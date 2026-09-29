@@ -1,10 +1,9 @@
-"""Two rules about what a hamlet's map may and must contain (feature 166).
+"""What a hamlet's map must contain (feature 166): `all_ink_is_ruled_on`.
 
-Carries `hamlet_has_no_headman` and `all_ink_is_ruled_on`.
-
-THESE TWO ARE NOT GEOMETRY, WHICH IS WHY THEY SHARE A MODULE. One is a fact about the settlement's
-society and the other is a fact about the drawing's completeness, and neither is a clearance any placer
-holds. They are properties of the FINISHED map, and the spec's destination list allows exactly that.
+KEPT through feature 287 because no single placer owns it: every layer's ink must carry a class, so it is a property of
+the finished drawing as a whole (the census at `settlement/finish.py`). Its sibling `hamlet_has_no_headman` was retired
+by feature 287 - `settlement/rolling/place.py:PlacerMixin.headman` refuses the role on a hamlet
+(`tests/settlement/test_rolling.py::test_a_hamlet_scale_map_can_draw_no_headman`; specs/287-placer-guarantees/research.md R8).
 """
 
 from __future__ import annotations
@@ -20,23 +19,6 @@ SPEC = rolls.REFERENCE  # the pool's brief (feature 215)
 @pytest.fixture(scope="module")
 def rolled():
     return _pool.rolled_map(SPEC)
-
-
-def test_a_hamlet_has_no_headman_of_its_own(rolled) -> None:
-    """`hamlet_has_no_headman`. A hamlet is not an administrative unit. The village headman (shoya /
-    nanushi) answers for the VILLAGE - it is the village that is assessed, that owes the tax rice, and
-    that holds the land register - and a hamlet is a cluster of houses inside one. Drawing a headman's
-    house in a hamlet promotes it to a village on the sheet, and the reader takes the settlement for
-    something it is not.
-
-    The assertion runs on the whole house list rather than on a count, so a house that acquires the role
-    under a new name is still caught."""
-    _plan, M = rolled
-    assert M["meta"].get("scale") == "hamlet", "this roll is not a hamlet, so the rule does not apply to it"
-    houses = M.get("houses") or []
-    assert houses, "the roll seated no house, so this rule would judge nothing"
-    headmen = [(round(h["x"]), round(h["y"])) for h in houses if h.get("role") == "headman"]
-    assert not headmen, f"a hamlet has no peasant headman of its own, but one is drawn at {headmen}"
 
 
 def test_every_mark_on_the_map_has_been_ruled_on(rolled) -> None:

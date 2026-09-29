@@ -1,11 +1,12 @@
-"""THE THREE SEATINGS, in the tier ABOVE the gate (feature 217, GM 2026-09-08; moved from tests/gate/hamletgen/).
+"""THE SEATINGS (three until feature 287, two now), in the tier ABOVE the gate (feature 217, GM 2026-09-08; moved from tests/gate/hamletgen/).
 
-Each test drives one seating pass with the others silenced - the `cluster_seeds` cloud alone, the lane frontage alone,
-the frontage stopping at one household - on copies of ONE partial roll (the stages before the homestead pass, then the
+Each test drives one seating pass with the others silenced - the `cluster_seeds` cloud alone and the frontage stopping at
+one household (the lane frontage alone seating the hamlet retired with feature 287: every household is seated or the site
+refused, `SiteRefused`, and `seats.lane_frontage` is unit-tested) - on copies of ONE partial roll (the stages before the homestead pass, then the
 pass and the track per variant; feature 216). They assert BEHAVIOR: that a fallback nothing on a shipped map exercises
 still seats a hamlet. Their one coverage line is a unit test now (`tests/hamletgen/homesteads/test_seats.py`), so under
 constitution VI - the gate rolls only what the floor needs - the roll they share belongs here, where `make soak` runs
-it and no ordinary run does. The GM accepted the loss at feature 217's landing: until the soak tier runs, these three
+it and no ordinary run does. The GM accepted the loss at feature 217's landing: until the soak tier runs, these
 assertions are proved by nothing.
 
 SERVED FROM THE ROLL CACHE, KEYED TO THE PRODUCER'S OWN SOURCE (feature 135): `rollcache.keyed_to` hashes `roll_seatings`
@@ -32,7 +33,7 @@ SEATINGS = HamletSpec(name="Seatings", seed=5, households=10, settlement_form="l
 # nothing until the track has drawn it). The three runs share the child's pid and request, so the census reads one
 # roll with four attempts. What this no longer proves, stated (specs/216 FR-005 d): the stages after the track on the
 # seated variants (their lines are unit tests), the cloud on a rolled NUCLEATED hamlet (it is asserted on the shared
-# linear state), and three distinct maps.
+# linear state), and three distinct maps. (Feature 287 retired the lane-frontage-alone variant: two seatings now, two copies.)
 def roll_seatings() -> dict[str, tuple]:  # type: ignore[type-arg]
     import copy
 
@@ -63,11 +64,9 @@ def roll_seatings() -> dict[str, tuple]:  # type: ignore[type-arg]
     silent_row = {"front_row": lambda plan, count, standoff=46.0, **kw: []}
     silent_both = {**silent_row, "lane_frontage": lambda s, seat, step=86.0, **kw: []}
     c_s, c_p = seat(silent_both)
-    l_s, l_p = seat(silent_row)
     o_s, o_p = seat(silent_row, households=1)
     return {
         "cloud": (c_p.placed, c_p.cluster_shape, c_s.M["meta"]),
-        "lane": (l_p.placed, len(HS.lane_frontage(l_s, l_p.seat, connector=True))),
         "one": (len(o_s.M["houses"]), len(HS.lane_frontage(o_s, o_p.seat, connector=True))),
     }
 
@@ -87,27 +86,11 @@ def test_the_cluster_seeds_cloud_still_seats_a_hamlet_when_the_rows_offer_nothin
     both row passes returning no seats, the cloud has to seat the hamlet by itself. This also pins
     the lean-toward-the-field transform (`ly = -wdep + (ly + wdep) * 0.75`), which is the only place
     that compression is applied."""
-    placed, cluster_shape, meta = seatings["cloud"]
+    placed, _cluster_shape, meta = seatings["cloud"]
     assert placed > 0, "with both row passes silent, every farmstead must come from the cloud"
     assert meta["cluster_seeding"] == "cloud"
-    # THE INVARIANT IS A TRACE EITHER WAY, not an unconditional stamp (updated 2026-08-19). The
-    # declaration is validated against the DRAWN aspect now, so a cloud-seated cluster whose drawing
-    # does not match its roll is correctly recorded `cluster_shape_unhonored` instead - which is the
-    # whole point of the guard. Asserting the honored key unconditionally would re-assert the very
-    # thing the honesty rule exists to deny.
-    assert cluster_shape in (meta.get("cluster_shape"), meta.get("cluster_shape_unhonored")), "the cloud must record the rolled shape either as honored or as unhonored"
-
-
-@pytest.mark.rolls_map
-def test_lane_frontage_seats_the_hamlet_when_the_field_row_offers_nothing(seatings: dict[str, tuple]) -> None:  # type: ignore[type-arg]
-    """The lane-frontage pass seats the BACK RANK on a real map, but only the households past one
-    rank's worth of the band - so on a small hamlet it can place very few, and for part of one day
-    (while `front_row` sampled by density with no cap) it placed nothing at all and the cluster came
-    out a single rank. Drive it directly, with the field row silent, so the code that puts a door on
-    a lane is exercised whatever the cap leaves it."""
-    placed, offered = seatings["lane"]
-    assert placed > 0, "with the field row silent, the farmsteads must still be seated"
-    assert offered, "a linear hamlet must be offered seats along the connector it fronts"
+    # (the shape's record clause retired with feature 287: `stages.py:declare_cluster_shape` declares the drawn shape on
+    # every seating, so it could no longer fail - specs/287-placer-guarantees/research.md R8)
 
 
 @pytest.mark.rolls_map

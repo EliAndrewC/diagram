@@ -1,28 +1,21 @@
-"""The lane network a rolled hamlet must produce (feature 166).
+"""The lane network a rolled hamlet must produce (feature 166): what is left of it after feature 287.
 
-Carries six rules the retired battery re-measured on every finished map: `lanes_form_one_network`,
-`lanes_do_not_break_mid_run`, `lanes_bend_like_paths`, `lanes_reach_something`,
-`lane_ends_front_different_houses` and `groves_clear_of_lanes`.
+Feature 166 carried six rules here that the retired battery re-measured on every finished map. Feature 287 made the web's
+last pass settle the lane law (`hamletgen/ways/settle.py:settle_the_web`, repairs that only shorten, cut, re-lay an end
+as a T or close a join, to a fixed point, the lane law's one predicate per rule in `law.py`) and refused every tree lane
+that would break one (`Lawful`), each unit-tested on the violating case in `tests/hamletgen/ways/test_settle.py` - and
+retired the finished-map tests of one network, the kink, the fold and hook, the lane end reaching something and the
+doorstep's two ends, with their every-shipped-hamlet twins (specs/287-placer-guarantees/research.md R8).
 
-A LANE IS A WORN LINE, AND THAT IS THE GROUNDING BEHIND EVERY RULE HERE. Nobody laid these paths out;
-they exist because inhabitants walked them, and a path exists only where somebody had a reason to go.
-So a lane joins the rest of the network (you can get there from here), it does not stop in the middle of
-a field (nothing wore that stretch), it bends the way a person walking bends rather than doubling back on
-itself, and its ends front something worth walking to.
-
-WHY THE WEB IS LAID AFTER THE HOUSES, WHICH IS WHAT MAKES THESE PROPERTIES OF THE PLACER. `stage_ways`
-lays the skeleton and the connector BEFORE the homesteads, so the houses front them; `stage_web` lays the
-lane web AFTER, because a web laid first competes for ground with the very houses it exists to serve
-(measured: it grew the four pool clusters' long axes 15-97%, sprawl no check measures). The order is the
-design, and these assertions are what pins it.
+KEPT, because no placer guarantees them yet:
+- a break mid-run on the CONNECTOR, which the settle pass exempts (see the test);
+- `groves_clear_of_lanes`: only the belt's placer (`stands.py:village_grove`) keeps its trunks off the lanes' treads; the
+  woodland commons, the forest and the yard's persimmon (seated before the web, which never reads it) have no guarantee.
 """
 
 from __future__ import annotations
 
-import glob
-import json
 import math
-import os
 
 import pytest
 
@@ -31,9 +24,6 @@ from tests import rolls
 from tests.gate import _pool
 
 SPEC = rolls.REFERENCE  # the pool's brief (feature 215)
-
-# THE RULES' THRESHOLDS LIVE WITH THE RULES (feature 287, M1): the join tolerance, the double-back turn and the bend's run
-# are `law.JOIN_TOL`, `law.DOUBLE_BACK_DEG` and `law.BEND_RUN_FT`, beside the predicates every test below calls.
 
 
 def _seg_dist(px: float, py: float, a, b) -> float:
@@ -53,99 +43,28 @@ def _ways(M):
 
 
 @pytest.fixture(scope="module")
-def rolled():
-    return _pool.rolled_map(SPEC)
-
-
-@pytest.fixture(scope="module")
-def lanes(rolled):
-    """The drawn lanes, with the assertion that there ARE some. Every rule below would pass on an empty
-    list, and a hamlet with no lanes is not a hamlet."""
-    _plan, M = rolled
+def lanes():
+    """The drawn lanes, with the assertion that there ARE some: a hamlet with no lanes is not a hamlet."""
+    _plan, M = _pool.rolled_map(SPEC)
     ways = [p for p in _ways(M) if len(p) >= 2]
     assert len(ways) >= 2, "the roll drew fewer than two lanes, so the network rules would judge nothing"
     return M, ways
 
 
-def _field_rings(M) -> list:
-    from l7r.diagram.hamletgen.ways.sweeps import worked_ground_rings
-
-    return worked_ground_rings(M)  # the sweep's own field, dry hem included (feature 261)
-
-
-def _dangling_ends(M) -> list:
-    """Every internal lane end that reaches nothing, read through the lane law's predicate (`law.dangling_ends`, feature
-    287 M1), which asks the PLACER'S OWN `end_serves` - the body `_trim_to_service` trims with, which is what makes this a
-    check on the placer rather than a second opinion about it (the skill's standing rule: "placement and its check must
-    read the SAME source"). It had been a restatement, and it drifted twice - at the bar, which feature 227 fixed with
-    `WAY_END_REACH_FT`, and then at what ARRIVAL is: both sides measured a farmhouse by its center and neither could see
-    the garden fence a tread had actually stopped at, which is what `STEADING_ARRIVAL_FT` answers. Since 287 the other
-    ways are asked less the one at the lane's own far end (the pool test's stronger set, one predicate for both)."""
-    return law.dangling_ends(M)
-
-
-def test_every_lane_belongs_to_one_network(lanes) -> None:
-    """`lanes_form_one_network`. You can get from any door to any other, and to the connector that leaves
-    the settlement. A lane in its own component is a path that starts nowhere a walker can reach - it is
-    ink drawn where a path would look right, which is the difference between a map of a place and a
-    picture of one."""
-    M, _ways_all = lanes
-    n = law.lane_networks(M)
-    assert n == 1, f"the lanes fall into {n} disconnected networks - you cannot walk between them"
-
-
-def test_no_lane_doubles_back_or_kinks(lanes) -> None:
-    """`lanes_bend_like_paths`. A worn line bends around what is in the way; it does not turn back on
-    itself, and it does not zig and immediately zag. Both shapes read as a routing artifact rather than as
-    ground somebody walks, which is exactly what they are when they appear."""
-    M, _ways_all = lanes
-    bad = law.lanes_that_kink(M)
-    assert not bad, f"lane(s) do not bend like paths: {bad[:4]}"
-
-
-def test_no_two_lanes_meet_end_to_end_in_a_fold_and_no_lane_ends_in_a_hook(lanes) -> None:
-    """Two records meeting end to end are ONE way to the walker, so the fold the per-lane rule above cannot see -
-    one lane turning back at the point the next begins - is refused here, and so is a hook at a lane's end (GM
-    2026-09-26: *"they are not going to walk in one direction and then turn at a 30-degree angle to keep
-    walking"*). The joint rule and the hook thresholds are the engine's own (`hamletgen/ways/joints.py`)."""
-    M, _ways_all = lanes
-    folds = law.folded_joints(M.get("lanes") or [])
-    hooks = law.hooked_ends(M)  # every lane, the connector included - the stricter of the two tests' readings (287 M1)
-    assert not folds, f"two lanes meet end to end and double back at {folds[:4]}"
-    assert not hooks, f"a lane ends in a hook at {hooks[:4]}"
-
-
-def test_every_lane_end_reaches_something_worth_walking_to(lanes) -> None:
-    """`lanes_reach_something`. A path exists because somebody had a reason to go there. An end that meets
-    no other way, no house and no field is a line that stops in open ground, and there is nothing at the
-    end of it for anyone to have worn the path to."""
-    M, _ways_all = lanes
-    assert (M.get("houses") or []) and any(len(o) >= 2 for o in _field_rings(M)), "the roll drew no house or no outlined field"
-    dangling = _dangling_ends(M)
-    assert not dangling, f"lane end(s) stop in open ground at {dangling[:4]} - nothing wore that path"
-
-
-def test_a_lane_does_not_break_mid_run(lanes) -> None:
-    """`lanes_do_not_break_mid_run`. A lane's drawn tread stops where something solid stands in it and
+def test_the_connector_does_not_break_mid_run(lanes) -> None:
+    """`lanes_do_not_break_mid_run`, on the CONNECTOR only (feature 287: the web's lanes are cut where they foul a solid
+    box by `settle.py:settle_shapes` and refused by `Lawful`, unit-tested in `tests/hamletgen/ways/test_settle.py`; the
+    connector is exempt from those passes and rests on `track.connector_track`'s ranking, whose refusal no unit test
+    drives with a house in the swept bearing). A lane's drawn tread stops where something solid stands in it and
     resumes on the far side, which on the page reads as a path that vanishes and reappears. The physical
     claim is simpler than the geometry: ground either carries a path or it does not, and a gap in the ink
     with nothing in the gap is the drawing forgetting to finish the line."""
     M, _ways_all = lanes
     assert law.solid_boxes(M), "the roll placed nothing solid, so a break would have nothing to be explained by"
-    gaps = law.breaks_mid_run(M)
-    assert not gaps, f"lane(s) run straight through something solid at {gaps[:4]}"
-
-
-def test_a_farmhouse_discharges_one_lane_end_not_three(lanes) -> None:
-    """`lane_ends_front_different_houses`. A lane end is allowed to stop at a farmhouse - that is what it
-    is for. What it may not do is let one farmhouse absolve three separate lane ends, because then the
-    fabric grows a fan of stubs all pointing at the same door and the settlement reads as a diagram of
-    frontage rather than as ground."""
-    M, _ways_all = lanes
-    assert M.get("houses") or [], "the roll placed no house"
-    assert law.fronted_ends(M), "no lane end fronted a house, so this rule judged nothing"
-    greedy = law.doorstep_ends(M)
-    assert not greedy, f"house(s) discharge more than two lane ends apiece: {greedy}"
+    connector = [ln for ln in (M.get("lanes") or []) if ln.get("connector")]
+    assert connector, "the roll drew no connector, so this rule would judge nothing"
+    gaps = law.breaks_mid_run({**M, "lanes": connector})
+    assert not gaps, f"the connector runs straight through something solid at {gaps[:4]}"
 
 
 def test_no_tree_is_planted_in_a_path(lanes) -> None:
@@ -178,38 +97,3 @@ def test_no_tree_is_planted_in_a_path(lanes) -> None:
     halves = [float(ln.get("w", 6)) / 2.0 for ln in (M.get("lanes") or [])]
     on_path = [(round(x), round(y)) for x, y in trunks if any(_min_dist((x, y), p) < halves[i] for i, p in enumerate(ways) if len(p) >= 2 and i < len(halves))]
     assert not on_path, f"tree trunk(s) stand ON a lane at {on_path[:4]}"
-
-
-_POOL = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "pool")
-
-
-@pytest.mark.parametrize("manifest", sorted(glob.glob(os.path.join(_POOL, "hamlets", "*", "*.json"))), ids=os.path.basename)
-def test_every_shipped_hamlets_lanes_are_one_network_at_the_ink_tolerance(manifest: str) -> None:
-    """ONE NETWORK OR NOTHING holds on every SHIPPED hamlet, read from the committed manifest (feature 220,
-    settlement-review of Sawada): the rule had a reader on the reference roll only, and the doubled-remnant
-    sweep left three pool maps in two pieces at the 4 ft ink tolerance the one-network pass itself uses -
-    joined only at the gate's 40 ft REACH figure, which is not an ink-continuity figure. Static data, so it
-    costs nothing to ask of every map."""
-    with open(manifest) as fh:
-        M = json.load(fh)
-    if sum(1 for ln in M.get("lanes") or [] if len(ln.get("pts") or []) >= 2) < 2:
-        pytest.skip("fewer than two lanes")
-    n = law.lane_networks(M)
-    assert n == 1, f"{os.path.basename(manifest)}: {n} lane networks at {law.JOIN_TOL} ft"
-
-
-@pytest.mark.parametrize("manifest", sorted(glob.glob(os.path.join(_POOL, "hamlets", "*", "*.json"))), ids=os.path.basename)
-def test_every_shipped_hamlets_lane_ends_reach_something(manifest: str) -> None:
-    """EVERY SHIPPED HAMLET, not only the reference roll (feature 227 D11). The rule had one reader, on
-    Inashiro, and two pool maps carried straggler ends it never looked at - which is the same blind spot
-    feature 220 found for the one-network rule, in the same place, for the same reason. Static data, so
-    asking it of every map costs no roll; and it is the guard against the regression this fix could
-    have, since what it reads is the placer's own predicate."""
-    with open(manifest) as fh:
-        M = json.load(fh)
-    ways = _ways(M)
-    if not any(len(p) >= 2 for p in ways):
-        pytest.skip("no drawn lane")
-    assert M.get("houses"), f"{os.path.basename(manifest)} records no house, so the end rule would judge nothing"
-    dangling = _dangling_ends(M)
-    assert not dangling, f"{os.path.basename(manifest)}: lane end(s) reach nothing at {dangling[:4]}"

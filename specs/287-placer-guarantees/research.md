@@ -311,3 +311,210 @@ Decisions review and for what goes to the GM once the work runs.
   only, since its dry ground is the toe strip alone (2.5-5.2 acres against a need of 8.5-17). Cost: the bare-winter form
   never appears on a cleared fan. Alternative priced: a deep reserve on cleared ground (no research places it). Chosen by
   the session; for the Decisions review.
+
+## R8 - Tests retired and kept (2026-09-29)
+
+**Method** (T84, T85; FR-006, FR-007, SC-005). Every finished-map test in `tests/gate/`, `tests/hamletgen/test_pool_*.py`,
+`tests/full/`, `tests/soak/` and the candidates the design rows and the implementers named were read by five Opus
+readers against the code: for each, the placer that decides the rule (the line that refuses, repairs or constrains) and
+the unit test that drives it on constructed input INCLUDING the violating case. A test was retired only where both were
+found; otherwise it was kept and its reason is below. Every figure is **observed 2026-09-29, `make durations FULL=1
+MARK="rolls_map or not rolls_map"` in a detached worktree at 0e792a665** (5,871 passed, 6 failed, 256 s wall; the failures
+are listed under "Found on the way"). A figure is the test's call plus setup summed over its parameters; `<0.005` is under
+pytest's print floor. A pool-reading test's setup includes the pool map's roll when the cache is cold, and that roll is
+SHARED by every reader of the map: Inashiro's cold obtain landed on `test_no_watercourse_crosses_another_mid_run`'s setup
+(18.60 s) and is paid by whichever reader comes first, so no retirement here frees it. The soak tier is collected by no
+ordinary run and costs the gate nothing.
+
+**Totals.** 84 test functions retired from the gate and quick trees (82 finished-map tests and their helpers'
+self-tests, and 2 unit tests in `tests/settlement/structures/test_fixtures.py`), plus 6 soak tests and a soak seating
+variant; 10 clauses retired from kept tests; 3 whole modules deleted
+(`tests/gate/test_cohort_lane_rules.py`, `tests/hamletgen/test_pool_282.py`, `tests/soak/test_seed_43_kink.py`) with the
+helper only they needed (`tests/test_villages.py:_channels_under_plots`, the `woodland` fixture, the `comb` and
+`kuwabata` fixtures of their modules, the seatings' lane variant). **Measured cost retired: 228.6 s** of test time per
+full gate run, of which 216.45 s is one unit test (below); the finished-map tests themselves cost 10.4 s together
+(the beads' 5.57 s the largest). One replacement unit test was added for two lines only the retired board tests reached
+(`siting.py:371-372`): `test_fixtures.py::test_an_anchored_board_with_no_handover_keeps_to_the_seats_nearest_its_anchor`,
+0.02 s (observed 2026-09-29, a direct call in the clone).
+
+### Retired
+
+| retired test | s | the placer that now decides it, and its unit test on the violating case |
+|---|---|---|
+| gate/test_bunds_and_dikes::test_no_bund_is_drawn_down_the_middle_of_a_supply_channel | 0.10 | `seams/close.py:hold_ring_rules` via `ring_violations` "stroke"; test_ring_guarantees::test_no_bund_is_left_down_the_middle_of_a_supply_channel |
+| ::test_no_bund_is_drawn_across_the_collector | 0.01 | the same, "collector"; test_ring_guarantees::test_no_bund_is_left_across_the_collector |
+| ::test_every_bund_bead_sits_on_visible_ground | 0.05 | `fields/comb.py:settle_beads` at the finish; test_field_guarantees::test_finish_settles_every_bead_the_last_water_drowned... |
+| ::test_every_beaded_bund_segment_shows_at_least_two_beads (5 maps) | 5.57 | `waterfields/carve.py:bead_runs`; test_core::test_bead_runs_split_at_a_drop_and_a_part_of_one_bead_goes |
+| ::test_bead_segments_derivation_fires | <0.005 | the helper's self-test; goes with the test above |
+| ::test_dry_plots_share_a_row_direction_within_a_tract_and_change_it_at_the_seams | 0.23 | `waterfields/hem.py:settle_tract_seams`; test_furrows::test_a_second_band_tract_turns_off_every_tract_it_abuts |
+| ::test_the_tract_judge_fires_on_a_split_tract_and_a_blurred_seam | <0.005 | moved with the judge: test_furrows::test_the_tract_judge_names_a_tract_run_apart... |
+| ::test_the_polder_dike_is_a_hand_piled_earthwork | 0.07 | `land/dikes.py:hand_piled_widths`; test_land::test_a_flat_dike_profile_is_stretched_until_it_reads_hand_piled |
+| ::test_nothing_is_built_on_the_dike | <0.005 | the dike keep-out in the site boundary (`rolling/fit.py:_rect_blocked`); test_land::test_a_homestead_is_refused_inside_the_dike_keep_out |
+| ::test_no_channel_is_cut_through_the_dike_except_at_its_gaps | 0.01 | `water/polder.py:gaps_for_courses`, `sink.py:breaches_any_dike`; test_water_287::test_the_route_refusals_name_the_dike |
+| gate/test_paddy_fabric::test_every_ditched_paddy_has_a_floor_under_its_plots | 0.05 | `fields/comb.py:draw_comb_field` (the floor unconditionally); test_field_guarantees::test_every_ditched_comb_draws_its_floor_under_its_plots_and_names_its_water |
+| ::test_the_floor_stops_where_the_command_area_does | <0.005 | `waterfields/comb.py:_comb_floor_and_winding`; test_trunks::test_the_floor_stops_where_the_command_area_does |
+| ::test_no_basin_tapers_to_a_point | <0.005 | `hold_ring_rules` "needle"; test_ring_guarantees::test_a_needle_no_neighbor_can_take_is_left_bare |
+| ::test_a_flooded_plot_reads_as_a_basin_and_not_as_a_pond | <0.005 | the same, and the raw tint re-judge; test_ring_guarantees::test_a_needle_hidden_from_the_deduplicated_ring_is_judged_raw |
+| ::test_no_basin_is_too_small_to_be_worth_its_own_bund | <0.005 | "area" and the refused neck trade; test_ring_guarantees::test_a_scrap_under_the_area_floor... |
+| ::test_the_rings_double_count_only_marginally | 0.05 | the seam partition; test_ring_guarantees::test_lapping_carved_plots_come_out_counted_once |
+| ::test_a_bund_does_not_build_a_flight_of_steps | <0.005 | `_split_steps`; test_ring_guarantees::test_the_whole_seam_pass_hands_back_no_staircase |
+| ::test_every_recorded_plot_ring_is_a_simple_polygon | 0.01 | `_repair_crossing_rings`, "crossing"; test_ring_guarantees::test_no_recorded_ring_crosses_itself |
+| gate/test_water_flow::test_a_collector_discharges_at_its_lowest_point | <0.005 | `waterfields/comb.py:_comb_drain`; test_trunks::test_a_collector_never_runs_uphill_even_where_its_head_draws_the_worst_jitter |
+| ::test_the_runoff_leaves_the_outfall_downhill | <0.005 | pond and drain run: `sink.py` pond seat and route refusals; test_sink::test_a_pond_sink_draws_a_ditch_ending_on_the_pond. Its brook clause judged nothing on the fixture (no brook within 60 px of Inashiro's outfall) - see "Gaps" |
+| ::test_no_stream_runs_through_a_field | <0.005 | `water/brook.py:feed_brook`, "enters"; test_brook::test_a_course_through_the_field_is_moved_out... |
+| ::test_every_field_shows_where_its_water_comes_from | <0.005 | `draw_comb_field` records the ditches unconditionally; test_field_guarantees (as the floor) |
+| gate/test_water_junctions::test_every_lateral_lands_on_a_trunk_at_both_ends | 0.05 | `waterfields/polder.py`'s tip snap; test_polder_ring::test_every_lateral_lands_on_a_trunk_at_both_ends (a wandered build; the weakest of these) |
+| ::test_a_channel_declaring_a_stream_actually_reaches_its_bed | <0.005 | the intake snap, `round_the_brooks`; test_field_guarantees::test_an_intake_declares_a_stream_only_where_its_mouth_reaches_one |
+| ::test_courses_that_meet_are_composited_as_one_confluence | <0.005 | `settlement/finish.py`'s one water stack; test_finish_287::test_no_bed_is_painted_above_a_sheen_and_the_pond_fill_over_every_mouth |
+| ::test_the_pond_fill_is_drawn_over_the_mouths_that_join_it | <0.005 | the same |
+| ::test_the_pond_is_connected_to_the_field_it_serves | <0.005 | `sink.py`'s pond run; test_sink::test_a_pond_sink_draws_a_ditch_ending_on_the_pond |
+| ::test_a_field_pond_is_sunk_into_one_plot | <0.005 | `fields/features.py:_pond_fit` (`ring_meets_ellipse`); test_fields::test_plot_pond_refuses_a_neighbor_corner_inside_the_rim... |
+| gate/test_lane_network::test_every_lane_belongs_to_one_network | 0.05 | `ways/settle.py:settle_network`; test_settle::test_a_piece_off_the_network_goes_and_so_does_a_husk |
+| ::test_no_lane_doubles_back_or_kinks | <0.005 | `settle_shapes` (`kink_spans`); test_settle::test_seed_43s_lattice_step_is_a_kink_the_old_bend_test_passed |
+| ::test_no_two_lanes_meet_end_to_end_in_a_fold_and_no_lane_ends_in_a_hook | <0.005 | `settle_ends`, `settle_shapes`, `Lawful`; test_settle::test_a_fold_at_a_joint_becomes_a_tee..., ::test_a_hook_is_relaid_as_a_tee... |
+| ::test_every_lane_end_reaches_something_worth_walking_to | 0.06 | `settle_dangling`; test_settle::test_a_lane_end_in_open_ground_is_trimmed_and_a_lane_serving_nothing_goes |
+| ::test_a_farmhouse_discharges_one_lane_end_not_three | <0.005 | `settle_ends` (`DOORSTEP_MAX`); test_settle::test_a_farmhouse_discharges_two_lane_ends_not_three |
+| ::test_every_shipped_hamlets_lanes_are_one_network_at_the_ink_tolerance (5) | 0.04 | as one network |
+| ::test_every_shipped_hamlets_lane_ends_reach_something (5) | 0.43 | as the lane end |
+| gate/test_cohort_lane_rules::test_the_clean_cohort_seeds_bend_like_paths (module) | 0.12 | as the kink |
+| gate/test_crossings_and_cover::test_every_deck_is_long_enough_to_land_on_dry_ground | 0.06 | `settle.py:_crossing_fault`, `city/bridges.py` (`UndeckableCrossing`); test_settle::test_a_crossing_no_deck_seats_is_squared_and_else_cut, test_city::test_a_deck_is_never_drawn_undersized |
+| ::test_every_plank_crosses_a_supply_ditch_and_never_the_collector | <0.005 | `bridges.py:channel_footbridges` (`plank_on_supply`); test_city::test_a_plank_is_laid_on_a_supply_ditch_only |
+| ::test_the_runoff_curves_out_of_the_collector | <0.005 | `_comb_drain`; test_trunks::test_the_collector_draws_no_hook_into_its_outfall |
+| ::test_no_watercourse_end_dangles_in_bare_ground | <0.005 | `trunks.py:anchor_trunk_ends`; test_trunks::test_every_trunk_end_is_left_where_its_water_goes |
+| gate/test_cluster_and_homes::test_the_cluster_abuts_the_ground_it_works | 0.05 | `rolling/fit.py:_parts_fit` (`within_field_reach`); test_capacity::test_the_placer_refuses_a_seat_beyond_the_fields_reach |
+| ::test_the_settlement_seats_the_byres_it_asked_for | <0.005 | `rolling/lot.py`, `bundle.py`, `SiteRefused`; test_lot::test_a_keepers_byre_is_a_part_of_its_bundle_and_every_one_is_drawn |
+| ::test_two_farmhouses_keep_their_own_drip_lines | <0.005 | `fit.py:_house_too_near_a_neighbor`; test_fit_287::test_two_farmhouses_seven_feet_apart_on_their_drawn_quads_are_refused |
+| ::test_every_threshing_yard_fronts_its_house_square | <0.005 | `yards.py:_attach_yard`; test_homestead_parts::test_the_yard_edge_facing_its_house_runs_parallel_to_the_house |
+| ::test_no_farmhouse_is_drawn_as_a_shed | <0.005 | `houses.py:_try_place_bundle`, `lot.py`; test_lot::test_an_explicit_size_past_the_minka_norm_is_refused_at_the_call |
+| ::test_every_well_stands_among_the_doors_it_serves | <0.005 | `homesteads/wells.py:place_wells`; test_homesteads::test_a_well_is_held_to_the_wall_gap_the_test_reads... |
+| gate/test_generator_contracts::test_the_map_declares_the_fall_its_drainage_is_judged_against | 0.09 | `plan.py:plan_site` always resolves it; test_plan (an undeclared fall); a duplicate of test_water_flow's non-vacuity test |
+| ::test_every_declared_household_is_seated | <0.005 | `stages.py:seat_every_household` (`SiteRefused`); test_capacity::test_a_site_no_margin_can_seat_is_refused_naming_it |
+| ::test_farmhouses_vary_in_size | <0.005 | the size ladder; test_lot::test_the_size_ladder_spreads_the_footprints_and_stays_a_farmhouse |
+| ::test_the_rolled_cluster_shape_leaves_a_record | <0.005 | `stages.py:declare_cluster_shape`; test_capacity::test_the_declaration_is_the_drawing_and_the_knob_narrows_to_it |
+| gate/test_map_vocabulary::test_a_hamlet_has_no_headman_of_its_own | 0.05 | `rolling/place.py:PlacerMixin.headman`; test_rolling::test_a_hamlet_scale_map_can_draw_no_headman |
+| gate/test_captions_and_boards::test_every_caption_records_the_feature_it_names | 0.05 | `finish.py:label` refuses no `ref`; test_label_placement::test_a_caption_that_names_no_subject_is_refused |
+| ::test_every_caption_hugs_what_it_names | <0.005 | `labels/placer.py:place` (`HUG_RING`); test_placer_287::test_no_seat_stands_past_the_hug |
+| ::test_every_caption_is_turned_to_match_its_subject | <0.005 | `placer.py:_point_cands`; test_placer_287::test_a_caption_is_drawn_at_its_subjects_own_angle_through_every_fallback |
+| ::test_the_notice_board_stands_by_the_way | <0.005 | `siting.py:_route_seats`; test_board_seat::test_the_board_stands_by_its_way_and_faces_it |
+| ::test_the_notice_board_faces_the_way | <0.005 | `siting.py:place_kosatsuba` (`nearest_way_bearing`); the same |
+| gate/test_settlement_cover::test_a_woodland_commons_is_visibly_stocked | 0.05 | `land/cover.py:commons`, `parcels.py`; test_woods_287::test_a_woodland_whose_throws_miss_is_stocked_from_its_room |
+| ::test_a_woodland_commons_stands_on_dry_ground | <0.005 | `parcels.py:open_ground_patches`; test_hinterland::test_the_scan_refuses_a_ring_the_wet_share_fails_and_takes_the_next_seat |
+| ::test_a_woodland_commons_is_mostly_inside_the_picture | <0.005 | `parcels.py` (`parcel_inside_share`); test_hinterland_287::test_the_scan_refuses_a_ring_mostly_off_the_page_and_takes_the_next_seat |
+| ::test_a_dooryard_copse_stands_clear_of_the_windbreak | 0.03 | `stands.py:village_grove`; test_woods_287::test_a_copse_over_a_belt_crown_stands_clear_of_its_canopy |
+| ::test_no_canopy_stands_over_open_water | 0.07 | `stands.py`, `wood_share.py`; test_woods_287::test_no_grove_clump_stands_over_a_stream_through_its_band |
+| gate/test_no_feature_overlaps::test_the_ground_cover_scatter_respects_what_was_swept_before_it | 0.01 | `cover.py:_clear_ground`; test_woods_287::test_a_clearing_swept_after_the_scrub_takes_its_blades_and_marks_out (and a subset of the matrix test's verdict) |
+| ::test_no_pond_fixture_stands_on_its_ponds_sluice | 0.01 | `farm_fixtures.py:pond_fixture_fits`; test_farm_fixtures::test_a_pond_fixture_will_not_stand_on_its_sluice |
+| ::test_every_pond_fixture_keeps_to_the_near_half_of_its_pond | <0.005 | `pondstock.py:sty_on_near_half`; test_pondstock::test_a_sty_never_stands_on_the_far_half_of_its_pond |
+| hamletgen/test_pool_261::test_every_way_across_the_brook_is_bridged (5) | 0.38 | `city/bridges.py:bridges`; test_city::test_a_crossing_is_decked_unless_a_standing_deck_covers_it |
+| ::test_every_farmstead_part_stands_on_its_house_bank (5) | 0.22 | `fit.py:_parts_across_stream`, `byres.py`, `bamboo.py`, `fixtures.py`; test_rolling::test_parts_across_stream_refuses_a_garden_on_the_far_bank |
+| ::test_an_entrance_board_stands_at_the_entrance (5) | 0.31 | `siting.py:_board_for` (`entrance_seat_ok`); test_board_seat::test_an_entrance_board_stands_where_every_way_out_passes_it |
+| ::test_no_farmhouse_stands_on_the_brook (5) | 0.12 | `fit.py:_rect_on_stream`; test_fit_287::test_a_house_on_the_brooks_course_is_refused_at_its_turned_box |
+| ::test_the_ways_cross_the_brook_only_at_fords_and_never_over_and_back (5) | 0.16 | `settle.py`; test_settle::test_a_brook_crossed_out_and_back_loses_the_far_bank_stretch, ::test_a_crossing_off_a_ford_is_cut_and_one_at_a_ford_stands |
+| ::test_no_household_grain_plot_is_laid_by_its_house (4) | 0.04 | the producer removed; test_capacity::test_no_writer_of_a_household_grain_plot_is_left_in_the_engine |
+| ::test_no_lane_ends_in_a_hook (5) | 0.06 | `settle_shapes`; test_settle::test_a_hook_is_relaid_as_a_tee_and_a_free_hook_loses_its_leg |
+| ::test_every_lane_crosses_a_drawn_channel_square (5) | 0.10 | `settle.py:square_every_crossing`; test_settle::test_a_crossing_left_oblique_is_cut |
+| ::test_the_board_caption_stands_at_the_boards_angle (4) | 0.04 | `board_seat.py:board_caption_seat`; test_placer_287::test_a_caption_is_drawn_at_its_subjects_own_angle_through_every_fallback |
+| ::test_no_three_woodland_parcels_stand_in_a_ruled_row (5) | 0.05 | `parcels.py:open_ground_patches`; test_hinterland_287::test_a_jittered_seat_in_a_row_is_not_taken |
+| ::test_no_copse_clump_is_based_in_the_marsh (5) | 0.13 | `stands.py` (marsh in the copse's blocks); test_woods_287::test_every_seat_is_decided_at_the_records_grain |
+| ::test_a_belt_tree_in_the_marsh_is_alder (5) | 0.05 | `stands.py`, `core.py:set_view`'s recount; test_woods_287::test_the_alder_count_is_taken_again_over_the_clumps_on_the_page |
+| ::test_every_lane_crosses_the_brook_square (5) | 0.06 | as the channel |
+| ::test_no_lane_end_is_served_only_by_the_way_it_left (5) | 0.53 | `settle_dangling`; as the lane end |
+| hamletgen/test_pool_wind::test_every_pool_belt_is_whole (5) | 0.05 | `belt_law.py:settle_the_belt`; test_belt_law::test_the_settle_deepens_the_thin_stretch_and_closes_the_hole |
+| hamletgen/test_pool_282 (module: the yard test (5), the weathers' non-vacuity, the oracle (3)) | 0.78 | `homestead_parts/yards.py`; test_yard_mats_282 (four mats at every turn, the third-to-two-thirds cover, the lattice, the rack's half, the record) |
+| settlement/structures/test_fixtures::test_a_board_under_a_canopy_still_takes_a_seat | 216.45 | the feature-261 level-1 seat it pinned is gone; a board every caption of which lies on ink takes plan D12's terminal, held by test_board_seat::test_with_no_clean_caption_anywhere_the_question_stands_for_the_gm (1.78 s) |
+| ::test_a_board_whose_caption_cannot_fit_is_not_sitable | 1.68 | the same terminal, the same test |
+| soak/test_seed_43_kink (module, strict xfail) | soak | `settle_shapes`; test_settle::test_seed_43s_lattice_step_is_a_kink_the_old_bend_test_passed. With the kink repaired the strict xfail would XPASS and fail |
+| soak/test_polder_fall_0::test_a_polder_reservoir_backs_off_until_its_rim_clears_the_crop | soak | `water/polder.py:walk_pond_uphill`; test_water::test_the_reservoir_is_seated_clear_of_a_spike_and_above_the_field_however_far_it_must_go |
+| ::test_a_polder_hamlet_draws_its_grid_dike_and_reservoir (with its carve-out docstring) | soak | `fit_polder` (`polder_acres_in_band` or refuse), `SiteRefused`, `dikes.py:dike_gates`; test_water::test_fit_polder_lands_inside_the_band_where_the_bisection_stalls |
+| ::test_the_polder_s_lanes_bend_like_paths | soak | as the kink |
+| ::test_the_polder_seats_its_households_and_lands_its_acreage (with its 85% floor) | soak | as the grid test |
+| soak/test_seatings::test_lane_frontage_seats_the_hamlet_when_the_field_row_offers_nothing (and its seating variant) | soak | `SiteRefused`; test_seats::test_lane_frontage_skips_web_lanes_and_lanes_of_the_other_kind |
+
+**Clauses retired from kept tests**: the seating floor and `ACREAGE_SHORT`'s skip and `GATE_COHORT_EXPECTED`'s pins in
+gate/hamletgen/test_driver (FR-006); the household clause of gate/hamletgen/test_water; the channel-under-plot clause of
+full/test_villages (`finish.py` lifts every plot under the water block; test_field_guarantees::test_a_plot_drawn_after_the_water_is_painted_under_every_channel);
+the comb fans' half of the shipped-hamlet needle test; the pond and drain clauses of the runoff (with the test);
+every clause but the band of the cluster-shape test; every lane but the connector in the break-mid-run test; the seat and
+household clauses of test_pool_wind's northwest test and the judged half of its depth test; the chord caps and the facing
+chains of the polder soak's keep-out test; the shape-record clause of the cloud seating; the `kosatsuba_caption_level == 1`
+excuse of test_the_board_caption_notches_no_crown (FR-006: no engine code writes it since ec241c0b1).
+
+### Kept, and the correctness each guards
+
+(a) = a property no single placer owns; (b) = a rule not yet guaranteed (what is missing is the reason).
+
+| kept map-reading test | s | why |
+|---|---|---|
+| gate/test_bunds_and_dikes::test_the_waterward_reed_strip_runs_off_the_frame | <0.005 | (b) `frame.py:waterward_to_the_frame` extends the strip but never re-judges it; with no open ground nothing is added |
+| gate/test_paddy_fabric::test_the_supply_commands_both_flanks_of_the_fan | <0.005 | (b) `fit.py:fit_field` ranks aspects and keeps the least-bad fan; no refusal, no violating-case test |
+| ::test_no_shipped_polder_parcel_tapers_to_a_point (narrowed to the forkless fields) | 0.30 | (b) `polder.py:unpoint_parcels` judges the unrounded ring; the record is rounded after |
+| gate/test_water_flow::test_the_map_declares_the_fall_every_rule_below_is_measured_against | 0.05 | non-vacuity for the two below |
+| ::test_every_channel_runs_downhill | <0.005 | (b) only the sink's routes ask `runs_downhill`; the feed and head-race record and the comb's drain run do not |
+| ::test_every_stream_end_is_anchored_to_what_it_declares | <0.005 | (b) `brook_violations` judges the source end only; the exit end rests on construction, untested |
+| gate/test_water_junctions::test_no_watercourse_crosses_another_mid_run | 18.63 | (b) the feed brook's last candidate (round the field) is returned unjudged. 18.60 s is setup: the Inashiro pool map's cold obtain, shared |
+| gate/test_lane_network::test_the_connector_does_not_break_mid_run (narrowed) | <0.005 | (b) the connector is exempt from `settle_shapes`; `connector_track`'s refusal has no unit test with a house in the bearing |
+| ::test_no_tree_is_planted_in_a_path | 0.06 | (b) only the belt keeps its trunks off the treads; the commons, the forest and the persimmon (seated before the web) do not |
+| gate/test_crossings_and_cover::test_the_countryside_has_no_holes_in_it | 0.04 | (b) `finish.py:_title_band` grows the view after `fill_the_holes`; the band is counted and refilled by nothing |
+| gate/test_cluster_and_homes::test_the_cluster_draws_inside_the_band_of_the_shape_it_declared (narrowed) | <0.005 | (b) `shapes_drawn_at` declares `elongated` past every band; a string past 12:1 is not refused |
+| ::test_every_household_can_reach_water | <0.005 | (b) `lot.py:needs_pocket` is asked at the seek point, not the placed center |
+| gate/test_generator_contracts::test_a_map_that_draws_byres_declares_their_form | <0.005 | (b) written by construction, but no unit test asserts `meta.byre_form` |
+| gate/test_map_vocabulary::test_every_mark_on_the_map_has_been_ruled_on | <0.005 | (a) every layer's ink carries a class |
+| gate/test_captions_and_boards::test_no_caption_lies_across_a_way | <0.005 | (b) plan D12's least-cost terminal and the placer's non-strict path |
+| gate/test_settlement_cover::test_every_recorded_grove_holds_trees | <0.005 | (b) no placer decides the belt's or the water mouth's density; `_partition_grove_clumps` moves clumps without re-recording the size |
+| gate/test_no_feature_overlaps::test_the_comb_hamlet_draws_no_forbidden_overlap | 0.05 | (a) the matrix over every pair of layers; M8 (T83) has not landed. FAILS at 0e792a665 |
+| ::test_the_polder_hamlet_draws_no_forbidden_overlap | 0.06 | (a) as above. FAILS at 0e792a665 |
+| gate/test_scatter_frame::test_no_shipped_hamlet_breaches_its_scatter_frame (5) | 0.28 | (b) the finish's repair never runs in production (nothing sets `_scatter_rethrows`); a south title band passes the pad |
+| ::test_no_stage_after_the_view_is_decided_moves_the_frame (5) | 0.33 | (a) a contract over every stage after the view is decided |
+| gate/hamletgen/test_driver::test_a_rolled_cohort_passes_the_whole_gate | 0.09 | (b) the fan's acreage (`fit_field` keeps its closest miss); (a) the roll's reach verdict, reported not refused |
+| gate/hamletgen/test_water::test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks | 0.04 | (b) the archetype's record and the sty (`reserve_sty_seat` may seat none, and nothing refuses) |
+| hamletgen/test_pool_261::test_the_pool_has_a_brook_to_cross | 0.08 | non-vacuity for the brook tests below |
+| ::test_the_copse_stands_within_reach_of_what_it_is_named_for (5) | 0.15 | (b) a reserved wood seat is planted without the reach test (against_the_belt's reach is from the belt) |
+| ::test_every_copse_clump_stands_on_the_bank_of_a_house_within_reach (4) | 0.15 | (b) a re-seated reserved seat is not asked its reach or bank again |
+| ::test_no_brook_folds_back_on_itself (5) | 0.12 | (b) `feed_brook`'s last candidate unjudged; the drawn course is rounded after the judgment |
+| ::test_no_brook_runs_ruled_along_the_frame (5) | 0.09 | (b) the same |
+| ::test_no_brook_runs_ruled_for_most_of_its_course_on_the_page (5) | 0.08 | (b) the same |
+| ::test_no_brook_segment_lies_on_a_screen_axis_but_the_tap_run (5) | 0.06 | (b) the same |
+| ::test_a_way_reaches_the_field (5) | 0.21 | (b) `settle_reach` reports `field_unreached`, it does not refuse |
+| ::test_every_way_out_crosses_the_brook_at_most_once (5) | 0.22 | (b) tree lanes are exempt from the last-resort drop; `Lawful` judges a lane, not a route |
+| ::test_the_board_caption_names_the_board_only (4) | 0.04 | (b) plan D12's terminal |
+| ::test_the_board_caption_stands_nearest_its_own_board (5) | 0.05 | (b) plan D12's terminal |
+| ::test_the_board_caption_notches_no_crown (5, excuse removed) | 0.15 | (b) plan D12's terminal |
+| hamletgen/test_pool_wind::test_the_pool_has_scripted_hamlets_to_judge | <0.005 | non-vacuity |
+| ::test_no_pool_hamlet_declares_a_wind (5) | <0.005 | (a) the GM's ruling on the pool's content; no placer owns a spec file |
+| ::test_every_pool_hamlet_has_its_belt_on_the_regional_northwest (5, narrowed) | 0.10 | (b) `trim_to_the_wind` converges on the crown nearest the wind even off it, and refuses nothing |
+| ::test_every_pool_belt_keeps_its_depth_across_its_windward_face (5, narrowed) | 0.08 | (b) no placer decides that a belt no bin judges stands against the page's edge |
+| full/test_villages::test_village_passes_gate (5) | 69.85 | (a) every shipped generator runs in its budget and to a manifest (this is the pool's regeneration, the gate's largest cost, which no retirement touches); (b) the paddy cell band (no placer holds it; it judges no map the pool ships today) |
+| full/settlement/test_rolling::test_pinned_knob_is_byte_identical_across_regens_and_rejects_incompatible_pins | 8.75 | (a) determinism of the whole roll |
+| soak/test_polder_fall_0::test_the_polder_dikes_keep_out_contains_its_drawn_band (narrowed) | soak | (b) the keep-out's inner edge is padded by a heuristic; no unit test holds a real band inside it |
+| soak/test_seatings::test_the_cluster_seeds_cloud_still_seats_a_hamlet_when_the_rows_offer_nothing | soak | (b) no unit test drives the cloud pass alone on a constructed site |
+| ::test_the_linear_frontage_pass_stops_once_the_households_are_housed | soak | (b) the quota's unit test (test_capacity::test_the_stage_seats_no_more_houses_than_households) never asserts that more seats were offered than taken |
+| soak/test_village_determinism::test_roll_village_is_deterministic_and_seed_varies_the_combination | soak | (a) determinism; (b) the village path's house count has a cap and no floor |
+
+Not placement rules, so outside FR-007 and kept: `tests/gate/test_pool.py`, `tests/gate/settlement/test_rolling.py` (the
+village entrypoint's coverage, 3.4 s), `tests/gate/pipeline/*`, `tests/full/hamletgen/test_driver.py` (CLI and fan-out),
+`tests/full/pipeline/*`, and `tests/test_villages.py`'s classification, budget, render and design-cell tests.
+
+### Gaps (FR-006: an excuse removed on a rule no placer guarantees yet)
+
+- **The fan's acreage.** `ACREAGE_SHORT` is gone and the cohort test asserts the 15% band on every member, but
+  `hamletgen/water/fit.py:fit_field` keeps its closest miss (no band, no refusal) and the canvas sizing is a measurement.
+  Seeds 45 and 47 are no member of the gate's population, so nothing rolls the case the excuse named.
+- **The board caption on a crown, on a way, off its board.** The level-1 excuse is gone; plan D12's terminal (0 of 53
+  maps) is the GM's question and the three pool tests are kept for it.
+- **The runoff brook downhill from the outfall** now has no reader at all: the retired test's brook clause judged nothing on
+  Inashiro, and `feed_brook`'s last candidate is unjudged.
+
+### Found on the way (for the lead)
+
+- **The SC-003 sweep reads the census tests by name** (`sweep/harness.py:census_tests` imports each module and looks the
+  function up). The retired ones will read "no such test function in its module" there; the sweep at acceptance needs
+  them from the pre-retirement tree or their predicates called directly.
+- **216 s**: `place_kosatsuba` on a road under one 600 px crown took 216.45 s at 0e792a665 (the strict siter proving
+  every seat before plan D12's terminal); a real map whose board stands under a canopy pays the same.
+- **Six failures at 0e792a665** in the worktree's run: the two overlap-matrix tests (kept, above), two
+  `test_notes_census` blocks (Inashiro, Kuwabata) and two test_pool_261 params on Mizuguchi's committed manifest (both
+  retired here).
+- **Stale mentions left in files this task does not own**: `hamletgen/ways/law.py`'s docstring and
+  `hamletgen/homesteads/wells.py` name retired tests; `tests/hamletgen/test_surface.py:105` names the deleted cohort module.
+- **Not touched, owned elsewhere now**: homes:H32's fixtures-unseated excuse tests in `tests/hamletgen/test_homesteads.py`
+  (the performance implementer's file) and woods:W17's `tools/mapcheck.py` tripwire (not a test).

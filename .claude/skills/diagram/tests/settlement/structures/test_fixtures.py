@@ -263,24 +263,21 @@ def test_a_caption_on_a_crown_is_on_the_canopy():
     assert not quad_on_canopy(quad, lambda x, y, pad: [(25.0, 40.0, 5.0)])
 
 
-def test_a_board_under_a_canopy_still_takes_a_seat():
-    # feature 261: a board whose caption would lie on crowns ranks below one clear of them, and is still offered - a
-    # board may stand under trees (the GM, 2026-08-29)
-    s = Settlement(1000, 1000, seed=1)
-    s.meta(name="T", scale="hamlet", ftpx=1)
-    s.M["road"] = [[100, 300], [900, 300]]
-    s.M["tree_crowns"] = [500.0, 300.0, 600.0]
-    assert s.place_kosatsuba() is not None
+def test_an_anchored_board_with_no_handover_keeps_to_the_seats_nearest_its_anchor():
+    # feature 287 R8: the band cut behind the retired canopy test (216 s on a 600 px crown) on a clear verge - an entrance
+    # anchor with no connector to hand over from keeps only the seats within the anchor band of the nearest one
+    import math
 
+    from l7r.diagram.settlement.structures.fixtures._helpers import KOSATSUBA_ANCHOR_BAND_FT
 
-def test_a_board_whose_caption_cannot_fit_is_not_sitable():
-    # feature 261: the siter asks the one placer, and a caption the placer can only seat on an obstacle or at a leader's
-    # distance does not make the board's seat sitable - the board is still placed (a board is never dropped)
-    s = Settlement(400, 400, seed=1)
+    s = Settlement(600, 400, seed=1)
     s.meta(name="T", scale="hamlet", ftpx=1)
-    s.M["road"] = [[20, 200], [380, 200]]
-    s.M["houses"] = [{"x": float(x), "y": float(y), "w": 30.0, "h": 30.0, "rot": 0.0} for x in range(40, 380, 34) for y in (170, 230)]
-    assert s.place_kosatsuba() is not None
+    s.M["road"] = [[20, 200], [580, 200]]  # a verge the whole width of the sheet, 400 px of it far from the anchor
+    s.M["houses"] = [{"x": 480.0, "y": 120.0, "w": 30.0, "h": 20.0, "rot": 0.0}, {"x": 520.0, "y": 120.0, "w": 30.0, "h": 20.0, "rot": 0.0}]
+    anchor = kosatsuba_anchor(s.M, "entrance")
+    assert anchor is not None and "lanes" not in s.M, "an anchor, and no connector to hand over from"
+    spot = s.place_kosatsuba()
+    assert spot is not None and math.dist(spot, anchor) <= 2 * KOSATSUBA_ANCHOR_BAND_FT, f"the board at {spot} strays from its anchor {anchor}"
 
 
 def test_a_hamlet_with_no_houses_or_no_handover_has_no_ways_out():

@@ -1,178 +1,30 @@
-"""Crossings, dangling water, and the ground between everything (feature 166).
+"""Crossings, dangling water, and the ground between everything (feature 166): what is left of it after feature 287.
 
-Carries six rules the retired battery re-measured on every finished map: `bridges_span_their_water`,
-`long_ditches_have_a_footbridge`, `footbridges_reach_useful_ground`, `drainage_junction_smooth`,
-`watercourse_ends_reach_water` and `margins_form_continuous_ring`.
+Feature 166 carried six rules here that the retired battery re-measured on every finished map. Feature 287 moved the
+crossing and watercourse rules into their placers, each with a unit test on the violating case, and retired their
+finished-map tests (specs/287-placer-guarantees/research.md R8): the deck long enough to land dry
+(`hamletgen/ways/settle.py:_crossing_fault`, `city/bridges.py` raising `UndeckableCrossing`), the plank on a supply ditch
+only (`city/bridges.py:channel_footbridges`, `plank_on_supply`), the runoff curving out of the collector
+(`waterfields/comb.py:_comb_drain`) and no watercourse end dangling (`waterfields/trunks.py:anchor_trunk_ends`).
 
-A CROSSING IS A DECISION SOMEBODY MADE, AND ITS ABSENCE IS ONE TOO. A ditch long enough to be in the way
-gets a plank, because the alternative is walking its whole length twice a day; a ditch with nothing on the
-far side does not, because nobody planks a crossing to nowhere. Both halves are the rule - a map that
-planks everything is as wrong as one that planks nothing, and it is wrong in the more expensive direction,
-because it says these households built things they had no use for.
-
-`stage_crossings` RUNS AFTER EVERY WAY AND EVERY WATERCOURSE, which is what makes these placer properties.
-A crossing added later leaves an unbridged one, so the stage is positioned to see the finished water and
-the finished ways - and having seen both, there is nothing downstream to undo its work.
-
-WATER NEVER JUST STOPS. A canal or collector end in bare ground is the drawing forgetting that the water
-has to go somewhere: it joins another course, or it runs off the frame, and those are the only two
-endings a watercourse has.
+KEPT, because no placer guarantees it yet: `margins_form_continuous_ring`. `land/cover.py:fill_the_holes` clothes the
+decided view to the rule's share, but the finish grows `meta.view` by the title band AFTER the fill
+(`settlement/finish.py:_title_band`), and the band's blank canvas is counted by the rule and refilled by nothing.
 """
 
 from __future__ import annotations
 
-import math
-
 import pytest
 
-from l7r.diagram.hamletgen.ways import law
 from tests import rolls
 from tests.gate import _pool
 
 SPEC = rolls.REFERENCE  # the pool's brief (feature 215)
 
-PLANK_MIN_PX = 140.0
-"""A ditch shorter than this is stepped over, not bridged. Below it a plank is a feature nobody built."""
-
-JOIN_TOL = 14.0
-"""How near a watercourse end must come to another course to count as joining it."""
-
-SHARP_DEG = 100.0
-"""A drainage brook leaving its collector past this angle is a hard corner. A collector turns DOWN the
-valley into the stream; it does not meet it at a right angle, because the water would not take that turn."""
-
-
-def _seg_dist(px: float, py: float, a, b) -> float:
-    ax, ay, bx, by = a[0], a[1], b[0], b[1]
-    vx, vy = bx - ax, by - ay
-    L2 = vx * vx + vy * vy
-    t = 0.0 if L2 == 0 else max(0.0, min(1.0, ((px - ax) * vx + (py - ay) * vy) / L2))
-    return math.hypot(px - (ax + t * vx), py - (ay + t * vy))
-
-
-def _poly_dist(pt, poly) -> float:
-    return min(_seg_dist(pt[0], pt[1], poly[i], poly[i + 1]) for i in range(len(poly) - 1))
-
-
-def _length(pts) -> float:
-    return sum(math.dist(pts[i], pts[i + 1]) for i in range(len(pts) - 1))
-
-
-def _point_in(pt, ring) -> bool:
-    x, y = float(pt[0]), float(pt[1])
-    inside, n = False, len(ring)
-    for i in range(n):
-        x0, y0 = float(ring[i][0]), float(ring[i][1])
-        x1, y1 = float(ring[(i + 1) % n][0]), float(ring[(i + 1) % n][1])
-        if (y0 > y) != (y1 > y) and x < (x1 - x0) * (y - y0) / (y1 - y0) + x0:
-            inside = not inside
-    return inside
-
 
 @pytest.fixture(scope="module")
 def rolled():
     return _pool.rolled_map(SPEC)
-
-
-def test_every_deck_is_long_enough_to_land_on_dry_ground(rolled) -> None:
-    """`bridges_span_their_water`. A deck whose corner falls at or short of the bank puts its abutment in
-    the water - the post that carries the deck stands in the thing it is crossing, which is the one place
-    it cannot stand. An oblique crossing needs more span than a square one, by exactly the geometry of the
-    angle, so a deck sized for a square crossing and then rotated is short by construction."""
-    _plan, M = rolled
-    bridges = M.get("bridges") or []
-    assert bridges, "the roll built no crossing, so this rule would judge nothing"
-    assert M.get("field_ditches") or M.get("channels") or M.get("streams"), "the roll drew no watercourse for a deck to span"
-    # the span must clear the water's full width with a landing each side (`law.short_decks`, the rule's one predicate)
-    short = law.short_decks(M)
-    assert not short, f"deck(s) shorter than the water they cross (x, y, span, water width): {short[:4]}"
-    # ...and every crossing a way makes is one the placer's own solve seats: grown, then skewed toward square, until every
-    # corner clears the whole crossed course (`law.undeckable_crossings` -> `crossing_deck` -> `_deck_corners_clear`)
-    undeckable = law.undeckable_crossings(M)
-    assert not undeckable, f"crossing(s) where no deck seats: {undeckable[:4]}"
-
-
-def test_every_plank_crosses_a_supply_ditch_and_never_the_collector(rolled) -> None:
-    """`footbridges_reach_useful_ground`, and the half of `long_ditches_have_a_footbridge` that is a
-    guarantee rather than a judgment call.
-
-    A ditch long enough to be in the way gets a plank, because walking its length twice a day is the
-    alternative. A ditch with nothing on the far side does NOT, because nobody builds a crossing to
-    nowhere - and a map that planks everything says these households built things they had no use for,
-    which is the more expensive error.
-
-    WHICH ditches have somewhere to cross TO is the PLACER's judgment (`channel_footbridges`), and the
-    retired check re-derived it through its own copy of the predicate. What the placer guarantees, and
-    what is asserted here, is that every plank it laid is a real crossing: on a recorded supply ditch,
-    never on the collector or the feeder - a plank over the drain crosses the water carrying the runoff
-    AWAY, which is not the ditch anybody needs to get over, and it is the far edge of the field.
-
-    Measured on the reference roll: 8 planks, every one on a main or a branch, none on the 1,183 px drain,
-    and two supply ditches (310 px and 256 px) deliberately left unplanked. That last figure is why the
-    "every long ditch" form is NOT asserted - it would call the placer's correct decision a defect."""
-    _plan, M = rolled
-    assert M["meta"].get("field_footbridges"), "this roll does not plank its ditches, so the rule does not apply to it"
-    planks = [b for b in (M.get("bridges") or []) if b.get("foot")]
-    assert planks, "the roll planked nothing, so this rule would judge nothing"
-    assert any(d.get("role") in ("main", "branch") for d in (M.get("field_ditches") or [])), "the roll drew no supply ditch"
-    stranded, on_drain = law.plank_faults(M)
-    assert not stranded, f"plank(s) cross no recorded ditch at all: {stranded[:4]}"
-    assert not on_drain, f"plank(s) laid over the collector rather than a supply ditch: {on_drain[:4]}"
-
-
-def test_the_runoff_curves_out_of_the_collector(rolled) -> None:
-    """`drainage_junction_smooth`. A collector turns DOWN the valley into the stream; it does not meet it
-    at a hard right angle, because water does not take that turn - it would pile against the far bank and
-    cut it. The junction is a curve on the ground and must be one on the page."""
-    _plan, M = rolled
-    drains = [d for d in (M.get("field_ditches") or []) if d.get("role") == "drain"]
-    assert drains, "the roll drew no collector, so this rule would judge nothing"
-    sharp = []
-    for d in drains:
-        pts = [(float(p[0]), float(p[1])) for p in d["poly"]]
-        for k in range(1, len(pts) - 1):
-            v1 = (pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1])
-            v2 = (pts[k + 1][0] - pts[k][0], pts[k + 1][1] - pts[k][1])
-            n1, n2 = math.hypot(*v1), math.hypot(*v2)
-            if n1 < 1e-6 or n2 < 1e-6:
-                continue
-            deg = math.degrees(math.acos(max(-1.0, min(1.0, (v1[0] * v2[0] + v1[1] * v2[1]) / (n1 * n2)))))
-            if deg >= SHARP_DEG:
-                sharp.append((round(pts[k][0]), round(pts[k][1]), round(deg)))
-    assert not sharp, f"the collector turns at a hard corner (x, y, deg): {sharp[:3]}"
-
-
-def test_no_watercourse_end_dangles_in_bare_ground(rolled) -> None:
-    """`watercourse_ends_reach_water`. Water never just stops. An on-map main or collector end must JOIN
-    another course - a culvert, the stream, another ditch, the pond - or run off the frame. An end in bare
-    grass is the drawing having forgotten that the water it drew has to go somewhere."""
-    _plan, M = rolled
-    trunks = [d for d in (M.get("field_ditches") or []) if d.get("role") in ("main", "drain")]
-    assert trunks, "the roll drew no trunk, so this rule would judge nothing"
-    others = [[(float(p[0]), float(p[1])) for p in c["poly"]] for c in (M.get("channels") or [])]
-    others += [[(float(p[0]), float(p[1])) for p in s["poly"]] for s in (M.get("streams") or [])]
-    others += [[(float(p[0]), float(p[1])) for p in d["poly"]] for d in (M.get("field_ditches") or [])]
-    pond = M.get("pond")
-    W, H = float(M["meta"]["W"]), float(M["meta"]["H"])
-    # THE RULE JUDGES ENDS OUTSIDE THE CROP. A trunk ending inside the field it feeds, or ON the field's
-    # boundary, has reached what it was dug for - the crop IS its destination. My first draft judged
-    # every end and flagged a main whose tip sits 0.3 px off the outline, which is the canal arriving,
-    # not dangling.
-    crop = [[(float(a), float(b)) for a, b in f["outline"]] for f in (M.get("fields") or []) if f.get("outline")]
-    dry = []
-    for d in trunks:
-        pts = [(float(p[0]), float(p[1])) for p in d["poly"]]
-        for end in (pts[0], pts[-1]):
-            if end[0] <= 1 or end[1] <= 1 or end[0] >= W - 1 or end[1] >= H - 1:
-                continue  # off the frame
-            if any(_point_in(end, ring) or _poly_dist(end, ring + [ring[0]]) <= 2.0 for ring in crop):
-                continue  # at or inside the crop it feeds
-            if pond and ((end[0] - pond[0]) / (pond[2] * 1.12)) ** 2 + ((end[1] - pond[1]) / (pond[3] * 1.12)) ** 2 <= 1.0:
-                continue
-            joined = any(_poly_dist(end, o) <= JOIN_TOL for o in others if o and o != pts and len(o) >= 2)
-            if not joined:
-                dry.append((round(end[0]), round(end[1])))
-    assert not dry, f"canal/collector end(s) dangle in bare ground at {sorted(set(dry))[:4]}"
 
 
 def test_the_countryside_has_no_holes_in_it(rolled) -> None:

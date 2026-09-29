@@ -26,7 +26,6 @@ import sys
 
 import pytest
 
-from l7r.diagram.overlap import point_in_poly
 from l7r.diagram.pipeline import gencache, poolmaps
 from tests.gate import _pool
 
@@ -247,37 +246,11 @@ def test_slow_gen_budget_fires_and_the_override_silences_it(tmp_path, monkeypatc
         _regen_and_gate(str(gen))
 
 
-def _channels_under_plots(svgpath):
-    """SVG-level z-order audit: every field channel (the SUPPLY_HUE / DRAIN_HUE strokes)
-    must draw OVER the paddy plots it crosses. A channel whose midpoint lies inside a plot polygon
-    that appears LATER in the document is painted over - the invisible-ditch-net defect (GM
-    2026-07-21: Hoshizora's canals "rendering below the rice paddies"; also Hikari-no-sato's
-    first comb under its second comb's plots, and the cities' residual 2nd-fan hole). This is
-    deliberately an SVG test, not a manifest check: scatter/paint order is not manifest-recorded,
-    same as the per-tuft skips. Returns the covered channels as (x, y) midpoints."""
-    import re
-
-    with open(svgpath) as fh:
-        svg = fh.read()
-    plots = []
-    for m in re.finditer(r'<polygon points="([^"]+)" fill="#[0-9A-Fa-f]{6}" stroke="#[0-9A-Fa-f]{6}" stroke-width="2"', svg):
-        plots.append((m.start(), [tuple(map(float, p.split(","))) for p in m.group(1).split()]))
-    covered = []
-    from l7r.diagram.settlement.water_ways.water import DRAIN_HUE, SUPPLY_HUE
-
-    for m in re.finditer(r'<path d="M([^"]+)" fill="none" stroke="(?:' + re.escape(SUPPLY_HUE) + '|' + re.escape(DRAIN_HUE) + ')"', svg):
-        coords = [tuple(map(float, p.split(","))) for p in m.group(1).replace(" L", ";").split(";")]
-        mid = coords[len(coords) // 2]
-        if any(pos > m.start() and point_in_poly(mid[0], mid[1], pts) for pos, pts in plots):
-            covered.append((round(mid[0]), round(mid[1])))
-    return covered
-
-
 def _typical_cell_acres(svgpath, ftpx):
     """Real-feet area of the TYPICAL leveled paddy cell (a bund-stroked plot polygon), taking the mean
     of the 45th-75th percentile band (the regular interior cells, above the edge wedges). Pins the
     ~0.05-acre paddy calibration (GM 2026-07-22, see research/fields.html 'Plot sizes, pond sizing and acreage from population'). SVG-measured,
-    not a manifest gate, because villages do not record plot_polys - same tier as the ditch z-order audit."""
+    not a manifest gate, because villages do not record plot_polys."""
     import re
     import statistics
 

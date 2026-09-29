@@ -1,25 +1,18 @@
-"""The ground cover a rolled hamlet must produce (feature 166).
+"""The ground cover a rolled hamlet must produce (feature 166): what is left of it after feature 287.
 
-Carries six rules the retired battery re-measured on every finished map: `woodland_commons_on_dry_ground`,
-`woodland_commons_visibly_stocked`, `woodland_commons_within_the_frame`, `village_groves_visibly_stocked`,
-`copse_stands_clear_of_the_belt` and `canopy_clear_of_watercourses`.
+Feature 166 carried six rules here that the retired battery re-measured on every finished map. Feature 287 moved five into
+their placers, each with a unit test on the violating case, and retired their finished-map tests with the woodland
+fixture only they read (specs/287-placer-guarantees/research.md R8): the woodland commons stocked, on dry ground and
+mostly inside the picture (`hamletgen/hinterland/parcels.py:open_ground_patches`, `land/cover.py:commons`), the dooryard
+copse clear of the belt and no canopy over open water (`homestead_parts/stands.py:village_grove`).
 
-A DECLARED FEATURE THE MAP DOES NOT DRAW IS THE FAILURE MOST OF THESE GUARD, and it is worse than a
-missing feature. A commons parcel recording `role=woodland` with no crowns reads green to every other
-grove rule while the dooryards it should have shaded stay bare - the record says wood, the page says
-grass, and each rule downstream believes the record. So "it was drawn" is itself the assertion, stated
-as a stocking density rather than as a boolean, because a parcel with two trees in it is not a wood.
-
-THE PHYSICAL RULES ARE SIMPLER THAN THE RECORD-KEEPING ONES. Trees do not grow in a stream; a wood does
-not stand in a marsh; a dooryard copse standing inside the windbreak's canopy is not a second stand of
-trees but the same trees drawn twice. Each is a fact about the world rather than about the drawing, and
-each has a placer that already knows it.
+KEPT, because no placer guarantees it yet: `village_groves_visibly_stocked`. The copse is held to its stocking
+(`stands.py`, `stocked_copse`), but the windbreak's and the water mouth's records keep the requested polygon's size with
+no placer deciding their density, and `settlement/core.py:_partition_grove_clumps` (called by `set_view`) moves the
+off-page clumps out of a grove without re-recording its size.
 """
 
 from __future__ import annotations
-
-import math
-import pathlib
 
 import pytest
 
@@ -28,111 +21,13 @@ from tests.gate import _pool
 
 SPEC = rolls.REFERENCE  # the pool's brief (feature 215)
 
-MIN_CROWNS = 5
-"""Under five crowns a stand does not read as a wood at fit zoom - it reads as a few trees on grass."""
-
 MIN_CLUMP_DENSITY = 1.5
 """Clumps per 100k square pixels. Below this the grove is a declared outline with almost nothing in it."""
-
-FRAME_FRACTION = 0.7
-"""How much of a woodland parcel's box must fall inside the rendered view. A commons may run off the
-frame like any other countryside; what it may not do is be seated mostly outside the picture, because
-then the map declares a wood the reader cannot see."""
-
-
-def _seg_dist(px: float, py: float, a, b) -> float:
-    ax, ay, bx, by = a[0], a[1], b[0], b[1]
-    vx, vy = bx - ax, by - ay
-    L2 = vx * vx + vy * vy
-    t = 0.0 if L2 == 0 else max(0.0, min(1.0, ((px - ax) * vx + (py - ay) * vy) / L2))
-    return math.hypot(px - (ax + t * vx), py - (ay + t * vy))
 
 
 @pytest.fixture(scope="module")
 def rolled():
     return _pool.rolled_map(SPEC)
-
-
-def _woodland_of(M: dict) -> list[dict]:
-    return [c for c in (M.get("commons") or []) if c.get("role") == "woodland" and c.get("poly")]
-
-
-@pytest.fixture(scope="module")
-def woodland(rolled):
-    """The woodland rules need a woodland to judge, and the REFERENCE map does not always have one.
-
-    Its woodland is a single marginal patch - 0.23 acres on the roll that had one - found by the hinterland
-    scan in whatever open ground the cluster and the fields leave. On 2026-09-13, with features 227 and 230
-    both in, the reference roll stopped seating it while its five grazing parcels stayed byte-identical: a
-    near-threshold find flipping, not a rule changing. Rather than let every woodland rule pass on nothing,
-    this falls back to a SHIPPED POOL MANIFEST that has one - three of the five do - which is a seed test on
-    a roll already made (the gate's own doctrine) and adds no roll to the census.
-    """
-    _plan, M = rolled
-    parcels = _woodland_of(M)
-    if parcels:
-        return M, parcels
-    import json
-
-    for path in sorted((pathlib.Path(__file__).resolve().parents[2] / "pool" / "hamlets").glob("*/*.json")):
-        try:
-            other = json.loads(path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            # THE GATE REWRITES THESE WHILE WE READ THEM. The pool phase re-rolls every shipped map, so a
-            # manifest can be half-written at the moment this fixture opens it - which errored two of these
-            # tests on the run that introduced this fallback. Three of the five maps carry a woodland, so
-            # stepping over one mid-write still leaves the rules something to judge; if every candidate is
-            # unreadable the `pytest.fail` below says so rather than passing on nothing.
-            continue
-        found = _woodland_of(other)
-        if found:
-            return other, found
-    pytest.fail("no shipped hamlet seats a woodland commons, so every woodland rule would pass on nothing")
-
-
-def test_a_woodland_commons_is_visibly_stocked(woodland) -> None:
-    """`woodland_commons_visibly_stocked`. A parcel claiming a woodland must draw one and record its
-    crowns. This is the record-keeping half of the rule and the reason it exists: without it a parcel
-    reads as a wood to every other rule while the page shows bare ground."""
-    _M, parcels = woodland
-    bare = [(round(float(c.get("x", 0))), round(float(c.get("y", 0))), c.get("crowns")) for c in parcels if c.get("crowns") is None or int(c["crowns"]) < MIN_CROWNS]
-    assert not bare, f"{len(bare)} woodland parcel(s) record no canopy (center, crowns; None = unrecorded): {bare[:4]}"
-
-
-def test_a_woodland_commons_stands_on_dry_ground(woodland) -> None:
-    """`woodland_commons_on_dry_ground`. A managed wood - the coppice a village cuts fuel and leaf-fodder
-    from - is not a swamp forest. Standing water rots the stools, the cut cannot be carried out, and the
-    species that make a satoyama coppice are not the species that grow in a marsh. Where the map has laid
-    marsh, the wood goes somewhere else."""
-    from l7r.diagram.hamletgen.hinterland.parcels import WET_SHARE_CAP, parcel_wet_share
-    from l7r.diagram.settlement.land.wet import marsh_ground
-
-    M, parcels = woodland
-    marshes = marsh_ground(M)  # the drawn marsh, as the placer reads it (feature 287, M7)
-    assert marshes, "the roll laid no marsh, so this rule would judge nothing"
-    # THE PLACER'S OWN PREDICATE (feature 287, FR-003): the 5 x 5 grid over the drawn ring's box, more than half wet fails
-    wet = [(round(float(c.get("x", 0))), round(float(c.get("y", 0))), parcel_wet_share(c["poly"], marshes)) for c in parcels if parcel_wet_share(c["poly"], marshes) > WET_SHARE_CAP]
-    assert not wet, f"woodland commons parcel(s) seated in marsh: {wet[:4]}"
-
-
-def test_a_woodland_commons_is_mostly_inside_the_picture(woodland) -> None:
-    """`woodland_commons_within_the_frame`. Countryside may run off the frame - that is what countryside
-    does - but a parcel seated mostly outside the rendered view declares a wood the reader cannot see, and
-    the sheet then shows a village whose fuel supply is off the page."""
-    M, parcels = woodland
-    view = M["meta"].get("view")
-    assert view, "the roll records no view, so 'inside the picture' has no meaning"
-    vx0, vy0, vw, vh = (float(v) for v in view)
-    vx1, vy1 = vx0 + vw, vy0 + vh
-    outside = []
-    for c in parcels:
-        xs = [float(p[0]) for p in c["poly"]]
-        ys = [float(p[1]) for p in c["poly"]]
-        box = max(1e-9, (max(xs) - min(xs)) * (max(ys) - min(ys)))
-        inter = max(0.0, min(max(xs), vx1) - max(min(xs), vx0)) * max(0.0, min(max(ys), vy1) - max(min(ys), vy0))
-        if inter / box < FRAME_FRACTION:
-            outside.append((round(float(c.get("x", 0))), round(float(c.get("y", 0))), round(100 * inter / box)))
-    assert not outside, f"woodland parcel(s) seated mostly outside the view (center, % inside): {outside[:4]}"
 
 
 def test_every_recorded_grove_holds_trees(rolled) -> None:
@@ -150,37 +45,3 @@ def test_every_recorded_grove_holds_trees(rolled) -> None:
         if dens < MIN_CLUMP_DENSITY:
             bare.append(f"{g.get('role') or 'grove'} {float(g['w']):.0f}x{float(g['h']):.0f}px holds {n} clump(s) ({dens:.2f}/100k)")
     assert not bare, f"{len(bare)} recorded grove(s) hold almost no trees: {bare[:3]}"
-
-
-def test_a_dooryard_copse_stands_clear_of_the_windbreak(rolled) -> None:
-    """`copse_stands_clear_of_the_belt`. A copse buried inside the windbreak's canopy is not a second
-    stand of trees - it is the same trees drawn twice, and the map has spent a feature saying nothing. The
-    copse is a dooryard feature and the belt is a field-edge one; they are different things standing in
-    different places, so the one inside the other means a seat search that gave up."""
-    _plan, M = rolled
-    groves = M.get("village_groves") or []
-    belts = [g for g in groves if g.get("role") in ("windbreak", "water_mouth")]
-    copses = [g for g in groves if g.get("role") == "copse"]
-    assert belts and copses, "the roll drew no belt or no copse, so this rule would judge nothing"
-    buried = []
-    for cp in copses:
-        for cl in cp.get("clumps") or []:
-            for b in belts:
-                r = float(b.get("r") or 0.0)
-                if any((float(cl[0]) - float(bc[0])) ** 2 + (float(cl[1]) - float(bc[1])) ** 2 < r * r for bc in (b.get("clumps") or [])):
-                    buried.append((round(float(cl[0])), round(float(cl[1]))))
-                    break
-    assert not buried, f"{len(buried)} copse clump(s) stand INSIDE the windbreak's canopy at {buried[:4]}"
-
-
-def test_no_canopy_stands_over_open_water(rolled) -> None:
-    """`canopy_clear_of_watercourses`. Trees do not grow in a stream, a channel or a moat. A clump seated
-    over open water is the scatter treating the watercourse as ground, and the reader sees a tree growing
-    out of a canal."""
-    _plan, M = rolled
-    courses = [[(float(p[0]), float(p[1])) for p in c["poly"]] for c in (M.get("channels") or [])]
-    courses += [[(float(p[0]), float(p[1])) for p in s["poly"]] for s in (M.get("streams") or [])]
-    clumps = [(float(c[0]), float(c[1])) for g in (M.get("village_groves") or []) for c in (g.get("clumps") or [])]
-    assert courses and clumps, "the roll drew no watercourse or no canopy, so this rule would judge nothing"
-    wet = [(round(x), round(y)) for x, y in clumps if min(min(_seg_dist(x, y, p[i], p[i + 1]) for i in range(len(p) - 1)) for p in courses) < 4.0]
-    assert not wet, f"grove canopy clump(s) stand over open water at {sorted(set(wet))[:4]}"

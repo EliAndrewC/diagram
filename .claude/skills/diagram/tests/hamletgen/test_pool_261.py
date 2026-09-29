@@ -5,6 +5,23 @@ The GM, on the seats the brook used to refuse: *"if we find instead that our pla
 it possible to lay out a known-to-be-valid settlement configuration then we should fix the placement algorithm
 instead"* - and then *"please add that to feature 261 and then do all of the work"*. These read the SHIPPED
 manifests: properties of a finished map that no single placement owns (FR-011, FR-013 - FR-015, FR-017).
+
+FEATURE 287 RETIRED FOURTEEN OF THESE (specs/287-placer-guarantees/research.md R8): the placer now decides each rule, with
+a unit test on the violating case - the brook bridged and crossed only at fords, square and at most once out and back
+(`hamletgen/ways/settle.py`, `city/bridges.py`), no hook and no end served only by its own way (`settle.py`), a farmstead
+part on its house's bank and no farmhouse on the brook (`settlement/rolling/fit.py`), the entrance board
+(`structures/fixtures/siting.py`), the board caption at the board's angle (`board_seat.py`), the ruled row of woodland
+(`hinterland/parcels.py`), the copse off the marsh and the belt's alder (`homestead_parts/stands.py`) and no household
+grain plot (its producer is gone). What is left is KEPT because no placer guarantees it yet, and each test says why:
+- the brook's shape (fold, ruled run along the frame and on the page, the screen axis): `hamletgen/water/brook.py:feed_brook`
+  returns its last candidate (round the field) unjudged, and the drawn course is rounded after it is judged;
+- a way reaching the field: `settle.py:settle_reach` reports `field_unreached`, it does not refuse;
+- a way out crossing the brook at most once: tree lanes are exempt from the last-resort drop, and `Lawful` judges one
+  lane, not a route;
+- the copse's reach and bank: a reserved wood seat is planted without the reach test, and a re-seated one is not asked
+  its reach or bank again (and against_the_belt's reach is from the belt, which the reservation does not know);
+- the board caption off the roofs, nearest its board and off the crowns: guaranteed except at plan D12's terminal, kept
+  for the GM (`meta.kosatsuba_d12`).
 """
 
 from __future__ import annotations
@@ -19,14 +36,10 @@ import pytest
 from l7r.diagram.hamletgen.consts import BROOK_MAX_TURN_DEG, BROOK_WANDER_STEP, COPSE_BELT_REACH_FT, COPSE_HOUSE_REACH_FT
 from l7r.diagram.hamletgen.ways import law
 from l7r.diagram.settlement import segments_cross
-from l7r.diagram.settlement._geom.water_index import crosses_a_stream
-from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_ENTRANCE_REACH_FT, KOSATSUBA_HANDOVER_BAND_FT, departure_routes, kosatsuba_anchor, routes_missed
-from l7r.diagram.settlement.structures.fixtures._helpers import KOSATSUBA_ANCHOR_BAND_FT
 
 SKILL = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 GENS = sorted(glob.glob(os.path.join(SKILL, "pool", "hamlets", "*", "*.gen.py")))
 IDS = [os.path.basename(g).removesuffix(".gen.py") for g in GENS]
-PART_KEYS = ("gardens", "threshing_yards", "farm_fixtures", "byres", "farm_sheds", "persimmons", "bamboo_stands")
 
 
 def _manifest(gen: str) -> dict:
@@ -41,25 +54,6 @@ def _brooks(m: dict) -> list[list[tuple[float, float]]]:
 def test_the_pool_has_a_brook_to_cross() -> None:
     brooked = [g for g in GENS if _brooks(_manifest(g))]
     assert len(brooked) >= 3, "non-vacuity: most scripted hamlets carry a brook"
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_every_way_across_the_brook_is_bridged(gen: str) -> None:
-    """FR-011 / SC-008: a way that crosses the brook crosses on a drawn deck - a bridge within its own span of the
-    crossing point."""
-    unbridged = law.unbridged_crossings(_manifest(gen))
-    assert not unbridged, f"a way crosses the brook at {unbridged[:4]} with no bridge"
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_every_farmstead_part_stands_on_its_house_bank(gen: str) -> None:
-    """FR-013 / SC-009: the line from a farmhouse to each part of its farmstead crosses no reach of the brook."""
-    m = _manifest(gen)
-    parts = [r for k in PART_KEYS for r in m.get(k) or [] if r.get("of")]
-    assert parts or m.get("meta", {}).get("archetype") == "dikepond" or not m.get("houses"), "non-vacuity: parts name their house"
-    for r in parts:  # the placers' own predicate (feature 287, FR-003)
-        across = crosses_a_stream((float(r["of"][0]), float(r["of"][1])), (float(r["x"]), float(r["y"])), m.get("streams", []))
-        assert not across, f"a farmstead part at ({r['x']:.0f}, {r['y']:.0f}) stands across the brook from its house"
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)
@@ -78,26 +72,6 @@ def test_the_copse_stands_within_reach_of_what_it_is_named_for(gen: str) -> None
         near, reach = [(h["x"], h["y"]) for h in m["houses"]], COPSE_HOUSE_REACH_FT
     far = [c for c in clumps if min(math.hypot(c[0] - q[0], c[1] - q[1]) for q in near) > reach + 1.0]
     assert not far, f"{len(far)} copse crowns stand beyond {reach:.0f} ft of what the copse is named for"
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_an_entrance_board_stands_at_the_entrance(gen: str) -> None:
-    """FR-015 / SC-011: a board the map seats at its entrance stands where the approach arrives - no further from the
-    anchor than the entrance reach plus the board's siting band, and where every household's way out passes it. The
-    settlement-review found Sawada's 669 ft from its anchor, deep among the houses, where no departure passed it."""
-    m = _manifest(gen)
-    seat = m["meta"].get("kosatsuba_seat")
-    if seat != "entrance" or not m.get("kosatsuba"):
-        pytest.skip(f"the board is seated {seat!r}")
-    b = m["kosatsuba"][0]
-    anchor = kosatsuba_anchor(m, seat)
-    assert anchor is not None
-    assert math.hypot(b["x"] - anchor[0], b["y"] - anchor[1]) <= KOSATSUBA_ENTRANCE_REACH_FT + KOSATSUBA_ANCHOR_BAND_FT
-    # ...AND EVERY DEPARTURE PASSES IT (a settlement-review measured one or two households per map leaving by a lane that
-    # never came near the board): each household's drawn way out, walked through the lanes and on along the connector
-    routes = departure_routes(m)
-    assert len(routes) >= len(m["houses"]) - 1, "non-vacuity: the households walk their ways out"
-    assert routes_missed(routes, b["x"], b["y"], KOSATSUBA_HANDOVER_BAND_FT) == 0
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)
@@ -143,36 +117,6 @@ def test_no_brook_runs_ruled_along_the_frame(gen: str) -> None:
                     j += 1
                 run = sum(math.dist(brook[k], brook[k + 1]) for k in range(i, j))
                 assert run <= 150.0, f"{run:.0f} ft of brook ruled along the frame from ({brook[i][0]:.0f}, {brook[i][1]:.0f})"
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_no_farmhouse_stands_on_the_brook(gen: str) -> None:
-    """FR-013: a farmstead stands whole on one bank, which begins with its house - no corner of a farmhouse within the brook's
-    half-width plus 5 ft of its course. The settlement-review found a Mizuguchi house whose wall stood on the centerline."""
-    from l7r.diagram.settlement import seg_dist
-
-    m = _manifest(gen)
-    for f in m.get("streams", []):
-        poly, hw = f["poly"], float(f.get("w", 9.0)) / 2 + 5.0
-        for h in m["houses"]:
-            corners = [(h["x"] + sx * h["w"] / 2, h["y"] + sy * h["h"] / 2) for sx in (-1, 1) for sy in (-1, 1)]
-            near = min(seg_dist(c[0], c[1], poly[k], poly[k + 1]) for c in corners for k in range(len(poly) - 1))
-            assert near >= hw - 1.0, f"the farmhouse at ({h['x']:.0f}, {h['y']:.0f}) stands {near:.1f} ft from the brook's course"
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_the_ways_cross_the_brook_only_at_fords_and_never_over_and_back(gen: str) -> None:
-    """FR-011 (settlement-reviews of Kashikawa and Mizuguchi, feature 261): every crossing of the brook by a way stands at a
-    ford, and no way crosses it an even number of times - out at one crossing and home at the next is two planks for
-    nothing; and no lane record is an empty husk or a tail doubled along another way."""
-    m = _manifest(gen)
-    assert not law.husks(m), "a lane record that draws nothing"
-    tails = law.doubled_tails(m)
-    assert not tails, f"lane {tails[0] if tails else ''}'s end runs on beside another way"
-    twice = law.over_and_back(m)
-    assert not twice, f"a way crosses the brook {twice[0][1] if twice else 0} times"
-    off = law.off_ford_crossings(m)  # at FORD_HALF, the router's one ford constant - the old 45 ft slack is gone (287 M1)
-    assert not off, f"a crossing at {off[:4]} stands off every ford"
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)
@@ -241,65 +185,6 @@ def test_every_way_out_crosses_the_brook_at_most_once(gen: str) -> None:
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_no_lane_ends_in_a_hook(gen: str) -> None:
-    """No lane ends in a hook - a last leg of `_HOOK_FT` or less turning back `_HOOK_DEG` or more (the GM, 2026-09-26; the
-    settlement-review of Sawada, feature 261, found one drawn by the doubled-tail cut, after the pass that takes them off)."""
-    m = _manifest(gen)
-    assert m["lanes"], "non-vacuity: the map has lanes"
-    hooks = law.hooked_ends(m)
-    assert not hooks, f"a lane ends in a hook at {hooks[:4]}"
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_every_lane_crosses_a_drawn_channel_square(gen: str) -> None:
-    """A plank crosses its ditch square rather than obliquely (research ways/030) - the channels as well as the brook
-    (settlement-review of Mizuguchi, feature 261: a lane over the head-race lay 44 degrees off square)."""
-    oblique = law.oblique_crossings(_manifest(gen), "channel")
-    assert not oblique, f"a lane crosses a channel off square (x, y, degrees off): {oblique[:4]}"
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_the_board_caption_stands_at_the_boards_angle(gen: str) -> None:
-    """The GM (2026-08-27): "the notice board is at an angle, therefore, the notice board label should be at exactly the
-    same angle" (settlement-review of Kuwabata, feature 261: an upright fallback drew the caption level beside a board
-    at 38.7 degrees)."""
-    m = _manifest(gen)
-    labs = [lab for lab in m.get("labels", []) if "notice" in str(lab[5]).lower()]
-    assert labs and m.get("kosatsuba"), "non-vacuity: the board and its caption"
-    tilt = float(labs[0][7]) if len(labs[0]) > 7 and labs[0][7] is not None else 0.0
-    off = abs((tilt - float(m["kosatsuba"][0].get("rot") or 0.0) + 90.0) % 180.0 - 90.0)
-    assert off <= 0.5, f"the caption stands {off:.1f} degrees off its board"
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_no_three_woodland_parcels_stand_in_a_ruled_row(gen: str) -> None:
-    """The coppice lots are not three stamps marching down one line (settlement-reviews of 2026-08-18, and of Inashiro in
-    feature 261: 5 ft off one line over 1,104 ft)."""
-    from l7r.diagram.hamletgen.hinterland.parcels import in_a_ruled_line
-
-    m = _manifest(gen)
-    w = [(float(o["x"]), float(o["y"])) for o in m.get("commons") or [] if o.get("role") == "woodland"]
-    if len(w) < 3:
-        pytest.skip(f"{len(w)} woodland parcel(s): a row needs three")
-    assert not any(in_a_ruled_line(w[k], w[:k]) for k in range(2, len(w))), f"woodland parcels in a row: {w}"
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_no_copse_clump_is_based_in_the_marsh(gen: str) -> None:
-    """Woody cover stands on the dry ground above the marsh (research/vegetation.html; settlement-review of Kashikawa,
-    feature 261: copse crowns 3-21 ft inside the toe marsh)."""
-    from l7r.diagram.settlement._geom import point_in_poly
-
-    m = _manifest(gen)
-    copse = [c for g in m.get("village_groves") or [] if g.get("role") == "copse" for c in g.get("clumps") or []]
-    assert copse, "non-vacuity: the map has a copse"
-    for mk in m.get("marshes") or []:
-        ring = [(float(q[0]), float(q[1])) for q in mk.get("poly") or []]
-        if len(ring) >= 3:
-            assert not any(point_in_poly(float(c[0]), float(c[1]), ring) for c in copse), "a copse clump stands in the marsh"
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
 def test_the_board_caption_notches_no_crown(gen: str) -> None:
     """The caption's halo does not cut a notch out of a tree crown (settlement-review of Kuwabata, feature 230 pass 13 and
     again in feature 261, once the caption stood at its board's angle in the windbreak)."""
@@ -311,9 +196,10 @@ def test_the_board_caption_notches_no_crown(gen: str) -> None:
     labs = [lab for lab in m.get("labels", []) if "notice" in str(lab[5]).lower()]
     assert labs, "non-vacuity: the board has its caption"
     on = quad_on_canopy(label_quad(labs[0]), canopy_index(m).near)
-    # ...unless the map records that no seat the board could take offered a caption clear of the crowns (level 1): the GM
-    # (2026-08-29) lets a board stand under a canopy while its label is visible, and the siter ranks a clear caption first
-    assert not on or m["meta"].get("kosatsuba_caption_level") == 1, "the caption lies on a crown where the seat offered a clear one"
+    # no excuse since feature 287 (FR-006): the level-1 seat is gone - the board is sited only where its caption proves clear
+    # of the crowns (`board_seat.py:board_caption_seat`). Plan D12's terminal (no verge takes a clean caption) is not
+    # excused either: it is the gap this test is kept for.
+    assert not on, "the board's caption lies on a crown"
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)
@@ -365,33 +251,6 @@ def test_no_brook_runs_ruled_for_most_of_its_course_on_the_page(gen: str) -> Non
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_no_household_grain_plot_is_laid_by_its_house(gen: str) -> None:
-    """The plot a household works by its own house is the kitchen bed, and its dry crops grew out in its hatake
-    (research/homesteads.html, "How big was a dooryard garden?"; research/fields.html, "Where dry (hatake) crops go"):
-    a per-house grain plot, which feature 261 once laid, is not drawn (the GM, 2026-09-28, on the research pass)."""
-    m = _manifest(gen)
-    assert m["houses"], "non-vacuity: the map has houses"
-    assert not any(d.get("homestead") for d in m.get("dry_plots") or []), "a grain plot laid by a house"
-    assert "homestead_fields" not in (m.get("meta") or {})
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_a_belt_tree_in_the_marsh_is_alder(gen: str) -> None:
-    """Woody cover at a reed edge is alder or willow, never pine (research/vegetation.html, the marsh margin): every belt
-    clump seated inside a toe marsh is drawn as alder and counted so (settlement-review of Sawada, feature 261: 70 of
-    its 201 belt clumps stood in the toe marsh, drawn as the belt's cedar and broadleaf)."""
-    from l7r.diagram.settlement import point_in_poly
-
-    m = _manifest(gen)
-    toes = [[(float(a), float(b)) for a, b in mk["poly"]] for mk in m.get("marshes") or [] if mk.get("role") in ("toe", "waterside")]
-    for g in m.get("village_groves") or []:
-        if g.get("role") != "windbreak":
-            continue
-        wet = sum(1 for c in g["clumps"] if any(point_in_poly(c[0], c[1], t) for t in toes))
-        assert g.get("alder", 0) == wet, f"{wet} belt clumps stand in the marsh, {g.get('alder', 0)} drawn as alder"
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
 def test_no_brook_segment_lies_on_a_screen_axis_but_the_tap_run(gen: str) -> None:
     """A drawn watercourse runs on no screen axis (the GM, 2026-08-26: a course "exactly east to west parallel to the edge
     of the map ... makes it look like a mistake"), except the tap run, which lies on the fall by construction: the
@@ -410,26 +269,6 @@ def test_no_brook_segment_lies_on_a_screen_axis_but_the_tap_run(gen: str) -> Non
                 continue
             deg = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])) % 90.0
             assert min(deg, 90.0 - deg) >= 1.6, f"brook segment {i} lies {min(deg, 90.0 - deg):.1f} degrees off a screen axis"
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_every_lane_crosses_the_brook_square(gen: str) -> None:
-    """Every lane crosses the brook square, within `FORD_SQUARE_TOL_DEG` (settlement-review of Kashikawa, round 03cf6a84:
-    a lane bent 3 ft inside the water and its plank lay 44 degrees off square; the channel test above did not read the
-    streams)."""
-    oblique = law.oblique_crossings(_manifest(gen), "brook")
-    assert not oblique, f"a lane crosses the brook off square (x, y, degrees off): {oblique[:4]}"
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_no_lane_end_is_served_only_by_the_way_it_left(gen: str) -> None:
-    """A lane end reaches something other than the way its own far end stands on (settlement-review of Mizuguchi, round
-    176042d3: a lane left the connector, ran 61 ft past its house and stopped in the grass, counted as arriving because it
-    was still within reach of the connector it had left). Asked of the engine's own `end_serves`."""
-    m = _manifest(gen)
-    assert [ln for ln in m["lanes"] if not ln.get("connector") and len(ln.get("pts") or []) >= 2], "non-vacuity: the map has lanes"
-    dangling = law.dangling_ends(m)
-    assert not dangling, f"the lane end(s) at {dangling[:4]} reach only the way they left"
 
 
 def test_a_house_beyond_the_reach_of_every_lane_has_no_way_out() -> None:

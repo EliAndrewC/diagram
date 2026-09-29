@@ -1,8 +1,17 @@
-"""Which way the water runs on a rolled map (feature 166).
+"""Which way the water runs on a rolled map (feature 166): what is left of it after feature 287.
 
-Carries seven rules the retired battery re-measured on every finished map: `channels_flow_downhill`,
-`drain_flows_downhill`, `drainage_discharges_downhill`, `streams_avoid_fields`, `stream_source_anchored`,
-`stream_end_anchored` and `fields_show_water_source`.
+Feature 166 carried seven rules here that the retired battery re-measured on every finished map. Feature 287 moved four
+into their placers, each with a unit test on the violating case, and retired their finished-map tests
+(specs/287-placer-guarantees/research.md R8): `drain_flows_downhill` (`waterfields/comb.py:_comb_drain`),
+`drainage_discharges_downhill` for the pond and the drain's run (`hamletgen/sink.py`'s route refusals and pond seat),
+`streams_avoid_fields` (`hamletgen/water/brook.py:feed_brook`, `brook_violations`) and `fields_show_water_source`
+(`fields/comb.py:draw_comb_field`).
+
+KEPT, because no placer guarantees them yet:
+- `channels_flow_downhill`: only the sink's routes are decided by `runs_downhill`; the feed and head-race record and the
+  comb's own drain run reach `channels` with no downhill decision and no unit test.
+- `stream_source_anchored` / `stream_end_anchored`: `brook_violations` asks the source end only; the exit end rests on
+  `brook_skirt`'s construction, and no test has the violating case.
 
 WATER IS THE ONE THING ON A MAP THAT CANNOT BE PLACED BY EYE. Every other feature can be wrong and merely
 look odd; a channel running uphill is a claim about the world that is false. That is why the fall is
@@ -41,18 +50,6 @@ def _fall_vector(deg: float) -> tuple[float, float]:
     return (math.cos(math.radians(deg)), math.sin(math.radians(deg)))
 
 
-def _seg_dist(px: float, py: float, a, b) -> float:
-    ax, ay, bx, by = a[0], a[1], b[0], b[1]
-    vx, vy = bx - ax, by - ay
-    L2 = vx * vx + vy * vy
-    t = 0.0 if L2 == 0 else max(0.0, min(1.0, ((px - ax) * vx + (py - ay) * vy) / L2))
-    return math.hypot(px - (ax + t * vx), py - (ay + t * vy))
-
-
-def _poly_dist(pt, poly) -> float:
-    return min(_seg_dist(pt[0], pt[1], poly[i], poly[i + 1]) for i in range(len(poly) - 1))
-
-
 @pytest.fixture(scope="module")
 def rolled():
     return _pool.rolled_map(SPEC)
@@ -87,79 +84,6 @@ def test_every_channel_runs_downhill(rolled) -> None:
     assert not uphill, f"channel(s) not running downhill: {sorted(set(uphill))}"
 
 
-def test_a_collector_discharges_at_its_lowest_point(rolled) -> None:
-    """`drain_flows_downhill`. Water would run backwards otherwise. The discharge end of a collector must
-    be its lowest point - which, with the fall declared rather than drawn, means the outfall's projection
-    on the fall vector exceeds the head's."""
-    _plan, M = rolled
-    drains = [d for d in (M.get("field_ditches") or []) if d.get("role") == "drain"]
-    assert drains, "the roll drew no collector, so this rule would judge nothing"
-    dvec = _fall_vector(float(M["meta"]["down_deg"]))
-    for d in drains:
-        pts = d["poly"]
-        head, out = pts[0], pts[-1]
-        along = (out[0] - head[0]) * dvec[0] + (out[1] - head[1]) * dvec[1]
-        # a collector runs cross-slope, so its ENDS may sit at nearly the same height; what is forbidden
-        # is the outfall sitting measurably UPHILL of the head.
-        assert along >= -1.0, f"the collector's outfall {out} sits uphill of its head {head} - water would run backwards"
-
-
-def test_the_runoff_leaves_the_outfall_downhill(rolled) -> None:
-    """`drainage_discharges_downhill`. The brook carrying the runoff away from the collector must take it
-    DOWNHILL, matching the water flow everywhere else on the map. Where the sink is a pond, the pond is
-    the discharge and the same rule applies to reaching it."""
-    plan, M = rolled
-    drains = [d for d in (M.get("field_ditches") or []) if d.get("role") == "drain"]
-    assert drains, "the roll drew no collector"
-    dvec = _fall_vector(float(M["meta"]["down_deg"]))
-    outfall = drains[0]["poly"][-1]
-    sink = M.get("pond")
-    # the continuation is a DRAINAGE DITCH in every sink since feature 230 - a `channels` record leaving the drain
-    # - and a natural brook near the outfall is judged too, should a map still draw one there
-    runs = [c["poly"] for c in (M.get("channels") or []) if (c.get("frm") or {}).get("kind") == "drain" and _poly_dist(outfall, c["poly"]) < 60.0]
-    brooks = runs + [st["poly"] for st in (M.get("streams") or []) if _poly_dist(outfall, st["poly"]) < 60.0]
-    assert sink or brooks, "the roll gave the outfall neither a pond nor a run onward, so the discharge is unjudgeable"
-    if sink:
-        along = (sink[0] - outfall[0]) * dvec[0] + (sink[1] - outfall[1]) * dvec[1]
-        assert along > 0, f"the sink pond at {sink[:2]} sits uphill of the outfall {outfall}"
-    for poly in brooks:
-        near, far = (poly[0], poly[-1]) if _poly_dist(outfall, [poly[0], poly[0]]) < _poly_dist(outfall, [poly[-1], poly[-1]]) else (poly[-1], poly[0])
-        along = (far[0] - near[0]) * dvec[0] + (far[1] - near[1]) * dvec[1]
-        assert along > 0, f"the drainage brook runs uphill from the outfall ({near} -> {far})"
-
-
-def test_no_stream_runs_through_a_field(rolled) -> None:
-    """`streams_avoid_fields`. A watercourse crossing a paddy fan is not irrigation - it is a river
-    through somebody's crop. Water reaches a field through a declared intake at its head, and leaves it
-    through the collector; a stream drawn across the plots means the field was laid over the water or the
-    water routed through the field."""
-    _plan, M = rolled
-    streams = M.get("streams") or []
-    fields = [f for f in (M.get("fields") or []) if f.get("outline")]
-    assert streams and fields, "the roll drew no stream or no outlined field, so this rule would judge nothing"
-    through = []
-    for st in streams:
-        poly = st["poly"]
-        for f in fields:
-            ring = [(float(v[0]), float(v[1])) for v in f["outline"]]
-            inside = [p for p in poly[1:-1] if _point_in(p, ring)]
-            if inside:
-                through.append(f["name"])
-    assert not through, f"stream(s) run through field(s): {sorted(set(through))}"
-
-
-def _point_in(pt, ring) -> bool:
-    x, y = float(pt[0]), float(pt[1])
-    inside = False
-    n = len(ring)
-    for i in range(n):
-        x0, y0 = ring[i]
-        x1, y1 = ring[(i + 1) % n]
-        if (y0 > y) != (y1 > y) and x < (x1 - x0) * (y - y0) / (y1 - y0) + x0:
-            inside = not inside
-    return inside
-
-
 def test_every_stream_end_is_anchored_to_what_it_declares(rolled) -> None:
     """`stream_source_anchored` and `stream_end_anchored`. A stream declares where it comes FROM and where
     it goes TO, and the drawn polyline must actually reach them. The declaration is what every other water
@@ -184,16 +108,3 @@ def test_every_stream_end_is_anchored_to_what_it_declares(rolled) -> None:
                 px, py, rx, ry = M["pond"][:4]
                 assert ((end[0] - px) / rx) ** 2 + ((end[1] - py) / ry) ** 2 <= 1.2, f"the stream declares a pond end but {end} is not on the pond"
     assert judged, "no stream declared an end, so this rule judged nothing"
-
-
-def test_every_field_shows_where_its_water_comes_from(rolled) -> None:
-    """`fields_show_water_source`. A paddy is defined by its water, so a field drawn with no visible
-    supply is a picture of a crop rather than of a farm. The source may be a channel declared to it, or a
-    stream or pond it abuts - what is forbidden is a field the reader cannot trace water to."""
-    _plan, M = rolled
-    fields = [f for f in (M.get("fields") or []) if f.get("kind") == "paddy"]
-    assert fields, "the roll drew no paddy, so this rule would judge nothing"
-    fed = {(c.get("to") or {}).get("name") for c in (M.get("channels") or [])}
-    fed |= {d.get("field") for d in (M.get("field_ditches") or [])}
-    dry = [f["name"] for f in fields if f.get("name") not in fed]
-    assert not dry, f"on-map field(s) with no visible water source: {sorted(set(dry))}"
