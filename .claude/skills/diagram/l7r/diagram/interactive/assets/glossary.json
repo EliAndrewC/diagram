@@ -13028,5 +13028,36 @@
    "centipede lane",
    "centipede lanes"
   ]
+ },
+ "Jin dynasty": {
+  "def": "The dynasty of the Jurchen people that ruled northern China from 1115 to 1234. Its capital, Zhongdu, stood on part of the site of later Beijing.",
+  "variants": [
+   "Jin dynasty",
+   "Jin-dynasty"
+  ]
+ },
+ "top-dressing": {
+  "def": "Fertilizer spread on a crop that is already growing, rather than worked into the soil before planting, like the liquid manure a farmer ladles onto rice.",
+  "variants": [
+   "top-dressing",
+   "top-dress",
+   "top-dressed"
+  ]
+ },
+ "Taiping": {
+  "def": "The Taiping Rebellion (1850-64), an uprising against the Qing that took Nanjing in 1853 and held it as its capital.",
+  "variants": [
+   "Taiping",
+   "Taiping Rebellion",
+   "Taiping Heavenly Kingdom"
+  ]
+ },
+ "finance commissioner": {
+  "def": "An officer of the Tokugawa shogunate over its finances and the revenue of its own lands. Villages near Edo brought petitions to this office.",
+  "variants": [
+   "finance commissioner",
+   "finance commissioners",
+   "kanjo bugyo"
+  ]
  }
 }

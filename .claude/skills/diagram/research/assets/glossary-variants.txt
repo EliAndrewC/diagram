@@ -803,6 +803,8 @@ filature	filature
 filatures	filature
 fillet	fillet
 fillets	fillet
+finance commissioner	finance commissioner
+finance commissioners	finance commissioner
 fines	fines
 fingerling	fingerling
 fingerlings	fingerling
@@ -1426,7 +1428,9 @@ jiaxing	Huzhou-Jiaxing
 jiegao	jiegao
 jiguchi-sen	jiguchi-sen
 jin	jin
+jin dynasty	Jin dynasty
 jin'ya	jin'ya
+jin-dynasty	Jin dynasty
 jinaicho	jinaicho
 jinan	Tsinan
 jinan's	Tsinan
@@ -1529,6 +1533,7 @@ kanden	kanden
 kang	kang
 kangs	kang
 kangxi	Kangxi
+kanjo bugyo	finance commissioner
 kanjo-nawa	kanjo-nawa
 kanjo-tsuri	kanjo-nawa
 kannon	Kannon
@@ -2940,6 +2945,9 @@ taiji	Taiji
 taiko kenchi	Taiko survey
 taiko survey	Taiko survey
 taimenjo	taimenjo
+taiping	Taiping
+taiping heavenly kingdom	Taiping
+taiping rebellion	Taiping
 taiping-gang	taiping-gang
 tairo	tairo
 tairō	tairo
@@ -3105,6 +3113,9 @@ tongdian	Tongdian
 tonya	ton'ya
 toon	toon
 toons	toon
+top-dress	top-dressing
+top-dressed	top-dressing
+top-dressing	top-dressing
 torii	torii
 toriimoto	Toriimoto
 torimono mitsu dogu	three arresting tools
