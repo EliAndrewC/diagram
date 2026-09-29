@@ -485,10 +485,6 @@ crown shyness	crown shyness
 crowns	crown
 crude drug	crude drug
 crude drugs	crude drug
-crypt compound	crypt precinct
-crypt compounds	crypt precinct
-crypt precinct	crypt precinct
-crypt precincts	crypt precinct
 cryptomeria	sugi
 cryptomeria japonica	sugi
 cudrania	cudrania

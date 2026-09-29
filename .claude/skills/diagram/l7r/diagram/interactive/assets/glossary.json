@@ -10993,15 +10993,6 @@
    "charity grounds"
   ]
  },
- "crypt precinct": {
-  "def": "A walled compound of built tombs or vaults, set apart from the open plots where the dead are buried in the earth.",
-  "variants": [
-   "crypt precinct",
-   "crypt precincts",
-   "crypt compound",
-   "crypt compounds"
-  ]
- },
  "drum tower": {
   "def": "A tower at the central crossing of a Chinese walled city's gate-to-gate streets, where a drum was beaten to mark the hours.",
   "variants": [
