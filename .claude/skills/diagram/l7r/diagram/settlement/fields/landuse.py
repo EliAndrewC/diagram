@@ -48,6 +48,9 @@ def mulberry_row_ts(band: float) -> list[float]:
     return [0.08 + 0.84 * (k + 0.5) / n for k in range(n)]
 
 
+FRY_WATER = "#A7AE86"  # the turbid fry water, a muddier green than the clear grow-out pond's #93B7AC
+
+
 def fry_pond_ids(chosen: Sequence[Any], area: Any, share: float) -> set[int]:
     """The ids of a fry village's fry ponds (feature 280 M60): the smallest parcels first, taken while their area stays
     within `share` of the block's whole pond area - so the nursery water is about that share, never more."""
@@ -410,7 +413,10 @@ class LandUseMixin:
             # the ring; measured on Kuwabata, 6% of the water area at the rim still lights), the ring's inner stroke
             # lies under the pond's own wider, later stroke, and the `dikeponds` records do not move.
             self.add(f'<path d="{bd} {wd}" fill-rule="evenodd" fill="#C2A772" stroke="#9C8558" stroke-width="1.2" stroke-linejoin="round" opacity="0.95"/>', cls=DIKE_CROP_CLASS[dike_crop])
-            self.add(f'<path d="{wd}" fill="{colors[overlay]}" stroke="#6C9CBE" stroke-width="1.4"/>', cls="fry pond" if fry else "fish pond")
+            # A FRY POND IS DRAWN TURBID (settlement-review of Kuwabata, feature 280): Qu Dajun (1678) - fry water is turbid,
+            # grown-fish water clear, and the color of the water tells what it holds (research/archetypes/200) - so a fry
+            # village reads as one without a hover
+            self.add(f'<path d="{wd}" fill="{FRY_WATER if fry else colors[overlay]}" stroke="#6C9CBE" stroke-width="1.4"/>', cls="fry pond" if fry else "fish pond")
             crown_q.append((qpoly, bd, cx, cy))  # crowns drawn after the late-water anchor (see below)
             # `bank` = the planted band's outer edge, recorded so mulberry_banks_clear_of_channels has
             # manifest teeth: the crowns fill the bank, so "no canal runs inside a bank" bounds the bushes

@@ -51,7 +51,8 @@ class MulberryDike(Kind):
     """
     What: The raised earthen dike around a fish pond, piled from the pond's own dredged mud and planted with
     coppiced mulberry - low bushes stripped for leaf several times a year to feed silkworms. Drawn here as a
-    planted collar about twenty-three feet wide around each pond, with a canal running between neighbors.
+    planted collar around each pond, twenty-three feet wide on the average but thinner along a long pond's sides and wider at
+    its ends, with a canal running between neighbors.
 
     Why: The dike is the silk side of the loop: mulberry leaf feeds the silkworms, the silkworm waste feeds the
     fish, the dredged pond mud re-fertilizes the dike. The prescription was six parts water to four parts
@@ -214,7 +215,7 @@ class PigSty(Kind):
 class FryPond(Kind):
     """
     What: A nursery pond where carp fry are reared, then grown on as fingerlings, before they are stocked
-    into the grow-out ponds - drawn only in a fry village.
+    into the grow-out ponds - drawn only in a fry village, its water a muddier green than a grow-out pond's.
 
     Why: Fry were a trade of their own in the delta, and one township's. The young carp that stocked the ponds
     were netted wild in the West River by the fry households of Jiujiang in Nanhai, who held the fry-catching
@@ -223,7 +224,7 @@ class FryPond(Kind):
     where seven parts in ten of the pond water raised fry; elsewhere the ponds mostly raised grown fish, and
     where they tried to raise fry the fry did not thrive. So the record holds two kinds of dike-pond village,
     and each hamlet rolls one: most raise grown fish and buy their fry, with no nursery ponds at all; a few are fry
-    villages of the Jiujiang kind, where the smallest ponds, up to seven tenths of the pond water, are nursery ponds.
+    villages of the Jiujiang kind, where the smallest ponds, up to seven tenths of the pond water, are nursery ponds. Fry water was turbid and grown-fish water clear, so the color of a pond told what it held, and the map draws it so.
 
     Note: The fry trade, the township that held it and the two kinds of village are read; how many hamlets are fry
     villages is a guess, and so is taking the smallest ponds as the nursery ponds.

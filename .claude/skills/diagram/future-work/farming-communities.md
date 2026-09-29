@@ -2302,7 +2302,10 @@ line in feature 280 (`specs/280-modern-only-sweep/outcomes.md`, one row per item
 - **Two skeleton lanes on Kashikawa detour through open grazing.** Lane 8 (1270,943)->(1156,1282)->(1281,1239) and lane 10
   (1008,1073)->(926,1284)->(1185,1196): the bends stand 140 and 232 ft from any house, and each lane is about 500 ft long
   between ends 215-300 ft apart. The straight chord of each crosses a farmhouse and its yard; the ground round the yard's
-  corner was clear at landing, so the detour was made at routing time. Mechanism, unverified: the skeleton router keeps off the
+  corner was clear at landing, so the detour was made at routing time. Feature 280's re-packed layout made them: on main no
+  lane but the trunk had an interior vertex over 95 ft from a house. Each lane holds the web together (dropping lane 8 leaves three
+  pieces, lane 10 strands a house). Tried and failed: pulling the bend in toward its neighbors' midpoint - every step was refused,
+  the clear bend being round the yard's far corner (the note at `joints.straighten_joints`). Mechanism, unverified: the skeleton router keeps off the
   houses' south-side sun lanes (`homestead_parts`, M41's 50 ft) and bends past them; `end_serves` and `_trim_to_service` test
   a lane's ENDS only. Sketch: a detour test in `ways/sweeps.py` - a lane whose length exceeds 1.6 x its chord and whose
   interior vertex is over 120 ft from every house is re-routed with the yard corners as candidate bends.
@@ -2313,5 +2316,20 @@ line in feature 280 (`specs/280-modern-only-sweep/outcomes.md`, one row per item
 - **Kuwabata's block holds less water than its parcels** - 0.62 of a parcel, about 0.48 of the block once the 22 ft corridors
   between parcels count. Whether Qu Dajun's "eight tenths ... water and dikes both" (archetypes/610) takes in the ground between
   ponds is a research question; if it does, the block, not the parcel, is the thing to calibrate.
-- **Inashiro's entrance board stands 15 ft inside the last junction** on the connector: the south-west household joins beyond
+- **Inashiro's and Kashikawa's entrance boards stand 13-15 ft inside the last junction** on the connector: one household joins beyond
   it and passes within sight of the board, not by its face. Sketch: seat the entrance board at or beyond the outermost junction.
+- **A dike pond's water is its parcel shrunk toward its center, not offset inward** (`landuse.py`, `s_w = 1 - DIKEPOND_WATER_INSET /
+  apo`): measured on Kuwabata's 29 ponds (settlement-review, 2026-09-29) the bank runs 7-35 ft (p50 18.5) round a 23 ft average,
+  thin on a long pond's sides and fat at its ends, and the four mulberry rows crowd the thin sides. Main had the same shape at 11 ft.
+  Sketch: offset the parcel inward by the inset (a polygon buffer) for the water and each row loop, and re-measure the share.
+- **Kuwabata's fry village keeps sties on grow-out ponds only**, so 5 of the 7 households that rolled pigs keep none; whether a
+  Qing delta fry pond took pig manure is unread (the FAO pages found are modern and name green manure). Sketch: a research pass,
+  then either sties on fry-pond banks or the pig kept by the house.
+- **The storehouse against the farmhouse is rolled per house by position, not by size** (`houses.py`, `KURA_SHARE`): Sawada's one
+  went to its 18th-largest of 19 houses, where the record gives it to "the larger houses first" (homesteads/720). Sketch: rank by
+  footprint as `fixture_order_key` does for the wood shed.
+- **The free-standing storage shed of homesteads/720** ("about one farm in three", storage shed or nagaya) is drawn on no scripted
+  map; the storehouse annex carries the `storage shed` class. Owed: the free-standing shed as its own seat, or the class split.
+- **A bath room beside the main door is never drawn**: the work yard covers the front wall on every scripted house, so a hamlet
+  whose seat is `main_door` (Kuwabata, Sawada) draws its bath rooms at the next seat, and `meta.bath_seats_drawn` says so.
+  Sketch: let the bath lap the yard's corner under the eaves beside the door - the yard's keep-out is a guess, the seat is not.

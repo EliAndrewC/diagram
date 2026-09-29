@@ -752,11 +752,11 @@ def test_bath_room_seats_abut_their_walls_the_hamlets_seat_first() -> None:
     from l7r.diagram.hamletgen.homesteads.fixtures import bath_room_seats
 
     seats = bath_room_seats("stable_end", 46.0, 28.0, 9.0, 6.0)
-    assert seats[0] == ((-26.0, 0.0, 6.0, 9.0), "stable_end") and len(seats) == 10
+    assert seats[0] == ((-26.0, 0.0, 6.0, 9.0), "stable_end") and len(seats) == 8
     assert all(ly - d / 2 == pytest.approx(14.0) for (_lx, ly, _w, d), _n in seats if ly > 14.0), "the door seats on the front wall"
     assert bath_room_seats("floored_rooms", 46.0, 28.0, 9.0, 6.0)[0] == ((26.0, 0.0, 6.0, 9.0), "floored_rooms")
     door = [q for q, n in bath_room_seats("main_door", 46.0, 28.0, 9.0, 6.0) if n == "main_door"]
-    assert len(door) == 4 and all(abs(q[0]) == 26.0 and q[1] == 14.0 - 4.5 for q in door[2:]), "then the end walls' front corners"
+    assert len(door) == 2 and all(q[1] == 17.0 for q in door), "on the front wall, either side of the door"
 
 
 def test_the_privy_and_the_bath_room_take_a_rolled_size_and_the_wood_shed_goes_to_the_larger_houses() -> None:

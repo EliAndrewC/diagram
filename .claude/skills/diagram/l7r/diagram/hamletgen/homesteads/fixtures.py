@@ -680,12 +680,13 @@ def bath_room_seats(first: str, hw: float, hh: float, w: float, d: float) -> lis
     """The bath room's seats in the house frame (feature 280 M22, research/homesteads/740), `first` tried first then the
     other attested seats: beside the MAIN DOOR (the front wall, either side of the door at its middle), at the far end of
     the STABLE WING (the -x end wall, where the doma and its stable are), or joined to the FLOORED ROOMS (the +x end wall).
-    Each abuts its wall - a room of the house, not a building beside it. Each seat carries its name, which the record keeps.
-    Beside the main door the front wall comes first, then the end walls' front corners - the work yard lies before the front
-    wall, and on Kuwabata no bath room found room there (settlement-review, feature 280: the seat was declared, never drawn)."""
+    Each abuts its wall - a room of the house, not a building beside it. Each seat carries its name, and the record keeps the
+    one taken: the work yard lies before the front wall, and where it covers the wall the bath falls to the next seat - the
+    reviews of Kuwabata and Sawada (feature 280) found a declared `main_door` never drawn, and then an end-wall corner offered
+    as `main_door` that read as the floored rooms' seat, so the record now says which seat each bath room took."""
     front, side = hh / 2 + d / 2, hw / 2 + d / 2
     table = {
-        "main_door": [(hw * 0.22 + w / 2, front, w, d), (-(hw * 0.22 + w / 2), front, w, d), (side, hh / 2 - w / 2, d, w), (-side, hh / 2 - w / 2, d, w)],
+        "main_door": [(hw * 0.22 + w / 2, front, w, d), (-(hw * 0.22 + w / 2), front, w, d)],
         "stable_end": [(-side, 0.0, d, w), (-side, -hh * 0.25, d, w), (-side, hh * 0.25, d, w)],
         "floored_rooms": [(side, 0.0, d, w), (side, -hh * 0.25, d, w), (side, hh * 0.25, d, w)],
     }

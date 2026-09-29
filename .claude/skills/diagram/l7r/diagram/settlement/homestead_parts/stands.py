@@ -1,6 +1,7 @@
 """Split from settlement/homestead_parts.py by feature 173 - see this package's CLAUDE.md for the index."""
 
 import math
+from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
 from .._geom import CanopyArea, point_in_poly
@@ -112,6 +113,7 @@ class StandsMixin:
         reserved: tuple[float, float, float, float] | None = None,
         near: tuple[Any, ...] | None = None,
         area: float | None = None,
+        bamboo_rings: Sequence[Any] = (),
     ) -> int:
         """A COMMUNAL village grove - the Chinese *fengshui* forest (风水林). Unlike the per-house *yashikirin*,
         a NUCLEATED village shelters behind ONE village-scale grove, in three roles (see research/vegetation.html 'What are the village's three groves' 'Village
@@ -277,7 +279,9 @@ class StandsMixin:
             # ...AND OFF THE BAMBOO, grown by a crown: a take-yabu is a clonal near single-species stand (research/vegetation 150),
             # and once feature 280 seated the thicket behind the back row the copse's crowns stood inside it (settlement-reviews
             # of Kashikawa and Mizuguchi: four crowns centered inside, culms drawn over them)
-            + ([grown_ring(b["poly"], cr) for b in self.M.get("bamboo_stands") or [] if len(b.get("poly") or []) >= 3] if role == "copse" else []),
+            # The rings come from the CALLER (`bamboo_rings`, the plan's seated stands): the stands are drawn by a later stage, so
+            # `M['bamboo_stands']` is still empty when the copse is seeded - reading it made the keep-out a no-op (round 3)
+            + ([grown_ring(b, cr) for b in bamboo_rings if len(b) >= 3] if role == "copse" else []),
             water=[(wl, whw + cr) for wl, whw in water_lines],
             corridors=corr,
             circles=occ,

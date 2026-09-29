@@ -301,7 +301,9 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
             for c in (g.get("clumps") or []) + (g.get("clumps_offpage") or []):
                 _belt_canopy.add(float(c[0]), float(c[1]), float(g.get("r") or 0.0))
     _copse_goal = max(0.0, _wood_ft2 * _ft2 - _belt_canopy.area)
-    s.village_grove(_box, role="copse", dense=False, reserved=title_pocket(s, plan), near=_copse_near, area=_copse_goal)  # the map's name has ground reserved; the copse honors it like the belt does
+    s.village_grove(
+        _box, role="copse", dense=False, reserved=title_pocket(s, plan), near=_copse_near, area=_copse_goal, bamboo_rings=plan.bamboo_polys
+    )  # the map's name has ground reserved; the copse honors it like the belt does
     # RECORD WHAT THE GROUND GAVE, beside what the knob asked for (settlement-review, feature 230 pass 12; the same
     # move `place_kosatsuba` makes with `kosatsuba_well_ft`, and for the same reason). `copse_siting` says
     # `among_the_houses` on four of the five pool maps, and what that produces depends entirely on whether the

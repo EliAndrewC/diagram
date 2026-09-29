@@ -130,6 +130,10 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
         for o in s.M.get(key, []):
             if all(isinstance(o.get(f), (int, float)) for f in ("x", "y", "w", "h")):
                 rects.append((float(o["x"]), float(o["y"]), float(o["w"]), float(o["h"]), px(pad)))
+    # ...AND THE YARD PERSIMMONS, by their crowns: a take-yabu is a near single-species stand, and once feature 280 seated the
+    # thicket behind the back row a dooryard persimmon stood inside it (settlement-review of Kashikawa, round 3)
+    rects += [(float(o["x"]), float(o["y"]), 2.0 * float(o["r"]), 2.0 * float(o["r"]), px(2.0)) for o in s.M.get("persimmons", []) if all(isinstance(o.get(f), (int, float)) for f in ("x", "y", "r"))]
+
     lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(10.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
     # ...AND THE WATER (settlement-review of Mizuguchi, feature 261): nothing refused a watercourse, and when the houses moved
     # north of the brook the thicket's target on the field edge fell on it - 13 culms on the 7 ft ribbon, read as reeds in
