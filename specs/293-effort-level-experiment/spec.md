@@ -244,13 +244,13 @@ says how to add an arm (`high`) or a second run per cell.
 
 ### Measurable Outcomes
 
-- **SC-001**: all four runs complete (or fail on their own merits) with every count of FR-006 and FR-007 filled from the transcripts and logs, and none
+- **SC-001** (FR-001, FR-002, FR-003, FR-006, FR-007) all four runs complete (or fail on their own merits) with every count of FR-006 and FR-007 filled from the transcripts and logs, and none
   counted by hand.
-- **SC-002**: both rubrics are committed before the first run starts, and neither changes after it.
-- **SC-003**: the grader agent grades each pair without access to the key; the key is opened after both grades per task are recorded.
-- **SC-004**: the report states an outcome under FR-011 for research and for implementation, and the arithmetic can be re-done from its table.
-- **SC-005**: the better output of each task that meets its pass line is on main; the other is discarded; the future-work entries they close are closed.
-- **SC-006**: no run was killed by the memory limit and left counted; no two runs overlapped in time.
+- **SC-002** (FR-004, FR-008) both rubrics are committed before the first run starts, and neither changes after it.
+- **SC-003** (FR-009, FR-010) the grader agent grades each pair without access to the key; the key is opened after both grades per task are recorded.
+- **SC-004** (FR-011, FR-012, FR-013) the report states an outcome under FR-011 for research and for implementation, and the arithmetic can be re-done from its table.
+- **SC-005** (FR-014) the better output of each task that meets its pass line is on main; the other is discarded; the future-work entries they close are closed.
+- **SC-006** (FR-005) no run was killed by the memory limit and left counted; no two runs overlapped in time.
 
 ## Decisions Recorded
 
@@ -292,3 +292,4 @@ every change to a map is; the report links them.
   run the research at the default effort in both arms; escalations and defects found later were missing; the thresholds' reasons
   were unmeasured claims. All seven applied; the aside (alternate the arms) taken.
 - Round 2 (spec-fidelity-verify, 2026-09-29): FAITHFUL - all seven items resolved; the alternation within the request.
+- After acceptance, 2026-09-29: formatting only - each success criterion's FR list moved beside its id, where spec-lint reads it; no wording changed.
