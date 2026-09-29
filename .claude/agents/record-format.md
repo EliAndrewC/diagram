@@ -196,17 +196,19 @@ already where it belongs, and you do not report it.
      `CONTRADICTED`, `leftover`, `not re-sourced`); an instruction to a future session ("do not re-use this
      until", "sharpen it when revisited", "the transferable lesson: an entry's Evidence line ..."). For each:
      the text (quoted) and what you propose - `comment` (move it, verbatim, into an HTML comment beside the
-     sentence) or `drop` (the sentence reads whole without it), with the sentence as it would then read. NOT a
-     session note: a source key that links to its work; a GM ruling and the alternatives it declined (that is the
-     decision the record owes its reader - root `CLAUDE.md`, "Record a decision to ACCEPT a limitation"); the
-     honest label on a claim (GUESS, a search that found nothing).
+     sentence) or `drop` (the sentence reads whole without it), with the sentence as it would then read. A visible GM
+     ruling IS a session note (feature 292, GM 2026-09-29): "the GM ruled", a quotation of the GM, "Offered ..., the GM
+     accepted" - propose `comment` for the ruling, and a rewrite of the sentence that states the DECISION as the
+     project's choice and why, in terms of the history. NOT a session note: a source key that links to its work; the
+     decision itself and the alternatives it declined, told as the project's choice; the honest label on a claim
+     (GUESS, a search that found nothing).
    - **HISTORY** - each visible reference to a past state of the record or of the maps: what a sentence used
      to say, a correction and its date, a re-read and what it changed, when and how a source was first pointed
      to or that it was once summary-only, which feature or pass did the work, what "the doc had carried". For
      each: the text (quoted), what in it is still USEFUL (a figure, a quote, a decision, the honest label) and
      is kept, and what is history and goes - with the sentence as it would then read. NOT history: the date a
      search was made and what it tried (`searched 2026-09-06: mdpi.com refused`) - that is the label on a guess;
-     the date of a GM ruling.
+     the date of a decision.
 3. A sentence can be in two lists (a correction note that names a feature). List it once, under HISTORY, and say
    the feature number goes with it.
 

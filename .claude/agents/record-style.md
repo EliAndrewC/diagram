@@ -49,6 +49,13 @@ Then only what to act on, in the guide's section order:
 
 Do not list what passes. Do not restate the guide. Do not judge citations, quotations, labels' truth or the map.
 
+## The GM's own examples are fixed points
+
+The guide quotes the GM's examples - lead lines they called right ("Windbreak groves sit on different sides in different
+regions.", "How tall were they?", "How large would these groves get?", "Farming communities have had these groves for
+centuries."), and a lead-in placed after the lead line. Never propose changing one of those, and never apply a rule so
+that it contradicts one; if a rule seems to, say so as a NOTE, naming both.
+
 ## How to judge - the questions per rule
 
 1. **Title.** Does it name the topic in plain English a newcomer would understand, with the native term in
@@ -80,7 +87,9 @@ Do not list what passes. Do not restate the guide. Do not judge citations, quota
    given; a statement that says only what the map visibly shows, with no finding (but a statement of HOW the map
    draws something and why is KEPT - do not flag it); a `Sources:` roster; a pointer paragraph to a sibling section
    that no longer exists; the GM's inciting question or a paraphrase of it ("This question asks..."); shouted capitals.
-   A GM RULING - a decision, with its quoted words - is not the inciting question; do not flag it.
+   Any visible trace of a GM ruling - "the GM ruled", the GM's quoted words, "the GM accepted" (the prepass lists every
+   visible "GM") - is a FAIL: the decision is stated as the project's choice and why, in terms of the history, and the
+   ruling goes into an HTML comment.
 10. **Units.** Each metric figure the prepass lists is a FAIL, with its conversion (nearest foot with a tilde; inches
     under a foot; acres or square feet for an area). Never flag a figure inside a quotation or a footnote.
 11. **Terms.** A term a newcomer would not know - grep the variant list first - that is explained neither by a tooltip
@@ -89,7 +98,8 @@ Do not list what passes. Do not restate the guide. Do not judge citations, quota
 
 ## The merge audit (only when `extra/` holds the old sections)
 
-List every FINDING, LABEL (accurate / deviation / convention / GUESS), GM RULING, rule of the map (`class="spec"`),
+List every FINDING, LABEL (accurate / deviation / convention / GUESS), DECISION (a GM ruling moved into a comment is
+kept, not lost), rule of the map (`class="spec"`),
 and footnote KEY + passage of the old sections, and check each is in the new section. Report each one missing as
 **LOST** - what it was, where it stood, and whether a rule of the guide cuts it by name (then it is not lost: say
 **CUT by** and the rule). A footnote dropped because another note in the new section quotes the same passage is not

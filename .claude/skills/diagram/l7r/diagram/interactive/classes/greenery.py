@@ -141,12 +141,12 @@ class HomesteadGrove(Kind):
     the count drawn is a GUESS set from the 1987 survey, and so is the windward stand's depth (1.57 house depths, about
     44 ft); how often each shape was taken is on no page, so the roll -
     two sides half the time, three sides three times in ten, four sides twice in ten, and four sides four times in ten
-    where the farms stand on flood-prone ground - is a GUESS, the GM's ruling of 2026-09-29, and so are the thin band's
+    where the farms stand on flood-prone ground - is a GUESS, this project's choice, and so are the thin band's
     depth (one tree, 17 ft), the kind of trees in it, and the width of the way in through a ring.
 
     Caveat: how often each shape was taken is on no page, so the roll - two sides half the time, three sides three times
     in ten, four sides twice in ten, and four sides four times in ten where the farms stand on flood-prone ground - is a
-    GUESS, the GM's ruling of 2026-09-29, and so are the thin band's depth (one tree, 17 ft), the kind of trees in it,
+    GUESS, this project's choice, and so are the thin band's depth (one tree, 17 ft), the kind of trees in it,
     and the width of the way in through a ring.
 
     Name: homestead grove

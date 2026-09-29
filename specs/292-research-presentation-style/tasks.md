@@ -17,6 +17,8 @@ Pilot phase. The sweep's tasks are added only after T09 is ticked (FR-011).
   - [ ] at push: the copse modal's section (vegetation/210) moved only by a re-aimed link - `ENTRY_DRIFT_OK` with that reason
 - [ ] T07a The GM's review of the pilot (2026-09-29): lead-line bullets (statement or question, readable from what came before) and metric-to-feet - the guide, the check's contract, `make style-prepass` with its tests and its bundle part, and the grove section revised (FR-012, FR-013, SC-009, SC-010). research: rendering
   - [x] guide, contract, prepass, tests, section revised
-  - [ ] the updated check run on the section before and after the revision (SC-009)
+  - [x] the updated check run on the section before (named the 1868 lead line, the lead lines in the wrong form, all four metric figures) and after the revision (5 FAIL, applied) (SC-009)
+- [x] T07b No visible GM ruling (GM 2026-09-29): the guide, the rules file, `record-format` and `record-style` contracts, the prepass's GM list with its test; the grove section's ruling moved to a comment and its sides bullet rewritten as the project's choice; the HomesteadGrove modal's two "the GM's ruling" made "this project's choice" (FR-014). research: rendering
+- [x] T07c The GM's own examples are fixed points in the check's contract (two seeded-run findings contradicted them). research: rendering
 - [ ] T08 The size cap for a topic section - the GM's choice (spec Decisions; plan D3). research: rendering
 - [ ] T09 **The GM signs off on the guide and the check** - after as many pilot topics as the GM asks for; only then are the sweep's tasks written (FR-011, SC-008). research: rendering

@@ -67,6 +67,12 @@ the pilot; the GM reads the pages in this feature's clone.
 - **FR-013** (GM 2026-09-29): a metric figure in the record's own prose MUST carry its conversion to feet, rounded to
   the nearest foot with a tilde, in parentheses; a quotation is never converted. A script MUST list every metric figure
   in a section's own prose that lacks one, and the check MUST report each as a failure.
+- **FR-014** (GM 2026-09-29): no research section, and no map modal, shows a GM ruling - no "the GM ruled", no quotation
+  of the GM, no "the GM accepted". The decision is told as the project's choice and why, in terms of the history
+  (which forms existed, which the evidence suggests were commoner, how the maps render that variety, and which shares
+  are arbitrary); the ruling, its date and words are kept for later sessions in an HTML comment beside it. The prepass
+  MUST list every visible "GM", and the checks (`record-style`, `record-format`) MUST report it. The sweep carries this
+  to the 111 research sections and the modals (stream, footbridge) that show a ruling today.
 - **FR-011**: The GM's sign-off on the guide and the check MUST be an open task, and the sweep's tasks MUST NOT be
   written or started before it is ticked.
 

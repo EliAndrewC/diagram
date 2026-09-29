@@ -160,7 +160,7 @@ every new or changed entry, its verdicts recorded in the task (`quote-check conf
    definition written from the record's own text; nothing is wrapped by hand. A term nothing uses fails the gate.
 2. **A note for a session is an HTML comment**: the `Grounds:` and `Evidence:` fields, a feature, a task, a spec,
    a test, a make target, an engine identifier, a fetch verdict. Visible: the `Sources:` roster (each key's
-   parenthetical says what the work contributed, never when or how it was read), a source key's link, a GM ruling and the alternatives it declined, the honest label on a claim (a GUESS, a dated search).
+   parenthetical says what the work contributed, never when or how it was read), a source key's link, a decision and the alternatives it declined - told as the project's choice, never as a GM ruling (feature 292, GM 2026-09-29: the ruling, its date and words go in an HTML comment beside it) - the honest label on a claim (a GUESS, a dated search).
 3. **No history of the document in the document**: no "used to say", no correction dates, no "re-sourced by".
    A changed finding is REWRITTEN; git holds the old wording. An absence note's provenance ("the passage came from
    `key`") is an HTML comment inside its `<li>`.
@@ -190,8 +190,8 @@ are the anchors. `README.md` and this file stay Markdown. The page mechanics are
 
 ## The record is the ONE home per topic (GM 2026-09-12, feature 229)
 
-Per question a page holds the finding, the decision it drove (the ruling, its date and words, the alternatives
-declined), and - for a rule no generator yet encodes - the **specification**, `<p class="spec"><strong>The rule
+Per question a page holds the finding, the decision it drove (what was chosen and why, the alternatives declined - the GM's ruling, its date and words
+in an HTML comment, feature 292), and - for a rule no generator yet encodes - the **specification**, `<p class="spec"><strong>The rule
 the map follows:</strong> ...</p>`, in real feet at the tier's scale (the pixel figure in a comment beside it), naming no engine identifier or check in
 its visible text, and - where it rests on no finding - saying which it is: a convention, a calibration against the
 drawn exhibits, or a guess; it is retired once a generator encodes the rule with its reasoning. A rule the engine

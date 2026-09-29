@@ -24,8 +24,14 @@ the GM's example, awaiting the GM's confirmation in the pilot).
   everything at the end."*)
 - **The inciting question appears nowhere** - neither the GM's words nor a paraphrase ("This question asks...").
   (GM: *"I instead do not want the inciting question to appear anywhere in the research write-up section, because I
-  think it just confuses things by referring to a conversation whose context the reader will not have."*) A GM
-  RULING - a decision, with the alternatives it declined - stays; that is a finding about the maps, not the question.
+  think it just confuses things by referring to a conversation whose context the reader will not have."*)
+- **A decision is the project's choice, never "the GM ruled".** No ruling, no quotation of the GM, no "the GM" at all
+  in the visible text. What the reader is told is what the decision IS and why, in terms of the history: which forms
+  the record shows existed, which the evidence suggests were commoner, and how the maps render that variety - for
+  example, "we know of farms whose grove took two sides, three or all four; two-sided groves are the form reported in
+  the most regions, so this project makes them the commonest, then three, then four". Where the shares are arbitrary,
+  say so. The ruling itself - date, words, alternatives declined - is kept for later sessions in an HTML comment beside
+  the sentence it produced. (GM, 2026-09-29: *"We should not have anything like this in our research writeup ... it is okay to capture my rulings in our checked-in repository for your own understanding ... you could keep it by having it be hidden. Like, this is in an HTML comment ... when explaining this to a human reading this later, you should not refer to this as a GM ruling. Rather, you should describe it the way this project has chosen to render the variety of settlements that we know existed historically."*)
 
 ## 2. It opens with a short plain-English account
 
@@ -49,7 +55,9 @@ highlights into questions ... I think that we need to come up with a different n
 - **One finding per bullet.** A run of findings joined by semicolons is split, each ending in a period. (GM: *"this
   is enough information to be its own bullet point ... end this with a period instead of a semicolon."*)
 - **The lead line is bold, on its own line, and the body follows on the next.** It is a one-sentence summary of the
-  bullet, and the body says how we know it. (GM: *"a good one sentence summary of what the paragraph can be. And then
+  bullet, and the body says how we know it. A lead-in sentence, where one is needed, opens the body, right after the
+  lead line - as in the GM's own example ("**How deep would these groves be?** Having established the *number* of
+  trees, how are they arranged..."). (GM: *"a good one sentence summary of what the paragraph can be. And then
   the paragraph goes into detail about how we know the top line sentence."*)
 - **A statement when the finding is a straightforward fact; a question when it is not.** A plain fact the sources
   establish - that the groves existed, that they stood on different sides in different regions - is a declarative lead
@@ -124,7 +132,7 @@ highlights into questions ... I think that we need to come up with a different n
 ## 7. What does not change
 
 Every other rule of the record holds: every assertion footnoted with a quoted passage; the four labels, visible
-(a GUESS stays a GUESS, said where the claim stands); absence notes; GM rulings with the alternatives declined; the
+(a GUESS stays a GUESS, said where the claim stands); absence notes; every decision and the alternatives it declined (as the project's choice, the ruling itself in a comment); the
 map's rule in real feet; nothing addressed to a session outside an HTML comment; no history of the document in the
-document. Restyling moves and rewords the prose around those; it never drops a footnote, a label or a ruling except
+document. Restyling moves and rewords the prose around those; it never drops a footnote, a label or a decision except
 where a rule above cuts the sentence that carried it, and then the cut is named.

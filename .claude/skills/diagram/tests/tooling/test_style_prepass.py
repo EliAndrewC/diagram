@@ -47,7 +47,15 @@ def test_every_lead_line_is_listed_as_a_question_or_a_statement_with_its_body() 
 def test_the_report_names_each_fragment_and_says_none_when_clean(tmp_path: pathlib.Path) -> None:
     out = sp.report({"010-x.html": "<p>12 m wide</p>", "020-y.html": "<p>clean</p>"})
     assert "== 010-x.html" in out and "METRIC WITHOUT A CONVERSION (1)" in out and "12 m" in out
-    assert out.count("  none") == 3, "020's metric list and both empty lead-line lists say none"
+    assert out.count("  none") == 5, "020's metric list, both GM lists and both empty lead-line lists say none"
+
+
+def test_a_visible_gm_ruling_is_listed_and_one_in_a_comment_is_not() -> None:
+    """GM 2026-09-29: a ruling is kept for later sessions in an HTML comment and never shown - so every visible "GM"
+    is listed, a quoted ruling included, and a comment's is not."""
+    html = "<p>The GM ruled on 2026-09-29: <q>two sides is the minimum</q>. <!-- the GM's words: ... --> A GMT clock.</p>"
+    found = sp.gm_mentions(html)
+    assert len(found) == 1 and "GM ruled" in found[0], found
 
 
 def test_the_command_reads_a_page_s_question_and_refuses_one_that_matches_nothing(capsys) -> None:  # noqa: ANN001
