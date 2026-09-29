@@ -12769,5 +12769,19 @@
    "tung tree",
    "tung trees"
   ]
+ },
+ "brush cutter": {
+  "def": "A hand-held motor mower with a spinning blade or line on a long shaft, used today to cut the grass on bunds and slope faces; a modern, mechanized tool.",
+  "variants": [
+   "brush cutter",
+   "brush cutters"
+  ]
+ },
+ "collective farm": {
+  "def": "In modern Japan, a farming corporation formed by the households of one hamlet, which pool their fields and farm them together; not a state farm.",
+  "variants": [
+   "collective farm",
+   "collective farms"
+  ]
  }
 }

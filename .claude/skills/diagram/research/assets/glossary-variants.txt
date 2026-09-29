@@ -231,6 +231,8 @@ break of slope	break of slope
 broadcast	broadcast sowing
 broadcast oilseed stand	broadcast sowing
 broadcast sowing	broadcast sowing
+brush cutter	brush cutter
+brush cutters	brush cutter
 bu	bu
 budget model	budget model
 bugeijo	bugeijo
@@ -391,6 +393,8 @@ closed canopy	closed-canopy
 closed-canopy	closed-canopy
 coefficient of variation	coefficient of variation
 coke	coke
+collective farm	collective farm
+collective farms	collective farm
 collector	collector
 comb	comb
 comb fan	comb
