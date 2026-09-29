@@ -604,7 +604,9 @@ def _drop_end_nubs(s: Settlement, hard: Sequence[Poly] = ()) -> int:
         if hard and not may_write(before[i], ways[i], float(lanes[i].get("w") or 5.0), hard):
             ways[i] = before[i]
             continue
-        lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in ways[i]]
+        if not s.reshape_lane(lanes[i], ways[i]):  # asked of the overlap matrix (feature 287 M8)
+            ways[i] = before[i]
+            continue
         s.reink_lane(i)
     return len(ways)
 
@@ -652,9 +654,8 @@ def _keep_the_route_wide(s: Settlement, hard: list[Poly], walls: Sequence[Poly],
                     if not (_TOUCH_GAP < d <= _ROUTE_JOIN_FT) or not _clear_touch(q, b, hard, walls, water):
                         continue
                     new = [b, *pts] if end == 0 else [*pts, b]
-                    if _bends_badly(new):
+                    if _bends_badly(new) or not s.reshape_lane(lanes[i], new):  # ...and the matrix admits it (feature 287 M8)
                         continue
-                    lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in new]
                     s.reink_lane(i)
                     pts = new
                     closed += 1
@@ -746,9 +747,8 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
                 _q = carry_to_dooryard(pts[_e], houses, steadings, 2.0 * _REACH_FT)
                 if _q is not None:
                     pts = [*pts, _q] if _e == -1 else [_q, *pts]
-            if [[round(x, 1), round(y, 1)] for x, y in pts] == ln["pts"]:
+            if [[round(x, 1), round(y, 1)] for x, y in pts] == ln["pts"] or not s.reshape_lane(ln, pts):  # ...admitted by the matrix (M8)
                 continue
-            ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
             s.reink_lane(i)
             fixed += 1
             continue
@@ -964,7 +964,6 @@ def _sweep_doubled_tails(s: Settlement) -> int:
                     fixed += 1
                     break
             pts.reverse()
-        if changed:
-            ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
+        if changed and s.reshape_lane(ln, pts):  # asked of the overlap matrix (feature 287 M8)
             s.reink_lane(i)
     return fixed

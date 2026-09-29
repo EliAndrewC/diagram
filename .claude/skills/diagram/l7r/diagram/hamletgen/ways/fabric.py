@@ -298,6 +298,10 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
     # gate says so, which is the same ruling as the orphan joiner's "KEPT, not dropped".
     if joins and _hits_a_steading(s, pts, width):
         return False
+    # ...AND NEVER ON WHAT THE OVERLAP MATRIX FORBIDS A WAY ON (feature 287 M8): a burial ground, a bed, a well - the registry
+    # of what stands answers, and a refused web lane is not drawn (the straggler pass serves its house another way)
+    if not s.admits_lane(pts, width):
+        return False
     if not joins and polyline_len(pts) < _WEB_MIN_FT:
         segs = _net_segs(s)
         earns = any(_reach(h, pts) <= WEB_REACH_FT and (not segs or min(seg_dist(h[0], h[1], a, b) for a, b in segs) > WEB_REACH_FT) for h in houses)

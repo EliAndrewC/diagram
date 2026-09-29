@@ -99,6 +99,10 @@ class EdgeGround:
         """May a w x h ground stand at (cx, cy)? The engine's own fit, then the ground's distances."""
         if not (s._fits(cx, cy, w, h) and s._footprint_clear(cx, cy, w, h)):
             return False
+        # ...and the registry of what stands admits it as `cemetery` records it (feature 287 M8: the overlap matrix and the
+        # seating's reservations - cohort 1-60 laid a burial ground on an access corridor three times)
+        if not s.admits("cemeteries", {"x": round(cx, 1), "y": round(cy, 1), "w": w, "h": h, "rot": 0.0}):
+            return False
         if any(rect_gap((cx, cy, w, h), home) < self.clear_px for home in self.homes):
             return False
         if len(self.hull) >= 3 and any(point_in_poly(px, py, self.hull) for px, py in rect_samples(cx, cy, w, h)):

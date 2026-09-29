@@ -58,8 +58,11 @@ def test_the_exit_strip_starts_the_tree_and_the_manifest_records_it() -> None:
     assert s.M["access_corridors"][-1] == {"pts": [[1.0, 1.0], [2.0, 2.0]], "of": [5.0, 5.0]}
 
 
-def test_a_corridor_through_another_homestead_or_its_own_house_is_refused() -> None:
+def test_a_corridor_through_another_homestead_or_its_own_house_is_refused(monkeypatch: pytest.MonkeyPatch) -> None:
     """W01 (a): two placed homesteads close the only straight run to the tree; a seat with a clear run is admitted."""
+    # the SE bed stands at the flank door the run round the neighbor leaves by; the corridor's own parts are
+    # `test_a_corridor_over_its_own_bed_or_well_pocket_is_refused`'s (feature 287 M8)
+    monkeypatch.setattr(access, "parts_clear", lambda *a: True)
     s = _open()
     start_tree(s, (700.0, 300.0), (1.0, 0.0), 300.0)
     s.placed.append((700.0, 500.0, 120.0, 60.0))  # a neighbor square across the direct run to the strip
@@ -169,6 +172,7 @@ def test_a_corridor_round_the_gable_never_doubles_back_to_a_tree_in_front(monkey
         return turn
 
     monkeypatch.setattr(access, "round_the_gable", gable)
+    monkeypatch.setattr(access, "parts_clear", lambda *a: True)  # the SE bed at the flank door is not under test (M8)
     monkeypatch.setattr(access, "standing_clear", lambda s_, a, b, memo=None: any(access.math.dist(p, t) < 1e-6 for t in turns for p in (a, b)))
 
     def search(tree_at: tuple[float, float], out: tuple[float, float]) -> tuple[tuple[float, float], ...] | None:

@@ -13,6 +13,28 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
+def boxes_meet(a: Any, b: Any) -> bool:
+    """Do two (cx, cy, w, h) boxes overlap - share more than an edge?"""
+    return bool(abs(a[0] - b[0]) < (a[2] + b[2]) / 2 and abs(a[1] - b[1]) < (a[3] + b[3]) / 2)
+
+
+def pocket_clear_of_beds(xs: Any, y: float, p: float, beds: Any, gap: float) -> tuple[float, float, float, float]:
+    """THE WELL POCKET NEVER ON A BED (feature 287 M8: the overlap matrix forbids a wellhead on a garden, its own household's
+    too). The pocket, `p` square at height `y`, is offered at each flank in `xs` in turn (the flank away from the primary
+    bed first); a bed split to flank the house on both walls (`_garden_beds`) can stand on either, and cohort 1-60 laid 8
+    wells on a bed so. Where both flanks hold a bed, the pocket stands past the outermost bed of the first flank, `gap`
+    beyond it - still beside the dooryard, on the same line."""
+    for x in xs:
+        box = (x, y, p, p)
+        if not any(boxes_meet(box, b) for b in beds):
+            return box
+    x = xs[0]
+    side = 1.0 if x >= xs[-1] else -1.0
+    while hit := [b for b in beds if boxes_meet((x, y, p, p), b)]:
+        x = max(b[0] * side + b[2] / 2 for b in hit) * side + side * (gap + p / 2)  # past the bed's outer edge on this flank
+    return (x, y, p, p)
+
+
 class BundleGeomMixin:
     @staticmethod
     def _bbox_of(rects: Any) -> tuple[float, float, float, float]:
@@ -246,7 +268,8 @@ class BundleGeomMixin:
         p = 2.0 * self._well_vr() + self.px(6.0)
         yard = base["yard"]
         sx = -1.0 if base["garden"][0] > hx else 1.0  # away from the garden's side
-        base["well"] = (hx + sx * (yard[2] / 2 + gap + p / 2), hy + hh / 2 + gap + p / 2 + self.px(2.0), p, p)
+        wy = hy + hh / 2 + gap + p / 2 + self.px(2.0)
+        base["well"] = pocket_clear_of_beds([hx + sx * (yard[2] / 2 + gap + p / 2), hx - sx * (yard[2] / 2 + gap + p / 2)], wy, p, base["gardens"], gap)
 
     def _lay_fixtures(self: Settlement, base: dict[str, Any], hx: float, hy: float, hw: float, hh: float, shed: bool, seat: Any) -> None:  # type: ignore[misc]
         """THE HOUSEHOLD'S FARMSTEAD FIXTURES, parts of its homestead (feature 287, homes H32, plan M5 and D9): the kinds its

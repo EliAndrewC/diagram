@@ -74,7 +74,9 @@ class LanesMixin:
         half-width (keep houses off the tread). `connector=True` marks the trodden path that LEAVES the
         village for the wider world - it MUST run off the map edge (checked), never stop mid-landscape.
         See research/ways.html 'What vehicle used a village lane, and where could the lane run?'."""
-        rec = {"pts": [[x, y] for x, y in pts], "worn": worn, "w": width, "connector": connector, "spur": spur}
+        # a lane KEEPS ITSELF RECORDED (feature 287 M8): the web reshapes lanes in place, and each reshape is asked of the
+        # registry of what stands at the write (`Kept`) - so a repair cannot lay a lane on what the overlap matrix forbids
+        rec = self.standing.kept("lanes", {"pts": [[x, y] for x, y in pts], "worn": worn, "w": width, "connector": connector, "spur": spur})
         self.M.setdefault("lanes", []).append(rec)
         self._lane_ink.append(self._lane_ink_at(pts, width, worn, rec))
         # `M["lane"]` IS THE SPINE - the longest ordinary way on the map - not whichever lane was
@@ -98,6 +100,40 @@ class LanesMixin:
                 self.M["lane"] = [[x, y] for x, y in pts]
         self.corridors.append((pts, clearance))
         self._record_tread(pts, width / 2)
+
+    def reshape_lane(self: Settlement, ln: Any, pts: Any) -> bool:  # type: ignore[misc]
+        """Rewrite lane record `ln` along `pts` (rounded to the record's 0.1 px) where the overlap matrix admits the lane as
+        it would become on what stands (feature 287 M8: the question every lane rewrite asks before it writes - `Kept`
+        refuses the write it did not ask). Returns whether it was written; a refused rewrite leaves the lane as it was,
+        and the pass that asked takes the lane unchanged (its ink is the caller's to redraw, `reink_lane`)."""
+        new = [[round(float(x), 1), round(float(y), 1)] for x, y in pts]
+        if not self.admits("lanes", {**ln, "pts": new}, ignore=ln):
+            return False
+        ln["pts"] = new
+        return True
+
+    def admits_lane(self: Settlement, pts: Any, width: float) -> bool:  # type: ignore[misc]
+        """May a new lane along `pts`, `width` wide, be recorded on what stands (the overlap matrix, feature 287 M8)? Asked as
+        `lane` would record it."""
+        return len(pts) < 2 or self.admits("lanes", {"pts": [[float(x), float(y)] for x, y in pts], "w": width})
+
+    def admitted_runs(self: Settlement, pts: Any, width: float) -> list[Any]:  # type: ignore[misc]
+        """The runs of `pts` a new lane `width` wide may be recorded along (`admits_lane`): the polyline with every segment
+        the overlap matrix forbids on what stands taken out, the pieces either side kept (feature 287 M8: the placer that
+        lays a draft way offers only what the registry admits, as the web's settle would cut it)."""
+        runs: list[Any] = []
+        cur: list[Any] = []
+        for a, b in zip(pts, pts[1:], strict=False):
+            if self.admits_lane([a, b], width):
+                cur = cur or [a]
+                cur.append(b)
+            else:
+                if len(cur) >= 2:
+                    runs.append(cur)
+                cur = []
+        if len(cur) >= 2:
+            runs.append(cur)
+        return runs
 
     def _lane_ink_at(self: Settlement, pts: Any, width: float, worn: bool, rec: Any) -> tuple[int]:  # type: ignore[misc]
         """Emit a lane's two strokes INTO THE GROUND BLOCK and return the ground entry's index.
@@ -300,8 +336,8 @@ class LanesMixin:
                 continue
             if [list(p) for p in pts] == ln["pts"]:
                 continue
-            ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
-            self.reink_lane(i)
+            if self.reshape_lane(ln, pts):
+                self.reink_lane(i)
         if _drop:  # rebuild record and ink together so their indices stay aligned
             self.M["lanes"] = [ln for k, ln in enumerate(lanes) if k not in _drop]
             self._lane_ink = [z for k, z in enumerate(self._lane_ink) if k not in _drop]

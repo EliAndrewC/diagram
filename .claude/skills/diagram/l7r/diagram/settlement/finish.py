@@ -902,6 +902,9 @@ class FinishMixin:
         # WRITTEN WHOLE, THEN MOVED INTO PLACE (feature 261): the gate reads a pool map's manifest in one worker
         # while another re-rolls it, and an in-place write let a reader see it half-written - measured as a
         # JSONDecodeError at char 122944 of kashikawa.json. A rename is atomic, so a reader sees old or new.
+        # THE REGISTRY'S BACKSTOP, LAST (feature 287 M8): a record reshaped in place since it was recorded is recorded again
+        # before the manifest is written, and raises where the overlap matrix forbids what it now covers
+        self.standing.resync()
         with open(basepath + '.json.tmp', 'w') as f:
             json.dump(self.M, f)
         os.replace(basepath + '.json.tmp', basepath + '.json')

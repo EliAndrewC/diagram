@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import contextlib
 import math
 from collections.abc import Mapping, Sequence
 from typing import Any, cast
 
-from l7r.diagram.settlement import Settlement, edge_dist, seg_intersect, segments_cross, skeleton_layout
+from l7r.diagram.overlap.registry import forbidden_segment
+from l7r.diagram.settlement import Settlement, edge_dist, seg_closest, seg_intersect, segments_cross, skeleton_layout
 from l7r.diagram.settlement._geom import ring_offset
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import centroid, crop_polys, pull_clear, unit
@@ -427,7 +429,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         track = connector_track(plan, gate_pt, avoid=[list(plan.envelope), *crops], wet=([toe] if toe else []) + drawn_wet, waters=drawn_water_segs(s), fabric=fabric)
         s.lane(
             connector_through(s, plan, track, [list(plan.envelope), *crops], ([toe] if toe else []) + drawn_wet, [*plan.watercourses, *drawn_water_segs(s)], fabric),
-            width=6,
+            width=CONNECTOR_WIDTH,
             clearance=LANE_CLEARANCE,
             worn=True,
             connector=True,
@@ -533,6 +535,8 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         # field; otherwise the map says why it has no path to its rice.
         _threaded = _thread_the_fabric(s, plan, _spur_pts)
         _drawn_spur, _swept = spur_cut_at_the_fold(_threaded, plan.envelope) if len(_threaded) >= 2 else (_threaded, "no way to the field clear of the steadings - the field path is the web's")
+        if _swept is None and not s.admits_lane(_drawn_spur, SPUR_WIDTH):
+            _swept = "the overlap matrix refuses the spur (a dry plot or a steading's part on it) - the field path is the web's"
         if _swept is None:
             s.lane(_drawn_spur, width=SPUR_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)  # flagged so neither sweep can drop the FIELD's only way
         else:
@@ -559,7 +563,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     track = connector_track(plan, gate, avoid=[list(plan.envelope), *crops], wet=([toe] if toe else []) + drawn_wet, waters=drawn_water_segs(s), fabric=fabric)
     s.lane(
         connector_through(s, plan, track, [list(plan.envelope), *crops], ([toe] if toe else []) + drawn_wet, [*plan.watercourses, *drawn_water_segs(s)], fabric),
-        width=6,
+        width=CONNECTOR_WIDTH,
         clearance=LANE_CLEARANCE,
         worn=True,
         connector=True,
@@ -712,7 +716,54 @@ def connector_through(s: Settlement, plan: SitePlan, track: Poly, avoid: Sequenc
     around = route_around(plan.envelope, track, SPUR_SETBACK)
     run = _thread_the_fabric(s, plan, around) if around is not None else []
     run = square_run(s.M, run) if len(run) >= 2 else run
-    return run if len(run) >= 2 and connector_keeps_the_law(s.M, run) else connector_dry_exit(plan, track[0], avoid, wet, waters, fabric)
+    if len(run) >= 2 and connector_keeps_the_law(s.M, run):
+        return run
+    # ...ELSE OUT ALONG THE EXIT STRIP (feature 287 M8): the seating reserved the strip from the cluster's center outward, and
+    # every household's wood seat keeps its lane buffer and more off it (`WoodShares.lane_gap`); a track swept from the
+    # gateway across the seats (cohort seeds 3, 12, 17: the first leg over a reserved seat) is swept again from the strip's
+    # outer end - the connector starts at its end (plan M3) - bent and threaded as the first
+    strip = [(float(q[0]), float(q[1])) for q in s.M.get("access_exit") or []]
+    foot = seg_closest(track[0][0], track[0][1], strip[0], strip[1]) if len(strip) >= 2 else None
+    if foot is not None:
+        out = connector_track(plan, strip[1], avoid=avoid, wet=wet, waters=waters, fabric=fabric)
+        around = route_around(plan.envelope, out, SPUR_SETBACK)
+        tail = _thread_the_fabric(s, plan, around) if around is not None else []
+        run = square_run(s.M, _dedup_run([track[0], foot, *tail])) if len(tail) >= 2 else []
+        if len(run) >= 2 and connector_keeps_the_law(s.M, run):
+            return run
+    # THE DRY EXIT IS WALLED BY WHAT THE REGISTRY OF WHAT STANDS FORBIDS A WAY ON (feature 287 M8): the overlap matrix's
+    # extents and the households' reserved wood seats (`Reservations.seat_walls`, the copse's lane buffer about each)
+    st = getattr(s.M, "standing", None)
+    forbid = st.forbidding("lanes") if st is not None else []
+    matrix = [e[1] for e in forbid if e[0] != "wood seat"]
+    seats = [e[1] for e in forbid if e[0] == "wood seat"]
+    with contextlib.suppress(NoDryExit):
+        return connector_dry_exit(plan, track[0], [*avoid, *matrix, *seats], wet, waters, fabric)
+    # ...AND FROM THE EXIT STRIP'S OUTER END where the gateway is walled in by the seats: the strip is the corridor the seating
+    # reserved from the cluster's center outward, every seat kept its lane buffer and more off it (`WoodShares.lane_gap`), so
+    # the connector runs out along it and the fill starts where the cluster ends (plan M3: the connector starts at its end)
+    if foot is not None:
+        with contextlib.suppress(NoDryExit):
+            tail = connector_dry_exit(plan, strip[1], [*avoid, *matrix, *seats], wet, waters, fabric)
+            run = square_run(s.M, _dedup_run([track[0], foot, strip[1], *tail[1:]]))
+            if connector_keeps_the_law(s.M, run):
+                return run
+    # ...AND ONLY THEN OVER A RESERVED SEAT, WHICH THE WAY OUT TAKES: a gateway the seats wall in on every side has one way out,
+    # and the seats it crosses are given up by name (`meta.wood_seats_to_the_connector`) rather than the hamlet left with none
+    run = connector_dry_exit(plan, track[0], [*avoid, *matrix], wet, waters, fabric)
+    if st is not None:
+        gone = st.reserved.release_seats_along(run, CONNECTOR_WIDTH)
+        if gone:
+            s.M["meta"]["wood_seats_to_the_connector"] = [[round(x, 1), round(y, 1)] for x, y in gone]
+    return run
+
+
+CONNECTOR_WIDTH = 6.0
+"""The connector's tread, px: the cart track out to the wider world, drawn wider than the web's footpaths."""
+
+
+def _dedup_run(p: Poly) -> Poly:
+    return [q for k, q in enumerate(p) if k == 0 or math.dist(q, p[k - 1]) > 1e-6]
 
 
 def connector_keeps_the_law(M: Mapping[str, Any], run: Poly) -> bool:
@@ -724,6 +775,8 @@ def connector_keeps_the_law(M: Mapping[str, Any], run: Poly) -> bool:
     box (`stage_track` walls it with `law.solid_quads`)."""
     if law.breaks_through(run, law.solid_boxes(M)):
         return False
+    if forbidden_segment(M, "lanes", run, CONNECTOR_WIDTH) is not None:
+        return False  # ...and it lies on nothing the overlap matrix forbids a way on (feature 287 M8): a dry plot, a well
     return all(len(law.crossing_points(run, brook)) <= 1 for brook in law._brooks(M))
 
 

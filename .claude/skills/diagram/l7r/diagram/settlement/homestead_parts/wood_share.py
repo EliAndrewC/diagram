@@ -28,9 +28,10 @@ north and west, research/homesteads) and its front is the yard's and the garden'
 point half the reach behind the house's back wall. A lattice of `SEAT_PITCH_BS` (a clump's radius times the square root
 of two, so every point of a lattice cell lies under a crown) anchored on the house.
 
-WHAT THIS DOES NOT YET HOLD, and who holds it: the copse must plant the reserved seats before any other clump (WOODS,
-`stage_windbreak`); the belt, the lanes the web draws off the corridors, the communal byres and the title's pocket must
-keep off them (the registry of reservations, plan M8). The communal wells, which this package seats, keep off them now.
+WHO HOLDS THE REST: the copse plants the reserved seats before any other clump (`stage_windbreak`) and the belt keeps off
+them (`reserved_seat_keepouts`); every placer after the seating - the web's lanes by the copse's own lane buffer, the
+title's pocket, the shared sheds, the wells, the parts laid after it - is kept off them by the registry of what stands
+(`overlap/reserved.py`, plan M8), to which the seating hands them (`homesteads/stages.reserve_the_seating`).
 """
 
 from __future__ import annotations
@@ -43,6 +44,7 @@ from .._geom import PointGrid, Pt, seg_dist, segments_cross
 from ..land.wet import marsh_ground
 from ..shrines_wells.byres import BYRE_FT
 from .grove_blocks import GroveBlocks
+from .groves import crown_lift
 from .stands import crown_reach
 
 if TYPE_CHECKING:
@@ -132,13 +134,33 @@ def ground_blocks(s: Settlement, clump: float) -> GroveBlocks:
         crop_pad=12 + cr + m,
         dry=s.dry_polys,
         dry_pad=12 + m,
-        dikes=[dk["outline"] for dk in s.M.get("dikes", [])] + marsh_ground(s.M),
+        # ...and the reed-marsh TOE, asked before it is drawn (`toe_band`, the one derivation `hinterland()` lays the reeds on):
+        # the copse refuses a clump in the marsh as finished, and cohort 1-60 lost 24 seats reserved on ground the toe
+        # marsh then took (feature 287 M8)
+        dikes=[dk["outline"] for dk in s.M.get("dikes", [])] + marsh_ground(s.M) + [t for t in [[(float(a), float(b)) for a, b in (s.toe_band() or [])]] if len(t) >= 3],
         water=water,
         corridors=[],
         circles=[],
         displacers=[],
         rects=[],
+        dike_pad=m,
     )
+
+
+def open_water_discs(M: Mapping[str, Any], clump: float) -> list[tuple[float, float, float]]:
+    """The copse's canopy keep-outs round the ponds and the sacred ground standing at seating (`village_grove`'s `occ`: the
+    pond - the tameike or a polder's header reservoir - by its longer semi-axis, a crescent pond by its radius, a shrine's
+    hall by half its diagonal, each plus 0.90 of the clump; a torii by its glyph), `BAR_MARGIN_PX` stricter: the planting
+    refuses a clump inside them, and Kuwabata's header reservoir took a reserved seat 3.5 px off its fringe so (feature
+    287 M8)."""
+    reach = clump * 0.90 + BAR_MARGIN_PX
+    out = [(float(o["x"]), float(o["y"]), 0.5 * math.hypot(float(o["w"]), float(o["h"])) + reach) for k in ("religious", "shrines") for o in M.get(k) or [] if "w" in o and "h" in o]
+    out += [(float(t[0]), float(t[1]) + 4.0, math.hypot(19.0, 14.0) + reach) for t in M.get("torii") or []]
+    out += [(float(cp["cx"]), float(cp["cy"]), float(cp["r"]) + reach) for cp in M.get("crescent_ponds") or []]
+    pond = M.get("pond")
+    if pond:
+        out.append((float(pond[0]), float(pond[1]), max(float(pond[2]), float(pond[3])) + reach))
+    return out
 
 
 def seat_rank(dx: float, dy: float, back: Pt, side: Pt, depth: float) -> float:
@@ -193,7 +215,7 @@ class WoodShares:
         # its strip, so a seat keeps the strip's half plus that buffer off the corridor's line - the buffer the copse plants
         # by, crowns drawn `3 * bs` up the sheet included (`crown_reach(lift=)`, feature 287 homes H43): without the lift a
         # reserved seat could stand where the copse's own lane buffer refuses it
-        self.lane_gap = corridor_half + max(self.clump * 0.45 + 4, crown_reach(self.clump, lift=3.0 * s.bscale)) + BAR_MARGIN_PX
+        self.lane_gap = corridor_half + max(self.clump * 0.45 + 4, crown_reach(self.clump, lift=crown_lift(s.bscale))) + BAR_MARGIN_PX
         self.W, self.H = float(s.W), float(s.H)
         self.ground = ground_blocks(s, self.clump)
         self.banks = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for f in s.M.get("streams") or [] for a, b in zip(f.get("poly") or [], (f.get("poly") or [])[1:], strict=False)]
@@ -202,9 +224,14 @@ class WoodShares:
         self.cells: set[tuple[int, int]] = set()
         # the crowns of the lattice last asked (`crowns`): the four garden sides of one seat ask the same lattice
         self._crowns: tuple[Pt, dict[tuple[float, float], frozenset[tuple[int, int]]]] = ((math.nan, math.nan), {})
-        # the shared sheds' pockets the seating reserved before any house (`reserve_commons_byres`): each a byre's keep-out
+        self.file_byre_pockets(s, getattr(s, "_byre_pockets", None) or ())
+        self.file(open_water_discs(s.M, self.clump), [])
+
+    def file_byre_pockets(self, s: Settlement, pockets: Iterable[Pt]) -> None:
+        """File the shared sheds' pockets the seating reserved before any house (`reserve_commons_byres`): each a byre's
+        keep-out, so no seat is reserved under a shed."""
         bw, bh = s.px(BYRE_FT[0]), s.px(BYRE_FT[1])
-        for x, y in getattr(s, "_byre_pockets", None) or ():
+        for x, y in pockets:
             self.file([(float(x), float(y), 0.5 * math.hypot(bw, bh) + self.clump / 2.0 + 2.0 + BAR_MARGIN_PX)], [])
 
     def keepouts(self, geom: Mapping[str, Any]) -> tuple[list[tuple[float, float, float]], list[tuple[float, float, float, float]]]:

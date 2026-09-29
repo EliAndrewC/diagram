@@ -230,9 +230,10 @@ def crossing_deck(ra: Pt, rb: Pt, rw: float, wa: Pt, wb: Pt, ww: float, wpts: An
     return p, rot_used, span, seated
 
 
-def undeckable_at(pts: Any, width: float, waters: Any, ftpx: float = 1.0, wet: Any = ()) -> list[tuple[int, Pt]]:
+def undeckable_at(pts: Any, width: float, waters: Any, ftpx: float = 1.0, wet: Any = (), M: Any = None) -> list[tuple[int, Pt]]:
     """(segment index, crossing point) for every crossing of `waters` (`bridge_crossed_waters`) by a way along `pts` where
-    no deck seats (`crossing_deck`, the very solve `bridges()` makes). THE ONE PREDICATE: the lane law asks it of a
+    no deck seats (`crossing_deck`, the very solve `bridges()` makes) - or where the registry of what stands on `M` refuses
+    the deck as `bridge()` would record it (`deck_admitted`, feature 287 M8). THE ONE PREDICATE: the lane law asks it of a
     finished web (`hamletgen/ways/law.py`), the web's last pass cuts what it names, and a settlement rolled without that
     pass cuts its lanes by it before `bridges()` (`cut_undeckable_lanes`, feature 287)."""
     out = []
@@ -241,10 +242,21 @@ def undeckable_at(pts: Any, width: float, waters: Any, ftpx: float = 1.0, wet: A
             wp = [(float(q[0]), float(q[1])) for q in wpts]
             for wa, wb in zip(wp, wp[1:], strict=False):
                 if segments_cross(ra, rb, wa, wb):
-                    p, _rot, _span, seated = crossing_deck(ra, rb, width, wa, wb, float(ww), wp, ftpx, wet)
-                    if not seated:
+                    p, rot, span, seated = crossing_deck(ra, rb, width, wa, wb, float(ww), wp, ftpx, wet)
+                    if not seated or not deck_admitted(M, p, rot, span, width):
                         out.append((k, p))
     return out
+
+
+def deck_admitted(M: Any, p: Pt, rot: float, span: float, width: float) -> bool:
+    """Does the registry of what stands on `M` admit a deck at `p` as `bridge()` records it (feature 287 M8)? Another deck
+    it would stand on is not asked here: `bridges()` merges a deck into the one standing there (`_reseat_to_cover`). True
+    where `M` carries no registry."""
+    st = getattr(M, "standing", None)
+    if st is None:
+        return True
+    rec = {"x": round(p[0], 1), "y": round(p[1], 1), "rot": round(rot, 1), "span": round(span, 1), "w": round(width, 1)}
+    return not [c for c in st.conflicts("bridges", rec) if c[1] != "bridges"]
 
 
 #: How far past the water's edge each piece of a lane cut at an undeckable crossing stops, in ft - the lane ends on the
@@ -392,7 +404,7 @@ class BridgesMixin:
                             # original span when nothing seats; this pass drew it and `bridges_span_their_water` named it.
                             # The web's last pass now cuts every crossing no deck seats before any deck is laid, so a way
                             # that reaches here unseated is an engine defect, raised rather than drawn.
-                            if not _seated:
+                            if not _seated or not deck_admitted(self.M, p, _rot_used, _span, rw):
                                 raise UndeckableCrossing(f"no deck seats where a way crosses water at ({p[0]:.0f}, {p[1]:.0f})")
                             # ...AND A DECK THAT WOULD STAND ON ANOTHER is merged into it: the standing deck is re-seated
                             # long enough to cover both crossings, rather than the second being skipped (and left
@@ -420,7 +432,7 @@ class BridgesMixin:
         while i < len(self.M.get("lanes") or []):
             ln = self.M["lanes"][i]
             pts = [(float(x), float(y)) for x, y in ln.get("pts") or []]
-            bad = undeckable_at(pts, float(ln.get("w", 6)), waters, self.ftpx, wet)
+            bad = undeckable_at(pts, float(ln.get("w", 6)), waters, self.ftpx, wet, self.M)
             if not bad:
                 i += 1
                 continue
@@ -626,6 +638,8 @@ class BridgesMixin:
                         continue
                     if not plank_on_supply((px, py), self.M.get("field_ditches")):
                         continue  # ...and a seat nearer a drain or collector than its own ditch (a junction) is refused (ways W14)
+                    if not self.admits("bridges", {"x": round(px, 1), "y": round(py, 1), "rot": round(deck, 1), "span": round(span_here, 1), "w": round(plank_w, 1)}):
+                        continue  # ...nor a plank the registry of what stands refuses: its ends on a dry plot or a fallow patch (M8)
                     self.bridge(px, py, deck, span_here, plank_w, form)
                     self.M["bridges"][-1]["foot"] = True  # a standalone footplank (checked by footbridges_reach_useful_ground)
                     self.M["bridges"][-1]["form"] = form

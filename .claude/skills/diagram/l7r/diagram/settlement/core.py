@@ -227,6 +227,12 @@ class Settlement(
         #                                for _rect_on_water's irrigation lines (channels / ditches / streams)
         self._clip = 0
         self._nbig = 0
+        # THE REGISTRY OF WHAT STANDS (feature 287 M8). The manifest is a `StandingManifest`: every record set or appended
+        # under a key the overlap matrix tests is recorded in `self.standing` as it lands, and one the matrix forbids on
+        # what already stands raises `OverlapRefused` - the backstop. A placer asks `self.admits(key, record)` first.
+        from l7r.diagram.overlap.registry import Standing, StandingManifest
+
+        self.standing = Standing({}, W, H)
         self.M: Manifest = {
             "houses": Indexed(),  # versioned, so the fit rules' house index (rolling/fit.py) knows when it is stale
             "fields": [],
@@ -290,6 +296,8 @@ class Settlement(
             "quarters": [],
             "meta": {"W": W, "H": H},
         }
+        self.M = StandingManifest(self.standing, self.M)
+        self.standing.M = self.M  # the extractor reads the road's width and the scale from the live manifest
         self._header()
 
     # ---- low level
@@ -299,6 +307,11 @@ class Settlement(
     LABELZ = 20_000_000  # the LABEL layer renders above even the TOP layer - text is never covered
     WALLZ = 1_000_000  # the WALL layer renders above every ground lane and building (which sit in
     #                          self.out, z < len(out)), below the TOP layer - so lanes pass UNDER walls
+
+    def admits(self: Settlement, key: str, rec: Any, ignore: Any = None) -> bool:
+        """May `rec` be recorded under `key` on what already stands (the overlap matrix, feature 287 M8)? Every placer
+        whose candidates the matrix can refuse asks this before it chooses one; `ignore` is the record `rec` replaces."""
+        return self.standing.admits(key, rec, ignore)
 
     def _tag(self: Settlement, cls: ClsTag) -> ClsTag:
         """The class an emit carries: an explicit `cls` wins, else the enclosing `feature()` scope's."""

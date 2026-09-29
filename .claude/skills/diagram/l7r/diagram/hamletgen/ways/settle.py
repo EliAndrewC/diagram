@@ -31,9 +31,10 @@ from __future__ import annotations
 
 import math
 import time
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Mapping, Sequence
 from typing import Any
 
+from l7r.diagram.overlap.registry import forbidden_segment
 from l7r.diagram.settlement import rot_rect, seg_closest, seg_dist
 from l7r.diagram.settlement._knobs import bridge_crossed_waters
 from l7r.diagram.settlement.city.bridges import flooded_ground
@@ -54,6 +55,7 @@ from .corridors import (
     building_quads,
     draw_corridors,
     field_chain,
+    field_router,
     field_runs,
     first_contact,
     is_tree,
@@ -66,7 +68,6 @@ from .corridors import (
 from .fabric import _crosses_fabric, _homestead_polys, house_hit
 from .geom import _TOUCH_GAP, _components, _trim_to_service, memo_ground, polyline_len, steading_footprints, worked_ground
 from .joints import joints
-from .route import _route
 from .sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
 
 SETTLE_ROUNDS = 8
@@ -140,7 +141,8 @@ def apply_pieces(s: Any, edits: Mapping[int, list[Poly]]) -> int:
         if not keep:
             drops.append(i)
             continue
-        ln["pts"] = _rounded(keep[0])
+        if not s.reshape_lane(ln, keep[0]):
+            continue  # the matrix refuses what the cut would leave (feature 287 M8): the lane stands as it was
         s.reink_lane(i)
         for q in keep[1:]:
             s.lane(q, width=float(ln.get("w") or 3.0), clearance=WEB_CLEARANCE, worn=bool(ln.get("worn", True)))
@@ -183,8 +185,7 @@ def square_every_crossing(s: Any) -> int:
                 if nq == q:
                     break
                 q = nq
-        if q != p:
-            ln["pts"] = _rounded(q)
+        if q != p and s.reshape_lane(ln, q):
             s.reink_lane(i)
             changed += 1
             # AN END THE SQUARING MOVED CARRIES ITS JOINT WITH IT: another lane that ended at the same point still ends
@@ -197,8 +198,10 @@ def square_every_crossing(s: Any) -> int:
                     op = other.get("pts") or []
                     for e in (0, -1):
                         if j != i and len(op) >= 2 and math.dist((float(op[e][0]), float(op[e][1])), old) <= 1.0:
-                            op[e] = [round(new[0], 1), round(new[1], 1)]
-                            s.reink_lane(j)
+                            moved = [list(q) for q in op]
+                            moved[e] = [round(new[0], 1), round(new[1], 1)]
+                            if s.reshape_lane(other, moved):
+                                s.reink_lane(j)
     return changed
 
 
@@ -221,14 +224,19 @@ def theirs(p: Poly, yards: Yards, houses: Sequence[Mapping[str, Any]]) -> list[P
     return [poly for poly, owner in yards if owner is None or all(math.dist(owner, c) > 1.0 for c in own)]
 
 
-def fouled_segment(p: Poly, width: float, houses: Sequence[Mapping[str, Any]], yards: Yards, solid: Sequence[tuple[float, float, float, float]], fixtures: Sequence[Poly] = ()) -> int | None:
+def fouled_segment(
+    p: Poly, width: float, houses: Sequence[Mapping[str, Any]], yards: Yards, solid: Sequence[tuple[float, float, float, float]], fixtures: Sequence[Poly] = (), M: Any = None
+) -> int | None:
     """The first segment of `p` that fouls the fabric: ink on a farmhouse (`house_hit`), within `_TOUCH_GAP` of another
     household's yard or garden (`law.fouls_fabric`, `theirs`), a long leg through a building's box (`law.breaks_mid_run`),
-    or a tread over a farmstead fixture, the lane's own household's too (`law.over_a_fixture`)."""
+    a tread over a farmstead fixture, the lane's own household's too (`law.over_a_fixture`), or a tread the overlap matrix
+    forbids on what stands on `M` (`registry.forbidden_segment`, feature 287 M8: a yard, a garden, a well, a burial
+    ground - its own household's too, since a path arrives at its dooryard and does not cross it)."""
     near = theirs(p, yards, houses)
     over = law.over_a_fixture(p, width, fixtures) if fixtures else None
+    matrix = forbidden_segment(M, "lanes", p, width) if M is not None else None
     for k, (a, b) in enumerate(zip(p, p[1:], strict=False)):
-        if k == over:
+        if k in (over, matrix):
             return k
         if house_hit([a, b], width, houses) or _crosses_fabric([a, b], near, _TOUCH_GAP):
             return k
@@ -256,14 +264,14 @@ def _crossing_fault(M: Mapping[str, Any], i: int, p: Poly, wet: Sequence[Poly]) 
     ln = M["lanes"][i]
     width = float(ln.get("w") or 3.0)
     waters = bridge_crossed_waters(M)
-    for k, x in law.undeckable_at(p, width, waters, ftpx, wet):
+    for k, x in law.undeckable_at(p, width, waters, ftpx, wet, M):
         # A CROSSING NO DECK SEATS is squared to the water it crosses first - a square deck is the shortest, and the
         # one most likely to land on the bank (the field path over its canal, R3) - and cut only if even that will not seat
         for wpts, ww in waters:
             course = [(float(q[0]), float(q[1])) for q in wpts]
             if len(course) >= 2 and any(math.dist(x, y) < 1.0 for _k, y in law.crossing_points(p, course)):
                 sq = square_crossings(p, course, float(ww) / 2 + SQUARE_MARGIN_FT / ftpx)
-                if sq != p and not law.undeckable_at(sq, width, waters, ftpx, wet):
+                if sq != p and not law.undeckable_at(sq, width, waters, ftpx, wet, M):
                     return [sq]
         return cut_around(p, arc_at(p, k, x), _cut_gap(M, x) + gap)
     return None
@@ -320,7 +328,7 @@ def settle_shapes(s: Any) -> int:
         if pieces is not None:
             edits[i] = pieces
             continue
-        k = fouled_segment(p, float(ln.get("w") or 3.0), houses, yards, solid, fixtures)
+        k = fouled_segment(p, float(ln.get("w") or 3.0), houses, yards, solid, fixtures, M)
         if k is not None:
             edits[i] = [q for q in (p[: k + 1], p[k + 1 :]) if len(q) >= 2]  # the fouling segment goes; a lane of one goes whole
     return apply_pieces(s, edits)
@@ -644,7 +652,7 @@ def settle_widths(s: Any) -> int:
         chain = [k for k in range(len(lanes)) if find(k) == root]
         widths = [float(lanes[k].get("w") or 3.0) for k in chain]
         wide = max(widths)
-        target = wide if all(fouled_segment(_pts(lanes[k]), wide, houses, yards, solid, fixtures) is None for k in chain) else min(widths)
+        target = wide if all(fouled_segment(_pts(lanes[k]), wide, houses, yards, solid, fixtures, s.M) is None for k in chain) else min(widths)
         for k in chain:
             if float(lanes[k].get("w") or 3.0) != target:
                 rewidth(s, k, target)
@@ -752,7 +760,7 @@ class Lawful:
         if ix.water_near(run, 1.0) and _crossing_fault({**self.M, "lanes": [{"pts": _rounded(run), "w": width}]}, 0, run, self.wet) is not None:
             return False
         houses = ix.near("houses", run, max(width / 2.0 + 2.0, law.DOORSTEP_FT) + 1.0)  # ...the doorstep's reach: `theirs` reads it
-        fouled = fouled_segment(run, width, houses, ix.near("yards", run, _TOUCH_GAP + 1.0), ix.near("solid", run, 1.0), ix.near("fixtures", run, width / 2.0 + law.FIXTURE_PAD_FT + 1.0))
+        fouled = fouled_segment(run, width, houses, ix.near("yards", run, _TOUCH_GAP + 1.0), ix.near("solid", run, 1.0), ix.near("fixtures", run, width / 2.0 + law.FIXTURE_PAD_FT + 1.0), self.M)
         return fouled is None and ix.open_ground(run) and not through_a_building(run, ix.near("buildings", run, 1.0))
 
     def __call__(self, run: Poly, width: float, skip: int | None = None) -> bool:
@@ -828,32 +836,6 @@ def settle_targets(s: Any, lawful: Lawful) -> int:
     return n
 
 
-def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:
-    """The web's router (`route._route`) as a field way threads it: walled by the steadings' built ground (not the commons
-    or the groves - a path crosses ground cover), hard against the field, the dry hem and the marsh, and kept off the brook
-    but at its fords (the straggler footpath's own terms, `serve._serve_stragglers`)."""
-    M = s.M
-    hard = [[(float(a), float(b)) for a, b in f["outline"]] for f in M.get("fields") or [] if f.get("outline")]
-    hard += [[(float(a), float(b)) for a, b in d["poly"]] for d in M.get("dry_plots") or [] if d.get("poly")]
-    hard += [[(float(a), float(b)) for a, b in m["poly"]] for m in M.get("marshes") or [] if len(m.get("poly") or ()) >= 3 and m.get("role") != "defense"]
-    fabric = [(poly, own) for poly, own, kind in _homestead_polys(s) if kind not in ("commons", "village_groves")]
-    water = list(zip(brook, brook[1:], strict=False))
-
-    def route(a: Pt, b: Pt) -> Poly:
-        # A PATH LEAVES ITS OWN DOORYARD: the yard and garden of a house the route starts at are not walls to it (a route from
-        # a dooryard started inside one, and every cell round it was walled), its fixtures and every other steading's are
-        walls = [poly for poly, own in fabric if own is None or math.dist(own, a) > law.DOORSTEP_FT]
-        return _route(a, b, hard, walls, water, gap=FIELD_ROUTE_GAP_FT)
-
-    return route
-
-
-FIELD_ROUTE_GAP_FT = BRANCH_WIDTH / 2.0 + 3.0
-"""How far the routed field way keeps off the steadings: the field path's half-tread and the 2 ft `house_hit` pads a tread
-by, and a foot to spare - at the footpath's own 4 ft the router drew a 5 ft path 4.3 ft off a house corner and the law
-(`fouled_segment`) refused it."""
-
-
 def settle_field(s: Any, lawful: Lawful) -> int:
     """Step 7 (ways W03): where no way of the hamlet's own reaches the field (`law.field_unreached`), the field way - the
     shortest run from the network on to the bund, straight or over the brook at a ford, the paddy's and then the dry hem's
@@ -920,7 +902,7 @@ def lane_violators(s: Any) -> list[int]:
     bad: set[int] = set()
     for i in _ordinary(M):
         p = _pts(lanes[i])
-        if law.hooked(p) or kink_spans(p) or _crossing_fault(M, i, p, wet) is not None or fouled_segment(p, float(lanes[i].get("w") or 3.0), houses, yards, solid, fixtures) is not None:
+        if law.hooked(p) or kink_spans(p) or _crossing_fault(M, i, p, wet) is not None or fouled_segment(p, float(lanes[i].get("w") or 3.0), houses, yards, solid, fixtures, M) is not None:
             bad.add(i)
     bad |= {i for _c, i, _e in law.connector_hairpin_ends(lanes)}
     bad |= {i for i, _e, _k, _u, _v in law.needle_ends(lanes)}

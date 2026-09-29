@@ -7,6 +7,7 @@ from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_closest, seg_dist
+from l7r.diagram.settlement.water_ways.lanes import reaches_dooryard
 from l7r.diagram.sitegen.geom import crop_polys, unit
 
 from ..clearance import fabric_index
@@ -154,6 +155,41 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
             run = ([q, *run]) if end == 0 else ([*run, q])
     _draw_web(s, run, 3)
     return True
+
+
+DOOR_BACK_STEP_FT = 4.0
+"""The step a straggler's door end is taken back by (`off_its_own_parts`): the corridors' own (`corridors.DOOR_TRIM_STEP_FT`)."""
+
+
+def off_its_own_parts(s: Any, path: Poly, house: Mapping[str, Any]) -> Poly:
+    """`path` from its door end, taken back `DOOR_BACK_STEP_FT` at a time until the registry of what stands admits it as a
+    footpath (`Settlement.admits_lane`), where the end left still reaches the house's dooryard (`reaches_dooryard`); else
+    `path` as it was, which the web then refuses to draw (feature 287 M8)."""
+    total = polyline_len(path)
+    k = 0.0
+    while k < total:
+        run = _from_arc(path, k)
+        if len(run) >= 2 and s.admits_lane(run, 3):
+            return run if k == 0.0 or reaches_dooryard(house, run[0]) else path
+        k += DOOR_BACK_STEP_FT
+    return path
+
+
+def _from_arc(p: Poly, s0: float) -> Poly:
+    """The run `p` from arc length `s0` on."""
+    if s0 <= 0.0:
+        return list(p)
+    out: Poly = []
+    acc = 0.0
+    for a, b in zip(p, p[1:], strict=False):
+        d = math.dist(a, b)
+        if acc + d > s0 and d > 0:
+            if not out:
+                t = (s0 - acc) / d
+                out.append((a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t))
+            out.append(b)
+        acc += d
+    return out
 
 
 _JOIN_FT = 4.0
@@ -585,6 +621,11 @@ def _serve_stragglers(
                     # can leave a step the pull could not take at the fabric margin; the junction-margin pass that
                     # every web lane gets (`_unjog`) is what `lanes_bend_like_paths` measures against.
                     path = _unjog(path, hard, others, water)
+                    # ...AND ITS DOOR END STARTS WHERE IT LEAVES ITS OWN DOORYARD (feature 287 M8): the path begins a step off the
+                    # wall and its own steading is exempt from its obstacles, so it ran across its own yard and bed, which
+                    # the overlap matrix refuses a way on - the door end is taken back until the registry admits the path
+                    # and it still reaches the dooryard (`off_its_own_parts`)
+                    path = off_its_own_parts(s, path, h)
                     # A FOLD IS A REASON TO TRY THE NEXT WAY, NOT A REASON TO DRAW (feature 134 T50,
                     # 2026-08-29). `_unjog` has three rungs and all of them can be blocked - cohort seed
                     # 16's footpath kept a 71-then-61 degree fold because the vertex between the turns

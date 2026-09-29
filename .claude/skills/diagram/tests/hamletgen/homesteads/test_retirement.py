@@ -4,6 +4,9 @@ from __future__ import annotations
 
 import math
 
+import pytest
+
+import l7r.diagram.settlement.rolling.access as access_mod
 from l7r.diagram.hamletgen.homesteads.retirement import (
     FAMILY_FORMS,
     RETIREMENT_FT,
@@ -84,13 +87,16 @@ def test_the_box_turns_and_the_glyph_draws_a_door() -> None:
     assert g.startswith('<g transform="translate(10.0,20.0) rotate(90.00)">') and g.endswith("</g>") and g.count("<rect") == 4
 
 
-def test_a_seated_hamlet_draws_every_retirement_house_its_lots_laid() -> None:
+def test_a_seated_hamlet_draws_every_retirement_house_its_lots_laid(monkeypatch: pytest.MonkeyPatch) -> None:
     """Feature 287, homes H32 and plan D9: on the retirement form the house is a household's part, laid in its bundle off
     the back wall or a flank - every one drawn where it was laid, the count the lots' quota, never short."""
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
     from l7r.diagram.hamletgen.homesteads.retirement import retirement_quota, retirement_share
     from tests.hamletgen.test_homesteads import _toy_hamlet
 
+    # the toy's bundles lay a bed or the well pocket where a flank door stands, and a corridor over its own parts is refused
+    # since feature 287 M8 (`access.parts_clear`); the seating's count, not the parts, is under test here
+    monkeypatch.setattr(access_mod, "parts_clear", lambda *a: True)
     s, plan = _toy_hamlet(12)
     s.pin_knob("family_form", "retirement_house")
     assert retirement_quota(s, 12) == {"retirement": retirement_share(s.seed)}
@@ -112,3 +118,13 @@ def test_a_laid_retirement_house_faces_off_the_wall_it_stands_by() -> None:
 
     h = {"x": 100.0, "y": 100.0, "w": 40.0, "h": 28.0, "rot": 0.0}
     assert retirement_face(h, 100.0, 70.0) == 180.0 and retirement_face(h, 135.0, 100.0) == -90.0 and retirement_face(h, 65.0, 100.0) == 90.0
+
+
+def test_a_retirement_seat_the_registry_refuses_is_passed_over() -> None:
+    """Feature 287 M8: a seat off the farmhouse that the overlap matrix or the seating's reservations refuse (here an access
+    corridor held behind every house) is not taken; the next seat, or the next household, is asked."""
+    s, hs = _byre_village()
+    s.pin_knob("family_form", "retirement_house")
+    for h in hs:
+        s.standing.reserved.reserve_corridor((h["x"] - 200.0, h["y"]), (h["x"] + 200.0, h["y"]), 60.0)
+    assert retirement_houses(s, None) == 0 and not s.M["retirement_houses"]  # type: ignore[arg-type]

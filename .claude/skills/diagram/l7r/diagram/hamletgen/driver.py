@@ -222,6 +222,9 @@ def build(plan: SitePlan) -> Settlement:
     """Run every stage, in order, against a fresh `Settlement` - once: a map is never rolled again with ground forbidden
     (feature 287, FR-002; the reach that re-roll bought is the web's to draw, `ways/settle.py`)."""
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    # EVERY FOOTPRINT HELD TO THE OVERLAP MATRIX AT RECORD TIME (feature 287 M8): every hamlet placer asks the registry of what
+    # stands before it chooses (`Settlement.admits`), so a record it forbids is an engine defect, raised by name
+    s.standing.strict = True
     if plan.spec.byre_form is not None:  # a declared byre form bypasses the settlement engine's roll (feature 261)
         s.pin_knob("byre_form", plan.spec.byre_form)
     # THE SPEC'S PINS REACH THE ENGINE'S CATALOG, as `HamletSpec.pins` has always said they do; nothing passed them on until
@@ -238,6 +241,7 @@ def _run_stages(s: Settlement, plan: SitePlan) -> None:
         with roll_scope(plan.spec):
             for stage in STAGES:
                 stage(s, plan)
+                s.standing.resync()  # a record a stage reshaped in place is recorded again (the registry's backstop, feature 287 M8)
         return
     # WHERE THE TIME WENT, in one roll (feature 151, US4). Finding the slow stage used to mean editing
     # this loop by hand, rolling, reading, and reverting - done twice in one session before this existed,
@@ -250,6 +254,7 @@ def _run_stages(s: Settlement, plan: SitePlan) -> None:
         for stage in STAGES:
             t0 = time.time()
             stage(s, plan)
+            s.standing.resync()  # as above
             timings.append((stage.__name__, time.time() - t0))
     total = sum(d for _n, d in timings)
     slowest = max(timings, key=lambda t: t[1])

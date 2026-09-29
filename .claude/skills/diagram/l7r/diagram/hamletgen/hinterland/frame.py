@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from collections.abc import Sequence
 from typing import Any
 
@@ -102,6 +103,12 @@ def frame_extras(s: Settlement, plan: SitePlan) -> list[tuple[float, float, floa
         _cx, _cy = plan.confluence
         _t = BROOK_JOIN_TRUNK * 0.5  # half the trunk each way: the junction, and enough brook below it to read as one
         extra.append((_cx - _t, _cy - _t, _cx + _t, _cy + _t))
+    # ...AND EVERY HOUSEHOLD'S SHARE OF THE WOOD FLOOR (feature 287 M8, woods W25): the copse seats the seating reserved, their
+    # crowns whole. The copse is planted after the view is decided, and a seat past the view's edge was planted and then
+    # partitioned off the page (cohort 1-60: 8 seats on two maps) - a household's own trees are its homestead's picture
+    crowns = [(float(p[0]), float(p[1]), float((h.get("wood_share") or {}).get("r") or 0.0)) for h in s.M.get("houses") or [] for p in (h.get("wood_share") or {}).get("seats") or ()]
+    if crowns:
+        extra.append((min(x - r for x, _y, r in crowns), min(y - r for _x, y, r in crowns), max(x + r for x, _y, r in crowns), max(y + r for _x, y, r in crowns)))
     return extra + brook_beside_the_field(s)  # ...and the brook's reach beside the field, which is picture, not a runner off the edge
 
 
@@ -115,7 +122,40 @@ def frame_for(s: Settlement, plan: SitePlan) -> tuple[float, float, float, float
 
     from .parcels import CROP_MARGIN  # noqa: PLC0415 - parcels imports this module
 
-    return content_view(s._crop_boxes(city=False), frame_extras(s, plan), CROP_MARGIN, s.W, s.H)
+    return to_the_strips(s, content_view(s._crop_boxes(city=False), frame_extras(s, plan), CROP_MARGIN, s.W, s.H))
+
+
+def to_the_strips(s: Settlement, view: tuple[float, float, float, float]) -> tuple[float, float, float, float]:
+    """THE VIEW'S WATERWARD EDGE STOPS WHERE THE REED STRIP STOPS (feature 287, water:W43; the view decided once, M6): on each
+    water-facing flank (`meta.waterward`) the view (x, y, w, h) reaches no farther out than a strip off that flank that
+    reaches no water-facing edge of it (`frame.strip_face`, `strip_reaches_view`), so every strip reaches the view's edge by
+    construction. A strip that already reaches one - Kuwabata's west strip runs off the south edge - constrains nothing: the
+    west edge there frames the homesteads north of the strip, which a clamp to the strip's extent cut off the page. The strip is laid at `WATERWARD_DEPTH`
+    and a view past it used to be filled by scattering the ground between (`waterward_to_the_frame`) - which drew nothing
+    where that ground had no open ground, and the strip stopped inside the frame: a lake with a ruled edge."""
+    from ..frame import strip_face, strip_reaches_view  # noqa: PLC0415 - the closing stages import this package
+
+    faces = (s.M.get("meta") or {}).get("waterward") or []
+    pts = [p for dk in s.M.get("dikes") or [] for p in dk.get("outline") or []]
+    strips = [m["poly"] for m in s.M.get("marshes") or [] if m.get("role") == "waterside" and len(m.get("poly") or ()) >= 3]
+    if not faces or not pts or not strips:
+        return view
+    box = (min(float(p[0]) for p in pts), min(float(p[1]) for p in pts), max(float(p[0]) for p in pts), max(float(p[1]) for p in pts))
+    x0, y0, x1, y1 = float(view[0]), float(view[1]), float(view[0]) + float(view[2]), float(view[1]) + float(view[3])
+    for strip in strips:
+        face = strip_face(strip, box)
+        if face not in faces or strip_reaches_view(strip, view, faces):
+            continue  # a strip already reaching the view's edge on a water-facing flank constrains nothing
+        xs, ys = [float(q[0]) for q in strip], [float(q[1]) for q in strip]
+        if face == "W":
+            x0 = max(x0, min(xs))
+        elif face == "E":
+            x1 = min(x1, max(xs))
+        elif face == "N":
+            y0 = max(y0, min(ys))
+        else:
+            y1 = min(y1, max(ys))
+    return (math.ceil(x0), math.ceil(y0), math.floor(x1) - math.ceil(x0), math.floor(y1) - math.ceil(y0))
 
 
 def belt_page(s: Settlement, plan: SitePlan, r: float) -> Any:
@@ -134,7 +174,7 @@ def belt_page(s: Settlement, plan: SitePlan, r: float) -> Any:
 
     def page(seats: list[tuple[float, float]]) -> tuple[float, float, float, float]:
         rec = {"role": "windbreak", "r": r, "clumps": [[x, y] for x, y in seats], "clumps_offpage": []}
-        return content_view(crop_boxes({**s.M, "village_groves": [*groves, rec]}, False, s.ftpx, s.W, s.H), extras, CROP_MARGIN, s.W, s.H)
+        return to_the_strips(s, content_view(crop_boxes({**s.M, "village_groves": [*groves, rec]}, False, s.ftpx, s.W, s.H), extras, CROP_MARGIN, s.W, s.H))
 
     return page
 
@@ -232,6 +272,12 @@ def pocket_clear_of_features(pocket: tuple[float, float, float, float], M: Any, 
     """THE ONE PREDICATE of the title pocket's keep-clear (feature 287, water W58): the pocket (x0, y0, x1, y1), grown by
     `clearance` each way, meets no feature glyph's box (`TITLE_GLYPH_KEYS`, a record's `w`/`h` or its drawn radius) and
     no torii (recorded as a bare point, its glyph about 38 x 28)."""
+    # ...AND COVERS NOTHING THE SEATING RESERVED (feature 287 M8, `overlap/reserved.py`): no household's wood seat within the
+    # copse's crown of it (the copse refuses a clump inside the pocket grown by its radius - cohort 1-60 lost 95 seats so)
+    # and no access corridor through it
+    st = getattr(M, "standing", None)
+    if st is not None and st.reserved.box_covers(pocket[0], pocket[1], pocket[2], pocket[3], st.reserved.clump / 2.0):
+        return False
     x0, y0, x1, y1 = pocket[0] - clearance, pocket[1] - clearance, pocket[2] + clearance, pocket[3] + clearance
     boxes: list[tuple[float, float, float, float]] = []
     for k in TITLE_GLYPH_KEYS:

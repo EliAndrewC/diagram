@@ -7,6 +7,7 @@ from collections import Counter
 
 import pytest
 
+import l7r.diagram.settlement.rolling.access as access_mod
 from l7r.diagram.hamletgen.homesteads import fixtures as fx
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.homestead_parts.fixture_seats import FixtureForms
@@ -28,8 +29,12 @@ def test_each_kinds_quota_is_its_share_of_the_households_and_a_floor_raises_it(n
     assert lots.fixtures_of(n) == () and lots.fixtures_of(-1) == ()
 
 
-def test_a_seated_hamlet_draws_every_fixture_its_lots_keep_and_records_none_short() -> None:
+def test_a_seated_hamlet_draws_every_fixture_its_lots_keep_and_records_none_short(monkeypatch: pytest.MonkeyPatch) -> None:
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
+
+    # the toy's bundles lay a bed or the well pocket where a flank door stands, and a corridor over its own parts is refused
+    # since feature 287 M8 (`access.parts_clear`); the seating's count, not the parts, is under test here
+    monkeypatch.setattr(access_mod, "parts_clear", lambda *a: True)
 
     s, plan = _toy_hamlet(12)
     stage_homesteads(s, plan)

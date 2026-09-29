@@ -83,6 +83,12 @@ def web_rejoinable(lanes: Sequence[Mapping[str, Any]], hard: list[Poly], walls: 
     return True
 
 
+def admits_lane(s: Any) -> Callable[[Any, Any], bool]:
+    """The settlement's question of a lane rewrite (feature 287 M8): does the overlap matrix admit lane record `ln` along
+    `pts` on what stands, its own old extent aside?"""
+    return lambda ln, pts: bool(s.admits("lanes", {**ln, "pts": [[round(float(x), 1), round(float(y), 1)] for x, y in pts]}, ignore=ln))
+
+
 def commit_lane(
     lanes: list[dict[str, Any]],
     m: int,
@@ -91,8 +97,10 @@ def commit_lane(
     walls: Sequence[Poly],
     water: list[tuple[Pt, Pt]],
     reink: Callable[[int], None],
+    admit: Callable[[Any, Any], bool] = lambda _ln, _pts: True,
 ) -> bool:
-    """Rewrite lane `m` - and put it back if the rewrite BREAKS the web and the touch pass cannot mend it.
+    """Rewrite lane `m` - and put it back if the rewrite BREAKS the web and the touch pass cannot mend it. Not at all where
+    `admit` refuses the lane as it would become (feature 287 M8: the settlement's overlap-matrix question, `admits_lane`).
 
     LIFTED OUT OF `_smooth_web` (feature 146, GM 2026-08-28 on inner functions and testability). The
     revert arm is the whole reason the function exists (feature 137 T03: a hairpin cut took the short
@@ -100,6 +108,8 @@ def commit_lane(
     Sawada all came out failing `lanes_form_one_network`), and it is the arm a clean roll never enters -
     so it had no test until it could be called with four plain lists.
     """
+    if not admit(lanes[m], new_pts):
+        return False
     before, old = web_pieces(lanes), lanes[m]["pts"]
     lanes[m]["pts"] = new_pts
     if web_pieces(lanes) > before and not web_rejoinable(lanes, hard, walls, water):
@@ -150,7 +160,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
     # counts the pieces itself. Removed with it (feature 146).
 
     def _commit(m: int, new_pts: list[list[float]]) -> bool:
-        return commit_lane(lanes, m, new_pts, hard, walls, water, s.reink_lane)
+        return commit_lane(lanes, m, new_pts, hard, walls, water, s.reink_lane, admits_lane(s))
 
     def _others_segs(skip: int) -> list[tuple[Pt, Pt]]:
         return [

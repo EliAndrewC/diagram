@@ -97,6 +97,12 @@ def byre_part(hw: float, hh: float, bw: float, bh: float, garden_side: str, form
     return sx * (hw / 2.0 + gap + bh / 2.0), 0.0, bh, bw, 90.0
 
 
+#: How far a shared shed's pocket keeps off the access tree's strips beyond their half-width, in feet: half a bundle pitch
+#: (`BUNDLE_PITCH`, 100 ft) - every household's corridor comes to the exit strip, so the ground either side of it is
+#: its approach, not a shed's (feature 287 M8). A map drawing convention.
+POCKET_TREE_CLEAR_FT = 50.0
+
+
 class DraftByresMixin:
     def reserve_commons_byres(self: Settlement, seat: Mapping[str, Any], households: int) -> list[Pt]:  # type: ignore[misc]
         """THE SHARED SHEDS' POCKETS, reserved in the seat band BEFORE any house (feature 287, homes H06): on a settlement
@@ -141,6 +147,14 @@ class DraftByresMixin:
         if any(math.hypot(x - p[0], y - p[1]) <= COMMONS_BYRE_GAP for p in pockets):
             return False
         if any(point_in_poly(x, y, ff) or edge_dist(x, y, ff) < bh for ff in self.field_polys):
+            return False
+        # ...nor on or beside the exit strip or the field's corridor the seating reserved first (feature 287 M8: the registry
+        # refuses a shed on an access corridor, and the web draws its way along one). Held off them by half a bundle pitch
+        # besides: every household's corridor comes to the strip, and a shed standing against it walls that side of it off -
+        # the toy hamlet's one pocket, laid beside the strip's root, left no house on its far side a way in
+        tree = getattr(self, "_access", None)
+        clear = self.px(POCKET_TREE_CLEAR_FT)
+        if tree is not None and tree.covers_box((x, y, bw + 6 + 2 * clear, bh + 6 + 2 * clear)):
             return False
         return bool(self._fits(x, y, bw + 6, bh + 6))
 

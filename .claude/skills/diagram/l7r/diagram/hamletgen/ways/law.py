@@ -714,11 +714,11 @@ def unbridged_crossings(M: Mapping[str, Any]) -> list[tuple[int, int]]:
     return sorted(hits)
 
 
-def deck_seats(pts: Poly, width: float, waters: Sequence[tuple[Any, float]], ftpx: float = 1.0, wet: Sequence[Poly] = ()) -> list[tuple[int, int]]:
+def deck_seats(pts: Poly, width: float, waters: Sequence[tuple[Any, float]], ftpx: float = 1.0, wet: Sequence[Poly] = (), M: Any = None) -> list[tuple[int, int]]:
     """Every crossing of `waters` (`bridge_crossed_waters`) by a way along `pts` where no deck seats: `crossing_deck`, the
     very solve `bridges()` makes - grown, then skewed toward square, until every corner clears the whole crossed course
     (`_deck_corners_clear`) and lands off the flooded rice (`wet`, `flooded_ground`) (`undeckable_at`)."""
-    return [(round(p[0]), round(p[1])) for _k, p in undeckable_at(pts, width, waters, ftpx, wet)]
+    return [(round(p[0]), round(p[1])) for _k, p in undeckable_at(pts, width, waters, ftpx, wet, M)]
 
 
 def undeckable_crossings(M: Mapping[str, Any]) -> list[tuple[int, int]]:
@@ -726,7 +726,7 @@ def undeckable_crossings(M: Mapping[str, Any]) -> list[tuple[int, int]]:
     ftpx = float((M.get("meta") or {}).get("ftpx") or 1.0)
     waters = bridge_crossed_waters(M)
     wet = flooded_ground(M)
-    return [x for rpts, rw in bridge_carried_ways(M) for x in deck_seats([(float(q[0]), float(q[1])) for q in rpts], float(rw), waters, ftpx, wet)]
+    return [x for rpts, rw in bridge_carried_ways(M) for x in deck_seats([(float(q[0]), float(q[1])) for q in rpts], float(rw), waters, ftpx, wet, M)]
 
 
 def short_decks(M: Mapping[str, Any]) -> list[tuple[int, int, float, float]]:

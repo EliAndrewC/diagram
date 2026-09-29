@@ -6,6 +6,7 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
+from l7r.diagram.overlap.registry import PLACER_MARGIN_PX
 from l7r.diagram.settlement import Settlement, seg_dist, skeleton_layout, web_cuts
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import crop_polys
@@ -201,7 +202,11 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
             if _arm_crossing_accidental(arm, raw_arms[ai], kept):
                 continue
             kept.append((arm, raw_arms[ai]))
-            s.lane(arm, width=5, clearance=LANE_CLEARANCE, worn=True)
+            # ...laid only where the overlap matrix admits it (feature 287 M8): an arm across a byre or a house is cut there,
+            # as the settle would cut it, and a piece left too short to be a way is not laid
+            for piece in s.admitted_runs(arm, 5):
+                if polyline_len(piece) >= _WEB_MIN_FT:
+                    s.lane(piece, width=5, clearance=LANE_CLEARANCE, worn=True)
     s.M["meta"]["lane_skeleton"] = plan.lane_skeleton
     return kept
 
@@ -508,7 +513,11 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     toe = s.toe_band() or None
     wet = marsh_ground(s.M, but=("defense",))
     hard = [list(plan.envelope), *crops, *([toe] if toe else []), *wet]
-    fabric = _homestead_polys(s)
+    # ...AND THE HOUSEHOLDS' RESERVED WOOD SEATS ARE FABRIC TO THE WEB (feature 287 M8): the registry refuses a lane within
+    # the copse's lane buffer of a seat, so every pass clips and routes round them - sized so the web's own fabric margin
+    # (`WEB_FABRIC_GAP`) plus a footpath's half-tread lands on the buffer - rather than laying a cut the registry then
+    # refuses and leaving its houses to the straggler search (seed 39: 60 routes against 7)
+    fabric = _homestead_polys(s) + [(w, None, "wood seat") for w in s.standing.reserved.seat_walls(reach=seat_wall_reach(s))]
     # WHAT A LANE MAY NOT BE DRAWN THROUGH, now that lanes come LAST (feature 126).
     #
     # `hard` is ground: the field, the crop, the wet toe. It says nothing about what the settlement
@@ -695,6 +704,15 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # cuts; the straggler redraw that stood in for the corridor until it landed is gone with the driver's re-roll.
     _pass("settle")
     s.M["meta"]["web_settle"] = settle_the_web(s)
+    # THE CORRIDORS HAVE SERVED (feature 287 M8): every way the seating held them for is drawn, so the registry's reservation
+    # of them ends here - the notice board may stand beside a way drawn along one, as beside any way
+    s.standing.reserved.release_corridors()
+
+
+def seat_wall_reach(s: Settlement) -> float:
+    """The radius a reserved seat is walled at for the web (`stage_web`): the copse's lane buffer about it, a footpath's
+    half-tread and the placer's margin, less the fabric margin every web pass keeps off a wall - never under a foot."""
+    return max(1.0, s.standing.reserved.lane_buffer + 1.5 + PLACER_MARGIN_PX - WEB_FABRIC_GAP)
 
 
 def kept_connector(pts: Poly, pulled: Poly, solid: Sequence[tuple[float, float, float, float]]) -> Poly:

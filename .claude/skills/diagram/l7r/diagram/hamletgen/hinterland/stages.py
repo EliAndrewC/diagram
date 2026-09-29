@@ -9,7 +9,7 @@ from typing import Any, cast
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._geom import CanopyArea
 from l7r.diagram.settlement.homestead_parts.belt_law import wind_unit
-from l7r.diagram.settlement.homestead_parts.groves import HOMESTEAD_WOOD_FT2, homestead_wood_ft2
+from l7r.diagram.settlement.homestead_parts.groves import homestead_wood_ft2
 
 from ..consts import COPSE_BELT_REACH_FT, COPSE_HOUSE_REACH_FT
 from ..homesteads import farmstead_fixtures, household_bamboo
@@ -391,25 +391,14 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     s.village_grove(
         _box, role="copse", dense=False, reserved=title_pocket(s, plan), near=_copse_near, area=_copse_goal, seats=_seats, seat_near=_dooryard
     )  # the map's name has ground reserved; the copse honors it like the belt does
-    # ...AND NEVER UNDER THE REGISTER'S FLOOR (feature 287, woods W25; plan D9): where the belt and the copse together draw
-    # less than `HOMESTEAD_WOOD_FT2`'s smallest household a homestead, the shortfall is topped up as the homesteads' own
-    # windward trees - in the belt's lee, between it and the houses, each within the dooryard copse's reach of a farmhouse
-    # on its own bank (so the dooryard rule, woods W02, holds of every clump on either siting). Nothing is relaxed: every
-    # seat faces the copse's own tests, and a site the ground cannot hold is the homestead bundle's to reserve (D9).
-    # SINCE THE RESERVED SEATS ARE PLANTED FIRST (above; the belt keeps off them, `reserved_seat_keepouts`) this top-up fired
-    # on none of cohort 1-60 nor Inashiro (the lowest drawn wood 9,917 sq ft a homestead). It is NOT yet retired, because the
-    # reservation does not yet hold the floor by itself: the web's lanes and the title's pocket still take reserved seats
-    # (measured on cohort 1-12: 21-90 seats a map to a lane, 0-17 to the pocket, 17% of all seats over 1-60, leaving the
-    # planted seats 4,712-5,635 sq ft a homestead - the belt makes up the rest). It retires when the registry of
-    # reservations (plan M8) keeps those two off the seats.
-    if houses and homestead_wood_drawn(s) < HOMESTEAD_WOOD_FT2[0]:
-        _lee = [(float(c[0]), float(c[1])) for g in s.M.get("village_groves") or [] if g.get("role") == "windbreak" for c in g.get("clumps") or []]
-        _lx = [x for x, _y in _lee] + xs
-        _ly = [y for _x, y in _lee] + ys
-        _top = [(min(_lx) - pad, min(_ly) - pad), (max(_lx) + pad, min(_ly) - pad), (max(_lx) + pad, max(_ly) + pad), (min(_lx) - pad, max(_ly) + pad)]
-        _short = (HOMESTEAD_WOOD_FT2[0] - homestead_wood_drawn(s)) * len(houses) * _ft2
-        _house_near = ([(float(x), float(y)) for x, y in zip(xs, ys, strict=False)], s.px(COPSE_HOUSE_REACH_FT), _brook)
-        s.village_grove(_top, role="copse", dense=False, reserved=title_pocket(s, plan), near=_house_near, area=_short)
+    s.standing.reserved.release_seats()  # planted: the seats stand as the copse's clumps now (feature 287 M8, `overlap/reserved.py`)
+    # ...AND NEVER UNDER THE REGISTER'S FLOOR (feature 287, woods W25; plan D9), BY CONSTRUCTION: each household is seated only
+    # with copse seats reserved that cover `HOMESTEAD_WOOD_FT2`'s floor (`wood_share`), and since the registry of what
+    # stands (plan M8, `overlap/reserved.py`) keeps the web's lanes, the title's pocket, the shared byres and the parts laid
+    # after the seating off them, every seat is planted where it was reserved (cohort 1-60 and the pool: 0 of 20,454 seats
+    # lost, against 17% before; the lowest drawn wood 9,401 sq ft a homestead). The lee top-up that made up a short floor
+    # here - it fired on none of cohort 1-60 once the seats were planted first - is retired with the check that triggered
+    # it (R8).
     # RECORD WHAT THE GROUND GAVE, beside what the knob asked for (settlement-review, feature 230 pass 12; the same
     # move `place_kosatsuba` makes with `kosatsuba_well_ft`, and for the same reason). `copse_siting` says
     # `among_the_houses` on four of the five pool maps, and what that produces depends entirely on whether the

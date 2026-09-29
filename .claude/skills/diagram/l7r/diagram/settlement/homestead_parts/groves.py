@@ -9,6 +9,18 @@ from .._geom import CrownIndex, PointGrid, _union_area, point_in_poly, seg_dist
 from .._knobs import Knob, register_knob
 from ._helpers import _belt_axis
 
+#: The grain a grove's clump is rendered at, relative to the town grain the glyphs were calibrated at (`_draw_grove`'s `bs`).
+GROVE_RENDER_GRAIN = 0.82
+
+
+def crown_lift(bscale: float) -> float:
+    """How far up the sheet `_draw_grove` draws every crown from the point it threw it at: `3 * bs` at the grove's render
+    grain (`bscale / GROVE_RENDER_GRAIN`) - 3.66 px on a hamlet, not the 3.0 the reach was once taken at (feature 287 M8:
+    cohort seed 31 drew a copse trunk 15.3 px from its clump against a reach of 15.0, on a lane's tread). `crown_reach`'s
+    `lift` is this, so the reach IS the drawn reach."""
+    return 3.0 * bscale / GROVE_RENDER_GRAIN
+
+
 if TYPE_CHECKING:
     from ..core import Settlement
 
@@ -393,7 +405,8 @@ class GrovesMixin:
         are seeded by position (stable across regenerations). Canopy count scales with footprint area."""
         # SCOPED (2026-08-08): a homestead grove's crowns are decoration keyed to the grove itself.
         with self.rng_scope("grove", cx, cy, w, h):
-            bs = self.bscale / 0.82  # render scale relative to the town grain
+            bs = self.bscale / GROVE_RENDER_GRAIN  # render scale relative to the town grain
+            lift = crown_lift(self.bscale)  # every crown is drawn this far up the sheet from its throw (`crown_reach` reads it)
             st = random.getstate()
             random.seed(int(abs(cx) * 5 + abs(cy) * 3 + round(w)))
             n = max(5, min(28, round(w * h / (bs * bs * 48))))  # ~ one crown per ~48 px^2 at 2 ft/px (a ~5 m crown); ~40 across the 6:1 L-grove
@@ -475,19 +488,19 @@ class GrovesMixin:
                 # blue-gray green set apart from the belt's own two greens and its cedar, a map drawing convention (the
                 # real foliage is a plain dark green; the tint is chosen so the wet stand reads apart)
                 col = random.choice(ALDER_GREENS) if mix == "alder" else ("#496733" if kind == "conifer" else random.choice(["#7C9A4E", "#6E8B43"]))
-                if self._crown_covers(cx + px, cy + py - 3 * bs, rr, krect, kcirc, self.CANOPY_PAD):
+                if self._crown_covers(cx + px, cy + py - lift, rr, krect, kcirc, self.CANOPY_PAD):
                     continue
                 # TWO SCANS, NOT A GRID (feature 284, A6 withdrawn, specs/284 research R7): a crown grid per clump was exact but
                 # slower - a clump's nearby crowns are few, and filing them cost more than walking them (the windbreak 8-12%
                 # slower on three pool hamlets against main).
-                if not self._crown_seat_clear(cx + px, cy + py - 3 * bs, rr, _near) or not self._crown_seat_clear(cx + px, cy + py - 3 * bs, rr, drawn):
+                if not self._crown_seat_clear(cx + px, cy + py - lift, rr, _near) or not self._crown_seat_clear(cx + px, cy + py - lift, rr, drawn):
                     continue  # a crown centered under an already-drawn crown is an understory stem, not canopy (GM 2026-08-28; woods._crown_seat_clear)
-                drawn.append((cx + px, cy + py - 3 * bs, rr))
+                drawn.append((cx + px, cy + py - lift, rr))
                 # ONE DISC PER CROWN, conifer included (GM 2026-09-27). A conifer used to carry a second, darker
                 # disc at 40% of its radius (a "dense dark apex"); the GM read it as a trunk, which a plan view
                 # cannot show, and it was an unrecorded map convention. The darker fill and the 15% larger
                 # crown already tell a conifer from a broadleaf.
-                g.append(f'<circle cx="{px:.1f}" cy="{py - 3 * bs:.1f}" r="{rr:.1f}" fill="{col}" stroke="#3C5526" stroke-width="0.8"/>')
+                g.append(f'<circle cx="{px:.1f}" cy="{py - lift:.1f}" r="{rr:.1f}" fill="{col}" stroke="#3C5526" stroke-width="0.8"/>')
                 if tally is not None:
                     tally[kind] = tally.get(kind, 0) + 1
             # THE BAMBOO SHOWS IN THE GAPS AND ALONG THE EDGE (269 B29, vegetation/260): a bamboo item under a drawn

@@ -6,6 +6,7 @@ from l7r.diagram import hamletgen as hg
 from l7r.diagram.settlement import Settlement
 
 from .._builders import a_plan
+from ._builders import AdmitsAll
 
 
 def test_reachable_runs_admits_a_run_that_joins_THROUGH_another_run() -> None:
@@ -168,7 +169,7 @@ def test_a_lane_the_smoothing_collapsed_is_emptied_reinked_and_deleted() -> None
     its shape - it is the map's way out."""
     from l7r.diagram.hamletgen.ways import web as _web
 
-    class _S:
+    class _S(AdmitsAll):
         def __init__(self) -> None:
             self.M: dict = {
                 "lanes": [

@@ -17,6 +17,8 @@ from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.settlement._knobs import Knob, knob_rng, register_knob
 
+from .holds import release_held
+
 if TYPE_CHECKING:
     from l7r.diagram.settlement import Settlement
 
@@ -137,6 +139,7 @@ def retirement_houses(s: Settlement, plan: SitePlan) -> int:
         laid = [(h, f) for h in houses for f in h.get("fixtures") or () if f["kind"] == "retirement"]
         s.M["meta"]["retirement_target"] = len(laid)
         for h, f in laid:
+            release_held(s, "retirement_houses", f)  # held since the seating (`hold_laid_parts`, feature 287 M8)
             _draw_retirement(s, h, float(f["x"]), float(f["y"]), w, d, retirement_face(h, float(f["x"]), float(f["y"])))
         s.M["meta"]["retirement_houses"] = len(laid)
         return len(laid)
@@ -152,7 +155,8 @@ def retirement_houses(s: Settlement, plan: SitePlan) -> int:
             break
         for cx, cy, rot in retirement_seats(h, w, d, gaps, rng.randrange(3)):
             aw, ah = turned_box(w, d, rot)
-            if s._byre_clear_of_all_but(cx, cy, aw, ah, h):
+            rec = {"x": round(cx, 1), "y": round(cy, 1), "w": round(w, 1), "h": round(d, 1), "rot": round(rot, 1), "of": [round(float(h["x"]), 1), round(float(h["y"]), 1)]}
+            if s._byre_clear_of_all_but(cx, cy, aw, ah, h) and s.admits("retirement_houses", rec):  # ...and the registry (M8)
                 _draw_retirement(s, h, cx, cy, w, d, rot)
                 seated += 1
                 break

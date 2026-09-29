@@ -4,10 +4,28 @@
 # ---- feature 123: the web's guard rails, each exercised on its own -------------------------------
 
 
+class AdmitsAll:
+    """A stub settlement's answer to the registry of what stands (feature 287 M8): it holds no footprint, so every question
+    is admitted and a lane rewrite is written as `Settlement.reshape_lane` writes it."""
+
+    def admits(self, key, rec, ignore=None):
+        return True
+
+    def admits_lane(self, pts, width):
+        return True
+
+    def admitted_runs(self, pts, width):
+        return [list(pts)] if len(pts) >= 2 else []
+
+    def reshape_lane(self, ln, pts):
+        ln["pts"] = [[round(float(x), 1), round(float(y), 1)] for x, y in pts]
+        return True
+
+
 def _lanes(*polys):
     """A minimal Settlement stand-in carrying only what the web helpers read."""
 
-    class _S:
+    class _S(AdmitsAll):
         def __init__(self):
             self.M = {"lanes": [{"pts": [list(map(list, p))][0], "w": 5} for p in polys], "houses": []}
 
@@ -17,7 +35,7 @@ def _lanes(*polys):
     return _S()
 
 
-class _StubSettlement:
+class _StubSettlement(AdmitsAll):
     """The two things the web helpers touch on a Settlement: the manifest and `lane()`."""
 
     def __init__(self, lanes=(), houses=(), W=1200.0, H=1200.0):
@@ -44,6 +62,37 @@ class _StubSettlement:
 
 
 # ---- feature 146: the track's fallbacks, which no cohort seed has needed --------------------------------
+
+
+class Registered(_StubSettlement):
+    """A stub settlement with the REAL registry of what stands under its manifest (feature 287 M8): its questions and its lane
+    rewrites are the settlement's own (`Standing.admits`, `LanesMixin.reshape_lane`), so a placer handed it is refused by the
+    overlap matrix exactly as on a map."""
+
+    def __init__(self, lanes=(), houses=(), W=1200.0, H=1200.0, strict=True):
+        from l7r.diagram.overlap.registry import Standing, StandingManifest
+
+        super().__init__(lanes, houses, W, H)
+        self.standing = Standing({}, W, H)
+        self.standing.strict = strict
+        self.M = StandingManifest(self.standing, {"meta": {"ftpx": 1.0}, **self.M})
+        self.standing.M = self.M
+
+    def admits(self, key, rec, ignore=None):
+        return self.standing.admits(key, rec, ignore)
+
+    def admits_lane(self, pts, width):
+        from l7r.diagram.settlement.water_ways.lanes import LanesMixin
+
+        return LanesMixin.admits_lane(self, pts, width)  # type: ignore[arg-type]
+
+    def reshape_lane(self, ln, pts):
+        from l7r.diagram.settlement.water_ways.lanes import LanesMixin
+
+        return LanesMixin.reshape_lane(self, ln, pts)  # type: ignore[arg-type]
+
+    def lane(self, pts, **kw):
+        self.M["lanes"].append(self.standing.kept("lanes", {"pts": [list(q) for q in pts], "w": kw.get("width", 5)}))
 
 
 def _walled_settlement() -> tuple[object, object]:
@@ -93,7 +142,7 @@ _TIP_WAY = {"pts": [[728.0, 272.0], [790.0, 272.0]], "w": 5}  # 38 ft off the ap
 # ---------------------------------------------------------------------------------------------
 
 
-class _StubWeb:
+class _StubWeb(AdmitsAll):
     """The two members of `Settlement` the web passes actually use."""
 
     def __init__(self, **M: object) -> None:

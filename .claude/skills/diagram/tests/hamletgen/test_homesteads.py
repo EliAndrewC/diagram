@@ -7,6 +7,7 @@ import math
 
 import pytest
 
+import l7r.diagram.settlement.rolling.access as access_mod
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.hamletgen.homesteads.capacity import SiteRefused
 from l7r.diagram.settlement import Settlement
@@ -262,6 +263,9 @@ def test_the_front_row_stops_at_its_share_and_the_ranks_seat_the_rest(monkeypatc
 
     monkeypatch.setattr(st, "fixture_quota", lambda *a: {})
     monkeypatch.setattr(st, "install_wood_shares", lambda *a: None)
+    # the toy's bundles lay a bed or the well pocket where a flank door stands, and a corridor over its own parts is refused
+    # since feature 287 M8 (`access.parts_clear`); the seating's count, not the parts, is under test here
+    monkeypatch.setattr(access_mod, "parts_clear", lambda *a: True)
     s, plan = _toy_hamlet(10)
     plan.cluster_shape = "round"  # the tightest band: the row's share is the floor of six, fewer than the chain could seat
     stage_homesteads(s, plan)
@@ -322,6 +326,7 @@ def test_a_rank_round_that_seats_nothing_grows_the_cluster_along_the_field() -> 
     behind - so a cluster whose back is refused grows along the field instead of stopping. Here the ground more than
     40 px out from the row is no-build, so every seat at a rank's depth is refused and the ends are the only ones
     left; the houses past the front row's own count can therefore only have come from them."""
+    from l7r.diagram.hamletgen.consts import BUNDLE_PITCH
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
 
     s, plan = _toy_hamlet(12)
@@ -338,18 +343,36 @@ def test_a_rank_round_that_seats_nothing_grows_the_cluster_along_the_field() -> 
     # ...AND A STRIP THAT CANNOT HOLD THE QUOTA IS REFUSED, NAMED (feature 287, homes H14 and H32: every household with its
     # fixtures, or the site refused) - asserted, not suppressed: the ends were offered and taken before the refusal
     plan.seat["ladder"] = []
+    tried: list[tuple[float, float]] = []
+    real = s.try_place
+
+    def spy(x: float, y: float, *a: object, **kw: object) -> object:
+        tried.append((x, y))
+        return real(x, y, *a, **kw)
+
+    s.try_place = spy  # type: ignore[method-assign]
     with pytest.raises(SiteRefused, match="no margin seats all 12 households"):
         stage_homesteads(s, plan)
     ss = s._seat_search
     assert ss["rounds"] >= 1, "the ranks ran"
-    assert len(s.M["houses"]) > ss["front"], "the only seats left were the ends, and the cluster took them"
+    # ...AND THE SEATS OFFERED PAST THE RANK'S ENDS, along the field: whether one is TAKEN is the corridor's to say (feature
+    # 287 M8 - here every run from an end to the access tree passes a front-row homestead's parts, which the overlap matrix
+    # keeps a way off), and the rule under test is that they are offered once the back is refused
+    row = [(float(h["x"]) - cx) * ax + (float(h["y"]) - cy) * ay for h in s.M["houses"]]
+    reach = max(abs(u) for u in row) if row else 0.0
+    along = [(x - cx) * ax + (y - cy) * ay for x, y in tried]
+    assert any(abs(u) >= reach + BUNDLE_PITCH * 0.9 for u in along), "a seat a pitch past the rank's end was offered"
 
 
-def test_an_accretion_hamlets_ranks_stand_off_their_lines_and_a_planned_ones_do_not() -> None:
+def test_an_accretion_hamlets_ranks_stand_off_their_lines_and_a_planned_ones_do_not(monkeypatch: pytest.MonkeyPatch) -> None:
     """`stage_homesteads` (feature 261 D22): an `alleys` hamlet's rank seats take the depth jitter, so the ranks behind the
     front row are not all on one line; a `back_lane` hamlet seated the same way keeps its ranks exact. Both seat every
     household."""
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
+
+    # the toy's bundles lay a bed or the well pocket where a flank door stands, and a corridor over its own parts is refused
+    # since feature 287 M8 (`access.parts_clear`); the seating's count, not the parts, is under test here
+    monkeypatch.setattr(access_mod, "parts_clear", lambda *a: True)
 
     seats = {}
     for form in ("alleys", "back_lane"):
@@ -385,6 +408,10 @@ def test_the_free_ground_changes_no_seat(form: str, scenario: str, monkeypatch: 
     """The same houses, at the same seats, with the index asked first and with it switched off entirely."""
     from l7r.diagram.hamletgen.homesteads import boundary, stage_homesteads
     from l7r.diagram.settlement import Settlement
+
+    # the toy's bundles lay a bed or the well pocket where a flank door stands, and a corridor over its own parts is refused
+    # since feature 287 M8 (`access.parts_clear`); the seating's count, not the parts, is under test here
+    monkeypatch.setattr(access_mod, "parts_clear", lambda *a: True)
 
     def roll():  # type: ignore[no-untyped-def]
         s, plan = _rescue(form) if scenario == "rescue" else _toy_hamlet(15)
@@ -490,6 +517,9 @@ def test_the_front_row_loop_stops_once_its_share_is_seated(monkeypatch) -> None:
 
     monkeypatch.setattr(st, "fixture_quota", lambda *a: {})  # no fixtures: the row's count is under test (homes H32)
     monkeypatch.setattr(st, "install_wood_shares", lambda *a: None)  # ...nor wood shares (woods W25; see the test above)
+    # the toy's bundles lay a bed or the well pocket where a flank door stands, and a corridor over its own parts is refused
+    # since feature 287 M8 (`access.parts_clear`); the seating's count, not the parts, is under test here
+    monkeypatch.setattr(access_mod, "parts_clear", lambda *a: True)
     real = st.front_row
     monkeypatch.setattr(st, "front_row", lambda *a, **k: (lambda seats: seats + seats)(list(real(*a, **k))))
     s, plan = _toy_hamlet(10)

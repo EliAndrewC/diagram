@@ -177,7 +177,8 @@ def _strip_blocked(
             return True
     # EVERY OTHER FARMHOUSE, as drawn: a caller that passes the bundle boxes in `skip` excuses a neighbor's bundle, and on a
     # map whose houses carry no separate placed box that excused the neighbor's house as well - Kuwabata's woodpile landed
-    # on the next house's gable once the 269 landing's bearing fix moved the row (tests/gate/test_no_feature_overlaps.py).
+    # on the next house's gable once the 269 landing's bearing fix moved the row (the retired finished-map overlap test; since
+    # feature 287 M8 the registry of what stands refuses it at record time, `overlap/registry.py`).
     for o in s.M.get("houses", []):
         ox, oy = float(o["x"]), float(o["y"])
         if abs(ox - hx) < 0.5 and abs(oy - hy) < 0.5:

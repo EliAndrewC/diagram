@@ -49,6 +49,7 @@ from l7r.diagram.settlement.land.wet import marsh_ground
 from ..consts import Poly, Pt
 from ..plan import SitePlan
 from .bamboo import Footing, _strip_blocked
+from .holds import release_held
 from .retirement import RETIREMENT_FT, RETIREMENT_GAP_FT
 
 # FARMSTEAD FIXTURES (feature 133 T53-T59, GM 2026-08-27; research/homesteads.html "The farmstead's
@@ -301,6 +302,7 @@ def draw_laid_fixture(s: Settlement, h: Mapping[str, Any], f: Mapping[str, Any],
     kind = str(f["kind"])
     x, y = float(f["x"]), float(f["y"])
     bx = f["box"]
+    release_held(s, "farm_fixtures", f)
     if kind == "persimmon":
         s.persimmon(x, y, of=(hx, hy))
         s.placed.append((x, y, s.px(4.0), s.px(4.0)))
@@ -340,6 +342,7 @@ def _draw_pending(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, A
     count = 0
     for h, f, _c in pending:
         hx, hy, rot = float(h["x"]), float(h["y"]), float(h.get("rot", 0.0))
+        release_held(s, "farm_fixtures", f)  # its laid seat stood held through the web; the form's own seat is sought now
         if f["kind"] == "woodpile":
             kw, kd = px(WOODPILE_FORM_FT["kizuma"][0]), px(WOODPILE_FORM_FT["kizuma"][1])
             reach = math.hypot(float(h["w"]) / 2, float(h["h"]) / 2) + px(KIZUMA_REACH_FT)
@@ -348,7 +351,9 @@ def _draw_pending(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, A
                 (
                     (x, y, a)
                     for x, y, a in seats
-                    if _flexible_clear(s, h, (x, y), _turned_ext(kw, kd, a), fields, marsh, pond, lanes, footing, lane_between=True) and not under_a_lane(s.M, (x, y, kw, kd, a))
+                    if _flexible_clear(s, h, (x, y), _turned_ext(kw, kd, a), fields, marsh, pond, lanes, footing, lane_between=True)
+                    and not under_a_lane(s.M, (x, y, kw, kd, a))
+                    and s.admits("farm_fixtures", {"x": round(x, 1), "y": round(y, 1), "w": kw, "h": kd, "rot": a, "of": [round(hx, 1), round(hy, 1)]})
                 ),
                 None,
             )
@@ -366,7 +371,9 @@ def _draw_pending(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, A
                 (
                     (x, y, road)
                     for x, y, road in field_edge_seats(edges, hx, hy, px(PIT_FIELD_REACH_FT), px(_PIT_EDGE_CLEAR_FT) + d / 2)
-                    if _flexible_clear(s, h, (x, y), (d, d), fields, marsh, pond, lanes, footing, lane_between=False) and not under_a_lane(s.M, (x, y, d, d, rot))
+                    if _flexible_clear(s, h, (x, y), (d, d), fields, marsh, pond, lanes, footing, lane_between=False)
+                    and not under_a_lane(s.M, (x, y, d, d, rot))
+                    and s.admits("farm_fixtures", {"x": round(x, 1), "y": round(y, 1), "w": d, "h": d, "rot": rot, "of": [round(hx, 1), round(hy, 1)]})
                 ),
                 None,
             )

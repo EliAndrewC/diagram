@@ -10,8 +10,9 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement._knobs import knob_rng
-from l7r.diagram.settlement.homestead_parts.groves import HOMESTEAD_WOOD_FT2
-from l7r.diagram.settlement.homestead_parts.wood_share import install_wood_shares
+from l7r.diagram.settlement.homestead_parts.groves import HOMESTEAD_WOOD_FT2, crown_lift
+from l7r.diagram.settlement.homestead_parts.stands import crown_reach
+from l7r.diagram.settlement.homestead_parts.wood_share import COPSE_CLUMP_BS, install_wood_shares
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT, exit_bearing, start_tree
 from l7r.diagram.settlement.rolling.bearing import COMMON_BEARING_DEG, MarginBearing, turned_reach, wrap_line_deg
@@ -24,6 +25,7 @@ from ..plan import SitePlan, _roll
 from .boundary import install_site_boundary
 from .capacity import SiteRefused, margin_ladder, seat_the_rest, seating_mark, unseat_to
 from .fixtures import farmstead_fixtures, fixture_forms, fixture_quota
+from .holds import hold_laid_parts
 from .retirement import retirement_houses, retirement_quota
 from .seats import cluster_aspect, front_row, lane_frontage
 from .wells import place_wells
@@ -252,6 +254,8 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # which stopped meaning anything the moment the shape was always declared.
     s.M["meta"]["cluster_seeding"] = "cloud" if _cloud_placed * 2 >= max(1, plan.spec.households) else "frontage"
     plan.placed = s.farmsteads()
+    hold_laid_parts(s, s.M.get("houses") or [])  # the pockets and fixtures stand for the ways laid before they are drawn (M8)
+    reserve_the_seating(s)  # ...and the corridors and wood seats it reserved, for every placer after it (M8, `overlap/reserved.py`)
     # how many farmhouses the quarter turn took (269 B18) - measured on what was drawn, so the share is a count, not a hope
     s.M["meta"]["house_quarter_turns"] = sum(1 for h in s.M.get("houses") or [] if abs(wrap_line_deg(float(h.get("rot", 0.0)) - (s._house_bearing or 0.0))) > 45.0)
     # THE TRIM MOVED OUT OF THIS STAGE (feature 126). It existed because the skeleton was laid
@@ -340,6 +344,29 @@ def seat_every_household(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     return placed, cloud
 
 
+def reserve_the_seating(s: Settlement) -> None:
+    """THE SEATING'S RESERVATIONS, HANDED TO THE REGISTRY OF WHAT STANDS (feature 287 M8; plan M3's keep-out, woods W25): the
+    access corridors (each leg at the corridor's half-width, for the household whose door it leaves - the legs a house's
+    corridor records follow its first, which names the house; the field's corridor and the exit strip are nobody's) and
+    every household's wood seats, with the clump the copse plants them at and the copse's own lane buffer about a lane
+    (`crown_reach` at the drawn lift, `village_grove`'s). Every placer after the seating then keeps off them by asking the
+    registry (`Settlement.admits`), and one that did not is refused at record time."""
+    res = s.standing.reserved
+    half = s.px(ACCESS_HALF_FT)
+    owner: Any = None
+    for c in s.M.get("access_corridors") or []:
+        owner = c["of"] if c.get("of") else (None if c.get("field") else owner)
+        pts = c.get("pts") or []
+        if len(pts) >= 2:
+            res.reserve_corridor(pts[0], pts[1], half, owner)
+    exit_seg = s.M.get("access_exit")
+    if exit_seg and len(exit_seg) >= 2:
+        res.reserve_corridor(exit_seg[0], exit_seg[1], half, None)
+    clump = COPSE_CLUMP_BS * s.bscale
+    seats = [p for h in s.M.get("houses") or [] for p in (h.get("wood_share") or {}).get("seats") or ()]
+    res.reserve_seats(seats, clump, max(clump * 0.45 + 4, crown_reach(clump, 0.0, lift=crown_lift(s.bscale))))
+
+
 def corridor_ground(s: Settlement) -> Callable[[list[Pt]], bool]:
     """The ways' own test of a corridor's ground (`settle.corridor_on_lawful_ground`: the run squared at its crossings, then
     `Lawful.on_lawful_ground`), for the seating to admit a corridor by (`access.lawful_ground`) - the settlement package
@@ -418,13 +445,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # EACH HOUSEHOLD'S LOT, keyed on seat order (feature 287, plan M5): the k-th house seated takes rung k of the size
     # ladder and the k-th place in the kura quota, so the counts close whatever seat each household lands on
     s._byre_form, _share = household_byre_form(s)
-    # THE SHARED SHEDS' POCKETS BEFORE ANY HOUSE (feature 287, homes H06): on the `detached_commons` form the sheds are no
-    # household's part, so their ground is reserved in the band first and the houses pack round it
     s._byre_pockets = []
-    if getattr(s, "_nucleated", False) and s.resolve("byre_form") == "detached_commons":
-        want = commons_byre_target(plan.spec.households)
-        if len(s.reserve_commons_byres(seat, plan.spec.households)) < want:
-            raise SiteRefused(f"{plan.spec.name} (seed {plan.spec.seed}): the seat band holds no ground for {want} shared byres")
     s._pockets = []  # the well pockets this seating has laid (feature 287, homes H10-H11; `needs_pocket`)
     # ...AND EACH HOUSEHOLD'S SHARE OF THE WOOD FLOOR (feature 287, woods W25 made absolute; plan D9): a household is seated
     # only where it can reserve copse seats covering `HOMESTEAD_WOOD_FT2`'s floor within the dooryard copse's reach of its
@@ -528,6 +549,17 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         start_tree(s, (float(seat["cx"]), float(seat["cy"])), _out, _length)
         if not reserve_field_corridor(s):
             return 0, 0  # ...AND ITS FIELD'S CORRIDOR (ways W03): a margin with no lawful way on to its field seats no one here
+    # THE SHARED SHEDS' POCKETS BEFORE ANY HOUSE (feature 287, homes H06): on the `detached_commons` form the sheds are no
+    # household's part, so their ground is reserved in the band first and the houses pack round it - AFTER the exit strip
+    # and the field's corridor, whose strips a pocket keeps off (`_commons_pocket_clear`; M8: the registry refuses a shed on
+    # a corridor, and the first pocket, nearest the band's middle, stood where every exit strip starts), and filed with the
+    # wood shares so no household's seat is reserved under one
+    if getattr(s, "_nucleated", False) and s.resolve("byre_form") == "detached_commons":
+        want = commons_byre_target(plan.spec.households)
+        if len(s.reserve_commons_byres(seat, plan.spec.households)) < want:
+            raise SiteRefused(f"{plan.spec.name} (seed {plan.spec.seed}): the seat band holds no ground for {want} shared byres")
+        if s._wood is not None:
+            s._wood.file_byre_pockets(s, s._byre_pockets)
 
     # THREE standoffs, not two. `field_ringed` (retired, feature 141) wants five farmhouses within 165 px of the field
     # outline and the placer refuses any bundle that laps a bund or a ditch, so a single ring of

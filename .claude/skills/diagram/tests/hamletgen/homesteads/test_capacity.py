@@ -7,6 +7,7 @@ import math
 
 import pytest
 
+import l7r.diagram.settlement.rolling.access as access_mod
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.hamletgen.homesteads import capacity, stages
 from l7r.diagram.hamletgen.homesteads.capacity import SiteRefused, compass, free_seats, margin_ladder, seat_the_rest, seating_mark, unseat_to
@@ -241,6 +242,10 @@ def test_the_linear_frontage_stops_once_the_households_are_housed_with_seats_sti
     s, plan = _toy(10)
     plan.settlement_form = "linear"
     object.__setattr__(plan.spec, "households", 3)  # frozen; the site stays a real hamlet's, only the target is cut
+    # the toy's frontage runs along the field's low face, whose wood seats the reed toe takes since feature 287 M8 (a seat is
+    # never reserved on the toe, `wood_share.ground_blocks`) - the pass under test is the frontage's, so the toe is not drawn
+    monkeypatch.setattr(s, "toe_band", lambda *a, **kw: None)
+    monkeypatch.setattr(access_mod, "parts_clear", lambda *a: True)  # ...nor a corridor's own parts (`access.parts_clear`)
     real, offers = stages.front_row, []
 
     def row(plan_: hg.SitePlan, count: int, **kw: object) -> list[object]:

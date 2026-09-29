@@ -20,16 +20,17 @@ import math
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import point_in_poly, rot_rect, seg_closest, seg_dist, segments_cross
+from l7r.diagram.settlement import edge_dist, point_in_poly, rot_rect, seg_closest, seg_dist, segments_cross
 from l7r.diagram.settlement._geom.indexes import PointGrid
 from l7r.diagram.settlement.water_ways.lanes import behind_house
 
 from ..consts import WEB_CLEARANCE, Poly, Pt
 from . import law
-from .bund import BRANCH_STEP_FT, run_on_target
+from .bund import BRANCH_STEP_FT, BRANCH_WIDTH, run_on_target
 from .checks import ford_crossing, served_network, unreached_houses
-from .fabric import house_hit
+from .fabric import _homestead_polys, house_hit
 from .geom import WorkedGround, polyline_len
+from .route import _route
 from .sweeps import _ALONG_FT
 
 ACCESS_ROLE = "access"
@@ -546,3 +547,44 @@ def draw_corridors(s: Any, vet: Callable[[Poly], bool] = lambda _run: True, rout
         segs = [*segs, *zip(run, run[1:], strict=False)]
         n += 1
     return n
+
+
+def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:
+    """The web's router (`route._route`) as a field way threads it: walled by the steadings' built ground (not the commons
+    or the groves - a path crosses ground cover), hard against the field, the dry hem and the marsh, and kept off the brook
+    but at its fords (the straggler footpath's own terms, `serve._serve_stragglers`)."""
+    M = s.M
+    hard = [[(float(a), float(b)) for a, b in f["outline"]] for f in M.get("fields") or [] if f.get("outline")]
+    hard += [[(float(a), float(b)) for a, b in d["poly"]] for d in M.get("dry_plots") or [] if d.get("poly")]
+    hard += [[(float(a), float(b)) for a, b in m["poly"]] for m in M.get("marshes") or [] if len(m.get("poly") or ()) >= 3 and m.get("role") != "defense"]
+    fabric = [(poly, own, kind) for poly, own, kind in _homestead_polys(s) if kind not in ("commons", "village_groves")]
+    # ...AND EVERYTHING THE OVERLAP MATRIX FORBIDS A WAY ON (feature 287 M8), read from the registry of what stands: the
+    # burial ground, a kura, a sty, a fixture - the ground the law will refuse the run for, walled before it is routed
+    st = getattr(M, "standing", None)
+    matrix = [(e[1], e[3] if e[3] is not None else e[2], e[0]) for e in st.forbidding("lanes")] if st is not None else []  # a part by its household, a house by itself
+    houses = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or []]
+    water = list(zip(brook, brook[1:], strict=False))
+
+    def route(a: Pt, b: Pt) -> Poly:
+        # A PATH LEAVES ITS OWN DOORYARD: the threshing yard of the house the route starts at is not a wall to it (a route from
+        # a dooryard starts inside it, and every cell round it was walled), nor the house itself where the route starts within
+        # the router's gap of its wall (a house with no yard: its dooryard is a step off the front) - the web draws the run
+        # from the yard's edge (`door_ends`) and the law refuses a tread on the house (`house_hit`); its beds, sheds and
+        # fixtures and every other steading's are walls, as the matrix holds them
+        own = min((c for c in houses if math.dist(c, a) <= law.DOORSTEP_FT), key=lambda c: math.dist(c, a), default=None)
+
+        def mine(owner: Any, kind: str, poly: Poly) -> bool:
+            if own is None or owner is None or math.dist((float(owner[0]), float(owner[1])), own) > 1.5:
+                return False
+            return kind == "threshing_yards" or (kind == "houses" and (point_in_poly(a[0], a[1], poly) or edge_dist(a[0], a[1], poly) <= GABLE_MARGIN_FT + FIELD_ROUTE_GAP_FT))
+
+        walls = [poly for poly, owner, kind in [*fabric, *matrix] if not mine(owner, kind, poly)]
+        return _route(a, b, hard, walls, water, gap=FIELD_ROUTE_GAP_FT)
+
+    return route
+
+
+FIELD_ROUTE_GAP_FT = BRANCH_WIDTH / 2.0 + 3.0
+"""How far the routed field way keeps off the steadings: the field path's half-tread and the 2 ft `house_hit` pads a tread
+by, and a foot to spare - at the footpath's own 4 ft the router drew a 5 ft path 4.3 ft off a house corner and the law
+(`fouled_segment`) refused it."""

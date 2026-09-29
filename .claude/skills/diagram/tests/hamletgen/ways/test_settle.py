@@ -9,8 +9,10 @@ from l7r.diagram.hamletgen.ways import corridors as co
 from l7r.diagram.hamletgen.ways import law, settle
 from l7r.diagram.settlement import segments_cross
 
+from ._builders import AdmitsAll
 
-class _S:
+
+class _S(AdmitsAll):
     """The four things `settle_the_web` touches on a Settlement: the manifest, `lane()`, `reink_lane()`, `drop_lanes()`."""
 
     def __init__(self, lanes=(), houses=(), **extra):

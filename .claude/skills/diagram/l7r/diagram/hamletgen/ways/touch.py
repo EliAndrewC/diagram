@@ -135,7 +135,9 @@ def _touch_junctions(
     def _may_write(idx: int, new_pts: Sequence[Pt], lane_list: Sequence[Mapping[str, Any]]) -> bool:
         """This lane's rewrite rule - see `may_write`, which holds the body."""
         _old = [(float(x), float(y)) for x, y in (lane_list[idx].get("pts") or [])]
-        return may_write(_old, new_pts, float(lane_list[idx].get("w") or 5.0), _fab)
+        # ...and the overlap matrix admits the lane as it would become (feature 287 M8, `reshape_lane`'s question)
+        _new = [[round(float(x), 1), round(float(y), 1)] for x, y in new_pts]
+        return may_write(_old, new_pts, float(lane_list[idx].get("w") or 5.0), _fab) and s.admits("lanes", {**lane_list[idx], "pts": _new}, ignore=lane_list[idx])
         # (the two paragraphs that used to stand here are on `may_write`)
 
     closed = 0
@@ -453,7 +455,8 @@ def _join_piece(
             return False
         if _bends_badly(run) and not _bent_before:
             return False  # see `_may_write`: the splice may not put a fold in a lane that had none
-        lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in run]
+        if not s.reshape_lane(lanes[i], run):
+            return False  # the overlap matrix refuses the splice (feature 287 M8); the link is drawn as its own lane
         s.reink_lane(i)
         return True
 

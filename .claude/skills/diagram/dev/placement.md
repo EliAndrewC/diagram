@@ -348,8 +348,11 @@ reading eight keys nobody had updated. A check that never sees your feature look
 that passes, so this was invisible until the GM looked at a rendered map. The matrix closes that
 class: a pair the registry does not permit fails whichever feature is newer, with no list to forget.
 
-**The ratchet.** `tests/gate/test_no_feature_overlaps.py` asserts the matrix on the shipped maps, and
-`tests/settlement/test_homestead_parts.py` censuses the roster. A new feature with no class fails the
+**The ratchet.** Since feature 287 M8 the matrix is refused at RECORD time, not audited after: every footprint the
+settlement records goes through the registry of what stands (`overlap/registry.py`, a grid index filed as each record
+lands), a hamlet raises `OverlapRefused` on a record the matrix forbids on what stands, and every placer asks
+`Settlement.admits(key, record)` before it chooses (the finished-map test `test_no_feature_overlaps.py` is retired,
+research R8). `tests/settlement/test_homestead_parts.py` censuses the roster. A new feature with no class fails the
 classification guard before it ever reaches the matrix.
 Verified to have teeth: reverting `ring_road_kept_clear` to its old list fails it with 21 keys
 listed. **Adding a hazard row to `_HAZARDS` extends the contract to every existing feature at

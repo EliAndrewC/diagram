@@ -9,7 +9,7 @@ from ..land.wet import MARSH_FEATHER_BS, marsh_ground
 from ._helpers import _BELT_GAP_FT, _belt_axis
 from .belt_law import settle_the_belt
 from .grove_blocks import GroveBlocks, Seats
-from .groves import RANK_JITTER_FT, bamboo_mark
+from .groves import RANK_JITTER_FT, bamboo_mark, crown_lift
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -22,8 +22,8 @@ clumps are unchanged."""
 
 def crown_reach(clump: float, jitter: float = 0.0, lift: float = 0.0) -> float:
     """How far from its clump's seat a crown's trunk can be drawn (feature 287, woods W21 and homes H43): `_draw_grove`
-    throws each crown inside the clump's box less 2 px a side and then draws it `lift` higher on the sheet (`3 * bs`, its
-    `cy + py - 3 * bs`), and a conifer-led belt's row trunk stands inside a clump's box and moves up to `jitter` each way
+    throws each crown inside the clump's box less 2 px a side and then draws it `lift` higher on the sheet (`groves.crown_lift`,
+    its `cy + py - lift` - 3.66 px on a hamlet, taken as 3.0 until feature 287 M8 found a trunk 15.3 px out), and a conifer-led belt's row trunk stands inside a clump's box and moves up to `jitter` each way
     (`_belt_ranks`) - so the box's half-diagonal, grown by the jitter, with the lift on the vertical half. The lift was
     missing until cohort seed 3 drew a copse crown 15.0 px from a seat whose reach was taken as 12.7, and 0.8 px from a
     footpath's centerline."""
@@ -416,7 +416,7 @@ class StandsMixin:
         # (feature 287, woods W21 and homes H43): a crown is thrown anywhere in the clump's box and a belt's row conifer a few
         # feet past it (`crown_reach`), so the seat keeps at least that reach beyond the tread, and no trunk the clump draws
         # can stand on it (`trunk_on_tread`). 0.45 x clump + 4 fell 0.4 px short of the belt's own crowns at the box corner
-        corr = self._corridor_buffers(max(clump * 0.45 + 4, crown_reach(clump, self.px(RANK_JITTER_FT) if role == "windbreak" else 0.0, lift=3.0 * bs)))
+        corr = self._corridor_buffers(max(clump * 0.45 + 4, crown_reach(clump, self.px(RANK_JITTER_FT) if role == "windbreak" else 0.0, lift=crown_lift(bs))))
         cr = clump / 2
         # ... and OUT of the SOUTHERN sun-corridor of every threshing yard + garden (a tree just south of them
         # blocks the drying/growing sun - +y is south). A touch wider than the check so it stays strictly clear.

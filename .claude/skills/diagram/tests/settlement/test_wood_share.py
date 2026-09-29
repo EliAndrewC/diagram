@@ -7,7 +7,7 @@ import math
 
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._geom import CanopyArea, seg_dist
-from l7r.diagram.settlement.homestead_parts.groves import HOMESTEAD_WOOD_FT2
+from l7r.diagram.settlement.homestead_parts.groves import HOMESTEAD_WOOD_FT2, crown_lift
 from l7r.diagram.settlement.homestead_parts.stands import crown_reach
 from l7r.diagram.settlement.homestead_parts.wood_share import (
     BAR_MARGIN_PX,
@@ -133,12 +133,12 @@ def test_the_one_predicate_refuses_each_kind_of_ground() -> None:
 
 
 def test_a_seat_the_copse_would_refuse_for_its_lifted_crown_on_the_tread_is_barred() -> None:
-    """Feature 287, homes H43: the copse keeps a clump off a lane by the reach of a crown drawn `3 * bs` up the sheet
-    (`stands.crown_reach(lift=)`), so the reservation bars a seat by that reach too - a seat just past the unlifted reach of
+    """Feature 287, homes H43: the copse keeps a clump off a lane by the reach of a crown drawn `groves.crown_lift` up the
+    sheet (`stands.crown_reach(lift=)`; M8: the lift as `_draw_grove` draws it, 3.66 px on a hamlet), so the reservation bars a seat by that reach too - a seat just past the unlifted reach of
     a corridor's strip, which the planting would refuse on the tread, is never reserved."""
     s = _open(400.0)
     wood = install_wood_shares(s, FLOOR, REACH, 7.0)
-    lifted = crown_reach(wood.clump, lift=3.0 * s.bscale)
+    lifted = crown_reach(wood.clump, lift=crown_lift(s.bscale))
     assert wood.lane_gap == 7.0 + max(wood.clump * 0.45 + 4, lifted) + BAR_MARGIN_PX
     flat = 7.0 + max(wood.clump * 0.45 + 4, crown_reach(wood.clump)) + BAR_MARGIN_PX
     assert flat < wood.lane_gap, "the lift reaches past the flat box"

@@ -283,29 +283,6 @@ def test_a_drawn_homestead_stand_carries_its_owner() -> None:
 # ---- woods W25: the homesteads' wood never under the register's floor ------------------------------------------------
 
 
-def test_a_woods_short_of_the_floor_is_topped_up_among_the_houses() -> None:
-    """Woods W25 / plan D9, the violating case: a belt that stands off the sheet and a copse siting whose belt gives it no
-    lee face, so the first copse seats nothing. The top-up plants the homesteads' own trees up to the floor, each within
-    the dooryard copse's reach of a farmhouse (so woods W02 holds of every clump)."""
-    from l7r.diagram.hamletgen.consts import COPSE_HOUSE_REACH_FT
-    from l7r.diagram.hamletgen.hinterland import stages
-    from l7r.diagram.settlement.homestead_parts.groves import HOMESTEAD_WOOD_FT2
-
-    plan = a_plan()
-    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
-    s.meta(name="W", scale="hamlet", ftpx=1, down_deg=90, windward="N")
-    s.M["houses"] = [{"x": float(x), "y": float(y), "w": 30.0, "h": 24.0, "rot": 0} for x in (500, 700, 900) for y in (600, 800)]
-    plan.belt = [(2000.0, 100.0), (2100.0, 100.0), (2100.0, 150.0), (2000.0, 150.0)]
-    plan.copse_siting = "against_the_belt"
-    assert stages.homestead_wood_drawn(s) == 0.0, "non-vacuity: no wood at all before the stage"
-    stages.stage_windbreak(s, plan)
-    hs = [(h["x"], h["y"]) for h in s.M["houses"]]
-    copse = [c for g in s.M["village_groves"] if g["role"] == "copse" for c in g["clumps"]]
-    assert copse and all(min(math.dist(c, h) for h in hs) <= COPSE_HOUSE_REACH_FT for c in copse)
-    assert stages.homestead_wood_drawn(s) >= HOMESTEAD_WOOD_FT2[0] and s.M["meta"]["homestead_wood_ft2"]["drawn"] >= HOMESTEAD_WOOD_FT2[0]
-    assert stages.homestead_wood_drawn(Settlement(W=100, H=100, seed=1)) == 0.0
-
-
 def test_every_households_reserved_share_is_planted_though_no_belt_stands() -> None:
     """Woods W25 / plan D9: two households (too few for a belt) that reserved their shares of the floor at seating
     (`wood_share`). Without the reservation the stage plants nothing; with it every reserved seat is a copse clump."""

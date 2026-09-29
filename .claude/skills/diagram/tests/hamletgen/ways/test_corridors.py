@@ -7,8 +7,10 @@ from l7r.diagram.hamletgen.ways import corridors as co
 from l7r.diagram.hamletgen.ways import law
 from l7r.diagram.hamletgen.ways.geom import WorkedGround
 
+from ._builders import AdmitsAll
 
-class _S:
+
+class _S(AdmitsAll):
     """What `draw_corridors` touches on a Settlement: the manifest and `lane()`."""
 
     def __init__(self, M):

@@ -42,7 +42,7 @@ class GroveBlocks:
     re-seats. `displaced` is the other grove's canopy alone, the one blocker a SPARSE grove re-seats
     for. `inside` and `rim_within` are the grove's own outline."""
 
-    __slots__ = ("_clear", "_fams", "_inside", "_last", "crop_pad", "displacers", "dry_pad", "ring", "static")
+    __slots__ = ("_clear", "_fams", "_inside", "_last", "crop_pad", "dike_pad", "displacers", "dry_pad", "ring", "static")
 
     def __init__(
         self,
@@ -58,9 +58,14 @@ class GroveBlocks:
         circles: Any,
         displacers: Any,
         rects: Any,
+        dike_pad: float = 0.0,
     ) -> None:
         self.ring = RingIndex(outline)
         self.crop_pad, self.dry_pad = crop_pad, dry_pad
+        # the dike and marsh outlines refuse a point inside them; `dike_pad` also refuses one within it of their edge - a
+        # placer held a hair stricter than the planting (the reserved seats, `wood_share.BAR_MARGIN_PX`: a seat left on the
+        # toe marsh's rounded edge, feature 287 M8)
+        self.dike_pad = dike_pad
         # ONE GRID FOR EVERY STATIC FAMILY (feature 278, FR-010; 218's "one grid per scatter, not one per family", never
         # applied to the grove). The seven families were seven grids and a candidate asked up to seven of them - 1.09
         # million `near` calls on Kashikawa's belts. Filed together, tagged by family, in cells of the same size, a point's
@@ -70,7 +75,7 @@ class GroveBlocks:
         families = (
             boxed_rings(crops, crop_pad),
             boxed_rings(dry, dry_pad),
-            boxed_rings(dikes),
+            boxed_rings(dikes, dike_pad),
             boxed_segs(water),  # (polyline, reach) pairs, the reach already including the clump's radius
             boxed_segs(corridors),  # (polyline, buffer) pairs from `_corridor_buffers`
             boxed_circles(circles),
@@ -96,7 +101,7 @@ class GroveBlocks:
     def hard(self, x: float, y: float) -> bool:
         """The crop, open water, the dike bank: reasons moving a few feet does not change."""
         crop, dry, dikes, water, _corr, _circles, _rects = self._at(x, y)
-        return boxed_ring_hit(x, y, crop, self.crop_pad) or boxed_ring_hit(x, y, dry, self.dry_pad) or boxed_ring_hit(x, y, dikes) or boxed_seg_hit(x, y, water)
+        return boxed_ring_hit(x, y, crop, self.crop_pad) or boxed_ring_hit(x, y, dry, self.dry_pad) or boxed_ring_hit(x, y, dikes, self.dike_pad) or boxed_seg_hit(x, y, water)
 
     def lane(self, x: float, y: float) -> bool:
         return boxed_seg_hit(x, y, self._at(x, y)[4])

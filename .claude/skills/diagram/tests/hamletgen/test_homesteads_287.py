@@ -8,6 +8,7 @@ import math
 
 import pytest
 
+import l7r.diagram.settlement.rolling.access as access_mod
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.settlement import Settlement
 
@@ -119,12 +120,15 @@ def test_the_woodpile_form_a_homestead_draws_is_the_one_the_predicate_names() ->
 # ---- homes H06: the shared sheds' pockets, reserved before any house ----------------------------------------------
 
 
-def test_a_commons_hamlet_reserves_every_shared_shed_before_its_houses_and_draws_each() -> None:
+def test_a_commons_hamlet_reserves_every_shared_shed_before_its_houses_and_draws_each(monkeypatch: pytest.MonkeyPatch) -> None:
     """Feature 287, homes H06: on `detached_commons` the sheds' pockets are laid in the band first, the houses pack round
     them, and `draft_byres` draws a shed in every pocket - the count asked (`commons_byre_target`) is the count drawn."""
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
     from l7r.diagram.settlement.shrines_wells.byres import COMMONS_BYRE_GAP, commons_byre_target
 
+    # the toy's bundles lay a bed or the well pocket where a flank door stands, and a corridor over its own parts is refused
+    # since feature 287 M8 (`access.parts_clear`); the seating's count, not the parts, is under test here
+    monkeypatch.setattr(access_mod, "parts_clear", lambda *a: True)
     s, plan = _toy_hamlet(12)
     s.pin_knob("byre_form", "detached_commons")
     stage_homesteads(s, plan)

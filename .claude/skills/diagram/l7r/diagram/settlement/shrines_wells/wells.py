@@ -208,7 +208,10 @@ class WellsMixin:
         # error. LEFT AS IS deliberately - changing it re-seats wells on every map in the pool and
         # re-rolls the packs that flow around them, so it belongs with the item 2/item 3 pass and
         # its re-baseline, not in a drive-by. See `_place_wells`, which computes the same box.
-        if self._fits(x, y, 2 * r + 14, 2 * r + 14):
+        # ...AND THE REGISTRY OF WHAT STANDS ADMITS THE WELLHEAD AS IT WILL BE RECORDED (feature 287 M8): the overlap matrix (a
+        # bed, a lane, a yard) and the seating's reservations (an access corridor, a household's wood seat) - cohort 1-60 dug
+        # 44 wells on a corridor the web then had to draw round
+        if self.admits("wells", {"x": round(x, 1), "y": round(y, 1), "r": r, "vr": round(self._well_vr(), 1)}) and self._fits(x, y, 2 * r + 14, 2 * r + 14):
             self.well(x, y, r, shrine=shrine)
             return True
         return False

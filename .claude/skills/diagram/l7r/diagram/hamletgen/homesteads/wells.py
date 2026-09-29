@@ -11,6 +11,7 @@ from l7r.diagram.settlement.homestead_parts.wood_share import ReservedSeats, wel
 
 from ..consts import Pt
 from ..plan import SitePlan
+from .holds import release_held
 
 _WELL_DRAWN_R = 12.0
 """The wellhead's DRAWN half-extent, used when asking how far a candidate seat would push the crop.
@@ -100,6 +101,7 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
     for h in houses:
         if h.get("well_pocket"):
             wx, wy = float(h["well_pocket"][0]), float(h["well_pocket"][1])
+            release_held(s, "wells", wx, wy)  # held since the seating, so the track kept off it (`hold_laid_parts`)
             s.well(wx, wy)
             placed.append((wx, wy))
     # A WELLHEAD MAY NOT STAND IN THE SHELTER BELT (settlement-review, Inashiro 2026-08-18). The
