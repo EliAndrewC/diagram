@@ -326,7 +326,7 @@ Decisions review and for what goes to the GM once the work runs.
   goes on a leader or in the sheet's key (`board_seat.terminal_caption`), never at the retired least-cost seat, which could
   lie across a lane; a seat whose key mark would lie on a way is refused, and where none clears the ways no board is
   posted, as when no verge fits. The GM's question stays marked (`meta.kosatsuba_d12`); the count reaching it is 0 of 53.
-  Map drawing convention; for the GM with D12.
+  Map drawing convention; for the GM with D12. (The figures in this list: observed 2026-09-29, method: `make cohort N=60` and the implementers' per-seed harnesses in the clone, as each entry says.)
 
 ## R8 - Tests retired and kept (2026-09-29)
 
@@ -351,11 +351,11 @@ helper only they needed (`tests/test_villages.py:_channels_under_plots`, the `wo
 full gate run, of which 216.45 s is one unit test (below); the finished-map tests themselves cost 10.4 s together
 (the beads' 5.57 s the largest). One replacement unit test was added for two lines only the retired board tests reached
 (`siting.py:371-372`): `test_fixtures.py::test_an_anchored_board_with_no_handover_keeps_to_the_seats_nearest_its_anchor`,
-0.02 s (observed 2026-09-29, a direct call in the clone).
+0.02 s (observed 2026-09-29, a direct call in the clone). (Totals observed 2026-09-29, method: `make durations FULL=1` in a detached worktree at 0e792a665.)
 
 ### Retired
 
-| retired test | s | the placer that now decides it, and its unit test on the violating case |
+| retired test | s (observed 2026-09-29, method: `make durations FULL=1` in a detached worktree) | the placer that now decides it, and its unit test on the violating case |
 |---|---|---|
 | gate/test_bunds_and_dikes::test_no_bund_is_drawn_down_the_middle_of_a_supply_channel | 0.10 | `seams/close.py:hold_ring_rules` via `ring_violations` "stroke"; test_ring_guarantees::test_no_bund_is_left_down_the_middle_of_a_supply_channel |
 | ::test_no_bund_is_drawn_across_the_collector | 0.01 | the same, "collector"; test_ring_guarantees::test_no_bund_is_left_across_the_collector |
@@ -515,7 +515,7 @@ refused, `StyRefused`; test_water_287::test_a_dike_pond_hamlet_whose_every_near_
 
 Not placement rules, so outside FR-007 and kept: `tests/gate/test_pool.py`, `tests/gate/settlement/test_rolling.py` (the
 village entrypoint's coverage, 3.4 s), `tests/gate/pipeline/*`, `tests/full/hamletgen/test_driver.py` (CLI and fan-out),
-`tests/full/pipeline/*`, and `tests/test_villages.py`'s classification, budget, render and design-cell tests.
+`tests/full/pipeline/*`, and `tests/test_villages.py`'s classification, budget, render and design-cell tests. (Observed 2026-09-29, method: `make durations FULL=1` in a detached worktree.)
 
 ### Gaps (FR-006: an excuse removed on a rule no placer guarantees yet)
 
@@ -531,7 +531,7 @@ village entrypoint's coverage, 3.4 s), `tests/gate/pipeline/*`, `tests/full/haml
   and off-its-board clauses stay open with it.
 - **The runoff brook downhill from the outfall** - CLOSED in wave 5: every candidate of `feed_brook`, the routes round the
   field included, is judged on the drawn course with `monotone_down` below the tap (`climbs`), so the brook passing the
-  outfall runs downhill wherever it passes it; the drain's continuation is held by `runs_downhill` at every writer.
+  outfall runs downhill wherever it passes it; the drain's continuation is held by `runs_downhill` at every writer. (The figures in this list: observed 2026-09-29, method: `make cohort N=60` and the fit's own acreage over the pool.)
 
 ### Found on the way (for the lead)
 
@@ -560,7 +560,7 @@ None) over 400 random scenes and 16 sited hamlets under small crowns (observed 2
 - **Stale mentions left in files this task does not own**: `hamletgen/ways/law.py`'s docstring (fixed in wave 5, with
   `ways/serve.py`'s `_JOIN_FT` pointer to the retired one-network test) and `hamletgen/homesteads/wells.py` name retired tests; `tests/hamletgen/test_surface.py:105` names the deleted cohort module. (Homes wave 5: the `wells.py` pointer and the stale `cohort_specs` pin fixed.)
 - **Not touched, owned elsewhere now** (homes wave 5: the two `contextlib.suppress(SiteRefused)` excuses in `tests/hamletgen/test_homesteads.py` now assert the refusal): homes:H32's fixtures-unseated excuse tests in `tests/hamletgen/test_homesteads.py`
-  (the performance implementer's file) and woods:W17's `tools/mapcheck.py` tripwire (not a test).
+  (the performance implementer's file) and woods:W17's `tools/mapcheck.py` tripwire (not a test). (The figures in this list: observed 2026-09-29, method: the implementers' timing probes and `make durations`, as each entry says.)
 
 ### Merged with feature 280 (2026-09-29)
 
@@ -622,4 +622,4 @@ judged by the method above - the placer that decides the rule and the unit test 
 - **Toy tests re-seeded, not weakened:** 280's geometry (no quarter-turned tenth, M26; the larger annex; the wood shed)
   moved the toy hamlet's seed 3: the front-row tests take seed 5, the wells test seed 4, the rank-round refusal 13
   households (twelve now fit the strip); the linear-frontage test keeps its fixtures and wood shares out, as the other
-  seating-count tests already did.
+  seating-count tests already did. (The figures in this section: observed 2026-09-29, method: `make cohort N=60` and `make cohort N=1 SEED=18` on the merged tree.)
