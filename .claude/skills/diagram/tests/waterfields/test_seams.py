@@ -470,6 +470,33 @@ def test_the_hem_pass_leaves_a_bank_that_already_reaches_the_field_edge_alone() 
     assert len(deep) > 1, "a real gap is filled with hem plots"
 
 
+def test_the_hem_pass_leaves_a_gap_filled_by_a_supply_ditchs_banks_to_the_floor() -> None:
+    """`_hem_pass`, the fourth producer that honors the supply banks (Sawada ring 669, 2026-08-15): where a delivery
+    ditch runs down the whole gap between the field and the collector, no hem quad can clear its banks even with its
+    corners slid onto them, so that quad is dropped - the bare gap is left to the floor rather than a bund drawn over the
+    water - and every hem plot that IS laid clears the banks."""
+    import random
+
+    from l7r.diagram.waterfields.carve import _hem_pass, _quad_in_supply, _supply_index
+    from l7r.diagram.waterfields.frame import _Frame
+
+    F = _Frame(90.0)  # fall due south: u is x, f is y
+    drain = [F.to_xy(0.0, 500.0), F.to_xy(1000.0, 500.0)]
+    g = 4.0
+
+    def field_plot() -> dict[str, object]:
+        return {"poly": [F.to_xy(0.0, 430.0), F.to_xy(1000.0, 430.0), F.to_xy(1000.0, 440.0), F.to_xy(0.0, 440.0)]}
+
+    open_gap = [field_plot()]
+    _hem_pass(random.Random(1), F, drain, 1000.0, 1000.0, g, lambda u: 0.0, [], open_gap)
+    assert len(open_gap) > 1, "the case: without the ditch the 60 px gap is hemmed"
+    ditch = _supply_index([{"pts": [F.to_xy(-50.0, 470.0), F.to_xy(1050.0, 470.0)], "w": 100.0}], g)
+    filled = [field_plot()]
+    _hem_pass(random.Random(1), F, drain, 1000.0, 1000.0, g, lambda u: 0.0, ditch, filled)
+    assert not any(_quad_in_supply(p["poly"], ditch, g) for p in filled[1:]), "no hem plot is laid over the ditch's banks"
+    assert len(filled) < len(open_gap), "the quads that could not clear them were dropped, not laid"
+
+
 def test_a_tab_cut_needs_the_step_to_be_one_edge_of_the_ring() -> None:
     """`_tab_cut` (feature 220, the step-1 re-fit's coverage): the two step vertices must be CONSECUTIVE on the
     ring - a pair that are both on the ring but not adjacent is not a step of it, and there is no tab to cut."""

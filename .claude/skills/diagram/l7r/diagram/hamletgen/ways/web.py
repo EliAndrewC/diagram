@@ -703,7 +703,9 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # each stranded house's reserved corridor, a spur to each way target, the field way (M3's web half) - as lanes it never
     # cuts; the straggler redraw that stood in for the corridor until it landed is gone with the driver's re-roll.
     _pass("settle")
-    s.M["meta"]["web_settle"] = settle_the_web(s)
+    # ...and its wall-clock seconds stay out of the manifest: a timing written there rewrote all five pool maps on every
+    # regeneration with nothing on them moved (287, 2026-09-29); the rounds and the lane counts are the record.
+    s.M["meta"]["web_settle"] = {k: v for k, v in settle_the_web(s).items() if k != "seconds"}
     # THE CORRIDORS HAVE SERVED (feature 287 M8): every way the seating held them for is drawn, so the registry's reservation
     # of them ends here - the notice board may stand beside a way drawn along one, as beside any way
     s.standing.reserved.release_corridors()

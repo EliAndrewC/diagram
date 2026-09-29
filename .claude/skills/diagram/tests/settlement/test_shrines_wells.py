@@ -643,6 +643,52 @@ def test_courtyard_annex_span_and_a_house_with_neither_side_wall_free():
     assert s._courtyard_byre_seat(owner, 15.5, 10.5) is None
 
 
+@pytest.mark.parametrize(("rot", "yard_y", "toward"), [(0.0, 500.0, 1.0), (0.0, 100.0, -1.0), (180.0, 500.0, -1.0)])
+def test_courtyard_byre_reaches_along_its_side_wall_toward_its_owners_work_yard(rot: float, yard_y: float, toward: float) -> None:
+    """The courtyard arm frames the working court: offset along the side wall toward the owner's NEAREST threshing yard,
+    that side derived in the house's own frame (a house turned half round reaches the other way in local y) - so the arm
+    keeps framing the court when the yard moves, which pinning a compass side would not."""
+    s = _crop_settlement()
+    owner = {"x": 300.0, "y": 300.0, "w": 40.0, "h": 28.0, "kind": "plain", "rot": rot, "wealth": 1.0}
+    s.M["houses"] = [owner]
+    s.M["threshing_yards"] = [{"x": 300.0, "y": yard_y, "w": 30.0, "h": 30.0}, {"x": 1800.0, "y": 1400.0 - yard_y, "w": 30.0, "h": 30.0}]
+    seat = s._courtyard_byre_seat(owner, 15.5, 10.5)
+    assert seat is not None
+    lyc = toward * (28.0 / 2.0 - 15.5 / 2.0)  # reach toward the court: the wall's half-length past the byre's half-width
+    th = math.radians(rot)
+    lx = -(40.0 / 2.0 + 10.5 / 2.0 + 3.0)  # the first wall tried, a drip line off it
+    assert seat[:2] == pytest.approx((300.0 + lx * math.cos(th) - lyc * math.sin(th), 300.0 + lx * math.sin(th) + lyc * math.cos(th)))
+
+
+def test_a_shared_byre_widens_its_spread_tier_until_it_holds_a_borrower() -> None:
+    """Settlement-review, Kashikawa 2026-08-18: after the first shared shed, the spread tier (candidates near the farthest
+    from every shed) WIDENS until it holds an owner a neighbor can borrow from, and stops there. Here the farthest
+    homestead has no neighbor, so the near-best tier holds no borrower; the half tier takes in a pair of neighbors a little
+    over half as far, and the second shed goes to one of them rather than out of everyone's reach."""
+    from l7r.diagram.settlement.shrines_wells.byres import _BORROW_REACH
+
+    def house(x: float, y: float, wealth: float) -> dict:
+        return {"x": x, "y": y, "w": 40.0, "h": 28.0, "kind": "plain", "rot": 0, "wealth": wealth}
+
+    s = _crop_settlement()
+    hs = [
+        house(400.0, 400.0, 1.5),  # the first shed's owner...
+        house(400.0 + _BORROW_REACH - 20.0, 400.0, 1.0),  # ...with a neighbor, so it has a borrower
+        house(1400.0, 400.0, 1.1),  # a pair of neighbors about 0.58 of the farthest distance out
+        house(1400.0, 400.0 + _BORROW_REACH - 20.0, 1.1),
+        house(1800.0, 1400.0, 1.4),  # the farthest, and alone
+    ]
+    s.M["houses"] = hs
+    for h in hs:
+        s.placed.append((h["x"], h["y"], h["w"], h["h"]))
+    s.pin_knob("byre_form", "detached_commons")
+    placed = s.draft_byres(fraction=0.4, gap=40)
+    assert len(placed) == 2, "the target: two shared sheds for five households"
+    owner = [min(range(len(hs)), key=lambda i: math.hypot(hs[i]["x"] - x, hs[i]["y"] - y)) for x, y in placed]
+    assert owner[0] in (0, 1), f"the first shed stands by the wealthiest owner with a borrower (spiralled toward its neighbor): {owner}"
+    assert owner[1] in (2, 3), f"the second goes to the pair in the widened tier, not the isolated farthest house: {owner}"
+
+
 def test_the_outer_stable_stands_on_its_own_in_its_owners_yard_on_about_half_the_households() -> None:
     """269 B16 (research/homesteads/300): on a household form the beast lives with its household - the byre names its owner
     (`of`), stands raked with that house a ken off one of its walls, and about half the households keep one (`byre_share`,

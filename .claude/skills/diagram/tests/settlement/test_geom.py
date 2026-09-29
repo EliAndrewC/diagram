@@ -858,6 +858,22 @@ def test_keepout_hit_many_equals_hit_point_for_point():
         assert wide.hit_many(*pts, extra).tolist() == [wide.hit(x, y, extra) for x, y in zip(*pts, strict=True)]
 
 
+def test_keepout_hit_many_refuses_the_pad_band_of_an_invalid_ring():
+    """Feature 278 (FR-008): a ring shapely reads as invalid (a bow-tie) is drawn as its even-odd region, and a PAD on
+    it is its own band round the ring's edges - so a point outside the region but within the pad of an edge is refused by
+    `hit_many` exactly as by `hit`, and one past the pad is not."""
+    from l7r.diagram.settlement._geom import KeepoutGrid
+
+    kg = KeepoutGrid()
+    kg.rings([[(300.0, 300.0), (400.0, 400.0), (400.0, 300.0), (300.0, 400.0)]], pad=6.0)  # a padded bow-tie
+    # The lobes are left and right, crossing at (350, 350). (296, 350) and (404, 350) stand 4 ft outside the lobes' outer
+    # edges, in the pad band; (290, 350) and (412, 350) past it; (395, 350) inside the right lobe; (350, 330) in the notch
+    # between the lobes, 14 ft from either diagonal.
+    xs, ys = [296.0, 404.0, 290.0, 412.0, 395.0, 350.0], [350.0, 350.0, 350.0, 350.0, 350.0, 330.0]
+    assert kg.hit_many(xs, ys, (0.0,)).tolist() == [True, True, False, False, True, False], "the band refuses, past it does not"
+    assert kg.hit_many(xs, ys, (0.0,)).tolist() == [kg.hit(x, y, (0.0,)) for x, y in zip(xs, ys, strict=True)]
+
+
 def test_ring_inside_many_equals_inside_point_for_point():
     """Feature 278 (FR-008): the vectorized ring test answers as `inside` - a valid ring, a bow-tie, points on edges and
     vertices."""

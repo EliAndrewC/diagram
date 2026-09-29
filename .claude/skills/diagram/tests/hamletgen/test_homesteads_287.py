@@ -233,6 +233,9 @@ def test_the_field_corridor_is_reserved_with_the_exit_strip_and_no_homestead_cov
     t = _brook_site()
     t.M["streams"] = []
     assert reserve_field_corridor(t) and not any(c.get("field") for c in t.M["access_corridors"])
+    u = _brook_site()  # a brook and a tree but NO FIELD: there is no ground a field path could reach, so the rule asks none
+    u.M["fields"], u.field_polys[:] = [], []
+    assert reserve_field_corridor(u) and not any(c.get("field") for c in u.M["access_corridors"])
 
 
 def test_a_margin_with_no_lawful_field_corridor_seats_no_one(monkeypatch: pytest.MonkeyPatch) -> None:

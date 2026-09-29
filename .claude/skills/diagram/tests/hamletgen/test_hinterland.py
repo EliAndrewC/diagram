@@ -464,6 +464,30 @@ def test_scatter_frame_holds_the_crops_boxes_the_reserved_polygons_and_the_pad()
     assert (x0, y0) == (min(500.0, 600.0, 780.0) - grow, 700.0 - grow - TITLE_BAND_ALLOWANCE) and (x1, y1) == (1300.0 + grow, 1290.0 + grow)
 
 
+def test_scatter_frame_before_the_pocket_takes_in_the_band_below_when_no_seat_above_is_on_the_canvas() -> None:
+    """Feature 261, cohort seed 45: before the title pocket is reserved, content standing within the pocket's rise of the
+    canvas top sends the pocket BELOW the content, so the prediction grows its foot by `TITLE_POCKET_RISE`; content lower
+    down, or a pocket already reserved, grows nothing."""
+    from l7r.diagram.hamletgen.hinterland.frame import TITLE_POCKET_RISE, scatter_frame
+
+    def frame(house_y: float, pocket: tuple[float, float, float, float] | None) -> tuple[float, float, float, float]:
+        s = Settlement(W=2000, H=2000, seed=5)
+        s.M["houses"] = [{"x": 800.0, "y": house_y, "w": 40.0, "h": 30.0}]
+        plan = a_plan(households=10)
+        plan.belt, plan.woodland_polys, plan.bamboo_polys = [], [], []
+        plan.title_pocket = pocket
+        return scatter_frame(s, plan)
+
+    top = 40.0
+    assert top - 15.0 - TITLE_POCKET_RISE < 0.0, "the house stands within the pocket's rise of the canvas top"
+    inside = (790.0, top - 5.0, 810.0, top + 5.0)  # a pocket reserved inside the content adds no extent of its own
+    unreserved, reserved = frame(top, None), frame(top, inside)
+    assert unreserved[:3] == reserved[:3], "only the foot moves"
+    assert unreserved[3] == pytest.approx(reserved[3] + TITLE_POCKET_RISE), "the band below is taken in"
+    low = 1000.0
+    assert frame(low, None) == frame(low, (790.0, low - 5.0, 810.0, low + 5.0)), "room above: the pocket goes there, no band below"
+
+
 def test_finish_records_the_scatter_frame_and_a_breach_only_where_the_view_shows_kept_out_ground(tmp_path) -> None:
     """Feature 224 FR-002: the tightest frame any scatter threw within is recorded; the overhang per side is judged
     on the ground each parcel actually covers inside the view; a breach only where the view shows part of a

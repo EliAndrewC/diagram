@@ -575,6 +575,19 @@ def test_bundle_side_fits_refuses_a_bundle_outside_the_bounding_ring() -> None:
     assert s._bundle_side_fits(s._bundle_geom(600.0, 500.0, 46.0, 28.0, "W")) is True, "the same house with its garden on the west wall"
 
 
+def test_bundle_side_fits_refuses_a_layout_whose_lot_fixture_found_no_seat() -> None:
+    """Feature 280 M21/M22 carried into 287: a layout marked `unlaid` (its bath room or wood shed found no seat) is refused
+    even where every ground test would pass - the envelope admits a household only with room for every part it keeps."""
+    from tests.settlement._builders import _nuc_village
+
+    s = _nuc_village()
+    geom = s._bundle_geom(600.0, 500.0, 46.0, 28.0, "W")
+    geom.pop("unlaid", None)
+    assert s._bundle_side_fits(geom) is True, "the case: this layout fits on its ground"
+    geom["unlaid"] = "FixtureUnlaid: bath"
+    assert s._bundle_side_fits(geom) is False, "...and is refused once a fixture of its lot is unlaid"
+
+
 def _village_with_houses(seed: int = 1, pin: str | None = None) -> Settlement:
     s = Settlement(1600, 1600, seed=seed)
     s.meta(name="V", scale="village", ftpx=2)

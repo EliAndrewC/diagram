@@ -159,6 +159,22 @@ def test_strip_blocked_sees_a_lane_that_crosses_the_strip_between_its_samples() 
     assert not _strip_blocked(s, 200.0, 800.0, 22.0, 16.0, 900.0, 900.0, [], [], None, clipping)
 
 
+def test_strip_blocked_excuses_its_own_farmhouse_and_the_skipped_bundle_boxes_and_nothing_else() -> None:
+    """A strip beside its OWN farmhouse is not blocked by it, nor by a reserved box the caller passes in `skip`
+    (feature 261: the homestead bundle boxes, whose parts are each registered); any other placed box it touches blocks it."""
+    from l7r.diagram.hamletgen.homesteads import _strip_blocked
+
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.placed.append((500.0, 500.0, 40.0, 30.0))  # its own farmhouse, under the strip's center
+    assert not _strip_blocked(s, 500.0, 500.0, 22.0, 16.0, 500.0, 500.0, [], [], None, []), "its own house is not something"
+    assert _strip_blocked(s, 500.0, 500.0, 22.0, 16.0, 900.0, 900.0, [], [], None, []), "a house not its own is"
+    bundle = (515.0, 500.0, 20.0, 20.0)
+    s.placed.append(bundle)
+    assert _strip_blocked(s, 500.0, 500.0, 22.0, 16.0, 500.0, 500.0, [], [], None, []), "an unexcused box blocks it"
+    assert not _strip_blocked(s, 500.0, 500.0, 22.0, 16.0, 500.0, 500.0, [], [], None, [], skip=frozenset({bundle})), "a skipped box does not"
+
+
 def test_a_linear_hamlet_strings_its_houses_along_the_connector() -> None:
     """The `linear` settlement form is attested and implemented but pinned off (`SETTLEMENT_FORMS`), so
     the arm that fronts the CONNECTOR - the only way on the map that predates the houses - has never
