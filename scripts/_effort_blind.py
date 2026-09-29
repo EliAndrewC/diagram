@@ -25,7 +25,8 @@ import sys
 
 FEATURE = "293-effort-level-experiment"
 RUBRIC = {"R": "rubrics/research.md", "I": "rubrics/implementation.md"}
-EFFORT_SETTING = re.compile(r"(--effort|effort(?:Level)?\s*[:=]?)\s*(medium|xhigh|high|low|max)\b", re.I)
+LEVEL = r"(?:medium|xhigh|high|low|max)"
+EFFORT_SETTING = re.compile(rf"(--effort|\beffort(?:[ _-]?level)?)\s*[:=]?\s*{LEVEL}\b|\b{LEVEL}[ -]effort\b", re.I)
 XHIGH = re.compile(r"\bxhigh\b", re.I)
 TRAILER = re.compile(r"^\s*Co-Authored-By:.*$", re.M | re.I)
 
@@ -35,7 +36,7 @@ def strip(text: str, run: dict, sids: list[str]) -> str:
     for s in sids:
         out = out.replace(s, "<session>")
     out = re.sub(rf"\b{re.escape(run['run_id'])}\b", "<run>", out)
-    out = EFFORT_SETTING.sub(lambda m: f"{m.group(1)} <arm>", out)
+    out = EFFORT_SETTING.sub(lambda m: f"{m.group(1)} <arm>" if m.group(1) else "<arm> effort", out)
     out = XHIGH.sub("<arm>", out)
     return TRAILER.sub("", out)
 

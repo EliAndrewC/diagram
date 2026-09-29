@@ -177,7 +177,8 @@ def test_task_r_is_the_two_page_sessions_through_the_runner_with_effort_and_agen
     rec = er.launch(_run_args(world, "R", run="e3", arm="xhigh"), world["origin"], time.time())
     argv = (world["out"] / "page.argv").read_text().split("\n")
     clone = world["tmp"] / "clones" / "diagram-exp-e3"
-    assert argv[0] == f"{clone}/{FEATURE}/prompts/R-write.md {clone}/{FEATURE}/prompts/R-check.md"
+    assert argv[0] == f"{clone}/handoffs/293/R-write.md {clone}/handoffs/293/R-check.md", "a neutral path (FR-004)"
+    assert (clone / "handoffs" / "293" / "R-write.md").read_text() == (clone / FEATURE / "prompts" / "R-write.md").read_text()
     assert argv[1:4] == ["diagram-exp-e3", "", "xhigh"] and pathlib.Path(argv[4]).read_text() == er.agents_json()
     assert "CLAUDE_CODE_EFFORT_LEVEL" not in (world["out"] / "page.env").read_text()
     assert [s["effort"] for s in rec["sessions"]] == ["xhigh", "xhigh"] and "page-session: started" in rec["runner_stdout"]

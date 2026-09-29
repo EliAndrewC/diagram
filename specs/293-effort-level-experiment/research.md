@@ -54,6 +54,8 @@ $0.15):**
   transcripts, and a mismatch is visible in the report rather than assumed away.
 - (c) The Agent tool offers `description`, `isolation`, `model`, `prompt`, `run_in_background`, `subagent_type` - no per-dispatch
   `effort`. Nothing to record or avoid.
+- (d) Under an `xhigh` session the pin holds too (observed 2026-09-29, one-shot, method: the same probe with `--effort xhigh`, cost
+  $0.12): the session's records read `xhigh`, the judge's `high`.
 
 **Alternatives priced**: a hook in the run clones rewriting ad-hoc opus dispatches - rejected, it changes the guard set between the
 experiment and normal work; a committed agent file - the FALLBACK (D2a), not the first choice only because `--agents` needs no landing

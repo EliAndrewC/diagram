@@ -2,7 +2,7 @@
 
 You are a session started to do ONE task, headless: no one will answer a question while you work. Where you would ask the GM,
 decide as the project's rules direct (research first, a knob where the record supports two forms, a labeled GUESS where it is
-silent), record the question and what you did in `specs/293-effort-level-experiment/prompts/I-handoff.md`, and carry on. Work in
+silent), record the question and what you did in `handoffs/293/I-handoff.md`, and carry on. Work in
 the clone you were started in (`git rev-parse --show-toplevel`); every project rule in the CLAUDE.md files applies.
 
 **Ad-hoc agents.** Dispatch any ad-hoc work that checks or judges (a verdict, a review, a comparison) that no defined agent

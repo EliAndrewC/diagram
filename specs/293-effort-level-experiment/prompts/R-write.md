@@ -25,9 +25,9 @@ at a free prefix from 910 to 990.
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
 **Coordination files are read by line, never whole**: `make lines FILE=<f> KEY=<regex>` and `make append FILE=<f>
 LINE="<text>"`. **Claims first:** `make lines FILE=/diagram/.clones/RESEARCH-CLAIMS.md KEY="buildings"`; a section another
-feature holds is researched but not edited (put the text it owes in the handoff). Lines about "Effort experiment | 293" that
-you did not write are NOT claims on your work: they are another run of this same task, whose output is set aside - ignore them. Then `make append
-FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="Effort experiment | 293 | task R in progress (buildings, servants' quarters) | <date>"`.
+feature holds is researched but not edited (put the text it owes in the handoff). Lines for 293 that you did not write are not
+claims on your work - ignore them. Then `make append
+FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="293 | task R in progress (buildings, servants' quarters) | <date>"`.
 **New registry entries and glossary terms take their prefix from `make reserve KIND=registry|glossary KEY=<k>`** (in
 `.claude/skills/diagram`).
 
@@ -51,7 +51,7 @@ FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="Effort experiment | 293 | task R 
    `Edit`/`Write`. Then in `.claude/skills/diagram`: `make record && make citations && make test-file FILE="tests/interactive/test_footnotes.py
    tests/interactive/test_citations.py tests/interactive/test_sources.py tests/interactive/test_record_format.py"`, and
    `python3 scripts/check-question-size.py` from the clone root.
-6. **Hand off.** Write `specs/293-effort-level-experiment/prompts/R-handoff.md`: one line per new or changed question as
+6. **Hand off.** Write `handoffs/293/R-handoff.md`: one line per new or changed question as
    `- SECTION=buildings/<NNN>`, one per new registry key as `- KEY=<key>`, then the outcome in a few sentences (what the record now
    says, what the Ubame sheet should draw, what was searched and when), then anything left open. Commit (a message beginning
    `293 R:`). Do NOT run the record checks and do NOT push - the next session checks in a fresh context. Your last message is

@@ -10,7 +10,7 @@ question and the default you took in the report, and carry on.
 covers to the `adhoc-judge` agent. Dispatch ad-hoc reading, fetching, translating or extracting as you normally would.
 
 Session 1 researched the Ubame servants' quarters question (one dormitory behind sliding partitions, or a door a household?)
-and committed; its handoff is `specs/293-effort-level-experiment/prompts/R-handoff.md`. You check and apply ALL of it: every
+and committed; its handoff is `handoffs/293/R-handoff.md`. You check and apply ALL of it: every
 `SECTION=` and `KEY=` line the handoff names. **Read narrowly**: `make lines FILE=<handoff> KEY="SECTION=|KEY="` for your
 list; `make notes PAGE=buildings SECTION=<NNN> KEYS=<key,key>` for a few notes.
 
@@ -30,7 +30,7 @@ list; `make notes PAGE=buildings SECTION=<NNN> KEYS=<key,key>` for a few notes.
 4. **If the modal of a map feature names a changed section as its `Entry:`**, run `scripts/_entry_owed.py` and `entry-drift` on
    what it names, and fix what drifted.
 5. **Commit** with a message beginning `293 R check:`; do not push. Then `make append FILE=/diagram/.clones/RESEARCH-CLAIMS.md
-   LINE="Effort experiment | 293 | task R checked, committed in clone | <date>"`.
-6. **Report.** Write `specs/293-effort-level-experiment/prompts/R-checks.md`: one line per question and key with its verdicts
+   LINE="293 | task R checked, committed in clone | <date>"`.
+6. **Report.** Write `handoffs/293/R-checks.md`: one line per question and key with its verdicts
    (quote-check, record-format, source-applicability), any outcome the checks changed, and anything left open. Commit it. Your
    last message is one paragraph.

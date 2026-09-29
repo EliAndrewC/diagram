@@ -233,7 +233,7 @@ def measure(run: dict, projects: pathlib.Path, guard_log: pathlib.Path, defined:
 
 def release_claim(claims: pathlib.Path, run_id: str, now: float) -> str:
     """R6 D5: after a task R run, the line that ends its claim, so the next run finds the question free."""
-    line = f"Effort experiment (diagram-exp-{run_id}) | 293 | run {run_id} ended - claim released | {iso(now)[:10]}"
+    line = f"293 | run {run_id} ended - claim released | {iso(now)[:10]}"  # no word of the experiment (FR-004): a later run reads it
     with claims.open("a", encoding="utf-8") as f:
         f.write(line + "\n")
     return line

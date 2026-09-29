@@ -171,7 +171,14 @@ def launch(args: argparse.Namespace, repo: pathlib.Path, now: float) -> dict:
               "shared_state": {"sources_snapshot_sha256": exp["sources_snapshot_sha256"], **claims_at_start(args.claims)},
               "sessions": []}
     if args.task == "R":
-        briefs = [str(clone / "specs" / FEATURE / p) for p in PROMPTS["R"]]
+        # FR-004: the page runner's prompt names the brief's path, and the feature directory's name says "effort"; the briefs
+        # are copied, byte for byte, to a neutral path in the run clone and run from there.
+        neutral = clone / "handoffs" / "293"
+        neutral.mkdir(parents=True, exist_ok=True)
+        briefs = []
+        for p in PROMPTS["R"]:
+            shutil.copyfile(clone / "specs" / FEATURE / p, neutral / pathlib.Path(p).name)
+            briefs.append(str(neutral / pathlib.Path(p).name))
         agents = work / "agents.json"
         agents.write_text(agents_json(), encoding="utf-8")
         cmd = [str(clone / "scripts" / "page-session.sh"), " ".join(briefs), clone.name, "", arm, str(agents)]
