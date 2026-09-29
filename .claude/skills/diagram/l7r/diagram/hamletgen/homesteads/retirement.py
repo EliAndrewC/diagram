@@ -57,6 +57,21 @@ RETIREMENT_GAP_FT = (6.0, 12.0)
 # broke are recorded in specs/269-research-backfill/briefs/engine/log.md (B42).
 
 
+def retirement_share(seed: int) -> float:
+    """The settlement's share of homesteads keeping a retirement house, rolled once within `RETIREMENT_SHARE`."""
+    lo, hi = RETIREMENT_SHARE
+    return round(lo + knob_rng(seed, "retirement_house").random() * (hi - lo), 3)
+
+
+def retirement_quota(s: Settlement, households: int) -> dict[str, float]:
+    """The retirement house as a household's part (feature 287, homes H32 and plan D9): on the `retirement_house` form, the
+    share the households' lots keep it at - at least one household, as the settlement always asked - and nothing on
+    `one_roof`. The lots lay it in the bundle, off the back wall or a flank, before the fixtures (`fixture_seats`)."""
+    if s.resolve("family_form") != "retirement_house":
+        return {}
+    return {"retirement": max(retirement_share(s.seed), 1.0 / max(1, households))}
+
+
 def retirement_seats(h: Mapping[str, Any], w: float, d: float, gaps: Sequence[float], turn: int) -> list[tuple[float, float, float]]:
     """The candidate seats of a retirement house `w` wide and `d` deep off farmhouse `h`, as `(x, y, rot)`.
 
@@ -104,19 +119,32 @@ def retirement_houses(s: Settlement, plan: SitePlan) -> int:
     the owners taken in an order rolled from the seed - a retired couple is a stage of a family's life, not a mark of its
     wealth - and each seated off its own farmhouse's back wall or a flank (`retirement_seats`, the side rolled), clear of everything but
     that farmhouse (the byre's annex test, which reads the placed index). A household with no room passes its turn to the
-    next one. Each record's geometry is complete when appended, and names its farmhouse (`of`)."""
+    next one. Each record's geometry is complete when appended, and names its farmhouse (`of`). WHERE THE HOUSEHOLDS WERE
+    SEATED WITH THEIR LOTS (feature 287, homes H32, plan D9) nothing is sought: each keeper's house was laid in its bundle
+    (`retirement_quota`, `fixture_seats`) and is drawn where it stands, so none is dropped - the search above is the
+    path of a settlement seated without lots."""
     form = s.M["meta"]["family_form"] = s.resolve("family_form")
     s.M.setdefault("retirement_houses", [])
     if form != "retirement_house":
         return 0
     houses = [h for h in s.M.get("houses") or [] if h.get("kind") == "plain"]
+    share = s.M["meta"]["retirement_share"] = retirement_share(s.seed)
+    w, d = s.px(RETIREMENT_FT[0]), s.px(RETIREMENT_FT[1])
+    # THE HOUSES THE SEATING LAID (feature 287, homes H32 and plan D9): where the households were seated with their lots,
+    # each keeper's retirement house is a part of its homestead, laid inside the envelope that admitted it - drawn where it
+    # stands, every one, the count the lots' quota
+    if any("fixtures" in h for h in houses):
+        laid = [(h, f) for h in houses for f in h.get("fixtures") or () if f["kind"] == "retirement"]
+        s.M["meta"]["retirement_target"] = len(laid)
+        for h, f in laid:
+            _draw_retirement(s, h, float(f["x"]), float(f["y"]), w, d, retirement_face(h, float(f["x"]), float(f["y"])))
+        s.M["meta"]["retirement_houses"] = len(laid)
+        return len(laid)
     rng = knob_rng(s.seed, "retirement_house")
-    lo, hi = RETIREMENT_SHARE
-    share = s.M["meta"]["retirement_share"] = round(lo + rng.random() * (hi - lo), 3)
+    rng.random()  # the share's draw (`retirement_share`), so the order and the sides below roll as they always did
     target = s.M["meta"]["retirement_target"] = max(1, round(len(houses) * share)) if houses else 0
     order = sorted(houses, key=lambda h: (float(h["x"]), float(h["y"])))
     rng.shuffle(order)
-    w, d = s.px(RETIREMENT_FT[0]), s.px(RETIREMENT_FT[1])
     gaps = [s.px(g) for g in RETIREMENT_GAP_FT]
     seated = 0
     for h in order:
@@ -125,12 +153,27 @@ def retirement_houses(s: Settlement, plan: SitePlan) -> int:
         for cx, cy, rot in retirement_seats(h, w, d, gaps, rng.randrange(3)):
             aw, ah = turned_box(w, d, rot)
             if s._byre_clear_of_all_but(cx, cy, aw, ah, h):
-                s.add(retirement_glyph(cx, cy, w, d, rot), cls="retirement house")
-                s.placed.append((cx, cy, aw, ah))
-                s.M["retirement_houses"].append(
-                    {"x": round(cx, 1), "y": round(cy, 1), "w": round(w, 1), "h": round(d, 1), "rot": round(rot, 1), "of": [round(float(h["x"]), 1), round(float(h["y"]), 1)]}
-                )
+                _draw_retirement(s, h, cx, cy, w, d, rot)
                 seated += 1
                 break
     s.M["meta"]["retirement_houses"] = seated
     return seated
+
+
+def retirement_face(h: Mapping[str, Any], x: float, y: float) -> float:
+    """The turn a retirement house laid at (x, y) is drawn at: its farmhouse's, plus the face its seat takes off the back
+    wall (180) or a flank (-90 east, 90 west) - its long side to the farmhouse wall, its door away (`retirement_seats`)."""
+    rot = float(h.get("rot", 0.0) or 0.0)
+    th = math.radians(rot)
+    dx, dy = x - float(h["x"]), y - float(h["y"])
+    lx, ly = dx * math.cos(th) + dy * math.sin(th), -dx * math.sin(th) + dy * math.cos(th)
+    if ly < 0.0 and abs(ly) - float(h["h"]) / 2 >= abs(lx) - float(h["w"]) / 2:
+        return rot + 180.0
+    return rot + (-90.0 if lx > 0.0 else 90.0)
+
+
+def _draw_retirement(s: Settlement, h: Mapping[str, Any], cx: float, cy: float, w: float, d: float, rot: float) -> None:
+    aw, ah = turned_box(w, d, rot)
+    s.add(retirement_glyph(cx, cy, w, d, rot), cls="retirement house")
+    s.placed.append((cx, cy, aw, ah))
+    s.M["retirement_houses"].append({"x": round(cx, 1), "y": round(cy, 1), "w": round(w, 1), "h": round(d, 1), "rot": round(rot, 1), "of": [round(float(h["x"]), 1), round(float(h["y"]), 1)]})

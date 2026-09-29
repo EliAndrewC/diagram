@@ -258,7 +258,7 @@ def head_sluice(plan: SitePlan) -> tuple[Pt, str]:
     cx, cy = plan.W / 2.0, plan.H / 2.0
     px, py = -dy, dx  # across the fall
     name, lateral = _roll(plan.spec.seed, "head_offset", HEAD_OFFSETS)
-    span = float(min(plan.W, plan.H))
+    span = float(plan.field_span or min(plan.W, plan.H))  # the field's own square, not the canvas grown for the seat (homes H31)
     return (cx - dx * span * 0.36 + px * span * lateral, cy - dy * span * 0.36 + py * span * lateral), str(name)
 
 

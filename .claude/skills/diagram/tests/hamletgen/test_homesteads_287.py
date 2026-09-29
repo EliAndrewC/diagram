@@ -4,13 +4,14 @@ household bamboo on its house's bank (H01), the eaves stack against its steading
 Split from test_homesteads.py when feature 287 took it past the 1,000-line bar; the helpers stay there.
 """
 
+import math
+
 import pytest
 
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.settlement import Settlement
 
-from ._builders import a_plan
-from .test_homesteads import _WELL_HOUSES, _one_kind, _only_seat, _toy_hamlet
+from .test_homesteads import _WELL_HOUSES, _only_seat, _toy_hamlet
 
 
 def test_a_well_past_the_crop_is_refused_now_the_pockets_water_every_house() -> None:
@@ -87,38 +88,6 @@ def test_a_household_bamboo_strip_stands_on_its_house_bank_and_names_its_house()
     assert got, "some strips seated over the seeds"
 
 
-def test_an_eaves_stack_stands_against_a_wall_of_its_own_steading_or_passes_on(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Feature 287, homes H35: an eaves woodpile is offered only the seats against a wall of its steading (the house, its
-    kura), never the outward rungs; with every wall taken it passes on, and no stack stands off a wall."""
-    from l7r.diagram.hamletgen.homesteads import fixtures as fx
-    from l7r.diagram.hamletgen.homesteads.fixtures import against_a_wall, steading_rects
-
-    walls = steading_rects(46.0, 28.0, "N")
-    assert against_a_wall((0.0, -(14.0 + 3.5 + 2.0), 10.0, 4.0), walls, 3.5), "the back wall, a wall gap off"
-    assert not against_a_wall((0.0, -(14.0 + 3.5 + 4.0 + 3.5 + 2.0), 10.0, 4.0), steading_rects(46.0, 28.0, None), 3.5), "a stack's depth further out"
-    assert against_a_wall((0.0, -(14.0 + 3.5 + 4.0 + 3.5 + 2.0), 10.0, 4.0), walls, 3.5), "...which is the north kura's own wall"
-    assert len(steading_rects(46.0, 28.0, "W")) == 2 and len(steading_rects(46.0, 28.0, None)) == 1
-    _one_kind(monkeypatch, fx, ("woodpile",))
-    monkeypatch.setattr(fx, "WOODPILE_FORMS", ("eaves",))
-    for boxed in (False, True):
-        s = Settlement(W=900, H=700, seed=7)
-        s.meta(name="T", scale="hamlet", ftpx=1)
-        house = {"x": 400.0, "y": 350.0, "w": 46.0, "h": 28.0, "rot": 0.0, "shed_side": "N"}
-        s.M["houses"].append(dict(house))
-        s.placed.append((400.0, 350.0, 46.0, 28.0))
-        if boxed:  # a ring of posts a wall gap off every wall: no seat against any wall
-            s.placed += [(400.0, 350.0 + d * 20.0, 60.0, 4.0) for d in (-1, 1)] + [(400.0 + d * 29.0, 350.0, 4.0, 40.0) for d in (-1, 1)]
-        fx.farmstead_fixtures(s, a_plan(), [house])
-        piles = [f for f in s.M["farm_fixtures"] if f["kind"] == "woodpile"]
-        if boxed:
-            assert not piles and s.M["meta"]["farm_fixtures_unseated"] == {"woodpile": 1}
-        else:
-            (p,) = piles
-            lx, ly = p["x"] - 400.0, p["y"] - 350.0
-            gap = max(abs(lx) - 23.0, abs(ly) - 14.0)
-            assert gap <= 3.5 + 4.0 + 1.5, f"against a wall ({gap:.1f} px)"
-
-
 def test_the_woodpile_form_a_homestead_draws_is_the_one_the_predicate_names() -> None:
     """Feature 287, homes H33: the kizuma where the knob rolled it and the belt stands within reach, else the eaves stack."""
     from l7r.diagram.hamletgen.homesteads.fixtures import woodpile_form_for
@@ -126,3 +95,66 @@ def test_the_woodpile_form_a_homestead_draws_is_the_one_the_predicate_names() ->
     assert woodpile_form_for("kizuma", True) == "kizuma"
     assert woodpile_form_for("kizuma", False) == "eaves"
     assert woodpile_form_for("shed", False) == "shed" and woodpile_form_for("eaves", True) == "eaves"
+
+
+# ---- homes H06: the shared sheds' pockets, reserved before any house ----------------------------------------------
+
+
+def test_a_commons_hamlet_reserves_every_shared_shed_before_its_houses_and_draws_each() -> None:
+    """Feature 287, homes H06: on `detached_commons` the sheds' pockets are laid in the band first, the houses pack round
+    them, and `draft_byres` draws a shed in every pocket - the count asked (`commons_byre_target`) is the count drawn."""
+    from l7r.diagram.hamletgen.homesteads import stage_homesteads
+    from l7r.diagram.settlement.shrines_wells.byres import COMMONS_BYRE_GAP, commons_byre_target
+
+    s, plan = _toy_hamlet(12)
+    s.pin_knob("byre_form", "detached_commons")
+    stage_homesteads(s, plan)
+    pockets = list(s._byre_pockets)
+    assert len(pockets) == commons_byre_target(12) == 3
+    assert all(math.dist(a, b) > COMMONS_BYRE_GAP for i, a in enumerate(pockets) for b in pockets[i + 1 :])
+    for x, y in pockets:  # no house laps a pocket's ground
+        assert all(abs(x - h["x"]) >= (h["w"] + 16.0) / 2 or abs(y - h["y"]) >= (h["h"] + 11.0) / 2 for h in s.M["houses"])
+    drawn = s.draft_byres()
+    assert drawn == pockets and s.M["meta"]["byre_target"] == 3 and len(s.M["byres"]) == 3
+
+
+def test_a_band_with_no_ground_for_the_shared_sheds_refuses_the_site(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The reservation's refusal: a band holding fewer pockets than asked is refused, naming it, before any house."""
+    from l7r.diagram.hamletgen.homesteads import stages
+    from l7r.diagram.hamletgen.homesteads.capacity import SiteRefused
+
+    s, plan = _toy_hamlet(12)
+    s.pin_knob("byre_form", "detached_commons")
+    monkeypatch.setattr(Settlement, "reserve_commons_byres", lambda self, seat, n: [])
+    with pytest.raises(SiteRefused, match="no ground for 3 shared byres"):
+        stages._seat_households(s, plan)
+    assert not s.M["houses"]
+
+
+def test_the_commons_pockets_widen_past_a_full_core_and_keep_off_the_paddy() -> None:
+    """The band's core walled by placed ground: the pockets are found in the widened rounds, none on the paddy, none within
+    the gap of another - and a band with no free ground at all yields fewer than asked (the caller refuses it)."""
+    from l7r.diagram.settlement.shrines_wells.byres import COMMONS_BYRE_GAP
+
+    s = Settlement(1400, 1400, seed=3)
+    s.meta(name="B", scale="hamlet", ftpx=1, toscale=True)
+    seat = {"cx": 700.0, "cy": 500.0, "along": (1.0, 0.0), "out": (0.0, -1.0), "lat": 400.0, "dep": 150.0}
+    s.placed.append((700.0, 500.0, 330.0, 250.0))  # the core (0.8 of the band) is built on
+    s.field_polys.append([(0.0, 600.0), (1400.0, 600.0), (1400.0, 1400.0), (0.0, 1400.0)])
+    pockets = s.reserve_commons_byres(seat, 20)
+    assert len(pockets) == 4 and all(y < 600.0 - 10.0 for _x, y in pockets)
+    assert all(math.dist(a, b) > COMMONS_BYRE_GAP for i, a in enumerate(pockets) for b in pockets[i + 1 :])
+    full = Settlement(1400, 1400, seed=3)
+    full.meta(name="F", scale="hamlet", ftpx=1, toscale=True)
+    full.placed.append((700.0, 500.0, 1400.0, 1000.0))
+    assert full.reserve_commons_byres(seat, 20) == []
+
+
+def test_the_free_ground_grid_covers_the_fields_reach_not_the_canvas() -> None:
+    """Feature 287, homes H31: the canvas grew for the seat's room; the FreeGround grid covers only the chords' reach."""
+    from l7r.diagram.hamletgen.homesteads.boundary import free_ground_bounds
+
+    chains = [[((1000.0, 1000.0), (1200.0, 1000.0), (0.0, 1.0))]]
+    assert free_ground_bounds(chains, 300.0, 5000.0, 5000.0) == (700.0, 700.0, 1500.0, 1300.0)
+    assert free_ground_bounds(chains, 2000.0, 2500.0, 2500.0) == (0.0, 0.0, 2500.0, 2500.0)
+    assert free_ground_bounds([], 300.0, 5000.0, 4000.0) == (0.0, 0.0, 5000.0, 4000.0)

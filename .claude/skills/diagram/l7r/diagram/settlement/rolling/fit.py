@@ -143,6 +143,9 @@ class BundleFitMixin:
     _byre_form: str | None = None
     _household_byre: str | None = None
     _household_well: bool = False
+    _byre_pockets: Any = None  # the shared sheds' pockets the seating reserved (`detached_commons`, homes H06)
+    _household_fixtures: Any = ()  # the fixture kinds the household being sought a seat keeps (homes H32)
+    _fixture_forms: Any = None  # the hamlet's rolled fixture forms, set by the seating (`FixtureForms`)
 
     def _field_adjacent(self: Settlement, x: float, y: float) -> bool:  # type: ignore[misc]
         """A RAIL, NOT A NORM: a nudge may not drift a farmhouse off the map's farmland entirely.
@@ -394,6 +397,12 @@ class BundleFitMixin:
         yard = part_box(geom, "yard")
         if yard is not None and self.field_polys and self._rect_hits(yard, self.field_polys):
             return False
+        # ...NOR A FARMSTEAD FIXTURE (feature 287, homes H32): a privy or a coop is small enough to stand between the
+        # envelope's nine points on a paddy's corner; each is held off every field polygon as the yard is - a persimmon by
+        # its trunk, its crown free to overhang
+        fixtures = (geom.get("boxes") or {}).get("fixtures") or {}
+        if self.field_polys and any(self._rect_hits(b if k != "persimmon" else (b[0], b[1], self.px(4.0), self.px(4.0)), self.field_polys) for k, b in fixtures.items()):
+            return False
         # NO GARDEN BED ON ANY DITCH (feature 287, water W56): the envelope's nine points pass a ditch narrower than their
         # spacing, so each bed is held off every irrigation line - channel, in-field ditch, drain, stream - at the corridor
         # `_rect_on_water` keeps, the test the solid rects of the legacy path take.
@@ -431,7 +440,14 @@ class BundleFitMixin:
         if not any(len(f.get("poly") or ()) >= 2 for f in streams):
             return False
         hx, hy = geom["house"][0], geom["house"][1]
-        parts = [part_box(geom, "yard"), *(part_box(geom, "gardens") or ()), part_box(geom, "shed"), part_box(geom, "byre"), part_box(geom, "well")]
+        parts = [
+            part_box(geom, "yard"),
+            *(part_box(geom, "gardens") or ()),
+            part_box(geom, "shed"),
+            part_box(geom, "byre"),
+            part_box(geom, "well"),
+            *((geom.get("boxes") or {}).get("fixtures") or {}).values(),
+        ]
         # ...AND NO PART STANDS ON THE WATER ITSELF (settlement-review of Mizuguchi, feature 261): the envelope's nine-point
         # ground test let a farmhouse's wall stand on the brook's centerline, its roof drawn over the water. Each solid part
         # is held off every stream at the stream's half-width plus the corridor `_rect_on_water` keeps.

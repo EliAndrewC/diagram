@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import math
 import random
+from collections.abc import Mapping
 from typing import Any
 
 #: The nucleated farmhouse's length and depth factors over its 46 x 28 ft base (`_try_place_bundle`): a minka grew by
@@ -78,13 +79,19 @@ class HouseholdLots:
     the households' own). Built once per seating (`stage_homesteads` sets it on the settlement); the `k`-th house seated
     takes lot `k`."""
 
-    __slots__ = ("byre", "kura", "n", "sizes")
+    __slots__ = ("byre", "fixtures", "kura", "n", "sizes")
 
-    def __init__(self, seed: int, n: int, byre_share: float = 0.0) -> None:
+    def __init__(self, seed: int, n: int, byre_share: float = 0.0, fixture_shares: Mapping[str, float] | None = None) -> None:
         self.n = n
         self.sizes = size_ladder(seed, n)
         self.kura = quota_carriers(seed, "kura", n, KURA_SHARE)
         self.byre = quota_carriers(seed, "byre", n, byre_share)
+        # THE FARMSTEAD FIXTURES, a quota per kind (feature 287, homes H32): exactly round(n x share) households keep each
+        self.fixtures = {k: quota_carriers(seed, f"fixture_{k}", n, p) for k, p in (fixture_shares or {}).items()}
+
+    def fixtures_of(self, k: int) -> tuple[str, ...]:
+        """The fixture kinds household `k` keeps, in the settlement's order of kinds."""
+        return tuple(kind for kind, carriers in self.fixtures.items() if 0 <= k < self.n and carriers[k])
 
     def lot(self, k: int) -> tuple[float, float, bool, bool] | None:
         """Household `k`'s (length factor, depth factor, keeps a kura, keeps a beast); None past the declared count."""
@@ -121,15 +128,17 @@ def household_parts(s: Any, x: float, y: float, kind: str, role: Any) -> tuple[t
     pocket. Set on the settlement for the seat search (`_household_byre`, `_household_well`), where `_bundle_layout` lays
     the parts inside the envelope; `seat_parts_done` takes them down."""
     lots = getattr(s, "_lots", None)
-    lot = lots.lot(sum(1 for h in s.M["houses"] if h.get("kind") == "plain")) if lots is not None and kind == "plain" and role is None else None
+    k = sum(1 for h in s.M["houses"] if h.get("kind") == "plain")
+    lot = lots.lot(k) if lots is not None and kind == "plain" and role is None else None
     form = getattr(s, "_byre_form", None) if lot is not None and lot[3] else None
     well = kind == "plain" and needs_pocket(s, x, y)
     s._household_byre, s._household_well = form, well
+    s._household_fixtures = lots.fixtures_of(k) if lots is not None and lot is not None else ()
     return lot, form, well
 
 
 def seat_parts_done(s: Any) -> None:
-    s._household_byre, s._household_well = None, False
+    s._household_byre, s._household_well, s._household_fixtures = None, False, ()
 
 
 def record_parts(s: Any, rec: dict[str, Any], geom: Any, form: str | None) -> None:
@@ -145,3 +154,6 @@ def record_parts(s: Any, rec: dict[str, Any], geom: Any, form: str | None) -> No
     if geom.get("well") is not None:
         rec["well_pocket"] = [geom["well"][0], geom["well"][1]]
         s._pockets.append((geom["well"][0], geom["well"][1]))
+    boxes = (geom.get("boxes") or {}).get("fixtures") or {}
+    if geom.get("fixtures"):  # the fixtures laid in the bundle (homes H32), drawn where they were laid (`farmstead_fixtures`)
+        rec["fixtures"] = [{"kind": k, "x": r[0], "y": r[1], "w": r[2], "h": r[3], "box": list(boxes[k])} for k, r in geom["fixtures"].items()]

@@ -29,9 +29,10 @@ if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds
 from l7r.diagram.settlement._geom.indexes import PointGrid, RingIndex
 from l7r.diagram.settlement._geom.primitives import FIELD_KEEPOUT_EPS, facing_chains, seg_dist
 from l7r.diagram.settlement.land.wet import marsh_ground
+from l7r.diagram.settlement.rolling.fit import FIELD_REACH_FT
 from l7r.diagram.sitegen.geom import crop_polys
 
-from ..consts import WEB_HARD_GAP, WEB_REACH_FT
+from ..consts import BUNDLE_PITCH, WEB_HARD_GAP, WEB_REACH_FT
 
 if TYPE_CHECKING:
     from l7r.diagram.settlement import Settlement
@@ -277,6 +278,17 @@ class FreeGround:
         return any(self.point_taken(px, py) for px, py in ((x0, y0), (x1, y0), (x1, y1), (x0, y1), (cx, y0), (x1, cy), (cx, y1), (x0, cy), (cx, cy)))
 
 
+def free_ground_bounds(chains: Any, reach: float, W: float, H: float) -> tuple[float, float, float, float]:
+    """The box FreeGround's grid covers: the paddy chords' extent grown by `reach`, inside the canvas (feature 287, homes
+    H31). No seat is offered past the field's reach (`within_field_reach`), and a cell outside the grid is only never
+    PRUNED - the fit test still asks it - so the box bounds the cost, never the answer. The canvas grew for the seat's
+    room and the belt's; gridding all of it doubled the grid for ground no seat can reach."""
+    pts = [p for ch in chains or () for a, b, _n in ch for p in (a, b)]
+    if not pts:
+        return (0.0, 0.0, W, H)
+    return (max(0.0, min(p[0] for p in pts) - reach), max(0.0, min(p[1] for p in pts) - reach), min(W, max(p[0] for p in pts) + reach), min(H, max(p[1] for p in pts) + reach))
+
+
 class UnreachableGround:
     """The ground where a farmhouse would stand beyond any way's reach (feature 278, FR-005).
 
@@ -341,7 +353,7 @@ def install_site_boundary(s: Settlement, plan: SitePlan) -> None:
     chains, corridors, outline = site_boundary(s, seat)
     s._site_chains = chains
     s._site_corridors = SiteCorridors(corridors, outline)
-    s._free_ground = FreeGround(chains, corridors, outline, (0.0, 0.0, float(s.W), float(s.H)))
+    s._free_ground = FreeGround(chains, corridors, outline, free_ground_bounds(chains, s.px(FIELD_REACH_FT) + 2.0 * BUNDLE_PITCH, float(s.W), float(s.H)))
     s._unreachable = UnreachableGround(web_hard_ground(s, plan))
     s.M["site_boundary"] = {
         "chords": [[[round(a[0], 1), round(a[1], 1)], [round(b[0], 1), round(b[1], 1)], [round(n[0], 4), round(n[1], 4)]] for ch in chains for a, b, n in ch],

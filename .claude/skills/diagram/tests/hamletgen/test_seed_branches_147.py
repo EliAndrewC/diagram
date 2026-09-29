@@ -26,17 +26,6 @@ def _hamlet() -> Settlement:
     return s
 
 
-def test_a_bamboo_trunk_may_not_stand_in_a_watercourse() -> None:
-    """`_trunk_blocked`'s water arm: a trunk whose CORNERS reach a drawn stroke. The centre test above it
-    catches a trunk on the middle of a brook; this catches one straddling a wide channel's bank."""
-    from l7r.diagram.hamletgen.homesteads import _trunk_blocked
-
-    s = _hamlet()
-    s.M["streams"] = [{"poly": [[100.0, 700.0], [1300.0, 700.0]], "w": 60}]
-    assert _trunk_blocked(s, 700.0, 700.0, 20.0, [], [], None, [])
-    assert not _trunk_blocked(s, 700.0, 200.0, 20.0, [], [], None, [])
-
-
 def test_a_wellhead_may_not_be_sunk_in_the_reed_toe_below_the_crop() -> None:
     """`_well_ground_clear`'s wet-toe arm. The reeds are drawn LATE - after the structures - so by the time
     they exist the well is already in them; the band is therefore DERIVED at seat time from the same geometry

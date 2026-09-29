@@ -12,11 +12,12 @@ from l7r.diagram.hamletgen.homesteads import capacity, stages
 from l7r.diagram.hamletgen.homesteads.capacity import SiteRefused, compass, free_seats, margin_ladder, seat_the_rest, seating_mark, unseat_to
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.rolling.fit import FIELD_REACH_FT, within_field_reach
-from tests.hamletgen._builders import a_plan
+from tests.hamletgen._builders import CROWN, a_plan
 
 
 def _toy(households: int) -> tuple[Settlement, hg.SitePlan]:
     plan = a_plan(households=households)
+    plan.envelope = list(CROWN)  # three wind-facing margins: a ladder to climb (the square has one)
     plan.seat = hg.seat_cluster(plan)
     plan.settlement_form = "nucleated"
     s = Settlement(1400, 1400, seed=3)
@@ -104,8 +105,9 @@ def test_the_pass_skips_a_seat_a_house_it_seated_now_stands_on(monkeypatch: pyte
 def test_seat_cluster_returns_its_ranking_as_the_ladder() -> None:
     """D2: the chosen seat heads the ranking; the other margins follow, best first, each a full seat frame."""
     plan = a_plan(households=10)
+    plan.envelope = list(CROWN)
     seat = hg.seat_cluster(plan)
-    assert seat["ladder"], "the square field has more than one buildable margin"
+    assert seat["ladder"], "the crowned field has more than one wind-facing margin"
     for rung in seat["ladder"]:
         assert set(rung) == {"cx", "cy", "along", "out", "lat", "dep", "anchor", "offwind"}
     assert (seat["cx"], seat["cy"]) not in [(r["cx"], r["cy"]) for r in seat["ladder"]]
@@ -152,6 +154,23 @@ def test_a_margin_that_cannot_seat_everyone_hands_the_hamlet_to_the_next(monkeyp
     assert s.M["meta"]["seat_margin"] == 2 and s.field_face == (float(rung["cx"]), float(rung["cy"]))
 
 
+def test_a_rung_with_no_dry_exit_is_passed_over(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 287, ways W23: a ladder rung whose seat has no dry way out of the frame is not seated - the next one is."""
+    s, plan = _toy(10)
+    assert len(plan.seat["ladder"]) >= 2
+    walled, rung = dict(plan.seat["ladder"][0]), dict(plan.seat["ladder"][1])
+    calls: list[tuple[float, float]] = []
+
+    def seat_on(s_: Settlement, plan_: hg.SitePlan) -> tuple[int, int]:
+        calls.append((plan_.seat["cx"], plan_.seat["cy"]))
+        return (7, 0) if len(calls) == 1 else (10, 0)
+
+    monkeypatch.setattr(stages, "_seat_households", seat_on)
+    monkeypatch.setattr(stages, "seat_has_dry_exit", lambda plan_, q, toe, wet: q != (walled["cx"], walled["cy"]))
+    assert stages.seat_every_household(s, plan) == (10, 0)
+    assert calls[1] == (rung["cx"], rung["cy"]) and (walled["cx"], walled["cy"]) not in calls
+
+
 def test_a_site_no_margin_can_seat_is_refused_naming_it(monkeypatch: pytest.MonkeyPatch) -> None:
     s, plan = _toy(10)
     plan.seat["ladder"] = plan.seat["ladder"][:1]
@@ -166,19 +185,21 @@ def test_the_chosen_margin_that_seats_everyone_is_kept_without_the_ladder(monkey
     assert stages.seat_every_household(s, plan) == (10, 3) and s.M["meta"]["seat_margin"] == 1
 
 
-def test_the_declaration_describes_the_drawing() -> None:
-    """Feature 287, homes H04: a string drawn for a rolled round is recorded unhonored, a 1.97 cluster on a rolled crescent
-    is too (round's ceiling), and a compact cluster on a rolled round is declared round."""
-
-    def houses(n: int, dx: float, dy: float) -> list[dict[str, float]]:
-        return [{"x": (k % 4) * dx, "y": (k // 4) * dy} for k in range(n)]
-
-    string = [{"x": k * 100.0, "y": (k % 2) * 20.0} for k in range(6)]  # 500 by 20: far past 2:1
-    assert "cluster_shape_unhonored" in stages.declare_cluster_shape(string, "round")
+def test_the_declaration_is_the_drawing_and_the_knob_narrows_to_it() -> None:
+    """Feature 287, homes H04 and H05 (plan D4): the rolled shape stands wherever the houses draw it; otherwise the knob is
+    resolved over the shapes the drawing admits, from the seed - a string drawn for a rolled round is declared a string
+    shape, a 1.97 cluster on a rolled crescent is round (round's ceiling), and no `cluster_shape_unhonored` is written."""
+    string = [{"x": k * 100.0, "y": (k % 2) * 20.0} for k in range(6)]  # 500 by 20: 25:1, past every band
+    assert stages.shapes_drawn_at(25.0) == ["elongated"] and stages.shapes_drawn_at(3.0) == ["crescent", "elongated", "split"]
+    got = stages.declare_cluster_shape(string, "round", 3)
+    assert got["cluster_shape"] == "elongated" and "cluster_shape_unhonored" not in got
     squat = [{"x": x, "y": y} for x, y in ((0.0, 0.0), (197.0, 0.0), (0.0, 100.0), (197.0, 100.0))]
-    got = stages.declare_cluster_shape(squat, "crescent")
-    assert got == {"cluster_shape_unhonored": "crescent", "cluster_aspect_drawn": 1.97}
-    assert stages.declare_cluster_shape(houses(8, 100.0, 100.0), "round") == {"cluster_shape": "round", "cluster_aspect_drawn": 3.0} or "cluster_shape" in stages.declare_cluster_shape(squat, "round")
+    assert stages.declare_cluster_shape(squat, "crescent", 3) == {"cluster_shape": "round", "cluster_aspect_drawn": 1.97}
+    assert stages.declare_cluster_shape(squat, "round", 3) == {"cluster_shape": "round", "cluster_aspect_drawn": 1.97}
+    three = [{"x": x, "y": y} for x, y in ((0.0, 0.0), (300.0, 0.0), (0.0, 100.0), (300.0, 100.0))]
+    assert stages.declare_cluster_shape(three, "crescent", 3)["cluster_shape"] == "crescent", "a drawn crescent keeps its roll"
+    assert stages.declare_cluster_shape(three, "round", 3)["cluster_shape"] in ("crescent", "elongated")
+    assert stages.declare_cluster_shape([], None, 3)["cluster_shape"] == "round"
 
 
 def test_the_stage_seats_no_more_houses_than_households() -> None:

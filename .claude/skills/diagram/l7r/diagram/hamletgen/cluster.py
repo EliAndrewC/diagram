@@ -12,8 +12,8 @@ from typing import Any
 from l7r.diagram.settlement import point_in_poly, seg_closest, seg_dist, seg_intersect
 from l7r.diagram.sitegen.geom import centroid, unit
 
-from .consts import BUNDLE_PITCH, CLUSTER_BAND_ASPECT, WIND_BACK_MIN_DOT, Poly, Pt
-from .plan import SitePlan
+from .consts import WIND_BACK_MIN_DOT, Poly, Pt
+from .plan import SitePlan, band_extent
 
 # ---- STAGE 4: seating the settlement, and its ways ----------------------------------------------
 
@@ -69,6 +69,55 @@ def belt_off_canvas(center: Pt, along: Pt, out: Pt, lat: float, dep: float, wind
     return sum(1 for x, y in pts if not (0.0 <= x <= W and 0.0 <= y <= H)) / len(pts)
 
 
+def seat_has_dry_exit(plan: SitePlan, start: Pt, toe: Poly | None = None, wet: Sequence[Poly] = ()) -> bool:
+    """Has a seat at `start` a dry way out of the frame (feature 287, homes; ways W23)? The connector leaves the cluster by
+    the flood fill `dry_exit` when no bearing is clean, and raises `NoDryExit` where the gateway is walled in - a property of
+    the SEAT, so the seat is refused here instead. Asked with what stands at seat time, as `connector_dry_exit` walls it:
+    the wet toe and the reed fringe grown by the lane's width, the field, the tameike at its 80 ft berth; the drain brook and
+    every watercourse (the brook gapped at its fords) are lines it may not cross. The ONE flood fill, WAYS' own."""
+    from .ways.dry_exit import EXIT_CELL_FT, dry_exit
+    from .ways.track import wet_grown_by_the_lane
+
+    walls: list[tuple[Poly, float]] = [(wet_grown_by_the_lane(w), 0.0) for w in [*([toe] if toe else []), *wet] if len(w) >= 3]
+    walls.append((list(plan.envelope), 0.0))
+    if plan.sink_pond:
+        px, py, rx, ry = plan.sink_pond
+        r = max(rx, ry)
+        walls.append(([(px + r * math.cos(k * math.pi / 8), py + r * math.sin(k * math.pi / 8)) for k in range(16)], 80.0))
+    lines = [(plan.sink_brook[i], plan.sink_brook[i + 1]) for i in range(len(plan.sink_brook) - 1)] + list(plan.watercourses)
+    if straight_exit(start, walls, lines, float(plan.W), float(plan.H), EXIT_CELL_FT):
+        return True
+    return dry_exit(start, walls, lines, float(plan.W), float(plan.H)) is not None
+
+
+#: The straight exits the fast path tries: every 22.5 degrees.
+EXIT_BEARINGS = 16
+
+
+def straight_exit(start: Pt, walls: Sequence[tuple[Poly, float]], lines: Sequence[tuple[Pt, Pt]], W: float, H: float, cell: float) -> bool:
+    """A SUFFICIENT test for `dry_exit`, asked first because the flood fill costs a canvas (feature 287): a straight run
+    from `start` off the canvas that keeps every wall at its margin plus one and a half cells, and every water line at
+    one and three quarter cells. Every cell such a run passes through then has its center clear of the fill's own
+    blocking distances (a wall's margin plus half a cell's diagonal, a line's one cell), and the cells a straight run
+    passes through are joined, so the fill would find its way out along it. False says nothing: the fill decides."""
+    from shapely import LineString, Polygon
+
+    polys = [(Polygon(p), m) for p, m in walls if len(p) >= 3]
+    segs = [LineString([a, b]) for a, b in lines]
+    for k in range(EXIT_BEARINGS):
+        dx, dy = math.cos(math.tau * k / EXIT_BEARINGS), math.sin(math.tau * k / EXIT_BEARINGS)
+        run = min(((W if dx > 0 else 0.0) - start[0]) / dx if abs(dx) > 1e-9 else math.inf, ((H if dy > 0 else 0.0) - start[1]) / dy if abs(dy) > 1e-9 else math.inf) + 2.0 * cell
+        ray = LineString([start, (start[0] + dx * run, start[1] + dy * run)])
+        if all(p.distance(ray) >= m + 1.5 * cell for p, m in polys) and all(s.distance(ray) >= 1.75 * cell for s in segs):
+            return True
+    return False
+
+
+class SeatRefused(ValueError):
+    """No field margin turns the settlement's back to the wind on legal ground (feature 287, homes H30, plan D3): the site
+    is refused at `stage_seat`, naming it, before any house exists - never seated off the wind."""
+
+
 def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | None = None, toe: Poly | None = None, wet: Sequence[Poly] = (), brook: Sequence[Pt] = ()) -> dict[str, Any]:
     """WHERE THE HOUSES GO - the one derivation that decides how the whole map reads.
 
@@ -79,8 +128,16 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
     wind, tie-broken toward the UPSLOPE end - which is also where the gate needs the dwellings to be
     (`dwellings_above_field_drain`: the ground below the drainage line is the wettest in the valley
     and is not building ground). A margin whose normal is more than 45 degrees off the wind is not a
-    candidate at all (`WIND_BACK_MIN_DOT`, feature 261) - only the last fallback, reported as
-    `offwind` - because the wind is the regional northwest unless declared, and the seat bends to it.
+    candidate at all (`WIND_BACK_MIN_DOT`, feature 261), and neither is one whose belt would fall off
+    the canvas (`BELT_ROOM_MAX_OFF`): the wind is the regional northwest unless declared, and the seat
+    bends to it.
+
+    NO FALLBACK (feature 287, homes H30/H31, plan D3): the off-wind and cramped margins were kept as a
+    last resort, recorded as `seat_offwind`; they are gone. The spec never asks for a site without a
+    wind-facing margin - `plan_site` rolls only falls that leave one and refuses a declared fall into
+    the wind - and the canvas holds the seat and its belt on every side (`plan.seat_room`). A site that
+    still has none (a declared fall 45 degrees off the wind whose field leaves only the toe facing it)
+    is refused here, naming it (`SeatRefused`).
 
     Scoring every margin point of the DRAWN envelope, rather than picking a compass corner, is what
     makes this survive a field that came out a different shape: the seat follows the fan.
@@ -111,13 +168,9 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
     # THE ROLLED SHAPE BINDS HERE, and until 2026-08-19 it bound nowhere - see
     # `CLUSTER_BAND_ASPECT` for the census that showed the knob was dead. Area is held, so a
     # round hamlet is a compact blob and an elongated one a long string of the same ground.
-    _asp = CLUSTER_BAND_ASPECT.get(plan.cluster_shape or "crescent", 3.0)
-    dep = max(112.0, min(math.sqrt(plan.spec.households * (BUNDLE_PITCH**2) / (_asp * math.pi)), 300.0))
-    lat = max(240.0, min(plan.spec.households * (BUNDLE_PITCH**2) / (math.pi * dep), 1100.0))
+    dep, lat = band_extent(plan.spec.households, plan.cluster_shape)
 
     ranked: list[tuple[float, Pt, Pt]] = []  # the wind-facing margins with room for their belt, in the order met
-    offwind: list[tuple[float, Pt, Pt]] = []  # margins whose back is more than 45 deg off the wind, kept only as the last fallback
-    cramped: list[tuple[float, Pt, Pt]] = []  # wind-facing margins whose belt would fall off the canvas, the fallback before those
     n = len(env)
     for i in range(n):
         ax, ay = env[i]
@@ -133,6 +186,8 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         nx, ny = unit(-(by - ay), bx - ax)
         if (nx * (mid[0] - cen[0]) + ny * (mid[1] - cen[1])) < 0:
             nx, ny = -nx, -ny  # flip to the outward side (winding-independent)
+        if nx * wx + ny * wy < WIND_BACK_MIN_DOT:
+            continue  # its back is more than 45 degrees off the wind: never a seat (homes H30)
         rel = ((mid[0] - cen[0]), (mid[1] - cen[1]))
         # ...and belt-and-braces: the BAND ITSELF must stand on open ground. An edge normal can
         # still graze a lobe of the fan a little further along, and a check is cheaper than a theory.
@@ -227,27 +282,34 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         # stands 36-146 ft upwind of the houses' windward fringe (`belt_polygon`); a seat whose band runs that belt off the
         # canvas left the belt a strip beside the westernmost farmsteads, holed where they stood in it. Scored alone (-2.5
         # x the share off the canvas) the seat still won, because every other wind-facing margin had the brook across its
-        # band - so the share still scores, and past `BELT_ROOM_MAX_OFF` the seat is only a fallback, below every
-        # wind-facing seat with room and above the off-wind ones, as the off-wind margins are below all of these.
+        # band - so the share still scores, and past `BELT_ROOM_MAX_OFF` the margin is refused (feature 287, homes H31:
+        # it was a fallback below every seat with room; the canvas is grown for the belt by `plan.seat_room`, so a cramped
+        # margin is never the only wind-facing one).
         off = belt_off_canvas((mid[0] + nx * (dep + 12.0), mid[1] + ny * (dep + 12.0)), (-ny, nx), (nx, ny), lat, dep, (wx, wy), plan.W, plan.H)
         score -= 2.5 * off
-        if nx * wx + ny * wy < WIND_BACK_MIN_DOT:
-            offwind.append((score, mid, (nx, ny)))
-            continue
         if off > BELT_ROOM_MAX_OFF:
-            cramped.append((score, mid, (nx, ny)))
             continue
         ranked.append((score, mid, (nx, ny)))
-    # THE FALLBACKS (feature 261): a wind-facing margin with no room for its belt, then one facing off the wind,
-    # recorded on the map as `seat_offwind`. ONE RANKING, BEST FIRST (feature 287, plan D2): the margins in the order this
-    # function prefers them - each tier by score, the first met winning a tie - so the chosen seat is the ranking's head
-    # and the rest are its LADDER, the margins `stage_homesteads` takes in turn when the chosen one cannot seat every
-    # household (`homesteads/capacity.py`).
-    order = [c for tier in (ranked, cramped, offwind) for c in sorted(tier, key=lambda c: -c[0])]
+    # ONE RANKING, BEST FIRST (feature 287, plan D2): the margins in the order this function prefers them - by score,
+    # the first met winning a tie - so the chosen seat is the ranking's head and the rest are its LADDER, the margins
+    # `stage_homesteads` takes in turn when the chosen one cannot seat every household (`homesteads/capacity.py`).
+    order = sorted(ranked, key=lambda c: -c[0])
+    # ...AND THE HEAD HAS A DRY WAY OUT (feature 287, ways W23): a margin whose seat is walled in by the wet, the field and
+    # the water is refused, so the connector never meets `NoDryExit`. Asked in ranking order until a margin has one - the
+    # flood fill costs a canvas - and each rung of the ladder is asked the same before it is seated (`capacity`).
+    while order and not seat_has_dry_exit(plan, _seat_center(order[0][1], order[0][2], dep), toe, wet):
+        order.pop(0)
     if not order:
-        raise ValueError("no field margin is clear of the drain and the dry hem - the fan has no buildable flank")
+        raise SeatRefused(
+            f"{plan.spec.name} (seed {plan.spec.seed}): no field margin turns its back to the {plan.windward} wind clear of the drain, the dry hem, the toe and the canvas edge - the site has no seat (plan D3)"
+        )
     frames = [_seat_frame(anchor, out, lat, dep, (wx, wy)) for _score, anchor, out in order]
     return {**frames[0], "ladder": frames[1:]}
+
+
+def _seat_center(anchor: Pt, out: Pt, dep: float) -> Pt:
+    """The band's center on a margin: its half-depth and the standoff out from the margin's midpoint."""
+    return (anchor[0] + out[0] * (dep + 12.0), anchor[1] + out[1] * (dep + 12.0))
 
 
 def _seat_frame(anchor: Pt, out: Pt, lat: float, dep: float, wind: Pt) -> dict[str, Any]:

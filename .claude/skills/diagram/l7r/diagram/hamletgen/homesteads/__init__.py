@@ -22,9 +22,7 @@ from .fixtures import PRIVY_SUN_MAX_FT as PRIVY_SUN_MAX_FT
 from .fixtures import PRIVY_SUN_MIN_FT as PRIVY_SUN_MIN_FT
 from .fixtures import PRIVY_SUNNY_SHARE as PRIVY_SUNNY_SHARE
 from .fixtures import _roll as _roll
-from .fixtures import _trunk_blocked as _trunk_blocked
 from .fixtures import farmstead_fixtures as farmstead_fixtures
-from .fixtures import nearer_own_house as nearer_own_house
 from .retirement import retirement_houses as retirement_houses
 from .seats import _seat_allowed as _seat_allowed
 from .seats import cluster_aspect as cluster_aspect

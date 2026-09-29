@@ -126,6 +126,12 @@ def corridor_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
     house = own.get("boxes", {}).get("house") or own["house"]
     if _seg_box_gap(a, b, house) < 0.5:
         return False
+    # ...NOR ITS OWN FARMSTEAD FIXTURES (feature 287, homes H32): they are parts of the homestead now, laid before the web,
+    # and the web draws its way along this corridor - a privy on its own path would be a lane on the privy. A persimmon
+    # is held off by its trunk; the path may pass under the crown.
+    for kind, box in ((own.get("boxes") or {}).get("fixtures") or {}).items():
+        if _seg_box_gap(a, b, box if kind != "persimmon" else (box[0], box[1], s.px(4.0), s.px(4.0))) < half:
+            return False
     x0, y0, x1, y1 = min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])
     seen: set[int] = set()
     for it in s._reach_index(s.placed, "placed_reach").near((x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0) / 2 + half):

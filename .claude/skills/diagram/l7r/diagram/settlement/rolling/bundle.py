@@ -6,6 +6,7 @@ Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.
 from typing import TYPE_CHECKING, Any
 
 from .._geom import turn_about
+from ..homestead_parts.fixture_seats import FixtureForms, lay_fixtures
 from ..shrines_wells.byres import BYRE_FT, YARD_SHED_GAP_FT, byre_part
 from .bearing import turned_box
 
@@ -78,7 +79,17 @@ class BundleGeomMixin:
         (`turned_box`); every fit rule reads the boxes, and the bundle's `bbox` is theirs. Under the old +/-5 degree
         rake the difference was two pixels and was let stand; a house turned 30 degrees, or a quarter turn, is not."""
         seat = getattr(self, "_household_seat", None) or (hx, hy)
-        key = (hw, hh, garden_side, shed, bool(getattr(self, "_nucleated", False)), seat, getattr(self, "_household_byre", None), bool(getattr(self, "_household_well", False)))
+        key = (
+            hw,
+            hh,
+            garden_side,
+            shed,
+            bool(getattr(self, "_nucleated", False)),
+            seat,
+            getattr(self, "_household_byre", None),
+            bool(getattr(self, "_household_well", False)),
+            tuple(getattr(self, "_household_fixtures", None) or ()),
+        )
         cache = self.__dict__.setdefault("_bundle_templates", {})
         tpl = cache.get(key)
         if tpl is None:
@@ -88,15 +99,16 @@ class BundleGeomMixin:
         def moved(r: Any) -> Any:
             return None if r is None else (r[0] + hx, r[1] + hy, r[2], r[3])
 
-        base: dict[str, Any] = {k: ([moved(r) for r in v] if k == "gardens" else moved(v)) for k, v in tpl.items()}
+        base: dict[str, Any] = {k: ([moved(r) for r in v] if k == "gardens" else {f: moved(r) for f, r in v.items()} if k == "fixtures" else moved(v)) for k, v in tpl.items()}
         frame = base.pop("_frame", None)
         turn = self._house_rot(hx, hy) if rot is None else rot
         self._rake_parts(base, hx, hy, turn)
         boxes: dict[str, Any] = {k: (turned_box(base[k], turn) if base.get(k) is not None else None) for k in ("house", "yard", "shed", "byre", "well")}
         boxes["gardens"] = [turned_box(g, turn) for g in base["gardens"]]
+        boxes["fixtures"] = {f: turned_box(r, turn) for f, r in (base.get("fixtures") or {}).items()}
         base["boxes"] = boxes
         if frame is None:  # nucleated: every part, as drawn
-            rects = [r for r in (boxes["house"], boxes["yard"], *boxes["gardens"], boxes.get("shed"), boxes.get("byre"), boxes.get("well")) if r is not None]
+            rects = [r for r in (boxes["house"], boxes["yard"], *boxes["gardens"], boxes.get("shed"), boxes.get("byre"), boxes.get("well"), *boxes["fixtures"].values()) if r is not None]
             base["bbox"] = self._bbox_of(rects)
         else:  # dispersed: the grove's unraked frame with the turned yard and garden
             base["bbox"] = self._bbox_of([frame, boxes["yard"], boxes["gardens"][0], *([boxes["well"]] if boxes.get("well") else [])])
@@ -185,6 +197,7 @@ class BundleGeomMixin:
                 dx, dy, w, h, _turn = byre_part(hw, hh, bw, bh, garden_side, form, self.px(YARD_SHED_GAP_FT[0]))
                 base["byre"] = (hx + dx, hy + dy, w, h)
             self._lay_well_pocket(base, hx, hy, hh, yh, gap)
+            self._lay_fixtures(base, hx, hy, hw, hh, shed, seat)
             return base  # raked and boxed by `_bundle_geom`, per seat
         # DISPERSED farmstead (the shipped ring-village behavior): the windward GROVE as an L (an N
         # band + a W band, for the default NW wind), sized so the grove footprint is ~6x the house. The
@@ -214,6 +227,27 @@ class BundleGeomMixin:
         sx = -1.0 if base["garden"][0] > hx else 1.0  # away from the garden's side
         base["well"] = (hx + sx * (yard[2] / 2 + gap + p / 2), hy + hh / 2 + gap + p / 2 + self.px(2.0), p, p)
 
+    def _lay_fixtures(self: Settlement, base: dict[str, Any], hx: float, hy: float, hw: float, hh: float, shed: bool, seat: Any) -> None:  # type: ignore[misc]
+        """THE HOUSEHOLD'S FARMSTEAD FIXTURES, parts of its homestead (feature 287, homes H32, plan M5 and D9): the kinds its
+        lot keeps (`_household_fixtures`, set by the seat search) laid beside the parts already laid - built ones a crown may
+        not cover, the yard and the beds it may - in the house's frame (`homestead_parts/fixture_seats.py`), with the
+        hamlet's rolled forms (`_fixture_forms`) and the household's own position roll. So the envelope admits a household
+        only with room for its privy, its stack, its tree, and no later stage can take that room."""
+        kinds = getattr(self, "_household_fixtures", None) or ()
+        if not kinds:
+            return
+        sx, sy = seat
+
+        def rel(r: Any) -> Any:
+            return (r[0] - hx, r[1] - hy, r[2], r[3])
+
+        roofs = [rel(r) for r in (base["house"], base.get("shed"), base.get("byre"), base.get("well")) if r is not None]
+        ground = [rel(base["yard"]), *(rel(g) for g in base["gardens"])]
+        forms = getattr(self, "_fixture_forms", None) or FixtureForms()
+        annex = rel(base["byre"]) if base.get("byre") is not None else None
+        laid = lay_fixtures(kinds, hw, hh, roofs, ground, rel(base["yard"]), shed, lambda salt: self._hjit(sx, sy, salt), forms, self.px, annex)
+        base["fixtures"] = {k: (hx + r[0], hy + r[1], r[2], r[3]) for k, r in laid.items()}
+
     def _rake_parts(self: Settlement, base: dict[str, Any], hx: float, hy: float, rot: float) -> None:  # type: ignore[misc]
         """Carry the yard, the garden bed(s) and the kura round the house center by the house's rake, in place.
 
@@ -237,3 +271,5 @@ class BundleGeomMixin:
         for part in ("shed", "byre", "well"):
             if part in base:
                 base[part] = turned(base[part])
+        if base.get("fixtures"):
+            base["fixtures"] = {f: turned(r) for f, r in base["fixtures"].items()}

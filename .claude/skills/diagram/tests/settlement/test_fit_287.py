@@ -73,3 +73,22 @@ def test_a_threshing_yard_lapping_a_paddy_is_refused(gap: float) -> None:
     yx, yy, yw, yh = part_box(geom, "yard")
     s.field_polys.append([(yx - 5.0, yy + yh / 2 - 3.0 + gap), (yx + 5.0, yy + yh / 2 - 3.0 + gap), (yx, yy + yh / 2 + 80.0)])  # a corner poking up
     assert s._parts_fit(geom) is (gap > 3.0)
+
+
+def test_a_farmstead_fixture_on_a_paddy_or_across_the_brook_refuses_its_homestead() -> None:
+    """Feature 287, homes H32: a household's fixtures are parts of its bundle, so a privy between the envelope's nine
+    points on a paddy's corner, or across a brook from its house, refuses the homestead as its yard or bed would."""
+    from l7r.diagram.settlement.homestead_parts.fixture_seats import FixtureForms
+
+    s = _village()
+    s._fixture_forms = FixtureForms()
+    s._household_fixtures = ("privy", "persimmon")
+    geom = s._bundle_geom(400.0, 400.0, 46.0, 28.0, "E")
+    boxes = geom["boxes"]["fixtures"]
+    assert set(boxes) == {"privy", "persimmon"} and s._parts_fit(geom)
+    px_, py_, pw, ph = boxes["privy"]
+    s.field_polys.append([(px_ - 1.0, py_ - 1.0), (px_ + pw, py_ - 1.0), (px_ + pw, py_ + ph), (px_ - 1.0, py_ + ph)])
+    assert not s._parts_fit(geom), "the privy on the paddy's corner"
+    s.field_polys.clear()
+    s.M["streams"] = [{"poly": [[(400.0 + px_) / 2 - 300.0, (400.0 + py_) / 2 + 300.0], [(400.0 + px_) / 2 + 300.0, (400.0 + py_) / 2 - 300.0]], "w": 2.0}]
+    assert s._parts_across_stream(geom), "the brook between the house and its privy"

@@ -82,3 +82,33 @@ def test_the_box_turns_and_the_glyph_draws_a_door() -> None:
     assert abs(w - 15.0) < 1e-9 and abs(h - 18.0) < 1e-9
     g = retirement_glyph(10.0, 20.0, 18.0, 15.0, 90.0)
     assert g.startswith('<g transform="translate(10.0,20.0) rotate(90.00)">') and g.endswith("</g>") and g.count("<rect") == 4
+
+
+def test_a_seated_hamlet_draws_every_retirement_house_its_lots_laid() -> None:
+    """Feature 287, homes H32 and plan D9: on the retirement form the house is a household's part, laid in its bundle off
+    the back wall or a flank - every one drawn where it was laid, the count the lots' quota, never short."""
+    from l7r.diagram.hamletgen.homesteads import stage_homesteads
+    from l7r.diagram.hamletgen.homesteads.retirement import retirement_quota, retirement_share
+    from tests.hamletgen.test_homesteads import _toy_hamlet
+
+    s, plan = _toy_hamlet(12)
+    s.pin_knob("family_form", "retirement_house")
+    assert retirement_quota(s, 12) == {"retirement": retirement_share(s.seed)}
+    stage_homesteads(s, plan)
+    laid = [(h, f) for h in s.M["houses"] for f in h.get("fixtures") or () if f["kind"] == "retirement"]
+    assert len(laid) == math.floor(12 * retirement_share(s.seed) + 0.5)
+    n = retirement_houses(s, plan)
+    assert n == len(laid) == s.M["meta"]["retirement_target"] == len(s.M["retirement_houses"])
+    for r in s.M["retirement_houses"]:
+        h = next(h for h in s.M["houses"] if [round(h["x"], 1), round(h["y"], 1)] == r["of"])
+        assert math.hypot(r["x"] - h["x"], r["y"] - h["y"]) > h["h"] / 2 + r["h"] / 2, "a roof of its own"
+    one = _toy_hamlet(10)[0]
+    one.pin_knob("family_form", "one_roof")
+    assert retirement_quota(one, 10) == {}
+
+
+def test_a_laid_retirement_house_faces_off_the_wall_it_stands_by() -> None:
+    from l7r.diagram.hamletgen.homesteads.retirement import retirement_face
+
+    h = {"x": 100.0, "y": 100.0, "w": 40.0, "h": 28.0, "rot": 0.0}
+    assert retirement_face(h, 100.0, 70.0) == 180.0 and retirement_face(h, 135.0, 100.0) == -90.0 and retirement_face(h, 65.0, 100.0) == 90.0
