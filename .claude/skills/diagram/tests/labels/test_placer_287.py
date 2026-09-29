@@ -55,6 +55,41 @@ def test_a_neighbor_one_offset_off_is_counted_by_the_association() -> None:
     assert poly_gap(list(p.block), list(BOARD.poly)) < min(others), "nearer its own board than any neighbor"
 
 
+def test_stands_nearest_is_strict_and_asks_every_neighbor_but_the_subject() -> None:
+    """Labels L6, the association as measured (`stands_nearest`, the one predicate the board's siter and the pool test
+    share): a yard just nearer than the board claims the caption, and so does one at a tie; one just farther does not. A
+    crown is measured as its disc, a neighbor of a group the caption names still counts, and ink inside the subject is
+    the subject's."""
+    from l7r.diagram.labels.obstacles import stands_nearest
+
+    first = place("notice board", SIZE, BOARD, ObstacleIndex())
+    block = list(first.block)
+    own = poly_gap(block, list(BOARD.poly))
+    top = min(q[1] for q in block)
+
+    def yard(gap: float) -> ObstacleIndex:
+        return ObstacleIndex([Obstacle(tuple(rect(500.0, top - gap - 10.0, 20.0, 10.0)), WEIGHT_OBSTACLE)])
+
+    assert not stands_nearest(block, list(BOARD.poly), yard(own - 0.048)), "a yard just nearer than the board claims it"
+    assert not stands_nearest(block, list(BOARD.poly), yard(own)), "a tie is the neighbor's"
+    assert stands_nearest(block, list(BOARD.poly), yard(own + 0.01))
+    assert stands_nearest(block, list(BOARD.poly), yard(own + 0.01 + 50.0)) and stands_nearest(block, list(BOARD.poly), ObstacleIndex())
+    crown = ObstacleIndex([circle_obstacle(500.0, top - own - 20.0 + 0.5, 20.0, WEIGHT_OBSTACLE, "board")])
+    assert not stands_nearest(block, list(BOARD.poly), crown), "a disc, as a disc; a group the caption names still counts"
+    inner = ObstacleIndex([Obstacle(tuple(rect(500.0, 500.0, 1.0, 1.0)), WEIGHT_OBSTACLE), Obstacle(BOARD.poly, WEIGHT_OBSTACLE)])
+    assert stands_nearest(block, list(BOARD.poly), inner), "ink inside the subject, and its own record, are the subject"
+
+
+def test_a_free_seat_accept_refuses_is_passed_over() -> None:
+    """`accept` is asked of every free seat, and a refused one is passed over for the next; where it refuses every seat,
+    a strict search has no answer (feature 287: the board's siter proves the association on the record this way)."""
+    first = place("notice board", SIZE, BOARD, ObstacleIndex(), strict=True, max_ring=0)
+    assert first is not None
+    other = place("notice board", SIZE, BOARD, ObstacleIndex(), strict=True, max_ring=0, accept=lambda p: p.position != first.position)
+    assert other is not None and other.position != first.position and other.cost == 0.0 and other.ring == 0
+    assert place("notice board", SIZE, BOARD, ObstacleIndex(), strict=True, max_ring=0, accept=lambda p: False) is None
+
+
 def test_the_association_waives_ink_inside_the_subject() -> None:
     """The association is about OTHER features: ink inside the subject (a partition drawn along its edge) stands no
     nearer than the subject itself and is not what the rule counts."""

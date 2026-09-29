@@ -173,6 +173,58 @@ def test_the_caption_the_siter_proved_is_the_caption_drawn() -> None:
     assert all(circle_gap(block, (s.M["tree_crowns"][i], s.M["tree_crowns"][i + 1], s.M["tree_crowns"][i + 2])) > 0 for i in range(0, len(s.M["tree_crowns"]), 3))
 
 
+def test_a_yard_just_nearer_than_the_board_on_the_record_moves_the_caption() -> None:
+    """Labels L6, the violating case (Kuwabata, feature 287: the caption 4.008 ft off a threshing yard and 4.056 ft off
+    its board, as recorded). The caption beside the board stands exactly one offset (4.0) off it, and a yard 4.02 off -
+    farther, so the search's association term passes the seat - but the record rounds the caption's box to 0.1, which
+    carries it 0.04 toward the yard and makes the yard the nearer. The siter proves the association on the record
+    (`stands_nearest`), so it takes the next seat beside the board, which stands nearer its board as recorded."""
+    from l7r.diagram.labels import place
+    from l7r.diagram.labels.geom import bbox
+    from l7r.diagram.labels.obstacles import stands_nearest
+    from l7r.diagram.settlement.finish import recorded_caption_quad
+    from l7r.diagram.settlement.structures.fixtures.board_seat import board_caption_seat, recorded_board
+    from l7r.diagram.settlement.structures.fixtures.boards import BOARD_CAPTION_SIZE
+
+    bx, by, frame = 500.0, 391.44, (0.0, 0.0, 1000.0, 800.0)
+    s = _hamlet(view=(0.0, 0.0, 1000.0, 800.0))
+    s.M["lanes"] = [{"pts": [[100.0, 400.0], [900.0, 400.0]], "w": 5}]
+    subject = board_subject(bx, by, 0.0, 12.0, 5.0)
+    first = board_caption_seat(s.M, bx, by, 6.0, 2.5, 0.0, "notice board", s.label_obstacles(), frame)
+    assert first is not None and first.position == "above" and poly_gap(list(first.block), list(subject.poly)) == pytest.approx(4.0)
+    x0, y0, x1, _y1 = bbox(first.block)
+    s.M["threshing_yards"] = [{"x": (x0 + x1) / 2, "y": y0 - 4.02 - 10.0, "w": 40.0, "h": 20.0, "rot": 0.0}]
+    index = s.label_obstacles()
+    board = recorded_board(bx, by, 12.0, 5.0, 0.0)
+
+    def on_record(p: Placement) -> bool:
+        return stands_nearest(recorded_caption_quad("notice board", p.lines, p.x, p.y, BOARD_CAPTION_SIZE, p.angle), board, index)
+
+    raw = place("notice board", BOARD_CAPTION_SIZE, subject, index, frame, strict=True, max_ring=0)
+    assert raw is not None and raw.position == "above" and not on_record(raw), "the case is real: exact passes, the record fails"
+    got = board_caption_seat(s.M, bx, by, 6.0, 2.5, 0.0, "notice board", index, frame)
+    assert got is not None and got.position != "above" and got.ring == 0 and on_record(got)
+
+
+def test_the_caption_quad_the_siter_proves_is_the_drawn_record() -> None:
+    """`recorded_caption_quad` is the corner ring of the label record the phase writes for the proved seat, and
+    `recorded_board` the footprint the board's record gives - so the siter's proof and the pool test measure one thing."""
+    from l7r.diagram.settlement._geom import label_quad
+    from l7r.diagram.settlement.finish import recorded_caption_quad
+    from l7r.diagram.settlement.structures.fixtures.board_seat import recorded_board
+    from l7r.diagram.settlement.structures.fixtures.boards import BOARD_CAPTION_SIZE
+
+    s = _hamlet(view=(0.0, 0.0, 1000.0, 800.0))
+    s.M["lanes"] = [{"pts": [[100.0, 400.0], [900.0, 437.0]], "w": 5}]
+    assert s.place_kosatsuba() is not None
+    x, y, rot, vw, vh, _label, proved = s._label_queue[-1][1]
+    (cap,) = _drawn(s)
+    assert recorded_caption_quad("notice board", proved.lines, proved.x, proved.y, BOARD_CAPTION_SIZE, proved.angle) == label_quad(cap)
+    k = s.M["kosatsuba"][-1]
+    assert (x, y, rot) != (k["x"], k["y"], k["rot"]), "non-vacuity: the record rounds the seat"
+    assert recorded_board(x, y, vw, vh, rot) == rect(k["x"], k["y"], k["vw"] / 2, k["vh"] / 2, k["rot"])
+
+
 def test_the_board_stands_by_its_way_and_faces_it() -> None:
     """Labels L11, L12: within `KOSATSUBA_WAY_REACH_FT` of the lane it was sampled from, and turned to the nearest way's
     bearing - at an L-corner, the shared reading's tie-broken arm."""

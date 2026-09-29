@@ -72,13 +72,17 @@ def test_the_board_caption_names_the_board_only(gen: str) -> None:
 def test_the_board_caption_stands_nearest_its_own_board(gen: str) -> None:
     """The reader pairs a caption with the nearest glyph, so the notice board's caption stands nearer the board AS DRAWN
     than any other built footprint (settlement-review of Kuwabata, feature 261: 4.9 ft off a byre and 24.6 ft off its
-    board, the words named the byre)."""
+    board, the words named the byre). THE ONE PREDICATE (feature 287, labels L6): `stands_nearest`, which the board's
+    siter asks of the caption and the board as they will be recorded (`board_seat.board_caption_seat`)."""
+    from l7r.diagram.labels import Obstacle, ObstacleIndex
+    from l7r.diagram.labels.obstacles import stands_nearest
+    from l7r.diagram.labels.standard import WEIGHT_OBSTACLE
     from l7r.diagram.settlement._geom import label_quad, poly_gap
     from l7r.diagram.settlement.structures.captions import LABEL_GROUND_KEYS
 
     def quad(o: dict) -> list[tuple[float, float]]:
         a = math.radians(float(o.get("rot") or 0))
-        ca, sa, hw, hh = math.cos(a), math.sin(a), float(o["w"]) / 2, float(o["h"]) / 2
+        ca, sa, hw, hh = math.cos(a), math.sin(a), float(o.get("vw") or o["w"]) / 2, float(o.get("vh") or o["h"]) / 2  # as drawn
         return [(o["x"] + dx * ca - dy * sa, o["y"] + dx * sa + dy * ca) for dx, dy in ((-hw, -hh), (hw, -hh), (hw, hh), (-hw, hh))]
 
     m = _manifest(gen)
@@ -87,15 +91,16 @@ def test_the_board_caption_stands_nearest_its_own_board(gen: str) -> None:
     q = label_quad(labs[0])
     own = poly_gap(q, quad(m["kosatsuba"][0]))
     others = [
-        (poly_gap(q, quad(o)), key)
+        (quad(o), key)
         for key, recs in m.items()
         if key not in LABEL_GROUND_KEYS and key != "kosatsuba" and isinstance(recs, list)
         for o in recs
         if isinstance(o, dict) and all(isinstance(o.get(f), (int, float)) for f in ("x", "y", "w", "h"))
     ]
     assert others, "non-vacuity: built footprints to compare against"
-    nearest = min(others)
-    assert nearest[0] > own, f"the caption stands {nearest[0]:.1f} ft from a {nearest[1]} record and {own:.1f} ft from its board"
+    nearest = min((poly_gap(q, p), key) for p, key in others)
+    index = ObstacleIndex([Obstacle(tuple(p), WEIGHT_OBSTACLE) for p, _key in others])
+    assert stands_nearest(q, quad(m["kosatsuba"][0]), index), f"the caption stands {nearest[0]:.3f} ft from a {nearest[1]} record and {own:.3f} ft from its board"
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)

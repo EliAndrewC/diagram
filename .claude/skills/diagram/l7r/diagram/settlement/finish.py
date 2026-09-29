@@ -46,6 +46,14 @@ def caption_record_box(text: str, lines: Sequence[str], x: float, y: float, size
     return (x0_, cy_ - half, x0_ + w_, cy_ + half)
 
 
+def recorded_caption_quad(text: str, lines: Sequence[str], x: float, y: float, size: float, angle: float) -> Poly:
+    """The drawn corner ring a centered caption's RECORD will give (`label_quad` of what `_record_label` writes: the box
+    rounded to 0.1, turned by the caption's tilt) - what a check of the finished map measures, known before the caption is
+    drawn (feature 287, labels L6: `board_seat.board_caption_seat` proves the association on it)."""
+    x0, y0, x1, y1 = (round(v, 1) for v in caption_record_box(text, lines, x, y, size, "middle"))
+    return label_quad([x0, y0, x1, y1, 0, text, [], angle])
+
+
 Box = tuple[float, float, float, float]
 
 

@@ -21,7 +21,7 @@ from __future__ import annotations
 
 import itertools
 import math
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass, replace
 from typing import Literal, overload
 
@@ -363,6 +363,7 @@ def place(
     *,
     strict: Literal[False] = False,
     max_ring: int | None = None,
+    accept: Callable[[Placement], bool] | None = None,
 ) -> Placement: ...
 
 
@@ -381,6 +382,7 @@ def place(
     *,
     strict: Literal[True],
     max_ring: int | None = None,
+    accept: Callable[[Placement], bool] | None = None,
 ) -> Placement | None: ...
 
 
@@ -398,6 +400,7 @@ def place(
     *,
     strict: bool = False,
     max_ring: int | None = None,
+    accept: Callable[[Placement], bool] | None = None,
 ) -> Placement | None:
     """Seat one caption by the standard (the module docstring). `frame` is the finished picture's (x0, y0, x1, y1); a
     block that leaves it is never a candidate, because a clipped caption cannot be read. `lines` fixes the caption's
@@ -415,7 +418,13 @@ def place(
     `strict=True` returns None instead of anything but a free seat (feature 287: the notice board's siter and the
     generated Mode A sheets ask it, and choose the SUBJECT or the program instead). The retired least-cost seat's last
     caller, the board with no clean verge (D12), takes this non-strict path since feature 287's wave 5. `max_ring` keeps
-    only the seats on rings up to it (0: directly beside the subject, no leader - the notice board's caption)."""
+    only the seats on rings up to it (0: directly beside the subject, no leader - the notice board's caption).
+
+    `accept` is asked of every free candidate before it is returned, and of the strict search's nudged seat - a strict
+    search's every answer, so only a strict caller passes it - and a seat it refuses is passed over as if it were not
+    free (feature 287, labels L6: the board's siter asks whether the caption stands nearest its board AS IT WILL BE
+    RECORDED, `board_seat.board_caption_seat`). The search then goes on to the next seat, so a refused seat costs the
+    caption no seat another would have given it."""
     clear = CLEAR_EM * size
     own: Poly | None = list(subject.poly) if subject.kind != "line" else None
     point = subject.kind == "point"
@@ -439,13 +448,17 @@ def place(
             continue
         cost, hard = _score(cand, block, subject, index, clear, own, text, leader_index)
         if cost == 0.0:
-            return _placement(cand, block, cost, subject)
+            free = _placement(cand, block, cost, subject)
+            if accept is None or accept(free):
+                return free
+            continue
         if best is None or cost < best[0]:
             best = (cost, order, cand, block)
         if not hard and (soft is None or cost < soft[0]):
             soft = (cost, order, cand, block)
     if strict:
-        return _strict_seat(best, deep, subject, index, clear, own, text, frame, leader_index)
+        got = _strict_seat(best, deep, subject, index, clear, own, text, frame, leader_index)
+        return got if got is None or accept is None or accept(got) else None
     if best is not None:
         # a nudge may yet free the least-cost seat, or carry it off every overlap (feature 286's band between grid points)
         cost, cand, block = nudge(best[0], best[2], best[3], subject, index, clear, own, text, frame, leader_index)

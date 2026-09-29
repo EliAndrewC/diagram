@@ -21,6 +21,11 @@ name to sit on the next ministry". So when a caption's SUBJECT is a named civic 
 building keeps its full weight; a caption whose subject is not - a district's, even a "temple neighborhood" - is waived
 onto its group like any other (FR-014)."""
 
+ASSOCIATION_TIE = 1e-6
+"""How much farther than a caption's own subject a neighbor may stand and still claim the caption (labels L6, the
+ASSOCIATION): a tie counts, and this is float slack on the tie only - it decides no seat a rounding-free measure would
+not. The search's term (`ObstacleIndex.score`) and the measured rule (`stands_nearest`) read it alike."""
+
 CELL = 32.0
 """The grid's cell, in drawing units. A pruning grain, not a rule: it decides nothing a smaller or larger cell would
 decide differently."""
@@ -118,7 +123,7 @@ class ObstacleIndex:
         tie (a neighbor exactly one offset off). The placer passes it for a seat with no leader (`placer._score`)."""
         x0, y0, x1, y1 = bbox(block)
         level = level_rect(block)
-        own_lim = own_gap + 1e-6 if own_gap is not None else -math.inf
+        own_lim = own_gap + ASSOCIATION_TIE if own_gap is not None else -math.inf
         reach = max(clear, own_lim)
         cells = _cells((x0 - reach, y0 - reach, x1 + reach, y1 + reach))
         seen: set[int] = set()
@@ -166,6 +171,29 @@ class ObstacleIndex:
                     crossed.add(wid)
                     hard = hard or not self.ways[wid].soft
         return total + WEIGHT_WAY * len(crossed), hard
+
+    def nearer_than(self, block: Poly, gap: float, subject: Poly) -> bool:
+        """Does any obstacle outside `subject` stand within `gap` of `block` - as near as the subject or nearer, a tie
+        counting (`ASSOCIATION_TIE`)? The association term of `score` asked alone, of EVERY obstacle whatever its group
+        (a caption beside a neighbor it may lie on still reads as that neighbor's), measured as `score` measures (a disc
+        as a disc, else the outline); the subject is its own record (`part_of`) or ink whose center lies inside it."""
+        x0, y0, x1, y1 = bbox(block)
+        lim = gap + ASSOCIATION_TIE
+        seen: set[int] = set()
+        for c in _cells((x0 - lim, y0 - lim, x1 + lim, y1 + lim)):
+            for i in self._ob.get(c, ()):
+                if i in seen:
+                    continue
+                seen.add(i)
+                bx0, by0, bx1, by1 = self._boxes[i]
+                if math.hypot(max(0.0, bx0 - x1, x0 - bx1), max(0.0, by0 - y1, y0 - by1)) > lim:
+                    continue  # the boxes' gap bounds the outlines' from below
+                o = self.obstacles[i]
+                if part_of(o.poly, subject) or inside(*centroid(o.poly), subject):
+                    continue
+                if (circle_gap(block, o.circle) if o.circle is not None else poly_gap(block, list(o.poly))) <= lim:
+                    return True
+        return False
 
     def blocked(self, block: Poly, clear: float, slack: float, subject: Poly | None = None, text: str = "", civic: bool = False) -> bool:
         """Does `score` count something against `block` that stays counted however the block is moved by up to `slack` -
@@ -216,6 +244,16 @@ class ObstacleIndex:
                 if poly_seg_gap(block, a, b) < need - slack or seg_dist((cx, cy), a, b) + slack < inner:
                     return True
         return False
+
+
+def stands_nearest(block: Poly, subject: Poly, index: ObstacleIndex) -> bool:
+    """THE ONE PREDICATE of the association as the reader meets it (labels L6): does the caption on `block` stand nearer
+    its own `subject` than any obstacle `index` holds - strictly, a tie being the neighbor's? The search's term decides a
+    seat on its exact geometry; a map is judged on its RECORD, rounded to 0.1 unit, which moves each gap by up to a tenth
+    of a unit - enough to turn a neighbor a hair farther than the subject into one a hair nearer (Kuwabata, feature 287:
+    the board's caption 4.008 ft off a threshing yard and 4.056 ft off its board as recorded). So the notice board's
+    siter asks this of the geometry AS IT WILL BE RECORDED, and the pool test asks it of the record."""
+    return not index.nearer_than(block, poly_gap(block, list(subject)), subject)
 
 
 def circle_gap(block: Poly, circle: tuple[float, float, float]) -> float:

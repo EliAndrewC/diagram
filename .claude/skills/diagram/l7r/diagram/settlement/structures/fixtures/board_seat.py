@@ -21,8 +21,11 @@ from collections.abc import Callable, Sequence
 from typing import Any, NamedTuple
 
 from ....labels import ObstacleIndex, Placement, caption_clears_ways, keyed, place
+from ....labels.geom import rect
+from ....labels.obstacles import stands_nearest
 from ..._geom import PointGrid, nearest_way_bearing, seg_dist, street_runs
 from ..._knobs import KNOBS, Knob, resolve_knob
+from ...finish import recorded_caption_quad
 from ._helpers import KOSATSUBA_ANCHOR_BAND_FT, KOSATSUBA_ENTRANCE_REACH_FT, KOSATSUBA_HANDOVER_BAND_FT, RouteReach
 from .boards import BOARD_CAPTION_SIZE, board_subject
 
@@ -160,10 +163,28 @@ def board_caption_seat(M: Any, x: float, y: float, hw: float, hh: float, rot: fl
     caption of a board seated here, AT THE ANGLE THE BOARD WILL BE DRAWN AT (the nearest way's bearing - a half-turn
     flips which side the placer ranks first), when that seat is FREE and BESIDE the board - clear of every roof, lane,
     crown and caption `index` holds (`place(strict=True)`), inside `frame`, at the preferred offset with no leader, where
-    the association term holds it nearer its board than any neighbor - else None."""
+    the association term holds it nearer its board than any neighbor - else None.
+
+    THE ASSOCIATION IS PROVED AGAIN ON THE RECORD (labels L6, `stands_nearest`): the search's term measures the exact
+    seat, and the map is judged on the manifest, which rounds the caption's box and the board's center and turn to 0.1.
+    At the preferred offset a neighbor a hair farther than the board is a tie that rounding can break the other way
+    (Kuwabata: a threshing yard 4.008 ft from the recorded caption, its board 4.056 ft), so a seat is accepted only where
+    the caption as recorded stands nearer the board as recorded than anything the index holds - the predicate the pool
+    test asks of the manifest."""
     nb = nearest_way_bearing(M, x, y)
     turn = nb if nb is not None else rot
-    return place(label, BOARD_CAPTION_SIZE, board_subject(x, y, turn, 2 * hw, 2 * hh), index, frame, strict=True, max_ring=0)
+    board = recorded_board(x, y, 2 * hw, 2 * hh, turn)
+
+    def nearest(p: Placement) -> bool:
+        return stands_nearest(recorded_caption_quad(label, p.lines, p.x, p.y, BOARD_CAPTION_SIZE, p.angle), board, index)
+
+    return place(label, BOARD_CAPTION_SIZE, board_subject(x, y, turn, 2 * hw, 2 * hh), index, frame, strict=True, max_ring=0, accept=nearest)
+
+
+def recorded_board(x: float, y: float, vw: float, vh: float, rot: float) -> list[tuple[float, float]]:
+    """The drawn footprint of a board seated at (x, y) turned `rot`, AS ITS RECORD GIVES IT (`board_record`: the center,
+    the marker box and the turn each rounded to 0.1) - what a check of the finished map measures the caption against."""
+    return rect(round(x, 1), round(y, 1), round(vw, 1) / 2, round(vh, 1) / 2, round(rot, 1))
 
 
 def terminal_caption(M: Any, x: float, y: float, hw: float, hh: float, rot: float, label: str, index: ObstacleIndex, frame: Any) -> Placement | None:
