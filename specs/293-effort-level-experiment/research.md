@@ -93,14 +93,15 @@ page cache) - a gate on it could stay shut on a quiet host. Nor is this cgroup's
 (observed 2026-09-29, one-shot, method: `memory.current` less `inactive_file`). The launcher also refuses while a memwatch warning newer than 15 minutes (a GUESS: long enough that a warning raised by the previous run's tail or another session's gate has passed, short enough not to stall the experiment for an old one) stands in
 `~/.claude/memwatch/events/`. The threshold is a GUESS with its arithmetic: the 9.0 GB cap less a run's own peak (a `make done`'s
 test phase, above, plus the run's session and its subagents' processes at about 0.5 GB each - observed 2026-09-29, one-shot, method: the memwatch warning of 15:34 listing the four biggest processes) leaves roughly
-4.5 GB for everything else. The threshold is derived on the working set, the same quantity: a run's peak is anonymous memory (the gate's
+4.5 GB for everything else. A run's peak is on the same footing: a run's peak is anonymous memory (the gate's
 test workers and the `claude` processes), which the working set counts and page cache does not add to. The threshold is on memwatch's scale - the 9.0 GB cap is the
 figure memwatch reports - and memwatch's figure cannot be read by the launcher: memwatch publishes a figure only inside a warning, when
 the containers pass 8 GB (`~/.claude/hooks/memwatch-hook.sh`; its `latest` file holds an event number and a time). So the gate converts
 the working set to memwatch's scale with an OFFSET measured at the minute of a warning, where both figures exist: at 19:41 UTC memwatch
-reported diagram at 8.3 GB while the working set was about 6.8 GB (9.23 GB less 2.40 GB of page cache; observed 2026-09-29, one-shot,
-method: the memwatch event of 15:41 local and the amendment review's `memory.stat` reading), an offset of **1.5 GB**. The gate is
-therefore working set + 1.5 GB <= 4.5 GB. In pre-flight (T09) the offset is re-measured at the next memwatch warning that falls in a
+reported diagram at 8.3 GB while the working set was about 7.4 GB (9.23 GB `memory.current` less 1.81 GB `inactive_file` - the
+same subtraction the gate makes, not the whole 2.40 GB of page cache; observed 2026-09-29, one-shot,
+method: the memwatch event of 15:41 local and the amendment review's `memory.stat` reading), an offset of **0.9 GB**. The gate is
+therefore working set + 0.9 GB <= 4.5 GB. In pre-flight (T09) the offset is re-measured at the next memwatch warning that falls in a
 working session (the event's figure beside a working-set reading taken within its minute), and the larger of the two offsets is used; no
 quiet-host memwatch figure is sought, since none is published. The working set alone IS readable on a quiet host, and T09 records it
 there: if that quiet reading plus the offset is above the threshold, the gate could never open, so the implementing session raises it
