@@ -149,6 +149,8 @@ class Settlement(
         # their output is byte-identical. Late ends are clipped to abut other water (never overlap), so
         # the two blocks cannot double-composite into a dark seam.
         #                           into a continuous confluence instead of stacking opacity (a dark seam).
+        self._paddy_z: list[int] = []  # the PADDY layer (feature 287, water W38): every plot's slot, lifted under the water block at finish
+        self._bead_slots: list[Any] = []  # each field's azemame ink slot, its runs, its record and its ponds (`settle_beads`, water W33)
         self.bscale = 1.0  # urban-building footprint scale (a large town packs at a finer grain)
         self.ftpx = 1.0  # declared REAL scale, feet per pixel - set via meta(ftpx=...); the
         #                           glyph library is calibrated at town scale (1 ft/px), so 1.0 = identity
@@ -306,6 +308,14 @@ class Settlement(
         z = len(self.out)
         self.out.append(s)
         self.out_cls.append(self._tag(cls))
+        return z
+
+    def add_paddy(self: Settlement, s: str, cls: ClsTag = None) -> int:
+        """Emit a field PLOT (or the field floor under it) into the paddy layer (feature 287, water W38): drawn where it is
+        called, and lifted to the front of the water block at `finish` wherever it was called after the block's anchor, so
+        no channel is ever painted under a plot, whatever order the stages draw in."""
+        z = self.add(s, cls)
+        self._paddy_z.append(z)
         return z
 
     def add_parts(self: Settlement, parts: Sequence[tuple[str | None, str]]) -> int:
@@ -543,6 +553,12 @@ class Settlement(
             on = [c for c in allc if c[0] + r > ox and c[0] - r < ox + w and c[1] + r > oy and c[1] - r < oy + h]
             off = [c for c in allc if c not in on]
             g["clumps"], g["clumps_offpage"] = on, off
+            # ...AND THE ALDER COUNT IS OF THE CLUMPS ON THE PAGE (feature 287, woods W05): `alder` counted every seated
+            # clump drawn as alder, and the partition moves the off-page ones out of `clumps`, so it is recounted here over
+            # the on-page clumps `village_grove` recorded as alder (`alder_clumps`)
+            if "alder_clumps" in g:
+                _al = {(float(c[0]), float(c[1])) for c in g["alder_clumps"]}
+                g["alder"] = sum(1 for c in on if (float(c[0]), float(c[1])) in _al)
 
     # solid HARD footprints the frame must fully contain (+ margin); the fields and pond are added specially.
     # Everything NOT listed here - the commons scrub, streams/channels/lanes - does not set the frame: it is

@@ -6,7 +6,6 @@ Split from settlement/fields.py by feature 112 - see settlement/fields/CLAUDE.md
 import hashlib
 import math
 import random
-import weakref
 from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING, Any, cast
 
@@ -45,9 +44,6 @@ def hem_on_water(poly: Poly, wet: Sequence[tuple[Any, float]], pond: Any) -> boo
     return bool(pond is not None and point_quad_dist(pond[0], pond[1], poly) < max(pond[2], pond[3]))
 
 
-_BEAD_SLOTS: weakref.WeakKeyDictionary[Any, list[tuple[int, Any, Any, list[tuple[float, float, float, float]]]]] = (
-    weakref.WeakKeyDictionary()
-)  # per settlement: each field's bead ink slot, its runs, its record and its ponds (`settle_beads`)
 STREAM_JOIN_TOL = 13.0  # px: a channel declaring a stream end has that end within this of the stream's drawn bed - the gate's TRUNK_TOL (feature 287, labels L16)
 
 
@@ -108,17 +104,17 @@ class CombMixin:
         floor = net.get("floor")
         if floor:
             fpts = " ".join(f"{x:.1f},{y:.1f}" for x, y in floor)
-            self.add(f'<polygon points="{fpts}" fill="{col}" stroke="none"/>', cls="paddy")
+            self.add_paddy(f'<polygon points="{fpts}" fill="{col}" stroke="none"/>', cls="paddy")
             self.M.setdefault("comb_floors", {})[name] = [[round(x, 1), round(y, 1)] for x, y in floor]
             return
         if full_envelope:
-            self.add(f'<polygon points="{epts}" fill="{col}" stroke="none"/>', cls="paddy")
+            self.add_paddy(f'<polygon points="{epts}" fill="{col}" stroke="none"/>', cls="paddy")
         else:
             cid = self._cid("padbase")
             px0, px1 = min(v[0] for v in pv), max(v[0] for v in pv)
             py0, py1 = min(v[1] for v in pv), max(v[1] for v in pv)
             self.add(f'<clipPath id="{cid}"><rect x="{px0:.1f}" y="{py0:.1f}" width="{px1 - px0:.1f}" height="{py1 - py0:.1f}"/></clipPath>')
-            self.add(f'<polygon points="{epts}" fill="{col}" clip-path="url(#{cid})"/>', cls="paddy")  # the field floor reads as paddy (feature 134)
+            self.add_paddy(f'<polygon points="{epts}" fill="{col}" clip-path="url(#{cid})"/>', cls="paddy")  # the field floor reads as paddy (feature 134)
         self.M.setdefault("comb_floors", {})[name] = [[round(x, 1), round(y, 1)] for x, y in env]
 
     def bund_junctions(self: Settlement, plots: Sequence[Mapping[str, Any]], name: str) -> None:  # type: ignore[misc]
@@ -324,7 +320,7 @@ class CombMixin:
             if _hem_on_water(p["poly"]):
                 continue  # standing water was here first - the crop stops at the bank
             pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in p["poly"])
-            self.add(f'<polygon points="{pts}" fill="{p["fill"]}" stroke="#A98C58" stroke-width="1.4" stroke-linejoin="round"/>', cls=p["crop"])  # each dry crop is its own class (feature 134)
+            self.add_paddy(f'<polygon points="{pts}" fill="{p["fill"]}" stroke="#A98C58" stroke-width="1.4" stroke-linejoin="round"/>', cls=p["crop"])  # each dry crop is its own class (feature 134)
             self._draw_furrows(p["poly"], p["furrow"], p["theta"], cls=p["crop"])
             # ...with its TRACT (269 B06), named by field so two fans' tracts never share a name: `dry_plot_furrows_vary` judges the
             # plots of one tract to share a row direction and the plots across a seam to differ.
@@ -375,7 +371,7 @@ class CombMixin:
             # and the color cannot disagree. The bund half is untouched: a blue plot's stroke is a bund
             # like every other, and hovering one still lights the whole fabric.
             plot_cls = "wet paddy" if p["fill"] == _WF_FLOODED else "paddy"
-            self.add(f'<polygon points="{pts}" fill="{p["fill"]}" stroke="{AZE}" stroke-width="{aze_w(self.ftpx):.2f}" stroke-linejoin="round"/>', cls=Split(plot_cls, "bund"))
+            self.add_paddy(f'<polygon points="{pts}" fill="{p["fill"]}" stroke="{AZE}" stroke-width="{aze_w(self.ftpx):.2f}" stroke-linejoin="round"/>', cls=Split(plot_cls, "bund"))
             # Record the LOW/WET plots (feature 010). This is the topographic ELIGIBILITY set the
             # plot-based land-use overlays draw from. It is written HERE, by the field pass, so that
             # `overlays_on_wet_ground_only` compares two INDEPENDENTLY-produced records rather than
@@ -440,7 +436,8 @@ class CombMixin:
 
         beads = "".join(f'<circle cx="{x}" cy="{y}" r="1.4" fill="{BEAN_GREEN}"/>' for x, y in net["bund_beans"])
         z = self.add(f'<g opacity="0.85">{beads}</g>', cls="bund beans")
-        _BEAD_SLOTS.setdefault(self, []).append((z, net["bund_bean_runs"], self.M["fields"][-1] if self.M.get("fields") else None, list(net.get("bead_ponds") or [])))
+        # THE SLOT IS KEPT ON THE SETTLEMENT (`_bead_slots`), so a re-roll's deep copy of it carries its beads' slots with it
+        self._bead_slots.append((z, net["bund_bean_runs"], self.M["fields"][-1] if self.M.get("fields") else None, list(net.get("bead_ponds") or [])))
 
     def settle_beads(self: Settlement) -> int:  # type: ignore[misc]
         """Drop every bead water recorded AFTER its field now lies under, from the ink and the record together; return
@@ -454,9 +451,12 @@ class CombMixin:
         from l7r.diagram.waterfields import BEAN_GREEN, bead_runs
 
         water = recorded_water(self.M)
+        # ...and every pond recorded by now: the tameike `stage_sink` digs below the field, a field pond laid after it
+        now = [(float(p[0]), float(p[1]), float(p[2]) + 3.0, float(p[3]) + 3.0) for p in [self.M.get("pond")] if p]
+        now += [(float(fp["x"]), float(fp["y"]), float(fp["rx"]) + 3.0, float(fp["ry"]) + 3.0) for fp in self.M.get("field_ponds") or []]
         dropped = 0
-        for k, (z, runs, rec, ponds) in enumerate(_BEAD_SLOTS.get(self, [])):
-            kept = [part for run in runs for part in bead_runs(run, lambda q, _p=ponds: not bead_drowned(q, water, _p))]
+        for k, (z, runs, rec, ponds) in enumerate(self._bead_slots):
+            kept = [part for run in runs for part in bead_runs(run, lambda q, _p=ponds + now: not bead_drowned(q, water, _p))]
             before, after = sum(len(r) for r in runs), sum(len(r) for r in kept)
             if after == before:
                 continue
@@ -465,7 +465,7 @@ class CombMixin:
             self.out[z] = '<g opacity="0.85">' + "".join(f'<circle cx="{x}" cy="{y}" r="1.4" fill="{BEAN_GREEN}"/>' for x, y in flat) + "</g>"
             if rec is not None:
                 rec["bund_beans"] = [[round(x, 1), round(y, 1)] for x, y in flat]
-            _BEAD_SLOTS[self][k] = (z, kept, rec, ponds)
+            self._bead_slots[k] = (z, kept, rec, ponds)
         return dropped
 
     def _comb_draw_source(self: Settlement, net: dict[str, Any], source: dict[str, Any], sluice: Any) -> Any:  # type: ignore[misc]

@@ -25,6 +25,7 @@ from ..consts import (
     Pt,
 )
 from ..plan import SitePlan
+from ..pondstock import reserve_sty_seat
 
 
 def reservoir_clear_of_crop(pond: tuple[float, float, float, float], envelope: Sequence[Pt]) -> bool:
@@ -547,6 +548,7 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.water.polder.waterward_flanks
         l7r.diagram.hamletgen.water.polder.dike_face
         l7r.diagram.settlement.Settlement.marsh
+        l7r.diagram.hamletgen.pondstock.reserve_sty_seat
     """
     if plan.field_archetype not in POLDER_ARCHETYPES or not s.M.get("dikes"):
         return
@@ -581,6 +583,10 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
     for q in flanks:
         s.marsh(strips[q], role="waterside")
     s.meta(waterward=flanks)
+    # ...AND THE STY'S SEAT, the other ground a dike-pond hamlet decides once the flank is known and before the houses stand
+    # (feature 287, water W50). A re-seat by `seat_every_household` keeps to this flank (`margin_ladder`), so neither the
+    # strips, their declaration nor this reservation has to be redrawn for it (`waterward_flanks` reads the flank alone).
+    reserve_sty_seat(s, plan)
 
 
 def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:
@@ -604,4 +610,8 @@ def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:
     # rests on - people cross where they LIVE - applies to whichever collector that is.
     if f["cluster"] == f["head"]:
         return {"feeder": 3, "drain": 0, "e_toe": 1, "w_toe": 1, "lateral": 1}
-    return {"feeder": 0, "drain": 3, "e_toe": 1, "w_toe": 1, "lateral": 1}
+    # ...EXCEPT THAT A DRAIN TAKES NO PLANK (feature 287, ways W14 and the WAYS law's `plank_on_supply`: a footplank stands on
+    # a supply ditch - research ways/030, archetypes/110). The village at the FOOT abuts the drain, which the law refuses a
+    # plank, so its crossings go on the supply ditches that reach it - the two toe collectors (role `lateral`) run down to
+    # the foot, two a side - and none is asked of the drain that `channel_footbridges` would refuse.
+    return {"feeder": 0, "drain": 0, "e_toe": 2, "w_toe": 2, "lateral": 1}

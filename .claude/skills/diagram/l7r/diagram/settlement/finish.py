@@ -663,6 +663,12 @@ class FinishMixin:
             self.out[z] = self.out[z] + "".join(mk for mx0, my0, mx1, my1, mk in marks if not (mx1 < x0 or mx0 > x1 or my1 < y0 or my0 > y1))
 
     def finish(self: Settlement, basepath: str, render: bool = True, png_width: int = 2600) -> int:  # type: ignore[misc]
+        # THE BEADS ARE SETTLED AFTER THE LAST WATER (feature 287, water W33): a field drops its drowned azemame over the
+        # water recorded when it is drawn, and the sink's drain run, a later field's ditches or a pond dug below it record
+        # more. Nothing records water after this line, so every bead ink slot is rewritten here from the runs that
+        # survive `bead_drowned` over the final registry - FIRST, while the slots still index `self.out` as they did when
+        # the beads were drawn (the flushes and splices below move them).
+        self.settle_beads()
         # BACKSTOP for the deferred canopy: crop_to_content / crop_city normally flush it, but a map
         # that frames to the bare canvas never calls either (Hoshizora), and a queued stand that is
         # never flushed is a wood with no trees. Idempotent, so the usual crop-time flush still wins.
@@ -798,8 +804,15 @@ class FinishMixin:
                         w["_sheen"] = w["clip"]["sheen_t"].format(dd=dd)
             for w in self.late_water:
                 w["_bed"], w["_sheen"] = w["bed"], w["sheen"]
-            wblock: list[Any] = []
-            wcls: list[ClsTag] = []
+            # THE PADDY LAYER GOES UNDER THE WATER, WHATEVER THE CALL ORDER (feature 287, water W38): a plot emitted through
+            # `add_paddy` after the water block's anchor - a field drawn after the first stream on a map with no late block,
+            # or after the last late call - would paint over every channel it lies across. It is lifted to the front of the
+            # water block (its own slot emptied, so no index moves), in its draw order, and so no channel can precede a plot.
+            lifted = [z for z in self._paddy_z if z > _widx]
+            wblock: list[Any] = [self.out[z] for z in lifted]
+            wcls: list[ClsTag] = [self.out_cls[z] for z in lifted]
+            for z in lifted:
+                self.out[z], self.out_cls[z] = "", None
             bedzs: list[Any] = []
             sheenzs: list[Any] = []
             for w in _entries:  # rims below every bed

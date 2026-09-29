@@ -132,3 +132,29 @@ def anchor_trunk_ends(channels: list[dict[str, Any]], envelope: Poly, W: float, 
             c["pts"][:] = pts  # IN PLACE: the builder holds the collector's list as `dpts` too, and both must see the clip
     for k in reversed(drop):
         del channels[k]
+
+
+STUB_MIN_RUN = 8.0
+"""The shortest canal piece drawn, px (feature 287, water W56's other half). Cutting the supply canals at the fork and at
+each offtake leaves a remainder wherever a cut lands near a piece's own end - Inashiro shipped a 3.2 ft stroke of `main`
+with its own hover region (settlement-review, feature 230 pass 12). The remainder was kept only because it held ground
+a garden then took; the bundle fit now keeps every garden bed off every ditch itself (`rolling/fit.py`, water W56)."""
+
+
+def drop_stub_pieces(pieces: list[dict[str, Any]], min_run: float = STUB_MIN_RUN) -> list[dict[str, Any]]:
+    """The canal `pieces` without the sub-stride remainders (`STUB_MIN_RUN`). A piece the canal runs on through - one whose
+    end is the next piece's start - gives its start to that next piece, so the canal stays joined at the fork; a piece at
+    the canal's far end is dropped, the canal ending at its last offtake. The survivors are returned as the same records,
+    in order (a successor's `pts` is replaced, never edited in place)."""
+    out = list(pieces)
+    k = 0
+    while k < len(out):
+        pts = out[k]["pts"]
+        if sum(math.dist(a, b) for a, b in zip(pts, pts[1:], strict=False)) >= min_run:
+            k += 1
+            continue
+        nxt = next((q for q in out if q is not out[k] and math.dist(q["pts"][0], pts[-1]) < 0.5), None)
+        if nxt is not None:
+            nxt["pts"] = [pts[0], *nxt["pts"][1:]] if math.dist(pts[0], nxt["pts"][0]) > 0.5 else nxt["pts"]
+        del out[k]
+    return out

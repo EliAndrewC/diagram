@@ -7,8 +7,10 @@ from __future__ import annotations
 
 import math
 from collections.abc import Sequence
+from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_closest
+from l7r.diagram.settlement.land.dikes import breaches_any_dike
 from l7r.diagram.settlement.land.wet import pond_fringe_ring
 from l7r.diagram.settlement.water_ways.water import DRAIN_HUE, DRAINAGE_DITCH
 from l7r.diagram.sitegen.geom import crosses_poly, unit
@@ -16,8 +18,13 @@ from l7r.diagram.waterfields import DRAIN_FT, chan_px
 
 from .consts import GRAIN, POND_SETBACK_LIMIT, REF_HOUSEHOLDS, Poly, Pt
 from .plan import SitePlan
-from .water.brook import finished_course, round_the_brooks
+from .water.brook import course_corner, finished_course, round_the_brooks
 from .water.brook_rules import BROOK_DRAWN_W, course_enters, crosses_mid_run, to_edge
+
+
+class SinkRefused(RuntimeError):
+    """The drain has no route the rules allow (feature 287, FR-005: refused by name, never drawn in breach)."""
+
 
 # ---- STAGE 3: where the runoff goes -------------------------------------------------------------
 
@@ -203,11 +210,13 @@ JUNCTION_TURN_MAX_DEG = 55.0
 #: bar, under the 65 degrees `drainage_junction_smooth` allowed, so the route the placer takes is not one the rule tolerates.
 
 
-def route_refusals(plan: SitePlan, out: Pt, heading: Pt, anchored: bool, route: Sequence[Pt], brook: Sequence[Pt]) -> list[str]:
+def route_refusals(plan: SitePlan, out: Pt, heading: Pt, anchored: bool, route: Sequence[Pt], brook: Sequence[Pt], dikes: Any = ()) -> list[str]:
     """Why the drain's continuation `route` (from the outfall `out`) may not be drawn - empty where it may. One predicate
     per term (feature 287, water:W10-W12): the junction turn (`JUNCTION_TURN_MAX_DEG`), the rice (an interior vertex in the
     field, or a leg through it - the first leg exempt where the outfall stands inside the field, as the gate trims it),
-    downhill (`runs_downhill`), the drainage bearing (under 90 degrees off `water_flow`) and the brook (`crosses_mid_run`)."""
+    downhill (`runs_downhill`), the drainage bearing (under 90 degrees off `water_flow`), the brook (`crosses_mid_run`) and
+    the dike (`breaches_any_dike` over the recorded `dikes`: a drain crosses a dike's crest only at one of its gaps, water
+    W42)."""
     lead = (route[1][0] - route[0][0], route[1][1] - route[0][1])
     ln = math.hypot(*lead) or 1.0
     turn = math.degrees(math.acos(max(-1.0, min(1.0, (heading[0] * lead[0] + heading[1] * lead[1]) / ln))))
@@ -219,6 +228,7 @@ def route_refusals(plan: SitePlan, out: Pt, heading: Pt, anchored: bool, route: 
         "uphill": not runs_downhill(route, plan.fall),
         "upstream": abs((bear - plan.water_flow + 180.0) % 360.0 - 180.0) >= 90.0,
         "brook": len(brook) >= 2 and crosses_mid_run(brook, route),
+        "dike": breaches_any_dike(list(route), dikes),
     }
     return [k for k, bad in checks.items() if bad]
 
@@ -343,6 +353,10 @@ def brook_join(plan: SitePlan, out: Pt, reach: float = 420.0, stride: float = 10
             if d > reach or (q[0] - out[0]) * dx + (q[1] - out[1]) * dy < BROOK_JOIN_DESCENT or not runs_downhill([out, q], plan.fall):
                 continue
             if _through_the_crop(plan, out, q):
+                continue
+            # ...AND NOT ON A CORNER OF THE BROOK (feature 287, labels L16): `round_the_brooks` holds the confluence as a vertex
+            # of the course, and a held corner is a mitred bend - the walk's first stride of every leg IS the corner.
+            if course_corner(q, plan.brook):
                 continue
             if best is None or d < best[0]:
                 best = (d, q)
@@ -485,9 +499,16 @@ def lay_sink(s: Settlement, plan: SitePlan) -> None:
         # THE BROOK FIRST. Where the field's own brook passes within reach of the outfall, the drain joins
         # it rather than running its own way off the map - what a village's drainage did (`brook_join`).
         join = brook_join(plan, out)
+        dikes = s.M.get("dikes") or []
+        mid_j = out
         if join is not None:
             bow = min(10.0, 0.08 * math.hypot(join[0] - out[0], join[1] - out[1]))  # dug earth, not a ruled connector; proportional keeps the turn obtuse at any length
             mid_j = ((out[0] + join[0]) / 2 - dy * bow, (out[1] + join[1]) / 2 + dx * bow)
+            # ...NEVER THROUGH A DIKE OFF ITS GAPS (feature 287, water W42): a confluence reached only across the crest is
+            # no confluence, and the drain takes the off-map route search below, which refuses the crest too
+            if breaches_any_dike([out, mid_j, join], dikes):
+                join = None
+        if join is not None:
             drain_run(s, [out, mid_j, join], "stream")
             plan.sink_brook = [out, mid_j, join]
             plan.confluence = join  # `stage_frame` reserves it: the junction is a feature, and the crop must show it
@@ -594,11 +615,16 @@ def lay_sink(s: Settlement, plan: SitePlan) -> None:
             # at least one of them, by construction - is gone. The downhill term is the channel rule itself (`runs_downhill`,
             # a fifth of the run down the fall, where "any descent" let a near-level ditch through) and the route may not
             # cross the brook mid-run (`crosses_mid_run`, water:W08).
-            if not route_refusals(plan, out, heading, anchored, [out, mid, end], brook):
+            if not route_refusals(plan, out, heading, anchored, [out, mid, end], brook, dikes):
                 drain_run(s, [out, mid, end], "offmap")
                 plan.sink_brook = [out, mid, end]
                 return
         route, to = hull_route(plan, out, heading, brook)
+        if breaches_any_dike(route, dikes):
+            # THE CONSTRUCTED ROUTE IS NOT DRAWN THROUGH A DIKE (feature 287, water W42). No map reaches this - a polder's field
+            # is named for the polder and has no `-paddies` collector, so the sink has no outfall where a dike stands - and a
+            # route that breaches is refused by name rather than drawn.
+            raise SinkRefused(f"{plan.spec.name}: the drain's constructed route crosses the dike away from its gaps")
         drain_run(s, route, to)
         plan.sink_brook = list(route)
         if to == "stream":
@@ -642,15 +668,21 @@ def lay_sink(s: Settlement, plan: SitePlan) -> None:
         stage_sink(s, plan)
         return
     pcx, pcy = clamped
-    s.pond(pcx, pcy, prx, pry)
-    plan.sink_pond = (pcx, pcy, prx, pry)
-    s.M["meta"]["pond_role"] = "drainage"
     # The drainage ditch, bowed slightly off the straight line so it reads as dug earth rather than
     # a ruled connector (the gate's `channel_winds_gently` wants the same thing). Drawn in the BASE
     # water block, not the late one: the pond's fill has to paint OVER the ditch's mouth where it
     # overshoots the rim, and a late stroke composites above the fill instead
     # (`pond_fill_covers_channel_mouths`).
     ditch = pond_run(out, drain_heading(s, name) or (dx, dy), (pcx, pcy), (dx, dy))
+    if breaches_any_dike(ditch, s.M.get("dikes") or []):
+        # ...and a pond reached only across a dike's crest off its gaps is no pond for this field (feature 287, water W42):
+        # the field drains off the frame, whose routes refuse the crest, as for a pond the canvas cannot hold
+        plan.water_sink = "offmap"
+        lay_sink(s, plan)
+        return
+    s.pond(pcx, pcy, prx, pry)
+    plan.sink_pond = (pcx, pcy, prx, pry)
+    s.M["meta"]["pond_role"] = "drainage"
     # WIDTH IS THE DRAIN'S OWN, NOT A LITERAL. This is the collector's last few strides into the
     # tameike, so it carries everything the collector carries - and it used to be drawn at a flat
     # 2.5 px whatever the drain arrived at. Harmless while the net was 5-6x oversize (12.0 -> 2.5

@@ -135,6 +135,25 @@ def course_breaches(course: Poly, crest: Poly, gaps: Poly, reach: float = CREST_
     return out
 
 
+def breaches_any_dike(course: Poly, dikes: Any, step: float = 1.0) -> bool:
+    """Does `course` breach the crest of any recorded dike (`M["dikes"]`, each with its `crest` and `gaps`) away from its
+    gaps? `course_breaches` - the one predicate - asked over the course walked at `step`, so a long leg that crosses the
+    crest far from its own midpoint is seen, and half a foot stricter on both reaches than the rule, since the record
+    rounds to 0.1 px (feature 287, water W42's second half: a channel router drawing after the dike asks this and refuses
+    the course)."""
+    pts = [(float(p[0]), float(p[1])) for p in course]
+    dense: Poly = pts[:1]
+    for a, b in zip(pts, pts[1:], strict=False):
+        n = max(1, math.ceil(math.dist(a, b) / step))
+        dense += [(a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n) for i in range(1, n + 1)]
+    for dk in dikes or ():
+        crest = [(float(p[0]), float(p[1])) for p in dk.get("crest") or ()]
+        gaps = [(float(g[0]), float(g[1])) for g in dk.get("gaps") or ()]
+        if crest and course_breaches(dense, crest, gaps, CREST_REACH + 0.5, GAP_REACH - 0.5):
+            return True
+    return False
+
+
 if TYPE_CHECKING:
     from ..core import Settlement
 

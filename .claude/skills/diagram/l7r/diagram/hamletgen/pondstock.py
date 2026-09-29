@@ -20,6 +20,7 @@ import math
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, knob_rng
+from l7r.diagram.settlement.farm_fixtures import STY_FT
 
 from .consts import Pt
 from .plan import SitePlan
@@ -73,6 +74,36 @@ def sty_on_near_half(seat: Pt, parcel: list[Any], hc: Pt, margin: float = 0.0) -
     return math.dist(seat, hc) + margin <= math.dist(_centroid(parcel), hc)
 
 
+STY_RESERVE_REACH_FT = (
+    24.0  # the largest footprint's half-diagonal a reserved sty seat is held clear of - a farmhouse of about 40 x 28 ft; a GUESS at the envelope, not a researched figure (feature 287, water W50)
+)
+
+
+def reserve_sty_seat(s: Settlement, plan: SitePlan) -> tuple[Pt, float, int] | None:
+    """THE STY'S SEAT, RESERVED BEFORE THE HOUSES (feature 287, water W50): a dike-pond hamlet keeps at least one sty, and the
+    homesteads seated before `stage_pond_stock` could take every near bank seat. Once `stage_seat` has decided the flank,
+    the grow-out pond nearest the seat's center gives its nearest bank seat on the near half (`sty_on_near_half`) that
+    clears the sluices (`pond_fixture_fits`), and a disc about it - the sty's own reach plus the largest footprint's
+    half-diagonal (`STY_RESERVE_REACH_FT`) - goes into `block_polys`, which every homestead placer refuses. Recorded on
+    the settlement for `stage_pond_stock`; returns (seat, rotation, pond) or None where the hamlet keeps no ponds."""
+    ponds = s.M.get("dikeponds") or []
+    if plan.field_archetype != "mulberry_dike_fishpond" or not ponds or not plan.seat:
+        return None
+    toward = (float(plan.seat["cx"]), float(plan.seat["cy"]))
+    order = sorted((i for i, p in enumerate(ponds) if p.get("kind") != "fry"), key=lambda i: math.dist(_centroid(ponds[i]["parcel"]), toward))
+    for i in order:
+        par = ponds[i]["parcel"]
+        seat = next((((x, y), rot) for (x, y), rot in _bank_seats(par, toward) if sty_on_near_half((x, y), par, toward, 0.5) and s.pond_fixture_fits(x, y, rot)), None)
+        if seat is None:
+            continue
+        (x, y), rot = seat
+        reach = math.hypot(s.px(STY_FT[0]), s.px(STY_FT[1])) / 2 + s.px(2.0) + s.px(STY_RESERVE_REACH_FT)
+        s.block_polys.append([(x + reach * math.cos(math.tau * k / 16), y + reach * math.sin(math.tau * k / 16)) for k in range(16)])
+        s.__dict__["_sty_seat"] = ((x, y), rot, i)
+        return (x, y), rot, i
+    return None
+
+
 def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
     """Pig sties on the ponds.
 
@@ -102,6 +133,15 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
     # grow-out ponds only, nearest the houses first; each pond takes at most one sty
     order = sorted((i for i, p in enumerate(ponds) if p.get("kind") != "fry"), key=lambda i: math.dist(_centroid(ponds[i]["parcel"]), hc))
     done = 0
+    # THE RESERVED SEAT FIRST (water W50, `reserve_sty_seat`): held clear of the homesteads, and taken wherever it stands on
+    # the near half of its pond for the houses as seated; else the walk below, which it only ever adds to
+    reserved = s.__dict__.get("_sty_seat")
+    if reserved is not None:
+        (rx, ry), rrot, ri = reserved
+        if sty_on_near_half((rx, ry), ponds[ri]["parcel"], hc, 0.5) and s.pond_fixture_fits(rx, ry, rrot):
+            s.pig_sty(rx, ry, rot=rrot, pond=ri)
+            done += 1
+            order = [i for i in order if i != ri]
     for i in order:
         if done >= n_sty:
             break

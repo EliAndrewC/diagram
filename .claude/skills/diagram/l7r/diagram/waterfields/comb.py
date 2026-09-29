@@ -40,7 +40,7 @@ from .furrows import STEEP_SPREAD_RAD, settle_tract_seams
 from .ring_rules import simple_outline
 from .seams import close_seams
 from .seams.pockets import _outside_command, _water
-from .trunks import DRAIN_MIN_LEG, anchor_trunk_ends
+from .trunks import DRAIN_MIN_LEG, anchor_trunk_ends, drop_stub_pieces
 
 _SHAPELY_LOADED = False
 
@@ -162,20 +162,12 @@ def carve_comb(
 
     drain_bank = _drain_bank(F, dpts, grain)  # the ditch's own edge, the one line the field may not cross
     _comb_clip_and_cap(R, F, threads, dpts, drain_bank)
+    _n0 = len(channels)
     _comb_canal_pieces(F, threads, bc, a_pts, offtakes_a, fork, grain, channels)
-    # A PIECE TOO SHORT TO BE A CHANNEL, AND WHY IT STAYS (settlement-review, feature 230 pass 12). Cutting the canals
-    # at the fork and at each offtake leaves a remainder wherever a cut lands near a piece's own end: Inashiro draws a
-    # 3.2 ft stroke of "main" with its own hover region and Mizuguchi a 21.9 ft one that stops under a blunt cap on
-    # the bare hem. Dropping them here - `channels[:] = [c for c in channels if run_length(dedup(c["pts"])) >= 8.0]` -
-    # is one line and was MEASURED, and it is not taken: the channel list feeds the no-build corridors, so removing a
-    # stub frees ground, the homestead packing takes it, and the reference hamlet came back with a garden seated ON a
-    # branch ditch at (2593, 1724) - `features_do_not_overlap`, a real defect in place of a cosmetic one.
-    # What that exposes is the actual bug, and it is a PLACER change rather than a channel one: a garden is tested
-    # against the ditch stretches that run OUTSIDE the field envelope (`hamletgen/water/comb.py` reserves those as
-    # corridors) and against nothing inside it, so any seat freed near an in-field branch is available to it. The fix
-    # is to give the homestead bundle the same in-field channel keep-out the houses already get, which moves every
-    # map's packing and belongs to a feature that can re-review all five. Recorded here so the cheap lever is not
-    # pulled again without the expensive half.
+    # A PIECE TOO SHORT TO BE A CHANNEL IS DROPPED (feature 287, water W56): the remainder a canal cut leaves near a piece's
+    # own end was kept only for the ground it held against a garden, which the bundle fit now keeps off every ditch itself.
+    _kept = {id(c) for c in drop_stub_pieces([c for c in channels[_n0:] if c["role"] == "main"])}
+    channels[_n0:] = [c for c in channels[_n0:] if c["role"] != "main" or id(c) in _kept]
     # SWEEP THE BENDS BEFORE ANYTHING CLEARS GROUND AGAINST THEM (2026-08-17). This used to run
     # after `_carve`, which meant the carve hemmed its bunds onto UN-SWEPT channel centerlines and
     # the sweep then moved the drawn water sideways underneath them - so a bund the carve had

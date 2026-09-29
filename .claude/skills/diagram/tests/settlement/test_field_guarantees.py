@@ -210,3 +210,44 @@ def test_the_drain_outfall_run_is_drawn_over_every_plot() -> None:
     assert s.M["drawn_channels"] and all(r["late"] for r in s.M["drawn_channels"])
     plots = [i for i, e in enumerate(s.out) if e.startswith("<polygon") and "stroke-linejoin" in e]
     assert plots and s._late_water_idx is not None and s._late_water_idx > max(plots)
+
+
+def test_finish_settles_every_bead_the_last_water_drowned_and_a_reroll_copy_keeps_its_slots(tmp_path) -> None:
+    """W33, the ordering half: `finish` settles the beads first, after every water writer - so a drain recorded across a
+    bund after the field (the sink's run) leaves no emitted bead within half its stroke, in the SVG and the manifest alike.
+    The slots ride on the settlement, so a re-roll's deep copy settles its own."""
+    import re
+
+    from l7r.diagram.settlement.fields.comb import bead_drowned, recorded_water
+
+    net = _comb()
+    net["brook"] = []
+    s = Settlement(W=1400, H=1400, seed=5)
+    s.meta(name="Bf", scale="hamlet", ftpx=1, down_deg=90)
+    s.draw_comb_field(net, "f1", {"kind": "stream"})
+    bx, by = s.M["fields"][-1]["bund_beans"][len(s.M["fields"][-1]["bund_beans"]) // 2]
+    s = copy.deepcopy(s)
+    s.M["channels"].append({"poly": [[bx - 40.0, by], [bx + 40.0, by]], "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": 6.0})
+    s.M["pond"] = [bx + 200.0, by + 200.0, 30.0, 20.0]
+    s.finish(str(tmp_path / "b"), render=False)
+    svg = (tmp_path / "b.svg").read_text()
+    water = recorded_water(s.M)
+    ponds = [(bx + 200.0, by + 200.0, 30.0, 20.0)]
+    drawn = [(float(x), float(y)) for x, y in re.findall(r'<circle cx="([-\d.]+)" cy="([-\d.]+)" r="1.4"', svg)]
+    assert drawn and not [q for q in drawn if bead_drowned(q, water, ponds)]
+    assert not [b for b in s.M["fields"][-1]["bund_beans"] if bead_drowned((b[0], b[1]), water, ponds)]
+
+
+def test_a_plot_drawn_after_the_water_is_painted_under_every_channel(tmp_path) -> None:
+    """W38: a settlement that draws a channel and THEN a plot - the stage order that buried a village's ditches - emits the
+    plot before the channel, because every plot goes through the paddy layer (`add_paddy`) and `finish` lifts one drawn
+    after the water block's anchor to the block's front."""
+    s = Settlement(W=600, H=600, seed=1)
+    s.meta(name="Pl", scale="hamlet", ftpx=1, down_deg=90)
+    s.field_channel([(100.0, 300.0), (500.0, 300.0)], "#6C9CBE", 3.0, 3.0)
+    s.add_paddy('<polygon points="80,250 520,250 520,350 80,350" fill="#A6C398" stroke="#8FA87A" stroke-width="2"/>', cls="paddy")
+    s.add_paddy('<polygon points="0,0 10,0 10,10" fill="#A6C398"/>', cls="paddy")
+    s.finish(str(tmp_path / "p"), render=False)
+    svg = (tmp_path / "p.svg").read_text()
+    assert 0 <= svg.index("<polygon points=\"80,250") < svg.index('stroke="#6C9CBE"'), "the plot is painted before the channel"
+    assert svg.index('<polygon points="0,0') < svg.index('stroke="#6C9CBE"')

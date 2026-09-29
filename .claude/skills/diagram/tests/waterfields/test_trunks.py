@@ -133,3 +133,20 @@ def test_a_fan_envelope_folded_by_the_floor_trim_still_has_its_ground() -> None:
     assert simple_outline([(0.0, 0.0), (1.0, 1.0), (2.0, 2.0), (0.5, 0.5)]) == [(0.0, 0.0), (1.0, 1.0), (2.0, 2.0), (0.5, 0.5)], "no ground to keep"
     bowtie = simple_outline([(0.0, 0.0), (10.0, 10.0), (10.0, 0.0), (0.0, 10.0)])
     assert Polygon(bowtie).is_valid and Polygon(bowtie).area == 25.0, "a bow-tie keeps its larger lobe"
+
+
+def test_a_sub_stride_canal_piece_is_dropped_and_the_canal_stays_joined() -> None:
+    """water W56's other half: a canal cut leaves a remainder near a piece's own end. A remainder the canal runs on through
+    hands its start to the next piece, so the canal still leaves the fork; one at the canal's far end is dropped."""
+    from l7r.diagram.waterfields.trunks import STUB_MIN_RUN, drop_stub_pieces
+
+    head = {"pts": [(0.0, 0.0), (3.0, 0.0)], "w": 6.0, "role": "main"}
+    body = {"pts": [(3.0, 0.0), (200.0, 0.0)], "w": 5.0, "role": "main"}
+    tail = {"pts": [(200.0, 0.0), (203.0, 0.0)], "w": 2.0, "role": "main"}
+    lone = {"pts": [(500.0, 0.0), (504.0, 0.0)], "w": 2.0, "role": "main"}
+    kept = drop_stub_pieces([head, body, tail, lone])
+    assert kept == [body] and body["pts"][0] == (0.0, 0.0), "the head's start is handed on; the far-end remainder goes"
+    assert all(sum(abs(b[0] - a[0]) + abs(b[1] - a[1]) for a, b in zip(p["pts"], p["pts"][1:], strict=False)) >= STUB_MIN_RUN for p in kept)
+    speck = {"pts": [(0.0, 0.0), (0.3, 0.0)], "w": 6.0, "role": "main"}
+    nxt = {"pts": [(0.3, 0.0), (90.0, 0.0)], "w": 5.0, "role": "main"}
+    assert drop_stub_pieces([speck, nxt]) == [nxt] and nxt["pts"][0] == (0.3, 0.0), "a speck at the successor's own start moves nothing"

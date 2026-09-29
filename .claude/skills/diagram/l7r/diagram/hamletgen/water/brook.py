@@ -11,7 +11,7 @@ import random
 import re
 from collections.abc import Callable, Sequence
 
-from l7r.diagram.settlement import Settlement, knob_rng, point_in_poly
+from l7r.diagram.settlement import Settlement, knob_rng, point_in_poly, seg_dist
 from l7r.diagram.settlement._geom import fillet_polyline
 from l7r.diagram.settlement._knobs import Knob, register_knob
 from l7r.diagram.sitegen.geom import crosses_poly, unit
@@ -183,6 +183,59 @@ def finished_course(course: Sequence[Pt], w: float, taps: Sequence[Pt] = ()) -> 
     return out
 
 
+JOIN_ON_COURSE = 1.0  # px: a declared channel end this near a brook's course lies ON it - the hold's own reach in `finished_course`
+FILLET_MIN_TURN_DEG = 8.0  # `fillet_polyline`'s own threshold: a vertex turning less is left as it is, so holding it rounds nothing less
+
+
+def course_corner(q: Pt, course: Sequence[Pt], tol: float = JOIN_ON_COURSE) -> bool:
+    """Does `q` stand on a CORNER of `course` - within `tol` of an interior vertex the rounding bends (feature 287, labels
+    L16)? Holding such a vertex would leave the bend mitred, which the brook's rounding exists to forbid, so the drain's
+    confluence is not placed on one (`sink.brook_join`) and `join_vertices` does not hold one."""
+    pts = [(float(x), float(y)) for x, y in course]
+    for k in range(1, len(pts) - 1):
+        if math.dist(pts[k], q) > tol:
+            continue
+        v0 = (pts[k - 1][0] - pts[k][0], pts[k - 1][1] - pts[k][1])
+        v1 = (pts[k + 1][0] - pts[k][0], pts[k + 1][1] - pts[k][1])
+        l0, l1 = math.hypot(*v0), math.hypot(*v1)
+        if l0 < 1e-6 or l1 < 1e-6:
+            continue
+        cosang = max(-1.0, min(1.0, (v0[0] * v1[0] + v0[1] * v1[1]) / (l0 * l1)))
+        if 180.0 - math.degrees(math.acos(cosang)) >= FILLET_MIN_TURN_DEG:
+            return True
+    return False
+
+
+def join_vertices(course: Sequence[Pt], ends: Sequence[Pt], hold_corners: bool = True, tol: float = JOIN_ON_COURSE) -> tuple[Poly, list[Pt]]:
+    """`course` with every channel end in `ends` that lies ON it (within `tol`) made a vertex, and the ends to hold there
+    (feature 287, labels L16). A confluence mid-segment - the drain's `brook_join` walks the brook at a stride - is not a
+    vertex, so `finished_course` could not hold it and the fillet of a nearby bend moved the course off the mouth; it is
+    inserted, and held. An end on a CORNER is held only where `hold_corners` says (the head race's tap, whose run is a
+    deliberate line); a confluence there is left to the rounding, which moves the course at most half its cut-back off
+    the corner - `0.5 * BROOK_BEND_WIDTHS * w * cos(half the angle)`, 8.75 px on the 7 px brook - under the rule's 13."""
+    pts = [(float(x), float(y)) for x, y in course]
+    held: list[Pt] = []
+    for e in ends:
+        q = (float(e[0]), float(e[1]))
+        if len(pts) < 2:
+            break
+        best = min(range(len(pts) - 1), key=lambda k: seg_dist(q[0], q[1], pts[k], pts[k + 1]))
+        if seg_dist(q[0], q[1], pts[best], pts[best + 1]) > tol:
+            continue
+        near = min(range(len(pts)), key=lambda k: math.dist(pts[k], q))
+        if math.dist(pts[near], q) <= tol:
+            if hold_corners or not course_corner(pts[near], pts, tol=1e-9):
+                held.append(pts[near])
+            continue
+        a, b = pts[best], pts[best + 1]
+        ab = (b[0] - a[0], b[1] - a[1])
+        t = ((q[0] - a[0]) * ab[0] + (q[1] - a[1]) * ab[1]) / ((ab[0] ** 2 + ab[1] ** 2) or 1.0)
+        on = (a[0] + ab[0] * t, a[1] + ab[1] * t)
+        pts.insert(best + 1, on)
+        held.append(on)
+    return pts, held
+
+
 def round_the_brooks(s: Settlement) -> None:
     """Every brook drawn at its `finished_course`, THE FINAL WATER BEFORE ANYTHING READS IT (feature 287, M2).
 
@@ -193,13 +246,21 @@ def round_the_brooks(s: Settlement) -> None:
     (`ways.checks.stream_segs` reads its `stations`; the fords and the crossing band read `plan.brook`), for the reason
     `Settlement.round_stream` records: rounding the brook before the ways were routed moved every way its corners had
     shaped. The tap - the first point of every head race taken off a stream - is held. Rounded from the `stations` when
-    they are recorded, so a second pass draws the same course rather than rounding the rounded one."""
-    heads = [(float(c["poly"][0][0]), float(c["poly"][0][1])) for c in s.M.get("channels") or [] if (c.get("frm") or {}).get("kind") == "stream" and c.get("poly")]
+    they are recorded, so a second pass draws the same course rather than rounding the rounded one.
+
+    ...AND EVERY CONFLUENCE IS HELD TOO (feature 287, labels L16): a channel that declares a stream at its far end (the
+    drain's `brook_join`, the constructed route's meeting) has that end made a vertex of the course and held
+    (`join_vertices`), so the rounding cannot draw the brook away from the mouth the record says joins it."""
+    chans = [c for c in s.M.get("channels") or [] if len(c.get("poly") or ()) >= 2]
+    heads = [(float(c["poly"][0][0]), float(c["poly"][0][1])) for c in chans if (c.get("frm") or {}).get("kind") == "stream"]
+    joins = [(float(c["poly"][-1][0]), float(c["poly"][-1][1])) for c in chans if (c.get("to") or {}).get("kind") == "stream"]
     for rec in s.M.get("streams") or []:
         course = rec.get("stations") or rec.get("poly") or []
         if len(course) < 3:
             continue
-        s.round_stream(rec, finished_course(course, float(rec.get("w") or 7.0), heads))
+        course, held = join_vertices(course, heads)
+        course, held_j = join_vertices(course, joins, hold_corners=False)
+        s.round_stream(rec, finished_course(course, float(rec.get("w") or 7.0), held + held_j))
 
 
 def _off_the_axes(course: Poly, away: Pt, eps: float = 1.6, nudge: float = 11.0, hold: int = 0) -> Poly:

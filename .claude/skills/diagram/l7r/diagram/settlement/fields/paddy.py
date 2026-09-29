@@ -180,13 +180,13 @@ class PaddyMixin:
                     fill, flooded = random.choice(RIPE_SHADES), False
                 else:
                     fill, flooded = random.choice(PADDY_SHADES), False
-                self.add(f'<polygon points="{pts}" fill="{fill}" stroke="{AZE}" stroke-width="{bund:.1f}" stroke-linejoin="round"/>')
+                self.add_paddy(f'<polygon points="{pts}" fill="{fill}" stroke="{AZE}" stroke-width="{bund:.1f}" stroke-linejoin="round"/>')
                 self._paddy_surface(poly, pts, flooded)
                 if not flooded and point_in_poly(cx, cy, smoothed):
                     rice.append(poly)
             else:
                 fill = 'url(#drycrop)' if crop == 'dry' else '#9CB36A'
-                self.add(f'<polygon points="{pts}" fill="{fill}" stroke="{AZE}" stroke-width="{bund:.1f}" stroke-linejoin="round"/>')
+                self.add_paddy(f'<polygon points="{pts}" fill="{fill}" stroke="{AZE}" stroke-width="{bund:.1f}" stroke-linejoin="round"/>')
                 self._rows(poly, pts, crop)  # dryland crops ARE ridge/row-cultivated
             if point_in_poly(cx, cy, smoothed):
                 interior.append((poly, cx, cy))
@@ -371,7 +371,7 @@ class PaddyMixin:
         from l7r.diagram.waterfields import AZE
 
         pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in poly)
-        self.add(f'<polygon points="{pts}" fill="{REST_GRASS}" stroke="{AZE}" stroke-width="{bund:.2f}" stroke-linejoin="round"/>', cls=Split("fallow", "bund"))
+        self.add_paddy(f'<polygon points="{pts}" fill="{REST_GRASS}" stroke="{AZE}" stroke-width="{bund:.2f}" stroke-linejoin="round"/>', cls=Split("fallow", "bund"))
         cx, cy = sum(p[0] for p in poly) / len(poly), sum(p[1] for p in poly) / len(poly)
         rng = random.Random(int(abs(cx) * 7 + abs(cy) * 13))  # positional: the tufts are decoration and move nothing else
         xs, ys = [p[0] for p in poly], [p[1] for p in poly]
@@ -469,7 +469,7 @@ class PaddyMixin:
                 if un_irrig or edgef + random.uniform(-0.08, 0.08) > 0.6:
                     crop = 'dry' if random.random() < 0.62 else 'soy'
                     fill = 'url(#drycrop)' if crop == 'dry' else '#9CB36A'
-                    self.add(f'<polygon points="{pts}" fill="{fill}" stroke="{AZE}" stroke-width="{bund:.1f}" stroke-linejoin="round"/>')
+                    self.add_paddy(f'<polygon points="{pts}" fill="{fill}" stroke="{AZE}" stroke-width="{bund:.1f}" stroke-linejoin="round"/>')
                     self._rows(quad, pts, crop)
                     ndry += 1
                 else:
@@ -481,7 +481,7 @@ class PaddyMixin:
                         fill, flooded = random.choice(RIPE_SHADES), False
                     else:
                         fill, flooded = random.choice(RICE_GREENS), False
-                    self.add(f'<polygon points="{pts}" fill="{fill}" stroke="{AZE}" stroke-width="{bund:.1f}" stroke-linejoin="round"/>')
+                    self.add_paddy(f'<polygon points="{pts}" fill="{fill}" stroke="{AZE}" stroke-width="{bund:.1f}" stroke-linejoin="round"/>')
                     self._paddy_surface(quad, pts, flooded)
                     nrice += 1
                 if point_in_poly(cx, cy, smoothed):
