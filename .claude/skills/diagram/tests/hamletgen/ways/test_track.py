@@ -200,3 +200,46 @@ def test_a_connector_through_a_building_or_over_the_brook_twice_takes_the_dry_ex
     s.M["streams"] = []
     s.M["houses"].append({"x": -445.0, "y": 10.0, "w": 40.0, "h": 28.0})
     assert track.connector_through(s, plan, run, [], [], [], []) == dry
+
+
+def test_the_gateway_stands_past_every_corridor_on_the_strip_and_on_it_clear_of_the_field() -> None:
+    """Feature 287 wave 6: the web draws the exit strip as a tree lane from its innermost attachment to the connector's start
+    (`tree.strip_run`), so the connector starts ON the strip - along the strip's own bearing where it was turned off the
+    seat's outward one - no nearer the center than the farthest corridor hanging from it, and walked out along the strip
+    until the field's envelope leaves it clear (`gate_on_the_strip`)."""
+    from l7r.diagram.hamletgen.ways import track
+    from l7r.diagram.settlement import Settlement, seg_dist
+
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="G", scale="hamlet", ftpx=1, down_deg=90)
+    seat = {"cx": 500.0, "cy": 500.0, "along": (1.0, 0.0), "out": (0.0, 1.0), "half": 200.0, "depth": 80.0}
+    s.M["houses"] += [{"x": 560.0, "y": 520.0, "w": 50.0, "h": 30.0}]
+    s.M["access_exit"] = [[500.0, 500.0], [900.0, 900.0]]  # turned 45 degrees off the seat's outward bearing
+    s.M["access_corridors"] = [{"pts": [[600.0, 700.0], [650.0, 650.0]], "of": [620.0, 720.0]}, {"pts": [[1.0, 1.0]]}]
+    g = track._cluster_gateway(s, seat, (0.0, 0.0))
+    assert seg_dist(g[0], g[1], (500.0, 500.0), (900.0, 900.0)) < 1e-6 and g[0] > 650.0, "on the strip, past the corridor at (650, 650)"
+    field = [(650.0, 650.0), (760.0, 650.0), (760.0, 760.0), (650.0, 760.0)]
+    on = track.gate_on_the_strip(s, field, (700.0, 703.0))
+    assert on == track.push_out_of(field, on, track.SPUR_SETBACK) and abs(on[0] - on[1]) < 1e-9 and on[0] > 760.0, "walked out along it"
+    assert track.gate_on_the_strip(s, [(0.0, 0.0), (1000.0, 0.0), (1000.0, 1000.0), (0.0, 1000.0)], (600.0, 600.0)) == (900.0, 900.0), "to its end at most"
+    del s.M["access_exit"]
+    assert track.gate_on_the_strip(s, field, (700.0, 703.0)) == track.push_out_of(field, (700.0, 703.0), track.SPUR_SETBACK)
+
+
+def test_a_connector_start_a_few_feet_off_the_strip_is_set_back_on_it_and_one_folding_on_it_is_refused() -> None:
+    """The threading can move the connector's start a few feet off the strip (cohort seed 37: 8 ft), and the strip drawn up
+    to it ended in a hook: `on_the_strip` sets it back on its foot where the connector still keeps the law. And a connector
+    leaving the strip turned back on it is refused (`folds_on_the_strip`): the fold at the two tree lanes' joint no repair
+    could mend."""
+    from l7r.diagram.hamletgen.ways import track
+
+    M = {"meta": {"ftpx": 1.0}, "access_exit": [[0.0, 0.0], [400.0, 0.0]]}
+    assert track.on_the_strip(M, [(300.0, 8.0), (300.0, 900.0)]) == [(300.0, 0.0), (300.0, 900.0)]
+    assert track.on_the_strip(M, [(300.0, 30.0), (300.0, 900.0)]) == [(300.0, 30.0), (300.0, 900.0)], "too far off: as it came"
+    assert track.on_the_strip(M, [(300.0, 0.0), (300.0, 900.0)]) == [(300.0, 0.0), (300.0, 900.0)]
+    assert track.on_the_strip({"meta": {}}, [(1.0, 1.0), (2.0, 2.0)]) == [(1.0, 1.0), (2.0, 2.0)]
+    assert track.on_the_strip(M, [(300.0, 5.0), (0.0, 5.0), (-10.0, -500.0)]) == [(300.0, 5.0), (0.0, 5.0), (-10.0, -500.0)], "moved it would fold"
+    assert track.folds_on_the_strip(M, [(400.0, 0.0), (10.0, 5.0)]) and not track.folds_on_the_strip(M, [(400.0, 0.0), (900.0, 50.0)])
+    assert not track.folds_on_the_strip(M, [(400.0, 50.0), (0.0, 50.0)]), "off the strip"
+    assert not track.folds_on_the_strip(M, [(400.0, 0.0), (400.0, 0.0)]) and not track.folds_on_the_strip({}, [(0.0, 0.0), (1.0, 1.0)])
+    assert not track.connector_keeps_the_law(M, [(400.0, 0.0), (10.0, 5.0)])

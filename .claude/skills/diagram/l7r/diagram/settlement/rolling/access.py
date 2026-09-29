@@ -393,8 +393,86 @@ def access_corridor(s: Settlement, geom: Any) -> tuple[Pt, ...] | None:
         # the leg onto the tree passes unasked where it has no length, as the search passed it; every other leg is asked
         last = len(corridor) - 2
         if all((n == last and math.dist(a, b) < 1e-6) or (fixtures_clear(s, a, b, geom) and parts_clear(s, a, b, geom)) for n, (a, b) in enumerate(legs(corridor))):
-            return corridor
+            # ...AS IT WILL BE DRAWN - from where it leaves its own threshing yard (`drawn_corridor`) - AND ONLY WHERE THE WHOLE
+            # TREE STAYS LAWFUL WITH IT (feature 287 wave 6, ways W01): every joint among the tree's lanes is known here, so a
+            # corridor the tree cannot take lawfully is refused now and the next tried, never found at the web's draw
+            drawn = drawn_corridor(s, corridor, geom)
+            if tree_admits(s, drawn, geom):
+                return drawn
         k += 1
+
+
+def yard_quad(geom: Any) -> list[Pt] | None:
+    """A homestead's threshing yard as the overlap matrix will read it: its rect turned with its house (`_attach_yard` draws
+    it at the house's rake about its own center, `registry.element_extents` reads the record's turned rect), or None for a
+    bundle with no yard."""
+    yard = geom.get("yard")
+    if yard is None:
+        return None
+    x, y, w, h = (float(v) for v in yard)
+    th = math.radians(float(geom.get("turn") or 0.0))
+    c, sn = math.cos(th), math.sin(th)
+    return [(x + dx * c - dy * sn, y + dx * sn + dy * c) for dx, dy in ((-w / 2, -h / 2), (w / 2, -h / 2), (w / 2, h / 2), (-w / 2, h / 2))]
+
+
+#: How far past its own threshing yard's edge, beyond the tread's half-width, a corridor's drawn door end stands
+#: (`past_the_yard`): the overlap matrix asks a tread `PLACER_MARGIN_PX` (0.2) wider than drawn and the record rounds to 0.1,
+#: so a foot is room for both. A map drawing convention.
+YARD_EXIT_PAD_FT = 1.0
+
+
+def past_the_yard(run: Any, yard: Any, half: float) -> list[Pt] | None:
+    """`run` from where its tread (`half` wide either side) leaves the threshing yard `yard` (its quad) for good: the arc past
+    the last point within `half` and `YARD_EXIT_PAD_FT` of the yard. The overlap matrix forbids a way on a yard, its own
+    household's too (a path arrives at its dooryard and does not cross it), and the door stands in the yard's middle
+    (`doors_of`) - an 81-mat yard 76 x 53 ft left every door end the web once trimmed to 40 ft still on it (cohort seed 39
+    under feature 284's probes). The corridor leaves its yard once (`leaves_its_yard`), so the run past it is the reserved
+    ground. None where the run never comes that near the yard or ends on it."""
+    from shapely.geometry import LineString, Point, Polygon
+
+    pts = [(float(q[0]), float(q[1])) for q in run]
+    line = LineString(pts)
+    inside = line.intersection(Polygon([(float(q[0]), float(q[1])) for q in yard]).buffer(half + YARD_EXIT_PAD_FT))
+    if inside.is_empty:
+        return None
+    s0 = max(line.project(Point(c)) for g in getattr(inside, "geoms", [inside]) for c in g.coords)
+    if s0 >= line.length - 1.0:
+        return None
+    out: list[Pt] = []
+    acc = 0.0
+    for a, b in zip(pts, pts[1:], strict=False):
+        d = math.dist(a, b)
+        if acc + d > s0 and d > 0:
+            if not out:
+                t = max(0.0, (s0 - acc) / d)
+                out.append((a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t))
+            out.append(b)
+        acc += d
+    return out
+
+
+def drawn_corridor(s: Settlement, corridor: tuple[Pt, ...], geom: Any) -> tuple[Pt, ...]:
+    """The corridor as the web will draw it: from where it leaves the homestead's own threshing yard (`past_the_yard`, at
+    the tread's half-width), else as found. What the seating reserves and records, so the tree the web draws is the tree the
+    seating judged."""
+    yard = yard_quad(geom)
+    past = past_the_yard(corridor, yard, s.px(TREAD_HALF_FT)) if yard is not None else None
+    return tuple(past) if past is not None and len(past) >= 2 else corridor
+
+
+def tree_admits(s: Settlement, corridor: tuple[Pt, ...], geom: Any) -> bool:
+    """Would the access tree, drawn as lanes with this corridor added, keep the whole lane law among its lanes? THE WAYS' OWN
+    PREDICATE (`hamletgen/ways/tree.py:tree_admits`), installed on the settlement by the hamlet's seating as `_corridor_tree`
+    - the settlement package cannot import the hamlet generator. Remembered per corridor while nothing standing changes.
+    With none installed (a village roll) every corridor is admitted, as the ground test is."""
+    judge = getattr(s, "_corridor_tree", None)
+    if judge is None:
+        return True
+    memo = _standing_memo(s)[1]
+    key = ("tree", corridor, tuple(geom["house"]))
+    if key not in memo:
+        memo[key] = bool(judge(corridor, geom))
+    return bool(memo[key])
 
 
 def _house_candidates(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tuple[Pt, ...]]:

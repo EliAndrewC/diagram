@@ -92,11 +92,12 @@ def test_a_seated_hamlet_draws_every_retirement_house_its_lots_laid(monkeypatch:
     the back wall or a flank - every one drawn where it was laid, the count the lots' quota, never short."""
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
     from l7r.diagram.hamletgen.homesteads.retirement import retirement_quota, retirement_share
-    from tests.hamletgen.test_homesteads import _toy_hamlet
+    from tests.hamletgen.test_homesteads import _no_tree, _toy_hamlet
 
     # the toy's bundles lay a bed or the well pocket where a flank door stands, and a corridor over its own parts is refused
-    # since feature 287 M8 (`access.parts_clear`); the seating's count, not the parts, is under test here
+    # since feature 287 M8 (`access.parts_clear`); the seating's count, not the parts, is under test here - nor the tree's
     monkeypatch.setattr(access_mod, "parts_clear", lambda *a: True)
+    _no_tree(monkeypatch)
     s, plan = _toy_hamlet(12)
     s.pin_knob("family_form", "retirement_house")
     assert retirement_quota(s, 12) == {"retirement": retirement_share(s.seed)}

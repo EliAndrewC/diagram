@@ -20,17 +20,17 @@ repaired is dropped; it is never kept as "the least bad").
 
 THE REACH IS DRAWN HERE (step 4; ways W01, W03, homes H36). A lane a repair cuts may have been some farmhouse's only way,
 and the web may never have reached one at all. The seating reserved a corridor from every door to the exit strip the
-connector leaves along (`settlement/rolling/access.py`, `track._cluster_gateway`), so for every farmhouse still unreached
-that corridor is drawn up to its first contact with the network (`corridors.draw_corridors`); a spur is laid to each way
-target the network misses (a burial ground's edge), and the field way where no lane reaches the field - each the shortest
-run that keeps the law (`Lawful`). This replaced the driver's re-roll (feature 287, FR-002).
+connector starts on (`settlement/rolling/access.py`, `track._cluster_gateway`) and judged the whole tree as lanes with
+each (`tree.admits`), so the tree lanes owed - every unreached farmhouse's chain and the field's corridor - are drawn as
+judged (`tree.settle_tree`), the ordinary lanes deferring to them (`tree.settle_defer`); a spur is laid to each way target
+the network misses (a burial ground's edge), the shortest run that keeps the law (`Lawful`); and a tree lane the map no
+longer needs is pruned (`tree.prune_the_tree`). This replaced the driver's re-roll (feature 287, FR-002).
 
 THE CROSSINGS ARE SQUARED HERE (ways W11): the squaring `stage_crossings` did after the woods now runs as this pass's first
 step, so every guarantee below is judged on the squared lane and no stage after the web rewrites one."""
 
 from __future__ import annotations
 
-import itertools
 import math
 import time
 from collections.abc import Mapping, Sequence
@@ -45,28 +45,16 @@ from l7r.diagram.settlement.water_ways.lanes import behind_house, reaches_doorya
 
 from ..consts import WAY_END_REACH_FT, WEB_CLEARANCE, Poly, Pt
 from . import law
-from .bund import BRANCH_WIDTH, paddy_ground
 from .checks import served_network, square_crossings, unreached_houses
 from .clearance import kink_spans
 from .corridors import (
     ACCESS_WIDTH,
-    CONTACT_FT,
-    FIELD_ROLE,
-    LATER_CONTACTS,
     TARGET_ROLE,
     GroundIndex,
     _poly_box,
     building_quads,
-    contacts,
-    draw_corridors,
-    field_chain,
-    field_router,
-    field_runs,
-    first_contact,
     is_tree,
-    lawful_run,
     round_the_gable,
-    routed_field_runs,
     spur_runs,
     through_a_building,
 )
@@ -74,6 +62,7 @@ from .fabric import _crosses_fabric, _homestead_polys, house_hit
 from .geom import _TOUCH_GAP, _components, _trim_to_service, memo_ground, polyline_len, steading_footprints, worked_ground
 from .joints import joints
 from .sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
+from .tree import prune_the_tree, settle_defer, settle_tree, tree_faults
 
 SETTLE_ROUNDS = 8
 """Repair rounds before the lanes still breaking a rule are dropped whole. Each round runs every rule once; a measured
@@ -452,7 +441,8 @@ def settle_ends(s: Any) -> int:
     houses = M.get("houses") or []
     for h, ends in law.fronting_ends(M).items():
         c = (float(houses[h]["x"]), float(houses[h]["y"]))
-        for i, end in sorted(ends, key=lambda ie: math.dist(c, _pts(lanes[ie[0]])[ie[1]]))[law.DOORSTEP_MAX :]:
+        # ...the tree's ends kept first (a tree lane is never cut; the ordinary lanes defer to it), then the nearer
+        for i, end in sorted(ends, key=lambda ie: (not is_tree(lanes[ie[0]]), math.dist(c, _pts(lanes[ie[0]])[ie[1]])))[law.DOORSTEP_MAX :]:
             seq = _as_end(_pts(lanes[i]), end)
             walk = next((polyline_len(seq[: k + 1]) for k in range(len(seq) - 1, -1, -1) if math.dist(seq[k], c) > law.DOORSTEP_FT), 0.0)
             claim({i}, i, [_back(sub_run(seq, 0.0, walk), end)] if walk > 0 else [])
@@ -542,12 +532,28 @@ def settle_joins(s: Any) -> int:
     (H38; the span may not run along a tread, H39). The only step that adds tread, and only to close a hole, once per end:
     an end it closes is no longer free. Before the network rule, so a piece the ink tolerance would drop is joined first."""
     edits: dict[int, list[Poly]] = {}
+    # A TREE LANE'S END IS CARRIED ONTO ITS WAY AS ANY LANE'S IS: the span only adds tread, over walkable ground, meeting the
+    # way clean (`law.near_misses`), and the lane it reaches is an ordinary one the tree's joint then binds
+    lanes = s.M.get("lanes") or []
     for i, end, f in law.near_misses(s.M):
         if i in edits:
             continue
-        p = _pts(s.M["lanes"][i])
-        edits[i] = [[*p, f] if end == -1 else [f, *p]]
+        p = _pts(lanes[i])
+        joined = [*p, f] if end == -1 else [f, *p]
+        # ...BUT AN ORDINARY LANE WHOSE JOIN WOULD BREAK A RULE AGAINST A TREE LANE DEFERS: it is taken back out of the join's
+        # reach instead - the deference would cut the join again, and the two passes took turns until the rounds ran out
+        # (cohort seed 25 under the probes)
+        if not is_tree(lanes[i]) and any(k == i for k, _q in tree_faults(with_edits(s.M, {i: [joined]}))):
+            seq = _as_end(p, end)
+            edits[i] = [_back(sub_run(seq, 0.0, polyline_len(seq) - law.JOIN_REACH_FT - JOIN_BACK_PAD_FT), end)]
+            continue
+        edits[i] = [joined]
     return apply_pieces(s, edits) if edits else 0
+
+
+JOIN_BACK_PAD_FT = 5.0
+"""How far past a join's reach (`law.JOIN_REACH_FT`) an ordinary end that defers to a tree lane is taken back
+(`settle_joins`), so it no longer makes for the way it stopped short of."""
 
 
 def settle_needles(s: Any) -> int:
@@ -845,58 +851,13 @@ def settle_targets(s: Any, lawful: Lawful) -> int:
     return n
 
 
-def settle_field(s: Any, lawful: Lawful) -> int:
-    """Step 7 (ways W03): where no way of the hamlet's own reaches the field (`law.field_unreached`), the field way - the
-    shortest run from the network on to the bund, straight or over the brook at a ford, the paddy's and then the dry hem's
-    (`field_runs`), that keeps the law (`Lawful`) - drawn as a tree lane, once. With none keeping the law the field stays
-    unreached - never drawn least-bad (FR-005) - and the settle's report says so."""
-    M = s.M
-    if not law.field_unreached(M) or any(ln.get("role") == FIELD_ROLE for ln in M.get("lanes") or []):
-        return 0
-    brook = next(iter(law._brooks(M)), [])
-    fords = [(float(x), float(y)) for x, y in (M.get("meta") or {}).get("brook_fords") or []]
-    segs, grounds = served_network(M.get("lanes") or []), (paddy_ground(s), memo_ground(s, "worked", worked_ground))
-    # THE RESERVED CORRIDOR FIRST (feature 287, W03): the field's run the seating kept clear (`field_chain`), drawn from the
-    # bund up to its first clean contact with the network, bowed round a building on it where need be - as a stranded
-    # house's corridor is (`draw_corridors`)
-    chain = field_chain(M)
-    quads = building_quads(M) + law.fixture_quads(M)
-
-    def drawn(reached: Poly) -> Poly | None:
-        return lawful_run(reached[::-1], quads, lambda r: lawful(r, BRANCH_WIDTH), norm=lambda r: square_run(M, r))
-
-    reached = first_contact(chain, segs) if chain is not None else None
-    run = drawn(reached) if reached is not None else None
-    if run is None and chain is not None:
-        # ...AND WHERE ITS FIRST CONTACT IS REFUSED, THE LATER ONES of the run squared as it would be drawn, as a stranded
-        # house's corridor is (`corridors.LATER_CONTACTS`)
-        later = contacts(square_run(M, chain), segs, spacing=CONTACT_FT)
-        run = next((r for c in itertools.islice(later, LATER_CONTACTS) if (r := drawn(c)) is not None), None)
-    if run is not None:
-        _draw_tree_lane(s, run, BRANCH_WIDTH, FIELD_ROLE)
-        return 1
-    runs = field_runs(segs, grounds, BRANCH_WIDTH / 2.0, brook, fords)
-    run = next((r for r in runs if lawful(r, BRANCH_WIDTH)), None)
-    if run is None:
-        # ...THREADED BY THE WEB'S OWN ROUTER where no straight run keeps the law (cohort seed 13: every one fouled a
-        # steading or met its lane at a needle) - round the steadings and the hard ground, over the brook at a ford
-        route = field_router(s, brook)
-        runs = [r for ground in grounds for r in routed_field_runs(segs, ground, BRANCH_WIDTH / 2.0, route, brook, fords)]
-        run = next((r for r in runs if lawful(r, BRANCH_WIDTH)), None)
-    if run is None:
-        return 0
-    _draw_tree_lane(s, run, BRANCH_WIDTH, FIELD_ROLE)
-    return 1
-
-
 def settle_reach(s: Any) -> int:
-    """Step 4: the reach the web owes, drawn as tree lanes - each stranded farmhouse's corridor (`draw_corridors`), a spur
-    to each way target (`settle_targets`), and the field way (`settle_field`)."""
+    """Step 4: the reach the web owes - the access tree's lanes to every farmhouse it does not reach and to the field where
+    no way reaches it, drawn as the seating judged them and the ordinary lanes deferring to them (`tree.settle_tree`), and a
+    spur to each way target (`settle_targets`)."""
     if not (unreached_houses(s.M) or law.unreached_targets(s.M) or law.field_unreached(s.M)):
         return 0
-    lawful = Lawful(s, tree=True)
-    route = field_router(s, next(iter(law._brooks(s.M)), []))
-    return draw_corridors(s, lambda run: lawful(run, ACCESS_WIDTH), route, lambda run: square_run(s.M, run)) + settle_targets(s, lawful) + settle_field(s, lawful)
+    return settle_tree(s) + settle_targets(s, Lawful(s, tree=True))
 
 
 def settle_husks(s: Any) -> int:
@@ -933,6 +894,7 @@ def lane_violators(s: Any) -> list[int]:
     bad |= {i for _face, bounding in law.needle_loops(M) for i in bounding}
     if law.way_outs_crossing(M):
         bad |= {i for brook in law._brooks(M) for i in _ordinary(M) if law.crossing_points(_pts(lanes[i]), brook)}
+    bad |= {i for i, _q in tree_faults(M)}  # ...and an ordinary lane breaking a rule against a tree lane, which defers
     out = {i for i in bad if not is_tree(lanes[i])}
     carriers = {i for i, _k, _y in law.way_out_carriers(M)}
     if carriers and not carriers & out:
@@ -940,7 +902,22 @@ def lane_violators(s: Any) -> list[int]:
     return sorted(out)
 
 
-STEPS = (settle_husks, square_every_crossing, settle_shapes, settle_way_outs, settle_ends, settle_joins, settle_needles, settle_reach, settle_network, settle_fragments, settle_widths, settle_husks)
+STEPS = (
+    settle_husks,
+    square_every_crossing,
+    settle_shapes,
+    settle_way_outs,
+    settle_ends,
+    settle_joins,
+    settle_needles,
+    settle_reach,
+    settle_defer,
+    settle_network,
+    settle_fragments,
+    prune_the_tree,
+    settle_widths,
+    settle_husks,
+)
 
 
 def settle_the_web(s: Any, rounds: int = SETTLE_ROUNDS) -> dict[str, Any]:
@@ -967,7 +944,7 @@ def settle_the_web(s: Any, rounds: int = SETTLE_ROUNDS) -> dict[str, Any]:
             settle_husks(s)
         # ...and the rules no drop can break are asked once more of what is left: a join closed only where it meets
         # cleanly, the reach a drop took away drawn again, the network, a fragment that no longer earns, one width a way
-        for step in (settle_joins, settle_reach, settle_network, settle_fragments, settle_widths, settle_husks):
+        for step in (settle_joins, settle_reach, settle_defer, settle_network, settle_fragments, prune_the_tree, settle_widths, settle_husks):
             step(s)
         # ...and a drop there that handed a household a way out over the brook and back loses the lane carrying it, tree or
         # not (ways W08: no fallback keeps the violation); a household left unreached by it is the report's to name

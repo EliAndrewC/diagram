@@ -246,13 +246,13 @@ def _plain_search(s, geom):  # type: ignore[no-untyped-def]
     for door in doors:
         for q in tree.targets(door):
             if access.math.dist(door, q) < 1e-6 or corridor_clear(s, door, q, geom):
-                return (door, q)
+                return access.drawn_corridor(s, (door, q), geom)
     for door in doors[2:]:
         turn = access.round_the_gable(geom, door, tree.half)
         if corridor_clear(s, door, turn, geom):
             for q in tree.targets(turn):
                 if access.math.dist(turn, q) < 1e-6 or (not access.doubles_back(door, turn, q) and corridor_clear(s, turn, q, geom)):
-                    return (door, turn, q)
+                    return access.drawn_corridor(s, (door, turn, q), geom)
     return None
 
 
@@ -305,3 +305,52 @@ def test_the_indexed_targets_are_the_nearest_of_every_point_of_the_tree_in_its_o
     tiny = AccessTree(7.0)
     tiny.add((0.0, 0.0), (10.0, 0.0))
     assert tiny.targets((5.0, 5.0)) == plain(tiny, (5.0, 5.0)) and len(tiny.targets((5.0, 5.0))) == 2, "a tree of fewer points than tried: every point"
+
+
+def test_a_corridor_is_drawn_from_where_it_leaves_its_own_yard() -> None:
+    """Feature 287 wave 6 (ways W01; cohort seed 39 under the probes: an 81-mat yard 76 x 53 ft, the door in its middle): the
+    matrix forbids a way on a yard, its own household's too, so the corridor the seating reserves and the web draws starts
+    where its tread leaves the yard for good - the yard read as the matrix reads it, turned with its house (`yard_quad`)."""
+    geom = {"house": (0.0, 0.0, 40.0, 28.0), "yard": (0.0, 60.0, 80.0, 50.0), "turn": 0.0}
+    quad = access.yard_quad(geom)
+    assert quad is not None and sorted(round(q[1]) for q in quad) == [35, 35, 85, 85]
+    turned = access.yard_quad({**geom, "turn": 90.0})
+    assert turned is not None and sorted(round(q[0]) for q in turned) == [-25, -25, 25, 25], "turned with its house"
+    assert access.yard_quad({"house": (0.0, 0.0, 1.0, 1.0), "yard": None}) is None
+    run = [(0.0, 60.0), (0.0, 400.0)]
+    past = access.past_the_yard(run, quad, access.TREAD_HALF_FT)
+    assert past is not None and past[0] == (0.0, pytest.approx(85.0 + access.TREAD_HALF_FT + access.YARD_EXIT_PAD_FT)) and past[-1] == (0.0, 400.0)
+    assert access.past_the_yard([(0.0, 300.0), (0.0, 400.0)], quad, 1.5) is None, "never near it"
+    assert access.past_the_yard([(0.0, 400.0), (0.0, 60.0)], quad, 1.5) is None, "ending on it"
+    bent = access.past_the_yard([(0.0, 60.0), (0.0, 60.0), (0.0, 100.0), (200.0, 100.0)], quad, 1.5)
+    assert bent is not None and bent[0] == (0.0, pytest.approx(87.5)) and bent[-1] == (200.0, 100.0), "left along its first leg"
+    s = _open()
+    assert access.drawn_corridor(s, ((0.0, 60.0), (0.0, 400.0)), geom)[0][1] == pytest.approx(87.5)
+    assert access.drawn_corridor(s, ((500.0, 60.0), (500.0, 400.0)), geom) == ((500.0, 60.0), (500.0, 400.0)), "away from its yard: as found"
+    assert access.drawn_corridor(s, ((0.0, 60.0), (0.0, 400.0)), {**geom, "yard": None}) == ((0.0, 60.0), (0.0, 400.0))
+
+
+def test_a_seat_whose_corridor_the_tree_cannot_take_lawfully_is_refused_at_seating() -> None:
+    """Feature 287 wave 6 (ways W01): the seating asks the WHOLE tree, as lanes, of every corridor it would admit (the ways'
+    own `tree.admits`, installed as `_corridor_tree`) - so a house whose every corridor would make the tree unlawful is
+    refused there and the next seat tried, never found unreached when the web draws. Here the tree is a strip, and the
+    house's only reachable point on it is the strip's inner end, which its corridor would meet folded back on the strip."""
+    from l7r.diagram.hamletgen.ways.tree import seating_judge
+
+    s = _open()
+    s._seat_search = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0, "rounds": 0}
+    start_tree(s, (700.0, 300.0), (0.0, -1.0), 200.0)
+    geom = s._bundle_geom(700.0, 520.0, 46.0, 28.0, "SE", rot=0.0)
+    admitted = access_corridor(s, geom)
+    assert admitted is not None, "no tree judge installed: the strip is reached"
+    s._corridor_tree = seating_judge(s)
+    assert access.tree_admits(s, admitted, geom), "square onto the strip's inner end: the tree admits it"
+    calls = []
+    s._corridor_tree = lambda corridor, g: calls.append(corridor) or False
+    s.__dict__.pop("_corridor_memo", None)
+    assert access_corridor(s, geom) is None and calls, "every corridor the tree refuses: the seat has none"
+    assert not s._parts_fit(geom), "and the seat is refused"
+    n = len(calls)
+    assert access.tree_admits(s, admitted, geom) is False and len(calls) == n, "asked once while nothing standing changes"
+    s._corridor_tree = None
+    assert access.tree_admits(s, admitted, geom), "no judge (a village roll): admitted"

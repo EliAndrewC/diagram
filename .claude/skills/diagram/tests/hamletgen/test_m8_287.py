@@ -135,7 +135,8 @@ def test_a_gateway_walled_in_by_reserved_seats_leaves_along_the_exit_strip_then_
 
     monkeypatch.setattr(track, "connector_dry_exit", dry)
     run = track.connector_through(s, plan, [(60.0, 60.0), (-900.0, 60.0)], [], [], [], [])
-    assert calls == [(60.0, 60.0), (300.0, 50.0)] and run[0] == (60.0, 60.0) and run[2] == (300.0, 50.0)
+    assert calls == [(60.0, 60.0), (300.0, 50.0)] and run[2] == (300.0, 50.0)
+    assert run[0] == (60.0, 50.0), "its start set back on the strip it stood 10 ft off (`track.on_the_strip`)"
     assert "wood_seats_to_the_connector" not in s.M["meta"]
     calls.clear()
 

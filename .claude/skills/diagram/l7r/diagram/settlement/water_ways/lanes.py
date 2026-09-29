@@ -5,6 +5,8 @@ import re
 from collections.abc import Iterable
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.overlap.registry import refuse_unadmitted
+
 from .._geom import (
     Pt,
     edge_dist,
@@ -76,28 +78,20 @@ class LanesMixin:
         See research/ways.html 'What vehicle used a village lane, and where could the lane run?'."""
         # a lane KEEPS ITSELF RECORDED (feature 287 M8): the web reshapes lanes in place, and each reshape is asked of the
         # registry of what stands at the write (`Kept`) - so a repair cannot lay a lane on what the overlap matrix forbids
-        rec = self.standing.kept("lanes", {"pts": [[x, y] for x, y in pts], "worn": worn, "w": width, "connector": connector, "spur": spur})
+        # ...AND IT IS ASKED BEFORE IT IS RECORDED OR INKED (feature 287, water W53): every placer that lays a lane chose it among
+        # what the registry admits (`admits_lane`, `admitted_runs`, the settle's `Lawful`, the connector's `connector_keeps_the_law`),
+        # so a refusal here names the engine defect by name before any of its ink is emitted, as the one-candidate writers do
+        # (`registry.refuse_unadmitted`; a Kuwabata lane was the last record the census found written unasked)
+        new = {"pts": [[x, y] for x, y in pts], "worn": worn, "w": width, "connector": connector, "spur": spur}
+        refuse_unadmitted(self.M, "lanes", new)
+        rec = self.standing.kept("lanes", new)
         self.M.setdefault("lanes", []).append(rec)
         self._lane_ink.append(self._lane_ink_at(pts, width, worn, rec))
-        # `M["lane"]` IS THE SPINE - the longest ordinary way on the map - not whichever lane was
-        # drawn last. It used to be assigned unconditionally here, so it held the final `lane()` call
-        # of the whole build, and five consumers read it as "the village street": two gate checks
-        # (`segments_03b` structures-vs-street, `segments_04c` grove shading), the kosatsuba's route
-        # list in `structures/fixtures.py`, and `_geom/ways.py`'s corridor runs. A settlement-review
-        # measured what that means in practice (Sawada 2026-08-19): the key held a 45 ft floating
-        # fragment in the NW, so two gate checks were adjudicating against a 45 ft orphan instead of
-        # the 354 ft spine - they ran, they passed, and they were testing the wrong geometry. That is
-        # the "a check that never runs looks exactly like a check that passes" family, one level down
-        # at the INPUT rather than at the rule.
-        #
-        # Longest-wins is monotone, so a mid-build consumer gets the best spine available when it
-        # asks rather than an arbitrary one; the connector is excluded because it is the road OUT,
-        # not the street. Derived from geometry already on the map, never pinned.
-        if not connector:
-            _prev = self.M.get("lane")
-            _prev_len = sum(math.dist(tuple(a), tuple(b)) for a, b in zip(_prev, _prev[1:], strict=False)) if _prev and len(_prev) > 1 else 0.0
-            if sum(math.dist(a, b) for a, b in zip(pts, pts[1:], strict=False)) > _prev_len:
-                self.M["lane"] = [[x, y] for x, y in pts]
+        # NO `M["lane"]` IS WRITTEN (feature 287 wave 6). It held "the spine" - the longest ordinary way drawn so far - kept by
+        # `lane()` alone, so every later rewrite of that lane (the web's passes, the settle's cuts and drops) left it standing
+        # as a copy of a lane no longer on the map: on cohort seeds 25 and 42 it was none of `M["lanes"]`. Every reader of a
+        # generated map reads `M["lanes"]` (`_geom/ways.street_runs`, `lane_runs`); `M["lane"]` is read only where a hand-built
+        # fixture carries it and no `lanes`.
         self.corridors.append((pts, clearance))
         self._record_tread(pts, width / 2)
 

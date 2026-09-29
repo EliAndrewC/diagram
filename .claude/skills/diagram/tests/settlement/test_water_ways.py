@@ -527,21 +527,15 @@ def test_ward_fails_loudly_on_a_commoner_already_inside():
         s.ward("samurai", [(400, 795), (400, 400), (795, 400)], gates=[])
 
 
-def test_the_lane_key_is_the_spine_not_the_last_way_drawn():
-    """`M["lane"]` is read by five consumers as "the village street" - two gate checks among them -
-    so it has to BE the street. It was assigned on every `lane()` call, i.e. it held whichever way
-    happened to be drawn last: a settlement-review measured Sawada shipping a 45 ft floating fragment
-    in that key while the spine ran 354 ft, so `structures_clear_of_streets` and the grove-shading
-    rule were adjudicating against a 45 ft orphan. They ran, they passed, and they tested the wrong
-    geometry - the input was wrong, not the rule."""
+def test_no_stale_single_lane_record_is_written():
+    """`M["lane"]` held "the spine", kept by `lane()` alone, so a later rewrite of that lane left it a copy of a lane no longer
+    on the map (cohort seeds 25 and 42: none of `M["lanes"]`). Nothing on a generated map reads it - `street_runs` reads
+    `M["lanes"]` - so it is no longer written at all."""
     s = Settlement(2000, 2000, seed=1)
     s.meta(name="H", scale="hamlet")
-    s.lane([(100.0, 100.0), (900.0, 100.0)])  # the spine, 800 ft
-    s.lane([(400.0, 120.0), (400.0, 180.0)])  # a 60 ft back lane, drawn after it
-    assert s.M["lane"] == [[100.0, 100.0], [900.0, 100.0]]
-    # ...and the road OUT is not the street, however long it runs
+    s.lane([(100.0, 100.0), (900.0, 100.0)])
     s.lane([(900.0, 100.0), (1900.0, 900.0)], connector=True)
-    assert s.M["lane"] == [[100.0, 100.0], [900.0, 100.0]]
+    assert "lane" not in s.M and len(s.M["lanes"]) == 2
 
 
 def test_angle_between_calls_a_degenerate_vector_square() -> None:
@@ -894,3 +888,20 @@ def test_a_lane_ending_behind_a_house_is_not_at_its_dooryard() -> None:
     s.trim_lane_stubs()
     end = s.M["lanes"][0]["pts"][-1]
     assert 280.0 <= end[1] <= 330.0, f"the end behind the house is pulled back to the last house it serves: {end}"
+
+
+def test_a_lane_is_asked_of_the_registry_before_it_is_recorded_or_inked() -> None:
+    """Feature 287, water W53: `lane()` asks the overlap matrix before it records or inks the lane (`refuse_unadmitted`) - a
+    Kuwabata lane was the last record the census found written unasked. A lane the matrix forbids is refused by name, and
+    nothing of it is left behind."""
+    from l7r.diagram.overlap.registry import OverlapRefused
+
+    s = Settlement(1000, 1000, seed=3)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90)
+    s.standing.strict = True
+    s.M["wells"].append({"x": 500.0, "y": 500.0, "r": 8, "vr": 12.0})
+    s.lane([(100.0, 100.0), (300.0, 100.0)], width=3, worn=True)
+    ink = len(s._lane_ink)
+    with pytest.raises(OverlapRefused):
+        s.lane([(400.0, 500.0), (600.0, 500.0)], width=3, worn=True)
+    assert len(s.M["lanes"]) == 1 and len(s._lane_ink) == ink, "nothing recorded, nothing inked"

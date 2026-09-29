@@ -238,7 +238,6 @@ class Settlement(
             "fields": [],
             "fallow_patches": [],
             "channels": [],
-            "lane": [],
             "taxfree": [],
             "torii": [],
             "shrines": [],

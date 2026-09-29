@@ -308,6 +308,11 @@ def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
         # straggler path at draw time shipped a dangling end anyway. The houses this lane is the ONLY way to
         # are named so the tidy-up cannot strand one (cohort seed 39's farmhouse, `_trim_to_service`).
         _keep = [_h for _h in _final_houses if all(seg_dist(_h[0], _h[1], _a, _b) > WEB_REACH_FT for _a, _b in _others)]
+        # ...BUT A CONNECTOR THAT STARTS ON THE EXIT STRIP STAYS THERE (feature 287 wave 6): the web draws the strip as a tree lane
+        # up to the connector's start where a house or the field is owed it (`tree.strip_run`), and pulled back to service the
+        # start left the strip 8 ft off on cohort seed 37 (the strip ended in a hook) and 300 ft down the track on seed 34
+        if _ln.get("connector") and s.M.get("access_exit"):
+            continue
         _kept = (
             kept_connector(_pts, _pull_back_to_service(_pts, _others, _final_houses, _inside, _fabric_now), _solid_now)
             if _ln.get("connector")

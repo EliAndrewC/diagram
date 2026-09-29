@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import math
 import random
-import types
 from collections.abc import Callable, Iterator, Sequence
 from typing import Any
 
@@ -240,6 +239,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     s._access = None  # the access tree is the seating's; the manifest keeps it (`access_exit`, `access_corridors`)
     s._pockets = None  # the pockets are drawn by `place_wells` from the house records (`well_pocket`)
     s._corridor_ground = None  # the corridors' ground test is the seating's
+    setattr(s, "_corridor_tree", None)  # noqa: B010 - ...and so is the tree's (`ways/tree.py`); read by `access.tree_admits` with a default
     s._wood = None  # the reservations are the seating's; each household's record keeps its own (`wood_share`)
     s._lots = None  # the lots are the seating's (the byre form stays: `draft_byres` draws the stalls it reserved)
     # THE ROLLED SHAPE MUST LEAVE A TRACE EVEN WHEN THE CLOUD NEVER RUNS (known-open ledger
@@ -370,21 +370,14 @@ def reserve_the_seating(s: Settlement) -> None:
 def corridor_ground(s: Settlement) -> Callable[[list[Pt]], bool]:
     """The ways' own test of a corridor's ground (`settle.corridor_on_lawful_ground`: the run squared at its crossings, then
     `Lawful.on_lawful_ground`), for the seating to admit a corridor by (`access.lawful_ground`) - the settlement package
-    cannot import the hamlet generator, so it is installed on the settlement as `_corridor_ground`. The ground the law reads
-    is built ONCE per standing seating (a `Lawful` over the manifest, keyed on the houses seated so far - it reads them),
-    not per corridor asked: built per call it re-derived the worked ground's union of the field's plots every time."""
+    cannot import the hamlet generator, so it is installed on the settlement as `_corridor_ground`. The law it reads is the
+    seating's (`tree.seating_law`), built once per house seated, not per corridor asked."""
     from ..ways.corridors import ACCESS_WIDTH
-    from ..ways.settle import Lawful
-
-    memo: dict[str, Any] = {}
-    view = types.SimpleNamespace(M=s.M)
+    from ..ways.tree import seating_law
 
     def ground(run: list[Pt]) -> bool:
-        houses = s.M.get("houses") or []
-        key = (len(houses), id(houses[-1]) if houses else None)
-        if memo.get("key") != key:
-            memo["key"], memo["law"] = key, Lawful(view)
-        return bool(memo["law"].on_lawful_ground(memo["law"].squared(run), ACCESS_WIDTH))
+        law_ = seating_law(s)
+        return bool(law_.on_lawful_ground(law_.squared(run), ACCESS_WIDTH))
 
     return ground
 
@@ -403,9 +396,10 @@ def reserve_field_corridor(s: Settlement) -> bool:
     the field from this margin - `_seat_households` then seats no one on it and the ladder offers the next."""
     from ..ways import law
     from ..ways.bund import BRANCH_WIDTH, paddy_ground
-    from ..ways.corridors import field_runs, routed_field_runs
+    from ..ways.corridors import FIELD_ROLE, field_router, field_runs, routed_field_runs
     from ..ways.geom import memo_ground, worked_ground
-    from ..ways.settle import corridor_on_lawful_ground, field_router
+    from ..ways.settle import corridor_on_lawful_ground
+    from ..ways.tree import admits, seating_law
 
     tree = getattr(s, "_access", None)
     brook = next(iter(law._brooks(s.M)), [])
@@ -423,7 +417,11 @@ def reserve_field_corridor(s: Settlement) -> bool:
         for ground in grounds:
             yield from routed_field_runs(segs, ground, BRANCH_WIDTH / 2.0, route, brook, fords)
 
-    run = next((r for r in candidates() if len(r) >= 2 and corridor_on_lawful_ground(s.M, r, BRANCH_WIDTH)), None)
+    # ...AND WHERE THE TREE STAYS LAWFUL WITH IT (feature 287 wave 6, `tree.admits`): the web draws it as a tree lane, never
+    # cut, so its joint with the exit strip is judged here with every other rule of the lane law
+    run = next(
+        (r for r in candidates() if len(r) >= 2 and corridor_on_lawful_ground(s.M, r, BRANCH_WIDTH) and admits(seating_law(s), s.M, [(float(x), float(y)) for x, y in r[::-1]], FIELD_ROLE)), None
+    )
     if run is None:
         return False
     back = [(float(x), float(y)) for x, y in run[::-1]]
@@ -541,7 +539,10 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # as far as a quarter turn where it is refused straight out; a margin with no lawful way out seats no one here, and
     # the ladder offers the next (`seat_every_household`)
     if plan.settlement_form != "dispersed":
+        from ..ways.tree import seating_judge
+
         s._corridor_ground = corridor_ground(s)
+        setattr(s, "_corridor_tree", seating_judge(s))  # noqa: B010 - ...and the whole tree judged as lanes with each corridor (feature 287 wave 6)
         _length = bound * 1.5 + BUNDLE_PITCH
         _out = exit_bearing(s, (float(seat["cx"]), float(seat["cy"])), (float(ox), float(oy)), _length)
         if _out is None:

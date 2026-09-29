@@ -283,6 +283,7 @@ def test_the_front_row_stops_at_its_share_and_the_ranks_seat_the_rest(monkeypatc
     # since feature 287 M8 (`access.parts_clear`); the seating's count, not the parts, is under test here
     monkeypatch.setattr(access_mod, "parts_clear", lambda *a: True)
     _small_yards(monkeypatch)
+    _no_tree(monkeypatch)
     s, plan = _toy_hamlet(10, seed=5)  # seed 5: feature 280 turned no house a quarter away (M26), and seed 3's chain seats five
     plan.cluster_shape = "round"  # the tightest band: the row's share is the floor of six, fewer than the chain could seat
     stage_homesteads(s, plan)
@@ -391,6 +392,7 @@ def test_an_accretion_hamlets_ranks_stand_off_their_lines_and_a_planned_ones_do_
     # since feature 287 M8 (`access.parts_clear`); the seating's count, not the parts, is under test here
     monkeypatch.setattr(access_mod, "parts_clear", lambda *a: True)
 
+    _no_tree(monkeypatch)
     seats = {}
     for form in ("alleys", "back_lane"):
         s, plan = _toy_hamlet(14)
@@ -540,11 +542,22 @@ def test_the_front_row_loop_stops_once_its_share_is_seated(monkeypatch) -> None:
     real = st.front_row
     monkeypatch.setattr(st, "front_row", lambda *a, **k: (lambda seats: seats + seats)(list(real(*a, **k))))
     _small_yards(monkeypatch)
+    _no_tree(monkeypatch)
     s, plan = _toy_hamlet(10, seed=5)  # seed 5, as above (feature 280 M26 moved seed 3's chain to five)
     plan.cluster_shape = "round"
     stage_homesteads(s, plan)
     lo, hi = CLUSTER_DRAWN_ASPECT["round"]
     assert s.M["meta"]["seat_search"]["front"] == min(10, max(6, round(math.sqrt(10 * (lo + hi)))))
+
+
+def _no_tree(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The seating's question of the whole access tree (feature 287 wave 6, `ways/tree.admits`), stood aside for a test of
+    the seating's COUNTS: on the toy's tight square band it refuses a corridor meeting its host at a needle or crossing a
+    neighbor's (measured on the twelve-household toy: 65 needles, 3 crossings) and so moves the counts, which the tree's own
+    tests (`tests/hamletgen/ways/test_tree.py`, `tests/settlement/test_access.py`) hold; the cohort seats as before."""
+    from l7r.diagram.hamletgen.ways import tree as tree_mod
+
+    monkeypatch.setattr(tree_mod, "seating_judge", lambda s: lambda corridor, geom: True)
 
 
 def _small_yards(monkeypatch: pytest.MonkeyPatch) -> None:

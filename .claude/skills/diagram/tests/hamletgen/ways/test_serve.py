@@ -434,3 +434,13 @@ def test_a_stragglers_doorstep_ground_is_obtained_once_per_house(monkeypatch) ->
     hg.ways._serve_stragglers(s, plan, [], fabric, [])
     assert len(asks) <= 2, f"{len(asks)} index requests for two houses"
     assert len(points) > len(asks), f"non-vacuity: more standing places were tried ({len(points)}) than indexes asked for - one ask per point would not pass"
+
+
+def test_the_late_pass_leaves_a_connector_that_starts_on_the_exit_strip() -> None:
+    """Feature 287 wave 6 (cohort seeds 34 and 37): a connector pulled back to service left the exit strip - 300 ft down the
+    track on seed 34 - and the strip the web draws up to it (`tree.strip_run`) ended in a hook or a long link. Where a strip
+    is reserved the connector's start stands."""
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=[(60.0, 200.0)])
+    s.M["access_exit"] = [[0.0, -300.0], [0.0, 0.0]]
+    hg.ways.tidy_lane_ends(s, [(200.0, 0.0), (600.0, 0.0), (600.0, 400.0), (200.0, 400.0)])
+    assert s.M["lanes"][0]["pts"][0] == [0.0, 0.0] or tuple(s.M["lanes"][0]["pts"][0]) == (0.0, 0.0)
