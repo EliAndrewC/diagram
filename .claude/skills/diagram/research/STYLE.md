@@ -35,6 +35,10 @@ the GM's example, awaiting the GM's confirmation in the pilot).
   description of what these groves were. And why they existed ... ideally these paragraphs would be relatively
   short."*)
 - The opening is footnoted like everything else; it states, it does not tease what the bullets will say. (inferred)
+- **The opening rounds; the bullet is exact.** A headline figure in the opening is given plainly ("dozens of trees");
+  the exact figure, and any caveat on how it was reached, is said once, in its bullet. (inferred - the first pilot's
+  opening gave "about 33" without the bullet's caveat that 33 is this page's arithmetic.)
+- **A date a newcomer cannot place is tied once to its period**: "before 1868, in the Edo period". (inferred)
 
 ## 3. The findings are short bullets, most led by a question
 
