@@ -1,0 +1,622 @@
+{
+ "events_src": 10720,
+ "distinct_src": 4282,
+ "searches": 2636,
+ "distinct_queries": 2606,
+ "by_kind": {
+  "fetch": 3876,
+  "source-pages": 3622,
+  "curl": 672,
+  "saved-read": 2550
+ },
+ "reads_per_source": {
+  "1": 2158,
+  "2": 733,
+  "3": 440,
+  "4": 350,
+  "5": 220,
+  "6": 122,
+  "7": 69,
+  "8": 52,
+  "9": 43,
+  "10": 95
+ },
+ "cited_distinct": 1632,
+ "cited_in_registry_distinct": 1625,
+ "registry_urls": 2036,
+ "notes_urls": 1986,
+ "registry_files": 1098,
+ "questions": 447,
+ "classes": {
+  "other feature / cited": [
+   528,
+   57188,
+   1299702
+  ],
+  "other feature / uncited": [
+   159,
+   13383,
+   503100
+  ],
+  "other session, same feature / cited": [
+   2088,
+   1184364,
+   2980774
+  ],
+  "other session, same feature / uncited": [
+   104,
+   13098,
+   437907
+  ],
+  "same agent (session) / cited": [
+   872,
+   383043,
+   3004908
+  ],
+  "same agent (session) / uncited": [
+   276,
+   59312,
+   2663853
+  ],
+  "same session, other agent / cited": [
+   2024,
+   1119544,
+   7039954
+  ],
+  "same session, other agent / uncited": [
+   387,
+   219571,
+   1227058
+  ]
+ },
+ "gap_hours_median": 0.10726958334445953,
+ "gap_hist": {
+  "6-24h": 422,
+  "<1h": 5236,
+  ">1d": 174,
+  "1-6h": 606
+ },
+ "uncited_multi_session": 208,
+ "uncited_multi_feature": 144,
+ "uncited_multi_session_reads": 592,
+ "tok_all_reads": 3592474,
+ "carry_all_reads": 33176402,
+ "save_tok_cross_session": 1268033,
+ "save_carry_cross_session": 5221483,
+ "save_carry_cross_session_discovery": 2969562,
+ "save_carry_all_repeats": 19157256,
+ "save_carry_uncited_cross_session": 941007,
+ "repeated_queries": 30,
+ "top": [
+  {
+   "url": "jstage.jst.go.jp/article/grj1984b/60/1/60_1_41/_pdf",
+   "reads": 32,
+   "sessions": 17,
+   "features": {
+    "250": 11,
+    "269": 9,
+    "271": 5,
+    "280": 7
+   },
+   "atypes": {
+    "main": 5,
+    "quote-check": 27
+   },
+   "cited": true,
+   "in_registry": true,
+   "carry": 49557,
+   "whys": [
+    "Quote exactly (character for character) the sentences containing these phrases if present: \"In order to supply irrigation water by gravity flow\"; \"There are two",
+    "Quote exactly, character for character, any sentence containing \"widely scattered fields that comprised their individual farms\" and any sentence containing \"reb",
+    "Quote verbatim the sentence containing \"widely scattered fields that comprised their individual farms\", character for character.",
+    "Quote exactly (character for character) any sentences containing: \"hierarchical structure of water management cooperatives\", \"gradually decrease in size as they",
+    "Quote verbatim (exact characters) any sentences containing: \"hierarchical structure of water management cooperatives\", \"main canals gradually decrease in size\",",
+    "Quote exactly (character for character) any sentences containing these phrases, and report whether each appears: (1) \"In order to supply irrigation water by gra"
+   ]
+  },
+  {
+   "url": "ja.wikipedia.org/wiki/\u9ad8\u5c71\u9663\u5c4b",
+   "reads": 28,
+   "sessions": 17,
+   "features": {
+    "250": 6,
+    "267": 7,
+    "271": 9,
+    "269": 2,
+    "268": 2,
+    "280": 2
+   },
+   "atypes": {
+    "main": 11,
+    "source-reader": 4,
+    "quote-check": 8,
+    "source-applicability": 3,
+    "general-purpose": 2
+   },
+   "cited": true,
+   "in_registry": true,
+   "carry": 55757,
+   "whys": [
+    "Quote verbatim, character for character in the original Japanese, the opening sentence(s) of the article defining what Takayama Jin'ya is (e.g. mention of \u4ee3\u5b98, \u90e1",
+    "Does this page describe the layout of the compound - a central axis, left-right symmetry (\u5de6\u53f3\u5bfe\u79f0, \u4e2d\u8ef8), or the arrangement (\u914d\u7f6e) of its buildings, offices in front ",
+    "Quote verbatim the article's opening sentence(s) defining \u9ad8\u5c71\u9663\u5c4b, and the sentence containing \u73fe\u5b58\u3059\u308b\u552f\u4e00\u306e\u9663\u5c4b. Does the article describe the arrangement/axis/symmetry o",
+    "Quote the Japanese text on the restoration (\u5fa9\u5143) of the jinya, especially the \u90e1\u4ee3\u5f79\u5b85/\u5f79\u5b85: was it restored/reconstructed, when? Also: when was Takayama raised from \u4ee3",
+    "Quote everything about the \u5fa1\u767d\u6d32 / \u541f\u5473\u6240 / \u304a\u767d\u6d32 at Takayama Jinya, and whether it (or the part of the building containing it) is original (1816) or was restored/reco",
+    "Quote exactly (Japanese, character for character) every sentence about \u5fa1\u8535 / \u8535 / \u7c73\u8535 / \u5e74\u8ca2\u7c73 storehouses and what they stored, and the sentence beginning \u73fe\u5b58\u5efa\u7269."
+   ]
+  },
+  {
+   "url": "ja.wikipedia.org/wiki/\u57ce\u4e0b\u753a",
+   "reads": 21,
+   "sessions": 16,
+   "features": {
+    "250": 1,
+    "267": 1,
+    "271": 10,
+    "269": 9
+   },
+   "atypes": {
+    "quote-check": 3,
+    "main": 13,
+    "source-reader": 4,
+    "source-applicability": 1
+   },
+   "cited": true,
+   "in_registry": true,
+   "carry": 37820,
+   "whys": [
+    "Quote verbatim in the original Japanese any sentences saying the samurai residences (\u6b66\u5bb6\u5730/\u6b66\u5bb6\u5c4b\u6577/\u4f8d\u753a) and the townsmen's quarter (\u753a\u4eba\u5730/\u753a\u5c4b) were separated, or that sa",
+    "Quote verbatim, in full Japanese, the sentence containing \u300c\u5e79\u7dda\u9053\u8def\u306e\u4e21\u8107\u306b\u5bb6\u5c4b\u3092\u9699\u9593\u306a\u304f\u914d\u7f6e\u300d plus the sentence before and after it, and the section heading it sits under.",
+    "Quote verbatim (in Japanese) the paragraphs containing \u4f8d\u753a\u3068\u306f and \u4ed8\u8fd1\u306e\u6751\u843d\u3092\u57ce\u4e0b\u306b\u79fb\u8ee2, plus any sentence stating castle towns across domains shared a common layout/zoning"
+   ]
+  },
+  {
+   "url": "ja.wikipedia.org/wiki/\u5c4b\u6577\u6797",
+   "reads": 26,
+   "sessions": 14,
+   "features": {
+    "250": 3,
+    "269": 10,
+    "261": 2,
+    "271": 6,
+    "280": 5
+   },
+   "atypes": {
+    "main": 11,
+    "general-purpose": 2,
+    "quote-check": 9,
+    "source-reader": 4
+   },
+   "cited": true,
+   "in_registry": true,
+   "carry": 55902,
+   "whys": [
+    "Quote verbatim any Japanese passages describing where yashikirin (homestead groves) are placed relative to wet ground, paddies, marshes, or reed beds - specific",
+    "Quote verbatim (character for character, Japanese) any sentences about the location of dry fields (\u7551) or house-plot fields (\u5c4b\u6577\u7551) relative to the homestead/house",
+    "Quote verbatim, character for character, the full sentence(s) containing \u660e\u6cbb\u6642\u4ee3\u4ee5\u524d\u306b\u306f\u5bb6\u306e\u5168\u5468\u3092\u56f2\u3063\u3066\u3044\u305f, plus the sentence immediately before it and the heading of the sect",
+    "Quote verbatim, in Japanese, the full text of the section headed \u7bc9\u5730\u677e (every sentence), character for character.",
+    "Quote exactly, character for character, the \u7bc9\u5730\u677e section's opening sentence (starting \u5cf6\u6839\u770c\u6771\u90e8\u306e\u51fa\u96f2\u5e73\u91ce\u3092\u4e2d\u5fc3\u306b\u898b\u3089\u308c\u308b\u69d8\u5f0f\u3067) and the sentence containing \u660e\u6cbb\u6642\u4ee3\u4ee5\u524d\u306b\u306f\u5bb6\u306e\u5168\u5468\u3092\u56f2\u3063\u3066\u3044\u305f, incl",
+    "Quote verbatim the section heading and the full paragraph containing \u300c\u5357\u5074\u306b\u306f\u8535\u3084\u7d0d\u5c4b\u306a\u3069\u304c\u3042\u308a\u300d, plus the sentences just before it. Does this paragraph concern \u783a\u6ce2\u5e73\u91ce (Tonam"
+   ]
+  },
+  {
+   "url": "jstage.jst.go.jp/article/tga1948/25/3/25_3_145/_pdf/-char/ja",
+   "reads": 30,
+   "sessions": 13,
+   "features": {
+    "250": 2,
+    "269": 17,
+    "271": 2,
+    "280": 9
+   },
+   "atypes": {
+    "quote-check": 24,
+    "main": 3,
+    "source-reader": 2,
+    "source-applicability": 1
+   },
+   "cited": true,
+   "in_registry": true,
+   "carry": 32588,
+   "whys": [
+    "This is Sugiura 1973 on farmhouse outbuildings (\u4ed8\u5c5e\u5efa\u7269). Reproduce exactly: (1) Table 5 (\u7b2c5\u8868) caption, its column headers (function labels such as \u4fbf\u6240/\u3079, \u85aa/\u307e, \u5806\u80a5/\u305f",
+    "Find Table 5 (\u7b2c5\u8868) and Table 6 (\u7b2c6\u8868). Report the B I (B_I) row values, especially the \u3079 (privy/\u4fbf\u6240) column and \u305f (\u5806\u80a5\u820e compost shed) column per household, and the",
+    "Find Table 5 (\u7b2c5\u8868) and report the B1 row values, especially the column headed \u307e (firewood shed / \u85aa\u5c0f\u5c4b?). Is 0.76 there? What do B1 and the column mean (pre-1944 ",
+    "Quote verbatim, character for character, the passage containing \u65b0\u7bc9\u8fb2\u5bb613\u6238 and \u5317\u6771 (corner), and the passage about \u5185\u53a9. Also give the Table 6 (\u7b2c6\u8868) row with 38 20(52",
+    "Return verbatim (Japanese, exact characters and punctuation) the passages containing: \u8abf\u67fb\u5bfe\u8c61\u306f; \u9cf4\u702c\u5ddd\u306e\u652f\u6d41; \u8abf\u67fb\u306f, 1972; \u5358\u68df\u5f0f; \u5bfe\u8c61\u96c6\u843d\u306fA7\u6238; \u4e00\u3064\u306e\u6a5f\u80fd\u3060\u3051\u3067; \u5bd2\u98a8\u6ca2; and Table 5 (\u7b2c5\u8868) ",
+    "Quote verbatim (Japanese, exact characters) the note containing \u4e00\u7a2e\u306e\u6d41\u884c and \u30aa\u30e2\u30c6\u30d8\u306e\u79fb\u884c (or \u30aa\u30e2\u30c6\u3078). Which area and which report does it refer to?"
+   ]
+  },
+  {
+   "url": "touken-world.jp/tips/105023",
+   "reads": 22,
+   "sessions": 13,
+   "features": {
+    "267": 13,
+    "271": 4,
+    "269": 1,
+    "268": 3,
+    "280": 1
+   },
+   "atypes": {
+    "main": 8,
+    "quote-check": 7,
+    "source-applicability": 3,
+    "source-reader": 1,
+    "general-purpose": 3
+   },
+   "cited": true,
+   "in_registry": true,
+   "carry": 61527,
+   "whys": [
+    "Quote verbatim, in the original Japanese characters exactly, the sentence(s) that name the \u53e3\u7fbd\u5bb6 (Kuchiba) house at Hagi and give its stipend (\u77f3\u9ad8, e.g. 1,000\u77f3) an",
+    "Quote verbatim (in Japanese, exact characters) the sentences about the Nomura house (\u91ce\u6751\u5bb6) in Kanazawa: the ones naming it, stating the rank of the samurai famil",
+    "Quote verbatim (exact Japanese characters) the passage about the \u53e3\u7fbd\u5bb6 (Kuchiba house) in Hagi, especially any sentence giving its rank or \u77f3\u9ad8 (e.g. 1,000\u77f3, \u4e0a\u7d1a\u6b66\u58eb),",
+    "In the section on the Nomura house (\u91ce\u6751\u5bb6), quote verbatim, in the original Japanese, any sentence that names \u91d1\u6ca2 (Kanazawa) or \u9577\u753a as the location of the Nomura ho",
+    "Does the character string \u91d1\u6ca2 appear anywhere on this page near the \u9577\u753a\u6b66\u5bb6\u5c4b\u6577\u8de1 / \u91ce\u6751\u5bb6 passage? Quote verbatim the exact sentence or heading containing \u91d1\u6ca2 closest to ",
+    "Quote verbatim (Japanese, exact characters) every sentence mentioning \u53e3\u7fbd\u5bb6 or \u8429 (Hagi), especially any that says where the Kuchiba house is located."
+   ]
+  },
+  {
+   "url": "jsszy.org.cn/userfiles/file/20221103/20221103155002_6437.pdf",
+   "reads": 18,
+   "sessions": 12,
+   "features": {
+    "250": 4,
+    "269": 5,
+    "271": 3,
+    "280": 6
+   },
+   "atypes": {
+    "quote-check": 13,
+    "main": 5
+   },
+   "cited": true,
+   "in_registry": true,
+   "carry": 16554,
+   "whys": [
+    "Quote exactly, character for character, the text of the clauses containing \"\u5404\u7ea7\u6e20\u9053\u5e94\u9009\u62e9\u5728\u5404\u81ea\u63a7\u5236\u8303\u56f4\u5185\u5730\u52bf\u8f83\u9ad8\u5730\u5e26\" and \"\u7530\u95f4\u6e20\u9053\u53ef\u5e03\u7f6e\" (with their clause numbers such as 9.1.1 and 7.",
+    "Find the exact sentence containing \"\u6e20\u9053\u5e95\u5bbd\u5e94\u4e0d\u5c0f\u4e8e\" and quote it character for character with its surrounding context. Also give the document's title.",
+    "Quote exactly, character for character (including full-width punctuation and spaces), the sentences containing: (1) \"\u5404\u7ea7\u6e20\u9053\u5e94\u9009\u62e9\u5728\u5404\u81ea\u63a7\u5236\u8303\u56f4\u5185\u5730\u52bf\u8f83\u9ad8\u5730\u5e26\" and the following se",
+    "Is this a Jiangsu design guideline (title, number)? Quote verbatim \u00a79.3.7 about \u6597\u6e20\u3001\u519c\u6e20\u5cb8\u9876\u5bbd\u5ea6, and \u00a79.1.6 about GB 50288. Give exact Chinese text.",
+    "Is this a Chinese standard (\u6c34\u5229 \u704c\u6e89\u4e0e\u6392\u6c34\u5de5\u7a0b\u8bbe\u8ba1)? Quote verbatim, character for character, any sentence containing: \"\u5404\u7ea7\u6e20\u9053\u5e94\u9009\u62e9\u5728\u5404\u81ea\u63a7\u5236\u8303\u56f4\u5185\u5730\u52bf\u8f83\u9ad8\u5730\u5e26\", \"\u7530\u95f4\u6e20\u9053\u5e94\u5e03\u7f6e\u5728\u5176\u63a7\u5236\u8303\u56f4\u5185\u5730\u52bf\u8f83\u9ad8\u5904\", \"\u5e72\u6e20",
+    "Quote verbatim, character for character, these passages if present and give the exact text if different, with section numbers: (1) \u300c\u5404\u7ea7\u6e20\u9053\u5e94\u9009\u62e9\u5728\u5404\u81ea\u63a7\u5236\u8303\u56f4\u5185\u5730\u52bf\u8f83\u9ad8\u5730\u5e26\u3002\u5e72\u6e20\u3001\u652f\u6e20\u5b9c"
+   ]
+  },
+  {
+   "url": "city.takayama.lg.jp/kurashi/1000021/1000119/1000847/1000954/1000956.html",
+   "reads": 18,
+   "sessions": 12,
+   "features": {
+    "267": 7,
+    "250": 1,
+    "271": 8,
+    "280": 2
+   },
+   "atypes": {
+    "main": 7,
+    "source-reader": 3,
+    "quote-check": 7,
+    "source-applicability": 1
+   },
+   "cited": true,
+   "in_registry": true,
+   "carry": 42671,
+   "whys": [
+    "Quote verbatim (Japanese) the full text of the page. In particular: does it say anything about the size, area (\u576a, \u5e73\u65b9\u30e1\u30fc\u30c8\u30eb), or dominance of the office/main build",
+    "Quote VERBATIM, character for character, the section listing \u54e1\u6570 and the designated parcels (\u662d\u548c4\u5e74\u6307\u5b9a ... \u5e73\u6210\u5143\u5e74\u6307\u5b9a), including every lot address and area, and the ex",
+    "Quote verbatim (Japanese, exact characters) any sentence saying Takayama Jinya is the only surviving (\u552f\u4e00 / \u73fe\u5b58) intendant's or gundai office, and the sentence co",
+    "Quote verbatim (Japanese) every sentence that mentions \u541f\u5473\u6240, \u767d\u5dde, \u5fa1\u7528\u5834, \u66f8\u9662, \u5f79\u6240, \u5927\u5e83\u9593, \u7384\u95a2, or describes the layout/which rooms the \u5fa1\u5f79\u6240 contains or how large/dominant",
+    "Quote verbatim (Japanese, character for character) any sentence on this page containing \u6728\u9020 or describing the buildings' material (wood, earth walls, \u571f\u8535, \u8535). Als",
+    "Quote verbatim (original Japanese) any sentence saying the jin'ya (\u9663\u5c4b) was the office from which Hida was governed (e.g. \u4ee3\u5b98\u6240, \u90e1\u4ee3\u5f79\u6240, \u653f\u52d9), and the sentence contai"
+   ]
+  },
+  {
+   "url": "kotobank.jp/word/\u53a9-35131",
+   "reads": 16,
+   "sessions": 11,
+   "features": {
+    "267": 4,
+    "269": 5,
+    "271": 6,
+    "280": 1
+   },
+   "atypes": {
+    "main": 4,
+    "source-reader": 6,
+    "quote-check": 4,
+    "source-applicability": 2
+   },
+   "cited": true,
+   "in_registry": true,
+   "carry": 17589,
+   "whys": [
+    "Quote verbatim the Heibonsha (\u4e16\u754c\u5927\u767e\u79d1\u4e8b\u5178) entry text in full, especially the sentences around \u6b66\u5bb6\u306e\u99ac\u5c4b, \u9060\u4f8d, \u5f66\u6839\u57ce, and \u7d043m\u56db\u65b9 (what kind of stable - farmhouse \u6c11\u5bb6?).",
+    "Quote verbatim in Japanese any sentence containing \u5185\u53a9 or \u5916\u53a9 or \u4e3b\u5c4b or \u5bb6\u5c4b\u5185, with the dictionary name it comes from.",
+    "Quote verbatim the full Japanese sentence(s) containing \u300c\u5185\u99ac\u5c4b\u300d and \u300c\u571f\u9593\u306e\u4e00\u9685\u3092\u3042\u3066\u308b\u300d, and the sentence containing \u300c\u307e\u305b\u3093\u68d2\u300d, with surrounding sentence. Does \u571f\u9593\u306e\u4e00\u9685\u3092\u3042\u3066\u308b ref",
+    "Quote exactly, character for character, the sentence(s) around \u5916\u99ac\u5c4b - especially any sentence defining \u5916\u99ac\u5c4b or saying the stable stands separate from the main hou"
+   ]
+  },
+  {
+   "url": "chiba-muse.or.jp/mura/facility/page-1519175606779",
+   "reads": 17,
+   "sessions": 10,
+   "features": {
+    "267": 12,
+    "268": 5
+   },
+   "atypes": {
+    "main": 4,
+    "source-reader": 3,
+    "quote-check": 4,
+    "source-applicability": 2,
+    "general-purpose": 4
+   },
+   "cited": true,
+   "in_registry": true,
+   "carry": 32233,
+   "whys": [
+    "Quote verbatim (exact Japanese characters, including punctuation) every sentence about the \u6b66\u5c45\u5bb6: especially any that say it is a \u4e2d\u7d1a\u6b66\u58eb (middle-rank samurai) house",
+    "Quote verbatim (exact Japanese characters) every sentence that describes what this samurai house is: what it reproduces/models, which period (late Edo?), which ",
+    "Quote verbatim (Japanese, exact characters) any sentence describing what this samurai house is: its rank (e.g. \u4e2d\u7d1a\u6b66\u58eb), its domain (e.g. \u4f50\u5009\u85e9), that it is a reprod",
+    "Does this page describe a samurai residence (\u6b66\u5bb6\u5c4b\u6577) with a vegetable garden (\u83dc\u5712, \u7551)? Where is the garden located relative to the residence (north/south/east/west",
+    "Quote every sentence on this page that mentions \u83dc\u5712, \u7551, \u5c4b\u6577, \u4f4d\u7f6e, \u65b9\u89d2, \u5317, \u5357, \u6771, \u897f, \u53f0\u6240, \u88cf\u5ead, or who cultivated the garden. Give the full verbatim Japanese text of eac",
+    "Quote verbatim in Japanese the full paragraph(s) about \u83dc\u5712 (vegetable garden), including any sentences about its history, who tended it, and whether it reproduce"
+   ]
+  },
+  {
+   "url": "jstage.jst.go.jp/article/jgeography/123/4/123_123.451/_pdf",
+   "reads": 15,
+   "sessions": 10,
+   "features": {
+    "268": 3,
+    "272": 10,
+    "280": 2
+   },
+   "atypes": {
+    "general-purpose": 3,
+    "main": 6,
+    "quote-check": 4,
+    "source-applicability": 2
+   },
+   "cited": true,
+   "in_registry": true,
+   "carry": 34867,
+   "whys": [
+    "This is a paper on the religious space of Edo (\u5bfa\u793e\u5206\u5e03\u3068\u6a5f\u80fd\u304b\u3089\u307f\u305f\u6c5f\u6238\u306e\u5b97\u6559\u7a7a\u9593). Extract any verbatim text with numbers: how many temples, how many monks per temple, temple ",
+    "This is a J-STAGE article on the religious space of Edo as seen from the distribution and function of temples/shrines. Quote verbatim (Japanese) any passages gi",
+    "Quote verbatim any text about the number of temples and shrines (\u5bfa\u793e) in Edo relative to villages/towns, their distribution, and any statistics on temple density",
+    "Is this a readable PDF of the paper (not a login/landing page)? Quote verbatim the sentence containing \"\u6559\u5584\u5bfa\" and \"1,000 \u576a\" (or 1,000\u576a), character for character,",
+    "Give: authors, title, year, journal, kind of article (research article, review, special issue?). Quote verbatim any passage mentioning 1000\u576a or \u5343\u576a or \u5e73\u5747 regardi",
+    "Find the passage containing \"\u65b0\u9580\u524d\u753a\u304c\u8d77\u3053\u3063\u305f\" and \"\u4f11\u307f\u8336\u5c4b\u3084\u571f\u7523\u7269\u5e97\" and quote it exactly, character for character, including the surrounding sentence. Also note whether it "
+   ]
+  },
+  {
+   "url": "city.fuchu.hiroshima.jp/material/files/group/23/daikanpanfu2.pdf",
+   "reads": 19,
+   "sessions": 9,
+   "features": {
+    "267": 13,
+    "271": 6
+   },
+   "atypes": {
+    "main": 10,
+    "quote-check": 8,
+    "source-applicability": 1
+   },
+   "cited": true,
+   "in_registry": true,
+   "carry": 64308,
+   "whys": [
+    "This is a pamphlet on a daikan office (\u4ee3\u5b98\u6240) in Fuchu, Hiroshima. Quote VERBATIM in Japanese every passage and floor-plan label about: \u30b7\u30e9\u30b9/\u767d\u6d32 (its surface, roof,",
+    "Is this a public PDF about the Joge daikansho (\u4e0a\u4e0b\u4ee3\u5b98\u6240)? Quote verbatim any text containing \u5927\u9580, \u5c0f\u9580, \u9580\u756a\u6240, \u77f3\u6bb5, and any text on the gate or the number of officials. ",
+    "Give the full Japanese text of this document exactly, character for character (including full-width vs half-width digits, punctuation like \uff64 vs \u3001, and spaces). ",
+    "Does this pamphlet contain the text \u7384\u95a2, \u6577\u53f0, \u5927\u9580 (as labels or text)? Quote any text mentioning them, the Meiji 2 (\u660e\u6cbb2\u5e74) drawing, and describe the layout of the e",
+    "Quote verbatim, character for character, any text containing \u5f79\u4eba, 3\u4eba or 3 \u4eba, \u6176\u5fdc, \u7a32\u8377, \u5929\u795e, \u9663\u5c4b\u306e\u4e2d. Also say whether a drawing dated \u660e\u6cbb2\u5e74 (1869) is reproduced and whe",
+    "Quote verbatim any text containing \u7a32\u8377 or \u5929\u795e or \u9663\u5c4b\u7d75\u56f3 or \u660e\u6cbb\uff12\u5e74. Say whether a caption \u660e\u6cbb\uff12\u5e74\u306e\u4e0a\u4e0b\u9663\u5c4b\u7d75\u56f3 appears."
+   ]
+  },
+  {
+   "url": "adeac.jp/oamishirasato-city/texthtml/d100010/mp100010-100010/ht011770",
+   "reads": 19,
+   "sessions": 9,
+   "features": {
+    "269": 8,
+    "280": 11
+   },
+   "atypes": {
+    "main": 3,
+    "source-reader": 2,
+    "quote-check": 11,
+    "source-applicability": 3
+   },
+   "cited": true,
+   "in_registry": true,
+   "carry": 26416,
+   "whys": [
+    "Quote verbatim (Japanese) every sentence mentioning \u56db\u3007\u576a, \u56db\u4e94\u576a, \u660e\u6cbb\u4e00\u516b\u5e74 or 1885 or the year of the table, the village name / \u4e0a\u7dcf, \u5927\u539f (Ohara) family and its year (\u5609\u6c38 ",
+    "Quote verbatim, in Japanese, the passages about \u886818 (\u660e\u6cbb\u5341\u516b\u5e74 \u5bb6\u5c4b\u898f\u6a21), \u4e00\u516b\u576a, \u5c0f\u5ddd\u6cf0\u8535 \u56db\u3007\u576a, \u56db\u4e94\u576a\u306e\u6700\u5927\u306e\u672c\u5bb6, and \u56f36 \u5927\u539f\u5bb6 \u5c4b\u6577\u56f3 (\u9577\u5c4b\u9580, \u571f\u8535 etc.). Also any sentence about the headman h",
+    "Which village (\u6751) does \u886818 (\u660e\u6cbb\u5341\u516b\u5e74\u306e\u5bb6\u5c4b\u898f\u6a21) cover? Quote verbatim, in Japanese, the sentences naming the village of table 18 and the 16 people (\u4e00\u516d\u4eba). Does the page ",
+    "Give a detailed summary in English: what book/section is this (title, publisher, year of the town history if shown), what it says about farmer houses in the Edo",
+    "Does this page mention \u4e0a\u7dcf (Kazusa) or \u5c71\u8fba\u90e1 or say which province/district \u67ff\u9905\u6751 was in? Quote any such sentence exactly, character for character.",
+    "Quote verbatim (Japanese, exact characters) the sentence(s) that give the date of the Kakimochi (\u67ff\u9905) house/building record behind Table 18 (e.g. \u660e\u6cbb18\u5e74 or 1885)."
+   ]
+  },
+  {
+   "url": "hattori-iseki.yayoiken.jp/h-zenki.html",
+   "reads": 17,
+   "sessions": 9,
+   "features": {
+    "280": 17
+   },
+   "atypes": {
+    "main": 5,
+    "source-reader": 4,
+    "quote-check": 7,
+    "source-applicability": 1
+   },
+   "cited": true,
+   "in_registry": true,
+   "carry": 33833,
+   "whys": [
+    "Quote verbatim the sentence containing \u6c34\u53e3\u3084\u5830 and the sentence before it, and say what period/site the paddies are.",
+    "Quote exactly the passages about \u6392\u6c34\u8def (drainage channel) and its width, and about \u5f25\u751f\u6642\u4ee3\u521d\u671f\u306e\u6c34\u7530 and areas A\u30fbB. Does the page say which period/area the drainage chann",
+    "Quote verbatim the Japanese passages about \u5927\u7566 and \u5c0f\u7566 (width, height), and the sentence containing \u8fb2\u4f5c\u696d\u7528\u306e\u901a\u8def\u3068\u3057\u3066\u3082\u5229\u7528\u3055\u308c\u305f\u3088\u3046\u3067\u3059 with its preceding sentence, so the subje",
+    "Copy exactly, character for character without paraphrase, the full paragraph(s) that contain the strings \u300c\u5927\u7566\u306f\u8015\u4f5c\u5730\u3068\u540c\u3058\u571f\u3092\u7528\u3044\u3066\u304a\u308a\u300d and \u300c\u3053\u306e\u5c0f\u7566\u306f\u4eba\u304c\u6b69\u304f\u305f\u3081\u306e\u3082\u306e\u3067\u306f\u306a\u304f\u300d and \u300c\u8fb2\u4f5c\u696d\u7528\u306e\u901a",
+    "Quote verbatim (in Japanese, exact characters) every sentence that (a) dates these paddies (e.g. \u5f25\u751f\u6642\u4ee3\u524d\u671f), (b) names the location (\u6ecb\u8cc0, \u5b88\u5c71), (c) says what the sma",
+    "Copy out, exactly character for character, the page's opening/title text and the first paragraph describing the \u6c34\u7530 (paddies), especially any sentence containing"
+   ]
+  },
+  {
+   "url": "jayna.usfca.edu/asia-pacific-perspectives/pdfs/1-coggins-minor-fengshui-forests.pdf",
+   "reads": 16,
+   "sessions": 9,
+   "features": {
+    "250": 2,
+    "269": 14
+   },
+   "atypes": {
+    "quote-check": 15,
+    "main": 1
+   },
+   "cited": true,
+   "in_registry": true,
+   "carry": 21266,
+   "whys": [
+    "Quote EXACTLY (character for character, including quote-mark style and any hyphenation) the sentences containing: (1) \"Fengshui forests modify flows of wind and",
+    "Quote verbatim, if present, these passages and their surrounding sentence: (1) \"fengshui forests are typically situated immediately behind and upslope from the ",
+    "Quote verbatim the passage beginning \"Fengshui forests modify flows of wind and water\" through \"village/water tail fengshuilin\" and the rest of that sentence. A",
+    "Quote verbatim, exactly as on the page, any sentence beginning \"Fengshui forests modify flows of wind and water\" and the sentence beginning \"Rice paddies are ty",
+    "Quote exactly, character for character (keep dashes and punctuation as in the source), the sentences containing: \"biology professor from Xiamen University named",
+    "Quote exactly (character for character) these passages if present, and give page numbers: (1) Figure 1 caption containing \"Fengshui forests modify flows of wind"
+   ]
+  }
+ ],
+ "unc_multi_session_top": [
+  [
+   7,
+   8,
+   "storage.googleapis.com/jnl-up-j-ijc-files/journals/1/articles/1300/66151cd3a6d55.pdf"
+  ],
+  [
+   6,
+   7,
+   "jinya.gifu.jp/en"
+  ],
+  [
+   6,
+   7,
+   "chiba-muse.or.jp/mura/kikaku-mura/juu/jyuu.htm"
+  ],
+  [
+   4,
+   5,
+   "ktr.mlit.go.jp/yokohama/tokaido/02_tokaido/03_sisetu/04index.htm"
+  ],
+  [
+   4,
+   5,
+   "ja.wikipedia.org/wiki/\u898b\u9644"
+  ],
+  [
+   4,
+   4,
+   "scirea.org/journal/paperinformation?paperid=5347"
+  ],
+  [
+   4,
+   4,
+   "jinya.gifu.jp"
+  ],
+  [
+   4,
+   4,
+   "example.com"
+  ],
+  [
+   4,
+   4,
+   "adeac.jp/kodaira-lib/text-list/d100010/ht002580"
+  ],
+  [
+   3,
+   6,
+   "museum-kiyose.jp/image/kenkyu/kyotaku72.pdf"
+  ],
+  [
+   3,
+   5,
+   "zh.wikipedia.org/wiki/\u62a4\u57ce\u6cb3"
+  ],
+  [
+   3,
+   5,
+   "kotobank.jp/word/\u5c4b\u6577-143650"
+  ],
+  [
+   3,
+   5,
+   "jstage.jst.go.jp/article/tga/71/3/71_120/_article/-char/ja"
+  ],
+  [
+   3,
+   5,
+   "ja.wikipedia.org/wiki/\u6563\u5c45\u6751"
+  ],
+  [
+   3,
+   5,
+   "iwr.cssn.cn/yjly/fjyj/lw/202010/w020201020357343060958.pdf"
+  ],
+  [
+   3,
+   5,
+   "bunka.nii.ac.jp/heritages/detail/201969"
+  ],
+  [
+   3,
+   4,
+   "zh.wikipedia.org/zh-hans/\u6f0f\u6fa4\u5712"
+  ],
+  [
+   3,
+   4,
+   "ranhaku.com/web06/01chishi/09ter00.html"
+  ],
+  [
+   3,
+   4,
+   "ktr.mlit.go.jp/yokohama/tokaido/02_tokaido/03_sisetu/08index.htm"
+  ],
+  [
+   3,
+   4,
+   "jstage.jst.go.jp/article/kfa/1/1/1_1/_article/-char/ja"
+  ],
+  [
+   3,
+   4,
+   "ja.wikipedia.org/wiki/\u85ac\u4e38\u81ea\u9855\u6d41"
+  ],
+  [
+   3,
+   4,
+   "ja.wikipedia.org/wiki/\u767e\u59d3\u4f1d\u8a18"
+  ],
+  [
+   3,
+   4,
+   "ja.wikipedia.org/wiki/\u59bb\u7c60\u5bbf"
+  ],
+  [
+   3,
+   4,
+   "city.sakura.lg.jp/soshiki/bunkaka/bunkazai/sisetsu/buke/3032.html"
+  ],
+  [
+   3,
+   4,
+   "arch.shibaura-it.ac.jp/multidatabases/multidatabase_contents/download/871/27e77f25f965b4c32978500d1420e06d/957?col_no=2&frame_id=795"
+  ]
+ ]
+}

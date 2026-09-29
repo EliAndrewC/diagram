@@ -88,7 +88,8 @@ A list of items, each: **the claim as written in the entry** (verbatim), **the s
    English - and `Read` only around the hits (a window of lines, never the whole file). A quote you give is
    copied from the file. `WebFetch` is for what the script could not reach (any other state in the manifest), for
    a pointer the manifest lacks, and for a lead the pages themselves point to. If your prompt carries no
-   manifest, say so and fetch as below.
+   manifest, say so and fetch as below. The saved pages come from the host's page cache (feature 288), so a
+   bundle's `pages/` is the cached text of the page: read it before any `WebFetch`, always.
 1. **Fetch the source itself** with `WebFetch`. Follow a redirect by calling again with the new
    URL. On a 403 or a paywall, try the obvious alternates once each: the publisher's abstract page,
    a PMC or arXiv copy, the Wikipedia article the summary was echoing. Do not try more than three

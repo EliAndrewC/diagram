@@ -1,0 +1,39 @@
+{
+ "cited_read": 1632,
+ "cited_read_in_sessions_of_2plus_questions": 1155,
+ "questions_per_cited_source_(session_sections)": {
+  "0": 83,
+  "1": 394,
+  "2": 382,
+  "3": 259,
+  "4": 160,
+  "5": 65,
+  "6": 289
+ },
+ "citing_questions_per_cited_source_(footnotes)": {
+  "0": 18,
+  "1": 1050,
+  "2": 310,
+  "3": 123,
+  "4": 52,
+  "5": 19,
+  "6": 60
+ },
+ "split_count": {
+  "new: same question/unknown": 955,
+  "verify": 4452,
+  "new: other question": 105
+ },
+ "split_tok": {
+  "new: same question/unknown": 115541,
+  "verify": 2613847,
+  "new: other question": 14751
+ },
+ "split_carry": {
+  "new: same question/unknown": 5557393,
+  "verify": 8235118,
+  "new: other question": 532827
+ },
+ "first_read_tok_cited": 178035,
+ "first_read_carry_cited": 4386905
+}

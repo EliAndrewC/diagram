@@ -142,3 +142,7 @@ development-secrets.ini
 .claude/skills/diagram/wip/**/*.html
 # the prefix reservation ledger (feature 265 FR-010): host state shared by every clone, never committed
 .specify/prefixes.jsonl
+# feature 288: the sources-consulted ledger and the page cache keyed by URL - host state under the MIRROR's .specify/,
+# shared by every clone and never committed (the lock is covered by `*.lock`)
+.specify/sources-consulted.jsonl
+.specify/page-cache/

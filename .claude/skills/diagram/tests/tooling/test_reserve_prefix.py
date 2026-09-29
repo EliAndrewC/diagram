@@ -130,3 +130,21 @@ def test_a_write_session_s_eleventh_registry_key_is_refused_with_the_continuatio
     assert rp.main(["registry", "key-12", "--root", str(a)]) == 0, "a session the runner did not cap (a check session) is not refused"
     (mirror / ".specify" / rp.LEDGER).write_text("not json\n", encoding="utf-8")
     assert rp.session_keys(mirror, "sid-w") == 0
+
+
+def test_a_registry_url_writes_the_stub_and_marks_the_source_cited(tmp_path, capsys) -> None:
+    """Feature 288 FR-005 (SC-003): with URL= the registry stub names its pointer the way every entry does and the
+    sources-consulted ledger marks it `cited:<key>` at once; without it the stub is empty, as before; a glossary term
+    takes no URL."""
+    _mirror, a = _world(tmp_path)
+    src = rp._sources()
+    where = src.home(a)
+    path = rp.reserve("registry", "edo-enwiki", a, url="https://en.wikipedia.org/wiki/Edo")
+    assert path.read_text(encoding="utf-8") == '<h3 id="edo-enwiki"><code>edo-enwiki</code></h3>\n<p>(https://en.wikipedia.org/wiki/Edo)</p>\n'
+    assert [(r["url"], r["outcome"], r["clone"]) for r in src.read(where)] == [("en.wikipedia.org/wiki/Edo", "cited:edo-enwiki", "a")]
+    assert rp.reserve("registry", "plain", a).read_text(encoding="utf-8") == "", "without URL= nothing differs"
+    assert len(src.read(where)) == 1
+    assert rp.main(["glossary", "a term", "--root", str(a), "--url", "https://example.org"]) == 2
+    assert "KIND=registry only" in capsys.readouterr().err
+    assert rp.main(["registry", "kyo-jawiki", "--root", str(a), "--url", "https://ja.wikipedia.org/wiki/Kyo"]) == 0
+    assert src.read(where)[-1]["outcome"] == "cited:kyo-jawiki"
