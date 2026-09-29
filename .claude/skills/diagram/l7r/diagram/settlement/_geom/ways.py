@@ -112,7 +112,7 @@ def nearest_way_bearing(M: Manifest, x: float, y: float) -> float | None:
     """The bearing (degrees) of the way nearest (x, y), or None where the map drew no way.
 
     ONE BODY, because a notice board is TURNED by this and then JUDGED against it
-    (`kosatsuba_faces_the_road`, tests/gate/test_captions_and_boards.py). They were two hand-rolled
+    (`kosatsuba_faces_the_road`, held at the siter since feature 287, labels L12). They were two hand-rolled
     scans, and they agreed everywhere except the one place the answer is not unique: a seat beside a
     lane's VERTEX is EXACTLY equidistant from both segments meeting there, so "the nearest segment"
     is a tie, and a tie is decided by whatever the scan happens to do next. The siter took `min` over

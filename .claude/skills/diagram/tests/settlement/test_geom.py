@@ -777,7 +777,7 @@ def test_nearest_way_bearing_breaks_a_corner_tie_by_manifest_order() -> None:
     equidistant from both segments meeting there, so "the nearest segment" is not unique, and the
     notice board was turned by one reading of that tie and judged against another - square-on by the
     siter's arithmetic, 64 degrees side-on by the check's. First in manifest order wins, both here
-    and in `tests/gate/test_captions_and_boards.py`, which is what makes the two agree."""
+    and in the siter that turns the board by it (labels L12), which is what makes the two agree."""
     from l7r.diagram.settlement import nearest_way_bearing
 
     assert nearest_way_bearing({}, 0.0, 0.0) is None, "no way drawn is None, not a crash"
