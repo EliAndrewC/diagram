@@ -257,3 +257,8 @@ the polder DRAWS and is down to two named failures ... BOTH OF THOSE ARE NOW FIX
 `hamletgen.md`'s polder section and `tests/soak/test_polder_fall_0.py`). What survives is the soak test's docstring carve-out
 ("this does not assert a clean gate, which would be a lie"), stale since; W48 is therefore an excuse to remove (FR-006): the
 polder roll is held to every placement rule like any other.
+
+**The seats today (D2's stand-in count)** (observed 2026-09-29, method: `p0/harness.py`, the pool and cohort seeds 1-48, each
+through `generate`; `p0/results.json`): all 53 maps seat every household, every one draws its connector, none fails; eight
+re-roll to get there - cohort seeds 6, 8, 19, 33, 38 and 42 once, 23 twice, 45 three times. Those re-rolls are what M3's
+corridor must make unnecessary; the count that decides D2's question is P3's, under the new placer.
