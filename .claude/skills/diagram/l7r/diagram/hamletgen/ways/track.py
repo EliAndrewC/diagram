@@ -28,6 +28,7 @@ from ..plan import SitePlan
 from .bund import RunOnBlocks, tip_onto_the_bund
 from .checks import PathChecker, brook_fords, drawn_water_segs, ford_crossing, gap_segments, stream_segs
 from .clearance import _HAIRPIN_DEG, clip_to_clear, route_around
+from .dry_exit import dry_exit
 from .fabric import _crosses_fabric, _fabric_hits, _homestead_polys
 from .geom import _turn_deg, memo_ground, polyline_len, push_clear_of_fabric, push_out_of, worked_ground
 from .route import _route, set_crossing
@@ -226,7 +227,11 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
         # theory that the offending leg was the first one and nothing above can move it. It changed
         # no map, because this function was never the one at fault - see `_pull_back_to_service`,
         # which moves a connector's inner end AFTER this has cleared it.
-    return out if len(out) >= 2 else run
+    # AND NEVER THE OFFENDING RUN AT ALL (feature 287, ways W25, FR-005): this terminal handed back the clipped run whether or
+    # not it still crossed the steadings, or the original when the clip left nothing - the fallback this docstring's own
+    # rule forbids. It hands back nothing: the spur is then recorded as dropped, and the connector takes the dry exit
+    # (`connector_through`).
+    return []
 
 
 def stage_seat(s: Settlement, plan: SitePlan) -> None:
@@ -406,7 +411,13 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         _band_gate = to_screen((float(layout["gateway"][0]), float(layout["gateway"][1])))
         gate_pt = push_out_of(plan.envelope, _cluster_gateway(s, seat, _band_gate), SPUR_SETBACK)
         track = connector_track(plan, gate_pt, avoid=[list(plan.envelope), *crops], wet=([toe] if toe else []) + drawn_wet, waters=drawn_water_segs(s), fabric=fabric)
-        s.lane(_thread_the_fabric(s, plan, route_around(plan.envelope, track, SPUR_SETBACK)), width=6, clearance=LANE_CLEARANCE, worn=True, connector=True)
+        s.lane(
+            connector_through(s, plan, track, [list(plan.envelope), *crops], ([toe] if toe else []) + drawn_wet, [*plan.watercourses, *drawn_water_segs(s)], fabric),
+            width=6,
+            clearance=LANE_CLEARANCE,
+            worn=True,
+            connector=True,
+        )
         return
 
     # THE SPUR STARTS AT THE CLUSTER'S EDGE, NOT AT THE BAND'S CENTER (FR-002, feature 128).
@@ -506,7 +517,8 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         # stopped 60.6 ft short of the field, where the marsh the path may not cross lies between, so it was a lane ending
         # in open ground (`lanes_reach_something`). A folded spur is drawn only when its outward arm still reaches the
         # field; otherwise the map says why it has no path to its rice.
-        _drawn_spur, _swept = spur_cut_at_the_fold(_thread_the_fabric(s, plan, _spur_pts), plan.envelope)
+        _threaded = _thread_the_fabric(s, plan, _spur_pts)
+        _drawn_spur, _swept = spur_cut_at_the_fold(_threaded, plan.envelope) if len(_threaded) >= 2 else (_threaded, "no way to the field clear of the steadings - the field path is the web's")
         if _swept is None:
             s.lane(_drawn_spur, width=SPUR_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)  # flagged so neither sweep can drop the FIELD's only way
         else:
@@ -531,7 +543,13 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     toe = s.toe_band()
     drawn_wet = marsh_ground(s.M, but=("defense",))
     track = connector_track(plan, gate, avoid=[list(plan.envelope), *crops], wet=([toe] if toe else []) + drawn_wet, waters=drawn_water_segs(s), fabric=fabric)
-    s.lane(_thread_the_fabric(s, plan, route_around(plan.envelope, track, SPUR_SETBACK)), width=6, clearance=LANE_CLEARANCE, worn=True, connector=True)
+    s.lane(
+        connector_through(s, plan, track, [list(plan.envelope), *crops], ([toe] if toe else []) + drawn_wet, [*plan.watercourses, *drawn_water_segs(s)], fabric),
+        width=6,
+        clearance=LANE_CLEARANCE,
+        worn=True,
+        connector=True,
+    )
 
 
 def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach: float = 4000.0, wet: Sequence[Poly] = (), waters: Sequence[tuple[Pt, Pt]] = (), fabric: Sequence[Poly] = ()) -> Poly:
@@ -582,10 +600,7 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach
     # its far corners not at all in the direction that matters, so the connector routed "clean" past a
     # corner it then grazed by 4.5 px. `ring_offset` (feature 140) pushes every vertex 8 px along the
     # ring's own outward normal; its first n vertices are that outer ring.
-    def _inflated(w: Poly) -> Poly:
-        return list(ring_offset(w, 8.0, 0.0)[: len(w)])
-
-    wet_grown = [_inflated(w) for w in wet if len(w) >= 3]
+    wet_grown = [wet_grown_by_the_lane(w) for w in wet if len(w) >= 3]
     # THE WATER, THE CROP AND THE POND INDEXED ONCE FOR THE WHOLE SWEEP (feature 276, FR-005): 41 bearings each asked
     # every segment and polygon again. `PathChecker` answers exactly what `path_violations` did.
     wet_checks = [PathChecker([w], None, ()) for w in wet_grown]
@@ -649,13 +664,53 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach
             return path
         if best is None or (soaked, steaded, violations) < best[0]:
             best = ((soaked, steaded, violations), path)
-    # NO CLEAN BEARING: take the LEAST-BAD one rather than a fixed escape route.
+    # NO CLEAN BEARING: the least-bad one only where it is DRY and clear of every steading.
     #
     # This used to return `start` plus a ray straight away from the field, and that fallback is what
     # actually shipped the defect: it consulted nothing, so on any map where the sweep came up empty
     # the connector was drawn through the hem and across the drainage ditch, failing three checks at
-    # once. A fallback that ignores the constraints is worse than no fallback, because it looks like
-    # a decision. Scoring every candidate and keeping the best means a hard map degrades by one
-    # crossing instead of by everything.
+    # once. The least-bad bearing that replaced it degraded a hard map by one violation instead of by
+    # everything - but still emitted it, a track through the marsh or across a farmstead (feature 287,
+    # ways W23, FR-005). A crop clip stays the best bearing's, because `route_around` bends the drawn
+    # track round the field afterwards; a wet or steaded bearing is refused, and the track is found by
+    # the flood fill instead (`dry_exit`).
     assert best is not None
-    return best[1]
+    if best[0][:2] == (0, 0):
+        return best[1]
+    return connector_dry_exit(plan, start, avoid, wet, waters, fabric)
+
+
+def wet_grown_by_the_lane(w: Poly) -> Poly:
+    """A wet polygon grown 8 px along its own outward normals (`ring_offset`) - the lane's half-width and the gate's pad,
+    so the sweep scores the tread the gate measures (see `connector_track`)."""
+    return list(ring_offset(w, 8.0, 0.0)[: len(w)])
+
+
+def connector_through(s: Settlement, plan: SitePlan, track: Poly, avoid: Sequence[Poly], wet: Sequence[Poly], waters: Sequence[tuple[Pt, Pt]], fabric: Sequence[Poly]) -> Poly:
+    """The connector as drawn: the swept track bent round the field (`route_around`) and threaded through the steadings
+    (`_thread_the_fabric`); where either cannot make it clean, the flood fill's dry exit from the same gateway (ways W24,
+    W25) - never the track still across the field or a farmstead."""
+    around = route_around(plan.envelope, track, SPUR_SETBACK)
+    run = _thread_the_fabric(s, plan, around) if around is not None else []
+    return run if len(run) >= 2 else connector_dry_exit(plan, track[0], avoid, wet, waters, fabric)
+
+
+class NoDryExit(ValueError):
+    """The cluster's gateway has no dry way out of the frame: every route crosses marsh, a steading, the field or the brook.
+    That is a property of the seat (`seat_cluster` must refuse such an anchor - the homesteads area's rule), raised here
+    rather than drawn as a track through the wet (feature 287, ways W23)."""
+
+
+def connector_dry_exit(plan: SitePlan, start: Pt, avoid: Sequence[Poly], wet: Sequence[Poly], waters: Sequence[tuple[Pt, Pt]], fabric: Sequence[Poly]) -> Poly:
+    """The connector by the flood fill (`dry_exit`): walled by the wet ground (grown by the lane's width), every steading at
+    `TRACK_FABRIC_GAP`, the field and the pond; the brook and the drawn water are lines it may not cross."""
+    walls = [(wet_grown_by_the_lane(w), 0.0) for w in wet if len(w) >= 3] + [(list(f), TRACK_FABRIC_GAP) for f in fabric] + [(list(a), 0.0) for a in (avoid or [plan.envelope])]
+    if plan.sink_pond:
+        px, py, rx, ry = plan.sink_pond  # the pond's disc, at the sweep's own 80 ft berth (`path_violations`)
+        r = max(rx, ry)
+        walls.append(([(px + r * math.cos(k * math.pi / 8), py + r * math.sin(k * math.pi / 8)) for k in range(16)], 80.0))
+    lines = [(plan.sink_brook[i], plan.sink_brook[i + 1]) for i in range(len(plan.sink_brook) - 1)] + list(waters)
+    path = dry_exit(start, walls, lines, float(plan.W), float(plan.H))
+    if path is None:
+        raise NoDryExit(f"no dry way out of the frame from the gateway at ({start[0]:.0f}, {start[1]:.0f})")
+    return path

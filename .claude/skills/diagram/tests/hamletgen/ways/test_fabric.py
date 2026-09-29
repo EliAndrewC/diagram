@@ -190,9 +190,12 @@ def test_a_track_that_cannot_thread_the_cluster_takes_a_wider_berth() -> None:
     s.M["houses"] = [{"x": 700.0, "y": 500.0 + dy, "w": 60.0, "h": 40.0, "rot": 0.0, "kind": "plain"} for dy in range(0, 401, 40)]
     run = [(700.0, 700.0), (950.0, 700.0)]
     out = _thread_the_fabric(s, plan, run)
-    assert len(out) >= 2, "a track is always handed back - the caller has a lane to draw"
     fabric = [poly for poly, _owner, _kind in _homestead_polys(s)]
     assert _crosses_fabric(list(run), fabric, 16.0), "the straight line really is blocked"
+    # feature 287 (ways W25, FR-005): with the run starting inside a steading no detour clears, and the terminal hands
+    # back NOTHING rather than the clipped run still crossing - the spur is recorded as dropped, the connector takes the
+    # dry exit
+    assert out == [], "never a track across the steadings"
 
 
 def test_a_join_link_is_refused_outright_when_it_would_cross_a_farmhouse() -> None:

@@ -25,6 +25,24 @@ def test_a_way_cutting_the_field_is_bent_ROUND_it_not_nibbled_at() -> None:
     assert not point_in_poly(stub[0][0], stub[0][1], square)
 
 
+def test_a_way_round_the_field_crosses_it_nowhere_or_is_refused() -> None:
+    """Feature 287, ways W24 (FR-005): six rounds and then the result as it stood let a leg across the field ship. The
+    rounds run until no leg crosses (bounded by the ring's vertices), and a path that still crosses comes back None."""
+    from l7r.diagram.settlement import segments_cross
+
+    comb = [(0.0, 0.0), (400.0, 0.0), (400.0, 100.0)]  # a deeply lobed field: eight teeth hanging from a spine
+    for k in range(8):
+        x = 400.0 - k * 50.0
+        comb += [(x, 300.0), (x - 25.0, 300.0), (x - 25.0, 100.0)]
+    comb += [(0.0, 100.0)]
+    path = [(-50.0, 200.0), (450.0, 200.0)]
+    bent = hg.route_around(comb, path, 4.0)
+    if bent is not None:
+        assert not any(segments_cross(a, b, comb[k], comb[(k + 1) % len(comb)]) for a, b in zip(bent, bent[1:], strict=False) for k in range(len(comb)))
+    square = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
+    assert hg.route_around(square, [(-50.0, 50.0), (150.0, 50.0)], 8.0, rounds=0) is None, "still across the field: refused"
+
+
 def test_a_way_is_clipped_where_the_crop_begins() -> None:
     """`clip_to_clear` truncates rather than dragging a vertex, and returns NOTHING when the
     surviving run is too short to be a lane - the arm is simply not drawn."""

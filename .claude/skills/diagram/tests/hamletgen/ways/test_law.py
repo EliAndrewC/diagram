@@ -234,6 +234,19 @@ def test_a_plank_crosses_a_supply_ditch_and_never_the_drain() -> None:
     }
     assert law.plank_faults(M) == ([(50, 100)], [(50, 201, "drain")])
     assert law.plank_faults({"bridges": [{"x": 0.0, "y": 0.0, "foot": True}]}) == ([(0, 0)], [])
+    # feature 287: a LATERAL is a supply ditch - a polder's ring canal and its field ditches record that role (Kuwabata's
+    # six planks, which the comb-only reading named as laid on a drain; research/ways/030, archetypes/110)
+    polder = {"field_ditches": [{"poly": [[0.0, 0.0], [100.0, 0.0]], "role": "lateral", "seg": "e_toe"}], "bridges": [{"x": 50.0, "y": 1.0, "foot": True}]}
+    assert law.plank_faults(polder) == ([], [])
+
+
+def test_a_deck_landing_on_the_rice_does_not_seat() -> None:
+    """Ways W13: `deck_seats` asks the placer's own solve with the flooded rice (`flooded_ground`), so a crossing whose
+    deck can land only in the paddy is named - `settle_the_web` then cuts it."""
+    ditch = [(0.0, 100.0), (400.0, 100.0)]
+    drowned = [[(-50.0, 101.0), (450.0, 101.0), (450.0, 400.0), (-50.0, 400.0)]]
+    assert law.deck_seats([(200.0, 0.0), (200.0, 300.0)], 3.0, [(ditch, 4.0)]) == []
+    assert law.deck_seats([(200.0, 0.0), (200.0, 300.0)], 3.0, [(ditch, 4.0)], 1.0, drowned) == [(200, 100)]
 
 
 # ---- the ways out --------------------------------------------------------------------------------------------------
@@ -258,3 +271,46 @@ def test_a_map_that_keeps_every_rule_has_no_violations() -> None:
 def test_a_map_that_breaks_a_rule_names_it() -> None:
     v = law.violations({"lanes": [_lane((0.0, 0.0), (100.0, 0.0), (0.0, 5.0)), _lane((500.0, 500.0), (600.0, 500.0))], "houses": []})
     assert v["bends"] == [("doubles back", 100, 0)] and v["networks"] == 1
+
+
+# ---- joins, fragments, widths (feature 287, homes H37-H40, H42) -------------------------------------------------------
+
+
+def test_a_join_that_stops_short_of_the_way_it_makes_for() -> None:
+    """Homes H37/H38: a free end making for a way within `JOIN_REACH_FT`, over walkable ground, is a join that stopped short
+    (future-work: Inashiro's four lanes 28.1-28.5 ft shy of the lane they join)."""
+    way = _lane((0.0, 0.0), (0.0, 400.0))
+    short = _lane((200.0, 100.0), (28.0, 100.0))  # heading west, 28 ft shy of the way
+    away = _lane((200.0, 300.0), (28.0, 300.0), (60.0, 330.0))  # its end turns away from the way
+    far = _lane((200.0, 200.0), (50.0, 200.0))  # 50 ft off: not a join
+    M = {"lanes": [way, short, away, far]}
+    assert law.near_misses(M) == [(1, -1, (0.0, 100.0))]
+    assert law.near_misses({"lanes": [way, short], "streams": [{"poly": [[14.0, -50.0], [14.0, 450.0]]}]}) == [], "over water: blocked"
+    assert law.near_misses({"lanes": [way, short], "houses": [_house(14.0, 100.0, 10.0, 10.0)]}) == [], "through a farmhouse: blocked"
+    assert law.near_misses({"lanes": [way, short], "gardens": [{"poly": [[10.0, 95.0], [18.0, 95.0], [18.0, 105.0], [10.0, 105.0]]}]}) == []
+    assert law.near_misses({"lanes": [way, short], "fields": [{"outline": [[10.0, 50.0], [18.0, 50.0], [18.0, 150.0], [10.0, 150.0]]}]}) == []
+    assert law.near_misses({"lanes": [way, _lane((5.0, 5.0)), _lane((1.0, 1.0), (1.0, 1.0)), _lane((50.0, 0.0), (50.0, 0.0), (80.0, 0.0), connector=True)]}) == []
+
+
+def test_a_span_that_would_hook_or_run_along_a_tread_is_no_join() -> None:
+    way = _lane((0.0, 0.0), (0.0, 400.0))
+    hooky = _lane((-100.0, 90.0), (10.0, 100.0))  # already past the way: the span back to it is a hook
+    assert law.near_misses({"lanes": [way, hooky]}) == []
+    assert not law.span_walkable({"lanes": [way, _lane((10.0, 0.0), (10.0, 400.0))]}, (12.0, 100.0), (8.0, 180.0), (0,)), "down the length of a way"
+    assert law.span_walkable({"lanes": [way, _lane((10.0, 0.0), (10.0, 400.0))]}, (12.0, 100.0), (8.0, 180.0), (0, 1)), "...unless it is a way the span meets"
+
+
+def test_a_fragment_that_earns_nothing() -> None:
+    conn = _lane((0.0, 0.0), (-500.0, 0.0), connector=True)
+    main = _lane((0.0, 0.0), (0.0, 300.0))
+    stub = _lane((0.0, 150.0), (10.0, 150.0))  # 10 ft off the main, serving nothing the main does not
+    link = _lane((0.0, 300.0), (20.0, 300.0))
+    island = _lane((20.0, 300.0), (20.0, 500.0))
+    M = {"lanes": [conn, main, stub, link, island], "houses": [_house(40.0, 480.0)], "meta": {"generated_by": "hamletgen"}}
+    assert law.short_fragments(M) == [2], "the link earns its place (it joins the island), the stub does not"
+    assert law.short_fragments({"lanes": [conn, main]}) == []
+
+
+def test_one_way_keeps_one_width() -> None:
+    lanes = [_lane((0.0, 0.0), (100.0, 0.0), w=6), _lane((100.0, 0.0), (200.0, 10.0), w=3), _lane((200.0, 10.0), (300.0, 10.0), w=3)]
+    assert law.width_steps(lanes) == [(0, 1)]

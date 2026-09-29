@@ -49,6 +49,85 @@ def test_a_spur_cut_short_of_the_field_is_recorded_instead_of_drawn(monkeypatch)
     s, plan = _walled_settlement()
     plan.seat = hg.seat_cluster(plan)
     monkeypatch.setattr(track, "spur_cut_at_the_fold", lambda pts, env: ([], "folded back short of the field - the test's own reason"))
+    # the wall of houses leaves the connector no way out at all (`NoDryExit`, tested on its own below); this test is the spur's
+    monkeypatch.setattr(track, "connector_dry_exit", lambda *a: [(1384.0, 700.0), (1600.0, 700.0)])
     track.stage_track(s, plan)
     assert "short of the field" in s.M["meta"].get("field_spur_swept", ""), "the map records why it has no path to its rice"
     assert not [ln for ln in s.M.get("lanes") or [] if ln.get("spur")], "and nothing is drawn for it"
+
+
+def test_a_connector_with_no_dry_bearing_takes_the_dry_neck() -> None:
+    """Feature 287, ways W23 (FR-005): where every bearing of the sweep crosses the wet, the least-bad one was drawn
+    through the marsh. The flood fill finds the one dry neck instead, and the track has no wet violation."""
+    from l7r.diagram.hamletgen.ways.checks import PathChecker
+    from l7r.diagram.hamletgen.ways.track import wet_grown_by_the_lane
+
+    plan = a_plan()
+    plan.seat = hg.seat_cluster(plan)
+    start = (700.0, 200.0)
+    # a marsh boxing the start in on every side but a 60 ft neck at the north wall's west end (x 500-560)
+    box = [
+        [(560.0, 60.0), (920.0, 60.0), (920.0, 80.0), (560.0, 80.0)],
+        [(480.0, 60.0), (500.0, 60.0), (500.0, 340.0), (480.0, 340.0)],
+        [(900.0, 60.0), (920.0, 60.0), (920.0, 340.0), (900.0, 340.0)],
+        [(480.0, 320.0), (920.0, 320.0), (920.0, 340.0), (480.0, 340.0)],
+    ]
+    track = hg.connector_track(plan, start, avoid=[SQUARE], wet=box)
+    assert sum(PathChecker([wet_grown_by_the_lane(w)], None, ()).violations(track) for w in box) == 0, "not a foot of it in the wet"
+    assert not (0 <= track[-1][0] <= plan.W and 0 <= track[-1][1] <= plan.H), "and it leaves the frame"
+
+
+def test_a_gateway_with_no_dry_way_out_is_refused_by_name() -> None:
+    import pytest
+
+    from l7r.diagram.hamletgen.ways.track import NoDryExit
+
+    plan = a_plan()
+    plan.seat = hg.seat_cluster(plan)
+    plan.sink_pond = (2000.0, 2000.0, 50.0, 40.0)
+    ring = [[(480.0, 60.0), (920.0, 60.0), (920.0, 80.0), (480.0, 80.0)], [(480.0, 60.0), (500.0, 60.0), (500.0, 340.0), (480.0, 340.0)]]
+    ring += [[(900.0, 60.0), (920.0, 60.0), (920.0, 340.0), (900.0, 340.0)], [(480.0, 320.0), (920.0, 320.0), (920.0, 340.0), (480.0, 340.0)]]
+    with pytest.raises(NoDryExit):
+        hg.connector_track(plan, (700.0, 200.0), avoid=[SQUARE], wet=ring)
+
+
+def test_the_connector_takes_the_dry_exit_where_the_field_or_the_steadings_leave_no_clean_track(monkeypatch) -> None:
+    """Feature 287, ways W24/W25: `route_around` refusing (None) or `_thread_the_fabric` handing back nothing both send
+    the connector to the dry exit from the same gateway - never the track still across the field or a farmstead."""
+    from l7r.diagram.hamletgen.ways import track
+
+    s, plan = _walled_settlement()
+    dry = [(1.0, 1.0), (-500.0, 1.0)]
+    monkeypatch.setattr(track, "connector_dry_exit", lambda *a: dry)
+    monkeypatch.setattr(track, "route_around", lambda *a: None)
+    assert track.connector_through(s, plan, [(10.0, 10.0), (-900.0, 10.0)], [], [], [], []) == dry
+    monkeypatch.setattr(track, "route_around", lambda poly, path, margin: path)
+    monkeypatch.setattr(track, "_thread_the_fabric", lambda *a: [])
+    assert track.connector_through(s, plan, [(10.0, 10.0), (-900.0, 10.0)], [], [], [], []) == dry
+    monkeypatch.setattr(track, "_thread_the_fabric", lambda s, plan, run: run)
+    assert track.connector_through(s, plan, [(10.0, 10.0), (-900.0, 10.0)], [], [], [], []) == [(10.0, 10.0), (-900.0, 10.0)]
+
+
+def test_a_spur_with_no_way_clear_of_the_steadings_is_recorded_dropped(monkeypatch) -> None:
+    """Feature 287, ways W25: the spur's threading hands back nothing rather than a run across a house, and the stage
+    records the spur as dropped; the field path is the web's."""
+    from l7r.diagram.hamletgen.ways import track
+
+    s, plan = _walled_settlement()
+    plan.seat = hg.seat_cluster(plan)
+    monkeypatch.setattr(track, "_thread_the_fabric", lambda *a, **k: [])
+    monkeypatch.setattr(track, "connector_dry_exit", lambda *a: [(1384.0, 700.0), (1600.0, 700.0)])
+    track.stage_track(s, plan)
+    assert "clear of the steadings" in s.M["meta"].get("field_spur_swept", "")
+    assert not [ln for ln in s.M.get("lanes") or [] if ln.get("spur")]
+
+
+def test_a_bearing_that_only_clips_the_field_is_kept_for_route_around() -> None:
+    """A crop clip is the one fault the sweep may still hand back: `route_around` bends the drawn track round the field
+    afterwards (ways W24). Walled in by crop on every side but dry and clear of the steadings, the best bearing stands."""
+    plan = a_plan()
+    plan.seat = hg.seat_cluster(plan)
+    fence = [[(480.0, 60.0), (920.0, 60.0), (920.0, 80.0), (480.0, 80.0)], [(480.0, 60.0), (500.0, 60.0), (500.0, 340.0), (480.0, 340.0)]]
+    fence += [[(900.0, 60.0), (920.0, 60.0), (920.0, 340.0), (900.0, 340.0)], [(480.0, 320.0), (920.0, 320.0), (920.0, 340.0), (480.0, 340.0)]]
+    track = hg.connector_track(plan, (700.0, 200.0), avoid=fence)
+    assert hg.path_violations(track, fence, None, []) > 0 and track[0] == (700.0, 200.0)

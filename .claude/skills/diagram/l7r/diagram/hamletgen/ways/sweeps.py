@@ -275,7 +275,6 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
             key=lambda c: c[0],
         )
         link, best = None, None
-        fallback: tuple[Poly, Any] | None = None
         for cand in cands[:40]:
             # A LINK MAY GO THE LONG WAY ROUND, AND MAY BE PLANKED. Joining the network is worth a
             # detour that a footpath to a door would not be: these two halves of one hamlet are
@@ -301,17 +300,15 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
             # on the reference hamlet. Do not re-add it: an orphan across a field is honestly
             # unlinkable, and the fix for those houses is the straggler pass, not a narrower lane.
             if _try and polyline_len(_try) <= _LINK_DIRECTNESS * max(cand[0], 1.0):
-                # ...AND NOT OVER THE BROOK AND BACK when another candidate will do (settlement-review of Mizuguchi, feature
-                # 261): a link from one bank to the same bank that crosses twice - out at one ford, home at the next - reads
-                # as two planks for nothing. It is kept only as the last resort, when no other candidate links the orphan.
+                # ...AND NEVER OVER THE BROOK AND BACK (settlement-review of Mizuguchi, feature 261): a link from one bank to
+                # the same bank that crosses twice - out at one ford, home at the next - reads as two planks for nothing. It
+                # was kept as the last resort when no other candidate linked the orphan; that fallback emitted the violation
+                # (feature 287, ways W06, FR-005), so it is refused like any other, and an orphan no clean link reaches is
+                # left for the web's last pass (`settle_the_web`: dropped off the network, its houses redrawn a way).
                 if brook_crossings(_try, s) and brook_crossings(_try, s) % 2 == 0:
-                    if fallback is None:
-                        fallback = (_try, cand)
                     continue
                 link, best = _try, cand
                 break
-        if (link is None or best is None) and fallback is not None:
-            link, best = fallback
         if link is None or best is None:
             return made
         # NOT trimmed to service (T31, GM 2026-08-27): `_trim_to_service` pulled the link's ends back to

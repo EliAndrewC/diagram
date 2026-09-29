@@ -558,15 +558,16 @@ def test_brook_crossings_counts_a_polyline_over_the_drawn_course() -> None:
     assert brook_crossings([(100.0, 100.0), (150.0, 300.0)], s) == 0
 
 
-def test_join_orphan_ways_keeps_an_over_and_back_link_only_as_the_last_resort(monkeypatch) -> None:
-    """Feature 261: a link that crosses the brook out and home again is refused while another candidate will do - and
-    when none will, it is still drawn, because an orphan left unjoined is worse than two planks."""
+def test_join_orphan_ways_never_draws_an_over_and_back_link(monkeypatch) -> None:
+    """Feature 261 refused a link that crosses the brook out and home again while another candidate would do, and drew it
+    as the last resort when none would. Feature 287 (ways W06, FR-005): that fallback emitted the violation, so the link is
+    refused outright and the orphan is left to the web's last pass."""
     from l7r.diagram.hamletgen.ways import sweeps
 
     monkeypatch.setattr(sweeps, "brook_crossings", lambda pts, s: 2)
     s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 200.0)], [(120.0, 0.0), (120.0, 200.0)]])
-    assert hg.ways._join_orphan_ways(s, [], [], []) == 1
-    assert len(s.M["lanes"]) == 3
+    assert hg.ways._join_orphan_ways(s, [], [], []) == 0
+    assert len(s.M["lanes"]) == 2, "no link drawn"
 
 
 def test_a_doubled_tail_that_overran_the_way_ends_at_the_crossing() -> None:

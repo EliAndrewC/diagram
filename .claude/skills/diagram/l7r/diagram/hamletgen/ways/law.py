@@ -3,18 +3,19 @@
 A LIFT, NOT A RE-DERIVATION. Each predicate below is the body a finished-map test asserts - `tests/gate/test_lane_network.py`,
 `tests/gate/test_cohort_lane_rules.py`, `tests/gate/test_crossings_and_cover.py` and the ways rows of
 `tests/hamletgen/test_pool_261.py` - moved into the engine, and those tests now call it. The placer that owns a rule
-(`settle_the_web`, the ways phase of feature 287) will call the same predicate, which is the skill's standing rule
+(`settle.settle_the_web`, the web's last pass) calls the same predicate, which is the skill's standing rule
 ("placement and its check must read the SAME source") made structural: there is one body per rule, so the two cannot
 drift. The acceptance sweep (M9) runs `violations` over every finished map, so this module is the registry of the rules.
 
 Every predicate answers with what VIOLATES the rule - an empty list (or zero, or False) is a pass - so a test states the
 found thing in its failure message and a placer knows where to cut.
 
-WHERE THE PLACER AND ITS TEST READ A RULE DIFFERENTLY TODAY, the predicate is the TEST's reading (feature 287's brief for
-P1: predicates only, no placer change); the ways phase moves each placer onto it:
+WHERE THE PLACER AND ITS TEST READ A RULE DIFFERENTLY, the predicate is the TEST's reading, and the placers were moved onto
+it (the ways phase of feature 287):
 
 - the BEND (`bends_badly`): the tests sum the path between two 50 degree turns; `clearance._bends_badly`, which the web's
-  passes ask, tests two turns separated by ONE segment - a lattice step of two short legs passes it and fails the test.
+  passes ask, tested two turns separated by ONE segment - a lattice step of two short legs passed it and failed the test.
+  Both now read `clearance.kink_spans`.
 - the FORD (`off_ford_crossings`): the test allowed 45 ft from a recorded ford; the router gaps the brook at `FORD_HALF`
   (30 ft). The 45 ft was slack for `round_the_brooks` moving the course after the fords were set; the pool passes at the
   one constant, so the predicate reads `FORD_HALF` and the slack is gone.
@@ -30,16 +31,20 @@ import math
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import seg_dist, seg_intersect, segments_cross
+from l7r.diagram.settlement import seg_closest, seg_dist, seg_intersect, segments_cross
+from l7r.diagram.settlement._geom.indexes import PointGrid
 from l7r.diagram.settlement._knobs import bridge_carried_ways, bridge_crossed_waters
-from l7r.diagram.settlement.city.bridges import crossing_deck
+from l7r.diagram.settlement.city.bridges import DECK_SPAN_DEFAULT_FT as DECK_SPAN_DEFAULT_FT
+from l7r.diagram.settlement.city.bridges import PLANK_DITCH_FT as PLANK_DITCH_FT
+from l7r.diagram.settlement.city.bridges import crossing_deck, flooded_ground, plank_ditch, plank_on_supply
+from l7r.diagram.settlement.city.bridges import deck_covers as deck_covers
 from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
 
 from ..consts import FORD_HALF, Poly, Pt
 from .checks import FORD_SQUARE_TOL_DEG, unreached_houses
-from .clearance import _HAIRPIN_DEG, _ZIGZAG_DEG, _ZIGZAG_RUN_FT
-from .fabric import _crosses_fabric, house_hit
-from .geom import _TOUCH_GAP, _components, _turn_deg, end_serves, steading_footprints, worked_ground
+from .clearance import _HAIRPIN_DEG, _ZIGZAG_DEG, _ZIGZAG_RUN_FT, kink_spans
+from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _crosses_fabric, house_hit
+from .geom import _TOUCH_GAP, WorkedGround, _components, _turn_deg, end_serves, polyline_len, steading_footprints, worked_ground
 from .joints import _HOOK_DEG, _HOOK_FT, hairpin_over_a_short_leg, joints, oriented
 from .sweeps import _DOUBLED_DEG, along_tail
 
@@ -70,14 +75,8 @@ FIELD_REACH_FT = 60.0
 """On a brook map one of the hamlet's own ways (not the track out) comes this near the field - its paddy or its dry hem -
 the reach `lanes_reach_something` asks of the field (feature 261, FR-012)."""
 
-DECK_SPAN_DEFAULT_FT = 20.0
-"""A deck that records no span is read as this long when asking whether it covers a crossing (the test's default)."""
-
 DECK_NEAR_FT = 40.0
 """A deck this near a recorded watercourse is over it, and is judged against that course's width."""
-
-PLANK_DITCH_FT = 24.0
-"""A footplank this near a recorded field ditch is on that ditch; farther, it crosses no recorded ditch at all."""
 
 CONNECTOR_START_FT = 1.5
 """A lane end this near the connector's first point meets the connector's START - `fold_the_connector_hairpin`'s own
@@ -91,6 +90,21 @@ figure, so the hairpin the fold repairs and the hairpin this law refuses are one
 # own ink. No rule of the record states either figure; they are recorded here, at the constant.
 NEEDLE_DEG = 20.0
 NEEDLE_FT = 20.0
+
+JOIN_REACH_FT = _LANE_JOIN_FT
+"""A free lane end this near another way, making for it, is a join that stops short (`near_misses`) - the web's own join
+reach (`fabric._LANE_JOIN_FT`, 30 ft), ONE tolerance for the placer that draws a join and the rule that asks whether it
+touched. Future-work 2c measured every stopped-short join in the pool inside it (16.7, 28.0, 28.1, 29.2, 29.6 ft) - the
+dead band between the generator's 30 ft and the ink's 4 ft that neither half owned."""
+
+FRAGMENT_FT = _WEB_MIN_FT
+"""A lane shorter than this that earns nothing is debris (`short_fragments`) - the web's own debris floor (`_WEB_MIN_FT`),
+asked of the finished web rather than only when a run is drawn."""
+
+AIM_DEG = 60.0
+"""...and "making for it" is the way standing within this many degrees of the end's own heading. MAP DRAWING CONVENTION: a
+tread that stops pointing at a way within a turn of 60 degrees reads as meant to meet it; one pointing away from it, or past
+it at a glance, is a lane that ends beside a way, not a broken join."""
 
 
 def lane_pts(ln: Mapping[str, Any]) -> Poly:
@@ -116,26 +130,9 @@ def _min_dist(pt: Pt, poly: Poly) -> float:
 def kinks(pts: Sequence[Pt]) -> list[tuple[str, int, int]]:
     """Where a lane fails to bend like a path: a turn of `DOUBLE_BACK_DEG` or more ("doubles back"), or two turns of
     `KINK_DEG` or more whose summed path between them is `BEND_RUN_FT` or less ("kinks") - the whole run between the two
-    turns, not one segment."""
+    turns, not one segment. The body is `clearance.kink_spans`, which every web pass asks too (ways W18, FR-003)."""
     p = list(pts)
-    bad: list[tuple[str, int, int]] = []
-    if len(p) < 3:
-        return bad
-    turns: list[int] = []
-    for k in range(1, len(p) - 1):
-        v1 = (p[k][0] - p[k - 1][0], p[k][1] - p[k - 1][1])
-        v2 = (p[k + 1][0] - p[k][0], p[k + 1][1] - p[k][1])
-        if math.hypot(*v1) < 1e-6 or math.hypot(*v2) < 1e-6:
-            continue
-        deg = _turn_deg(p[k - 1], p[k], p[k + 1])
-        if deg >= DOUBLE_BACK_DEG:
-            bad.append(("doubles back", round(p[k][0]), round(p[k][1])))
-        elif deg >= KINK_DEG:
-            turns.append(k)
-    for ka, kb in zip(turns, turns[1:], strict=False):
-        if sum(math.dist(p[j], p[j + 1]) for j in range(ka, kb)) <= BEND_RUN_FT:
-            bad.append(("kinks", round(p[ka][0]), round(p[ka][1])))
-    return bad
+    return [(kind, round(p[ka][0]), round(p[ka][1])) for kind, ka, _kb in kink_spans(p)]
 
 
 def bends_badly(pts: Sequence[Pt]) -> bool:
@@ -148,12 +145,19 @@ def lanes_that_kink(M: Mapping[str, Any]) -> list[tuple[str, int, int]]:
     return [k for ln in (M.get("lanes") or []) if not ln.get("connector") for k in kinks(lane_pts(ln))]
 
 
-def hooks(pts: Sequence[Pt]) -> list[tuple[int, int]]:
-    """The vertex before each hooked end: a first or last leg of `_HOOK_FT` or less turning `_HOOK_DEG` or more."""
+def hooked(pts: Sequence[Pt]) -> list[int]:
+    """Which ends of a run are hooked, as -1 (its last) and 0 (its first): a leg of `_HOOK_FT` or less turning `_HOOK_DEG`
+    or more."""
     p = list(pts)
     if len(p) < 3:
         return []
-    return [(round(q[-2][0]), round(q[-2][1])) for q in (p, p[::-1]) if math.dist(q[-2], q[-1]) <= _HOOK_FT and _turn_deg(q[-3], q[-2], q[-1]) >= _HOOK_DEG]
+    return [end for end, q in ((-1, p), (0, p[::-1])) if math.dist(q[-2], q[-1]) <= _HOOK_FT and _turn_deg(q[-3], q[-2], q[-1]) >= _HOOK_DEG]
+
+
+def hooks(pts: Sequence[Pt]) -> list[tuple[int, int]]:
+    """The vertex before each hooked end (`hooked`)."""
+    p = list(pts)
+    return [(round(p[-2 if end == -1 else 1][0]), round(p[-2 if end == -1 else 1][1])) for end in hooked(p)]
 
 
 def hooked_ends(M: Mapping[str, Any]) -> list[tuple[int, int]]:
@@ -169,32 +173,48 @@ def husks(M: Mapping[str, Any]) -> list[int]:
 # ---- where lanes meet ----------------------------------------------------------------------------------------------
 
 
-def folded_joints(lanes: Lanes) -> list[tuple[int, int]]:
-    """Where two lanes meeting end to end - one way to the walker (`joints`) - turn `DOUBLE_BACK_DEG` or more at the joint."""
+def folded_joint_pairs(lanes: Lanes) -> list[tuple[int, int, int, int]]:
+    """The joints (`joints`: `(i, end_i, j, end_j)`) where two lanes meeting end to end - one way to the walker - turn
+    `DOUBLE_BACK_DEG` or more."""
     out = []
     for i, ei, j, ej in joints(lanes):
         x, y = oriented(lanes, i, ei, j, ej)
         if _turn_deg(x[-2], x[-1], y[1]) >= DOUBLE_BACK_DEG:
-            out.append((round(x[-1][0]), round(x[-1][1])))
+            out.append((i, ei, j, ej))
+    return out
+
+
+def folded_joints(lanes: Lanes) -> list[tuple[int, int]]:
+    """Where two lanes meeting end to end turn `DOUBLE_BACK_DEG` or more at the joint (`folded_joint_pairs`)."""
+    out = []
+    for i, ei, j, ej in folded_joint_pairs(lanes):
+        x, _y = oriented(lanes, i, ei, j, ej)
+        out.append((round(x[-1][0]), round(x[-1][1])))
+    return out
+
+
+def connector_hairpin_ends(lanes: Lanes) -> list[tuple[int, int, int]]:
+    """(connector index, lane index, end) wherever a lane's short last leg meets the connector's start and the two double
+    back (`hairpin_over_a_short_leg`); the end is -1 (the lane's last point) or 0 (its first)."""
+    out = []
+    for ci, co in enumerate(lanes):
+        cp = lane_pts(co)
+        if not co.get("connector") or len(cp) < 2:
+            continue
+        for i, ln in enumerate(lanes):
+            p = lane_pts(ln)
+            if ln.get("connector") or len(p) < 3:
+                continue
+            for end, seq in ((-1, p), (0, p[::-1])):
+                a, b, j = seq[-3], seq[-2], seq[-1]
+                if math.dist(j, cp[0]) <= CONNECTOR_START_FT and hairpin_over_a_short_leg(a, b, j, cp[1]):
+                    out.append((ci, i, end))
     return out
 
 
 def connector_hairpins(lanes: Lanes) -> list[tuple[int, int]]:
-    """Where a lane's short last leg meets the connector's start and the two double back (`hairpin_over_a_short_leg`)."""
-    out = []
-    for co in lanes:
-        cp = lane_pts(co)
-        if not co.get("connector") or len(cp) < 2:
-            continue
-        for ln in lanes:
-            p = lane_pts(ln)
-            if ln.get("connector") or len(p) < 3:
-                continue
-            for seq in (p, p[::-1]):
-                a, b, j = seq[-3], seq[-2], seq[-1]
-                if math.dist(j, cp[0]) <= CONNECTOR_START_FT and hairpin_over_a_short_leg(a, b, j, cp[1]):
-                    out.append((round(j[0]), round(j[1])))
-    return out
+    """Where a lane's short last leg meets the connector's start and the two double back (`connector_hairpin_ends`)."""
+    return [(round(lane_pts(lanes[i])[end][0]), round(lane_pts(lanes[i])[end][1])) for _ci, i, end in connector_hairpin_ends(lanes)]
 
 
 def _tread_bearings(q: Pt, u: Pt, v: Pt) -> list[Pt]:
@@ -210,17 +230,17 @@ def _tread_bearings(q: Pt, u: Pt, v: Pt) -> list[Pt]:
     return out
 
 
-def needle_joins(lanes: Lanes) -> list[tuple[int, int]]:
-    """Where a lane's last leg, longer than `NEEDLE_FT`, meets another way's tread (within `JOIN_TOL`) and runs back along
-    it at under `NEEDLE_DEG` - a needle rather than a T. A leg carrying straight on from a way's END is not a needle: the
-    tread it meets does not run back beside it."""
+def needle_ends(lanes: Lanes) -> list[tuple[int, int, int, Pt, Pt]]:
+    """(lane index, end, tread lane index, u, v) wherever a lane's end leg, longer than `NEEDLE_FT`, meets another way's tread `u`-`v`
+    (within `JOIN_TOL`) and runs back along it at under `NEEDLE_DEG` - a needle rather than a T. A leg carrying straight on
+    from a way's END is not a needle: the tread it meets does not run back beside it. The end is -1 (last) or 0 (first)."""
     ways = [lane_pts(ln) for ln in lanes]
     out = []
     for i, ln in enumerate(lanes):
         p = ways[i]
         if ln.get("connector") or len(p) < 2:
             continue
-        for q, b in ((p[-1], p[-2]), (p[0], p[1])):
+        for end, q, b in ((-1, p[-1], p[-2]), (0, p[0], p[1])):
             leg = math.dist(q, b)
             if leg <= NEEDLE_FT:
                 continue
@@ -232,8 +252,13 @@ def needle_joins(lanes: Lanes) -> list[tuple[int, int]]:
                     if seg_dist(q[0], q[1], u, v) > JOIN_TOL:
                         continue
                     if any(math.degrees(math.acos(max(-1.0, min(1.0, back[0] * d[0] + back[1] * d[1])))) < NEEDLE_DEG for d in _tread_bearings(q, u, v)):
-                        out.append((round(q[0]), round(q[1])))
-    return sorted(set(out))
+                        out.append((i, end, k, u, v))
+    return out
+
+
+def needle_joins(lanes: Lanes) -> list[tuple[int, int]]:
+    """Where a lane's end leg meets another way's tread as a needle rather than a T (`needle_ends`)."""
+    return sorted({(round(lane_pts(lanes[i])[end][0]), round(lane_pts(lanes[i])[end][1])) for i, end, _k, _u, _v in needle_ends(lanes)})
 
 
 def doubled_tails(M: Mapping[str, Any]) -> list[int]:
@@ -246,6 +271,107 @@ def doubled_tails(M: Mapping[str, Any]) -> list[int]:
     ]
 
 
+def free_end(ways: Sequence[Poly], i: int, q: Pt) -> bool:
+    """Does the end `q` of way `i` touch no other way (within `JOIN_TOL`)?"""
+    return all(len(o) < 2 or min(seg_dist(q[0], q[1], u, v) for u, v in zip(o, o[1:], strict=False)) > JOIN_TOL for k, o in enumerate(ways) if k != i)
+
+
+def span_walkable(M: Mapping[str, Any], p: Pt, q: Pt, skip: Sequence[int] = ()) -> bool:
+    """May a short span of tread be laid from `p` to `q`: across no water (`bridge_crossed_waters`), no crop or marsh, no
+    farmhouse (`house_hit`), no household's yard or garden, and not along another way (its middle within `JOIN_TOL` of a
+    way other than the lanes `skip` - a span that doubles a tread rather than meeting it)?"""
+    for wpts, _w in bridge_crossed_waters(M):
+        wp = [(float(a[0]), float(a[1])) for a in wpts]
+        if any(segments_cross(p, q, u, v) for u, v in zip(wp, wp[1:], strict=False)):
+            return False
+    rings = [[(float(a), float(b)) for a, b in f["outline"]] for f in M.get("fields") or [] if f.get("outline")]
+    rings += [[(float(a), float(b)) for a, b in d["poly"]] for d in M.get("dry_plots") or [] if d.get("poly")]
+    rings += [[(float(a), float(b)) for a, b in m["poly"]] for m in M.get("marshes") or [] if len(m.get("poly") or ()) >= 3 and m.get("role") != "defense"]
+    if any(segments_cross(p, q, r[k], r[(k + 1) % len(r)]) for r in rings for k in range(len(r))):
+        return False
+    if house_hit([p, q], 3.0, M.get("houses") or []):
+        return False
+    yards = [[(float(a), float(b)) for a, b in rec["poly"]] for key in ("threshing_yards", "gardens") for rec in M.get(key) or [] if rec.get("poly")]
+    if _crosses_fabric([p, q], yards, _TOUCH_GAP):
+        return False
+    mid = ((p[0] + q[0]) / 2, (p[1] + q[1]) / 2)
+    return math.dist(p, q) <= 2 * JOIN_TOL or all(k in skip or len(o) < 2 or _min_dist(mid, o) > JOIN_TOL for k, o in enumerate(_ways(M)))
+
+
+def meets_clean(run: Poly, tread: Poly, connector: bool = False) -> bool:
+    """Does the run's LAST end meet the way `tread` as the law asks - no needle, no hook, no fold at a joint, no hairpin at
+    the connector's start? The law's own predicates, asked of the two ways alone (what `settle_the_web` re-lays an end to,
+    and what a join that stops short would have to be)."""
+    pair = [{"pts": run}, {"pts": tread, "connector": connector}]
+    if -1 in hooked(run):
+        return False
+    if any(i == 0 and e == -1 for i, e, *_r in needle_ends(pair)):
+        return False
+    if any(i == 0 and e == -1 for _c, i, e in connector_hairpin_ends(pair)):
+        return False
+    return not any((i, ei) == (0, -1) or (j, ej) == (0, -1) for i, ei, j, ej in folded_joint_pairs(pair))
+
+
+def near_misses(M: Mapping[str, Any]) -> list[tuple[int, int, Pt]]:
+    """(lane index, end, the point it should meet) for every lane end that stops short of a way it is making for: a FREE
+    end (`free_end`) with another way within `JOIN_REACH_FT`, the nearest point of which lies within `AIM_DEG` of the end's
+    own heading, and a walkable span to it (`span_walkable`) that would meet the way cleanly and bend like a path
+    (`meets_clean`, `kinks`). Such an end is a JOIN that stops short - a hole the eye reads in one way, or a T one clearance
+    shy of its lane (homes H37, H38; future-work's "one clearance short" and 2c's corner hole). An end whose span is blocked,
+    or would fold or kink, is not one: the two are separate ways, each ending at what it serves."""
+    ways = _ways(M)
+    out = []
+    for i, ln in enumerate(M.get("lanes") or []):
+        p = ways[i]
+        if ln.get("connector") or len(p) < 2 or polyline_len(p) < 1.0:
+            continue
+        for end, q, b in ((-1, p[-1], p[-2]), (0, p[0], p[1])):
+            if not free_end(ways, i, q) or math.dist(q, b) < 1e-6:
+                continue
+            head = ((q[0] - b[0]) / math.dist(q, b), (q[1] - b[1]) / math.dist(q, b))
+            best: tuple[float, int, Pt] | None = None
+            for k, o in enumerate(ways):
+                if k == i or len(o) < 2:
+                    continue
+                f = min((seg_closest(q[0], q[1], u, v) for u, v in zip(o, o[1:], strict=False)), key=lambda z: math.dist(q, z))
+                d = math.dist(q, f)
+                if d > JOIN_REACH_FT or (best is not None and d >= best[0]):
+                    continue
+                if (f[0] - q[0]) * head[0] + (f[1] - q[1]) * head[1] < d * math.cos(math.radians(AIM_DEG)):
+                    continue
+                best = (d, k, f)
+            if best is None or not span_walkable(M, q, best[2], (i, best[1])):
+                continue
+            run = [*(p if end == -1 else p[::-1]), best[2]]
+            if meets_clean(run, ways[best[1]], bool((M.get("lanes") or [])[best[1]].get("connector"))) and len(kink_spans(run)) <= len(kink_spans(p)):
+                out.append((i, end, best[2]))
+    return out
+
+
+def short_fragments(M: Mapping[str, Any]) -> list[int]:
+    """The lanes shorter than `FRAGMENT_FT` (the connector and the field spur aside) that earn nothing: taking one away
+    leaves no farmhouse newly unreached (`unreached_houses`) and the web in as many networks (`lane_networks`) - a fragment
+    the passes whittled down and nothing re-asked (homes H40; future-work 2c's 4 ft fragment). A short run that is some
+    house's way, or the link that joins two pieces, earns its place and is not one."""
+    lanes = M.get("lanes") or []
+    short = [i for i, ln in enumerate(lanes) if not ln.get("connector") and not ln.get("spur") and len(ln.get("pts") or []) >= 2 and polyline_len(lane_pts(ln)) < FRAGMENT_FT]
+    if not short:
+        return []
+    reached, nets = len(unreached_houses(M)), lane_networks(M)
+    out = []
+    for i in short:
+        without = {**M, "lanes": [ln for k, ln in enumerate(lanes) if k != i]}
+        if len(unreached_houses(without)) <= reached and lane_networks(without) <= nets:
+            out.append(i)
+    return out
+
+
+def width_steps(lanes: Lanes) -> list[tuple[int, int]]:
+    """The joints (`joints`: two lane ends meeting, no third way there) where one way changes width - a back lane halving
+    its tread where nothing happens (homes H42, future-work "THE WIDTH STEP"): (lane, lane) for each."""
+    return [(i, j) for i, _ei, j, _ej in joints(lanes) if float(lanes[i].get("w") or 3.0) != float(lanes[j].get("w") or 3.0)]
+
+
 def lane_networks(M: Mapping[str, Any]) -> int:
     """How many networks the drawn lanes fall into at the ink tolerance (`JOIN_TOL`): one, or you cannot walk between
     them."""
@@ -256,45 +382,57 @@ def lane_networks(M: Mapping[str, Any]) -> int:
 # ---- where lanes end -----------------------------------------------------------------------------------------------
 
 
-def dangling_ends(M: Mapping[str, Any]) -> list[tuple[int, int]]:
-    """Every internal lane end that reaches nothing (`end_serves`) other than the way its own far end stands on: the other
-    ways' segments are asked, less those within `_TOUCH_GAP` of the lane's far end."""
+def dangling_lane_ends(M: Mapping[str, Any], ground: WorkedGround | None = None) -> list[tuple[int, int]]:
+    """(lane index, end) for every internal lane end that reaches nothing (`end_serves`) other than the way its own far
+    end stands on: the other ways' segments are asked, less those within `_TOUCH_GAP` of the lane's far end. `ground` is the
+    worked ground where the caller has it built already (`memo_ground`)."""
     ways = _ways(M)
     centers = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or []]
     steadings = steading_footprints(M)
-    ground = worked_ground(M)
+    ground = worked_ground(M) if ground is None else ground
     out = []
     for i, ln in enumerate(M.get("lanes") or []):
         p = ways[i]
         if ln.get("connector") or len(p) < 2:
             continue
         others = [sg for k, o in enumerate(ways) if k != i and len(o) >= 2 for sg in zip(o, o[1:], strict=False)]
-        for end, far in ((p[-1], p[0]), (p[0], p[-1])):
+        for e, end, far in ((-1, p[-1], p[0]), (0, p[0], p[-1])):
             segs = [sg for sg in others if seg_dist(far[0], far[1], sg[0], sg[1]) > _TOUCH_GAP]
             if not end_serves(end, segs, centers, ground, steadings):
-                out.append((round(end[0]), round(end[1])))
-    return sorted(set(out))
+                out.append((i, e))
+    return out
 
 
-def fronted_ends(M: Mapping[str, Any]) -> dict[int, int]:
-    """How many free lane ends (the connector's aside; an end within `JOIN_TOL` of another way is discharged by the
-    junction) each farmhouse discharges - an end whose nearest farmhouse center is within `DOORSTEP_FT`."""
+def dangling_ends(M: Mapping[str, Any]) -> list[tuple[int, int]]:
+    """Every internal lane end that reaches nothing but the way it left (`dangling_lane_ends`), by where it stands."""
+    ways = _ways(M)
+    return sorted({(round(ways[i][e][0]), round(ways[i][e][1])) for i, e in dangling_lane_ends(M)})
+
+
+def fronting_ends(M: Mapping[str, Any]) -> dict[int, list[tuple[int, int]]]:
+    """The free lane ends (the connector's aside; an end within `JOIN_TOL` of another way is discharged by the junction)
+    each farmhouse discharges, as (lane index, end) - an end whose nearest farmhouse center is within `DOORSTEP_FT`."""
     ways = _ways(M)
     houses = M.get("houses") or []
-    fronted: dict[int, int] = {}
+    fronted: dict[int, list[tuple[int, int]]] = {}
     if not houses:
         return fronted
     for i, ln in enumerate(M.get("lanes") or []):
         p = ways[i]
         if ln.get("connector") or len(p) < 2:
             continue
-        for end in (p[0], p[-1]):
+        for e, end in ((0, p[0]), (-1, p[-1])):
             if min((_min_dist(end, o) for k, o in enumerate(ways) if k != i and len(o) >= 2), default=1e9) <= JOIN_TOL:
                 continue
             best = min(range(len(houses)), key=lambda h: math.hypot(end[0] - houses[h]["x"], end[1] - houses[h]["y"]))
             if math.hypot(end[0] - houses[best]["x"], end[1] - houses[best]["y"]) <= DOORSTEP_FT:
-                fronted[best] = fronted.get(best, 0) + 1
+                fronted.setdefault(best, []).append((i, e))
     return fronted
+
+
+def fronted_ends(M: Mapping[str, Any]) -> dict[int, int]:
+    """How many free lane ends each farmhouse discharges (`fronting_ends`)."""
+    return {h: len(ends) for h, ends in fronting_ends(M).items()}
 
 
 def doorstep_ends(M: Mapping[str, Any]) -> dict[int, int]:
@@ -357,7 +495,7 @@ def fouls_fabric(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]], f
 
 
 def _crossings(p: Poly, course: Poly) -> list[Pt]:
-    return [x for a, b in zip(p, p[1:], strict=False) for c, d in zip(course, course[1:], strict=False) if segments_cross(a, b, c, d) and (x := seg_intersect(a, b, c, d)) is not None]
+    return [x for _k, x in crossing_points(p, course)]
 
 
 def over_and_back(M: Mapping[str, Any]) -> list[tuple[int, int]]:
@@ -366,33 +504,67 @@ def over_and_back(M: Mapping[str, Any]) -> list[tuple[int, int]]:
     return [(i, n) for brook in _brooks(M) for i, p in enumerate(ways) if (n := len(_crossings(p, brook))) >= 2]
 
 
+def crossing_points(p: Poly, course: Poly) -> list[tuple[int, Pt]]:
+    """(segment index, point) for every crossing of `course` by the run `p`, in the run's order.
+
+    THE COURSE INDEXED ONCE (constitution X clause 15): a household's way out is sampled every 10 ft and a brook runs to
+    hundreds of segments, so every pair was millions of tests a map (`settle_the_web`'s way-out step, 4.3 s of Kashikawa's
+    5.0). The grid only prunes - a course segment whose box cannot meet the run segment's cannot cross it - and the same
+    test decides, in the same order."""
+    grid = PointGrid(64.0)
+    grid.extend((j, c, d, min(c[0], d[0]), min(c[1], d[1]), max(c[0], d[0]), max(c[1], d[1])) for j, (c, d) in enumerate(zip(course, course[1:], strict=False)))
+    out = []
+    for k, (a, b) in enumerate(zip(p, p[1:], strict=False)):
+        mx, my = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2
+        near = {item[0]: item for item in grid.near(mx, my, math.dist(a, b) / 2 + 1.0)}
+        for j in sorted(near):
+            _j, c, d, *_box = near[j]
+            if segments_cross(a, b, c, d) and (x := seg_intersect(a, b, c, d)) is not None:
+                out.append((k, x))
+    return out
+
+
+def off_ford_at(M: Mapping[str, Any], reach: float = FORD_HALF) -> list[tuple[int, int, Pt]]:
+    """(lane index, segment index, point) for every crossing of the brook by a lane farther than `reach` from every
+    recorded ford (`meta.brook_fords`)."""
+    fords = [(float(f[0]), float(f[1])) for f in (M.get("meta") or {}).get("brook_fords") or []]
+    return [(i, k, x) for brook in _brooks(M) for i, p in enumerate(_ways(M)) for k, x in crossing_points(p, brook) if min((math.dist(x, f) for f in fords), default=math.inf) > reach]
+
+
 def off_ford_crossings(M: Mapping[str, Any], reach: float = FORD_HALF) -> list[tuple[int, int]]:
     """Every crossing of the brook by a lane that stands farther than `reach` from every recorded ford
-    (`meta.brook_fords`) - ONE constant with the router's ford gap."""
-    fords = [(float(f[0]), float(f[1])) for f in (M.get("meta") or {}).get("brook_fords") or []]
-    return [(round(x[0]), round(x[1])) for brook in _brooks(M) for p in _ways(M) for x in _crossings(p, brook) if min((math.dist(x, f) for f in fords), default=math.inf) > reach]
+    (`meta.brook_fords`) - ONE constant with the router's ford gap (`off_ford_at`)."""
+    return [(round(x[0]), round(x[1])) for _i, _k, x in off_ford_at(M, reach)]
+
+
+def water_courses(M: Mapping[str, Any], water: str = "brook") -> list[Poly]:
+    """The brook's courses (`water="brook"`, the streams) or the drawn channels' (`water="channel"`)."""
+    return _brooks(M) if water == "brook" else [[(float(q[0]), float(q[1])) for q in c["pts"]] for c in M.get("drawn_channels") or []]
+
+
+def off_square(a: Pt, b: Pt, u: Pt, v: Pt) -> float:
+    """How many degrees the run `a`-`b` crosses the course `u`-`v` off square."""
+    t = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]) - math.atan2(v[1] - u[1], v[0] - u[0])) % 180.0
+    return abs(90.0 - t)
+
+
+def oblique_at(M: Mapping[str, Any], water: str = "brook") -> list[tuple[int, int, Pt, float]]:
+    """(lane index, segment index, point, degrees off square) for every lane crossing of the brook or a drawn channel
+    (`water_courses`) more than `FORD_SQUARE_TOL_DEG` off square."""
+    out = []
+    for course in water_courses(M, water):
+        for i, p in enumerate(_ways(M)):
+            for k, (a, b) in enumerate(zip(p, p[1:], strict=False)):
+                for u, v in zip(course, course[1:], strict=False):
+                    if segments_cross(a, b, u, v) and (off := off_square(a, b, u, v)) > FORD_SQUARE_TOL_DEG:
+                        out.append((i, k, seg_intersect(a, b, u, v) or a, off))
+    return out
 
 
 def oblique_crossings(M: Mapping[str, Any], water: str = "brook") -> list[tuple[int, int, float]]:
     """(x, y, degrees off square) for every lane crossing more than `FORD_SQUARE_TOL_DEG` off square - of the brook
-    (`water="brook"`, the streams) or of a drawn channel (`water="channel"`, `drawn_channels`)."""
-    courses = _brooks(M) if water == "brook" else [[(float(q[0]), float(q[1])) for q in c["pts"]] for c in M.get("drawn_channels") or []]
-    out = []
-    for course in courses:
-        for p in _ways(M):
-            for a, b in zip(p, p[1:], strict=False):
-                for u, v in zip(course, course[1:], strict=False):
-                    if segments_cross(a, b, u, v):
-                        t = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]) - math.atan2(v[1] - u[1], v[0] - u[0])) % 180.0
-                        if abs(90.0 - t) > FORD_SQUARE_TOL_DEG:
-                            x = seg_intersect(a, b, u, v) or a
-                            out.append((round(x[0]), round(x[1]), round(abs(90.0 - t), 1)))
-    return out
-
-
-def deck_covers(deck: Mapping[str, Any], x: float, y: float) -> bool:
-    """Does this deck's own span reach the point (x, y)?"""
-    return math.hypot(float(deck["x"]) - x, float(deck["y"]) - y) <= float(deck.get("span", DECK_SPAN_DEFAULT_FT))
+    (`water="brook"`, the streams) or of a drawn channel (`water="channel"`, `drawn_channels`) (`oblique_at`)."""
+    return [(round(x[0]), round(x[1]), round(off, 1)) for _i, _k, x, off in oblique_at(M, water)]
 
 
 def unbridged_crossings(M: Mapping[str, Any]) -> list[tuple[int, int]]:
@@ -401,19 +573,25 @@ def unbridged_crossings(M: Mapping[str, Any]) -> list[tuple[int, int]]:
     return [(round(x[0]), round(x[1])) for brook in _brooks(M) for p in _ways(M) for x in _crossings(p, brook) if not any(deck_covers(d, x[0], x[1]) for d in decks)]
 
 
-def deck_seats(pts: Poly, width: float, waters: Sequence[tuple[Any, float]], ftpx: float = 1.0) -> list[tuple[int, int]]:
+def deck_seats(pts: Poly, width: float, waters: Sequence[tuple[Any, float]], ftpx: float = 1.0, wet: Sequence[Poly] = ()) -> list[tuple[int, int]]:
     """Every crossing of `waters` (`bridge_crossed_waters`) by a way along `pts` where no deck seats: `crossing_deck`, the
     very solve `bridges()` makes - grown, then skewed toward square, until every corner clears the whole crossed course
-    (`_deck_corners_clear`)."""
+    (`_deck_corners_clear`) and lands off the flooded rice (`wet`, `flooded_ground`) (`undeckable_at`)."""
+    return [(round(p[0]), round(p[1])) for _k, p in undeckable_at(pts, width, waters, ftpx, wet)]
+
+
+def undeckable_at(pts: Poly, width: float, waters: Sequence[tuple[Any, float]], ftpx: float = 1.0, wet: Sequence[Poly] = ()) -> list[tuple[int, Pt]]:
+    """(segment index, crossing point) for every crossing of `waters` by a way along `pts` where no deck seats
+    (`crossing_deck`)."""
     out = []
-    for ra, rb in zip(pts, pts[1:], strict=False):
+    for k, (ra, rb) in enumerate(zip(pts, pts[1:], strict=False)):
         for wpts, ww in waters:
             wp = [(float(q[0]), float(q[1])) for q in wpts]
             for wa, wb in zip(wp, wp[1:], strict=False):
                 if segments_cross(ra, rb, wa, wb):
-                    p, _rot, _span, seated = crossing_deck(ra, rb, width, wa, wb, float(ww), wp, ftpx)
+                    p, _rot, _span, seated = crossing_deck(ra, rb, width, wa, wb, float(ww), wp, ftpx, wet)
                     if not seated:
-                        out.append((round(p[0]), round(p[1])))
+                        out.append((k, p))
     return out
 
 
@@ -421,7 +599,8 @@ def undeckable_crossings(M: Mapping[str, Any]) -> list[tuple[int, int]]:
     """`deck_seats` over every carried way of the map (`bridge_carried_ways`) against every watercourse it may cross."""
     ftpx = float((M.get("meta") or {}).get("ftpx") or 1.0)
     waters = bridge_crossed_waters(M)
-    return [x for rpts, rw in bridge_carried_ways(M) for x in deck_seats([(float(q[0]), float(q[1])) for q in rpts], float(rw), waters, ftpx)]
+    wet = flooded_ground(M)
+    return [x for rpts, rw in bridge_carried_ways(M) for x in deck_seats([(float(q[0]), float(q[1])) for q in rpts], float(rw), waters, ftpx, wet)]
 
 
 def short_decks(M: Mapping[str, Any]) -> list[tuple[int, int, float, float]]:
@@ -441,18 +620,24 @@ def short_decks(M: Mapping[str, Any]) -> list[tuple[int, int, float, float]]:
 
 def plank_faults(M: Mapping[str, Any]) -> tuple[list[tuple[int, int]], list[tuple[int, int, str]]]:
     """(stranded, on the drain): footplanks farther than `PLANK_DITCH_FT` from every recorded field ditch, and planks whose
-    nearest ditch is not a supply ditch (a main or a branch) - the collector, the drain or the feeder."""
-    supply = [([(float(p[0]), float(p[1])) for p in d["poly"]], d.get("role")) for d in (M.get("field_ditches") or [])]
+    nearest ditch is not a supply ditch (`SUPPLY_ROLES`: a main, a branch or a lateral) - the collector, the drain or the
+    feeder. `plank_ditch` and `plank_on_supply` are the placer's own (`channel_footbridges`, ways W14).
+
+    THE LATERAL IS A SUPPLY DITCH (feature 287; Kuwabata's six planks). The test this was lifted from read the comb's two roles
+    only, and so named every plank on a polder's laterals and settlement-side ring canal - which record the role `lateral` -
+    as laid on a drain. The record answers it: a plank is laid where a bund path meets an IRRIGATION ditch (research/ways/030),
+    and the polder's inner ring canal and its field ditches are its distribution water (research/archetypes/110)."""
+    ditches = M.get("field_ditches") or []
     stranded, on_drain = [], []
     for b in M.get("bridges") or []:
         if not b.get("foot"):
             continue
         pt = (float(b["x"]), float(b["y"]))
-        near = min(((_min_dist(pt, poly), role) for poly, role in supply if len(poly) >= 2), key=lambda t: t[0], default=(math.inf, None))
-        if near[0] >= PLANK_DITCH_FT:
+        dist, role = plank_ditch(pt, ditches)
+        if dist >= PLANK_DITCH_FT:
             stranded.append((round(pt[0]), round(pt[1])))
-        elif near[1] not in ("main", "branch"):
-            on_drain.append((round(pt[0]), round(pt[1]), str(near[1])))
+        elif not plank_on_supply(pt, ditches):
+            on_drain.append((round(pt[0]), round(pt[1]), str(role)))
     return stranded, on_drain
 
 
@@ -465,7 +650,7 @@ def way_outs_crossing(M: Mapping[str, Any], routes: Sequence[Sequence[Pt]] | Non
     out = []
     for brook in _brooks(M):
         for r in routes:
-            n = sum(1 for a, b in zip(r, r[1:], strict=False) for c, d in zip(brook, brook[1:], strict=False) if segments_cross(a, b, c, d))
+            n = len(crossing_points(list(r), brook))
             if n > 1:
                 out.append((round(r[0][0]), round(r[0][1]), n))
     return out
@@ -482,6 +667,9 @@ LAW: dict[str, Callable[[Mapping[str, Any]], Any]] = {
     "needle_joins": lambda M: needle_joins(M.get("lanes") or []),
     "doubled_tails": doubled_tails,
     "networks": lambda M: max(0, lane_networks(M) - 1),
+    "joins_short": near_misses,
+    "fragments": short_fragments,
+    "width_steps": lambda M: width_steps(M.get("lanes") or []),
     "dangling_ends": dangling_ends,
     "doorstep_ends": doorstep_ends,
     "field_unreached": field_unreached,

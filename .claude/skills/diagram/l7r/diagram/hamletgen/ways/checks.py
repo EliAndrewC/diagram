@@ -355,18 +355,26 @@ convention: square to the eye, and small enough that a gently angled approach is
 
 def square_crossings(pts: Sequence[Pt], brook: Sequence[Pt], half: float) -> list[Pt]:
     """`pts` with every crossing of `brook` that is more than `FORD_SQUARE_TOL_DEG` off square replaced by a leg `2 *
-    half` long along the brook's normal at the crossing, so the way - and the deck laid on it - crosses square. A
-    crossing whose segment is too short to hold the leg is left as drawn.
+    (half + `SQUARE_LEG_PAD`)` long along the brook's normal at the crossing, so the way - and the deck laid on it - crosses
+    square.
 
     AN ELBOW IN THE WATER IS TAKEN OUT FIRST (settlement-review of Kashikawa, feature 261): a lane that bent 3 ft inside the
     brook crossed on a segment too short to square, and its plank took the angle of the leg after the bend - 44 degrees off
     square. An interior vertex within `half` of the brook is dropped, so the crossing lies on one segment that can hold
-    the square leg; the way's ends stay where they are."""
+    the square leg.
+
+    TOTAL (feature 287, ways W11): every oblique crossing on a segment is squared, not the first alone, and a crossing too
+    near the lane's own END to hold the leg is squared too - the end moves onto the leg rather than the crossing being
+    "left as drawn" oblique (the elbow pass has already taken out every INTERIOR vertex that near the water, so only an end
+    can be). The leg reaches `SQUARE_LEG_PAD` past `half` each side, so its own points stand clear of the elbow pass and
+    squaring a squared lane changes nothing: the web's last pass (`settle_the_web`) runs this until a round is still."""
     if len(pts) > 2 and len(brook) > 1:
         pts = [pts[0], *(p for p in pts[1:-1] if min(seg_dist(p[0], p[1], c, d) for c, d in zip(brook, brook[1:], strict=False)) > half), pts[-1]]
+    leg = half + SQUARE_LEG_PAD
     out: list[Pt] = [pts[0]] if pts else []
-    for a, b in zip(pts, pts[1:], strict=False):
+    for k, (a, b) in enumerate(zip(pts, pts[1:], strict=False)):
         seg_len = math.dist(a, b)
+        legs: list[tuple[float, Pt, Pt]] = []
         for c, d in zip(brook, brook[1:], strict=False):
             if seg_len == 0.0 or math.dist(c, d) == 0.0 or not segments_cross(a, b, c, d):
                 continue
@@ -379,9 +387,22 @@ def square_crossings(pts: Sequence[Pt], brook: Sequence[Pt], half: float) -> lis
             dot = ux * nx + uy * ny
             if dot < 0:
                 nx, ny, dot = -nx, -ny, -dot
-            if math.degrees(math.acos(min(1.0, dot))) <= FORD_SQUARE_TOL_DEG or min(math.dist(a, x), math.dist(x, b)) <= half:
+            if math.degrees(math.acos(min(1.0, dot))) <= FORD_SQUARE_TOL_DEG:
                 continue
-            out += [(x[0] - nx * half, x[1] - ny * half), (x[0] + nx * half, x[1] + ny * half)]
-            break
+            legs.append((math.dist(a, x), (x[0] - nx * leg, x[1] - ny * leg), (x[0] + nx * leg, x[1] + ny * leg)))
+        legs.sort(key=lambda t: t[0])
+        for n, (along, p0, p1) in enumerate(legs):
+            if k == 0 and n == 0 and along <= leg:
+                out[-1] = p0  # the lane STARTS too near the water to hold the leg: it starts on the leg instead
+            else:
+                out.append(p0)
+            out.append(p1)
+        if legs and k == len(pts) - 2 and seg_len - legs[-1][0] <= leg:
+            continue  # ...and it ENDS too near: it ends on the leg
         out.append(b)
     return out
+
+
+SQUARE_LEG_PAD = 1.0
+"""How far past `half` the square leg reaches each side of the water, in feet - enough that the leg's own points stand
+outside the elbow pass's reach, so the squaring is idempotent (a map drawing convention)."""
