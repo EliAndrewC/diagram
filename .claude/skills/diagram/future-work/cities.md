@@ -156,3 +156,33 @@ building or district (`Subject("area", ...)` through `_draw_seated_caption`), an
 `Subject(civic=True)` so it keeps off the other named civic buildings (spec FR-014). Delete the row from
 `D8_HAND_SEATS` as each goes. The town and city cover rule (research/presentation 070) is already in the weights.
 
+
+## OWED AT CONVERSION (269's research, 2026-09-28): what the scripted city generator must draw differently
+
+Feature 269 read these questions for the city tier (research/cities; `specs/269-research-backfill/outcomes.md`
+section 3). The hand-drawn maps are frozen, so each is owed by the city tier's conversion (`migration-plan.md`), and
+the rows marked GM wait on a ruling that the conversion puts to the GM through `escalation-check`.
+
+- **The moat's width (B38).** Measurement: `settlement/city/moat.py` draws `px(66)`, 66 ft, on every city. The record
+  reads about 13 ft for a county seat, with a broad shallow form on low ground by a river. Sketch: width by the city's
+  rank, and a knob `moat_form` narrow / broad_shallow, the broad form offered only on low riverside ground.
+- **The gate's guard and inspection posts (B38, GM).** Measurement: drawn 105-135 ft inside the opening; the Hakone
+  barrier puts them 59 ft in. Mechanism: the gate furniture's offsets are fixed. Sketch: the conversion asks the GM,
+  then sets the offset.
+- **The patrol road and the ward fence (B38, GM).** Measurement: a 20 ft patrol road, and the ward fence runs on to the
+  rampart; Tang wards never met the rampart, a road lay between. Today's form is the GM's 2026-07-27 ruling, so the
+  conversion puts the Tang reading to the GM before changing it. Sketch: the fence closes on the road's inner edge; the
+  road may widen.
+- **The gate range (B39).** Measurement: a plain range. Sketch: an optional guard room either side of a senior house's
+  gate, and a ward gate about 12-15 ft wide with wickets.
+- **The ward blocks (B40).** Measurement: `settlement/water_ways/wards.py` `quarter` lays one block form. The record
+  reads blocks about 390 ft with lots about 130 ft, rectangle-weighted or a square with an open core. Sketch: a knob
+  `block_form` rolled per city.
+- **Lower mansions at the outer town (B41a-1).** Measurement: the hinterland draws a garden retreat only. Sketch: a
+  second form, a street of lower mansions at the outer town, rolled per city.
+- **The gate belt's ceiling (B41a-4, GM).** Measurement: a 6-structure floor and no ceiling. Sketch: the GM sets the
+  ceiling; the belt may then be denser.
+- **The in-wall samurai share (B41b, GM).** Measurement: `l7r/diagram/citybudget.py` `SAMURAI_INWALL_FRAC` 2/3; the
+  history reads 2/3 as low. Sketch: the GM rules a higher share, and the extramural estates are drawn as country estates.
+- **The canal's mouth (B46).** Measurement: `settlement/city/canals.py` allows both forms and chooses none. Sketch: a knob
+  rolled per city, the moat with a water gate or the canal's own mouth to the river.

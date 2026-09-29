@@ -1,0 +1,69 @@
+{
+ "kashikawa": {
+  "avoid": 1,
+  "first_s": 4.979,
+  "first_with_snapshot_s": 4.798,
+  "reroll_full_s": 5.077,
+  "reroll_resume_s": 3.389,
+  "manifest_equal": true,
+  "svg_equal": true,
+  "page_equal": true,
+  "page_bytes": 4346155
+ },
+ "cohort-01": {
+  "avoid": 1,
+  "first_s": 3.428,
+  "first_with_snapshot_s": 3.285,
+  "reroll_full_s": 3.498,
+  "reroll_resume_s": 2.184,
+  "manifest_equal": true,
+  "svg_equal": true,
+  "page_equal": true,
+  "page_bytes": 3080590
+ },
+ "cohort-05": {
+  "avoid": 1,
+  "first_s": 3.883,
+  "first_with_snapshot_s": 3.926,
+  "reroll_full_s": 4.229,
+  "reroll_resume_s": 2.73,
+  "manifest_equal": true,
+  "svg_equal": true,
+  "page_equal": true,
+  "page_bytes": 2836402
+ },
+ "cohort-17": {
+  "avoid": 2,
+  "first_s": 3.813,
+  "first_with_snapshot_s": 3.965,
+  "reroll_full_s": 3.8,
+  "reroll_resume_s": 2.673,
+  "manifest_equal": true,
+  "svg_equal": true,
+  "page_equal": true,
+  "page_bytes": 4027912
+ },
+ "cohort-18": {
+  "avoid": 1,
+  "first_s": 4.16,
+  "first_with_snapshot_s": 4.292,
+  "reroll_full_s": 3.673,
+  "reroll_resume_s": 2.424,
+  "manifest_equal": true,
+  "svg_equal": true,
+  "page_equal": true,
+  "page_bytes": 3012489
+ },
+ "cohort-19": {
+  "avoid": 2,
+  "first_s": 2.654,
+  "first_with_snapshot_s": 2.81,
+  "reroll_full_s": 2.938,
+  "reroll_resume_s": 1.748,
+  "manifest_equal": true,
+  "svg_equal": true,
+  "page_equal": true,
+  "page_bytes": 2587600
+ },
+ "load": 4.75146484375
+}

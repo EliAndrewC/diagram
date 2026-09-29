@@ -139,6 +139,17 @@ counts as a readable source, when a guess may be recorded, how a two-form findin
   implement what it says; if it supports two forms, add the knob; only if it is silent does the GM
   rule. (The "calibrated liberty" clause covers a DEGREE along a continuum - how large, how dense,
   how often - never a choice between distinct FORMS.)
+- **A FORM ATTESTED ONLY IN MODERN SOURCES IS ELIMINATED FROM THE PREMODERN MAPS (REQUIRED)** (GM
+  2026-09-28: *"We should eliminate anything which is only modern"*; and of the dike crops, *"We should
+  avoid anything that appears only on modern lists"*). A form earns a place on a map, or a value in a
+  knob, only when a premodern source attests it; one read only in a modern manual, survey or listing is
+  not drawn, however well documented its modern practice. The rule applies to what the GM once asked for
+  as well: the duck pen at a fish pond was drawn because the GM chose it and retired when the record found
+  it modern (269 B32), and the cane, banana and vegetable dikes left the dike-crop knob while the attested
+  tea dike joined it (269 B34). The same reasoning holds a modern COUNT off the premodern maps: the GM kept
+  hamlets without a shrine of their own because the modern counts reflect *"a wealthier and even
+  post-industrial society"* (269 B35). Where animals lived in the premodern place - ducks herded in the
+  fields rather than penned at the ponds - the write-up of that place says so.
 
 ## The record is written per entry, and the pages are assembled (feature 258, GM 2026-09-20)
 

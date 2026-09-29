@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, Any, cast
 
 from .._geom import Indexed, point_in_poly
 from .._knobs import CITY_TIER_SCALES
+from .fit import part_box
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -114,10 +115,10 @@ class FarmsteadFlushMixin:
                 if j == exclude:
                     continue
                 g = r["geom"]
-                out.append(tuple(g["house"]))
+                out.append(tuple(part_box(g, "house")))  # every footprint as drawn, turned with its house (269 B18)
                 if g.get("yard") is not None:
-                    out.append(tuple(g["yard"]))
-                out += [tuple(b) for b in g.get("gardens", [])]
+                    out.append(tuple(part_box(g, "yard")))
+                out += [tuple(b) for b in part_box(g, "gardens") or []]
                 out += [tuple(g[k]) for k in ("grove_n", "grove_w") if k in g]
             return out
 
@@ -137,14 +138,17 @@ class FarmsteadFlushMixin:
             if not any(overlaps((gcy - gh / 2, gcy + gh / 2), t) for t in trees):
                 continue  # not currently east-shaded - nothing to do
             maxshift = gh + rec["h"] + 6  # 'a little' - stays a dooryard garden near the house
-            others = footprints(i) + [tuple(geom["house"])] + ([tuple(geom["yard"])] if geom.get("yard") is not None else [])
+            others = footprints(i) + [tuple(part_box(geom, "house"))] + ([tuple(part_box(geom, "yard"))] if geom.get("yard") is not None else [])
             dy = step
             while dy <= maxshift:
                 lane = (gcy + dy - gh / 2, gcy + dy + gh / 2)  # clear of EVERY east tree (a small shift can slip INTO a taller arm)
                 if not any(overlaps(lane, t) for t in trees):
                     shifted = [(b[0], b[1] + dy, b[2], b[3]) for b in beds]
-                    if self._garden_beds_clear(shifted, others):
+                    drawn = [(b[0], b[1] + dy, b[2], b[3]) for b in part_box(geom, "gardens")]
+                    if self._garden_beds_clear(drawn, others):
                         geom["gardens"] = shifted
+                        if "boxes" in geom:
+                            geom["boxes"]["gardens"] = drawn  # the beds' drawn boxes move with them
                         break
                 dy += step
 
@@ -199,7 +203,7 @@ class FarmsteadFlushMixin:
             # legacy path fit-tested them square, so a part may stand up to ~3 px off the ground it cleared
             yard_spot, garden_spot = spot
             parts = {"yard": yard_spot, "gardens": [garden_spot]}
-            self._rake_parts(parts, rec["x"], rec["y"])
+            self._rake_parts(parts, rec["x"], rec["y"], rec["rot"])
             yard_spot, garden_spot = parts["yard"], parts["garden"]
             self._attach_garden(rec["x"], rec["y"], [garden_spot], rec["rot"])  # legacy farms keep ONE bed (multi-bed split is nucleated)
             self._attach_yard(rec["x"], rec["y"], yard_spot, rec["rot"])

@@ -1,0 +1,82 @@
+{
+ "feature": "283-garden-sun-check",
+ "plan_sha256": "5b7310d8c9e2ef65fe4b7828a90bea3caf1507d1f640cc4ec1205cb3bf9d47f0",
+ "reviewed": "2026-09-28",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Research homesteads 044: 6 h sun bed, 3 h half-shade bed; the counting (38N, shoulder month, half-hour steps, half the bed lit); least heights labeled.",
+   "class": "within",
+   "why": "FR-001/FR-002 as written; least heights are a labeled calibration, not a choice between forms."
+  },
+  {
+   "id": "D2",
+   "summary": "garden_sun in the pack audit's shared layer on every hand-drawn building sheet; casts buildings, walls, dividers, every tree; a named not-standing list (basin, door, engawa, hearth, notice board, weapon rack, stone lantern, tax barge, dais, clerks' seats, well, two small altars); reports hours, threshold, shade makers by kind; red fixture the shrine sheet as drawn, naming the trees; a trees-only test.",
+   "class": "within",
+   "why": "FR-003/FR-004 as written. The not-standing list is the spec's 'low furniture' class with the well the spec names; the altars are small open-air altars (Hayakawa's Ebisu altar is a stroke path, Ubame's wood-kami altar a small grove altar - read from the sheets 2026-09-28), not the roofed compound shrines FR-003 counts, which still cast."
+  },
+  {
+   "id": "D3",
+   "summary": "Research buildings 405: four attested seats as a knob, the sun ruling out seats under their hours; 400 corrected.",
+   "class": "within",
+   "why": "The GM's redirect ('This feels like ... a research question'), carried by FR-005."
+  },
+  {
+   "id": "D4",
+   "summary": "The four beds moved to seats that pass as sun beds (shrine below the forecourt west of the approach; Hayakawa before Hajime's rooms with the pond and pines moved before the reception, grown to the size knob's low end; Ochiba in the inner court clear of the shrine arm; Ubame between the pavilion and the roji at the low end, pavilion and well shifted); none half-shade.",
+   "class": "within",
+   "why": "'Move them all', to seats from 405, none half-shade (FR-005). Moving the pond, pines, pavilion and well is what the move of the bed displaced; Hayakawa's growth to the knob's low end is FR-005's own size rule and a XIV fix; nothing the GM asked is narrowed."
+  },
+  {
+   "id": "D5",
+   "summary": "Caption placer defect fixed in tools/seat_label.py with a test; other sheets' seats measured unchanged.",
+   "class": "within",
+   "why": "A found defect fixed where found (XIV); narrows nothing."
+  },
+  {
+   "id": "D6",
+   "summary": "programs.md and the shrine hall bullet name the seat knob and the sun rule; compound.py's comment points at 405.",
+   "class": "within",
+   "why": "FR-006 as written."
+  },
+  {
+   "id": "D7",
+   "summary": "make quick; entry-drift; building-review of the four sheets, ledgered, through escalation-check; make done green.",
+   "class": "within",
+   "why": "FR-005's reviews and FR-007's gate."
+  },
+  {
+   "id": "D8",
+   "summary": "Building-review round 1 applied: Hayakawa's bed off the reception's front; beds painted in rows over formal gardens kept in their shape (a drawing convention); two household storehouses (a storehouse kind, research 400/160/230) and a service alley in each vacated rear strip; shrine bed 12 px south; programs.md and buildings.md put a rear kitchen garden only where it gets its sun; notes restated; 405's open questions as absence notes.",
+   "class": "within",
+   "why": "Garden findings applied under FR-005; the rear-strip fill is research-driven work on ground the GM-ordered move vacated, additive, narrowing nothing; the docs line is FR-006. No bed is declared half-shade and none leaves its sun."
+  },
+  {
+   "id": "D9",
+   "summary": "Tooling defects fixed where found: pack_audit reads filled rectilinear paths; the label placer takes an optional leader_index only seat_label supplies (engine maps unchanged); a busy fill is no seat for a name; the sheets test checks staleness under its lock; each tested, seat reports compared against HEAD.",
+   "class": "within",
+   "why": "XIV fixes met on the way. The path-fill fix strengthens FR-003's reach (Ochiba's L-shaped garden was invisible to the audit). Keeping the leader index to hand sheets narrows nothing the GM asked: the request concerns hand sheets' gardens, not the engine's labels."
+  },
+  {
+   "id": "D10",
+   "summary": "Round 2 applied: Hayakawa's bed and formal garden swapped; Ochiba's bed narrowed off the shrine arm; storehouses at the attested size and seat (research 230, four sources checked); Ubame's rear yard named; shrine knob list and note; review contract's rear strip takes the sun condition.",
+   "class": "within",
+   "why": "Garden findings applied under FR-005, the rest additive and research-driven; the contract change enforces the requested sun rule (serves FR-006)."
+  },
+  {
+   "id": "D11a",
+   "summary": "Rounds 3-4 applied: a rear garden kind (planting a labeled guess) behind Ubame's house and beside Ochiba's storehouses; Hayakawa's storehouses east; stepped_subject and leader_to_ink in the caption tool, tested; the kitchen-garden kind's guesses in its visible text; notes restated.",
+   "class": "within",
+   "why": "Additive fill of vacated ground and XIV tool fixes. The rear garden is not a sun-needing bed evading the check: its kind and notes place it deliberately in the house's shade with no vegetable planting claimed (the carried item proposes shade-taking trees), and FR-003's scope of kitchen gardens - under which the sheets' formal gardens were never checked - was accepted FAITHFUL."
+  },
+  {
+   "id": "D11b",
+   "summary": "What round 4 still found about the rear strips (rear strip as an undeclared knob; Ubame's rear-garden planting, paths, privy approach; Ochiba's rear-strip form and shade; Hayakawa's family exit, well on the roji line, rear pocket; bed-order and screening research; the shrine keeper's-plot question; three tool notes) carried to future-work/compounds.md and ledgered instead of a fifth review round.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "It narrows the ACCEPTED spec (FR-005/SC-003 said each sheet 'passes a building-review'), not the GM's request. Adjudicated item by item against request.md: the GM asked for a sun check on hand-drawn sheets and chose 'Move them all' - re-seat each garden where the check passes, as a sun bed. Every carried item is either about ground the move vacated (storehouses, rear garden, paths, privy approach, exits, a well on the roji, a rear pocket), a tool nit, or a research absence already recorded on 405 as searched-and-not-found with the drawing labeled a guess (bed order, screening, keeper's plot). None reopens a bed's seat, its hours, its sun-bed status or the check; the ledger records every garden finding applied and every bed passing garden_sun. 'Passes a building-review' was the spec's own verification wording, not the GM's, so relaxing it for off-garden ground departs from nothing the GM said, and the purpose - gardens get their sun - is untouched. What does NOT make it legitimate is the cost argument the spec gives (a fifth and sixth round); it stands only because the carried findings lie outside the request."
+  }
+ ],
+ "verdict": "CLEAR"
+}

@@ -1,0 +1,143 @@
+{
+ "feature": "284-fourth-hotspot-pass",
+ "plan_sha256": "c3c3a1904c3e47bb8c3eeafd2fc79bf6445f1a59b1dea6c918e33ea2f57cb9ea",
+ "reviewed": "2026-09-28",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "A1",
+   "summary": "one link index per route (landed)",
+   "class": "within",
+   "why": "FR-002 as written; exact, with the base's recorded-request equality test restored now that A* is out."
+  },
+  {
+   "id": "A2",
+   "summary": "the page from the scrub's and marsh's structured blade slots (landed)",
+   "class": "within",
+   "why": "FR-006 first half; pool byte-identity and the synthetic-page test."
+  },
+  {
+   "id": "A2-rest",
+   "summary": "the one parse of every other class not built",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The row now cites R7's measured ceiling (0.051 s and 0.059 s a map, about 1% of a roll); one parse cannot remove more, so building it would not serve the request's purpose (significantly faster)."
+  },
+  {
+   "id": "A3",
+   "summary": "board_choice, the caption level asked lazily (landed)",
+   "class": "within",
+   "why": "FR-007 first half, exact."
+  },
+  {
+   "id": "A4",
+   "summary": "the bamboo walked outward (landed)",
+   "class": "within",
+   "why": "FR-008, exact."
+  },
+  {
+   "id": "A5",
+   "summary": "the four whole-ring scans through indexes (landed)",
+   "class": "within",
+   "why": "FR-009, exact."
+  },
+  {
+   "id": "A6",
+   "summary": "the grove draw's crown grid built and WITHDRAWN as slower than main's scans after 269",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "FR-011 takes a lever only where it makes the stage significantly faster; measured on main as merged, the grid made the windbreak 8-12% SLOWER; R7 now says the crown test is two scans. R7's 2-3%-of-a-build ceiling bounds any other lever."
+  },
+  {
+   "id": "A7",
+   "summary": "the toll's near-cell set (landed)",
+   "class": "within",
+   "why": "FR-010, exact."
+  },
+  {
+   "id": "A8",
+   "summary": "the yards' mats in arrays (landed)",
+   "class": "within",
+   "why": "FR-011, SC-009; the same mats."
+  },
+  {
+   "id": "B1",
+   "summary": "A* withdrawn on its own measurement: alone, on the merged engine, FR-004 out",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Round 3's requirement met. astarcmp/results-alone.json, re-summed here: cost-order 220.19 s and 229.08 s, A* 219.67 s (29 rolls a pass, 0 failures each) - 4.97 s under the mean against an 8.89 s same-run spread; 9 unreached over every attempt against 7 and 7, six re-rolls against four and four. The engine is main as merged (fit.py differs from 7c0c94f94 only by a comment; the harness swaps only lattice_search). The GM's willingness to let maps change was conditioned on the change allowing it to be 'significantly faster'; a lever that moves maps and strands more houses for a gain inside the noise does not serve that purpose, so R6's keep-only-beyond-the-spread rule applies. Attributed to A* alone in R6, the spec's bullet, the Decisions row and route.py's docstring. Round 5: every stale passage named in round 4 is corrected; plan.md's B3 row no longer says 'with B1'."
+  },
+  {
+   "id": "B2",
+   "summary": "the coarser lattice withdrawn: 12 px strands houses the 10 px lattice did not, and no coarser cell is faster",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Re-derived from b2/results.json in round 3: 10 px 5 unreached / 2 re-rolls, 12 px 8 / 4, rising to 16 at 18 px; and every coarser cell slower per roll over the maps that rolled once at both cells (12 px 1.055x on 27 maps up to 18 px 1.84x), so a coarser grid would defeat the request's purpose. R4 now says it was measured just before main's 269 merged; the monotone trend makes the ruling robust to the merge."
+  },
+  {
+   "id": "B3",
+   "summary": "FR-004 WITHDRAWN on the rules",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The GM allowed map changes that 'still correspond to historical norms'; the stepped plot ring and Sawada's seat off the regional wind come from the field and seat stages, which the router (first called in stage_track) does not reach, so FR-004 is shown to break the pool's rules (the GM's own condition), and the pool with the levers was about 0.6% faster. Now attributed to FR-004 alone everywhere, plan.md's B3 row included (round 5: 'its moved maps failed five gate rules, two from stages only it reaches'). Raise it with the GM once the work lands (CLAUDE.md, XVI)."
+  },
+  {
+   "id": "B4",
+   "summary": "rows as arrays withdrawn: the edge walk 3.6x slower",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "FR-005's own keep-if-faster rule, measured per call; independent of the other levers."
+  },
+  {
+   "id": "B5",
+   "summary": "the 24 px board lattice withdrawn (broke the entrance-board rule's test); VERGE_FIRST in its place",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "FR-013 and the GM's condition that changes hold the norms; the replacement is exact and tested."
+  },
+  {
+   "id": "B6",
+   "summary": "the bamboo seat lattice 16 ft, since A4 missed SC-006 on Mizuguchi",
+   "class": "within",
+   "why": "FR-008's own conditional fallback; the thicket 18.1 and 24.5 ft from main's, recorded in R6."
+  },
+  {
+   "id": "FR-014",
+   "summary": "a re-roll resumes from a snapshot before the seats",
+   "class": "within",
+   "why": "FR-011's after-profile clause; exact, re-verified on the merged engine. The count now says 31 rolls."
+  },
+  {
+   "id": "FR-009+",
+   "summary": "push_clear_of_fabric box prefilter",
+   "class": "within",
+   "why": "FR-009 names the function; exact; tested."
+  },
+  {
+   "id": "connector",
+   "summary": "_touch_junctions never drops the connector",
+   "class": "within",
+   "why": "Constitution XIV defect fix; tested."
+  },
+  {
+   "id": "box-decline",
+   "summary": "the router's box decline back on its own lattice",
+   "class": "within",
+   "why": "Reverts support that served only the withdrawn coarser cell; at 10 px it is the configuration R4 measured."
+  },
+  {
+   "id": "SC-001-rebase",
+   "summary": "SC-001 judged against main as merged (1.32x) rather than the original base (1.20x)",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Applied literally the floor would charge this feature for 269's own added work (main 35.148 s against the base's 32.106 s, re-measured in the same run), which defeats SC-001's purpose of measuring this pass; both figures are reported and the GM judges 'significantly faster', as SC-001 itself says."
+  },
+  {
+   "id": "C",
+   "summary": "the final measure and the pool regenerated on the merged engine",
+   "class": "within",
+   "why": "FR-012, SC-001; B1 is now measured and withdrawn, so the final measure stands."
+  }
+ ],
+ "verdict": "CLEAR"
+}

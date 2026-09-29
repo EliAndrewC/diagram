@@ -211,6 +211,14 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         # Okawa, specs/230 R6), and the strike-out existed only because no way could cross the brook. Ways cross it now
         # at a ford (`ways/checks.py` `brook_fords`) and `bridges()` decks the crossing, so the seat is free to stand on
         # either bank of its field, or astride the brook (the GM, 2026-09-27: "fix the placement algorithm instead").
+        # THE RECORD NOW SUPPORTS BOTH FORMS (269 B23; research/water/270, "Does a hamlet stand on one bank of its stream,
+        # or around it?"): against a river one bank only, around a settlement's own channel the reverse, and at a stream's
+        # size both - Hongcun beside its stream, Xidi and Likeng along both banks. The record prefers neither, and "each
+        # map takes the form its site gives it", so which form a hamlet draws follows from where this scorer seats it, not
+        # from a roll. The score below is the entry's "a site the brook does not cross is still preferred when two are
+        # otherwise level" - this project's decision (a crossing is one more thing to build and keep), and the 3.0 weight
+        # a GUESS. A bank knob, rolling the form, stays deferred (fc:2342) until a roll could choose a site the site does
+        # not give.
         if brook:
             _bp = [(mid[0] + nx * d - ny * lat * t, mid[1] + ny * d + nx * lat * t) for d in (dep * 0.5, dep + 34.0, dep * 2.0) for t in (-0.9, -0.45, 0.0, 0.45, 0.9)]
             crossed = sum(1 for q in _bp if min((seg_dist(q[0], q[1], a, b) for a, b in zip(brook, brook[1:], strict=False)), default=1e9) < 30.0) / len(_bp)

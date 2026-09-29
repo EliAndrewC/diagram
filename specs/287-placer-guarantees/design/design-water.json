@@ -1,0 +1,985 @@
+{
+ "area": "water",
+ "brief": "/tmp/claude-1000/-diagram/f70424b3-a8eb-45cf-8472-6eb804c5e7c2/scratchpad/design-prompt.md",
+ "items_file": "area-water.json (64 rows: 45 R1, 3 R2, 16 R3)",
+ "rules": [
+  {
+   "id": "W01",
+   "rule": "No vertex of the drawn (rounded) brook course turns it by more than BROOK_MAX_TURN_DEG (100). Stated: tests/hamletgen/test_pool_261.py::test_no_brook_folds_back_on_itself; brook.py:unfold docstring; FR-017 of feature 261.",
+   "rows": [
+    "R1 test_pool_261.py::test_no_brook_folds_back_on_itself"
+   ],
+   "owner": "l7r/diagram/hamletgen/water/brook.py:feed_brook (census said feed_brook; right, but the unguarded joints are in feed_brook's approach and at the sluice, not in brook_skirt, which already ends in unfold)",
+   "mechanism": "SHARED BROOK ARCHITECTURE (W01-W07): the stream poly the tests read is the course AFTER hamletgen/frame.py:round_the_brooks, which fillets it (settlement/_geom/curves.py:fillet_polyline at BROOK_BEND_WIDTHS*w, taps held) in stage_crossings, six stages after the brook is drawn. The fillet is a pure function of (course, w, taps), and nothing rewrites plan.brook between stage_field and stage_crossings, so a new brook.py:finished_course(course, w, taps) (the fillet with the tap held, lifted out of Settlement.round_stream) is the ONE geometry every brook predicate judges: feed_brook judges its candidate's finished_course, round_stream applies the same function, and the seat test (W05) reads it. Ways stay routed against the unrounded course as today, so the history in round_stream's docstring (rounding at `stream` moved every way) does not recur. feed_brook becomes a candidate loop over (approach swing x 15) x (brook_side, then the other flank), and for each candidate runs a bounded repair `settle_course` = [off_the_axes -> unfold -> unbend_ruled_runs -> off_the_axes] to a fixed point on the finished course, accepting the first candidate on which brook_violations(finished, plan) is empty. Predicate: lift the test's turn loop into brook.py:max_turn_deg(course) (unfold already computes the same angle; unfold is rewritten to call it). unfold runs over the WHOLE assembled course [approach legs, sluice, skirt] with the sluice index held (a held vertex is never deleted; the vertex before it is deleted instead), so the approach wobble points and the approach->sluice->first-skirt joint are covered. Fillet only splits a turn into smaller ones (curves.py caps the cut at 35% of each leg), so a finished course whose raw course passes max_turn <= 100 also passes; the check still runs on finished_course.",
+   "fallback": "unfold always terminates with a legal course (it only deletes vertices, down to the two ends, and a 2-point course has no turn). If deleting approach vertices leaves a leg that breaks W04/W06, the candidate is refused and the next swing/flank tried; the terminal candidate is W06's route_around approach, which is built monotone (no turn over 90).",
+   "later_stages": "round_the_brooks (stage_crossings) is closed by construction: it applies the same finished_course the placer judged. No other stage rewrites a stream poly (verify by grep for `streams` writes at implementation).",
+   "unit_test": "tests/hamletgen/test_brook.py: a SitePlan whose fan head lobe forces a 70-degree approach swing plus a first skirt leg heading back across the fall (the Sawada fold shape: 123 degrees at the sluice) - assert max_turn_deg(finished_course(feed_brook(...))) <= 100 and that the sluice is still a vertex. Plus unfold on a hand polyline with a 150-degree vertex next to a held index.",
+   "retire": [
+    "tests/hamletgen/test_pool_261.py::test_no_brook_folds_back_on_itself (pool-parametrized over every hamlet manifest)"
+   ],
+   "risk": "medium - moves every brook map a little (approach vertices dropped), in a module with a long record of review-driven tuning (feature 230 passes 9-12, feature 261); the change is additive though."
+  },
+  {
+   "id": "W02",
+   "rule": "No stretch of brook within 80 ft of the view's edge runs level along that edge (within 4 ft) for more than 150 ft. Stated: test_pool_261.py::test_no_brook_runs_ruled_along_the_frame; GM 2026-08-26 on Sawada.",
+   "rows": [
+    "R1 test_pool_261.py::test_no_brook_runs_ruled_along_the_frame"
+   ],
+   "owner": "l7r/diagram/hamletgen/water/brook.py:feed_brook (via brook_skirt's station walk). The census owner brook_skirt is right for the cause; the guarantee is in feed_brook's candidate acceptance because the view is decided later (stage_frame).",
+   "mechanism": "SHARED BROOK ARCHITECTURE (W01-W07): the stream poly the tests read is the course AFTER hamletgen/frame.py:round_the_brooks, which fillets it (settlement/_geom/curves.py:fillet_polyline at BROOK_BEND_WIDTHS*w, taps held) in stage_crossings, six stages after the brook is drawn. The fillet is a pure function of (course, w, taps), and nothing rewrites plan.brook between stage_field and stage_crossings, so a new brook.py:finished_course(course, w, taps) (the fillet with the tap held, lifted out of Settlement.round_stream) is the ONE geometry every brook predicate judges: feed_brook judges its candidate's finished_course, round_stream applies the same function, and the seat test (W05) reads it. Ways stay routed against the unrounded course as today, so the history in round_stream's docstring (rounding at `stream` moved every way) does not recur. feed_brook becomes a candidate loop over (approach swing x 15) x (brook_side, then the other flank), and for each candidate runs a bounded repair `settle_course` = [off_the_axes -> unfold -> unbend_ruled_runs -> off_the_axes] to a fixed point on the finished course, accepting the first candidate on which brook_violations(finished, plan) is empty. Predicate: lift the test's loop into brook.py:level_runs_along_frame(course, view, near=80, tol=4, max_run=150) -> list of runs. The test calls it with the recorded view; the placer calls the SAME function with view = the canvas (0,0,W,H) and near = infinity, which is a superset of every view crop_to_content can choose (the view lies inside the canvas and the placer then judges every level run, not only those near an edge). Repair inside settle_course: each offending run gets one lateral bend at its middle (brook.py:exit_bend, alternating side) of >= tol+1 px on the run's level axis. Room is guaranteed: stations are held between the crop floor (skirt 34) and the frame box (BROOK_FRAME_MARGIN 44), so a bend of 5 px inward from the box or outward from the floor is always legal - the invariant BROOK_FRAME_MARGIN - BROOK_SKIRT >= 2*(tol+1) is asserted at import in consts.py. The i > steps//2 gate at brook.py:254 is removed (break at the first station the box binds, per the census sketch) so the flat run cannot form in the first half.",
+   "fallback": "None needed if the room invariant holds (asserted). If a consts change ever breaks it, the import assertion fails - the violation cannot ship.",
+   "later_stages": "stage_frame decides the view later; closed because the placer judged the canvas-wide superset. round_the_brooks applies the judged finished_course.",
+   "unit_test": "A SitePlan with fall due east and a field whose top margin is a straight line 40 px below the frame box (Sawada's shape: 457 ft pinned) - assert level_runs_along_frame(finished, canvas, near=inf) == []. Plus the room invariant as a unit test of consts.",
+   "retire": [
+    "tests/hamletgen/test_pool_261.py::test_no_brook_runs_ruled_along_the_frame"
+   ],
+   "risk": "medium - adds bends to brooks pinned against the box; the placer judges more of the course than the test (canvas vs view), which can move maps whose level run lay away from the view edge."
+  },
+  {
+   "id": "W03",
+   "rule": "No straight run of the brook (every vertex within 3.1 ft of the chord) covers more than 40% of its in-view length, when that length is >= 300 ft. Stated: test_pool_261.py::test_no_brook_runs_ruled_for_most_of_its_course_on_the_page; settlement-review of Sawada round 0ae309f0.",
+   "rows": [
+    "R1 test_pool_261.py::test_no_brook_runs_ruled_for_most_of_its_course_on_the_page"
+   ],
+   "owner": "l7r/diagram/hamletgen/water/brook.py:feed_brook (brook_skirt builds the runs; census owner brook_skirt names the cause)",
+   "mechanism": "SHARED BROOK ARCHITECTURE (W01-W07): the stream poly the tests read is the course AFTER hamletgen/frame.py:round_the_brooks, which fillets it (settlement/_geom/curves.py:fillet_polyline at BROOK_BEND_WIDTHS*w, taps held) in stage_crossings, six stages after the brook is drawn. The fillet is a pure function of (course, w, taps), and nothing rewrites plan.brook between stage_field and stage_crossings, so a new brook.py:finished_course(course, w, taps) (the fillet with the tap held, lifted out of Settlement.round_stream) is the ONE geometry every brook predicate judges: feed_brook judges its candidate's finished_course, round_stream applies the same function, and the seat test (W05) reads it. Ways stay routed against the unrounded course as today, so the history in round_stream's docstring (rounding at `stream` moved every way) does not recur. feed_brook becomes a candidate loop over (approach swing x 15) x (brook_side, then the other flank), and for each candidate runs a bounded repair `settle_course` = [off_the_axes -> unfold -> unbend_ruled_runs -> off_the_axes] to a fixed point on the finished course, accepting the first candidate on which brook_violations(finished, plan) is empty. Predicate: lift _straightest into brook.py:straightest_run(pts, tol) and the test's whole body into brook.py:ruled_share_ok(course, view, tol=3.1, share=0.4, min_len=300). The view is unknown at brook time, so the placer calls the same predicate with a view-independent SUFFICIENT bound: straightest_run(on-canvas course) <= share * max(min_len, L_reserved), where L_reserved is the length of the course through the stations brook_beside_the_field reserves as crop content (hinterland/frame.py; stage_frame passes them to crop_to_content as `extra`, so every view contains them). Any view then has in-view length >= max(300, L_reserved) whenever the rule applies, and in-view straightest <= canvas straightest, so the test's inequality follows. Repair in settle_course: split the longest straight run at its middle with a lateral bend of 4 px (the same room invariant as W02: margin 44 - skirt 34 = 10 px), repeat; each bend halves the offending run, so it terminates in O(log) passes.",
+   "fallback": "None needed under the room invariant. The record (brook.py:233-248) says the WANDER cannot loosen a run where the crop floor binds; this does not use the wander - it bends away from the floor into the 10 px the box leaves, which that measurement did not try.",
+   "later_stages": "stage_frame: closed by the sufficient bound over the reserved stations. round_the_brooks: fillet can pull a gently bent vertex within 3.1 ft of a chord, which is why the predicate judges finished_course, not the raw course.",
+   "unit_test": "A SitePlan whose field margin on the brook's flank is one straight 900 ft edge (Kashikawa's 46%-ruled shape) - assert straightest_run(finished on canvas) <= 0.4*max(300, L_reserved), and ruled_share_ok(finished, view) for three views (field box, field+houses box, canvas).",
+   "retire": [
+    "tests/hamletgen/test_pool_261.py::test_no_brook_runs_ruled_for_most_of_its_course_on_the_page (and its _straightest helper moves to the engine)"
+   ],
+   "risk": "high - the record documents three failed levers on exactly this run (feature 230 pass 11 and 12, BROOK_WANDER 10->26 and 10->18: brook.py:233-248); the bound is conservative, so it bends brooks the test would have passed."
+  },
+  {
+   "id": "W04",
+   "rule": "No brook segment of 10 ft (BROOK_WANDER_STEP) or longer, other than the two tap-run segments, lies within 1.6 degrees of a screen axis. Stated: test_pool_261.py::test_no_brook_segment_lies_on_a_screen_axis_but_the_tap_run; GM 2026-08-26; one of the five named in FR-001.",
+   "rows": [
+    "R1 test_pool_261.py::test_no_brook_segment_lies_on_a_screen_axis_but_the_tap_run",
+    "R3 future-work/farming-communities.md 'Five finished-map rules no placer guarantees' - brook legs within 1.6 degrees of a screen axis (Kashikawa, Sawada)"
+   ],
+   "owner": "l7r/diagram/hamletgen/water/brook.py:feed_brook (the census owner is right; R3's 'brook.py wander' is the wrong place - the wander is not what makes the axis legs)",
+   "mechanism": "SHARED BROOK ARCHITECTURE (W01-W07): the stream poly the tests read is the course AFTER hamletgen/frame.py:round_the_brooks, which fillets it (settlement/_geom/curves.py:fillet_polyline at BROOK_BEND_WIDTHS*w, taps held) in stage_crossings, six stages after the brook is drawn. The fillet is a pure function of (course, w, taps), and nothing rewrites plan.brook between stage_field and stage_crossings, so a new brook.py:finished_course(course, w, taps) (the fillet with the tap held, lifted out of Settlement.round_stream) is the ONE geometry every brook predicate judges: feed_brook judges its candidate's finished_course, round_stream applies the same function, and the seat test (W05) reads it. Ways stay routed against the unrounded course as today, so the history in round_stream's docstring (rounding at `stream` moved every way) does not recur. feed_brook becomes a candidate loop over (approach swing x 15) x (brook_side, then the other flank), and for each candidate runs a bounded repair `settle_course` = [off_the_axes -> unfold -> unbend_ruled_runs -> off_the_axes] to a fixed point on the finished course, accepting the first candidate on which brook_violations(finished, plan) is empty. Predicate: brook.py:axis_segments(course, taps, eps=1.6, min_len=BROOK_WANDER_STEP) - the test's loop, lifted, exempting the two segments from the tap as the test does. Holes closed: (1) _off_the_axes runs LAST in settle_course, after unfold (today unfold runs after it, brook.py:342-344, and a deleted vertex makes an unchecked segment); (2) it runs over the WHOLE course including the approach leg w3 -> sluice, moving w3 (the leg's start) instead of the sluice so the tap stays put; (3) the fixed point is judged on finished_course - a fillet keeps each leg's own bearing for its straight remainder and its arc chords are under 10 ft (radius 2.5*w, 6 steps), so it adds no qualifying axis segment, and the check proves it per candidate. The nudge tilts a leg by 2*eps (3.2 degrees), which cannot push a turn past 100 unless it was already over 96, and unfold runs before it in the same pass.",
+   "fallback": "Loop to fixed point bounded at 4 passes; a candidate still failing is refused and the next swing/flank taken; the terminal route_around candidate (W06) is built on bearings chosen off the axes (its hull walk legs get the same nudge, its sluice leg is the tap run and exempt).",
+   "later_stages": "round_the_brooks applies the judged finished_course; nothing later moves a stream.",
+   "unit_test": "Constructed: fall due south, a crop edge that pins the skirt at constant x for 6 stations (Inashiro's sawtooth site), and an approach whose w3->sluice leg is 1.2 degrees off vertical - assert axis_segments(finished_course(...)) == [] and that the tap vertex is unmoved.",
+   "retire": [
+    "tests/hamletgen/test_pool_261.py::test_no_brook_segment_lies_on_a_screen_axis_but_the_tap_run"
+   ],
+   "risk": "medium - named in FR-001; recorded as open in future-work; the fix is ordering plus one missed leg, but it touches every brook map."
+  },
+  {
+   "id": "W05",
+   "rule": "No farmhouse corner (of the drawn, rotated house quad) stands within the brook's half-width plus 5 ft of its drawn course. Stated: test_pool_261.py::test_no_farmhouse_stands_on_the_brook; FR-013 of feature 261.",
+   "rows": [
+    "R1 test_pool_261.py::test_no_farmhouse_stands_on_the_brook"
+   ],
+   "owner": "l7r/diagram/settlement/rolling/fit.py:Settlement._rect_on_stream (rect_touches_stream) - census owner correct",
+   "mechanism": "The seat test already refuses at the test's bar, but against the UNROUNDED course, and round_the_brooks later pulls the course up to ~8-9 px toward a house on the inside of a bend. Fix: stream_segment_index / _rect_on_stream index the course each stream WILL have: finished_course(rec['poly'], w, taps) from brook.py (the same pure function round_the_brooks applies; W01 architecture), keyed on the stream record as today. Predicate: fit.py:rect_touches_stream is the one predicate; the test is rewritten to call it with the house's rotated corners (_rect_corners), which is what the placer measures and what is drawn (FR-003: the drawn quad is the house; the test's axis-aligned w x h box is wrong on a raked house, the same mismatch as the eave-gap row W54).",
+   "fallback": "Unchanged: a bundle whose house touches the finished course is refused and the fit takes its next candidate, as for any water refusal. Households unseated is the seating area's rule, not this one.",
+   "later_stages": "round_the_brooks is the only later stage; it applies exactly the geometry the seat test read. The index key must include w and the taps so a changed stream cannot serve a stale index (fit.py:_rect_on_stream's own caveat).",
+   "unit_test": "A settlement stub with one brook whose 95-degree bend has a house rect 3 px outside the raw course's bar on the inside of the bend: assert _rect_on_stream refuses it (the finished course is inside the bar) and accepts the same rect on the outside of the bend.",
+   "retire": [
+    "tests/hamletgen/test_pool_261.py::test_no_farmhouse_stands_on_the_brook"
+   ],
+   "risk": "low - houses near a bend move to the next candidate; most maps unchanged."
+  },
+  {
+   "id": "W06",
+   "rule": "No stream runs through a field: no interior vertex of a stream lies inside a field outline (streams_avoid_fields). Stated: tests/gate/test_water_flow.py::test_no_stream_runs_through_a_field; feed_brook docstring (brook.py ~351-356).",
+   "rows": [
+    "R1 test_water_flow.py::test_no_stream_runs_through_a_field",
+    "R2 hamletgen/water/brook.py:feed_brook:385 (the straight-up-the-fall terminal)",
+    "R2 hamletgen/sink.py:stage_sink:473 (the streams_avoid_fields part of the least-bad route; the rest is W10-W12)"
+   ],
+   "owner": "l7r/diagram/hamletgen/water/brook.py:feed_brook for the feed brook; l7r/diagram/hamletgen/sink.py:stage_sink for the off-map drain brook",
+   "mechanism": "SHARED BROOK ARCHITECTURE (W01-W07): the stream poly the tests read is the course AFTER hamletgen/frame.py:round_the_brooks, which fillets it (settlement/_geom/curves.py:fillet_polyline at BROOK_BEND_WIDTHS*w, taps held) in stage_crossings, six stages after the brook is drawn. The fillet is a pure function of (course, w, taps), and nothing rewrites plan.brook between stage_field and stage_crossings, so a new brook.py:finished_course(course, w, taps) (the fillet with the tap held, lifted out of Settlement.round_stream) is the ONE geometry every brook predicate judges: feed_brook judges its candidate's finished_course, round_stream applies the same function, and the seat test (W05) reads it. Ways stay routed against the unrounded course as today, so the history in round_stream's docstring (rounding at `stream` moved every way) does not recur. feed_brook becomes a candidate loop over (approach swing x 15) x (brook_side, then the other flank), and for each candidate runs a bounded repair `settle_course` = [off_the_axes -> unfold -> unbend_ruled_runs -> off_the_axes] to a fixed point on the finished course, accepting the first candidate on which brook_violations(finished, plan) is empty. Predicate: lift the test's check into settlement/_geom (e.g. primitives.py:course_enters(course, rings)) and call it in feed_brook on finished_course against plan.envelope (the paddy outline recorded as fields[].outline). Today the approach is tested on its CHORD before the +-16 px wobble and the _off_the_axes nudge; the candidate loop now tests the final legs. The tap run is exempt from the crop floor by design and lies on the sluice's own stride outside the envelope's head (the fit places the sluice at the head, fit.py:head_sluice) - the unit test pins that. stage_sink: course_enters(mid/end legs, [envelope]) becomes a refusal (not a score), see W12.",
+   "fallback": "feed_brook: replace the unreachable straight-up-the-fall terminal (brook.py:385, `pragma: no cover`) with hamletgen/ways/clearance.py:route_around(plan.envelope, approach, margin=BROOK_SKIRT) and a verified clear result; route_around walks the outline outside the polygon, so it cannot enter it. stage_sink: W12's constructed hull route.",
+   "later_stages": "round_the_brooks: fillet stays inside the convex hull of each corner's two legs, so it can move a vertex toward the field by at most the cut; judged on finished_course, so closed.",
+   "unit_test": "A SitePlan whose fan head carries a lobe across all fifteen approach bearings (the census's unreachable case, constructed): assert feed_brook returns a course with course_enters(...) False and the sluice as a vertex; and a case where only the wobble (not the chord) clips the lobe.",
+   "retire": [
+    "tests/gate/test_water_flow.py::test_no_stream_runs_through_a_field",
+    "the `pragma: no cover` fallback lines at brook.py:381-391 become covered code (no test to retire, the pragma goes)"
+   ],
+   "risk": "medium - the route_around terminal is new code on a path no cohort reaches; the wobble re-test can move approach bearings on a few maps."
+  },
+  {
+   "id": "W07",
+   "rule": "A stream end declared off-map lies off the canvas; one declared to a pond lies on it. Stated: test_water_flow.py::test_every_stream_end_is_anchored_to_what_it_declares.",
+   "rows": [
+    "R1 test_water_flow.py::test_every_stream_end_is_anchored_to_what_it_declares"
+   ],
+   "owner": "l7r/diagram/hamletgen/water/brook.py:feed_brook (the `run` = 420 px approach start) - census owner correct; the drain brook's off-map end is stage_sink's, already edge-derived",
+   "mechanism": "Construct it: the approach start `up` is placed at sluice + bearing * (hamletgen/sink.py:edge_run-style distance to the canvas edge along that bearing + 60), not a fixed 420, exactly as brook_skirt's exit already sizes `span` from the edge (brook.py:271). The exit's last point is span*1.0 past the last station with span >= edge+260, so it is off-canvas by construction; assert both in a predicate brook.py:ends_off_canvas(course, W, H) shared with the test. The pond-declared end: stage_sink's pond_run ends at the pond center by construction (sink.py:pond_run) - the same predicate's pond clause.",
+   "fallback": "None - a distance to the edge always exists; the run is at least that plus a margin.",
+   "later_stages": "The crop rewrites meta W/H to the view; the view lies inside the canvas, so an end off the canvas is off every view. round_the_brooks holds the ends.",
+   "unit_test": "A SitePlan with the sluice 0.36*min(W,H) from the center and a bearing 70 degrees off upslope on a canvas wider than 420 px to that edge: assert the approach start lies outside (0,0,W,H).",
+   "retire": [
+    "tests/gate/test_water_flow.py::test_every_stream_end_is_anchored_to_what_it_declares"
+   ],
+   "risk": "low - the approach grows on large canvases; the in-view part is unchanged."
+  },
+  {
+   "id": "W08",
+   "rule": "No channel or field ditch crosses a stream except at its own end (a confluence). Stated: tests/gate/test_water_junctions.py::test_no_watercourse_crosses_another_mid_run.",
+   "rows": [
+    "R1 test_water_junctions.py::test_no_watercourse_crosses_another_mid_run"
+   ],
+   "owner": "l7r/diagram/hamletgen/water/brook.py:feed_brook (the brook is drawn after the comb's ditches in stage_field) and l7r/diagram/hamletgen/sink.py:stage_sink (drawn after the brook). Each later router refuses crossing what is already drawn.",
+   "mechanism": "Predicate: settlement/_geom primitives crosses_mid_run(course, other) - the test's own crossing test, lifted, ends exempt. feed_brook adds it to brook_violations against every net['channels'] and field_ditch stroke (the delivery tails and the collector ends that run outside the envelope; today the profile clears only rings), except the head race whose mouth IS the confluence. stage_sink's route search refuses a candidate whose legs cross plan.brook or any net channel mid-run (W12's refusal set). _comb_source_channel's hairline starts on the brook (a confluence) and runs down the head race, inside the net - it is tested too.",
+   "fallback": "feed_brook: the next candidate; terminal route_around (W06) with the ditch strokes' outside stretches added to the obstacles. stage_sink: W12's terminal.",
+   "later_stages": "round_the_brooks: judged on finished_course; closed.",
+   "unit_test": "Constructed comb net whose collector end runs 40 px past the envelope on the brook's flank: assert the feed brook's finished course does not cross it mid-run; and a sink candidate list whose only zero-score route crosses the brook: assert it is refused.",
+   "retire": [
+    "tests/gate/test_water_junctions.py::test_no_watercourse_crosses_another_mid_run"
+   ],
+   "risk": "medium - adds obstacles to the brook's profile on the brook flank; may move a few brooks outward."
+  },
+  {
+   "id": "W09",
+   "rule": "The weir's root keys into the bank at the head race mouth's upstream lip: no area of the weir bar lies on the head race. Stated: Weir class docstring; future-work 'The weir's root lands on the head race's mouth' (17% of the bar on the race).",
+   "rows": [
+    "R3 future-work/farming-communities.md: The weir's root lands on the head race's mouth"
+   ],
+   "owner": "l7r/diagram/hamletgen/water/brook.py:draw_intake (the weir seat) - R3 owner correct",
+   "mechanism": "Construct: the bar's root is placed on the brook bank at the mouth's upstream lip = the tap point moved upstream along the brook by (race half-width at its mouth + the race's bank margin), and the bar is laid across the brook from there. Predicate: brook.py:bar_on_race(bar_poly, race_stroke) = area of the bar polygon intersecting the race's stroke buffer; the placer asserts 0 by construction and the unit test calls the same function.",
+   "fallback": "None - the lip is a point on the brook bank that always exists above the mouth (the approach's last leg is >= 40 px, brook.py `near`).",
+   "later_stages": "open_race_mouth runs before draw_intake and shapes the mouth; the lip is read after it. round_the_brooks holds the tap, so the lip does not move.",
+   "unit_test": "A brook with the race leaving at 35 degrees and a 9 px race: assert bar_on_race == 0 and the root lies upstream of the mouth.",
+   "retire": [
+    "none today (no finished-map test asserts it; the R3 entry is closed by the unit test)"
+   ],
+   "risk": "low - a local seat change on weir maps only."
+  },
+  {
+   "id": "W10",
+   "rule": "Every M['channels'] course's net displacement runs down the fall by at least 20% of its length. Stated: tests/gate/test_water_flow.py::test_every_channel_runs_downhill.",
+   "rows": [
+    "R1 test_water_flow.py::test_every_channel_runs_downhill",
+    "R2 hamletgen/sink.py:stage_sink:473 (drainage_discharges_downhill / watercourses_flow_downstream in the least-bad route)"
+   ],
+   "owner": "l7r/diagram/hamletgen/sink.py:stage_sink (brook_join, the off-map route search, pond_run) and l7r/diagram/settlement/fields/comb.py:_comb_source_channel (the head-race hairline)",
+   "mechanism": "Predicate: lift the test into settlement/_geom (water topology helpers) as runs_downhill(course, fall, frac=0.2). stage_sink: brook_join's refusal becomes runs_downhill([out, q], fall, 0.2) in place of the 20 px descent (0.05 over 420) and the off-map search refuses a candidate failing runs_downhill([out, mid, end]) instead of scoring descent <= 0; pond_run is checked with the same predicate and, if the sway makes it fail, the sway is clamped to 0 (a straight run down to a pond seated `back` > 0 down-fall passes by construction since pond_seat walks down the fall). _comb_source_channel: the <= 30 px start snap onto the stream is taken only if runs_downhill still holds; otherwise the hairline starts at the sluice, which lies on the brook by construction.",
+   "fallback": "stage_sink off-map: W12's constructed hull route, whose off-map leg is extended until the net-descent fraction reaches 0.2 (the off-map leg lies off the canvas, so its length is free). Pond: clamp sway.",
+   "later_stages": "round_channel_joints (banks.py) moves a seam's end onto a shared arc - ends preserved, so the net displacement does not change.",
+   "unit_test": "A comb whose collector heading runs 90 degrees off the fall and a brook 300 px along it: assert brook_join returns only junctions satisfying runs_downhill(0.2); and a sink search on a fan where every clean candidate climbs (cohort seed 2's shape): assert the chosen route satisfies runs_downhill.",
+   "retire": [
+    "tests/gate/test_water_flow.py::test_every_channel_runs_downhill"
+   ],
+   "risk": "medium - brook_join's bar rises four-fold, so some confluence sinks move to off-map routes."
+  },
+  {
+   "id": "W11",
+   "rule": "The runoff's continuation (sink pond, drain run, or any brook within 60 px of the outfall) lies and runs downhill of the outfall. Stated: test_water_flow.py::test_the_runoff_leaves_the_outfall_downhill.",
+   "rows": [
+    "R1 test_water_flow.py::test_the_runoff_leaves_the_outfall_downhill"
+   ],
+   "owner": "l7r/diagram/hamletgen/sink.py:stage_sink for the continuation; l7r/diagram/hamletgen/water/brook.py:brook_skirt for the feed brook passing the outfall (census named only stage_sink)",
+   "mechanism": "Sink: pond_seat already returns back >= pry + 58 down-fall and brook_join refuses non-descending junctions; the off-map least-bad branch goes (W12). Feed brook: brook_skirt's course below the tap is MONOTONE along the fall by construction - stations step u by `stride`, cut points only move v, the exit legs keep a fall component > 0.15 and blend to the fall, unfold deletes vertices, _off_the_axes nudges along the lateral normal, and a fillet stays between monotone points. Make it an asserted invariant: brook.py:monotone_down(course_below_tap, fall) is part of brook_violations, and the test calls the same predicate for the 'any brook near the outfall' clause.",
+   "fallback": "Sink: W12's terminal. Brook: a candidate failing monotone_down (only possible if a later edit breaks the construction) is refused like any other brook violation.",
+   "later_stages": "round_the_brooks: fillet preserves monotonicity along the fall; judged on finished_course.",
+   "unit_test": "brook_skirt on a crop whose margin steps back upslope (the fold case) - assert monotone_down; a sink stub whose outfall sits inside an envelope bow - assert the pond center projects down-fall of the outfall.",
+   "retire": [
+    "tests/gate/test_water_flow.py::test_the_runoff_leaves_the_outfall_downhill"
+   ],
+   "risk": "low - mostly asserting what the construction already gives; the least-bad branch is W12's."
+  },
+  {
+   "id": "W12",
+   "rule": "The drain's continuation leaves the collector without a kink (junction turn under the drainage_junction_smooth bar, 55 in the placer / 65 at the gate) and without crossing the rice - no least-bad route. Stated: sink.py:stage_sink comments ~433-470 (drainage_junction_smooth, streams_avoid_fields, drainage_discharges_downhill, watercourses_flow_downstream).",
+   "rows": [
+    "R2 hamletgen/sink.py:stage_sink:473 (the least-bad off-map route)"
+   ],
+   "owner": "l7r/diagram/hamletgen/sink.py:stage_sink - R2 where correct",
+   "mechanism": "Every scored term becomes a refusal against one predicate each (junction turn <= 55, course_enters envelope, runs_downhill 0.2, bearing divergence < 90 from water_flow, crosses_mid_run vs the brook - W06/W08/W10). The candidate set is widened before any fallback: more junction distances (to 400), then the pond sink if the spec allows it, then a CONSTRUCTED route: out -> along the drain's own heading for jd (turn 0 at the junction) -> round the envelope's convex hull buffered by BROOK_SKIRT on the downhill side (route_around) -> from the hull's fall-extreme vertex straight down the fall off the canvas. The last leg starts at a supporting point of the hull, so it cannot enter the field; the junction turn is 0; the off-map leg is lengthened until net descent >= 0.2 of the length.",
+   "fallback": "The constructed route IS the fallback and satisfies every predicate by construction; no least-bad branch remains (delete the `best` bookkeeping and its pragmas).",
+   "later_stages": "stage_frame reserves the confluence (plan.confluence) - unchanged. No later stage moves a channel.",
+   "unit_test": "A fan whose toe lobe blocks every bearing at every junction distance (the `pragma: no cover` case, constructed as a U-shaped envelope around the outfall): assert stage_sink draws a route satisfying all five predicates and that it is the constructed one.",
+   "retire": [
+    "the pragma-no-cover least-bad lines at sink.py:473-480 (not a test; they become covered code)"
+   ],
+   "risk": "medium - new constructed route on a path no cohort reaches today; the widened search could change the chosen route on maps whose first clean candidate was at a later swing."
+  },
+  {
+   "id": "W13",
+   "rule": "A drain collector's outfall never sits more than 1 px uphill of its head. Stated: tests/gate/test_water_flow.py::test_a_collector_discharges_at_its_lowest_point.",
+   "rows": [
+    "R1 test_water_flow.py::test_a_collector_discharges_at_its_lowest_point"
+   ],
+   "owner": "l7r/diagram/waterfields/comb.py:_comb_drain (census correct); also l7r/diagram/waterfields/hill.py builds the hill archetype's drain and gets the same construction",
+   "mechanism": "Construct: the head (lo_u) gets NO fall jitter, and interior jitter is clamped to R.uniform(-6, 6) as today; the outfall is at a_fit + b_fit*hi_u with b_fit >= 0.06 and hi_u >= lo_u + 40, so outfall - head >= 0.06*40 = 2.4 px down the fall by construction. Predicate: waterfields/banks.py:outfall_below_head(dpts, down_deg) shared with the test.",
+   "fallback": "None - the inequality holds by construction.",
+   "later_stages": "_comb_clip_and_cap and round_channel_joints keep the ends; the recorded field_ditch is dpts.",
+   "unit_test": "_comb_drain with threads whose ditch bottoms span 60 px of u and an R that draws +6 on the head: assert outfall_below_head.",
+   "retire": [
+    "tests/gate/test_water_flow.py::test_a_collector_discharges_at_its_lowest_point"
+   ],
+   "risk": "low - one jitter draw removed; the RNG stream is kept by drawing and discarding it so later draws do not shift."
+  },
+  {
+   "id": "W14",
+   "rule": "The drain collector's recorded polyline never turns 100 degrees or more at any vertex. Stated: tests/gate/test_crossings_and_cover.py::test_the_runoff_curves_out_of_the_collector.",
+   "rows": [
+    "R1 test_crossings_and_cover.py::test_the_runoff_curves_out_of_the_collector"
+   ],
+   "owner": "l7r/diagram/waterfields/comb.py:_comb_drain (census said build_comb; the geometry is made in _comb_drain) and l7r/diagram/waterfields/hill.py (hill drain)",
+   "mechanism": "Construct: the interior sample loop stops at u < hi_u - DRAIN_MIN_LEG (60 px), so the last leg into the outfall is >= 60 px, and every leg is >= 60 px (steps 120-170, the tail dropped when short). With jitter +-6 and slope b <= 0.35, each leg's direction is within atan(0.35) + atan(12/60) of the fit line's, so no turn exceeds ~2*(19+11) = 60 degrees. Predicate: max_turn_deg (the same function as W01, moved to settlement/_geom) shared with the test.",
+   "fallback": "None - bounded by construction.",
+   "later_stages": "round_channel_joints only rounds (smaller turns). stage_sink's continuation is a separate record.",
+   "unit_test": "_comb_drain where the last interior u lands 2 px short of hi_u (force R) - assert no turn >= 100 and last leg >= 60.",
+   "retire": [
+    "tests/gate/test_crossings_and_cover.py::test_the_runoff_curves_out_of_the_collector"
+   ],
+   "risk": "low - removes the 'short hook' (sink.py drain_heading's docstring then needs its 40 px look-back note updated)."
+  },
+  {
+   "id": "W15",
+   "rule": "A main or collector end never stops on the map in bare ground: it joins water, the crop, the pond, or leaves the frame. Stated: test_crossings_and_cover.py::test_no_watercourse_end_dangles_in_bare_ground.",
+   "rows": [
+    "R1 test_crossings_and_cover.py::test_no_watercourse_end_dangles_in_bare_ground"
+   ],
+   "owner": "l7r/diagram/waterfields/comb.py:build_comb (the ends are made by _comb_drain, _comb_skeleton and _comb_clip_and_cap) for the heads and tails; l7r/diagram/hamletgen/sink.py:stage_sink for the outfall (already continued)",
+   "mechanism": "Predicate: lift the test's end check into settlement/_geom as end_anchored(end, crop_rings, others, pond, W, H). build_comb asserts it on every main/drain end against the net's own envelope and channels: a head/tail that fails is CLIPPED back along its own polyline to the last point inside the envelope (every main starts at the fork inside the field, so such a point exists) - the crop is its destination. stage_sink already continues the outfall from drain_outfall; when drain_outfall is None there is no collector and the rule is vacuous.",
+   "fallback": "Clip-to-crop always succeeds (the fork is inside the envelope).",
+   "later_stages": "stage_sink adds the outfall's continuation after build_comb; the net's other ends are not moved later.",
+   "unit_test": "A comb net whose westmost delivery ditch bottom lies 20 px outside the envelope (the old 'dangling stub') - assert every trunk end satisfies end_anchored.",
+   "retire": [
+    "tests/gate/test_crossings_and_cover.py::test_no_watercourse_end_dangles_in_bare_ground"
+   ],
+   "risk": "low - clips a few px off rare ends."
+  },
+  {
+   "id": "W16",
+   "rule": "No paddy bund edge stands inside a supply canal's or delivery ditch's drawn stroke (halfw + BANK_MARGIN). Stated: tests/gate/test_bunds_and_dikes.py::test_no_bund_is_drawn_down_the_middle_of_a_supply_channel; GM 2026-08-15.",
+   "rows": [
+    "R1 test_bunds_and_dikes.py::test_no_bund_is_drawn_down_the_middle_of_a_supply_channel"
+   ],
+   "owner": "l7r/diagram/waterfields/seams/close.py:close_seams (census correct); the carve half stays in carve.py:_carve_plots",
+   "mechanism": "SHARED PADDY-RING ARCHITECTURE (W16-W28): waterfields/seams/close.py:close_seams is the last stage that reshapes a paddy plot ring (carve_comb -> _comb_floor_and_winding -> _comb_toe_and_hem -> finish_comb -> close_seams -> _comb_dry_and_beans, which only reads rings). Lift ONE predicate module, waterfields/ring_rules.py:ring_violations(ring, ctx) -> set of rule names, where ctx carries the design cell, the grain, the supply index (carve._supply_index), the drain polyline and widths, and the field ponds/graves; each rule below is one function in it, and each gate test calls that function. Two mechanisms: (a) EVERY step of close_seams that writes a ring (_plant, _visible_parts, _absorb and all its ladder tiers, _trade, _unjog, _shed_necks, _repair_crossing_rings) refuses a candidate ring for which ring_violations is non-empty - the step is not taken; (b) a TERMINAL sweep at the end of close_seams (after _repair_crossing_rings(rounded=True)) sends any ring still violating (a carved ring no step touched) to the scrap path: _absorb into a neighbor if the union passes ring_violations, else the ground stays bare under the fan floor - the 'odd corner left unpaddied' the research describes and the Sawada review confirmed invisible in ink (pockets.py:_absorb's last branch). Rings are judged AS RECORDED (rounded to 0.1 px, raw and deduped), so the placer and the manifest see one ring. Rule function: ring_in_supply(ring, sup_idx, g) = the carve's _quad_in_supply/_edge_in_supply generalized to rings (walk each edge at 3 px), at the GATE's threshold (halfw + BANK_MARGIN*g - 0.15) - the test calls it. Holes closed: _shed_necks (tail.buffer(0.05) grow), _absorb (union + simplify(0.05)) and _repair_crossing_rings (buffer(0) part) now refuse through ring_violations; pockets.py:_water buffers each segment at max(w_i, w_i+1) instead of its head width (a widening stroke was under-covered).",
+   "fallback": "The step is refused (ring unchanged); a carved ring failing the terminal sweep goes to the scrap path (weld or bare).",
+   "later_stages": "_comb_toe_and_hem's hem_to_bank runs BEFORE close_seams, so the terminal sweep covers it; nothing after close_seams moves a ring.",
+   "unit_test": "A plot quad whose edge a _shed_necks trade would drag 1 px into a 5 px delivery ditch stroke, and a widening supply stroke with a planted pocket at its tail: assert close_seams output has no ring for which ring_in_supply is true.",
+   "retire": [
+    "tests/gate/test_bunds_and_dikes.py::test_no_bund_is_drawn_down_the_middle_of_a_supply_channel"
+   ],
+   "risk": "medium - adds a predicate to every seam step; ring counts may change where a trade was the only route (bare scraps instead)."
+  },
+  {
+   "id": "W17",
+   "rule": "No plot-ring edge runs across the drain collector (both ends within half the stroke of its centerline). Stated: test_bunds_and_dikes.py::test_no_bund_is_drawn_across_the_collector; GM 2026-08-08.",
+   "rows": [
+    "R1 test_bunds_and_dikes.py::test_no_bund_is_drawn_across_the_collector"
+   ],
+   "owner": "l7r/diagram/waterfields/seams/close.py:close_seams (the census names it; hem_to_bank in comb.py:_comb_toe_and_hem is the repair that already runs before it)",
+   "mechanism": "SHARED PADDY-RING ARCHITECTURE (W16-W28): waterfields/seams/close.py:close_seams is the last stage that reshapes a paddy plot ring (carve_comb -> _comb_floor_and_winding -> _comb_toe_and_hem -> finish_comb -> close_seams -> _comb_dry_and_beans, which only reads rings). Lift ONE predicate module, waterfields/ring_rules.py:ring_violations(ring, ctx) -> set of rule names, where ctx carries the design cell, the grain, the supply index (carve._supply_index), the drain polyline and widths, and the field ponds/graves; each rule below is one function in it, and each gate test calls that function. Two mechanisms: (a) EVERY step of close_seams that writes a ring (_plant, _visible_parts, _absorb and all its ladder tiers, _trade, _unjog, _shed_necks, _repair_crossing_rings) refuses a candidate ring for which ring_violations is non-empty - the step is not taken; (b) a TERMINAL sweep at the end of close_seams (after _repair_crossing_rings(rounded=True)) sends any ring still violating (a carved ring no step touched) to the scrap path: _absorb into a neighbor if the union passes ring_violations, else the ground stays bare under the fan floor - the 'odd corner left unpaddied' the research describes and the Sawada review confirmed invisible in ink (pockets.py:_absorb's last branch). Rings are judged AS RECORDED (rounded to 0.1 px, raw and deduped), so the placer and the manifest see one ring. Rule function: ring_across_drain(ring, dpts, w0, w1) - the test's edge test (both ends within half the stroke), lifted. hem_to_bank's `lean < 0.2` and `past` exemptions are kept (they are about where the lift applies, not the rule), and the rule function judges every ring close_seams writes plus the terminal sweep.",
+   "fallback": "Refuse the step; terminal sweep -> scrap path.",
+   "later_stages": "None after close_seams.",
+   "unit_test": "A basin that a weld would extend across the collector's head where it runs with the fall (lean < 0.2): assert no output ring crosses.",
+   "retire": [
+    "tests/gate/test_bunds_and_dikes.py::test_no_bund_is_drawn_across_the_collector"
+   ],
+   "risk": "low - the carve and hem already hold it; this closes the seam-pass tail."
+  },
+  {
+   "id": "W18",
+   "rule": "No paddy basin ring (as recorded, raw and deduped) has an interior angle under 15 degrees (NEEDLE_DEG); this includes the tapering scraps no weld resolves. Stated: test_paddy_fabric.py::test_no_basin_tapers_to_a_point and ::test_no_shipped_hamlet_has_a_basin_tapering_to_a_point (comb fans); GM realism ruling 2026-08-17; research/fields 'Minimum basin SIZE'.",
+   "rows": [
+    "R1 test_paddy_fabric.py::test_no_basin_tapers_to_a_point",
+    "R1 test_paddy_fabric.py::test_no_shipped_hamlet_has_a_basin_tapering_to_a_point (comb part)",
+    "R3 future-work 'cohort seeds 9 and 11' (a tapering scrap no weld resolves; paddy_plot_seams_shared)"
+   ],
+   "owner": "l7r/diagram/waterfields/seams/close.py:close_seams (terminal sweep) - census correct; R3's 'carve.py sector opening' is a CAUSE, fixed by the sweep regardless of what the carve opens",
+   "mechanism": "SHARED PADDY-RING ARCHITECTURE (W16-W28): waterfields/seams/close.py:close_seams is the last stage that reshapes a paddy plot ring (carve_comb -> _comb_floor_and_winding -> _comb_toe_and_hem -> finish_comb -> close_seams -> _comb_dry_and_beans, which only reads rings). Lift ONE predicate module, waterfields/ring_rules.py:ring_violations(ring, ctx) -> set of rule names, where ctx carries the design cell, the grain, the supply index (carve._supply_index), the drain polyline and widths, and the field ponds/graves; each rule below is one function in it, and each gate test calls that function. Two mechanisms: (a) EVERY step of close_seams that writes a ring (_plant, _visible_parts, _absorb and all its ladder tiers, _trade, _unjog, _shed_necks, _repair_crossing_rings) refuses a candidate ring for which ring_violations is non-empty - the step is not taken; (b) a TERMINAL sweep at the end of close_seams (after _repair_crossing_rings(rounded=True)) sends any ring still violating (a carved ring no step touched) to the scrap path: _absorb into a neighbor if the union passes ring_violations, else the ground stays bare under the fan floor - the 'odd corner left unpaddied' the research describes and the Sawada review confirmed invisible in ink (pockets.py:_absorb's last branch). Rings are judged AS RECORDED (rounded to 0.1 px, raw and deduped), so the placer and the manifest see one ring. Rule function: banks.py:pointed_ring(raw, NEEDLE_DEG) or pointed_ring(dedup_ring(raw, 1.0), NEEDLE_DEG), on the ring rounded as recorded. The toe pass judges only dedup_ring today; a carved ring no seam step touches is now judged raw by the sweep. For seeds 9/11: the carve's sector opening that collapses onto the collector is left as is - its scrap reaches the sweep and is welded (if the union passes) or left bare.",
+   "fallback": "Scrap path: weld if the union passes ring_violations, else bare under the fan floor.",
+   "later_stages": "None after close_seams.",
+   "unit_test": "A carved quad with a 0.4 px collapsed edge hiding a 12-degree raw apex (the dedup blind spot), fed through close_seams with no neighbor that can weld it: assert it is gone (bare) and no output ring is pointed on either reading.",
+   "retire": [
+    "tests/gate/test_paddy_fabric.py::test_no_basin_tapers_to_a_point",
+    "tests/gate/test_paddy_fabric.py::test_no_shipped_hamlet_has_a_basin_tapering_to_a_point (once W19 covers the polder)"
+   ],
+   "risk": "low - apex refusals exist in every step already; the sweep catches the carved residue."
+  },
+  {
+   "id": "W19",
+   "rule": "No polder parcel ring has an interior angle under 15 degrees. Stated: test_paddy_fabric.py::test_no_shipped_hamlet_has_a_basin_tapering_to_a_point (polders included).",
+   "rows": [
+    "R1 test_paddy_fabric.py::test_no_shipped_hamlet_has_a_basin_tapering_to_a_point (polder part)"
+   ],
+   "owner": "l7r/diagram/waterfields/polder.py:_polder_close (the last ring writer: hem_to_bank runs there after _polder_parcels / clean_polder_parcels) - census named build_polder",
+   "mechanism": "Same rule function (ring_rules.pointed) as W18, run as a terminal pass at the end of _polder_close: a pointed parcel is first re-hemmed without the vertex that makes the apex (drop the vertex; the parcel is a lattice quad clipped by the ring, so dropping the clipped corner vertex keeps it a quad-like parcel), and if still pointed it is merged with its lattice neighbor across its shortest side if that union passes, else left as bank ground (the polder's own berm fill).",
+   "fallback": "Merge, else leave as berm - never a pointed parcel.",
+   "later_stages": "clean_polder_parcels runs at draw (polder.py:726) - it must call the same terminal pass or run before _polder_close; verify order at implementation.",
+   "unit_test": "A polder ring whose corner cuts a lattice cell into a 10-degree sliver: assert no parcel is pointed after _polder_close.",
+   "retire": [
+    "the polder half of test_no_shipped_hamlet_has_a_basin_tapering_to_a_point (retired with W18)"
+   ],
+   "risk": "medium - polder is declared work in progress (W48); parcels at ring corners change."
+  },
+  {
+   "id": "W20",
+   "rule": "No plot painted with the flooded tint is a needle (raw ring under 15 degrees). Stated: test_paddy_fabric.py::test_a_flooded_plot_reads_as_a_basin_and_not_as_a_pond.",
+   "rows": [
+    "R1 test_paddy_fabric.py::test_a_flooded_plot_reads_as_a_basin_and_not_as_a_pond"
+   ],
+   "owner": "l7r/diagram/waterfields/seams/close.py:close_seams (the tint re-judge at its end) - census correct",
+   "mechanism": "Add pointed_ring(raw, _TINT_MIN_APEX) to `_wrong` (close.py:306) beside the dedup clause - the gate reads the raw ring; the close.py comments that say the gate reads dedup_ring are corrected. The promotion of one plot when none survives uses the same `_wrong`. Predicate: the test calls ring_rules.pointed on the flooded ring (the same function).",
+   "fallback": "A wrong plot is demoted to green (as today); if every candidate is wrong, no plot is promoted (the class exhibit is a separate rule - feature 230's promotion only picks from plots that pass).",
+   "later_stages": "None after close_seams.",
+   "unit_test": "A flooded quad blunt on the deduped ring but 12 degrees raw: assert it is demoted.",
+   "retire": [
+    "tests/gate/test_paddy_fabric.py::test_a_flooded_plot_reads_as_a_basin_and_not_as_a_pond"
+   ],
+   "risk": "low - one clause."
+  },
+  {
+   "id": "W21",
+   "rule": "No basin is smaller than _GATE_MIN_AREA (0.20) of the fan's design cell. Stated: test_paddy_fabric.py::test_no_basin_is_too_small_to_be_worth_its_own_bund; GM 2026-08-17.",
+   "rows": [
+    "R1 test_paddy_fabric.py::test_no_basin_is_too_small_to_be_worth_its_own_bund"
+   ],
+   "owner": "l7r/diagram/waterfields/seams/close.py:close_seams - census correct",
+   "mechanism": "SHARED PADDY-RING ARCHITECTURE (W16-W28): waterfields/seams/close.py:close_seams is the last stage that reshapes a paddy plot ring (carve_comb -> _comb_floor_and_winding -> _comb_toe_and_hem -> finish_comb -> close_seams -> _comb_dry_and_beans, which only reads rings). Lift ONE predicate module, waterfields/ring_rules.py:ring_violations(ring, ctx) -> set of rule names, where ctx carries the design cell, the grain, the supply index (carve._supply_index), the drain polyline and widths, and the field ponds/graves; each rule below is one function in it, and each gate test calls that function. Two mechanisms: (a) EVERY step of close_seams that writes a ring (_plant, _visible_parts, _absorb and all its ladder tiers, _trade, _unjog, _shed_necks, _repair_crossing_rings) refuses a candidate ring for which ring_violations is non-empty - the step is not taken; (b) a TERMINAL sweep at the end of close_seams (after _repair_crossing_rings(rounded=True)) sends any ring still violating (a carved ring no step touched) to the scrap path: _absorb into a neighbor if the union passes ring_violations, else the ground stays bare under the fan floor - the 'odd corner left unpaddied' the research describes and the Sawada review confirmed invisible in ink (pockets.py:_absorb's last branch). Rings are judged AS RECORDED (rounded to 0.1 px, raw and deduped), so the placer and the manifest see one ring. Rule function: area(ring)/cell >= _GATE_MIN_AREA. Holes closed: _shed_necks (the giving body can shrink under the floor) and _repair_crossing_rings (keeps the largest buffer(0) part with no area test) refuse through ring_violations.",
+   "fallback": "Refuse the trade; a repaired ring under the floor goes to the scrap path.",
+   "later_stages": "None after close_seams.",
+   "unit_test": "A basin at 0.22 cell whose 20 px tail _shed_necks would give away (leaving 0.17): assert the trade is refused.",
+   "retire": [
+    "tests/gate/test_paddy_fabric.py::test_no_basin_is_too_small_to_be_worth_its_own_bund"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W22",
+   "rule": "The recorded plot rings over-count the fan's area by under 4% (overlap stays marginal). Stated: test_paddy_fabric.py::test_the_rings_double_count_only_marginally.",
+   "rows": [
+    "R1 test_paddy_fabric.py::test_the_rings_double_count_only_marginally"
+   ],
+   "owner": "l7r/diagram/waterfields/seams/close.py:_visible_parts + every later step (census correct: guaranteed)",
+   "mechanism": "Already guaranteed: _visible_parts partitions the plots, and every later step plants from field - covered or trades ground conservatively (buffers 0.02-0.05 px). Make it an asserted invariant with its unit test: ring_rules.overcount(rings) computed in the unit test on close_seams output.",
+   "fallback": "n/a",
+   "later_stages": "None after close_seams.",
+   "unit_test": "Two lapping carved quads (a 30% overlap) through close_seams: assert overcount < 0.04.",
+   "retire": [
+    "tests/gate/test_paddy_fabric.py::test_the_rings_double_count_only_marginally"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W23",
+   "rule": "No plot ring carries more than one bund step (jog) - no staircase walls. Stated: test_paddy_fabric.py::test_a_bund_does_not_build_a_flight_of_steps; GM 2026-08-18 on Inashiro; one of the five named in FR-001.",
+   "rows": [
+    "R1 test_paddy_fabric.py::test_a_bund_does_not_build_a_flight_of_steps",
+    "R3 future-work 'OPEN 2026-08-18: paddy bunds still step sideways' (cohort seeds 12 with 4 steps, 39 with 2)",
+    "R3 future-work 'Five finished-map rules no placer guarantees - stepped bund'"
+   ],
+   "owner": "l7r/diagram/waterfields/seams/close.py:close_seams (the steps are made by pockets.py:_absorb's jogged tier; plots.py:_unjog repairs; _shed_necks/_repair_crossing_rings run after it unaware) - census owner plots.py:_unjog is the repair, not the owner",
+   "mechanism": "SHARED PADDY-RING ARCHITECTURE (W16-W28): waterfields/seams/close.py:close_seams is the last stage that reshapes a paddy plot ring (carve_comb -> _comb_floor_and_winding -> _comb_toe_and_hem -> finish_comb -> close_seams -> _comb_dry_and_beans, which only reads rings). Lift ONE predicate module, waterfields/ring_rules.py:ring_violations(ring, ctx) -> set of rule names, where ctx carries the design cell, the grain, the supply index (carve._supply_index), the drain polyline and widths, and the field ponds/graves; each rule below is one function in it, and each gate test calls that function. Two mechanisms: (a) EVERY step of close_seams that writes a ring (_plant, _visible_parts, _absorb and all its ladder tiers, _trade, _unjog, _shed_necks, _repair_crossing_rings) refuses a candidate ring for which ring_violations is non-empty - the step is not taken; (b) a TERMINAL sweep at the end of close_seams (after _repair_crossing_rings(rounded=True)) sends any ring still violating (a carved ring no step touched) to the scrap path: _absorb into a neighbor if the union passes ring_violations, else the ground stays bare under the fan floor - the 'odd corner left unpaddied' the research describes and the Sawada review confirmed invisible in ink (pockets.py:_absorb's last branch). Rings are judged AS RECORDED (rounded to 0.1 px, raw and deduped), so the placer and the manifest see one ring. Rule function: len(banks.py:jog_vertices(ring, g)) <= 1 (the test's own predicate). (1) _absorb's `_jogged` tier takes a host only if the welded ring has <= 1 step (it currently takes the least-jogged even at 3+); (2) _shed_necks and _repair_crossing_rings refuse a result with > 1 step; (3) the terminal sweep handles a ring still carrying 2+ steps by SUBDIVIDING it: cut the ring along the line that continues the step's hop across the basin, which is the GM's own description of the right form ('instead of just continuing on and meeting at the four way intersection'); each part is judged by ring_violations and a part that fails goes to the scrap path.",
+   "fallback": "Subdivide; a failing part is welded into the neighbor across the new line if that passes, else bare. Never a staircase.",
+   "later_stages": "None after close_seams (the sweep runs last).",
+   "unit_test": "The seed-12 fixture ring (4 steps) and a constructed two-step ring from an _absorb weld: assert close_seams output has no ring with > 1 jog, and that ground is conserved within the floor (union area change is only bare scraps).",
+   "retire": [
+    "tests/gate/test_paddy_fabric.py::test_a_bund_does_not_build_a_flight_of_steps"
+   ],
+   "risk": "high - open since 2026-08-18 with repeated attempts (the _unjog repair, the weld pitch; 'seven survive across the pool, each ledgered'); subdivision is a new operation and moves plot counts, which reshuffles the shared placement RNG (close.py's own REPAIR-DO-NOT-DROP note measured two cohort seeds failing from a count change)."
+  },
+  {
+   "id": "W24",
+   "rule": "No recorded plot ring (rounded to 0.1 px) crosses itself. Stated: test_paddy_fabric.py::test_every_recorded_plot_ring_is_a_simple_polygon.",
+   "rows": [
+    "R1 test_paddy_fabric.py::test_every_recorded_plot_ring_is_a_simple_polygon"
+   ],
+   "owner": "l7r/diagram/waterfields/seams/close.py:_repair_crossing_rings(rounded=True) - census correct: guaranteed",
+   "mechanism": "Already guaranteed: the last ring-shaping call judges each ring as the manifest rounds it and drops what buffer(0) cannot rescue. The W16-W23 terminal sweep must run BEFORE this call (or re-judge validity itself) so the sweep's welds/subdivisions are covered.",
+   "fallback": "Drop to bare (existing).",
+   "later_stages": "The W18/W23 sweep: ordered before it.",
+   "unit_test": "A 4-vertex bow-tie and a ring valid unrounded but revisiting a vertex at 0.1 px: assert both are repaired or dropped.",
+   "retire": [
+    "tests/gate/test_paddy_fabric.py::test_every_recorded_plot_ring_is_a_simple_polygon"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W25",
+   "rule": "No paddy basin reads as an arrowhead: no welded ring is a chevron at the gate line (is_chevron at 35 degrees / 0.85 solidity). Stated: waterfields/banks.py:503-504 ('CAUGHT AT 40/0.90, GATED AT 35/0.85').",
+   "rows": [
+    "R2 waterfields/seams/pockets.py:_absorb (chevron fallback):490-500"
+   ],
+   "owner": "l7r/diagram/waterfields/seams/pockets.py:_absorb - R2 where correct",
+   "mechanism": "SHARED PADDY-RING ARCHITECTURE (W16-W28): waterfields/seams/close.py:close_seams is the last stage that reshapes a paddy plot ring (carve_comb -> _comb_floor_and_winding -> _comb_toe_and_hem -> finish_comb -> close_seams -> _comb_dry_and_beans, which only reads rings). Lift ONE predicate module, waterfields/ring_rules.py:ring_violations(ring, ctx) -> set of rule names, where ctx carries the design cell, the grain, the supply index (carve._supply_index), the drain polyline and widths, and the field ponds/graves; each rule below is one function in it, and each gate test calls that function. Two mechanisms: (a) EVERY step of close_seams that writes a ring (_plant, _visible_parts, _absorb and all its ladder tiers, _trade, _unjog, _shed_necks, _repair_crossing_rings) refuses a candidate ring for which ring_violations is non-empty - the step is not taken; (b) a TERMINAL sweep at the end of close_seams (after _repair_crossing_rings(rounded=True)) sends any ring still violating (a carved ring no step touched) to the scrap path: _absorb into a neighbor if the union passes ring_violations, else the ground stays bare under the fan floor - the 'odd corner left unpaddied' the research describes and the Sawada review confirmed invisible in ink (pockets.py:_absorb's last branch). Rings are judged AS RECORDED (rounded to 0.1 px, raw and deduped), so the placer and the manifest see one ring. Rule function: banks.py:is_chevron(ring, 35, 0.85). The `_chev` tier takes its candidate only if is_chevron(candidate, 35, 0.85) is false, as the needle fallback is held to _GATE_MIN_APEX + 1.",
+   "fallback": "Return False - the scrap stays bare (the recorded 'odd corner left unpaddied').",
+   "later_stages": "Terminal sweep (W18) also runs is_chevron at the gate line.",
+   "unit_test": "A scrap whose only host makes a 30-degree, 0.8-solidity arrowhead: assert _absorb returns False and the host ring is unchanged.",
+   "retire": [
+    "none (no finished-map test asserts the chevron line today); the unit test is new"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W26",
+   "rule": "A basin is wide enough to stand in and puddle: working width (area / longest side) over a floor. Stated: research/fields 'Minimum basin SIZE'; future-work 'OPEN 2026-08-19: the paddy area floor cannot see WIDTH' (5.9 ft basins; 9 under 12 ft, 30 under 16 ft on Kashikawa).",
+   "rows": [
+    "R3 future-work 'OPEN 2026-08-19 (waterfields): the paddy area floor cannot see WIDTH'"
+   ],
+   "owner": "l7r/diagram/waterfields/seams/close.py:close_seams (via ring_rules) - R3 said the toe pass; the toe pass runs before close_seams, which can re-narrow, so the rule belongs in ring_rules",
+   "mechanism": "SHARED PADDY-RING ARCHITECTURE (W16-W28): waterfields/seams/close.py:close_seams is the last stage that reshapes a paddy plot ring (carve_comb -> _comb_floor_and_winding -> _comb_toe_and_hem -> finish_comb -> close_seams -> _comb_dry_and_beans, which only reads rings). Lift ONE predicate module, waterfields/ring_rules.py:ring_violations(ring, ctx) -> set of rule names, where ctx carries the design cell, the grain, the supply index (carve._supply_index), the drain polyline and widths, and the field ponds/graves; each rule below is one function in it, and each gate test calls that function. Two mechanisms: (a) EVERY step of close_seams that writes a ring (_plant, _visible_parts, _absorb and all its ladder tiers, _trade, _unjog, _shed_necks, _repair_crossing_rings) refuses a candidate ring for which ring_violations is non-empty - the step is not taken; (b) a TERMINAL sweep at the end of close_seams (after _repair_crossing_rings(rounded=True)) sends any ring still violating (a carved ring no step touched) to the scrap path: _absorb into a neighbor if the union passes ring_violations, else the ground stays bare under the fan floor - the 'odd corner left unpaddied' the research describes and the Sawada review confirmed invisible in ink (pockets.py:_absorb's last branch). Rings are judged AS RECORDED (rounded to 0.1 px, raw and deduped), so the placer and the manifest see one ring. Rule function: working_width(ring) = area / longest minimum-rotated-rectangle side >= BASIN_MIN_WIDTH_FT * g/2. The floor is a calibrated degree along a continuum (not a knob); the research pass reads 'Minimum basin SIZE' for a stated width - if the record gives none, the number is labeled GUESS at the constant and in the spec's Decisions table, and the Senmaida strips ('a few feet wide') bound it from below.",
+   "fallback": "Scrap path: weld into the neighbor sharing the longest side (the width-making move), else bare.",
+   "later_stages": "None after close_seams.",
+   "unit_test": "A 6 ft x 80 ft basin at 0.3 cell: assert close_seams output has no ring under the width floor.",
+   "retire": [
+    "none today (no finished-map test); a new placer unit test"
+   ],
+   "risk": "medium - changes plot counts on fans with narrow seam basins (Kashikawa measured 30 under 16 ft); the threshold needs its research pass first."
+  },
+  {
+   "id": "W27",
+   "rule": "A small basin does not read as a dart: a basin of under ~0.75 design cell has no tip under ~30 degrees (the tip-angle companion to the area floor). Stated: future-work 'Review residue from the shared-bund re-roll - A tip-angle companion to the area floor' (basins of 0.55-0.72 cell with 27-30 degree tips).",
+   "rows": [
+    "R3 future-work 'A tip-angle companion to the area floor'"
+   ],
+   "owner": "l7r/diagram/waterfields/seams/close.py:close_seams (via ring_rules)",
+   "mechanism": "SHARED PADDY-RING ARCHITECTURE (W16-W28): waterfields/seams/close.py:close_seams is the last stage that reshapes a paddy plot ring (carve_comb -> _comb_floor_and_winding -> _comb_toe_and_hem -> finish_comb -> close_seams -> _comb_dry_and_beans, which only reads rings). Lift ONE predicate module, waterfields/ring_rules.py:ring_violations(ring, ctx) -> set of rule names, where ctx carries the design cell, the grain, the supply index (carve._supply_index), the drain polyline and widths, and the field ponds/graves; each rule below is one function in it, and each gate test calls that function. Two mechanisms: (a) EVERY step of close_seams that writes a ring (_plant, _visible_parts, _absorb and all its ladder tiers, _trade, _unjog, _shed_necks, _repair_crossing_rings) refuses a candidate ring for which ring_violations is non-empty - the step is not taken; (b) a TERMINAL sweep at the end of close_seams (after _repair_crossing_rings(rounded=True)) sends any ring still violating (a carved ring no step touched) to the scrap path: _absorb into a neighbor if the union passes ring_violations, else the ground stays bare under the fan floor - the 'odd corner left unpaddied' the research describes and the Sawada review confirmed invisible in ink (pockets.py:_absorb's last branch). Rings are judged AS RECORDED (rounded to 0.1 px, raw and deduped), so the placer and the manifest see one ring. Rule function: not (area/cell < DART_MAX_CELL and min_apex(raw and deduped) < DART_MIN_APEX). Thresholds from the review's measurements; a degree along a continuum, labeled GUESS unless the research pass finds the figure.",
+   "fallback": "Scrap path.",
+   "later_stages": "None after close_seams.",
+   "unit_test": "A 0.6-cell basin with a 28-degree tip: assert it is welded or bare.",
+   "retire": [
+    "none today"
+   ],
+   "risk": "medium - new constraint; its thresholds are review-derived, and it moves basins on every fan with seam wedges."
+  },
+  {
+   "id": "W28",
+   "rule": "The flat paddy tiles AROUND an in-field grave island: no plot ring runs under the mound. Stated: the grave-island registry entry; future-work 'Carve the paddy around an in-field grave island' (three rings and nine junctions under it); features.py labels drawing over the lattice a map drawing convention today.",
+   "rows": [
+    "R3 future-work 'Carve the paddy around an in-field grave island'"
+   ],
+   "owner": "l7r/diagram/settlement/fields/features.py:_plot_grave_island + waterfields/seams/close.py:close_seams (the grave disc joins ring_rules' ctx)",
+   "mechanism": "Seat the grave BEFORE the seam pass (its site choice needs only the carved plots), pass its disc into close_seams, and difference every ring with the disc + bank margin before the terminal sweep; ring_violations gains ring_under_island(ring, discs). The pieces are judged by the other ring rules and scraps go to the scrap path, exactly as for the field pond (W29). The 'map drawing convention' label in features.py is removed with the deviation.",
+   "fallback": "Pieces failing -> weld or bare; if no seat leaves every piece legal, the grave takes the next candidate plot (the placer's own candidate loop).",
+   "later_stages": "Beads are laid after close_seams on final rings, so none lands on the mound; the bead drop (W33) adds the mound as not-visible ground.",
+   "unit_test": "A 12x12 carved lattice with a grave seated on a four-way junction: assert no ring intersects the disc and every ring passes ring_violations.",
+   "retire": [
+    "none today"
+   ],
+   "risk": "medium - moves the grave's site decision earlier in the pipeline."
+  },
+  {
+   "id": "W29",
+   "rule": "A field pond sits inside one plot: no plot or drain-hem ring edge crosses the pond's rim. Stated: tests/gate/test_water_junctions.py::test_a_field_pond_is_sunk_into_one_plot.",
+   "rows": [
+    "R1 test_water_junctions.py::test_a_field_pond_is_sunk_into_one_plot"
+   ],
+   "owner": "l7r/diagram/settlement/fields/features.py:_plot_pond - census correct",
+   "mechanism": "FR-003: the placer (seg_in_ellipse_core at inset 3) and the test (one vertex inside the full ellipse, the next outside) disagree. The research rule is 'sunk into one plot', which is the test's reading - no ring edge crosses the rim. Write primitives.py:ring_crosses_ellipse(ring, cx, cy, rx, ry, pad) (exact segment-ellipse intersection, pad = 0.15 px for the manifest's rounding), used by _plot_pond's shrink loop in place of seg_in_ellipse_core and by the test. The primitives.py docstring that says the gate calls seg_in_ellipse_core is corrected.",
+   "fallback": "Shrink as today; if no size clears, refuse the plot and try the next (existing); if no plot takes a pond the pond is not drawn and meta records it (the pond count is a knob sample, not a rule).",
+   "later_stages": "Rings are final before _plot_pond (close_seams precedes the draw); nothing reshapes rings after.",
+   "unit_test": "A plot with a neighbor's vertex 1.5 px inside its host's rim (allowed by inset 3, failed by the test): assert _plot_pond shrinks or refuses.",
+   "retire": [
+    "tests/gate/test_water_junctions.py::test_a_field_pond_is_sunk_into_one_plot"
+   ],
+   "risk": "low - ponds a little smaller on a few plots."
+  },
+  {
+   "id": "W30",
+   "rule": "Every ditched paddy field has a base floor drawn under its plots. Stated: tests/gate/test_paddy_fabric.py::test_every_ditched_paddy_has_a_floor_under_its_plots.",
+   "rows": [
+    "R1 test_paddy_fabric.py::test_every_ditched_paddy_has_a_floor_under_its_plots"
+   ],
+   "owner": "l7r/diagram/settlement/fields/comb.py:CombMixin.comb_base_fill (census correct: guaranteed)",
+   "mechanism": "Already guaranteed by construction (draw_comb_field calls comb_base_fill unconditionally before the plots). Keep; add the placer unit test.",
+   "fallback": "n/a",
+   "later_stages": "None.",
+   "unit_test": "draw_comb_field on a two-plot net: assert M['comb_floors'][name] exists and is emitted before the plots.",
+   "retire": [
+    "tests/gate/test_paddy_fabric.py::test_every_ditched_paddy_has_a_floor_under_its_plots"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W31",
+   "rule": "The fan's floor outline never overhangs the flat-extended collector line by more than 16 px down-fall. Stated: test_paddy_fabric.py::test_the_floor_stops_where_the_command_area_does.",
+   "rows": [
+    "R1 test_paddy_fabric.py::test_the_floor_stops_where_the_command_area_does"
+   ],
+   "owner": "l7r/diagram/waterfields/comb.py:_comb_floor_and_winding (census correct: guaranteed, reads banks.py:floor_overhang - the test's predicate)",
+   "mechanism": "Already guaranteed with a shared predicate. Keep; add the unit test.",
+   "fallback": "n/a",
+   "later_stages": "round_channel_joints and rounding are far under 16 px (census).",
+   "unit_test": "An envelope with a vertex 40 px below the collector line: assert max(floor_overhang) <= 0.5.",
+   "retire": [
+    "tests/gate/test_paddy_fabric.py::test_the_floor_stops_where_the_command_area_does"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W32",
+   "rule": "Each flank of the fork has supply-ditch reach of at least max(80 ft, 30% of that flank's planted extent). Stated: test_paddy_fabric.py::test_the_supply_commands_both_flanks_of_the_fan; GM 2026-08-16.",
+   "rows": [
+    "R1 test_paddy_fabric.py::test_the_supply_commands_both_flanks_of_the_fan"
+   ],
+   "owner": "l7r/diagram/hamletgen/water/fit.py:_fit_at_aspect (the fit's legality) with waterfields/comb.py:_comb_skeleton providing the geometry - census listed both; the refusal belongs in the fit",
+   "mechanism": "Predicate: lift the test into waterfields/comb.py:flanks_commanded(net) -> bool. Add it to the fit's legality set beside tail_dangles / net_bends_acutely, so an aspect or size that leaves a flank uncommanded is illegal. BROOK_FAN_TRIM's shortening is inside the net the predicate reads.",
+   "fallback": "fit_field today keeps the closest-on-acreage fan even when no aspect is legal - that least-bad keep goes: the fit widens the aspect set, then grows the canvas/envelope (as W59), and never returns an illegal net.",
+   "later_stages": "None - the net is final at fit time.",
+   "unit_test": "A net with canal B trimmed to 60 ft on a wide fan: assert _fit_at_aspect marks it illegal.",
+   "retire": [
+    "tests/gate/test_paddy_fabric.py::test_the_supply_commands_both_flanks_of_the_fan"
+   ],
+   "risk": "medium - removes fit_field's least-bad keep, which also serves acreage (W59)."
+  },
+  {
+   "id": "W33",
+   "rule": "No azemame bead sits on water paint (inside any field ditch, channel stroke, or the pond). Stated: test_bunds_and_dikes.py::test_every_bund_bead_sits_on_visible_ground.",
+   "rows": [
+    "R1 test_bunds_and_dikes.py::test_every_bund_bead_sits_on_visible_ground"
+   ],
+   "owner": "l7r/diagram/settlement/fields/comb.py:CombMixin._comb_drop_drowned_beads - census correct, but it must run after the LAST water record",
+   "mechanism": "The drop reads M at one moment; _comb_source_channel (after the drop in draw_comb_field) and hamletgen/sink.py:drain_run (stage_sink) add water later. Fix by ordering, not prediction: the bead INK is deferred to a finish-time layer (like the late water block, settlement/finish.py), and _comb_drop_drowned_beads runs there over the final water registry (every field_ditch, channel, stream, pond, field pond, grave mound), re-splitting through carve.py:bead_runs so W34 holds. Predicate: the drop's seg_dist < half test, lifted to one function the gate test calls.",
+   "fallback": "A drowned bead is dropped and its run re-split; a run left under two beads is dropped (bead_runs).",
+   "later_stages": "Closed by running at finish after every water writer; any future water writer after finish is impossible by construction (finish emits).",
+   "unit_test": "A comb net whose beads line a bund the source-channel hairline later crosses: assert no emitted bead lies within half a stroke of any recorded water after finish.",
+   "retire": [
+    "tests/gate/test_bunds_and_dikes.py::test_every_bund_bead_sits_on_visible_ground"
+   ],
+   "risk": "medium - moves bead emission to finish (draw order and the SVG move; bead z-order must stay under the late water block)."
+  },
+  {
+   "id": "W34",
+   "rule": "No beaded bund segment shows a single bead (at least two glyphs). Stated: test_bunds_and_dikes.py::test_every_beaded_bund_segment_shows_at_least_two_beads; GM 2026-09-14.",
+   "rows": [
+    "R1 test_bunds_and_dikes.py::test_every_beaded_bund_segment_shows_at_least_two_beads"
+   ],
+   "owner": "l7r/diagram/waterfields/carve.py:bead_runs (census correct: guaranteed)",
+   "mechanism": "Already guaranteed: every bead line and every drop goes through bead_runs (MIN_BEADS_PER_RUN 2). W33's relocated drop must use it (stated in W33).",
+   "fallback": "n/a",
+   "later_stages": "W33's finish-time drop re-splits through bead_runs.",
+   "unit_test": "Existing bead_runs unit tests (feature 247) plus one of the finish-time drop leaving a one-bead remnant: assert it is removed.",
+   "retire": [
+    "tests/gate/test_bunds_and_dikes.py::test_every_beaded_bund_segment_shows_at_least_two_beads",
+    "tests/gate/test_bunds_and_dikes.py::test_bead_segments_derivation_fires (the gate helper's own self-test; goes with it)"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W35",
+   "rule": "Dry plots of one tract share a row direction (differ by <= 2x the in-tract turn), and neighbors across a tract seam differ by more than ~6 degrees. Stated: test_bunds_and_dikes.py::test_dry_plots_share_a_row_direction_within_a_tract_and_change_it_at_the_seams; research fields/180.",
+   "rows": [
+    "R1 test_bunds_and_dikes.py::test_dry_plots_share_a_row_direction_within_a_tract_and_change_it_at_the_seams"
+   ],
+   "owner": "l7r/diagram/waterfields/furrows.py:tract_ways (census correct) with waterfields/comb.py:_comb_dry_and_beans supplying the second band's neighbors",
+   "mechanism": "Within a tract it holds by construction (TRACT_PLOT_TURN_RAD). Seams: tract_ways takes a `neighbors(tract)` list of headings - every earlier tract whose COLUMN STRIP (known before headings: a column is a strip from the canal upslope) touches this tract's strips - and chooses a heading outside the union of (h_j +- TRACT_SEAM_MIN_RAD) over all of them, not only the previous one; the second (fork-triangle) band is built with the first band's tracts as candidate neighbors. Predicate: the test's judge (it already has a self-test, test_the_tract_judge_fires_on_a_split_tract_and_a_blurred_seam) moves into furrows.py as seams_read(plots) and the placer's unit test calls it.",
+   "fallback": "If the allowed set is empty (furrows are modulo pi, each neighbor excludes 0.7 rad, so only 5+ neighbors can empty it), the tract is merged into the neighbor whose heading is nearest (it takes that tract's id and heading) - a larger tract, which the record allows (sizes open, GUESS).",
+   "later_stages": "fan_toe_hem and _comb_draw_hem only remove plots, which cannot create a new within-tract split or a new adjacency.",
+   "unit_test": "A first band of tracts (0, pi/2, 0) and a second band whose tract abuts tracts 0 and 1: assert its heading differs from both by >= TRACT_SEAM_MIN_RAD; and the 5-neighbor merge case.",
+   "retire": [
+    "tests/gate/test_bunds_and_dikes.py::test_dry_plots_share_a_row_direction_within_a_tract_and_change_it_at_the_seams",
+    "tests/gate/test_bunds_and_dikes.py::test_the_tract_judge_fires_on_a_split_tract_and_a_blurred_seam (moves with the judge into the engine's unit tests)"
+   ],
+   "risk": "low - touches only second-band and non-consecutive seams."
+  },
+  {
+   "id": "W36",
+   "rule": "A hamlet's dry field is sized from its population (coarse grain about a third of the diet) whatever the fan_middle knob rolls: a 'wild' middle does not leave the hamlet almost no dry field. Stated: research/fields 'Acreage from population'; future-work 'OPEN 2026-09-28 (269 B07)' (Inashiro 0.42 acre, Mizuguchi 0.41 acre).",
+   "rows": [
+    "R3 future-work 'OPEN 2026-09-28 (269 B07): a wild fan middle leaves a hamlet almost no dry field'"
+   ],
+   "owner": "l7r/diagram/waterfields/comb.py:_comb_dry_and_beans (after fan_toe_hem, the dry-band placer) - R3 owner correct",
+   "mechanism": "After fan_toe_hem trims to the toe, compare dry acreage to the sizing rule's target (a shared function beside net_acres, read by the unit test); lay the shortfall on the named ground. WHERE is research owed first (the R3 entry says so; feedback 'where is research, not a question'): the catena research (fields/160) is read for where a wild-middle fan's dry crops stood - likely the toe's flanks and the ground below the collector. Candidates are laid by _dry_fields on that ground, deepening the toe band up to the target.",
+   "fallback": "If the named ground cannot hold the target inside the canvas, the canvas grows (plan_site), as W59 does for paddy.",
+   "later_stages": "_comb_draw_hem drops hem plots under the brook's band after this; the target must be met after that drop - run the top-up after the brook is known (stage_field has plan.brook before draw_comb_field) or re-top-up there.",
+   "unit_test": "A wild-middle fan whose toe hem gives 0.4 acre against a 2.5 acre target: assert the output dry acreage is within the sizing band.",
+   "retire": [
+    "none today (no finished-map test); a new placer test"
+   ],
+   "risk": "high - research owed before the design can name the ground; moves every wild-middle map."
+  },
+  {
+   "id": "W37",
+   "rule": "Every paddy field shows where its water comes from: a channel declared to it or a field ditch naming it. Stated: test_water_flow.py::test_every_field_shows_where_its_water_comes_from.",
+   "rows": [
+    "R1 test_water_flow.py::test_every_field_shows_where_its_water_comes_from"
+   ],
+   "owner": "l7r/diagram/settlement/fields/comb.py:CombMixin._comb_record_ditches (census correct: guaranteed)",
+   "mechanism": "Already guaranteed by construction. Keep; unit test.",
+   "fallback": "n/a",
+   "later_stages": "None.",
+   "unit_test": "draw_comb_field on a minimal net: assert a field_ditch with field=name exists.",
+   "retire": [
+    "tests/gate/test_water_flow.py::test_every_field_shows_where_its_water_comes_from"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W38",
+   "rule": "No field channel is painted under a later paddy plot. Stated: tests/full/test_villages.py::test_village_passes_gate (measured on the SVG).",
+   "rows": [
+    "R1 tests/full/test_villages.py::test_village_passes_gate (channel z-order part)"
+   ],
+   "owner": "l7r/diagram/settlement/fields/comb.py:draw_comb_field with settlement/core.py/finish.py's block splicing - census correct",
+   "mechanism": "Make it structural: plot polygons are emitted into a PADDY block that finish splices before every water block (early and late), so no channel can precede a plot whatever the call order. field_channel's `late` stays for its compositing role (the sink drain is deliberately in the early block so the pond fill paints over its mouth - sink.py:524 - which is still after the paddy block).",
+   "fallback": "n/a - ordering.",
+   "later_stages": "finish splices blocks; a later stage emitting a plot polygon goes to the paddy block by construction.",
+   "unit_test": "A settlement stub that draws a channel then a plot: assert the plot's element precedes the channel's in the emitted SVG.",
+   "retire": [
+    "the channel-under-plot assertion inside tests/full/test_villages.py::test_village_passes_gate"
+   ],
+   "risk": "low - SVG order changes, pixels do not except where a channel was buried."
+  },
+  {
+   "id": "W39",
+   "rule": "A shipped scripted map's typical paddy cell stays in the 0.030-0.072 acre band (polder and dike-pond maps exempt by rule). Stated: tests/full/test_villages.py::test_village_passes_gate; research/fields.html 'Plot sizes, pond sizing and acreage from population'.",
+   "rows": [
+    "R1 tests/full/test_villages.py::test_village_passes_gate (cell-size part)"
+   ],
+   "owner": "l7r/diagram/hamletgen/water/fit.py:fit_field (census correct) with the carve's plot_across from settlement plot_texture",
+   "mechanism": "Predicate: median interior cell area in acres, lifted from the test to waterfields (cell_acres(net, ftpx)). fit_field asserts it on the carved net; outside the band it scales plot_across by sqrt(target/median) and re-carves (a search on its own parameter, not a map re-roll), bisecting between the last in-band-low and in-band-high values.",
+   "fallback": "The median is continuous-ish in plot_across and the band is 2.4x wide; bisection over a bracket always lands inside. If a bracket cannot be found (cannot happen for a positive grain), refuse the fit aspect.",
+   "later_stages": "close_seams changes some rings; the median is taken after finish_comb (the rings recorded).",
+   "unit_test": "A net carved at plot_across giving a 0.02 acre median: assert fit_field returns a net in band.",
+   "retire": [
+    "the cell-band assertion inside tests/full/test_villages.py::test_village_passes_gate (the CPU-budget part is not a placement rule and stays)"
+   ],
+   "risk": "medium - re-carves on maps near the band edges."
+  },
+  {
+   "id": "W40",
+   "rule": "A polder dike's widest stretch is at least 1.4x its narrowest (a hand-piled earthwork, never a uniform band). Stated: test_bunds_and_dikes.py::test_the_polder_dike_is_a_hand_piled_earthwork; research/archetypes 'The perimeter dike followed the natural water edge'.",
+   "rows": [
+    "R1 test_bunds_and_dikes.py::test_the_polder_dike_is_a_hand_piled_earthwork"
+   ],
+   "owner": "l7r/diagram/settlement/land/dikes.py:DikeMixin.perimeter_dike - census correct",
+   "mechanism": "Move the constant into the engine (DIKE_IRREGULARITY = 1.4, the test imports it). After w_seen is built, if max/min < DIKE_IRREGULARITY, stretch the profile about its mean (deterministic, no new draw), clamped to (wlo, whi); with the default (14, 40) the stretched range always reaches 1.4 (40/14 = 2.9). Predicate: dikes.py:dike_irregular(w_seen).",
+   "fallback": "If width is passed as a range narrower than 1.4x, the stretch runs to the range ends and the call raises at construction time (a caller bug, not a roll).",
+   "later_stages": "None - w_min/w_max are recorded from the final profile.",
+   "unit_test": "perimeter_dike with seed phases that flatten the sum (constructed): assert w_max/w_min >= 1.4.",
+   "retire": [
+    "tests/gate/test_bunds_and_dikes.py::test_the_polder_dike_is_a_hand_piled_earthwork"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W41",
+   "rule": "No house, farm shed, byre or threshing yard stands (by its center) inside the dike's keep-out. Stated: test_bunds_and_dikes.py::test_nothing_is_built_on_the_dike.",
+   "rows": [
+    "R1 test_bunds_and_dikes.py::test_nothing_is_built_on_the_dike"
+   ],
+   "owner": "l7r/diagram/settlement/land/dikes.py:perimeter_dike (keep-out into block_polys) + the seat tests (census correct: guaranteed)",
+   "mechanism": "Already guaranteed (keep-out recorded before any homestead; bundles refused by site_boundary, byres/yards by _in_blocked). Unit test of the seat path against a keep-out.",
+   "fallback": "n/a",
+   "later_stages": "Dike-top houses exempt by design (on_dike).",
+   "unit_test": "A block_polys keep-out and a bundle candidate centered in it: assert refused.",
+   "retire": [
+    "tests/gate/test_bunds_and_dikes.py::test_nothing_is_built_on_the_dike"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W42",
+   "rule": "No watercourse crosses the dike crest except within 60 px of a recorded gap (sluice or outfall). Stated: test_bunds_and_dikes.py::test_no_channel_is_cut_through_the_dike_except_at_its_gaps.",
+   "rows": [
+    "R1 test_bunds_and_dikes.py::test_no_channel_is_cut_through_the_dike_except_at_its_gaps"
+   ],
+   "owner": "l7r/diagram/hamletgen/water/polder.py:stage_polder (dike_gaps_at_channels) for the net; every later channel router for its own course (census correct in part)",
+   "mechanism": "Two halves. (1) dike_gaps_at_channels tests crossings against the CREST band (the dike's outline), not only the inner ring, over every course recorded by the time the dike is drawn (net channels + M['channels']). (2) The dike band becomes a keep-out for every later channel router (stage_sink's routes, _comb_source_channel, the reservoir inlet hairline) except within 60 px of a gap, via the same refusal predicate the test uses: primitives.py:course_breaches_dike(course, crest, gaps, 3.0, 60.0).",
+   "fallback": "A later router whose candidates all breach: route through the nearest gap (a gap exists: the two named sluices always do).",
+   "later_stages": "stage_sink runs after stage_polder? (No: polder hamlets return from stage_field into stage_polder; stage_sink follows) - so (2) closes it; nothing appends gaps later.",
+   "unit_test": "A square ring with a sink route whose only straight candidate crosses the crest 200 px from both sluices: assert it is refused and the drawn route passes within 60 px of a gap.",
+   "retire": [
+    "tests/gate/test_bunds_and_dikes.py::test_no_channel_is_cut_through_the_dike_except_at_its_gaps"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W43",
+   "rule": "A waterward reed strip reaches the map's view edge on its flank, never stops inside the frame. Stated: test_bunds_and_dikes.py::test_the_waterward_reed_strip_runs_off_the_frame; GM 2026-08-28 / feature 150 T55.",
+   "rows": [
+    "R1 test_bunds_and_dikes.py::test_the_waterward_reed_strip_runs_off_the_frame"
+   ],
+   "owner": "l7r/diagram/hamletgen/frame.py:stage_frame (the stage that decides the view) - census named stage_waterward; the strip is laid before the view exists, so its flank edge can only be guaranteed where the view is decided",
+   "mechanism": "After crop_to_content, for each waterward flank whose strip's outer edge lies inside the view, stage_frame calls stage_waterward's strip builder for the band between the strip's outer edge and the view edge + 20, and marsh() scatters it with the same keep-outs (the ground there is outside the dike, so nothing built stands in it; keep-outs honored). Predicate: polder.py:strip_reaches_view(strip, view, face) - the test's `reach` expression - shared.",
+   "fallback": "None needed - the band is always drawable (marsh skips keep-outs; the strip polygon is recorded to the view edge either way).",
+   "later_stages": "stage_notice runs after the frame but does not move the view; the title band grows after the crop (TITLE_BAND_ALLOWANCE) - the extension reads the FINAL view, so it must run after the title band is grown (same stage, after title()).",
+   "unit_test": "A polder whose content extends 400 px west of the dike (WATERWARD_DEPTH 280): assert after stage_frame the W strip reaches the view edge.",
+   "retire": [
+    "tests/gate/test_bunds_and_dikes.py::test_the_waterward_reed_strip_runs_off_the_frame"
+   ],
+   "risk": "low - only maps whose view outruns the depth; keeps feature 150 T55's 4x scatter saving."
+  },
+  {
+   "id": "W44",
+   "rule": "Both ends of every polder lateral land within 13 px of the main or the drain. Stated: tests/gate/test_water_junctions.py::test_every_lateral_lands_on_a_trunk_at_both_ends.",
+   "rows": [
+    "R1 test_water_junctions.py::test_every_lateral_lands_on_a_trunk_at_both_ends"
+   ],
+   "owner": "l7r/diagram/waterfields/polder.py:_polder_channels (census correct: guaranteed)",
+   "mechanism": "Already guaranteed (tips snapped onto the trunks; round_channel_joints moves a seam's end onto the shared arc for both). Unit test.",
+   "fallback": "n/a",
+   "later_stages": "stage_polder moves only the feeder's inlet stub end.",
+   "unit_test": "_polder_channels on a small lattice: assert every lateral end within 13 px of a trunk.",
+   "retire": [
+    "tests/gate/test_water_junctions.py::test_every_lateral_lands_on_a_trunk_at_both_ends"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W45",
+   "rule": "A polder toe canal joins the drain trunk at its centerline, as feeder/lateral junctions do. Stated: future-work 'Two ways that meet where the material changes' (toe ends 3 ft short, 2.5 ft off the centerline).",
+   "rows": [
+    "R3 future-work 'Two ways that meet where the material changes'"
+   ],
+   "owner": "l7r/diagram/hamletgen/water/polder.py ring corner builder (R3's owner) - the geometry is in waterfields/polder.py:_polder_channels / _polder_ring where the toe sides are built; confirm at implementation",
+   "mechanism": "Construct: the toe's end vertex is the projection of its corner onto the drain's centerline polyline (polder.py:_onto_poly exists for exactly this), applied at both corners. Predicate: end_on_centerline(course, trunk, tol=0.5) shared with a unit test.",
+   "fallback": "None - a projection onto a polyline always exists.",
+   "later_stages": "round_channel_joints: it moves ends onto shared arcs for both records, which keeps them on the centerline.",
+   "unit_test": "A ring corner where the toe stops 3 px short: assert both toe ends lie on the drain centerline within 0.5 px.",
+   "retire": [
+    "none today"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W46",
+   "rule": "A polder's header reservoir rim never lies on the crop, and the reservoir never sits downhill of the field's highest point. Stated: tests/soak/test_polder_fall_0.py::test_a_polder_reservoir_backs_off_until_its_rim_clears_the_crop; research/archetypes polder siting (the source sits above what it waters).",
+   "rows": [
+    "R1 soak/test_polder_fall_0.py::test_a_polder_reservoir_backs_off_until_its_rim_clears_the_crop"
+   ],
+   "owner": "l7r/diagram/hamletgen/water/polder.py:walk_pond_uphill (called from stage_polder) - census correct",
+   "mechanism": "Replace the bounded 16-point walk with a solved seat: t_clear = first step at which the ellipse POLYGON (shapely, not 16 samples) is disjoint from the envelope; t_up = the step at which the center's fall projection is <= the envelope's minimum projection; seat at max(t_clear, t_up). The walk is along -fall, so t_up bounds t_clear from above (once the lowest rim point is upslope of the envelope's highest point, nothing can intersect): no step limit is needed. Predicates: pond_clear_of_crop (the polygon test) and pond_uphill_of_field, both shared with the test.",
+   "fallback": "If the solved seat leaves the canvas, the canvas grows upslope (plan_site's canvas is 'deliberately generous'; erring large is cheap) - never an uncleared pond.",
+   "later_stages": "The doubling-back stub trim once slid the ring canal's head onto the crop: the seat is computed after the canal's head is final (order it after the trim) and the inlet hairline is routed to the seated pond.",
+   "unit_test": "The rectangle unit test extended: an envelope with a spike between two of the old 16 sample points, and one whose clearance needs more than 60 steps: assert both predicates.",
+   "retire": [
+    "tests/soak/test_polder_fall_0.py::test_a_polder_reservoir_backs_off_until_its_rim_clears_the_crop (and its soak roll, if no other soak test needs it)"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W47",
+   "rule": "A polder's land acreage is within 12% of its target. Stated: soak/test_polder_fall_0.py::test_a_polder_hamlet_draws_its_grid_dike_and_reservoir (the acreage clause; the dike/gate/reservoir clauses are W40-W46, households seated is the seating area's rule).",
+   "rows": [
+    "R1 soak/test_polder_fall_0.py::test_a_polder_hamlet_draws_its_grid_dike_and_reservoir (acreage clause; the gate-per-cut clause is guaranteed by dike_gates seating one per recorded gap)"
+   ],
+   "owner": "l7r/diagram/hamletgen/water/polder.py:fit_polder - census correct",
+   "mechanism": "fit_polder's bisection (tolerance 0.06) keeps the closest when it misses; instead, acreage is monotone in the block's span, so the bisection is run on span until within 0.06 (inside the rule's 0.12), growing the canvas when the span needed exceeds it. Predicate: polder_acres_in_band(net, target, 0.12).",
+   "fallback": "Grow the canvas; never the closest-miss.",
+   "later_stages": "clean_polder_parcels / _polder_close trim parcels after the fit: the acreage is measured on the final parcels, and the bisection target carries the measured trim loss (bisect on the final measure).",
+   "unit_test": "A target where the old bisection stalled 15% short: assert within 12%.",
+   "retire": [
+    "the acreage clause of tests/soak/test_polder_fall_0.py::test_a_polder_hamlet_draws_its_grid_dike_and_reservoir (the whole test retires once W40-W46 and the seating area's household guarantee have their unit tests)"
+   ],
+   "risk": "medium - polder is work in progress (W48)."
+  },
+  {
+   "id": "W48",
+   "rule": "The polder_grid archetype's two named gate failures in build_polder's own geometry are placement guarantees like any other. Stated: soak/test_polder_fall_0.py docstring; hamletgen.md 'down to two named failures'.",
+   "rows": [
+    "R3 soak/test_polder_fall_0.py test_a_polder_hamlet_draws_its_grid_dike_and_reservoir docstring; hamletgen.md"
+   ],
+   "owner": "l7r/diagram/waterfields/polder.py:build_polder - R3 owner",
+   "mechanism": "The two failures are not named in the record. First step is a measurement: roll the Polder coverage seeds (12/19) and name each failing rule; each then joins this design as its own rule with its own predicate in build_polder and a unit test. This entry is a placeholder the plan must fill, not a mechanism.",
+   "fallback": "Per named rule.",
+   "later_stages": "Per named rule.",
+   "unit_test": "Per named rule; the soak test's 'does not assert a clean gate' carve-out is removed (FR-006).",
+   "retire": [
+    "the carve-out in tests/soak/test_polder_fall_0.py::test_a_polder_hamlet_draws_its_grid_dike_and_reservoir"
+   ],
+   "risk": "high - work-in-progress archetype, failures unmeasured and unnamed."
+  },
+  {
+   "id": "W49",
+   "rule": "A source pond has a channel from/to it; a drainage pond has a drain or channel ending on it. Stated: test_water_junctions.py::test_the_pond_is_connected_to_the_field_it_serves.",
+   "rows": [
+    "R1 test_water_junctions.py::test_the_pond_is_connected_to_the_field_it_serves"
+   ],
+   "owner": "l7r/diagram/hamletgen/sink.py:stage_sink / settlement/fields/comb.py:_comb_source_channel (census correct: guaranteed)",
+   "mechanism": "Already guaranteed by construction (pond_run ends at the pond center; the source hairline starts at pond_rec). Unit test.",
+   "fallback": "n/a",
+   "later_stages": "None.",
+   "unit_test": "stage_sink with water_sink=pond on a stub fan: assert a channel ends on the pond.",
+   "retire": [
+    "tests/gate/test_water_junctions.py::test_the_pond_is_connected_to_the_field_it_serves"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W50",
+   "rule": "A dike-pond hamlet draws at least one pig sty when its sty count is >= 1 (feature 150 A3); fry ponds 1-3, a wet strip on every declared flank, no duck pen, forecourt-only yards (these guarded). Stated: tests/gate/hamletgen/test_water.py::test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks.",
+   "rows": [
+    "R1 gate/hamletgen/test_water.py::test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks"
+   ],
+   "owner": "l7r/diagram/hamletgen/pondstock.py:stage_pond_stock - census correct (households seated is the seating area's rule)",
+   "mechanism": "n_sty = max(1, round(...)) when the archetype is dike-pond. The candidate set is every near-half bank seat of every pond, ordered by distance to the house centroid (the nearest bank point to hc is always in the near half - it is nearer hc than any interior point, hc lying outside the parcel). To make one always free, stage_polder/dike-pond reserves a sty seat on each pond's bank facing the settlement seat (stage_seat's side is known before homesteads) as a block_poly the homesteads refuse; stage_pond_stock takes a reserved seat if it passes the near-half test for the final hc, else any legal near-half seat.",
+   "fallback": "If no near-half seat is legal after the reservation (the final hc moved to the far side of every pond), GM-QUESTION is NOT needed: the record (specs/233 R7) puts the sty by the house side, so the sty goes on the nearest bank point to hc of the nearest pond, which the reservation's keep-out is widened to guarantee - the reservation covers the bank arc facing the seat's whole cluster box, not one point.",
+   "later_stages": "None known (sties reserve ground before the web).",
+   "unit_test": "A dike-pond stub with every near-half bank seat blocked by houses except the reserved arc: assert one sty is seated within reach.",
+   "retire": [
+    "the sty clause of tests/gate/hamletgen/test_water.py::test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks; the whole test retires with the guarded clauses' unit tests (fry count, flank strips, yards) and the seating area's household guarantee"
+   ],
+   "risk": "medium - a new reservation before the homesteads."
+  },
+  {
+   "id": "W51",
+   "rule": "A pig sty never stands further from the house cluster's centroid than its pond parcel's center (near half of its pond). Stated: tests/gate/test_no_feature_overlaps.py::test_every_pond_fixture_keeps_to_the_near_half_of_its_pond; specs/233 research R7.",
+   "rows": [
+    "R1 test_no_feature_overlaps.py::test_every_pond_fixture_keeps_to_the_near_half_of_its_pond"
+   ],
+   "owner": "l7r/diagram/hamletgen/pondstock.py:stage_pond_stock (census correct: guaranteed)",
+   "mechanism": "Already guaranteed (math.dist(seat, hc) <= reach at acceptance; hc from M['houses'], which no later stage changes). Unit test.",
+   "fallback": "n/a",
+   "later_stages": "None.",
+   "unit_test": "Bank seats on both halves of a pond: assert the far-half ones are refused.",
+   "retire": [
+    "tests/gate/test_no_feature_overlaps.py::test_every_pond_fixture_keeps_to_the_near_half_of_its_pond"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W52",
+   "rule": "The final view never reaches past the frame the scatter was thrown within (no strip with no scatter). Stated: tests/gate/test_scatter_frame.py::test_no_shipped_hamlet_breaches_its_scatter_frame; feature 224 FR-002.",
+   "rows": [
+    "R1 test_scatter_frame.py::test_no_shipped_hamlet_breaches_its_scatter_frame"
+   ],
+   "owner": "l7r/diagram/settlement/finish.py (where the view is final and scatter_frame_breach is measured today) - census named hinterland/frame.py:scatter_frame (the prediction) and the crop; a prediction patched twice for new frame-setters is not a guarantee, so the guarantee moves to where the view is final",
+   "mechanism": "Replace measure-and-record with repair at the same point: for each recorded scatter frame (settlement._scatter_frames, each with its parcel box), compute the overhang strips where the view shows the parcel beyond the frame, and re-throw that parcel's scatter into the strips only (each scatter records its thrower and rng key; keep-outs are honored as at the first throw). The prediction stays as the cost saver; the repair makes it a guarantee. Predicate: the existing overhang computation lifted into a function the test calls (returns [] after the repair).",
+   "fallback": "None needed - a strip is always throwable (the thrower skips keep-outs).",
+   "later_stages": "Runs in finish after the last view change (crop, title band, stage_notice); nothing after finish moves the view.",
+   "unit_test": "A settlement stub whose scatter frame is 30 px inside the view on one side: assert after finish the overhang list is empty and the strip holds scatter.",
+   "retire": [
+    "tests/gate/test_scatter_frame.py::test_no_shipped_hamlet_breaches_its_scatter_frame"
+   ],
+   "risk": "medium - every scatter thrower must be re-throwable by strip; finish gains work only on breached maps."
+  },
+  {
+   "id": "W53",
+   "rule": "No two features whose overlap classes forbid it overlap (overlap/matrix.py matrix_policy), on every map (the comb and polder reference hamlets are the tests). Stated: tests/gate/test_no_feature_overlaps.py::test_the_comb_hamlet_draws_no_forbidden_overlap and ::test_the_polder_hamlet_draws_no_forbidden_overlap.",
+   "rows": [
+    "R1 test_no_feature_overlaps.py::test_the_comb_hamlet_draws_no_forbidden_overlap",
+    "R1 test_no_feature_overlaps.py::test_the_polder_hamlet_draws_no_forbidden_overlap"
+   ],
+   "owner": "l7r/diagram/overlap/matrix.py (the policy) consulted by every placer; census owner settlement/rolling/fit.py:_fits is only one of them",
+   "mechanism": "Make the matrix a constraint, not an audit: one indexed registry of classified extents (overlap/matrix.py:matrix_extents, built incrementally as each feature is recorded - an STRtree per class, the project's 'index once, ask per candidate' rule), and one predicate forbidden_against(extent, cls, registry) that every placer's candidate loop calls before accepting (the bundle fit, byres/yards/gardens, wells, sties, woodland/copse/bamboo scatter, marsh, lanes/web corridors, bridges, burial, title pocket, water routers). A later stage that draws over earlier ground must either be allowed by the policy or refuse. The test then calls matrix_violations on constructed layouts only.",
+   "fallback": "Per placer: its existing next-candidate loop; a scatter item is skipped; a linear router bends (the web already routes around keep-outs).",
+   "later_stages": "Every stage is a 'later stage' for the ones before it; the guarantee holds because each stage refuses against the registry of everything recorded before it, and a feature recorded later that overlaps an earlier one is by definition refused by the later placer.",
+   "unit_test": "Per placer: a constructed registry holding a forbidden neighbor under the candidate; assert refused. One integration unit test of matrix_extents' incremental index vs a rebuild.",
+   "retire": [
+    "tests/gate/test_no_feature_overlaps.py::test_the_comb_hamlet_draws_no_forbidden_overlap",
+    "tests/gate/test_no_feature_overlaps.py::test_the_polder_hamlet_draws_no_forbidden_overlap"
+   ],
+   "risk": "high - touches every placer and adds a query per candidate (perf: SC-006); pairs no hand-kept keep-out covered will start refusing and move maps across the pool."
+  },
+  {
+   "id": "W54",
+   "rule": "Two farmhouses never stand closer than FARMHOUSE_EAVE_GAP_FT (8 ft) wall to wall, measured on the drawn (rotated) quads. Stated: tests/gate/test_cluster_and_homes.py::test_two_farmhouses_keep_their_own_drip_lines.",
+   "rows": [
+    "R1 test_cluster_and_homes.py::test_two_farmhouses_keep_their_own_drip_lines"
+   ],
+   "owner": "l7r/diagram/settlement/rolling/fit.py:_house_too_near_a_neighbor (census correct: guaranteed at seat time)",
+   "mechanism": "Already refused at seat time on rotated quads (poly_gap) with a 2 ft margin. FR-003: the test measures unrotated w x h boxes, which is wrong on a quarter-turned house (Inashiro's at rot 94.3); the test is rewritten to call the placer's predicate (rotated quads via poly_gap), then retired in favor of the placer test in tests/settlement/test_rolling.py.",
+   "fallback": "n/a",
+   "later_stages": "None (houses are not moved after placement).",
+   "unit_test": "Existing tests/settlement/test_rolling.py case plus a rotated pair 7 ft apart that the unrotated measure would pass: assert refused.",
+   "retire": [
+    "tests/gate/test_cluster_and_homes.py::test_two_farmhouses_keep_their_own_drip_lines"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W55",
+   "rule": "A raked house's drawn corner never crosses (or eats the margin to) a neighbor's garden. Stated: future-work FINDING 2 'a raked house corner bulges into a neighbor's garden' (2.1 ft margin eaten); features_do_not_overlap / gardens_clear_of_structures.",
+   "rows": [
+    "R3 future-work FINDING 2: a raked house corner bulges into a neighbor's garden"
+   ],
+   "owner": "l7r/diagram/settlement/rolling/fit.py bundle fit (bundle separation; its docstring says it 'knows nothing about either house's rake') - R3 owner correct",
+   "mechanism": "The bundle fit measures each candidate house by its rotated quad (_rect_corners, the same corners _house_too_near_a_neighbor uses) against every placed neighbor's garden polygon, and each candidate garden against placed houses' rotated quads, at the gardens_clear_of_structures margin. Predicate: poly_gap(house_quad, garden_poly) >= margin, shared with the unit test (and W53's matrix pair house/garden).",
+   "fallback": "Next candidate (existing loop).",
+   "later_stages": "None - neither is moved after seating.",
+   "unit_test": "A raked house 1 ft from a neighbor garden by its unraked rect but overlapping by its drawn corner: assert refused.",
+   "retire": [
+    "none today beyond W53's overlap tests"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W56",
+   "rule": "A garden is never seated on an in-field ditch (no garden on a channel). Stated: future-work 'A garden may be seated on an in-field ditch'; features_do_not_overlap.",
+   "rows": [
+    "R3 future-work 'A garden may be seated on an in-field ditch'"
+   ],
+   "owner": "l7r/diagram/settlement/rolling/fit.py bundle fit (_rect_on_water) with hamletgen/water/comb.py's corridors - R3 owner correct",
+   "mechanism": "Give every bundle rect (house, yard, garden, shed) the in-field channel keep-out the houses carry: _rect_on_water already tests feeder channels, in-field/drain ditches and streams for SOLID rects - make the garden rect go through it too, then drop the sub-stride corridor stubs in stage_field that were holding the ground (comb.py corridor loop). Predicate: _rect_on_water's segment test on plain lists (like rect_touches_stream).",
+   "fallback": "Next candidate.",
+   "later_stages": "None.",
+   "unit_test": "A garden candidate across a delivery ditch's tail with no corridor stub: assert refused.",
+   "retire": [
+    "none today"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W57",
+   "rule": "A lane end reaches something - a way or a dooryard; a lane end behind a house's back wall does not count as reaching its dooryard. Stated: 269 B17 trim_lane_stubs; future-work 'A lane end behind a house counts as its dooryard' (11 ft behind the back wall).",
+   "rows": [
+    "R3 future-work 'the rest of the 269 landing's settlement-review findings' - A lane end behind a house counts as its dooryard"
+   ],
+   "owner": "l7r/diagram/settlement/water_ways/lanes.py:trim_lane_stubs + the hamletgen/ways web - R3 owner correct (not a water rule; carried here because the census row is in this area file)",
+   "mechanism": "Predicate: reaches_dooryard(end, house) = the end lies in the house's recorded yard polygon or within the band in front of its front face (the face the yard opens from), never by distance to the house. trim_lane_stubs judges ends with it; the web, when it would end a lane behind a house, carries the end round the gable to the front band (the way routing's own clearance).",
+   "fallback": "Trim the stub back to the last way junction (an end that reaches nothing is removed, the existing trim).",
+   "later_stages": "None after the web.",
+   "unit_test": "A lane ending 11 ft behind a back wall: assert it is either extended round the gable or trimmed.",
+   "retire": [
+    "none today"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W58",
+   "rule": "The title pocket keeps clear of features: no feature glyph (e.g. the burial ground) stands within the keep-clear distance of the title placard. Stated: dev/placement.md keep-clear contract; future-work 'The burial ground beside the title placard' (23 ft on its centerline).",
+   "rows": [
+    "R3 future-work 'The burial ground beside the title placard'"
+   ],
+   "owner": "l7r/diagram/hamletgen/hinterland/frame.py:title_pocket (the pocket search runs after stage_burial) - R3 named frame.py / burial.py; the later placer owns it",
+   "mechanism": "The pocket search refuses a pocket whose box, grown by the keep-clear distance, meets any recorded feature glyph or clearing bbox (burial, wells, shrines, boards). Predicate: pocket_clear_of_features(pocket, M, clearance), shared with the unit test and the keep-clear contract.",
+   "fallback": "The search takes the next pocket; if none inside the view is clear, the pocket goes OUTSIDE (plan.title_pocket_outside, an existing branch the crop takes in).",
+   "later_stages": "stage_notice after the frame: the board placer must refuse the reserved pocket (it reads it) - verify.",
+   "unit_test": "A burial glyph 23 ft below the best pocket's centerline: assert the pocket moves.",
+   "retire": [
+    "none today"
+   ],
+   "risk": "low"
+  },
+  {
+   "id": "W59",
+   "rule": "Paddy acreage lands within 15% of the figure the household count implies - no seeds excused. Stated: research/fields 'Acreage from population'; tests/gate/hamletgen/test_driver.py ACREAGE_SHORT (seeds 45, 47) in test_a_rolled_cohort_passes_the_whole_gate.",
+   "rows": [
+    "R3 tests/gate/hamletgen/test_driver.py ACREAGE_SHORT (seeds 45, 47)"
+   ],
+   "owner": "l7r/diagram/hamletgen/water/fit.py:fit_field with the canvas/envelope sizing in plan_site - R3 owner correct",
+   "mechanism": "fit_field's legality adds acres_in_band(net, target, 0.15) (lifted from the driver test). When no aspect reaches the target because the envelope clamps the fan, plan_site's canvas/envelope grows (the canvas is 'deliberately generous and cropped to content'), and the fit is re-run on the grown envelope - a search on the placer's own input, not a map re-roll. Growth is monotone in reachable acreage, so it terminates.",
+   "fallback": "Grow until in band; the least-bad keep in fit_field goes (shared with W32).",
+   "later_stages": "close_seams and the toe pass trim acreage after the fit: the band is judged on the net as finished (finish_comb), with the fit aiming at the target plus the measured trim loss.",
+   "unit_test": "A large-household, steep-fall spec (seed 45's parameters): assert fit_field returns a net within 15%; and ACREAGE_SHORT is deleted (FR-006).",
+   "retire": [
+    "the ACREAGE_SHORT excuse list and its skip in tests/gate/hamletgen/test_driver.py (FR-006); the acreage assertion there retires if the placer test covers it"
+   ],
+   "risk": "high - canvas growth moves the frame and every placer's ground on those maps; the envelope clamp is structural at steep falls."
+  }
+ ],
+ "impossible": [
+  {
+   "rule": "W48 (polder_grid's two named failures)",
+   "reason": "Not impossible in principle, but no guarantee can be designed until the two failures are measured and named - the record does not name them. The plan must roll Polder 12/19 first."
+  },
+  {
+   "rule": "W03 (brook ruled for most of its course on the page)",
+   "reason": "Guaranteeable only through a CONSERVATIVE, view-independent bound (straightest run on canvas <= 0.4*max(300, reserved length)), because the view is decided six stages later and the rule is a ratio in the view. Exact equality with the test's reading is impossible at brook time; the design accepts that the placer is stricter than the test. Review should confirm this is not an 'X except Y'."
+  },
+  {
+   "rule": "W53 (overlap matrix)",
+   "reason": "Possible, but only by making every placer consult one registry - a change to what every placer is, beyond this area; flagged for review as an overhaul-scale item (constitution XIV's deferral clause would require the measurement, mechanism and sketch if it is split out)."
+  }
+ ],
+ "notes": [
+  "Non-water R3 rows in this file (W55 raked corner, W56 garden on ditch, W57 lane end, W58 burial vs title) and R1 rows W53/W54 belong to the seating/ways/frame areas; designed here because they were assigned, and should be de-duplicated against those areas' designs.",
+  "Rows 41 and 44 bundle 'every household seated'; that clause is the seating area's rule (placed == households) and is not designed here.",
+  "The CPU-budget clause of tests/full/test_villages.py::test_village_passes_gate is not a placement rule.",
+  "Retirements depend on the finished-map test's other clauses: tests that bundle several rules (test_village_passes_gate, the polder soak test, the dike-pond test) retire only when every clause has a placer test."
+ ]
+}

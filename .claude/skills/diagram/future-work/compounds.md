@@ -9,6 +9,33 @@ looked at a compound recently. Feature 262 (the interactive magistracy pages) lo
 drawn kind against the whole research record (`specs/262-interactive-magistracy-pages/coverage.md`) and ran
 `building-review` over the Ochiba page - and what it found is below.
 
+## OPEN 2026-09-28: the magistracies' rear strips, and what feature 283's reviews left open
+
+Feature 283 moved the three magistracies' kitchen gardens out of their shady rear strips for their sun (the GM, "Move
+them all"). Filling the strips they left took four `building-review` rounds a sheet; the session carried what the
+fourth round still found here rather than into a fifth (spec 283, Decisions Recorded, with its cost). Each is a finding
+to work, the research ones first:
+
+- **The rear strip is a knob, not yet declared.** Research buildings 230 now attests a garden behind the house with the
+  storehouse beyond it (the Higuchi house) beside the old service-strip-or-alley rule; `buildings/programs.md` still
+  states only the latter. Declare the forms - a rear yard (the Higuchi house), a service strip with an alley - with
+  their evidence, and say which each sheet takes (Ubame the garden; Ochiba storehouses hard behind the house with a
+  garden beside them, a form not yet shown attested; Hayakawa storehouses across the alley).
+- **Ubame's rear yard** (open ground since the GM's 2026-09-28 ruling to draw what the sources most safely support):
+  stepping stones or a way to the two storehouse doors, a service way to the reception's privy (its cesspit has no approach that avoids a garden),
+  and settle the 19 x 31 ft strip east of the reception; end the garden at the storehouses' south faces.
+- **Hayakawa**: the family's way out of the inner garden (research: a wicket, kido or shiorido, between a buke inner
+  garden and its service ground?); the working well at the middle gate's mouth beside the guests' first stone
+  (research: was a draw-well ever on the roji's line?); the 33 x 12 ft rear pocket kept for caption seats.
+- **Ubame**: the servants' quarters have one door for four bays (research: one dormitory behind sliding partitions, or
+  a door a household?).
+- **Every sheet's bed**: whether it stood beyond the ornamental ground, before the rooms, or within the garden, and
+  whether it was screened (research buildings 405 records all three as searched and not found).
+- **The shrine**: whether a keeper's plot ever stood in a precinct's front ground (research 405's absence note).
+- **Tools**: pack-audit's aligned-gap finder pairs two buildings across a third
+  (Ochiba's "28.7 ft" nagaya-to-storehouse gap); `building-review`'s contract names an "all N structures clear the wall
+  ink" line the audit no longer prints.
+
 ## Research owed (rewritten by feature 267, 2026-09-27)
 
 Feature 267 took up everything this section held when the GM released it (*"take on whatever future work research
@@ -69,7 +96,7 @@ the Fuchu Joge pamphlet's drawing labels, which sit only in its PDF's images and
 
 ### Drawing and tooling questions left open
 
-- **The program example's captions and `seat_label` disagree on 9** (feature 267, 2026-09-27: striking posts, residence, well, gatehouse, practice ground, both clerks, straw mats' seat and leader). `compound.py` seats through the one placer but with its own view: a caption's subject is one chosen shape (the rear alley, one seat, one mat) where `seat_label` takes every drawn shape of the kind; it counts invisible stand-ins for tubs and stones and blocks the roofed court only after the court's own captions; and it measures every caption at the standard's character width where `seat_label` measures bold, capitals and spacing (feature 267's rules). The reasons are read from the code, not measured. The fix is one view: `compound.py` builds its obstacle index with `seat_label.classify` over the sheet it is drawing, or `seat_label` gains the composer's subjects; measure first which disagreements each removes.
+- **The program example's captions and the hand-sheet placer (`labels.hand_sheet`, `seat_label` until feature 286) disagreed on 9** (feature 267, 2026-09-27: striking posts, residence, well, gatehouse, practice ground, both clerks, straw mats' seat and leader). `compound.py` seats through the one placer but with its own view: a caption's subject is one chosen shape (the rear alley, one seat, one mat) where the hand-sheet placer takes what the caption declares; it counts invisible stand-ins for tubs and stones and blocks the roofed court only after the court's own captions; and it measures every caption at the standard's character width where the hand-sheet placer measures bold, capitals and spacing (feature 267's rules). The reasons are read from the code, not measured. The fix is one view: `compound.py` builds its obstacle index with `hand_sheet.classify` over the sheet it is drawing, or `hand_sheet` gains the composer's subjects; measure first which disagreements each removes.
 - Door glyphs drawn as slabs outside their walls where the rendering rule says flush (every sheet's informal doors -
   a convention question).
 - The torii drawn as an elevation silhouette on Mode A sheets while `buildings.md` (feature 268) says a Mode A arch

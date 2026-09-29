@@ -24,6 +24,7 @@ from . import checks as c
 from . import labels as lbl
 from . import mapmatch as mm
 from . import shared as s
+from . import sun
 from .grids import FTPX
 from .onmap import OnMap
 from .parse import ParsedPlan
@@ -77,11 +78,7 @@ def _tub_on_well(ctx: Context) -> list[str]:
 
 
 def _occluded(ctx: Context) -> list[str]:
-    return [f"{o.kind} {(repr(o.text) + ' ') if o.text else ''}at svg({o.x:.0f},{o.y:.0f}) is under a feature drawn later" for o in c.occluded_foreground(ctx.plan)]
-
-
-def _orphan(ctx: Context) -> list[str]:
-    return [f"{o.text!r} at svg({o.x:.0f},{o.y:.0f}) is {o.gap_ft:.1f} ft from the nearest glyph it names" for o in c.orphan_group_labels(ctx.plan)]
+    return [f"{o.kind} at svg({o.x:.0f},{o.y:.0f}) is under a feature drawn later" for o in c.occluded_foreground(ctx.plan)]
 
 
 def _passage(ctx: Context) -> list[str]:
@@ -90,18 +87,6 @@ def _passage(ctx: Context) -> list[str]:
 
 def _board(ctx: Context) -> list[str]:
     return [f"notice board at svg({b.x:.0f},{b.y:.0f}) is {b.gap_ft:.1f} ft from the nearest gate opening" for b in c.notice_board_adrift(ctx.plan)]
-
-
-def _dark(ctx: Context) -> list[str]:
-    return [
-        f"{d.text!r} at svg({d.x:.0f},{d.y:.0f}) - black ink over a dark feature; "
-        + (f"nudge ({d.nudge_dx_ft:+.0f},{d.nudge_dy_ft:+.0f}) ft clears it" if d.fixable else "no small nudge clears it - relocate")
-        for d in c.dark_on_dark_labels(ctx.plan)
-    ]
-
-
-def _clash(ctx: Context) -> list[str]:
-    return [f"{lc.a!r} and {lc.b!r} overlap at svg({lc.x:.0f},{lc.y:.0f})" for lc in c.overlapping_labels(ctx.plan)]
 
 
 def _doors(ctx: Context) -> list[str]:
@@ -122,11 +107,11 @@ CHECKS: tuple[Check, ...] = (
         "move one footprint clear of the other, or draw a contained part (an engawa, a porch) fully inside its building",
     ),
     Check("structures_on_walls", _on_wall, True, "ubame-privy-in-wall-red.svg", "set the structure against the wall's inner face, or break the wall around it if it IS part of the wall"),
-    Check("occluded_foreground", _occluded, True, "ubame-occlusion-red.svg", "move the buried label or glyph to the top layer"),
-    Check("overlapping_labels", _clash, True, "ochiba-label-clash-red.svg", "move one label apart so neither smears the other"),
-    Check("dark_on_dark_labels", _dark, True, "hayakawa-layout-red.svg", "nudge the label off the dark feature or give it a light fill"),
+    # NO CHECK OF WHERE A CAPTION STANDS (feature 286): captions are placed by the one placer in the render pipeline,
+    # and its unit tests hold it correct - the GM: "There is no point in having an automated check run against an
+    # automated process." The label checks (overlap, dark ink, group labels adrift, a buried label) went with that.
+    Check("occluded_foreground", _occluded, True, "ubame-occlusion-red.svg", "move the buried glyph or feature to the top layer"),
     Check("floating_doors", _doors, True, "ochiba-layout-red.svg", "set the door glyph on the wall it opens through"),
-    Check("orphan_group_labels", _orphan, True, "ochiba-layout-red.svg", "put the group label beside a glyph it names"),
     Check("passage_blockers", _passage, True, "ochiba-stones-in-passage-red.svg", "move the object clear of the track - stones and posts FLANK a passage"),
     Check(
         "gate_widths", lambda ctx: s.gate_widths(ctx.plan), True, "ochiba-capped-gates-red.svg", "draw the opening at passage width from the INK (pull each flanking endpoint back by half a stroke)"
@@ -141,7 +126,7 @@ CHECKS: tuple[Check, ...] = (
         lambda ctx: s.trees_overlap(ctx.plan),
         True,
         "hoshigaoka-tree-on-fence-red.svg",
-        "move the tree onto open ground - off the building, the fence, the well and the label; crowns may overlap each other, but a tree is not drawn on top of another",
+        "move the tree onto open ground - off the building, the fence and the well; crowns may overlap each other, but a tree is not drawn on top of another",
     ),
     Check(
         "matches_map",
@@ -150,6 +135,15 @@ CHECKS: tuple[Check, ...] = (
         "hoshigaoka-off-map-red.svg",
         "draw what the map shows at the subject and nothing it does not - move, add or remove the feature, or size the subject to the map's footprint (the map is the canon for the site)",
         skipped=lambda ctx: mm.skipped(ctx.on_map),
+    ),
+    # A kitchen bed gets its sun (feature 283, the GM 2026-09-28: "That feels like it should be an automated check that gets
+    # run on hand-drawn diagrams that have gardens"; research homesteads 044): every sheet, since both programs draw one.
+    Check(
+        "garden_sun",
+        lambda ctx: sun.garden_sun(ctx.plan, ctx.text),
+        True,
+        "hoshigaoka-garden-shaded-red.svg",
+        "move the bed to open ground where it gets its hours - clear of the shadows the report names, never by declaring a sun bed half-shade",
     ),
     # --- the program itself, generic over the declaration: every type's required items and their bands (D7) ---
     Check(

@@ -1,0 +1,6 @@
+{
+  "utc": "20260928T144733Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the settlement-reviews are refused until this gate is green (pair guard FR-004, review of fixes); they are dispatched on its green"
+}

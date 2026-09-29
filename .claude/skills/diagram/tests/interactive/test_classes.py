@@ -23,6 +23,7 @@ SPEC_CLASSES = [
     "farmhouse",
     "storage shed",
     "byre",
+    "retirement house",  # 269 B42 (settlements/035)
     "threshing yard",
     "garden",
     "privy",
@@ -77,12 +78,9 @@ SPEC_CLASSES = [
     "fry pond",
     "manure pit",
     "sluice gate",
-    "sugarcane dike",
-    "banana dike",
     "fruit dike",
-    "vegetable ground",
+    "tea dike",
     "pig sty",
-    "duck pen",
 ]
 
 
@@ -130,7 +128,18 @@ def test_the_gm_s_line_between_deviation_and_convention() -> None:
     assert sorted(k for k, fc in CLASSES.items() if fc.label == "deviation") == []  # the grave island became accurate as the Chinese form (feature 267)
     # `weir` joined them on 2026-09-12 (feature 230): the bar is drawn closing the brook bank to bank
     # because a half-river closure - the common old form - is a pixel or two at a 7 ft brook.
-    assert sorted(k for k, fc in CLASSES.items() if fc.label == "convention") == ["bund beans", "homestead bamboo", "household shrine", "shared bamboo grove", "stream", "weir", "well"]
+    # `threshing yard` joined them on 2026-09-28 (feature 282): about half the straw mats that covered a harvest yard are
+    # drawn, so each reads as a mat rather than the floor as a texture.
+    assert sorted(k for k, fc in CLASSES.items() if fc.label == "convention") == [
+        "bund beans",
+        "homestead bamboo",
+        "household shrine",
+        "shared bamboo grove",
+        "stream",
+        "threshing yard",
+        "weir",
+        "well",
+    ]
     beans = CLASSES["bund beans"].label_note
     assert beans.startswith("we have rendered the bund beans as") and "50 to 125 cm" in beans and "medium-green" in beans and "not found" in beans
     well = CLASSES["well"].label_note
@@ -257,7 +266,13 @@ def test_every_accurate_class_without_a_caveat_is_deliberate() -> None:
     # reservoir above the fields" and then "on this map the pond is the field's drainage sink", on every map. Rewritten
     # to cover both parts a pond plays, it now discloses that a pond at the field's foot is the map's declared sink with
     # no surveyed bank or outlet behind it.
-    assert bare == {"marsh", "bund", "notice board", "windbreak"}
+    # `bund` LEFT the list on 2026-09-28 (feature 269 K1): fields/260 reads the dividing bund's one to two shaku, and
+    # the walking bund's two to five feet is now disclosed as a GUESS held between that and the one-ken farm road.
+    # `windbreak` and `marsh` LEFT the list on 2026-09-28 (feature 269 K3): the windbreak discloses that its
+    # conifer-led form is drawn at village scale from farmstead surveys and that the odds, the rows' spacing and the
+    # conifer's lead are guesses (vegetation/270); the marsh that a village's own cutting of its toe is carried across
+    # from thatch fields and Lake Biwa (vegetation/280), with the carr form left undrawn and sedge-for-fodder unsourced.
+    assert bare == {"notice board"}
 
 
 def test_slug_is_a_css_token() -> None:
@@ -309,9 +324,8 @@ def test_a_sibling_pair_naming_an_unknown_class_is_refused() -> None:
         ("irrigation ditch", "drainage ditch"),
         ("pond sluice", "sluice gate"),
         ("mulberry dike", "perimeter dike"),
-        ("sugarcane dike", "perimeter dike"),
-        ("banana dike", "perimeter dike"),
         ("fruit dike", "perimeter dike"),
+        ("tea dike", "perimeter dike"),
     ],
 )
 def test_the_confusable_water_and_dike_pairs_link_both_ways(a: str, b: str) -> None:

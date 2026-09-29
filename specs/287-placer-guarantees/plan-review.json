@@ -1,0 +1,94 @@
+{
+ "feature": "287-placer-guarantees",
+ "plan_sha256": "c44416485abcc516f6509167aa1caa53eadf19770df5fda0a7b8e197920a98e0",
+ "reviewed": "2026-09-29",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "M1-M9, P0-P9",
+   "summary": "Shared mechanisms and phase order; P0 now lists the belt residual (D8), the field-pond knob census (D9) and the seats D2 refuses.",
+   "class": "within",
+   "why": "Each implements FR-001..FR-009 as written; round 2's consistency edit made (plan P0, tasks T01)."
+  },
+  {
+   "id": "D1",
+   "summary": "A drop is taken only where it is the rule's own provision; a drop of a rolled or required feature is closed by constraining the knob or candidates beforehand.",
+   "class": "within",
+   "why": "Matches FR-005: no violation is emitted."
+  },
+  {
+   "id": "D2 (homes H14)",
+   "summary": "seat_cluster takes a margin only if the homestead seat pass, run on a copy over that margin's band inside the named limits (H03 reach, belt band, D4 shape, drain, canvas) with M5's in-range shrink, seats every household; the found seating is kept; a site no margin can seat is refused at stage_seat, counted, and taken to the GM with the count if any live map or cohort seed reaches it.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Round 2's finding is answered: the bounding rules are named and the terminal is stated. Trying margins with the placer itself is FR-001's 'refuse the violating candidate and take the next', not FR-002's finished-map raise or re-roll, and no shortfall is emitted, so H14 cannot be violated. The terminal is physical impossibility under the GM's own rules (no legal ground holds the households) and it goes to the GM with a measured count, the route round 2 offered. Two cautions, neither blocking: a rolled site is not 'D7's kind' (declared, seedless input) - it is the generator declining a seed, so it is raised with the GM once it works whatever the count (standard XVI procedure), not only when the cohort reaches it; and P0's 'households unseated today' is a proxy - the count that decides escalation is P3's seats-refused-per-seed under the new placer."
+  },
+  {
+   "id": "D3 (homes H30)",
+   "summary": "A fall with no wind-facing margin above the drain is refused (declared) or constrained (rolled) at spec resolution; H30 steps kept; Sawada untouched.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Physical impossibility of the drain and wind rules together, decided before any stage; the rolled case is now 'constrained', not re-rolled, so SC-003 is not contradicted."
+  },
+  {
+   "id": "D4 (homes H05)",
+   "summary": "cluster_shape resolves only over the shapes the chosen seat band admits; steer and repair within it.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "A rolled knob is honored by what is drawn; narrowed only where a shape is undrawable, by the engine's existing affordance mechanism."
+  },
+  {
+   "id": "D5 (water W03)",
+   "summary": "Brook ruled-run held by a stricter view-independent bound at the brook's placer.",
+   "class": "within",
+   "why": "Stricter than the test, so the rule as tested holds."
+  },
+  {
+   "id": "D6 (woods W11)",
+   "summary": "Bare-ground predicate counts recorded footprints and treads as covered.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The rule's own grounding; raised with the GM once it works."
+  },
+  {
+   "id": "D7 (labels L15, homes H29a)",
+   "summary": "A generated Mode A program with no legal seat is refused at composition.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "A seedless composer refusing unsatisfiable declared input before any sheet exists."
+  },
+  {
+   "id": "D8 (woods W16, W17)",
+   "summary": "Belt band reserved before the hem, canvas sized for it, seat_cluster refuses a margin whose belt cannot be 30 ft deep and whole; P0 measures any residual; a forced case goes to the GM with its count.",
+   "class": "within",
+   "why": "A construction; P0 now names the measurement."
+  },
+  {
+   "id": "D9 (woods W25; burial own; water W29)",
+   "summary": "Wood floor as an M5 part; own burial ground resolved only where edge_seat finds a seat, a pinned own_ground with none refused at resolve time; a rolled field pond likewise.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Knob narrowed to what the site affords (D4's mechanism); the pinned case is now stated as refusal of declared input, as round 2 asked."
+  },
+  {
+   "id": "D10 (labels L13, homes H29c)",
+   "summary": "No caption overlaps on any sheet: leader line, then the sheet's key.",
+   "class": "within",
+   "why": "Honors the GM's 'labels mandatory' without an overlap."
+  },
+  {
+   "id": "D11 (woods, R3 woodland row)",
+   "summary": "Worked woodland off a tight sheet recorded off the sheet with its bearing.",
+   "class": "within",
+   "why": "Answered by research/vegetation/220 and the GM's frame rule; raised once it works."
+  },
+  {
+   "id": "D12 (labels L4)",
+   "summary": "GM question on the board with no clean verge, three options, with P0's count.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Every terminal breaks one of the GM's rulings and the research is silent; put to the GM with the measured count."
+  }
+ ],
+ "verdict": "CLEAR"
+}

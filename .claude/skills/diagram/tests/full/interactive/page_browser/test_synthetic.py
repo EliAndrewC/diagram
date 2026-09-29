@@ -326,15 +326,20 @@ def test_in_raster_mode_the_lit_paddy_is_washed_and_the_lit_beads_are_not(synthe
     paddy = "() => getComputedStyle(document.querySelector('g.f[data-k=\"paddy\"] rect')).fillOpacity"
     beads = "() => getComputedStyle(document.querySelector('g.f[data-k=\"bund beans\"] circle:not(.hit)')).fillOpacity"
 
+    seen: dict[str, object] = {}
+
     def lit(want: tuple[str, str]) -> tuple[str, str]:
         # Each read waits for its STATE, bounded (the driver's `settles`, feature 145), not for nothing: it read
         # the computed opacity in the same tick as the highlight, and under a loaded gate the style had not
         # been recomputed yet - `('1', '1')` against `('0.45', '1')` once in a FULL run, green alone twice
         # (feature 250, 2026-09-26). The assertion is exactly as strict: a value that never arrives still fails.
-        synthetic.js("k => window.l7rMap.highlight(k)", "paddy")
-        p = synthetic.settles(want[0], lambda: synthetic.js(paddy))
-        synthetic.js("k => window.l7rMap.highlight(k)", "bund beans")
-        b = synthetic.settles(want[1], lambda: synthetic.js(beads))
+        # each poll re-asserts the highlight before it reads: feature 283's two failures had the page in raster mode with
+        # no highlight at all (`data-hl` empty, the paddy group without `on`) - the highlight undone, most likely by the
+        # pointer event the browser fires for the stationary mouse once the viewport shrinks, which calls `highlight`
+        # for whatever is under it. A wash that never arrives still fails.
+        p = synthetic.settles(want[0], lambda: (synthetic.js("k => window.l7rMap.highlight(k)", "paddy"), synthetic.js(paddy))[1])
+        seen["lit"] = synthetic.js(state_lit)  # WHILE the paddy is lit - the state `after` below reads only once cleared
+        b = synthetic.settles(want[1], lambda: (synthetic.js("k => window.l7rMap.highlight(k)", "bund beans"), synthetic.js(beads))[1])
         synthetic.clear()
         return p, b
 
@@ -348,9 +353,12 @@ def test_in_raster_mode_the_lit_paddy_is_washed_and_the_lit_beads_are_not(synthe
         # or beside a test-full (29 runs, 2026-09-28): the message names the page's state so the next failure says which
         # of mode, highlight, a pinned modal or raster readiness was wrong
         state = "() => ({mode: document.getElementById('map').getAttribute('data-mode'), hl: document.getElementById('map').getAttribute('data-hl'), explain: document.getElementById('explain').open, ready: window.l7rMap.rasterReady()})"
+        # ...and while the paddy is lit: its groups' classes and the rect's own style, so a failure says whether the highlight
+        # took (feature 281: three gate failures in a row with every `before` field right and `after` read once cleared)
+        state_lit = "() => ({mode: document.getElementById('map').getAttribute('data-mode'), hl: document.getElementById('map').getAttribute('data-hl'), groups: [...document.querySelectorAll('g.f[data-k=\"paddy\"]')].map(g => g.getAttribute('class')), fill: getComputedStyle(document.querySelector('g.f[data-k=\"paddy\"] rect')).fillOpacity})"
         before = synthetic.js(state)
         got = lit(("0.45", "1"))
-        assert got == ("0.45", "1"), f"raster mode: the lit paddy is a wash, the lit beads are solid; before={before} after={synthetic.js(state)}"
+        assert got == ("0.45", "1"), f"raster mode: the lit paddy is a wash, the lit beads are solid; before={before} lit={seen.get('lit')} after={synthetic.js(state)}"
     finally:
         synthetic.page.set_viewport_size(was)
         synthetic.js("() => window.l7rMap.fitWidth()")
@@ -467,8 +475,9 @@ def test_the_record_page_defines_its_terms_on_hover_in_the_footnote_box(record: 
     in our diagram HTML pages." The glossary term in the heading, the prose and the quoted footnote is wrapped;
     the one in a code span is not; hovering shows the definition in the footnote box, and leaving hides it."""
     spans = record.js("() => Array.from(document.querySelectorAll('span.gl')).map(s => s.textContent)")
-    # feature 265: `ochiba` is a CASED term, so the manor Ochiba is left alone and only the lowercase word is wrapped
-    assert spans == ["yashikirin", "kainyo", "sugi", "ochiba", "yashikirin"], "heading, prose, the footnote's quote - never the code span or Ochiba"
+    # feature 265: `ochiba` is a CASED term, so the manor Ochiba is left alone and only the lowercase word is wrapped;
+    # feature 269 (V2) made `Tonami plain` a term, so the fixture's plain is wrapped too
+    assert spans == ["yashikirin", "kainyo", "Tonami plain", "sugi", "ochiba", "yashikirin"], "heading, prose, the footnote's quote - never the code span or Ochiba"
     assert record.js("() => document.querySelector('code span.gl')") is None
     assert record.js("() => document.getElementById('fntip').hidden") is True
     record.page.hover("h2 span.gl")

@@ -24,7 +24,7 @@ from l7r.diagram.settlement import Settlement
 from l7r.diagram.sitegen.jobs import default_jobs as default_jobs  # noqa: PLC0414 - explicit re-export so `hamletgen.default_jobs` still resolves under --strict
 
 from .burial import stage_burial
-from .consts import FIELD_ARCHETYPES, REF_HOUSEHOLDS
+from .consts import DIKE_CROPS, FIELD_ARCHETYPES, LEFTOVER_FORMS, REF_HOUSEHOLDS
 from .frame import stage_crossings, stage_frame, stage_labels, stage_notice
 from .hinterland import stage_bamboo, stage_hinterland, stage_windbreak, stage_woodland
 from .homesteads import stage_appurtenances, stage_homesteads
@@ -90,7 +90,7 @@ STAGES = (
     stage_homesteads,  # the farmhouses, seated with no lane anywhere on the map
     stage_track,  # the connector and the field spur, derived from the placed houses
     stage_appurtenances,
-    stage_pond_stock,  # a dike-pond hamlet's pig sties and duck pens, on the ponds nearest the houses (feature 150 A3/A4)
+    stage_pond_stock,  # a dike-pond hamlet's pig sties, on the ponds nearest the houses (feature 150 A3; the duck pen retired, 269 B32)
     stage_burial,  # the hamlet's own burial ground at its edge (feature 273): seated against the placed houses and wells, reserving ground the web and the scrub work around
     # THE WEB RUNS LAST OF THE BUILT THINGS, after the byres, sheds and wells - not just after the
     # houses. It FILLS leftover ground, so everything that RESERVES ground has to be seated first;
@@ -222,21 +222,60 @@ def roll_scope(spec: HamletSpec | None = None) -> Iterator[None]:
         _census.record("roll", spec=_census.spec_row(spec), ok=ok, dt=round(time.time() - t0, 1))
 
 
-def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settlement:
+def resume_at() -> int | None:
+    """Where a re-roll may resume: the index in `STAGES` of the first stage that reads the avoid list (`stage_homesteads`,
+    whose seat loops refuse the avoided ground). Every stage before it - the water frame, the field, the sink, the seat,
+    the waterward fringe - runs the same on every attempt, because nothing it reads differs between them (feature 284: a
+    stranding re-roll used to rebuild the field, the costliest stage, to get it back unchanged). None when the stages
+    have no such stage (a test's stand-in tuple). Found by NAME, so a stage wrapped by a timer that keeps its name (the
+    measurement harnesses, the stage profile) still resumes."""
+    return next((i for i, st in enumerate(STAGES) if getattr(st, "__name__", "") == stage_homesteads.__name__), None)
+
+
+def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = (), snapshot: list[Any] | None = None) -> Settlement:
     """Run every stage, in order, against a fresh `Settlement`.
 
     `avoid` is ground a previous roll proved unservable - the seat loops refuse a seat near any of
-    these points. See `generate`, which re-rolls a map whose finished manifest stranded a farmhouse."""
+    these points. See `generate`, which re-rolls a map whose finished manifest stranded a farmhouse.
+    With `snapshot` (a list), a deep copy of the settlement and the plan as they stand before `resume_at()` is appended
+    to it, for `resume`."""
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
     s._avoid_seats = list(avoid)  # type: ignore[attr-defined]
     if plan.spec.byre_form is not None:  # a declared byre form bypasses the settlement engine's roll (feature 261)
         s.pin_knob("byre_form", plan.spec.byre_form)
+    # THE SPEC'S PINS REACH THE ENGINE'S CATALOG, as `HamletSpec.pins` has always said they do; nothing passed them on until
+    # 269 E4, whose knobs (`paddy_rest`, `fan_middle`) have no field of their own on the spec.
+    for knob, value in plan.spec.pins.items():
+        s.pin_knob(knob, value)
+    _run_stages(s, plan, 0, snapshot)
+    return s
 
+
+def resume(snapshot: list[Any], avoid: Sequence[tuple[float, float]]) -> tuple[Settlement, SitePlan]:
+    """A re-roll from the first roll's `snapshot`: a copy of the settlement and plan before the first stage that reads
+    `avoid`, the avoid list set, and the stages from there on - the same map `build(copy of plan, avoid)` makes, without
+    running the stages that come out the same (`resume_at`; `tests/hamletgen/test_driver.py` proves the manifests
+    equal). The copy is taken again per re-roll, so every attempt starts from the untouched snapshot."""
+    import copy
+
+    s, plan = copy.deepcopy(snapshot[0])
+    s._avoid_seats = list(avoid)  # type: ignore[attr-defined]
+    _run_stages(s, plan, resume_at() or 0, None)
+    return s, plan
+
+
+def _run_stages(s: Settlement, plan: SitePlan, start: int, snapshot: list[Any] | None) -> None:
+    """The stages from `start` on, inside the roll's scope; `snapshot` takes its copy before `resume_at()`."""
+    import copy
+
+    at = resume_at() if snapshot is not None else None
     if not os.environ.get(STAGE_PROFILE_ENV):
         with roll_scope(plan.spec):
-            for stage in STAGES:
+            for i, stage in enumerate(STAGES[start:], start):
+                if i == at:
+                    snapshot.append(copy.deepcopy((s, plan)))  # pyrefly: ignore[missing-attribute]  # `at` is set only with a snapshot
                 stage(s, plan)
-        return s
+        return
     # WHERE THE TIME WENT, in one roll (feature 151, US4). Finding the slow stage used to mean editing
     # this loop by hand, rolling, reading, and reverting - done twice in one session before this existed,
     # and the second time it found `stage_waterward` at 21.7 s of a 45 s gen. An environment variable is
@@ -245,7 +284,9 @@ def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settleme
     # PRINTED - `tests/hamletgen/test_driver.py` asserts the manifest is identical with it set and unset.
     timings: list[tuple[str, float]] = []
     with roll_scope(plan.spec):
-        for stage in STAGES:
+        for i, stage in enumerate(STAGES[start:], start):
+            if i == at:
+                snapshot.append(copy.deepcopy((s, plan)))  # pyrefly: ignore[missing-attribute]  # `at` is set only with a snapshot
             t0 = time.time()
             stage(s, plan)
             timings.append((stage.__name__, time.time() - t0))
@@ -255,7 +296,6 @@ def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = ()) -> Settleme
     for name, dur in sorted(timings, key=lambda t: -t[1]):
         if dur >= 0.05:
             print(f"  {dur:6.2f}s  {100 * dur / total:4.1f}%  {name}", file=sys.stderr)
-    return s
 
 
 def stage_for(out_base: str) -> str:
@@ -327,9 +367,11 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     plan = plan_site(spec)
     rolled: dict[str, SitePlan] = {}  # the plan the LAST roll built on - the kept attempt rolls last, so the report reads it
     rolled_m: dict[str, dict[str, Any]] = {}  # ...and its finished manifest, by the same argument (feature 213: the report carries it)
+    _snap: list[Any] = []  # the first roll before its seats, for every re-roll to resume from (`resume`)
 
-    def _roll(avoid: Sequence[tuple[float, float]], out: str | None = None, attempt: int = 1, after: Sequence[str] = ()) -> tuple[Settlement, list[str], list[tuple[float, float]], list[str]]:
-        """Build, finish and gate once. Returns the settlement, the gate's verdict, and the seats the
+    def _roll(avoid: Sequence[tuple[float, float]], attempt: int = 1, after: Sequence[str] = ()) -> tuple[Settlement, list[str], list[tuple[float, float]], list[str]]:
+        """Build and gate once - UNFINISHED: only the attempt kept is finished, once, after the choice (feature 278, FR-006).
+        Returns the settlement, the gate's verdict, and the seats the
         GATE ITSELF names as unreached - read off its message, never recomputed. A hand-rolled
         reach measure was tried and was wrong on five of six seeds (see future-work 2b): it
         over-counted and never read zero, so anything steered by it was steered by noise."""
@@ -348,8 +390,13 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         # `plan_site` derived it, which is all the report reads.
         import copy
 
-        rolled["plan"] = copy.deepcopy(plan)
-        s2 = build(rolled["plan"], avoid=avoid)
+        # A RE-ROLL RESUMES AT THE SEATS (feature 284): the first roll keeps a copy of itself before the first stage that
+        # reads `avoid` (`resume_at`), and each re-roll starts from a fresh copy of that instead of running the field again.
+        if _snap:
+            s2, rolled["plan"] = resume(_snap, avoid)
+        else:
+            rolled["plan"] = copy.deepcopy(plan)
+            s2 = build(rolled["plan"], avoid=avoid, snapshot=_snap)
         rolled_m["M"] = s2.M  # the kept attempt rolls last, so this is the report's manifest (feature 213)
         # ATTRIBUTION (T33): the manifest says which roll drew it, and why the earlier ones were
         # rejected, so a changed connector or web is never mistaken for the effect of an edit.
@@ -363,11 +410,6 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         s2.M["meta"]["roll_failures"] = [f"farmhouses_reach_a_way[{len(_seats)}]"] if _seats else []
         s2.M["meta"]["roll_placed"] = int(rolled["plan"].placed)
         s2.M["meta"]["roll_acres"] = float(rolled["plan"].acres)
-        if out is not None:
-            s2.finish(out, render=render)
-        else:
-            with tempfile.TemporaryDirectory() as tmp:
-                s2.finish(os.path.join(tmp, "scratch"), render=False)
         # THE GENERATOR REPORTS ON ITSELF NOW (feature 166). This used to run the whole check battery
         # in-process on the finished manifest and take its verdict as the map's. There is no battery:
         # every rule it held is either a property some placer guarantees by construction, proven by
@@ -394,12 +436,15 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     #
     # The retry is self-limiting: it runs only for a map that stranded a house, and it keeps a
     # re-roll only if the reach count got no worse.
-    # EVERY ATTEMPT FINISHES INTO ITS OWN STAGE, and only the kept one is promoted onto `out_base` (`promote`).
-    _stage = stage_for(out_base) if out_base is not None else None
-    _s, failures, seats, lines = discard_on_failure(_stage, lambda: _roll((), _stage))
-    kept_stage = _stage
+    # ONLY THE ATTEMPT KEPT IS FINISHED, into a stage that is then promoted onto `out_base` (`promote`) - so a rejected roll
+    # never touches the map's own files, nor does one that dies mid-finish (`discard_on_failure`). Every attempt used to be
+    # finished into its own stage before the choice, which paid a whole finish - render and page - for the attempt thrown
+    # away (feature 278, FR-006). The choice reads only what the build decided: the unreached seats and the households
+    # placed. The kept settlement's manifest is the report's (`rolled_m`), and finishing it completes that manifest.
+    _s, failures, seats, lines = _roll(())
+    kept_s = _s
     avoid: list[tuple[float, float]] = []
-    stale = False  # ...and whether the files on disk came from a later roll we then rejected
+    stale = False  # ...and whether a later roll was rejected, so the keeper is handed back
     attempt = kept_attempt = 1
     after: list[str] = []  # the checks that forced each re-roll, in order
     _kept_placed = int(_s.M["meta"]["roll_placed"])  # the households the kept roll seated - a re-roll may not seat fewer
@@ -419,8 +464,7 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
         avoid = avoid + seats
         after = after + ["farmhouses_reach_a_way"]
         attempt += 1
-        _stage2 = stage_for(out_base) if out_base is not None else None
-        _s2, f2, seats2, lines2 = discard_on_failure(_stage2, lambda _a=avoid, _o=_stage2, _n=attempt, _f=after: _roll(_a, _o, _n, _f))
+        _s2, f2, seats2, lines2 = _roll(avoid, attempt, after)
         # THE ACCEPT CRITERION IS THE REACH COUNT, NOT THE GATE'S TOTAL (feature 166 T03).
         #
         # It used to be `len(f2) <= len(failures)`: keep a re-roll only if the battery's WHOLE failure
@@ -443,20 +487,21 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
             failures, seats, lines, kept_attempt = f2, seats2, lines2, attempt
             _kept_placed = int(_s2.M["meta"]["roll_placed"])
             _keep_plan, _keep_m = rolled["plan"], rolled_m["M"]
-            if kept_stage is not None:
-                promote(kept_stage, None)  # the roll it replaces is discarded unseen
-            kept_stage = _stage2
+            kept_s = _s2
         else:
-            if _stage2 is not None:
-                promote(_stage2, None)
             stale = True
             break
-    if kept_stage is not None:
-        promote(kept_stage, out_base)  # the kept roll's files, and only those, reach the map's own paths
     if stale:
-        # The kept roll's files were staged, not overwritten, so there is nothing to re-emit (a re-roll of the keeper's
-        # avoid list used to put it back on disk): hand back the keeper itself.
+        # Nothing was finished before the choice, so there is nothing to re-emit (a re-roll of the keeper's avoid list used
+        # to put it back on disk): hand back the keeper itself.
         rolled["plan"], rolled_m["M"] = _keep_plan, _keep_m
+    if out_base is not None:
+        _stage = stage_for(out_base)
+        discard_on_failure(_stage, lambda: kept_s.finish(_stage, render=render))
+        promote(_stage, out_base)  # the kept roll's files, and only those, reach the map's own paths
+    else:
+        with tempfile.TemporaryDirectory() as tmp:
+            kept_s.finish(os.path.join(tmp, "scratch"), render=False)
     return Report(plan=rolled.get("plan", plan), failures=failures, path=out_base, fail_lines=lines, attempt=kept_attempt, rerolled_after=after[: kept_attempt - 1], manifest=rolled_m.get("M"))
 
 
@@ -583,8 +628,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--archetype", choices=FIELD_ARCHETYPES, default=None, help="pin the field archetype (feature 150: the dike-pond is opt-in, like the polder)")
     ap.add_argument("--pond-layout", choices=("grid", "mosaic"), default=None, help="pin a dike-pond's arrangement (feature 150: one map per knob value is owed)")
     ap.add_argument("--manure-form", choices=("heap", "pit"), default=None, help="pin the manure fixture's form (feature 150 A2)")
-    ap.add_argument("--dike-crop", choices=("mulberry", "sugarcane", "banana", "fruit"), default=None, help="pin a dike-pond's dike planting (feature 150 A6)")
-    ap.add_argument("--leftover", choices=("rice", "vegetables", "pond"), default=None, help="pin a dike-pond's leftover parcels (feature 150 B2)")
+    ap.add_argument("--dike-crop", choices=sorted(set(DIKE_CROPS)), default=None, help="pin a dike-pond's dike planting (feature 150 A6)")
+    ap.add_argument("--leftover", choices=LEFTOVER_FORMS, default=None, help="pin a dike-pond's leftover parcels (feature 150 B2)")
     ap.add_argument("--out", default=None, help="write <out>.svg/.png/.json")
     ap.add_argument("--no-render", action="store_true")
     ap.add_argument("--batch", type=int, default=0, help="roll N hamlets from consecutive seeds and gate them all")

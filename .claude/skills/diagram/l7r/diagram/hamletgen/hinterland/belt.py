@@ -7,7 +7,8 @@ import random
 from collections.abc import Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
+from l7r.diagram.settlement import Settlement, point_in_poly
+from l7r.diagram.settlement._geom import RingIndex
 from l7r.diagram.sitegen.geom import crop_polys
 
 from ..consts import Poly, Pt
@@ -57,6 +58,23 @@ def fringe_profile(uv: Sequence[tuple[float, float]], cols: int, half: float, v_
     if not known:  # no column sees a house at all: the whole profile is the floor, which is the median house
         return [(v, u_floor) for v, _u in raw]
     return [(v, u if u is not None else known[min(known, key=lambda j: abs(j - k))]) for k, (v, u) in enumerate(raw)]
+
+
+def trim_receding_ends(cols: Sequence[tuple[float, float]], drop: float) -> list[tuple[float, float]]:
+    """The fringe profile `cols` ((v, u), in order across the wind) without its END columns that fall back more than `drop`
+    downwind of their inner neighbor, from each end inward while that holds.
+
+    THE BELT STANDS ACROSS THE WIND (settlement-review of Sawada at the 269 landing). Where a cluster lies along the wind,
+    the column at the belt's end leans on a house far downwind of the rest - Sawada's end column stood 766 ft behind its
+    neighbor - and the band followed it into an arm lying along the wind: 500 ft of one row of trees, 35-60 ft across,
+    sheltering nothing, where research/vegetation asks a belt never thinner than 80 ft. A column that recedes more than a
+    belt's own depth is not the windward fringe any more; the belt ends at the column before it."""
+    out = list(cols)
+    while len(out) > 2 and out[1][1] - out[0][1] > drop:
+        out.pop(0)
+    while len(out) > 2 and out[-2][1] - out[-1][1] > drop:
+        out.pop()
+    return out
 
 
 BELT_LANE_CLEAR_FT = 12.0  # ft: a belt whose band a lane runs along stands this far beyond the lane's tread
@@ -277,7 +295,14 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     _near_n = [0]  # how many of the band's vertices are its near face, recorded for the depth measure (the far face has more)
 
     def band(span_f: float, back: float) -> Poly:
-        cols = past_the_lanes(round_the_houses(profile(span_f), uv, BELT_NEAR_FT + _sun_off), _lanes, half * span_f / COLS, near=BELT_NEAR_FT, depth=BELT_NEAR_FT + BELT_DEPTH_FT, wet=_in_marsh)
+        cols = past_the_lanes(
+            round_the_houses(trim_receding_ends(profile(span_f), BELT_DEPTH_FT), uv, BELT_NEAR_FT + _sun_off),
+            _lanes,
+            half * span_f / COLS,
+            near=BELT_NEAR_FT,
+            depth=BELT_NEAR_FT + BELT_DEPTH_FT,
+            wet=_in_marsh,
+        )
         # 36 px, not 24. `village_grove` filters clumps against every structure and crop, and it
         # filters the near face hardest - so a belt whose POLYGON sits clearly windward can still
         # have its DRAWN clumps average back onto the cluster's own line, which is what
@@ -291,8 +316,14 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
         far = [rag((ccx + wx * (u + _far + _sun_off + back) + px * v, ccy + wy * (u + _far + _sun_off + back) + py * v), 1.0) for v, u in reversed(far_envelope(cols))]
         return near + far
 
+    # EACH CROP AS A RING INDEX, BUILT ONCE (feature 278): `fouled` walked every edge of every crop for every vertex of each
+    # candidate belt. `inside` counts the crossings `point_in_poly` counted, and `edge_within(.., 20)` is the nearest edge
+    # under 20 px - and a vertex that close to an edge is fouled either way, so a rounding difference on the edge itself
+    # cannot change the answer.
+    crop_idx = [RingIndex(c) for c in crops if len(c) >= 3]
+
     def fouled(poly: Poly) -> bool:
-        return any(point_in_poly(q[0], q[1], list(c)) or min(seg_dist(q[0], q[1], c[i2], c[(i2 + 1) % len(c)]) for i2 in range(len(c))) < 20.0 for q in poly for c in crops)
+        return any(ci.inside(q[0], q[1]) or ci.edge_within(q[0], q[1], 20.0) is not None for q in poly for ci in crop_idx)
 
     # THE LADDER STANDS BACK BEFORE IT SHRINKS. Both moves get the belt off the crop, but they cost
     # different things: standing back spends the embrace budget (a clump within 150 px of a

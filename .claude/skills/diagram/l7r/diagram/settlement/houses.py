@@ -5,8 +5,9 @@ import random
 from collections.abc import Iterator
 from typing import TYPE_CHECKING, Any, cast
 
-from ._geom import PointGrid, Pt, boxed_polys, drawn_extent, edge_dist, indexed_grid, point_in_poly, quad_hits_poly, rot_rect, seg_dist
+from ._geom import PointGrid, Pt, boxed_polys, drawn_extent, edge_dist, indexed_grid, point_in_poly, rot_rect, seg_dist
 from ._knobs import skeleton_layout
+from .rolling.bearing import QUARTER_TURN_SHARE, house_rot
 
 # HOW FAR A FARMHOUSE WALL STANDS OFF THE PADDY (researched 2026-08-27, feature 133 T41; the record
 # in research/homesteads.html "How close does a farmhouse stand to the paddy?"). The paddy's margin is
@@ -203,68 +204,6 @@ class HousesMixin:
             return grid
 
         return indexed_grid(polys, key, build)
-
-    def _hard_ground(self: Settlement) -> list[Any]:  # type: ignore[misc]
-        """Every HARD no-build polygon, read from the MANIFEST plus anything a gen registered by hand.
-
-        Manifest-sourced on purpose. The first cut kept a `hard_polys` registry that `draw_comb_field`
-        populated - and it was EMPTY on any map whose field is drawn by a different path (the polder
-        and contour archetypes have their own), so the rule silently did nothing there. Reading the
-        drawn record instead makes it order-independent and impossible for a gen to forget: the same
-        placement-and-check-read-the-same-source doctrine the footbridges taught us. Cached on the
-        record counts, since this is called once per placement candidate."""
-        dp, fd = self.M.get("dry_plots", []) or [], self.M.get("field_ditches", []) or []
-        key = (len(dp), len(fd), len(self.hard_polys), len(self.wet_polys))
-        if self._hard_cache_key == key:
-            return self._hard_cache
-        out: list[Any] = [list(self.hard_polys)[i] for i in range(len(self.hard_polys))]
-        out += [list(wp) for wp in self.wet_polys if len(wp) >= 3]  # every drawn marsh (feature 150 T50)
-        out += [[(q[0], q[1]) for q in d["poly"]] for d in dp if d.get("poly") and len(d["poly"]) >= 3]
-        for ch in fd:
-            pts = ch.get("poly") or ch.get("pts")
-            if not pts:
-                continue
-            hw = float(ch.get("w") or 1.5) / 2 + 2.0
-            for k in range(len(pts) - 1):
-                ax, ay = pts[k]
-                bx, by = pts[k + 1]
-                ln = math.hypot(bx - ax, by - ay) or 1.0
-                nx, ny = -(by - ay) / ln * hw, (bx - ax) / ln * hw
-                out.append([(ax + nx, ay + ny), (bx + nx, by + ny), (bx - nx, by - ny), (ax - nx, ay - ny)])
-        self._hard_cache_key: tuple[int, ...] | None = key
-        self._hard_cache = out
-        return out
-
-    def _hard_clear(self: Settlement, x: float, y: float, w: float, h: float) -> bool:  # type: ignore[misc]
-        """Is this footprint clear of HARD no-build ground (crop, pond, bog, a field's own ditches)?
-
-        Factored out of `_fits` because placement is not the only moment that needs it:
-        `_solve_homestead` NUDGES a farmstead after it has already passed `_fits`, to make room for
-        its yard, garden and grove - and nothing re-tested the moved position, so a steading that
-        genuinely cleared every keep-out where it was placed could be shifted onto a ditch or a hem
-        plot afterwards. That was the last root cause behind the overlap matrix's residue."""
-        hard = self._hard_ground()
-        if not hard:
-            return True
-        # ROTATION ALLOWANCE. `_fits` is called before a farmhouse is given its small random tilt
-        # (+/-5 deg), so the box tested here is axis-aligned while the box DRAWN and RECORDED is
-        # rotated - and a rotated rect reaches further on both axes than its unrotated self. Testing
-        # the swept extent closes that gap; without it a steading clears at placement and laps a hem
-        # plot once tilted, which is exactly one of the defects the overlap matrix kept reporting.
-        _th = math.radians(5.0)
-        # BOTH AXES FROM THE ORIGINAL SIDES (feature 226, a spec-fidelity aside): this inflated `h` from the already-swept
-        # `w`, so one axis was wider than the tilt's extent; `w0` keeps the sweep what it claims to be.
-        w0 = w
-        w = w0 * math.cos(_th) + h * math.sin(_th)
-        h = w0 * math.sin(_th) + h * math.cos(_th)
-        fp = [(x - w / 2, y - h / 2), (x + w / 2, y - h / 2), (x + w / 2, y + h / 2), (x - w / 2, y + h / 2)]
-        fx0, fy0, fx1, fy1 = x - w / 2, y - h / 2, x + w / 2, y + h / 2
-        for hp, (hx0, hy0, hx1, hy1) in zip(hard, self._poly_bboxes(hard), strict=False):
-            if fx1 < hx0 or fx0 > hx1 or fy1 < hy0 or fy0 > hy1:
-                continue
-            if quad_hits_poly(fp, hp):
-                return False
-        return True
 
     def _record_tread(self: Settlement, pts: Any, half: float) -> None:  # type: ignore[misc]
         """Register a way's DRAWN tread, so `_fits` can keep whole footprints off it (see `_on_a_tread`).
@@ -631,19 +570,16 @@ class HousesMixin:
     def _house_rot(self: Settlement, cx: float, cy: float) -> float:  # type: ignore[misc]
         """The rake a farmhouse seated at (cx, cy) will be DRAWN at, in degrees.
 
-        ONE DEFINITION, because the placer and the renderer must not each have their own (feature
-        121). This expression used to be written out at both farmhouse record sites, and the bundle
-        placer had no third copy at all - it cleared an AXIS-ALIGNED rect and the map then drew the
-        house raked, which is the whole of the drawn-versus-placed divergence. Measured on
-        pool/hamlets/inashiro/inashiro.json: the bundle's position and size match the drawn record to four
-        decimal places, and the rake alone pushes a corner up to 2.56 px outside the rect that was
-        cleared - which is the 2.4 px `_on_a_tread`'s own docstring reports.
+        ONE DEFINITION, because the placer and the renderer must not each have their own (feature 121): the bundle
+        placer once cleared an AXIS-ALIGNED rect and the map then drew the house raked (a corner 2.56 px outside the
+        cleared rect on Inashiro), which was the whole of the drawn-versus-placed divergence.
 
-        POSITION-SEEDED, and that is what makes the fix possible: the rake is a pure function of the
-        seat's coordinates (so it never ripples other placement - see `_hjit`), and therefore the
-        placer can know the exact quad it is going to draw BEFORE it commits to the seat. Nothing
-        about when rotation is decided had to change."""
-        return self._hjit(cx, cy, 11.0) * 10.0 - 5.0
+        POSITION-SEEDED: a pure function of the seat's coordinates (see `_hjit`), so the placer knows the exact quad
+        before it commits. A hamlet sets `_house_bearing` (269 B18, research/homesteads/240): the common bearing, the
+        lane's turn and a quarter-turned tenth (`rolling/bearing.py`); elsewhere the old +/-5 degree rake stands."""
+        if self._house_bearing is None:
+            return self._hjit(cx, cy, 11.0) * 10.0 - 5.0
+        return house_rot(self._hjit, cx, cy, self._house_bearing, self._bearing_follow, QUARTER_TURN_SHARE)
 
     def _quad(self: Settlement, cx: float, cy: float, w: float, h: float, jit: float, salt: float, level: str | None = None) -> list[Pt]:  # type: ignore[misc]
         """A slightly-IRREGULAR 4-sided polygon INSCRIBED in the (cx,cy,w,h) rect: each corner is pulled

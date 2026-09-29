@@ -15,7 +15,7 @@ fingerprint hashes bytes), so the page regenerates.
 | `greenery.py` | homestead bamboo, shared bamboo grove, windbreak, copse, woodland commons, scrub and rough grazing, marsh |
 | `fields.py` | paddy, wet paddy, bund, bund beans, millet, buckwheat, barley, soy, fallow |
 | `water_and_ways.py` | stream, irrigation ditch, drainage ditch, pond, field pond, field rock, grave island, village lane, footbridge, well, notice board |
-| `dikepond.py` | fish pond, mulberry dike, pond sluice, sugarcane dike, banana dike, fruit dike, vegetable ground, pig sty, duck pen, fry pond, manure pit, sluice gate, perimeter dike |
+| `dikepond.py` | fish pond, mulberry dike, pond sluice, fruit dike, tea dike, pig sty, fry pond, manure pit, sluice gate, perimeter dike |
 | `siblings.py` | the pair texts ("how the farmhouse differs from the storage shed"), string constants because the page renders sibling LINKS, not these texts (spec 189 D4) |
 | `__init__.py` | imports the families in the spec's FR-007 order and builds `CLASSES`; re-exports everything the old `classes.py` exported |
 

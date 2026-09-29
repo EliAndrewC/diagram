@@ -93,11 +93,11 @@ write every git call as `git -C <clone>`. Paths below are under the clone's `.cl
    wall thickness, courts and gardens, and the point glyphs (wells, markers).
    **START FROM THE TABLE YOU WERE HANDED** (feature 251, GM 2026-09-19): the
    session runs `make size-table PLAN=<svg>` before dispatching you and puts its
-   output in your prompt - every rect in feet with its nearest label and how far
-   away that label is, every gap between collinear wall segments with the wall's
+   output in your prompt - every rect in feet named by its `data-kind` tag (the
+   sheet's own, never the nearest caption), every gap between collinear wall segments with the wall's
    thickness, every stroke width. The arithmetic is done; do not redo it. Your
-   part of this step is to CHECK the table against the sheet: a label many feet
-   from its rect is a guess, a row marked `transform not applied` needs its real
+   part of this step is to CHECK the table against the sheet: an `(untagged)` rect
+   is one the sheet names nothing, a row marked `transform not applied` needs its real
    size worked out, and a thing drawn as a path, a circle or a glyph is not in
    the table at all - add it. If no table is in your prompt, say so and build
    the list yourself from the SVG.
@@ -233,7 +233,7 @@ PACKING / WHITESPACE SWEEP (mandatory - run pack_audit.py, then interpret):
 - per-region density: name any large tile whose local coverage sits far below the global figure -> locally-sparse pocket (consolidation candidate), even when global coverage is in-band
 - loose gaps: rule each flagged gap -> ABUT/TIGHTEN (two wooden service buildings) | fire-gap OK (kura, <=~10 ft) | FEATURE (forecourt / court / passage)
 - fire-water tubs adrift: pack_audit lists any gutter-fed tub sitting >~3.5 ft from a building -> each must be moved to a wall/eaves corner (a tensuioke is fed by roof runoff; a tub adrift in the court is fed by nothing). This is a hard geometric FINDING, not a judgment call - report every adrift tub.
-- LAYER/LABEL section: pack_audit also runs eight hard rendering checks (all objective geometry, no judgment - so they live in the tool, not this sweep): labels/tubs BURIED under a later-drawn feature (belong on the top layer), a glyph-group label ORPHANED from its glyphs, a NOTICE BOARD not within ~20 ft of a gate opening, DARK-ON-DARK label ink over a wall/dark block (with a suggested nudge), two labels that OVERLAP (LABEL CLASH), a DOOR ADRIFT (a door glyph floating inside a building instead of on its wall), and a TUB ON WELL (a fire-water tub overlapping a well glyph). Relay any it prints; they are already-verified findings, not calls to re-litigate.
+- LAYER section: pack_audit also runs hard rendering checks (all objective geometry, no judgment - so they live in the tool, not this sweep): tubs, wells and small features BURIED under a later-drawn feature (belong on the top layer), a NOTICE BOARD not within ~20 ft of a gate opening, a DOOR ADRIFT (a door glyph floating inside a building instead of on its wall), and a TUB ON WELL (a fire-water tub overlapping a well glyph). Relay any it prints; they are already-verified findings, not calls to re-litigate. Where a caption stands is not checked and not yours to judge: the render pipeline places every caption (the one placer, feature 286).
 - packing verdict: envelope OK + which specific gaps/regions/tiles to consolidate (never "shrink the manor" when coverage is in-band)
 
 FINDINGS (ranked by how wrong):

@@ -14,13 +14,14 @@ from l7r.diagram.settlement.structures.fixtures import (
     KOSATSUBA_HANDOVER_BAND_FT,
     KOSATSUBA_MARKER_MIN_PX,
     KOSATSUBA_VERGE_FT,
+    RouteReach,
     canopy_index,
     departure_routes,
     kosatsuba_anchor,
     kosatsuba_handover,
-    routes_missed,
     under_canopy,
 )
+from l7r.diagram.settlement.structures.fixtures.siting import BOARD_ALONG_STEP_PX
 
 from .consts import BROOK_BEND_WIDTHS, POLDER_ARCHETYPES
 from .hinterland import CROP_MARGIN, brook_beside_the_field, title_pocket
@@ -260,8 +261,8 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                     seg = math.hypot(bx - ax, by - ay) or 1.0
                     ux, uy = -(by - ay) / seg, (bx - ax) / seg
                     rot = math.degrees(math.atan2(by - ay, bx - ax))
-                    for t in range(int(seg // 12) + 1):
-                        mx, my = ax + (bx - ax) * (t * 12 / seg), ay + (by - ay) * (t * 12 / seg)
+                    for t in range(int(seg // BOARD_ALONG_STEP_PX) + 1):  # the board's lattice step (feature 284)
+                        mx, my = ax + (bx - ax) * (t * BOARD_ALONG_STEP_PX / seg), ay + (by - ay) * (t * BOARD_ALONG_STEP_PX / seg)
                         # ROADSIDE, per T13's verge (feature 133 T48): the old 16 px offset stood the
                         # board outside `kosatsuba_by_the_road`'s band the first time this path ran
                         # on the reference hamlet. Tread half-width + the verge + the board's half depth.
@@ -322,7 +323,8 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
                         # where every departure passes, then beside the handover - the rule `place_kosatsuba` applies
                         _routes = departure_routes(s.M)
                         _pass = _pxb(KOSATSUBA_HANDOVER_BAND_FT) if _pxb else KOSATSUBA_HANDOVER_BAND_FT
-                        _missed = [routes_missed(_routes, q[1], q[2], _pass) for q in _seats]
+                        _reach = RouteReach(_routes)  # the routes filed once for every seat (feature 281, FR-004)
+                        _missed = [_reach.missed(q[1], q[2], _pass) for q in _seats]
                         _seats = [q for q, k in zip(_seats, _missed, strict=True) if k == min(_missed)]
                         # ...ON THE APPROACH ITSELF where it offers one (settlement-review of Inashiro, feature 261): the board
                         # is squared to the way it stands on, and the kosatsuba stands broadside to the one way out

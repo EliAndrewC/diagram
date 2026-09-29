@@ -1,0 +1,1735 @@
+[
+ {
+  "cell": 10.0,
+  "map": "inashiro",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 15,
+  "s": 6.734
+ },
+ {
+  "cell": 10.0,
+  "map": "kashikawa",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 10.635
+ },
+ {
+  "cell": 10.0,
+  "map": "kuwabata",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 16,
+  "s": 4.627
+ },
+ {
+  "cell": 10.0,
+  "map": "sawada",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 19,
+  "s": 10.391
+ },
+ {
+  "cell": 10.0,
+  "map": "mizuguchi",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 12,
+  "s": 4.534
+ },
+ {
+  "cell": 10.0,
+  "map": "toy10",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 3.542
+ },
+ {
+  "cell": 10.0,
+  "map": "toy20",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 5.942
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-01",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 17,
+  "s": 8.253
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-02",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 13,
+  "s": 4.751
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-03",
+  "per_attempt": [
+   2,
+   1,
+   1,
+   0
+  ],
+  "kept_attempt": 4,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 23.988
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-04",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 16,
+  "s": 6.033
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-05",
+  "per_attempt": [
+   1,
+   0
+  ],
+  "kept_attempt": 2,
+  "kept_unreached": 0,
+  "placed": 12,
+  "s": 10.511
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-06",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 19,
+  "s": 5.91
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-07",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 15,
+  "s": 7.615
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-08",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 11,
+  "s": 4.823
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-09",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 18,
+  "s": 7.977
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-10",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 14,
+  "s": 8.311
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-11",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 8.338
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-12",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 17,
+  "s": 6.343
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-13",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 13,
+  "s": 5.801
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-14",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 5.852
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-15",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 16,
+  "s": 6.171
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-16",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 12,
+  "s": 4.311
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-17",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 19,
+  "s": 7.036
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-18",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 15,
+  "s": 5.745
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-19",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 11,
+  "s": 4.62
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-20",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 18,
+  "s": 8.541
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-21",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 14,
+  "s": 5.451
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-22",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 7.099
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-23",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 17,
+  "s": 5.383
+ },
+ {
+  "cell": 10.0,
+  "map": "cohort-24",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 13,
+  "s": 5.599
+ },
+ {
+  "cell": 12.0,
+  "map": "inashiro",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 15,
+  "s": 6.359
+ },
+ {
+  "cell": 12.0,
+  "map": "kashikawa",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 8.196
+ },
+ {
+  "cell": 12.0,
+  "map": "kuwabata",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 16,
+  "s": 3.938
+ },
+ {
+  "cell": 12.0,
+  "map": "sawada",
+  "per_attempt": [
+   1,
+   0
+  ],
+  "kept_attempt": 2,
+  "kept_unreached": 0,
+  "placed": 19,
+  "s": 14.953
+ },
+ {
+  "cell": 12.0,
+  "map": "mizuguchi",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 12,
+  "s": 4.074
+ },
+ {
+  "cell": 12.0,
+  "map": "toy10",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 4.475
+ },
+ {
+  "cell": 12.0,
+  "map": "toy20",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 8.155
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-01",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 17,
+  "s": 6.028
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-02",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 13,
+  "s": 5.232
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-03",
+  "per_attempt": [
+   2,
+   1,
+   1,
+   0
+  ],
+  "kept_attempt": 4,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 22.414
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-04",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 16,
+  "s": 7.844
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-05",
+  "per_attempt": [
+   1,
+   0
+  ],
+  "kept_attempt": 2,
+  "kept_unreached": 0,
+  "placed": 12,
+  "s": 9.56
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-06",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 19,
+  "s": 7.969
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-07",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 15,
+  "s": 8.577
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-08",
+  "per_attempt": [
+   2,
+   0
+  ],
+  "kept_attempt": 2,
+  "kept_unreached": 0,
+  "placed": 11,
+  "s": 8.16
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-09",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 18,
+  "s": 8.737
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-10",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 14,
+  "s": 9.189
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-11",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 9.277
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-12",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 17,
+  "s": 7.013
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-13",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 13,
+  "s": 5.445
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-14",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 7.667
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-15",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 16,
+  "s": 6.99
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-16",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 12,
+  "s": 4.616
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-17",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 19,
+  "s": 8.762
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-18",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 15,
+  "s": 5.74
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-19",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 11,
+  "s": 4.764
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-20",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 18,
+  "s": 8.567
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-21",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 14,
+  "s": 6.093
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-22",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 6.387
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-23",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 17,
+  "s": 4.866
+ },
+ {
+  "cell": 12.0,
+  "map": "cohort-24",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 13,
+  "s": 5.547
+ },
+ {
+  "cell": 14.0,
+  "map": "inashiro",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 15,
+  "s": 7.367
+ },
+ {
+  "cell": 14.0,
+  "map": "kashikawa",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 10.344
+ },
+ {
+  "cell": 14.0,
+  "map": "kuwabata",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 16,
+  "s": 4.285
+ },
+ {
+  "cell": 14.0,
+  "map": "sawada",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 19,
+  "s": 12.33
+ },
+ {
+  "cell": 14.0,
+  "map": "mizuguchi",
+  "per_attempt": [
+   1,
+   0
+  ],
+  "kept_attempt": 2,
+  "kept_unreached": 0,
+  "placed": 12,
+  "s": 7.553
+ },
+ {
+  "cell": 14.0,
+  "map": "toy10",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 3.652
+ },
+ {
+  "cell": 14.0,
+  "map": "toy20",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 6.286
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-01",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 17,
+  "s": 7.54
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-02",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 13,
+  "s": 5.847
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-03",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 9.382
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-04",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 16,
+  "s": 6.653
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-05",
+  "per_attempt": [
+   1,
+   0
+  ],
+  "kept_attempt": 2,
+  "kept_unreached": 0,
+  "placed": 12,
+  "s": 9.602
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-06",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 19,
+  "s": 8.258
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-07",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 15,
+  "s": 5.963
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-08",
+  "per_attempt": [
+   7,
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 7,
+  "placed": 11,
+  "s": 5.727
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-09",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 18,
+  "s": 7.658
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-10",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 14,
+  "s": 7.882
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-11",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 9.061
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-12",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 17,
+  "s": 6.457
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-13",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 13,
+  "s": 5.772
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-14",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 7.354
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-15",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 16,
+  "s": 6.62
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-16",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 12,
+  "s": 5.599
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-17",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 19,
+  "s": 7.229
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-18",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 15,
+  "s": 6.72
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-19",
+  "per_attempt": [
+   2,
+   0
+  ],
+  "kept_attempt": 2,
+  "kept_unreached": 0,
+  "placed": 11,
+  "s": 6.745
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-20",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 18,
+  "s": 7.74
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-21",
+  "per_attempt": [
+   1,
+   0
+  ],
+  "kept_attempt": 2,
+  "kept_unreached": 0,
+  "placed": 14,
+  "s": 14.776
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-22",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 7.074
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-23",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 17,
+  "s": 7.826
+ },
+ {
+  "cell": 14.0,
+  "map": "cohort-24",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 13,
+  "s": 6.143
+ },
+ {
+  "cell": 16.0,
+  "map": "inashiro",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 15,
+  "s": 6.888
+ },
+ {
+  "cell": 16.0,
+  "map": "kashikawa",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 10.44
+ },
+ {
+  "cell": 16.0,
+  "map": "kuwabata",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 16,
+  "s": 5.188
+ },
+ {
+  "cell": 16.0,
+  "map": "sawada",
+  "per_attempt": [
+   1,
+   0
+  ],
+  "kept_attempt": 2,
+  "kept_unreached": 0,
+  "placed": 19,
+  "s": 16.11
+ },
+ {
+  "cell": 16.0,
+  "map": "mizuguchi",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 12,
+  "s": 5.366
+ },
+ {
+  "cell": 16.0,
+  "map": "toy10",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 3.611
+ },
+ {
+  "cell": 16.0,
+  "map": "toy20",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 6.567
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-01",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 17,
+  "s": 7.231
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-02",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 13,
+  "s": 6.351
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-03",
+  "per_attempt": [
+   2,
+   1,
+   1,
+   0
+  ],
+  "kept_attempt": 4,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 33.867
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-04",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 16,
+  "s": 8.0
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-05",
+  "per_attempt": [
+   1,
+   0
+  ],
+  "kept_attempt": 2,
+  "kept_unreached": 0,
+  "placed": 12,
+  "s": 9.002
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-06",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 19,
+  "s": 8.481
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-07",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 15,
+  "s": 6.902
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-08",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 11,
+  "s": 4.781
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-09",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 18,
+  "s": 8.764
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-10",
+  "per_attempt": [
+   1,
+   0
+  ],
+  "kept_attempt": 2,
+  "kept_unreached": 0,
+  "placed": 14,
+  "s": 12.287
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-11",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 10.791
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-12",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 17,
+  "s": 6.258
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-13",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 13,
+  "s": 5.554
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-14",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 6.946
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-15",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 16,
+  "s": 8.013
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-16",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 12,
+  "s": 4.701
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-17",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 19,
+  "s": 9.793
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-18",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 15,
+  "s": 6.27
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-19",
+  "per_attempt": [
+   2,
+   0
+  ],
+  "kept_attempt": 2,
+  "kept_unreached": 0,
+  "placed": 11,
+  "s": 9.674
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-20",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 18,
+  "s": 13.5
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-21",
+  "per_attempt": [
+   1,
+   3
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 1,
+  "placed": 14,
+  "s": 21.081
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-22",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 8.795
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-23",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 17,
+  "s": 9.325
+ },
+ {
+  "cell": 16.0,
+  "map": "cohort-24",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 13,
+  "s": 9.336
+ },
+ {
+  "cell": 18.0,
+  "map": "inashiro",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 15,
+  "s": 13.619
+ },
+ {
+  "cell": 18.0,
+  "map": "kashikawa",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 16.24
+ },
+ {
+  "cell": 18.0,
+  "map": "kuwabata",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 16,
+  "s": 8.866
+ },
+ {
+  "cell": 18.0,
+  "map": "sawada",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 19,
+  "s": 20.848
+ },
+ {
+  "cell": 18.0,
+  "map": "mizuguchi",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 12,
+  "s": 9.239
+ },
+ {
+  "cell": 18.0,
+  "map": "toy10",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 7.991
+ },
+ {
+  "cell": 18.0,
+  "map": "toy20",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 13.822
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-01",
+  "per_attempt": [
+   1,
+   0
+  ],
+  "kept_attempt": 2,
+  "kept_unreached": 0,
+  "placed": 17,
+  "s": 20.097
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-02",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 13,
+  "s": 9.679
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-03",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 16.989
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-04",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 16,
+  "s": 12.915
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-05",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 12,
+  "s": 12.71
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-06",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 19,
+  "s": 13.8
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-07",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 15,
+  "s": 13.617
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-08",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 11,
+  "s": 11.048
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-09",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 18,
+  "s": 11.908
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-10",
+  "per_attempt": [
+   1,
+   0
+  ],
+  "kept_attempt": 2,
+  "kept_unreached": 0,
+  "placed": 14,
+  "s": 14.025
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-11",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 20.448
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-12",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 17,
+  "s": 9.426
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-13",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 13,
+  "s": 8.837
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-14",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 20,
+  "s": 10.219
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-15",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 16,
+  "s": 11.142
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-16",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 12,
+  "s": 8.203
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-17",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 19,
+  "s": 14.084
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-18",
+  "per_attempt": [
+   11,
+   0
+  ],
+  "kept_attempt": 2,
+  "kept_unreached": 0,
+  "placed": 15,
+  "s": 13.208
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-19",
+  "per_attempt": [
+   2,
+   0
+  ],
+  "kept_attempt": 2,
+  "kept_unreached": 0,
+  "placed": 11,
+  "s": 12.399
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-20",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 18,
+  "s": 11.98
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-21",
+  "per_attempt": [
+   1,
+   0
+  ],
+  "kept_attempt": 2,
+  "kept_unreached": 0,
+  "placed": 14,
+  "s": 14.873
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-22",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 10,
+  "s": 7.352
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-23",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 17,
+  "s": 10.275
+ },
+ {
+  "cell": 18.0,
+  "map": "cohort-24",
+  "per_attempt": [
+   0
+  ],
+  "kept_attempt": 1,
+  "kept_unreached": 0,
+  "placed": 13,
+  "s": 8.366
+ }
+]

@@ -7,9 +7,25 @@ from typing import TYPE_CHECKING, Any
 
 from .._geom import (
     Pt,
+    edge_dist,
     seg_dist,
 )
-from ._helpers import _FRAY_DEG, _LANE_MIN_FT, _angle_between, _lane_len, _pull_back, fan_rival, junction_floor
+from ..rolling.fit import houses_meeting
+from ._helpers import (
+    _FRAY_DEG,
+    _LANE_MIN_FT,
+    BUND_REACH_FT,
+    DOORYARD_REACH_FT,
+    HOUSE_SERVE_FT,
+    _angle_between,
+    _lane_len,
+    _pull_back,
+    dooryard_dist,
+    fan_rival,
+    junction_floor,
+    vertex_behind,
+    walked_past,
+)
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -128,7 +144,9 @@ class LanesMixin:
             del self.M["lanes"][i]
             del self._lane_ink[i]
 
-    def trim_lane_stubs(self: Settlement, way_reach: float = 40.0, house_reach: float = 90.0, fan_spread: float = 60.0, fan_bearing: float = 25.0) -> int:  # type: ignore[misc]
+    def trim_lane_stubs(  # type: ignore[misc]
+        self: Settlement, way_reach: float = 40.0, house_reach: float = HOUSE_SERVE_FT, dooryard_reach: float = DOORYARD_REACH_FT, fan_spread: float = 60.0, fan_bearing: float = 25.0
+    ) -> int:
         """Pull back any internal lane end that REACHES NOTHING. Returns how many ends were trimmed.
 
         A lane exists to be fronted. The engine already ends an arm where it meets crop or water
@@ -138,6 +156,13 @@ class LanesMixin:
         are laid. Lanes must be laid FIRST: a lane is a no-build corridor the homesteads front. So
         the trim happens here instead, after the flush, by rewriting the ink in the stream slots the
         lane already owns - the lane keeps its exact draw position and nothing re-layers.
+
+        A FARMHOUSE IS REACHED AT ITS DOORYARD (269 B17, research/homesteads/310: "a lane that serves a farmhouse ends at
+        that house's dooryard ... a lane end that reaches nothing is pulled back to the last house it serves"). An end serves
+        a house when it stands within `dooryard_reach` of the house's drawn footprint, yard or beds, or within `house_reach`
+        of its center while the house still lies ahead of it - never past it. It was 90 ft from the CENTER, in any
+        direction, which let an arm run on past the last steading into the grass (Sawada, Kashikawa). An end on the field's
+        bund has arrived too (`BUND_REACH_FT`, research/fields/290).
 
         MEASURED before it existed: five internal lane ends across the four live scripted hamlets
         (and honda, ubame x4, kikuta x2, tanada, hoshizora among the frozen ones) ended more than
@@ -152,6 +177,9 @@ class LanesMixin:
         requires it to reach the frame; a path stopping mid-landscape is the defect, not the cure."""
         lanes = self.M.get("lanes") or []
         houses = self.M.get("houses") or []
+        # the worked ground a lane may end on: the fields' outlines and the dry plots (hamletgen reads the drawn rice too)
+        fields = [[(float(a), float(b)) for a, b in f.get("outline") or []] for f in self.M.get("fields") or [] if len(f.get("outline") or []) >= 3]
+        fields += [[(float(a), float(b)) for a, b in d["poly"]] for d in self.M.get("dry_plots") or [] if len(d.get("poly") or []) >= 3]
         trimmed = 0
         _drop: set[int] = set()
 
@@ -169,7 +197,7 @@ class LanesMixin:
             if len(pts) < 2:
                 continue
 
-            def _reaches(q: Pt, me: int = i, run: Any = None) -> bool:
+            def _reaches(q: Pt, me: int = i, run: Any = None, back: Pt | None = None) -> bool:
                 for k, other in enumerate(lanes):
                     if k == me or len(other["pts"]) < 2:
                         continue
@@ -199,13 +227,17 @@ class LanesMixin:
                 # house from opposite quarters is a house on a corner - a real thing that reads as
                 # one. It is only ends arriving ALONGSIDE each other that the eye merges.
                 _my = math.degrees(math.atan2(run[1][1] - run[0][1], run[1][0] - run[0][0])) if run else None
-                for h in houses:
+                for h in houses_meeting(houses, (q[0] - house_reach, q[1] - house_reach, q[0] + house_reach, q[1] + house_reach)):
                     _d = math.hypot(q[0] - h["x"], q[1] - h["y"])
-                    if _d > house_reach:
+                    # AT ITS DOORYARD, OR BESIDE THE HOUSE AND NOT PAST IT (269 B17): within the serving reach of the center
+                    # only while the house still lies ahead of the end or level with it - an end that has walked on past
+                    # its last house is pulled back to it, as `_trim_to_service` cuts one at its closest approach
+                    _from = back if back is not None else (run[0] if run is not None else None)
+                    if dooryard_dist(h, q) > dooryard_reach and (_d > house_reach or (_from is not None and walked_past(_from, q, (h["x"], h["y"])))):
                         continue
                     if _my is None or not _fan_rival(q, _my, (h["x"], h["y"]), _d, me):
                         return True
-                return False
+                return any(edge_dist(q[0], q[1], f) <= BUND_REACH_FT for f in fields)
 
             def _junction_floor(_p: list[Pt], me: int = i) -> float:
                 """This lane's junction floor - see `junction_floor`, which holds the body."""
@@ -213,7 +245,7 @@ class LanesMixin:
 
             for _ in range(2):  # each end in turn; a 2-point lane can lose at most one
                 if len(pts) >= 2 and not _reaches(pts[-1], run=(pts[-2], pts[-1])):
-                    pts = _pull_back(pts, lambda q, _p=pts: _reaches(q, run=(_p[-2], _p[-1])), min_len=_junction_floor(pts))
+                    pts = _pull_back(pts, lambda q, _p=pts: _reaches(q, run=(_p[-2], _p[-1]), back=vertex_behind(q, _p)), min_len=_junction_floor(pts))
                     trimmed += 1
                 pts.reverse()
             # ...and a lane too SHORT to front anybody is not a lane at all, it is clipping debris.

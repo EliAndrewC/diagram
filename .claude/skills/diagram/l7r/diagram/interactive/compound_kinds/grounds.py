@@ -63,11 +63,13 @@ class InnerCourt(Kind):
     Note: The household inside the compound follows the record; the residence-behind-the-office order is
     Chinese regulation (Neixiang), while the Japanese pages read show no front-and-rear order - at Takayama the
     residence stood beside the office, to the west. The two-court split and the formal garden south of the
-    reception rooms follow the record. The service strip along the shady north rear is this record's own
-    reasoning from where the formal garden sat, not something a source describes.
+    reception rooms follow the record. That a household's storehouse stood behind the house is read, at the Higuchi
+    house; the rest of the service strip along the shady north rear is this record's own reasoning from where the
+    formal garden sat, not something a source describes.
 
-    Caveat: The service strip along the shady north rear is this record's own reasoning from where the formal
-    garden sat, not something a source describes.
+    Caveat: That a household's storehouse stood behind the house is read, at the Higuchi house; the rest of the
+    service strip along the shady north rear is this record's own reasoning from where the formal garden sat, not
+    something a source describes.
 
     Name: inner court
     Covers: the inner court's ground and its label
@@ -147,15 +149,19 @@ class PracticeGround(Kind):
     What: A patch of swept earth in the outer court, marked by the gear that stands on it: the place where the
     compound's samurai keep up their daily practice.
 
-    Why: A dojo with a resident teacher and enrolled students was an institution of cities, in Japan and
-    China alike; rural samurai most likely trained at home in an earthen yard, in a hall cleared for the
-    purpose, or on shrine grounds. A county seat holds about fifteen samurai - no student body and no living for a teacher -
+    Why: Formal martial training belonged to the towns. A domain taught the martial arts at its school, built
+    in its own territory and in the castle town as a rule, and many domains attached a practice hall to it;
+    the great enrolled halls grew in Edo, where the pupils were. Private halls, kept by masters at their own
+    houses, did reach every part of the country, but late - they flourished at the end of the Edo period, with
+    townsmen and farmers training beside samurai - and before the mid-Edo period practice was mostly held
+    outdoors or on an earthen floor. So rural samurai most likely trained at home in an earthen yard, in a hall
+    cleared for the purpose, or on shrine grounds. A county seat holds about fifteen samurai - no student body and no living for a teacher -
     so its magistracy trains on open ground in its own compound, and what marks that ground is the gear
     practice leaves behind, not a building. It is sized to the samurai who drill there, about 90 to 135 sq ft
     each.
 
     Note: Courtyard keiko in place of a dojo follows the record only in part: the famous private fencing
-    dojos read on stood in Edo, and practice before the mid-Edo period was held outdoors or on earthen floors.
+    dojos read on stood in Edo, and practice before the mid-Edo period was held outdoors or on earthen floors. Private halls did reach every part of the country late in the period, so that a county seat keeps none is the map's own calibration, counted on its samurai alone though townsmen and farmers trained at them too.
     The one martial ground the pages read on an intendant's office name there is a riding ground, and the
     drill ground read on stood at a small domain's jin'ya, so they confirm the practice ground. That domain
     schools stood in castle towns and cities as a rule (the two read, Hagi's and Mito's, stood inside their
@@ -222,29 +228,55 @@ class CompoundGarden(Kind):
     key = "garden"
 
 
+class RearYard(Kind):
+    """
+    What: The open ground behind the house, between it and the household's storehouses: working ground, not a garden.
+
+    Why: At the Higuchi house at Matsushiro the storehouse stands beyond the ground behind the main house; the source's
+    word for that ground, niwa, is a yard as much as a garden, and the formal garden took the sunny south.
+
+    Note: Open ground behind the house, with the storehouse beyond it, follows the record, drawn as the court's own earth.
+
+    Name: rear yard
+    Covers: the rear yard and its label
+    Label: accurate
+    Sources: kojodan-higuchi, matsushiro-kankou-higuchi
+    Entry: research/buildings.html - 'The shady rear is the service strip'
+    """
+
+    key = "rear yard"
+
+
 class VegetableGarden(Kind):
     """
-    What: A vegetable garden for the household's own table, worked in the service ground behind the residence.
+    What: A vegetable garden for the household's own table, set where it gets its sun.
 
     Why: Samurai grew their own vegetables, on anything from a kitchen plot to half their grounds. The
-    Boso-no-mura house of a middle-rank samurai family has a soup-greens plot of about 1,070 sq ft, planted
-    mainly with leafy greens, on the west side of the house; at Matsushiro a 150-koku retainer's house kept
-    about half its grounds in vegetable field. The formal garden took the south side of the house, so the
-    vegetable garden lay off it.
+    Boso-no-mura house of a middle-rank samurai family, as the museum reconstructs it, has a soup-greens plot of
+    about 1,070 sq ft, planted mainly with leafy greens, on the west side of the house; at Matsushiro a 150-koku
+    retainer's house keeps about half its grounds in vegetable field today, and the Higuchi house's field lay south
+    of its pond, where its formal garden is now. A jin'ya had a vegetable garden inside its grounds, a daikan's
+    office a field of its own, and a Chinese county office listed its plot behind the residence gate after the
+    kitchen and the stable. A bed of vegetables that want full sun needs about six hours of direct sun a day.
 
-    Note: Its size is one of two attested forms, a soup-greens plot or a field over about half the grounds, and
-    each sheet takes its own. Seating it to the north of the house is a guess, reasoned from the formal garden
-    taking the sunny south: no vegetable garden north of a house was found, and the one plot whose side is given
-    lay to the west.
+    Note: At a residence or a walled compound its size is one of two attested forms, a soup-greens plot or a field
+    over about half the grounds, and each sheet takes its own; its seat is one of four attested ones - west of the
+    house, south beside the formal garden, the rear service ground, or a parcel of its own ("Where does a walled
+    compound keep its vegetable garden, and does the sun decide it?"). The sun rules out a seat where the bed gets under
+    its six hours in the autumn ("How many hours of direct sun does a kitchen bed need?"; a sheet may declare a
+    half-shade bed, which needs three). Where the west and the rear lie in the shade of the house and the kitchen, the
+    bed stands in the inner court beside the formal garden; at a country shrine it is the resident keeper's plot, near
+    the dwelling on whatever open ground gets its sun. That a household chose its seat by the sun is a guess, and so are
+    a country shrine keeper's plot's place and size: no source read places or measures one.
 
-    Caveat: Seating it to the north of the house is a guess, reasoned from the formal garden taking the sunny
-    south: no vegetable garden north of a house was found, and the one plot whose side is given lay to the west.
+    Caveat: That a household chose its seat by the sun is a guess, and so are a country shrine keeper's plot's place and
+    size: no source read places or measures one.
 
     Name: vegetable garden
     Covers: the kitchen garden's beds and label
     Label: accurate
-    Sources: boso-no-mura-takei, matsushiro-bukeyashiki, shoinzukuri-jawiki
-    Entry: research/buildings.html - 'Where did a residence keep its vegetable garden, and how big was it?', 'The shady rear is the service strip'
+    Sources: boso-no-mura-takei, matsushiro-bukeyashiki, sanada-higuchi, kasama-iwama-jinya, kotobank-kisaku-daikansho, gujin-xie-yamen, atariya-nisho
+    Entry: research/buildings.html - 'Where did a residence keep its vegetable garden, and how big was it?', 'Where does a walled compound keep its vegetable garden, and does the sun decide it?'; research/homesteads.html - 'How many hours of direct sun does a kitchen bed need?'
     """
 
     key = "vegetable garden"
@@ -252,25 +284,23 @@ class VegetableGarden(Kind):
 
 class ShrineGrove(Kind):
     """
-    What: A stand of kept trees around the compound's shrine, its hall and arch set in a cleared opening among
-    them: the shrine's own sacred wood.
+    What: The shrine's own sacred wood: kept trees standing on the sides of the hall its ground gives them, round a
+    cleared opening where the hall stands.
 
     Why: A Japanese shrine's setting was a deliberately preserved grove, the chinju no mori - a wood kept and
-    tended around the sanctuary, the approach and the place of worship, so that the precinct sits inside
-    kept trees rather than in cleared ground. This map draws a village shrine's precinct as its grove, with the hall in a small
-    swept clearing inside it and no fence around it.
+    tended around the sanctuary, the approach and the place of worship, so that the shrine stands among
+    kept trees. Which sides of the hall it stands on follows the ground: all around on a
+    rise or in the paddy plain; on a slope behind the hall, at its sides, or both.
 
-    Note: The grove as the setting of a shrine follows the record, as does the village's own households answering for the shrine's cleaning; that its clearing was a swept surface is general reading with no page found; that the wood fills most of a precinct's unbuilt ground is a guess, since no source measures what covered the ground beyond buildings that took a fortieth to a seventh of it. Everything the record holds is about a
-    village shrine standing in its own wood; nothing covers a grove kept inside a compound wall.
+    Note: The grove as the setting of a shrine follows the record, as do the forms it takes by the ground and the village's own households answering for the shrine's cleaning; that its clearing was a swept surface is general reading with no page found. Its edge, where it meets scrub or slope, is drawn irregular, a guess, and which of two or three forms a slope takes is rolled with equal weights, a guess; everything the record holds is about a village shrine standing in its own wood, and nothing covers a grove kept inside a compound wall.
 
-    Caveat: Everything the record holds is about a village shrine standing in its own wood; nothing covers a
-    grove kept inside a compound wall.
+    Caveat: Its edge, where it meets scrub or slope, is drawn irregular, a guess, and which of two or three forms a slope takes is rolled with equal weights, a guess; everything the record holds is about a village shrine standing in its own wood, and nothing covers a grove kept inside a compound wall.
 
     Name: shrine grove (chinju no mori)
     Covers: the grove's ground and its tree canopies
     Label: accurate
-    Sources: chinju-no-mori-jawiki, fengshui-woodland-enwiki, jinja-jawiki
-    Entry: research/religion-and-death.html - 'Is the ground around a shrine or a grave swept clear of scrub?', 'Where does a village put its shrine, and how big is it?', 'How big is a country shrine, and what stands in its precinct?', 'How large was a village shrine's precinct, and how much of it was built on?'
+    Sources: chinju-no-mori-jawiki, fengshui-woodland-enwiki, jinja-jawiki, short-2012-sacred-groves, fujita-2007-shaso-slopes
+    Entry: research/religion-and-death.html - 'What shape is a village shrine's wood, and on which sides of the hall does it stand?', 'Is the ground around a shrine or a grave swept clear of scrub?', 'Where does a village put its shrine, and how big is it?', 'How big is a country shrine, and what stands in its precinct?', 'How large was a village shrine's precinct, and how much of it was built on?'
     """
 
     key = "shrine grove"
@@ -402,7 +432,7 @@ class ApproachRoad(Kind):
     What: The ways that bring traffic to the compound: the road or town street up to the main gate, and the
     lanes that serve its lesser doors.
 
-    Why: A magistrate's manor stands at the edge of the settlement it administers, and its gate faces what it
+    Why: On the Japanese model a magistrate's manor stands at the edge of the settlement it administers, on the Chinese model inside the wall on the main street, and its gate faces what it
     fronts - the town, or the road it sits beside - opening onto the roadbed; where a manor fronts a road at
     an angle, the whole compound turns so its front wall runs parallel to the way. So a road always arrives at
     the main gate. A planned Chinese capital was a grid of avenues keyed to its gates, and a county seat's
@@ -416,14 +446,14 @@ class ApproachRoad(Kind):
     towns. The road at the gate is drawn at the width of the road the compound stands on, 15 to 24 ft where it is
     a highway, as read; no page read gives the width of the road before an official's gate, so any wider ground
     before the gate is a guess, and so is a lane to a side or cart gate, drawn at about 6 ft where carts use it.
-    The record read gives only a south-facing gate for a Chinese county office; that the manor stands at the edge
-    of its town and opens its gate onto the road it fronts is this project's own siting, set against the drawn
+    The record read sets a Japanese seat beside the settlement it administers and a Chinese county yamen inside its town on the main street, and gives a south-facing gate for a Chinese county office; that the manor's gate faces what it fronts
+    and opens onto the road it stands on is this project's own calibration, set against the drawn
     maps rather than read from a source.
 
     Name: road
     Covers: the approach road or town street, the lanes to the lesser doors, and a road across a border
     Label: deviation
-    Sources: ctie-michi-nazenaze, hiroshima-saigoku-kaido, mlit-kinsei-michi, kotobank-daihachiguruma, l7r-wagons, neixiang-xianya-zhwiki, song-architecture-enwiki, jokamachi-jawiki, lowtech-chinese-wheelbarrow, toyama-1988-road-undevelopment
+    Sources: ctie-michi-nazenaze, hiroshima-saigoku-kaido, mlit-kinsei-michi, kotobank-daihachiguruma, l7r-wagons, neixiang-xianya-zhwiki, song-architecture-enwiki, jokamachi-jawiki, lowtech-chinese-wheelbarrow, toyama-1988-road-undevelopment, jinya-jawiki, tamba-kashiwara-jinya, sina-neixiang-xianya, bjd-qing-yamen
     Entry: research/ways.html - 'How wide is the road at a compound's gate?', 'Could a cart use the roads here, and where would it go?', 'What vehicle used a village lane, and where could the lane run?'; research/towns.html - 'Where does a magistrate's manor stand, and which way does its gate face?', 'Chinese towns were PLANNED - the gate-to-yamen axis'
     """
 

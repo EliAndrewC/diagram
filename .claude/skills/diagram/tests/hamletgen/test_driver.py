@@ -318,7 +318,7 @@ def _scripted_rolls(monkeypatch, script: dict[int, tuple[int, list[tuple[float, 
         def finish(self, out: str, render: bool = False) -> None:
             pass
 
-    def fake_build(plan: Any, avoid: Any = ()) -> _S:
+    def fake_build(plan: Any, avoid: Any = (), snapshot: Any = None) -> _S:
         placed, stranded = script[len(avoid)]
         plan.placed = placed
         plan.acres = 1.0
@@ -387,3 +387,42 @@ def test_a_roll_that_raises_leaves_no_stage_behind(tmp_path) -> None:
         discard_on_failure(base, boom)
     assert not os.path.exists(os.path.dirname(base))
     assert discard_on_failure(None, lambda: 7) == 7
+
+
+@pytest.mark.rolls_map  # it calls `generate`, which the marker scan reads as a roll; `build` is scripted here, so nothing is actually rolled
+def test_only_the_attempt_kept_is_finished(monkeypatch, tmp_path) -> None:  # type: ignore[no-untyped-def]
+    """Feature 278 (FR-006): every attempt used to be finished - rendered and paged - before the choice, so a re-rolled
+    map paid a whole finish for the attempt it threw away. Now only the kept attempt is finished, once: a first roll that
+    strands a house and a re-roll that does not finish the re-roll alone, with an output path and without; and a re-roll
+    that is rejected leaves the first roll the only one finished."""
+    from l7r.diagram.hamletgen import driver
+
+    finished: list[int] = []
+
+    class _S:
+        def __init__(self, n: int, stranded: list[tuple[float, float]]) -> None:
+            self.n = n
+            self.M: dict[str, Any] = {"meta": {}, "houses": [], "lanes": [], "_stranded": stranded}
+
+        def finish(self, out: str, render: bool = False) -> None:
+            finished.append(self.n)
+
+    def scripted(script):  # type: ignore[no-untyped-def]
+        def fake_build(plan: Any, avoid: Any = (), snapshot: Any = None) -> _S:
+            placed, stranded = script[len(avoid)]
+            plan.placed, plan.acres = placed, 1.0
+            return _S(len(avoid), stranded)
+
+        monkeypatch.setattr(driver, "build", fake_build)
+        monkeypatch.setattr(driver, "unreached_houses", lambda M: [(x, y, 120) for x, y in M["_stranded"]])
+
+    spec = hg.HamletSpec(name="Finish", seed=5, households=12)
+    scripted({0: (12, [(1.0, 1.0)]), 1: (12, [])})
+    for out in (None, str(tmp_path / "finish")):
+        finished.clear()
+        rep = hg.generate(spec, out_base=out, render=False)
+        assert rep.attempt == 2 and finished == [1], f"the kept re-roll finished once, the stranded roll never ({out})"
+    scripted({0: (12, [(1.0, 1.0)]), 1: (11, [])})
+    finished.clear()
+    rep = hg.generate(spec, out_base=None, render=False)
+    assert rep.attempt == 1 and finished == [0], "a rejected re-roll is not finished; the first roll is"

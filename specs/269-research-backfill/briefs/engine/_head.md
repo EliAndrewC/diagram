@@ -1,0 +1,29 @@
+# Brief - feature 269 (research backfill), engine group {G}: {TITLE}
+
+You are a FRESH headless session named `diagram-supplemental`, working in `/diagram/.clones/diagram-supplemental`
+(the clone guard ties you to it). Every rule of the root CLAUDE.md applies, and the engine's own CLAUDE.md auto-loads
+under `l7r/`. The research is done: each item below follows a finding already in the record, and the record section it
+cites is the `Entry:` source. Read `specs/269-research-backfill/outcomes.md` section 3 ONLY by line, with
+`make lines FILE=specs/269-research-backfill/outcomes.md KEY="<your item ids>"`.
+
+**Rules for this session**
+- You are headless: never background a command. A background command's completion notice never reaches you, and your
+  session ends with your turn. Run `make quick` and `make test-file` in the foreground.
+- Diagram (Inashiro)'s feature 276 made placement indexed. Scans of placed houses go through `houses_meeting()`;
+  `M["houses"]` and `placed` are `Indexed`; there is a `FreeGround` raster. A new record's `geom` is complete when it
+  is appended and never edited afterward. Any new per-candidate check follows `dev/performance.md` "Three more
+  shapes": index it, never scan.
+- A KNOB is rolled per settlement from the map's seed, and its form is recorded in the manifest's `meta`. Each form
+  cites its record section. Record the why of every constant beside it, with its section.
+- 100% coverage for what you add; the 1,000-line bar. An engine change's motivating pool maps are regenerated through
+  the engine CLAUDE.md's loop, and their notes censuses too (`make notes-census`).
+- Do NOT touch another group's modules (listed in `specs/269-research-backfill/briefs/engine/groups.md`). Do not edit
+  the research record. Do not push, and do not run `make done` (the landing session does).
+
+## Your items
+{ITEMS}
+
+## Finish
+Run `make quick` green in the foreground. Commit with a message beginning `269 {G}:`. Append one line per item to
+`specs/269-research-backfill/briefs/engine/log.md` with `make append`: `<item> DONE|PARTIAL|NOT-DONE - <what changed,
+maps moved> - <why, if not done>`. Your last message is one paragraph.

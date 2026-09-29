@@ -56,14 +56,16 @@ def cited_keys(notes_html: str) -> list[str]:
 
 def url_of(entry_html: str) -> str:
     """The pointer a registry entry names. A closing parenthesis ends it unless the URL opened one:
-    `(https://.../Edo)` is written around a URL, `町屋_(商家)` is part of one."""
+    `(https://.../Edo)` is written around a URL, `町屋_(商家)` is part of one. Punctuation after the wrapping
+    parenthesis (`.../174809), 5 August`) goes with it, and an entity is unescaped: the entry is HTML, so
+    `&amp;page=` is `&page=` - fetched as written it lands on the site's front page (feature 269)."""
     found = _URL.search(entry_html)
     if not found:
         return ""
     url = html.unescape(found.group(0))  # the entry is HTML: `&amp;` in a query string is `&` (feature 268: the NDL records fetched as the home page)
-    while url.endswith(")") and url.count(")") > url.count("("):
+    while url.endswith((".", ",", ";")) or (url.endswith(")") and url.count(")") > url.count("(")):
         url = url[:-1]
-    return url.rstrip(".,;")
+    return url
 
 
 def registry_entry(root: pathlib.Path, key: str) -> pathlib.Path | None:
@@ -240,6 +242,8 @@ def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path,
         if code:
             print(text, file=sys.stderr)
             return code
+        if residue_pages(out):
+            rows.append(("pages/", "the host's page cache (feature 288)", "for quote-check: the saved text of each page a quotation was not found VERBATIM on - grep it before any WebFetch; its MANIFEST.txt names a page the cache did not hold"))
     for key in dict.fromkeys(keys) if "registry" in want else ():
         src = registry_entry(root, key)
         if src is not None:
@@ -252,6 +256,37 @@ def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path,
     (out / MANIFEST).write_text(manifest(out, f"{page}, question {section}" + ("" if for_ == "all" else f", for {for_}"), rows), encoding="utf-8")
     print(f"check-bundle: {len(rows)} file(s) in {out} - hand the agent {out / MANIFEST}")
     return 0
+
+
+class NotCached:
+    """The fetcher behind a cache-only read: a page the cache does not hold is named, never fetched."""
+
+    refused: dict = {}
+
+    @staticmethod
+    def get(_url: str) -> dict:
+        return {"state": "NOT-CACHED", "why": "not in the page cache (quote-verbatim could not save it) - fetch it yourself"}
+
+
+def residue_pages(out: pathlib.Path) -> int:
+    """The cached text of every page a quotation in the bundle's quote-verbatim report was not found VERBATIM on, saved
+    under `out/pages/` from the host's page cache ONLY - quote-verbatim has just read each of them through it, so
+    nothing is fetched again (feature 288 FR-010, FR-011: quote-check reads this before any WebFetch). The count of
+    pages named; 0 writes nothing. A re-verification read: no ledger line (spec D1)."""
+    report = out / "quote-verbatim.json"
+    data = json.loads(report.read_text(encoding="utf-8")) if report.is_file() else {}
+    urls = [u for e in data.get("footnotes", []) if any(p.get("quotation") != "VERBATIM" for p in e.get("passages", []))
+            for u in e.get("links", []) if u.startswith(("http://", "https://"))]
+    if not urls:
+        return 0
+    import importlib.util  # noqa: PLC0415
+
+    spec = importlib.util.spec_from_file_location("_source_pages", HERE / "_source_pages.py")
+    assert spec and spec.loader
+    sp = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(sp)
+    sp.save(list(dict.fromkeys(urls)), out / "pages", sp.src.CachedPages(NotCached(), sp.src.home()))
+    return len(dict.fromkeys(urls))
 
 
 def scoped_verbatim(out: pathlib.Path, full_text: str) -> str:
@@ -314,7 +349,12 @@ def quoted_passages(root: pathlib.Path, key: str) -> list[str]:
     return [q for q in dict.fromkeys(out) if not q.startswith(("http://", "https://")) and len(q) >= 20]
 
 
-def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path, whole: bool = False) -> int:
+def ledger_part(saved: str) -> str:
+    """What a `_source_pages.py` run printed before its manifest: the page's earlier reads on the ledger (feature 288)."""
+    return saved.split("pointer | file | state", 1)[0].strip("\n")
+
+
+def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path, whole: bool = False, question: str = "") -> int:
     entry = registry_entry(root, key)
     if entry is None:
         print(f"check-bundle: no registry entry for {key!r}", file=sys.stderr)
@@ -327,13 +367,18 @@ def key_bundle(root: pathlib.Path, key: str, out: pathlib.Path, whole: bool = Fa
         # key - one book-length source cost 0.73 million tokens in one check when its whole text was copied
         # WHOLE (plan review, D19): a source-reader looks for the passage behind a NEW claim, which by construction
         # is not beside a passage already quoted - it gets the whole page, saved in parts, never the excerpt
+        # THE LEDGER (feature 288 D1, spec-fidelity round 1): a WHOLE read is source-reader searching a cited page for a NEW
+        # claim - a research read, so its earlier reads are printed and a `pending` line appended, as `make source-pages`
+        # does; the excerpt re-checks passages already quoted, and writes no ledger line. Both read the page cache.
         if whole:
-            code, text = run_script("_source_pages.py", [str(out / "pages"), url], root)
+            code, text = run_script("_source_pages.py", [str(out / "pages"), url, *(["--question", question] if question else [])], root)
+            if ledger_part(text):
+                print(ledger_part(text))
             rows.append(("pages/", url, "the page's whole visible text, saved - a long page in PARTS; grep them all, read the part a hit is in"))
         else:
             qfile = out / "quotes.json"
             qfile.write_text(json.dumps(quoted_passages(root, key), ensure_ascii=False), encoding="utf-8")
-            code, text = run_script("_source_pages.py", [str(out / "pages"), url, "--quotes", str(qfile)], root)
+            code, text = run_script("_source_pages.py", [str(out / "pages"), url, "--quotes", str(qfile), "--no-ledger"], root)
             rows.append(("pages/", url, "the page's visible text, saved - a long page as an EXCERPT (its front and a window around each passage the record quotes); grep it; MANIFEST.txt says which"))
         if code:
             print(text, file=sys.stderr)
@@ -348,6 +393,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--section", default="", help="one question: its prefix (010) or part of its heading id")
     ap.add_argument("--key", default="", help="one registry key, for a source bundle")
     ap.add_argument("--whole", action="store_true", help="with --key: the whole page in parts, not the excerpt - for source-reader (D19)")
+    ap.add_argument("--question", default="", help="with --whole: the research question the page is read for, recorded on the sources-consulted ledger (feature 288)")
     ap.add_argument("--out", default="", help=f"the bundle directory (default under {DEFAULT_ROOT})")
     ap.add_argument("--extra", nargs="*", default=[], help="further files to copy in, relative to the root")
     ap.add_argument("--notes", default="", help="re-check only these note keys, comma-separated: the notes file and the fragment are cut to them")
@@ -359,7 +405,7 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     root = pathlib.Path(args.root).resolve()
     if args.key:
-        return key_bundle(root, args.key, pathlib.Path(args.out or DEFAULT_ROOT / f"key-{args.key}{'-whole' if args.whole else ''}"), args.whole)
+        return key_bundle(root, args.key, pathlib.Path(args.out or DEFAULT_ROOT / f"key-{args.key}{'-whole' if args.whole else ''}"), args.whole, args.question)
     if not args.page or not args.section:
         ap.error("PAGE and --section, or --key")
     wanted = frozenset(k.strip() for k in args.notes.split(",") if k.strip())

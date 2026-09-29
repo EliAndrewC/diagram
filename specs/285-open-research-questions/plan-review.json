@@ -1,0 +1,69 @@
+{
+ "feature": "285-open-research-questions",
+ "plan_sha256": "b8b01939f9a7efda0cad32272c03ac325de41f958f92075d2d61bce7992d8981",
+ "reviewed": "2026-09-28",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "read only the question fragments and their notes, never the assembled or citations pages",
+   "class": "within",
+   "why": "the spec's edge case and Decisions Recorded settle it"
+  },
+  {
+   "id": "D2-guess",
+   "summary": "a guess item is each sentence of visible text carrying GUESS or GUESSES; lower-case guess is not a label",
+   "class": "within",
+   "why": "FR-002(a), the comment edge case, SC-001 and the spec's edge case naming the plural"
+  },
+  {
+   "id": "D2-absence",
+   "summary": "an absence item is each notes li carrying 'no publicly readable source', with its search record and claim; 'settled' makes it absence-settled",
+   "class": "within",
+   "why": "FR-002(b) and FR-005"
+  },
+  {
+   "id": "D2-not-items",
+   "summary": "GROUNDS notes and CONVENTION or DEVIATION labels are not items",
+   "class": "within",
+   "why": "the spec's edge case names both"
+  },
+  {
+   "id": "D3-a-b",
+   "summary": "route (a) a class's Entry:; route (b) one hop of links from a question a class names",
+   "class": "within",
+   "why": "FR-003 and US2 define these two routes"
+  },
+  {
+   "id": "D3-c",
+   "summary": "route (c) matches an engine .py line on the anchor or the heading's question up to its '?', with no length floor",
+   "class": "within",
+   "why": "FR-003's 'its heading or its anchor' as written (confirmed round 2); R5 now counts six short headings, three with no engine hit, eight hits all citations - the correction changes no conclusion"
+  },
+  {
+   "id": "D4",
+   "summary": "make open-questions prints counts first, then the list, text only",
+   "class": "within",
+   "why": "FR-001, FR-004"
+  },
+  {
+   "id": "D7",
+   "summary": "outside the record: tracked text files under the skill less research/, tests/, the three tooling logs and binaries; each line carrying the whole word GUESS or GUESSES is an item",
+   "class": "within",
+   "why": "round 2 item confirmed: plan.md lines 36-37 now read 'the whole word GUESS or its plural GUESSES (as D2)', matching FR-007's 'every GUESS label' and the spec's plural edge case; the five GUESSES lines outside the record (compound.py 568/643, pondstock.py 8/25, county-magistracy-example.notes.md 24; git grep -w, this review) are now in scope, and scripts/_open_questions.py:38 _GUESS = GUESS(?:ES)? already reads them"
+  },
+  {
+   "id": "D5",
+   "summary": "unit tests on a fixture record and one real-record test",
+   "class": "within",
+   "why": "FR-006, SC-001, SC-002, SC-004; enforcement of the request"
+  },
+  {
+   "id": "D6",
+   "summary": "one pass over the files, one registry import, a whole-text pre-check in the code route",
+   "class": "within",
+   "why": "SC-003; a speed mechanism that changes no result"
+  }
+ ],
+ "verdict": "CLEAR"
+}

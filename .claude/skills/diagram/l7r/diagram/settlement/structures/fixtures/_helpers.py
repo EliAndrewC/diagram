@@ -5,7 +5,9 @@ from collections.abc import Callable, Sequence
 from typing import Any
 
 from ..._geom import (
+    PointGrid,
     seg_dist,
+    seg_reach_index,
 )
 
 # The lane clearance `place_kosatsuba` asks of the caption room beside a candidate board seat - a SITING heuristic
@@ -80,12 +82,18 @@ preferences carry the board 70-100 ft off it, onto a lane two of Kashikawa's hou
 
 def outermost_join(track: Sequence[tuple[float, float]], others: Sequence[Sequence[tuple[float, float]]], step: float = 5.0) -> tuple[float, float] | None:
     """The first point of `track`, walked from its first vertex, that another way comes within `KOSATSUBA_HANDOVER_PX` of -
-    where the last way out joins it - or None when none does (feature 261)."""
+    where the last way out joins it - or None when none does (feature 261).
+
+    The other ways' segments are INDEXED once (feature 281, FR-004): each 5 ft sample walked every segment of every way -
+    209,131 `seg_dist` on Sawada. A sample farther than the reach from a segment's box is farther than the reach from the
+    segment, so the segments whose box widened by the reach holds the sample are every one the test can accept; the reach
+    is padded by 1e-6 so a way at EXACTLY the reach, which the closed test accepts, stays inside its widened box."""
+    index = seg_reach_index([(o, 0.0) for o in others], KOSATSUBA_HANDOVER_PX + 1e-6)
     for a, b in zip(track, track[1:], strict=False):
         n = max(1, int(math.dist(a, b) // step))
         for i in range(n + 1):
             q = (a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n)
-            if any(seg_dist(q[0], q[1], c, d) <= KOSATSUBA_HANDOVER_PX for o in others for c, d in zip(o, o[1:], strict=False)):
+            if any(x0 <= q[0] <= x1 and y0 <= q[1] <= y1 and seg_dist(q[0], q[1], c, d) <= KOSATSUBA_HANDOVER_PX for c, d, _r, x0, y0, x1, y1 in index.near(q[0], q[1])):
                 return q
     return None
 
@@ -266,8 +274,29 @@ def departure_routes(M: Any, step: float = 10.0, join: float = 7.0, reach: float
 
 
 def routes_missed(routes: Sequence[Sequence[tuple[float, float]]], x: float, y: float, near: float) -> int:
-    """How many of `routes` never come within `near` of (x, y) - the departures that do not pass a board there."""
-    return sum(1 for r in routes if not any(math.hypot(q[0] - x, q[1] - y) <= near for q in r))
+    """How many of `routes` never come within `near` of (x, y) - the departures that do not pass a board there. A caller
+    asking of many seats builds one `RouteReach` instead."""
+    return RouteReach(routes).missed(x, y, near)
+
+
+class RouteReach:
+    """Every route's points filed ONCE, for asking of many candidate seats how many routes pass none of them within reach
+    (feature 281, FR-004). `routes_missed` walked every point of every route per seat - 724,209 `hypot` on Sawada's
+    notice board - though the routes do not change while the seats are scored. A point is filed by its own position, so
+    `near(x, y, reach)` returns every point within the reach (and some beyond), and the same
+    `math.hypot(q[0] - x, q[1] - y) <= near` decides which routes it reaches."""
+
+    __slots__ = ("grid", "n")
+
+    def __init__(self, routes: Sequence[Sequence[tuple[float, float]]]) -> None:
+        self.n = len(routes)
+        self.grid = PointGrid(cell=32.0)
+        self.grid.extend((k, float(q[0]), float(q[1]), float(q[0]), float(q[1]), float(q[0]), float(q[1])) for k, r in enumerate(routes) for q in r)
+
+    def missed(self, x: float, y: float, near: float) -> int:
+        """`routes_missed(routes, x, y, near)`, exactly."""
+        passed = {k for k, qx, qy, *_box in self.grid.near(x, y, near) if math.hypot(qx - x, qy - y) <= near}
+        return self.n - len(passed)
 
 
 CAPTION_HALO_FT = 1.5  # the caption's background halo, drawn past its box (`label()`'s stroke) - what notches a crown

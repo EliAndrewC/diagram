@@ -1,0 +1,27 @@
+{
+  "inashiro": {
+    "blades": 55752,
+    "dots": 2960,
+    "pines": 262
+  },
+  "kashikawa": {
+    "blades": 63103,
+    "dots": 3385,
+    "pines": 291
+  },
+  "kuwabata": {
+    "blades": 15236,
+    "dots": 733,
+    "pines": 62
+  },
+  "mizuguchi": {
+    "blades": 38726,
+    "dots": 2024,
+    "pines": 189
+  },
+  "sawada": {
+    "blades": 62067,
+    "dots": 3349,
+    "pines": 311
+  }
+}

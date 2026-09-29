@@ -1,0 +1,8 @@
+{
+ "term": "person-year",
+ "def": "A count that weights each person by the years they appear in a register, so someone recorded for five years counts five times.",
+ "variants": [
+  "person-year",
+  "person-years"
+ ]
+}

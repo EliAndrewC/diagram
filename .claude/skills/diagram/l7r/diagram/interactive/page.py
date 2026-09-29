@@ -27,6 +27,7 @@ from typing import Any
 from . import raster
 from .classes import CLASSES, NOT_HIGHLIGHTED, PLACE, FeatureClass, lead_sentence, slug
 from .content import content
+from .extents import Extent, _BoxGrid, _file_extent, _refused
 from .glossary import CASED, GLOSSARY
 from .notes import EMPTY, MapNotes, read_map_notes
 from .place import LANE, WINDBREAK, lane_default, place_card, windbreak_default
@@ -79,9 +80,6 @@ _COORDS: dict[str, tuple[str, ...]] = {
     "circle": ("cx", "cy", "r"),
     "ellipse": ("cx", "cy", "rx", "ry"),
 }
-#: What one element paints inside: a disc (cx, cy, r) for a circle, a box (x0, y0, x1, y1) for anything
-#: else, None for a shape whose area cannot be read - which counts as being in the way everywhere.
-Extent = tuple[float, float, float] | tuple[float, float, float, float] | None
 #: How many skipped extents one bucket will hold before it gives up and starts a new run. A bound on the
 #: work, not a rule about the map: past this the bucket is almost certainly blocked anyway.
 _SKIP_CAP = 400
@@ -190,51 +188,6 @@ def _extent(tag: str, at: dict[str, str], raw: str) -> Extent:
     return (min(xs) - pad, min(ys) - pad, max(xs) + pad, max(ys) + pad)
 
 
-def _hits(a: Extent, b: Extent) -> bool:
-    """Do these two painted areas touch? An unknown one is treated as touching everything.
-
-    A CIRCLE IS TESTED AS A CIRCLE (feature 153). Boxes are what every other shape gets, but a scatter
-    of round blobs is exactly where a box lies most: two crowns whose boxes overlap in a corner do not
-    touch at all, and under the box test they refuse to merge for nothing. Measured on Kuwabata's
-    woodland, where the difference is thousands of elements."""
-    if a is None or b is None:
-        return True
-    if len(a) == 3 and len(b) == 3:
-        return (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 <= (a[2] + b[2]) ** 2
-    ba, bb = _box(a), _box(b)
-    return not (ba[2] < bb[0] or bb[2] < ba[0] or ba[3] < bb[1] or bb[3] < ba[1])
-
-
-def _box(e: tuple[float, ...]) -> tuple[float, float, float, float]:
-    """A disc's bounding box, or a box unchanged."""
-    if len(e) == 3:
-        x, y, r = e
-        return (x - r, y - r, x + r, y + r)
-    return (e[0], e[1], e[2], e[3])
-
-
-def _refused(b: dict[str, Any], ext: Extent) -> bool:
-    """May this bucket NOT take an element painting inside `ext`? Three ways it may not.
-
-    A TRANSLUCENT SHAPE MAY NOT MERGE WITH ONE IT OVERLAPS (feature 148, measured). Two blobs at
-    opacity 0.85 stack darker where they cross; the same two as subpaths of ONE path are a single 0.85
-    fill and the crossing goes light. Small - 0.0025% of the reference hamlet's pixels - and still the
-    picture changing, which feature 134's FR-002 forbids.
-
-    NOR MAY AN OUTLINED ONE (feature 153, measured on Kuwabata). A path paints ALL its subpath fills and
-    only THEN its stroke, so an earlier crown's outline that a later crown's fill used to hide comes back
-    over it: the dike-pond map's woodland read as a heap of glass rings, and the page sat 0.255% of
-    pixels from its own PNG against the reference hamlet's 0.015%.
-
-    And nothing may move BACKWARD past a different element it overlaps - the `skip` extents gathered
-    since this bucket's last member, or `blocked` when one of them could not be read at all."""
-    if b["blocked"]:
-        return True
-    if (b["translucent"] or b["outlined"]) and any(_hits(ext, e) for e in b["extents"]):
-        return True
-    return any(_hits(ext, e) for e in b["skip"])
-
-
 def _outlined(tag: str, at: dict[str, str]) -> bool:
     """Does this element paint a fill AND a stroke? Those two are painted in different PASSES once the
     element is a subpath of a merged path - every fill, then the one stroke - so where two of them
@@ -321,19 +274,35 @@ def merge_primitives(s: str) -> str:
             if got is not None:
                 got["members"].append(idx)
                 got["extents"].append(ext)
+                _file_extent(got, ext)
                 joined = got
             else:
                 _st = dict(at)
                 _translucent = any(float(_st.get(k, 1) or 1) < 1.0 for k in ("opacity", "fill-opacity", "stroke-opacity"))
-                joined = {"first": idx, "members": [idx], "extents": [ext], "skip": [], "blocked": False, "tag": tag, "translucent": _translucent, "outlined": _outlined(tag, _st)}
+                joined = {
+                    "first": idx,
+                    "members": [idx],
+                    "extents": [ext],
+                    "skip": [],
+                    "blocked": False,
+                    "tag": tag,
+                    "translucent": _translucent,
+                    "outlined": _outlined(tag, _st),
+                    "ext_grid": _BoxGrid(),
+                    "ext_none": False,
+                    "skip_grid": _BoxGrid(),
+                }
+                _file_extent(joined, ext)
                 buckets[key] = joined
                 order.append(joined)
         for other in buckets.values():
-            if other is joined:
+            if other is joined or other["blocked"]:  # a blocked bucket never reads its skips again (feature 278)
                 continue
             other["skip"].append(ext)
             if ext is None or len(other["skip"]) > _SKIP_CAP:
                 other["blocked"] = True
+            else:
+                other["skip_grid"].add(ext)
 
     #: what each element becomes: its own text, nothing (it was gathered into an earlier one), or the path
     repl: dict[int, str] = {}
@@ -409,7 +378,7 @@ HIT_PRIORITY: tuple[str, ...] = ("stream", "village lane", "bund", "bund beans",
 #: THE STRUCTURES A LIFTED BOX MUST NOT SWALLOW. `HIT_ON_TOP` puts a box above the ink, and the rule it
 #: is allowed under is that a box may beat empty ground and area fills but never another feature's drawn
 #: glyph. It broke that rule the moment it shipped: the sluice box took 88.4% of one pig sty's own
-#: footprint and 42.8% of a duck pen's (settlement-review, 2026-08-29, 0.25 px grid) - the sty's center
+#: footprint and 42.8% of a duck pen's, since retired (settlement-review, 2026-08-29, 0.25 px grid) - the sty's center
 #: is 4.67 px from a lifted line whose half-width is 7.2, so the box simply contained it, and the GM's
 #: "really hard to click on" moved from the sluice onto a farm building. Every one of these is a rect in
 #: the manifest, so the layer is clipped against them: the box keeps the open ground and gives up the
@@ -418,7 +387,7 @@ HIT_PRIORITY: tuple[str, ...] = ("stream", "village lane", "bund", "bund beans",
 #: EVERY KEY LISTED MUST RECORD `x/y/w/h`: a key whose records carry some other shape (a well's `x,y,r`,
 #: a footbridge's `span`, a sluice gate's bare `x,y,rot`) makes no hole and no error, so
 #: `test_every_keep_clear_key_makes_its_holes` counts holes against records on a real manifest.
-HIT_KEEP_CLEAR: tuple[str, ...] = ("houses", "byres", "farm_sheds", "farm_fixtures", "duck_pens", "pig_sties", "kosatsuba")
+HIT_KEEP_CLEAR: tuple[str, ...] = ("houses", "byres", "farm_sheds", "retirement_houses", "farm_fixtures", "pig_sties", "kosatsuba")
 HIT_WIDEN_FACTOR = 4.0
 HIT_WIDEN_MIN = 6.0
 #: The scrub's hit region is where its MARKS are, not its recorded polygon (the polygon is the whole
@@ -473,7 +442,7 @@ def _in_any(x: float, y: float, polys: Sequence[Sequence[Sequence[float]]]) -> b
     return False
 
 
-def marks_region(strings: Sequence[str], cell: float = HIT_CELL, grow: int = 1, within: Sequence[Sequence[Sequence[float]]] = ()) -> str:
+def marks_region(strings: Sequence[str], cell: float = HIT_CELL, grow: int = 1, within: Sequence[Sequence[Sequence[float]]] = (), points: Sequence[tuple[str, str]] = ()) -> str:
     """Rects over the grid cells that hold a mark of the given strings - the scrub's real extent -
     GROWN by `grow` cells around every mark and kept inside the recorded footprints `within`. The
     growth is what makes a bare patch INSIDE the scrub count as scrub (the GM, 2026-08-28: "patches
@@ -481,7 +450,9 @@ def marks_region(strings: Sequence[str], cell: float = HIT_CELL, grow: int = 1, 
     the village's deliberate clearing, wider than two cells, stays clear; the footprint stops the
     growth spilling past the scrub's own edge. The rects carry fill="none" so the highlight never
     paints them - the first cut left the attribute off and the grid showed as gold steps."""
-    marked: set[tuple[int, int]] = set()
+    # `points`: the marks' own coordinate strings where the caller holds them (a blade slot's roots, feature 284) - the very
+    # figures the regex below reads out of the text
+    marked: set[tuple[int, int]] = {(int(float(x) // cell), int(float(y) // cell)) for x, y in points}
     for s in strings:
         for m in _MARK_XY.finditer(s):
             x, y = (m.group(1), m.group(2)) if m.group(1) is not None else (m.group(3), m.group(4))
@@ -519,14 +490,15 @@ def _inline_hits(s: str, key: str) -> str:
     return hit_copies(s, *HIT_WIDEN[key]) if key in HIT_WIDEN and key not in HIT_ON_TOP else ""
 
 
-def wrap(s: str, tag: ClsTag) -> str:
+def wrap(s: str, tag: ClsTag, premerged: bool = False) -> str:
     """The HTML form of one record-stream string: unchanged when unclassed or ruled out; wrapped in its
     class group when classed; two copies for a `Split` (fill-only under the fill class, stroke-only under
     the stroke class - the paddy body and the bund from one polygon); piece by piece for `Parts`."""
     if tag is None or tag == NOT_HIGHLIGHTED or not s:
         return s
     if isinstance(tag, str):
-        return _open(tag, isinstance(tag, Planted)) + merge_primitives(s) + _inline_hits(s, tag) + "</g>"
+        # `premerged`: a blade slot the finish wrote in its merged form (`merge_lines`), which `merge_primitives` returns as it is
+        return _open(tag, isinstance(tag, Planted)) + (s if premerged else merge_primitives(s)) + _inline_hits(s, tag) + "</g>"
     if isinstance(tag, Split):
         fill_copy = _ATTR_STROKE.sub(' stroke="none"', s)
         stroke_copy = _ATTR_FILL.sub(' fill="none"', s)
@@ -805,12 +777,12 @@ def _keep_clear_clip(manifest: dict[str, Any] | None) -> tuple[str, str]:
             bw = abs(w * math.cos(rot)) + abs(h * math.sin(rot)) + 0.2
             bh = abs(w * math.sin(rot)) + abs(h * math.cos(rot)) + 0.2
             holes.append(f"M{x - bw / 2:.1f},{y - bh / 2:.1f}h{bw:.1f}v{bh:.1f}h{-bw:.1f}Z")
-            # ...AND THE APRON A GLYPH IS DRAWN OUTSIDE ITS OWN BOX. A duck pen's `wet` reaches 6-7 px
+            # ...AND THE APRON A GLYPH IS DRAWN OUTSIDE ITS OWN BOX. A duck pen's `wet` (retired by 269 B32) reached 6-7 px
             # past its `w` x `h`, and the lifted box was taking 10.17% of one apron (settlement-review
             # rounds 3-4). Any auxiliary polygon on the record is held clear too - which is a BBOX with
             # no size bound, so a record that ever carries a large `poly` (a pond ring, a compound
             # outline) would punch a correspondingly large hole, and the count test would not see it.
-            for extra in ("wet", "poly"):
+            for extra in ("poly",):
                 pts = rec.get(extra)
                 if isinstance(pts, list) and len(pts) > 2:
                     xs, ys = [float(q[0]) for q in pts], [float(q[1]) for q in pts]
@@ -833,6 +805,7 @@ def render_page(
     registry: dict[str, FeatureClass] = CLASSES,
     caveat_lead: str = CAVEAT_LEAD,
     within: Sequence[tuple[str, ...]] | None = None,
+    blade_starts: dict[int, list[tuple[str, str]]] | None = None,
 ) -> str:
     """The whole page as one string - `write_html` writes it; tests read it.
 
@@ -845,6 +818,7 @@ def render_page(
     and openable, `"r": 0`. The raster is a RENDER: `finish()` passes the PNG's own condition, so a roll a test
     makes never pays the 7.3 s and 450 MB spike of a picture nobody opens (specs/208 research.md R1)."""
     present = present_classes(tags)
+    blades = blade_starts or {}
     # THE OFF-MAP INK IS DROPPED FIRST (feature 200, FR-001): 90% of a hamlet page's subpaths lay outside
     # the viewBox - the hinterland scatter the generator draws over the whole commons and the crop never
     # shows (specs/200 research.md R2). Invisible by construction, and the reason the page still loads
@@ -852,8 +826,9 @@ def render_page(
     # without). Only classed strings are judged; the sheet and the unclassed pass through.
     vb = raster.viewbox_of(strings[0]) if strings else None
     if vb is not None:
-        strings = [raster.drop_offmap(s, vb) if t is not None and t != NOT_HIGHLIGHTED else s for s, t in zip(strings, tags, strict=True)]
-    wrapped = [wrap(s, t) for s, t in zip(strings, tags, strict=True)]
+        # ...but not a blade slot the finish culled already, by this same rule (feature 284, FR-006; `flush_blade_groups`)
+        strings = [raster.drop_offmap(s, vb) if t is not None and t != NOT_HIGHLIGHTED and i not in blades else s for i, (s, t) in enumerate(zip(strings, tags, strict=True))]
+    wrapped = [wrap(s, t, premerged=i in blades) for i, (s, t) in enumerate(zip(strings, tags, strict=True))]
     if within is not None:
         wrapped = [part_of(w, ks) for w, ks in zip(wrapped, within, strict=True)]
     # the hit regions go right after the SHEET (the first "-"-tagged string), under everything drawn
@@ -872,7 +847,11 @@ def render_page(
             for rec in (manifest or {}).get(mk) or []
             if isinstance(rec, dict) and rec.get("poly") and roles.get(str(rec.get("role", "*")), roles.get("*")) == key
         ]
-        rects = marks_region([s for s, t in zip(strings, tags, strict=True) if t == key], within=polys)
+        rects = marks_region(
+            [s for i, (s, t) in enumerate(zip(strings, tags, strict=True)) if t == key and i not in blades],
+            within=polys,
+            points=[pt for i, t in enumerate(tags) if t == key and i in blades for pt in blades[i]],
+        )
         if rects:
             regions += _open(key) + f'<g class="hit" fill="none" style="pointer-events: fill">{rects}</g></g>'
     regions += hit_regions(manifest, present - HIT_FROM_MARKS)
@@ -978,6 +957,7 @@ def write_html(
     registry: dict[str, FeatureClass] = CLASSES,
     caveat_lead: str = CAVEAT_LEAD,
     within: Sequence[tuple[str, ...]] | None = None,
+    blade_starts: dict[int, list[tuple[str, str]]] | None = None,
 ) -> None:
     """`<base>.html`, beside the map's other outputs. The map's `<base>.notes.md` is read here if it
     exists - one place, derived from the output path rather than searched for, so a stale or foreign
@@ -985,4 +965,4 @@ def write_html(
     render condition (feature 208) - see `render_page`; `registry` the vocabulary (feature 262)."""
     notes = read_map_notes(path[: -len(".html")] + ".notes.md") if path.endswith(".html") else EMPTY
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write(render_page(strings, tags, name, meta, manifest, notes, with_raster=with_raster, registry=registry, caveat_lead=caveat_lead, within=within))
+        fh.write(render_page(strings, tags, name, meta, manifest, notes, with_raster=with_raster, registry=registry, caveat_lead=caveat_lead, within=within, blade_starts=blade_starts))

@@ -16,6 +16,7 @@ from .civic_grounds import CivicGroundsMixin
 from .farm_fixtures import FarmFixturesMixin, PondStockMixin
 from .fields import FieldsMixin
 from .finish import FinishMixin
+from .hard_ground import HardGroundMixin
 from .homestead_parts import HomesteadPartsMixin
 from .houses import HousesMixin
 from .land import LandMixin
@@ -45,6 +46,7 @@ class Settlement(
     CityMixin,
     CastleCivicMixin,
     HousesMixin,
+    HardGroundMixin,  # feature 278: the hard no-build ground, out of houses.py
     RollingMixin,
     FinishMixin,
     FarmFixturesMixin,
@@ -68,6 +70,7 @@ class Settlement(
         # WORK YARDS: every farmstead bundle carries a threshing yard unless the generator declares the
         # settlement grows no rice (feature 150: the dike-pond hamlet; `meta.work_yards`, `_bundle_geom`).
         self._work_yards: bool = True
+        self._house_racks: bool = False  # a rack by each house's yard - changeable harvest weather (feature 282, `yards.rack_segment`)
         self.out_cls: list[ClsTag] = []
         self.top_cls: list[ClsTag] = []
         self.toplabels_cls: list[ClsTag] = []
@@ -81,6 +84,7 @@ class Settlement(
         self._blade_groups: list[tuple[int, str, list[tuple[str, str, str, str]]]] = []
         # the scatter's other marks - brush dots, pines, wet tint, glints - kept as (extent, string) until finish culls the off-frame ones (feature 225)
         self._mark_groups: list[tuple[int, list[tuple[float, float, float, float, str]]]] = []
+        self._blade_starts: dict[int, tuple[str, list[tuple[str, str]]]] = {}  # id(slot string) -> (the string, its blades' roots) - for the page (feature 284)
         # the frame the scatter may predict (feature 224): a throw outside it is skipped before the keep-out test; each frame
         # used is kept so `finish()` can record whether the view stayed inside the tightest of them
         self._scatter_frame: tuple[float, float, float, float] | None = None
@@ -89,6 +93,11 @@ class Settlement(
         self._site_chains: Any = None
         self._site_corridors: Any = None
         self._free_ground: Any = None  # the static ground's surely-taken cells while a site boundary is installed (feature 276)
+        # which way the farmhouses face (269 B18, `rolling/bearing.py`): the common bearing a hamlet rolls, and the margin its
+        # lanes follow; None elsewhere, where `_house_rot` keeps the +/-5 degree rake
+        self._house_bearing: float | None = None
+        self._bearing_follow: Any = None
+        self._unreachable: Any = None  # the ground no way can reach while a site boundary is installed (feature 278)
         self._seat_search: dict[str, int] = {
             "candidates": 0,
             "placer_calls": 0,
@@ -187,6 +196,7 @@ class Settlement(
         self._pending_block: Poly | None = None  # ...and the pond's no-build rect that must follow it (see `fields/comb.py`)
         self._hard_cache_key: tuple[int, ...] | None = None
         self._hard_cache: list[Any] = []
+        self._hard_grid: tuple[list[Any], PointGrid] | None = None  # `_hard_index`'s grid, keyed by the hard list it was built from (feature 278)
         # SWEPT/TENDED GROUND around sacred + funerary features - a keep-out for the LOOSE HINTERLAND
         # SCATTER (commons scrub + marsh reeds) ONLY, not for building placement and not for the grove.
         # A shrine precinct, the ground under a torii and along its sando, and the collar tended around
@@ -210,6 +220,7 @@ class Settlement(
         self._bbox_cache: dict[Any, Any] = {}  # id(poly-list) -> (len, [per-poly (minx,miny,maxx,maxy)]) for the collision
         #                           pre-filter: reject a far polygon cheaply before the O(vertices) corner /
         #                           segment tests (the homestead solver probes _rect_blocked ~100k+ times)
+        self._stream_idx_cache: Any = None  # (streams, their key, stream_segment_index) - `_rect_on_stream`'s index (feature 281)
         self._water_obs_cache: Any = None  # (lengths-key, [(poly, keep-out half-width, bbox)]) - same pre-filter idea
         #                                for _rect_on_water's irrigation lines (channels / ditches / streams)
         self._clip = 0
@@ -271,6 +282,7 @@ class Settlement(
             "marshes": [],
             "byres": [],
             "farm_sheds": [],
+            "retirement_houses": [],
             "farm_fixtures": [],
             "persimmons": [],
             "quarters": [],
@@ -544,6 +556,14 @@ class Settlement(
     # A WOOD is drawn as individual trees at true density (see _tree_stand for the research).
     CANOPY_SPACING_FT = 13.0  # ~600 canopy stems/ha - one tree per ~180 sq ft
     CANOPY_R_FT = 8.5  # mean crown radius; a real canopy crown is ~5-8 m across
+    # THE WOODLAND COMMONS IS STOCKED ON ITS OWN FIGURES (269 B28; research/vegetation/230, "How thickly was a worked
+    # coppice stocked"): a worked konara coppice stood as a thicket of thin stems, about 1,700 a hectare - one to ~63
+    # sq ft, centers near 8 ft - a calibration on overgrown stands (the planted Tsukuba stand at 29 years, inside the
+    # 1,460-2,063 of woods left grown to 26-31), so probably thinner than a wood at its cut. The crown is drawn 8-9 ft
+    # across so neighbors just meet: a GUESS sized from the spacing, because no crown width was found. The belt and the
+    # other woods keep the two figures above (vegetation/060 and 070) until they are researched in their own right.
+    COMMONS_SPACING_FT = 8.0  # centers near 8 ft: 1,700 stems/ha (vegetation/230)
+    COMMONS_CROWN_R_FT = (4.0, 4.5)  # an 8-9 ft crown, the radius rolled per crown (vegetation/230; a GUESS)
     FOREST_FLOOR = "#5C7042"  # shaded litter/understory between the crowns, not a terrain wash
     # How deep a canvas-filling wood is REVEALED by the crop: ~8 ranks of trees past the tree line.
     # That is enough for the canopy to close and read as a wood running off the frame; beyond it the
@@ -565,6 +585,7 @@ class Settlement(
         "flophouses",
         "storehouses",
         "farm_sheds",
+        "retirement_houses",
         "merchant_estates",
         "wells",
         "fire_towers",

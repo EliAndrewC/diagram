@@ -1,0 +1,733 @@
+{
+ "area": "homesteads",
+ "feature": "287",
+ "rules": [
+  {
+   "id": "H01",
+   "rule": "No farmstead part (yard, garden bed, kura, byre, shed, privy and every farm fixture, persimmon, homestead bamboo stand) stands across a stream from its own house. Stated: tests/hamletgen/test_pool_261.py::test_every_farmstead_part_stands_on_its_house_bank; fit.py:_parts_across_stream docstring (feature 261 FR-013, a GUESS recorded in research/homesteads).",
+   "rows": [
+    "R1 tests/hamletgen/test_pool_261.py::test_every_farmstead_part_stands_on_its_house_bank"
+   ],
+   "owner": "l7r/diagram/settlement/shrines_wells/byres.py:draft_byres (_courtyard_byre_seat, _yard_shed_seat, the spiral) is the one unguarded placer; the census owner is right for the gap. Under H06 the household-form byre moves into the bundle and is then owned by settlement/rolling/fit.py:_parts_fit. Homestead bamboo (hamletgen/homesteads/bamboo.py) records no `of`, so its bank is unguarded AND untested - add `of` and the refusal there too.",
+   "mechanism": "ONE predicate, lifted: `crosses_a_stream(house: Pt, part: Pt, streams) -> bool` in settlement/_geom (the straight house-to-part line crosses no reach of any stream). Today it is written TWICE - fit.py:_parts_across_stream (segments_cross over part centers) and fixtures.py:across_the_brook - FR-003 makes both call the one function. draft_byres refuses a seat (courtyard arm, yard shed, every spiral probe) for which crosses_a_stream(owner, seat) is true and tries the next; bamboo.py refuses a stand likewise and records `of`.",
+   "fallback": "The seat is refused and the next is offered (spiral ring / next wall). A household-form byre with no same-bank seat left is covered by H06 (the byre is reserved in the envelope, so there is no later seat to lose). A bamboo stand with no same-bank seat is not drawn for that homestead (the stand is a per-homestead scatter with no count rule).",
+   "later_stages": "hamletgen/frame.py:round_the_brooks (inside stage_crossings) re-fillets the brook AFTER every part is placed, moving the course up to ~8-9 px into a bend, so a part near the water could change bank. CLOSED by reorder: round_the_brooks moves to the stage that lays the brook (before stage_homesteads), so every bank test reads the final course; its only input is the brook and the channel taps, both known then. Its docstring's reason for running late ('once the ways that were routed against it are laid') is itself satisfied, since the ways are then routed against the rounded course.",
+   "unit_test": "A homestead beside a brook whose owner's only courtyard seat on the wall facing the water lies across a narrow brook (a stream poly passing 10 px from the house wall): draft_byres (and bamboo) must seat the byre on the house's bank or elsewhere; assert crosses_a_stream(owner, byre) is False for every emitted byre. Second test: round_the_brooks runs before stage_homesteads in STAGES (order assertion) and a part 6 px outside the unrounded bend keeps its bank.",
+   "retire": "tests/hamletgen/test_pool_261.py::test_every_farmstead_part_stands_on_its_house_bank (finished-map sweep).",
+   "risk": "medium",
+   "notes": "Moving round_the_brooks earlier moves every lane routed against a brook on the pool (Inashiro, Mizuguchi, Kashikawa) by a few px; the byre change moves only byres that stood across the water."
+  },
+  {
+   "id": "H02",
+   "rule": "No per-household grain plot (dry_plots[].homestead, meta.homestead_fields) is laid by a house. Stated: tests/hamletgen/test_pool_261.py::test_no_household_grain_plot_is_laid_by_its_house; the GM 2026-09-28 (research/homesteads.html, research/fields.html).",
+   "rows": [
+    "R1 tests/hamletgen/test_pool_261.py::test_no_household_grain_plot_is_laid_by_its_house"
+   ],
+   "owner": "none - the producer was removed; census right.",
+   "mechanism": "Guaranteed by absence: no code path writes `homestead` on a dry plot or meta.homestead_fields. Made durable without a rolled map: a static engine test (grep of l7r/ for the writer keys) - the one predicate is the absence of the writer.",
+   "fallback": "n/a",
+   "later_stages": "none",
+   "unit_test": "A static test over the engine source asserting no assignment of `homestead_fields` and no `homestead` key written into a dry-plot record.",
+   "retire": "tests/hamletgen/test_pool_261.py::test_no_household_grain_plot_is_laid_by_its_house (reads rolled pool maps).",
+   "risk": "low"
+  },
+  {
+   "id": "H03",
+   "rule": "A nucleated cluster never stands with its nearest house more than 700 px (ft at hamlet scale) from a field, nor any house more than 700 px + two cluster spans away. Stated: tests/gate/test_cluster_and_homes.py::test_the_cluster_abuts_the_ground_it_works; research/homesteads.html 'How close does a farmhouse stand to the paddy?' (6 ft minimum, ~700 ft tolerance).",
+   "rows": [
+    "R1 tests/gate/test_cluster_and_homes.py::test_the_cluster_abuts_the_ground_it_works"
+   ],
+   "owner": "l7r/diagram/settlement/rolling/fit.py:_parts_fit (the check on the PLACED house, which every seating pass reaches through try_place). The census names stage_homesteads; the decision that can breach it is the placed position after try_place's one computed move, which only _parts_fit sees - the stages.py _pretest docstring records exactly this OPEN DEFECT.",
+   "mechanism": "New predicate lifted from the test: `within_field_reach(s, x, y) -> bool` = distance from the house center to the field outline (s._site_chains while the boundary is installed) <= s.px(FIELD_REACH_FT = 700). _parts_fit refuses a house for which it is False. Holding EVERY house to 700 implies both clauses of the test (nearest <= 700, every house <= 700 + two spans), so the test's looser second clause is subsumed; the lattice ranks for attempt < 4, today bounded only by _row_out + _rank_step*(attempt+1), are now bounded by it too.",
+   "fallback": "The seat is refused and the next candidate offered; a household left unseated is H14's (the exhaustive pass scans only ground inside this reach, so the two rules share one ground).",
+   "later_stages": "none - houses are not moved after stage_homesteads.",
+   "unit_test": "A SitePlan whose lattice rank at attempt 3 lies 760 px from the field outline: try_place at that seat returns False; a seat at 690 px is accepted.",
+   "retire": "tests/gate/test_cluster_and_homes.py::test_the_cluster_abuts_the_ground_it_works.",
+   "risk": "low",
+   "notes": "The bar is a rail far outside the pool's measured 12-300 ft, so no pool map should move; it narrows H14's rescue ground only on a pathological site."
+  },
+  {
+   "id": "H04",
+   "rule": "A map never declares a cluster_shape its drawn cluster aspect does not fall inside (declared honored, or recorded unhonored). Stated: tests/gate/test_cluster_and_homes.py::test_the_cluster_draws_the_shape_it_rolled; stages.py:561-624.",
+   "rows": [
+    "R1 tests/gate/test_cluster_and_homes.py::test_the_cluster_draws_the_shape_it_rolled"
+   ],
+   "owner": "l7r/diagram/hamletgen/homesteads/stages.py:stage_homesteads (the declaration block, 610-624); census right.",
+   "mechanism": "Already by construction: the drawn aspect (seats.py:cluster_aspect over the placed houses) is measured and meta.cluster_shape is written only when it lies inside CLUSTER_DRAWN_ASPECT (non-round shapes held above round's ceiling), else cluster_shape_unhonored. Lift lines 610-624 into `declare_cluster_shape(houses, shape) -> dict` so the stage and its unit test read one function.",
+   "fallback": "n/a - the declaration always describes the drawing.",
+   "later_stages": "none - houses fixed after stage_homesteads.",
+   "unit_test": "declare_cluster_shape on constructed house sets: a 3.8:1 string with shape 'round' declares unhonored; a 1.97 cluster with shape 'crescent' declares unhonored (round's ceiling); a 1.5 cluster with 'round' declares round.",
+   "retire": "tests/gate/test_cluster_and_homes.py::test_the_cluster_draws_the_shape_it_rolled (the declaration half of tests/gate/test_generator_contracts.py stays only if it is the unit test above).",
+   "risk": "low"
+  },
+  {
+   "id": "H05",
+   "rule": "The rolled cluster_shape is drawn (the knob honored by the drawing, not merely declared unhonored). Stated: future-work/farming-communities.md 'A real defect fell out of the retraction' (GM 2026-08-24: a rolled knob is honored by what is drawn).",
+   "rows": [
+    "R3 future-work/farming-communities.md 'A real defect fell out of the retraction' (cluster_shape)"
+   ],
+   "owner": "l7r/diagram/hamletgen/homesteads/stages.py:stage_homesteads (front_cap, the lattice depth, the rescue cloud) with hamletgen/cluster.py:seat_cluster (the band's aspect, CLUSTER_BAND_ASPECT).",
+   "mechanism": "Best available: steer and repair at seat time. (1) Every candidate in the lattice and rescue rounds is ranked by `aspect_after(standing, q)` - cluster_aspect of the standing houses plus the candidate - toward the rolled band's middle, before centrality. (2) After the quota is seated, a repair pass moves the outermost house on the long axis to a free seat on the short axis (through try_place, all its rules) while the aspect lies outside the band and a move improves it. Predicate: stages' cluster_aspect with CLUSTER_DRAWN_ASPECT.",
+   "fallback": "Where the ground does not admit the shape (the lane skeleton or a narrow margin forbids it) the repair stops and cluster_shape_unhonored is recorded - that is the violation, so this is NOT a guarantee; see impossible list.",
+   "later_stages": "none after stage_homesteads.",
+   "unit_test": "A band on a narrow margin (dep capped by a dike) with shape 'round': the steered placer draws aspect <= 2.0 where the constructed ground admits a disc; a second constructed ground that admits only a string records unhonored (documents the limit).",
+   "retire": "none until the review rules; H04's test covers the declaration.",
+   "risk": "high",
+   "notes": "consts.py CLUSTER_BAND_ASPECT's record: round honored on ~5 of 21 cohort rolls; the FORM_BOUND and front-row-band docstrings in stages.py record three failed attempts at binding shape by the band."
+  },
+  {
+   "id": "H14",
+   "rule": "A hamlet (any form, the polder included) never seats under 85% of its declared households, and never zero when a seeding pass (front row, lane frontage, cloud) offers nothing. Stated: tests/gate/test_generator_contracts.py::test_every_declared_household_is_seated; research/settlements.html 'Is every household in a hamlet actually drawn?' (030: 0.85-1.05, aims at one apiece); stages.py:131.",
+   "rows": [
+    "R1 tests/gate/test_generator_contracts.py::test_every_declared_household_is_seated",
+    "R1 tests/gate/hamletgen/test_driver.py::test_a_rolled_cohort_passes_the_whole_gate (seating clause)",
+    "R1 tests/soak/test_polder_fall_0.py::test_the_polder_seats_its_households_and_lands_its_acreage (seating clause)",
+    "R1 tests/soak/test_seatings.py::test_the_cluster_seeds_cloud_still_seats_a_hamlet_when_the_rows_offer_nothing",
+    "R1 tests/soak/test_seatings.py::test_lane_frontage_seats_the_hamlet_when_the_field_row_offers_nothing",
+    "R2 hamletgen/homesteads/stages.py:stage_homesteads:441-520 (rescue rounds 5-7, then the shortfall)",
+    "R3 tests/gate/hamletgen/test_driver.py:109 and tests/soak/test_polder_fall_0.py:113 (placed >= round(0.85*households))"
+   ],
+   "owner": "l7r/diagram/hamletgen/homesteads/stages.py:stage_homesteads; census right. The census's later-stage worry (Settlement.farmsteads' survivor filter) is unfounded: _farmsteads_bundle appends every pending record to `survivors` (rolling/farmsteads.py:33-46), so no seated house is dropped there - the unit test pins that.",
+   "mechanism": "After the seventh round, while placed < households, a final EXHAUSTIVE pass: `free_seats(s, plan)` scans the whole legal ground (the installed site boundary's free ground, inside H03's within_field_reach) on a grid of BUNDLE_PITCH/3, center-out from the seat, and offers every point to the same _seat_allowed + try_place until the quota is met. try_place's envelope test is the one predicate that decides fit, so the pass adds no rule of its own; H03 bounds its ground. The quota is capacity-checked BEFORE seating: plan_site (hamletgen/plan.py) sizes the canvas so the legal ground within reach holds households x the largest envelope at the measured packing density, growing the canvas where it does not - a decision at plan time, not a finished-map retry. The driver's 'a re-roll may not seat fewer' clause (driver.py:484) goes with the re-roll (H16).",
+   "fallback": "The exhaustive pass exhausts the legal ground only if the ground within reach is physically full of homesteads; the plan-time capacity sizing prevents that for any declared count. Nothing ships under the floor and no whole-map re-roll runs. Residual stated in the impossible list: packing is not exact, so the capacity factor is a measured calibrated liberty.",
+   "later_stages": "none - houses are fixed after stage_homesteads and the survivor filter keeps every seated record.",
+   "unit_test": "(a) A partial plan with front_row and lane_frontage patched to yield nothing and a rescue cloud that is refused everywhere but one pocket off-band: stage_homesteads still seats >= ceil(0.85*households) via free_seats. (b) A 20-household spec on a boxed band (the constructed Kuwabata dike-head case): placed == 20. (c) _farmsteads_bundle returns every pending record.",
+   "retire": "test_every_declared_household_is_seated; the seating clauses of test_a_rolled_cohort_passes_the_whole_gate and test_the_polder_seats_its_households_and_lands_its_acreage; both tests/soak/test_seatings.py seating tests (their partial rolls become the unit test's constructed inputs); the placed >= round(0.85*h) excuses in test_driver.py:109 and test_polder_fall_0.py:113.",
+   "risk": "high",
+   "notes": "The exhaustive pass reaches only maps that ship short today (cohort seed 25 was 19/20, Inashiro 13/15 in the record); the canvas sizing can move every map whose canvas grows. FORM_BOUND's docstring records a failed widening (feature 126) - that widened the band for all houses; this pass only runs for the households the rounds left."
+  },
+  {
+   "id": "H28",
+   "rule": "A hamlet never seats more farmhouses than its declared households. Stated: tests/soak/test_seatings.py::test_the_linear_frontage_pass_stops_once_the_households_are_housed.",
+   "rows": [
+    "R1 tests/soak/test_seatings.py::test_the_linear_frontage_pass_stops_once_the_households_are_housed"
+   ],
+   "owner": "l7r/diagram/hamletgen/homesteads/stages.py:stage_homesteads; census right.",
+   "mechanism": "Already by construction: every seating loop checks the quota before placing (front_cap = min(households, ...), the frontage pass's `placed >= households: break`, the round loop and the per-candidate loop); H14's exhaustive pass is written with the same guard. Retirement houses are recorded apart (homesteads/retirement.py).",
+   "fallback": "n/a",
+   "later_stages": "none",
+   "unit_test": "stage_homesteads on a constructed linear plan whose connector offers 3x households verge seats: placed == households.",
+   "retire": "tests/soak/test_seatings.py::test_the_linear_frontage_pass_stops_once_the_households_are_housed (a soak roll) - replaced by the unit test on constructed input.",
+   "risk": "low"
+  },
+  {
+   "id": "H08",
+   "rule": "A farmhouse footprint never exceeds 2.7:1 long to wide. Stated: tests/gate/test_cluster_and_homes.py::test_no_farmhouse_is_drawn_as_a_shed.",
+   "rows": [
+    "R1 tests/gate/test_cluster_and_homes.py::test_no_farmhouse_is_drawn_as_a_shed"
+   ],
+   "owner": "l7r/diagram/settlement/houses.py:_try_place_bundle (the size roll); census right.",
+   "mechanism": "Already bounded: length factor [0.85, 1.35] x 46 and depth [0.90, 1.10] x 28 give at most 62.1/25.2 = 2.46; the dispersed path scales 46x28 / 64x40 uniformly; the headman is 92x56. Made explicit: a module constant FARMHOUSE_MAX_ASPECT = 2.7 and `house_aspect_bound()` derived from the factor ranges, asserted at import, and _try_place_bundle raises ValueError on an explicit size=(w, h) past the bound (a caller's input error, not a map check).",
+   "fallback": "n/a - no roll can exceed it; an explicit oversize is refused at the call.",
+   "later_stages": "none",
+   "unit_test": "house_aspect_bound() over the factor ranges <= 2.7; try_place(..., size=(80, 20)) raises; the extreme corner of both factor rolls draws <= 2.46.",
+   "retire": "tests/gate/test_cluster_and_homes.py::test_no_farmhouse_is_drawn_as_a_shed.",
+   "risk": "low"
+  },
+  {
+   "id": "H17",
+   "rule": "A hamlet never draws its plain farmhouses so uniform that under 20% differ from the median footprint by more than 5%. Stated: tests/gate/test_generator_contracts.py::test_farmhouses_vary_in_size; research/homesteads farmhouse-size spread.",
+   "rows": [
+    "R1 tests/gate/test_generator_contracts.py::test_farmhouses_vary_in_size"
+   ],
+   "owner": "l7r/diagram/settlement/houses.py:_try_place_bundle (length/depth factors, 658-659); census right.",
+   "mechanism": "Replace the position hash with a STRATIFIED LADDER keyed on the household's seat ordinal: `size_ladder(seed, households)` returns households length factors evenly spaced over [0.85, 1.35] (depth over [0.90, 1.10]) in a seed-shuffled order; the k-th seated household takes rung k. Evenly spaced factors put at most ~22% of rungs within +/-5% of the median footprint at any N >= 3, so the share differing is >= 78% by construction. The ladder is what feeds _household_seat's cached template (rolling/bundle.py), so the size is fixed before the envelope is tested. H06 and H45 draw their keepers from the same per-household lot.",
+   "fallback": "n/a - every roll satisfies it.",
+   "later_stages": "none - size set at seat time.",
+   "unit_test": "size_ladder for N in 3..40 over 50 seeds: share of footprints off the median by > 5% >= 20%; a seated cluster's drawn sizes equal the ladder's rungs.",
+   "retire": "tests/gate/test_generator_contracts.py::test_farmhouses_vary_in_size.",
+   "risk": "medium",
+   "notes": "Moves every nucleated map (every house changes size, so every envelope and every later packing decision shifts)."
+  },
+  {
+   "id": "H18",
+   "rule": "A hamlet never draws a house with the headman role. Stated: tests/gate/test_map_vocabulary.py::test_a_hamlet_has_no_headman_of_its_own.",
+   "rows": [
+    "R1 tests/gate/test_map_vocabulary.py::test_a_hamlet_has_no_headman_of_its_own"
+   ],
+   "owner": "l7r/diagram/settlement/rolling/place.py:PlacerMixin.headman (the only role='headman' producer); census names stage_homesteads, which never assigns a role.",
+   "mechanism": "Already by construction (the hamlet tier calls try_place(x, y, 'plain') only; headman's one caller is roll_village under scale == 'village'). Hardened: headman() raises when meta.scale == 'hamlet'.",
+   "fallback": "n/a",
+   "later_stages": "none",
+   "unit_test": "A hamlet-scale Settlement calling headman() raises; stage_homesteads on a constructed plan records no role.",
+   "retire": "tests/gate/test_map_vocabulary.py::test_a_hamlet_has_no_headman_of_its_own.",
+   "risk": "low"
+  },
+  {
+   "id": "H45",
+   "rule": "About 30% of farmhouses carry a kura (p = 0.2993), the headman always; the share does not alias with position. Stated: research/homesteads 'Which farmhouses have a storehouse?'; future-work/farming-communities.md 'the kura roll under-delivers 2.2x' and 'The storehouse share is a positional roll'.",
+   "rows": [
+    "R3 future-work/farming-communities.md OPEN 2026-08-19 kura roll FINDING 1 / 'The storehouse share is a positional roll'"
+   ],
+   "owner": "l7r/diagram/settlement/houses.py:_try_place_bundle line 676 (`self._hjit(x, y, 3.0) < 0.30`); census right.",
+   "mechanism": "A COUNT, not a per-seat Bernoulli: the per-household lot (`household_lot(seed, k)`, shared with H06 and H17) marks household k a kura keeper iff floor((k+1)*p + 0.5) > floor(k*p + 0.5) over a seed-shuffled ordinal order - so after n seats exactly round(n*p) houses carry one, whatever n is. The kura is reserved in the envelope as today (shed=True). Headman stays forced.",
+   "fallback": "A keeper whose envelope-with-kura fits nowhere passes the kura to the next seated household (the lot is a quota by ordinal, so the count still closes at round(n*p)).",
+   "later_stages": "none",
+   "unit_test": "household_lot for n in 5..40: kura count == round(n*0.2993); a constructed row of 12 seats at one pitch (the aliasing case) carries 4.",
+   "retire": "none on a finished map today (the share was never gated); the unit test is new.",
+   "risk": "medium",
+   "notes": "Moves every nucleated map where the kura set changes (the envelope differs by the kura's depth)."
+  },
+  {
+   "id": "H06",
+   "rule": "A settlement never seats fewer byres than its recorded byre_target. Stated: tests/gate/test_cluster_and_homes.py::test_the_settlement_seats_the_byres_it_asked_for; byres.py (byres_meet_their_target; a shortfall is a placement failure, not a settlement without oxen); research/homesteads/300 (BYRE_KEEPER_SHARE).",
+   "rows": [
+    "R1 tests/gate/test_cluster_and_homes.py::test_the_settlement_seats_the_byres_it_asked_for",
+    "R2 settlement/shrines_wells/byres.py:draft byre placement (shortfall):265,287-368"
+   ],
+   "owner": "l7r/diagram/settlement/houses.py:_try_place_bundle + settlement/rolling/bundle.py:_bundle_layout for the household forms (the census's owner draft_byres cannot guarantee it: it runs in stage_appurtenances after every courtyard may be full). For detached_commons, hamletgen/homesteads/stages.py:stage_homesteads reserves the shed pockets.",
+   "mechanism": "Household forms (courtyard, yard shed): the keeper is decided at seat time by the per-household lot (as H45, Bresenham quota over BYRE_KEEPER_SHARE rolled once), and the byre's arm or yard shed is a PART of the bundle - `base['byre']` laid by the same geometry _courtyard_byre_seat/_yard_shed_seat compute, boxed in `boxes` and inside the envelope - so a keeper is seated only with room for its beast (the envelope test is the one predicate) and draft_byres only draws the reserved parts. The lot prefers the larger size-ladder rungs for keepers (H17), keeping the footprint-as-wealth reading. detached_commons: `target` shed pockets are reserved in the seat band before the lattice, spread by the existing minimax + borrower-floor key, and the houses pack round them.",
+   "fallback": "A keeper whose envelope-with-byre fits nowhere passes the byre to the next seated household (quota by ordinal, so the count closes at round(n*share)). A detached_commons pocket that cannot be reserved in the band is offered along the band's widened rounds; the band precedes every house, so a pocket fails only on a band with no free ground, which H14's capacity sizing excludes.",
+   "later_stages": "retirement_houses runs after the byres (stages.py:677) and must not take a reserved byre's ground - it reads s.placed, which holds the bundle bbox including the byre. H01's bank rule applies to the byre part through _parts_fit.",
+   "unit_test": "A courtyard-form cluster packed so every courtyard is full at stage_appurtenances (the constructed 8-of-16 case): with the byre in the bundle, byres drawn == byre_target; a keeper seat whose byre arm would lap a neighbor is refused and the next seat taken.",
+   "retire": "tests/gate/test_cluster_and_homes.py::test_the_settlement_seats_the_byres_it_asked_for.",
+   "risk": "high",
+   "notes": "Moves every map with byres (keepers change from wealth-ranked-at-the-end to lotted-at-seat, envelopes grow for keepers); the draft-team seat order recorded at 269 B42 changes. The spread across the cluster is by seat order now, not by the minimax key - recorded as a deliberate change in the decisions table."
+  },
+  {
+   "id": "H07",
+   "rule": "A threshing yard's house-facing edge never runs more than 0.3 degrees off its house's wall. Stated: tests/gate/test_cluster_and_homes.py::test_every_threshing_yard_fronts_its_house_square; GM 2026-09-26.",
+   "rows": [
+    "R1 tests/gate/test_cluster_and_homes.py::test_every_threshing_yard_fronts_its_house_square"
+   ],
+   "owner": "l7r/diagram/settlement/homestead_parts/yards.py:_attach_yard; census right.",
+   "mechanism": "Already by construction (the quad is built with level=_facing, then turned by the house's rot). FR-003: the test reads poly[0]->poly[1] (the N edge) while the placer levels the HOUSE-FACING edge, which the legacy path may seat E/W/S; lift `house_facing_edge(ox, oy, hx, hy, rot)` from lines 566-569 and have the unit test read the edge it names.",
+   "fallback": "n/a",
+   "later_stages": "none",
+   "unit_test": "_attach_yard for yards N, E, W and S of a house at rot in {-30, 0, 5, 90}: the edge house_facing_edge names is parallel to the wall within 0.3 degrees.",
+   "retire": "tests/gate/test_cluster_and_homes.py::test_every_threshing_yard_fronts_its_house_square (tests/settlement/test_homestead_parts.py's sweep is the unit test and stays).",
+   "risk": "low"
+  },
+  {
+   "id": "H19",
+   "rule": "A drawn threshing yard never holds fewer than 4 mats. Stated: tests/hamletgen/test_pool_282.py::test_every_drawn_yard_is_a_floor_of_mats_and_racks_follow_the_weather; spec 282 FR-004.",
+   "rows": [
+    "R1 tests/hamletgen/test_pool_282.py::test_every_drawn_yard_is_a_floor_of_mats_and_racks_follow_the_weather (the 4-mat minimum)"
+   ],
+   "owner": "l7r/diagram/settlement/homestead_parts (_yard_dims, the rolled yard size) - the census's owner mat_cells only lays what fits; the decision that can make 4 impossible is the yard's size.",
+   "mechanism": "Constrain the candidate set: _yard_dims floors the rolled size at YARD_MIN, derived (not picked) as the smallest yard whose worst-case quad (the 0.10 inward jitter) and worst-case rack keep-out still seat 4 mats at the widest gap - computed once from MAT_FT, MAT_GAPS_FT, RACK_* and asserted by `mat_cells(YARD_MIN...) >= 4`. The rolled lognormal is otherwise untouched; this clips only its lower tail, a degree along a continuum (calibrated liberty), recorded beside the constant.",
+   "fallback": "n/a - no yard below the floor is rolled.",
+   "later_stages": "none - mats drawn in the same call as the yard.",
+   "unit_test": "mat_cells at YARD_MIN over every rot in 0..90 step 5 and 200 quad salts, with and without the rack: >= 4. The existing test_a_yard_with_room_for_no_mat_draws_none becomes a test of mat_cells alone (still true of the function) and _yard_dims never returns such a size.",
+   "retire": "The 4-mat clause of test_every_drawn_yard_is_a_floor_of_mats_and_racks_follow_the_weather.",
+   "risk": "medium",
+   "notes": "Moves any homestead whose rolled yard lay below the floor (envelopes grow); the research's yard-size distribution loses its smallest tail - to be checked against research/homesteads' yard-area entry before landing."
+  },
+  {
+   "id": "H20",
+   "rule": "A drawn threshing yard on a changeable-weather map always has a rack. Stated: test_pool_282 (rack presence); the harvest_weather knob (research: every farmstead gathers its rack by the house where the weather is changeable).",
+   "rows": [
+    "R1 tests/hamletgen/test_pool_282.py::test_every_drawn_yard_is_a_floor_of_mats_and_racks_follow_the_weather (rack presence)"
+   ],
+   "owner": "l7r/diagram/settlement/homestead_parts (_yard_dims); rack_segment returns None at yards.py:395 when no side leaves RACK_MIN_FT.",
+   "mechanism": "Same floor as H19: YARD_MIN also guarantees a side edge with RACK_MIN_FT map-north of the center at every rot (the half-plane solve in rack_segment is the one predicate: `rack_segment(YARD_MIN..., rot, side) is not None` for every rot and both sides). The docstring's 'a yard of the sizes the roll makes always takes a rack' becomes a derived assertion instead of a hope.",
+   "fallback": "n/a",
+   "later_stages": "none",
+   "unit_test": "rack_segment over rot 0..359 step 1 at YARD_MIN dims: never None.",
+   "retire": "The rack-presence clause of test_every_drawn_yard_is_a_floor_of_mats_and_racks_follow_the_weather.",
+   "risk": "low"
+  },
+  {
+   "id": "H21",
+   "rule": "A drawn yard never holds more than two-thirds of full-cover mats. Stated: test_pool_282; spec 282.",
+   "rows": [
+    "R1 test_pool_282 (two-thirds ceiling)"
+   ],
+   "owner": "l7r/diagram/settlement/homestead_parts/yards.py:mat_cells (thin_evenly, 133); census right.",
+   "mechanism": "Already by construction: thin_evenly caps the count at floor(area/MAT_SQ_FT * 2/3).",
+   "fallback": "n/a",
+   "later_stages": "none",
+   "unit_test": "Existing unit tests in tests/settlement/test_yard_mats_282.py plus a large yard asserting the cap.",
+   "retire": "The ceiling clause of the pool test.",
+   "risk": "low"
+  },
+  {
+   "id": "H22",
+   "rule": "A drawn yard never falls short of a third where a 1 ft lattice seats more. Stated: test_pool_282; spec 282 FR-004 amended 2026-09-28.",
+   "rows": [
+    "R1 test_pool_282 (third-or-best-lattice floor)"
+   ],
+   "owner": "l7r/diagram/settlement/homestead_parts/yards.py:mat_cells (grid search + _exact_lattice); census right.",
+   "mechanism": "Already by construction; unit tests test_a_yard_short_of_a_third_draws_as_many_as_any_1_ft_lattice_would_fit and ..._band_thinner_than_any_grid_is_found.",
+   "fallback": "n/a",
+   "later_stages": "none",
+   "unit_test": "The existing two unit tests.",
+   "retire": "The floor clause of the pool test.",
+   "risk": "low"
+  },
+  {
+   "id": "H23",
+   "rule": "A rack never has a corner map-south of its yard's center. Stated: test_pool_282; research entry 030 (the drying floor needs the southern sun).",
+   "rows": [
+    "R1 test_pool_282 (rack never map-south)"
+   ],
+   "owner": "l7r/diagram/settlement/homestead_parts/yards.py:rack_segment; census right.",
+   "mechanism": "Already by construction (half-plane solve in map coordinates after the rake); unit test test_the_rack_never_stands_in_the_yards_map_south_half.",
+   "fallback": "n/a",
+   "later_stages": "none",
+   "unit_test": "The existing unit test.",
+   "retire": "The rack-south clause of the pool test.",
+   "risk": "low"
+  },
+  {
+   "id": "H24",
+   "rule": "A settled-weather map draws no rack. Stated: test_pool_282; harvest_weather knob.",
+   "rows": [
+    "R1 test_pool_282 (no rack when settled)"
+   ],
+   "owner": "l7r/diagram/settlement/homestead_parts/yards.py:_draw_threshing_yard (yards.py:407 reads _house_racks, set at hamletgen/water/skeleton.py:85).",
+   "mechanism": "Already by construction.",
+   "fallback": "n/a",
+   "later_stages": "none",
+   "unit_test": "_draw_threshing_yard with _house_racks False returns no rack.",
+   "retire": "The settled clause of the pool test.",
+   "risk": "low"
+  },
+  {
+   "id": "H25",
+   "rule": "A no-rice hamlet draws no threshing floor. Stated: test_pool_282; GM 2026-08-28 (feature 150).",
+   "rows": [
+    "R1 test_pool_282 (no floor on a no-rice hamlet)"
+   ],
+   "owner": "l7r/diagram/settlement/homestead_parts/yards.py:_attach_yard (579-580).",
+   "mechanism": "Already by construction (work_yards False records a forecourt, no ink).",
+   "fallback": "n/a",
+   "later_stages": "none",
+   "unit_test": "_attach_yard with work_yards False draws no floor and records a forecourt.",
+   "retire": "The no-rice clause of the pool test.",
+   "risk": "low"
+  },
+  {
+   "id": "H44",
+   "rule": "A drawn threshing yard never laps a paddy. Stated: future-work/farming-communities.md, seed 31's threshing yard laps a paddy (harvest_yards_clear of paddies).",
+   "rows": [
+    "R3 future-work/farming-communities.md seed 31's threshing yard laps a paddy"
+   ],
+   "owner": "l7r/diagram/settlement/rolling/fit.py:_parts_fit. The census names farmsteads():_attach_yard, but the bundle's yard is never nudged: _relax_gardens_south moves only GARDEN beds. What differs between the tested rect and the drawn yard is the quad jitter (_quad, 0.10 inward) and the rake - the test boxes are turned rects, the drawn quad is inscribed, so the likelier cause is a garden nudge or the legacy path; to be measured on seed 31 before the fix is chosen.",
+   "mechanism": "One predicate: `part_clear_of_fields(poly, field_polys)` (polygon-vs-outline, the gate's measure) applied in _parts_fit to the yard AS DRAWN (the jittered, turned quad - position-seeded, so computable at fit time) and in _relax_gardens_south to every shifted bed; a shift that fails is not taken.",
+   "fallback": "The seat is refused and the next offered; a garden nudge that fails stays unnudged (the nudge is already best-effort).",
+   "later_stages": "_relax_gardens_south in farmsteads() runs after placement - closed by giving it the same predicate. Nothing else moves a yard.",
+   "unit_test": "A homestead seated so its yard rect clears a paddy by 1 px but its jittered quad corner does not (constructed field poly): _parts_fit refuses; and a garden whose south nudge would enter a paddy is not nudged.",
+   "retire": "none today (no finished-map test holds it); the unit test is new.",
+   "risk": "low"
+  },
+  {
+   "id": "H09",
+   "rule": "A well never stands more than 95 px (edge gap) from every dwelling - it stands among the doors it serves, in a dooryard, not in the commons. Stated: tests/gate/test_cluster_and_homes.py::test_every_well_stands_among_the_doors_it_serves (wells_among_dwellings); the 井戸端 doctrine in wells.py; future-work 'the south well stands in the commons' (Inashiro, 100 ft from its nearest house).",
+   "rows": [
+    "R1 tests/gate/test_cluster_and_homes.py::test_every_well_stands_among_the_doors_it_serves",
+    "R2 hamletgen/homesteads/wells.py:wells:328-337 (open_seat last resort with no among-the-dwellings test)",
+    "R3 future-work/farming-communities.md OPEN 2026-08-27: the south well stands in the commons"
+   ],
+   "owner": "l7r/diagram/hamletgen/homesteads/wells.py:place_wells, with the WELL POCKET reserved at seat time in settlement/houses.py:_try_place_bundle (via rolling/bundle.py:_bundle_layout)",
+   "mechanism": "One predicate lifted from the test: `well_gap_to_dwellings(houses, x, y) -> float` (edge gap to each turned house rect). Every lattice rung replaces its nearest-house CENTER test (105-112 px, which admits an edge gap up to ~99 px) with well_gap_to_dwellings <= 95; the ring-probe rescue and the open_seat last resort are replaced by the pockets of H10/H11, which stand within 95 px of their house by construction (the pocket is laid at the dooryard side of the bundle, inside the envelope).",
+   "fallback": "A lattice seat that fails is not taken; a well is always available from the pockets, so no fallback seat without the floor exists.",
+   "later_stages": "none - houses fixed; wells placed in stage_appurtenances; village_grove skips clumps over a well (it does not move the well).",
+   "unit_test": "Houses constructed so the lattice's best seat is 112 px from a 26 px-deep house's center (edge gap ~99): place_wells refuses it; a constructed cluster whose only lattice seat is in the commons 100 px from every house draws its well at a pocket instead.",
+   "retire": "tests/gate/test_cluster_and_homes.py::test_every_well_stands_among_the_doors_it_serves.",
+   "risk": "medium"
+  },
+  {
+   "id": "H10",
+   "rule": "A settlement never has no well. Stated: wells.py:329-330 ('a settlement with NO well fails the gate outright', settlement_has_wells).",
+   "rows": [
+    "R2 hamletgen/homesteads/wells.py:wells:328-337 (if open_seat finds nothing the map has no well)"
+   ],
+   "owner": "l7r/diagram/hamletgen/homesteads/wells.py:place_wells, with the WELL POCKET reserved at seat time in settlement/houses.py:_try_place_bundle (via rolling/bundle.py:_bundle_layout)",
+   "mechanism": "The first seated household always carries a WELL POCKET: at seat time a house carries a pocket iff `needs_pocket(house)` = no pocket already reserved within 760 ft of it and surface_water_dist > 760 ft. The first house has no pocket to lean on, so it carries one unless surface water serves it (then the pocket goes to the first house surface water does not serve, or, if every house is surface-watered, to the first house anyway, so a well always exists). The pocket (16 px wellhead + its clearance) is a part of the bundle, boxed and inside the envelope - the envelope test is the predicate; place_wells draws every pocket as a well (s.well_at).",
+   "fallback": "A house whose envelope-with-pocket fits at no seat is not seated there; the next candidate seat is offered with the pocket. The pocket is never dropped once the house stands.",
+   "later_stages": "none - nothing moves a well; the grove skips it.",
+   "unit_test": "A cluster constructed so the lattice of place_wells is refused everywhere (every legal seat taken by courtyards): the map still draws >= 1 well, at the first house's pocket.",
+   "retire": "No finished-map test is named in the rows beyond the gate verdict; the pragma-no-cover last-resort branch and its comment are deleted.",
+   "risk": "medium"
+  },
+  {
+   "id": "H11",
+   "rule": "No household stands more than ~760 real ft from a well or open water. Stated: tests/gate/test_cluster_and_homes.py::test_every_household_can_reach_water (settlement_dwellings_watered); wells.py:271-274.",
+   "rows": [
+    "R1 tests/gate/test_cluster_and_homes.py::test_every_household_can_reach_water",
+    "R2 hamletgen/homesteads/wells.py:wells:276-327 (ring-probe rescue leaves the household dry)"
+   ],
+   "owner": "l7r/diagram/hamletgen/homesteads/wells.py:place_wells, with the WELL POCKET reserved at seat time in settlement/houses.py:_try_place_bundle (via rolling/bundle.py:_bundle_layout)",
+   "mechanism": "Coverage by construction: needs_pocket (H10) is asked of EVERY seated house, so each house is either within 760 ft of surface water (surface_water_dist, the test's own measure) or within 760 ft of a pocket that is drawn as a well. Pockets are created only where no pocket lies within 760 ft, so two pockets stand >= ~650 px apart - far past wells_not_clustered's 170 px - and the lattice wells place_wells adds afterwards (minimax, up to well_target) are held >= 170 px from every pocket. The ring-probe rescue (all '# pragma: no cover') is deleted.",
+   "fallback": "A house whose envelope-with-pocket fits nowhere is not seated at that candidate (H14 offers the next); no house stands without water.",
+   "later_stages": "Surface water is final before stage_homesteads (the brook, channels, pond are water stages), so a house watered by a stream stays watered; round_the_brooks' move (H01) is <= 9 px against a 760 ft reach.",
+   "unit_test": "A two-farm satellite constructed 500 px off the cluster with the neighborhood probes refused (cohort seed 18's shape): both houses stand within 760 ft of a drawn well; a house 70 ft from a stream carries no pocket.",
+   "retire": "tests/gate/test_cluster_and_homes.py::test_every_household_can_reach_water.",
+   "risk": "medium",
+   "notes": "Moves maps where the first-house pocket changes the first well's site (every map: the first well now stands at a dooryard rather than the innermost lattice seat unless the lattice well supersedes it - pockets are all drawn, so a map may gain a well). Record the well count per map before/after (wells_sized_to_population's 2-20 households per well must still hold; unit-test it with a 10-house cluster)."
+  },
+  {
+   "id": "H12",
+   "rule": "No well holds the crop open (the frame stays tight to content; no single feature past the rest). Stated: crop_not_held_open_by_one_feature (wells.py _extent_added comments); future-work 'cohort seed 62's northern lobe' (a well 65 px past the next feature).",
+   "rows": [
+    "R3 future-work/farming-communities.md STILL OPEN cohort seed 62's northern lobe"
+   ],
+   "owner": "l7r/diagram/hamletgen/homesteads/wells.py:place_wells; census right.",
+   "mechanism": "The frame term turns from a score into a refusal: a lattice seat with `_extent_added(c) > 0` against s._crop_boxes (the box crop_to_content reads) is not taken. That was a tie-break only because a padded seat was sometimes the only way to water a household; the pockets (H10/H11) now carry coverage and stand inside their bundle's box, so no well is needed outside the box.",
+   "fallback": "A lattice well that fits only outside the crop box is not drawn; coverage is held by the pockets.",
+   "later_stages": "The crop box only grows after stage_appurtenances (woodland, pond, labels), so a seat inside it stays inside - conservative in the safe direction (the wells.py comment already states it).",
+   "unit_test": "A two-lobed cluster whose best minimax seat lies 65 px beyond every feature (seed 62's shape): place_wells does not draw it; every drawn well lies inside the crop box predicted at the time.",
+   "retire": "none - no finished-map test holds it today; the unit test is new.",
+   "risk": "low"
+  },
+  {
+   "id": "H13",
+   "rule": "No pig sty stands within SLUICE_CLEAR_FT (6 ft) of a pond sluice stub. Stated: tests/gate/test_no_feature_overlaps.py::test_no_pond_fixture_stands_on_its_ponds_sluice.",
+   "rows": [
+    "R1 tests/gate/test_no_feature_overlaps.py::test_no_pond_fixture_stands_on_its_ponds_sluice"
+   ],
+   "owner": "l7r/diagram/settlement/farm_fixtures.py:pond_fixture_fits; census right.",
+   "mechanism": "Already refused at seat time (poly_seg_dist of the rotated footprint against every dikepond_sluices segment); stage_pond_stock takes only seats that pass.",
+   "fallback": "n/a",
+   "later_stages": "none - sluices are laid before stage_pond_stock.",
+   "unit_test": "Existing tests/settlement/test_farm_fixtures.py (a seat 5 ft from a sluice refused).",
+   "retire": "tests/gate/test_no_feature_overlaps.py::test_no_pond_fixture_stands_on_its_ponds_sluice.",
+   "risk": "low"
+  },
+  {
+   "id": "H32",
+   "rule": "Every farm fixture kind is drawn at its rolled count (the per-hamlet prevalence band's share x households, and any spec floor). Stated: hamletgen/homesteads/fixtures.py:18-30 (FIXTURE_BANDS), research/homesteads.html 'The farmstead's fixtures'; the shortfall comment at fixtures.py:653-660.",
+   "rows": [
+    "R2 hamletgen/homesteads/fixtures.py:seat_farm_fixtures:653-660 (the unseated shortfall)"
+   ],
+   "owner": "l7r/diagram/hamletgen/homesteads/fixtures.py:farmstead_fixtures moves to seat time: settlement/houses.py:_try_place_bundle with rolling/bundle.py:_bundle_layout (the census owner is right about which code, wrong about where it must run: stage_hinterland is after the web, when the ground is already spent).",
+   "mechanism": "The GM's own design (fixtures.py docstring, 2026-09-12: 'place them and then determine what they have and then move on and place more homesteads'): each household's fixtures are decided by the per-household lot (a quota by ordinal per kind, exactly round(share x n) + floors) and laid as PARTS of the bundle at their attested seats (the first seat of each table: privy seat by its weights, eaves woodpile at a wall, corridor bath with its corridor, coop, heap, shrine corner, persimmon) inside the envelope, so the envelope test is the one predicate and a household is seated only with its fixtures. The web, laid after, threads round them (they are in s.placed and s.block_polys, as today). Fixture seats that need the web (field pit by the road, H32's `seat: roadside`) keep their stage-11 placement with a reserved field-edge fallback seat carried in the envelope.",
+   "fallback": "A household whose envelope with its lotted fixtures fits nowhere hands the fixture's quota to the next seated household (quota by ordinal: the count still closes).",
+   "later_stages": "The lane web can no longer take a fixture seat (fixtures precede it and are obstacles). across_a_lane (a lane between the house and its fixture) becomes the web's constraint: the web refuses a run between a house and any of its own parts - lift `crosses_own_plot(house, part, lane)` from across_a_lane and give it to the web router's obstacle set as the steading's union outline (steading_footprints already exists).",
+   "unit_test": "A boxed-in homestead (the constructed cases at tests/.../test_homesteads.py:383 and :511): the drawn count per kind == target; farm_fixtures_unseated is never written.",
+   "retire": "The fixtures-unseated excuse tests at test_homesteads.py:383 and :511 (they test the fallback FR-005 converts); any pool test reading farm_fixtures_unseated.",
+   "risk": "high",
+   "notes": "Reorders a stage the GM questioned (fixtures.py docstring); every pool map moves (envelopes grow, the web threads round more). The docstring records why it was put late (a tread would otherwise have to be re-threaded) - that is exactly what the web now does by routing round placed boxes."
+  },
+  {
+   "id": "H33",
+   "rule": "A hamlet's rolled woodpile form is the form drawn. Stated: future-work 'A rolled form the sheet never draws' (kizuma rolled on Kashikawa/Kuwabata, none drawn); GM 2026-08-24 (a rolled knob is honored by what is drawn); fixtures.py:25-30 (research/homesteads/260: the kizuma only where the homestead has the windbreak at its back, else the eaves stack).",
+   "rows": [
+    "R3 future-work/farming-communities.md 'A rolled form the sheet never draws' (woodpile_form kizuma)"
+   ],
+   "owner": "l7r/diagram/hamletgen/homesteads/fixtures.py (woodpile seating; the kizuma table from belt_edge/kizuma_seats).",
+   "mechanism": "The research already makes the form PER HOMESTEAD: the kizuma stands only where the windbreak is at the homestead's back. So the knob's value is read through one predicate, `woodpile_form_for(knob, homestead, belt) -> str` = 'kizuma' iff knob == 'kizuma' and the belt lies within the kizuma reach behind this homestead, else 'eaves' (the researched else), and 'shed' iff knob == 'shed'. The placer seats exactly that form (a kizuma seat is laid in the envelope as H32's part when the belt is known - the belt is DERIVED from the houses, so under the seat-time move the kizuma is seated after the belt stage with its ground reserved); meta.woodpile_forms_drawn is then fully explained by the predicate, and the test asserts drawn form == woodpile_form_for per homestead.",
+   "fallback": "A homestead whose kizuma seat along the belt is blocked draws its eaves stack (the research's own alternative), recorded per fixture as form='eaves'. NOT a dropped fixture.",
+   "later_stages": "stage_windbreak draws the belt that the kizuma follows; the kizuma reads plan.belt, which belt_polygon derives from the seated houses - the same expression, so no stage after can move it.",
+   "unit_test": "A hamlet rolling kizuma with a belt behind only its west half: every west homestead draws a kizuma, every east one an eaves stack, and woodpile_form_for agrees per homestead.",
+   "retire": "none today; the unit test is new.",
+   "risk": "medium",
+   "notes": "If the GM reads 'kizuma rolled' as 'every homestead a kizuma', that contradicts the researched rule (kizuma only with the belt at its back) - recorded, not a GM question: the research decides (constitution XII, FR-003)."
+  },
+  {
+   "id": "H34",
+   "rule": "A hamlet's rolled bath seat form (corridor or front_yard) is the form drawn. Stated: future-work 'A rolled form the sheet never draws' (bath_seat corridor rolled on Mizuguchi, baths drawn unjoined); fixtures.py:92-95 (269 B12: two attested forms, a KNOB rolled per hamlet).",
+   "rows": [
+    "R3 future-work/farming-communities.md 'A rolled form the sheet never draws' (bath_seat corridor)"
+   ],
+   "owner": "l7r/diagram/hamletgen/homesteads/fixtures.py (corridor_table, corridor_rect) moving into the bundle with H32.",
+   "mechanism": "The corridor bath is reserved in the envelope: when the hamlet rolled 'corridor', each bath household's bundle carries the bath shed AND its corridor (corridor_rect, the one geometry) as parts, so the envelope test admits the house only with its joined bath. No unjoined fallback exists once the parts are reserved.",
+   "fallback": "A bath household whose envelope with shed+corridor fits nowhere passes the bath to the next seated household (H32's quota rule).",
+   "later_stages": "The web routes round the corridor (it is in s.placed), so no later stage can cut it.",
+   "unit_test": "A corridor-rolled hamlet with the bath household's back wall 8 ft from a neighbor: that seat is refused and the next taken; every drawn bath carries rec['corridor'].",
+   "retire": "none today; the unit test is new.",
+   "risk": "medium"
+  },
+  {
+   "id": "H35",
+   "rule": "An eaves woodpile stands against a wall (within the wall gap of a building of its own steading). Stated: future-work 'Eaves woodpiles standing off the wall' (Mizuguchi F2: 5-7 of 10 stacks 10.5-27.8 ft off any building; Kuwabata 7 of 15); research/homesteads eaves woodpile.",
+   "rows": [
+    "R3 future-work/farming-communities.md 'Eaves woodpiles standing off the wall' / 'Woodpiles off the wall also on Kuwabata'"
+   ],
+   "owner": "l7r/diagram/hamletgen/homesteads/fixtures.py:farmstead_fixtures - the outward rungs (px(8)*k, fixtures.py:582-591) are what push an eaves stack off the wall; census right.",
+   "mechanism": "For kind woodpile in the eaves form, the seat set is constrained to wall-gap seats on EVERY wall of the steading's own buildings (house, kura, byre, bath shed - their turned rects), `wall_seats(steading, g)`; the outward and straight-out rungs are not offered to it. Predicate lifted from the finding: `against_a_wall(seat, steading_rects, g) -> bool` (edge gap <= _WALL_GAP_FT + tolerance), read by the unit test. Under H32 the stack is a bundle part at a wall seat, so the envelope admits it only at a wall.",
+   "fallback": "A homestead with no free wall seat for its stack passes the woodpile to the next seated household (H32 quota), never an off-wall stack.",
+   "later_stages": "The web cannot move a stack (obstacle); nothing later moves a fixture.",
+   "unit_test": "A homestead whose house back wall and flanks are taken by the privy, the bath and a lane corridor: the stack takes the kura's wall; with every wall taken, the fixture passes to the next household and no stack stands off a wall.",
+   "retire": "none today; the unit test is new.",
+   "risk": "low"
+  },
+  {
+   "id": "H30",
+   "rule": "The settlement's seat turns its back to the wind: the chosen margin's outward normal is within 45 degrees of the wind (WIND_BACK_MIN_DOT), and the belt stands on the regional northwest unless declared. Stated: hamletgen/consts.py:664-676 (feature 261); cluster.py:seat_cluster docstring; tests/hamletgen/test_pool_wind.py (seat_offwind asserted False; test_every_pool_hamlet_has_its_belt_on_the_regional_northwest is one of the GM's five).",
+   "rows": [
+    "R2 hamletgen/cluster.py:seat_cluster:82,119,244-245 (off-wind margin seated)",
+    "R2 hamletgen/cluster.py:seat_cluster:246 (recorded at hamletgen/ways/track.py:stage_seat:301)",
+    "R2 hamletgen/cluster.py:seat choice (offwind fallback):244-247",
+    "R3 future-work/farming-communities.md Sawada's seat off the regional northwest"
+   ],
+   "owner": "l7r/diagram/hamletgen/cluster.py:seat_cluster for the choice, but the decisions that remove every wind-facing margin are EARLIER: the dry hem (dry_plots, laid in the field/water stages), the canvas (plan_site), the toe/wet marsh. The guarantee therefore lives in hamletgen/plan.py (plan_site) + the hem placer, with seat_cluster refusing off-wind margins outright.",
+   "mechanism": "(1) seat_cluster: an off-wind margin is never a candidate (the offwind list and its fallback are deleted). (2) Reorder: the seat is chosen from the envelope, drain and toe BEFORE the dry hem is laid, and the hem placer refuses the chosen seat band plus its belt band (a reserved region, the same belt_polygon geometry) - so HARD 2 (back_fouled) cannot remove the windward flanks; the hem takes the other flank or the upslope stretch outside the reservation. (3) plan_site sizes the canvas with the windward margin's band + belt room (H31), so HARD 3 cannot. (4) What remains is HARD 1 and HARD 4 (below the drain / on the wet toe): they remove the windward flank only when the fall runs INTO the wind (the downslope toe faces the wind), which plan_site refuses at spec time for a rolled fall (the fall roll is constrained to leave a flank whose normal is within 45 degrees of the wind above the drain); a DECLARED fall that makes it impossible is an input error raised before any stage - see impossible list.",
+   "fallback": "None at seat time - by construction a legal wind-facing margin exists for every accepted spec. A declared spec that admits none is refused at spec load with the reason (not a finished-map check).",
+   "later_stages": "stage_windbreak draws the belt from the seat; the belt's side follows the seat's normal, so it cannot be undone. The copse and woodland do not move the seat.",
+   "unit_test": "seat_cluster on an envelope whose every wind-facing margin is hemmed (tests/hamletgen/test_cluster.py:62's constructed fan): raises nothing and returns a wind-facing seat once the hem is laid after the seat; a constructed plan with fall pointing into the wind is refused by plan_site's spec check; the returned seat's normal . wind >= WIND_BACK_MIN_DOT on 200 constructed fans.",
+   "retire": "tests/hamletgen/test_pool_wind.py's seat_offwind assertion and its belt-on-the-northwest sweep; tests/hamletgen/test_cluster.py:62's off-wind fallback test (it tests the branch FR-005 removes).",
+   "risk": "high",
+   "notes": "Reordering the hem after the seat moves every pool map's hem and therefore its seat; feature 261's record (cluster.py comments) shows two rounds of settlement-review over belt room vs brook on Mizuguchi."
+  },
+  {
+   "id": "H31",
+   "rule": "The windbreak belt stands 36-146 ft upwind of the cluster ON the canvas (not cramped off it). Stated: cluster.py:225-231, belt_off_canvas / BELT_ROOM_MAX_OFF (feature 261, settlement-review of Mizuguchi: 'a strip ... holed where they stood in it').",
+   "rows": [
+    "R2 hamletgen/cluster.py:seat_cluster:55,120,242-245 (the best CRAMPED margin is seated)"
+   ],
+   "owner": "l7r/diagram/hamletgen/plan.py:plan_site (the canvas size and the field's place on it); seat_cluster only chooses among what the canvas allows.",
+   "mechanism": "plan_site sizes the canvas so that, on every side the wind can come from within 45 degrees, the margin beyond the field envelope holds the seat band's depth (dep, from households) + 12 + the belt's 146 ft + its width: a closed-form bound from the same quantities seat_cluster computes (lat/dep from households and CLUSTER_BAND_ASPECT). With that, belt_off_canvas <= BELT_ROOM_MAX_OFF on at least one wind-facing margin by construction; seat_cluster then treats 'cramped' as a refusal, and the cramped list is deleted.",
+   "fallback": "none - the canvas is sized before the field is placed; frame crops to content later, so a larger working canvas costs no ink.",
+   "later_stages": "stage_frame crops to content: it cannot clip the belt (the belt is content).",
+   "unit_test": "plan_site for a 40-household elongated spec with the NW wind: the windward margin holds band + belt; belt_off_canvas of the chosen seat <= 0.2; seat_cluster on a constructed canvas with no room raises (the input plan_site never produces).",
+   "retire": "The cramped-fallback branch's tests, if any, in tests/hamletgen/test_cluster.py.",
+   "risk": "medium",
+   "notes": "A larger canvas can shift where the field sits relative to the canvas edge, and so its carve (anything reading plan.W/H)."
+  },
+  {
+   "id": "H16",
+   "rule": "Every seated farmhouse (nucleated/linear) is reached by the connected way network within WEB_REACH_FT, along ground that is not a neighbor's steading - with no whole-map re-roll. Stated: hamletgen/ways/checks.py:unreached_houses; FR-002 names generate's re-roll on farmhouses_reach_a_way; future-work 2b 'The packer must RESERVE ways', 2b-i 'THE SKELETON MUST FOLLOW THE MARGIN', 'A house at the edge of the lanes' reach' (Kuwabata: 96 ft with a neighbor's back yard between).",
+   "rows": [
+    "R1 tests/gate/hamletgen/test_driver.py::test_a_rolled_cohort_passes_the_whole_gate (reach clause)",
+    "R3 future-work/farming-communities.md 2b The packer must RESERVE ways",
+    "R3 same section 'A house at the edge of the lanes' reach' (Kuwabata)",
+    "R3 2b-i THE SKELETON MUST FOLLOW THE MARGIN (far-arm houses, corner seats)",
+    "R3 hamletgen/driver.py re-roll loop (test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden)"
+   ],
+   "owner": "l7r/diagram/the seat (hamletgen/homesteads/stages.py via settlement/rolling/fit.py:_parts_fit) reserving an ACCESS CORRIDOR, and hamletgen/ways/serve.py:_serve_stragglers honoring it; the driver.py re-roll loop (430-485) is deleted.",
+   "mechanism": "The packer reserves ways (future-work 2b's own design). At seat time each homestead registers an ACCESS CORRIDOR: a footpath-width strip (WEB_FABRIC_GAP x 2) from its door (the yard's open side) to the nearest point of the already-reserved access network or the band's field-side front (the front row reaches the field spur; each rank reaches the corridor of the rank in front). The corridor is a keep-out for every later envelope (it goes into the site boundary's corridor set that _envelope_blocked already reads), so no later homestead can hem the house in; _parts_fit refuses a seat whose corridor cannot be laid clear (one predicate: `access_corridor(s, geom) -> Poly | None`). _serve_stragglers then lays a way along each reserved corridor not already served, so the served network reaches every house by construction. unreached_houses becomes the unit test's predicate, and it measures reach along a path that crosses no other steading (steading_footprints), so the Kuwabata 'through the neighbor's yard' case fails it (FR-003: the check measured straight-line distance). Seat_cluster gains the edge-turn term refusing a field corner of more than ~110 degrees (2b-i), and the skeleton arms are laid through _margin_frame.",
+   "fallback": "A seat whose corridor cannot be laid is refused and the next offered (H14 carries the count). No house is left unreached, and no roll repeats.",
+   "later_stages": "stage_web, sweeps (_join_orphan_ways, _bridge_collinear_breaks), smooth and stage_crossings rewrite lanes after the corridors: each must keep every reserved corridor's way (the reach set is re-asserted by the one predicate at the end of each rewriting stage's own unit test, and trims (_trim_to_service) are forbidden to cut a way that is some house's only corridor - it is passed as `keep`).",
+   "unit_test": "(a) The Sawada/cohort seed 5 shape: a rank whose houses would be boxed by the rank behind - with corridors reserved the rank behind is seated around them and unreached_houses == []. (b) The Kuwabata case: a house 96 ft from a lane with a neighbor's yard between is unreached by the predicate, and with its corridor it is served. (c) generate has no re-roll path (the loop is gone).",
+   "retire": "tests/gate/hamletgen/test_driver.py::test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden and the driver's avoid-list plumbing (the salted lattice in stages.py:189-194, _avoid_seats); the reach clause of test_a_rolled_cohort_passes_the_whole_gate.",
+   "risk": "high",
+   "notes": "driver.py:430-436 records that 'three separate seat-time tests were built and all three failed, because reachability depends on fabric that does not exist when seats are chosen' - a corridor RESERVATION is not a test of fabric that does not exist but the fabric itself, which is why it is proposed; UnreachableGround (boundary.py:279) is the partial precedent. Moves every nucleated map."
+  },
+  {
+   "id": "H15",
+   "rule": "A rolled hamlet (fan or polder) never lands its paddy acreage more than 15% off target. Stated: test_a_rolled_cohort_passes_the_whole_gate and test_the_polder_seats_its_households_and_lands_its_acreage (acreage clauses); the ACREAGE_SHORT excuse (seeds 45/47) that FR-006 removes.",
+   "rows": [
+    "R1 tests/gate/hamletgen/test_driver.py::test_a_rolled_cohort_passes_the_whole_gate (acreage clause)",
+    "R1 tests/soak/test_polder_fall_0.py::test_the_polder_seats_its_households_and_lands_its_acreage (acreage clause)"
+   ],
+   "owner": "l7r/diagram/hamletgen/water/fit.py:fit_field (fan) and hamletgen/water/polder.py:fit_polder; the canvas/envelope is hamletgen/plan.py:plan_site. Cross-area: the FIELDS design should hold this rule; recorded here because the rows are bundled with the seating.",
+   "mechanism": "fit_field keeps the closest carve when no aspect lands within tolerance (fit.py:89-98). The guarantee: when every aspect saturates (the fan cannot reach the target in the envelope), the envelope is grown by the measured shortfall (area ratio) and the fit re-run INSIDE fit_field - a placer-internal widening, not a finished-map re-roll - until within 15% or the canvas bound; plan_site sizes the canvas from the target acreage so the bound is never the binding one. fit_polder grows its block the same way. Predicate: `acreage_within(target, drawn, 0.15)`.",
+   "fallback": "none past the canvas bound, which plan_site sets from the acreage.",
+   "later_stages": "Later stages that carve the field (the toe marsh, the dike, stage_sink) must not remove paddy area below the band: the fit's measured area is the area after those carves, or they run before the measurement.",
+   "unit_test": "fit_field on seeds 45/47's constructed fan (saturated at every aspect): the drawn acreage is within 15%.",
+   "retire": "The ACREAGE_SHORT seed list and the acreage clauses of both finished-map tests.",
+   "risk": "high",
+   "notes": "The ACREAGE_SHORT ledger is the direct record that fit_field does not guarantee it; the growth moves the fan and therefore the seat on every map near saturation."
+  },
+  {
+   "id": "H36",
+   "rule": "A path runs to the hamlet's own burial ground. Stated: research religion-and-death 140 ('the graves and the paths to the graves are cleaned') and 190 (funeral path); future-work OPEN 2026-09-28 'OWED: no way reaches a burial ground' (Inashiro, Kashikawa, Kuwabata).",
+   "rows": [
+    "R3 future-work/farming-communities.md OPEN 2026-09-28 OWED: no way reaches a burial ground"
+   ],
+   "owner": "l7r/diagram/hamletgen/burial.py:stage_burial (seat) + hamletgen/ways/web.py:stage_web way-targets; census right.",
+   "mechanism": "stage_burial registers a WAY TARGET at the ground's edge nearest the houses (a point record the web reads, e.g. plan.way_targets) together with an access corridor to the ground reserved like H16's; stage_web lays a footpath spur to every registered target through the same router. Predicate: `burial_reached(M)` = some served way end within the footpath's reach of the ground's edge.",
+   "fallback": "A burial seat whose access corridor cannot be laid is not taken (seat_ground's next candidate); with no seat the ground is 'no seat' as today (that is a knob-fallback of its own: see notes).",
+   "later_stages": "Sweeps and trims must keep the spur (passed as keep to _trim_to_service).",
+   "unit_test": "stage_burial + stage_web on a constructed hamlet with the ground 120 ft beyond the last house past scrub: a way ends at the ground's edge.",
+   "retire": "none today.",
+   "risk": "medium",
+   "notes": "burial.py's 'no seat' branch leaves a rolled 'own' knob undrawn (meta.burial_ground = 'no seat') - a knob-not-honored fallback not in these rows; flagged for the owning area."
+  },
+  {
+   "id": "H37",
+   "rule": "A web link ends ON the way it joins (distance 0, a T-junction), not a clearance short. Stated: future-work OPEN 2026-08-24 'the web stops exactly one clearance short of the lane it should join' (four Inashiro lanes 28.1-28.5 ft short, WEB_CLEARANCE 28).",
+   "rows": [
+    "R3 future-work/farming-communities.md OPEN 2026-08-24 the web stops one clearance short"
+   ],
+   "owner": "l7r/diagram/hamletgen/ways/serve.py:_lay_web_lane with the corridor registration in ways/fabric.py:291 and joints.py:369 (s.lane(..., clearance=WEB_CLEARANCE)); cross-area (ways).",
+   "mechanism": "The joined way's corridor is exempted for the link's TERMINAL segment (the router is told the target way's id, and the terminal segment is snapped to the joined way's centerline), and ONE declared join tolerance (0, with the snap) is shared by the placer and every join test - FR-003 ('a 0-40 ft dead band between generator and check join tolerances'). Predicate: `link_end_on_way(end, way) -> bool` (seg distance == 0 after the snap).",
+   "fallback": "A link whose terminal segment cannot be snapped (the join point is under another obstacle) is re-aimed at the nearest reachable point of the same way; failing that it is not laid, and the house it served falls to H16's corridor.",
+   "later_stages": "smooth/sweeps must keep the snapped terminal on the way (smooth holds endpoints fixed).",
+   "unit_test": "_lay_web_lane with a target lane registered at WEB_CLEARANCE: the laid run's last point lies on the target's centerline.",
+   "retire": "none today.",
+   "risk": "medium"
+  },
+  {
+   "id": "H38",
+   "rule": "A lane never breaks mid-run (no hole in a way the eye reads as one), including corner holes invisible to the aim test. Stated: future-work 2c 'The way-repair passes want ONE design'.",
+   "rows": [
+    "R3 future-work/farming-communities.md 2c The way-repair passes want ONE design (breaks)"
+   ],
+   "owner": "l7r/diagram/hamletgen/ways/sweeps.py:_bridge_collinear_breaks and _join_orphan_ways, with serve.py:_serve_stragglers; cross-area (ways).",
+   "mechanism": "One graph repair stage replaces the three passes: the finished lane set is built into a graph with the ONE join tolerance (H37); every pair of ends that are collinear within the aim cone OR form a corner hole within the join tolerance is joined by a straight span (before any detour), each repair emitted once from a repair set so the same break cannot be repaired twice. Predicate: `way_graph_holes(lanes, tol) -> list` (empty after the stage).",
+   "fallback": "A break whose span crosses hard ground is not bridged; its two ends are then separate ways and each must end at what it serves (H41), so no hole is read as one run.",
+   "later_stages": "stage_crossings rounds and squares crossings after: it reshapes geometry at fords only; its own unit test asserts way_graph_holes stays empty.",
+   "unit_test": "A constructed web with a corner hole at a 100-degree turn and a collinear break of 12 ft: after the stage, way_graph_holes == [] and each break was repaired once.",
+   "retire": "none today.",
+   "risk": "medium"
+  },
+  {
+   "id": "H39",
+   "rule": "No way is doubled (two ways laid along the same ground). Stated: future-work 2c.",
+   "rows": [
+    "R3 future-work/farming-communities.md 2c (doubled way)"
+   ],
+   "owner": "l7r/diagram/hamletgen/ways/sweeps.py (the same repair stage as H38); cross-area (ways).",
+   "mechanism": "The repair stage's repair set is keyed by the pair of ends, so a break is repaired once; and a new span is refused where it runs within the tread width of an existing way for more than its own width (`doubles_a_way(span, lanes)`).",
+   "fallback": "A refused doubled span is not laid; the existing way already serves.",
+   "later_stages": "none after the repair stage but crossings (see H38).",
+   "unit_test": "The 'needle' case: a break around a needle obstacle repaired from both sides - one span only.",
+   "retire": "none today.",
+   "risk": "low"
+  },
+  {
+   "id": "H40",
+   "rule": "No way fragment is shorter than _WEB_MIN_FT (30 ft). Stated: future-work 2c (4 ft fragments); ways/fabric.py:207 _WEB_MIN_FT.",
+   "rows": [
+    "R3 future-work/farming-communities.md 2c (4 ft fragments)"
+   ],
+   "owner": "l7r/diagram/hamletgen/ways/sweeps.py / fabric.py (the repair stage and the trims); cross-area (ways).",
+   "mechanism": "After the repair stage and each trim, a run under _WEB_MIN_FT is either merged into the way it touches (if it continues one) or removed; the predicate `short_fragments(lanes, _WEB_MIN_FT)` is read by both the stage and its test.",
+   "fallback": "Removed - a 4 ft fragment serves nothing; H16's reach predicate is asserted after the removal, and a fragment that is some house's only corridor is kept by extending it to its house (never short).",
+   "later_stages": "Later trims run the same predicate at their end.",
+   "unit_test": "A constructed repair that leaves a 4 ft stub: short_fragments == [] after the stage.",
+   "retire": "none today.",
+   "risk": "low"
+  },
+  {
+   "id": "H41",
+   "rule": "A lane ends at what it serves: no skeleton arm or web lane overruns its last steading. Stated: future-work 2c 'Also found: skeleton arm overruns its last steading by 85 ft' (lanes_reach_something; trim_lane_stubs).",
+   "rows": [
+    "R3 future-work/farming-communities.md 2c 'Also found' skeleton arm overruns"
+   ],
+   "owner": "l7r/diagram/hamletgen/ways/web.py:193 already calls _trim_to_service on skeleton arms (the census's 'runs only on web lanes' may be stale - to be verified on the 85 ft case); owner hamletgen/ways/geom.py:_trim_to_service.",
+   "mechanism": "Every non-connector lane end passes `lane_end_serves(end, houses, ways, reach)` (lifted from lanes_reach_something) - _trim_to_service applied to every arm and web lane as the last act of stage_web and after each later rewrite.",
+   "fallback": "The overrun is trimmed back to the last steading it serves.",
+   "later_stages": "sweeps/smooth may extend a run (a join) - the trim is re-applied after them.",
+   "unit_test": "A skeleton arm laid 85 ft past its last steading: after stage_web the arm ends within reach of that steading.",
+   "retire": "none today.",
+   "risk": "low"
+  },
+  {
+   "id": "H42",
+   "rule": "A way keeps its width along a run unless its rank changes (no width step at a degree-2 node). Stated: future-work 'THE WIDTH STEP' (a back lane halves its width where nothing happens).",
+   "rows": [
+    "R3 future-work/farming-communities.md THE WIDTH STEP"
+   ],
+   "owner": "l7r/diagram/hamletgen/ways (link width assignment in serve.py/_lay_web_lane taking the joined way's width); cross-area (ways).",
+   "mechanism": "Width is assigned per connected CHAIN (maximal run between nodes of degree != 2) after the graph is built (the H38 stage), from the chain's rank; `width_steps(lanes)` (a width change at a degree-2 node) is the predicate.",
+   "fallback": "n/a - the assignment is total.",
+   "later_stages": "Crossings do not change widths.",
+   "unit_test": "A back lane made of two links joined end to end with widths 6 and 3: after assignment both are the chain's width.",
+   "retire": "none today.",
+   "risk": "low"
+  },
+  {
+   "id": "H43",
+   "rule": "No tree trunk stands in a tread (groves_clear_of_lanes, trunk 4.0 ft from a footpath centerline). Stated: GM feature 157; future-work 'Eight tree trunks stand in a tread on Moritono' and 'A tree stands in a path on the reference hamlet' (Inashiro: 3.1-4.2 ft).",
+   "rows": [
+    "R3 future-work/farming-communities.md Eight tree trunks stand in a tread on Moritono",
+    "R3 future-work/farming-communities.md A tree stands in a path on the reference hamlet"
+   ],
+   "owner": "l7r/diagram/settlement/homestead_parts/stands.py:village_grove (the crown scatter) - the census names the straggler router's obstacle set, but the web (stage 105) runs BEFORE stage_woodland/stage_windbreak (107/108), so the crowns do not exist when the footpath is routed: the tree is placed onto the path, not the path through the tree. Cross-area (woods).",
+   "mechanism": "The scatter refuses each DRAWN crown's trunk (after its scatter offset, median 8.1 ft) whose center lies within 4.0 ft of a recorded tread (s._on_a_tread / the tread registry `_record_tread` already holds every way), not the clump center. Predicate: `trunk_in_tread(x, y, treads, 4.0)` read by the scatter and by the test.",
+   "fallback": "A refused trunk is not drawn (the canopy is a scatter with no count rule; the grove's area goal already tolerates skipped crowns).",
+   "later_stages": "Ways laid after the groves (crossings' squaring near fords) must not run through a recorded trunk: stage_crossings' rewrite is limited to the ford approach, which the scatter keeps clear via the ford keep-out; its unit test asserts no trunk within 4 ft after it.",
+   "unit_test": "village_grove over a constructed clump centered 6 ft from a footpath with a scatter that throws a crown to 3 ft: no drawn trunk within 4.0 ft of the tread.",
+   "retire": "none today.",
+   "risk": "low"
+  },
+  {
+   "id": "H26",
+   "rule": "A dike's keep-out contains every vertex of the drawn band; the field's facing chains never accept an outline vertex they reach. Stated: tests/soak/test_polder_fall_0.py::test_the_polders_keep_outs_contain_what_they_stand_for.",
+   "rows": [
+    "R1 tests/soak/test_polder_fall_0.py::test_the_polders_keep_outs_contain_what_they_stand_for (containment)"
+   ],
+   "owner": "l7r/diagram/settlement/_geom/primitives.py:keepout_ring (via settlement/land/dikes.py:201-204) and facing_chains (via settlement/finish.py:641-648); census right.",
+   "mechanism": "Already by construction: keepout_ring pushes the simplified chords out by the measured reach of every covered point plus eps.",
+   "fallback": "n/a",
+   "later_stages": "none - recorded with the drawing.",
+   "unit_test": "tests/settlement/test_keepouts.py (existing).",
+   "retire": "The containment clause of the soak test.",
+   "risk": "low"
+  },
+  {
+   "id": "H27",
+   "rule": "The dike's keep-out has at most 24 chords and the field's facing chains at most 12. Stated: the same soak test (the GM's 'a couple of dozen').",
+   "rows": [
+    "R1 tests/soak/test_polder_fall_0.py::test_the_polders_keep_outs_contain_what_they_stand_for (chord caps)"
+   ],
+   "owner": "l7r/diagram/settlement/_geom/primitives.py:keepout_ring and facing_chains.",
+   "mechanism": "keepout_ring raises eps geometrically (x1.5) until len(chords) <= cap; containment is unaffected (the push is measured, so a coarser chain is pushed further). Predicate: the cap constant beside the function, read by its test.",
+   "fallback": "n/a - eps can always grow until a triangle; the cap is reachable.",
+   "later_stages": "none",
+   "unit_test": "keepout_ring over a 400-vertex noisy band at DIKE_KEEPOUT_EPS returns <= 24 chords and still contains every covered point.",
+   "retire": "The chord-count clause of the soak test (and with H26, the whole soak test).",
+   "risk": "low",
+   "notes": "A coarser keep-out is looser: check the polder's houses still seat (H14) on the constructed dike."
+  },
+  {
+   "id": "H29a",
+   "rule": "A generated Mode A sheet never draws a building off its wall or leaves one in overflow. Stated: tests/test_mode_a_sheets.py::test_every_mode_a_sheet_passes_its_checks (structures on walls, viewBox crop).",
+   "rows": [
+    "R1 tests/test_mode_a_sheets.py::test_every_mode_a_sheet_passes_its_checks (generated sheets: county-magistracy-example, ochiba-roundtrip-test)"
+   ],
+   "owner": "l7r/diagram/compound.py:place / _place_one; census right. Hand sheets are out of scope (spec Edge Cases).",
+   "mechanism": "_place_one already slides past the gate, courts and placed buildings; what is missing is the overflow fallback, which is only printed (main, 692). place() refuses to return with result.overflow non-empty: the compound's wall is grown along the program's long axis by the overflowing building's depth and the placement re-run inside place() (a placer-internal widening), bounded by the program's stated compound size range.",
+   "fallback": "If the program's compound size range is exhausted, place() raises with the building named - the program asks for more than its compound holds, an input error of the program (GM-QUESTION only if a live program ever hits it: shrink the building, or grow the compound past its researched size - distinct forms).",
+   "later_stages": "_seat_captions and emit_svg do not move buildings.",
+   "unit_test": "place() on a program whose last building cannot fit the stated wall: returns with no overflow and a grown wall (or raises past the range).",
+   "retire": "The generated sheets' rows of the parametrized test.",
+   "risk": "medium"
+  },
+  {
+   "id": "H29b",
+   "rule": "A generated Mode A sheet places its sited fixtures by their rules (tubs, well, notice board within 20 ft of the gate, perimeter hugging, coverage band, sanctuary axis, arch/well). Stated: pack_audit's registered checks via tests/test_mode_a_sheets.py.",
+   "rows": [
+    "R1 tests/test_mode_a_sheets.py::test_every_mode_a_sheet_passes_its_checks (siting checks on generated sheets)"
+   ],
+   "owner": "l7r/diagram/compound.py:_place_one (the census names place(); the candidate set is _place_one's).",
+   "mechanism": "Each registered siting check becomes a predicate the candidate loop calls: _place_one's candidates for a tub/well/notice board are filtered by the SAME function pack_audit registers (one predicate, FR-003), and coverage_band / perimeter_hugging are enforced by the order and extent of the candidates. A new registry maps each Mode A check to the placer that owns it.",
+   "fallback": "A fixture with no legal candidate falls to H29a's widening; never drawn in violation.",
+   "later_stages": "_seat_captions after place() does not move fixtures.",
+   "unit_test": "Per check, a constructed program whose first candidate violates it (a notice board 30 ft from the gate): the placer takes the legal one.",
+   "retire": "The generated sheets' rows of the parametrized test.",
+   "risk": "medium"
+  },
+  {
+   "id": "H29c",
+   "rule": "No caption the caption placer seats overlaps another label, is occluded, or sits dark-on-dark - on any sheet, hand or generated (the caption placer is in scope on hand sheets: spec Edge Cases). Stated: pack_audit overlapping_labels / occluded / dark_on_dark; feature 266 (one caption placer).",
+   "rows": [
+    "R1 tests/test_mode_a_sheets.py::test_every_mode_a_sheet_passes_its_checks (label checks)"
+   ],
+   "owner": "l7r/diagram/labels/placer.py (feature 266's one caption placer) - it takes the least-weight seat when no free one exists ('a caption is never dropped').",
+   "mechanism": "The least-weight fallback is replaced: when no free seat exists, the caption is seated as a LEADER-LINE caption at the nearest free seat in a widening ring (the cartographic convention the standard already names), and dark_on_dark is a refusal in the seat scoring (the fill under the seat, read from the same index), not a weight.",
+   "fallback": "A caption with no free seat inside the sheet goes to the sheet's key/legend with a reference mark at the feature - a map drawing convention, recorded; never an overlap.",
+   "later_stages": "none - captions are last.",
+   "unit_test": "A constructed sheet where every seat around a small building is taken: the caption is drawn by leader to a free seat; overlapping_labels finds nothing.",
+   "retire": "The label rows of the parametrized test for generated sheets; the hand sheets' label rows likewise once the placer holds it; the hand GEOMETRY rows stay (they guard authored art no placer covers - FR-007's keep reason, recorded).",
+   "risk": "medium",
+   "notes": "Moves captions on every Mode A sheet whose placer fell back to least weight."
+  }
+ ],
+ "impossible": [
+  {
+   "rule": "H05 - the rolled cluster_shape drawn",
+   "why": "The drawn aspect is a joint product of the ground, the lane skeleton and the refusals of every other seat rule; no seat-time mechanism can guarantee a disc on a margin that admits only a string without either violating another rule (H03, the wind seat) or changing the knob from 'the shape drawn' to 'the shape of the seat band' (which is always honored). Offered: the steer-and-repair near-guarantee in H05, with the unhonored record kept honest (H04); or the redefinition - the reviewer's choice changes what the feature is."
+  },
+  {
+   "rule": "H30 - the seat's back to the wind, for a DECLARED fall that runs into the wind",
+   "why": "When the declared fall points the wet toe and drain at the wind, every wind-facing margin is below the drain; the drain rule (dwellings_above_field_drain) and the wind rule cannot both hold on that site. Guaranteed for every rolled fall by constraining the roll; a declared spec with such a fall can only be refused at spec load (not a finished-map check, but it does narrow the spec space) - for review."
+  },
+  {
+   "rule": "H14 - the 85% seating floor, strictly",
+   "why": "Rectangle packing is not exact, so plan_site's capacity sizing is a measured factor; the exhaustive pass makes a shortfall require the legal ground within 700 ft to be physically full. A strict guarantee for every conceivable site needs either a reserved lattice of envelope cells before seating (a regular grid - a different settlement form) or unbounded canvas growth. Proposed as guaranteed-by-capacity with the factor calibrated; the reviewer should confirm that counts."
+  }
+ ],
+ "shared_mechanisms": {
+  "household_lot": "ONE per-household lot keyed by seat ordinal (hamletgen/homesteads, new): size ladder rung (H17), kura (H45), byre keeper (H06), fixtures per kind (H32-H35), well pocket (H10/H11). A quota by ordinal (floor((k+1)*p+0.5) > floor(k*p+0.5)) closes every count at round(n*p) for whatever n is seated, and a keeper whose envelope fits nowhere passes its lot to the next seated household. It replaces the positional _hjit rolls that alias along a row (the kura's 2.2x under-delivery).",
+  "envelope_parts": "Every part a household is guaranteed (kura, byre, fixtures, bath corridor, well pocket, access corridor) is a PART of the bundle laid by rolling/bundle.py:_bundle_layout, boxed in `boxes`, inside the envelope - so fit.py:_envelope_blocked + _parts_fit are the one predicate that decides whether the household is seated, and nothing after the seat can lose the part."
+ },
+ "cross_area": [
+  "H15 acreage (fields)",
+  "H37-H42 ways",
+  "H43 woods",
+  "H29a-c Mode A"
+ ],
+ "counts": {
+  "rules": 47,
+  "by_risk": {
+   "medium": 16,
+   "low": 24,
+   "high": 7
+  }
+ }
+}

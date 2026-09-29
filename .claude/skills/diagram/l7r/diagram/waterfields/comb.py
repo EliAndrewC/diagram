@@ -93,6 +93,7 @@ class CombCarve:
     furrow_spread: float
     grain_drift: float
     grain: float
+    fan_middle: str = "cleared"  # 269 B07: see `fan_toe_hem`
 
     @property
     def net(self) -> dict[str, Any]:
@@ -137,6 +138,7 @@ def carve_comb(
     supply_banks: bool = False,
     head_deg: float | None = None,
     head_len: float = 90.0,
+    fan_middle: str = "cleared",
 ) -> CombCarve:
     """The CARVE half of `build_comb` (feature 220): everything up to the planted plots and the
     envelope, before the seams are closed - what `fit_field`'s search measures. Returns a
@@ -230,6 +232,7 @@ def carve_comb(
         furrow_spread=furrow_spread,
         grain_drift=grain_drift,
         grain=grain,
+        fan_middle=fan_middle,
     )
 
 
@@ -262,7 +265,9 @@ def finish_comb(c: CombCarve) -> dict[str, Any]:
     close_seams(R, F, plots, envelope, grain, channels, plot_across, row_step, a_pts, dpts, drain_bank)
     acres = sum(_poly_area(p["poly"]) for p in plots) * 4 / 43560  # 1px=2ft -> 4 sq ft/px^2
 
-    dry_plots, dry_acres, bund_bean_runs = _comb_dry_and_beans(R, F, a_pts, bc, plots, channels, W, H, dry_keepout, dry_band, bean_frac, grain, furrow_spread, grain_drift)
+    dry_plots, dry_acres, bund_bean_runs = _comb_dry_and_beans(
+        R, F, a_pts, bc, plots, channels, W, H, dry_keepout, dry_band, bean_frac, grain, furrow_spread, grain_drift, fan_middle=c.fan_middle, fork=fork
+    )
     # furrows_vary tells the checker whether to REQUIRE neighboring dry plots to differ in row direction: a
     # gentle-valley village spreads them (the patchwork quilt, default); a STEEP/terraced village narrows the
     # spread so the rows converge back onto the contour (ridge-along-contour erosion control) and no variation
@@ -296,6 +301,7 @@ def finish_comb(c: CombCarve) -> dict[str, Any]:
         "bund_bean_runs": bund_bean_runs,
         "bund_beans": [q for run in bund_bean_runs for q in run],
         "furrows_vary": furrow_spread >= 0.3,
+        "fan_middle": c.fan_middle,
     }
 
 
@@ -908,6 +914,8 @@ def _comb_dry_and_beans(
     grain: float,
     furrow_spread: float,
     grain_drift: float,
+    fan_middle: str,
+    fork: Pt,
 ) -> tuple[list[dict[str, Any]], float, list[Poly]]:
     """DRY FIELDS (hatake) on the uncommanded upslope margin above the supply canal, and
     BUND BEANS (azemame) beaded along a fraction of the paddy bunds - see research/fields.html 'What a bund bean actually looks like'."""
@@ -916,6 +924,8 @@ def _comb_dry_and_beans(
     # and after `round_channel_joints`, i.e. against the geometry that will actually be painted.
     _supply_strokes = [c for c in channels if c.get("role") != "drain"]
     dry_plots = _dry_fields(R, F, a_pts, W, H, dry_keepout, band=dry_band, g=grain, furrow_spread=furrow_spread, grain_drift=grain_drift, supply=_supply_strokes)
+    if fan_middle == "wild":
+        dry_plots = fan_toe_hem(dry_plots, F, fork, plots)
     if grain != 1.0:
         # the INTER-ARM FORK TRIANGLE (coarse grains only): the ground between the two supply
         # canals just below the fork is commanded by neither (it sits upslope of canal B), and
@@ -933,7 +943,42 @@ def _comb_dry_and_beans(
         _bc_supply = [p for p in bc.pts if F.to_uf(*p)[1] <= _bc_tri_f]
         if len(_bc_supply) >= 2:
             dry_plots += _dry_fields(
-                R, F, _bc_supply, W, H, dry_keepout, band=(dry_band[0] * 0.6, dry_band[1] * 0.6), g=grain, furrow_spread=furrow_spread, grain_drift=grain_drift, supply=_supply_strokes
+                R,
+                F,
+                _bc_supply,
+                W,
+                H,
+                dry_keepout,
+                band=(dry_band[0] * 0.6, dry_band[1] * 0.6),
+                g=grain,
+                furrow_spread=furrow_spread,
+                grain_drift=grain_drift,
+                supply=_supply_strokes,
+                tract0=1 + max((p["tract"] for p in dry_plots), default=-1),
             )  # thinner than the a-side hem: it only needs to cover the fork triangle, and a full-depth band crowds the farmhouse ring off the fan's visible edge
     dry_acres = sum(_poly_area(p["poly"]) for p in dry_plots) * 4 / 43560
     return dry_plots, dry_acres, _bund_beans(R, plots, bean_frac, channels=channels)
+
+
+# WHERE A FAN'S DRY BAND LIES (269 B07; research/fields.html 'Where dry (hatake) crops go - the topographic catena',
+# fields/160). On an alluvial fan the middle, where the river sinks underground, is too short of water for paddy and was
+# often left as coppice or wild ground until late in the early modern period, while the spring-fed toe was settled early
+# with paddy beside it. The record calls that a tendency, not a rule - in old heartlands fans were cleared from early
+# times - so it is a KNOB, `fan_middle` (hamletgen/water/fit.py): "wild" keeps the hem only on the toe's stretch of the
+# fan's edge and leaves the middle to the scrub, "cleared" hems the whole canal as before. The comb IS the fan (its apex
+# is the division point, its toe the collector), so the stretch is read along the fall from the fork to the lowest
+# paddy. The fork-triangle band is the fan's HEAD, not its middle, and stays.
+#   FAN_TOE_FROM   where the toe begins, as a share of the fall from apex to toe. The record names the middle and the
+#                  toe and gives no proportions; equal thirds of head, middle and toe is a GUESS.
+FAN_TOE_FROM = 2.0 / 3.0
+
+
+def fan_toe_hem(dry_plots: list[dict[str, Any]], F: _Frame, fork: Pt, plots: Sequence[dict[str, Any]]) -> list[dict[str, Any]]:
+    """The hem plots that stand on the fan's toe: those whose center lies at least `FAN_TOE_FROM` of the way down the fall
+    from the fork to the lowest paddy vertex. A fan with no fall below its fork keeps its hem."""
+    f0 = F.to_uf(*fork)[1]
+    f1 = max((F.to_uf(float(v[0]), float(v[1]))[1] for p in plots for v in p["poly"]), default=f0)
+    if f1 - f0 <= 0:
+        return dry_plots
+    cut = f0 + (f1 - f0) * FAN_TOE_FROM
+    return [d for d in dry_plots if F.to_uf(sum(v[0] for v in d["poly"]) / len(d["poly"]), sum(v[1] for v in d["poly"]) / len(d["poly"]))[1] >= cut]

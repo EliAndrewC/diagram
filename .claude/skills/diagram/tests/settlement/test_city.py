@@ -106,6 +106,24 @@ def test_channel_footbridges_plank_each_long_ditch_perpendicular():
     assert all(190 < b["y"] < 210 for b in s.M["bridges"])  # both sit ON the ditch line
 
 
+def test_channel_footbridges_lay_every_crossing_in_the_settlement_s_rolled_form():
+    """269 B21 (research/water/290): a settlement's ditch crossings all take one form - a single log, logs under earth,
+    or a planked deck - declared in meta and on each deck; the form changes the glyph, never the deck's box."""
+    boxes = {}
+    for form in settlement.city.bridges.FOOTBRIDGE_FORMS:
+        s = _crop_settlement()
+        s.pin_knob("footbridge_form", form)
+        s.M["fields"] = [{"outline": [[50, 120], [850, 120], [850, 280], [50, 280]]}]
+        s.M["field_ditches"] = [{"poly": [[100, 200], [400, 200], [800, 200]], "w": 5, "role": "main"}]
+        assert s.channel_footbridges(spacing=320) == 2
+        assert s.M["meta"]["footbridge_form"] == form and all(b["form"] == form for b in s.M["bridges"])
+        boxes[form] = [(b["x"], b["y"], b["rot"], b["span"], b["w"]) for b in s.M["bridges"]]
+    assert boxes["log"] == boxes["earthen"] == boxes["plank"]
+    glyphs = {f: settlement.city.bridges.deck_glyph(0, 0, 90, 20, 2, f) for f in settlement.city.bridges.FOOTBRIDGE_FORMS}
+    assert 'rx="0.7"' in glyphs["log"] and "#BFA274" in glyphs["earthen"] and 'height="2.6"' in glyphs["plank"]
+    assert len(set(glyphs.values())) == 3
+
+
 def test_channel_footbridges_slides_a_plank_clear_of_a_farmhouse():
     s = _crop_settlement()
     s.M["fields"] = [{"outline": [[50, 220], [750, 220], [750, 380], [50, 380]]}]  # paddy straddling the y=300 ditch
@@ -370,3 +388,49 @@ def test_a_plank_whose_far_bank_is_the_village_reaches_useful_ground():
     assert s._plank_reaches_useful_ground(200.0, 200.0, 90.0, 12.0), "field on one bank, the village on the other"
     s.M["houses"] = []
     assert not s._plank_reaches_useful_ground(200.0, 200.0, 90.0, 12.0), "a far bank onto nothing"
+
+
+def test_the_footbridge_widening_from_its_segment_index_equals_the_scan() -> None:
+    """Feature 278 (FR-003): the widening asks an index of the other watercourses' segments instead of testing every
+    segment per deck candidate. Over random decks and courses - its own course among them, skipped by identity - the
+    indexed widening equals the scan it replaced, restated here as it stood."""
+    import random
+
+    from l7r.diagram.settlement._geom import quad_hits_seg
+    from l7r.diagram.settlement.city.bridges import water_segment_index
+
+    def scan(s, quad, deck, own, water, span, plank_w):
+        dux, duy = math.cos(math.radians(deck)), math.sin(math.radians(deck))
+        under = []
+        for wl, ow in water:
+            if wl is own:
+                continue
+            for i2 in range(len(wl) - 1):
+                if not quad_hits_seg(quad, tuple(wl[i2]), tuple(wl[i2 + 1]), 3.0):
+                    continue
+                wx, wy = wl[i2 + 1][0] - wl[i2][0], wl[i2 + 1][1] - wl[i2][1]
+                w = math.hypot(wx, wy) or 1.0
+                sin, cos = abs(dux * wy / w - duy * wx / w), abs(dux * wx / w + duy * wy / w)
+                under.append((ow + 2.0 * (2.0 / s.ftpx) + plank_w * cos) / max(sin, 0.02) + 1.0)
+        return max([span] + under)
+
+    s = Settlement(900, 900, seed=1)
+    s.meta(name="B", scale="hamlet", ftpx=1, toscale=True)
+    rng = random.Random(278)
+    water = []
+    for _ in range(40):
+        x, y = rng.uniform(0, 900), rng.uniform(0, 900)
+        water.append(([(x + k * rng.uniform(-40, 40), y + k * rng.uniform(-40, 40)) for k in range(rng.randint(2, 6))], rng.uniform(2, 9)))
+    idx = water_segment_index(water)
+    widened = 0
+    for _ in range(600):
+        cx, cy, deck = rng.uniform(0, 900), rng.uniform(0, 900), rng.uniform(0, 180)
+        dx, dy = math.cos(math.radians(deck)) * 12, math.sin(math.radians(deck)) * 12
+        nx, ny = -dy / 4, dx / 4
+        quad = [(cx - dx - nx, cy - dy - ny), (cx + dx - nx, cy + dy - ny), (cx + dx + nx, cy + dy + ny), (cx - dx + nx, cy - dy + ny)]
+        own = water[rng.randrange(len(water))][0]
+        want = scan(s, quad, deck, own, water, 20.0, 5.0)
+        assert s._widen_for_confluence(quad, deck, own, water, 20.0, 5.0, idx) == want
+        assert s._widen_for_confluence(quad, deck, own, water, 20.0, 5.0) == want
+        widened += want > 20.0
+    assert 20 < widened < 580, "non-vacuity: decks both over and clear of other water"

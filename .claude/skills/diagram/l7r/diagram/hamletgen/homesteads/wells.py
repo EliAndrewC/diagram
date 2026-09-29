@@ -136,8 +136,15 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
         # center - i.e. it serves the households the placed wells do not, which is why a real hamlet
         # digs a second well at all.
         pool = sorted(seats, key=lambda c: (_in_belt(c), c[0]))  # the FIRST well is central too, but never in the belt if anywhere else will do
+        # RE-SORTED ONLY WHEN A WELL HAS LANDED (feature 278, FR-004). The key reads the wells placed and the crop boxes, and
+        # inside this loop only a well that lands changes either - so a pass that popped a seat and placed nothing left a
+        # list already sorted by the key it would be sorted by again (Kuwabata: 168 sorts, 72,324 key evaluations, the
+        # most of its 1.8 s appurtenance stage). The house-distance part of the key never reads the wells, so it is
+        # computed once per seat.
+        _sorted_at = -1
+        _near_of: dict[tuple[float, float, float], float] = {}
         while pool and len(placed) < want:
-            if placed:
+            if placed and len(placed) != _sorted_at:
                 # ...by MINIMAX NEED, in ~3-grid-step buckets, centrality breaking ties inside a
                 # bucket. Two failed rankings led here, and both are worth remembering. Strict
                 # farthest-first (the 2026-08-15 greedy-coverage fix) let a seat 91 px OUTSIDE the
@@ -240,8 +247,10 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
                 # is minimized by hugging one outlying farmhouse, which is the same mistake in the
                 # other direction. Every seat in the pool already passed the rung, so this only
                 # orders seats that are all legally "among the dwellings".
-                def _neighborhood(c: tuple[float, float, float], wn: int = want_near) -> float:
-                    return sorted(math.hypot(c[1] - h["x"], c[2] - h["y"]) for h in houses)[wn - 1]
+                def _neighborhood(c: tuple[float, float, float], wn: int = want_near, memo: dict[tuple[float, float, float], float] = _near_of) -> float:
+                    if c not in memo:
+                        memo[c] = sorted(math.hypot(c[1] - h["x"], c[2] - h["y"]) for h in houses)[wn - 1]
+                    return memo[c]
 
                 # THE BELT TERM SITS BEHIND COVERAGE, not in front of it. Ranked first it is a
                 # filter, and it behaved like every other filter this function has tried: Mizuguchi's
@@ -255,6 +264,7 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
                     return ((_w + _e) // 66.0, _in_belt(c), _e, _w, _neighborhood(c))
 
                 pool.sort(key=_key)
+                _sorted_at = len(placed)
             _, x, y = pool.pop(0)
             if any(math.hypot(x - px, y - py) < 170.0 for px, py in placed):
                 continue  # `wells_not_clustered`: shared wells serve separate courtyards

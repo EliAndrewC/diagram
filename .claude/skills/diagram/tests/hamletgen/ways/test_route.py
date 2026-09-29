@@ -187,3 +187,36 @@ def test_a_route_pays_to_cross_the_brook_and_goes_round_when_that_is_cheaper() -
     finally:
         set_crossing([], 0.0, 0.0)
     assert not in_brook_band((50.0, 0.0))
+
+
+def test_the_lazy_router_returns_the_whole_box_routers_paths() -> None:
+    """Feature 278 (FR-001): the router judges each cell when the search first asks of it rather than the whole box first.
+    The fixture is 14 route requests recorded from one Mizuguchi roll on the unmodified engine (`ac01ffe2d`) - five of
+    them finding no route, which explores every reachable cell - with that router's answers; the lazy router returns the
+    same paths, point for point, under the same brook crossing."""
+    import json
+    import pathlib
+
+    from l7r.diagram.hamletgen.ways import route as R
+
+    rec = json.loads((pathlib.Path(__file__).resolve().parents[2] / "fixtures" / "route_requests_mizuguchi.json").read_text())
+    polys = [[tuple(p) for p in poly] for poly in rec["polys"]]
+    assert any(not r["out"] for r in rec["requests"]) and any(r["out"] for r in rec["requests"]), "non-vacuity: both a route and no route"
+    saved = dict(R._CROSSING)
+    try:
+        for req in rec["requests"]:
+            c = rec["crossings"][req["crossing"]] if req["crossing"] >= 0 else {"brook": [], "radius": 0.0, "cost": 0.0}
+            R.set_crossing([tuple(q) for q in c["brook"]], c["radius"], c["cost"])
+            got = R._route(
+                tuple(req["start"]),
+                tuple(req["goal"]),
+                [polys[i] for i in req["hard"]],
+                [polys[i] for i in req["walls"]],
+                [(tuple(a), tuple(b)) for a, b in req["water"]],
+                cell=req["cell"],
+                gap=req["gap"],
+                pad_mult=req["pad_mult"],
+            )
+            assert [list(q) for q in got] == req["out"]
+    finally:
+        R._CROSSING.update(saved)

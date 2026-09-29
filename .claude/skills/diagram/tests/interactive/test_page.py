@@ -132,17 +132,18 @@ def test_the_broad_kinds_keep_the_arrow_and_every_other_kind_gets_the_hand() -> 
 
 
 def test_explanations_hold_only_present_classes_and_present_siblings() -> None:
-    data = explanations({"windbreak", "copse", "farmhouse"})
-    assert set(data) == {"windbreak", "copse", "farmhouse"}
+    data = explanations({"windbreak", "copse", "farmhouse", "notice board"})
+    assert set(data) == {"windbreak", "copse", "farmhouse", "notice board"}
     assert data["windbreak"]["siblings"] == ["copse"], "woodland commons is absent from this map, so it is not claimed; siblings are link keys now"
     assert data["farmhouse"]["siblings"] == [], "storage shed and byre are absent"
     # the presumption of accuracy (feature 156): an accurate class announces nothing, and the liberty
     # its record discloses rides in `caveat` instead, to be shown after the what and the why
     assert data["windbreak"]["label"] == "accurate", "the classification is still recorded (constitution XII)"
     assert data["windbreak"]["lead"] == "", "an accurate class leads with what the feature is, not with a claim"
-    # the windbreak is one of the seven whose record discloses no liberty, so it shows no caveat at
-    # all (settlement-review, 2026-08-29); the copse beside it on this map does have one
-    assert data["windbreak"]["caveat"] == "", "the windbreak discloses no liberty - see test_classes"
+    # the notice board is the one class whose record discloses no liberty, so it shows no caveat at all
+    # (settlement-review, 2026-08-29); the windbreak was one too until feature 269 K3 disclosed its two forms' guesses
+    assert data["notice board"]["caveat"] == "", "the notice board discloses no liberty - see test_classes"
+    assert data["windbreak"]["caveat"] == CAVEAT_LEAD + CLASSES["windbreak"].caveat and CLASSES["windbreak"].caveat
     assert data["copse"]["caveat"] == CAVEAT_LEAD + CLASSES["copse"].caveat and CLASSES["copse"].caveat
     # the references are QUESTIONS (feature 180): the sections the entry names, linked to the local page; the
     # cited keys, the citation text and the entry pointer no longer ride on the page at all
@@ -187,15 +188,16 @@ def test_a_question_s_text_drops_the_dated_bookkeeping_and_nothing_else() -> Non
 
 def test_the_questions_come_in_the_entry_s_order_and_every_class_that_names_a_section_has_some() -> None:
     """Spec FR-004 / D4: the class author's primary question first, not file order; FR-002: the one entry
-    that resolves to nothing is `fallow`, whose link was hidden already."""
+    that resolved to nothing was `fallow`, whose link was hidden already - until feature 269 (K1) wrote it from
+    fields/250, so now every class names a findable section."""
     qs = research_questions(CLASSES["farmhouse"].entry)
-    assert [q["text"][:30] for q in qs] == ["What stood on a farmstead - th", "How close does a farmhouse sta", "Is every farmhouse reached by "], qs
+    assert [q["text"][:30] for q in qs] == ["What stood on a farmstead - th", "How close does a farmhouse sta", "Is every farmhouse reached by ", "Why do a village's farmhouses "], qs
     assert all(q["url"].startswith(RESEARCH_PAGES + "homesteads.html#") for q in qs)
     assert qs[1]["url"].endswith("#how-close-does-a-farmhouse-stand-to-the-paddy-up-against-it---but-never-on-the-bund")
     # file order would put the lane entry (line 274) before the paddy entry (line 400); the entry's order wins
     assert [q["url"] for q in research_questions(CLASSES["farmhouse"].entry)] == [q["url"] for q in qs], "deterministic"
     unresolved = sorted(k for k, fc in CLASSES.items() if not research_questions(fc.entry))
-    assert unresolved == ["fallow"], "every other class's entry names at least one findable section"
+    assert unresolved == [], "every class's entry names at least one findable section"
     assert research_questions("nothing here") == []
     for k, fc in CLASSES.items():
         for q in research_questions(fc.entry):
@@ -407,7 +409,8 @@ def test_the_citations_come_from_the_research_entries() -> None:
 
 
 def test_every_class_cites_what_its_entry_cites_and_the_uncited_are_the_known_four() -> None:
-    """One entry the citation passes have left without a key: `fallow`, whose section records a silence. The
+    """No entry is left without a key. `fallow` was the last, its section recording a silence, until feature 269 (K1)
+    wrote it from fields/250 (the resting paddy basin). The
     in-field-features section of `fields.html` (field pond, field rock, grave island) was cited in feature 242. `copse` and `windbreak` were uncited for a day: their
     fengshui-forest entry rested on two MDPI papers mdpi.com would not serve to this container, until the GM
     downloaded them (2026-09-07) and the passages were read from the copies - the Fujian paper supports the
@@ -419,7 +422,7 @@ def test_every_class_cites_what_its_entry_cites_and_the_uncited_are_the_known_fo
     openly, so the ladder is cited from that and from an open design report. GB 50288 itself stays on the
     list of documents only a person could reach."""
     uncited = sorted(k for k, fc in CLASSES.items() if not research_sources(fc.entry))
-    assert uncited == ["fallow"], "an entry without a cited key - see the docstring for the one known one"
+    assert uncited == [], "an entry without a cited key - see the docstring"
     for k, fc in CLASSES.items():
         for key in research_sources(fc.entry):
             assert key in registry(), f"{k} cites {key}, which SOURCES.md does not register"
@@ -653,6 +656,19 @@ def test_a_lifted_box_gives_up_the_ground_a_structure_stands_on() -> None:
     assert hit_layer([sluice], ["pond sluice"], junk).count("M94.9,95.9") == 1, "a record it cannot read is skipped, not fatal"
 
 
+def test_a_record_s_auxiliary_polygon_is_held_clear_by_its_box() -> None:
+    """A glyph drawn outside its own `w` x `h` (a `poly` on the record) punches a second hole, its bounding box
+    padded the tenth of a pixel the coordinates round to; a `poly` of two points is no polygon and adds none."""
+    from l7r.diagram.interactive.page import hit_layer
+
+    sluice = '<line x1="90" y1="100" x2="110" y2="100" stroke="#37637F" stroke-width="2.4"/>'
+    rec = {"x": 100.0, "y": 100.0, "w": 10.0, "h": 8.0, "rot": 0, "poly": [[100.0, 104.0], [106.0, 104.0], [106.0, 110.0]]}
+    out = hit_layer([sluice], ["pond sluice"], {"pig_sties": [rec]})
+    assert "M99.9,103.9h6.2v6.2h-6.2Z" in out, out
+    two = {**rec, "poly": [[100.0, 104.0], [106.0, 104.0]]}
+    assert hit_layer([sluice], ["pond sluice"], {"pig_sties": [two]}).count("h6.2v6.2") == 0
+
+
 def test_a_rotated_footprint_is_held_clear_by_its_whole_box() -> None:
     """The hole is the axis-aligned box of the ROTATED glyph - a superset, so it is never smaller than
     the thing it protects."""
@@ -683,7 +699,7 @@ def test_every_keep_clear_key_makes_its_holes() -> None:
     """`HIT_KEEP_CLEAR` names manifest keys, and a key whose records carry some other shape - a well's
     `x,y,r`, a footbridge's `span`, a sluice gate's bare `x,y,rot` - yields NO hole and NO error
     (settlement-review round 3). So the count is asserted against a real manifest: one hole per record,
-    plus one per auxiliary polygon (a duck pen's `wet` apron), plus the canvas rectangle."""
+    plus one per auxiliary polygon (a `poly` apron; the duck pen's `wet` retired with it, 269 E9), plus the canvas rectangle."""
     import json
     from pathlib import Path
 
@@ -693,7 +709,7 @@ def test_every_keep_clear_key_makes_its_holes() -> None:
     for k in HIT_KEEP_CLEAR:
         assert man.get(k), f"{k} records nothing on this map, so the count below cannot see it go wrong"
     recs = [r for k in HIT_KEEP_CLEAR for r in man.get(k) or []]
-    aprons = sum(1 for r in recs for e in ("wet", "poly") if isinstance(r.get(e), list) and len(r[e]) > 2)
+    aprons = sum(1 for r in recs if isinstance(r.get("poly"), list) and len(r["poly"]) > 2)
     clip, _ = _keep_clear_clip(man)
     assert recs, "the reference dike-pond map records structures"
     assert clip.count("M") == 1 + len(recs) + aprons, f"{len(recs)} records + {aprons} aprons + the canvas"
@@ -773,7 +789,7 @@ def test_an_element_with_no_extent_is_treated_as_touching_everything() -> None:
     would split one feature into two hover groups on the sheet, which the reader sees, while merging
     slightly too eagerly costs nothing visible. Boxes and circles both go through here, and a circle
     is tested AS a circle - two crowns whose boxes overlap at a corner do not actually touch."""
-    from l7r.diagram.interactive.page import _hits
+    from l7r.diagram.interactive.extents import _hits
 
     assert _hits(None, (0.0, 0.0, 5.0)) is True
     assert _hits((0.0, 0.0, 5.0), None) is True
@@ -925,3 +941,57 @@ def test_the_windbreak_pop_up_names_its_side_and_an_authored_note_beats_it() -> 
     assert data["windbreak"]["on_this_map"].startswith("Here the belt stands toward the northwest of the houses")
     notes = MapNotes(place={}, features={"windbreak": "This one is planted on the old dike."})
     assert _render([PLACE, "windbreak"], meta, notes)["windbreak"]["on_this_map"] == "This one is planted on the old dike."
+
+
+def test_the_merges_bucket_grids_change_no_byte(monkeypatch):
+    """Feature 278 (FR-011): `_refused` asks a grid of each bucket's extents instead of walking them. Over a dense,
+    interleaved scatter - lines and circles in several styles, some translucent, some outlined, some wider than the
+    grid's big-box bound - the merged page is byte-identical to the one the whole-list walk wrote (the grid forced to
+    return everything it holds)."""
+    import random
+
+    from l7r.diagram.interactive import page as pg
+
+    rng = random.Random(278)
+    parts = []
+    for _ in range(3000):
+        k = rng.random()
+        if k < 0.45:
+            x, y = rng.uniform(0, 1500), rng.uniform(0, 1500)
+            parts.append(f'<line x1="{x:.1f}" y1="{y:.1f}" x2="{x + rng.uniform(-9, 9):.1f}" y2="{y + rng.uniform(-9, 9):.1f}" stroke="#{rng.choice(["6a7", "8b5"])}" stroke-width="1"/>')
+        elif k < 0.9:
+            style = rng.choice(['fill="#2a4"', 'fill="#2a4" opacity="0.8"', 'fill="#475" stroke="#123" stroke-width="0.5"'])
+            parts.append(f'<circle cx="{rng.uniform(0, 1500):.1f}" cy="{rng.uniform(0, 1500):.1f}" r="{rng.uniform(1, 14):.1f}" {style}/>')
+        elif k < 0.97:
+            x, y = rng.uniform(0, 1500), rng.uniform(0, 1500)
+            parts.append(f'<line x1="{x:.1f}" y1="{y:.1f}" x2="{x + rng.uniform(-1600, 1600):.1f}" y2="{y + rng.uniform(-1600, 1600):.1f}" stroke="#6a7" stroke-width="1"/>')
+        else:
+            parts.append(f'<rect x="{rng.uniform(0, 1500):.1f}" y="{rng.uniform(0, 1500):.1f}" width="30" height="20" fill="#999"/>')
+    svg = "<g>" + "".join(parts) + "</g>"
+    indexed = pg.merge_primitives(svg)
+
+    def everything(self, e):
+        return list(self.big) + [x for b in self.cells.values() for x in b]
+
+    monkeypatch.setattr(pg._BoxGrid, "near", everything)
+    assert pg.merge_primitives(svg) == indexed
+    assert indexed.count("<path") > 5 and len(indexed) < len(svg), "non-vacuity: the scatter merged"
+
+
+def test_an_unreadable_extent_is_refused_by_any_bucket_holding_something():
+    """Feature 278: with the bucket grids, an element whose extent cannot be read still touches everything - a bucket
+    that skipped anything refuses it, an empty one does not - and a member with no extent marks a translucent bucket as
+    touching every newcomer."""
+    from l7r.diagram.interactive.extents import _BoxGrid, _file_extent, _refused
+
+    def bucket(translucent=False):
+        return {"blocked": False, "translucent": translucent, "outlined": False, "extents": [], "skip": [], "ext_grid": _BoxGrid(), "ext_none": False, "skip_grid": _BoxGrid()}
+
+    b = bucket()
+    assert _refused(b, None) is False
+    b["skip"].append((0.0, 0.0, 5.0, 5.0))
+    b["skip_grid"].add((0.0, 0.0, 5.0, 5.0))
+    assert _refused(b, None) is True
+    t = bucket(translucent=True)
+    _file_extent(t, None)
+    assert t["ext_none"] is True and _refused(t, (500.0, 500.0, 2.0)) is True

@@ -12,6 +12,7 @@ from .._geom import (
     PLANK_ABUTMENT,
     PLANK_BANK_REACH,
     PLANK_VILLAGE_REACH,
+    PointGrid,
     Pt,
     point_in_poly,
     quad_hits_poly,
@@ -20,7 +21,7 @@ from .._geom import (
     seg_intersect,
     segments_cross,
 )
-from .._knobs import bridge_carried_ways, bridge_crossed_waters
+from .._knobs import Knob, bridge_carried_ways, bridge_crossed_waters, register_knob
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -119,13 +120,64 @@ def seat_deck(p: Pt, rot: float, span: float, rw: float, wpts: Any, need: float,
     return rot, span, False
 
 
+# THE DITCH CROSSING'S FORM IS A KNOB (269 B21; research/water/290, "What crosses a farm ditch - a plank, a log, or earth
+# over logs?"). Three forms of crossing over small water are attested and the record cannot say which was laid over a
+# paddy ditch: a SINGLE LOG (or one board, the same object in the Chinese definition), LOGS UNDER TRODDEN EARTH (the
+# earthen bridge, the common bridge of pre-Edo Japan), and a PLANKED DECK. So a settlement lays all its ditch crossings
+# in one form, rolled per map from its seed and declared as `meta.footbridge_form`. The EVEN chance is a GUESS: no
+# source gives the forms' shares for a farm ditch, and the one proportion read (river bridges) would make the plank far
+# rarer than earth over logs. Where and at what width a crossing is laid does not change with the form, so the deck's
+# recorded box is the same for all three and only the glyph differs. `plank` is the default because it is the glyph
+# every map drew before the knob, so a settlement that resolves no form draws what it always did.
+FOOTBRIDGE_FORMS = ("log", "earthen", "plank")
+FOOTBRIDGE_FORM = register_knob(Knob("footbridge_form", list(FOOTBRIDGE_FORMS), default="plank"))
+
+
+def deck_glyph(x: float, y: float, rot: float, span: float, deck_w: float, form: str = "plank") -> str:
+    """The SVG of one crossing's deck, centered on (x, y) and running along `rot` for `span` - by its FORM (269 B21,
+    research/water/290). The three draw inside the same `span` x `deck_w` box, so every check that reads the deck's
+    record reads the same geometry whatever the roll:
+
+    - `plank`: the planked timber deck, seams across it and a dark rail down each side (the glyph before the knob);
+    - `log`: one round trunk, bark brown and rounded at the ends, narrower than the box - a log bridge is a single
+      trunk about a foot or so through, so it fills seven tenths of the deck's width with a highlight along its crown;
+    - `earthen`: a deck of trodden earth, the earth's own color between two dark edges, the ends of the logs under it
+      ticked along each side - no seams and no rails, which is what tells it from the planked deck at a glance."""
+    hl, hw = span / 2, deck_w / 2
+    g = [f'<g transform="translate({x:.1f},{y:.1f}) rotate({rot:.1f})">']
+    if form == "log":
+        r = hw * 0.7
+        g.append(f'<rect x="{-hl:.1f}" y="{-r:.1f}" width="{span:.1f}" height="{2 * r:.1f}" rx="{r:.1f}" fill="#8A6A44" stroke="#4E3820" stroke-width="0.9"/>')  # the trunk
+        g.append(f'<line x1="{-hl + r:.1f}" y1="{-r * 0.3:.1f}" x2="{hl - r:.1f}" y2="{-r * 0.3:.1f}" stroke="#B08A5C" stroke-width="0.6"/>')  # its crown catching the light
+    elif form == "earthen":
+        g.append(f'<rect x="{-hl:.1f}" y="{-hw:.1f}" width="{span:.1f}" height="{deck_w:.1f}" rx="1" fill="#BFA274" stroke="#6B5130" stroke-width="1.0"/>')  # the trodden earth
+        step = max(3.0, span / 7)  # the log ends showing along each edge
+        sx = -hl + step / 2
+        while sx < hl:
+            for ey in (-hw, hw):
+                g.append(f'<line x1="{sx:.1f}" y1="{ey - 0.8:.1f}" x2="{sx:.1f}" y2="{ey + 0.8:.1f}" stroke="#6B5130" stroke-width="0.8"/>')
+            sx += step
+    else:
+        g.append(f'<rect x="{-hl:.1f}" y="{-hw:.1f}" width="{span:.1f}" height="{deck_w:.1f}" rx="2" fill="#B68D5A" stroke="#5A3F1E" stroke-width="1.6"/>')  # the planked timber deck
+        step = max(7, span / 8)  # plank seams across the deck
+        sx = -hl + step
+        while sx < hl - 1:
+            g.append(f'<line x1="{sx:.1f}" y1="{-hw:.1f}" x2="{sx:.1f}" y2="{hw:.1f}" stroke="#5A3F1E" stroke-width="0.7" opacity="0.55"/>')
+            sx += step
+        g.append(f'<rect x="{-hl:.1f}" y="{-hw - 2.4:.1f}" width="{span:.1f}" height="2.6" fill="#5A3F1E"/>')  # the two side rails
+        g.append(f'<rect x="{-hl:.1f}" y="{hw - 0.2:.1f}" width="{span:.1f}" height="2.6" fill="#5A3F1E"/>')
+    g.append("</g>")
+    return "".join(g)
+
+
 class BridgesMixin:
-    def bridge(self: Settlement, x: float, y: float, rot: float, span: float, deck_w: float) -> int:  # type: ignore[misc]
+    def bridge(self: Settlement, x: float, y: float, rot: float, span: float, deck_w: float, form: str = "plank") -> int:  # type: ignore[misc]
         """A timber BRIDGE carrying a road (or town street) over a watercourse - a stream, an
         irrigation channel, or the city moat at a gate. Centered on the crossing (x, y); the deck
         runs along `rot` (the road's bearing, degrees) for `span` px (long enough to reach both
         banks) and is `deck_w` wide (the carried road's width). Drawn on the TOP layer so it sits
-        ABOVE the water and the roadbed. Records M['bridges']."""
+        ABOVE the water and the roadbed. Records M['bridges']. `form` is the deck's glyph (`deck_glyph`): a carried
+        way's deck is always planked; `channel_footbridges` passes the settlement's rolled ditch-crossing form."""
         # ONE DECK PER CROSSING, enforced HERE so every caller is covered (GM 2026-07-26): the
         # road-crossing pass in bridges(), the plank pass in channel_footbridges(), and any gen that
         # hand-places a deck for a crossing one of those also finds. Minami carried two decks over the
@@ -138,18 +190,7 @@ class BridgesMixin:
         for _b in self.M.get("bridges", []):
             if math.hypot(_b["x"] - x, _b["y"] - y) <= _btol:
                 return int(_b["z"])
-        hl, hw = span / 2, deck_w / 2
-        g = [f'<g transform="translate({x:.1f},{y:.1f}) rotate({rot:.1f})">']
-        g.append(f'<rect x="{-hl:.1f}" y="{-hw:.1f}" width="{span:.1f}" height="{deck_w:.1f}" rx="2" fill="#B68D5A" stroke="#5A3F1E" stroke-width="1.6"/>')  # the planked timber deck
-        step = max(7, span / 8)  # plank seams across the deck
-        sx = -hl + step
-        while sx < hl - 1:
-            g.append(f'<line x1="{sx:.1f}" y1="{-hw:.1f}" x2="{sx:.1f}" y2="{hw:.1f}" stroke="#5A3F1E" stroke-width="0.7" opacity="0.55"/>')
-            sx += step
-        g.append(f'<rect x="{-hl:.1f}" y="{-hw - 2.4:.1f}" width="{span:.1f}" height="2.6" fill="#5A3F1E"/>')  # the two side rails
-        g.append(f'<rect x="{-hl:.1f}" y="{hw - 0.2:.1f}" width="{span:.1f}" height="2.6" fill="#5A3F1E"/>')
-        g.append('</g>')
-        z = self.add_top(''.join(g), cls="footbridge")  # every plank and deck over water is one class (feature 134)
+        z = self.add_top(deck_glyph(x, y, rot, span, deck_w, form), cls="footbridge")  # every plank and deck over water is one class (feature 134)
         self.M.setdefault("bridges", []).append({"x": round(x, 1), "y": round(y, 1), "rot": round(rot, 1), "span": round(span, 1), "w": round(deck_w, 1), "z": z})
         return z
 
@@ -239,12 +280,16 @@ class BridgesMixin:
         lane (~5-6 px); the wider `bridges()` carried-way deck matches the lane it carries, but a footplank does not.
         USEFULNESS: a plank is placed only where BOTH banks reach ground someone walks to - cultivated field,
         the village, or a dike (via _plank_reaches_useful_ground). A drain/toe stretch whose far bank opens onto
-        marsh/scrub/off-map carries NO plank (GM 2026-07-22, Hikari no Sato: crossings into the reed marsh)."""
+        marsh/scrub/off-map carries NO plank (GM 2026-07-22, Hikari no Sato: crossings into the reed marsh).
+        FORM (269 B21): every crossing this lays takes the settlement's one rolled form - a single log, logs under
+        earth, or a planked deck (`FOOTBRIDGE_FORM`, research/water/290) - declared as `meta.footbridge_form` and on
+        each deck's record as `form`. The form changes the glyph only, never where or how wide a crossing is laid."""
 
         from l7r.diagram.waterfields import taper_w, worth_planking  # local: the engine packages are peers, imported lazily
 
         houses = [_deck_quad(h["x"], h["y"], h["w"], h["h"], h.get("rot", 0)) for h in self.M.get("houses", [])]
         n0 = len(self.M.get("bridges", []))
+        form = self.M["meta"]["footbridge_form"] = self.resolve("footbridge_form")
         # THREE MORE THINGS A PLANK SLIDES AWAY FROM (2026-08-11, found by rolling cohorts of
         # scripted hamlets - the shipped maps' ditches happen to run clear of all three):
         #
@@ -274,6 +319,7 @@ class BridgesMixin:
         # planked, and `wl is pts` cannot exclude a twin, so every candidate then reads as sitting at
         # a confluence with itself. Tried 2026-08-11; it made both footbridge checks fail at once.
         other_water = [(rec.get("poly") or rec.get("pts"), float(rec.get("w") or DEFAULT_W[key])) for key in ("streams", "channels", "field_ditches") for rec in self.M.get(key, []) or []]
+        _water_segs = water_segment_index(other_water)  # built once for every deck candidate below (feature 278, FR-003)
         for d in self.M.get("field_ditches", []):
             pts = d["poly"]
             seg = [math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]) for i in range(len(pts) - 1)]
@@ -356,7 +402,7 @@ class BridgesMixin:
                     # a plank at a junction spans the junction. Tested as "another course runs UNDER
                     # this deck", not "another course passes within a deck's length" - the looser
                     # form catches a ditch merely running parallel to a neighbor.
-                    span_here = self._widen_for_confluence(quad, deck, pts, other_water, span, plank_w)
+                    span_here = self._widen_for_confluence(quad, deck, pts, other_water, span, plank_w, _water_segs)
                     # THE OBLIQUENESS CEILING IS MEASURED AGAINST THE DITCH'S WIDEST SECTION, not
                     # against `span`, which is built from the HEAD width. On a COLLECTOR the head is
                     # the narrow end - a drain starts as a thread and earns its section at the
@@ -399,39 +445,53 @@ class BridgesMixin:
                         continue
                     if not self._deck_clears_its_water(px, py, deck, span_here, plank_w):
                         continue
-                    self.bridge(px, py, deck, span_here, plank_w)
+                    self.bridge(px, py, deck, span_here, plank_w, form)
                     self.M["bridges"][-1]["foot"] = True  # a standalone footplank (checked by footbridges_reach_useful_ground)
+                    self.M["bridges"][-1]["form"] = form
                     break
         return len(self.M["bridges"]) - n0
 
-    def _widen_for_confluence(self: Settlement, quad: Any, deck: float, own_pts: Any, other_water: Any, span: float, plank_w: float) -> float:  # type: ignore[misc]
+    def _widen_for_confluence(self: Settlement, quad: Any, deck: float, own_pts: Any, other_water: Any, span: float, plank_w: float, segs: PointGrid | None = None) -> float:  # type: ignore[misc]
         """The widest water actually UNDER this deck, expressed as a span - a plank at a junction is
         simply a longer plank, which is what a farmer would lay. Tested as "another course runs
         under this deck", not "another course passes within a deck's length": the looser form
         catches a ditch merely running alongside a neighbor. Returns `span` unchanged where nothing
-        else crosses."""
+        else crosses.
+
+        THE SEGMENTS FROM AN INDEX (feature 278, FR-003): every segment of every other watercourse was tested per deck
+        candidate - 62,565 of Inashiro's 63,674 `quad_hits_seg` calls. `quad_hits_seg(..., 3.0)` can pass only a segment
+        whose box meets the deck's box widened by those 3 px, so the index (`water_segment_index`, built once per
+        footbridge pass by the caller) returns every segment the test could pass, and the test decides as before. `under`
+        is a maximum, so neither the order of the hits nor a hit met twice changes it."""
         _da = math.radians(deck)
         _dux, _duy = math.cos(_da), math.sin(_da)
         under: list[float] = []
-        for wl, ow in other_water:
+        segs = segs if segs is not None else water_segment_index(other_water)
+        qx0, qy0 = min(q[0] for q in quad) - 3.0, min(q[1] for q in quad) - 3.0
+        qx1, qy1 = max(q[0] for q in quad) + 3.0, max(q[1] for q in quad) + 3.0
+        seen: set[tuple[int, int]] = set()
+        for wi, i2, bx0, by0, bx1, by1 in segs.near((qx0 + qx1) / 2, (qy0 + qy1) / 2, max(qx1 - qx0, qy1 - qy0) / 2):
+            if (wi, i2) in seen or bx1 < qx0 or bx0 > qx1 or by1 < qy0 or by0 > qy1:
+                continue
+            seen.add((wi, i2))
+            wl, ow = other_water[wi]
             if wl is own_pts:
                 continue
-            for i2 in range(len(wl) - 1):
-                if not quad_hits_seg(quad, tuple(wl[i2]), tuple(wl[i2 + 1]), 3.0):
-                    continue
-                _wx, _wy = wl[i2 + 1][0] - wl[i2][0], wl[i2 + 1][1] - wl[i2][1]
-                _wl = math.hypot(_wx, _wy) or 1.0
-                _sin = abs(_dux * _wy / _wl - _duy * _wx / _wl)  # deck-vs-course crossing angle
-                _cos = abs(_dux * _wx / _wl + _duy * _wy / _wl)
-                # THE CHECK'S OWN GEOMETRY, not the shorthand in its message. It requires
-                # every deck CORNER to stand at least `cw/2 + floor` from the crossed
-                # course's centerline (floor = 2 real ft for a footplank), so at a
-                # crossing angle t the deck's half-length must exceed that over sin(t) -
-                # i.e. the whole span is (cw + 2*floor + deck_w*|cos|) / sin. Deriving it
-                # from the message's "(width + deck_w*|cos|)/sin plus a landing" leaves
-                # the landing UNDIVIDED by sin and comes up short on a shallow crossing,
-                # which is precisely the case this exists for.
-                under.append((ow + 2.0 * (2.0 / self.ftpx) + plank_w * _cos) / max(_sin, 0.02) + 1.0)
+            if not quad_hits_seg(quad, tuple(wl[i2]), tuple(wl[i2 + 1]), 3.0):
+                continue
+            _wx, _wy = wl[i2 + 1][0] - wl[i2][0], wl[i2 + 1][1] - wl[i2][1]
+            _wl = math.hypot(_wx, _wy) or 1.0
+            _sin = abs(_dux * _wy / _wl - _duy * _wx / _wl)  # deck-vs-course crossing angle
+            _cos = abs(_dux * _wx / _wl + _duy * _wy / _wl)
+            # THE CHECK'S OWN GEOMETRY, not the shorthand in its message. It requires
+            # every deck CORNER to stand at least `cw/2 + floor` from the crossed
+            # course's centerline (floor = 2 real ft for a footplank), so at a
+            # crossing angle t the deck's half-length must exceed that over sin(t) -
+            # i.e. the whole span is (cw + 2*floor + deck_w*|cos|) / sin. Deriving it
+            # from the message's "(width + deck_w*|cos|)/sin plus a landing" leaves
+            # the landing UNDIVIDED by sin and comes up short on a shallow crossing,
+            # which is precisely the case this exists for.
+            under.append((ow + 2.0 * (2.0 / self.ftpx) + plank_w * _cos) / max(_sin, 0.02) + 1.0)
         return max([span] + under)
 
     def _deck_clears_its_water(self: Settlement, px: float, py: float, deck: float, span_here: float, plank_w: float) -> bool:  # type: ignore[misc]
@@ -493,3 +553,16 @@ class BridgesMixin:
                 continue
             return False
         return True
+
+
+def water_segment_index(water: Any) -> PointGrid:
+    """Every segment of every watercourse in `water` - `(polyline, width)` pairs - filed by its box as
+    `(course index, segment index, x0, y0, x1, y1)` (feature 278, FR-003)."""
+    grid = PointGrid()
+    grid.extend(
+        (wi, i, min(wl[i][0], wl[i + 1][0]), min(wl[i][1], wl[i + 1][1]), max(wl[i][0], wl[i + 1][0]), max(wl[i][1], wl[i + 1][1]))
+        for wi, (wl, _w) in enumerate(water)
+        if wl
+        for i in range(len(wl) - 1)
+    )
+    return grid

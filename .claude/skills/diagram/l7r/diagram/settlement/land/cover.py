@@ -33,7 +33,7 @@ from typing import TYPE_CHECKING, Any
 # AND SINCE FEATURE 223 THE BUCKET IS KEPT AS COORDINATES UNTIL `finish()`, which knows the frame: ~90% of the blades
 # lie outside the viewBox (specs/200 R2) and are culled there by the page's own `drop_offmap` rule before the merge,
 # so the file never carries them (`Settlement.flush_blade_groups`).
-from .._geom import KeepoutGrid, Poly, RingIndex, convex_hull
+from .._geom import CrownIndex, KeepoutGrid, Poly, RingIndex, convex_hull
 from ..land.wet import MARSH_FEATHER_BS
 
 WOOD_FRINGE_FT = 8.0
@@ -57,7 +57,7 @@ def farmstead_keepouts(M: Any, margin: float) -> list[Any]:
     if not hs:
         return []
     groups: list[list[tuple[float, float]]] = [[h] for h in hs]
-    for key in ("gardens", "threshing_yards", "farm_fixtures", "byres", "farm_sheds", "persimmons"):
+    for key in ("gardens", "threshing_yards", "farm_fixtures", "byres", "farm_sheds", "retirement_houses", "persimmons"):
         for r in M.get(key) or []:
             if "x" in r:
                 hw, hh = float(r.get("w", 0.0)) / 2, float(r.get("h", 0.0)) / 2
@@ -218,9 +218,9 @@ class GroundCoverMixin:
             # type is defined PURELY by its feathered scatter, which thins to nothing at the margin - so the ground
             # has no boundary at all, just its cover petering out onto the open slope. THREE distinct looks so land
             # types read apart at a glance (the GM's rule - grass and woods must NOT look the same):
-            #   role="woodland"  -> a COPPICE WOOD: individual, spaced tree CROWNS, an OPEN canopy (gaps show) - the
-            #                       upland/ridge wood the hamlet coppices. Clearly TREES, but lighter and more open
-            #                       than the dense DARK closed-canopy fengshui village grove (they stay distinct too).
+            #   role="woodland"  -> a COPPICE WOOD: a thicket of small crowns whose neighbors just meet (8-9 ft on
+            #                       ~8 ft centers, research/vegetation/230) - the hill wood the hamlet coppices. Clearly
+            #                       TREES, lighter and finer-grained than the DARK big-crowned village grove (they stay distinct).
             #   role="pasture"   -> OPEN GRAZING GRASS: grass tufts + the odd brush dot, NO trees at all - reads as
             #                       open pasture, unmistakably NOT woodland.
             #   role="commons"/"grazing" (default) -> the cut-over fuel/fodder scrub: grass + a FEW scraggly pines.
@@ -251,30 +251,36 @@ class GroundCoverMixin:
                 # cannot hold its quota still terminates) makes the realized density the stated one on
                 # every parcel. The draws stay inside this function's `random.setstate` scope, so the
                 # extra throws cannot ripple into anything drawn later.
-                _wd_target = int(area / (540 * bs * bs))
-                _wd_seated = self._crowns_near(
-                    min(q[0] for q in poly), min(q[1] for q in poly), max(q[0] for q in poly), max(q[1] for q in poly)
-                )  # no crown under another's, this wood's or a neighbor's (GM 2026-08-28; woods._crown_seat_clear)
+                # THE COMMONS' OWN STOCKING (269 B28; research/vegetation/230): one crown to `COMMONS_SPACING_FT`
+                # squared (~63 sq ft, 1,700 stems/ha), each 8-9 ft across so neighbors just meet. It was one crown to
+                # 540 sq ft at 13-23 ft across, the hill wood's figures (vegetation/060) that no page gave for a coppice.
+                _wd_target = int(area / self.px(self.COMMONS_SPACING_FT) ** 2)
+                _r_lo, _r_hi = (self.px(v) for v in self.COMMONS_CROWN_R_FT)
+                # no crown under another's, this wood's or a neighbor's (GM 2026-08-28; woods._crown_seat_clear) -
+                # asked of an index, because a coppice at its real stocking seats hundreds of crowns (dev/performance.md)
+                _wd_seated = CrownIndex(self._crowns_near(min(q[0] for q in poly), min(q[1] for q in poly), max(q[0] for q in poly), max(q[1] for q in poly)))
                 for _ in range(_wd_target * 6):
                     if _wd_crowns >= _wd_target:
                         break
                     cx, cy = random.uniform(x0, x1), random.uniform(y0, y1)
-                    if _sparse(cx, cy, 0.6, 11.5 * bs):  # lean = the largest crown radius, so no canopy overhangs a crop
+                    if _sparse(cx, cy, 0.6, _r_hi):  # lean = the largest crown radius, so no canopy overhangs a crop
                         continue
-                    r = random.uniform(6.5, 11.5) * bs
+                    r = random.uniform(_r_lo, _r_hi)
                     col = random.choice(("#6E8B4A", "#7C9856", "#87A45C"))
                     # RECORD the crown (known-open ledger 2026-08-16, both review rounds
                     # independently): these used to be SVG ink only, so no manifest check could
                     # count a stand's canopy - which is how a zero-crown "woodland" parcel could
                     # ship green. Same flat [x, y, r] run the homestead groves use.
-                    if not self._crown_seat_clear(cx, cy, r, _wd_seated):
+                    if not _wd_seated.clear(cx, cy, r):
                         continue  # centered under an already-seated crown: an understory stem, not canopy
-                    _wd_seated.append((cx, cy, r))
+                    _wd_seated.add(cx, cy, r)
                     self.M["tree_crowns"] += [round(cx, 1), round(cy, 1), round(r, 1)]
                     _wd_crowns += 1
-                    g.append(f'<ellipse cx="{cx:.1f}" cy="{cy + 2 * bs:.1f}" rx="{r:.1f}" ry="{r * 0.72:.1f}" fill="#59703E" fill-opacity="0.30"/>')  # soft ground shadow
-                    g.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="{col}" stroke="#4C6234" stroke-width="0.7"/>')  # the crown
-                    g.append(f'<circle cx="{cx - r * 0.32:.1f}" cy="{cy - r * 0.32:.1f}" r="{r * 0.42:.1f}" fill="#A6BA79" fill-opacity="0.55"/>')  # sun highlight
+                    # ONE FLAT DISC PER CROWN (GM 2026-09-28), as in groves.py and woods.py. A pale "sun highlight"
+                    # disc inside each crown and a soft ground shadow under it were a shading convention that
+                    # the GM read as a second tree or a trunk, worse under the page's highlighting; color alone
+                    # tells one kind of tree from another.
+                    g.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="{col}" stroke="#4C6234" stroke-width="0.7"/>')
             else:
                 # A THROW OUTSIDE THE PREDICTED FRAME COSTS ITS TWO DRAWS AND NOTHING ELSE (feature 224): ~90% of a hamlet's
                 # throws land where the frame will clip them, and each used to pay the keep-out test and its marks' draws
@@ -283,21 +289,23 @@ class GroundCoverMixin:
                 _fr = self._scatter_frame
                 if _fr is not None:
                     self._scatter_frames.append((_fr, (x0, y0, x1, y1)))  # for finish()'s breach record: the frame, and the ground this throw covered
-                for _ in range(int(area / (74 * bs * bs))):  # coarse grass tufts + the odd low brush dot
-                    gx, gy = random.uniform(x0, x1), random.uniform(y0, y1)
-                    if _fr is not None and not (_fr[0] <= gx <= _fr[2] and _fr[1] <= gy <= _fr[3]):
-                        continue
-                    if _sparse(gx, gy, 0.7):
-                        continue
-                    if random.random() < 0.14:  # a low brush dot
-                        if _in_soft(gx, gy):
-                            continue  # WOODY: never in the bog (see _in_soft)
-                        _r = random.uniform(1.5, 2.4) * bs
-                        marks.append((gx - _r, gy - _r, gx + _r, gy + _r, f'<circle cx="{gx:.1f}" cy="{gy:.1f}" r="{_r:.1f}" fill="#94A063" fill-opacity="0.85"/>'))
-                    else:  # a grass tuft: a few short diverging blades (bucketed - see the note at `blades`)
-                        for _ in range(3):
-                            a, bl = random.uniform(-0.45, 0.45), random.uniform(2.4, 4.2) * bs
-                            blades.append((f"{gx:.1f}", f"{gy:.1f}", f"{gx + math.sin(a) * bl:.1f}", f"{gy - math.cos(a) * bl:.1f}"))
+                # coarse grass tufts + the odd low brush dot, thrown and tested AS ARRAYS (`grass_scatter`, feature 278 FR-008)
+                _gb, _gm = grass_scatter(
+                    int(area / (74 * bs * bs)),
+                    (x0, y0, x1, y1),
+                    _fr,
+                    ring,
+                    keep,
+                    self._on_crescent_pond if crescents else None,
+                    pond,
+                    soft_idx,
+                    soft_feathers,
+                    feather,
+                    bs,
+                    random.getrandbits(64),
+                )
+                blades += _gb
+                marks += _gm
                 if role != "pasture":  # the SCRAGGLY pines belong to cut-over scrub, NOT to open pasture
                     for _ in range(max(2, int(area / (6000 * bs * bs)))):  # a few SCRAGGLY hill pines (sparse, individual, open)
                         px, py = random.uniform(x0 + 6, x1 - 6), random.uniform(y0 + 6, y1 - 6)
@@ -587,3 +595,83 @@ class GroundCoverMixin:
         the overlap is harmless. Pass roughly the footprint you will draw (a slightly generous `extra` is
         fine - over-clearing by a few px reads the same)."""
         self._clear_ground(x, y, w, h, extra)
+
+
+def grass_scatter(
+    n: int,
+    box: tuple[float, float, float, float],
+    frame: tuple[float, float, float, float] | None,
+    ring: Any,
+    keep: Any,
+    on_crescent: Any,
+    pond: Any,
+    soft_idx: list[Any],
+    soft_feathers: list[float],
+    feather: float,
+    bs: float,
+    seed: int,
+) -> tuple[list[tuple[str, str, str, str]], list[tuple[float, float, float, float, str]]]:
+    """The commons' grass tufts and brush dots - `n` throws over `box` - THROWN AND TESTED AS ARRAYS (feature 278, FR-008).
+
+    The loop this replaces drew two coordinates per throw and asked `_sparse` of each, one point at a time: 79,181 tests
+    and 551,875 draws on Kashikawa, most of the hinterland stage. The same throws are made here as numpy arrays from a
+    generator seeded off the parcel's own seeded stream, and every test is the one `_sparse` ran, point for point: the
+    predicted frame, the parcel's ring (`RingIndex.inside_many`), the keep-outs (`KeepoutGrid.hit_many`, the crop margin
+    at the grass's lean of 0), the crescent ponds, the pond's ellipse, then the soft ramp - a point inside a marsh or a
+    wood is dropped with the probability `sd / sf` (1 past the feather) - or, outside every soft ground, the parcel's
+    feathered edge, dropped where `u > (ed / feather) ** 0.7`. The density is the parcel's own, as before: the same throw
+    count and the same odds; the marks land at different random places (the spec's Decisions Recorded). 14% of the
+    kept points are brush dots (never in a soft ground - woody), the rest three-bladed tufts."""
+    import numpy as np
+    import shapely
+    from shapely.geometry import LinearRing
+
+    blades: list[tuple[str, str, str, str]] = []
+    marks: list[tuple[float, float, float, float, str]] = []
+    if n <= 0:
+        return blades, marks
+    x0, y0, x1, y1 = box
+    rng = np.random.default_rng(seed)
+    gx, gy = rng.uniform(x0, x1, n), rng.uniform(y0, y1, n)
+    u_thin, u_kind = rng.random(n), rng.random(n)
+    r_dot = rng.uniform(1.5, 2.4, n) * bs
+    ang, blen = rng.uniform(-0.45, 0.45, (n, 3)), rng.uniform(2.4, 4.2, (n, 3)) * bs
+    idx = np.arange(n)
+    if frame is not None:
+        idx = idx[(gx >= frame[0]) & (gx <= frame[2]) & (gy >= frame[1]) & (gy <= frame[3])]
+    idx = idx[ring.inside_many(gx[idx], gy[idx])]
+    idx = idx[~keep.hit_many(gx[idx], gy[idx], (0.0, 0.0))]
+    if on_crescent is not None and len(idx):
+        idx = idx[~np.array([bool(on_crescent(float(gx[i]), float(gy[i]))) for i in idx], dtype=bool)]
+    if pond:
+        idx = idx[((gx[idx] - pond[0]) / pond[2]) ** 2 + ((gy[idx] - pond[1]) / pond[3]) ** 2 > 1.0]
+    soft_of = np.full(len(idx), -1)
+    for k, si in enumerate(soft_idx):  # the FIRST soft ground holding a point decides it, as the loop's order did
+        free = np.flatnonzero(soft_of < 0)
+        if not len(free):
+            break
+        soft_of[free[si.inside_many(gx[idx[free]], gy[idx[free]])]] = k
+    kept = np.ones(len(idx), dtype=bool)
+    for k, (si, sf) in enumerate(zip(soft_idx, soft_feathers, strict=True)):
+        sel = np.flatnonzero(soft_of == k)
+        if len(sel):
+            d = shapely.distance(LinearRing(si.ring), shapely.points(gx[idx[sel]], gy[idx[sel]]))
+            kept[sel] = ~(u_thin[idx[sel]] < np.where(d < sf, d / sf, 1.0))
+    rest = np.flatnonzero(soft_of < 0)
+    if len(rest):
+        ed = shapely.distance(LinearRing(ring.ring), shapely.points(gx[idx[rest]], gy[idx[rest]]))
+        kept[rest] = ~((ed < feather) & (u_thin[idx[rest]] > (np.minimum(ed, feather) / feather) ** 0.7))
+    idx, in_soft = idx[kept], soft_of[kept] >= 0
+    dot = u_kind[idx] < 0.14
+    for i in idx[dot & ~in_soft].tolist():  # a low brush dot - WOODY: never in the bog (see _in_soft)
+        px, py, r = float(gx[i]), float(gy[i]), float(r_dot[i])
+        marks.append((px - r, py - r, px + r, py + r, f'<circle cx="{px:.1f}" cy="{py:.1f}" r="{r:.1f}" fill="#94A063" fill-opacity="0.85"/>'))
+    tufts = idx[~dot]  # grass tufts: three short diverging blades each (bucketed - see the note at `blades` in `commons`)
+    if len(tufts):
+        tx, ty = gx[tufts][:, None], gy[tufts][:, None]
+        ex, ey = tx + np.sin(ang[tufts]) * blen[tufts], ty - np.cos(ang[tufts]) * blen[tufts]
+        blades = [
+            (f"{a:.1f}", f"{b:.1f}", f"{c:.1f}", f"{d:.1f}")
+            for a, b, c, d in zip(np.repeat(tx, 3, axis=1).ravel().tolist(), np.repeat(ty, 3, axis=1).ravel().tolist(), ex.ravel().tolist(), ey.ravel().tolist(), strict=True)
+        ]
+    return blades, marks

@@ -1,7 +1,10 @@
 {
  "term": "cho",
- "def": "About one hectare (10 tan), the unit a holding or a village's fields were reckoned in; also a town block of that size.",
+ "def": "About one hectare (10 tan), the unit a holding or a village's fields were reckoned in; also a town block of that size. Land counted in cho is chobu (町歩): 5 chobu is 5 cho of land, about 5 hectares.",
  "variants": [
-  "cho"
+  "cho",
+  "chobu",
+  "cho-bu",
+  "chō"
  ]
 }

@@ -1,0 +1,7 @@
+{
+  "utc": "2026-09-28T17:55:39Z",
+  "target": "review-accept",
+  "commit": "d9ad65432",
+  "outcome": "permitted",
+  "why": "review-accept mizuguchi F3: the modal lead is the class docstring every map shares; its rack clauses are conditional ('where a map draws racks by the houses'), so on a rackless map they describe nothing false, and the map's own on_this_map line says why no rack is drawn"
+}

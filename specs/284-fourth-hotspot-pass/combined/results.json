@@ -1,0 +1,1758 @@
+[
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "inashiro",
+  "attempt": 1,
+  "placed": 15,
+  "households": 15,
+  "acres": 19.85,
+  "target": 19.5,
+  "homestead_bamboo": 8,
+  "thicket": 0,
+  "way_len": 5872,
+  "board": true,
+  "failures": [],
+  "s": 9.6
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "inashiro",
+  "attempt": 1,
+  "placed": 15,
+  "households": 15,
+  "acres": 19.62,
+  "target": 19.5,
+  "homestead_bamboo": 3,
+  "thicket": 0,
+  "way_len": 5608,
+  "board": true,
+  "failures": [],
+  "s": 11.09
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "inashiro",
+  "attempt": 1,
+  "placed": 15,
+  "households": 15,
+  "acres": 19.85,
+  "target": 19.5,
+  "homestead_bamboo": 8,
+  "thicket": 0,
+  "way_len": 5872,
+  "board": true,
+  "failures": [],
+  "s": 9.67
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   1,
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "kashikawa",
+  "attempt": 2,
+  "placed": 20,
+  "households": 20,
+  "acres": 26.73,
+  "target": 26.0,
+  "homestead_bamboo": 6,
+  "thicket": 1,
+  "way_len": 7002,
+  "board": true,
+  "failures": [],
+  "s": 20.66
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "kashikawa",
+  "attempt": 1,
+  "placed": 20,
+  "households": 20,
+  "acres": 25.22,
+  "target": 26.0,
+  "homestead_bamboo": 8,
+  "thicket": 1,
+  "way_len": 7082,
+  "board": true,
+  "failures": [],
+  "s": 15.26
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   1,
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "kashikawa",
+  "attempt": 2,
+  "placed": 20,
+  "households": 20,
+  "acres": 26.73,
+  "target": 26.0,
+  "homestead_bamboo": 6,
+  "thicket": 1,
+  "way_len": 7002,
+  "board": true,
+  "failures": [],
+  "s": 18.88
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "kuwabata",
+  "attempt": 1,
+  "placed": 16,
+  "households": 16,
+  "acres": 19.13,
+  "target": 20.8,
+  "homestead_bamboo": 9,
+  "thicket": 0,
+  "way_len": 5604,
+  "board": true,
+  "failures": [],
+  "s": 6.07
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "kuwabata",
+  "attempt": 1,
+  "placed": 16,
+  "households": 16,
+  "acres": 19.13,
+  "target": 20.8,
+  "homestead_bamboo": 9,
+  "thicket": 0,
+  "way_len": 5604,
+  "board": true,
+  "failures": [],
+  "s": 4.95
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "kuwabata",
+  "attempt": 1,
+  "placed": 16,
+  "households": 16,
+  "acres": 19.13,
+  "target": 20.8,
+  "homestead_bamboo": 9,
+  "thicket": 0,
+  "way_len": 5604,
+  "board": true,
+  "failures": [],
+  "s": 6.1
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "sawada",
+  "attempt": 1,
+  "placed": 19,
+  "households": 19,
+  "acres": 23.86,
+  "target": 24.7,
+  "homestead_bamboo": 7,
+  "thicket": 0,
+  "way_len": 6423,
+  "board": true,
+  "failures": [],
+  "s": 12.61
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "sawada",
+  "attempt": 1,
+  "placed": 19,
+  "households": 19,
+  "acres": 23.47,
+  "target": 24.7,
+  "homestead_bamboo": 8,
+  "thicket": 0,
+  "way_len": 6454,
+  "board": true,
+  "failures": [],
+  "s": 17.82
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "sawada",
+  "attempt": 1,
+  "placed": 19,
+  "households": 19,
+  "acres": 23.86,
+  "target": 24.7,
+  "homestead_bamboo": 7,
+  "thicket": 0,
+  "way_len": 6423,
+  "board": true,
+  "failures": [],
+  "s": 11.97
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "mizuguchi",
+  "attempt": 1,
+  "placed": 12,
+  "households": 12,
+  "acres": 14.64,
+  "target": 15.6,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 6347,
+  "board": true,
+  "failures": [],
+  "s": 9.86
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "mizuguchi",
+  "attempt": 1,
+  "placed": 12,
+  "households": 12,
+  "acres": 14.64,
+  "target": 15.6,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 6350,
+  "board": true,
+  "failures": [],
+  "s": 6.94
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "mizuguchi",
+  "attempt": 1,
+  "placed": 12,
+  "households": 12,
+  "acres": 14.64,
+  "target": 15.6,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 6347,
+  "board": true,
+  "failures": [],
+  "s": 10.22
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   1,
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-01",
+  "attempt": 2,
+  "placed": 17,
+  "households": 17,
+  "acres": 21.65,
+  "target": 22.1,
+  "homestead_bamboo": 7,
+  "thicket": 1,
+  "way_len": 5956,
+  "board": true,
+  "failures": [],
+  "s": 16.37
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-01",
+  "attempt": 1,
+  "placed": 17,
+  "households": 17,
+  "acres": 22.62,
+  "target": 22.1,
+  "homestead_bamboo": 11,
+  "thicket": 1,
+  "way_len": 6400,
+  "board": true,
+  "failures": [],
+  "s": 13.55
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   1,
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-01",
+  "attempt": 2,
+  "placed": 17,
+  "households": 17,
+  "acres": 21.65,
+  "target": 22.1,
+  "homestead_bamboo": 7,
+  "thicket": 1,
+  "way_len": 5956,
+  "board": true,
+  "failures": [],
+  "s": 15.3
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-02",
+  "attempt": 1,
+  "placed": 13,
+  "households": 13,
+  "acres": 16.54,
+  "target": 16.9,
+  "homestead_bamboo": 5,
+  "thicket": 0,
+  "way_len": 5952,
+  "board": true,
+  "failures": [],
+  "s": 6.22
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-02",
+  "attempt": 1,
+  "placed": 13,
+  "households": 13,
+  "acres": 17.43,
+  "target": 16.9,
+  "homestead_bamboo": 8,
+  "thicket": 0,
+  "way_len": 5911,
+  "board": true,
+  "failures": [],
+  "s": 9.22
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-02",
+  "attempt": 1,
+  "placed": 13,
+  "households": 13,
+  "acres": 16.54,
+  "target": 16.9,
+  "homestead_bamboo": 5,
+  "thicket": 0,
+  "way_len": 5952,
+  "board": true,
+  "failures": [],
+  "s": 8.44
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-03",
+  "attempt": 1,
+  "placed": 20,
+  "households": 20,
+  "acres": 25.24,
+  "target": 26.0,
+  "homestead_bamboo": 5,
+  "thicket": 1,
+  "way_len": 6297,
+  "board": true,
+  "failures": [],
+  "s": 13.56
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   2,
+   1,
+   1,
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-03",
+  "attempt": 4,
+  "placed": 20,
+  "households": 20,
+  "acres": 25.24,
+  "target": 26.0,
+  "homestead_bamboo": 9,
+  "thicket": 1,
+  "way_len": 5852,
+  "board": true,
+  "failures": [],
+  "s": 42.32
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-03",
+  "attempt": 1,
+  "placed": 20,
+  "households": 20,
+  "acres": 25.24,
+  "target": 26.0,
+  "homestead_bamboo": 5,
+  "thicket": 1,
+  "way_len": 6297,
+  "board": true,
+  "failures": [],
+  "s": 14.07
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-04",
+  "attempt": 1,
+  "placed": 16,
+  "households": 16,
+  "acres": 20.42,
+  "target": 20.8,
+  "homestead_bamboo": 8,
+  "thicket": 0,
+  "way_len": 6209,
+  "board": true,
+  "failures": [],
+  "s": 10.29
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-04",
+  "attempt": 1,
+  "placed": 16,
+  "households": 16,
+  "acres": 20.88,
+  "target": 20.8,
+  "homestead_bamboo": 9,
+  "thicket": 0,
+  "way_len": 6045,
+  "board": true,
+  "failures": [],
+  "s": 10.82
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-04",
+  "attempt": 1,
+  "placed": 16,
+  "households": 16,
+  "acres": 20.42,
+  "target": 20.8,
+  "homestead_bamboo": 8,
+  "thicket": 0,
+  "way_len": 6209,
+  "board": true,
+  "failures": [],
+  "s": 13.67
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   1,
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-05",
+  "attempt": 2,
+  "placed": 12,
+  "households": 12,
+  "acres": 15.06,
+  "target": 15.6,
+  "homestead_bamboo": 0,
+  "thicket": 0,
+  "way_len": 5730,
+  "board": true,
+  "failures": [],
+  "s": 18.72
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   1,
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-05",
+  "attempt": 2,
+  "placed": 12,
+  "households": 12,
+  "acres": 15.06,
+  "target": 15.6,
+  "homestead_bamboo": 0,
+  "thicket": 0,
+  "way_len": 5743,
+  "board": true,
+  "failures": [],
+  "s": 18.95
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   1,
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-05",
+  "attempt": 2,
+  "placed": 12,
+  "households": 12,
+  "acres": 15.06,
+  "target": 15.6,
+  "homestead_bamboo": 0,
+  "thicket": 0,
+  "way_len": 5730,
+  "board": true,
+  "failures": [],
+  "s": 16.71
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-06",
+  "attempt": 1,
+  "placed": 19,
+  "households": 19,
+  "acres": 24.73,
+  "target": 24.7,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 6404,
+  "board": true,
+  "failures": [],
+  "s": 15.21
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-06",
+  "attempt": 1,
+  "placed": 19,
+  "households": 19,
+  "acres": 25.12,
+  "target": 24.7,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 6298,
+  "board": true,
+  "failures": [],
+  "s": 14.47
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-06",
+  "attempt": 1,
+  "placed": 19,
+  "households": 19,
+  "acres": 24.73,
+  "target": 24.7,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 6404,
+  "board": true,
+  "failures": [],
+  "s": 11.32
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-07",
+  "attempt": 1,
+  "placed": 15,
+  "households": 15,
+  "acres": 19.37,
+  "target": 19.5,
+  "homestead_bamboo": 10,
+  "thicket": 0,
+  "way_len": 6145,
+  "board": true,
+  "failures": [],
+  "s": 11.14
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-07",
+  "attempt": 1,
+  "placed": 15,
+  "households": 15,
+  "acres": 19.16,
+  "target": 19.5,
+  "homestead_bamboo": 1,
+  "thicket": 0,
+  "way_len": 6190,
+  "board": true,
+  "failures": [],
+  "s": 15.22
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-07",
+  "attempt": 1,
+  "placed": 15,
+  "households": 15,
+  "acres": 19.37,
+  "target": 19.5,
+  "homestead_bamboo": 10,
+  "thicket": 0,
+  "way_len": 6145,
+  "board": true,
+  "failures": [],
+  "s": 8.91
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-08",
+  "attempt": 1,
+  "placed": 11,
+  "households": 11,
+  "acres": 14.48,
+  "target": 14.3,
+  "homestead_bamboo": 7,
+  "thicket": 0,
+  "way_len": 5705,
+  "board": true,
+  "failures": [],
+  "s": 6.87
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-08",
+  "attempt": 1,
+  "placed": 11,
+  "households": 11,
+  "acres": 14.48,
+  "target": 14.3,
+  "homestead_bamboo": 8,
+  "thicket": 0,
+  "way_len": 5644,
+  "board": true,
+  "failures": [],
+  "s": 9.92
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-08",
+  "attempt": 1,
+  "placed": 11,
+  "households": 11,
+  "acres": 14.48,
+  "target": 14.3,
+  "homestead_bamboo": 7,
+  "thicket": 0,
+  "way_len": 5705,
+  "board": true,
+  "failures": [],
+  "s": 9.12
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-09",
+  "attempt": 1,
+  "placed": 18,
+  "households": 18,
+  "acres": 22.15,
+  "target": 23.4,
+  "homestead_bamboo": 6,
+  "thicket": 0,
+  "way_len": 6347,
+  "board": true,
+  "failures": [],
+  "s": 13.61
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-09",
+  "attempt": 1,
+  "placed": 18,
+  "households": 18,
+  "acres": 23.01,
+  "target": 23.4,
+  "homestead_bamboo": 10,
+  "thicket": 0,
+  "way_len": 6313,
+  "board": true,
+  "failures": [],
+  "s": 16.68
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-09",
+  "attempt": 1,
+  "placed": 18,
+  "households": 18,
+  "acres": 22.15,
+  "target": 23.4,
+  "homestead_bamboo": 6,
+  "thicket": 0,
+  "way_len": 6347,
+  "board": true,
+  "failures": [],
+  "s": 14.58
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-10",
+  "attempt": 1,
+  "placed": 14,
+  "households": 14,
+  "acres": 16.87,
+  "target": 18.2,
+  "homestead_bamboo": 6,
+  "thicket": 0,
+  "way_len": 5676,
+  "board": true,
+  "failures": [],
+  "s": 10.8
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-10",
+  "attempt": 1,
+  "placed": 14,
+  "households": 14,
+  "acres": 16.87,
+  "target": 18.2,
+  "homestead_bamboo": 6,
+  "thicket": 0,
+  "way_len": 5647,
+  "board": true,
+  "failures": [],
+  "s": 13.28
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-10",
+  "attempt": 1,
+  "placed": 14,
+  "households": 14,
+  "acres": 16.87,
+  "target": 18.2,
+  "homestead_bamboo": 6,
+  "thicket": 0,
+  "way_len": 5676,
+  "board": true,
+  "failures": [],
+  "s": 14.39
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-11",
+  "attempt": 1,
+  "placed": 10,
+  "households": 10,
+  "acres": 12.92,
+  "target": 13.0,
+  "homestead_bamboo": 5,
+  "thicket": 0,
+  "way_len": 5162,
+  "board": true,
+  "failures": [],
+  "s": 17.39
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-11",
+  "attempt": 1,
+  "placed": 10,
+  "households": 10,
+  "acres": 13.82,
+  "target": 13.0,
+  "homestead_bamboo": 4,
+  "thicket": 0,
+  "way_len": 5391,
+  "board": true,
+  "failures": [],
+  "s": 10.88
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-11",
+  "attempt": 1,
+  "placed": 10,
+  "households": 10,
+  "acres": 12.92,
+  "target": 13.0,
+  "homestead_bamboo": 5,
+  "thicket": 0,
+  "way_len": 5162,
+  "board": true,
+  "failures": [],
+  "s": 17.18
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-12",
+  "attempt": 1,
+  "placed": 17,
+  "households": 17,
+  "acres": 21.65,
+  "target": 22.1,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 7121,
+  "board": true,
+  "failures": [],
+  "s": 12.88
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-12",
+  "attempt": 1,
+  "placed": 17,
+  "households": 17,
+  "acres": 21.72,
+  "target": 22.1,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 6390,
+  "board": true,
+  "failures": [],
+  "s": 7.38
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-12",
+  "attempt": 1,
+  "placed": 17,
+  "households": 17,
+  "acres": 21.65,
+  "target": 22.1,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 7121,
+  "board": true,
+  "failures": [],
+  "s": 9.82
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-13",
+  "attempt": 1,
+  "placed": 13,
+  "households": 13,
+  "acres": 16.16,
+  "target": 16.9,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 5445,
+  "board": true,
+  "failures": [],
+  "s": 7.1
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-13",
+  "attempt": 1,
+  "placed": 13,
+  "households": 13,
+  "acres": 16.16,
+  "target": 16.9,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 5445,
+  "board": true,
+  "failures": [],
+  "s": 7.36
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-13",
+  "attempt": 1,
+  "placed": 13,
+  "households": 13,
+  "acres": 16.16,
+  "target": 16.9,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 5445,
+  "board": true,
+  "failures": [],
+  "s": 10.46
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-14",
+  "attempt": 1,
+  "placed": 20,
+  "households": 20,
+  "acres": 24.55,
+  "target": 26.0,
+  "homestead_bamboo": 0,
+  "thicket": 0,
+  "way_len": 6496,
+  "board": true,
+  "failures": [],
+  "s": 7.81
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-14",
+  "attempt": 1,
+  "placed": 20,
+  "households": 20,
+  "acres": 27.5,
+  "target": 26.0,
+  "homestead_bamboo": 0,
+  "thicket": 0,
+  "way_len": 6509,
+  "board": true,
+  "failures": [],
+  "s": 10.91
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-14",
+  "attempt": 1,
+  "placed": 20,
+  "households": 20,
+  "acres": 24.55,
+  "target": 26.0,
+  "homestead_bamboo": 0,
+  "thicket": 0,
+  "way_len": 6496,
+  "board": true,
+  "failures": [],
+  "s": 13.59
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-15",
+  "attempt": 1,
+  "placed": 16,
+  "households": 16,
+  "acres": 20.46,
+  "target": 20.8,
+  "homestead_bamboo": 3,
+  "thicket": 1,
+  "way_len": 6078,
+  "board": true,
+  "failures": [],
+  "s": 9.05
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-15",
+  "attempt": 1,
+  "placed": 16,
+  "households": 16,
+  "acres": 20.46,
+  "target": 20.8,
+  "homestead_bamboo": 9,
+  "thicket": 1,
+  "way_len": 6664,
+  "board": true,
+  "failures": [],
+  "s": 11.0
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-15",
+  "attempt": 1,
+  "placed": 16,
+  "households": 16,
+  "acres": 20.46,
+  "target": 20.8,
+  "homestead_bamboo": 3,
+  "thicket": 1,
+  "way_len": 6078,
+  "board": true,
+  "failures": [],
+  "s": 14.63
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-16",
+  "attempt": 1,
+  "placed": 12,
+  "households": 12,
+  "acres": 15.44,
+  "target": 15.6,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 5632,
+  "board": true,
+  "failures": [],
+  "s": 7.38
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-16",
+  "attempt": 1,
+  "placed": 12,
+  "households": 12,
+  "acres": 15.44,
+  "target": 15.6,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 5629,
+  "board": true,
+  "failures": [],
+  "s": 8.28
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-16",
+  "attempt": 1,
+  "placed": 12,
+  "households": 12,
+  "acres": 15.44,
+  "target": 15.6,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 5632,
+  "board": true,
+  "failures": [],
+  "s": 4.04
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   2,
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-17",
+  "attempt": 2,
+  "placed": 19,
+  "households": 19,
+  "acres": 25.29,
+  "target": 24.7,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 6686,
+  "board": true,
+  "failures": [],
+  "s": 12.69
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-17",
+  "attempt": 1,
+  "placed": 19,
+  "households": 19,
+  "acres": 24.36,
+  "target": 24.7,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 6309,
+  "board": true,
+  "failures": [],
+  "s": 9.44
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   2,
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-17",
+  "attempt": 2,
+  "placed": 19,
+  "households": 19,
+  "acres": 25.29,
+  "target": 24.7,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 6686,
+  "board": true,
+  "failures": [],
+  "s": 14.15
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   1,
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-18",
+  "attempt": 2,
+  "placed": 15,
+  "households": 15,
+  "acres": 18.43,
+  "target": 19.5,
+  "homestead_bamboo": 6,
+  "thicket": 1,
+  "way_len": 6664,
+  "board": true,
+  "failures": [],
+  "s": 17.19
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-18",
+  "attempt": 1,
+  "placed": 15,
+  "households": 15,
+  "acres": 20.16,
+  "target": 19.5,
+  "homestead_bamboo": 7,
+  "thicket": 1,
+  "way_len": 5727,
+  "board": true,
+  "failures": [],
+  "s": 9.09
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   1,
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-18",
+  "attempt": 2,
+  "placed": 15,
+  "households": 15,
+  "acres": 18.43,
+  "target": 19.5,
+  "homestead_bamboo": 6,
+  "thicket": 1,
+  "way_len": 6664,
+  "board": true,
+  "failures": [],
+  "s": 12.48
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   2,
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-19",
+  "attempt": 2,
+  "placed": 11,
+  "households": 11,
+  "acres": 13.73,
+  "target": 14.3,
+  "homestead_bamboo": 3,
+  "thicket": 0,
+  "way_len": 5940,
+  "board": true,
+  "failures": [],
+  "s": 11.72
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-19",
+  "attempt": 1,
+  "placed": 11,
+  "households": 11,
+  "acres": 13.73,
+  "target": 14.3,
+  "homestead_bamboo": 5,
+  "thicket": 0,
+  "way_len": 5658,
+  "board": true,
+  "failures": [],
+  "s": 7.96
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   2,
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-19",
+  "attempt": 2,
+  "placed": 11,
+  "households": 11,
+  "acres": 13.73,
+  "target": 14.3,
+  "homestead_bamboo": 3,
+  "thicket": 0,
+  "way_len": 5940,
+  "board": true,
+  "failures": [],
+  "s": 8.09
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-20",
+  "attempt": 1,
+  "placed": 18,
+  "households": 18,
+  "acres": 22.36,
+  "target": 23.4,
+  "homestead_bamboo": 5,
+  "thicket": 0,
+  "way_len": 6097,
+  "board": true,
+  "failures": [],
+  "s": 10.68
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-20",
+  "attempt": 1,
+  "placed": 18,
+  "households": 18,
+  "acres": 24.49,
+  "target": 23.4,
+  "homestead_bamboo": 8,
+  "thicket": 0,
+  "way_len": 6561,
+  "board": true,
+  "failures": [],
+  "s": 9.05
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-20",
+  "attempt": 1,
+  "placed": 18,
+  "households": 18,
+  "acres": 22.36,
+  "target": 23.4,
+  "homestead_bamboo": 5,
+  "thicket": 0,
+  "way_len": 6097,
+  "board": true,
+  "failures": [],
+  "s": 9.27
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-21",
+  "attempt": 1,
+  "placed": 14,
+  "households": 14,
+  "acres": 17.27,
+  "target": 18.2,
+  "homestead_bamboo": 5,
+  "thicket": 0,
+  "way_len": 6211,
+  "board": true,
+  "failures": [],
+  "s": 9.97
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-21",
+  "attempt": 1,
+  "placed": 14,
+  "households": 14,
+  "acres": 17.82,
+  "target": 18.2,
+  "homestead_bamboo": 8,
+  "thicket": 0,
+  "way_len": 5754,
+  "board": true,
+  "failures": [],
+  "s": 10.52
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-21",
+  "attempt": 1,
+  "placed": 14,
+  "households": 14,
+  "acres": 17.27,
+  "target": 18.2,
+  "homestead_bamboo": 5,
+  "thicket": 0,
+  "way_len": 6211,
+  "board": true,
+  "failures": [],
+  "s": 8.82
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-22",
+  "attempt": 1,
+  "placed": 10,
+  "households": 10,
+  "acres": 13.19,
+  "target": 13.0,
+  "homestead_bamboo": 3,
+  "thicket": 0,
+  "way_len": 5032,
+  "board": true,
+  "failures": [],
+  "s": 7.77
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-22",
+  "attempt": 1,
+  "placed": 10,
+  "households": 10,
+  "acres": 13.19,
+  "target": 13.0,
+  "homestead_bamboo": 3,
+  "thicket": 0,
+  "way_len": 5168,
+  "board": true,
+  "failures": [],
+  "s": 7.48
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-22",
+  "attempt": 1,
+  "placed": 10,
+  "households": 10,
+  "acres": 13.19,
+  "target": 13.0,
+  "homestead_bamboo": 3,
+  "thicket": 0,
+  "way_len": 5032,
+  "board": true,
+  "failures": [],
+  "s": 10.78
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-23",
+  "attempt": 1,
+  "placed": 17,
+  "households": 17,
+  "acres": 21.57,
+  "target": 22.1,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 5813,
+  "board": true,
+  "failures": [],
+  "s": 6.88
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-23",
+  "attempt": 1,
+  "placed": 17,
+  "households": 17,
+  "acres": 20.67,
+  "target": 22.1,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 5448,
+  "board": true,
+  "failures": [],
+  "s": 7.1
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-23",
+  "attempt": 1,
+  "placed": 17,
+  "households": 17,
+  "acres": 21.57,
+  "target": 22.1,
+  "homestead_bamboo": 0,
+  "thicket": 1,
+  "way_len": 5813,
+  "board": true,
+  "failures": [],
+  "s": 6.95
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 1,
+  "map": "cohort-24",
+  "attempt": 1,
+  "placed": 13,
+  "households": 13,
+  "acres": 17.22,
+  "target": 16.9,
+  "homestead_bamboo": 6,
+  "thicket": 0,
+  "way_len": 5258,
+  "board": true,
+  "failures": [],
+  "s": 7.17
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "off",
+  "pass": 1,
+  "map": "cohort-24",
+  "attempt": 1,
+  "placed": 13,
+  "households": 13,
+  "acres": 17.22,
+  "target": 16.9,
+  "homestead_bamboo": 6,
+  "thicket": 0,
+  "way_len": 5258,
+  "board": true,
+  "failures": [],
+  "s": 7.81
+ },
+ {
+  "connectors": 1,
+  "per_attempt": [
+   0
+  ],
+  "fit": "ship",
+  "pass": 2,
+  "map": "cohort-24",
+  "attempt": 1,
+  "placed": 13,
+  "households": 13,
+  "acres": 17.22,
+  "target": 16.9,
+  "homestead_bamboo": 6,
+  "thicket": 0,
+  "way_len": 5258,
+  "board": true,
+  "failures": [],
+  "s": 5.76
+ }
+]

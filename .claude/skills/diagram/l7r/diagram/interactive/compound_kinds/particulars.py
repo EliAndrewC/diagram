@@ -222,7 +222,7 @@ class CharcoalStore(Kind):
     Covers: the sealed charcoal kura and its labels
     Label: guess
     Sources: dozo-jawiki, kotobank-dozozukuri, wagner-ming-iron, fao-charcoal-safety
-    Entry: research/urban-features.html - "Does the charcoal yard's 30 ft fire gap apply to charcoal kept in a plastered storehouse?", 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
+    Entry: research/urban-features.html - "Does the charcoal yard's 30 ft fire gap apply to charcoal kept in a plastered storehouse?", 'Is a fire gap kept round a charcoal yard?', 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
     """
 
     key = "charcoal store"

@@ -1,4 +1,5 @@
-"""The ONE caption placer (feature 266) - owned by neither mode, used by both and by `make seat-label`.
+"""The ONE caption placer (feature 266) - owned by neither mode, used by both; `hand_sheet.py` runs it over a hand-drawn
+Mode A sheet's declared captions in the sheet's render (feature 286).
 
 Load `placer.py` first: its docstring is the standard in the order it decides. `standard.py` holds every number, each
 with its source or its calibration; `obstacles.py` the index; `layout.py` the line cuts; `geom.py` the plain geometry.

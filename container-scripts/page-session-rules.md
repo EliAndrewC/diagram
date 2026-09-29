@@ -35,6 +35,10 @@ on. The research record's own `CLAUDE.md` still loads when you touch `research/`
   about what an entry used to say. Never edit an assembled page; edit the fragment and run `make record`.
 - Checks read BUNDLES made by `make check-bundle`, never a path under `/diagram`; run the mechanical pre-pass the
   record's CLAUDE.md names before each check.
+- **Every page read is on the sources-consulted ledger** (feature 288). `make source-pages ... QUESTION=<page/NNN>`
+  prints each page's earlier reads and their outcomes before it fetches: check them - a page already `rejected` for
+  the same question is not re-read without a reason. Record every page's outcome with `make source-outcome URL=<u>
+  OUTCOME=cited:<key>|rejected:<why>|nothing-found|unreadable`; `make sources-consulted URL=<u>` looks one up.
 - **Coordination files are read by line, never whole** (feature 274): the claims file, a group's handoff and a checks
   report are read with `make lines FILE=<f> KEY=<regex>` and written with `make append FILE=<f> LINE="<text>"`.
 - **A write session takes at most four questions and at most ten new registry keys** (feature 274). The runner

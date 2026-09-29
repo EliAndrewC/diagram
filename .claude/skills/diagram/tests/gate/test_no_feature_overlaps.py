@@ -87,16 +87,12 @@ def test_the_ground_cover_scatter_respects_what_was_swept_before_it(comb) -> Non
 
 
 def _pond_stock_parts(M):
-    """Every DRAWN part of every pig sty and duck pen on the map, as (outline, closed) pairs - the sty
-    footprint, the pen's dry run, and the pen's fence arc, which is an open polyline and not a region."""
+    """Every DRAWN part of every pig sty on the map, as (outline, closed) pairs - the sty footprint. (The duck pen,
+    with its dry run and open fence arc, is retired: 269 B32.)"""
     from l7r.diagram.settlement._geom.overlap import rot_rect
 
     for s in M.get("pig_sties", []):
         yield rot_rect(s["x"], s["y"], s["w"], s["h"], s["rot"]), True
-    for p in M.get("duck_pens", []):
-        yield rot_rect(p["x"], p["y"], p["w"], p["h"], p["rot"]), True
-        if p.get("wet"):
-            yield [(float(q[0]), float(q[1])) for q in p["wet"]], False
 
 
 def test_no_pond_fixture_stands_on_its_ponds_sluice(polder) -> None:
@@ -127,7 +123,7 @@ def test_every_pond_fixture_keeps_to_the_near_half_of_its_pond(polder) -> None:
     houses = M["houses"]
     hc = (sum(h["x"] for h in houses) / len(houses), sum(h["y"] for h in houses) / len(houses))
     ponds = M["dikeponds"]
-    for key in ("pig_sties", "duck_pens"):
+    for key in ("pig_sties",):
         for f in M.get(key, []):
             par = ponds[f["pond"]]["parcel"]
             center = (sum(float(q[0]) for q in par) / len(par), sum(float(q[1]) for q in par) / len(par))

@@ -395,7 +395,8 @@ map: export L7R_STAGE_PROFILE = $(if $(PROFILE),1,)
 map:            ## [maps] regenerate ONE gen and gate it   GEN=pool/hamlets/inashiro/inashiro.gen.py [PROFILE=1: where the roll spent its time]
 ##  GEN=<gen path>  which generator to re-run (default: `pool/hamlets/inashiro/inashiro.gen.py`)
 ##  PROFILE=1       also print where the roll spent its time, stage by stage
-	$(REF_FIRST)
+	@: "GUARD_EDIT_OK: feature 278 FR-012 - make map on the REFERENCE rolled it twice: the reference check rolled it render-less into the roll cache, then regen found that entry without a render and rolled it again uncached to draw one. When the map asked for IS the reference, the check is the regen itself (regen gates what it rolls), so it is skipped; for every other map the check still runs first."
+	$(if $(filter pool/hamlets/inashiro/inashiro.gen.py,$(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)),,$(REF_FIRST))
 	$(RUN).pipeline.regen $(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)
 	@: "GUARD_EDIT_OK: feature 240 FR-005 - a CACHED map may come back with no picture. The gate files its entries with rendering skipped, so a hit on one restores the manifest and DELETES the render (gencache.load, deliberately: a render the entry lacks is stale). make map then printed CACHED over a map with no .png and no .html, and the review precondition that names make map as its remedy could not be satisfied by it. So a hit that leaves a render missing is rolled again, uncached, which draws both."
 	@g="$(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)"; s="$${g%.gen.py}"; \
@@ -443,6 +444,10 @@ cache-audit:    ## [maps] does using the generation cache change any map?
 placement-stages: ## [maps] re-plate the stage-by-stage walk-through page
 	$(REF_FIRST)
 	$(RUN).tools.placement_stages $(ARGS)
+
+placement-stages-if-classes: ## [maps] {internal} re-plate the walk-through page only if the class registry moved (sync-in runs it)
+	@: "GUARD_EDIT_OK: feature 278 FR-013 - a new operation, nothing loosened: the page is gitignored and re-plated at landing, so a clone that merged a new class went red on the page test until a hand re-plate; sync-in runs this, which re-plates only when the page's class stamp differs from the registry"
+	$(RUN).pipeline.render_cache --page-if-classes --no-allow-main
 
 pool-index:     ## [maps] rebuild the pool index
 	$(RUN).pipeline.pool_index $(ARGS)
@@ -508,13 +513,12 @@ scatter-bases:  ## [diagnostics] where a map's ground-cover scatter stands: base
 	@if [ -z "$(MAP)" ]; then printf 'make scatter-bases: MAP=<pool map> is required - e.g. make scatter-bases MAP=pool/hamlets/sawada BOX=600,1600,1300,2000\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_scatter_bases.py" "$(MAP)" $(if $(BOX),--box "$(BOX)",)
 
-# GUARD_EDIT_OK: feature 266 adds a new operation, `make seat-label` - the one caption placer run on a hand-drawn sheet; nothing existing is weakened (its usage hint names no building tier)
-seat-label:     ## [maps] seat a hand-drawn Mode A sheet's captions by the ONE placer (feature 266): report, or WRITE=1 to rewrite   SHEET=<svg> [KIND=<data-kind>] [WRITE=1]
-##  SHEET=<svg>         the hand-drawn sheet
-##  KIND=<data-kind>    only the captions of this kind (e.g. "notice board")
-##  WRITE=1             move every caption to its standard seat and write, move or remove its leader
-	@if [ -z "$(SHEET)" ]; then printf 'make seat-label: SHEET=<svg> is required - e.g. make seat-label SHEET=pool/<tier>/<map>/<map>.svg KIND="notice board"\n' >&2; exit 2; fi
-	@python3 -m l7r.diagram.tools.seat_label "$(SHEET)" $(if $(KIND),--kind "$(KIND)",) $(if $(WRITE),--write,)
+# GUARD_EDIT_OK: feature 286 replaces `make seat-label` (a placement report and rewrite, retired at the GM's ruling - no check runs against the placer) with `make sheet-render`; nothing existing is weakened
+sheet-render:   ## [maps] render a hand-drawn Mode A sheet with its captions placed by the ONE placer (feature 286)   SHEET=<svg> OUT=<png>
+##  SHEET=<svg>         the hand-drawn sheet (its drawing and its captions' declarations)
+##  OUT=<png>           the picture to write
+	@if [ -z "$(SHEET)" ] || [ -z "$(OUT)" ]; then printf 'make sheet-render: SHEET=<svg> and OUT=<png> are required - e.g. make sheet-render SHEET=pool/<tier>/<map>/<map>.svg OUT=/tmp/<map>.png\n' >&2; exit 2; fi
+	@python3 -m l7r.diagram.labels.hand_sheet "$(SHEET)" "$(OUT)"
 
 
 page-lit:       ## [diagnostics] light ONE class on a map's page and report which classes' pixels change   MAP=<page.html> CLASS="<key>" [VECTOR=1] [OUT=lit.png]
@@ -558,6 +562,8 @@ citations:      ## [docs] write each research page's citations script (research/
 # per-entry fragments. No guard changes; the same shape as `citations` above, and for the same reason.
 record:         ## [docs] write the record's pages from their per-entry fragments under research/<page>/ (feature 258)   CHECK=1: exit 1 if a committed page differs from its assembly   PAGE=<name>: one page   SPLIT=<name>: the one-time split of a page that is still whole
 	$(RUN).tools.record_asset $(if $(CHECK),--check,) $(if $(PAGE),--page $(PAGE),) $(if $(SPLIT),--split $(SPLIT),)
+	@: "GUARD_EDIT_OK: feature 288 FR-005 - after assembling, a filled registry entry marks its URL cited on the sources-consulted ledger (not under CHECK=1, which writes nothing); a new step, nothing loosened"
+	$(if $(CHECK),,@python3 "$$(git rev-parse --show-toplevel)/scripts/_sources.py" mark-filled)
 
 
 
@@ -1091,6 +1097,10 @@ record-prepass: ## [project] the session notes and vocabulary candidates a patte
 question-sizes: ## [project] every research question over the size cap (question + notes, feature 250 D14), largest first - make quick fails on one a change touched
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/check-question-size.py" --report
 
+# GUARD_EDIT_OK: feature 285 - a new operation (list the open research questions, read from the record); no guard changes. Its help says "guess" in lower case: the list reads this file, and an upper-case label here would list itself.
+open-questions: ## [project] every guess and every unfound source, read from the record and the tracked files now - the research still owed, with the map features each touches (feature 285)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_open_questions.py" --root "$$(git rev-parse --show-toplevel)"
+
 # GUARD_EDIT_OK: feature 250 - a new operation (print the named notes of one question, not the whole file); no guard changes.
 notes: ## [project] print the named notes of ONE question and only the blocks of its fragment that carry them - for editing a few notes without reading the whole file (feature 250)   PAGE=homesteads SECTION=040 KEYS=kyuhi-jawiki,kyuhi-jawiki-2
 	@if [ -z "$(PAGE)" ] || [ -z "$(SECTION)" ] || [ -z "$(KEYS)" ]; then printf 'make notes: PAGE=<page> SECTION=<question> KEYS=<key,key> are required\n' >&2; exit 2; fi
@@ -1109,7 +1119,8 @@ append: ## [project] append ONE line to a coordination file without reading or p
 # GUARD_EDIT_OK: feature 274 D4 - KEY_CAP_OK='<reason>' passes a write session's key cap; make exports it to the recipe as it is, so no change below.
 reserve: ## [project] reserve the next glossary or registry-entry prefix under a host-wide lock and write the file's stub - prints its path; fill it in (feature 265 FR-010: parallel queues never collide; feature 274: a write session's 11th registry key is refused)   KIND=glossary|registry KEY=<term or key> [KEY_CAP_OK='<reason>']
 	@if [ -z "$(KIND)" ] || [ -z "$(KEY)" ]; then printf 'make reserve: KIND=glossary|registry KEY=<term or key> are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/reserve-prefix.py" "$(KIND)" "$(KEY)"
+# GUARD_EDIT_OK: feature 288 FR-005 - an optional URL=, nothing loosened: a registry stub then names its source and the sources-consulted ledger marks it cited.
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reserve-prefix.py" "$(KIND)" "$(KEY)" $(if $(URL),--url "$(URL)",)
 
 # GUARD_EDIT_OK: feature 250 D16 - a new operation (search the setting canon for every term of a claim at once); no guard changes here - canon-read-hooks.sh makes it the only way in.
 canon: ## [project] search the GM's setting canon for EVERY term of a claim in one call - each hit with its file, line and heading (feature 250 D16; a direct read of a canon file is refused)   TERMS="imperial road|merchant share|artisan"
@@ -1133,14 +1144,32 @@ check-bundle: ## [project] the files ONE check agent reads, copied out of the re
 ##  KEY=<key>        one source: its registry entry and its saved page
 ##  OUT=<dir>        default /tmp/l7r-check/<page>-<section> or /tmp/l7r-check/key-<key>   EXTRA="<path> ..."   NO_QUOTES=1 skips the fetches   KIND=<modal class> adds its docstring, for entry-drift   NOTES=<key,key> a RE-check of those notes only   FOR=quote-check|record-format|entry-drift only that check's parts   WHOLE=1 with KEY= the whole page in parts, for source-reader (D19)
 	@if [ -z "$(KEY)" ] && { [ -z "$(PAGE)" ] || [ -z "$(SECTION)" ]; }; then printf 'make check-bundle: PAGE=<page> SECTION=<question> (or KEY=<registry key>) is required - e.g. make check-bundle PAGE=ways SECTION=010\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" $(if $(KEY),--key "$(KEY)","$(PAGE)" --section "$(SECTION)") $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(EXTRA),--extra $(EXTRA),) $(if $(NO_QUOTES),--no-quotes,) $(if $(KIND),--kind "$(KIND)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(FOR),--for "$(FOR)",) $(if $(WHOLE),--whole,)
+##  QUESTION=<q>     with KEY= WHOLE=1: the research question the page is read for, on the sources-consulted ledger (feature 288)
+# GUARD_EDIT_OK: feature 288 D3 - an optional QUESTION=, nothing loosened: a WHOLE=1 read is a research read and is ledgered with it.
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" $(if $(KEY),--key "$(KEY)","$(PAGE)" --section "$(SECTION)") $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(EXTRA),--extra $(EXTRA),) $(if $(NO_QUOTES),--no-quotes,) $(if $(KIND),--kind "$(KIND)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(FOR),--for "$(FOR)",) $(if $(WHOLE),--whole,) $(if $(QUESTION),--question "$(QUESTION)",)
 
 # GUARD_EDIT_OK: feature 255 - a new operation (save named pages' visible text, so a page and not a fetch extract can be grepped); no guard changes. (The source-entries and review-facts operations added beside it were NOT ADOPTED on their seeded runs and are removed - specs/255 research R1 and R6. GUARD_EDIT_OK again, 2026-09-19: the header says the GM adopted source-reader's use of it; no guard changes.)
 source-pages: ## [project] save the full visible text of the named pointers, with a manifest - run BEFORE source-reader, which greps the PAGE where a fetch gives an extract   OUT=<dir> URL=<u1>  (several: URLS="<u1> <u2>")
 ##  OUT=<dir>      where the pages and MANIFEST.txt go (a scratch directory)
 ##  URL=<u>        one pointer; URLS="<u1> <u2>" for several - make keeps only the LAST of a repeated URL=
+##  QUESTION=<q>   the research question the pages are read for (page/NNN), recorded on the sources-consulted ledger
+##  REFRESH=1      fetch again even where the page cache holds a copy younger than seven days
+# GUARD_EDIT_OK: feature 288 - two optional variables, nothing loosened: QUESTION= reaches the ledger line the save now
+# appends (each URL's earlier reads are printed first), and REFRESH=1 is read from make's exported environment by the cache.
 	@if [ -z "$(OUT)" ] || [ -z "$(URL)$(URLS)" ]; then printf 'make source-pages: OUT=<dir> and URL=<u> (or URLS="<u1> <u2>") are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_source_pages.py" "$(abspath $(OUT))" $(foreach u,$(URL) $(URLS),"$(u)")
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_source_pages.py" "$(abspath $(OUT))" $(foreach u,$(URL) $(URLS),"$(u)") $(if $(QUESTION),--question "$(QUESTION)",)
+
+# GUARD_EDIT_OK: feature 288 - three new operations (the sources-consulted ledger's outcome, its lookup, and the one-time seed and page-cache import); no guard changes.
+source-outcome: ## [project] record what came of reading a source page on the host-wide sources-consulted ledger - every page a research pass reads (feature 288)   URL=<u> OUTCOME=cited:<key>|rejected:<why>|nothing-found|unreadable|pending [QUESTION=<page/NNN>]
+	@if [ -z "$(URL)" ] || [ -z "$(OUTCOME)" ]; then printf 'make source-outcome: URL=<u> OUTCOME=<cited:key|rejected:why|nothing-found|unreadable|pending> are required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_sources.py" outcome "$(URL)" "$(OUTCOME)" $(if $(QUESTION),--question "$(QUESTION)",)
+
+sources-consulted: ## [project] every earlier read of a source page, with its outcome, from the sources-consulted ledger - by URL, or by registry key (feature 288)   URL=<u> | KEY=<regex>
+	@if [ -z "$(URL)$(KEY)" ]; then printf 'make sources-consulted: URL=<u> or KEY=<regex> is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_sources.py" lookup $(if $(URL),--url "$(URL)",) $(if $(KEY),--key "$(KEY)",)
+
+sources-import: ## [project] ONE TIME, idempotent: seed the sources-consulted ledger from the 2026-09-29 measurement and import the /tmp/l7r-check saves into the page cache (feature 288)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_sources.py" import
 
 # GUARD_EDIT_OK: feature 253 - a new operation (the search the review-round guard runs, by hand); no guard changes.
 stale-terms:    ## [project] after a value changed in a feature's spec, where does the OLD value still stand - look BEFORE a later review round   F=253 [AGAINST=<git ref>]

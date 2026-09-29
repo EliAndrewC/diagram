@@ -1,0 +1,267 @@
+{
+ "area": "LABELS, BOARDS AND THE FINISH",
+ "read": "labels/placer.py, labels/obstacles.py, labels/standard.py, labels/hand_sheet.py (fallback + repair), settlement/structures/captions.py (place_labels, _draw_seated_caption, label_obstacles), settlement/structures/fixtures/boards.py, fixtures/siting.py (place_kosatsuba, board_choice, board_caption_level), hamletgen/frame.py (round_the_brooks, stage_notice, stage_frame, stage_labels), settlement/finish.py (title, _title_obstacles, water flush), settlement/water_ways/water.py:round_stream, compound.py (_seat_captions, emit_svg), compound_parts.py board, tests/hamletgen/test_pool_261.py, tests/gate/test_captions_and_boards.py, tests/gate/test_water_junctions.py, tests/settlement/test_label_placement.py, git dec6344cb (feature 286).",
+ "shared_mechanism": {
+  "summary": "The census rows about the notice board and its caption are one design, and the future-work record already says why: 'No seat search can fix that, because the board is in the wrong PLACE to be captioned, and nine attempts inside the search is what it cost to see that' (siting.py:436-443; future-work/farming-communities.md, 'ATTEMPTS 8-13'). The one placer never refuses. It takes the least-cost seat (placer.py:283-289) or the first seat off the frame (placer.py:285-287), because the GM rules labels mandatory ('we'll treat labels as mandatory'). So a caption rule cannot be guaranteed inside place() by dropping the caption. It is guaranteed by the placer that decides the SUBJECT: the board siter accepts only a board seat whose caption the one placer can seat clean.",
+  "pieces": [
+   "labels/placer.py: add `place(..., strict=True)`, which returns None where the lax version would take the least-cost seat or the off-frame `first` seat. Lax stays the default for the standard's mandatory-label callers.",
+   "labels/obstacles.py: `ObstacleIndex.cost(..., own_gap=...)`. For a point subject, an obstacle at or nearer than the block's gap to its own subject counts (the association rule, standard.py 'ASSOCIATION'). Today only CLEAR_EM does, and a ring>0 seat lets a neighbor stand nearer.",
+   "settlement/structures/captions.py:label_obstacles adds (a) every drawn tree crown (`tree_crowns`, the canopy_index source) as an Obstacle with group 'grove', so a caption naming trees may lie on it and no other caption may, and (b) the record box of every still-QUEUED fixed-seat `text` caption, so a probe made at siting time sees every caption the label phase will have drawn before this one.",
+   "One predicate, `board_caption_seat(M-or-s, x, y, hw, hh, rot, label, index, frame) -> Placement | None`: `place(strict=True)` at the angle the board will be drawn at (nearest_way_bearing). It replaces board_caption_level's three levels and the older probes (label_seat_clear / `lab`, caption_lane_clearance) that disagree with the placer (FR-003).",
+   "The siter keeps only seats where board_caption_seat is not None. The Placement it proved rides in the queued `kosatsuba` payload, and _draw_board_caption draws that Placement. On a hamlet the board caption is the only caption and stage_labels follows stage_notice with nothing between them (row 8 notes; frame.py stage order). The drawn seat is therefore the probed one by construction, not a re-search against a different index (the 'later stage' named in rows 1, 2 and 4)."
+  ],
+  "one_siter": "hamletgen/frame.py:stage_notice's re-seat (frame.py:190-369) exists only because place_kosatsuba samples seats outside the view. place_kosatsuba already runs after stage_frame and already reads meta.view (siting.py:295-296). So the view, inset by the board's half-diagonal, becomes a CANDIDATE filter in place_kosatsuba, and the re-seat is deleted with its `loose` and pragma-no-cover branches (R2 rows 15 and 16). One siter applies every board rule once, instead of two siters restating them with drift (the re-seat's own comments record four such drifts: features 154, 227, 230, 261)."
+ },
+ "rules": [
+  {
+   "id": "L1",
+   "rule": "An `entrance` board never stands farther than KOSATSUBA_ENTRANCE_REACH_FT + KOSATSUBA_ANCHOR_BAND_FT from the entrance anchor, nor where some household's way out (departure_routes) passes more than KOSATSUBA_HANDOVER_BAND_FT from it. Stated: test_pool_261.py::test_an_entrance_board_stands_at_the_entrance (FR-015/SC-011 of 261); research/urban-features.html (the kosatsu at the village entrance, broadside to the way out).",
+   "rows": ["R1 tests/hamletgen/test_pool_261.py::test_an_entrance_board_stands_at_the_entrance"],
+   "owner": "l7r/diagram/settlement/structures/fixtures/siting.py:FixtureSitingMixin.place_kosatsuba (the census's owner is right; frame.py:stage_notice is deleted, see shared_mechanism.one_siter)",
+   "mechanism": "Two hard filters on `cands` replace the relative ones. `_miss == 0` replaces `== min(_miss)` (siting.py:413-414), and `dist(c, anchor) <= KOSATSUBA_ENTRANCE_REACH_FT + KOSATSUBA_ANCHOR_BAND_FT` (in px) holds alongside the relative handover band (siting.py:490-491). The predicates are the test's own: `RouteReach(departure_routes(M)).missed(x, y, band)` (the same body as routes_missed) and `kosatsuba_anchor`. They run BEFORE the knob is committed: the candidate set is computed per placement value, and `kosatsuba_affordances(M)` gains `entrance_sitable` (non-empty after these filters and the caption filter L4-L7). resolve_knob therefore never rolls `entrance` on a map that cannot site it.",
+   "fallback": "The knob's value space is constrained. Where no seat passes, `entrance` is not an affordance, and the knob resolves over what is left (center / official's gate), recorded as meta.kosatsuba_seat plus meta.kosatsuba_seat_unsitable=['entrance']. This is the affordance mechanism the knob already uses for has_approach and has_headman_house, not a new form.",
+   "later_stages": "Only stage_labels follows, and it places no feature. The frame.py re-seat that could move the board after this (the census's later_stage_risk) is deleted.",
+   "unit_test": "A stub manifest with a connector approach, handover H, two lanes and three houses, where one house's only way out leaves by a straggler that never comes within 20 ft of the verge seats beside H, while the busiest verge lies 200 ft inside the cluster. Assert: the placed board has routes_missed == 0 and anchor distance <= reach + band. With the straggler house moved so that no seat passes all departures, assert meta.kosatsuba_seat != 'entrance' and meta.kosatsuba_seat_unsitable == ['entrance'].",
+   "retire": "tests/hamletgen/test_pool_261.py::test_an_entrance_board_stands_at_the_entrance (reads shipped manifests, 5 params, no roll).",
+   "risk": "high",
+   "risk_why": "Moves the board on every entrance-rolled map and can change a pool map's rolled seat value. Board siting has been re-fixed by settlement-review in features 154, 227, 230 and 261 (each recorded at siting.py/frame.py). Sawada's entrance is recorded as having no departure-band seat with a clear caption (siting.py:512-514), so at least one pool map's seat value will likely change."
+  },
+  {
+   "id": "L2",
+   "rule": "The board's whole footprint, and its caption's drawn block, never stand outside the view (labels_within_image; frame.py:170-195; settlement-review of feature 227: Sawada shipped with no board drawn).",
+   "rows": ["R2 hamletgen/frame.py:stage_notice:366-369 (the out-of-frame engine seat appended unchanged)"],
+   "owner": "l7r/diagram/settlement/structures/fixtures/siting.py:place_kosatsuba. The census/R2 owner was stage_notice. That is where the violation is emitted, but the seat is decided in the siter.",
+   "mechanism": "The candidate loop (siting.py:315-369) skips any (x, y) not inside meta.view inset by hypot(w, h)/2, which is the re-seat's own `_inset` predicate lifted into one function, `board_in_view(view, x, y, w, h)`. The caption's frame test is place(strict=True) with the view as `frame`, which returns None instead of the off-frame `first` seat (placer.py:285-287), and a seat whose caption is None is refused (shared mechanism). stage_notice becomes `s.place_kosatsuba()` plus record_board_well. The pop, the re-seat and the `else: append(board)` branch are deleted.",
+   "fallback": "The same terminal as L4-L7, where no seat in the view carries a board and a clean caption. See L4.",
+   "later_stages": "None: stage_labels draws the placement the siter proved.",
+   "unit_test": "A view of 400x300 with the only busy verge 10 px outside its north edge and a quieter verge inside. Assert the board's quad and the caption block lie inside the view. With every in-view verge blocked by a house, assert the siter does not place the out-of-view seat (it takes the L4 terminal).",
+   "retire": "The stage_notice re-seat tests that drive the pop and re-seat path in tests/hamletgen/test_frame.py (the stub-driven re-seat cases, including the 'loose' fallback and the traffic-ranked re-seat), because the path is deleted. Keep the frame tests of stage_frame.",
+   "risk": "high",
+   "risk_why": "Deleting the re-seat removes a second siter whose ranking differs (main lanes first, web lanes near the anchor, connector only at a handover), so boards the re-seat moved will land elsewhere. This is the path four settlement-reviews reworked."
+  },
+  {
+   "id": "L3",
+   "rule": "A board stands under the village's trees only where its caption stands clear and visible beside it. The GM's 2026-08-29 ruling (siting.py:485-488): a board under a canopy is acceptable 'as long as there is a label attached to it and the label is visible'. frame.py:283-287 states the stricter 'a board in a wood is a notice nobody reads', which the R2 row reads as the rule. The GM's ruling is the governing reading (FR-003: the ruling decides).",
+   "rows": ["R2 hamletgen/frame.py:stage_notice:250-301,362-365 (the loose shaded seat taken with no caption test)"],
+   "owner": "l7r/diagram/settlement/structures/fixtures/siting.py:place_kosatsuba",
+   "mechanism": "Every candidate, shaded or not, must pass board_caption_seat (shared mechanism). Open ground stays a preference among the passing seats (`[c for c in cands if not c[7]] or cands`, siting.py:489). The `loose` branch that seated a shaded board with no caption test is deleted with the re-seat.",
+   "fallback": "See L4's terminal.",
+   "later_stages": "None.",
+   "unit_test": "A lane with every verge inside a ring of tree_crowns, one verge seat where the caption's ranked positions all fall on crowns, and one where an 'upper left' seat is clear. Assert the board takes the second seat and its caption block clears every crown. Where no shaded seat has a clean caption, assert no board is posted under the trees (the L4 terminal).",
+   "retire": "Nothing further (the finished-map test is L7's crown test). The re-seat's loose-fallback test goes with L2.",
+   "risk": "medium",
+   "risk_why": "Moves only boards that stood shaded with a doubtful caption (Mizuguchi and Sawada are recorded as such in feature 230/261)."
+  },
+  {
+   "id": "L4",
+   "rule": "The board's caption never lies on, or within CLEAR_EM of, a built footprint it does not name: a farmhouse roof, a byre, any other record. Stated: test_pool_261.py::test_the_board_caption_names_the_board_only (roof half); future-work/cross-cutting.md 'The caption-over-a-building rule was cut' (Kuwabata's board caption 2.24 px from a built glyph).",
+   "rows": ["R1 tests/hamletgen/test_pool_261.py::test_the_board_caption_names_the_board_only (roof half)", "R3 future-work/cross-cutting.md: ## The caption-over-a-building rule was cut (hamlet half)", "R2 settlement/structures/fixtures/siting.py:board_choice / place_kosatsuba:91-115,469,536-560"],
+   "owner": "l7r/diagram/settlement/structures/fixtures/siting.py:place_kosatsuba over labels/placer.py:place(strict=True). The census owner, labels/placer.py:place alone, cannot hold it, because the placer must seat a mandatory label.",
+   "mechanism": "board_caption_seat returns a placement only at index cost 0. label_obstacles already scores every built record at WEIGHT_OBSTACLE within CLEAR_EM (obstacles.py:cost). Each candidate seat is kept only if that is non-None, and the Placement is carried to the label phase and drawn verbatim. board_choice's 'best level available' tail (siting.py:72-75) and the siter's 'A board with nowhere to put its caption is still placed' (siting.py:430-431) are deleted. The finished-map test's own roof test becomes the index's obstacle test (FR-003: the test builds its expectation from label_obstacles, not from its own houses-only corner list).",
+   "fallback": "When no candidate seat has a clean caption, the siter widens in stated steps, each still inside every board rule. (1) The whole siting band (verge-only off, off <= lim), and web lanes admitted as routes. (2) For anchored placements, the knob's other affordances (L1). (3) GM-QUESTION: with no verge anywhere in the view that takes a board and a clean caption, the choice is between distinct forms: post no board (meta.kosatsuba_dropped with the reason), against the GM's 2026-07-24 'EVERY settlement tier carries the board', or a caption beside it that breaks a caption rule, against 'labels mandatory'. The research is silent (it is a drawing question). Measured need: whether any cohort seed 1-48 reaches step 3 is the first thing to measure, and if none does, the question is still owed for the guarantee.",
+   "later_stages": "None: stage_labels draws the proved Placement, and label_obstacles includes queued fixed-seat captions so the probe's index is the phase's (shared mechanism).",
+   "unit_test": "A board verge between two farmhouses 14 ft apart, where every ranked ring-0 position of the caption covers a roof, and a second verge in open ground 60 ft away. Assert the board takes the second verge and the drawn caption's gap to every house quad is >= CLEAR_EM*8. Plus place(strict=True) on a boxed-in subject returns None, where place() returns cost > 0.",
+   "retire": "The roof half of tests/hamletgen/test_pool_261.py::test_the_board_caption_names_the_board_only (the test is retired whole with L5). Also the level-0/1 branch tests of board_choice / board_caption_level in tests/settlement/structures/test_fixtures.py and test_captions.py that assert a board is placed at a lower level.",
+   "risk": "high",
+   "risk_why": "The notice-board caption cost 13 recorded attempts (future-work/farming-communities.md, 'ATTEMPTS 8-13' and the seven before it). This moves the board wherever its caption did not fit clean, and the terminal is a GM-QUESTION."
+  },
+  {
+   "id": "L5",
+   "rule": "No caption's drawn block comes within WAY_NOTCH (2 ft) of a lane's tread (captions_clear_the_ways_they_stand_on). Stated: test_captions_and_boards.py::test_no_caption_lies_across_a_way; test_pool_261.py::test_the_board_caption_names_the_board_only (lane half); future-work 'the five caption notches' and 'the caption clearance on a CURVED tread'.",
+   "rows": ["R1 tests/gate/test_captions_and_boards.py::test_no_caption_lies_across_a_way", "R1 tests/hamletgen/test_pool_261.py::test_the_board_caption_names_the_board_only (lane half)", "R3 future-work/farming-communities.md: caption notches on five cohort seeds / ATTEMPTS 8-13", "R3 future-work/farming-communities.md: ## 2026-08-20: the caption clearance on a CURVED tread"],
+   "owner": "l7r/diagram/labels/obstacles.py:ObstacleIndex.cost (the way term) read by siting.py:place_kosatsuba through board_caption_seat. R3's owner Settlement.caption_lane_clearance is a legacy probe that no longer decides the drawn seat. It is retired.",
+   "mechanism": "The way term is already exact: `poly_seg_gap(block, a, b) < half_width + WAY_NOTCH` (obstacles.py:584) measures the rotated quad against every segment. That is segment-to-polygon, so a curved tread's middle crossing an edge between corners cannot be missed (R3 row 21), and it adds WEIGHT_WAY. strict=True makes any way crossing a refusal (cost must be 0). The hamlet's only seated caption is the board's, and L4's siter filter guarantees it. FR-003: the test and the placer read one predicate, `caption_clears_ways(block, ways)` = no way within half + WAY_NOTCH by poly_seg_gap. The gate test's corner-plus-center sampling (test_captions_and_boards.py:139-146) is the weaker reading and is dropped. The lane half-width reads one expression, `float(ln.get('w') or 3)/2`, in both.",
+   "fallback": "L4's (the caption rule and the board seat are one search).",
+   "later_stages": "None on a hamlet (stage_labels is last; square_crossings reruns lanes BEFORE stage_notice, frame.py stage order).",
+   "unit_test": "(a) A board at 52 degrees in a lane crotch, whose perpendicular runs between two lanes (the future-work seeds 1/7/14 geometry). Assert the siter's board has a caption with caption_clears_ways true. (b) The curved-tread case: a concave filleted lane whose arc crosses the caption quad's long edge between its corners. Assert ObstacleIndex.cost counts it, and that a candidate there is refused under strict.",
+   "retire": "tests/gate/test_captions_and_boards.py::test_no_caption_lies_across_a_way and tests/hamletgen/test_pool_261.py::test_the_board_caption_names_the_board_only. Also Settlement.caption_lane_clearance, label_seat_clear's lane leg, the `lab` probe in place_kosatsuba (siting.py:293, 297-298, 359-363) and their unit tests in tests/settlement/structures/test_captions.py / test_fixtures.py, which test a probe that no longer decides anything (FR-007).",
+   "risk": "high",
+   "risk_why": "The same history as L4: five cohort seeds and 13 attempts recorded. The board moves where it could only be captioned across a lane."
+  },
+  {
+   "id": "L6",
+   "rule": "The board's caption never stands as near, or nearer, to another built footprint than to its own board (association; standard.py 'ASSOCIATION'; test_pool_261.py::test_the_board_caption_stands_nearest_its_own_board, from Kuwabata 261: 4.9 ft off a byre, 24.6 ft off its board).",
+   "rows": ["R1 tests/hamletgen/test_pool_261.py::test_the_board_caption_stands_nearest_its_own_board"],
+   "owner": "l7r/diagram/labels/obstacles.py:ObstacleIndex.cost (new own_gap term), called by labels/placer.py:place for point subjects",
+   "mechanism": "place() computes `own_gap = poly_gap(block, subject.poly)` per point candidate and passes it to cost(). An obstacle counts when its gap to the block is <= max(clear, own_gap), not just < clear. At ring 0 this closes the tie the test's strict `>` forbids (both at CLEAR_EM). At ring > 0 it refuses a seat a neighbor stands nearer than the board. This is the placer's own rule for EVERY point caption (a stricter reading of the standard's association clause, no new form), so strict=True makes it a refusal. The test's comparison set becomes label_obstacles' built records (vw/vh as drawn, not w/h), the one predicate.",
+   "fallback": "L4's.",
+   "later_stages": "None.",
+   "unit_test": "A board with a byre whose edge stands 5 ft from the board's upper-right ring-2 seat while ring 0/1 seats are blocked by a house. Assert the ring-2 seat is refused (cost > 0), and that a placement returned under strict has own_gap < every other obstacle's gap. Plus a tie case: an obstacle exactly CLEAR_EM from a ring-0 block is counted.",
+   "retire": "tests/hamletgen/test_pool_261.py::test_the_board_caption_stands_nearest_its_own_board",
+   "risk": "medium",
+   "risk_why": "The own_gap term changes place() for every point caption (hand sheets, compounds, the board). Hand-sheet captions that took a ring>0 cost-0 seat beside a nearer neighbor will move (feature 286's measured sheets). Their re-render must be checked."
+  },
+  {
+   "id": "L7",
+   "rule": "The board's caption block never lies on a drawn tree crown, with no level-1 excuse. Stated: test_pool_261.py::test_the_board_caption_notches_no_crown (settlement-review, features 230 pass 13 and 261). The GM's 2026-08-29 ruling lets the BOARD stand under trees, not the caption's halo bite them (siting.py:98-101).",
+   "rows": ["R1 tests/hamletgen/test_pool_261.py::test_the_board_caption_notches_no_crown", "R2 settlement/structures/fixtures/siting.py:board_choice / place_kosatsuba:91-115,469,536-560 (the crown half)", "R3 tests/hamletgen/test_pool_261.py test_the_board_caption_notches_no_crown ('or meta.kosatsuba_caption_level == 1')"],
+   "owner": "l7r/diagram/settlement/structures/captions.py:label_obstacles (crowns into the one index) + siting.py:place_kosatsuba. The census owner is right about the siter but misses the root cause: place() never saw the canopy, so the drawn seat and the probed seat differ (siting.py:101 checks crowns AFTER place() chose).",
+   "mechanism": "Every tree crown (tree_crowns, falling back to grove clumps, the same source as canopy_index) becomes an Obstacle(circle-as-poly, WEIGHT_OBSTACLE, group='grove'). place() then prefers a crown-clear seat among all ranked seats instead of accepting the first roof-clear one and asking about crowns afterwards. strict=True refuses a crown seat, and board_caption_seat's None refuses the board seat. The predicate is quad_on_canopy's circle test expressed as the index's poly_gap: one reading, and the test calls the index. meta.kosatsuba_caption_level is dropped. It recorded a level-1 compromise that can no longer be emitted.",
+   "fallback": "L4's. The level-1 compromise (R2) is removed, not kept as a rung.",
+   "later_stages": "None: the crowns are all drawn before stage_notice (the belt and groves are earlier stages), and the label phase draws the proved Placement.",
+   "unit_test": "A board whose ring-0 'upper right' is roof-clear but on a crown, and whose 'lower left' is clear of both. Assert the drawn caption is the lower-left one and quad_on_canopy is false. A board whose every seat within reach lies on crowns: assert strict place() returns None and the siter moves the board.",
+   "retire": "tests/hamletgen/test_pool_261.py::test_the_board_caption_notches_no_crown with its level-1 carve-out (FR-006). Also the board_caption_level level-1 assertions in tests/settlement/structures/test_fixtures.py.",
+   "risk": "high",
+   "risk_why": "Adds 600-1,800 crowns to the label index (a performance cost to measure, constitution VI). It will move Sawada's board, which is recorded as having no departure-band seat with a clear caption (siting.py:512-514), and interacts with L1's affordance."
+  },
+  {
+   "id": "L8",
+   "rule": "A seated caption is never drawn at an angle other than its subject's own, mod 180 (0.5 degrees for the board by the GM's 2026-08-27 ruling; 12 degrees for any caption in labels_align_with_their_referent).",
+   "rows": ["R1 tests/hamletgen/test_pool_261.py::test_the_board_caption_stands_at_the_boards_angle", "R1 tests/gate/test_captions_and_boards.py::test_every_caption_is_turned_to_match_its_subject"],
+   "owner": "l7r/diagram/labels/placer.py:_point_cands (and _extended_cands, nudge)",
+   "mechanism": "Already by construction: every point candidate, the extended search and the nudge included, carries `upright(subject.angle)` (placer.py:112, 191, 316 via replace keeping angle), and _draw_seated_caption passes angle=p.angle. The board's subject is built with angle=rot, the same rot kosatsuba records (boards.py). The only other tilt source is the `text` path's label_tilt, which no live hamlet stage calls (row 8 notes). Nothing to change. Its unit test exists (tests/settlement/test_finish.py:130; tests/labels/test_placer.py).",
+   "fallback": "None needed: no candidate carries another angle.",
+   "later_stages": "None.",
+   "unit_test": "Existing: test_label_carries_the_subjects_own_angle_for_lines_and_boxes_alike. Add: a 126-degree board subject whose preferred seats are all blocked, so the extended search and the nudge fire. Assert the returned Placement.angle == upright(126).",
+   "retire": "tests/hamletgen/test_pool_261.py::test_the_board_caption_stands_at_the_boards_angle; tests/gate/test_captions_and_boards.py::test_every_caption_is_turned_to_match_its_subject",
+   "risk": "low",
+   "risk_why": "No engine change: a test is added and two are retired."
+  },
+  {
+   "id": "L9",
+   "rule": "A caption is never drawn without recording the box of the feature it names (element [6]; caption_stands_beside_its_referent).",
+   "rows": ["R1 tests/gate/test_captions_and_boards.py::test_every_caption_records_the_feature_it_names"],
+   "owner": "l7r/diagram/settlement/finish.py:Settlement.label / _record_label (the census named captions.py:_draw_seated_caption, which holds it only for seated captions)",
+   "mechanism": "Seated captions always pass ref=subject_ref(...). On the `text` path, label() gets `ref` as a required keyword whose only non-box value is an explicit sentinel `NO_REFERENT`, allowed only for district/area-name captions. _record_label writes the box or, for the sentinel, the caption's own area box. No caller can emit a caption with ref=None, so the rule is a property of the call signature, not of which stages happen to call it. The live hamlet path is unchanged. The legacy town/city callers (funerary.py, ground.py, trades.py, castle_civic.py) pass the sentinel or their box: a signature edit that places nothing, within the spec's code-path line.",
+   "fallback": "None: a missing referent is a TypeError at the call site, a programming contract caught by the type checker and the unit test, not a map-time refusal.",
+   "later_stages": "None.",
+   "unit_test": "label(x, y, 'the well') with no ref raises TypeError. With ref=(...) the queued payload and the drawn record carry it. The seated path records subject_ref for point, line and area subjects.",
+   "retire": "tests/gate/test_captions_and_boards.py::test_every_caption_records_the_feature_it_names",
+   "risk": "low",
+   "risk_why": "A signature change. No live map changes."
+  },
+  {
+   "id": "L10",
+   "rule": "A caption never stands more than HUG_PX (120 px) box-to-box from the feature it names (label_hugs_its_referent).",
+   "rows": ["R1 tests/gate/test_captions_and_boards.py::test_every_caption_hugs_what_it_names"],
+   "owner": "l7r/diagram/labels/placer.py:rings / place (with standard.py)",
+   "mechanism": "Bounded by construction today but implicitly (REACH_EM*size + NUDGE_PX*sqrt2). HUG_PX moves into labels/standard.py beside REACH_EM, and rings(size) caps the last ring at `HUG_PX - NUDGE_PX*sqrt(2)`, so no point or line candidate, extended or nudged, can exceed it at any caption size. An area caption lies inside its subject (gap 0, or its inside test is a cost). The `first` off-frame fallback is ring 0. The one predicate is `hug_gap(block, ref_box)` (the test's _box_gap), which the placer's unit test and any caller read.",
+   "fallback": "None needed: no candidate lies beyond the cap.",
+   "later_stages": "None.",
+   "unit_test": "For sizes 7, 8, 9, 15 and 30, a point subject boxed in so only the last ring is free. Assert hug_gap(placement.block, subject_ref) <= HUG_PX. And rings(30) is capped.",
+   "retire": "tests/gate/test_captions_and_boards.py::test_every_caption_hugs_what_it_names",
+   "risk": "low",
+   "risk_why": "At the sizes in use (<= 14.5 pt for point captions) the cap never binds, so no map moves."
+  },
+  {
+   "id": "L11",
+   "rule": "The notice board never stands more than BOARD_TO_WAY_PX (90 px) from a way (kosatsuba_by_the_road).",
+   "rows": ["R1 tests/gate/test_captions_and_boards.py::test_the_notice_board_stands_by_the_way"],
+   "owner": "l7r/diagram/settlement/structures/fixtures/siting.py:place_kosatsuba",
+   "mechanism": "By construction: every candidate is sampled at `off <= lim` (60 ft / ftpx) from a route segment (siting.py:329-330), and the only other seat source, the frame re-seat, is deleted (L2). The one predicate is `lim` itself, stated once as KOSATSUBA_WAY_REACH_FT beside the other kosatsuba constants and read by the unit test (the gate test's 90 px was a separate, looser number: FR-003).",
+   "fallback": "L4's terminal. Where no verge takes a board, the board is not posted and meta.kosatsuba_dropped says why. That is GM-QUESTION-bound under L4, since 'no board' and 'a board off the way' are the two forms.",
+   "later_stages": "None: square_crossings / stage_crossings rewrite lanes BEFORE stage_notice (frame.py order), so the way the board was measured against is final.",
+   "unit_test": "A single lane with every verge within 60 ft refused by _fits except one 58 ft out. Assert the board's distance to the lane <= KOSATSUBA_WAY_REACH_FT / ftpx. With every verge refused, assert no board and meta.kosatsuba_dropped set.",
+   "retire": "tests/gate/test_captions_and_boards.py::test_the_notice_board_stands_by_the_way",
+   "risk": "low",
+   "risk_why": "Already holds by the sampling bound. The only change is deleting the second siter (covered under L2)."
+  },
+  {
+   "id": "L12",
+   "rule": "The notice board never stands more than FACING_DEG (45 degrees) off parallel to its nearest way (kosatsuba_faces_the_road).",
+   "rows": ["R1 tests/gate/test_captions_and_boards.py::test_the_notice_board_faces_the_way"],
+   "owner": "l7r/diagram/settlement/structures/fixtures/siting.py:place_kosatsuba",
+   "mechanism": "By construction: the chosen board is turned to nearest_way_bearing(M, x, y) (siting.py:509-511), so it is 0 degrees off the way the shared predicate calls nearest. FR-003: the test re-derives 'nearest' with its own loop in manifest order (lanes, then M['lane']) while the siter uses street_runs order, so at an exactly equidistant corner they can read different arms. The unit test calls _geom.ways.nearest_way_bearing. With the re-seat deleted, the 15-degree `_off_way` refusal and its loose fallback go with it.",
+   "fallback": "None needed: nearest_way_bearing is None only with no ways, and then there are no candidates.",
+   "later_stages": "None (the lanes are final before stage_notice).",
+   "unit_test": "A seat at an L-corner equidistant from both arms. Assert the board's rot equals nearest_way_bearing's tie-broken arm, and a seat beside a straggler crossing at 72 degrees takes the straggler's bearing.",
+   "retire": "tests/gate/test_captions_and_boards.py::test_the_notice_board_faces_the_way",
+   "risk": "low",
+   "risk_why": "No engine change beyond L2's deletion."
+  },
+  {
+   "id": "L13",
+   "rule": "A caption on a hand-drawn Mode A sheet never stands off the seat the one placer's standard gives it.",
+   "rows": ["R1 tests/gate/test_hand_sheet_captions.py::test_every_caption_on_a_hand_drawn_sheet_is_at_its_standard_seat"],
+   "owner": "l7r/diagram/labels/hand_sheet.py:seat / placed (feature 286). The census owner, tools/seat_label.py, no longer exists: it was renamed into labels/hand_sheet.py.",
+   "mechanism": "Already guaranteed and the census row is STALE. Feature 286 (commit dec6344cb) made each hand sheet declare its captions by text and subject with no position, and each gen's render places them by the one placer (labels/hand_sheet.py). The test, the caption ledger (tests/fixtures/caption_ledger.json) and make seat-label were deleted in that commit. A caption's position is now written only by the placer, so 'off its standard seat' cannot be produced. The residue is the placer's least-cost terminal on a sheet with no free seat (hand_sheet.py:739-787 + repair). That terminal is part of the GM-adopted standard ('labels mandatory'; standard.py 'Past the reach the least-cost seat inside it is taken'), a carve-out that is part of the rule itself (FR-006). It does not break the rule.",
+   "fallback": "The standard's own: the lift-one-neighbor repair, then the least cost (feature 286 SC-002: no caption covers more than its hand seat).",
+   "later_stages": "A hand edit of the SVG's geometry is out of scope (hand drawing). A hand edit cannot move a caption, because captions carry no position.",
+   "unit_test": "Existing: tests/labels/test_hand_sheet.py (test_each_caption_avoids_every_one_placed, test_a_stranded_caption_is_freed_by_lifting_a_neighbor). Nothing new.",
+   "retire": "Already retired by 286: the test, the ledger fixture and tests/tools/test_seat_label.py. The closing census (FR-008) should read this row as guaranteed by labels/hand_sheet.py.",
+   "risk": "low",
+   "risk_why": "No change. Only the census record is corrected."
+  },
+  {
+   "id": "L14",
+   "rule": "The title placard never covers a building, plot, field, water, lane, label or the notice board (it may sit on cover) (title_clear_of_features; finish.py:543; tests/settlement/test_label_placement.py).",
+   "rows": ["R2 hamletgen/frame.py:stage_frame:412 (settlement/finish.py:title:348-368), the title band's placard over a runner", "R2 settlement/finish.py:title (no view):376-377"],
+   "owner": "l7r/diagram/settlement/finish.py:Settlement.title",
+   "mechanism": "(a) The band rung: `band` is computed as today, then the placard's x is SCANNED along the band (step 8) with the same `_box_clear(obs)` the pocket and corner rungs use, instead of fixed at vx0+30. Failing that, a south band is tried. Failing both, the map's ink is clipped at the pre-band view's edge (a neatline: the band is title panel, outside the map). `_title_obstacles(window=map_view)` clips its polylines to the same window, so the predicate and the ink agree and the placard is over blank band by construction. (b) With no view: title() raises when `self.view` is unset (a precondition; both callers, frame.py:432 and rolling/roll.py:111, crop first, and the docstring already requires it). The canvas-center branch is deleted. (c) The stale stage_frame comment (frame.py:~405-412, 'falls back to a corner overlap') is corrected.",
+   "fallback": "The neatline clip in (a) is the terminal and always succeeds: a clipped band holds nothing. It is a map drawing convention (a title panel outside the map frame), recorded as such.",
+   "later_stages": "stage_notice runs AFTER the title (frame.py: stage_frame, then stage_notice), and place_kosatsuba's `_fits(..., top=26.0)` never consults M['title']. So a board can be posted under the placard. That is closed by adding the placard box (+4 ft) to place_kosatsuba's candidate filter (the caption already avoids it: label_obstacles includes M['title']).",
+   "unit_test": "A stub settlement whose four corners each hold a dry plot and a lane crossing the north edge at x = vx0+30..vx0+200. Assert the placard lands in the band and _box_clear holds on it. With lanes crossing the whole north and south edges, assert the clip is recorded and the placard box meets no clipped obstacle. title() with no view raises. place_kosatsuba on a map whose only verge lies under M['title']['placard'] does not seat there.",
+   "retire": "Nothing: the title's tests are already placer unit tests (tests/settlement/test_label_placement.py). If a hamletgen finished-map check of title_clear_of_features exists, it is retired with this.",
+   "risk": "medium",
+   "risk_why": "Only rare maps reach the band. The clip is a new drawing convention on those maps. The board-under-placard filter can move a board on a map whose placard sits on a verge."
+  },
+  {
+   "id": "L15",
+   "rule": "A caption on a GENERATED Mode A sheet (compound.py drafts) never lies on a feature it does not name (R3: 'Confirm the labels/ placer's cost blocks every built glyph on hamlets and the generated Mode A sheets').",
+   "rows": ["R3 future-work/cross-cutting.md: ## The caption-over-a-building rule was cut (generated Mode A half)"],
+   "owner": "l7r/diagram/compound.py:_seat_captions",
+   "mechanism": "_seat_captions calls place(strict=True). Where it returns None, it runs labels/hand_sheet.py's `repair` (lift one neighbor and re-seat the pair), the mechanism feature 286 already uses on hand sheets, then retries with the frame's foot grown by CAPTION_ROOM steps (the canvas already grows to hug what is placed below it, compound.py:477-487). The one predicate is ObstacleIndex.cost == 0. Every drawn rect, wall band, gate post and caption is already an obstacle (compound.py emit_svg).",
+   "fallback": "The composer is seedless and deterministic: a program either has a clean seat for every caption after repair and growth, or it does not. The terminal is a ValueError from the composer naming the caption and the program, so the program's author changes the program. That is a raise at composition, before any sheet exists, not a finished-map check. It is listed under `impossible` for review because FR-002's wording forbids 'a raise'.",
+   "later_stages": "None: captions are seated last, after every drawn feature (compound.py emit_svg).",
+   "unit_test": "A two-building program whose small building's caption fits only over the large building's roof until the large building's own caption is lifted. Assert repair frees both at cost 0. And a program where one building is walled in with no free seat raises naming it.",
+   "retire": "Nothing finished-map: test_mode_a_sheets' sweep carries no caption check since feature 286 (pack_audit checks.py:166-169).",
+   "risk": "medium",
+   "risk_why": "The two generated sheets can re-render with moved captions. The terminal's form is for review."
+  },
+  {
+   "id": "L16",
+   "rule": "A channel that declares a stream end never ends more than TRUNK_TOL (13 px) from that stream's drawn bed (channels_join_streams_at_confluence).",
+   "rows": ["R1 tests/gate/test_water_junctions.py::test_a_channel_declaring_a_stream_actually_reaches_its_bed"],
+   "owner": "Two placers own it. l7r/diagram/settlement/fields/comb.py:_comb_source_channel (the intake end) and hamletgen/sink.py (the drain's brook_join end). hamletgen/frame.py:round_the_brooks is the later stage that can undo both. The census named only round_the_brooks.",
+   "mechanism": "(1) comb.py:~635-648 snaps the intake start onto the nearest stream centerline only when 0.5 < d <= 30. Otherwise the channel still declares frm=stream. The snap becomes unconditional for a channel declaring a stream end, and one that cannot reach within the rule does not declare it. (2) round_the_brooks holds, besides the taps, every stream vertex a declared channel end touches. Where the join lies mid-segment (brook_join walks at a stride), the join point is first inserted into the stream poly as a vertex and then held (round_stream's `hold` splits the fillet there). A held vertex coinciding with an existing corner would leave that corner unrounded, which the brook-bend rule forbids. In that case the channel's end is re-snapped to the rounded course (record and deferred ink, the regex path round_stream uses) instead of holding. The one predicate is `channel_end_on_stream(end, stream_poly, tol)` (the test's _poly_dist <= TRUNK_TOL), called after rounding by the stage's unit test.",
+   "fallback": "An intake that cannot reach a stream does not declare one. It is already sourced from the sluice/pond by the comb's other branches, so no form changes.",
+   "later_stages": "round_the_brooks is itself the later stage: closed by (2). No stage after stage_crossings moves a stream.",
+   "unit_test": "A stream with a 100-degree corner at w = 9, a drain whose brook_join lies exactly on that corner, and a second drain joining mid-segment 5 px from a corner's tangent point. After round_the_brooks, assert channel_end_on_stream for both, and that the corner is filleted. An intake whose source lies 45 px from the brook: assert it either snaps or does not declare frm=stream.",
+   "retire": "tests/gate/test_water_junctions.py::test_a_channel_declaring_a_stream_actually_reaches_its_bed. The module's `rolled` fixture is shared with the module's other tests, so the roll is freed only if every test in the module retires.",
+   "risk": "medium",
+   "risk_why": "Touches the brook's rounding, which feature 261 reworked. Inserting held vertices changes fillet segmentation on maps with a drain confluence (Sawada)."
+  },
+  {
+   "id": "L17",
+   "rule": "No watercourse bed is ever painted above the topmost sheen (water composites as one surface; waterways_merge_at_crossings).",
+   "rows": ["R1 tests/gate/test_water_junctions.py::test_courses_that_meet_are_composited_as_one_confluence"],
+   "owner": "l7r/diagram/settlement/finish.py:Settlement.finish (the water block flush, ~lines 716-749)",
+   "mechanism": "Already by construction: every water entry's bed is emitted into one group and every sheen into a later group, with bedz/sheenz taken from one running counter (finish.py:729-741). So min(sheenz) > max(bedz), recorded as water_bed_zmax / water_sheen_zmin. Nothing to change.",
+   "fallback": "None needed.",
+   "later_stages": "None (finish is the last write).",
+   "unit_test": "A Settlement with two streams, a drawn channel and a pond, run through finish(render=False). Assert M['water_sheen_zmin'] > M['water_bed_zmax'] and every record's bedz < every sheenz.",
+   "retire": "tests/gate/test_water_junctions.py::test_courses_that_meet_are_composited_as_one_confluence",
+   "risk": "low",
+   "risk_why": "No engine change."
+  },
+  {
+   "id": "L18",
+   "rule": "The pond fill is always painted above every course that joins the pond (pond_fill_covers_channel_mouths).",
+   "rows": ["R1 tests/gate/test_water_junctions.py::test_the_pond_fill_is_drawn_over_the_mouths_that_join_it"],
+   "owner": "l7r/diagram/settlement/finish.py:Settlement.finish (the water block flush)",
+   "mechanism": "Already by construction: the bed group is emitted in `sorted(_entries, key=lambda w: bool(w.get('pond_fill')))`, a stable sort with the fill last (finish.py:729). So the fill's bedz exceeds every other bed's, joining or not. Nothing to change.",
+   "fallback": "None needed.",
+   "later_stages": "None.",
+   "unit_test": "The L17 fixture with the channel's mouth inside the pond's rim and the pond fill registered FIRST. Assert pond_layer.bedz > that channel's bedz.",
+   "retire": "tests/gate/test_water_junctions.py::test_the_pond_fill_is_drawn_over_the_mouths_that_join_it",
+   "risk": "low",
+   "risk_why": "No engine change."
+  }
+ ],
+ "impossible": [
+  {
+   "rule": "L4-L7 + L2 + L11 terminal: a board with a clean caption is not guaranteed on every map without changing what the feature is.",
+   "reason": "The placer seats a mandatory label (GM 2026-09-27) and every settlement carries a board (GM 2026-07-24). Where no verge in the view takes a board whose caption clears roofs, lanes, crowns and neighbors, one of the two rulings has to give: no board, or a caption that breaks a caption rule. Widening and the knob's affordances push this out to maps that may not exist, but the guarantee needs a stated terminal, and the choice is between distinct forms. GM-QUESTION, with a measurement first: cohort 1-48 plus the SC-003 probes, counting maps that reach the terminal."
+  },
+  {
+   "rule": "L15 terminal: a generated Mode A program with a caption that has no clean seat after repair and canvas growth.",
+   "reason": "The composer is seedless, so the only exits are a raise naming the caption (the program's author fixes the program) or the standard's least-cost seat (a violation). FR-002 excludes 'a raise' literally, though that clause is aimed at finished-map checks that trigger a re-roll. This goes to review to confirm that a composition-time refusal counts."
+  }
+ ],
+ "notes_for_the_plan": [
+  "Census corrections: row 14's owner tools/seat_label.py and its test no longer exist (retired by 286). Row 5's owner is two emitters plus round_the_brooks, not round_the_brooks alone. Rows 1, 2 and 4's owner is the siter, not place(). Row 15 reads frame.py's 'a board in a wood is a notice nobody reads' as the rule, but the GM's 2026-08-29 ruling (board under canopy acceptable with a visible label) governs.",
+  "A later stage the census missed: stage_notice runs after stage_frame's title, and place_kosatsuba never consults M['title'], so a board can be posted under the placard (L14).",
+  "Performance (constitution VI): the crowns in the label index (L7) and one strict place() per board candidate. board_choice's lazy order (feature 284) stays: walk seats in rank order and stop at the first with a clean caption.",
+  "Retirement cost: test_pool_261's board tests read shipped JSON (no roll). test_captions_and_boards.py uses one module-scoped roll of rolls.REFERENCE, and retiring all six of its tests (L5, L8-L12) frees that roll. test_water_junctions.py shares its roll with five other tests outside this area."
+ ]
+}

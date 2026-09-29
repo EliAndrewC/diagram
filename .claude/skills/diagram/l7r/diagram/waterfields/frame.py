@@ -2,7 +2,8 @@
 
 import math
 import random
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
+from typing import Any
 
 Pt = tuple[float, float]  # an (x, y) point in map pixels
 Poly = list[Pt]  # a polyline / polygon as a list of points
@@ -251,12 +252,44 @@ class _Thread:
         return self.u + (self.drift * k + R.uniform(-0.10, 0.10)) * DF
 
 
+# THE FALL OF EVERY VERTEX, PROJECTED ONCE PER POLYLINE WHILE A CARVE RUNS (feature 278, FR-007). `_at_f` re-projected
+# every vertex of the polyline it was asked about on every call - 118,836 calls over Kashikawa and Sawada's carves, each
+# walking a thread or the drain that does not change while the carve runs. `at_f_cache()` holds each polyline's falls
+# for the length of one carve: keyed by the object, the entry keeping the object itself so no other list can take its id
+# while cached, and dropped when the carve ends. Outside a carve nothing is cached.
+_AT_F: dict[int, tuple[Poly, list[float]]] | None = None
+
+
+class at_f_cache:
+    """`with at_f_cache():` - the fall values `_at_f` reads are projected once per polyline for the block's length."""
+
+    def __enter__(self) -> None:
+        global _AT_F  # the cache is the module's, for `_at_f` to read without a parameter every caller would carry
+        self._outer = _AT_F
+        _AT_F = {} if _AT_F is None else _AT_F
+
+    def __exit__(self, *_exc: object) -> None:
+        global _AT_F  # restored, so a nested block leaves the outer one's cache in place
+        _AT_F = self._outer
+
+
+def _falls(F: _Frame, pts: Poly) -> list[float]:
+    cache = _AT_F
+    if cache is None:
+        return [F.to_uf(*p)[1] for p in pts]
+    hit = cache.get(id(pts))  # the entry holds `pts` itself, so while it is cached no other object can carry this id
+    if hit is None:
+        hit = cache[id(pts)] = (pts, [F.to_uf(*p)[1] for p in pts])
+    return hit[1]
+
+
 def _at_f(F: _Frame, pts: Poly, f: float) -> Pt:
     """Point on a fall-monotone polyline at fall f (clamped at the ends)."""
-    if f <= F.to_uf(*pts[0])[1]:
+    fs = _falls(F, pts)
+    if f <= fs[0]:
         return pts[0]
     for i in range(len(pts) - 1):
-        fa, fb = F.to_uf(*pts[i])[1], F.to_uf(*pts[i + 1])[1]
+        fa, fb = fs[i], fs[i + 1]
         if fa <= f <= fb and fb > fa:
             k = (f - fa) / (fb - fa)
             return (pts[i][0] + k * (pts[i + 1][0] - pts[i][0]), pts[i][1] + k * (pts[i + 1][1] - pts[i][1]))
@@ -468,3 +501,8 @@ def _miter_normals(bpts: Poly, F: _Frame) -> list[Pt]:
         out.append((ux * scale, uy * scale))
     out.append(cn[-1])
     return out
+
+
+def plot_boxes(plots: Sequence[dict[str, Any]]) -> list[tuple[dict[str, Any], float, float, float, float]]:
+    """`(plot, x0, y0, x1, y1)` - each plot filed by its ring's box (feature 278)."""
+    return [(pl, min(q[0] for q in pl["poly"]), min(q[1] for q in pl["poly"]), max(q[0] for q in pl["poly"]), max(q[1] for q in pl["poly"])) for pl in plots]

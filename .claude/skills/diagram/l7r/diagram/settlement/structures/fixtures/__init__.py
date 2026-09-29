@@ -9,6 +9,7 @@ from ._helpers import KOSATSUBA_ANCHOR_BAND_FT as KOSATSUBA_ANCHOR_BAND_FT
 from ._helpers import KOSATSUBA_ENTRANCE_REACH_FT as KOSATSUBA_ENTRANCE_REACH_FT
 from ._helpers import KOSATSUBA_HANDOVER_BAND_FT as KOSATSUBA_HANDOVER_BAND_FT
 from ._helpers import KOSATSUBA_VERGE_FT as KOSATSUBA_VERGE_FT
+from ._helpers import RouteReach as RouteReach
 from ._helpers import departure_routes as departure_routes
 from ._helpers import kosatsuba_affordances as kosatsuba_affordances
 from ._helpers import kosatsuba_anchor as kosatsuba_anchor

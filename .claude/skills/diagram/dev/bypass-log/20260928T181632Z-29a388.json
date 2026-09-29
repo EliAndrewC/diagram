@@ -1,0 +1,6 @@
+{
+  "utc": "2026-09-28T18:16:32Z",
+  "target": "entry-gate",
+  "commit": "ce7db300f",
+  "why": "research 230 added the storehouse finding and relabeled the rear's well, privy and servants' quarters as reasoning; the garden, latrine, reception room and well modals claim nothing about the rear strip beyond the privy's rear seat, already labeled reasoning - checked by grep, the three that did drift were rewritten"
+}

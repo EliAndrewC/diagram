@@ -7,7 +7,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross
-from l7r.diagram.settlement._geom import PointGrid, RingIndex, boxed_grid
+from l7r.diagram.settlement._geom import PointGrid, RingIndex, boxed_grid, seg_reach_index
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
@@ -97,6 +97,46 @@ def fit_square_parcel(half: float, floor_half: float, fits: Any) -> float | None
         if fits(cand):
             return cand
     return None
+
+
+_EDGE_SAMPLE = 30.0  # px between the samples `crop_edge_points` takes along a field edge: a third of the scan's 90 px lattice
+
+
+def crop_edge_points(crops: Sequence[Poly], every: float = _EDGE_SAMPLE) -> PointGrid:
+    """The edges of the field ground, sampled every `every` px and filed in a grid, so the height of the field nearest a
+    seat is one grid read (269 B27; a paddy envelope's vertices can stand hundreds of px apart, so the vertices alone
+    would measure the wrong stretch of edge)."""
+    grid = PointGrid(128.0)
+    for ring in crops:
+        for (ax, ay), (bx, by) in zip(ring, [*ring[1:], ring[0]], strict=False):
+            n = max(1, math.ceil(math.dist((ax, ay), (bx, by)) / every))
+            grid.extend([(ax + (bx - ax) * k / n, ay + (by - ay) * k / n, ax + (bx - ax) * k / n, ay + (by - ay) * k / n, ax + (bx - ax) * k / n, ay + (by - ay) * k / n) for k in range(n)])
+    return grid
+
+
+def field_height_near(p: Pt, fall: Pt, grid: PointGrid) -> float:
+    """The height (up the fall, -p.fall) of the field ground nearest `p` - the field a wood at `p` would adjoin. The grid
+    is asked at a widening pad until it answers; with no field ground at all, -inf (every seat stands above it)."""
+    pad = 128.0
+    while pad <= 8192.0:
+        near = [(math.dist(p, (q[0], q[1])), q) for q in grid.near(p[0], p[1], pad)]
+        near = [t for t in near if t[0] <= pad]
+        if near:
+            q = min(near)[1]
+            return -(float(q[0]) * fall[0] + float(q[1]) * fall[1])
+        pad *= 2.0
+    return -math.inf
+
+
+def woodland_tier(p: Pt, fall: Pt, house_floor: float, field_height: float) -> int:
+    """Where the record puts a village's fuel wood, as a rank (269 B27, research/vegetation/220): 0 - higher than the field
+    it adjoins and not below the lowest house (the nearest hill ground beyond the fields); 1 - not below the houses but
+    not above that field (the level beside the fields, the record's fallback); 2 - downslope of every house, where the
+    record puts the grass and riverbank commons, never the wood. Heights run up the fall: -p.fall."""
+    h = -(p[0] * fall[0] + p[1] * fall[1])
+    if h < house_floor:
+        return 2
+    return 0 if h > field_height else 1
 
 
 _CHAIN_OFF = 0.2  # a third parcel within this fraction of the span off the line through two others stands in their row
@@ -205,6 +245,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
 
     crops: list[Poly] = [list(plan.envelope)] + [[(float(v[0]), float(v[1])) for v in d["poly"]] for d in s.M.get("dry_plots", [])]
     crop_idx = [RingIndex(c) for c in crops]  # each crop's edges indexed once (feature 218); the rung below boxes them by its own set-back
+    crop_pts = crop_edge_points(crops)  # the field ground's edge, sampled and indexed once, for `field_height_near` (269 B27)
     _hx = [h["x"] for h in s.M.get("houses", [])] or [plan.W / 2]
     _hy = [h["y"] for h in s.M.get("houses", [])] or [plan.H / 2]
     ccx, ccy = sum(_hx) / len(_hx), sum(_hy) / len(_hy)
@@ -330,6 +371,10 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # used to be an inline `if` that only the lattice scan could evaluate, which is why the
             # jitter below could not exist: there was no way to check that a moved seat was still
             # legal. Same shape as every other "placement and its check read one source" fix here.
+            # EVERY LANE AND STREAM SEGMENT BY ITS REACH, one index per size asked (feature 278): `_ok` is re-asked with a
+            # different `half` when the size roll re-tests a seat, and the reach is `pad + half`, so each size gets its own.
+            _line_g: dict[float, PointGrid] = {}
+
             def _ok(
                 x: float,
                 y: float,
@@ -341,6 +386,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 sx1: float = sx1,
                 sy1: float = sy1,
                 crop_g: PointGrid = crop_g,
+                line_g: dict[float, PointGrid] = _line_g,
             ) -> bool:
                 # ONE guard clause, deliberately: the window bounds and the kept-window AREA are the
                 # same question asked of a seat that may have been MOVED since the scan offered it
@@ -358,7 +404,9 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                     and not any(_crop_refuses((x, y), half, idx, n, sn) for idx, _bx0, _by0, _bx1, _by1 in crop_g.near(x, y))
                     and not any(math.hypot(x - kx, y - ky) < kr + half for kx, ky, kr in keep)
                     and not any(rx0 - half < x < rx1 + half and ry0 - half < y < ry1 + half for rx0, ry0, rx1, ry1 in keep_rects)
-                    and not any(_near_line((x, y), half, pts, pad) for pts, pad in lanes + streams)
+                    and not any(
+                        bx0 <= x <= bx1 and by0 <= y <= by1 and seg_dist(x, y, a, b) < reach for a, b, reach, bx0, by0, bx1, by1 in _lines_at(line_g, lanes + streams, half).near(x, y)
+                    )  # `_near_line`, from the index
                     and not _wet(x, y, half)
                 )
 
@@ -368,45 +416,34 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 x = max(half + 40.0, sx0)
                 while x <= min(plan.W - half - 40.0, sx1):
                     if _ok(x, y):
-                        # PREFER THE NEAREST QUALIFYING GROUND, leaning upslope. The first version of this
-                        # maximized distance from the crop instead, which sounds right and is wrong twice
-                        # over: it drove every patch to the canvas's far upslope margin, where the dedupe
-                        # radius strung them out along one line at identical height, and then the crop -
-                        # which frames to the HARD features and lets commons bleed off-frame - cut three of
-                        # the four off the sheet entirely. A settlement's coppice is walked to daily for
-                        # fuel and fodder; it stands on the back slope behind the houses, as close as the
-                        # crop set-back allows. The keep-outs above are what make it far ENOUGH.
-                        upslope = -((x - ccx) * dx + (y - ccy) * dy)
-                        scored.append((-math.hypot(x - ccx, y - ccy) + 0.35 * upslope, x, y))
+                        # PREFER THE NEAREST QUALIFYING GROUND. The first version of this maximized distance from
+                        # the crop instead, which drove every patch to the canvas's far upslope margin and the crop
+                        # then cut three of four off the sheet. A settlement's coppice is walked to daily for fuel and
+                        # fodder: the satoyama is the NEAREST hill ground (research/vegetation/220), so within the
+                        # ground the height rule below admits, nearer wins outright. The keep-outs above are what make
+                        # it far ENOUGH. Height is no longer a term in this score (269 B27): it is `woodland_tier`.
+                        scored.append((-math.hypot(x - ccx, y - ccy), x, y))
                     x += step
                 y += step
-            # THE COPPICE IS A HILLSIDE WOOD, SO A DOWN-SLOPE-DOMINANT SEAT LOSES TO A CROSS-SLOPE ONE
-            # (settlement-review, Kashikawa 2026-08-18 round 2, and its research pass settled the
-            # ruling this ledger item was waiting for). Three project files say woodland goes on the
-            # higher, farther ground - `research/vegetation.html`, `research/fields.html` and this
-            # function's own scorer comment - and Kashikawa drew both its stands downslope, one of them
-            # 886 ft down and 75 ft off the reed marsh: a coppice walking onto the wet toe of the fan.
-            # The scorer's additive `+0.35 * upslope` never binds, because a 90 px step toward the
-            # cluster outbids 257 px of height.
-            #
-            # THE RULING, and why it is neither of the two options I ledgered. Raising the weight until
-            # it binds returns this map to ZERO parcels - the defect closed that morning - and a knob
-            # was not available either: the reviewer's research pass found satoyama DEFINED as the
-            # foothill border zone with its coppice on the hillsides, and the China-first analog (the
-            # fengshui back-hill wood) upslope as well, so a downslope commons is not a co-equal
-            # attested form and "correct the prose instead" would mean rewriting doctrine to match a
-            # placement artifact. What the record does support is weaker than "uphill of the houses":
-            # the wood is ON THE HILLSIDE, i.e. at or above the settlement's own contour. So the test
-            # is the along/cross RATIO, not the height. Decomposed on Kashikawa, that refuses the
-            # down-dominant parcel (886 ft down against 276 cross) and keeps the cross-dominant one
-            # (505 down against 1562 cross, effectively a contour seat) - one parcel, not zero.
-            #
-            # A PREFERENCE, not a filter, per this scan's standing habit: if no cross-slope seat
-            # qualifies at all, the down-slope ones are still offered rather than leaving a map
-            # woodless. The GM can reverse this ruling; it is recorded in `future-work/`.
-            _cross_seats = [t for t in scored if abs((t[1] - ccx) * -dy + (t[2] - ccy) * dx) >= ((t[1] - ccx) * dx + (t[2] - ccy) * dy)]
-            if _cross_seats:
-                scored = _cross_seats
+            # THE WOOD STANDS BEYOND THE FIELDS, ON GROUND HIGHER THAN THE FIELDS IT ADJOINS (269 B27; research/vegetation/220,
+            # "Where did a village keep its fuel wood?" - houses, then fields, then the hill and wild land beyond; the
+            # nearest hill slope round the settlement; the Musashino upland's groves, fields, then the konara wood on the
+            # outer edge). The scorer used to ADD `0.35 * upslope` to nearness, and nearness outbid it: a 90 px step toward
+            # the cluster was worth 257 px of height, so Kashikawa drew a stand 886 ft down the fan and 75 ft off the reed
+            # marsh. A cross-slope preference (the along/cross ratio, 2026-08-18) narrowed that and still admitted ground
+            # below the houses. The record's rule is a ranking, so it is one here (`woodland_tier`): a seat higher than the
+            # nearest field ground and not below the lowest house first; then, where the map has no such ground, a seat on
+            # the level beside the fields - not below the houses; a seat downslope of every house is never offered. Low wet
+            # ground by a marsh or a river is left to grass and reeds: the marsh and stream keep-outs above refuse it, and it
+            # lies below the houses on a fan. Reading "beyond the fields" as "higher than the field next to it" where the
+            # ground slopes is the entry's own reading of "the slopes around the settlement".
+            _fall = (dx, dy)
+            _house_floor = min((-(float(h["x"]) * dx + float(h["y"]) * dy) for h in s.M.get("houses", [])), default=-math.inf)
+            _tiers = [woodland_tier((t[1], t[2]), _fall, _house_floor, field_height_near((t[1], t[2]), _fall, crop_pts)) for t in scored]
+            # a RANK, not a filter, below the downslope refusal: every tier-0 seat outranks every tier-1 one (the 1e9 dwarfs any
+            # distance on a canvas), so the level is taken only once the ground above the fields is used up - "where the map
+            # has no such ground" read per parcel, as the count is a target the scan meets only where there is open ground
+            scored = [(t[0] - 1e9 * k, t[1], t[2]) for t, k in zip(scored, _tiers, strict=True) if k < 2]
             # ...AND ON THE HOUSES' SIDE OF THEIR FIELD (settlement-review of Inashiro, feature 261): a coppice walked to daily
             # for fuel and fodder stands on the hillside the settlement backs onto, and with the houses seated against the
             # wind Inashiro's parcels went up across the paddy from every house. A preference as the one above: where no seat
@@ -515,9 +552,10 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 # because the varying dimension proves the constant one was a choice.
                 #
                 # The record is decisive rather than two-sided, so this is calibrated liberty and not
-                # a knob between forms: *iriai* commons boundaries were customary and described by
-                # ridge, stream and path (UNSOURCED - read under T46, 2026-08-27: the cited Yamaguni
-                # study says nothing about boundaries; see research/vegetation.html), and satoyama
+                # a knob between forms: an *iriai* wood's edge was a line the villages agreed or were
+                # given, and it bent (research/vegetation/140: a 1612 ruling map sealed along the line at
+                # its ends and bends); that it ran by ridge, stream and path is a GUESS - no page read
+                # says so (269 B27; the Yamaguni study cited for it says nothing of boundaries), and satoyama
                 # coppice sits on the slope break - there is no attested rectilinear woodlot. Aspect and bearing therefore roll per parcel from its
                 # own position, AREA HELD (hw*hh is unchanged, so every size rule above still means
                 # what it says), and the bearing is taken off the fall line because a hillside wood
@@ -600,13 +638,14 @@ def _parcel_outline(s: Settlement, x: float, y: float, hw: float, hh: float, bc:
     THE RESEARCHED RULING WAS ONLY HALF DRAWN (GM 2026-08-27, feature 133 T36: *"those coppice
     Patches. basically it looked like little squares ... I want to make sure that that is intentional
     and based on research rather than just happenstance"*). It was happenstance. The 2026-08-18
-    review pass had already found the record decisive - *iriai* commons boundaries were customary and
-    "described by ridge, stream and path", satoyama coppice sits on the slope break, and there is no
+    review pass had already found the record decisive - *iriai* commons boundaries were customary (it
+    said "described by ridge, stream and path", which is a GUESS: research/vegetation/140 finds a line
+    the villages agreed or were given, bent to the ground, and no page on what it followed), satoyama coppice sits on the slope break, and there is no
     attested rectilinear woodlot - and implemented it as a ROTATED RECTANGLE with the plain square as
     the fallback for a tight seat. A rotated rectangle is still rectilinear, and on Inashiro all three
     parcels took the fallback: `rot 0`, `w == h`, twelve of twelve across the pool before that. So the
     outline is now what the ruling says: a ring that follows no page axis, its radius wandering the
-    way a boundary that runs "by ridge, stream and path" does.
+    way a boundary bent to the ground does (whether by ridge, stream and path is a GUESS - vegetation/140).
 
     Built INSIDE the tested reach, on purpose. Every keep-out test in `open_ground_patches` was made
     at the ellipse's circumscribing half, so a vertex that never leaves the ellipse can never buy
@@ -647,6 +686,14 @@ def _crop_refuses(center: Pt, half: float, crop: RingIndex, normal: float = 80.0
     limit = sunny if south_of else normal
     dist = crop.edge_within(cx, cy, limit + half + 1.0)
     return dist is not None and dist - half < limit
+
+
+def _lines_at(cache: dict[float, PointGrid], lines: Any, half: float) -> PointGrid:
+    """`seg_reach_index(lines, half)`, built once per `half` into `cache` (feature 278)."""
+    grid = cache.get(half)
+    if grid is None:
+        grid = cache[half] = seg_reach_index(lines, half)
+    return grid
 
 
 def _near_line(center: Pt, half: float, pts: Sequence[Pt], pad: float) -> bool:

@@ -7,6 +7,7 @@ import math
 from typing import TYPE_CHECKING, Any
 
 from .._geom import Indexed, Pt, point_in_poly
+from .fit import part_box
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -83,7 +84,7 @@ class PlacerMixin:
         for it in self._reach_index(self.placed, "placed_reach").near(x, y, max(hw, hh) / 2 + 2):
             if abs(x - it[0]) < (hw + it[2]) / 2 + 2 and abs(y - it[1]) < (hh + it[3]) / 2 + 2:
                 return True
-        return bool(self._house_too_near_a_neighbor(house))
+        return bool(self._house_too_near_a_neighbor(house) or self._house_unreachable(house))
 
     def _bundle_refused(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """Would `_bundle_fits` refuse this DISPERSED bundle, by one of the conjuncts the indexes answer cheaply (feature
@@ -94,7 +95,7 @@ class PlacerMixin:
         `_bundle_fits`, so a YES here is its NO; what survives gets the whole test, as before."""
         fg = getattr(self, "_free_ground", None)
         if fg is not None:
-            parts = [geom.get(k) for k in ("yard", "grove_n", "grove_w", "shed")] + list(geom["gardens"])
+            parts = [part_box(geom, k) for k in ("yard", "grove_n", "grove_w", "shed")] + list(part_box(geom, "gardens"))  # as drawn (269 B18)
             if any(r is not None and fg.rect_refused(r) for r in parts):
                 return True
         cx, cy, W, H = geom["bbox"]
@@ -251,7 +252,7 @@ class PlacerMixin:
             # the west side went to 0 of 82 homesteads across the pool - in exactly the axis the GM asked to see vary
             # (*"whether the garden is on the left or the right side or both"*).
             _hand = (rank % 2) ^ (1 if self._hjit(cx, cy, 12.0) < 0.5 else 0)
-            score = (sum(self._garden_shaded(g) for g in geom["gardens"]), rank // 2, _hand)
+            score = (sum(self._garden_shaded(g) for g in part_box(geom, "gardens")), rank // 2, _hand)
             if best is None or score < best[0]:
                 best = (score, cx, cy, geom)
         if best is None:

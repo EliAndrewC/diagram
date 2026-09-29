@@ -175,10 +175,32 @@ def check_key_cap(kind: str, key: str, mirror: Path) -> None:
                   "The runner starts that brief next, in a fresh session. For a deliberate larger load: KEY_CAP_OK='<reason>'")
 
 
-def reserve(kind: str, key: str, root: Path, mirror: Path | None = None, stub: str | None = None, timeout: float = 30.0) -> Path:
-    """The new file's path, its prefix reserved and a stub written before the lock is released."""
+def _sources():  # noqa: ANN202
+    import importlib.util  # noqa: PLC0415
+
+    spec = importlib.util.spec_from_file_location("_sources", HERE / "_sources.py")
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def registry_stub(key: str, url: str) -> str:
+    """A registry entry's opening, naming its pointer the way every entry does (`_check_bundle.url_of` reads it)."""
+    return f'<h3 id="{key}"><code>{key}</code></h3>\n<p>({url})</p>\n'
+
+
+def reserve(kind: str, key: str, root: Path, mirror: Path | None = None, stub: str | None = None, timeout: float = 30.0, url: str = "") -> Path:
+    """The new file's path, its prefix reserved and a stub written before the lock is released.
+
+    With `url` (a registry entry only, feature 288 FR-005) the stub names the pointer and the sources-consulted ledger
+    marks it `cited:<key>` at once; without it, nothing differs from before."""
     if kind not in DIRS:
         raise Refusal(f"KIND must be one of {sorted(DIRS)}")
+    if url and kind != "registry":
+        raise Refusal("URL= names a registry entry's source - it is for KIND=registry only")
+    if url and stub is None:
+        stub = registry_stub(key, url)
     if not key.strip():
         raise Refusal("KEY is required - the glossary term or the registry key")
     mirror = mirror_of(root) if mirror is None else mirror
@@ -200,6 +222,9 @@ def reserve(kind: str, key: str, root: Path, mirror: Path | None = None, stub: s
         row = {"kind": kind, "key": key, "prefix": prefix, "clone": str(root), "session": os.environ.get("L7R_PAGE_SESSION", ""), "utc": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")}
         with open(mirror / ".specify" / LEDGER, "a", encoding="utf-8") as f:
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
+    if url:
+        src = _sources()
+        src.append(src.home(root), [src.line(src.context(root), url, f"cited:{key}")])
     return path
 
 
@@ -226,6 +251,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("key")
     ap.add_argument("--root", default="", help="the clone (default: the repository this runs in)")
     ap.add_argument("--mirror", default="", help="the mirror (default: the clone's grandparent under .clones/)")
+    ap.add_argument("--url", default="", help="a registry entry's source: the stub names it and the sources-consulted ledger marks it cited (feature 288)")
     ap.add_argument("--check", default="", help="with a path: exit 0 if its prefix is reserved in the ledger, 1 if not")
     args = ap.parse_args(argv)
     if args.root:
@@ -239,7 +265,7 @@ def main(argv: list[str] | None = None) -> int:
         m = re.match(r"(\d+)-", Path(args.check).name)
         return 0 if m and reserved(args.kind, int(m.group(1)), mirror, args.key or None) else 1
     try:
-        path = reserve(args.kind, args.key, root, mirror)
+        path = reserve(args.kind, args.key, root, mirror, url=args.url)
     except Refusal as e:
         print(f"reserve: {e}", file=sys.stderr)
         return 2

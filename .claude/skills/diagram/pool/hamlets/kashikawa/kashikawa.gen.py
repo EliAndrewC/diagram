@@ -25,6 +25,10 @@ brook visible below it.
 
 `bamboo="both"` - DECLARED, NOT ROLLED (feature 261): a knob owes one map per value on the sheet; the value this map
 exhibited is declared so the pool keeps its only exhibit of it whatever the roll.
+
+`byre_form="yard_shed"` - DECLARED, NOT ROLLED (269 B16), for the same reason: the outer stable is the form 269 added
+(research/homesteads/300), and on the honest roll no pool map drew it - this seed, Inashiro's and Sawada's all fall in the
+rare shared shed's tenth. The map was one of B16's three motivating maps, drawing that shared shed before.
 """
 
 import os
@@ -35,5 +39,5 @@ SKILL = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))  # <tree>/<tier>
 sys.path.insert(0, SKILL)
 from l7r.diagram.hamletgen import HamletSpec, generate  # noqa: E402
 
-report = generate(HamletSpec(name="Kashikawa", seed=3, households=20, down_deg=315, water_sink="offmap", brook_side=-1, bamboo="both"), out_base=os.path.join(HERE, "kashikawa"))
+report = generate(HamletSpec(name="Kashikawa", seed=3, households=20, down_deg=315, water_sink="offmap", brook_side=-1, bamboo="both", byre_form="yard_shed"), out_base=os.path.join(HERE, "kashikawa"))
 print(report.line())

@@ -482,11 +482,11 @@ def test_no_lane_end_is_served_only_by_the_way_it_left(gen: str) -> None:
     """A lane end reaches something other than the way its own far end stands on (settlement-review of Mizuguchi, round
     176042d3: a lane left the connector, ran 61 ft past its house and stopped in the grass, counted as arriving because it
     was still within reach of the connector it had left). Asked of the engine's own `end_serves`."""
-    from l7r.diagram.hamletgen.ways.geom import _TOUCH_GAP, end_serves, steading_footprints
+    from l7r.diagram.hamletgen.ways.geom import _TOUCH_GAP, end_serves, steading_footprints, worked_ground
 
     m = _manifest(gen)
     houses = [(float(h["x"]), float(h["y"])) for h in m["houses"]]
-    fields = [[(float(a), float(b)) for a, b in f["outline"]] for f in m.get("fields") or [] if f.get("outline")]
+    fields = worked_ground(m)  # the bund, not the outline within 60 ft (269 B04)
     steadings = steading_footprints(m)
     lanes = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in m["lanes"] if not ln.get("connector") and len(ln.get("pts") or []) >= 2]
     allsegs = [(a, b) for ln in m["lanes"] for a, b in zip([tuple(map(float, q)) for q in ln["pts"]], [tuple(map(float, q)) for q in ln["pts"]][1:], strict=False)]
@@ -502,3 +502,17 @@ def segments_dist(q: tuple[float, float], sg: tuple[tuple[float, float], tuple[f
     from l7r.diagram.settlement import seg_dist
 
     return seg_dist(q[0], q[1], sg[0], sg[1])
+
+
+def test_a_house_beyond_the_reach_of_every_lane_has_no_way_out() -> None:
+    """`departure_routes` walks each dwelling from its nearest lane sample within `reach`; a house farther than that from
+    every lane is left out rather than routed from a far-off sample (feature 278: the branch Sawada's stranded house used to
+    take, stated directly)."""
+    from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
+
+    m = {
+        "houses": [{"x": 210.0, "y": 100.0}, {"x": 1000.0, "y": 1000.0}],
+        "lanes": [{"pts": [[0.0, 0.0], [200.0, 0.0]], "connector": True}, {"pts": [[200.0, 0.0], [200.0, 200.0]]}],
+    }
+    routes = departure_routes(m)
+    assert len(routes) == 1 and routes[0][0][0] == 200.0, "the near house walks out; the far one is not routed"

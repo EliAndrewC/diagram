@@ -6,9 +6,9 @@ import heapq
 import math
 from collections.abc import Sequence
 
-from l7r.diagram.settlement import point_in_poly, seg_closest, seg_dist, seg_intersect, segments_cross
+from l7r.diagram.settlement import seg_closest, seg_intersect, segments_cross
 
-from ..clearance import fabric_index
+from ..clearance import FabricIndex, fabric_index
 from ..consts import (
     WEB_FABRIC_GAP,
     WEB_HARD_GAP,
@@ -18,7 +18,13 @@ from ..consts import (
 from .geom import _TOUCH_GAP, _turn_deg, fabric_clearance, polyline_len, push_out_of
 
 
-def _clear_link(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float = WEB_FABRIC_GAP) -> bool:
+def link_index(hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float = WEB_FABRIC_GAP) -> FabricIndex:
+    """The fabric index `_clear_link` asks with these grounds and this gap - built once by a caller that tests many links
+    (feature 284, FR-002)."""
+    return fabric_index(hard, WEB_HARD_GAP, walls, gap, water, 14.0)
+
+
+def _clear_link(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float = WEB_FABRIC_GAP, index: FabricIndex | None = None) -> bool:
     """Is the short run between two points walkable? Used before extending a lane end onto the way
     it meets, so a junction is drawn as a touch without the touch crossing anything."""
     span = math.dist(a, b)
@@ -29,7 +35,7 @@ def _clear_link(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: li
     # bridged - and the lane ink then crossed a house or a garden bed
     # (`features_do_not_overlap`, `houses_clear_of_lanes`). A link is walkable only if it survives
     # end to end.
-    runs = clear_runs([a, b], hard, WEB_HARD_GAP, step=3.0, lines=water, tight=walls, tight_margin=gap, floor=0.5)
+    runs = clear_runs([a, b], hard, WEB_HARD_GAP, step=3.0, lines=water, tight=walls, tight_margin=gap, floor=0.5, index=index)
     return any(polyline_len(r) >= span - 3.0 for r in runs)
 
 
@@ -351,6 +357,7 @@ def clear_runs(
     tight: Sequence[Poly] = (),
     tight_margin: float = 6.0,
     floor: float = 70.0,
+    index: FabricIndex | None = None,
 ) -> list[Poly]:
     """EVERY clear stretch of a polyline, not just the first or the longest - the through-lane
     counterpart of `clip_to_clear`.
@@ -387,8 +394,9 @@ def clear_runs(
     # it files each polygon and line by grid cell so a sample measures only its cell's candidates.
     # Same verdicts by construction - the candidates are a superset of what the box prefilter kept,
     # measured with the same predicate; `clearance.py` carries the argument and the oracle test.
-    index = fabric_index(obstacles, margin, tight, tight_margin, lines, line_margin)
-    fouled = index.fouled
+    # ...or handed in by a caller that asks many links of the SAME ground (feature 284, FR-002: `_route`'s string-pull, whose
+    # every link asked the memo, and the memo's key walks every polygon's identity, length and ends and every water line)
+    fouled = (index if index is not None else fabric_index(obstacles, margin, tight, tight_margin, lines, line_margin)).fouled
 
     samples: Poly = [pts[0]]
     for i in range(len(pts) - 1):
@@ -426,10 +434,12 @@ def clip_to_clear(pts: Poly, obstacles: Sequence[Poly], margin: float, step: flo
     if not obstacles and not lines:
         return pts
 
-    def fouled(q: Pt) -> bool:
-        if any(seg_dist(q[0], q[1], a, b) < line_margin for a, b in lines):
-            return True
-        return any(point_in_poly(q[0], q[1], list(o)) or min(seg_dist(q[0], q[1], o[j], o[(j + 1) % len(o)]) for j in range(len(o))) < margin for o in obstacles)
+    # THE FABRIC INDEX, AS `clear_runs` ASKS IT (feature 281, FR-001). This walked every obstacle's every edge and every
+    # line per 8 ft sample - 535,389 `seg_dist` on Kashikawa's lane arms, field spur and threading - while its through-lane
+    # sibling below had asked the index since feature 138. The closure it replaces was `fouled_brute` term for term (each
+    # line under `line_margin`, then each obstacle inside or its nearest edge under `margin`), and `FabricIndex.fouled`
+    # equals `fouled_brute` (feature 138's oracle test), so every clip is what it was.
+    fouled = fabric_index(obstacles, margin, (), 0.0, lines, line_margin).fouled
 
     out: Poly = [pts[0]]
     for i in range(len(pts) - 1):

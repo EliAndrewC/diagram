@@ -10,20 +10,32 @@ from __future__ import annotations
 
 import math
 
-# THE RANKED POSITIONS AROUND A POINT FEATURE, best first. QGIS's documented default order, which it takes from
-# Krygier and Wood's textbook: "top right top left bottom right bottom left middle right middle left top, slightly
+# THE RANKED POSITIONS AROUND A POINT FEATURE, best first. The standard's is QGIS's documented default order, which it
+# takes from Krygier and Wood's textbook: "top right top left bottom right bottom left middle right middle left top, slightly
 # right bottom, slightly left" (qgis-label-settings); a ranked set of eight positions is the standard formulation
 # (christensen-marks-shieber-1995, after Yoeli 1972). Each is (name, sx, sy) in the SUBJECT'S OWN frame as the
 # words read: sx -1/0/+1 is left/center/right and sy -1/0/+1 is above/level/below. A fractional sx on the last two
 # is "slightly": the block's center sits sx times the block's width off center - a quarter width, our reading of
 # the word (plan P3, a calibration; the sources name the position, not the amount).
+#
+# A DELIBERATE DEVIATION, the GM's ruling of 2026-09-29 (feature 289): *"we prefer being adjacent to an object to being
+# diagonal to it. I think that directly above an object is best. And then directly below, then left then right."* The
+# four ADJACENT positions come first - directly above, directly below, left, right - and the standard's others follow
+# in the standard's order. The standard's order is point-symbol machinery (a dot for a town); on these plans a caption
+# named from beside is a small drawn object's - a notice board, a well - and a corner seat read as strange beside
+# one with open ground in front of it. No source read treats such objects as their own case (the feature's
+# research.md). The four-way order is a Mapbox documentation example's (`text-variable-anchor`: top, bottom, left,
+# right); it is not Zoraster's, whose models put two corners ahead of left and right. The one user study found
+# (Bobak, Cmolik and Cadik 2024) ranks top, bottom, right, then corners - close to this, and not it.
 POSITIONS: tuple[tuple[str, float, float], ...] = (
+    ("above", 0.0, -1.0),
+    ("below", 0.0, 1.0),
+    ("left", -1.0, 0.0),
+    ("right", 1.0, 0.0),
     ("upper right", 1.0, -1.0),
     ("upper left", -1.0, -1.0),
     ("lower right", 1.0, 1.0),
     ("lower left", -1.0, 1.0),
-    ("right", 1.0, 0.0),
-    ("left", -1.0, 0.0),
     ("above, slightly right", 0.25, -1.0),
     ("below, slightly left", -0.25, 1.0),
 )

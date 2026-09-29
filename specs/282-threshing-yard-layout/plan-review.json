@@ -1,0 +1,89 @@
+{
+ "feature": "282-threshing-yard-layout",
+ "plan_sha256": "eec80067d420d6a402058ec39854d4658fcd88eaef34346d96dfd5401e17d9aa",
+ "reviewed": "2026-09-28",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Rack-by-the-house knob is HamletSpec.harvest_weather (settled|changeable), declared, never rolled; default settled; entry 500's knob folded in.",
+   "class": "within",
+   "why": "Unchanged. FR-005: the research found the environment decided, so the knob is set from a stated environment input; the GM's own worry was neighboring villages in one microclimate differing."
+  },
+  {
+   "id": "D2",
+   "summary": "Sawada declares harvest_weather=changeable as the pool's exhibit.",
+   "class": "within",
+   "why": "Unchanged. FR-005/FR-008."
+  },
+  {
+   "id": "D3-mats",
+   "summary": "6 x 3 ft mats in rows, 1 ft edge clearance, gaps 2/1.5/1 ft never below 1 ft, hand-laid nudge and turn kept only where clear of neighbors; count in [ceil(full/3), floor(2 full/3)], thinned evenly.",
+   "class": "within",
+   "why": "Unchanged; the GM's 'render a bunch of mats over the yard', 'a smaller number to give the impression that there are many', 'three to six foot mats size to the yard'."
+  },
+  {
+   "id": "D3-salt-turn",
+   "summary": "The nudge and turn salted per yard.",
+   "class": "within",
+   "why": "Unchanged; a degree of the hand-laid convention."
+  },
+  {
+   "id": "D3-tie-break",
+   "summary": "Of equal counts, the lattice whose seated mats' box sits nearest the yard's center.",
+   "class": "within",
+   "why": "Unchanged; a placement choice among layouts seating the same number."
+  },
+  {
+   "id": "D3-short-yard-physical",
+   "summary": "A yard that physically cannot hold a third at a 1 ft gap draws as many as fit at it, at any size.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "As ruled in round 5: the third is this project's proxy for the GM's aim, and forcing it on a yard that cannot hold it at 1 ft draws paving, defeating the aim that the mats read as mats."
+  },
+  {
+   "id": "D3-short-yard-search",
+   "summary": "'Cannot reach a third at 1 ft' decided by the quarter-foot search, then, before a yard is let off, an exact solve: every crossing of two fit-condition lines on the lattice origin, each seated set confirmed at its group's centroid and, where the rack cuts a region into an L, a hair to each side of every crossing.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Round 9's objection (the down direction sampled at 0.02 ft) is gone: the solve has no step in either direction, and the L-region aside is closed (MAT_PROBE_FT, pinned by the 10 x 7 ft test). On this round's own run (a scratch test via make test-file, 2026-09-28, 834 s): 160 random yards 12-40 ft wide at h/w 0.6-0.75, corners pulled in up to 0.8 ft, a third with a rack from rack_segment at a random rake, a third with an arbitrary keep-out box, compared against a brute grid over every origin at 0.05 ft with a random anchor and strict fit - the brute never seated more than _exact_lattice. So 'cannot hold a third' now means the geometry cannot, which is the exception as ruled."
+  },
+  {
+   "id": "D3-oracle",
+   "summary": "SC-001's pool test runs an oracle on a 0.02 ft grid anchored 0.01 ft off on every short pool yard's outline and rack, and a test shows it sees the old counts.",
+   "class": "within",
+   "why": "Enforcement of FR-004's floor as the spec states it; not scope."
+  },
+  {
+   "id": "D3-floor-four",
+   "summary": "The short-yard floor is four mats.",
+   "class": "within",
+   "why": "Bounds the exception; FR-004 as accepted."
+  },
+  {
+   "id": "D4",
+   "summary": "Rack along a side edge inset 1 ft, near half preferred, off the yard's map-south half solved in map coordinates, whole-side fallback; 2.5 ft drawn width a convention; mats skip its footprint; manifest gains mats and rack.",
+   "class": "within",
+   "why": "Unchanged. FR-006 and the GM's 'they should not be at the south side of the yard'."
+  },
+  {
+   "id": "D5",
+   "summary": "Threshing yard docstring rewritten from 025 and 505 with labels and the GM's convention wording.",
+   "class": "within",
+   "why": "FR-007; the GM's 'the pop-up should explain'."
+  },
+  {
+   "id": "D6",
+   "summary": "Regenerate the five pool hamlets; the settlement-reviews the gate owes; make done.",
+   "class": "within",
+   "why": "Unchanged. FR-008, SC-005."
+  },
+  {
+   "id": "D7",
+   "summary": "Landing order with feature 269.",
+   "class": "within",
+   "why": "Unchanged. Process only."
+  }
+ ],
+ "verdict": "CLEAR"
+}

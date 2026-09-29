@@ -9,7 +9,9 @@ can `Grep` the saved pages for a claim's terms and `Read` only around the hits.
 
 WHAT IT DOES. Each URL is fetched by `_quote_verbatim.Pages` - one attempt per host, a timeout, the charset honored,
 a PDF not attempted - and its visible text is written to `<out>/<nn>-<host>.txt`, wrapped at sentence ends so a
-grep hit is a line and not a page. `<out>/MANIFEST.txt` lists every pointer as `pointer | file | state`; a pointer
+grep hit is a line and not a page. Since feature 288 every page goes through the host-wide page cache (`_sources`),
+so a page saved once is not fetched again within its age, and each URL's earlier reads on the sources-consulted ledger
+are printed before it is fetched, a `pending` line appended for each page saved. `<out>/MANIFEST.txt` lists every pointer as `pointer | file | state`; a pointer
 the script could not reach is listed with its state and why, and is the reader's to fetch. It judges nothing.
 """
 
@@ -37,41 +39,28 @@ def _qv():  # noqa: ANN202
 qv = _qv()
 
 
+def _src():  # noqa: ANN202
+    spec = importlib.util.spec_from_file_location("_sources", HERE / "_sources.py")
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+src = _src()
+
+
 def file_for(index: int, url: str) -> str:
     host = re.sub(r"[^a-z0-9.-]+", "-", urllib.parse.urlsplit(url).netloc.lower()).strip("-") or "page"
     return f"{index:02d}-{host}.txt"
 
 
-def wrapped(text: str) -> str:
-    """One sentence to a line (Latin and CJK stops), so `Grep` returns a passage and `Read` can page around it."""
-    return re.sub(r"(?<=[.!?。！？])\s*(?=\S)", "\n", text).strip() + "\n"
-
-
-PART = 20_000     # the most characters one saved file holds (D19): a longer page is saved as parts
+# The saved form - one sentence to a line, a long page in parts - is the cache's as well (feature 288), so it lives in
+# `_sources` and is named here for every caller that knew it as `_source_pages.wrapped` / `.parts` / `.PART`.
+wrapped, parts, PART = src.wrapped, src.parts, src.PART
 LIMIT = 30_000    # a page longer than this, saved for a check that names its quotes, is saved as an EXCERPT (D19)
 HEAD = 6_000      # an excerpt keeps the page's front: title, author, date, contents - what a source is judged by
 WINDOW = 1_500    # and this much either side of each passage the record quotes from it
-
-
-def parts(text: str, size: int = PART) -> list[str]:
-    """`text` cut at line ends into pieces of at most `size` characters (a single longer line is cut where it must).
-
-    WHY (feature 250 D19, research R10): one source was a whole book, and the checks that read its saved page read
-    200,026 and 83,621 characters of it. A grep hit now leads to one part, never to the book."""
-    out: list[str] = []
-    cur = ""
-    for line in text.splitlines(keepends=True):
-        while len(line) > size:
-            if cur:
-                out.append(cur)
-                cur = ""
-            out.append(line[:size])
-            line = line[size:]
-        if len(cur) + len(line) > size:
-            out.append(cur)
-            cur = ""
-        cur += line
-    return [*out, cur] if cur else out
 
 
 def excerpt(text: str, quotes: list[str], head: int = HEAD, window: int = WINDOW, limit: int = LIMIT) -> str:
@@ -138,13 +127,20 @@ def next_number(out: pathlib.Path) -> int:
     return max(numbers, default=0) + 1
 
 
-def save(urls: list[str], out: pathlib.Path, pages, quotes: list[str] | None = None) -> list[dict]:  # noqa: ANN001
+def save(urls: list[str], out: pathlib.Path, pages, quotes: list[str] | None = None, ledger: dict | None = None) -> list[dict]:  # noqa: ANN001
+    """Save each pointer's page into `out`. With `ledger` (`{"where", "ctx", "questions"}`, feature 288 FR-003), each
+    URL's earlier ledger lines are printed BEFORE it is fetched, and a `pending` line is appended for each page saved."""
     out.mkdir(parents=True, exist_ok=True)
     rows = saved_rows(out)
     start = max(len(rows) + 1, next_number(out))  # past every earlier row and file, so a new page never takes an old one's number
     have = {r["pointer"] for r in rows if r["state"] == "FETCHED"}
     rows = [r for r in rows if r["pointer"] in have or r["pointer"] not in urls]
     for index, url in enumerate((u for u in dict.fromkeys(urls) if u not in have), start):
+        if ledger is not None:
+            seen = src.earlier(ledger["where"], url)
+            print(f"sources-consulted: {url} - " + (f"read {len(seen)} time(s) before:" if seen else "no earlier read on the ledger"))
+            for r in seen:
+                print(src.show(r))
         got = pages.get(url)
         row = {"pointer": url, "file": "-", "state": got["state"], "why": got.get("why", "")}
         if got["state"] == "FETCHED":
@@ -159,6 +155,10 @@ def save(urls: list[str], out: pathlib.Path, pages, quotes: list[str] | None = N
                     (out / f"{name[:-4]}.p{k}.txt").write_text(piece, encoding="utf-8")
                 row["file"] = f"{name[:-4]}.p1.txt ... .p{len(pieces)}.txt ({len(pieces)} parts - grep them all, read the part a hit is in)"
             row["why"] = f"{len(got['text'])} chars" + ("" if quotes is None or len(text) >= len(got["text"]) else f", saved as an excerpt of {len(text):,}")
+            if got.get("cached"):
+                row["why"] += f", from the page cache (fetched {got['cached'][:10]}; REFRESH=1 fetches it again)"
+            if ledger is not None:
+                src.append(ledger["where"], [src.line(ledger["ctx"], url, "pending", ledger["questions"])])
         rows.append(row)
     manifest = "".join(f"{r['pointer']} | {r['file']} | {r['state']}{' - ' + r['why'] if r['why'] else ''}\n" for r in rows)
     (out / "MANIFEST.txt").write_text("pointer | file | state\n" + manifest, encoding="utf-8")
@@ -170,13 +170,17 @@ def main(argv: list[str] | None = None, pages=None) -> int:  # noqa: ANN001
     ap.add_argument("out", help="the directory the pages and MANIFEST.txt are written to")
     ap.add_argument("urls", nargs="*", help="the pointers to save")
     ap.add_argument("--quotes", default="", help="a JSON list of the passages the record quotes from these pages: a long page is saved as an excerpt around them (D19)")
+    ap.add_argument("--question", default="", help="the research question the pages are read for (page/NNN), recorded on the ledger")
+    ap.add_argument("--no-ledger", action="store_true", help="a re-verification save (an excerpt bundle): the cache, but no ledger lines (feature 288 D1)")
     args = ap.parse_args(argv)
     if not args.urls:
         print("source-pages: no pointer given - URL=<u1> [URL=<u2> ...]", file=sys.stderr)
         return 2
     out = pathlib.Path(args.out)
     quotes = json.loads(pathlib.Path(args.quotes).read_text(encoding="utf-8")) if args.quotes else None
-    rows = save(args.urls, out, pages or qv.Pages(), quotes)
+    where = src.home()
+    ledger = None if args.no_ledger else {"where": where, "ctx": src.context(src.repo_root()), "questions": [args.question] if args.question else []}
+    rows = save(args.urls, out, pages or src.CachedPages(qv.Pages(), where, refresh=src.refresh_wanted()), quotes, ledger)
     print((out / "MANIFEST.txt").read_text(encoding="utf-8"), end="")
     print(f"  saved {sum(r['state'] == 'FETCHED' for r in rows)} of {len(rows)} to {out} - hand source-reader the manifest")
     return 0

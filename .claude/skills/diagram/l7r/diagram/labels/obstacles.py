@@ -33,13 +33,17 @@ class Obstacle:
     name of its own (a ministry, the governor's yamen, a temple by name), which no other caption may lie on. `inner`
     marks ink INSIDE a subject that its caption must still avoid - a hand sheet draws a building's partitions, a court's
     mats, a garden's stepping stones, and a name set on them could not be read (feature 267); a generated map draws no
-    such ink, so none of its obstacles sets it."""
+    such ink, so none of its obstacles sets it. `keep` is a gap the obstacle asks for itself, when larger than the
+    caption's own: a placed caption keeps its OWN clearance from the next one, so a small name set beside a large one
+    keeps the large one's gap (feature 286 - by the small name's gap alone, Hayakawa's RESIDENCE stood 4.3 px from
+    `family privy`, inside its own 5.5)."""
 
     poly: tuple[Pt, ...]
     weight: float
     group: str | None = None
     named: bool = False
     inner: bool = False
+    keep: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -60,6 +64,8 @@ class ObstacleIndex:
 
     def __init__(self, obstacles: list[Obstacle] | None = None, ways: list[Way] | None = None) -> None:
         self.obstacles: list[Obstacle] = []
+        self._boxes: list[tuple[float, float, float, float]] = []
+        self._level: list[bool] = []
         self.ways: list[Way] = []
         self._ob: dict[tuple[int, int], list[int]] = defaultdict(list)
         self._segs: dict[tuple[int, int], list[tuple[int, Pt, Pt]]] = defaultdict(list)
@@ -71,7 +77,10 @@ class ObstacleIndex:
     def add(self, o: Obstacle) -> None:
         i = len(self.obstacles)
         self.obstacles.append(o)
-        for c in _cells(bbox(o.poly)):
+        self._boxes.append(bbox(o.poly))
+        self._level.append(level_rect(o.poly))
+        bx0, by0, bx1, by1 = self._boxes[i]
+        for c in _cells((bx0 - o.keep, by0 - o.keep, bx1 + o.keep, by1 + o.keep)):
             self._ob[c].append(i)
 
     def add_way(self, w: Way) -> None:
@@ -88,6 +97,7 @@ class ObstacleIndex:
         and any built feature of a group its `text` names (FR-014), plus `WEIGHT_WAY` per way it crosses. `civic` says
         the caption's SUBJECT is a named civic building, which keeps every other named civic building at full weight."""
         x0, y0, x1, y1 = bbox(block)
+        level = level_rect(block)
         cells = _cells((x0 - clear, y0 - clear, x1 + clear, y1 + clear))
         seen: set[int] = set()
         words = text.lower()
@@ -98,9 +108,17 @@ class ObstacleIndex:
                     continue
                 seen.add(i)
                 o = self.obstacles[i]
+                need = max(clear, o.keep)
+                bx0, by0, bx1, by1 = self._boxes[i]
+                box_gap = math.hypot(max(0.0, bx0 - x1, x0 - bx1), max(0.0, by0 - y1, y0 - by1))
+                if box_gap >= need - 1e-6:
+                    continue  # the boxes' gap bounds the outlines' from below: clear by the boxes, clear (feature 286)
                 if not o.weight or (o.group and o.group in words and not (civic and o.named and o.group in CIVIC_GROUPS)) or (subject is not None and not o.inner and part_of(o.poly, subject)):
                     continue
-                if poly_gap(block, list(o.poly)) < clear - 1e-6:  # strict: a seat exactly one offset off is clear (plan P6)
+                # two level rectangles are their boxes, so the boxes' gap is theirs (feature 286: the outline test was
+                # nine tenths of placing a hand sheet's captions)
+                gap = box_gap if level and self._level[i] else poly_gap(block, list(o.poly))
+                if gap < need - 1e-6:  # strict: a seat exactly one offset off is clear (plan P6)
                     total += o.weight
         crossed: set[int] = set()
         for c in cells:
@@ -108,6 +126,11 @@ class ObstacleIndex:
                 if wid not in crossed and poly_seg_gap(block, a, b) < self.ways[wid].half_width + WAY_NOTCH:
                     crossed.add(wid)
         return total + WEIGHT_WAY * len(crossed)
+
+
+def level_rect(poly: tuple[Pt, ...] | Poly) -> bool:
+    """Is this outline a level rectangle - four corners, every edge along an axis - so that its box is itself?"""
+    return len(poly) == 4 and all(abs(a[0] - b[0]) < 1e-9 or abs(a[1] - b[1]) < 1e-9 for a, b in zip(poly, [*poly[1:], poly[0]], strict=True))
 
 
 def part_of(poly: tuple[Pt, ...] | Poly, subject: Poly) -> bool:

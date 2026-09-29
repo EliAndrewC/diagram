@@ -118,7 +118,21 @@ class KeepoutsMixin:
     _HALO_PLOT_FT = 8.0
     # occupied structures (people live/work in them: full dooryard halo) vs tended ground plots (kept clear
     # to their edge, but nobody sweeps a 30 ft apron around a vegetable bed)
-    _HALO_STRUCT_KEYS = ("houses", "buildings", "storehouses", "flophouses", "byres", "farm_sheds", "religious", "shrines", "manors", "ministries", "inspection_stations", "theater_stage")
+    _HALO_STRUCT_KEYS = (
+        "houses",
+        "buildings",
+        "storehouses",
+        "flophouses",
+        "byres",
+        "farm_sheds",
+        "retirement_houses",
+        "religious",
+        "shrines",
+        "manors",
+        "ministries",
+        "inspection_stations",
+        "theater_stage",
+    )
     # `theater_stage` added 2026-07-26: hinterland scrub was drawn ON the stage's roof, and it took an
     # independent reviewer's eye to see it because SCRUB IS NOT RECORDED IN THE MANIFEST - no gate check
     # and no manifest audit can reach this class of defect at all. (This halo is deliberately NARROWER

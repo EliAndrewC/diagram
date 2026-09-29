@@ -42,7 +42,7 @@ class GroveBlocks:
     re-seats. `displaced` is the other grove's canopy alone, the one blocker a SPARSE grove re-seats
     for. `inside` and `rim_within` are the grove's own outline."""
 
-    __slots__ = ("circles", "corr", "crop", "crop_pad", "dikes", "displacers", "dry", "dry_pad", "rects", "ring", "water")
+    __slots__ = ("_clear", "_fams", "_inside", "_last", "crop_pad", "displacers", "dry_pad", "ring", "static")
 
     def __init__(
         self,
@@ -60,37 +60,71 @@ class GroveBlocks:
         rects: Any,
     ) -> None:
         self.ring = RingIndex(outline)
-        self.crop, self.crop_pad = boxed_grid(boxed_rings(crops, crop_pad)), crop_pad
-        self.dry, self.dry_pad = boxed_grid(boxed_rings(dry, dry_pad)), dry_pad
-        self.dikes = boxed_grid(boxed_rings(dikes))
-        self.water = boxed_grid(boxed_segs(water))  # (polyline, reach) pairs, the reach already including the clump's radius
-        self.corr = boxed_grid(boxed_segs(corridors))  # (polyline, buffer) pairs from `_corridor_buffers`
-        self.circles = boxed_grid(boxed_circles(circles))
+        self.crop_pad, self.dry_pad = crop_pad, dry_pad
+        # ONE GRID FOR EVERY STATIC FAMILY (feature 278, FR-010; 218's "one grid per scatter, not one per family", never
+        # applied to the grove). The seven families were seven grids and a candidate asked up to seven of them - 1.09
+        # million `near` calls on Kashikawa's belts. Filed together, tagged by family, in cells of the same size, a point's
+        # cell holds exactly the items each family's own grid held there; the first question about a point splits them by
+        # family and the rest reuse that split (`hard`, `local` and `lane` are asked of the same candidate in turn). Each
+        # family's own hit test still decides, so no verdict changes.
+        families = (
+            boxed_rings(crops, crop_pad),
+            boxed_rings(dry, dry_pad),
+            boxed_rings(dikes),
+            boxed_segs(water),  # (polyline, reach) pairs, the reach already including the clump's radius
+            boxed_segs(corridors),  # (polyline, buffer) pairs from `_corridor_buffers`
+            boxed_circles(circles),
+            boxed_rects(rects),
+        )
+        self.static = PointGrid()
+        self.static.extend((tag, it, *it[-4:]) for tag, fam in enumerate(families) for it in fam)
         self.displacers = boxed_grid(boxed_circles(displacers))
-        self.rects = boxed_grid(boxed_rects(rects))
+        self._last: tuple[float, float] | None = None
+        self._fams: tuple[list[Any], ...] = ()
+        self._inside: dict[tuple[float, float], bool] = {}
+        self._clear: dict[tuple[float, float], bool] = {}
+
+    def _at(self, x: float, y: float) -> tuple[list[Any], ...]:
+        """The static items in (x, y)'s cell, split by family: crops, dry, dikes, water, corridors, circles, rects."""
+        if self._last != (x, y):
+            fams: tuple[list[Any], ...] = ([], [], [], [], [], [], [])
+            for tag, it, *_box in self.static.near(x, y):
+                fams[tag].append(it)
+            self._last, self._fams = (x, y), fams
+        return self._fams
 
     def hard(self, x: float, y: float) -> bool:
         """The crop, open water, the dike bank: reasons moving a few feet does not change."""
-        return (
-            boxed_ring_hit(x, y, self.crop.near(x, y), self.crop_pad)
-            or boxed_ring_hit(x, y, self.dry.near(x, y), self.dry_pad)
-            or boxed_ring_hit(x, y, self.dikes.near(x, y))
-            or boxed_seg_hit(x, y, self.water.near(x, y))
-        )
+        crop, dry, dikes, water, _corr, _circles, _rects = self._at(x, y)
+        return boxed_ring_hit(x, y, crop, self.crop_pad) or boxed_ring_hit(x, y, dry, self.dry_pad) or boxed_ring_hit(x, y, dikes) or boxed_seg_hit(x, y, water)
 
     def lane(self, x: float, y: float) -> bool:
-        return boxed_seg_hit(x, y, self.corr.near(x, y))
+        return boxed_seg_hit(x, y, self._at(x, y)[4])
 
     def local(self, x: float, y: float) -> bool:
         """A house, a yard, a wellhead's keep-out, a shrine, a pond, the other grove, a sun corridor."""
-        return circle_hit(x, y, self.circles.near(x, y)) or rect_hit(x, y, self.rects.near(x, y))
+        fams = self._at(x, y)
+        return circle_hit(x, y, fams[5]) or rect_hit(x, y, fams[6])
 
     def displaced(self, x: float, y: float) -> bool:
         """Standing under the OTHER grove's canopy - the one refusal a sparse grove re-seats for."""
         return circle_hit(x, y, self.displacers.near(x, y))
 
     def inside(self, x: float, y: float) -> bool:
-        return self.ring.inside(x, y)
+        """The outline's own test, remembered per point (feature 278, FR-010): the gap fill offers the SAME points on
+        every round it runs - its depth search is deterministic - and the outline does not change during the fill."""
+        hit = self._inside.get((x, y))
+        if hit is None:
+            hit = self._inside[(x, y)] = self.ring.inside(x, y)
+        return hit
+
+    def static_clear(self, x: float, y: float) -> bool:
+        """`not (hard or local or lane)`, remembered per point (feature 281, FR-008): the windbreak's gap fill offers a gap
+        the same points on every round, and none of the three changes during the fill."""
+        hit = self._clear.get((x, y))
+        if hit is None:
+            hit = self._clear[(x, y)] = not (self.hard(x, y) or self.local(x, y) or self.lane(x, y))
+        return hit
 
     def rim_within(self, x: float, y: float, limit: float) -> bool:
         """`edge_dist(x, y, outline) <= limit`, exactly: `edge_within` answers strictly-under, so the
@@ -110,7 +144,10 @@ class Seats:
     def __init__(self, reach: float) -> None:
         self.reach = reach
         self.r2 = reach**2  # `(step * 0.55) ** 2` and `(clump * 0.5) ** 2` were the originals - the same power, once
-        self.grid = PointGrid()
+        # A CELL THE SIZE OF THE REACH (feature 278, FR-010). At the default 128 px a query read every clump seated in a
+        # 128 px square - dozens of a dense belt's - to find the few within a ~10 px reach: 4.5 million distance tests over
+        # Kashikawa and Sawada's belts. At twice the reach a seat is filed in at most four cells and a query reads one.
+        self.grid = PointGrid(cell=max(16.0, 2.0 * reach))
 
     def add(self, x: float, y: float) -> None:
         r = self.reach

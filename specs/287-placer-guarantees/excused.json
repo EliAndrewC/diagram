@@ -1,0 +1,881 @@
+[
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-09-28, OWED: no way reaches a burial ground",
+  "what": "No lane or path reaches a hamlet's own burial ground (Inashiro, Kashikawa, Kuwabata).",
+  "verdict": "in",
+  "why": "Rule: a path runs to the graves (research religion-and-death 140 'the graves and the paths to the graves are cleaned', 190 funeral path). hamletgen/burial.py seats the ground on every live hamlet and the web never targets it.",
+  "still_open": "yes",
+  "owner": "hamletgen/burial.py (seat) + the lane web (hamletgen/ways stage_web way-targets)",
+  "sketch": "Register a way-target at the ground's edge nearest the houses after the burial seat and before the web, so the web lays a footpath spur to it; unit-test that every seated burial ground has a way end within the footpath's reach."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## Rename the `grave island` class to `field grave`",
+  "what": "Page class and hover still say 'grave island' for the corner-form field grave.",
+  "verdict": "out",
+  "why": "Record/page naming text, not placement."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN ... OWED AT CONVERSION: a village's funerary grounds",
+  "what": "Village burial ground and cremation ground placement owed by the village generator.",
+  "verdict": "out",
+  "why": "Feature not yet built: the village-tier scripted generator (migration-plan step 5)."
+ },
+ {
+  "where": "future-work/farming-communities.md: same section, 'The headman's gate (269 B19)'",
+  "what": "The scripted village must gate the headman's house (nagayamon).",
+  "verdict": "out",
+  "why": "Owed at village conversion; no live generator draws a village."
+ },
+ {
+  "where": "future-work/farming-communities.md: same section, 'Tax rice (B19)'",
+  "what": "tax_store knob headman_kura / gogura.",
+  "verdict": "out",
+  "why": "Owed at village conversion."
+ },
+ {
+  "where": "future-work/farming-communities.md: same section, 'The cluster's spacing (B19)'",
+  "what": "No village house more than ~650 ft from the next.",
+  "verdict": "out",
+  "why": "Owed at village conversion (the sketch is already placer-side: a nearest-house test per candidate)."
+ },
+ {
+  "where": "future-work/farming-communities.md: same section, 'The headman's house size (B19)'",
+  "what": "Headman house 92x56 ft vs the record's 65-75x40 ft.",
+  "verdict": "out",
+  "why": "Hand-rolled village tier (settlement/rolling/place.py headman()); owed at village conversion."
+ },
+ {
+  "where": "future-work/farming-communities.md: same section, 'The dosojin (B20)'",
+  "what": "Dosojin by the road at the village entrance.",
+  "verdict": "out",
+  "why": "Owed at village conversion."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-09-27 ... no cremation ground and no wayside stones",
+  "what": "Village generator draws no cremation ground or wayside stones.",
+  "verdict": "out",
+  "why": "Village generator not built."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-09-27 ... no shrine grove, sacred tree or basin",
+  "what": "Village civic shrine lays no grove, sacred tree or basin.",
+  "verdict": "out",
+  "why": "Village generator not built (roll.py civic shrine is the hand-rolled tier)."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-09-28 (269 B26): the homesteads' woods fall short of their rolled area",
+  "what": "Drawn homestead wood is 49-86% of the rolled area on every map; Kuwabata near/under the 6,000 sq ft floor; copse crowns across a lane from their house.",
+  "verdict": "in",
+  "why": "Rule: each homestead that keeps a wood keeps 6,000-28,000 sq ft of it, rolled per homestead (research/vegetation 210; HOMESTEAD_WOOD_FT2). The copse top-up runs out of seats inside COPSE_HOUSE_REACH_FT.",
+  "still_open": "yes",
+  "owner": "hamletgen homestead_parts/groves.py village_grove(area=) copse top-up",
+  "sketch": "Seat the shortfall as a second stand (behind the belt on the homestead's side) or widen the reach for a full homestead; unit-test drawn/rolled >= a stated floor per homestead."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-09-28 (269 B07): a wild fan middle leaves a hamlet almost no dry field",
+  "what": "fan_middle=wild leaves Inashiro 0.42 acre and Mizuguchi 0.41 acre of dry field (~0.03 acre/household).",
+  "verdict": "in",
+  "why": "Rule: the paddy and dry fields are sized from population, coarse grain about a third of the diet (research/fields 'Acreage from population'); the knob removes the hem and nothing re-places it. WHERE the band goes is research owed first.",
+  "still_open": "yes",
+  "owner": "waterfields/comb.py fan_toe_hem (the dry-band placer)",
+  "sketch": "After the research pass, place the dry band on the named ground at the acreage the sizing rule leaves; unit-test dry acreage per household against the sizing rule on both fan_middle forms."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-09-28: the rest of the 269 landing's settlement-review findings - 'A lane end behind a house counts as its dooryard'",
+  "what": "trim_lane_stubs accepts a lane end 11 ft behind a house's back wall as reaching its dooryard.",
+  "verdict": "in",
+  "why": "Rule: a lane end must reach something - a way or a dooryard (269 B17, trim_lane_stubs).",
+  "still_open": "yes",
+  "owner": "settlement/water_ways/lanes.py trim_lane_stubs + hamletgen/ways web",
+  "sketch": "Judge an end against the recorded yard and front face only, and have the web carry such an end round the gable."
+ },
+ {
+  "where": "same section, 'A rolled form the sheet never draws'",
+  "what": "woodpile_form kizuma rolled on Kashikawa/Kuwabata and none drawn; bath_seat corridor rolled on Mizuguchi and baths drawn unjoined.",
+  "verdict": "in",
+  "why": "Rule: a rolled knob is honored by what is drawn (GM 2026-08-24, checks against what is rendered; meta.woodpile_forms_drawn / bath_seats_drawn now record the gap).",
+  "still_open": "yes",
+  "owner": "hamletgen/homesteads/fixtures.py (woodpile and bath seating)",
+  "sketch": "Offer a form only where a homestead can seat it and fall back per homestead to the next attested form; unit-test rolled form == drawn form or a recorded fallback."
+ },
+ {
+  "where": "same section, 'Eaves woodpiles standing off the wall' (Mizuguchi F2) and 'Woodpiles off the wall also on Kuwabata'",
+  "what": "5-7 of 10 eaves stacks 10.5-27.8 ft from any building on Mizuguchi, 7 of 15 on Kuwabata.",
+  "verdict": "in",
+  "why": "Rule: the eaves form stands against a wall (homesteads eaves woodpile).",
+  "still_open": "yes",
+  "owner": "hamletgen/homesteads/fixtures.py woodpile placer (feature-261 outward rungs)",
+  "sketch": "Try every wall of the steading's own buildings at the wall gap before stepping out; unit-test every eaves stack within the wall gap of a building."
+ },
+ {
+  "where": "same section, 'Belt bamboo reads as grass'",
+  "what": "Belt bamboo culm marks share the scrub grass's size and color.",
+  "verdict": "out",
+  "why": "Glyph legibility (rendering), not placement."
+ },
+ {
+  "where": "same section, 'Coppice lots read as stamped discs'",
+  "what": "Coppice lot stocking fills a near-round 12-sided outline edge to edge.",
+  "verdict": "in",
+  "why": "Rule: a lot is bounded by what research/vegetation 140 names (a path, a stream, the slope), no fixed shape.",
+  "still_open": "yes",
+  "owner": "hamletgen/hinterland/parcels.py open_ground_patches (lot outline)",
+  "sketch": "Bound the lot by the nearest path/stream/slope break and roughen the rest; unit-test the outline is not a regular polygon."
+ },
+ {
+  "where": "same section, 'The burial ground beside the title placard'",
+  "what": "Burial glyph stood 23 ft from the title placard on its centerline, reading as its ornament.",
+  "verdict": "in",
+  "why": "Rule: the title pocket keeps clear of features (placement keep-clear contract, dev/placement.md).",
+  "still_open": "unknown",
+  "owner": "hamletgen title pocket (frame.py) / hamletgen/burial.py",
+  "sketch": "Make feature glyphs and their clearings keep-outs of the title pocket search; unit-test pocket vs every recorded feature bbox."
+ },
+ {
+  "where": "same section, 'A needle join' (Mizuguchi)",
+  "what": "Orphan join lane runs back along the skeleton lane 35 ft at 16 degrees, leaving a ~250 sq ft needle.",
+  "verdict": "in",
+  "why": "Rule: a join meets its way as a T, not a needle (ways/web.py center_lane_ends; 2c defect 2).",
+  "still_open": "yes",
+  "owner": "hamletgen/ways/web.py join + tidy",
+  "sketch": "Square the join at the foot of the prior vertex and keep the skeleton tail as that house's way (name it in the tidy's keep)."
+ },
+ {
+  "where": "same section, 'A house at the edge of the lanes' reach' (Kuwabata)",
+  "what": "A house 96 ft from the nearest lane (inside WEB_REACH_FT 100, a guess) with a neighbor's back yard between.",
+  "verdict": "in",
+  "why": "Rule: every farmhouse reaches a way (unreached_houses / WEB_REACH_FT); passes by distance while the path crosses private ground.",
+  "still_open": "unknown",
+  "owner": "hamletgen/ways straggler pass",
+  "sketch": "Serve a house whose nearest way lies past a neighbor's yard, not only one past the reach."
+ },
+ {
+  "where": "same section, 'The field path's canal deck runs onto the paddy'",
+  "what": "Carried deck's 10 ft LANDING_FT puts the paddy-side end ~7 ft onto a flooded field.",
+  "verdict": "in",
+  "why": "Rule: a deck lands on dry ground (bridges() LANDING_FT, roads_bridge_water).",
+  "still_open": "unknown",
+  "owner": "settlement/city/bridges.py bridges() + the field path's crossing form",
+  "sketch": "A field path over its own canal takes the channel footbridge form (rolled footbridge_form) with short abutments."
+ },
+ {
+  "where": "same section, 'A lane and the connector doubling back' (Kuwabata)",
+  "what": "Lane 2 and the connector run back 126 ft 15-40 ft apart at 169 degrees.",
+  "verdict": "in",
+  "why": "Rule: ways do not double back (lanes_bend_like_paths, DOUBLE_BACK_DEG 140); fold_the_connector_hairpin refused by may_write.",
+  "still_open": "unknown",
+  "owner": "hamletgen/ways/joints.py fold_the_connector_hairpin",
+  "sketch": "Start the connector at the lane's earlier vertex, or route the moved start round the steading."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-09-28 (269 B16): the shared byre on the commons is still rolled",
+  "what": "byre_form rolls detached_commons at 0.1 against homesteads/060.",
+  "verdict": "out",
+  "why": "A knob weight out of step with the record (edit the knob table), not a placement guarantee."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-09-28 (269 B32): grow-out hamlet or fry village",
+  "what": "pondstock makes the smallest parcel in ten a fry pond; record supports a grow_out/fry knob.",
+  "verdict": "out",
+  "why": "A knob owed (new form), not a placement violation."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-09-28 (269 K3): the toe marsh rolls no alder-willow carr",
+  "what": "Marsh placer has one form; the carr form is owed.",
+  "verdict": "out",
+  "why": "A form not yet built (knob owed)."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-09-28 (269 K1-K5): record text",
+  "what": "Research sentences still describe the pre-269 engine.",
+  "verdict": "out",
+  "why": "Record text."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-08-24: the web stops exactly one clearance short of the lane it should join",
+  "what": "Four Inashiro lanes end 28.1-28.5 ft from the lane they should join (WEB_CLEARANCE 28).",
+  "verdict": "in",
+  "why": "Rule: a link Ts into the way it joins; lanes form one network. WEB_CLEARANCE still registers each lane's corridor against the one being joined.",
+  "still_open": "unknown",
+  "owner": "hamletgen/ways web (_lay_web_lane, WEB_CLEARANCE in consts.py)",
+  "sketch": "Exempt a link's terminal segment from the clearance of the way it joins; unit-test that every link end lies on a way (distance 0), not within a tolerance."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-08-24: the field SPUR can be forced onto a house",
+  "what": "On tight clusters the spur's final fallback returns its original run over a house (tripwire seed 27).",
+  "verdict": "in",
+  "why": "Rule: no farmhouse stands on a lane (no_farmhouse_stands_on_a_lane, houses_clear_of_lanes).",
+  "still_open": "unknown",
+  "owner": "hamletgen/ways track spur_path / _thread_the_fabric",
+  "sketch": "Rank spur targets by a fabric-clear route and drop the spur rather than draw onto a house; unit-test the fallback never returns a run crossing a footprint."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-08-24: feature 126 cost ~50% of generation speed",
+  "what": "Undiagnosed generation slowdown.",
+  "verdict": "out",
+  "why": "Performance."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## 2b. The packer must RESERVE ways",
+  "what": "Cohort seeds 5/8/25 strand farmhouses 172-237 ft from any way; reach is repaired only by a re-roll, not guaranteed by the seat or the web.",
+  "verdict": "in",
+  "why": "Rule: every farmhouse reaches the connected way network (unreached_houses, WEB_REACH_FT 100); driver.py records roll_failures farmhouses_reach_a_way and keeps the least-bad re-roll.",
+  "still_open": "yes",
+  "owner": "hamletgen/homesteads/stages.py seating + hamletgen/ways straggler pass (+ driver re-roll)",
+  "sketch": "A post-pack pass that re-seats a stranded steading (or seats only on ground a footpath corridor reaches, counting final fabric); unit-test unreached_houses == [] as a placer postcondition rather than a retry."
+ },
+ {
+  "where": "same section, 'A real defect fell out of the retraction' (cluster_shape)",
+  "what": "cluster_shape rolled but not drawn when the frontage seats every household.",
+  "verdict": "in",
+  "why": "Rule: a rolled knob is honored by the drawing (GM 2026-08-24). Partly addressed: stages.py now binds CLUSTER_DRAWN_ASPECT and records cluster_shape_unhonored when a roll does not take.",
+  "still_open": "yes",
+  "owner": "hamletgen/homesteads/stages.py (front_row / cluster_seeds)",
+  "sketch": "Make the frontage seat within the rolled shape's band so the shape is always drawn, and test the drawn bbox aspect against the rolled shape."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## 2b-i. THE SKELETON MUST FOLLOW THE MARGIN",
+  "what": "The lane skeleton is a straight chord across a curved seat band; far-arm houses get no lane (the unshipped fix cleared seeds 8/25). Cluster seats on field corners (111-113 deg turns) strand houses.",
+  "verdict": "in",
+  "why": "Rule: every farmhouse reaches a way; _margin_frame's docstring says anything parallel to the field is built on the edge.",
+  "still_open": "unknown",
+  "owner": "hamletgen stage_ways skeleton (_margin_frame) + cluster.py seat_cluster anchor scoring",
+  "sketch": "Map skeleton arms through _margin_frame; add an edge-turn term to seat_cluster refusing a corner."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## 2c. The way-repair passes want ONE design",
+  "what": "Corner holes invisible to the aim test, the same break repaired twice around a needle, 4 ft fragments, and a 0-40 ft dead band between generator and check join tolerances.",
+  "verdict": "in",
+  "why": "Rules: lanes do not break mid-run, no doubled way, no fragment under _WEB_MIN_FT, one join tolerance shared by placer and check.",
+  "still_open": "unknown",
+  "owner": "hamletgen/ways (_join_orphan_ways, _bridge_collinear_breaks, _serve_stragglers)",
+  "sketch": "One graph-based repair stage with one declared join tolerance that emits a repair set (straight span before detour); unit-test the finished graph has no hole, doubled pair or sub-minimum run."
+ },
+ {
+  "where": "same section, 'Also found': skeleton arm overruns its last steading",
+  "what": "A skeleton arm overruns its last steading by 85 ft because _trim_to_service runs only on web lanes.",
+  "verdict": "in",
+  "why": "Rule: a lane ends at what it serves (lanes_reach_something; trim_lane_stubs).",
+  "still_open": "unknown",
+  "owner": "hamletgen stage_ways skeleton / _trim_to_service",
+  "sketch": "Run the service trim on skeleton arms too; unit-test every non-connector lane end is within reach of a house or way."
+ },
+ {
+  "where": "same section, 'Also found': M[\"lane\"] holds the last lane",
+  "what": "Consumers read M['lane'] as the street.",
+  "verdict": "out",
+  "why": "Fixed: settlement/water_ways/lanes.py now records M['lane'] as the spine (longest ordinary way)."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## 2e. `plot_regularity` is recorded as though rolled and is a literal",
+  "what": "hamletgen/water/comb.py passes the literal 'organic'.",
+  "verdict": "out",
+  "why": "Research owed (is regular vs irregular plot layout a knob?), not a placement violation."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## 2f. The shallow-crossing veto must be STREAM-scoped",
+  "what": "A link way meets a stream at 17 degrees (seed 47) and its deck cannot span.",
+  "verdict": "in",
+  "why": "Rule: a way crosses water square enough to be decked (bridges_span_their_water / bridges_align_with_their_way).",
+  "still_open": "unknown",
+  "owner": "hamletgen/ways _join_orphan_ways (link routing) + settlement/city/bridges.py",
+  "sketch": "Bend the link locally onto a square crossing where it meets a stream (not a veto); unit-test every stream crossing angle above a floor."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-08-19 (latent): the oblique-deck growth loop fails SILENTLY",
+  "what": "When no grown or skewed deck clears the water, the original undersized span is drawn anyway.",
+  "verdict": "in",
+  "why": "Rule: a deck clears its water with a landing each side. bridges.py now returns seated=False after skew attempts, but its docstring says the caller still draws the undersized deck.",
+  "still_open": "yes",
+  "owner": "settlement/city/bridges.py (deck search) + the way that asked for the crossing",
+  "sketch": "On seated=False, re-route or bend the way rather than draw; unit-test no drawn deck has a corner in water."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## Review residue from the supply-bank hem re-roll - sluice glyph",
+  "what": "Mizuguchi (named for its sluice) draws none at the intake.",
+  "verdict": "out",
+  "why": "A glyph not built (feature owed), not a placement violation."
+ },
+ {
+  "where": "same section - kept/dropped read along hemmed ditch banks",
+  "what": "Alternating kept/dropped bank plots read as a dashed line.",
+  "verdict": "out",
+  "why": "Presentation refinement, not correctness (the entry says so)."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## Review residue from the canal-B fork re-roll",
+  "what": "All items marked DONE.",
+  "verdict": "out",
+  "why": "Closed."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## Review residue from the shared-bund re-roll - 'A tip-angle companion to the area floor'",
+  "what": "Basins of 0.55-0.72 cell with 27-30 deg tips read as darts.",
+  "verdict": "in",
+  "why": "Rule: a basin never tapers to a point (research/fields 'Minimum basin SIZE'); tests/gate/test_paddy_fabric.py now checks NEEDLE_DEG on shipped manifests, no placer guarantee of a tip floor.",
+  "still_open": "unknown",
+  "owner": "waterfields toe/seam pass",
+  "sketch": "Add a tip-angle floor to the carve/toe pass's acceptance, placer stricter than the test."
+ },
+ {
+  "where": "same section - woodland lattice; byre_form knob",
+  "what": "Both marked DONE.",
+  "verdict": "out",
+  "why": "Closed."
+ },
+ {
+  "where": "same section - '### STILL OPEN ... cohort seed 62's northern lobe'",
+  "what": "A well seated in the sweep pad 65 px past the next feature holds the frame open.",
+  "verdict": "in",
+  "why": "Rule: no single feature holds the crop open (crop_not_held_open_by_one_feature; the frame stays tight to content).",
+  "still_open": "unknown",
+  "owner": "hamletgen/homesteads/wells.py place_wells",
+  "sketch": "Score a seat by _worst_after plus the crop extent it adds."
+ },
+ {
+  "where": "same section - 'the flooded tint discriminates on TRUNCATION DEPTH'",
+  "what": "Sharper taper keeps the tint when truncated higher.",
+  "verdict": "out",
+  "why": "Rendering (tint rule), low priority, band empty on today's maps."
+ },
+ {
+  "where": "same section - 'cohort seeds 9 and 11'",
+  "what": "Carve leaves a tapering scrap no weld resolves; paddy_plot_seams_shared fails.",
+  "verdict": "in",
+  "why": "Rules: plot seams shared, basins workable (research/fields 'Bunds are shared').",
+  "still_open": "unknown",
+  "owner": "waterfields/carve.py sector opening",
+  "sketch": "Stop the carve opening a sector whose boundary collapses onto the collector."
+ },
+ {
+  "where": "same section - 'The density that is actually available'",
+  "what": "Stagger rows east-west to pack a nucleus tighter.",
+  "verdict": "out",
+  "why": "Not a violation; an option for the village tier's own work."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN, from the 2026-08-18 settlement-review round - A. woodland commons squares",
+  "what": "Every woodland parcel axis-aligned square.",
+  "verdict": "in",
+  "why": "Rule: coppice has no fixed shape; aspect and bearing roll per parcel.",
+  "still_open": "fixed",
+  "owner": "hamletgen/hinterland/parcels.py open_ground_patches",
+  "sketch": "Fixed: parcels.py rolls aspect up to 2.2:1 and a bearing off the fall line."
+ },
+ {
+  "where": "same section - C. surface_water_dist reads channels",
+  "what": "Needy-house set decided by manifest container.",
+  "verdict": "in",
+  "why": "Rule: domestic water from well/spring, not ditches.",
+  "still_open": "fixed",
+  "owner": "settlement/land/wet.py surface_water_dist",
+  "sketch": "Fixed (ruled 2026-08-18): the predicate names the water kind."
+ },
+ {
+  "where": "same section - E. belt continuity",
+  "what": "Inashiro belt canopy thinned to 4.8 ft / one clump over a 45 ft band after the web landed; the road gap's coincidence is unstable.",
+  "verdict": "in",
+  "why": "Rule: village_windbreak_is_continuous (canopy depth per column across the wind).",
+  "still_open": "unknown",
+  "owner": "hamletgen/hinterland/belt.py (belt scatter) vs the web",
+  "sketch": "The belt placer guarantees a minimum canopy depth per cross-wind column except a declared track gap; unit-test it."
+ },
+ {
+  "where": "same section - G. glyph collisions",
+  "what": "Byre vs notice board glyph; belt vs copse crowns.",
+  "verdict": "out",
+  "why": "Glyph vocabulary (rendering)."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-08-18: paddy bunds still step sideways; tests/gate/test_paddy_fabric.py test_a_bund_does_not_build_a_flight_of_steps ('Seven of those survive across the pool, each ledgered')",
+  "what": "Single bund steps survive on pool rings; cohort seeds 12 (4 steps) and 39 (2 steps) carry staircases.",
+  "verdict": "in",
+  "why": "Rule: paddy_bunds_do_not_stagger (the GM's report; more than one step on a ring fails). The test tolerates single steps and reads only shipped maps; the seam pass does not guarantee it.",
+  "still_open": "yes",
+  "owner": "waterfields seams close_seams / _seam_cuts / _unjog",
+  "sketch": "Keep the weld pitch in register with the fabric so close_seams cannot emit a second step on a ring; unit-test the pass's output on the seed-12 fixture."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## Two nitpicks from the 2026-08-18 byre review",
+  "what": "Flooded wedge tint DONE; byres buried in canopy.",
+  "verdict": "out",
+  "why": "Closed / legibility, nothing overlaps."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN after the 2026-08-18 round-2 reviews - grazing commons tiling",
+  "what": "commons records partition the frame into rectangles.",
+  "verdict": "out",
+  "why": "Record bookkeeping; nothing drawn wrong."
+ },
+ {
+  "where": "same section - seed 31's threshing yard laps a paddy",
+  "what": "The fit tests a reservation; the south-nudge relaxation moves the bundle so the drawn yard corner lands in a basin.",
+  "verdict": "in",
+  "why": "Rule: harvest yards clear of paddies; the placer tests a rect that is not the drawn one.",
+  "still_open": "unknown",
+  "owner": "settlement/rolling/farmsteads.py farmsteads() at _attach_yard",
+  "sketch": "Re-assert the final yard against the paddy outlines after the nudge and undo the nudge if it fails; unit-test drawn yard vs outlines."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-08-19: the FLOODED paddy tint has collapsed to zero",
+  "what": "Tint eligibility is a 45% coin on one plot per column; decided (closing rank) and pending.",
+  "verdict": "out",
+  "why": "Rendering classification (what blue means), decided-and-pending; not placement."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-08-19: the kura roll under-delivers 2.2x - FINDING 1; and ## The storehouse share is a positional roll",
+  "what": "_hjit positional roll aliases along a front row; pool share 13.6-22% against ~30% (p=0.2993), a re-pack moves it.",
+  "verdict": "in",
+  "why": "Rule: ~30% of farmhouses have a kura (research/homesteads 'Which farmhouses have a storehouse?'). settlement/houses.py still keys it on _hjit(x, y).",
+  "still_open": "yes",
+  "owner": "settlement/houses.py kura roll",
+  "sketch": "Key the roll to the household number with an avalanche hash (_nth_roll in the entry); test the pool share against 0.2993."
+ },
+ {
+  "where": "same section - FINDING 2: a raked house corner bulges into a neighbor's garden",
+  "what": "Bundle fit measures unraked rects; the drawn raked corner eats a 2.1 ft margin to a neighbor's garden.",
+  "verdict": "in",
+  "why": "Rule: features_do_not_overlap / gardens_clear_of_structures; rolling/fit.py admits bundle separation 'knows nothing about either house's rake'.",
+  "still_open": "unknown",
+  "owner": "settlement/rolling/fit.py bundle fit",
+  "sketch": "Add a rake-aware house-to-neighbor-garden clearance in the bundle fit; unit-test drawn quads never cross a neighbor's garden."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-08-19: every lane junction draws a cap bead - THE BEAD",
+  "what": "Round-capped shoulder painted over the joined tread.",
+  "verdict": "out",
+  "why": "Rendering; fixed - lanes.py now draws every shoulder below every tread."
+ },
+ {
+  "where": "same section - THE WIDTH STEP",
+  "what": "One continuous back lane halves its width at a node where nothing happens (a link takes the joined way's width).",
+  "verdict": "in",
+  "why": "Rule: a way keeps its width along a run unless its rank changes.",
+  "still_open": "unknown",
+  "owner": "hamletgen/ways link width assignment",
+  "sketch": "Assign width per connected chain; unit-test no width change at a degree-2 node."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-08-19 (waterfields): the paddy area floor cannot see WIDTH",
+  "what": "Basins 5.9 ft wide pass the area floor; 9 under 12 ft, 30 under 16 ft on Kashikawa.",
+  "verdict": "in",
+  "why": "Rule: a basin is wide enough to stand in and puddle (research/fields 'Minimum basin SIZE').",
+  "still_open": "unknown",
+  "owner": "waterfields toe pass",
+  "sketch": "Add a working-width floor (area / longest side) to the toe pass, merging a scrap into its neighbor."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-08-19 (small): the notice-board caption's halo notches the lane; ## gate 0617 finds caption notches on five cohort seeds; ## the five caption notches need a 2D seat search; ## ATTEMPTS 8-13",
+  "what": "Tilted boards' captions land on a lane tread (seeds 1, 7, 14, 33, 36); a 1D seat ladder and a board sited where no caption is sitable.",
+  "verdict": "in",
+  "why": "Rule: a caption's box clears the way it stands on by 2 ft (captions_clear_the_ways_they_stand_on).",
+  "still_open": "unknown",
+  "owner": "structures/fixtures kosatsuba caption seat + place_kosatsuba (now the feature-266 labels/ placer)",
+  "sketch": "Verify the labels/ placer treats lane treads as blockers for the board caption and that place_kosatsuba ranks by sitability; unit-test on a tilted board in a lane crotch."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## 2026-08-20: the caption clearance on a CURVED tread",
+  "what": "Corner sampling misses a curved tread crossing the caption box edge.",
+  "verdict": "in",
+  "why": "Same caption-vs-tread rule; the fix (segment-to-rectangle) is unverified on curved treads.",
+  "still_open": "unknown",
+  "owner": "Settlement.caption_lane_clearance",
+  "sketch": "Unit-test the measure on a synthetic concave tread crossing an edge between samples."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## 2026-08-20: the copse that collapsed to one tree",
+  "what": "Copse 11 -> 1 clump when the belt's keep-out dropped sparse clumps.",
+  "verdict": "in",
+  "why": "Rule: a declared grove is drawn (visibility floor 1.5 clumps / 100k sq px).",
+  "still_open": "fixed",
+  "owner": "homestead groves _reseat",
+  "sketch": "Fixed: canopy-blocked clumps re-seat; the shortfall against the rolled area is the separate B26 item."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## DEFERRED 2026-08-27: seasonal maps",
+  "what": "Straw rick, hasa frames, drained paddies.",
+  "verdict": "out",
+  "why": "Feature not built (GM deferral)."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-08-27: the south well stands in the commons, not a dooryard",
+  "what": "Inashiro's south well is 100 ft from its nearest house with scrub on every side.",
+  "verdict": "in",
+  "why": "Rule: shared wells drop into the courtyards the layout left (the doctrine in wells.py; \u4e95\u6238\u7aef dooryards).",
+  "still_open": "unknown",
+  "owner": "hamletgen/homesteads/wells.py place_wells",
+  "sketch": "Prefer a seat inside the house cloud's hull when the worst walk is within ~30 ft of the open-ground optimum."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## OPEN 2026-08-27 (feature 133 T91, WAIVED); l7r/diagram/tools/mapcheck.py TRIPWIRE_EXPECTED",
+  "what": "Tripwire seeds 27, 33, 37, 47 failed named checks; the pin table is EMPTY since the battery was deleted, so the defects have no reader.",
+  "verdict": "in",
+  "why": "Rules: village_grove thins around a plot inside the band (seed 33), orphan joiner accepts short links (seed 37), lane bends and bamboo off lanes (seed 27). The waiver lapsed with the battery, not with a fix.",
+  "still_open": "unknown",
+  "owner": "hamletgen/hinterland village_grove; hamletgen/ways _touch_junctions; ways smoothing",
+  "sketch": "Re-measure the four seeds with the migrated tests; move each surviving defect into its placer's unit test."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## Is the in-field grave island attested?",
+  "what": "Grave-island rate and label rest on thin evidence.",
+  "verdict": "out",
+  "why": "Research owed (GM holds it)."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## Carve the paddy around an in-field grave island",
+  "what": "The mound is drawn over an intact lattice; three plot rings and nine junctions lie under it.",
+  "verdict": "in",
+  "why": "Rule: the flat paddy tiles around the grave (registry entry); features.py now labels drawing over the lattice a map drawing convention.",
+  "still_open": "yes",
+  "owner": "settlement/fields/features.py _plot_grave_island + the toe pass",
+  "sketch": "Carve the plots around the grave where the toe pass builds them, as for the pond."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## Two checks that pass VACUOUSLY - woodland",
+  "what": "Sawada and Kashikawa roll zero woodland parcels.",
+  "verdict": "in",
+  "why": "Rule: a farming village held worked woodland (iriai; research/vegetation); the scan finds no legal seat on a tight sheet.",
+  "still_open": "unknown",
+  "owner": "hamletgen/hinterland/parcels.py open_ground_patches",
+  "sketch": "Guarantee at least one parcel (a smaller floor or a set-back seat) and test count >= 1 on every roll."
+ },
+ {
+  "where": "same section - windbreak counts the record, not the ink",
+  "what": "A belt drawn 57 px short of the page with 37 recorded clumps undrawn passes.",
+  "verdict": "in",
+  "why": "Rule: the belt is continuous as drawn (GM 2026-08-24: check what is rendered).",
+  "still_open": "unknown",
+  "owner": "hamletgen/hinterland/belt.py trim vs the final crop",
+  "sketch": "Trim the belt record at the final crop so record == ink; test drawn clumps."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## The notice board: two knobs answer one question",
+  "what": "kosatsuba_siting and kosatsuba_seat both decide one thing.",
+  "verdict": "out",
+  "why": "GM ruled every seat either knob picks is fine; a knob-design question, not a placement violation."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## Eight tree trunks stand in a tread on Moritono",
+  "what": "Placer constrains clump centers while crowns are drawn scattered (median 8.1 ft), so drawn trunks can stand in a tread.",
+  "verdict": "in",
+  "why": "Rule: a trunk may not stand in a path (groves_clear_of_lanes, GM feature 157). Moritono itself is a legacy map, but the mechanism is the live village_grove scatter.",
+  "still_open": "unknown",
+  "owner": "hamletgen village_grove crown scatter",
+  "sketch": "Test each drawn crown's trunk against the corridor at scatter time; unit-test drawn tree_crowns vs treads."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## SEED 45'S WINDBREAK PIN; tests/gate/hamletgen/test_driver.py GATE_COHORT_EXPECTED comment",
+  "what": "Seed 45's windbreak continuity failure is unverified since the pin moved out of the gate.",
+  "verdict": "in",
+  "why": "Rule: village_windbreak_is_continuous.",
+  "still_open": "unknown",
+  "owner": "hamletgen/hinterland/belt.py",
+  "sketch": "Roll seed 45 against the belt placer's own continuity predicate; fix the placer or carry a strict xfail."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## A tree stands in a path on the reference hamlet",
+  "what": "Three trunks 3.1-4.2 ft from Inashiro's straggler footpath centerline (bar 4.0).",
+  "verdict": "in",
+  "why": "Rule: groves_clear_of_lanes (trunk 4.0 ft). The straggler router's obstacle set lacks recorded crowns.",
+  "still_open": "yes",
+  "owner": "hamletgen/ways straggler router (_homestead_polys obstacle set)",
+  "sketch": "Add M['tree_crowns'] circles to the footpath's obstacles, or refuse a tread within 4 ft of a trunk."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## The windbreak's far limb, where a cluster sits in two groups",
+  "what": "On Inashiro 63 of 308 belt crowns stand over 200 ft from any farmhouse (furthest 518 ft).",
+  "verdict": "in",
+  "why": "Rule: the belt shelters the houses on the windward fringe (belt_polygon's own docstring).",
+  "still_open": "yes",
+  "owner": "hamletgen/hinterland/belt.py belt_polygon",
+  "sketch": "Sample cross-wind columns that contain a house and end the belt where its column is empty (two belts for a split cluster)."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## The drain that reaches its pond round a hook",
+  "what": "CLOSED by pass 12.",
+  "verdict": "out",
+  "why": "Closed."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## A garden may be seated on an in-field ditch",
+  "what": "The bundle has no in-field channel keep-out; the stub was holding the ground a garden would otherwise take.",
+  "verdict": "in",
+  "why": "Rule: features_do_not_overlap (a garden never on a ditch).",
+  "still_open": "yes",
+  "owner": "homestead bundle fit + hamletgen/water/comb.py corridors",
+  "sketch": "Give the bundle rect the in-field channel keep-out the houses carry, then drop sub-stride stubs."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## What a reader takes for the river at the tap",
+  "what": "Head race width and hue near the brook's.",
+  "verdict": "out",
+  "why": "Rendering (width ladder and hue)."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## Two ways that meet where the material changes",
+  "what": "Polder toe canal ends 3 ft short and 2.5 ft off the drain trunk's centerline.",
+  "verdict": "in",
+  "why": "Rule: a watercourse joins the one it feeds at its centerline (as feeder/lateral junctions do).",
+  "still_open": "unknown",
+  "owner": "hamletgen/water/polder.py ring corner builder",
+  "sketch": "End the toe on the drain's centerline; unit-test endpoint-on-centerline at both corners."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## The weir's root lands on the head race's mouth",
+  "what": "17% of the weir bar lies on the head race; the Weir modal says it runs from the mouth.",
+  "verdict": "in",
+  "why": "Rule: the weir's root keys into the bank at the mouth's upstream lip (Weir class docstring).",
+  "still_open": "yes",
+  "owner": "hamletgen/water/brook.py weir seat",
+  "sketch": "Root the bar at the mouth's upstream lip; unit-test zero bar area inside the race band."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## The straggler router pays a fresh search per rejected target",
+  "what": "Web stage doubled by per-target Dijkstra.",
+  "verdict": "out",
+  "why": "Performance."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## Where the dry hem stands once the houses move off it",
+  "what": "A hem_siting knob for levee archetypes.",
+  "verdict": "out",
+  "why": "Research and a knob for a levee archetype the pool does not draw."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## The toe marsh's recorded outline is not the drawn marsh",
+  "what": "marshes[0].poly keeps the unclipped ring, so the belt cannot be kept off the marsh (68 of 179 belt crowns inside it on Sawada).",
+  "verdict": "in",
+  "why": "Rule: woody cover stands on dry ground above the marsh (research/vegetation; the copse test in test_pool_261).",
+  "still_open": "yes",
+  "owner": "settlement/land/wet.py marsh record + hamletgen/hinterland/belt.py",
+  "sketch": "Record drawn_poly and have every grove and parcel test against it; then give the belt the copse's keep-out."
+ },
+ {
+  "where": "future-work/farming-communities.md: ## Five finished-map rules no placer guarantees - stepped bund",
+  "what": "A paddy bund built as a flight of steps (tests/gate/test_paddy_fabric.py).",
+  "verdict": "in",
+  "why": "Rule: paddy_bunds_do_not_stagger; asserted on the finished pool only.",
+  "still_open": "yes",
+  "owner": "waterfields seam pass",
+  "sketch": "Make it a seam-pass guarantee with a unit test (see the bunds item)."
+ },
+ {
+  "where": "same section - woodland parcels in a ruled row",
+  "what": "Three woodland parcels in a ruled row on Kashikawa (test_pool_261).",
+  "verdict": "in",
+  "why": "Rule: no three coppice lots on one line (settlement-reviews 2026-08-18, feature 261).",
+  "still_open": "yes",
+  "owner": "hamletgen/hinterland/parcels.py (seat_off_the_row)",
+  "sketch": "Apply in_a_ruled_line as a seat refusal inside open_ground_patches; unit-test the layout."
+ },
+ {
+  "where": "same section - copse clump off its house's bank",
+  "what": "A copse clump within reach only across the brook (Inashiro).",
+  "verdict": "in",
+  "why": "Rule: every copse clump has a house within reach on its own side of the brook (test_pool_261).",
+  "still_open": "yes",
+  "owner": "homestead groves copse seat",
+  "sketch": "Test the bank side at seat time."
+ },
+ {
+  "where": "same section - brook legs within 1.6 degrees of a screen axis",
+  "what": "Brook legs near-axis-aligned on Kashikawa and Sawada.",
+  "verdict": "in",
+  "why": "Rule: a brook wanders, no leg on a screen axis (test_pool_261).",
+  "still_open": "yes",
+  "owner": "hamletgen/water/brook.py wander",
+  "sketch": "Reject or perturb an axis-aligned leg in the wander."
+ },
+ {
+  "where": "same section - Sawada's seat off the regional northwest",
+  "what": "Seat not facing the regional wind (test_pool_wind.py).",
+  "verdict": "in",
+  "why": "Rule: the seat faces away from the regional northwest wind (feature 261).",
+  "still_open": "yes",
+  "owner": "hamletgen/cluster.py seat scoring",
+  "sketch": "Make the wind term a hard constraint or bounded band in seat_cluster, with a unit test."
+ },
+ {
+  "where": "future-work/cross-cutting.md: ## FLAKY: the raster-mode wash test",
+  "what": "Page test flakes under memory pressure.",
+  "verdict": "out",
+  "why": "Test/page tooling."
+ },
+ {
+  "where": "future-work/cross-cutting.md: ## The review-prereq guard matches a finding's measurement by bare id",
+  "what": "Guard matching.",
+  "verdict": "out",
+  "why": "Tooling."
+ },
+ {
+  "where": "future-work/cross-cutting.md: ## 2. Fabric-first generation",
+  "what": "City wall sizing by construction.",
+  "verdict": "out",
+  "why": "City tier; no live generator."
+ },
+ {
+  "where": "future-work/cross-cutting.md: ## 2g. The render cache serves a PNG made from a DIFFERENT SVG",
+  "what": "Cache-key defect.",
+  "verdict": "out",
+  "why": "Tooling."
+ },
+ {
+  "where": "future-work/cross-cutting.md: ## Three members ... settlement/structures/",
+  "what": "Module relocations.",
+  "verdict": "out",
+  "why": "Code structure."
+ },
+ {
+  "where": "future-work/cross-cutting.md: ## Feature 115's leftovers",
+  "what": "Module relocations.",
+  "verdict": "out",
+  "why": "Code structure."
+ },
+ {
+  "where": "future-work/cross-cutting.md: ## The gate's 15 over-150-line segment functions",
+  "what": "Long check functions.",
+  "verdict": "out",
+  "why": "Code structure; the check battery is deleted."
+ },
+ {
+  "where": "future-work/cross-cutting.md: ## 8. TWIN_AXES believes a declared knob",
+  "what": "Twin detector read the knob over the drawn shape.",
+  "verdict": "out",
+  "why": "The check lived in check_village (deleted, feature 166); the knob-honoring half is the cluster_shape item."
+ },
+ {
+  "where": "future-work/cross-cutting.md: ## NOTE 2026-08-27: the would-have-dispatched trail",
+  "what": "ci-status reporting.",
+  "verdict": "out",
+  "why": "Tooling."
+ },
+ {
+  "where": "future-work/cross-cutting.md: ## The hamlet coverage floor's last 128 lines",
+  "what": "Coverage residue.",
+  "verdict": "out",
+  "why": "Tooling/tests."
+ },
+ {
+  "where": "future-work/cross-cutting.md: ## The caption-over-a-building rule was cut",
+  "what": "No check measures a caption against a building it does not name; Kuwabata's board caption 2.24 px from a built glyph.",
+  "verdict": "in",
+  "why": "Rule: a label must not sit on a feature it does not name (the retired labels_clear_of_other_buildings). Feature 266's single labels/ placer scores captions against every subject but its own, which may now guarantee it; the registry apparatus decision is the GM's.",
+  "still_open": "unknown",
+  "owner": "l7r/diagram/labels/ (the one caption placer)",
+  "sketch": "Confirm the labels/ placer's cost blocks every built glyph on hamlets and the generated Mode A sheets; unit-test a caption next to a foreign roof."
+ },
+ {
+  "where": "future-work/cross-cutting.md: ## 2h. make done FULL=1 HAS NEVER BEEN GREEN",
+  "what": "FULL gate history.",
+  "verdict": "out",
+  "why": "Tooling."
+ },
+ {
+  "where": "future-work/cross-cutting.md: ## hooks-test is 94 s",
+  "what": "Serial suites.",
+  "verdict": "out",
+  "why": "Performance/tooling."
+ },
+ {
+  "where": "future-work/cross-cutting.md: ## RE-PIN done's ratchet baseline",
+  "what": "Ratchet baseline.",
+  "verdict": "out",
+  "why": "Tooling."
+ },
+ {
+  "where": "future-work/cross-cutting.md: ## The push-time roll-review agent",
+  "what": "Deferred review agent.",
+  "verdict": "out",
+  "why": "Tooling."
+ },
+ {
+  "where": "future-work/cross-cutting.md: ## Three magistracy SVGs have no generator",
+  "what": "Hand-authored svg sources untracked.",
+  "verdict": "out",
+  "why": "Hand-drawn Mode A sheets (no generator) and repository tracking."
+ },
+ {
+  "where": "future-work/cross-cutting.md: ## Lighting a watercourse paints over the things that CROSS it",
+  "what": "Raster-mode page redraw order.",
+  "verdict": "out",
+  "why": "Page rendering."
+ },
+ {
+  "where": "future-work/cross-cutting.md: ## A single fallback wakeup",
+  "what": "Harness notification.",
+  "verdict": "out",
+  "why": "Tooling."
+ },
+ {
+  "where": "future-work/cross-cutting.md: ## MEASURE feature 274's write cap",
+  "what": "Research session cost measurement.",
+  "verdict": "out",
+  "why": "Research process tooling."
+ },
+ {
+  "where": "tests/gate/hamletgen/test_driver.py ACREAGE_SHORT (seeds 45, 47), test_a_rolled_cohort_passes_the_whole_gate",
+  "what": "Seed 45 reaches 18.6 of 22.1 acres, seed 47 21.9 of 26.0; the 15% acreage assertion is skipped for them.",
+  "verdict": "in",
+  "why": "Rule: paddy acreage lands on the figure the household count implies (research/fields 'Acreage from population'; the 15% band in the same test). The envelope clamps the fan at every aspect for a large household count at that fall.",
+  "still_open": "yes",
+  "owner": "hamletgen/water fit_field + canvas/envelope sizing (plan_site)",
+  "sketch": "Grow the canvas/envelope (or change archetype) when the largest fan cannot reach the target, and unit-test acreage within band on a large-household, steep-fall spec."
+ },
+ {
+  "where": "tests/gate/hamletgen/test_driver.py:109 (and tests/soak/test_polder_fall_0.py:113) - placed >= round(0.85 * households)",
+  "what": "The test accepts a hamlet seating 85% of its declared households.",
+  "verdict": "in",
+  "why": "A rule, not a bare excuse: research/settlements 030 states the band 0.85-1.05 occupied farmhouses per declared household and 'aims at one apiece'. But the seating stage only records a shortfall (stages.py docstring) - no placer guarantees even the 0.85 floor; it is asserted on rolled maps.",
+  "still_open": "yes",
+  "owner": "hamletgen/homesteads/stages.py stage_homesteads (front row, cloud, widening rounds)",
+  "sketch": "Make the seating stage keep widening its candidate ground until the band is met (or fail the roll loudly); unit-test placed/households >= 0.85 on a tight-ground spec."
+ },
+ {
+  "where": "tests/soak/test_seed_43_kink.py (strict xfail) and tests/gate/test_cohort_lane_rules.py",
+  "what": "Seed 43's routed footpath keeps a 36 px lattice step round a house corner; the lane-bend rule is asserted only on the coverage rolls, with seed 43 moved to the soak tier.",
+  "verdict": "in",
+  "why": "Rule: lanes bend like paths - no two real turns inside 40 ft, nothing past 140 deg (lanes_bend_like_paths, _kinks). The router's chord/knee cannot take the step.",
+  "still_open": "yes",
+  "owner": "hamletgen/ways/route.py lattice step removal (_clear_touch / chord)",
+  "sketch": "Post-process routed runs so no kink survives (chord with a fabric-aware detour); unit-test the kink geometry in specs/215 census/kink-seed-43.json."
+ },
+ {
+  "where": "l7r/diagram/hamletgen/driver.py re-roll loop (tests/gate/hamletgen/test_driver.py test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden)",
+  "what": "Farmhouse reach is enforced by re-rolling with stranded ground forbidden and keeping the least-bad attempt; a map can still ship with meta.roll_failures farmhouses_reach_a_way.",
+  "verdict": "in",
+  "why": "Rule: every farmhouse reaches the way network (ways.unreached_houses). A retry is not a guarantee; driver.py's comment calls it 'the one thing no placer can promise in advance'.",
+  "still_open": "yes",
+  "owner": "hamletgen/driver.py + homesteads seating + ways straggler pass",
+  "sketch": "Same as the 2b item: a post-pack re-seat of the stranded steading so the finished roll always satisfies unreached_houses == []."
+ },
+ {
+  "where": "tests/hamletgen/test_pool_261.py test_the_board_caption_notches_no_crown ('or meta.kosatsuba_caption_level == 1')",
+  "what": "A board caption may lie on a crown when the siter records that no seat offered a clear one.",
+  "verdict": "in",
+  "why": "Rule: the caption halo notches no crown (settlement-review, features 230/261); the level-1 fallback is excused by the GM's 2026-08-29 allowance for a board under canopy with a visible label, so the placer does not guarantee a clear caption.",
+  "still_open": "yes",
+  "owner": "structures/fixtures/siting.py place_kosatsuba + the board caption seat",
+  "sketch": "Rank board positions by a crown-clear caption seat so level 1 cannot occur, or have the GM confirm the fallback is the rule."
+ },
+ {
+  "where": "tests/soak/test_polder_fall_0.py test_a_polder_hamlet_draws_its_grid_dike_and_reservoir docstring; hamletgen.md 'down to two named failures'",
+  "what": "The polder grid is WIP with two named gate failures in build_polder's own geometry; the test deliberately does not assert a clean gate, and no pool map is a polder grid.",
+  "verdict": "in",
+  "why": "The polder_grid archetype is a live hamletgen path (coverage rolls Polder 12/19); the two failures are not named in the test and the soak tier rarely runs.",
+  "still_open": "unknown",
+  "owner": "hamletgen/water/polder.py build_polder",
+  "sketch": "Name the two failures, make each a build_polder unit test, and assert the clean placement properties on the polder roll."
+ },
+ {
+  "where": "tests/gate/test_hand_sheet_captions.py + tests/fixtures/caption_ledger.json",
+  "what": "Off-standard captions on hand-drawn Mode A sheets excused while the sheet is unchanged.",
+  "verdict": "out",
+  "why": "Hand-drawn sheets; no live generator produces them."
+ },
+ {
+  "where": "tests/soak/test_seatings.py",
+  "what": "Three seating fallbacks proved only in the soak tier.",
+  "verdict": "out",
+  "why": "Test-tier placement of behavior tests, not an excused violation."
+ }
+]

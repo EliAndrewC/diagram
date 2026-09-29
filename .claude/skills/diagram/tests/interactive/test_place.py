@@ -61,14 +61,14 @@ def test_every_crop_key_is_a_real_class(key: str) -> None:
 def test_the_card_names_only_the_crops_the_map_draws() -> None:
     text = crop_sentence(PADDY)
     assert "rice" in text and "millet" in text and "soy" in text
-    assert "buckwheat" not in text and "mulberry" not in text and "sugarcane" not in text
+    assert "buckwheat" not in text and "mulberry" not in text and "tea" not in text
 
 
 def test_a_dike_pond_map_describes_itself_with_no_code_of_its_own() -> None:
-    """Kuwabata's shape: mulberry, sugarcane and fish, no paddy and no dry plot at all. It must not
-    claim flooded fields it does not have (spec Edge Cases)."""
-    text = crop_sentence({"mulberry dike", "sugarcane dike", "fish pond"})
-    assert "mulberry" in text and "sugarcane" in text and "fish" in text
+    """Kuwabata's shape: a dike crop and fish, no paddy and no dry plot at all. It must not claim flooded
+    fields it does not have (spec Edge Cases)."""
+    text = crop_sentence({"mulberry dike", "tea dike", "fish pond"})
+    assert "mulberry" in text and "tea" in text and "fish" in text
     assert "flooded fields" not in text and "dry ground" not in text
 
 

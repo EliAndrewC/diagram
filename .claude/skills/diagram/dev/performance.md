@@ -331,6 +331,139 @@ calls became 0.139 s over 83 once bounded, and 0.011 s with the `PathChecker` in
 tracks moved (Inashiro's connector now leaves east), each the same hamlet on the same rules. A profile that shows a
 check called far more than it should be is sometimes a wrong answer, not a slow one.
 
+## The second pass, and where the returns start to diminish (feature 278, 2026-09-28)
+
+The GM: *"If we run through exactly the same exercise a second time, then I expect we'll turn up even more. Eventually
+we'll reach a point where we've optimized as much as can be expected."* The same exercise - every pool hamlet rolled with
+each stage timed and each mechanism counted, each heavy stage profiled alone - found nine more per-candidate scans and
+one roll done twice. All figures are in `specs/278-second-hotspot-pass/measurements.json`, taken back to back against the
+base; the pool's five rolls went from 60.5 s to 35.0 s together.
+
+**The scans, the shape of the first section again.** The router judged its whole search box - up to 90,000 cells - before
+Dijkstra ran; now each cell is judged when the search first asks (2-5x fewer cell tests, the same paths). A doorstep search
+rebuilt one memoized index's KEY per candidate - a memo whose key walks every polygon is not free (3.6x fewer asks). The
+footbridge widening tested every watercourse segment per deck (56x fewer); the wells re-sorted their whole pool on every
+pass, including passes that placed nothing (Kuwabata's appurtenances 1.77 s -> 0.09 s); the carve's hem pass asked
+point-in-polygon of every plot per sample (81-96x fewer); the notice board measured every way segment and every hard
+polygon's box per verge probe; the windbreak asked seven grids per candidate and read a 128 px cell to find neighbors
+within 10 px; the page merge walked every extent in a bucket per element (57-66x fewer). **Two traps worth carrying**: an
+index keyed by a parameter the caller varies (`_ok` is re-asked with a different `half`) must be one index per value -
+the first cut used one and moved a woodland parcel, caught only because the exact pieces are held to byte-identical
+manifests; and a harness counter keyed by FILE reads zero once a function moves (`_hits`, now in `extents.py`).
+
+**A roll done twice.** Sawada seated a farmhouse 157 px deep inside its paddy field, where no way can ever be drawn, so the
+driver re-rolled it every time - and finished the discarded attempt first. The placer now refuses a seat deeper than any
+way's reach inside the web's hard ground (`UnreachableGround`), and the driver finishes only the attempt it keeps.
+
+**Vectorizing is not free.** The commons grass, thrown and tested as numpy arrays, was first SLOWER than the per-point loop
+it replaced: building a shapely shape for every keep-out on the map, per call, cost more than 16,000 in-frame points took
+in Python. It paid only once the shapes were built for the items near the throws, unioned and PREPARED (a tree query
+returning pairs was the slow step), and invalid rings drawn as their even-odd faces instead of their whole box. Exactness
+held throughout: points surely in or surely out are decided in arrays, and the band between them by the scalar test.
+
+**What is left, priced - the next pass's levers** (none taken here; the spec's Amendment 1 records why):
+
+| stage | measured after | what is left | the lever, and what it costs |
+|---|---|---|---|
+| field | 1.075-1.23x per build (Sawada) | the carve's per-row geometry, 4 carves per build on Inashiro and 3 on Kashikawa (the fit's size search) | a closer first guess of the fan's size, or the rows as array operations - both change the field |
+| hinterland | 1.20-1.28x | the marsh scatter (the commons' old per-point shape), the bamboo seats' 10,000 samples, the parcels' crop set-backs | the marsh vectorized as the grass was; coarser bamboo sampling - a drawing change |
+| notice | 1.19x Inashiro, 1.87x Sawada | the verge probes (9,708 `_fits` calls in Sawada's build, 8,001 in Inashiro's), each through the indexed `_fits` the scoring needs | score first, fit only the probes that could win - changes the seat when two tie |
+| windbreak | 1.43x Kashikawa, 1.51x Inashiro | 128,952 candidate points on Kashikawa through Python predicates | the static tests over the jittered grid as arrays, the spacing test sequential - the commons' hybrid applied to the grove |
+| finish | - | about 4.7 s profiled over three finishes waiting on the external renderer (PNG and page raster) | fewer or smaller raster tiles; out of this pass's scope (the render path, feature 225's territory) |
+| tests | - | the gate's slowest items are pool rolls through a cold roll cache after an engine change | inherent to a change that re-keys the cache; `make quick` is 3,789 tests in ~27 s |
+
+## The third pass: scans that were missed, work done twice, and a lever that bought nothing (feature 281, 2026-09-28)
+
+The GM, after 278: *"each time it seems to be paying out with really big performance gains. So let's do the full thing
+again."* The same exercise, with one change to the measuring: every primitive call is traced to the caller that makes it.
+All figures are in `specs/281-third-hotspot-pass/measurements.json`; the pool's five rolls went from 32.9 s to 27.6 s
+together (1.19x), and the reference hamlet's perf bookend 20.6 s -> 16.5 s. Every pool manifest came out byte-identical.
+
+**Scans the index doctrine missed.** Each was a sibling of code already indexed: the lane clip (`clip_to_clear`) walked
+every obstacle edge per 8 ft sample while `clear_runs` beside it asked the fabric index - 535,389 `seg_dist` on Kashikawa
+to 11; the notice board walked every way segment per handover sample and every route point per seat; the home-bank join
+and the homestead fit walked every brook segment; the caption probe walked every lane segment per seat; the brook toll read
+25 mostly empty 20 px cells per ask where a cell a hair wider than the band needs nine. **The shape to look for**: grep a
+module for `seg_dist`/`segments_cross` inside `any(`/`min(` generator expressions over a whole registry - that is where the
+ones left over from the first two passes were.
+
+**Work done twice.** A fabric-index memo miss rebuilt the ring index of every polygon it filed - 376 distinct polygons
+built 5,932 times on Kashikawa - so ring indexes are now shared by CONTENT (the ring's points are the key). The carve asked
+each bund vertex once per plot sharing it (four), and walked each shared plot edge once per plot (two). And the windbreak's
+gap fill re-offered a gap that seated nothing the same 165 candidate points every round for up to six rounds - though a gap
+that seats nothing cannot seat anything later, because every test it faces is static except the spacing test, whose
+refusals only grow.
+
+**Measuring where work moves.** A count credited to a primitive's direct caller reads zero once an index moves the call
+under a new method - a criterion "passed" on work that merely moved. The harness now counts every call made beneath each
+mechanism's entry functions with `sys.monitoring` (the builders included), and records each bucket's TOTAL beside its
+named count: a named count that falls while the total does not is a finding, not a pass.
+
+**A lever priced by 278 that bought nothing.** The marsh scatter, thrown and tested as arrays in 278's grass form, cut its
+scalar keep-out tests 359x - and its hinterland stage did not get faster (Kuwabata's got slower): on small marshes, building
+the shapely shapes of the keep-outs near each mark kind's throws costs what the scalar tests did. It was withdrawn. **Price
+a vectorization by the stage's wall time, fastest of three, not by the calls it removes** - the profile favors it, since
+profiling inflates Python calls and not C. Its one lasting find was a defect: a pond bank's keep-out thinned to every 16th
+point cut the bank's corners, fixed by using the whole ring.
+
+**Two traps worth carrying.** A cache keyed by a list's LENGTH (the precedent `_water_obstacles` uses) served a stale index
+when a caller replaced the streams with a different list of the same length - the gate's feature-261 test caught it; the
+stream index now holds the objects it was built from and compares them by identity. And a single back-to-back reading is
+not a measurement on this host: one base re-run read Kashikawa at 13.2 s against 8.9-9.0 s in every other reading.
+
+**What is left, priced** (profiled seconds over the five maps, `/tmp/m281/after`; profiling inflates Python ~2.4x):
+
+| where | profiled | what it is | the lever, and what it costs |
+|---|---|---|---|
+| the router (`_route`) | 7.9 s | Dijkstra over lazily judged cells, `_clear_link` per shortcut | a coarser lattice, or A* toward the goal - both change which of two equal paths is drawn |
+| field fit and seams | ~9 s | the carve's per-row geometry and shapely buffers/unions in `close_seams` | the rows as array operations; fewer carves by a closer first guess - both change the field |
+| the page writer | ~4 s | regex parsing of the element text (`merge_primitives`, `drop_offmap`) | emit the page's elements from the records instead of re-parsing the svg - a rewrite of the page path |
+| `edge_dist` over whole rings | ~1.5 s | `_crosses_fabric`, `ways/geom.py`'s service trims, the comb's `_dry` | the fourth batch of the missed-scan shape: a `RingIndex` per ring; exact, about 0.6 s real |
+| the brook toll | 590,253 lookups on Kashikawa | 9 cells per ask, most empty | a bitmap of cells near the band - exact, small |
+| the finish | ~1.5 s | the blade buckets' flush | out of this pass's scope (feature 223's) |
+
+## The fourth pass: the exact levers kept, the moving ones measured faster and withdrawn on the rules (feature 284, 2026-09-28)
+
+The GM, on 281's priced residue: *"look at what is slow and then be willing to let things of that nature change if those
+changes would allow it to be significantly faster."* The pool's five rolls went from 35.15 s on main (as merged, with feature
+269) to 26.72 s back to back (1.32x), and every pool map came out main's map but for one bamboo thicket on two maps (the 16 ft seat lattice). All figures are in
+`specs/284-fourth-hotspot-pass/measurements.json` and its research record.
+
+**What paid, all exact:** the threshing yards' mats in arrays (feature 282 had made the homesteads stage 3.7-5.1 times slower;
+the same mats), the page reading the blade slots' structures instead of re-parsing their strings, the notice board sampling
+its verge band before the rest (the roadside rule throws the rest away whenever the band holds a seat), the bamboo walked
+outward from its target, the whole-ring `edge_dist` scans asked through indexes, one link index per route, the brook toll's
+near-cell set (and one exact lever withdrawn for costing more than it saved: a crown grid per grove clump, whose few crowns are
+cheaper to walk than to file) (and one exact lever withdrawn for costing more than it saved: a crown grid per grove clump, whose few crowns are
+cheaper to walk than to file) - and a stranding re-roll resuming from a copy of the first roll taken before the seats, the stages before
+them being the same on every attempt (a re-roll 1.1-1.7 s faster).
+
+**The moving levers, and how to judge one.** A* in the router and the field's size search without its blind probe each move
+maps, and the moved maps re-roll more often. Judged by the pool and cohort seeds 1-24 rolled whole against the run-to-run
+spread measured IN THE SAME RUN (the shipping engine rolled twice, interleaved by map with the lever's pass;
+`specs/284-fourth-hotspot-pass/combined/`), they were 4.8% faster together against a 0.6% spread - and the gate then failed
+on five rules over the moved POOL maps (a bund stepped twice, woodland parcels in a ruled row, a copse off its house's bank,
+brook legs on a screen axis, a seat off the wind), with the pool itself no faster. The field search's lever was
+withdrawn on the rules; A*, measured again alone once that was out, was not faster than the run-to-run spread, and went too. **Three lessons:** run the
+gate on the moved pool before calling a moving lever kept - a cohort comparison measures reach and time, not the pool's
+seed tests; never judge one lever with another in that has since changed (each was first withdrawn on a run under the other);
+and a lever's own stage can halve while the rolls get slower. The coarser router lattice, the carve's rows in arrays and the
+board's 24 px lattice lost on those terms too (they strand, run slower, or break the entrance rule).
+
+**A defect the moved maps found.** The junction pass deleted a connector the web could not join as debris, and the reach
+check then read the network that was left and passed: cohort seed 15 shipped with no way off the map. The connector is now
+never dropped there. A check that reads "whatever is left" passes when the thing it should have failed on is deleted first.
+
+**What is left** (profiled on Sawada and Kashikawa after the pass; research R7): no lever of the allowed kind remains that
+makes any of these significantly faster.
+
+| where | cost | why nothing was taken |
+|---|---|---|
+| the seam closing (`close_seams`) | ~2.5 profiled s on Sawada | ~800 shapely welds of ~1.2 ms each, already ranked in one array call and read from a shared tree; no scan left, and the shapes are the rule |
+| the first-roll strandings | 2 of 29 rolls pay a re-roll (the resume cuts it to the stages from the seats on) | a seat-time reach test was tried three times before and failed - reachability depends on fabric that does not exist when seats are chosen |
+| the commons, the blade flush, the grove fill | 0.2-0.6 s each | sums of indexed lookups; each an index already |
+| `seg_dist` over ~25 callers | 312,391 calls on Sawada, none above 0.09 s | an index per caller buys under a tenth of a second each |
+
 ## Memory: the spike is C buffers, not Python objects, and it lands where nothing reads it (feature 208, 2026-09-07)
 
 The GM asked why a full gate costs 6.8 GiB and whether each of the eight workers really needs most of a

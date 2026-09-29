@@ -8,8 +8,8 @@ Its modules are LAYERS, emitted bottom-up: every cross-module reference points b
 
 | file | look here when |
 |---|---|
-| `parse.py` (298) | the SVG reader: the fill/stroke/pattern vocabulary, the four record types (`Rect`, `Label`, `ParsedPlan`), and `parse_svg`, which turns a Mode A sheet into them |
+| `parse.py` (500) | the SVG reader: the fill/stroke/pattern vocabulary, the four record types (`Rect`, `Label`, `ParsedPlan`), and `parse_svg`, which turns a Mode A sheet into them |
 | `grids.py` (244) | the raster measurements - the occupancy grids and everything derived by counting cells: coverage, perimeter hugging, the largest vacant rectangles, per-region density |
-| `checks.py` (542) | the twenty audits themselves - one function per question asked of a plan, each with its own result record. Add a new check here |
+| `checks.py` (476) | the audits themselves - one function per question asked of a plan, each with its own result record. Add a new check here |
 | `report.py` (143) | the printed report and the CLI entry point - the only place the checks above are composed into an order |
 | `__init__.py` | the composed surface only - the re-exports that keep every existing importer working. Never add logic here |
