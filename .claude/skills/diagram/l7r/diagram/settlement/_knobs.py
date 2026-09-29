@@ -422,7 +422,8 @@ TORII_WEIGHTS = {
     # more potent in Rokugan than in the real world). Weights per settlement tier; the richer the tier,
     # the deeper the accumulated patronage (torii are DONATED votive gates - see research/religion-and-death.html 'Torii are votive donations - the count records patronage'
     # for the historical grounding and the deliberate Rokugan liberties). "capital" is recorded ahead of
-    # need - no capital-city maps exist yet.
+    # need - no capital-city maps exist yet. A row of arches at an ordinary shrine is a DELIBERATE DEVIATION
+    # (GM 2026-09-29; research/religion-and-death.html 'Did a village shrine have an avenue of arches before modern times?').
     "village": ((1, 0.60), (3, 0.30), (7, 0.10)),
     "town": ((1, 0.30), (3, 0.60), (7, 0.10)),
     "city": ((1, 0.30), (3, 0.40), (7, 0.30)),

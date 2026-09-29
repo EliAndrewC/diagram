@@ -2280,12 +2280,11 @@ line in feature 280 (`specs/280-modern-only-sweep/outcomes.md`, one row per item
 - **The frozen hamlets' modern-only forms, by map** (never retrofitted - fixed by CONVERSION, `migration-plan.md`):
   Akagahara, Ikegami, Moritono, Tanada, Yatsuda - M34 (the reed edge grounded on a modern survey); Enokida - M54 (the
   110 ft polder cell; three mu is 190 ft), M57 (a sluice per dike pond), M58 (the 0.80 water share; 0.62 at the 23 ft
-  inset), M34; Honda - M52 (the overlay extent), M56 (a pond grid other than the mosaic), M58, M34; Shimizu - M52, M53
-  (the cash-crop share), M34.
-- **The frozen villages' owed forms**: Hoshigaoka - M12 (the pond sized by command area), M64 (the avenue of arches,
-  waiting on the GM), M65 and M81 (the sanctuary fence), M66 (the swept collars), M68 (a hamlet's own burial ground),
+  inset), M34; Honda - M56 (a pond grid other than the mosaic), M58, M34; Shimizu - M34.
+- **The frozen villages' owed forms**: Hoshigaoka - M12 (the pond sized by command area), M65 and M81 (the sanctuary fence),
+  M66 (the swept collars), M68 (a hamlet's own burial ground),
   M70 (the roofed pyre ground, platform and hut), M71 (six jizo at a cremation ground alone), M80 (the basin's roof,
-  drawn plain, its roof a guess); Kikuta - M52, M56, M58, M64; Ueda and Hikari-no-Sato - M64.
+  drawn plain, its roof a guess); Kikuta - M56, M58. (M50, M52, M53 and M64 were kept by the GM on 2026-09-29.)
 - **M13, the homestead grove**: no pool hamlet draws one; `_find_grove_arms` (the arms-only L) serves the legacy maps
   only. Owed: the grove's premodern size at conversion, or the arms retired with the last legacy map.
 - **M38, a knob candidate**: the bare dike-pond bank is attested (turfed or trodden), and so is a bank planted sparse

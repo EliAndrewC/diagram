@@ -60,5 +60,5 @@ form is owed when the town tier is scripted (`specs/280-modern-only-sweep/outcom
   farrier's sling frame is Western; the Qing two-post tie frame is the attested alternative).
 - **Hirameki**: M123, M124 (a private back-gate landing is modern only), M127, M69, M84, M85, M86, M97.
 - **Ubame** (the legacy town map, not the magistracy sheet): M114 (the freestanding notice board is a guess), M115
-  (the striking bundle - upright posts only), M120, M123, M127, M64 (the avenue of arches, waiting on the GM), M69,
+  (the striking bundle - upright posts only), M120, M123, M127, M69,
   M84, M85, M86, M87, M92, M97, M104 (no charcoal cooling ground), M105 (the bale sizes).

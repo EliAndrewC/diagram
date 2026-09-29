@@ -11,7 +11,7 @@ undated modern account of custom, counted modern.
 **Dispositions:** 43 eliminated or recalibrated in the engine, a sheet or a modal; 58 kept as attested (the
 record now cites the premodern source); 6 record-only (nothing drawn rested on it); 19 on the frozen legacy maps
 only, owed at their tier's conversion (`future-work/cities.md`, `towns.md`, `farming-communities.md`; `migration-plan.md`);
-4 waiting on the GM (a form the GM ruled in knowingly: M50, M52, M53, M64; escalation-check 2026-09-29 settled six more as degrees or legacy-only).
+4 ruled by the GM on 2026-09-29, all kept: M50 (a map drawing convention), M52 and M53 (lotus and lotus districts are premodern; the drawn size is a legibility convention), M64 (a deliberate deviation); `rulings-2026-09-29.md`. escalation-check 2026-09-29 settled six more as degrees or legacy-only.
 
 **Found in passing and handled here (not inventory items):** the woodpile's KIZUMA form (homesteads/212; researched
 2026-09-29, undated modern pages only - removed, undated-custom); the downstream side of a burial ground (religion-and-death
@@ -72,10 +72,10 @@ on the magistracy sheets (building-review, 2026-09-29: an open candidate for a r
 | M47 | V3 | MIXED | vegetation/630 | The crop margin | kept (attested) | the kept-cut margin attested (karishiki); its 6 ft a guess inside the attested ground |
 | M48 | V3 | MIXED | vegetation/110, water/040, vegetation/630 | The cut bank | kept (attested) | the bank margin stands where the channel runs along a paddy bund; 6 ft the margin's choice |
 | M49 | V3 | PREMODERN-ATTESTED | vegetation/640 | The take-yabu | eliminated / recalibrated | the take-yabu thicket seated at the settlement's edge behind its back row, not the field margin |
-| M50 | V3 | MODERN-ONLY | vegetation/152 | The bamboo glyph | waiting on the GM | the stand-level bamboo glyph follows a modern (GSI) legend; the GM ruled it in knowingly (2026-08-27) - waiting on the ruling |
+| M50 | V3 | MODERN-ONLY | vegetation/152 | The bamboo glyph | kept (GM 2026-09-29) | a map drawing convention standing for a real bamboo stand (vegetation/152) |
 | M51 | A1 | PREMODERN-ATTESTED | archetypes/600 | The lotus field | kept (attested) | the lotus field is premodern in both countries |
-| M52 | A1 | MIXED | archetypes/020 | Overlay extent | waiting on the GM | lotus has no premodern share; the upper band fits a lotus-district village - a knob narrowing the GM's knowing liberty of 2026-07-19, raised |
-| M53 | A1 | MIXED | archetypes/310 | The cash-crop share | waiting on the GM | as M52, for legacy shimizu (frozen) |
+| M52 | A1 | MIXED | archetypes/020 | Overlay extent | kept (GM 2026-09-29) | lotus and lotus-growing villages are premodern (archetypes/600); drawing the band larger to read on the map is a map drawing convention (archetypes/020) |
+| M53 | A1 | MIXED | archetypes/310 | The cash-crop share | kept (GM 2026-09-29) | as M52 |
 | M54 | A2 | MIXED | archetypes/050 | The polder parcel | eliminated / recalibrated | the rice polder's cell 110 -> 190 ft (three mu, the 1897 fish-scale register); no pool map rolls it |
 | M55 | A2 | PREMODERN-ATTESTED | archetypes/090 | Dike planting rows | eliminated / recalibrated | the dikes.py comment re-pointed at Pan Jixun; no geometry |
 | M56 | A2 | MIXED | archetypes/130 | The pond grid | eliminated / recalibrated | POND_LAYOUTS mosaic only; reversal of the GM's knob of 2026-08-18 reported |
@@ -86,7 +86,7 @@ on the magistracy sheets (building-review, 2026-09-29: an open candidate for a r
 | M61 | A4 | MIXED | archetypes/180, archetypes/210 | The sty at the water | eliminated / recalibrated | the PigSty modal: on the pond bank as the 1639 pen; no flush-into-the-pond claim |
 | M62 | A4 | MIXED | archetypes/171, archetypes/210 | The pig shed on the dike | eliminated / recalibrated | the 5-10 m shed-dike width not a rule the maps follow (PigSty modal) |
 | M63 | A4 | PREMODERN-ATTESTED | archetypes/620, homesteads/260, homesteads/211 | Manure pits | kept (attested) | the manure jar by the road attested (Staunton 1797) |
-| M64 | R1 | MIXED | religion-and-death/710, 090 | The torii avenue | waiting on the GM | the avenue of arches at ordinary shrines: the GM ruled the pitch for all maps knowing no village row was found (2026-09-27) - waiting on the ruling; Hoshigaoka's seven are the GM's |
+| M64 | R1 | MIXED | religion-and-death/710, 090 | The torii avenue | kept (GM 2026-09-29) | a deliberate deviation: the arch is historical, its use at an ordinary shrine is this setting's (religion-and-death/710, 090) |
 | M65 | R1 | MIXED | religion-and-death/730, 122 | The sanctuary fence | eliminated / recalibrated | the sanctuary fence dropped from the wealth knob (programs.md); no kind drew it |
 | M66 | R1 | MIXED (undated-custom (shrine half)) | religion-and-death/720, 130 | The swept collar | eliminated / recalibrated | no swept collar at arches or graves (the clearings' collars 30 -> 0); the precinct's ground kept, not called swept (key precinct clearing); undated-custom (shrine half) |
 | M67 | R1 | MIXED | religion-and-death/240 | Salt wards | kept (attested) | nothing live draws salt; the record allows only a small heap at a trade's door |
