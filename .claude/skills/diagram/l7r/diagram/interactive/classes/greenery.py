@@ -97,7 +97,7 @@ class Windbreak(Kind):
     Note: The grove count follows the Fujian figure (forests-2020), the density the Pearl-delta patches
     (hu-2011-fengshui-patches), and the size the Hong Kong survey (afcd-ncsc-9-06), measured in modern times on groves centuries old, no older measurement being known; the water-mouth cluster's
     size and the tree counts are guesses bracketed by Korean village-grove analogues; the belt's shape follows
-    the terrain and the cluster. The side it stands on follows the Japanese homestead grove, kept on the north
+    the terrain and the cluster. The side it stands on, never ringing the cluster, follows the Chinese village's separate grove patches (coggins-minor-2018) and the Sendai farmstead grove - the full ring being the Izumo plain's farmstead form alone, which the maps give only to a farmstead's own grove - kept on the north
     and west against the northwesterly winter wind (irie-2020-igune, yashikirin-jawiki), and the GM's rulings
     that the maps show that regional wind unless a place declares its own. The two forms are read (the four-region
     survey, takehara-2004-yashikirin; the delta patches), and so is the bamboo, in the Japanese farmstead grove only
@@ -115,7 +115,7 @@ class Windbreak(Kind):
     Name: windbreak forest
     Covers: `village_groves[role=windbreak]`
     Label: accurate
-    Sources: forests-2020, hu-2011-fengshui-patches, takehara-2004-yashikirin, tonami-yashikirin-haichi, sendai-igune-modelplan
+    Sources: forests-2020, hu-2011-fengshui-patches, coggins-minor-2018, takehara-2004-yashikirin, tonami-yashikirin-haichi, sendai-igune-modelplan
     Entry: research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest'; research/vegetation.html - 'Does a shelter belt wrap the settlement? No - it stands on one or two windward sides'; research/homesteads.html - 'The garden's sun, and how far the windbreak shades'; research/vegetation.html - 'Was a windbreak one kind of tree in a row', "Did a farmstead's grove carry bamboo"
     """
 
@@ -147,7 +147,7 @@ class HomesteadGrove(Kind):
     GUESS, the GM's ruling of 2026-09-29, and so are the thin band's depth (one tree, 17 ft), the kind of trees in it,
     and the width of the way in through a ring.
 
-    Name: farmstead grove
+    Name: homestead grove
     Covers: `groves`
     Label: accurate
     Sources: miura-2014-kainyo, irie-2020-igune, kashima-kainyo-1987, tonami-yashikirin-haichi, yashikirin-jawiki
