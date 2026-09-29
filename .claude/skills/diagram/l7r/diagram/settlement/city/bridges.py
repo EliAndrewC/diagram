@@ -310,6 +310,12 @@ class BridgesMixin:
         #    a plank that ought to exist. A plank at a junction is simply a longer plank, which is
         #    what a farmer would lay, so the deck is sized to the widest water actually beneath it.
         dry_quads = [list(poly) for poly in self.dry_polys]
+        # ...AND A FARM'S WORKED GROUND: its kitchen garden and its own grove (feature 291). Once the farms carried their own
+        # groves the frames moved, and on cohort seed 1 a garden stood 5 ft off a field main, where the plank's landing
+        # lay on the beds.
+        # Each by its recorded box, which is what `features_do_not_overlap` reads (a garden's box stood 0.75 ft wider than its
+        # bed outline, and the plank that cleared the outline met the box), a foot wider all round.
+        ground_quads = [_deck_quad(g["x"], g["y"], g["w"] + 2.0, g["h"] + 2.0, g.get("rot", 0)) for key in ("gardens", "groves") for g in self.M.get(key, []) if all(k in g for k in ("x", "y", "w", "h"))]
         DEFAULT_W = {"streams": 9.0, "channels": 2.5, "field_ditches": 4.2}
         # ...including the OTHER FIELD DITCHES, which is where the confluences actually are: a comb's
         # branch takes off from a main, and the plank the branch wants at its own head sits over the
@@ -427,6 +433,8 @@ class BridgesMixin:
                         continue
                     if any(quad_hits_poly(quad, dp) for dp in dry_quads):
                         continue  # no plank laid across the hem crop
+                    if any(quad_hits_poly(quad, gp) for gp in ground_quads):
+                        continue  # ...nor landing on a garden's beds or in a farm's grove
                     if any(_quads_overlap(quad, _deck_quad(b["x"], b["y"], b.get("span", 8.0), b.get("w", 4.0), b.get("rot", 0.0))) for b in self.M.get("bridges", [])):
                         continue  # ...nor on top of another deck
                     # ...tested on the EXACT numbers that will be recorded. `footbridges_reach_useful_ground`

@@ -268,3 +268,13 @@ def test_fixtures_on_groves_names_a_fixture_inside_a_band() -> None:
     M = {"groves": [band, {"poly": []}], "farm_fixtures": [{"kind": "bath", "x": 18.0, "y": 0.0, "w": 7.0, "h": 6.0}, {"kind": "woodpile", "x": 60.0, "y": 0.0, "w": 24.0, "h": 12.0}, {"kind": "persimmon", "x": 0.0, "y": 0.0}]}
     assert fixtures_on_groves(M) == [("bath", band)], "the bath inside the band; the shed clear of it; a tree has no box"
     assert fixtures_on_groves({}) == []
+
+
+def test_fixtures_on_groves_reads_the_fixture_turned() -> None:
+    """A flank seat's shed is recorded 24 x 12 at a quarter turn: drawn 12 across, it clears a band whose edge is 10 ft from its center."""
+    from l7r.diagram.settlement.homestead_parts.grove_rules import fixtures_on_groves
+
+    band = {"x": 0.0, "y": 0.0, "w": 40.0, "h": 80.0}
+    shed = {"kind": "woodpile", "x": 30.0, "y": 0.0, "w": 24.0, "h": 12.0}
+    assert fixtures_on_groves({"groves": [band], "farm_fixtures": [shed]}) == [("woodpile", band)]
+    assert fixtures_on_groves({"groves": [band], "farm_fixtures": [{**shed, "rot": 90.0}]}) == []
