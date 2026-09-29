@@ -158,15 +158,21 @@ def chain_of(recs: Sequence[Mapping[str, Any]], host: Sequence[int | None], i: i
     return out
 
 
-def lanes_of(M: Mapping[str, Any], recs: Sequence[Mapping[str, Any]], host: Sequence[int | None], chosen: Sequence[int], drawn: bool = True, square: Any = None) -> list[dict[str, Any]]:
+def lanes_of(
+    M: Mapping[str, Any], recs: Sequence[Mapping[str, Any]], host: Sequence[int | None], chosen: Sequence[int], drawn: bool = True, square: Any = None, laid: Any = None
+) -> list[dict[str, Any]]:
     """The tree lanes for the runs `chosen` (their chains' closure taken by the caller), squared at their water crossings as
     the web draws every lane (`settle.square_run`, or `square` - the seating's `Lawful.squared`, the same answer asked only
-    where water comes near, and remembered per run), the exit strip first."""
-    raw_sq = square if square is not None else (lambda run: square_run_of(M, run))
-    waters = square_waters_of(M)
+    where water comes near, and remembered per run), the exit strip first. `laid`, where given, is the whole of that - a run
+    rejoined (`rejoined`) and squared - as the seating remembers it per run (`admits`)."""
+    if laid is not None:
+        sq = laid
+    else:
+        raw_sq = square if square is not None else (lambda run: square_run_of(M, run))
+        waters = square_waters_of(M)
 
-    def sq(run: Poly) -> Poly:
-        return raw_sq(rejoined(run, waters))
+        def sq(run: Poly) -> Poly:
+            return raw_sq(rejoined(run, waters))
 
     out: list[dict[str, Any]] = []
     strip = strip_run(M, recs, host, chosen, drawn)
@@ -245,8 +251,25 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
             memo[key] = base.squared(list(run))
         return list(memo[key])
 
+    # EACH RUN REJOINED AND SQUARED ONCE WHILE THE WATER STANDS (dev/performance.md, shape two): every seat asked re-laid
+    # every reserved run of the tree - `rejoined` tests each leg against every leg of the brook and the channels (312,044
+    # `segments_cross` on seed 44, most of the tree's question) - though a reserved run and the water are the same from one
+    # seat to the next. Remembered by the run's points, and forgotten whenever the water the squaring reads differs.
+    waters = square_waters_of(M)
+    laid = base.__dict__.get("_tree_laid")
+    if laid is None or laid[0] != waters:
+        laid = base.__dict__["_tree_laid"] = (waters, {})
+    done: dict[tuple[Pt, ...], Poly] = laid[1]
+
+    def lay(run: Poly) -> Poly:
+        key = tuple(run)
+        hit = done.get(key)
+        if hit is None:
+            hit = done[key] = square(rejoined(run, waters))
+        return list(hit)
+
     for ctx in (whole, [*reversed(chain[1:]), k]):
-        lanes = lanes_of(M, recs, host, ctx, drawn=False, square=square)
+        lanes = lanes_of(M, recs, host, ctx, drawn=False, laid=lay)
         new = lanes[-1]
         law_.M = _trial(view, lanes=[*lanes[:-1], *stub])
         if not law_(new["pts"], float(new["w"])):
@@ -531,7 +554,18 @@ def seating_law(s: Any) -> Any:
     key = (len(houses), id(houses[-1]) if houses else None)
     memo = s.__dict__.get("_seating_law")
     if memo is None or memo[0] != key:
-        memo = s.__dict__["_seating_law"] = (key, Lawful(types.SimpleNamespace(M=s.M)))
+        # ...OVER ONE VIEW OF THE MANIFEST FOR THE WHOLE SEATING: `Lawful` keeps the worked ground on the object it is given
+        # (`geom.memo_ground`, rebuilt only when the field's registries change), so a fresh view per house seated threw it
+        # away and re-took the union of the field's plots once per house (seed 44: 17 builds, most of the seating's rise)
+        view = s.__dict__.get("_seating_view")
+        if view is None or view.M is not s.M:
+            view = s.__dict__["_seating_view"] = types.SimpleNamespace(M=s.M)
+        law_ = Lawful(view)
+        # ...and the runs the tree has laid so far carried on to it (`admits`: each remembered with the water it was laid
+        # against, and dropped where that water differs): a reserved run is laid the same whichever house is being seated
+        if memo is not None and "_tree_laid" in memo[1].__dict__:
+            law_.__dict__["_tree_laid"] = memo[1].__dict__["_tree_laid"]
+        memo = s.__dict__["_seating_law"] = (key, law_)
     return memo[1]
 
 

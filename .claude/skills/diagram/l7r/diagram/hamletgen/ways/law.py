@@ -531,8 +531,24 @@ def field_reach_ft(M: Mapping[str, Any]) -> float:
 
 
 def field_unreached(M: Mapping[str, Any]) -> bool:
-    """On a brook map, no way of the hamlet's own comes within `FIELD_REACH_FT` of its field."""
-    return bool(_brooks(M)) and field_reach_ft(M) > FIELD_REACH_FT
+    """On a brook map, no way of the hamlet's own comes within `FIELD_REACH_FT` of its field.
+
+    `field_reach_ft(M) > FIELD_REACH_FT`, ASKED AS THE THRESHOLD IT IS (dev/performance.md, shape one): the measure walks
+    every lane vertex against every edge of every paddy outline and dry plot, and the settle and the tree's pruning ask this
+    once per round and per lane tried (cohort seed 44: 39,321 distances a roll). No vertex comes within the reach of an edge
+    whose box, grown by the reach, does not hold it, so the edges are filed by that box once and a vertex asks only its
+    cell's; the first within the reach answers, by the same `seg_dist`."""
+    if not _brooks(M):
+        return False
+    rings = [f["outline"] for f in M.get("fields") or [] if f.get("outline")] + [d["poly"] for d in M.get("dry_plots") or [] if d.get("poly")]
+    grid = PointGrid(128.0)
+    grid.extend(
+        (a, b, min(a[0], b[0]) - FIELD_REACH_FT, min(a[1], b[1]) - FIELD_REACH_FT, max(a[0], b[0]) + FIELD_REACH_FT, max(a[1], b[1]) + FIELD_REACH_FT)
+        for r in rings
+        for a, b in ((r[i], r[(i + 1) % len(r)]) for i in range(len(r)))
+    )
+    pts = [(float(x), float(y)) for ln in (M.get("lanes") or []) if not ln.get("connector") for x, y in (ln.get("pts") or [])]
+    return not any(seg_dist(p[0], p[1], a, b) <= FIELD_REACH_FT for p in pts for a, b, *_box in grid.near(p[0], p[1]))
 
 
 # ---- the fabric ----------------------------------------------------------------------------------------------------

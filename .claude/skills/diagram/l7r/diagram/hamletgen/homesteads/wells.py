@@ -160,178 +160,188 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
     # wellhead, so a well seated among the reserved seats would take the ground the household's floor stands on
     _wood = ReservedSeats(houses)
     _well_r = well_keepout(s) if _wood.grid.n else 0.0  # nothing reserved (a settlement seated without shares): nothing held
-    for third, want_near in ((190.0, 3), (300.0, 3), (520.0, 3), (520.0, 2)):
-        if len(placed) >= want:
-            break
-        seats: list[tuple[float, float, float]] = []
-        step = 22.0
-        # THE SWEEP BOX IS THE HOMESTEADS', NOT THE HOUSE CENTERS' (2026-08-15, cohort seed 44).
-        # A bundle's courtyard ground extends ~a house-length past its house CENTER, so a cluster
-        # strung along its field margin can keep every legal well pocket just OUTSIDE the centers'
-        # bbox - seed 44 had 84 legal seats, nearly all north-west of min(xs)/min(ys), and the
-        # unpadded grid visited none of them (0 of 1440 probes passed; the map shipped well-less).
-        # The pad only restores ground the bundles themselves cover: every rung still demands a
-        # dwelling's wall within 95 px, so an open-field corner of the padded box is rejected exactly
-        # as the docstring above promises.
-        pad = 120.0
-        y = min(ys) - pad
-        while y <= max(ys) + pad:
-            x = min(xs) - pad
-            while x <= max(xs) + pad:
-                near = sorted(math.hypot(x - h["x"], y - h["y"]) for h in houses)
-                # the center distance PREFILTERS (a wall is never nearer than its center less the half-diagonal); the
-                # rule's own predicate decides
-                if len(near) >= want_near and near[want_near - 1] <= third and near[0] <= WELL_AMONG_DWELLINGS_PX + reach_r and _among_dwellings(houses, x, y) and not _wood.disc_covers(x, y, _well_r):
-                    seats.append((math.hypot(x - ccx, y - ccy), x, y))
-                x += step
-            y += step
-        # GREEDY COVERAGE, not central-first throughout (settlement-review, Mizuguchi/Sawada
-        # 2026-08-15): sorting every well toward the centroid put both of Mizuguchi's wells in one
-        # lobe of a two-lobed cluster - the six eastern households walked 248-424 ft while the west
-        # had a well within 63. The FIRST well is central (innermost legal seat, as before); every
-        # LATER well takes the legal seat FARTHEST from the wells already standing, ties toward the
-        # center - i.e. it serves the households the placed wells do not, which is why a real hamlet
-        # digs a second well at all.
-        pool = sorted(seats, key=lambda c: (_in_belt(c), c[0]))  # the FIRST well is central too, but never in the belt if anywhere else will do
-        # RE-SORTED ONLY WHEN A WELL HAS LANDED (feature 278, FR-004). The key reads the wells placed and the crop boxes, and
-        # inside this loop only a well that lands changes either - so a pass that popped a seat and placed nothing left a
-        # list already sorted by the key it would be sorted by again (Kuwabata: 168 sorts, 72,324 key evaluations, the
-        # most of its 1.8 s appurtenance stage). The house-distance part of the key never reads the wells, so it is
-        # computed once per seat.
-        _sorted_at = -1
-        _near_of: dict[tuple[float, float, float], float] = {}
-        while pool and len(placed) < want:
-            if placed and len(placed) != _sorted_at:
-                # ...by MINIMAX NEED, in ~3-grid-step buckets, centrality breaking ties inside a
-                # bucket. Two failed rankings led here, and both are worth remembering. Strict
-                # farthest-first (the 2026-08-15 greedy-coverage fix) let a seat 91 px OUTSIDE the
-                # cluster beat an interior seat covering the same households - the exterior well
-                # held Sawada's whole frame open (crop_not_held_open_by_one_feature). Bucketing
-                # that same farthest-first score fixed the frame and re-broke coverage the other
-                # way: on Mizuguchi the spread rung walked EAST past the last house into scrub
-                # while the one under-served household stood at the WEST end (settlement-review
-                # 2026-08-16). Both fail because "far from the standing wells" is a proxy for the
-                # real quantity, which is the walk of the household WORST served after the well is
-                # dug - so score that directly: pick the seat minimizing the farthest any house
-                # would remain from its nearest well. A seat past the row's end cannot beat an
-                # in-row seat (it serves nobody the row seat does not), and a seat in an unserved
-                # lobe wins outright, which is what the greedy fix was for in the first place.
-                # ONCE PER SORT, ONCE PER CANDIDATE (feature 223, GM 2026-09-11: "the wells key"). The standing wells do
-                # not change while the pool is sorted, so each needy house's walk to its nearest standing well is
-                # taken once here, and the key tuple below is built once per candidate - it used to call
-                # `_worst_after` and `_extent_added` twice each per candidate and re-derive every house's walk to every
-                # standing well inside each call (70,416 calls, 1.2 million terms on Kuwabata). Same numbers, same
-                # order: `worst_after` is the lifted body, held to the nested form by its test.
-                _standing = [min(math.hypot(h["x"] - wx, h["y"] - wy) for wx, wy in placed) for h in needy]
+    # ONE WELL INDEX FOR THE WHOLE LADDER (dev/performance.md, `frozen_terrain`): a well laid here moves no water and no crop,
+    # and each `well_at` built the water, dry-plot and wet-ring grids again for its one seat (cohort seed 44: 71 builds);
+    # the scope asserts on exit that the terrain it froze is the terrain that stands
+    with s.frozen_terrain():
+        for third, want_near in ((190.0, 3), (300.0, 3), (520.0, 3), (520.0, 2)):
+            if len(placed) >= want:
+                break
+            seats: list[tuple[float, float, float]] = []
+            step = 22.0
+            # THE SWEEP BOX IS THE HOMESTEADS', NOT THE HOUSE CENTERS' (2026-08-15, cohort seed 44).
+            # A bundle's courtyard ground extends ~a house-length past its house CENTER, so a cluster
+            # strung along its field margin can keep every legal well pocket just OUTSIDE the centers'
+            # bbox - seed 44 had 84 legal seats, nearly all north-west of min(xs)/min(ys), and the
+            # unpadded grid visited none of them (0 of 1440 probes passed; the map shipped well-less).
+            # The pad only restores ground the bundles themselves cover: every rung still demands a
+            # dwelling's wall within 95 px, so an open-field corner of the padded box is rejected exactly
+            # as the docstring above promises.
+            pad = 120.0
+            y = min(ys) - pad
+            while y <= max(ys) + pad:
+                x = min(xs) - pad
+                while x <= max(xs) + pad:
+                    near = sorted(math.hypot(x - h["x"], y - h["y"]) for h in houses)
+                    # the center distance PREFILTERS (a wall is never nearer than its center less the half-diagonal); the
+                    # rule's own predicate decides
+                    if (
+                        len(near) >= want_near
+                        and near[want_near - 1] <= third
+                        and near[0] <= WELL_AMONG_DWELLINGS_PX + reach_r
+                        and _among_dwellings(houses, x, y)
+                        and not _wood.disc_covers(x, y, _well_r)
+                    ):
+                        seats.append((math.hypot(x - ccx, y - ccy), x, y))
+                    x += step
+                y += step
+            # GREEDY COVERAGE, not central-first throughout (settlement-review, Mizuguchi/Sawada
+            # 2026-08-15): sorting every well toward the centroid put both of Mizuguchi's wells in one
+            # lobe of a two-lobed cluster - the six eastern households walked 248-424 ft while the west
+            # had a well within 63. The FIRST well is central (innermost legal seat, as before); every
+            # LATER well takes the legal seat FARTHEST from the wells already standing, ties toward the
+            # center - i.e. it serves the households the placed wells do not, which is why a real hamlet
+            # digs a second well at all.
+            pool = sorted(seats, key=lambda c: (_in_belt(c), c[0]))  # the FIRST well is central too, but never in the belt if anywhere else will do
+            # RE-SORTED ONLY WHEN A WELL HAS LANDED (feature 278, FR-004). The key reads the wells placed and the crop boxes, and
+            # inside this loop only a well that lands changes either - so a pass that popped a seat and placed nothing left a
+            # list already sorted by the key it would be sorted by again (Kuwabata: 168 sorts, 72,324 key evaluations, the
+            # most of its 1.8 s appurtenance stage). The house-distance part of the key never reads the wells, so it is
+            # computed once per seat.
+            _sorted_at = -1
+            _near_of: dict[tuple[float, float, float], float] = {}
+            while pool and len(placed) < want:
+                if placed and len(placed) != _sorted_at:
+                    # ...by MINIMAX NEED, in ~3-grid-step buckets, centrality breaking ties inside a
+                    # bucket. Two failed rankings led here, and both are worth remembering. Strict
+                    # farthest-first (the 2026-08-15 greedy-coverage fix) let a seat 91 px OUTSIDE the
+                    # cluster beat an interior seat covering the same households - the exterior well
+                    # held Sawada's whole frame open (crop_not_held_open_by_one_feature). Bucketing
+                    # that same farthest-first score fixed the frame and re-broke coverage the other
+                    # way: on Mizuguchi the spread rung walked EAST past the last house into scrub
+                    # while the one under-served household stood at the WEST end (settlement-review
+                    # 2026-08-16). Both fail because "far from the standing wells" is a proxy for the
+                    # real quantity, which is the walk of the household WORST served after the well is
+                    # dug - so score that directly: pick the seat minimizing the farthest any house
+                    # would remain from its nearest well. A seat past the row's end cannot beat an
+                    # in-row seat (it serves nobody the row seat does not), and a seat in an unserved
+                    # lobe wins outright, which is what the greedy fix was for in the first place.
+                    # ONCE PER SORT, ONCE PER CANDIDATE (feature 223, GM 2026-09-11: "the wells key"). The standing wells do
+                    # not change while the pool is sorted, so each needy house's walk to its nearest standing well is
+                    # taken once here, and the key tuple below is built once per candidate - it used to call
+                    # `_worst_after` and `_extent_added` twice each per candidate and re-derive every house's walk to every
+                    # standing well inside each call (70,416 calls, 1.2 million terms on Kuwabata). Same numbers, same
+                    # order: `worst_after` is the lifted body, held to the nested form by its test.
+                    _standing = [min(math.hypot(h["x"] - wx, h["y"] - wy) for wx, wy in placed) for h in needy]
 
-                def _worst_after(c: tuple[float, float, float], standing: Sequence[float] = _standing) -> float:
-                    return worst_after(c, needy, standing)
+                    def _worst_after(c: tuple[float, float, float], standing: Sequence[float] = _standing) -> float:
+                        return worst_after(c, needy, standing)
 
-                # AND AN INTERIOR SEAT BEATS A PADDED ONE THAT SERVES THE SAME HOUSEHOLDS. The sweep
-                # box above is padded 120 px past the house CENTERS because a bundle's courtyard
-                # really does reach that far, and without the pad seed 44 shipped well-less. But the
-                # pad is symmetric, so it equally offers seats BEYOND the outermost homestead on
-                # every side - and a wellhead is a hard crop feature with a 16 px extent, so one
-                # seated out there drags the map's frame after it and leaves a band of empty scrub
-                # (`crop_not_held_open_by_one_feature`). The RESCUE pass below already refuses
-                # exactly that, with its `min(xs) <= x <= max(xs)` test and a comment giving this
-                # very reason; the greedy pass did not - two passes carrying two definitions of
-                # "inside the house cloud", with the looser one running first.
-                #
-                # MEASURED on cohort seed 41: the second well won its minimax bucket on the strength
-                # of one north-east household, then seated 76 px NORTH of that household and 66 px
-                # past every other feature on the map. The minimax objective is right and is not
-                # what moved here - the tie-break was, because distance-to-centroid cannot express
-                # "this seat is outside the settlement".
-                #
-                # SO IT IS A TIE-BREAK AHEAD OF CENTRALITY, NOT A FILTER. The padded ground stays in
-                # the pool and still wins when nothing inside the cloud serves the same households,
-                # which is what the pad was added for; it simply can no longer outrank an interior
-                # seat that does. Same shape as every other rule in this function: relax rather than
-                # forbid, because a settlement with a badly-placed well beats one with no well.
-                # OUTSIDE WHAT, EXACTLY - the CROP's own box, not a box round the house CENTERS. The
-                # first version of this tie-break tested `min(xs)..max(xs)`, an AABB of house centers,
-                # and settlement-review (Inashiro 2026-08-17) named the flaw before it bit: an AABB
-                # cannot tell "in the settlement" from "in the box", so on a two-lobed cluster the
-                # ~345 px of grove and scrub BETWEEN the lobes scores as interior, exactly like a
-                # courtyard. Cohort seed 29 then did bite - a well 64 px north of every other feature,
-                # inside the centers' box and holding the whole frame open.
-                #
-                # `_crop_boxes` is what `crop_to_content` itself reads, so asking it is asking the
-                # question the check will ask: a seat inside the box the crop will set cannot hold the
-                # frame open, whatever its relation to the house centers. Same-source doctrine, and it
-                # picks up the houses' DRAWN extents plus their yards, gardens, sheds and byres rather
-                # than a point per house. (The box can only GROW later - the woodland and the pond are
-                # placed after - so this is conservative in the safe direction.)
-                _cb = s._crop_boxes(city=False)
-                _bx0 = min((b[0] for b in _cb), default=min(xs))
-                _bx1 = max((b[1] for b in _cb), default=max(xs))
-                _by0 = min((b[2] for b in _cb), default=min(ys))
-                _by1 = max((b[3] for b in _cb), default=max(ys))
+                    # AND AN INTERIOR SEAT BEATS A PADDED ONE THAT SERVES THE SAME HOUSEHOLDS. The sweep
+                    # box above is padded 120 px past the house CENTERS because a bundle's courtyard
+                    # really does reach that far, and without the pad seed 44 shipped well-less. But the
+                    # pad is symmetric, so it equally offers seats BEYOND the outermost homestead on
+                    # every side - and a wellhead is a hard crop feature with a 16 px extent, so one
+                    # seated out there drags the map's frame after it and leaves a band of empty scrub
+                    # (`crop_not_held_open_by_one_feature`). The RESCUE pass below already refuses
+                    # exactly that, with its `min(xs) <= x <= max(xs)` test and a comment giving this
+                    # very reason; the greedy pass did not - two passes carrying two definitions of
+                    # "inside the house cloud", with the looser one running first.
+                    #
+                    # MEASURED on cohort seed 41: the second well won its minimax bucket on the strength
+                    # of one north-east household, then seated 76 px NORTH of that household and 66 px
+                    # past every other feature on the map. The minimax objective is right and is not
+                    # what moved here - the tie-break was, because distance-to-centroid cannot express
+                    # "this seat is outside the settlement".
+                    #
+                    # SO IT IS A TIE-BREAK AHEAD OF CENTRALITY, NOT A FILTER. The padded ground stays in
+                    # the pool and still wins when nothing inside the cloud serves the same households,
+                    # which is what the pad was added for; it simply can no longer outrank an interior
+                    # seat that does. Same shape as every other rule in this function: relax rather than
+                    # forbid, because a settlement with a badly-placed well beats one with no well.
+                    # OUTSIDE WHAT, EXACTLY - the CROP's own box, not a box round the house CENTERS. The
+                    # first version of this tie-break tested `min(xs)..max(xs)`, an AABB of house centers,
+                    # and settlement-review (Inashiro 2026-08-17) named the flaw before it bit: an AABB
+                    # cannot tell "in the settlement" from "in the box", so on a two-lobed cluster the
+                    # ~345 px of grove and scrub BETWEEN the lobes scores as interior, exactly like a
+                    # courtyard. Cohort seed 29 then did bite - a well 64 px north of every other feature,
+                    # inside the centers' box and holding the whole frame open.
+                    #
+                    # `_crop_boxes` is what `crop_to_content` itself reads, so asking it is asking the
+                    # question the check will ask: a seat inside the box the crop will set cannot hold the
+                    # frame open, whatever its relation to the house centers. Same-source doctrine, and it
+                    # picks up the houses' DRAWN extents plus their yards, gardens, sheds and byres rather
+                    # than a point per house. (The box can only GROW later - the woodland and the pond are
+                    # placed after - so this is conservative in the safe direction.)
+                    _cb = s._crop_boxes(city=False)
+                    _bx0 = min((b[0] for b in _cb), default=min(xs))
+                    _bx1 = max((b[1] for b in _cb), default=max(xs))
+                    _by0 = min((b[2] for b in _cb), default=min(ys))
+                    _by1 = max((b[3] for b in _cb), default=max(ys))
 
-                # A TIE-BREAK CANNOT REACH A SEAT WITH NO RIVAL IN ITS BUCKET, so the FRAME goes into
-                # the score itself. Ranking outside-ness ahead of centrality fixed cohort seed 29 and
-                # left seed 7 failing for the reason a tie-break always leaves one: its pad seat was
-                # alone in its minimax bucket, so there was nothing to break the tie against. Seed 7's
-                # well sits 25 px past the northernmost byre and holds the whole frame open
-                # (`crop_not_held_open_by_one_feature`), because a wellhead is a hard crop feature with
-                # a 16 px extent and the crop follows it out.
-                #
-                # THE EXCHANGE RATE IS 1:1 IN PIXELS, which is what makes this a rule rather than a
-                # knob: a seat that drags the frame out by N px must save at least N px of the
-                # worst-served household's walk to be worth it. Both quantities are distances in the
-                # same units, so no weighting has to be invented - and the well that genuinely serves
-                # an outlying lobe still wins, because the coverage it buys is real.
-                def _extent_added(c: tuple[float, float, float], bx0: float = _bx0, bx1: float = _bx1, by0: float = _by0, by1: float = _by1) -> float:
-                    """How far past the crop's predicted box this seat (drawn radius included) reaches."""
-                    return max(0.0, bx0 - (c[1] - _WELL_DRAWN_R), (c[1] + _WELL_DRAWN_R) - bx1, by0 - (c[2] - _WELL_DRAWN_R), (c[2] + _WELL_DRAWN_R) - by1)
+                    # A TIE-BREAK CANNOT REACH A SEAT WITH NO RIVAL IN ITS BUCKET, so the FRAME goes into
+                    # the score itself. Ranking outside-ness ahead of centrality fixed cohort seed 29 and
+                    # left seed 7 failing for the reason a tie-break always leaves one: its pad seat was
+                    # alone in its minimax bucket, so there was nothing to break the tie against. Seed 7's
+                    # well sits 25 px past the northernmost byre and holds the whole frame open
+                    # (`crop_not_held_open_by_one_feature`), because a wellhead is a hard crop feature with
+                    # a 16 px extent and the crop follows it out.
+                    #
+                    # THE EXCHANGE RATE IS 1:1 IN PIXELS, which is what makes this a rule rather than a
+                    # knob: a seat that drags the frame out by N px must save at least N px of the
+                    # worst-served household's walk to be worth it. Both quantities are distances in the
+                    # same units, so no weighting has to be invented - and the well that genuinely serves
+                    # an outlying lobe still wins, because the coverage it buys is real.
+                    def _extent_added(c: tuple[float, float, float], bx0: float = _bx0, bx1: float = _bx1, by0: float = _by0, by1: float = _by1) -> float:
+                        """How far past the crop's predicted box this seat (drawn radius included) reaches."""
+                        return max(0.0, bx0 - (c[1] - _WELL_DRAWN_R), (c[1] + _WELL_DRAWN_R) - bx1, by0 - (c[2] - _WELL_DRAWN_R), (c[2] + _WELL_DRAWN_R) - by1)
 
-                # ...AND THE LAST TIE-BREAK IS THE NEIGHBORHOOD, NOT THE CENTROID (settlement-review,
-                # Sawada 2026-08-18). Once the minimax bucket and the frame term are equal, the
-                # remaining sort was `c[0]` - the seat's distance to the cluster CENTROID, computed
-                # when the pool was built. On a ONE-lobed cluster that reads as "the most central
-                # seat wins" and is fine. On a TWO-lobed one the centroid is the empty ground
-                # BETWEEN the lobes, so the tie-break actively prefers the gap: Sawada's second well
-                # moved off a seat serving 11 households within 300 ft onto one serving 5, and the
-                # worst walk went 364 -> 493 ft. Same family as the `_extent_added` fix above and as
-                # the standing rule against letting an aggregate stand in for the distributed thing
-                # a verdict is about - a centroid is not a place anybody lives.
-                #
-                # The measure that IS the question: how tightly is this seat surrounded by
-                # homesteads - the distance to the `want_near`-th nearest house, which is exactly
-                # the rung's own "is this in a neighborhood" test, reused rather than restated.
-                # Distance to the SINGLE nearest house was the ledger's sketch and is rejected: it
-                # is minimized by hugging one outlying farmhouse, which is the same mistake in the
-                # other direction. Every seat in the pool already passed the rung, so this only
-                # orders seats that are all legally "among the dwellings".
-                def _neighborhood(c: tuple[float, float, float], wn: int = want_near, memo: dict[tuple[float, float, float], float] = _near_of) -> float:
-                    if c not in memo:
-                        memo[c] = sorted(math.hypot(c[1] - h["x"], c[2] - h["y"]) for h in houses)[wn - 1]
-                    return memo[c]
+                    # ...AND THE LAST TIE-BREAK IS THE NEIGHBORHOOD, NOT THE CENTROID (settlement-review,
+                    # Sawada 2026-08-18). Once the minimax bucket and the frame term are equal, the
+                    # remaining sort was `c[0]` - the seat's distance to the cluster CENTROID, computed
+                    # when the pool was built. On a ONE-lobed cluster that reads as "the most central
+                    # seat wins" and is fine. On a TWO-lobed one the centroid is the empty ground
+                    # BETWEEN the lobes, so the tie-break actively prefers the gap: Sawada's second well
+                    # moved off a seat serving 11 households within 300 ft onto one serving 5, and the
+                    # worst walk went 364 -> 493 ft. Same family as the `_extent_added` fix above and as
+                    # the standing rule against letting an aggregate stand in for the distributed thing
+                    # a verdict is about - a centroid is not a place anybody lives.
+                    #
+                    # The measure that IS the question: how tightly is this seat surrounded by
+                    # homesteads - the distance to the `want_near`-th nearest house, which is exactly
+                    # the rung's own "is this in a neighborhood" test, reused rather than restated.
+                    # Distance to the SINGLE nearest house was the ledger's sketch and is rejected: it
+                    # is minimized by hugging one outlying farmhouse, which is the same mistake in the
+                    # other direction. Every seat in the pool already passed the rung, so this only
+                    # orders seats that are all legally "among the dwellings".
+                    def _neighborhood(c: tuple[float, float, float], wn: int = want_near, memo: dict[tuple[float, float, float], float] = _near_of) -> float:
+                        if c not in memo:
+                            memo[c] = sorted(math.hypot(c[1] - h["x"], c[2] - h["y"]) for h in houses)[wn - 1]
+                        return memo[c]
 
-                # THE BELT TERM SITS BEHIND COVERAGE, not in front of it. Ranked first it is a
-                # filter, and it behaved like every other filter this function has tried: Mizuguchi's
-                # second well moved off a seat inside the belt and its worst walk went 203 -> 264 ft,
-                # on a map whose belt hole turned out not to be well-caused at all, so the trade
-                # bought nothing. Behind the minimax bucket it can only decide between seats that
-                # serve the households equally well - which is all "do not stand in the windbreak"
-                # was ever entitled to decide.
-                def _key(c: tuple[float, float, float]) -> tuple[float, int, float, float, float]:
-                    _w, _e = _worst_after(c), _extent_added(c)
-                    return ((_w + _e) // 66.0, _in_belt(c), _e, _w, _neighborhood(c))
+                    # THE BELT TERM SITS BEHIND COVERAGE, not in front of it. Ranked first it is a
+                    # filter, and it behaved like every other filter this function has tried: Mizuguchi's
+                    # second well moved off a seat inside the belt and its worst walk went 203 -> 264 ft,
+                    # on a map whose belt hole turned out not to be well-caused at all, so the trade
+                    # bought nothing. Behind the minimax bucket it can only decide between seats that
+                    # serve the households equally well - which is all "do not stand in the windbreak"
+                    # was ever entitled to decide.
+                    def _key(c: tuple[float, float, float]) -> tuple[float, int, float, float, float]:
+                        _w, _e = _worst_after(c), _extent_added(c)
+                        return ((_w + _e) // 66.0, _in_belt(c), _e, _w, _neighborhood(c))
 
-                pool.sort(key=_key)
-                _sorted_at = len(placed)
-            _, x, y = pool.pop(0)
-            if any(math.hypot(x - px, y - py) < 170.0 for px, py in placed):
-                continue  # `wells_not_clustered`: shared wells serve separate courtyards
-            if crop_extent_added(s, (x, y), xs, ys) > 0.0:
-                # NO WELL HOLDS THE CROP OPEN (feature 287, homes H12): the frame term was a score because a padded seat was
-                # sometimes the only way to water a household; the pockets water every one now, so a lattice well that
-                # reaches past the box the crop will set is refused, not drawn
-                continue
-            if s.well_at(x, y):
-                placed.append((x, y))
+                    pool.sort(key=_key)
+                    _sorted_at = len(placed)
+                _, x, y = pool.pop(0)
+                if any(math.hypot(x - px, y - py) < 170.0 for px, py in placed):
+                    continue  # `wells_not_clustered`: shared wells serve separate courtyards
+                if crop_extent_added(s, (x, y), xs, ys) > 0.0:
+                    # NO WELL HOLDS THE CROP OPEN (feature 287, homes H12): the frame term was a score because a padded seat was
+                    # sometimes the only way to water a household; the pockets water every one now, so a lattice well that
+                    # reaches past the box the crop will set is refused, not drawn
+                    continue
+                if s.well_at(x, y):
+                    placed.append((x, y))
     # NO RESCUE AND NO LAST RESORT (feature 287, homes H10-H12). A ring probe spiraled out from each dry household and
     # `open_seat` was asked when the lattice found nothing; both are gone, because what they rescued is carried by
     # construction now: every household seated is within `WATER_REACH_FT` of a well pocket or of open water

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import heapq
 import math
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 
 from l7r.diagram.settlement import seg_closest, seg_intersect, segments_cross
 
@@ -35,8 +35,43 @@ def _clear_link(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: li
     # bridged - and the lane ink then crossed a house or a garden bed
     # (`features_do_not_overlap`, `houses_clear_of_lanes`). A link is walkable only if it survives
     # end to end.
-    runs = clear_runs([a, b], hard, WEB_HARD_GAP, step=3.0, lines=water, tight=walls, tight_margin=gap, floor=0.5, index=index)
-    return any(polyline_len(r) >= span - 3.0 for r in runs)
+    if not hard and not water and not walls:
+        return True  # `clear_runs` hands the link back whole
+    fouled = (index if index is not None else fabric_index(hard, WEB_HARD_GAP, walls, gap, water, 14.0)).fouled
+    return link_survives(a, b, fouled, span - 3.0)
+
+
+_LINK_STEP = 3.0  # ft: `_clear_link`'s sample pitch along the link
+_LINK_FLOOR = 0.5  # ft: the shortest run `_clear_link` counts (`clear_runs`' floor as it asks)
+_LINK_EPS = 1e-6  # ft: past any rounding between a run's summed legs and its chord
+
+
+def link_survives(a: Pt, b: Pt, fouled: Callable[[Pt], bool], need: float) -> bool:
+    """`any(polyline_len(r) >= need for r in clear_runs([a, b], ..., step=3.0, floor=0.5))` - the SAME samples asked the SAME
+    `fouled`, in order - but decided as soon as it is known (dev/performance.md, shape one): the string-pull of `_route` asks a
+    link from each vertex to every later one, longest first, and nearly every long one is fouled near its middle, so the walk
+    of its every sample was the router's second cost (cohort seed 44, 928 links). It answers True once a clear run in progress
+    is already longer than `need` (a run only grows), and False once a fouled sample leaves too little link after it for any
+    run to be; the length that decides is the run's own `polyline_len`, with a margin past rounding on each early answer."""
+    n = max(1, int(math.hypot(b[0] - a[0], b[1] - a[1]) / _LINK_STEP))
+    thr = max(need, _LINK_FLOOR)
+    run: Poly = []
+    done = 0.0  # the run's length so far, summed leg by leg (`polyline_len` sums the same legs)
+    for k in range(n + 1):
+        q = a if k == 0 else (a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n)
+        if fouled(q):
+            if len(run) >= 2 and (length := polyline_len(run)) >= _LINK_FLOOR and length >= need:
+                return True
+            if math.dist(q, b) + _LINK_EPS < thr:
+                return False  # every run after this sample lies within the rest of the link, shorter than asked
+            run, done = [], 0.0
+            continue
+        if run:
+            done += math.hypot(q[0] - run[-1][0], q[1] - run[-1][1])
+        run.append(q)
+        if len(run) >= 2 and done > thr + _LINK_EPS:
+            return True
+    return len(run) >= 2 and (length := polyline_len(run)) >= _LINK_FLOOR and length >= need
 
 
 def existing_walk(ways: Sequence[Poly], a: Pt, b: Pt, touch: float) -> float | None:

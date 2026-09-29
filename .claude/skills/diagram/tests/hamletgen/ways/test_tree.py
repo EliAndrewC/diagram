@@ -164,6 +164,14 @@ def test_the_seating_asks_the_tree_of_a_bundle_as_it_will_be_drawn() -> None:
     assert tree.seating_law(s) is not first, "a house seated: the law is read again"
     judge = tree.seating_judge(s)
     assert judge([(100.0, 48.0), (100.0, 0.0)], geom) and not judge([(100.0, 48.0), (100.0, -300.0)], geom)
+    # ...over ONE view of the manifest, so the worked ground is built once for the seating, and the runs laid so far go on to
+    # the next house's law (feature 287 perf: a fresh view per house rebuilt the union of the field's plots each time)
+    second = tree.seating_law(s)
+    laid = second.__dict__["_tree_laid"]
+    s.M["houses"].append(_house(760.0, 760.0))
+    third = tree.seating_law(s)
+    assert third is not second and third.ground is second.ground is first.ground
+    assert third.__dict__["_tree_laid"] is laid
 
 
 # ---- the draw ----------------------------------------------------------------------------------------------------------
