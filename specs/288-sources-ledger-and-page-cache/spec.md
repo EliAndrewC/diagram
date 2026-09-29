@@ -176,22 +176,15 @@ is not re-read without a reason. The feature-274 drift test stays green.
 
 ### Measurable Outcomes
 
-- **SC-001** Tests: an earlier line for a URL, in another spelling, is printed by source-pages, and by
-  `check-bundle KEY=<k> WHOLE=1`, before its fetch, and each save appends a `pending` line; an excerpt bundle
-  appends none (FR-001, FR-002, FR-003).
-- **SC-002** Tests: source-outcome records a well-formed outcome and refuses a malformed one; sources-consulted finds
-  lines by URL and by key regex (FR-004, FR-006).
-- **SC-003** Tests: reserve with `URL=` writes the ledger line; without it the stub and output are as before; a filled
-  entry is marked once by the fill pass (FR-005, FR-014).
-- **SC-004** The seeded ledger holds a line for every URL of `per_url.json`, and research.md states the count
-  (FR-007).
-- **SC-005** Tests: a second save of a URL makes no fetch and yields the same OUT files; `REFRESH=1` and an old copy
-  do fetch; check-bundle and quote-verbatim make no fetch for a cached page (FR-008, FR-009, FR-010).
-- **SC-006** The import leaves each distinct page of `/tmp/l7r-check` in the cache once, and reports its counts
-  (FR-012).
-- **SC-007** The two agent files carry the instruction; `test_agent_models.py` stays green (FR-011).
-- **SC-008** The two process files carry the rules; `test_page_session_rules.py` stays green (FR-013).
-- **SC-009** `make done` green with the coverage floor held (FR-015) (spec-wide).
+- **SC-001** (FR-001, FR-002, FR-003) Tests: an earlier line for a URL, in another spelling, is printed by source-pages, and by `check-bundle KEY=<k> WHOLE=1`, before its fetch, and each save appends a `pending` line; an excerpt bundle appends none.
+- **SC-002** (FR-004, FR-006) Tests: source-outcome records a well-formed outcome and refuses a malformed one; sources-consulted finds lines by URL and by key regex.
+- **SC-003** (FR-005, FR-014) Tests: reserve with `URL=` writes the ledger line; without it the stub and output are as before; a filled entry is marked once by the fill pass.
+- **SC-004** (FR-007) The seeded ledger holds a line for every URL of `per_url.json`, and research.md states the count.
+- **SC-005** (FR-008, FR-009, FR-010) Tests: a second save of a URL makes no fetch and yields the same OUT files; `REFRESH=1` and an old copy do fetch; check-bundle and quote-verbatim make no fetch for a cached page.
+- **SC-006** (FR-012) The import leaves each distinct page of `/tmp/l7r-check` in the cache once, and reports its counts.
+- **SC-007** (FR-011) The two agent files carry the instruction; `test_agent_models.py` stays green.
+- **SC-008** (FR-013) The two process files carry the rules; `test_page_session_rules.py` stays green.
+- **SC-009** (FR-015) (spec-wide) `make done` green with the coverage floor held.
 
 ## Decisions Recorded
 
@@ -224,3 +217,5 @@ is not re-read without a reason. The feature-274 drift test stays green.
 - Round 1 (spec-fidelity, 2026-09-29): CHANGES REQUIRED - D1 excluded the `WHOLE=1` bundle, a research read of a
   cited page for a new claim; D1, the edge case, FR-003 and SC-001 now ledger it, with `QUESTION=`.
 - Round 2 (spec-fidelity-verify, 2026-09-29): FAITHFUL - all three items resolved.
+- After acceptance, 2026-09-29: formatting only - each success criterion's FR list moved beside its id, where
+  spec-lint reads it; no wording changed.

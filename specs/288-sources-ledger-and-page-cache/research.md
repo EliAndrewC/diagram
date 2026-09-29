@@ -44,6 +44,6 @@ counted from `/diagram/.specify/sources-consulted.jsonl` and `/diagram/.specify/
 - **The first fill pass** (the first `make sources-consulted` after the seed) added 433 `cited:<key>` lines: registry
   entries whose pointer the measurement never saw read (entries written before 2026-09-26).
 - **The page-cache import:** 1,317 manifests under `/tmp/l7r-check`, 3,853 saved rows; 23 excerpts and 7 rows whose
-  file was gone were skipped; 2,365 distinct pages imported, 106 MB, each marked `exact: false`. R1's "4,612 saves of
+  file was gone were skipped; 2,365 distinct pages imported, 106 MB on disk (observed 2026-09-29 by the method above, `du -sh`), each marked `exact: false`. R1's "4,612 saves of
   3,089 pages" counted every saved-page READ the transcripts showed, excerpts and since-deleted runs among them; this
   counts the whole pages still on disk.
