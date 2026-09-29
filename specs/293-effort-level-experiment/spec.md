@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-29
 
-**Status**: Draft
+**Status**: Accepted (spec-fidelity FAITHFUL, round 2, 2026-09-29)
 
 **Input**: the GM's request, `request.md` (the handoff `~/.claude/handoffs/effort-experiment.md`, copied verbatim, and
 the GM's answers of 2026-09-29 that settled the tasks, the arms and the replication).
@@ -284,3 +284,11 @@ every change to a map is; the report links them.
 - Changing the Ubame sheet from task R's finding.
 - The burial ground's way at any tier above the hamlet.
 - Applying the recommended setting; the GM does that.
+
+## Review history
+
+- Round 1 (spec-fidelity, 2026-09-29): CHANGES REQUIRED - seven items: FR-011's adopt and keep clauses overlapped and left a
+  gap; expansion fired in one direction only; ad-hoc checkers were countable instead of fixed; the page-session runner would
+  run the research at the default effort in both arms; escalations and defects found later were missing; the thresholds' reasons
+  were unmeasured claims. All seven applied; the aside (alternate the arms) taken.
+- Round 2 (spec-fidelity-verify, 2026-09-29): FAITHFUL - all seven items resolved; the alternation within the request.
