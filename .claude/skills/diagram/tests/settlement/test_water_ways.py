@@ -846,17 +846,17 @@ def test_dropping_the_field_spur_is_always_recorded_and_a_passes_own_reason_is_k
     assert s.M["meta"]["field_spur_swept"] == "isolated - the pass's own words", "a pass that said why keeps its own reason"
 
 
-def test_a_drawn_stream_is_rounded_in_place_with_its_held_vertices_kept():
-    """`round_stream` (settlement-review of Sawada, feature 261): a stream already drawn has its corners filleted - the record
-    and the deferred bed and sheen together - and a held vertex stays on the course, each stretch rounded between its ends."""
+def test_a_drawn_stream_is_redrawn_on_the_rounded_course_it_is_handed():
+    """`round_stream` (settlement-review of Sawada, feature 261; feature 287): a stream already drawn is redrawn on the rounded
+    course it is handed - the record, the deferred bed and sheen, and its corridor together - and keeps its first course."""
     s = Settlement(800, 800, seed=1)
     s.meta(name="T", scale="hamlet", ftpx=1)
     s.stream([(100.0, 100.0), (400.0, 100.0), (400.0, 400.0), (700.0, 400.0)], width=9)
     rec = s.M["streams"][-1]
-    s.round_stream(rec, 22.5, hold=(2,))
-    poly = [tuple(p) for p in rec["poly"]]
-    assert poly[0] == (100.0, 100.0) and poly[-1] == (700.0, 400.0) and (400.0, 400.0) in poly, "the ends and the held vertex stay"
-    assert (400.0, 100.0) not in poly and len(poly) > 4, "the free corner is rounded"
+    rounded = [(100.0, 100.0), (380.0, 100.0), (400.0, 120.0), (400.0, 400.0), (700.0, 400.0)]
+    s.round_stream(rec, rounded)
+    assert [tuple(p) for p in rec["poly"]] == rounded, "the record is the course handed in"
+    assert any(list(c[0]) == rounded for c in s.corridors), "and so is the stream's no-build corridor"
     assert rec["stations"] == [[100.0, 100.0], [400.0, 100.0], [400.0, 400.0], [700.0, 400.0]], "the course as first drawn is kept"
     entry = next(e for e in s.water if e["rec"] is rec)
     assert "400.0,100.0" not in entry["bed"] and "400.0,100.0" not in entry["sheen"], "the ink follows the record"
@@ -868,6 +868,6 @@ def test_a_rounded_stream_also_redraws_a_late_or_clipped_entry():
     s.meta(name="T", scale="hamlet", ftpx=1)
     rec = {"poly": [[100.0, 100.0], [400.0, 100.0], [400.0, 400.0]], "w": 9}
     s.late_water.append({"bed": '<path d="M100,100 L400,100 L400,400"/>', "sheen": None, "rec": rec, "clip": {"pts": []}})
-    s.round_stream(rec, 22.5)
+    s.round_stream(rec, [(100.0, 100.0), (380.0, 100.0), (400.0, 120.0), (400.0, 400.0)])
     entry = s.late_water[-1]
     assert "L400,100 " not in entry["bed"] and entry["sheen"] is None and entry["clip"]["pts"] and entry["clip"]["pts"][0] == (100.0, 100.0)

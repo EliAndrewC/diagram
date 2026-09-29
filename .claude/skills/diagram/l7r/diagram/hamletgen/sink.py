@@ -15,6 +15,7 @@ from l7r.diagram.waterfields import DRAIN_FT, chan_px
 
 from .consts import GRAIN, POND_SETBACK_LIMIT, REF_HOUSEHOLDS, Poly, Pt
 from .plan import SitePlan
+from .water.brook import round_the_brooks
 
 # ---- STAGE 3: where the runoff goes -------------------------------------------------------------
 
@@ -344,7 +345,18 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.Settlement.pond
         l7r.diagram.settlement.land.wet.pond_fringe_ring
         l7r.diagram.settlement.Settlement.marsh
+        l7r.diagram.hamletgen.water.brook.round_the_brooks
+
+    THE WATER IS FINISHED HERE (feature 287, M2): the brook is rounded to the course the map draws as this stage's last
+    step, so the seat, the houses, the fords' tests and the decks all read one course.
     """
+    lay_sink(s, plan)
+    round_the_brooks(s)
+
+
+def lay_sink(s: Settlement, plan: SitePlan) -> None:
+    """`stage_sink` before the brook is rounded: the drain run to its tameike, to the passing brook or off the frame. A pond
+    the canvas cannot hold re-enters `stage_sink` as an off-map sink, whose rounding is the same course again."""
     name = f"{plan.spec.name.lower()}-paddies"
     out = drain_outfall(s, name)
     if out is None:

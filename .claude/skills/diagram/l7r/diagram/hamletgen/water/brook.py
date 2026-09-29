@@ -12,10 +12,12 @@ import re
 from collections.abc import Sequence
 
 from l7r.diagram.settlement import Settlement, knob_rng
+from l7r.diagram.settlement._geom import fillet_polyline
 from l7r.diagram.settlement._knobs import Knob, register_knob
 from l7r.diagram.sitegen.geom import crosses_poly, unit
 
 from ..consts import (
+    BROOK_BEND_WIDTHS,
     BROOK_FRAME_MARGIN,
     BROOK_MAX_TURN_DEG,
     BROOK_SKIRT,
@@ -125,6 +127,48 @@ def unfold(course: Poly, limit_deg: float) -> Poly:
                 changed = True
                 break
     return out
+
+
+def finished_course(course: Sequence[Pt], w: float, taps: Sequence[Pt] = ()) -> Poly:
+    """The brook's course AS DRAWN: `course` with its bends rounded at `BROOK_BEND_WIDTHS` of its width `w`, each vertex
+    within a foot of a tap in `taps` held where it is (feature 287, M2 - lifted out of `Settlement.round_stream`).
+
+    A natural brook turns on a curve like every earthen channel (`fillet_polyline`; research/water.html "Why does every
+    ditch turn on a curve?"; settlement-review of Sawada, feature 261: mitred corners of 27-47 degrees). A held vertex
+    splits the course and each stretch is rounded between its own ends, so the head race still leaves the course at the
+    tap where its offtake angle is measured. A function of the course, its width and the taps only, so the placer that
+    judges a brook and the stage that draws it read ONE geometry; a course of two points has no corner and comes back
+    as it is."""
+    pts = [(float(x), float(y)) for x, y in course]
+    if len(pts) < 3:
+        return pts
+    hold = {min(range(len(pts)), key=lambda k, t=t: math.dist(pts[k], t)) for t in taps if min(math.dist(p, t) for p in pts) <= 1.0}
+    out: Poly = []
+    start = 0
+    for k in [*sorted(k for k in hold if 0 < k < len(pts) - 1), len(pts) - 1]:
+        part = fillet_polyline(pts[start : k + 1], BROOK_BEND_WIDTHS * w)
+        out += part[1:] if out else part
+        start = k
+    return out
+
+
+def round_the_brooks(s: Settlement) -> None:
+    """Every brook drawn at its `finished_course`, THE FINAL WATER BEFORE ANYTHING READS IT (feature 287, M2).
+
+    Run as the last step of `stage_sink`, the end of the water stages, so every later bank, seat, corridor, ford and deck
+    test reads the course the map draws. It ran in `stage_crossings` until feature 287, six stages after the brook was
+    laid: the houses were seated against one course and the crossings squared and decked against another, and the test
+    of a ford read a course the fords were never set on. The WAYS STILL ROUTE AGAINST THE COURSE AS FIRST DRAWN
+    (`ways.checks.stream_segs` reads its `stations`; the fords and the crossing band read `plan.brook`), for the reason
+    `Settlement.round_stream` records: rounding the brook before the ways were routed moved every way its corners had
+    shaped. The tap - the first point of every head race taken off a stream - is held. Rounded from the `stations` when
+    they are recorded, so a second pass draws the same course rather than rounding the rounded one."""
+    heads = [(float(c["poly"][0][0]), float(c["poly"][0][1])) for c in s.M.get("channels") or [] if (c.get("frm") or {}).get("kind") == "stream" and c.get("poly")]
+    for rec in s.M.get("streams") or []:
+        course = rec.get("stations") or rec.get("poly") or []
+        if len(course) < 3:
+            continue
+        s.round_stream(rec, finished_course(course, float(rec.get("w") or 7.0), heads))
 
 
 def _off_the_axes(course: Poly, away: Pt, eps: float = 1.6, nudge: float = 11.0, hold: int = 0) -> Poly:

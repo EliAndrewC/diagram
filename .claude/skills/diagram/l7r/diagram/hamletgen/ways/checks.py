@@ -45,8 +45,14 @@ def stream_segs(s: Settlement) -> list[tuple[Pt, Pt]]:
     THE BROOK HAS CROSSINGS (feature 261): where `stage_ways` has opened fords (`s.brook_fords`), the stream's
     segments come back with a short gap at each, so the router may carry a way over the brook there - and only
     there, and only near square, because the gap is shorter than the corridor is deep. `bridges()` reads the
-    UNgapped `M["streams"]` and decks every such crossing."""
-    segs = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for st in s.M.get("streams", []) if st.get("poly") for a, b in zip(st["poly"], st["poly"][1:], strict=False)]
+    UNgapped `M["streams"]` and decks every such crossing.
+
+    THE COURSE AS FIRST DRAWN (feature 287, M2): the brook is rounded at the end of the water stages now, before the ways,
+    and a way is still routed against its `stations` - the course before the rounding - because rounding the brook before
+    the ways were routed moved every way its corners had shaped (`Settlement.round_stream`). The fords (`brook_fords`) and
+    the crossing band (`set_crossing`) read the same unrounded course, `plan.brook`."""
+    courses = [st.get("stations") or st.get("poly") or [] for st in s.M.get("streams", [])]
+    segs = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for c in courses for a, b in zip(c, c[1:], strict=False)]
     return gap_segments(segs, getattr(s, "brook_fords", ()), FORD_HALF)
 
 
