@@ -15,6 +15,19 @@ if TYPE_CHECKING:
 
 
 ALDER_GREENS = ("#5E7F6A", "#6B8A74")  # the alder crowns' tint (a map drawing convention, `_draw_grove`)
+GROVE_CLUMP_CROWNS = 28  # the most crowns one `_draw_grove` clump throws
+GROVE_CROWN_AREA = 48.0  # sq px of clump per crown at the town grain (~one 5 m crown); scaled by (bscale / 0.82) ** 2
+
+
+def band_clumps(cx: float, cy: float, w: float, h: float, cap_area: float) -> list[tuple[float, float, float, float]]:
+    """A grove band cut along its longer side into equal pieces of at most `cap_area` each (feature 291), so a band
+    larger than one clump's cap is drawn as several clumps at the one density rather than one sparse clump."""
+    k = max(1, math.ceil(w * h / cap_area)) if cap_area > 0 else 1
+    if w >= h:
+        return [(cx - w / 2 + w * (i + 0.5) / k, cy, w / k, h) for i in range(k)]
+    return [(cx, cy - h / 2 + h * (i + 0.5) / k, w, h / k) for i in range(k)]
+
+
 GROVE_BAMBOO_SHARE = 0.08  # of a windbreak clump's items, the bamboo under its crowns: a GUESS (269 B29, vegetation/260)
 
 # THE VILLAGE BELT HAS TWO ATTESTED FORMS, SO IT IS A KNOB (269 B30; research/vegetation/270, "Was a windbreak one kind of
@@ -504,7 +517,7 @@ class GrovesMixin:
             bs = self.bscale / 0.82  # render scale relative to the town grain
             st = random.getstate()
             random.seed(int(abs(cx) * 5 + abs(cy) * 3 + round(w)))
-            n = max(5, min(28, round(w * h / (bs * bs * 48))))  # ~ one crown per ~48 px^2 at 2 ft/px (a ~5 m crown); ~40 across the 6:1 L-grove
+            n = max(5, min(GROVE_CLUMP_CROWNS, round(w * h / (bs * bs * GROVE_CROWN_AREA))))  # ~ one crown per ~48 px^2 at 2 ft/px (a ~5 m crown); ~40 across the 6:1 L-grove
             # BAMBOO LEFT THE MIX (feature 133 T47, GM 2026-08-27). It used to be 20% of a windbreak's
             # crowns and 45% of a dooryard copse's, drawn one culm at a time - 315 six-foot glyphs on
             # Inashiro that no one could see as bamboo, and not how bamboo grows: a stand is a clonal

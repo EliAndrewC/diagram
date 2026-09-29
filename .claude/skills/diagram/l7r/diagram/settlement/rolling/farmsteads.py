@@ -7,6 +7,7 @@ import math
 from typing import TYPE_CHECKING, Any, cast
 
 from .._geom import Indexed
+from ..homestead_parts.groves import GROVE_CLUMP_CROWNS, GROVE_CROWN_AREA, band_clumps
 from .fit import part_box
 
 if TYPE_CHECKING:
@@ -63,8 +64,21 @@ class FarmsteadFlushMixin:
         # (The arm rects themselves are recorded above, before _relax_gardens_south, which needs them.)
         # A THIN BAND draws as lesser trees - fruit and flowering broadleaf, no conifer (`dooryard`; Tonami's sides away
         # from the wind carried flowering trees, persimmon and fig, and hackberry and alder): the mix a GUESS (feature 291).
+        # ...AND A BAND IS DRAWN AS CLUMPS OF ONE CLUMP'S SIZE (feature 291, the settlement-review of Kashikawa): `_draw_grove`
+        # caps a clump at 28 crowns, one to about 48 sq px at the town grain, so a deep band - 40 x 80 ft, room for some 67 -
+        # drew at 0.57 of its box under canopy against the thin band's 0.78. Cut along its length into pieces that hold no
+        # more than the cap, every band is drawn at the one density.
+        _cap = GROVE_CLUMP_CROWNS * GROVE_CROWN_AREA * (self.bscale / 0.82) ** 2
+        # ...WITH ITS CANOPY'S EDGE, NOT ITS TRUNKS, AT THE BAND'S INNER EDGE: a clump seats its crowns' centers inside its box,
+        # so a crown overhung the service strip by its radius, and once the bands drew at their full density a wood shed's
+        # seat there was under a crown (Mizuguchi seated 4 of 5). The drawn box gives up one crown radius on the house's side.
+        _inset = self.px(self.CANOPY_R_FT)
         for cx, cy, w, h, face, depth in arms:
-            self._draw_grove(cx, cy, w, h, face, mix="windbreak" if depth == "deep" else "dooryard", cls="homestead grove")
+            fx, fy = (float(face[0]), float(face[1])) if face else (0.0, 0.0)
+            cx, cy = cx + fx * _inset / 2, cy + fy * _inset / 2
+            w, h = max(4.0, w - abs(fx) * _inset), max(4.0, h - abs(fy) * _inset)
+            for px_, py_, pw, ph in band_clumps(cx, cy, w, h, _cap):
+                self._draw_grove(px_, py_, pw, ph, face, mix="windbreak" if depth == "deep" else "dooryard", cls="homestead grove")
         self.M["houses"] = Indexed(
             [h for h in self.M["houses"] if h.get("on_dike")] + survivors
         )  # dike-top houses (dike_top_houses) are not pending farmsteads - keep them; Indexed for the fit rules' index

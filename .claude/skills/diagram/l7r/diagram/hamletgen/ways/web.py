@@ -378,8 +378,8 @@ def _lay_street(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
         if len(leg) < 2 and path:
             continue  # no route to this door: the stragglers serve it
         path += leg[1:] if path else leg
-    if len(path) >= 2:
-        _draw_web(s, path, 5, houses=[(float(h["x"]), float(h["y"])) for h in houses])
+    if len(path) >= 2 and _draw_web(s, path, 5, houses=[(float(h["x"]), float(h["y"])) for h in houses]):
+        s.M["lanes"][-1]["street"] = True  # the row's street, said so: a reader of the manifest cannot tell it by its role
 
 
 def stage_web(s: Settlement, plan: SitePlan) -> None:

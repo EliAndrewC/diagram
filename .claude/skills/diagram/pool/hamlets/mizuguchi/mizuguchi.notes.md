@@ -869,6 +869,6 @@ nucleated and did not move.
 - **Two farms' groves stand at least 32 ft apart**, a lane's room, and the lanes are routed round the bands, never through
   them (homesteads/715).
 
-Measured on this roll (2026-09-29): 12 houses, all 12 grove farms; 24 bands, all deep; bath rooms 3 (all stable_end), wood
+Measured on this roll (2026-09-29): 12 houses, all 12 grove farms, 11 within 80 ft of the street; 24 bands, all deep; bath rooms 3 (all stable_end), wood
 sheds 5, privies 11, coops 10, manure heaps 8, shrine 1 - every declared fixture seated, none inside a band; 8 lanes; no
 lane across a band; attempt 1, no farmhouse off the way network.
