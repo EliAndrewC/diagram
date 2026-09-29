@@ -1,10 +1,9 @@
-"""Feature 291: a grove farm is reached at its front door - `front_door`, `street_doors`, `lay_door_paths`."""
+"""Feature 291: a grove farm is reached at its front door - `front_door`, `lay_door_paths`, `own_street`."""
 
 from __future__ import annotations
 
 from l7r.diagram.hamletgen.consts import FOOTPATH_FABRIC_GAP
 from l7r.diagram.hamletgen.ways.serve import DOOR_REACH_FT, front_door, lay_door_paths
-from l7r.diagram.hamletgen.ways.web import street_doors
 from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement.homestead_parts.grove_sides import bundle_turn
 from l7r.diagram.settlement.rolling.dispersed import dispersed_layout
@@ -29,13 +28,6 @@ def test_a_ring_s_door_lines_up_with_its_way_in() -> None:
     assert door is not None and len(halves) == 2
     lo, hi = sorted(halves)
     assert lo[0] + lo[2] / 2 < door[0] < hi[0] - hi[2] / 2, "between the two halves of the front band"
-
-
-def test_street_doors_come_in_row_order() -> None:
-    a, b, c = _farm(300.0, 400.0), _farm(700.0, 400.0), _farm(500.0, 400.0)
-    doors = street_doors([a, b, c], [0.0, 2.0, 1.0], 8.0)
-    assert [round(d[0]) for d in doors] == sorted(round(d[0]) for d in doors), "sorted by each farm's arc"
-    assert street_doors([{"x": 1.0, "y": 2.0, "geom": {}}], [0.0], 8.0) == [(1.0, 2.0)], "a farm with no front door is its center"
 
 
 def test_a_door_far_from_the_lanes_gets_a_footpath_to_them() -> None:

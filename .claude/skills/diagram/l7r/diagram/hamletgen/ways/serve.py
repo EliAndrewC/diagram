@@ -696,22 +696,34 @@ The front is the side the grove leaves open for the way in (research/homesteads/
 - about a yard's depth past the door - is a GUESS at 'at the door'."""
 
 
+def own_street(h: Mapping[str, Any], streets: Sequence[Sequence[tuple[Pt, Pt]]]) -> int | None:
+    """The index of the street a row farm stands on - the nearest to its house - or None where no street is laid."""
+    if not streets:
+        return None
+    hx, hy = float(h["x"]), float(h["y"])
+    return min(range(len(streets)), key=lambda k: min((seg_dist(hx, hy, a, b) for a, b in streets[k]), default=float("inf")))
+
+
 def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], reach: float = DOOR_REACH_FT) -> int:
-    """A footpath from each grove farm's front door (`front_door`) that stands more than `reach` from the connected lane
-    network to the network, routed round the steadings and never across a farm's fabric; the nearest few points on the
-    network are tried, nearest first. Returns the paths drawn."""
+    """A footpath from each grove farm's front door (`front_door`) to the ways, where the door stands more than `reach`
+    from them: to the connected lane network, or - for a row farm (feature 291 plan D17) - to its OWN street (the nearest
+    street laid, `own_street`), routed round the farm's grove when the street lies on its windward side. Each path records
+    the farm it serves (`serves`); the nearest few points are tried, nearest first. Returns the paths drawn."""
     from .checks import served_network  # local: checks sits above serve in this package's layers
 
     n = 0
     for h in list(s.M.get("houses", [])):
         door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
-        segs = served_network(s.M.get("lanes") or [])
-        if door is None or not segs or min(seg_dist(door[0], door[1], a, b) for a, b in segs) <= reach:
+        streets = [[(tuple(a), tuple(b)) for a, b in zip(ln["pts"], ln["pts"][1:], strict=False)] for ln in s.M.get("lanes") or [] if ln.get("street")]
+        k = own_street(h, streets)  # type: ignore[arg-type]
+        segs = streets[k] if k is not None else served_network(s.M.get("lanes") or [])
+        if door is None or not segs or min(seg_dist(door[0], door[1], a, b) for a, b in segs) <= reach:  # type: ignore[arg-type]
             continue
-        near = sorted((seg_closest(door[0], door[1], a, b) for a, b in segs), key=lambda q: math.dist(q, door))[:6]
+        near = sorted((seg_closest(door[0], door[1], a, b) for a, b in segs), key=lambda q: math.dist(q, door))[:6]  # type: ignore[arg-type]
         for q in near:
             path = _route(door, q, hard, walls, water, gap=FOOTPATH_FABRIC_GAP)
             if len(path) >= 2 and not _crosses_fabric(path, walls, 0.0) and _draw_web(s, path, 3, houses=[(float(h["x"]), float(h["y"]))], joins=True):
+                s.M["lanes"][-1]["serves"] = [float(h["x"]), float(h["y"])]
                 n += 1
                 break
     return n

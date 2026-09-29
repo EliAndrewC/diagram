@@ -1,6 +1,6 @@
 {
  "feature": "291-homestead-grove-sides",
- "plan_sha256": "d0a492a1c3dac8b6eef2a38471a924dae2893a64efcc975d8cf382af926b53da",
+ "plan_sha256": "2d7a096c4066e480263af0c6be2951bee0231d5564556b85db30e5cf146c4841",
  "reviewed": "2026-09-29",
  "declared": "spec-fidelity",
  "decisions": [
@@ -30,10 +30,10 @@
   },
   {
    "id": "D5",
-   "summary": "A four-sided ring's front band broken once at the yard's center for a 12 ft way in (width a GUESS)",
+   "summary": "A four-sided ring's front band broken once at the yard's center for a way in about 36 ft wide (WAY_IN_FT; width a GUESS)",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "A literally closed ring is physically incompatible with the spec's own FR-010 (no grove on a lane tread; every household seated and reached) and with the request's purpose, a grove round a house people live in. 'Completely surrounding' farmhouses in the GM's words describes a planted ring, which the four planted sides remain; one opening at the minimum lane width is the least the physics requires, on the front the spec already names as the way-in side."
+   "why": "Unchanged in kind from round 1: one opening, on the front the spec names as the way-in side, is what FR-010 (every household seated and reached, no grove on a lane tread) physically requires of a closed ring. The width moved from 12 ft to 36 ft on a measurement (cohort seed 12: at 12 ft no route at cells 10, 5 or 3 and 14 of 17 farms stranded; the router keeps about 22 ft of the opening clear), recorded in dispersed.py and homesteads/715 as a GUESS set by that necessity. Four planted sides remain, so the ring the GM approved is not gutted."
   },
   {
    "id": "D6",
@@ -82,6 +82,43 @@
    "summary": "The two nucleated overlaps the matrix found (seeds 17, 20) fixed whether pre-existing or regressions",
    "class": "within",
    "why": "Not an addition to the request: once the matrix runs in the cohort (D7), SC-005 requires every seed's checks green, and a defect found in the work is fixed under XIV. It narrows nothing."
+  },
+  {
+   "id": "D14",
+   "summary": "rows.py row_line: flood_ground takes edge; else even-odds street/edge knob, pinnable, meta.row_line; edge = the field envelope buffered out (curving arc), street = a straight chord; row length n_side x frame centered on the seat, clipped to the canvas",
+   "class": "within",
+   "why": "FR-013 word for word: both attested lines, the site's line on flood ground, even odds otherwise, pinnable and recorded; the straight surveyed street and the margin-following edge are the spec's own forms."
+  },
+  {
+   "id": "D15",
+   "summary": "row_sides knob one/both (even odds, pinnable, meta.row_sides); farms one frame apart; ONE = street between the row and its field, BOTH = near row and far row either side of a street set out from the field; seats center-out; a full line grows a parallel street; the front-row, rank and rescue passes do not run for a linear hamlet",
+   "class": "within",
+   "why": "FR-014, FR-015 and FR-016. Switching off the rank and rescue passes enforces FR-013's 'never in ranks behind the row'; the overflow goes to FR-016's parallel street, and FR-010 / SC-005 still require every household seated."
+  },
+  {
+   "id": "D16",
+   "summary": "On BOTH, the far row's holding is behind its lot (street: a strip one frame wide and three deep in the near ring's plots; edge: one frame deep, compact, near the house), RESERVED at seating (placed box + block_polys ring) so later placers keep off; a far farm with no room for its holding is not seated there; only a canvas-edge clip or a single plot on water or a lane is dropped, never the whole holding",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Round 1's findings are cured: the holding is behind the lot on both lines, compact and near the house on the edge (homesteads/156), and reserved so it cannot be crowded out. The one narrowing, a plot left undrawn, is taken case by case. A canvas-edge clip is forced by the sheet and is what homesteads/156 says a sheet shows ('only the near end of a 2,240-ft strip'). A single plot under water or a lane cannot be farmed; since the holding is reserved before later placers run, that case arises only where they cannot route round it. The holding itself is always drawn behind the farm, as FR-015 and SC-007 require. Depth and crop are GUESSES the spec already carries."
+  },
+  {
+   "id": "D17",
+   "summary": "Each planned street laid as one width-6 lane (web lanes 3-5), joined to the connector or the previous street; no skeleton arms or web cuts for a linear hamlet with planned streets; each row farm's door path targets its own street, routed round its grove when the street is on the windward side, and records its farm",
+   "class": "within",
+   "why": "FR-017 (one continuous way, joined to the connector, a rank wider, every farm reaching it) and FR-019 (the front door reached). Round 1's finding is cured: the way ends on the farm's own street. Leaving out the arms is not a narrowing: the request asks for no arms, and the streets are the lines FR-013 names."
+  },
+  {
+   "id": "D18",
+   "summary": "The dispersed bundle carries its well's seat in its layout (dooryard beside the yard, away from the garden, off the way in), drawn by own_wells; linear row_water knob own/shared (even odds, pinnable, meta.row_water); shared wells beside each street between lots, at least one every floor(reach/frame) farms, the reach the watering rule's 760 ft (WATER_REACH_FT)",
+   "class": "within",
+   "why": "FR-018 exactly: the dispersed farm's own well in its dooryard, off its way in (homesteads/200), and the row's water a recorded, pinnable, even-odds knob with shared wells within reach of the farms they serve. Round 1's finding is cured: spacing is taken from the reach, and the layout carries the well, so no farm is seated without water."
+  },
+  {
+   "id": "D19",
+   "summary": "row_rules, water_rules, doors_unreached and bamboo_mismatch predicates; the cohort audit runs them on every roll and adds pinned linear specs covering each value of row_line, row_sides and row_water; the gate test runs them on the linear pool maps",
+   "class": "within",
+   "why": "Enforcement of SC-007 and SC-008 clause by clause. Pinned specs make 'both values appear' certain rather than left to the roll. Delete the requested behavior and these checks have nothing left to check, so they enforce the request (GM 2026-09-20)."
   }
  ],
  "verdict": "CLEAR"

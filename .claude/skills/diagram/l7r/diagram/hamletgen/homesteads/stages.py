@@ -704,5 +704,9 @@ def stage_appurtenances(s: Settlement, plan: SitePlan) -> None:
     """
     houses = s.M.get("houses", [])
     place_wells(s, plan, houses)
+    if getattr(s, "_row_holdings", None):  # a row village's far-row holdings, reserved at seating (feature 291 plan D16)
+        from .rows import draw_holdings
+
+        s.M["meta"]["row_holdings_drawn"] = draw_holdings(s)
     s.draft_byres(fraction=0.22, gap=60)
     retirement_houses(s, plan)  # after the byres, so the draft team keeps the seats it always had (269 B42)

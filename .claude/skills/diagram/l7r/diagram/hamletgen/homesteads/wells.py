@@ -67,6 +67,11 @@ def own_wells(s: Settlement, houses: Sequence[Mapping[str, Any]]) -> int:
     n = 0
     for h in houses:
         hx, hy = float(h["x"]), float(h["y"])
+        seat_in_layout = (h.get("geom") or {}).get("well")
+        if seat_in_layout is not None:  # the layout's own seat (plan D18): reserved with the farm, so it is always there
+            s.well(float(seat_in_layout[0]), float(seat_in_layout[1]), private=True)
+            n += 1
+            continue
         frame = homestead_box(s.placed, hx, hy)
         boxes: list[tuple[float, float, float, float]] = [(float(p[0]), float(p[1]), float(p[2]), float(p[3])) for p in s.placed if (float(p[0]), float(p[1]), float(p[2]), float(p[3])) != frame] + bands
         # ...THE DOORYARD SIDE FIRST: the seats nearest the farm's work yard, so the well stands in the dooryard and leaves the
@@ -83,6 +88,74 @@ def own_wells(s: Settlement, houses: Sequence[Mapping[str, Any]]) -> int:
         if seat is not None:
             s.well(seat[0], seat[1], private=True)
             n += 1
+    return n
+
+
+WATER_REACH_FT = 760.0
+"""The watering rule's reach (`surface_water_dist` against 760 ft, `place_wells` below; the gate's `WATER_REACH_FT`)."""
+
+
+def shared_row_wells(s: Settlement, houses: Sequence[Mapping[str, Any]], streets: Sequence[Sequence[Pt]]) -> int:
+    """A row village that shares its water (`row_water` shared, feature 291 plan D18): along each street, wells beside the
+    street, one at the middle of each equal stretch of the row no longer than 1.6 reaches (the watering rule's reach), so
+    every farm of every row stands within reach of one. A seat is tried at each mark and a half and a quarter lot either
+    way, on either side of the tread. Returns the wells seated."""
+    if not streets or not houses:
+        return 0
+    half = s._well_vr()
+    boxes = [(float(p[0]), float(p[1]), float(p[2]), float(p[3])) for p in s.placed] + [
+        (float(g["x"]), float(g["y"]), float(g["w"]), float(g["h"])) for g in s.M.get("groves", []) if all(k in g for k in ("x", "y", "w", "h"))
+    ]
+    frame_w = max((max(float(b[2]), float(b[3])) for b in ((h.get("geom") or {}).get("bbox") for h in houses) if b), default=s.px(240.0))
+    reach = s.px(WATER_REACH_FT)
+    n = 0
+    for line in streets:
+        if len(line) < 2:
+            continue
+        arc = [0.0]
+        for a, b in zip(line, line[1:], strict=False):
+            arc.append(arc[-1] + math.dist(a, b))
+
+        def along(p: Pt, _line: Sequence[Pt] = line, _arc: Sequence[float] = arc) -> tuple[float, float, Pt]:
+            best = min(((seg_dist(p[0], p[1], a, b), i) for i, (a, b) in enumerate(zip(_line, _line[1:], strict=False))), key=lambda t: t[0])
+            a, b = _line[best[1]], _line[best[1] + 1]
+            seg = math.dist(a, b) or 1.0
+            t = max(0.0, min(1.0, ((p[0] - a[0]) * (b[0] - a[0]) + (p[1] - a[1]) * (b[1] - a[1])) / (seg * seg)))
+            q = (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t)
+            return _arc[best[1]] + seg * t, best[0], q
+
+        mine = sorted(((along((float(h["x"]), float(h["y"]))), h) for h in houses), key=lambda t: t[0][0])
+        mine = [(u, h) for (u, d, _q), h in mine if d <= 2.0 * frame_w]
+        if not mine:
+            continue
+        us = [u for u, _h in mine]
+        # SPACED BY DISTANCE ALONG THE STREET, not by farms: a both-sided row has two farms at every step, and a stride in
+        # farms dug a well at every one and a half lots (Kashikawa: 16 wells for 20 farms). The row is cut into equal
+        # stretches no longer than 1.6 reaches and a well dug at each one's middle: every farm is then within 0.8 of a
+        # reach of one along the street, the rest of the reach left for the lot's depth across it.
+        span = us[-1] - us[0]
+        stretches = max(1, math.ceil(span / (1.6 * reach)))
+        for u in [us[0] + span * (j + 0.5) / stretches for j in range(stretches)]:
+            for du in (0.0, frame_w / 2, -frame_w / 2, frame_w / 4, -frame_w / 4):
+                uu = max(0.0, min(arc[-1], u + du))
+                k = max(0, min(len(arc) - 2, next(j for j in range(len(arc) - 1) if arc[j + 1] >= uu)))
+                a, b = line[k], line[k + 1]
+                seg = math.dist(a, b) or 1.0
+                f = (uu - arc[k]) / seg
+                p = (a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f)
+                nx, ny = -(b[1] - a[1]) / seg, (b[0] - a[0]) / seg
+                seated = False
+                for sgn in (1.0, -1.0):
+                    off = half + s.px(8.0)  # off the street's tread, beside it
+                    x, y = p[0] + sgn * nx * off, p[1] + sgn * ny * off
+                    if own_well_clear(s, x, y, half, boxes):
+                        s.well(x, y)
+                        boxes.append((x, y, 2 * half, 2 * half))
+                        n += 1
+                        seated = True
+                        break
+                if seated:
+                    break
     return n
 
 
@@ -103,7 +176,12 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
     footprint or too near another well - so nothing here restates a placement rule."""
     grove_farms = [h for h in houses if (h.get("geom") or {}).get("groves")]
     if grove_farms:
-        own_wells(s, grove_farms)
+        streets = getattr(s, "_row_streets", None) or []
+        if plan.settlement_form == "linear" and plan.row_water == "shared" and streets:
+            shared_row_wells(s, grove_farms, streets)
+        else:
+            own_wells(s, grove_farms)
+        s.M["meta"]["row_water_drawn"] = plan.row_water if plan.settlement_form == "linear" else None
         houses = [h for h in houses if h not in grove_farms]  # the communal wells serve the rest, if any
         if not houses:
             return len(s.M.get("wells", []))

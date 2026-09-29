@@ -30,7 +30,8 @@ from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _draw_web, _homestead_polys, _ma
 from .geom import _components, _trim_to_service, polyline_len, steading_footprints
 from .joints import center_lane_ends, fold_the_connector_hairpin, meet_end_to_end, split_at_crossings, straighten_joints
 from .route import _route
-from .serve import _lay_web_lane, _serve_stragglers, front_door, lay_door_paths
+from .serve import _lay_web_lane, _serve_stragglers, lay_door_paths
+from .street import lay_row_streets
 from .smooth import _STUB_REACH_FT, _smooth_web
 from .sweeps import (
     _bridge_collinear_breaks,
@@ -347,41 +348,6 @@ def unsplitting_drops(lanes: Sequence[Mapping[str, Any]], drops: Sequence[int]) 
     return sorted(gone)
 
 
-def street_doors(houses: Sequence[Mapping[str, Any]], arcs: Sequence[float], clear: float) -> list[Pt]:
-    """A row village's doors in order along its row: each farm's front door (`serve.front_door`, the open ground past its
-    yard) - or, for a farm with no grove of its own, its center - sorted by `arcs`, each house's position along the margin."""
-    out = []
-    for h, _a in sorted(zip(houses, arcs, strict=True), key=lambda t: t[1]):
-        d = front_door(h, clear)
-        out.append(d if d is not None else (float(h["x"]), float(h["y"])))
-    return out
-
-
-def _lay_street(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]], arcs: Sequence[float]) -> None:
-    """THE ROW VILLAGE'S STREET (feature 291; research/homesteads/150, "LINEAR": the farmsteads strung along a way, each
-    fronting it). Laid first in the web, before any cut or straggler: a lane from door to door along the row, each hop
-    routed round what stands between (`_route`), joined at its nearer end to the connector. Without it a linear roll's web
-    was the nucleated one's - skeleton arms and cuts sized on the house cloud - and on a long row of farms with their own
-    groves the stragglers joined each other in islands the connector never reached (cohort seed 12: 16 of 17 farms
-    stranded, 800-1,300 ft from the connector). The street is still worn AFTER the houses, as every lane here is."""
-    doors = street_doors(houses, arcs, FOOTPATH_FABRIC_GAP + 4.0)
-    if len(doors) < 2:
-        return
-    conn = [(float(x), float(y)) for ln in s.M.get("lanes", []) if ln.get("connector") for x, y in ln.get("pts") or []]
-    if conn and min(math.dist(doors[-1], q) for q in conn) < min(math.dist(doors[0], q) for q in conn):
-        doors.reverse()  # start at the end the connector reaches
-    hard = [poly for poly, _owner, _kind in _homestead_polys(s)] + crop_polys(s) + ([list(plan.envelope)] if plan.envelope else [])
-    water = drawn_water_segs(s)
-    path: list[Pt] = [min(conn, key=lambda q: math.dist(q, doors[0]))] if conn else []
-    for a in doors:
-        leg = _route(path[-1], a, hard, [], water) if path else [a]
-        if len(leg) < 2 and path:
-            continue  # no route to this door: the stragglers serve it
-        path += leg[1:] if path else leg
-    if len(path) >= 2 and _draw_web(s, path, 5, houses=[(float(h["x"]), float(h["y"])) for h in houses]):
-        s.M["lanes"][-1]["street"] = True  # the row's street, said so: a reader of the manifest cannot tell it by its role
-
-
 def stage_web(s: Settlement, plan: SitePlan) -> None:
     """The lanes the settlement wore.
 
@@ -483,10 +449,12 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # two stages earlier, before any house existed; now it is derived from where they actually went.
     # It runs before the web cuts so the web sees it as existing network to thread around and join,
     # which is what `_net_segs` reads.
+    # A ROW VILLAGE WITH PLANNED STREETS lays those, not a skeleton and cuts sized on the house cloud (feature 291 plan
+    # D17): the streets are laid below, once the steadings' fabric is known, and the stragglers and door paths still run.
+    _rows = plan.settlement_form == "linear" and bool(getattr(s, "_row_streets", None))
     _pass("skeleton")
-    _lay_skeleton(s, plan, frame, arcs, stands)
-    if plan.settlement_form == "linear":
-        _lay_street(s, plan, houses, arcs)
+    if not _rows:
+        _lay_skeleton(s, plan, frame, arcs, stands)
 
     pad = 30.0  # a lane runs a little past the last steading it serves, not up to its wall
 
@@ -502,7 +470,9 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         return (min(near_by) - pad, max(near_by) + pad)
 
     lines: list[Poly] = []
-    if plan.lane_web == "alleys":
+    if _rows:
+        pass  # no cuts: a row's farms are served by their street
+    elif plan.lane_web == "alleys":
         # A lateral spans the cluster's DEPTH at a cut along the margin. Straight in outline
         # coordinates, which is a gentle curve on the ground - it runs square out from the field
         # edge, which is the way a path between two plots actually leaves the paddy.
@@ -572,6 +542,9 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # The shelter belts, separately: a web lane may CROSS one but may not run its length.
     belts = [[(float(a), float(b)) for a, b in g["poly"]] for g in s.M.get("village_groves", []) if g.get("poly")]
     drawn_water = drawn_water_segs(s)  # channels AND streams - see the helper for why the streams were missing
+    if _rows:
+        _frame_w = max((max(float(b[2]), float(b[3])) for b in (((h.get("geom") or {}).get("bbox")) for h in houses) if b), default=BUNDLE_PITCH)
+        lay_row_streets(s, houses, hard_built, walls, list(plan.watercourses) + drawn_water, reach=1.5 * _frame_w, pad=_frame_w / 2)
     cands: list[Poly] = []
     for line in lines:
         # FINER SAMPLING AND A WIDER FABRIC MARGIN THAN THE DEFAULTS. A web lane runs among the
