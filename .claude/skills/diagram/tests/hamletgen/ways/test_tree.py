@@ -284,3 +284,21 @@ def test_a_corridor_another_hangs_from_is_not_pruned_and_a_leaf_retracts_the_str
     before = [ln.get("role") for ln in chain["lanes"]]
     tree.prune_the_tree(c)
     assert [ln.get("role") for ln in chain["lanes"]].count(ACCESS_ROLE) >= 1 and before.count(ACCESS_ROLE) == 2, "A, which B hangs from, is no leaf"
+
+
+def test_a_tree_that_hands_a_house_more_ends_than_its_doorstep_takes_is_refused(monkeypatch) -> None:
+    """The doorstep clause of `admits`, reached on its own: a corridor every other clause admits (square onto the strip) is
+    refused the moment the whole tree would leave any house discharging more than `law.DOORSTEP_MAX` free ends - here the
+    count reported one past the limit, the way a third corridor on a crowded house's front reads to `law.fronting_ends`."""
+    M = _tree()
+    run, house = [(100.0, 80.0), (100.0, 0.0)], _house(100.0, 100.0)
+    assert tree.admits(_law(M), M, run, ACCESS_ROLE, house), "lawful with the doorstep's ends at its limit"
+    real = law.fronting_ends
+    crowded = {(300.0, 100.0): [object()] * (law.DOORSTEP_MAX + 1)}
+
+    def fronting(m):  # crowded only in the WHOLE tree's reading, the one that holds the new corridor's own lane
+        mine = any(abs(q[0] - 100.0) < 1.0 and abs(q[1] - 80.0) < 1.0 for lane in m.get("lanes") or [] for q in lane["pts"][:1])
+        return crowded if mine else real(m)
+
+    monkeypatch.setattr(tree.law, "fronting_ends", fronting)
+    assert not tree.admits(_law(M), M, run, ACCESS_ROLE, house), "one end past the doorstep: refused"
