@@ -1220,6 +1220,8 @@ hokke sect	Hokke
 hokora	hokora
 hokuriku	Hokuriku
 holding jail	holding jail
+homestead grove	yashikirin
+homestead groves	yashikirin
 hon-byakusho	honbyakusho
 honan	Honan
 honbyakusho	honbyakusho
@@ -2326,6 +2328,8 @@ prefectural cities	prefectural city
 prefectural city	prefectural city
 prefecture	prefectural city
 prefectures	prefectural city
+principal axes	principal axis
+principal axis	principal axis
 principal image	principal image
 principal images	principal image
 prison god	jail-god
@@ -2512,6 +2516,7 @@ sagami	Sagami
 sagami province	Sagami
 sagamino	Sagamino
 sageba	ōkaji
+sai on	Sai On
 saikyosho	saikyosho
 sakagura	sakagura
 sakaki	sakaki

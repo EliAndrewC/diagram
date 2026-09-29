@@ -4232,7 +4232,9 @@
   "def": "A homestead grove: the belt of trees planted around a farmhouse plot as its own shelter from wind and sun.",
   "variants": [
    "yashikirin",
-   "屋敷林"
+   "屋敷林",
+   "homestead grove",
+   "homestead groves"
   ]
  },
  "yato": {
@@ -13003,6 +13005,19 @@
   "def": "The northwestern corner of Japan's main island, in today's Aomori prefecture, and the domain of the Tsugaru lords who ruled it in the Edo period; its western plain takes a salt wind and blown sand off the sea.",
   "variants": [
    "Tsugaru"
+  ]
+ },
+ "Sai On": {
+  "def": "A statesman of the Ryukyu kingdom (1682-1761) who reformed its forestry and had village tree belts, the hogo, planted round its settlements.",
+  "variants": [
+   "Sai On"
+  ]
+ },
+ "principal axis": {
+  "def": "The line through a scatter of points along which they spread widest; of a drawn belt, the direction its clumps run.",
+  "variants": [
+   "principal axis",
+   "principal axes"
   ]
  }
 }
