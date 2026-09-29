@@ -54,6 +54,10 @@ ADHOC_JUDGE = {
     }
 }
 APPEND_PROMPT = "container-scripts/append-system-prompt.md"
+# R5 D7 (revised at T09): the 9.0 GB cap is ONE host cgroup over every Claude container, read through the host-diag tool
+# (read-only, no sudo for cgroup files). memwatch's figure is that cgroup's raw memory.current, page cache included.
+HOST_DIAG = "/host-l7r-repo/gm-assistant/scripts/claude-diagnostics/client/host-diag"
+SHARED_SLICE = "/sys/fs/cgroup/user.slice/user-1001.slice/user@1001.service/claude.slice/claude-containers.slice"
 
 
 class Refused(Exception):
@@ -84,6 +88,30 @@ def working_set(cgroup: pathlib.Path) -> int:
     return current
 
 
+def parse_working_set(text: str) -> int | None:
+    """`memory.current` less `inactive_file` from the two files' text printed one after the other, or None."""
+    lines = text.split("\n")
+    try:
+        current = int(lines[0].split()[0])
+    except (IndexError, ValueError):
+        return None
+    for line in lines[1:]:
+        key, _, val = line.partition(" ")
+        if key == "inactive_file" and val.strip().isdigit():
+            return current - int(val)
+    return None
+
+
+def shared_working_set(host_diag: str) -> int | None:
+    """The working set of the shared cgroup every Claude container is capped by, or None when the host cannot be read."""
+    try:
+        out = subprocess.run([host_diag, f"cat {SHARED_SLICE}/memory.current {SHARED_SLICE}/memory.stat"],
+                             capture_output=True, text=True, timeout=60, check=False)
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    return parse_working_set(out.stdout) if out.returncode == 0 else None
+
+
 def fresh_warning(events: pathlib.Path, now: float) -> str:
     """The newest memwatch warning younger than WARNING_FRESH_S, or ''."""
     if not events.is_dir():
@@ -100,10 +128,17 @@ def live_runs(runs: pathlib.Path) -> list[str]:
 
 
 def refusal(exp: dict, feature_dir: pathlib.Path, task: str, cgroup: pathlib.Path, events: pathlib.Path,
-            now: float) -> tuple[str, dict]:
-    """Why this launch may not start ('' when it may), and the memory reading it was judged on."""
-    reading = {"working_set_gb": round(working_set(cgroup) / GB, 2), "offset_gb": exp["offset_gb"],
-               "threshold_gb": THRESHOLD_GB, "fresh_warning": fresh_warning(events, now)}
+            now: float, shared: int | None = None) -> tuple[str, dict]:
+    """Why this launch may not start ('' when it may), and the memory reading it was judged on. With the SHARED cgroup's
+    working set (R5 D7 revised) the gate reads it directly, no offset, and a memwatch warning - a raw figure that counts
+    the page cache the kernel drops first - does not block; without it, this container's working set plus the offset,
+    and a fresh warning blocks."""
+    if shared is not None:
+        reading = {"source": "shared-slice", "working_set_gb": round(shared / GB, 2), "offset_gb": 0.0,
+                   "threshold_gb": THRESHOLD_GB, "fresh_warning": ""}
+    else:
+        reading = {"source": "container+offset", "working_set_gb": round(working_set(cgroup) / GB, 2),
+                   "offset_gb": exp["offset_gb"], "threshold_gb": THRESHOLD_GB, "fresh_warning": fresh_warning(events, now)}
     if live := live_runs(feature_dir / "runs"):
         return f"another run is live or unmeasured: {', '.join(live)}", reading
     changed = [f for f, h in frozen_hashes(feature_dir).items() if exp["hashes"].get(f) != h]
@@ -113,8 +148,8 @@ def refusal(exp: dict, feature_dir: pathlib.Path, task: str, cgroup: pathlib.Pat
         return "the --agents JSON differs from the recorded one", reading
     if reading["fresh_warning"]:
         return f"a memwatch warning under 15 minutes old ({reading['fresh_warning']})", reading
-    if reading["working_set_gb"] + exp["offset_gb"] > THRESHOLD_GB:
-        return (f"memory: working set {reading['working_set_gb']} GB + offset {exp['offset_gb']} GB is over "
+    if reading["working_set_gb"] + reading["offset_gb"] > THRESHOLD_GB:
+        return (f"memory: working set {reading['working_set_gb']} GB ({reading['source']}) + offset {reading['offset_gb']} GB is over "
                 f"{THRESHOLD_GB} GB - retry later"), reading
     if task not in TASKS:
         return f"no task {task}", reading
@@ -151,7 +186,8 @@ def mangled(path: pathlib.Path) -> str:
 def launch(args: argparse.Namespace, repo: pathlib.Path, now: float) -> dict:
     feature_dir = repo / "specs" / FEATURE
     exp = json.loads((feature_dir / "experiment.json").read_text())
-    why, reading = refusal(exp, feature_dir, args.task, pathlib.Path(args.cgroup), pathlib.Path(args.events), now)
+    why, reading = refusal(exp, feature_dir, args.task, pathlib.Path(args.cgroup), pathlib.Path(args.events), now,
+                           shared_working_set(args.host_diag) if args.host_diag else None)
     if why:
         raise Refused(why)
     run_id, arm = args.run, args.arm
@@ -262,6 +298,7 @@ def main(argv: list[str]) -> int:
     r.add_argument("--clones", default="/diagram/.clones")
     r.add_argument("--claims", default="/diagram/.clones/RESEARCH-CLAIMS.md")
     r.add_argument("--cgroup", default="/sys/fs/cgroup")
+    r.add_argument("--host-diag", default=HOST_DIAG, help="'' to judge on this container's working set plus the offset")
     r.add_argument("--events", default=str(pathlib.Path.home() / ".claude" / "memwatch" / "events"))
     args = ap.parse_args(argv)
     repo = pathlib.Path(subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True,

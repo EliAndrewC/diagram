@@ -7,7 +7,7 @@ to every session the runner starts (after `--model`, if any). Unset, the command
 
 ## `make effort-run TASK=R|I RUN=<run-id> ARM=medium|xhigh COMMIT=<sha> [ORDER=<n> SEED=<s>]`
 
-1. Refuses if another effort run is live (a run record with no `ended`), if the container's working set (`memory.current` less `inactive_file`) plus the measured offset (research R5 D7) is above the 4.5 GB threshold or a
+1. Refuses if another effort run is live (a run record with no `ended`), if the SHARED cgroup's working set (read through host-diag; research R5 D7 revised) - or, when the host cannot be read, this container's working set plus the measured offset - is above the 4.5 GB threshold or a
    memwatch warning is under 15 minutes old (both GUESS thresholds, research R5 D7; the figure and the reading go in the refusal and the run record), if the rubrics changed since their freeze commit, or if the prompt
    files differ from the hashes recorded for this task's earlier run.
 2. `git clone /diagram /diagram/.clones/diagram-exp-<run-id>`, checks out `COMMIT` detached-free (a fresh `main` reset to it in the new

@@ -120,6 +120,20 @@ working session (the event's figure beside a working-set reading taken within it
 quiet-host memwatch figure is sought, since none is published. The working set alone IS readable on a quiet host, and T09 records it
 there: if that quiet reading plus the offset is above the threshold, the gate could never open, so the implementing session raises it
 with the GM before any run rather than changing the threshold on its own.
+**D7 REVISED at T09 (2026-09-29): read the shared cgroup itself.** The offset above was measured
+again at the next warning (observed 2026-09-29 21:34 UTC, one-shot, method: memwatch event 11 beside a working-set reading one
+second later): memwatch said 8.8 GB in all - diagram 6.4, gm-assistant 2.5 - while this container's working set read 4.5 GB. Two
+things follow. The diagram offset is 1.9 GB, not 0.9; and the cap is SHARED with other containers, whose memory this container
+cannot see, so no fixed offset converts one container's figure into the cap's. The cap is one host cgroup,
+`claude-containers.slice` (its `memory.max` is 9,663,676,416 bytes = 9.0 GiB), and the host-diag tool (read-only, no sudo for
+cgroup files; `reference_host_diagnostics`) reads it: its `memory.current` was 8.58 GB, of which `inactive_file` 4.39 GB, a
+working set of 4.2 GB (observed 2026-09-29 ~21:40 UTC, one-shot, method: `host-diag cat` of the slice's `memory.current` and
+`memory.stat`). So memwatch's figure is the slice's RAW memory, page cache included - the cache the kernel drops before it kills
+anything. The gate therefore reads the SHARED slice's working set directly, with no offset, against the same 4.5 GB threshold
+(a run's peak, about 4.5 GB, still fits under the 9.0 GB cap); and while that figure is readable a memwatch warning does not
+block, because the warning is the raw figure the working set corrects. Only when the host cannot be read does the gate fall back
+to this container's working set plus the offset - now 1.9 GB, the larger of the two measured - with the 15-minute warning rule.
+The launch record says which source it judged on.
 The refusal prints the figure and the wait is logged in `interventions.md`; the implementing session
 retries on its next turn rather than polling. While a run is live the implementing session runs nothing memory-heavy of its own: the
 measurement of the previous run, the blinding and the grading are done between runs, one at a time, and the tooling is built and gated
