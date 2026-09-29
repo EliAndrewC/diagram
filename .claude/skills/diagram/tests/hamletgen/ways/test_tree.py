@@ -302,3 +302,21 @@ def test_a_tree_that_hands_a_house_more_ends_than_its_doorstep_takes_is_refused(
 
     monkeypatch.setattr(tree.law, "fronting_ends", fronting)
     assert not tree.admits(_law(M), M, run, ACCESS_ROLE, house), "one end past the doorstep: refused"
+
+
+def test_a_tree_whose_new_way_out_would_cross_a_brook_twice_is_refused(monkeypatch) -> None:
+    """The way-out clause of `admits`, reached on its own: a corridor every other clause admits is refused when the new
+    house's way out along the tree fails `way_out_once` (a brook crossed and crossed back) - the case the lane law alone
+    does not see, because each lane of the chain crosses the brook once."""
+    M = _tree()
+    run, house = [(100.0, 80.0), (100.0, 0.0)], _house(100.0, 100.0)
+    assert tree.admits(_law(M), M, run, ACCESS_ROLE, house), "lawful with its way out crossing no brook twice"
+    asked = []
+
+    def twice(_m, chains):
+        asked.append(chains)
+        return False
+
+    monkeypatch.setattr(tree, "way_out_once", twice)
+    assert not tree.admits(_law(M), M, run, ACCESS_ROLE, house), "its way out over the brook and back: refused"
+    assert asked and asked[0][0][0] == (100.0, 80.0), "the chain judged is the new house's, from its own door"
