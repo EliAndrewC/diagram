@@ -10,22 +10,29 @@ from __future__ import annotations
 
 import math
 
-# THE RANKED POSITIONS AROUND A POINT FEATURE, best first. QGIS's documented default order, which it takes from
-# Krygier and Wood's textbook: "top right top left bottom right bottom left middle right middle left top, slightly
+# THE RANKED POSITIONS AROUND A POINT FEATURE, best first. The standard's is QGIS's documented default order, which it
+# takes from Krygier and Wood's textbook: "top right top left bottom right bottom left middle right middle left top, slightly
 # right bottom, slightly left" (qgis-label-settings); a ranked set of eight positions is the standard formulation
 # (christensen-marks-shieber-1995, after Yoeli 1972). Each is (name, sx, sy) in the SUBJECT'S OWN frame as the
-# words read: sx -1/0/+1 is left/center/right and sy -1/0/+1 is above/level/below. A fractional sx on the last two
-# is "slightly": the block's center sits sx times the block's width off center - a quarter width, our reading of
-# the word (plan P3, a calibration; the sources name the position, not the amount).
+# words read: sx -1/0/+1 is left/center/right and sy -1/0/+1 is above/level/below. (The textbook order's last two,
+# "slightly" right and left, were a fractional sx; the order followed has none.)
+#
+# THE ORDER THE MAPS FOLLOW (the GM, 2026-09-29, feature 290: *"I would like to follow the published standard rather
+# than deviate"*) is not that one but the user-tested order of Bobák, Čmolík and Čadík (2024), PerceptPPO: *"A key
+# finding is that labels placed above point features are significantly preferred by users, contrary to the
+# conventional top-right position"* (bobak-cmolik-cadik-2024; its Table 1: "PerceptPPO 2024 - A T B R TR BR L TL BL").
+# Its eight positions, in its order, and no others. It replaced the GM's own deviation of feature 289 (above, below,
+# left, right, then the textbook's), which it is close to: a small drawn object's caption stands directly above or
+# below it, or beside it, before any corner.
 POSITIONS: tuple[tuple[str, float, float], ...] = (
-    ("upper right", 1.0, -1.0),
-    ("upper left", -1.0, -1.0),
-    ("lower right", 1.0, 1.0),
-    ("lower left", -1.0, 1.0),
+    ("above", 0.0, -1.0),
+    ("below", 0.0, 1.0),
     ("right", 1.0, 0.0),
+    ("upper right", 1.0, -1.0),
+    ("lower right", 1.0, 1.0),
     ("left", -1.0, 0.0),
-    ("above, slightly right", 0.25, -1.0),
-    ("below, slightly left", -0.25, 1.0),
+    ("upper left", -1.0, -1.0),
+    ("lower left", -1.0, 1.0),
 )
 
 # THE GAP, measured from the subject's drawn edge to the caption's nearest edge ("The offset is measured from the

@@ -1,0 +1,39 @@
+{
+ "feature": "289-adjacent-before-diagonal",
+ "plan_sha256": "db1822db26c426e3edf43a937ec036d69a8bd716cef239861035c19cac8492c8",
+ "reviewed": "2026-09-29",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "POSITIONS becomes above, below, left, right, then today's six others in today's order; the comment names the GM's deviation and a Mapbox documentation example's matching order, not Zoraster's",
+   "class": "within",
+   "why": "Exactly FR-001 and the GM's stated order; the corrected attribution (an example, not a default; not Zoraster) is accuracy, not scope."
+  },
+  {
+   "id": "D2",
+   "summary": "_extended_cands walks above, below, left, right (was above, below, right, left); slides unchanged",
+   "class": "within",
+   "why": "FR-002 names this reordering of the fallback's sides; nothing else in the fallback moves."
+  },
+  {
+   "id": "D3",
+   "summary": "The record entry's 'Which side' paragraph states the maps' order as the GM's deliberate deviation (grounds note), the textbooks' order and why it starts at corners (existing citations), an absence note for small drawn objects, and the other published orders cited through three new registry entries (Spektrum, Bobak/Cmolik/Cadik 2024 incl. Zoraster and the user study, the Mapbox example); checked by quote-check, record-format, source-applicability; T02 stays research: rendering",
+   "class": "within",
+   "why": "Round 1's block is cured: User Story 2 and FR-003 now land in the research record itself - standard's order and source, the GM's deviation and class, and the other published orders read, each cited or carried by an absence note. Imhof is represented by the German right-beside ideal through a readable source, which is what the record's citation rules permit for a paywalled text. research: rendering is the right class for a drawing convention, and the citations still pass the three checks."
+  },
+  {
+   "id": "D4",
+   "summary": "Hand sheets regenerated; scripted hamlets regenerated to count captions that move and take the order on every render; unit tests naming a first position updated",
+   "class": "within",
+   "why": "FR-004 as written; the hamlet regeneration measures the change's reach, not a change of scope."
+  },
+  {
+   "id": "D5",
+   "summary": "A unit test blocks positions in turn; a count over the four sheets of notice-board labels at a corner with an adjacent same-ring seat free, recorded in measurements.json; make done",
+   "class": "within",
+   "why": "SC-001 to SC-003 as written; it enforces the requested order."
+  }
+ ],
+ "verdict": "CLEAR"
+}

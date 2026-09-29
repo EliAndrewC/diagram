@@ -41,7 +41,7 @@ def test_a_neighbor_one_offset_off_is_counted_by_the_association() -> None:
     exactly the preferred offset off the ring-0 block - the tie `>` forbids - is counted, where without the association
     term it was clear (a seat exactly one offset off is clear, feature 266 plan P6)."""
     first = place("notice board", SIZE, BOARD, ObstacleIndex())
-    assert first.position == "upper right" and first.ring == 0
+    assert first.position == "above" and first.ring == 0
     x0 = max(q[0] for q in first.block)
     gap = CLEAR_EM * SIZE
     post = Obstacle(tuple(rect(x0 + gap + 3.0, sum(q[1] for q in first.block) / 4, 3.0, 3.0)), WEIGHT_OBSTACLE)

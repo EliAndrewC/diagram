@@ -1,0 +1,20 @@
+{
+ "boards-at-corner": {
+  "value": 0,
+  "unit": "captions",
+  "observed": "2026-09-29",
+  "method": "hand_sheet.seat over the four hand sheets after the change: notice-board captions (kinds 'notice board') at a diagonal corner; the five stand below (4) and below slightly left (1), each at the nearest ring and covering nothing"
+ },
+ "hamlet-captions-moved": {
+  "value": 5,
+  "unit": "captions",
+  "observed": "2026-09-29",
+  "method": "the five scripted hamlets regenerated (make map) and their manifests' labels compared with HEAD: each hamlet has one caption, its notice board, and all five moved"
+ },
+ "sheet-corner-seats": {
+  "value": 12,
+  "unit": "captions",
+  "observed": "2026-09-29",
+  "method": "hand_sheet.seat over the four hand sheets: captions still at a diagonal corner (Hayakawa 3, Ochiba 6, Ubame 1, the shrine 2) - each where the four adjacent places at its ring were not free, the order being first-free"
+ }
+}

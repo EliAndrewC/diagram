@@ -7,8 +7,9 @@ leader line ties them back. The standard, in the order it decides:
 
 1. NEARER FIRST (QGIS's default, "Prefer closer labels"): every candidate at the preferred offset - every ranked
    position, every line layout - is tried before any seat a ring further out.
-2. Within a ring, the RANKED POSITIONS in the standard's order (upper right first; `standard.POSITIONS`), then fewer
-   lines before more (the GM's wrap rule).
+2. Within a ring, the RANKED POSITIONS (`standard.POSITIONS`: the user-tested order of Bobák, Čmolík and Čadík 2024 -
+   above, below, right, then the corners on the right, left, the corners on the left; feature 290), then fewer lines
+   before more (the GM's wrap rule).
 3. FREE SPACE WINS: the first candidate that covers nothing is taken. When nothing in reach is free, the fallback
    slides and then the leader rings out to the hug are searched; a caption is never dropped (the GM: "we'll treat
    labels as mandatory") and never drawn overlapping (feature 287, D10) - with no free seat it goes in the sheet's key.
@@ -265,7 +266,7 @@ def _extended_cands(
                         ring, rank, name, (c[0] + s * (su + bw) * u[0] + side * (sv + bh + g) * v[0], c[1] + s * (su + bw) * u[1] + side * (sv + bh + g) * v[1]), ang, tuple(ln), (bw, bh), size
                     )
                     rank += 1
-            for name, side in (("right", 1.0), ("left", -1.0)):
+            for name, side in (("right", 1.0), ("left", -1.0)):  # right before left, as in `POSITIONS` (feature 290)
                 for s in slides:
                     yield _Cand(
                         ring, rank, name, (c[0] + side * (su + bw + g) * u[0] + s * (sv + bh) * v[0], c[1] + side * (su + bw + g) * u[1] + s * (sv + bh) * v[1]), ang, tuple(ln), (bw, bh), size
