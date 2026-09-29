@@ -309,3 +309,24 @@ def test_a_sty_stands_within_a_household_s_reach_or_not_at_all() -> None:
     s.M["dikeponds"] = [{"parcel": parcel, "water": parcel, "kind": "growout"}]
     stage_pond_stock(s, plan)
     assert STY_HOUSE_REACH_FT < 1560.0 - 450.0 and not s.M.get("pig_sties") and s.M["meta"]["pond_stock"]["drawn"] == 0
+
+
+def test_the_sty_walk_stops_once_every_rolled_sty_is_drawn() -> None:
+    """Ponds to spare within reach: the walk takes as many as were rolled and stops (feature 280: Kuwabata's roll no longer
+    has more near grow-out ponds than sties)."""
+    from l7r.diagram.hamletgen.pondstock import stage_pond_stock
+    from l7r.diagram.settlement import Settlement
+
+    plan = hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16, field_archetype="mulberry_dike_fishpond"))
+
+    def _pond(x: float, y: float) -> dict:
+        parcel = [(x - 60.0, y - 40.0), (x + 60.0, y - 40.0), (x + 60.0, y + 40.0), (x - 60.0, y + 40.0)]
+        return {"parcel": parcel, "water": parcel, "kind": "growout"}
+
+    s = Settlement(W=1400, H=1400, seed=1)
+    s.meta(name="X", scale="hamlet")
+    s.M["houses"] = [{"x": 700.0, "y": 700.0, "w": 46.0, "h": 28.0} for _ in range(4)]
+    s.M["dikeponds"] = [_pond(700.0 + dx, 700.0 + dy) for dx, dy in ((-200, -150), (200, -150), (-200, 150), (200, 150), (0, 250), (0, -250), (-280, 0), (280, 0))]
+    stage_pond_stock(s, plan)
+    stock = s.M["meta"]["pond_stock"]
+    assert 1 <= stock["sties"] < 8 and stock["drawn"] == stock["sties"] == len(s.M["pig_sties"])

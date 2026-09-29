@@ -897,3 +897,12 @@ def test_a_large_privy_s_sun_side_reach_keeps_its_near_edge_where_a_one_ken_priv
 
     assert privy_sun_reach_ft(6.0, 6.0) == PRIVY_SUN_MAX_FT == privy_sun_reach_ft(5.0, 5.0)
     assert privy_sun_reach_ft(24.0, 12.0) == PRIVY_SUN_MAX_FT + 9.0
+
+
+def test_strip_blocked_refuses_another_farmhouse_as_drawn() -> None:
+    """The every-other-farmhouse arm of `_strip_blocked` (feature 280: the re-packed pool rolls no longer reach it)."""
+    s, _plan = _strip_settlement()
+    s.M["houses"] = [{"x": 500.0, "y": 500.0, "w": 46.0, "h": 28.0, "rot": 0.0}]
+    blocked = hg.homesteads._strip_blocked
+    assert blocked(s, 500, 500, 30, 20, 300, 300, [], [], None, []) is True, "a neighbor's house"
+    assert blocked(s, 500, 500, 30, 20, 500, 500, [], [], None, []) is False, "its own house is excused"
