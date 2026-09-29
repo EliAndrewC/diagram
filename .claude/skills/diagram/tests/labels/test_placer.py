@@ -19,20 +19,28 @@ def _gap(p, subject: Subject) -> float:
     return poly_gap(list(p.block), list(subject.poly))
 
 
-def test_the_first_position_is_upper_right_at_the_preferred_offset() -> None:
-    """Scenario 1: clear ground, so the caption takes the standard's first position, the preferred gap off the board's
-    drawn edge, with no leader."""
+def test_the_first_position_is_directly_above_at_the_preferred_offset() -> None:
+    """Scenario 1: clear ground, so the caption takes the first position - directly above the board (the GM's deviation
+    from the standard's corners-first order, feature 289) - the preferred gap off the board's drawn edge, no leader."""
     p = place("notice board", SIZE, BOARD, ObstacleIndex())
-    assert (p.position, p.ring, p.lines, p.leader) == ("upper right", 0, ("notice board",), None)
+    assert (p.position, p.ring, p.lines, p.leader) == ("above", 0, ("notice board",), None)
     assert _gap(p, BOARD) == pytest.approx(PREFERRED_OFFSET_EM * SIZE, abs=1e-6)
-    assert p.block[3][0] > 506.0 and max(q[1] for q in p.block) < 497.5, "right of the board and above it"
+    assert centroid(list(p.block))[0] == pytest.approx(500.0) and max(q[1] for q in p.block) < 497.5, "centered, above"
+
+
+# A post in each of the four adjacent seats at the preferred gap, clear of every other seat
+ABOVE, BELOW = rect(500.0, 489.0, 4.0, 2.0), rect(500.0, 511.0, 4.0, 2.0)
+LEFT, RIGHT = rect(466.0, 502.0, 4.0, 1.0), rect(534.0, 502.0, 4.0, 1.0)
 
 
 def test_a_blocked_position_falls_to_the_next_ranked_one() -> None:
-    """Scenario 2: a house over the upper right sends the caption to the upper left, still at the preferred gap."""
-    house = Obstacle(tuple(rect(560.0, 480.0, 40.0, 15.0)), WEIGHT_OBSTACLE)
-    p = place("notice board", SIZE, BOARD, ObstacleIndex([house]))
-    assert (p.position, p.ring, p.leader) == ("upper left", 0, None)
+    """Scenario 2 and feature 289's SC-001: adjacent before diagonal - directly above, then below, then left, then
+    right, and only with all four taken a corner, the standard's upper right first; each at the preferred gap."""
+    blocked: list[Obstacle] = []
+    for seat, want in ((ABOVE, "below"), (BELOW, "left"), (LEFT, "right"), (RIGHT, "upper right")):
+        blocked.append(Obstacle(tuple(seat), WEIGHT_OBSTACLE))
+        p = place("notice board", SIZE, BOARD, ObstacleIndex(blocked))
+        assert (p.position, p.ring, p.leader) == (want, 0, None), want
 
 
 def test_every_adjacent_seat_is_tried_before_a_farther_one_and_the_farther_one_gets_a_leader() -> None:
@@ -103,23 +111,23 @@ def test_when_nothing_is_free_the_least_weight_wins() -> None:
     """A sheet whose every seat covers something: a seat crossing one way beats every seat on a house, even at a lower
     rank - Esri's "a location with the lowest total feature weight is chosen"."""
     p = place("notice board", SIZE, BOARD, _Priced())
-    assert p.cost == WEIGHT_WAY and p.position == "upper right" and p.ring == 0
+    assert p.cost == WEIGHT_WAY and p.position == "right" and p.ring == 0
 
 
 def test_the_frame_is_never_left() -> None:
     """A clipped caption cannot be read: with the frame's right edge at the board, the right-hand seats are gone."""
     p = place("notice board", SIZE, BOARD, ObstacleIndex(), frame=(0.0, 0.0, 510.0, 1000.0))
-    assert p.position == "upper left"
+    assert p.position == "left", "above and below run past the frame's edge too"
     squeezed = place("notice board", SIZE, BOARD, ObstacleIndex(), frame=(495.0, 495.0, 505.0, 505.0))
     assert squeezed.lines and squeezed.ring == 0, "no seat fits the frame at all: the caption still goes down"
 
 
 def test_a_caption_wraps_at_a_seat_before_moving_off_it() -> None:
     """The GM's wrap rule: at a seat, one line first, then two - so a post that blocks the long one-liner's tail keeps
-    the caption at upper right on two lines instead of sending it round the board."""
-    post = Obstacle(tuple(rect(548.0, 490.0, 4.0, 4.0)), WEIGHT_OBSTACLE)
+    the caption above the board on two lines instead of sending it round the board."""
+    post = Obstacle(tuple(rect(522.0, 490.0, 2.0, 2.0)), WEIGHT_OBSTACLE)
     p = place("notice board", SIZE, BOARD, ObstacleIndex([post]))
-    assert (p.position, p.lines) == ("upper right", ("notice", "board"))
+    assert (p.position, p.lines) == ("above", ("notice", "board"))
 
 
 def test_a_rotated_subject_turns_its_caption_upright() -> None:
@@ -169,22 +177,22 @@ def test_an_area_caption_lies_inside_the_area_over_its_centroid() -> None:
 def test_a_caption_may_lie_on_its_own_group_but_a_civic_one_never_on_another_civic_building() -> None:
     """FR-014, the GM's 2026-07-21 rule: a temple's caption may lie on a temple; a ministry's name may not lie on the
     next ministry (research/presentation 070)."""
-    temple = Obstacle(tuple(rect(560.0, 480.0, 40.0, 15.0)), WEIGHT_OBSTACLE, group="flophouse")
-    assert place("flophouse", SIZE, BOARD, ObstacleIndex([temple])).position == "upper right"
-    assert place("notice board", SIZE, BOARD, ObstacleIndex([temple])).position != "upper right"
-    works = Obstacle(tuple(rect(560.0, 480.0, 40.0, 15.0)), WEIGHT_OBSTACLE, group="ministry", named=True)
+    temple = Obstacle(tuple(ABOVE), WEIGHT_OBSTACLE, group="flophouse")
+    assert place("flophouse", SIZE, BOARD, ObstacleIndex([temple])).position == "above"
+    assert place("notice board", SIZE, BOARD, ObstacleIndex([temple])).position != "above"
+    works = Obstacle(tuple(ABOVE), WEIGHT_OBSTACLE, group="ministry", named=True)
     assert "ministry" in CIVIC_GROUPS
     justice = Subject("point", BOARD.poly, civic=True)  # the caption's SUBJECT is a named ministry
-    assert place("Ministry of Justice", SIZE, justice, ObstacleIndex([works])).position != "upper right"
-    shrine = Obstacle(tuple(rect(560.0, 480.0, 40.0, 15.0)), WEIGHT_OBSTACLE, group="temple")
-    assert place("temple", SIZE, BOARD, ObstacleIndex([shrine])).position == "upper right", "an UNNAMED temple is waivable"
-    named = Obstacle(tuple(rect(560.0, 480.0, 40.0, 15.0)), WEIGHT_OBSTACLE, group="temple", named=True)
+    assert place("Ministry of Justice", SIZE, justice, ObstacleIndex([works])).position != "above"
+    shrine = Obstacle(tuple(ABOVE), WEIGHT_OBSTACLE, group="temple")
+    assert place("temple", SIZE, BOARD, ObstacleIndex([shrine])).position == "above", "an UNNAMED temple is waivable"
+    named = Obstacle(tuple(ABOVE), WEIGHT_OBSTACLE, group="temple", named=True)
     benten = Subject("point", BOARD.poly, civic=True)
-    assert place("Temple of Benten", SIZE, benten, ObstacleIndex([named])).position != "upper right", "one named temple's name off another"
-    assert place("temple neighborhood", SIZE, BOARD, ObstacleIndex([named])).position == "upper right", (
+    assert place("Temple of Benten", SIZE, benten, ObstacleIndex([named])).position != "above", "one named temple's name off another"
+    assert place("temple neighborhood", SIZE, BOARD, ObstacleIndex([named])).position == "above", (
         "a district caption names no civic building, so it may lie on its district's named temple (answer 070)"
     )
-    assert place("flophouse row", SIZE, BOARD, ObstacleIndex([Obstacle(named.poly, WEIGHT_OBSTACLE, "flophouse", named=True)])).position == "upper right", (
+    assert place("flophouse row", SIZE, BOARD, ObstacleIndex([Obstacle(named.poly, WEIGHT_OBSTACLE, "flophouse", named=True)])).position == "above", (
         "named but not civic: waived by its group like any other"
     )
 
@@ -195,7 +203,18 @@ def test_an_unknown_subject_kind_is_refused() -> None:
 
 
 def test_the_positions_rings_and_upright_rule() -> None:
-    assert [n for n, _x, _y in POSITIONS][:4] == ["upper right", "upper left", "lower right", "lower left"]
+    assert [n for n, _x, _y in POSITIONS] == [
+        "above",
+        "below",
+        "left",
+        "right",  # the GM's deviation, feature 289
+        "upper right",
+        "upper left",
+        "lower right",
+        "lower left",
+        "above, slightly right",
+        "below, slightly left",
+    ]
     rs = rings(SIZE)
     assert rs[0] == PREFERRED_OFFSET_EM * SIZE and rs[-1] == pytest.approx(REACH_EM * SIZE)
     assert upright(126.0) == pytest.approx(-54.0) and upright(-100.0) == pytest.approx(80.0) and upright(90.0) == 90.0

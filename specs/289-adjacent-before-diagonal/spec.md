@@ -49,7 +49,7 @@ the GM's deviation from it, and what the research found about other published or
 
 - **SC-001** (FR-001): unit tests prove the order on a subject with positions blocked in turn: above, then below, then
   left, then right, then the corners.
-- **SC-002** (FR-001, FR-004): on the four hand sheets, no notice board's label stands at a diagonal corner where an
+- **SC-002** (FR-001, FR-004): on the four hand sheets (Hayakawa, Ochiba and Ubame magistracies, the Hoshigaoka shrine), no notice board's label stands at a diagonal corner where an
   adjacent position at the same ring is free.
 - **SC-003** (FR-003): the research record's entry names the deviation and its class; `make done` is green.
 
@@ -63,11 +63,23 @@ the GM's deviation from it, and what the research found about other published or
 - **The order is the GM's as stated** - above, below, left, right. The GM also said it matches "Zoroaster's 1990s oil
   well labeling models"; the order the research reader reported for Zoraster's third model (Bobák, Čmolík and Čadík
   2024, Table 1) is top, top right, top left, right, left, bottom right, bottom, bottom left, which differs. The GM
-  stated the order twice, explicitly; it is implemented as stated, and it is exactly Mapbox's documented default
-  variable-anchor order (top, bottom, left, right). Raised with the GM at hand-back.
+  stated the order twice, explicitly; it is implemented as stated. Its four-way order is a Mapbox documentation example's (top, bottom,
+  left, right - an example's settings, not a stated default). Found while writing the record: the one published user
+  study (Bobák, Čmolík and Čadík 2024, nearly 800 readers) found readers significantly prefer a name directly above its
+  point, and its order runs top, bottom, right, top right, bottom right, left, top left, bottom left - close to the
+  GM's, not it; adopting it would follow a published order rather than a deviation. Both raised with the GM at
+  hand-back.
 - **Scope: the one placer.** The ranked positions live in the placer every map shares (feature 266: "one placer for
   all labels"), and the GM's reasoning - a name adjacent to a small drawn object - holds for the generated hamlets'
   small objects as for the hand sheets'. So the order changes for every point caption; which captions are points is
   unchanged.
 - **Class: deliberate deviation** (the GM's ruling), not a new standard: no published source read addresses small
   drawn objects on large-scale plans as their own case.
+
+## Review history
+
+**Round 1** (spec-fidelity, MODE 2, 2026-09-29): FAITHFUL. Implementing the GM's stated order (above, below, left,
+right) and raising the Zoraster attribution at hand-back is the faithful reading - Zoraster's reported order puts two
+diagonals ahead of left and right, against the GM's stated purpose; nothing may say the order "follows Zoraster".
+Applying it to every point caption is within the request: the GM ruled by the kind of object, not the kind of map, and
+one placer with one order is the smaller change.
