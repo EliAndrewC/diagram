@@ -3,12 +3,14 @@
 Split from test_hamletgen.py by feature 111; test bodies verbatim. See hamletgen/CLAUDE.md.
 """
 
+import math
+
 import pytest
 
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.hamletgen.cluster import BELT_ROOM_MAX_OFF, SeatRefused, belt_off_canvas
 from l7r.diagram.hamletgen.consts import CLUSTER_SHAPES, FALL_BEARINGS
-from l7r.diagram.hamletgen.plan import BELT_REACH, FAN_OVERHANG, SEAT_STANDOFF, FallIntoTheWind, band_extent, fall_backs_the_wind, fall_into_the_wind, seat_room
+from l7r.diagram.hamletgen.plan import BELT_REACH, FAN_OVERHANG, SEAT_STANDOFF, band_extent, fall_backs_the_wind, seat_room
 
 from ._builders import CROWN, SQUARE, a_plan
 
@@ -73,10 +75,6 @@ def test_the_seat_turns_its_back_to_the_wind_whatever_the_slope(windward: str, d
     outward normal - faces within 45 degrees of the windward bearing, so the belt behind it stands on the
     windward side instead of in the crop. Before feature 261 the wind was renamed after the seat instead."""
     spec = hg.HamletSpec(name="Test", seed=3, households=10, down_deg=down_deg, windward=windward)
-    if fall_into_the_wind(down_deg, windward):
-        with pytest.raises(FallIntoTheWind, match="runs into the"):
-            hg.plan_site(spec)  # refused at resolution, naming it (feature 287, plan D3)
-        return
     plan = hg.plan_site(spec)
     d = plan.W / 2.0 - 700.0  # the field in the canvas middle, where `head_sluice` lays it (the canvas holds the seat's room round it)
     plan.envelope = [(x + d, y + d) for x, y in [(400.0, 400.0), (700.0, 250.0), (1000.0, 400.0), (1150.0, 700.0), (1000.0, 1000.0), (700.0, 1150.0), (400.0, 1000.0), (250.0, 700.0)]]
@@ -185,17 +183,31 @@ def test_a_rolled_fall_always_leaves_a_margin_whose_back_faces_the_wind(windward
     assert len(falls) == 5
 
 
-def test_a_fall_into_the_wind_is_told_apart_from_one_across_it() -> None:
-    assert fall_into_the_wind(225.0, "NW") and not fall_backs_the_wind(225.0, "NW")
-    assert not fall_into_the_wind(180.0, "NW") and not fall_backs_the_wind(180.0, "NW")  # 45 degrees off: declared only
-    assert not fall_into_the_wind(135.0, "NW") and fall_backs_the_wind(135.0, "NW")  # square to the wind
-    assert fall_backs_the_wind(45.0, "NW")  # away from it: the head faces the wind
+def test_a_rolled_fall_backs_the_wind_and_a_declared_one_is_taken_as_written() -> None:
+    """Plan D3: the roll is narrowed to falls square to the wind or away from it; a declared fall is the GM's fact, taken
+    as written - into the wind included - and its site is judged by the seat alone."""
+    assert not fall_backs_the_wind(225.0, "NW") and not fall_backs_the_wind(180.0, "NW")
+    assert fall_backs_the_wind(135.0, "NW") and fall_backs_the_wind(45.0, "NW")
+    assert hg.plan_site(hg.HamletSpec(name="Sawada", seed=24, households=19, down_deg=225)).down_deg == 225
 
 
-def test_a_declared_fall_into_the_wind_is_refused_at_resolution() -> None:
-    with pytest.raises(FallIntoTheWind, match="Sawada: down_deg=225 runs into the NW wind"):
-        hg.plan_site(hg.HamletSpec(name="Sawada", seed=24, households=19, down_deg=225))
-    assert hg.plan_site(hg.HamletSpec(name="Sawada", seed=24, households=19, down_deg=225, windward="SE")).down_deg == 225
+def test_a_flank_offers_its_back_turned_to_the_wind_after_every_margin_facing_it() -> None:
+    """Homes H30, plan D3: a margin 45 to 90 degrees off the wind offers a seat whose back is turned just past the bar
+    toward the wind (tier 1), after every margin that faces it (tier 0); a margin facing away offers none."""
+    from l7r.diagram.hamletgen.cluster import margin_candidates
+
+    square = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
+    wind = (-0.5, -math.sqrt(0.75))  # 30 degrees west of north: the north edge faces it, the west edge is 60 degrees off
+    got = {m: (o, t) for m, o, t in margin_candidates(square, (50.0, 50.0), wind)}
+    assert set(got) == {(50.0, 0.0), (0.0, 50.0)}, "south and east face away and offer nothing"
+    assert got[(50.0, 0.0)] == ((0.0, -1.0), 0)
+    west, tier = got[(0.0, 50.0)]
+    assert tier == 1 and west[0] * wind[0] + west[1] * wind[1] > hg.WIND_BACK_MIN_DOT and -west[0] > math.cos(math.radians(45.0)), "turned just past the bar, under 45 degrees off its normal"
+    plan = a_plan()
+    plan.windward = "NW"
+    plan.envelope = [(x + 600.0, y + 600.0) for x, y in SQUARE]
+    seat = hg.seat_cluster(plan)
+    assert seat["out"][0] * -0.7071 + seat["out"][1] * -0.7071 >= hg.WIND_BACK_MIN_DOT and seat["offwind"] is False
 
 
 @pytest.mark.parametrize("shape", sorted(CLUSTER_SHAPES))

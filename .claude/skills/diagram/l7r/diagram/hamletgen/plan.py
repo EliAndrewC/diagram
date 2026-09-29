@@ -323,31 +323,17 @@ def _fall_into_wind(down_deg: float, windward: str) -> float:
     return math.cos(math.radians(down_deg)) * wx + math.sin(math.radians(down_deg)) * wy
 
 
-def fall_into_the_wind(down_deg: float, windward: str) -> bool:
-    """Does the fall run INTO the wind, so that every margin whose back faces the wind is the field's wet toe (feature
-    287, homes H30 and plan D3)? The toe is the field's downslope side and the drain runs along it; a margin above the
-    drain faces across the fall or up it, and when the fall lies within 45 degrees of the wind no such margin can be
-    within 45 degrees of the wind (`WIND_BACK_MIN_DOT`). The predicate a DECLARED fall is refused by. Measured over the
-    pool and cohort 1-60 (2026-09-29): all ten falls into the wind (Sawada at seed 24 and nine cohort maps) had every
-    wind-facing margin on the toe or inside the fan."""
-    return _fall_into_wind(down_deg, windward) > math.sqrt(1.0 - WIND_BACK_MIN_DOT**2) + 1e-9
-
-
 def fall_backs_the_wind(down_deg: float, windward: str) -> bool:
     """Does the fall leave the seat a wind-facing margin above the drain on EVERY field it can draw (feature 287, homes
     H30 and plan D3)? True when the fall runs square to the wind or away from it: the wind then meets a flank or the
-    head. A fall 45 degrees off the wind is not refused by `fall_into_the_wind`, but its wind-facing margins are only
+    head. A fall 45 degrees off the wind, or into it, may still offer a seat - a flank's back turned to the wind
+    (`cluster.margin_candidates`) - but its wind-facing margins are only
     the toe's corner - a fan widens downhill, so its flanks' normals lean UPHILL, away from the wind - and whether the
     corner stands clear of the toe depends on the field the fit draws: 16 of 17 such cohort maps had one, cohort seed
     24 had none (measured 2026-09-29, on the canvas `seat_room` grows). A rolled fall is rolled over the falls this
     admits, so the seat's back to the wind holds by construction; it is also 背山面水 read whole - the back to the
     hill AND to the wind, the high side and the windward side being one side (`seat_cluster`)."""
     return _fall_into_wind(down_deg, windward) <= 1e-9
-
-
-class FallIntoTheWind(ValueError):
-    """A declared fall runs into the wind, so the settlement has no margin that turns its back to the wind above the
-    drain (plan D3): the spec is refused at resolution, naming it, before any stage runs."""
 
 
 def plan_site(spec: HamletSpec) -> SitePlan:
@@ -366,18 +352,11 @@ def plan_site(spec: HamletSpec) -> SitePlan:
     _pond_layout = (spec.pond_layout or str(_roll(spec.seed, "pond_layout", POND_LAYOUTS))) if _archetype == "mulberry_dike_fishpond" else "grid"
     # THE REGIONAL NORTHWEST unless the spec declares a local wind (feature 261; `DEFAULT_WINDWARD` for why).
     windward = spec.windward or DEFAULT_WINDWARD
-    # THE FALL LEAVES THE SEAT A BACK TO THE WIND (feature 287, homes H30, plan D3): a rolled fall is rolled over the
-    # falls that leave a wind-facing margin above the drain on any field (`fall_backs_the_wind`), and a declared fall
-    # into the wind is refused here, naming it (`fall_into_the_wind`). The seat never falls back off the wind: a declared
-    # fall 45 degrees off it whose field leaves no such margin is refused by `seat_cluster`, naming it.
-    if spec.down_deg is not None:
-        if fall_into_the_wind(spec.down_deg, windward):
-            raise FallIntoTheWind(
-                f"{spec.name}: down_deg={spec.down_deg:g} runs into the {windward} wind, so every margin whose back faces the wind is the field's wet toe - declare another fall or a local wind"
-            )
-        down_deg = spec.down_deg
-    else:
-        down_deg = float(_roll(spec.seed, "down_deg", tuple(f for f in _falls if fall_backs_the_wind(f, windward))))
+    # THE FALL LEAVES THE SEAT A BACK TO THE WIND (feature 287, homes H30, plan D3): a ROLLED fall is rolled over the
+    # falls that leave a wind-facing margin above the drain on any field (`fall_backs_the_wind`) - the knob narrowed where
+    # it cannot be honored. A DECLARED fall is the GM's fact about the place and is taken as written: its site is refused
+    # only where `seat_cluster` finds no margin whose back it can turn to the wind (`SeatRefused`), never for its bearing.
+    down_deg = spec.down_deg if spec.down_deg is not None else float(_roll(spec.seed, "down_deg", tuple(f for f in _falls if fall_backs_the_wind(f, windward))))
     # A hamlet is ONE comb draining down ONE valley, so its drainage bearing IS its fall unless the
     # GM declares otherwise. Recording both separately keeps the map honest about which fact is
     # which (skill SKILL.md: "these are not the same fact and must not be derived from each other")

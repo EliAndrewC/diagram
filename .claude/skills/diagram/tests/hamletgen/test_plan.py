@@ -7,7 +7,6 @@ import pytest
 
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.hamletgen.consts import COPSE_SITINGS, KOSATSUBA_SITINGS
-from l7r.diagram.hamletgen.plan import FallIntoTheWind, fall_into_the_wind
 
 from ._builders import a_plan
 
@@ -109,20 +108,14 @@ def test_the_cold_wind_is_the_regional_northwest_unless_declared(down_deg: float
     """THE WIND IS THE NORTHWEST ON EVERY MAP THAT DECLARES NONE (feature 261, GM 2026-09-26: "only when declared").
     Neither the slope nor the seed moves it - until feature 261 it was the upslope bearing turned by a rolled 45
     degrees, and Kashikawa's belt stood on the south and east."""
-    spec = hg.HamletSpec(name="X", seed=seed, down_deg=down_deg)
-    if down_deg is not None and fall_into_the_wind(down_deg, "NW"):
-        with pytest.raises(FallIntoTheWind, match="runs into the NW wind"):
-            hg.plan_site(spec)  # the wind stays the northwest: the FALL is refused (feature 287, plan D3)
-        return
-    plan = hg.plan_site(spec)
+    plan = hg.plan_site(hg.HamletSpec(name="X", seed=seed, down_deg=down_deg))
     assert plan.windward == hg.DEFAULT_WINDWARD == "NW"
 
 
 @pytest.mark.parametrize("windward", sorted(hg.WIND_VECTORS))
 def test_a_declared_local_wind_is_used_as_declared(windward: str) -> None:
     """A declaration is the ONLY way a map's wind departs from the northwest, and it is taken as written."""
-    down = 90.0 if not fall_into_the_wind(90.0, windward) else 270.0  # a fall into the declared wind is refused (plan D3)
-    assert hg.plan_site(hg.HamletSpec(name="X", seed=4, down_deg=down, windward=windward)).windward == windward
+    assert hg.plan_site(hg.HamletSpec(name="X", seed=4, down_deg=90.0, windward=windward)).windward == windward
 
 
 def test_a_nonsense_field_archetype_is_refused() -> None:

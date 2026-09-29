@@ -133,11 +133,11 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
     bends to it.
 
     NO FALLBACK (feature 287, homes H30/H31, plan D3): the off-wind and cramped margins were kept as a
-    last resort, recorded as `seat_offwind`; they are gone. The spec never asks for a site without a
-    wind-facing margin - `plan_site` rolls only falls that leave one and refuses a declared fall into
-    the wind - and the canvas holds the seat and its belt on every side (`plan.seat_room`). A site that
-    still has none (a declared fall 45 degrees off the wind whose field leaves only the toe facing it)
-    is refused here, naming it (`SeatRefused`).
+    last resort, recorded as `seat_offwind`; they are gone. A margin whose normal is 45 to 90 degrees off
+    the wind offers its back turned to the wind instead (`margin_candidates`, tier 1, after every margin
+    that faces it), so a fan falling into the wind seats on a flank above its toe; `plan_site` rolls only
+    falls that leave a wind-facing margin, and the canvas holds the seat and its belt on every side
+    (`plan.seat_room`). A site with no legal seat even so is refused here, naming it (`SeatRefused`).
 
     Scoring every margin point of the DRAWN envelope, rather than picking a compass corner, is what
     makes this survive a field that came out a different shape: the seat follows the fan.
@@ -171,23 +171,8 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
     dep, lat = band_extent(plan.spec.households, plan.cluster_shape)
 
     ranked: list[tuple[float, Pt, Pt]] = []  # the wind-facing margins with room for their belt, in the order met
-    n = len(env)
-    for i in range(n):
-        ax, ay = env[i]
-        bx, by = env[(i + 1) % n]
-        mid = ((ax + bx) / 2.0, (ay + by) / 2.0)
-        # THE EDGE'S OWN NORMAL, turned to face away from the field - not the ray from the field's
-        # middle. A comb fan is NOT CONVEX: it has concave shoulders where the carve stops short,
-        # and on those edges "away from the centroid" points straight back INTO the rice. Seeding a
-        # cluster there put ten households on the paddy, where every candidate footprint was refused
-        # by the crop keep-out and only four houses of a declared ten ever landed (seed 11). The
-        # centroid ray is a plausible-looking approximation of an outward normal that is simply
-        # wrong for the one shape this generator always draws.
-        nx, ny = unit(-(by - ay), bx - ax)
-        if (nx * (mid[0] - cen[0]) + ny * (mid[1] - cen[1])) < 0:
-            nx, ny = -nx, -ny  # flip to the outward side (winding-independent)
-        if nx * wx + ny * wy < WIND_BACK_MIN_DOT:
-            continue  # its back is more than 45 degrees off the wind: never a seat (homes H30)
+    turned: list[tuple[float, Pt, Pt]] = []  # margins whose back is turned to the wind off a flank (`margin_candidates`)
+    for mid, (nx, ny), tier in margin_candidates(env, cen, (wx, wy)):
         rel = ((mid[0] - cen[0]), (mid[1] - cen[1]))
         # ...and belt-and-braces: the BAND ITSELF must stand on open ground. An edge normal can
         # still graze a lobe of the fan a little further along, and a check is cheaper than a theory.
@@ -289,11 +274,11 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         score -= 2.5 * off
         if off > BELT_ROOM_MAX_OFF:
             continue
-        ranked.append((score, mid, (nx, ny)))
+        (ranked if tier == 0 else turned).append((score, mid, (nx, ny)))
     # ONE RANKING, BEST FIRST (feature 287, plan D2): the margins in the order this function prefers them - by score,
     # the first met winning a tie - so the chosen seat is the ranking's head and the rest are its LADDER, the margins
     # `stage_homesteads` takes in turn when the chosen one cannot seat every household (`homesteads/capacity.py`).
-    order = sorted(ranked, key=lambda c: -c[0])
+    order = sorted(ranked, key=lambda c: -c[0]) + sorted(turned, key=lambda c: -c[0])
     # ...AND THE HEAD HAS A DRY WAY OUT (feature 287, ways W23): a margin whose seat is walled in by the wet, the field and
     # the water is refused, so the connector never meets `NoDryExit`. Asked in ranking order until a margin has one - the
     # flood fill costs a canvas - and each rung of the ladder is asked the same before it is seated (`capacity`).
@@ -305,6 +290,47 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         )
     frames = [_seat_frame(anchor, out, lat, dep, (wx, wy)) for _score, anchor, out in order]
     return {**frames[0], "ladder": frames[1:]}
+
+
+#: How far past the 45-degree bar a margin's back is turned, radians: a hair, so the turned back passes
+#: `WIND_BACK_MIN_DOT`'s 0.7071 without resting on it.
+TURN_SLACK = math.radians(0.5)
+
+
+def margin_candidates(env: Poly, cen: Pt, wind: Pt) -> list[tuple[Pt, Pt, int]]:
+    """The seats a field envelope offers, `(margin midpoint, the back's direction, tier)`, in the envelope's order.
+
+    Tier 0, the margin's own outward normal where it lies within 45 degrees of the wind. THE EDGE'S OWN NORMAL, turned
+    to face away from the field - not the ray from the field's middle: a comb fan is NOT CONVEX, it has concave shoulders
+    where the carve stops short, and on those edges "away from the centroid" points straight back INTO the rice (seed 11
+    put ten households on the paddy that way).
+
+    Tier 1, THE BACK TURNED TO THE WIND OFF A FLANK (feature 287, homes H30, plan D3): a margin whose normal is 45 to 90
+    degrees off the wind offers a seat whose back is turned toward the wind just past the 45-degree bar - at most 45
+    degrees off its own normal, so the band still stands off the field (`seat_cluster`'s open-ground test asks it). A
+    fan falling INTO the wind has its wind-facing edges on the wet toe and its flanks square to the wind, so until this
+    tier its seat hung on an accident of the outline: Sawada's (down_deg 225, seed 24) was one short edge at the fan's
+    upper west corner, facing west-northwest, and 287's brook repair (508bcd511) smoothed it away. A flank above the toe,
+    the band beside it turned to the wind, is the same seat by construction. Offered after every tier-0 seat, so a site
+    with an edge facing the wind seats as before."""
+    out: list[tuple[Pt, Pt, int]] = []
+    n = len(env)
+    for i in range(n):
+        ax, ay = env[i]
+        bx, by = env[(i + 1) % n]
+        mid = ((ax + bx) / 2.0, (ay + by) / 2.0)
+        nx, ny = unit(-(by - ay), bx - ax)
+        if (nx * (mid[0] - cen[0]) + ny * (mid[1] - cen[1])) < 0:
+            nx, ny = -nx, -ny  # flip to the outward side (winding-independent)
+        dot = nx * wind[0] + ny * wind[1]
+        if dot >= WIND_BACK_MIN_DOT:
+            out.append((mid, (nx, ny), 0))
+        elif dot > 0.0:
+            off = math.atan2(nx * wind[1] - ny * wind[0], dot)  # the wind's bearing from the normal, signed
+            turn = off - math.copysign(math.pi / 4 - TURN_SLACK, off)
+            a = math.atan2(ny, nx) + turn
+            out.append((mid, (math.cos(a), math.sin(a)), 1))
+    return out
 
 
 def _seat_center(anchor: Pt, out: Pt, dep: float) -> Pt:
