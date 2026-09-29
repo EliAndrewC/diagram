@@ -137,14 +137,15 @@ per-house groves pass every check a grove answers to.
   no count), and recorded on the map.
 - **FR-014**: The farms along a line MUST stand one FRAME apart - the farm's grove and its ground plus the lane's room
   between two farms' groves (homesteads/715) - a physical necessity of FR-010, since a grove farm cannot stand on a
-  narrower lot. The width this gives is a GUESS at the top of the record's range, 9 ken to 40 ken (homesteads/156); the
+  narrower lot. The width this gives is a GUESS at or just past the top of the record's range, 9 ken to 40 ken (homesteads/156); the
   40 ken is a dry-field colony's figure and is not carried over as a paddy row's.
 - **FR-015**: Which side of its street a row stands on MUST be a per-settlement knob, pinnable, otherwise rolled at even
   odds: ONE side, the street between the row and its field (farmland across the road, Shimotome), or BOTH sides, each
   farm's holding behind it (Santome, Nobidome); the odds a GUESS (homesteads/155: no count of which was commoner).
   Recorded on the map. On BOTH, the far row's holding MUST be drawn behind it in the form the record gives its line: on
   a street laid first, a strip behind the farm (the planned row's form, which a paddy row may borrow; its crop dry field
-  and its depth a GUESS); on the dry edge, compact and near the house (a dike row's holding, homesteads/155).
+  and its depth a GUESS); on the dry edge, compact and near the house (accurate for a dike row, homesteads/156; carried to a levee
+  or fan-foot row as this project's reading).
 - **FR-016**: A row the line cannot hold MUST grow another street parallel to the first, with its own row or rows, as a
   planned colony grew more roads (homesteads/156) - not ranks behind a row. How many farms a line holds before the next
   street is the ground's, the count a GUESS.
@@ -221,11 +222,11 @@ per-house groves pass every check a grove answers to.
   (homesteads/155), and a paddy row may borrow the planned row's street; flood-prone ground takes the dike; elsewhere
   even odds, a GUESS. The field's margin standing for a levee, dike or fan foot is this project's reading.
 - **One frame apart** (FR-014): a physical necessity of FR-010, the grove plus the lane's room between two groves (homesteads/715);
-  its width a GUESS at the top of the record's 9-40 ken range. The 9 ken row is not this form's value because a 9 ken
+  its width a GUESS at or just past the top of the record's 9-40 ken range. The 9 ken row is not this form's value because a 9 ken
   lot cannot hold a grove farm; the 40 ken is a dry-field colony's and does not transfer (source-applicability).
 - **Sides at even odds** (FR-015): both attested, no count - a GUESS. The far row's holding follows its line: a strip
   behind on a street laid first (the borrowed planned form; dry field and depth a GUESS), compact near the house on the
-  dry edge.
+  dry edge (homesteads/156: accurate for a dike row; a levee or fan-foot row this project's reading).
 - **Row water** (FR-018): the record rules on the dispersed farm only; a row's water is a knob, even odds, a GUESS.
 
 ## Review history

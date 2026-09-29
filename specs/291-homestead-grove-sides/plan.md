@@ -80,7 +80,7 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   (`band_clumps`: `_draw_grove` caps a clump at 28 crowns, and a deep band drawn as one clump was sparser than the thin
   band), inset one crown radius on the house side so the canopy's edge meets the band's inner edge, off the service
   strip; its bamboo is drawn only where the farm rolled a household bamboo stand (`_farm_rolls_bamboo`, the bamboo pass's
-  own positional roll; FR-017).
+  own positional roll; FR-019).
 - **D10 - the forms back on** (FR-011). `SETTLEMENT_FORMS = _SETTLEMENT_FORMS_WHEN_GROVES_WORK` and the comment block
   above it rewritten from "why off" to the measurement that put them back.
 - **D11 - the pool** (FR-012). The five hamlets regenerate from their unchanged specs; each takes its seed's form and
@@ -94,6 +94,38 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
 - **D13 - the two nucleated overlaps** (XIV). If the baseline shows seeds 17 and 20 fail on main too, they are
   defects found in this work and are fixed here; if they do not, they are regressions of this change and are fixed.
   Either way, fixed.
+
+- **D14 - the row's line** (FR-013). A new module `hamletgen/homesteads/rows.py`. `row_line(plan)` is the site's or
+  the roll's: `flood_ground` gives `edge`; otherwise `knob_rng(seed, "row_line")` at even odds between `street` and
+  `edge`, or `HamletSpec.row_line` pinned; recorded `meta.row_line`. A line is a polyline: `edge` - the field
+  envelope buffered outward (shapely) to the street's offset, its exterior ring cut to an arc centered on the seat's
+  projection (the row curves with the margin); `street` - a straight segment through that same projection along the
+  arc's chord, a surveyed road. The row's length along the line is what its farms need, `n_side x frame`, centered on
+  the seat, clipped to the canvas less the frame.
+- **D15 - the seats** (FR-014, FR-015, FR-016). `row_sides(plan)` the same way (knob `row_sides`, `one`/`both`,
+  `meta.row_sides`). The frame is the dispersed bundle's `_frame` at the largest house (grove, ground and the lane's
+  room); farms step one frame width along the line. ONE side: the street at the field's standoff, the farms beyond it
+  (away from the field) at half a frame depth past the street's half-width. BOTH: the street one frame depth plus the
+  standoff out from the field, a near row between the street and the field and a far row beyond. Each seat goes to
+  `try_place` (one computed move), in center-out order alternating the two ends. When a line is full or refused,
+  `row_streets` offsets the next street parallel, one row set further out (FR-016), and the rows continue there. The
+  front-row, rank and rescue passes do not run for a linear hamlet. The streets are kept on `s._row_streets` for the web.
+- **D16 - the far row's holding** (FR-015). On BOTH, each far-row farm gets a dry-field holding drawn behind it by the
+  near ring's own plot drawer (`dry_plots`, furrowed, registered in `dry_polys`/`block_polys`): on `street`, a strip one
+  frame wide and three frames deep, cut in plots of the near ring's cell; on `edge`, one frame square beside the lot.
+  Drawn in the hinterland stage, after the woods, before the scatter; a plot the ground refuses is left as scrub. Depth
+  and crop a GUESS.
+- **D17 - the streets** (FR-017). `_lay_street` lays each of `s._row_streets` as one lane, width 6 (the connector's; web
+  lanes are 3-5), `street: True`, clipped to its farms' extent plus a lot, routed only where a straight leg is blocked,
+  and joined at its nearer end to the connector (or to the previous street). `lay_door_paths` then reaches every door.
+  The door-to-door street it replaces goes.
+- **D18 - water** (FR-018). `own_wells` for a dispersed hamlet. A linear hamlet rolls `row_water` (`own`/`shared`,
+  even odds, pinnable, `meta.row_water`): `own` as dispersed; `shared` seats a well beside the street every
+  `well_target`-th farm, in the lane's room between two lots, each serving the farms within its reach.
+- **D19 - the checks** (SC-007, SC-008). `grove_rules` gains `row_rules(M)`: every house within a frame depth of a
+  street, no house behind another on its side, each street one lane; the far row's holdings; the water knob drawn; the
+  cohort audit runs them and prints the line, sides and water values it rolled; the gate test covers the linear pool
+  maps.
 
 ## Indexing
 
