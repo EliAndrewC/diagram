@@ -337,8 +337,8 @@ Decisions review and for what goes to the GM once the work runs.
   allowed, so a placer that refused them would draw against the record. `ring_rules.narrow` / `dart` report them and no
   placer refuses on them. Cost: a plot a reader finds implausibly thin is not prevented. Alternative priced: enforcing the
   old thresholds (contradicts the record). Chosen by the session; for the Decisions review.
-- **water:W36 - needs a physical research pass** before any guarantee (the design row names the question); it stays open
-  in T12 and is not guessed.
+- **water:W36 - needed a physical research pass** before any guarantee (the design row names the question); the pass was
+  run in wave 4 (research/fields/165, all four checks applied), and the guarantee that followed is the knob recorded below.
 - **labels:L6 applies at ring 0 only** (the crown obstacles are the tree ring the caption would cover; outer rings are
   scatter the placer already treats as soft). Map drawing convention.
 - **labels:L14(b) treats the canvas as the view** on Mode A sheets, which have no crop. Map drawing convention.
