@@ -305,4 +305,4 @@ every change to a map is; the report links them.
 - Amendment review, 2026-09-29: round 1 NOT-REVIEWABLE (two unlabeled figures, labeled); round 1 CHANGES REQUIRED (the gate read raw
   `memory.current`, page cache included - now the working set); round 2 CHANGES REQUIRED (a quiet-host memwatch figure is never published
   - now an offset measured at a warning); round 3 FAITHFUL. Its two asides applied after: the offset re-derived with the gate's own
-  subtraction (`inactive_file`, 0.9 GB, a stricter gate than the 1.5 GB it replaced was not), and a leftover sentence reworded.
+  subtraction (`inactive_file`, 0.9 GB - looser than the 1.5 GB it replaces, which had subtracted all page cache where the gate subtracts only the inactive part), and a leftover sentence reworded.
