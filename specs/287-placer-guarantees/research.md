@@ -115,12 +115,16 @@ distinct fallback with the code around it; the rows are `fallbacks.json`). The g
 `settlement/town_ways.py`, `settlement/structures/urban*.py`, `packing.py` and `servants.py` (the town and city tiers), and
 `tools/`, `ci/`, `pipeline/` and `interactive/` (not placement) - 260 hits in 70 files. The town and city exclusion is by
 CODE PATH, not module, so the city modules a hamlet calls were read as well: `settlement/city/bridges.py` (`bridges`,
-`channel_footbridges`, from `hamletgen/frame.py`) - its two fallbacks are the last two rows below - and `city/walls.py`'s
-wall helpers, which only the town wards reach. One row the grep brought in is town-only and recorded, not converted:
+`channel_footbridges`, from `hamletgen/frame.py`, `settlement/rolling/roll.py` and `hamletgen/ways/checks.py`) - its two
+fallbacks are the last two rows below - and `settlement/city/moat.py` (`sluice_gate`, from the polder dike in `land/dikes.py`;
+`inwall_drain_outfall`, from `fields/comb.py`), where the fallback grep finds nothing. `city/walls.py`'s helpers are reached
+only by the town wards and the freestanding wall (`castle_civic.py`'s `wall`, a town feature), so they stay out (the search:
+every method of `settlement/city/*.py` against callers outside the town and city modules). One row the grep brought in is town-only and recorded, not converted:
 `settlement/water_ways/wards.py:_ward_ends_on_wall` (reached only by a hand-authored city generator).
 Of 150 distinct fallbacks, 31 emit something that breaks a stated rule when their branch runs; the rest degrade within
 their rules (a smaller feature, a drop the rule itself provides for, a search fallback that still returns a legal result),
-are not placement, or are the town-only row. The breaking ones are this feature's scope (FR-005):
+are not placement, or are the town-only row. The breaking ones are this feature's scope (FR-005). The three censuses are joined by owning placer in
+`scope-by-owner.json`, written by `scope_join.py` from `census.json`, `fallbacks.json` and `excused.json`:
 
 | where | what the branch does | the rule it breaks | reachable | sketch (observed 2026-09-29, method: the fallback readers) |
 |---|---|---|---|---|

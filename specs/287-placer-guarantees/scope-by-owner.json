@@ -1,1136 +1,508 @@
 {
- "settlement/city/bridges.py": [
-  [
-   "R1",
-   "settlement/city/bridges.py",
-   "test_every_way_across_the_brook_is_bridged",
-   "partial"
-  ],
-  [
-   "R1",
-   "settlement/city/bridges.py",
-   "test_every_deck_is_long_enough_to_land_on_dry_ground",
-   "partial"
-  ],
-  [
-   "R1",
-   "settlement/city/bridges.py",
-   "test_every_plank_crosses_a_supply_ditch_and_never_the_collector",
-   "partial"
-  ],
+ "Settlement.caption_lane_clearance": [
   [
    "R3",
-   "settlement/city/bridges.py",
-   "Carried deck's 10 ft LANDING_FT puts the paddy-side end ~7 ft onto a flooded field.",
-   "unknown"
-  ],
-  [
-   "R3",
-   "settlement/city/bridges.py",
-   "A link way meets a stream at 17 degrees (seed 47) and its deck cannot span.",
-   "unknown"
-  ],
-  [
-   "R3",
-   "settlement/city/bridges.py",
-   "When no grown or skewed deck clears the water, the original undersized span is drawn anyway.",
-   "yes"
-  ]
- ],
- "settlement/shrines_wells/byres.py": [
-  [
-   "R1",
-   "settlement/shrines_wells/byres.py",
-   "test_every_farmstead_part_stands_on_its_house_bank",
-   "partial"
-  ],
-  [
-   "R1",
-   "settlement/shrines_wells/byres.py",
-   "test_the_settlement_seats_the_byres_it_asked_for",
-   "no"
-  ],
-  [
-   "R2",
-   "settlement/shrines_wells/byres.py",
-   "when the owner pool runs out before target byres are seated, fewer are drawn; meta.byre_target records the ask",
-   "breaks"
-  ]
- ],
- "settlement/homestead_parts/stands.py": [
-  [
-   "R1",
-   "settlement/homestead_parts/stands.py",
-   "test_the_copse_stands_within_reach_of_what_it_is_named_for",
-   "yes"
-  ],
-  [
-   "R1",
-   "settlement/homestead_parts/stands.py",
-   "test_no_copse_clump_is_based_in_the_marsh",
-   "yes"
-  ],
-  [
-   "R1",
-   "settlement/homestead_parts/stands.py",
-   "test_every_copse_clump_stands_on_the_bank_of_a_house_within_reach",
-   "yes"
-  ],
-  [
-   "R1",
-   "settlement/homestead_parts/stands.py",
-   "test_a_belt_tree_in_the_marsh_is_alder",
-   "partial"
-  ],
-  [
-   "R1",
-   "settlement/homestead_parts/stands.py",
-   "test_no_tree_is_planted_in_a_path",
-   "partial"
-  ],
-  [
-   "R1",
-   "settlement/homestead_parts/stands.py",
-   "test_every_recorded_grove_holds_trees",
-   "no"
-  ],
-  [
-   "R1",
-   "settlement/homestead_parts/stands.py",
-   "test_a_dooryard_copse_stands_clear_of_the_windbreak",
-   "yes"
-  ],
-  [
-   "R1",
-   "settlement/homestead_parts/stands.py",
-   "test_no_canopy_stands_over_open_water",
-   "yes"
-  ],
-  [
-   "R1",
-   "settlement/homestead_parts/stands.py",
-   "test_every_pool_belt_keeps_its_depth_across_its_windward_face",
-   "no"
-  ],
-  [
-   "R2",
-   "settlement/homestead_parts/stands.py",
-   "A windbreak gap whose columns offer no legal seat at any depth is marked _barren and left bare",
-   "breaks"
-  ]
- ],
- "settlement/structures/fixtures/siting.py": [
-  [
-   "R1",
-   "settlement/structures/fixtures/siting.py",
-   "test_an_entrance_board_stands_at_the_entrance",
-   "no"
-  ],
-  [
-   "R1",
-   "settlement/structures/fixtures/siting.py",
-   "test_the_board_caption_notches_no_crown",
-   "no"
-  ],
-  [
-   "R1",
-   "settlement/structures/fixtures/siting.py",
-   "test_the_notice_board_stands_by_the_way",
-   "yes"
-  ],
-  [
-   "R1",
-   "settlement/structures/fixtures/siting.py",
-   "test_the_notice_board_faces_the_way",
-   "yes"
-  ],
-  [
-   "R2",
-   "settlement/structures/fixtures/siting.py",
-   "when no seat above the traffic floor offers a caption at level 2, the board is still placed at the best level available (caption over a crown, or nowhere beside the board), and meta.kosatsuba_caption_level records it",
-   "breaks"
-  ]
- ],
- "hamletgen/water/brook.py": [
-  [
-   "R1",
-   "hamletgen/water/brook.py",
-   "test_no_brook_folds_back_on_itself",
-   "partial"
-  ],
-  [
-   "R1",
-   "hamletgen/water/brook.py",
-   "test_no_brook_runs_ruled_along_the_frame",
-   "no"
-  ],
-  [
-   "R1",
-   "hamletgen/water/brook.py",
-   "test_no_brook_runs_ruled_for_most_of_its_course_on_the_page",
-   "no"
-  ],
-  [
-   "R1",
-   "hamletgen/water/brook.py",
-   "test_no_brook_segment_lies_on_a_screen_axis_but_the_tap_run",
-   "partial"
-  ],
-  [
-   "R1",
-   "hamletgen/water/brook.py",
-   "test_no_stream_runs_through_a_field",
-   "partial"
-  ],
-  [
-   "R1",
-   "hamletgen/water/brook.py",
-   "test_every_stream_end_is_anchored_to_what_it_declares",
-   "no"
-  ],
-  [
-   "R1",
-   "hamletgen/water/brook.py",
-   "test_no_watercourse_crosses_another_mid_run",
-   "partial"
-  ],
-  [
-   "R2",
-   "hamletgen/water/brook.py",
-   "When all fifteen upslope bearings clip the field envelope, the approach is drawn straight up the fall line regardless, crossing the rice.",
-   "breaks"
-  ],
-  [
-   "R3",
-   "hamletgen/water/brook.py",
-   "17% of the weir bar lies on the head race; the Weir modal says it runs from the mouth.",
-   "yes"
-  ],
-  [
-   "R3",
-   "hamletgen/water/brook.py",
-   "Brook legs near-axis-aligned on Kashikawa and Sawada.",
-   "yes"
-  ]
- ],
- "hamletgen/ways/bund.py": [
-  [
-   "R1",
-   "hamletgen/ways/bund.py",
-   "test_a_way_reaches_the_field",
-   "partial"
-  ]
- ],
- "settlement/rolling/fit.py": [
-  [
-   "R1",
-   "settlement/rolling/fit.py",
-   "test_no_farmhouse_stands_on_the_brook",
-   "no"
-  ],
-  [
-   "R1",
-   "settlement/rolling/fit.py",
-   "test_two_farmhouses_keep_their_own_drip_lines",
-   "yes"
-  ],
-  [
-   "R1",
-   "settlement/rolling/fit.py",
-   "test_the_comb_hamlet_draws_no_forbidden_overlap",
-   "partial"
-  ],
-  [
-   "R1",
-   "settlement/rolling/fit.py",
-   "test_the_polder_hamlet_draws_no_forbidden_overlap",
-   "partial"
-  ],
-  [
-   "R3",
-   "settlement/rolling/fit.py",
-   "Bundle fit measures unraked rects; the drawn raked corner eats a 2.1 ft margin to a neighbor's garden.",
+   "Corner sampling misses a curved tread crossing the caption box edge.",
    "unknown"
   ]
  ],
- "hamletgen/ways/web.py": [
-  [
-   "R1",
-   "hamletgen/ways/web.py",
-   "test_the_ways_cross_the_brook_only_at_fords_and_never_over_and_back",
-   "partial"
-  ],
-  [
-   "R1",
-   "hamletgen/ways/web.py",
-   "test_no_lane_end_is_served_only_by_the_way_it_left",
-   "no"
-  ],
-  [
-   "R1",
-   "hamletgen/ways/web.py",
-   "test_every_lane_belongs_to_one_network",
-   "no"
-  ],
-  [
-   "R1",
-   "hamletgen/ways/web.py",
-   "test_a_lane_does_not_break_mid_run",
-   "partial"
-  ],
-  [
-   "R1",
-   "hamletgen/ways/web.py",
-   "test_every_shipped_hamlets_lanes_are_one_network_at_the_ink_tolerance",
-   "no"
-  ],
+ "cluster.py": [
   [
    "R3",
-   "hamletgen/ways/web.py",
-   "Orphan join lane runs back along the skeleton lane 35 ft at 16 degrees, leaving a ~250 sq ft needle.",
-   "yes"
-  ]
- ],
- "labels/placer.py": [
-  [
-   "R1",
-   "labels/placer.py",
-   "test_the_board_caption_names_the_board_only",
-   "partial"
-  ],
-  [
-   "R1",
-   "labels/placer.py",
-   "test_the_board_caption_stands_nearest_its_own_board",
-   "no"
-  ],
-  [
-   "R1",
-   "labels/placer.py",
-   "test_the_board_caption_stands_at_the_boards_angle",
-   "yes"
-  ],
-  [
-   "R1",
-   "labels/placer.py",
-   "test_every_caption_hugs_what_it_names",
-   "yes"
-  ],
-  [
-   "R1",
-   "labels/placer.py",
-   "test_every_caption_is_turned_to_match_its_subject",
-   "yes"
-  ],
-  [
-   "R1",
-   "labels/placer.py",
-   "test_no_caption_lies_across_a_way",
-   "no"
-  ]
- ],
- "hamletgen/ways/sweeps.py": [
-  [
-   "R1",
-   "hamletgen/ways/sweeps.py",
-   "test_every_way_out_crosses_the_brook_at_most_once",
-   "no"
-  ],
-  [
-   "R1",
-   "hamletgen/ways/sweeps.py",
-   "test_every_lane_end_reaches_something_worth_walking_to",
-   "partial"
-  ],
-  [
-   "R1",
-   "hamletgen/ways/sweeps.py",
-   "test_every_shipped_hamlets_lane_ends_reach_something",
-   "partial"
-  ],
-  [
-   "R2",
-   "hamletgen/ways/sweeps.py",
-   "When no candidate link joins an orphan way without crossing the brook and coming back, the out-and-back link is kept as the last resort and drawn",
-   "breaks"
-  ]
- ],
- "hamletgen/ways/joints.py": [
-  [
-   "R1",
-   "hamletgen/ways/joints.py",
-   "test_no_lane_ends_in_a_hook",
-   "no"
-  ],
-  [
-   "R1",
-   "hamletgen/ways/joints.py",
-   "test_no_two_lanes_meet_end_to_end_in_a_fold_and_no_lane_ends_in_a_hook",
-   "partial"
-  ],
-  [
-   "R3",
-   "hamletgen/ways/joints.py",
-   "Lane 2 and the connector run back 126 ft 15-40 ft apart at 169 degrees.",
+   "The lane skeleton is a straight chord across a curved seat band; far-arm houses get no lane (the unshipped fix cleared seeds 8/25). Cluster seats on field corners (111-113 deg turns) strand houses.",
    "unknown"
-  ]
- ],
- "hamletgen/ways/checks.py": [
-  [
-   "R1",
-   "hamletgen/ways/checks.py",
-   "test_every_lane_crosses_a_drawn_channel_square",
-   "partial"
-  ],
-  [
-   "R1",
-   "hamletgen/ways/checks.py",
-   "test_every_lane_crosses_the_brook_square",
-   "partial"
-  ]
- ],
- "hamletgen/hinterland/parcels.py": [
-  [
-   "R1",
-   "hamletgen/hinterland/parcels.py",
-   "test_no_three_woodland_parcels_stand_in_a_ruled_row",
-   "no"
-  ],
-  [
-   "R1",
-   "hamletgen/hinterland/parcels.py",
-   "test_a_woodland_commons_stands_on_dry_ground",
-   "yes"
-  ],
-  [
-   "R1",
-   "hamletgen/hinterland/parcels.py",
-   "test_a_woodland_commons_is_mostly_inside_the_picture",
-   "partial"
-  ],
-  [
-   "R3",
-   "hamletgen/hinterland/parcels.py",
-   "Coppice lot stocking fills a near-round 12-sided outline edge to edge.",
-   "yes"
-  ],
-  [
-   "R3",
-   "hamletgen/hinterland/parcels.py",
-   "Sawada and Kashikawa roll zero woodland parcels.",
-   "unknown"
-  ],
-  [
-   "R3",
-   "hamletgen/hinterland/parcels.py",
-   "Three woodland parcels in a ruled row on Kashikawa (test_pool_261).",
-   "yes"
-  ]
- ],
- "none (the producer was removed)": [
-  [
-   "R1",
-   "none (the producer was removed)",
-   "test_no_household_grain_plot_is_laid_by_its_house",
-   "yes"
-  ]
- ],
- "waterfields/seams/close.py": [
-  [
-   "R1",
-   "waterfields/seams/close.py",
-   "test_no_bund_is_drawn_down_the_middle_of_a_supply_channel",
-   "partial"
-  ],
-  [
-   "R1",
-   "waterfields/seams/close.py",
-   "test_no_bund_is_drawn_across_the_collector",
-   "partial"
-  ],
-  [
-   "R1",
-   "waterfields/seams/close.py",
-   "test_no_basin_tapers_to_a_point",
-   "partial"
-  ],
-  [
-   "R1",
-   "waterfields/seams/close.py",
-   "test_a_flooded_plot_reads_as_a_basin_and_not_as_a_pond",
-   "partial"
-  ],
-  [
-   "R1",
-   "waterfields/seams/close.py",
-   "test_no_basin_is_too_small_to_be_worth_its_own_bund",
-   "partial"
-  ],
-  [
-   "R1",
-   "waterfields/seams/close.py",
-   "test_the_rings_double_count_only_marginally",
-   "yes"
-  ],
-  [
-   "R1",
-   "waterfields/seams/close.py",
-   "test_every_recorded_plot_ring_is_a_simple_polygon",
-   "yes"
-  ],
-  [
-   "R1",
-   "waterfields/seams/close.py",
-   "test_no_shipped_hamlet_has_a_basin_tapering_to_a_point",
-   "partial"
-  ]
- ],
- "settlement/fields/comb.py": [
-  [
-   "R1",
-   "settlement/fields/comb.py",
-   "test_every_bund_bead_sits_on_visible_ground",
-   "partial"
-  ],
-  [
-   "R1",
-   "settlement/fields/comb.py",
-   "test_every_ditched_paddy_has_a_floor_under_its_plots",
-   "yes"
-  ],
-  [
-   "R1",
-   "settlement/fields/comb.py",
-   "test_every_field_shows_where_its_water_comes_from",
-   "yes"
-  ],
-  [
-   "R1",
-   "settlement/fields/comb.py",
-   "test_village_passes_gate",
-   "partial"
-  ]
- ],
- "waterfields/carve.py": [
-  [
-   "R1",
-   "waterfields/carve.py",
-   "test_every_beaded_bund_segment_shows_at_least_two_beads",
-   "yes"
-  ],
-  [
-   "R3",
-   "waterfields/carve.py",
-   "Carve leaves a tapering scrap no weld resolves; paddy_plot_seams_shared fails.",
-   "unknown"
-  ]
- ],
- "waterfields/furrows.py": [
-  [
-   "R1",
-   "waterfields/furrows.py",
-   "test_dry_plots_share_a_row_direction_within_a_tract_and_change_it_at_the_seams",
-   "partial"
-  ]
- ],
- "settlement/land/dikes.py": [
-  [
-   "R1",
-   "settlement/land/dikes.py",
-   "test_the_polder_dike_is_a_hand_piled_earthwork",
-   "no"
-  ],
-  [
-   "R1",
-   "settlement/land/dikes.py",
-   "test_nothing_is_built_on_the_dike",
-   "yes"
-  ]
- ],
- "hamletgen/water/polder.py": [
-  [
-   "R1",
-   "hamletgen/water/polder.py",
-   "test_no_channel_is_cut_through_the_dike_except_at_its_gaps",
-   "partial"
-  ],
-  [
-   "R1",
-   "hamletgen/water/polder.py",
-   "test_the_waterward_reed_strip_runs_off_the_frame",
-   "no"
-  ],
-  [
-   "R1",
-   "hamletgen/water/polder.py",
-   "test_a_polder_reservoir_backs_off_until_its_rim_clears_the_crop",
-   "partial"
-  ],
-  [
-   "R1",
-   "hamletgen/water/polder.py",
-   "test_a_polder_hamlet_draws_its_grid_dike_and_reservoir",
-   "partial"
-  ],
-  [
-   "R3",
-   "hamletgen/water/polder.py",
-   "Polder toe canal ends 3 ft short and 2.5 ft off the drain trunk's centerline.",
-   "unknown"
-  ],
-  [
-   "R3",
-   "hamletgen/water/polder.py",
-   "The polder grid is WIP with two named gate failures in build_polder's own geometry; the test deliberately does not assert a clean gate, and no pool map is a polder grid.",
-   "unknown"
-  ]
- ],
- "waterfields/comb.py": [
-  [
-   "R1",
-   "waterfields/comb.py",
-   "test_the_floor_stops_where_the_command_area_does",
-   "yes"
-  ],
-  [
-   "R1",
-   "waterfields/comb.py",
-   "test_the_supply_commands_both_flanks_of_the_fan",
-   "no"
-  ],
-  [
-   "R1",
-   "waterfields/comb.py",
-   "test_a_collector_discharges_at_its_lowest_point",
-   "partial"
-  ],
-  [
-   "R1",
-   "waterfields/comb.py",
-   "test_the_runoff_curves_out_of_the_collector",
-   "no"
-  ],
-  [
-   "R3",
-   "waterfields/comb.py",
-   "fan_middle=wild leaves Inashiro 0.42 acre and Mizuguchi 0.41 acre of dry field (~0.03 acre/household).",
-   "yes"
-  ]
- ],
- "waterfields/seams/plots.py": [
-  [
-   "R1",
-   "waterfields/seams/plots.py",
-   "test_a_bund_does_not_build_a_flight_of_steps",
-   "no"
-  ]
- ],
- "hamletgen/sink.py": [
-  [
-   "R1",
-   "hamletgen/sink.py",
-   "test_every_channel_runs_downhill",
-   "partial"
-  ],
-  [
-   "R1",
-   "hamletgen/sink.py",
-   "test_the_runoff_leaves_the_outfall_downhill",
-   "partial"
-  ],
-  [
-   "R1",
-   "hamletgen/sink.py",
-   "test_the_pond_is_connected_to_the_field_it_serves",
-   "yes"
-  ],
-  [
-   "R1",
-   "hamletgen/sink.py",
-   "test_no_watercourse_end_dangles_in_bare_ground",
-   "partial"
-  ],
-  [
-   "R2",
-   "hamletgen/sink.py",
-   "When no bearing/junction-distance candidate for the off-map drain brook scores zero, it draws the LEAST-BAD route, which may lie in the envelope, cross the field, turn over 55 deg, or run uphill.",
-   "breaks"
-  ]
- ],
- "waterfields/polder.py": [
-  [
-   "R1",
-   "waterfields/polder.py",
-   "test_every_lateral_lands_on_a_trunk_at_both_ends",
-   "yes"
-  ]
- ],
- "hamletgen/frame.py": [
-  [
-   "R1",
-   "hamletgen/frame.py",
-   "test_a_channel_declaring_a_stream_actually_reaches_its_bed",
-   "partial"
-  ],
-  [
-   "R2",
-   "hamletgen/frame.py",
-   "when every in-frame verge is refused as off-way (>15 deg) or under the village canopy, the best-ranked LOOSE seat is taken anyway and turned to its nearest way - the board can stand under the belt",
-   "breaks"
-  ],
-  [
-   "R2",
-   "hamletgen/frame.py",
-   "when no verge inside the frame takes a board at all, the engine's original seat (the one the guard just found outside the frame) is appended unchanged",
-   "breaks"
-  ],
-  [
-   "R2",
-   "hamletgen/frame.py",
-   "title with no blank or cover-only pocket and every corner blocked grows a north title band and sits the placard there 'over nothing, unless a feature runs off the frame there, which the check still reports'; the stage_frame comment still describes the retired corner-overlap fallback",
-   "breaks"
-  ]
- ],
- "settlement/finish.py": [
-  [
-   "R1",
-   "settlement/finish.py",
-   "test_courses_that_meet_are_composited_as_one_confluence",
-   "yes"
-  ],
-  [
-   "R1",
-   "settlement/finish.py",
-   "test_the_pond_fill_is_drawn_over_the_mouths_that_join_it",
-   "yes"
-  ],
-  [
-   "R2",
-   "settlement/finish.py",
-   "with no view set, the title goes at the top center of the canvas with no clearance test",
-   "breaks"
-  ]
- ],
- "settlement/fields/features.py": [
-  [
-   "R1",
-   "settlement/fields/features.py",
-   "test_a_field_pond_is_sunk_into_one_plot",
-   "partial"
-  ],
-  [
-   "R3",
-   "settlement/fields/features.py",
-   "The mound is drawn over an intact lattice; three plot rings and nine junctions lie under it.",
-   "yes"
-  ]
- ],
- "settlement/structures/captions.py": [
-  [
-   "R1",
-   "settlement/structures/captions.py",
-   "test_every_caption_records_the_feature_it_names",
-   "partial"
-  ]
- ],
- "hamletgen/homesteads/stages.py": [
-  [
-   "R1",
-   "hamletgen/homesteads/stages.py",
-   "test_the_cluster_abuts_the_ground_it_works",
-   "partial"
-  ],
-  [
-   "R1",
-   "hamletgen/homesteads/stages.py",
-   "test_the_cluster_draws_the_shape_it_rolled",
-   "yes"
-  ],
-  [
-   "R1",
-   "hamletgen/homesteads/stages.py",
-   "test_a_rolled_cohort_passes_the_whole_gate",
-   "no"
-  ],
-  [
-   "R1",
-   "hamletgen/homesteads/stages.py",
-   "test_every_declared_household_is_seated",
-   "no"
-  ],
-  [
-   "R1",
-   "hamletgen/homesteads/stages.py",
-   "test_a_hamlet_has_no_headman_of_its_own",
-   "yes"
-  ],
-  [
-   "R1",
-   "hamletgen/homesteads/stages.py",
-   "test_the_polder_seats_its_households_and_lands_its_acreage",
-   "no"
-  ],
-  [
-   "R1",
-   "hamletgen/homesteads/stages.py",
-   "test_the_cluster_seeds_cloud_still_seats_a_hamlet_when_the_rows_offer_nothing",
-   "no"
-  ],
-  [
-   "R1",
-   "hamletgen/homesteads/stages.py",
-   "test_the_linear_frontage_pass_stops_once_the_households_are_housed",
-   "yes"
-  ],
-  [
-   "R2",
-   "hamletgen/homesteads/stages.py",
-   "After four lattice rounds, the rescue offers along-the-field ends and a wider random cloud. If the quota is still short after round 7, the map ships with fewer households and plan.placed records the shortfall, with no refusal or re-roll",
-   "breaks"
-  ],
-  [
-   "R3",
-   "hamletgen/homesteads/stages.py",
-   "Cohort seeds 5/8/25 strand farmhouses 172-237 ft from any way; reach is repaired only by a re-roll, not guaranteed by the seat or the web.",
-   "yes"
-  ],
-  [
-   "R3",
-   "hamletgen/homesteads/stages.py",
-   "cluster_shape rolled but not drawn when the frontage seats every household.",
-   "yes"
-  ],
-  [
-   "R3",
-   "hamletgen/homesteads/stages.py",
-   "The test accepts a hamlet seating 85% of its declared households.",
-   "yes"
-  ]
- ],
- "settlement/homestead_parts/yards.py": [
-  [
-   "R1",
-   "settlement/homestead_parts/yards.py",
-   "test_every_threshing_yard_fronts_its_house_square",
-   "yes"
-  ],
-  [
-   "R1",
-   "settlement/homestead_parts/yards.py",
-   "test_every_drawn_yard_is_a_floor_of_mats_and_racks_follow_the_weather",
-   "partial"
-  ]
- ],
- "settlement/houses.py": [
-  [
-   "R1",
-   "settlement/houses.py",
-   "test_no_farmhouse_is_drawn_as_a_shed",
-   "yes"
-  ],
-  [
-   "R1",
-   "settlement/houses.py",
-   "test_farmhouses_vary_in_size",
-   "no"
-  ],
-  [
-   "R3",
-   "settlement/houses.py",
-   "_hjit positional roll aliases along a front row; pool share 13.6-22% against ~30% (p=0.2993), a re-pack moves it.",
-   "yes"
-  ]
- ],
- "hamletgen/homesteads/wells.py": [
-  [
-   "R1",
-   "hamletgen/homesteads/wells.py",
-   "test_every_well_stands_among_the_doors_it_serves",
-   "partial"
-  ],
-  [
-   "R1",
-   "hamletgen/homesteads/wells.py",
-   "test_every_household_can_reach_water",
-   "partial"
-  ],
-  [
-   "R2",
-   "hamletgen/homesteads/wells.py",
-   "coverage rescue: a household beyond 760 ft of any water gets a ring-probed well; if no probe passes, nothing is placed and the household is left dry",
-   "breaks"
-  ],
-  [
-   "R2",
-   "hamletgen/homesteads/wells.py",
-   "last resort: open_seat over the house-cloud bbox with no among-the-dwellings or not-clustered test; if that finds nothing the map has no well",
-   "breaks"
-  ],
-  [
-   "R3",
-   "hamletgen/homesteads/wells.py",
-   "A well seated in the sweep pad 65 px past the next feature holds the frame open.",
-   "unknown"
-  ],
-  [
-   "R3",
-   "hamletgen/homesteads/wells.py",
-   "Inashiro's south well is 100 ft from its nearest house with scrub on every side.",
-   "unknown"
-  ]
- ],
- "settlement/land/cover.py": [
-  [
-   "R1",
-   "settlement/land/cover.py",
-   "test_the_countryside_has_no_holes_in_it",
-   "no"
-  ],
-  [
-   "R1",
-   "settlement/land/cover.py",
-   "test_a_woodland_commons_is_visibly_stocked",
-   "no"
-  ]
- ],
- "hamletgen/ways/smooth.py": [
-  [
-   "R1",
-   "hamletgen/ways/smooth.py",
-   "test_no_lane_doubles_back_or_kinks",
-   "partial"
-  ]
- ],
- "hamletgen/ways/serve.py": [
-  [
-   "R1",
-   "hamletgen/ways/serve.py",
-   "test_a_farmhouse_discharges_one_lane_end_not_three",
-   "no"
-  ],
-  [
-   "R1",
-   "hamletgen/ways/serve.py",
-   "test_the_clean_cohort_seeds_bend_like_paths",
-   "partial"
-  ],
-  [
-   "R1",
-   "hamletgen/ways/serve.py",
-   "test_the_polder_s_lanes_bend_like_paths",
-   "partial"
-  ],
-  [
-   "R1",
-   "hamletgen/ways/serve.py",
-   "test_seed_43_still_kinks_round_a_house_corner",
-   "no"
-  ],
-  [
-   "R2",
-   "hamletgen/ways/serve.py",
-   "when neither cut is clean, the least-bad cut by (fouls, bends) is kept, and a cut that crosses a neighbor's yard or garden (_crosses_fabric against passable) can survive, because only a steading foul is re-tested later (_hits_a_steading)",
-   "breaks"
-  ],
-  [
-   "R2",
-   "hamletgen/ways/serve.py",
-   "a door path that bends badly on every target way is still drawn as the least-bad fold so the house is served",
-   "breaks"
-  ],
-  [
-   "R2",
-   "hamletgen/ways/serve.py",
-   "when every candidate fouls a steading or none ends worth walking to, the house is left with no way and recorded in _exhausted",
-   "breaks"
-  ]
- ],
- "hamletgen/hinterland/stages.py": [
-  [
-   "R1",
-   "hamletgen/hinterland/stages.py",
-   "test_the_ground_cover_scatter_respects_what_was_swept_before_it",
-   "partial"
-  ]
- ],
- "settlement/farm_fixtures.py": [
-  [
-   "R1",
-   "settlement/farm_fixtures.py",
-   "test_no_pond_fixture_stands_on_its_ponds_sluice",
-   "yes"
-  ]
- ],
- "hamletgen/pondstock.py": [
-  [
-   "R1",
-   "hamletgen/pondstock.py",
-   "test_every_pond_fixture_keeps_to_the_near_half_of_its_pond",
-   "yes"
-  ],
-  [
-   "R1",
-   "hamletgen/pondstock.py",
-   "test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks",
-   "partial"
-  ]
- ],
- "tools/seat_label.py": [
-  [
-   "R1",
-   "tools/seat_label.py",
-   "test_every_caption_on_a_hand_drawn_sheet_is_at_its_standard_seat",
-   "no"
-  ]
- ],
- "hamletgen/hinterland/frame.py": [
-  [
-   "R1",
-   "hamletgen/hinterland/frame.py",
-   "test_no_shipped_hamlet_breaches_its_scatter_frame",
-   "no"
-  ]
- ],
- "hamletgen/hinterland/belt.py": [
-  [
-   "R1",
-   "hamletgen/hinterland/belt.py",
-   "test_every_pool_hamlet_has_its_belt_on_the_regional_northwest",
-   "partial"
-  ],
-  [
-   "R3",
-   "hamletgen/hinterland/belt.py",
-   "Inashiro belt canopy thinned to 4.8 ft / one clump over a 45 ft band after the web landed; the road gap's coincidence is unstable.",
-   "unknown"
-  ],
-  [
-   "R3",
-   "hamletgen/hinterland/belt.py",
-   "A belt drawn 57 px short of the page with 37 recorded clumps undrawn passes.",
-   "unknown"
-  ],
-  [
-   "R3",
-   "hamletgen/hinterland/belt.py",
-   "Seed 45's windbreak continuity failure is unverified since the pin moved out of the gate.",
-   "unknown"
-  ],
-  [
-   "R3",
-   "hamletgen/hinterland/belt.py",
-   "On Inashiro 63 of 308 belt crowns stand over 200 ft from any farmhouse (furthest 518 ft).",
-   "yes"
-  ]
- ],
- "settlement/_geom/primitives.py": [
-  [
-   "R1",
-   "settlement/_geom/primitives.py",
-   "test_the_polders_keep_outs_contain_what_they_stand_for",
-   "partial"
-  ]
- ],
- "hamletgen/homesteads/seats.py": [
-  [
-   "R1",
-   "hamletgen/homesteads/seats.py",
-   "test_lane_frontage_seats_the_hamlet_when_the_field_row_offers_nothing",
-   "no"
   ]
  ],
  "compound.py": [
   [
    "R1",
-   "compound.py",
    "test_every_mode_a_sheet_passes_its_checks",
    "partial"
   ]
  ],
- "settlement/water_ways/wards.py": [
-  [
-   "R2",
-   "settlement/water_ways/wards.py",
-   "a fence end further than `reach` from the wall is left exactly as placed, not joined",
-   "breaks"
-  ]
- ],
- "hamletgen/ways/track.py": [
-  [
-   "R2",
-   "hamletgen/ways/track.py",
-   "no clean bearing: the connector takes the least-bad candidate ranked (wet, steadings, crop/pond/brook)",
-   "breaks"
-  ],
-  [
-   "R2",
-   "hamletgen/ways/track.py",
-   "When route+clip and the four-step swing ladder all fail, returns `out` (a clipped run still crossing the steadings) or, if the clip died, the original `run` straight through them.",
-   "breaks"
-  ],
-  [
-   "R2",
-   "hamletgen/ways/track.py",
-   "When none of 41 bearings is clean of wet ground, steadings and crop, the connector returns the LEAST-BAD bearing (lexicographic wet, steadings, crop); only crop hits are repaired later by route_around.",
-   "breaks"
-  ]
- ],
- "settlement/land/wet.py": [
-  [
-   "R2",
-   "settlement/land/wet.py",
-   "when shapely raises or returns no polygon, the marsh is drawn UNCLIPPED - over the dike block, the fields and the pond",
-   "breaks"
-  ],
-  [
-   "R2",
-   "settlement/land/wet.py",
-   "a two-point way whose whole length lies in wet ground is shortened to <=30 px and left with its soaked end",
-   "breaks"
-  ],
+ "consts.py": [
   [
    "R3",
-   "settlement/land/wet.py",
-   "marshes[0].poly keeps the unclipped ring, so the belt cannot be kept off the marsh (68 of 179 belt crowns inside it on Sawada).",
+   "Four Inashiro lanes end 28.1-28.5 ft from the lane they should join (WEB_CLEARANCE 28).",
+   "unknown"
+  ]
+ ],
+ "frame.py": [
+  [
+   "R3",
+   "Burial glyph stood 23 ft from the title placard on its centerline, reading as its ornament.",
+   "unknown"
+  ]
+ ],
+ "hamletgen stage_ways skeleton / _trim_to": [
+  [
+   "R3",
+   "A skeleton arm overruns its last steading by 85 ft because _trim_to_service runs only on web lanes.",
+   "unknown"
+  ]
+ ],
+ "hamletgen village_grove crown scatter": [
+  [
+   "R3",
+   "Placer constrains clump centers while crowns are drawn scattered (median 8.1 ft), so drawn trunks can stand in a tread.",
+   "unknown"
+  ]
+ ],
+ "hamletgen/burial.py": [
+  [
+   "R3",
+   "No lane or path reaches a hamlet's own burial ground (Inashiro, Kashikawa, Kuwabata).",
    "yes"
   ]
  ],
  "hamletgen/cluster.py": [
   [
    "R2",
-   "hamletgen/cluster.py",
    "when no wind-facing margin has room for its belt, the best CRAMPED margin is seated - the windbreak belt runs partly off the canvas",
    "breaks"
   ],
   [
    "R2",
-   "hamletgen/cluster.py",
    "when no margin faces within 45 deg of the wind, the best OFF-WIND margin is seated (recorded as seat_offwind)",
    "breaks"
   ],
   [
    "R2",
-   "hamletgen/cluster.py",
    "With no wind-facing margin, the cluster seats on the best margin whose back faces off the wind and records meta.seat_offwind.",
    "breaks"
   ],
   [
    "R2",
-   "hamletgen/cluster.py",
    "when no field margin faces the wind within 45 degrees, the best off-wind margin is taken and meta.seat_offwind is set",
    "breaks"
   ],
   [
    "R3",
-   "hamletgen/cluster.py",
    "Seat not facing the regional wind (test_pool_wind.py).",
    "yes"
+  ]
+ ],
+ "hamletgen/driver.py": [
+  [
+   "R3",
+   "Farmhouse reach is enforced by re-rolling with stranded ground forbidden and keeping the least-bad attempt; a map can still ship with meta.roll_failures farmhouses_reach_a_way.",
+   "yes"
+  ]
+ ],
+ "hamletgen/frame.py": [
+  [
+   "R1",
+   "test_a_channel_declaring_a_stream_actually_reaches_its_bed",
+   "partial"
+  ],
+  [
+   "R2",
+   "when every in-frame verge is refused as off-way (>15 deg) or under the village canopy, the best-ranked LOOSE seat is taken anyway and turned to its nearest way - the board can stand under the belt",
+   "breaks"
+  ],
+  [
+   "R2",
+   "when no verge inside the frame takes a board at all, the engine's original seat (the one the guard just found outside the frame) is appended unchanged",
+   "breaks"
+  ],
+  [
+   "R2",
+   "title with no blank or cover-only pocket and every corner blocked grows a north title band and sits the placard there 'over nothing, unless a feature runs off the frame there, which the check still reports'; the stage_frame comment still describes the retired corner-overlap fallback",
+   "breaks"
+  ]
+ ],
+ "hamletgen/hinterland village_grove; haml": [
+  [
+   "R3",
+   "Tripwire seeds 27, 33, 37, 47 failed named checks; the pin table is EMPTY since the battery was deleted, so the defects have no reader.",
+   "unknown"
+  ]
+ ],
+ "hamletgen/hinterland/belt.py": [
+  [
+   "R1",
+   "test_every_pool_hamlet_has_its_belt_on_the_regional_northwest",
+   "partial"
+  ],
+  [
+   "R3",
+   "Inashiro belt canopy thinned to 4.8 ft / one clump over a 45 ft band after the web landed; the road gap's coincidence is unstable.",
+   "unknown"
+  ],
+  [
+   "R3",
+   "A belt drawn 57 px short of the page with 37 recorded clumps undrawn passes.",
+   "unknown"
+  ],
+  [
+   "R3",
+   "Seed 45's windbreak continuity failure is unverified since the pin moved out of the gate.",
+   "unknown"
+  ],
+  [
+   "R3",
+   "On Inashiro 63 of 308 belt crowns stand over 200 ft from any farmhouse (furthest 518 ft).",
+   "yes"
+  ]
+ ],
+ "hamletgen/hinterland/frame.py": [
+  [
+   "R1",
+   "test_no_shipped_hamlet_breaches_its_scatter_frame",
+   "no"
+  ]
+ ],
+ "hamletgen/hinterland/parcels.py": [
+  [
+   "R1",
+   "test_no_three_woodland_parcels_stand_in_a_ruled_row",
+   "no"
+  ],
+  [
+   "R1",
+   "test_a_woodland_commons_stands_on_dry_ground",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_a_woodland_commons_is_mostly_inside_the_picture",
+   "partial"
+  ],
+  [
+   "R3",
+   "Coppice lot stocking fills a near-round 12-sided outline edge to edge.",
+   "yes"
+  ],
+  [
+   "R3",
+   "Sawada and Kashikawa roll zero woodland parcels.",
+   "unknown"
+  ],
+  [
+   "R3",
+   "Three woodland parcels in a ruled row on Kashikawa (test_pool_261).",
+   "yes"
+  ]
+ ],
+ "hamletgen/hinterland/stages.py": [
+  [
+   "R1",
+   "test_the_ground_cover_scatter_respects_what_was_swept_before_it",
+   "partial"
+  ]
+ ],
+ "hamletgen/homesteads/fixtures.py": [
+  [
+   "R2",
+   "A fixture no house had room for is not drawn, and the miss is recorded in meta.farm_fixtures_unseated",
+   "breaks"
+  ],
+  [
+   "R3",
+   "woodpile_form kizuma rolled on Kashikawa/Kuwabata and none drawn; bath_seat corridor rolled on Mizuguchi and baths drawn unjoined.",
+   "yes"
+  ],
+  [
+   "R3",
+   "5-7 of 10 eaves stacks 10.5-27.8 ft from any building on Mizuguchi, 7 of 15 on Kuwabata.",
+   "yes"
+  ]
+ ],
+ "hamletgen/homesteads/seats.py": [
+  [
+   "R1",
+   "test_lane_frontage_seats_the_hamlet_when_the_field_row_offers_nothing",
+   "no"
+  ]
+ ],
+ "hamletgen/homesteads/stages.py": [
+  [
+   "R1",
+   "test_the_cluster_abuts_the_ground_it_works",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_the_cluster_draws_the_shape_it_rolled",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_a_rolled_cohort_passes_the_whole_gate",
+   "no"
+  ],
+  [
+   "R1",
+   "test_every_declared_household_is_seated",
+   "no"
+  ],
+  [
+   "R1",
+   "test_a_hamlet_has_no_headman_of_its_own",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_the_polder_seats_its_households_and_lands_its_acreage",
+   "no"
+  ],
+  [
+   "R1",
+   "test_the_cluster_seeds_cloud_still_seats_a_hamlet_when_the_rows_offer_nothing",
+   "no"
+  ],
+  [
+   "R1",
+   "test_the_linear_frontage_pass_stops_once_the_households_are_housed",
+   "yes"
+  ],
+  [
+   "R2",
+   "After four lattice rounds, the rescue offers along-the-field ends and a wider random cloud. If the quota is still short after round 7, the map ships with fewer households and plan.placed records the shortfall, with no refusal or re-roll",
+   "breaks"
+  ],
+  [
+   "R3",
+   "Cohort seeds 5/8/25 strand farmhouses 172-237 ft from any way; reach is repaired only by a re-roll, not guaranteed by the seat or the web.",
+   "yes"
+  ],
+  [
+   "R3",
+   "cluster_shape rolled but not drawn when the frontage seats every household.",
+   "yes"
+  ],
+  [
+   "R3",
+   "The test accepts a hamlet seating 85% of its declared households.",
+   "yes"
+  ]
+ ],
+ "hamletgen/homesteads/wells.py": [
+  [
+   "R1",
+   "test_every_well_stands_among_the_doors_it_serves",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_every_household_can_reach_water",
+   "partial"
+  ],
+  [
+   "R2",
+   "coverage rescue: a household beyond 760 ft of any water gets a ring-probed well; if no probe passes, nothing is placed and the household is left dry",
+   "breaks"
+  ],
+  [
+   "R2",
+   "last resort: open_seat over the house-cloud bbox with no among-the-dwellings or not-clustered test; if that finds nothing the map has no well",
+   "breaks"
+  ],
+  [
+   "R3",
+   "A well seated in the sweep pad 65 px past the next feature holds the frame open.",
+   "unknown"
+  ],
+  [
+   "R3",
+   "Inashiro's south well is 100 ft from its nearest house with scrub on every side.",
+   "unknown"
+  ]
+ ],
+ "hamletgen/pondstock.py": [
+  [
+   "R1",
+   "test_every_pond_fixture_keeps_to_the_near_half_of_its_pond",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks",
+   "partial"
+  ]
+ ],
+ "hamletgen/sink.py": [
+  [
+   "R1",
+   "test_every_channel_runs_downhill",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_the_runoff_leaves_the_outfall_downhill",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_the_pond_is_connected_to_the_field_it_serves",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_no_watercourse_end_dangles_in_bare_ground",
+   "partial"
+  ],
+  [
+   "R2",
+   "When no bearing/junction-distance candidate for the off-map drain brook scores zero, it draws the LEAST-BAD route, which may lie in the envelope, cross the field, turn over 55 deg, or run uphill.",
+   "breaks"
+  ]
+ ],
+ "hamletgen/water fit_field + canvas/envel": [
+  [
+   "R3",
+   "Seed 45 reaches 18.6 of 22.1 acres, seed 47 21.9 of 26.0; the 15% acreage assertion is skipped for them.",
+   "yes"
+  ]
+ ],
+ "hamletgen/water/brook.py": [
+  [
+   "R1",
+   "test_no_brook_folds_back_on_itself",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_no_brook_runs_ruled_along_the_frame",
+   "no"
+  ],
+  [
+   "R1",
+   "test_no_brook_runs_ruled_for_most_of_its_course_on_the_page",
+   "no"
+  ],
+  [
+   "R1",
+   "test_no_brook_segment_lies_on_a_screen_axis_but_the_tap_run",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_no_stream_runs_through_a_field",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_every_stream_end_is_anchored_to_what_it_declares",
+   "no"
+  ],
+  [
+   "R1",
+   "test_no_watercourse_crosses_another_mid_run",
+   "partial"
+  ],
+  [
+   "R2",
+   "When all fifteen upslope bearings clip the field envelope, the approach is drawn straight up the fall line regardless, crossing the rice.",
+   "breaks"
+  ],
+  [
+   "R3",
+   "17% of the weir bar lies on the head race; the Weir modal says it runs from the mouth.",
+   "yes"
+  ],
+  [
+   "R3",
+   "Brook legs near-axis-aligned on Kashikawa and Sawada.",
+   "yes"
+  ]
+ ],
+ "hamletgen/water/comb.py": [
+  [
+   "R3",
+   "The bundle has no in-field channel keep-out; the stub was holding the ground a garden would otherwise take.",
+   "yes"
+  ]
+ ],
+ "hamletgen/water/polder.py": [
+  [
+   "R1",
+   "test_no_channel_is_cut_through_the_dike_except_at_its_gaps",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_the_waterward_reed_strip_runs_off_the_frame",
+   "no"
+  ],
+  [
+   "R1",
+   "test_a_polder_reservoir_backs_off_until_its_rim_clears_the_crop",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_a_polder_hamlet_draws_its_grid_dike_and_reservoir",
+   "partial"
+  ],
+  [
+   "R3",
+   "Polder toe canal ends 3 ft short and 2.5 ft off the drain trunk's centerline.",
+   "unknown"
+  ],
+  [
+   "R3",
+   "The polder grid is WIP with two named gate failures in build_polder's own geometry; the test deliberately does not assert a clean gate, and no pool map is a polder grid.",
+   "unknown"
+  ]
+ ],
+ "hamletgen/ways (_join_orphan_ways, _brid": [
+  [
+   "R3",
+   "Corner holes invisible to the aim test, the same break repaired twice around a needle, 4 ft fragments, and a 0-40 ft dead band between generator and check join tolerances.",
+   "unknown"
+  ]
+ ],
+ "hamletgen/ways link width assignment": [
+  [
+   "R3",
+   "One continuous back lane halves its width at a node where nothing happens (a link takes the joined way's width).",
+   "unknown"
+  ]
+ ],
+ "hamletgen/ways straggler pass": [
+  [
+   "R3",
+   "A house 96 ft from the nearest lane (inside WEB_REACH_FT 100, a guess) with a neighbor's back yard between.",
+   "unknown"
+  ]
+ ],
+ "hamletgen/ways straggler router (_homest": [
+  [
+   "R3",
+   "Three trunks 3.1-4.2 ft from Inashiro's straggler footpath centerline (bar 4.0).",
+   "yes"
+  ]
+ ],
+ "hamletgen/ways track spur_path / _thread": [
+  [
+   "R3",
+   "On tight clusters the spur's final fallback returns its original run over a house (tripwire seed 27).",
+   "unknown"
+  ]
+ ],
+ "hamletgen/ways/bund.py": [
+  [
+   "R1",
+   "test_a_way_reaches_the_field",
+   "partial"
+  ]
+ ],
+ "hamletgen/ways/checks.py": [
+  [
+   "R1",
+   "test_every_lane_crosses_a_drawn_channel_square",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_every_lane_crosses_the_brook_square",
+   "partial"
   ]
  ],
  "hamletgen/ways/clearance.py": [
   [
    "R2",
-   "hamletgen/ways/clearance.py",
    "Bends a way round a field outline for at most `rounds` (6) passes and returns whatever it has when the rounds run out, even if a leg still crosses the outline.",
    "breaks"
   ]
@@ -1138,261 +510,686 @@
  "hamletgen/ways/fabric.py": [
   [
    "R2",
-   "hamletgen/ways/fabric.py",
    "a join link that would touch a farmhouse is refused and the piece it was joining is kept orphaned (the trade serve.py:619 cites)",
    "breaks"
   ]
  ],
- "waterfields/seams/pockets.py": [
+ "hamletgen/ways/joints.py": [
   [
-   "R2",
-   "waterfields/seams/pockets.py",
-   "the least-bad arrowhead weld is taken with no test against the gate's chevron line, unlike the needle fallback, which is held to _GATE_MIN_APEX",
-   "breaks"
-  ]
- ],
- "hamletgen/homesteads/fixtures.py": [
+   "R1",
+   "test_no_lane_ends_in_a_hook",
+   "no"
+  ],
   [
-   "R2",
-   "hamletgen/homesteads/fixtures.py",
-   "A fixture no house had room for is not drawn, and the miss is recorded in meta.farm_fixtures_unseated",
-   "breaks"
+   "R1",
+   "test_no_two_lanes_meet_end_to_end_in_a_fold_and_no_lane_ends_in_a_hook",
+   "partial"
   ],
   [
    "R3",
-   "hamletgen/homesteads/fixtures.py",
-   "woodpile_form kizuma rolled on Kashikawa/Kuwabata and none drawn; bath_seat corridor rolled on Mizuguchi and baths drawn unjoined.",
+   "Lane 2 and the connector run back 126 ft 15-40 ft apart at 169 degrees.",
+   "unknown"
+  ]
+ ],
+ "hamletgen/ways/route.py": [
+  [
+   "R3",
+   "Seed 43's routed footpath keeps a 36 px lattice step round a house corner; the lane-bend rule is asserted only on the coverage rolls, with seed 43 moved to the soak tier.",
    "yes"
+  ]
+ ],
+ "hamletgen/ways/serve.py": [
+  [
+   "R1",
+   "test_a_farmhouse_discharges_one_lane_end_not_three",
+   "no"
+  ],
+  [
+   "R1",
+   "test_the_clean_cohort_seeds_bend_like_paths",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_the_polder_s_lanes_bend_like_paths",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_seed_43_still_kinks_round_a_house_corner",
+   "no"
+  ],
+  [
+   "R2",
+   "when neither cut is clean, the least-bad cut by (fouls, bends) is kept, and a cut that crosses a neighbor's yard or garden (_crosses_fabric against passable) can survive, because only a steading foul is re-tested later (_hits_a_steading)",
+   "breaks"
+  ],
+  [
+   "R2",
+   "a door path that bends badly on every target way is still drawn as the least-bad fold so the house is served",
+   "breaks"
+  ],
+  [
+   "R2",
+   "when every candidate fouls a steading or none ends worth walking to, the house is left with no way and recorded in _exhausted",
+   "breaks"
+  ]
+ ],
+ "hamletgen/ways/smooth.py": [
+  [
+   "R1",
+   "test_no_lane_doubles_back_or_kinks",
+   "partial"
+  ]
+ ],
+ "hamletgen/ways/sweeps.py": [
+  [
+   "R1",
+   "test_every_way_out_crosses_the_brook_at_most_once",
+   "no"
+  ],
+  [
+   "R1",
+   "test_every_lane_end_reaches_something_worth_walking_to",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_every_shipped_hamlets_lane_ends_reach_something",
+   "partial"
+  ],
+  [
+   "R2",
+   "When no candidate link joins an orphan way without crossing the brook and coming back, the out-and-back link is kept as the last resort and drawn",
+   "breaks"
+  ]
+ ],
+ "hamletgen/ways/track.py": [
+  [
+   "R2",
+   "no clean bearing: the connector takes the least-bad candidate ranked (wet, steadings, crop/pond/brook)",
+   "breaks"
+  ],
+  [
+   "R2",
+   "When route+clip and the four-step swing ladder all fail, returns `out` (a clipped run still crossing the steadings) or, if the clip died, the original `run` straight through them.",
+   "breaks"
+  ],
+  [
+   "R2",
+   "When none of 41 bearings is clean of wet ground, steadings and crop, the connector returns the LEAST-BAD bearing (lexicographic wet, steadings, crop); only crop hits are repaired later by route_around.",
+   "breaks"
+  ]
+ ],
+ "hamletgen/ways/web.py": [
+  [
+   "R1",
+   "test_the_ways_cross_the_brook_only_at_fords_and_never_over_and_back",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_no_lane_end_is_served_only_by_the_way_it_left",
+   "no"
+  ],
+  [
+   "R1",
+   "test_every_lane_belongs_to_one_network",
+   "no"
+  ],
+  [
+   "R1",
+   "test_a_lane_does_not_break_mid_run",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_every_shipped_hamlets_lanes_are_one_network_at_the_ink_tolerance",
+   "no"
   ],
   [
    "R3",
-   "hamletgen/homesteads/fixtures.py",
-   "5-7 of 10 eaves stacks 10.5-27.8 ft from any building on Mizuguchi, 7 of 15 on Kuwabata.",
-   "yes"
-  ]
- ],
- "hamletgen/burial.py": [
-  [
-   "R3",
-   "hamletgen/burial.py",
-   "No lane or path reaches a hamlet's own burial ground (Inashiro, Kashikawa, Kuwabata).",
-   "yes"
-  ]
- ],
- "homestead_parts/groves.py": [
-  [
-   "R3",
-   "homestead_parts/groves.py",
-   "Drawn homestead wood is 49-86% of the rolled area on every map; Kuwabata near/under the 6,000 sq ft floor; copse crowns across a lane from their house.",
-   "yes"
-  ]
- ],
- "settlement/water_ways/lanes.py": [
-  [
-   "R3",
-   "settlement/water_ways/lanes.py",
-   "trim_lane_stubs accepts a lane end 11 ft behind a house's back wall as reaching its dooryard.",
-   "yes"
-  ]
- ],
- "frame.py": [
-  [
-   "R3",
-   "frame.py",
-   "Burial glyph stood 23 ft from the title placard on its centerline, reading as its ornament.",
-   "unknown"
-  ]
- ],
- "hamletgen/ways straggler pass": [
-  [
-   "R3",
-   "hamletgen/ways straggler pass",
-   "A house 96 ft from the nearest lane (inside WEB_REACH_FT 100, a guess) with a neighbor's back yard between.",
-   "unknown"
-  ]
- ],
- "consts.py": [
-  [
-   "R3",
-   "consts.py",
-   "Four Inashiro lanes end 28.1-28.5 ft from the lane they should join (WEB_CLEARANCE 28).",
-   "unknown"
-  ]
- ],
- "hamletgen/ways track spur_path / _thread": [
-  [
-   "R3",
-   "hamletgen/ways track spur_path / _thread",
-   "On tight clusters the spur's final fallback returns its original run over a house (tripwire seed 27).",
-   "unknown"
-  ]
- ],
- "cluster.py": [
-  [
-   "R3",
-   "cluster.py",
-   "The lane skeleton is a straight chord across a curved seat band; far-arm houses get no lane (the unshipped fix cleared seeds 8/25). Cluster seats on field corners (111-113 deg turns) strand houses.",
-   "unknown"
-  ]
- ],
- "hamletgen/ways (_join_orphan_ways, _brid": [
-  [
-   "R3",
-   "hamletgen/ways (_join_orphan_ways, _brid",
-   "Corner holes invisible to the aim test, the same break repaired twice around a needle, 4 ft fragments, and a 0-40 ft dead band between generator and check join tolerances.",
-   "unknown"
-  ]
- ],
- "hamletgen stage_ways skeleton / _trim_to": [
-  [
-   "R3",
-   "hamletgen stage_ways skeleton / _trim_to",
-   "A skeleton arm overruns its last steading by 85 ft because _trim_to_service runs only on web lanes.",
-   "unknown"
-  ]
- ],
- "waterfields toe/seam pass": [
-  [
-   "R3",
-   "waterfields toe/seam pass",
-   "Basins of 0.55-0.72 cell with 27-30 deg tips read as darts.",
-   "unknown"
-  ]
- ],
- "waterfields seams close_seams / _seam_cu": [
-  [
-   "R3",
-   "waterfields seams close_seams / _seam_cu",
-   "Single bund steps survive on pool rings; cohort seeds 12 (4 steps) and 39 (2 steps) carry staircases.",
-   "yes"
-  ]
- ],
- "settlement/rolling/farmsteads.py": [
-  [
-   "R3",
-   "settlement/rolling/farmsteads.py",
-   "The fit tests a reservation; the south-nudge relaxation moves the bundle so the drawn yard corner lands in a basin.",
-   "unknown"
-  ]
- ],
- "hamletgen/ways link width assignment": [
-  [
-   "R3",
-   "hamletgen/ways link width assignment",
-   "One continuous back lane halves its width at a node where nothing happens (a link takes the joined way's width).",
-   "unknown"
-  ]
- ],
- "waterfields toe pass": [
-  [
-   "R3",
-   "waterfields toe pass",
-   "Basins 5.9 ft wide pass the area floor; 9 under 12 ft, 30 under 16 ft on Kashikawa.",
-   "unknown"
-  ]
- ],
- "structures/fixtures kosatsuba caption se": [
-  [
-   "R3",
-   "structures/fixtures kosatsuba caption se",
-   "Tilted boards' captions land on a lane tread (seeds 1, 7, 14, 33, 36); a 1D seat ladder and a board sited where no caption is sitable.",
-   "unknown"
-  ]
- ],
- "Settlement.caption_lane_clearance": [
-  [
-   "R3",
-   "Settlement.caption_lane_clearance",
-   "Corner sampling misses a curved tread crossing the caption box edge.",
-   "unknown"
-  ]
- ],
- "hamletgen/hinterland village_grove; haml": [
-  [
-   "R3",
-   "hamletgen/hinterland village_grove; haml",
-   "Tripwire seeds 27, 33, 37, 47 failed named checks; the pin table is EMPTY since the battery was deleted, so the defects have no reader.",
-   "unknown"
-  ]
- ],
- "hamletgen village_grove crown scatter": [
-  [
-   "R3",
-   "hamletgen village_grove crown scatter",
-   "Placer constrains clump centers while crowns are drawn scattered (median 8.1 ft), so drawn trunks can stand in a tread.",
-   "unknown"
-  ]
- ],
- "hamletgen/ways straggler router (_homest": [
-  [
-   "R3",
-   "hamletgen/ways straggler router (_homest",
-   "Three trunks 3.1-4.2 ft from Inashiro's straggler footpath centerline (bar 4.0).",
-   "yes"
-  ]
- ],
- "hamletgen/water/comb.py": [
-  [
-   "R3",
-   "hamletgen/water/comb.py",
-   "The bundle has no in-field channel keep-out; the stub was holding the ground a garden would otherwise take.",
-   "yes"
-  ]
- ],
- "waterfields seam pass": [
-  [
-   "R3",
-   "waterfields seam pass",
-   "A paddy bund built as a flight of steps (tests/gate/test_paddy_fabric.py).",
+   "Orphan join lane runs back along the skeleton lane 35 ft at 16 degrees, leaving a ~250 sq ft needle.",
    "yes"
   ]
  ],
  "homestead groves copse seat": [
   [
    "R3",
-   "homestead groves copse seat",
    "A copse clump within reach only across the brook (Inashiro).",
+   "yes"
+  ]
+ ],
+ "homestead_parts/groves.py": [
+  [
+   "R3",
+   "Drawn homestead wood is 49-86% of the rolled area on every map; Kuwabata near/under the 6,000 sq ft floor; copse crowns across a lane from their house.",
    "yes"
   ]
  ],
  "labels/ (the one caption placer)": [
   [
    "R3",
-   "labels/ (the one caption placer)",
    "No check measures a caption against a building it does not name; Kuwabata's board caption 2.24 px from a built glyph.",
    "unknown"
   ]
  ],
- "hamletgen/water fit_field + canvas/envel": [
+ "labels/placer.py": [
   [
-   "R3",
-   "hamletgen/water fit_field + canvas/envel",
-   "Seed 45 reaches 18.6 of 22.1 acres, seed 47 21.9 of 26.0; the 15% acreage assertion is skipped for them.",
+   "R1",
+   "test_the_board_caption_names_the_board_only",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_the_board_caption_stands_nearest_its_own_board",
+   "no"
+  ],
+  [
+   "R1",
+   "test_the_board_caption_stands_at_the_boards_angle",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_every_caption_hugs_what_it_names",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_every_caption_is_turned_to_match_its_subject",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_no_caption_lies_across_a_way",
+   "no"
+  ]
+ ],
+ "none (the producer was removed)": [
+  [
+   "R1",
+   "test_no_household_grain_plot_is_laid_by_its_house",
    "yes"
   ]
  ],
- "hamletgen/ways/route.py": [
+ "settlement/_geom/primitives.py": [
+  [
+   "R1",
+   "test_the_polders_keep_outs_contain_what_they_stand_for",
+   "partial"
+  ]
+ ],
+ "settlement/city/bridges.py": [
+  [
+   "R1",
+   "test_every_way_across_the_brook_is_bridged",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_every_deck_is_long_enough_to_land_on_dry_ground",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_every_plank_crosses_a_supply_ditch_and_never_the_collector",
+   "partial"
+  ],
+  [
+   "R2",
+   "when no deck seats by growth or skew, the original undersized span comes back and the caller draws it",
+   "breaks"
+  ],
+  [
+   "R2",
+   "a ditch the gate needs crossed gets a plank at the best available spot even where the water there does not earn a board",
+   "breaks"
+  ],
   [
    "R3",
-   "hamletgen/ways/route.py",
-   "Seed 43's routed footpath keeps a 36 px lattice step round a house corner; the lane-bend rule is asserted only on the coverage rolls, with seed 43 moved to the soak tier.",
+   "Carried deck's 10 ft LANDING_FT puts the paddy-side end ~7 ft onto a flooded field.",
+   "unknown"
+  ],
+  [
+   "R3",
+   "A link way meets a stream at 17 degrees (seed 47) and its deck cannot span.",
+   "unknown"
+  ],
+  [
+   "R3",
+   "When no grown or skewed deck clears the water, the original undersized span is drawn anyway.",
    "yes"
   ]
  ],
- "hamletgen/driver.py": [
+ "settlement/farm_fixtures.py": [
+  [
+   "R1",
+   "test_no_pond_fixture_stands_on_its_ponds_sluice",
+   "yes"
+  ]
+ ],
+ "settlement/fields/comb.py": [
+  [
+   "R1",
+   "test_every_bund_bead_sits_on_visible_ground",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_every_ditched_paddy_has_a_floor_under_its_plots",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_every_field_shows_where_its_water_comes_from",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_village_passes_gate",
+   "partial"
+  ]
+ ],
+ "settlement/fields/features.py": [
+  [
+   "R1",
+   "test_a_field_pond_is_sunk_into_one_plot",
+   "partial"
+  ],
   [
    "R3",
-   "hamletgen/driver.py",
-   "Farmhouse reach is enforced by re-rolling with stranded ground forbidden and keeping the least-bad attempt; a map can still ship with meta.roll_failures farmhouses_reach_a_way.",
+   "The mound is drawn over an intact lattice; three plot rings and nine junctions lie under it.",
    "yes"
+  ]
+ ],
+ "settlement/finish.py": [
+  [
+   "R1",
+   "test_courses_that_meet_are_composited_as_one_confluence",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_the_pond_fill_is_drawn_over_the_mouths_that_join_it",
+   "yes"
+  ],
+  [
+   "R2",
+   "with no view set, the title goes at the top center of the canvas with no clearance test",
+   "breaks"
+  ]
+ ],
+ "settlement/homestead_parts/stands.py": [
+  [
+   "R1",
+   "test_the_copse_stands_within_reach_of_what_it_is_named_for",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_no_copse_clump_is_based_in_the_marsh",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_every_copse_clump_stands_on_the_bank_of_a_house_within_reach",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_a_belt_tree_in_the_marsh_is_alder",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_no_tree_is_planted_in_a_path",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_every_recorded_grove_holds_trees",
+   "no"
+  ],
+  [
+   "R1",
+   "test_a_dooryard_copse_stands_clear_of_the_windbreak",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_no_canopy_stands_over_open_water",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_every_pool_belt_keeps_its_depth_across_its_windward_face",
+   "no"
+  ],
+  [
+   "R2",
+   "A windbreak gap whose columns offer no legal seat at any depth is marked _barren and left bare",
+   "breaks"
+  ]
+ ],
+ "settlement/homestead_parts/yards.py": [
+  [
+   "R1",
+   "test_every_threshing_yard_fronts_its_house_square",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_every_drawn_yard_is_a_floor_of_mats_and_racks_follow_the_weather",
+   "partial"
+  ]
+ ],
+ "settlement/houses.py": [
+  [
+   "R1",
+   "test_no_farmhouse_is_drawn_as_a_shed",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_farmhouses_vary_in_size",
+   "no"
+  ],
+  [
+   "R3",
+   "_hjit positional roll aliases along a front row; pool share 13.6-22% against ~30% (p=0.2993), a re-pack moves it.",
+   "yes"
+  ]
+ ],
+ "settlement/land/cover.py": [
+  [
+   "R1",
+   "test_the_countryside_has_no_holes_in_it",
+   "no"
+  ],
+  [
+   "R1",
+   "test_a_woodland_commons_is_visibly_stocked",
+   "no"
+  ]
+ ],
+ "settlement/land/dikes.py": [
+  [
+   "R1",
+   "test_the_polder_dike_is_a_hand_piled_earthwork",
+   "no"
+  ],
+  [
+   "R1",
+   "test_nothing_is_built_on_the_dike",
+   "yes"
+  ]
+ ],
+ "settlement/land/wet.py": [
+  [
+   "R2",
+   "when shapely raises or returns no polygon, the marsh is drawn UNCLIPPED - over the dike block, the fields and the pond",
+   "breaks"
+  ],
+  [
+   "R2",
+   "a two-point way whose whole length lies in wet ground is shortened to <=30 px and left with its soaked end",
+   "breaks"
+  ],
+  [
+   "R3",
+   "marshes[0].poly keeps the unclipped ring, so the belt cannot be kept off the marsh (68 of 179 belt crowns inside it on Sawada).",
+   "yes"
+  ]
+ ],
+ "settlement/rolling/farmsteads.py": [
+  [
+   "R3",
+   "The fit tests a reservation; the south-nudge relaxation moves the bundle so the drawn yard corner lands in a basin.",
+   "unknown"
+  ]
+ ],
+ "settlement/rolling/fit.py": [
+  [
+   "R1",
+   "test_no_farmhouse_stands_on_the_brook",
+   "no"
+  ],
+  [
+   "R1",
+   "test_two_farmhouses_keep_their_own_drip_lines",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_the_comb_hamlet_draws_no_forbidden_overlap",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_the_polder_hamlet_draws_no_forbidden_overlap",
+   "partial"
+  ],
+  [
+   "R3",
+   "Bundle fit measures unraked rects; the drawn raked corner eats a 2.1 ft margin to a neighbor's garden.",
+   "unknown"
+  ]
+ ],
+ "settlement/shrines_wells/byres.py": [
+  [
+   "R1",
+   "test_every_farmstead_part_stands_on_its_house_bank",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_the_settlement_seats_the_byres_it_asked_for",
+   "no"
+  ],
+  [
+   "R2",
+   "when the owner pool runs out before target byres are seated, fewer are drawn; meta.byre_target records the ask",
+   "breaks"
+  ]
+ ],
+ "settlement/structures/captions.py": [
+  [
+   "R1",
+   "test_every_caption_records_the_feature_it_names",
+   "partial"
+  ]
+ ],
+ "settlement/structures/fixtures/siting.py": [
+  [
+   "R1",
+   "test_an_entrance_board_stands_at_the_entrance",
+   "no"
+  ],
+  [
+   "R1",
+   "test_the_board_caption_notches_no_crown",
+   "no"
+  ],
+  [
+   "R1",
+   "test_the_notice_board_stands_by_the_way",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_the_notice_board_faces_the_way",
+   "yes"
+  ],
+  [
+   "R2",
+   "when no seat above the traffic floor offers a caption at level 2, the board is still placed at the best level available (caption over a crown, or nowhere beside the board), and meta.kosatsuba_caption_level records it",
+   "breaks"
+  ]
+ ],
+ "settlement/water_ways/lanes.py": [
+  [
+   "R3",
+   "trim_lane_stubs accepts a lane end 11 ft behind a house's back wall as reaching its dooryard.",
+   "yes"
+  ]
+ ],
+ "structures/fixtures kosatsuba caption se": [
+  [
+   "R3",
+   "Tilted boards' captions land on a lane tread (seeds 1, 7, 14, 33, 36); a 1D seat ladder and a board sited where no caption is sitable.",
+   "unknown"
   ]
  ],
  "structures/fixtures/siting.py": [
   [
    "R3",
-   "structures/fixtures/siting.py",
    "A board caption may lie on a crown when the siter records that no seat offered a clear one.",
    "yes"
+  ]
+ ],
+ "tools/seat_label.py": [
+  [
+   "R1",
+   "test_every_caption_on_a_hand_drawn_sheet_is_at_its_standard_seat",
+   "no"
+  ]
+ ],
+ "waterfields seam pass": [
+  [
+   "R3",
+   "A paddy bund built as a flight of steps (tests/gate/test_paddy_fabric.py).",
+   "yes"
+  ]
+ ],
+ "waterfields seams close_seams / _seam_cu": [
+  [
+   "R3",
+   "Single bund steps survive on pool rings; cohort seeds 12 (4 steps) and 39 (2 steps) carry staircases.",
+   "yes"
+  ]
+ ],
+ "waterfields toe pass": [
+  [
+   "R3",
+   "Basins 5.9 ft wide pass the area floor; 9 under 12 ft, 30 under 16 ft on Kashikawa.",
+   "unknown"
+  ]
+ ],
+ "waterfields toe/seam pass": [
+  [
+   "R3",
+   "Basins of 0.55-0.72 cell with 27-30 deg tips read as darts.",
+   "unknown"
+  ]
+ ],
+ "waterfields/carve.py": [
+  [
+   "R1",
+   "test_every_beaded_bund_segment_shows_at_least_two_beads",
+   "yes"
+  ],
+  [
+   "R3",
+   "Carve leaves a tapering scrap no weld resolves; paddy_plot_seams_shared fails.",
+   "unknown"
+  ]
+ ],
+ "waterfields/comb.py": [
+  [
+   "R1",
+   "test_the_floor_stops_where_the_command_area_does",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_the_supply_commands_both_flanks_of_the_fan",
+   "no"
+  ],
+  [
+   "R1",
+   "test_a_collector_discharges_at_its_lowest_point",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_the_runoff_curves_out_of_the_collector",
+   "no"
+  ],
+  [
+   "R3",
+   "fan_middle=wild leaves Inashiro 0.42 acre and Mizuguchi 0.41 acre of dry field (~0.03 acre/household).",
+   "yes"
+  ]
+ ],
+ "waterfields/furrows.py": [
+  [
+   "R1",
+   "test_dry_plots_share_a_row_direction_within_a_tract_and_change_it_at_the_seams",
+   "partial"
+  ]
+ ],
+ "waterfields/polder.py": [
+  [
+   "R1",
+   "test_every_lateral_lands_on_a_trunk_at_both_ends",
+   "yes"
+  ]
+ ],
+ "waterfields/seams/close.py": [
+  [
+   "R1",
+   "test_no_bund_is_drawn_down_the_middle_of_a_supply_channel",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_no_bund_is_drawn_across_the_collector",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_no_basin_tapers_to_a_point",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_a_flooded_plot_reads_as_a_basin_and_not_as_a_pond",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_no_basin_is_too_small_to_be_worth_its_own_bund",
+   "partial"
+  ],
+  [
+   "R1",
+   "test_the_rings_double_count_only_marginally",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_every_recorded_plot_ring_is_a_simple_polygon",
+   "yes"
+  ],
+  [
+   "R1",
+   "test_no_shipped_hamlet_has_a_basin_tapering_to_a_point",
+   "partial"
+  ]
+ ],
+ "waterfields/seams/plots.py": [
+  [
+   "R1",
+   "test_a_bund_does_not_build_a_flight_of_steps",
+   "no"
+  ]
+ ],
+ "waterfields/seams/pockets.py": [
+  [
+   "R2",
+   "the least-bad arrowhead weld is taken with no test against the gate's chevron line, unlike the needle fallback, which is held to _GATE_MIN_APEX",
+   "breaks"
   ]
  ]
 }
