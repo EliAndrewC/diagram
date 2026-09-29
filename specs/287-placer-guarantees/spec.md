@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-performance`)
 **Created**: 2026-09-29
-**Status**: Draft
+**Status**: Accepted - FAITHFUL at round 4 (2026-09-29)
 **Request**: [`request.md`](request.md) - the GM's words verbatim: the five rules feature 284 found, "guaranteed by the
 placement algorithm rather than just happening to work on particular seeds", and "if there are literally any other things
 of this nature where our placement algorithm is not guaranteeing correct behavior, then we should include those along with
@@ -150,4 +150,14 @@ repairs or never emits it.
 
 ## Review history
 
-(none yet)
+- Round 1 (spec-fidelity, 2026-09-29): CHANGES REQUIRED - one of the five named outside the scope (the copse, read `yes`);
+  the 31 `yes` verdicts unchecked; the census read only tests (not the placers' fallbacks nor the violations on record); a
+  finished-map check plus re-roll allowed as a guarantee; SC-004 allowed existing failures; hand geometry contradictory.
+  Addressed: the five named in FR-001, all 118 tested, research R2 and R3, FR-002 against the re-roll, zero failing seeds,
+  the hand line drawn; and the GM's second message (retire what is no longer needed) taken into FR-007.
+- Round 2 (spec-fidelity, 2026-09-29): CHANGES REQUIRED - the town/city carve-out applied by module (bridges.py, which every
+  hamlet runs, missed; the city-only wards row in scope); FR-007 and SC-005 narrower than the GM's retirement wording.
+  Addressed.
+- Round 3 (spec-fidelity-verify, 2026-09-29): CHANGES REQUIRED - scope-by-owner.json stale; R2's method missing city/moat.py.
+  Addressed (scope_join.py).
+- Round 4 (spec-fidelity-verify, 2026-09-29): FAITHFUL.

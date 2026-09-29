@@ -115,7 +115,7 @@ distinct fallback with the code around it; the rows are `fallbacks.json`). The g
 `settlement/town_ways.py`, `settlement/structures/urban*.py`, `packing.py` and `servants.py` (the town and city tiers), and
 `tools/`, `ci/`, `pipeline/` and `interactive/` (not placement) - 260 hits in 70 files. The town and city exclusion is by
 CODE PATH, not module, so the city modules a hamlet calls were read as well: `settlement/city/bridges.py` (`bridges`,
-`channel_footbridges`, from `hamletgen/frame.py`, `settlement/rolling/roll.py` and `hamletgen/ways/checks.py`) - its two
+`channel_footbridges`, from `hamletgen/frame.py` and `settlement/rolling/roll.py`) - its two
 fallbacks are the last two rows below - and `settlement/city/moat.py` (`sluice_gate`, from the polder dike in `land/dikes.py`;
 `inwall_drain_outfall`, from `fields/comb.py`), where the fallback grep finds nothing. `city/walls.py`'s helpers are reached
 only by the town wards and the freestanding wall (`castle_civic.py`'s `wall`, a town feature), so they stay out (the search:
