@@ -201,5 +201,6 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D8). Inventory: [`inv
 - [x] T50 Regenerate each motivating pool map; `settlement-review` / `building-review` one map per agent, a ledger row each; the magistracy sheets edited by hand where a Mode A form goes, with `building-review` (SC-003)
       research: rendering
       verify: DONE. five hamlets regenerated; settlement-review six rounds, PASS x5 at key 098165c0 on a green gate; building-review of the Hoshigaoka and Ubame sheets, fixes applied; ledger rows in docs/review-ledger.md
-- [ ] T51 `make done` green, the landing (`scripts/sync-with-main.sh done`), the claims line closed (SC-006)
+- [x] T51 `make done` green, the landing (`scripts/sync-with-main.sh done`), the claims line closed (SC-006)
       research: procedure
+      verify: DONE. make done green at 8a1912bf8 against this engine content (already verified at 18f36a266); settlement-review PASS x5 at key 098165c0; claims line closed; landing by scripts/sync-with-main.sh done
