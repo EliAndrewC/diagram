@@ -122,8 +122,8 @@ per-house groves pass every check a grove answers to.
   household is seated.
 - **FR-011**: The settlement-form roll MUST restore feature 126's weights (nucleated 5, dispersed 3, linear 2), and the
   hamlet cohort MUST pass with them, as the bar feature 126 set for switching them back on.
-- **FR-012**: The pool hamlets MUST be regenerated from their specs as they are; a hamlet whose seed now rolls another
-  form takes it.
+- **FR-012**: The pool hamlets MUST be regenerated; a hamlet whose seed now rolls another form takes it, except the
+  reference hamlet Inashiro, which the GM kept nucleated (2026-09-29).
 
 ### Key Entities
 
@@ -165,8 +165,10 @@ per-house groves pass every check a grove answers to.
   decision (a GUESS as to where else floods threatened farms), and a map may pin it either way.
 - **Every farm carries its settlement's grove** (FR-010, spec-fidelity round 1): no farm quietly loses sides for want
   of room; a farm is seated where its grove fits.
-- **The pool takes its seed's roll** (FR-012): the GM asked for the forms "rolled again"; pinning the existing hamlets
-  to nucleated would be an exception not asked for. Which hamlets change is reported at hand-back.
+- **The pool takes its seed's roll, Inashiro excepted by the GM** (FR-012): under the restored roll Inashiro,
+  Mizuguchi and Kashikawa roll linear, Kuwabata and Sawada stay nucleated. Asked, the GM chose "Keep Inashiro, let
+  others roll": the reference hamlet (and the test baselines built on it) is pinned nucleated in its spec; Mizuguchi
+  and Kashikawa take their linear roll.
 
 ## Review history
 
@@ -183,3 +185,5 @@ non-nucleated seed plants every side its settlement rolled, so the fallback roun
 **Round 3** (spec-fidelity-verify, MODE 3, 2026-09-29): FAITHFUL. The spec is accepted.
 
 **Amendment 1** (2026-09-29, after acceptance; wording only): the GM's weights restated as the ratios they are (5 : 3 : 2; 15 : 9 : 16 on flood ground) rather than percentages, which spec-lint reads as unmeasured figures; SC-001 names FR-001 to FR-003 one by one and SC-002 covers FR-009 (the modal states the side count). Nothing changed in substance.
+
+**Amendment 2** (2026-09-29, the GM's decision): FR-012 - the GM, asked how the pool should take the restored roll (three hamlets roll linear), chose "Keep Inashiro, let others roll (Recommended)": the reference hamlet is pinned nucleated, Mizuguchi and Kashikawa take their roll.
