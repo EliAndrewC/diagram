@@ -38,10 +38,11 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   symmetry that takes {N, W} to the windward pair and puts the yard on the lee face nearest the south: NW identity;
   NE mirrored east-west (yard S); SW turned a quarter counterclockwise (yard E - Tonami's east front); SE turned a
   half (yard N) is refused in favor of the mirror across the anti-diagonal (yard W, the afternoon sun); a cardinal key
-  takes the diagonal its flank makes (N with the W flank = NW). Under a turn the canonical east garden would land on
-  the house's north wall, in its shadow, so a turned bundle lays its garden beside the yard instead (the canonical
-  frame's southeast, at the yard's east end), where the yard keeps its sky open to the south - as at Tonami, where the
-  garden stood with the entrance on the east front (`homesteads/046`). Until now every dispersed bundle drew its L on the
+  takes the diagonal its flank makes (N with the W flank = NW). In every frame but the unchanged NW one the canonical
+  east garden would land where the house takes its sun - on the north wall under a turn, on the west wall (no morning
+  sun) under the NE mirror - so every other frame lays its garden beside the yard instead (the canonical frame's
+  southeast, at the yard's far end), where the yard keeps its sky open to the south - as at Tonami, where the garden
+  stood with the entrance on the east front (`homesteads/046`). Until now every dispersed bundle drew its L on the
   north and west whatever the map declared - on no pool map, since none declares a wind, but wrong on any that would.
 - **D4 - the bands** (FR-008, FR-010). The deep bands keep today's `1.57 * hh`. A thin band is ONE CROWN deep -
   `2 * CANOPY_R_FT` = 17 ft (the record's mean crown, `vegetation/`'s "Forest density and crown size") - a GUESS for
@@ -66,8 +67,13 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   band on a windward face of its own house), `gardens_east_clear(M)` (no grove band within the east shade reach across
   a garden's height). `cohort_audit` runs them and the matrix on every roll, and prints the forms and side counts it
   rolled. A gate seed test runs them on any pool roll that is non-nucleated.
-- **D8 - the city path** (FR-005). `_find_grove_arms` plants `grove_faces`' deep faces as now and each thin face at
-  the thin depth, fit-tested; it is the frozen legacy maps' path and runs on no live generator.
+- **D8 - the city path** (FR-005, FR-010). The house-first path (`_solve_homestead`, `_find_grove_arms`) plants every
+  face `grove_faces` names on a farm that has a grove: `_grove_room` asks room for the minimal footprint of EVERY rolled
+  face (deep and thin), `_solve_homestead` takes only a seat with that room for a grove farm - its old fallback to a
+  yard-and-garden-only seat goes, so a farm with no such seat within its nudges is not seated, as a to-scale farm whose
+  bundle does not fit is not - and `_find_grove_arms` plants each face (the deep ladder as now; a thin face at the thin
+  depth, its run shortened as the deep ladder does where a neighbor is close). Whether a farm has a grove at all stays
+  the in-wall rule's and `grove_prevalence`'s, as now.
 - **D9 - drawing**. A thin band draws with `_draw_grove(..., mix="dooryard")` - fruit and flowering broadleaf, no
   conifer (Tonami's east side: flowering trees, persimmon, fig; its west-to-north side hackberry and alder) - the mix a
   GUESS for the full ring. Deep bands keep the windbreak mix.
