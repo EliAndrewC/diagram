@@ -96,13 +96,20 @@ def test_the_pool_exhibits_both_harvest_weathers() -> None:
     assert {"settled", "changeable"} <= seen, f"the pool shows only {sorted(map(str, seen))}"
 
 
-def test_the_oracle_sees_the_yard_the_quarter_foot_search_left_short() -> None:
-    # round 8's layout drew Sawada's 31 x 22 ft yard 12 mats and its 20 x 14 ft yard 5, each a mat under a third that a
-    # lattice in a window narrower than a quarter foot seats (spec-fidelity, amendment round 7); the oracle must find those
-    m = _manifest(next(g for g in GENS if g.endswith("sawada.gen.py")))
-    ftpx = float(m["meta"].get("ftpx", 1.0))
-    seen = {(round(y["w"]), round(y["h"])): y for y in m["threshing_yards"] if y.get("kind") != "forecourt"}
-    for size, old in (((31, 22), 12), ((20, 14), 5)):
-        y = seen[size]
-        third = math.ceil(y["w"] * y["h"] * ftpx * ftpx / MAT_SQ_FT / 3)
-        assert old < min(third, _fine_fit(y, ftpx)), f"the oracle cannot see the {size} yard's old count of {old}"
+def _yard(w: float, h: float, rot: float) -> dict:
+    """A yard of `w` x `h` ft at (500, 500), turned `rot` degrees, recorded as the placer records one."""
+    th = math.radians(rot)
+    corners = [(-w / 2, -h / 2), (w / 2, -h / 2), (w / 2, h / 2), (-w / 2, h / 2)]
+    poly = [[500.0 + lx * math.cos(th) - ly * math.sin(th), 500.0 + lx * math.sin(th) + ly * math.cos(th)] for lx, ly in corners]
+    return {"x": 500.0, "y": 500.0, "w": w, "h": h, "rot": rot, "poly": poly}
+
+
+@pytest.mark.parametrize("rot", [0.0, 7.5, 93.6])
+def test_the_oracle_sees_the_yard_the_quarter_foot_search_left_short(rot: float) -> None:
+    # round 8's layout drew a 31 x 22 ft yard 12 mats and a 20 x 14 ft yard 5, each a mat under a third that a lattice in
+    # a window narrower than a quarter foot seats (spec-fidelity, amendment round 7); the oracle must find those. The
+    # yards are built here at the house's own turn rather than read from Sawada, whose layout feature 287 moved.
+    for (w, h), old in (((31.0, 22.0), 12), ((20.0, 14.0), 5)):
+        y = _yard(w, h, rot)
+        third = math.ceil(w * h / MAT_SQ_FT / 3)
+        assert old < min(third, _fine_fit(y, 1.0)), f"the oracle cannot see the {(w, h)} yard's old count of {old}"
