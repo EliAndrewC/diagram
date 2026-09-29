@@ -65,7 +65,11 @@ def thread(path: Sequence[Pt], walls: Sequence[Poly], hard: list[Poly], water: l
     out: list[Pt] = [clear[0]]
     for a, b in zip(clear, clear[1:], strict=False):
         if _crosses_fabric([a, b], walls, half):
-            leg = _route(a, b, hard, walls, water, gap=FOOTPATH_FABRIC_GAP)
+            # routed at the STREET's gap, not a footpath's: a detour at 4 ft ran 3 ft off a grove band, inside the 6 ft tread
+            # (cohort seed 23); a leg still grazing is routed once more a foot wider
+            leg = _route(a, b, hard, walls, water, gap=half + 1.0)
+            if len(leg) >= 2 and _crosses_fabric(leg, walls, half):
+                leg = _route(a, b, hard, walls, water, gap=half + 3.0)
             out += leg[1:] if len(leg) >= 2 else [b]
         else:
             out.append(b)

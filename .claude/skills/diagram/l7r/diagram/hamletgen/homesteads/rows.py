@@ -357,13 +357,17 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
     depth_n = max((frame_extent(frame, n) for _p, n in first), default=fd)
     offsets = row_offsets(depth_n, sides, MAX_STREETS, s.px(FIELD_KEEP_FT), gap, depth_n * HOLDING_DEPTH_FRAMES.get(plan.row_line, 1.0) + gap)
     offsets = [first_off + (o - offsets[0]) for o in offsets]
+    from shapely.geometry import LineString, MultiLineString, box
+
+    planned = [parallel(first, o - offsets[0]) for o in offsets]
+    all_streets = MultiLineString([LineString([p for p, _n in ln]) for ln in planned if len(ln) >= 2]) if first else None
     for off in offsets:
         if placed >= want:
             break
         # two lots of slack beyond what the row needs: a refused seat is taken up at the row's end rather than sent to a
         # second street across the holdings (Kashikawa: one farm alone on a second street no way could reach). Each next
         # street is the FIRST one set out parallel, so the streets stay a grid beside each other (FR-016)
-        line = parallel(first, off - offsets[0])
+        line = planned[offsets.index(off)]
         took = 0
         for (fx, fy), side, t, nrm in row_seats(line, frame, sides, gap):
             if placed >= want:
@@ -374,6 +378,10 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
             # A FAR-ROW FARM IS SEATED ONLY WITH ITS HOLDING (plan D16): behind its lot, away from the street, clear of the
             # hard ground and every reserved box - else not seated here, as a farm whose grove has no room is not.
             if not door_clear((fx, fy, float(frame[2]), float(frame[3])), front, lane_pad, hard, door_room):
+                continue
+            # ...and a frame that reaches across ANY of the row's streets where a line bends is refused: square to its own line
+            # at its seat, it stood on a street at the bend, and no route round its yard and grove existed (cohort seed 23)
+            if all_streets is not None and box(fx - float(frame[2]) / 2, fy - float(frame[3]) / 2, fx + float(frame[2]) / 2, fy + float(frame[3]) / 2).intersects(all_streets):
                 continue
             # ...and no farm stands on a holding already reserved (cohort seeds 3 and 4: houses, yards and gardens on dry plots)
             if holdings and frame_on_holdings((fx, fy, float(frame[2]), float(frame[3])), [hq for hq, *_r in holdings]):
