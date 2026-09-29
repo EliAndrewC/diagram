@@ -82,8 +82,12 @@ tiers.
    for those dispatches with their count per arm.
 4. **Given** a run starts headless sessions of its own (a research page's write and check-and-apply sessions run as fresh headless
    sessions), **When** it does, **Then** every one of them runs at the run's arm effort, and the run log records each session's effort.
-5. **Given** the container memory cap, **When** the runs execute, **Then** they run one after another, never two at once, and a run
-   killed by the memory limit (exit 137) is void and re-run.
+5. **Given** the container memory cap (the GM, 2026-09-29: run the tests "sequentially rather than in parallel for memory reasons ...
+   I don't want too many things running to be a problem for the container"), **When** the experiment executes, **Then** it is strictly
+   SEQUENTIAL end to end: one run at a time, never two at once; a run starts only when the container's memory is under a stated
+   headroom threshold, and waits (logged, not counted in its wall-clock) otherwise; while a run is live the implementing session starts
+   nothing else memory-heavy of its own - no gate, no test run, no grading, no measurement of another run - so measuring, blinding and
+   grading happen BETWEEN runs, one at a time; and a run killed by the memory limit (exit 137) is void and re-run.
 6. **Given** the order could favor one arm (a warmer page cache, a shared ledger the first run writes), **When** the runs are scheduled,
    **Then** the arms alternate - which arm goes first on the first task is drawn from a recorded seed, and the other arm goes first on the
    second task, so at n=1 neither arm runs first on both, and anything a run writes outside its clone that a later
@@ -193,8 +197,9 @@ says how to add an arm (`high`) or a second run per cell.
   gives the task, where its future-work entry is, the stop point (FR-002), the no-human-help rule, and nothing about effort.
 - **FR-005 Controls**: same model, same starting commit, same hooks, agent files and settings in every run; the defined check agents run at their pinned
   tiers in both arms; an ad-hoc dispatch that checks or judges runs at one fixed effort in both arms, and only reading, fetching, translating or
-  extracting dispatches may instead be counted per arm (US2 AS3); every headless session a run starts runs at the arm's effort (US2 AS4); runs are
-  sequential; the arms alternate which goes first, the first task's order drawn from a recorded seed.
+  extracting dispatches may instead be counted per arm (US2 AS3); every headless session a run starts runs at the arm's effort (US2 AS4); the experiment is
+  strictly sequential - one run at a time, each launched only under the memory headroom threshold, and nothing else of the experiment
+  running beside a live run (US2 AS5); the arms alternate which goes first, the first task's order drawn from a recorded seed.
 - **FR-006 Measurement**: per run, from the session transcripts - the main session's and every subagent's: input, output, cache-read and cache-creation
   tokens, main and subagents shown apart and summed; wall-clock from first to last event, excluding logged pauses; tool calls by tool; subagent
   dispatches by agent type. Usage-limit share is recorded when it can be observed and said to be unobserved when it cannot.
@@ -250,7 +255,8 @@ says how to add an arm (`high`) or a second run per cell.
 - **SC-003** (FR-009, FR-010) the grader agent grades each pair without access to the key; the key is opened after both grades per task are recorded.
 - **SC-004** (FR-011, FR-012, FR-013) the report states an outcome under FR-011 for research and for implementation, and the arithmetic can be re-done from its table.
 - **SC-005** (FR-014) the better output of each task that meets its pass line is on main; the other is discarded; the future-work entries they close are closed.
-- **SC-006** (FR-005) no run was killed by the memory limit and left counted; no two runs overlapped in time.
+- **SC-006** (FR-005) no run was killed by the memory limit and left counted; no two runs overlapped in time; every run's record shows the
+  container's memory under the headroom threshold at its launch; no measurement, grading or gate of the experiment overlapped a live run.
 
 ## Decisions Recorded
 
@@ -293,3 +299,10 @@ every change to a map is; the report links them.
   were unmeasured claims. All seven applied; the aside (alternate the arms) taken.
 - Round 2 (spec-fidelity-verify, 2026-09-29): FAITHFUL - all seven items resolved; the alternation within the request.
 - After acceptance, 2026-09-29: formatting only - each success criterion's FR list moved beside its id, where spec-lint reads it; no wording changed.
+- Amendment, 2026-09-29 (the GM: "change the plan so that you will instead run these tests sequentially rather than in parallel for memory
+  reasons"): US2 AS5, FR-005 and SC-006 make the experiment strictly sequential end to end - one run at a time, each launched under a memory
+  headroom threshold, and nothing else of the experiment beside a live run; research R5 D7 carries the threshold. The review counter resets.
+- Amendment review, 2026-09-29: round 1 NOT-REVIEWABLE (two unlabeled figures, labeled); round 1 CHANGES REQUIRED (the gate read raw
+  `memory.current`, page cache included - now the working set); round 2 CHANGES REQUIRED (a quiet-host memwatch figure is never published
+  - now an offset measured at a warning); round 3 FAITHFUL. Its two asides applied after: the offset re-derived with the gate's own
+  subtraction (`inactive_file`, 0.9 GB - looser than the 1.5 GB it replaces, which had subtracted all page cache where the gate subtracts only the inactive part), and a leftover sentence reworded.
