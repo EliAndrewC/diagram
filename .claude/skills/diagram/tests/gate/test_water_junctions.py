@@ -26,6 +26,7 @@ import math
 
 import pytest
 
+from l7r.diagram.waterfields.ring_rules import crosses_pond_rim
 from tests import rolls
 from tests.gate import _pool
 
@@ -218,9 +219,7 @@ def test_a_field_pond_is_sunk_into_one_plot(rolled) -> None:
         for fld in M.get("fields") or []:
             rings = (fld.get("plot_rings") or []) + (fld.get("drain_hem") or [])
             for ring in rings:
-                n = len(ring)
-                crossed = [k for k in range(n) if _in_ellipse(ring[k], e) != _in_ellipse(ring[(k + 1) % n], e)]
-                if crossed:
+                if crosses_pond_rim(ring, e):  # the one predicate (feature 287, ring_rules)
                     spilled.append([fp["x"], fp["y"]])
                     break
             if spilled and spilled[-1] == [fp["x"], fp["y"]]:

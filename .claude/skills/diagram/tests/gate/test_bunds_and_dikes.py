@@ -19,7 +19,8 @@ inside a supply stroke, the worst 6.1 px deep in a ~12 px channel.
 
 THE PREDICATE IS THE ENGINE'S OWN, NOT A RESTATEMENT. `supply_bank_clearance` is the same call `_carve`'s
 `clear_supply` makes when it lays the bund, which is the whole shape of this feature: the placer and the
-check were asking one function the same question, and only the placer needs to.
+check were asking one function the same question, and only the placer needs to. The two bund rules here
+call `waterfields/ring_rules.py` (feature 287), the one predicate per paddy-ring rule a placer calls too.
 """
 
 from __future__ import annotations
@@ -32,8 +33,7 @@ import os
 
 import pytest
 
-from l7r.diagram.waterfields.banks import supply_bank_clearance
-from l7r.diagram.waterfields.frame import BANK_MARGIN
+from l7r.diagram.waterfields.ring_rules import collector_crossings, collector_strokes, supply_intrusions, supply_strokes
 from tests import rolls
 from tests.gate import _pool
 
@@ -56,13 +56,6 @@ def _seg_dist(px: float, py: float, a, b) -> float:
     L2 = vx * vx + vy * vy
     t = 0.0 if L2 == 0 else max(0.0, min(1.0, ((px - ax) * vx + (py - ay) * vy) / L2))
     return math.hypot(px - (ax + t * vx), py - (ay + t * vy))
-
-
-def _cum(pts):
-    out = [0.0]
-    for i in range(len(pts) - 1):
-        out.append(out[-1] + math.dist(pts[i], pts[i + 1]))
-    return out
 
 
 def _point_in(pt, ring) -> bool:
@@ -89,34 +82,10 @@ def _bund_edge_intrusions(field, supplies) -> list[tuple[int, int]]:
     by that half-width plus `BANK_MARGIN` (0.75 - half a drawn bund stroke, so bund and ditch ABUT
     rather than overlap). A test that only forbade crossing the centerline would pass a bund drawn
     down the inside of the water, which is exactly the defect the GM reported."""
+    strokes = supply_strokes(supplies)  # the predicate is `ring_rules.supply_intrusions` (feature 287)
     out: dict[tuple[int, int], None] = {}
-    for fd in supplies:
-        pts = [(float(p[0]), float(p[1])) for p in (fd.get("poly") or [])]
-        if len(pts) < 2:
-            continue
-        w0 = float(fd.get("w", 2.0))
-        w1 = float(fd.get("w_tail", w0))
-        cum = _cum(pts)
-        reach = max(w0, w1) / 2 + BANK_MARGIN + 1.0
-        x0 = min(p[0] for p in pts) - reach
-        x1 = max(p[0] for p in pts) + reach
-        y0 = min(p[1] for p in pts) - reach
-        y1 = max(p[1] for p in pts) + reach
-        for ring in field["plot_rings"]:
-            n = len(ring)
-            for i in range(n):
-                ax, ay = float(ring[i][0]), float(ring[i][1])
-                bx, by = float(ring[(i + 1) % n][0]), float(ring[(i + 1) % n][1])
-                if max(ax, bx) < x0 or min(ax, bx) > x1 or max(ay, by) < y0 or min(ay, by) > y1:
-                    continue  # bbox prefilter: prunes only, decides nothing
-                steps = max(1, int(math.hypot(bx - ax, by - ay) / 3.0))
-                for k in range(steps + 1):
-                    t = k / steps
-                    x, y = ax + t * (bx - ax), ay + t * (by - ay)
-                    gap, halfw, past, _foot, _nrm = supply_bank_clearance((x, y), pts, w0, w1, cum)
-                    if not past and gap < halfw + BANK_MARGIN - 0.15:
-                        out[(round(x), round(y))] = None
-                        break
+    for ring in field["plot_rings"]:
+        out.update(dict.fromkeys(supply_intrusions(ring, strokes)))
     return list(out)
 
 
@@ -157,22 +126,8 @@ def test_no_bund_is_drawn_across_the_collector(comb) -> None:
     assert field, "the roll carved no plot rings"
     drains = [d for d in (M.get("field_ditches") or []) if d.get("role") == "drain" and d.get("field") == field.get("name")]
     assert drains, "the fan has no collector, so this rule would judge nothing"
-    across = []
-    for d in drains:
-        pts = [(float(p[0]), float(p[1])) for p in d["poly"]]
-        half = max(float(d.get("w", 3.0)), float(d.get("w_tail", 3.0))) / 2.0
-        for ring in field["plot_rings"]:
-            n = len(ring)
-            for k in range(n):
-                a = (float(ring[k][0]), float(ring[k][1]))
-                b = (float(ring[(k + 1) % n][0]), float(ring[(k + 1) % n][1]))
-                # a SEGMENT that starts one side of the drain and ends the other has crossed it
-                if (
-                    min(_seg_dist(a[0], a[1], pts[i], pts[i + 1]) for i in range(len(pts) - 1)) < half * 0.5
-                    and min(_seg_dist(b[0], b[1], pts[i], pts[i + 1]) for i in range(len(pts) - 1)) < half * 0.5
-                    and math.dist(a, b) > 2 * half
-                ):
-                    across.append((round(a[0]), round(a[1])))
+    strokes = collector_strokes(drains)
+    across = [p for ring in field["plot_rings"] for p in collector_crossings(ring, strokes)]
     assert not across, f"{len(across)} paddy bund(s) run across the collector rather than along it: {across[:4]}"
 
 

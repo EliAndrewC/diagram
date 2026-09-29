@@ -33,7 +33,8 @@ import os
 
 import pytest
 
-from l7r.diagram.waterfields.banks import _GATE_MIN_AREA, floor_overhang, jog_vertices, pointed_ring
+from l7r.diagram.waterfields.banks import floor_overhang
+from l7r.diagram.waterfields.ring_rules import AREA_FLOOR, NEEDLE_DEG, OVERCOUNT_CEILING, needle, overcount, self_crossing, staircase, too_small
 from tests import rolls
 from tests.gate import _pool
 
@@ -44,21 +45,8 @@ FLOOR_OVERHANG_FT = 16.0
 centerline (the basin's low edge IS the drain polyline), so only a protrusion well past the drawn water -
 max half-width 6 px - can fire."""
 
-NEEDLE_DEG = 15.0
-"""The carve demotes a ring tapering below 25 deg; the rule fires at 15, so a borderline plot the carve
-deliberately allowed cannot be read as a failure. Both numbers live on `pointed_ring`."""
-
-OVERCOUNT_CEILING = 0.04
-"""`plot_rings` is a paint-order STACK, not a partition - a later basin paints out the stretch of bund it
-laps, which is what makes the pair read as the single shared wall a real fan has. So the ring areas
-double-count the lapped ground, and this is a CEILING on that over-count rather than a ban on the lap.
-Measured over the four scripted hamlets and a 48-seed cohort in 2026-08-17: 0.53-1.06% on the pool, cohort
-median ~0.9%, tail to 2.49%. 4% is ~1.6x the worst live map and fires on a doubling of it."""
-
-
-def _ring_area(ring) -> float:
-    n = len(ring)
-    return abs(sum(ring[i][0] * ring[(i + 1) % n][1] - ring[(i + 1) % n][0] * ring[i][1] for i in range(n))) / 2.0
+# NEEDLE_DEG, AREA_FLOOR and OVERCOUNT_CEILING, with their reasoning, live beside the rules in
+# `l7r/diagram/waterfields/ring_rules.py` (feature 287): each ring test below calls the one predicate a placer calls.
 
 
 @pytest.fixture(scope="module")
@@ -150,7 +138,7 @@ def test_no_basin_tapers_to_a_point(fan) -> None:
     left unpaddied."""
     _M, f = fan
     rings = f["plot_rings"]
-    needles = [i for i, r in enumerate(rings) if pointed_ring([(float(a), float(b)) for a, b in r], NEEDLE_DEG)]
+    needles = [i for i, r in enumerate(rings) if needle(r)]
     assert not needles, f"{len(needles)} of {len(rings)} basins taper below {NEEDLE_DEG} deg"
 
 
@@ -175,7 +163,7 @@ def test_a_flooded_plot_reads_as_a_basin_and_not_as_a_pond(fan) -> None:
         if best is None:
             continue  # a fill path that recorded no ring - not judgeable
         matched += 1
-        assert not pointed_ring(rings[best], NEEDLE_DEG), f"the flooded plot at ({round(wx)}, {round(wy)}) is a needle, so it reads as a pond"
+        assert not needle(rings[best]), f"the flooded plot at ({round(wx)}, {round(wy)}) is a needle, so it reads as a pond"
     assert matched, "no flooded plot matched a recorded ring, so the rule judged nothing"
 
 
@@ -191,8 +179,8 @@ def test_no_basin_is_too_small_to_be_worth_its_own_bund(fan) -> None:
     _M, f = fan
     cell = f.get("cell")
     assert cell, "the fan records no design cell, so the ratio has no denominator and the rule would skip"
-    ratios = sorted(_ring_area(r) / float(cell) for r in f["plot_rings"])
-    assert ratios[0] >= _GATE_MIN_AREA, f"the smallest basin is {ratios[0]:.3f} of the design cell, under the {_GATE_MIN_AREA} floor"
+    small = [i for i, r in enumerate(f["plot_rings"]) if too_small(r, float(cell))]
+    assert not small, f"{len(small)} basin(s) are under the {AREA_FLOOR} floor of the design cell: {small[:6]}"
 
 
 def test_the_rings_double_count_only_marginally(fan) -> None:
@@ -205,14 +193,8 @@ def test_the_rings_double_count_only_marginally(fan) -> None:
     rule that does. What the ceiling buys is that an acreage read off the undissolved stack stays wrong by
     less than one significant figure, which is what makes "dissolve before you measure" a small documented
     approximation rather than a trap."""
-    shapely = pytest.importorskip("shapely.geometry")
     _M, f = fan
-    rings = [shapely.Polygon([(float(a), float(b)) for a, b in r]).buffer(0) for r in f["plot_rings"]]
-    from shapely.ops import unary_union
-
-    union = unary_union(rings)
-    assert union.area > 0, "the rings union to nothing, so the over-count has no denominator"
-    over = (sum(r.area for r in rings) - union.area) / union.area
+    over = overcount(f["plot_rings"])
     assert over < OVERCOUNT_CEILING, f"the plot rings over-count the fan by {over:.1%}, past the {OVERCOUNT_CEILING:.0%} ceiling"
 
 
@@ -234,7 +216,7 @@ def test_a_bund_does_not_build_a_flight_of_steps(fan) -> None:
     restated as a second rule of thumb that would drift."""
     M, f = fan
     grain = 2.0 / float(M["meta"].get("ftpx") or 1.0)
-    staircases = [i for i, r in enumerate(f["plot_rings"]) if len(jog_vertices([(float(a), float(b)) for a, b in r], grain)) > 1]
+    staircases = [i for i, r in enumerate(f["plot_rings"]) if staircase(r, grain)]
     assert not staircases, f"{len(staircases)} plot ring(s) carry more than one step - a staircase, not a nudge"
 
 
@@ -243,11 +225,10 @@ def test_every_recorded_plot_ring_is_a_simple_polygon(fan) -> None:
     two rings shipped with a vertex revisited - a 2 px needle each, ink-invisible under the bund stroke,
     and not a simple polygon for any shape metric). The seam pass repairs bow-ties at its start; this
     holds the rings AS RECORDED, rounded to 0.1 px, after every trade and weld that follows."""
-    shapely = pytest.importorskip("shapely.geometry")
     _M, f = fan
     rings = f["plot_rings"]
     assert rings, "no plot rings on the fan"
-    crossing = [i for i, r in enumerate(rings) if len(r) >= 3 and not shapely.Polygon([(float(a), float(b)) for a, b in r]).is_valid]
+    crossing = [i for i, r in enumerate(rings) if self_crossing(r)]
     assert not crossing, f"self-crossing plot rings as recorded: {crossing[:6]}"
 
 
@@ -271,5 +252,5 @@ def test_no_shipped_hamlet_has_a_basin_tapering_to_a_point(gen: str) -> None:
     fields = [f for f in M.get("fields") or [] if f.get("plot_rings")]
     if not fields:
         pytest.skip("no paddy field on this map")
-    needles = [(f.get("name"), i) for f in fields for i, r in enumerate(f["plot_rings"]) if len(r) >= 3 and pointed_ring([(float(a), float(b)) for a, b in r], NEEDLE_DEG)]
+    needles = [(f.get("name"), i) for f in fields for i, r in enumerate(f["plot_rings"]) if len(r) >= 3 and needle(r)]
     assert not needles, f"{len(needles)} basin(s) taper below {NEEDLE_DEG} deg: {needles[:5]}"
