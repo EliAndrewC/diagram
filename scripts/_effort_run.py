@@ -1,0 +1,278 @@
+#!/usr/bin/env python3
+"""Launch one run of the effort-level experiment (feature 293, contracts/cli.md `make effort-run`).
+
+WHAT A RUN IS. One task (R, the servants' quarters research; I, the burial-ground footpath) at one arm (`medium` or
+`xhigh`), as top-level headless sessions in a fresh clone of its own at the experiment's one start commit. Task R is the
+project's two page sessions (write, then check-and-apply) through `scripts/page-session.sh`; task I is one full session.
+Everything the arms share - the start commit, the prompts, the pinned ad-hoc judge, the sources snapshot - is recorded
+ONCE in `experiment.json` by `init`, and every launch is checked against it.
+
+THE CONTROLS THIS ENFORCES, each with its research decision (specs/293-effort-level-experiment/research.md):
+- R1 D1: the arm is set with `--effort` and never `CLAUDE_CODE_EFFORT_LEVEL`, which would also override the effort every
+  check agent pins in its frontmatter; the launcher removes it from the run's environment.
+- R1 D2: every session carries the same `--agents` JSON defining `adhoc-judge` (opus, effort high).
+- R5 D7: strictly sequential (the GM, 2026-09-29, "sequentially rather than in parallel for memory reasons"): no launch
+  while another run is live, while the working set plus the measured offset is over the threshold, or while a memwatch
+  warning is fresh.
+- R6 D4/D6: each run reads its own copy of the sources ledger and page cache (`L7R_SOURCES_HOME`), and the run record says
+  what shared state it found.
+- Spec SC-002: no launch once the rubrics or prompts differ from their frozen hashes.
+"""
+
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import hashlib
+import json
+import os
+import pathlib
+import random
+import shutil
+import subprocess
+import sys
+import time
+import uuid
+
+FEATURE = "293-effort-level-experiment"
+ARMS = ("medium", "xhigh")
+TASKS = ("R", "I")
+PROMPTS = {"R": ("prompts/R-write.md", "prompts/R-check.md"), "I": ("prompts/I.md",)}
+RUBRICS = ("rubrics/research.md", "rubrics/implementation.md")
+# R5 D7. Both figures are GUESSES recorded with their arithmetic in research.md: the 9.0 GB shared cap less a run's own
+# peak leaves about 4.5 GB for everything else; a warning under 15 minutes old has not yet passed.
+THRESHOLD_GB = 4.5
+WARNING_FRESH_S = 15 * 60
+GB = 1_000_000_000
+# R1 D2: the one ad-hoc judge, pinned by definition; frontmatter effort overrides the session's.
+ADHOC_JUDGE = {
+    "adhoc-judge": {
+        "description": "Any ad-hoc work that checks or judges (a verdict, a review, a comparison) that no defined agent covers.",
+        "prompt": "You check or judge the work the dispatch describes and report a compact verdict: counts first, then only what to act on.",
+        "model": "opus",
+        "effort": "high",
+    }
+}
+APPEND_PROMPT = "container-scripts/append-system-prompt.md"
+
+
+class Refused(Exception):
+    """A launch the controls do not admit; nothing was started."""
+
+
+def sha256(data: bytes | str) -> str:
+    return hashlib.sha256(data.encode() if isinstance(data, str) else data).hexdigest()
+
+
+def agents_json() -> str:
+    return json.dumps(ADHOC_JUDGE, sort_keys=True)
+
+
+def frozen_hashes(feature_dir: pathlib.Path) -> dict[str, str]:
+    """The sha256 of every rubric and prompt file, keyed by its path in the feature directory."""
+    files = [*RUBRICS, *(p for ps in PROMPTS.values() for p in ps)]
+    return {f: sha256((feature_dir / f).read_bytes()) for f in files}
+
+
+def working_set(cgroup: pathlib.Path) -> int:
+    """`memory.current` less `inactive_file` - the memory the kernel cannot simply drop (R5 D7)."""
+    current = int((cgroup / "memory.current").read_text().split()[0])
+    for line in (cgroup / "memory.stat").read_text().splitlines():
+        key, _, val = line.partition(" ")
+        if key == "inactive_file":
+            return current - int(val)
+    return current
+
+
+def fresh_warning(events: pathlib.Path, now: float) -> str:
+    """The newest memwatch warning younger than WARNING_FRESH_S, or ''."""
+    if not events.is_dir():
+        return ""
+    recent = [p for p in events.iterdir() if p.is_file() and now - p.stat().st_mtime < WARNING_FRESH_S]
+    return max(recent, key=lambda p: p.stat().st_mtime).name if recent else ""
+
+
+def live_runs(runs: pathlib.Path) -> list[str]:
+    """Run ids whose record has no `ended` - still live, or never measured."""
+    if not runs.is_dir():
+        return []
+    return sorted(p.stem for p in runs.glob("*.json") if not json.loads(p.read_text()).get("ended"))
+
+
+def refusal(exp: dict, feature_dir: pathlib.Path, task: str, cgroup: pathlib.Path, events: pathlib.Path,
+            now: float) -> tuple[str, dict]:
+    """Why this launch may not start ('' when it may), and the memory reading it was judged on."""
+    reading = {"working_set_gb": round(working_set(cgroup) / GB, 2), "offset_gb": exp["offset_gb"],
+               "threshold_gb": THRESHOLD_GB, "fresh_warning": fresh_warning(events, now)}
+    if live := live_runs(feature_dir / "runs"):
+        return f"another run is live or unmeasured: {', '.join(live)}", reading
+    changed = [f for f, h in frozen_hashes(feature_dir).items() if exp["hashes"].get(f) != h]
+    if changed:
+        return f"changed since the freeze: {', '.join(changed)}", reading
+    if exp["agents_sha256"] != sha256(agents_json()):
+        return "the --agents JSON differs from the recorded one", reading
+    if reading["fresh_warning"]:
+        return f"a memwatch warning under 15 minutes old ({reading['fresh_warning']})", reading
+    if reading["working_set_gb"] + exp["offset_gb"] > THRESHOLD_GB:
+        return (f"memory: working set {reading['working_set_gb']} GB + offset {exp['offset_gb']} GB is over "
+                f"{THRESHOLD_GB} GB - retry later"), reading
+    if task not in TASKS:
+        return f"no task {task}", reading
+    return "", reading
+
+
+def arm_order(seed: int) -> dict[str, list[str]]:
+    """Spec US2 AS6: task R's order drawn from the seed, task I's the other way round."""
+    first = list(ARMS)
+    random.Random(seed).shuffle(first)
+    return {"R": first, "I": first[::-1]}
+
+
+def run_env(env: dict[str, str], sources: pathlib.Path) -> dict[str, str]:
+    out = {k: v for k, v in env.items() if k != "CLAUDE_CODE_EFFORT_LEVEL"}
+    return out | {"L7R_SOURCES_HOME": str(sources), "SPECIFY_FEATURE": FEATURE}
+
+
+def full_session_cmd(prompt: str, name: str, sid: str, effort: str, appended: str) -> list[str]:
+    """Task I's one session: the project's full instructions and tools, as an interactive session has them."""
+    cmd = ["claude", "-p", prompt, "-n", name, "--session-id", sid, "--effort", effort, "--agents", agents_json(),
+           "--permission-mode", "bypassPermissions"]
+    if appended:
+        cmd += ["--append-system-prompt", appended]
+    return cmd + ["--output-format", "json"]
+
+
+def mangled(path: pathlib.Path) -> str:
+    return str(path).replace("/", "-").replace(".", "-")
+
+
+def launch(args: argparse.Namespace, repo: pathlib.Path, now: float) -> dict:
+    feature_dir = repo / "specs" / FEATURE
+    exp = json.loads((feature_dir / "experiment.json").read_text())
+    why, reading = refusal(exp, feature_dir, args.task, pathlib.Path(args.cgroup), pathlib.Path(args.events), now)
+    if why:
+        raise Refused(why)
+    run_id, arm = args.run, args.arm
+    base = pathlib.Path(args.clones)
+    clone = base / f"diagram-exp-{run_id}"
+    if clone.exists():
+        raise Refused(f"{clone} exists - a run id is used once")
+    subprocess.run(["git", "clone", "-q", args.origin, str(clone)], check=True)
+    subprocess.run(["git", "-C", str(clone), "reset", "-q", "--hard", exp["start_commit"]], check=True)
+    work = base / ".effort-293" / run_id
+    sources = work / "sources"
+    shutil.copytree(exp["sources_snapshot"], sources)
+    env = run_env(dict(os.environ), sources)
+    projects = pathlib.Path.home() / ".claude" / "projects" / mangled(clone)
+    record = {"run_id": run_id, "task": args.task, "arm": arm, "seed": exp["seed"], "order": args.order,
+              "start_commit": exp["start_commit"], "clone": str(clone), "started": iso(now), "ended": None,
+              "pauses": [], "memory_at_launch": reading, "agents_json_sha256": sha256(agents_json()),
+              "env": {"L7R_SOURCES_HOME": str(sources), "CLAUDE_CODE_EFFORT_LEVEL": "unset", "SPECIFY_FEATURE": FEATURE},
+              "shared_state": {"sources_snapshot_sha256": exp["sources_snapshot_sha256"], **claims_at_start(args.claims)},
+              "sessions": []}
+    if args.task == "R":
+        briefs = [str(clone / "specs" / FEATURE / p) for p in PROMPTS["R"]]
+        agents = work / "agents.json"
+        agents.write_text(agents_json(), encoding="utf-8")
+        cmd = [str(clone / "scripts" / "page-session.sh"), " ".join(briefs), clone.name, "", arm, str(agents)]
+        out = subprocess.run(cmd, cwd=clone, env=env, capture_output=True, text=True, check=False)
+        if out.returncode:
+            raise Refused(f"page-session refused: {out.stderr.strip()[:300]}")
+        record["argv"] = cmd
+        record["sessions"] = [{"brief": b, "prompt_sha256": exp["hashes"][p], "effort": arm, "log": None}
+                              for b, p in zip(briefs, PROMPTS["R"], strict=True)]
+        record["runner_stdout"] = out.stdout
+    else:
+        sid = str(uuid.uuid4())
+        log = work / "session"
+        log.mkdir(parents=True)
+        prompt = (clone / "specs" / FEATURE / PROMPTS["I"][0]).read_text(encoding="utf-8")
+        appended_file = clone / APPEND_PROMPT
+        appended = appended_file.read_text(encoding="utf-8").strip() if appended_file.is_file() else ""
+        cmd = full_session_cmd(prompt, clone.name, sid, arm, appended)
+        with open(log / "result.json", "w") as out_f, open(log / "stderr.txt", "w") as err_f:
+            subprocess.Popen(cmd, cwd=clone, env=env, stdin=subprocess.DEVNULL, stdout=out_f, stderr=err_f,
+                             start_new_session=True, close_fds=True)
+        record["argv"] = [c if c != prompt else f"<prompts/I.md sha256 {exp['hashes'][PROMPTS['I'][0]]}>" for c in cmd]
+        record["sessions"] = [{"sid": sid, "prompt_sha256": exp["hashes"][PROMPTS["I"][0]], "effort": arm,
+                               "transcript": str(projects / f"{sid}.jsonl"), "log": str(log)}]
+    runs = feature_dir / "runs"
+    runs.mkdir(exist_ok=True)
+    (runs / f"{run_id}.json").write_text(json.dumps(record, indent=1) + "\n", encoding="utf-8")
+    return record
+
+
+def claims_at_start(claims: str) -> dict:
+    """R6 D6: the claims file as the run found it - its hash, and the lines naming the servants' quarters question."""
+    p = pathlib.Path(claims)
+    if not p.is_file():
+        return {"claims_sha256_at_start": None, "claims_lines_at_start": []}
+    text = p.read_text(encoding="utf-8")
+    hits = [ln for ln in text.splitlines() if "servants" in ln.lower() or "293" in ln]
+    return {"claims_sha256_at_start": sha256(text), "claims_lines_at_start": hits}
+
+
+def iso(t: float) -> str:
+    return dt.datetime.fromtimestamp(t, dt.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def init(args: argparse.Namespace, repo: pathlib.Path, now: float) -> dict:
+    """Pre-flight (T09-T11): record what every run shares. Refuses to overwrite an experiment already recorded."""
+    feature_dir = repo / "specs" / FEATURE
+    target = feature_dir / "experiment.json"
+    if target.exists():
+        raise Refused(f"{target} exists - the experiment's shared record is written once")
+    snapshot = pathlib.Path(args.snapshot)
+    src = pathlib.Path(args.sources_home)
+    snapshot.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(src, snapshot)
+    ledger = snapshot / "sources-consulted.jsonl"
+    exp = {"start_commit": args.start, "seed": args.seed, "order": arm_order(args.seed), "offset_gb": args.offset,
+           "sources_snapshot": str(snapshot),
+           "sources_snapshot_sha256": sha256(ledger.read_bytes()) if ledger.is_file() else None,
+           "hashes": frozen_hashes(feature_dir), "agents_sha256": sha256(agents_json()), "recorded": iso(now)}
+    target.write_text(json.dumps(exp, indent=1) + "\n", encoding="utf-8")
+    return exp
+
+
+def main(argv: list[str]) -> int:
+    ap = argparse.ArgumentParser(prog="effort-run")
+    sub = ap.add_subparsers(dest="cmd", required=True)
+    i = sub.add_parser("init")
+    i.add_argument("--start", required=True)
+    i.add_argument("--seed", type=int, required=True)
+    i.add_argument("--offset", type=float, required=True)
+    i.add_argument("--sources-home", required=True)
+    i.add_argument("--snapshot", required=True)
+    r = sub.add_parser("run")
+    r.add_argument("--task", required=True, choices=TASKS)
+    r.add_argument("--run", required=True)
+    r.add_argument("--arm", required=True, choices=ARMS)
+    r.add_argument("--order", type=int, required=True)
+    r.add_argument("--origin", default="/diagram")
+    r.add_argument("--clones", default="/diagram/.clones")
+    r.add_argument("--claims", default="/diagram/.clones/RESEARCH-CLAIMS.md")
+    r.add_argument("--cgroup", default="/sys/fs/cgroup")
+    r.add_argument("--events", default=str(pathlib.Path.home() / ".claude" / "memwatch" / "events"))
+    args = ap.parse_args(argv)
+    repo = pathlib.Path(subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True,
+                                       check=True).stdout.strip())
+    try:
+        if args.cmd == "init":
+            exp = init(args, repo, time.time())
+            print(f"effort-run: experiment recorded - start {exp['start_commit'][:10]}, order {exp['order']}")
+        else:
+            rec = launch(args, repo, time.time())
+            print(f"effort-run: {rec['run_id']} started ({rec['task']}) in {rec['clone']}")
+            for s in rec["sessions"]:
+                print(f"  session {s.get('sid') or s.get('brief')}  transcript {s.get('transcript', 'see runner output')}")
+            if rec.get("runner_stdout"):
+                print(rec["runner_stdout"])
+    except Refused as e:
+        print(f"effort-run: REFUSED, nothing started - {e}", file=sys.stderr)
+        return 2
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))
