@@ -76,13 +76,17 @@ tiers.
    with a prompt whose hash is identical, and with the effort level set for the whole session at launch.
 2. **Given** the defined review and check agents pin their own model and effort, **When** a run dispatches one, **Then** it runs at its
    pinned tier in both arms, and the report names the tiers that ran.
-3. **Given** an ad-hoc agent (one with no agent file) would otherwise take its effort from the session, **When** a run dispatches one,
-   **Then** it runs at the same effort in both arms, or the run log shows how many ad-hoc dispatches each arm made and at what effort,
-   so the report can say whether they could explain a difference.
-4. **Given** the container memory cap, **When** the runs execute, **Then** they run one after another, never two at once, and a run
+3. **Given** an ad-hoc agent (one with no agent file) that checks or judges, **When** a run dispatches one, **Then** it runs at one
+   fixed effort in both arms. Counting per arm instead is allowed only for ad-hoc reading, fetching, translating or extracting. If the
+   implementing session MEASURES that an ad-hoc dispatch's effort cannot be set, it records that, and the report lists the control as unmet
+   for those dispatches with their count per arm.
+4. **Given** a run starts headless sessions of its own (a research page's write and check-and-apply sessions run as fresh headless
+   sessions), **When** it does, **Then** every one of them runs at the run's arm effort, and the run log records each session's effort.
+5. **Given** the container memory cap, **When** the runs execute, **Then** they run one after another, never two at once, and a run
    killed by the memory limit (exit 137) is void and re-run.
-5. **Given** the order could favor one arm (a warmer page cache, a shared ledger the first run writes), **When** the runs are scheduled,
-   **Then** the order of arms is randomized per task from a recorded seed, and anything a run writes outside its clone that a later
+6. **Given** the order could favor one arm (a warmer page cache, a shared ledger the first run writes), **When** the runs are scheduled,
+   **Then** the arms alternate - which arm goes first on the first task is drawn from a recorded seed, and the other arm goes first on the
+   second task, so at n=1 neither arm runs first on both, and anything a run writes outside its clone that a later
    run would read is listed in the run log.
 
 ---
@@ -181,25 +185,29 @@ says how to add an arm (`high`) or a second run per cell.
   in the hamlet generator, carried to a green local `make done` with the moved maps regenerated. Each run stops short of landing: it commits in its
   own clone and does not push.
 - **FR-003 Launch**: each run is a top-level headless session started by one command that takes the task, the arm and the seed, creates a fresh clone
-  from the recorded starting commit under a neutral run id, sets the effort level for the whole session at launch, and logs the command line. The
-  project's existing headless runner is extended to carry the effort level, rather than a second runner being written.
+  from the recorded starting commit under a neutral run id, sets the effort level for the whole session at launch, and logs the command line. Every
+  headless session the run itself starts (a research page's write and check-and-apply sessions included) runs at the run's arm effort, and
+  the run log records each session's effort; the project's existing headless runner, which today passes a model and no effort, is extended
+  to carry it, rather than a second runner being written.
 - **FR-004 The prompt**: one prompt file per task, identical across arms (byte-identical; its hash is in the run log), committed with the rubrics. It
   gives the task, where its future-work entry is, the stop point (FR-002), the no-human-help rule, and nothing about effort.
 - **FR-005 Controls**: same model, same starting commit, same hooks, agent files and settings in every run; the defined check agents run at their pinned
-  tiers in both arms; ad-hoc agent dispatches are held equal across arms or counted per arm with their effort (US2 AS3); runs are sequential; the arm
-  order per task is randomized from a recorded seed.
+  tiers in both arms; an ad-hoc dispatch that checks or judges runs at one fixed effort in both arms, and only reading, fetching, translating or
+  extracting dispatches may instead be counted per arm (US2 AS3); every headless session a run starts runs at the arm's effort (US2 AS4); runs are
+  sequential; the arms alternate which goes first, the first task's order drawn from a recorded seed.
 - **FR-006 Measurement**: per run, from the session transcripts - the main session's and every subagent's: input, output, cache-read and cache-creation
   tokens, main and subagents shown apart and summed; wall-clock from first to last event, excluding logged pauses; tool calls by tool; subagent
   dispatches by agent type. Usage-limit share is recorded when it can be observed and said to be unobserved when it cannot.
 - **FR-007 Rework signals**, per run, from what the project already logs: guard firings by guard and rule (refusals and corrections separately), check
-  and review verdicts that were not a pass and the rounds each needed, test and gate runs that failed before the last green one, and the number of commits
-  that revert or fix the run's own earlier work.
+  and review verdicts that were not a pass and the rounds each needed, test and gate runs that failed before the last green one, the number of commits
+  that revert or fix the run's own earlier work, and escalations - `escalation-check` verdicts and any question the run put to the GM.
 - **FR-008 Rubrics before runs**: one rubric per task, each with scored criteria and a stated pass line, committed before the first run starts and not
   edited afterwards. The research rubric scores at least: the answer to the question and whether the sources read support it; the breadth of the search
   (languages, kinds of source) and whether an absence is stated as one; citation correctness as the checks judge it; and clarity for the casual reader.
   The implementation rubric scores at least: the acceptance criteria met (every hamlet with its own ground has a path that reaches it; the path is a
   footpath's width; no new failure elsewhere); the regression and gate results; the review findings on the moved maps; the size and shape of the diff;
-  and the decisions recorded in the four classes.
+  and the decisions recorded in the four classes. Defects found in the implementation winner AFTER grading - at the landing merge, the post-merge
+  gate, the moved-map reviews, and any later review before the report closes - are recorded in the report as their own section, not re-scored.
 - **FR-009 Blinding**: a step the grader does not read strips arm-identifying text from each output, labels the two outputs of a task A and B in a random
   order, and writes the key to a file opened only after both grades are recorded.
 - **FR-010 Grading**: one grader agent file, model and effort pinned, which does not inherit the project's instructions (as every defined agent here), grades
@@ -207,13 +215,14 @@ says how to add an arm (`high`) or a second run per cell.
   disagreement.
 - **FR-011 Decision rule** (fixed now, before any run; applied per task type):
   - **Adopt `xhigh`** if its blind quality is clearly better - both graders prefer it, or the GM does with a stated reason on a rubric criterion - OR if
-    quality is not worse and its total tokens are at most 1.25x `medium`'s (rework having paid for the extra thinking).
-  - **Keep `medium`** if quality is the same or worse and `xhigh` costs more than 1.25x in tokens or wall-clock.
-  - **Inconclusive** otherwise, or when the two graders disagree and the GM declines to decide.
-  - **Expand** (add `high`, or a second run per cell) when the outcome is "adopt `xhigh`" on quality, or when either measure differs by more than 2x between
-    arms - the GM's "if there is a big difference". The expansion is proposed to the GM, not started.
+    quality is not worse and BOTH its total tokens and its wall-clock are at most 1.25x `medium`'s (rework having paid for the extra thinking).
+  - **Keep `medium`** if `xhigh`'s quality is worse, or if quality is the same and `xhigh` costs more than 1.25x in total tokens or in wall-clock.
+  - **Inconclusive** otherwise - the two graders disagree and the GM declines to decide.
+  - **Expand** (add `high`, or a second run per cell) when the graders find a clear quality difference in EITHER direction, or when total tokens or
+    wall-clock differ by more than 2x between arms in either direction - the GM's "if there is a big difference between medium and xhigh". The expansion
+    is proposed to the GM, not started.
 - **FR-012 Report**: a short report in the repository with the per-task table (arm x run: tokens by kind, main vs subagents, wall-clock, tool calls, rework counts,
-  both quality scores), the qualitative differences, the decision rule's outcome per task type with its arithmetic, the pinned tiers that ran, every logged
+  both quality scores), the qualitative differences, the defects found later in the implementation winner (FR-008), the decision rule's outcome per task type with its arithmetic, the pinned tiers that ran (and any control listed as unmet), every logged
   intervention, and the caveats (pilot, n=1; specific to Opus 5.5 and this tooling as of 2026-09; re-run a reduced version when either changes significantly).
 - **FR-013 The setting**: if the rule's outcome changes a default, the recommended setting is written for `.claude/settings.local.json` (the effort level,
   or the model-scoped form), not the committed, guarded `settings.json`, unless the GM prefers otherwise; sessions can still override it. This feature
@@ -253,7 +262,8 @@ every change to a map is; the report links them.
 |---|---|---|---|
 | Arms `medium` vs `xhigh`, one run per cell | GM ruling | "medium vs xhigh to start with"; "Pilot: 1 per arm per task" | `request.md` |
 | Tasks R and I, hamlets only for I | GM ruling | "anything involving settlement types which have not yet been scripted" ruled out | `request.md` |
-| Decision rule thresholds (1.25x, 2x) | process choice, this spec | 1.25x: within ordinary run-to-run spread of one session, so not a cost the GM would feel; 2x: a difference a pilot at n=1 is unlikely to show by chance | FR-011 |
+| Decision rule thresholds (1.25x, 2x) | GUESS - a process choice with no measured basis | no measurement of one session's run-to-run spread exists here, and the handoff warns "the same effort level run twice can differ a lot"; the figures are round numbers picked so that "comparable" and "big" have a fixed meaning before any run, and the report says they are guesses | FR-011 |
+| Arm order alternates between tasks | process choice (the handoff allows alternate or randomize) | at n=1, independent randomization can put one arm first on both tasks | US2 AS6 |
 | Task R stops at the record, not the Ubame sheet | process choice | the GM's rule: no hand-map edits inside other work (2026-09-28); keeps the task inside one research session pair | US4 AS1 |
 
 ## Assumptions
