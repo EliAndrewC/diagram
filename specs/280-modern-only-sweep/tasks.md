@@ -183,20 +183,23 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D8). Inventory: [`inv
 - [x] T44 Gather every handoff's `M<nn>` lines into `outcomes.md`, and confirm each of M01-M130 has an outcome line or an exclusion naming its owner before phase 3 starts; apply each `OWED-TO` text through a `briefs/extra/` brief once its hold clears, or send it to the owner; the spec's Decisions Recorded gets one line per outcome (FR-003, SC-002, plan D3)
       research: procedure
       verify: DONE. outcomes.md: 130 rows, M01-M130 each with an outcome; no exclusion (269 and 279 landed); every OWED-TO text applied (fd8dc79cd); Decisions Recorded one line per elimination
-- [ ] T45 Report to the GM through `escalation-check`: each GM ruling a MODERN-ONLY outcome reverses, each form ruled in knowingly (held until the GM rules), and the `undated-custom` set (spec D1) (D5, FR-006, SC-004)
+- [x] T45 Report to the GM through `escalation-check`: each GM ruling a MODERN-ONLY outcome reverses, each form ruled in knowingly (held until the GM rules), and the `undated-custom` set (spec D1) (D5, FR-006, SC-004)
       research: procedure
+      verify: DONE. escalation-check judged the GM report four times (2026-09-29): 4 items need the GM (M50, M52/M53, M64); the rest informational, in the final message
 - [x] T46 Eliminate the MODERN-ONLY forms and calibrate the MIXED degrees in modules OUTSIDE 269's `briefs/engine/groups.md`: knob options removed, generators stop drawing the form, detached-worktree baseline first (D4, FR-005)
       research: rendering
       verify: DONE. 43 eliminations in the engine, the kinds and the sheets (outcomes.md); baseline in a detached worktree /tmp/base280; the gate's regressions fixed (Kashikawa hook, Sawada network, the 282 oracle)
 - [x] T47 The same in 269's modules, once 269 has landed (D4, FR-010)
       research: rendering
       verify: DONE. 269 landed before phase 2; its modules (burial, bamboo, the dike-pond, the bearing) were changed in the same pass as T46
-- [ ] T48 The kinds follow: retired, or their `Entry:`, label and prose rewritten; `entry-drift` IN-STEP on a bundle for each (FR-009, SC-005)
+- [x] T48 The kinds follow: retired, or their `Entry:`, label and prose rewritten; `entry-drift` IN-STEP on a bundle for each (FR-009, SC-005)
       research: rendering
+      verify: DONE. entry-drift on 44 owed pairs (7 agents): 20 DRIFTED rewritten from their sections, 24 IN-STEP; bathhouse/woodpile renamed bath room/wood shed; PondSluice retired
 - [x] T49 The frozen legacy maps: each MODERN-ONLY form they draw written against the map in `migration-plan.md`, owed at conversion; the list to the GM through `escalation-check` (D6, FR-007)
       research: procedure
       verify: DONE. the 17 legacy-only items by map in future-work/farming-communities.md, towns.md and cities.md, pointed at from migration-plan.md; the list goes to the GM in T45's escalation-check
-- [ ] T50 Regenerate each motivating pool map; `settlement-review` / `building-review` one map per agent, a ledger row each; the magistracy sheets edited by hand where a Mode A form goes, with `building-review` (SC-003)
+- [x] T50 Regenerate each motivating pool map; `settlement-review` / `building-review` one map per agent, a ledger row each; the magistracy sheets edited by hand where a Mode A form goes, with `building-review` (SC-003)
       research: rendering
+      verify: DONE. five hamlets regenerated; settlement-review six rounds, PASS x5 at key 098165c0 on a green gate; building-review of the Hoshigaoka and Ubame sheets, fixes applied; ledger rows in docs/review-ledger.md
 - [ ] T51 `make done` green, the landing (`scripts/sync-with-main.sh done`), the claims line closed (SC-006)
       research: procedure

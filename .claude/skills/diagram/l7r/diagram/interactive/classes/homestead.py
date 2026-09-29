@@ -25,7 +25,7 @@ class Farmhouse(Kind):
     each settlement rolls a common bearing near south, and each house turns a little with the lane and the field edge it
     stands on, never more than about 30 degrees; no house is turned a quarter away. Its work yard and garden beds turn
     with it: the GM ruled that they always line up with their house. About one farm in eight carries a storehouse
-    against its back wall, the headman's always.
+    against its back wall, a village headman's always.
 
     Note: Placement follows the read record; that every house in a nucleated cluster is reached by a lane, and the alleys-off-the-spine form, are paraphrased from a morphology literature no public page carries, and the back lane is read only for planned English villages. The setback from the paddy is stated in feet by no source:
     it is built from a bund width that is sourced (one to two shaku), a levee path and an eave overhang that
@@ -59,7 +59,7 @@ class StorageShed(Kind):
     Why: Before modern times a farmstead carried far fewer outbuildings than the twentieth century's counts: a village
     count of 1885, which its historian reads back to the last years of the shogunate, gives about one and a half
     besides the privy, with a storehouse on only two farms in sixteen, both powerful households. So a storehouse
-    stands against about one farmhouse in eight, the headman's always. Its size follows the two storage sheds dated to
+    stands against about one farmhouse in eight, and a village headman's always. Its size follows the two storage sheds dated to
     the end of the Edo period, about 18 to 27 ft long and one and a half to nearly twice as long as deep.
 
     Note: The count and the sheds' sizes are read (the Kakimochi count; the Hannan and Nerima sheds); the count is one

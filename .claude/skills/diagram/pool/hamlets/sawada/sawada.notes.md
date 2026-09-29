@@ -1000,12 +1000,12 @@ The GM's ruling of 2026-09-28 - "We should eliminate anything which is only mode
 - **The bath is a room joined to the house**, not a shed (M22, research homesteads/740: a bath of one or two tsubo in two or three
   houses in ten by 1824-1842, beside the main door or at the far end of the stable wing; a bath standing on its own is found only in
   the twentieth century). Drawn on 20-30% of homesteads, 6 ft out from the wall and 6-12 ft along it, abutting the wall; the hamlet's rolled
-  seat main_door (tried first; the seat each bath took is in the measured line below), a headman's joined to his floored rooms.
+  seat main_door (tried first, then the stable end, then the floored rooms; the seat each bath took is in the measured line below).
 - **The firewood is a wood shed**, 24 x 12 ft, on about four farmsteads in ten, the larger houses first (M21, homesteads/212 and 720:
   Hasuda 1824 and the Kakimochi count). The open stack under the eaves (a present-day page only) and the kizuma along the windbreak
   (undated modern pages only) are no longer drawn.
 - **The privy's size** is one of the sixteen of the Kakimochi table (homesteads/750), rolled per homestead; it was a 6 x 6 ft guess.
-- **The storehouse against the farmhouse** on about one farm in eight, the headman's always, at the Edo sheds' proportion, about 1.67
+- **The storehouse against the farmhouse** on about one farm in eight, at the Edo sheds' proportion, about 1.67
   to one (M18, M20: Kakimochi's 2 storehouses in 16 households; the ~30% it was drawn at was the 1972 count's).
 - **The work yard's median is 25 tsubo** (M16, homesteads/020: the 18-tsubo crop derivation rested on IRRI's modern 2.5 cm spreading
   depth; 25 is the Okayama ~50 mats a farm and Kitamoto's band - two undated records of remembered practice, a calibration).

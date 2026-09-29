@@ -2334,8 +2334,9 @@ line in feature 280 (`specs/280-modern-only-sweep/outcomes.md`, one row per item
   whose seat is `main_door` (Kuwabata, Sawada) draws its bath rooms at the next seat, and `meta.bath_seats_drawn` says so.
   Sketch: let the bath lap the yard's corner under the eaves beside the door - the yard's keep-out is a guess, the seat is not.
 - **The storehouse annex is sized as shares of its house** (0.46 w x 0.45 h, `houses.py`): 1.67 to one on a 46 ft minka, 1.46 on
-  Sawada's 40 x 28 ft house, just under the record's 1.5-1.8 band (homesteads/440). Sketch: size it in feet from the band, clamped
-  to the house's back wall.
+  Sawada's 40 x 28 ft house. Which norm applies turns on what the annex is: the farm shed's 1.5-1.8 (homesteads/440) or the kura's
+  about 15 x 18 ft, which "as a rule" stands apart from the house (homesteads/430) - the same split as the `storage shed` class
+  above. Sketch: settle the class first, then size it in feet from its own section.
 - **Mizuguchi's two east houses walk about four times the straight distance to the way out** (1,176 and 1,207 ft of lane for
   290-300 ft; 2.27 at worst on main) - the lane web leads them south-east first. Measured by the round-5 review, 2026-09-29; the
   same routing question as Kashikawa's detours above.
