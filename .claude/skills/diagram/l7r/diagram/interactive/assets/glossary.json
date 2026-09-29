@@ -12753,5 +12753,21 @@
    "feedlot",
    "feedlots"
   ]
+ },
+ "toon": {
+  "def": "A tall tree of China (Toona sinensis), also called Chinese mahogany. Its young shoots are eaten and its reddish timber was valued. It was planted around villages and at their water mouths.",
+  "variants": [
+   "toon",
+   "toons",
+   "Chinese toon"
+  ]
+ },
+ "tung": {
+  "def": "A Chinese tree (Vernicia fordii) grown for the oil pressed from its seeds, which was used to waterproof wood, paper and cloth.",
+  "variants": [
+   "tung",
+   "tung tree",
+   "tung trees"
+  ]
  }
 }

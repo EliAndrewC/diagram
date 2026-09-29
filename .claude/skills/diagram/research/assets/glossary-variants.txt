@@ -337,6 +337,7 @@ chenghuangmiao	chenghuangmiao
 chi	chi
 chigaidana	staggered shelves
 chikaraishi	chikaraishi
+chinese toon	toon
 chinese-style gate	Chinese-style gate
 chinese-style gates	Chinese-style gate
 chinju	chinju
@@ -3023,6 +3024,8 @@ tonami	Tonami plain
 tonami plain	Tonami plain
 tongdian	Tongdian
 tonya	ton'ya
+toon	toon
+toons	toon
 torii	torii
 toriimoto	Toriimoto
 torimono mitsu dogu	three arresting tools
@@ -3095,6 +3098,9 @@ tudigong	tudi miao
 tulou	tulou
 tulous	tulou
 tumu crisis	Tumu crisis
+tung	tung
+tung tree	tung
+tung trees	tung
 tutelary shrine	chinju
 twelve-mat	tatami
 two-grave	two-grave
