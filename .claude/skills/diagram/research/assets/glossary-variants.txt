@@ -1087,6 +1087,7 @@ hachures	hachure
 hageyama	bald hill
 haiden	haiden
 haikai	haikai
+hakata	Hakata
 hakehi	hakehi
 hakka	Hakka
 hakone barrier	Hakone barrier
@@ -1337,6 +1338,10 @@ inshu	Inshu
 intake	intake
 intake mouth	intake
 intakes	intake
+integrated fish farm	integrated fish farming
+integrated fish farming	integrated fish farming
+integrated fish farms	integrated fish farming
+integrated-farming	integrated fish farming
 intendancies	daikan
 intendancy	daikan
 intendant	daikan

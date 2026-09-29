@@ -12879,5 +12879,20 @@
    "jin",
    "catty"
   ]
+ },
+ "integrated fish farming": {
+  "def": "Raising fish in the same farm as livestock or crops, so that the animals' manure and the farm's wastes go into the ponds and feed the fish, usually with pig sheds built on the pond dikes. The name and the manuals that teach it are modern.",
+  "variants": [
+   "integrated fish farming",
+   "integrated-farming",
+   "integrated fish farm",
+   "integrated fish farms"
+  ]
+ },
+ "Hakata": {
+  "def": "A port town on the north coast of Kyushu, for centuries Japan's harbor for trade with the continent; today part of the city of Fukuoka.",
+  "variants": [
+   "Hakata"
+  ]
  }
 }
