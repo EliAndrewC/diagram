@@ -544,7 +544,14 @@ class Settlement(
         The ink is not rewritten - a clump past the page is clipped by the render, which is what a
         communal grove is documented to do. Only the RECORD moves, so `clumps` means "canopy a reader
         can see" and `clumps_offpage` means "trees that stand, off the page" - which is what the two
-        keys have always claimed and, until now, only claimed."""
+        keys have always claimed and, until now, only claimed.
+
+        ...AND THE EXTENT IS RECORDED AGAIN (feature 287, woods W15): the grove's `w` x `h` is what its `clumps` stock, and
+        moving the off-page clumps out of `clumps` can leave a box they no longer stock - so the box is re-decided over the
+        clumps on the page by the placer's own rule (`stocked_box`): kept where they stock it, else the extent they are
+        drawn at on the page, else their main stand's."""
+        from .homestead_parts.stands import record_box, stocked_box  # noqa: PLC0415 - kept beside its one use
+
         for g in self.M.get("village_groves") or []:
             allc = list(g.get("clumps") or []) + list(g.get("clumps_offpage") or [])
             if not allc:
@@ -553,6 +560,9 @@ class Settlement(
             on = [c for c in allc if c[0] + r > ox and c[0] - r < ox + w and c[1] + r > oy and c[1] - r < oy + h]
             off = [c for c in allc if c not in on]
             g["clumps"], g["clumps_offpage"] = on, off
+            if all(k in g for k in ("x", "y", "w", "h")):
+                _hw, _hh = float(g["w"]) / 2.0, float(g["h"]) / 2.0
+                record_box(g, stocked_box(on, (float(g["x"]) - _hw, float(g["y"]) - _hh, float(g["x"]) + _hw, float(g["y"]) + _hh), r + 4.0))
             # ...AND THE ALDER COUNT IS OF THE CLUMPS ON THE PAGE (feature 287, woods W05): `alder` counted every seated
             # clump drawn as alder, and the partition moves the off-page ones out of `clumps`, so it is recounted here over
             # the on-page clumps `village_grove` recorded as alder (`alder_clumps`)

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement
@@ -65,8 +66,20 @@ def brook_beside_the_field(s: Settlement) -> list[tuple[float, float, float, flo
 SCATTER_PAD = 40.0
 #: ...and the TITLE BAND on the north side (feature 224, the 48-map cohort): a sheet with no room for its name grows a
 #: band above the map sized to the placard (`Settlement.title`, 30 * 1.2 + 46 + 24 + 32 = 138 px) AFTER the crop, and
-#: on four of 48 seeds it reached 6 px past the pad - so the prediction's top edge carries the band's full height too.
+#: on four of 48 seeds it reached 6 px past the pad - so the prediction's top edge carries the band's full height too, and
+#: since feature 287 the decided view's bottom edge as well (the band goes under the map when the one above is crossed).
 TITLE_BAND_ALLOWANCE = 140.0
+
+
+def scatter_frame_for(view: Sequence[float]) -> tuple[float, float, float, float]:
+    """THE FRAME A SCATTER THROWS WITHIN once the view (x, y, w, h) is decided (feature 287, M6 and water W52): the view,
+    `SCATTER_PAD` past it on every side, and `TITLE_BAND_ALLOWANCE` more above AND below it. The title's band is grown
+    after the crop above the map, or UNDER it when every seat above is crossed (`Settlement._title_band`; cohort seed 8's
+    south band reached 98 px past a pad that allowed only for the north) - so whichever side the band takes, the view it
+    grows stays inside this frame: the finish's overhang (`scatter_overhang`) is negative by construction for any band
+    under `SCATTER_PAD + TITLE_BAND_ALLOWANCE` (the hamlet's placard makes one of 138 px)."""
+    vx, vy, vw, vh = (float(v) for v in view)
+    return (vx - SCATTER_PAD, vy - SCATTER_PAD - TITLE_BAND_ALLOWANCE, vx + vw + SCATTER_PAD, vy + vh + SCATTER_PAD + TITLE_BAND_ALLOWANCE)
 
 
 TITLE_POCKET_RISE = 30 * 1.2 + 46 + 24 + 12 + 8 + 48  # ft: the pocket's height (`title_pocket`'s placard) with its 8 ft gap and 48 ft of step-out
@@ -146,10 +159,10 @@ def scatter_frame(s: Settlement, plan: SitePlan) -> tuple[float, float, float, f
 
     if plan.view is not None:
         # THE VIEW IS DECIDED (feature 287, M6): the scatter throws within it and `SCATTER_PAD` past it, nothing predicted -
-        # the pad for a mark centered just outside that still paints in, the north's allowance for the title band, which
-        # `title()`'s last rung grows above the map after the crop
-        vx, vy, vw, vh = plan.view
-        return (vx - SCATTER_PAD, vy - SCATTER_PAD - TITLE_BAND_ALLOWANCE, vx + vw + SCATTER_PAD, vy + vh + SCATTER_PAD)
+        # the pad for a mark centered just outside that still paints in - and the title band's allowance on BOTH its sides
+        # (`scatter_frame_for`): `title()`'s last rung grows the band above the map after the crop, or under it when the
+        # band above is crossed
+        return scatter_frame_for(plan.view)
     # BEFORE THE DECISION - the marsh's throw, which the view depends on (the title pocket's search reads the marsh) - the
     # frame is still a prediction, and the breach record (`finish`) audits it
     boxes = s._crop_boxes(city=False)

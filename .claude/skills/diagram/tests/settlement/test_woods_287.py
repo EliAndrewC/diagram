@@ -86,8 +86,19 @@ def test_a_belt_wrapped_round_the_cluster_is_trimmed_to_a_hook_on_the_wind() -> 
     assert belt_bearing_and_subtense(east, houses, NW)[0] > BELT_BEARING_MAX_DEG
     assert belt_bearing_and_subtense(trim_to_the_wind(east, houses, NW), houses, NW)[0] <= BELT_BEARING_MAX_DEG
     assert trim_to_the_wind(wrap, [], NW) == wrap, "no houses, nothing to bear from"
-    lone = [(900.0, 900.0), (910.0, 900.0)]  # both downwind: trimmed to the one nearer the wind, where it converges
-    assert len(trim_to_the_wind(lone, houses, NW)) == 1
+    lone = [(900.0, 900.0), (910.0, 900.0)]  # both downwind: the ends converge on one crown still off the wind
+    assert belt_bearing_and_subtense(lone[:1], houses, NW)[0] > BELT_BEARING_MAX_DEG, "non-vacuity: the remnant is off the wind"
+    assert trim_to_the_wind(lone, houses, NW) == [], "no crown stands in the wind's quarter: no belt, never one off the wind"
+
+
+def test_a_belt_with_no_crown_on_the_wind_is_not_planted() -> None:
+    """Woods W18 at the placer, the violating case: a band wholly downwind of the houses. The belt the trim would have
+    converged on - one crown off the wind - is not planted, and the grove records nothing."""
+    houses = [{"x": 500.0 + dx, "y": 500.0 + dy, "w": 30.0, "h": 24.0, "rot": 0} for dx in (-40.0, 0.0, 40.0) for dy in (-40.0, 0.0, 40.0)]
+    s = _hamlet()
+    s.M["houses"] = [dict(h) for h in houses]
+    assert s.village_grove([(880.0, 880.0), (960.0, 880.0), (960.0, 960.0), (880.0, 960.0)], role="windbreak", wind=NW) == 0
+    assert s.M["village_groves"] == []
 
 
 def test_village_grove_trims_the_windbreak_it_is_handed_the_wind_for() -> None:
@@ -451,3 +462,132 @@ def test_a_clearing_swept_after_the_scrub_takes_its_blades_and_marks_out() -> No
     assert len(blades) > len(left) > 0 and len(left_marks) > 0, "only the clearing's ground was taken"
     s.reserve_clearing(400.0, 400.0, 60.0, 60.0)  # the same clearing again: the reused blob culls nothing more
     assert len([ln for _z, _c, bl in s._blade_groups for ln in bl]) == len(left)
+
+
+# ---- W15 at the record: every grove is recorded at an extent its clumps stock ---------------------------------------
+
+
+def test_a_grove_is_recorded_at_an_extent_its_clumps_stock() -> None:
+    """Woods W15, the violating cases: a band far larger than what was planted in it (the windbreak's box kept), and two
+    stands far apart (the drawn extent of both under the floor) - each recorded box is stocked; a stocked band keeps its
+    box, and a grove with nothing on it records none."""
+    from l7r.diagram.settlement.homestead_parts.stands import grove_extent, main_stand, record_box, stocked_at_grain, stocked_box
+
+    stand = [(100.0 + 20 * i, 100.0 + 20 * j) for i in range(4) for j in range(4)]
+    band = (0.0, 0.0, 2000.0, 2000.0)
+    assert not stocked_at_grain(stand, band), "non-vacuity: 16 clumps in 4,000,000 sq px"
+    assert stocked_box(stand, band, 15.0) == grove_extent(stand, 15.0)
+    far = [*stand, (1900.0, 1900.0), (1900.0, 100.0)]
+    assert not stocked_at_grain(far, grove_extent(far, 15.0)), "non-vacuity: the drawn extent of both is under the floor"
+    box = stocked_box(far, band, 15.0)
+    assert stocked_at_grain(far, box) and box == grove_extent(stand, 15.0) and sorted(main_stand(far, 15.0)) == sorted(stand)
+    tight = (80.0, 80.0, 180.0, 180.0)
+    assert stocked_box(stand, tight, 15.0) == tight, "a band its clumps stock keeps its box: the belt's position is its meaning"
+    assert stocked_box([], (0.0, 0.0, 10.0, 20.0), 15.0) == (5.0, 10.0, 5.0, 10.0)
+    g: dict = {}
+    record_box(g, (1.04, 2.0, 11.06, 22.0))
+    assert (g["y"], g["w"], g["h"]) == (12.0, 10.0, 20.0)
+
+
+def test_village_grove_records_a_windbreak_its_clumps_stock() -> None:
+    """At the placer, the violating case: a windbreak band 1,100 px square over a field that leaves only one corner of it
+    plantable - its few clumps do not stock the band's box, and the grove is recorded at an extent they do."""
+    s = _hamlet(1400, 1400)
+    s.M["houses"] = [{"x": 700.0, "y": 1300.0, "w": 30.0, "h": 24.0, "rot": 0}]
+    s.field_polys.append([(180.0, 60.0), (1260.0, 60.0), (1260.0, 1260.0), (60.0, 1260.0), (60.0, 180.0), (180.0, 180.0)])
+    n = s.village_grove([(100.0, 100.0), (1200.0, 100.0), (1200.0, 1200.0), (100.0, 1200.0)], role="windbreak")
+    g = s.M["village_groves"][0]
+    assert n and not grove_stocked(g["clumps"], 1100.0, 1100.0), "non-vacuity: the band's box is under the floor"
+    assert grove_stocked(g["clumps"], g["w"], g["h"]) and g["w"] < 1100.0
+
+
+def test_the_page_partition_records_the_grove_again_at_what_the_page_shows() -> None:
+    """Woods W15 at `set_view`: a grove whose clumps mostly stand off the page keeps only its on-page clumps, and its box is
+    re-decided over them - stocked, where the old box with two clumps in it was not."""
+    s = _hamlet(2000, 2000)
+    clumps = [[100.0, 100.0], [1800.0, 1800.0]] + [[1500.0 + 20 * i, 1500.0 + 20 * j] for i in range(5) for j in range(5)]
+    s.M["village_groves"] = [{"x": 1000.0, "y": 1000.0, "w": 1900.0, "h": 1900.0, "role": "windbreak", "r": 14.0, "clumps": clumps, "clumps_offpage": []}]
+    s.set_view(0.0, 0.0, 1400.0, 1400.0)
+    g = s.M["village_groves"][0]
+    assert g["clumps"] == [[100.0, 100.0]] and len(g["clumps_offpage"]) == 26
+    assert grove_stocked(g["clumps"], g["w"], g["h"]) and not grove_stocked(g["clumps"], 1900.0, 1900.0)
+    s.M["village_groves"].append({"role": "copse", "r": 11.0, "clumps": [[50.0, 50.0]], "clumps_offpage": []})
+    s.set_view(0.0, 0.0, 1400.0, 1400.0)
+    assert "w" not in s.M["village_groves"][1], "a record with no extent is not given one"
+
+
+# ---- W02 / W25: a reserved seat stands within its household's reach, as planted and as re-seated ---------------------
+
+
+def test_a_reserved_seat_is_asked_its_households_reach_and_bank() -> None:
+    """Woods W02 with W25, the violating cases: three reserved seats - one within its house's reach, one beyond it, one
+    within it only across the brook. Planted with the dooryard's reach (`seat_near`), only the first stands; the siting's
+    own `near` (against the belt) is not what a seat is asked."""
+    from l7r.diagram.settlement.homestead_parts.stands import BankNear
+
+    house = (600.0, 600.0)
+    brook = [((660.0, 300.0), (660.0, 900.0))]
+    seats = [(560.0, 560.0), (600.0, 750.0), (700.0, 600.0)]
+    reach = BankNear([house], 90.0, brook)
+    assert reach.too_near(*seats[0]) and not reach.too_near(*seats[1]) and not reach.too_near(*seats[2]), "non-vacuity"
+    s = _hamlet()
+    s.M["houses"] = [{"x": 600.0, "y": 600.0, "w": 30.0, "h": 24.0, "rot": 0}]
+    s.village_grove([(500.0, 500.0), (800.0, 500.0), (800.0, 800.0), (500.0, 800.0)], role="copse", dense=False, near=([(100.0, 100.0)], 10.0), seats=seats, seat_near=([house], 90.0, brook))
+    assert s.M["village_groves"][0]["clumps"] == [list(seats[0])]
+
+
+def test_a_reserved_seat_moved_round_another_groves_crown_is_asked_its_reach_again() -> None:
+    """Woods W25, the re-seat: another grove's crown displaces a reserved seat, and the copse moves it round the crown. The
+    moved seat is asked the household's reach, not the siting's (which here admits nothing): at every reach it is planted,
+    moved, within it - and a seat beyond the reach is not planted at all."""
+    house = (600.0, 600.0)
+    seat = (640.0, 600.0)
+    other = {"role": "windbreak", "r": 14.0, "clumps": [[652.0, 600.0]], "clumps_offpage": []}
+
+    def plant(reach: float) -> list[list[float]]:
+        s = _hamlet()
+        s.M["houses"] = [{"x": 600.0, "y": 600.0, "w": 30.0, "h": 24.0, "rot": 0}]
+        s.M["village_groves"].append(dict(other))
+        s.village_grove([(520.0, 520.0), (760.0, 520.0), (760.0, 680.0), (520.0, 680.0)], role="copse", dense=False, near=([(2000.0, 2000.0)], 5.0), seats=[seat], seat_near=([house], reach, []))
+        return [c for g in s.M["village_groves"] if g["role"] == "copse" for c in g["clumps"]]
+
+    for reach in (40.5, 60.0, 120.0):
+        moved = plant(reach)
+        assert moved and list(seat) not in moved, "non-vacuity: the crown displaced the seat and it was moved"
+        assert all(math.dist(c, house) <= reach for c in moved)
+    assert plant(39.0) == [], "the seat itself is beyond its household's reach"
+
+
+# ---- W21: a crown's reach counts the lift `_draw_grove` draws it at ------------------------------------------------------
+
+
+def test_no_trunk_a_copse_draws_stands_on_a_footpath_beside_it() -> None:
+    """Woods W21, cohort seed 3's case: a copse beside a 3 ft footpath, a crown drawn 3 bs above its clump's seat. The
+    corridor keep-out counts that lift (`crown_reach(..., lift=...)`), so no trunk the copse draws is on the tread."""
+    assert crown_reach(22.0, lift=3.0) > crown_reach(22.0), "the lift reaches farther than the box's half-diagonal"
+    assert math.isclose(crown_reach(22.0, lift=3.0), 15.0)
+    s = _hamlet()
+    s.M["houses"] = [{"x": 600.0, "y": 700.0, "w": 30.0, "h": 24.0, "rot": 0}]
+    s.lane([(400.0, 600.0), (800.0, 590.0)], width=3, clearance=4, worn=True)
+    s.village_grove([(420.0, 520.0), (780.0, 520.0), (780.0, 680.0), (420.0, 680.0)], role="copse", dense=False, near=([(600.0, 700.0)], 200.0), area=1e9)
+    flat = s.M["tree_crowns"]
+    trunks = [(flat[i], flat[i + 1]) for i in range(0, len(flat), 3)]
+    assert trunks and not any(trunk_on_tread(x, y, s.M["lanes"]) for x, y in trunks)
+
+
+def test_a_wood_draws_no_trunk_on_a_lane_through_it() -> None:
+    """Woods W21 for a tree stand (`_draw_stand`, at crop time): a lane runs through a forest patch; no crown's trunk stands
+    on its tread, and a stand no lane reaches asks nothing."""
+    from l7r.diagram.settlement.shrines_wells.woods import trees_off_the_treads
+
+    s = _hamlet()
+    s.lane([(100.0, 400.0), (900.0, 400.0)], width=6, clearance=4, worn=True)
+    s._tree_stand([(200.0, 300.0), (800.0, 300.0), (800.0, 500.0), (200.0, 500.0)], seed=3, outliers=False)
+    s.flush_tree_stands()
+    flat = s.M["tree_crowns"]
+    trunks = [(flat[i], flat[i + 1]) for i in range(0, len(flat), 3)]
+    assert trunks and not any(trunk_on_tread(x, y, s.M["lanes"]) for x, y in trunks)
+    far = [{"pts": [[0.0, 0.0], [10.0, 0.0]], "w": 6}]
+    trees = [(500.0, 500.0, 8.0, "broadleaf")]
+    assert trees_off_the_treads(trees, far) == trees and trees_off_the_treads([], far) == []
+    assert trees_off_the_treads(trees, [{"pts": [[400.0, 500.0], [600.0, 500.0]], "w": 6}]) == []

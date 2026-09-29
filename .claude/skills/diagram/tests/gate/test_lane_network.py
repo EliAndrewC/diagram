@@ -11,8 +11,12 @@ them, a break mid-run on the CONNECTOR (which the settle pass exempts), went in 
 `tests/hamletgen/ways/test_track.py`, `test_web.py` and `test_joints.py`.
 
 KEPT, because no placer guarantees it yet:
-- `groves_clear_of_lanes`: only the belt's placer (`stands.py:village_grove`) keeps its trunks off the lanes' treads; the
-  woodland commons, the forest and the yard's persimmon (seated before the web, which never reads it) have no guarantee.
+- `groves_clear_of_lanes`: the belt and the copse (`stands.py:village_grove`, whose tread keep-out counts the lift a crown
+  is drawn at since wave 5 - cohort seed 3's copse crown stood 0.8 px from a footpath), the woodland commons (its crowns
+  thrown against the commons' corridor keep-out) and a wood's stand (`shrines_wells/woods.py:trees_off_the_treads`) keep
+  their trunks off the treads; the yard's persimmon does not - it is seated with its household before the web, and the web
+  keeps off the farmstead fixtures' quads (`ways/law.py:fixture_quads`) but not the persimmon's trunk (cohort 1-60 at wave
+  5: a persimmon on a lane on seeds 17, 20, 38, 41, 42, 47 and 58). That is the WAYS and HOMES modules' to close.
 """
 
 from __future__ import annotations

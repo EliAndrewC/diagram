@@ -365,6 +365,7 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # covered. `village_grove` now decides every seat at the record's grain, so the point it asks the reach of is the point
     # the manifest carries, and no margin stands in for the rounding.
     _copse_near: tuple[Any, ...] = ([(float(x), float(y)) for x, y in zip(xs, ys, strict=False)], s.px(COPSE_HOUSE_REACH_FT), _brook)
+    _dooryard = _copse_near  # a household's reserved seat is its dooryard's on either siting (woods W25), asked of it as planted
     if plan.copse_siting == "against_the_belt" and _dented:
         # the belt's own footprint, stood off the houses so the two stands read as one wood at its back
         _bx = [q[0] for q in _dented]
@@ -388,7 +389,7 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # household's share of the floor (`wood_share`) are planted before any other clump, on either siting - each within its
     # own house's dooryard reach, not the siting's `near` - and the goal counts them, so the grid fills only the rest.
     s.village_grove(
-        _box, role="copse", dense=False, reserved=title_pocket(s, plan), near=_copse_near, area=_copse_goal, seats=_seats
+        _box, role="copse", dense=False, reserved=title_pocket(s, plan), near=_copse_near, area=_copse_goal, seats=_seats, seat_near=_dooryard
     )  # the map's name has ground reserved; the copse honors it like the belt does
     # ...AND NEVER UNDER THE REGISTER'S FLOOR (feature 287, woods W25; plan D9): where the belt and the copse together draw
     # less than `HOMESTEAD_WOOD_FT2`'s smallest household a homestead, the shortfall is topped up as the homesteads' own

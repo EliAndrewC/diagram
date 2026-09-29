@@ -701,8 +701,8 @@ def test_a_belt_end_that_recedes_along_the_wind_is_trimmed() -> None:
 
 
 def test_after_the_view_is_decided_the_scatter_throws_within_it_and_the_placers_ask_it() -> None:
-    """M6: once `plan.view` is set, `scatter_frame` is that view grown by `SCATTER_PAD` (the title band's allowance on the
-    north) - no prediction - and `frame_bounds` is the view itself; before the decision `frame_bounds` is `frame_for` of
+    """M6: once `plan.view` is set, `scatter_frame` is that view grown by `SCATTER_PAD` (and the title band's allowance
+    above and below it) - no prediction - and `frame_bounds` is the view itself; before the decision `frame_bounds` is `frame_for` of
     the map as it stands, the same body the crop reads, and a bare canvas is the whole page."""
     from l7r.diagram.hamletgen.hinterland.frame import SCATTER_PAD, TITLE_BAND_ALLOWANCE, frame_bounds, frame_for, scatter_frame
 
@@ -716,7 +716,7 @@ def test_after_the_view_is_decided_the_scatter_throws_within_it_and_the_placers_
     assert frame_bounds(s, plan) == (vx, vy, vx + vw, vy + vh)
     plan.view = (100.0, 200.0, 800.0, 600.0)
     assert frame_bounds(s, plan) == (100.0, 200.0, 900.0, 800.0), "the decided view, not a recomputation"
-    assert scatter_frame(s, plan) == (100.0 - SCATTER_PAD, 200.0 - SCATTER_PAD - TITLE_BAND_ALLOWANCE, 900.0 + SCATTER_PAD, 800.0 + SCATTER_PAD)
+    assert scatter_frame(s, plan) == (100.0 - SCATTER_PAD, 200.0 - SCATTER_PAD - TITLE_BAND_ALLOWANCE, 900.0 + SCATTER_PAD, 800.0 + SCATTER_PAD + TITLE_BAND_ALLOWANCE)
 
 
 def test_a_marsh_finger_between_the_probes_is_read_by_the_rules_own_grid() -> None:

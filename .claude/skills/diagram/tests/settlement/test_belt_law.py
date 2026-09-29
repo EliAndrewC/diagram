@@ -161,3 +161,26 @@ def test_the_settling_seat_asks_the_fills_own_tests_but_the_outline(monkeypatch)
     s.M["wells"] = [{"x": 700.0, "y": 540.0, "r": 20.0, "vr": 12.0}]
     s.village_grove(BAND, role="windbreak", within=(0.0, 300.0, 1400.0, 1200.0), wind=N, page=lambda _s: PAGE)
     assert answers == [None, None, (400.0, 440.0), None]
+
+
+def test_a_belt_no_bin_judges_is_judged_whole_where_it_stands_off_the_page() -> None:
+    """W16's frame-held half, the violating case: a one-row stub two bins wide (both tips, so no bin is judged) standing in
+    the middle of the page. Its exemptions are not the frame's (`off_the_page`), so every crowned bin is judged and the stub
+    reads thin - and the settle plants it deep. The same stub against the page's top edge stays unjudged: there the frame is
+    what cuts it."""
+    stub = [(600.0, 560.0), (620.0, 560.0), (640.0, 560.0), (660.0, 560.0)]
+    rd = _read(stub)
+    assert rd.off_the_page() and rd.thin(), "judged whole: a one-row stub off the page is thin"
+    assert rd._depths(lenient=True) == [None, None], "non-vacuity: every bin is a tip"
+    edge = [(x, 20.0) for x, _y in stub]
+    at_edge = _read(edge, band=[(550.0, 0.0), (700.0, 0.0), (700.0, 90.0), (550.0, 90.0)])
+    assert not at_edge.off_the_page() and at_edge.depths() == [None, None]
+    assert BeltReading(stub, [], 14.0, HOUSES, N, [], None, None, BAND).off_the_page() == [], "no recorded view, no page to stand off"
+
+    def seat(x: float, y: float) -> tuple[float, float]:
+        return (round(x, 1), round(y, 1))
+
+    out = settle_the_belt(stub, r=14.0, houses=HOUSES, wind=N, ways=(), page=lambda _s: PAGE, band=BAND, seat=seat)
+    done = _read(out)
+    assert out and not done.thin() and any(d is not None for d in done.depths()), "planted deep, and judged"
+    assert settle_the_belt(stub, r=14.0, houses=HOUSES, wind=N, ways=(), page=lambda _s: PAGE, band=BAND, seat=lambda _x, _y: None) == [], "no seat: the stub is ended"

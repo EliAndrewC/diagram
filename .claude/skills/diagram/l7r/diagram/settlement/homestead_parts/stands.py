@@ -20,11 +20,14 @@ _GAP_MEMORY = True
 clumps are unchanged."""
 
 
-def crown_reach(clump: float, jitter: float = 0.0) -> float:
+def crown_reach(clump: float, jitter: float = 0.0, lift: float = 0.0) -> float:
     """How far from its clump's seat a crown's trunk can be drawn (feature 287, woods W21 and homes H43): `_draw_grove`
-    throws each crown inside the clump's box less 2 px a side, and a conifer-led belt's row trunk stands inside a clump's
-    box and moves up to `jitter` each way (`_belt_ranks`) - so the box's half-diagonal, grown by the jitter."""
-    return (clump / 2.0 - 2.0 + jitter) * math.sqrt(2.0)
+    throws each crown inside the clump's box less 2 px a side and then draws it `lift` higher on the sheet (`3 * bs`, its
+    `cy + py - 3 * bs`), and a conifer-led belt's row trunk stands inside a clump's box and moves up to `jitter` each way
+    (`_belt_ranks`) - so the box's half-diagonal, grown by the jitter, with the lift on the vertical half. The lift was
+    missing until cohort seed 3 drew a copse crown 15.0 px from a seat whose reach was taken as 12.7, and 0.8 px from a
+    footpath's centerline."""
+    return math.hypot(clump / 2.0 - 2.0 + jitter, clump / 2.0 - 2.0 + jitter + lift)
 
 
 def trunk_on_tread(x: float, y: float, lanes: Any) -> bool:
@@ -67,9 +70,21 @@ def trim_to_the_wind(clumps: list[tuple[float, float]], houses: Any, wind: tuple
     checked after). The ends are the two crowns either side of the widest angular gap round the cluster, and the one lying
     farther round from the wind's bearing goes first: that shortens the hook and draws the belt's center toward the wind at
     once, and it never opens a hole inside a run, so the depth and the continuity of what stays are untouched. Converges -
-    at worst on the crowns nearest the wind's bearing, the belt's middle stretch (a single crown subtends nothing)."""
+    at worst on the crowns nearest the wind's bearing, the belt's middle stretch (a single crown subtends nothing).
+
+    ...AND WHERE THAT CONVERGES OFF THE WIND, NO BELT (feature 287, woods W18): the crown nearest the wind's bearing is never
+    the end taken off (the other end lies farther round), so the one crown the loop can converge on is that one - and where
+    even it bears more than `BELT_BEARING_MAX_DEG` off, no crown stands in the wind's quarter at all. It was returned as it
+    stood, the one way the trim left the rule broken; a belt with nothing on the wind is no windbreak, so none is kept."""
     if not houses:
         return list(clumps)
+    out = _trim_ends(clumps, houses, wind)
+    off, sub = belt_bearing_and_subtense(out, houses, wind) if out else (0.0, 0.0)
+    return out if off <= BELT_BEARING_MAX_DEG and sub <= BELT_SUBTENSE_MAX_DEG else []
+
+
+def _trim_ends(clumps: Sequence[tuple[float, float]], houses: Any, wind: tuple[float, float]) -> list[tuple[float, float]]:
+    """`trim_to_the_wind`'s end-crown loop: the ends off until the belt bears on the wind as a hook, or one crown is left."""
     out = list(clumps)
     cx = sum(float(h["x"]) for h in houses) / len(houses)
     cy = sum(float(h["y"]) for h in houses) / len(houses)
@@ -136,6 +151,62 @@ def stocked_copse(clumps: list[tuple[float, float]], pad: float, kept: frozenset
             break
         del out[max(loose, key=lambda k: math.hypot(out[k][0] - mx, out[k][1] - my))]
     return out
+
+
+Box = tuple[float, float, float, float]
+
+
+def grove_extent(clumps: Sequence[Sequence[float]], pad: float) -> Box:
+    """The box (x0, y0, x1, y1) a grove's clumps span, grown by `pad` - the extent it is drawn at."""
+    xs, ys = [float(c[0]) for c in clumps], [float(c[1]) for c in clumps]
+    return (min(xs) - pad, min(ys) - pad, max(xs) + pad, max(ys) + pad)
+
+
+def stocked_at_grain(clumps: Sequence[Sequence[float]], box: Box) -> bool:
+    """`grove_stocked` over `box` as the record writes it (`record_box`: `w`, `h` to 0.1 px), so the rounding cannot tip a
+    grove at the floor under it."""
+    return grove_stocked(clumps, round(box[2] - box[0], 1), round(box[3] - box[1], 1))
+
+
+def main_stand(clumps: Sequence[Sequence[float]], pad: float) -> list[Sequence[float]]:
+    """The grove's MAIN STAND: its clumps split, while a part's extent (`grove_extent`) is not `grove_stocked`, across the
+    widest gap along that extent's longer side, keeping the part with more clumps (the lower side on a tie). Terminates -
+    each split keeps a nonempty proper part, and one clump's extent is a `2 * pad` square, far above the floor - and the
+    part it returns is stocked in its own extent (feature 287, woods W15)."""
+    part = list(clumps)
+    while len(part) > 1:
+        x0, y0, x1, y1 = grove_extent(part, pad)
+        if stocked_at_grain(part, (x0, y0, x1, y1)):
+            break
+        k = 0 if x1 - x0 >= y1 - y0 else 1
+        vals = sorted(float(c[k]) for c in part)
+        cut = max(range(len(vals) - 1), key=lambda i: vals[i + 1] - vals[i])
+        lo = [c for c in part if float(c[k]) <= vals[cut]]
+        hi = [c for c in part if float(c[k]) > vals[cut]]
+        part = lo if len(lo) >= len(hi) else hi
+    return part
+
+
+def stocked_box(clumps: Sequence[Sequence[float]], box: Box, pad: float) -> Box:
+    """THE EXTENT A GROVE IS RECORDED AT, `grove_stocked` by construction (feature 287, woods W15 - the one predicate of
+    `test_every_recorded_grove_holds_trees`): `box` where its clumps stock it - a windbreak's band, whose position is its
+    meaning - else the extent its clumps are drawn at, else the extent of its main stand (`main_stand`), which its clumps
+    stock since they include the stand's. A grove with no clump records no extent (a zero box at `box`'s center)."""
+    if not clumps:
+        cx, cy = (box[0] + box[2]) / 2.0, (box[1] + box[3]) / 2.0
+        return (cx, cy, cx, cy)
+    if stocked_at_grain(clumps, box):
+        return box
+    ext = grove_extent(clumps, pad)
+    if stocked_at_grain(clumps, ext):
+        return ext
+    return grove_extent(main_stand(clumps, pad), pad)
+
+
+def record_box(g: dict[str, Any], box: Box) -> None:
+    """Write `box` (x0, y0, x1, y1) into a grove record's `x`, `y`, `w`, `h`, at the record's grain."""
+    g["x"], g["y"] = round((box[0] + box[2]) / 2, 1), round((box[1] + box[3]) / 2, 1)
+    g["w"], g["h"] = round(box[2] - box[0], 1), round(box[3] - box[1], 1)
 
 
 class BankNear:
@@ -226,6 +297,7 @@ class StandsMixin:
         reach: float | None = None,
         seats: Sequence[tuple[float, float]] | None = None,
         keep_off: Sequence[tuple[float, float]] | None = None,
+        seat_near: tuple[Any, ...] | None = None,
     ) -> int:
         """A COMMUNAL village grove - the Chinese *fengshui* forest (风水林). Unlike the per-house *yashikirin*,
         a NUCLEATED village shelters behind ONE village-scale grove, in three roles (see research/vegetation.html 'What are the village's three groves' 'Village
@@ -247,8 +319,11 @@ class StandsMixin:
         fell short (269 B26, the copse sized by the homesteads' woods). `wind` (toward where the wind comes from), given for the
         windbreak, trims the belt's ends until it bears on the wind's quarter as a hook (`trim_to_the_wind`). `seats` are the
         households' reserved shares of the wood floor (feature 287, woods W25; `wood_share`), planted FIRST, each through the
-        same rejection chain but `near` (each stands within its own house's reach by construction), and never dropped as a
-        straggler; `keep_off` are those seats for a grove that must leave them free (`reserved_seat_keepouts`). Returns the
+        same rejection chain but `near`, and never dropped as a straggler; a seat's reach is its household's - the dooryard
+        copse's, `seat_near` (points, reach, the brook's reaches: a house within reach on the seat's own bank) - asked of the
+        seat as planted and again of any re-seat, where `near` is the siting's (feature 287, woods W02 and W25: the
+        reservation reserved it within reach, and a seat moved round another grove's crown is asked again rather than
+        trusted); `keep_off` are those seats for a grove that must leave them free (`reserved_seat_keepouts`). Returns the
         count."""
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
@@ -341,7 +416,7 @@ class StandsMixin:
         # (feature 287, woods W21 and homes H43): a crown is thrown anywhere in the clump's box and a belt's row conifer a few
         # feet past it (`crown_reach`), so the seat keeps at least that reach beyond the tread, and no trunk the clump draws
         # can stand on it (`trunk_on_tread`). 0.45 x clump + 4 fell 0.4 px short of the belt's own crowns at the box corner
-        corr = self._corridor_buffers(max(clump * 0.45 + 4, crown_reach(clump, self.px(RANK_JITTER_FT) if role == "windbreak" else 0.0)))
+        corr = self._corridor_buffers(max(clump * 0.45 + 4, crown_reach(clump, self.px(RANK_JITTER_FT) if role == "windbreak" else 0.0, lift=3.0 * bs)))
         cr = clump / 2
         # ... and OUT of the SOUTHERN sun-corridor of every threshing yard + garden (a tree just south of them
         # blocks the drying/growing sun - +y is south). A touch wider than the check so it stays strictly clear.
@@ -435,8 +510,10 @@ class StandsMixin:
             _near = Seats(near[1])
             for _p in near[0]:
                 _near.add(float(_p[0]), float(_p[1]))
+        # `seat_near`: the reserved seats' own reach - the dooryard copse's, a house within reach on the seat's bank (W25)
+        _seat_near = BankNear(seat_near[0], seat_near[1], seat_near[2]) if seat_near is not None else None
 
-        def _reseat(qx: float, qy: float, require_interior: bool) -> tuple[float, float] | None:
+        def _reseat(qx: float, qy: float, require_interior: bool, reach_of: Seats | BankNear | None = _near) -> tuple[float, float] | None:
             """A DENSE belt flows around a local obstacle instead of losing the column.
 
             Which obstacles, and why this is not "re-seat around everything": a clump refused by the
@@ -524,8 +601,8 @@ class StandsMixin:
                         continue
                     if near_clumps.too_near(ax, ay):
                         continue
-                    if _near is not None and not _near.too_near(ax, ay):
-                        continue  # a re-seat is a clump like any other: it stays within `near`'s reach (feature 261)
+                    if reach_of is not None and not reach_of.too_near(ax, ay):
+                        continue  # a re-seat is a clump like any other: it stays within its reach (feature 261; a reserved seat's, W25)
                     return (ax, ay)
             return None
 
@@ -550,14 +627,20 @@ class StandsMixin:
             DECIDED AT THE RECORD'S GRAIN (feature 287, woods W01, W03, W05): the seat is rounded to the 0.1 px the manifest
             records before any test is asked of it, so the point every rule reads - the reach, the bank, the marsh, the alder -
             is the point the placer admitted, and no margin stands in for the rounding. A `reserved` seat is a household's
-            share of the wood floor: its reach is its own house's (`wood_share`), so `near` is not asked of it, and the grid's
-            other seats keep off it (`held`)."""
+            share of the wood floor: its reach is its household's (`seat_near`) rather than the siting's `near` - asked of it
+            here and of its re-seat alike, so a seat is never planted past the reach it was reserved within - and the
+            grid's other seats keep off it (`held`)."""
             jx, jy = round(jx, 1), round(jy, 1)
-            _far = (lambda x, y: False) if reserved else (lambda x, y: (_near is not None and not _near.too_near(x, y)) or (held is not None and held.too_near(x, y)))
+            _reach = _seat_near if reserved else _near
+            _far = (
+                (lambda x, y: _reach is not None and not _reach.too_near(x, y))
+                if reserved
+                else (lambda x, y: (_near is not None and not _near.too_near(x, y)) or (held is not None and held.too_near(x, y)))
+            )
             if blocks.hard(jx, jy) or _far(jx, jy):
                 return
             if blocks.local(jx, jy) or blocks.lane(jx, jy):
-                _alt = _reseat(jx, jy, require_interior=not blocks.local(jx, jy))
+                _alt = _reseat(jx, jy, require_interior=not blocks.local(jx, jy), reach_of=_reach)
                 if _alt is None:
                     return
                 jx, jy = round(_alt[0], 1), round(_alt[1], 1)
@@ -811,7 +894,7 @@ class StandsMixin:
             _ways = [ln.get("pts") or [] for ln in self.M.get("lanes") or []] + [st_.get("poly") or [] for st_ in self.M.get("streams") or []]
             _trim = (lambda cs: trim_to_the_wind(cs, _houses, wind)) if wind is not None else None
             seated = settle_the_belt(seated, r=round(clump / 2, 1), houses=_houses, wind=wind or (0.0, -1.0), ways=_ways, page=page, band=poly, seat=_settle_seat, reach=reach, trim=_trim)
-        elif role == "windbreak" and wind is not None and len(seated) > 1:
+        elif role == "windbreak" and wind is not None and seated:  # one crown too: a lone crown off the wind is no belt (W18)
             seated = trim_to_the_wind(seated, _houses, wind)
         if role == "copse" and len(seated) > 1:
             seated = stocked_copse(seated, clump / 2 + 4.0, kept)
@@ -860,19 +943,18 @@ class StandsMixin:
             # not: its position IS its meaning (`village_windbreak_on_windward_side` judges the
             # recorded center) and shrinking it to the leaves would walk that center off the windward
             # side - a defect this file already records having caused on cohort seeds 19 and 28.
+            _pad = clump / 2 + 4.0
             if role == "copse":
-                _cxs = [cl[0] for cl in clumps]
-                _cys = [cl[1] for cl in clumps]
-                _pad = clump / 2 + 4.0
-                x0, x1 = min(_cxs) - _pad, max(_cxs) + _pad
-                y0, y1 = min(_cys) - _pad, max(_cys) + _pad
+                x0, y0, x1, y1 = grove_extent(clumps, _pad)
                 poly = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
+            # ...AND EVERY GROVE IS RECORDED AT AN EXTENT ITS CLUMPS STOCK (feature 287, woods W15): the band's box where they
+            # stock it (the windbreak's position is its meaning, above), else the extent they are drawn at, else their main
+            # stand's (`stocked_box`) - no role is left to a density nothing decided
+            _rec: dict[str, Any] = {}
+            record_box(_rec, stocked_box(clumps, (x0, y0, x1, y1), _pad))
             self.M["village_groves"].append(
                 {
-                    "x": round((x0 + x1) / 2, 1),
-                    "y": round((y0 + y1) / 2, 1),
-                    "w": round(x1 - x0, 1),
-                    "h": round(y1 - y0, 1),
+                    **_rec,
                     "rot": 0,
                     "role": role,
                     "r": round(clump / 2, 1),

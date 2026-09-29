@@ -92,18 +92,31 @@ def test_the_scatter_overhang_and_its_strips() -> None:
     assert scatter_strips((0.0, 0.0, 800.0, 800.0), parcel, (100.0, 100.0, 750.0, 750.0))[0][0] == 800.0, "the right strip"
 
 
-def test_a_scatter_the_view_breaches_is_re_thrown_into_the_strips(tmp_path: Path) -> None:
-    """Water W52: where the final view shows a parcel past the frame its scatter was thrown within, the scatter's
-    registered re-throw fills exactly those strips, and no breach is recorded; a scatter with no re-throw registered is
-    still recorded as the breach it is."""
-    s = Settlement(1000, 1000, seed=1)
-    s.meta(name="T", scale="hamlet", ftpx=1)
-    s.set_view(70, 50, 800, 900)
-    s._scatter_frames.append(((100.0, 100.0, 900.0, 900.0), (0.0, 0.0, 1000.0, 1000.0)))
-    thrown: list[tuple[float, float, float, float]] = []
-    s._scatter_rethrows = {0: thrown.append}  # type: ignore[attr-defined]
+def test_a_scatter_frame_of_the_decided_view_holds_the_title_band_on_either_side(tmp_path: Path) -> None:
+    """Water W52 / M6, cohort seed 8's violating case: the view is decided, the scatter thrown within its frame
+    (`scatter_frame_for`), and then every seat in the band above the map is crossed, so the title's band is grown UNDER
+    it. The frame carries the band's allowance below as well as above, so the finished map records no breach; the same
+    view grown by the band with the north-only frame it used to have would have breached it."""
+    from l7r.diagram.hamletgen.hinterland.frame import SCATTER_PAD, TITLE_BAND_ALLOWANCE, scatter_frame_for
+
+    s = _crop_settlement()
+    s.set_view(0, 400, 2000, 700)
+    s.M["fields"] = [{"outline": [[-10, 390], [2010, 390], [2010, 1110], [-10, 1110]]}]
+    s.M["lanes"] = [{"pts": [[x, 100], [x, 700]]} for x in range(40, 2000, 60)]
+    frame = scatter_frame_for((0, 400, 2000, 700))
+    assert frame == (-SCATTER_PAD, 400 - SCATTER_PAD - TITLE_BAND_ALLOWANCE, 2000 + SCATTER_PAD, 1100 + SCATTER_PAD + TITLE_BAND_ALLOWANCE)
+    s._scatter_frames.append((frame, (-500.0, -500.0, 2500.0, 2000.0)))
+    s.title("Bandton")
+    assert s.M["meta"]["title_band_side"] == "south", "non-vacuity: the band went under the map"
+    north_only = (frame[0], frame[1], frame[2], 1100 + SCATTER_PAD)
+    assert max(scatter_overhang(north_only, (-500.0, -500.0, 2500.0, 2000.0), s.M["meta"]["view"])) > 0, "the old frame breached"
     s.finish(os.path.join(str(tmp_path), "a"), render=False)
-    assert len(thrown) == 3 and "scatter_frame_breach" not in s.M["meta"] and max(s.M["meta"]["scatter_frame_overhang"]) <= 0
+    assert "scatter_frame_breach" not in s.M["meta"] and max(s.M["meta"]["scatter_frame_overhang"]) < 0
+
+
+def test_a_scatter_the_view_breaches_is_recorded(tmp_path: Path) -> None:
+    """The finish's record: a scatter thrown within a frame the view reaches past is recorded as the breach it is (a caller
+    whose scatters kept no decided view's frame)."""
     t = Settlement(1000, 1000, seed=1)
     t.meta(name="T", scale="hamlet", ftpx=1)
     t.set_view(70, 50, 800, 900)
@@ -134,3 +147,34 @@ def test_no_bed_is_painted_above_a_sheen_and_the_pond_fill_over_every_mouth(tmp_
     assert s.M["water_sheen_zmin"] > s.M["water_bed_zmax"]
     assert all(r["bedz"] < min(channel["sheenz"], brook["sheenz"]) for r in (pond, channel, brook))
     assert pond["bedz"] > channel["bedz"] and pond["bedz"] > brook["bedz"], "the fill over the mouths that join it"
+
+
+def test_the_title_band_is_clothed_as_the_view_was() -> None:
+    """Woods W11 over the view as it ends, the violating case: a hamlet fills its holes over the view it decided, and then
+    the title's band is grown over the map - blank canvas the rule counts. The band is filled again where it is grown, so
+    the ground nothing covers over the final map window (`map_window`) stays within the share; a map that never filled its
+    holes is not filled for it, and a band outside a neatline is sheet, not map."""
+    from l7r.diagram.settlement.land.cover import BARE_SHARE_CAP, bare_cells, map_window
+
+    s = Settlement(2000, 1500, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1)
+    s.set_view(0, 400, 2000, 700)
+    # field strips with a bare strip every third row: a third of the view is bare, just inside the share, in strips too thin
+    # for any placard - so the fill lays nothing and the title takes the band over the map
+    rows = [k for k in range(28) if k % 3]
+    s.M["fields"] = [{"outline": [[-10, 400 + 25 * k], [2010, 400 + 25 * k], [2010, 425 + 25 * k], [-10, 425 + 25 * k]]} for k in rows]
+    s.fill_the_holes((0, 400, 2000, 700))
+    before = len(s.M["commons"])
+    s.title("Bandton")
+    band = s.M["meta"]["title_band"]
+    assert band and s.M["meta"]["view"][1] == pytest.approx(400 - band), "the band grew over the map"
+    bare, total = bare_cells({**s.M, "commons": s.M["commons"][:before]}, map_window(s.M))
+    assert len(bare) / total > BARE_SHARE_CAP, "non-vacuity: the band's canvas takes the map past the share"
+    bare, total = bare_cells(s.M, map_window(s.M))
+    assert len(s.M["commons"]) > before and len(bare) / total <= BARE_SHARE_CAP
+    t = Settlement(2000, 1500, seed=1)
+    t.meta(name="V", scale="hamlet", ftpx=1)
+    t.set_view(0, 400, 2000, 700)
+    assert t.refill_the_view() == 0 and not t.M["commons"], "a map that never filled its holes"
+    assert map_window({"meta": {"view": [0, 0, 10, 10], "neatline": [0, 5, 10, 5]}}) == [0.0, 5.0, 10.0, 5.0]
+    assert map_window({"meta": {"view": [0, 0, 10, 10]}}) == [0.0, 0.0, 10.0, 10.0]

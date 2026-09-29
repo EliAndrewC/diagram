@@ -469,7 +469,8 @@ class FinishMixin:
         still draws, so the placard's x is SCANNED along the band with the test every other rung uses (`_box_clear`); then
         the band under the map; and where a way crosses the whole of both, the map's ink is clipped at the frame it had
         (`meta.neatline`: a title panel outside the map's neatline - a map drawing convention), which leaves the band
-        blank by construction. Returns the placard's top-left."""
+        blank by construction. A band inside the map is map, and its bare ground is clothed as the view's was
+        (`refill_the_view`) - cover the placard may stand on, as on every other rung. Returns the placard's top-left."""
         band = bh + 32
         for north in (True, False):
             y = vy0 - band + 16 if north else vy0 + vh + 16
@@ -480,6 +481,9 @@ class FinishMixin:
                     self.M["meta"]["title_band"] = round(band, 1)
                     if not north:
                         self.M["meta"]["title_band_side"] = "south"
+                    # ...and the band is map, so it is clothed as the view was (feature 287, woods W11): the holes are
+                    # filled over the view as it ends, not the one the hinterland filled (`refill_the_view`)
+                    self.refill_the_view()
                     return (x, y)
                 x += 8
         self.M["meta"]["neatline"] = [round(v, 1) for v in (vx0, vy0, vw, vh)]
@@ -683,11 +687,14 @@ class FinishMixin:
         self.flush_blade_groups()
         # THE PREDICTION IS VERIFIED, NEVER TRUSTED (feature 224 FR-002): the view against the tightest frame any scatter
         # threw within; a view reaching past it means a strip inside the frame may hold no scatter - a visible defect.
-        # REPAIRED WHERE THE VIEW IS FINAL (feature 287, water W52): a scatter whose thrower registered a re-throw
-        # (`_scatter_rethrows`, by its index in `_scatter_frames`) is thrown again into exactly the strips the view shows
-        # past its frame (`scatter_strips`), and its frame then covers them; what no re-throw covers is recorded as
-        # `scatter_frame_breach` (the overhang per side), asserted absent over the pool by the gate. A title panel beyond a
-        # neatline is not the map, so the view measured is the neatline where one is recorded.
+        # GUARANTEED WHERE THE FRAME IS SET, not repaired here (feature 287, M6 and water W52): a hamlet's every scatter is
+        # thrown within the DECIDED view's frame (`hinterland.frame.scatter_frame_for` - the marsh thrown before the
+        # decision is thrown again into it, `throw_to_the_view`), and that frame carries the title band's allowance above
+        # and below the view, so the one thing that grows the view after the crop stays inside it. A re-throw here was
+        # offered for a scatter whose thrower registered one and none ever did, so it is gone. What this records is the
+        # overhang per side (`scatter_frame_overhang`), and a positive one as `scatter_frame_breach` for a caller whose
+        # scatters kept no such frame. A title panel beyond a neatline is not the map, so the view measured is the
+        # neatline where one is recorded.
         if self._scatter_frames:
             _tight = (
                 max(f[0] for f, _b in self._scatter_frames),
@@ -699,18 +706,7 @@ class FinishMixin:
             _view = self.M["meta"].get("neatline") or self.view
             if _view:
                 _over = [-1e9, -1e9, -1e9, -1e9]
-                for _k, (_frame, _parcel) in enumerate(self._scatter_frames):
-                    _rethrow = getattr(self, "_scatter_rethrows", {}).get(_k)
-                    _strips = scatter_strips(_frame, _parcel, _view)
-                    if _rethrow is not None and _strips:
-                        for _strip in _strips:
-                            _rethrow(_strip)
-                        _frame = (
-                            min(_frame[0], *(s[0] for s in _strips)),
-                            min(_frame[1], *(s[1] for s in _strips)),
-                            max(_frame[2], *(s[2] for s in _strips)),
-                            max(_frame[3], *(s[3] for s in _strips)),
-                        )
+                for _frame, _parcel in self._scatter_frames:
                     _side = scatter_overhang(_frame, _parcel, _view)
                     if _side is not None:
                         _over = [max(a, b) for a, b in zip(_over, _side, strict=True)]

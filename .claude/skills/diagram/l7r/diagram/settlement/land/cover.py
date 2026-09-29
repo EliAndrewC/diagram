@@ -181,6 +181,14 @@ def bare_cells(M: Any, view: Any, step: float = BARE_STEP) -> tuple[list[tuple[f
     return [(x, y) for x, y, h in zip(xs, ys, hit, strict=True) if not h], len(xs)
 
 
+def map_window(M: Any) -> list[float]:
+    """The part of the sheet that is MAP, as (x, y, w, h): the view, or the neatline where the map's ink is clipped at one
+    (a title panel or a caption key outside it is sheet, not ground - `Settlement._title_band`). The window the bare-ground
+    rule is judged over (`margins_form_continuous_ring`, feature 287 woods W11)."""
+    meta = M.get("meta") or {}
+    return [float(v) for v in (meta.get("neatline") or meta["view"])]
+
+
 def bare_blocks(bare: list[tuple[float, float]], step: float = BARE_STEP) -> list[list[tuple[float, float]]]:
     """The bare sample points grouped into connected blocks (4-neighbors on the `step` grid), largest first."""
     if not bare:
@@ -226,6 +234,7 @@ class GroundCoverMixin:
         covers every one of its points, so the share falls by exactly the block and the fill ends. Returns the commons laid.
         Rough grazing is what the record puts on ground nothing else claims (research/vegetation.html, "Why is the hillside
         past the grove open scrub rather than more forest?")."""
+        vars(self)["_fills_holes"] = True  # ...and the view the finish grows for the title is clothed the same way (`refill_the_view`)
         probe = {**self.M, "_planned_cover": [[(float(q[0]), float(q[1])) for q in p] for p in planned]}
         bare, total = bare_cells(probe, view)
         laid = 0
@@ -237,6 +246,15 @@ class GroundCoverMixin:
             bare = [p for p in bare if p not in gone]
             laid += 1
         return laid
+
+    def refill_the_view(self: Settlement) -> int:  # type: ignore[misc]
+        """THE VIEW AS IT ENDS, CLOTHED (feature 287, woods W11): the title's last rung grows the sheet a band past the view
+        the holes were filled over (`Settlement._title_band`), and the band shows the map's canvas - blank ground the rule
+        counts. So a map that filled its holes (`fill_the_holes`) has the final view filled again, over `map_window` - the
+        view, or the neatline where the band lies outside the map. Returns the commons laid; 0 for a map that never asked."""
+        if not vars(self).get("_fills_holes"):
+            return 0
+        return self.fill_the_holes(map_window(self.M))
 
     def _commons_keep(self: Settlement, box: tuple[float, float, float, float], avoid: Any = ()) -> Any:  # type: ignore[misc]
         """The commons' STATIC keep-outs over `box` (x0, y0, x1, y1), indexed once - lifted out of `commons` (feature 287, woods

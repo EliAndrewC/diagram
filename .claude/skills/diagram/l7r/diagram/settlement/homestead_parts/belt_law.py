@@ -42,6 +42,7 @@ MIN_BELT_DEPTH_FT = 30.0  # research/vegetation/020: a belt 'shallower than abou
 DEPTH_BIN_FT = 40.0  # the stretch across the wind a depth is read over - about a crown and a half
 BELT_PUSH_BACK_FT = 60.0  # how far past the band's far face a thin column may be planted: `belt_polygon`'s own ladder tops out at 60 ft back
 SETTLE_ROUNDS = 12  # rounds that may add seats before the removing phase; each round re-reads the page the belt sets
+BELT_DESIGN_DEPTH_FT = 110.0  # the band `belt_polygon` draws, 36..146 ft behind the fringe: a belt standing against the page has a crown this near its edge
 
 #: The compass quarter the wind comes from, as the manifest records it (`meta.windward`), toward that quarter. Normalized
 #: in `wind_unit`, the one place a quarter becomes a vector for these predicates, so the placer and a test read one number.
@@ -112,6 +113,8 @@ class BeltReading:
         # depth just the same, which the record accepts (the belt's inner face is kept at the frame, its depth clipped).
         x0, y0, w, h = (float(c) for c in (view or (-1e9, -1e9, 2e9, 2e9)))  # no view recorded: no frame
         self.view = (x0, y0, w, h)
+        self.framed = view is not None
+        self.on_xy = [(float(c[0]), float(c[1])) for c in on]
         page |= {self.bin(v) for c, (_u, v) in zip(on, self.cl, strict=False) if min(c[0] - x0, c[1] - y0, x0 + w - c[0], y0 + h - c[1]) <= 2 * r}
         page |= {b for b in range(max(self.bins) + 1) if self._band_leaves_the_page(b)}
         self.page = page
@@ -188,12 +191,37 @@ class BeltReading:
         # ...and an empty bin inside an opening a way crosses face to face (`_crossed`): a way crossing on the diagonal parts
         # the belt over more than the one bin its samples span half the band's depth in, and the opening it makes is the
         # crossing's, which W17 judges (no more than `_BELT_GAP_FT` either side of the way)
+        # ...AND A BELT NO BIN JUDGES IS JUDGED WHOLE WHERE IT STANDS OFF THE PAGE (feature 287, woods W16's frame-held half):
+        # the exemptions are honest only where the frame is what cuts the belt, so a belt every bin of which is exempt - a
+        # stub of two tips, a run a way parts - while some stretch of it stands farther than `BELT_DESIGN_DEPTH_FT` from
+        # the page's edge (`off_the_page`) has every crowned bin judged, and `settle_the_belt` deepens or ends it
+        out = self._depths(lenient=True)
+        if all(d is None for d in out) and self.off_the_page():
+            out = self._depths(lenient=False)
+        return out
+
+    def off_the_page(self) -> list[int]:
+        """The bins whose crown on the page NEAREST the page's edge stands farther than `BELT_DESIGN_DEPTH_FT` from it - a
+        stretch that does not stand against the page, so its exemption is not the frame's (the one predicate of
+        `test_every_pool_belt_keeps_its_depth_across_its_windward_face`'s frame-held half). None without a recorded view."""
+        if not self.framed:
+            return []
+        x0, y0, w, h = self.view
+        near: dict[int, float] = {}
+        for (x, y), (_u, v) in zip(self.on_xy, self.cl, strict=False):
+            b = self.bin(v)
+            near[b] = min(near.get(b, math.inf), min(x - x0, y - y0, x0 + w - x, y0 + h - y))
+        return sorted(b for b, d in near.items() if d > BELT_DESIGN_DEPTH_FT)
+
+    def _depths(self, lenient: bool) -> list[float | None]:
+        """`depths` with its exemptions (`lenient`), or with only an empty bin's (the crossing's, the run break's)."""
         vs = sorted(v for _u, v in self.cl)
         crossed = {k for a, b in zip(vs, vs[1:], strict=False) if b - a > _BELT_GAP_FT and self._crossed(a, b) for k in range(self.bin(a) + 1, self.bin(b - 1e-6) + 1)}
         out: list[float | None] = []
         for b in range(max(self.bins) + 1):
             us = sorted(self.bins.get(b, []))
-            if b in self.parted or b in self.page or b in self.tips or (not us and (b in crossed or self.unreached(self.lo + (b + 0.5) * DEPTH_BIN_FT))):
+            exempt = b in self.parted or b in self.page
+            if (lenient and (exempt or b in self.tips)) or (not us and (exempt or b in crossed or self.unreached(self.lo + (b + 0.5) * DEPTH_BIN_FT))):
                 out.append(None)
                 continue
             out.append((us[-1] - us[0] + 2 * self.r) if us else 0.0)
