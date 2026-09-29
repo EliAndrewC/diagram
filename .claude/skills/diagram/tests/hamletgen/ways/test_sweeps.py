@@ -700,9 +700,17 @@ def test_a_cut_that_strands_a_lane_does_not_keep_the_network() -> None:
     assert cut_keeps_network([{"pts": [list(p) for p in tail]}], 0, tail, [(0.0, 0.0), (10.0, 0.0)]) is True, "one lane is one piece"
     from l7r.diagram.hamletgen.ways.sweeps import _sweep_doubled_tails
 
-    s = _StubSettlement(lanes=[[(0.0, -300.0), (0.0, 300.0)], [(100.0, 200.0), (6.0, 150.0), (6.0, 60.0)], [(80.0, 90.0), (8.0, 90.0)], [(100.0, 200.0), (100.0, 300.0), (0.0, 300.0)]])
+    far = [(0.0, -300.0), (0.0, 300.0)], [(100.0, 200.0), (6.0, 150.0), (6.0, 60.0)], [(80.0, 90.0), (9.5, 90.0)], [(100.0, 200.0), (100.0, 300.0), (0.0, 300.0)]
+    s = _StubSettlement(lanes=list(far))
     for ln in s.M["lanes"]:
         ln["connector"], ln["w"] = False, 3
     n = _sweep_doubled_tails(s)  # the fourth lane joins the straggler to the way, so the web is one piece
     assert n == 0
-    assert s.M["lanes"][1]["pts"] == [[100.0, 200.0], [6.0, 150.0], [6.0, 60.0]], "the tail the third lane joins stays"
+    assert s.M["lanes"][1]["pts"] == [[100.0, 200.0], [6.0, 150.0], [6.0, 60.0]], "a third lane 9.5 ft off the way keeps the tail"
+    # Sawada (feature 280): the third lane's end 8 ft off the way is carried onto it, and the tail is cut
+    s = _StubSettlement(lanes=[far[0], far[1], [(80.0, 90.0), (8.0, 90.0)], far[3]])
+    for ln in s.M["lanes"]:
+        ln["connector"], ln["w"] = False, 3
+    assert _sweep_doubled_tails(s) == 1
+    assert s.M["lanes"][2]["pts"][-1] == [0.0, 90.0], "the straggler meets the way"
+    assert s.M["lanes"][1]["pts"] != [[100.0, 200.0], [6.0, 150.0], [6.0, 60.0]], "and the doubled tail is cut"

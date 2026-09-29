@@ -955,6 +955,35 @@ def cut_keeps_network(lanes: Sequence[Mapping[str, Any]], i: int, before: Sequen
     return pieces(after) <= pieces(before)
 
 
+_RESEAT_FT = 2.0 * _TOUCH_GAP
+"""How far a lane end left on a cut tail may be carried onto the way the tail ran beside (Sawada, feature 280: 4.4 ft)."""
+
+
+def reseat_on_way(lanes: Sequence[Mapping[str, Any]], i: int, before: Sequence[Pt], after: Sequence[Pt], way: Sequence[Pt]) -> dict[int, list[Pt]]:
+    """The lanes whose end stood on lane `i`'s tail (`before`) and on nothing once it is cut (`after`), each with that end
+    carried onto `way` - the way the tail ran beside - where it lies within `_RESEAT_FT` of it. FOUND BY FEATURE 280
+    (Sawada): a straggler met the doubled tail 4.4 ft off the way beside it, just past the touch gap, so the cut would
+    strand it and the tail stayed doubled; a tail 4 ft off a way is that way, and the straggler meets it there."""
+    ways = [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in lanes]
+    tail, kept, road = list(zip(before, before[1:], strict=False)), list(zip(after, after[1:], strict=False)), list(zip(way, way[1:], strict=False))
+    moved: dict[int, list[Pt]] = {}
+    for j, w in enumerate(ways):
+        if j == i or len(w) < 2 or not road:
+            continue
+        rest = [sg for k, o in enumerate(ways) if k not in (i, j) for sg in zip(o, o[1:], strict=False)]
+        for end in (0, len(w) - 1):
+            e = w[end]
+            if not any(seg_dist(e[0], e[1], a, b) <= _TOUCH_GAP for a, b in tail) or any(seg_dist(e[0], e[1], a, b) <= _TOUCH_GAP for a, b in kept + rest):
+                continue
+            to = min((seg_closest(e[0], e[1], a, b) for a, b in road), key=lambda z: math.dist(e, z))
+            if math.dist(e, to) <= _RESEAT_FT:
+                w = moved.get(j, w)[:]
+                w[end] = (float(to[0]), float(to[1]))
+                moved[j] = w
+    return moved
+
+
+
 def _sweep_doubled_tails(s: Settlement) -> int:
     """A lane whose end runs ALONGSIDE another way has met that way where it first came alongside, and ends there
     (settlement-review of Kuwabata, feature 261: a join lane ran back 122 ft beside the connector, 12.7 ft apart and
@@ -980,8 +1009,13 @@ def _sweep_doubled_tails(s: Settlement) -> int:
                 k = along_tail(pts, op)
                 if k is not None:
                     cut = cut_at_tail(pts, k, op)
-                    if not cut_keeps_network(lanes, i, pts, cut):
+                    moved = reseat_on_way(lanes, i, pts, cut, op)
+                    if not cut_keeps_network([{"pts": moved.get(n, lx.get("pts") or [])} for n, lx in enumerate(lanes)], i, pts, cut):
                         continue  # the tail carries another lane's junction: cutting it would strand that lane
+                    for n, w in moved.items():
+                        lanes[n]["pts"] = [[round(x, 1), round(y, 1)] for x, y in w]
+                        s.reink_lane(n)
+
                     pts, changed = cut, True
                     fixed += 1
                     break
