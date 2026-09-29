@@ -105,6 +105,12 @@ the pilot; the GM reads the pages in this feature's clone.
 - **FR-024** (GM 2026-09-29): a footnote quoting several passages is shown as a list - flat for siblings, nested under a
   passage that introduces others - written by the assembly with the separators kept, hidden, so the page's text is
   unchanged.
+- **FR-025** (GM 2026-09-29): an absence note opens, for its reader, with "Our research of publicly-available sources
+  couldn't find anything conclusive:", kept in ONE place (`record/absence.py`) and put in place of the note's marker by
+  the assembly; the search's date and terms are an HTML comment; what was found is visible, a (nested) list where it is
+  several things; no untranslated foreign word stands in our own text. The prepass lists old-form absence notes and
+  foreign script in our words; `record-style` and `record-format` report them. The grove topic's six are converted; the
+  other ~720 are the sweep's.
 - **FR-011**: The GM's sign-off on the guide and the check MUST be an open task, and the sweep's tasks MUST NOT be
   written or started before it is ticked.
 

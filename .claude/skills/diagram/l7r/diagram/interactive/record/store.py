@@ -15,7 +15,7 @@ import re
 
 from l7r.diagram.interactive.record import citations_side as cite
 from l7r.diagram.interactive.record import fragments as frag
-from l7r.diagram.interactive.record import originals, passages, xref
+from l7r.diagram.interactive.record import absence, originals, passages, xref
 from l7r.diagram.interactive.record.assemble import assemble
 from l7r.diagram.interactive.record.notes import allocate, merge, notes_of, number_references
 from l7r.diagram.interactive.record.split import Entry, Page, Section, split
@@ -185,6 +185,9 @@ def _first_difference(want: str, got: str) -> str:
 # ---------------------------------------------------------------- stage 3: the notes
 
 
+_NOTE_BODY = re.compile(r'(<li data-note="[^"]+">)(.*?)(</li>)', re.S)
+
+
 def split_originals(record_dir: str = RESEARCH_DIR, *, write: bool = True) -> list[str]:
     """Move every original still written inline in a question's notes into its `.originals.html` (feature 292,
     `originals.py`); returns the notes files that had one. With `write=False` it only reports - the check."""
@@ -236,6 +239,7 @@ def read_notes(page_rel: str, record_dir: str = RESEARCH_DIR) -> dict[str, str]:
         elif originals.has_placeholder(text):
             raise RecordError(f"{where}/{frag.notes_file(name)}: a note holds an original's placeholder and {frag.originals_file(name)} is missing")
         text = passages.bulleted_notes(text)  # feature 292: a note quoting several passages is shown as a list
+        text = _NOTE_BODY.sub(lambda m: m.group(1) + absence.render(m.group(2)) + m.group(3), text)  # and an absence note's words
         per_question.append((f"{where}/{frag.notes_file(name)}", notes_of(text, f"{where}/{name}")))
     return merge(per_question)
 
@@ -364,9 +368,19 @@ def _refuse_a_move_that_changed_the_record(page_rel: str, research: str, citatio
     if _numberless(committed) != _numberless(research):
         raise RecordError(f"{page_rel}: the move changed more than the footnote numbers - with every number and reference id stripped, the page is not the page it was")
     if citations is not None:
-        was, now = sorted(notes.values()), sorted(cite.old_notes(citations).values())
+        was, now = sorted(map(_as_written, notes.values())), sorted(map(_as_written, cite.old_notes(citations).values()))
         if was != now:
             raise RecordError(f"{cite.citations_rel(page_rel)}: {len(was)} notes went in and {len(now)} came out, or their text changed - the move carries every note verbatim")
+
+
+_RENDERING = re.compile(r'<span class="(?:pass(?: sub)?|passages|sep|orig)">')
+
+
+def _as_written(body: str) -> str:
+    """A note with what the assembly adds for its reader taken away - the absence note's words (`absence.py`), the
+    passages' list (`passages.py`), the original's wrapper (`originals.py`) - so a move is judged on the note's own
+    text. Both sides of a comparison are read through it, so a span a session wrote cancels out."""
+    return _RENDERING.sub("", absence.unrender(body)).replace("</span>", "")
 
 
 def _numberless(page_html: str) -> str:

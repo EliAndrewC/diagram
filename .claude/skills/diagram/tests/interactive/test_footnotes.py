@@ -18,6 +18,7 @@ import re
 import pytest
 
 from l7r.diagram.interactive.citations import GROUNDS_REASONS, citations_page, footnote_form, grounds_reasons, is_settled, notes
+from l7r.diagram.interactive.record import absence
 from l7r.diagram.interactive.sources import RESEARCH_DIR, canon_keys, collection_pages, registry_keys
 
 #: a second reference to the same note carries no id (ids are unique; the back-link returns to the first); the href
@@ -84,7 +85,7 @@ def test_every_footnote_resolves_and_every_definition_quotes_a_registered_source
         # gate rather than written down.
         if form in ("absence", "grounds"):
             continue
-        if body.lstrip().startswith(("no source is owed:", "no publicly readable source")):
+        if absence.unrender(body).lstrip().startswith(("no source is owed:", "no publicly readable source")):
             # a malformed note of either sourceless form is reported AS that form's defect: saying "no registry
             # key link" about a grounds note whose reason is misspelled sends the next reader to look for a key
             bad.append(f"[^{fid}]: {form}")
@@ -135,7 +136,7 @@ def sourceless_shape_faults(page_notes: dict[str, str]) -> list[str]:
     note carrying two DIFFERENT dated passes beside its marker."""
     faults = []
     for fid, body in page_notes.items():
-        stripped = re.sub(r'<a class="fnback" href="[^"]*">back</a>', "", body).strip()
+        stripped = absence.unrender(re.sub(r'<a class="fnback" href="[^"]*">back</a>', "", body)).strip()
         if sum(stripped.startswith(o) for o in _OPENERS) > 1:
             faults.append(f"[^{fid}]: opens as two kinds at once")
         if stripped.startswith("no source is owed:"):

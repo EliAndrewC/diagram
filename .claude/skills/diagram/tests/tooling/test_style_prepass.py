@@ -44,7 +44,7 @@ def test_every_lead_line_is_listed_as_a_question_or_a_statement_with_its_body() 
 def test_the_report_names_each_fragment_and_says_none_when_clean(tmp_path: pathlib.Path) -> None:
     out = sp.report({"010-x.html": "<p>12 m wide</p>", "020-y.html": "<p>clean</p>"})
     assert "== 010-x.html" in out and "METRIC WITHOUT A CONVERSION (1)" in out and "12 m" in out
-    assert out.count("  none") == 9, "020's metric list, both GM lists, both paragraph lists, both year lists and both empty lead-line lists say none"
+    assert out.count("  none") == 13, "every empty list of both questions says none"
 
 
 def test_a_visible_gm_ruling_is_listed_and_one_in_a_comment_is_not() -> None:
@@ -75,6 +75,22 @@ def test_a_year_in_a_lead_line_is_listed_with_whether_the_glossary_defines_it() 
         "1603 (NOT in the glossary) - What stood in 1603?",
     ]
     assert "YEARS IN LEAD LINES (2)" in sp.report({"x.html": html}, {"1868"})
+
+
+def test_an_old_form_absence_note_and_foreign_script_in_our_words_are_listed() -> None:
+    """GM 2026-09-29: the search goes in a comment, the findings are visible; and 屋敷林 in our own words is translated -
+    a quotation, an original and a comment keep their own script."""
+    notes = (
+        '<li data-note="a">no publicly readable source (searched 2026-09-28: 屋敷林 江戸時代; read ja.wikipedia 屋敷林)</li>\n'
+        '<li data-note="b">no publicly readable source<!-- searched 2026-09-29: 築地松 --> None counts them.</li>\n'
+        '<li data-note="c"><a href="x"><code>k</code></a> - 「A」 (translated; <span class="orig" data-orig="c#1"></span>)</li>\n'
+    )
+    assert sp.old_absence(notes) == ["a"]
+    found = sp.foreign_in_own_text(notes)
+    assert [f.split(" - ")[0] for f in found] == ["屋敷林", "江戸時代", "屋敷林"], "the old note's visible search, not the comment's"
+    assert sp.foreign_in_own_text('<p>written 垣根 in its documents; 「引用」 <!-- 註 --><span class="orig">original: 「原文」</span></p>')[0].startswith("垣根 - ")
+    out = sp.report({"q.html": "<p>x</p>"}, set(), {"q.html": notes})
+    assert "ABSENCE NOTE IN THE OLD FORM (1)" in out and "FOREIGN SCRIPT IN OUR OWN TEXT (3)" in out
 
 
 def test_the_hook_helper_and_the_engine_name_the_same_collections() -> None:

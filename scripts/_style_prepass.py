@@ -15,6 +15,12 @@ found exactly and for no tokens, so they are found here and handed over:
   sits between the GM's examples: the grove section's two opening paragraphs (133 and 68 words) are fine, its old rule
   paragraph (364) was not; over the whole record on 2026-09-29, the median paragraph was 82 words, the 90th percentile
   192, and 487 of 2,549 were over 150.
+- **ABSENCE NOTE IN THE OLD FORM** (STYLE.md 7, GM 2026-09-29: *"the date we searched and what the web searches were is
+  not information the human reader needs to see"*): a note of the question opening `no publicly readable source (searched`
+  - its search belongs in a comment after the marker and its findings in the visible text, a list where several. A finding.
+- **FOREIGN SCRIPT IN OUR OWN TEXT** (STYLE.md 5, GM 2026-09-29: *"this still has some untranslated foreign words, i.e.
+  '屋敷林' should get translated"*): every run of CJK, kana or hangul in the question's or its notes' visible text outside
+  a quotation, an original and a comment - to rule on: translated, or a gloss standing beside its English.
 - **LEAD LINES** (STYLE.md 3): every bullet's bold lead line, marked `Q` (a question) or `S` (a statement), with the
   start of its body - the list the agent rules on, statement or question, and whether a newcomer could read it.
 
@@ -45,6 +51,23 @@ _TAG = re.compile(r"<[^>]+>")
 MAX_WORDS = 150
 _BLOCK = re.compile(r"<p[^>]*>(.*?)</p>|<li[^>]*>(.*?)(?=<ul>|<ol>|</li>)", re.S)
 _SUP = re.compile(r"<sup[^>]*>.*?</sup>", re.S)
+_OLD_ABSENCE = re.compile(r'<li data-note="([^"]+)">\s*no publicly readable source\s*\(searched', re.S)
+_FOREIGN = re.compile(r"[\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af\uf900-\ufaff]+")
+_ORIG = re.compile(r'<span class="orig"[^>]*>.*?</span>', re.S)
+
+
+def old_absence(notes_html: str) -> list[str]:
+    """The key of each absence note still in the old form - its search visible, in parentheses after the marker."""
+    return _OLD_ABSENCE.findall(notes_html)
+
+
+def foreign_in_own_text(html: str) -> list[str]:
+    """Each run of CJK, kana or hangul in our own visible words, with a little context - quotations, originals (and
+    their placeholders) and comments excluded."""
+    text = re.sub(r"\s+", " ", _TAG.sub(" ", _QUOTED.sub(" ", _ORIG.sub(" ", _COMMENT.sub(" ", html)))))
+    return [f"{m.group(0)} - ...{text[max(0, m.start() - 40) : m.end() + 20].strip()}..." for m in _FOREIGN.finditer(text)]
+
+
 _GM = re.compile(r"\bGM(?:'s)?\b")
 _LEAD = re.compile(r"<li>\s*<strong>(.*?)</strong>\s*<br>\s*(.*?)(?=</li>|<ul>)", re.S)
 
@@ -104,10 +127,13 @@ def lead_lines(html: str) -> list[str]:
     return out
 
 
-def report(fragments: dict[str, str], glossary_words: set[str] | None = None) -> str:
-    """The prepass text for the named question fragments (their notes files are not prose and are skipped)."""
+def report(fragments: dict[str, str], glossary_words: set[str] | None = None, notes: dict[str, str] | None = None) -> str:
+    """The prepass text for the named question fragments; `notes` (their notes files, by question name) add the two
+    lists read from the footnotes - the old-form absence notes and foreign script in our own words."""
     lines = []
     for name, html in fragments.items():
+        note_html = (notes or {}).get(name, "")
+        old, foreign = old_absence(note_html), foreign_in_own_text(html) + foreign_in_own_text(note_html)
         metric, leads, gm, long = unconverted(html), lead_lines(html), gm_mentions(html), long_paragraphs(html)
         years = lead_line_years(html, glossary_words or set())
         lines.append(f"== {name}")
@@ -117,6 +143,10 @@ def report(fragments: dict[str, str], glossary_words: set[str] | None = None) ->
         lines += [f"  {x}" for x in gm] or ["  none"]
         lines.append(f"PARAGRAPH OVER {MAX_WORDS} WORDS ({len(long)}) - each is a FAIL of STYLE.md 3 (split it, or make it a list):")
         lines += [f"  {x}" for x in long] or ["  none"]
+        lines.append(f"ABSENCE NOTE IN THE OLD FORM ({len(old)}) - each is a FAIL of STYLE.md 7 (search into a comment, findings visible):")
+        lines += [f"  {x}" for x in old] or ["  none"]
+        lines.append(f"FOREIGN SCRIPT IN OUR OWN TEXT ({len(foreign)}) - rule on each: translate it, or keep it as a gloss beside its English (STYLE.md 5):")
+        lines += [f"  {x}" for x in foreign] or ["  none"]
         lines.append(f"YEARS IN LEAD LINES ({len(years)}) - rule on each: is its significance given in the line, or by its tooltip?")
         lines += [f"  {x}" for x in years] or ["  none"]
         lines.append(f"LEAD LINES ({len(leads)}) - rule on each: statement or question (STYLE.md 3), and readable from what precedes it:")
@@ -140,7 +170,12 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     variants = root / ".claude/skills/diagram/research/assets/glossary-variants.txt"
     words = {line.split("\t", 1)[0] for line in variants.read_text(encoding="utf-8").splitlines()} if variants.is_file() else set()
-    print(report({pathlib.Path(r).name: (root / r).read_text(encoding="utf-8") for r in rels}, words), end="")
+    notes = {}
+    for r in rels:
+        n = root / (r[: -len(".html")] + ".notes.html")
+        if n.is_file():
+            notes[pathlib.Path(r).name] = n.read_text(encoding="utf-8")
+    print(report({pathlib.Path(r).name: (root / r).read_text(encoding="utf-8") for r in rels}, words, notes), end="")
     return 0
 
 

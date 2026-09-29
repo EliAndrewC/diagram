@@ -41,3 +41,6 @@ button.orig-toggle::after { content: " \25B8"; } button.orig-toggle[aria-expande
 .pass { display: list-item; list-style: disc outside; margin-left: 1.3em; }
 .pass.sub { margin-left: 2.6em; list-style-type: circle; }
 .sep { display: none; }
+/* feature 292: an absence note opens with the one sentence `record/absence.py` keeps; what was found is a list of
+   `.pass` items under it (the stylesheet's footnote list above), what was searched a comment the reader never sees */
+.absence-lead { font-style: italic; }

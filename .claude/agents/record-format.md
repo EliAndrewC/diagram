@@ -210,9 +210,10 @@ already where it belongs, and you do not report it.
      to say, a correction and its date, a re-read and what it changed, when and how a source was first pointed
      to or that it was once summary-only, which feature or pass did the work, what "the doc had carried". For
      each: the text (quoted), what in it is still USEFUL (a figure, a quote, a decision, the honest label) and
-     is kept, and what is history and goes - with the sentence as it would then read. NOT history: the date a
-     search was made and what it tried (`searched 2026-09-06: mdpi.com refused`) - that is the label on a guess;
-     the date of a decision.
+     is kept, and what is history and goes - with the sentence as it would then read. NOT history: the date of a decision.
+     A VISIBLE search log - `searched 2026-09-06: web searches for ...` in an absence note - is a SESSION NOTE since
+     feature 292 (GM 2026-09-29: *"the date we searched and what the web searches were is not information the human
+     reader needs to see"*): propose `comment` for the date and the terms, and keep what the search FOUND visible.
 3. A sentence can be in two lists (a correction note that names a feature). List it once, under HISTORY, and say
    the feature number goes with it.
 

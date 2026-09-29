@@ -142,7 +142,11 @@ A note is one of THREE forms:
   the passage can be read: the paper's public PDF, not its abstract; the full-text view, not a library landing page;
   the original-language page, not an English rendering that is on no page. Never a paywall, a login wall or a
   search summary.
-- **ABSENCE**: `no publicly readable source (searched YYYY-MM-DD: what was tried)` - no key, no URL; the
+- **ABSENCE**: `no publicly readable source<!-- searched YYYY-MM-DD: what was tried -->` then what the search found,
+  visible - a list of `<span class="pass">` items (`pass sub` nested) where it is several things (feature 292, GM
+  2026-09-29: the search log is for a session, so it is a comment; the reader sees the one opening sentence
+  `record/absence.py` keeps, which `make record` puts in place of the marker, and the findings). The old form, the
+  search in visible parentheses, still reads and is converted by the sweep. No key, no URL; the
   assertion stands, honestly labeled; the registry entry stays, marked *Not cited*. It may carry `settled DATE`
   only after two independent passes on different dates, the second using a tool the first lacked, and it re-opens
   on anything that changes what can be read. Settling is never obligatory.
@@ -173,7 +177,7 @@ every new or changed entry, its verdicts recorded in the task (`quote-check conf
    definition written from the record's own text; nothing is wrapped by hand. A term nothing uses fails the gate.
 2. **A note for a session is an HTML comment**: the `Grounds:` and `Evidence:` fields, a feature, a task, a spec,
    a test, a make target, an engine identifier, a fetch verdict. Visible: the `Sources:` roster (each key's
-   parenthetical says what the work contributed, never when or how it was read), a source key's link, a decision and the alternatives it declined - told as the project's choice, never as a GM ruling (feature 292, GM 2026-09-29: the ruling, its date and words go in an HTML comment beside it) - the honest label on a claim (a GUESS, a dated search).
+   parenthetical says what the work contributed, never when or how it was read), a source key's link, a decision and the alternatives it declined - told as the project's choice, never as a GM ruling (feature 292, GM 2026-09-29: the ruling, its date and words go in an HTML comment beside it) - the honest label on a claim (a GUESS; that a search found nothing - its date and terms are a comment).
 3. **No history of the document in the document**: no "used to say", no correction dates, no "re-sourced by".
    A changed finding is REWRITTEN; git holds the old wording. An absence note's provenance ("the passage came from
    `key`") is an HTML comment inside its `<li>`.

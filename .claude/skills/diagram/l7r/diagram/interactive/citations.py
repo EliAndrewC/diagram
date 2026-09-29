@@ -28,6 +28,7 @@ import json
 import os
 import re
 
+from l7r.diagram.interactive.record import absence
 from l7r.diagram.interactive.sources import RESEARCH_DIR, WHAT_LABEL, WHY_LABEL, collection_pages, link_target, registry_entries
 
 #: A note on a citations page: its number and its inner HTML.
@@ -158,7 +159,9 @@ def derive(page_rel: str, research_dir: str = RESEARCH_DIR) -> tuple[str, str, l
 # ---------------------------------------------------------------------------------------------
 
 #: An ABSENCE note: no key, no link, what was searched and when. THE BACKLOG - the only kind that owes work.
-ABSENCE = re.compile(r"^no publicly readable source \(searched \d{4}-\d{2}-\d{2}:")
+#: Since feature 292 the search may be an HTML comment after the marker - the reader is not shown what was searched or
+#: when (`record/absence.py`) - and a rendered page is read through `absence.unrender`.
+ABSENCE = re.compile(r"^no publicly readable source\s*(?:\(searched \d{4}-\d{2}-\d{2}:|<!--\s*searched \d{4}-\d{2}-\d{2}:)")
 #: An absence searched to exhaustion by two dated passes carries the marker beside its search (feature 235 FR-004).
 SETTLED = re.compile(r"settled \d{4}-\d{2}-\d{2}")
 #: THE SIX REASONS A GROUNDS NOTE MAY NAME (feature 235, GM 2026-09-12: *"if we're counting things that are not
@@ -211,7 +214,7 @@ def footnote_form(body: str, canon: set[str]) -> str | None:
         if not named:
             return "a grounds note names at least one of the six reasons"
         return "grounds"
-    if ABSENCE.match(body):
+    if ABSENCE.match(absence.unrender(body).lstrip()):
         if "<code>" in body or 'href="' in body:
             return "an absence note carries no key and no link"
         return "absence"

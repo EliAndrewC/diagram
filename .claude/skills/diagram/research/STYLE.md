@@ -130,6 +130,10 @@ highlights into questions ... I think that we need to come up with a different n
   that we use the term."*)
 - Project jargon ("arm", "belt", "appurtenance", "roll", "footprint", "tier") is replaced by the plain word where one
   exists, and glossed where it must stay. (inferred)
+- **No untranslated foreign words in our own text** - footnotes included. A page is named by what it is ("the Japanese
+  Wikipedia article on homestead groves", not "ja.wikipedia 屋敷林"); a term in its own script stands only as a gloss
+  beside its English. Quotations and originals keep their own script. (GM, 2026-09-29: *"this still has some
+  untranslated foreign words, i.e. '屋敷林' should get translated"*)
 
 - **Number follows the map.** A feature a map has one of is singular - "a settlement's notice board"; a feature it has
   many of is plural - "a settlement's farmhouses", and the homestead groves, one to a farmhouse, are "a map's groves",
@@ -167,6 +171,11 @@ highlights into questions ... I think that we need to come up with a different n
   are citing multiple things from a source instead of one thing, we should display this as a bulleted list within the
   footnote"*)
 - **A footnote's link to its source opens the citations page in a new tab.**
+- **An absence note opens with one sentence, kept in one place.** The note is written `no publicly readable source`
+  followed by an HTML comment holding the search - its date and its terms - and then, visibly, what the search found; the
+  page shows "Our research of publicly-available sources couldn't find anything conclusive:" in place of the marker, from
+  `record/absence.py`, the one line to change. What was found is a list where it is several things - a finding with its
+  sources nested under it. (GM, 2026-09-29: *"Instead of 'no publicly available source' our standard wording should be 'Our research of publicly-available sources couldn't find anything conclusive:' ... the date we searched and what the web searches were is not information the human reader needs to see ... This is another case where a bulleted list would be clearer"*)
 
 ## 8. What does not change
 
