@@ -133,3 +133,19 @@ def test_a_spec_floor_is_declared_and_a_field_pit_across_the_brook_is_not_taken(
     fx.farmstead_fixtures(s, plan, [_house([pit])])
     (laid,) = s.M["farm_fixtures"]
     assert s.M["meta"]["farm_fixtures_min"] == {"shrine": 1} and "seat" not in laid and laid["x"] == pytest.approx(410.0)
+
+
+def test_a_kizuma_seat_under_a_lane_is_refused_for_the_laid_eaves_stack() -> None:
+    """Feature 287, ways (`law.over_a_fixture`): the flexible forms are seated after the web, so a seat under a lane's tread
+    is refused and the laid seat - the web was routed round it - is drawn instead."""
+    stack = _laid("woodpile", 400.0, 350.0 - 14.0 - 3.5 - 1.75, 10.0, 3.5)
+    plan = a_plan()
+    plan.belt = [(330.0, 270.0), (470.0, 270.0), (470.0, 316.0), (330.0, 316.0)]
+    s = _sheet()
+    s._fixture_forms = FixtureForms(woodpile_form="kizuma")
+    s.M.setdefault("lanes", []).append({"pts": [[300.0, 318.0], [500.0, 318.0]], "w": 3.0})  # along the belt's inner edge, where the kizuma stands
+    fx.farmstead_fixtures(s, plan, [_house([stack])])
+    (got,) = s.M["farm_fixtures"]
+    assert "form" not in got, "the eaves stack the seating laid"
+    assert not fx.under_a_lane(s.M, (got["x"], got["y"], got["w"], got["h"], got.get("rot", 0.0)))
+    assert fx.under_a_lane(s.M, (400.0, 318.0, 24.0, 5.0, 0.0))

@@ -22,7 +22,6 @@ from typing import TYPE_CHECKING, Any
 from l7r.diagram.settlement.rolling.fit import FIELD_REACH_FT, within_field_reach
 
 from ..consts import BUNDLE_PITCH, Pt
-from .seats import _seat_allowed
 
 if TYPE_CHECKING:
     from l7r.diagram.settlement import Settlement
@@ -79,7 +78,7 @@ def seat_the_rest(s: Settlement, plan: SitePlan, placed: int) -> int:
     for q in free_seats(s, (float(plan.seat["cx"]), float(plan.seat["cy"]))):
         if placed >= want:
             break
-        if _near_a_house(s, q) or not _seat_allowed(s, q[0], q[1]):
+        if _near_a_house(s, q):
             continue  # a house this pass seated stands here now
         offered += 1
         s._seat_search["candidates"] += 1

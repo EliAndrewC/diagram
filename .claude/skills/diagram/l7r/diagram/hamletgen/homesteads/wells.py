@@ -7,6 +7,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, point_quad_dist, rot_rect, surface_water_dist
+from l7r.diagram.settlement.homestead_parts.wood_share import ReservedSeats, well_keepout
 
 from ..consts import Pt
 from ..plan import SitePlan
@@ -152,6 +153,10 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
     # 777 px from the nearest well, with all 118 legal-neighborhood probes around them refused.
     # Two households sharing a draw-well is an ordinary thing; three is not a threshold nature knows.
     reach_r = max((math.hypot(h["w"], h["h"]) / 2 for h in houses), default=0.0)  # the prefilter's widest house
+    # ...AND NO WELL OVER A HOUSEHOLD'S SHARE OF THE WOOD FLOOR (feature 287, woods W25): the copse keeps its clumps off a
+    # wellhead, so a well seated among the reserved seats would take the ground the household's floor stands on
+    _wood = ReservedSeats(houses)
+    _well_r = well_keepout(s) if _wood.grid.n else 0.0  # nothing reserved (a settlement seated without shares): nothing held
     for third, want_near in ((190.0, 3), (300.0, 3), (520.0, 3), (520.0, 2)):
         if len(placed) >= want:
             break
@@ -173,7 +178,7 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
                 near = sorted(math.hypot(x - h["x"], y - h["y"]) for h in houses)
                 # the center distance PREFILTERS (a wall is never nearer than its center less the half-diagonal); the
                 # rule's own predicate decides
-                if len(near) >= want_near and near[want_near - 1] <= third and near[0] <= WELL_AMONG_DWELLINGS_PX + reach_r and _among_dwellings(houses, x, y):
+                if len(near) >= want_near and near[want_near - 1] <= third and near[0] <= WELL_AMONG_DWELLINGS_PX + reach_r and _among_dwellings(houses, x, y) and not _wood.disc_covers(x, y, _well_r):
                     seats.append((math.hypot(x - ccx, y - ccy), x, y))
                 x += step
             y += step

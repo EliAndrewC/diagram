@@ -142,8 +142,9 @@ def seat_parts_done(s: Any) -> None:
 
 
 def record_parts(s: Any, rec: dict[str, Any], geom: Any, form: str | None) -> None:
-    """The reserved parts a seated household's record carries: its stall (`byre`: where it is drawn, its turn, its box)
-    and its well pocket (`well_pocket`, the wellhead's center), which the seating also remembers (`_pockets`)."""
+    """The reserved parts a seated household's record carries: its stall (`byre`: where it is drawn, its turn, its box),
+    its well pocket (`well_pocket`, the wellhead's center), which the seating also remembers (`_pockets`), and its share of
+    the wood floor (`wood_share`: the copse seats it reserved, their crowns' radius and the ground they cover in sq ft)."""
     cx, cy = rec["x"], rec["y"]
     if form and geom.get("byre") is not None:  # the reserved stall, drawn where it was reserved (`draft_byres`)
         bx, by = geom["byre"][0], geom["byre"][1]
@@ -157,3 +158,8 @@ def record_parts(s: Any, rec: dict[str, Any], geom: Any, form: str | None) -> No
     boxes = (geom.get("boxes") or {}).get("fixtures") or {}
     if geom.get("fixtures"):  # the fixtures laid in the bundle (homes H32), drawn where they were laid (`farmstead_fixtures`)
         rec["fixtures"] = [{"kind": k, "x": r[0], "y": r[1], "w": r[2], "h": r[3], "box": list(boxes[k])} for k, r in geom["fixtures"].items()]
+    seats = geom.pop("wood", None)
+    wood = getattr(s, "_wood", None)
+    if seats is not None and wood is not None:  # its share of the wood floor (woods W25, plan D9), reserved and on the record
+        covered = wood.commit(geom, seats)
+        rec["wood_share"] = {"seats": [[x, y] for x, y in seats], "r": wood.cr, "ft2": round(covered / s.px(1.0) ** 2)}

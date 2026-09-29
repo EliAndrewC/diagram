@@ -14,7 +14,7 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, segments_cross
+from l7r.diagram.settlement import Settlement, rot_rect, segments_cross
 from l7r.diagram.settlement._geom.water_index import crosses_a_stream
 from l7r.diagram.settlement._knobs import knob_rng
 from l7r.diagram.settlement.farm_fixtures import WOODPILE_FORM_FT
@@ -344,7 +344,14 @@ def _draw_pending(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, A
             kw, kd = px(WOODPILE_FORM_FT["kizuma"][0]), px(WOODPILE_FORM_FT["kizuma"][1])
             reach = math.hypot(float(h["w"]) / 2, float(h["h"]) / 2) + px(KIZUMA_REACH_FT)
             seats = kizuma_seats(belt_line, hx, hy, reach, wind, kw, kd / 2 + px(_KIZUMA_GAP_FT)) if belt_line is not None else []
-            spot = next(((x, y, a) for x, y, a in seats if _flexible_clear(s, h, (x, y), _turned_ext(kw, kd, a), fields, marsh, pond, lanes, footing, lane_between=True)), None)
+            spot = next(
+                (
+                    (x, y, a)
+                    for x, y, a in seats
+                    if _flexible_clear(s, h, (x, y), _turned_ext(kw, kd, a), fields, marsh, pond, lanes, footing, lane_between=True) and not under_a_lane(s.M, (x, y, kw, kd, a))
+                ),
+                None,
+            )
             if spot is not None:
                 s.farm_fixture("woodpile", spot[0], spot[1], rot=spot[2], of=(hx, hy), form="kizuma")
                 ext = _turned_ext(kw, kd, spot[2])
@@ -359,7 +366,7 @@ def _draw_pending(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, A
                 (
                     (x, y, road)
                     for x, y, road in field_edge_seats(edges, hx, hy, px(PIT_FIELD_REACH_FT), px(_PIT_EDGE_CLEAR_FT) + d / 2)
-                    if _flexible_clear(s, h, (x, y), (d, d), fields, marsh, pond, lanes, footing, lane_between=False)
+                    if _flexible_clear(s, h, (x, y), (d, d), fields, marsh, pond, lanes, footing, lane_between=False) and not under_a_lane(s.M, (x, y, d, d, rot))
                 ),
                 None,
             )
@@ -372,6 +379,17 @@ def _draw_pending(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, A
                 draw_laid_fixture(s, h, f, forms)
         count += 1
     return count
+
+
+def under_a_lane(M: Mapping[str, Any], fixture: tuple[float, float, float, float, float]) -> bool:
+    """Would a fixture drawn at `(x, y, w, h, rot)` stand under a lane's tread - the web's own test of a lane over a fixture
+    (`law.over_a_fixture`, the ONE predicate the finished-map rule reads)? The flexible forms are seated after the web, so
+    the web cannot route round them; a seat under lane ink is refused and the next offered, and the laid seat - which the web
+    was routed round - is the fallback (feature 287, ways: 8 pool and cohort maps ended with a woodpile or a heap under a lane)."""
+    from ..ways.law import lane_pts, over_a_fixture
+
+    quad = rot_rect(*fixture)
+    return any(over_a_fixture(lane_pts(ln), float(ln.get("w") or 3.0), [quad]) is not None for ln in M.get("lanes") or [] if len(ln.get("pts") or ()) >= 2)
 
 
 def _turned_ext(w: float, d: float, bearing: float) -> tuple[float, float]:

@@ -44,7 +44,6 @@ def roll_seatings() -> dict[str, tuple]:  # type: ignore[type-arg]
     cut, track = names.index("stage_homesteads"), names.index("stage_track")
     plan = hg.plan_site(SEATINGS)
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
-    s._avoid_seats = []  # type: ignore[attr-defined]
     with driver.roll_scope(plan.spec):
         for st in driver.STAGES[:cut]:
             st(s, plan)

@@ -92,7 +92,6 @@ def test_the_pass_skips_a_seat_a_house_it_seated_now_stands_on(monkeypatch: pyte
     hg.homesteads.boundary.install_site_boundary(s, plan)
     s._seat_search = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0, "rounds": 0}
     monkeypatch.setattr(capacity, "free_seats", lambda s_, c: [(700.0, 300.0), (710.0, 300.0)])
-    monkeypatch.setattr(capacity, "_seat_allowed", lambda s_, x, y: True)
 
     def place(x: float, y: float, kind: str) -> bool:
         s.M["houses"].append({"x": x, "y": y, "w": 46.0, "h": 28.0, "kind": kind})

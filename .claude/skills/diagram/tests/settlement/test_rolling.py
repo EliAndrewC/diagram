@@ -464,17 +464,6 @@ def test_a_bundle_is_refused_when_its_house_or_its_grove_stands_on_a_drawn_tread
     assert not on_grove._bundle_common_fits(with_grove), "the windward grove is planted across the lane"
 
 
-def test_a_bundle_is_refused_a_seat_the_re_roll_loop_has_already_forbidden():
-    """`_avoid_seats` breaks a stall the re-roll loop could otherwise spin on: measured on cohort seed 5, the
-    retry converged 2 unreached houses to 1 and then re-seated the identical point at (1130, 858) three
-    rounds running while that point was in the avoid list. Reached today only by the seeds that stall."""
-    s = Settlement(1400, 1400, seed=3)
-    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, down_deg=90, water_flow=90)
-    s._avoid_seats = [(700.0, 700.0)]
-    assert s._place_bundle_nucleated(700.0, 700.0, 30.0, 20.0) is None, "the forbidden seat is refused outright"
-    assert s._place_bundle_nucleated(300.0, 300.0, 30.0, 20.0) is not None, "and a seat nowhere near it is not"
-
-
 def test_the_sun_corridor_clears_a_bundle_that_has_no_yard_of_its_own() -> None:
     """A no-yard bundle (feature 150) has nothing of its own to keep sunny, so once it has been
     checked against the yards ALREADY standing there is nothing left to ask and it clears.

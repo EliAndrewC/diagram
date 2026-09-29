@@ -93,22 +93,49 @@ class AccessTree:
         return pts[:TARGETS_TRIED]
 
 
-def doors_of(geom: Any) -> list[Pt]:
-    """Where a homestead's corridor may start, in preference order: its forecourt (the yard's center, before the door),
-    then a step off each of the house's four walls - a farmhouse is entered from more than one side (the doma's front
-    and back doors), and a corridor that had to cross its own house to leave by the front is taken out the back."""
+def doors_of(geom: Any, half: float = 0.0) -> list[Pt]:
+    """Where a homestead's corridor may start, in preference order - IN ITS DOORYARD, never at a back wall (feature 287,
+    ways W57: the path serves the house at its dooryard, and the web drew a back-wall door round the gable after the
+    fact): the forecourt (the yard's center, before the door), then the yard's far edge, then the dooryard's two flanks -
+    at the yard's depth, beside it, carried out past the house's gable by a corridor's half-width (`half`) and a foot, so a
+    corridor to a tree behind the house leaves its dooryard and passes the gable rather than crossing the house. A bundle
+    with no yard leaves by a step off its front wall."""
     boxes = geom.get("boxes") or {}
     yard = boxes.get("yard") or geom.get("yard")
     hx, hy, hw, hh = boxes.get("house") or geom["house"]
-    step = 2.0
-    walls = [(hx, hy + hh / 2 + step), (hx, hy - hh / 2 - step), (hx + hw / 2 + step, hy), (hx - hw / 2 - step, hy)]
-    return ([(float(yard[0]), float(yard[1]))] if yard is not None else []) + [(float(x), float(y)) for x, y in walls]
+    if yard is None:
+        return [(float(hx), float(hy + hh / 2 + 2.0))]
+    yx, yy, yw, yh = (float(v) for v in yard)
+    d = math.hypot(yx - hx, yy - hy) or 1.0
+    ux, uy = (yx - hx) / d, (yy - hy) / d
+    along = yw / 2 * abs(ux) + yh / 2 * abs(uy)  # the yard's half extent away from the house
+    across = max(yw / 2 * abs(uy) + yh / 2 * abs(ux), hw / 2 * abs(uy) + hh / 2 * abs(ux) + half + 1.0)  # ...and across, past the gable
+    return [(yx, yy), (yx + ux * along, yy + uy * along), (yx - uy * across, yy + ux * across), (yx + uy * across, yy - ux * across)]
+
+
+#: The turns off the seat's outward bearing an exit strip is tried at, in degrees, nearest first, where the strip straight
+#: out is refused by the ground: a quarter turn either way at most, so the strip still leaves the cluster away from its field.
+EXIT_TURNS_DEG = (0.0, 15.0, -15.0, 30.0, -30.0, 45.0, -45.0, 60.0, -60.0, 75.0, -75.0, 90.0, -90.0)
+
+
+def exit_bearing(s: Settlement, center: Pt, out: Pt, length: float) -> Pt | None:
+    """The bearing the exit strip leaves the cluster's center along: `out`, or the nearest turn off it (`EXIT_TURNS_DEG`)
+    whose strip stands on lawful ground (`lawful_ground`, the corridors' own test). None where no turn does - the margin
+    has no way out and is refused."""
+    for deg in EXIT_TURNS_DEG:
+        c, sn = math.cos(math.radians(deg)), math.sin(math.radians(deg))
+        u = (out[0] * c - out[1] * sn, out[0] * sn + out[1] * c)
+        if lawful_ground(s, center, (center[0] + u[0] * length, center[1] + u[1] * length)):
+            return u
+    return None
 
 
 def start_tree(s: Settlement, center: Pt, out: Pt, length: float) -> AccessTree:
     """The tree's first corridor, the EXIT STRIP: from the cluster's center outward along `out` for `length` px (the
-    connector starts at its outer end). Installed on the settlement for the seat pass and recorded on the manifest."""
+    connector starts at its outer end). Installed on the settlement for the seat pass and recorded on the manifest. The
+    caller asks `exit_bearing` for an `out` whose strip stands on lawful ground."""
     tree = AccessTree(s.px(ACCESS_HALF_FT))
+    s.__dict__.pop("_corridor_memo", None)  # a new tree is a new seating: nothing remembered of the last one's ground
     end = (center[0] + out[0] * length, center[1] + out[1] * length)
     tree.add(center, end)
     s._access = tree
@@ -132,14 +159,55 @@ def corridor_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
     for kind, box in ((own.get("boxes") or {}).get("fixtures") or {}).items():
         if _seg_box_gap(a, b, box if kind != "persimmon" else (box[0], box[1], s.px(4.0), s.px(4.0))) < half:
             return False
+    return standing_clear(s, a, b)
+
+
+def standing_clear(s: Settlement, a: Pt, b: Pt) -> bool:
+    """The half of `corridor_clear` that reads only what already stands - the reserved seats, the placed boxes, the site's
+    ground and the ways' ground test - REMEMBERED while nothing of it changes (the placed boxes, the tree, the seats and
+    the houses the ground test reads): the four garden sides of one seat ask the same doors of the same targets, and seed 14
+    spent 136 of its 215 s asking them again (361,575 calls)."""
+    wood = getattr(s, "_wood", None)
+    houses = s.M.get("houses") or []
+    state = (len(s.placed), len(s._access.segs), wood.seats.n if wood is not None else 0, len(houses), id(houses[-1]) if houses else None)
+    memo = s.__dict__.get("_corridor_memo")
+    if memo is None or memo[0] != state:
+        memo = s.__dict__["_corridor_memo"] = (state, {})
+    key = (round(a[0], 3), round(a[1], 3), round(b[0], 3), round(b[1], 3))
+    hit = memo[1].get(key)
+    if hit is None:
+        hit = memo[1][key] = _standing_clear(s, a, b)
+    return hit
+
+
+def _standing_clear(s: Settlement, a: Pt, b: Pt) -> bool:
+    half = s._access.half
+    # ...NOR OVER A HOUSEHOLD'S SHARE OF THE WOOD FLOOR (feature 287, woods W25): the way drawn along it would take the
+    # reserved seats' clumps
+    wood = getattr(s, "_wood", None)
+    if wood is not None and wood.corridor_bars(a, b):
+        return False
     x0, y0, x1, y1 = min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])
     seen: set[int] = set()
     for it in s._reach_index(s.placed, "placed_reach").near((x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0) / 2 + half):
         if id(it) in seen:
             continue
         seen.add(id(it))
+        # a box whose center stands its half-diagonal and the strip's half clear of the line cannot meet the strip: pruned
+        # with one distance before the eight the exact gap takes (seed 44: 4 million gaps asked, most of boxes in the
+        # long corridor's bounding box but nowhere near its line)
+        if seg_dist(it[0], it[1], a, b) - math.hypot(it[2], it[3]) / 2 >= half:
+            continue
         if _seg_box_gap(a, b, (it[0], it[1], it[2], it[3])) < half:
             return False
+    if not on_site_ground(s, a, b):
+        return False
+    return lawful_ground(s, a, b)
+
+
+def on_site_ground(s: Settlement, a: Pt, b: Pt) -> bool:
+    """Does a corridor's line a-b stand on ground the site boundary admits - not on the field's side of a chord, not within
+    a water course's clearance?"""
     n = max(1, int(math.dist(a, b) / SAMPLE_PX))
     pts = [(a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n) for k in range(n + 1)]
     chains, corr = getattr(s, "_site_chains", None), getattr(s, "_site_corridors", None)
@@ -148,26 +216,64 @@ def corridor_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
     return not (corr is not None and any(corr.hit_points([p]) for p in pts))
 
 
-def access_corridor(s: Settlement, geom: Any) -> tuple[Pt, Pt] | None:
-    """The corridor this homestead would be admitted with: from its door to the first of the tree's nearest points that a
-    clear strip reaches (`corridor_clear`). None when no target is clear - the seat is refused (the ONE predicate the
-    placer reads and its test reads)."""
+def lawful_ground(s: Settlement, a: Pt, b: Pt) -> bool:
+    """Would the web's way along a-b stand on lawful ground? THE WAYS' OWN PREDICATE (`settle.corridor_on_lawful_ground`:
+    the run squared at its water crossings, then judged by the ground half of the law the web draws by), installed on the
+    settlement by the hamlet's seating as `_corridor_ground` - the settlement package cannot import the hamlet generator.
+    With none installed (a village roll) the site boundary's test above is the whole test."""
+    ground = getattr(s, "_corridor_ground", None)
+    return ground is None or bool(ground([a, b]))
+
+
+def round_the_gable(geom: Any, door: Pt, half: float) -> Pt:
+    """Where a corridor from a dooryard flank door (`doors_of`) turns once it has passed its house: carried back along the
+    gable, parallel to the house's front-to-yard axis, past the back wall by a corridor's half-width and a foot - so the
+    leg beside the house clears it and the turn stands behind its corner, not behind its wall."""
+    boxes = geom.get("boxes") or {}
+    yard = boxes.get("yard") or geom.get("yard")
+    hx, hy, hw, hh = boxes.get("house") or geom["house"]
+    d = math.hypot(float(yard[0]) - hx, float(yard[1]) - hy) or 1.0
+    ux, uy = (float(yard[0]) - hx) / d, (float(yard[1]) - hy) / d
+    back = hw / 2 * abs(ux) + hh / 2 * abs(uy) + half + 1.0  # the back wall's reach behind the center, and the strip past it
+    t = (door[0] - hx) * ux + (door[1] - hy) * uy + back
+    return (door[0] - ux * t, door[1] - uy * t)
+
+
+def access_corridor(s: Settlement, geom: Any) -> tuple[Pt, ...] | None:
+    """The corridor this homestead would be admitted with: from a dooryard door to the first of the tree's nearest points
+    that a clear strip reaches (`corridor_clear`) - straight, or, where the tree lies behind the house, from a flank door
+    carried past the gable first (`round_the_gable`), two legs. None when no target is clear - the seat is refused (the ONE
+    predicate the placer reads and its test reads)."""
     tree = getattr(s, "_access", None)
     if tree is None:
         return None
-    for door in doors_of(geom):
+    doors = doors_of(geom, tree.half)
+    for door in doors:
         for q in tree.targets(door):
             if math.dist(door, q) < 1e-6 or corridor_clear(s, door, q, geom):
                 return (door, q)
+    for door in doors[2:]:  # the flank doors: round the gable (none on a bundle with no yard)
+        turn = round_the_gable(geom, door, tree.half)
+        if not corridor_clear(s, door, turn, geom):
+            continue
+        for q in tree.targets(turn):
+            if math.dist(turn, q) < 1e-6 or corridor_clear(s, turn, q, geom):
+                return (door, turn, q)
     return None
 
 
-def reserve(s: Settlement, corridor: tuple[Pt, Pt], of: Pt | None = None) -> None:
-    """Add an admitted house's corridor to the tree and to the manifest's record, naming the house it serves (`of`, its
-    center) - the record the web reads to draw a way along the corridor of a house its lanes do not reach."""
-    a, b = corridor
-    s._access.add(a, b)
-    rec: dict[str, Any] = {"pts": [[round(a[0], 1), round(a[1], 1)], [round(b[0], 1), round(b[1], 1)]]}
-    if of is not None:
-        rec["of"] = [round(of[0], 1), round(of[1], 1)]
-    s.M.setdefault("access_corridors", []).append(rec)
+def legs(corridor: tuple[Pt, ...]) -> list[tuple[Pt, Pt]]:
+    """A corridor's straight legs, door first."""
+    return list(zip(corridor, corridor[1:], strict=False))
+
+
+def reserve(s: Settlement, corridor: tuple[Pt, ...], of: Pt | None = None) -> None:
+    """Add an admitted house's corridor to the tree and to the manifest's record, a record per leg, the first naming the
+    house it serves (`of`, its center) - the records the web reads to draw a way along the corridor of a house its lanes do
+    not reach, following the chain from the door's leg to the next."""
+    for k, (a, b) in enumerate(legs(corridor)):
+        s._access.add(a, b)
+        rec: dict[str, Any] = {"pts": [[round(a[0], 1), round(a[1], 1)], [round(b[0], 1), round(b[1], 1)]]}
+        if of is not None and k == 0:
+            rec["of"] = [round(of[0], 1), round(of[1], 1)]
+        s.M.setdefault("access_corridors", []).append(rec)

@@ -10,7 +10,7 @@ from .._geom import FARMHOUSE_EAVE_GAP_FT, Indexed, PointGrid, Pt, eave_gap, edg
 from .._geom.indexes import indexed_grid
 from .._geom.primitives import FIELD_KEEPOUT_EPS, chain_distance, chain_violated, facing_chains, keepout_ring
 from .._geom.water_index import crosses_a_stream
-from .access import access_corridor
+from .access import access_corridor, legs
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -146,6 +146,8 @@ class BundleFitMixin:
     _byre_pockets: Any = None  # the shared sheds' pockets the seating reserved (`detached_commons`, homes H06)
     _household_fixtures: Any = ()  # the fixture kinds the household being sought a seat keeps (homes H32)
     _fixture_forms: Any = None  # the hamlet's rolled fixture forms, set by the seating (`FixtureForms`)
+    _corridor_ground: Any = None  # the ways' test of a corridor's ground, installed by a hamlet's seating (`access.lawful_ground`)
+    _wood: Any = None  # the households' shares of the wood floor (`homestead_parts/wood_share.py`, woods W25)
 
     def _field_adjacent(self: Settlement, x: float, y: float) -> bool:  # type: ignore[misc]
         """A RAIL, NOT A NORM: a nudge may not drift a farmhouse off the map's farmland entirely.
@@ -414,14 +416,34 @@ class BundleFitMixin:
             return False
         if not self._gardens_sun_ok(geom):
             return False
+        # ...AND ITS SHARE OF THE WOOD FLOOR, RESERVED (feature 287, woods W25 and plan D9): a household is admitted only
+        # where it can reserve copse seats whose crowns cover the floor within reach of its house, and never where one of
+        # its parts would stand over a seat another household reserved (`homestead_parts/wood_share.py`). Asked BEFORE the
+        # corridor, which is the dearer question (seed 17: 233 of 314 s of the fit test was `access_corridor`); a corridor
+        # admitted afterwards that runs over one of the seats sends the share to be sought again with it standing.
+        wood = self._wood
+        tree = getattr(self, "_access", None)
+        seats = None
+        if wood is not None:
+            if wood.covers_a_seat(geom):
+                return False
+            seats = wood.share(geom, self._house_rot(house[0], house[1]), tree.segs if tree is not None else ())
+            if seats is None:
+                return False
         # ...AND A CLEAR CORRIDOR FROM ITS DOOR TO THE ACCESS TREE (feature 287, plan M3's seat half): a house the tree
         # cannot reach from its door is refused here, before it stands, instead of being found stranded on the finished
         # map. The corridor rides on the geometry and is reserved when the house is placed (`_try_place_bundle`).
-        if getattr(self, "_access", None) is not None:
+        if tree is not None:
             corridor = access_corridor(self, geom)
             if corridor is None:
                 return False
             geom["access"] = corridor
+            if seats is not None and any(wood.seats_on(seats, leg) for leg in legs(corridor)):
+                seats = wood.share(geom, self._house_rot(house[0], house[1]), [*tree.segs, *legs(corridor)])
+                if seats is None:
+                    return False
+        if seats is not None:
+            geom["wood"] = seats
         return True
 
     def _parts_across_stream(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]

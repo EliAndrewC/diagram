@@ -4,25 +4,28 @@ from __future__ import annotations
 
 import math
 import random
-from collections.abc import Sequence
+import types
+from collections.abc import Callable, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement._knobs import knob_rng
+from l7r.diagram.settlement.homestead_parts.groves import HOMESTEAD_WOOD_FT2
+from l7r.diagram.settlement.homestead_parts.wood_share import install_wood_shares
 from l7r.diagram.settlement.land.wet import marsh_ground
-from l7r.diagram.settlement.rolling.access import start_tree
+from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT, exit_bearing, start_tree
 from l7r.diagram.settlement.rolling.bearing import COMMON_BEARING_DEG, MarginBearing, turned_reach, wrap_line_deg
 from l7r.diagram.settlement.rolling.lot import HouseholdLots
 from l7r.diagram.settlement.shrines_wells.byres import COMMONS_BYRE_FRACTION, COMMONS_BYRE_GAP, commons_byre_target, household_byre_form
 
 from ..cluster import seat_has_dry_exit
-from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, CLUSTER_SHAPES, MIN_WEB_GAP, POLDER_ARCHETYPES, SUN_CORRIDOR_FT, WEB_FABRIC_GAP, WEST_SUN_FT, Pt
+from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, CLUSTER_SHAPES, COPSE_HOUSE_REACH_FT, MIN_WEB_GAP, POLDER_ARCHETYPES, SUN_CORRIDOR_FT, WEB_FABRIC_GAP, WEST_SUN_FT, Pt
 from ..plan import SitePlan, _roll
 from .boundary import install_site_boundary
 from .capacity import SiteRefused, margin_ladder, seat_the_rest, seating_mark, unseat_to
 from .fixtures import farmstead_fixtures, fixture_forms, fixture_quota
 from .retirement import retirement_houses, retirement_quota
-from .seats import _seat_allowed, cluster_aspect, front_row, lane_frontage
+from .seats import cluster_aspect, front_row, lane_frontage
 from .wells import place_wells
 
 #: The range a rank seat may stand off its exact rank, as a share of `BUNDLE_PITCH` - half of it each way (feature 261,
@@ -143,17 +146,24 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     never a shortfall shipped and never a whole-map re-roll.
 
     Steps:
+        l7r.diagram.hamletgen.homesteads.stages.seat_every_household
         l7r.diagram.hamletgen.homesteads.boundary.install_site_boundary
         l7r.diagram.hamletgen.homesteads.boundary.site_boundary
+        l7r.diagram.settlement.homestead_parts.wood_share.install_wood_shares
+        l7r.diagram.settlement.rolling.access.start_tree
+        l7r.diagram.settlement.rolling.lot.household_parts
         l7r.diagram.hamletgen.homesteads.seats.front_row
         l7r.diagram.hamletgen.homesteads.seats._front_row_from_chains
         l7r.diagram.hamletgen.homesteads.seats.lane_frontage
-        l7r.diagram.hamletgen.homesteads.seats._seat_allowed
         l7r.diagram.settlement.Settlement.try_place
         l7r.diagram.settlement.Settlement._place_bundle_nucleated
         l7r.diagram.settlement.Settlement._bundle_envelope
         l7r.diagram.settlement.Settlement._envelope_blocked
         l7r.diagram.settlement.Settlement._parts_fit
+        l7r.diagram.settlement.rolling.access.access_corridor
+        l7r.diagram.settlement.homestead_parts.wood_share.WoodShares.share
+        l7r.diagram.settlement.rolling.lot.record_parts
+        l7r.diagram.settlement.rolling.access.reserve
         l7r.diagram.settlement.Settlement.cluster_seeds
         l7r.diagram.settlement.Settlement.farmsteads
     """
@@ -227,6 +237,8 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     s._unreachable = None
     s._access = None  # the access tree is the seating's; the manifest keeps it (`access_exit`, `access_corridors`)
     s._pockets = None  # the pockets are drawn by `place_wells` from the house records (`well_pocket`)
+    s._corridor_ground = None  # the corridors' ground test is the seating's
+    s._wood = None  # the reservations are the seating's; each household's record keeps its own (`wood_share`)
     s._lots = None  # the lots are the seating's (the byre form stays: `draft_byres` draws the stalls it reserved)
     # THE ROLLED SHAPE MUST LEAVE A TRACE EVEN WHEN THE CLOUD NEVER RUNS (known-open ledger
     # 2026-08-16, Kashikawa: the front rows + lane frontage seated all 20 households, the
@@ -315,6 +327,28 @@ def seat_every_household(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     return placed, cloud
 
 
+def corridor_ground(s: Settlement) -> Callable[[list[Pt]], bool]:
+    """The ways' own test of a corridor's ground (`settle.corridor_on_lawful_ground`: the run squared at its crossings, then
+    `Lawful.on_lawful_ground`), for the seating to admit a corridor by (`access.lawful_ground`) - the settlement package
+    cannot import the hamlet generator, so it is installed on the settlement as `_corridor_ground`. The ground the law reads
+    is built ONCE per standing seating (a `Lawful` over the manifest, keyed on the houses seated so far - it reads them),
+    not per corridor asked: built per call it re-derived the worked ground's union of the field's plots every time."""
+    from ..ways.corridors import ACCESS_WIDTH
+    from ..ways.settle import Lawful, square_run
+
+    memo: dict[str, Any] = {}
+    view = types.SimpleNamespace(M=s.M)
+
+    def ground(run: list[Pt]) -> bool:
+        houses = s.M.get("houses") or []
+        key = (len(houses), id(houses[-1]) if houses else None)
+        if memo.get("key") != key:
+            memo["key"], memo["law"] = key, Lawful(view)
+        return bool(memo["law"].on_lawful_ground(square_run(s.M, run), ACCESS_WIDTH))
+
+    return ground
+
+
 def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     """Seat the households on `plan.seat`'s margin: the site boundary installed for it, the front row, the ranks, the
     rescue rounds, then the exhaustive pass over the legal ground within reach (homes H14). Returns `(placed, the
@@ -335,6 +369,11 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         if len(s.reserve_commons_byres(seat, plan.spec.households)) < want:
             raise SiteRefused(f"{plan.spec.name} (seed {plan.spec.seed}): the seat band holds no ground for {want} shared byres")
     s._pockets = []  # the well pockets this seating has laid (feature 287, homes H10-H11; `needs_pocket`)
+    # ...AND EACH HOUSEHOLD'S SHARE OF THE WOOD FLOOR (feature 287, woods W25 made absolute; plan D9): a household is seated
+    # only where it can reserve copse seats covering `HOMESTEAD_WOOD_FT2`'s floor within the dooryard copse's reach of its
+    # own house, and no later household or corridor takes them (`homestead_parts/wood_share.py`)
+    if getattr(s, "_nucleated", False):
+        install_wood_shares(s, HOMESTEAD_WOOD_FT2[0], COPSE_HOUSE_REACH_FT, ACCESS_HALF_FT)
     # ...AND ITS FARMSTEAD FIXTURES (feature 287, homes H32): a quota per kind, laid in the bundle with the hamlet's forms
     s._fixture_forms = fixture_forms(plan.spec.seed, plan.manure_form)
     _quota = {**fixture_quota(plan.spec.seed, plan.spec.households, {k: int(v) for k, v in plan.fixtures_min.items()}), **retirement_quota(s, plan.spec.households)}
@@ -363,12 +402,9 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
 
     ax, ay = seat["along"]
     ox, oy = seat["out"]
-    # A RE-ROLL DRAWS A DIFFERENT LATTICE (feature 226, cohort seeds 11 and 25). `generate` re-rolls a map that stranded a
-    # farmhouse with that ground forbidden, and under the old random cloud the retry explored new pockets by itself; the
-    # lattice keeps the FIRST survivors of the same draw, so a retry that forbade one seat kept every other, and the
-    # stranded house came back a pitch away. The draw is salted by how many seats are forbidden - the first roll is
-    # unchanged, and each retry lays the lattice at a new phase.
-    rng = random.Random((plan.spec.seed * 2654435761 + 7919 * len(getattr(s, "_avoid_seats", None) or ())) & 0xFFFFFFFF)
+    # THE LATTICE'S DRAW, one per map: the seed's own hash (feature 226's re-roll salt went with the re-roll, feature 287;
+    # the first roll's draw is this one, so no map moves).
+    rng = random.Random((plan.spec.seed * 2654435761) & 0xFFFFFFFF)
     placed = 0
     lat, dep = seat["lat"], seat["dep"]
 
@@ -423,8 +459,16 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # THE ACCESS TREE'S FIRST CORRIDOR, THE EXIT STRIP (feature 287, plan M3's seat half): from the cluster's center
     # outward past the furthest seat any round may offer, so every house after is admitted only with a corridor to it
     # (`settlement/rolling/access.py`). A dispersed hamlet has no internal network and is not held to one.
+    # ...ON LAWFUL GROUND (feature 287, ways): the strip is held to the corridors' own test, turned off the outward bearing
+    # as far as a quarter turn where it is refused straight out; a margin with no lawful way out seats no one here, and
+    # the ladder offers the next (`seat_every_household`)
     if plan.settlement_form != "dispersed":
-        start_tree(s, (float(seat["cx"]), float(seat["cy"])), (float(ox), float(oy)), bound * 1.5 + BUNDLE_PITCH)
+        s._corridor_ground = corridor_ground(s)
+        _length = bound * 1.5 + BUNDLE_PITCH
+        _out = exit_bearing(s, (float(seat["cx"]), float(seat["cy"])), (float(ox), float(oy)), _length)
+        if _out is None:
+            return 0, 0
+        start_tree(s, (float(seat["cx"]), float(seat["cy"])), _out, _length)
 
     # THREE standoffs, not two. `field_ringed` (retired, feature 141) wants five farmhouses within 165 px of the field
     # outline and the placer refuses any bundle that laps a bund or a ditch, so a single ring of
@@ -576,7 +620,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
             # split its lane web in two; the extra tries go only where the water moved the seat.
             _tries = [(fx, fy)] + ([(fx - _n[1] * d, fy + _n[0] * d) for d in (BUNDLE_PITCH / 4.0, -BUNDLE_PITCH / 4.0)] if _by_water else [])
             for tx, ty in _tries:
-                if math.hypot(tx - seat["cx"], ty - seat["cy"]) <= bound * 1.3 and _seat_allowed(s, tx, ty) and _pretest(tx, ty) and s.try_place(tx, ty, "plain"):
+                if math.hypot(tx - seat["cx"], ty - seat["cy"]) <= bound * 1.3 and _pretest(tx, ty) and s.try_place(tx, ty, "plain"):
                     placed += 1
                     break
     # ...then rows FLANKING the lanes, before any shape fill. A lane exists to be fronted, and a
@@ -618,7 +662,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         for lx, ly in lane_frontage(s, seat, connector=True):
             if placed >= plan.spec.households:
                 break
-            if in_band((lx, ly)) and _seat_allowed(s, lx, ly) and _pretest(lx, ly) and s.try_place(lx, ly, "plain"):
+            if in_band((lx, ly)) and _pretest(lx, ly) and s.try_place(lx, ly, "plain"):
                 placed += 1
     _cloud_placed = 0
     s._seat_search["front"] = placed  # the households the front row seated (R2 reads it beside the cap)
@@ -739,7 +783,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
                 # 0.18 and 0.25 each tipped Inashiro's rolled crescent under round's ceiling - a knob that moves which map fails.)
                 _dj = (s._hjit(_sx4, _sy4, 14.0) - 0.5) * BUNDLE_PITCH * RANK_DEPTH_JITTER if attempt < 4 and not _along_the_field and plan.lane_web == "alleys" else 0.0
                 for _tx, _ty in ((_sx4 + ox * _dj, _sy4 + oy * _dj), (_sx4, _sy4)) if _dj != 0.0 else ((_sx4, _sy4),):
-                    if _seat_allowed(s, _tx, _ty) and _pretest(_tx, _ty) and s.try_place(_tx, _ty, "plain"):
+                    if _pretest(_tx, _ty) and s.try_place(_tx, _ty, "plain"):
                         placed += 1
                         _cloud_placed += 1
                         break

@@ -24,7 +24,6 @@ from .fixtures import PRIVY_SUNNY_SHARE as PRIVY_SUNNY_SHARE
 from .fixtures import _roll as _roll
 from .fixtures import farmstead_fixtures as farmstead_fixtures
 from .retirement import retirement_houses as retirement_houses
-from .seats import _seat_allowed as _seat_allowed
 from .seats import cluster_aspect as cluster_aspect
 from .seats import front_row as front_row
 from .seats import lane_frontage as lane_frontage

@@ -85,22 +85,6 @@ def test_the_well_gap_reads_the_turned_wall_and_passes_over_a_derelict() -> None
     assert well_gap_to_dwellings([{**turned[0], "kind": "abandoned"}], 1000.0, 890.0) == math.inf
 
 
-def test_a_seat_on_forbidden_ground_is_refused() -> None:
-    """`generate` re-rolls a stranding map with the offending ground passed as `avoid`; the seat loops
-    honour it through `_seat_allowed`. Half a bundle pitch is the radius - enough to clear the pocket,
-    not so much that the retry merely nudges the same steading along it."""
-
-    class _S:
-        pass
-
-    s = _S()
-    assert hg.homesteads._seat_allowed(s, 100.0, 100.0) is True  # nothing forbidden yet
-    s._avoid_seats = [(100.0, 100.0)]
-    assert hg.homesteads._seat_allowed(s, 100.0, 100.0) is False  # dead on the forbidden seat
-    assert hg.homesteads._seat_allowed(s, 140.0, 100.0) is False  # inside half a bundle pitch
-    assert hg.homesteads._seat_allowed(s, 400.0, 400.0) is True  # well clear
-
-
 # ---- feature 145: the refusal branches of the fixture placer that no cohort seed took --------------
 
 
@@ -269,12 +253,16 @@ def _toy_hamlet(households: int, seed: int = 3, east: bool = False):  # type: ig
 def test_the_front_row_stops_at_its_share_and_the_ranks_seat_the_rest(monkeypatch: pytest.MonkeyPatch) -> None:
     """Feature 227 D8: the row takes about sqrt(N x A) houses - here fewer than the chain could seat - and stops;
     the ranks behind seat the rest. The toy's households keep no fixtures (homes H32): their corridors leave the yard
-    round them, and the row's count is the thing under test."""
+    round them, and the row's count is the thing under test. Nor a share of the wood floor (woods W25): the exit strip
+    runs up the back of the toy's middle house, whose wood then spreads to its flanks and takes a row seat - measured,
+    the row seats 4 - and the row's count, not the wood, is under test (`tests/settlement/test_wood_share.py` is the
+    wood's)."""
     from l7r.diagram.hamletgen.consts import CLUSTER_DRAWN_ASPECT
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
     from l7r.diagram.hamletgen.homesteads import stages as st
 
     monkeypatch.setattr(st, "fixture_quota", lambda *a: {})
+    monkeypatch.setattr(st, "install_wood_shares", lambda *a: None)
     s, plan = _toy_hamlet(10)
     plan.cluster_shape = "round"  # the tightest band: the row's share is the floor of six, fewer than the chain could seat
     stage_homesteads(s, plan)
@@ -408,7 +396,9 @@ def test_the_free_ground_changes_no_seat(form: str, scenario: str, monkeypatch: 
     monkeypatch.setattr(Settlement, "_seat_refused", lambda self, x, y, hw, hh: False)
     monkeypatch.setattr(Settlement, "_bundle_refused", lambda self, geom: False)
     without = roll()
-    assert with_index == without and len(with_index) >= 8  # the rescue's walled band, each homestead with its fixtures (homes H32)
+    # the rescue's walled band, each homestead with its fixtures (homes H32) and its share of the wood floor (woods W25):
+    # measured, 6 of the walled band's households seat with their wood where 8 did without it
+    assert with_index == without and len(with_index) >= 6
 
 
 def test_a_side_is_not_dropped_for_ground_the_loop_never_judges() -> None:
@@ -464,6 +454,7 @@ def test_the_front_row_loop_stops_once_its_share_is_seated(monkeypatch) -> None:
     from l7r.diagram.hamletgen.homesteads import stages as st
 
     monkeypatch.setattr(st, "fixture_quota", lambda *a: {})  # no fixtures: the row's count is under test (homes H32)
+    monkeypatch.setattr(st, "install_wood_shares", lambda *a: None)  # ...nor wood shares (woods W25; see the test above)
     real = st.front_row
     monkeypatch.setattr(st, "front_row", lambda *a, **k: (lambda seats: seats + seats)(list(real(*a, **k))))
     s, plan = _toy_hamlet(10)

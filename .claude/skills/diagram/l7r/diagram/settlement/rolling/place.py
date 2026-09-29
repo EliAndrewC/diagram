@@ -204,7 +204,6 @@ class PlacerMixin:
         that neighbor, and tested once more (the GM: *"measuring the distance to the neighbor and then moving
         however much the correct amount is"*). Anything else is refused and the proposer offers the next seat."""
         self._seat_search["placer_calls"] += 1
-        _avoid = getattr(self, "_avoid_seats", None)
         # THE UNION FIRST, ONE RECTANGLE: the box around every configuration (`_bundle_envelope`). Where it fits - the
         # open ground of most seats - every configuration's box fits inside it and no other rectangle is tested; the
         # parts alone decide the side. Where the union is refused, each configuration's OWN box is tried in turn (the
@@ -242,8 +241,6 @@ class PlacerMixin:
                 self._seat_search["positions"] += 1
                 hit = True if _fg is not None and _fg.rect_refused(geom["bbox"]) else self._envelope_blocked(geom["bbox"])
             if hit is not None:
-                continue
-            if _avoid and any(math.hypot(cx - _ax, cy - _ay) <= 50.0 for _ax, _ay in _avoid):
                 continue
             self._seat_search["parts"] = self._seat_search.get("parts", 0) + 1
             if not self._parts_fit(geom):
