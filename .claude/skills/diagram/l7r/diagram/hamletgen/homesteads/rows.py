@@ -35,9 +35,10 @@ drawing convention, near enough that the field reads as the row's own, clear eno
 STREET_HALF_FT = 3.0
 """Half the street's drawn width (the connector's 6 ft tread; the web's lanes are 3-5), the room a row stands back from it."""
 
-MAX_STREETS = 4
-"""The most parallel streets a row village grows before the seat passes behind it take the remainder (a GUESS: a
-twenty-farm row fills one or two)."""
+MAX_STREETS = 6
+"""The most parallel streets a row village grows (a GUESS): a twenty-farm row on open ground fills one or two, but where
+the line soon runs off the sheet each street holds a few (cohort seed 12, four-sided groves: four streets seated 13 of 17).
+A farm six streets cannot hold is reported unseated."""
 
 
 def hard_ground(field: Poly, rings: Sequence[Sequence[Pt]] = (), water: Sequence[tuple[Pt, Pt, float]] = ()) -> Any:
@@ -272,6 +273,51 @@ def draw_holdings(s: Settlement) -> int:
     return n
 
 
+def parallel(line: Sequence[tuple[Pt, Pt]], d: float) -> list[tuple[Pt, Pt]]:
+    """`line` set out `d` along each sample's own outward normal (the next street of a row village, plan D15)."""
+    return [((p[0] + n[0] * d, p[1] + n[1] * d), n) for p, n in line]
+
+
+def clear_frames(line: Sequence[tuple[Pt, Pt]], frame: Sequence[float], sides: str, gap: float, hard: Any, bounds: tuple[float, float, float, float], front: Sequence[float], pad: float, room: float) -> int:
+    """How many of a line's row seats hold a frame clear of the hard ground, inside `bounds`, with room at its door - the
+    measure `best_row_line` ranks a stretch by (the placer still decides each seat)."""
+    from shapely.geometry import box
+
+    n = 0
+    for (fx, fy), _side, _t, _n in row_seats(line, frame, sides, gap):
+        w, h = float(frame[2]), float(frame[3])
+        inside = bounds[0] <= fx - w / 2 and fx + w / 2 <= bounds[2] and bounds[1] <= fy - h / 2 and fy + h / 2 <= bounds[3]
+        if inside and (hard is None or not box(fx - w / 2, fy - h / 2, fx + w / 2, fy + h / 2).intersects(hard)) and door_clear((fx, fy, w, h), front, pad, hard, room):
+            n += 1
+    return n
+
+
+def best_row_line(hard: Any, anchor: Pt, offset: float, length: float, form: str, slack: float, frame: Sequence[float], sides: str, gap: float, bounds: tuple[float, float, float, float], front: Sequence[float], pad: float, room: float, samples: int = 16) -> list[tuple[Pt, Pt]]:
+    """The first street of a row village: of the lines centered on the planned seat's point of the hard ground's grown edge
+    and on `samples` points of that edge within a row's length either way of it, the one holding the most clear frames
+    (`clear_frames`), the nearest the seat among equals. [] where there is no hard ground."""
+    if hard is None:
+        return []
+    from shapely.geometry import Point
+
+    ring = _ring_near(hard, anchor, offset)
+    s0 = ring.project(Point(anchor))
+    total = ring.length
+    # ...within one row's length of the seat along the edge: the brook and the marsh carry the hard ground's edge off to the
+    # sheet's far side, and a stretch there held clear frames the placer then refused as far from the field (cohort seed
+    # 12 on its larger canvas: 3 of 17 seated at the bottom edge)
+    near = min(total / 2, length)
+    tries = [anchor] + [(p.x, p.y) for p in (ring.interpolate((s0 + near * (2 * k / (samples - 1) - 1)) % total) for k in range(samples))]
+    best: tuple[int, float, list[tuple[Pt, Pt]]] | None = None
+    for a in tries:
+        line = street_line(hard, a, offset, length, form, slack=slack)
+        score = (clear_frames(line, frame, sides, gap, hard, bounds, front, pad, room), -math.dist(a, anchor))
+        if best is None or score > best[:2]:
+            best = (score[0], score[1], line)
+    assert best is not None
+    return best[2]
+
+
 def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: Any = None) -> int:
     """Seat a linear hamlet's farms in rows along its streets (`row_offsets`, `street_line`, `row_seats`), each seat
     offered once to the placer at the frame's own house offset; returns the farms seated, and keeps the streets that
@@ -301,12 +347,23 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
     hold_depth = fd * HOLDING_DEPTH_FRAMES.get(plan.row_line, 1.0)
     bounds = (30.0, 30.0, float(s.W) - 30.0, float(s.H) - 30.0)
     holdings: list[tuple[list[Pt], Pt, Pt, float]] = []
-    for off in row_offsets(fd, sides, MAX_STREETS, s.px(FIELD_KEEP_FT), gap, hold_depth + gap):
+    # WHERE THE ROW GOES: the stretch of the hard ground's edge whose line holds the most clear frames, the planned seat
+    # breaking a tie - seated at the plan's seat alone, a seat on a narrow strip between field and marsh held one farm and
+    # the rest went to streets that circled to the far side of the map (cohort seed 12)
+    first_off = row_offsets(fd, sides, 1, s.px(FIELD_KEEP_FT), gap)[0]
+    first = best_row_line(hard, anchor, first_off, per_line * fw + fw, plan.row_line, 2 * fw, frame, sides, gap, bounds, front, lane_pad, door_room)
+    # ...and the streets beyond it set out by the frame's depth ALONG THE LINE'S NORMAL, not its shorter side: on a diagonal
+    # street a frame reaches deeper, and the second street ran through the first row's groves (cohort seed 901)
+    depth_n = max((frame_extent(frame, n) for _p, n in first), default=fd)
+    offsets = row_offsets(depth_n, sides, MAX_STREETS, s.px(FIELD_KEEP_FT), gap, depth_n * HOLDING_DEPTH_FRAMES.get(plan.row_line, 1.0) + gap)
+    offsets = [first_off + (o - offsets[0]) for o in offsets]
+    for off in offsets:
         if placed >= want:
             break
         # two lots of slack beyond what the row needs: a refused seat is taken up at the row's end rather than sent to a
-        # second street across the holdings (Kashikawa: one farm alone on a second street no way could reach)
-        line = street_line(hard, anchor, off, per_line * fw + fw, plan.row_line, slack=2 * fw)
+        # second street across the holdings (Kashikawa: one farm alone on a second street no way could reach). Each next
+        # street is the FIRST one set out parallel, so the streets stay a grid beside each other (FR-016)
+        line = parallel(first, off - offsets[0])
         took = 0
         for (fx, fy), side, t, nrm in row_seats(line, frame, sides, gap):
             if placed >= want:

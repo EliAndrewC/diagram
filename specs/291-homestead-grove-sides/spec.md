@@ -159,8 +159,9 @@ per-house groves pass every check a grove answers to.
   per-settlement knob, pinnable, rolled at even odds and recorded: each farm its own well in its dooryard, or wells
   shared along the street within reach of the farms they serve - the record rules only on the dispersed farm, and its
   one row's wells (Santome's, few, deep and shared on a water-poor upland) do not transfer; the odds a GUESS.
-- **FR-019**: Every grove farm's front door, the open side of its grove, MUST be reached by a way; and a farm's grove MUST
-  draw bamboo only where that farm rolled a household bamboo stand.
+- **FR-019**: Every grove farm of a LINEAR row MUST have its front door, the open side of its grove, reached by a way
+  (a dispersed farm needs none: homesteads/150, "a dispersed hamlet has no interconnected lane network to be reached
+  by"); and a farm's grove MUST draw bamboo only where that farm rolled a household bamboo stand.
 
 ### Key Entities
 
@@ -190,8 +191,8 @@ per-house groves pass every check a grove answers to.
   the sides appear among the linear seeds.
 - **SC-008** (FR-018, FR-019): in every dispersed seed every farm has a well of its own, not in its way in; in every linear
   seed the water knob's value is drawn (own wells, or every farm within reach of a shared well) and both values appear;
-  in every non-nucleated seed and pool map every front door is within the door reach of a way, and the farms drawing
-  grove bamboo are exactly the farms that rolled it.
+  in every linear seed and pool map every front door is within the door reach of a way; and in every non-nucleated seed
+  and pool map the farms drawing grove bamboo are exactly the farms that rolled it.
 - **SC-006** (FR-012): the pool is regenerated, `make done` is green, and every regenerated pool map whose layout moved
   gets its settlement-review.
 
@@ -257,3 +258,9 @@ research is homesteads/155 and 156 (R6, checked). FR-018 and FR-019 carry the re
 farms that rolled none; a door no way reached), each decided by the record.
 
 **Amendment 3, round 1** (spec-fidelity-verify, MODE 3, 2026-09-29): CHANGES - both attested lines to be drawn (a paddy row may borrow the street laid first), the frame by FR-010's necessity with its width a GUESS, the lane's room in the frame, the far row's holding drawn, own wells for the dispersed form only and a row's water a knob, the converted feet removed. **Round 2**: CHANGES - the compact holding cited to homesteads/156 and labeled; plan D9's id. **Round 3**: FAITHFUL. Amendment 3 is accepted.
+
+**Amendment 4** (2026-09-29, the record's own finding): FR-019's door clause and SC-008's door check scoped to the LINEAR
+row. As written they held every grove farm, and the first cohort with the check found every dispersed farm failing it -
+a dispersed hamlet lays no lanes at all, by homesteads/150's finding ("a dispersed hamlet has no interconnected lane
+network to be reached by. The rule in the entry above is a rule about nucleated settlements"). The row farm's door
+remains held (FR-017, FR-019).

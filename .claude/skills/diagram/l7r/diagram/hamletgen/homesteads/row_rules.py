@@ -76,14 +76,15 @@ def row_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
     houses = list(M.get("houses") or [])
     lanes = list(M.get("lanes") or [])
     own: dict[tuple[float, float], int] = {}
+    drawn_st = {k: [sg for ln in lanes if ln.get("street") and ln.get("street_index") == k for sg in _segs(ln["pts"])] for k in range(len(plans))}
     for h in houses:
         c = (float(h["x"]), float(h["y"]))
         fr = _frame(h)
         size = max(fr[2], fr[3]) if fr else 240.0  # the house may stand at its frame's far side from the street
         d = [_dist(c, s) for s in streets]
-        k = min(range(len(d)), key=lambda i: d[i])
-        own[_key(c)] = k
-        if d[k] > size:
+        door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0) or c
+        own[_key(c)] = min(range(len(streets)), key=lambda i: _dist(door, drawn_st.get(i) or streets[i]))  # the street its door faces, as drawn (`serve.own_street`)
+        if min(d) > size:
             out.append(("farm_off_its_street", _key(c)))
     # NOT BEHIND ANOTHER on its side of its street: two farms of one street, one side, overlapping along it, one standing
     # more than half a frame deeper than the other
@@ -122,13 +123,12 @@ def row_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
             out.append(("holding_not_drawn", _key(rec["of"])))
     # EVERY ROW FARM'S WAY ENDS ON ITS OWN STREET: its door within the door reach of that street, or a door path serving it
     served = {_key(ln["serves"]) for ln in lanes if ln.get("serves")}
-    drawn_streets = {k: [s for ln in lanes if ln.get("street") and ln.get("street_index") == k for s in _segs(ln["pts"])] for k in range(len(plans))}
     for h in houses:
         door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
         k = own.get(_key((h["x"], h["y"])))
         if door is None or k is None:
             continue
-        if _dist(door, drawn_streets.get(k, [])) > DOOR_REACH_FT and _key((h["x"], h["y"])) not in served:
+        if _dist(door, drawn_st.get(k, [])) > DOOR_REACH_FT and _key((h["x"], h["y"])) not in served:
             out.append(("farm_not_on_its_street", _key((h["x"], h["y"]))))
     return out
 
@@ -164,7 +164,11 @@ def water_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
 
 
 def doors_unreached(M: Mapping[str, Any], reach: float = DOOR_REACH_FT) -> list[tuple[float, float]]:
-    """The grove farms whose front door stands farther than `reach` from every way (FR-019)."""
+    """The grove farms whose front door stands farther than `reach` from every way (FR-019) - on a LINEAR map: a dispersed
+    hamlet has no lane network to be reached by (research/homesteads/150, "the rule ... is a rule about nucleated
+    settlements"; `ways.unreached_houses` skips it for the same reason), and its farm fronts its own fields."""
+    if (M.get("meta") or {}).get("settlement_form") != "linear":
+        return []
     segs = [s for ln in M.get("lanes") or [] for s in _segs(ln.get("pts") or [])]
     if not segs:
         return []

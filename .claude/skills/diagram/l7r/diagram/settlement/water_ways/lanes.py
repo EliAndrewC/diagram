@@ -191,7 +191,7 @@ class LanesMixin:
             # house, so this pass read it as a dead end, pulled it back and dropped what was left for being short - on
             # Inashiro the only way to the rice, across the brook at a ford, with no record. Like the connector, whose far
             # end reaches the frame, it is judged by the sweeps, which record a spur they drop (`field_spur_swept`).
-            if ln.get("connector") or ln.get("spur") or i >= len(self._lane_ink):
+            if ln.get("connector") or ln.get("spur") or ln.get("street") or i >= len(self._lane_ink):  # a row village's street is laid whole (feature 291)
                 continue
             pts = [(float(x), float(y)) for x, y in ln["pts"]]
             if len(pts) < 2:

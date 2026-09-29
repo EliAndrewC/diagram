@@ -697,10 +697,12 @@ The front is the side the grove leaves open for the way in (research/homesteads/
 
 
 def own_street(h: Mapping[str, Any], streets: Sequence[Sequence[tuple[Pt, Pt]]]) -> int | None:
-    """The index of the street a row farm stands on - the nearest to its house - or None where no street is laid."""
+    """The index of the street a row farm's way ends on - the nearest to its FRONT DOOR (its house where it has none) - or
+    None where no street is laid. By the door, not the house: a farm between two streets faces the one its door is on
+    (cohort seed 903: a door 36 ft from one street, its house nearer the other)."""
     if not streets:
         return None
-    hx, hy = float(h["x"]), float(h["y"])
+    hx, hy = front_door(h, FOOTPATH_FABRIC_GAP + 4.0) or (float(h["x"]), float(h["y"]))
     return min(range(len(streets)), key=lambda k: min((seg_dist(hx, hy, a, b) for a, b in streets[k]), default=float("inf")))
 
 

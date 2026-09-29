@@ -52,3 +52,19 @@ def test_a_farm_draws_the_bamboo_it_rolls() -> None:
     seats = [(float(x), 300.0) for x in range(100, 1300, 37)]
     rolled = [s._farm_rolls_bamboo(x, y) for x, y in seats]
     assert rolled == [s._hjit(x, y, 95.0) < HOUSEHOLD_BAMBOO_PREVALENCE for x, y in seats] and any(rolled) and not all(rolled)
+
+
+def test_shared_row_wells_put_every_farm_within_reach() -> None:
+    """`shared_row_wells` (plan D18): wells beside the street, one at the middle of each stretch of the row no longer than
+    1.6 reaches, every farm then within the watering reach of one."""
+    from l7r.diagram.hamletgen.homesteads.wells import WATER_REACH_FT, shared_row_wells
+
+    s = _s()
+    line = [(float(x), 700.0) for x in range(100, 1301, 8)]
+    houses = [{"x": float(x), "y": 700.0 + (120.0 if i % 2 else -120.0), "geom": {"bbox": (float(x), 700.0, 200.0, 150.0)}} for i, x in enumerate(range(150, 1300, 110))]
+    n = shared_row_wells(s, houses, [line])
+    assert 1 <= n <= 2
+    assert all(min(math.dist((h["x"], h["y"]), (w["x"], w["y"])) for w in s.M["wells"]) <= WATER_REACH_FT for h in houses)
+    assert shared_row_wells(s, [], [line]) == 0 and shared_row_wells(s, houses, []) == 0
+    assert shared_row_wells(s, [{"x": 5000.0, "y": 5000.0, "geom": {}}], [line]) == 0, "no farm near the street"
+    assert shared_row_wells(s, houses, [line[:1]]) == 0

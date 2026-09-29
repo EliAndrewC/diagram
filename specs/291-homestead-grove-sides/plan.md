@@ -102,7 +102,9 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   envelope buffered outward (shapely) to the street's offset, its exterior ring cut to an arc centered on the seat's
   projection (the row curves with the margin); `street` - a straight segment through that same projection along the
   arc's chord, a surveyed road. The row's length along the line is what its farms need, `n_side x frame`, centered on
-  the seat, clipped to the canvas less the frame.
+  the seat, clipped to the canvas less the frame. A linear hamlet's canvas is 1.5 times `canvas_for`'s (`LINEAR_CANVAS`,
+  a drawing convention - the unused ground is cropped): sized for a cluster, the canvas ran each street off the sheet
+  after a few lots and cohort seed 12 seated 13 of 17 on six streets.
 - **D15 - the seats** (FR-014, FR-015, FR-016). `row_sides(plan)` the same way (knob `row_sides`, `one`/`both`,
   `meta.row_sides`). The frame is the dispersed bundle's `_frame` at the largest house (grove, ground and the lane's
   room); farms step one frame width along the line. ONE side: the street at the field's standoff, the farms beyond it
