@@ -304,6 +304,8 @@ castle rice	castle rice
 castle town	jokamachi
 castle towns	jokamachi
 castle-rice	castle rice
+catalpa	catalpa
+catalpas	catalpa
 catchment	catchment
 catena	catena
 causeway	causeway
@@ -2323,6 +2325,7 @@ qing dynasty	Qing dynasty
 qing-dynasty	Qing dynasty
 qingming	Qingming
 qingming shanghe tu	Qingming Shanghe Tu
+qiu	qiu
 quay	quay
 quays	quay
 quercus acutissima	kunugi
@@ -2979,6 +2982,10 @@ thatch field	thatch field
 thatch fields	thatch field
 the pool	the pool
 the reform and opening-up	reform and opening-up
+thin out	thinning
+thinned	thinning
+thinned out	thinning
+thinning	thinning
 thirty guardian deities	thirty guardian deities
 thousand character classic	Thousand Character Classic
 thousand-tooth thresher	senbakoki
