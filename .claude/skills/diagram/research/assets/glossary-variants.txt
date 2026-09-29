@@ -308,6 +308,7 @@ catalpa	catalpa
 catalpas	catalpa
 catchment	catchment
 catena	catena
+catty	jin
 causeway	causeway
 causeways	causeway
 celestial order	Celestial Order
@@ -820,6 +821,8 @@ fireboxes	firebox
 firebrand	firebrand
 firebrands	firebrand
 fish fry	fish fry
+fish landing	fry landing
+fish landings	fry landing
 fish mouth	fish mouth
 fish-scale polder	yulin wei
 fish-scale polders	yulin wei
@@ -886,8 +889,11 @@ freeboard	freeboard
 frontage	frontage
 frost heave	frost heave
 frost-heave	frost heave
+fry landing	fry landing
+fry landings	fry landing
 fry pond	nursery pond
 fry ponds	nursery pond
+fry-catching landings	fry landing
 fsw	FSW
 fsws	FSW
 fu	fu
@@ -1052,6 +1058,7 @@ groyne	groyne
 groynes	groyne
 gsi	GSI
 guan-xiang	guanxiang
+guangdong xinyu	Guangdong xinyu
 guangfu	Guangfu
 guangxu	Guangxu
 guangxu era	Guangxu era
@@ -1216,6 +1223,9 @@ hongawara	hongawara
 hongawara tile	hongawara
 hongo	hongo
 hongwu	Hongwu
+hongzhi	Hongzhi
+hongzhi era	Hongzhi
+hongzhi reign	Hongzhi
 honjin	honjin
 honjins	honjin
 honmaru	honmaru
@@ -1396,6 +1406,7 @@ jiaochang	jiaochang
 jiaqing	Jiaqing
 jiegao	jiegao
 jiguchi-sen	jiguchi-sen
+jin	jin
 jin'ya	jin'ya
 jinaicho	jinaicho
 jingshi fangxiang zhi	Jingshi fangxiang zhi
@@ -1836,6 +1847,7 @@ martial temple	Martial temple
 martial temples	Martial temple
 massing	massing
 master mountain	master-mountain
+master xuanhu	Xuanhu
 master-mountain	master-mountain
 masugata	masugata
 matebajii	matebajii
@@ -3344,6 +3356,7 @@ xiang seven, li three	Lingqu
 xiang-gan	Xiang-Gan
 xu	xu
 xu tan	Xu Tan
+xuanhu	Xuanhu
 xuanhua arch	memorial arch
 xun	xun
 xunjiansi	xunjiansi

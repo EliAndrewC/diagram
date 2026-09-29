@@ -12841,5 +12841,43 @@
    "trial stand",
    "unthinned stand"
   ]
+ },
+ "Hongzhi": {
+  "def": "A reign era of the Ming dynasty, 1488-1505.",
+  "variants": [
+   "Hongzhi",
+   "Hongzhi reign",
+   "Hongzhi era"
+  ]
+ },
+ "fry landing": {
+  "def": "A stretch of West River bank where wild fish fry were netted. From the Hongzhi reign on, these stretches were granted to Jiujiang's fry households, who paid a levy on each every year.",
+  "variants": [
+   "fry landing",
+   "fry landings",
+   "fry-catching landings",
+   "fish landing",
+   "fish landings"
+  ]
+ },
+ "Xuanhu": {
+  "def": "The literary name of Xu Guangqi, compiler of the Nongzheng quanshu. The passages headed \"Master Xuanhu says\" are his own comments.",
+  "variants": [
+   "Xuanhu",
+   "Master Xuanhu"
+  ]
+ },
+ "Guangdong xinyu": {
+  "def": "New Discourses on Guangdong, the late-Ming and early-Qing Lingnan scholar Qu Dajun's seventeenth-century account of Guangdong: its places, its crafts and its customs.",
+  "variants": [
+   "Guangdong xinyu"
+  ]
+ },
+ "jin": {
+  "def": "A Chinese unit of weight, the catty: a little over a pound.",
+  "variants": [
+   "jin",
+   "catty"
+  ]
  }
 }
