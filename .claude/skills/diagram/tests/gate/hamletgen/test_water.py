@@ -8,7 +8,7 @@ from l7r.diagram import hamletgen as hg
 from tests.gate import _pool
 
 # THE POLDER TESTS LEFT FOR THE SOAK TIER (feature 219): the gate rolls no spec of its own - Kuwabata below is the
-# POOL's map, read through `tests/gate/_pool.py`; the polder-grid assertions roll Polder 12 in tests/soak/test_polder_fall_0.py.
+# POOL's map, read through `tests/gate/_pool.py`; the polder-grid rules are guaranteed at their placers (feature 287).
 
 
 @pytest.mark.rolls_map
