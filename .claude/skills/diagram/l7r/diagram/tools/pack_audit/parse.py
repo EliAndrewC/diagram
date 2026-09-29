@@ -59,7 +59,7 @@ MIN_TREE_R_PX: float = 4.0  # the glyph floor: a canopy-green dot smaller than t
 # tolerance. Same 0.5 px floor as WALL_OVERLAP_MIN_PX and for the same reason: emit rounding and
 # stroke width put sub-pixel ink over an edge that is geometrically clear.
 
-# --- text labels (for the layer/legibility/proximity checks) ---
+# --- text labels (their text: the scale bar, a program item found by its label; each with an estimated box) ---
 _TEXT_RE = re.compile(r"<text\s([^>]*)>(.*?)</text>", re.DOTALL)
 _ATTR_RE = re.compile(r'([\w-]+)="([^"]*)"')
 _INNER_TAG_RE = re.compile(r"<[^>]*>")
@@ -87,9 +87,8 @@ CAPS_RATIO: float = 0.8  # a label with >= this share of upper-case letters is a
 WELL_FILL = "#9C8C70"  # well-curb stone
 WALL_STROKE = "#2D2A24"  # the compound wall (and gate posts / well-mouths share this dark ink)
 _WALL_GROUP_RE = re.compile(rf'<g stroke="{re.escape(WALL_STROKE)}"[^>]*>(.*?)</g>', re.DOTALL)
-# Fills dark enough that BLACK label ink laid over them stops being legible (luminance < ~0.30):
+# The dark inks (luminance < ~0.30) - a small rect in one is a door glyph (`door_rects`):
 DARK_FILLS: frozenset[str] = frozenset({"#2D2A24", "#3A2010", "#3A2418", "#1A1410", "#4A3318", "#5C0A04", "#3A2E1C", "#6B4030", "#5A3F1E", "#5C1A0A"})
-MIN_DARK_AREA_PX: float = 150.0  # ignore tiny dark markers (kura door, altar square) - only a real dark BLOCK or wall hurts legibility
 # The occlusion check is deliberately fill-BLIND on the occluder side: ANY rect or glyph drawn later
 # counts, not just the fills this tool happens to classify as a building or a garden. Enumerating
 # occluders by fill is what let two real defects through (2026-07-25) - a note box (an unclassified
@@ -161,13 +160,8 @@ class Label:
     y: float
     w: float
     h: float
-    fill: str
     text: str
     pos: int  # byte offset in the source SVG (draw order)
-
-    @property
-    def x2(self) -> float:
-        return self.x + self.w
 
     @property
     def y2(self) -> float:
@@ -182,14 +176,6 @@ class Label:
         return self.y + self.h / 2
 
 
-def _luma(fill: str) -> float:
-    """Relative luminance (0=black, 1=white) of a #rrggbb fill; 1.0 for anything non-hex."""
-    if not (len(fill) == 7 and fill.startswith("#")):
-        return 1.0
-    r, g, b = (int(fill[i : i + 2], 16) / 255 for i in (1, 3, 5))
-    return 0.2126 * r + 0.7152 * g + 0.0722 * b
-
-
 @dataclass(frozen=True)
 class ParsedPlan:
     """Classified geometry of one compound plan."""
@@ -202,8 +188,7 @@ class ParsedPlan:
     tubs: tuple[Rect, ...] = ()  # fire-water tubs (bbox of each), to check wall-adjacency
     labels: tuple[Label, ...] = ()  # text labels with estimated bboxes + draw order
     wall_segs: tuple[Rect, ...] = ()  # compound-wall line segments (thin rects), for gate openings
-    wells: tuple[Rect, ...] = ()  # well-curb rects, for the 'well' group-label proximity check
-    dark_rects: tuple[Rect, ...] = ()  # dark-filled rects, for the black-on-black legibility check
+    wells: tuple[Rect, ...] = ()  # well-curb rects, for the tub and passage checks
     door_rects: tuple[Rect, ...] = ()  # small dark rects (door glyphs), for the door-on-a-wall check
     wall_bands: tuple[Rect, ...] = ()  # the INKED band of each wall/divider stroke (`fill` = its stroke color)
     structures: tuple[Rect, ...] = ()  # every built footprint, NO area floor (porches/sheds count)
@@ -255,7 +240,7 @@ def _parse_labels(text: str) -> list[Label]:
         fs = float(attrs.get("font-size", "13"))
         ls = float(attrs.get("letter-spacing", "0"))
         # a wrapped caption is one line per <tspan dy>: its block is its widest line by its lines' height, not every
-        # line run together - `seat_label` writes wrapped captions so, and INNER COURT in two lines was measured as
+        # line run together - `labels.hand_sheet` writes wrapped captions so, and INNER COURT in two lines was measured as
         # one 10-letter line reaching into the building beside it (feature 267)
         spans = _TSPAN_RE.findall(m.group(2))
         # only tspans that each set their own x are lines; an inline tspan (a styled word) continues the line it is in
@@ -277,7 +262,7 @@ def _parse_labels(text: str) -> list[Label]:
             turned = [(px - s * (cy - py), py + s * (cx - px)) for cx, cy in corners]
             (ax, ay), (bx, by) = turned
             left, top, w, h = min(ax, bx), min(ay, by), abs(bx - ax), abs(by - ay)
-        out.append(Label(left, top, w, h, attrs.get("fill", "#000000"), " ".join(lines), m.start()))
+        out.append(Label(left, top, w, h, " ".join(lines), m.start()))
     return out
 
 
@@ -453,7 +438,6 @@ def parse_svg(text: str) -> ParsedPlan:
     wells = tuple(r for r in rects if r.fill == WELL_FILL)
     fills = tuple(r for r in rects if not r.precinct)
     furniture = tuple(r for r in fills if r.area_px < FURNITURE_MAX_AREA_PX)
-    dark_rects = tuple(r for r in rects if r.fill in DARK_FILLS and r.area_px >= MIN_DARK_AREA_PX)
     door_rects = tuple(r for r in rects if r.fill in DARK_FILLS and r.area_px < DOOR_MAX_AREA_PX)
     kinds = element_kinds(text)
     return ParsedPlan(
@@ -466,7 +450,6 @@ def parse_svg(text: str) -> ParsedPlan:
         tuple(_parse_labels(text)),
         tuple(wall_segs),
         wells,
-        dark_rects,
         door_rects,
         tuple(_wall_bands(text)),
         tuple(r for r in rects if r.fill in STRUCTURE_FILLS),

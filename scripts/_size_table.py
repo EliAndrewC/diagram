@@ -17,8 +17,9 @@ WHAT IT LISTS.
 - every distinct stroke width on a line, path, polyline, polygon or rect (a wall's thickness is a stroke);
 - the GAPS between consecutive collinear axis-aligned `<line>` segments of the same stroke - a gate or a
   door is drawn as the gap between two wall segments.
-Each rect is labeled with the nearest `<text>` by center distance, and the distance is printed: a label
-60 ft away is a guess and reads as one.
+Each rect is named by its `data-kind` tag - its own or its nearest tagged ancestor's (feature 262) - never by
+the nearest caption: a hand sheet's captions are placed by the render pipeline (feature 286), so where one
+stands says nothing about which rect the drawing means.
 """
 
 from __future__ import annotations
@@ -31,10 +32,13 @@ import re
 import sys
 import xml.etree.ElementTree as ET
 
-# THE PAIRING IS THE PACKAGE'S (feature 254, D7): `pack_audit.labels.nearest_label` is the one rule that
-# says which label a footprint carries, shared with the band check, so the two cannot drift apart.
+# THE PAIRING IS THE SHEET'S TAGS (feature 286, D7): `interactive.sheet.element_kinds` is the one rule that says which
+# kind an element carries - the pack audit's band check reads the same map - so the two cannot drift apart.
+# `labels.hand_sheet.start_tags` lists the start tags in the order ElementTree walks them, which ties an element to the
+# byte offset `element_kinds` keys it by.
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".claude", "skills", "diagram"))
-from l7r.diagram.tools.pack_audit.labels import nearest_label  # noqa: E402
+from l7r.diagram.interactive.sheet import element_kinds  # noqa: E402
+from l7r.diagram.labels.hand_sheet import start_tags  # noqa: E402
 
 PX_PER_FT = 3.0
 SKIP = {"defs", "pattern", "symbol", "clipPath", "mask", "marker"}
@@ -96,7 +100,9 @@ def ft(px: float) -> float:
 def table(svg_text: str) -> dict:
     root = ET.fromstring(svg_text)
     items = walk(root)
-    labels = [(num(el.get("x")) + dx, num(el.get("y")) + dy, " ".join("".join(el.itertext()).split())) for el, dx, dy, _ in items if tag(el) == "text" and "".join(el.itertext()).strip()]
+    kinds = element_kinds(svg_text)
+    starts = [a for a, _b in start_tags(svg_text)]
+    order = {id(el): i for i, el in enumerate(root.iter())}
     rects, strokes, lines = [], {}, []
     for el, dx, dy, other in items:
         kind = tag(el)
@@ -108,8 +114,6 @@ def table(svg_text: str) -> dict:
             x, y, w, h = num(el.get("x")) + dx, num(el.get("y")) + dy, num(el.get("width")), num(el.get("height"))
             if w <= 0 or h <= 0:
                 continue
-            cx, cy = x + w / 2, y + h / 2
-            near = nearest_label(cx, cy, labels)
             rects.append(
                 {
                     "x_px": round(x, 1),
@@ -117,8 +121,7 @@ def table(svg_text: str) -> dict:
                     "w_ft": ft(w),
                     "h_ft": ft(h),
                     "area_sqft": round(ft(w) * ft(h)),
-                    "label": near[0] if near else "",
-                    "label_ft_away": ft(near[1]) if near else None,
+                    "kind": kinds.get(starts[order[id(el)]], ""),
                     "note": "transform not applied" if other else "",
                 }
             )
@@ -148,10 +151,9 @@ def gaps(lines: list[tuple[float, float, float, float, str, float]]) -> list[dic
 
 def render(name: str, data: dict) -> str:
     lines = [f"size-table: {name} - 3 px = 1 ft; {len(data['rects'])} rects, {len(data['gaps'])} wall gaps"]
-    lines.append(f"{'w ft':>7}{'h ft':>7}{'sq ft':>8}  {'at px':<14}{'label (ft away)':<44}note")
+    lines.append(f"{'w ft':>7}{'h ft':>7}{'sq ft':>8}  {'at px':<14}{'kind (data-kind)':<44}note")
     for r in data["rects"]:
-        label = f"{r['label'][:34]} ({r['label_ft_away']})" if r["label"] else "-"
-        lines.append(f"{r['w_ft']:>7}{r['h_ft']:>7}{r['area_sqft']:>8}  {str(r['x_px']) + ',' + str(r['y_px']):<14}{label:<44}{r['note']}")
+        lines.append(f"{r['w_ft']:>7}{r['h_ft']:>7}{r['area_sqft']:>8}  {str(r['x_px']) + ',' + str(r['y_px']):<14}{(r['kind'][:42] or '(untagged)'):<44}{r['note']}")
     lines.append("wall gaps (openings between collinear segments): " + ("; ".join(f"{g['gap_ft']} ft {g['axis']}@{g['at_px']:g} from {g['from_px']:g} (wall {g['wall_ft']} ft)" for g in data["gaps"]) or "none found - check gates drawn another way"))
     lines.append("stroke widths in ft (count): " + ", ".join(f"{k} ({v})" for k, v in data["strokes_ft"].items()))
     return "\n".join(lines)

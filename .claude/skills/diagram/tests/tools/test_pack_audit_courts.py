@@ -41,7 +41,7 @@ def test_the_river_cobble_floor_is_roofed_too() -> None:
 
 
 def test_a_wrapped_label_is_its_widest_line_by_its_lines() -> None:
-    """A caption written one line per `<tspan x dy>` (as `seat_label` wraps one) is measured as a block - its widest
+    """A caption written one line per `<tspan x dy>` (as `labels.hand_sheet` wraps one) is measured as a block - its widest
     line by its lines' height - not every line run together; INNER COURT in two lines read as one 10-letter line
     (feature 267)."""
     svg = f'<svg>{_PRECINCT}<text x="100" y="50" font-size="10" text-anchor="middle"><tspan x="100" dy="0">INNER</tspan><tspan x="100" dy="14">COURT</tspan></text></svg>'
@@ -92,14 +92,13 @@ def test_the_report_names_the_main_gate_passage() -> None:
     assert "the MAIN GATE's passage" in pa.format_report(pa.parse_svg(_svg(_rect(0, 0, 400, 400, COURT), posts)))
 
 
-def test_a_tagged_caption_is_measured_on_its_own_kind() -> None:
+def test_a_kind_is_measured_on_its_own_structure_wherever_its_caption_stands() -> None:
     """A caption the standard seats beside its building can stand nearer another: Ubame's INARI SHRINE, set left of the
-    shrine, stood nearest a 6 x 5 ft privy. Tagged with its kind, it is paired with the structure of that kind."""
+    shrine, stood nearest a 6 x 5 ft privy. The pairing reads the tags (feature 286), so the shrine's footprint is the
+    structure tagged with its kind, and the caption's seat plays no part."""
     shrine = '<g data-kind="compound shrine"><rect x="200" y="100" width="60" height="45" fill="#C9876C"/></g>'
     privy = '<rect x="120" y="100" width="18" height="14" fill="#7E726A" data-kind="latrine"/>'
-    name = '<text x="150" y="95" font-size="11" data-kind="compound shrine">INARI SHRINE</text>'
+    name = '<text x="130" y="105" font-size="11" data-kind="compound shrine">INARI SHRINE</text>'  # on the privy
     plan = pa.parse_svg(_svg(_rect(0, 0, 400, 400, COURT), shrine, privy, name))
-    (lab,) = [lb for lb in plan.labels if lb.text == "INARI SHRINE"]
-    assert [(r.x, r.w) for r in pa.labels._of_its_kind(lab, plan)] == [(200.0, 60.0)]
-    untagged = pa.parse_svg(_svg(_rect(0, 0, 400, 400, COURT), shrine, privy, name.replace(' data-kind="compound shrine"', "")))
-    assert len(pa.labels._of_its_kind(untagged.labels[0], untagged)) == len(untagged.structures), "untagged: any structure"
+    found = pa.labels.footprint(plan, "compound shrine")
+    assert found is not None and (found.x, found.w) == (200.0, 60.0)

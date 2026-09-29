@@ -1,0 +1,26 @@
+{
+ "sc002-placed-worse": {
+  "value": 0,
+  "unit": "captions",
+  "observed": "2026-09-29",
+  "method": "sc002_ctx.py (the round-4 plan review's full-context measure) over the four declared sheets against the sheets at git dddd838b5: captions whose placed seat covers more than their hand seat; per sheet, the method and its history in sc002.json"
+ },
+ "sc002-drawing-worse": {
+  "value": 0,
+  "unit": "captions",
+  "observed": "2026-09-29",
+  "method": "sc002_drawing.py, the drawing alone, the same sheets"
+ },
+ "scripted-captions-moved": {
+  "value": 0,
+  "unit": "captions",
+  "observed": "2026-09-28",
+  "method": "the five scripted hamlets regenerated with the new placer (make map, REGENERATED) and their tracked SVGs compared with git: byte-identical"
+ },
+ "hand-seats-before": {
+  "value": 8,
+  "unit": "captions",
+  "observed": "2026-09-28",
+  "method": "the old tool's hand-seat exception instrumented over the four sheets (before286.json): captions whose hand seat beat the placer"
+ }
+}

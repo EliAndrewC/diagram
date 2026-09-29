@@ -3,22 +3,17 @@
 from __future__ import annotations
 
 import math
-import re
 from dataclasses import dataclass
 
 from .grids import FTPX
-from .parse import WALL_KIND, WALL_STROKE, ParsedPlan, Rect, _luma
+from .parse import WALL_KIND, WALL_STROKE, ParsedPlan, Rect
 
 TUB_MAX_GAP_FT: float = 3.5  # a wall-hugging tub sits ~1.7-2 ft from a wall (its own radius + eaves);
 # beyond this it is adrift in the court with no roof draining into it.
 TUB_WELL_MIN_PX: float = 1.0  # a fire-water tub overlapping a well glyph by more than this sits ON it
 TUB_BLDG_MIN_PX: float = 0.5  # ...and reaching this far past a building's edge, it is drawn INTO the
-LABEL_DARK_LUMA: float = 0.42  # a label whose own fill is darker than this is "black ink" for legibility
-DARK_MIN_OVERLAP_PX: float = 2.5  # a label must sit ON a dark feature by at least this much (not just graze an edge)
 OCCLUSION_MIN_PX: float = 3.0  # a later feature must cover at least this much of a foreground item to count
-# (privy, door, board, hearth, stilt, mat) - foreground that belongs ABOVE the fills, like a label.
-GROUP_LABEL_GLYPHS: dict[str, str] = {"fire-water tub": "tub", "well": "well"}  # label text -> glyph kind it names
-GROUP_LABEL_MAX_FT: float = 9.0  # a glyph-group label must sit within this of a glyph it names
+# (privy, door, board, hearth, stilt, mat) - foreground that belongs ABOVE the fills.
 NOTICE_BOARD_MAX_FT: float = 20.0  # a notice board must sit within this of a gate opening to be read
 PASSAGE_DEPTH_PX: float = 9.0  # the gateway zone reaches 3 ft in front of and behind the wall ink -
 # a stone set just inside or just outside the masonry is still in the track a cart drives through
@@ -26,9 +21,6 @@ PASSAGE_CLEAR_MIN_PX: float = 0.5  # sub-pixel contact is a flush jamb (a gate p
 # opening edge) plus integer-emit rounding, not an object standing in the passage
 OPENING_MAX_PX: float = 80.0  # a wider gap in the wall is a structural break (a wall drawn around a
 # building that IS part of it), not a gate - see `wall_openings`
-NUDGE_STEP_PX: float = 4.0
-NUDGE_MAX_PX: float = 40.0  # search radius for a legibility-clearing nudge
-LABEL_OVERLAP_MIN_PX: float = 3.0  # two labels overlapping by more than this collide/smear
 DOOR_FLUSH_TOL_PX: float = 1.5  # a door within this of a building edge reads as ON the wall
 DOOR_NEAR_PX: float = 12.0  # a door candidate this close to an edge is TRYING to be in the wall (vs a deep interior marker)
 WALL_OVERLAP_MIN_PX: float = 0.5  # sub-pixel contact is a flush abutment + integer-emit rounding,
@@ -59,11 +51,6 @@ def _point_rect_dist(px: float, py: float, r: Rect) -> float:
     dx = max(r.x - px, 0.0, px - r.x2)
     dy = max(r.y - py, 0.0, py - r.y2)
     return math.hypot(dx, dy)
-
-
-def _rect_gap(a: Rect, b: Rect) -> float:
-    """The distance between two rectangles' edges (0 when they touch or overlap)."""
-    return math.hypot(max(a.x - b.x2, 0.0, b.x - a.x2), max(a.y - b.y2, 0.0, b.y - a.y2))
 
 
 def fire_water_adrift(plan: ParsedPlan, max_gap_ft: float = TUB_MAX_GAP_FT) -> list[TubAdrift]:
@@ -155,8 +142,7 @@ def tubs_on_wells(plan: ParsedPlan, min_px: float = TUB_WELL_MIN_PX) -> list[Tub
 class Occluded:
     """A foreground item painted over by anything drawn later in the SVG (not on the top layer)."""
 
-    kind: str  # "label" | "tub" | "well" | "feature"
-    text: str  # label text, or "" for a tub
+    kind: str  # "tub" | "well" | "feature"
     x: float
     y: float
 
@@ -168,14 +154,19 @@ def _overlap_px(ax: float, ay: float, ax2: float, ay2: float, b: Rect) -> float:
 
 def occluded_foreground(plan: ParsedPlan, min_px: float = OCCLUSION_MIN_PX) -> list[Occluded]:
     """Foreground items painted OVER by anything drawn LATER in the SVG - i.e. not on the top
-    layer, so they read as buried (a label's ink, a tub's rim, a privy that vanishes).
+    layer, so they read as buried (a tub's rim, a privy that vanishes).
 
-    Draw-order rule: labels, point glyphs and furniture-scale features all belong ABOVE the
-    fills, so any later rect or glyph covering one is a defect. Both sides of that test are
-    deliberately broad - the occluder side is fill-BLIND (see OCCLUSION_MIN_PX) and the occluded
-    side spans labels, tubs, wells and every sub-building rect - because the two defects this
-    check was widened for (2026-07-25) each slipped through a narrow enumeration: a note box was
-    not a "building or garden", and a privy was not a "label or tub".
+    Draw-order rule: point glyphs and furniture-scale features belong ABOVE the fills, so any
+    later rect or glyph covering one is a defect. Both sides of that test are deliberately broad -
+    the occluder side is fill-BLIND (see OCCLUSION_MIN_PX) and the occluded side spans tubs, wells
+    and every sub-building rect - because the two defects this check was widened for (2026-07-25)
+    each slipped through a narrow enumeration: a note box was not a "building or garden", and a
+    privy was not a "label or tub".
+
+    NOT CAPTIONS (feature 286): a caption is placed by the one placer in the render pipeline, which
+    writes it after the drawing; whether it is buried is the placer's to get right and its unit
+    tests' to hold, not a check's (the GM: "There is no point in having an automated check run
+    against an automated process"). What is still drawn by hand is still checked here.
     """
     occluders = plan.fills + plan.glyphs
     out: list[Occluded] = []
@@ -185,54 +176,15 @@ def occluded_foreground(plan: ParsedPlan, min_px: float = OCCLUSION_MIN_PX) -> l
         # curb, a hearth's fire in its hearth), not something painted over it.
         return any(f.pos > pos and _overlap_px(x, y, x2, y2, f) >= min_px and not (f.x >= x and f.y >= y and f.x2 <= x2 and f.y2 <= y2) for f in occluders)
 
-    for lab in plan.labels:
-        if buried(lab.x, lab.y, lab.x2, lab.y2, lab.pos):
-            out.append(Occluded("label", lab.text, lab.cx, lab.cy))
     for t in plan.tubs:
         if buried(t.x, t.y, t.x2, t.y2, t.pos):
-            out.append(Occluded("tub", "", t.x + t.w / 2, t.y + t.h / 2))
+            out.append(Occluded("tub", t.x + t.w / 2, t.y + t.h / 2))
     for w in plan.wells:
         if buried(w.x, w.y, w.x2, w.y2, w.pos):
-            out.append(Occluded("well", "", w.x + w.w / 2, w.y + w.h / 2))
+            out.append(Occluded("well", w.x + w.w / 2, w.y + w.h / 2))
     for f0 in plan.furniture:
         if buried(f0.x, f0.y, f0.x2, f0.y2, f0.pos):
-            out.append(Occluded("feature", "", f0.x + f0.w / 2, f0.y + f0.h / 2))
-    return out
-
-
-@dataclass(frozen=True)
-class OrphanLabel:
-    """A glyph-group label (e.g. 'fire-water tubs') sitting too far from any glyph it names."""
-
-    text: str
-    x: float
-    y: float
-    gap_ft: float
-
-
-def orphan_group_labels(plan: ParsedPlan, max_ft: float = GROUP_LABEL_MAX_FT) -> list[OrphanLabel]:
-    """Labels that NAME a glyph group (fire-water tubs, well) must sit next to a glyph of that kind
-    - a label far from every glyph it names is orphaned. (Building labels sit on their rect, so they
-    are not this check's concern; only the small point-glyph groups drift.)"""
-    kinds: dict[str, tuple[Rect, ...]] = {"tub": plan.tubs, "well": plan.wells}
-    out: list[OrphanLabel] = []
-    for lab in plan.labels:
-        low = lab.text.lower()
-        for key, kind in GROUP_LABEL_GLYPHS.items():
-            # a WHOLE-WORD match: `well` inside `dwelling` named no well, and a shrine's `hall and dwelling`
-            # label was reported orphaned from every well on the sheet (found by the second type, 2026-09-19)
-            if not re.search(r"\b" + re.escape(key) + r"s?\b", low):
-                continue
-            centers = kinds[kind]
-            if centers:
-                lr = Rect(lab.x, lab.y, lab.w, lab.h)
-                # from the glyph's EDGE: a caption the standard seats just off a well (feature 267) was measured from the
-                # well's middle, and a 10 ft well read its own neighbor as 9 ft away
-                d = min(_rect_gap(c, lr) for c in centers) / FTPX
-                if d > max_ft:
-                    out.append(OrphanLabel(lab.text, lab.cx, lab.cy, d))
-            break
-    out.sort(key=lambda o: o.gap_ft, reverse=True)
+            out.append(Occluded("feature", f0.x + f0.w / 2, f0.y + f0.h / 2))
     return out
 
 
@@ -373,80 +325,19 @@ def notice_board_adrift(plan: ParsedPlan, max_ft: float = NOTICE_BOARD_MAX_FT) -
     board, which held while every caption hung just under its board; once captions are seated by the
     cartographic standard - beside the board at its first free ranked position - the caption can stand a
     board's length off to one side, and a board at the gate read as adrift. The sheet tags the board
-    (feature 262), so its own drawn rect is measured; an untagged sheet still falls back to the label."""
+    (feature 262), so its own drawn rect is measured - and only that: a caption is placed by the pipeline
+    (feature 286), so where it stands says nothing about where the board was drawn, and a sheet that tags
+    no board has no board this check can see."""
     ops = _gate_openings(plan) + _main_gate_passage(plan)
     if not ops:
         return []
-    boards = [r for r in plan.fills if plan.label_kinds.get(r.pos) == "notice board"]
-    marks = [(r, r.x + r.w / 2, r.y + r.h / 2) for r in boards] or [(Rect(lab.x, lab.y, lab.w, lab.h), lab.cx, lab.cy) for lab in plan.labels if "notice board" in lab.text.lower()]
     out: list[MisplacedBoard] = []
-    for rect, cx, cy in marks:
-        d = min(_point_rect_dist(ox, oy, rect) for ox, oy in ops) / FTPX  # nearest edge of the board
-        if d > max_ft:
-            out.append(MisplacedBoard(cx, cy, d))
-    return out
-
-
-@dataclass(frozen=True)
-class DarkOnDark:
-    """A dark (black-ink) label laid over a dark feature, with a nudge that would clear it."""
-
-    text: str
-    x: float
-    y: float
-    nudge_dx_ft: float
-    nudge_dy_ft: float
-    fixable: bool
-
-
-def _dark_hit(x: float, y: float, w: float, h: float, darks: tuple[Rect, ...], walls: tuple[Rect, ...]) -> bool:
-    """True if box (x,y,w,h) sits ON any dark-filled rect or (stroke-widened) wall by >= the min overlap."""
-    if any(_overlap_px(x, y, x + w, y + h, d) >= DARK_MIN_OVERLAP_PX for d in darks):
-        return True
-    return any(_overlap_px(x, y, x + w, y + h, Rect(s.x - 4.5, s.y - 4.5, s.w + 9, s.h + 9)) >= DARK_MIN_OVERLAP_PX for s in walls)
-
-
-def dark_on_dark_labels(plan: ParsedPlan) -> list[DarkOnDark]:
-    """Black-ink labels sitting on a dark feature (a wall, a dark block) where they lose contrast.
-    For each, search a small grid of nudges and report the first offset that lands the label on
-    clear ground (fixable=False if nothing within the search radius clears it)."""
-    out: list[DarkOnDark] = []
-    steps = [n * NUDGE_STEP_PX for n in range(1, int(NUDGE_MAX_PX / NUDGE_STEP_PX) + 1)]
-    for lab in plan.labels:
-        if _luma(lab.fill) >= LABEL_DARK_LUMA or not _dark_hit(lab.x, lab.y, lab.w, lab.h, plan.dark_rects, plan.wall_segs):
+    for r in plan.fills:
+        if plan.label_kinds.get(r.pos) != "notice board":
             continue
-        best: tuple[float, float] | None = None
-        for r in steps:
-            for dx, dy in ((r, 0), (-r, 0), (0, r), (0, -r)):
-                if not _dark_hit(lab.x + dx, lab.y + dy, lab.w, lab.h, plan.dark_rects, plan.wall_segs):
-                    best = (dx / FTPX, dy / FTPX)
-                    break
-            if best is not None:
-                break
-        out.append(DarkOnDark(lab.text, lab.cx, lab.cy, *(best or (0.0, 0.0)), best is not None))
-    return out
-
-
-@dataclass(frozen=True)
-class LabelClash:
-    """Two labels whose boxes overlap - their text smears together."""
-
-    a: str
-    b: str
-    x: float
-    y: float
-
-
-def overlapping_labels(plan: ParsedPlan, min_px: float = LABEL_OVERLAP_MIN_PX) -> list[LabelClash]:
-    """Pairs of labels whose estimated boxes overlap by more than min_px on both axes."""
-    out: list[LabelClash] = []
-    labs = plan.labels
-    for i, a in enumerate(labs):
-        for b in labs[i + 1 :]:
-            ox = min(a.x2, b.x2) - max(a.x, b.x)
-            oy = min(a.y2, b.y2) - max(a.y, b.y)
-            if ox >= min_px and oy >= min_px:
-                out.append(LabelClash(a.text, b.text, (max(a.x, b.x) + min(a.x2, b.x2)) / 2, (max(a.y, b.y) + min(a.y2, b.y2)) / 2))
+        d = min(_point_rect_dist(ox, oy, r) for ox, oy in ops) / FTPX  # nearest edge of the board
+        if d > max_ft:
+            out.append(MisplacedBoard(r.x + r.w / 2, r.y + r.h / 2, d))
     return out
 
 

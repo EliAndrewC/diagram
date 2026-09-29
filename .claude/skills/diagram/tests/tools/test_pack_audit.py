@@ -367,7 +367,9 @@ def test_format_report_tub_section_states_each_case() -> None:
     assert "TUB IN BUILDING" in straddle and "reaches 1.0 ft INTO" in straddle
 
 
-# --- round-1 rendering checks: layers, label placement, legibility ---
+# --- round-1 rendering checks: layers and the notice board ---
+# The checks of where a CAPTION stands (buried, overlapping, on dark ink, a group label adrift) are gone (feature 286):
+# captions are placed by the one placer in the render pipeline, and its unit tests hold it correct.
 
 
 def _text(x: float, y: float, content: str, extra: str = "") -> str:
@@ -379,12 +381,9 @@ def _wallgroup(*segs: tuple[float, float, float, float]) -> str:
     return f'<g stroke="{pa.WALL_STROKE}" stroke-width="9">{lines}</g>'
 
 
-@pytest.mark.parametrize(
-    "fill, dark",
-    [("#000000", True), ("#ffffff", False), ("#3A2E1C", True), ("url(#g)", False), ("#abc", False)],
-)
-def test_luma_classifies_dark(fill: str, dark: bool) -> None:
-    assert (pa._luma(fill) < pa.LABEL_DARK_LUMA) == dark
+def _board(x: float, y: float) -> str:
+    """A notice board as a sheet draws it: its own rect, tagged with its kind (feature 262)."""
+    return f'<rect x="{x}" y="{y}" width="12" height="4" fill="#8C6F3E" data-kind="notice board"/>'
 
 
 def test_parse_labels_bbox_anchor_bold_and_skips() -> None:
@@ -404,52 +403,45 @@ def test_parse_labels_bbox_anchor_bold_and_skips() -> None:
     assert end.x == pytest.approx(100 - 2 * 10 * pa.CHAR_W_FRAC)  # end anchor, regular width
 
 
-def test_parse_reads_walls_wells_and_dark_blocks() -> None:
+def test_parse_reads_walls_wells_and_door_glyphs() -> None:
     svg = _svg(
         _rect(0, 0, 300, 300, COURT),
         _wallgroup((0, 0, 300, 0)),
         _rect(50, 50, 22, 22, pa.WELL_FILL),
-        _rect(100, 100, 20, 20, "#2D2A24"),  # dark block (area 400 >= 150)
-        _rect(200, 200, 5, 5, "#2D2A24"),  # dark but tiny (area 25) -> not a dark block
+        _rect(100, 100, 20, 20, "#2D2A24"),  # dark block (area 400): too big for a door glyph
+        _rect(200, 200, 5, 5, "#2D2A24"),  # dark and small (area 25) -> a door glyph
     )
     plan = pa.parse_svg(svg)
-    assert len(plan.wall_segs) == 1 and len(plan.wells) == 1 and len(plan.dark_rects) == 1
+    assert len(plan.wall_segs) == 1 and len(plan.wells) == 1 and len(plan.door_rects) == 1
 
 
-def test_occlusion_flags_later_feature_over_label_and_tub() -> None:
-    # a label then a building drawn LATER on top of it; a tub then a garden on top
+def test_occlusion_flags_a_later_feature_over_a_tub_and_never_a_caption() -> None:
+    # a caption then a building drawn LATER on top of it; a tub then a garden on top
     svg = _svg(
         _rect(0, 0, 400, 400, COURT),
         _text(20, 60, "buried", 'font-size="12"'),  # pos early
         _tubgroup('<circle cx="200" cy="200" r="5"/>'),
-        _rect(10, 40, 90, 40, "#DDB87A"),  # building drawn later, over the label
+        _rect(10, 40, 90, 40, "#DDB87A"),  # building drawn later, over the caption
         _rect(180, 180, 60, 40, "url(#garden-stipple)"),  # garden drawn later, over the tub
     )
     occ = pa.occluded_foreground(pa.parse_svg(svg))
-    kinds = {(o.kind, o.text) for o in occ}
-    assert ("label", "buried") in kinds and ("tub", "") in kinds
+    assert [o.kind for o in occ] == ["tub"], "the tub is buried; the caption is the placer's, not a check's (feature 286)"
+
+
+def test_occlusion_flags_a_well_under_a_later_feature() -> None:
+    svg = _svg(_rect(0, 0, 400, 400, COURT), _rect(100, 100, 22, 22, pa.WELL_FILL), _rect(90, 90, 60, 60, "url(#cart-gravel)"))
+    assert "well" in [o.kind for o in pa.occluded_foreground(pa.parse_svg(svg))]
 
 
 def test_occlusion_ignores_feature_drawn_before_or_barely_touching() -> None:
     svg = _svg(
         _rect(0, 0, 400, 400, COURT),
-        _rect(10, 40, 90, 40, "#DDB87A"),  # building BEFORE the label -> label on top, fine
-        _text(20, 60, "ontop", 'font-size="12"'),
-        _text(300, 60, "clear", 'font-size="12"'),  # not over anything
-        _rect(392, 40, 40, 40, "#DDB87A"),  # later, but only grazes 'clear' by <min_px
+        _rect(10, 40, 90, 40, "#DDB87A"),  # building BEFORE the tub -> tub on top, fine
+        _tubgroup('<circle cx="50" cy="60" r="5"/>'),
+        _tubgroup('<circle cx="390" cy="60" r="5"/>'),  # not over anything...
+        _rect(394, 40, 40, 40, "#DDB87A"),  # ...but grazed by a later one by < min_px
     )
     assert pa.occluded_foreground(pa.parse_svg(svg)) == []
-
-
-def test_orphan_group_label_far_flagged_near_ok_and_no_glyphs_skipped() -> None:
-    far = _svg(_rect(0, 0, 400, 400, COURT), _text(20, 20, "fire-water tubs"), _tubgroup('<circle cx="300" cy="300" r="5"/>'))
-    assert pa.orphan_group_labels(pa.parse_svg(far))[0].text == "fire-water tubs"
-    near = _svg(_rect(0, 0, 400, 400, COURT), _text(20, 20, "fire-water tubs"), _tubgroup('<circle cx="40" cy="30" r="5"/>'))
-    assert pa.orphan_group_labels(pa.parse_svg(near)) == []
-    noglyph = _svg(_rect(0, 0, 400, 400, COURT), _text(20, 20, "fire-water tubs"))  # no tub group -> can't judge
-    assert pa.orphan_group_labels(pa.parse_svg(noglyph)) == []
-    other = _svg(_rect(0, 0, 400, 400, COURT), _text(20, 20, "kitchen"))  # not a group label
-    assert pa.orphan_group_labels(pa.parse_svg(other)) == []
 
 
 def test_gate_openings_finds_gaps_both_axes() -> None:
@@ -471,39 +463,28 @@ def test_notice_board_far_from_gate_flagged() -> None:
     svg = _svg(
         _rect(0, 0, 400, 400, COURT),
         _wallgroup((0, 400, 180, 400), (220, 400, 400, 400)),  # gate opening at (200,400)
-        _text(50, 60, "notice board"),  # far up in the NW, far from the south gate
+        _board(50, 60),  # far up in the NW, far from the south gate
     )
     assert pa.notice_board_adrift(pa.parse_svg(svg))[0].gap_ft > pa.NOTICE_BOARD_MAX_FT
 
 
 def test_notice_board_near_gate_and_no_wall_and_no_board() -> None:
-    near = _svg(_rect(0, 0, 400, 400, COURT), _wallgroup((0, 400, 180, 400), (220, 400, 400, 400)), _text(200, 395, "notice board", 'text-anchor="middle"'))
+    near = _svg(_rect(0, 0, 400, 400, COURT), _wallgroup((0, 400, 180, 400), (220, 400, 400, 400)), _board(194, 390))
     assert pa.notice_board_adrift(pa.parse_svg(near)) == []
-    nowall = _svg(_rect(0, 0, 400, 400, COURT), _text(50, 60, "notice board"))  # no gate openings at all
+    nowall = _svg(_rect(0, 0, 400, 400, COURT), _board(50, 60))  # no gate openings at all
     assert pa.notice_board_adrift(pa.parse_svg(nowall)) == []
-    noboard = _svg(_rect(0, 0, 400, 400, COURT), _wallgroup((0, 400, 180, 400), (220, 400, 400, 400)), _text(50, 60, "well"))
+    noboard = _svg(_rect(0, 0, 400, 400, COURT), _wallgroup((0, 400, 180, 400), (220, 400, 400, 400)), _rect(50, 60, 12, 4, "#8C6F3E"))
     assert pa.notice_board_adrift(pa.parse_svg(noboard)) == []
 
 
-def test_dark_on_dark_over_rect_and_wall_with_nudge() -> None:
-    over_rect = _svg(_rect(0, 0, 400, 400, COURT), _rect(80, 40, 60, 40, "#2D2A24"), _text(90, 60, "dim", 'font-size="12" fill="#3A2E1C"'))
-    hit = pa.dark_on_dark_labels(pa.parse_svg(over_rect))
-    assert hit and hit[0].fixable and (hit[0].nudge_dx_ft or hit[0].nudge_dy_ft)
-    over_wall = _svg(_rect(0, 0, 400, 400, COURT), _wallgroup((100, 0, 100, 400)), _text(80, 60, "onwall", 'font-size="12" fill="#3A2E1C"'))
-    assert pa.dark_on_dark_labels(pa.parse_svg(over_wall))
-
-
-def test_dark_on_dark_skips_light_labels_and_clear_labels() -> None:
-    light = _svg(_rect(0, 0, 400, 400, COURT), _rect(80, 40, 60, 40, "#2D2A24"), _text(90, 60, "pale", 'font-size="12" fill="#FFFAE6"'))
-    assert pa.dark_on_dark_labels(pa.parse_svg(light)) == []
-    clear = _svg(_rect(0, 0, 400, 400, COURT), _rect(300, 300, 40, 40, "#2D2A24"), _text(20, 60, "away", 'font-size="12" fill="#3A2E1C"'))
-    assert pa.dark_on_dark_labels(pa.parse_svg(clear)) == []
-
-
-def test_dark_on_dark_unfixable_when_dark_everywhere() -> None:
-    boxed = _svg(_rect(0, 0, 400, 400, COURT), _rect(0, 0, 300, 300, "#2D2A24"), _text(120, 120, "trapped", 'font-size="12" fill="#3A2E1C"'))
-    hit = pa.dark_on_dark_labels(pa.parse_svg(boxed))
-    assert hit and not hit[0].fixable and hit[0].nudge_dx_ft == 0.0 and hit[0].nudge_dy_ft == 0.0
+def test_a_notice_board_is_its_drawn_board_never_its_caption() -> None:
+    """Feature 286: a caption is placed by the pipeline, so where a `notice board` caption stands says nothing about the
+    board. A board at the gate with its caption far off passes; a caption alone, with no tagged board, is no board."""
+    wall = _wallgroup((0, 400, 180, 400), (220, 400, 400, 400))
+    at_gate = _svg(_rect(0, 0, 400, 400, COURT), wall, _board(194, 390), _text(50, 60, "notice board"))
+    assert pa.notice_board_adrift(pa.parse_svg(at_gate)) == []
+    caption_only = _svg(_rect(0, 0, 400, 400, COURT), wall, _text(50, 60, "notice board"))
+    assert pa.notice_board_adrift(pa.parse_svg(caption_only)) == []
 
 
 def test_format_report_layer_sections() -> None:
@@ -513,49 +494,35 @@ def test_format_report_layer_sections() -> None:
         pa.parse_svg(
             _svg(
                 _rect(0, 0, 400, 400, COURT),
-                _text(20, 60, "buried", 'font-size="12"'),
-                _rect(10, 40, 90, 40, "#DDB87A"),
-                _text(20, 20, "fire-water tubs"),
-                _tubgroup('<circle cx="300" cy="300" r="5"/>'),
+                _tubgroup('<circle cx="30" cy="60" r="5"/>'),
+                _rect(10, 40, 90, 40, "#DDB87A"),  # drawn over the tub
                 _wallgroup((0, 400, 180, 400), (220, 400, 400, 400)),
-                _text(50, 90, "notice board"),
-                _rect(60, 300, 60, 40, "#2D2A24"),
-                _text(70, 320, "dim", 'fill="#3A2E1C"'),
+                _board(50, 90),
             )
         ),
         tier="magistracies",
     )
-    for token in ("OCCLUDED_FOREGROUND:", "ORPHAN_GROUP_LABELS:", "NOTICE_BOARD_ADRIFT:", "DARK_ON_DARK_LABELS:"):
+    for token in ("OCCLUDED_FOREGROUND: tub at", "NOTICE_BOARD_ADRIFT:"):
         assert token in dirty, token
+    for gone in ("ORPHAN_GROUP_LABELS", "DARK_ON_DARK_LABELS", "OVERLAPPING_LABELS", "orphan_group_labels", "dark_on_dark_labels", "overlapping_labels"):
+        assert gone not in dirty, f"{gone}: no check of where a caption stands (feature 286)"
 
 
 def test_layout_checks_fire_on_frozen_ochiba_fixture() -> None:
     with open(os.path.join(_FIX, "ochiba-layout-red.svg")) as fh:
         plan = pa.parse_svg(fh.read())
-    occ = {(o.kind, o.text) for o in pa.occluded_foreground(plan)}
-    assert ("label", "RESIDENCE") in occ  # the buried 'R'
-    assert ("tub", "") in occ  # the buried guest-room tub
-    assert any("fire-water" in o.text for o in pa.orphan_group_labels(plan))
+    occ = [o.kind for o in pa.occluded_foreground(plan)]
+    assert "tub" in occ  # the buried guest-room tub
     assert pa.notice_board_adrift(plan)  # notice board far from the gate
 
 
 def test_layout_checks_fire_on_frozen_hayakawa_fixture() -> None:
     with open(os.path.join(_FIX, "hayakawa-layout-red.svg")) as fh:
         plan = pa.parse_svg(fh.read())
-    assert pa.dark_on_dark_labels(plan)  # river door / guest-wing annotation over the wall
     assert pa.notice_board_adrift(plan)
-    assert pa.occluded_foreground(plan)  # 'service gate' clipped
 
 
-# --- label-clash + door-on-a-wall checks (round 2 of the rendering checks) ---
-
-
-def test_overlapping_labels_flags_smear_and_ignores_separated() -> None:
-    clash = _svg(_rect(0, 0, 300, 300, COURT), _text(50, 50, "alpha", 'font-size="12"'), _text(58, 52, "beta", 'font-size="12"'))
-    hit = pa.overlapping_labels(pa.parse_svg(clash))
-    assert hit and {hit[0].a, hit[0].b} == {"alpha", "beta"}
-    apart = _svg(_rect(0, 0, 300, 300, COURT), _text(20, 50, "alpha", 'font-size="12"'), _text(220, 50, "beta", 'font-size="12"'))
-    assert pa.overlapping_labels(pa.parse_svg(apart)) == []
+# --- door-on-a-wall check (round 2 of the rendering checks) ---
 
 
 def test_floating_door_flagged_but_flush_deep_and_straddling_pass() -> None:
@@ -570,16 +537,14 @@ def test_floating_door_flagged_but_flush_deep_and_straddling_pass() -> None:
     assert pa.floating_doors(pa.parse_svg(straddle)) == []
 
 
-def test_format_report_clash_and_door_sections() -> None:
+def test_format_report_door_section() -> None:
     svg = _svg(
         _rect(0, 0, 300, 300, COURT),
         _rect(0, 0, 100, 100, "#DDB87A"),
         _rect(90, 40, 7, 14, "#4A3318"),  # floating door
-        _text(50, 50, "alpha", 'font-size="12"'),
-        _text(58, 52, "beta", 'font-size="12"'),  # clashes with alpha
     )
     report = pa.format_report(pa.parse_svg(svg))
-    assert "OVERLAPPING_LABELS:" in report and "FLOATING_DOORS:" in report
+    assert "FLOATING_DOORS:" in report
 
 
 def test_frozen_fixtures_show_the_floating_kura_door() -> None:
@@ -623,11 +588,10 @@ def test_occlusion_ignores_a_shape_drawn_inside_its_own_parent() -> None:
 
 
 def test_occlusion_fires_on_the_frozen_ubame_red_fixture() -> None:
-    """Red fixture: the note box painting over the bounty bill, and the cart-yard gravel painting
-    over the privy beneath it (both real, both shipped, both invisible to the narrow check)."""
+    """Red fixture: the cart-yard gravel painting over the privy beneath it (real, shipped, and invisible to the narrow
+    check). Its other defect - a note box over the bounty bill's caption - is the placer's since feature 286."""
     with open(os.path.join(_FIX, "ubame-occlusion-red.svg")) as fh:
         occ = pa.occluded_foreground(pa.parse_svg(fh.read()))
-    assert any(o.kind == "label" and "100 koku" in o.text for o in occ)
     assert any(o.kind == "feature" for o in occ)
 
 

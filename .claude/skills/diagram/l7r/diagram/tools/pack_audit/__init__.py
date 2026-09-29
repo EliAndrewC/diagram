@@ -32,16 +32,9 @@ Usage:  python3 -m l7r.diagram.tools.pack_audit pool/<subject>.svg [more.svg ...
 
 from __future__ import annotations
 
-from .checks import DARK_MIN_OVERLAP_PX as DARK_MIN_OVERLAP_PX
 from .checks import DOOR_FLUSH_TOL_PX as DOOR_FLUSH_TOL_PX
 from .checks import DOOR_NEAR_PX as DOOR_NEAR_PX
-from .checks import GROUP_LABEL_GLYPHS as GROUP_LABEL_GLYPHS
-from .checks import GROUP_LABEL_MAX_FT as GROUP_LABEL_MAX_FT
-from .checks import LABEL_DARK_LUMA as LABEL_DARK_LUMA
-from .checks import LABEL_OVERLAP_MIN_PX as LABEL_OVERLAP_MIN_PX
 from .checks import NOTICE_BOARD_MAX_FT as NOTICE_BOARD_MAX_FT
-from .checks import NUDGE_MAX_PX as NUDGE_MAX_PX
-from .checks import NUDGE_STEP_PX as NUDGE_STEP_PX
 from .checks import OCCLUSION_MIN_PX as OCCLUSION_MIN_PX
 from .checks import OPENING_MAX_PX as OPENING_MAX_PX
 from .checks import PASSAGE_CLEAR_MIN_PX as PASSAGE_CLEAR_MIN_PX
@@ -50,13 +43,10 @@ from .checks import TUB_BLDG_MIN_PX as TUB_BLDG_MIN_PX
 from .checks import TUB_MAX_GAP_FT as TUB_MAX_GAP_FT
 from .checks import TUB_WELL_MIN_PX as TUB_WELL_MIN_PX
 from .checks import WALL_OVERLAP_MIN_PX as WALL_OVERLAP_MIN_PX
-from .checks import DarkOnDark as DarkOnDark
 from .checks import FloatingDoor as FloatingDoor
 from .checks import Gap as Gap
-from .checks import LabelClash as LabelClash
 from .checks import MisplacedBoard as MisplacedBoard
 from .checks import Occluded as Occluded
-from .checks import OrphanLabel as OrphanLabel
 from .checks import PassageBlocker as PassageBlocker
 from .checks import StructureOnWall as StructureOnWall
 from .checks import TubAdrift as TubAdrift
@@ -67,15 +57,12 @@ from .checks import _gate_openings as _gate_openings
 from .checks import _overlap_px as _overlap_px
 from .checks import _point_rect_dist as _point_rect_dist
 from .checks import aligned_gaps as aligned_gaps
-from .checks import dark_on_dark_labels as dark_on_dark_labels
 from .checks import fire_water_adrift as fire_water_adrift
 from .checks import floating_doors as floating_doors
 from .checks import gap_tag as gap_tag
 from .checks import main_gate_passage_ft as main_gate_passage_ft
 from .checks import notice_board_adrift as notice_board_adrift
 from .checks import occluded_foreground as occluded_foreground
-from .checks import orphan_group_labels as orphan_group_labels
-from .checks import overlapping_labels as overlapping_labels
 from .checks import passage_blockers as passage_blockers
 from .checks import structures_on_walls as structures_on_walls
 from .checks import tubs_in_buildings as tubs_in_buildings
@@ -107,7 +94,6 @@ from .parse import FURNITURE_MAX_AREA_PX as FURNITURE_MAX_AREA_PX
 from .parse import INTERIOR_FILL as INTERIOR_FILL
 from .parse import KURA_FILLS as KURA_FILLS
 from .parse import MIN_BLDG_AREA_PX as MIN_BLDG_AREA_PX
-from .parse import MIN_DARK_AREA_PX as MIN_DARK_AREA_PX
 from .parse import OPEN_PATTERNS as OPEN_PATTERNS
 from .parse import STRUCTURE_FILLS as STRUCTURE_FILLS
 from .parse import TREE_FILL as TREE_FILL
@@ -119,7 +105,6 @@ from .parse import Label as Label
 from .parse import ParsedPlan as ParsedPlan
 from .parse import Rect as Rect
 from .parse import _bold_char_w as _bold_char_w
-from .parse import _luma as _luma
 from .parse import parse_svg as parse_svg
 from .registry import CHECKS as CHECKS
 from .registry import Check as Check

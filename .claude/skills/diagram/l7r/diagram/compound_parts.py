@@ -492,7 +492,7 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
             rect(tx - 1.27, ty - 1.27, 2.54, 2.54, "none", "none", 0)  # registers the tub; its drawn circle follows
         # the group's one caption goes on the tub with the most open ground around it: the first tub can stand hemmed
         # in (the residence's, between the wall, the kitchen and their corridor), and a caption pushed off it is
-        # drawn far from any tub it names (pack audit `orphan_group_labels`)
+        # drawn far from any tub it names - a group's name stands beside one of the glyphs it names
         tx, ty = _roomiest(tubs, taken)
         caption("point", tx - 1.27, ty - 1.27, 2.54, 2.54, "fire-water tubs", 7, True, "#3A5060", "fire-water tubs")
     gl, _gr = _gate_interval(env)

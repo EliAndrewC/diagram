@@ -239,3 +239,86 @@ def test_geometry_edges() -> None:
     assert poly_seg_gap(sq, (-5.0, 5.0), (15.0, 5.0)) == 0.0
     assert poly_seg_gap(sq, (20.0, 0.0), (20.0, 10.0)) == pytest.approx(10.0)
     assert segments_cross((0.0, 0.0), (10.0, 0.0), (5.0, 0.0), (5.0, 5.0)), "touching counts"
+
+
+def test_a_name_over_a_smaller_gloss_is_measured_line_by_line() -> None:
+    """Feature 286: measured at the head's size, a 12 px name over two 7 px lines was too tall for any seat."""
+    from l7r.diagram.labels.placer import sized_half
+
+    head_only = sized_half(["bath", "xxxxx", "xxxxx"], 12.0)
+    sized = sized_half(["bath", "xxxxx", "xxxxx"], 12.0, line_sizes=[12.0, 7.0, 7.0])
+    assert sized[0] == head_only[0] and sized[1] < head_only[1]
+    assert sized_half(["bath"], 12.0, line_sizes=None) == sized_half(["bath"], 12.0)
+
+
+def test_the_fallback_finds_a_free_seat_the_standard_misses() -> None:
+    """Feature 286: when no ranked seat is free the fallback searches on - round a point, sliding along its sides; inside
+    an area, over its whole extent - before it settles for the least cost."""
+    board = Subject("point", tuple(rect(500.0, 500.0, 11.0, 7.5)))
+    # every ranked seat covered, one gap left along the top edge, off the ranked positions
+    walls = [Obstacle(tuple(q), WEIGHT_OBSTACLE) for q in _collar(rect(500.0, 500.0, 11.0, 7.5), 4.5)]
+    cover = [rect(500.0, 470.0, 200.0, 12.0)]  # the band above, but a notch cut out left of center
+    notch = ObstacleIndex(walls + [Obstacle(tuple(rect(440.0, 485.0, 30.0, 6.0)), WEIGHT_OBSTACLE), Obstacle(tuple(rect(560.0, 485.0, 30.0, 6.0)), WEIGHT_OBSTACLE)])
+    p = place("notice board", SIZE, board, notch)
+    assert p.cost == 0.0 or p.cost <= min(Obstacle(tuple(cover[0]), WEIGHT_OBSTACLE).weight, WEIGHT_OBSTACLE)
+    # a large area whose only free ground lies far from its centroid, beyond the standard's nearest 400 seats
+    court = Subject("area", tuple(rect(1000.0, 1000.0, 800.0, 200.0)))  # x 200-1800
+    busy = ObstacleIndex([Obstacle(tuple(rect(880.0, 1000.0, 720.0, 260.0)), WEIGHT_OBSTACLE)])  # x 160-1600, past the court's edges
+    q = place("forecourt", SIZE, court, busy)
+    assert q.cost == 0.0 and q.x > 1600.0, "found at the court's free east end"
+
+
+def test_the_least_cost_seat_is_nudged_into_a_band_between_grid_points() -> None:
+    """Feature 286: a free band exactly as tall as the caption lies between any grid's points; the nudge finds it."""
+    from l7r.diagram.labels.placer import _Cand, nudge
+
+    sub = Subject("area", tuple(rect(0.0, 0.0, 100.0, 100.0)))
+    index = ObstacleIndex([Obstacle(tuple(rect(0.0, -20.0, 120.0, 10.0)), WEIGHT_OBSTACLE)])  # y -30 to -10, past the area's sides
+    c = _Cand(0, 0, "inside", (0.0, -8.0), 0.0, ("x",), (4.0, 3.0), 9.0)
+    block = rect(0.0, -8.0, 4.0, 3.0)
+    cost, moved, _ = nudge(1000.0, c, block, sub, index, 0.5, list(sub.poly), "x", None, None)  # a real clearance: an overlap reads a gap of 0
+    assert cost == 0.0 and moved.center[1] > -8.0
+
+
+def test_the_index_skips_by_boxes_and_measures_level_rectangles_by_them() -> None:
+    """Feature 286: the outline test was nine tenths of placing a hand sheet's captions. An obstacle whose box is clear
+    of the block's is clear; two level rectangles are their boxes. Both agree with the outline test they stand for."""
+    from l7r.diagram.labels.geom import poly_gap
+    from l7r.diagram.labels.obstacles import level_rect
+
+    wall = Obstacle(tuple(rect(100.0, 0.0, 5.0, 50.0)), 1000.0)
+    turned = Obstacle(tuple(rect(0.0, 100.0, 20.0, 5.0, 30.0)), 1000.0)
+    index = ObstacleIndex([wall, turned])
+    for x in (80.0, 90.0, 92.5, 93.0, 96.0, 140.0):
+        block = rect(x, 0.0, 4.0, 3.0)
+        want = sum(o.weight for o in (wall, turned) if poly_gap(block, list(o.poly)) < 3.0 - 1e-6)
+        assert index.cost(block, 3.0) == want, x
+    near_turned = rect(0.0, 90.0, 4.0, 3.0)
+    assert index.cost(near_turned, 3.0) == (1000.0 if poly_gap(near_turned, list(turned.poly)) < 3.0 else 0.0)
+    assert level_rect(rect(0.0, 0.0, 4.0, 3.0)) and not level_rect(turned.poly) and not level_rect(((0.0, 0.0), (1.0, 1.0), (2.0, 0.0)))
+
+
+def test_an_obstacle_keeps_its_own_gap_when_larger() -> None:
+    """Feature 286: a placed caption keeps its own clearance from the next one - a small name 4 px from a large one was
+    clear by its own 3 px gap and inside the large one's 5.5."""
+    far = rect(200.0, 0.0, 10.0, 5.0)
+    big = Obstacle(tuple(rect(0.0, 0.0, 20.0, 5.0)), 1000.0, keep=5.5)
+    block = rect(28.0, 0.0, 4.0, 3.0)  # 4 px from the big one's right edge
+    assert ObstacleIndex([big]).cost(block, 3.0) == 1000.0, "inside its keep"
+    assert ObstacleIndex([Obstacle(big.poly, 1000.0)]).cost(block, 3.0) == 0.0, "clear by the caption's own gap"
+    assert ObstacleIndex([big, Obstacle(tuple(far), 1000.0)]).cost(rect(31.0, 0.0, 4.0, 3.0), 3.0) == 0.0, "past both"
+
+
+def test_the_nudge_stays_in_the_frame_and_a_line_has_no_fallback() -> None:
+    """Feature 286: a nudge never moves a caption off the picture; a line subject's stations already walk its length, so
+    the fallback adds no seat for it."""
+    from l7r.diagram.labels.placer import _Cand, _extended_cands, nudge
+
+    sub = Subject("point", tuple(rect(0.0, 0.0, 5.0, 5.0)))
+    index = ObstacleIndex([Obstacle(tuple(rect(20.0, 0.0, 6.0, 6.0)), WEIGHT_OBSTACLE)])
+    c = _Cand(0, 0, "right", (20.0, 0.0), 0.0, ("x",), (4.0, 3.0), 9.0)
+    frame = (16.0, -3.0, 24.0, 3.0)  # exactly the block: every move leaves the picture
+    cost, moved, _ = nudge(1000.0, c, rect(20.0, 0.0, 4.0, 3.0), sub, index, 0.5, list(sub.poly), "x", frame, None)
+    assert cost == 1000.0 and moved.center == (20.0, 0.0)
+    line = Subject("line", ((0.0, 0.0), (100.0, 0.0)), half_width=2.0)
+    assert list(_extended_cands("lane", 9.0, line)) == []

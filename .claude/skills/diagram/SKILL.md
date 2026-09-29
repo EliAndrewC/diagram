@@ -182,6 +182,9 @@ Mode A diagrams are cropped tight - set the `viewBox` to hug the drawn content w
 
 ### Label sizes
 
+A Mode A sheet DECLARES its captions and the render places them (feature 286): a caption's `<text>` carries its words and
+face and no position, inside the tagged group it names or with `data-names`; `buildings.md` has the form. The sizes:
+
 - Building names: bold, ~13 px
 - Sub-labels under building name: italic, ~10-11 px
 - Annotations: italic, ~9 px
