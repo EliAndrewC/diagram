@@ -191,3 +191,14 @@ def test_the_pass_cuts_a_free_end_stub_back_to_its_junction() -> None:
     assert B.cut_past_the_junction(s) == 1
     assert s.M["lanes"][1]["pts"] == [list(q) for q in spur[1:]]
     assert B.cut_past_the_junction(s) == 0, "and a second pass finds nothing"
+
+
+def test_a_run_on_crosses_no_dry_plot() -> None:
+    """Feature 291, cohort seed 17: a way carried to the paddy ran straight across a buckwheat plot between - the run-on
+    aims at the paddy alone, so the plots between were never asked. The tread as the matrix reads it, square-ended."""
+    plot = {"dry_plots": [{"poly": [[340.0, 90.0], [360.0, 90.0], [360.0, 110.0], [340.0, 110.0]]}]}
+    assert not B.RunOnBlocks(_stub(**plot)).clear((300.0, 100.0), (396.0, 100.0), 3.0), "straight through the plot"
+    beside = {"dry_plots": [{"poly": [[340.0, 101.0], [360.0, 101.0], [360.0, 120.0], [340.0, 120.0]]}]}
+    assert not B.RunOnBlocks(_stub(**beside)).clear((300.0, 100.0), (396.0, 100.0), 3.0), "the tread's edge on the plot"
+    clear = {"dry_plots": [{"poly": [[340.0, 102.0], [360.0, 102.0], [360.0, 120.0], [340.0, 120.0]]}]}
+    assert B.RunOnBlocks(_stub(**clear)).clear((300.0, 100.0), (396.0, 100.0), 3.0), "on the baulk beside it"

@@ -143,12 +143,10 @@ def test_the_form_roll_is_deterministic_and_covers_all_three_forms() -> None:
         again = hg.plan_site(hg.HamletSpec(name=f"Roll-{seed}", seed=seed, households=12))
         assert plan.settlement_form == again.settlement_form, f"seed {seed} rolled two different forms"
         forms[plan.settlement_form] = forms.get(plan.settlement_form, 0) + 1
-    # PINNED TO NUCLEATED for now - the knob is live and every other part of it is tested, but the
-    # per-house grove path the other two forms need has four unfixed defects (see SETTLEMENT_FORMS
-    # in hamletgen/consts.py for the measurements and the sketch). This asserts the CURRENT contract
-    # rather than the intended one, so that turning the forms back on fails here loudly and the test
-    # is updated deliberately instead of drifting.
-    assert set(forms) == {"nucleated"}, f"forms are pinned to nucleated; got {forms}"
+    # ALL THREE FORMS ROLL AGAIN (feature 291): the per-house grove's four defects fixed at the seat, the forms back at
+    # feature 126's 5 : 3 : 2. Every form must come up within these 48 seeds, and nucleated stays the commonest.
+    assert set(forms) == {"nucleated", "dispersed", "linear"}, f"every form rolls; got {forms}"
+    assert forms["nucleated"] > max(forms["dispersed"], forms["linear"]), forms
 
 
 def test_an_explicit_form_on_the_spec_beats_the_roll() -> None:

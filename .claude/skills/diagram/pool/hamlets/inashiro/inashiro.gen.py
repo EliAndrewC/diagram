@@ -20,5 +20,7 @@ SKILL = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))  # <skill>/pool/
 sys.path.insert(0, SKILL)
 from l7r.diagram.hamletgen import HamletSpec, generate  # noqa: E402
 
-report = generate(HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond", fixtures_min={"shrine": 1}), out_base=os.path.join(HERE, "inashiro"))
+# NUCLEATED BY THE GM'S CHOICE (feature 291, 2026-09-29): with the dispersed and linear forms back in the roll, seed 4
+# rolls linear; the GM kept the reference hamlet as reviewed and let the other pool hamlets take their rolls.
+report = generate(HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond", settlement_form="nucleated", fixtures_min={"shrine": 1}), out_base=os.path.join(HERE, "inashiro"))
 print(report.line())

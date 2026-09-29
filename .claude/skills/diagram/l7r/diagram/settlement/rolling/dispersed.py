@@ -39,7 +39,20 @@ def _edges(r: Rect) -> tuple[float, float, float, float]:
     return r[0] - r[2] / 2, r[1] - r[3] / 2, r[0] + r[2] / 2, r[1] + r[3] / 2
 
 
-def canonical_farmstead(cw: float, ch: float, gap: float, garden: tuple[float, float], yard: tuple[float, float], *, sides: int, garden_by_yard: bool, thin: float, sun_east: float, way_in: float, yard_sun: float = YARD_SUN_STRIP) -> dict[str, Any]:
+def canonical_farmstead(
+    cw: float,
+    ch: float,
+    gap: float,
+    garden: tuple[float, float],
+    yard: tuple[float, float],
+    *,
+    sides: int,
+    garden_by_yard: bool,
+    thin: float,
+    sun_east: float,
+    way_in: float,
+    yard_sun: float = YARD_SUN_STRIP,
+) -> dict[str, Any]:
     """The farmstead in the canonical frame, about a house of `cw` x `ch` centered on the origin: `yard`, `garden`, and
     `groves` as (rect, face, "deep" | "thin") - the deep north and west bands; with three sides a thin east band; with four
     a thin south band too, broken at the yard's middle for the way in. The corners close: the north and south bands run
@@ -81,7 +94,9 @@ def _carried(r: Rect, t: Turn, hx: float, hy: float) -> Rect:
     return (hx + x, hy + y, w, h)
 
 
-def dispersed_layout(hx: float, hy: float, hw: float, hh: float, gap: float, garden: tuple[float, float], yard: tuple[float, float], *, sides: int, turn: Turn, thin: float, sun_east: float, way_in: float) -> dict[str, Any]:
+def dispersed_layout(
+    hx: float, hy: float, hw: float, hh: float, gap: float, garden: tuple[float, float], yard: tuple[float, float], *, sides: int, turn: Turn, thin: float, sun_east: float, way_in: float
+) -> dict[str, Any]:
     """The dispersed farmstead about a house at (hx, hy) of `hw` x `hh` (as drawn), carried from the canonical frame by
     `turn`: `house`, `yard`, `garden`, `gardens` (one bed), `groves` (rects), `grove_faces` ((face, depth) beside each,
     the face as turned) and `_frame` (the box round the whole grove and ground, unraked). In every frame but the unchanged

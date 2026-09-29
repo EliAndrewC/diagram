@@ -30,7 +30,7 @@ from .content import content
 from .extents import Extent, _BoxGrid, _file_extent, _refused
 from .glossary import CASED, GLOSSARY
 from .notes import EMPTY, MapNotes, read_map_notes
-from .place import LANE, WINDBREAK, lane_default, place_card, windbreak_default
+from .place import HOMESTEAD_GROVE, LANE, WINDBREAK, homestead_grove_default, lane_default, place_card, windbreak_default
 from .sources import research_questions
 from .tags import ClsTag, Planted, Split
 
@@ -902,6 +902,9 @@ def render_page(
     # THE WINDBREAK'S SIDE AND ITS REASON (feature 261), on the same terms: the notes' own entry wins.
     if WINDBREAK in data and not data[WINDBREAK]["on_this_map"]:
         data[WINDBREAK]["on_this_map"] = windbreak_default(meta or {})
+    # ...AND THE FARMSTEAD GROVE'S SIDES AND WHY (feature 291, FR-009): the settlement's own roll, read from the map.
+    if HOMESTEAD_GROVE in data and not data[HOMESTEAD_GROVE]["on_this_map"]:
+        data[HOMESTEAD_GROVE]["on_this_map"] = homestead_grove_default(meta or {})
     blob = json.dumps({"classes": data, "glossary": glossary_for(data), "raster": raster_payload}, ensure_ascii=False).replace("</", "<\\/")
     title = html.escape(name)
     # NO HEADER ON THE PAGE (GM 2026-08-28: "we can get rid of the entire header") - the map already

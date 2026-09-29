@@ -570,14 +570,17 @@ def _rescue(form):  # type: ignore[no-untyped-def]
 
 @pytest.mark.parametrize("form", ["nucleated", "dispersed"])
 @pytest.mark.parametrize("scenario", ["rescue", "open"])
-def test_the_free_ground_changes_no_seat(form: str, scenario: str, monkeypatch: pytest.MonkeyPatch) -> None:
-    """The same houses, at the same seats, with the index asked first and with it switched off entirely."""
+@pytest.mark.parametrize("sides", [2, 4])
+def test_the_free_ground_changes_no_seat(form: str, scenario: str, sides: int, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The same houses, at the same seats, with the index asked first and with it switched off entirely - for a farm
+    grove on two sides and on four (feature 291: a dispersed bundle's grove takes its settlement's rolled sides)."""
     from l7r.diagram.hamletgen.homesteads import boundary, stage_homesteads
     from l7r.diagram.settlement import Settlement
 
     def roll():  # type: ignore[no-untyped-def]
         s, plan = _rescue(form) if scenario == "rescue" else _toy_hamlet(15)
         s._nucleated = form == "nucleated"
+        s.M["meta"]["grove_sides"] = sides
         stage_homesteads(s, plan)
         return _seats(s)
 
@@ -586,7 +589,10 @@ def test_the_free_ground_changes_no_seat(form: str, scenario: str, monkeypatch: 
     monkeypatch.setattr(Settlement, "_seat_refused", lambda self, x, y, hw, hh: False)
     monkeypatch.setattr(Settlement, "_bundle_refused", lambda self, geom: False)
     without = roll()
-    assert with_index == without and len(with_index) >= 10
+    # the floor is what the scenario seats, measured 2026-09-29: a ring takes more ground than a two-sided grove, so the
+    # 520 ft rescue strip holds 6 dispersed farms with four-sided groves where it holds 10 with two
+    floor = 6 if (form, scenario, sides) == ("dispersed", "rescue", 4) else 10
+    assert with_index == without and len(with_index) >= floor
 
 
 def test_a_side_is_not_dropped_for_ground_the_loop_never_judges() -> None:

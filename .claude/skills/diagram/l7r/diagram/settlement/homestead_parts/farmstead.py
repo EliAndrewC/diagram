@@ -13,7 +13,7 @@ class FarmsteadMixin:
         Arms go into `grove_rects` (NOT `placed`) so a neighbor's grove may MERGE with it and the wells
         still avoid it. Drawn in the farmsteads() second pass, after every house/yard/garden is set."""
         for cx, cy, w, h, face, depth in arms:  # a thin band is lesser trees (feature 291; `_farmsteads_bundle`)
-            self._draw_grove(cx, cy, w, h, face, mix="windbreak" if depth == "deep" else "dooryard")
+            self._draw_grove(cx, cy, w, h, face, mix="windbreak" if depth == "deep" else "dooryard", cls="homestead grove")
             self.M["groves"].append({"x": round(cx, 1), "y": round(cy, 1), "w": w, "h": h, "rot": 0, "of": [hx, hy], "face": list(face), "depth": depth})
             self.grove_rects.append((cx, cy, w, h))
 

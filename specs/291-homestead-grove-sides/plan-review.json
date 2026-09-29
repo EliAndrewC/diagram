@@ -1,6 +1,6 @@
 {
  "feature": "291-homestead-grove-sides",
- "plan_sha256": "fb8e13bf75b2e83668398ea3c618b34dbbf45b2c8928eaa5572ae1a24fa494f3",
+ "plan_sha256": "d0a492a1c3dac8b6eef2a38471a924dae2893a64efcc975d8cf382af926b53da",
  "reviewed": "2026-09-29",
  "declared": "spec-fidelity",
  "decisions": [
@@ -18,9 +18,9 @@
   },
   {
    "id": "D3",
-   "summary": "The dispersed bundle carried from its NW canonical frame to the map's windward key by a symmetry of the square (SE by the anti-diagonal mirror, yard W); a turned bundle lays its garden beside the yard",
+   "summary": "The dispersed bundle carried from its NW canonical frame to the map's windward key by a symmetry of the square (SE by the anti-diagonal mirror, yard W); in every frame but the identity NW one the garden is laid beside the yard",
    "class": "within",
-   "why": "Not scope creep: the bundle hard-wires N and W, so without turning it FR-007 ('two sides MUST be the windward pair') and FR-010 (groves_on_windward_side, 'on the windward side it was rolled for') cannot hold on any map declaring another wind; the XIV label is incidental. Choosing W over N for SE keeps the yard on a lee face as FR-007 requires. Moving the garden is forced by FR-010's 'leaves every garden its morning sun'. Wording fix owed (not blocking): the relocation must apply to EVERY non-identity frame; the NE east-west mirror sends the canonical east garden to the house's WEST wall, behind the house from the morning sun, and the plan's sentence names only the north-wall case."
+   "why": "Within, as round 1 ruled: without turning the bundle FR-007 and FR-010 cannot hold on a map declaring another wind, and moving the garden is forced by FR-010's morning-sun clause. The round-1 wording fix is made: the relocation now applies to every frame but NW, naming the NE mirror's west-wall case."
   },
   {
    "id": "D4",
@@ -49,10 +49,9 @@
   },
   {
    "id": "D8",
-   "summary": "_find_grove_arms (city/legacy path) plants grove_faces' deep faces 'as now' and each thin face at thin depth, fit-tested",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "'As now' is the ladder that drops an arm that does not fit (groves.py 319-336: a face with no fitting rect gets nothing), and 'fit-tested' thin faces are dropped the same way, so a city farm can plant fewer sides than its settlement rolled. That is exactly the fallback the accepted spec removed in round 1 (FR-010 'every rolled side planted, for every side count'; Decisions: 'no farm quietly loses sides for want of room'). That the path runs on no live generator is a cost argument and does not make it legitimate. Required: on this path a farm that carries a grove plants every face grove_faces names, and the farm is seated with room for the whole rolled grove (place.py's _grove_room candidate test extended to the rolled faces, as D6 does for the bundle); the pre-existing in-wall rule and grove_prevalence, which decide WHETHER a farm has a grove, stay as they are and are not the side count."
+   "summary": "City/house-first path: _grove_room asks room for the minimal footprint of every rolled face; _solve_homestead seats a grove farm only with that room (the yard-and-garden-only fallback removed); _find_grove_arms plants every face grove_faces names; whether a farm has a grove stays the in-wall rule's and grove_prevalence's",
+   "class": "within",
+   "why": "Round 1's NOT LEGITIMATE finding is cured: no rolled side is dropped for want of room (FR-010, spec Decisions 'no farm quietly loses sides'), the seat is conditioned on room for the whole rolled grove as D6 does for the bundle, and the grove-or-not decision is untouched as required. An unseated farm follows D6's already-accepted rule. No longer a narrowing."
   },
   {
    "id": "D9",
@@ -85,5 +84,5 @@
    "why": "Not an addition to the request: once the matrix runs in the cohort (D7), SC-005 requires every seed's checks green, and a defect found in the work is fixed under XIV. It narrows nothing."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

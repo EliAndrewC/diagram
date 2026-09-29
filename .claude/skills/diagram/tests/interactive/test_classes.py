@@ -20,6 +20,7 @@ from l7r.diagram.interactive.classes import ANNOUNCED, CLASSES, NOT_HIGHLIGHTED,
 # the spec does not name fails it too.
 SPEC_CLASSES = [
     "alder",  # feature 261: the belt's trees where it runs into the marsh
+    "homestead grove",  # feature 291: a farm's own grove, on the sides its settlement rolled
     "farmhouse",
     "storage shed",
     "byre",

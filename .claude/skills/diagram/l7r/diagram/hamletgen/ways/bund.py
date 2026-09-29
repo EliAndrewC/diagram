@@ -19,12 +19,13 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, point_in_poly, segments_cross
+from l7r.diagram.settlement import Settlement, point_in_poly, poly_gap, segments_cross
+from l7r.diagram.sitegen.geom import crop_polys
 
 from ..consts import FOOTPATH_FABRIC_GAP, LANE_CLEARANCE, WAY_END_REACH_FT, Poly, Pt
 from .checks import drawn_water_segs
 from .fabric import _crosses_fabric, _hits_a_steading, _homestead_polys
-from .geom import BUND_REACH_FT, WorkedGround, end_serves, memo_ground, steading_footprints, worked_ground
+from .geom import BUND_REACH_FT, WorkedGround, end_serves, memo_ground, steading_footprints, stroke_quad, worked_ground
 
 # The tip stops this far outside the worked ground's edge past its own half-tread, so the tread's rounded cap lies on the
 # bund line rather than on the rice (a map drawing convention; inside `BUND_REACH_FT` for every lane width drawn here).
@@ -116,6 +117,11 @@ class RunOnBlocks:
         if toe:
             self.wet.append(list(toe))
         self.fabric = [poly for poly, _own, kind in _homestead_polys(s) if kind not in ("commons", "village_groves")]
+        # THE DRY PLOTS TOO (feature 291, found by the cohort's matrix on seed 17): a run-on aims at the PADDY
+        # (`paddy_ground`, which holds no dry plot) and `run_on_target` promises only that its segment meets nothing of
+        # that set - so a way carried ~150 ft to the paddy ran straight across a buckwheat plot between, and nothing here
+        # looked. A way runs on the baulk between plots, never through the crop (`lanes_clear_of_dry_plots`).
+        self.crops = crop_polys(s)
 
     def clear(self, a: Pt, b: Pt, width: float) -> bool:
         if any(segments_cross(a, b, c, d) for c, d in self.water):
@@ -125,6 +131,8 @@ class RunOnBlocks:
                 return False
         # the new stretch alone, from a step off the end it grows from (that end may stand at its own dooryard's gap)
         start = (a[0] + (b[0] - a[0]) * min(1.0, 2.0 / max(math.dist(a, b), 1e-9)), a[1] + (b[1] - a[1]) * min(1.0, 2.0 / max(math.dist(a, b), 1e-9)))
+        if self.crops and any(poly_gap(stroke_quad(start, b, width / 2.0), c) <= 0.0 for c in self.crops):
+            return False  # the drawn tread, as the matrix reads it, on a dry plot
         return not _crosses_fabric([start, b], self.fabric, FOOTPATH_FABRIC_GAP) and not _hits_a_steading(self.s, [start, b], int(width))
 
 

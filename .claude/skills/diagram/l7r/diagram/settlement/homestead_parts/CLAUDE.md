@@ -12,6 +12,8 @@ Split from the 1,353-line `homestead_parts.py` by feature 173 (constitution Prin
 | `yards.py` (169) | the threshing yard: its size from the house's, whether it fits, where it goes, and how it is drawn |
 | `gardens.py` (110) | the kitchen garden and the farm shed it shares a corner with - dimensions, fit, and the spot search |
 | `groves.py` (252) | the homestead grove (yashikirin): which way the wind comes from, whether this house gets one, the L-belt arms, and the drawing |
+| `grove_sides.py` | how many sides a farmstead grove takes and which (feature 291): the roll tables (`GROVE_SIDES`, the flood table), `grove_faces` (deep, thin, the front) for any wind and side count, and `bundle_turn` - the square's symmetry carrying the canonical farmstead to the map's wind. A pure leaf |
+| `grove_rules.py` | the grove's rules read off a FINISHED manifest (feature 291): every rolled side planted, the deep stand windward, no garden's morning sun cut - run by `tools/cohort_audit` on every roll |
 | `stands.py` (545) | the two big stands - the household bamboo stand and `village_grove`, the settlement-scale windbreak |
 | `grove_blocks.py` | the keep-outs of ONE grove fill indexed once and asked per candidate clump (`GroveBlocks`, `Seats`; feature 218) - open it when `village_grove` refuses or accepts a seat you did not expect, or when a new keep-out joins the fill |
 | `keepouts.py` (265) | what a grove or a stand may NOT cover: corridor buffers, watercourses, canopy crowns and the urban keepouts |

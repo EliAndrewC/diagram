@@ -155,7 +155,7 @@ def _reference_ok() -> list[str]:
 
     One map, about a minute. It is the cheapest question in the loop and it gates the most expensive
     answer, which is the whole point of the tier ladder (constitution VI)."""
-    rep = hg.generate(hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond"), out_base=None, render=False)
+    rep = hg.generate(hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond", settlement_form="nucleated"), out_base=None, render=False)
     for f in rep.failures:
         print(f"  reference: {f}", flush=True)
     return list(rep.failures)

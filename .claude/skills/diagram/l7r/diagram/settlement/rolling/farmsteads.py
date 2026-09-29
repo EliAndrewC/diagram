@@ -64,7 +64,7 @@ class FarmsteadFlushMixin:
         # A THIN BAND draws as lesser trees - fruit and flowering broadleaf, no conifer (`dooryard`; Tonami's sides away
         # from the wind carried flowering trees, persimmon and fig, and hackberry and alder): the mix a GUESS (feature 291).
         for cx, cy, w, h, face, depth in arms:
-            self._draw_grove(cx, cy, w, h, face, mix="windbreak" if depth == "deep" else "dooryard")
+            self._draw_grove(cx, cy, w, h, face, mix="windbreak" if depth == "deep" else "dooryard", cls="homestead grove")
         self.M["houses"] = Indexed(
             [h for h in self.M["houses"] if h.get("on_dike")] + survivors
         )  # dike-top houses (dike_top_houses) are not pending farmsteads - keep them; Indexed for the fit rules' index
