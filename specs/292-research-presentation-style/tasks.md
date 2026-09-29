@@ -28,6 +28,8 @@ Pilot phase. The sweep's tasks are added only after T09 is ticked (FR-011).
 - [x] T07h The size cap counts prose only; quote-check notes in 12,000-byte batches; no notes to record-style (but for a merge audit) or entry-drift (FR-019). research: rendering
 - [x] T07i Originals stored apart: `record/originals.py`, `make record` moves inline originals (6,171 runs in 618 notes files moved; 165 assembled files identical but for the wrapper), the hover and the citations page collapse them (`record.js`, browser-tested), the file filters of every record reader, `translation-check` and `make translation-owed`, the contracts and rules (FR-020). research: rendering
 - [ ] T07j translation-check run on the owed pairs (7 today: feature 291's and an earlier landing's). research: rendering
+  - [x] the grove section's 4 (2026-09-29): FAITHFUL 4 - the first run of the check
+  - [ ] archetypes/110's 3 (not this feature's section; owed by the change that added them)
 - [x] T08 The size cap for a topic section - the GM's choice: prose only, notes bounded in the quote-check's batches (FR-019). research: rendering
 - [ ] T09 **The GM signs off on the guide and the check** - after as many pilot topics as the GM asks for; only then are the sweep's tasks written (FR-011, SC-008). research: rendering
 - [ ] T10 **Not to be confused with** (FR-016) - AFTER the sweep, when every section has its final title: the pairs as data (from `confusables.md`, two-way by construction), rendered at the top of each section by `make record`, a test that every pair resolves to a real section and every rendered list matches the data, and `record-style` checking a section that a reader could confuse with another has its list. research: rendering
