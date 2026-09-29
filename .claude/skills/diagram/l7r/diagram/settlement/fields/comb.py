@@ -6,7 +6,7 @@ Split from settlement/fields.py by feature 112 - see settlement/fields/CLAUDE.md
 import hashlib
 import math
 import random
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from typing import TYPE_CHECKING, Any, cast
 
 from l7r.diagram.interactive.tags import Split
@@ -24,6 +24,7 @@ from .._geom import (
 from .._knobs import _centroid, _sharp_corners, _toward
 from ..land.wet import pond_fringe_ring
 from ..water_ways.water import ditch_style
+from .grain import SQ_FT_PER_ACRE, dry_need_acres, poly_area, top_up
 from .landuse import line_cuts
 
 if TYPE_CHECKING:
@@ -314,11 +315,12 @@ class CombMixin:
         def _hem_on_water(poly: Poly) -> bool:
             return hem_on_water(poly, _wet, _wpond)
 
-        for p in net["dry_plots"]:  # the dry upslope hem
-            if any(hem_on_paddy(p["poly"], _pol) for _pol in _prior_paddies):
-                continue
-            if _hem_on_water(p["poly"]):
-                continue  # standing water was here first - the crop stops at the bank
+        def _refused(poly: Poly) -> bool:
+            return any(hem_on_paddy(poly, _pol) for _pol in _prior_paddies) or _hem_on_water(poly)  # the crop stops at the bank
+
+        drawn = [p for p in net["dry_plots"] if not _refused(p["poly"])]  # the dry upslope hem
+        drawn += self._coarse_grain_top_up(net, sum(poly_area(p["poly"]) for p in drawn), _refused)
+        for p in drawn:
             pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in p["poly"])
             self.add_paddy(f'<polygon points="{pts}" fill="{p["fill"]}" stroke="#A98C58" stroke-width="1.4" stroke-linejoin="round"/>', cls=p["crop"])  # each dry crop is its own class (feature 134)
             self._draw_furrows(p["poly"], p["furrow"], p["theta"], cls=p["crop"])
@@ -340,6 +342,25 @@ class CombMixin:
             # its check must read the SAME source, and the source is what was actually drawn.
             self.block_polys.append(p["poly"])
             self.dry_polys.append(p["poly"])
+
+    def _coarse_grain_top_up(self: Settlement, net: dict[str, Any], drawn_px2: float, refused: Callable[[Poly], bool]) -> list[dict[str, Any]]:  # type: ignore[misc]
+        """The reserve plots a wild fan middle's hem adds to the drawn band so it holds the coarse-grain need (feature 287,
+        W36; `grain.py`, research/fields.html fields/165): none where the hamlet grows its barley on its drained paddy over
+        the winter and that covers the need, the middle's plots nearest the toe first where it does not. A generated
+        comb hamlet only - it alone rolls `fan_middle`; the hamlet's form and its accounting go in the meta."""
+        from l7r.diagram.waterfields import FLOODED
+
+        meta = self.M["meta"]
+        if meta.get("generated_by") != "hamletgen" or "fan_middle" not in meta or "dry_reserve" not in net:
+            return []
+        form = self.resolve("winter_crop")
+        ft2 = float(meta.get("ftpx") or 1.0) ** 2 / SQ_FT_PER_ACRE
+        drained = sum(poly_area(p["poly"]) for p in net.get("plots", []) if p.get("fill") != FLOODED) * ft2
+        need = dry_need_acres(int(meta.get("households") or 0), drained, form)
+        added = top_up(drawn_px2, net["dry_reserve"], need / ft2, refused)
+        dry = (drawn_px2 + sum(poly_area(p["poly"]) for p in added)) * ft2
+        meta.update(winter_crop=form, coarse_grain_dry_need_acres=round(need, 2), coarse_grain_dry_acres=round(dry, 2), coarse_grain_short_acres=round(max(0.0, need - dry), 2))
+        return added
 
     def _comb_draw_paddies(self: Settlement, net: dict[str, Any], name: str = "") -> None:  # type: ignore[misc]
         """Draw the flooded paddy plots, and write the topography record and the paint record the overlay

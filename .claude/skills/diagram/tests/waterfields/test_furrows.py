@@ -7,7 +7,7 @@ import math
 import random
 
 from l7r.diagram.waterfields.carve import _dry_fields
-from l7r.diagram.waterfields.comb import FAN_TOE_FROM, fan_toe_hem
+from l7r.diagram.waterfields.comb import FAN_TOE_FROM, fan_toe_hem, middle_reserve
 from l7r.diagram.waterfields.frame import _Frame
 from l7r.diagram.waterfields.furrows import STEEP_SPREAD_RAD, TRACT_COLUMNS, TRACT_LEAN_RAD, TRACT_PLOT_TURN_RAD, TRACT_SEAM_MIN_RAD, furrow_turn, tract_ways
 
@@ -107,3 +107,14 @@ def test_a_tract_hemmed_in_on_every_heading_joins_its_nearest_neighbor() -> None
     assert len({p["tract"] for p in plots}) < 40, "some tract had no heading left and joined a neighbor"
     for t in {p["tract"] for p in plots}:
         assert len({round(p["theta"], 9) for p in plots if p["tract"] == t}) == 1, "a joined tract takes its host's heading"
+
+
+def test_a_wild_fan_holds_its_middle_in_reserve_nearest_the_toe_first() -> None:
+    """Feature 287, W36: the middle's hem plots are not lost but held back for the coarse-grain top-up, ordered down the
+    fall from the toe's edge up toward the head (`middle_reserve`)."""
+    F = _Frame(90.0)
+    paddies = [{"poly": [(0.0, 0.0), (100.0, 0.0), (100.0, 900.0)]}]
+    hem = [{"poly": [(0.0, y), (10.0, y), (10.0, y + 10.0), (0.0, y + 10.0)]} for y in (95.0, 400.0, 595.0, 605.0, 850.0, 300.0)]
+    reserve = middle_reserve(hem, F, (0.0, 0.0), paddies)
+    assert [d["poly"][0][1] for d in reserve] == [400.0, 300.0, 95.0], "the complement of the toe, nearest the toe first"
+    assert not {id(d) for d in reserve} & {id(d) for d in fan_toe_hem(hem, F, (0.0, 0.0), paddies)}
