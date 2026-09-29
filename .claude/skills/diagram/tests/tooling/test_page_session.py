@@ -318,3 +318,44 @@ def test_a_continuation_over_the_cap_stops_the_queue(tmp_path: pathlib.Path, mon
     ps.work(str(tmp_path), "n", [], [first, {"then": "/never/run"}], str(run_log))
     lines = run_log.read_text(encoding="utf-8").splitlines()
     assert lines[-2].startswith("STOPPED continue.md: it assigns 5") and lines[-1] == "ALL DONE", lines
+
+
+def _run_sh(tmp_path: pathlib.Path, *args: str) -> tuple[int, list[str], str]:
+    """page-session.sh with a fake `claude` and a fake `python3` on PATH: the fake python records the runner's argv."""
+    import subprocess
+
+    bin_ = tmp_path / "bin"
+    bin_.mkdir(parents=True)
+    (bin_ / "claude").write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
+    argv_file = tmp_path / "argv.json"
+    (bin_ / "python3").write_text(
+        f"#!/usr/bin/env -S {pathlib.Path(__import__('sys').executable)}\nimport json, sys\n"
+        f"open({str(argv_file)!r}, 'w').write(json.dumps(sys.argv[1:]))\n", encoding="utf-8")
+    for f in bin_.iterdir():
+        f.chmod(0o755)
+    brief = tmp_path / "brief.md"
+    brief.write_text(BRIEF, encoding="utf-8")
+    env = {"PATH": f"{bin_}:/usr/bin:/bin", "HOME": str(tmp_path)}
+    r = subprocess.run(["bash", str(REPO / "scripts" / "page-session.sh"), str(brief), *args], cwd=REPO, env=env,
+                       capture_output=True, text=True, check=False)
+    argv = __import__("json").loads(argv_file.read_text()) if argv_file.exists() else []
+    return r.returncode, argv, r.stderr
+
+
+def test_effort_and_agents_reach_every_session_and_unset_they_change_nothing(tmp_path: pathlib.Path) -> None:
+    """Feature 293 (research R1 D2, FR-003): the effort experiment runs each page session at its arm's effort and with the
+    pinned ad-hoc judge; unset, the runner's argv is what it was."""
+    code, plain, _ = _run_sh(tmp_path / "a", "diagram-x", "opus")
+    assert code == 0 and "--effort" not in plain and "--agents" not in plain
+    extra = plain[plain.index("--model"):plain.index("--")]
+    assert extra == ["--model", "opus"], "unset EFFORT and AGENTS add nothing"
+    agents = tmp_path / "agents.json"
+    agents.write_text('{"adhoc-judge": {"model": "opus", "effort": "high"}}', encoding="utf-8")
+    code, argv, _ = _run_sh(tmp_path / "b", "diagram-x", "", "xhigh", str(agents))
+    extra = argv[4:argv.index("--")]  # the runner script, root, name, projects, then the extra flags
+    assert code == 0 and extra == ["--effort", "xhigh", "--agents", agents.read_text()]
+
+
+def test_a_missing_agents_file_is_refused_before_anything_starts(tmp_path: pathlib.Path) -> None:
+    code, argv, err = _run_sh(tmp_path, "diagram-x", "", "medium", str(tmp_path / "nope.json"))
+    assert code == 2 and argv == [] and "no agents file" in err

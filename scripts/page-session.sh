@@ -23,13 +23,17 @@
 # session.
 set -uo pipefail
 ROOT=$(git rev-parse --show-toplevel)
-BRIEFS=${1:-}; NAME=${2:-$(basename "$ROOT")}; MODEL=${3:-}
+BRIEFS=${1:-}; NAME=${2:-$(basename "$ROOT")}; MODEL=${3:-}; EFFORT=${4:-}; AGENTS=${5:-}
 [ -n "$BRIEFS" ] || { echo "page-session: BRIEF=<file> (or several, space-separated, run one after another) is required" >&2; exit 2; }
 for b in $BRIEFS; do f=${b#then:}; case $f in resume:*) f=${f#resume:*:};; esac; [ -f "$f" ] || { echo "page-session: no brief or step at $f" >&2; exit 2; }; done
 command -v claude >/dev/null || { echo "page-session: no claude on PATH" >&2; exit 2; }
 # The appended system prompt - the standing authorization, then the slim rules file in place of the root CLAUDE.md
 # (feature 274 D6) - is added by the runner's floor_flags, where its test reads it.
+# EFFORT and AGENTS (feature 293): the effort level for every session, and a JSON file of session-scoped agents passed as
+# --agents - the effort experiment pins its ad-hoc judge this way (research R1 D2). Unset, the command line is unchanged.
 EXTRA=(); [ -n "$MODEL" ] && EXTRA+=(--model "$MODEL")
+[ -n "$EFFORT" ] && EXTRA+=(--effort "$EFFORT")
+if [ -n "$AGENTS" ]; then [ -f "$AGENTS" ] || { echo "page-session: no agents file at $AGENTS" >&2; exit 2; }; EXTRA+=(--agents "$(cat "$AGENTS")"); fi
 MANGLED=$(printf '%s' "$ROOT" | sed 's#[/.]#-#g')
 # shellcheck disable=SC2086 # BRIEFS is a space-separated list on purpose
 exec python3 "$ROOT/scripts/_page_session_runner.py" "$ROOT" "$NAME" "$HOME/.claude/projects/$MANGLED" "${EXTRA[@]}" -- $BRIEFS

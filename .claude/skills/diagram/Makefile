@@ -1134,9 +1134,10 @@ apply-edits: ## [project] apply a quote-check or record-format report's EDIT and
 
 # GUARD_EDIT_OK: feature 250 - a new operation (one page's work in a fresh headless session, started from a brief); no guard changes.
 # GUARD_EDIT_OK: feature 274 D2 - the runner refuses a write brief over four questions; WRITE_CAP_OK='<reason>' reaches it through make's exported environment.
-page-session: ## [project] start ONE page's work in a FRESH headless session, detached, from written briefs, one after another - absolute paths; a then:<script> step queues the briefs it prints (feature 250 D7, R3); a write brief over four questions is refused (feature 274)   BRIEF="<file> then:<script>" [NAME=<session name, default this clone's>] [MODEL=<model>] [WRITE_CAP_OK='<reason>']
+# GUARD_EDIT_OK: feature 293 adds an operation - EFFORT and AGENTS passed through to page-session.sh; nothing a guard decides changes.
+page-session: ## [project] start ONE page's work in a FRESH headless session, detached, from written briefs, one after another - absolute paths; a then:<script> step queues the briefs it prints (feature 250 D7, R3); a write brief over four questions is refused (feature 274)   BRIEF="<file> then:<script>" [NAME=<session name, default this clone's>] [MODEL=<model>] [EFFORT=<level>] [AGENTS=<agents.json>] [WRITE_CAP_OK='<reason>']
 	@if [ -z "$(BRIEF)" ]; then printf 'make page-session: BRIEF=<file> is required - e.g. make page-session BRIEF=specs/250-close-the-record-checks/briefs/homesteads.md\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && scripts/page-session.sh "$(BRIEF)" "$(NAME)" "$(MODEL)"
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/page-session.sh "$(BRIEF)" "$(NAME)" "$(MODEL)" "$(EFFORT)" "$(AGENTS)"
 
 # GUARD_EDIT_OK: feature 250 - a new operation (copy what one check reads out of the repository, so the harness attaches no CLAUDE.md to the agent); no guard changes.
 check-bundle: ## [project] the files ONE check agent reads, copied out of the repository with its prepass output - dispatch quote-check, record-format, source-applicability or source-reader with the MANIFEST it prints   PAGE=ways SECTION=010 | KEY=edo-enwiki
