@@ -179,3 +179,5 @@ lee side with the yard and the way in, the side three leaves open.
 
 **Round 2** (spec-fidelity-verify, MODE 3, 2026-09-29): CHANGES, one item - SC-005 now checks that every farm in a
 non-nucleated seed plants every side its settlement rolled, so the fallback round 1 removed cannot return unseen.
+
+**Round 3** (spec-fidelity-verify, MODE 3, 2026-09-29): FAITHFUL. The spec is accepted.
