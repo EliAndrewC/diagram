@@ -3,6 +3,10 @@
 from l7r.diagram import hamletgen as hg
 
 SQUARE: list[tuple[float, float]] = [(400.0, 400.0), (1000.0, 400.0), (1000.0, 1000.0), (400.0, 1000.0)]
+# THE SQUARE WITH A CROWN (feature 287, homes H30): three margins whose backs face a north wind - the crown's two
+# shoulders and its top - so a seat has a LADDER of wind-facing margins; the plain square has only its north edge. It
+# stands 700 px below the canvas' top so each margin's belt stands on the canvas (the room `plan.seat_room` gives).
+CROWN: list[tuple[float, float]] = [(400.0, 800.0), (550.0, 720.0), (850.0, 720.0), (1000.0, 800.0), (1000.0, 1300.0), (400.0, 1300.0)]
 
 
 def a_plan(households: int = 15, **kw: object) -> hg.SitePlan:

@@ -77,4 +77,4 @@ def rolled_report(spec: hg.HamletSpec) -> hg.Report:
         return rollcache.report(spec)[0]
     plan, M = rolled_map(spec)
     meta = M.get("meta") or {}
-    return hg.Report(plan=plan, failures=list(meta.get("roll_failures", [])), attempt=int(meta.get("roll_attempt", 1)), rerolled_after=list(meta.get("roll_after", [])), manifest=M)
+    return hg.Report(plan=plan, failures=list(meta.get("roll_failures", [])), manifest=M)

@@ -314,3 +314,64 @@ def test_a_fragment_that_earns_nothing() -> None:
 def test_one_way_keeps_one_width() -> None:
     lanes = [_lane((0.0, 0.0), (100.0, 0.0), w=6), _lane((100.0, 0.0), (200.0, 10.0), w=3), _lane((200.0, 10.0), (300.0, 10.0), w=3)]
     assert law.width_steps(lanes) == [(0, 1)]
+
+
+# ---- feature 287 wave 3: the ends at a house, the needles, the way targets, every water decked ---------------------------
+
+
+def test_a_lane_end_behind_a_house_has_not_reached_it() -> None:
+    """Water W57: behind the back wall and abreast of it, at no dooryard, off the bund and at no junction."""
+    house = _house(0.0, 200.0)  # the front faces +y: the back wall is at y = 185
+    M = {"lanes": [_lane((0.0, 0.0), (0.0, 160.0))], "houses": [house]}
+    assert law.ends_behind(M) == [(0, -1, 0)]
+    assert law.ends_behind({**M, "houses": []}) == [] and law.ends_behind({**M, "lanes": [_lane((0.0, 0.0), (0.0, 100.0))]}) == [], "no house near"
+    front = {**M, "lanes": [_lane((0.0, 400.0), (0.0, 220.0))]}
+    assert law.ends_behind(front) == [], "at the front, the dooryard"
+    joined = {**M, "lanes": [*M["lanes"], _lane((-50.0, 160.0), (50.0, 160.0))]}
+    assert law.ends_behind(joined) == [], "an end on another way is a junction"
+    field = {**M, "fields": [{"outline": [[-20.0, 162.0], [20.0, 162.0], [20.0, 170.0], [-20.0, 170.0]]}]}
+    assert law.ends_behind(field) == [], "an end on the bund reaches the field"
+    assert law.ends_behind({**M, "lanes": [_lane((0.0, 0.0), (0.0, 160.0), connector=True)]}) == [], "the connector leaves the map"
+
+
+def test_a_way_forked_round_a_needle_of_grass_is_named_and_a_block_is_not() -> None:
+    """Homes H39: a face of the web thinner than `NEEDLE_LOOP_FT` is the same way drawn twice."""
+    needle = {"lanes": [_lane((0.0, 0.0), (200.0, 0.0)), _lane((0.0, 0.0), (100.0, 12.0), (200.0, 0.0))]}
+    ((face, bounding),) = law.needle_loops(needle)
+    assert bounding == [0, 1] and 2.0 * face.area / face.length < law.NEEDLE_LOOP_FT
+    block = {"lanes": [_lane((0.0, 0.0), (200.0, 0.0), (200.0, 150.0)), _lane((0.0, 0.0), (0.0, 150.0), (200.0, 150.0))]}
+    assert law.needle_loops(block) == [], "a block wide enough to hold a steading"
+    assert law.needle_loops({"lanes": [_lane((0.0, 0.0), (200.0, 0.0))]}) == []
+
+
+def test_a_way_target_is_reached_by_the_served_network_and_counts_as_served() -> None:
+    """Homes H36: the burial ground's near edge is a point a way must reach, and an end there serves something."""
+    meta = {"way_targets": [{"kind": "burial ground", "at": [100.0, 60.0]}]}
+    M = {"meta": meta, "lanes": [_lane((0.0, 0.0), (-500.0, 0.0), connector=True)]}
+    assert law.way_targets(M) == [(100.0, 60.0)] and law.unreached_targets(M) == [(100.0, 60.0)]
+    assert law.unreached_targets({"lanes": M["lanes"]}) == []
+    spur = {**M, "lanes": [*M["lanes"], _lane((0.0, 0.0), (100.0, 55.0))]}
+    assert law.unreached_targets(spur) == [] and law.dangling_lane_ends(spur) == [], "the spur's end serves the graves"
+    near = {"meta": {"way_targets": [{"at": [0.0, 20.0]}]}, "lanes": [M["lanes"][0], _lane((0.0, 0.0), (0.0, 18.0))]}
+    assert law.short_fragments(near) == [], "a short spur that reaches the graves earns its place"
+
+
+def test_every_water_a_way_crosses_is_under_a_deck_not_the_brook_alone() -> None:
+    """The drain takes no footplank (`plank_on_supply`), so a way over it is carried on a deck or not drawn at all."""
+    drain = {"poly": [[0.0, 100.0], [400.0, 100.0]], "w": 4.0, "role": "drain"}
+    M = {"field_ditches": [drain], "lanes": [_lane((200.0, 0.0), (200.0, 200.0))], "bridges": []}
+    assert law.unbridged_crossings(M) == [(200, 100)]
+    M["bridges"] = [{"x": 200.0, "y": 100.0, "span": 12.0, "rot": 90.0}]
+    assert law.unbridged_crossings(M) == []
+
+
+def test_a_lane_over_a_farmstead_fixture_is_named() -> None:
+    """Feature 287 (the fixtures laid in each bundle): a tread over a privy, a heap or a hokora - its own household's too."""
+    privy = {"kind": "privy", "x": 100.0, "y": 0.0, "w": 6.0, "h": 6.0, "rot": 0.0}
+    M = {"farm_fixtures": [privy, {"kind": "coop", "x": 1.0}], "lanes": [_lane((0.0, 0.0), (200.0, 0.0)), _lane((0.0, 50.0), (200.0, 50.0))]}
+    assert len(law.fixture_quads(M)) == 1
+    assert law.lanes_over_fixtures(M) == [(0, 0)]
+    assert law.over_a_fixture([(0.0, 4.9), (200.0, 4.9)], 3.0, law.fixture_quads(M)) == 0, "the tread's half-width reaches it"
+    assert law.over_a_fixture([(0.0, 6.5), (200.0, 6.5)], 3.0, law.fixture_quads(M)) is None
+    assert law.over_a_fixture([(0.0, 50.0), (100.0, 1.0)], 3.0, law.fixture_quads(M)) == 0, "an end standing in it"
+    assert law.lanes_over_fixtures({"lanes": M["lanes"]}) == []

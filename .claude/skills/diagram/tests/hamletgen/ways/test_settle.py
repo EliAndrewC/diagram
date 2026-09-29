@@ -5,6 +5,7 @@ import math
 
 import pytest
 
+from l7r.diagram.hamletgen.ways import corridors as co
 from l7r.diagram.hamletgen.ways import law, settle
 
 
@@ -354,30 +355,163 @@ def test_a_width_change_redraws_the_ink() -> None:
     assert all(not s.ground[z].get(part) for z in old for part in ("edge", "bed", "top")), "the old ink is blanked"
 
 
-def test_a_cut_that_strands_a_house_or_the_field_redraws_the_reach_once() -> None:
-    """Until the access corridor (M3) serves them, a farmhouse or the field left without a way by a settling cut is served
-    by drawing the stragglers and the field path again, and the web settled once more."""
-    calls = []
-    kept = _S([CONN, [(0.0, 2.0), (0.0, 100.0)]], houses=[(40.0, 110.0)])
-    assert "redrawn" not in settle.settle_and_redraw(kept, lambda: calls.append(1)) and calls == []
-    # a house served only past a lattice step: the settle cuts the kink out, the far piece falls off the network and the
-    # house is stranded, so the reach is redrawn
-    lost = _S([CONN, [(0.0, 2.0), (0.0, 200.0), (100.0, 200.0), (100.0, 220.0), (200.0, 220.0)]], houses=[(120.0, 170.0), (230.0, 240.0)], meta={"ftpx": 1.0, "generated_by": "hamletgen"})
-
-    def redraw() -> None:
-        calls.append(1)
-        lost.lane([(100.0, 200.0), (215.0, 200.0)], width=3)
-
-    got = settle.settle_and_redraw(lost, redraw)
-    assert calls == [1] and got["redrawn"] and got["unreached_after"] == 0 and got["unreached_before"] == 0
+# ---- step 4: the reach the web owes, drawn as tree lanes (ways W01, W03, homes H36) ----------------------------------------
 
 
-def test_the_web_stage_redraws_the_reach_through_the_straggler_and_field_passes(monkeypatch: pytest.MonkeyPatch) -> None:
-    from l7r.diagram.hamletgen.ways import web
+_GEN = {"ftpx": 1.0, "generated_by": "hamletgen"}
 
-    seen = []
-    monkeypatch.setattr(web, "_serve_stragglers", lambda *a: seen.append("stragglers"))
-    monkeypatch.setattr(web, "a_way_onto_the_bund", lambda s: "run_on")
+
+def test_a_stranded_house_is_reached_along_its_corridor_and_the_tree_is_never_cut() -> None:
+    """M3's web half: the house the web left 360 ft off is served by its corridor, drawn from its door along the reserved
+    strip to the connector's start - and a settle round after cuts nothing of it (`corridors.is_tree`)."""
+    s = _S([CONN], houses=[(300.0, 200.0)], meta=dict(_GEN), access_exit=[[400.0, 0.0], [0.0, 0.0]], access_corridors=[{"pts": [[300.0, 180.0], [300.0, 0.0]], "of": [300.0, 200.0]}])
+    s.M["houses"][0]["rot"] = 180.0  # the front faces the strip: the door is in the dooryard
+    assert law.unreached_houses(s.M)
+    got = settle.settle_the_web(s)
+    assert got["unreached_before"] == 1 and got["unreached_after"] == 0 and law.unreached_houses(s.M) == []
+    drawn = [ln for ln in s.M["lanes"] if ln.get("role") == "access"]
+    assert len(drawn) == 1 and drawn[0]["of"] == [300.0, 200.0] and not law.violations(s.M)
+    assert settle.settle_the_web(s)["changed"] == 0, "the tree lane keeps the law, so nothing is left to repair"
+    assert settle.settle_reach(s) == 0, "nothing owed, nothing drawn"
+
+
+def test_a_way_target_gets_its_spur_and_the_field_its_way() -> None:
+    """Homes H36 (a path runs to the graves) and ways W03 (the hamlet has a way to its field): the connector alone reaches
+    neither, so the settle lays the shortest lawful spur to the burial ground's edge and the field way over the brook at
+    its ford, on to the bund - each a tree lane, drawn once."""
+    field = [[200.0, -300.0], [500.0, -300.0], [500.0, 300.0], [200.0, 300.0]]
+    meta = {**_GEN, "way_targets": [{"kind": "burial ground", "at": [-300.0, 80.0]}], "brook_fords": [[100.0, 0.0]]}
+    s = _S([CONN], meta=meta, streams=[BROOK], fields=[{"outline": field}])
+    assert law.unreached_targets(s.M) == [(-300.0, 80.0)] and law.field_unreached(s.M)
+    settle.settle_the_web(s)
+    assert law.unreached_targets(s.M) == [] and not law.field_unreached(s.M)
+    roles = [ln.get("role") for ln in s.M["lanes"]]
+    assert roles.count("way target") == 1 and roles.count("field way") == 1
+    assert not law.violations(s.M) or set(law.violations(s.M)) <= {"unbridged"}, "the crossings are decked by the next stage"
+    assert settle.settle_targets(s, settle.Lawful(s)) == 0 and settle.settle_field(s, settle.Lawful(s)) == 0, "each drawn once"
+
+
+def test_a_target_or_a_field_no_lawful_run_reaches_is_left_unreached_not_drawn_least_bad(monkeypatch: pytest.MonkeyPatch) -> None:
+    """FR-005: with no run keeping the law, nothing is drawn - the report says what is still owed."""
+    field = [[200.0, -300.0], [500.0, -300.0], [500.0, 300.0], [200.0, 300.0]]
+    meta = {**_GEN, "way_targets": [{"kind": "burial ground", "at": [-300.0, 80.0]}]}
+    s = _S([CONN], meta=meta, streams=[BROOK], fields=[{"outline": field}])
+    monkeypatch.setattr(settle.Lawful, "__call__", lambda self, run, width, skip=None: False)
+    got = settle.settle_the_web(s)
+    assert got["targets_unreached"] == 1 and got["field_unreached"] is True
+    assert not any(ln.get("role") in ("way target", "field way") for ln in s.M["lanes"])
+
+
+def test_an_end_behind_a_house_is_carried_round_the_gable_or_cut() -> None:
+    """Water W57: a lane ending 26 ft behind a farmhouse's back wall has not reached it. Carried round the nearer gable into
+    the dooryard band where that keeps the law; where it would not (another house on the gable), its last leg goes."""
+    from l7r.diagram.settlement.water_ways.lanes import reaches_dooryard
+
+    lane = [(-100.0, 0.0), (-100.0, 100.0), (-100.0, 160.0)]
+    s = _S([CONN, lane], houses=[(-100.0, 200.0)])
+    assert law.ends_behind(s.M) == [(1, -1, 0)]
+    settle.settle_ends(s)
+    assert law.ends_behind(s.M) == [] and reaches_dooryard(s.M["houses"][0], _pts(s, 1)[-1])
+    walled = [(-100.0, 200.0), (-60.0, 200.0), (-140.0, 200.0)]  # a house on either gable: no carry keeps the law
+    blocked = _S([CONN, lane], houses=walled)
+    settle.settle_ends(blocked)
+    cut = _pts(blocked, 1)
+    assert law.ends_behind(blocked.M) == [] and cut[:2] == lane[:2] and math.dist(cut[-1], (-100.0, 200.0)) > 60.0, "taken back only off the back"
+    junction = _S([CONN, lane, [(-130.0, 150.0), (-100.0, 150.0)]], houses=walled)
+    settle.settle_ends(junction)
+    assert math.dist(_pts(junction, 1)[-1], (-100.0, 150.0)) <= law.JOIN_TOL, "no further than its last junction: the way that joins it keeps it"
+    behind = _S([CONN, [(-100.0, 170.0), (-100.0, 180.0)]], houses=walled)
+    settle.settle_ends(behind)
+    assert len(behind.M["lanes"]) == 1, "a lane standing wholly behind the house goes"
+
+
+def test_a_needle_of_grass_is_opened_on_its_shorter_lane() -> None:
+    """Homes H39 (future-work 2c): two ways forking and rejoining round a sliver of ground - the shorter lane loses its
+    stretch along the needle, and no loop that thin is left."""
+    s = _S([CONN, [(-300.0, 0.0), (-250.0, 110.0), (-250.0, 200.0)], [(-280.0, 0.0), (-250.0, 110.0)]])
+    assert law.needle_loops(s.M)
+    assert settle.settle_needles(s) == 1
+    assert law.needle_loops(s.M) == [] and polyline(_pts(s, 1)) > 200.0, "the longer way stands"
+    tree = _S([CONN, ([(-300.0, 0.0), (-250.0, 110.0)], {}), ([(-280.0, 0.0), (-250.0, 110.0)], {})])
+    for ln in tree.M["lanes"][1:]:
+        ln["role"] = "access"
+    assert settle.settle_needles(tree) == 0, "a needle bounded by the tree alone is the tree's"
+
+
+def polyline(p):
+    return sum(math.dist(a, b) for a, b in zip(p, p[1:], strict=False))
+
+
+def test_lawful_refuses_each_rule_a_new_tree_lane_would_break() -> None:
+    """`Lawful`: the one question asked before a tree lane is laid, since it is never cut afterwards."""
+    s = _S(
+        [CONN, [(-500.0, 0.0), (-500.0, 300.0)]], houses=[(-300.0, 300.0), (-460.0, 300.0)], streams=[BROOK], fields=[{"outline": [[-800.0, 400.0], [-700.0, 400.0], [-700.0, 500.0], [-800.0, 500.0]]}]
+    )
+    s.M["threshing_yards"] = [{"poly": [[-320.0, 100.0], [-280.0, 100.0], [-280.0, 120.0], [-320.0, 120.0]], "of": [-300.0, 300.0]}]
+    ok = settle.Lawful(s)
+    assert ok([(-240.0, 0.0), (-250.0, 290.0)], 3.0), "a clean spur off the connector, to a house"
+    assert not ok([(-100.0, 0.0), (-100.0, 150.0)], 3.0), "a spur to nothing: its end dangles"
+    assert not ok([(-100.0, 0.0)], 3.0) and not ok([(-100.0, 0.0), (-100.0, 150.0), (-90.0, 20.0)], 3.0), "too short; doubled back"
+    assert not ok([(0.0, 50.0), (200.0, 50.0)], 3.0), "over the brook off any ford"
+    assert not ok([(-300.0, 0.0), (-300.0, 160.0)], 3.0), "through a neighbor's threshing yard"
+    assert not ok([(-750.0, 0.0), (-750.0, 450.0)], 3.0), "into the field"
+    assert not ok([(-490.0, 0.0), (-490.0, 290.0)], 3.0), "doubling a way along its whole run"
+    assert ok([(-500.0, 0.0), (-500.0, 300.0)], 3.0, skip=1), "the lane it would replace is not asked to meet it"
+    assert not ok([(-340.0, 100.0), (-340.0, 250.0), (-300.0, 295.0)], 3.0), "into a house"
+    quad = [(0.0, 0.0), (40.0, 0.0), (40.0, 28.0), (0.0, 28.0)]
+    assert co.through_a_building([(20.0, -10.0), (20.0, 40.0)], [quad]), "clean through between the corners"
+    assert co.through_a_building([(20.0, -10.0), (20.0, 10.0)], [quad]) and not co.through_a_building([(50.0, -10.0), (50.0, 40.0)], [quad])
+
+
+def test_the_tree_is_left_alone_at_a_fold_and_behind_a_house_and_a_target_is_drawn_to_once() -> None:
+    """The tree lanes (`corridors.is_tree`) are never the lane a repair edits: two folded on each other are left, a tree
+    lane ending behind a house is the corridor pass's to carry, and a target whose spur is drawn is not drawn to again."""
+    folded = _S([CONN, [(-100.0, 0.0), (-100.0, 100.0)], [(-100.0, 100.0), (-95.0, 20.0)]])
+    for ln in folded.M["lanes"][1:]:
+        ln["role"] = "access"
+    assert law.folded_joint_pairs(folded.M["lanes"]) and settle.settle_ends(folded) == 0
+    behind = _S([CONN, [(-100.0, 0.0), (-100.0, 100.0), (-100.0, 160.0)]], houses=[(-100.0, 200.0)])
+    behind.M["lanes"][1]["role"] = "access"
+    assert law.ends_behind(behind.M) and settle.settle_ends(behind) == 0
+    drawn = _S([CONN, ([(-600.0, 0.0), (-600.0, 50.0)], {})], meta={**_GEN, "way_targets": [{"at": [-300.0, 80.0]}]})
+    drawn.M["lanes"][1].update({"role": "way target", "to": [-300.0, 80.0]})
+    assert settle.settle_targets(drawn, settle.Lawful(drawn)) == 0
+
+
+def test_lawful_refuses_a_needle_or_a_hairpin_at_the_connectors_start() -> None:
     s = _S([CONN])
-    web.redraw_the_reach(s, None, [], [], [])
-    assert seen == ["stragglers"] and s.M["meta"]["field_path"] == "run_on"
+    ok = settle.Lawful(s)
+    assert not ok([(-200.0, 30.0), (-100.0, 0.5)], 3.0), "meets the connector at a needle's angle"
+    assert not ok([(-60.0, 10.0), (-5.0, 10.0), (0.0, 0.0)], 3.0), "doubles back over a short leg at the connector's start"
+
+
+def test_a_field_way_no_straight_run_keeps_is_threaded_round_the_steadings() -> None:
+    """Ways W03, cohort seed 13: every straight run from the network to the bund passed through a steading, so the field way
+    is threaded by the web's router (`field_router`) and drawn where that keeps the law."""
+    field = [[300.0, -300.0], [500.0, -300.0], [500.0, 300.0], [300.0, 300.0]]
+    far_brook = {"poly": [[1000.0, -500.0], [1000.0, 500.0]], "w": 6.0}
+    s = _S([_c((0.0, 0.0), (-1000.0, 0.0))], houses=[(150.0, 0.0)], meta=dict(_GEN), streams=[far_brook], fields=[{"outline": field}])
+    s.M["houses"][0].update({"w": 60.0, "h": 200.0})
+    assert law.field_unreached(s.M)
+    assert settle.settle_field(s, settle.Lawful(s)) == 1
+    run = [tuple(q) for q in s.M["lanes"][-1]["pts"]]
+    assert s.M["lanes"][-1]["role"] == "field way" and len(run) > 2 and not co.through_a_building(run, co.building_quads(s.M))
+    assert not law.field_unreached(s.M)
+
+
+def test_a_repair_that_would_split_the_web_is_known_before_it_is_made() -> None:
+    """`keeps_the_network` (cohort seed 31: a backbone's end carried round a gable took the tread three lanes stood on and
+    nine fell off the network), asked of the web as this round's earlier repairs leave it (`with_edits`)."""
+    s = _S([CONN, [(0.0, 0.0), (0.0, 200.0)], [(-100.0, 200.0), (100.0, 200.0)]])
+    assert settle.keeps_the_network(s.M, 1, [[(0.0, 0.0), (10.0, 100.0), (0.0, 200.0)]]), "the junction kept: nothing hangs"
+    assert not settle.keeps_the_network(s.M, 1, [[(0.0, 0.0), (0.0, 150.0)]]), "cut short of it: the cross lane falls off"
+    work = settle.with_edits(s.M, {1: [[(0.0, 0.0), (0.0, 150.0)], [(5.0, 5.0), (5.0, 9.0)]], 2: []})
+    assert [ln["pts"] for ln in work["lanes"]][1:] == [[[0.0, 0.0], [0.0, 150.0]], [], [[5.0, 5.0], [5.0, 9.0]]]
+
+
+def test_a_lane_over_a_fixture_is_cut_and_no_tree_lane_is_laid_over_one() -> None:
+    s = _S([CONN, [(-100.0, 0.0), (-100.0, 200.0)]], farm_fixtures=[{"kind": "manure", "x": -100.0, "y": 100.0, "w": 8.0, "h": 6.0, "rot": 0.0}])
+    assert law.lanes_over_fixtures(s.M) == [(1, 0)]
+    settle.settle_shapes(s)
+    assert law.lanes_over_fixtures(s.M) == [], "the leg over the heap is cut"
+    assert not settle.Lawful(s)([(-200.0, 0.0), (-100.0, 100.0)], 3.0)

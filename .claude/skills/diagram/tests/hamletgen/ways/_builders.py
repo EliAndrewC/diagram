@@ -60,6 +60,7 @@ def _walled_settlement() -> tuple[object, object]:
         s.M["houses"].append({"x": x, "y": 700.0, "w": 140.0, "h": 90.0, "rot": 0})
     plan = a_plan()
     plan.envelope = [(50.0, 50.0), (1350.0, 50.0), (1350.0, 1350.0), (50.0, 1350.0)]
+    plan.windward = "E"  # the canvas' room lies south and east of this field: a seat with its back to an east wind (feature 287, homes H30)
     return s, plan
 
 

@@ -105,3 +105,22 @@ def test_stage_notice_is_the_one_siter() -> None:
 
     hg.stage_notice(_S(), None)  # type: ignore[arg-type]
     assert calls == ["sited"]
+
+
+def test_stage_crossings_decks_the_web_and_rewrites_no_lane() -> None:
+    """Feature 287, M4c: the squaring `stage_crossings` did moved into the web's last pass (`settle_the_web`), so nothing
+    after the web rewrites a lane - an oblique lane over the brook reaches this stage as the web left it."""
+    import types
+
+    from l7r.diagram.hamletgen.frame import stage_crossings
+
+    calls: list[str] = []
+    oblique = [[0.0, 0.0], [200.0, 150.0]]
+    s = types.SimpleNamespace(
+        M={"lanes": [{"pts": [list(q) for q in oblique], "w": 3}], "streams": [{"poly": [[100.0, -500.0], [100.0, 500.0]], "w": 6.0}]},
+        px=lambda ft: ft,
+        reink_lane=lambda i: calls.append(f"reink {i}"),
+        bridges=lambda: calls.append("bridges") or 0,
+    )
+    stage_crossings(s, types.SimpleNamespace(field_archetype="comb"))
+    assert calls == ["bridges"] and s.M["lanes"][0]["pts"] == oblique

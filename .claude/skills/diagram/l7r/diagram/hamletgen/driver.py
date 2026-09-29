@@ -156,17 +156,14 @@ class Report:
     # re-gate (or, worse, re-build) to get it - `cohort_audit` did exactly that by calling `build`
     # instead of `generate`, which silently measured a different code path than the one that ships.
     fail_lines: list[str] = field(default_factory=list)
-    # WHICH ROLL THIS IS (feature 133 T33). The re-roll loop below can ship attempt four with a
-    # different connector and a different web, and until 2026-08-27 nothing on the map or in the
-    # report said so - a session read attempt four as its own fix for most of a task. The attempt
-    # and the checks that forced each re-roll are carried here AND in the manifest's meta
-    # (`roll_attempt`, `roll_after`), so the picture can always be attributed to the roll that drew it.
-    attempt: int = 1
-    rerolled_after: list[str] = field(default_factory=list)
+    # ONE ROLL (feature 287, FR-002): the re-roll loop that could ship attempt four with a different connector and web is
+    # gone - the reach it bought is guaranteed where the web settles (`ways/settle.py`, the reserved corridors drawn) - so
+    # the `attempt` / `rerolled_after` fields and the manifest's `roll_attempt` / `roll_after` that attributed a map to
+    # its attempt went with it (feature 133 T33 added them).
     # THE MANIFEST THE REPORT WAS JUDGED ON (feature 213): one roll now serves the cohort test (the
     # verdict), the lane-rule fixtures (the finished manifest) and the hamlet floor (the record), so the
-    # report carries the kept attempt's finished manifest instead of finishing it into a scratch directory
-    # and throwing it away. None only when a caller built the Report by hand.
+    # report carries the finished manifest instead of finishing it into a scratch directory and throwing
+    # it away. None only when a caller built the Report by hand.
     manifest: dict[str, Any] | None = None
 
     @property
@@ -175,11 +172,10 @@ class Report:
 
     def line(self) -> str:
         p = self.plan
-        roll = f"attempt {self.attempt}" + (f" (re-rolled after: {', '.join(dict.fromkeys(self.rerolled_after))})" if self.attempt > 1 else "")
         return (
             f"{p.spec.name:<18} seed={p.spec.seed:<4} hh={p.placed}/{p.spec.households:<3} "
             f"acres={p.acres:5.1f}/{p.target_acres:5.1f} fall={int(p.down_deg):<4} wind={p.windward:<3} "
-            f"sink={p.water_sink:<7} {p.cluster_shape[:9]:<10} {p.lane_skeleton:<6} {roll:<10} "
+            f"sink={p.water_sink:<7} {p.cluster_shape[:9]:<10} {p.lane_skeleton:<6} "
             f"{'OK' if self.ok else 'FAIL: ' + ', '.join(self.failures[:4])}" + self._breach_note()
         )
 
@@ -222,58 +218,25 @@ def roll_scope(spec: HamletSpec | None = None) -> Iterator[None]:
         _census.record("roll", spec=_census.spec_row(spec), ok=ok, dt=round(time.time() - t0, 1))
 
 
-def resume_at() -> int | None:
-    """Where a re-roll may resume: the index in `STAGES` of the first stage that reads the avoid list (`stage_homesteads`,
-    whose seat loops refuse the avoided ground). Every stage before it - the water frame, the field, the sink, the seat,
-    the waterward fringe - runs the same on every attempt, because nothing it reads differs between them (feature 284: a
-    stranding re-roll used to rebuild the field, the costliest stage, to get it back unchanged). None when the stages
-    have no such stage (a test's stand-in tuple). Found by NAME, so a stage wrapped by a timer that keeps its name (the
-    measurement harnesses, the stage profile) still resumes."""
-    return next((i for i, st in enumerate(STAGES) if getattr(st, "__name__", "") == stage_homesteads.__name__), None)
-
-
-def build(plan: SitePlan, avoid: Sequence[tuple[float, float]] = (), snapshot: list[Any] | None = None) -> Settlement:
-    """Run every stage, in order, against a fresh `Settlement`.
-
-    `avoid` is ground a previous roll proved unservable - the seat loops refuse a seat near any of
-    these points. See `generate`, which re-rolls a map whose finished manifest stranded a farmhouse.
-    With `snapshot` (a list), a deep copy of the settlement and the plan as they stand before `resume_at()` is appended
-    to it, for `resume`."""
+def build(plan: SitePlan) -> Settlement:
+    """Run every stage, in order, against a fresh `Settlement` - once: a map is never rolled again with ground forbidden
+    (feature 287, FR-002; the reach that re-roll bought is the web's to draw, `ways/settle.py`)."""
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
-    s._avoid_seats = list(avoid)  # type: ignore[attr-defined]
     if plan.spec.byre_form is not None:  # a declared byre form bypasses the settlement engine's roll (feature 261)
         s.pin_knob("byre_form", plan.spec.byre_form)
     # THE SPEC'S PINS REACH THE ENGINE'S CATALOG, as `HamletSpec.pins` has always said they do; nothing passed them on until
     # 269 E4, whose knobs (`paddy_rest`, `fan_middle`) have no field of their own on the spec.
     for knob, value in plan.spec.pins.items():
         s.pin_knob(knob, value)
-    _run_stages(s, plan, 0, snapshot)
+    _run_stages(s, plan)
     return s
 
 
-def resume(snapshot: list[Any], avoid: Sequence[tuple[float, float]]) -> tuple[Settlement, SitePlan]:
-    """A re-roll from the first roll's `snapshot`: a copy of the settlement and plan before the first stage that reads
-    `avoid`, the avoid list set, and the stages from there on - the same map `build(copy of plan, avoid)` makes, without
-    running the stages that come out the same (`resume_at`; `tests/hamletgen/test_driver.py` proves the manifests
-    equal). The copy is taken again per re-roll, so every attempt starts from the untouched snapshot."""
-    import copy
-
-    s, plan = copy.deepcopy(snapshot[0])
-    s._avoid_seats = list(avoid)  # type: ignore[attr-defined]
-    _run_stages(s, plan, resume_at() or 0, None)
-    return s, plan
-
-
-def _run_stages(s: Settlement, plan: SitePlan, start: int, snapshot: list[Any] | None) -> None:
-    """The stages from `start` on, inside the roll's scope; `snapshot` takes its copy before `resume_at()`."""
-    import copy
-
-    at = resume_at() if snapshot is not None else None
+def _run_stages(s: Settlement, plan: SitePlan) -> None:
+    """Every stage, in order, inside the roll's scope."""
     if not os.environ.get(STAGE_PROFILE_ENV):
         with roll_scope(plan.spec):
-            for i, stage in enumerate(STAGES[start:], start):
-                if i == at:
-                    snapshot.append(copy.deepcopy((s, plan)))  # pyrefly: ignore[missing-attribute]  # `at` is set only with a snapshot
+            for stage in STAGES:
                 stage(s, plan)
         return
     # WHERE THE TIME WENT, in one roll (feature 151, US4). Finding the slow stage used to mean editing
@@ -284,9 +247,7 @@ def _run_stages(s: Settlement, plan: SitePlan, start: int, snapshot: list[Any] |
     # PRINTED - `tests/hamletgen/test_driver.py` asserts the manifest is identical with it set and unset.
     timings: list[tuple[str, float]] = []
     with roll_scope(plan.spec):
-        for i, stage in enumerate(STAGES[start:], start):
-            if i == at:
-                snapshot.append(copy.deepcopy((s, plan)))  # pyrefly: ignore[missing-attribute]  # `at` is set only with a snapshot
+        for stage in STAGES:
             t0 = time.time()
             stage(s, plan)
             timings.append((stage.__name__, time.time() - t0))
@@ -354,155 +315,45 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     runs; a cohort member with nowhere to go finishes into a scratch directory and is thrown away.
 
     The roll then reports on ITSELF (feature 166): the only verdict a finished map can give that no
-    placer already guarantees is whether its ways reach every house it seated, because reachability
-    depends on fabric that does not exist when the seats are chosen. Everything else the retired
-    battery measured here is now a property proven once, at the placer that makes it."""
+    placer already guarantees is whether its ways reach every house it seated. Since feature 287 that
+    too is guaranteed where it is decided - the seating reserves a corridor from every door to the exit
+    strip, and the web draws it where its lanes do not reach the house (`ways/settle.py`) - so the
+    verdict is a measurement of the guarantee, and a map is built ONCE (FR-002): the re-roll that
+    rebuilt a stranding map with its ground forbidden (feature 133 T33), its snapshot and resume
+    (feature 284) and its choice between attempts (features 226, 278) are gone."""
     # FR-008: an expensive operation refuses IN-PROCESS too, not only at the CLI. Without this,
     # `python3 -c "from ... import generate; generate(...)"` walks past every command-shape guard - a
     # bypass that needs no git diff and reads perfectly as diligence.
     guard("l7r.diagram.hamletgen")
 
+    import copy
     import tempfile
 
-    plan = plan_site(spec)
-    rolled: dict[str, SitePlan] = {}  # the plan the LAST roll built on - the kept attempt rolls last, so the report reads it
-    rolled_m: dict[str, dict[str, Any]] = {}  # ...and its finished manifest, by the same argument (feature 213: the report carries it)
-    _snap: list[Any] = []  # the first roll before its seats, for every re-roll to resume from (`resume`)
-
-    def _roll(avoid: Sequence[tuple[float, float]], attempt: int = 1, after: Sequence[str] = ()) -> tuple[Settlement, list[str], list[tuple[float, float]], list[str]]:
-        """Build and gate once - UNFINISHED: only the attempt kept is finished, once, after the choice (feature 278, FR-006).
-        Returns the settlement, the gate's verdict, and the seats the
-        GATE ITSELF names as unreached - read off its message, never recomputed. A hand-rolled
-        reach measure was tried and was wrong on five of six seeds (see future-work 2b): it
-        over-counted and never read zero, so anything steered by it was steered by noise."""
-        # FINISH EACH ROLL EXACTLY ONCE, to its final destination when there is one. `finish` MUTATES:
-        # it splices the shared water block into the stream, so calling it twice on one Settlement
-        # emits that block twice and the second copy's `</g>` closes the <svg> root early. Not
-        # theoretical - it shipped a kashikawa.svg with 436 group opens against 437 closes, which
-        # resvg refuses outright ("expected 'svg' tag, not 'g'"), so render-sync could not draw the
-        # map at all. Introduced when this retry loop began finishing a copy to gate it and then
-        # finishing the same object again for real.
-        # EACH ATTEMPT ROLLS ITS OWN PLAN (feature 137, cohort seed 03). The stages ACCUMULATE onto the
-        # plan - `plan.bamboo_polys += household_bamboo(...)`, `plan.bamboo_roles.append(...)` - so a
-        # second attempt on the shared plan inherited the first attempt's stands and drew them again
-        # over a different web: a homestead strip seated clear of attempt 1's lanes stood on attempt
-        # 2's, and `lanes_clear_of_bamboo` was right. A deep copy per roll; the outer plan stays as
-        # `plan_site` derived it, which is all the report reads.
-        import copy
-
-        # A RE-ROLL RESUMES AT THE SEATS (feature 284): the first roll keeps a copy of itself before the first stage that
-        # reads `avoid` (`resume_at`), and each re-roll starts from a fresh copy of that instead of running the field again.
-        if _snap:
-            s2, rolled["plan"] = resume(_snap, avoid)
-        else:
-            rolled["plan"] = copy.deepcopy(plan)
-            s2 = build(rolled["plan"], avoid=avoid, snapshot=_snap)
-        rolled_m["M"] = s2.M  # the kept attempt rolls last, so this is the report's manifest (feature 213)
-        # ATTRIBUTION (T33): the manifest says which roll drew it, and why the earlier ones were
-        # rejected, so a changed connector or web is never mistaken for the effect of an edit.
-        s2.M["meta"]["roll_attempt"] = attempt
-        s2.M["meta"]["roll_after"] = list(dict.fromkeys(after))
-        # THE MANIFEST CARRIES ITS OWN VERDICT (feature 215, D3): the roll's self-report, what it seated and the acreage
-        # it reached go into the meta BEFORE the finish writes the file, so a map read back from disk - the pool's, which
-        # the gate's ratchet reads instead of rolling the reference again - answers the same questions the Report does.
-        # `unreached_houses` reads the lanes and the houses, which the stages have drawn by now; the finish only inks.
-        _seats = [(float(x), float(y)) for x, y, _d in unreached_houses(s2.M)]
-        s2.M["meta"]["roll_failures"] = [f"farmhouses_reach_a_way[{len(_seats)}]"] if _seats else []
-        s2.M["meta"]["roll_placed"] = int(rolled["plan"].placed)
-        s2.M["meta"]["roll_acres"] = float(rolled["plan"].acres)
-        # THE GENERATOR REPORTS ON ITSELF NOW (feature 166). This used to run the whole check battery
-        # in-process on the finished manifest and take its verdict as the map's. There is no battery:
-        # every rule it held is either a property some placer guarantees by construction, proven by
-        # that placer's own test, or a recorded drop. What remains for a ROLL to say about itself is
-        # the one thing no placer can promise in advance - whether the ways it drew actually reach
-        # every house it seated - because reachability depends on fabric that does not exist when the
-        # seats are chosen.
-        #
-        # The predicate is `ways.unreached_houses`, the retired check's own body lifted to the engine
-        # (T02) rather than re-derived: a hand-rolled reach measure was tried and was wrong on five of
-        # six seeds (see future-work 2b), over-counting and never reading zero, so anything steered by
-        # it was steered by noise.
-        seats = _seats
-        red = list(s2.M["meta"]["roll_failures"])
-        lines = [f"FAIL farmhouses_reach_a_way  -> {len(seats)} farmhouse(s) stand off the connected way network, at {[(round(x), round(y)) for x, y in seats[:4]]}"] if seats else []
-        return s2, red, seats, lines
-
-    # A MAP THAT STRANDS A FARMHOUSE IS RE-ROLLED WITH THAT GROUND FORBIDDEN. The seats a hamlet
-    # offers are not all equally servable, and which ones are cannot be known until the ways are
-    # drawn - three separate seat-time tests were built and all three failed, because reachability
-    # depends on fabric that does not exist when seats are chosen. What CAN be done is to observe it
-    # on the finished map and not seat there next time. Measured on cohort seed 5: two unreached
-    # houses, then one, then none - it converges in two rounds.
-    #
-    # The retry is self-limiting: it runs only for a map that stranded a house, and it keeps a
-    # re-roll only if the reach count got no worse.
-    # ONLY THE ATTEMPT KEPT IS FINISHED, into a stage that is then promoted onto `out_base` (`promote`) - so a rejected roll
-    # never touches the map's own files, nor does one that dies mid-finish (`discard_on_failure`). Every attempt used to be
-    # finished into its own stage before the choice, which paid a whole finish - render and page - for the attempt thrown
-    # away (feature 278, FR-006). The choice reads only what the build decided: the unreached seats and the households
-    # placed. The kept settlement's manifest is the report's (`rolled_m`), and finishing it completes that manifest.
-    _s, failures, seats, lines = _roll(())
-    kept_s = _s
-    avoid: list[tuple[float, float]] = []
-    stale = False  # ...and whether a later roll was rejected, so the keeper is handed back
-    attempt = kept_attempt = 1
-    after: list[str] = []  # the checks that forced each re-roll, in order
-    _kept_placed = int(_s.M["meta"]["roll_placed"])  # the households the kept roll seated - a re-roll may not seat fewer
-    # THE REPORT MUST CARRY THE KEPT ROLL, NOT THE LAST ONE. `rolled`/`rolled_m` hold whichever roll ran most
-    # recently, on the argument that "the kept attempt rolls last" - which a rejected re-roll makes false. A COHORT passes no `out_base`: every member finishes into a scratch directory and
-    # is thrown away, so a rejected re-roll was the manifest the report handed back, and `cohort_audit` reads
-    # `meta.roll_placed` off exactly that manifest (feature 215). The verdict lines were the kept roll's and the
-    # numbers beside them the rejected roll's. Snapshot the keeper instead, and hand it back. Found while adding the shortfall re-roll below, which meets the same door.
-    _keep_plan, _keep_m = rolled["plan"], rolled_m["M"]
-    for _ in range(4):
-        # THE LOOP'S ENTRY IS THE PREDICATE TOO (feature 166 T03). It used to also require the gate to
-        # have NAMED `farmhouses_reach_a_way`, which is the same dependency in the entry condition that
-        # the accept criterion had in the exit: the ladder could not run without the battery telling it
-        # to. `seats` is non-empty exactly when houses are stranded, so it is the whole condition.
-        if not seats:
-            break
-        avoid = avoid + seats
-        after = after + ["farmhouses_reach_a_way"]
-        attempt += 1
-        _s2, f2, seats2, lines2 = _roll(avoid, attempt, after)
-        # THE ACCEPT CRITERION IS THE REACH COUNT, NOT THE GATE'S TOTAL (feature 166 T03).
-        #
-        # It used to be `len(f2) <= len(failures)`: keep a re-roll only if the battery's WHOLE failure
-        # list got no longer. That is a global quality proxy, and it becomes uncomputable when the
-        # battery goes - so this is a decision, not a refactor, and it is the one place this feature can
-        # move a map. What it costs is measured at T05 by re-rolling every live hamlet and comparing
-        # byte-for-byte.
-        #
-        # WHY THE REACH COUNT IS THE RIGHT REPLACEMENT, and not merely the available one: this loop
-        # exists to fix stranded farmhouses and nothing else. Judging its re-rolls by the total made an
-        # unrelated defect elsewhere veto a genuine reach fix - and the rejection then KEEPS the map
-        # with the stranded house, which is the worse of the two on the only axis the loop is about.
-        # Under this feature's architecture every other defect belongs to the placer that caused it and
-        # is caught by that placer's own test, so a reach loop that optimizes reach is correct rather
-        # than merely convenient.
-        # ...AND A RE-ROLL THAT SEATS FEWER HOUSEHOLDS IS NOT A FIX (feature 226, cohort seed 25 under the toe-marsh
-        # boundary: attempt 1 seated 14 of 20 with two stranded, attempt 2 seated 13 with none, and the loop KEPT the
-        # second - a map that lost a household to reach the rest). The reach count decides, the seated count may not fall.
-        if len(seats2) <= len(seats) and int(_s2.M["meta"]["roll_placed"]) >= _kept_placed:
-            failures, seats, lines, kept_attempt = f2, seats2, lines2, attempt
-            _kept_placed = int(_s2.M["meta"]["roll_placed"])
-            _keep_plan, _keep_m = rolled["plan"], rolled_m["M"]
-            kept_s = _s2
-        else:
-            stale = True
-            break
-    if stale:
-        # Nothing was finished before the choice, so there is nothing to re-emit (a re-roll of the keeper's avoid list used
-        # to put it back on disk): hand back the keeper itself.
-        rolled["plan"], rolled_m["M"] = _keep_plan, _keep_m
+    # A COPY OF THE PLAN IS BUILT ON (feature 137): the stages accumulate onto the plan they are handed
+    # (`plan.bamboo_polys += ...`), and the report reads the plan the roll built on.
+    plan = copy.deepcopy(plan_site(spec))
+    s = build(plan)
+    # THE MANIFEST CARRIES ITS OWN VERDICT (feature 215, D3): the roll's self-report, what it seated and the acreage it
+    # reached go into the meta BEFORE the finish writes the file, so a map read back from disk - the pool's, which the
+    # gate's ratchet reads instead of rolling the reference again - answers the same questions the Report does.
+    # `unreached_houses` reads the lanes and the houses, which the stages have drawn by now; the finish only inks.
+    seats = [(float(x), float(y)) for x, y, _d in unreached_houses(s.M)]
+    failures = [f"farmhouses_reach_a_way[{len(seats)}]"] if seats else []
+    s.M["meta"]["roll_failures"] = list(failures)
+    s.M["meta"]["roll_placed"] = int(plan.placed)
+    s.M["meta"]["roll_acres"] = float(plan.acres)
+    lines = [f"FAIL farmhouses_reach_a_way  -> {len(seats)} farmhouse(s) stand off the connected way network, at {[(round(x), round(y)) for x, y in seats[:4]]}"] if seats else []
+    # THE FINISH GOES INTO A STAGE that is then promoted onto `out_base` (`promote`), so a roll that dies mid-finish never
+    # touches the map's own files (`discard_on_failure`, feature 261). A cohort member with nowhere to go finishes into a
+    # scratch directory; finishing completes the manifest the report carries (feature 213).
     if out_base is not None:
         _stage = stage_for(out_base)
-        discard_on_failure(_stage, lambda: kept_s.finish(_stage, render=render))
-        promote(_stage, out_base)  # the kept roll's files, and only those, reach the map's own paths
+        discard_on_failure(_stage, lambda: s.finish(_stage, render=render))
+        promote(_stage, out_base)
     else:
         with tempfile.TemporaryDirectory() as tmp:
-            kept_s.finish(os.path.join(tmp, "scratch"), render=False)
-    return Report(plan=rolled.get("plan", plan), failures=failures, path=out_base, fail_lines=lines, attempt=kept_attempt, rerolled_after=after[: kept_attempt - 1], manifest=rolled_m.get("M"))
+            s.finish(os.path.join(tmp, "scratch"), render=False)
+    return Report(plan=plan, failures=failures, path=out_base, fail_lines=lines, manifest=s.M)
 
 
 def cohort_specs(count: int, first_seed: int = 1, households: int | None = None) -> list[HamletSpec]:

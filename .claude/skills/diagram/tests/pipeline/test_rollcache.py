@@ -545,7 +545,7 @@ def test_the_roll_payload_is_generate_s_plan_manifest_and_report(monkeypatch) ->
 
     spec = hg.HamletSpec(name="Probe", seed=1, households=10)
     plan = hg.plan_site(spec)
-    fake = hg.Report(plan=plan, failures=[], attempt=1, rerolled_after=[], manifest={"houses": []})
+    fake = hg.Report(plan=plan, failures=[], manifest={"houses": []})
     monkeypatch.setattr(hg, "generate", lambda s, out_base=None, render=False: fake)
     got_plan, manifest, rep = rollcache._roll_payload(spec)
     assert got_plan is plan and manifest == {"houses": []} and rep is fake

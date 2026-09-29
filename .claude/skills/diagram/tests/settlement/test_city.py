@@ -532,3 +532,25 @@ def test_a_merged_deck_is_redrawn_to_reach_both_crossings() -> None:
     deck = s.M["bridges"][0]
     s._reseat_to_cover(deck, (500.0, 320.0))
     assert deck["span"] == 42.0 and 'width="42.0"' in s.top[int(deck["z"]) - s.TOPZ]
+
+
+def test_a_village_cuts_its_lanes_where_no_deck_seats_before_it_lays_its_decks() -> None:
+    """Feature 287 (ways W12): `roll_village` has no web settle, and `bridges()` raises on a crossing no deck seats. So the
+    village cuts its lanes by the same predicate first (`undeckable_at`): the crossing and a bank's width either side come
+    out, the pieces stand, a lane with nothing left goes, and `bridges()` then decks what remains."""
+    from l7r.diagram.settlement.city.bridges import cut_at, undeckable_at
+
+    s = _crop_settlement()
+    s.M["field_ditches"] = [{"poly": [[0.0, 100.0], [400.0, 110.0]], "w": 4.0}]
+    grazing = [[0.0, 95.0], [400.0, 118.0]]  # two degrees off the ditch's own line: no deck seats
+    square = [[200.0, 0.0], [200.0, 300.0]]  # square over it: a deck seats
+    for pts in (grazing, square, [[105.0, 102.55], [108.0, 102.72]]):  # the last is all crossing: nothing of it is left
+        s.lane(pts, width=3)
+    waters = [([[0.0, 100.0], [400.0, 110.0]], 4.0)]
+    assert undeckable_at([(0.0, 95.0), (400.0, 118.0)], 3.0, waters) and not undeckable_at([(200.0, 0.0), (200.0, 300.0)], 3.0, waters)
+    assert s.cut_undeckable_lanes() >= 1
+    assert all(not undeckable_at([(float(x), float(y)) for x, y in ln["pts"]], 3.0, waters) for ln in s.M["lanes"])
+    assert s.bridges() >= 1, "the square crossing is decked; nothing raises"
+    assert cut_at([(0.0, 0.0), (100.0, 0.0)], 0, (50.0, 0.0), 10.0) == [[(0.0, 0.0), (40.0, 0.0)], [(60.0, 0.0), (100.0, 0.0)]]
+    assert cut_at([(0.0, 0.0), (10.0, 0.0), (100.0, 0.0)], 0, (5.0, 0.0), 10.0) == [[(15.0, 0.0), (100.0, 0.0)]], "a head with no length goes; the cut runs on past a vertex"
+    assert cut_at([(0.0, 0.0), (0.0, 0.0)], 0, (0.0, 0.0), 1.0) == []

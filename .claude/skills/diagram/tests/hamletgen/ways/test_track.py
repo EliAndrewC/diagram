@@ -131,3 +131,20 @@ def test_a_bearing_that_only_clips_the_field_is_kept_for_route_around() -> None:
     fence += [[(900.0, 60.0), (920.0, 60.0), (920.0, 340.0), (900.0, 340.0)], [(480.0, 320.0), (920.0, 320.0), (920.0, 340.0), (480.0, 340.0)]]
     track = hg.connector_track(plan, (700.0, 200.0), avoid=fence)
     assert hg.path_violations(track, fence, None, []) > 0 and track[0] == (700.0, 200.0)
+
+
+def test_the_gateway_stands_on_the_exit_strip_the_seating_reserved() -> None:
+    """Feature 287, plan M4b: the connector leaves along the exit strip, measured from the strip's own start (the seat's
+    center) rather than the cloud's mean, so a corridor the web draws along the strip meets the track."""
+    from l7r.diagram.hamletgen.ways import _cluster_gateway
+    from l7r.diagram.settlement import Settlement, seg_dist
+
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="G", scale="hamlet", ftpx=1, down_deg=90)
+    seat = {"cx": 500.0, "cy": 500.0, "along": (1.0, 0.0), "out": (0.0, 1.0), "half": 200.0, "depth": 80.0}
+    s.M["houses"] += [{"x": 560.0, "y": 520.0, "w": 50.0, "h": 30.0}, {"x": 640.0, "y": 470.0, "w": 50.0, "h": 30.0}]
+    off = _cluster_gateway(s, seat, (0.0, 0.0))
+    assert off[0] == 600.0, "without a strip, abreast of the cloud's mean"
+    s.M["access_exit"] = [[500.0, 500.0], [500.0, 900.0]]
+    on = _cluster_gateway(s, seat, (0.0, 0.0))
+    assert seg_dist(on[0], on[1], (500.0, 500.0), (500.0, 900.0)) < 1e-9 and on[1] > 520.0, "on the strip, past the cloud"

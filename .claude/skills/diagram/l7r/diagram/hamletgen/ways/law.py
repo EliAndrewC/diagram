@@ -31,17 +31,20 @@ import math
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import seg_closest, seg_dist, seg_intersect, segments_cross
+from l7r.diagram.settlement import point_in_poly, rot_rect, seg_closest, seg_dist, seg_intersect, segments_cross
 from l7r.diagram.settlement._geom.indexes import PointGrid
 from l7r.diagram.settlement._knobs import bridge_carried_ways, bridge_crossed_waters
 from l7r.diagram.settlement.city.bridges import DECK_SPAN_DEFAULT_FT as DECK_SPAN_DEFAULT_FT
 from l7r.diagram.settlement.city.bridges import PLANK_DITCH_FT as PLANK_DITCH_FT
-from l7r.diagram.settlement.city.bridges import crossing_deck, flooded_ground, plank_ditch, plank_on_supply
 from l7r.diagram.settlement.city.bridges import deck_covers as deck_covers
+from l7r.diagram.settlement.city.bridges import flooded_ground, plank_ditch, plank_on_supply
+from l7r.diagram.settlement.city.bridges import undeckable_at as undeckable_at
 from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
+from l7r.diagram.settlement.water_ways._helpers import BUND_REACH_FT
+from l7r.diagram.settlement.water_ways.lanes import behind_house, reaches_dooryard
 
-from ..consts import FORD_HALF, Poly, Pt
-from .checks import FORD_SQUARE_TOL_DEG, unreached_houses
+from ..consts import FORD_HALF, WAY_END_REACH_FT, Poly, Pt
+from .checks import FORD_SQUARE_TOL_DEG, served_network, unreached_houses
 from .clearance import _HAIRPIN_DEG, _ZIGZAG_DEG, _ZIGZAG_RUN_FT, kink_spans
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _crosses_fabric, house_hit
 from .geom import _TOUCH_GAP, WorkedGround, _components, _turn_deg, end_serves, polyline_len, steading_footprints, worked_ground
@@ -348,6 +351,33 @@ def near_misses(M: Mapping[str, Any]) -> list[tuple[int, int, Pt]]:
     return out
 
 
+NEEDLE_LOOP_FT = 20.0
+"""A face of the lane web whose mean width (twice its area over its perimeter) is under this is a NEEDLE OF GRASS: the same
+way drawn twice, forking and rejoining round nothing (homes H39; future-work/farming-communities.md 2c, two
+settlement-reviews: Sawada's triangle 110 ft long and 37.7 ft at its widest, mean width 16 ft, "reading as a street that
+forks and rejoins around nothing"). A village block holds a steading and is five times as wide. A map drawing convention."""
+
+
+def needle_loops(M: Mapping[str, Any]) -> list[tuple[Any, list[int]]]:
+    """(face, the lanes bounding it) for every face of the drawn lane web (the treads noded where they cross, then
+    polygonized) whose mean width is under `NEEDLE_LOOP_FT` - two ways laid round a sliver of ground, or along the same
+    ground (a face of no area at all)."""
+    from shapely.geometry import LineString
+    from shapely.ops import polygonize, unary_union
+
+    ways = _ways(M)
+    lines = {i: LineString(p) for i, p in enumerate(ways) if len(p) >= 2 and polyline_len(p) >= 1.0}
+    if len(lines) < 2:
+        return []
+    out = []
+    for face in polygonize(unary_union(list(lines.values()))):
+        if face.length <= 0 or 2.0 * face.area / face.length >= NEEDLE_LOOP_FT:
+            continue
+        edge = face.exterior.buffer(0.5)
+        out.append((face, sorted(i for i, ln in lines.items() if ln.intersection(edge).length > 1.0)))
+    return out
+
+
 def short_fragments(M: Mapping[str, Any]) -> list[int]:
     """The lanes shorter than `FRAGMENT_FT` (the connector and the field spur aside) that earn nothing: taking one away
     leaves no farmhouse newly unreached (`unreached_houses`) and the web in as many networks (`lane_networks`) - a fragment
@@ -357,11 +387,13 @@ def short_fragments(M: Mapping[str, Any]) -> list[int]:
     short = [i for i, ln in enumerate(lanes) if not ln.get("connector") and not ln.get("spur") and len(ln.get("pts") or []) >= 2 and polyline_len(lane_pts(ln)) < FRAGMENT_FT]
     if not short:
         return []
-    reached, nets = len(unreached_houses(M)), lane_networks(M)
+    reached, nets, targets, field = len(unreached_houses(M)), lane_networks(M), len(unreached_targets(M)), field_unreached(M)
     out = []
     for i in short:
         without = {**M, "lanes": [ln for k, ln in enumerate(lanes) if k != i]}
-        if len(unreached_houses(without)) <= reached and lane_networks(without) <= nets:
+        # ...nor a way target (a burial ground's edge) newly unreached, nor the field (feature 287: a short spur to the graves
+        # or on to the bund earns its place as a house's door path does)
+        if len(unreached_houses(without)) <= reached and lane_networks(without) <= nets and len(unreached_targets(without)) <= targets and field_unreached(without) <= field:
             out.append(i)
     return out
 
@@ -382,12 +414,32 @@ def lane_networks(M: Mapping[str, Any]) -> int:
 # ---- where lanes end -----------------------------------------------------------------------------------------------
 
 
+def way_targets(M: Mapping[str, Any]) -> list[Pt]:
+    """The points a way must reach (`meta.way_targets`: a burial ground's edge nearest the houses, homes H36)."""
+    return [(float(t["at"][0]), float(t["at"][1])) for t in (M.get("meta") or {}).get("way_targets") or []]
+
+
+TARGET_REACH_FT = 14.0
+"""A way target is reached where the served network comes this near it: the spur drawn to it ends on it, and a lane passing
+nearer than a doubled tread's distance (`sweeps._ALONG_FT`) stands at it. A map drawing convention."""
+
+
+def unreached_targets(M: Mapping[str, Any]) -> list[Pt]:
+    """The way targets (`way_targets`) the served network (`served_network`) does not come within `TARGET_REACH_FT` of."""
+    targets = way_targets(M)
+    if not targets:
+        return []
+    segs = served_network(M.get("lanes") or [])
+    return [t for t in targets if not any(seg_dist(t[0], t[1], a, b) <= TARGET_REACH_FT for a, b in segs)]
+
+
 def dangling_lane_ends(M: Mapping[str, Any], ground: WorkedGround | None = None) -> list[tuple[int, int]]:
     """(lane index, end) for every internal lane end that reaches nothing (`end_serves`) other than the way its own far
     end stands on: the other ways' segments are asked, less those within `_TOUCH_GAP` of the lane's far end. `ground` is the
-    worked ground where the caller has it built already (`memo_ground`)."""
+    worked ground where the caller has it built already (`memo_ground`). A way target (`meta.way_targets`, a burial ground's
+    near edge) is something worth walking to, as a farmhouse is (homes H36: a path runs to the graves)."""
     ways = _ways(M)
-    centers = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or []]
+    centers = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or []] + way_targets(M)
     steadings = steading_footprints(M)
     ground = worked_ground(M) if ground is None else ground
     out = []
@@ -435,6 +487,33 @@ def fronted_ends(M: Mapping[str, Any]) -> dict[int, int]:
     return {h: len(ends) for h, ends in fronting_ends(M).items()}
 
 
+def ends_behind(M: Mapping[str, Any], ground: WorkedGround | None = None) -> list[tuple[int, int, int]]:
+    """(lane index, end, house index) for every free lane end (the connector's aside; an end within `JOIN_TOL` of another
+    way is a junction) that stands within `WAY_END_REACH_FT` of a farmhouse, BEHIND the nearest such house - past its back
+    wall, abreast of it (`behind_house`) - and at no house's dooryard (`reaches_dooryard`), nor on the bund (water W57; 269
+    B17, research/homesteads/310: a lane that serves a farmhouse ends at its dooryard, and a lane end behind a house's back
+    wall does not count as reaching it - Kuwabata's lane 5, 11 ft behind house 1 and 43 ft from its yard)."""
+    ways = _ways(M)
+    houses = M.get("houses") or []
+    if not houses:
+        return []
+    ground = worked_ground(M) if ground is None else ground
+    out = []
+    for i, ln in enumerate(M.get("lanes") or []):
+        p = ways[i]
+        if ln.get("connector") or len(p) < 2:
+            continue
+        for e in (0, -1):
+            q = p[e]
+            near = [h for h in range(len(houses)) if math.hypot(q[0] - houses[h]["x"], q[1] - houses[h]["y"]) <= WAY_END_REACH_FT]
+            if not near or not free_end(ways, i, q) or ground.dist(q) <= BUND_REACH_FT or any(reaches_dooryard(houses[h], q) for h in near):
+                continue
+            h = min(near, key=lambda k: math.hypot(q[0] - houses[k]["x"], q[1] - houses[k]["y"]))
+            if behind_house(houses[h], q):
+                out.append((i, e, h))
+    return out
+
+
 def doorstep_ends(M: Mapping[str, Any]) -> dict[int, int]:
     """The farmhouses that discharge more than `DOORSTEP_MAX` free lane ends apiece (`fronted_ends`)."""
     return {h: n for h, n in fronted_ends(M).items() if n > DOORSTEP_MAX}
@@ -454,6 +533,41 @@ def field_unreached(M: Mapping[str, Any]) -> bool:
 
 
 # ---- the fabric ----------------------------------------------------------------------------------------------------
+
+
+FIXTURE_PAD_FT = 0.5
+"""How far a lane's tread keeps off a farmstead fixture beyond its own half-width: the ink's edge stroke - a tread that
+touches the glyph reads as walking over it."""
+
+
+def fixture_quads(M: Mapping[str, Any]) -> list[Poly]:
+    """Every farmstead fixture's drawn quad (`farm_fixtures`: privy, manure heap, bath, coop, hokora), turned as drawn."""
+    return [rot_rect(float(r["x"]), float(r["y"]), float(r["w"]), float(r["h"]), float(r.get("rot") or 0.0)) for r in M.get("farm_fixtures") or [] if all(k in r for k in ("x", "y", "w", "h"))]
+
+
+def over_a_fixture(pts: Sequence[Pt], width: float, quads: Sequence[Poly]) -> int | None:
+    """The first segment of a lane along `pts`, drawn `width` wide, whose tread meets a farmstead fixture (`fixture_quads`) -
+    crosses it, stands in it, or passes within its half-width and `FIXTURE_PAD_FT` of it; None where it meets none. THE ONE
+    PREDICATE: the web's settle cuts what it names, a tree lane is refused by it, and the finished-map rule reads it."""
+    gap = width / 2.0 + FIXTURE_PAD_FT
+    for k, (a, b) in enumerate(zip(pts, pts[1:], strict=False)):
+        for q in quads:
+            if point_in_poly(a[0], a[1], q) or point_in_poly(b[0], b[1], q) or _crosses_fabric([a, b], [q], gap):
+                return k
+    return None
+
+
+def lanes_over_fixtures(M: Mapping[str, Any]) -> list[tuple[int, int]]:
+    """(lane, segment) for every lane whose tread meets a farmstead fixture (`over_a_fixture`)."""
+    quads = fixture_quads(M)
+    if not quads:
+        return []
+    out = []
+    for i, ln in enumerate(M.get("lanes") or []):
+        k = over_a_fixture(lane_pts(ln), float(ln.get("w") or 3.0), quads)
+        if k is not None:
+            out.append((i, k))
+    return out
 
 
 def solid_boxes(M: Mapping[str, Any]) -> list[tuple[float, float, float, float]]:
@@ -568,9 +682,14 @@ def oblique_crossings(M: Mapping[str, Any], water: str = "brook") -> list[tuple[
 
 
 def unbridged_crossings(M: Mapping[str, Any]) -> list[tuple[int, int]]:
-    """Every crossing of the brook by a lane that no drawn deck covers (`deck_covers`)."""
+    """Every crossing of water by a lane that no drawn deck covers (`deck_covers`): the brook, and every other course a way
+    may have to be carried over (`bridge_crossed_waters`) - a drawn channel, a field ditch, the polder's drain (feature
+    287: the drain takes no footplank, `plank_on_supply`, so a way over it is carried on the deck `bridges()` lays where
+    the web's last pass left a crossing it can deck, and cut where it could not - never walked through the water)."""
     decks = M.get("bridges") or []
-    return [(round(x[0]), round(x[1])) for brook in _brooks(M) for p in _ways(M) for x in _crossings(p, brook) if not any(deck_covers(d, x[0], x[1]) for d in decks)]
+    waters = [*_brooks(M), *([(float(q[0]), float(q[1])) for q in wpts] for wpts, _w in bridge_crossed_waters(M) if len(wpts) >= 2)]
+    hits = {(round(x[0]), round(x[1])) for course in waters for p in _ways(M) for x in _crossings(p, course) if not any(deck_covers(d, x[0], x[1]) for d in decks)}
+    return sorted(hits)
 
 
 def deck_seats(pts: Poly, width: float, waters: Sequence[tuple[Any, float]], ftpx: float = 1.0, wet: Sequence[Poly] = ()) -> list[tuple[int, int]]:
@@ -578,21 +697,6 @@ def deck_seats(pts: Poly, width: float, waters: Sequence[tuple[Any, float]], ftp
     very solve `bridges()` makes - grown, then skewed toward square, until every corner clears the whole crossed course
     (`_deck_corners_clear`) and lands off the flooded rice (`wet`, `flooded_ground`) (`undeckable_at`)."""
     return [(round(p[0]), round(p[1])) for _k, p in undeckable_at(pts, width, waters, ftpx, wet)]
-
-
-def undeckable_at(pts: Poly, width: float, waters: Sequence[tuple[Any, float]], ftpx: float = 1.0, wet: Sequence[Poly] = ()) -> list[tuple[int, Pt]]:
-    """(segment index, crossing point) for every crossing of `waters` by a way along `pts` where no deck seats
-    (`crossing_deck`)."""
-    out = []
-    for k, (ra, rb) in enumerate(zip(pts, pts[1:], strict=False)):
-        for wpts, ww in waters:
-            wp = [(float(q[0]), float(q[1])) for q in wpts]
-            for wa, wb in zip(wp, wp[1:], strict=False):
-                if segments_cross(ra, rb, wa, wb):
-                    p, _rot, _span, seated = crossing_deck(ra, rb, width, wa, wb, float(ww), wp, ftpx, wet)
-                    if not seated:
-                        out.append((k, p))
-    return out
 
 
 def undeckable_crossings(M: Mapping[str, Any]) -> list[tuple[int, int]]:
@@ -672,6 +776,9 @@ LAW: dict[str, Callable[[Mapping[str, Any]], Any]] = {
     "width_steps": lambda M: width_steps(M.get("lanes") or []),
     "dangling_ends": dangling_ends,
     "doorstep_ends": doorstep_ends,
+    "ends_behind": ends_behind,
+    "over_fixtures": lanes_over_fixtures,
+    "needle_loops": lambda M: [[round(v) for v in face.centroid.coords[0]] for face, _lanes in needle_loops(M)],
     "field_unreached": field_unreached,
     "breaks_mid_run": breaks_mid_run,
     "over_and_back": over_and_back,
@@ -684,6 +791,7 @@ LAW: dict[str, Callable[[Mapping[str, Any]], Any]] = {
     "planks": lambda M: [x for part in plank_faults(M) for x in part],
     "way_outs": way_outs_crossing,
     "unreached_houses": unreached_houses,
+    "unreached_targets": unreached_targets,
 }
 """Every lane rule a finished map is asked, by name - the acceptance sweep's (M9) reading of this module. A rule's value is
 falsy when the map keeps it. `fouls_fabric` and `deck_seats` are asked of one candidate way, not of a manifest, and are

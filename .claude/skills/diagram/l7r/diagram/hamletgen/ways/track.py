@@ -95,6 +95,15 @@ def _cluster_gateway(s: Settlement, seat: Mapping[str, object], fallback: Pt) ->
     # how far the cloud actually reaches, along each seat axis
     out_reach = max((x - cx) * ox + (y - cy) * oy for x, y in zip(xs, ys, strict=False))
     along_mid = sum((x - cx) * ax + (y - cy) * ay for x, y in zip(xs, ys, strict=False)) / len(xs)
+    # THE GATEWAY STANDS ON THE EXIT STRIP (feature 287, plan M4b): where the seating reserved one, the track leaves along
+    # it - measured from the strip's own start (the seat's center) rather than from the cloud's mean - so the reserved tree
+    # every corridor hangs from runs on into the connector, and a corridor the web draws along the strip meets it
+    # (`corridors.corridor_chain`). Off the strip, a corridor walked to the track would cross unreserved ground.
+    exit_strip = s.M.get("access_exit")
+    if exit_strip:
+        cx, cy = float(exit_strip[0][0]), float(exit_strip[0][1])
+        out_reach = max((x - cx) * ox + (y - cy) * oy for x, y in zip(xs, ys, strict=False))
+        along_mid = 0.0
     # THE CLOUD IS NOT ONLY THE HOUSES. Wells, byres, sheds and yards are seated in
     # `stage_appurtenances`, which runs BEFORE the track, and some of them stand outside the house
     # extent. A gateway measured from houses alone landed 3.6 px from a well on the reference hamlet

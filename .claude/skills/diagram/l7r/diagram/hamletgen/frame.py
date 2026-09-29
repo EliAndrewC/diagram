@@ -14,7 +14,6 @@ from .hinterland import title_pocket
 from .hinterland.frame import frame_for
 from .plan import SitePlan
 from .water import polder_crossing_caps
-from .ways.checks import square_crossings
 
 # ---- STAGE 8: crossings, the board, and the frame ------------------------------------------------
 
@@ -35,24 +34,11 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.Settlement.channel_footbridges
         l7r.diagram.settlement.Settlement.dike_gates
         l7r.diagram.hamletgen.water.polder_crossing_caps
-        l7r.diagram.hamletgen.ways.checks.square_crossings
     """
-    # THE BROOK IS ALREADY ROUND: `round_the_brooks` runs at the end of `stage_sink` (feature 287, M2), so the crossings
-    # are squared and decked against the course the houses and the fords were set against - not rounded under them here.
-    # EVERY WAY CROSSES THE BROOK SQUARE, and so does its deck (feature 261): the lane is squared at the crossing first,
-    # its record and its ink together, because `bridges` lays the plank along the way it carries.
-    # ...AND EVERY DRAWN CHANNEL (settlement-review of Mizuguchi, feature 261): a lane over the head-race beside the weir lay
-    # 44 degrees off square, because only the brook was squared - and the record says a plank "crosses its ditch square
-    # rather than obliquely" (research ways/030)
-    waters = [(f["poly"], float(f.get("w", 8.0)) / 2 + s.px(6.0)) for f in s.M.get("streams", []) if len(f.get("poly") or ()) >= 2]
-    waters += [(c["pts"], float(c.get("w0", 4.0)) / 2 + s.px(6.0)) for c in s.M.get("drawn_channels", []) if len(c.get("pts") or ()) >= 2]
-    for brook, half in waters:
-        for i, ln in enumerate(s.M.get("lanes", [])):
-            pts = [(float(x), float(y)) for x, y in ln["pts"]]
-            squared = square_crossings(pts, [(float(x), float(y)) for x, y in brook], half)
-            if len(squared) != len(pts):
-                ln["pts"] = [[x, y] for x, y in squared]
-                s.reink_lane(i)
+    # THE LANES ARE ALREADY SQUARE (feature 287, M4c): every way crosses the brook and every drawn channel square, and so
+    # does its deck (features 261, research ways/030) - squared as the first step of `settle_the_web`, the web's last pass
+    # (`ways/settle.py:square_every_crossing`), so every rule of the lane law is judged on the squared lane and no stage
+    # after the web rewrites one. This stage only decks what the web drew. (The brook is round since `stage_sink`, M2.)
     s.bridges()
     if s.M.get("field_ditches"):
         if plan.field_archetype in POLDER_ARCHETYPES:

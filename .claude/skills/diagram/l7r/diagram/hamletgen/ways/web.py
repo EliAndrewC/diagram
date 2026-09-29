@@ -31,7 +31,7 @@ from .geom import _components, _trim_to_service, polyline_len, steading_footprin
 from .joints import center_lane_ends, fold_the_connector_hairpin, meet_end_to_end, split_at_crossings, straighten_joints
 from .route import _route
 from .serve import _lay_web_lane, _serve_stragglers
-from .settle import settle_and_redraw
+from .settle import settle_the_web
 from .smooth import _STUB_REACH_FT, _smooth_web
 from .sweeps import (
     _bridge_collinear_breaks,
@@ -688,19 +688,11 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     s.M["meta"]["lane_web"] = plan.lane_web
     # ...AND THE WEB SETTLES ITSELF, LAST (feature 287, M4): every rule of the lane law is asked of the web as it stands and
     # what breaks one is cut away or re-laid (`settle_the_web`), the crossings squared first - so no stage after this one
-    # rewrites a lane. A cut can take a farmhouse's only way or the field path: until the access corridor reserved at seating
-    # serves them (M3), the stragglers and the field path are drawn once more and the web settled again.
+    # rewrites a lane. A cut can take a farmhouse's only way or the field path, so the settle draws what the web still owes -
+    # each stranded house's reserved corridor, a spur to each way target, the field way (M3's web half) - as lanes it never
+    # cuts; the straggler redraw that stood in for the corridor until it landed is gone with the driver's re-roll.
     _pass("settle")
-    s.M["meta"]["web_settle"] = settle_and_redraw(s, lambda: redraw_the_reach(s, plan, hard, fabric, list(plan.watercourses) + drawn_water))
-
-
-def redraw_the_reach(s: Settlement, plan: SitePlan, hard: list[Poly], fabric: list[tuple[Poly, Pt | None, str]], water: list[tuple[Pt, Pt]]) -> None:
-    """The farmhouses and the field a settling cut left without a way, served again: the straggler paths
-    (`_serve_stragglers`) and the way onto the bund (`a_way_onto_the_bund`) drawn once more (feature 287: until the access
-    corridor reserved at seating serves them, M3)."""
-    _pass("straggler")
-    _serve_stragglers(s, plan, hard, fabric, water)
-    s.M["meta"]["field_path"] = a_way_onto_the_bund(s)
+    s.M["meta"]["web_settle"] = settle_the_web(s)
 
 
 def _reachable_runs(cands: Sequence[Poly], seed_segs: Sequence[tuple[Pt, Pt]]) -> list[Poly]:

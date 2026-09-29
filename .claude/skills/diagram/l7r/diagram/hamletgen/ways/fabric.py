@@ -187,6 +187,14 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
         for r in s.M.get(key, []):
             own = r.get("of")
             out.append((rot_rect(float(r["x"]), float(r["y"]), float(r["w"]), float(r["h"]), float(r.get("rot", 0.0))), (float(own[0]), float(own[1])) if own else None, key))
+    # THE FARMSTEAD FIXTURES ARE BUILT GROUND TOO (feature 287: laid in each bundle since HOMES' wave 3 and recorded as
+    # `farm_fixtures`) - a privy, a manure heap, a bath, a coop, a hokora - and UNOWNED: a door path may leave its own yard,
+    # never walk over its own privy. Measured before: 233 lane crossings of a fixture over 64 maps
+    out.extend(
+        (rot_rect(float(r["x"]), float(r["y"]), float(r["w"]), float(r["h"]), float(r.get("rot", 0.0))), None, "farm_fixtures")
+        for r in s.M.get("farm_fixtures", [])
+        if all(k in r for k in ("x", "y", "w", "h"))
+    )
     return out
 
 

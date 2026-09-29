@@ -8,15 +8,19 @@ changes nothing. It is the guarantee; the passes before it are best-effort drawi
 
 WHAT A REPAIR MAY DO. It only takes material AWAY from an ordinary lane - cuts a crossing, a fold or a foul out of it,
 shortens an end, re-aims an end's last leg at the foot of its own previous vertex (never longer than the leg it replaces),
-drops a piece that no longer joins the connector's network - or squares a crossing. It never moves the connector, except to
-take a hook off its end. That is the termination argument: every repair but the squaring strictly shortens the non-connector
-web, and the squaring is idempotent (`checks.square_crossings`). Should the rounds run out with a rule still broken, the
-lanes still breaking one are dropped whole, round by round, until none is (FR-005: a lane that cannot be repaired is dropped;
-it is never kept as "the least bad").
+drops a piece that no longer joins the connector's network - or squares a crossing. It never cuts the TREE (`corridors.
+is_tree`: the connector, whose hook alone it takes off, and the lanes step 4 draws). That is the termination argument:
+every repair but the squaring strictly shortens the non-tree web, the squaring is idempotent (`checks.square_crossings`),
+and step 4 adds a tree lane at most once per house, way target and field. Should the rounds run out with a rule still
+broken, the lanes still breaking one are dropped whole, round by round, until none is (FR-005: a lane that cannot be
+repaired is dropped; it is never kept as "the least bad").
 
-WHAT IT CANNOT DO ALONE. A lane it cuts may have been some farmhouse's only way. The access corridor reserved at seating
-(M3, the homesteads area) is what serves that house; until the corridor lands, `stage_web` redraws the straggler paths once
-after this pass and settles again, and the driver's re-roll still stands behind `unreached_houses` (T66 retires it).
+THE REACH IS DRAWN HERE (step 4; ways W01, W03, homes H36). A lane a repair cuts may have been some farmhouse's only way,
+and the web may never have reached one at all. The seating reserved a corridor from every door to the exit strip the
+connector leaves along (`settlement/rolling/access.py`, `track._cluster_gateway`), so for every farmhouse still unreached
+that corridor is drawn up to its first contact with the network (`corridors.draw_corridors`); a spur is laid to each way
+target the network misses (a burial ground's edge), and the field way where no lane reaches the field - each the shortest
+run that keeps the law (`Lawful`). This replaced the driver's re-roll (feature 287, FR-002).
 
 THE CROSSINGS ARE SQUARED HERE (ways W11): the squaring `stage_crossings` did after the woods now runs as this pass's first
 step, so every guarantee below is judged on the squared lane and no stage after the web rewrites one."""
@@ -28,18 +32,22 @@ import time
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import seg_closest, seg_dist
+from l7r.diagram.settlement import seg_closest, seg_dist, segments_cross
 from l7r.diagram.settlement._knobs import bridge_crossed_waters
 from l7r.diagram.settlement.city.bridges import flooded_ground
 from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
+from l7r.diagram.settlement.water_ways.lanes import behind_house, reaches_dooryard
 
-from ..consts import WEB_CLEARANCE, Poly, Pt
+from ..consts import WAY_END_REACH_FT, WEB_CLEARANCE, Poly, Pt
 from . import law
-from .checks import square_crossings, unreached_houses
+from .bund import BRANCH_WIDTH, paddy_ground
+from .checks import served_network, square_crossings, unreached_houses
 from .clearance import kink_spans
+from .corridors import ACCESS_WIDTH, FIELD_ROLE, TARGET_ROLE, building_quads, draw_corridors, field_runs, is_tree, round_the_gable, routed_field_runs, spur_runs, through_a_building
 from .fabric import _crosses_fabric, _homestead_polys, house_hit
 from .geom import _TOUCH_GAP, _components, _trim_to_service, memo_ground, polyline_len, steading_footprints, worked_ground
 from .joints import joints
+from .route import _route
 from .sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
 
 SETTLE_ROUNDS = 8
@@ -124,7 +132,8 @@ def apply_pieces(s: Any, edits: Mapping[int, list[Poly]]) -> int:
 
 
 def _ordinary(M: Mapping[str, Any]) -> list[int]:
-    return [i for i, ln in enumerate(M.get("lanes") or []) if not ln.get("connector") and len(ln.get("pts") or []) >= 2]
+    """The lanes a repair may cut: every lane but the tree (`is_tree` - the connector and the drawn access corridors)."""
+    return [i for i, ln in enumerate(M.get("lanes") or []) if not is_tree(ln) and len(ln.get("pts") or []) >= 2]
 
 
 # ---- step 1: every crossing square -------------------------------------------------------------------------------------
@@ -193,11 +202,15 @@ def theirs(p: Poly, yards: Yards, houses: Sequence[Mapping[str, Any]]) -> list[P
     return [poly for poly, owner in yards if owner is None or all(math.dist(owner, c) > 1.0 for c in own)]
 
 
-def fouled_segment(p: Poly, width: float, houses: Sequence[Mapping[str, Any]], yards: Yards, solid: Sequence[tuple[float, float, float, float]]) -> int | None:
+def fouled_segment(p: Poly, width: float, houses: Sequence[Mapping[str, Any]], yards: Yards, solid: Sequence[tuple[float, float, float, float]], fixtures: Sequence[Poly] = ()) -> int | None:
     """The first segment of `p` that fouls the fabric: ink on a farmhouse (`house_hit`), within `_TOUCH_GAP` of another
-    household's yard or garden (`law.fouls_fabric`, `theirs`), or a long leg through a building's box (`law.breaks_mid_run`)."""
+    household's yard or garden (`law.fouls_fabric`, `theirs`), a long leg through a building's box (`law.breaks_mid_run`),
+    or a tread over a farmstead fixture, the lane's own household's too (`law.over_a_fixture`)."""
     near = theirs(p, yards, houses)
+    over = law.over_a_fixture(p, width, fixtures) if fixtures else None
     for k, (a, b) in enumerate(zip(p, p[1:], strict=False)):
+        if k == over:
+            return k
         if house_hit([a, b], width, houses) or _crosses_fabric([a, b], near, _TOUCH_GAP):
             return k
         if math.dist(a, b) > law.BREAK_SPAN_FT:
@@ -265,11 +278,12 @@ def settle_shapes(s: Any) -> int:
     lanes = M.get("lanes") or []
     yards, houses = _fabric(s)
     solid = law.solid_boxes(M)
+    fixtures = law.fixture_quads(M)
     wet = flooded_ground(M)
     edits: dict[int, list[Poly]] = {}
     for i, ln in enumerate(lanes):
         p = _pts(ln)
-        if len(p) < 2:
+        if len(p) < 2 or (is_tree(ln) and not ln.get("connector")):
             continue
         ends = law.hooked(p)
         if ends:
@@ -289,7 +303,7 @@ def settle_shapes(s: Any) -> int:
         if pieces is not None:
             edits[i] = pieces
             continue
-        k = fouled_segment(p, float(ln.get("w") or 3.0), houses, yards, solid)
+        k = fouled_segment(p, float(ln.get("w") or 3.0), houses, yards, solid, fixtures)
         if k is not None:
             edits[i] = [q for q in (p[: k + 1], p[k + 1 :]) if len(q) >= 2]  # the fouling segment goes; a lane of one goes whole
     return apply_pieces(s, edits)
@@ -378,7 +392,7 @@ def settle_ends(s: Any) -> int:
     touched: set[int] = set()
 
     def claim(involved: set[int], i: int, pieces: list[Poly]) -> None:
-        if not involved & touched:
+        if not involved & touched and not is_tree(lanes[i]):
             edits[i] = pieces
             touched.update(involved)
 
@@ -390,8 +404,10 @@ def settle_ends(s: Any) -> int:
         # the SHORTER record of the two that has a vertex to fall back to is re-aimed as a T on the other; two bare legs
         # folded on each other lose the shorter
         x, y = _as_end(_pts(lanes[i]), ei), _as_end(_pts(lanes[j]), ej)
-        both = sorted(((polyline_len(q), m, q, e, o) for m, q, e, o in ((i, x, ei, y), (j, y, ej, x))), key=lambda c: c[0])
+        both = sorted(((polyline_len(q), m, q, e, o) for m, q, e, o in ((i, x, ei, y), (j, y, ej, x)) if not is_tree(lanes[m])), key=lambda c: c[0])
         bent = [c for c in both if len(c[2]) >= 3]
+        if not both:
+            continue
         if bent:
             _len, m, seq, me, other = bent[0]
             claim({i, j}, m, [_back(reaimed(seq, other), me)])
@@ -411,9 +427,54 @@ def settle_ends(s: Any) -> int:
             seq = _as_end(_pts(lanes[i]), end)
             walk = next((polyline_len(seq[: k + 1]) for k in range(len(seq) - 1, -1, -1) if math.dist(seq[k], c) > law.DOORSTEP_FT), 0.0)
             claim({i}, i, [_back(sub_run(seq, 0.0, walk), end)] if walk > 0 else [])
+    # AN END BEHIND A HOUSE IS CARRIED ROUND THE GABLE TO ITS FRONT, OR CUT (water W57): where the carried run keeps the law
+    # (`Lawful`, asked without the lane it replaces) the end runs on round the nearer gable into the dooryard band, or the
+    # farther; otherwise the end is taken back only as far as it stands behind the house (`off_the_back`) - never a whole
+    # leg: cohort seed 31's backbone lane lost its 200 ft last leg to a cut, and fifteen houses hanging off that leg were
+    # stranded - and the next round asks what the shortened end reaches (a dangling end is trimmed to service, a house left
+    # unreached is its corridor's). Each lane's first such end only, one repair per round.
+    lawful: Lawful | None = None
+    for i, end, h in law.ends_behind(M, memo_ground(s, "worked", worked_ground)):
+        if i in touched or is_tree(lanes[i]):
+            continue
+        seq = _as_end(_pts(lanes[i]), end)
+        lawful = lawful or Lawful(s)
+        width = float(lanes[i].get("w") or 3.0)
+        gables = [round_the_gable(seq, houses[h], far=far, keep_end=keep) for keep in (False, True) for far in (False, True)]
+        carries = [c for c in gables if lawful(c, width, skip=i)]
+        # ...PREFERRING A REPAIR THAT SPLITS NOTHING (`keeps_the_network`): a carry, then the back-off; where each would leave
+        # another way's end hanging, the carry or the back-off all the same - the rule holds, and a house the split strands is
+        # its corridor's
+        others = [sg for k, o in enumerate(lanes) if k != i for sg in zip(_pts(o), _pts(o)[1:], strict=False)]
+        options = [_back(q, end) for q in (*carries, off_the_back(seq, houses[h], others))]
+        # ...judged against the web WITH this round's earlier repairs made: two carries each harmless alone can together
+        # take a junction's both sides (cohort seed 31's lanes 8 and 10, carried round one gable to one point)
+        work = with_edits(M, edits)
+        claim({i}, i, [next((q for q in options if keeps_the_network(work, i, [q])), options[0])])
     if edits:
         return apply_pieces(s, edits)
     return settle_dangling(s)
+
+
+BACK_OFF_STEP_FT = 2.0
+"""The step an end behind a house is taken back in (`off_the_back`)."""
+
+
+def off_the_back(seq: Poly, house: Mapping[str, Any], others: Sequence[tuple[Pt, Pt]] = ()) -> Poly:
+    """`seq`, whose last point stands behind `house` (water W57), taken back along itself to the first point that no longer
+    does - beside the house, at its dooryard, or past `WAY_END_REACH_FT` from it, where the end is no longer the house's
+    to reach - or to its last junction (a point within `law.JOIN_TOL` of another way's `others` segment), which is the
+    stub's own end: the design's "trimmed back to the last way junction", so no way that joins the lane is cut off it. []
+    where no such point is left (the lane stands wholly behind the house)."""
+    c, total = (float(house["x"]), float(house["y"])), polyline_len(seq)
+    walk = total
+    while walk > 0.0:
+        run = sub_run(seq, 0.0, walk)
+        q = run[-1] if run else seq[0]
+        if math.dist(q, c) > WAY_END_REACH_FT or not behind_house(house, q) or reaches_dooryard(house, q) or any(seg_dist(q[0], q[1], a, b) <= law.JOIN_TOL for a, b in others):
+            return run
+        walk -= BACK_OFF_STEP_FT
+    return []
 
 
 def settle_dangling(s: Any) -> int:
@@ -460,10 +521,68 @@ def settle_joins(s: Any) -> int:
     return apply_pieces(s, edits) if edits else 0
 
 
+def settle_needles(s: Any) -> int:
+    """Step 5b (homes H39): a way drawn twice round a needle of grass, or along the same ground (`law.needle_loops`), is
+    opened - the shortest ordinary lane on the needle loses its stretch along it (the pieces either side kept), so the
+    other way is the one walked. The cut must SPLIT NOTHING - the web in no more networks and no farmhouse newly unreached
+    (cohort seed 31: a cut taken at the needle's corner took the junction three lanes hung from, and nine lanes fell off the
+    network with thirteen houses) - so the shortest lane whose cut keeps both is cut, and a needle no cut opens that way
+    waits for the next round. One cut a round; a needle bounded by the tree alone is left to the tree (it is drawn once per
+    house and meets the network at its first contact, so it closes no loop of its own)."""
+    from shapely.geometry import LineString
+
+    M = s.M
+    lanes = M.get("lanes") or []
+    for face, bounding in law.needle_loops(M):
+        for i in sorted((k for k in bounding if not is_tree(lanes[k])), key=lambda k: polyline_len(_pts(lanes[k]))):
+            rest = LineString(_pts(lanes[i])).difference(face.exterior.buffer(1.0))
+            parts = [rest] if rest.geom_type == "LineString" else list(getattr(rest, "geoms", []))
+            pieces = [[(float(x), float(y)) for x, y in g.coords] for g in parts if g.geom_type == "LineString" and not g.is_empty]
+            if keeps_the_network(M, i, pieces):
+                return apply_pieces(s, {i: pieces})
+    return 0
+
+
+def with_edits(M: Mapping[str, Any], edits: Mapping[int, Sequence[Poly]]) -> dict[str, Any]:
+    """`M` as `apply_pieces` would leave it after `edits`, its lane indices kept: each edited lane's first piece in place (a
+    lane with none left empty rather than removed) and the further pieces appended."""
+    lanes = [dict(ln) for ln in M.get("lanes") or []]
+    extra = []
+    for i, pieces in edits.items():
+        lanes[i]["pts"] = [list(q) for q in pieces[0]] if pieces else []
+        extra += [{"pts": [list(q) for q in p]} for p in pieces[1:]]
+    return {**M, "lanes": [*lanes, *extra]}
+
+
+def keeps_the_network(M: Mapping[str, Any], i: int, pieces: Sequence[Poly]) -> bool:
+    """Would lane `i` redrawn as `pieces` SPLIT NOTHING - the web in no more networks (`law.lane_networks`), no farmhouse
+    newly unreached (`unreached_houses`), and every other lane joined to the connector's network still joined to it
+    (`connector_component`, what `settle_network` keeps)? A repair that moves a lane's end asks it: another way's end on the
+    stretch it moves is left hanging otherwise (cohort seed 31: a backbone's end carried round a gable took the tread three
+    lanes stood on, and nine lanes fell off the network with thirteen houses)."""
+    lanes = M.get("lanes") or []
+    joined = connector_component(lanes)
+    others = [k for k in range(len(lanes)) if k != i]
+    trial = {**M, "lanes": [*(lanes[k] for k in others), *({"pts": q} for q in pieces if len(q) >= 2 and polyline_len(q) >= 1.0)]}
+    kept = connector_component(trial["lanes"])
+    if sum(1 for n, k in enumerate(others) if k in joined and n in kept) != len(joined - {i}):
+        return False  # the cheap question first: the reach below grows the served network lane by lane
+    return law.lane_networks(trial) <= law.lane_networks(M) and len(unreached_houses(trial)) <= len(unreached_houses(M))
+
+
+def connector_component(lanes: Sequence[Mapping[str, Any]]) -> set[int]:
+    """The lanes joined to the connector's network at the ink tolerance (`law.JOIN_TOL`) - what `settle_network` keeps."""
+    live = [i for i, ln in enumerate(lanes) if len(ln.get("pts") or []) >= 2]
+    labels = _components([_pts(lanes[i]) for i in live], law.JOIN_TOL)
+    roots = {labels[n] for n, i in enumerate(live) if lanes[i].get("connector")}
+    return {i for n, i in enumerate(live) if labels[n] in roots}
+
+
 def settle_fragments(s: Any) -> int:
     """A fragment that earns nothing (`law.short_fragments`) is dropped (homes H40) - one a round, since two fragments can
     each be redundant only while the other stands."""
-    gone = law.short_fragments(s.M)[:1]
+    lanes = s.M.get("lanes") or []
+    gone = [i for i in law.short_fragments(s.M) if not is_tree(lanes[i])][:1]
     if gone:
         s.drop_lanes(gone)
     return len(gone)
@@ -503,12 +622,13 @@ def settle_widths(s: Any) -> int:
         par[find(i)] = find(j)
     yards, houses = _fabric(s)
     solid = law.solid_boxes(s.M)
+    fixtures = law.fixture_quads(s.M)
     changed = 0
     for root in {find(i) for i, _j in steps}:
         chain = [k for k in range(len(lanes)) if find(k) == root]
         widths = [float(lanes[k].get("w") or 3.0) for k in chain]
         wide = max(widths)
-        target = wide if all(fouled_segment(_pts(lanes[k]), wide, houses, yards, solid) is None for k in chain) else min(widths)
+        target = wide if all(fouled_segment(_pts(lanes[k]), wide, houses, yards, solid, fixtures) is None for k in chain) else min(widths)
         for k in chain:
             if float(lanes[k].get("w") or 3.0) != target:
                 rewidth(s, k, target)
@@ -531,6 +651,148 @@ def settle_network(s: Any) -> int:
     return len(gone)
 
 
+# ---- step 4b: the reach the web owes - a corridor, a way target, the field ----------------------------------------------
+
+
+def on_open_ground(M: Mapping[str, Any], run: Poly) -> bool:
+    """Does `run` cross no field outline, dry plot or marsh (the ground `law.span_walkable` refuses a span, less the water,
+    which a crossing fault judges - a decked or forded crossing is a lawful one)?"""
+    rings = [[(float(a), float(b)) for a, b in f["outline"]] for f in M.get("fields") or [] if f.get("outline")]
+    rings += [[(float(a), float(b)) for a, b in d["poly"]] for d in M.get("dry_plots") or [] if d.get("poly")]
+    rings += [[(float(a), float(b)) for a, b in m["poly"]] for m in M.get("marshes") or [] if len(m.get("poly") or ()) >= 3 and m.get("role") != "defense"]
+    return not any(segments_cross(p, q, r[k], r[(k + 1) % len(r)]) for p, q in zip(run, run[1:], strict=False) for r in rings for k in range(len(r)))
+
+
+MEET_REACH_FT = 60.0
+"""The lanes a new run is asked to meet cleanly are those whose box comes within this of its box: past every reach a joint
+rule measures (a needle's 20 ft leg, a doubled tread's 14 ft, a join's 40 ft) - so the lanes left out cannot meet it."""
+
+
+def _box(p: Poly, pad: float) -> tuple[float, float, float, float]:
+    return (min(q[0] for q in p) - pad, min(q[1] for q in p) - pad, max(q[0] for q in p) + pad, max(q[1] for q in p) + pad)
+
+
+class Lawful:
+    """Would a run, drawn as a new lane of a given width, keep every per-lane rule of the law - no kink or hook, no crossing
+    fault, no foul of the fabric, no field, dry plot or marsh underfoot (`on_open_ground`) - and meet the ways it comes near
+    as the law asks: no needle, fold or hairpin at either end, no tail doubled along a way, either way round? The ONE
+    question the web asks before it adds a tree lane, since a tree lane is never cut afterwards. The map's fabric, water
+    and wet ground are read once, when it is built, for every run a step asks about."""
+
+    def __init__(self, s: Any) -> None:
+        self.M = s.M
+        self.wet = flooded_ground(s.M)
+        self.yards, self.houses = _fabric(s)
+        self.solid = law.solid_boxes(s.M)
+        self.fixtures = law.fixture_quads(s.M)
+        self.buildings = building_quads(s.M)
+        self.ground = memo_ground(s, "worked", worked_ground)
+
+    def __call__(self, run: Poly, width: float, skip: int | None = None) -> bool:
+        """`skip`: the lane `run` would replace, left out of what it is asked to meet."""
+        M = self.M
+        if len(run) < 2 or law.hooked(run) or kink_spans(run):
+            return False
+        lanes = [ln for k, ln in enumerate(M.get("lanes") or []) if k != skip]
+        i = len(lanes)
+        if _crossing_fault({**M, "lanes": [*lanes, {"pts": _rounded(run), "w": width}]}, i, run, self.wet) is not None:
+            return False
+        if fouled_segment(run, width, self.houses, self.yards, self.solid, self.fixtures) is not None or not on_open_ground(M, run) or through_a_building(run, self.buildings):
+            return False
+        x0, y0, x1, y1 = _box(run, MEET_REACH_FT)
+        near = [ln for ln in lanes if len(ln.get("pts") or []) >= 2 and not ((b := _box(_pts(ln), 0.0))[2] < x0 or b[0] > x1 or b[3] < y0 or b[1] > y1)]
+        tl, k = [*near, {"pts": run, "w": width}], len(near)
+        if any(k in (n, m) for n, _e, m, _u, _v in law.needle_ends(tl)) or any(k in (a, b) for a, _ea, b, _eb in law.folded_joint_pairs(tl)):
+            return False
+        if any(n == k for _c, n, _e in law.connector_hairpin_ends(tl)):
+            return False
+        # ...AND EACH END SERVES SOMETHING, NOT FROM BEHIND A HOUSE (the lane law's `dangling_lane_ends`, water W57's
+        # `ends_behind`): a tree lane is never trimmed afterwards, so an end it would leave in open ground or behind a back
+        # wall is refused here
+        trial = {**M, "lanes": tl}
+        if any(n == k for n, _e in law.dangling_lane_ends(trial, self.ground)) or any(n == k for n, _e, _h in law.ends_behind(trial, self.ground)):
+            return False
+        return not any(along_tail(p, q, deg=_DOUBLED_DEG) is not None for o in (_pts(ln) for ln in near) for p, q in ((run, o), (run[::-1], o), (o, run), (o[::-1], run)))
+
+
+def _draw_tree_lane(s: Any, run: Poly, width: float, role: str, **extra: Any) -> None:
+    s.lane(_rounded(run), width=width, clearance=WEB_CLEARANCE, worn=True)
+    s.M["lanes"][-1].update({"role": role, **extra})
+
+
+def settle_targets(s: Any, lawful: Lawful) -> int:
+    """Step 4b (homes H36): a spur from the network to every way target it does not reach (`law.unreached_targets` - a
+    burial ground's near edge), the shortest straight run that keeps the law (`Lawful`), drawn as a tree lane, once. A
+    target no such run reaches stays unreached - never drawn to by a least-bad spur (FR-005) - and the settle's report
+    names it."""
+    M = s.M
+    done = {tuple(ln["to"]) for ln in M.get("lanes") or [] if ln.get("role") == TARGET_ROLE and ln.get("to")}
+    n = 0
+    for t in law.unreached_targets(M):
+        key = (round(t[0], 1), round(t[1], 1))
+        if key in done:
+            continue
+        run = next((r for r in spur_runs(served_network(M.get("lanes") or []), t) if lawful(r, ACCESS_WIDTH)), None)
+        if run is not None:
+            _draw_tree_lane(s, run, ACCESS_WIDTH, TARGET_ROLE, to=list(key))
+            n += 1
+    return n
+
+
+def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:
+    """The web's router (`route._route`) as a field way threads it: walled by the steadings' built ground (not the commons
+    or the groves - a path crosses ground cover), hard against the field, the dry hem and the marsh, and kept off the brook
+    but at its fords (the straggler footpath's own terms, `serve._serve_stragglers`)."""
+    M = s.M
+    hard = [[(float(a), float(b)) for a, b in f["outline"]] for f in M.get("fields") or [] if f.get("outline")]
+    hard += [[(float(a), float(b)) for a, b in d["poly"]] for d in M.get("dry_plots") or [] if d.get("poly")]
+    hard += [[(float(a), float(b)) for a, b in m["poly"]] for m in M.get("marshes") or [] if len(m.get("poly") or ()) >= 3 and m.get("role") != "defense"]
+    walls = [poly for poly, _own, kind in _homestead_polys(s) if kind not in ("commons", "village_groves")]
+    water = list(zip(brook, brook[1:], strict=False))
+    return lambda a, b: _route(a, b, hard, walls, water, gap=FIELD_ROUTE_GAP_FT)
+
+
+FIELD_ROUTE_GAP_FT = BRANCH_WIDTH / 2.0 + 3.0
+"""How far the routed field way keeps off the steadings: the field path's half-tread and the 2 ft `house_hit` pads a tread
+by, and a foot to spare - at the footpath's own 4 ft the router drew a 5 ft path 4.3 ft off a house corner and the law
+(`fouled_segment`) refused it."""
+
+
+def settle_field(s: Any, lawful: Lawful) -> int:
+    """Step 7 (ways W03): where no way of the hamlet's own reaches the field (`law.field_unreached`), the field way - the
+    shortest run from the network on to the bund, straight or over the brook at a ford, the paddy's and then the dry hem's
+    (`field_runs`), that keeps the law (`Lawful`) - drawn as a tree lane, once. With none keeping the law the field stays
+    unreached - never drawn least-bad (FR-005) - and the settle's report says so."""
+    M = s.M
+    if not law.field_unreached(M) or any(ln.get("role") == FIELD_ROLE for ln in M.get("lanes") or []):
+        return 0
+    brook = next(iter(law._brooks(M)), [])
+    fords = [(float(x), float(y)) for x, y in (M.get("meta") or {}).get("brook_fords") or []]
+    segs, grounds = served_network(M.get("lanes") or []), (paddy_ground(s), memo_ground(s, "worked", worked_ground))
+    runs = field_runs(segs, grounds, BRANCH_WIDTH / 2.0, brook, fords)
+    run = next((r for r in runs if lawful(r, BRANCH_WIDTH)), None)
+    if run is None:
+        # ...THREADED BY THE WEB'S OWN ROUTER where no straight run keeps the law (cohort seed 13: every one fouled a
+        # steading or met its lane at a needle) - round the steadings and the hard ground, over the brook at a ford
+        route = field_router(s, brook)
+        runs = [r for ground in grounds for r in routed_field_runs(segs, ground, BRANCH_WIDTH / 2.0, route, brook, fords)]
+        run = next((r for r in runs if lawful(r, BRANCH_WIDTH)), None)
+    if run is None:
+        return 0
+    _draw_tree_lane(s, run, BRANCH_WIDTH, FIELD_ROLE)
+    return 1
+
+
+def settle_reach(s: Any) -> int:
+    """Step 4: the reach the web owes, drawn as tree lanes - each stranded farmhouse's corridor (`draw_corridors`), a spur
+    to each way target (`settle_targets`), and the field way (`settle_field`)."""
+    if not (unreached_houses(s.M) or law.unreached_targets(s.M) or law.field_unreached(s.M)):
+        return 0
+    lawful = Lawful(s)
+    route = field_router(s, next(iter(law._brooks(s.M)), []))
+    return draw_corridors(s, lambda run: lawful(run, ACCESS_WIDTH), route) + settle_targets(s, lawful) + settle_field(s, lawful)
+
+
 def settle_husks(s: Any) -> int:
     """Drop every lane record that draws nothing (ways W04)."""
     gone = law.husks(s.M)
@@ -548,11 +810,12 @@ def lane_violators(s: Any) -> list[int]:
     lanes = M.get("lanes") or []
     yards, houses = _fabric(s)
     solid = law.solid_boxes(M)
+    fixtures = law.fixture_quads(M)
     wet = flooded_ground(M)
     bad: set[int] = set()
     for i in _ordinary(M):
         p = _pts(lanes[i])
-        if law.hooked(p) or kink_spans(p) or _crossing_fault(M, i, p, wet) is not None or fouled_segment(p, float(lanes[i].get("w") or 3.0), houses, yards, solid) is not None:
+        if law.hooked(p) or kink_spans(p) or _crossing_fault(M, i, p, wet) is not None or fouled_segment(p, float(lanes[i].get("w") or 3.0), houses, yards, solid, fixtures) is not None:
             bad.add(i)
     bad |= {i for _c, i, _e in law.connector_hairpin_ends(lanes)}
     bad |= {i for i, _e, _k, _u, _v in law.needle_ends(lanes)}
@@ -560,12 +823,14 @@ def lane_violators(s: Any) -> list[int]:
     bad |= set(law.doubled_tails(M))
     bad |= {i for i, _e in law.dangling_lane_ends(M, memo_ground(s, "worked", worked_ground))}
     bad |= {i for ends in law.fronting_ends(M).values() if len(ends) > law.DOORSTEP_MAX for i, _e in ends}
+    bad |= {i for i, _e, _h in law.ends_behind(M, memo_ground(s, "worked", worked_ground))}
+    bad |= {i for _face, bounding in law.needle_loops(M) for i in bounding}
     if law.way_outs_crossing(M):
         bad |= {i for brook in law._brooks(M) for i in _ordinary(M) if law.crossing_points(_pts(lanes[i]), brook)}
-    return sorted(i for i in bad if not lanes[i].get("connector"))
+    return sorted(i for i in bad if not is_tree(lanes[i]))
 
 
-STEPS = (settle_husks, square_every_crossing, settle_shapes, settle_way_outs, settle_ends, settle_joins, settle_network, settle_fragments, settle_widths, settle_husks)
+STEPS = (settle_husks, square_every_crossing, settle_shapes, settle_way_outs, settle_ends, settle_joins, settle_needles, settle_reach, settle_network, settle_fragments, settle_widths, settle_husks)
 
 
 def settle_the_web(s: Any, rounds: int = SETTLE_ROUNDS) -> dict[str, Any]:
@@ -591,22 +856,16 @@ def settle_the_web(s: Any, rounds: int = SETTLE_ROUNDS) -> dict[str, Any]:
             settle_network(s)
             settle_husks(s)
         # ...and the rules no drop can break are asked once more of what is left: a join closed only where it meets
-        # cleanly, the network, a fragment that no longer earns, one width a way
-        for step in (settle_joins, settle_network, settle_fragments, settle_widths, settle_husks):
+        # cleanly, the reach a drop took away drawn again, the network, a fragment that no longer earns, one width a way
+        for step in (settle_joins, settle_reach, settle_network, settle_fragments, settle_widths, settle_husks):
             step(s)
-    return {"rounds": done, "seconds": round(time.perf_counter() - t0, 3), "changed": changed, "dropped": dropped, "unreached_before": before, "unreached_after": len(unreached_houses(s.M))}
-
-
-def settle_and_redraw(s: Any, redraw: Callable[[], None]) -> dict[str, Any]:
-    """`settle_the_web`, and - where its cuts left a farmhouse newly unreached or the field without its way - `redraw` (the
-    straggler paths and the field path, drawn again) and settle once more: the interim reach repair until the access corridor
-    reserved at seating serves them (M3). The report sums the two settles and says `redrawn`."""
-    field_before = law.field_unreached(s.M)
-    settled = settle_the_web(s)
-    if settled["unreached_after"] > settled["unreached_before"] or (law.field_unreached(s.M) and not field_before):
-        redraw()
-        again = settle_the_web(s)
-        first = settled
-        settled = {key: (first[key] + again[key] if key in ("rounds", "seconds", "changed", "dropped") else again[key]) for key in again}
-        settled |= {"unreached_before": first["unreached_before"], "redrawn": True}
-    return {key: (round(v, 3) if isinstance(v, float) else v) for key, v in settled.items()}
+    return {
+        "rounds": done,
+        "seconds": round(time.perf_counter() - t0, 3),
+        "changed": changed,
+        "dropped": dropped,
+        "unreached_before": before,
+        "unreached_after": len(unreached_houses(s.M)),
+        "targets_unreached": len(law.unreached_targets(s.M)),
+        "field_unreached": law.field_unreached(s.M),
+    }
