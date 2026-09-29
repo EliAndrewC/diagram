@@ -45,17 +45,32 @@ def _bank_seats(parcel: list[Any], toward: Pt) -> list[tuple[Pt, float]]:
     see `stage_pond_stock`. This function ranks; it does not decide what is acceptable.
     """
     cx, cy = _centroid(parcel)
-    seats: list[tuple[Pt, float]] = []
     n = len(parcel)
-    for i in range(n):
-        a, b = parcel[i], parcel[(i + 1) % n]
-        mx, my = (float(a[0]) + float(b[0])) / 2, (float(a[1]) + float(b[1])) / 2
-        rot = math.degrees(math.atan2(float(b[1]) - float(a[1]), float(b[0]) - float(a[0])))
-        vx, vy = cx - mx, cy - my
-        vl = math.hypot(vx, vy) or 1.0
-        seats.append(((mx + vx / vl * BANK_INSET_FT, my + vy / vl * BANK_INSET_FT), rot))
-    seats.sort(key=lambda s: math.dist(s[0], toward))
-    return seats
+
+    def ranked(fracs: tuple[float, ...]) -> list[tuple[Pt, float]]:
+        seats: list[tuple[Pt, float]] = []
+        for i in range(n):
+            a, b = parcel[i], parcel[(i + 1) % n]
+            rot = math.degrees(math.atan2(float(b[1]) - float(a[1]), float(b[0]) - float(a[0])))
+            for f in fracs:
+                mx, my = float(a[0]) + (float(b[0]) - float(a[0])) * f, float(a[1]) + (float(b[1]) - float(a[1])) * f
+                vx, vy = cx - mx, cy - my
+                vl = math.hypot(vx, vy) or 1.0
+                seats.append(((mx + vx / vl * BANK_INSET_FT, my + vy / vl * BANK_INSET_FT), rot))
+        seats.sort(key=lambda s: math.dist(s[0], toward))
+        return seats
+
+    # ...THE MIDPOINTS FIRST, THEN THE REST OF EACH BANK (feature 287, water W50): a sty whose every edge midpoint was taken
+    # by a sluice or another shed lost its pond, and a hamlet whose ponds all did so drew none. The rest of each bank, in
+    # eighths, comes after every midpoint, so a pond whose midpoint fits takes the seat it always took.
+    return ranked((0.5,)) + ranked((0.125, 0.25, 0.375, 0.625, 0.75, 0.875))
+
+
+def sty_on_near_half(seat: Pt, parcel: list[Any], hc: Pt, margin: float = 0.0) -> bool:
+    """THE RULE (feature 287, water W51; specs/233 research R7): a pig sty stands no further from the house cluster's
+    centroid `hc` than its pond's own parcel center - on the side of the water the households are on. The placer and
+    its test read this one predicate; the placer asks it `margin` stricter, since the sty is recorded rounded to 0.1."""
+    return math.dist(seat, hc) + margin <= math.dist(_centroid(parcel), hc)
 
 
 def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
@@ -79,7 +94,9 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
     if plan.field_archetype != "mulberry_dike_fishpond" or not ponds or not houses:
         return
     rng = knob_rng(s.seed, "pond_stock")
-    n_sty = round(len(houses) * (STY_SHARE[0] + rng.random() * (STY_SHARE[1] - STY_SHARE[0])))
+    # AT LEAST ONE (feature 287, water W50; feature 150 A3): the dike-pond loop fed its fish from the sties on its dikes, so a
+    # dike-pond hamlet with any grow-out pond keeps one, however few households the share rounds to.
+    n_sty = max(1, round(len(houses) * (STY_SHARE[0] + rng.random() * (STY_SHARE[1] - STY_SHARE[0]))))
     s.M["meta"]["pond_stock"] = {"sties": n_sty}
     hc = (sum(float(h["x"]) for h in houses) / len(houses), sum(float(h["y"]) for h in houses) / len(houses))
     # grow-out ponds only, nearest the houses first; each pond takes at most one sty
@@ -98,8 +115,8 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
         # The bound is geometric rather than a tuned distance: a seat may not be further from the house
         # cluster than the pond's own PARCEL center is (`_centroid(parcel)` below), which keeps the sty on
         # the side of the water the households are on. Figures: specs/233-pigsty-clear-of-the-sluice/research.md R7.
-        reach = math.dist(_centroid(ponds[i]["parcel"]), hc)
-        seat = next((((x, y), rot) for (x, y), rot in _bank_seats(ponds[i]["parcel"], hc) if math.dist((x, y), hc) <= reach and s.pond_fixture_fits(x, y, rot)), None)
+        par = ponds[i]["parcel"]
+        seat = next((((x, y), rot) for (x, y), rot in _bank_seats(par, hc) if sty_on_near_half((x, y), par, hc, 0.5) and s.pond_fixture_fits(x, y, rot)), None)
         if seat is None:
             continue
         (x, y), rot = seat

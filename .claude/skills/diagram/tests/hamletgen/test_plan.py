@@ -244,10 +244,14 @@ def test_a_pond_whose_bank_cannot_hold_the_fixture_is_passed_over() -> None:
 
     s = Settlement(W=900, H=900, seed=1)
     s.meta(name="X", scale="hamlet")
-    s.M["houses"] = [{"x": 450.0, "y": 450.0, "w": 46.0, "h": 28.0} for _ in range(4)]
-    # one pond's bank seat lands on the houses themselves - `pond_fixture_fits` holds a fixture clear
-    # of every placed footprint, so that pond can take nothing and the walk moves on to the next
     s.M["dikeponds"] = [_pond(450.0, 500.0), _pond(450.0, 250.0), _pond(450.0, 700.0)]
+    # one pond's whole bank lies under the houses - `pond_fixture_fits` holds a fixture clear of every placed
+    # footprint, so that pond can take nothing and the walk moves on to the next (since feature 287 every seat
+    # along the bank is tried, not the edge midpoints alone, so a house stands on each of them)
+    from l7r.diagram.hamletgen.pondstock import _bank_seats
+
+    s.M["houses"] = [{"x": 450.0, "y": 450.0, "w": 46.0, "h": 28.0} for _ in range(4)]
+    s.M["houses"] += [{"x": q[0], "y": q[1], "w": 10.0, "h": 10.0} for q, _rot in _bank_seats(s.M["dikeponds"][0]["parcel"], (450.0, 450.0))]
     stage_pond_stock(s, plan)
 
     declared = s.M["meta"]["pond_stock"]

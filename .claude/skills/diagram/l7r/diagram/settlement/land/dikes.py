@@ -22,10 +22,118 @@ from typing import TYPE_CHECKING, Any
 from l7r.diagram.interactive.tags import Planted
 from l7r.diagram.settlement._geom.primitives import keepout_ring
 
-from .._geom import Poly, Pt, point_in_poly, smooth_closed, smooth_points
+from .._geom import Poly, Pt, point_in_poly, seg_dist, smooth_closed, smooth_points
 
 DIKE_GAP_HW = 15.0  # half the width the band is CUT by at a sluice notch or a crossing; exported because the waterward reed strip steps into exactly that opening (feature 150 T54, hamletgen/water/polder.py `dike_face`) and a drifted copy would leave the wet ground short of the cut or lapping the band
 DIKE_KEEPOUT_EPS = 8.0  # px: a chord may stray this far from the crest; the keep-out is pushed out by it (feature 140)
+
+DIKE_IRREGULARITY = 1.4  # a hand-piled dike's widest stretch is at least this many times its narrowest (feature 287, water W40): research/archetypes.html 'The perimeter dike followed the natural water edge' - built by basket and repaired where the water took most, never a ruled uniform band
+_IRREGULARITY_AIM = 1.42  # what the stretch aims at: the record rounds each width to 0.1 px, and the placer stays stricter than the rule it is held to
+
+
+def dike_irregular(w_min: float, w_max: float) -> bool:
+    """THE RULE (feature 287, water W40): the band's widest stretch is at least `DIKE_IRREGULARITY` times its narrowest.
+    The placer's stretch and the test of the recorded `w_min` / `w_max` read this one predicate."""
+    return w_min > 0 and w_max >= DIKE_IRREGULARITY * w_min
+
+
+def hand_piled_widths(ws: list[float], width: tuple[float, float]) -> list[float]:
+    """The dike's width profile, stretched until it reads as hand-piled (feature 287, water W40).
+
+    A profile already irregular enough is returned unchanged, so every dike that met the rule draws exactly as before.
+    A flatter one is mapped AFFINELY onto an interval `_IRREGULARITY_AIM` wide in ratio, centered on its own mean and
+    shifted inside `width` - the shape of the profile (where it bulges, where it pinches) is kept, only its amplitude
+    grows; no new random draw is taken. A profile with no shape at all (every width equal) takes one broad swell round
+    the loop. A `width` range narrower than the rule itself is a caller's error, refused rather than drawn."""
+    wlo, whi = width
+    if whi < _IRREGULARITY_AIM * wlo:
+        raise ValueError(f"a dike width range {wlo}-{whi} cannot be {DIKE_IRREGULARITY}x irregular")
+    lo, hi = min(ws), max(ws)
+    if dike_irregular(round(lo, 1), round(hi, 1)) and hi >= _IRREGULARITY_AIM * lo:
+        return list(ws)
+    mean = sum(ws) / len(ws)
+    low = max(wlo, min(2.0 * mean / (1.0 + _IRREGULARITY_AIM), whi / _IRREGULARITY_AIM))
+    top = low * _IRREGULARITY_AIM
+    if hi - lo < 1e-9:
+        n = len(ws)
+        return [low + (top - low) * (0.5 + 0.5 * math.sin(math.tau * i / n)) for i in range(n)]
+    return [low + (w - lo) / (hi - lo) * (top - low) for w in ws]
+
+
+def dike_band(inner_env: Any, seed: int, width: tuple[float, float] = (14.0, 40.0)) -> tuple[list[tuple[float, float, int]], Poly, Poly, list[float], Pt]:
+    """The perimeter dike's GEOMETRY, drawing nothing: the densified inner face with the edge each point lies on, the
+    inner and outer faces, the width profile and the ring's centroid. A pure function of (ring, seed, width), so a stage
+    can know where the crest will run before the band is drawn and notched (feature 287, water W42) - `perimeter_dike`
+    draws exactly this band."""
+    R = random.Random(seed)
+    pts = list(inner_env)
+    if pts and pts[0] == pts[-1]:
+        pts = pts[:-1]
+    cx = sum(p[0] for p in pts) / len(pts)
+    cy = sum(p[1] for p in pts) / len(pts)
+    wlo, whi = width
+    m = len(pts)
+    dense: list[tuple[float, float, int]] = []
+    for i in range(m):
+        a, b = pts[i], pts[(i + 1) % m]
+        steps = max(3, int(math.hypot(b[0] - a[0], b[1] - a[1]) / 34))
+        for s in range(steps):
+            t = s / steps
+            dense.append((a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, i))
+    n = len(dense)
+    ph0, ph1, ph2 = R.uniform(0, math.tau), R.uniform(0, math.tau), R.uniform(0, math.tau)
+    inner_s: Poly = []
+    w_seen: list[float] = []
+    normals: list[tuple[float, float]] = []
+    for k, (x, y, ei) in enumerate(dense):
+        a, b = pts[ei], pts[(ei + 1) % m]
+        ex, ey = b[0] - a[0], b[1] - a[1]
+        eL = math.hypot(ex, ey) or 1.0
+        nx, ny = -ey / eL, ex / eL  # outward edge normal (flip toward away-from-centroid)
+        if nx * (x - cx) + ny * (y - cy) < 0:
+            nx, ny = -nx, -ny
+        u = k / n * math.tau
+        # broad shoreline-following bulges (u*2) + mid + fine variation - the dike thickens along an old
+        # water edge and pinches where it was repaired, so the outer face reads organic, not a ruled line
+        wf = 0.5 + 0.26 * math.sin(u * 2 + ph0) + 0.22 * math.sin(u * 3 + ph1) + 0.16 * math.sin(u * 5 + ph2)
+        w_seen.append(wlo + (whi - wlo) * max(0.0, min(1.0, wf)) + R.uniform(-3, 3))
+        normals.append((nx, ny))
+        # the inner face hugs the grid boundary and wobbles OUTWARD only (never intrudes past the
+        # envelope into the field) - so the ring canal running just inside the envelope stays clear of
+        # the dike, and water crosses the dike only at the sluices
+        inner_s.append((x + nx * R.uniform(0.0, 3.0), y + ny * R.uniform(0.0, 3.0)))
+    # THE BAND IS NEVER UNIFORM (feature 287, water W40): the three seeded sines can flatten one another, and nothing
+    # bounded the profile they made. A profile flatter than `DIKE_IRREGULARITY` is stretched here, deterministically.
+    w_seen = hand_piled_widths(w_seen, (wlo, whi))
+    outer_s = [(x + nx * w, y + ny * w) for (x, y, _ei), (nx, ny), w in zip(dense, normals, w_seen, strict=True)]
+    return dense, inner_s, outer_s, w_seen, (cx, cy)
+
+
+def dike_crest(inner_s: Poly, outer_s: Poly) -> Poly:
+    """The crest centerline - the midpoint of the two faces at every densified point, a closed loop."""
+    return [((a[0] + b[0]) / 2, (a[1] + b[1]) / 2) for a, b in zip(inner_s, outer_s, strict=True)]
+
+
+CREST_REACH = 3.0  # a watercourse within this of the crest line runs ON the dike (the rule's own reach, feature 287 water W42)
+GAP_REACH = 60.0  # ...and a crossing within this of a recorded gap is that gap - the sluice or the outfall, a decided crossing
+
+
+def course_breaches(course: Poly, crest: Poly, gaps: Poly, reach: float = CREST_REACH, gap_reach: float = GAP_REACH) -> list[Pt]:
+    """THE RULE (feature 287, water W42): the midpoints of `course`'s segments that lie on the dike crest (within `reach`
+    of the closed crest line) farther than `gap_reach` from every recorded gap - a channel cut through the dike where
+    the settlement decided no water should cross. The stage that gaps the dike and the test of it read this one
+    predicate."""
+    loop = [*crest, crest[0]] if crest else []
+    out: list[Pt] = []
+    for a, b in zip(course, course[1:], strict=False):
+        mid = ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)
+        if not loop or min(seg_dist(mid[0], mid[1], p, q) for p, q in zip(loop, loop[1:], strict=False)) > reach:
+            continue
+        if gaps and min(math.dist(mid, g) for g in gaps) <= gap_reach:
+            continue
+        out.append(mid)
+    return out
+
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -49,44 +157,8 @@ class DikeMixin:
         dike is NOT an "obvious" feature - the GM asked for it named)."""
         from l7r.diagram.waterfields import BUND
 
-        R = random.Random(seed)
-        pts = list(inner_env)
-        if pts and pts[0] == pts[-1]:
-            pts = pts[:-1]
-        cx = sum(p[0] for p in pts) / len(pts)
-        cy = sum(p[1] for p in pts) / len(pts)
-        wlo, whi = width
-        m = len(pts)
-        dense: list[tuple[float, float, int]] = []
-        for i in range(m):
-            a, b = pts[i], pts[(i + 1) % m]
-            steps = max(3, int(math.hypot(b[0] - a[0], b[1] - a[1]) / 34))
-            for s in range(steps):
-                t = s / steps
-                dense.append((a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, i))
+        dense, inner_s, outer_s, w_seen, (cx, cy) = dike_band(inner_env, seed, width)
         n = len(dense)
-        ph0, ph1, ph2 = R.uniform(0, math.tau), R.uniform(0, math.tau), R.uniform(0, math.tau)
-        inner_s: Poly = []
-        outer_s: Poly = []
-        w_seen: list[float] = []
-        for k, (x, y, ei) in enumerate(dense):
-            a, b = pts[ei], pts[(ei + 1) % m]
-            ex, ey = b[0] - a[0], b[1] - a[1]
-            eL = math.hypot(ex, ey) or 1.0
-            nx, ny = -ey / eL, ex / eL  # outward edge normal (flip toward away-from-centroid)
-            if nx * (x - cx) + ny * (y - cy) < 0:
-                nx, ny = -nx, -ny
-            u = k / n * math.tau
-            # broad shoreline-following bulges (u*2) + mid + fine variation - the dike thickens along an old
-            # water edge and pinches where it was repaired, so the outer face reads organic, not a ruled line
-            wf = 0.5 + 0.26 * math.sin(u * 2 + ph0) + 0.22 * math.sin(u * 3 + ph1) + 0.16 * math.sin(u * 5 + ph2)
-            w = wlo + (whi - wlo) * max(0.0, min(1.0, wf)) + R.uniform(-3, 3)
-            w_seen.append(w)
-            outer_s.append((x + nx * w, y + ny * w))
-            # the inner face hugs the grid boundary and wobbles OUTWARD only (never intrudes past the
-            # envelope into the field) - so the ring canal running just inside the envelope stays clear of
-            # the dike, and water crosses the dike only at the sluices
-            inner_s.append((x + nx * R.uniform(0.0, 3.0), y + ny * R.uniform(0.0, 3.0)))
         band = [*outer_s, *reversed(inner_s)]
         d = smooth_closed(band)
         # SLUICE GAPS (GM 2026-07-22): where a channel crosses the dike (the inlet + outfall sluices), the

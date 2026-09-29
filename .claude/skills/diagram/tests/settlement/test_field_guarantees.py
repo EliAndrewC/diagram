@@ -147,3 +147,66 @@ def test_the_bead_drop_leaves_no_bead_on_water_on_a_mound_or_alone() -> None:
     s._comb_drop_drowned_beads(net, {"kind": "stream"})
     assert net["bund_bean_runs"] == [], "a middle bead in the ditch leaves two singles; the mound takes one; the third run is on no bund"
     assert net["bund_beans"] == []
+
+
+def test_an_intake_declares_a_stream_only_where_its_mouth_reaches_one() -> None:
+    """L16 at the intake: a feed whose sluice stands within the anchor band of a stream is snapped onto its bed and declares
+    it (`channel_end_on_stream`); one with no stream within reach is sourced from the sluice and declares no stream -
+    never a mouth in the grass recorded as joining the brook."""
+    from l7r.diagram.settlement.fields.comb import channel_end_on_stream
+
+    far = _comb()
+    far["brook"] = []
+    s = Settlement(W=1400, H=1400, seed=5)
+    s.meta(name="In", scale="hamlet", ftpx=1, down_deg=90)
+    s.M["streams"].append({"poly": [[1300.0, 0.0], [1300.0, 1400.0]]})  # 600 ft off: out of reach
+    s.draw_comb_field(far, "f1", {"kind": "stream"})
+    feed = s.M["channels"][-1]
+    assert feed["frm"] == {"kind": "sluice"} and not channel_end_on_stream(feed["poly"][0], s.M["streams"][0]["poly"])
+    near = _comb()
+    near["brook"] = []
+    sx, sy = near["channels"][0]["pts"][0]
+    t = Settlement(W=1400, H=1400, seed=5)
+    t.meta(name="In", scale="hamlet", ftpx=1, down_deg=90)
+    t.M["streams"].append({"poly": [[sx - 400.0, sy - 20.0], [sx + 400.0, sy - 20.0]]})  # 20 ft off: inside the anchor band
+    t.draw_comb_field(near, "f1", {"kind": "stream"})
+    feed = t.M["channels"][-1]
+    assert feed["frm"] == {"kind": "stream"} and channel_end_on_stream(feed["poly"][0], t.M["streams"][0]["poly"])
+    assert channel_end_on_stream((0.0, 12.0), [(-10.0, 0.0), (10.0, 0.0)]) and not channel_end_on_stream((0.0, 14.0), [(-10.0, 0.0), (10.0, 0.0)])
+
+
+def test_a_bead_water_recorded_later_lies_over_is_dropped_from_the_ink_and_the_record() -> None:
+    """W33, the later-water half: the field drops its drowned beads over the water recorded when it is drawn, and a later
+    stage (the sink's drain run) can record more; `settle_beads` - run after the last water writer - drops every bead that
+    water now covers, from the ink slot and the field record together, judged by the one predicate `bead_drowned`."""
+    from l7r.diagram.settlement.fields.comb import bead_drowned, recorded_water
+
+    net = _comb()
+    net["brook"] = []
+    s = Settlement(W=1400, H=1400, seed=5)
+    s.meta(name="Bd", scale="hamlet", ftpx=1, down_deg=90)
+    s.draw_comb_field(net, "f1", {"kind": "stream"})
+    rec = s.M["fields"][-1]
+    beads = [tuple(b) for b in rec["bund_beans"]]
+    assert beads and s.settle_beads() == 0, "nothing new: nothing moves"
+    bx, by = beads[len(beads) // 2]
+    s.M["channels"].append({"poly": [[bx - 40.0, by], [bx + 40.0, by]], "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": 6.0})
+    assert s.settle_beads() > 0
+    water = recorded_water(s.M)
+    assert rec["bund_beans"] and not [b for b in rec["bund_beans"] if bead_drowned((b[0], b[1]), water, [])]
+    ink = next(e for e in s.out if 'r="1.4"' in e and "circle" in e)
+    assert ink.count("<circle") == len(rec["bund_beans"]), "the dots and the manifest agree"
+
+
+def test_the_drain_outfall_run_is_drawn_over_every_plot() -> None:
+    """W38 at the comb: every channel the comb draws - the net and the drain's run off the field alike - goes to the LATE
+    water block, which is spliced after the last plot, so no plot is painted over a channel."""
+    net = _comb()
+    end = next(c for c in net["channels"] if c["role"] == "drain")["pts"][-1]
+    net["brook"] = [tuple(end), (end[0], end[1] + 40.0)]  # the collector's run on off the field
+    s = Settlement(W=1400, H=1400, seed=5)
+    s.meta(name="Lt", scale="hamlet", ftpx=1, down_deg=90)
+    s.draw_comb_field(net, "f1", {"kind": "stream"})
+    assert s.M["drawn_channels"] and all(r["late"] for r in s.M["drawn_channels"])
+    plots = [i for i, e in enumerate(s.out) if e.startswith("<polygon") and "stroke-linejoin" in e]
+    assert plots and s._late_water_idx is not None and s._late_water_idx > max(plots)

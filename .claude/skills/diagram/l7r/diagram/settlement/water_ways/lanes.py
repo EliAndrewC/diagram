@@ -8,6 +8,8 @@ from typing import TYPE_CHECKING, Any
 from .._geom import (
     Pt,
     edge_dist,
+    point_in_poly,
+    rot_rect,
     seg_dist,
 )
 from ..rolling.fit import houses_meeting
@@ -20,7 +22,6 @@ from ._helpers import (
     _angle_between,
     _lane_len,
     _pull_back,
-    dooryard_dist,
     fan_rival,
     junction_floor,
     vertex_behind,
@@ -29,6 +30,38 @@ from ._helpers import (
 
 if TYPE_CHECKING:
     from ..core import Settlement
+
+
+def _house_frame(house: Any, q: Pt) -> tuple[float, float]:
+    """`q` in the house's own frame: +x along the ridge, +y out through the FRONT face - the side the threshing yard is
+    laid on (`rolling/bundle.py`: the yard at `hy + hh / 2 + gap`, turned with the house by its rake)."""
+    th = math.radians(float(house.get("rot") or 0.0))
+    dx, dy = q[0] - float(house["x"]), q[1] - float(house["y"])
+    return (dx * math.cos(th) + dy * math.sin(th), -dx * math.sin(th) + dy * math.cos(th))
+
+
+def behind_house(house: Any, q: Pt) -> bool:
+    """Does `q` stand BEHIND the house - past its back wall, abreast of it (feature 287, water W57)?"""
+    lx, ly = _house_frame(house, q)
+    return ly < -float(house["h"]) / 2 and abs(lx) <= float(house["w"]) / 2 + float(house["h"])
+
+
+def reaches_dooryard(house: Any, q: Pt, reach: float = DOORYARD_REACH_FT) -> bool:
+    """THE RULE (feature 287, water W57; 269 B17, research/homesteads/310): a lane end reaches a farmhouse at its DOORYARD -
+    within `reach` of its threshing yard or its dooryard beds, or in the band `reach` deep in front of its front face.
+
+    Never by distance to the house itself: 12 ft of the drawn house counted a lane ending behind the BACK wall as
+    arrived (Kuwabata's lane 5, 11 ft behind house 1 and 43 ft from its yard - future-work, "A lane end behind a house
+    counts as its dooryard"). `trim_lane_stubs` judges its ends with this, and the test of it reads it."""
+    rot = float(house.get("rot") or 0.0)
+    g = house.get("geom") or {}
+    for r in [g[k] for k in ("yard",) if g.get(k) is not None] + list(g.get("gardens") or ()):
+        quad = rot_rect(float(r[0]), float(r[1]), float(r[2]), float(r[3]), rot)
+        if point_in_poly(q[0], q[1], quad) or edge_dist(q[0], q[1], quad) <= reach:
+            return True
+    lx, ly = _house_frame(house, q)
+    hh = float(house["h"]) / 2
+    return hh - 1e-6 <= ly <= hh + reach and abs(lx) <= float(house["w"]) / 2 + reach
 
 
 class LanesMixin:
@@ -233,7 +266,9 @@ class LanesMixin:
                     # only while the house still lies ahead of the end or level with it - an end that has walked on past
                     # its last house is pulled back to it, as `_trim_to_service` cuts one at its closest approach
                     _from = back if back is not None else (run[0] if run is not None else None)
-                    if dooryard_dist(h, q) > dooryard_reach and (_d > house_reach or (_from is not None and walked_past(_from, q, (h["x"], h["y"])))):
+                    # ...AND NEVER BEHIND IT (feature 287, water W57): the dooryard is the yard and the front, not 12 ft of
+                    # any wall, and an end abreast of the back wall is not "beside the house" either - it is behind it.
+                    if not reaches_dooryard(h, q, dooryard_reach) and (_d > house_reach or behind_house(h, q) or (_from is not None and walked_past(_from, q, (h["x"], h["y"])))):
                         continue
                     if _my is None or not _fan_rival(q, _my, (h["x"], h["y"]), _d, me):
                         return True

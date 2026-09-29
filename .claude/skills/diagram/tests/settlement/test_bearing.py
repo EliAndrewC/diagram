@@ -150,9 +150,9 @@ def test_the_dooryard_figures_are_the_scripted_tiers_own() -> None:
 def _lanes_past_a_house(end_x: float) -> Settlement:
     s = Settlement(1000, 1000, seed=1)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
-    s.M["houses"] = [{"x": 500.0, "y": 540.0, "w": 46.0, "h": 28.0, "rot": 0.0}]
+    s.M["houses"] = [{"x": 500.0, "y": 540.0, "w": 46.0, "h": 28.0, "rot": 180.0}]  # facing north, onto the arm: a lane behind a house serves it not at all (feature 287, water W57)
     s.lane([(100.0, 100.0), (100.0, 900.0)], width=4)
-    s.lane([(100.0, 500.0), (end_x, 500.0)], width=4)  # an arm off the first, running east past the house 40 ft south of it
+    s.lane([(100.0, 500.0), (end_x, 500.0)], width=4)  # an arm off the first, running east past the house 40 ft north of it, before its front
     return s
 
 

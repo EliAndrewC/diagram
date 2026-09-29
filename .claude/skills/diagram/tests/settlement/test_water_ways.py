@@ -871,3 +871,26 @@ def test_a_rounded_stream_also_redraws_a_late_or_clipped_entry():
     s.round_stream(rec, [(100.0, 100.0), (380.0, 100.0), (400.0, 120.0), (400.0, 400.0)])
     entry = s.late_water[-1]
     assert "L400,100 " not in entry["bed"] and entry["sheen"] is None and entry["clip"]["pts"] and entry["clip"]["pts"][0] == (100.0, 100.0)
+
+
+def test_a_lane_ending_behind_a_house_is_not_at_its_dooryard() -> None:
+    """Feature 287, water W57: a lane end 11 ft behind a farmhouse's back wall does not reach it - the dooryard is the
+    yard and the front, never 12 ft of any wall (Kuwabata's lane 5) - so the trim pulls that end back; the same end in
+    front of the house, or in its yard, has arrived."""
+    from l7r.diagram.settlement.water_ways.lanes import behind_house, reaches_dooryard
+
+    house = {"x": 500.0, "y": 500.0, "w": 46.0, "h": 28.0, "rot": 0.0, "geom": {"yard": (500.0, 537.0, 40.0, 30.0), "gardens": [(540.0, 500.0, 12.0, 20.0)]}}
+    back = (500.0, 500.0 - 14.0 - 11.0)
+    assert behind_house(house, back) and not reaches_dooryard(house, back)
+    assert reaches_dooryard(house, (500.0, 525.0)) and reaches_dooryard(house, (500.0, 560.0)) and reaches_dooryard(house, (552.0, 500.0))
+    assert not behind_house(house, (500.0, 525.0))
+    turned = dict(house, rot=180.0, geom={})  # turned about: its front now faces north, and a bare house has no yard
+    assert reaches_dooryard(turned, back) and not behind_house(turned, back)
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.M["houses"] = [house, {"x": 530.0, "y": 300.0, "w": 46.0, "h": 28.0, "rot": 0.0}]  # a second house the lane passes on its way
+    s.lane([(500.0, 100.0), (500.0, 475.0)], width=4)  # runs down to the back wall and stops 11 ft behind it
+    s.lane([(100.0, 100.0), (900.0, 100.0)], width=4)
+    s.trim_lane_stubs()
+    end = s.M["lanes"][0]["pts"][-1]
+    assert 280.0 <= end[1] <= 330.0, f"the end behind the house is pulled back to the last house it serves: {end}"
