@@ -4873,7 +4873,7 @@
   ]
  },
  "kami": {
-  "def": "A god of the Japanese tradition - the spirit of a place, a natural force or an ancestor - housed in a shrine's sanctuary. Before 1868 the kami were served together with the Buddhas, at the same sites and by the same monks.",
+  "def": "A god of the Japanese tradition - the spirit of a place, a natural force or an ancestor - housed in a shrine's sanctuary. Before 1868 the kami were served together with the Buddhas, at the same sites and by the same monks. In a village's sense of direction, kami (written カミ) also means the upper or upstream side, against shimo, the lower.",
   "variants": [
    "kami"
   ]
@@ -12962,6 +12962,34 @@
   "def": "A district of Edo east of the Sumida River, today part of Tokyo's Sumida ward.",
   "variants": [
    "Honjo"
+  ]
+ },
+ "common cemetery": {
+  "def": "A cemetery a Japanese city ran for its residents at large, as opposed to a temple's or a household's own ground. In 1930s Tokyo it was where most households interred their cremated remains in a family urn plot.",
+  "variants": [
+   "common cemetery",
+   "common cemeteries",
+   "common graveyard",
+   "common graveyards"
+  ]
+ },
+ "text layer": {
+  "def": "The machine-read text that a scanned PDF carries beneath its page images, which can be searched and copied. It can misread the scan, so a quotation taken from it is checked against the image.",
+  "variants": [
+   "text layer",
+   "text layers"
+  ]
+ },
+ "Mypedia": {
+  "def": "A short Japanese encyclopedia from the publisher Heibonsha, one of the reference works whose entries Kotobank carries.",
+  "variants": [
+   "Mypedia"
+  ]
+ },
+ "Shima": {
+  "def": "The Shima region of Mie Prefecture, on the coast of central Japan, one of the three regions whose two-grave villages the Kawazoe survey measured.",
+  "variants": [
+   "Shima"
   ]
  }
 }

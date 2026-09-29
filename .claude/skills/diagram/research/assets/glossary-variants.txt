@@ -414,6 +414,10 @@ combs	comb
 command area	command area
 commanderies	commandery
 commandery	commandery
+common cemeteries	common cemetery
+common cemetery	common cemetery
+common graveyard	common cemetery
+common graveyards	common cemetery
 common hill	commons
 commons	commons
 commutation	commutation
@@ -2009,6 +2013,7 @@ myoga	myoga
 myoji-taito	myoji-taito
 myoken	Myōken
 myoshu	myoshu
+mypedia	Mypedia
 myōden	myoden
 myōga	myoga
 myōken	Myōken
@@ -2673,6 +2678,7 @@ shijing	Book of Songs
 shiki-dai	shikidai
 shikidai	shikidai
 shikoku	Shikoku
+shima	Shima
 shimazu	Shimazu
 shimenawa	shimenawa
 shimo-yashiki	lower mansion
@@ -3014,6 +3020,8 @@ tertiary source	tertiary source
 tertiary summaries	tertiary source
 tertiary summary	tertiary source
 tetsuki	tetsuki
+text layer	text layer
+text layers	text layer
 tezuki	tezuki
 thalweg	thalweg
 thalwegs	thalweg
