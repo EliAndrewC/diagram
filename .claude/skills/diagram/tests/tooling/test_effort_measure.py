@@ -31,10 +31,11 @@ census = _load("_agent_census")
 FEATURE = "specs/293-effort-level-experiment"
 
 
-def _asst(mid: str, ts: str, blocks: list[dict], out: int, inp: int = 10, cr: int = 100, cw: int = 5) -> dict:
+def _asst(mid: str, ts: str, blocks: list[dict], out: int, inp: int = 10, cr: int = 100, cw: int = 5, effort: str = "xhigh") -> dict:
     return {
         "type": "assistant",
         "timestamp": ts,
+        "effort": effort,
         "message": {"id": mid, "model": "claude-opus-5-5", "content": blocks, "usage": {"input_tokens": inp, "output_tokens": out, "cache_read_input_tokens": cr, "cache_creation_input_tokens": cw}},
     }
 
@@ -70,7 +71,7 @@ MAIN = [
 ]
 SUB = [
     _asst("s1", "2026-10-01T10:30:00Z", [{"type": "tool_use", "id": "u1", "name": "WebFetch", "input": {}}], out=5),
-    _asst("s2", "2026-10-01T10:31:00Z", [{"type": "text", "text": "CHANGES REQUIRED - 2 notes not verbatim"}], out=6),
+    _asst("s2", "2026-10-01T10:31:00Z", [{"type": "text", "text": "CHANGES REQUIRED - 2 notes not verbatim"}], out=6, effort="high"),
 ]
 
 
@@ -122,6 +123,9 @@ def test_a_run_is_measured_from_every_source(tmp_path: pathlib.Path) -> None:
     assert m["tokens"]["total"]["cache_read_input_tokens"] == 100 * 4 + 100 * 3
     assert m["wall_clock_s"] == 3600 - 600, "first to last event, less the logged pause"
     assert m["tool_calls"]["main"] == {"Bash": 2, "Agent": 5} and m["tool_calls"]["subagents"] == {"WebFetch": 1}
+    assert m["effort"]["main"] == {"xhigh": 4}, "counted per message, m1's two records once"
+    assert m["effort"]["subagents"] == {"quote-check": {"xhigh": 1, "high": 1}, "escalation-check": {"xhigh": 1}}
+    assert em.efforts([{"type": "assistant", "uuid": "u"}]) == {"unrecorded": 1}
     assert m["dispatches"]["general-purpose@opus"] == 1 and m["dispatches"]["adhoc-judge@inherit"] == 1
     assert [a["type"] for a in m["adhoc_dispatches"]] == ["general-purpose", "Explore", "Explore"]
     assert m["adhoc_judging_at_session_effort"] == 2, "opus, or a judging word on sonnet ('review the lane tests')"

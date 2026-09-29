@@ -43,6 +43,18 @@ the individual invocation", undocumented elsewhere. `CLAUDE_CODE_EFFORT_LEVEL` b
   as D2, since steering the run's dispatch shape by effort would differ by arm. If (a) fails, apply D2a (the agent file) and re-measure; the spec's measured branch (ad-hoc judging counted per arm, the control
   listed as unmet) applies only if that too fails.
 
+**P0 MEASURED (T07, observed 2026-09-29, one-shot, method: one `claude -p --effort medium --agents <the launcher's JSON>` session in
+a scratch directory, `CLAUDE_CODE_EFFORT_LEVEL` unset, told to dispatch `adhoc-judge` and to list the Agent tool's parameters; cost
+$0.15):**
+- (a) `--agents` carries the pinned judge in `claude -p`: the dispatch ran, `meta.json` names `agentType: adhoc-judge`. **D2 is in
+  force; D2a's agent file is not needed.**
+- (b) Effort IS recorded: every assistant record carries an `effort` field (and `perTurnEffort`). The session's records read
+  `medium`; the judge's read `high` - the frontmatter pin beat the session's level, as the docs say. So `effort-measure` counts each
+  run's efforts per message for the main sessions and per subagent type: the arm and every checker's tier are MEASURED from the
+  transcripts, and a mismatch is visible in the report rather than assumed away.
+- (c) The Agent tool offers `description`, `isolation`, `model`, `prompt`, `run_in_background`, `subagent_type` - no per-dispatch
+  `effort`. Nothing to record or avoid.
+
 **Alternatives priced**: a hook in the run clones rewriting ad-hoc opus dispatches - rejected, it changes the guard set between the
 experiment and normal work; a committed agent file - the FALLBACK (D2a), not the first choice only because `--agents` needs no landing
 and no retirement.

@@ -87,6 +87,16 @@ def tool_results(records: list[dict]) -> dict[str, str]:
     return out
 
 
+def efforts(records: list[dict]) -> Counter[str]:
+    """The effort each assistant record ran at - Claude Code writes it on every record (research R1, P0 of 2026-09-29) -
+    counted per message, so a run's claimed arm and the checkers' pinned tiers are MEASURED, not trusted."""
+    seen: dict[str, str] = {}
+    for r in records:
+        if r.get("type") == "assistant":
+            seen[str((r.get("message") or {}).get("id") or r.get("uuid"))] = str(r.get("effort") or "unrecorded")
+    return Counter(seen.values())
+
+
 def last_text(records: list[dict]) -> str:
     for r in reversed(records):
         if r.get("type") == "assistant":
@@ -169,12 +179,15 @@ def measure(run: dict, projects: pathlib.Path, guard_log: pathlib.Path, defined:
     failed: list[str] = []
     stamps: list[str] = []
     finals: list[str] = []
+    main_effort: Counter[str] = Counter()
+    sub_effort: dict[str, Counter[str]] = {}
     for t in main_t:
         recs = records_of(t)
         main_tok = add(main_tok, fold(recs))
         stamps += times(recs)
         failed += failed_make_runs(recs)
         finals.append(last_text(recs))
+        main_effort += efforts(recs)
         for b in tool_uses(recs):
             tools[b["name"]] += 1
             if b["name"] in ("Agent", "Task"):
@@ -191,6 +204,7 @@ def measure(run: dict, projects: pathlib.Path, guard_log: pathlib.Path, defined:
             for b in tool_uses(recs2):
                 sub_tools[b["name"]] += 1
             kind = str(meta.get("agentType") or "unknown")
+            sub_effort.setdefault(kind, Counter()).update(efforts(recs2))
             verdicts.setdefault(kind, Counter())[verdict_of(last_text(recs2))] += 1
     stamps.sort()
     pauses = sum(parse(b) - parse(a) for a, b in run.get("pauses") or [])
@@ -203,6 +217,7 @@ def measure(run: dict, projects: pathlib.Path, guard_log: pathlib.Path, defined:
         "sessions": sorted(sids),
         "tool_calls": {"main": dict(tools), "subagents": dict(sub_tools)},
         "dispatches": dict(dispatches),
+        "effort": {"main": dict(main_effort), "subagents": {k: dict(v) for k, v in sub_effort.items()}},
         "adhoc_dispatches": adhoc,
         "adhoc_judging_at_session_effort": sum(1 for a in adhoc if a["judging"]),
         "rework": {
