@@ -21,7 +21,7 @@ each is a GUESS and says why:
   page says; the strip is sized to the shed.
 - **A farm with its own grove carries its household bamboo in that grove** (no separate bamboo strip beside the house),
   and **no village belt is drawn where the farms carry their own groves** (the GM's ruling of 2026-09-29, already
-  recorded in `vegetation/030`); a **linear** hamlet's farms front a street laid along the road, the row as long as its
+  recorded in the shelter-belt entry of the vegetation page); a **linear** hamlet's farms front a street laid along the road, the row as long as its
   households.
 
 ## Your items (four questions; no new source, no new registry key)
@@ -33,7 +33,7 @@ each is a GUESS and says why:
 - **vegetation/620** ("How did a lane get through a belt?"): the same way-in figure, "about 12 ft" to about 36 ft, the
   reason in a clause, pointing at homesteads/715.
 - **homesteads/150** ("Does a hamlet have to be nucleated at all?"): one or two sentences - where the farms carry their
-  own groves (the dispersed and linear forms) no village belt is drawn, pointing at `vegetation/030`; and in the LINEAR
+  own groves (the dispersed and linear forms) no village belt is drawn, pointing at the vegetation page's "Does a shelter belt wrap the settlement?"; and in the LINEAR
   section, that the farms front a street laid along the road, the row as long as its households (the drawn length a
   GUESS).
 - **vegetation/154** ("Did every farmstead keep its own bamboo, and on which side?"): one sentence - a farm drawn with
