@@ -192,7 +192,31 @@ def stage_woodland(s: Settlement, plan: SitePlan) -> None:
     # The patches were SCANNED in `stage_hinterland` (T35) - before the scrub, so the scrub kept out
     # of them; the scan needs the marsh drawn and nothing this stage adds. Drawn here, over open ground.
     for patch in plan.woodland_polys:
-        s.commons(patch, role="woodland")
+        stock_woodland(s, patch)
+
+
+def stock_woodland(s: Settlement, patch: Sequence[Any]) -> None:
+    """One woodland parcel, NEVER UNDER-STOCKED (feature 287, woods W13). The scan offered the parcel on its room
+    (`woodland_room` at `WOODLAND_MIN_CROWNS`), and the farmstead fixtures, the bamboo, the belt and the scrub are laid
+    between the scan and this draw - so the room is asked again HERE, on the ground as it now stands, immediately before
+    `commons` stocks the parcel: nothing is recorded between the two, so where the throws seat short, the room `commons`
+    stocks from is this one. A parcel whose room the later fixtures have taken under the floor is not drawn as a wood of
+    a few trees on grass: its ground is clothed as rough grazing, as `fill_the_holes` clothes bare ground, and the map
+    records it (`meta.woodland_regraded`). Measured over cohort seeds 1-60 on 2026-09-29: no parcel's room was re-read
+    at the draw and the fewest crowns a wood recorded was 134, so the refusal is a guarantee, not a path any map takes."""
+    from l7r.diagram.settlement.land.cover import WOODLAND_MIN_CROWNS  # noqa: PLC0415 - kept beside its one use
+
+    if len(s.woodland_room(patch)) < WOODLAND_MIN_CROWNS:
+        s.M["meta"].setdefault("woodland_regraded", []).append([round(float(v), 1) for v in ring_box(patch)])
+        s.commons(patch, role="grazing")
+        return
+    s.commons(patch, role="woodland")
+
+
+def ring_box(ring: Sequence[Any]) -> tuple[float, float, float, float]:
+    """A ring's (x0, y0, x1, y1)."""
+    xs, ys = [float(q[0]) for q in ring], [float(q[1]) for q in ring]
+    return (min(xs), min(ys), max(xs), max(ys))
 
 
 def dent_around(belt: Sequence[tuple[float, float]], pocket: tuple[float, float, float, float]) -> list[tuple[float, float]]:

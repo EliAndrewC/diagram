@@ -285,3 +285,20 @@ def test_the_feed_runs_downhill_its_snap_refused_where_it_would_climb_and_a_clim
     t.meta(name="In", scale="hamlet", ftpx=1, down_deg=90)
     with pytest.raises(ValueError, match="runs level or uphill"):
         t.draw_comb_field(across, "f1", {"kind": "stream"})
+
+
+def test_the_drain_outfall_run_runs_downhill_and_goes_straight_down_where_its_lead_would_climb() -> None:
+    """W10 at the village and city comb's drain outfall (`outfall_run`): the drawn run - 70 px on along the drain's exit,
+    then 520 down the fall - runs downhill even where the drain exits straight UP the fall (the worst case); and the
+    violating case, a lead long enough to take back more than the reach gives, is not drawn - the run goes straight down
+    the fall from the drain's end. `runs_downhill` is the one rule."""
+    from l7r.diagram.settlement.fields.comb import outfall_run, runs_downhill
+
+    fall = (0.0, 1.0)
+    for b1 in [(100.0, 150.0), (150.0, 100.0), (100.0, 50.0), (50.0, 100.0)]:
+        run = outfall_run((100.0, 100.0), b1, fall)
+        assert len(run) == 3 and runs_downhill(run, fall), f"the drawn run from an exit toward {b1}"
+    up = [(100.0, 100.0), (100.0, -500.0), (100.0, -400.0)]
+    assert not runs_downhill(up, fall), "the case: a 600 px lead up the fall, 100 back down, climbs"
+    run = outfall_run((100.0, 100.0), (100.0, 50.0), fall, lead=600.0, reach=100.0)
+    assert run == [(100.0, 100.0), (100.0, 800.0)] and runs_downhill(run, fall)

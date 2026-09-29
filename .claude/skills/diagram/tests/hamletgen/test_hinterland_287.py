@@ -323,3 +323,26 @@ def test_every_households_reserved_share_is_planted_though_no_belt_stands() -> N
     stages.stage_windbreak(s, plan)
     copse = [c for g in s.M["village_groves"] if g["role"] == "copse" for c in g["clumps"]]
     assert all(q in copse for v in seats.values() for q in v)
+
+
+def test_a_parcel_whose_room_later_fixtures_took_is_clothed_as_grazing_not_drawn_a_thin_wood() -> None:
+    """Woods W13 at the draw (`stock_woodland`), on the violating case: a parcel the scan offered, whose ground a paddy laid
+    after the scan now covers - its room is under `WOODLAND_MIN_CROWNS`. It is not recorded as a wood of a few trees; its
+    ground is rough grazing and the map says so. A parcel with room is a wood of at least the floor."""
+    from l7r.diagram.hamletgen.hinterland.stages import stock_woodland
+    from l7r.diagram.settlement.land.cover import WOODLAND_MIN_CROWNS
+
+    ring = [(400.0, 400.0), (700.0, 400.0), (700.0, 700.0), (400.0, 700.0)]
+    s = Settlement(1200, 1200, seed=5)
+    s.meta(name="W", scale="hamlet", ftpx=1, down_deg=90)
+    assert len(s.woodland_room(ring)) >= WOODLAND_MIN_CROWNS, "the room the scan saw"
+    s.field_polys.append([(300.0, 300.0), (800.0, 300.0), (800.0, 800.0), (300.0, 800.0)])  # laid after the scan
+    assert len(s.woodland_room(ring)) < WOODLAND_MIN_CROWNS, "the case: the room is gone"
+    stock_woodland(s, ring)
+    assert not [c for c in s.M.get("commons") or [] if c.get("role") == "woodland"]
+    assert s.M["meta"]["woodland_regraded"] == [[400.0, 400.0, 700.0, 700.0]]
+    t = Settlement(1200, 1200, seed=5)
+    t.meta(name="W", scale="hamlet", ftpx=1, down_deg=90)
+    stock_woodland(t, ring)
+    woods = [c for c in t.M["commons"] if c.get("role") == "woodland"]
+    assert woods and woods[0]["crowns"] >= WOODLAND_MIN_CROWNS and "woodland_regraded" not in t.M["meta"]

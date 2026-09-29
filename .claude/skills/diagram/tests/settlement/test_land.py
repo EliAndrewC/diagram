@@ -485,6 +485,16 @@ def test_a_lane_is_walked_back_off_the_reeds_and_dropped_if_the_whole_leg_is_wet
     assert s.trim_off_marsh([(200.0, 600.0)]) == [(200.0, 600.0)], "a stub shorter than a segment is returned untouched"
 
 
+def test_a_wet_leg_longer_than_sixty_steps_is_still_walked_back_to_dry_ground():
+    """Woods W09, the violating case: a way whose last leg runs 2,000 px into a reed bed - past the ~1,440 px sixty 24 px
+    steps covered, which shipped the end still in the reeds. The walk goes on until the end is dry."""
+    s = Settlement(3000, 1200, seed=3)
+    s.meta(name="Reeds", scale="hamlet", ftpx=1, toscale=True, households=12)
+    s.M["marshes"].append({"x": 1600, "y": 600, "w": 2400, "h": 400, "rot": 0, "role": "toe", "seq": 1, "poly": [[400.0, 400.0], [2800.0, 400.0], [2800.0, 800.0], [400.0, 800.0]]})
+    trimmed = s.trim_off_marsh([(100.0, 600.0), (2500.0, 600.0)])
+    assert trimmed[0] == (100.0, 600.0) and trimmed[-1][0] < 400.0, f"the wet end must reach dry ground, got {trimmed[-1]}"
+
+
 def test_a_map_with_no_field_has_no_wet_toe_to_ask_about():
     """`toe_band` is asked for BEFORE the marsh is drawn, by a router that may run on a map with no
     paddy at all. It answers with no band rather than raising, so the caller needs no special case."""

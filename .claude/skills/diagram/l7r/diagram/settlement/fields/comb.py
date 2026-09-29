@@ -70,6 +70,22 @@ def runs_downhill(course: Sequence[Sequence[float]], fall: Sequence[float], frac
     return L == 0 or vx * float(fall[0]) + vy * float(fall[1]) >= frac * L
 
 
+def outfall_run(b0: Sequence[float], b1: Sequence[float], fall: Sequence[float], lead: float = 70.0, reach: float = 520.0) -> list[Pt]:
+    """The village and city comb's drain-outfall run (water:W10): `lead` px on along the drain's own exit (`b0` toward
+    `b1`) for a smooth junction, then `reach` px straight down the unit `fall` off the map - taken only where it
+    `runs_downhill`, which at the drawn 70 and 520 it always does (the lead can take back at most 70 of 520 px down the
+    fall, so the run's net descent never drops under three quarters of its length). Where it would not, the run goes
+    straight down the fall from the drain's end, which runs downhill by construction."""
+    ex, ey = float(b1[0]) - float(b0[0]), float(b1[1]) - float(b0[1])
+    el = math.hypot(ex, ey) or 1.0
+    start = (float(b0[0]), float(b0[1]))
+    mid = (start[0] + ex / el * lead, start[1] + ey / el * lead)
+    run = [start, mid, (mid[0] + float(fall[0]) * reach, mid[1] + float(fall[1]) * reach)]
+    if runs_downhill(run, fall):
+        return run
+    return [start, (start[0] + float(fall[0]) * (lead + reach), start[1] + float(fall[1]) * (lead + reach))]
+
+
 def bead_drowned(q: Pt, water: Any, ellipses: Sequence[tuple[float, float, float, float]]) -> bool:
     """THE RULE (feature 287, water W33; `bund_beans_on_bunds`): an azemame bead stands on water paint - inside a pond's rim
     (`ellipses`, each grown by the rim stroke and a bead radius) or nearer than a ditch's or channel's half-width to its
@@ -566,15 +582,14 @@ class CombMixin:
             bdx, bdy = math.cos(math.radians(ddb)), math.sin(math.radians(ddb))
             b0 = net["brook"][0]
             b1 = net["brook"][1] if len(net["brook"]) > 1 else (b0[0] + bdx, b0[1] + bdy)
-            ex, ey = b1[0] - b0[0], b1[1] - b0[1]  # the drain's own exit direction (smooth junction)
-            el = math.hypot(ex, ey) or 1.0
-            mid = (b0[0] + ex / el * 70, b0[1] + ey / el * 70)  # a short smooth continuation, THEN turn downhill
             # (first segment = drain direction -> smooth junction; then straight downhill AWAY from the field ->
             # clears a fan envelope's concave lobe without an acute turn, since the drain already runs downhill)
             # A DRAINAGE DITCH, not a stream (feature 230): the collector's dug continuation, drawn at the
             # collector's tail width with the drain's hue and class, recorded in `channels` like the pond run
             # - the same stroke `hamletgen/sink.py` `drain_run` draws, so every sink carries one kind of thing.
-            _run = [b0, mid, (mid[0] + bdx * 520, mid[1] + bdy * 520)]
+            # ...AND IT RUNS DOWNHILL BY THE CHANNEL RULE'S OWN PREDICATE (feature 287, water W10): `outfall_run` asks
+            # `runs_downhill`, as the hamlet's sink routes do
+            _run = outfall_run(b0, b1, (bdx, bdy))
             _dw = next((float(_c.get("w_tail", _c["w"])) for _c in net["channels"] if _c.get("role") == "drain"), 5.5)
             col, cls = ditch_style("drain")
             # ...INTO THE LATE BLOCK WITH THE NET (feature 287, water W38): drawn into the shared early block it was spliced

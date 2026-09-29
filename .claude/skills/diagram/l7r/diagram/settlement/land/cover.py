@@ -850,6 +850,7 @@ class GroundCoverMixin:
             left = [mk for mk in marks if not swept((mk[0] + mk[2]) / 2.0, (mk[1] + mk[3]) / 2.0)]
             if len(left) != len(marks):
                 self._mark_groups[k] = (z, left)
+        self.shrink_marshes_off(ring)  # ...and a marsh's reeds culled here leave its record too (woods W08)
 
     def reserve_clearing(self: Settlement, x: float, y: float, w: float, h: float, extra: float = 46) -> None:  # type: ignore[misc]
         """Pre-register a swept-ground clearing for a sacred/funerary feature a gen draws LATER (e.g. a

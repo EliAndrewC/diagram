@@ -464,6 +464,45 @@ def test_a_clearing_swept_after_the_scrub_takes_its_blades_and_marks_out() -> No
     assert len([ln for _z, _c, bl in s._blade_groups for ln in bl]) == len(left)
 
 
+# ---- W08 (the record half): a clearing swept after the marsh shrinks the marsh's record ------------------------------
+
+
+def test_a_clearing_swept_in_the_marsh_after_it_is_laid_leaves_the_marsh_record() -> None:
+    """Woods W08, the violating case: a toe marsh is laid, then a household shrine's clearing is swept inside it. The reeds
+    there are culled, and the marsh's record, its no-build block and its drawn-wet ring all give the clearing's ground back
+    - the block the same list in `marsh_blocks`, as the scrub reads it by identity; a clearing taking a marsh whole drops it."""
+    from l7r.diagram.settlement._geom import RingIndex
+
+    s = _hamlet()
+    s.marsh([(100.0, 100.0), (700.0, 100.0), (700.0, 700.0), (100.0, 700.0)], role="toe")
+    rec, blk = s.M["marshes"][-1], s.marsh_blocks[-1]
+    before = len(rec["poly"])
+    s.reserve_clearing(400.0, 400.0, 60.0, 60.0)
+    clear = s.clearings[-1]
+    ring = RingIndex([(float(q[0]), float(q[1])) for q in rec["poly"]])
+    assert len(rec["poly"]) > before, "the record was cut"
+    assert not any(ring.inside(float(q[0]), float(q[1])) for q in _interior(clear)), "no swept ground left in the record"
+    assert ring.inside(150.0, 150.0), "the marsh away from the clearing stays"
+    assert blk is s.marsh_blocks[-1] and any(b is blk for b in s.block_polys) and [list(q) for q in blk] == rec["poly"]
+    assert s.wet_polys[-1] == [tuple(q) for q in rec["poly"]] and s._hard_cache_key is None
+    cut = [list(q) for q in rec["poly"]]
+    s.reserve_clearing(150.0, 950.0, 40.0, 40.0)  # a clearing nowhere near the marsh changes nothing
+    s.reserve_clearing(400.0, 400.0, 60.0, 60.0)  # ...nor the same clearing again, whose ground the record no longer holds
+    assert rec["poly"] == cut
+    t = _hamlet()
+    t.marsh([(380.0, 380.0), (420.0, 380.0), (420.0, 420.0), (380.0, 420.0)], role="toe")
+    t.reserve_clearing(400.0, 400.0, 120.0, 120.0)
+    assert t.M["marshes"] == [] and t.marsh_blocks == [] and t.wet_polys == []
+    assert t.M["meta"]["marsh_dropped"][-1] == {"role": "toe", "why": "swept clear"}
+
+
+def _interior(poly: list[tuple[float, float]]) -> list[tuple[float, float]]:
+    """Points well inside a clearing: its vertices pulled a third of the way to its center."""
+    cx = sum(float(q[0]) for q in poly) / len(poly)
+    cy = sum(float(q[1]) for q in poly) / len(poly)
+    return [(float(q[0]) + (cx - float(q[0])) / 3, float(q[1]) + (cy - float(q[1])) / 3) for q in poly]
+
+
 # ---- W15 at the record: every grove is recorded at an extent its clumps stock ---------------------------------------
 
 

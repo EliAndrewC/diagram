@@ -67,6 +67,18 @@ def scatter_overhang(frame: Box, parcel: Box, view: Sequence[float]) -> list[flo
     return [frame[0] - s[0], frame[1] - s[1], s[2] - frame[2], s[3] - frame[3]]
 
 
+def band_keeps_the_strips(M: Any, view: Sequence[float], grown: Sequence[float]) -> bool:
+    """Does growing the view (x, y, w, h) to `grown` leave every waterward reed strip that reached its edge still reaching
+    it (feature 287, water W43)? The strip reaches the view as it is decided (`hinterland.frame.to_the_strips`); a title
+    band grown on the flank the strip runs off would put ground past the strip's end inside the frame. The reach is the
+    rule's own predicate (`hamletgen.frame.strip_reaches_view`, what the kept test reads)."""
+    from l7r.diagram.hamletgen.frame import strip_reaches_view  # noqa: PLC0415 - the hamlet tier imports this package
+
+    faces = (M.get("meta") or {}).get("waterward") or []
+    strips = [m["poly"] for m in M.get("marshes") or [] if m.get("role") == "waterside" and len(m.get("poly") or ()) >= 3]
+    return all(strip_reaches_view(p, grown, faces) or not strip_reaches_view(p, view, faces) for p in strips)
+
+
 def scatter_strips(frame: Box, parcel: Box, view: Sequence[float]) -> list[Box]:
     """The strips of a scatter's parcel the view shows past its frame, as boxes - where a re-throw goes (water W52)."""
     s = _shown(parcel, view)
@@ -473,6 +485,11 @@ class FinishMixin:
         (`refill_the_view`) - cover the placard may stand on, as on every other rung. Returns the placard's top-left."""
         band = bh + 32
         for north in (True, False):
+            # ...NEVER ON A FLANK A WATERWARD REED STRIP RUNS OFF (feature 287, water W43): the band there would show ground past
+            # the strip's end inside the frame - a lake with a ruled edge - so that flank is not taken; the other is, or the
+            # neatline below, which leaves the map (the strip's view) the frame it had
+            if not band_keeps_the_strips(self.M, (vx0, vy0, vw, vh), (vx0, vy0 - band if north else vy0, vw, vh + band)):
+                continue
             y = vy0 - band + 16 if north else vy0 + vh + 16
             x = vx0 + 30
             while x + bw <= vx0 + vw - 30:

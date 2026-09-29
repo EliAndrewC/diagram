@@ -877,7 +877,12 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
     # it lies on the race's stroke (`bar_on_race`): the root then keys into the bank at the mouth's downstream lip, the mouth
     # still in the pool the weir raises (pass 10's rule) and not under the bar. The race leaves at `OFFTAKE_DEG` and the
     # bar's end at the skew, so the two diverge and a clear seat exists within a few bar-lengths; the design row's "upstream
-    # lip" would have put the mouth in the tailwater, which pass 10 measured and refused.
+    # lip" would have put the mouth in the tailwater, which pass 10 measured and refused. THE DOWNSTREAM LIP IS THE RECORD'S
+    # (HISTORICALLY ACCURATE; feature 287 wave 6 re-read research/water/253, "Is there a weir at the intake?"): the old
+    # oblique weir was "extended long in the diagonally upstream direction from the intake mouth" and "dams the riffle ...
+    # leading water to the intake mouth" (jsidre-miwa-2023, translated) - the bar starts AT the mouth and runs upstream from
+    # it, so the mouth stands at the bar's downstream end, in the water the bar leads to it. A root at the upstream lip would
+    # set the whole bar above the mouth and lead the water past it.
     _race_pts = [(float(x), float(y)) for x, y in _race["pts"]] if _race else []
     off = half_t + _mouth / 2.0 + 1.0  # below the mouth, not in it
     while True:

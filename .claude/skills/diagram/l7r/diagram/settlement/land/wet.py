@@ -544,6 +544,48 @@ class WetGroundMixin:
             self.block_polys.append(blk)  # so nothing is placed/dug on a bog (a thin pond-fringe shore ring is exempt)
             self.marsh_blocks.append(blk)  # ...and the scrub scatter treats it as the marsh it is (soft), not as a building (hard)
 
+    def shrink_marshes_off(self: Settlement, ring: Any) -> None:  # type: ignore[misc]
+        """A CLEARING SWEPT AFTER THE MARSH TAKES ITS GROUND OUT OF THE MARSH'S RECORD TOO (feature 287, woods W08). The reeds
+        inside a clearing swept later - a household shrine seated after the toe was laid - are culled at the sweep
+        (`_cull_cover_in`), and the record kept the whole ring, so "is this in the marsh" said yes about the swept verge. Each
+        marsh the clearing reaches is recorded again as `drawn_ground` of its own ring less the clearing - the one predicate
+        the marsh was first recorded by - and its no-build block and drawn-wet ring with it; a marsh the clearing takes whole
+        is dropped as a marsh with no open ground is (`marsh_dropped`)."""
+        xs, ys = [float(q[0]) for q in ring], [float(q[1]) for q in ring]
+        cx0, cy0, cx1, cy1 = min(xs), min(ys), max(xs), max(ys)
+        for rec in list(self.M.get("marshes") or []):
+            old = [(float(q[0]), float(q[1])) for q in rec.get("poly") or []]
+            if len(old) < 3 or min(q[0] for q in old) > cx1 or max(q[0] for q in old) < cx0 or min(q[1] for q in old) > cy1 or max(q[1] for q in old) < cy0:
+                continue
+            _load_shapely()
+            swept = ShapelyPolygon([(float(q[0]), float(q[1])) for q in ring]).buffer(0)
+            # a hundredth of the clearing: a record already cut round it, rounded to a tenth of a pixel, still laps it by a
+            # few square pixels along its edge (6 px2 of a 17,400 px2 verge, measured) - that is the record's grain, not ground
+            if ShapelyPolygon(old).buffer(0).intersection(swept).area < 0.01 * swept.area:
+                continue  # the clearing's box reached the marsh's, its ground did not (or the marsh was laid round it already)
+            ground = drawn_ground(old, clearings=[ring])
+            new = [(round(float(x), 1), round(float(y), 1)) for x, y in ground] if ground is not None else None
+            for fam in (self.block_polys, self.wet_polys):
+                for blk in fam:
+                    if [(float(q[0]), float(q[1])) for q in blk] == old:
+                        blk[:] = new or []  # IN PLACE: the no-build block is the same list in `marsh_blocks` (read by identity)
+            self.block_polys[:] = [b for b in self.block_polys if len(b) >= 3]
+            self.marsh_blocks[:] = [b for b in self.marsh_blocks if len(b) >= 3]
+            self.wet_polys[:] = [b for b in self.wet_polys if len(b) >= 3]
+            self._hard_cache_key: tuple[int, ...] | None = None  # the hard ground reads `wet_polys` and is cached on counts only
+            if new is None:
+                self.M["marshes"].remove(rec)
+                self.M["meta"].setdefault("marsh_dropped", []).append({"role": rec.get("role"), "why": "swept clear"})
+                continue
+            nx, ny = [q[0] for q in new], [q[1] for q in new]
+            rec.update(
+                poly=[[x, y] for x, y in new],
+                x=round((min(nx) + max(nx)) / 2, 1),
+                y=round((min(ny) + max(ny)) / 2, 1),
+                w=round(max(nx) - min(nx), 1),
+                h=round(max(ny) - min(ny), 1),
+            )
+
     def trim_off_marsh(self: Settlement, pts: Any, margin: float = 6.0) -> Any:  # type: ignore[misc]
         """Shorten a way so neither END stands on drawn marshland (GM 2026-08-12).
 
@@ -564,10 +606,11 @@ class WetGroundMixin:
         # A skeleton arm is a TWO-point polyline, so the walk must be able to shorten the last leg
         # itself rather than only drop vertices - guarding on `len(out) > 2` trimmed nothing at all
         # on the very map this was written for.
+        # ...AND WALKED BACK UNTIL IT IS DRY, not for a fixed count (feature 287, woods W09): sixty 24 px steps stopped a wet leg
+        # longer than ~1,440 px with its end still in the reeds. Every pass pops a vertex, returns, or shortens the last leg
+        # by 24 px while it is over 30 px long, so the walk ends.
         for _ in range(2):  # once from each end
-            for _step in range(60):
-                if not soaked(out[-1]):
-                    break
+            while soaked(out[-1]):
                 a, b = out[-2], out[-1]
                 d = math.hypot(b[0] - a[0], b[1] - a[1])
                 if d <= 30.0:  # this whole leg is wet: drop it

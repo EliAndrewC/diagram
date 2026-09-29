@@ -33,6 +33,28 @@ def test_the_title_band_scans_for_blank_ground_along_it() -> None:
     assert _placard_clear(s) and "neatline" not in s.M["meta"] and "title_band_side" not in s.M["meta"]
 
 
+def test_the_title_band_is_not_grown_on_a_flank_a_reed_strip_runs_off() -> None:
+    """Water W43, the violating case: every corner hides a plot and the north band is blank, but a waterward reed strip runs
+    off the north edge - a band there would leave the strip stopping inside the frame. The band is grown under the map,
+    and the strip still reaches the view's edge; a strip that never reached it constrains nothing."""
+    from l7r.diagram.hamletgen.frame import strip_reaches_view
+    from l7r.diagram.settlement.finish import band_keeps_the_strips
+
+    s = _crop_settlement()
+    s.set_view(0, 400, 2000, 700)
+    s.M["fields"] = [{"outline": [[-10, 390], [2010, 390], [2010, 1110], [-10, 1110]]}]
+    strip = [[200.0, 380.0], [1800.0, 380.0], [1800.0, 520.0], [200.0, 520.0]]
+    s.M["marshes"].append({"role": "waterside", "poly": strip})
+    s.M["meta"]["waterward"] = ["N"]
+    assert not band_keeps_the_strips(s.M, (0, 400, 2000, 700), (0, 300, 2000, 800)), "the north band would strand the strip"
+    assert band_keeps_the_strips(s.M, (0, 400, 2000, 700), (0, 400, 2000, 800))
+    s.title("Reedton")
+    assert s.M["meta"]["title_band_side"] == "south" and _placard_clear(s)
+    assert strip_reaches_view(strip, s.M["meta"]["view"], ["N"])
+    s.M["marshes"][-1]["poly"] = [[200.0, 450.0], [1800.0, 450.0], [1800.0, 520.0], [200.0, 520.0]]
+    assert band_keeps_the_strips(s.M, (0, 400, 2000, 700), (0, 300, 2000, 800)), "a strip short of the edge already is not this rule's"
+
+
 def test_the_band_under_the_map_is_tried_before_the_neatline() -> None:
     """Labels L14: ways cross the whole north band; the band under the map is blank and takes the placard."""
     s = _crop_settlement()
