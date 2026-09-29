@@ -300,7 +300,11 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
         if g.get("role") == "windbreak":
             for c in (g.get("clumps") or []) + (g.get("clumps_offpage") or []):
                 _belt_canopy.add(float(c[0]), float(c[1]), float(g.get("r") or 0.0))
-    _copse_goal = max(0.0, _wood_ft2 * _ft2 - _belt_canopy.area)
+    # ...AND WHAT EACH FARM'S OWN GROVE ALREADY HOLDS (feature 291): where the farms carry their own groves the record's one
+    # wood is that grove and its share of the copse, so the copse is filled to what the groves leave (settlement-review of
+    # Kashikawa: filled to the belt's remainder alone, the drawn wood ran ~17,400 sq ft a house against 14,872 rolled)
+    _farm_groves = sum(float(g["w"]) * float(g["h"]) for g in s.M.get("groves") or [] if g.get("w") and g.get("h"))
+    _copse_goal = max(0.0, _wood_ft2 * _ft2 - _belt_canopy.area - _farm_groves)
     s.village_grove(
         _box, role="copse", dense=False, reserved=title_pocket(s, plan), near=_copse_near, area=_copse_goal, bamboo_rings=plan.bamboo_polys
     )  # the map's name has ground reserved; the copse honors it like the belt does
@@ -325,5 +329,5 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     if _hs:
         s.M["meta"]["homestead_wood_ft2"] = {
             "rolled": round(_wood_ft2 / len(_hs)),
-            "drawn": round((_belt_canopy.area + _copse_canopy.area) / _ft2 / len(_hs)),
+            "drawn": round((_belt_canopy.area + _copse_canopy.area + _farm_groves) / _ft2 / len(_hs)),  # the farm groves too (291)
         }

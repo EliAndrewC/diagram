@@ -36,7 +36,7 @@ if HERE not in sys.path:
 
 from l7r.diagram import hamletgen as hg  # noqa: E402
 from l7r.diagram.overlap import matrix_violations  # noqa: E402
-from l7r.diagram.settlement.homestead_parts.grove_rules import gardens_east_shaded, grove_sides_missing, groves_off_windward  # noqa: E402
+from l7r.diagram.settlement.homestead_parts.grove_rules import gardens_east_shaded, grove_sides_missing, groves_crossed_by_lanes, groves_off_windward  # noqa: E402
 
 _PART_KEYS = ("gardens", "threshing_yards", "farm_fixtures", "byres", "farm_sheds", "retirement_houses", "persimmons", "bamboo_stands")
 
@@ -99,7 +99,7 @@ def roll_one(spec: tuple[int, int]) -> tuple[str, list[str], list[str]]:
     # ...AND THE GROVE'S OWN RULES (feature 291, `grove_rules`): every rolled side planted at every farm, the deep stand on
     # the windward faces, no garden's morning sun cut off - the three feature 126 measured that the matrix cannot see.
     _M = getattr(report, "manifest", None) or {}
-    for name, found in (("grove_sides_missing", grove_sides_missing(_M)), ("groves_off_windward", groves_off_windward(_M)), ("gardens_east_shaded", gardens_east_shaded(_M))):
+    for name, found in (("grove_sides_missing", grove_sides_missing(_M)), ("groves_off_windward", groves_off_windward(_M)), ("gardens_east_shaded", gardens_east_shaded(_M)), ("groves_crossed_by_lanes", groves_crossed_by_lanes(_M))):
         if found:
             report.fail_lines.append(f"FAIL {name} -> {len(found)}, e.g. {found[:2]}")
             report.failures.append(name)

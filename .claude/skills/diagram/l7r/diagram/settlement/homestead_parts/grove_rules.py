@@ -85,6 +85,29 @@ def groves_off_windward(M: Mapping[str, Any]) -> list[Mapping[str, Any]]:
     return out
 
 
+def groves_crossed_by_lanes(M: Mapping[str, Any]) -> list[tuple[int, Mapping[str, Any]]]:
+    """Each (lane index, band) where a lane's drawn tread - each segment stroked square-ended at half its width - overlaps a
+    farm grove band (feature 291; the settlement-review found lanes through 19 of Kashikawa's 40 windward bands, which the
+    matrix, classing groves as VEGETATION, lets pass). A farm's way in comes by its open front, never through its grove."""
+    from .._geom import poly_gap  # the matrix's own quad gap, exact for convex quads
+
+    bands = [(g, [(g["x"] - g["w"] / 2, g["y"] - g["h"] / 2), (g["x"] + g["w"] / 2, g["y"] - g["h"] / 2), (g["x"] + g["w"] / 2, g["y"] + g["h"] / 2), (g["x"] - g["w"] / 2, g["y"] + g["h"] / 2)]) for g in M.get("groves") or () if all(k in g for k in ("x", "y", "w", "h"))]
+    out: list[tuple[int, Mapping[str, Any]]] = []
+    seen: set[tuple[int, int]] = set()
+    for i, ln in enumerate(M.get("lanes") or ()):
+        pts = [(float(p[0]), float(p[1])) for p in ln.get("pts") or ()]
+        half = float(ln.get("w") or 3) / 2.0
+        for a, b in zip(pts, pts[1:], strict=False):
+            d = max(((b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2) ** 0.5, 1e-9)
+            nx, ny = -(b[1] - a[1]) / d * half, (b[0] - a[0]) / d * half
+            quad = [(a[0] + nx, a[1] + ny), (b[0] + nx, b[1] + ny), (b[0] - nx, b[1] - ny), (a[0] - nx, a[1] - ny)]
+            for g, rect in bands:
+                if (i, id(g)) not in seen and poly_gap(quad, rect) <= 0.0:
+                    seen.add((i, id(g)))
+                    out.append((i, g))
+    return out
+
+
 def gardens_east_shaded(M: Mapping[str, Any]) -> list[tuple[Pt, Mapping[str, Any]]]:
     """Each (garden, band) where a grove band's west edge stands within the east reach of the garden's east edge and
     overlaps its height - the garden's morning sun cut off."""
