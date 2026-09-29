@@ -281,7 +281,9 @@ class StandsMixin:
             # of Kashikawa and Mizuguchi: four crowns centered inside, culms drawn over them)
             # The rings come from the CALLER (`bamboo_rings`, the plan's seated stands): the stands are drawn by a later stage, so
             # `M['bamboo_stands']` is still empty when the copse is seeded - reading it made the keep-out a no-op (round 3)
-            + ([grown_ring(b, cr) for b in bamboo_rings if len(b) >= 3] if role == "copse" else []),
+            # grown by TWO crowns: a clump draws its crowns scattered about its seat, so a seat one crown off the stand still
+            # drew a crown centered inside it (measured on the round-3 fix: one to two a map)
+            + ([grown_ring(b, 2.0 * cr) for b in bamboo_rings if len(b) >= 3] if role == "copse" else []),
             water=[(wl, whw + cr) for wl, whw in water_lines],
             corridors=corr,
             circles=occ,

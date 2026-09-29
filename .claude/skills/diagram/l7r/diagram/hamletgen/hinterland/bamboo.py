@@ -166,7 +166,9 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
         return bamboo_blocked_indexed(x, y, (s.W, s.H), tp, index, pond, px(30.0))
 
     def _fits(cx: float, cy: float, hw: float, hh: float) -> bool:
-        samples = [(cx + dx * hw, cy + dy * hh) for dx in (-1.0, -0.5, 0.0, 0.5, 1.0) for dy in (-1.0, 0.0, 1.0)]
+        # nine by five: at five by three a yard persimmon's crown fitted between the samples of a 72 x 55 ft thicket
+        # (settlement-review of Kashikawa, feature 280)
+        samples = [(cx + dx * hw, cy + dy * hh) for dx in (-1.0, -0.75, -0.5, -0.25, 0.0, 0.25, 0.5, 0.75, 1.0) for dy in (-1.0, -0.5, 0.0, 0.5, 1.0)]
         return not any(_blocked(x, y) for x, y in samples)
 
     out: list[Poly] = []

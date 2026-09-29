@@ -48,7 +48,7 @@ def mulberry_row_ts(band: float) -> list[float]:
     return [0.08 + 0.84 * (k + 0.5) / n for k in range(n)]
 
 
-FRY_WATER = "#A7AE86"  # the turbid fry water, a muddier green than the clear grow-out pond's #93B7AC
+FRY_WATER = "#9FA898"  # the turbid fry water, a grayer, muddier green than the clear grow-out pond's #93B7AC - still water, not the polder grass #A6C398 (review, round 4)
 
 
 def fry_pond_ids(chosen: Sequence[Any], area: Any, share: float) -> set[int]:

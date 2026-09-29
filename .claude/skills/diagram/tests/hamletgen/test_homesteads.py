@@ -757,6 +757,9 @@ def test_bath_room_seats_abut_their_walls_the_hamlets_seat_first() -> None:
     assert bath_room_seats("floored_rooms", 46.0, 28.0, 9.0, 6.0)[0] == ((26.0, 0.0, 6.0, 9.0), "floored_rooms")
     door = [q for q, n in bath_room_seats("main_door", 46.0, 28.0, 9.0, 6.0) if n == "main_door"]
     assert len(door) == 2 and all(q[1] == 17.0 for q in door), "on the front wall, either side of the door"
+    past = [q for q, n in bath_room_seats("main_door", 46.0, 28.0, 9.0, 6.0, (0.0, 10.0)) if n == "main_door"]
+    assert [q[0] for q in past[2:]] == [17.5, -17.5], "then just past the yard's sides, on the front wall"
+    assert len([q for q, n in bath_room_seats("main_door", 46.0, 28.0, 9.0, 6.0, (0.0, 20.0)) if n == "main_door"]) == 2, "past the wall's end: none"
 
 
 def test_the_privy_and_the_bath_room_take_a_rolled_size_and_the_wood_shed_goes_to_the_larger_houses() -> None:

@@ -283,3 +283,12 @@ def test_a_not_reviewable_verdict_carries_the_findings_it_stopped_over(tmp_path:
     _records(clone, **{"r": {"verifies": "F1", "subject": "m", "source": "s", "quantity": "q", "answers": "aaaaaaaaaaaa"}})
     assert prereq.unverified_findings(clone, "m") == [], "answered against the verdict that raised it"
     assert '"answers": "aaaaaaaaaaaa"' in prereq.answers_hint(clone, "m")
+
+
+def test_a_verdict_a_red_gate_downgraded_still_raises_its_own_findings() -> None:
+    """Feature 280 (the settlement-review of Sawada): a NEEDS-WORK written while the gate was red is recorded NOT-REVIEWABLE with
+    `concluded`, its findings its own; reading only `carried` asked for none of them and carried none forward."""
+    f1 = {"id": "F1", "severity": "error"}
+    assert prereq.raised_findings({"verdict": "NOT-REVIEWABLE", "concluded": "NEEDS-WORK", "findings": [f1], "carried": []}) == [f1]
+    assert prereq.raised_findings({"verdict": "NOT-REVIEWABLE", "findings": [{"id": "P1"}], "carried": [f1]}) == [f1], "a prerequisite is not a finding"
+    assert prereq.raised_findings({"verdict": "NEEDS-WORK", "findings": [f1, "x"]}) == [f1]

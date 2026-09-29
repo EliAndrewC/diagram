@@ -544,7 +544,8 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
             elif kind == "bath":
                 # THE BATH ROOM (feature 280 M22, `bath_room_seats`): joined to the house - against its wall, no gap - at the
                 # hamlet's seat, then at the other attested seats; it is never a building standing off in the yard.
-                _named = bath_room_seats("floored_rooms" if h.get("role") == "headman" else bath_seat, hw, hh, w, d)
+                _yl = yard_local(h, hx, hy, ca, sa)
+                _named = bath_room_seats("floored_rooms" if h.get("role") == "headman" else bath_seat, hw, hh, w, d, (_yl[0], _yl[2] / 2) if _yl else None)
                 yard_lead = [q for q, _n in _named]
                 bath_names = {id(q): _n for q, _n in zip(yard_lead, (_n for _q, _n in _named), strict=True)}
                 seats = []
@@ -676,7 +677,7 @@ def fixture_size_ft(s: Settlement, kind: str, hx: float, hy: float) -> tuple[flo
     return FIXTURE_FT[kind]
 
 
-def bath_room_seats(first: str, hw: float, hh: float, w: float, d: float) -> list[tuple[tuple[float, float, float, float], str]]:
+def bath_room_seats(first: str, hw: float, hh: float, w: float, d: float, yard: tuple[float, float] | None = None) -> list[tuple[tuple[float, float, float, float], str]]:
     """The bath room's seats in the house frame (feature 280 M22, research/homesteads/740), `first` tried first then the
     other attested seats: beside the MAIN DOOR (the front wall, either side of the door at its middle), at the far end of
     the STABLE WING (the -x end wall, where the doma and its stable are), or joined to the FLOORED ROOMS (the +x end wall).
@@ -685,8 +686,13 @@ def bath_room_seats(first: str, hw: float, hh: float, w: float, d: float) -> lis
     reviews of Kuwabata and Sawada (feature 280) found a declared `main_door` never drawn, and then an end-wall corner offered
     as `main_door` that read as the floored rooms' seat, so the record now says which seat each bath room took."""
     front, side = hh / 2 + d / 2, hw / 2 + d / 2
+    # ...AND JUST PAST THE YARD'S SIDES (`yard`: its center x and half-width in the house frame), still on the front wall: the
+    # yard is centered before the door and covered both door-side seats on every house, so the seat was never drawn
+    # (settlement-review of Kuwabata, feature 280); the room stands under the eaves beside the door, the yard beside it
+    past = [yard[0] + sx * (yard[1] + w / 2 + 3.0) for sx in (1.0, -1.0)] if yard else []  # 3 ft: the placer keeps 2 ft off a footprint
+    door = [(hw * 0.22 + w / 2, front, w, d), (-(hw * 0.22 + w / 2), front, w, d)] + [(x, front, w, d) for x in past if abs(x) + w / 2 <= hw / 2]
     table = {
-        "main_door": [(hw * 0.22 + w / 2, front, w, d), (-(hw * 0.22 + w / 2), front, w, d)],
+        "main_door": door,
         "stable_end": [(-side, 0.0, d, w), (-side, -hh * 0.25, d, w), (-side, hh * 0.25, d, w)],
         "floored_rooms": [(side, 0.0, d, w), (side, -hh * 0.25, d, w), (side, hh * 0.25, d, w)],
     }
