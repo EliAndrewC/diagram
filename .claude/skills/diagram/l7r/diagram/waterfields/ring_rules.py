@@ -135,6 +135,33 @@ def _shapely() -> Any:
     return _SHAPELY
 
 
+def simple_outline(ring: Sequence[Sequence[float]]) -> Poly:
+    """`ring` as a SIMPLE polygon - itself when it already is one, else the outline of the largest part of it.
+
+    A FAN'S ENVELOPE MUST BE A POLYGON WITH GROUND IN IT (feature 287, the cohort seed 27 crash). The floor trim clamps a
+    run of vertices onto the flat-extended collector line, and where an unclipped outer thread runs on past the drain's
+    head the clamp deposits a fold - six points 1-3 px apart, back and forth along the line (measured on seed 27 at
+    (798-800, 1976-1978)) - that `dedup_ring`'s 1 px merge cannot reach. The ring then crosses itself, and `buffer(0)` of
+    that ring came back EMPTY, so the seam pass and the carve's acreage estimate were handed a field with no ground and
+    raised on its NaN bounds. `make_valid` keeps the fan's ground (823,065 sq px there, against the ring's own 823,065)
+    and the fold, which is no ground at all, is dropped. A ring that is already simple is returned untouched."""
+    Polygon, _union = _shapely()
+    pts = _pts(ring)
+    if len(pts) < 3 or Polygon(pts).is_valid:
+        return pts
+    import shapely
+
+    stack, parts = [shapely.make_valid(Polygon(pts))], []
+    while stack:  # make_valid nests: a collection of a MultiPolygon and the fold's lines, on seed 27
+        g = stack.pop()
+        if hasattr(g, "geoms"):
+            stack += list(g.geoms)
+        elif g.geom_type == "Polygon" and g.area > 0.0:
+            parts.append(g)
+    best = max(parts, key=lambda g: g.area) if parts else Polygon(pts).convex_hull
+    return [(float(x), float(y)) for x, y in list(best.exterior.coords)[:-1]] if best.geom_type == "Polygon" else pts
+
+
 def needle(ring: Sequence[Sequence[float]]) -> bool:
     """W18/W20 - the basin tapers to a point: an interior angle under `NEEDLE_DEG` on the ring as recorded.
 

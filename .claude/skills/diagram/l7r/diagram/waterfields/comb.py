@@ -37,6 +37,7 @@ from .frame import (
     chan_px,
 )
 from .furrows import STEEP_SPREAD_RAD, settle_tract_seams
+from .ring_rules import simple_outline
 from .seams import close_seams
 from .seams.pockets import _outside_command, _water
 from .trunks import DRAIN_MIN_LEG, anchor_trunk_ends
@@ -696,9 +697,8 @@ def _comb_drain(R: random.Random, F: _Frame, threads: list[_Thread], W: float, H
         yc = F.to_xy(uc, a_fit + b_fit * uc)[1]
         if yc > H - 40:
             a_fit -= (yc - (H - 40)) / max(0.35, abs(F.d[1]))
-    # THE HEAD ON THE FITTED LINE, NO SAMPLE WITHIN `DRAIN_MIN_LEG` OF THE OUTFALL (feature 287, water W13/W14; the why is
-    # at `trunks.DRAIN_MIN_LEG`): a jittered head could sit below a lone ditch's outfall, and a sample 2 px short of it
-    # hooked the last leg. Every draw is still taken, the unused ones discarded, so the random stream is unmoved.
+    # THE HEAD ON THE FITTED LINE, NO SAMPLE WITHIN `DRAIN_MIN_LEG` OF THE OUTFALL (feature 287, W13/W14; why: `trunks.DRAIN_MIN_LEG`).
+    # Every draw is still taken, the unused ones discarded, so the random stream is unmoved.
     duf = []
     u = lo_u
     while u < hi_u:
@@ -886,7 +886,7 @@ def _comb_floor_and_winding(plots: list[dict[str, Any]], threads: list[_Thread],
     # ...then merge the near-duplicate vertices the clamp deposits where the cut meets the old
     # boundary (merged-roll review 2026-08-16, Kashikawa: ~12 points with reversals in a ~5 px
     # span at the trim corner) - data hygiene for every later consumer of the ring.
-    envelope = dedup_ring(envelope, 1.0)
+    envelope = simple_outline(dedup_ring(envelope, 1.0))  # ...which cannot merge a fold of points 1-3 px apart (feature 287)
 
     # A BASIN IS SIMPLE AND POSITIVELY WOUND (settlement-review, 2026-08-08). At the fan's corner
     # the outer thread has been clipped at the collector, so `bnd` hands the same clamped point back

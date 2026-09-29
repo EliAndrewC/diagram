@@ -106,3 +106,30 @@ def test_the_floor_stops_where_the_command_area_does() -> None:
     assert max(floor_overhang(raw, dpts, 90.0)) > 30.0, "the fixture's floor hangs past the collector"
     env = _comb_floor_and_winding([], threads, [(100.0, 0.0), (400.0, 0.0)], dpts, _Frame(90.0))  # type: ignore[arg-type]
     assert max(floor_overhang(env, dpts, 90.0)) <= 0.5
+
+
+def test_a_fan_envelope_folded_by_the_floor_trim_still_has_its_ground() -> None:
+    """Feature 287, the cohort seed 27 crash: the floor trim clamped an unclipped outer thread onto the collector line and
+    left a fold of six points 1-3 px apart, which `dedup_ring` cannot merge. That ring crosses itself and `buffer(0)` of
+    it is EMPTY, so the carve's acreage estimate and the seam pass were handed a field with no ground (NaN bounds). The
+    envelope is now made a simple polygon where it is built (`ring_rules.simple_outline`), keeping the fan's ground; a
+    ring already simple is returned as it stands. The fixture is the seed's own ring, at full precision - rounded to 0.1
+    px it no longer collapses, which is why it is recorded rather than constructed."""
+    import json
+    import os
+
+    from shapely.geometry import Polygon
+
+    from l7r.diagram.waterfields.ring_rules import simple_outline
+
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    with open(os.path.join(here, "fixtures", "folded_envelope_seed27.json"), encoding="utf-8") as fh:
+        folded = [tuple(p) for p in json.load(fh)["envelope"]]
+    assert Polygon(folded).buffer(0).is_empty, "the fixture is the ring that emptied the field"
+    fixed = simple_outline(folded)
+    assert Polygon(fixed).is_valid and abs(Polygon(fixed).area - Polygon(folded).area) < 1.0
+    square = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)]
+    assert simple_outline(square) == square, "a simple ring is left alone"
+    assert simple_outline([(0.0, 0.0), (1.0, 1.0), (2.0, 2.0), (0.5, 0.5)]) == [(0.0, 0.0), (1.0, 1.0), (2.0, 2.0), (0.5, 0.5)], "no ground to keep"
+    bowtie = simple_outline([(0.0, 0.0), (10.0, 10.0), (10.0, 0.0), (0.0, 10.0)])
+    assert Polygon(bowtie).is_valid and Polygon(bowtie).area == 25.0, "a bow-tie keeps its larger lobe"
