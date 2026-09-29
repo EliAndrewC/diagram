@@ -255,3 +255,5 @@ existed, and then have our settlements reflect the range of settlement layouts t
 our research is thin and we are straightforwardly unable to come up with an answer, then we make a tunable knob for the various possibilities which all seem reasonable by virtue of being in line with our other research and not contradicting anything that our research has already established."* The
 research is homesteads/155 and 156 (R6, checked). FR-018 and FR-019 carry the reviews' other findings (no wells; bamboo drawn on
 farms that rolled none; a door no way reached), each decided by the record.
+
+**Amendment 3, round 1** (spec-fidelity-verify, MODE 3, 2026-09-29): CHANGES - both attested lines to be drawn (a paddy row may borrow the street laid first), the frame by FR-010's necessity with its width a GUESS, the lane's room in the frame, the far row's holding drawn, own wells for the dispersed form only and a row's water a knob, the converted feet removed. **Round 2**: CHANGES - the compact holding cited to homesteads/156 and labeled; plan D9's id. **Round 3**: FAITHFUL. Amendment 3 is accepted.

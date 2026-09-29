@@ -47,5 +47,44 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D13).
       - [ ] source-applicability confirmed
 - [ ] T10 The modals: the grove kind states the side count; entry-drift on every owed pair (D12; FR-004, FR-009; SC-002)
       research: rendering
+- [ ] T12 The record, groups R5 and R6 (homesteads 715, 150, 155, 156; vegetation 620, 154): write, check and apply (FR-013-FR-019; amendment 3)
+      research: physical
+      - [ ] research pass
+      - [ ] source-reader confirmed
+      - [ ] recorded and cited
+      - [ ] quote-check confirmed
+      - [ ] source-applicability confirmed
+- [ ] T13 The row's line and its seats: `rows.py`, the line and sides knobs, farms one frame apart along the line, further streets (D14, D15; FR-013, FR-014, FR-015, FR-016; SC-007)
+      research: physical
+      - [ ] research pass
+      - [ ] source-reader confirmed
+      - [ ] recorded and cited
+      - [ ] quote-check confirmed
+      - [ ] source-applicability confirmed
+- [ ] T14 The far row's holding: a strip behind on a street laid first, compact on the dry edge (D16; FR-015; SC-007)
+      research: physical
+      - [ ] research pass
+      - [ ] source-reader confirmed
+      - [ ] recorded and cited
+      - [ ] quote-check confirmed
+      - [ ] source-applicability confirmed
+- [ ] T15 The streets laid as one continuous way each, joined to the connector (D17; FR-017; SC-007)
+      research: rendering
+- [ ] T16 Water: own wells for the dispersed farm, the row water knob (D18; FR-018; SC-008)
+      research: physical
+      - [ ] research pass
+      - [ ] source-reader confirmed
+      - [ ] recorded and cited
+      - [ ] quote-check confirmed
+      - [ ] source-applicability confirmed
+- [ ] T17 Door paths and the grove's bamboo roll (FR-019; SC-008)
+      research: physical
+      - [ ] research pass
+      - [ ] source-reader confirmed
+      - [ ] recorded and cited
+      - [ ] quote-check confirmed
+      - [ ] source-applicability confirmed
+- [ ] T18 The row rules as manifest predicates, in the cohort and the gate test (D19; SC-007, SC-008)
+      research: rendering
 - [ ] T11 The pool regenerated, settlement-review on each moved map, make done, push (D11; FR-012; SC-006)
       research: rendering
