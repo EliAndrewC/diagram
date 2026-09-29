@@ -84,11 +84,22 @@ fix-commit match) the measurement lists the matched lines so the report's reader
 Containers share a 9 GB cap; memwatch warns at 8 GB (the handoff). A `make done` alone reaches ~3.2 GiB at its test-phase peak (observed 2026-09-13, one-shot, method: the gate RAM profile; memory
 note of 2026-09-13). **D7 - strictly sequential, gated on headroom** (the GM, 2026-09-29: "run these tests sequentially rather than in parallel for memory
 reasons"). The launcher refuses to start a run while any other effort run's session is live (its record has a start and no
-`result.json`), and refuses while the container's memory (`/sys/fs/cgroup/memory.current`, this container's own figure; memwatch's
-shared total is only seen when it warns) is above **4.5 GB**, or while a memwatch warning newer than 15 minutes (a GUESS: long enough that a warning raised by the previous run's tail or another session's gate has passed, short enough not to stall the experiment for an old one) stands in
+`result.json`), and refuses while the container's WORKING SET is above **4.5 GB**. The working set is `memory.current` less `inactive_file` from
+`/sys/fs/cgroup/memory.stat` - the memory the kernel cannot simply drop, the figure container tools report as usage. The raw
+`memory.current` is NOT the gate: it counts page cache, and read 9.23 GB against memwatch's 8.3 GB for the same minute (observed
+2026-09-29 19:41 UTC, one-shot, method: the amendment review's `cat` of `memory.current` and `grep` of `memory.stat`, 2.40 GB of it
+page cache) - a gate on it could stay shut on a quiet host. Nor is this cgroup's own limit the cap: `memory.max` is 10 GiB, while the
+9.0 GB cap is the shared one memwatch reports. At 19:43 UTC the working set read 6.98 GB against a `memory.current` of 7.90 GB
+(observed 2026-09-29, one-shot, method: `memory.current` less `inactive_file`). The launcher also refuses or while a memwatch warning newer than 15 minutes (a GUESS: long enough that a warning raised by the previous run's tail or another session's gate has passed, short enough not to stall the experiment for an old one) stands in
 `~/.claude/memwatch/events/`. The threshold is a GUESS with its arithmetic: the 9.0 GB cap less a run's own peak (a `make done`'s
 test phase, above, plus the run's session and its subagents' processes at about 0.5 GB each - observed 2026-09-29, one-shot, method: the memwatch warning of 15:34 listing the four biggest processes) leaves roughly
-4.5 GB for everything else. The refusal prints the figure and the wait is logged in `interventions.md`; the implementing session
+4.5 GB for everything else. The threshold is derived on the working set, the same quantity: a run's peak is anonymous memory (the gate's
+test workers and the `claude` processes), which the working set counts and page cache does not add to. Whether the working set and
+memwatch's figure agree is MEASURED in pre-flight (T09): on a quiet host - no other session running a gate, a page session or a
+render - the working set and memwatch's figure are read at the same minute and recorded; if they differ by more than half a gigabyte
+(a GUESS tolerance) the gate reads the one memwatch reports instead; and if the quiet reading is itself above the threshold, the gate
+could never open, so the implementing session raises it with the GM before any run rather than changing the threshold on its own.
+The refusal prints the figure and the wait is logged in `interventions.md`; the implementing session
 retries on its next turn rather than polling. While a run is live the implementing session runs nothing memory-heavy of its own: the
 measurement of the previous run, the blinding and the grading are done between runs, one at a time, and the tooling is built and gated
 before the first run. Other sessions' work is the implementing session's to schedule around (the quickstart says to run when the host
