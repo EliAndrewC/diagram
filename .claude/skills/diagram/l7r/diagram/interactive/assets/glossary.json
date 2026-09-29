@@ -13076,5 +13076,19 @@
    "tsuchinoe-ne",
    "hinoe-inu"
   ]
+ },
+ "band": {
+  "def": "The range within which a share or size is rolled - per hamlet or per homestead - so that drawn maps vary inside what the record attests.",
+  "variants": [
+   "band",
+   "bands"
+  ]
+ },
+ "Fubokuwakasho": {
+  "def": "A Japanese collection of poems compiled about 1310. The earliest known use of the word itabashi, \"plank bridge\", is in a poem of its sixteenth book.",
+  "variants": [
+   "Fubokuwakasho",
+   "Fubokuwakashō"
+  ]
  }
 }

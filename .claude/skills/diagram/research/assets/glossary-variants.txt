@@ -128,6 +128,8 @@ bald hills	bald hill
 bamboo grass	sasa
 bamboo-grass	sasa
 ban-hinin	banta
+band	band
+bands	band
 banfang	banfang
 bangi	clapper-board
 bangumi	bangumi
@@ -902,6 +904,8 @@ fry-catching landings	fry landing
 fsw	FSW
 fsws	FSW
 fu	fu
+fubokuwakasho	Fubokuwakasho
+fubokuwakashō	Fubokuwakasho
 fudai	fudai
 fudai daimyo	fudai
 fudai domains	fudai
