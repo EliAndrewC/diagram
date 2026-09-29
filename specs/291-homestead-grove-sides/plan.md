@@ -76,7 +76,11 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   the in-wall rule's and `grove_prevalence`'s, as now.
 - **D9 - drawing**. A thin band draws with `_draw_grove(..., mix="dooryard")` - fruit and flowering broadleaf, no
   conifer (Tonami's east side: flowering trees, persimmon, fig; its west-to-north side hackberry and alder) - the mix a
-  GUESS for the full ring. Deep bands keep the windbreak mix.
+  GUESS for the full ring. Deep bands keep the windbreak mix. A band is drawn as clumps of at most one clump's size
+  (`band_clumps`: `_draw_grove` caps a clump at 28 crowns, and a deep band drawn as one clump was sparser than the thin
+  band), inset one crown radius on the house side so the canopy's edge meets the band's inner edge, off the service
+  strip; its bamboo is drawn only where the farm rolled a household bamboo stand (`_farm_rolls_bamboo`, the bamboo pass's
+  own positional roll; FR-017).
 - **D10 - the forms back on** (FR-011). `SETTLEMENT_FORMS = _SETTLEMENT_FORMS_WHEN_GROVES_WORK` and the comment block
   above it rewritten from "why off" to the measurement that put them back.
 - **D11 - the pool** (FR-012). The five hamlets regenerate from their unchanged specs; each takes its seed's form and
