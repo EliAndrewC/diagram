@@ -2,8 +2,8 @@
 
 ## `make page-session ... EFFORT=<level>`
 
-The existing target gains `EFFORT`; when set, `--effort <level>` is appended to every session the runner starts (after `--model`, if any).
-Unset, the command line is byte-identical to today's (tested).
+The existing target gains `EFFORT` and `AGENTS` (a JSON file); when set, `--effort <level>` and `--agents <the file's JSON>` are appended
+to every session the runner starts (after `--model`, if any). Unset, the command line is byte-identical to today's (tested).
 
 ## `make effort-run TASK=R|I RUN=<run-id> ARM=medium|xhigh COMMIT=<sha> [ORDER=<n> SEED=<s>]`
 
@@ -11,11 +11,11 @@ Unset, the command line is byte-identical to today's (tested).
    files differ from the hashes recorded for this task's earlier run.
 2. `git clone /diagram /diagram/.clones/diagram-exp-<run-id>`, checks out `COMMIT` detached-free (a fresh `main` reset to it in the new
    clone), and copies the sources snapshot to `<clone>/.git/effort-sources/` (R6 D4).
-3. Starts the run detached: task R through the page-session runner with the two briefs and `--effort <arm>`; task I as one
+3. Starts the run detached: task R through the page-session runner with the two briefs, `--effort <arm>` and the same `--agents` JSON; task I as one
    `claude -p <prompts/I.md> -n diagram-exp-<run-id> --session-id <uuid> --effort <arm> --permission-mode bypassPermissions
    --agents <json> --output-format json`, the appended system prompt the same as an interactive session's. `CLAUDE_CODE_EFFORT_LEVEL` is
    removed from the environment; `L7R_SOURCES_HOME` is set.
-4. Writes `runs/<run-id>.json` and prints the session ids, transcripts and log directories. Returns at once.
+4. After a task R run ends, appends the claims release line (R6 D5). Writes `runs/<run-id>.json` (with `shared_state`, R6 D6) and prints the session ids, transcripts and log directories. Returns at once.
 
 ## `make effort-measure RUN=<run-id>`
 

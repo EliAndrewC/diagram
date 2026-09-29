@@ -21,13 +21,21 @@ the individual invocation", undocumented elsewhere. `CLAUDE_CODE_EFFORT_LEVEL` b
 - **D1 - the arm is set with `--effort` and NEVER with `CLAUDE_CODE_EFFORT_LEVEL`.** The environment variable would override the
   checkers' pinned frontmatter effort and break the control the spec most depends on. The launcher unsets it in the run's
   environment and records that it did.
-- **D2 - ad-hoc judging goes to one session-scoped judge pinned by definition.** Every run is launched with the same `--agents`
-  JSON defining `adhoc-judge` (model `opus`, `effort: high` - the tier of the defined judging checkers, eight of twelve), and the
-  byte-identical prompt tells the run to dispatch any ad-hoc work that checks or judges to `adhoc-judge`, and ad-hoc reading,
+- **D2 - ad-hoc judging goes to one session-scoped judge pinned by definition.** Every SESSION of every run - task I's one session
+  and task R's write and check-and-apply page sessions alike (the page sessions have the `Agent` tool and `page-session-rules.md`
+  lets them dispatch ad-hoc `opus` judges) - is launched with the same `--agents` JSON defining `adhoc-judge` (model `opus`, `effort: high` - the tier of the defined judging checkers, eight of twelve), and the
+  byte-identical prompt (and both R briefs) tells the run to dispatch any ad-hoc work that checks or judges to `adhoc-judge`, and ad-hoc reading,
   fetching, translating or extracting as it normally would. The instruction names no effort level and is identical across arms.
-  Frontmatter effort overrides the session's (the docs above), so `adhoc-judge` runs at `high` in both arms.
-- **D3 - what the run did anyway is counted.** `effort-measure` counts, per arm, the ad-hoc dispatches that were NOT to a defined
-  agent or `adhoc-judge`, split by the model named; any on `opus` (the project's rule: opus "for anything that judges") is reported
+  Frontmatter effort overrides the session's (the docs above), so `adhoc-judge` runs at `high` in both arms. The run record carries the
+  JSON's hash per session, and the launcher refuses a session whose hash differs.
+- **D2a - the fallback is an agent FILE, not the unmet branch.** If P0 (a) shows `--agents` cannot carry the effort in `claude -p`, an
+  agent file `.claude/agents/adhoc-judge.md` (`model: opus`, `effort: high`, `omitClaudeMd: true`), registered in `test_agent_models.py`'s
+  tier table, lands on main BEFORE `START`, so every run clone has it identically by construction; it is retired after the report. The
+  spec's unmet branch (US2 AS3) is used only if that too is measured not to pin the effort.
+- **D3 - what the run did anyway is counted and listed.** `effort-measure` counts, per arm, the ad-hoc dispatches that were NOT to a
+  defined agent or `adhoc-judge`, split by the model named, and LISTS every one with its description, so the report's reader can check
+  the classification (a judging dispatch sent on `sonnet` would otherwise slip past a model-only rule); any on `opus`, or any the list
+  shows judging, (the project's rule: opus "for anything that judges") is reported
   as an ad-hoc judging dispatch at the session effort - the control unmet for that many dispatches (spec US2 AS3's measured branch).
 - **MEASURE FIRST (P0)**: (a) that a `--agents` agent with `effort` in `claude -p` is dispatchable and its transcript's meta or
   records show the effort or at least the model; (b) whether a subagent transcript or `meta.json` records effort at all; (c)
@@ -36,8 +44,8 @@ the individual invocation", undocumented elsewhere. `CLAUDE_CODE_EFFORT_LEVEL` b
   ad-hoc judging is counted per arm and the control listed as unmet.
 
 **Alternatives priced**: a hook in the run clones rewriting ad-hoc opus dispatches - rejected, it changes the guard set between the
-experiment and normal work; a committed agent file - rejected, it adds a permanent agent for a one-off, where `--agents` is scoped to
-the launch and identical by construction.
+experiment and normal work; a committed agent file - the FALLBACK (D2a), not the first choice only because `--agents` needs no landing
+and no retirement.
 
 ## R2 - Where do a run's transcripts live?
 
@@ -93,6 +101,9 @@ by `effort-measure` from its `result.json`/`stderr.txt`, and re-launched with th
 - **`make reserve`** allocates registry and glossary prefixes under a host-wide lock; both runs reserve, the loser's reservations are
   simply unused numbers. Accepted, no cost but a gap in numbering.
 - **The guard log** is shared but per-firing and tagged with session and cwd (R4); nothing to isolate.
+- **D6 - the run record lists the shared state.** Each run's record carries `shared_state`: the sources snapshot's hash at start,
+  the ledger lines the run appended to its copy, the claims-file lines it wrote and the release line the launcher wrote, and the prefixes
+  it reserved - what it found at start and what it left for a later run (spec US2 AS6, the shared-resource edge case).
 - **`make claim`**: neither run claims a feature number (the prompts say the run is a task under feature 293); a run that tries is
   counted and the claim released.
 

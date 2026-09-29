@@ -15,7 +15,8 @@ All records are JSON in this feature directory unless said otherwise; every one 
 | `sessions` | `[{sid, brief_or_prompt, prompt_sha256, effort, transcript, log_dir}]` - one for I, two for R |
 | `argv` | each session's full command line, as launched |
 | `env` | what the launcher set or unset: `L7R_SOURCES_HOME`, `CLAUDE_CODE_EFFORT_LEVEL` (unset), `SPECIFY_FEATURE` |
-| `agents_json_sha256` | the hash of the `--agents` JSON (R1 D2) - identical across runs |
+| `agents_json_sha256` | the hash of the `--agents` JSON (R1 D2), per session - identical across every session of every run |
+| `shared_state` | R6 D6: `{sources_snapshot_sha256, ledger_lines_appended, claims_lines_written, claims_release_line, prefixes_reserved}` |
 | `started`, `ended`, `pauses` | UTC times; pauses from `interventions.md` |
 | `exit`, `status` | the session exit codes; `valid` / `void` (with reason: 137, outage) |
 
@@ -31,7 +32,7 @@ is given, identically, to the other.
 
 - `tokens`: `{main: {input, output, cache_read, cache_creation}, subagents: {...}, total: {...}}`, plus `result_json_total` and the gap (R3).
 - `wall_clock_s` (first to last event, minus pauses), `tool_calls` by tool, `dispatches` by agent type and model.
-- `adhoc_judging_at_session_effort`: count and list (R1 D3).
+- `adhoc_dispatches`: every ad-hoc dispatch not to a defined agent or `adhoc-judge`, with its model and description; `adhoc_judging_at_session_effort`: the count of those on `opus` or judging by their description (R1 D3).
 - `rework`: `guard` (by guard x event x rule), `verdicts` (by agent: pass / not-pass, rounds per subject), `failed_runs` (with the matched
   lines), `fix_commits` (with subjects), `escalations`.
 - `sources_cache_hits` for R runs (R6 D4).

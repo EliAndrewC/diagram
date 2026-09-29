@@ -12,7 +12,7 @@ on what exists:
 
 - **The launcher** `make effort-run` makes a fresh clone at the recorded start commit under a neutral run id and starts the
   run detached. Task R runs through the existing page-session runner (write brief, then check-and-apply brief), which gains an
-  `EFFORT=` argument passed straight through to `claude -p --effort`; task I runs as one full headless session started the
+  `EFFORT=` and an `AGENTS=` argument passed straight through to `claude -p --effort` and `--agents` (the pinned `adhoc-judge`, research R1 D2, on every session of every run); task I runs as one full headless session started the
   same way (same session-id choice, same detachment, same `result.json`), but with the project's full instructions and tools,
   because engine work is not a page session.
 - **The measurement** `make effort-measure RUN=<id>` reads every transcript of the run (each session's and each subagent's),
