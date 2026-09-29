@@ -136,6 +136,11 @@ by `effort-measure` from its `result.json`/`stderr.txt`, and re-launched with th
   question as claimed. **D5**: the launcher appends a release line after each R run ends (`effort experiment run <id> ended - claim
   released`), which the page-session rules' reading of the file treats as the end of that claim. MEASURE in P0 that the rules read it
   so; if not, point the run at a per-run copy of the file by the same means as D4 (an env override added to the claims reader, tested).
+  **T08, checked 2026-09-29:** the page-session rules (`container-scripts/page-session-rules.md`) say only HOW the file is read
+  and written; what a claim blocks is the BRIEF's to say, and task R's write brief said "a section another feature holds" - which
+  a second run could read as covering the first run's feature-293 lines. So the write brief now says plainly that "Effort
+  experiment | 293" lines the run did not write are not claims on its work (identical in both arms). The release line stays, as a
+  record; no per-run copy of the file is needed.
 - **`make reserve`** allocates registry and glossary prefixes under a host-wide lock; both runs reserve, the loser's reservations are
   simply unused numbers. Accepted, no cost but a gap in numbering.
 - **The guard log** is shared but per-firing and tagged with session and cwd (R4); nothing to isolate.

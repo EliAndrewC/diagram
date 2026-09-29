@@ -25,7 +25,8 @@ at a free prefix from 910 to 990.
 `.claude/skills/diagram`). Grep with `-o` and a short context. Send the lookups you know you need in one message.
 **Coordination files are read by line, never whole**: `make lines FILE=<f> KEY=<regex>` and `make append FILE=<f>
 LINE="<text>"`. **Claims first:** `make lines FILE=/diagram/.clones/RESEARCH-CLAIMS.md KEY="buildings"`; a section another
-feature holds is researched but not edited (put the text it owes in the handoff). Then `make append
+feature holds is researched but not edited (put the text it owes in the handoff). Lines about "Effort experiment | 293" that
+you did not write are NOT claims on your work: they are another run of this same task, whose output is set aside - ignore them. Then `make append
 FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="Effort experiment | 293 | task R in progress (buildings, servants' quarters) | <date>"`.
 **New registry entries and glossary terms take their prefix from `make reserve KIND=registry|glossary KEY=<k>`** (in
 `.claude/skills/diagram`).
