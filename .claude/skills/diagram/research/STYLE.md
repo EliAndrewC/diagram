@@ -18,6 +18,12 @@ the GM's example, awaiting the GM's confirmation in the pilot).
 - **One topic, one section.** Sections that grew one per question on the same subject are merged. (GM: *"asking a
   new question about a grove created a new section about a grove ... it probably makes sense to combine some of these
   sections into a single larger section."*)
+- **A rendering section's title mirrors its research section's**: "How our maps draw threshing and drying yards (niwa)"
+  beside "Threshing and drying yards at farmhouses (niwa)" - so a reader who follows the link knows it is the same
+  thing. (inferred - the second pilot's check found the generic "How our maps draw the work yards" vague.)
+- **A turn to another region or practice is introduced.** When a section moves from one country's practice to
+  another's, a sentence of prose between the lists says what changes ("Rice farmers in south China did the same work on
+  different ground ..."), so a bullet about the second is not a non sequitur. (inferred - the second pilot.)
 - **A merge is a reorganization, not a concatenation.** Material from the later sections goes where a newcomer
   needs it - often early - and repeated material is said once. (GM: *"possibly reordering some things because that
   other section might have information that should come earlier in the combined section rather than just appending
