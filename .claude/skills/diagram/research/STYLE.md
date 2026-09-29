@@ -118,6 +118,18 @@ highlights into questions ... I think that we need to come up with a different n
 - Project jargon ("arm", "belt", "appurtenance", "roll", "footprint", "tier") is replaced by the plain word where one
   exists, and glossed where it must stay. (inferred)
 
+- **Number follows the map.** A feature a map has one of is singular - "a settlement's notice board"; a feature it has
+  many of is plural - "a settlement's farmhouses", and the homestead groves, one to a farmhouse, are "a map's groves",
+  never "a map's grove". A generic singular that plainly means each one ("a grove's trees", "each windward stand")
+  stays. (GM, 2026-09-29: *"there are some features on a map for which the map only has a single one ... you would use
+  the singular to refer to it to prevent confusion ... when referring to a thing which a map will have many of, you
+  would use the plural."*)
+- **Not to be confused with** (GM, 2026-09-29 - DEFERRED until the sweep has given every section its final title): a
+  section whose subject a reader could mistake for another's will open, before its opening paragraph, with a list
+  *Not to be confused with:* - each entry the other section's title, linked, and the definition the record uses for
+  it. The pairs are data, kept once and always two-way, and the list is written by `make record`, never by hand. Until
+  then a restyle records each confusable pair it meets in `specs/292-research-presentation-style/confusables.md`.
+
 ## 6. Units
 
 - **A metric figure in our own prose carries its conversion to feet**, rounded to the nearest foot with a tilde, in

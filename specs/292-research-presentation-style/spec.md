@@ -73,6 +73,13 @@ the pilot; the GM reads the pages in this feature's clone.
   are arbitrary); the ruling, its date and words are kept for later sessions in an HTML comment beside it. The prepass
   MUST list every visible "GM", and the checks (`record-style`, `record-format`) MUST report it. The sweep carries this
   to the 111 research sections and the modals (stream, footbridge) that show a ruling today.
+- **FR-015** (GM 2026-09-29): number follows the map - a feature a map has one of is singular, one it has many of
+  plural ("a map's groves"); the guide states it and `record-style` checks it.
+- **FR-016** (GM 2026-09-29, DEFERRED to after the sweep): a section a reader could mistake for another opens with
+  *Not to be confused with:* - each entry the other section's final title, linked, and the record's definition of it.
+  The pairs are data kept once, always two-way (a pair declared once yields both entries), and the list is written by
+  `make record`; a test fails on a pair naming a section that does not exist. It waits for the sweep because the
+  titles it links are not final; until then each restyle records its pairs in `confusables.md`.
 - **FR-011**: The GM's sign-off on the guide and the check MUST be an open task, and the sweep's tasks MUST NOT be
   written or started before it is ticked.
 

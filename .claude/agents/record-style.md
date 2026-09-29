@@ -90,6 +90,10 @@ that it contradicts one; if a rule seems to, say so as a NOTE, naming both.
    Any visible trace of a GM ruling - "the GM ruled", the GM's quoted words, "the GM accepted" (the prepass lists every
    visible "GM") - is a FAIL: the decision is stated as the project's choice and why, in terms of the history, and the
    ruling goes into an HTML comment.
+9a. **Number.** A feature a map has one of is singular ("a settlement's notice board"); one it has many of is plural
+   ("a map's groves", one to a farmhouse - never "a map's grove"). A singular where the map has many, in a lead line
+   or a statement about the map, is a FAIL with the plural; a generic singular that plainly means each one ("a grove's
+   trees") is not.
 10. **Units.** Each metric figure the prepass lists is a FAIL, with its conversion (nearest foot with a tilde; inches
     under a foot; acres or square feet for an area). Never flag a figure inside a quotation or a footnote.
 11. **Terms.** A term a newcomer would not know - grep the variant list first - that is explained neither by a tooltip
