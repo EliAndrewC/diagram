@@ -31,6 +31,7 @@ from ..banks import (
 )
 from ..frame import Poly, _Frame
 from ..palette import FLOODED, RICE_GREENS
+from ..ring_rules import needle
 from .geoms import GeomTree, ring_polygons
 from .plots import _plant, _unjog
 from .pockets import MIN_PLOT_SIDE, _absorb, _despike_many, _outside_command, _parts, _ring, _water
@@ -59,6 +60,12 @@ def _load_shapely() -> None:
     from shapely.strtree import STRtree
 
     _SHAPELY_LOADED = True
+
+
+def _needle(poly: Poly) -> bool:
+    """The flooded tint's needle rule on the ring AS RECORDED - `ring_rules.needle`, the test's own call, asked of the
+    plot rounded to the manifest's 0.1 px (feature 287, T04), so the tint pass and the test judge one ring."""
+    return needle([(round(float(q[0]), 1), round(float(q[1]), 1)) for q in poly])
 
 
 # past that the 'repair' is moving more ground than the step it retires, which is a land grab wearing a
@@ -254,14 +261,16 @@ def close_seams(
     _collector = LineString(dpts) if len(dpts) >= 2 else None
     _to_collector = shapely.distance(_pgs, _collector).tolist() if _collector is not None and _pgs else []  # every plot's, in one call
     for _k, p in enumerate(plots):
-        # TWO RINGS, AND BOTH CLAUSES EARN THEIR KEEP - this is the one place a second measurement is
-        # right, and the reason is that they answer to different masters. `flooded_plots_read_as_basins`
-        # is the GATE for a tinted plot and it reads `dedup_ring(r, 1.0)` at 15 deg, so the first
-        # clause is the placer being strictly stricter on the GATE'S OWN measurement (25 vs 15) - drop
-        # it and a plot pointed at 1.0 but blunt at the end width keeps its tint and trips the gate,
-        # which is exactly what cohort seed 8 did when this briefly tested the end-collapsed ring
-        # alone. The second clause catches the defect the gate CANNOT see: a needle truncated a few
-        # feet short of its point, which no interior angle on the 1.0 ring will ever report.
+        # THE RULE ITSELF FIRST, AS THE TEST READS IT (feature 287, FR-003, water W20). `flooded_plots_read_as_basins`
+        # (`test_a_flooded_plot_reads_as_a_basin_and_not_as_a_pond`) calls `ring_rules.needle` on the RAW ring as the
+        # manifest records it (rounded to 0.1 px), and so does `_needle` here, on the same rounded ring - one predicate.
+        # This pass used to read only the deduplicated ring and its comment said the gate did too; the two had drifted,
+        # and a tip that the 1.0 px dedup collapses into a blunt corner still reads raw as a needle under 15 deg. The raw
+        # reading is the right one: the rule is about the ring AS DRAWN, and the drawn ring is the raw one.
+        # THEN TWO MORE RINGS, AND BOTH CLAUSES EARN THEIR KEEP. The deduplicated ring at 25 deg is the placer's margin
+        # over the rule - drop it and a plot pointed at 1.0 but blunt at the end width keeps its tint, which is exactly
+        # what cohort seed 8 did when this briefly tested the end-collapsed ring alone. The end-collapsed clause
+        # catches a needle truncated a few feet short of its point, which no interior angle on the 1.0 ring reports.
         # AND A THIRD CLAUSE, WHICH MEASURES SHAPE RATHER THAN TAPER. Both clauses above ask "does
         # this come to a point"; neither can see a blunt-cornered LOBE, and welding a scrap into
         # the fan's one blue plot is exactly how a lobe gets there. Sawada shipped a 0.731-solidity
@@ -304,7 +313,8 @@ def close_seams(
             if len(_sides) >= 2 and min(_sides[0], _sides[1]) > 0.0:
                 _asp = max(_sides[0], _sides[1]) / min(_sides[0], _sides[1])
         _wrong = (
-            pointed_ring(dedup_ring(p["poly"], 1.0), _TINT_MIN_APEX)
+            _needle(p["poly"])
+            or pointed_ring(dedup_ring(p["poly"], 1.0), _TINT_MIN_APEX)
             or tapers_to_a_point(p["poly"], _t_end, _TINT_MIN_APEX, 4 * _t_end)
             or _psol < _TINT_MIN_SOLIDITY
             or _at_outfall

@@ -33,10 +33,63 @@ def test_a_house_beside_open_water_needs_no_rescue_well() -> None:
     surface water and so takes the other branch."""
     from types import SimpleNamespace
 
-    houses = [{"x": 500, "y": 500}, {"x": 2000, "y": 2000}]  # the second sits far outside the first well's reach...
+    houses = [{"x": 500, "y": 500, "w": 40, "h": 26}, {"x": 2000, "y": 2000, "w": 40, "h": 26}]  # the second sits far outside the first well's reach...
     s = SimpleNamespace(well_at=lambda x, y: math.hypot(x - 500, y - 500) < 60.0, M={"streams": [{"poly": [[1900, 1900], [2100, 2100]], "w": 9}]})  # ...but a stream runs right past it
     plan = SimpleNamespace(spec=SimpleNamespace(households=6), ftpx=1.0)
     assert hg.place_wells(s, plan, houses) == 1, "the watered house is skipped by the rescue, so only the first well is sited"  # type: ignore[arg-type]
+
+
+# A 60 x 26 house at (1000, 1000), and two far houses that set the lattice's origin (min x 988, min y 988) so a
+# lattice point falls 110 px due north of it - 13 px of its depth leaves that seat's wall gap at 97 px.
+_WELL_HOUSES = [
+    {"x": 1000.0, "y": 1000.0, "w": 60.0, "h": 26.0, "rot": 0.0},
+    {"x": 988.0, "y": 1400.0, "w": 60.0, "h": 26.0, "rot": 0.0},
+    {"x": 1400.0, "y": 988.0, "w": 60.0, "h": 26.0, "rot": 0.0},
+]
+
+
+def _only_seat(sx: float, sy: float, open_seat: tuple[float, float] | None = None) -> object:
+    """A settlement whose engine allows a wellhead at (sx, sy) alone, and whose `open_seat` answers `open_seat`."""
+    from types import SimpleNamespace
+
+    return SimpleNamespace(well_at=lambda x, y: abs(x - sx) < 0.5 and abs(y - sy) < 0.5, open_seat=lambda *_a, **_k: open_seat, M={})
+
+
+def test_a_well_is_held_to_the_wall_gap_the_test_reads_not_to_a_center_distance() -> None:
+    """Feature 287 T04 (FR-003, homes H09): `place_wells` and the finished-map test read ONE predicate,
+    `well_gap_to_dwellings` - the gap to the nearest dwelling's drawn wall, at most 95 px. The constructed case is where
+    the two used to disagree: a lattice seat 110 px from a 26 px-deep house's CENTER, inside the old rungs' 112 px, but
+    97 px from its wall. It is refused - on the lattice, by the rescue ring and at the last resort alike, which is
+    handed the same seat - and the hamlet digs no well there. A seat the same center distance off the house's long
+    end (wall 80 px off) is taken, and so is a last-resort seat among the doors."""
+    from types import SimpleNamespace
+
+    from l7r.diagram.hamletgen.homesteads.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
+
+    plan = SimpleNamespace(spec=SimpleNamespace(households=6), ftpx=1.0)
+    north = (1000.0, 890.0)
+    assert math.hypot(north[0] - 1000.0, north[1] - 1000.0) <= 112.0, "inside the old rungs' center distance"
+    assert well_gap_to_dwellings(_WELL_HOUSES, *north) == pytest.approx(97.0), "and 97 px from its wall"
+    assert WELL_AMONG_DWELLINGS_PX < 97.0, "past the wall gap"
+    assert hg.place_wells(_only_seat(*north, open_seat=north), plan, _WELL_HOUSES) == 0  # type: ignore[arg-type]
+
+    east = (1110.0, 1000.0)  # the same 110 px from the center, off the long end: the wall is 80 px away
+    assert well_gap_to_dwellings(_WELL_HOUSES, *east) == pytest.approx(80.0)
+    assert hg.place_wells(_only_seat(*east), plan, _WELL_HOUSES) == 1  # type: ignore[arg-type]
+
+    door = (1001.5, 960.0)  # off the lattice and the rescue ring: only the last resort finds it
+    assert hg.place_wells(_only_seat(*door, open_seat=door), plan, _WELL_HOUSES) == 1  # type: ignore[arg-type]
+
+
+def test_the_well_gap_reads_the_turned_wall_and_passes_over_a_derelict() -> None:
+    """The predicate measures each dwelling on its drawn quad (a house turned a quarter lies along the other axis) and
+    reads no abandoned house as a dwelling; with no dwelling at all, no well stands among any."""
+    from l7r.diagram.hamletgen.homesteads.wells import well_gap_to_dwellings
+
+    turned = [{"x": 1000.0, "y": 1000.0, "w": 60.0, "h": 26.0, "rot": 90.0}]
+    assert well_gap_to_dwellings(turned, 1000.0, 890.0) == pytest.approx(80.0), "turned, the house's long side faces north"
+    assert well_gap_to_dwellings(turned, 1000.0, 1000.0) == 0.0, "inside the footprint"
+    assert well_gap_to_dwellings([{**turned[0], "kind": "abandoned"}], 1000.0, 890.0) == math.inf
 
 
 def test_a_seat_on_forbidden_ground_is_refused() -> None:

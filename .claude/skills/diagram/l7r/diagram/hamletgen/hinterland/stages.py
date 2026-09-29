@@ -15,7 +15,7 @@ from ..homesteads import farmstead_fixtures, household_bamboo
 from ..plan import SitePlan
 from .bamboo import bamboo_seats
 from .belt import belt_polygon
-from .frame import scatter_frame, title_pocket
+from .frame import frame_bounds, frame_for, scatter_frame, title_pocket
 from .parcels import CROP_MARGIN, open_ground_patches
 
 # ---- STAGE 7: the ground between everything ------------------------------------------------------
@@ -66,6 +66,8 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.homesteads.fixtures.farmstead_fixtures
         l7r.diagram.hamletgen.homesteads.bamboo.household_bamboo
         l7r.diagram.hamletgen.hinterland.bamboo.bamboo_seats
+        l7r.diagram.hamletgen.hinterland.stages.plant_the_belt
+        l7r.diagram.hamletgen.hinterland.frame.frame_for
     """
     # THE BELT IS COMPUTED HERE, two stages before it is drawn, so the scrub can keep out of it
     # (T34): the belt derives from the houses alone, which are final by now, and `stage_woodland`
@@ -86,7 +88,17 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     farmstead_fixtures(s, plan, s.M.get("houses", []))  # T53-T59: the privies, woodpiles, heaps, baths, coops, shrines, persimmons - before the bamboo, which keeps off them
     plan.bamboo_polys += household_bamboo(s, plan, s.M.get("houses", []))  # T49: after the web and the board, before the scrub
     plan.bamboo_polys += bamboo_seats(s, plan)
+    # THE BELT IS PLANTED, AND THEN THE VIEW IS DECIDED - ONCE (feature 287, M6). The belt's inner face is the last thing
+    # that sets the frame (`crop_boxes`, GM 2026-08-26), and nothing after this line sets it, so the view the crop will
+    # take is known here: `frame_for` - the crop's own body over the crop's own boxes and the ground it reserves - into
+    # `plan.view`, which `stage_frame` sets exactly. The scrub below throws within that view (not a prediction of it), and
+    # the woods' rules that read the picture read it. The polygon is recomputed first, as `stage_woodland` used to: the
+    # marsh is laid now, and the band keeps off it.
+    plan.belt = belt_polygon(s, plan)
+    plant_the_belt(s, plan)
+    plan.view = frame_for(s, plan)
     s._scatter_frame = scatter_frame(s, plan)
+
     s.hinterland(marsh=False, soft_extra=[*([plan.belt] if plan.belt else []), *plan.woodland_polys, *plan.bamboo_polys])
     s._scatter_frame = None  # the later scatters (a stand's understory, a hand call) throw whole
 
@@ -125,30 +137,43 @@ def stage_woodland(s: Settlement, plan: SitePlan) -> None:
 
     A few managed-woodland patches on the high, far ground - the green EXCEPTION to the scrub.
 
-    The windbreak belt is COMPUTED here, before the scan, and only DRAWN in the next stage. That
-    split exists because the two woods must not merge: `woodland_clear_of_grove` requires a coppice
-    patch to keep off every clump of the fengshui grove, or the two read as one indistinct green
-    mass. The scan therefore has to know where the belt is going, but the belt has to be DRAWN late
-    so its per-crown filter sees every structure already standing (the engine's DRAW ORDER rule).
-    Computing early and drawing late satisfies both.
+    The windbreak belt was COMPUTED before the scan, so the two woods do not merge (`woodland_clear_of_grove` requires a
+    coppice patch to keep off every clump of the fengshui grove, or the two read as one indistinct green mass), and is
+    planted by `stage_hinterland` before the view is decided (feature 287, M6).
 
     Steps:
-        l7r.diagram.hamletgen.hinterland.belt.belt_polygon
         l7r.diagram.settlement.Settlement.commons
     """
-    plan.belt = belt_polygon(s, plan)
+
     # The patches were SCANNED in `stage_hinterland` (T35) - before the scrub, so the scrub kept out
     # of them; the scan needs the marsh drawn and nothing this stage adds. Drawn here, over open ground.
     for patch in plan.woodland_polys:
         s.commons(patch, role="woodland")
 
 
-def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
-    """The shelter belt.
+def dent_around(belt: Sequence[tuple[float, float]], pocket: tuple[float, float, float, float]) -> list[tuple[float, float]]:
+    """The belt's outline with every vertex inside the title's `pocket` pushed 6 px out of it, to the nearest side - the
+    dent `plant_the_belt` plants and the against-the-belt copse is boxed by (one body, so the two cannot differ)."""
+    out: list[tuple[float, float]] = []
+    for bx, by in belt:
+        if pocket[0] <= bx <= pocket[2] and pocket[1] <= by <= pocket[3]:
+            cands = ((pocket[0] - 6.0, by), (pocket[2] + 6.0, by), (bx, pocket[1] - 6.0), (bx, pocket[3] + 6.0))
+            bx, by = min(cands, key=lambda q, _x=bx, _y=by: (q[0] - _x) ** 2 + (q[1] - _y) ** 2)
+        out.append((bx, by))
+    return out
+
+
+def plant_the_belt(s: Settlement, plan: SitePlan) -> None:
+    """The shelter belt, planted - the LAST frame-setting feature, so `stage_hinterland` plants it just before it decides
+    the view (feature 287, M6): the belt's inner face sets the frame (GM 2026-08-26, `crop_boxes`), so the view cannot be
+    decided before the belt stands, and every rule that reads the view is placed after it.
 
     Sited from the wind and the cluster it shelters, so it needs the cluster finished. Its canopy is deferred to
-    the flush at the end - drawn here it would be painted over by nothing, but its crowns must be filtered
-    against every structure, and not all of them exist yet.
+    the flush at the end - drawn here it would be painted over by nothing - and its crowns are filtered against every
+    structure the belt keeps off (`village_grove`'s keep-outs: the houses, yards, gardens, byres, sheds, wells, shrines,
+    ponds, the crops, the water, the lanes), every one of which is standing when this runs. Nothing seated after it - the
+    woodland parcels drawn, the scrub, the bamboo stands, the copse, the decks - is in that list, so planting it here
+    rather than in `stage_windbreak` changes what it is filtered against not at all.
 
     The communal fengshui belt behind the cluster, shaped to the houses that actually landed.
 
@@ -157,15 +182,7 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     the cluster (a substantial belt within 150 px of a farmhouse - "far corner masses alone are
     decoration"). Both fall out of deriving it from the houses: the belt is a band offset into the
     wind from the cluster's own centroid, spanning the cluster's width across the wind, ragged along
-    its edges because a grove hugs the land and is not a ruled wall. A copse scatter then fills the
-    leafy gaps among the homes.
-
-    Drawn LATE, after the ground cover and the woods, so its per-crown filter sees every structure
-    already standing and no tree is drawn on a roof.
-
-    Steps:
-        l7r.diagram.hamletgen.hinterland.frame.title_pocket
-        l7r.diagram.settlement.Settlement.village_grove
+    its edges because a grove hugs the land and is not a ruled wall.
     """
     if not plan.belt:
         return
@@ -188,21 +205,14 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # The clamp can be exact rather than a guess, because every HARD feature that sets the crop is
     # already placed by the time this stage runs: ask `_crop_boxes` - the very source
     # `crop_to_content` reads - and hold the belt inside that box. Same-source doctrine, and the same
-    # move the title-pocket dent above already makes: push the vertices, keep the belt. (Only
-    # `stage_crossings` follows, and a footbridge sits on water well inside the frame, so it cannot
-    # pull the box back out from under this.)
-    _boxes = s._crop_boxes(city=False)
-    _fx0 = min((b[0] for b in _boxes), default=0.0) - CROP_MARGIN
-    _fx1 = max((b[1] for b in _boxes), default=float(s.W)) + CROP_MARGIN
-    _fy0 = min((b[2] for b in _boxes), default=0.0) - CROP_MARGIN
-    _fy1 = max((b[3] for b in _boxes), default=float(s.H)) + CROP_MARGIN
+    # move the title-pocket dent above already makes: push the vertices, keep the belt.
+    #
+    # SINCE FEATURE 287 (M6) the frame is `frame_bounds` - the one function the view is decided by, asked just before the
+    # decision this belt is the last input to: the crop's own boxes AND the ground the frame reserves as content (an
+    # outside title pocket, the confluence, the brook beside the field), which the old `_crop_boxes` clamp did not know.
+    _fx0, _fy0, _fx1, _fy1 = frame_bounds(s, plan)
     _tp = title_pocket(s, plan)
-    _dented = []
-    for _bx, _by in plan.belt:
-        if _tp[0] <= _bx <= _tp[2] and _tp[1] <= _by <= _tp[3]:
-            _cands = ((_tp[0] - 6.0, _by), (_tp[2] + 6.0, _by), (_bx, _tp[1] - 6.0), (_bx, _tp[3] + 6.0))
-            _bx, _by = min(_cands, key=lambda q: (q[0] - _bx) ** 2 + (q[1] - _by) ** 2)
-        _dented.append((_bx, _by))
+    _dented = dent_around(plan.belt, _tp)
     # THE BELT ITSELF IS NOT MOVED - the CLUMPS are held inside the frame instead, via
     # `village_grove(within=...)`. Clamping the polygon was tried first and is wrong, recorded so it
     # is not retried: the outline's bbox center is what `village_grove` records as the grove's `x`,`y`
@@ -231,6 +241,22 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     if abs(_wy) > 1e-6:
         _fy0, _fy1 = (min(_fy0, min(_bys) - 30.0), _fy1) if _wy < 0 else (_fy0, max(_fy1, max(_bys) + 30.0))
     s.village_grove(_dented, role="windbreak", within=(_fx0, _fy0, _fx1, _fy1), face_margin=CROP_MARGIN, reserved=_tp)
+
+
+def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
+    """The copse among the homes - the shelter belt's companion wood.
+
+    The belt itself is planted by `stage_hinterland` (`plant_the_belt`), before the view is decided, because its inner
+    face sets the frame (feature 287, M6). What is left here is the copse, which sets no frame: seated after the woods
+    and the ground cover, against the belt's recorded crowns, so the two stands read as two.
+
+    Steps:
+        l7r.diagram.hamletgen.hinterland.frame.title_pocket
+        l7r.diagram.settlement.Settlement.village_grove
+    """
+    if not plan.belt:
+        return
+    _dented = dent_around(plan.belt, title_pocket(s, plan))
     # The COPSE fills the leafy gaps AMONG the homes, over the house cloud. That is only reasonable
     # ground because `stage_homesteads` now bounds every seat to the cluster band: over a cloud with
     # a strewn farmstead in it, this became a scatter across 1,446 x 1,244 px - a wood over the whole

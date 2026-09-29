@@ -9,6 +9,7 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly
 from l7r.diagram.settlement._geom import RingIndex
+from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import crop_polys
 
 from ..consts import Poly, Pt
@@ -284,7 +285,7 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
         for q in [(a[0] + (b[0] - a[0]) * t / 10, a[1] + (b[1] - a[1]) * t / 10) for t in range(11)]
     ]
 
-    _marsh = [[(float(q[0]), float(q[1])) for q in mk["poly"]] for mk in s.M.get("marshes") or [] if len(mk.get("poly") or []) >= 3]
+    _marsh = marsh_ground(s.M)
 
     def _in_marsh(v: float, u: float) -> bool:
         """Would the band moved to fringe `u` in column `v` stand in the marsh - its middle, half its depth behind its near face?"""

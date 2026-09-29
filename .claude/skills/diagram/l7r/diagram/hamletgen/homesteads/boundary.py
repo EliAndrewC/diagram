@@ -28,6 +28,7 @@ if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds
 
 from l7r.diagram.settlement._geom.indexes import PointGrid, RingIndex
 from l7r.diagram.settlement._geom.primitives import FIELD_KEEPOUT_EPS, facing_chains, seg_dist
+from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import crop_polys
 
 from ..consts import WEB_HARD_GAP, WEB_REACH_FT
@@ -318,7 +319,7 @@ def web_hard_ground(s: Settlement, plan: SitePlan) -> list[Any]:
     envelope, the crops, the toe band (asked before it is drawn), the wet ground. A marsh drawn later is simply absent,
     which only refuses less."""
     toe = [(float(a), float(b)) for a, b in (s.toe_band() or [])]
-    wet = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") != "defense" and m.get("poly")]
+    wet = marsh_ground(s.M, but=("defense",))
     env = list(getattr(plan, "envelope", None) or [])  # a plan with no field envelope contributes none
     return [*([env] if len(env) >= 3 else []), *crop_polys(s), *([toe] if len(toe) >= 3 else []), *wet]
 

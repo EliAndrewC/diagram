@@ -8,6 +8,7 @@ from typing import cast
 
 from l7r.diagram.settlement import Settlement, edge_dist, seg_intersect, segments_cross, skeleton_layout
 from l7r.diagram.settlement._geom import ring_offset
+from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import centroid, crop_polys, pull_clear, unit
 
 from ..cluster import _fork_spur, seat_cluster
@@ -182,7 +183,7 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
         return run
     crops = crop_polys(s)
     toe_now = s.toe_band() or None
-    wet_now = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") != "defense" and m.get("poly")]
+    wet_now = marsh_ground(s.M, but=("defense",))
     drawn_water = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for rec in s.M.get("drawn_channels", []) for a, b in zip(rec["pts"], rec["pts"][1:], strict=False)]
     obstacles = [list(plan.envelope), *crops, *fabric, *([toe_now] if toe_now else []), *wet_now]
     lines = list(plan.watercourses) + drawn_water
@@ -290,7 +291,7 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
         dry_plots=crop_polys(s),
         drain=drain,
         toe=s.toe_band() or None,
-        wet=[[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") == "pond_fringe"],
+        wet=marsh_ground(s.M, only=("pond_fringe",)),
         brook=plan.brook,  # the stream runs past the fan since feature 230; a cluster does not straddle it
     )  # the reservoir's reed fringe: not building ground (feature 150 T50)
     plan.seat = seat
@@ -401,7 +402,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     if plan.field_archetype in POLDER_ARCHETYPES:  # both polder archetypes (feature 150)
         s.M["meta"]["lane_skeleton"] = plan.lane_skeleton
         toe = s.toe_band()
-        drawn_wet = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") != "defense" and m.get("poly")]
+        drawn_wet = marsh_ground(s.M, but=("defense",))
         _band_gate = to_screen((float(layout["gateway"][0]), float(layout["gateway"][1])))
         gate_pt = push_out_of(plan.envelope, _cluster_gateway(s, seat, _band_gate), SPUR_SETBACK)
         track = connector_track(plan, gate_pt, avoid=[list(plan.envelope), *crops], wet=([toe] if toe else []) + drawn_wet, waters=drawn_water_segs(s), fabric=fabric)
@@ -528,7 +529,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # ...and the wet ground is EVERY marsh, not just the toe band: the pond's reed fringe is drawn
     # back in `stage_sink`, before this, and a cohort sweep found ways ending in it on two maps.
     toe = s.toe_band()
-    drawn_wet = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") != "defense" and m.get("poly")]
+    drawn_wet = marsh_ground(s.M, but=("defense",))
     track = connector_track(plan, gate, avoid=[list(plan.envelope), *crops], wet=([toe] if toe else []) + drawn_wet, waters=drawn_water_segs(s), fabric=fabric)
     s.lane(_thread_the_fabric(s, plan, route_around(plan.envelope, track, SPUR_SETBACK)), width=6, clearance=LANE_CLEARANCE, worn=True, connector=True)
 

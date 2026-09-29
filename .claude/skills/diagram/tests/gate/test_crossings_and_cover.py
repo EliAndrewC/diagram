@@ -41,10 +41,6 @@ SHARP_DEG = 100.0
 """A drainage brook leaving its collector past this angle is a hard corner. A collector turns DOWN the
 valley into the stream; it does not meet it at a right angle, because the water would not take that turn."""
 
-BARE_FRACTION = 0.35
-"""How much of the rendered view may be ground nothing covers. Above this the map has holes in it - the
-margins are meant to form a continuous ring of worked and unworked ground, not islands with gaps between."""
-
 
 def _seg_dist(px: float, py: float, a, b) -> float:
     ax, ay, bx, by = a[0], a[1], b[0], b[1]
@@ -190,29 +186,11 @@ def test_the_countryside_has_no_holes_in_it(rolled) -> None:
     _plan, M = rolled
     view = M["meta"].get("view")
     assert view, "the roll records no view, so 'the picture' has no extent"
-    vx0, vy0, vw, vh = (float(v) for v in view)
-    polys = [[(float(a), float(b)) for a, b in f["outline"]] for f in (M.get("fields") or []) if f.get("outline")]
-    for key in ("commons", "marshes", "village_groves", "dry_plots", "gardens", "threshing_yards"):
-        polys += [[(float(a), float(b)) for a, b in o["poly"]] for o in (M.get(key) or []) if o.get("poly") and len(o["poly"]) >= 3]
-    boxes = []
-    for key in ("houses", "farm_sheds", "byres", "gardens", "threshing_yards"):
-        for o in M.get(key) or []:
-            if "x" in o and "w" in o:
-                boxes.append((o["x"] - o["w"] / 2, o["y"] - o["h"] / 2, o["x"] + o["w"] / 2, o["y"] + o["h"] / 2))
-    if M.get("pond"):
-        px, py, rx, ry = M["pond"][:4]
-        boxes.append((px - rx, py - ry, px + rx, py + ry))
-    assert polys, "the roll drew no cover at all, so the ring has nothing to be made of"
-    bare = total = 0
-    y = vy0 + 12.5
-    while y < vy0 + vh:
-        x = vx0 + 12.5
-        while x < vx0 + vw:
-            total += 1
-            covered = any(x0 <= x <= x1 and y0 <= y <= y1 for x0, y0, x1, y1 in boxes) or any(_point_in((x, y), p) for p in polys)
-            if not covered:
-                bare += 1
-            x += 25.0
-        y += 25.0
+    from l7r.diagram.settlement.land.cover import BARE_SHARE_CAP, bare_cells
+
+    assert any(c.get("poly") for c in M.get("commons") or []), "the roll drew no cover at all, so the ring has nothing to be made of"
+    # THE ENGINE'S OWN PREDICATE (feature 287, FR-003, plan D6): every recorded footprint and tread is decided ground
+    holes, total = bare_cells(M, view)
+    bare = len(holes)
     assert total, "the view sampled no ground"
-    assert bare / total <= BARE_FRACTION, f"{bare} of {total} sample points ({bare / total:.0%}) fall on ground nothing covers"
+    assert bare / total <= BARE_SHARE_CAP, f"{bare} of {total} sample points ({bare / total:.0%}) fall on ground nothing covers"

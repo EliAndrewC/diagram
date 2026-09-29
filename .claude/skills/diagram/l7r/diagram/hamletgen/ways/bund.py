@@ -20,6 +20,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, segments_cross
+from l7r.diagram.settlement.land.wet import marsh_ground
 
 from ..consts import FOOTPATH_FABRIC_GAP, LANE_CLEARANCE, WAY_END_REACH_FT, Poly, Pt
 from .checks import drawn_water_segs
@@ -112,7 +113,7 @@ class RunOnBlocks:
         self.s = s
         self.water = drawn_water_segs(s)
         toe = s.toe_band()
-        self.wet: list[Poly] = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes") or [] if m.get("role") != "defense" and m.get("poly")]
+        self.wet: list[Poly] = marsh_ground(s.M, but=("defense",))
         if toe:
             self.wet.append(list(toe))
         self.fabric = [poly for poly, _own, kind in _homestead_polys(s) if kind not in ("commons", "village_groves")]

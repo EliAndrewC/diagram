@@ -6,9 +6,10 @@ Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.
 import math
 from typing import TYPE_CHECKING, Any, cast
 
-from .._geom import FARMHOUSE_EAVE_GAP_FT, Indexed, PointGrid, Pt, edge_dist, point_in_poly, poly_gap, rot_rect, seg_dist, segments_cross
+from .._geom import FARMHOUSE_EAVE_GAP_FT, Indexed, PointGrid, Pt, eave_gap, edge_dist, point_in_poly, seg_dist, segments_cross
 from .._geom.indexes import indexed_grid
 from .._geom.primitives import FIELD_KEEPOUT_EPS, chain_distance, chain_violated, facing_chains, keepout_ring
+from .._geom.water_index import crosses_a_stream
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -366,9 +367,10 @@ class BundleFitMixin:
         far bank. That the parts share the house's bank is a GUESS - no page read places a garden across a channel from
         its house, and none says it never was (research/homesteads, the farmstead's layout) - kept because a plot
         split by running water reads as two holdings. Exact: the straight line from the house's center to each part's
-        crosses no reach of any stream."""
-        streams = [f["poly"] for f in self.M.get("streams", []) if len(f.get("poly", ())) >= 2]
-        if not streams:
+        crosses no reach of any stream - `crosses_a_stream`, the one predicate the farm fixtures and the finished-map
+        test read too (feature 287, FR-003)."""
+        streams = self.M.get("streams", [])
+        if not any(len(f.get("poly") or ()) >= 2 for f in streams):
             return False
         hx, hy = geom["house"][0], geom["house"][1]
         parts = [part_box(geom, "yard"), *(part_box(geom, "gardens") or ()), part_box(geom, "shed")]
@@ -377,7 +379,7 @@ class BundleFitMixin:
         # is held off every stream at the stream's half-width plus the corridor `_rect_on_water` keeps.
         if any(self._rect_on_stream(r) for r in [part_box(geom, "house"), *parts] if r is not None):
             return True
-        return any(segments_cross((hx, hy), (r[0], r[1]), poly[k], poly[k + 1]) for r in parts if r is not None for poly in streams for k in range(len(poly) - 1))
+        return any(crosses_a_stream((hx, hy), (r[0], r[1]), streams) for r in parts if r is not None)
 
     def _rect_blocked(self: Settlement, rect: Any, fields: bool) -> bool:  # type: ignore[misc]
         """Whether a bundle sub-rect lands on forbidden ground: no-build blocks, lanes, hill/pond ellipses,
@@ -452,13 +454,13 @@ class BundleFitMixin:
         fractions of a pixel. Two feet of margin costs nothing in packing and puts the disagreement
         where it cannot bite.
 
-        GAP VERDICT family: real rotated corners via `poly_gap`, never centers, never a
+        GAP VERDICT family: real rotated corners via `eave_gap`, never centers, never a
         circumscribed radius (dev/placement.md, "CENTER vs FOOTPRINT"). The center-distance test in
         front of it is a PREFILTER - it over-states both extents, so it can only admit a pair the
         exact test then rejects."""
         lim = self.px(FARMHOUSE_EAVE_GAP_FT + 2.0)
         cx, cy, w, h = rect
-        quad = rot_rect(cx, cy, w, h, self._house_rot(cx, cy))
+        cand = {"x": cx, "y": cy, "w": w, "h": h, "rot": self._house_rot(cx, cy)}  # the candidate as `eave_gap` reads a record
         reach = lim + math.hypot(w, h) / 2
         # FROM THE INDEX (feature 276): a record the prefilter below admits has its center within `reach` plus its own
         # half-diagonal, so its extent meets this box - the index returns every record the scan could have flagged.
@@ -468,7 +470,7 @@ class BundleFitMixin:
             ow, oh = rec["w"], rec["h"]
             if math.hypot(cx - rec["x"], cy - rec["y"]) > reach + math.hypot(ow, oh) / 2:
                 continue  # prefilter: prunes, never decides
-            if poly_gap(quad, rot_rect(rec["x"], rec["y"], ow, oh, rec.get("rot", 0.0))) < lim:
+            if eave_gap(cand, rec) < lim:  # the one drip-line measure, the gate's too (feature 287, FR-003)
                 return True
         return False
 

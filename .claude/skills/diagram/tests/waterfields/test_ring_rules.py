@@ -131,6 +131,11 @@ def test_a_ring_crossing_the_pond_rim_is_found() -> None:
     pond = (50.0, 50.0, 10.0, 10.0)
     assert crosses_pond_rim(_box(45.0, 45.0, 70.0, 70.0), pond)
     assert not crosses_pond_rim(_box(0.0, 0.0, 100.0, 100.0), pond)  # the pond sunk inside one plot
+    # T04: a bund CHORDING the pond between two outside vertices meets it (the vertex-parity test missed it)...
+    assert crosses_pond_rim([[40.0, 48.0], [60.0, 48.0], [60.0, 30.0], [40.0, 30.0]], pond)
+    # ...and so does a ring standing wholly in the water; one that only touches the rim does not
+    assert crosses_pond_rim(_box(48.0, 48.0, 52.0, 52.0), pond)
+    assert not crosses_pond_rim(_box(40.0, 30.0, 60.0, 40.0), pond)
 
 
 def test_a_ring_under_the_grave_island_is_found() -> None:

@@ -48,17 +48,6 @@ def _seg_dist(px: float, py: float, a, b) -> float:
     return math.hypot(px - (ax + t * vx), py - (ay + t * vy))
 
 
-def _point_in(pt, ring) -> bool:
-    x, y = float(pt[0]), float(pt[1])
-    inside, n = False, len(ring)
-    for i in range(n):
-        x0, y0 = float(ring[i][0]), float(ring[i][1])
-        x1, y1 = float(ring[(i + 1) % n][0]), float(ring[(i + 1) % n][1])
-        if (y0 > y) != (y1 > y) and x < (x1 - x0) * (y - y0) / (y1 - y0) + x0:
-            inside = not inside
-    return inside
-
-
 @pytest.fixture(scope="module")
 def rolled():
     return _pool.rolled_map(SPEC)
@@ -115,23 +104,14 @@ def test_a_woodland_commons_stands_on_dry_ground(woodland) -> None:
     from - is not a swamp forest. Standing water rots the stools, the cut cannot be carried out, and the
     species that make a satoyama coppice are not the species that grow in a marsh. Where the map has laid
     marsh, the wood goes somewhere else."""
+    from l7r.diagram.hamletgen.hinterland.parcels import WET_SHARE_CAP, parcel_wet_share
+    from l7r.diagram.settlement.land.wet import marsh_ground
+
     M, parcels = woodland
-    marshes = [[(float(v[0]), float(v[1])) for v in (m.get("poly") or [])] for m in (M.get("marshes") or [])]
-    marshes = [m for m in marshes if len(m) >= 3]
+    marshes = marsh_ground(M)  # the drawn marsh, as the placer reads it (feature 287, M7)
     assert marshes, "the roll laid no marsh, so this rule would judge nothing"
-    wet = []
-    for c in parcels:
-        xs = [float(p[0]) for p in c["poly"]]
-        ys = [float(p[1]) for p in c["poly"]]
-        soaked = 0
-        for i in range(5):
-            for j in range(5):
-                x = min(xs) + (max(xs) - min(xs)) * (i + 0.5) / 5
-                y = min(ys) + (max(ys) - min(ys)) * (j + 0.5) / 5
-                if any(_point_in((x, y), m) for m in marshes):
-                    soaked += 1
-        if soaked > 12:  # more than half the parcel's sample grid standing in water
-            wet.append((round(float(c.get("x", 0))), round(float(c.get("y", 0))), soaked))
+    # THE PLACER'S OWN PREDICATE (feature 287, FR-003): the 5 x 5 grid over the drawn ring's box, more than half wet fails
+    wet = [(round(float(c.get("x", 0))), round(float(c.get("y", 0))), parcel_wet_share(c["poly"], marshes)) for c in parcels if parcel_wet_share(c["poly"], marshes) > WET_SHARE_CAP]
     assert not wet, f"woodland commons parcel(s) seated in marsh: {wet[:4]}"
 
 

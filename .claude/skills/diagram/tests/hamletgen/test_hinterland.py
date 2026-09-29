@@ -11,6 +11,7 @@ from l7r.diagram import hamletgen as hg
 # internals of this stage; pinning them on hamletgen's star-import surface to satisfy one test would
 # widen the package's public contract for a test's convenience (tests/hamletgen/test_surface.py).
 from l7r.diagram.hamletgen import hinterland
+from l7r.diagram.hamletgen.hinterland import stages
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._geom import RingIndex
 
@@ -111,7 +112,7 @@ def test_a_belt_vertex_in_the_title_pocket_is_pushed_out_of_it() -> None:
     tp = hinterland.title_pocket(s, plan)
     mid = ((tp[0] + tp[2]) / 2, (tp[1] + tp[3]) / 2)
     plan.belt = [(tp[0] - 80.0, tp[1] - 80.0), mid, (tp[2] + 80.0, tp[3] + 80.0), (tp[0] - 80.0, tp[3] + 80.0)]
-    hinterland.stage_windbreak(s, plan)
+    stages.plant_the_belt(s, plan)  # the belt is planted by `stage_hinterland` before the view is decided (feature 287, M6)
     belt = [g for g in s.M["village_groves"] if g.get("role") == "windbreak"]
     assert belt, "the windbreak was not recorded"
     inside = [q for q in belt[0]["poly"] if tp[0] <= q[0] <= tp[2] and tp[1] <= q[1] <= tp[3]]
@@ -407,7 +408,8 @@ def test_the_windbreak_stage_draws_nothing_when_the_plan_has_no_belt() -> None:
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
     before = dict(s.M.get("village_groves", [])) if isinstance(s.M.get("village_groves"), dict) else list(s.M.get("village_groves", []))
     hinterland.stage_windbreak(s, plan)
-    assert list(s.M.get("village_groves", [])) == list(before), "no belt, no windbreak"
+    stages.plant_the_belt(s, plan)
+    assert list(s.M.get("village_groves", [])) == list(before), "no belt, no windbreak and no copse"
 
 
 def test_bamboo_blocked_indexed_matches_bamboo_blocked_on_random_ground() -> None:
@@ -693,3 +695,67 @@ def test_a_belt_end_that_recedes_along_the_wind_is_trimmed() -> None:
     assert trim_receding_ends([(-313.0, -105.0), (-226.0, 661.0), (-140.0, 647.0), (-53.0, 697.0), (33.0, 400.0), (120.0, 90.0)], 100.0) == [(-226.0, 661.0), (-140.0, 647.0), (-53.0, 697.0)]
     assert trim_receding_ends([(0.0, 10.0), (90.0, 20.0), (180.0, 5.0)], 100.0) == [(0.0, 10.0), (90.0, 20.0), (180.0, 5.0)]
     assert trim_receding_ends([(0.0, -500.0), (90.0, 20.0)], 100.0) == [(0.0, -500.0), (90.0, 20.0)]
+
+
+# ---- feature 287: the view decided once (M6), the woodland on dry ground by one measure (woods W12) -------------------
+
+
+def test_after_the_view_is_decided_the_scatter_throws_within_it_and_the_placers_ask_it() -> None:
+    """M6: once `plan.view` is set, `scatter_frame` is that view grown by `SCATTER_PAD` (the title band's allowance on the
+    north) - no prediction - and `frame_bounds` is the view itself; before the decision `frame_bounds` is `frame_for` of
+    the map as it stands, the same body the crop reads, and a bare canvas is the whole page."""
+    from l7r.diagram.hamletgen.hinterland.frame import SCATTER_PAD, TITLE_BAND_ALLOWANCE, frame_bounds, frame_for, scatter_frame
+
+    plan = a_plan()
+    bare = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    plan.title_pocket, plan.title_pocket_outside = (0.0, 0.0, 0.0, 0.0), False
+    assert frame_bounds(bare, plan) == (0, 0, round(plan.W), round(plan.H)), "nothing sets a frame yet: the whole canvas"
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.M["houses"] = [{"x": 700.0, "y": 700.0, "w": 40.0, "h": 30.0, "rot": 0}]
+    vx, vy, vw, vh = frame_for(s, plan)
+    assert frame_bounds(s, plan) == (vx, vy, vx + vw, vy + vh)
+    plan.view = (100.0, 200.0, 800.0, 600.0)
+    assert frame_bounds(s, plan) == (100.0, 200.0, 900.0, 800.0), "the decided view, not a recomputation"
+    assert scatter_frame(s, plan) == (100.0 - SCATTER_PAD, 200.0 - SCATTER_PAD - TITLE_BAND_ALLOWANCE, 900.0 + SCATTER_PAD, 800.0 + SCATTER_PAD)
+
+
+def test_a_marsh_finger_between_the_probes_is_read_by_the_rules_own_grid() -> None:
+    """W12, the violating case: a marsh finger threading between the scan's 3 x 3 probes of the square can still put more
+    than half of the drawn ring's 5 x 5 sample grid in the wet. `parcel_wet_share` is the rule's own measure."""
+    from l7r.diagram.hamletgen.hinterland.parcels import WET_SHARE_CAP, parcel_wet_share
+    from l7r.diagram.settlement import point_in_poly
+
+    ring = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
+    # two fingers, joined past the ring's far edge, over the grid's columns x = 10, 30, 70, 90 - and clear of the 3 x 3
+    # probes, which stand at x = 0, 50, 100
+    finger = [(5.0, -5.0), (45.0, -5.0), (45.0, 102.0), (55.0, 102.0), (55.0, -5.0), (95.0, -5.0), (95.0, 105.0), (5.0, 105.0)]
+    probes = [(x, y) for x in (0.0, 50.0, 100.0) for y in (0.0, 50.0, 100.0)]
+    assert not any(point_in_poly(x, y, finger) for x, y in probes), "the square's probes all read dry"
+    assert parcel_wet_share(ring, [finger]) > WET_SHARE_CAP, "but the drawn ring stands mostly in the wet"
+    assert parcel_wet_share(ring, []) == 0.0 and parcel_wet_share(ring[:2], [finger]) == 0.0
+
+
+def test_the_scan_refuses_a_ring_the_wet_share_fails_and_takes_the_next_seat(monkeypatch: pytest.MonkeyPatch) -> None:
+    """W12 at the placer: the ring about to be drawn is asked `parcel_wet_share`, and a wet ring is refused - its seat is
+    not drawn, and the scan goes on to the next scored seat."""
+    plan = a_plan()
+
+    def _scan() -> list:
+        s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+        s.M["fields"] = []  # no houses and no crop: the setup `test_a_seat_whose_rotated_parcel...` proved seats parcels
+        plan.belt = []
+        plan.title_pocket = None
+        return hg.hinterland.open_ground_patches(s, plan, count=2)
+
+    dry = _scan()
+    assert dry, "the control scan seated nothing, so a refusal would prove nothing"
+    asked: list[list] = []
+
+    def _first_is_wet(ring, _marshes):  # type: ignore[no-untyped-def]
+        asked.append(ring)
+        return 1.0 if len(asked) == 1 else 0.0
+
+    monkeypatch.setattr(hinterland.parcels, "parcel_wet_share", _first_is_wet)
+    got = _scan()
+    assert asked[0] not in got, "the wet ring is not drawn"
+    assert got, "the scan went on to the next seat"

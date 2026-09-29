@@ -24,6 +24,8 @@ from collections.abc import Sequence
 from dataclasses import dataclass, field
 from typing import Any
 
+from l7r.diagram.settlement._geom.primitives import ring_meets_ellipse
+
 from .banks import (
     _GATE_CHEVRON_APEX,
     _GATE_CHEVRON_SOLIDITY,
@@ -269,15 +271,12 @@ def collector_crossings(ring: Sequence[Sequence[float]], drains: Sequence[tuple[
     return out
 
 
-def _in_ellipse(pt: Sequence[float], e: Sequence[float]) -> bool:
-    return ((pt[0] - e[0]) / e[2]) ** 2 + ((pt[1] - e[1]) / e[3]) ** 2 <= 1.0
-
-
 def crosses_pond_rim(ring: Sequence[Sequence[float]], pond: Sequence[float]) -> bool:
-    """W29 - a ring edge crosses a field pond's rim (`pond` = cx, cy, rx, ry): one vertex inside the ellipse and the
-    next outside. A field pond is a low pocket dug INTO one basin; a rim crossed by a bund reads as a flood."""
-    n = len(ring)
-    return any(_in_ellipse(ring[k], pond) != _in_ellipse(ring[(k + 1) % n], pond) for k in range(n))
+    """W29 - a ring edge meets a field pond (`pond` = cx, cy, rx, ry): it crosses the rim, chords it, or stands in the
+    water. A field pond is a low pocket dug INTO one basin; a bund through it reads as a flood. The body is
+    `settlement._geom.ring_meets_ellipse`, the one predicate `_plot_pond` shrinks the pond against (feature 287, T04):
+    the vertex-parity test this replaced missed a bund chording the pond between two outside vertices."""
+    return ring_meets_ellipse(ring, float(pond[0]), float(pond[1]), float(pond[2]), float(pond[3]))
 
 
 def under_island(ring: Sequence[Sequence[float]], disc: Sequence[float]) -> bool:

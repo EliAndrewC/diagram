@@ -204,6 +204,9 @@ class SitePlan:
     # thing on a watercourse that is a FEATURE rather than a runner - two waters meeting is a place - and the
     # crop deliberately ignores runners, which is how one came to be drawn 7.4 ft outside the picture.
     confluence: Pt | None = None
+    # THE VIEW, DECIDED ONCE (feature 287, M6): (x, y, w, h), fixed at the end of `stage_hinterland`'s seating by
+    # `hinterland.frame.frame_for`, and set exactly by `stage_frame`. Every rule that reads the picture reads this.
+    view: tuple[float, float, float, float] | None = None
 
     @property
     def fall(self) -> Pt:

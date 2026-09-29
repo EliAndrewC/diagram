@@ -12,7 +12,7 @@ from .._geom import (
     Poly,
     Pt,
     point_in_poly,
-    seg_in_ellipse_core,
+    ring_meets_ellipse,
 )
 from .._knobs import CITY_TIER_SCALES, _centroid
 
@@ -193,23 +193,27 @@ class FieldFeaturesMixin:
         # WEDGES whose bounding box is several times the wedge itself, so a bbox-sized ellipse
         # spilled across three neighboring plots and the drain hem, spoke bunds drawn straight
         # through open water. Center on the CENTROID (a wedge's bbox center can sit outside it) and
-        # shrink until every rim point sits inside the plot and NO ring in `rings` cuts the pond's
-        # core - `seg_in_ellipse_core` is the same predicate the gate's
-        # `field_ponds_sunk_into_one_plot` runs, and `rings` is every ring that check will scan
-        # (rings can OVERLAP at the fan/grid seams, so testing the host plot alone is not enough -
-        # cohort seeds 5/19/21). Placement tests a LARGER core (inset 3 vs the check's 4) so the
-        # manifest's 0.1 px rounding can never flip a verdict the siting cleared. Below the legible
-        # floor (10 x 7 px) the plot takes no pond and the caller tries another low plot.
+        # shrink until every rim point sits inside the plot and NO ring in `rings` meets the pond -
+        # `ring_meets_ellipse`, the ONE predicate the finished-map test (`crosses_pond_rim`) calls too
+        # (feature 287, FR-003: this used to ask a core 3 px inside the rim while the test read the full
+        # ellipse, so the two disagreed; the full rim is the rule - see the predicate). `rings` is every
+        # ring that test will scan (rings can OVERLAP at the fan/grid seams, so testing the host plot
+        # alone is not enough - cohort seeds 5/19/21). JUDGED AS RECORDED: the rings and the pond are
+        # rounded to the manifest's 0.1 px before they are asked, and the pond is drawn and recorded at
+        # the values that were judged, so the test reads exactly what the placer cleared. Below the
+        # legible floor (10 x 7 px) the plot takes no pond and the caller tries another low plot.
         rim = [(math.cos(a), math.sin(a)) for a in [i * math.pi / 12 for i in range(24)]]
-        boxed = [(min(q[0] for q in r), min(q[1] for q in r), max(q[0] for q in r), max(q[1] for q in r), r) for r in rings]
+        recorded = [[(round(float(q[0]), 1), round(float(q[1]), 1)) for q in r] for r in rings]
+        boxed = [(min(q[0] for q in r), min(q[1] for q in r), max(q[0] for q in r), max(q[1] for q in r), r) for r in recorded]
+        cx, cy = round(cx, 1), round(cy, 1)
         while rx >= 10.0 and ry >= 7.0:
+            rx, ry = round(rx, 1), round(ry, 1)
             ok = all(point_in_poly(cx + rx * ux, cy + ry * uy, poly) for ux, uy in rim)
             if ok:
                 for bx0, by0, bx1, by1, ring in boxed:
                     if bx1 < cx - rx or bx0 > cx + rx or by1 < cy - ry or by0 > cy + ry:
                         continue  # bbox prefilter only - the exact test below decides
-                    rn = len(ring)
-                    if any(seg_in_ellipse_core(ring[i], ring[(i + 1) % rn], cx, cy, rx, ry, inset=3.0) for i in range(rn)):
+                    if ring_meets_ellipse(ring, cx, cy, rx, ry):
                         ok = False
                         break
             if ok:

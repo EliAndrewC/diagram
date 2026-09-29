@@ -6,7 +6,7 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, point_in_poly, surface_water_dist
+from l7r.diagram.settlement import Settlement, point_in_poly, point_quad_dist, rot_rect, surface_water_dist
 
 from ..consts import Pt
 from ..plan import SitePlan
@@ -15,6 +15,33 @@ _WELL_DRAWN_R = 12.0
 """The wellhead's DRAWN half-extent, used when asking how far a candidate seat would push the crop.
 It is the `vr` the glyph draws (not the `r` clearance radius), because the frame follows the ink -
 `crop_not_held_open_by_one_feature` quotes a well's extent as 16 px across."""
+
+
+WELL_AMONG_DWELLINGS_PX = 95.0
+"""How far a well may stand from the nearest dwelling's WALL - `wells_among_dwellings`' bar, the finished-map test's own
+figure (`test_every_well_stands_among_the_doors_it_serves`), unchanged by feature 287. Its origin is not recorded beside
+it; what the record gives is the reason for a bar at all - a well is dug among the doors it serves, the dooryard well of
+the idiom 井戸端会議 (idobata kaigi, "well-side meeting"), not out in the commons."""
+
+
+def well_gap_to_dwellings(houses: Sequence[Mapping[str, Any]], x: float, y: float) -> float:
+    """The gap from a well at (x, y) to the nearest dwelling's drawn wall - 0 inside one; abandoned houses are no dwelling.
+
+    THE ONE PREDICATE of the among-the-dwellings rule (feature 287, FR-003, homes H09): every seat `place_wells` offers
+    is held to `WELL_AMONG_DWELLINGS_PX` by it, and the finished-map test reads it. The two used to disagree: the
+    placer's lattice asked for a house CENTER within 105-112 px, which admits a wall 99 px off beside a 26 px-deep
+    house, while the test measured the gap to an unturned box. The test's reading is the right one, turned: a gap
+    verdict reads the footprint, never the center (`dev/placement.md`, "CENTER vs FOOTPRINT"), and a well stands among
+    the DOORS it serves, which are in the walls. Each house is measured on its drawn quad (`rot_rect` at its `rot`)."""
+    return min(
+        (point_quad_dist(x, y, rot_rect(h["x"], h["y"], h["w"], h["h"], h.get("rot", 0.0))) for h in houses if h.get("kind") != "abandoned"),
+        default=float("inf"),
+    )
+
+
+def _among_dwellings(houses: Sequence[Mapping[str, Any]], x: float, y: float) -> bool:
+    """Would a well at (x, y) stand among the dwellings - judged where the manifest will record it, to 0.1 px."""
+    return well_gap_to_dwellings(houses, round(x, 1), round(y, 1)) <= WELL_AMONG_DWELLINGS_PX
 
 
 def well_target(households: int) -> int:
@@ -95,17 +122,19 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
     # map shipped with no well (seeds 3 and 12). A settlement WITHOUT a well is a much worse map
     # than one whose well sits a little wide, so the test loosens until it finds seats. It never
     # loosens into "anywhere": every seat still has to be nearer a house than the crop.
-    # Only the THIRD-nearest distance relaxes - the "is this in a neighborhood" test. The distance to
-    # the NEAREST house stays tight, because `wells_among_dwellings` is a 95 px gap verdict against
-    # the served building's edge: a well 220 px from its closest farmhouse is standing in the fields
-    # by any measure, and relaxing that rung traded one failure for another.
+    # Only the THIRD-nearest distance relaxes - the "is this in a neighborhood" test. The gap to the
+    # NEAREST house never relaxes: every rung holds it to `well_gap_to_dwellings` <= 95 px, the rule's
+    # own predicate (feature 287, FR-003 - the rungs used to ask a house CENTER within 105-112 px, which
+    # admitted a wall 99 px off). A well 220 px from its closest farmhouse is standing in the fields by
+    # any measure, and relaxing that rung traded one failure for another.
     # The last rung also serves a PAIR. Every rung above asks for three homesteads around a seat,
     # which is the right shape for a nucleus and leaves a two-farm satellite with no well of its own
     # - and then the coverage pass cannot rescue it either, because the ground among two farms is
     # their own courtyards. Seed 18 stranded exactly that: a pair 500 px off the cluster, 760 and
     # 777 px from the nearest well, with all 118 legal-neighborhood probes around them refused.
     # Two households sharing a draw-well is an ordinary thing; three is not a threshold nature knows.
-    for third, nearest, want_near in ((190.0, 105.0, 3), (300.0, 110.0, 3), (520.0, 112.0, 3), (520.0, 112.0, 2)):
+    reach_r = max((math.hypot(h["w"], h["h"]) / 2 for h in houses), default=0.0)  # the prefilter's widest house
+    for third, want_near in ((190.0, 3), (300.0, 3), (520.0, 3), (520.0, 2)):
         if len(placed) >= want:
             break
         seats: list[tuple[float, float, float]] = []
@@ -115,16 +144,18 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
         # strung along its field margin can keep every legal well pocket just OUTSIDE the centers'
         # bbox - seed 44 had 84 legal seats, nearly all north-west of min(xs)/min(ys), and the
         # unpadded grid visited none of them (0 of 1440 probes passed; the map shipped well-less).
-        # The pad only restores ground the bundles themselves cover: every rung still demands
-        # near[0] <= ~105 px, so an open-field corner of the padded box is rejected exactly as the
-        # docstring above promises.
+        # The pad only restores ground the bundles themselves cover: every rung still demands a
+        # dwelling's wall within 95 px, so an open-field corner of the padded box is rejected exactly
+        # as the docstring above promises.
         pad = 120.0
         y = min(ys) - pad
         while y <= max(ys) + pad:
             x = min(xs) - pad
             while x <= max(xs) + pad:
                 near = sorted(math.hypot(x - h["x"], y - h["y"]) for h in houses)
-                if len(near) >= want_near and near[want_near - 1] <= third and near[0] <= nearest:
+                # the center distance PREFILTERS (a wall is never nearer than its center less the half-diagonal); the
+                # rule's own predicate decides
+                if len(near) >= want_near and near[want_near - 1] <= third and near[0] <= WELL_AMONG_DWELLINGS_PX + reach_r and _among_dwellings(houses, x, y):
                     seats.append((math.hypot(x - ccx, y - ccy), x, y))
                 x += step
             y += step
@@ -313,8 +344,8 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
                     # the frame out after it (`crop_not_held_open_by_one_feature`) - the same reason  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
                     # the grid above is laid over the cloud rather than a box grown around it.  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
                     continue  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
-                if not any(math.hypot(cand[0] - hh2["x"], cand[1] - hh2["y"]) <= 95.0 for hh2 in houses):  # pragma: no cover - the rescue's among-the-dwellings floor
-                    continue  # pragma: no cover - center distance <= 95 is strictly inside the check's 95 px EDGE gap
+                if not _among_dwellings(houses, cand[0], cand[1]):  # pragma: no cover - the rescue's among-the-dwellings floor
+                    continue  # pragma: no cover - the rule's own predicate (feature 287, FR-003)
                 if any(
                     math.hypot(cand[0] - px, cand[1] - py) < 110.0 for px, py in placed
                 ):  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
@@ -335,6 +366,8 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
         spot = s.open_seat(
             (min(xs), min(ys), max(xs), max(ys)), 16.0, 16.0, well=True
         )  # pragma: no cover - reached only when the lattice above found NOTHING, which the bundle-pitch fix made rare; a settlement with no well fails the gate outright, so the branch stays
-        if spot is not None and s.well_at(spot[0], spot[1]):  # pragma: no cover - the last-resort seat; unreached since the bundle-pitch fix left the courtyards open
+        # ...held to the same among-the-dwellings floor (feature 287, FR-005: no fallback emits a violation) - a seat
+        # `open_seat` finds out in the commons is refused, not drawn
+        if spot is not None and _among_dwellings(houses, spot[0], spot[1]) and s.well_at(spot[0], spot[1]):
             placed.append(spot)
     return len(placed)

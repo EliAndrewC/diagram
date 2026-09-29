@@ -24,7 +24,9 @@ import math
 
 import pytest
 
+from l7r.diagram.hamletgen.homesteads.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
 from l7r.diagram.settlement import FARMHOUSE_EAVE_GAP_FT, surface_water_dist
+from l7r.diagram.settlement._geom import eave_gap
 from tests import rolls
 from tests.gate import _pool
 
@@ -71,15 +73,6 @@ def _poly_dist(x: float, y: float, poly) -> float:
         t = 0.0 if L2 == 0 else max(0.0, min(1.0, ((x - a[0]) * vx + (y - a[1]) * vy) / L2))
         best = min(best, math.hypot(x - (a[0] + t * vx), y - (a[1] + t * vy)))
     return best
-
-
-def _edge_gap(a, b) -> float:
-    """The gap between two axis-aligned footprints, wall to wall - never centre to centre. A gap verdict
-    reads footprints (`dev/placement.md`), because a centre-to-centre bar quietly forgives a large
-    building standing on a small one."""
-    dx = max(0.0, abs(a["x"] - b["x"]) - (a["w"] + b["w"]) / 2)
-    dy = max(0.0, abs(a["y"] - b["y"]) - (a["h"] + b["h"]) / 2)
-    return math.hypot(dx, dy)
 
 
 @pytest.fixture(scope="module")
@@ -149,7 +142,9 @@ def test_two_farmhouses_keep_their_own_drip_lines(homes) -> None:
     merges into a single long building. The gap is measured wall to wall, which is what an eave gap is."""
     M, houses = homes
     limit = FARMHOUSE_EAVE_GAP_FT / float(M["meta"].get("ftpx", 1) or 1)
-    merged = [(round(houses[i]["x"]), round(houses[i]["y"])) for i in range(len(houses)) for j in range(i + 1, len(houses)) if _edge_gap(houses[i], houses[j]) < limit]
+    # THE PLACER'S OWN MEASURE (feature 287, FR-003): wall to wall on the drawn, ROTATED quads - an unrotated box runs a
+    # quarter-turned house along the wrong axis and reports a pair the placer correctly admitted
+    merged = [(round(houses[i]["x"]), round(houses[i]["y"])) for i in range(len(houses)) for j in range(i + 1, len(houses)) if eave_gap(houses[i], houses[j]) < limit]
     assert not merged, f"{len(merged)} farmhouse pair(s) stand closer than {FARMHOUSE_EAVE_GAP_FT:.0f} ft wall to wall, at {merged[:4]}"
 
 
@@ -185,8 +180,9 @@ def test_every_well_stands_among_the_doors_it_serves(homes) -> None:
     M, houses = homes
     wells = M.get("wells") or []
     assert wells, "the roll dug no well, so this rule would judge nothing"
-    stray = [(round(w["x"]), round(w["y"])) for w in wells if not any(_edge_gap({"x": w["x"], "y": w["y"], "w": 0.0, "h": 0.0}, h) <= 95.0 for h in houses)]
-    assert not stray, f"well(s) stand in open ground with no dwelling within ~95 px: {stray[:4]}"
+    # THE PLACER'S OWN PREDICATE (feature 287, FR-003): the gap to the nearest dwelling's drawn, turned wall
+    stray = [(round(w["x"]), round(w["y"])) for w in wells if well_gap_to_dwellings(houses, w["x"], w["y"]) > WELL_AMONG_DWELLINGS_PX]
+    assert not stray, f"well(s) stand in open ground with no dwelling within {WELL_AMONG_DWELLINGS_PX:.0f} px: {stray[:4]}"
 
 
 def test_every_household_can_reach_water(homes) -> None:

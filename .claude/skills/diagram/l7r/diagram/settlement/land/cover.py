@@ -34,7 +34,7 @@ from typing import TYPE_CHECKING, Any
 # lie outside the viewBox (specs/200 R2) and are culled there by the page's own `drop_offmap` rule before the merge,
 # so the file never carries them (`Settlement.flush_blade_groups`).
 from .._geom import CrownIndex, KeepoutGrid, Poly, RingIndex, convex_hull
-from ..land.wet import MARSH_FEATHER_BS
+from ..land.wet import MARSH_FEATHER_BS, marsh_ground
 
 WOOD_FRINGE_FT = 8.0
 """How far grass reaches in under a wood's edge before the kept-clear floor (GM 2026-09-27, Inashiro: highlighting the
@@ -72,6 +72,101 @@ def farmstead_keepouts(M: Any, margin: float) -> list[Any]:
     return rings
 
 
+BARE_STEP = 25.0  # px between the samples `bare_cells` takes - the gate's own grid (`margins_form_continuous_ring`)
+BARE_SHARE_CAP = 0.35
+"""How much of the rendered view may be ground nothing covers (`margins_form_continuous_ring`). Above this the map has
+holes in it - the margins are meant to form a continuous ring of worked and unworked ground, not islands with gaps."""
+
+#: The manifest's TREADS - a way or a watercourse is a polyline with a width, not a ring: (key, points key, width key).
+BARE_TREADS = (("lanes", "pts", "w"), ("streams", "poly", "w"), ("channels", "poly", "w"), ("field_ditches", "poly", "w"), ("drawn_channels", "pts", "w0"))
+#: Keys that record no ground: the page's furniture, the render's bookkeeping, a lone connector's raw points.
+_BARE_SKIP = frozenset({"meta", "labels", "title", "scalebar", "ink_classes", "site_boundary", "comb_floors", "pond_layer", "tree_crowns", "wet_plots", "flooded_plots", "field_chains", "lane"})
+
+
+def _footprint(o: Any) -> Any:
+    """One manifest record as the shapely ground it covers, or None - a ring (`outline` / `poly`), a turned box (`x y w h rot`),
+    a disc (`x y r`) or an ellipse (`x y rx ry`); a bare list of points is a ring too (a pasture, a forest patch)."""
+    from shapely.geometry import Point, Polygon  # noqa: PLC0415 - shapely is loaded on first use (feature 237)
+
+    from .._geom import rot_rect  # noqa: PLC0415 - kept beside its one use
+
+    if isinstance(o, dict):
+        ring = o.get("outline") or o.get("poly")
+        if ring and len(ring) >= 3 and all(isinstance(q, (list, tuple)) and len(q) >= 2 for q in ring):
+            return Polygon([(float(q[0]), float(q[1])) for q in ring]).buffer(0)
+        if all(k in o for k in ("x", "y", "w", "h")):
+            return Polygon(rot_rect(float(o["x"]), float(o["y"]), float(o["w"]), float(o["h"]), float(o.get("rot") or 0.0))).buffer(0)
+        if all(k in o for k in ("x", "y", "r")):
+            return Point(float(o["x"]), float(o["y"])).buffer(max(float(o["r"]), 0.5))
+        if all(k in o for k in ("x", "y", "rx", "ry")):
+            return _ellipse_ground(float(o["x"]), float(o["y"]), float(o["rx"]), float(o["ry"]))
+        return None
+    if isinstance(o, (list, tuple)) and len(o) >= 3 and all(isinstance(q, (list, tuple)) and len(q) >= 2 for q in o):
+        return Polygon([(float(q[0]), float(q[1])) for q in o]).buffer(0)
+    return None
+
+
+def _ellipse_ground(cx: float, cy: float, rx: float, ry: float) -> Any:
+    """An axis-aligned ellipse as shapely ground."""
+    from shapely import affinity  # noqa: PLC0415 - shapely is loaded on first use (feature 237)
+    from shapely.geometry import Point  # noqa: PLC0415
+
+    return affinity.scale(Point(cx, cy).buffer(1.0), max(rx, 0.5), max(ry, 0.5))
+
+
+def covered_ground(M: Any) -> Any:
+    """Everything the manifest records as standing on the ground, as one shapely geometry: every footprint (cover,
+    fields, buildings, yards, wells, clearings, the burial ground, ponds - every ring, box, disc and ellipse a record
+    carries) and every tread (the ways and the watercourses at their drawn width).
+
+    THE FR-003 CORRECTION (feature 287, plan D6; woods W11): the rule's own grounding is that a hole in the cover is "the
+    map admitting it has not decided what is there", and a recorded lane, stream, well, clearing or burial ground is
+    DECIDED ground - "margin grass, scrub, a grazing common, a marsh, a wood, a yard" are the rule's examples, not its
+    list. The gate used to count those as bare, so a view that such features filled could fail however the cover lay."""
+    from shapely.geometry import LineString  # noqa: PLC0415 - shapely is loaded on first use (feature 237)
+    from shapely.ops import unary_union  # noqa: PLC0415
+
+    parts: list[Any] = []
+    treads = {k for k, _p, _w in BARE_TREADS}
+    for key, recs in M.items():
+        if key in _BARE_SKIP or key in treads or not isinstance(recs, list):
+            continue
+        parts += [g for g in (_footprint(o) for o in recs) if g is not None and not g.is_empty]
+    for key, pk, wk in BARE_TREADS:
+        for o in M.get(key) or []:
+            pts = [(float(q[0]), float(q[1])) for q in (o.get(pk) or [])]
+            if len(pts) >= 2:
+                parts.append(LineString(pts).buffer(max(float(o.get(wk) or 1.0), 1.0) / 2.0))
+    pond = M.get("pond")
+    if pond and len(pond) >= 4:
+        parts.append(_ellipse_ground(float(pond[0]), float(pond[1]), float(pond[2]), float(pond[3])))
+    return unary_union(parts) if parts else None
+
+
+def bare_cells(M: Any, view: Any, step: float = BARE_STEP) -> tuple[list[tuple[float, float]], int]:
+    """The sample points of `view` (x, y, w, h) that stand on ground nothing covers, and how many points were sampled.
+
+    ONE PREDICATE (feature 287, FR-003; woods W11): the grid is the gate's own - a point every `step` px from half a step
+    in - and "covered" is `covered_ground`, which counts every recorded footprint and tread. The share is
+    `len(bare) / total`; the rule holds it at `BARE_SHARE_CAP`."""
+    from shapely import intersects_xy  # noqa: PLC0415 - shapely is loaded on first use (feature 237)
+
+    vx0, vy0, vw, vh = (float(v) for v in view)
+    xs: list[float] = []
+    ys: list[float] = []
+    y = vy0 + step / 2
+    while y < vy0 + vh:
+        x = vx0 + step / 2
+        while x < vx0 + vw:
+            xs.append(x)
+            ys.append(y)
+            x += step
+        y += step
+    ground = covered_ground(M)
+    hit = intersects_xy(ground, xs, ys) if ground is not None else [False] * len(xs)
+    return [(x, y) for x, y, h in zip(xs, ys, hit, strict=True) if not h], len(xs)
+
+
 class GroundCoverMixin:
     def commons(self: Settlement, poly: Any, role: str = "commons", avoid: Any = (), render: str = "scrub", soft: Any = (), woods: Any = ()) -> None:  # type: ignore[misc]
         """FUEL-AND-FODDER COMMONS - the degraded open grazing/scrub on the far (upslope / windward) side,
@@ -97,7 +192,7 @@ class GroundCoverMixin:
         # ruled line and a ~40 ft bare strip on the toe's straight west edge. The scrub instead thins
         # INTO the marsh over that same band - kept with probability 1 at the edge, 0 at feather depth,
         # the complement of the reeds' ramp - so the two covers interleave into a wild edge.
-        soft = [*soft, *(m["poly"] for m in self.M.get("marshes", []) if m.get("poly"))]
+        soft = [*soft, *marsh_ground(self.M)]
         # SCOPED (2026-08-08): the tuft/brush scatter is decoration keyed to the common it fills.
         if render == "bare":
             # CLAIMED but UNDRAWN ground (GM 2026-08-10, on the capital's ring bands reading as

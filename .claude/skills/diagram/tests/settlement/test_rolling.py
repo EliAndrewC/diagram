@@ -713,6 +713,29 @@ def test_the_eave_gap_ignores_an_abandoned_neighbor_and_flags_a_standing_one():
     assert s._house_too_near_a_neighbor((300.0, 300.0, 40.0, 26.0)) is True
 
 
+def test_a_quarter_turned_neighbor_is_measured_on_its_drawn_quad(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The drip-line rule is ONE predicate (feature 287, FR-003): `eave_gap` measures wall to wall on the drawn, rotated
+    quads, and the placer and the gate both read it. The violating case: a neighbor recorded 20 x 60 and turned a quarter
+    stands 60 wide along x, so an UNROTATED box (the gate's old measure) sees a wide gap where the walls stand closer than
+    the eave gap - the placer refuses the seat, and the one measure says why."""
+    from l7r.diagram.settlement import FARMHOUSE_EAVE_GAP_FT
+    from l7r.diagram.settlement._geom import eave_gap
+
+    s = _village()
+    monkeypatch.setattr(s, "_house_rot", lambda _x, _y: 0.0)
+    near = s.px(FARMHOUSE_EAVE_GAP_FT) - 1.0  # a wall gap under the rule
+    cand = {"x": 300.0, "y": 300.0, "w": 40.0, "h": 26.0, "rot": 0.0}
+    turned = {"x": 300.0 + 20.0 + 30.0 + near, "y": 300.0, "w": 20.0, "h": 60.0, "rot": 90.0, "kind": "plain"}
+    unrotated = abs(turned["x"] - cand["x"]) - (cand["w"] + turned["w"]) / 2  # the retired measure
+    assert unrotated >= s.px(FARMHOUSE_EAVE_GAP_FT), "the unrotated box would have admitted this pair"
+    assert eave_gap(cand, turned) == pytest.approx(near), "the drawn walls stand `near` apart"
+    s.M["houses"].append(turned)
+    assert s._house_too_near_a_neighbor((300.0, 300.0, 40.0, 26.0)) is True, "the placer refuses the seat on the drawn quad"
+    turned["x"] += s.px(3.0) + 1.0  # past the rule and the placer's hair of margin
+    assert s._house_too_near_a_neighbor((300.0, 300.0, 40.0, 26.0)) is False
+    assert eave_gap(cand, turned) >= s.px(FARMHOUSE_EAVE_GAP_FT)
+
+
 def test_the_sun_rules_pass_over_a_neighbor_record_with_no_bundle():
     # feature 276: a drawn house with no `geom` (no yard, no garden, no grove) inside the indexed reach box has nothing
     # the corridor or the yard-sun rule can read, so both pass it over

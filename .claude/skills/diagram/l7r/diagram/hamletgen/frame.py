@@ -24,9 +24,9 @@ from l7r.diagram.settlement.structures.fixtures import (
 from l7r.diagram.settlement.structures.fixtures.siting import BOARD_ALONG_STEP_PX
 
 from .consts import POLDER_ARCHETYPES
-from .hinterland import CROP_MARGIN, brook_beside_the_field, title_pocket
+from .hinterland import title_pocket
+from .hinterland.frame import frame_for
 from .plan import SitePlan
-from .sink import BROOK_JOIN_TRUNK
 from .water import polder_crossing_caps
 from .ways.checks import square_crossings
 
@@ -389,9 +389,15 @@ def stage_frame(s: Settlement, plan: SitePlan) -> None:
     In that order: the title searches the FRAMED window for blank space to sit in, so the frame has
     to exist first.
 
+    THE VIEW WAS DECIDED EARLIER, at the end of `stage_hinterland`'s seating (feature 287, M6): the crop takes exactly
+    `plan.view`, so every rule that reads the picture - the bare ground, the woodland in the view, the belt's record against
+    its ink, the scatter's frame - was placed against the page it is judged on. Should anything placed since have moved
+    the frame the crop would take, the difference is recorded as `meta.view_drift` (left, top, right, bottom) and the
+    view is still the decided one; the pool test holds that no map records one.
+
     Steps:
         l7r.diagram.hamletgen.hinterland.frame.title_pocket
-        l7r.diagram.settlement.Settlement.crop_to_content
+        l7r.diagram.settlement.Settlement.crop_to_view
         l7r.diagram.settlement.Settlement.title
     """
     # The margin leaves the TITLE somewhere to stand: `title()` scans the framed window for a box
@@ -401,19 +407,15 @@ def stage_frame(s: Settlement, plan: SitePlan) -> None:
     # only extra is open ground is wasted image. 64 was tried and fails all twelve. 48 is the most
     # air the frame will give the title.
     _pocket = title_pocket(s, plan)  # the pocket the belt was dented around (feature 150) - reserved once, see hinterland.title_pocket
-    _extra = [_pocket] if plan.title_pocket_outside else []  # an OUTSIDE reservation is content the crop must take in; an inside one changes nothing
-    # ...AND THE CONFLUENCE, WITH A LENGTH OF ITS TRUNK (feature 230, settlement-review passes 6 and 7). Where the
-    # drain meets the passing brook, that junction is a FEATURE - the thing the third sink exists to show - and the
-    # crop ignores watercourses because they are runners that trail off the edge. So Sawada's was drawn 7.4 ft
-    # outside the sheet with none of its 359 ft of trunk in view. Predicting the frame back in `stage_sink` was
-    # tried twice and cannot work (the frame is decided here, not there); reserving the junction and a trunk's
-    # length around it is the engine's own mechanism for exactly this, the one the title pocket uses.
-    if plan.confluence is not None:
-        _cx, _cy = plan.confluence
-        _t = BROOK_JOIN_TRUNK * 0.5  # half the trunk each way: the junction, and enough brook below it to read as one
-        _extra.append((_cx - _t, _cy - _t, _cx + _t, _cy + _t))
-    _extra += brook_beside_the_field(s)  # ...and the brook's reach beside the field, which is picture, not a runner off the edge
-    s.crop_to_content(margin=CROP_MARGIN, extra=_extra)
+    # The extras the frame reserves as content - an outside pocket, the confluence with its trunk, the brook beside the
+    # field - are `frame_extras`, and the view carrying them was decided in `stage_hinterland` (`frame_for`). Predicting
+    # the confluence back in `stage_sink` was tried twice and cannot work; reserving it where the view is decided can.
+    assert plan.view is not None, "stage_frame runs after stage_hinterland, which decides the view"
+    _now = frame_for(s, plan)
+    if _now != plan.view:
+        _v, _n = plan.view, _now
+        s.M["meta"]["view_drift"] = [_v[0] - _n[0], _v[1] - _n[1], (_n[0] + _n[2]) - (_v[0] + _v[2]), (_n[1] + _n[3]) - (_v[1] + _v[3])]
+    s.crop_to_view(plan.view)
     s.M["meta"]["title_pocket"] = [round(v, 1) for v in _pocket]  # recorded so a placard that fell back can be read against the reservation
     s.title(plan.spec.name, prefer=_pocket)
 

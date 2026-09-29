@@ -19,6 +19,7 @@ import pytest
 from l7r.diagram.hamletgen.consts import BROOK_MAX_TURN_DEG, BROOK_WANDER_STEP, COPSE_BELT_REACH_FT, COPSE_HOUSE_REACH_FT
 from l7r.diagram.hamletgen.ways import law
 from l7r.diagram.settlement import segments_cross
+from l7r.diagram.settlement._geom.water_index import crosses_a_stream
 from l7r.diagram.settlement.structures.fixtures import KOSATSUBA_ENTRANCE_REACH_FT, KOSATSUBA_HANDOVER_BAND_FT, departure_routes, kosatsuba_anchor, routes_missed
 from l7r.diagram.settlement.structures.fixtures._helpers import KOSATSUBA_ANCHOR_BAND_FT
 
@@ -56,11 +57,9 @@ def test_every_farmstead_part_stands_on_its_house_bank(gen: str) -> None:
     m = _manifest(gen)
     parts = [r for k in PART_KEYS for r in m.get(k) or [] if r.get("of")]
     assert parts or m.get("meta", {}).get("archetype") == "dikepond" or not m.get("houses"), "non-vacuity: parts name their house"
-    for brook in _brooks(m):
-        for r in parts:
-            of = (float(r["of"][0]), float(r["of"][1]))
-            across = any(segments_cross((float(r["x"]), float(r["y"])), of, c, d) for c, d in zip(brook, brook[1:], strict=False))
-            assert not across, f"a farmstead part at ({r['x']:.0f}, {r['y']:.0f}) stands across the brook from its house"
+    for r in parts:  # the placers' own predicate (feature 287, FR-003)
+        across = crosses_a_stream((float(r["of"][0]), float(r["of"][1])), (float(r["x"]), float(r["y"])), m.get("streams", []))
+        assert not across, f"a farmstead part at ({r['x']:.0f}, {r['y']:.0f}) stands across the brook from its house"
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)

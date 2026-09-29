@@ -219,6 +219,62 @@ def _keyholed(g: Any) -> Any:
     return ring
 
 
+def drawn_ground(poly: Any, fields: Any = (), blocks: Any = (), clearings: Any = (), avoid: Any = (), field_pad: float = 10.0) -> list[Pt] | None:
+    """The ground a marsh's reeds are ACTUALLY drawn on: its outline with the scatter's AREA keep-outs taken out, as one
+    keyholed ring - or None where nothing is left (feature 287, M7; woods W08).
+
+    THE RECORD WAS THE UNCLIPPED RING (future-work/farming-communities.md, "The toe marsh's recorded outline is not the
+    drawn marsh"). The scatter refuses a mark in a paddy (padded `field_pad`), on a building or any other no-build block,
+    in a swept clearing and in the caller's `avoid` set, while `M['marshes']` kept the whole outline - so every reader
+    asking "is this in the marsh" was told yes about dry, cleared ground: Sawada's belt lost 68 of 179 crowns to an
+    outline that ran under the settlement's own cleared ground. These are the SAME rings, pads and families the
+    scatter's `KeepoutGrid` holds; the corridors and the mounds are threads and margins, not ground, and stay.
+
+    A record carries one ring, so where a keep-out cuts the marsh in two the largest piece is the marsh - and the scatter
+    is then run on that ring (`marsh`), so no reed is drawn on a piece the record does not hold."""
+    _load_shapely()
+    pts = [(float(a), float(b)) for a, b in poly]
+    if len(pts) < 3:
+        return None
+    try:
+        keep = ShapelyPolygon(pts).buffer(0)
+        x0, y0, x1, y1 = keep.bounds
+        cuts = []
+        for ring, pad in [*((f, field_pad) for f in fields), *((r, 0.0) for fam in (blocks, clearings, avoid) for r in fam)]:
+            rp = [(float(q[0]), float(q[1])) for q in ring]
+            if len(rp) < 3 or min(q[0] for q in rp) - pad > x1 or max(q[0] for q in rp) + pad < x0 or min(q[1] for q in rp) - pad > y1 or max(q[1] for q in rp) + pad < y0:
+                continue  # a keep-out beyond the marsh's reach cuts nothing
+            g = ShapelyPolygon(rp).buffer(0)
+            cuts.append(g.buffer(pad) if pad else g)
+        out = keep.difference(unary_union(cuts)) if cuts else keep
+    except ValueError, GEOSException:  # pragma: no cover - buffer(0) repairs every ring a placer records [287: a degenerate outline keeps the drop honest]
+        return None
+    if keep.area > 0.0 and out.area >= keep.area - 1e-6:
+        return pts  # nothing the scatter refuses lies in it: the outline IS the drawn ground, vertex for vertex
+    parts = [g for g in getattr(out, "geoms", [out]) if not g.is_empty and g.geom_type == "Polygon" and g.area > 0.0]
+    if not parts:
+        return None
+    return _keyholed(max(parts, key=lambda g: g.area))
+
+
+def marsh_ground(M: Any, only: Any = None, but: Any = ()) -> list[list[Pt]]:
+    """Every recorded marsh ring - the ONE reading of "is this in the marsh" (feature 287, M7; woods S3).
+
+    Since M7 a marsh's record IS the ground its reeds are drawn on (`drawn_ground`), so this is the drawn marsh. `only`
+    names the roles to read (None: every role), `but` the roles to leave out - the ways leave out the `defense` belt, whose
+    approach is a causeway, and the belt's alder reads the toe and the waterside only. Rings of under three points are
+    not ground and are skipped."""
+    out: list[list[Pt]] = []
+    for m in M.get("marshes") or []:
+        role = m.get("role")
+        if (only is not None and role not in only) or role in but:
+            continue
+        ring = [(float(q[0]), float(q[1])) for q in m.get("poly") or []]
+        if len(ring) >= 3:
+            out.append(ring)
+    return out
+
+
 def bank_rings(dikeponds: Any, near: Any) -> list[list[tuple[float, float]]]:
     """Every fish pond's mulberry bank near the marsh, WHOLE - each ring as drawn, never thinned (feature 281; the reason is
     at the call in `marsh`). Lifted to module level so a test can hold the whole ring without a scatter to throw into it."""
@@ -262,7 +318,16 @@ class WetGroundMixin:
             self.field_polys if _outside else (),
             self.M.get("pond") if role == "pond_fringe" else None,
         )
-        self.wet_polys.append([(float(px), float(py)) for px, py in poly])
+        # ...AND THE RECORD IS THE GROUND THE REEDS ARE DRAWN ON (feature 287, M7): the outline less every area the scatter
+        # below refuses - the padded paddies, the no-build blocks, the swept clearings, `avoid` - one ring (`drawn_ground`).
+        # The scatter is thrown over the same bounding box and thinned by the same feather as before, and a mark is kept only
+        # inside this ring, so the ink and the record are one shape. Nothing left: nothing is drawn or recorded.
+        _ground = drawn_ground(poly, self.field_polys, self.block_polys, self.clearings, avoid)
+        if _ground is None:
+            self.M["meta"].setdefault("marsh_dropped", []).append({"role": role, "why": "no open ground left"})
+            return
+        drawn = [(round(px, 1), round(py, 1)) for px, py in _ground]  # at the record's grain, so the scatter keeps a mark in exactly what is recorded
+        self.wet_polys.append(list(drawn))
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
         x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
@@ -329,7 +394,8 @@ class WetGroundMixin:
         keep.rings(_banks, slot=2, reach=max(_pads))
         keep.segs(self._watercourse_segs(0.0), slot=3, reach=max(_pads) + 2.0)
         crescents = self.M.get("crescent_ponds", [])  # read once (feature 218)  # base = the drawn half-width; the query adds 2 px + the mark's pad in the SAME association the linear scan used
-        ring = RingIndex(poly)  # the outline, indexed once per marsh (feature 145; the why is on RingIndex)
+        ring = RingIndex(drawn)  # the drawn ground, indexed once per marsh (feature 145; the why is on RingIndex): a mark is kept only in the record
+        rim = RingIndex(poly)  # ...and the outline the feather thins from, as it always did (feature 287, M7: the ink moves only where the record does)
 
         def _sparse(
             px: float, py: float, drop: float, mound_pad: float = 0.0, blade_up: float = 0.0
@@ -360,7 +426,7 @@ class WetGroundMixin:
                 return True  # reeds fringe the shore, they do not float on open water
             if blade_up and pond and ((px - pond[0]) / pond[2]) ** 2 + ((py - blade_up - pond[1]) / pond[3]) ** 2 < 1.0:
                 return True  # ...and neither do the blade TIPS, which is the reach that actually crosses a rim
-            ed = ring.edge_within(px, py, feather)
+            ed = rim.edge_within(px, py, feather)
             return ed is not None and random.random() > (ed / feather) ** drop
 
         g: list[str] = []
@@ -408,20 +474,21 @@ class WetGroundMixin:
         self._mark_groups.append((self.add(''.join(g), cls="marsh"), marks))  # `g` holds nothing today; the marks are flushed into this slot at finish
         random.setstate(st)
         self._cover_n += 1
+        dx0, dx1, dy0, dy1 = min(q[0] for q in drawn), max(q[0] for q in drawn), min(q[1] for q in drawn), max(q[1] for q in drawn)
         self.M["marshes"].append(
             {
-                "x": round((x0 + x1) / 2, 1),
-                "y": round((y0 + y1) / 2, 1),
-                "w": round(x1 - x0, 1),
-                "h": round(y1 - y0, 1),
+                "x": round((dx0 + dx1) / 2, 1),
+                "y": round((dy0 + dy1) / 2, 1),
+                "w": round(dx1 - dx0, 1),
+                "h": round(dy1 - dy0, 1),
                 "rot": 0,
                 "role": role,
                 "seq": self._cover_n,
-                "poly": [[round(px, 1), round(py, 1)] for px, py in poly],
+                "poly": [[round(px, 1), round(py, 1)] for px, py in drawn],  # the drawn ground (feature 287, M7)
             }
         )
         if role != "pond_fringe":  # the wet valley TOE (and the defensive belt) is UNBUILDABLE: register it as a no-build keep-out
-            blk = [(round(px, 1), round(py, 1)) for px, py in poly]
+            blk = [(round(px, 1), round(py, 1)) for px, py in drawn]
             self.block_polys.append(blk)  # so nothing is placed/dug on a bog (a thin pond-fringe shore ring is exempt)
             self.marsh_blocks.append(blk)  # ...and the scrub scatter treats it as the marsh it is (soft), not as a building (hard)
 
@@ -434,7 +501,7 @@ class WetGroundMixin:
         Marsh drawn so far is what is checked, so this only helps a way laid AFTER its water; the
         `defense` belt is exempt for the same reason it is exempt from the check (its approach IS a
         causeway, and few constricted approaches are the point of it)."""
-        wet = [[(float(a), float(b)) for a, b in m["poly"]] for m in self.M.get("marshes", []) if m.get("role") != "defense" and m.get("poly")]
+        wet = marsh_ground(self.M, but=("defense",))
         if not wet or len(pts) < 2:  # a caller may hand over an already-clipped stub; there is nothing to walk back
             return pts
         out = [(float(q[0]), float(q[1])) for q in pts]

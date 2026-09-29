@@ -8,6 +8,7 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_dist, segments_cross
 from l7r.diagram.settlement._geom import PointGrid, boxed_grid, boxed_ring_hit, boxed_rings, boxed_segs
+from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.settlement.rolling.bearing import turned_box
 
 from ..consts import Poly
@@ -65,7 +66,7 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
     sw, sh = px(HOUSEHOLD_BAMBOO_FT[0]), px(HOUSEHOLD_BAMBOO_FT[1])
     wx, wy = plan.wind
     fields = [list(f) for f in s.field_polys]
-    marsh = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("poly")]
+    marsh = marsh_ground(s.M)
     pond = s.M.get("pond")
     lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(6.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
     footing = Footing(s, fields, marsh)  # the static ground, indexed once for every strip this pass tests (feature 218)

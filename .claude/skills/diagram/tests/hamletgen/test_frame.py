@@ -86,36 +86,63 @@ def test_stage_notice_reseats_a_board_the_frame_would_lose(monkeypatch):
     assert len(s.M["kosatsuba"]) == 1, "old board not popped"
 
 
-def test_the_confluence_reserves_its_own_room_in_the_crop(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+def test_the_confluence_reserves_its_own_room_in_the_view() -> None:
     """Feature 230, settlement-review passes 6 and 7. Where the drain meets the passing brook, that junction is a
-    FEATURE - the thing the third sink exists to show - and the crop ignores watercourses because they are
-    runners that trail off the edge, so one was drawn 7.4 ft outside the sheet with none of its trunk in view.
-    Predicting the frame back in `stage_sink` cannot work: the frame is decided here. The junction reserves
-    itself instead, the way the title pocket does."""
-    from l7r.diagram.hamletgen import frame as fr
+    FEATURE - the thing the third sink exists to show - and the crop ignores watercourses because they are runners that
+    trail off the edge, so one was drawn 7.4 ft outside the sheet with none of its trunk in view. The junction reserves
+    itself as content, the way the title pocket does - in `frame_extras`, which the view is decided by (feature 287)."""
+    from l7r.diagram.hamletgen.hinterland.frame import frame_extras, frame_for
+    from l7r.diagram.hamletgen.sink import BROOK_JOIN_TRUNK
+    from l7r.diagram.settlement import Settlement
 
     from ._builders import a_plan
 
-    calls: list[list[tuple[float, float, float, float]]] = []
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.M["houses"] = [{"x": 600.0, "y": 600.0, "w": 40.0, "h": 30.0, "rot": 0}]
+    plan.title_pocket, plan.title_pocket_outside = (590.0, 590.0, 610.0, 610.0), False  # an inside pocket reserves nothing
+    plan.confluence = (1200.0, 900.0)
+    got = frame_extras(s, plan)
+    assert got, "the junction is reserved as content"
+    x0, y0, x1, y1 = got[0]
+    assert x0 < 1200.0 < x1 and y0 < 900.0 < y1, "and the reservation is centered on the junction"
+    assert (x1 - x0) >= BROOK_JOIN_TRUNK, "with a trunk's length of room around it"
+    vx, vy, vw, vh = frame_for(s, plan)
+    assert vx + vw >= x1 and vy + vh >= y1, "the view decided takes the junction in"
+    plan.title_pocket_outside = True
+    assert frame_extras(s, plan)[0] == plan.title_pocket, "an OUTSIDE pocket is content too"
 
-    class _Crop:
-        M = {"meta": {}, "houses": [], "lanes": [], "kosatsuba": []}
 
-        def crop_to_content(self, margin=30, extra=()):  # type: ignore[no-untyped-def]
-            calls.append(list(extra))
+def test_stage_frame_takes_exactly_the_view_decided_and_records_a_drift() -> None:
+    """Feature 287, M6: the view is decided ONCE, at the end of `stage_hinterland`, and `stage_frame` sets exactly that view
+    - never a second computation of it. The violating case: a frame-setting feature placed after the decision (here a
+    house far off the cluster) would have moved a recomputed crop; the view stays the decided one, and the difference is
+    recorded as `meta.view_drift` so the pool test can hold that no stage after the decision sets the frame."""
+    from l7r.diagram.hamletgen import frame as fr
+    from l7r.diagram.hamletgen.hinterland.frame import frame_for
+    from l7r.diagram.settlement import Settlement
 
-        def title(self, *_a, **_k):  # type: ignore[no-untyped-def]
-            pass
+    from ._builders import a_plan
 
     plan = a_plan()
-    plan.title_pocket_outside = False
-    plan.confluence = (1200.0, 900.0)
-    monkeypatch.setattr(fr, "title_pocket", lambda _s, _p: (0.0, 0.0, 10.0, 10.0))  # the pocket is exercised where it lives
-    fr.stage_frame(_Crop(), plan)  # type: ignore[arg-type]
-    assert calls and calls[0], "the junction is reserved as content"
-    x0, y0, x1, y1 = calls[0][0]
-    assert x0 < 1200.0 < x1 and y0 < 900.0 < y1, "and the reservation is centered on the junction"
-    assert (x1 - x0) >= fr.BROOK_JOIN_TRUNK, "with a trunk's length of room around it"
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.meta(name=plan.spec.name, scale="hamlet", ftpx=1, down_deg=90)
+    s.M["houses"] = [{"x": 600.0, "y": 600.0, "w": 40.0, "h": 30.0, "rot": 0}, {"x": 800.0, "y": 700.0, "w": 40.0, "h": 30.0, "rot": 0}]
+    plan.title_pocket, plan.title_pocket_outside = (620.0, 620.0, 700.0, 680.0), False
+    plan.view = frame_for(s, plan)
+    fr.stage_frame(s, plan)
+    assert tuple(s.M["meta"]["view"]) == plan.view, "the crop takes the decided view"
+    assert "view_drift" not in s.M["meta"], "nothing moved the frame after the decision"
+
+    t = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    t.meta(name=plan.spec.name, scale="hamlet", ftpx=1, down_deg=90)
+    t.M["houses"] = [dict(h) for h in s.M["houses"]]
+    decided = frame_for(t, plan)
+    plan.view = decided
+    t.M["houses"].append({"x": 1100.0, "y": 700.0, "w": 40.0, "h": 30.0, "rot": 0})  # placed AFTER the decision
+    fr.stage_frame(t, plan)
+    assert tuple(t.M["meta"]["view"]) == decided, "the decided view, not a recomputed one"
+    assert t.M["meta"]["view_drift"][2] > 0 and t.M["meta"]["view_drift"][0] == 0, "the drift says the right edge would have moved"
 
 
 def test_a_board_with_no_compliant_verge_still_faces_the_way_a_reader_sees_it_by() -> None:

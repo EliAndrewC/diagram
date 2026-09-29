@@ -4,6 +4,7 @@ import math
 from typing import TYPE_CHECKING, Any
 
 from .._geom import CanopyArea, point_in_poly
+from ..land.wet import marsh_ground
 from ._helpers import _BELT_GAP_FT, _belt_axis
 from .grove_blocks import GroveBlocks, Seats
 from .groves import bamboo_mark
@@ -260,8 +261,7 @@ class StandsMixin:
             # cleared ground there, so the outline is not the drawn marsh. The crops' padded keep-out was tried before that
             # and was worse still. The copse is the grove the review measured, and the parcels' own marsh keep-out is the
             # precedent it asked for.
-            dikes=[dk["outline"] for dk in self.M.get("dikes", [])]
-            + ([[(float(q[0]), float(q[1])) for q in mk["poly"]] for mk in self.M.get("marshes") or [] if len(mk.get("poly") or []) >= 3] if role == "copse" else []),
+            dikes=[dk["outline"] for dk in self.M.get("dikes", [])] + (marsh_ground(self.M) if role == "copse" else []),
             water=[(wl, whw + cr) for wl, whw in water_lines],
             corridors=corr,
             circles=occ,
@@ -621,7 +621,7 @@ class StandsMixin:
         # A BELT CROWN IN THE MARSH IS ALDER (feature 261, Sawada's belt on its toe's reed edge): the record's woody stage at
         # a reed margin is alder or willow (research/vegetation.html, the marsh margin), and alder is the tree of a
         # wetland's fertile edge, so where the windbreak's ground runs into the recorded marsh its trees are drawn as one
-        _wet = [[(float(a), float(b)) for a, b in m["poly"]] for m in self.M.get("marshes") or [] if m.get("role") in ("toe", "waterside") and m.get("poly")] if role == "windbreak" else []
+        _wet = marsh_ground(self.M, only=("toe", "waterside")) if role == "windbreak" else []
         alder = 0
         bamboo = 0  # the bamboo marks inked low under the windbreak's crowns (269 B29, `_draw_grove`)
         # THE VILLAGE BELT IS DRAWN IN ITS ROLLED FORM (269 B30, `windbreak_belt`; research/vegetation/270): conifer-led, its

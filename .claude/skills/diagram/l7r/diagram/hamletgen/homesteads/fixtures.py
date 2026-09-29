@@ -8,8 +8,10 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_dist, segments_cross
 from l7r.diagram.settlement._geom import boxed_ring_hit
+from l7r.diagram.settlement._geom.water_index import crosses_a_stream
 from l7r.diagram.settlement._knobs import knob_rng
 from l7r.diagram.settlement.farm_fixtures import FIXTURE_FT, PERSIMMON_CROWN_FT, WOODPILE_FORM_FT
+from l7r.diagram.settlement.land.wet import marsh_ground
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
@@ -261,7 +263,7 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
     px = s.px
     g = px(_WALL_GAP_FT)
     fields = [list(f) for f in s.field_polys]
-    marsh = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("poly")]
+    marsh = marsh_ground(s.M)
     pond = s.M.get("pond")
     lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(3.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
     footing = Footing(s, fields, marsh)  # the static ground, indexed once per pass (feature 218)
@@ -787,8 +789,9 @@ def across_the_brook(s: Settlement, house: Pt, seat: Pt) -> bool:
     """Would this fixture stand across a stream from the house it serves (feature 261 FR-013)? The same rule, and the
     same guess, as `Settlement._parts_across_stream` for the homestead's own parts: the line from the house to the
     seat crosses no reach of any stream. Mizuguchi drew a privy and a persimmon on the far bank of the brook that runs
-    past their house's door."""
-    return any(segments_cross(house, seat, poly[k], poly[k + 1]) for f in s.M.get("streams", []) for poly in (f.get("poly") or [],) for k in range(len(poly) - 1))
+    past their house's door. The body is `crosses_a_stream`, the one predicate the homestead's own parts and the
+    finished-map test read too (feature 287, FR-003)."""
+    return crosses_a_stream(house, seat, s.M.get("streams", []))
 
 
 def yard_ring(hw: float, hh: float, g: float, w: float, d: float) -> list[tuple[float, float, float, float]]:

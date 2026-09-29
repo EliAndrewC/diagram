@@ -708,6 +708,27 @@ def test_plot_pond_fits_the_polygon_not_the_bbox():
         assert 100 <= px <= 190 and 100 <= py <= 170  # every rim point inside the plot
 
 
+def test_plot_pond_refuses_a_neighbor_corner_inside_the_rim_that_the_old_core_let_through():
+    """Feature 287 T04 (FR-003, water W29): the pond's placer and its test read ONE predicate on the FULL rim. The
+    constructed case is where the two used to disagree: a neighbor's corner 1.5 px inside the first-size pond's rim,
+    outside the 3 px inset core the placer used to ask - so the old placer drew the pond there and the test failed
+    it. Now the placer shrinks until the corner is clear, and the recorded pond passes the test's own call."""
+    from l7r.diagram.waterfields.ring_rules import crosses_pond_rim
+
+    s = Settlement(600, 600, seed=1)
+    s.meta(name="W", scale="village", ftpx=1, down_deg=90)
+    rect = {"poly": [(100.0, 100.0), (190.0, 100.0), (190.0, 170.0), (100.0, 170.0)]}
+    first_rx = 45.0 * 0.82  # the first size `_plot_pond` tries on this plot: rx 36.9 about the centroid x 145
+    corner = [(145.0 + first_rx - 1.5, 135.0), (200.0, 120.0), (200.0, 150.0)]  # a neighbor poking in from the east
+    assert (corner[0][0] - 145.0) / (first_rx - 3.0) > 1.0, "the corner lies outside the old 3 px core - the disagreement"
+    assert crosses_pond_rim(corner, (145.0, 135.0, first_rx, 35.0 * 0.82)), "and inside the full rim"
+    assert s._plot_pond(rect, [rect["poly"], corner]) is True
+    (fp,) = s.M["field_ponds"]
+    pond = (fp["x"], fp["y"], fp["rx"], fp["ry"])
+    assert fp["rx"] < round(first_rx, 1), "the pond shrank off the corner"
+    assert not crosses_pond_rim(corner, pond) and not crosses_pond_rim(rect["poly"], pond)
+
+
 def test_hem_on_water_sees_a_stream_and_a_pond_separately():
     """`build_comb` lays the fan from pure geometry and `draw_comb_field` used to render it blind - it
     was the ONLY placer that consulted nothing, so a dry-hem plot could be drawn straight across a

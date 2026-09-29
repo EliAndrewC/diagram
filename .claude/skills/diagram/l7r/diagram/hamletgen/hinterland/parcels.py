@@ -8,10 +8,11 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross
 from l7r.diagram.settlement._geom import PointGrid, RingIndex, boxed_grid, seg_reach_index
+from l7r.diagram.settlement.land.wet import marsh_ground
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
-from .frame import content_box, title_pocket
+from .frame import content_box, frame_bounds, title_pocket
 
 CROP_MARGIN = 48.0  # the one crop margin, shared by stage_frame's crop_to_content call and the
 # predicted-kept-window math in open_ground_patches - two hardcoded 48s would drift
@@ -97,6 +98,33 @@ def fit_square_parcel(half: float, floor_half: float, fits: Any) -> float | None
         if fits(cand):
             return cand
     return None
+
+
+WET_SHARE_CAP = 0.5
+"""The most of a woodland parcel that may stand in marsh: half its sample grid (`woodland_commons_on_dry_ground`). A
+managed coppice is not a swamp forest - standing water rots the stools and the cut cannot be carried out."""
+
+
+def parcel_wet_share(ring: Sequence[Pt], marshes: Sequence[list[Pt]]) -> float:
+    """The share of a parcel's 5 x 5 sample grid, over its DRAWN ring's bounding box, that stands in a marsh ring.
+
+    ONE PREDICATE (feature 287, FR-003; woods W12), read by `open_ground_patches` on the ring it is about to draw and by
+    the gate's `test_a_woodland_commons_stands_on_dry_ground`. They used to disagree: the scan probed 3 x 3 points of the
+    circumscribing square while the gate sampled 5 x 5 over the drawn ring's box, so a marsh finger between the probes
+    could pass the scan and fail the rule. `marshes` is `marsh_ground(M)` - the drawn marsh (M7)."""
+    if not marshes or len(ring) < 3:
+        return 0.0
+    xs = [float(p[0]) for p in ring]
+    ys = [float(p[1]) for p in ring]
+    x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
+    soaked = 0
+    for i in range(5):
+        for j in range(5):
+            x = x0 + (x1 - x0) * (i + 0.5) / 5
+            y = y0 + (y1 - y0) * (j + 0.5) / 5
+            if any(point_in_poly(x, y, m) for m in marshes):
+                soaked += 1
+    return soaked / 25.0
 
 
 _EDGE_SAMPLE = 30.0  # px between the samples `crop_edge_points` takes along a field edge: a third of the scan's 90 px lattice
@@ -237,8 +265,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
     # wet seat renders as a claimed woodland with almost no trees). "Still open" is not "dry":
     # a candidate square must keep every sample point out of every recorded marsh poly.
     # `woodland_commons_on_dry_ground` gates the result.
-    marshes: list[Poly] = [[(float(v[0]), float(v[1])) for v in mp.get("poly") or []] for mp in s.M.get("marshes", [])]
-    marshes = [mp for mp in marshes if len(mp) >= 3]
+    marshes: list[Poly] = marsh_ground(s.M)  # the drawn marsh (feature 287, M7)
 
     def _wet(x: float, y: float, half_: float) -> bool:
         return any(point_in_poly(x + ddx * half_, y + ddy * half_, mp) for mp in marshes for ddx in (-1.0, 0.0, 1.0) for ddy in (-1.0, 0.0, 1.0))
@@ -272,11 +299,11 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
     # shared CROP_MARGIN), and at this stage it is final except for features that only GROW it -
     # so a parcel held inside it now is inside the kept view later.
     # `woodland_commons_within_the_frame` gates the result.
-    _cb = s._crop_boxes(city=False)
-    _cx = [v for b in _cb for v in (b[0], b[1])] or [0.0, plan.W]
-    _cy = [v for b in _cb for v in (b[2], b[3])] or [0.0, plan.H]
-    _fx0, _fy0 = max(0.0, min(_cx) - CROP_MARGIN), max(0.0, min(_cy) - CROP_MARGIN)
-    _fx1, _fy1 = min(plan.W, max(_cx) + CROP_MARGIN), min(plan.H, max(_cy) + CROP_MARGIN)
+    # SINCE FEATURE 287 (M6) the window IS the view function: `frame_bounds`, the crop's own body over the crop's boxes and
+    # the ground the frame reserves (an outside pocket, the confluence, the brook beside the field), which the view decided
+    # at the end of this stage contains - a frame only GROWS after the scan (the belt's face), and a parcel's share inside a
+    # larger frame is never smaller.
+    _fx0, _fy0, _fx1, _fy1 = frame_bounds(s, plan)
 
     chosen: list[Poly] = []
     centers: list[tuple[float, float, float]] = []  # (x, y, this parcel's OWN exclusion radius - see the stride roll)
@@ -627,7 +654,14 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                     # little size variety on a map that just declined to seat a parcel anyway.
                     continue
                 _hw, _hh = half_used * math.sqrt(_asp), half_used / math.sqrt(_asp)
-                chosen.append(_parcel_outline(s, x, y, _hw, _hh, _bc, _bs))
+                _ring = _parcel_outline(s, x, y, _hw, _hh, _bc, _bs)
+                # ...AND THE RING THAT IS DRAWN STANDS ON DRY GROUND, by the rule's own measure (feature 287, FR-003; woods
+                # W12): the 3x3 probe above samples the circumscribing SQUARE, and a marsh finger threading between its
+                # probes can still put most of the drawn ring in the wet - so the ring is asked `parcel_wet_share`, the one
+                # predicate the gate reads too, and a wet ring is refused for the next scored seat
+                if parcel_wet_share(_ring, marshes) > WET_SHARE_CAP:
+                    continue
+                chosen.append(_ring)
                 centers.append((x, y, size * (1.15 + 1.35 * s._hjit(x, y, 74.0))))
     return chosen
 

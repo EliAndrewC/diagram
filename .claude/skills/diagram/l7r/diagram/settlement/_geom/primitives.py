@@ -53,22 +53,33 @@ def seg_dist(px: float, py: float, a: Pt, b: Pt) -> float:
     return math.hypot(px - cx, py - cy)
 
 
-def seg_in_ellipse_core(a: Pt, b: Pt, cx: float, cy: float, rx: float, ry: float, inset: float = 4.0) -> bool:
-    """Does segment a-b pass through the CORE of this ellipse - the water inside its rim?
+def ring_meets_ellipse(ring: Sequence[Sequence[float]], cx: float, cy: float, rx: float, ry: float) -> bool:
+    """Does any edge of the closed `ring` cross this ellipse's rim or run inside it - a bund through a field pond?
 
-    The shared predicate of the feature-012 field pond's containment rule: `_plot_pond` (placement)
-    and `field_ponds_sunk_into_one_plot` (the verdict) both call this one function, so the siter and
-    the check cannot disagree - the same discipline as `paddy_wet_rings` in extents.py. The core is the
-    ellipse shrunk by `inset` px (rim stroke + reed fringe): a bund may TOUCH the shore - the host
-    plot's own ring does - but a bund running through open water means the pond spans plots.
-    Computed in the scaled space where the core is the unit circle, so one segment-to-center
-    distance answers it for any ellipse."""
-    crx, cry = max(1.0, rx - inset), max(1.0, ry - inset)
-    ax, ay = (float(a[0]) - cx) / crx, (float(a[1]) - cy) / cry
-    bx, by = (float(b[0]) - cx) / crx, (float(b[1]) - cy) / cry
-    dx, dy = bx - ax, by - ay
-    t = max(0.0, min(1.0, -(ax * dx + ay * dy) / max(1e-12, dx * dx + dy * dy)))
-    return math.hypot(ax + t * dx, ay + t * dy) < 1.0
+    THE ONE PREDICATE of the field pond's rule (feature 287, FR-003, water W29): `_plot_pond` shrinks a pond until no
+    ring meets it, and `waterfields/ring_rules.crosses_pond_rim` - the finished-map test's call - is this function.
+    They used to disagree: the placer asked `seg_in_ellipse_core`, a core shrunk 3 px inside the rim, while the test
+    failed any ring with one vertex inside the full ellipse and the next outside. So the placer could let a bund cut
+    the pond's outer 3 px and the test fail it, and the test could pass a bund chording the pond between two outside
+    vertices that the placer, reading the core, would have refused.
+
+    WHICH READING, AND WHY (the test's, as the water design W29 records). The research makes the pond "a low pocket"
+    among the flat, flooded fields (`research/fields.html`, "In-field features"); the rule drawn from it is that the
+    pocket is dug INTO one basin with the field tiling around it, because a bund running through open water reads as
+    a flood rather than a pocket (the rule's own statement, `test_a_field_pond_is_sunk_into_one_plot`). A bund meeting
+    the water at all - across the rim, chording it, or standing in it - is that flood, so the full ellipse is the
+    rule and the 3 px inset was a placement tolerance that let the placer pass what the rule forbids. Exact: each
+    edge's closest approach to the center, measured in the scaled space where the ellipse is the unit circle. A ring
+    that only TOUCHES the rim (closest approach exactly 1) does not meet it."""
+    n = len(ring)
+    for i in range(n):
+        ax, ay = (float(ring[i][0]) - cx) / rx, (float(ring[i][1]) - cy) / ry
+        bx, by = (float(ring[(i + 1) % n][0]) - cx) / rx, (float(ring[(i + 1) % n][1]) - cy) / ry
+        dx, dy = bx - ax, by - ay
+        t = max(0.0, min(1.0, -(ax * dx + ay * dy) / max(1e-12, dx * dx + dy * dy)))
+        if math.hypot(ax + t * dx, ay + t * dy) < 1.0:
+            return True
+    return False
 
 
 def ring_touches(cx: float, cy: float, r: float, ring: Poly) -> bool:

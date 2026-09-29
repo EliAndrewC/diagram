@@ -8,6 +8,7 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
 from l7r.diagram.settlement._geom.indexes import BambooObstacles
+from l7r.diagram.settlement.land.wet import marsh_ground
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
@@ -151,7 +152,7 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     # the one thing a farmer digs a trench to stop, so this is a placement error rather than a legibility one. The
     # gate could not catch it either: `bamboo_stands_clear_of_paddies` reads paddy outlines only (widened with this).
     polys += [([(float(a_), float(b_)) for a_, b_ in (o.get("poly") or [])], px(12.0)) for o in s.M.get("dry_plots", []) if len(o.get("poly") or []) >= 3]
-    polys += [([(float(a), float(b)) for a, b in m["poly"]], px(6.0)) for m in s.M.get("marshes", []) if m.get("poly")]
+    polys += [(ring, px(6.0)) for ring in marsh_ground(s.M)]
     polys += [(list(plan.belt), px(10.0))] if plan.belt else []
     polys += [(list(w), px(20.0)) for w in plan.woodland_polys]
     pond = s.M.get("pond")

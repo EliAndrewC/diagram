@@ -518,6 +518,28 @@ def test_a_map_whose_blue_sample_is_all_demoted_still_exhibits_one_flooded_basin
     assert [min(q[1] for q in p["poly"]) > 1200 for p in kept if p["fill"] == FLOODED] == [True], "a surviving draw is left alone"
 
 
+def test_the_tint_pass_judges_the_flooded_needle_on_the_ring_the_test_reads() -> None:
+    """Feature 287 T04 (FR-003, water W20): the tint pass and the test read ONE predicate, `ring_rules.needle` on the
+    ring as recorded. The constructed case is where the two used to disagree: a basin with a hairline spur on its
+    bund - blunt on the 1.0 px deduplicated ring the pass alone used to read (at its stricter 25 deg), a needle under
+    15 deg on the raw ring the test reads. The pass's clause (`_needle`) now calls the test's predicate on that ring.
+
+    Asked of the clause and not through `close_seams` because a hand-built ring does not reach the tint judgment
+    unchanged: measured 2026-09-29, the pass's planting and welding re-lay a lone spurred basin on the grid (its ring
+    came back a 46 x 34 rectangle) before the tint loop reads it."""
+    from l7r.diagram.waterfields.banks import _TINT_MIN_APEX, pointed_ring
+    from l7r.diagram.waterfields.ring_rules import needle
+    from l7r.diagram.waterfields.seams.close import _needle
+
+    spur = [(600.0, 1266.0), (620.0, 1266.0), (620.05, 1265.1), (620.2, 1266.0), (640.0, 1266.0), (640.0, 1292.0), (600.0, 1292.0)]
+    assert needle(spur) and not pointed_ring(dedup_ring(spur, 1.0), _TINT_MIN_APEX), "the disagreement: a needle raw, blunt deduplicated"
+    assert _needle(spur), "the tint pass now sees the needle the test sees"
+    assert not _needle(_rect(600, 1266, 640, 1292))
+    # judged AS RECORDED: a spur the manifest's 0.1 px rounding flattens is no needle to the test, and none to the pass
+    flat = [(600.0, 1266.0), (620.0, 1266.0), (620.004, 1265.96), (620.008, 1266.0), (640.0, 1266.0), (640.0, 1292.0), (600.0, 1292.0)]
+    assert needle(flat) and not _needle(flat)
+
+
 def test_a_triangle_never_wears_the_water_tint() -> None:
     """The fill clause: a triangle's solidity is 1.0 and a capped wedge has no sharp vertex, so both passed every
     earlier clause and read as little ponds (Sawada, Kashikawa). One that fills less than its rectangle is demoted,

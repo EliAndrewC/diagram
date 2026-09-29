@@ -70,6 +70,46 @@ TITLE_BAND_ALLOWANCE = 140.0
 TITLE_POCKET_RISE = 30 * 1.2 + 46 + 24 + 12 + 8 + 48  # ft: the pocket's height (`title_pocket`'s placard) with its 8 ft gap and 48 ft of step-out
 
 
+def frame_extras(s: Settlement, plan: SitePlan) -> list[tuple[float, float, float, float]]:
+    """The ground a hamlet's frame reserves as CONTENT beyond the crop's own boxes (x0, y0, x1, y1): an OUTSIDE title
+    pocket, the confluence with a trunk's length round it, and the brook's reach beside the field. `stage_frame` used to
+    assemble these itself; `frame_for` reads them now, so the view decided early carries them (feature 287, M6)."""
+    from ..sink import BROOK_JOIN_TRUNK  # noqa: PLC0415 - sink imports the hinterland package
+
+    pocket = title_pocket(s, plan)  # the pocket the belt was dented around (feature 150) - reserved once
+    extra = [pocket] if plan.title_pocket_outside else []  # an OUTSIDE reservation is content the crop must take in; an inside one changes nothing
+    # ...AND THE CONFLUENCE, WITH A LENGTH OF ITS TRUNK (feature 230, settlement-review passes 6 and 7). Where the drain
+    # meets the passing brook, that junction is a FEATURE - the thing the third sink exists to show - and the crop ignores
+    # watercourses because they are runners that trail off the edge, so Sawada's was drawn 7.4 ft outside the sheet with
+    # none of its 359 ft of trunk in view. The junction and a trunk's length round it are reserved as content, the
+    # mechanism the title pocket uses.
+    if plan.confluence is not None:
+        _cx, _cy = plan.confluence
+        _t = BROOK_JOIN_TRUNK * 0.5  # half the trunk each way: the junction, and enough brook below it to read as one
+        extra.append((_cx - _t, _cy - _t, _cx + _t, _cy + _t))
+    return extra + brook_beside_the_field(s)  # ...and the brook's reach beside the field, which is picture, not a runner off the edge
+
+
+def frame_for(s: Settlement, plan: SitePlan) -> tuple[float, float, float, float]:
+    """THE VIEW, as the crop would frame the map as it stands now: the crop's frame-setting boxes (`_crop_boxes`, the
+    source `crop_to_content` reads), `frame_extras`, `CROP_MARGIN`, clamped to the canvas - `content_view`, the crop's own
+    body. Called ONCE into `plan.view` at the end of `stage_hinterland`'s seating, after the last frame-setting feature
+    (the belt, whose inner face sets the frame - GM 2026-08-26), and `stage_frame` sets exactly that view (feature 287,
+    M6). Before the decision it is also the frame a placer asks "will this be on the page" of (`frame_bounds`)."""
+    from l7r.diagram.settlement.core import content_view  # noqa: PLC0415 - kept beside its one use
+
+    from .parcels import CROP_MARGIN  # noqa: PLC0415 - parcels imports this module
+
+    return content_view(s._crop_boxes(city=False), frame_extras(s, plan), CROP_MARGIN, s.W, s.H)
+
+
+def frame_bounds(s: Settlement, plan: SitePlan) -> tuple[float, float, float, float]:
+    """The view as (x0, y0, x1, y1): `plan.view` once it is decided, and until then `frame_for` of the map as it stands -
+    ONE function for every placer that asks where the page will be (feature 287, M6)."""
+    vx, vy, vw, vh = plan.view if plan.view is not None else frame_for(s, plan)
+    return (vx, vy, vx + vw, vy + vh)
+
+
 def scatter_frame(s: Settlement, plan: SitePlan) -> tuple[float, float, float, float]:
     """The frame the scatter predicts and throws within (feature 224, GM 2026-09-11: "the scatter still throws its
     off-map blades"): the crop's own frame-setting boxes at this moment (`_crop_boxes`, the source `crop_to_content`
@@ -81,6 +121,14 @@ def scatter_frame(s: Settlement, plan: SitePlan) -> tuple[float, float, float, f
     ground from `SCATTER_PAD` out (settlement-review, 2026-09-11)."""
     from .parcels import CROP_MARGIN  # noqa: PLC0415 - parcels imports this module
 
+    if plan.view is not None:
+        # THE VIEW IS DECIDED (feature 287, M6): the scatter throws within it and `SCATTER_PAD` past it, nothing predicted -
+        # the pad for a mark centered just outside that still paints in, the north's allowance for the title band, which
+        # `title()`'s last rung grows above the map after the crop
+        vx, vy, vw, vh = plan.view
+        return (vx - SCATTER_PAD, vy - SCATTER_PAD - TITLE_BAND_ALLOWANCE, vx + vw + SCATTER_PAD, vy + vh + SCATTER_PAD)
+    # BEFORE THE DECISION - the marsh's throw, which the view depends on (the title pocket's search reads the marsh) - the
+    # frame is still a prediction, and the breach record (`finish`) audits it
     boxes = s._crop_boxes(city=False)
     xs = [v for b in boxes for v in (b[0], b[1])]
     ys = [v for b in boxes for v in (b[2], b[3])]

@@ -654,17 +654,29 @@ class Settlement(
         (We used to extend the frame to preserve 2/3 of a trailing commons, but the GM wants the frame tight to
         the real content - a graveyard, the pond - never held open by empty back-slope grazing, so the commons
         now clips like the marsh instead of dragging the frame out.)"""
+        self.crop_to_view(content_view(self._crop_boxes(city=False), extra, margin, self.W, self.H))
+
+    def crop_to_view(self: Settlement, view: tuple[float, float, float, float]) -> None:
+        """Frame the map to a view DECIDED EARLIER (feature 287, M6): the woods' canopy is flushed, seeing the complete
+        map, and the view is set exactly. `crop_to_content` is this with the view computed on the spot; a scripted hamlet
+        decides its view once, at the end of `stage_hinterland`, and hands that view here."""
         self.flush_tree_stands()  # the woods' canopy draws HERE, seeing the complete map (see flush_tree_stands)
-        _boxes = self._crop_boxes(city=False)
-        _boxes = [
-            *_boxes,
-            *[(b[0], b[2], b[1], b[3], "title-pocket") for b in extra],
-        ]  # `extra` (x0, y0, x1, y1): ground reserved as content - the title pocket a full sheet had to make room for (feature 150; `_crop_boxes` keys x0, x1, y0, y1)
-        hx = [v for b in _boxes for v in (b[0], b[1])]
-        hy = [v for b in _boxes for v in (b[2], b[3])]
-        # clamp the frame to the canvas: never open the view PAST the map edge (an EDGE feature like the forest
-        # fills to the canvas edge, so its side must be the frame edge with no margin gap - else it reads as
-        # "stopping short"). Content within the canvas is unaffected (villages crop tighter than this anyway).
-        x0, y0 = max(0, min(hx) - margin), max(0, min(hy) - margin)
-        x1, y1 = min(self.W, max(hx) + margin), min(self.H, max(hy) + margin)
-        self.set_view(round(x0), round(y0), round(x1 - x0), round(y1 - y0))
+        self.set_view(*view)
+
+
+def content_view(boxes: Sequence[tuple[float, float, float, float, str]], extra: Sequence[tuple[float, float, float, float]], margin: float, W: float, H: float) -> tuple[float, float, float, float]:
+    """The view `crop_to_content` frames: the frame-setting `boxes` (x0, x1, y0, y1, what - `crop_boxes`) and the `extra`
+    ground reserved as content (x0, y0, x1, y1 - the title pocket a full sheet had to make room for, feature 150), grown
+    by `margin`, clamped to the canvas and rounded. ONE body (feature 287, M6): `crop_to_content` and a hamlet's view
+    decision (`hamletgen.hinterland.frame.frame_for`) both read it, so the view decided early is the view the crop takes."""
+    _boxes = [*boxes, *[(b[0], b[2], b[1], b[3], "title-pocket") for b in extra]]
+    hx = [v for b in _boxes for v in (b[0], b[1])]
+    hy = [v for b in _boxes for v in (b[2], b[3])]
+    if not hx:  # nothing sets a frame yet (a bare canvas a placer asks early): the whole canvas is the page
+        return (0, 0, round(W), round(H))
+    # clamp the frame to the canvas: never open the view PAST the map edge (an EDGE feature like the forest
+    # fills to the canvas edge, so its side must be the frame edge with no margin gap - else it reads as
+    # "stopping short"). Content within the canvas is unaffected (villages crop tighter than this anyway).
+    x0, y0 = max(0, min(hx) - margin), max(0, min(hy) - margin)
+    x1, y1 = min(W, max(hx) + margin), min(H, max(hy) + margin)
+    return (round(x0), round(y0), round(x1 - x0), round(y1 - y0))
