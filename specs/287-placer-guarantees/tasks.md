@@ -1,12 +1,12 @@
 # Tasks - feature 287, every finished-map rule guaranteed by its placer
 
-Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (M1-M9, P0-P9, D1-D8). The rules: [`plan-rules.md`](plan-rules.md) and
+Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (M1-M9, P0-P9, D1-D12). The rules: [`plan-rules.md`](plan-rules.md) and
 `design/*.json` (a rule is `area:id`). Each owner task lands its rules' guarantees with a unit test of the placer on
 constructed inputs including the violating case (FR-004), and retires the tests its design rows name (FR-007).
 
 ## P0 - Measurements owed
 
-- [ ] T01 [US1] The polder's two failures read from the record (research R5); seed 31's yard over a paddy measured; the board terminal counted over cohort 1-48 and the probes once the strict caption predicate exists (labels L4)
+- [ ] T01 [US1] P0: the polder's two failures read from the record (research R5); seed 31's yard over a paddy; the belt cases D8 leaves; the field pond's knob (D9); the seats D2 refuses (households unseated today over cohort 1-48, the probes and the pool); the board terminal counted once the strict caption predicate exists (labels L4, D12)
       research: rendering
 
 ## P1 - The shared mechanisms, no placer changed yet

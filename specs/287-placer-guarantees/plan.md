@@ -86,7 +86,10 @@ The gate's test phase before (SC-005): 5,258 tests in 57.13 s (observed 2026-09-
 
 - **P0 - Measurements owed before building** (the designs name them): the Polder coverage seeds 12 and 19, naming the polder grid's two failures (water
   W48); the board terminal - how many maps of cohort 1-48 and the probes reach "no verge in the view takes a board with a
-  clean caption" (labels L4); seed 31's yard over a paddy (homes). Recorded in research R4.
+  clean caption" (labels L4); seed 31's yard over a paddy (homes); the belt cases D8's mechanisms leave (a margin whose belt
+  cannot be planted 30 ft deep and whole, over cohort 1-48 and the probes); whether the field pond's count (water W29) is a
+  rolled knob (D9); and the seats D2 refuses (households unseated today over cohort 1-48, the probes and the pool).
+  Recorded in research R5.
 - **P1 - The reorders and the predicates**: M2, M6, M7 and M1's modules, with each predicate's unit test against its old
   test body; no placer changed yet.
 - **P2 - Water** (59 rules; `design-water.json`), **P3 - Homesteads** (47; M5 and M3's seat half - measured as it lands,
@@ -111,15 +114,19 @@ Each of these could read as a narrowing; they are put here rather than decided s
   candidate left, the design's fallback is taken when it stays inside the rule (draw it smaller within its researched range,
   or a stated alternative); a drop of a rolled or required feature is never a fallback - it is closed by constraining the
   knob or the candidates beforehand (D4, D9).
-- **D2 The seating floor holds by construction, not by a measured density** (homes H14). After the exhaustive pass over the
-  seat band, a household still unseated is seated by the next step in a fixed ladder, each within its rules: its envelope
-  shrunk within its researched range through M5's quota; then the seat band itself grown upslope (away from the field and
-  the toe - the side the settlement can always extend on the canvas, since the canvas is sized to the settlement and the
-  frame crops to its content) and the pass run over the new ground. The band grows until every household is seated; the
-  loop terminates because each round adds ground no earlier round had. No shortfall is emitted and nothing re-rolls.
+- **D2 The seating floor holds where the site is chosen** (homes H14). The limits that bound a settlement's seat band are
+  named: H03 (every house within 700 ft of the field outline), the belt band reserved before the hem (D8), the resolved
+  cluster shape (D4), the drain (a dwelling above it) and the canvas. Within them, the site is chosen for its capacity by
+  the placer itself: `seat_cluster` takes a margin only if the homestead seat pass - the same placer, run on a copy of the
+  settlement over that margin's band, with M5's shrink of envelopes within their researched range - seats every household;
+  margins are tried in its ranking order, and the seating the chosen margin's pass found is the seating kept (one pass, not
+  a second roll). A site where no margin seats every household is refused at `stage_seat`, naming it, as impossible input
+  (D7's kind of refusal, before any house exists) - never a shortfall, never a re-roll. P0 counts the seeds of cohort 1-48,
+  the probes and the pool that reach it; if any live map or any cohort seed does, it goes to the GM with that count.
 - **D3 A fall into the wind is refused only where its geometry admits no wind-facing margin above the drain** (homes H30):
   H30's steps (1)-(3) are kept; at plan time the margins are computed from the envelope and the drain, and a fall - declared
-  or rolled - is refused or re-rolled at spec resolution only when no wind-facing margin above the drain exists. Sawada
+  or rolled - is refused (declared) or constrained (rolled: the fall's value space narrowed to falls with such a margin) at
+  spec resolution only when no wind-facing margin above the drain exists. Sawada
   (`down_deg=225`, seed 24, seating all 19 on a wind-facing margin) has one and is untouched.
 - **D4 The cluster shape resolves only over the shapes the chosen seat band allows** (homes H05), as labels L1 does for the
   board's seat: the band is chosen, the knob's value space is narrowed to the shapes that band admits (the ones the seat
@@ -141,7 +148,8 @@ Each of these could read as a narrowing; they are put here rather than decided s
   homestead envelope, so a household is seated only with room for it (woods W25), and D2's capacity ladder supplies the
   room; the hamlet's own burial ground (`burial.py`, `hamlet_burial='own'`) resolves `own` only where the edge seat finds a
   legal seat at resolve time, the knob narrowed to what the site affords as in D4 (the homes design's "for the owning
-  area" item, taken here); a field pond that is a rolled count (water W29) is treated the same way if the census of its
+  area" item, taken here) - a PINNED `own_ground` with no legal seat is refused at resolve time, naming it, as declared
+  input the site cannot honor (D7's kind); a field pond that is a rolled count (water W29) is treated the same way if the census of its
   knob confirms it is rolled, and otherwise recorded as not a rule.
 - **D10 A caption never overlaps, on any sheet** (labels L13, homes H29c): where the one placer has no free seat, it draws
   the caption on a leader line, and failing that enters it in the sheet's key - on hamlets, generated sheets and hand
