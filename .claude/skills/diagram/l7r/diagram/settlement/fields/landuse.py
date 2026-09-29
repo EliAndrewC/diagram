@@ -35,6 +35,19 @@ DIKEPOND_WATER_INSET = 23.0
 FRY_VILLAGE_SHARE = 0.7
 
 
+MULBERRY_ROW_FT = 5.5
+"""The spacing between rows of coppiced mulberry across a bank: two rows on the 11 ft bank drawn before feature 280, with the
+4.4 ft pitch along a row, gave the bush per ~23 sq ft the GM ruled (the premodern spacing, research/archetypes/140)."""
+
+
+def mulberry_row_ts(band: float) -> list[float]:
+    """Where the mulberry rows run across a bank `band` wide, as shares of it from the water's edge: one row per
+    `MULBERRY_ROW_FT`, at least two (feature 280, settlement-review of Kuwabata: the bank widened to 23 ft kept two rows
+    and the bushes thinned from one per 23 sq ft to one per 47)."""
+    n = max(2, round(band / MULBERRY_ROW_FT))
+    return [0.08 + 0.84 * (k + 0.5) / n for k in range(n)]
+
+
 def fry_pond_ids(chosen: Sequence[Any], area: Any, share: float) -> set[int]:
     """The ids of a fry village's fry ponds (feature 280 M60): the smallest parcels first, taken while their area stays
     within `share` of the block's whole pond area - so the nursery water is about that share, never more."""
@@ -472,7 +485,7 @@ class LandUseMixin:
         # The pitches are drawing calibrations from each plant's habit, not surveyed dikes (nothing read gives a
         # spacing along a dike, archetypes/230) - labeled so in the class entries.
         if crop == "mulberry":
-            for t in (0.30, 0.72):  # two planted rows across the band
+            for t in mulberry_row_ts(DIKEPOND_WATER_INSET):  # the planted rows across the band
                 for x, y in walk(s_w + t * (s_b - s_w), 4.4):
                     jx, jy = x + rng.uniform(-1.3, 1.3), y + rng.uniform(-1.3, 1.3)
                     r = rng.uniform(2.2, 3.6)

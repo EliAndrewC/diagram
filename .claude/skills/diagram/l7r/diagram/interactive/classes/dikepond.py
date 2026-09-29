@@ -51,7 +51,7 @@ class MulberryDike(Kind):
     """
     What: The raised earthen dike around a fish pond, piled from the pond's own dredged mud and planted with
     coppiced mulberry - low bushes stripped for leaf several times a year to feed silkworms. Drawn here as a
-    planted collar about seven feet wide around each pond, with a canal running between neighbors.
+    planted collar about twenty-three feet wide around each pond, with a canal running between neighbors.
 
     Why: The dike is the silk side of the loop: mulberry leaf feeds the silkworms, the silkworm waste feeds the
     fish, the dredged pond mud re-fertilizes the dike. The prescription was six parts water to four parts
@@ -70,13 +70,9 @@ class MulberryDike(Kind):
     per twenty-three square feet, the late-Qing figure, by the GM's ruling that the map keeps the premodern
     spacing. No page read gives how wide a bush grew, so the four and a half to seven feet drawn is this
     project's own figure. And the dike is drawn as a RING, the band between the parcel's outer edge and the
-    water's own outline, so hovering a dike lights its bank and not the pond inside it. So: the collar drawn
-    around each pond is about two meters where the traditional figure is a dike of six to ten, and the width
-    of a bush's crown is this project's own.
+    water's own outline, so hovering a dike lights its bank and not the pond inside it. So: the width of a bush's crown is this project's own.
 
-    Caveat: the collar drawn
-    around each pond is about two meters where the traditional figure is a dike of six to ten, and the width
-    of a bush's crown is this project's own.
+    Caveat: the width of a bush's crown is this project's own.
 
     Name: mulberry dike
     Covers: the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it
@@ -217,7 +213,7 @@ class PigSty(Kind):
 
 class FryPond(Kind):
     """
-    What: A small nursery pond where carp fry are reared, then grown on as fingerlings, before they are stocked
+    What: A nursery pond where carp fry are reared, then grown on as fingerlings, before they are stocked
     into the grow-out ponds - drawn only in a fry village.
 
     Why: Fry were a trade of their own in the delta, and one township's. The young carp that stocked the ponds

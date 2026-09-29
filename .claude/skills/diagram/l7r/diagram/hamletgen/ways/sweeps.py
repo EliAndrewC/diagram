@@ -983,7 +983,6 @@ def reseat_on_way(lanes: Sequence[Mapping[str, Any]], i: int, before: Sequence[P
     return moved
 
 
-
 def _sweep_doubled_tails(s: Settlement) -> int:
     """A lane whose end runs ALONGSIDE another way has met that way where it first came alongside, and ends there
     (settlement-review of Kuwabata, feature 261: a join lane ran back 122 ft beside the connector, 12.7 ft apart and

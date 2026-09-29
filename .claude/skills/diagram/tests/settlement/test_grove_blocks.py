@@ -91,3 +91,12 @@ def test_seats_files_incrementally_and_matches_the_linear_test() -> None:
         s.add(x, y)
         placed.append((x, y))
     assert s.too_near(10.5, 10.5) and s.too_near(299.0, 41.0) and not s.too_near(150.0, 150.0)
+
+
+def test_a_bamboo_stand_grown_by_a_crown_keeps_the_copse_out() -> None:
+    """Feature 280 (settlement-reviews of Kashikawa and Mizuguchi): copse crowns stood inside the take-yabu."""
+    from l7r.diagram.settlement.homestead_parts.stands import grown_ring
+
+    ring = grown_ring([(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)], 5.0)
+    assert all(abs(abs(x - 5.0) - (5.0 + 5.0 / 2**0.5)) < 1e-9 for x, _ in ring), "each corner pushed a crown's radius out"
+    assert grown_ring([(3.0, 3.0), (3.0, 3.0), (3.0, 3.0)], 2.0)[0] == (3.0, 3.0), "a degenerate ring does not divide by zero"

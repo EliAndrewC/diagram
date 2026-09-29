@@ -60,10 +60,18 @@ def test_the_woodpile_is_a_wood_shed_and_a_rolled_size_draws_at_its_own_feet():
     s.meta(name="T", scale="hamlet", ftpx=1)
     s.farm_fixture("woodpile", 100.0, 100.0, rot=0.0, of=(80.0, 90.0))
     rec = s.M["farm_fixtures"][-1]
-    assert (rec["w"], rec["h"]) == (24.0, 12.0) and "form" not in rec and s.top_cls[-1] == "woodpile"
-    assert "<line" in s.top[-1] and s.top[-1].count("<circle") >= 9, "the shed's ridge and its log ends along 24 ft"
+    assert (rec["w"], rec["h"]) == (24.0, 12.0) and "form" not in rec and s.top_cls[-1] == "wood shed"
+    assert "<line" in s.top[-1] and s.top[-1].count("<circle") >= 7, "the shed's ridge and its log ends along 24 ft (one to 3.2 ft)"
     s.farm_fixture("privy", 200.0, 200.0, size_ft=(18.0, 12.0))
     assert (s.M["farm_fixtures"][-1]["w"], s.M["farm_fixtures"][-1]["h"]) == (18.0, 12.0)
     for kind, form in (("coop", "shed"), ("woodpile", "kizuma"), ("woodpile", "shed")):
         with pytest.raises(ValueError, match="form"):
             s.farm_fixture(kind, 100.0, 100.0, form=form)
+
+
+def test_a_privy_carries_its_jar_so_a_large_one_is_not_read_as_a_wood_shed():
+    """Feature 280 (settlement-review of Mizuguchi): at the rolled sizes a plain ridged roof read as the wood shed."""
+    s = Settlement(W=400, H=400, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    s.farm_fixture("privy", 100.0, 100.0, size_ft=(24.0, 12.0))
+    assert s.top[-1].count("<circle") == 1 and "#3E2A12" in s.top[-1] and s.top_cls[-1] == "privy"

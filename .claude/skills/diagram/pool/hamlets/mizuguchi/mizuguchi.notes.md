@@ -849,4 +849,4 @@ The GM's ruling of 2026-09-28 - "We should eliminate anything which is only mode
 - **The take-yabu thicket**, where the hamlet rolls one, stands at the settlement's edge behind its back row, on dry ground, not at the
   field margin (M49, vegetation/640).
 
-Measured on this roll (2026-09-29): 12 houses; bath rooms 3, wood sheds 5, privies 11, storehouses 2, bamboo stands 1; house turns 0 to 12 degrees; every declared fixture seated.
+Measured on this roll (2026-09-29): 12 houses; bath rooms 3 (by seat: floored_rooms 1, stable_end 2; the hamlet's seat stable_end), wood sheds 5, privies 11 (5 on the sun side), storehouses 2, bamboo stands 1, woodland stands 1; house turns 0 to 12 degrees; every declared fixture seated.

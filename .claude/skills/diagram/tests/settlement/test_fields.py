@@ -910,3 +910,11 @@ def test_a_dike_pond_bank_is_a_ring_around_its_water():
     assert outer.startswith("M ") and outer.endswith("Z") and outer != pond_d
     bank, water = s.M["dikeponds"][0]["bank"], s.M["dikeponds"][0]["water"]  # the records are untouched (FR-003)
     assert min(x for x, _y in bank) < min(x for x, _y in water) and max(x for x, _y in bank) > max(x for x, _y in water)
+
+
+def test_the_mulberry_rows_grow_with_the_bank_so_the_spacing_holds() -> None:
+    """Feature 280 (settlement-review of Kuwabata): a 23 ft bank kept two rows and the bushes thinned by half."""
+    from l7r.diagram.settlement.fields.landuse import mulberry_row_ts
+
+    assert len(mulberry_row_ts(11.0)) == 2 and len(mulberry_row_ts(23.0)) == 4 and len(mulberry_row_ts(3.0)) == 2
+    assert all(0.0 < t < 1.0 for t in mulberry_row_ts(23.0))

@@ -34,7 +34,7 @@ DIRECTION is not invented: it is the bearing of this map's own connector track w
 
 ### Features
 
-- **burial ground**: Kuwabata keeps its own ground, east-north-east of the hamlet beyond its last houses, holding the urns brought home from the main village's cremation ground.
+- **burial ground**: Kuwabata keeps none of its own: its dead lie in the main village's ground, by the shrine that is the setting's parish temple.
 - **retirement house**: Kuwabata keeps the custom of the separate retirement house: 7 of its 16 homesteads have one, a small roof of its own a ken or two off the farmhouse's back wall or flank, its door facing away.
 
 ## The declaration
@@ -771,8 +771,12 @@ The GM's ruling of 2026-09-28 - "We should eliminate anything which is only mode
   a hamlet's own ground rests only on twentieth-century records).
 - **The take-yabu thicket**, where the hamlet rolls one, stands at the settlement's edge behind its back row, on dry ground, not at the
   field margin (M49, vegetation/640).
+- **The mulberry rows grow with the bank**: four rows across the 23 ft bank, one per 5.5 ft, so the bushes keep the ruled spacing of
+  about one per 23 sq ft (two rows on the wider bank had thinned them to one per 47).
+- **A pig sty stands within 320 ft of a farmhouse**, the farthest main drew: the fry village takes the smaller ponds, and the
+  grow-out ponds it leaves lie out to the block's far end, so a household with none in reach keeps no sty.
 
-Measured on this roll (2026-09-29): 16 houses; bath rooms 5, wood sheds 7, privies 14, storehouses 4, bamboo stands 8; house turns -3 to 18 degrees; every declared fixture seated.
+Measured on this roll (2026-09-29): 16 houses; bath rooms 5 (by seat: main_door 3, stable_end 2; the hamlet's seat main_door), wood sheds 7, privies 14 (4 on the sun side), storehouses 4, bamboo stands 5, woodland stands 0, pig sties 2 of 7 rolled (no sty beyond 320 ft of a farmhouse); house turns -3 to 18 degrees; every declared fixture seated.
 
 And on the pond block:
 

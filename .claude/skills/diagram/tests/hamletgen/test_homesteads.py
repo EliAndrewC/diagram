@@ -78,7 +78,8 @@ def test_farmstead_fixtures_roll_a_share_in_each_band_and_seat_one_of_a_kind_per
     assert sum(r["kind"] == "shrine" for r in recs) <= max(1, round(shares["shrine"] * len(houses)))
     assert all(tuple(r["of"]) in {(h["x"], h["y"]) for h in houses} for r in recs)
     assert len(s.placed) == len(houses) + n, "every seated fixture reserves its ground"
-    assert s.M["meta"]["bath_seats_drawn"] == {"joined": sum(r["kind"] == "bath" for r in recs)}
+    baths = [r for r in recs if r["kind"] == "bath"]
+    assert sum(s.M["meta"]["bath_seats_drawn"].values()) == len(baths) and all(r["seat"] in ("main_door", "stable_end", "floored_rooms") for r in baths)
 
 
 def test_farmstead_fixtures_honor_the_spec_floor() -> None:
@@ -751,9 +752,11 @@ def test_bath_room_seats_abut_their_walls_the_hamlets_seat_first() -> None:
     from l7r.diagram.hamletgen.homesteads.fixtures import bath_room_seats
 
     seats = bath_room_seats("stable_end", 46.0, 28.0, 9.0, 6.0)
-    assert seats[0] == (-26.0, 0.0, 6.0, 9.0) and len(seats) == 8
-    assert all(ly - d / 2 == pytest.approx(14.0) for _lx, ly, _w, d in seats if ly > 14.0), "the door seats on the front wall"
-    assert bath_room_seats("floored_rooms", 46.0, 28.0, 9.0, 6.0)[0] == (26.0, 0.0, 6.0, 9.0)
+    assert seats[0] == ((-26.0, 0.0, 6.0, 9.0), "stable_end") and len(seats) == 10
+    assert all(ly - d / 2 == pytest.approx(14.0) for (_lx, ly, _w, d), _n in seats if ly > 14.0), "the door seats on the front wall"
+    assert bath_room_seats("floored_rooms", 46.0, 28.0, 9.0, 6.0)[0] == ((26.0, 0.0, 6.0, 9.0), "floored_rooms")
+    door = [q for q, n in bath_room_seats("main_door", 46.0, 28.0, 9.0, 6.0) if n == "main_door"]
+    assert len(door) == 4 and all(abs(q[0]) == 26.0 and q[1] == 14.0 - 4.5 for q in door[2:]), "then the end walls' front corners"
 
 
 def test_the_privy_and_the_bath_room_take_a_rolled_size_and_the_wood_shed_goes_to_the_larger_houses() -> None:
@@ -886,3 +889,11 @@ def test_a_shrine_corner_named_by_the_compass_is_that_corner_on_a_turned_house()
         ca, sa = math.cos(math.radians(rot)), math.sin(math.radians(rot))
         lx, ly = shrine_corner_local(30.0, -20.0, ca, sa)
         assert (lx * ca - ly * sa, lx * sa + ly * ca) == (pytest.approx(30.0), pytest.approx(-20.0))
+
+
+def test_a_large_privy_s_sun_side_reach_keeps_its_near_edge_where_a_one_ken_privy_s_is() -> None:
+    """Feature 280 (settlement-review of Sawada): a 24 x 12 ft privy never fitted the one-ken reach and fell to the north-east."""
+    from l7r.diagram.hamletgen.homesteads.fixtures import PRIVY_SUN_MAX_FT, privy_sun_reach_ft
+
+    assert privy_sun_reach_ft(6.0, 6.0) == PRIVY_SUN_MAX_FT == privy_sun_reach_ft(5.0, 5.0)
+    assert privy_sun_reach_ft(24.0, 12.0) == PRIVY_SUN_MAX_FT + 9.0

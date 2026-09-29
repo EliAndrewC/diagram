@@ -54,7 +54,7 @@ class Farmhouse(Kind):
 
 class StorageShed(Kind):
     """
-    What: A roofed storehouse against the back of the farmhouse, for grain, straw and tools, on the larger farms.
+    What: A roofed storage shed built onto the back of the farmhouse - a storehouse - for grain, straw and tools, on the larger farms.
 
     Why: Before modern times a farmstead carried far fewer outbuildings than the twentieth century's counts: a village
     count of 1885, which its historian reads back to the last years of the shogunate, gives about one and a half
@@ -249,7 +249,7 @@ class Privy(Kind):
     key = 'privy'
 
 
-class Woodpile(Kind):
+class WoodShed(Kind):
     """
     What: The household's firewood, kept in a wood shed of its own: a roofed shed a step off the house, its open front
     showing the log ends.
@@ -268,14 +268,14 @@ class Woodpile(Kind):
     or a flank - is a guess.
 
 
-    Name: woodpile
+    Name: wood shed
     Covers: `farm_fixtures[kind=woodpile]` - the wood shed
     Label: accurate
     Sources: boso-no-mura-kigoya, koshigaya-shishi-noumin-jukyo, oamishirasato-choshi-kaoku
     Entry: research/homesteads.html - 'Where was the firewood stacked, and how big was the pile?'; 'The farmstead's fixtures'
     """
 
-    key = 'woodpile'
+    key = 'wood shed'
 
 
 class ManureHeap(Kind):
@@ -305,7 +305,7 @@ class ManureHeap(Kind):
     key = 'manure heap'
 
 
-class Bathhouse(Kind):
+class BathRoom(Kind):
     """
     What: A small bath room joined to the farmhouse - the tub under the house's own roof line, at its main door or
     at the far end of its stable wing.
@@ -324,14 +324,14 @@ class Bathhouse(Kind):
     Caveat: the odds between the places are a guess, and so is giving the floored-room seat to the headman; the tub
     drawn in it is the map's mark for what the room is.
 
-    Name: bathhouse
+    Name: bath room
     Covers: `farm_fixtures[kind=bath]` - the bath room joined to the house
     Label: accurate
     Sources: tsuda-1991-nikko-shasan-minka, mizumaki-goemonburo
     Entry: research/homesteads.html - 'Did a farmhouse have a bath shed, and where did it stand?'; 'The farmstead's fixtures'
     """
 
-    key = 'bathhouse'
+    key = 'bath room'
 
 
 class HenCoop(Kind):

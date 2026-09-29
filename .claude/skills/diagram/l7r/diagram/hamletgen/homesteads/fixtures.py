@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+from collections import Counter
 from collections.abc import Mapping, Sequence
 from typing import Any
 
@@ -125,6 +126,14 @@ PRIVY_SUN_MIN_FT = 18.0  # the sun-side search starts at the house wall and step
 # was chosen for and it did not hold. Wang & Ochiai gives a DIRECTION, not a distance, so the radius is
 # ours to set and it belongs against the house: the three attested seats are all at the wall.
 PRIVY_SUN_MAX_FT = 48.0
+
+
+def privy_sun_reach_ft(w_ft: float, d_ft: float) -> float:
+    """How far from its house's center the sun-side search may seat a privy of `w_ft` x `d_ft`: `PRIVY_SUN_MAX_FT`, plus the
+    half-length it has past the one-ken default, so its near edge stands no farther out than a one-ken privy's."""
+    return PRIVY_SUN_MAX_FT + max(0.0, (max(w_ft, d_ft) - 6.0) / 2.0)
+
+
 PRIVY_SUNNY_SHARE = 0.727  # the share of outhouses seated SE-to-S: Wang & Ochiai 2022 measured 72.7% in
 # Arakawa village, and the GM (2026-08-29) ruled the figure be used literally rather than rounded. The
 # reason the record gives is fermentation, not wind - see the note at the seat roll.
@@ -359,6 +368,7 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
             # are the house's own walls, refused every seat before or beside the house: measured on the first roll of this
             # change, no privy on the five pool maps took the front or stable seat and no front-yard bath stood in front.
             yard_lead: list[tuple[float, float, float, float]] = []
+            bath_names: dict[int, str] = {}
             # candidate seats as (lx, ly, w_local, h_local); the fixture is drawn raked with the house
             if kind == "privy":
                 seat = {  # the four attested seats (`_PRIVY_SEATS`); -x is the shed end of the house, where the doma and its stable are
@@ -409,7 +419,10 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                 # first that is clear. Bearings are COMPASS bearings in map space, converted back through
                 # the house's own rake, so a raked farmhouse still gets a true southeast seat.
                 _sun: list[tuple[float, float, float, float]] = []
-                for _r_ft in range(int(PRIVY_SUN_MIN_FT), int(PRIVY_SUN_MAX_FT) + 1, 4):
+                # ...THE RADIUS IS TO THE PRIVY'S CENTER, so a privy of a rolled size reaches the same NEAR EDGE as a one-ken
+                # one: the reach grows by the half-length it has past 6 ft (settlement-review of Sawada, feature 280: every
+                # privy of 18 x 12 ft or more fell through to the north-east seat, 7 of 17, the failure feature 152 fixed)
+                for _r_ft in range(int(PRIVY_SUN_MIN_FT), int(privy_sun_reach_ft(w / px(1.0), d / px(1.0))) + 1, 4):
                     for _b in range(1125, 2026, 75):  # 112.5 to 202.5 degrees, tenths
                         _bd = _b / 10.0
                         _rr = px(float(_r_ft))
@@ -531,7 +544,9 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
             elif kind == "bath":
                 # THE BATH ROOM (feature 280 M22, `bath_room_seats`): joined to the house - against its wall, no gap - at the
                 # hamlet's seat, then at the other attested seats; it is never a building standing off in the yard.
-                yard_lead = bath_room_seats("floored_rooms" if h.get("role") == "headman" else bath_seat, hw, hh, w, d)
+                _named = bath_room_seats("floored_rooms" if h.get("role") == "headman" else bath_seat, hw, hh, w, d)
+                yard_lead = [q for q, _n in _named]
+                bath_names = {id(q): _n for q, _n in zip(yard_lead, (_n for _q, _n in _named), strict=True)}
                 seats = []
             elif kind == "coop":
                 # ...and the back seat is not DEAD CENTRE on the wall, which is the stamp itself: at
@@ -584,6 +599,9 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                 _rungs += [(_o, 0.0, _ring) for _o in (px(8.0) * _k for _k in (1, 2, 3, 4))] + [(0.0, _o, _ring) for _o in (px(8.0) * _k for _k in (1, 2, 3, 4))]
             if kind == "bath":  # a room joined to the house has no seat out in the yard: no rung walks it away from the wall
                 _rungs = []
+            if kind == "woodpile":  # the shed stands a step off its wall: no rung walks it out across the dooryard (settlement-reviews of
+                # Inashiro and Kuwabata, feature 280: 25-37 ft out, between farmsteads); a house with no room passes it on
+                _rungs = [r for r in _rungs if max(abs(r[0]), abs(r[1])) <= px(8.0)]
             _lead: list[tuple[float, float, Sequence[tuple[float, ...]]]] = [(0.0, 0.0, _t) for _t in (field_table, sun_table, yard_lead) if _t]
             _rungs = _lead + _rungs
             _strict_ids = {id(seats), id(field_table), id(sun_table)}
@@ -615,6 +633,8 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     s.block_polys.append(ring)
                     if _table is field_table:
                         s.M["farm_fixtures"][-1]["seat"] = "roadside" if roadside.get(id(_seat)) else "field_edge"
+                    elif kind == "bath":
+                        s.M["farm_fixtures"][-1]["seat"] = bath_names[id(_seat)]
 
                     if kind == "privy":
                         privy_at = privy_seat[i] = (lx, ly)
@@ -630,7 +650,7 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
     short = {k: targets[k] - have[k] for k in targets if have[k] < targets[k]}
     if short:
         s.M["meta"]["farm_fixtures_unseated"] = short
-    s.M["meta"]["bath_seats_drawn"] = {"joined": sum(1 for r in s.M.get("farm_fixtures", []) if r.get("kind") == "bath")}
+    s.M["meta"]["bath_seats_drawn"] = dict(sorted(Counter(str(r.get("seat")) for r in s.M.get("farm_fixtures", []) if r.get("kind") == "bath").items()))
     return count
 
 
@@ -656,18 +676,20 @@ def fixture_size_ft(s: Settlement, kind: str, hx: float, hy: float) -> tuple[flo
     return FIXTURE_FT[kind]
 
 
-def bath_room_seats(first: str, hw: float, hh: float, w: float, d: float) -> list[tuple[float, float, float, float]]:
+def bath_room_seats(first: str, hw: float, hh: float, w: float, d: float) -> list[tuple[tuple[float, float, float, float], str]]:
     """The bath room's seats in the house frame (feature 280 M22, research/homesteads/740), `first` tried first then the
     other attested seats: beside the MAIN DOOR (the front wall, either side of the door at its middle), at the far end of
     the STABLE WING (the -x end wall, where the doma and its stable are), or joined to the FLOORED ROOMS (the +x end wall).
-    Each abuts its wall - a room of the house, not a building beside it."""
+    Each abuts its wall - a room of the house, not a building beside it. Each seat carries its name, which the record keeps.
+    Beside the main door the front wall comes first, then the end walls' front corners - the work yard lies before the front
+    wall, and on Kuwabata no bath room found room there (settlement-review, feature 280: the seat was declared, never drawn)."""
     front, side = hh / 2 + d / 2, hw / 2 + d / 2
     table = {
-        "main_door": [(hw * 0.22 + w / 2, front, w, d), (-(hw * 0.22 + w / 2), front, w, d)],
+        "main_door": [(hw * 0.22 + w / 2, front, w, d), (-(hw * 0.22 + w / 2), front, w, d), (side, hh / 2 - w / 2, d, w), (-side, hh / 2 - w / 2, d, w)],
         "stable_end": [(-side, 0.0, d, w), (-side, -hh * 0.25, d, w), (-side, hh * 0.25, d, w)],
         "floored_rooms": [(side, 0.0, d, w), (side, -hh * 0.25, d, w), (side, hh * 0.25, d, w)],
     }
-    return table[first] + [q for k, v in table.items() if k != first for q in v]
+    return [(q, first) for q in table[first]] + [(q, k) for k, v in table.items() if k != first for q in v]
 
 
 def yard_local(h: Mapping[str, Any], hx: float, hy: float, ca: float, sa: float) -> tuple[float, float, float, float] | None:

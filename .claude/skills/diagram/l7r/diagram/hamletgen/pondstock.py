@@ -59,6 +59,12 @@ def _bank_seats(parcel: list[Any], toward: Pt) -> list[tuple[Pt, float]]:
     return seats
 
 
+STY_HOUSE_REACH_FT = 320.0
+"""How far from a farmhouse a sty may stand: the farthest main drew (feature 233's sties, 155-320 ft). A sty is a household's,
+and once feature 280's fry village took the smaller ponds the grow-out ponds left lay out to the block's far end - sties
+480-1,235 ft from any house (settlement-review of Kuwabata); a household with no grow-out pond in reach keeps none."""
+
+
 def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
     """Pig sties on the ponds.
 
@@ -104,5 +110,8 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
         if seat is None:
             continue
         (x, y), rot = seat
+        if min(math.dist((x, y), (float(h["x"]), float(h["y"]))) for h in houses) > s.px(STY_HOUSE_REACH_FT):
+            continue
         s.pig_sty(x, y, rot=rot, pond=i)
         done += 1
+    s.M["meta"]["pond_stock"]["drawn"] = done

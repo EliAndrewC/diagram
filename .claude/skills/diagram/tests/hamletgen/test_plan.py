@@ -294,3 +294,18 @@ def test_a_byre_form_is_declarable_and_a_nonsense_one_refused() -> None:
     assert hg.HamletSpec(name="X", seed=4, byre_form="courtyard").byre_form == "courtyard"
     with pytest.raises(ValueError, match="byre_form"):
         hg.HamletSpec(name="X", seed=4, byre_form="barn")
+
+
+def test_a_sty_stands_within_a_household_s_reach_or_not_at_all() -> None:
+    """Feature 280 (settlement-review of Kuwabata): the grow-out ponds a fry village leaves lay far out, and sties followed."""
+    from l7r.diagram.hamletgen.pondstock import STY_HOUSE_REACH_FT, stage_pond_stock
+    from l7r.diagram.settlement import Settlement
+
+    plan = hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16, field_archetype="mulberry_dike_fishpond"))
+    parcel = [(390.0, 1560.0), (510.0, 1560.0), (510.0, 1640.0), (390.0, 1640.0)]
+    s = Settlement(W=900, H=1800, seed=1)
+    s.meta(name="X", scale="hamlet")
+    s.M["houses"] = [{"x": 450.0, "y": 450.0, "w": 46.0, "h": 28.0} for _ in range(8)]
+    s.M["dikeponds"] = [{"parcel": parcel, "water": parcel, "kind": "growout"}]
+    stage_pond_stock(s, plan)
+    assert STY_HOUSE_REACH_FT < 1560.0 - 450.0 and not s.M.get("pig_sties") and s.M["meta"]["pond_stock"]["drawn"] == 0

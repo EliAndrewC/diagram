@@ -35,7 +35,7 @@ DIRECTION is not invented: it is the bearing of this map's own connector track w
 ### Features
 
 - **threshing yard**: This map's harvest weather is settled, the regional default, so no rack is drawn by the houses: its racks would be put up out on the paddies after the harvest, which is the seasonal map's business and not drawn here (settled weather keeping the racks off the houses is our reading of the survey, which records racks gathered by the houses only on a coast of changeable weather).
-- **burial ground**: Inashiro keeps its own ground: a glade of graves cut into the windbreak west-north-west of the houses, beyond its last houses, holding the urns brought home from the main village's cremation ground. The land falls south, but the ground below the houses is paddy.
+- **burial ground**: Inashiro keeps none of its own: its dead lie in the main village's ground, by the shrine that is the setting's parish temple.
 - **retirement house**: Inashiro keeps the custom of the separate retirement house: 10 of its 15 homesteads have one, a small roof of its own a ken or two off the farmhouse's back wall or flank, its door facing away.
 
 ## Why it exists
@@ -1853,5 +1853,7 @@ The GM's ruling of 2026-09-28 - "We should eliminate anything which is only mode
   a hamlet's own ground rests only on twentieth-century records).
 - **The take-yabu thicket**, where the hamlet rolls one, stands at the settlement's edge behind its back row, on dry ground, not at the
   field margin (M49, vegetation/640).
+- **The woodland commons** came to one stand on this roll, north of the field, where the pre-280 roll drew three across it: the
+  re-packed houses moved the frame the stands must fit, and the stand count is rolled from the ground, not set.
 
-Measured on this roll (2026-09-29): 15 houses; bath rooms 4, wood sheds 6, privies 13, storehouses 2, bamboo stands 9; house turns -12 to 6 degrees; every declared fixture seated.
+Measured on this roll (2026-09-29): 15 houses; bath rooms 4 (by seat: main_door 1, stable_end 3; the hamlet's seat stable_end), wood sheds 6, privies 13 (5 on the sun side), storehouses 2, bamboo stands 9, woodland stands 1; house turns -12 to 6 degrees; every declared fixture seated.

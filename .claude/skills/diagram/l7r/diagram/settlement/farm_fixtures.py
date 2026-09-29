@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 # glyph rendering convention (GM 2026-08-27, T62; recorded as a map drawing convention in research/homesteads.html).
 # The interactive map's feature class per fixture kind (feature 134, spec FR-007) - the vocabulary
 # is the `interactive/classes/` package; a kind missing here is a KeyError at draw time, never silent ink.
-FIXTURE_CLASS = {"privy": "privy", "woodpile": "woodpile", "manure": "manure heap", "bath": "bathhouse", "coop": "hen coop", "shrine": "household shrine"}
+FIXTURE_CLASS = {"privy": "privy", "woodpile": "wood shed", "manure": "manure heap", "bath": "bath room", "coop": "hen coop", "shrine": "household shrine"}
 # THE MANURE FIXTURE HAS TWO ATTESTED FORMS (feature 150, GM 2026-08-28 choosing audit A2): the HEAP by the
 # privy or stable (Tohoku, Sugiura 1973) and the PIT - "pits made of earthenware, half buried in the ground at
 # the back of the building" and lined along the road (Fei 1939, Lake Tai). Two forms -> a knob, rolled per
@@ -71,14 +71,17 @@ class FarmFixturesMixin:
         if kind == "privy":
             g.append(f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w:.1f}" height="{h:.1f}" rx="1" fill="#8F7548" stroke="{edge}" stroke-width="1.1"/>')
             g.append(f'<line x1="{x0 + 1:.1f}" y1="0" x2="{-x0 - 1:.1f}" y2="0" stroke="#D8C08C" stroke-width="1"/>')
+            # the night-soil jar at one end - hidden by the roof, so a MAP DRAWING CONVENTION naming what the building is: at the
+            # rolled sizes (up to 24 x 12 ft, feature 280) a plain ridged roof read as the wood shed (settlement-review of Mizuguchi)
+            g.append(f'<circle cx="{x0 + min(w, h) * 0.4:.1f}" cy="{h * 0.22:.1f}" r="{min(w, h) * 0.2:.1f}" fill="#3E2A12" stroke="#D8C08C" stroke-width="0.5"/>')
         elif kind == "woodpile":
             # the wood shed (feature 280 M21): a roof, and along its open front a band of log ends - which a roof would hide from above,
             # so the band is a MAP DRAWING CONVENTION naming what the shed holds, as the byre's stall mouth names its beast
             g.append(f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w:.1f}" height="{h:.1f}" rx="1" fill="#9C7C4C" stroke="{edge}" stroke-width="1.1"/>')
             g.append(f'<line x1="{x0 + 1:.1f}" y1="{y0 + h * 0.3:.1f}" x2="{-x0 - 1:.1f}" y2="{y0 + h * 0.3:.1f}" stroke="#D8C08C" stroke-width="0.9"/>')  # the ridge
-            n = max(3, int(w / 2.6))
+            n = max(3, int(w / 3.2))  # log ends large enough to read at the fit zoom (settlement-review of Mizuguchi, feature 280)
             for i in range(n):
-                g.append(f'<circle cx="{x0 + (i + 0.5) * w / n:.1f}" cy="{-y0 - min(h, 3.0) * 0.45:.1f}" r="{min(h, 2.6) * 0.3:.1f}" fill="#C9A874"/>')
+                g.append(f'<circle cx="{x0 + (i + 0.5) * w / n:.1f}" cy="{-y0 - min(h, 4.0) * 0.4:.1f}" r="{min(h, 4.0) * 0.3:.1f}" fill="#E6CC96" stroke="#5A4326" stroke-width="0.4"/>')
 
         elif kind == "manure" and form == "pit":
             g.append(f'<circle cx="0" cy="0" r="{w / 2:.1f}" fill="#C9B384" stroke="#7A5A30" stroke-width="0.9"/>')  # the jar's rim, flush with the ground

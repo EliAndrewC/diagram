@@ -27,9 +27,9 @@ SPEC_CLASSES = [
     "threshing yard",
     "garden",
     "privy",
-    "woodpile",
+    "wood shed",  # feature 280: the woodpile is a wood shed
     "manure heap",
-    "bathhouse",
+    "bath room",  # feature 280: the bath is a room joined to the house
     "hen coop",
     "household shrine",
     "persimmon",

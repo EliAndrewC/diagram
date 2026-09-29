@@ -112,9 +112,7 @@ names.*
 
 ### Features
 
-- **burial ground**: Kashikawa keeps a burial ground of its own, northeast of the houses on open ground, well east of where
-  the windbreak ends; the windbreak stands northwest of them against the prevailing wind, and the grave in the paddy is one family's,
-  a separate thing.
+- **burial ground**: Kashikawa keeps none of its own: its dead lie in the main village's ground, by the shrine that is the setting's parish temple.
 
 - **threshing yard**: This map's harvest weather is settled, the regional default, so no rack is drawn by the houses: its racks would be put up out on the paddies after the harvest, which is the seasonal map's business and not drawn here (settled weather keeping the racks off the houses is our reading of the survey, which records racks gathered by the houses only on a coast of changeable weather).
 - **grave island**: Kashikawa's field grave takes the Japanese form: a small mound with its stones in the corner of a rice plot, against its bunds, not an island in the plot's middle (each hamlet takes one form).
@@ -647,7 +645,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - farmhouses: **20**
 - family form: **one_roof**, retirement houses **0**
 - farmstead fixtures: bath **5**, coop **18**, pit **9**, privy **17**, shrine **1**, woodpile **7**
-- notice board at the entrance, **(1075.2, 625.0)**: **20** of 20 households' ways out pass it
+- notice board at the entrance, **(1069.5, 648.3)**: **20** of 20 households' ways out pass it
 <!-- /census -->
 
 ## 2026-08-29 - feature 154: an `entrance` board on the windward fringe ate the shelter belt (CLOSED)
@@ -1041,4 +1039,4 @@ The GM's ruling of 2026-09-28 - "We should eliminate anything which is only mode
 - **The take-yabu thicket**, where the hamlet rolls one, stands at the settlement's edge behind its back row, on dry ground, not at the
   field margin (M49, vegetation/640).
 
-Measured on this roll (2026-09-29): 20 houses; bath rooms 5, wood sheds 7, privies 17, storehouses 4, bamboo stands 4; house turns -11 to 5 degrees; every declared fixture seated.
+Measured on this roll (2026-09-29): 20 houses; bath rooms 5 (by seat: floored_rooms 1, stable_end 4; the hamlet's seat stable_end), wood sheds 7, privies 17 (10 on the sun side), storehouses 4, bamboo stands 4, woodland stands 2; house turns -11 to 5 degrees; every declared fixture seated.

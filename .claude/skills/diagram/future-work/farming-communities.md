@@ -2296,3 +2296,22 @@ line in feature 280 (`specs/280-modern-only-sweep/outcomes.md`, one row per item
 - **M93, a knob candidate**: the communal windbreak is premodern; a ring around the settlement and a belt on the
   windward side alone are both read. Sketch: roll `windbreak_form` (ring / windward) in `SitePlan` and let the belt
   placer take an arc.
+
+## Found by feature 280's settlement-reviews (2026-09-29), measured and not yet fixed
+
+- **Two skeleton lanes on Kashikawa detour through open grazing.** Lane 8 (1270,943)->(1156,1282)->(1281,1239) and lane 10
+  (1008,1073)->(926,1284)->(1185,1196): the bends stand 140 and 232 ft from any house, and each lane is about 500 ft long
+  between ends 215-300 ft apart. The straight chord of each crosses a farmhouse and its yard; the ground round the yard's
+  corner was clear at landing, so the detour was made at routing time. Mechanism, unverified: the skeleton router keeps off the
+  houses' south-side sun lanes (`homestead_parts`, M41's 50 ft) and bends past them; `end_serves` and `_trim_to_service` test
+  a lane's ENDS only. Sketch: a detour test in `ways/sweeps.py` - a lane whose length exceeds 1.6 x its chord and whose
+  interior vertex is over 120 ft from every house is re-routed with the yard corners as candidate bends.
+- **The privy's sun-side share is under the ruled 0.727 on every scripted map** - measured on the rolls of 2026-09-29: Inashiro
+  5 of 13, Kashikawa 10 of 17, Kuwabata 4 of 14, Mizuguchi 5 of 11, Sawada 7 of 17; Sawada was 6 of 17 on main as well, so the
+  shortfall predates feature 280 (which widened the sun search for the larger privies it rolled). Sketch: record the realized
+  share in `meta` beside the target and walk the sector's bearings before its radii.
+- **Kuwabata's block holds less water than its parcels** - 0.62 of a parcel, about 0.48 of the block once the 22 ft corridors
+  between parcels count. Whether Qu Dajun's "eight tenths ... water and dikes both" (archetypes/610) takes in the ground between
+  ponds is a research question; if it does, the block, not the parcel, is the thing to calibrate.
+- **Inashiro's entrance board stands 15 ft inside the last junction** on the connector: the south-west household joins beyond
+  it and passes within sight of the board, not by its face. Sketch: seat the entrance board at or beyond the outermost junction.

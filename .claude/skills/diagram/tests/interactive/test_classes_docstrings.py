@@ -29,6 +29,10 @@ SINCE_189: dict[str, tuple[str, ...]] = {
     "duck pen": (),
     # feature 280 M57 (research/archetypes/150): a sluice through each pond's dike is a modern manual's form - retired
     "pond sluice": (),
+    # feature 280 (settlement-review of Inashiro): the heading named the form eliminated - the bath is a room joined to the
+    # house (M22) and the firewood is kept in a wood shed (M21); renamed, the prose and data carried over unchanged
+    "bathhouse": ("bath room",),
+    "woodpile": ("wood shed",),
 }
 #: Kinds the map draws that the snapshot's registry did not have at all.
 ADDED_SINCE_189: tuple[str, ...] = (

@@ -37,6 +37,18 @@ class BankNear:
         return any(math.dist((x, y), it[0]) <= self.reach and not any(segments_cross((x, y), it[0], a, b) for a, b in self.barriers) for it in self.points.near(x, y, self.reach))
 
 
+def grown_ring(ring: Any, by: float) -> list[tuple[float, float]]:
+    """`ring` pushed `by` outward from its centroid, vertex by vertex - a keep-out a crown of radius `by` centered outside
+    it cannot reach into, for the near-convex outlines of a bamboo stand."""
+    pts = [(float(q[0]), float(q[1])) for q in ring]
+    cx, cy = sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts)
+    out = []
+    for x, y in pts:
+        d = math.hypot(x - cx, y - cy) or 1.0
+        out.append((x + (x - cx) / d * by, y + (y - cy) / d * by))
+    return out
+
+
 class StandsMixin:
     def bamboo_stand(self: Settlement, poly: Any, role: str = "homestead") -> int:  # type: ignore[misc]
         """A BAMBOO STAND - a take-yabu: a clonal thicket with a hard edge, drawn as a STAND-LEVEL glyph
@@ -261,7 +273,11 @@ class StandsMixin:
             # and was worse still. The copse is the grove the review measured, and the parcels' own marsh keep-out is the
             # precedent it asked for.
             dikes=[dk["outline"] for dk in self.M.get("dikes", [])]
-            + ([[(float(q[0]), float(q[1])) for q in mk["poly"]] for mk in self.M.get("marshes") or [] if len(mk.get("poly") or []) >= 3] if role == "copse" else []),
+            + ([[(float(q[0]), float(q[1])) for q in mk["poly"]] for mk in self.M.get("marshes") or [] if len(mk.get("poly") or []) >= 3] if role == "copse" else [])
+            # ...AND OFF THE BAMBOO, grown by a crown: a take-yabu is a clonal near single-species stand (research/vegetation 150),
+            # and once feature 280 seated the thicket behind the back row the copse's crowns stood inside it (settlement-reviews
+            # of Kashikawa and Mizuguchi: four crowns centered inside, culms drawn over them)
+            + ([grown_ring(b["poly"], cr) for b in self.M.get("bamboo_stands") or [] if len(b.get("poly") or []) >= 3] if role == "copse" else []),
             water=[(wl, whw + cr) for wl, whw in water_lines],
             corridors=corr,
             circles=occ,
