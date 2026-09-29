@@ -34,8 +34,9 @@ each was.
    the Sendai two-sided form, the Tonami front-open form and the Izumo full ring, each attributed to its region and
    footnoted, and no sentence saying all premodern groves went round the house.
 2. **Given** the shelter-belt entry holding the GM's 2026-08-29 hook ruling, **When** a reader reads it, **Then** it
-   says the hook ruling stands for the village belt and that the GM's 2026-09-29 ruling makes the farmstead grove's
-   sides a rolled knob, in the GM's words.
+   says the GM's 2026-09-29 ruling reverses it for the farmstead grove, whose sides are now a rolled knob, quoting
+   both rulings; and that the village belt stays on one or two windward sides on that entry's own evidence and the
+   GM's 2026-09-29 approval of "the homestead grove only".
 
 ### User Story 2 - Farmstead groves take two, three or four sides (Priority: P1)
 
@@ -48,8 +49,8 @@ the house, the same shape at every farm in that hamlet, with the deep stand on t
 
 1. **Given** a settlement whose farms carry groves, **When** it is generated, **Then** every farm's grove has the one
    side count rolled for that settlement.
-2. **Given** a three-sided grove, **When** drawn, **Then** the open side is the front, where the farm's yard and way in
-   are.
+2. **Given** a three-sided grove, **When** drawn, **Then** the open side is the front - the lee side where the farm's
+   yard and way in are.
 3. **Given** a three- or four-sided grove, **When** drawn, **Then** the windward arms are the full depth and the other
    planted sides a thinner band.
 4. **Given** a settlement on flood-prone ground, **When** rolled, **Then** four sides comes up at 40%.
@@ -65,15 +66,13 @@ per-house groves pass every check a grove answers to.
 
 1. **Given** the settlement-form roll, **When** a hamlet is generated without a pinned form, **Then** it can come up
    nucleated, dispersed or linear at feature 126's weights (5 : 3 : 2).
-2. **Given** a dispersed or linear hamlet, **When** generated, **Then** no grove lies on a lane, over a byre or other
-   structure, or across a garden's morning sun, and every household is seated.
+2. **Given** a dispersed or linear hamlet, **When** generated, **Then** every farm carries its rolled grove, no grove
+   lies on a lane, over a byre or other structure, or across a garden's morning sun, and every household is seated.
 
 ### Edge Cases
 
 - A map whose windward key is a single cardinal (N, S, E, W): two sides still means two - the windward face and one
   flank.
-- A farm with no room for a planted side: the grove is fitted as it is today where room is short, and the check that
-  already reports a missing windward grove still reports it; the side count is not faked by a stub.
 - A nucleated hamlet: its farms still shelter behind the village belt and carry no grove of their own; the knob is
   rolled and recorded but draws nothing.
 - The village-scale shelter belt is not this knob and keeps one or two windward sides.
@@ -94,8 +93,9 @@ per-house groves pass every check a grove answers to.
   / 20 (two / three / four), four sides at 40% on flood-prone ground, the weights a GUESS by the GM's ruling of
   2026-09-29, quoted; the windward arms deep and the rest thinner (Tonami's pattern, a GUESS for the full ring); the
   open side of three the front.
-- **FR-003**: The shelter-belt entry holding the 2026-08-29 hook ruling MUST say that ruling governs the village belt
-  and that the farmstead grove is now the knob, without rewriting the ruling itself.
+- **FR-003**: The shelter-belt entry holding the 2026-08-29 hook ruling MUST record the GM's 2026-09-29 ruling as
+  reversing it for the farmstead grove, both quoted; the village belt stays on one or two windward sides on that
+  entry's own evidence and by the GM's approval of "the homestead grove only".
 - **FR-004**: Every map modal written from a changed entry MUST be checked for drift and rewritten where it drifted.
 
 **The knob**
@@ -103,15 +103,23 @@ per-house groves pass every check a grove answers to.
 - **FR-005**: The homestead grove's side count MUST be a per-settlement knob, pinnable by a map, otherwise rolled from
   the map's seed: two sides 50%, three 30%, four 20%.
 - **FR-006**: On flood-prone ground the four-sided share MUST be 40%, the other two keeping their 5 : 3 ratio.
+  Flood-prone ground MUST be a site property a map can pin, and is otherwise set from the site: true where the fields
+  are reclaimed low ground behind dikes (the polder archetypes, the grid polder and the dike-and-pond) or the houses
+  stand on a dike.
 - **FR-007**: Two sides MUST be the windward pair (for a diagonal windward key, its two faces; for a cardinal, that face
-  and one flank); three sides MUST add the flank that is not the front; four sides MUST close the ring.
+  and one flank). The FRONT is the lee side where the farm's yard and way in are, and a three-sided grove leaves it
+  open: three sides MUST add the one remaining face that is not the front. Four sides MUST close the ring.
 - **FR-008**: The windward arms MUST keep today's depth; every other planted side MUST be a thinner band.
 - **FR-009**: The rolled side count MUST be recorded on the map and stated in the grove's modal.
 
 **The placement**
 
-- **FR-010**: The per-house grove MUST be placed so that it lies on no lane tread, over no structure seated later, and
-  does not shade a garden's morning sun - the four defects feature 126 measured - for every side count.
+- **FR-010**: Each farm MUST be seated with room for the grove its settlement rolled, and every rolled side planted,
+  for every side count; and the per-house grove MUST pass every rule feature 126 measured failing: it lies on no lane
+  tread (`groves_clear_of_lanes`), stands on the windward side it was rolled for (`groves_on_windward_side`), leaves
+  every garden its morning sun (`gardens_unshaded_from_east`), lies on no structure and puts no crown over one,
+  byres and later-seated fixtures included (`groves_clear_of_structures`, `structures_clear_of_trees`), and every
+  household is seated.
 - **FR-011**: The settlement-form roll MUST restore feature 126's weights (nucleated 5, dispersed 3, linear 2), and the
   hamlet cohort MUST pass with them, as the bar feature 126 set for switching them back on.
 - **FR-012**: The pool hamlets MUST be regenerated from their specs as they are; a hamlet whose seed now rolls another
@@ -120,7 +128,8 @@ per-house groves pass every check a grove answers to.
 ### Key Entities
 
 - **Grove side count**: 2, 3 or 4; one per settlement; recorded on the map.
-- **Flood-prone ground**: a property of the settlement's site, decided from what the map already knows about its land.
+- **Flood-prone ground**: a property of the settlement's site - pinned by the map, or set from its polder fields or
+  dike-top houses (FR-006); recorded on the map.
 
 ## Success Criteria *(mandatory)*
 
@@ -128,7 +137,8 @@ per-house groves pass every check a grove answers to.
   pass `quote-check` and `record-format`.
 - **SC-002** (FR-004): every modal the push names as owed is answered by an `entry-drift` check.
 - **SC-003** (FR-005, FR-006): over 1,000 rolled seeds the counts sit within three standard errors of 50/30/20 off
-  flood ground and 37.5/22.5/40 on it.
+  flood ground and 37.5/22.5/40 on it; and a test rolls a real polder site and finds it flood-prone, reading the
+  flood table.
 - **SC-004** (FR-007, FR-008): unit tests prove the faces planted for each side count and windward key, and that the
   non-windward bands are thinner than the windward arms.
 - **SC-005** (FR-010, FR-011): the cohort passes (every seed's checks green, every household seated) with the three
@@ -146,7 +156,22 @@ per-house groves pass every check a grove answers to.
 - **Windward deep, rest thinner**: Tonami's tall cedar on the windward faces and lesser trees elsewhere; a GUESS for the
   Izumo ring; the thinner depth is a GUESS.
 - **The front is the open side of three**: Tonami's east front had little grove.
-- **The village belt is untouched**: the 2026-08-29 hook ruling stands for it; the GM approved "the homestead grove
-  only".
+- **The 2026-08-29 hook ruling is reversed for the farmstead grove** (the GM approved "This reverses the GM's
+  2026-08-29 hook ruling"); both rulings are recorded. **The village belt is not this knob**: it stays on one or two
+  windward sides on `vegetation/030`'s own evidence, and the GM approved "the homestead grove only".
+- **Flood-prone ground is the polder site** (FR-006): the Izumo ring stood on a flood plain behind an earth bank; the
+  engine's diked low ground is the polder archetypes and the dike-top line. Reading it from those is this project's
+  decision (a GUESS as to where else floods threatened farms), and a map may pin it either way.
+- **Every farm carries its settlement's grove** (FR-010, spec-fidelity round 1): no farm quietly loses sides for want
+  of room; a farm is seated where its grove fits.
 - **The pool takes its seed's roll** (FR-012): the GM asked for the forms "rolled again"; pinning the existing hamlets
   to nucleated would be an exception not asked for. Which hamlets change is reported at hand-back.
+
+## Review history
+
+**Round 1** (spec-fidelity, MODE 2, 2026-09-29): CHANGES. (a) flood weights, (b) the cardinal reading and (c) FR-012
+faithful. Changes applied: the 2026-08-29 ruling recorded as REVERSED for the farmstead grove, not recast as standing
+for the belt; the no-room edge case deleted and FR-010 requiring every farm seated with room for its rolled grove;
+FR-010 naming every rule feature 126 measured failing, `groves_on_windward_side` included; flood-prone ground defined
+(pinnable, else the polder archetypes or dike-top houses) with a test on a real polder site; the front defined as the
+lee side with the yard and the way in, the side three leaves open.
