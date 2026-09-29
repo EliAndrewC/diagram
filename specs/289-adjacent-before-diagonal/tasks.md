@@ -8,5 +8,6 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D5).
 - [x] T02 The deviation in the record (D3; FR-003)
       research: rendering
       verify: DONE. research/presentation 040 'Which side': the deviation (grounds note), the textbooks' order, an absence note for small drawn objects, the other orders cited (spektrum-schriftplatzierung, bobak-cmolik-cadik-2024 x4, mapbox-variable-label-placement); quote-verbatim 9/9 VERBATIM; quote-check, record-format and source-applicability run and their edits applied
-- [ ] T03 The maps regenerated and measured; make done; push (D4, D5; FR-004, SC-002, SC-003)
+- [x] T03 The maps regenerated and measured; make done; push (D4, D5; FR-004, SC-002, SC-003)
       research: rendering
+      verify: DONE. four sheets and five hamlets regenerated (make map): every notice board's label adjacent - the sheets' four below, Ubame's bounty board below slightly left, m:boards-at-corner 0; the five hamlets' one caption each moved (m:hamlet-captions-moved 5); spec FAITHFUL round 2, plan CLEAR; make done green 2026-09-29 (76 s)
