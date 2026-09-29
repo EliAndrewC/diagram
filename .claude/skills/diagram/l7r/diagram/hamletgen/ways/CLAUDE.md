@@ -13,7 +13,8 @@ Its modules are LAYERS, emitted bottom-up: every cross-module reference points b
 | `clearance.py` (449) | may a way BE here - the clear-run scan, the clip, the span and touch tests, the bend/nub judgments, and `may_write`, the guard every rewrite passes |
 | `route.py` (220) | the router itself: `_route` finds a way round hard ground, `_unjog` straightens what it found, `_ease_corner` rounds the corners it leaves |
 | `fabric.py` (428) | the settlement fabric a way must respect - the homestead polygons, the margin frame, the fabric-collision probes, and `_draw_web`, the single place a web lane is committed to the map |
-| `sweeps.py` (536) | the passes that REMOVE or REPAIR after the web is laid - doubled remnants, steading fouls, end nubs, necked routes, debris, collinear breaks, orphaned pieces |
+| `sweeps.py` (882) | the passes that REMOVE or REPAIR after the web is laid - doubled remnants, steading fouls, end nubs, necked routes, debris, collinear breaks, orphaned pieces |
+| `tails.py` (171) | the DOUBLED TAIL: a lane end running on beside the way it met is cut back to where it came alongside - unless the cut strands a lane that met the tail; a lane stranded only by the touch gap is carried onto the way (feature 280). Re-exported by `sweeps.py` |
 | `touch.py` (445) | how a lane end meets the network - the whole junction-touching pass and the piece-joining it falls back on |
 | `smooth.py` (341) | the smoothing pass and the connectivity accounting that decides whether a smoothed lane may be committed |
 | `joints.py` | where two lanes meet END TO END - read as one way: a fold at the joint becomes a T, a jog across it is pulled straight, a hook at a lane's end is taken off (`straighten_joints`, GM 2026-09-26); then an end stopping on another lane's tread is set on its centerline (`center_lane_ends`, GM 2026-09-27), and two ends left a hand's width apart are joined (`meet_end_to_end`, 269 E3) |
