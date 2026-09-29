@@ -81,7 +81,7 @@ fix-commit match) the measurement lists the matched lines so the report's reader
 
 ## R5 - Memory and sequencing
 
-Containers share a 9 GB cap; memwatch warns at 8 GB (the handoff). A `make done` alone reaches ~3.2 GiB at its test-phase peak (observed 2026-09-13, the gate RAM profile, one-shot; memory
+Containers share a 9 GB cap; memwatch warns at 8 GB (the handoff). A `make done` alone reaches ~3.2 GiB at its test-phase peak (observed 2026-09-13, one-shot, method: the gate RAM profile; memory
 note of 2026-09-13). The launcher refuses to start a run while any other effort run's session is live (its record has a start and no
 `result.json`) and prints the current container memory from `/sys/fs/cgroup/memory.current`; other sessions' work is the implementing
 session's to schedule around (the quickstart says to run when the host is otherwise quiet). A run that ends with exit 137 is marked void
