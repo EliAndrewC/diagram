@@ -63,6 +63,6 @@
   "/diagram/.clones/.runs-293/e1/agents.json"
  ],
  "runner_stdout": "page-session: R-write.md\n  session:    7d89826a-dbb8-4100-ba24-90e576d96507\n  transcript: /home/agent/.claude/projects/-diagram--clones-diagram-exp-e1/7d89826a-dbb8-4100-ba24-90e576d96507.jsonl\n  log:        /diagram/.clones/diagram-exp-e1/.git/page-sessions/7d89826a-dbb8-4100-ba24-90e576d96507\npage-session: R-check.md\n  session:    be70d50f-d73e-43ae-b2db-72c147e6f966\n  transcript: /home/agent/.claude/projects/-diagram--clones-diagram-exp-e1/be70d50f-d73e-43ae-b2db-72c147e6f966.jsonl\n  log:        /diagram/.clones/diagram-exp-e1/.git/page-sessions/be70d50f-d73e-43ae-b2db-72c147e6f966\npage-session: started - each result.json is written when its session ends, and the next session begins\npage-session: to be told when the whole queue has ended, run this BACKGROUNDED (run_in_background):\n    until grep -q '^ALL DONE' /diagram/.clones/diagram-exp-e1/.git/page-sessions/run-e1dafca2.log; do sleep 60; done; tail -20 /diagram/.clones/diagram-exp-e1/.git/page-sessions/run-e1dafca2.log\n",
- "status": "valid",
- "void_reason": ""
+ "status": "void",
+ "void_reason": "voided by the session: the launcher exported make's variables into the run's environment - ARM=xhigh named the arm, and MAKEFLAGS carried TASK/RUN/ARM into its own make calls (two failed until it unset them); fixed in the launcher, re-run as e2"
 }

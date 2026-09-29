@@ -54,6 +54,8 @@ ADHOC_JUDGE = {
     }
 }
 APPEND_PROMPT = "container-scripts/append-system-prompt.md"
+MAKE_VARS = ("MAKEFLAGS", "MAKELEVEL", "MFLAGS", "MAKEOVERRIDES", "TASK", "RUN", "ARM", "ORDER", "START", "SEED", "OFFSET",
+             "SOURCES_HOME", "SNAPSHOT")
 # R5 D7 (revised at T09): the 9.0 GB cap is ONE host cgroup over every Claude container, read through the host-diag tool
 # (read-only, no sudo for cgroup files). memwatch's figure is that cgroup's raw memory.current, page cache included.
 HOST_DIAG = "/host-l7r-repo/gm-assistant/scripts/claude-diagnostics/client/host-diag"
@@ -166,7 +168,11 @@ def arm_order(seed: int) -> dict[str, list[str]]:
 def run_env(env: dict[str, str], sources: pathlib.Path) -> dict[str, str]:
     # CLAUDE_CODE_EFFORT_LEVEL would override the checkers' pinned effort (R1 D1); SPECIFY_FEATURE would name the experiment
     # to any tool that prints it (FR-004's intent, the plan review's aside) - the runs push nothing and need no feature.
-    out = {k: v for k, v in env.items() if k not in ("CLAUDE_CODE_EFFORT_LEVEL", "SPECIFY_FEATURE", "SPECIFY_FEATURE_DIRECTORY")}
+    # MAKEFLAGS, MAKELEVEL, MFLAGS and the target's own variables: `make effort-run ARM=xhigh ...` exports its command-line
+    # variables to every child, so run e1 saw ARM=xhigh in its environment and its own `make` calls inherited TASK/RUN/ARM
+    # through MAKEFLAGS (two of its make runs failed until it unset them - recorded in interventions.md).
+    drop = {"CLAUDE_CODE_EFFORT_LEVEL", "SPECIFY_FEATURE", "SPECIFY_FEATURE_DIRECTORY", *MAKE_VARS}
+    out = {k: v for k, v in env.items() if k not in drop}
     return out | {"L7R_SOURCES_HOME": str(sources)}
 
 

@@ -1141,8 +1141,9 @@ effort-init: ## [project] feature 293: record what every run of the effort exper
 effort-run: ## [project] feature 293: launch ONE run, detached, in its own clone - refused while another run is live or memory is short   TASK=R|I RUN=<id> ARM=medium|xhigh ORDER=<n>
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_run.py run --task "$(TASK)" --run "$(RUN)" --arm "$(ARM)" --order "$(ORDER)"
 
-effort-measure: ## [project] feature 293: measure a finished run from its transcripts, the guard log and its clone   RUN=<id>
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_measure.py --run "$(RUN)"
+# GUARD_EDIT_OK: feature 293 adds an operation - VOID= passed to effort-measure (a run voided for an environment reason); nothing a guard decides changes.
+effort-measure: ## [project] feature 293: measure a finished run from its transcripts, the guard log and its clone   RUN=<id> [VOID="<environment reason>"]
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_measure.py --run "$(RUN)" --void "$(VOID)"
 
 effort-blind: ## [project] feature 293: export one task's two outputs, stripped and labeled A/B, to a bundle outside the repository   TASK=R|I SEED=<n>
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_blind.py --task "$(TASK)" --seed "$(SEED)"

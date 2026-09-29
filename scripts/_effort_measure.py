@@ -255,6 +255,7 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--projects", default=str(pathlib.Path.home() / ".claude" / "projects"))
     ap.add_argument("--guard-log", default=str(pathlib.Path.home() / ".claude" / "guard-log"))
     ap.add_argument("--claims", default="/diagram/.clones/RESEARCH-CLAIMS.md")
+    ap.add_argument("--void", default="", help="mark the run void for an environment reason the logs cannot see (with the reason)")
     args = ap.parse_args(argv)
     repo = pathlib.Path(subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True,
                                        check=True).stdout.strip())
@@ -274,7 +275,7 @@ def main(argv: list[str]) -> int:
     git_log = subprocess.run(["git", "-C", str(clone), "log", "--format=%s", f"{run['start_commit']}..HEAD"],
                              capture_output=True, text=True, check=True).stdout.splitlines()
     m = measure(run, pathlib.Path(args.projects), pathlib.Path(args.guard_log), defined, git_log)
-    reasons = [v for p in logs if (v := void_reason(p))]
+    reasons = [v for p in logs if (v := void_reason(p))] + ([f"voided by the session: {args.void}"] if args.void else [])
     now = time.time()
     run["status"] = "void" if reasons else "valid"
     run["void_reason"] = "; ".join(reasons)

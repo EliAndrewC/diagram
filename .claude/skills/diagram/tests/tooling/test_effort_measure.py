@@ -210,3 +210,16 @@ def test_a_killed_task_r_run_is_void_and_its_claim_released(tmp_path: pathlib.Pa
     assert run["status"] == "void" and "137" in run["void_reason"]
     assert "run e1 ended - claim released" in claims.read_text() == run["shared_state"]["claims_release_line"] + "\n"
     assert em.void_reason(tmp_path / "nothing") == ""
+
+
+def test_the_session_can_void_a_run_for_an_environment_reason(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    w = _world(tmp_path)
+    log = tmp_path / "log"
+    log.mkdir()
+    (log / "result.json").write_text('{"type": "result"}')
+    repo = _repo(tmp_path, w, "I", [log])
+    monkeypatch.chdir(repo)
+    assert em.main(["--run", "e1", "--projects", str(w["projects"]), "--guard-log", str(w["guard"]),
+                    "--claims", str(tmp_path / "c.md"), "--void", "the launcher leaked the arm"]) == 0
+    run = json.loads((repo / FEATURE / "runs" / "e1.json").read_text())
+    assert run["status"] == "void" and "leaked the arm" in run["void_reason"]
