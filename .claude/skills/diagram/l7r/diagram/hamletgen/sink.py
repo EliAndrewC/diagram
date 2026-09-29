@@ -9,6 +9,7 @@ import math
 from collections.abc import Callable, Sequence
 from typing import Any
 
+from l7r.diagram.overlap.registry import refuse_unadmitted
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_closest
 from l7r.diagram.settlement.fields.comb import DOWNHILL_FRACTION as DOWNHILL_FRACTION
 from l7r.diagram.settlement.fields.comb import runs_downhill  # the channel rule, one predicate for every channel writer (water:W10)
@@ -105,9 +106,23 @@ def drain_run(s: Settlement, pts: Poly, to: str) -> None:
     fine for the comb's own ditches inside a blocked envelope, wrong for this one, which runs OUT of the field
     across open margin where the placer is free to seat a homestead on it."""
     outfall_w = chan_px(DRAIN_FT[1], GRAIN)
+    rec = drain_record(pts, to)
+    refuse_unadmitted(s.M, "channels", rec)  # its route was chosen among those the registry admits (`drain_admitted`)
     s.field_channel(pts, DRAIN_HUE, outfall_w, outfall_w, cls=DRAINAGE_DITCH)
-    s.M["channels"].append({"poly": [[round(x, 1), round(y, 1)] for x, y in pts], "frm": {"kind": "drain"}, "to": {"kind": to}, "w": 2.5})
+    s.M["channels"].append(rec)
     s.corridors.append((list(pts), 33.0))
+
+
+def drain_record(pts: Sequence[Pt], to: str) -> dict[str, Any]:
+    """The `channels` record a drain run along `pts` into `to` is written as (`drain_run`)."""
+    return {"poly": [[round(x, 1), round(y, 1)] for x, y in pts], "frm": {"kind": "drain"}, "to": {"kind": to}, "w": 2.5}
+
+
+def drain_admitted(s: Settlement, pts: Sequence[Pt], to: str) -> bool:
+    """May a drain run along `pts` into `to` be recorded on what stands (the overlap matrix, feature 287 water W53)? Every
+    route the sink offers asks it - the confluence, each searched run off the frame, the constructed route, the pond run -
+    so a run across a resting basin or a stranger's ground is refused and the next taken."""
+    return s.admits("channels", drain_record(pts, to))
 
 
 def edge_run(plan: SitePlan, frm: Pt) -> float:
@@ -511,7 +526,8 @@ def lay_sink(s: Settlement, plan: SitePlan) -> None:
             mid_j = ((out[0] + join[0]) / 2 - dy * bow, (out[1] + join[1]) / 2 + dx * bow)
             # ...NEVER THROUGH A DIKE OFF ITS GAPS (feature 287, water W42): a confluence reached only across the crest is
             # no confluence, and the drain takes the off-map route search below, which refuses the crest too
-            if breaches_any_dike([out, mid_j, join], dikes):
+            # ...AND NEVER WHERE THE REGISTRY OF WHAT STANDS REFUSES IT (feature 287, water W53): the off-map search below takes it
+            if breaches_any_dike([out, mid_j, join], dikes) or not drain_admitted(s, [out, mid_j, join], "stream"):
                 join = None
         if join is not None:
             drain_run(s, [out, mid_j, join], "stream")
@@ -620,7 +636,7 @@ def lay_sink(s: Settlement, plan: SitePlan) -> None:
             # at least one of them, by construction - is gone. The downhill term is the channel rule itself (`runs_downhill`,
             # a fifth of the run down the fall, where "any descent" let a near-level ditch through) and the route may not
             # cross the brook mid-run (`crosses_mid_run`, water:W08).
-            if not route_refusals(plan, out, heading, anchored, [out, mid, end], brook, dikes):
+            if not route_refusals(plan, out, heading, anchored, [out, mid, end], brook, dikes) and drain_admitted(s, [out, mid, end], "offmap"):
                 drain_run(s, [out, mid, end], "offmap")
                 plan.sink_brook = [out, mid, end]
                 return
@@ -634,6 +650,9 @@ def lay_sink(s: Settlement, plan: SitePlan) -> None:
             # THE MEETING IS JUDGED WITH THE BROOK AS DRAWN (feature 287 wave 5): the constructed route is the last candidate,
             # so a meeting whose held vertex would take the drawn brook out of its rules is refused by name, never drawn
             raise SinkRefused(f"{plan.spec.name}: the drain's constructed route meets the brook where the brook as drawn breaks its rules")
+        if not drain_admitted(s, route, to):
+            # ...and the last candidate the registry of what stands refuses is refused by name, never recorded (water W53)
+            raise SinkRefused(f"{plan.spec.name}: the drain's constructed route lies where the overlap matrix forbids it")
         drain_run(s, route, to)
         plan.sink_brook = list(route)
         if to == "stream":
@@ -687,7 +706,8 @@ def lay_sink(s: Settlement, plan: SitePlan) -> None:
     # overshoots the rim, and a late stroke composites above the fill instead
     # (`pond_fill_covers_channel_mouths`).
     ditch = pond_run(out, drain_heading(s, name) or (dx, dy), (pcx, pcy), (dx, dy))
-    if breaches_any_dike(ditch, s.M.get("dikes") or []) or crosses_mid_run(drawn_brook(s, plan), ditch):
+    # ...and a pond or a run the registry of what stands refuses sends the drain off the frame instead (feature 287, water W53)
+    if breaches_any_dike(ditch, s.M.get("dikes") or []) or crosses_mid_run(drawn_brook(s, plan), ditch) or not (s.admits("pond", [pcx, pcy, prx, pry]) and drain_admitted(s, ditch, "pond")):
         # ...and a pond reached only across a dike's crest off its gaps is no pond for this field (feature 287, water W42):
         # the field drains off the frame, whose routes refuse the crest, as for a pond the canvas cannot hold. So is one
         # reached only ACROSS THE BROOK (feature 287 wave 5, water:W08): the ditch would run over the open water mid-run,

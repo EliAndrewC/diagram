@@ -1,6 +1,6 @@
 """Split from settlement/structures/fixtures.py by feature 173 - see this package's CLAUDE.md for the index."""
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from ....labels import Placement, Subject
 from ....labels.geom import rect
@@ -43,6 +43,14 @@ class BoardsMixin:
             self.label(_lx, _ly, label, 9, italic=True, color="#7A5A30", ref=(x - h, y - h, x + h, y + h), rot=_t)
         return z
 
+    def board_record(self: Settlement, x: float, y: float, rot: float) -> dict[str, Any]:  # type: ignore[misc]
+        """The `kosatsuba` record a board at (x, y) turned `rot` is written as - its TRUE w/h and its drawn marker box vw/vh
+        (see `kosatsuba`) - which the siter asks the registry of what stands about before it offers the seat (feature 287,
+        water W53)."""
+        w, h = self.px(12), self.px(5)
+        k = max(1.0, KOSATSUBA_MARKER_MIN_PX / w)  # marker floor, aspect preserved
+        return {"x": round(x, 1), "y": round(y, 1), "w": w, "h": h, "vw": round(w * k, 1), "vh": round(h * k, 1), "rot": round(rot, 1)}
+
     def kosatsuba(self: Settlement, x: float, y: float, rot: float = 0.0, label: str = "notice board", placement: Placement | None = None) -> int:  # type: ignore[misc]
         """The KOSATSUBA - the settlement's official notice board: a small roofed frame posting
         the state's STANDING LAW (edicts, porter/packhorse rate tables, ban lists). Sited at the
@@ -79,16 +87,16 @@ class BoardsMixin:
         `placement` is the caption's seat when the siter PROVED it (feature 287, labels L4: `place_kosatsuba` keeps only
         a board whose caption the one placer seats clean, and hands that seat on): the label phase draws it verbatim
         rather than searching again. A board posted by hand passes none, and the phase seats its caption."""
-        w, h = self.px(12), self.px(5)
-        k = max(1.0, KOSATSUBA_MARKER_MIN_PX / w)  # marker floor, aspect preserved
-        vw, vh = w * k, h * k
+        rec = self.board_record(x, y, rot)
+        k = max(1.0, KOSATSUBA_MARKER_MIN_PX / rec["w"])  # marker floor, aspect preserved: drawn unrounded, recorded to 0.1 px
+        vw, vh = rec["w"] * k, rec["h"] * k
         hw, hh = vw / 2, vh / 2
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
         g.append(f'<rect x="{-hw:.1f}" y="{-hh:.1f}" width="{vw:.1f}" height="{vh:.1f}" rx="1" fill="#7A5A30" stroke="#5A3F1E" stroke-width="0.8"/>')  # the little tiled roof, seen from above
         g.append(f'<line x1="{-hw:.1f}" y1="0" x2="{hw:.1f}" y2="0" stroke="#EFE6CC" stroke-width="0.9"/>')  # the ridge
         g.append('</g>')
         z = self.add_top(''.join(g), cls="notice board")
-        self.M["kosatsuba"].append({"x": round(x, 1), "y": round(y, 1), "w": w, "h": h, "vw": round(vw, 1), "vh": round(vh, 1), "rot": round(rot, 1), "z": z, "label": label})
+        self.M["kosatsuba"].append({**rec, "z": z, "label": label})
         self.placed.append((x, y, vw, vh))
         bm = 6
         self.block_polys.append([(x - hw - bm, y - hh - bm), (x + hw + bm, y - hh - bm), (x + hw + bm, y + hh + bm), (x - hw - bm, y + hh + bm)])

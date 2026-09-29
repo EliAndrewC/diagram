@@ -292,6 +292,9 @@ class FixtureSitingMixin:
                             # wave 6): beside a lane's corner both arms are as near, and a board turned to one stood 55 and 86
                             # degrees off the other (cohort seeds 25 and 42) - asked last, of a seat every cheaper test kept
                             and (turn := env.facing.turn(x, y, rot)) is not None
+                            # ...and the registry of what stands admits the board as `kosatsuba` will record it, turned
+                            # (feature 287, water W53): a seat on a field ditch or a stranger's yard is not offered
+                            and self.admits("kosatsuba", self.board_record(x, y, turn))
                         ):
                             # BUSY IS WHERE THE FEET ARE (feature 140's Inashiro review): the near count is weighted double
                             busy = sum(1 for sx, sy in env.spots if math.hypot(x - sx, y - sy) < 260) + 2 * sum(1 for sx, sy in env.spots if math.hypot(x - sx, y - sy) < 150)

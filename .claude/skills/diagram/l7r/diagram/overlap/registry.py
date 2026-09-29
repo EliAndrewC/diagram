@@ -37,6 +37,7 @@ from .reserved import Reservations
 from .taxonomy import (
     _MATRIX_PARENT_FIELD,
     _MATRIX_PERMISSIVE,
+    _MATRIX_SAME_PARENT_OK,
     _MX_FIXTURE_BOX,
     _MX_LINE_W,
     _MX_NOT_GEOMETRY,
@@ -112,7 +113,9 @@ def element_extents(k: str, o: Any, M: Mapping[str, Any]) -> list[Extent]:
         # fixtures record their extent in their own vocabulary (a bridge stores span x deck-w, a jetty a length, a
         # sluice nothing at all), so each says how to read its drawn box
         bw, bh = _MX_FIXTURE_BOX[k](o)
-        out.append((k, _mx_rect({"x": o["x"], "y": o["y"], "w": bw, "h": bh, "rot": o.get("rot", 0)}), (round(o["x"], 1), round(o["y"], 1)), None))
+        # ...turned as it is drawn: a weir records its oblique bar's bearing as `deg`, not `rot`, and read at rot 0 its box
+        # lay square to the sheet, across ground the bar never touches (feature 287, water W53)
+        out.append((k, _mx_rect({"x": o["x"], "y": o["y"], "w": bw, "h": bh, "rot": o.get("rot", o.get("deg", 0))}), (round(o["x"], 1), round(o["y"], 1)), None))
     elif k == "wells":
         r_ = float(o.get("vr") or o.get("r") or 8.0)
         out.append((k, [(o["x"] + r_ * math.cos(i * math.pi / 6), o["y"] + r_ * math.sin(i * math.pi / 6)) for i in range(12)], (round(o["x"], 1), round(o["y"], 1)), None))
@@ -167,6 +170,8 @@ def pair_permitted(a: Extent, b: Extent, priv: Iterable[Any] | set[Any]) -> bool
         return True  # an annex on its OWN parent
     if OVERLAP_CLASS.get(ki) == "ANNEX" and OVERLAP_CLASS.get(kj) == "ANNEX" and _mx_same(pari, parj):
         return True  # two annexes of one household
+    if frozenset({ki, kj}) in _MATRIX_SAME_PARENT_OK and _mx_same(pari, parj):
+        return True  # a field's own ditch on its own resting basin (`_MATRIX_SAME_PARENT_OK`)
     return "wells" in (ki, kj) and (idi in priv or idj in priv)  # a trade work's own private well, inside its own court
 
 
@@ -394,6 +399,22 @@ def forbidden_segment(M: Any, key: str, pts: Sequence[Sequence[float]], width: f
         if st.conflicts(key, {"pts": seg, "w": width + 2.0 * margin}):
             return k
     return None
+
+
+def refuse_unadmitted(M: Any, key: str, o: Any, ignore: Any = None) -> None:
+    """THE QUESTION A WRITER WITH ONE CANDIDATE ASKS, before it draws (feature 287, water W53): a watercourse traced by an
+    earlier fit, a pond whose alternatives its placer has already walked, the field's ditch net. Where the overlap matrix
+    forbids `o` under `key` on what stands on `M` (the settlement's `StandingManifest`), `OverlapRefused` is raised BY
+    NAME before any of its ink is emitted - on a strict registry (`Standing.refuse`); the town and city tiers' registries
+    record as they always did. A placer that has candidates asks `admits` and takes the next instead; this is for the
+    writer whose ground the ORDER of the stages makes admissible by construction (the skeleton recorded before the ground
+    that asks against it), so a refusal names the engine defect that broke the order."""
+    st = getattr(M, "standing", None)
+    if st is None:
+        return
+    bad = st.conflicts(key, o, ignore)
+    if bad:
+        st.refuse(bad)
 
 
 class Kept(dict):  # type: ignore[type-arg]

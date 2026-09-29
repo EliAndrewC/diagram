@@ -8,6 +8,8 @@ import random
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.overlap.registry import refuse_unadmitted
+
 from .._geom import (
     Poly,
     Pt,
@@ -154,7 +156,11 @@ class FieldFeaturesMixin:
         below every water bed (a feeder's bed covers it at the junction -> a clean gap), the FILL joins the
         shared bed group as the TOPMOST bed (`pond_fill=True`) - so it paints OVER any feeder's inside-the-rim
         overshoot (an irrigation channel's round end-cap bulging past the rim, whichever order it was drawn),
-        while the shore rim still shows and the mouths stay clean; the inner highlight is a sheen."""
+        while the shore rim still shows and the mouths stay clean; the inner highlight is a sheen.
+
+        ASKED BEFORE ANYTHING IS DRAWN (feature 287, water W53): its placer has walked its alternatives (the sink's pond
+        falls back to an off-map run, `hamletgen/sink.py`), so a pond the matrix still forbids is refused by name here."""
+        refuse_unadmitted(self.M, "pond", [cx, cy, rx, ry])
         if stream_curve:
             # the pond's feeder runs at the lateral/ditch tier - a thin line near the channel weight,
             # NOT the heftier natural-stream weight (see the water-width ladder in research/water.html).

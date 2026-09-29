@@ -10,6 +10,7 @@ from collections.abc import Callable, Mapping, Sequence
 from typing import TYPE_CHECKING, Any, cast
 
 from l7r.diagram.interactive.tags import Split
+from l7r.diagram.overlap.registry import refuse_unadmitted
 
 from .._geom import (
     Poly,
@@ -249,6 +250,13 @@ class CombMixin:
         # imperfect tessellation never shows the parchment background as bare "white" gaps (research.md D5).
         self.comb_base_fill(net, name)
 
+        # THE WATER IS RECORDED BEFORE THE GROUND THAT ASKS AGAINST IT (feature 287, water W53). The ditch net is the field's
+        # skeleton - the plots are cut between its threads - so its records stand before any plot is offered: the dry hem
+        # then refuses a plot one of the field's own ditches crosses (`dry_plots` on `field_ditches` is forbidden), where it
+        # used to be recorded first and leave the ditch to be refused on it. Recording draws nothing; the net is still
+        # painted below, where it always was. (The feed from the source is recorded after the source is drawn, since it
+        # snaps to the brook; it names its field, and a field's own water may lie on its own resting basin.)
+        self._comb_record_ditches(net, name)
         self._comb_draw_hem(net, source, name)
         # THE IN-FIELD FEATURES ARE SEATED BEFORE THE PADDIES ARE DRAWN, AND INKED AFTER THEM (feature 287, water W28): a
         # grave carves the rings the paddies are drawn from, so the paddies must be drawn from the carved rings; the
@@ -270,7 +278,6 @@ class CombMixin:
         sluice = net["channels"][0]["pts"][0]
         pond_rec = self._comb_draw_source(net, source, sluice)
         self._comb_draw_ditches(net)
-        self._comb_record_ditches(net, name)
         # ...AND THE HAIRLINE FEED IS RECORDED BEFORE THE BEADS ARE DROPPED (feature 287, water W33): it is water the bead
         # drop reads (`M["channels"]`), and recorded after the drop it could lay a bead under its own stroke.
         self._comb_source_channel(net, name, source, sluice, pond_rec, join_head)
@@ -346,7 +353,9 @@ class CombMixin:
             return hem_on_water(poly, _wet, _wpond)
 
         def _refused(poly: Poly) -> bool:
-            return any(hem_on_paddy(poly, _pol) for _pol in _prior_paddies) or _hem_on_water(poly)  # the crop stops at the bank
+            # the crop stops at the bank - and a plot the registry of what stands refuses is not offered (feature 287, water
+            # W53): the field's own ditch net is recorded before the hem, so a plot one of its ditches crosses is refused here
+            return any(hem_on_paddy(poly, _pol) for _pol in _prior_paddies) or _hem_on_water(poly) or not self.admits("dry_plots", {"poly": [[round(x, 1), round(y, 1)] for x, y in poly]})
 
         drawn = [p for p in net["dry_plots"] if not _refused(p["poly"])]  # the dry upslope hem
         drawn += self._coarse_grain_top_up(net, sum(poly_area(p["poly"]) for p in drawn), _refused)
@@ -420,7 +429,7 @@ class CombMixin:
         for i, p in enumerate(net["plots"]):  # the flooded paddies
             if i in _rest:
                 p["rest"] = True
-                self.rest_basin(p["poly"], aze_w(self.ftpx))
+                self.rest_basin(p["poly"], aze_w(self.ftpx), name)
                 continue
             pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in p["poly"])
             # ONE polygon, TWO classes (feature 134 `Split`): the fill is the flooded paddy, the stroke is
@@ -595,8 +604,10 @@ class CombMixin:
             # ...INTO THE LATE BLOCK WITH THE NET (feature 287, water W38): drawn into the shared early block it was spliced
             # at the FIRST water call, before every plot painted after it - a second fan's paddies, or this fan's own where
             # the run's middle lies over the toe - so the plots covered it. The late block re-anchors after the last field.
+            _rec = {"poly": [[round(x, 1), round(y, 1)] for x, y in _run], "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": 2.5}
+            refuse_unadmitted(self.M, "channels", _rec)  # asked before it is drawn: the straight run is the only one (W53)
             self.field_channel(_run, col, _dw, _dw, late=True, cls=cls)
-            self.M["channels"].append({"poly": [[round(x, 1), round(y, 1)] for x, y in _run], "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": 2.5})
+            self.M["channels"].append(_rec)
             self.corridors.append((list(_run), 33.0))
 
     def _comb_record_field(self: Settlement, net: dict[str, Any], name: str) -> None:  # type: ignore[misc]
@@ -707,6 +718,7 @@ class CombMixin:
                 rec["trimmed"] = True
             if c.get("seg"):  # a polder ring-side tag (feeder/e_toe/w_toe/drain/lateral), so footbridge placement can be side-aware
                 rec["seg"] = c["seg"]
+            refuse_unadmitted(self.M, "field_ditches", rec)  # the skeleton, recorded before the ground that asks against it (W53)
             self.M["field_ditches"].append(rec)
 
     def _comb_source_channel(self: Settlement, net: dict[str, Any], name: str, source: dict[str, Any], sluice: Any, pond_rec: Any, join_head: bool) -> None:  # type: ignore[misc]
@@ -838,14 +850,11 @@ class CombMixin:
             # name here, never recorded as water running uphill
             if not runs_downhill(_ch_poly, _feed_fall):
                 raise ValueError(f"{name}: the feed from its {frm['kind']} to the field runs level or uphill ({_ch_poly[0]} -> {_ch_poly[-1]})")
-            self.M["channels"].append(
-                {
-                    "poly": _ch_poly,
-                    "frm": frm,
-                    "to": {"kind": "field", "name": name},
-                    "w": 2.5,
-                }
-            )
+            # ...AND IT NAMES THE FIELD IT FEEDS (feature 287, water W53): it traces the head race, and a field's own water may
+            # lie along its own resting basin (`_MATRIX_SAME_PARENT_OK`); a stranger's may not. Asked before it is recorded.
+            _feed = {"poly": _ch_poly, "frm": frm, "to": {"kind": "field", "name": name}, "w": 2.5, "field": name}
+            refuse_unadmitted(self.M, "channels", _feed)
+            self.M["channels"].append(_feed)
 
     def _draw_furrows(self: Settlement, poly: Any, color: str, theta: float, cls: str | None = None) -> None:  # type: ignore[misc]
         """Stylised ridge/furrow lines within a dry-field plot (dry crops are row-cultivated)."""

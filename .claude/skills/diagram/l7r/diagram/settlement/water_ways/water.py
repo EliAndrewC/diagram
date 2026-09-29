@@ -5,6 +5,8 @@ import re
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.overlap.registry import refuse_unadmitted
+
 from .._geom import (
     winding,
 )
@@ -106,6 +108,7 @@ class WaterBodiesMixin:
         # always recorded so the gate can check it (anchors optional - only some streams connect things)
         rec = {"poly": [[x, y] for x, y in pts], "frm": frm, "to": to, "w": width}
         self._flow_record(rec, pts, flow)
+        refuse_unadmitted(self.M, "streams", rec)  # asked before its ink (feature 287, water W53): the course is its fit's
         self.M["streams"].append(rec)
         bed_t = f'<path d="{{dd}}" fill="none" stroke="#9CB4C8" stroke-width="{width}" stroke-linejoin="round" stroke-linecap="round"/>'
         # lighter mid-current highlight (NOT a dashed lane line - this is water, not a road)
@@ -141,8 +144,15 @@ class WaterBodiesMixin:
         map draws."""
         pts = [(float(x), float(y)) for x, y in rec["poly"]]
         out = [(float(x), float(y)) for x, y in course]
+        # THE ROUNDED COURSE IS ASKED OF THE REGISTRY BEFORE IT IS WRITTEN, AND RECORDED AGAIN ONCE IT IS (feature 287, water
+        # W53): the reshape in place used to leave the index stale until the stage's end, where the backstop re-recorded it
+        # unasked (9 of 25 census brooks). The rounding is the brook's drawn course - there is no other - so a rounding the
+        # matrix forbids is refused by name, with nothing of it written.
+        refuse_unadmitted(self.M, "streams", {**rec, "poly": [[x, y] for x, y in out]}, ignore=rec)
         rec.setdefault("stations", [[x, y] for x, y in pts])  # the course as first drawn, which a frame that reserved its stations keeps reading
         rec["poly"] = [[x, y] for x, y in out]
+        if (st := getattr(self.M, "standing", None)) is not None and any(r is rec for r in self.M.get("streams") or []):
+            st.rerecord("streams", rec)
         for i, (cpts, clr, *more) in enumerate(self.corridors):
             if list(cpts) == pts:
                 self.corridors[i] = (list(out), clr, *more)

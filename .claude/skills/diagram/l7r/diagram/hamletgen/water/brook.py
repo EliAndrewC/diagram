@@ -11,6 +11,7 @@ import random
 import re
 from collections.abc import Callable, Sequence
 
+from l7r.diagram.overlap.registry import refuse_unadmitted
 from l7r.diagram.settlement import Settlement, knob_rng, point_in_poly, seg_dist
 from l7r.diagram.settlement._geom import fillet_polyline
 from l7r.diagram.settlement._knobs import Knob, register_knob
@@ -885,19 +886,14 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
     # set the whole bar above the mouth and lead the water past it.
     _race_pts = [(float(x), float(y)) for x, y in _race["pts"]] if _race else []
     off = half_t + _mouth / 2.0 + 1.0  # below the mouth, not in it
+    # ...AND ON GROUND THE REGISTRY OF WHAT STANDS ADMITS (feature 287, water W53): a bar is mounted on water alone, so a seat
+    # whose root keys into a dry plot of the hem is passed over like one on the race, as far as the brook's leg runs (GUESS:
+    # past its next vertex the bar would no longer cross the course it was turned to); none there is refused by name
+    reach = math.dist(sluice, nxt) if nxt else 2 * half
     while True:
         cx, cy = sluice[0] + hx * off, sluice[1] + hy * off
-        poly = [
-            (cx + ax * half + hx * half_t, cy + ay * half + hy * half_t),
-            (cx - ax * half + hx * half_t, cy - ay * half + hy * half_t),
-            (cx - ax * half - hx * half_t, cy - ay * half - hy * half_t),
-            (cx + ax * half - hx * half_t, cy + ay * half - hy * half_t),
-        ]
-        if bar_on_race(poly, _race_pts, _race_w) <= 1e-9:  # the race is a finite stroke, so a seat past its end always clears it
-            break
-        off += 1.0
-    s.M.setdefault("weirs", []).append(
-        {
+        poly = [(cx + ax * a * half + hx * b * half_t, cy + ay * a * half + hy * b * half_t) for a, b in ((1, 1), (-1, 1), (-1, -1), (1, -1))]
+        rec = {
             "x": round(cx, 1),
             "y": round(cy, 1),
             "len": round(2 * half, 1),
@@ -906,7 +902,11 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
             "form": form,
             "poly": [[round(x, 1), round(y, 1)] for x, y in poly],
         }
-    )
+        if bar_on_race(poly, _race_pts, _race_w) <= 1e-9 and (s.admits("weirs", rec) or off > reach):  # the race is a finite stroke, so a seat past its end always clears it
+            break
+        off += 1.0
+    refuse_unadmitted(s.M, "weirs", rec)
+    s.M.setdefault("weirs", []).append(rec)
     s.add(weir_glyph(form, poly, (cx, cy), (ax, ay), (hx, hy), half, half_t), cls="weir")
 
 

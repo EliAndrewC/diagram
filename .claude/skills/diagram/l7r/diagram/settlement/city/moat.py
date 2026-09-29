@@ -6,6 +6,8 @@ Split from settlement/city.py by feature 113 - see settlement/city/CLAUDE.md for
 import math
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.overlap.registry import refuse_unadmitted
+
 from .._geom import (
     Pt,
     seg_closest,
@@ -160,7 +162,11 @@ class MoatMixin:
         or a field drain handing off to its outfall culvert. `rot` degrees turns the board ACROSS the
         channel (pass the channel's heading + 90). ~8px span = a true-scale ~16-24 ft timber intake
         structure with wing posts at the village/city grains. Top layer, above the water. Records
-        M['sluice_gates'] for `channel_gates_at_water_junctions`."""
+        M['sluice_gates'] for `channel_gates_at_water_junctions`, asked of the registry of what stands before anything is drawn
+        (feature 287, water W53): its seat is the junction its caller found, so a gate the matrix forbids there - a fixture is
+        mounted on water alone - is refused by name."""
+        rec = {"x": round(x, 1), "y": round(y, 1), "rot": round(rot, 1)}
+        refuse_unadmitted(self.M, "sluice_gates", rec)
         wc = '#3A352C'
         # `span` stretches the frame ACROSS its channel so the posts stand on the BANKS (GM
         # 2026-08-09: on the capital's 66 ft leats the default field-channel frame floated
@@ -181,7 +187,7 @@ class MoatMixin:
         g.append(f'<rect x="-1.1" y="-4.2" width="2.2" height="2.2" fill="#B0905E" stroke="{wc}" stroke-width="0.8"/>')  # the windlass drum
         g.append('</g>')
         z = self.add_top(''.join(g), cls="sluice gate")  # feature 150: its own highlight class
-        self.M.setdefault("sluice_gates", []).append({"x": round(x, 1), "y": round(y, 1), "rot": round(rot, 1), "z": z})
+        self.M.setdefault("sluice_gates", []).append({**rec, "z": z})
         if label:
             # a sluice reads as a bare black bar at fit zoom (GM 2026-08-09) - most of a real
             # gate IS in the water, so the word does the explaining, not the drawing
