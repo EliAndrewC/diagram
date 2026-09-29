@@ -684,6 +684,12 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     # with it the 60 ft to the field the bund rule retired. `fields` stands in only where the manifest records no ground.
     ground = memo_ground(s, "worked", worked_ground) if worked_ground_rings(s.M) else WorkedGround([list(f) for f in fields])
     steadings = steading_footprints(s.M)
+    # the farm grove bands an end may not be carried across (feature 291; their boxes are unrotated)
+    _bands = [
+        [(g["x"] - g["w"] / 2, g["y"] - g["h"] / 2), (g["x"] + g["w"] / 2, g["y"] - g["h"] / 2), (g["x"] + g["w"] / 2, g["y"] + g["h"] / 2), (g["x"] - g["w"] / 2, g["y"] + g["h"] / 2)]
+        for g in s.M.get("groves") or []
+        if g.get("w")
+    ]
     fixed, emptied = 0, []
     for i, ln in enumerate(lanes):
         if ln.get("connector"):
@@ -746,7 +752,7 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
             for _e in (-1, 0):
                 if _reaches(pts[_e]):
                     continue
-                _q = carry_to_dooryard(pts[_e], houses, steadings, 2.0 * _REACH_FT)
+                _q = carry_to_dooryard(pts[_e], houses, steadings, 2.0 * _REACH_FT, groves=_bands)
                 if _q is not None:
                     pts = [*pts, _q] if _e == -1 else [_q, *pts]
             if [[round(x, 1), round(y, 1)] for x, y in pts] == ln["pts"]:
@@ -773,11 +779,13 @@ def held_at(a: Pt, b: Pt, tails: Sequence[Pt]) -> Pt | None:
     return (a[0] + dx * max(held), a[1] + dy * max(held)) if held else None
 
 
-def carry_to_dooryard(q: Pt, houses: Sequence[Pt], steadings: Sequence[Sequence[Pt]], reach: float, step: float = 2.0) -> Pt | None:
+def carry_to_dooryard(q: Pt, houses: Sequence[Pt], steadings: Sequence[Sequence[Pt]], reach: float, step: float = 2.0, groves: Sequence[Sequence[Pt]] = ()) -> Pt | None:
     """Where an end at `q` stops once carried straight toward the nearest farmhouse within `reach`: the first point of the
     walk (in `step` ft) inside `STEADING_ARRIVAL_FT` less a margin of any steading's built ground, so the tread arrives at
     the dooryard and stops short of the wall (a tread on the doorstep laps the farmhouse, `features_do_not_overlap`).
-    None where no house is within `reach`, or the walk reaches none of it (269 B17)."""
+    None where no house is within `reach`, or the walk reaches none of it (269 B17) - or it would enter one of `groves`, a
+    farm's grove band, which no lane crosses (feature 291: an end carried straight at a house on cohort seed 3 went across
+    the thin east band of the farm it served)."""
     near = [h for h in houses if 0.0 < math.dist(q, h) <= reach]
     if not near:
         return None
@@ -786,6 +794,8 @@ def carry_to_dooryard(q: Pt, houses: Sequence[Pt], steadings: Sequence[Sequence[
     stop = STEADING_ARRIVAL_FT - 4.0  # inside the arrival bar by the clip's own 4 ft step
     for k in range(1, int(d / step) + 1):
         p = (q[0] + (h[0] - q[0]) * k * step / d, q[1] + (h[1] - q[1]) * k * step / d)
+        if any(point_in_poly(p[0], p[1], list(g)) for g in groves):
+            return None
         if any(edge_dist(p[0], p[1], list(sp)) <= stop or point_in_poly(p[0], p[1], list(sp)) for sp in steadings):
             return p
     return None

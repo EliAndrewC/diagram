@@ -200,6 +200,43 @@ def _ends_worth_walking_to(s: Settlement, path: Poly, house: Pt, segs: Sequence[
     return joined and _fronts(path[0]) and _fronts(path[-1])
 
 
+def front_door(h: Mapping[str, Any], clear: float) -> Pt | None:
+    """Where a path to a farm with its own grove begins (feature 291): `clear` past the far edge of the farm's yard, straight
+    out along the line from the house through the yard - the front, the side a grove leaves open (or breaks for the way
+    in). None for a farm with no grove of its own, or no yard."""
+    g = h.get("geom") or {}
+    y = g.get("yard")
+    if not g.get("groves") or y is None:
+        return None
+    # A RING'S DOOR LINES UP WITH ITS WAY IN: the yard turns with the house's rake and the bands do not, so "straight out
+    # through the yard" can miss a gap 24 ft wide (cohort seed 12: three farms' doors walled on all four sides). The door
+    # stays just past the yard - a door out in the gap itself, ~80 ft from the house, is past the reach a path's arrival
+    # is judged by, and seed 12 then stranded 13 - but it takes the gap's middle across the front.
+    faces = list(g.get("grove_faces") or ())
+    split = [r for r, (face, _d) in zip(g["groves"], faces, strict=False) if sum(1 for f2, _d2 in faces if f2 == face) == 2]
+    gap_mid: Pt | None = None
+    if len(split) == 2:
+        (ax, ay, aw, ah), (bx, by, bw, bh) = split
+        if abs(ay - by) < 1e-6:  # a north or south front: the halves side by side along x
+            lo, hi = sorted(((ax, aw), (bx, bw)))
+            gap_mid = ((lo[0] + lo[1] / 2 + hi[0] - hi[1] / 2) / 2, ay)
+        else:
+            lo, hi = sorted(((ay, ah), (by, bh)))
+            gap_mid = (ax, (lo[0] + lo[1] / 2 + hi[0] - hi[1] / 2) / 2)
+    hx, hy = float(h["x"]), float(h["y"])
+    fx, fy = float(y[0]) - hx, float(y[1]) - hy
+    n = math.hypot(fx, fy)
+    if n < 1e-9:
+        return None
+    fx, fy = fx / n, fy / n
+    half = abs(fx) * float(y[2]) / 2 + abs(fy) * float(y[3]) / 2  # the yard's reach along the front, unturned
+    door = (float(y[0]) + fx * (half + clear), float(y[1]) + fy * (half + clear))
+    if gap_mid is None:
+        return door
+    # across the front, the gap's line; along it, just past the yard
+    return (gap_mid[0], door[1]) if abs(split[0][1] - split[1][1]) < 1e-6 else (door[0], gap_mid[1])
+
+
 def _serve_stragglers(
     s: Settlement,
     plan: SitePlan,
@@ -344,13 +381,19 @@ def _serve_stragglers(
                 # not exist is the doorstep. Exempting the steading's own open ground was tried and
                 # rejected: it bought this house nothing and cost an overlap on another seed. Walking
                 # out past the yard is what a person does, and it keeps every footprint solid.
+                # ...BUT A FARM WITH ITS OWN GROVE IS ENTERED BY ITS OPEN FRONT (feature 291). Its grove closes the windward
+                # sides, and a ring closes the front too but for the way in, so the nearest clear standing-place was
+                # often inside the grove's own pocket, walled on three or four sides - cohort seed 12, whose farms are
+                # rings, stranded 16 of 17 that way. The door is the open ground just past the farm's own yard, on the
+                # side the yard faces (the front, where the way in is), tried before the ring round the house.
+                _front = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
                 door = next(
                     (
                         q
-                        for q in sorted(
+                        for q in [*([_front] if _front is not None else []), *sorted(
                             ((c[0] + math.cos(math.tau * k / 16) * (step + out), c[1] + math.sin(math.tau * k / 16) * (step + out)) for out in (0.0, 12.0, 24.0, 40.0, 60.0, 85.0) for k in range(16)),
                             key=lambda q: (math.dist(q, c), -((q[0] - c[0]) * dx + (q[1] - c[1]) * dy)),
-                        )
+                        )]
                         # A POINT, NOT A LINK (feature 145): `_clear_link(q, q, ...)` returns True for any span
                         # under 1 px, so the standing place was never tested at all - cohort seed 41's footpath
                         # began 1.3 px from the drain brook. The same index the router uses judges the point.
@@ -628,12 +671,16 @@ def _serve_stragglers(
                         continue
                     if not _ends_worth_walking_to(s, path, c, segs, _crops):
                         continue
-                    _draw_web(s, path, 3, houses=[c])
+                    # A PATH THE DRAWER REFUSED SERVES NOBODY (feature 291): `_draw_web` declines debris, and the pass
+                    # used to count the house served anyway and stop trying its targets - with farm grove bands as
+                    # fabric, a candidate clipped at the farm's own band trimmed to nothing, was refused, and two of
+                    # cohort seed 11's farms were stranded after four passes of it. The next target is tried instead.
+                    if not _draw_web(s, path, 3, houses=[c]):
+                        continue
                     added += 1
                     _served = True
                     break
-            if not _served and _folded is not None and _ends_worth_walking_to(s, _folded, c, segs, _crops):
-                _draw_web(s, _folded, 3, houses=[c])
+            if not _served and _folded is not None and _ends_worth_walking_to(s, _folded, c, segs, _crops) and _draw_web(s, _folded, 3, houses=[c]):
                 added += 1
                 _served = True
             if not _served:

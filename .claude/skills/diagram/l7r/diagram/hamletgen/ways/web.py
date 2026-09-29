@@ -13,6 +13,7 @@ from ..cluster import _arm_crossing_accidental
 from ..consts import (
     BUNDLE_PITCH,
     CLUSTER_SPAN_FACTOR,
+    FOOTPATH_FABRIC_GAP,
     LANE_CLEARANCE,
     MIN_WEB_GAP,
     WEB_FABRIC_GAP,
@@ -25,11 +26,11 @@ from ..plan import SitePlan
 from .bund import a_way_onto_the_bund, cut_past_the_junction, run_lanes_on_to_the_bund, worked_ground_of
 from .checks import drawn_water_segs
 from .clearance import clear_runs, clip_to_clear
-from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _homestead_polys, _margin_frame, _net_segs, _pass, _pull_back_to_service
+from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _draw_web, _homestead_polys, _margin_frame, _net_segs, _pass, _pull_back_to_service
 from .geom import _components, _trim_to_service, polyline_len, steading_footprints
 from .joints import center_lane_ends, fold_the_connector_hairpin, meet_end_to_end, split_at_crossings, straighten_joints
 from .route import _route
-from .serve import _lay_web_lane, _serve_stragglers
+from .serve import _lay_web_lane, _serve_stragglers, front_door
 from .smooth import _STUB_REACH_FT, _smooth_web
 from .sweeps import (
     _bridge_collinear_breaks,
@@ -346,6 +347,41 @@ def unsplitting_drops(lanes: Sequence[Mapping[str, Any]], drops: Sequence[int]) 
     return sorted(gone)
 
 
+def street_doors(houses: Sequence[Mapping[str, Any]], arcs: Sequence[float], clear: float) -> list[Pt]:
+    """A row village's doors in order along its row: each farm's front door (`serve.front_door`, the open ground past its
+    yard) - or, for a farm with no grove of its own, its center - sorted by `arcs`, each house's position along the margin."""
+    out = []
+    for h, _a in sorted(zip(houses, arcs, strict=True), key=lambda t: t[1]):
+        d = front_door(h, clear)
+        out.append(d if d is not None else (float(h["x"]), float(h["y"])))
+    return out
+
+
+def _lay_street(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]], arcs: Sequence[float]) -> None:
+    """THE ROW VILLAGE'S STREET (feature 291; research/homesteads/150, "LINEAR": the farmsteads strung along a way, each
+    fronting it). Laid first in the web, before any cut or straggler: a lane from door to door along the row, each hop
+    routed round what stands between (`_route`), joined at its nearer end to the connector. Without it a linear roll's web
+    was the nucleated one's - skeleton arms and cuts sized on the house cloud - and on a long row of farms with their own
+    groves the stragglers joined each other in islands the connector never reached (cohort seed 12: 16 of 17 farms
+    stranded, 800-1,300 ft from the connector). The street is still worn AFTER the houses, as every lane here is."""
+    doors = street_doors(houses, arcs, FOOTPATH_FABRIC_GAP + 4.0)
+    if len(doors) < 2:
+        return
+    conn = [(float(x), float(y)) for ln in s.M.get("lanes", []) if ln.get("connector") for x, y in ln.get("pts") or []]
+    if conn and min(math.dist(doors[-1], q) for q in conn) < min(math.dist(doors[0], q) for q in conn):
+        doors.reverse()  # start at the end the connector reaches
+    hard = [poly for poly, _owner, _kind in _homestead_polys(s)] + crop_polys(s) + ([list(plan.envelope)] if plan.envelope else [])
+    water = drawn_water_segs(s)
+    path: list[Pt] = [min(conn, key=lambda q: math.dist(q, doors[0]))] if conn else []
+    for a in doors:
+        leg = _route(path[-1], a, hard, [], water) if path else [a]
+        if len(leg) < 2 and path:
+            continue  # no route to this door: the stragglers serve it
+        path += leg[1:] if path else leg
+    if len(path) >= 2:
+        _draw_web(s, path, 5, houses=[(float(h["x"]), float(h["y"])) for h in houses])
+
+
 def stage_web(s: Settlement, plan: SitePlan) -> None:
     """The lanes the settlement wore.
 
@@ -449,6 +485,8 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # which is what `_net_segs` reads.
     _pass("skeleton")
     _lay_skeleton(s, plan, frame, arcs, stands)
+    if plan.settlement_form == "linear":
+        _lay_street(s, plan, houses, arcs)
 
     pad = 30.0  # a lane runs a little past the last steading it serves, not up to its wall
 

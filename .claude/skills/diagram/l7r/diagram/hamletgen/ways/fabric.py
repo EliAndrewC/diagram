@@ -5,7 +5,7 @@ from __future__ import annotations
 import math
 from collections.abc import Callable, Sequence
 
-from l7r.diagram.settlement import Settlement, edge_dist, rot_rect, seg_closest, seg_dist, segments_cross
+from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, rot_rect, seg_closest, seg_dist, segments_cross
 from l7r.diagram.sitegen.geom import centroid, unit
 
 from ..consts import (
@@ -446,5 +446,10 @@ def _crosses_fabric(run: Poly, fabric: Sequence[Poly], gap: float) -> bool:
                 if seg_dist(c[0], c[1], a, b) < gap:
                     return True
             if edge_dist(a[0], a[1], poly) < gap or edge_dist(b[0], b[1], poly) < gap:
+                return True
+            # ...AND A SEGMENT WHOLLY INSIDE (feature 291): with no edge crossed and nothing within `gap` of an edge, a leg
+            # lying inside the polygon passed - a spur or connector starting inside a farm's 44 ft grove band, its first leg
+            # still in it (cohort seeds 1, 5, 11, 15: the track drawn across a band after this said the run was clear)
+            if point_in_poly(a[0], a[1], poly) or point_in_poly(b[0], b[1], poly):
                 return True
     return False

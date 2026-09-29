@@ -73,6 +73,14 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
         hx, hy, hw, hh = float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"])
         if s._hjit(hx, hy, 95.0) >= HOUSEHOLD_BAMBOO_PREVALENCE:
             continue
+        # A FARM WITH ITS OWN GROVE KEEPS ITS BAMBOO IN THAT GROVE (feature 291; research/vegetation/260, "Did a farmstead's
+        # grove carry bamboo? Yes - mixed in low under the tall trees, on its windward side"). Its deep windward bands draw
+        # the windbreak mix, which carries the bamboo; a separate strip would stand exactly where the grove already does -
+        # and did not: once the dispersed and linear forms rolled again, every seat (back, shed, side, wind) lay in the
+        # grove and Kashikawa's 12 expected strips silently became 0. Counted, so the knob's household half is on record.
+        if (h.get("geom") or {}).get("groves"):
+            s.M["meta"]["household_bamboo_in_grove"] = int(s.M["meta"].get("household_bamboo_in_grove", 0)) + 1
+            continue
         th = math.radians(float(h.get("rot", 0.0)))
         ca, sa = math.cos(th), math.sin(th)
         gap = px(6.0)

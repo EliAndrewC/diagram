@@ -6,13 +6,14 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import cast
 
-from l7r.diagram.settlement import Settlement, edge_dist, seg_intersect, segments_cross, skeleton_layout
+from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, seg_intersect, segments_cross, skeleton_layout
 from l7r.diagram.settlement._geom import ring_offset
 from l7r.diagram.sitegen.geom import centroid, crop_polys, pull_clear, unit
 
 from ..cluster import _fork_spur, seat_cluster
 from ..consts import (
     BROOK_CROSSING_COST_FT,
+    FOOTPATH_FABRIC_GAP,
     FORD_BEND_DEG,
     FORD_HALF,
     FORD_SPACING,
@@ -149,6 +150,33 @@ def _cluster_edge_toward(s: Settlement, target: Pt, fallback: Pt) -> Pt:
     return edge
 
 
+def _out_of_bands(p: Pt, bands: Sequence[Poly], toward: Pt) -> Pt:
+    """`p` set outside the grove bands it stands in (feature 291): walked out toward `toward`, the run's other end, or put
+    a footpath's gap past the nearest edge, whichever lands nearer `toward` - so a spur that began in a band leaves it by
+    the side it was heading for rather than into the yard behind (seed 11). A point already clear comes back untouched."""
+    if not any(point_in_poly(p[0], p[1], band) for band in bands):
+        return p
+    # walked in 2 px steps, asking containment as well as the gap: `push_clear_of_fabric` asks only the distance to the
+    # ring, and a point at a band's middle is farther than a footpath's gap from every edge
+    d = math.dist(p, toward)
+    walked: Pt | None = None
+    for k in range(int(d / 2.0)):
+        q = (p[0] + (toward[0] - p[0]) * 2.0 * k / d, p[1] + (toward[1] - p[1]) * 2.0 * k / d)
+        if not any(point_in_poly(q[0], q[1], band) or edge_dist(q[0], q[1], band) < FOOTPATH_FABRIC_GAP + 1.0 for band in bands):
+            walked = q
+            break
+    near = p
+    for band in bands:
+        if point_in_poly(near[0], near[1], band):
+            near = push_out_of(band, near, FOOTPATH_FABRIC_GAP + 1.0)
+    return near if walked is None else min((walked, near), key=lambda q: math.dist(q, toward))
+
+
+def _water_crossings(pts: Poly, lines: Sequence[tuple[Pt, Pt]]) -> int:
+    """How many times the polyline crosses the water segments (feature 291's grove fallback weighs a route by it)."""
+    return sum(1 for a, b in zip(pts, pts[1:], strict=False) for c, d in lines if segments_cross(a, b, c, d))
+
+
 def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TRACK_FABRIC_GAP) -> Poly:
     """Route a track around the steadings that are already standing, and clip what will be drawn.
 
@@ -186,6 +214,17 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
     drawn_water = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for rec in s.M.get("drawn_channels", []) for a, b in zip(rec["pts"], rec["pts"][1:], strict=False)]
     obstacles = [list(plan.envelope), *crops, *fabric, *([toe_now] if toe_now else []), *wet_now]
     lines = list(plan.watercourses) + drawn_water
+    # AN END STANDING IN THE FABRIC IS WALKED CLEAR ALONG THE RUN FIRST (feature 291). A farm's grove band is fabric now,
+    # and the connector's gateway or the spur's start can land within the gap of one: the clip below then kept nothing,
+    # and the fallback at the end of this function handed back the raw run across the band (the connector over a deep
+    # north band on cohort seed 19, the spur over bands on 11 and 15). Walked along the run's own first and last legs, so
+    # the track still leaves from where it was aimed.
+    run = list(run)
+    for i, j in ((0, 1), (-1, -2)):
+        ux, uy = run[j][0] - run[i][0], run[j][1] - run[i][1]
+        n = math.hypot(ux, uy)
+        if n > 1e-9:
+            run[i] = push_clear_of_fabric(run[i], (ux / n, uy / n), 0.0, fabric, gap)
     routed = _route(run[0], run[-1], obstacles, [], lines)
     out = clip_to_clear(routed if len(routed) >= 2 else run, fabric, gap)
     if len(out) >= 2 and not _crosses_fabric(out, fabric, gap):
@@ -225,7 +264,31 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
         # theory that the offending leg was the first one and nothing above can move it. It changed
         # no map, because this function was never the one at fault - see `_pull_back_to_service`,
         # which moves a connector's inner end AFTER this has cleared it.
-    return out if len(out) >= 2 else run
+    kept = out if len(out) >= 2 else run
+    # ...AND NEVER ACROSS A FARM'S GROVE (feature 291). Where neither the threaded route nor the swing clears every steading,
+    # the clipped run - or the run as it came - went back across grove bands (the spur and the connector, cohort seeds 1, 5,
+    # 11, 12, 14 and 15). A route that must clear only the grove bands and the crop, at a footpath's gap, is tried first; a
+    # band is ground a track goes round, the rest keeps the old fallback.
+    bands = [poly for poly, _owner, kind in _homestead_polys(s) if kind == "groves"]
+    if bands and _crosses_fabric(kept, bands, 0.0):
+        # an end standing IN a band (seed 11's spur began at a deep band's middle, where the walk along the run found no
+        # clear ground) is set out of it on the nearest edge's normal first: a route cannot start inside what it avoids
+        ends = [_out_of_bands(run[0], bands, run[-1]), _out_of_bands(run[-1], bands, run[0])]
+        # ...and where the crop refuses the route too (the spur's field end stands on the bund, inside the crop's gap - seed
+        # 11), round the bands alone: the run it replaces was already clear of the crop but for its end
+        # (seed 11 again), and where the water refuses it (the spur's run already crossed the channel it would ford), round
+        # the bands with the water left to the ford pass - taken only if it crosses no more water than the run it replaces
+        for hard, water in (([*bands, *crops], lines), (bands, lines), (bands, [])):
+            around = _route(ends[0], ends[1], hard, [], water, gap=FOOTPATH_FABRIC_GAP)
+            if len(around) >= 2 and not _crosses_fabric(around, bands, 0.0) and _water_crossings(around, lines) <= _water_crossings(kept, lines):
+                return around
+        # ...and where the run starts inside a band there is no route from it: keep its FAR part, from the field or the
+        # map's edge back to where it would first enter a band, and the web joins the near end (seed 1's spur, which began
+        # inside its own farm's north band)
+        far = clip_to_clear(kept[::-1], bands, FOOTPATH_FABRIC_GAP)[::-1]
+        if len(far) >= 2 and not _crosses_fabric(far, bands, 0.0):
+            return far
+    return kept
 
 
 def stage_seat(s: Settlement, plan: SitePlan) -> None:

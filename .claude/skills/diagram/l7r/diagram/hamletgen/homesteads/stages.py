@@ -5,6 +5,7 @@ from __future__ import annotations
 import math
 import random
 from collections.abc import Sequence
+from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement._knobs import knob_rng
@@ -22,9 +23,14 @@ from .wells import place_wells
 #: quarter pitch keeps a rank a rank while taking it off the surveyed line.
 RANK_DEPTH_JITTER = 0.25
 
-FORM_BOUND: dict[str, float] = {}
+FORM_BOUND: dict[str, float] = {"linear": 2.5}
 """Per-FORM override of how far from the seat center a homestead may stand, as a multiple of the
-seat band's diagonal. EMPTY, deliberately - every form uses the 1.15 default.
+seat band's diagonal; every other form uses the 1.15 default.
+
+A ROW NEEDS ITS LENGTH (feature 291). With the linear form's row taking every household (`front_cap`), the radius sized for
+a compact cluster ended the row after about seven farms carrying their own groves, and the rest were seated in ranks
+behind it - a block again (cohort seed 12). The row village grows long, not wide; 2.5 is a GUESS at the length a row of
+ten to twenty farms with their groves needs, not a researched extent.
 
 A FAILED FIX, recorded so it is not tried again (feature 126). Dispersed and linear maps were given
 2.2 and 1.8 here to cure Inashiro seating 13 of its 15 households. It did not cure it: the cause was
@@ -284,6 +290,15 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # aspect is read on the house centers' own axis, so a block of L by N/L houses reads about half of L*L/N - seven
     # in Inashiro's row drew 1.66 on a rolled crescent (1.9-4.2), six in Kuwabata's 1.71 on a round (1.0-2.0).
     front_cap = min(plan.spec.households, max(6, round(math.sqrt(plan.spec.households * (_lo_a + _hi_a)))))
+    # ...BUT A ROW VILLAGE IS ONE ROW (feature 291; research/homesteads/150, "LINEAR": farmsteads strung along the way, each
+    # holding behind its house). The cap above exists to make a nucleated cluster stand in ranks; applied to the linear form
+    # it did the same, and since feature 126 every linear roll drew a block (settlement-review 2026-09-29: Mizuguchi 611 x
+    # 715 ft with 1 of 12 houses on its track, Kashikawa 2 of 20). The frontage pass below could not help: it fronts the
+    # CONNECTOR, which `stage_track` lays only after the houses, so at this moment it offers nothing. A linear hamlet's row
+    # takes every household it can seat along its field, and the track is then laid along the row (`stage_track`).
+    _linear = plan.settlement_form == "linear"
+    if _linear:
+        front_cap = plan.spec.households
 
     # ...AND A FRONT-ROW SEAT MUST ALSO BE REACHABLE FROM A TRACK, not merely near the paddy
     # (settlement-review, Inashiro 2026-08-17 - the same review round as the rank cap above, which
@@ -360,8 +375,15 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     _g0 = s._bundle_geom(0.0, 0.0, _house_max[0], _house_max[1], "E", shed=True, rot=0.0)  # unturned: each seat adds its own turn
     _core = s._bbox_of([r for r in (_g0["house"], _g0["yard"], _g0.get("shed")) if r is not None])
     _reach = (_core[0] - _core[2] / 2, _core[1] - _core[3] / 2, _core[0] + _core[2] / 2, _core[1] + _core[3] / 2)  # (left, top, right, bottom) about the house center
+    # A ROW VILLAGE'S ROW (feature 291): the whole farmstead - its grove too, which may face the field - stands off the field,
+    # the seats step at the farmstead's own width rather than the nucleated pitch, and the row runs the field's whole edge
+    _row_kw: dict[str, Any] = {}
+    if _linear:
+        _bb = _g0["bbox"]
+        _reach = (_bb[0] - _bb[2] / 2, _bb[1] - _bb[3] / 2, _bb[0] + _bb[2] / 2, _bb[1] + _bb[3] / 2)
+        _row_kw = {"pitch": max(_bb[2], _bb[3]), "reach": float("inf")}
     for _rung in (0,):
-        for (fx, fy), _n in front_row(plan, min(plan.spec.households, 12), standoff=None, chains=s._site_chains, house=_house_max, envelope=_reach, with_normals=True):
+        for (fx, fy), _n in front_row(plan, plan.spec.households if _linear else min(plan.spec.households, 12), standoff=None, chains=s._site_chains, house=_house_max, envelope=_reach, with_normals=True, **_row_kw):
             if placed >= front_cap:
                 break
             # THE ONE COMPUTED MOVE AGAINST THE GROUND (feature 227 FR-002, the GM's "measuring the distance ... and then

@@ -21,10 +21,23 @@ EAST_SHADE_REACH = 22.0
 # THE YARD'S DRYING SUN: the strip south of a threshing yard no grove may stand in - `_yard_sun_conflict`'s 22 px strip.
 YARD_SUN_STRIP = 22.0
 # THE WAY IN THROUGH A RING. A grove round all four sides must still let the farm be reached: its front band is broken
-# once, at the yard's middle, for a way two lane treads wide (the lane fabric sizes every lane at 6 ft). A physical
-# necessity; the width is a GUESS - no old page gives an opening's width, and the old entrances found stood on a grove's
-# open side, which a ring does not have (research/vegetation.html, "How did a lane get through a belt?").
-WAY_IN_FT = 12.0
+# once, at the yard's middle, for a way wide enough that a lane can be ROUTED through it - the router keeps a footpath's
+# fabric gap plus 0.71 of its planning cell off every band on each side, 22.2 ft at its 10 ft cell (measured on cohort
+# seed 12, whose rings were first opened 12 ft, two treads: no route at cells 10, 5 or 3, and 14 of 17 farms stranded).
+# A physical necessity; the width is a GUESS - no old page gives an opening's width, and the old entrances found stood on
+# a grove's open side, which a ring does not have (research/vegetation.html, "How did a lane get through a belt?").
+WAY_IN_FT = 36.0
+# THE LANE'S ROOM BETWEEN TWO FARMS' GROVES: a farm's frame is padded by half of it on every side, so two neighbors' groves
+# stand at least a lane's room apart - `MIN_WEB_GAP` (hamletgen/consts.py: both neighbors' clearance and the tread between
+# them), 18 ft; a test holds the two equal. Unpadded, the frames packed 2-3 ft apart (16 of seed 12's 17 farms) and the
+# neighbors' bands walled off every front, so the web could reach no door.
+LANE_ROOM_FT = 32.0
+# THE SERVICE STRIP BEHIND THE HOUSE: the windward stand stands this far off the back wall, so a wood shed (24 x 12 ft,
+# `FIXTURE_FT`) fits a step (`_WOODSHED_STEP_FT`, 6 ft) off it with a wall gap to spare. Hard against the wall, the stand
+# took every wood-shed seat: once the dispersed and linear forms rolled again, Kashikawa seated 1 of 7 rolled wood sheds
+# and Mizuguchi 1 of 5 (settlement-review, 2026-09-29). Where on the plot a wood shed stood no page says (a GUESS, as the
+# shed's own seat is), so the strip is sized to the shed, not to a finding.
+SERVICE_STRIP_FT = 21.0
 # THE WINDWARD STAND'S DEPTH, in house depths: the grove ~6x the house (research/homesteads.html, the grove's real scale).
 DEEP_BAND_HOUSE_DEPTHS = 1.57
 
@@ -52,6 +65,7 @@ def canonical_farmstead(
     sun_east: float,
     way_in: float,
     yard_sun: float = YARD_SUN_STRIP,
+    back: float = 0.0,
 ) -> dict[str, Any]:
     """The farmstead in the canonical frame, about a house of `cw` x `ch` centered on the origin: `yard`, `garden`, and
     `groves` as (rect, face, "deep" | "thin") - the deep north and west bands; with three sides a thin east band; with four
@@ -66,7 +80,7 @@ def canonical_farmstead(
     garden_r = (yw / 2 + gap + gw / 2, yard_r[1], gw, gh) if garden_by_yard else (cw / 2 + gap + gw / 2, 0.0, gw, gh)
     works = [(-cw / 2, -ch / 2, cw / 2, ch / 2), _edges(yard_r), _edges(garden_r)]
     west_in = min(e[0] for e in works) - gap
-    north_in = min(e[1] for e in works) - gap
+    north_in = min(e[1] for e in works) - gap - back  # `back`: the service strip behind the house (`SERVICE_STRIP_FT`)
     east_w = max(e[2] for e in works)
     south_w = max(e[3] for e in works)
     b = DEEP_BAND_HOUSE_DEPTHS * ch
@@ -95,7 +109,21 @@ def _carried(r: Rect, t: Turn, hx: float, hy: float) -> Rect:
 
 
 def dispersed_layout(
-    hx: float, hy: float, hw: float, hh: float, gap: float, garden: tuple[float, float], yard: tuple[float, float], *, sides: int, turn: Turn, thin: float, sun_east: float, way_in: float
+    hx: float,
+    hy: float,
+    hw: float,
+    hh: float,
+    gap: float,
+    garden: tuple[float, float],
+    yard: tuple[float, float],
+    *,
+    sides: int,
+    turn: Turn,
+    thin: float,
+    sun_east: float,
+    way_in: float,
+    pad: float = 0.0,
+    back: float = 0.0,
 ) -> dict[str, Any]:
     """The dispersed farmstead about a house at (hx, hy) of `hw` x `hh` (as drawn), carried from the canonical frame by
     `turn`: `house`, `yard`, `garden`, `gardens` (one bed), `groves` (rects), `grove_faces` ((face, depth) beside each,
@@ -104,11 +132,12 @@ def dispersed_layout(
     the house's north wall or its west, where the house takes its sun."""
     moved = turn != (1, 0, 0, 1)
     cw, ch = (hh, hw) if turns_axes(turn) else (hw, hh)
-    can = canonical_farmstead(cw, ch, gap, garden, yard, sides=sides, garden_by_yard=moved, thin=thin, sun_east=sun_east, way_in=way_in)
+    can = canonical_farmstead(cw, ch, gap, garden, yard, sides=sides, garden_by_yard=moved, thin=thin, sun_east=sun_east, way_in=way_in, back=back)
     yard_r = _carried(can["yard"], turn, hx, hy)
     garden_r = _carried(can["garden"], turn, hx, hy)
     groves = [_carried(r, turn, hx, hy) for r, _f, _d in can["groves"]]
     faces = [(turn_face(turn, f), d) for _r, f, d in can["groves"]]
     edges = [_edges(r) for r in (*groves, yard_r, garden_r, (hx, hy, hw, hh))]
-    frame = _box(min(e[0] for e in edges), min(e[1] for e in edges), max(e[2] for e in edges), max(e[3] for e in edges))
+    # the frame the placer reserves, padded by `pad` (half the lane's room, `LANE_ROOM_FT`) so neighbors leave a lane between
+    frame = _box(min(e[0] for e in edges) - pad, min(e[1] for e in edges) - pad, max(e[2] for e in edges) + pad, max(e[3] for e in edges) + pad)
     return {"house": (hx, hy, hw, hh), "yard": yard_r, "garden": garden_r, "gardens": [garden_r], "groves": groves, "grove_faces": faces, "_frame": frame}

@@ -29,6 +29,7 @@ from .plan import SitePlan
 from .sink import BROOK_JOIN_TRUNK
 from .water import polder_crossing_caps
 from .ways.checks import square_crossings
+from .ways.fabric import _crosses_fabric, _homestead_polys
 
 # THE RE-SEAT PROBE MUST MEASURE THE BOARD THAT IS DRAWN (feature 134 T50, 2026-08-29). This was pinned
 # at 14 x 8 while `Settlement.kosatsuba` draws the researched 12 x 5 - not even the same aspect - and the
@@ -94,11 +95,14 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
     # rather than obliquely" (research ways/030)
     waters = [(f["poly"], float(f.get("w", 8.0)) / 2 + s.px(6.0)) for f in s.M.get("streams", []) if len(f.get("poly") or ()) >= 2]
     waters += [(c["pts"], float(c.get("w0", 4.0)) / 2 + s.px(6.0)) for c in s.M.get("drawn_channels", []) if len(c.get("pts") or ()) >= 2]
+    _fabric_now = [poly for poly, _owner, kind in _homestead_polys(s) if kind == "groves"]  # the farm grove bands (feature 291)
     for brook, half in waters:
         for i, ln in enumerate(s.M.get("lanes", [])):
             pts = [(float(x), float(y)) for x, y in ln["pts"]]
             squared = square_crossings(pts, [(float(x), float(y)) for x, y in brook], half)
-            if len(squared) != len(pts):
+            # ...NOT WHERE THE NEW CHORD RUNS ACROSS THE FABRIC (feature 291): squaring drops the vertices near the brook, and
+            # on cohort seed 22 the dropped one was a detour round five farm grove bands, so the chord cut across them all
+            if len(squared) != len(pts) and not _crosses_fabric(squared, _fabric_now, 0.0):
                 ln["pts"] = [[x, y] for x, y in squared]
                 s.reink_lane(i)
     s.bridges()
