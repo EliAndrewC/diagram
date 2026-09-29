@@ -1,0 +1,6 @@
+{
+  "utc": "2026-09-28T19:21:37Z",
+  "target": "entry-gate",
+  "commit": "9d3499baf",
+  "why": "entry-drift IN-STEP on BundBeans (fields/020: grid and bund-width wording only), HouseholdShrine and WoodKamiAltar (homesteads/210: fixture counts re-read, the shrine unchanged at 1), MainGate (towns/120, K5); Alder and ShrineBurialGround rewritten"
+}
