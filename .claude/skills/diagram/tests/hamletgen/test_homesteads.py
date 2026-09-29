@@ -3,6 +3,7 @@
 Split from test_hamletgen.py by feature 111; test bodies verbatim. See hamletgen/CLAUDE.md.
 """
 
+import contextlib
 import math
 
 import pytest
@@ -40,7 +41,13 @@ def _only_seat(sx: float, sy: float, open_seat: tuple[float, float] | None = Non
     """A settlement whose engine allows a wellhead at (sx, sy) alone, and whose `open_seat` answers `open_seat`."""
     from types import SimpleNamespace
 
-    return SimpleNamespace(well_at=lambda x, y: abs(x - sx) < 0.5 and abs(y - sy) < 0.5, open_seat=lambda *_a, **_k: open_seat, M={})
+    # `frozen_terrain` is the engine's one-index scope for the well ladder; this stand-in has no terrain to freeze
+    return SimpleNamespace(
+        well_at=lambda x, y: abs(x - sx) < 0.5 and abs(y - sy) < 0.5,
+        open_seat=lambda *_a, **_k: open_seat,
+        M={},
+        frozen_terrain=contextlib.nullcontext,
+    )
 
 
 def test_a_well_is_held_to_the_wall_gap_the_test_reads_not_to_a_center_distance() -> None:
