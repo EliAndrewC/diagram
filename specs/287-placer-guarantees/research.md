@@ -282,3 +282,26 @@ among them move, since the seats now read the finished course); Sawada moves onl
 unchanged. Every map seats every household in one roll. The pool's rule tests then fail two rules on Mizuguchi -
 `test_an_entrance_board_stands_at_the_entrance` and `test_every_lane_crosses_the_brook_square` - both rules this feature
 guarantees (labels, P6; ways, P4); the regressed state stays in the clone until they land.
+
+## R7 - Decisions recorded during implementation (2026-09-29)
+
+Each is recorded where it arose as well (the pointer at the point of change); this is the feature's list, for the
+Decisions review and for what goes to the GM once the work runs.
+
+- **water:W26 / W27 (a plot's working width, the dart) - RECORDED, not enforced; a guess held open.** The research
+  entries `fields/023` and `fields/025` describe irregular hill-foot plots narrower and sharper than the old thresholds
+  allowed, so a placer that refused them would draw against the record. `ring_rules.narrow` / `dart` report them and no
+  placer refuses on them. Cost: a plot a reader finds implausibly thin is not prevented. Alternative priced: enforcing the
+  old thresholds (contradicts the record). Chosen by the session; for the Decisions review.
+- **water:W36 - needs a physical research pass** before any guarantee (the design row names the question); it stays open
+  in T12 and is not guessed.
+- **labels:L6 applies at ring 0 only** (the crown obstacles are the tree ring the caption would cover; outer rings are
+  scatter the placer already treats as soft). Map drawing convention.
+- **labels:L14(b) treats the canvas as the view** on Mode A sheets, which have no crop. Map drawing convention.
+- **Mode A area captions take a holder waiver**: a room's caption sits inside its room by definition, so the "not over
+  another feature" rule excludes the caption's own holder. Map drawing convention.
+- **D12, the board terminal** ("no verge takes a board with a clean caption"): kept, marked for the GM; the count over the
+  pool, cohort 1-48 and the Mode A sheets is **0 of 53** maps (the labels implementer's run, 2026-09-29). Mizuguchi's
+  board moves from its entrance to the center: the knob now resolves only over placements the map can site.
+- **The fan envelope's fold (seed 27)**: an outline the floor trim folds is reduced to its largest valid polygon at the
+  outline's making (`ring_rules.simple_outline`), keeping all the fan's ground; historically neutral (a drawing repair).
