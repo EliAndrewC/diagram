@@ -33,8 +33,7 @@ def _load():  # noqa: ANN202
 er = _load()
 FEATURE = "specs/293-effort-level-experiment"
 FAKE_CLAUDE = "#!/bin/sh\nprintf '%s\\n' \"$@\" > \"$FAKE_OUT/claude.argv\"\nenv > \"$FAKE_OUT/claude.env\"\n"
-FAKE_PAGE_SESSION = ("#!/bin/sh\nprintf '%s\\n' \"$@\" > \"$FAKE_OUT/page.argv\"\nenv > \"$FAKE_OUT/page.env\"\n"
-                     "echo 'page-session: started'\n")
+FAKE_PAGE_SESSION = "#!/bin/sh\nprintf '%s\\n' \"$@\" > \"$FAKE_OUT/page.argv\"\nenv > \"$FAKE_OUT/page.env\"\necho 'page-session: started'\n"
 
 
 def _git(*args: str, cwd: pathlib.Path) -> str:
@@ -82,20 +81,17 @@ def world(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> dict:
     claims.write_text("- 280 towns\n- 293 servants' quarters (run e0) | claim released\n")
     events = tmp_path / "events"
     events.mkdir()
-    return {"origin": origin, "fdir": fdir, "home": home, "out": out, "tmp": tmp_path, "claims": claims, "events": events,
-            "start": _git("rev-parse", "HEAD", cwd=origin)}
+    return {"origin": origin, "fdir": fdir, "home": home, "out": out, "tmp": tmp_path, "claims": claims, "events": events, "start": _git("rev-parse", "HEAD", cwd=origin)}
 
 
 def _init(w: dict, seed: int = 7) -> dict:
-    ns = argparse.Namespace(start=w["start"], seed=seed, offset=0.9, sources_home=str(w["home"]),
-                            snapshot=str(w["tmp"] / "snap"))
+    ns = argparse.Namespace(start=w["start"], seed=seed, offset=0.9, sources_home=str(w["home"]), snapshot=str(w["tmp"] / "snap"))
     return er.init(ns, w["origin"], 1_000_000.0)
 
 
 def _run_args(w: dict, task: str, run: str = "e1", arm: str = "xhigh", ws_gb: float = 2.0) -> argparse.Namespace:
     cg = _cgroup(w["tmp"] / f"cg-{run}-{ws_gb}", int((ws_gb + 1) * er.GB), er.GB)
-    return argparse.Namespace(task=task, run=run, arm=arm, order=1, origin=str(w["origin"]), clones=str(w["tmp"] / "clones"),
-                              claims=str(w["claims"]), cgroup=str(cg), events=str(w["events"]))
+    return argparse.Namespace(task=task, run=run, arm=arm, order=1, origin=str(w["origin"]), clones=str(w["tmp"] / "clones"), claims=str(w["claims"]), cgroup=str(cg), events=str(w["events"]))
 
 
 def test_init_records_what_every_run_shares_once(world: dict) -> None:
@@ -210,17 +206,19 @@ def test_claims_at_start_without_a_claims_file(tmp_path: pathlib.Path) -> None:
 def test_the_command_line_refuses_and_reports(world: dict, capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.chdir(world["origin"])
     snap = str(world["tmp"] / "snap2")
-    assert er.main(["init", "--start", world["start"], "--seed", "3", "--offset", "0.9", "--sources-home", str(world["home"]),
-                    "--snapshot", snap]) == 0
+    assert er.main(["init", "--start", world["start"], "--seed", "3", "--offset", "0.9", "--sources-home", str(world["home"]), "--snapshot", snap]) == 0
     assert "experiment recorded" in capsys.readouterr().out
-    assert er.main(["init", "--start", world["start"], "--seed", "3", "--offset", "0.9", "--sources-home", str(world["home"]),
-                    "--snapshot", snap + "x"]) == 2
+    assert er.main(["init", "--start", world["start"], "--seed", "3", "--offset", "0.9", "--sources-home", str(world["home"]), "--snapshot", snap + "x"]) == 2
     assert "REFUSED" in capsys.readouterr().err
     a = _run_args(world, "R", run="e7")
-    assert er.main(["run", "--task", "R", "--run", "e7", "--arm", "medium", "--order", "1", "--origin", a.origin,
-                    "--clones", a.clones, "--claims", a.claims, "--cgroup", a.cgroup, "--events", a.events]) == 0
+    assert (
+        er.main(["run", "--task", "R", "--run", "e7", "--arm", "medium", "--order", "1", "--origin", a.origin, "--clones", a.clones, "--claims", a.claims, "--cgroup", a.cgroup, "--events", a.events])
+        == 0
+    )
     assert "e7 started (R)" in capsys.readouterr().out
     (world["fdir"] / "runs" / "e7.json").write_text(json.dumps({"ended": "done"}))
-    assert er.main(["run", "--task", "I", "--run", "e8", "--arm", "xhigh", "--order", "2", "--origin", a.origin,
-                    "--clones", a.clones, "--claims", a.claims, "--cgroup", a.cgroup, "--events", a.events]) == 0
+    assert (
+        er.main(["run", "--task", "I", "--run", "e8", "--arm", "xhigh", "--order", "2", "--origin", a.origin, "--clones", a.clones, "--claims", a.claims, "--cgroup", a.cgroup, "--events", a.events])
+        == 0
+    )
     assert "transcript" in capsys.readouterr().out

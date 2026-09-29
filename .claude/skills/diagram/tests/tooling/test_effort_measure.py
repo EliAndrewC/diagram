@@ -32,10 +32,11 @@ FEATURE = "specs/293-effort-level-experiment"
 
 
 def _asst(mid: str, ts: str, blocks: list[dict], out: int, inp: int = 10, cr: int = 100, cw: int = 5) -> dict:
-    return {"type": "assistant", "timestamp": ts,
-            "message": {"id": mid, "model": "claude-opus-5-5", "content": blocks,
-                        "usage": {"input_tokens": inp, "output_tokens": out, "cache_read_input_tokens": cr,
-                                  "cache_creation_input_tokens": cw}}}
+    return {
+        "type": "assistant",
+        "timestamp": ts,
+        "message": {"id": mid, "model": "claude-opus-5-5", "content": blocks, "usage": {"input_tokens": inp, "output_tokens": out, "cache_read_input_tokens": cr, "cache_creation_input_tokens": cw}},
+    }
 
 
 def _result(tid: str, text: str, ts: str) -> dict:
@@ -49,26 +50,28 @@ def _write(path: pathlib.Path, recs: list[dict]) -> None:
 
 MAIN = [
     _asst("m1", "2026-10-01T10:00:00Z", [{"type": "text", "text": "starting"}], out=3),
-    _asst("m1", "2026-10-01T10:00:01Z", [{"type": "tool_use", "id": "t1", "name": "Bash",
-                                         "input": {"command": "make quick"}}], out=40),
+    _asst("m1", "2026-10-01T10:00:01Z", [{"type": "tool_use", "id": "t1", "name": "Bash", "input": {"command": "make quick"}}], out=40),
     _result("t1", "1 failed, 20 passed\nmake: *** Error 1", "2026-10-01T10:01:00Z"),
-    _asst("m2", "2026-10-01T10:02:00Z", [{"type": "tool_use", "id": "t2", "name": "Bash",
-                                         "input": {"command": "make quick"}}], out=7),
+    _asst("m2", "2026-10-01T10:02:00Z", [{"type": "tool_use", "id": "t2", "name": "Bash", "input": {"command": "make quick"}}], out=7),
     _result("t2", "21 passed", "2026-10-01T10:03:00Z"),
-    _asst("m3", "2026-10-01T10:04:00Z", [
-        {"type": "tool_use", "id": "t3", "name": "Agent", "input": {"subagent_type": "general-purpose", "model": "opus",
-                                                                    "description": "weigh the two routes"}},
-        {"type": "tool_use", "id": "t4", "name": "Agent", "input": {"subagent_type": "Explore", "model": "sonnet",
-                                                                    "description": "review the lane tests"}},
-        {"type": "tool_use", "id": "t5", "name": "Agent", "input": {"subagent_type": "Explore", "model": "sonnet",
-                                                                    "description": "find burial.py"}},
-        {"type": "tool_use", "id": "t6", "name": "Agent", "input": {"subagent_type": "adhoc-judge", "description": "judge"}},
-        {"type": "tool_use", "id": "t7", "name": "Agent", "input": {"subagent_type": "quote-check", "description": "q"}}],
-        out=9),
+    _asst(
+        "m3",
+        "2026-10-01T10:04:00Z",
+        [
+            {"type": "tool_use", "id": "t3", "name": "Agent", "input": {"subagent_type": "general-purpose", "model": "opus", "description": "weigh the two routes"}},
+            {"type": "tool_use", "id": "t4", "name": "Agent", "input": {"subagent_type": "Explore", "model": "sonnet", "description": "review the lane tests"}},
+            {"type": "tool_use", "id": "t5", "name": "Agent", "input": {"subagent_type": "Explore", "model": "sonnet", "description": "find burial.py"}},
+            {"type": "tool_use", "id": "t6", "name": "Agent", "input": {"subagent_type": "adhoc-judge", "description": "judge"}},
+            {"type": "tool_use", "id": "t7", "name": "Agent", "input": {"subagent_type": "quote-check", "description": "q"}},
+        ],
+        out=9,
+    ),
     _asst("m4", "2026-10-01T11:00:00Z", [{"type": "text", "text": "Which width should the path be?"}], out=2),
 ]
-SUB = [_asst("s1", "2026-10-01T10:30:00Z", [{"type": "tool_use", "id": "u1", "name": "WebFetch", "input": {}}], out=5),
-       _asst("s2", "2026-10-01T10:31:00Z", [{"type": "text", "text": "CHANGES REQUIRED - 2 notes not verbatim"}], out=6)]
+SUB = [
+    _asst("s1", "2026-10-01T10:30:00Z", [{"type": "tool_use", "id": "u1", "name": "WebFetch", "input": {}}], out=5),
+    _asst("s2", "2026-10-01T10:31:00Z", [{"type": "text", "text": "CHANGES REQUIRED - 2 notes not verbatim"}], out=6),
+]
 
 
 def test_the_fold_takes_each_message_s_maximum_and_agrees_with_the_census() -> None:
@@ -95,14 +98,17 @@ def _world(tmp: pathlib.Path, task: str = "I") -> dict:
     _write(project / "sid-1.jsonl", MAIN)
     _write(project / "sid-1" / "subagents" / "agent-a1.jsonl", SUB)
     (project / "sid-1" / "subagents" / "agent-a1.meta.json").write_text(json.dumps({"agentType": "quote-check"}))
-    _write(project / "sid-1" / "subagents" / "agent-a2.jsonl", [_asst("s3", "2026-10-01T10:40:00Z",
-                                                                     [{"type": "text", "text": "KEEP 2, CUT 1"}], out=1)])
+    _write(project / "sid-1" / "subagents" / "agent-a2.jsonl", [_asst("s3", "2026-10-01T10:40:00Z", [{"type": "text", "text": "KEEP 2, CUT 1"}], out=1)])
     (project / "sid-1" / "subagents" / "agent-a2.meta.json").write_text(json.dumps({"agentType": "escalation-check"}))
     guard = tmp / "guard-log"
     guard.mkdir()
-    for i, e in enumerate([{"session": "sid-1", "cwd": "/x", "guard": "batching", "event": "blocked", "rule": "recon"},
-                           {"session": "other", "cwd": str(clone) + "/sub", "guard": "house-style", "event": "rewrote", "rule": "dash"},
-                           {"session": "other", "cwd": "/elsewhere", "guard": "batching", "event": "blocked", "rule": "recon"}]):
+    for i, e in enumerate(
+        [
+            {"session": "sid-1", "cwd": "/x", "guard": "batching", "event": "blocked", "rule": "recon"},
+            {"session": "other", "cwd": str(clone) + "/sub", "guard": "house-style", "event": "rewrote", "rule": "dash"},
+            {"session": "other", "cwd": "/elsewhere", "guard": "batching", "event": "blocked", "rule": "recon"},
+        ]
+    ):
         (guard / f"{i}.json").write_text(json.dumps(e))
     (guard / "bad.json").write_text("{")
     run = {"run_id": "e1", "task": task, "clone": str(clone), "pauses": [["2026-10-01T10:10:00Z", "2026-10-01T10:20:00Z"]]}
@@ -111,8 +117,7 @@ def _world(tmp: pathlib.Path, task: str = "I") -> dict:
 
 def test_a_run_is_measured_from_every_source(tmp_path: pathlib.Path) -> None:
     w = _world(tmp_path)
-    m = em.measure(w["run"], w["projects"], w["guard"], {"quote-check", "escalation-check", "adhoc-judge"},
-                   ["293 I: the path", "fix the spur width", "round-2 changes", "Revert the web edit"])
+    m = em.measure(w["run"], w["projects"], w["guard"], {"quote-check", "escalation-check", "adhoc-judge"}, ["293 I: the path", "fix the spur width", "round-2 changes", "Revert the web edit"])
     assert m["tokens"]["main"]["output_tokens"] == 58 and m["tokens"]["subagents"]["output_tokens"] == 12
     assert m["tokens"]["total"]["cache_read_input_tokens"] == 100 * 4 + 100 * 3
     assert m["wall_clock_s"] == 3600 - 600, "first to last event, less the logged pause"
@@ -134,8 +139,7 @@ def test_an_empty_project_measures_zero(tmp_path: pathlib.Path) -> None:
 
 
 def _git(*args: str, cwd: pathlib.Path) -> str:
-    return subprocess.run(["git", "-c", "user.email=t@t", "-c", "user.name=t", *args], cwd=cwd, capture_output=True,
-                          text=True, check=True).stdout.strip()
+    return subprocess.run(["git", "-c", "user.email=t@t", "-c", "user.name=t", *args], cwd=cwd, capture_output=True, text=True, check=True).stdout.strip()
 
 
 def _repo(tmp: pathlib.Path, w: dict, task: str, logs: list[pathlib.Path]) -> pathlib.Path:
@@ -162,8 +166,7 @@ def _repo(tmp: pathlib.Path, w: dict, task: str, logs: list[pathlib.Path]) -> pa
     copy.mkdir()
     (copy / "sources-consulted.jsonl").write_text("a\nb\nc\n")
     (fdir / "experiment.json").write_text(json.dumps({"sources_snapshot": str(snap)}))
-    run = w["run"] | {"task": task, "start_commit": start, "shared_state": {}, "env": {"L7R_SOURCES_HOME": str(copy)},
-                      "sessions": [{"log": str(p)} for p in logs], "ended": None}
+    run = w["run"] | {"task": task, "start_commit": start, "shared_state": {}, "env": {"L7R_SOURCES_HOME": str(copy)}, "sessions": [{"log": str(p)} for p in logs], "ended": None}
     (fdir / "runs" / "e1.json").write_text(json.dumps(run))
     _git("init", "-q", "-b", "main", cwd=repo)
     return repo
@@ -174,8 +177,7 @@ def _main(w: dict, repo: pathlib.Path, claims: pathlib.Path, monkeypatch: pytest
     return em.main(["--run", "e1", "--projects", str(w["projects"]), "--guard-log", str(w["guard"]), "--claims", str(claims)])
 
 
-def test_the_command_refuses_a_running_run_then_measures_it(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch,
-                                                           capsys: pytest.CaptureFixture[str]) -> None:
+def test_the_command_refuses_a_running_run_then_measures_it(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     w = _world(tmp_path)
     log = tmp_path / "log"
     log.mkdir()

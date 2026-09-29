@@ -31,8 +31,7 @@ FEATURE = "specs/293-effort-level-experiment"
 
 
 def _git(*args: str, cwd: pathlib.Path) -> str:
-    return subprocess.run(["git", "-c", "user.email=t@t", "-c", "user.name=t", *args], cwd=cwd, capture_output=True,
-                          text=True, check=True).stdout.strip()
+    return subprocess.run(["git", "-c", "user.email=t@t", "-c", "user.name=t", *args], cwd=cwd, capture_output=True, text=True, check=True).stdout.strip()
 
 
 def _clone(tmp: pathlib.Path, run_id: str, arm: str) -> tuple[pathlib.Path, str]:
@@ -44,8 +43,7 @@ def _clone(tmp: pathlib.Path, run_id: str, arm: str) -> tuple[pathlib.Path, str]
     _git("add", "-A", cwd=clone)
     _git("commit", "-qm", "start", cwd=clone)
     start = _git("rev-parse", "HEAD", cwd=clone)
-    (clone / "research" / "buildings" / "900-servants.html").write_text(
-        f"<p>A medium-sized room in {clone}; run {run_id} ran with --effort {arm}, effort: {arm}; xhigh noted.</p>\n")
+    (clone / "research" / "buildings" / "900-servants.html").write_text(f"<p>A medium-sized room in {clone}; run {run_id} ran with --effort {arm}, effort: {arm}; xhigh noted.</p>\n")
     (clone / "pool" / "hamlets" / "inashiro.png").write_bytes(b"\x89PNG fake")
     (clone / "pool" / "hamlets" / "inashiro.notes.md").write_text(f"path added by diagram-exp-{run_id}\n")
     (clone / "l7r.py").write_text(f"WIDTH = 4  # {run_id}\n")
@@ -64,14 +62,13 @@ def _world(tmp: pathlib.Path, task: str) -> dict:
     projects = tmp / "projects"
     for run_id, arm in (("e1", "medium"), ("e2", "xhigh")):
         clone, start = _clone(tmp, run_id, arm)
-        (fdir / "runs" / f"{run_id}.json").write_text(json.dumps(
-            {"run_id": run_id, "task": task, "arm": arm, "clone": str(clone), "start_commit": start, "status": "valid"}))
+        (fdir / "runs" / f"{run_id}.json").write_text(json.dumps({"run_id": run_id, "task": task, "arm": arm, "clone": str(clone), "start_commit": start, "status": "valid"}))
         project = projects / str(clone).replace("/", "-").replace(".", "-")
         project.mkdir(parents=True)
-        recs = [{"type": "assistant", "message": {"content": [{"type": "tool_use", "id": f"d-{run_id}", "name": "Bash",
-                                                              "input": {"command": "make done"}}]}},
-                {"type": "user", "message": {"content": [{"type": "tool_result", "tool_use_id": f"d-{run_id}",
-                                                          "content": f"gate: green in {clone} sid-{run_id}"}]}}]
+        recs = [
+            {"type": "assistant", "message": {"content": [{"type": "tool_use", "id": f"d-{run_id}", "name": "Bash", "input": {"command": "make done"}}]}},
+            {"type": "user", "message": {"content": [{"type": "tool_result", "tool_use_id": f"d-{run_id}", "content": f"gate: green in {clone} sid-{run_id}"}]}},
+        ]
         (project / f"sid-{run_id}.jsonl").write_text("\n".join(json.dumps(r) for r in recs) + "\nnot json\n")
     (fdir / "runs" / "e3.json").write_text(json.dumps({"run_id": "e3", "task": task, "status": "void"}))
     return {"repo": repo, "projects": projects}
@@ -86,8 +83,7 @@ def test_nothing_that_names_the_arm_or_the_run_reaches_the_bundle(tmp_path: path
     w = _world(tmp_path, task)
     bundle, key = eb.blind(w["repo"], task, 11, tmp_path / "out", w["projects"])
     text = _all_text(bundle)
-    for leak in ("diagram-exp-e1", "diagram-exp-e2", "--effort medium", "effort: xhigh", "xhigh", "Co-Authored-By",
-                 "sid-e1", str(tmp_path / "clones")):
+    for leak in ("diagram-exp-e1", "diagram-exp-e2", "--effort medium", "effort: xhigh", "xhigh", "Co-Authored-By", "sid-e1", str(tmp_path / "clones")):
         assert leak not in text, leak
     assert "e1" not in text.replace("<", " ") or "run <run>" in text
     assert sorted([key["A"], key["B"]]) == ["e1", "e2"] and key["seed"] == 11
@@ -116,8 +112,7 @@ def test_a_task_without_two_valid_runs_is_refused(tmp_path: pathlib.Path) -> Non
         eb.blind(w["repo"], "R", 1, tmp_path / "out", w["projects"])
 
 
-def test_the_command_prints_only_the_manifest_path(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch,
-                                                   capsys: pytest.CaptureFixture[str]) -> None:
+def test_the_command_prints_only_the_manifest_path(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     w = _world(tmp_path, "I")
     monkeypatch.chdir(w["repo"])
     assert eb.main(["--task", "I", "--seed", "2", "--out", str(tmp_path / "o"), "--projects", str(w["projects"])]) == 0

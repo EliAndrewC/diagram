@@ -329,15 +329,14 @@ def _run_sh(tmp_path: pathlib.Path, *args: str) -> tuple[int, list[str], str]:
     (bin_ / "claude").write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
     argv_file = tmp_path / "argv.json"
     (bin_ / "python3").write_text(
-        f"#!/usr/bin/env -S {pathlib.Path(__import__('sys').executable)}\nimport json, sys\n"
-        f"open({str(argv_file)!r}, 'w').write(json.dumps(sys.argv[1:]))\n", encoding="utf-8")
+        f"#!/usr/bin/env -S {pathlib.Path(__import__('sys').executable)}\nimport json, sys\nopen({str(argv_file)!r}, 'w').write(json.dumps(sys.argv[1:]))\n", encoding="utf-8"
+    )
     for f in bin_.iterdir():
         f.chmod(0o755)
     brief = tmp_path / "brief.md"
     brief.write_text(BRIEF, encoding="utf-8")
     env = {"PATH": f"{bin_}:/usr/bin:/bin", "HOME": str(tmp_path)}
-    r = subprocess.run(["bash", str(REPO / "scripts" / "page-session.sh"), str(brief), *args], cwd=REPO, env=env,
-                       capture_output=True, text=True, check=False)
+    r = subprocess.run(["bash", str(REPO / "scripts" / "page-session.sh"), str(brief), *args], cwd=REPO, env=env, capture_output=True, text=True, check=False)
     argv = __import__("json").loads(argv_file.read_text()) if argv_file.exists() else []
     return r.returncode, argv, r.stderr
 
@@ -347,12 +346,12 @@ def test_effort_and_agents_reach_every_session_and_unset_they_change_nothing(tmp
     pinned ad-hoc judge; unset, the runner's argv is what it was."""
     code, plain, _ = _run_sh(tmp_path / "a", "diagram-x", "opus")
     assert code == 0 and "--effort" not in plain and "--agents" not in plain
-    extra = plain[plain.index("--model"):plain.index("--")]
+    extra = plain[plain.index("--model") : plain.index("--")]
     assert extra == ["--model", "opus"], "unset EFFORT and AGENTS add nothing"
     agents = tmp_path / "agents.json"
     agents.write_text('{"adhoc-judge": {"model": "opus", "effort": "high"}}', encoding="utf-8")
     code, argv, _ = _run_sh(tmp_path / "b", "diagram-x", "", "xhigh", str(agents))
-    extra = argv[4:argv.index("--")]  # the runner script, root, name, projects, then the extra flags
+    extra = argv[4 : argv.index("--")]  # the runner script, root, name, projects, then the extra flags
     assert code == 0 and extra == ["--effort", "xhigh", "--agents", agents.read_text()]
 
 
