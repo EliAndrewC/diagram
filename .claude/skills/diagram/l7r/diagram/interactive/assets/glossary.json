@@ -10891,5 +10891,68 @@
    "harakata-shu",
    "harakata"
   ]
+ },
+ "Bunkyu": {
+  "def": "A Japanese era name of the last years of the shogunate (1861-1864); Osaka's \"Bunkyu fire\" was the city's great fire of 1863.",
+  "variants": [
+   "Bunkyu",
+   "Bunkyū",
+   "Bunkyu era"
+  ]
+ },
+ "Shaka Nyorai": {
+  "def": "The historical Buddha, Shakyamuni, in his form as a Tathagata, the Japanese name under which a temple enshrines him as its principal image.",
+  "variants": [
+   "Shaka Nyorai",
+   "Shaka"
+  ]
+ },
+ "principal image": {
+  "def": "The statue or picture of a buddha or deity that a temple enshrines in its main hall as the chief object of its worship.",
+  "variants": [
+   "principal image",
+   "principal images"
+  ]
+ },
+ "thirty guardian deities": {
+  "def": "The thirty kami the Nichiren sect worshipped as protectors of the Lotus Sutra, one on guard for each day of the month. A Nichiren temple might keep a hall to them, as Kōshōji at Senjudō did in 1843, with its own tax-exempt land.",
+  "variants": [
+   "thirty guardian deities",
+   "guardian deities",
+   "sanjūbanshin"
+  ]
+ },
+ "land class": {
+  "def": "The Meiji state's sorting of land, by a decree of 1874, into government land and private land, each in numbered classes that decided whether the land paid land tax. A temple precinct was usually government land class 4 (untaxed); one a temple owned outright was private land.",
+  "variants": [
+   "land class",
+   "land classes"
+  ]
+ },
+ "Rennyo": {
+  "def": "A leader of the Shin sect whose letters to his followers (the Ofumi) are still read. In 1471, at fifty-seven, he moved to Yoshizaki, where a town of priests' lodging houses grew up round his temple.",
+  "variants": [
+   "Rennyo"
+  ]
+ },
+ "Ofumi": {
+  "def": "Rennyo's letters to the Shin sect's followers, collected in fascicles. The sect also calls them the Gobunshō.",
+  "variants": [
+   "Ofumi",
+   "Gobunsho",
+   "Gobunshō"
+  ]
+ },
+ "ujibito": {
+  "def": "At the Kamigamo shrine, the hereditary clan members who served as its priests alongside the shrine officials. Until the Restoration both lived in the shrine's priests' quarter, among farmers.",
+  "variants": [
+   "ujibito"
+  ]
+ },
+ "Daoguang": {
+  "def": "The reign name of the Qing emperor who ruled China from 1821 to 1850. Years are counted from its start, so Daoguang 26 is 1846.",
+  "variants": [
+   "Daoguang"
+  ]
  }
 }

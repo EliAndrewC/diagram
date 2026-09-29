@@ -205,6 +205,9 @@ bunds	bund
 bungi	bungi
 bunka	Bunka
 bunka era	Bunka
+bunkyu	Bunkyu
+bunkyu era	Bunkyu
+bunkyū	Bunkyu
 bunsei	Bunsei
 bunsuiguchi	bunsuiguchi
 bunto house	bunto house
@@ -441,6 +444,7 @@ danka	danna-dera
 danna-ba	kusaba
 danna-dera	danna-dera
 danzaemon	Danzaemon
+daoguang	Daoguang
 daoshi	daoshi
 daozuofang	daozuofang
 daqing gate	Daqing gate
@@ -829,6 +833,8 @@ glyph	glyph
 glyphs	glyph
 gm	GM
 go	go
+gobunsho	Ofumi
+gobunshō	Ofumi
 god of government office	yamen-god
 god of land	tudi miao
 goemon-buro	goemon-buro
@@ -870,6 +876,7 @@ guangxu era	Guangxu era
 guanxiang	guanxiang
 guard cities	guard city
 guard city	guard city
+guardian deities	thirty guardian deities
 gulou	gulou
 gun bugyo	gun-bugyo
 gun-bugyo	gun-bugyo
@@ -1453,6 +1460,8 @@ kōsatsu-ba	kosatsuba
 kōshin	Kōshin
 lacey	Lacey
 lake tai	Lower Yangzi
+land class	land class
+land classes	land class
 land consolidation	kochi seiri
 land readjustment	kochi seiri
 land-readjustment	kochi seiri
@@ -1777,6 +1786,7 @@ odoko	odoko
 offering hall	offering hall
 offtake	offtake
 offtakes	offtake
+ofumi	Ofumi
 ofuregaki	ofuregaki
 ogashoya	ogashoya
 ohaguro dobu	ohaguro-dobu
@@ -1928,6 +1938,8 @@ prefectural cities	prefectural city
 prefectural city	prefectural city
 prefecture	prefectural city
 prefectures	prefectural city
+principal image	principal image
+principal images	principal image
 prison god	jail-god
 proso	proso
 proso millet	proso
@@ -2006,6 +2018,7 @@ remanded	remand
 ren	ren
 renge	renge
 renkaku	renkaku
+rennyo	Rennyo
 rent bursary	rent bursary
 rent-collection bursaries	rent bursary
 rent-collection bursary	rent bursary
@@ -2105,6 +2118,7 @@ sandō	sando
 sangai banrei	three-worlds-myriad-spirits
 sangji yutang	dike-pond
 sanheyuan	sanheyuan
+sanjūbanshin	thirty guardian deities
 sankin-kotai	alternate attendance
 sankyoson	sankyoson
 sanmai	sanmai
@@ -2174,6 +2188,8 @@ seyakuin	seyakuin
 shacho-sen'yokata	shacho-sen'yokata
 shadoof	jiegao
 shahi	shahi
+shaka	Shaka Nyorai
+shaka nyorai	Shaka Nyorai
 shaku	shaku
 shakuhachi	shakuhachi
 shakyamuni	Shakyamuni
@@ -2498,6 +2514,7 @@ thatch field	thatch field
 thatch fields	thatch field
 the pool	the pool
 the reform and opening-up	reform and opening-up
+thirty guardian deities	thirty guardian deities
 thousand character classic	Thousand Character Classic
 thousand-tooth thresher	thousand-tooth thresher
 three arresting tools	three arresting tools
@@ -2619,6 +2636,7 @@ udatsu	udatsu
 udegi	udegi gate
 udegi gate	udegi gate
 udegimon	udegi gate
+ujibito	ujibito
 ujidera	bodaiji
 ujigami	ujigami
 ujiko	ujiko
