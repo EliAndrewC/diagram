@@ -1205,6 +1205,7 @@ hm²	hm2
 hoarding	hoarding
 hoardings	hoarding
 hoei	Hoei
+hogo	hogo
 hoin	hōin
 hojo	hojo
 hojo form	hojo
@@ -3143,6 +3144,7 @@ tsinan's	Tsinan
 tsubo	tsubo
 tsubo-niwa	tsubo-niwa
 tsuchiusu	clay mill
+tsugaru	Tsugaru
 tsuijibei	tsuijibei
 tsuijimatsu	tsuijimatsu
 tsujiban	tsujiban
