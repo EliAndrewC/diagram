@@ -13,8 +13,8 @@ Sendai lord and kept for centuries, the Tonami grove open on its east front, and
 sides. No source counts farmsteads by grove shape.
 
 This feature (1) corrects the record so each shape is cited to the region and date that attest it; (2) makes the
-homestead grove's sides a per-settlement knob - two sides 50%, three sides 30%, four sides 20%, the four-sided share
-rising to 40% where the farmsteads stand on flood-prone ground - with the windward side the deep one; and (3) fixes
+homestead grove's sides a per-settlement knob - two sides one time in two, three sides three in ten, four sides one in five (the GM's weights, 5 : 3 : 2), the four-sided share
+rising to two in five where the farmsteads stand on flood-prone ground - with the windward side the deep one; and (3) fixes
 the per-house grove placement that has kept the dispersed and linear settlement forms (the forms whose farms carry
 their own grove) switched off since feature 126, and switches them back on, so the knob reaches maps.
 
@@ -53,7 +53,7 @@ the house, the same shape at every farm in that hamlet, with the deep stand on t
    yard and way in are.
 3. **Given** a three- or four-sided grove, **When** drawn, **Then** the windward arms are the full depth and the other
    planted sides a thinner band.
-4. **Given** a settlement on flood-prone ground, **When** rolled, **Then** four sides comes up at 40%.
+4. **Given** a settlement on flood-prone ground, **When** rolled, **Then** four sides comes up two times in five.
 
 ### User Story 3 - Dispersed and linear hamlets come back (Priority: P1)
 
@@ -90,7 +90,7 @@ per-house groves pass every check a grove answers to.
   (undated); the 1625 Takada order read as it is written (cedar around the homestead, camellia and bamboo grass on the
   south). Each assertion is footnoted; the record says no source counts farmsteads by grove shape.
 - **FR-002**: The record MUST state the decision: the farmstead grove's sides are a knob rolled per settlement at 50 / 30
-  / 20 (two / three / four), four sides at 40% on flood-prone ground, the weights a GUESS by the GM's ruling of
+  / 20 (two / three / four), four sides two in five on flood-prone ground, the weights a GUESS by the GM's ruling of
   2026-09-29, quoted; the windward arms deep and the rest thinner (Tonami's pattern, a GUESS for the full ring); the
   open side of three the front.
 - **FR-003**: The shelter-belt entry holding the 2026-08-29 hook ruling MUST record the GM's 2026-09-29 ruling as
@@ -101,8 +101,8 @@ per-house groves pass every check a grove answers to.
 **The knob**
 
 - **FR-005**: The homestead grove's side count MUST be a per-settlement knob, pinnable by a map, otherwise rolled from
-  the map's seed: two sides 50%, three 30%, four 20%.
-- **FR-006**: On flood-prone ground the four-sided share MUST be 40%, the other two keeping their 5 : 3 ratio.
+  the map's seed: two sides, three and four weighted 5 : 3 : 2.
+- **FR-006**: On flood-prone ground the four-sided share MUST be two in five, the other two keeping their 5 : 3 ratio.
   Flood-prone ground MUST be a site property a map can pin, and is otherwise set from the site: true where the fields
   are reclaimed low ground behind dikes (the polder archetypes, the grid polder and the dike-and-pond) or the houses
   stand on a dike.
@@ -122,8 +122,8 @@ per-house groves pass every check a grove answers to.
   household is seated.
 - **FR-011**: The settlement-form roll MUST restore feature 126's weights (nucleated 5, dispersed 3, linear 2), and the
   hamlet cohort MUST pass with them, as the bar feature 126 set for switching them back on.
-- **FR-012**: The pool hamlets MUST be regenerated from their specs as they are; a hamlet whose seed now rolls another
-  form takes it.
+- **FR-012**: The pool hamlets MUST be regenerated; a hamlet whose seed now rolls another form takes it, except the
+  reference hamlet Inashiro, which the GM kept nucleated (2026-09-29).
 
 ### Key Entities
 
@@ -133,11 +133,11 @@ per-house groves pass every check a grove answers to.
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001** (FR-001-FR-003): no entry of the record asserts a universal premodern full ring; the corrected entries
+- **SC-001** (FR-001, FR-002, FR-003): no entry of the record asserts a universal premodern full ring; the corrected entries
   pass `quote-check` and `record-format`.
-- **SC-002** (FR-004): every modal the push names as owed is answered by an `entry-drift` check.
-- **SC-003** (FR-005, FR-006): over 1,000 rolled seeds the counts sit within three standard errors of 50/30/20 off
-  flood ground and 37.5/22.5/40 on it; and a test rolls a real polder site and finds it flood-prone, reading the
+- **SC-002** (FR-004, FR-009): every modal the push names as owed is answered by an `entry-drift` check; the grove's modal states the side count its map rolled, read from the map.
+- **SC-003** (FR-005, FR-006): over 1,000 rolled seeds the counts sit within three standard errors of the 5 : 3 : 2 weights off
+  flood ground and the 15 : 9 : 16 weights on it; and a test rolls a real polder site and finds it flood-prone, reading the
   flood table.
 - **SC-004** (FR-007, FR-008): unit tests prove the faces planted for each side count and windward key, and that the
   non-windward bands are thinner than the windward arms.
@@ -151,7 +151,7 @@ per-house groves pass every check a grove answers to.
 
 - **Weights**: 50 / 30 / 20, a GUESS, the GM's ruling of 2026-09-29. Two sides is the form reported in the most regions
   and the only one with a general statement and an early-Edo date; three is Tonami's; four is Izumo's.
-- **Flood ground**: four sides at 40%, the other two scaled to keep 5 : 3 (37.5 / 22.5 / 40) - the Izumo ring's own
+- **Flood ground**: four sides two in five, the other two scaled to keep 5 : 3 (weights 15 : 9 : 16) - the Izumo ring's own
   stated cause was flood; the scaling is a GUESS.
 - **Per settlement, not per farm**: grove shape is reported as regional custom.
 - **Windward deep, rest thinner**: Tonami's tall cedar on the windward faces and lesser trees elsewhere; a GUESS for the
@@ -165,8 +165,10 @@ per-house groves pass every check a grove answers to.
   decision (a GUESS as to where else floods threatened farms), and a map may pin it either way.
 - **Every farm carries its settlement's grove** (FR-010, spec-fidelity round 1): no farm quietly loses sides for want
   of room; a farm is seated where its grove fits.
-- **The pool takes its seed's roll** (FR-012): the GM asked for the forms "rolled again"; pinning the existing hamlets
-  to nucleated would be an exception not asked for. Which hamlets change is reported at hand-back.
+- **The pool takes its seed's roll, Inashiro excepted by the GM** (FR-012): under the restored roll Inashiro,
+  Mizuguchi and Kashikawa roll linear, Kuwabata and Sawada stay nucleated. Asked, the GM chose "Keep Inashiro, let
+  others roll": the reference hamlet (and the test baselines built on it) is pinned nucleated in its spec; Mizuguchi
+  and Kashikawa take their linear roll.
 
 ## Review history
 
@@ -181,3 +183,7 @@ lee side with the yard and the way in, the side three leaves open.
 non-nucleated seed plants every side its settlement rolled, so the fallback round 1 removed cannot return unseen.
 
 **Round 3** (spec-fidelity-verify, MODE 3, 2026-09-29): FAITHFUL. The spec is accepted.
+
+**Amendment 1** (2026-09-29, after acceptance; wording only): the GM's weights restated as the ratios they are (5 : 3 : 2; 15 : 9 : 16 on flood ground) rather than percentages, which spec-lint reads as unmeasured figures; SC-001 names FR-001 to FR-003 one by one and SC-002 covers FR-009 (the modal states the side count). Nothing changed in substance.
+
+**Amendment 2** (2026-09-29, the GM's decision): FR-012 - the GM, asked how the pool should take the restored roll (three hamlets roll linear), chose "Keep Inashiro, let others roll (Recommended)": the reference hamlet is pinned nucleated, Mizuguchi and Kashikawa take their roll.

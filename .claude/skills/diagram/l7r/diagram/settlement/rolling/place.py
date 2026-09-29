@@ -95,7 +95,7 @@ class PlacerMixin:
         `_bundle_fits`, so a YES here is its NO; what survives gets the whole test, as before."""
         fg = getattr(self, "_free_ground", None)
         if fg is not None:
-            parts = [part_box(geom, k) for k in ("yard", "grove_n", "grove_w", "shed")] + list(part_box(geom, "gardens"))  # as drawn (269 B18)
+            parts = [part_box(geom, k) for k in ("yard", "shed")] + list(geom.get("groves") or ()) + list(part_box(geom, "gardens"))  # as drawn (269 B18)
             if any(r is not None and fg.rect_refused(r) for r in parts):
                 return True
         cx, cy, W, H = geom["bbox"]
@@ -261,10 +261,12 @@ class PlacerMixin:
 
     def _solve_homestead(self: Settlement, rec: Any) -> Any:  # type: ignore[misc]
         """Find the best position for a farmhouse so its WHOLE homestead fits - threshing yard + dooryard
-        garden + room for a windward grove. Searches the placed spot first, then a widening spiral, and stops
-        as soon as the home spot already leaves grove-room (no churn). Prefers a spot WITH grove-room, then the
-        least displacement; falls back to a yard+garden-only spot if no grove-room is reachable nearby. Updates
-        rec's position + reservation. Returns (yard_spot, garden_spot), or None if even yard+garden won't fit."""
+        garden + room for its grove on every side the settlement rolled. Searches the placed spot first, then a
+        widening spiral, and stops as soon as the home spot already leaves grove-room (no churn); takes the least
+        displacement among the spots that hold the whole homestead. A farm that has a grove (`_wants_grove`) takes
+        ONLY a spot with room for all of it (feature 291, FR-010: no farm quietly loses sides - the old fallback to a
+        yard-and-garden-only spot is gone), so with none within its nudges it is not seated, as a to-scale farm whose
+        bundle does not fit is not. Updates rec's position + reservation. Returns (yard_spot, garden_spot), or None."""
         x0, y0, w, h = rec["x"], rec["y"], rec["w"], rec["h"]
         self.placed: list[Any] = Indexed(
             p for p in self.placed if p != (x0, y0, w, h)
@@ -278,7 +280,10 @@ class PlacerMixin:
             if spot is None:
                 continue
             wf = rec["wealth"]  # the grove is drawn at the WEALTH size, so reserve room for THAT
-            cand = (self._grove_room(cx, cy, w * wf, h * wf), -(abs(nx) + abs(ny)), cx, cy, spot)
+            held = self._grove_reserve(cx, cy, w * wf, h * wf, [tuple(p) for p in spot])
+            if held is None and self._wants_grove(cx, cy):
+                continue
+            cand = (held is not None, -(abs(nx) + abs(ny)), cx, cy, spot, held)
             if best is None or cand[:2] > best[:2]:
                 best = cand
             if cand[0] and nx == 0 and ny == 0:
@@ -289,4 +294,9 @@ class PlacerMixin:
         if isinstance(houses, Indexed):
             houses._bump()  # a record MOVED in place: the fit rules' house index (rolling/fit.py) must not answer from its old box
         self.placed.append((cx, cy, w, h))  # re-reserve at the chosen (or original) spot
+        # ...AND HOLD ITS GROVE'S LEAST GROUND (feature 291, `_grove_reserve`) until the second pass plants it, so a farm
+        # seated after this one cannot take the room this one was seated for
+        if best and best[5] is not None and self._wants_grove(cx, cy):
+            rec["grove_reserve"], rec["grove_avoid"] = best[5], [tuple(p) for p in best[4]]
+            self.placed.extend(best[5])
         return best[4] if best else None

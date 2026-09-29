@@ -28,6 +28,9 @@ from .consts import (
     FRY_FORMS,
     GRAIN_DRIFTS,
     GROSS_ACRES_PER_HOUSEHOLD,
+    GROVE_FLANKS,
+    GROVE_SIDES,
+    GROVE_SIDES_FLOOD,
     HARVEST_WEATHERS,
     HEAD_RACE_LEAD,
     HOUSEHOLD_BAND,
@@ -86,6 +89,8 @@ class HamletSpec:
     bamboo: str | None = None
     fixtures_min: dict[str, int] | None = None  # at least N of a farmstead fixture kind, e.g. {"shrine": 1} (feature 133 T61)
     settlement_form: str | None = None
+    grove_sides: int | None = None  # how many sides each farmstead's grove takes, 2 | 3 | 4 (feature 291; `GROVE_SIDES`)
+    flood_ground: bool | None = None  # the farms stand on flood-prone ground (feature 291); None reads it off the site
     field_archetype: str | None = None
     pond_layout: str | None = None  # a dike-pond's arrangement, grid | mosaic (feature 150; `POND_LAYOUTS`)
     manure_form: str | None = None  # the manure fixture's form, heap | pit (feature 150; `MANURE_FORMS`)
@@ -154,6 +159,12 @@ class SitePlan:
     # the grove choice (one village belt or a kainyo per farmstead), and by the two access checks.
     # `settlement_form_asked` preserves the ROLL when a site cannot take that form; see `stage_track`.
     settlement_form: str
+    # HOW MANY SIDES EACH FARM'S GROVE TAKES (feature 291): rolled for every hamlet and recorded, drawn only where the
+    # farms carry their own grove (not nucleated). `flood_ground` chooses the table; `grove_flank` completes a
+    # cardinal wind's windward pair (`GROVE_FLANKS`).
+    grove_sides: int
+    flood_ground: bool
+    grove_flank: int
     field_archetype: str
     # THE DIKE-POND'S ARRANGEMENT (feature 150): "grid" or "mosaic", rolled for a dike-pond hamlet
     # and pinned to "grid" for a rice polder (see `POND_LAYOUTS`). Read by `stage_polder`.
@@ -292,6 +303,13 @@ def plan_site(spec: HamletSpec) -> SitePlan:
     water_flow = spec.water_flow if spec.water_flow is not None else down_deg
     # THE REGIONAL NORTHWEST unless the spec declares a local wind (feature 261; `DEFAULT_WINDWARD` for why).
     windward = spec.windward or DEFAULT_WINDWARD
+    _form = spec.settlement_form or str(_roll(spec.seed, "settlement_form", SETTLEMENT_FORMS))
+    # FLOOD-PRONE GROUND (feature 291): the farms stand on reclaimed low ground behind dikes, or on a dike - the ground
+    # the Izumo ring guarded against floods. This project's decision (research/homesteads.html, the grove's shape); a
+    # spec pins it either way.
+    _flood = spec.flood_ground if spec.flood_ground is not None else (_archetype in POLDER_ARCHETYPES or _form == "dike_top")
+    if spec.grove_sides is not None and spec.grove_sides not in (2, 3, 4):
+        raise ValueError(f"grove_sides={spec.grove_sides!r}: a farmstead grove takes 2, 3 or 4 sides")
     target_acres = spec.households * GROSS_ACRES_PER_HOUSEHOLD
     a, b = offtakes_for(spec.households)
     W, H = canvas_for(target_acres, 1.0)
@@ -306,7 +324,10 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         lane_web=spec.lane_web or str(_roll(spec.seed, "lane_web", LANE_WEBS)),
         bamboo=spec.bamboo or str(_roll(spec.seed, "bamboo", BAMBOO_FORMS)),
         fixtures_min={k: int(v) for k, v in (spec.fixtures_min or {}).items()},
-        settlement_form=spec.settlement_form or str(_roll(spec.seed, "settlement_form", SETTLEMENT_FORMS)),
+        settlement_form=_form,
+        grove_sides=spec.grove_sides or int(_roll(spec.seed, "grove_sides", GROVE_SIDES_FLOOD if _flood else GROVE_SIDES)),
+        flood_ground=_flood,
+        grove_flank=int(_roll(spec.seed, "grove_flank", GROVE_FLANKS)),
         field_archetype=_archetype,
         pond_layout=_pond_layout,
         manure_form=spec.manure_form or str(_roll(spec.seed, "manure_form", MANURE_FORMS)),

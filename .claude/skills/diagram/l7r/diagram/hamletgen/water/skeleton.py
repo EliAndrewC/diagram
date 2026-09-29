@@ -60,6 +60,11 @@ def stage_water_frame(s: Settlement, plan: SitePlan) -> None:
         settlement_form=plan.settlement_form,
         settlement_form_asked=plan.settlement_form,
         nucleated=plan.settlement_form == "nucleated",
+        # THE GROVE'S SIDES AND THE GROUND THAT CHOSE THEIR TABLE (feature 291), recorded on every hamlet; the engine's
+        # dispersed bundle reads `grove_sides` and `grove_flank` (`homestead_parts/groves.py` `grove_faces`).
+        grove_sides=plan.grove_sides,
+        grove_flank=plan.grove_flank,
+        flood_ground=plan.flood_ground,
         field_footbridges=True,
         water_kind="stream",
         # WHAT STANDS AT THE INTAKE, and which flank the brook passes on (feature 230): both rolled, both
