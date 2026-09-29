@@ -60,7 +60,7 @@ As `_agent_census.py` does and for the reason its docstring gives (its research 
 each repeating the message id and its usage as it stood, so usage is folded per message id as the per-field MAXIMUM. `effort-measure`
 imports that fold rather than re-deriving it. Fields: `input_tokens`, `output_tokens`, `cache_read_input_tokens`,
 `cache_creation_input_tokens`. The `claude -p --output-format json` result (`result.json`, written by the runner) also carries usage
-and cost per session; it is recorded beside the transcript sum as a cross-check, and a disagreement over 2% (a GUESS threshold, no measured basis) is reported.
+and cost per session; it is recorded beside the transcript sum as a cross-check, and a disagreement over two percent (a GUESS threshold, no measured basis) is reported.
 
 **Usage-limit share**: not observable from inside a `-p` session (no documented field). The report says "unobserved" unless the GM
 reads the account's usage page before and after each run, which the quickstart offers and does not require.
@@ -81,7 +81,7 @@ fix-commit match) the measurement lists the matched lines so the report's reader
 
 ## R5 - Memory and sequencing
 
-Containers share a 9 GB cap; memwatch warns at 8 GB (the handoff). A `make done` alone reaches ~3.2 GiB at its test-phase peak (a one-shot observation, 2026-09-13, the gate RAM profile; memory
+Containers share a 9 GB cap; memwatch warns at 8 GB (the handoff). A `make done` alone reaches ~3.2 GiB at its test-phase peak (observed 2026-09-13, the gate RAM profile, one-shot; memory
 note of 2026-09-13). The launcher refuses to start a run while any other effort run's session is live (its record has a start and no
 `result.json`) and prints the current container memory from `/sys/fs/cgroup/memory.current`; other sessions' work is the implementing
 session's to schedule around (the quickstart says to run when the host is otherwise quiet). A run that ends with exit 137 is marked void
