@@ -137,6 +137,7 @@ baulks	baulk
 bay	bay
 bays	bay
 beam span	ridge span
+bed load	bedload
 bed shear stress	bed shear stress
 bedload	bedload
 beishan mianshui	beishan mianshui
@@ -2370,6 +2371,7 @@ suiden	suiden
 suids	suid
 suimon	suimon
 suiren	Suiren
+suitengu	Suitengu
 suji-bei	suji-bei
 sujibei	suji-bei
 sukego	sukego

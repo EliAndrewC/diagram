@@ -728,7 +728,8 @@
  "bedload": {
   "def": "The sand and gravel a river rolls along its bed, as against the finer silt it carries suspended.",
   "variants": [
-   "bedload"
+   "bedload",
+   "bed load"
   ]
  },
  "beishan mianshui": {
@@ -10868,6 +10869,12 @@
    "Yoro code",
    "Yōrō Code",
    "Yoro Code"
+  ]
+ },
+ "Suitengu": {
+  "def": "A shrine to a water god in the line of the Suitengu of Kurume, revered for protection against water disasters and for safe birth; the lords of Kurume enshrined it at their Edo residence in 1818, and its faith spread from there.",
+  "variants": [
+   "Suitengu"
   ]
  }
 }
