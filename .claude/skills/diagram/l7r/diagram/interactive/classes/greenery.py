@@ -130,14 +130,16 @@ class HomesteadGrove(Kind):
     or all four - and the shape is rolled for each settlement.
 
     Why: The grove is older than the modern surveys - the Kaga domain's documents of the 1600s and 1700s treat the
-    homestead grove as a stand of timber and bamboo kept thick against wind and fire - and it is the largest thing a
-    farmstead has, bigger than the house. Which sides it took was a regional custom: on the Sendai plain it stood on
-    the north and west from the early Edo period and often lacked the south or the east; on the Tonami plain it was
+    homestead grove as a stand of timber and bamboo kept thick against wind and fire, and a 1987 survey counted dozens
+    of good-sized trees around each farmhouse. Which sides it took was a regional custom: on the Sendai plain it stood on
+    the north and west, planted there at the urging of the domain's first lord, and often lacked the south or the east; on the Tonami plain it was
     open only at the front, where the yard and the way in were; on the Izumo plain it went the whole way round the
     house before the Meiji era, on a bank against floods. So a settlement rolls its farms' grove shape, the windward
     sides always the deep stand, and a ring is broken once at its front for the way in.
 
-    Note: The grove, its size and its three shapes are read; how often each shape was taken is on no page, so the roll -
+    Note: The grove, its 1987 tree count and its three shapes are read; no page before 1868 counts a grove's trees, so
+    the count drawn is a GUESS set from the 1987 survey, and so is the windward stand's depth (1.57 house depths, about
+    44 ft); how often each shape was taken is on no page, so the roll -
     two sides half the time, three sides three times in ten, four sides twice in ten, and four sides four times in ten
     where the farms stand on flood-prone ground - is a GUESS, the GM's ruling of 2026-09-29, and so are the thin band's
     depth (one tree, 17 ft), the kind of trees in it, and the width of the way in through a ring.
