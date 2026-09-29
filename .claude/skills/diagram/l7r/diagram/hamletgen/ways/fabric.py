@@ -169,9 +169,18 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
     # what `groves_clear_of_lanes` says. It was missing from this list because it could not matter
     # while the lanes were laid FIRST and the groves grew around them; with the lanes drawn last,
     # every non-nucleated map cut treads through its own shelter belts.
+    # ...AND IT NEVER WAS, UNTIL FEATURE 291. A grove band is recorded as a box (x, y, w, h, unrotated), never a `poly`, so
+    # this loop - which read only `poly` - added nothing: feature 126's "adding `groves` to the lane fabric ... measured not
+    # to help" measured a no-op. With the dispersed and linear forms rolled again, the settlement-review found lanes run
+    # through 19 of Kashikawa's 40 windward bands and 14 of Mizuguchi's 24. A band is its own house's (`of`), so the path
+    # to that farmstead may still leave its own dooryard (the owner, as for a yard), but no other lane crosses it.
     for rec in s.M.get("groves", []):
+        own = rec.get("of")
+        owner2 = (float(own[0]), float(own[1])) if own else None
         if rec.get("poly"):
-            out.append(([(float(a2), float(b2)) for a2, b2 in rec["poly"]], None, "groves"))
+            out.append(([(float(a2), float(b2)) for a2, b2 in rec["poly"]], owner2, "groves"))
+        elif rec.get("w"):
+            out.append((rot_rect(float(rec["x"]), float(rec["y"]), float(rec["w"]), float(rec["h"]), float(rec.get("rot", 0.0))), owner2, "groves"))
     for key in ("village_groves", "commons"):
         out.extend(([(float(a), float(b)) for a, b in rec["poly"]], None, key) for rec in s.M.get(key, []) if rec.get("poly"))
     for w in s.M.get("wells", []):

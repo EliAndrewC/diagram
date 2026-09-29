@@ -43,7 +43,7 @@ def test_the_cli_reports_a_single_hamlet(monkeypatch: pytest.MonkeyPatch) -> Non
         out = os.path.join(d, "cli")
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
-            hg.main(["--name", "Inashiro", "--seed", "4", "--households", "15", "--down-deg", "90", "--sink", "pond", "--out", out, "--no-render"])
+            hg.main(["--name", "Inashiro", "--seed", "4", "--households", "15", "--down-deg", "90", "--sink", "pond", "--form", "nucleated", "--out", out, "--no-render"])
         assert os.path.exists(out + ".json") and os.path.exists(out + ".svg")
     # the CLI has no `--fixtures-min`, so what it can build is the reference's brief without the pool's forced shrine
     assert seen == [dataclasses.replace(rolls.REFERENCE, fixtures_min=None)], "the CLI built the reference spec from its arguments"

@@ -114,7 +114,9 @@ class PoolGen:
 
 # THE COVERAGE ROLLS, shared by name (feature 214): the plain `roll:<spec>` subjects every reader can share - the
 # ratchet, the lane rules, the fan-out, the child-equality proof and the hamlet floor all read these.
-REFERENCE = HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond", fixtures_min={"shrine": 1})  # THE POOL'S BRIEF (feature 215 D1)
+# GUARD_EDIT_OK: the pool's brief follows its generator - feature 291 pinned the reference hamlet nucleated (the GM's
+# choice, 2026-09-29) once seed 4 began rolling linear, so this row pins it too; no roll is added or retired.
+REFERENCE = HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond", settlement_form="nucleated", fixtures_min={"shrine": 1})  # THE POOL'S BRIEF (feature 215 D1)
 KUWABATA = HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry")
 POLDER_FALL_0 = HamletSpec(name="Polder", seed=12, households=16, field_archetype="polder_grid", down_deg=0)
 COVERAGE: tuple[HamletSpec, ...] = (

@@ -292,6 +292,26 @@ def windbreak_default(meta: dict[str, Any]) -> str:
     return f"Here the belt stands toward the {WIND_NAMES[quarter]} of the houses, because this place has a local wind from the {WIND_NAMES[quarter]} that departs from the region's northwesterly winter wind."
 
 
+HOMESTEAD_GROVE = "homestead grove"
+
+_SIDES_WORDS = {
+    2: "two sides of the house, the pair the winter wind blows on",
+    3: "three sides of the house, open only at the front where the yard and the way in are",
+    4: "all four sides of the house, broken once at the front for the way in",
+}
+
+
+def homestead_grove_default(meta: dict[str, Any]) -> str:
+    """How many sides THIS settlement's farmstead groves take, and why that roll (feature 291, FR-009): the side count
+    and the ground the map records. A map that records no side count - a nucleated one rolls it but draws no farm grove,
+    and the frozen hand-authored maps record none - gets nothing, and the class's own explanation stands alone."""
+    sides = meta.get("grove_sides")
+    if sides not in _SIDES_WORDS or meta.get("settlement_form", "nucleated") == "nucleated":
+        return ""
+    ground = " These farms stand on flood-prone ground, where the full ring - the Izumo plain's, raised on a bank against floods - is rolled more often." if meta.get("flood_ground") else ""
+    return f"Here every farm's grove takes {_SIDES_WORDS[int(sides)]}: the shape was a regional custom, so one roll decides it for the whole settlement.{ground}"
+
+
 def dwellings_shown(manifest: dict[str, Any], kind: Kind) -> int:
     """How many dwellings this map DRAWS that the tier is willing to count.
 

@@ -108,6 +108,14 @@ def shadowing_lane(pts: Poly, others: Sequence[Poly], reach: float) -> int | Non
     return None
 
 
+def stroke_quad(a: Pt, b: Pt, half: float) -> Poly:
+    """The quad a straight stroke of half-width `half` from `a` to `b` covers, square-ended - the footprint the overlap
+    matrix reads for a lane's segment (feature 291)."""
+    d = max(math.dist(a, b), 1e-9)
+    nx, ny = -(b[1] - a[1]) / d * half, (b[0] - a[0]) / d * half
+    return [(a[0] + nx, a[1] + ny), (b[0] + nx, b[1] + ny), (b[0] - nx, b[1] - ny), (a[0] - nx, a[1] - ny)]
+
+
 def fabric_clearance(pts: Sequence[Pt], fabric: Sequence[Poly]) -> float:
     """How near a run passes to the settlement's own fabric - infinity when there is none to pass.
 

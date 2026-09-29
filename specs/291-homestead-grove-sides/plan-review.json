@@ -1,0 +1,88 @@
+{
+ "feature": "291-homestead-grove-sides",
+ "plan_sha256": "d0a492a1c3dac8b6eef2a38471a924dae2893a64efcc975d8cf382af926b53da",
+ "reviewed": "2026-09-29",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "GROVE_SIDES 5:3:2 and GROVE_SIDES_FLOOD 15:9:16 rolled per settlement, pinnable; flood_ground pinnable else polder archetypes or dike_top; recorded in meta, nucleated included; the generic Settlement rolls the same table",
+   "class": "within",
+   "why": "FR-005, FR-006, FR-009 and the nucleated edge case. Extending the roll to the other path that draws a homestead grove is what 'the homestead grove' knob covers."
+  },
+  {
+   "id": "D2",
+   "summary": "grove_faces(windward, sides, flank): two = windward pair (cardinal: face + a per-settlement rolled flank); three adds the non-front face; four adds the front; the front is the yard's face",
+   "class": "within",
+   "why": "FR-007 word for word; which flank a cardinal key takes is left open by the spec and rolling it from the seed follows the knob doctrine."
+  },
+  {
+   "id": "D3",
+   "summary": "The dispersed bundle carried from its NW canonical frame to the map's windward key by a symmetry of the square (SE by the anti-diagonal mirror, yard W); in every frame but the identity NW one the garden is laid beside the yard",
+   "class": "within",
+   "why": "Within, as round 1 ruled: without turning the bundle FR-007 and FR-010 cannot hold on a map declaring another wind, and moving the garden is forced by FR-010's morning-sun clause. The round-1 wording fix is made: the relocation now applies to every frame but NW, naming the NE mirror's west-wall case."
+  },
+  {
+   "id": "D4",
+   "summary": "Deep bands keep 1.57*hh; a thin band is one crown (17 ft, GUESS); east band set beyond the garden's morning-sun reach, front band beyond the yard's sun corridor; N/S bands full width so corners close",
+   "class": "within",
+   "why": "FR-008 leaves the thin depth open (spec Decisions: a GUESS). Setting bands outside the worked ground still plants the side and closes the corners; it is how FR-010's garden-sun and structure rules are met, not a side dropped."
+  },
+  {
+   "id": "D5",
+   "summary": "A four-sided ring's front band broken once at the yard's center for a 12 ft way in (width a GUESS)",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "A literally closed ring is physically incompatible with the spec's own FR-010 (no grove on a lane tread; every household seated and reached) and with the request's purpose, a grove round a house people live in. 'Completely surrounding' farmhouses in the GM's words describes a planted ring, which the four planted sides remain; one opening at the minimum lane width is the least the physics requires, on the front the spec already names as the way-in side."
+  },
+  {
+   "id": "D6",
+   "summary": "geom['groves'] list with faces and depth replaces grove_n/grove_w in every reader; a farm is seated only where its whole rolled grove fits",
+   "class": "within",
+   "why": "FR-010 and the spec's 'every farm carries its settlement's grove' decision."
+  },
+  {
+   "id": "D7",
+   "summary": "Manifest predicates grove_sides_complete, groves_windward, gardens_east_clear; cohort_audit runs them and the overlap matrix on every roll; a gate seed test on non-nucleated pool rolls",
+   "class": "within",
+   "why": "Enforcement of FR-010 and SC-005 only; with the requested behavior deleted there is nothing left for these to check."
+  },
+  {
+   "id": "D8",
+   "summary": "City/house-first path: _grove_room asks room for the minimal footprint of every rolled face; _solve_homestead seats a grove farm only with that room (the yard-and-garden-only fallback removed); _find_grove_arms plants every face grove_faces names; whether a farm has a grove stays the in-wall rule's and grove_prevalence's",
+   "class": "within",
+   "why": "Round 1's NOT LEGITIMATE finding is cured: no rolled side is dropped for want of room (FR-010, spec Decisions 'no farm quietly loses sides'), the seat is conditioned on room for the whole rolled grove as D6 does for the bundle, and the grove-or-not decision is untouched as required. An unseated farm follows D6's already-accepted rule. No longer a narrowing."
+  },
+  {
+   "id": "D9",
+   "summary": "Thin band drawn with the dooryard mix, deep bands the windbreak mix (GUESS for the ring)",
+   "class": "within",
+   "why": "Spec Decisions: 'Tonami's tall cedar on the windward faces and lesser trees elsewhere'; the species mix is left open to the plan."
+  },
+  {
+   "id": "D10",
+   "summary": "SETTLEMENT_FORMS restored to the 126 weights; comment rewritten",
+   "class": "within",
+   "why": "FR-011."
+  },
+  {
+   "id": "D11",
+   "summary": "The five pool hamlets regenerate from unchanged specs, taking their seed's form and side count; settlement-review where layout moved",
+   "class": "within",
+   "why": "FR-012, SC-006."
+  },
+  {
+   "id": "D12",
+   "summary": "Record rewritten in two write sessions (homesteads 010/710/480; vegetation 030/620), checked by quote-check, record-format, source-applicability; modals by entry-drift; grove modal states the side count",
+   "class": "within",
+   "why": "FR-001 to FR-004, FR-009."
+  },
+  {
+   "id": "D13",
+   "summary": "The two nucleated overlaps the matrix found (seeds 17, 20) fixed whether pre-existing or regressions",
+   "class": "within",
+   "why": "Not an addition to the request: once the matrix runs in the cohort (D7), SC-005 requires every seed's checks green, and a defect found in the work is fixed under XIV. It narrows nothing."
+  }
+ ],
+ "verdict": "CLEAR"
+}

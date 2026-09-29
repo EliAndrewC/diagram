@@ -97,7 +97,7 @@ class Windbreak(Kind):
     Note: The grove count follows the Fujian figure (forests-2020), the density the Pearl-delta patches
     (hu-2011-fengshui-patches), and the size the Hong Kong survey (afcd-ncsc-9-06), measured in modern times on groves centuries old, no older measurement being known; the water-mouth cluster's
     size and the tree counts are guesses bracketed by Korean village-grove analogues; the belt's shape follows
-    the terrain and the cluster. The side it stands on follows the Japanese homestead grove, kept on the north
+    the terrain and the cluster. The side it stands on, never ringing the cluster, follows the Chinese village's separate grove patches (coggins-minor-2018) and the Sendai farmstead grove - the full ring being the Izumo plain's farmstead form alone, which the maps give only to a farmstead's own grove - kept on the north
     and west against the northwesterly winter wind (irie-2020-igune, yashikirin-jawiki), and the GM's rulings
     that the maps show that regional wind unless a place declares its own. The two forms are read (the four-region
     survey, takehara-2004-yashikirin; the delta patches), and so is the bamboo, in the Japanese farmstead grove only
@@ -115,11 +115,46 @@ class Windbreak(Kind):
     Name: windbreak forest
     Covers: `village_groves[role=windbreak]`
     Label: accurate
-    Sources: forests-2020, hu-2011-fengshui-patches, takehara-2004-yashikirin, tonami-yashikirin-haichi, sendai-igune-modelplan
+    Sources: forests-2020, hu-2011-fengshui-patches, coggins-minor-2018, takehara-2004-yashikirin, tonami-yashikirin-haichi, sendai-igune-modelplan
     Entry: research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest'; research/vegetation.html - 'Does a shelter belt wrap the settlement? No - it stands on one or two windward sides'; research/homesteads.html - 'The garden's sun, and how far the windbreak shades'; research/vegetation.html - 'Was a windbreak one kind of tree in a row', "Did a farmstead's grove carry bamboo"
     """
 
     key = 'windbreak'
+
+
+class HomesteadGrove(Kind):
+    """
+    What: A farm's own grove, where each farm stands apart with its fields round it rather than in a cluster: a dense
+    stand of real crowns hard against the house on the side the winter wind comes from, and on some farms a thinner
+    band of lesser trees round more of the house. Every farm in a settlement takes the same shape - two sides, three,
+    or all four - and the shape is rolled for each settlement.
+
+    Why: The grove is older than the modern surveys - the Kaga domain's documents of the 1600s and 1700s treat the
+    homestead grove as a stand of timber and bamboo kept thick against wind and fire - and it is the largest thing a
+    farmstead has, bigger than the house. Which sides it took was a regional custom: on the Sendai plain it stood on
+    the north and west from the early Edo period and often lacked the south or the east; on the Tonami plain it was
+    open only at the front, where the yard and the way in were; on the Izumo plain it went the whole way round the
+    house before the Meiji era, on a bank against floods. So a settlement rolls its farms' grove shape, the windward
+    sides always the deep stand, and a ring is broken once at its front for the way in.
+
+    Note: The grove, its size and its three shapes are read; how often each shape was taken is on no page, so the roll -
+    two sides half the time, three sides three times in ten, four sides twice in ten, and four sides four times in ten
+    where the farms stand on flood-prone ground - is a GUESS, the GM's ruling of 2026-09-29, and so are the thin band's
+    depth (one tree, 17 ft), the kind of trees in it, and the width of the way in through a ring.
+
+    Caveat: how often each shape was taken is on no page, so the roll - two sides half the time, three sides three times
+    in ten, four sides twice in ten, and four sides four times in ten where the farms stand on flood-prone ground - is a
+    GUESS, the GM's ruling of 2026-09-29, and so are the thin band's depth (one tree, 17 ft), the kind of trees in it,
+    and the width of the way in through a ring.
+
+    Name: homestead grove
+    Covers: `groves`
+    Label: accurate
+    Sources: miura-2014-kainyo, irie-2020-igune, kashima-kainyo-1987, tonami-yashikirin-haichi, yashikirin-jawiki
+    Entry: research/homesteads.html - 'Which sides of the house did a homestead grove take?', 'Homestead groves (yashikirin) - the real scale and prevalence', 'Was the homestead grove there before 1868, and how big was it?'
+    """
+
+    key = 'homestead grove'
 
 
 class Alder(Kind):

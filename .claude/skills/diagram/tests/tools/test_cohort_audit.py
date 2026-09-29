@@ -188,3 +188,16 @@ def test_roll_one_reports_farmstead_parts_across_the_brook_and_an_offwind_seat(m
     header, failures, lines = ca.roll_one((9, 12))
     assert failures == ["farmstead_across_brook"] and "1 farmstead part" in lines[-1] and header.endswith("seat=OFFWIND")
     assert ca.parts_across_brook({}) == 0
+
+
+def test_roll_one_reports_the_matrix_and_the_grove_rules(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 291: the cohort's verdict reads the overlap matrix and the grove predicates on every roll - the retired
+    battery had been the only thing that saw 126's grove defects."""
+    rep = _report([])
+    rep.manifest = {"meta": {}}
+    monkeypatch.setattr(hg, "generate", lambda spec, out_base, render: rep)
+    monkeypatch.setattr(ca, "matrix_violations", lambda M: [("groves", "lanes", 1, 2)])
+    monkeypatch.setattr(ca, "gardens_east_shaded", lambda M: [((0.0, 0.0), {})])
+    _header, failures, lines = ca.roll_one((9, 12))
+    assert failures == ["features_do_not_overlap", "gardens_east_shaded"], failures
+    assert any("1 forbidden overlap" in ln for ln in lines)

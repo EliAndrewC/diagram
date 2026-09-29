@@ -67,7 +67,7 @@ def subjects() -> list[Any]:
     # needs is the one the tests just made. Seeds 41, 42 and 44 went with the cohort; 43 stays for its kink. The
     # reference and Kuwabata are the POOL's maps since feature 215 (their record is the gen cache's, `pool_deps`).
     return [
-        hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond", fixtures_min={"shrine": 1}),  # the pool's brief
+        hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond", settlement_form="nucleated", fixtures_min={"shrine": 1}),  # the pool's brief
         hg.HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry"),
     ]  # Polder 19 and seed 43 left at feature 216, Polder 12 at 219 (its three lines are unit tests, its behavior the soak tier's): the gate rolls no spec of its own
 

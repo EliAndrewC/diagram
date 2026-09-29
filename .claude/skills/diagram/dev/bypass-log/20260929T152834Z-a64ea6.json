@@ -1,0 +1,6 @@
+{
+  "utc": "20260929T152834Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: figures are design constants labeled GUESS in plan D4 D5, not measurements"
+}

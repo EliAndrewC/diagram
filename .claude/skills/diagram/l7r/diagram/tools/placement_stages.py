@@ -648,7 +648,7 @@ def main(argv: list[str] | None = None) -> int:
     # cheap to make and does not show what was asked for is not cheaper, it is useless).
     ap.add_argument("--no-steps", dest="steps", action="store_false", help="stage plates only - skip the per-step plates")
     a = ap.parse_args(argv)
-    spec = HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond")
+    spec = HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond", settlement_form="nucleated")
     page = build_page(a.out, a.width, spec, a.steps)
     print(f"\nwrote {page}")
     return 0

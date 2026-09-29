@@ -35,6 +35,8 @@ if HERE not in sys.path:
     sys.path.insert(0, HERE)
 
 from l7r.diagram import hamletgen as hg  # noqa: E402
+from l7r.diagram.overlap import matrix_violations  # noqa: E402
+from l7r.diagram.settlement.homestead_parts.grove_rules import gardens_east_shaded, grove_sides_missing, groves_crossed_by_lanes, groves_off_windward  # noqa: E402
 
 _PART_KEYS = ("gardens", "threshing_yards", "farm_fixtures", "byres", "farm_sheds", "retirement_houses", "persimmons", "bamboo_stands")
 
@@ -86,8 +88,23 @@ def roll_one(spec: tuple[int, int]) -> tuple[str, list[str], list[str]]:
     if _across:
         report.fail_lines.append(f"FAIL farmstead_across_brook -> {_across} farmstead part(s) stand across the brook from their house")
         report.failures.append("farmstead_across_brook")
+    # THE MATRIX OVER EVERY COHORT ROLL (feature 291). `features_do_not_overlap` was a seed test over the POOL's rolls
+    # only (tests/gate/test_no_feature_overlaps.py), so a cohort seed whose grove lay on a lane or a crown on a byre read
+    # as a pass here - the 24/24 feature 291 first measured with the dispersed and linear forms back in the roll, while
+    # feature 126 had measured exactly those overlaps on the same forms.
+    _mx = matrix_violations(getattr(report, "manifest", None) or {}) if getattr(report, "manifest", None) else []
+    if _mx:
+        report.fail_lines.append(f"FAIL features_do_not_overlap -> {len(_mx)} forbidden overlap(s), e.g. {_mx[:3]}")
+        report.failures.append("features_do_not_overlap")
+    # ...AND THE GROVE'S OWN RULES (feature 291, `grove_rules`): every rolled side planted at every farm, the deep stand on
+    # the windward faces, no garden's morning sun cut off - the three feature 126 measured that the matrix cannot see.
+    _M = getattr(report, "manifest", None) or {}
+    for name, found in (("grove_sides_missing", grove_sides_missing(_M)), ("groves_off_windward", groves_off_windward(_M)), ("gardens_east_shaded", gardens_east_shaded(_M)), ("groves_crossed_by_lanes", groves_crossed_by_lanes(_M))):
+        if found:
+            report.fail_lines.append(f"FAIL {name} -> {len(found)}, e.g. {found[:2]}")
+            report.failures.append(name)
     plan = report.plan
-    header = f"--- Audit-{seed:02d}  seed={seed} households={households} fall={int(plan.down_deg)} sink={plan.water_sink} shape={plan.cluster_shape} lanes={plan.lane_skeleton}"
+    header = f"--- Audit-{seed:02d}  seed={seed} households={households} form={getattr(plan, 'settlement_form', '?')} sides={getattr(plan, 'grove_sides', '?')} fall={int(plan.down_deg)} sink={plan.water_sink} shape={plan.cluster_shape} lanes={plan.lane_skeleton}"
     if _meta.get("seat_offwind"):
         header += " seat=OFFWIND"
     return header, report.failures, report.fail_lines
@@ -120,6 +137,11 @@ def audit(count: int, first_seed: int, only: str | None = None, jobs: int | None
         for line in fail_lines:
             if not only or only in line:
                 print("   ", line)
+    # WHICH FORMS THE COHORT ROLLED (feature 291): a green cohort says nothing about a form none of its seeds drew
+    forms = collections.Counter(h.split(" form=")[1].split()[0] for h, _f, _l in results if " form=" in h)
+    print(f"\nforms rolled: {', '.join(f'{k} {v}' for k, v in sorted(forms.items()))}")
+    sides = collections.Counter(h.split(" sides=")[1].split()[0] for h, _f, _l in results if " sides=" in h and " form=nucleated" not in h)
+    print(f"grove sides among the farms that carry a grove: {', '.join(f'{k} sides {v}' for k, v in sorted(sides.items()))}")
     print(f"\n{count - failing}/{count} passed the whole gate")
     if tally:
         print("residue by check:")
@@ -133,7 +155,7 @@ def _reference_ok() -> list[str]:
 
     One map, about a minute. It is the cheapest question in the loop and it gates the most expensive
     answer, which is the whole point of the tier ladder (constitution VI)."""
-    rep = hg.generate(hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond"), out_base=None, render=False)
+    rep = hg.generate(hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond", settlement_form="nucleated"), out_base=None, render=False)
     for f in rep.failures:
         print(f"  reference: {f}", flush=True)
     return list(rep.failures)
