@@ -322,6 +322,11 @@ Decisions review and for what goes to the GM once the work runs.
   drains off the frame (the existing fallback); six maps moved their pond to the other side of the outfall, none lost it.
   The constructed drain route meeting the brook where the drawn brook breaks a rule: `SinkRefused`. Historically neutral
   (refusals of drawings the rules forbid); chosen by the session, for the Decisions review.
+- **D12's terminal takes D10's form** (labels, wave 5): where no verge takes a board with a clean caption, the caption
+  goes on a leader or in the sheet's key (`board_seat.terminal_caption`), never at the retired least-cost seat, which could
+  lie across a lane; a seat whose key mark would lie on a way is refused, and where none clears the ways no board is
+  posted, as when no verge fits. The GM's question stays marked (`meta.kosatsuba_d12`); the count reaching it is 0 of 53.
+  Map drawing convention; for the GM with D12.
 
 ## R8 - Tests retired and kept (2026-09-29)
 
