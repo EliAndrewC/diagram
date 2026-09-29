@@ -2333,6 +2333,10 @@ raku	raku
 rakuchu rakugai	Rakuchu rakugai
 rakuchu rakugai screens	Rakuchu rakugai
 rakuchu rakugai zu	Rakuchu rakugai
+rakugai-zu	Rakugai-zu
+rakugai-zu screen	Rakugai-zu
+rakugai-zu screen painting	Rakugai-zu
+rakugai-zu screens	Rakugai-zu
 rakugo	rakugo
 rammed earth	rammed earth
 rammed-earth	rammed earth
