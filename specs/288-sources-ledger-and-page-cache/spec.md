@@ -120,8 +120,10 @@ is not re-read without a reason. The feature-274 drift test stays green.
   its interface and its output shape; the new arguments are optional.
 - A long page saved as an excerpt for a check (`--quotes`): the cache holds the whole page; the excerpt is cut from it
   into OUT, as now.
-- The checks' own saves (check-bundle's calls into source-pages) are check reads, not research reads: they use the
-  cache but do not print or append ledger lines.
+- The re-verification saves - a `make check-bundle KEY=<k>` excerpt bundle (no `WHOLE=1`, the page cut around the
+  passages already quoted) and `make quote-verbatim` - re-check passages of an already-cited page: they use the cache
+  but do not print or append ledger lines (D1). `make check-bundle KEY=<k> WHOLE=1` is source-reader's search of a
+  cited page for a NEW claim, a research read: it prints and appends exactly as `make source-pages` does.
 
 ## Requirements
 
@@ -133,8 +135,9 @@ is not re-read without a reason. The feature-274 drift test stays green.
   (and `unknown-outcome`, written only by the seeding).
 - **FR-002** URL normalization exactly as the measurement's `extract_norm.py` (R1), shared by the ledger and the
   cache.
-- **FR-003** `make source-pages` prints every earlier ledger line for each URL BEFORE fetching it, and appends a
-  `pending` line for each URL it saves. An optional `QUESTION=<page/NNN>` is recorded on those lines.
+- **FR-003** `make source-pages`, and `make check-bundle KEY=<k> WHOLE=1`, print every earlier ledger line for each
+  URL BEFORE fetching it, and append a `pending` line for each URL they save. An optional `QUESTION=<page/NNN>` on
+  either is recorded on those lines.
 - **FR-004** `make source-outcome URL=<u> OUTCOME=<o> [QUESTION=<page/NNN>]` records an outcome; a malformed outcome
   is refused, naming the allowed forms.
 - **FR-005** `make reserve KIND=registry KEY=<k>` marks the URL `cited:<k>`: at once when an optional `URL=<u>` is
@@ -170,8 +173,9 @@ is not re-read without a reason. The feature-274 drift test stays green.
 
 ### Measurable Outcomes
 
-- **SC-001** A test: an earlier line for a URL, in another spelling, is printed by source-pages before its fetch, and
-  the save appends a `pending` line (FR-001, FR-002, FR-003).
+- **SC-001** Tests: an earlier line for a URL, in another spelling, is printed by source-pages, and by
+  `check-bundle KEY=<k> WHOLE=1`, before its fetch, and each save appends a `pending` line; an excerpt bundle
+  appends none (FR-001, FR-002, FR-003).
 - **SC-002** Tests: source-outcome records a well-formed outcome and refuses a malformed one; sources-consulted finds
   lines by URL and by key regex (FR-004, FR-006).
 - **SC-003** Tests: reserve with `URL=` writes the ledger line; without it the stub and output are as before; a filled
@@ -188,10 +192,14 @@ is not re-read without a reason. The feature-274 drift test stays green.
 
 ## Decisions Recorded
 
-- **D1 - check reads stay out of the ledger**:
-  check-bundle's own saves use the cache but neither print nor append ledger lines. R1 (observed 2026-09-29; method: research.md R1) found 60% of reads were the
-  check pipeline re-reading within a session BY DESIGN; logging those as `pending` reads would bury the research
-  reads the ledger exists to surface.
+- **D1 - re-verification reads stay out of the ledger; a WHOLE=1 read does not**: the excerpt bundles
+  (`check-bundle KEY=<k>` without `WHOLE=1`) and `quote-verbatim` use the cache but neither print nor append ledger
+  lines. They re-check passages already quoted from an already-cited page, with no research question and no outcome
+  from the ledger's list; a `pending` line would put a false open status on a cited page. R1 (observed 2026-09-29;
+  method: research.md R1) found 60% of reads were that within-session re-verification, by design. `check-bundle
+  KEY=<k> WHOLE=1` is different: source-reader searches the whole cited page for the passage behind a NEW claim -
+  a cited page read for a new question, which the GM asked about by name - so it prints and appends as
+  `source-pages` does (spec-fidelity round 1).
 - **D2 - "when the entry is filled" is found by a pass**, run by `make record` (which every research session runs
   after editing the record) and by `make sources-consulted`, rather than by a new hook: the GM's measurement said no
   guard.
@@ -210,4 +218,5 @@ is not re-read without a reason. The feature-274 drift test stays green.
 
 ## Review history
 
-(none yet)
+- Round 1 (spec-fidelity, 2026-09-29): CHANGES REQUIRED - D1 excluded the `WHOLE=1` bundle, a research read of a
+  cited page for a new claim; D1, the edge case, FR-003 and SC-001 now ledger it, with `QUESTION=`.
