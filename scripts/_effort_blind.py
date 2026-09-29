@@ -26,7 +26,7 @@ import sys
 FEATURE = "293-effort-level-experiment"
 RUBRIC = {"R": "rubrics/research.md", "I": "rubrics/implementation.md"}
 LEVEL = r"(?:medium|xhigh|high|low|max)"
-EFFORT_SETTING = re.compile(rf"(--effort|\beffort(?:[ _-]?level)?)\s*[:=]?\s*{LEVEL}\b|\b{LEVEL}[ -]effort\b", re.I)
+EFFORT_SETTING = re.compile(rf"(--effort|\beffort(?:[ _-]?level)?\"?)\s*[:=]?\s*\"?{LEVEL}\b\"?|\b{LEVEL}[ -]effort\b", re.I)
 XHIGH = re.compile(r"\bxhigh\b", re.I)
 TRAILER = re.compile(r"^\s*Co-Authored-By:.*$", re.M | re.I)
 

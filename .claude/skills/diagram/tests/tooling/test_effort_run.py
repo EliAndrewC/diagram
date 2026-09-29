@@ -76,6 +76,7 @@ def world(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> dict:
     monkeypatch.setenv("PATH", f"{bin_}:{os.environ['PATH']}")
     monkeypatch.setenv("FAKE_OUT", str(out))
     monkeypatch.setenv("CLAUDE_CODE_EFFORT_LEVEL", "max")
+    monkeypatch.setenv("SPECIFY_FEATURE", "293-effort-level-experiment")
     monkeypatch.setenv("HOME", str(tmp_path / "home"))
     claims = tmp_path / "CLAIMS.md"
     claims.write_text("- 280 towns\n- 293 servants' quarters (run e0) | claim released\n")
@@ -162,7 +163,7 @@ def test_task_i_is_one_full_session_at_the_arm_effort_with_the_pinned_judge(worl
     assert argv[argv.index("--agents") + 1] == er.agents_json()
     assert argv[argv.index("--append-system-prompt") + 1] == "STANDING AUTHORIZATION"
     assert "CLAUDE_CODE_EFFORT_LEVEL" not in env, "R1 D1: the env var would override the checkers' pinned effort"
-    assert f"L7R_SOURCES_HOME={world['tmp']}/clones/.effort-293/e1/sources" in env
+    assert f"L7R_SOURCES_HOME={world['tmp']}/clones/.runs-293/e1/sources" in env and "SPECIFY_FEATURE" not in env
     assert rec["arm"] == "medium" and rec["sessions"][0]["effort"] == "medium" and rec["ended"] is None
     assert "<prompts/I.md sha256" in " ".join(rec["argv"]), "the record names the prompt by hash"
     assert rec["shared_state"]["claims_lines_at_start"] == ["- 293 servants' quarters (run e0) | claim released"]

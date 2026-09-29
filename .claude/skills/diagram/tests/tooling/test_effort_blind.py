@@ -43,7 +43,7 @@ def _clone(tmp: pathlib.Path, run_id: str, arm: str) -> tuple[pathlib.Path, str]
     _git("add", "-A", cwd=clone)
     _git("commit", "-qm", "start", cwd=clone)
     start = _git("rev-parse", "HEAD", cwd=clone)
-    (clone / "research" / "buildings" / "900-servants.html").write_text(f"<p>A medium-sized room in {clone}; run {run_id} ran with --effort {arm}, effort: {arm}; xhigh noted; at {arm} effort, effort level {arm}.</p>\n")
+    (clone / "research" / "buildings" / "900-servants.html").write_text(f"<p>A medium-sized room in {clone}; run {run_id} ran with --effort {arm}, effort: {arm}; xhigh noted; at {arm} effort, effort level {arm}, \"effort\": \"{arm}\".</p>\n")
     (clone / "pool" / "hamlets" / "inashiro.png").write_bytes(b"\x89PNG fake")
     (clone / "pool" / "hamlets" / "inashiro.notes.md").write_text(f"path added by diagram-exp-{run_id}\n")
     (clone / "l7r.py").write_text(f"WIDTH = 4  # {run_id}\n")
@@ -83,7 +83,7 @@ def test_nothing_that_names_the_arm_or_the_run_reaches_the_bundle(tmp_path: path
     w = _world(tmp_path, task)
     bundle, key = eb.blind(w["repo"], task, 11, tmp_path / "out", w["projects"])
     text = _all_text(bundle)
-    for leak in ("diagram-exp-e1", "diagram-exp-e2", "--effort medium", "effort: xhigh", "xhigh", "at medium effort", "effort level medium", "Co-Authored-By", "sid-e1", str(tmp_path / "clones")):
+    for leak in ("diagram-exp-e1", "diagram-exp-e2", "--effort medium", "effort: xhigh", "xhigh", "at medium effort", "effort level medium", '"effort": "medium"', "Co-Authored-By", "sid-e1", str(tmp_path / "clones")):
         assert leak not in text, leak
     assert "e1" not in text.replace("<", " ") or "run <run>" in text
     assert sorted([key["A"], key["B"]]) == ["e1", "e2"] and key["seed"] == 11

@@ -129,8 +129,10 @@ def arm_order(seed: int) -> dict[str, list[str]]:
 
 
 def run_env(env: dict[str, str], sources: pathlib.Path) -> dict[str, str]:
-    out = {k: v for k, v in env.items() if k != "CLAUDE_CODE_EFFORT_LEVEL"}
-    return out | {"L7R_SOURCES_HOME": str(sources), "SPECIFY_FEATURE": FEATURE}
+    # CLAUDE_CODE_EFFORT_LEVEL would override the checkers' pinned effort (R1 D1); SPECIFY_FEATURE would name the experiment
+    # to any tool that prints it (FR-004's intent, the plan review's aside) - the runs push nothing and need no feature.
+    out = {k: v for k, v in env.items() if k not in ("CLAUDE_CODE_EFFORT_LEVEL", "SPECIFY_FEATURE", "SPECIFY_FEATURE_DIRECTORY")}
+    return out | {"L7R_SOURCES_HOME": str(sources)}
 
 
 def full_session_cmd(prompt: str, name: str, sid: str, effort: str, appended: str) -> list[str]:
@@ -159,7 +161,7 @@ def launch(args: argparse.Namespace, repo: pathlib.Path, now: float) -> dict:
         raise Refused(f"{clone} exists - a run id is used once")
     subprocess.run(["git", "clone", "-q", args.origin, str(clone)], check=True)
     subprocess.run(["git", "-C", str(clone), "reset", "-q", "--hard", exp["start_commit"]], check=True)
-    work = base / ".effort-293" / run_id
+    work = base / ".runs-293" / run_id  # a neutral name: the sources path is in the run's environment
     sources = work / "sources"
     shutil.copytree(exp["sources_snapshot"], sources)
     env = run_env(dict(os.environ), sources)
@@ -167,7 +169,7 @@ def launch(args: argparse.Namespace, repo: pathlib.Path, now: float) -> dict:
     record = {"run_id": run_id, "task": args.task, "arm": arm, "seed": exp["seed"], "order": args.order,
               "start_commit": exp["start_commit"], "clone": str(clone), "started": iso(now), "ended": None,
               "pauses": [], "memory_at_launch": reading, "agents_json_sha256": sha256(agents_json()),
-              "env": {"L7R_SOURCES_HOME": str(sources), "CLAUDE_CODE_EFFORT_LEVEL": "unset", "SPECIFY_FEATURE": FEATURE},
+              "env": {"L7R_SOURCES_HOME": str(sources), "CLAUDE_CODE_EFFORT_LEVEL": "unset", "SPECIFY_FEATURE": "unset"},
               "shared_state": {"sources_snapshot_sha256": exp["sources_snapshot_sha256"], **claims_at_start(args.claims)},
               "sessions": []}
     if args.task == "R":

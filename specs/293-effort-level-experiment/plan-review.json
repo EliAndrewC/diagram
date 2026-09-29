@@ -20,7 +20,7 @@
    "id": "R1-P0-measured",
    "summary": "P0 measured 2026-09-29 (T07): --agents carries adhoc-judge under claude -p, so D2 stands and D2a's agent file is not built; transcripts carry effort per assistant message, so effort-measure records effort per message for the main sessions and per subagent type (data-model effort field); the Agent tool has no per-dispatch effort",
    "class": "within",
-   "why": "The plan's own branch: (a) passing keeps D2, and D2a was only the fallback for (a) failing. The effort field MEASURES what US2 AS2 (report names the tiers that ran), AS3 (one fixed effort for ad-hoc judges) and AS4 (the run log records each session's effort) ask; enforcement of the request, not scope. Aside: the probe ran the session at medium only; the pin holding under an xhigh session is not yet observed, and the per-message field will show it only after a run is spent."
+   "why": "The plan's own branch: (a) passing keeps D2, and D2a was only the fallback for (a) failing. The effort field MEASURES what US2 AS2, AS3 and AS4 ask; enforcement of the request, not scope. Round-1 aside taken up: research R1 P0 (d) records the pin holding under an xhigh session (observed 2026-09-29, one-shot, $0.12): session records xhigh, judge high."
   },
   {
    "id": "R1-D2a",
@@ -50,14 +50,13 @@
    "id": "R6-D5-T08",
    "summary": "Claims file: the page-session rules say only how the file is read and written, so what blocks a run is the brief's to say; the write brief now says feature-293 lines the run did not write are not claims on its work (identical in both arms); the launcher's release line stays as a record; no per-run copy",
    "class": "within",
-   "why": "The purpose of D5 is that the second R run is not blocked by the first run's claim, so both arms start from the same effective state; an identical instruction in both briefs does that, D6 still records the claims file as each run found it (the shared-resource edge case), and the per-run copy was only the fallback for the rules not honoring a release. The WORDING of the sentence is a separate decision (prompt-names-effort)."
+   "why": "The purpose of D5 is that the second R run is not blocked by the first run's claim, so both arms start from the same effective state; an identical instruction in both briefs does that, D6 still records the claims file as each run found it (the shared-resource edge case), and the per-run copy was only the fallback for the rules not honoring a release. Its wording is now neutral (prompt-names-effort)."
   },
   {
    "id": "prompt-names-effort",
-   "summary": "prompts/R-write.md (claims line and the T08 sentence) and prompts/R-check.md line 33 tell the run it is in an 'Effort experiment' and that another run of the same task exists whose output is set aside; every prompt (R-write, R-check, I) also points the run's handoff files into specs/293-effort-level-experiment/",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-004: the prompt gives the task, the future-work location, the stop point, the no-human-help rule, 'and nothing about effort'. A prompt that tells a session it is a subject of an effort experiment is about effort, and the handoff's 'byte-identical task prompt' control is there so that the only thing acting on the run is its effort level. Nothing makes this impossible: the claims label can be '293 | task R ...' and the sentence 'lines for 293 that you did not write are not claims on your work'; the handoff files can be written under a neutral path in the clone. Symmetry across arms is not a defense - FR-004 is a separate clause from 'identical across arms'. The prompts are drafts not yet frozen, so the fix costs minutes."
+   "summary": "The prompts (R-write, R-check, I) say nothing about effort or the experiment: neutral claims label and T08 sentence, handoffs under handoffs/293/, R briefs copied to and run from a neutral path in the run clone, neutral release line",
+   "class": "within",
+   "why": "Resolved in c6a4e9e5a: grep of prompts/*.md for effort|experiment|specs/293|xhigh|set aside finds nothing; the claims labels read \"293 | ...\", the T08 sentence reads \"Lines for 293 that you did not write are not claims on your work\", handoffs go to handoffs/293/, the R briefs are copied byte for byte to <clone>/handoffs/293/ and run from there so the page runner's PROMPT (\"Read {brief} first\") names a neutral path (test_effort_run asserts the path and byte equality), and the release line reads \"293 | run <id> ended\". This now ENFORCES FR-004 (\"nothing about effort\") rather than departing from it. Aside for the GM: the run environment still carries SPECIFY_FEATURE=293-effort-level-experiment and L7R_SOURCES_HOME under <clones>/.effort-293/<run>/, identical in both arms; FR-004 governs the prompt, so this is not a finding, but a tool that echoes either path would put the word in front of the session."
   },
   {
    "id": "R6-reserve",
@@ -100,7 +99,7 @@
    "id": "blinding-strip-scope",
    "summary": "contracts/cli.md effort-blind: strips what identifies the arm or the run - run id, clone path and name, session ids, commit trailers, the token xhigh, and an arm name where it names an effort setting; 'medium' in ordinary prose left (was: any occurrence of the arm names)",
    "class": "within",
-   "why": "FR-009 says 'strips arm-identifying text' and US3 AS2 'anything naming the effort level or the run'; 'medium' as an ordinary word names neither, and stripping it would itself mark the text. Implementation note (not a plan ruling): scripts/_effort_blind.py's EFFORT_SETTING regex leaves 'at medium effort' and 'effort level medium' unstripped (probed 2026-09-29), which the contract's own words cover - fix the regex."
+   "why": "FR-009 says \"strips arm-identifying text\" and US3 AS2 \"anything naming the effort level or the run\"; \"medium\" as an ordinary word names neither, and stripping it would itself mark the text. Round-1 implementation note resolved in c6a4e9e5a: EFFORT_SETTING now matches \"effort[ _-]?level X\" and \"X[ -]effort\" (replaced with \"<arm> effort\"), and test_effort_blind asserts \"at medium effort\" and \"effort level medium\" absent from the bundle. Aside: a quoted JSON form (\"effort\": \"medium\") is still not matched, since [:=]? admits no quote; xhigh is stripped everywhere regardless."
   },
   {
    "id": "grader",
@@ -127,5 +126,5 @@
    "why": "US4 AS1-AS3, FR-014."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
