@@ -2095,6 +2095,7 @@ nihonbashi	Nihonbashi
 nihonmatsu	Nihonmatsu
 nihonshi shojiten	Yamakawa Nihonshi Shojiten
 nimosaku	nimosaku
+ninbetsu aratame cho	shumon aratame cho
 ninjobon	ninjōbon
 ninjōbon	ninjōbon
 ninomaru	ninomaru

@@ -10530,10 +10530,11 @@
   ]
  },
  "shumon aratame cho": {
-  "def": "The yearly religious-investigation register of an Edo-period village, listing every household and its members with their ages and relations; historians read household sizes from it.",
+  "def": "The yearly religious-investigation register of an Edo-period village, listing every household and its members with their ages and relations; historians read household sizes from it. Where a domain kept the head count apart from the religious check, the same kind of register was called the ninbetsu aratame cho, the population-investigation register.",
   "variants": [
    "shumon aratame cho",
-   "shumon aratame"
+   "shumon aratame",
+   "ninbetsu aratame cho"
   ]
  },
  "myoshu": {
