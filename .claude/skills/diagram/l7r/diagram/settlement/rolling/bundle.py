@@ -194,7 +194,6 @@ class BundleGeomMixin:
             way_in=self.px(WAY_IN_FT),
             pad=self.px(LANE_ROOM_FT) / 2.0,
             back=self.px(SERVICE_STRIP_FT),
-            well=2.0 * self._well_vr() + 4.0,  # the drawn wellhead and 2 ft round it (feature 291 plan D18)
         )
 
     def _rake_parts(self: Settlement, base: dict[str, Any], hx: float, hy: float, rot: float) -> None:  # type: ignore[misc]

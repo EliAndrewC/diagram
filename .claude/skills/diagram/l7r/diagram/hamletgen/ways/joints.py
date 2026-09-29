@@ -61,7 +61,7 @@ def joints(lanes: Sequence[Mapping[str, Any]]) -> list[tuple[int, int, int, int]
     """Every point where exactly two lane ENDS meet and no other way touches: `(i, end_i, j, end_j)`, an end
     being 0 or -1. A connector's end counts as a way touching (the cart route is not merged into a footpath), and
     two lanes that meet at both ends are a loop, not a joint."""
-    live = [m for m, ln in enumerate(lanes) if not ln.get("connector") and len(ln.get("pts") or []) >= 2]
+    live = [m for m, ln in enumerate(lanes) if not (ln.get("connector") or ln.get("street")) and len(ln.get("pts") or []) >= 2]
     ends = [(m, e, _pts(lanes[m])[e]) for m in live for e in (0, -1)]
     out: list[tuple[int, int, int, int]] = []
     for a, (i, ei, q) in enumerate(ends):
@@ -317,7 +317,7 @@ def meet_end_to_end(s: Settlement, fabric: Sequence[Poly] = ()) -> int:
     closed = 0
     for i, ln in enumerate(lanes):
         p = _pts(ln)
-        if ln.get("connector") or len(p) < 2:
+        if (ln.get("connector") or ln.get("street")) or len(p) < 2:
             continue
         for k in (0, -1):
             q = p[k]
@@ -355,7 +355,7 @@ def split_at_crossings(s: Settlement) -> int:
         ln = lanes[i]
         p = _pts(ln)
         cut: tuple[int, Pt] | None = None
-        if not ln.get("connector") and len(p) >= 2:
+        if not (ln.get("connector") or ln.get("street")) and len(p) >= 2:
             for j, other in enumerate(lanes):
                 op = _pts(other)
                 if j == i or len(op) < 2:
@@ -412,7 +412,7 @@ def fold_the_connector_hairpin(s: Settlement, fabric: Sequence[Poly] = ()) -> in
         cp = _pts(co)
         for i, ln in enumerate(lanes):
             p = _pts(ln)
-            if i == ci or ln.get("connector") or len(p) < 3:
+            if i == ci or (ln.get("connector") or ln.get("street")) or len(p) < 3:
                 continue
             for seq, back in ((p, False), (p[::-1], True)):
                 a, b, j = seq[-3], seq[-2], seq[-1]

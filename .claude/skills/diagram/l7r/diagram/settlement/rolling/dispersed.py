@@ -72,7 +72,6 @@ def canonical_farmstead(
     way_in: float,
     yard_sun: float = YARD_SUN_STRIP,
     back: float = 0.0,
-    well: float = 0.0,
 ) -> dict[str, Any]:
     """The farmstead in the canonical frame, about a house of `cw` x `ch` centered on the origin: `yard`, `garden`, and
     `groves` as (rect, face, "deep" | "thin") - the deep north and west bands; with three sides a thin east band; with four
@@ -85,11 +84,7 @@ def canonical_farmstead(
     # beside the yard, at its far end (the yard keeps the garden's sky open to the south), or against the house's east
     # wall, at its mid-height
     garden_r = (yw / 2 + gap + gw / 2, yard_r[1], gw, gh) if garden_by_yard else (cw / 2 + gap + gw / 2, 0.0, gw, gh)
-    # THE FARM'S OWN WELL (feature 291 plan D18; research/homesteads/200: a dispersed farm carries its own water): a seat in
-    # the dooryard on the yard's west, away from the garden and off the way in at the yard's middle, part of the layout so a
-    # farm is never seated without room for it. Where on the plot the well stood no page read says - a GUESS.
-    well_r = (-(yw / 2 + gap + well / 2), yard_r[1], well, well)
-    works = [(-cw / 2, -ch / 2, cw / 2, ch / 2), _edges(yard_r), _edges(garden_r)] + ([_edges(well_r)] if well > 0 else [])
+    works = [(-cw / 2, -ch / 2, cw / 2, ch / 2), _edges(yard_r), _edges(garden_r)]
     # `back`: the service strip (`SERVICE_STRIP_FT`) on BOTH windward sides - behind the house, and off its west end wall,
     # where the bath room is joined at the stable end and the wood shed takes a flank seat: hard against that wall, the
     # west band stood on every bath room Mizuguchi drew (3 of 3) and on its one wood shed
@@ -111,7 +106,7 @@ def canonical_farmstead(
         mid = yard_r[0]
         groves.append((_box(west_in - b, south_in, mid - way_in / 2, south_out), S, "thin"))
         groves.append((_box(mid + way_in / 2, south_in, east_out, south_out), S, "thin"))
-    return {"yard": yard_r, "garden": garden_r, "groves": groves, **({"well": well_r} if well > 0 else {})}
+    return {"yard": yard_r, "garden": garden_r, "groves": groves}
 
 
 def _carried(r: Rect, t: Turn, hx: float, hy: float) -> Rect:
@@ -138,7 +133,6 @@ def dispersed_layout(
     way_in: float,
     pad: float = 0.0,
     back: float = 0.0,
-    well: float = 0.0,
 ) -> dict[str, Any]:
     """The dispersed farmstead about a house at (hx, hy) of `hw` x `hh` (as drawn), carried from the canonical frame by
     `turn`: `house`, `yard`, `garden`, `gardens` (one bed), `groves` (rects), `grove_faces` ((face, depth) beside each,
@@ -147,13 +141,12 @@ def dispersed_layout(
     the house's north wall or its west, where the house takes its sun."""
     moved = turn != (1, 0, 0, 1)
     cw, ch = (hh, hw) if turns_axes(turn) else (hw, hh)
-    can = canonical_farmstead(cw, ch, gap, garden, yard, sides=sides, garden_by_yard=moved, thin=thin, sun_east=sun_east, way_in=way_in, back=back, well=well)
+    can = canonical_farmstead(cw, ch, gap, garden, yard, sides=sides, garden_by_yard=moved, thin=thin, sun_east=sun_east, way_in=way_in, back=back)
     yard_r = _carried(can["yard"], turn, hx, hy)
     garden_r = _carried(can["garden"], turn, hx, hy)
-    well_r = _carried(can["well"], turn, hx, hy) if "well" in can else None
     groves = [_carried(r, turn, hx, hy) for r, _f, _d in can["groves"]]
     faces = [(turn_face(turn, f), d) for _r, f, d in can["groves"]]
-    edges = [_edges(r) for r in (*groves, yard_r, garden_r, (hx, hy, hw, hh), *([well_r] if well_r else []))]
+    edges = [_edges(r) for r in (*groves, yard_r, garden_r, (hx, hy, hw, hh))]
     # the frame the placer reserves, padded by `pad` (half the lane's room, `LANE_ROOM_FT`) so neighbors leave a lane between
     frame = _box(min(e[0] for e in edges) - pad, min(e[1] for e in edges) - pad, max(e[2] for e in edges) + pad, max(e[3] for e in edges) + pad)
-    return {"house": (hx, hy, hw, hh), "yard": yard_r, "garden": garden_r, "gardens": [garden_r], "groves": groves, "grove_faces": faces, "_frame": frame, **({"well": well_r} if well_r else {})}
+    return {"house": (hx, hy, hw, hh), "yard": yard_r, "garden": garden_r, "gardens": [garden_r], "groves": groves, "grove_faces": faces, "_frame": frame}

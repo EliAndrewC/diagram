@@ -22,6 +22,9 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement
 
+from l7r.diagram.settlement.homestead_parts.grove_sides import grove_faces
+from l7r.diagram.settlement.rolling.dispersed import LANE_ROOM_FT
+
 from ..consts import Poly, Pt
 from ..plan import SitePlan
 
@@ -70,11 +73,12 @@ def _normal_away(hard: Any, p: Pt, t: Pt) -> Pt:
     return n1 if a >= b else (-n1[0], -n1[1])
 
 
-def street_line(hard: Any, anchor: Pt, offset: float, length: float, form: str) -> list[tuple[Pt, Pt]]:
+def street_line(hard: Any, anchor: Pt, offset: float, length: float, form: str, slack: float = 0.0) -> list[tuple[Pt, Pt]]:
     """The street as (point, outward normal) samples every 8 ft, `length` long, centered on the point of the hard ground's
     edge - grown by `offset` - nearest `anchor`. The dry EDGE follows that ring and curves with it. A STREET laid first is
     straight: the line fitted to the same stretch of the ring (its principal axis), then set out until the whole stretch
-    lies behind it, so it runs along the ground rather than off a corner of it. [] where there is no hard ground."""
+    lies behind it, so it runs along the ground rather than off a corner of it. `slack` lengthens the line at both ends
+    without changing the stretch it is fitted to. [] where there is no hard ground."""
     if hard is None or length <= 0:
         return []
     from shapely.geometry import Point
@@ -86,6 +90,10 @@ def street_line(hard: Any, anchor: Pt, offset: float, length: float, form: str) 
     arc = [ring.interpolate((s0 - length / 2 + k * length / (n - 1)) % total) for k in range(n)]
     pts = [(p.x, p.y) for p in arc]
     if form == "edge":
+        if slack > 0:
+            length += slack
+            n = max(2, int(length / 8.0) + 1)
+            pts = [(p.x, p.y) for p in (ring.interpolate((s0 - length / 2 + k * length / (n - 1)) % total) for k in range(n))]
         out: list[tuple[Pt, Pt]] = []
         for k, p in enumerate(pts):
             q, r = pts[min(k + 1, n - 1)], pts[max(k - 1, 0)]
@@ -102,7 +110,9 @@ def street_line(hard: Any, anchor: Pt, offset: float, length: float, form: str) 
     nrm = _normal_away(hard, (mx, my), t)
     push = max((p[0] - mx) * nrm[0] + (p[1] - my) * nrm[1] for p in pts)  # through the stretch's outermost point: all of it behind
     cx, cy = mx + nrm[0] * push, my + nrm[1] * push
-    return [((cx + t[0] * u, cy + t[1] * u), nrm) for u in (-length / 2 + k * length / (n - 1) for k in range(n))]
+    full = length + slack
+    m_ = max(2, int(full / 8.0) + 1)
+    return [((cx + t[0] * u, cy + t[1] * u), nrm) for u in (-full / 2 + k * full / (m_ - 1) for k in range(m_))]
 
 
 def frame_extent(bbox: Sequence[float], direction: Pt) -> float:
@@ -195,6 +205,37 @@ def holding_clear(quad: Sequence[Pt], hard: Any, boxes: Sequence[tuple[float, fl
     return largest_ring(clipped)
 
 
+FOOTPATH_DOOR_OUT_FT = 12.0
+"""How far past the yard's far edge a farm's front door stands (`ways/serve.front_door`: a footpath's gap plus 4 ft, less
+the fraction of a foot the frame's pad differs by) - the door `door_clear` tests."""
+
+DOOR_ROOM_FT = 16.0
+"""The room a farm's front door needs off the hard ground for a way to start from: a footpath's fabric gap and most of the
+router's cell (`WAY_IN_FT`'s measurement) - a map drawing convention."""
+
+
+def door_clear(frame: tuple[float, float, float, float], front: Sequence[float], pad: float, hard: Any, room: float) -> bool:
+    """Is a frame's front door - the middle of its FRONT edge, less its lane pad, `FOOTPATH_DOOR_OUT_FT` out - at least `room`
+    off the hard ground? The front is the page face the farm's grove leaves open, where its way in is."""
+    if hard is None:
+        return True
+    from shapely.geometry import Point
+
+    x, y, w, h = frame
+    fx, fy = float(front[0]), float(front[1])
+    reach = abs(fx) * w / 2 + abs(fy) * h / 2 - pad + FOOTPATH_DOOR_OUT_FT  # the door stands just past the yard, in the pad
+    return bool(Point(x + fx * reach, y + fy * reach).distance(hard) >= room)
+
+
+def frame_on_holdings(frame: tuple[float, float, float, float], holdings: Sequence[Sequence[Pt]]) -> bool:
+    """Does an axis-aligned frame (`cx, cy, w, h`) meet any reserved holding?"""
+    from shapely.geometry import Polygon, box
+
+    x, y, w, h = frame
+    fb = box(x - w / 2, y - h / 2, x + w / 2, y + h / 2)
+    return any(fb.intersects(Polygon(q)) for q in holdings)
+
+
 def draw_holdings(s: Settlement) -> int:
     """Draw each reserved holding (`s._row_holdings`) as dry-field plots cut across its depth at `HOLDING_CELL_FT`, furrowed,
     recorded in `dry_plots` and registered in `dry_polys` (feature 291 plan D16). A cell on water or a lane is left undrawn;
@@ -223,7 +264,9 @@ def draw_holdings(s: Settlement) -> int:
             s.add(f'<polygon points="{pts}" fill="{fill}" stroke="#A98C58" stroke-width="1.4" stroke-linejoin="round"/>')
             theta = math.atan2(nrm[1], nrm[0]) % math.pi  # the furrows run down the strip, across the street
             s._draw_furrows(cell, fur, theta)
-            s.M["dry_plots"].append({"poly": [[round(x, 1), round(y, 1)] for x, y in cell], "crop": crop, "theta": round(theta, 3), "holding": k})
+            # `homestead`: a farm's own holding, not the field's hem - the reed toe is measured below the FIELD'S lowest crop
+            # (`toe_band`), and read as field crop a holding moved the toe 220 ft onto three Kashikawa farms' doors
+            s.M["dry_plots"].append({"poly": [[round(x, 1), round(y, 1)] for x, y in cell], "crop": crop, "theta": round(theta, 3), "holding": k, "homestead": True})
             s.dry_polys.append(cell)
             n += 1
     return n
@@ -236,13 +279,22 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
     want = plan.spec.households
     field = [(float(x), float(y)) for x, y in (plan.envelope or [])]
     corr = getattr(s, "_site_corridors", None)
-    hard = hard_ground(field, getattr(corr, "ring_pts", ()) or (), getattr(corr, "water", ()) or ())
+    # ...AND THE WET GROUND the ways refuse: the toe marsh (asked before it is drawn, as `stage_web` asks it) and every marsh
+    # drawn so far - missing, three Kashikawa farms fronted the toe marsh and no way could reach their doors
+    wet = [[(float(a), float(b)) for a, b in (s.toe_band() or [])]] + [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") != "defense" and m.get("poly")]
+    hard = hard_ground(field, [*(getattr(corr, "ring_pts", ()) or ()), *[w for w in wet if len(w) >= 3]], getattr(corr, "water", ()) or ())
     anchor = (float(plan.seat["cx"]), float(plan.seat["cy"]))
     sides = plan.row_sides
     per_line = math.ceil(want / (2 if sides == "both" else 1))
     gap = s.px(STREET_HALF_FT) + s.px(FIELD_KEEP_FT) / 2
     fw, fd = max(float(frame[2]), float(frame[3])), min(float(frame[2]), float(frame[3]))
     hx_off, hy_off = float(frame[0]), float(frame[1])  # the frame's center relative to its house
+    # THE FRONT DOOR'S GROUND (plan D17): a farm's way in is at its front - the lee face its grove leaves open - so a seat
+    # whose front edge stands on the hard ground's footpath margin has no way in (Kashikawa: three near-row farms fronting
+    # the marsh, no route from their doors to the street) and is passed over like a refused seat
+    front = grove_faces(plan.windward, plan.grove_sides, plan.grove_flank)[2]
+    door_room = s.px(DOOR_ROOM_FT)
+    lane_pad = s.px(LANE_ROOM_FT) / 2
     streets: list[list[Pt]] = []
     placed = 0
     s._exact_seat = True  # type: ignore[attr-defined]  # the placer nudges a row's seat, never slides it (`_place_bundle_dispersed`)
@@ -252,7 +304,9 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
     for off in row_offsets(fd, sides, MAX_STREETS, s.px(FIELD_KEEP_FT), gap, hold_depth + gap):
         if placed >= want:
             break
-        line = street_line(hard, anchor, off, per_line * fw + fw, plan.row_line)
+        # two lots of slack beyond what the row needs: a refused seat is taken up at the row's end rather than sent to a
+        # second street across the holdings (Kashikawa: one farm alone on a second street no way could reach)
+        line = street_line(hard, anchor, off, per_line * fw + fw, plan.row_line, slack=2 * fw)
         took = 0
         for (fx, fy), side, t, nrm in row_seats(line, frame, sides, gap):
             if placed >= want:
@@ -262,6 +316,11 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
                 continue
             # A FAR-ROW FARM IS SEATED ONLY WITH ITS HOLDING (plan D16): behind its lot, away from the street, clear of the
             # hard ground and every reserved box - else not seated here, as a farm whose grove has no room is not.
+            if not door_clear((fx, fy, float(frame[2]), float(frame[3])), front, lane_pad, hard, door_room):
+                continue
+            # ...and no farm stands on a holding already reserved (cohort seeds 3 and 4: houses, yards and gardens on dry plots)
+            if holdings and frame_on_holdings((fx, fy, float(frame[2]), float(frame[3])), [hq for hq, *_r in holdings]):
+                continue
             hold = None
             if sides == "both" and side > 0:
                 depth_here = frame_extent(frame, nrm)
@@ -275,11 +334,14 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
                 placed += 1
                 took += 1
                 if hold is not None:
+                    rec = s._pending_farmsteads[-1]  # the farm just seated (`try_place` queues its record)
                     holdings.append((hold, t, nrm, hold_depth))
+                    s.M.setdefault("row_holdings", []).append({"id": len(holdings) - 1, "of": [float(rec["x"]), float(rec["y"])], "poly": [[round(x, 1), round(y, 1)] for x, y in hold]})
                     s.block_polys.append(hold)  # the next placers and the woods keep off it (plan D16)
                     s.hard_polys.append(hold)
         if took:
-            streets.append([p for p, _n in line])
+            on_sheet = [p for p, _n in line if 0.0 <= p[0] <= s.W and 0.0 <= p[1] <= s.H]  # the sheet's part: the road runs on from its edge
+            streets.append(on_sheet if len(on_sheet) >= 2 else [p for p, _n in line])
     s._exact_seat = False  # type: ignore[attr-defined]
     s._row_holdings = holdings  # type: ignore[attr-defined]
     s._row_streets = streets  # type: ignore[attr-defined]

@@ -431,7 +431,10 @@ class BridgesMixin:
                     quad = _deck_quad(px, py, span_here, plank_w, deck)
                     if any(_quads_overlap(quad, hc) for hc in houses):
                         continue
-                    if any(quad_hits_poly(quad, dp) for dp in dry_quads):
+                    # ...nor touching it: the overlap matrix reads a deck on a plot's edge as on the plot (Mizuguchi, on main too:
+                    # a log plank's corner on a millet plot's corner, zero area) - tested half a foot wider all round
+                    _touch = _deck_quad(px, py, span_here + 1.0, plank_w + 1.0, deck)
+                    if any(quad_hits_poly(_touch, dp) for dp in dry_quads):
                         continue  # no plank laid across the hem crop
                     if any(quad_hits_poly(quad, gp) for gp in ground_quads):
                         continue  # ...nor landing on a garden's beds or in a farm's grove

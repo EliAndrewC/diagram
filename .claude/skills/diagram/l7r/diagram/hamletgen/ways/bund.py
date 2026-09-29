@@ -153,7 +153,7 @@ def run_lanes_on_to_the_bund(s: Settlement, ground: WorkedGround, blocks: RunOnB
     moved = 0
     for i, ln in enumerate(lanes):
         pts = [(float(x), float(y)) for x, y in ln.get("pts") or []]
-        if ln.get("connector") or len(pts) < 2:
+        if (ln.get("connector") or ln.get("street")) or len(pts) < 2:
             continue
         segs = _segs_of(lanes, i)
         changed = False
@@ -195,7 +195,7 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
     if paddy.edge is None:
         return "none: no paddy"
     lanes = s.M.get("lanes") or []
-    live = [(i, ln) for i, ln in enumerate(lanes) if not ln.get("connector") and len(ln.get("pts") or []) >= 2]
+    live = [(i, ln) for i, ln in enumerate(lanes) if not (ln.get("connector") or ln.get("street")) and len(ln.get("pts") or []) >= 2]
     ends = [(i, e, (float(ln["pts"][e][0]), float(ln["pts"][e][1]))) for i, ln in live for e in (0, -1)]
     blocks = blocks or RunOnBlocks(s)
     # AN END AT THE BUND WITH WATER BETWEEN HAS NOT JOINED IT (settlement-review of Mizuguchi at the 269 landing): the field
@@ -286,7 +286,7 @@ def cut_past_the_junction(s: Settlement, touch: float = 4.0) -> int:
     cuts = 0
     for i, ln in enumerate(lanes):
         p = [(float(x), float(y)) for x, y in ln.get("pts") or []]
-        if ln.get("connector") or len(p) < 3:
+        if (ln.get("connector") or ln.get("street")) or len(p) < 3:
             continue
         others = _segs_of(lanes, i)
         q = cut_stub_ends(p, others, houses, ground, touch)

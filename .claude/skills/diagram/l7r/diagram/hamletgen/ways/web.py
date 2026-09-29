@@ -220,7 +220,7 @@ def _drop_collapsed(s: Settlement) -> list[int]:
     collapsed: list[int] = []
     for i, ln in enumerate(s.M.get("lanes", [])):
         p = ln.get("pts") or []
-        if not ln.get("connector") and (len(p) < 2 or math.dist(p[0], p[-1]) < 1.0 and len(p) == 2):
+        if not (ln.get("connector") or ln.get("street")) and (len(p) < 2 or math.dist(p[0], p[-1]) < 1.0 and len(p) == 2):
             ln["pts"] = []
             s.reink_lane(i)
             collapsed.append(i)
@@ -243,7 +243,7 @@ def cut_the_overruns(s: Settlement) -> None:
         # ...and a lane that ran on past the connector to a loose end is cut where it met it (feature 261: `cut_past_connector`)
         _q = (
             trim_free_stub(cut_past_connector(_p, _conn, [sg for sg in _others if sg not in _conn], [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]), _others)
-            if not _ln.get("connector")
+            if not (_ln.get("connector") or _ln.get("street"))
             else _p
         )
         if _q != _p:
@@ -312,7 +312,7 @@ def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
             # drawn lane longer than the checked one, which is the quietest kind of wrong there is.
             s.reink_lane(_i)
         elif (
-            not _ln.get("connector")
+            not (_ln.get("connector") or _ln.get("street"))
             and (
                 len(_kept) < 2
                 # trimmed to a nub too short to be a lane (Kashikawa's field spur kept 2 ft past the tread it stopped on) that is
@@ -668,7 +668,6 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # (558, 1096) stood 56 ft from lane 2's end until the two became one lane, and then 104 ft from anything.
     _sweep_doubled_tails(s)  # a lane that runs on beside the way it met ends where it met it (feature 261)
     _sweep_dangling_ends(s)
-    lay_door_paths(s, hard_built, walls, list(plan.watercourses) + drawn_water)  # ...and a grove farm is reached at its front door (feature 291)
     # ...AND A LANE THAT ENDS ON ANOTHER STANDS ON ITS CENTERLINE (GM 2026-09-27): an end a few feet off it shows its round cap past the far edge.
     # A NEEDLE JOIN SQUARED HERE WAS TRIED AND REVERTED (the 269 landing, 2026-09-28): Mizuguchi's orphan join runs 35 ft
     # back along the skeleton lane at 16 degrees before meeting it, and moving its end to the foot of the vertex before it
@@ -693,6 +692,9 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     meet_end_to_end(s, walls)  # ...and two ends the trims left facing each other across a hand's width are joined
     # ...AND THE PADDY IS REACHED (269 B04, research/fields/290): where no lane end stands on its bund - the spur swept, or
     # never drawn - the nearest lane runs on to it, or a field path is drawn off the nearest lane; recorded either way
+    # ...AND A GROVE FARM IS REACHED AT ITS FRONT DOOR (feature 291 FR-019), LAST: laid before the trims, a door path was cut
+    # back off its door by them (Mizuguchi: the farm at (232,1582) served, its door 60 ft from the path's trimmed end)
+    lay_door_paths(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     s.M["meta"]["field_path"] = a_way_onto_the_bund(s)
     s.M["meta"]["lane_web"] = plan.lane_web
 

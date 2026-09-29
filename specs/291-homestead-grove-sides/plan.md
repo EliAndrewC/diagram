@@ -117,8 +117,8 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   house. It is RESERVED when the farm is seated - `seat_rows` offers a far-row seat only where its holding's box is clear
   of the ground and of every placed box, and registers it (a `placed` box and a `block_polys` ring) - so the woods, the
   copse and the later placers keep off it; a far-row farm whose holding has no room is not seated there, as a farm
-  whose grove has no room is not (D6). The plots are drawn in the hinterland stage by the near ring's plot drawer
-  (`dry_plots`, furrowed, `dry_polys`). Only a strip clipped at the canvas edge (a sheet shows only the near end,
+  whose grove has no room is not (D6). The plots are drawn at the end of the homestead stage, as the dry plots every later way and the woods treat
+  as crop (`dry_plots`, furrowed, `dry_polys`) - drawn after the track, the connector ran across one. Only a strip clipped at the canvas edge (a sheet shows only the near end,
   homesteads/156) or a single plot on water or a lane is dropped, never the whole holding. Depth and crop a GUESS.
 - **D17 - the streets** (FR-017). `_lay_street` lays each of `s._row_streets` as one lane, width 6 (the connector's; web
   lanes are 3-5), `street: True`, clipped to its farms' extent plus a lot, routed only where a straight leg is blocked,
@@ -127,9 +127,12 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   is given, for a row farm, its own street as the target (not the nearest way), and routes from the front door round the
   farm's grove when the street lies on its windward side (the front is the wind's, D3); the path records the farm it
   serves. The door-to-door street it replaces goes.
-- **D18 - water** (FR-018). The dispersed bundle carries its well's seat IN ITS LAYOUT (`canonical_farmstead`: a
-  wellhead box in the dooryard beside the yard, on the side away from the garden, off the way in), so a seated farm has
-  room for its well by construction, and `own_wells` draws it there - no farm is seated without one. A linear hamlet
+- **D18 - water** (FR-018). A dispersed farm's own well is seated in its dooryard by `own_wells`: a ring round the house
+  out to the frame, nearest the work yard first, tested by footprint against every reserved box, never on the way in
+  (the line from the house through its yard). A well seat reserved in the bundle's layout was built and MEASURED: every
+  seat beside the yard widened the turned frames, and cohort seed 19 seated 10 of 11 households against 11 without it
+  (FR-010 forbids that), so it is not used. The guarantee is the check: `water_rules` fails any dispersed farm without
+  its own well, on every cohort roll and the gate's grove maps - a farm is never silently left dry. A linear hamlet
   rolls `row_water` (`own`/`shared`, even odds, pinnable, `meta.row_water`): `own` the same; `shared` seats wells beside
   each street, in the lane's room between two lots, SPACED FROM THE REACH - one at least every `floor(reach / frame)`
   farms along the street, the reach the watering rule's (`WATER_REACH_FT`) - so every farm of every row and street, near

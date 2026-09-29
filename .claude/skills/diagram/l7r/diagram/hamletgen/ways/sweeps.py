@@ -104,10 +104,10 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
         ways = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in s.M.get("lanes", [])]
         cands: list[tuple[float, Pt, Pt, float, float]] = []
         for i, li in enumerate(s.M.get("lanes", [])):
-            if li.get("connector") or len(ways[i]) < 2:
+            if (li.get("connector") or li.get("street")) or len(ways[i]) < 2:
                 continue
             for j, lj in enumerate(s.M.get("lanes", [])):
-                if j <= i or lj.get("connector") or len(ways[j]) < 2:
+                if j <= i or (lj.get("connector") or lj.get("street")) or len(ways[j]) < 2:
                     continue
                 for ta, pra in ((ways[i][0], ways[i][1]), (ways[i][-1], ways[i][-2])):
                     for tb, prb in ((ways[j][0], ways[j][1]), (ways[j][-1], ways[j][-2])):
@@ -390,7 +390,7 @@ def excursion_lanes(lanes: Sequence[Mapping[str, Any]], served: Sequence[Pt], ho
     ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
     drop: list[int] = []
     for i, (ln, w) in enumerate(zip(lanes, ways, strict=True)):
-        if ln.get("connector") or len(w) < 2 or not any(math.dist(e, h) <= _REACH_FT for e in (w[0], w[-1]) for h in served):
+        if (ln.get("connector") or ln.get("street")) or len(w) < 2 or not any(math.dist(e, h) <= _REACH_FT for e in (w[0], w[-1]) for h in served):
             continue
         if not any(segments_cross(a, b, c, d) for a, b in zip(w, w[1:], strict=False) for c, d in brook):
             continue
@@ -499,7 +499,7 @@ def _sweep_doubled_remnants(s: Settlement) -> int:
     dropped = 0
     gone: list[int] = []
     for i, ln in enumerate(lanes):
-        if len(ways[i]) < 2 or ln.get("connector"):
+        if len(ways[i]) < 2 or (ln.get("connector") or ln.get("street")):
             continue
         others = [w if k != i else [] for k, w in enumerate(ways)]
         # EITHER SHAPE OF THE SAME DEFECT (feature 230 pass 11): a lane that leaves a way and returns to it, or one that
@@ -563,7 +563,7 @@ def _sweep_steading_fouls(s: Settlement) -> int:
     emptied: list[int] = []
     for i, ln in enumerate(lanes):
         pts = [(float(x), float(y)) for x, y in (ln.get("pts") or [])]
-        if len(pts) < 2 or ln.get("connector"):
+        if len(pts) < 2 or (ln.get("connector") or ln.get("street")):
             continue  # a connector's route is the track's own business and it never ends in the cluster
         width = int(float(ln.get("w", 3)))
         before = len(pts)
@@ -692,7 +692,7 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     ]
     fixed, emptied = 0, []
     for i, ln in enumerate(lanes):
-        if ln.get("connector"):
+        if (ln.get("connector") or ln.get("street")):
             continue
         pts = [(float(x), float(y)) for x, y in (ln.get("pts") or [])]
         if len(pts) < 2:
@@ -842,7 +842,7 @@ def _sweep_debris(s: Settlement) -> int:
         # missing was the record: the length the clip left is on every map (`meta.field_spur_ft`) and a spur
         # swept here says so (`meta.field_spur_swept`), so a hamlet with no drawn way to its rice is a fact
         # the manifest states rather than one a reviewer has to notice.
-        if lanes[i].get("connector") or comp[i] not in alone or polyline_len(ways[i]) >= _WEB_MIN_FT:
+        if (lanes[i].get("connector") or lanes[i].get("street")) or comp[i] not in alone or polyline_len(ways[i]) >= _WEB_MIN_FT:
             continue
         mine = list(zip(ways[i], ways[i][1:], strict=False))
         others = [sg for j in live if j != i for sg in zip(ways[j], ways[j][1:], strict=False)]

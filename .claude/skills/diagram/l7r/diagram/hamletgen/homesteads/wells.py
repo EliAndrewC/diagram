@@ -67,18 +67,17 @@ def own_wells(s: Settlement, houses: Sequence[Mapping[str, Any]]) -> int:
     n = 0
     for h in houses:
         hx, hy = float(h["x"]), float(h["y"])
-        seat_in_layout = (h.get("geom") or {}).get("well")
-        if seat_in_layout is not None:  # the layout's own seat (plan D18): reserved with the farm, so it is always there
-            s.well(float(seat_in_layout[0]), float(seat_in_layout[1]), private=True)
-            n += 1
-            continue
         frame = homestead_box(s.placed, hx, hy)
         boxes: list[tuple[float, float, float, float]] = [(float(p[0]), float(p[1]), float(p[2]), float(p[3])) for p in s.placed if (float(p[0]), float(p[1]), float(p[2]), float(p[3])) != frame] + bands
         # ...THE DOORYARD SIDE FIRST: the seats nearest the farm's work yard, so the well stands in the dooryard and leaves the
         # service strip behind the house to the wood shed (a first cut ringed from the east and took 4 of Mizuguchi's 5)
         yard = yards.get((round(hx, 1), round(hy, 1)), (hx, hy + 1.0))
         ring = [(hx + s.px(r_ft) * math.cos(2 * math.pi * k / k_n), hy + s.px(r_ft) * math.sin(2 * math.pi * k / k_n), r_ft) for r_ft, k_n in OWN_WELL_RINGS_FT for k in range(k_n)]
-        ring.sort(key=lambda q: (math.dist((q[0], q[1]), yard), q[2]))
+        # ...INSIDE THE FARM'S OWN FRAME FIRST: a ring seat past the frame stands in the lane's room between two farms, which is
+        # no farm's dooryard (Mizuguchi: two wells 56 and 68 ft out, off their plots); only where the frame holds none is the
+        # nearest seat outside it taken, and `row_rules.water_rules` reports that farm
+        fb = (h.get("geom") or {}).get("bbox")
+        ring.sort(key=lambda q: (not (fb and abs(q[0] - fb[0]) <= fb[2] / 2 - half and abs(q[1] - fb[1]) <= fb[3] / 2 - half), math.dist((q[0], q[1]), yard), q[2]))
         # ...BESIDE THE WAY IN, NOT ON IT: the seats nearest the yard lie straight out past it, where the farm's path arrives
         # (`front_door`); a well there took the approach on every farm and the web re-routed round 12 of them (Mizuguchi:
         # 8 lanes to 34). The approach is the house-to-yard line carried past the yard, a well's box and a path's width wide.

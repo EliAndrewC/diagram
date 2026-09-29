@@ -297,6 +297,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # CONNECTOR, which `stage_track` lays only after the houses, so at this moment it offers nothing. A linear hamlet's row
     # takes every household it can seat along its field, and the track is then laid along the row (`stage_track`).
     _linear = plan.settlement_form == "linear"
+    _rows_seated = False  # a row village whose streets were planned takes no ranks (feature 291 plan D15)
     if _linear:
         front_cap = plan.spec.households
 
@@ -390,6 +391,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
 
         placed += seat_rows(s, plan, _g0["bbox"], allowed=lambda x, y: _seat_allowed(s, x, y))
         front_cap = placed
+        _rows_seated = bool(getattr(s, "_row_streets", None))
     for _rung in (0,):
         for (fx, fy), _n in front_row(plan, plan.spec.households if _linear else min(plan.spec.households, 12), standoff=None, chains=s._site_chains, house=_house_max, envelope=_reach, with_normals=True, **_row_kw):
             if placed >= front_cap:
@@ -483,7 +485,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # seed 8, the paddy to the south: the "clear" seats of every rank round failed, 9 of 11 seated)
     _rank_step = abs(ox) * _env[2] + abs(oy) * _env[3] + s.px(MIN_WEB_GAP) + max(0.0, -oy) * s.px(SUN_CORRIDOR_FT)
     for attempt in range(7):
-        if placed >= plan.spec.households:
+        if placed >= plan.spec.households or _rows_seated:  # NEVER IN RANKS BEHIND A ROW (FR-016): a farm its streets could not hold is reported unseated
             break
         s._seat_search["rounds"] = attempt + 1  # the rounds this roll needed (over 4 = the rescue ran); R2 reads it per map
         wlat, wdep = lat * (1.0 + 0.22 * attempt), dep * (1.0 + 0.16 * attempt)
@@ -670,6 +672,12 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     s.M["meta"]["cluster_seeding"] = "cloud" if _cloud_placed * 2 >= max(1, plan.spec.households) else "frontage"
     s._household_bamboo = plan.bamboo in ("homestead", "both")  # type: ignore[attr-defined]  # a grove farm draws the bamboo it rolls (feature 291)
     plan.placed = s.farmsteads()
+    # A ROW VILLAGE'S FAR-ROW HOLDINGS, reserved at seating (feature 291 plan D16), drawn now - before the track and the web,
+    # so every way treats them as the crop they are (drawn after the track, Kashikawa's connector ran across one)
+    if getattr(s, "_row_holdings", None):
+        from .rows import draw_holdings
+
+        s.M["meta"]["row_holdings_drawn"] = draw_holdings(s)
     # how many farmhouses the quarter turn took (269 B18) - measured on what was drawn, so the share is a count, not a hope
     s.M["meta"]["house_quarter_turns"] = sum(1 for h in s.M.get("houses") or [] if abs(wrap_line_deg(float(h.get("rot", 0.0)) - (s._house_bearing or 0.0))) > 45.0)
     # THE TRIM MOVED OUT OF THIS STAGE (feature 126). It existed because the skeleton was laid
@@ -704,9 +712,6 @@ def stage_appurtenances(s: Settlement, plan: SitePlan) -> None:
     """
     houses = s.M.get("houses", [])
     place_wells(s, plan, houses)
-    if getattr(s, "_row_holdings", None):  # a row village's far-row holdings, reserved at seating (feature 291 plan D16)
-        from .rows import draw_holdings
 
-        s.M["meta"]["row_holdings_drawn"] = draw_holdings(s)
     s.draft_byres(fraction=0.22, gap=60)
     retirement_houses(s, plan)  # after the byres, so the draft team keeps the seats it always had (269 B42)

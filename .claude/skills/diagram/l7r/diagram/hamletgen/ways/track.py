@@ -578,6 +578,13 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # gateway is a point in the seat frame, so on a cluster that sits against a concave stretch of
     # the fan it can land INSIDE the field envelope - and the connector then starts in the rice and
     # crosses the outline twice on its way out (Inashiro, GM 2026-08-12).
+    # A ROW VILLAGE'S ROAD IS ITS STREET (feature 291 plan D17; research/homesteads/155: the road village's farms stand
+    # along the road): the connector carries the first planned street on out of the frame along its own line, from
+    # whichever end is nearer the sheet's edge. Laid from the gateway, it ran straight across the far row's holdings.
+    _row = (getattr(s, "_row_streets", None) or [None])[0] if plan.settlement_form == "linear" else None
+    if _row and len(_row) >= 2:
+        s.lane(_thread_the_fabric(s, plan, street_run_out(_row, s.W, s.H)), width=6, clearance=LANE_CLEARANCE, worn=True, connector=True)
+        return
     _band_gate = to_screen((float(layout["gateway"][0]), float(layout["gateway"][1])))
     gate = push_out_of(plan.envelope, _cluster_gateway(s, seat, _band_gate), SPUR_SETBACK)
     # THE TRACK LEAVES CLEAR OF THE WET TOE (GM 2026-08-12: "there's supposed to be a rule that
@@ -593,6 +600,24 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     drawn_wet = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") != "defense" and m.get("poly")]
     track = connector_track(plan, gate, avoid=[list(plan.envelope), *crops], wet=([toe] if toe else []) + drawn_wet, waters=drawn_water_segs(s), fabric=fabric)
     s.lane(_thread_the_fabric(s, plan, route_around(plan.envelope, track, SPUR_SETBACK)), width=6, clearance=LANE_CLEARANCE, worn=True, connector=True)
+
+
+def street_run_out(street: Sequence[Pt], width: float, height: float, beyond: float = 60.0) -> list[Pt]:
+    """The road a row's street runs on as (feature 291 plan D17): from the street's end nearer the sheet's edge, straight on
+    along its last leg until `beyond` past the edge. The end chosen is the one whose run to the edge is shorter."""
+
+    def run(end: Pt, prev: Pt) -> tuple[float, list[Pt]]:
+        dx, dy = end[0] - prev[0], end[1] - prev[1]
+        m = math.hypot(dx, dy) or 1.0
+        ux, uy = dx / m, dy / m
+        tx = (-end[0]) / ux if ux < 0 else (width - end[0]) / ux if ux > 0 else math.inf
+        ty = (-end[1]) / uy if uy < 0 else (height - end[1]) / uy if uy > 0 else math.inf
+        t = max(0.0, min(tx, ty))
+        return t, [end, (end[0] + ux * (t + beyond), end[1] + uy * (t + beyond))]
+
+    a = run(street[0], street[min(8, len(street) - 1)])
+    b = run(street[-1], street[max(-9, -len(street))])
+    return a[1] if a[0] <= b[0] else b[1]
 
 
 def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach: float = 4000.0, wet: Sequence[Poly] = (), waters: Sequence[tuple[Pt, Pt]] = (), fabric: Sequence[Poly] = ()) -> Poly:

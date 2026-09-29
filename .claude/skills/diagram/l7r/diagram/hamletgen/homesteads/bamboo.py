@@ -82,6 +82,7 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
         # grove and Kashikawa's 12 expected strips silently became 0. Counted, so the knob's household half is on record.
         if (h.get("geom") or {}).get("groves"):
             s.M["meta"]["household_bamboo_in_grove"] = int(s.M["meta"].get("household_bamboo_in_grove", 0)) + 1
+            s.M["meta"].setdefault("household_bamboo_in_grove_farms", []).append([round(hx, 1), round(hy, 1)])  # which, for `row_rules.bamboo_mismatch`
             continue
         th = math.radians(float(h.get("rot", 0.0)))
         ca, sa = math.cos(th), math.sin(th)
