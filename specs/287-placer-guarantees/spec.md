@@ -121,11 +121,11 @@ repairs or never emits it.
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001** (FR-001, FR-008): the closing census reads guaranteed on every placement rule, each with its placer's
+- **SC-001** (FR-001, FR-005, FR-008): the closing census reads guaranteed on every placement rule, each with its placer's
   mechanism named; none partial, none unguarded; every R2 fallback converted; every R3 excuse removed.
-- **SC-002** (FR-004): every rule in scope has a unit test of its owning placer on constructed inputs that include a
+- **SC-002** (FR-003, FR-004): every rule's placer and its test read one predicate, and every rule in scope has a unit test of its owning placer on constructed inputs that include a
   violating case.
-- **SC-003** (US1 scenario 2): the pool and cohort seeds 1-48, rolled plain and again with feature 284's A* router and
+- **SC-003** (FR-001, FR-002, US1 scenario 2): the pool and cohort seeds 1-48, rolled plain and again with feature 284's A* router and
   field-search lever applied as probes (neither ships), pass every placement rule, and no roll re-rolls.
 - **SC-004** (FR-006, FR-009): `make done` green; every live pool map regenerates and passes every rule; `make cohort
   N=24` shows zero failing seeds on any placement rule (not merely none newly failing); every moved map's before and after
@@ -133,7 +133,7 @@ repairs or never emits it.
 - **SC-005** (FR-007): every retired test is listed with the cost the gate no longer pays for it (its measured seconds, and
   the rolls it alone required); every kept test that reads or rolls a finished map is listed with the correctness it guards
   that no placer unit test covers; and the gate's test phase is measured before and after (`make audit`) and is not slower.
-- **SC-006** (constitution VI): `make perf-report` against the feature's start bookend; an increase owes its record.
+- **SC-006** (spec-wide): under constitution VI, `make perf-report` against the feature's start bookend; an increase owes its record.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
