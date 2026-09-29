@@ -27,7 +27,7 @@ Idempotent.
 
 Exports each valid run's output for the task - R: the question's fragment, its `.notes.html`, and every new source and glossary file, as
 files; I: `git diff <start>..HEAD` of the run clone, the moved maps' PNGs and `.notes.md`, and the run's final `make done` summary -
-strips the run id, clone path, session names, commit trailers and any occurrence of the arm names, labels them A/B from the seed, writes
+strips what identifies the arm or the run - the run id, clone path and name, session ids, commit trailers, the token `xhigh`, and an arm name where it names an effort setting (`medium` in ordinary prose is left: it identifies nothing, and both outputs may use it) - labels them A/B from the seed, writes
 the bundle and `MANIFEST.md` outside the repository, and the key under `.git/effort-keys/`. Prints the bundle path only.
 
 ## Agent `effort-grader` (`.claude/agents/effort-grader.md`)
