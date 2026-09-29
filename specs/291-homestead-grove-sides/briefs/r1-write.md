@@ -36,7 +36,7 @@ that. Both the percentage split and the flood ground adjustment."*
 - **homesteads/710** ("Was the homestead grove there before 1868, and what size and shape was it?"): the paragraph "Nor is a belt on the windward arms only" and "The decision" say the premodern record puts the grove round the homestead. Rewrite the shape half: the full ring is Izumo's (with its flood cause), the Takada order read as written, the Sendai two-sided form with its early-Edo planting (copy the `irie-2020-igune` notes from `vegetation/030` with their quotes), Tonami's open front, no count of shapes anywhere; then the decision above with the GM's rulings quoted. The size half (the Edo documents, the 1987 count) stays.
 - **homesteads/480** ("What marked the edge of a farmstead ..."): its knob lists "a grove on the north and west, which also serves as the windbreak" as one edge form. Say the grove takes the sides its settlement rolls (two, three or four - pointing at 710), and leave the rest.
 
-`vegetation/030` and `vegetation/620` are group R2's, not yours.
+The village shelter-belt entries on the vegetation page are group R2's, not yours.
 
 ## The procedure (session 1: write)
 
