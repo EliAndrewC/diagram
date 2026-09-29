@@ -893,35 +893,30 @@ LANE_WEBS = ("alleys", "back_lane")
 # and 145. That is the generator being wrong about the FORM, not a map being too far from its crop, and
 # it is the number to re-derive a standoff from rather than a bar to re-impose.
 
-# ROLLED TO NUCLEATED ONLY, FOR NOW - and the weights above are what to restore, not to re-derive.
+# THE THREE FORMS, ROLLED AGAIN (feature 291) - at feature 126's weights, nucleated 5 : dispersed 3 : linear 2.
 #
-# Feature 126 built everything the other two forms need: the research (research/homesteads.html), the
-# knob, the form-conditional access checks, the corrected field-adjacency branch, and per-form
-# seating. What it did NOT build is a per-house GROVE that behaves. That path had never been
-# exercised by the scripted tier - it was written for hand-authored dispersed maps - and switching
-# it on surfaces four latent defects at once, measured on the in-gate ratchet seeds:
+# Feature 126 rolled nucleated only, because switching the other two on surfaced four latent defects in the
+# per-house grove, measured on the in-gate ratchet seeds then:
 #
 #   seed 42 (linear):    groves_clear_of_lanes, groves_on_windward_side, gardens_unshaded_from_east
 #   seed 43 (dispersed): groves_clear_of_structures, structures_clear_of_trees (groves over byres),
 #                        gardens_unshaded_from_east, and 12 of 14 households seated
 #
-# MECHANISM, as far as it was traced: a yashikirin is part of the BUNDLE and is planted at seat
-# time, but it is tested only by `_rect_blocked` (keep-out polygons). It is not tested against lane
-# treads, against byres seated later in `stage_appurtenances`, or for the garden's morning sun. Two
-# fixes were tried and MEASURED NOT TO HELP, so do not repeat them: adding `groves` to the lane
-# fabric in `_homestead_polys`, and giving the grove rects the house's own `_house_on_a_tread` test.
-# Both are kept because they are correct in themselves; neither moved the ratchet.
-#
-# SKETCH for the follow-up: the grove needs the same treatment the HOUSE already has - a
-# footprint-level fit test covering treads, later-seated fixtures and the east-sun rule - which
-# probably means groves stop being seated with the bundle and become a deferred pass after the
-# appurtenances, in the same way canopies are already deferred to the flush.
-#
-# Until then the generator emits only the form it can draw correctly. This is a WEIGHTS change and
-# nothing else: every other part of the knob is live and tested, so restoring the line below is the
-# whole of turning the other forms back on.
-SETTLEMENT_FORMS = ("nucleated",)
+# Two fixes were tried then and MEASURED NOT TO HELP, and are not to be repeated as fixes: adding `groves` to the
+# lane fabric in `_homestead_polys`, and giving the grove rects the house's own `_house_on_a_tread` test (both kept,
+# being correct in themselves). What changed since is the seating: the houses come first and the lanes last (126),
+# the free-ground and placed-box indexes judge the whole bundle (276), and the matrix owns the overlaps (166).
+# Feature 291 measured the restored weights on cohort seeds 1-24 (dispersed 7, linear 6, nucleated 11) with the
+# matrix and the grove predicates (`homestead_parts/grove_rules.py`) run on every roll by `tools/cohort_audit` -
+# the battery that had caught 126's defects was retired by 166, so the cohort's own verdict no longer saw them.
 _SETTLEMENT_FORMS_WHEN_GROVES_WORK = ("nucleated", "nucleated", "nucleated", "nucleated", "nucleated", "dispersed", "dispersed", "dispersed", "linear", "linear")
+SETTLEMENT_FORMS = _SETTLEMENT_FORMS_WHEN_GROVES_WORK
+
+# HOW MANY SIDES A FARMSTEAD GROVE TAKES (feature 291): the roll tables live with the engine that draws the grove
+# (`settlement/homestead_parts/grove_sides.py`, where their reasoning is), so the city path rolls the same ones.
+from l7r.diagram.settlement.homestead_parts.grove_sides import GROVE_FLANKS as GROVE_FLANKS  # noqa: E402,F401
+from l7r.diagram.settlement.homestead_parts.grove_sides import GROVE_SIDES as GROVE_SIDES  # noqa: E402,F401
+from l7r.diagram.settlement.homestead_parts.grove_sides import GROVE_SIDES_FLOOD as GROVE_SIDES_FLOOD  # noqa: E402,F401
 
 # Where the hamlet's bamboo stands (feature 133 T47; the `bamboo` knob's roll table). Weighted so a
 # temperate lowland hamlet usually has one - the research puts bamboo below the frost line as a

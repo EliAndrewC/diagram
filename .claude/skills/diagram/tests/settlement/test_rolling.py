@@ -195,6 +195,45 @@ def test_legacy_dispersed_farmstead_path_still_covered():
     assert n > 0
 
 
+@pytest.mark.parametrize("sides", (2, 3, 4))
+def test_the_legacy_path_plants_every_rolled_side_on_every_grove_farm(sides: int) -> None:
+    """Feature 291, plan D8: a house-first farm with a grove is seated only where the whole rolled grove fits, and then
+    plants a band on every face - none dropped for want of room (`meta.grove_faces_unplanted` stays unset)."""
+    s = Settlement(1200, 900, seed=3)
+    s.meta(name="L", scale="hamlet", grove_sides=sides, grove_flank=-1)
+    fld = (300, 300, 620, 560)
+    s.paddy_field(fld, "", "f", amp=20)
+    s.ring(fld, 12, 24, ["plain"])
+    assert s.farmsteads() > 0
+    faces: dict = {}
+    for g in s.M["groves"]:
+        faces.setdefault(tuple(g["of"]), set()).add((tuple(g["face"]), g["depth"]))
+    assert faces, "the ring's farms carry groves - the rule was not vacuous"
+    assert all(len({f for f, _d in fs}) == sides for fs in faces.values()), faces
+    assert "grove_faces_unplanted" not in s.M["meta"]
+
+
+def test_a_legacy_grove_farm_with_no_room_for_its_whole_grove_is_not_seated() -> None:
+    """Feature 291, plan D8: the old fallback to a yard-and-garden-only spot is gone for a farm that has a grove."""
+    s = Settlement(1200, 900, seed=3)
+    s.meta(name="L", scale="hamlet", grove_sides=4, grove_flank=-1)
+    s._grove_reserve = lambda *a: None  # type: ignore[method-assign]  # no seat anywhere holds the whole grove
+    rec = {"x": 600.0, "y": 450.0, "w": 23.0, "h": 14.0, "rot": 0.0, "kind": "plain", "shed": False, "wealth": 1.0}
+    s.placed.append((600.0, 450.0, 23.0, 14.0))
+    assert s._solve_homestead(rec) is None
+    s._wants_grove = lambda *a: False  # type: ignore[method-assign]  # a farm with no grove keeps its yard-and-garden seat
+    assert s._solve_homestead(dict(rec)) is not None
+
+
+def test_a_farm_inside_a_city_wall_wants_no_grove() -> None:
+    s = Settlement(800, 800, seed=1)
+    s.meta(name="C", scale="city")
+    s.M["wall"] = [(100, 100), (700, 100), (700, 700), (100, 700), (100, 100)]
+    assert not s._wants_grove(400, 400)
+    s.M["meta"]["inwall_groves"] = True
+    assert s._wants_grove(400, 400)
+
+
 def test_relax_gardens_south_skips_a_bundle_without_gardens():
     # defensive: a homestead bundle whose geom carries no garden beds is simply skipped (no shift, no error)
     s = Settlement(800, 800, seed=1)
@@ -426,8 +465,7 @@ def test_bundle_common_fits_refuses_a_grove_on_a_tread_and_a_shaded_bundle() -> 
     geom = {
         "house": (600.0, 600.0, 56.0, 30.0),
         "yard": (600.0, 640.0, 34.0, 22.0),
-        "grove_n": (600.0, 520.0, 90.0, 26.0),
-        "grove_w": (540.0, 600.0, 26.0, 90.0),
+        "groves": [(600.0, 520.0, 90.0, 26.0), (540.0, 600.0, 26.0, 90.0)],
     }
     s.lane([(300.0, 520.0), (900.0, 520.0)], width=6, worn=True)  # drawn, so it has a tread
     assert s._bundle_common_fits(geom) is False, "the north grove sits on the lane's tread"
@@ -451,7 +489,7 @@ def test_a_bundle_is_refused_when_its_house_or_its_grove_stands_on_a_drawn_tread
     on_grove = Settlement(1000, 1000, seed=1)
     on_grove.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
     on_grove.treads.append(([(400.0, 300.0), (600.0, 300.0)], 3.0, [(400.0, 300.0), (600.0, 300.0)]))
-    with_grove = {**clean, "grove_n": (500.0, 300.0, 30.0, 20.0), "grove_w": (450.0, 500.0, 20.0, 30.0)}
+    with_grove = {**clean, "groves": [(500.0, 300.0, 30.0, 20.0), (450.0, 500.0, 20.0, 30.0)]}
     assert not on_grove._bundle_common_fits(with_grove), "the windward grove is planted across the lane"
 
 

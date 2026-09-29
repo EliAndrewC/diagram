@@ -6,7 +6,9 @@ Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.
 from typing import TYPE_CHECKING, Any
 
 from .._geom import turn_about
+from ..homestead_parts.grove_sides import bundle_turn
 from .bearing import turned_box
+from .dispersed import EAST_SHADE_REACH, THIN_BAND_FT, WAY_IN_FT, dispersed_layout
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -87,7 +89,7 @@ class BundleGeomMixin:
         def moved(r: Any) -> Any:
             return None if r is None else (r[0] + hx, r[1] + hy, r[2], r[3])
 
-        base: dict[str, Any] = {k: ([moved(r) for r in v] if k == "gardens" else moved(v)) for k, v in tpl.items()}
+        base: dict[str, Any] = {k: (v if k == "grove_faces" else [moved(r) for r in v] if k in ("gardens", "groves") else moved(v)) for k, v in tpl.items()}
         frame = base.pop("_frame", None)
         turn = self._house_rot(hx, hy) if rot is None else rot
         self._rake_parts(base, hx, hy, turn)
@@ -105,10 +107,9 @@ class BundleGeomMixin:
         """The metric layout of one homestead BUNDLE around a house centered at (hx, hy). TWO forms:
         NUCLEATED (self._nucleated) = house + lee GARDEN (E) + south YARD only, compact so a cluster can
         pack tight (no per-house grove - a nucleus shelters itself); DISPERSED (default) also carries the
-        windward GROVE as an L (an N band + a W band for the default NW wind), sized ~6x the house. The
-        dooryard GARDEN tucks tight to the house's E (lee) wall, the threshing YARD sits on the sunny S
-        front. Returns a dict of (cx, cy, w, h) rects keyed house/garden/yard (+ grove_n/grove_w when
-        dispersed) plus the whole-bundle bbox. (NW windward; other winds are a later generalisation.)"""
+        farm's own GROVE on the sides its settlement rolled, turned to the map's wind (`dispersed.dispersed_layout`,
+        feature 291). Returns a dict of (cx, cy, w, h) rects keyed house/garden/yard (+ `groves`, a list, with
+        `grove_faces` beside it, when dispersed)."""
         gap = self.px(3)  # 3 ft between a house and its yard/garden, at this map's ftpx
         gw, gh = 0.48 * hw, 0.85 * hh  # garden - tight to the house, scales with wealth
         sx, sy = seat  # the rolls key on the household's seat (see `_bundle_geom`)
@@ -126,8 +127,6 @@ class BundleGeomMixin:
             # Hoshigaoka's packing and pushed its fixed-coordinate graveyard off-frame.
             gw, gh = min(gw, self.px(42)), min(gh, self.px(30))
             # the yard is ROLLED, not scaled off the house (feature 134 T49), so it needs no headman cap
-        east = hx + hw / 2 + gap + gw
-        south = hy + hh / 2 + gap + yh
         base: dict[str, Any] = {
             "house": (hx, hy, hw, hh),
             "garden": (hx + hw / 2 + gap + gw / 2, hy, gw, gh),
@@ -176,18 +175,24 @@ class BundleGeomMixin:
             if shed:  # a north-wall kura, reserved so a neighbor never lands on it
                 base["shed"] = (hx, hy - 0.675 * hh, 0.46 * hw, 0.45 * hh)  # the drawn annex (`house`, feature 280 M18: 1.67 to one)
             return base  # raked and boxed by `_bundle_geom`, per seat
-        # DISPERSED farmstead (the shipped ring-village behavior): the windward GROVE as an L (an N
-        # band + a W band, for the default NW wind), sized so the grove footprint is ~6x the house. The
-        # multi-bed garden split is a NUCLEATED feature (clean E/W walls, no grove or shed in the way); a
-        # dispersed farm keeps its single east garden (its west wall carries the windbreak grove).
-        base["gardens"] = [base["garden"]]
-        b = 1.57 * hh  # grove band depth -> grove ~= 6x house area
-        west = hx - hw / 2 - gap - b
-        north = hy - hh / 2 - gap - b
-        base["grove_n"] = ((west + east) / 2, north + b / 2, east - west, b)
-        base["grove_w"] = (west + b / 2, (north + b + south) / 2, b, south - (north + b))
-        base["_frame"] = ((west + east) / 2, (north + south) / 2, east - west, south - north)  # the grove's frame, unraked
-        return base
+        # DISPERSED farmstead: the farm's own GROVE round the ground it works, on the sides its settlement rolled
+        # (feature 291, `grove_sides.py`). Laid out in the CANONICAL frame - the wind from the northwest, the deep bands
+        # on the north and west, the yard on the south front, the garden on the east - then carried to the map's wind
+        # by `dispersed_layout`'s turn. The multi-bed garden split is a NUCLEATED feature; a dispersed farm keeps one bed.
+        return dispersed_layout(
+            hx,
+            hy,
+            hw,
+            hh,
+            gap,
+            (gw, gh),
+            (yw, yh),
+            sides=self._grove_sides(),
+            turn=bundle_turn(self._windward(), self._grove_flank()),
+            thin=self.px(THIN_BAND_FT),
+            sun_east=EAST_SHADE_REACH * self.bscale,
+            way_in=self.px(WAY_IN_FT),
+        )
 
     def _rake_parts(self: Settlement, base: dict[str, Any], hx: float, hy: float, rot: float) -> None:  # type: ignore[misc]
         """Carry the yard, the garden bed(s) and the kura round the house center by the house's rake, in place.
