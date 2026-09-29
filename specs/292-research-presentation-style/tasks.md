@@ -14,6 +14,7 @@ Pilot phase. The sweep's tasks are added only after T09 is ticked (FR-011).
   - [x] record-style on the old section (seeded against the GM's objections - it named every one) and on the new, with the merge audit (LOST 0; 7 FAIL applied) (SC-007)
   - [x] quote-check (4 PARTIAL, 2 unfootnoted - all applied) and record-format (clean) on the new section
   - [x] entry-drift on the HomesteadGrove modal: IN-STEP; its pre-existing gap fixed (its Note called the count read; its Why kept the cut 'largest thing' and the unsourced early-Edo date)
+  - [ ] at the first `make done`: `PAIR_OK="292 moves no map layout - the maps whose layout moved (inashiro, kashikawa, kuwabata, mizuguchi, sawada) moved in feature 291's merged work in progress, whose review 291's session owes"` - `_review_owed.py` names them against origin/main; nothing in 292 touches a generator
   - [ ] at push: the copse modal's section (vegetation/210) moved only by a re-aimed link - `ENTRY_DRIFT_OK` with that reason
 - [ ] T07a The GM's review of the pilot (2026-09-29): lead-line bullets (statement or question, readable from what came before) and metric-to-feet - the guide, the check's contract, `make style-prepass` with its tests and its bundle part, and the grove section revised (FR-012, FR-013, SC-009, SC-010). research: rendering
   - [x] guide, contract, prepass, tests, section revised
