@@ -544,7 +544,8 @@ village entrypoint's coverage, 3.4 s), `tests/gate/pipeline/*`, `tests/full/haml
   the nudge starts from. With them: the way term measures a segment once (a long road was re-measured in every cell) and
   clears it by the boxes first; `nearest_points` skips its crossing tests for outlines whose boxes stand apart. Held
   exact by test_strict_index (the indexed strict search against the scan over 60 scenes; `blocked` against every nudge
-  over 400 blocks) and a differential run of 400 placements and 25 sited hamlets against 920c5ad9f; the fast siting test
+  over 400 blocks) and a differential run against 920c5ad9f, identical: 1,600 placements (strict and lax, 258 of them
+None) over 400 random scenes and 16 sited hamlets under small crowns (observed 2026-09-29); the fast siting test
   is test_fixtures::test_a_board_under_one_wide_canopy_is_sited_without_measuring_a_seat_it_cannot_take (0.6 s, the
   scene on a 200 px road: the only seats scored are the one terminal search's).
 - **Six failures at 0e792a665** in the worktree's run: the two overlap-matrix tests (kept, above), two

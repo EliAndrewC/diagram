@@ -75,7 +75,8 @@ class ObstacleIndex:
         self._level: list[bool] = []
         self.ways: list[Way] = []
         self._ob: dict[tuple[int, int], list[int]] = defaultdict(list)
-        self._segs: dict[tuple[int, int], list[tuple[int, Pt, Pt]]] = defaultdict(list)
+        self._segs: dict[tuple[int, int], list[tuple[int, int, Pt, Pt]]] = defaultdict(list)
+        self._seg_boxes: list[tuple[float, float, float, float]] = []  # each way segment's own box, by its id
         for o in obstacles or []:
             self.add(o)
         for w in ways or []:
@@ -95,9 +96,11 @@ class ObstacleIndex:
         self.ways.append(w)
         reach = w.half_width + WAY_NOTCH
         for a, b in zip(w.pts, w.pts[1:], strict=False):
+            sid = len(self._seg_boxes)
+            self._seg_boxes.append((min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])))
             box = (min(a[0], b[0]) - reach, min(a[1], b[1]) - reach, max(a[0], b[0]) + reach, max(a[1], b[1]) + reach)
             for c in _cells(box):
-                self._segs[c].append((wid, a, b))
+                self._segs[c].append((wid, sid, a, b))
 
     def cost(self, block: Poly, clear: float, subject: Poly | None = None, text: str = "", civic: bool = False, own_gap: float | None = None) -> float:
         """The weight a caption set on `block` covers (`score`'s first half)."""
@@ -145,13 +148,74 @@ class ObstacleIndex:
                 if near:
                     total += o.weight
                     hard = hard or not o.soft
+        # EACH SEGMENT MEASURED ONCE (feature 287, the board's 216 s siting): a long segment is filed in every cell it
+        # crosses, and one block's cells met it again in each, measuring the same outline gap up to nine times; and the
+        # boxes' gap, a lower bound on the outline gap, clears a segment before the outline is measured. Same verdict.
         crossed: set[int] = set()
+        measured: set[int] = set()
         for c in cells:
-            for wid, a, b in self._segs.get(c, ()):
-                if wid not in crossed and poly_seg_gap(block, a, b) < self.ways[wid].half_width + WAY_NOTCH:
+            for wid, sid, a, b in self._segs.get(c, ()):
+                if wid in crossed or sid in measured:
+                    continue
+                measured.add(sid)
+                need = self.ways[wid].half_width + WAY_NOTCH
+                sx0, sy0, sx1, sy1 = self._seg_boxes[sid]
+                if math.hypot(max(0.0, sx0 - x1, x0 - sx1), max(0.0, sy0 - y1, y0 - sy1)) >= need:
+                    continue
+                if poly_seg_gap(block, a, b) < need:
                     crossed.add(wid)
                     hard = hard or not self.ways[wid].soft
         return total + WEIGHT_WAY * len(crossed), hard
+
+    def blocked(self, block: Poly, clear: float, slack: float, subject: Poly | None = None, text: str = "", civic: bool = False) -> bool:
+        """Does `score` count something against `block` that stays counted however the block is moved by up to `slack` -
+        an obstacle or way nearer it than its own clearance less `slack`? Then no seat within `slack` of this one is free
+        (a gap moves no more than the block does), and a strict search need not measure it or nudge it (feature 287: the
+        board's siting, which proved every seat under one wide canopy seat by seat, 216 s). Asks the first such thing and
+        stops; the association term only adds weight, so it is not asked.
+
+        A gap bounds a moved block's gap only from above by gap + `slack`, which says nothing where the clearance is under
+        `slack`; so an OVERLAP is judged by its depth instead: the block's center inside an obstacle by more than `slack`,
+        a disc reaching more than `slack` past the block, or a way through the disc the block's rectangle holds about its
+        center by more than `slack` - each still an overlap however the block moves by `slack`."""
+        x0, y0, x1, y1 = bbox(block)
+        cx, cy = (x0 + x1) / 2, (y0 + y1) / 2  # a rectangle's center is its box's
+        inner = min(math.dist(block[0], block[1]), math.dist(block[1], block[2])) / 2  # the block is a rectangle (`rect`)
+        cells = _cells((x0 - clear, y0 - clear, x1 + clear, y1 + clear))
+        words = text.lower()
+        for c in cells:
+            for i in self._ob.get(c, ()):
+                o = self.obstacles[i]
+                need = max(clear, o.keep) - 1e-6
+                bx0, by0, bx1, by1 = self._boxes[i]
+                box_gap = math.hypot(max(0.0, bx0 - x1, x0 - bx1), max(0.0, by0 - y1, y0 - by1))
+                if box_gap > 0.0 and box_gap >= need - slack:
+                    continue  # apart by more than a moved block could close
+                if not o.weight or (o.group and o.group in words and not (civic and o.named and o.group in CIVIC_GROUPS)):
+                    continue
+                if subject is not None and not o.inner and part_of(o.poly, subject):
+                    continue
+                if o.circle is not None:
+                    ox, oy, r = o.circle
+                    reach = 0.0 if inside(ox, oy, block) else min(seg_dist((ox, oy), a, b) for a, b in zip(block, [*block[1:], block[0]], strict=True))
+                    if reach - r < need - slack:
+                        return True
+                    continue
+                gap = box_gap if self._level[i] and level_rect(block) else poly_gap(block, list(o.poly))
+                if gap < need - slack:
+                    return True
+                if gap == 0.0 and inside(cx, cy, o.poly):
+                    ring = list(o.poly)
+                    if min(seg_dist((cx, cy), a, b) for a, b in zip(ring, [*ring[1:], ring[0]], strict=True)) > slack:
+                        return True
+            for wid, sid, a, b in self._segs.get(c, ()):
+                need = self.ways[wid].half_width + WAY_NOTCH
+                sx0, sy0, sx1, sy1 = self._seg_boxes[sid]
+                if math.hypot(max(0.0, sx0 - x1, x0 - sx1), max(0.0, sy0 - y1, y0 - sy1)) >= need:
+                    continue
+                if poly_seg_gap(block, a, b) < need - slack or seg_dist((cx, cy), a, b) + slack < inner:
+                    return True
+        return False
 
 
 def circle_gap(block: Poly, circle: tuple[float, float, float]) -> float:
@@ -179,8 +243,9 @@ def part_of(poly: tuple[Pt, ...] | Poly, subject: Poly) -> bool:
     court or a post in a hall lies inside its area and is NOT the area - an area caption must still keep off it. Neither
     mode needs to carry an identity for this, which is what lets one index serve the settlement engine, the compound
     composer and a hand-drawn sheet."""
-    cx, cy = centroid(poly)
     sx0, sy0, sx1, sy1 = bbox(subject)
     ox0, oy0, ox1, oy1 = bbox(poly)
-    within = ox0 >= sx0 - 1 and oy0 >= sy0 - 1 and ox1 <= sx1 + 1 and oy1 <= sy1 + 1
-    return inside(cx, cy, subject) and within and (ox1 - ox0) * (oy1 - oy0) >= 0.5 * (sx1 - sx0) * (sy1 - sy0)
+    if not (ox0 >= sx0 - 1 and oy0 >= sy0 - 1 and ox1 <= sx1 + 1 and oy1 <= sy1 + 1):
+        return False  # the cheap box test first: an obstacle not within the subject's box is not the subject
+    cx, cy = centroid(poly)
+    return inside(cx, cy, subject) and (ox1 - ox0) * (oy1 - oy0) >= 0.5 * (sx1 - sx0) * (sy1 - sy0)

@@ -362,7 +362,6 @@ def place(
     extended: bool = True,
     *,
     strict: Literal[False] = False,
-    least: bool = False,
     max_ring: int | None = None,
 ) -> Placement: ...
 
@@ -381,7 +380,6 @@ def place(
     extended: bool = True,
     *,
     strict: Literal[True],
-    least: bool = False,
     max_ring: int | None = None,
 ) -> Placement | None: ...
 
@@ -399,7 +397,6 @@ def place(
     extended: bool = True,
     *,
     strict: bool = False,
-    least: bool = False,
     max_ring: int | None = None,
 ) -> Placement | None:
     """Seat one caption by the standard (the module docstring). `frame` is the finished picture's (x0, y0, x1, y1); a
@@ -416,8 +413,8 @@ def place(
     never overlapping, never past the hug (`HUG_PX`).
 
     `strict=True` returns None instead of anything but a free seat (feature 287: the notice board's siter and the
-    generated Mode A sheets ask it, and choose the SUBJECT or the program instead). `least=True` keeps the retired
-    least-cost seat, for the one caller awaiting the GM's answer (the board with no clean verge, D12). `max_ring` keeps
+    generated Mode A sheets ask it, and choose the SUBJECT or the program instead). The retired least-cost seat's last
+    caller, the board with no clean verge (D12), takes this non-strict path since feature 287's wave 5. `max_ring` keeps
     only the seats on rings up to it (0: directly beside the subject, no leader - the notice board's caption)."""
     clear = CLEAR_EM * size
     own: Poly | None = list(subject.poly) if subject.kind != "line" else None
@@ -425,19 +422,20 @@ def place(
     ref = referent_box(subject, subject.poly) if point else None
     best: tuple[float, int, _Cand, Poly] | None = None
     soft: tuple[float, int, _Cand, Poly] | None = None
-    first: tuple[_Cand, Poly] | None = None
     # the standard's candidates, then - reached only when none was free, the chain being lazy - the fallback search
     # (feature 286) and the leader rings (feature 287)
     # `max_ring` generates only the rings up to it - the rings past it are never offered, so they are never built
     near = None if max_ring is None else list(enumerate(rings(size)))[: max_ring + 1]
     leaders = _leader_cands(text, size, subject, lines, char_w, line_sizes) if max_ring is None else iter(())
     more = itertools.chain(_extended_cands(text, size, subject, lines, char_w, line_sizes, near), leaders) if extended else iter(())
+    deep: list[tuple[int, _Cand, Poly]] = []  # strict: the seats no nudge can free, measured only if one might be the best
     for order, cand in enumerate(itertools.chain(_cands(text, size, subject, lines, char_w, line_sizes, near), more)):
         block = rect(cand.center[0], cand.center[1], cand.half[0], cand.half[1], cand.angle)
-        if first is None:
-            first = (cand, block)
         # the hug is held with the nudge's room to spare, so no nudge can carry a seat past it (labels L10)
         if not _in_frame(block, frame) or (subject.kind != "area" and hug_gap(block, ref or referent_box(subject, block)) > HUG_RING):
+            continue
+        if strict and index.blocked(block, clear, NUDGE_REACH, own, text, subject.civic):
+            deep.append((order, cand, block))
             continue
         cost, hard = _score(cand, block, subject, index, clear, own, text, leader_index)
         if cost == 0.0:
@@ -447,16 +445,7 @@ def place(
         if not hard and (soft is None or cost < soft[0]):
             soft = (cost, order, cand, block)
     if strict:
-        if best is None:
-            return None
-        cost, cand, block = nudge(best[0], best[2], best[3], subject, index, clear, own, text, frame, leader_index)
-        return _placement(cand, block, cost, subject) if cost == 0.0 else None
-    if least:  # D12: awaiting the GM - the retired least-cost seat, kept for the one caller the question is about
-        if best is None:
-            assert first is not None  # every subject kind yields at least one candidate
-            return _placement(first[0], first[1], index.cost(first[1], clear, own, text, subject.civic), subject)
-        cost, cand, block = nudge(best[0], best[2], best[3], subject, index, clear, own, text, frame, leader_index)
-        return _placement(cand, block, cost, subject)
+        return _strict_seat(best, deep, subject, index, clear, own, text, frame, leader_index)
     if best is not None:
         # a nudge may yet free the least-cost seat, or carry it off every overlap (feature 286's band between grid points)
         cost, cand, block = nudge(best[0], best[2], best[3], subject, index, clear, own, text, frame, leader_index)
@@ -466,6 +455,38 @@ def place(
         cost, cand, block = nudge(soft[0], soft[2], soft[3], subject, index, clear, own, text, frame, leader_index, soft_only=True)
         return _placement(cand, block, cost, subject)
     return keyed(text, size, subject, lines, best[0] if best is not None else 0.0)
+
+
+NUDGE_REACH = NUDGE_PX * math.sqrt(2.0) + 1e-3
+"""The farthest a nudge carries a seat, with a margin over rounding: a seat blocked by more than this stays blocked
+under every nudge (`ObstacleIndex.blocked`)."""
+
+
+def _strict_seat(
+    best: tuple[float, int, _Cand, Poly] | None,
+    deep: list[tuple[int, _Cand, Poly]],
+    subject: Subject,
+    index: ObstacleIndex,
+    clear: float,
+    own: Poly | None,
+    text: str,
+    frame: Frame | None,
+    leader_index: ObstacleIndex | None,
+) -> Placement | None:
+    """A strict search's answer once no candidate was free: the least-cost seat nudged free, or None. THE SAME ANSWER AS
+    MEASURING EVERY SEAT (feature 287, the board's siting): a seat `blocked` beyond a nudge's reach can be neither free nor
+    nudged free, so where every seat is, the answer is None unmeasured; otherwise those seats are measured now, since
+    one may still be the least-cost seat the nudge starts from (the first in order among the cheapest)."""
+    if best is None:
+        return None
+    for order, cand, block in deep:
+        cost = _score(cand, block, subject, index, clear, own, text, leader_index)[0]
+        if (cost, order) < best[:2]:
+            best = (cost, order, cand, block)
+    if any(best[1] == order for order, _c, _b in deep):
+        return None
+    cost, cand, block = nudge(best[0], best[2], best[3], subject, index, clear, own, text, frame, leader_index)
+    return _placement(cand, block, cost, subject) if cost == 0.0 else None
 
 
 def _in_frame(block: Poly, frame: tuple[float, float, float, float] | None) -> bool:

@@ -10,7 +10,8 @@ functions here are the rules' ONE predicates: the siter calls them and the tests
 THE TERMINAL IS THE GM'S QUESTION (plan D12): where no verge in the view takes a board whose caption clears roofs,
 lanes, crowns and neighbors, every option breaks one of the GM's own rulings - no board (against "every settlement
 carries the board", 2026-07-24), a board off the way (against `kosatsuba_by_the_road`), or a caption breaking a caption
-rule (against the caption rules). Until the GM answers, the siter keeps the behavior it had (`D12_AWAITING_THE_GM`).
+rule (against the caption rules). Until the GM answers, the siter keeps a board at the best-ranked seat with its caption
+on a leader or in the key (`D12_AWAITING_THE_GM`, `terminal_caption`).
 """
 
 from __future__ import annotations
@@ -19,7 +20,7 @@ import math
 from collections.abc import Callable, Sequence
 from typing import Any, NamedTuple
 
-from ....labels import ObstacleIndex, Placement, place
+from ....labels import ObstacleIndex, Placement, caption_clears_ways, keyed, place
 from ..._geom import nearest_way_bearing
 from ..._knobs import KNOBS, Knob, resolve_knob
 from ._helpers import KOSATSUBA_ANCHOR_BAND_FT, KOSATSUBA_ENTRANCE_REACH_FT, KOSATSUBA_HANDOVER_BAND_FT, RouteReach
@@ -37,8 +38,12 @@ every other "these two inked things are separate" rule on these maps uses (`CAPT
 
 D12_AWAITING_THE_GM = True
 """D12: awaiting the GM. With no board seat in the view whose caption the one placer seats clean, the siter keeps the
-behavior it had before feature 287 - the board at the best-ranked seat, its caption at the least-cost seat
-(`place(least=True)`) - and records `meta.kosatsuba_d12`, so the maps reaching the question can be counted."""
+board at the best-ranked seat whose caption clears every way (`terminal_caption`) and records `meta.kosatsuba_d12`, so
+the maps reaching the question can be counted. THE CAPTION IS D10's, NOT THE LEAST-COST SEAT'S (feature 287 wave 5,
+`captions_clear_the_ways_they_stand_on`): the terminal kept the least-cost seat D10 retired on every sheet, and that
+seat could lie across a lane. On a leader or in the key it overlaps nothing, which is the (c) the question already
+names - a caption breaking the board caption's own rules (beside the board, no leader) - so no option is decided here.
+(0 of 53 maps reached the terminal: research R5.)"""
 
 
 class BoardSeat(NamedTuple):
@@ -99,6 +104,25 @@ def board_caption_seat(M: Any, x: float, y: float, hw: float, hh: float, rot: fl
     return place(label, BOARD_CAPTION_SIZE, board_subject(x, y, turn, 2 * hw, 2 * hh), index, frame, strict=True, max_ring=0)
 
 
+def terminal_caption(M: Any, x: float, y: float, hw: float, hh: float, rot: float, label: str, index: ObstacleIndex, frame: Any) -> Placement | None:
+    """THE ONE PREDICATE of a board caption at plan D12's terminal (feature 287: `captions_clear_the_ways_they_stand_on`,
+    D10): the seat the one placer gives the caption of a board seated here when no seat is free beside it - on a leader,
+    or in the sheet's key with its numbered mark on the board, never overlapping (D10) - and only where that caption, and
+    the key mark it would take, clear every way `index` holds; else None.
+
+    THE MARK IS ASKED FIRST, and it is what refuses a verge seat: a mark is set on the board, and a board posted at the
+    verge's edge puts it on the tread. Asked before the search (it is the keyed seat's own geometry, `keyed`), it
+    refuses such a seat without the full search that would find out whether the caption ends in the key; a seat whose
+    mark clears keeps a caption that clears whatever the search decides, since every other seat the search can return
+    covers no hard ink, and a way is hard. The drawn caption is asked again, so the predicate holds of what is drawn."""
+    nb = nearest_way_bearing(M, x, y)
+    subject = board_subject(x, y, nb if nb is not None else rot, 2 * hw, 2 * hh)
+    if not caption_clears_ways(keyed(label, BOARD_CAPTION_SIZE, subject, None, 0.0).block, index.ways):
+        return None
+    p = place(label, BOARD_CAPTION_SIZE, subject, index, frame)
+    return p if caption_clears_ways(p.block, index.ways) else None
+
+
 def entrance_seat_ok(seat: BoardSeat, anchor: tuple[float, float], reach: RouteReach | None, ftpx: float) -> bool:
     """THE ONE PREDICATE of an entrance board's ground (feature 287, labels L1): within
     `KOSATSUBA_ENTRANCE_REACH_FT + KOSATSUBA_ANCHOR_BAND_FT` of the entrance anchor, and - at a handover - passed by every
@@ -116,17 +140,19 @@ def choose_board(seats: list[BoardSeat], proof: Proof) -> tuple[BoardSeat, Place
     """The board's seat among `seats`, walked in the order of their score (stably, so a tie keeps the first): the first
     whose caption fits in the OPEN, else the first whose caption fits under the trees (the GM, 2026-08-29: a board under a
     canopy is fine "as long as there is a label attached to it and the label is visible"), else None. ASKED LAZILY
-    (feature 284): the caption's proof is a placement against every obstacle, so the walk stops at the first open fit."""
-    shaded: tuple[BoardSeat, Placement | None] | None = None
-    for c in sorted(seats, key=lambda c: c.score, reverse=True):
-        ok, p = proof(c)
-        if not ok:
-            continue
-        if not c.shaded:
-            return c, p
-        if shaded is None:
-            shaded = (c, p)
-    return shaded
+    (feature 284): the caption's proof is a placement against every obstacle, so the walk stops at the first open fit.
+
+    THE OPEN SEATS ARE PROVED BEFORE ANY SHADED ONE (feature 287, the board's 216 s siting): the walk in one pass proved
+    every shaded seat on its way to an open fit, and a board under one wide canopy - every seat shaded - proved all 1,072
+    of them where the first that fits was the answer. Walking the open seats in score order and then the shaded ones in
+    score order asks the same question of each and returns the same seat."""
+    ranked = sorted(seats, key=lambda c: c.score, reverse=True)
+    for group in ([c for c in ranked if not c.shaded], [c for c in ranked if c.shaded]):
+        for c in group:
+            ok, p = proof(c)
+            if ok:
+                return c, p
+    return None
 
 
 def resolve_seat(seed: int, context: dict[str, Any], pinned: dict[str, Any], sitable: set[str]) -> str:

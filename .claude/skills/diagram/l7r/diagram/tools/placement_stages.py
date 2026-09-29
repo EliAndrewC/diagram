@@ -46,6 +46,7 @@ if SKILL not in sys.path:
 from l7r.diagram.hamletgen import HamletSpec, SitePlan, plan_site  # noqa: E402
 from l7r.diagram.hamletgen.driver import STAGES, roll_scope  # noqa: E402
 from l7r.diagram.settlement import Settlement  # noqa: E402
+from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT  # noqa: E402
 
 # THE PAGE IS WRITTEN FROM THE CODE'S OWN DOCUMENTATION (feature 227, GM 2026-09-12: *"I would like it if this HTML
 # page basically was generated based on the documentation, the docstrings, the stages, and such so that I could just
@@ -345,9 +346,9 @@ def _plate(snap: Settlement, out_dir: str, stem: str, width: int, overlay: dict[
     with Image.open(png) as im:
         w, h = im.size
         if overlay:
-            im = im.convert("RGB")
             x0, y0, vw, _vh = snap.M["meta"].get("view") or (0.0, 0.0, float(snap.W), float(snap.H))  # a mid-roll copy is uncropped: the plate is the whole canvas
             sc = w / float(vw)
+            im = draw_reservations(im.convert("RGB"), overlay, x0, y0, sc)
             draw = ImageDraw.Draw(im)
             for ring in overlay.get("rings", []) + overlay.get("holes", []):
                 pts = [((x - x0) * sc, (y - y0) * sc) for x, y in ring]
@@ -374,6 +375,42 @@ def _plate(snap: Settlement, out_dir: str, stem: str, width: int, overlay: dict[
     if os.path.isfile(base + ".html"):
         os.remove(base + ".html")  # the interactive page of a half-built map: 700 KB apiece that nothing links (feature 227)
     return os.path.basename(png), size[0], size[1]
+
+
+def homestead_overlay(s: Settlement) -> dict[str, Any]:
+    """What the homesteads plate draws over itself (features 227, 287): the site boundary the homesteads were seated
+    against, and the ground the seating RESERVED as it seated them - each house's access corridor (`access_corridors`,
+    at its half-width), the exit strip the tree starts from (`access_exit`), and every household's wood-share seats
+    (each house's `wood_share`, at the crown radius it reserved). A reservation no plate showed was a rule no reader could
+    check against the picture."""
+    out: dict[str, Any] = dict(s.M.get("site_boundary") or {})
+    out["access"] = [rec["pts"] for rec in s.M.get("access_corridors") or [] if len(rec.get("pts") or []) >= 2]
+    out["exit"] = s.M.get("access_exit")
+    out["access_half"] = s.px(ACCESS_HALF_FT)
+    out["wood"] = [[float(p[0]), float(p[1]), float((h.get("wood_share") or {}).get("r") or 0.0)] for h in s.M.get("houses") or [] for p in (h.get("wood_share") or {}).get("seats") or ()]
+    return out
+
+
+RESERVATION_COLORS = {"access": (235, 135, 20, 110), "exit": (190, 40, 190, 150), "wood": (25, 110, 35, 255)}
+"""The reservations' inks on the homesteads plate: the access corridors a translucent orange band, the exit strip a
+translucent magenta band, the wood-share seats a dark green ring - none of them a color the map itself uses for ground."""
+
+
+def draw_reservations(im: Any, overlay: dict[str, Any], x0: float, y0: float, sc: float) -> Any:
+    """Draw `homestead_overlay`'s reservations over a plate at scale `sc` from the view's corner (x0, y0): the corridor
+    and exit bands at their true width, composited translucent so the map shows through, then the wood seats' rings."""
+    from PIL import Image, ImageDraw
+
+    layer = Image.new("RGBA", im.size, (0, 0, 0, 0))
+    draw = ImageDraw.Draw(layer)
+    band = max(2, round(2 * float(overlay.get("access_half") or 0.0) * sc))
+    for key, segs in (("access", overlay.get("access") or []), ("exit", [overlay["exit"]] if overlay.get("exit") else [])):
+        for pts in segs:
+            draw.line([((p[0] - x0) * sc, (p[1] - y0) * sc) for p in pts], fill=RESERVATION_COLORS[key], width=band, joint="curve")
+    for x, y, r in overlay.get("wood") or []:
+        cx, cy, rr = (x - x0) * sc, (y - y0) * sc, max(2.0, r * sc)
+        draw.ellipse((cx - rr, cy - rr, cx + rr, cy + rr), outline=RESERVATION_COLORS["wood"], width=max(2, round(sc * 2)))
+    return Image.alpha_composite(im.convert("RGBA"), layer).convert("RGB")
 
 
 def build_page(out_dir: str, width: int, spec: HamletSpec, steps_too: bool = True) -> str:
@@ -436,7 +473,7 @@ def _walk(s: Settlement, plan: SitePlan, out_dir: str, width: int, rows: list[di
             # and would have been sixty: at most `max_workers` copies are alive at once now.
             jobs: list[tuple[Any, dict[tuple[str, str], int] | None, str, dict[str, Any] | None, int]] = []
             if drew:
-                overlay = dict(s.M["site_boundary"]) if not had_boundary and "site_boundary" in s.M else None
+                overlay = homestead_overlay(s) if not had_boundary and "site_boundary" in s.M else None
                 jobs.append((row, None, stem, overlay, 2600))
             else:
                 row["decided"] = [(k, str(v)) for k, v in now.items() if known.get(k) != v]
@@ -475,6 +512,13 @@ def _walk(s: Settlement, plan: SitePlan, out_dir: str, width: int, rows: list[di
         print(f"  {row['i']:>2}. {row['fn']:<22} -> {row['img'] or f'(no ink - {len(row['decided'])} values decided)'}" + (f"  + {shown} step plate(s)" if shown else ""))
 
 
+def snapshot(s: Settlement) -> Settlement:
+    """A copy of the part-built settlement to finish into a plate, its MEMOS left behind (feature 287): a memo is a roll's
+    cache of questions asked of the standing ground (`rolling/access.py`'s `_corridor_memo` holds lazy answers a copy
+    cannot take), not the map, and the reader of each rebuilds it when it finds none. Each is copied as None."""
+    return copy.deepcopy(s, {id(v): None for k, v in vars(s).items() if k.endswith("_memo")})
+
+
 def _make_plates(s: Settlement, jobs: list[Any], out_dir: str, width: int) -> None:
     """Render one stage's plates - its own and its steps' - and hang each result on the row that asked for it.
 
@@ -485,7 +529,7 @@ def _make_plates(s: Settlement, jobs: list[Any], out_dir: str, width: int) -> No
 
     def one(job: Any) -> tuple[Any, tuple[str, int, int]]:
         target, mark, stem, overlay, render_w = job
-        snap = copy.deepcopy(s)
+        snap = snapshot(s)
         if mark is not None:
             _rewind(snap, mark)
             _balance_groups(snap)
@@ -606,7 +650,7 @@ def _write_page(out_dir: str, rows: list[dict[str, Any]], spec: HamletSpec) -> s
             parts.append(f'<img src="{escape(r["img"])}" width="{r["iw"]}" height="{r["ih"]}" alt="{escape(r["title"])}" loading="lazy">')
             if r["fn"] == "stage_homesteads":
                 parts.append(
-                    '<p class="legend">Drawn over this plate: the site boundary the homesteads were seated against - the paddy\'s facing chords in blue, the outline of everything else (the hem, the marshes, the ponds, the reed toe) in red, the water and corridor segments in teal.</p>'
+                    '<p class="legend">Drawn over this plate: the site boundary the homesteads were seated against - the paddy\'s facing chords in blue, the outline of everything else (the hem, the marshes, the ponds, the reed toe) in red, the water and corridor segments in teal - and the ground the seating reserved as it seated them: each house\'s access corridor in orange, the exit strip the corridors start from in magenta, and each household\'s wood-share seats as dark green rings.</p>'
                 )
         else:
             parts += [

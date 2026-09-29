@@ -4,7 +4,7 @@ import math
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
-from ....labels import Placement, place
+from ....labels import Placement
 from ..._geom import (
     Manifest,
     PointGrid,
@@ -40,9 +40,9 @@ from .board_seat import (
     choose_board,
     entrance_seat_ok,
     resolve_seat,
+    terminal_caption,
     under_placard,
 )
-from .boards import BOARD_CAPTION_SIZE, board_subject
 
 if TYPE_CHECKING:
     from ...core import Settlement
@@ -199,14 +199,18 @@ class FixtureSitingMixin:
                 meta["kosatsuba_seat_unsitable"] = unsitable
             seat, cap = chosen[placement]
         else:
-            # D12: awaiting the GM - no seat in the view takes a board with a clean caption. The behavior before feature 287
-            # is kept (the board at the best-ranked seat, its caption at the least cost) and the map is marked for the count.
+            # D12: awaiting the GM - no seat in the view takes a board with a clean caption. The board stands at the best-ranked
+            # seat whose caption, on a leader or in the key (D10), clears every way (`terminal_caption`), and the map is marked
+            # for the count. Where no seat's does, there is no board - the siter's answer wherever no verge fits.
             placement = str(resolve_knob("kosatsuba_seat", int(self.seed), afford, pinned)) if lane_tier else "center"
 
             def lax(c: BoardSeat) -> tuple[bool, Placement | None]:
                 assert index is not None  # a board with no caption proves every seat, so only a captioned one gets here
-                nb = nearest_way_bearing(self.M, c.x, c.y)
-                return True, place(label, BOARD_CAPTION_SIZE, board_subject(c.x, c.y, nb if nb is not None else c.rot, w, h), index, frame, least=True)
+                if (c.x, c.y, c.rot) not in terminal:
+                    terminal[c.x, c.y, c.rot] = terminal_caption(self.M, c.x, c.y, w / 2, h / 2, c.rot, label, index, frame)
+                return terminal[c.x, c.y, c.rot] is not None, terminal[c.x, c.y, c.rot]
+
+            terminal: dict[tuple[float, float, float], Placement | None] = {}
 
             got = self._board_for(placement, sample, lax, False, ftpx, lane_tier) or (self._board_for(placement, sample, lax, True, ftpx, lane_tier) if lane_tier else None)
             if got is None:

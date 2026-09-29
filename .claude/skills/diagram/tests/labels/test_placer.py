@@ -86,14 +86,12 @@ def _collar(poly, width):
 
 def test_a_caption_is_never_dropped_and_never_overlaps() -> None:
     """Scenario 4 (feature 287, D10): a sheet with no free seat anywhere - the caption is not dropped and is not drawn
-    overlapping: it goes in the sheet's key, its mark on the board. The retired least-cost seat survives only for the
-    caller awaiting the GM (`least=True`, D12)."""
+    overlapping: it goes in the sheet's key, its mark on the board. The retired least-cost seat has no caller left: the
+    board awaiting the GM (D12) takes this path too since feature 287's wave 5."""
     everything = Obstacle(tuple(rect(500.0, 500.0, 900.0, 900.0)), WEIGHT_OBSTACLE)
     p = place("notice board", SIZE, BOARD, ObstacleIndex([everything]))
     assert p.keyed and p.lines == ("notice board",) and p.cost > WEIGHT_KEY and p.leader is None
     assert inside(p.x, p.y - 2.2, list(BOARD.poly)), "the mark stands on what it names"
-    old = place("notice board", SIZE, BOARD, ObstacleIndex([everything]), least=True)
-    assert not old.keyed and old.cost == WEIGHT_OBSTACLE and (old.ring, old.rank) == (0, 0)
     assert place("notice board", SIZE, BOARD, ObstacleIndex([everything]), strict=True) is None
 
 
@@ -136,8 +134,6 @@ def test_the_frame_is_never_left() -> None:
     assert p.position == "left", "above and below run past the frame's edge too"
     squeezed = place("notice board", SIZE, BOARD, ObstacleIndex(), frame=(495.0, 495.0, 505.0, 505.0))
     assert squeezed.keyed and squeezed.lines, "no seat fits the frame at all: the caption goes in the key"
-    old = place("notice board", SIZE, BOARD, ObstacleIndex(), frame=(495.0, 495.0, 505.0, 505.0), least=True)
-    assert old.ring == 0 and not old.keyed, "the retired first seat, kept for D12's caller"
 
 
 def test_a_caption_wraps_at_a_seat_before_moving_off_it() -> None:

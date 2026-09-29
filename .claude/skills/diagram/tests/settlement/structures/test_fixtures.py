@@ -280,6 +280,40 @@ def test_an_anchored_board_with_no_handover_keeps_to_the_seats_nearest_its_ancho
     assert spot is not None and math.dist(spot, anchor) <= 2 * KOSATSUBA_ANCHOR_BAND_FT, f"the board at {spot} strays from its anchor {anchor}"
 
 
+def test_a_board_under_one_wide_canopy_is_sited_without_measuring_a_seat_it_cannot_take(monkeypatch):
+    # feature 287 wave 5: the retired canopy test's scene (216 s at 0e792a665, 305 s at 920c5ad9f) - a road under ONE
+    # crown - shortened to a 200 px road. Every seat's caption lies on the crown, so the siter proves every seat strictly
+    # (all refused), then takes D12's terminal. INDEXED, EXACT: `ObstacleIndex.blocked` refuses a strict seat without
+    # measuring it where the crown holds it past a nudge's reach, and the terminal walk is lazy, so the only seats scored
+    # are the ONE terminal search's - the same answer the scan gave, with none of its measuring
+    import math
+
+    from l7r.diagram.labels import caption_clears_ways, place
+    from l7r.diagram.labels import placer as placer_mod
+    from l7r.diagram.settlement.structures.fixtures.boards import BOARD_CAPTION_SIZE, board_subject
+
+    s = Settlement(600, 600, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    s.M["road"] = [[200, 300], [400, 300]]
+    s.M["tree_crowns"] = [300.0, 300.0, 600.0]
+    s.set_view(0.0, 0.0, 600.0, 600.0)  # sited against the finished frame, so the proved caption rides to the label phase
+    index = s.label_obstacles()  # the index the siter builds, before its board's caption joins it
+    scored: list[int] = []
+    real = placer_mod._score
+    monkeypatch.setattr(placer_mod, "_score", lambda *a: scored.append(1) or real(*a))
+    spot = s.place_kosatsuba()
+    assert spot is not None and s.M["meta"]["kosatsuba_d12"] is True
+    board = s.M["kosatsuba"][0]
+    assert abs(board["y"] - 300.0) > 15.5, "the verge seats would put the key mark on the road's bed"
+    proved = s._label_queue[-1][1][6]
+    assert proved.keyed and caption_clears_ways(proved.block, index.ways)
+    during = len(scored)
+    scored.clear()
+    again = place("notice board", BOARD_CAPTION_SIZE, board_subject(board["x"], board["y"], board["rot"], board["vw"], board["vh"]), index, (0.0, 0.0, 600.0, 600.0))
+    assert again == proved and during == len(scored), f"{during} seats scored: the strict proofs measured a seat under the crown"
+    assert math.dist(spot, (board["x"], board["y"])) == 0.0
+
+
 def test_a_hamlet_with_no_houses_or_no_handover_has_no_ways_out():
     # feature 261: the handover needs dwellings, and the routes need a handover
     from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes, kosatsuba_handover

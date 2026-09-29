@@ -16,6 +16,7 @@ from .placer import Placement as Placement
 from .placer import Subject as Subject
 from .placer import caption_clears_ways as caption_clears_ways
 from .placer import hug_gap as hug_gap
+from .placer import keyed as keyed
 from .placer import place as place
 from .placer import referent_box as referent_box
 from .standard import upright as upright
