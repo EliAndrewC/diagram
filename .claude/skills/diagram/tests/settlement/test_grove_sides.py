@@ -248,3 +248,23 @@ def test_the_garden_relax_steers_clear_of_a_neighbors_whole_homestead() -> None:
     }
     s._relax_gardens_south([shaded, other])
     assert shaded["geom"]["gardens"][0][1] > 300
+
+
+def test_the_service_strip_stands_the_windward_bands_off_the_back_wall_and_the_west_end() -> None:
+    """`back` (`SERVICE_STRIP_FT`) sets both deep bands off the house - the north one off the back wall, the west one off
+    the end wall where the bath room and the wood shed go (Mizuguchi: every bath room stood on its west band)."""
+    tight = canonical_farmstead(50.0, 28.0, 3.0, (22.0, 24.0), (40.0, 30.0), sides=2, garden_by_yard=False, thin=17.0, sun_east=22.0, way_in=12.0)
+    strip = canonical_farmstead(50.0, 28.0, 3.0, (22.0, 24.0), (40.0, 30.0), sides=2, garden_by_yard=False, thin=17.0, sun_east=22.0, way_in=12.0, back=24.0)
+    for face, side in ((N, 3), (W, 2)):
+        was = next(_edges(r) for r, f, _d in tight["groves"] if f == face)
+        now = next(_edges(r) for r, f, _d in strip["groves"] if f == face)
+        assert was[side] - now[side] == pytest.approx(24.0), face
+
+
+def test_fixtures_on_groves_names_a_fixture_inside_a_band() -> None:
+    from l7r.diagram.settlement.homestead_parts.grove_rules import fixtures_on_groves
+
+    band = {"x": 0.0, "y": 0.0, "w": 40.0, "h": 80.0}
+    M = {"groves": [band, {"poly": []}], "farm_fixtures": [{"kind": "bath", "x": 18.0, "y": 0.0, "w": 7.0, "h": 6.0}, {"kind": "woodpile", "x": 60.0, "y": 0.0, "w": 24.0, "h": 12.0}, {"kind": "persimmon", "x": 0.0, "y": 0.0}]}
+    assert fixtures_on_groves(M) == [("bath", band)], "the bath inside the band; the shed clear of it; a tree has no box"
+    assert fixtures_on_groves({}) == []

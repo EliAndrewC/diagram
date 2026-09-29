@@ -241,13 +241,18 @@ def test_a_linear_hamlet_strings_its_houses_along_the_connector() -> None:
         plan = a_plan(households=10)
         plan.seat = hg.seat_cluster(plan)
         plan.settlement_form = form
-        s = Settlement(1400, 1400, seed=3)
+        # a road 1,800 ft long on a canvas 2,400 wide (feature 291): a row farm's frame - its grove, the service strip and
+        # the lane's room - is some 200 ft across, and the toy's 800 ft road held eight of the ten
+        s = Settlement(2400, 1400, seed=3)
         s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=True)
+        # the placer's own switch, said (feature 291): unset, BOTH arms laid farms with their own groves, and the nucleated
+        # control was not one
+        s._nucleated = form == "nucleated"
         s.field_polys.append(list(plan.envelope))
         # the connector has to BE there for the linear form to string anything along it - it is the one
         # way on the map that predates the houses, which is the whole premise of the archetype
         cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
-        s.M["lanes"] = [{"pts": [[cx_ - 400, cy_], [cx_ + 400, cy_]], "w": 6, "connector": True}]
+        s.M["lanes"] = [{"pts": [[cx_ - 900, cy_], [cx_ + 900, cy_]], "w": 6, "connector": True}]
         stage_homesteads(s, plan)
         assert len(s.M["houses"]) == 10, f"{form}: every household seated"
 
@@ -438,20 +443,20 @@ def test_a_quota_the_ranks_cannot_seat_reaches_the_rescue_rounds() -> None:
 def test_a_cluster_standing_off_its_field_gets_the_spur_to_it() -> None:
     """`stage_track`'s field spur is laid when the path from the cluster's edge to the field is longer than 20 ft; the
     pool's clusters front the paddy at the wall rule now (feature 227), so no shipped map lays one - a cluster seated
-    three hundred feet back does."""
+    two hundred feet back does."""
     from l7r.diagram.hamletgen.ways import stage_track
 
     s, plan = _toy_hamlet(10)
-    # A DISPERSED cluster, said so (feature 276): the seats three hundred feet back fall off the toy's canvas, and it
-    # was the dispersed spiral - which the toy ran by accident until `_toy_hamlet` set the placer's own switch -
-    # that found room within reach of them. The spur is a property of the track, whatever form stands back there.
-    s._nucleated = False
+    # NUCLEATED seats two hundred feet back, where they are asked (feature 291). Three hundred fell off the toy's canvas,
+    # and the test leaned on the DISPERSED spiral finding room within reach of them (feature 276); a dispersed farm's
+    # frame - its grove, the service strip and the lane's room - is over 200 ft across now, and the spiral found none. The
+    # spur is a property of the track, whatever form stands back there.
     cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
     ox, oy = plan.seat["out"]
     n = 0
     for k in range(-2, 3):
         ax, ay = plan.seat["along"]
-        if s.try_place(cx_ + ax * 110 * k + ox * 300, cy_ + ay * 110 * k + oy * 300, "plain"):
+        if s.try_place(cx_ + ax * 110 * k + ox * 200, cy_ + ay * 110 * k + oy * 200, "plain"):
             n += 1
     assert n >= 3
     stage_track(s, plan)
@@ -589,10 +594,13 @@ def test_the_free_ground_changes_no_seat(form: str, scenario: str, sides: int, m
     monkeypatch.setattr(Settlement, "_seat_refused", lambda self, x, y, hw, hh: False)
     monkeypatch.setattr(Settlement, "_bundle_refused", lambda self, geom: False)
     without = roll()
-    # the floor is what the scenario seats, measured 2026-09-29: a ring takes more ground than a two-sided grove, so the
-    # 520 ft rescue strip holds 6 dispersed farms with four-sided groves where it holds 10 with two
-    floor = 6 if (form, scenario, sides) == ("dispersed", "rescue", 4) else 10
-    assert with_index == without and len(with_index) >= floor
+    # the floor is what the scenario seats, measured 2026-09-29: a grove farm's frame - its grove, the service strip on both
+    # windward sides and the lane's room - is some 200 ft across, and the seat band's radius (sized for the households, not
+    # the frames) holds 4 two-sided farms and 1 ring in the 520 ft rescue strip. The equivalence above is what the test is
+    # for; a real dispersed roll seats every household (cohort seeds 1, 5 and 15: 17/17, 12/12, 16/16)
+    floor = {("dispersed", "rescue", 2): 4, ("dispersed", "rescue", 4): 1}.get((form, scenario, sides), 10)
+    assert with_index == without
+    assert len(with_index) >= floor, len(with_index)
 
 
 def test_a_side_is_not_dropped_for_ground_the_loop_never_judges() -> None:
@@ -924,3 +932,24 @@ def test_a_household_strip_keeps_out_of_the_windbreak_belt() -> None:
     belt = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
     assert in_belt(belt, 50.0, 50.0, 10.0, 10.0) and in_belt(belt, 104.0, 50.0, 10.0, 10.0), "inside, or a corner reaching in"
     assert not in_belt(belt, 200.0, 50.0, 10.0, 10.0) and not in_belt(None, 50.0, 50.0, 10.0, 10.0) and not in_belt([(0.0, 0.0)], 1, 1, 1, 1)
+
+
+def test_service_side_carries_the_back_and_west_seats_to_the_deep_bands_faces() -> None:
+    """`service_side` (feature 291): a farm whose deep bands face south and east has its service strip there, so the wood
+    shed's seats (drawn behind and west) are mirrored; north and west, or none, keep them; the house's rake is undone."""
+    from l7r.diagram.hamletgen.homesteads.fixtures import service_side
+
+    assert service_side([(0.0, -1.0), (-1.0, 0.0)], 1.0, 0.0) == (1.0, 1.0)
+    assert service_side([], 1.0, 0.0) == (1.0, 1.0)
+    assert service_side([(0.0, 1.0), (1.0, 0.0)], 1.0, 0.0) == (-1.0, -1.0)
+    c, s = math.cos(math.radians(15.0)), math.sin(math.radians(15.0))
+    assert service_side([(0.0, 1.0), (-1.0, 0.0)], c, s) == (1.0, -1.0)
+
+
+def test_on_a_grove_tests_a_box_against_the_bands_with_a_gap() -> None:
+    from l7r.diagram.hamletgen.homesteads.fixtures import on_a_grove
+
+    bands = [(0.0, 0.0, 40.0, 80.0)]
+    assert on_a_grove((31.0, 0.0, 20.0, 10.0), bands), "one foot off the band's east edge is within the 2 ft gap"
+    assert not on_a_grove((33.5, 0.0, 20.0, 10.0), bands)
+    assert not on_a_grove((0.0, 0.0, 1.0, 1.0), [])

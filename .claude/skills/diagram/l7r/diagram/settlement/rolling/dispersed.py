@@ -28,16 +28,22 @@ YARD_SUN_STRIP = 22.0
 # a grove's open side, which a ring does not have (research/vegetation.html, "How did a lane get through a belt?").
 WAY_IN_FT = 36.0
 # THE LANE'S ROOM BETWEEN TWO FARMS' GROVES: a farm's frame is padded by half of it on every side, so two neighbors' groves
-# stand at least a lane's room apart - `MIN_WEB_GAP` (hamletgen/consts.py: both neighbors' clearance and the tread between
-# them), 18 ft; a test holds the two equal. Unpadded, the frames packed 2-3 ft apart (16 of seed 12's 17 farms) and the
-# neighbors' bands walled off every front, so the web could reach no door.
+# stand at least this far apart. Unpadded, the frames packed 2-3 ft apart (16 of seed 12's 17 farms) and the neighbors'
+# bands walled off every front, so the web could reach no door. `MIN_WEB_GAP` (hamletgen/consts.py, 18 ft: both
+# neighbors' clearance and the tread between them) was the first figure and is not enough: the router PLANS a lane at a
+# footpath's fabric gap plus 0.71 of its cell off each band (as `WAY_IN_FT` measures), and at 18 ft seed 12's web still
+# stranded at least eight farms (the trace listed eight before it was cut), at 32 none. A physical necessity at a
+# GUESSED width - no page gives the gap between two groves.
 LANE_ROOM_FT = 32.0
-# THE SERVICE STRIP BEHIND THE HOUSE: the windward stand stands this far off the back wall, so a wood shed (24 x 12 ft,
+# THE SERVICE STRIP BEHIND THE HOUSE AND OFF ITS WINDWARD END: the windward stand stands this far off the back wall and
+# the west end wall (`canonical_farmstead`), so a wood shed (24 x 12 ft,
 # `FIXTURE_FT`) fits a step (`_WOODSHED_STEP_FT`, 6 ft) off it with a wall gap to spare. Hard against the wall, the stand
 # took every wood-shed seat: once the dispersed and linear forms rolled again, Kashikawa seated 1 of 7 rolled wood sheds
 # and Mizuguchi 1 of 5 (settlement-review, 2026-09-29). Where on the plot a wood shed stood no page says (a GUESS, as the
-# shed's own seat is), so the strip is sized to the shed, not to a finding.
-SERVICE_STRIP_FT = 21.0
+# shed's own seat is), so the strip is sized to the shed, not to a finding: the wall gap (3.5 ft), the step (6 ft), the
+# shed's depth (12 ft) and the 2 ft the fixture placer keeps off a footprint, with half a foot over - at 21 ft, without
+# the placer's gap, the back seats ended 1.5 ft off the band and Mizuguchi's largest farmhouse seated no shed.
+SERVICE_STRIP_FT = 24.0
 # THE WINDWARD STAND'S DEPTH, in house depths: the grove ~6x the house (research/homesteads.html, the grove's real scale).
 DEEP_BAND_HOUSE_DEPTHS = 1.57
 
@@ -79,8 +85,11 @@ def canonical_farmstead(
     # wall, at its mid-height
     garden_r = (yw / 2 + gap + gw / 2, yard_r[1], gw, gh) if garden_by_yard else (cw / 2 + gap + gw / 2, 0.0, gw, gh)
     works = [(-cw / 2, -ch / 2, cw / 2, ch / 2), _edges(yard_r), _edges(garden_r)]
-    west_in = min(e[0] for e in works) - gap
-    north_in = min(e[1] for e in works) - gap - back  # `back`: the service strip behind the house (`SERVICE_STRIP_FT`)
+    # `back`: the service strip (`SERVICE_STRIP_FT`) on BOTH windward sides - behind the house, and off its west end wall,
+    # where the bath room is joined at the stable end and the wood shed takes a flank seat: hard against that wall, the
+    # west band stood on every bath room Mizuguchi drew (3 of 3) and on its one wood shed
+    west_in = min(e[0] for e in works) - gap - back
+    north_in = min(e[1] for e in works) - gap - back
     east_w = max(e[2] for e in works)
     south_w = max(e[3] for e in works)
     b = DEEP_BAND_HOUSE_DEPTHS * ch

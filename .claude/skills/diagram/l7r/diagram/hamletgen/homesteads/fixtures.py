@@ -294,6 +294,16 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
     # for the yard ring (below): skipped for every seat, the fixtures took the flanks first and the persimmons after them
     # lost their ground - on a trial roll of 2026-09-27, Inashiro drew 6 of its 12 persimmons (plan D19).
     bundles = frozenset(b for b in (homestead_box(s.placed, float(q["x"]), float(q["y"])) for q in houses) if b is not None)
+    # A FARM WITH ITS OWN GROVE (feature 291): its bundle is the whole frame the grove closes round - house, yard, garden,
+    # the service strip behind the house and the bands - so tested as a solid it refused every wall seat of its own house
+    # (Mizuguchi and Kashikawa seated 1 of 12 rolled wood sheds). For the recorded seats its OWN frame is excused and the
+    # grove bands are tested instead, which is what the frame stood in for; a neighbor's frame still refuses.
+    grove_boxes = [(float(_gv["x"]), float(_gv["y"]), float(_gv["w"]), float(_gv["h"])) for _gv in s.M.get("groves", []) if all(k in _gv for k in ("x", "y", "w", "h"))]
+    grove_faces: dict[tuple[float, float], list[tuple[float, float]]] = {}
+    for _gv in s.M.get("groves", []):
+        if _gv.get("of") and _gv.get("depth") == "deep" and _gv.get("face"):
+            grove_faces.setdefault((round(float(_gv["of"][0]), 1), round(float(_gv["of"][1]), 1)), []).append((float(_gv["face"][0]), float(_gv["face"][1])))
+    grove_farms = {(round(float(_gv["of"][0]), 1), round(float(_gv["of"][1]), 1)) for _gv in s.M.get("groves", []) if _gv.get("of")}
     count = 0
     # THE COUNTS (269 fc:2261; see the note at FIXTURE_BANDS): each kind's share is seated as a count - the shrine's too, so
     # RARE stays rare (a 0.03-0.08 share of a dozen households is none or one); a spec floor may raise any count.
@@ -541,6 +551,10 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                 # THE WOOD SHED (feature 280 M21): the same walls, a ken further out - a building of its own
                 _st = px(_WOODSHED_STEP_FT)
                 seats = [(lx + math.copysign(_st, lx) * (abs(lx) > hw / 2), ly + math.copysign(_st, ly) * (abs(lx) <= hw / 2), cw, ch) for lx, ly, cw, ch in seats]
+                # ...ON THE SERVICE STRIP (feature 291): a farm with its own grove keeps its strip on the windward sides, which a
+                # turned farm has south or east of the house, where these seats (drawn behind and west) meet its yard or garden
+                _sx, _sy = service_side(grove_faces.get((round(hx, 1), round(hy, 1)), ()), ca, sa)
+                seats = [(lx * _sx, ly * _sy, cw, ch) for lx, ly, cw, ch in seats]
             elif kind == "bath":
                 # THE BATH ROOM (feature 280 M22, `bath_room_seats`): joined to the house - against its wall, no gap - at the
                 # hamlet's seat, then at the other attested seats; it is never a building standing off in the yard.
@@ -606,6 +620,8 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
             _lead: list[tuple[float, float, Sequence[tuple[float, ...]]]] = [(0.0, 0.0, _t) for _t in (field_table, sun_table, yard_lead) if _t]
             _rungs = _lead + _rungs
             _strict_ids = {id(seats), id(field_table), id(sun_table)}
+            _box = homestead_box(s.placed, hx, hy) if (round(hx, 1), round(hy, 1)) in grove_farms else None
+            _own_frame = frozenset() if _box is None else frozenset({_box})
             _seated = False
             for _ox, _oy, _table in _rungs:
                 if _seated:
@@ -617,7 +633,8 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
                     ext = abs(cw * ca) + abs(ch * sa), abs(cw * sa) + abs(ch * ca)  # the drawn rect's bbox, raked with the house
                     if (
-                        _strip_blocked(s, cx, cy, ext[0], ext[1], hx, hy, fields, marsh, pond, lanes, footing, frozenset() if id(_table) in _strict_ids else bundles)
+                        _strip_blocked(s, cx, cy, ext[0], ext[1], hx, hy, fields, marsh, pond, lanes, footing, (_own_frame if id(_table) in _strict_ids else bundles))
+                        or (bool(_own_frame) and on_a_grove((cx, cy, ext[0], ext[1]), grove_boxes))
                         or across_the_brook(s, (hx, hy), (cx, cy))
                         # a field pit stands out by its fields or the road, not in the yard, so a lane may run between (269 B11)
                         or (_table is not field_table and across_a_lane(lanes, (hx, hy), (cx, cy)))
@@ -731,6 +748,26 @@ def fixture_form(kind: str, manure_form: str | None) -> str | None:
     if kind == "manure":
         return "pit" if manure_form == "pit" else None
     return None
+
+
+def service_side(faces: Sequence[tuple[float, float]], ca: float, sa: float) -> tuple[float, float]:
+    """The signs that carry a seat drawn behind the house and off its west end (-y and -x in the house frame) onto the sides
+    its deep grove bands face (feature 291): each band's page face turned into the house frame by the house's rake (`ca`,
+    `sa`); a farm with no deep band, or with one behind and west, keeps (1, 1)."""
+    sx = sy = 1.0
+    for fx, fy in faces:
+        lx, ly = fx * ca + fy * sa, -fx * sa + fy * ca
+        if abs(ly) > abs(lx) and ly > 0:
+            sy = -1.0
+        elif abs(lx) > abs(ly) and lx > 0:
+            sx = -1.0
+    return sx, sy
+
+
+def on_a_grove(box: tuple[float, float, float, float], groves: Sequence[tuple[float, float, float, float]], gap: float = 2.0) -> bool:
+    """Does a centered box (`cx, cy, w, h`) come within `gap` of any grove band's centered box (feature 291)?"""
+    cx, cy, w, h = box
+    return any(abs(cx - gx) < (w + gw) / 2 + gap and abs(cy - gy) < (h + gh) / 2 + gap for gx, gy, gw, gh in groves)
 
 
 def homestead_box(placed: Sequence[Any], x: float, y: float) -> tuple[float, float, float, float] | None:
