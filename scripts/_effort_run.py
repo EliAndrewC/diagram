@@ -195,7 +195,7 @@ def launch(args: argparse.Namespace, repo: pathlib.Path, now: float) -> dict:
     clone = base / f"diagram-exp-{run_id}"
     if clone.exists():
         raise Refused(f"{clone} exists - a run id is used once")
-    subprocess.run(["git", "clone", "-q", args.origin, str(clone)], check=True)
+    subprocess.run(["git", "clone", "-q", args.origin or str(repo), str(clone)], check=True)
     subprocess.run(["git", "-C", str(clone), "reset", "-q", "--hard", exp["start_commit"]], check=True)
     work = base / ".runs-293" / run_id  # a neutral name: the sources path is in the run's environment
     sources = work / "sources"
@@ -269,8 +269,12 @@ def init(args: argparse.Namespace, repo: pathlib.Path, now: float) -> dict:
         raise Refused(f"{target} exists - the experiment's shared record is written once")
     snapshot = pathlib.Path(args.snapshot)
     src = pathlib.Path(args.sources_home)
-    snapshot.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copytree(src, snapshot)
+    snapshot.mkdir(parents=True)
+    for name in ("sources-consulted.jsonl", "page-cache"):  # the ledger and the cache `_sources.home()` holds - nothing else
+        if (src / name).is_dir():
+            shutil.copytree(src / name, snapshot / name)
+        elif (src / name).is_file():
+            shutil.copyfile(src / name, snapshot / name)
     ledger = snapshot / "sources-consulted.jsonl"
     exp = {"start_commit": args.start, "seed": args.seed, "order": arm_order(args.seed), "offset_gb": args.offset,
            "sources_snapshot": str(snapshot),
@@ -294,7 +298,9 @@ def main(argv: list[str]) -> int:
     r.add_argument("--run", required=True)
     r.add_argument("--arm", required=True, choices=ARMS)
     r.add_argument("--order", type=int, required=True)
-    r.add_argument("--origin", default="/diagram")
+    # The runs clone from the SESSION's clone at the frozen start commit: the feature's tooling cannot land on main while its
+    # tasks are open (sync-with-main's open-task refusal), so the start commit exists only here until the feature lands.
+    r.add_argument("--origin", default="", help="default: this repository")
     r.add_argument("--clones", default="/diagram/.clones")
     r.add_argument("--claims", default="/diagram/.clones/RESEARCH-CLAIMS.md")
     r.add_argument("--cgroup", default="/sys/fs/cgroup")

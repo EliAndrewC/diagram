@@ -67,6 +67,9 @@ def world(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> dict:
     home = tmp_path / "sources-home"
     home.mkdir()
     (home / "sources-consulted.jsonl").write_text('{"url": "u"}\n')
+    (home / "page-cache" / "ab").mkdir(parents=True)
+    (home / "page-cache" / "ab" / "meta.json").write_text("{}")
+    (home / "claims.jsonl").write_text("not a sources file\n")
     bin_ = tmp_path / "bin"
     bin_.mkdir()
     (bin_ / "claude").write_text(FAKE_CLAUDE)
@@ -103,6 +106,8 @@ def test_init_records_what_every_run_shares_once(world: dict) -> None:
     assert set(exp["hashes"]) == {*er.RUBRICS, "prompts/R-write.md", "prompts/R-check.md", "prompts/I.md"}
     assert exp["agents_sha256"] == er.sha256(er.agents_json()) and exp["sources_snapshot_sha256"]
     assert (pathlib.Path(exp["sources_snapshot"]) / "sources-consulted.jsonl").is_file()
+    snap = pathlib.Path(exp["sources_snapshot"])
+    assert (snap / "page-cache" / "ab" / "meta.json").is_file() and not (snap / "claims.jsonl").exists(), "the sources only"
     with pytest.raises(er.Refused, match="written once"):
         _init(world)
 

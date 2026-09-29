@@ -1,6 +1,8 @@
 # Quickstart: running the pilot (the implementing session)
 
-Prerequisite: the tooling tasks are done and landed (`tasks.md` Phases 1-2), the rubrics and prompts committed.
+Prerequisite: the tooling tasks are done and gated green (`tasks.md` Phase 1), the rubrics and prompts committed. The tooling
+cannot land on main while the feature's tasks are open (the push's open-task refusal), so the runs clone from the session's own clone
+at the recorded start commit (`effort-run`'s default origin), and everything lands together at the end.
 
 1. **Pre-flight (P0).** Record `START=<sha>` (main at that moment). Confirm both future-work entries are still open at `START` and that main
    draws no burial-ground way. Run the three R1 measurements and the R6 claims-file check. Snapshot the sources ledger and cache. Draw

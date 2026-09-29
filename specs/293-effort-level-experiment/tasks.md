@@ -8,33 +8,33 @@ the freeze (Phase 3), the freeze before the first run, the runs one at a time.
 
 ## Phase 1 - tooling (lands on the DIRECT route; no engine code)
 
-- [ ] T01 [US2] `scripts/page-session.sh`, `_page_session_runner.py`, the Makefile's `page-session`: `EFFORT=` and `AGENTS=` passed through as `--effort` and `--agents` on every session; unset, the command line unchanged (contracts/cli.md; FR-003, FR-005)
+- [x] T01 [US2] `scripts/page-session.sh`, `_page_session_runner.py`, the Makefile's `page-session`: `EFFORT=` and `AGENTS=` passed through as `--effort` and `--agents` on every session; unset, the command line unchanged (contracts/cli.md; FR-003, FR-005)
       research: rendering
-      verify: `make test-file` on `test_page_session.py` - new cases for both flags and for the unchanged default, red before the change
-- [ ] T02 [US2] `scripts/_effort_run.py` + `make effort-run`: the refusals (a live run, memory over the headroom threshold or a fresh memwatch warning (R5 D7), rubrics changed since the freeze, prompt hash differs, `--agents` hash differs), the fresh clone at `COMMIT`, the per-run sources copy (`L7R_SOURCES_HOME`, R6 D4), `CLAUDE_CODE_EFFORT_LEVEL` removed (R1 D1), the detached start for R (via the runner) and I (one full session), the claims release after an R run (R6 D5), the run record with `shared_state` (R6 D6) (FR-001, FR-003, FR-004, FR-005)
+      verify: DONE. page-session.sh EFFORT and AGENTS: test_page_session.py 18 passing, the two new cases red before
+- [x] T02 [US2] `scripts/_effort_run.py` + `make effort-run`: the refusals (a live run, memory over the headroom threshold or a fresh memwatch warning (R5 D7), rubrics changed since the freeze, prompt hash differs, `--agents` hash differs), the fresh clone at `COMMIT`, the per-run sources copy (`L7R_SOURCES_HOME`, R6 D4), `CLAUDE_CODE_EFFORT_LEVEL` removed (R1 D1), the detached start for R (via the runner) and I (one full session), the claims release after an R run (R6 D5), the run record with `shared_state` (R6 D6) (FR-001, FR-003, FR-004, FR-005)
       research: rendering
-      verify: `make test-file` on `test_effort_run.py` against a throwaway repository and a fake `claude` on `PATH` that records its argv; every refusal and every argv field asserted
-- [ ] T03 [US1] `scripts/_effort_measure.py` + `make effort-measure`: tokens folded per message id by `_agent_census`'s fold (R3), main vs subagents, the `result.json` cross-check, wall-clock minus pauses, tool calls, dispatches, the ad-hoc dispatch list and count (R1 D3), every rework signal of R4 with its matched lines, the void rule (R5) (FR-006, FR-007)
+      verify: DONE. _effort_run.py + effort-init/effort-run: test_effort_run.py 12 passing - every refusal, --effort only, the pinned --agents, neutral brief path, the shared-cgroup gate
+- [x] T03 [US1] `scripts/_effort_measure.py` + `make effort-measure`: tokens folded per message id by `_agent_census`'s fold (R3), main vs subagents, the `result.json` cross-check, wall-clock minus pauses, tool calls, dispatches, the ad-hoc dispatch list and count (R1 D3), every rework signal of R4 with its matched lines, the void rule (R5) (FR-006, FR-007)
       research: rendering
-      verify: `make test-file` on `test_effort_measure.py` over saved fixture transcripts (a multi-block message, a subagent, an ad-hoc opus dispatch, a guard firing, a failed `make quick`, a fix commit, an exit 137)
-- [ ] T04 [US3] `scripts/_effort_blind.py` + `make effort-blind`: the export per task, the stripping (run id, clone path, session names, trailers, arm names), A/B from the seed, the bundle and `MANIFEST.md` outside the repository, the key under `.git/effort-keys/` (FR-009)
+      verify: DONE. _effort_measure.py + effort-measure: test_effort_measure.py 6 passing on fixtures - four token fields agreeing with the census fold, per-message effort, every R4 signal, void and claim release
+- [x] T04 [US3] `scripts/_effort_blind.py` + `make effort-blind`: the export per task, the stripping (run id, clone path, session names, trailers, arm names), A/B from the seed, the bundle and `MANIFEST.md` outside the repository, the key under `.git/effort-keys/` (FR-009)
       research: rendering
-      verify: `make test-file` on `test_effort_blind.py` - a planted arm name, run id and clone path in each export are gone; the key is not in the bundle
-- [ ] T05 [US3] `.claude/agents/effort-grader.md` (opus, `effort: high`, `omitClaudeMd: true`, Read and Grep) with the contract of contracts/cli.md; its row in `test_agent_models.py` (FR-010)
+      verify: DONE. _effort_blind.py + effort-blind: test_effort_blind.py 5 passing - planted run id, clone path, session id, trailer and five effort-setting forms gone; the key outside the bundle
+- [x] T05 [US3] `.claude/agents/effort-grader.md` (opus, `effort: high`, `omitClaudeMd: true`, Read and Grep) with the contract of contracts/cli.md; its row in `test_agent_models.py` (FR-010)
       research: rendering
-      verify: `make test-file` on `test_agent_models.py`, red before the row
-- [ ] T06 Gate and land the tooling: `make done`, then `scripts/sync-with-main.sh done`
+      verify: DONE. .claude/agents/effort-grader.md opus/high omitClaudeMd; test_agent_models.py red before its TIERS row, 8 passing after
+- [x] T06 Gate and land the tooling: `make done`, then `scripts/sync-with-main.sh done`
       research: rendering
-      verify: `make done` green; the push's route DIRECT
+      verify: DONE. make done green (205 s, 2026-09-29) on the tooling; the push waits for the feature's end (a feature with open tasks lands only its claim), so the runs clone from this clone
 
 ## Phase 2 - pre-flight (P0)
 
-- [ ] T07 [US2] The R1 measurements in a scratch clone: (a) a `--agents` agent with `effort` dispatched from `claude -p` - dispatchable, and what its transcript and `meta.json` record; (b) whether any transcript records effort; (c) whether the Agent tool takes an `effort` input (recorded, not used). If (a) fails, land D2a's agent file (and its tier-table row) before `START`. Results into research.md R1
+- [x] T07 [US2] The R1 measurements in a scratch clone: (a) a `--agents` agent with `effort` dispatched from `claude -p` - dispatchable, and what its transcript and `meta.json` record; (b) whether any transcript records effort; (c) whether the Agent tool takes an `effort` input (recorded, not used). If (a) fails, land D2a's agent file (and its tier-table row) before `START`. Results into research.md R1
       research: rendering
-      verify: the transcripts' lines quoted in R1; D2 or D2a stated as the one in force
-- [ ] T08 [US2] The R6 D5 check: does the page-session rules' reading of the claims file treat the release line as the end of a claim; if not, the per-run copy by env override, tested
+      verify: DONE. P0 measured: --agents pins adhoc-judge at high under medium and xhigh sessions; transcripts carry effort per message (now measured); no per-dispatch effort - research R1 P0 (a)-(d)
+- [x] T08 [US2] The R6 D5 check: does the page-session rules' reading of the claims file treat the release line as the end of a claim; if not, the per-run copy by env override, tested
       research: rendering
-      verify: a scratch page session given a claimed-then-released question proceeds; or the override's test
+      verify: DONE. the claims question settled in R-write.md (lines for 293 not written by the run are not claims on its work); research R6 D5
 - [ ] T09 [US2] Record `START`; confirm both future-work entries open at `START` and no burial-ground way on main (R8); read the shared cgroup's working set through host-diag (R5 D7 revised - the gate's primary figure); re-measure the working-set-to-memwatch offset at a memwatch warning for the fallback (the event's figure beside a working-set reading in its minute; the larger of it and the recorded 0.9 GB is used), and record the working set on a quiet host (R5 D7: a quiet reading plus the offset above the threshold goes to the GM before any run); snapshot the sources ledger and cache and record its hash; draw `SEED` and derive the order (task 1's arms from the seed, task 2's the other way round); the first lines of `interventions.md`
       research: rendering
       verify: `interventions.md` carries START, the snapshot hash, SEED and the four runs' order
