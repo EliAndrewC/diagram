@@ -139,12 +139,14 @@ modern-only - two GM rulings in conflict - does it go to the GM through `escalat
 - **D2 - the frozen legacy maps are not edited** (the GM's standing ruling, 2026-08-16, and 2026-09-28 on the headman's
   gate). Their modern-only forms are owed at conversion (FR-007).
 - **Per candidate**: every item's outcome, section and drawn form is a row of `outcomes.md`. One line per elimination
-  (phase 2, 2026-09-29), labeled by what the map now draws:
+  (phase 2, 2026-09-29), labeled by what the map now draws. Each figure is the research record's finding for the
+  section its row in outcomes.md names (the feature keeps no research.md of its own), or a map figure
+  observed 2026-09-29 (method: read from the regenerated manifest):
 - **M09 - Bund cross-section** (historically accurate): the Bund modal: a few inches high, today's standard a foot; Sources kotobank-azebiki, hattori-site-yayoiken
 - **M10 - Water depth** (historically accurate): the Paddy modal: the drained stages are premodern (Qimin yaoshu, Chen Fu), the depths modern
 - **M12 - Pond sized by command area** (guess): the m3/ha rule gone from fields/110; the scripted tameike is sized from Ikegami by households, noted as held below Chen Fu's measure (a guess)
 - **M16 - Work-yard median** (guess): YARD_MEDIAN_TSUBO 18 -> 25 (the IRRI spreading depth retired; undated-custom calibration)
-- **M18 - Farm-shed size** (historically accurate): the storehouse annex at 1.67:1 (0.46 w x 0.45 h), inside the Edo sheds' 18-27 ft; the Meiji-Taisho barns not drawn
+- **M18 - Farm-shed size** (historically accurate): the storehouse annex drawn about 1.67 times as long as deep, inside the Edo sheds' 18-27 ft; the Meiji-Taisho barns not drawn
 - **M20 - Outbuildings, the storehouse share and the heap rate** (guess): the storehouse annex on ~1 farm in 8 (KURA_SHARE 0.125, headman always); the heap's 40-70% stays a guess
 - **M21 - The firewood stack** (historically accurate): the woodpile is a wood shed only, 35-45% of farmsteads, larger houses first, 24 x 12 ft; the eaves stack and (found in passing, undated-custom) the kizuma removed
 - **M22 - The bath shed** (historically accurate): the bath is a room joined to the house, 20-30%, main door / stable end / a headman's floored rooms, 6 x 6-12 ft; the shed and corridor removed
