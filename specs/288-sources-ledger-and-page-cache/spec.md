@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-29
 
-**Status**: Draft
+**Status**: FAITHFUL (spec-fidelity round 2, 2026-09-29)
 
 **Input**: the GM, 2026-09-29 ([`request.md`](request.md)): "I like the idea of the cheap fixes that you have
 suggested so far. So please do make that small tooling change. Both of the cheap fixes, I mean." The two fixes: a
@@ -48,6 +48,9 @@ spelling the normalization folds together); the line is printed before the fetch
    **Then** the ledger holds that outcome line; an outcome of any other shape is refused with the allowed forms.
 4. **Given** `make sources-consulted URL=<u>` or `KEY=<regex>`, **When** it runs, **Then** it prints every line for
    that URL, or every line whose outcome cites a registry key matching the regex.
+5. **Given** source-reader's whole-page bundle, `make check-bundle KEY=<k> WHOLE=1 [QUESTION=<q>]`, **When** it saves
+   the key's page, **Then** it prints the earlier lines and appends a `pending` line exactly as scenarios 1 and 2 say
+   of `make source-pages`; an excerpt bundle (`KEY=<k>` without `WHOLE=1`) prints and appends nothing (D1).
 
 ### User Story 2 - A new citation marks its source cited without a separate step (Priority: P1)
 
@@ -220,3 +223,4 @@ is not re-read without a reason. The feature-274 drift test stays green.
 
 - Round 1 (spec-fidelity, 2026-09-29): CHANGES REQUIRED - D1 excluded the `WHOLE=1` bundle, a research read of a
   cited page for a new claim; D1, the edge case, FR-003 and SC-001 now ledger it, with `QUESTION=`.
+- Round 2 (spec-fidelity-verify, 2026-09-29): FAITHFUL - all three items resolved.
