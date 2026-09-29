@@ -353,3 +353,51 @@ def test_a_toe_wholly_inside_the_dike_block_is_no_marsh() -> None:
     s.M["dikes"] = [{"outline": [[0.0, 0.0], [1000.0, 0.0], [1000.0, 1000.0], [0.0, 1000.0]]}]
     s.marsh([(300.0, 300.0), (500.0, 300.0), (500.0, 500.0)], role="toe")
     assert s.M["marshes"] == [] and s.M["meta"]["marsh_dropped"] == [{"role": "toe", "why": "no open ground left"}]
+
+
+# ---- W05 (the count half): the alder is counted over the clumps the page shows -----------------------------------------
+
+
+def test_the_alder_count_is_taken_again_over_the_clumps_on_the_page() -> None:
+    """Woods W05: four clumps, two drawn as alder and one of those two off the view - once the page is known, `alder`
+    counts the one alder clump the page shows."""
+    s = _hamlet()
+    s.M["village_groves"] = [
+        {
+            "role": "windbreak",
+            "r": 14.0,
+            "clumps": [[100.0, 100.0], [200.0, 100.0], [300.0, 100.0], [900.0, 100.0]],
+            "clumps_offpage": [],
+            "alder": 2,
+            "alder_clumps": [[200.0, 100.0], [900.0, 100.0]],
+        },
+        {"role": "copse", "r": 11.0, "clumps": [[150.0, 150.0]], "clumps_offpage": []},
+    ]
+    s.set_view(0.0, 0.0, 500.0, 500.0)
+    g = s.M["village_groves"][0]
+    assert g["clumps_offpage"] == [[900.0, 100.0]] and g["alder"] == 1
+    assert "alder" not in s.M["village_groves"][1], "a grove with no alder record is not given one"
+
+
+# ---- W10 (the cull half): no cover inside a clearing swept after it -----------------------------------------------------
+
+
+def test_a_clearing_swept_after_the_scrub_takes_its_blades_and_marks_out() -> None:
+    """Woods W10, the violating case: the scrub is scattered over a square, then a household shrine's clearing is swept
+    inside it. The finish writes nothing rooted inside the clearing, and the scrub outside it stays."""
+    from l7r.diagram.settlement._geom import RingIndex
+
+    s = _hamlet()
+    s.commons([(100.0, 100.0), (700.0, 100.0), (700.0, 700.0), (100.0, 700.0)], role="grazing")
+    blades = [ln for _z, _c, bl in s._blade_groups for ln in bl]
+    marks = [mk for _z, mk in s._mark_groups for mk in mk]
+    assert blades and marks, "non-vacuity: the scrub threw blades and dots"
+    s.reserve_clearing(400.0, 400.0, 60.0, 60.0)
+    ring = RingIndex(s.clearings[-1])
+    left = [ln for _z, _c, bl in s._blade_groups for ln in bl]
+    left_marks = [mk for _z, mk in s._mark_groups for mk in mk]
+    assert not any(ring.inside(float(ln[0]), float(ln[1])) for ln in left)
+    assert not any(ring.inside((mk[0] + mk[2]) / 2, (mk[1] + mk[3]) / 2) for mk in left_marks)
+    assert len(blades) > len(left) > 0 and len(left_marks) > 0, "only the clearing's ground was taken"
+    s.reserve_clearing(400.0, 400.0, 60.0, 60.0)  # the same clearing again: the reused blob culls nothing more
+    assert len([ln for _z, _c, bl in s._blade_groups for ln in bl]) == len(left)

@@ -1,11 +1,13 @@
 """Split from settlement/homestead_parts.py by feature 173 - see this package's CLAUDE.md for the index."""
 
 import math
+from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
 from .._geom import CanopyArea, point_in_poly
 from ..land.wet import MARSH_FEATHER_BS, marsh_ground
 from ._helpers import _BELT_GAP_FT, _belt_axis
+from .belt_law import settle_the_belt
 from .grove_blocks import GroveBlocks, Seats
 from .groves import RANK_JITTER_FT, bamboo_mark
 
@@ -206,6 +208,8 @@ class StandsMixin:
         near: tuple[Any, ...] | None = None,
         area: float | None = None,
         wind: tuple[float, float] | None = None,
+        page: Callable[[list[tuple[float, float]]], tuple[float, float, float, float]] | None = None,
+        reach: float | None = None,
     ) -> int:
         """A COMMUNAL village grove - the Chinese *fengshui* forest (风水林). Unlike the per-house *yashikirin*,
         a NUCLEATED village shelters behind ONE village-scale grove, in three roles (see research/vegetation.html 'What are the village's three groves' 'Village
@@ -743,8 +747,30 @@ class StandsMixin:
         # its end crowns are taken off until its center bears within 45 degrees of the wind and it subtends no more than 200
         # round the houses (`trim_to_the_wind`, asked by the same predicate the rule's test reads). A COPSE is held to its own
         # stocking the same way (woods W15): its stragglers are dropped until the extent it is recorded at holds its clumps.
-        if role == "windbreak" and wind is not None and len(seated) > 1:
-            seated = trim_to_the_wind(seated, self.M.get("houses") or [], wind)
+        # ...AND, GIVEN THE PAGE IT WILL BE FRAMED TO, DEEP AND WHOLE ON IT (feature 287, woods W16-W19; plan D8): `page` answers
+        # the view the crop takes with these crowns, and `settle_the_belt` trims the hook on the crowns that view shows,
+        # deepens every thin stretch and closes every hole with seats this fill's own tests admit - up to 60 ft past the
+        # band's far face - and ends the belt where none is admitted, so no rule is left to a check of the finished map.
+        _houses = self.M.get("houses") or []
+        if role == "windbreak" and page is not None and seated and _houses:
+
+            def _settle_seat(x: float, y: float) -> tuple[float, float] | None:
+                """A settling seat at the record's grain, through the gap fill's tests but the band's outline (the band is
+                pushed back for a thin column), or None."""
+                x, y = round(x, 1), round(y, 1)
+                if within is not None and (x + clump * 0.9 < within[0] or x - clump * 0.9 > within[2] or y + clump * 0.9 < within[1] or y - clump * 0.9 > within[3]):
+                    return None
+                if not blocks.static_clear(x, y) or (_near is not None and not _near.too_near(x, y)) or near_seats.too_near(x, y):
+                    return None
+                near_seats.add(x, y)
+                near_clumps.add(x, y)
+                return (x, y)
+
+            _ways = [ln.get("pts") or [] for ln in self.M.get("lanes") or []] + [st_.get("poly") or [] for st_ in self.M.get("streams") or []]
+            _trim = (lambda cs: trim_to_the_wind(cs, _houses, wind)) if wind is not None else None
+            seated = settle_the_belt(seated, r=round(clump / 2, 1), houses=_houses, wind=wind or (0.0, -1.0), ways=_ways, page=page, band=poly, seat=_settle_seat, reach=reach, trim=_trim)
+        elif role == "windbreak" and wind is not None and len(seated) > 1:
+            seated = trim_to_the_wind(seated, _houses, wind)
         if role == "copse" and len(seated) > 1:
             seated = stocked_copse(seated, clump / 2 + 4.0)
         clumps = [[x, y] for x, y in seated]  # the seats are at the record's grain (W01), so the record is the ink

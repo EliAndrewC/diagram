@@ -8,14 +8,15 @@ from typing import Any, cast
 
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._geom import CanopyArea
-from l7r.diagram.settlement.homestead_parts.groves import homestead_wood_ft2
+from l7r.diagram.settlement.homestead_parts.belt_law import wind_unit
+from l7r.diagram.settlement.homestead_parts.groves import HOMESTEAD_WOOD_FT2, homestead_wood_ft2
 
 from ..consts import COPSE_BELT_REACH_FT, COPSE_HOUSE_REACH_FT
 from ..homesteads import farmstead_fixtures, household_bamboo
 from ..plan import SitePlan
 from .bamboo import bamboo_seats
 from .belt import belt_polygon
-from .frame import frame_bounds, frame_for, scatter_frame, throw_to_the_view, title_pocket
+from .frame import belt_page, frame_bounds, frame_for, scatter_frame, throw_to_the_view, title_pocket
 from .parcels import CROP_MARGIN, open_ground_patches
 
 # ---- STAGE 7: the ground between everything ------------------------------------------------------
@@ -156,8 +157,11 @@ def stage_bamboo(s: Settlement, plan: SitePlan) -> None:
     """
     s.M["meta"]["bamboo"] = plan.bamboo
     s.M["bamboo_stands"] = []  # the pending seat-time records (T49) are replaced by the drawn ones
-    for role, ring in zip(plan.bamboo_roles, plan.bamboo_polys, strict=True):
-        s.bamboo_stand(ring, role=role)
+    for k, (role, ring) in enumerate(zip(plan.bamboo_roles, plan.bamboo_polys, strict=True)):
+        # ...A HOMESTEAD STRIP NAMES ITS HOUSE (feature 287, homes H01): the owner `household_bamboo` recorded at seating
+        # (`plan.bamboo_of`, by the stand's index) goes on the drawn record as `of`, as every other farmstead part's does
+        if s.bamboo_stand(ring, role=role) and k in plan.bamboo_of:
+            s.M["bamboo_stands"][-1]["of"] = [round(float(plan.bamboo_of[k][0]), 1), round(float(plan.bamboo_of[k][1]), 1)]
 
 
 def stage_woodland(s: Settlement, plan: SitePlan) -> None:
@@ -274,7 +278,22 @@ def plant_the_belt(s: Settlement, plan: SitePlan) -> None:
         _fx0, _fx1 = (min(_fx0, min(_bxs) - 30.0), _fx1) if _wx < 0 else (_fx0, max(_fx1, max(_bxs) + 30.0))
     if abs(_wy) > 1e-6:
         _fy0, _fy1 = (min(_fy0, min(_bys) - 30.0), _fy1) if _wy < 0 else (_fy0, max(_fy1, max(_bys) + 30.0))
-    s.village_grove(_dented, role="windbreak", within=(_fx0, _fy0, _fx1, _fy1), face_margin=CROP_MARGIN, reserved=_tp, wind=plan.wind)
+    # ...ON THE PAGE IT WILL BE DRAWN ON, DEEP, WHOLE AND WITHIN REACH OF THE HOUSES (feature 287, woods W16-W19; plan D8):
+    # `belt_page` answers the view `frame_for` decides from the crowns the belt keeps, so the planter judges the depth, the
+    # holes and the hook on that page; and every crown stands within the band's reach of a farmhouse (`meta.belt_reach`)
+    _reach = s.M["meta"].get("belt_reach")
+    _near = ([(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []], float(_reach)) if _reach else None
+    s.village_grove(
+        _dented,
+        role="windbreak",
+        within=(_fx0, _fy0, _fx1, _fy1),
+        face_margin=CROP_MARGIN,
+        reserved=_tp,
+        near=_near,
+        wind=wind_unit(plan.windward),
+        page=belt_page(s, plan, round(14.0 * s.bscale, 1)),
+        reach=float(_reach) if _reach else None,
+    )
 
 
 def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
@@ -356,13 +375,21 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # than the register's smallest household.
     _wood_ft2 = sum(homestead_wood_ft2(s._hjit(float(h["x"]), float(h["y"]), 210.0)) for h in houses)
     _ft2 = s.px(1.0) ** 2  # px^2 per sq ft
-    _belt_canopy = CanopyArea(2.0 * s.bscale)
-    for g in s.M.get("village_groves") or []:
-        if g.get("role") == "windbreak":
-            for c in (g.get("clumps") or []) + (g.get("clumps_offpage") or []):
-                _belt_canopy.add(float(c[0]), float(c[1]), float(g.get("r") or 0.0))
-    _copse_goal = max(0.0, _wood_ft2 * _ft2 - _belt_canopy.area)
+    _copse_goal = max(0.0, _wood_ft2 * _ft2 - wood_canopy(s, ("windbreak",)))
     s.village_grove(_box, role="copse", dense=False, reserved=title_pocket(s, plan), near=_copse_near, area=_copse_goal)  # the map's name has ground reserved; the copse honors it like the belt does
+    # ...AND NEVER UNDER THE REGISTER'S FLOOR (feature 287, woods W25; plan D9): where the belt and the copse together draw
+    # less than `HOMESTEAD_WOOD_FT2`'s smallest household a homestead, the shortfall is topped up as the homesteads' own
+    # windward trees - in the belt's lee, between it and the houses, each within the dooryard copse's reach of a farmhouse
+    # on its own bank (so the dooryard rule, woods W02, holds of every clump on either siting). Nothing is relaxed: every
+    # seat faces the copse's own tests, and a site the ground cannot hold is the homestead bundle's to reserve (D9).
+    if houses and homestead_wood_drawn(s) < HOMESTEAD_WOOD_FT2[0]:
+        _lee = [(float(c[0]), float(c[1])) for g in s.M.get("village_groves") or [] if g.get("role") == "windbreak" for c in g.get("clumps") or []]
+        _lx = [x for x, _y in _lee] + xs
+        _ly = [y for _x, y in _lee] + ys
+        _top = [(min(_lx) - pad, min(_ly) - pad), (max(_lx) + pad, min(_ly) - pad), (max(_lx) + pad, max(_ly) + pad), (min(_lx) - pad, max(_ly) + pad)]
+        _short = (HOMESTEAD_WOOD_FT2[0] - homestead_wood_drawn(s)) * len(houses) * _ft2
+        _house_near = ([(float(x), float(y)) for x, y in zip(xs, ys, strict=False)], s.px(COPSE_HOUSE_REACH_FT), _brook)
+        s.village_grove(_top, role="copse", dense=False, reserved=title_pocket(s, plan), near=_house_near, area=_short)
     # RECORD WHAT THE GROUND GAVE, beside what the knob asked for (settlement-review, feature 230 pass 12; the same
     # move `place_kosatsuba` makes with `kosatsuba_well_ft`, and for the same reason). `copse_siting` says
     # `among_the_houses` on four of the five pool maps, and what that produces depends entirely on whether the
@@ -370,19 +397,34 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # single row on a dike head has no interior at all and gets 3. A reader - or a later check - reading the knob
     # alone is told five maps did the same thing. These two numbers say what each one actually drew, and they
     # claim nothing: a count and a distance, not a second label.
-    _cop = next((g for g in s.M.get("village_groves") or [] if g.get("role") == "copse"), None)
+    _cop = [c for g in s.M.get("village_groves") or [] if g.get("role") == "copse" for c in g.get("clumps") or []]
     _hs = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]
-    if _cop and _hs and _cop.get("clumps"):
-        _near = sorted(min(math.dist((float(c[0]), float(c[1])), h) for h in _hs) for c in _cop["clumps"])
+    if _cop and _hs:
+        _near = sorted(min(math.dist((float(c[0]), float(c[1])), h) for h in _hs) for c in _cop)
         s.M["meta"]["copse_clumps"] = len(_near)
         s.M["meta"]["copse_house_ft"] = round(_near[len(_near) // 2] * float(s.M["meta"].get("ftpx") or 1), 1)
     # ...and what the woods came to beside what was rolled, so a copse the ground could not hold is a number, not a silence
-    _copse_canopy = CanopyArea(2.0 * s.bscale)
-    if _cop:
-        for c in _cop.get("clumps") or []:
-            _copse_canopy.add(float(c[0]), float(c[1]), float(_cop["r"]))
     if _hs:
-        s.M["meta"]["homestead_wood_ft2"] = {
-            "rolled": round(_wood_ft2 / len(_hs)),
-            "drawn": round((_belt_canopy.area + _copse_canopy.area) / _ft2 / len(_hs)),
-        }
+        s.M["meta"]["homestead_wood_ft2"] = {"rolled": round(_wood_ft2 / len(_hs)), "drawn": round(homestead_wood_drawn(s))}
+
+
+def wood_canopy(s: Settlement, roles: Sequence[str]) -> float:
+    """The ground (px^2) the village groves of `roles` cover - each role's crowns unioned at its clumps' radius, on the page
+    and off it (the belt's trees stand whether the page shows them or not), the roles summed."""
+    total = 0.0
+    for role in roles:
+        area = CanopyArea(2.0 * s.bscale)
+        for g in s.M.get("village_groves") or []:
+            if g.get("role") == role:
+                for c in (g.get("clumps") or []) + (g.get("clumps_offpage") or []):
+                    area.add(float(c[0]), float(c[1]), float(g.get("r") or 0.0))
+        total += area.area
+    return total
+
+
+def homestead_wood_drawn(s: Settlement) -> float:
+    """THE ONE PREDICATE of the homesteads' wood floor (feature 287, woods W25; research/vegetation/210): the wood each
+    homestead keeps, in sq ft - the belt and the copse together, shared among the houses - which the register puts at no
+    less than `HOMESTEAD_WOOD_FT2[0]`. `meta.homestead_wood_ft2.drawn` records it."""
+    houses = s.M.get("houses") or []
+    return wood_canopy(s, ("windbreak", "copse")) / s.px(1.0) ** 2 / len(houses) if houses else 0.0

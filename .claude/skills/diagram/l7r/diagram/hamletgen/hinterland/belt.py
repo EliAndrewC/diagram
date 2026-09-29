@@ -336,9 +336,20 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     # spends the SIZE budget (canopy worth 40% of the roof area it shelters, which a belt trimmed to
     # half its length cannot meet). Shrinking first cost both checks on two cohort maps.
     belt = band(1.0, 0.0)
+    span_f, back = 1.0, 0.0
     for span_f, back in ((1.0, 0.0), (1.0, 22.0), (1.0, 44.0), (0.88, 44.0), (0.74, 60.0), (0.6, 60.0)):
         belt = band(span_f, back)
         if not fouled(belt):
             break
     s.M.setdefault("meta", {})["belt_near_vertices"] = _near_n[0]
+    # THE BAND'S REACH (feature 287, woods W19): how far its designed far face stands from the house it is laid behind - the
+    # near stand-off, the depth, the far face's rag, the afternoon-sun offset and the step back the ladder took, ALONG the
+    # wind; and a column is laid behind the windward-most house within its own window ACROSS the wind (`fringe_profile`'s
+    # `near`, half a column and 40 ft), so the far face stands that much farther from that house on the diagonal. A crown
+    # farther than this from every farmhouse shelters none of them (Inashiro: 63 of 308 crowns over 200 ft from any house,
+    # the furthest 518, on a limb joining a cluster's two groups), so the belt is planted within it (`plant_the_belt`) and
+    # the stretch it leaves between two groups is a run break, not a hole (`belt_law`). The designed reach ALONG the wind
+    # alone was tried first and cut into the band the design lays: a column's far face stood beyond it wherever its house
+    # stood across the wind from it, the depth could not be kept there, and cohort seed 37's belt lost 120 of 332 crowns.
+    s.M["meta"]["belt_reach"] = round(math.hypot(BELT_NEAR_FT + BELT_DEPTH_FT + BELT_FAR_RAG_FT + _sun_off + back, half * span_f / COLS + 40.0), 1)
     return [(max(6.0, min(plan.W - 6.0, bx)), max(6.0, min(plan.H - 6.0, by))) for bx, by in belt]

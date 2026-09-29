@@ -19,6 +19,8 @@ import re
 
 import pytest
 
+from l7r.diagram.settlement.homestead_parts.belt_law import DEPTH_BIN_FT, MIN_BELT_DEPTH_FT, belt_depths, belt_holes
+
 SKILL = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 GENS = sorted(glob.glob(os.path.join(SKILL, "pool", "hamlets", "*", "*.gen.py")))
 NW_COMPASS = 315.0
@@ -65,96 +67,11 @@ def test_every_pool_hamlet_has_its_belt_on_the_regional_northwest(gen: str) -> N
     assert 360.0 - gap <= 200.0, f"the belt subtends {360.0 - gap:.0f} deg round its cluster"
 
 
-MIN_BELT_DEPTH_FT = 30.0  # research/vegetation/020: a belt 'shallower than about 30 ft reads as a row of blobs'
-DEPTH_BIN_FT = 40.0
 BELT_DESIGN_DEPTH_FT = 110.0  # the band `belt_polygon` draws, 36..146 px behind the fringe at 1 ft per px
 
-
-def _way_samples(m: dict) -> list[tuple[float, float]]:
-    """Points every 10 ft along each lane and the brook - a way or the water through the belt parts it, and that
-    gap is not a thin stretch."""
-    out: list[tuple[float, float]] = []
-    for rec in [*m.get("lanes", []), *m.get("streams", [])]:
-        pts = rec.get("pts") or rec.get("poly") or []
-        for (ax, ay), (bx, by) in zip(pts, pts[1:], strict=False):
-            n = max(1, int(math.hypot(bx - ax, by - ay) // 10))
-            out += [(ax + (bx - ax) * i / n, ay + (by - ay) * i / n) for i in range(n + 1)]
-    return out
-
-
-def belt_depths(m: dict) -> list[float | None]:
-    """The belt's depth ALONG the wind, per 40 ft bin ACROSS it: the extent of its crowns (1 px = 1 ft on a hamlet). A bin a way or the brook runs THROUGH, or the page's edge cuts, reads None."""
-    q = {"NW": (-1.0, -1.0), "N": (0.0, -1.0), "W": (-1.0, 0.0)}[m["meta"]["windward"]]
-    wx, wy = q[0] / math.hypot(*q), q[1] / math.hypot(*q)
-    px, py = -wy, wx
-    hs = m["houses"]
-    cx, cy = sum(h["x"] for h in hs) / len(hs), sum(h["y"] for h in hs) / len(hs)
-    g = next(g for g in m["village_groves"] if g["role"] == "windbreak")
-    r = g.get("r", 14.0)
-    on = g["clumps"]
-    cl = [((x - cx) * wx + (y - cy) * wy, (x - cx) * px + (y - cy) * py) for x, y in on + g.get("clumps_offpage", [])]
-    lo = min(v for _u, v in cl)
-    bins: dict[int, list[float]] = {}
-    for u, v in cl:
-        bins.setdefault(int((v - lo) // DEPTH_BIN_FT), []).append(u)
-    # A BIN THE PAGE'S EDGE CUTS IS NOT JUDGED: the frame, not the belt, is what is thin there (Inashiro's belt runs off
-    # the top of its view, and the canvas squeezes the part a reader never sees).
-    framed = {int((v - lo) // DEPTH_BIN_FT) for _u, v in cl[len(on) :]}
-    # ...and a bin whose crowns stand within the belt's own designed depth of the page's edge: where the view starts at the
-    # canvas's edge there are no crowns off the page to count - the canvas clamps the belt - but the frame takes its depth
-    # just the same, which the record accepts (the belt's inner face is kept at the frame, its depth clipped; Mizuguchi).
-    x0, y0, w, h = (float(c) for c in m["meta"].get("view") or (-1e9, -1e9, 2e9, 2e9))  # no view recorded: no frame
-    framed |= {int((v - lo) // DEPTH_BIN_FT) for (x, y), (_u, v) in zip(on, cl, strict=False) if min(x - x0, y - y0, x0 + w - x, y0 + h - y) <= 2 * r}
-
-    def _band_leaves_the_page(b: int) -> bool:
-        """Does the belt's band at bin `b` - across the depth its neighbors' crowns span - run off the view? Then the frame,
-        not the planting, decides what is drawn there (Mizuguchi's belt, laid along the canvas's west edge)."""
-        us = [w2 for k in (b - 1, b, b + 1) for w2 in bins.get(k, [])]
-        if not us:
-            return False
-        v = lo + (b + 0.5) * DEPTH_BIN_FT
-        for u in (min(us), (min(us) + max(us)) / 2, max(us)):
-            x, y = cx + wx * u + px * v, cy + wy * u + py * v
-            if not (x0 <= x <= x0 + w and y0 <= y <= y0 + h):
-                return True
-        return False
-
-    framed |= {b for b in range(max(bins) + 1) if _band_leaves_the_page(b)}
-    # ...and the TIPS: a bin at the end of a run of crowned bins is where a belt tapers - it is deepest in the middle
-    # (research/vegetation/020) - and one crown there is the taper, not the one-row arm this measures
-    framed |= {b for b in bins if not bins.get(b - 1) or not bins.get(b + 1)}
-
-    def through(b: int, u: float) -> bool:
-        """Inside the belt's thickness there - between the near and far crowns of this bin and its neighbors, a
-        crown's radius in from each face. A lane along the belt's inner face is not a way through it."""
-        us = [w for k in (b - 1, b, b + 1) for w in bins.get(k, [])]
-        return bool(us) and min(us) + r < u < max(us) - r
-
-    # A WAY PARTS THE BELT ONLY WHERE IT CROSSES IT, face to face: its samples inside the belt's band at a bin must span at
-    # least half the band's depth there. A lane running ALONG the belt inside its band parts nothing - and exempting it hid
-    # the very defect this measures: Kashikawa's seed-8 windward arm, one row deep beside its main lane.
-    inside: dict[int, list[float]] = {}
-    for x, y in _way_samples(m):
-        b = int((((x - cx) * px + (y - cy) * py) - lo) // DEPTH_BIN_FT)
-        u = (x - cx) * wx + (y - cy) * wy
-        if through(b, u):
-            inside.setdefault(b, []).append(u)
-    parted = set()
-    for b, us_in in inside.items():
-        band = [w2 for k in (b - 1, b, b + 1) for w2 in bins.get(k, [])]
-        if max(us_in) - min(us_in) >= 0.5 * (max(band) - min(band) - 2 * r):
-            parted.add(b)
-    out: list[float | None] = []
-    for b in range(max(bins) + 1):
-        us = sorted(bins.get(b, []))
-        if b in parted or b in framed:
-            out.append(None)
-            continue
-        # the belt's EXTENT along the wind in this slice, crown edge to crown edge: a belt one row deep - the defect this
-        # measures (Kashikawa's windward arm) - reads one crown; a longest-touching-run measure broke a sparse but deep
-        # stand into short runs and read 28 ft where the drawing shows about 100 (Mizuguchi)
-        out.append((us[-1] - us[0] + 2 * r) if us else 0.0)
-    return out
+# THE ONE PREDICATE (feature 287, woods W16): the depth measure this file used to carry is the engine's now, and the placer
+# that plants the belt (`settle_the_belt`) asks the same one - lifted unchanged but for W19's run break (an empty stretch no
+# house stands before) and an opening a way crosses face to face (`BeltReading._crossed`), which W17 judges.
 
 
 @pytest.mark.parametrize("gen", GENS, ids=lambda g: os.path.basename(g).removesuffix(".gen.py"))
@@ -190,13 +107,12 @@ def test_every_pool_belt_keeps_its_depth_across_its_windward_face(gen: str) -> N
     assert min(judged) >= MIN_BELT_DEPTH_FT, f"belt depths per {DEPTH_BIN_FT:.0f} ft: {depths}"
 
 
-def test_belt_depths_reads_a_thin_stretch_and_a_parted_one() -> None:
-    """The measure itself: a two-row block reads its depth, a lone crown reads one crown, and a lane through a bin
-    leaves that bin unjudged, while one along the belt's inner face does not; nor is a bin the page's edge cuts."""
-    m = {
-        "meta": {"windward": "N"},
-        "houses": [{"x": 0.0, "y": 0.0}],
-        "village_groves": [{"role": "windbreak", "r": 10.0, "clumps": [[5.0, -100.0], [5.0, -120.0], [45.0, -100.0], [85.0, -100.0], [85.0, -160.0]], "clumps_offpage": [[125.0, -100.0]]}],
-        "lanes": [{"pts": [[85.0, 0.0], [85.0, -200.0]]}, {"pts": [[0.0, -80.0], [90.0, -80.0]]}],
-    }
-    assert belt_depths(m) == [None, 20.0, None, None]
+@pytest.mark.parametrize("gen", GENS, ids=lambda g: os.path.basename(g).removesuffix(".gen.py"))
+def test_every_pool_belt_is_whole(gen: str) -> None:
+    """Feature 287, woods W17: the belt has no hole - no opening across the wind over 30 ft between two crowns, but where a
+    way crosses it face to face, the page cuts it, or no house stands before it (W19's run break); a gap funnels the wind.
+    The finished-map form of the rule `settle_the_belt` keeps where the belt is planted (the measure's own unit tests are
+    `tests/settlement/test_belt_law.py`)."""
+    m = _manifest(gen)
+    assert any(g["role"] == "windbreak" for g in m["village_groves"]), "non-vacuity: the map has a windbreak"
+    assert belt_holes(m) == [], f"holes across the wind (v from, v to): {belt_holes(m)}"

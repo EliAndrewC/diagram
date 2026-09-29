@@ -105,6 +105,27 @@ def frame_for(s: Settlement, plan: SitePlan) -> tuple[float, float, float, float
     return content_view(s._crop_boxes(city=False), frame_extras(s, plan), CROP_MARGIN, s.W, s.H)
 
 
+def belt_page(s: Settlement, plan: SitePlan, r: float) -> Any:
+    """The view `frame_for` will decide once the belt stands, as a function of the belt's crowns (feature 287, woods W16-W19
+    and M6): the crop's boxes over the map with a windbreak record of those crowns (radius `r`) beside what is already
+    recorded, `frame_extras` and `CROP_MARGIN` - `content_view`, the crop's own body. The belt is the last frame-setting
+    feature and `frame_for` runs straight after it is planted, so the page this answers for the crowns the belt keeps IS
+    the decided view, and the planter can judge the belt on the page it will be drawn on."""
+    from l7r.diagram.settlement._knobs import crop_boxes  # noqa: PLC0415 - kept beside its one use
+    from l7r.diagram.settlement.core import content_view  # noqa: PLC0415 - kept beside its one use
+
+    from .parcels import CROP_MARGIN  # noqa: PLC0415 - parcels imports this module
+
+    extras = frame_extras(s, plan)
+    groves = list(s.M.get("village_groves") or [])
+
+    def page(seats: list[tuple[float, float]]) -> tuple[float, float, float, float]:
+        rec = {"role": "windbreak", "r": r, "clumps": [[x, y] for x, y in seats], "clumps_offpage": []}
+        return content_view(crop_boxes({**s.M, "village_groves": [*groves, rec]}, False, s.ftpx, s.W, s.H), extras, CROP_MARGIN, s.W, s.H)
+
+    return page
+
+
 def frame_bounds(s: Settlement, plan: SitePlan) -> tuple[float, float, float, float]:
     """The view as (x0, y0, x1, y1): `plan.view` once it is decided, and until then `frame_for` of the map as it stands -
     ONE function for every placer that asks where the page will be (feature 287, M6)."""

@@ -780,6 +780,7 @@ class GroundCoverMixin:
 
         def record(poly: Poly) -> None:
             self.M.setdefault("clearings", []).append({"poly": [[round(px, 1), round(py, 1)] for px, py in poly], "seq": self._cover_n})
+            self._cull_cover_in(poly)
 
         for (ocx, ocy), opoly in zip(self._verge_centers, self.clearings, strict=True):
             if abs(ocx - x) <= 4 and abs(ocy - y) <= 4:  # the documented duplicate-registration pattern: reuse the reserved blob
@@ -808,6 +809,29 @@ class GroundCoverMixin:
         self.clearings.append(verge)
         self._verge_centers.append((x, y))
         record(verge)
+
+    def _cull_cover_in(self: Settlement, ring: Poly) -> None:  # type: ignore[misc]
+        """Take out of every scatter still waiting for the finish (`_blade_groups`, `_mark_groups`) each grass blade ROOTED
+        inside the swept clearing `ring`, and each brush dot or pine stroke whose extent's middle lies inside it (feature
+        287, woods W10). The scatter skips the clearings that exist when it runs; a clearing swept after it - a household
+        shrine seated after the scrub - was dotted over. Its marks are deferred to the finish, so the ground is cleared
+        here, where the clearing is made, and the order the two were placed in cannot matter. The clearing is bare, which
+        is what it is; no feature moves."""
+        xs, ys = [float(q[0]) for q in ring], [float(q[1]) for q in ring]
+        x0, y0, x1, y1 = min(xs), min(ys), max(xs), max(ys)
+        idx = RingIndex(ring)
+
+        def swept(px: float, py: float) -> bool:
+            return x0 <= px <= x1 and y0 <= py <= y1 and idx.inside(px, py)
+
+        for k, (z, color, blades) in enumerate(self._blade_groups):
+            kept = [ln for ln in blades if not swept(float(ln[0]), float(ln[1]))]
+            if len(kept) != len(blades):
+                self._blade_groups[k] = (z, color, kept)
+        for k, (z, marks) in enumerate(self._mark_groups):
+            left = [mk for mk in marks if not swept((mk[0] + mk[2]) / 2.0, (mk[1] + mk[3]) / 2.0)]
+            if len(left) != len(marks):
+                self._mark_groups[k] = (z, left)
 
     def reserve_clearing(self: Settlement, x: float, y: float, w: float, h: float, extra: float = 46) -> None:  # type: ignore[misc]
         """Pre-register a swept-ground clearing for a sacred/funerary feature a gen draws LATER (e.g. a

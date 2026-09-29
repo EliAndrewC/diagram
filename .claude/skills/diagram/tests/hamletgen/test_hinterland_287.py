@@ -220,3 +220,87 @@ def test_a_roll_with_no_parcel_on_the_sheet_records_its_wood_beyond_it() -> None
     assert woodland_on_the_sheet(s, plan, []) == []
     rec = s.M["meta"]["woodland_offsheet"]
     assert rec == woodland_offsheet(plan) and rec["bearing"] == "N" and rec["parcels"] == plan.woodland_patches
+
+
+# ---- woods W16-W19: the belt planted on the page it will be drawn on, within the band's reach -----------------------
+
+
+def _cluster_plan():  # type: ignore[no-untyped-def]
+    plan = a_plan()  # the wind from the north
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.meta(name="W", scale="hamlet", ftpx=1, down_deg=90, windward="N")
+    s.M["houses"] = [{"x": float(x), "y": 900.0, "w": 40.0, "h": 30.0, "rot": 0} for x in range(450, 951, 100)]
+    return s, plan
+
+
+def test_the_band_records_its_reach_and_the_belt_keeps_every_crown_within_it() -> None:
+    """Woods W19: `belt_polygon` records the band's far-face reach (its depth along the wind with the column's window across
+    it), and every crown the planted belt keeps stands within that reach of a farmhouse."""
+    from l7r.diagram.hamletgen.hinterland import belt as beltmod
+    from l7r.diagram.hamletgen.hinterland import stages
+
+    s, plan = _cluster_plan()
+    plan.belt = hinterland.belt_polygon(s, plan)
+    reach = s.M["meta"]["belt_reach"]
+    along = beltmod.BELT_NEAR_FT + beltmod.BELT_DEPTH_FT + beltmod.BELT_FAR_RAG_FT
+    assert along < reach < along + 200.0, "the far face along the wind, grown by the column's window across it"
+    stages.plant_the_belt(s, plan)
+    g = next(g for g in s.M["village_groves"] if g["role"] == "windbreak")
+    hs = [(h["x"], h["y"]) for h in s.M["houses"]]
+    assert g["clumps"] and all(min(math.dist(c, h) for h in hs) <= reach for c in g["clumps"])
+
+
+def test_the_page_the_planter_judges_is_the_view_the_frame_decides() -> None:
+    """M6 for the belt (woods W16-W18): `belt_page` over the crowns the belt keeps answers exactly the view `frame_for`
+    decides once the belt stands, so the depth, the holes and the hook are judged on the page the belt is drawn on."""
+    from l7r.diagram.hamletgen.hinterland import stages
+    from l7r.diagram.hamletgen.hinterland.frame import belt_page, frame_for
+
+    s, plan = _cluster_plan()
+    s.M["fields"] = [{"outline": [[400.0, 1000.0], [1000.0, 1000.0], [1000.0, 1400.0], [400.0, 1400.0]]}]
+    plan.belt = hinterland.belt_polygon(s, plan)
+    page = belt_page(s, plan, 14.0)
+    stages.plant_the_belt(s, plan)
+    g = next(g for g in s.M["village_groves"] if g["role"] == "windbreak")
+    assert g["clumps"] and page([(c[0], c[1]) for c in g["clumps"]]) == frame_for(s, plan)
+
+
+# ---- homes H01 on the drawn record: a homestead bamboo stand names its house ---------------------------------------
+
+
+def test_a_drawn_homestead_stand_carries_its_owner() -> None:
+    from l7r.diagram.hamletgen.hinterland import stages
+
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    plan.bamboo_polys = [[(500.0, 500.0), (560.0, 500.0), (560.0, 540.0), (500.0, 540.0)], [(700.0, 500.0), (760.0, 500.0), (760.0, 540.0), (700.0, 540.0)]]
+    plan.bamboo_roles = ["homestead", "thicket"]
+    plan.bamboo_of = {0: (530.0, 580.0)}
+    stages.stage_bamboo(s, plan)
+    assert [r.get("of") for r in s.M["bamboo_stands"]] == [[530.0, 580.0], None]
+
+
+# ---- woods W25: the homesteads' wood never under the register's floor ------------------------------------------------
+
+
+def test_a_woods_short_of_the_floor_is_topped_up_among_the_houses() -> None:
+    """Woods W25 / plan D9, the violating case: a belt that stands off the sheet and a copse siting whose belt gives it no
+    lee face, so the first copse seats nothing. The top-up plants the homesteads' own trees up to the floor, each within
+    the dooryard copse's reach of a farmhouse (so woods W02 holds of every clump)."""
+    from l7r.diagram.hamletgen.consts import COPSE_HOUSE_REACH_FT
+    from l7r.diagram.hamletgen.hinterland import stages
+    from l7r.diagram.settlement.homestead_parts.groves import HOMESTEAD_WOOD_FT2
+
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.meta(name="W", scale="hamlet", ftpx=1, down_deg=90, windward="N")
+    s.M["houses"] = [{"x": float(x), "y": float(y), "w": 30.0, "h": 24.0, "rot": 0} for x in (500, 700, 900) for y in (600, 800)]
+    plan.belt = [(2000.0, 100.0), (2100.0, 100.0), (2100.0, 150.0), (2000.0, 150.0)]
+    plan.copse_siting = "against_the_belt"
+    assert stages.homestead_wood_drawn(s) == 0.0, "non-vacuity: no wood at all before the stage"
+    stages.stage_windbreak(s, plan)
+    hs = [(h["x"], h["y"]) for h in s.M["houses"]]
+    copse = [c for g in s.M["village_groves"] if g["role"] == "copse" for c in g["clumps"]]
+    assert copse and all(min(math.dist(c, h) for h in hs) <= COPSE_HOUSE_REACH_FT for c in copse)
+    assert stages.homestead_wood_drawn(s) >= HOMESTEAD_WOOD_FT2[0] and s.M["meta"]["homestead_wood_ft2"]["drawn"] >= HOMESTEAD_WOOD_FT2[0]
+    assert stages.homestead_wood_drawn(Settlement(W=100, H=100, seed=1)) == 0.0
