@@ -60,6 +60,13 @@ the pilot; the GM reads the pages in this feature's clone.
 - **FR-010**: A merge MUST keep every finding, label (accurate / deviation / convention / GUESS), GM ruling, spec
   rule and footnote of the sections merged, except what the guide cuts by name; every link into a merged section MUST
   be re-aimed at the new anchor.
+- **FR-012** (GM 2026-09-29, the review of the first pilot): the bullet list is named **lead-line bullets**, not Q&A;
+  a lead line is a one-sentence summary of its bullet - a declarative statement for a straightforward fact, a question
+  for a finding that is complicated, a range or approximation, an educated guess or a conclusion from thin sourcing -
+  and makes sense to a reader who has read only what comes before it. The check MUST rule on every lead line.
+- **FR-013** (GM 2026-09-29): a metric figure in the record's own prose MUST carry its conversion to feet, rounded to
+  the nearest foot with a tilde, in parentheses; a quotation is never converted. A script MUST list every metric figure
+  in a section's own prose that lacks one, and the check MUST report each as a failure.
 - **FR-011**: The GM's sign-off on the guide and the check MUST be an open task, and the sweep's tasks MUST NOT be
   written or started before it is ticked.
 
@@ -77,6 +84,10 @@ the pilot; the GM reads the pages in this feature's clone.
 - **SC-006** (FR-007): both terms are in the glossary and wrap on the restyled section.
 - **SC-007** (FR-008): the check, run on the grove section as it stood before the rewrite, finds the faults the GM
   named in their example; run on the rewrite, it finds none it cannot justify.
+- **SC-009** (FR-012): the updated check, run on the grove section as it stood before the GM's review, names the
+  "before 1868" lead line and the lead lines in the wrong form; run on the revision, it finds none.
+- **SC-010** (FR-013): a unit test proves the prepass lists an unconverted metric figure in the prose and never one in a
+  quotation, a comment or with its conversion beside it.
 - **SC-008** (FR-011, spec-wide): the tasks file ends the pilot in an unticked GM sign-off task.
 
 ## Decisions Recorded

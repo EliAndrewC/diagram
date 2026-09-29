@@ -40,20 +40,38 @@ the GM's example, awaiting the GM's confirmation in the pilot).
   opening gave "about 33" without the bullet's caveat that 33 is this page's arithmetic.)
 - **A date a newcomer cannot place is tied once to its period**: "before 1868, in the Edo period". (inferred)
 
-## 3. The findings are short bullets, most led by a question
+## 3. The findings are lead-line bullets
+
+The list is called **lead-line bullets**, not Q&A: every bullet opens with a bold LEAD LINE, which is a statement or a
+question as the finding calls for. (GM: *"I suspect I might have inadvertently biased you towards making these bolded
+highlights into questions ... I think that we need to come up with a different name for it."*)
 
 - **One finding per bullet.** A run of findings joined by semicolons is split, each ending in a period. (GM: *"this
   is enough information to be its own bullet point ... end this with a period instead of a semicolon."*)
-- **A bullet opens with a bold lead line on its own line** - usually the question a reader would ask
-  (**What was the average number of trees per farmhouse?**), sometimes a plain statement of the point
-  (**Our maps draw every canopy tree.**). The body follows on the next line. (GM, both forms in their example.)
+- **The lead line is bold, on its own line, and the body follows on the next.** It is a one-sentence summary of the
+  bullet, and the body says how we know it. (GM: *"a good one sentence summary of what the paragraph can be. And then
+  the paragraph goes into detail about how we know the top line sentence."*)
+- **A statement when the finding is a straightforward fact; a question when it is not.** A plain fact the sources
+  establish - that the groves existed, that they stood on different sides in different regions - is a declarative lead
+  line: **Farming communities have had these groves for centuries.** A finding that is complicated, a range or an
+  approximation, an educated guess, or a conclusion drawn from thin sourcing is a question: **How tall were they?**
+  (a range with an average), **How large would these groves get?** (an educated guess, cited). A question is better
+  than a statement of doubt ("We don't know how large...") because there IS a sourced guess. Only a point resting on
+  no evidence at all, pure conjecture, goes back to a statement. (GM: *"depends on whether or not there is a
+  straightforward fact that we are attempting to convey. If there is, then we make it as a declarative statement. And
+  if what we are expressing is complicated or we are explaining a level of uncertainty, and summarizing the conclusions
+  that we have made based on our research, then it should be phrased as a question."*)
+- **A lead line makes sense to a reader who has read only what comes before it.** A date, a name or a term whose
+  relevance the reader has not yet been given - "before 1868" before anything has said why that year matters - is
+  either explained before it or kept out of the lead line. (GM: *"someone just starting to read this document ...
+  would have no idea whatsoever why the year 1868 is being mentioned, or why it would even occur to us to ask."*)
 - **A lead-in sentence where the bullet needs context.** When the bullet's figures only make sense against
   something ("Having established the *number* of trees, how are they arranged?"), or a reader would not see why it
   matters, one or two sentences of lead-in come first, in plain terms for a non-expert; when the bullet already flows,
   it has none. (GM: *"I wrote a leading sentence as well as a bolded question
   ... because that helped contextualize the numbers that came after it. The previous bullet points didn't need
   that."*)
-- **Not everything is a Q&A bullet.** The opening, a ruling, the map's rule (`class="spec"`) and a short join between
+- **Not everything is a bullet.** The opening, a ruling, the map's rule (`class="spec"`) and a short join between
   bullets stay prose. (GM: *"not everything needs to be a Q&A style bullet point."*)
 - **An aside that carries a real finding is its own bullet**, not a parenthesis or an italic afterthought. (GM, of the
   Okinawa cross-check: *"it deserves its own bullet point and doesn't need to be a parenthetical."*)
@@ -92,7 +110,18 @@ the GM's example, awaiting the GM's confirmation in the pilot).
 - Project jargon ("arm", "belt", "appurtenance", "roll", "footprint", "tier") is replaced by the plain word where one
   exists, and glossed where it must stay. (inferred)
 
-## 6. What does not change
+## 6. Units
+
+- **A metric figure in our own prose carries its conversion to feet**, rounded to the nearest foot with a tilde, in
+  parentheses after it: "11 to 28 m (~36-92 ft), about 15 m (~49 ft) on average". A quoted passage is never touched -
+  a footnote quotes its source as the source wrote it. (GM: *"any time we expressed something in meters, then we also
+  convert it to feet and then round to the nearest foot with a tilde ... this rule about units only applies to text
+  that we ourselves write."*)
+- A figure under a foot converts to inches the same way ("10 cm (~4 in)"), and an area in hectares or square meters to
+  acres or square feet. (inferred - rounding 10 cm to the nearest foot gives nothing.)
+- The prepass (`make style-prepass`) lists every metric figure in the section's own prose with no conversion beside it.
+
+## 7. What does not change
 
 Every other rule of the record holds: every assertion footnoted with a quoted passage; the four labels, visible
 (a GUESS stays a GUESS, said where the claim stands); absence notes; GM rulings with the alternatives declined; the

@@ -30,6 +30,9 @@ A check BUNDLE: its `MANIFEST.md` lists the files. Read them from the bundle; op
 - `STYLE.md` - the style guide. **It is your rulebook: every rule you judge is a rule in it, and you judge no rule
   it does not state.** Each rule is marked **GM** (the GM said it) or **inferred** (awaiting the GM's confirmation);
   judge both, and say which a finding rests on.
+- `style-prepass.txt` - what a pattern found: every METRIC figure in the section's own prose with no conversion to feet
+  (each one is a FAIL of the guide's units rule - report it with the converted figure), and every LEAD LINE, marked `Q`
+  or `S`, which you rule on one by one.
 - `glossary-variants.txt` - every word the glossary defines, one per line; grep it before saying a term needs a tooltip
   (a word on it is ALREADY a tooltip on the page).
 - Optionally `extra/`: the OLD sections a merge replaced, with their notes. When they are there, you also audit the
@@ -56,11 +59,20 @@ Do not list what passes. Do not restate the guide. Do not judge citations, quota
    its form - with the headline numbers? Would a reader who stopped there know what the thing was?
 4. **Order.** Does it read as one organized account, or as sections appended one after another (a repeated fact, a
    second introduction, a "before 1868" block bolted on at the end where it belongs beside what it qualifies)?
-5. **Bullets.** One finding per bullet? A bullet that runs findings together with semicolons, or carries several
-   separate points, is a FAIL with the split. Does each bullet open with a bold lead line of its own (a question a
-   reader would ask, or a plain statement), the body on the next line? Where the figures would be opaque without
-   context, is there a lead-in sentence - and where the bullet already flows, is there none?
-6. **Prose where prose belongs.** The opening, a ruling, the map's rule, a short join: forcing these into Q&A bullets
+5. **Lead-line bullets.** One finding per bullet? A bullet that runs findings together with semicolons, or carries
+   several separate points, is a FAIL with the split. Does each bullet open with a bold lead line of its own that
+   summarizes it in one sentence, the body on the next line saying how we know? Where the figures would be opaque
+   without context, is there a lead-in sentence - and where the bullet already flows, is there none?
+5a. **Statement or question - rule on EVERY lead line the prepass lists.** A straightforward fact the sources establish
+   takes a declarative lead line; a finding that is complicated, a range or an approximation, an educated guess, or a
+   conclusion from thin sourcing takes a question; only a point with no evidence at all goes back to a statement. A
+   lead line in the wrong form is a FAIL with the rewritten line. Do not default to questions: the guide's own example
+   of a wrong question is "Was the grove there before 1868?" for the plain fact that the groves are centuries old.
+5b. **Readable from what came before.** Read the section from the top as a newcomer. A lead line (or the first
+   sentence of its body) that leans on a date, name or term whose relevance nothing above it has given - "before
+   1868" with no word yet on why that year matters - is a FAIL: say what the reader is missing and where it should
+   be given.
+6. **Prose where prose belongs.** The opening, a ruling, the map's rule, a short join: forcing these into bullets
    is a NOTE.
 7. **Asides.** A parenthesis or italic afterthought carrying a real finding should be its own bullet.
 8. **Map after history.** Is what the record found kept apart from, and before, what our maps draw?
@@ -69,7 +81,9 @@ Do not list what passes. Do not restate the guide. Do not judge citations, quota
    draws something and why is KEPT - do not flag it); a `Sources:` roster; a pointer paragraph to a sibling section
    that no longer exists; the GM's inciting question or a paraphrase of it ("This question asks..."); shouted capitals.
    A GM RULING - a decision, with its quoted words - is not the inciting question; do not flag it.
-10. **Terms.** A term a newcomer would not know - grep the variant list first - that is explained neither by a tooltip
+10. **Units.** Each metric figure the prepass lists is a FAIL, with its conversion (nearest foot with a tilde; inches
+    under a foot; acres or square feet for an area). Never flag a figure inside a quotation or a footnote.
+11. **Terms.** A term a newcomer would not know - grep the variant list first - that is explained neither by a tooltip
     nor in the text is a FAIL naming the term and a one-sentence definition. Project jargon ("arm", "belt",
     "appurtenance", "roll", "footprint", "tier") where a plain word exists is a FAIL with the plain word.
 

@@ -1093,6 +1093,12 @@ record-prepass: ## [project] the session notes and vocabulary candidates a patte
 # GUARD_EDIT_OK: feature 251 - SECTION= scopes the new record-prepass operation to one section; no guard changes.
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" $(if $(SECTION),--section "$(SECTION)",)
 
+style-prepass: ## [project] the style guide's mechanical half for one question - metric figures with no feet, and every lead line to rule on - run BEFORE record-style   PAGE=homesteads SECTION=010
+##  PAGE=<name> SECTION=<question>   the question (its file prefix or heading text)
+# GUARD_EDIT_OK: feature 292 - a new read-only operation (the style prepass record-style is handed); no guard changes.
+	@if [ -z "$(PAGE)" ] || [ -z "$(SECTION)" ]; then printf 'make style-prepass: PAGE=<page> SECTION=<question> is required - e.g. make style-prepass PAGE=homesteads SECTION=010\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_style_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(PAGE)" --section "$(SECTION)"
+
 # GUARD_EDIT_OK: feature 250 D14 - a new operation (report every research question over the size cap); no guard changes.
 question-sizes: ## [project] every research question over the size cap (question + notes, feature 250 D14), largest first - make quick fails on one a change touched
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/check-question-size.py" --report

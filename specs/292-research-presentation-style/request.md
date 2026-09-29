@@ -102,3 +102,45 @@ note it has since been edited, and that their general points still hold):
 > An example of something which didn't come up for This section, but which comes up in a lot of other sections, is that we previously had a rule that if I asked a question that kicked off the research, then my exact question would be transcribed verbatim into the section. However, I now think that I want to strike that as a rule, and I instead do not want the inciting question to appear anywhere in the research write-up section, because I think it just confuses things by referring to a conversation whose context the reader will not have. And so, therefore, we should just get rid of it completely, editing that out from all of the sections which have it once we get to the point where we are editing those other sections, which will not be right away.
 >
 > I think a good way to approach this would be to create a new spec kit feature now, where the The first few tasks of the feature are about what we are doing now, and the final unchecked task at the start is going to be my sign off on our checks being good enough. And then really what we are doing with the feature at the start is to iterate one section at a time on trying to write things in a sensible way, as I have laid out, and then when I give my sign off, then instead of this feature being complete and landing on main, that will be the point at which you will add another task or add new tasks or however it is that this is best represented in a spec kit feature to crawl the project and rewrite all of the rest of the research sections according to this style. And then I will be able to tell you to proceed with that all at once because we will already know that you have got it right and that we are ready to kind of rewrite everything. How does that sound? Does that seem like a good way to structure this? And in the meantime, I can inspect the HTML files within your clone rather than inspecting them from the main checkout the way that I normally do.
+
+## The GM's review of the first pilot section, 2026-09-29 (verbatim)
+
+> Okay, one new rule based on my initial review: links to citations should open in a new tab.  I expect this is a simple mechanical change since those links are presumably generated in an automated way, right?  As an example, footnote 1 reads
+>
+> > visit-toyama-sankyoson - "A dispersed settlement with over...
+>
+> and `visit-toyama-sankyoson` is a link, but I would like for that to open in a new tab when clicked.
+>
+> I am reviewing the section now and will make a decision about length before we move on to another section.  I will also review your STYLE.md inferred rules before we proceed with new sections.
+
+> Okay, I think from reading this, I do have some new style rules, which should probably become subagent checks or something.
+>
+> Here is the first one. The very first bullet point opens with this bolded question: "Was the grove there before 1868, in the Edo period?" Now here's the thing. This is a sensible question and someone who looked at all of the footnotes and understood the context of all of the sources that we are reading would understand why we asked it. But to someone just starting to read this document, reading the first section title, reading the first two paragraphs, and then hitting this question, they would have no idea whatsoever why the year 1868 is being mentioned, or why it would even occur to us to ask whether these groves existed before 1868. Now, I suspect I might have inadvertently biased you towards making these bolded highlights into questions in this forum by saying that this was a Q&A style list. I think that we need to come up with a different name for it because in this case, a good bolded sentence to begin this bullet point would be something like "Farming communities have had these groves for centuries." That is a good one sentence summary of what the paragraph can be. And then the paragraph goes into detail about how we know the top line sentence.
+>
+> Now, in some cases, I think that a question and answer format is very good.  For example:
+>
+> > How tall were they?
+> > 11 to 28 m, about 15 m on average.14
+>
+> That is perfect. A plus no notes. at least in terms of the format. I actually do have one note, which is that I think that it would be good if any time we expressed something in meters, then we also convert it to feet and then round to the nearest foot with a tilde to express approximation. For example, this would read
+>
+> > How tall were they?
+> > 11 to 28 m (~36-92 ft), about 15 m (~49 ft) on average.14
+>
+> Now, when I say that any time we express this, I, of course, do not mean when citing our sources. So, for example, the footnote for this reads
+>
+> > kashima-kainyo-1987 - 「Tree heights run from 11 meters to 28 meters, averaging about 15 meters.」 (translated from the Japanese by this project; original: 「樹高は１１メートルから２８メートルで平均１５メートルくらいである。」)
+>
+> And that should not change. And it should not have unit conversions injected into it or anything of the sort. In other words, this rule about units only applies to text that we ourselves write in these research summary sections.
+>
+> Now, overall, I think that the way that we determine whether or not a bullet point bolded opening sentence should be a question or a declarative statement depends on whether or not there is a straightforward fact that we are attempting to convey. If there is, then we make it as a declarative statement. And if what we are expressing is complicated or we are explaining a level of uncertainty, and summarizing the conclusions that we have made based on our research, then it should be phrased as a question. So, for example, the first item in the list should be a declarative statement because we are straightforwardly expressing that these windbreak trees existed and that we know that they existed in pre-modern eras. The bullet point on tree heights should be phrased as a question because the answer is a range of heights with an average. And so we are conveying an approximate truth.
+>
+> here are two more examples of how to apply this general rule:
+>
+> > Windbreak groves sit on different sides in different regions.
+>
+> is perfect as it is because it is making a simple declarative statement that conveys valuable information to the reader, which is then expounded upon in the bullet point underneath.
+>
+> > How large would these groves get?
+>
+> This is perfect as a question because the answer is just that we don't know. And so phrasing it as a question is actually preferable to making a declarative statement such as "We don't know how large these groves would be." Because saying that we don't know is also not quite right. I mean, what we have is an educated guess, and then we are citing our sources about what the educated guess is. And so that is what makes it appropriate for a question. Now, if there was a declarative statement about something that we had literally no evidence for and everything was just conjecture, then at that point, a declarative statement would be fine. But in general, we tend to have some sourcing, even when it is thin, for most or all of our points.

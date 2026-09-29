@@ -170,7 +170,7 @@ def test_each_check_gets_only_its_own_parts(tmp_path: pathlib.Path) -> None:
     rs = tmp_path / "rs"
     assert cb.main(["ways", "--section", "010", "--out", str(rs), "--no-quotes", "--for", "record-style", "--root", str(REPO)]) == 0
     names = {p.relative_to(rs).as_posix() for p in rs.rglob("*") if p.is_file()}
-    assert {"STYLE.md", "glossary-variants.txt"} <= names and "prepass.txt" not in names, "feature 292: record-style reads the guide itself"
+    assert {"STYLE.md", "style-prepass.txt", "glossary-variants.txt"} <= names and "prepass.txt" not in names, "feature 292: record-style reads the guide itself, and its own prepass"
 
 
 def test_a_mode_a_compound_kind_is_a_modal_the_drift_bundle_can_find() -> None:
