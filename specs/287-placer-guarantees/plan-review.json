@@ -1,0 +1,103 @@
+{
+ "feature": "287-placer-guarantees",
+ "plan_sha256": "b6576db4a4911d62d3d40b45933e8a4ccac7708b9ee9c29b7a00a5f23342e844",
+ "reviewed": "2026-09-29",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "M1-M9, P0-P9",
+   "summary": "Shared mechanisms (one predicate per rule, final water first, access-corridor tree replacing the re-roll, the web settles itself, household parts in the envelope, view decided once, recorded marsh, overlap registry, acceptance sweep) and the phase order.",
+   "class": "within",
+   "why": "Each implements FR-001..FR-009 as written: the re-roll is removed (FR-002), later stages re-apply or move before the guarantee (US2), the overlap matrix is kept in scope rather than deferred, and retirements land per phase (FR-007)."
+  },
+  {
+   "id": "D1",
+   "summary": "A placer with no legal candidate drops, draws smaller within the rule, or takes a stated alternative; never the violation.",
+   "class": "within",
+   "why": "FR-005 asks for exactly a per-rule, recorded fallback. A drop is within only where no rule requires the dropped thing; the drops that DO break a rule (cluster shape, burial ground, board, belt, wood floor) are ruled separately below."
+  },
+  {
+   "id": "D2 (homes H14)",
+   "summary": "The 85% seating floor held 'by capacity': plan-time canvas sized at a measured packing density plus an exhaustive pass; the design concedes a strict guarantee is not delivered and states no terminal.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Not physically impossible (the residual is greedy packing, not full ground) and not implied by the GM. The guarantee rests on a density MEASURED on seeds, which is the GM's 'happening to work on particular seeds' moved into a constant, and the design says 'nothing ships under the floor' without saying what the stage does when the exhaustive pass ends short. The plan must name a terminal that emits no shortfall and runs no re-roll (e.g. envelopes shrunk within their researched range via M5's quota, or a declared count refused / a rolled count constrained by a capacity bound computed by construction), or put the residual to the GM as an exception with its measured frequency - not call it a guarantee."
+  },
+  {
+   "id": "D3 (homes H30)",
+   "summary": "A declared fall into the wind refused at spec load; a rolled fall constrained never to run into the wind.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Its justification is physical impossibility, and a shipped pool map contradicts the premise: Sawada declares down_deg=225 (land falling northwest, into the regional wind) and at seed 24 seats all 19 households on a wind-facing margin with its belt on the northwest (pool/hamlets/sawada/sawada.gen.py docstring, specs/261). As written D3 refuses a live pool map and removes northwest-falling land from every rolled hamlet. Keep H30's steps (1)-(3) (off-wind margins never candidates, the seat and belt band reserved before the hem, canvas sized for belt room); refuse or constrain only a fall whose geometry is SHOWN to admit no wind-facing margin above the drain, with Sawada's declared fall kept."
+  },
+  {
+   "id": "D4 (homes H05)",
+   "summary": "The rolled cluster shape: steer and repair, recording cluster_shape_unhonored where the ground admits another shape (proposed), or redefine the knob as the seat band's shape.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The proposed option emits the violation (the design itself says 'that is the violation, so this is NOT a guarantee'), which FR-005 forbids; the alternative redefines the rule so it cannot fail, which guts the R3 item's purpose (the shape drawn, not declared). A route that neither emits nor redefines is unpriced and already used elsewhere in this plan: the knob resolves only over shapes the chosen seat band affords, as labels L1 constrains the board-seat knob and D3 constrains the fall, with steer-and-repair guaranteeing the shape within an affording band. Price that; only a residual shown forced goes to the GM."
+  },
+  {
+   "id": "D5 (water W03)",
+   "summary": "The brook's ruled-run rule enforced at the placer by a stricter, view-independent bound over the reserved crop stations.",
+   "class": "within",
+   "why": "Stricter than the test, so the rule as tested follows (the reserved stations are crop content every view contains); moving maps is allowed by FR-009. Not an exception."
+  },
+  {
+   "id": "D6 (woods W11)",
+   "summary": "The bare-ground predicate counts every recorded footprint and tread (lane, stream, well, clearing, burial ground) as covered, where the retired test counted them bare.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The rule's own docstring states its purpose: 'a hole in the cover is the map admitting it has not decided what is there'. A recorded lane, stream, well, clearing or burial ground is decided ground, so the corrected reading serves the purpose, and FR-003 lets the rule's grounding decide between readings. Raise with the GM once it works, as it relaxes the test's arithmetic."
+  },
+  {
+   "id": "D7 (labels L15, homes H29a)",
+   "summary": "A generated Mode A program with no legal seat after repair and growth is refused at composition with the item named.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The composer is seedless and deterministic: the raise refuses an unsatisfiable input at the placer before any sheet exists, so no violating output can be produced. FR-002's 'raise' is one triggered by a check of a finished manifest or SVG; this is not. The two live programs must compose (their unit tests show it)."
+  },
+  {
+   "id": "D8a board terminal",
+   "summary": "GM question: no verge in the view takes a board with a clean caption.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Every terminal breaks one of the GM's own rulings ('EVERY settlement tier carries the board', 'labels mandatory', the board by the way), the research is silent (a drawing question), and P0 measures how often it is reached first: a genuine GM choice. The ask must list the options the designs actually name - plan D8 says 'no board, or a board farther off the way' while L4 names 'a caption that breaks a caption rule' - and carry P0's count."
+  },
+  {
+   "id": "D8b woodland off the sheet",
+   "summary": "GM question: a woodland parcel with no legal ground inside a tight frame - record it off-sheet with a bearing, or let a parcel set the frame.",
+   "class": "within",
+   "why": "Not genuinely the GM's: the rule R3 records is 'a farming village held worked woodland' (research/vegetation), research 220 places a village's wood on the hill beyond the fields, and the second option contradicts the GM's standing frame rule (the commons never set the frame). The research and the standing ruling answer it: record the wood off-sheet with its bearing, labeled, and raise it once the implementation works."
+  },
+  {
+   "id": "D8c belt depth vs continuity",
+   "summary": "GM question: where the ground ahead of a belt column is field, water or the page - a thinner belt or a recorded break.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Both offered forms emit a violation (W16 or W17). The plan's own homes design removes the causes by construction: H30 step (2) reserves the seat band plus its belt band before the hem is laid, H31 sizes the canvas with belt room, and seat_cluster can refuse a margin whose belt band cannot be planted 30 ft deep as it refuses off-wind ones. No residual is measured (P0 names only the board). Price that route; ask the GM only for a residual shown forced, with its count."
+  },
+  {
+   "id": "D8d homestead wood floor",
+   "summary": "GM question: a homestead's 6,000 sq ft wood floor with no ground left in reach - a recorded shortfall, or a wider siting rule.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "'A recorded shortfall' is the violation and 'a wider siting rule' overrides research/vegetation/210's 'among the houses'; both are exceptions. The plan's own M5 (a household's parts laid inside its envelope, so a household is seated only with them) and H14's plan-time capacity sizing are unpriced routes to hold the floor by construction, and no residual is measured. Price them; ask only for a residual shown forced."
+  },
+  {
+   "id": "X1 (unlabeled: homes H36 note)",
+   "summary": "burial.py's 'no seat' branch leaves a rolled hamlet_burial='own' undrawn; the homes design flags it 'for the owning area' and the plan does not take it up.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "It is the same class as D4 (a rolled knob not drawn) and a placer fallback that knowingly leaves a rule's subject undone, which FR-001/FR-005 and the GM's 'literally any other things of this nature' include; homes is the owning area. The plan must convert it (a seat guarantee, or the knob resolved over what the site affords, as L1) or list it for review - not drop it by omission."
+  },
+  {
+   "id": "X2 (unlabeled: labels L13 vs homes H29c)",
+   "summary": "L13 keeps the caption placer's least-cost terminal on hand sheets as 'part of the rule itself'; H29c replaces the same fallback with a leader-line caption, then the sheet's key, so no caption overlaps.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The GM's words are 'we'll treat labels as mandatory' (standard.py:42-43); the least-cost seat is the session's mechanism for that, not the ruling, and it can emit an overlapping or occluded caption on a sheet whose captions the spec puts in scope. The same plan designs a terminal (H29c) that honors 'mandatory' without the violation. The plan must state that H29c governs the terminal on every sheet and drop L13's carve-out."
+  }
+ ],
+ "verdict": "BLOCKED"
+}

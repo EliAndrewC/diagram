@@ -104,33 +104,58 @@ The gate's test phase before (SC-005): 5,258 tests in 57.13 s (observed 2026-09-
 
 ## Decisions for review
 
-Each of these could read as a narrowing; they are put here rather than decided silently.
+Each of these could read as a narrowing; they are put here rather than decided silently. None records a violation: a
+"shortfall", an "unhonored" knob or a dropped rolled feature is the violation, so each is closed by a mechanism instead.
 
-- **D1 A fallback that drops is recorded.** Where a placer has no legal candidate left, the design's fallback is taken:
-  drop the feature and record why in meta, draw it smaller within its rule, or a stated alternative (each design row's
-  `fallback`); never the violation (FR-005).
-- **D2 The 85% seating floor as a capacity guarantee** (homes H14): the canvas is sized for the households' capacity at plan
-  time and a final pass seats over all legal ground, so a shortfall means the legal ground within reach is physically full;
-  a strict guarantee for any conceivable site would need a reserved lattice (a different settlement form) or unbounded
-  canvas growth.
-- **D3 A declared fall into the wind is refused at spec load** (homes H30): on such a site the drain rule and the seat's
-  back to the wind cannot both hold; a rolled fall is constrained so it never happens.
-- **D4 The rolled cluster shape** (homes H05): steer the seat band toward the rolled shape and repair, with an honest
-  "unhonored" record where the ground allows only another shape - or redefine the knob as the seat band's shape. Proposed:
-  the first, since the knob names the settlement's drawn shape.
+- **D1 A fallback that drops is recorded only where the drop is the rule's own provision.** Where a placer has no legal
+  candidate left, the design's fallback is taken when it stays inside the rule (draw it smaller within its researched range,
+  or a stated alternative); a drop of a rolled or required feature is never a fallback - it is closed by constraining the
+  knob or the candidates beforehand (D4, D9).
+- **D2 The seating floor holds by construction, not by a measured density** (homes H14). After the exhaustive pass over the
+  seat band, a household still unseated is seated by the next step in a fixed ladder, each within its rules: its envelope
+  shrunk within its researched range through M5's quota; then the seat band itself grown upslope (away from the field and
+  the toe - the side the settlement can always extend on the canvas, since the canvas is sized to the settlement and the
+  frame crops to its content) and the pass run over the new ground. The band grows until every household is seated; the
+  loop terminates because each round adds ground no earlier round had. No shortfall is emitted and nothing re-rolls.
+- **D3 A fall into the wind is refused only where its geometry admits no wind-facing margin above the drain** (homes H30):
+  H30's steps (1)-(3) are kept; at plan time the margins are computed from the envelope and the drain, and a fall - declared
+  or rolled - is refused or re-rolled at spec resolution only when no wind-facing margin above the drain exists. Sawada
+  (`down_deg=225`, seed 24, seating all 19 on a wind-facing margin) has one and is untouched.
+- **D4 The cluster shape resolves only over the shapes the chosen seat band allows** (homes H05), as labels L1 does for the
+  board's seat: the band is chosen, the knob's value space is narrowed to the shapes that band admits (the ones the seat
+  placer can draw there), the knob resolves over that space from the map's seed, and the seat placer steers and repairs
+  within the resolved shape. The drawn shape is the rolled shape; there is no "unhonored" record.
 - **D5 The brook's ruled run is judged by a stricter, view-independent bound** at the brook's placer (water W03), since the
-  view is decided later; the placer stricter than the test is the engine's standing convention, not an exception.
-- **D6 The bare-ground predicate counts every recorded footprint and tread as covered** (woods W11), as the rule's own
-  grounding reads; the retired test counted lanes and clearings as bare.
+  view is decided later; the placer stricter than the test is the engine's standing convention, so the rule as tested holds.
+- **D6 The bare-ground predicate counts every recorded footprint and tread as covered** (woods W11): the rule's own
+  grounding is that a hole is "the map admitting it has not decided what is there", and a recorded lane, stream, well or
+  clearing is decided ground. Raised with the GM once it works.
 - **D7 A generated Mode A program whose caption or building has no legal seat after repair and growth is refused at
-  composition, naming it** (labels L15, homes H29a): the composer is seedless, so the refusal is the program author's input
-  error at the placer, not a finished-map check.
-- **D8 Questions for the GM**, after a research pass and P0's measurement, through `escalation-check`: the board where no
-  verge in the view takes it with a clean caption (no board, recorded; or a board farther off the way); a woodland parcel
-  where no legal ground lies inside a tight frame (recorded off the sheet with its bearing, as research/vegetation/220's
-  wood beyond the fields reads; or a parcel allowed to set the frame); the belt where the ground ahead is field, water or
-  the page (a thinner belt there; or a recorded break); a homestead's wood floor where no ground is left in reach (a
-  recorded shortfall; or a wider siting rule). Work that does not depend on an answer proceeds meanwhile.
+  composition, naming it** (labels L15, homes H29a): the composer is seedless, so the refusal is of an impossible input
+  before any sheet exists, not a finished-map check.
+- **D8 The belt is planted where it can be deep and whole** (woods W16, W17): the belt band is reserved before the hem (H30
+  step 2), the canvas is sized for belt room (H31), and `seat_cluster` refuses a margin whose belt band cannot be planted 30
+  ft deep and unbroken. P0 measures, over cohort 1-48 and the probes, any case left; only a case shown to be forced goes to
+  the GM, with its count.
+- **D9 A rolled or required feature is always drawn**: the homestead's wood floor is laid as one of M5's parts inside the
+  homestead envelope, so a household is seated only with room for it (woods W25), and D2's capacity ladder supplies the
+  room; the hamlet's own burial ground (`burial.py`, `hamlet_burial='own'`) resolves `own` only where the edge seat finds a
+  legal seat at resolve time, the knob narrowed to what the site affords as in D4 (the homes design's "for the owning
+  area" item, taken here); a field pond that is a rolled count (water W29) is treated the same way if the census of its
+  knob confirms it is rolled, and otherwise recorded as not a rule.
+- **D10 A caption never overlaps, on any sheet** (labels L13, homes H29c): where the one placer has no free seat, it draws
+  the caption on a leader line, and failing that enters it in the sheet's key - on hamlets, generated sheets and hand
+  sheets alike. The GM's "we'll treat labels as mandatory" (`labels/standard.py`) is honored without an overlap; the
+  least-cost overlapping seat is retired.
+- **D11 A village's worked woodland off a tight sheet is recorded off the sheet with its bearing** (woods, R3's woodland
+  row): research/vegetation/220 puts the wood on the hill beyond the fields, and the GM's frame rule forbids a parcel
+  setting the frame. Raised with the GM once it works.
+- **D12 The question for the GM**, after P0's count and through `escalation-check`: the notice board where no verge in the
+  view takes a board whose caption clears roofs, lanes, crowns and neighbors (labels L4) - every option breaks one of the
+  GM's own rulings: (a) no board, recorded (against "every settlement carries the board", 2026-07-24); (b) a board farther
+  off the way than `BOARD_TO_WAY_PX` (against `kosatsuba_by_the_road`); (c) a caption that breaks a caption rule, drawn on a
+  leader under D10 (against the caption rules). The count of maps reaching it over cohort 1-48 and the probes goes with the
+  question. Work that does not depend on the answer proceeds meanwhile.
 
 ## Verification per phase
 
