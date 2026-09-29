@@ -8,9 +8,9 @@
 The research record is organized one section per question asked, and many of those questions arose mid-session, so
 their headings read as session artifacts and one topic is scattered over several sections. The GM asks for a
 STYLE GUIDE and a CHECK that holds it: a section is a TOPIC with a plain-English title; it opens with a short
-plain-English account of what the thing was and why it existed; its findings follow as short bullets, most led by a
-bold Q&A-style question on its own line; framing, restatement and descriptions of what the map plainly shows are
-cut; unfamiliar terms are glossary tooltips; there is no `Sources:` roster and no quotation of the GM's inciting
+plain-English account of what the thing was and why it existed; its findings follow as short bullets, each led by a
+bold line of its own - a Q&A-style question or a plain statement of the point; framing, restatement, and statements
+that say nothing about the thing or the research but only what the map visibly shows are cut; unfamiliar terms are glossary tooltips; there is no `Sources:` roster and no quotation of the GM's inciting
 question. Two mechanical changes come with it: a footnote tooltip's source link goes to the work's entry on the
 citations page, not to the source; and a section's sources are read from its footnotes once it has no roster.
 
@@ -24,26 +24,32 @@ the pilot; the GM reads the pages in this feature's clone.
 ### Functional Requirements
 
 - **FR-001**: A written style guide MUST state the presentation rules generalized from the GM's worked example -
-  the topic title, the opening paragraphs, the Q&A bullet form (a bold question on its own line, a lead-in sentence
-  where the numbers need context), one finding per bullet, what is cut (framing that the whole record presumes,
-  restatements of a number already given, descriptions of what the map plainly shows, parenthetical asides carrying
-  real content), when prose is left as prose, and the glossary as the place to explain a term - each rule with the
-  GM's words it comes from.
+  the topic title, the opening paragraphs, the bullet form (a bold lead line of its own - a question or a plain
+  statement of the point - and a lead-in sentence where the bullet needs context or a reason it is relevant), one
+  finding per bullet, an aside carrying real content taken out of its parentheses and made its own bullet, what is cut
+  (framing that the whole record presumes, restatements of a number already given, a statement that says nothing
+  about the thing or the research but only what is visible on the map - while a statement of HOW the map draws
+  something, and why, is kept), when prose is left as prose, and a glossary tooltip preferred to a lead-in for a term
+  used in many places - each rule with the GM's words it comes from.
 - **FR-002**: Sections that cover one topic MUST be merged into one section under a plain-English title naming the
   topic, organized for a reader who knows nothing of it: the account of what the thing was and why first, then the
   findings in the order a reader needs them - never one section appended after another.
 - **FR-003**: A restyled section MUST carry no `Sources:` roster, and removing a roster MUST lose no citation: every
   key the roster named is cited by a footnote of the section, and every passage the roster's own footnote quoted is
-  quoted by a footnote in the section.
+  quoted by a footnote in the section, and any information the roster states that the section does not state
+  elsewhere is carried into the section's text.
 - **FR-004**: A section's sources, as the map's references read them, MUST be derived from the keys its footnotes
   cite when it has no roster.
 - **FR-005**: The source link inside a footnote's hover MUST lead to that work's entry on the page's citations page
   (`citations/<page>.html#work-<key>`), which itself links the source.
-- **FR-006**: The rule that the GM's inciting question is quoted verbatim in a section MUST be struck; the guide MUST
-  say the inciting question appears nowhere in a section. Removing the existing quotations is the sweep's work.
+- **FR-006**: The guide MUST say the GM's inciting question appears nowhere in a section. The practice of quoting it
+  was never written as a rule (a search of every rules file, agent, template and test found none - 44 `The question`
+  paragraphs, all on the water page, follow it), so there is no rule text to strike; removing the quotations is the
+  sweep's work.
 - **FR-007**: "knob" MUST be a glossary term whose definition says what the GM said a knob is (the settings the
   generator varies to show the ways settlements differ - by chance, by region, by the lie of the land), and "canopy
-  tree" MUST be a glossary term.
+  tree" MUST be a glossary term whose definition carries the context of the GM's lead-in: a tree with a large crown of
+  leaves, which the maps draw one crown at a time at its real size, unlike bamboo, drawn by a convention.
 - **FR-008**: A check agent MUST judge a section against the guide - one verdict per rule, with the passage and the
   fix - pinned to a tier, launched without the repository's CLAUDE.md files, reading a bundle.
 - **FR-009**: The pilot's first topic MUST be the homestead grove: the scale section the GM quoted, the section on
@@ -57,8 +63,8 @@ the pilot; the GM reads the pages in this feature's clone.
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001** (FR-001, FR-006): the guide exists, each rule carries the GM's words, and the struck inciting-question
-  rule is gone from the rules files.
+- **SC-001** (FR-001, FR-006): the guide exists, each rule carries the GM's words or says it is the session's
+  inference awaiting the GM, and it says the inciting question appears nowhere.
 - **SC-002** (FR-002, FR-009, FR-010): the grove topic is one section with a plain-English title; the three old
   anchors resolve to nothing and nothing links to them; a diff of footnote keys and labels before and after shows
   each one kept or cut by a named rule.
@@ -95,4 +101,10 @@ the pilot; the GM reads the pages in this feature's clone.
 
 ## Review history
 
-(none yet)
+- **Round 1** (spec-fidelity, 2026-09-29): REVISE. Kept: the third grove section folded in, the cap raised with the
+  GM, the two phases. Fixed: an aside with real content is promoted, not cut; only map-visible statements with no
+  finding are cut, a statement of how the map draws is kept; the lead line may be a statement; the lead-in is for
+  context or relevance; a tooltip over a lead-in for a recurring term; the roster's unstated information is carried;
+  the canopy-tree definition specified. FR-006 rewritten on the finding that the rule was never written down.
+  Aside raised for the GM: `homesteads/046` (which side the windbreak stood on, the yard and the garden) overlaps the
+  grove topic and may belong to it later.

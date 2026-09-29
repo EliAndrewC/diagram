@@ -657,7 +657,7 @@ class HousesMixin:
         # its ~6:1 room (the fix for groves never reaching target under end-reconciliation). Dimensions are in
         # FEET, drawn at this map's ftpx (village 2 ft/px, hamlet 1): the plain house is the 46x28 ft 8:5 minka
         # (px(46) = 23px at 2 ft/px). A modest, position-seeded wealth tier scales the whole bundle. See
-        # research/homesteads.html 'Homestead groves (yashikirin) - the real scale and prevalence' ('How far is it across this map? The scale, tier by tier'.
+        # research/homesteads.html 'Groves of trees around farmhouses (yashikirin)' ('How far is it across this map? The scale, tier by tier'.
         if size is not None:  # explicit footprint in FEET (e.g. a larger headman)
             wf, hw, hh = 1.0, self.px(size[0]), self.px(size[1])
         elif getattr(self, "_nucleated", False):

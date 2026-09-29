@@ -30,6 +30,9 @@ dispatch record-format "Check ONE entry: $Q and its notes."
 grep -q 'make check-bundle PAGE=ways SECTION=010' "$T/err" && ok "...and the refusal carries the command for THAT question" || no "no compliant command" "$(cat "$T/err")"
 grep -q 'MANIFEST.md' "$T/err" && ok "...and says to name the MANIFEST it prints" || no "the message does not say what to re-send"
 logged repo-path && ok "...recorded blocked/repo-path" || no "repo-path not recorded"
+# GUARD_EDIT_OK: feature 292 - the new record-style check is refused the same way, and told to build ITS bundle
+dispatch record-style "Judge the style of $Q and its notes."
+[ "$(rc)" -eq 2 ] && grep -q 'make check-bundle PAGE=ways SECTION=010 FOR=record-style' "$T/err" && ok "a record-style dispatch into the repository is refused with its own bundle's command" || no "record-style was not refused, or the command lacks FOR=" "$(cat "$T/err")"
 dispatch source-applicability "Judge the entry $S against its page."
 [ "$(rc)" -eq 2 ] && grep -q 'make check-bundle KEY=edo-enwiki' "$T/err" && ! grep -q 'WHOLE=1' "$T/err" && ok "a registry entry gets the KEY= form (the excerpt, for source-applicability)" || no "the key form is wrong" "$(cat "$T/err")"
 # GUARD_EDIT_OK: feature 250 D19 - a source-reader's command is the whole page in parts, never the excerpt

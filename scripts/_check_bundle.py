@@ -192,8 +192,12 @@ PARTS = {
     "quote-check": {"quote"},
     "record-format": {"prepass", "variants"},
     "entry-drift": {"kind"},
+    "record-style": {"style", "variants"},
     "all": {"quote", "prepass", "variants", "registry", "kind"},
 }
+#: The style guide `record-style` judges against (feature 292) - handed in the bundle, so the agent reads the one copy
+#: the writers read rather than a paraphrase of it in its contract.
+STYLE = pathlib.Path(".claude/skills/diagram/research/STYLE.md")
 
 
 def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path, extra: list[str], quotes: bool, kind: str = "",
@@ -248,6 +252,8 @@ def entry_bundle(root: pathlib.Path, page: str, section: str, out: pathlib.Path,
         src = registry_entry(root, key)
         if src is not None:
             rows.append((copy(src, out, f"sources/{key}.html"), str(src.relative_to(root)), f"the registry entry of `{key}`"))
+    if "style" in want:
+        rows.append((copy(root / STYLE, out), str(STYLE), "for record-style: the style guide - every rule you judge, with the GM's words it comes from"))
     if "variants" in want:
         rows.append((copy(root / VARIANTS, out), str(VARIANTS), "the glossary's variant index: one line per defined word - grep it"))
     for path in extra:

@@ -68,6 +68,14 @@ decision it drove; each part is its own question with its heading, `Sources:` li
 other, never restate each other's evidence. A split that would strip a finding of what it needs is not made - it is
 raised instead.
 
+## How a section reads: the style guide (GM 2026-09-29, feature 292 - PILOT)
+
+The record is being rewritten topic by topic under [`STYLE.md`](STYLE.md): a section is a TOPIC under a plain-English
+title, opening with a short account of what the thing was and why, then short bullets each led by a bold question or
+statement; no `Sources:` roster; the GM's inciting question nowhere. Until the GM signs the pilot off, only the
+sections feature 292 has rewritten follow it; everything else below holds for both forms. The **`record-style`**
+agent judges a restyled section against the guide.
+
 ## Who the record is for (GM 2026-09-05, feature 180)
 
 The reader is a casual RPG enthusiast at the map, not the next session. They go map -> modal -> "See
@@ -108,9 +116,10 @@ passage it rests on, VERBATIM including the source's own spelling and dashes (th
 quoted spans). A foreign passage is quoted in English translation, marked: `「English」 (translated from the
 Japanese by this project; original: 「原文」)` - the translation follows house style, the original follows the note.
 The note names the language and the translator; a source's own English needs no note; the original is the
-checker's anchor, never a second quote. The same form holds in body prose and in a `SOURCES.html` entry. The section's
-`<p><strong>Sources:</strong> ...</p>` roster stays, every key on it is quoted by a footnote in that section, and a key
-with nothing to quote leaves the roster. Nothing is quoted from memory.
+checker's anchor, never a second quote. The same form holds in body prose and in a `SOURCES.html` entry. A section's
+`<p><strong>Sources:</strong> ...</p>` roster, where it still has one, has every key quoted by a footnote in that section,
+and a key with nothing to quote leaves the roster; a section restyled under `STYLE.md` has none, and its sources are
+the keys its footnotes cite. Nothing is quoted from memory.
 
 ## A citation links to a page where its quote can be READ - or it is not a citation (GM 2026-09-06, feature 195)
 

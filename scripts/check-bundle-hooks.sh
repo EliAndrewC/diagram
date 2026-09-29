@@ -8,7 +8,7 @@
 # times what the check read of the record. `omitClaudeMd` (feature 256) drops only the copy given at
 # LAUNCH. A check handed copies outside the repository attached nothing; peak 47,700 -> 14,500.
 #
-# WHAT IT DOES. A dispatch of `quote-check`, `record-format`, `source-applicability`, `source-reader` or `entry-drift`
+# WHAT IT DOES. A dispatch of `quote-check`, `record-format`, `source-applicability`, `source-reader`, `entry-drift` or `record-style`
 # whose prompt names a file under the repository and no bundle is REFUSED, and the refusal carries the
 # `make check-bundle` command for the question the prompt names, read off its path. It cannot BUILD the
 # bundle itself: the bundle fetches every quoted page, and a hook that takes a minute is worse than a
@@ -28,7 +28,8 @@ CB_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$CB_HERE/_guardlog.sh"
 
 #: the checks whose contract reads a bundle (`.claude/agents/<name>.md`, "Read the BUNDLE")
-CHECKS="quote-check record-format source-applicability source-reader entry-drift"
+# GUARD_EDIT_OK: feature 292 - record-style is a new bundle-reading check; it is added to the list, nothing is loosened.
+CHECKS="quote-check record-format source-applicability source-reader entry-drift record-style"
 
 pretool() {
   local verdict kind detail reason
@@ -62,7 +63,7 @@ for path in paths:
         # the excerpt around already-quoted passages is for source-applicability (no apostrophe: this is single-quoted)
         cmds.append(f"make check-bundle KEY={k.group(1)}" + (" WHOLE=1" if atype == "source-reader" else ""))
     elif m:
-        cmds.append(f"make check-bundle PAGE={m.group(1)} SECTION={m.group(2)}")
+        cmds.append(f"make check-bundle PAGE={m.group(1)} SECTION={m.group(2)}" + (" FOR=record-style" if atype == "record-style" else ""))
 cmds = list(dict.fromkeys(cmds)) or ["make check-bundle PAGE=<page> SECTION=<question>   (or KEY=<registry key>)"]
 print("\x1frefuse\x1f" + atype + "\x1e" + "\x1e".join(cmds))
 ' 2>/dev/null)" || exit 0

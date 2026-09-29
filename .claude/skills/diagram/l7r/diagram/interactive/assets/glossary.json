@@ -4375,7 +4375,7 @@
   ]
  },
  "knob": {
-  "def": "A setting the map varies from settlement to settlement: where the research supports more than one form, the map rolls between them from its own seed instead of the record choosing one for every map.",
+  "def": "One of the settings the map generator varies from settlement to settlement. Real settlements differed - by region, by the lie of the land, by which way the water ran or the wind blew, and by plain chance - so where the research finds more than one form, each map rolls between them from its own seed instead of every map getting the same one.",
   "variants": [
    "knob",
    "knobs"
@@ -11879,13 +11879,6 @@
    "Ubame's"
   ]
  },
- "appurtenance": {
-  "def": "Anything that belongs to a homestead and stands on its grounds - the farmhouse, the garden, the threshing yard, the bamboo stand and the grove around them.",
-  "variants": [
-   "appurtenance",
-   "appurtenances"
-  ]
- },
  "hanebashi": {
   "def": "A Japanese cantilever bridge with no pier: timbers set into holes in the bank rock on both sides, each layer projecting a little further over the water, with the deck laid across their ends.",
   "variants": [
@@ -13094,6 +13087,13 @@
   "def": "The large area of high air pressure over the North Pacific that Japan's southeasterly summer wind blows out of - the summer partner of the Siberian High, whose northwesterly wind rules the winter.",
   "variants": [
    "Pacific High"
+  ]
+ },
+ "canopy-tree": {
+  "def": "A tree with a broad crown of leaves overhead - cedar, oak, zelkova and the like. The maps draw each one as a single crown at its real size, on real spacing; bamboo, whose stems are too thin to see at map scale, is drawn by a convention instead.",
+  "variants": [
+   "canopy tree",
+   "canopy trees"
   ]
  }
 }

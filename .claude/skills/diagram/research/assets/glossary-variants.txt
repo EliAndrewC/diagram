@@ -56,8 +56,6 @@ animal unit	animal unit
 animal units	animal unit
 anjifang	anjifang
 anthropogenic	anthropogenic
-appurtenance	appurtenance
-appurtenances	appurtenance
 apron	apron
 aprons	apron
 aqueduct	aqueduct
@@ -285,6 +283,8 @@ calibrated liberty	calibrated liberty
 canal corridor	canal corridor
 canal corridors	canal corridor
 cangue	cangue
+canopy tree	canopy-tree
+canopy trees	canopy-tree
 canton	Canton
 cao wei	Three Kingdoms
 caoshi	caoshi

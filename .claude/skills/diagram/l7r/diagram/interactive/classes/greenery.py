@@ -151,7 +151,7 @@ class HomesteadGrove(Kind):
     Covers: `groves`
     Label: accurate
     Sources: miura-2014-kainyo, irie-2020-igune, kashima-kainyo-1987, tonami-yashikirin-haichi, yashikirin-jawiki
-    Entry: research/homesteads.html - 'Which sides of the house did a homestead grove take?', 'Homestead groves (yashikirin) - the real scale and prevalence', 'Was the homestead grove there before 1868, and how big was it?'
+    Entry: research/homesteads.html - 'Groves of trees around farmhouses (yashikirin)'
     """
 
     key = 'homestead grove'

@@ -1,6 +1,6 @@
 {
  "term": "knob",
- "def": "A setting the map varies from settlement to settlement: where the research supports more than one form, the map rolls between them from its own seed instead of the record choosing one for every map.",
+ "def": "One of the settings the map generator varies from settlement to settlement. Real settlements differed - by region, by the lie of the land, by which way the water ran or the wind blew, and by plain chance - so where the research finds more than one form, each map rolls between them from its own seed instead of every map getting the same one.",
  "variants": [
   "knob",
   "knobs"

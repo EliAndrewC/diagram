@@ -164,14 +164,45 @@ def section_sources(body: str) -> list[str]:
     return keys
 
 
+_FN_REF = re.compile(r'<sup class="fn"><a [^>]*href="([^"#]+)#fn-(\d+)"')
+_NOTE_LI = re.compile(r'<li id="fn-(\d+)">(.*?)</li>', re.S)
+_NOTE_KEY = re.compile(r'<a href="[^"]*"><code>([a-z0-9][a-z0-9-]*)</code></a>')
+
+
+@cache
+def _page_notes(path: str) -> dict[str, str]:
+    """note number -> note HTML, for one citations page (empty when it cannot be read)."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            return dict(_NOTE_LI.findall(fh.read()))
+    except OSError:
+        return {}
+
+
+def footnote_sources(body: str, page_path: str) -> list[str]:
+    """The keys a section's FOOTNOTES cite, in order of first citation, once each - the section's sources once it
+    carries no `Sources:` roster (feature 292: the roster is retired from a restyled section, and every key it named
+    had to be quoted by one of these footnotes anyway). `page_path` is the assembled research page the body is from;
+    each reference names the citations page its note is on, relative to it."""
+    keys: list[str] = []
+    for href, n in _FN_REF.findall(body):
+        note = _page_notes(os.path.normpath(os.path.join(os.path.dirname(page_path), href))).get(n, "")
+        for k in _NOTE_KEY.findall(note):
+            if k not in keys:
+                keys.append(k)
+    return keys
+
+
 def research_sources(entry: str, research_dir: str = RESEARCH_DIR) -> list[str]:
-    """Every key the research entries named in `entry` cite, in file order."""
+    """Every key the research entries named in `entry` cite, in file order: a section's roster where it has one,
+    else the keys its footnotes cite."""
     headings = _entry_headings(entry)
     keys: list[str] = []
     for fname in _ENTRY_FILE.findall(entry):
-        for heading, body in _sections(os.path.join(research_dir, fname)):
+        path = os.path.join(research_dir, fname)
+        for heading, body in _sections(path):
             if any(_names(heading, h) for h in headings):
-                for k in section_sources(body):
+                for k in section_sources(body) or footnote_sources(body, path):
                     if k not in keys:
                         keys.append(k)
     return keys

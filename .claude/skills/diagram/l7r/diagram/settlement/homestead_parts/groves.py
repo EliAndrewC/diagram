@@ -174,7 +174,7 @@ class GrovesMixin:
     # East Asian winter monsoon (the Siberian high) blows NW across China AND Japan, so N+W is windward and
     # the S/E is the sheltered, sunny side. A map keys it off its geography with meta(windward=...). Each
     # arm is (face, perp): `face` is the cardinal it sits on; `perp` is the sign the N/S arm extends along
-    # to wrap the corner (0 for a lone cardinal arm). See research/homesteads.html 'Homestead groves (yashikirin) - the real scale and prevalence'.
+    # to wrap the corner (0 for a lone cardinal arm). See research/homesteads.html 'Groves of trees around farmhouses (yashikirin)'.
     _GROVE_ARMS = {
         "NW": [((0, -1), -1), ((-1, 0), 0)],
         "NE": [((0, -1), 1), ((1, 0), 0)],
@@ -277,8 +277,8 @@ class GrovesMixin:
         N/S arm runs E-W as wide as the house plus `d` (extending `perp` toward the windward corner so the
         two arms wrap it); an E/W arm runs N-S as tall as the house. The depth `d` is how many trees deep the
         stand is - sized so the whole grove is the LARGEST homestead appurtenance (bigger than the house);
-        `lf` shortens the arm's run to slip a partial belt past a close neighbor. See research/homesteads.html 'Homestead groves (yashikirin) - the real scale and prevalence' ('Homestead
-        groves' (Historical scale)."""
+        `lf` shortens the arm's run to slip a partial belt past a close neighbor. See research/homesteads.html 'Groves of trees around farmhouses (yashikirin)' ('How deep is
+        the stand?')."""
         if fdy:  # N or S arm (runs E-W); wraps `perp` toward the windward corner
             return hx + perp * d / 2, hy + fdy * (hh / 2 + d / 2 + gap), (hw + d) * lf, d
         return hx + fdx * (hw / 2 + d / 2 + gap), hy, d, hh * lf  # E or W arm (runs N-S)
@@ -320,7 +320,7 @@ class GrovesMixin:
                 return False
         return True
 
-    GROVE_RATIO = 6.0  # target grove footprint as a multiple of the house (~6:1 - see research/homesteads.html 'Homestead groves (yashikirin) - the real scale and prevalence'; Historical scale)
+    GROVE_RATIO = 6.0  # target grove footprint as a multiple of the house (~6:1 - see research/homesteads.html 'Groves of trees around farmhouses (yashikirin)', 'How deep is the stand?')
 
     def _find_grove_arms(self: Settlement, hx: float, hy: float, hw: float, hh: float, reserve: Any = None, avoid: Any = ()) -> list[Any]:  # type: ignore[misc]
         """The windward grove's belt arms, AREA-TARGETED to ~GROVE_RATIO x the house footprint (the historical
