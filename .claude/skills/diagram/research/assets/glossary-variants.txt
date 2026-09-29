@@ -1237,6 +1237,7 @@ houzhaofang	houzhaofang
 hsien	hsien
 huc	Huc
 hucheng he	hucheng he
+hui	hui
 hui (huizhou) style	Hui style
 hui style	Hui style
 hui-style	Hui style
