@@ -36,7 +36,7 @@ Four destinations, and the choice is usually obvious once the question is asked 
 | the rule is about | it belongs in | example |
 |---|---|---|
 | a clearance, spacing or seat a placer decides | a UNIT TEST of that placer, on plain inputs | `tests/hamletgen/test_unreached_houses.py` |
-| a property of a FINISHED map that no single placement owns | a SEED test in `tests/gate/`, on a cached roll | `tests/gate/test_paddy_fabric.py` |
+| a property of a FINISHED map that no single placement owns | a SEED test in `tests/gate/`, on a cached roll | `tests/gate/test_no_feature_overlaps.py` (feature 287 moved every other rule into its placer) |
 | a fact about the CODE rather than about a map | a static test | the operations registry; `all_ink_is_ruled_on` |
 | a feature no scripted generator produces | a RECORDED DROP, with its grounding kept | `pond_fed_from_edge`, and the urban vocabulary |
 
