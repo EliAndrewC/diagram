@@ -186,6 +186,7 @@ branch house	branch house
 branch household	branch household
 branch households	branch household
 branch houses	branch house
+brands	firebrand
 broadcast	broadcast sowing
 broadcast oilseed stand	broadcast sowing
 broadcast sowing	broadcast sowing
@@ -345,6 +346,7 @@ consolidated paddies	kochi seiri
 consolidated paddy	kochi seiri
 contour canal	contour canal
 contour canals	contour canal
+convection column	convection column
 cooper	cooper
 cooperage	cooper
 coopers	cooper
@@ -384,6 +386,8 @@ cribs	cribbing
 crop margin	crop margin
 crop margins	crop margin
 crop-margin	crop margin
+crown fire	crown fire
+crown fires	crown fire
 crown shyness	crown shyness
 crude drug	crude drug
 crude drugs	crude drug
@@ -576,6 +580,7 @@ elder house	karo
 elder houses	karo
 embankment	embankment
 embankments	embankment
+ember-spotting	spotting
 emerald charter	Emerald Charter
 emergent	emergent
 emergent plant	emergent
@@ -671,6 +676,8 @@ fire-water	fire-water
 fire-water tubs	fire-water
 firebox	firebox
 fireboxes	firebox
+firebrand	firebrand
+firebrands	firebrand
 fish fry	fish fry
 fish-scale polder	yulin wei
 fish-scale polders	yulin wei
@@ -1063,6 +1070,7 @@ idowaku	igeta
 idoyakata	idoyakata
 ieyasu	Ieyasu
 ieyasu's	Ieyasu
+ifc	IFC
 igeta	igeta
 igune	igune
 ihai	ihai
@@ -1181,6 +1189,8 @@ jodan	jodan-no-ma
 jodan-no-ma	jodan-no-ma
 jodo	Jodo
 jodo shinshu	Jodo Shinshu
+jogyo hall	Jogyo hall
+jogyo-do	Jogyo hall
 jokamachi	jokamachi
 jokyo	Jokyo
 jomon	Jomon period
@@ -1202,6 +1212,7 @@ juyangyuan	juyangyuan
 jō	jo
 jōdo	Jodo
 jōdo shinshū	Jodo Shinshu
+jōgyō hall	Jogyo hall
 jōgōe-chi	jōgōe-chi
 jōmon	Jomon period
 jōmon period	Jomon period
@@ -1478,6 +1489,7 @@ loess	loess
 log boom	boom
 lognormal	lognormal
 long willow	long willow
+long-range spotting	spotting
 longan	longan
 longans	longan
 loophole	loophole
@@ -2035,6 +2047,9 @@ road magistrate	road magistrate
 road magistrates	road magistrate
 roji	roji
 roju	Roju
+rokudo crossroads	Rokudō crossroads
+rokudō crossroads	Rokudō crossroads
+rokudō no tsuji	Rokudō crossroads
 rokugan	Rokugan
 rokugani	Rokugan
 rokusai-ichi	rokusai-ichi
@@ -2224,6 +2239,7 @@ shop-houses	machiya
 shophouse	machiya
 shophouses	machiya
 shoro	shoro
+short-range spotting	spotting
 shoucheng lu	Shoucheng Lu
 shoulder month	shoulder month
 showa	Showa
@@ -2292,6 +2308,9 @@ spillways	spillway
 spiraea	Spiraea
 spirit wall	screen wall
 spirit walls	screen wall
+spot fire	spotting
+spot fires	spotting
+spotting	spotting
 spread footing	footing
 spring and autumn	Spring and Autumn
 spring line	spring line
@@ -2803,6 +2822,7 @@ yorigumi	yorigumi
 yoriki	yoriki
 yorishiro	yorishiro
 yoritsuki	yoritsuki
+yoro code	Yōrō code
 yose	variety hall
 yosemune	yosemune-zukuri
 yosemune-zukuri	yosemune-zukuri
@@ -2826,6 +2846,7 @@ yukaku	yukaku
 yukimi	yukimi
 yulin wei	yulin wei
 yw	yu
+yōrō code	Yōrō code
 yūkaku	yukaku
 zaigo-machi	zaigomachi
 zaigomachi	zaigomachi

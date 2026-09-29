@@ -10806,5 +10806,68 @@
    "military commissioner",
    "military commissioners"
   ]
+ },
+ "Rokudō crossroads": {
+  "def": "The crossroads at the entrance to Toribeno, Heian-kyō's cremation ground, held to be the boundary between this world and the other world; funerals sent the dead off from there.",
+  "variants": [
+   "Rokudō crossroads",
+   "Rokudo crossroads",
+   "Rokudō no tsuji"
+  ]
+ },
+ "Jogyo hall": {
+  "def": "A Buddhist hall; the one founded in 1667 beside the Kozukappara execution ground was built to bury the dead and hold memorial services for them, and later became Minami-Senju Eko-in.",
+  "variants": [
+   "Jogyo hall",
+   "Jōgyō hall",
+   "Jogyo-do"
+  ]
+ },
+ "IFC": {
+  "def": "The International Fire Code, a present-day model fire code used across the United States. The record takes only one figure from it: a bonfire must stand 50 ft (15 m) from a structure or anything that burns.",
+  "variants": [
+   "IFC"
+  ]
+ },
+ "spotting": {
+  "def": "In a wildfire, new fires started ahead of the main fire by burning fragments that the wind or the fire's own updraft carries there. Only a still-burning fragment starts one more than about 60 m from the main fire.",
+  "variants": [
+   "spotting",
+   "ember-spotting",
+   "spot fire",
+   "spot fires",
+   "long-range spotting",
+   "short-range spotting"
+  ]
+ },
+ "crown fire": {
+  "def": "A wildfire burning through the tops (the crowns) of trees, not along the ground. It is the fire whose rising column of heat carries burning fragments far enough to start new fires at a distance.",
+  "variants": [
+   "crown fire",
+   "crown fires"
+  ]
+ },
+ "convection column": {
+  "def": "The column of hot air and smoke that rises above a large fire. It lifts burning fragments high enough for the wind to carry them beyond the fire.",
+  "variants": [
+   "convection column"
+  ]
+ },
+ "firebrand": {
+  "def": "A burning or glowing piece of wood or bark carried off by a fire. Once it lands, only one that is still burning can start a new fire.",
+  "variants": [
+   "firebrand",
+   "firebrands",
+   "brands"
+  ]
+ },
+ "Yōrō code": {
+  "def": "The ritsuryo law code compiled in 718 and put into force in 757, Japan's classical code of administration. Its funeral ordinance keeps burial away from the capital and the roads, but it gives no distance.",
+  "variants": [
+   "Yōrō code",
+   "Yoro code",
+   "Yōrō Code",
+   "Yoro Code"
+  ]
  }
 }
