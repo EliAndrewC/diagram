@@ -7,7 +7,9 @@ from typing import TYPE_CHECKING, Any, cast
 
 from ._geom import PointGrid, Pt, boxed_polys, drawn_extent, edge_dist, indexed_grid, point_in_poly, rot_rect, seg_dist
 from ._knobs import skeleton_layout
+from .rolling.access import reserve
 from .rolling.bearing import QUARTER_TURN_SHARE, house_rot
+from .rolling.lot import FARMHOUSE_MAX_ASPECT, household_parts, record_parts, seat_parts_done
 
 # HOW FAR A FARMHOUSE WALL STANDS OFF THE PADDY (researched 2026-08-27, feature 133 T41; the record
 # in research/homesteads.html "How close does a farmhouse stand to the paddy?"). The paddy's margin is
@@ -647,8 +649,15 @@ class HousesMixin:
         # FEET, drawn at this map's ftpx (village 2 ft/px, hamlet 1): the plain house is the 46x28 ft 8:5 minka
         # (px(46) = 23px at 2 ft/px). A modest, position-seeded wealth tier scales the whole bundle. See
         # research/homesteads.html 'Homestead groves (yashikirin) - the real scale and prevalence' ('How far is it across this map? The scale, tier by tier'.
+        # THE HOUSEHOLD'S PARTS (feature 287, plan M5): its lot - the k-th plain household seated takes lot k, its size
+        # rung, its kura and its beast - and its well pocket, whatever seat it lands on (`rolling/lot.py`)
+        _lot, _byre_form, _well = household_parts(self, x, y, kind, role)
         if size is not None:  # explicit footprint in FEET (e.g. a larger headman)
+            if max(size) > FARMHOUSE_MAX_ASPECT * min(size):  # a caller's input error, not a map check (homes H08)
+                raise ValueError(f"a farmhouse of {size[0]} x {size[1]} ft runs past {FARMHOUSE_MAX_ASPECT}:1 - it would read as a shed")
             wf, hw, hh = 1.0, self.px(size[0]), self.px(size[1])
+        elif _lot is not None:  # the size ladder (homes H17): the footprints spread by construction
+            wf, hw, hh = 1.0, self.px(46) * _lot[0], self.px(28) * _lot[1]
         elif getattr(self, "_nucleated", False):
             # a minka grew by adding BAYS (ken) along the ridge, so a bigger farmhouse is LONGER far more
             # than it is wider (the roof span caps the depth) - vary length a lot, depth only a little, so
@@ -673,12 +682,19 @@ class HousesMixin:
         # the west/sunny walls but never the shaded NORTH, so a north kura is clear of it - and its footprint is
         # RESERVED in the homestead bundle so a neighbor never lands on it. Drawn + recorded in farmsteads() so
         # it always moves WITH the house (farm_sheds_attached guards it).
-        _shed = kind == "plain" and (role == "headman" or self._hjit(x, y, 3.0) < 0.30)
-        spot = self._place_bundle(x, y, hw, hh, shed=_shed)  # pack the bundle (incl. the reserved kura) near (x,y)
+        # ...A COUNT, NOT A PER-SEAT ROLL, where the household carries a lot (homes H45): exactly round(n x 0.2993) of n
+        # seated households keep one, where the positional roll aliased along a row and under-delivered 2.2x.
+        _shed = kind == "plain" and (role == "headman" or (_lot[2] if _lot is not None else self._hjit(x, y, 3.0) < 0.30))
+        try:  # a keeper's byre and a well pocket are parts of the bundle: the envelope is sought with them in it (H06, H10)
+            spot = self._place_bundle(x, y, hw, hh, shed=_shed)  # pack the bundle (incl. the reserved kura) near (x,y)
+        finally:
+            seat_parts_done(self)
         if spot is None:
             return False
         cx, cy, geom = spot
         self.placed.append(geom["bbox"])  # reserve the whole homestead footprint as one rect
+        if geom.get("access") is not None:  # the corridor the seat was admitted with, reserved (feature 287, plan M3)
+            reserve(self, geom["access"], (cx, cy))
         rec = {
             "x": cx,
             "y": cy,
@@ -692,6 +708,7 @@ class HousesMixin:
             "wealth": wf,
             "geom": geom,
         }  # rot position-seeded, like _shed above
+        record_parts(self, rec, geom, _byre_form)  # the reserved stall and well pocket, on the record
         self.M["houses"].append(rec)
         self._pending_farmsteads.append(rec)
         return True

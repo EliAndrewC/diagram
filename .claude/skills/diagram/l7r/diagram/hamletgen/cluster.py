@@ -115,7 +115,7 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
     dep = max(112.0, min(math.sqrt(plan.spec.households * (BUNDLE_PITCH**2) / (_asp * math.pi)), 300.0))
     lat = max(240.0, min(plan.spec.households * (BUNDLE_PITCH**2) / (math.pi * dep), 1100.0))
 
-    best: tuple[float, Pt, Pt] | None = None
+    ranked: list[tuple[float, Pt, Pt]] = []  # the wind-facing margins with room for their belt, in the order met
     offwind: list[tuple[float, Pt, Pt]] = []  # margins whose back is more than 45 deg off the wind, kept only as the last fallback
     cramped: list[tuple[float, Pt, Pt]] = []  # wind-facing margins whose belt would fall off the canvas, the fallback before those
     n = len(env)
@@ -237,17 +237,23 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         if off > BELT_ROOM_MAX_OFF:
             cramped.append((score, mid, (nx, ny)))
             continue
-        if best is None or score > best[0]:
-            best = (score, mid, (nx, ny))
+        ranked.append((score, mid, (nx, ny)))
     # THE FALLBACKS (feature 261): a wind-facing margin with no room for its belt, then one facing off the wind,
-    # recorded on the map as `seat_offwind`.
-    if best is None and cramped:
-        best = max(cramped, key=lambda t: t[0])
-    if best is None and offwind:
-        best = max(offwind, key=lambda t: t[0])
-    if best is None:
+    # recorded on the map as `seat_offwind`. ONE RANKING, BEST FIRST (feature 287, plan D2): the margins in the order this
+    # function prefers them - each tier by score, the first met winning a tie - so the chosen seat is the ranking's head
+    # and the rest are its LADDER, the margins `stage_homesteads` takes in turn when the chosen one cannot seat every
+    # household (`homesteads/capacity.py`).
+    order = [c for tier in (ranked, cramped, offwind) for c in sorted(tier, key=lambda c: -c[0])]
+    if not order:
         raise ValueError("no field margin is clear of the drain and the dry hem - the fan has no buildable flank")
-    _, anchor, out = best
+    frames = [_seat_frame(anchor, out, lat, dep, (wx, wy)) for _score, anchor, out in order]
+    return {**frames[0], "ladder": frames[1:]}
+
+
+def _seat_frame(anchor: Pt, out: Pt, lat: float, dep: float, wind: Pt) -> dict[str, Any]:
+    """The seat frame on one margin: its center, the along and away units, the band's half-extents, the anchor, and
+    whether its back is off the wind."""
+    wx, wy = wind
     along = (-out[1], out[0])
     # THE BAND'S NEAR EDGE HUGS THE FIELD. The standoff is the front row's own depth and no more, and
     # the measurement below is why - not a check, which is the correction this comment needed

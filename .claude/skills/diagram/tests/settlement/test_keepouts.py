@@ -138,3 +138,19 @@ def test_field_within_measures_by_the_chains_when_the_seat_is_known() -> None:
     assert s._field_chains()[0], "the fixture must give chains, not a ring"
     assert s._field_within(450.0, 280.0, 40.0) is True  # 20 px north of the facing chord, inside the reach
     assert s._field_within(450.0, 100.0, 40.0) is False  # 200 px north of it
+
+
+def test_a_noisy_band_takes_no_more_chords_than_the_cap_and_still_contains_every_point() -> None:
+    """Feature 287, homes H27: a 400-vertex noisy ring at the dike's own tolerance simplifies to at most 24 chords for the
+    keep-out and at most 12 for the facing chains, and the keep-out still contains every covered point."""
+    from l7r.diagram.settlement._geom.primitives import FACING_CHORD_CAP, KEEPOUT_CHORD_CAP
+
+    rng = random.Random(7)
+    ring = [(500.0 + (300.0 + rng.uniform(-40.0, 40.0)) * math.cos(2 * math.pi * k / 400), 500.0 + (300.0 + rng.uniform(-40.0, 40.0)) * math.sin(2 * math.pi * k / 400)) for k in range(400)]
+    assert len(simplify_ring(ring, 1.0)) > KEEPOUT_CHORD_CAP, "the case: the tolerance alone takes more than the cap"
+    keepout, chords = keepout_ring(ring, ring, 1.0)
+    assert len(chords) <= KEEPOUT_CHORD_CAP
+    outer = keepout[: len(chords)]
+    assert all(point_in_poly(x, y, outer) or edge_dist(x, y, outer) < 1e-6 for x, y in ring)
+    chains = facing_chains(ring, (1500.0, 500.0), 1.0)
+    assert 1 <= sum(len(c) for c in chains) <= FACING_CHORD_CAP

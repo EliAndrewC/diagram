@@ -8,6 +8,7 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_dist, segments_cross
 from l7r.diagram.settlement._geom import PointGrid, boxed_grid, boxed_ring_hit, boxed_rings, boxed_segs
+from l7r.diagram.settlement._geom.water_index import crosses_a_stream
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.settlement.rolling.bearing import turned_box
 
@@ -110,7 +111,10 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
                 cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
                 if _strip_blocked(s, cx, cy, cw, ch, hx, hy, fields, marsh, pond, lanes, footing):
                     continue
+                if crosses_a_stream((hx, hy), (cx, cy), s.M.get("streams", [])):
+                    continue  # the household's strip stands on its house's bank (feature 287, homes H01)
                 ring = [(cx - cw / 2, cy - ch / 2), (cx + cw / 2, cy - ch / 2), (cx + cw / 2, cy + ch / 2), (cx - cw / 2, cy + ch / 2)]
+                plan.bamboo_of[len(plan.bamboo_polys) + len(out)] = (hx, hy)  # its owner, for the stand's record (`of`)
                 out.append(ring)
                 plan.bamboo_roles.append("homestead")
                 s.placed.append((cx, cy, cw, ch))

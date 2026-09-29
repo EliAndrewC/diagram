@@ -252,8 +252,16 @@ def keepout_ring(chain: Sequence[Pt], covered: Sequence[Pt], eps: float, filled:
     point of `covered` lies from those chords (measured, not assumed) plus `eps` - so the keep-out CONTAINS
     every covered point by construction. For a field, `chain` and `covered` are both the outline (the
     keep-out is the outline's chords plus the simplification tolerance); for a dike, `chain` is the crest and
-    `covered` the drawn band."""
-    chords = simplify_ring(chain, eps)
+    `covered` the drawn band.
+
+    AT MOST `KEEPOUT_CHORD_CAP` CHORDS (feature 287, homes H27; the GM's "a couple of dozen"): the simplification's
+    tolerance grows by half again until the chain takes no more - containment is untouched, because the push is the
+    MEASURED reach of every covered point from whatever chords result."""
+    tol = eps
+    chords = simplify_ring(chain, tol)
+    while not filled and len(chords) > KEEPOUT_CHORD_CAP:  # the dike's band; a field is held by its facing chains' cap
+        tol *= 1.5
+        chords = simplify_ring(chain, tol)
     n = len(chords)
     if n < 3:
         return list(chords), list(chords)
@@ -275,7 +283,25 @@ def keepout_ring(chain: Sequence[Pt], covered: Sequence[Pt], eps: float, filled:
 Chord = tuple[Pt, Pt, Pt]  # (a, b, outward normal): a pushed-out chord of a field outline and the side the houses are on
 
 
+#: The most chords a dike's keep-out ring may have (homes H27): the GM's "a couple of dozen".
+KEEPOUT_CHORD_CAP = 24
+#: The most chords a field's facing chains may have (homes H27): half the ring's cap, since the chains are one side of it.
+FACING_CHORD_CAP = 12
+
+
 def facing_chains(outline: Sequence[Pt], seat: Pt, eps: float) -> list[list[Chord]]:
+    """`_facing_chains` held to `FACING_CHORD_CAP` chords (feature 287, homes H27): where the outline simplifies to more,
+    the tolerance - and with it the push that keeps the drawn outline behind every chord - grows by half again until
+    the chains take no more. A cap reached only by a triangle's chains always holds."""
+    tol = eps
+    chains = _facing_chains(outline, seat, tol)
+    while sum(len(c) for c in chains) > FACING_CHORD_CAP:
+        tol *= 1.5
+        chains = _facing_chains(outline, seat, tol)
+    return chains
+
+
+def _facing_chains(outline: Sequence[Pt], seat: Pt, eps: float) -> list[list[Chord]]:
     """THE OPEN CHAINS ON THE HOUSE SIDE (feature 140, GM 2026-08-28: *"just a few line segments on one side of
     the field that you are checking that you are on the correct side of ... not forming a closed shape"*):
     the outline simplified to chords, keeping only the runs of chords whose outward normal points toward

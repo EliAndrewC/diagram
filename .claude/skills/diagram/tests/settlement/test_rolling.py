@@ -139,6 +139,15 @@ def test_headman_refuses_a_non_toscale_map():
         s.headman(400, 400)
 
 
+def test_a_hamlet_scale_map_can_draw_no_headman():
+    """Feature 287, homes H18: the role's one producer refuses a hamlet - a hamlet has no headman of its own."""
+    s = Settlement(800, 800, seed=5)
+    s.meta(name="H", scale="hamlet", ftpx=1, toscale=True)
+    with pytest.raises(ValueError, match="no headman of its own"):
+        s.headman(400, 400)
+    assert not any(h.get("role") == "headman" for h in s.M["houses"])
+
+
 def test_garden_beds_clear_rejects_a_bed_on_a_neighbor():
     # the neighbor-footprint hit branch: a shifted bed landing on an actual drawn structure is rejected
     s = Settlement(800, 800, seed=5)

@@ -597,6 +597,17 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                 _rungs += [(_o, 0.0, _ring) for _o in (px(8.0) * _k for _k in (1, 2, 3, 4))] + [(0.0, _o, _ring) for _o in (px(8.0) * _k for _k in (1, 2, 3, 4))]
             _lead: list[tuple[float, float, Sequence[tuple[float, ...]]]] = [(0.0, 0.0, _t) for _t in (kizuma_table, field_table, corridor_table, sun_table, yard_lead) if _t]
             _rungs = _lead + _rungs
+            # THE ROLLED FORM IS THE FORM DRAWN (feature 287, homes H34 and H35), so the seats a form cannot take are not
+            # offered: a corridor-rolled bath is seated only with its corridor (no unjoined shed beside it - the household
+            # with no clear corridor passes its bath to the next), and an eaves stack only against a wall of its own
+            # steading (`against_a_wall`: the outward rungs and the ring round the yard are not a wall). A kizuma along the
+            # belt stays first; where it is blocked the eaves stack is the record's own alternative (H33).
+            if kind == "bath" and bath_seat == "corridor":
+                _rungs = [(0.0, 0.0, corridor_table)]
+            elif kind == "woodpile" and woodpile_form != "shed":  # the eaves stack, and the kizuma's own fallback to it
+                _walls = steading_rects(hw, hh, shed_side if h.get("shed") else None)
+                seats = [q for q in seats if against_a_wall(q, _walls, g)]  # held to the strict test as its recorded seats are
+                _rungs = ([(0.0, 0.0, kizuma_table)] if kizuma_table else []) + [(0.0, 0.0, seats)]
             _strict_ids = {id(seats), id(kizuma_table), id(field_table), id(corridor_table), id(sun_table)}
             _seated = False
             for _ox, _oy, _table in _rungs:
@@ -722,6 +733,39 @@ def persimmon_seats(yard: tuple[float, float, float, float] | None, reach: float
     ring = front + back if front_first else back + front
     seats = (edge + ring) if front_first else (ring + edge)
     return seats + [(lx * (reach + st) / reach, ly * (reach + st) / reach) for st in steps for lx, ly in ring]
+
+
+def steading_rects(hw: float, hh: float, kura_side: str | None) -> list[tuple[float, float, float, float]]:
+    """The walls an eaves stack may stand against, in the house's unturned frame: the house, and its kura where it keeps
+    one (north, or the west end - `Settlement.house`'s own kura footprint)."""
+    rects = [(0.0, 0.0, hw, hh)]
+    if kura_side == "N":
+        rects.append((0.0, -0.60 * hh, 0.46 * hw, 0.30 * hh))
+    elif kura_side is not None:
+        rects.append((-0.64 * hw, 0.0, 0.32 * hw, 0.56 * hh))
+    return rects
+
+
+def against_a_wall(seat: Sequence[float], rects: Sequence[tuple[float, float, float, float]], g: float, tol: float = 1.5) -> bool:
+    """Does a seat `(lx, ly, w, d)` in the house frame stand against a wall of its steading - its edge within the wall gap
+    `g` (plus `tol`) of one of `rects`, and overlapping it along that wall (feature 287, homes H35: 5-7 of Mizuguchi's 10
+    stacks stood 10.5-27.8 ft off any building)? The one predicate the placer and its test read."""
+    lx, ly, cw, ch = seat[0], seat[1], seat[2], seat[3]
+    for rx, ry, rw, rh in rects:
+        gx = abs(lx - rx) - (cw + rw) / 2
+        gy = abs(ly - ry) - (ch + rh) / 2
+        if (gx <= g + tol and gy < 0.0) or (gy <= g + tol and gx < 0.0):
+            return True
+    return False
+
+
+def woodpile_form_for(knob: str, kizuma_seats_found: bool) -> str:
+    """The woodpile form a homestead draws (feature 287, homes H33): the kizuma only where the knob rolled it and the
+    windbreak stands within the kizuma reach behind this homestead (research/homesteads/260: the kizuma only with the
+    windbreak at the homestead's back), else the eaves stack - the record's own alternative; the woodshed where rolled."""
+    if knob == "kizuma":
+        return "kizuma" if kizuma_seats_found else "eaves"
+    return knob
 
 
 def fixture_form(kind: str, manure_form: str | None, woodpile_form: str, kizuma: bool) -> str | None:

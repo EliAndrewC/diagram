@@ -72,11 +72,42 @@ def test_it_keeps_the_stream_set_back() -> None:
     assert min(seg_dist(px, py, (400.0, 820.0), (1000.0, 820.0)) for px, py in corners) >= STREAM_SETBACK_PX
 
 
-def test_no_seat_is_recorded_and_nothing_drawn() -> None:
+def test_a_pinned_own_ground_the_site_cannot_seat_is_refused_and_a_rolled_one_resolves_to_the_village() -> None:
+    """Feature 287, plan D9: a rolled feature is always drawn - `own_ground` resolves only where the edge seat finds a
+    legal seat, the knob narrowed to what the site affords (the village's ground); a PINNED own ground with no seat is
+    refused, naming the map, as declared input the site cannot honor."""
+    import pytest
+
     s = _hamlet()
     s.M["fields"] = [{"outline": [(0, 0), (1400, 0), (1400, 1400), (0, 1400)]}]  # paddy everywhere
-    stage_burial(s, a_plan())
-    assert s.M["meta"]["burial_ground"] == "no seat" and not s.M["cemeteries"]
+    with pytest.raises(ValueError, match=r"pinned own_ground and no edge of this site takes the ground"):
+        stage_burial(s, a_plan())
+    assert not s.M["cemeteries"]
+    for seed in range(1, 40):
+        s = _hamlet(form=None)
+        s.seed = seed
+        s.M["fields"] = [{"outline": [(0, 0), (1400, 0), (1400, 1400), (0, 1400)]}]
+        stage_burial(s, a_plan())
+        assert s.M["meta"]["hamlet_burial"] == "village_ground" and not s.M["cemeteries"]
+        if s.M["meta"].get("hamlet_burial_narrowed"):
+            break
+    else:
+        raise AssertionError("no seed rolled own_ground")
+
+
+def test_the_ground_is_a_way_target_at_its_edge_nearest_the_houses() -> None:
+    """Feature 287, homes H36: a path runs to the graves - the ground's edge nearest the houses is registered for the web."""
+    from l7r.diagram.hamletgen.burial import ground_way_target
+
+    s = _hamlet()
+    plan = a_plan()
+    stage_burial(s, plan)
+    g = _ground(s)
+    (tx, ty) = plan.way_targets[0]
+    assert s.M["meta"]["way_targets"] == [{"kind": "burial ground", "at": [round(tx, 1), round(ty, 1)]}]
+    assert abs(abs(tx - g["x"]) - g["w"] / 2) < 1e-6 or abs(abs(ty - g["y"]) - g["h"] / 2) < 1e-6, "on the ground's edge"
+    assert ground_way_target((0.0, 0.0), 40.0, 20.0, [{"x": 100.0, "y": 5.0}]) == (20.0, 5.0)
+    assert ground_way_target((0.0, 0.0), 40.0, 20.0, [{"x": 3.0, "y": -2.0}]) == (3.0, -10.0), "a house over the box: its nearest side"
 
 
 def test_only_a_hamlet_draws_one() -> None:

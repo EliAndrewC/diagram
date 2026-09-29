@@ -25,6 +25,7 @@ burial ground. Down the fall line first is the village's own ground's side (buri
 from __future__ import annotations
 
 import math
+from typing import Any
 
 from l7r.diagram.settlement import Settlement, knob_rng
 from l7r.diagram.settlement._knobs import BOUNDARY_STONE_CLEAR_FT
@@ -91,14 +92,39 @@ def stage_burial(s: Settlement, plan: SitePlan) -> None:
     form = s.knob_pins.get("hamlet_burial") or BURIAL_FORMS[knob_rng(s.seed, "hamlet_burial").randrange(len(BURIAL_FORMS))]
     if form not in BURIAL_FORMS:
         raise ValueError(f"hamlet_burial: {form!r} is not one of {BURIAL_FORMS}")
+    seat: Pt | None = None
+    w = h = 0.0
+    if form == "own_ground":
+        w, h = ground_size(len(houses), float(s.M["meta"].get("ftpx", 1.0)))
+        seat = seat_ground(s, plan.down_deg, w, h)
+    # A ROLLED FEATURE IS ALWAYS DRAWN (feature 287, plan D9): `own_ground` resolves only where the edge seat finds a
+    # legal seat - the knob narrowed, as the cluster shape's is (D4), to the forms this site affords, so a rolled own
+    # ground with no seat is the village's ground, not a ground dropped. A PINNED own ground with no seat is declared input
+    # the site cannot honor, refused here, naming it (D7's kind of refusal).
+    if form == "own_ground" and seat is None:
+        if s.knob_pins.get("hamlet_burial") == "own_ground":
+            raise ValueError(f"{plan.spec.name} (seed {plan.spec.seed}): hamlet_burial is pinned own_ground and no edge of this site takes the ground")
+        form = "village_ground"
+        s.M["meta"]["hamlet_burial_narrowed"] = True
     s.M["meta"]["hamlet_burial"] = form
-    if form == "village_ground":
-        return
-    w, h = ground_size(len(houses), float(s.M["meta"].get("ftpx", 1.0)))
-    seat = seat_ground(s, plan.down_deg, w, h)
     if seat is None:
-        s.M["meta"]["burial_ground"] = "no seat"
         return
     with s.feature("burial ground"):
         s.cemetery(seat[0], seat[1], w, h, parish=False)
     s.M["meta"]["burial_ground"] = "own"
+    # A PATH RUNS TO THE GRAVES (feature 287, homes H36; research religion-and-death 140 and 190): the ground's edge nearest
+    # the houses is registered as a way target the web serves (`plan.way_targets`, `meta.way_targets`)
+    target = ground_way_target(seat, w, h, houses)
+    plan.way_targets.append(target)
+    s.M["meta"].setdefault("way_targets", []).append({"kind": "burial ground", "at": [round(target[0], 1), round(target[1], 1)]})
+
+
+def ground_way_target(seat: Pt, w: float, h: float, houses: list[dict[str, Any]]) -> Pt:
+    """Where a way reaches the burial ground: the point of the ground's box edge nearest the nearest house."""
+    cx, cy = seat
+    near = min(houses, key=lambda q: math.hypot(float(q["x"]) - cx, float(q["y"]) - cy))
+    hx, hy = float(near["x"]), float(near["y"])
+    x, y = min(max(hx, cx - w / 2), cx + w / 2), min(max(hy, cy - h / 2), cy + h / 2)
+    if abs(x - cx) < w / 2 and abs(y - cy) < h / 2:  # the house stands over the box's span: the nearest side
+        x, y = (cx + math.copysign(w / 2, hx - cx), y) if w / 2 - abs(x - cx) < h / 2 - abs(y - cy) else (x, cy + math.copysign(h / 2, hy - cy))
+    return (x, y)

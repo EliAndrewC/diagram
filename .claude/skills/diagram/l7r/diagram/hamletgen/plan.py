@@ -191,6 +191,8 @@ class SitePlan:
     # The bamboo stands (T47), scanned in `stage_hinterland` before the scrub, drawn by `stage_bamboo`.
     bamboo_polys: list[Poly] = field(default_factory=list)
     bamboo_roles: list[str] = field(default_factory=list)
+    bamboo_of: dict[int, Pt] = field(default_factory=dict)  # a homestead strip's owner house, by its index in `bamboo_polys` (feature 287, homes H01)
+    way_targets: list[Pt] = field(default_factory=list)  # points a way must reach - a burial ground's edge (feature 287, homes H36); the web serves each
     fixtures_min: dict[str, int] = field(
         default_factory=dict
     )  # the spec's floor per fixture kind (T61); the placer forces presence up to it  # "thicket" (communal, one) or "homestead" (per farmstead), parallel to bamboo_polys

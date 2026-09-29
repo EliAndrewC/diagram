@@ -178,7 +178,9 @@ def _fit_at_aspect(
         # (`watercourse_ends_reach_water`). The offtake ladder keeps the tail SHORT, but whether a
         # short tail lands inside depends on how wide the fan happens to be there - so the bisection
         # picks the best fan that is legal rather than the best fan and then hoping.
-        score = (tail_dangles(net) or net_bends_acutely(net), err)
+        # ...AND A FAN WHOSE SUPPLY LEAVES A FLANK UNCOMMANDED IS NOT LEGAL (feature 287, water W32): judged beside the
+        # dangling tail and the hairpin, so a size or an aspect that commands both flanks always wins over one that does not
+        score = (tail_dangles(net) or net_bends_acutely(net) or not flanks_commanded(net, plan.down_deg, plan.ftpx), err)
         if best is None or score < best[0]:
             best = (score, carve)
         if err <= tolerance and not score[0]:
@@ -280,6 +282,41 @@ def tail_dangles(net: Mapping[str, Any], margin: float = 18.0) -> bool:
     ends = [q for c in net["channels"] if c["role"] == "main" for q in (c["pts"][0], c["pts"][-1])]
     free = [q for q in ends if sum(1 for r in ends if math.hypot(q[0] - r[0], q[1] - r[1]) < 5.0) == 1]
     return any(not (x0 <= q[0] <= x1 and y0 <= q[1] <= y1) for q in free[1:])  # [1:] drops the head intake, which is always outside the plots
+
+
+FLANK_REACH_FLOOR_FT = 80.0
+"""The least supply reach a flank of the fork is owed, in feet, whatever its extent (GM 2026-08-16,
+`comb_supply_commands_both_flanks`): with `FLANK_REACH_SHARE`, the finished-map test's own figures."""
+FLANK_REACH_SHARE = 0.3
+FLANK_MIN_EXTENT_FT = 150.0
+"""A flank narrower than this is not a flank the rule judges (the test's own non-vacuity bar)."""
+
+
+def flanks_commanded(net: Mapping[str, Any], down_deg: float, ftpx: float = 1.0) -> bool:
+    """Does the supply reach both flanks of the fork (feature 287, water W32)? Each side of the fork, measured across the
+    fall, is owed supply-ditch reach of at least max(80 ft, 30% of that flank's planted extent); a fan planted on one side
+    only commands no second flank. The ONE predicate the fit's legality reads and the finished-map test reads."""
+    fork = net.get("fork")
+    if fork is None:
+        return True
+    cross = (-math.sin(math.radians(down_deg)), math.cos(math.radians(down_deg)))
+
+    def offset(v: Any) -> float:
+        return float((v[0] - fork[0]) * cross[0] + (v[1] - fork[1]) * cross[1])
+
+    extent, reach = [0.0, 0.0], [0.0, 0.0]
+    for p in net.get("plots") or []:
+        for v in p.get("poly") or ():
+            o = offset(v)
+            extent[0 if o >= 0 else 1] = max(extent[0 if o >= 0 else 1], abs(o))
+    for c in net.get("channels") or []:
+        if c.get("role") in ("main", "branch"):
+            for v in c["pts"]:
+                o = offset(v)
+                reach[0 if o >= 0 else 1] = max(reach[0 if o >= 0 else 1], abs(o))
+    if min(extent) <= FLANK_MIN_EXTENT_FT / ftpx:
+        return False
+    return all(reach[i] >= max(FLANK_REACH_FLOOR_FT / ftpx, FLANK_REACH_SHARE * extent[i]) for i in (0, 1))
 
 
 def net_bends_acutely(net: Mapping[str, Any]) -> bool:

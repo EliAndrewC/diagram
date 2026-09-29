@@ -44,6 +44,16 @@ def _among_dwellings(houses: Sequence[Mapping[str, Any]], x: float, y: float) ->
     return well_gap_to_dwellings(houses, round(x, 1), round(y, 1)) <= WELL_AMONG_DWELLINGS_PX
 
 
+def crop_extent_added(s: Any, c: Pt, xs: Sequence[float], ys: Sequence[float]) -> float:
+    """How far past the crop's predicted box a wellhead at `c` (its drawn radius included) reaches - 0 inside it
+    (feature 287, homes H12). The box is `_crop_boxes`, what `crop_to_content` reads; a settlement that keeps none (a
+    stand-in) is judged against the house centers' own box."""
+    boxes = s._crop_boxes(city=False) if hasattr(s, "_crop_boxes") else []
+    bx0, bx1 = min((b[0] for b in boxes), default=min(xs)), max((b[1] for b in boxes), default=max(xs))
+    by0, by1 = min((b[2] for b in boxes), default=min(ys)), max((b[3] for b in boxes), default=max(ys))
+    return max(0.0, bx0 - (c[0] - _WELL_DRAWN_R), (c[0] + _WELL_DRAWN_R) - bx1, by0 - (c[1] - _WELL_DRAWN_R), (c[1] + _WELL_DRAWN_R) - by1)
+
+
 def well_target(households: int) -> int:
     """How many communal draw-wells a hamlet of this size keeps.
 
@@ -82,6 +92,14 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
     ccx, ccy = sum(xs) / len(xs), sum(ys) / len(ys)
     want = well_target(plan.spec.households)
     placed: list[Pt] = []
+    # THE POCKETS FIRST (feature 287, homes H10 and H11): each household the seating gave a well pocket (`well_pocket`)
+    # has its wellhead's ground reserved inside its own homestead, before its yard - drawn there as a well, with no seat to
+    # seek. The lattice below adds the rest of `well_target`, held off every pocket as off every well.
+    for h in houses:
+        if h.get("well_pocket"):
+            wx, wy = float(h["well_pocket"][0]), float(h["well_pocket"][1])
+            s.well(wx, wy)
+            placed.append((wx, wy))
     # A WELLHEAD MAY NOT STAND IN THE SHELTER BELT (settlement-review, Inashiro 2026-08-18). The
     # belt is drawn later, but `village_grove` SKIPS any clump whose canopy would reach a wellhead
     # (`wells_clear_of_trees` - a well lost under the grove reads wrong), so a well seated inside
@@ -299,75 +317,16 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
             _, x, y = pool.pop(0)
             if any(math.hypot(x - px, y - py) < 170.0 for px, py in placed):
                 continue  # `wells_not_clustered`: shared wells serve separate courtyards
+            if crop_extent_added(s, (x, y), xs, ys) > 0.0:
+                # NO WELL HOLDS THE CROP OPEN (feature 287, homes H12): the frame term was a score because a padded seat was
+                # sometimes the only way to water a household; the pockets water every one now, so a lattice well that
+                # reaches past the box the crop will set is refused, not drawn
+                continue
             if s.well_at(x, y):
                 placed.append((x, y))
-    # ...then a COVERAGE pass. `settlement_dwellings_watered` gives every dwelling ~760 real feet to
-    # the nearest well, channel, pond or stream - generous, and still not automatic once a cluster is
-    # sized from the real bundle pitch and runs 700+ px along its margin: a single well at one end
-    # leaves the far end dry. So any house still out of reach gets a well sought beside it.
-    reach = 760.0 / max(plan.ftpx, 0.01)
-    for h in houses:
-        if any(math.hypot(h["x"] - px, h["y"] - py) <= reach for px, py in placed):
-            continue
-        if surface_water_dist(s.M, h["x"], h["y"]) <= reach:
-            continue  # watered by a stream/channel/pond - the check's own verdict; no rescue well
-        # A RING PROBE, spiraling out from the house, asking `well_at` directly.
-        #
-        # AND EVERY CANDIDATE MUST STILL STAND AMONG THE DWELLINGS - near SOME house, not necessarily
-        # the one being rescued. `wells_among_dwellings` is a 95 px edge-gap verdict against the
-        # served building, and this probe used to take the first seat `well_at` allowed at any radius
-        # out to 340. That was harmless while nothing reached this branch, and stopped being harmless
-        # the moment the sun corridor (2026-08-13) spread a cluster enough to strand a household:
-        # seed 18 seated a well 161 px from its nearest dwelling. Capping the RADIUS was the obvious
-        # fix and the wrong one - it just traded the failure for `settlement_dwellings_watered`,
-        # leaving the household dry. The honest constraint is the one the check states: a well may
-        # be dug well away from the farm it rescues, as long as it is in somebody's courtyard.
-        #
-        # `open_seat` was tried here first and is the wrong tool: it optimizes a seat over a
-        # RECTANGLE - furthest from what it is told to clear, ties toward the center - and it
-        # returned None at every radius from 60 to 430 px around a stranded farmstead that had a
-        # perfectly legal spot 40 px to its east. What this needs is not the best seat in a region
-        # but ANY seat near THIS house, so it asks the question that way round, and it asks it of
-        # `well_at`, which is the call that actually places a well.
-        spot = None  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
-        for radius in range(40, 340, 20):  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
-            for bearing in range(0, 360, 20):  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
-                cand = (
-                    h["x"] + math.cos(math.radians(bearing)) * radius,
-                    h["y"] + math.sin(math.radians(bearing)) * radius,
-                )  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
-                if not (
-                    min(xs) <= cand[0] <= max(xs) and min(ys) <= cand[1] <= max(ys)
-                ):  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
-                    # a rescue well still sits INSIDE the house cloud. A wellhead is a hard crop  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
-                    # feature with a 16 px extent, so one seated past the outermost homestead drags  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
-                    # the frame out after it (`crop_not_held_open_by_one_feature`) - the same reason  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
-                    # the grid above is laid over the cloud rather than a box grown around it.  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
-                    continue  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
-                if not _among_dwellings(houses, cand[0], cand[1]):  # pragma: no cover - the rescue's among-the-dwellings floor
-                    continue  # pragma: no cover - the rule's own predicate (feature 287, FR-003)
-                if any(
-                    math.hypot(cand[0] - px, cand[1] - py) < 110.0 for px, py in placed
-                ):  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
-                    continue  # `wells_not_clustered`: shared wells serve separate courtyards  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
-                if s.well_at(cand[0], cand[1]):  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
-                    spot = cand  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
-                    break  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
-            if spot is not None:  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
-                placed.append(spot)  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
-                break  # pragma: no cover - the well ring-probe rescue; the bundle-pitch fix left the courtyards open enough that no cohort map strands a household
-    if not placed:
-        # LAST RESORT: ask the engine. A settlement with NO well fails the gate outright, and by
-        # this point the lattice has been refused everywhere - which means the courtyards are full,
-        # not that there is no room. `open_seat` runs the engine's own `_fits` over the ground and
-        # returns the best clear spot or None, which is the documented answer to "this pocket needs
-        # one more X" and finds seats a hand-rolled scan misses (the skill's dev notes: a manifest
-        # scan cannot predict `_fits`).
-        spot = s.open_seat(
-            (min(xs), min(ys), max(xs), max(ys)), 16.0, 16.0, well=True
-        )  # pragma: no cover - reached only when the lattice above found NOTHING, which the bundle-pitch fix made rare; a settlement with no well fails the gate outright, so the branch stays
-        # ...held to the same among-the-dwellings floor (feature 287, FR-005: no fallback emits a violation) - a seat
-        # `open_seat` finds out in the commons is refused, not drawn
-        if spot is not None and _among_dwellings(houses, spot[0], spot[1]) and s.well_at(spot[0], spot[1]):
-            placed.append(spot)
+    # NO RESCUE AND NO LAST RESORT (feature 287, homes H10-H12). A ring probe spiraled out from each dry household and
+    # `open_seat` was asked when the lattice found nothing; both are gone, because what they rescued is carried by
+    # construction now: every household seated is within `WATER_REACH_FT` of a well pocket or of open water
+    # (`needs_pocket`), and the first always carries one - so no house is left dry and no settlement wellless, and no
+    # well is drawn outside its among-the-dwellings floor or past the crop to rescue one.
     return len(placed)

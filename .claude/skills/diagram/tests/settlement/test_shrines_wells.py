@@ -693,3 +693,28 @@ def test_the_outer_stable_finds_no_seat_on_the_paddy() -> None:
     s.M["houses"] = [owner]
     s.field_polys.append([(200.0, 200.0), (400.0, 200.0), (400.0, 400.0), (200.0, 400.0)])
     assert s._yard_shed_seat(owner, 15.5, 10.5) is None
+
+
+def test_a_households_byre_is_never_stabled_across_the_brook_from_its_house(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 287, homes H01: a brook passing 10 px off the owner's back wall puts every back-wall seat on the far bank;
+    the arm, the outer stable and the spiral each refuse it and seat the beast on the house's bank - by the one
+    same-bank predicate, `crosses_a_stream`."""
+    from l7r.diagram.settlement._geom.water_index import crosses_a_stream
+
+    for form in ("courtyard", "yard_shed"):
+        s = _crop_settlement()
+        owner = {"x": 300.0, "y": 300.0, "w": 40.0, "h": 28.0, "kind": "plain", "rot": 0.0, "wealth": 1.0}
+        s.M["houses"] = [owner]
+        s.M["streams"] = [{"poly": [[100.0, 276.0], [500.0, 276.0]], "w": 3.0}]  # 10 px behind the north wall
+        s.pin_knob("byre_form", form)
+        s.draft_byres()
+        assert s.M["byres"], form
+        assert all(not crosses_a_stream((300.0, 300.0), (b["x"], b["y"]), s.M["streams"]) for b in s.M["byres"]), form
+    s = _crop_settlement()
+    s.M["houses"] = [{"x": 300.0, "y": 300.0, "w": 20.0, "h": 14.0, "kind": "plain", "rot": 0.0, "wealth": 1.0}]
+    s.placed.append((300.0, 300.0, 20.0, 14.0))
+    s.M["streams"] = [{"poly": [[100.0, 290.0], [500.0, 290.0]], "w": 1.0}]
+    s.pin_knob("byre_form", "yard_shed")
+    monkeypatch.setattr(Settlement, "_yard_shed_seat", lambda self, h, bw, bh: None)
+    s.draft_byres()
+    assert all(b["y"] > 290.0 for b in s.M["byres"]), "the spiral's seats north of the brook are refused"
