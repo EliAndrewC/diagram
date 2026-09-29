@@ -206,6 +206,7 @@ def test_a_used_run_id_and_a_refusing_runner_start_nothing(world: dict) -> None:
     with pytest.raises(er.Refused, match="page-session refused: page-session: no brief"):
         er.launch(_run_args(world, "R", run="e6"), world["origin"], time.time())
     assert not (world["fdir"] / "runs" / "e6.json").exists()
+    assert not (world["tmp"] / "clones" / "diagram-exp-e6").exists() and not (world["tmp"] / "clones" / ".runs-293" / "e6").exists()
 
 
 def test_claims_at_start_without_a_claims_file(tmp_path: pathlib.Path) -> None:

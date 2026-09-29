@@ -8,3 +8,4 @@ given, identically, to the other.
 - 2026-09-29T21:44:01Z | - | preflight | memory: the shared cgroup's working set read 5.87 GB with other sessions active (a fully quiet host was not available; the gate opens at 4.5 GB, so it CAN open - it read 4.2-4.7 GB through the afternoon)
 - 2026-09-29T21:44:01Z | - | preflight | R8: both future-work entries open at START; main draws no burial-ground way (feature 287's tasks T03/T46 still open)
 - 2026-09-29T21:44:10Z | e1 | wait | launch refused: shared working set 6.09 GB over 4.5 GB; waiting (R5 D7)
+- 2026-09-29T21:53:15Z | e1 | refreeze | the page runner refused R-write.md (no '## Your items' for its write cap to count) before anything ran; the brief gained that section, the launcher now removes the clone on a refusal, and the experiment was re-frozen at a new START with the same SEED (no run had started)

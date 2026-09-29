@@ -222,6 +222,9 @@ def launch(args: argparse.Namespace, repo: pathlib.Path, now: float) -> dict:
         cmd = [str(clone / "scripts" / "page-session.sh"), " ".join(briefs), clone.name, "", arm, str(agents)]
         out = subprocess.run(cmd, cwd=clone, env=env, capture_output=True, text=True, check=False)
         if out.returncode:
+            # Nothing started: the clone and the run's directory go, so the run id can be used again.
+            shutil.rmtree(clone)
+            shutil.rmtree(work)
             raise Refused(f"page-session refused: {out.stderr.strip()[:300]}")
         record["argv"] = cmd
         record["sessions"] = [{"brief": b, "prompt_sha256": exp["hashes"][p], "effort": arm, "log": None}

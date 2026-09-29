@@ -31,6 +31,11 @@ FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="293 | task R in progress (buildin
 **New registry entries and glossary terms take their prefix from `make reserve KIND=registry|glossary KEY=<k>`** (in
 `.claude/skills/diagram`).
 
+## Your items
+
+- R1 **The servants' quarters**: one dormitory behind sliding partitions with one door, or a door a household - researched,
+  written on the buildings page as described above, and handed off.
+
 ## The procedure (session 1: research and write)
 
 1. **Canon first, once.** If any part is a question of the SETTING, ask the GM's canon with ONE call naming every term:
