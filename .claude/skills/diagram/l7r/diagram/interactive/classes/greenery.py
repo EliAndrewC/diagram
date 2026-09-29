@@ -131,7 +131,7 @@ class HomesteadGrove(Kind):
 
     Why: The grove is older than the modern surveys - the Kaga domain's documents of the 1600s and 1700s treat the
     homestead grove as a stand of timber and bamboo kept thick against wind and fire, and a 1987 survey counted dozens
-    of good-sized trees around each farmhouse. Which sides it took was a regional custom: on the Sendai plain it stood on
+    of good-sized trees around each farmhouse. Which sides it took differed from region to region: on the Sendai plain it stood on
     the north and west, planted there at the urging of the domain's first lord, and often lacked the south or the east; on the Tonami plain it was
     open only at the front, where the yard and the way in were; on the Izumo plain it went the whole way round the
     house before the Meiji era, on a bank against floods. So a settlement rolls its farms' grove shape, the windward
