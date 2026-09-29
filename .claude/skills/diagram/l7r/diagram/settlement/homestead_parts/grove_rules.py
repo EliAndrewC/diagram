@@ -21,6 +21,8 @@ the rule was not vacuous (`grove_farms`).
 
 from __future__ import annotations
 
+import math
+
 from collections.abc import Mapping, Sequence
 from typing import Any
 
@@ -131,13 +133,18 @@ def gardens_east_shaded(M: Mapping[str, Any]) -> list[tuple[Pt, Mapping[str, Any
 
 
 def fixtures_on_groves(M: Mapping[str, Any]) -> list[tuple[str, Mapping[str, Any]]]:
-    """Each (fixture kind, band) where a farm fixture's box overlaps a grove band's box (both recorded centered)."""
+    """Each (fixture kind, band) where a farm fixture's drawn box - its recorded size turned by its `rot`, so a flank seat's
+    shed lying along the wall is 12 ft across, not 24 (cohort seeds 6, 11, 16) - overlaps a grove band's box (both
+    recorded centered)."""
     bands = [g for g in M.get("groves") or () if all(k in g for k in ("x", "y", "w", "h"))]
     out = []
     for f in M.get("farm_fixtures") or ():
         if not all(k in f for k in ("x", "y", "w", "h")):  # a fixture with no box (a tree) has no footprint to test
             continue
+        th = math.radians(float(f.get("rot", 0.0)))
+        fw = abs(f["w"] * math.cos(th)) + abs(f["h"] * math.sin(th))
+        fh = abs(f["w"] * math.sin(th)) + abs(f["h"] * math.cos(th))
         for g in bands:
-            if abs(f["x"] - g["x"]) < (f["w"] + g["w"]) / 2 and abs(f["y"] - g["y"]) < (f["h"] + g["h"]) / 2:
+            if abs(f["x"] - g["x"]) < (fw + g["w"]) / 2 and abs(f["y"] - g["y"]) < (fh + g["h"]) / 2:
                 out.append((str(f.get("kind")), g))
     return out

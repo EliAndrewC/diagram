@@ -268,3 +268,27 @@ def test_fixtures_on_groves_names_a_fixture_inside_a_band() -> None:
     M = {"groves": [band, {"poly": []}], "farm_fixtures": [{"kind": "bath", "x": 18.0, "y": 0.0, "w": 7.0, "h": 6.0}, {"kind": "woodpile", "x": 60.0, "y": 0.0, "w": 24.0, "h": 12.0}, {"kind": "persimmon", "x": 0.0, "y": 0.0}]}
     assert fixtures_on_groves(M) == [("bath", band)], "the bath inside the band; the shed clear of it; a tree has no box"
     assert fixtures_on_groves({}) == []
+
+
+def test_fixtures_on_groves_reads_the_fixture_turned() -> None:
+    """A flank seat's shed is recorded 24 x 12 at a quarter turn: drawn 12 across, it clears a band whose edge is 10 ft from its center."""
+    from l7r.diagram.settlement.homestead_parts.grove_rules import fixtures_on_groves
+
+    band = {"x": 0.0, "y": 0.0, "w": 40.0, "h": 80.0}
+    shed = {"kind": "woodpile", "x": 30.0, "y": 0.0, "w": 24.0, "h": 12.0}
+    assert fixtures_on_groves({"groves": [band], "farm_fixtures": [shed]}) == [("woodpile", band)]
+    assert fixtures_on_groves({"groves": [band], "farm_fixtures": [{**shed, "rot": 90.0}]}) == []
+
+
+def test_band_clumps_cuts_a_band_into_pieces_no_larger_than_the_cap() -> None:
+    """`band_clumps` (feature 291): a band over one clump's cap is cut along its longer side into equal pieces, each at
+    most the cap, tiling the band; a band under the cap, or a cap of zero, is one piece."""
+    from l7r.diagram.settlement.homestead_parts.groves import band_clumps
+
+    tall = band_clumps(0.0, 0.0, 40.0, 80.0, 1400.0)
+    assert len(tall) == 3 and all(w == 40.0 and h * w <= 1400.0 for _x, _y, w, h in tall)
+    assert sum(h for *_r, h in tall) == pytest.approx(80.0) and tall[0][1] < tall[-1][1]
+    wide = band_clumps(0.0, 0.0, 120.0, 20.0, 1400.0)
+    assert len(wide) == 2 and all(h == 20.0 for *_r, h in wide) and wide[0][0] < wide[1][0]
+    assert band_clumps(5.0, 6.0, 10.0, 10.0, 1400.0) == [(5.0, 6.0, 10.0, 10.0)]
+    assert band_clumps(5.0, 6.0, 10.0, 10.0, 0.0) == [(5.0, 6.0, 10.0, 10.0)]

@@ -6,10 +6,11 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, point_in_poly, surface_water_dist
+from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, surface_water_dist
 
-from ..consts import Pt
+from ..consts import FOOTPATH_FABRIC_GAP, Pt
 from ..plan import SitePlan
+from .fixtures import homestead_box
 
 _WELL_DRAWN_R = 12.0
 """The wellhead's DRAWN half-extent, used when asking how far a candidate seat would push the crop.
@@ -35,6 +36,56 @@ def worst_after(c: tuple[float, float, float], needy: Sequence[Mapping[str, Any]
     return max(min(sd, math.hypot(h["x"] - c[1], h["y"] - c[2])) for h, sd in zip(needy, standing, strict=True))
 
 
+# A FARM WITH ITS OWN GROVE DRAWS FROM ITS OWN WELL (feature 291; research/homesteads/200, "Does a dispersed hamlet's
+# outlying farm have its own well? Yes"): a shared well within reach is a nucleated settlement's arrangement, and a farm
+# standing in its own grove some 250 ft from the next has no center to share. The rings are the dooryard and the service
+# strip - where on the plot the well stood no page read says (a GUESS) - nearest first, never in a grove band.
+OWN_WELL_RINGS_FT = ((36.0, 16), (46.0, 20), (56.0, 24), (68.0, 24), (80.0, 28), (94.0, 32), (108.0, 32))  # past the walls (a farmhouse is some 46 x 28 ft, the well box 30 ft) out to the frame
+
+
+def own_well_clear(s: Settlement, x: float, y: float, half: float, boxes: Sequence[tuple[float, float, float, float]]) -> bool:
+    """May a farm's own wellhead of drawn half-size `half` stand at (x, y)? Tested by FOOTPRINT: its box a 2 ft gap off
+    every reserved box (`boxes`: the placed boxes but the farm's own frame, and the grove bands), and the engine's own
+    ground tests - no water, crop or bog (`_well_ground_clear`), no scrub cover, nothing blocked. `well_at` asks `_fits`,
+    whose circumscribed circle round a 150 ft grove band covered most of the farm it shelters (Kashikawa: 0 wells)."""
+    if x < 55 or y < 88 or x > s.W - 55 or y > s.H - 26:
+        return False
+    if s._in_scrub_cover(x, y) or not s._well_ground_clear(x, y) or s._in_blocked(x, y):
+        return False
+    return not any(abs(x - bx) < half + bw / 2 + 2.0 and abs(y - by) < half + bh / 2 + 2.0 for bx, by, bw, bh in boxes)
+
+
+def own_wells(s: Settlement, houses: Sequence[Mapping[str, Any]]) -> int:
+    """One PRIVATE well for each farm that carries its own grove, on a ring round its house, nearest first, tested by
+    `own_well_clear` against every reserved box but the farm's own frame (it holds the whole plot the well stands on).
+    Returns the wells seated."""
+    bands = [(float(g["x"]), float(g["y"]), float(g["w"]), float(g["h"])) for g in s.M.get("groves", []) if all(k in g for k in ("x", "y", "w", "h"))]
+    from ..ways.serve import front_door  # local: the ways are a later stage, module-level would invert the pipeline's reading order
+
+    half = s._well_vr()
+    yards = {(round(float(y["of"][0]), 1), round(float(y["of"][1]), 1)): (float(y["x"]), float(y["y"])) for y in s.M.get("threshing_yards", []) if y.get("of")}
+    n = 0
+    for h in houses:
+        hx, hy = float(h["x"]), float(h["y"])
+        frame = homestead_box(s.placed, hx, hy)
+        boxes: list[tuple[float, float, float, float]] = [(float(p[0]), float(p[1]), float(p[2]), float(p[3])) for p in s.placed if (float(p[0]), float(p[1]), float(p[2]), float(p[3])) != frame] + bands
+        # ...THE DOORYARD SIDE FIRST: the seats nearest the farm's work yard, so the well stands in the dooryard and leaves the
+        # service strip behind the house to the wood shed (a first cut ringed from the east and took 4 of Mizuguchi's 5)
+        yard = yards.get((round(hx, 1), round(hy, 1)), (hx, hy + 1.0))
+        ring = [(hx + s.px(r_ft) * math.cos(2 * math.pi * k / k_n), hy + s.px(r_ft) * math.sin(2 * math.pi * k / k_n), r_ft) for r_ft, k_n in OWN_WELL_RINGS_FT for k in range(k_n)]
+        ring.sort(key=lambda q: (math.dist((q[0], q[1]), yard), q[2]))
+        # ...BESIDE THE WAY IN, NOT ON IT: the seats nearest the yard lie straight out past it, where the farm's path arrives
+        # (`front_door`); a well there took the approach on every farm and the web re-routed round 12 of them (Mizuguchi:
+        # 8 lanes to 34). The approach is the house-to-yard line carried past the yard, a well's box and a path's width wide.
+        door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
+        approach = [(hx, hy), door] if door is not None else []
+        seat = next(((x, y) for x, y, _r in ring if own_well_clear(s, x, y, half, boxes) and not (approach and seg_dist(x, y, approach[0], approach[1]) < half + s.px(12.0))), None)
+        if seat is not None:
+            s.well(seat[0], seat[1], private=True)
+            n += 1
+    return n
+
+
 def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]]) -> int:
     """Seat the communal wells INSIDE the house cloud, not on a box around it.
 
@@ -50,6 +101,12 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
     none too far, which is what "among the dwellings" means, and the innermost candidates are tried
     first. `well_at` gives the engine's own verdict on each - it refuses a seat on a lane, a crop, a
     footprint or too near another well - so nothing here restates a placement rule."""
+    grove_farms = [h for h in houses if (h.get("geom") or {}).get("groves")]
+    if grove_farms:
+        own_wells(s, grove_farms)
+        houses = [h for h in houses if h not in grove_farms]  # the communal wells serve the rest, if any
+        if not houses:
+            return len(s.M.get("wells", []))
     xs = [h["x"] for h in houses]
     ys = [h["y"] for h in houses]
     ccx, ccy = sum(xs) / len(xs), sum(ys) / len(ys)

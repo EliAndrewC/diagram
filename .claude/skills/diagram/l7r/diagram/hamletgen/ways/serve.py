@@ -687,3 +687,31 @@ def _serve_stragglers(
                 _exhausted[id(h)] = _key
         if not added:
             return
+
+
+DOOR_REACH_FT = 40.0
+"""How far a grove farm's front door may stand from the lane network before a footpath is laid to it (feature 291; the
+settlement-review of Kashikawa: a farm whose only lane stopped against the outside of its east band, 89 ft from the door).
+The front is the side the grove leaves open for the way in (research/homesteads/715), so the path arrives there; 40 ft
+- about a yard's depth past the door - is a GUESS at 'at the door'."""
+
+
+def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], reach: float = DOOR_REACH_FT) -> int:
+    """A footpath from each grove farm's front door (`front_door`) that stands more than `reach` from the connected lane
+    network to the network, routed round the steadings and never across a farm's fabric; the nearest few points on the
+    network are tried, nearest first. Returns the paths drawn."""
+    from .checks import served_network  # local: checks sits above serve in this package's layers
+
+    n = 0
+    for h in list(s.M.get("houses", [])):
+        door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
+        segs = served_network(s.M.get("lanes") or [])
+        if door is None or not segs or min(seg_dist(door[0], door[1], a, b) for a, b in segs) <= reach:
+            continue
+        near = sorted((seg_closest(door[0], door[1], a, b) for a, b in segs), key=lambda q: math.dist(q, door))[:6]
+        for q in near:
+            path = _route(door, q, hard, walls, water, gap=FOOTPATH_FABRIC_GAP)
+            if len(path) >= 2 and not _crosses_fabric(path, walls, 0.0) and _draw_web(s, path, 3, houses=[(float(h["x"]), float(h["y"]))], joins=True):
+                n += 1
+                break
+    return n

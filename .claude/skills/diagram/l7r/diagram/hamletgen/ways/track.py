@@ -272,12 +272,11 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
     bands = [poly for poly, _owner, kind in _homestead_polys(s) if kind == "groves"]
     if bands and _crosses_fabric(kept, bands, 0.0):
         # an end standing IN a band (seed 11's spur began at a deep band's middle, where the walk along the run found no
-        # clear ground) is set out of it on the nearest edge's normal first: a route cannot start inside what it avoids
+        # clear ground) is set out of it first, by the side facing the run's other end: a route cannot start inside what it
+        # avoids. Then three routes, each looser: round the bands and the crop; round the bands alone (the spur's field end
+        # stands on the bund, inside the crop's gap); round the bands with the water left to the ford pass (seed 11's spur
+        # already crossed the channel) - the last taken only if it crosses no more water than the run it replaces
         ends = [_out_of_bands(run[0], bands, run[-1]), _out_of_bands(run[-1], bands, run[0])]
-        # ...and where the crop refuses the route too (the spur's field end stands on the bund, inside the crop's gap - seed
-        # 11), round the bands alone: the run it replaces was already clear of the crop but for its end
-        # (seed 11 again), and where the water refuses it (the spur's run already crossed the channel it would ford), round
-        # the bands with the water left to the ford pass - taken only if it crosses no more water than the run it replaces
         for hard, water in (([*bands, *crops], lines), (bands, lines), (bands, [])):
             around = _route(ends[0], ends[1], hard, [], water, gap=FOOTPATH_FABRIC_GAP)
             if len(around) >= 2 and not _crosses_fabric(around, bands, 0.0) and _water_crossings(around, lines) <= _water_crossings(kept, lines):

@@ -1,0 +1,123 @@
+{
+ "mizuguchi-lanes-off-groves": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "answers": "1bb06d0c368f",
+  "quantity": "grove crowns whose trunk center lies on a lane tread; grove bands a lane's stroked tread overlaps",
+  "value": 0,
+  "unit": "crowns and bands",
+  "observed": "2026-09-29",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json tree_crowns (drawn crowns, x y r triples) against lanes (each segment at half its width) and groves (grove_rules.groves_crossed_by_lanes)",
+  "method": "405 crowns centered inside a grove band: 0 with the trunk center within a tread's half-width (the last review: 8); 0 of 24 bands crossed by a lane's stroked tread; the gate reads the same predicate (tests/gate/test_farm_groves.py)"
+ },
+ "mizuguchi-wood-sheds": {
+  "verifies": "F3",
+  "subject": "mizuguchi",
+  "answers": "1bb06d0c368f",
+  "quantity": "wood sheds drawn against the count rolled; fixtures inside a band",
+  "value": 5,
+  "unit": "wood sheds of 5 rolled",
+  "observed": "2026-09-29",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json farm_fixtures (kind woodpile) and meta.farm_fixtures_unseated; grove_rules.fixtures_on_groves",
+  "method": "5 wood sheds drawn, meta.farm_fixtures_unseated absent (every declared fixture seated), 0 fixtures inside a band; the notes carry the feature-291 entry with these counts"
+ },
+ "kashikawa-bamboo-in-grove": {
+  "verifies": "F2",
+  "subject": "kashikawa",
+  "answers": "1bb06d0c368f",
+  "quantity": "farms whose household bamboo is carried inside their own grove",
+  "value": 12,
+  "unit": "farms",
+  "observed": "2026-09-29",
+  "source": "pool/hamlets/kashikawa/kashikawa.json meta.household_bamboo_in_grove and bamboo_stands",
+  "method": "12 farms roll household bamboo and carry it in their grove's windward stand (research vegetation/154: bamboo mixed into the grove, Tonami), 1 thicket drawn; bamboo=both is kept, its homestead half drawn in the groves rather than as strips"
+ },
+ "kashikawa-wood-sheds": {
+  "verifies": "F3",
+  "subject": "kashikawa",
+  "answers": "1bb06d0c368f",
+  "quantity": "wood sheds drawn against the count rolled",
+  "value": 7,
+  "unit": "wood sheds of 7 rolled",
+  "observed": "2026-09-29",
+  "source": "pool/hamlets/kashikawa/kashikawa.json farm_fixtures (kind woodpile) and meta.farm_fixtures_unseated",
+  "method": "7 of 7 drawn, meta.farm_fixtures_unseated absent, 0 fixtures inside a band (grove_rules.fixtures_on_groves)"
+ },
+ "kashikawa-lanes-off-groves": {
+  "verifies": "F4",
+  "subject": "kashikawa",
+  "answers": "1bb06d0c368f",
+  "quantity": "grove bands a lane's stroked tread overlaps",
+  "value": 0,
+  "unit": "bands of 60",
+  "observed": "2026-09-29",
+  "source": "pool/hamlets/kashikawa/kashikawa.json lanes (each segment at half its width) against groves (grove_rules.groves_crossed_by_lanes)",
+  "method": "0 of 60 bands (40 deep) carry a lane tread; the last review: 19 of 40 deep bands"
+ },
+ "kashikawa-homestead-wood": {
+  "verifies": "F5",
+  "subject": "kashikawa",
+  "answers": "1bb06d0c368f",
+  "quantity": "homestead wood per household carried by the farm groves; copse and belt clumps drawn",
+  "value": 12833,
+  "unit": "sq ft of grove band per household",
+  "observed": "2026-09-29",
+  "source": "pool/hamlets/kashikawa/kashikawa.json groves (w x h summed) and village_groves",
+  "method": "256,665 sq ft of bands over 20 households, inside HOMESTEAD_WOOD_FT2's 6,000-28,000 (research vegetation); the copse goal now subtracts the farm groves (hinterland/stages.py) so no copse is drawn (main: 185 clumps), and no belt (main: 193)"
+ },
+ "kashikawa-notes": {
+  "verifies": "F6",
+  "subject": "kashikawa",
+  "answers": "1bb06d0c368f",
+  "quantity": "a feature-291 notes entry whose measured line matches the manifest",
+  "value": 1,
+  "unit": "entry",
+  "observed": "2026-09-29",
+  "source": "pool/hamlets/kashikawa/kashikawa.notes.md, section '2026-09-29 (feature 291)', against kashikawa.json",
+  "method": "the entry's counts (20 houses, 60 bands 40 deep 20 thin, bath rooms 5, wood sheds 7, privies 17, coops 18, heaps 9, shrine 1, 18 lanes) read off the regenerated manifest"
+ },
+ "kashikawa-no-belt": {
+  "verifies": "F7",
+  "subject": "kashikawa",
+  "answers": "1bb06d0c368f",
+  "quantity": "village belt and copse clumps drawn where every farm keeps its own grove",
+  "value": 0,
+  "unit": "clumps",
+  "observed": "2026-09-29",
+  "source": "pool/hamlets/kashikawa/kashikawa.json village_groves",
+  "method": "0 village_groves (main: a 193-clump windbreak belt and a 185-clump copse); the GM's ruling of 2026-09-29 recorded in research vegetation/030: the belt stands on one or two windward sides of a nucleated settlement and is not drawn where the farms carry their own groves"
+ },
+ "kashikawa-crowns-off-treads": {
+  "verifies": "F8",
+  "subject": "kashikawa",
+  "answers": "1bb06d0c368f",
+  "quantity": "grove crowns whose trunk center lies on a lane tread",
+  "value": 0,
+  "unit": "crowns",
+  "observed": "2026-09-29",
+  "source": "pool/hamlets/kashikawa/kashikawa.json tree_crowns against lanes at half their width",
+  "method": "908 crowns centered in a band, 0 with the trunk center on a tread (the last review: 19 bases up to 2.4 ft inside a tread)"
+ },
+ "kashikawa-band-density": {
+  "verifies": "F9",
+  "subject": "kashikawa",
+  "answers": "1bb06d0c368f",
+  "quantity": "median share of a band's recorded box under a drawn crown, deep and thin",
+  "value": 0.645,
+  "unit": "share (deep; thin 0.566)",
+  "observed": "2026-09-29",
+  "source": "pool/hamlets/kashikawa/kashikawa.json tree_crowns sampled on a 2 ft grid over each groves box",
+  "method": "a band is drawn as clumps of one clump's size (band_clumps; a clump caps at 28 crowns), so the deep stand no longer draws sparser than the thin band (last review: 0.63 deep vs 0.83 thin); the drawn box gives up one crown radius on the house side, so the canopy edge, not the trunks, meets the band's inner edge"
+ },
+ "mizuguchi-row-on-its-street": {
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "answers": "1bb06d0c368f",
+  "quantity": "farmhouses whose center stands within 80 ft of the row's street",
+  "value": 11,
+  "unit": "of 12 farmhouses",
+  "observed": "2026-09-29",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json lanes (the lane recorded street: true) against houses",
+  "method": "a 3,762 ft street laid door to door along the row (ways/web.py _lay_street); house-to-street 43-66 ft for 11 farms, 170 ft for the twelfth; the last review measured 1 of 12 fronting the connector"
+ }
+}

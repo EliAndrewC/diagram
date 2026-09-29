@@ -8,6 +8,7 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross
 from l7r.diagram.settlement._geom import PointGrid, boxed_grid, boxed_ring_hit, boxed_rings, boxed_segs
+from l7r.diagram.settlement.homestead_parts.groves import HOUSEHOLD_BAMBOO_PREVALENCE as HOUSEHOLD_BAMBOO_PREVALENCE
 from l7r.diagram.settlement.rolling.bearing import turned_box
 
 from ..consts import Poly, Pt
@@ -25,7 +26,8 @@ from ..plan import SitePlan
 # raised from .15 to .30 when the wind side was read, from `back` and `shed`, which stay the likeliest two together.
 # The PRESENCE rate is a GUESS - no source gives a share; "one of several secondary
 # species" says common but not universal - set like the shed's, and labeled. Sizes are a working strip.
-HOUSEHOLD_BAMBOO_PREVALENCE = 0.6
+# HOUSEHOLD_BAMBOO_PREVALENCE lives with the grove drawer (settlement/homestead_parts/groves.py) since feature 291: a
+# farm with its own grove draws its bamboo in that grove, so the drawing makes the same positional roll.
 HOUSEHOLD_BAMBOO_FT = (22.0, 16.0)
 _HOUSEHOLD_BAMBOO_SIDES = (("back", 0.35), ("shed", 0.25), ("wind", 0.30), ("side", 0.10))
 

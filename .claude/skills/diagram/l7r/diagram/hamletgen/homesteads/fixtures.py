@@ -297,7 +297,8 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
     # A FARM WITH ITS OWN GROVE (feature 291): its bundle is the whole frame the grove closes round - house, yard, garden,
     # the service strip behind the house and the bands - so tested as a solid it refused every wall seat of its own house
     # (Mizuguchi and Kashikawa seated 1 of 12 rolled wood sheds). For the recorded seats its OWN frame is excused and the
-    # grove bands are tested instead, which is what the frame stood in for; a neighbor's frame still refuses.
+    # grove bands are tested instead, which is what the frame stood in for; a neighbor's frame still refuses. Every seat is
+    # tested against every band, so a farm with no grove of its own (a headman's, a crowded one) keeps off its neighbor's too.
     grove_boxes = [(float(_gv["x"]), float(_gv["y"]), float(_gv["w"]), float(_gv["h"])) for _gv in s.M.get("groves", []) if all(k in _gv for k in ("x", "y", "w", "h"))]
     grove_faces: dict[tuple[float, float], list[tuple[float, float]]] = {}
     for _gv in s.M.get("groves", []):
@@ -634,7 +635,7 @@ def farmstead_fixtures(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[s
                     ext = abs(cw * ca) + abs(ch * sa), abs(cw * sa) + abs(ch * ca)  # the drawn rect's bbox, raked with the house
                     if (
                         _strip_blocked(s, cx, cy, ext[0], ext[1], hx, hy, fields, marsh, pond, lanes, footing, (_own_frame if id(_table) in _strict_ids else bundles))
-                        or (bool(_own_frame) and on_a_grove((cx, cy, ext[0], ext[1]), grove_boxes))
+                        or on_a_grove((cx, cy, ext[0], ext[1]), grove_boxes)  # anyone's band, own or a neighbor's
                         or across_the_brook(s, (hx, hy), (cx, cy))
                         # a field pit stands out by its fields or the road, not in the yard, so a lane may run between (269 B11)
                         or (_table is not field_table and across_a_lane(lanes, (hx, hy), (cx, cy)))
