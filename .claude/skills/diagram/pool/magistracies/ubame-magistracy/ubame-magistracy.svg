@@ -851,8 +851,8 @@
   <text font-size="13" font-weight="bold" letter-spacing="2" fill="#5C4830" data-kind="inner court" data-names="inner-court-1">INNER COURT</text>
   <text font-size="11" font-weight="bold" letter-spacing="2" fill="#3A5A30" data-kind="border court" data-names="border-court-1"><tspan>BORDER</tspan><tspan>COURT</tspan></text>
   <g data-kind="outer court">
-    <!-- the ground it names: the apron between the hearing court and the gate range, where the main gate lets onto
-         the compound (unfilled, a polygon: the outer court's earth shows through) -->
+    <!-- the forecourt: the apron between the hearing court and the gate range, where the main gate lets onto the
+         compound (unfilled, a polygon: the outer court's earth shows through); the court's name names the whole court -->
     <polygon points="362,674 788,674 788,710 362,710" fill="none"/>
     <!-- the court's name names the court, as on the other sheets (feature 286: declared against this apron alone, the
          apron too narrow for it once smaller names were placed on it, it was led out past the gate range) -->
