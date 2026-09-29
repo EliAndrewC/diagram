@@ -248,3 +248,12 @@ passed, 12 skipped, in 57.13 s. The slowest, which FR-007 and SC-005 weigh again
     2.97s call     tests/settlement/test_exact_pieces_284.py::test_the_board_sampled_verge_first_is_the_board_sampled_whole
     2.95s call     tests/tools/test_registry.py::test_every_check_fires_on_its_red_fixture[garden_sun]
     2.79s call     tests/tools/test_registry.py::test_every_check_passes_the_pool_sheets_of_its_tiers[garden_sun]
+
+## R5 - P0: the measurements owed before building (2026-09-29)
+
+**The polder grid's "two named failures" (water W48).** The record names and closes them: `hamletgen.md` ("Where it stands:
+the polder DRAWS and is down to two named failures ... BOTH OF THOSE ARE NOW FIXED" - `paddy_bunds_clear_the_collector`,
+`build_polder` never calling `hem_to_bank`, and the second the same section names) (observed 2026-09-29, method: reading
+`hamletgen.md`'s polder section and `tests/soak/test_polder_fall_0.py`). What survives is the soak test's docstring carve-out
+("this does not assert a clean gate, which would be a lie"), stale since; W48 is therefore an excuse to remove (FR-006): the
+polder roll is held to every placement rule like any other.
