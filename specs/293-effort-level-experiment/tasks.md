@@ -35,7 +35,7 @@ the freeze (Phase 3), the freeze before the first run, the runs one at a time.
 - [ ] T08 [US2] The R6 D5 check: does the page-session rules' reading of the claims file treat the release line as the end of a claim; if not, the per-run copy by env override, tested
       research: rendering
       verify: a scratch page session given a claimed-then-released question proceeds; or the override's test
-- [ ] T09 [US2] Record `START`; confirm both future-work entries open at `START` and no burial-ground way on main (R8); on a quiet host, read the working set and memwatch's figure at the same minute and record both (R5 D7: the gate reads memwatch's if they differ by more than half a gigabyte; a quiet reading above the threshold goes to the GM before any run); snapshot the sources ledger and cache and record its hash; draw `SEED` and derive the order (task 1's arms from the seed, task 2's the other way round); the first lines of `interventions.md`
+- [ ] T09 [US2] Record `START`; confirm both future-work entries open at `START` and no burial-ground way on main (R8); re-measure the working-set-to-memwatch offset at a memwatch warning (the event's figure beside a working-set reading in its minute; the larger of it and the recorded 1.5 GB is used), and record the working set on a quiet host (R5 D7: a quiet reading plus the offset above the threshold goes to the GM before any run); snapshot the sources ledger and cache and record its hash; draw `SEED` and derive the order (task 1's arms from the seed, task 2's the other way round); the first lines of `interventions.md`
       research: rendering
       verify: `interventions.md` carries START, the snapshot hash, SEED and the four runs' order
 
