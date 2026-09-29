@@ -47,7 +47,7 @@ def test_every_lead_line_is_listed_as_a_question_or_a_statement_with_its_body() 
 def test_the_report_names_each_fragment_and_says_none_when_clean(tmp_path: pathlib.Path) -> None:
     out = sp.report({"010-x.html": "<p>12 m wide</p>", "020-y.html": "<p>clean</p>"})
     assert "== 010-x.html" in out and "METRIC WITHOUT A CONVERSION (1)" in out and "12 m" in out
-    assert out.count("  none") == 5, "020's metric list, both GM lists and both empty lead-line lists say none"
+    assert out.count("  none") == 7, "020's metric list, both GM lists, both paragraph lists and both empty lead-line lists say none"
 
 
 def test_a_visible_gm_ruling_is_listed_and_one_in_a_comment_is_not() -> None:
@@ -56,6 +56,24 @@ def test_a_visible_gm_ruling_is_listed_and_one_in_a_comment_is_not() -> None:
     html = "<p>The GM ruled on 2026-09-29: <q>two sides is the minimum</q>. <!-- the GM's words: ... --> A GMT clock.</p>"
     found = sp.gm_mentions(html)
     assert len(found) == 1 and "GM ruled" in found[0], found
+
+
+def test_a_paragraph_or_a_bullet_over_the_bar_is_listed_and_footnotes_and_comments_do_not_count() -> None:
+    """GM 2026-09-29: the opening paragraphs (133 and 68 words) are fine and the 364-word rule paragraph is not - a
+    mechanical bar between them. A bullet's own text is a paragraph; its nested list is counted item by item."""
+    ok = " ".join(["word"] * sp.MAX_WORDS)
+    over = " ".join(["word"] * (sp.MAX_WORDS + 1))
+    sup = '<sup class="fn" data-note="k"></sup>' * 40
+    html = f"<p>{ok}{sup}<!-- {over} --></p><ul><li><strong>Lead.</strong><br>{over}<ul><li>{ok}</li></ul></li></ul><p class=\"spec\">{over}</p>"
+    found = sp.long_paragraphs(html)
+    assert [f.split(" words")[0] for f in found] == [str(sp.MAX_WORDS + 2), str(sp.MAX_WORDS + 1)], found
+
+
+def test_the_hook_helper_and_the_engine_name_the_same_collections() -> None:
+    """`_hm_record.py` restates the record's sub-collections because a hook helper imports nothing from the engine."""
+    from l7r.diagram.interactive.sources import COLLECTIONS
+
+    assert _load("_hm_record").COLLECTIONS == COLLECTIONS
 
 
 def test_the_command_reads_a_page_s_question_and_refuses_one_that_matches_nothing(capsys) -> None:  # noqa: ANN001

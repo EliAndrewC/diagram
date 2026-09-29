@@ -22,6 +22,10 @@ import os
 import sys
 
 RECORD = os.path.join(".claude", "skills", "diagram", "research")
+# GUARD_EDIT_OK: feature 292 - the record gains a second sub-collection (rendering/); the page lookup learns its name, nothing loosened.
+#: The record's sub-collections, one directory down - the engine's `sources.COLLECTIONS`, restated because a hook
+#: helper imports nothing from the engine; `tests/tooling/test_style_prepass.py` holds the two equal.
+COLLECTIONS = ("cities", "rendering")
 #: The glossary is the same kind of file in a different tree (feature 259): assembled from one file
 #: per term, read by the engine, and never hand-edited. One case here rather than a second guard.
 GLOSSARY = os.path.join(".claude", "skills", "diagram", "l7r", "diagram", "interactive", "assets", "glossary.json")
@@ -49,7 +53,7 @@ def page_dir_for(rel: str) -> str | None:
     if inside.startswith("citations/"):
         inside = inside[len("citations/"):]
     parts = inside.split("/")
-    if len(parts) > 2 or (len(parts) == 2 and parts[0] != "cities"):
+    if len(parts) > 2 or (len(parts) == 2 and parts[0] not in COLLECTIONS):
         return None                                   # inside a page directory: this IS a fragment
     return root + inside[: -len(".html")]
 

@@ -28,7 +28,7 @@ import json
 import os
 import re
 
-from l7r.diagram.interactive.sources import RESEARCH_DIR, WHAT_LABEL, WHY_LABEL, link_target, registry_entries
+from l7r.diagram.interactive.sources import RESEARCH_DIR, WHAT_LABEL, WHY_LABEL, collection_pages, link_target, registry_entries
 
 #: A note on a citations page: its number and its inner HTML.
 NOTE = re.compile(r'<li id="fn-(\d+)">(.*?)</li>', re.S)
@@ -46,9 +46,7 @@ def research_pages(research_dir: str = RESEARCH_DIR) -> list[str]:
     """The research pages, as paths relative to `research/` - `homesteads.html`, `cities/fabric.html` - in sorted
     order. The registry and the citations pages are not research pages."""
     top = sorted(f for f in os.listdir(research_dir) if f.endswith(".html") and f != "SOURCES.html")
-    cities = os.path.join(research_dir, "cities")
-    sub = sorted(f"cities/{f}" for f in os.listdir(cities) if f.endswith(".html")) if os.path.isdir(cities) else []
-    return top + sub
+    return top + collection_pages(research_dir)
 
 
 def citations_page(page_rel: str) -> str:

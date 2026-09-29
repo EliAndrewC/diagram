@@ -153,7 +153,7 @@ class HomesteadGrove(Kind):
     Covers: `groves`
     Label: accurate
     Sources: miura-2014-kainyo, irie-2020-igune, kashima-kainyo-1987, tonami-yashikirin-haichi, yashikirin-jawiki
-    Entry: research/homesteads.html - 'Groves of trees around farmhouses (yashikirin)'
+    Entry: research/homesteads.html - 'Groves of trees around farmhouses (yashikirin)'; research/rendering/homesteads.html - 'How our maps draw the groves around farmhouses'
     """
 
     key = 'homestead grove'

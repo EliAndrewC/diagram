@@ -28,3 +28,6 @@ a.fnback { font-family: system-ui, sans-serif; margin-left: .35em; }
 /* the glossary (feature 209, GM 2026-09-07 - the map's rule, page.css): a dotted underline marks a defined term;
    hovering it shows the definition in the same box the footnotes use */
 .gl { border-bottom: 1px dotted var(--rule); cursor: help; }
+/* feature 292: the link between a research section and the rendering section about it, written by `make record`
+   after the heading - small and to the right, so it reads as a way out of the section and not as its first line */
+p.xref { margin: -.2rem 0 .8rem; text-align: right; font-size: .8em; }

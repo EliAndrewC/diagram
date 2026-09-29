@@ -80,6 +80,12 @@ the pilot; the GM reads the pages in this feature's clone.
   The pairs are data kept once, always two-way (a pair declared once yields both entries), and the list is written by
   `make record`; a test fails on a pair naming a section that does not exist. It waits for the sweep because the
   titles it links are not final; until then each restyle records its pairs in `confusables.md`.
+- **FR-017** (GM 2026-09-29): how the maps draw a thing is a section of the RENDERING collection
+  (`research/rendering/<page>.html`), never part of the research section; each rendering section declares the research
+  section it is about once, and `make record` writes a link under both headings; a declaration naming a missing
+  section refuses the build. The grove topic's map bullets and its rule of the map moved there.
+- **FR-018** (GM 2026-09-29): no paragraph, and no bullet's own text, runs over 150 words - a mechanical check in the
+  style prepass; the rule of the map becomes a (nested) list.
 - **FR-011**: The GM's sign-off on the guide and the check MUST be an open task, and the sweep's tasks MUST NOT be
   written or started before it is ticked.
 

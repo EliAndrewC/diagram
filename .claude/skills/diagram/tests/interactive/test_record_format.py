@@ -20,7 +20,7 @@ import re
 import pytest
 
 from l7r.diagram.interactive.glossary import GLOSSARY, record_glossary_js
-from l7r.diagram.interactive.sources import RESEARCH_DIR
+from l7r.diagram.interactive.sources import RESEARCH_DIR, collection_pages
 
 _COMMENT = re.compile(r"<!--.*?-->", re.S)
 _TAG = re.compile(r"<[^>]+>")
@@ -32,7 +32,7 @@ def _all_pages() -> list[pathlib.Path]:
     root = pathlib.Path(RESEARCH_DIR)
     # the citations pages (feature 211) are record pages a reader meets: the works write-ups and the notes are under
     # every rule here except the Grounds/Evidence one (they are not findings)
-    return sorted(root.glob("*.html")) + sorted((root / "cities").glob("*.html")) + sorted((root / "citations").glob("*.html")) + sorted((root / "citations" / "cities").glob("*.html"))
+    return sorted(root.glob("*.html")) + [root / c for c in collection_pages(str(root))] + sorted((root / "citations").glob("*.html")) + [root / "citations" / c for c in collection_pages(str(root / "citations"))]
 
 
 def _finding_files() -> list[pathlib.Path]:

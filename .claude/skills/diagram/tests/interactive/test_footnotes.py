@@ -18,7 +18,7 @@ import re
 import pytest
 
 from l7r.diagram.interactive.citations import GROUNDS_REASONS, citations_page, footnote_form, grounds_reasons, is_settled, notes
-from l7r.diagram.interactive.sources import RESEARCH_DIR, canon_keys, registry_keys
+from l7r.diagram.interactive.sources import RESEARCH_DIR, canon_keys, collection_pages, registry_keys
 
 #: a second reference to the same note carries no id (ids are unique; the back-link returns to the first); the href
 #: names the citations page (feature 211) - `_REF_TARGET` checks WHICH page below
@@ -40,7 +40,7 @@ _NOT_FINDINGS = {"SOURCES.html"}
 
 def _finding_files() -> list[pathlib.Path]:
     root = pathlib.Path(RESEARCH_DIR)
-    return [p for p in sorted(root.glob("*.html")) + sorted((root / "cities").glob("*.html")) if p.name not in _NOT_FINDINGS]
+    return [p for p in sorted(root.glob("*.html")) + [root / c for c in collection_pages(str(root))] if p.name not in _NOT_FINDINGS]
 
 
 def _rel(path: pathlib.Path) -> str:

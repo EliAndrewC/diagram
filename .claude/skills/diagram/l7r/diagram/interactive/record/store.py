@@ -15,10 +15,11 @@ import re
 
 from l7r.diagram.interactive.record import citations_side as cite
 from l7r.diagram.interactive.record import fragments as frag
+from l7r.diagram.interactive.record import xref
 from l7r.diagram.interactive.record.assemble import assemble
 from l7r.diagram.interactive.record.notes import allocate, merge, notes_of, number_references
 from l7r.diagram.interactive.record.split import Entry, Page, Section, split
-from l7r.diagram.interactive.sources import RESEARCH_DIR
+from l7r.diagram.interactive.sources import RESEARCH_DIR, collection_pages
 
 #: The registry is the one page whose sections hold entries of their own - 920 of them.
 REGISTRY = "SOURCES.html"
@@ -34,9 +35,7 @@ def record_pages(record_dir: str = RESEARCH_DIR) -> list[str]:
     and the `cities/` ones. The citations pages are not here - they are assembled beside their
     research page, from the same directory (stage 3)."""
     top = sorted(f for f in os.listdir(record_dir) if f.endswith(".html"))
-    cities_dir = os.path.join(record_dir, "cities")
-    cities = sorted(f"cities/{f}" for f in os.listdir(cities_dir) if f.endswith(".html")) if os.path.isdir(cities_dir) else []
-    return top + cities
+    return top + collection_pages(record_dir)
 
 
 def entry_level(page_rel: str) -> int | None:
@@ -210,7 +209,7 @@ def assemble_pages(page_rel: str, record_dir: str = RESEARCH_DIR) -> tuple[str, 
     The citations page carries the works region the committed page carries; `write_pages` is what
     re-derives it, because the derivation reads a page from disk and this function writes nothing.
     """
-    research = assemble(read_fragments(page_rel, record_dir))
+    research = _cross_linked(assemble(read_fragments(page_rel, record_dir)), page_rel, record_dir)
     if not has_notes(page_rel, record_dir):
         return research, None
     stripped, placed = allocate(research, read_notes(page_rel, record_dir), page_rel)
@@ -223,6 +222,17 @@ def assemble_pages(page_rel: str, record_dir: str = RESEARCH_DIR) -> tuple[str, 
     committed = _read(os.path.join(record_dir, cite.citations_rel(page_rel))) or ""
     page = cite.assemble_citations(parts[0], cite.works_region(committed), parts[1], placed, parts[2], cite.page_href(page_rel))
     return research, page
+
+
+def _cross_linked(page_html: str, page_rel: str, record_dir: str) -> str:
+    """The page with its research <-> rendering links written in (feature 292, `xref.py`); a declaration touching this
+    page that names a section which does not exist is a refusal, naming the declaration."""
+    pairs = xref.pairs(record_dir)
+    mine = [p for p in pairs if page_rel in (p.research_page, p.rendering_page)]
+    bad = xref.unresolved(mine, record_dir)
+    if bad:
+        raise RecordError("a rendering section is declared about a section that does not exist:\n  " + "\n  ".join(bad))
+    return xref.link(page_html, page_rel, mine)
 
 
 def write_pages(page_rel: str, record_dir: str = RESEARCH_DIR) -> int:

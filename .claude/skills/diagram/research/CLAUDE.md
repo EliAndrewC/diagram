@@ -74,7 +74,11 @@ The record is being rewritten topic by topic under [`STYLE.md`](STYLE.md): a sec
 title, opening with a short account of what the thing was and why, then short bullets each led by a bold question or
 statement; no `Sources:` roster; the GM's inciting question nowhere. Until the GM signs the pilot off, only the
 sections feature 292 has rewritten follow it; everything else below holds for both forms. The **`record-style`**
-agent judges a restyled section against the guide.
+agent judges a restyled section against the guide, after `make style-prepass` (metric figures without feet, a visible
+"GM", paragraphs over 150 words, every lead line). How the maps DRAW a thing is its own collection,
+`research/rendering/<page>.html` (`sources.COLLECTIONS`); a rendering section declares the research section it is about
+in an `about:` comment and `make record` writes the links both ways (`record/xref.py`); its rule of the map may be a
+`<div class="spec">` holding a list.
 
 ## Who the record is for (GM 2026-09-05, feature 180)
 

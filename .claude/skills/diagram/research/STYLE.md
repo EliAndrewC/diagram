@@ -83,9 +83,17 @@ highlights into questions ... I think that we need to come up with a different n
   bullets stay prose. (GM: *"not everything needs to be a Q&A style bullet point."*)
 - **An aside that carries a real finding is its own bullet**, not a parenthesis or an italic afterthought. (GM, of the
   Okinawa cross-check: *"it deserves its own bullet point and doesn't need to be a parenthetical."*)
-- **The map comes after the history.** What the record found comes first; what our maps draw, and which knobs they
-  roll, follows it in bullets of its own, each saying which finding it rests on. (inferred - the GM's example
-  mixes the two within bullets, and they kept both kinds; separating them lets a reader who wants only the history stop.)
+- **How the maps draw it is not in the research section at all.** A research section says what the record found. What
+  our maps draw - sizes chosen, knobs, conventions, the rule the map follows - is a section of its own in the
+  RENDERING collection, `research/rendering/<page>.html` (one page beside each research page), which declares the
+  research section it is about in a comment after its heading (`about: <page>.html#<id>`); `make record` then writes
+  a link under both headings, "How our maps draw it" and "The history behind it". No link between the two is ever
+  typed. A rendering section follows this guide too, and still cites the research it rests on. (GM, 2026-09-29: *"anything that is specifically about how we choose to render the grove or render a map element generally probably belongs in a separate place ... there should probably just be a separate collection of files that have to do with our rendering decisions ... the two of them should definitely link to each other. And I think that linking should be automated rather than something that we write."*)
+- **No paragraph over 150 words**, and no bullet whose own text is. A longer one is split, or made a list - a rule
+  paragraph of several rules and rationales is a bulleted list, nested where the rules group. The bar is mechanical
+  (`make style-prepass`): the GM's accepted opening paragraphs were 133 and 68 words, the rule paragraph they rejected
+  364. (GM, 2026-09-29: *"that paragraph is way too long. that looks like it should probably be its own bulleted list
+  ... that could probably be a mechanical check"*)
 
 ## 4. What is cut
 

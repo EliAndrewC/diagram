@@ -10,6 +10,11 @@ found exactly and for no tokens, so they are found here and handed over:
   with no `(~N ft)`, `(~N in)` or acre/square-foot conversion right after it. This one is a finding, not a candidate.
 - **GM IN THE VISIBLE TEXT** (STYLE.md 1, GM 2026-09-29: *"you should not refer to this as a GM ruling"*): every
   visible "GM" - a ruling, a quotation, an acceptance. The ruling belongs in a comment; each is a finding.
+- **PARAGRAPH OVER 150 WORDS** (STYLE.md 3, GM 2026-09-29: *"that paragraph is way too long ... that could probably be
+  a mechanical check"*): every paragraph, and every bullet's own text, longer than `MAX_WORDS` - a finding. The bar
+  sits between the GM's examples: the grove section's two opening paragraphs (133 and 68 words) are fine, its old rule
+  paragraph (364) was not; over the whole record on 2026-09-29, the median paragraph was 82 words, the 90th percentile
+  192, and 487 of 2,549 were over 150.
 - **LEAD LINES** (STYLE.md 3): every bullet's bold lead line, marked `Q` (a question) or `S` (a statement), with the
   start of its body - the list the agent rules on, statement or question, and whether a newcomer could read it.
 
@@ -35,6 +40,11 @@ _COMMENT = re.compile(r"<!--.*?-->", re.S)
 #: Quoted text keeps its source's own units: a GM ruling in `<q>`, a source's words in corner brackets or quotes.
 _QUOTED = re.compile(r"<q>.*?</q>|「.*?」|&quot;.*?&quot;|\"[^\"]*\"", re.S)
 _TAG = re.compile(r"<[^>]+>")
+#: The longest a paragraph or a bullet's own text may run, in words of visible text (footnote references and comments
+#: not counted) - between the GM's accepted 133 and rejected 364; see the module docstring.
+MAX_WORDS = 150
+_BLOCK = re.compile(r"<p[^>]*>(.*?)</p>|<li[^>]*>(.*?)(?=<ul>|<ol>|</li>)", re.S)
+_SUP = re.compile(r"<sup[^>]*>.*?</sup>", re.S)
 _GM = re.compile(r"\bGM(?:'s)?\b")
 _LEAD = re.compile(r"<li>\s*<strong>(.*?)</strong>\s*<br>\s*(.*?)(?=</li>|<ul>)", re.S)
 
@@ -60,6 +70,16 @@ def gm_mentions(html: str) -> list[str]:
     return [f"...{text[max(0, m.start() - 40) : m.end() + 60].strip()}..." for m in _GM.finditer(text)]
 
 
+def long_paragraphs(html: str) -> list[str]:
+    """Each paragraph or bullet text over `MAX_WORDS` words, as `<n> words - <its start>`."""
+    out = []
+    for m in _BLOCK.finditer(_COMMENT.sub("", html)):
+        words = _TAG.sub(" ", _SUP.sub("", m.group(1) or m.group(2) or "")).split()
+        if len(words) > MAX_WORDS:
+            out.append(f"{len(words)} words - {' '.join(words[:14])}...")
+    return out
+
+
 def lead_lines(html: str) -> list[str]:
     """Each bullet's lead line, `Q` or `S`, with the start of its body."""
     out = []
@@ -74,12 +94,14 @@ def report(fragments: dict[str, str]) -> str:
     """The prepass text for the named question fragments (their notes files are not prose and are skipped)."""
     lines = []
     for name, html in fragments.items():
-        metric, leads, gm = unconverted(html), lead_lines(html), gm_mentions(html)
+        metric, leads, gm, long = unconverted(html), lead_lines(html), gm_mentions(html), long_paragraphs(html)
         lines.append(f"== {name}")
         lines.append(f"METRIC WITHOUT A CONVERSION ({len(metric)}) - each is a FAIL of STYLE.md 6:")
         lines += [f"  {x}" for x in metric] or ["  none"]
         lines.append(f"GM IN THE VISIBLE TEXT ({len(gm)}) - each is a FAIL of STYLE.md 1 (the ruling goes in a comment):")
         lines += [f"  {x}" for x in gm] or ["  none"]
+        lines.append(f"PARAGRAPH OVER {MAX_WORDS} WORDS ({len(long)}) - each is a FAIL of STYLE.md 3 (split it, or make it a list):")
+        lines += [f"  {x}" for x in long] or ["  none"]
         lines.append(f"LEAD LINES ({len(leads)}) - rule on each: statement or question (STYLE.md 3), and readable from what precedes it:")
         lines += [f"  {x}" for x in leads] or ["  none"]
     return "\n".join(lines) + "\n"

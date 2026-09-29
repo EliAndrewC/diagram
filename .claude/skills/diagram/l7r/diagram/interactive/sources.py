@@ -40,6 +40,23 @@ RESEARCH_DIR = os.path.normpath(os.path.join(_HERE, "..", "..", "..", "research"
 #: and every pool page re-renders at each landing.
 RESEARCH_PAGES = "../../../research/"
 
+#: The record's SUB-COLLECTIONS - pages one directory down, `research/<collection>/<name>.html`, each with its fragments
+#: at `research/<collection>/<name>/` and its citations page at `research/citations/<collection>/<name>.html`. `cities`
+#: holds the city research; `rendering` (feature 292, GM 2026-09-29: *"there should probably just be a separate
+#: collection of files that have to do with our rendering decisions"*) holds how the maps draw what the research
+#: pages describe, one rendering page beside each research page it covers. Every reader of the record takes its list
+#: from here; a collection named anywhere else is a defect.
+COLLECTIONS = ("cities", "rendering")
+
+
+def collection_pages(research_dir: str = RESEARCH_DIR) -> list[str]:
+    """Every page of every sub-collection, as `<collection>/<name>.html`, sorted within each collection."""
+    out: list[str] = []
+    for c in COLLECTIONS:
+        d = os.path.join(research_dir, c)
+        out += sorted(f"{c}/{f}" for f in os.listdir(d) if f.endswith(".html")) if os.path.isdir(d) else []
+    return out
+
 _KEY = re.compile(r"`([a-z0-9][a-z0-9-]*)`")
 #: A research page the entry names - `research/water.html`, or one level down, `research/cities/fabric.html`.
 #: The one-level form was added in feature 180 (spec FR-012a): the pattern could not match a

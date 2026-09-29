@@ -30,7 +30,8 @@ A check BUNDLE: its `MANIFEST.md` lists the files. Read them from the bundle; op
 - `STYLE.md` - the style guide. **It is your rulebook: every rule you judge is a rule in it, and you judge no rule
   it does not state.** Each rule is marked **GM** (the GM said it) or **inferred** (awaiting the GM's confirmation);
   judge both, and say which a finding rests on.
-- `style-prepass.txt` - what a pattern found: every METRIC figure in the section's own prose with no conversion to feet
+- `style-prepass.txt` - what a pattern found (each list but the lead lines is a FAIL list): every paragraph or bullet
+  over 150 words, every visible "GM", and every METRIC figure in the section's own prose with no conversion to feet
   (each one is a FAIL of the guide's units rule - report it with the converted figure), and every LEAD LINE, marked `Q`
   or `S`, which you rule on one by one.
 - `glossary-variants.txt` - every word the glossary defines, one per line; grep it before saying a term needs a tooltip
@@ -82,7 +83,10 @@ that it contradicts one; if a rule seems to, say so as a NOTE, naming both.
 6. **Prose where prose belongs.** The opening, a ruling, the map's rule, a short join: forcing these into bullets
    is a NOTE.
 7. **Asides.** A parenthesis or italic afterthought carrying a real finding should be its own bullet.
-8. **Map after history.** Is what the record found kept apart from, and before, what our maps draw?
+8. **History here, the maps elsewhere.** In a RESEARCH section, any statement of what our maps draw - a size chosen, a
+   knob, a convention, "the rule the map follows" - is a FAIL: it belongs in the rendering section about it
+   (`research/rendering/<page>.html`). A rendering section is judged by the same guide and must still cite what it
+   rests on. The link between the two is written by the assembly; a hand-typed one is a FAIL.
 9. **Cuts.** Framing the whole record presumes ("to scale", "the real numbers"); a restatement of a number already
    given; a statement that says only what the map visibly shows, with no finding (but a statement of HOW the map
    draws something and why is KEPT - do not flag it); a `Sources:` roster; a pointer paragraph to a sibling section
