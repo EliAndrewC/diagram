@@ -386,6 +386,14 @@ def test_a_fragment_is_dropped_and_a_chain_takes_one_width() -> None:
     s = _S([CONN, [(0.0, 0.0), (0.0, 300.0)], [(0.0, 150.0), (10.0, 150.0)]], meta={"ftpx": 1.0, "generated_by": "hamletgen"})
     assert settle.settle_fragments(s) == 1 and len(s.M["lanes"]) == 2
     assert settle.settle_fragments(s) == 0
+    # HOMES H40 ON THE TREE (R9: Kashikawa's lane 17, Mizuguchi's lane 11): a short access corridor to a house another lane
+    # already reaches earns nothing and goes like any lane; one that is the house's only way stays
+    tree = _S([CONN, [(0.0, 0.0), (0.0, 300.0)], [(0.0, 150.0), (10.0, 150.0)]], houses=[(40.0, 150.0)], meta={"ftpx": 1.0, "generated_by": "hamletgen"})
+    tree.M["lanes"][2].update(role=co.ACCESS_ROLE, of=[40.0, 150.0])
+    assert law.short_fragments(tree.M) == [2] and settle.settle_fragments(tree) == 1 and len(tree.M["lanes"]) == 2
+    only = _S([CONN, [(0.0, 0.0), (0.0, 300.0)], [(0.0, 150.0), (20.0, 150.0)]], houses=[(115.0, 150.0)], meta={"ftpx": 1.0, "generated_by": "hamletgen"})
+    only.M["lanes"][2].update(role=co.ACCESS_ROLE, of=[115.0, 150.0])
+    assert law.unreached_houses(only.M) == [] and settle.settle_fragments(only) == 0, "the house's only way earns its place"
     w = _S([CONN, ([(0.0, 5.0), (100.0, 5.0)], {"w": 6}), ([(100.0, 5.0), (200.0, 15.0)], {"w": 3})])
     assert settle.settle_widths(w) == 1 and law.width_steps(w.M["lanes"]) == []
     assert {ln["w"] for ln in w.M["lanes"][1:]} == {6}, "the way takes its widest member's width"
@@ -467,6 +475,26 @@ def test_the_field_corridor_the_seating_reserved_is_drawn_first_and_alone_where_
     settle.settle_field(s, settle.Lawful(s, tree=True))
     drawn = s.M["lanes"][-1]
     assert drawn["role"] == "field way" and [round(v) for v in drawn["pts"][-1]] == [195, 150], "on to the bund where it was reserved"
+
+
+def test_a_field_corridor_whose_first_contact_is_refused_meets_the_network_farther_on(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Ways W03, as W01's corridor (cohort seed 8 under the probes): the reserved field run's first contact is refused, and a
+    later one along the run, squared as drawn, is drawn instead - the field is not left unreached for its first contact."""
+    field = [[200.0, -300.0], [500.0, -300.0], [500.0, 300.0], [200.0, 300.0]]
+    legs = [[[195.0, 150.0], [112.0, 150.0]], [[112.0, 150.0], [88.0, 150.0]], [[88.0, 150.0], [0.0, 150.0]]]
+    monkeypatch.setattr(settle, "field_runs", lambda *a, **k: [])
+    monkeypatch.setattr(settle, "routed_field_runs", lambda *a, **k: [])
+    s = _S([CONN, [(0.0, 0.0), (0.0, 300.0)]], meta={**_GEN, "brook_fords": [[100.0, 150.0]]}, streams=[BROOK], fields=[{"outline": field}])
+    s.M["access_exit"] = [[0.0, 0.0], [0.0, 300.0]]
+    s.M["access_corridors"] = [{"pts": p, "field": True} for p in legs]
+    first = settle.first_contact(settle.field_chain(s.M), settle.served_network(s.M["lanes"]))
+    law_ = settle.Lawful(s, tree=True)
+
+    def not_there(run, width):
+        return math.dist(run[0], first[-1]) > 1.0 and law_(run, width)
+
+    assert settle.settle_field(s, not_there) == 1 and not law.field_unreached(s.M)
+    assert math.dist(tuple(s.M["lanes"][-1]["pts"][0]), first[-1]) > 1.0, "met the network farther on"
 
 
 def test_a_target_or_a_field_no_lawful_run_reaches_is_left_unreached_not_drawn_least_bad(monkeypatch: pytest.MonkeyPatch) -> None:

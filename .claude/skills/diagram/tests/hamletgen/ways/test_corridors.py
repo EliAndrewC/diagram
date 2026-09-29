@@ -3,6 +3,8 @@ water W57) - each helper on constructed records, the violating case among them."
 
 import math
 
+import pytest
+
 from l7r.diagram.hamletgen.ways import corridors as co
 from l7r.diagram.hamletgen.ways import law
 from l7r.diagram.hamletgen.ways.geom import WorkedGround
@@ -247,3 +249,78 @@ def test_the_ground_index_hands_back_only_what_comes_within_the_pad_in_filing_or
     assert ix.water_near([(60.0, 0.0), (90.0, 0.0)], 12.0) and not ix.water_near([(60.0, 0.0), (90.0, 0.0)], 5.0)
     assert not ix.open_ground([(250.0, 150.0), (250.0, 250.0)]), "into the outline"
     assert ix.open_ground([(250.0, 150.0), (250.0, 190.0)]) and ix.open_ground([(400.0, 150.0), (400.0, 400.0)])
+
+
+def test_every_later_contact_is_offered_in_order_and_spaced() -> None:
+    """`contacts`: the first is `first_contact`'s; the later ones follow along the run, none nearer than `spacing` to the
+    last, each meeting its tread clean - what the draw offers once the first is refused (ways W01, cohort seed 8)."""
+    tread = [((0.0, 0.0), (400.0, 0.0))]
+    path = [(-20.0, 60.0), (-20.0, 10.0), (380.0, 10.0)]
+    every = list(co.contacts(path, tread, spacing=co.CONTACT_FT))
+    assert every[0] == co.first_contact(path, tread) and len(every) > 5
+    feet = [e[-1][0] for e in every[1:]]  # past the corner each meets the tread square below where it stops
+    assert all(b - a >= co.CONTACT_FT - 1e-6 for a, b in zip(feet, feet[1:], strict=False)), "in order along the run, spaced"
+    assert all(law.meets_clean(e, [(0.0, 0.0), (400.0, 0.0)]) and not law.bends_badly(e) for e in every)
+    assert list(co.contacts(path, [])) == [] and len(list(co.contacts(path, tread))) > len(every), "unspaced, one per sample"
+
+
+def _yard_house():
+    """A house at (300, 100) fronting the strip, its 81-mat threshing yard 80 x 50 ft centered on its door (300, 60) - wider
+    along the corridor than `DOOR_TRIM_FT` reaches, as cohort seed 39's under the probes."""
+    h = _house(300.0, 100.0)
+    yard = {"x": 300.0, "y": 60.0, "w": 50.0, "h": 80.0, "rot": 0.0, "of": [300.0, 100.0], "poly": [[276.0, 21.0], [324.0, 21.0], [324.0, 99.0], [276.0, 99.0]]}
+    return h, yard
+
+
+def test_a_door_end_is_taken_past_its_own_yard_where_the_yard_is_wider_than_the_trims_reach() -> None:
+    """Ways W01 (R9: cohort seed 39 under the probes): the door stands in the middle of its threshing yard, the matrix
+    forbids a way on the yard, and a yard wider along the run than `DOOR_TRIM_FT` left every trimmed end on it. The last
+    door end starts where the tread leaves the yard - as the matrix reads the yard (`own_yard`: its turned rect, not the
+    smaller drawn poly)."""
+    h, yard = _yard_house()
+    M = {"meta": {"ftpx": 1.0}, "threshing_yards": [yard]}
+    quad = co.own_yard(M, (300.0, 100.0))
+    assert quad is not None and sorted(round(q[1]) for q in quad) == [20, 20, 100, 100], "the matrix's rect, 80 deep"
+    assert co.own_yard(M, (0.0, 0.0)) is None and co.own_yard({}, (300.0, 100.0)) is None
+    run = [(300.0, 60.0), (300.0, -100.0)]
+    past = co.past_the_yard(run, quad)
+    assert past is not None and past[0] == (300.0, pytest.approx(20.0 - co.ACCESS_WIDTH / 2 - co.YARD_EXIT_PAD_FT))
+    ends = co.door_ends(run, h, quad)
+    assert ends[-1] == past and all(e[0][1] > 20.0 - co.ACCESS_WIDTH / 2 for e in ends[:-1]), "every trim stood on the yard"
+    assert co.past_the_yard([(0.0, 0.0), (0.0, -50.0)], quad) is None, "a run that never comes near the yard"
+    assert co.past_the_yard([(300.0, -100.0), (300.0, 60.0)], quad) is None, "a run that ends on it"
+    assert co.door_ends(run, h) == ends[:-1], "no yard, no such end"
+
+
+def test_a_stranded_house_whose_yard_the_trims_cannot_leave_is_reached_past_it() -> None:
+    """The violating case, constructed: every door end within `DOOR_TRIM_FT` stands on the yard, which the vet refuses (as
+    the matrix does); before the fix the house was recorded refused and left unreached."""
+    h, yard = _yard_house()
+    M = _tree_map(houses=[h], threshing_yards=[yard], access_corridors=[{"pts": [[300.0, 60.0], [300.0, 0.0]], "of": [300.0, 100.0]}])
+    quad = co.own_yard(M, (300.0, 100.0))
+
+    def off_the_yard(run):
+        return not any(20.0 - co.ACCESS_WIDTH / 2 < q[1] < 100.0 and 250.0 < q[0] < 350.0 for q in run)
+
+    s = _S(M)
+    assert co.draw_corridors(s, off_the_yard) == 1 and law.unreached_houses(s.M) == []
+    assert "access_refused" not in s.M["meta"] and off_the_yard([tuple(q) for q in s.M["lanes"][-1]["pts"]])
+    assert quad is not None
+
+
+def test_a_corridor_whose_first_contact_is_refused_meets_the_network_farther_on() -> None:
+    """Ways W01 (R9: cohort seed 8 under the probes): the reserved run's first contact is refused (there, squared at the
+    channel it had just crossed, the run kinked) - a later contact along the run, squared as drawn, meets the network clean
+    and the house is reached."""
+    M = _tree_map(houses=[_house(300.0, 100.0)])
+    M["lanes"].append({"pts": [[0.0, 0.0], [20.0, -12.0], [400.0, -12.0]], "w": 3})  # a lane beside the strip, off the connector
+    first = co.first_contact(co.corridor_chain(M, (300.0, 100.0)), co.served_network(M["lanes"]))
+    assert first is not None
+
+    def not_there(run):
+        return math.dist(run[-1], first[-1]) > 1.0
+
+    s = _S(M)
+    assert co.draw_corridors(s, not_there) == 1, "a later contact is drawn"
+    assert law.unreached_houses(s.M) == [] and "access_refused" not in s.M["meta"]
+    assert not_there([tuple(q) for q in s.M["lanes"][-1]["pts"]])

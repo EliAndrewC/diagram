@@ -11,7 +11,8 @@ shortens an end, re-aims an end's last leg at the foot of its own previous verte
 drops a piece that no longer joins the connector's network - or squares a crossing. It never cuts the TREE (`corridors.
 is_tree`: the connector, whose hook alone it takes off, and the lanes step 4 draws); the one tree edit is step 3's, which
 takes a tree lane away WHOLE where it alone carries a way out over the brook and back, and step 4 lays that reach again
-only where it adds no such way out (`Lawful`). That is the termination argument:
+only where it adds no such way out (`Lawful`); and a tree lane shorter than `law.FRAGMENT_FT` that earns nothing goes whole
+as any lane does (`settle_fragments`, homes H40) - it reaches nothing step 4 owes. That is the termination argument:
 every repair but the squaring strictly shortens the non-tree web, the squaring is idempotent (`checks.square_crossings`),
 and step 4 adds a tree lane at most once per house, way target and field. Should the rounds run out with a rule still
 broken, the lanes still breaking one are dropped whole, round by round, until none is (FR-005: a lane that cannot be
@@ -29,6 +30,7 @@ step, so every guarantee below is judged on the squared lane and no stage after 
 
 from __future__ import annotations
 
+import itertools
 import math
 import time
 from collections.abc import Mapping, Sequence
@@ -48,11 +50,14 @@ from .checks import served_network, square_crossings, unreached_houses
 from .clearance import kink_spans
 from .corridors import (
     ACCESS_WIDTH,
+    CONTACT_FT,
     FIELD_ROLE,
+    LATER_CONTACTS,
     TARGET_ROLE,
     GroundIndex,
     _poly_box,
     building_quads,
+    contacts,
     draw_corridors,
     field_chain,
     field_router,
@@ -604,9 +609,13 @@ def connector_component(lanes: Sequence[Mapping[str, Any]]) -> set[int]:
 
 def settle_fragments(s: Any) -> int:
     """A fragment that earns nothing (`law.short_fragments`) is dropped (homes H40) - one a round, since two fragments can
-    each be redundant only while the other stands."""
-    lanes = s.M.get("lanes") or []
-    gone = [i for i in law.short_fragments(s.M) if not is_tree(lanes[i])][:1]
+    each be redundant only while the other stands. A TREE lane too, the connector aside (`short_fragments` never names it):
+    a corridor drawn to a house a lane since reaches, or a spur whose target another way now serves, earns nothing, and
+    the rule is FRAGMENT_FT for every lane (Kashikawa's lane 17, a 28.8 ft access corridor, and Mizuguchi's lane 11, 16.1
+    ft, stayed drawn while the tree was exempt - research R9). Dropping it cuts nothing another way needs, so the
+    termination argument stands: the drop shortens the web, and `short_fragments` names only a lane whose loss leaves no
+    house, target or field newly unreached, so step 4 does not draw it again."""
+    gone = law.short_fragments(s.M)[:1]
     if gone:
         s.drop_lanes(gone)
     return len(gone)
@@ -851,8 +860,18 @@ def settle_field(s: Any, lawful: Lawful) -> int:
     # bund up to its first clean contact with the network, bowed round a building on it where need be - as a stranded
     # house's corridor is (`draw_corridors`)
     chain = field_chain(M)
+    quads = building_quads(M) + law.fixture_quads(M)
+
+    def drawn(reached: Poly) -> Poly | None:
+        return lawful_run(reached[::-1], quads, lambda r: lawful(r, BRANCH_WIDTH), norm=lambda r: square_run(M, r))
+
     reached = first_contact(chain, segs) if chain is not None else None
-    run = lawful_run(reached[::-1], building_quads(M) + law.fixture_quads(M), lambda r: lawful(r, BRANCH_WIDTH), norm=lambda r: square_run(M, r)) if reached is not None else None
+    run = drawn(reached) if reached is not None else None
+    if run is None and chain is not None:
+        # ...AND WHERE ITS FIRST CONTACT IS REFUSED, THE LATER ONES of the run squared as it would be drawn, as a stranded
+        # house's corridor is (`corridors.LATER_CONTACTS`)
+        later = contacts(square_run(M, chain), segs, spacing=CONTACT_FT)
+        run = next((r for c in itertools.islice(later, LATER_CONTACTS) if (r := drawn(c)) is not None), None)
     if run is not None:
         _draw_tree_lane(s, run, BRANCH_WIDTH, FIELD_ROLE)
         return 1

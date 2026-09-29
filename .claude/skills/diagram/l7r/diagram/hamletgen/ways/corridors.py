@@ -16,10 +16,12 @@ most once per house.
 
 from __future__ import annotations
 
+import itertools
 import math
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Callable, Iterator, Mapping, Sequence
 from typing import Any
 
+from l7r.diagram.overlap.registry import element_extents
 from l7r.diagram.settlement import edge_dist, point_in_poly, rot_rect, seg_closest, seg_dist, segments_cross
 from l7r.diagram.settlement._geom.indexes import PointGrid
 from l7r.diagram.settlement.water_ways.lanes import behind_house
@@ -324,15 +326,55 @@ DOOR_TRIM_STEP_FT = 4.0
 """The step the door end is taken back in (`door_ends`): the clip's own 4 ft grain."""
 
 
-def door_ends(run: Poly, house: Mapping[str, Any] | None) -> list[Poly]:
+def door_ends(run: Poly, house: Mapping[str, Any] | None, yard: Sequence[Sequence[float]] | None = None, width: float = ACCESS_WIDTH) -> list[Poly]:
     """The door ends a corridor's run may be drawn with, in preference order. A door behind its house (`access.doors_of`
     offers every wall) is left round the gable from the front instead - the nearer gable, then the farther (water W57: the
     path serves the house at its dooryard, never ends behind it). Otherwise the door as reserved, then the run taken back
-    from it `DOOR_TRIM_STEP_FT` at a time, up to `DOOR_TRIM_FT`, for a door an outbuilding now stands on."""
+    from it `DOOR_TRIM_STEP_FT` at a time, up to `DOOR_TRIM_FT`, for a door an outbuilding now stands on - and last, the run
+    from where it leaves the house's own threshing yard (`yard`, its drawn quad) for good (`past_the_yard`), which a yard
+    wider than the trims reach needs."""
     if house is not None and behind_house(house, run[0]):
         return [round_the_gable(run[::-1], house)[::-1], round_the_gable(run[::-1], house, far=True)[::-1]]
     total = polyline_len(run)
-    return [run] + [trimmed for k in range(1, int(DOOR_TRIM_FT // DOOR_TRIM_STEP_FT) + 1) if len(trimmed := sub_run_from(run, k * DOOR_TRIM_STEP_FT)) >= 2 and k * DOOR_TRIM_STEP_FT < total]
+    ends = [run] + [trimmed for k in range(1, int(DOOR_TRIM_FT // DOOR_TRIM_STEP_FT) + 1) if len(trimmed := sub_run_from(run, k * DOOR_TRIM_STEP_FT)) >= 2 and k * DOOR_TRIM_STEP_FT < total]
+    past = past_the_yard(run, yard, width) if yard is not None and len(yard) >= 3 else None
+    return ends + ([past] if past is not None and past not in ends else [])
+
+
+YARD_EXIT_PAD_FT = 1.0
+"""How far past its own threshing yard's edge, beyond the tread's half-width, a door end is taken back to (`past_the_yard`):
+the overlap matrix asks a tread `PLACER_MARGIN_PX` (0.2) wider than drawn and the record rounds to 0.1, so a foot is
+room for both. A map drawing convention."""
+
+
+def past_the_yard(run: Poly, yard: Sequence[Sequence[float]], width: float = ACCESS_WIDTH) -> Poly | None:
+    """`run` from where its tread leaves the house's own threshing yard `yard` (its quad, `own_yard`) for good: the arc past the
+    last point within the tread's half-width and `YARD_EXIT_PAD_FT` of the yard. The overlap matrix forbids a way on a
+    yard, its own household's too (a path arrives at its dooryard and does not cross it), and the door stands in the yard's
+    middle (`access.doors_of`) - so where the yard is wider than `DOOR_TRIM_FT` reaches, every trimmed end still stood on it
+    (cohort seed 39 under feature 284's probes, measured: an 81-mat yard 76 x 53 ft, the corridor leaving along its long
+    axis, and the house was left with no way). The seating reserved the corridor leaving its yard once (`access.
+    leaves_its_yard`), so the run past it is reserved ground. None where the run never comes that near the yard or ends
+    on it."""
+    from shapely.geometry import LineString, Point, Polygon
+
+    line = LineString(run)
+    inside = line.intersection(Polygon([(float(q[0]), float(q[1])) for q in yard]).buffer(width / 2.0 + YARD_EXIT_PAD_FT))
+    if inside.is_empty:
+        return None
+    s0 = max(line.project(Point(c)) for g in getattr(inside, "geoms", [inside]) for c in g.coords)
+    if s0 >= line.length - 1.0:
+        return None
+    return sub_run_from(run, s0)
+
+
+def own_yard(M: Mapping[str, Any], house: Pt) -> Poly | None:
+    """The threshing yard of the house centered at `house` (`threshing_yards`, by its `of`) as the overlap matrix reads it
+    (`registry.element_extents`: its turned rect, which stands up to 3 ft wider than the drawn `poly` - cohort seed 39's
+    81-mat yard, measured), or None."""
+    rec = next((y for y in M.get("threshing_yards") or [] if y.get("of") and math.dist(_pt(y["of"]), house) <= ON_TREE_PX), None)
+    ext = element_extents("threshing_yards", rec, M) if rec is not None else []
+    return [(float(q[0]), float(q[1])) for q in ext[0][1]] if ext else None
 
 
 def sub_run_from(p: Poly, s0: float) -> Poly:
@@ -368,24 +410,37 @@ def off_the_wall(chain: Poly, house: Mapping[str, Any], width: float = ACCESS_WI
     return chain
 
 
-def first_contact(path: Poly, segs: Sequence[tuple[Pt, Pt]], reach: float = CONTACT_FT, step: float = SAMPLE_FT) -> Poly | None:
-    """`path` up to its first point within `reach` of the network `segs` where it can meet the tread it comes to as the law
-    asks - no kink (`law.bends_badly`), no needle, hook or fold at the joint (`law.meets_clean`) - ending on that tread's
-    foot; None when it never comes that near."""
+def contacts(path: Poly, segs: Sequence[tuple[Pt, Pt]], reach: float = CONTACT_FT, step: float = SAMPLE_FT, spacing: float = 0.0) -> Iterator[Poly]:
+    """Every way `path` may stop and meet the network `segs`, in order along it: at each point within `reach` of a tread
+    where it can meet that tread as the law asks - no kink (`law.bends_badly`), no needle, hook or fold at the joint
+    (`law.meets_clean`) - the run up to there, ending on the tread's foot. One per point, and, with `spacing`, none within
+    that arc length of the last one handed back."""
     if not segs:
-        return None
+        return
+    last, walked = -math.inf, 0.0
     for k, (a, b) in enumerate(zip(path, path[1:], strict=False)):
-        n = max(1, int(math.ceil(math.dist(a, b) / step)))
+        d = math.dist(a, b)
+        n = max(1, int(math.ceil(d / step)))
         for m in range(n + 1):
             q = (a[0] + (b[0] - a[0]) * m / n, a[1] + (b[1] - a[1]) * m / n)
+            at = walked + d * m / n
+            if at - last < spacing:
+                continue
             u, v = min(segs, key=lambda sg: seg_dist(q[0], q[1], sg[0], sg[1]))
             if seg_dist(q[0], q[1], u, v) > reach:
                 continue
             foot = seg_closest(q[0], q[1], u, v)
-            for run in contact_endings(path, k, q, foot):
-                if len(run) >= 2 and not law.bends_badly(run) and law.meets_clean(run, [u, v]):
-                    return run
-    return None
+            run = next((r for r in contact_endings(path, k, q, foot) if len(r) >= 2 and not law.bends_badly(r) and law.meets_clean(r, [u, v])), None)
+            if run is not None:
+                last = at
+                yield run
+        walked += d
+
+
+def first_contact(path: Poly, segs: Sequence[tuple[Pt, Pt]], reach: float = CONTACT_FT, step: float = SAMPLE_FT) -> Poly | None:
+    """`path` up to its first point within `reach` of the network `segs` where it can meet the tread it comes to as the law
+    asks (`contacts`), ending on that tread's foot; None when it never comes that near."""
+    return next(contacts(path, segs, reach, step), None)
 
 
 def samples_along(segs: Sequence[tuple[Pt, Pt]], step: float = BRANCH_STEP_FT) -> list[Pt]:
@@ -480,12 +535,22 @@ FORD_LANDING_FT = 22.0
 """A ford's landing stands this far off the brook square to its reach (`checks.ford_crossing`'s own `landing`)."""
 
 
-def _lawful_contact(run: Poly | None, rec: Mapping[str, Any] | None, quads: Sequence[Poly], vet: Callable[[Poly], bool], norm: Callable[[Poly], Poly] = lambda r: r) -> Poly | None:
-    """The first of `run`'s door ends (`door_ends`) that `vet` admits once `norm` (the web's squaring) has made it what would
-    be drawn, bowed round a building on it where need be (`lawful_run`); None for no run, or none admitted."""
+def _lawful_contact(
+    run: Poly | None, rec: Mapping[str, Any] | None, quads: Sequence[Poly], vet: Callable[[Poly], bool], norm: Callable[[Poly], Poly] = lambda r: r, yard: Sequence[Sequence[float]] | None = None
+) -> Poly | None:
+    """The first of `run`'s door ends (`door_ends`, `yard` the house's own) that `vet` admits once `norm` (the web's squaring)
+    has made it what would be drawn, bowed round a building on it where need be (`lawful_run`); None for no run, or none
+    admitted."""
     if run is None or len(run) < 2 or polyline_len(run) < 1.0:
         return None
-    return next((r for c in door_ends(run, rec) if (r := lawful_run(c, quads, vet, norm=norm)) is not None), None)
+    return next((r for c in door_ends(run, rec, yard) if (r := lawful_run(c, quads, vet, norm=norm)) is not None), None)
+
+
+LATER_CONTACTS = 12
+"""How many of the reserved run's later contacts with the network (`contacts`, `CONTACT_FT` apart) are offered once its
+first is refused (`draw_corridors`): cohort seed 8 under feature 284's probes, measured - the run's first contact stood just
+past a channel it crossed, and squared there the crossing and the contact made a kink; farther along the exit strip the
+same run met the network clean. A dozen reach some 170 ft along the network, past any crossing's square legs."""
 
 
 def dooryard(house: Mapping[str, Any]) -> Pt:
@@ -502,10 +567,13 @@ def dooryard(house: Mapping[str, Any]) -> Pt:
 def draw_corridors(s: Any, vet: Callable[[Poly], bool] = lambda _run: True, route: Callable[[Pt, Pt], Poly] | None = None, norm: Callable[[Poly], Poly] = lambda r: r) -> int:
     """Step 4 of `settle_the_web` (ways W01): for every farmhouse the served network does not reach (`unreached_houses`),
     the reserved run from its door (`corridor_chain`) drawn up to its first contact with the network - once per house, as a
-    tree lane, where `vet` (the web's `lawful`) admits it once squared (`norm`). Where it does not, the web's router
-    (`route`) carries the reserved run on from the exit strip, and failing that threads a way from the house's own dooryard
-    (`dooryard`) to the network. A house none of these reaches is recorded on the manifest (`meta.access_refused`) and not
-    drawn to. Returns the corridors drawn."""
+    tree lane, where `vet` (the web's `lawful`) admits it once squared (`norm`) - its door end taken back as far as past its
+    own threshing yard where need be (`door_ends`). Where it does not, the run's later contacts (`contacts`, at most
+    `LATER_CONTACTS`); then the web's router (`route`) carries the reserved run on from the exit strip, and failing that
+    threads a way from the house's own dooryard (`dooryard`) to the network. A house none of these reaches is recorded on
+    the manifest (`meta.access_refused`) and not drawn to - never a least-bad run (FR-005); the roll's reach verdict names
+    it (research R9: cohort seeds 8 and 39 under feature 284's probes reached it; with the yard and later-contact ends
+    both are reached, and cohort 1-60 plain passes). Returns the corridors drawn."""
     M = s.M
     far = unreached_houses(M)
     if not far:
@@ -523,19 +591,25 @@ def draw_corridors(s: Any, vet: Callable[[Poly], bool] = lambda _run: True, rout
             continue
         chain = corridor_chain(M, house)
         chain = off_the_wall(chain, rec) if rec is not None and chain is not None else chain
-        run = _lawful_contact(first_contact(chain, segs), rec, quads, vet, norm) if chain is not None else None
+        yard = own_yard(M, house)
+        run = _lawful_contact(first_contact(chain, segs), rec, quads, vet, norm, yard) if chain is not None else None
+        if run is None and chain is not None:
+            # ...AND WHERE ITS FIRST CONTACT IS REFUSED, THE LATER ONES of the run squared as it would be drawn (cohort seed 8
+            # under the probes: squared at the channel just before its first contact, the run kinked there)
+            later = contacts(norm(chain), segs, spacing=CONTACT_FT)
+            run = next((r for c in itertools.islice(later, LATER_CONTACTS) if (r := _lawful_contact(c, rec, quads, vet, norm, yard)) is not None), None)
         if run is None and route is not None and chain is not None:
             # ...AND WHERE THE RESERVED RUN MEETS THE NETWORK NOWHERE THE LAW ALLOWS - the connector started off the strip
             # (its track bent round the field or took the dry exit, cohort seeds 15 and 41: 72 ft off it), or the run turns
             # back on itself at the strip - the web's router carries it on from where it reached the strip to the nearest
             # point of the network
             trunk = off_the_wall(corridor_chain(M, house, to_connector=False) or chain, rec) if rec is not None else chain
-            run = _lawful_contact(routed_on(trunk, segs, route), rec, quads, vet, norm)
+            run = _lawful_contact(routed_on(trunk, segs, route), rec, quads, vet, norm, yard)
         if run is None and route is not None and rec is not None:
             # ...AND WHERE EVEN THAT IS REFUSED - the reserved door walled in by the house's own fixtures (cohort seed 4: its
             # privy on one gable and its bath and coop on the other, the reserved door behind the house) - the router threads
             # a way from the dooryard itself to the nearest point of the network
-            run = _lawful_contact(routed_on([dooryard(rec)], segs, route), rec, quads, vet, norm)
+            run = _lawful_contact(routed_on([dooryard(rec)], segs, route), rec, quads, vet, norm, yard)
         if run is None:
             refused = M["meta"].setdefault("access_refused", [])
             if list(key) not in refused:
