@@ -198,8 +198,8 @@ def work(root: str, name: str, extra: list[str], queue: list[dict], run_log: str
             if not failed(rc, text) or attempt == RETRIES:
                 break
             wait = wait_for(text, attempt, time.time())
-            runlog.write(f"failed {item['sid']} rc={rc} - waiting {wait // 60} min, then resuming it ({first_line(text)})\n")
-            time.sleep(wait)
+            runlog.write(f"failed {item['sid']} rc={rc} - waiting {min(wait, RETRY_EVERY) // 60} min (reset in {wait // 60}), then resuming it ({first_line(text)})\n")
+            time.sleep(min(wait, RETRY_EVERY))
             cmd = resume_command(item["cmd"], item["sid"])
         runlog.write(f"ended {item['sid']} rc={rc}\n")
         cont = os.path.join(item["log"], "continue.md")
@@ -222,7 +222,14 @@ def work(root: str, name: str, extra: list[str], queue: list[dict], run_log: str
 # started, which fails the same way at once, so one spent window burned the whole rest of the queue. Now a failed
 # session is RESUMED (`--resume <id>`, so it carries on with its own context) after a wait: until the reset time the
 # message names when it names one, else a backoff of 15, 30, then 60 minutes, for up to RETRIES attempts (~11 hours).
-RETRIES = 14
+#
+# RETRY EVERY 15 MINUTES AT MOST (feature 280, 2026-09-28): `work()` used to sleep the whole wait `wait_for()` computed,
+# up to six hours, after a usage-limit failure. When the GM resets the limit early, every queue then sat idle for the
+# rest of that wait - 88 minutes on two queues on 2026-09-28. So one sleep is capped at RETRY_EVERY: a resume before
+# the real reset fails at once and waits again, which costs one short failed call a quarter hour. RETRIES rose from 14
+# to 44 so the reach stays about 11 hours (44 x 15 min) - the cap shortens each wait, not how long a queue holds on.
+RETRIES = 44
+RETRY_EVERY = 15 * 60
 BACKOFF = (15 * 60, 30 * 60, 60 * 60)
 RESUME = "Continue the work of the brief you were given, from where you stopped - an error or the usage limit ended your last turn."
 
