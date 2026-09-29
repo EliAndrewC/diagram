@@ -210,7 +210,7 @@ def test_every_key_on_a_sources_roster_is_quoted_by_a_footnote_in_its_section(pa
 #: as well as Japanese and Chinese. The limit, stated in the spec: a Latin-script foreign quote with no non-ASCII
 #: character reads as English here; the sweep and the quote-check carry those.
 _QUOTE_SPAN = re.compile(r"「([^」]+)」")
-_TRANSLATION_NOTE = re.compile(r"\((?:[^()]*;\s*)?(?:translated from the|machine translation|the source.s own English|translation:)", re.I)
+_TRANSLATION_NOTE = re.compile(r"\((?:[^()]*;\s*)?(?:(?:title\s+)?translated\b|machine translation|translation:)", re.I)
 _BLOCK = re.compile(r"<(p|li|h[2-4])\b[^>]*>(.*?)</\1>", re.S)
 #: English quotes carry macrons (daimyō), curly quotes and the source's own dashes, so "not ASCII" is not "foreign".
 #: Foreign is a NON-LATIN script (CJK, kana, hangul, Cyrillic, Greek...) or, for a Latin-script language, a run of its
@@ -226,7 +226,13 @@ _GLOSS = re.compile(r"[(（][^()（）A-Za-z]*[)）]")
 
 
 def _looks_foreign(passage: str) -> bool:
-    return bool(_NON_LATIN.search(_GLOSS.sub("", passage))) or len(_GERMAN.findall(passage)) >= 2
+    """Since feature 292 (GM 2026-09-29: *"we should presume the source is in English unless ... stated otherwise"*) an
+    English quote carries no marker, so an English passage with a native-script gloss run into it ("the Senju 千住 area")
+    must read as English by itself: foreign is MOSTLY non-Latin - over 30% of its letters - or a run of German."""
+    text = _GLOSS.sub("", passage)
+    letters = [c for c in text if c.isalpha()]
+    non_latin = sum(1 for c in letters if _NON_LATIN.match(c))
+    return (bool(letters) and non_latin / len(letters) > 0.3) or len(_GERMAN.findall(passage)) >= 2
 
 
 def _anchor_spans(block: str) -> list[tuple[int, int]]:
@@ -269,6 +275,25 @@ def unmarked_foreign_quotes(text: str) -> list[str]:
 def test_a_foreign_language_quote_is_a_marked_translation(path: pathlib.Path) -> None:
     bad = unmarked_foreign_quotes(path.read_text(encoding="utf-8"))
     assert not bad, f"{path.name}: {len(bad)} foreign-language quote(s) with no translation note (feature 202):\n" + "\n".join(bad[:8])
+
+
+#: The forms feature 292 retired from the record (GM 2026-09-29): English is presumed, and so is this project as the
+#: translator - a translation by anyone else names them, and one that says more than the language keeps its words.
+_RETIRED = re.compile(r"the source(?:'|&#x27;|’)s own English|translated from the (?:[a-z]+ )?[A-Z][A-Za-z ()-]* by this project")
+
+
+@pytest.mark.parametrize("path", _finding_files() + [citations_of(p) for p in _finding_files()], ids=lambda p: str(p.relative_to(RESEARCH_DIR)))
+def test_no_note_says_the_source_s_own_english_or_by_this_project(path: pathlib.Path) -> None:
+    hits = [m.group(0) for m in _RETIRED.finditer(path.read_text(encoding="utf-8"))]
+    assert not hits, f"{path.name}: write `(translated; original: ...)` and leave English unmarked (feature 292): {hits[:3]}"
+
+
+def test_an_english_passage_with_a_gloss_is_english_and_a_japanese_one_is_not() -> None:
+    assert not _looks_foreign("cremation grounds clustered in the Senju 千住 area of Edo")
+    assert _looks_foreign("昭和６２年の砺波市鹿島での調査によると")
+    assert not _looks_foreign("")
+    assert _RETIRED.search("(the source's own English)") and _RETIRED.search("(translated from the classical Chinese by this project;")
+    assert not _RETIRED.search("(the paper's own English title; original: 「x」)"), "a paper's own English title says something"
 
 
 def test_the_translation_form_is_told_apart() -> None:

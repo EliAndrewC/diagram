@@ -80,6 +80,20 @@ def long_paragraphs(html: str) -> list[str]:
     return out
 
 
+_YEAR = re.compile(r"(?<![\d-])1[0-9]{3}(?![\d])")
+
+
+def lead_line_years(html: str, glossary_words: set[str]) -> list[str]:
+    """Each year in a lead line, and whether the glossary defines it - a skimmer meets the lead line alone (STYLE.md 3,
+    GM 2026-09-29), so a year it leans on is explained in the line or is a tooltip."""
+    out = []
+    for m in _LEAD.finditer(_COMMENT.sub("", html)):
+        lead = re.sub(r"\s+", " ", _TAG.sub("", m.group(1))).strip()
+        for y in _YEAR.findall(lead):
+            out.append(f"{y} ({'a glossary tooltip' if y in glossary_words else 'NOT in the glossary'}) - {lead}")
+    return out
+
+
 def lead_lines(html: str) -> list[str]:
     """Each bullet's lead line, `Q` or `S`, with the start of its body."""
     out = []
@@ -90,11 +104,12 @@ def lead_lines(html: str) -> list[str]:
     return out
 
 
-def report(fragments: dict[str, str]) -> str:
+def report(fragments: dict[str, str], glossary_words: set[str] | None = None) -> str:
     """The prepass text for the named question fragments (their notes files are not prose and are skipped)."""
     lines = []
     for name, html in fragments.items():
         metric, leads, gm, long = unconverted(html), lead_lines(html), gm_mentions(html), long_paragraphs(html)
+        years = lead_line_years(html, glossary_words or set())
         lines.append(f"== {name}")
         lines.append(f"METRIC WITHOUT A CONVERSION ({len(metric)}) - each is a FAIL of STYLE.md 6:")
         lines += [f"  {x}" for x in metric] or ["  none"]
@@ -102,6 +117,8 @@ def report(fragments: dict[str, str]) -> str:
         lines += [f"  {x}" for x in gm] or ["  none"]
         lines.append(f"PARAGRAPH OVER {MAX_WORDS} WORDS ({len(long)}) - each is a FAIL of STYLE.md 3 (split it, or make it a list):")
         lines += [f"  {x}" for x in long] or ["  none"]
+        lines.append(f"YEARS IN LEAD LINES ({len(years)}) - rule on each: is its significance given in the line, or by its tooltip?")
+        lines += [f"  {x}" for x in years] or ["  none"]
         lines.append(f"LEAD LINES ({len(leads)}) - rule on each: statement or question (STYLE.md 3), and readable from what precedes it:")
         lines += [f"  {x}" for x in leads] or ["  none"]
     return "\n".join(lines) + "\n"
@@ -121,7 +138,9 @@ def main(argv: list[str] | None = None) -> int:
     if not rels:
         print(f"style-prepass: no question of {args.page} matches {args.section!r}", file=sys.stderr)
         return 2
-    print(report({pathlib.Path(r).name: (root / r).read_text(encoding="utf-8") for r in rels}), end="")
+    variants = root / ".claude/skills/diagram/research/assets/glossary-variants.txt"
+    words = {line.split("\t", 1)[0] for line in variants.read_text(encoding="utf-8").splitlines()} if variants.is_file() else set()
+    print(report({pathlib.Path(r).name: (root / r).read_text(encoding="utf-8") for r in rels}, words), end="")
     return 0
 
 

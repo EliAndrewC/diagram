@@ -150,7 +150,8 @@ run the whole procedure: nothing this check covers goes unchecked for want of th
      not normalize british spellings or em-dashes inside things we are quoting"*); `DIFFERS` (the page has the passage with different characters or words - give the page's text);
      `NOT-ON-PAGE` (nothing like it on the page - say what the page does say on the point, if anything);
      `UNFETCHABLE` (the host refused; say how). **A translated quote** (feature 202, GM 2026-09-07: the quote is the
-     English translation, marked "translated from the ... by ...") - since feature 292 (GM 2026-09-29: *"when we include translated text, and then also include the original text ... can we store the original text separately as well? ... I don't think that there is any reason for other subagent checks to read both the translation and the original text. I think they should only read the translation."*) the
+     English translation, marked "(translated; original: ...)" - this project the presumed translator, English the
+     presumed language of an unmarked passage) - since feature 292 (GM 2026-09-29: *"when we include translated text, and then also include the original text ... can we store the original text separately as well? ... I don't think that there is any reason for other subagent checks to read both the translation and the original text. I think they should only read the translation."*) the
      notes you are handed carry only the TRANSLATION; where the original stood is a placeholder
      `<span class="orig" data-orig="..."></span>`, and the original is stored apart and read by the `translation-check`
      agent alone. Judge the translation's SUPPORT like any quote. Its VERBATIM is the script's: `quote-verbatim.txt`

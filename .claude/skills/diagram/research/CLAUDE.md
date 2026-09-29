@@ -119,10 +119,12 @@ whatever label surrounds it.
 A footnote per assertion - several a sentence when it asserts several things, two on a sentence resting on two
 sources - and every note quotes the
 passage it rests on, VERBATIM including the source's own spelling and dashes (the house-style guard exempts
-quoted spans). A foreign passage is quoted in English translation, marked: `「English」 (translated from the
-Japanese by this project; original: 「原文」)` - the translation follows house style, the original follows the note.
-The note names the language and the translator; a source's own English needs no note; the original is the
-checker's anchor, never a second quote. **The original is stored apart** (feature 292, GM 2026-09-29): write the note
+quoted spans). A foreign passage is quoted in English translation, marked: `「English」 (translated; original: 「原文」)`
+- the translation follows house style, the original follows the note. English is presumed and this project is presumed
+the translator (feature 292, GM 2026-09-29: *"we should presume the source is in English unless ... stated otherwise ... we should presume that all translations are done by this project unless explicitly stated otherwise, which allows us to simply say 'translated'"*): an English passage carries no marker, and only a translation by
+someone else names them (`translated by <who>`), or one that says more than its language keeps its words; the original
+is the checker's anchor, never a second quote. A note quoting several passages joins them with `; ` (a passage that
+introduces others ends with `:` before them); the assembly shows them as a list, nested under the introducing one. **The original is stored apart** (feature 292, GM 2026-09-29): write the note
 the natural way, original inline, and `make record` moves each `original: 「...」` run into the question's
 `NNN-<id>.originals.html` beside its notes, leaving a placeholder; the assembly puts it back, and the page shows it
 collapsed behind a click. No check but `translation-check` reads an original (the quote-check meets one only where the

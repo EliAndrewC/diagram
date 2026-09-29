@@ -15,7 +15,7 @@ import re
 
 from l7r.diagram.interactive.record import citations_side as cite
 from l7r.diagram.interactive.record import fragments as frag
-from l7r.diagram.interactive.record import originals, xref
+from l7r.diagram.interactive.record import originals, passages, xref
 from l7r.diagram.interactive.record.assemble import assemble
 from l7r.diagram.interactive.record.notes import allocate, merge, notes_of, number_references
 from l7r.diagram.interactive.record.split import Entry, Page, Section, split
@@ -235,6 +235,7 @@ def read_notes(page_rel: str, record_dir: str = RESEARCH_DIR) -> dict[str, str]:
                     raise RecordError(f"{where}/{frag.notes_file(name)}: {e.args[0]}") from None
         elif originals.has_placeholder(text):
             raise RecordError(f"{where}/{frag.notes_file(name)}: a note holds an original's placeholder and {frag.originals_file(name)} is missing")
+        text = passages.bulleted_notes(text)  # feature 292: a note quoting several passages is shown as a list
         per_question.append((f"{where}/{frag.notes_file(name)}", notes_of(text, f"{where}/{name}")))
     return merge(per_question)
 

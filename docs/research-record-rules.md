@@ -232,9 +232,9 @@ point in including a reference if it is not being quoted."* So the citation form
 - on the page's CITATIONS PAGE (feature 211, below; it was the page's own foot until then), in `<section class="footnotes"><ol>`, `<li id="fn-n"><a href="url"><code>key</code></a> -
   「the quoted passage」 (one clause on what it bears on when that is not plain) <a class="fnback" href="../<name>.html#fnref-n">back</a></li>` -
   and when the passage is not English, **the quote is the English translation, marked as one** (GM 2026-09-07, feature
-  202: *"for foreign language things we want to quote the English translation rather than the original text but we also want to note that it is a translation"*): `「English translation」 (translated from the Japanese by this project; original: 「原文」)` - the note names the language
-  and the translator (this project; the GM's browser, a machine translation saved on a date; the source's own English
-  elsewhere on the page), and the original follows the note as the anchor a checker finds on the page, never as a
+  202: *"for foreign language things we want to quote the English translation rather than the original text but we also want to note that it is a translation"*): `「English translation」 (translated; original: 「原文」)` - since feature 292 (GM 2026-09-29) the language is the original's own and this
+  project is presumed the translator, so only another translator is named (the GM's browser, a machine translation saved
+  on a date), and English is presumed, so the source's own English carries no marker; the original follows the note as the anchor a checker finds on the page, never as a
   second quote; a translation is this project's own English and follows house style (the guard's 「」 exemption
   cannot tell it from an original - held by hand); a source's own English needs no note. The same form holds in body
   prose and in a `SOURCES.html` entry. The record's 472 foreign-language passages were converted on 2026-09-07

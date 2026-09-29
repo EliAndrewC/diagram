@@ -503,6 +503,16 @@ def test_the_record_page_defines_its_terms_on_hover_in_the_footnote_box(record: 
     note = record.js("() => document.getElementById('fntip').textContent")
     assert "a derived note naming a tameike" in note, f"a note from window.RECORD_CITATIONS shows in the box ({record.errors})"
     assert record.js("() => document.querySelector('#fntip span.gl').getAttribute('title')").startswith("An irrigation reservoir")
+    # GM 2026-09-29: a note quoting several passages is a list in the box - a bullet each, the joining `; ` hidden
+    record.page.mouse.move(1, 1)
+    record.page.wait_for_timeout(300)
+    record.page.hover("sup.fn a[href$='#fn-2']")
+    record.page.wait_for_timeout(30)
+    shape = record.js("() => Array.from(document.querySelectorAll('#fntip .pass, #fntip .sep')).map(e => e.className + ':' + getComputedStyle(e).display)")
+    assert shape == ["sep:none", "pass:list-item", "sep:none", "pass sub:list-item"], shape  # the key's ` - ` is hidden too
+    # GM 2026-09-29: the link to the rendering section sits on its heading's own line, at the right
+    geo = record.js("() => { const h = document.querySelector('h2').getBoundingClientRect(), x = document.querySelector('h2 .xref').getBoundingClientRect(); return [h.top, h.bottom, h.right, x.top, x.bottom, x.right]; }")
+    assert geo[3] >= geo[0] and geo[4] <= geo[1] and abs(geo[2] - geo[5]) < 2, geo
     # GM 2026-09-29: a translated quotation's original is collapsed - in the page and in the footnote box - and a click
     # on its toggle shows it
     assert record.js("() => document.querySelector('main span.orig').hidden") is True

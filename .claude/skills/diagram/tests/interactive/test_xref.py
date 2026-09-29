@@ -28,9 +28,9 @@ def test_one_declaration_links_both_sections_each_to_the_other(tmp_path: pathlib
     pairs = xref.pairs(str(rec))
     assert pairs == [xref.Pair("rendering/homesteads.html", "drawn", "homesteads.html", "groves")]
     research = xref.link('<h2 id="groves">Groves</h2>\n<p>history</p>\n', "homesteads.html", pairs)
-    assert '<h2 id="groves">Groves</h2>\n<p class="xref"><a href="rendering/homesteads.html#drawn">How our maps draw it</a></p>\n<p>history' in research
+    assert '<h2 id="groves"><span class="xref"><a href="rendering/homesteads.html#drawn">How it\'s drawn</a></span>Groves</h2>\n<p>history' in research
     rendering = xref.link('<h2 id="drawn">Drawn</h2>\n<!-- about: homesteads.html#groves -->\n', "rendering/homesteads.html", pairs)
-    assert '<p class="xref"><a href="../homesteads.html#groves">The history behind it</a></p>' in rendering
+    assert '<span class="xref"><a href="../homesteads.html#groves">The history behind it</a></span>Drawn</h2>' in rendering
     assert xref.link("<p>unrelated</p>", "ways.html", pairs) == "<p>unrelated</p>"
     assert xref.link('<h2 id="other">x</h2>\n', "homesteads.html", pairs) == '<h2 id="other">x</h2>\n', "a missing target is left to `unresolved`"
     assert xref.unresolved(pairs, str(rec)) == []
@@ -68,5 +68,15 @@ def test_the_committed_grove_sections_link_each_other() -> None:
     """The pilot's pair, on the committed pages: the research section links its rendering section and back."""
     research = pathlib.Path(RESEARCH_DIR, "homesteads.html").read_text(encoding="utf-8")
     rendering = pathlib.Path(RESEARCH_DIR, "rendering", "homesteads.html").read_text(encoding="utf-8")
-    assert 'href="rendering/homesteads.html#how-our-maps-draw-the-groves-around-farmhouses">How our maps draw it' in research
+    assert 'href="rendering/homesteads.html#how-our-maps-draw-the-groves-around-farmhouses">How it\'s drawn' in research
     assert 'href="../homesteads.html#groves-of-trees-around-farmhouses-yashikirin">The history behind it' in rendering
+
+
+def test_a_heading_s_text_does_not_include_its_link() -> None:
+    """The link is inside the heading so it can sit on the heading's line; a heading's TEXT - the anchor rule, the
+    question a modal lists - never includes it."""
+    from l7r.diagram.interactive.sources import github_anchor, heading_text, page_text
+
+    h = '<span class="xref"><a href="rendering/homesteads.html#x">How it\'s drawn</a></span>Groves of trees (yashikirin)'
+    assert page_text(h) == heading_text(h) == "Groves of trees (yashikirin)"
+    assert github_anchor(heading_text(h)) == "groves-of-trees-yashikirin"

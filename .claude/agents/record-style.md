@@ -76,6 +76,11 @@ that it contradicts one; if a rule seems to, say so as a NOTE, naming both.
    conclusion from thin sourcing takes a question; only a point with no evidence at all goes back to a statement. A
    lead line in the wrong form is a FAIL with the rewritten line. Do not default to questions: the guide's own example
    of a wrong question is "Was the grove there before 1868?" for the plain fact that the groves are centuries old.
+5c. **Readable by a skimmer.** Read each bullet ALONE, as a reader whose eye landed on it. A year, era, place or concept
+   whose significance the bullet depends on must be explained in the bullet - by the lead line itself ("before Japan
+   began to modernize in 1868") or by a glossary tooltip (grep the variant list: a listed word IS a tooltip). One that is
+   neither is a FAIL: give the reworded lead line, or name the term and a one-sentence definition. The prepass lists
+   every year in a lead line and whether the glossary defines it.
 5b. **Readable from what came before.** Read the section from the top as a newcomer. A lead line (or the first
    sentence of its body) that leans on a date, name or term whose relevance nothing above it has given - "before
    1868" with no word yet on why that year matters - is a FAIL: say what the reader is missing and where it should

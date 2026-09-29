@@ -93,6 +93,18 @@ the pilot; the GM reads the pages in this feature's clone.
   in the hover and on the citations page; no check but `translation-check` reads an original, and that check runs only
   on the pairs `make translation-owed` names (new or changed since the merge base). The whole record is converted - a
   conversion proved lossless: every assembled page, the originals' wrapper removed, equals its bytes before.
+- **FR-021** (GM 2026-09-29): the link between a research section and its rendering section sits on the heading's own
+  row, floated right, and reads "How it's drawn" (back: "The history behind it"); a heading's text never includes it.
+- **FR-022** (GM 2026-09-29): English is presumed - "(the source's own English)" is struck from the record - and this
+  project is presumed the translator - `(translated from the <language> by this project; original:` becomes
+  `(translated; original:`; a translation by anyone else, or one that says more than its language, keeps its words. A
+  test fails on either retired form.
+- **FR-023** (GM 2026-09-29): a lead line and its body stand on their own for a reader who skims: a year or concept the
+  bullet leans on is explained in the lead line or is a glossary tooltip ("1868" is one); the prepass lists every year
+  in a lead line and whether the glossary defines it, and `record-style` rules on it.
+- **FR-024** (GM 2026-09-29): a footnote quoting several passages is shown as a list - flat for siblings, nested under a
+  passage that introduces others - written by the assembly with the separators kept, hidden, so the page's text is
+  unchanged.
 - **FR-011**: The GM's sign-off on the guide and the check MUST be an open task, and the sweep's tasks MUST NOT be
   written or started before it is ticked.
 

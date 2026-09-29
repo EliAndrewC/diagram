@@ -85,14 +85,19 @@ _DATED_TAIL = re.compile(r"\s*\([^()]*\b\d{4}-\d{2}-\d{2}\b[^()]*\)\s*$")
 _MARKUP = re.compile(r"[*`]")
 
 
+#: The link the assembly writes into a heading to its research or rendering counterpart (feature 292, `record/xref.py`)
+#: - a way out of the section, not part of its title, so every reading of a heading's text drops it.
+_XREF = re.compile(r'<span class="xref">.*?</span>', re.S)
+
+
 def heading_text(heading: str) -> str:
     """The rendered text of a heading - what a reader sees and what the anchor rule slugs."""
-    return _MARKUP.sub("", heading).strip()
+    return _MARKUP.sub("", _XREF.sub("", heading)).strip()
 
 
 def page_text(fragment: str) -> str:
     """The text of an HTML fragment: tags dropped, entities decoded, whitespace collapsed."""
-    return re.sub(r"\s+", " ", html.unescape(_TAG.sub("", fragment))).strip()
+    return re.sub(r"\s+", " ", html.unescape(_TAG.sub("", _XREF.sub("", fragment)))).strip()
 
 
 def github_anchor(heading: str, seen: dict[str, int] | None = None) -> str:

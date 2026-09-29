@@ -5,7 +5,7 @@ The GM, 2026-09-29: *"when we include translated text, and then also include the
 other subagent checks to read both the translation and the original text ... the original text should be collapsed by
 default."*
 
-A note quotes a foreign passage as `「English」 (translated from the Japanese by this project; original: 「原文」)`
+A note quotes a foreign passage as `「English」 (translated; original: 「原文」)`
 (feature 202). The notes fragment a session edits and a check reads keeps the translation and, where the original
 stood, a PLACEHOLDER - `<span class="orig" data-orig="<key>#<n>"></span>`; the original itself lives in the question's
 `.originals.html` beside it, one `<li data-orig="<key>#<n>">original: 「原文」</li>` per unit. The assembly puts each

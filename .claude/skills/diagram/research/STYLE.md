@@ -69,6 +69,11 @@ highlights into questions ... I think that we need to come up with a different n
   straightforward fact that we are attempting to convey. If there is, then we make it as a declarative statement. And
   if what we are expressing is complicated or we are explaining a level of uncertainty, and summarizing the conclusions
   that we have made based on our research, then it should be phrased as a question."*)
+- **A lead line and its body stand on their own, for a reader who skims.** A reader whose eye lands on one bullet should
+  follow it without the bullets before it. A year or a concept whose significance the bullet needs is explained in
+  place, one of two ways: the lead line says it ("Were groves as large before Japan began to modernize in 1868?"), or
+  the word is a glossary tooltip ("1868", "Edo period"). Choose per bullet; a term that recurs across the record wants
+  the tooltip. (GM, 2026-09-29: *"it would be good if someone skimming this section were able to read an arbitrary answer that caught their eye without requiring all of the context that came before it. Therefore, when there is an easy way to explain a year or a concept then we should take it ... The first option is to reword the question to include the explanation ... The second option is to make the year 1868 a tooltip."*)
 - **A lead line makes sense to a reader who has read only what comes before it.** A date, a name or a term whose
   relevance the reader has not yet been given - "before 1868" before anything has said why that year matters - is
   either explained before it or kept out of the lead line. (GM: *"someone just starting to read this document ...
@@ -149,7 +154,21 @@ highlights into questions ... I think that we need to come up with a different n
   acres or square feet. (inferred - rounding 10 cm to the nearest foot gives nothing.)
 - The prepass (`make style-prepass`) lists every metric figure in the section's own prose with no conversion beside it.
 
-## 7. What does not change
+## 7. Footnotes
+
+- **A translation says `translated`, and English says nothing.** `「English」 (translated; original: 「原文」)`: this project
+  is presumed the translator and English the language of an unmarked passage, so neither is stated; another translator
+  is named. (GM, 2026-09-29: *"we should presume the source is in English unless ... stated otherwise ... we should
+  presume that all translations are done by this project unless explicitly stated otherwise, which allows us to simply
+  say 'translated', which improves legibility and makes the footnotes scan better."*)
+- **The original is collapsed**, one click away, and stored apart (`make record` moves it).
+- **Several passages from one source are a list.** Join them with `; `, and end a passage that introduces others with
+  `:`; the page shows one bullet per passage, nested under the one that introduces them. (GM, 2026-09-29: *"anytime we
+  are citing multiple things from a source instead of one thing, we should display this as a bulleted list within the
+  footnote"*)
+- **A footnote's link to its source opens the citations page in a new tab.**
+
+## 8. What does not change
 
 Every other rule of the record holds: every assertion footnoted with a quoted passage; the four labels, visible
 (a GUESS stays a GUESS, said where the claim stands); absence notes; every decision and the alternatives it declined (as the project's choice, the ruling itself in a comment); the

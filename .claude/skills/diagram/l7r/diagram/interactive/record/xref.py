@@ -11,8 +11,8 @@ assembly writes a small link under BOTH headings: on the research section to the
 section back. Two-way by construction: there is one declaration and no second place to forget.
 
 These are the second bytes the assembly writes rather than copies (the first are footnote numbers, `notes.py`): a
-link paragraph directly after the `<h2>`, marked `class="xref"` so the stylesheet can set it small and right and so a
-reader of the page can tell it from the section's own text. A declaration naming a section that does not exist is a
+link at the start of the `<h2>`, marked `class="xref"` so the stylesheet can float it small at the right of the heading's
+line and so every reader of a heading's text can drop it. A declaration naming a section that does not exist is a
 refusal, not a silently missing link.
 """
 
@@ -27,7 +27,7 @@ from l7r.diagram.interactive.record import fragments as frag
 #: The rendering collection (`sources.COLLECTIONS`), whose sections carry the declarations.
 RENDERING = "rendering"
 ABOUT = re.compile(r"<!-- about: ((?:[a-z-]+/)?[a-z-]+\.html)#([^\s]+) -->")
-TO_RENDERING = "How our maps draw it"
+TO_RENDERING = "How it's drawn"
 TO_RESEARCH = "The history behind it"
 
 
@@ -78,12 +78,14 @@ def _links_for(page_rel: str, all_pairs: list[Pair]) -> dict[str, list[str]]:
 
 
 def link(page_html: str, page_rel: str, all_pairs: list[Pair]) -> str:
-    """The assembled page with a `<p class="xref">` written after each joined section's heading."""
+    """The assembled page with a `<span class="xref">` written at the start of each joined section's heading, which the
+    stylesheet floats to the right of the heading's own line (GM 2026-09-29: *"should be floated to the right-hand side
+    of the same row"*). It is inside the heading, and every reader of a heading's text drops it (`sources.page_text`)."""
     for section_id, anchors in _links_for(page_rel, all_pairs).items():
-        m = re.search(rf'<h[23] id="{re.escape(section_id)}">.*?</h[23]>\n', page_html)
+        m = re.search(rf'<h[23] id="{re.escape(section_id)}">', page_html)
         if m is None:
             continue  # the target side is checked by `unresolved`, which names the declaration
-        page_html = page_html[: m.end()] + f'<p class="xref">{" - ".join(anchors)}</p>\n' + page_html[m.end() :]
+        page_html = page_html[: m.end()] + f'<span class="xref">{" - ".join(anchors)}</span>' + page_html[m.end() :]
     return page_html
 
 
