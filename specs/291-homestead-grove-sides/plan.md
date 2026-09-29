@@ -126,7 +126,8 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   lanes are 3-5), `street: True`, clipped to its farms' extent plus a lot, routed only where a straight leg is blocked,
   and joined at its nearer end to the connector (or to the previous street). A linear hamlet with planned streets lays no
   skeleton arms and no web cuts; the stragglers still run. EACH ROW FARM'S WAY ENDS ON ITS OWN STREET: `lay_door_paths`
-  is given, for a row farm, its own street as the target (not the nearest way), and routes from the front door round the
+  is given, for a row farm, its own street as the target - the street its front door faces, as drawn (not the nearest way
+  to its house: a farm between two streets faces the one its door is on) - and routes from the front door round the
   farm's grove when the street lies on its windward side (the front is the wind's, D3); the path records the farm it
   serves. The door-to-door street it replaces goes.
 - **D18 - water** (FR-018). A dispersed farm's own well is seated in its dooryard by `own_wells`: a ring round the house
