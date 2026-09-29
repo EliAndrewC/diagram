@@ -1593,6 +1593,8 @@ micro-highs	micro-high
 midaidokoro	midaidokoro
 middle moat	middle moat
 middle moats	middle moat
+middle rowhouse	middle rowhouse
+middle rowhouses	middle rowhouse
 military commissioner	military commissioner
 military commissioners	military commissioner
 mimizuka	ear mound
