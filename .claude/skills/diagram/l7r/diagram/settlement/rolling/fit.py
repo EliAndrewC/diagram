@@ -485,7 +485,7 @@ class BundleFitMixin:
     def _sun_corridor_ok(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """Does this homestead leave every threshing yard - its own and the neighbors' - its sun?
 
-        THE RULE (GM 2026-08-13, researched in research/rendering/homesteads.html, "How our maps draw the work yards"):
+        THE RULE (GM 2026-08-13, researched in research/rendering/homesteads.html, "How our maps draw threshing and drying yards (niwa)"):
         rice is dried on the niwa, so a yard needs clear ground to its SOUTH. A thatched roof is
         pitched 45 deg or steeper, which puts our 46x28 ft minka's ridge ~20 ft up; at 38N in the
         10th month that throws 21 ft of shadow at noon and 39 ft by 9am. So a farmhouse standing

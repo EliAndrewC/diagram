@@ -158,9 +158,9 @@ class ThreshingYard(Kind):
     harvest weather is changeable, each household also gathers its drying rack by the house, along one side of
     the yard.
 
-    Why: Threshing and drying were done per household, in the yard, and the yard needs sun: a thatched roof
+    Why: Threshing and drying were done per household, in the yard (though some south-China villages shared one drying floor), and the yard needs sun: a thatched roof
     pitched at 45 degrees puts a minka's ridge at 20-22 feet, so no yard is placed in the shadow band south
-    of a neighbor's wall, and a rack never stands in the yard's southern half. Every yard on this map is different:
+    of a neighbor's wall, and a rack never stands in the yard's southern half. Unless a map allots every household the same yard, as the planned colony at Santome did in 1696, every yard on it is different:
     each is rolled from a right-skewed spread about 25 tsubo, correlated with the household - the barley country's
     count and, in a rice district, a museum's count of about fifty mats a farm for drying the grain. Whether racks stand
     by the houses follows the weather of the country, not a village's taste: racks gathered by the house are recorded for
@@ -173,7 +173,7 @@ class ThreshingYard(Kind):
     floor rather than as mats, so the drawing shows a smaller number to give the impression of many. The real yard at
     harvest was covered, 40 to 60 mats of about 3 by 6 feet each on an ordinary barley-country farm and 100 to 150 on a
     large one. The
-    mats' size and the yard's spread are read; the yard's size rests on two undated records of remembered practice, a calibration and this project's choice; the rows the mats are laid in are a guess - no source read
+    mats' size is read, and the yard's lopsided spread is read from registers of houses and homestead lots, since no survey counts yards; the yard's size rests on two undated records of remembered practice, a calibration and this project's choice; the rows the mats are laid in are a guess - no source read
     says; and where a map draws racks by the houses, which side of the yard a rack takes is a guess too, and the rack is
     drawn wider than its poles so that it reads.
 
@@ -181,7 +181,7 @@ class ThreshingYard(Kind):
     Covers: `threshing_yards` - the floor, its mats, and the rack by the house where the harvest weather is changeable
     Label: convention
     Sources: kitamoto-inakoki-niwa, kitamoto-mushiro-niwa, tobunken-mushiro, nishimura-makino-1959
-    Entry: research/homesteads.html - 'Threshing and drying yards at farmhouses (niwa)'; 'Did a village put its drying racks by the houses by custom, or because of its weather?'; research/rendering/homesteads.html - 'How our maps draw the work yards'
+    Entry: research/homesteads.html - 'Threshing and drying yards at farmhouses (niwa)'; 'Did a village put its drying racks by the houses by custom, or because of its weather?'; research/rendering/homesteads.html - 'How our maps draw threshing and drying yards (niwa)'
     """
 
     key = 'threshing yard'
