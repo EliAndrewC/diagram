@@ -688,17 +688,24 @@ class Lawful:
         self.buildings = building_quads(s.M)
         self.ground = memo_ground(s, "worked", worked_ground)
 
+    def on_lawful_ground(self, run: Poly, width: float) -> bool:
+        """THE GROUND HALF - what a run keeps whatever lanes the web draws beside it: no kink or hook, no crossing fault (a
+        brook crossed off a ford or twice, a crossing off square, one no deck seats), no foul of a farmhouse, another
+        household's yard or garden, a building or a farmstead fixture, no field, dry plot or marsh underfoot. The seating asks
+        this of a corridor before it admits a house (`corridor_on_lawful_ground`), so the web can always draw what it
+        reserved."""
+        if len(run) < 2 or law.hooked(run) or kink_spans(run):
+            return False
+        if _crossing_fault({**self.M, "lanes": [{"pts": _rounded(run), "w": width}]}, 0, run, self.wet) is not None:
+            return False
+        return fouled_segment(run, width, self.houses, self.yards, self.solid, self.fixtures) is None and on_open_ground(self.M, run) and not through_a_building(run, self.buildings)
+
     def __call__(self, run: Poly, width: float, skip: int | None = None) -> bool:
         """`skip`: the lane `run` would replace, left out of what it is asked to meet."""
         M = self.M
-        if len(run) < 2 or law.hooked(run) or kink_spans(run):
+        if not self.on_lawful_ground(run, width):
             return False
         lanes = [ln for k, ln in enumerate(M.get("lanes") or []) if k != skip]
-        i = len(lanes)
-        if _crossing_fault({**M, "lanes": [*lanes, {"pts": _rounded(run), "w": width}]}, i, run, self.wet) is not None:
-            return False
-        if fouled_segment(run, width, self.houses, self.yards, self.solid, self.fixtures) is not None or not on_open_ground(M, run) or through_a_building(run, self.buildings):
-            return False
         x0, y0, x1, y1 = _box(run, MEET_REACH_FT)
         near = [ln for ln in lanes if len(ln.get("pts") or []) >= 2 and not ((b := _box(_pts(ln), 0.0))[2] < x0 or b[0] > x1 or b[3] < y0 or b[1] > y1)]
         tl, k = [*near, {"pts": run, "w": width}], len(near)
@@ -713,6 +720,29 @@ class Lawful:
         if any(n == k for n, _e in law.dangling_lane_ends(trial, self.ground)) or any(n == k for n, _e, _h in law.ends_behind(trial, self.ground)):
             return False
         return not any(along_tail(p, q, deg=_DOUBLED_DEG) is not None for o in (_pts(ln) for ln in near) for p, q in ((run, o), (run[::-1], o), (o, run), (o[::-1], run)))
+
+
+def square_run(M: Mapping[str, Any], run: Poly) -> Poly:
+    """`run` squared at every crossing of the brook and the drawn channels (`square_crossings`), as settle step 1 squares
+    every lane - so a tree lane is judged, and drawn, square where it crosses water (cohort seed 8: the exit strip crossed the
+    brook at its ford 38 degrees off square, and the corridor was refused for it)."""
+    q = list(run)
+    for course, half in square_waters(M):
+        for _ in range(SQUARE_PASSES):
+            nq = square_crossings(q, course, half)
+            if nq == q:
+                break
+            q = nq
+    return q
+
+
+def corridor_on_lawful_ground(M: Mapping[str, Any], run: Poly, width: float = ACCESS_WIDTH) -> bool:
+    """THE SEATING'S QUESTION (feature 287, plan M3): would a corridor along `run`, squared at its water crossings
+    (`square_run`), stand on lawful ground (`Lawful.on_lawful_ground`) on the manifest as it stands? One predicate, asked by
+    the seating before it admits a house and by the web before it draws the corridor."""
+    import types
+
+    return Lawful(types.SimpleNamespace(M=M)).on_lawful_ground(square_run(M, run), width)
 
 
 def _draw_tree_lane(s: Any, run: Poly, width: float, role: str, **extra: Any) -> None:
@@ -747,9 +777,16 @@ def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:
     hard = [[(float(a), float(b)) for a, b in f["outline"]] for f in M.get("fields") or [] if f.get("outline")]
     hard += [[(float(a), float(b)) for a, b in d["poly"]] for d in M.get("dry_plots") or [] if d.get("poly")]
     hard += [[(float(a), float(b)) for a, b in m["poly"]] for m in M.get("marshes") or [] if len(m.get("poly") or ()) >= 3 and m.get("role") != "defense"]
-    walls = [poly for poly, _own, kind in _homestead_polys(s) if kind not in ("commons", "village_groves")]
+    fabric = [(poly, own) for poly, own, kind in _homestead_polys(s) if kind not in ("commons", "village_groves")]
     water = list(zip(brook, brook[1:], strict=False))
-    return lambda a, b: _route(a, b, hard, walls, water, gap=FIELD_ROUTE_GAP_FT)
+
+    def route(a: Pt, b: Pt) -> Poly:
+        # A PATH LEAVES ITS OWN DOORYARD: the yard and garden of a house the route starts at are not walls to it (a route from
+        # a dooryard started inside one, and every cell round it was walled), its fixtures and every other steading's are
+        walls = [poly for poly, own in fabric if own is None or math.dist(own, a) > law.DOORSTEP_FT]
+        return _route(a, b, hard, walls, water, gap=FIELD_ROUTE_GAP_FT)
+
+    return route
 
 
 FIELD_ROUTE_GAP_FT = BRANCH_WIDTH / 2.0 + 3.0
@@ -790,7 +827,7 @@ def settle_reach(s: Any) -> int:
         return 0
     lawful = Lawful(s)
     route = field_router(s, next(iter(law._brooks(s.M)), []))
-    return draw_corridors(s, lambda run: lawful(run, ACCESS_WIDTH), route) + settle_targets(s, lawful) + settle_field(s, lawful)
+    return draw_corridors(s, lambda run: lawful(run, ACCESS_WIDTH), route, lambda run: square_run(s.M, run)) + settle_targets(s, lawful) + settle_field(s, lawful)
 
 
 def settle_husks(s: Any) -> int:

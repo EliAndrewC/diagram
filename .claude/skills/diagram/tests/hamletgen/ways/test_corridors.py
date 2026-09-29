@@ -223,3 +223,9 @@ def test_a_corridor_that_meets_the_network_nowhere_is_routed_on_from_the_strip()
     refused = _S(_tree_map(houses=[_house(300.0, 100.0)], lanes=M["lanes"]))
     assert co.draw_corridors(refused, lambda run: (0.0, 0.0) not in run, lambda a, b: []) == 0, "no route: refused"
     assert co._lawful_contact(None, None, [], lambda r: True) is None
+
+
+def test_a_house_whose_corridor_is_drawn_is_not_drawn_to_again() -> None:
+    M = _tree_map(houses=[_house(300.0, 100.0)])
+    M["lanes"].append({"pts": [[900.0, 900.0], [950.0, 900.0]], "w": 3, "role": co.ACCESS_ROLE, "of": [300.0, 100.0]})
+    assert co.draw_corridors(_S(M)) == 0

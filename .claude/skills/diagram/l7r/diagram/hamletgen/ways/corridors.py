@@ -201,14 +201,14 @@ BOW_WIDTH = 32
 the level before's."""
 
 
-def lawful_run(run: Poly, quads: Sequence[Poly], vet: Callable[[Poly], bool], depth: int = BOW_DEPTH) -> Poly | None:
+def lawful_run(run: Poly, quads: Sequence[Poly], vet: Callable[[Poly], bool], depth: int = BOW_DEPTH, norm: Callable[[Poly], Poly] = lambda r: r) -> Poly | None:
     """`run` where `vet` (the web's `Lawful`) admits it, else the first of its bows round the buildings standing on it
     (`bowed_round`, up to `depth` buildings) that `vet` admits; None when none does."""
     frontier = [run]
     for _ in range(depth + 1):
         for cand in frontier:
-            if vet(cand):
-                return cand
+            if vet(c := norm(cand)):
+                return c
         frontier = [b for cand in frontier for b in bowed_round(cand, quads)][:BOW_WIDTH]
     return None
 
@@ -397,23 +397,44 @@ def routed_field_runs(
     return out
 
 
+def routed_on(trunk: Poly, segs: Sequence[tuple[Pt, Pt]], route: Callable[[Pt, Pt], Poly]) -> Poly | None:
+    """`trunk` carried on by `route` from its last point to the nearest point of the network `segs`, up to its first contact
+    with it (`first_contact`); None where there is no network or no route."""
+    near = min((seg_closest(trunk[-1][0], trunk[-1][1], a, b) for a, b in segs), key=lambda f: math.dist(f, trunk[-1]), default=None)
+    leg = route(trunk[-1], near) if near is not None else []
+    return first_contact(_dedup([*trunk, *leg[1:]]), segs) if len(leg) >= 2 else None
+
+
 FORD_LANDING_FT = 22.0
 """A ford's landing stands this far off the brook square to its reach (`checks.ford_crossing`'s own `landing`)."""
 
 
-def _lawful_contact(run: Poly | None, rec: Mapping[str, Any] | None, quads: Sequence[Poly], vet: Callable[[Poly], bool]) -> Poly | None:
-    """The first of `run`'s door ends (`door_ends`) that `vet` admits, bowed round a building on it where need be
-    (`lawful_run`); None for no run, or none admitted."""
+def _lawful_contact(run: Poly | None, rec: Mapping[str, Any] | None, quads: Sequence[Poly], vet: Callable[[Poly], bool], norm: Callable[[Poly], Poly] = lambda r: r) -> Poly | None:
+    """The first of `run`'s door ends (`door_ends`) that `vet` admits once `norm` (the web's squaring) has made it what would
+    be drawn, bowed round a building on it where need be (`lawful_run`); None for no run, or none admitted."""
     if run is None or len(run) < 2 or polyline_len(run) < 1.0:
         return None
-    return next((r for c in door_ends(run, rec) if (r := lawful_run(c, quads, vet)) is not None), None)
+    return next((r for c in door_ends(run, rec) if (r := lawful_run(c, quads, vet, norm=norm)) is not None), None)
 
 
-def draw_corridors(s: Any, vet: Callable[[Poly], bool] = lambda _run: True, route: Callable[[Pt, Pt], Poly] | None = None) -> int:
+def dooryard(house: Mapping[str, Any]) -> Pt:
+    """Where a path to a farmhouse ends at its dooryard: the threshing yard's middle where the house records one, else a
+    point `GABLE_MARGIN_FT` before the middle of its front face (`reaches_dooryard`'s band)."""
+    yard = (house.get("geom") or {}).get("yard")
+    if yard is not None:
+        return (float(yard[0]), float(yard[1]))
+    th = math.radians(float(house.get("rot") or 0.0))
+    d = float(house["h"]) / 2 + GABLE_MARGIN_FT
+    return (float(house["x"]) - math.sin(th) * d, float(house["y"]) + math.cos(th) * d)
+
+
+def draw_corridors(s: Any, vet: Callable[[Poly], bool] = lambda _run: True, route: Callable[[Pt, Pt], Poly] | None = None, norm: Callable[[Poly], Poly] = lambda r: r) -> int:
     """Step 4 of `settle_the_web` (ways W01): for every farmhouse the served network does not reach (`unreached_houses`),
     the reserved run from its door (`corridor_chain`) drawn up to its first contact with the network - once per house, as a
-    tree lane, where `vet` (the web's `lawful`) admits it. A run `vet` refuses is recorded on the manifest
-    (`meta.access_refused`, the house) and not drawn. Returns the corridors drawn."""
+    tree lane, where `vet` (the web's `lawful`) admits it once squared (`norm`). Where it does not, the web's router
+    (`route`) carries the reserved run on from the exit strip, and failing that threads a way from the house's own dooryard
+    (`dooryard`) to the network. A house none of these reaches is recorded on the manifest (`meta.access_refused`) and not
+    drawn to. Returns the corridors drawn."""
     M = s.M
     far = unreached_houses(M)
     if not far:
@@ -427,20 +448,23 @@ def draw_corridors(s: Any, vet: Callable[[Poly], bool] = lambda _run: True, rout
         rec = next((h for h in M.get("houses") or [] if math.dist((float(h["x"]), float(h["y"])), (x, y)) <= 1.0), None)
         house = _pt((rec["x"], rec["y"])) if rec is not None else (float(x), float(y))
         key = (round(house[0], 1), round(house[1], 1))
-        chain = corridor_chain(M, house)
-        if key in drawn or chain is None:
+        if key in drawn:
             continue
-        chain = off_the_wall(chain, rec) if rec is not None else chain
-        run = _lawful_contact(first_contact(chain, segs), rec, quads, vet)
-        if run is None and route is not None:
+        chain = corridor_chain(M, house)
+        chain = off_the_wall(chain, rec) if rec is not None and chain is not None else chain
+        run = _lawful_contact(first_contact(chain, segs), rec, quads, vet, norm) if chain is not None else None
+        if run is None and route is not None and chain is not None:
             # ...AND WHERE THE RESERVED RUN MEETS THE NETWORK NOWHERE THE LAW ALLOWS - the connector started off the strip
             # (its track bent round the field or took the dry exit, cohort seeds 15 and 41: 72 ft off it), or the run turns
             # back on itself at the strip - the web's router carries it on from where it reached the strip to the nearest
             # point of the network
             trunk = off_the_wall(corridor_chain(M, house, to_connector=False) or chain, rec) if rec is not None else chain
-            near = min((seg_closest(trunk[-1][0], trunk[-1][1], a, b) for a, b in segs), key=lambda f: math.dist(f, trunk[-1]), default=None)
-            leg = route(trunk[-1], near) if near is not None else []
-            run = _lawful_contact(first_contact(_dedup([*trunk, *leg[1:]]), segs), rec, quads, vet) if len(leg) >= 2 else None
+            run = _lawful_contact(routed_on(trunk, segs, route), rec, quads, vet, norm)
+        if run is None and route is not None and rec is not None:
+            # ...AND WHERE EVEN THAT IS REFUSED - the reserved door walled in by the house's own fixtures (cohort seed 4: its
+            # privy on one gable and its bath and coop on the other, the reserved door behind the house) - the router threads
+            # a way from the dooryard itself to the nearest point of the network
+            run = _lawful_contact(routed_on([dooryard(rec)], segs, route), rec, quads, vet, norm)
         if run is None:
             refused = M["meta"].setdefault("access_refused", [])
             if list(key) not in refused:

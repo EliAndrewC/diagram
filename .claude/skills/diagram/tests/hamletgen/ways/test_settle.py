@@ -515,3 +515,44 @@ def test_a_lane_over_a_fixture_is_cut_and_no_tree_lane_is_laid_over_one() -> Non
     settle.settle_shapes(s)
     assert law.lanes_over_fixtures(s.M) == [], "the leg over the heap is cut"
     assert not settle.Lawful(s)([(-200.0, 0.0), (-100.0, 100.0)], 3.0)
+
+
+def test_seed_8_a_corridor_over_the_brook_at_its_ford_is_squared_and_drawn() -> None:
+    """Cohort seed 8 (the coarse-grain knob reseated the cluster): the exit strip ran from the houses over the brook to the
+    connector's start 38 degrees off square at a ford, the corridor was judged unsquared, refused, and three houses were
+    stranded. The web squares a tree lane at its crossings (`square_run`) before it asks the law, as it squares every lane."""
+    brook = {"poly": [[100.0, -500.0], [100.0, 500.0]], "w": 7.0}
+    s = _S(
+        [_c((0.0, -150.0), (-1000.0, -150.0))],
+        houses=[(300.0, 200.0)],
+        meta={**_GEN, "brook_fords": [[100.0, -73.3]]},
+        streams=[brook],
+        access_exit=[[300.0, 80.0], [0.0, -150.0]],
+        access_corridors=[{"pts": [[300.0, 180.0], [300.0, 80.0]], "of": [300.0, 200.0]}],
+    )
+    s.M["houses"][0]["rot"] = 180.0
+    assert not settle.Lawful(s).on_lawful_ground([(300.0, 80.0), (0.0, -150.0)], 3.0), "unsquared, the strip crosses 38 degrees off"
+    assert settle.corridor_on_lawful_ground(s.M, [(300.0, 80.0), (0.0, -150.0)]), "squared, the seating's own question admits it"
+    settle.settle_the_web(s)
+    assert law.unreached_houses(s.M) == [] and law.oblique_crossings(s.M) == [] and law.off_ford_crossings(s.M) == []
+    assert [ln["role"] for ln in s.M["lanes"] if ln.get("role")] == ["access"]
+
+
+def test_seed_4_a_door_walled_in_by_its_own_fixtures_is_reached_from_the_dooryard() -> None:
+    """Cohort seed 4: the corridor was reserved from the back wall, the house's own privy stood off one gable and its bath
+    and coop off the other, so neither gable carry kept the law - the router threads a way from the dooryard instead."""
+    fixtures = [
+        {"kind": "privy", "x": 330.0, "y": 200.0, "w": 6.0, "h": 6.0, "rot": 0.0, "of": [300.0, 200.0]},
+        {"kind": "bath", "x": 270.0, "y": 200.0, "w": 6.0, "h": 6.0, "rot": 0.0, "of": [300.0, 200.0]},
+    ]
+    s = _S(
+        [_c((300.0, 0.0), (300.0, -1000.0))],
+        houses=[(300.0, 200.0)],
+        meta=dict(_GEN),
+        farm_fixtures=fixtures,
+        access_exit=[[300.0, 120.0], [300.0, 0.0]],
+        access_corridors=[{"pts": [[300.0, 183.0], [300.0, 120.0]], "of": [300.0, 200.0]}],
+    )
+    settle.settle_the_web(s)
+    assert law.unreached_houses(s.M) == [] and law.ends_behind(s.M) == [] and law.lanes_over_fixtures(s.M) == []
+    assert co.dooryard(s.M["houses"][0]) == (300.0, 220.0) and co.dooryard({**s.M["houses"][0], "geom": {"yard": [1, 2, 3, 4]}}) == (1.0, 2.0)
