@@ -144,7 +144,7 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   street; no house behind another on its side; each street one lane; every far row farm with its holding behind it; every
   row farm joined by a way to its own street) and `water_rules(M)` (every dispersed farm with its own well, not in its
   way in; a linear map's `row_water` drawn - own wells, or every farm within reach of a shared well), and the door and
-  bamboo predicates (`doors_unreached`: every grove farm's front door within the door reach of a way; `bamboo_mismatch`:
+  bamboo predicates (`doors_unreached`: every LINEAR row farm's front door within the door reach of a way (a dispersed farm needs none, homesteads/150); `bamboo_mismatch`:
   the farms drawing grove bamboo exactly the farms that rolled it). The cohort audit runs all of them on every roll and,
   beside its 24 seeds, rolls a PINNED linear spec for each value of `row_line`, `row_sides` and `row_water` (four
   line-by-sides specs, water alternating), so both values of each knob are asserted to appear, not left to the roll; the
