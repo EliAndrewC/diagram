@@ -382,6 +382,14 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         _bb = _g0["bbox"]
         _reach = (_bb[0] - _bb[2] / 2, _bb[1] - _bb[3] / 2, _bb[0] + _bb[2] / 2, _bb[1] + _bb[3] / 2)
         _row_kw = {"pitch": max(_bb[2], _bb[3]), "reach": float("inf")}
+    # A ROW VILLAGE'S FARMS STAND IN ROWS ALONG THEIR STREETS (feature 291 amendment 3, `rows.py`; research/homesteads/155
+    # and 156): the row takes every household it can, and the front-row, frontage and rank passes below take only what the
+    # streets could not hold - a remainder the cohort's row rules report.
+    if _linear:
+        from .rows import seat_rows  # the row module reads this stage's frame; imported where it is used
+
+        placed += seat_rows(s, plan, _g0["bbox"], allowed=lambda x, y: _seat_allowed(s, x, y))
+        front_cap = placed
     for _rung in (0,):
         for (fx, fy), _n in front_row(plan, plan.spec.households if _linear else min(plan.spec.households, 12), standoff=None, chains=s._site_chains, house=_house_max, envelope=_reach, with_normals=True, **_row_kw):
             if placed >= front_cap:
