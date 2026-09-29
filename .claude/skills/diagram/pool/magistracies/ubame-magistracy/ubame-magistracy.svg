@@ -106,7 +106,7 @@
        court's rect overlaps the outer court's by 1 unit (0.44 device px at this render's scale) so
        every row is interior to a fill, which renders pixel-identical to one rect (measured, feature 262). -->
   <rect data-id="inner-court-1" x="200" y="150" width="870" height="301" fill="url(#court-earth)" id="precinct" data-kind="inner court"/>
-  <rect x="200" y="450" width="870" height="300" fill="url(#court-earth)" id="precinct" data-kind="outer court"/>
+  <rect data-id="outer-court-1" x="200" y="450" width="870" height="300" fill="url(#court-earth)" id="precinct" data-kind="outer court"/>
 
   <g stroke="#2D2A24" stroke-width="9" fill="none" stroke-linecap="square" data-kind="compound wall">
     <!-- North -->
@@ -854,9 +854,9 @@
     <!-- the ground it names: the apron between the hearing court and the gate range, where the main gate lets onto
          the compound (unfilled, a polygon: the outer court's earth shows through) -->
     <polygon points="362,674 788,674 788,710 362,710" fill="none"/>
-    <!-- the court's name stands on its forecourt, the one open ground it has (feature 267 round 5): on the hearing
-         court's roof it named the roofed court's east third, and beside `forecourt` it read as one phrase -->
-    <text font-size="13" font-weight="bold" letter-spacing="2" fill="#5C4830">OUTER COURT</text>
+    <!-- the court's name names the court, as on the other sheets (feature 286: declared against this apron alone, the
+         apron too narrow for it once smaller names were placed on it, it was led out past the gate range) -->
+    <text font-size="13" font-weight="bold" letter-spacing="2" fill="#5C4830" data-names="outer-court-1">OUTER COURT</text>
     <text font-size="9" font-style="italic" fill="#7A6A4A" data-cont="1">(the forecourt)</text>
   </g>
 

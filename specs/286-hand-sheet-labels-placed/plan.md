@@ -101,7 +101,8 @@ Each found by rendering the four sheets and looking, then measuring (`measuremen
 - **D19 - the index skips by boxes** (`labels/obstacles.py`): an obstacle whose box is clear of the block's is clear,
   and two level rectangles are measured by their boxes. Exact - the boxes' gap bounds the outlines' from below, and is
   theirs for level rectangles (a unit test holds both against the outline test) - so no generated caption moves; the
-  outline test was nine tenths of placing a hand sheet (Ochiba 114 s profiled, 9.5 s after).
+  outline test was nine tenths of placing a hand sheet (observed 2026-09-28; method: cProfile of `hand_sheet.seat` on
+  Ochiba, under load - 114 s before, 9.5 s after; each sheet's gen now 4-16 s, `make map`).
 - **D20 - SC-002 measured on the drawing** (`sc002_drawing.py`, in `measurements.json`): the hand seat (block and its
   hand leader) and the placed seat priced against the drawing alone, each as the kind of seat it is. The first reading
   scored the hand seat the old tool's way - block alone, among captions since moved - and so flagged seats that were
@@ -109,9 +110,27 @@ Each found by rendering the four sheets and looking, then measuring (`measuremen
   D15's hand declarations are: the migration had named the one nearest the caption.
 - **D21 - D7's readers, as built.** A program item is measured on the largest structure tagged with its kind; the
   notice-board fallback to a caption is gone; `_size_table.py` names each rect by its `data-kind`. The crop check
-  (`ink_bounds`) skips a declared caption - it has no position - rather than render the placed sheet (10-62 s a sheet
+  (`ink_bounds`) skips a declared caption - it has no position - rather than render the placed sheet (observed 2026-09-28 by the T05 agent; method: the pack-audit sweep timed with
+  `placed()` wired in, before D19: 10-62 s a sheet
   in `make quick`, over its budget); the placer keeps every caption inside the frame. What it costs: a margin that only
   a caption fills would read as slack. None of the four sheets has one. Chosen by the session, 2026-09-28.
+
+- **D22 - two captions keep the larger of their gaps** (`Obstacle.keep`): a placed caption is added to the next one's
+  index with its own clearance, so a small name set beside a large one keeps the large one's gap. The round-4 review's
+  full-context measure (`sc002_ctx.py`, adopted unchanged as SC-002's) found three captions inside a larger neighbor's
+  clearance; none after.
+- **D23 - a named thing weighs as a name.** Ink that carries a name of its own - a room or ground inside what a caption
+  names, a building anywhere, another named ground under a ground's name - weighs as a caption does
+  (`WEIGHT_TEXT`): a caption set on it reads as naming it (Ubame's RESIDENCE set in the guest room, its OUTER COURT on
+  the practice ground and then on the gate range's roof). A thing's name beside it on open ground is free as before.
+- **D24 - D14's order amended: open ground's names first**, as a cartographer sets the major area names before the
+  small ones fill in (placed after them, Ubame's OUTER COURT found its open ground taken and was led out past the wall);
+  and a ground's name stays in its ground unless every seat there would cover another name (Imhof: an area is named
+  inside it). A building too small for its name still goes beside it. A tie rule (beside wins a tie) was tried and taken
+  out: it set the family rowhouse's name on the hearing court.
+- **D25 - D12 raised: a leader across a wall weighs as a name** - a leader from beyond a boundary names the wrong side.
+- **D26 - D15 extended:** Ubame's `OUTER COURT` names the outer court, as on the other two sheets; the migration had
+  named the forecourt apron it stood on, too narrow once smaller names were placed there. Recorded in its notes.
 
 ## Constitution Check
 

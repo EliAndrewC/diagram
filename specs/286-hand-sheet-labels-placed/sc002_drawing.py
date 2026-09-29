@@ -29,7 +29,7 @@ def band(seg):
 def price(shapes, view, skip, idx, sub, own, block, leader, text, size):
     head = shapes[idx[0]]
     light = sl._luma(head.element.get("fill") if head.element is not None else None) > sl.LIGHT
-    index = sl.classify(shapes, view, skip, after=idx[0], group=head.group, kind=head.kind, subject=list(sub.poly), area=sub.kind == "area", dark_inside=not light)
+    index = sl.classify(shapes, view, skip, after=idx[0], group=head.group, kind=head.kind, subject=list(sub.poly), area=sub.kind == "area", dark_inside=not light, named=frozenset(shapes[i[0]].kind for i in sl.captions_of(shapes)))
     clear = st.CLEAR_EM * size
     cost = index.cost(block, clear, list(sub.poly), text, sub.civic)
     if sub.kind == "area" and not all(inside(q[0], q[1], sub.poly) for q in block):

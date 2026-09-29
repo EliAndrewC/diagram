@@ -15,15 +15,43 @@
  },
  "sc_002": {
   "verdict": "met",
-  "method": "sc002_drawing.py beside this file, run on each sheet as it stood before the feature (git dddd838b5) and as declared: every caption's hand seat (its block and the data-leader line that began at it) and its placed seat (block and leader) priced against the DRAWING alone - the placer's index for its subject and the leader index with no other caption in either, since the other captions moved - each as what it is (a block whose middle is inside its subject as an area caption). A caption fails when its placed seat covers more.",
-  "observed": "2026-09-28",
+  "observed": "2026-09-29",
+  "method": "sc002_ctx.py beside this file (written by the round-4 plan review, used unchanged): each seat priced in its own era's full context - the drawing plus every other caption's block and leader, at the weight seat() gives a caption - the hand seat among the other hand seats (the sheet at git dddd838b5, with its data-leader lines), the placed seat among the other placed seats; each as the kind of seat it is. The drawing alone (sc002_drawing.py) is run beside it as a second view. Both price the drawing with the placer's own classify, named kinds included.",
   "results": {
-   "hayakawa-magistracy": 0,
-   "ochiba-magistracy": 0,
-   "ubame-magistracy": 0,
-   "hoshigaoka-shrine": 0
+   "hayakawa-magistracy": {
+    "captions": 63,
+    "hand_covering_ink": 17,
+    "placed_covering_ink": 6,
+    "placed_worse": 0
+   },
+   "ochiba-magistracy": {
+    "captions": 49,
+    "hand_covering_ink": 11,
+    "placed_covering_ink": 0,
+    "placed_worse": 0
+   },
+   "ubame-magistracy": {
+    "captions": 63,
+    "hand_covering_ink": 22,
+    "placed_covering_ink": 10,
+    "placed_worse": 0
+   },
+   "hoshigaoka-shrine": {
+    "captions": 9,
+    "hand_covering_ink": 5,
+    "placed_covering_ink": 5,
+    "placed_worse": 0
+   }
   },
-  "history": "The first reading, with each hand seat priced as the old tool scored it (block alone, in the hand sheet's own context), flagged Hayakawa's Ebisu altar note: placed at its hand seat with its hand leader, it scored 1,000 where the hand seat scored 0 because the old score never priced a leader (ebisu_probe.py). The drawing measure prices both the same way. It then flagged Ochiba's fire-water tubs, declared by the migration against the one tub nearest the caption (as Hayakawa's were; Ubame's caption stands in its tubs' group and names them all); declared against every tub on both sheets and named beside any of them, neither covers anything."
+  "drawing_only": {
+   "placed_worse": 0,
+   "sheets": 4
+  },
+  "history": [
+   "The first reading priced each hand seat as the old tool scored it (block alone, in the hand sheet's context) and flagged Hayakawa's Ebisu altar note, which stands at its hand seat with its hand leader: the old score never priced a leader (ebisu_probe.py).",
+   "The second (sc002_drawing.py) priced both seats against the drawing alone; the round-4 plan review ruled that a narrowing - other captions are ink, and leaving them out of the placed seat's price hides a caption set too near another - and wrote sc002_ctx.py. Under it three placed captions stood inside a larger neighbor's clearance (Hayakawa's RESIDENCE, its practice ground, Ubame's OUTER COURT): each caption kept its own gap, so a small name set beside a large one kept the small gap. The placer now keeps the larger (Obstacle.keep, plan D22).",
+   "Ochiba's and Hayakawa's fire-water tubs and Ubame's OUTER COURT were declared by the migration against the one piece nearest where the caption stood; each is declared against what it names (every tub; the whole court), as on the other sheets."
+  ]
  },
  "sheets": {
   "hoshigaoka-shrine.svg": {

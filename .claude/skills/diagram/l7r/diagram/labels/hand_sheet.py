@@ -317,13 +317,14 @@ def _is_background(s: Shape, view: tuple[float, float, float, float]) -> bool:
 def classify(
     shapes: list[Shape],
     view: tuple[float, float, float, float],
-    skip: set[int] = frozenset(),
+    skip: set[int] | frozenset[int] = frozenset(),
     after: int | None = None,
     group: int = 0,
     kind: str = "",
     subject: Poly | None = None,
     area: bool = False,
     dark_inside: bool = False,
+    named: frozenset[str] = frozenset(),
 ) -> ObstacleIndex:  # type: ignore[assignment]
     """The sheet as the placer sees it (plan P4). `skip` holds the captions being placed, which are not obstacles to
     themselves. With `after` (a caption's own index), a GROUND shape drawn LATER in the document - outside the caption's
@@ -349,8 +350,12 @@ def classify(
             # is (Hayakawa's vegetable bed cut from the inner garden's corner took the garden's name, feature 283)
             over = after is not None and i > after and s.filled and not s.line
             light = (s.kind in GROUND_KINDS and s.kind != kind and not over and not s.busy) or s.texture
+            # ink inside it that carries a name of its own (`named` - a named room, a named ground) weighs as that name:
+            # a caption set on it reads as naming it (feature 286 - Ubame's RESIDENCE was set in the guest room, and its
+            # OUTER COURT on the practice ground, whose own name it pushed out)
+            own_name = s.kind in named and s.kind != kind and not s.texture
 
-            weight = WEIGHT_INNER if light else WEIGHT_TEXT if over else WEIGHT_OBSTACLE
+            weight = WEIGHT_TEXT if own_name or over else WEIGHT_INNER if light else WEIGHT_OBSTACLE
             bands = [_band(a, b, max(s.half, 0.5)) for a, b in zip(s.poly, s.poly[1:], strict=False)] if s.line else [s.poly]
             obstacles += [Obstacle(tuple(b), weight, inner=True) for b in bands]
             continue
@@ -382,6 +387,10 @@ def classify(
             if s.edge and not _is_background(s, view) and not (subject is not None and _same_box(s.poly, subject)):
                 ring = [*s.poly, s.poly[0]]
                 obstacles += [Obstacle(tuple(_band(a, b, s.edge)), WEIGHT_OBSTACLE) for a, b in zip(ring, ring[1:], strict=False)]
+            # a ground's name set on another ground that carries a name of its own reads as naming it (feature 286 -
+            # Ubame's OUTER COURT on the practice ground); a thing's name beside it on open ground is free as ever
+            if kind in GROUND_KINDS and s.kind in named and s.kind != kind and not _is_background(s, view):
+                obstacles.append(Obstacle(tuple(s.poly), WEIGHT_TEXT))
             continue
         elif s.kind in WAY_KINDS:
             if s.line:
@@ -391,6 +400,10 @@ def classify(
         elif s.line:
             for a, b in zip(s.poly, s.poly[1:], strict=False):
                 obstacles.append(Obstacle(tuple(_band(a, b, max(s.half, 0.5))), WEIGHT_DARK if s.dark else WEIGHT_OBSTACLE))
+        elif s.filled and s.kind in named and s.kind != kind and not s.texture:
+            # a thing that carries a name of its own: a caption set on it reads as naming it (feature 286 - Ubame's
+            # OUTER COURT, with no free seat on its apron, was set on the gate range's roof)
+            obstacles.append(Obstacle(tuple(s.poly), WEIGHT_TEXT))
         else:
             obstacles.append(Obstacle(tuple(s.poly), WEIGHT_DARK if s.dark else WEIGHT_OBSTACLE))
     return ObstacleIndex(obstacles, ways)
@@ -476,7 +489,7 @@ def leader_blockers(shapes: list[Shape], skip: set[int], placed: list[tuple[list
         if s.tag != "text" and s.filled and not s.line and not s.leader and s.kind != "door" and 0 < _area(s.poly) <= GLYPH_MAX_PX and not _box_within(s.poly, own)
     ]
     out += [
-        Obstacle(tuple(_band(a, b, s.half)), WEIGHT_DARK)
+        Obstacle(tuple(_band(a, b, s.half)), WEIGHT_TEXT)
         for s in shapes
         if s.line and s.dark and s.half >= WALL_HALF_PX and not s.leader and not any(s is o for o in own_parts or ())
         for a, b in zip(s.poly, s.poly[1:], strict=False)
@@ -693,13 +706,15 @@ def seat(src: str) -> list[tuple[list[Shape], Placement, list[list[str]]]]:
     first free seat winning, else the least cost; a name in light ink (chosen for a dark roof) may sit on its subject's
     dark fill, and a name in the sheet's dark ink may not.
 
-    The ORDER (Imhof's, points before areas - feature 286): the names that must stand BESIDE their subject first, then
-    those that fit inside it, then the glyphs standing in a named ground, each tier in document order. In document order
+    The ORDER (feature 286): open ground's names first, as a cartographer sets the major area names before the small
+    ones fill in around them (a court's name placed after them found its open ground taken, and was led out past the
+    wall - Ubame's OUTER COURT); then, points before areas, the names that must stand BESIDE their subject, then those
+    that fit inside it, then the glyphs standing in a named ground; each tier in document order. In document order
     alone Ochiba's garrison latrine found its one free seat taken by a building's name placed before it; smallest subject
     first, Hayakawa's RESIDENCE, placed last, found every seat taken; and a glyph named before the ground it stands in
     took the ground's inside (Hayakawa's weapon rack and striking posts, whose practice ground's name went into the
-    empty tally office beside it). Then `REPAIR`: a greedy order still strands a caption now and then, so each caption
-    left covering ink is tried with one neighbor lifted, and the pair is kept where the neighbor is re-placed no worse."""
+    empty tally office beside it). Then `repair`: a greedy order still strands a caption now and then, so each caption
+    left covering ink is tried with one neighbor lifted, and the pair is kept where the two together cover less."""
     shapes, view = read_sheet(src)
     caps_of = captions_of(shapes)
     skip = {i for idx in caps_of for i in idx}
@@ -707,18 +722,21 @@ def seat(src: str) -> list[tuple[list[Shape], Placement, list[list[str]]]]:
     for idx in caps_of:
         per_group[shapes[idx[0]].group] = per_group.get(shapes[idx[0]].group, 0) + 1
     owns = {idx[0]: declared_parts(shapes[idx[0]], shapes, alone=per_group[shapes[idx[0]].group] == 1) for idx in caps_of}
+    named = frozenset(shapes[idx[0]].kind for idx in caps_of)
     grounds = [bbox([p for s in owns[idx[0]] for p in s.poly]) for idx in caps_of if shapes[idx[0]].kind in GROUND_KINDS]
 
-    def order(idx: list[int]) -> int:
+    def order(idx: list[int]) -> tuple[int, float]:
         # a scatter's box has no inside, however large (Ochiba's tubs span the compound)
-        if any(s.kind == "area" for s in subjects(owns[idx[0]], shapes[idx[0]].size)) and fits_inside([shapes[i] for i in idx], owns[idx[0]]):
-            return 1
         x0, y0, x1, y1 = bbox([p for s in owns[idx[0]] for p in s.poly])
-        return 2 if any(g[0] <= x0 and g[1] <= y0 and x1 <= g[2] and y1 <= g[3] and (x1 - x0) * (y1 - y0) < (g[2] - g[0]) * (g[3] - g[1]) for g in grounds) else 0
+        if any(s.kind == "area" for s in subjects(owns[idx[0]], shapes[idx[0]].size)) and fits_inside([shapes[i] for i in idx], owns[idx[0]]):
+            # open ground's names first (see the docstring); a named ground in them weighs as a name (`classify`), so a
+            # court's name placed first no longer takes the practice ground
+            return (-1, 0.0) if shapes[idx[0]].kind in GROUND_KINDS else (1, 0.0)
+        return (3, 0.0) if any(g[0] <= x0 and g[1] <= y0 and x1 <= g[2] and y1 <= g[3] and (x1 - x0) * (y1 - y0) < (g[2] - g[0]) * (g[3] - g[1]) for g in grounds) else (0, 0.0)
 
     bases: dict[tuple[int, int], ObstacleIndex] = {}
 
-    def one(idx: list[int], others: list[Placement], quick: bool = False) -> tuple[Placement, list[list[str]]]:
+    def one(idx: list[int], others: list[tuple[Placement, float]], quick: bool = False) -> tuple[Placement, list[list[str]]]:
         caps = [shapes[i] for i in idx]
         head = caps[0]
         own = owns[idx[0]]
@@ -727,16 +745,17 @@ def seat(src: str) -> list[tuple[list[Shape], Placement, list[list[str]]]]:
         light = _luma(head.element.get("fill") if head.element is not None else None) > LIGHT
         best: Placement | None = None
         best_per = [list(c.lines) for c in caps]
-        held = [(caps, p) for p in others]
+        held = [(caps, p) for p, _size in others]
         for k, sub in enumerate(subjects(own, head.size)):
             # each caption's own index: the ground drawn after it is an obstacle to IT (see `classify`), and every
             # caption placed is one, with its leader
             if (idx[0], k) not in bases:
-                bases[idx[0], k] = classify(shapes, view, skip, after=idx[0], group=head.group, kind=head.kind, subject=list(sub.poly), area=sub.kind == "area", dark_inside=not light)
+                bases[idx[0], k] = classify(shapes, view, skip, after=idx[0], group=head.group, kind=head.kind, subject=list(sub.poly), area=sub.kind == "area", dark_inside=not light, named=named)
             base = bases[idx[0], k]
             index = ObstacleIndex(list(base.obstacles), list(base.ways))
-            for done in others:
-                index.add(Obstacle(done.block, WEIGHT_TEXT))
+            for done, size in others:
+                # each placed caption keeps its own clearance too (`Obstacle.keep`)
+                index.add(Obstacle(done.block, WEIGHT_TEXT, keep=CLEAR_EM * size))
                 if done.leader is not None:
                     index.add(Obstacle(tuple(_band(done.leader[0], done.leader[1], 1.0)), WEIGHT_TEXT))
             lead = leader_blockers(shapes, skip, held, sub, own)
@@ -752,12 +771,17 @@ def seat(src: str) -> list[tuple[list[Shape], Placement, list[list[str]]]]:
                     break
             if best is not None and best.cost == 0.0:
                 break
+            if head.kind in GROUND_KINDS and sub.kind == "area" and best is not None and best.position == "inside" and best.cost < WEIGHT_TEXT:
+                # a ground's name stays in its ground unless every seat there covers another name: led out from beyond
+                # the wall, Ubame's OUTER COURT named the gate range it crossed (feature 286; Imhof - an area is named
+                # inside it). A building too small for its name still goes beside it.
+                break
         assert best is not None
         return leader_to_ink(best, own), best_per
 
     done: dict[int, tuple[Placement, list[list[str]]]] = {}
     for idx in sorted(caps_of, key=order):
-        done[idx[0]] = one(idx, [p for p, _ in done.values()])
+        done[idx[0]] = one(idx, [(p, shapes[k].size) for k, (p, _) in done.items()])
     by_head = {idx[0]: idx for idx in caps_of}
     boxes = {k: bbox([p for s in owns[k] for p in s.poly]) for k in done}
     repair(done, boxes, {k: shapes[k].size for k in done}, lambda k, rest, quick=False: one(by_head[k], rest, quick))
@@ -771,7 +795,8 @@ def repair(done: dict[int, Seated], boxes: dict[int, tuple[float, float, float, 
     """The greedy pass's repair (feature 286): each caption left covering ink is re-placed with one neighbor lifted - a
     caption whose block lies within `REPAIR` ems plus its own length of the subject's box - and the neighbor re-placed
     after it; the pair is kept where the two together cover less (a neighbor may move to a seat covering a little so a
-    stranded caption covers nothing). `one(key, others, quick)` places a caption against the others' placements; `quick`
+    stranded caption covers nothing). `one(key, others, quick)` places a caption against the others' placements, each
+    with its caption's size; `quick`
     tries the standard's seats only - a lift that frees a caption frees one of them, and the fallback search is the
     expensive half of a stranded caption's search (a full search per lift ran past ten minutes on Hayakawa). A chain of
     three lifts was tried for Ochiba's tubs and freed nothing more; it was taken out (2026-09-28)."""
@@ -783,11 +808,11 @@ def repair(done: dict[int, Seated], boxes: dict[int, tuple[float, float, float, 
         x0, y0, x1, y1 = boxes[a]
         near = [b for b in done if b != a and _box_gap(list(done[b][0].block), [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]) <= reach]
         for b in near:
-            rest = [p for k, (p, _) in done.items() if k not in (a, b)]
+            rest = [(p, sizes[k]) for k, (p, _) in done.items() if k not in (a, b)]
             pa = one(a, rest, True)
             if pa[0].cost >= done[a][0].cost:
                 continue
-            pb = one(b, [*rest, pa[0]])
+            pb = one(b, [*rest, (pa[0], sizes[a])])
             if pa[0].cost + pb[0].cost < done[a][0].cost + done[b][0].cost:
                 done[a], done[b] = pa, pb
                 break

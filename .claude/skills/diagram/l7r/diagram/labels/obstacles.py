@@ -33,13 +33,17 @@ class Obstacle:
     name of its own (a ministry, the governor's yamen, a temple by name), which no other caption may lie on. `inner`
     marks ink INSIDE a subject that its caption must still avoid - a hand sheet draws a building's partitions, a court's
     mats, a garden's stepping stones, and a name set on them could not be read (feature 267); a generated map draws no
-    such ink, so none of its obstacles sets it."""
+    such ink, so none of its obstacles sets it. `keep` is a gap the obstacle asks for itself, when larger than the
+    caption's own: a placed caption keeps its OWN clearance from the next one, so a small name set beside a large one
+    keeps the large one's gap (feature 286 - by the small name's gap alone, Hayakawa's RESIDENCE stood 4.3 px from
+    `family privy`, inside its own 5.5)."""
 
     poly: tuple[Pt, ...]
     weight: float
     group: str | None = None
     named: bool = False
     inner: bool = False
+    keep: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -75,7 +79,8 @@ class ObstacleIndex:
         self.obstacles.append(o)
         self._boxes.append(bbox(o.poly))
         self._level.append(level_rect(o.poly))
-        for c in _cells(self._boxes[i]):
+        bx0, by0, bx1, by1 = self._boxes[i]
+        for c in _cells((bx0 - o.keep, by0 - o.keep, bx1 + o.keep, by1 + o.keep)):
             self._ob[c].append(i)
 
     def add_way(self, w: Way) -> None:
@@ -103,16 +108,17 @@ class ObstacleIndex:
                     continue
                 seen.add(i)
                 o = self.obstacles[i]
+                need = max(clear, o.keep)
                 bx0, by0, bx1, by1 = self._boxes[i]
                 box_gap = math.hypot(max(0.0, bx0 - x1, x0 - bx1), max(0.0, by0 - y1, y0 - by1))
-                if box_gap >= clear - 1e-6:
+                if box_gap >= need - 1e-6:
                     continue  # the boxes' gap bounds the outlines' from below: clear by the boxes, clear (feature 286)
                 if not o.weight or (o.group and o.group in words and not (civic and o.named and o.group in CIVIC_GROUPS)) or (subject is not None and not o.inner and part_of(o.poly, subject)):
                     continue
                 # two level rectangles are their boxes, so the boxes' gap is theirs (feature 286: the outline test was
                 # nine tenths of placing a hand sheet's captions)
                 gap = box_gap if level and self._level[i] else poly_gap(block, list(o.poly))
-                if gap < clear - 1e-6:  # strict: a seat exactly one offset off is clear (plan P6)
+                if gap < need - 1e-6:  # strict: a seat exactly one offset off is clear (plan P6)
                     total += o.weight
         crossed: set[int] = set()
         for c in cells:

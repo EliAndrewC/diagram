@@ -1,6 +1,6 @@
 {
  "feature": "286-hand-sheet-labels-placed",
- "plan_sha256": "3ce92794bab62f89557bad1633c2554f95e08da36a13093354539a0db8ecdf1f",
+ "plan_sha256": "f93889490b409e88563d0587f78f15cb68b0d6bc04c8210d2e09a96167de4008",
  "reviewed": "2026-09-28",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,92 +8,141 @@
    "id": "D1",
    "summary": "A caption declares its text and subject (group membership or data-names ids). A one-time migration strips its x/y and hand leader from the tracked sheet and writes the ids from today's subject reading.",
    "class": "within",
-   "why": "This is the proposal the GM accepted ('a sheet declaring only a caption's text and what it names') and FR-002 ('nothing that decides where it stands'). The migration reads position once, only so that no caption changes what it names. Placement never depends on it afterwards. Unchanged since round 1."
+   "why": "This is the proposal the GM accepted ('a sheet declaring only a caption's text and what it names') and FR-002 ('nothing that decides where it stands'). The migration reads position once, only so that no caption changes what it names. Placement never depends on it afterwards. Unchanged since round 1. Round 4: unchanged."
   },
   {
    "id": "D2",
    "summary": "Inside or beside is the placer's call: inside seats first, then the ranked beside seats. Done in seat_label as two place() calls.",
    "class": "within",
-   "why": "FR-002: the placer decides inside or beside from the drawing, and the sheet declares neither. Unchanged since round 1."
+   "why": "FR-002: the placer decides inside or beside from the drawing, and the sheet declares neither. Unchanged since round 1. Round 4: unchanged."
   },
   {
    "id": "D3",
    "summary": "The extended fallback (a whole-extent inside sample, slid point positions, a per-block search on stepped buildings) goes in labels/placer.py and is shared with the generated maps. It runs only when the standard search finds no free seat, and it is measured on the scripted maps.",
    "class": "within",
-   "why": "The accepted proposal ('improve the placer's fallback'), the GM's 'reuse the same literal code', FR-003 ('improved in the placer itself') and the Assumptions all call for this. Unchanged since round 1."
+   "why": "The accepted proposal ('improve the placer's fallback'), the GM's 'reuse the same literal code', FR-003 ('improved in the placer itself') and the Assumptions all call for this. Unchanged since round 1. Round 4: unchanged."
   },
   {
    "id": "D4",
    "summary": "Mixed-size captions are measured and written line by line, at each line's own size.",
    "class": "within",
-   "why": "FR-003: two of the eight measured misses have this cause. Any effect on the generated maps is covered by D9's before-and-after comparison. Unchanged since round 1."
+   "why": "FR-003: two of the eight measured misses have this cause. Any effect on the generated maps is covered by D9's before-and-after comparison. Unchanged since round 1. Round 4: unchanged."
   },
   {
    "id": "D5",
    "summary": "hand_sheet.placed() (D10) in each hand sheet's gen renders the PNG and the page from the placed text. make sheet-render renders any sheet placed.",
    "class": "within",
-   "why": "FR-001: placing is a step of the pipeline and there is no separate tool to run. sheet-render is that same pipeline, offered to readers. Unchanged since round 1. Round 3: the function is now named hand_sheet.placed (D10). Only the name changed."
+   "why": "FR-001: placing is a step of the pipeline and there is no separate tool to run. sheet-render is that same pipeline, offered to readers. Unchanged since round 1. Round 3: the function is now named hand_sheet.placed (D10). Only the name changed. Round 4: unchanged."
   },
   {
    "id": "D6",
    "summary": "Removes test_hand_sheet_captions.py, the caption ledger, make seat-label and its judge report, the four sheet-audit checks with their red fixtures and tests, the label half of trees_overlap, and building-review's caption-seat step. The tree's checks against the hand-drawn things stay.",
    "class": "within",
-   "why": "The round 1 finding is resolved. The label half of trees_overlap (shared.py:410, the plan.labels line in _things_under_a_tree) is now on the removal list, and the stated reason matches the GM's ('There is no point in having an automated check run against an automated process'). What stays is a canopy against buildings, fences, wells, glyphs and tubs. Those are drawn by hand, and FR-004 keeps checks of things still drawn by hand. The rest of trees_overlap (walls, dividers, furniture, the duplicate-tree rule) is not named in the parenthetical, but D6 removes only what it lists, so it stays too. Every other sheet-audit reader of label positions was re-checked: occluded_foreground, orphan_group_labels, dark_on_dark_labels and overlapping_labels are on the list. labels.py pairing and the notice-board fallback are FR-005 readers, and D7 covers them. shared.py:87 reads text only. Every check of caption placement is now removed, so the list narrows nothing."
+   "why": "The round 1 finding is resolved. The label half of trees_overlap (shared.py:410, the plan.labels line in _things_under_a_tree) is now on the removal list, and the stated reason matches the GM's ('There is no point in having an automated check run against an automated process'). What stays is a canopy against buildings, fences, wells, glyphs and tubs. Those are drawn by hand, and FR-004 keeps checks of things still drawn by hand. The rest of trees_overlap (walls, dividers, furniture, the duplicate-tree rule) is not named in the parenthetical, but D6 removes only what it lists, so it stays too. Every other sheet-audit reader of label positions was re-checked: occluded_foreground, orphan_group_labels, dark_on_dark_labels and overlapping_labels are on the list. labels.py pairing and the notice-board fallback are FR-005 readers, and D7 covers them. shared.py:87 reads text only. Every check of caption placement is now removed, so the list narrows nothing. Round 4: unchanged."
   },
   {
    "id": "D7",
    "summary": "pack_audit/labels.py pairs items with structures by data-kind tags. Any other reader of caption coordinates moves to the placed text or the tags.",
    "class": "within",
-   "why": "FR-005. Since the label half of trees_overlap is now removed under D6, the phrase 'moved to the placed text' can no longer keep a placement check alive."
+   "why": "FR-005. Since the label half of trees_overlap is now removed under D6, the phrase 'moved to the placed text' can no longer keep a placement check alive. Round 4: unchanged."
   },
   {
    "id": "D8",
    "summary": "SKILL.md Mode A usage, buildings.md, research presentation 040's note that names make seat-label, and the building-review and size-audit contracts: a sheet declares text and subject, the pipeline places it, and the contracts judge wording, not position.",
    "class": "within",
-   "why": "FR-006. The round 1 aside (presentation 040 names make seat-label) is now in the list. docs/make-targets.html also lists make seat-label, but that page is generated from the Makefile and make-docs.py --check gates it, so removing the target under D6 removes its row as well."
+   "why": "FR-006. The round 1 aside (presentation 040 names make seat-label) is now in the list. docs/make-targets.html also lists make seat-label, but that page is generated from the Makefile and make-docs.py --check gates it, so removing the target under D6 removes its row as well. Round 4: unchanged."
   },
   {
    "id": "D9",
    "summary": "make quick; the one-time SC-002 measurement in measurements.json; the scripted maps' captions compared before and after D3; make done; the blind test at hand-back, with the 18 legacy exhibits named as untouched.",
    "class": "within",
-   "why": "SC-002 as a one-time measurement and not a standing check; XIII verification of a change to shared code; the hand-back line the round-2 MODE 1 ruling required. Unchanged since round 1."
+   "why": "SC-002 as a one-time measurement and not a standing check; XIII verification of a change to shared code; the hand-back line the round-2 MODE 1 ruling required. Unchanged since round 1. Round 4: unchanged."
   },
   {
    "id": "D10",
    "summary": "The seat_label module moves to l7r/diagram/labels/hand_sheet.py, beside the placer, because every sheet's gen now imports placed. make sheet-render runs its main.",
    "class": "within",
-   "why": "This decides where the code lives, and the requested behavior does not change. Moving it next to the one placer serves FR-001 (placing is a step of the pipeline, and no separate tool is run) and the GM's 'reuse the same literal code'."
+   "why": "This decides where the code lives, and the requested behavior does not change. Moving it next to the one placer serves FR-001 (placing is a step of the pipeline, and no separate tool is run) and the GM's 'reuse the same literal code'. Round 4: unchanged."
   },
   {
    "id": "D11",
    "summary": "data-names lists data-id values, not SVG ids, because the sheets give three court rects one shared id (precinct) that the pack audit reads.",
    "class": "within",
-   "why": "FR-002: a declaration carries its subject, 'one of several like parts included'. Naming by a shared id would name the wrong subject, as INNER and OUTER COURT did when they named all three rects. data-id is the mechanism that makes the declared subject the true one. Nothing positional is read."
+   "why": "FR-002: a declaration carries its subject, 'one of several like parts included'. Naming by a shared id would name the wrong subject, as INNER and OUTER COURT did when they named all three rects. data-id is the mechanism that makes the declared subject the true one. Nothing positional is read. Round 4: unchanged."
   },
   {
    "id": "D12",
    "summary": "In the leader index, a dark stroke with a half-width of 2 px or more (WALL_HALF_PX) is an obstacle, unless it is part of what the caption names.",
    "class": "within",
-   "why": "FR-003: the fallback must place at least as well as the hand seats. A leader led across a wall from the far side names something the reader cannot reach, so this rule makes the placer's result as good as a hand seat. The own-parts waiver is the standard's ordinary rule that a subject's own ink does not obstruct its own leader. It is not a carve-out, and nothing in it reads a caption's hand position (leader_blockers takes the drawn strokes and own_parts from the declaration). It lives in the hand-sheet adapter that reads walls from the SVG, and seats are still chosen by place(). FR-003's 'in the placer itself' concerns the fallback search that the generated maps share (D3), and that stays in placer.py."
+   "why": "FR-003: the fallback must place at least as well as the hand seats. A leader led across a wall from the far side names something the reader cannot reach, so this rule makes the placer's result as good as a hand seat. The own-parts waiver is the standard's ordinary rule that a subject's own ink does not obstruct its own leader. It is not a carve-out, and nothing in it reads a caption's hand position (leader_blockers takes the drawn strokes and own_parts from the declaration). It lives in the hand-sheet adapter that reads walls from the SVG, and seats are still chosen by place(). FR-003's 'in the placer itself' concerns the fallback search that the generated maps share (D3), and that stays in placer.py. Round 4: unchanged."
   },
   {
    "id": "D13",
    "summary": "A caption of several texts may take the standard's own two- and three-line layouts (layouts()) for each one-line text, one line first. Line breaks the sheet declares are kept.",
    "class": "within",
-   "why": "FR-003: the placer's standard wrap is extended to multi-text captions, so the granary's and the tally office's names fit inside their buildings. A one-text caption already had this. The line breaks a sheet writes are content (the caption's text and lines, FR-002), not position, so keeping them narrows nothing."
+   "why": "FR-003: the placer's standard wrap is extended to multi-text captions, so the granary's and the tally office's names fit inside their buildings. A one-text caption already had this. The line breaks a sheet writes are content (the caption's text and lines, FR-002), not position, so keeping them narrows nothing. Round 4: unchanged."
   },
   {
    "id": "D14",
    "summary": "Placement order: captions that must stand beside first, then those that fit inside, then glyphs in a named ground, each tier in document order. Then a repair pass re-places a caption still covering ink, with one near neighbor lifted, and keeps the pair only when the caption is freer and the neighbor no worse. A lift tries only the standard's seats.",
    "class": "within",
-   "why": "Nothing in the order or in the repair reads a caption's hand position. The code (hand_sheet.seat/order/repair/fits_inside) uses the declared parts' boxes, each caption's font size and face, the placed blocks, and each caption's index in document order. Captions carry no x or y (D1), and Shape.center is not used in placement. Document order is where a text element sits in the drawing's paint order, which is already structural (classify uses it for ground painted after the caption). It is not where the caption's text was left, so FR-002 and SC-001 hold. The placer still decides every seat (FR-002). The repair adopts a change only when it lowers cost, and every caption's first placement ran the full extended search, so limiting a lift to extended=False cannot make the result worse than the greedy pass. FR-003 is not narrowed."
+   "why": "Nothing in the order or in the repair reads a caption's hand position. The code (hand_sheet.seat/order/repair/fits_inside) uses the declared parts' boxes, each caption's font size and face, the placed blocks, and each caption's index in document order. Captions carry no x or y (D1), and Shape.center is not used in placement. Document order is where a text element sits in the drawing's paint order, which is already structural (classify uses it for ground painted after the caption). It is not where the caption's text was left, so FR-002 and SC-001 hold. The placer still decides every seat (FR-002). The repair adopts a change only when it lowers cost, and every caption's first placement ran the full extended search, so limiting a lift to extended=False cannot make the result worse than the greedy pass. FR-003 is not narrowed. Round 4: unchanged."
   },
   {
    "id": "D15",
    "summary": "Three declarations are written by hand where the migration's reading found no subject. Hayakawa's 'river landing' names landing-steps. The alcove notes on Hayakawa and Ubame continue the reception's caption (data-cont). Ubame's three border captions name fox-border-1 and east-wall-1..3. Each is recorded in its map's notes.",
    "class": "within",
-   "why": "FR-002 makes the sheet the place that declares a caption's subject, so writing a subject by hand is the ordinary authoring act FR-002 describes. It is not an exception, and the choice reads no hand position at placement time. Each subject is true to the drawing. The sheet's comment says the landing is the flight of gangi steps. The alcove notes read '& ancestral alcove ...' and '& lineage alcove', which continue 'reception (zashiki)' as text, and the sheet draws no separate alcove shape for them to name. For the border, the east wall and the border line are drawn at the same x=1070, and the sheet's own note says 'The east wall IS the Fox/Scorpion line'. So the wall is part of what 'THE FOX BORDER' names, and the subject is faithful. The recorded motive ('so their seats stand off the wall') is about placement, but the subject stands on the sheet's own statement, not on that motive. Like D1's migration, reading where the alcove notes stood happened once, only to keep what they name, and placement does not depend on it."
+   "why": "FR-002 makes the sheet the place that declares a caption's subject, so writing a subject by hand is the ordinary authoring act FR-002 describes. It is not an exception, and the choice reads no hand position at placement time. Each subject is true to the drawing. The sheet's comment says the landing is the flight of gangi steps. The alcove notes read '& ancestral alcove ...' and '& lineage alcove', which continue 'reception (zashiki)' as text, and the sheet draws no separate alcove shape for them to name. For the border, the east wall and the border line are drawn at the same x=1070, and the sheet's own note says 'The east wall IS the Fox/Scorpion line'. So the wall is part of what 'THE FOX BORDER' names, and the subject is faithful. The recorded motive ('so their seats stand off the wall') is about placement, but the subject stands on the sheet's own statement, not on that motive. Like D1's migration, reading where the alcove notes stood happened once, only to keep what they name, and placement does not depend on it. Round 4: unchanged."
+  },
+  {
+   "id": "D16",
+   "summary": "A single closed outline holding a caption's other parts is its area; a scatter of like glyphs has no inside and is named beside the group, else beside one glyph, largest first; the ORDER's 'fits inside' asks only of a subject with an inside.",
+   "class": "within",
+   "why": "FR-002: the placer decides inside or beside from the drawing. This is that decision made from the drawing's shapes, not from any caption position."
+  },
+  {
+   "id": "D17",
+   "summary": "D12 widened: a leader crosses no building it does not name, nor one holding what it names.",
+   "class": "within",
+   "why": "FR-003: the placer's own quality, improved in the placer with unit tests. It adds nothing the GM did not ask for and excepts nothing."
+  },
+  {
+   "id": "D18",
+   "summary": "D14 amended: a repair is kept where the pair together cover less; the three-lift chain was tried and removed, with a note at the point of change.",
+   "class": "within",
+   "why": "FR-003: a change to the fallback's search. It does not exempt any caption. Whether a lifted neighbor ends up worse than its hand seat is SC-002's question, and SC-002 must answer it (see D20-captions)."
+  },
+  {
+   "id": "D19",
+   "summary": "The obstacle index skips by boxes. This is exact, unit-tested against the outline test, and moves no generated caption.",
+   "class": "within",
+   "why": "Performance with no behavior change. It is not a fidelity question. Its timings (Ochiba 114 s profiled, 9.5 s after) carry only the section's date and the word 'profiled'. Give them a one-shot label or an m: key."
+  },
+  {
+   "id": "D20-leader",
+   "summary": "SC-002 prices the hand seat's hand leader as well as its block, symmetric with the placed seat's block plus leader.",
+   "class": "within",
+   "why": "SC-002 asks what ink a caption covers, and a leader is part of the caption. Pricing the leader on both sides is the literal reading. The first reading priced it on one side only (ebisu_probe.py), which was an error in the measurement and not a reading of the spec."
+  },
+  {
+   "id": "D20-captions",
+   "summary": "SC-002 prices both seats against the drawing ALONE: other captions are left out of the hand seat's context and out of the placed seat's.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "SC-002 reads: 'no caption on a hand sheet covers more ink than its hand seat did when the feature began'. On the rendered sheet the other captions are ink. A caption set on another caption is the classic badly placed label, the class of problem the GM's blind test is about, and the overlapping_labels check that FR-004 removed covered it. The stated reason ('the other captions moved, so a seat taken by one now says nothing about the hand's choice') supports removing captions from the HAND side, which only makes that side cheaper. It does not support removing them from the PLACED side, which blinds the measure to caption-on-caption collisions. One argument was stretched over two unlike changes. The literal measurement is possible: this reviewer ran it, pricing each seat in its own era's full context with the other captions' blocks and leaders at WEIGHT_TEXT, the same way seat() prices them. The drawing-only script reproduced 0/0/0/0. In context, no placed block overlaps another caption's block or leader on any of the four sheets. Priced with the record's own clearance-inclusive cost, three placed captions come out worse than their hand seats, each standing inside its own clearance of a neighboring caption: Hayakawa RESIDENCE (hand 0, placed 10000; gap 4.3 px to 'family privy' against a clearance of 5.5), Hayakawa 'practice ground (doubles as bale yard)' (3000 against 10500; 4.0 px to 'weapon rack' against 4.5), and Ubame 'OUTER COURT (the forecourt)' (5000 against 20000; 6.1 px to 'practice ground' against 6.5). Fix: SC-002's record must price the other captions exactly as it prices the drawing and report the result. The three must then be fixed in the placer (FR-003), or the record must show that they are not worse under a pricing applied to BOTH terms alike. A pricing chosen for the caption term alone does not satisfy this."
+  },
+  {
+   "id": "D20-tubs",
+   "summary": "Ochiba's and Hayakawa's 'fire-water tubs' caption is declared against every tub, not the one tub the migration chose by position.",
+   "class": "within",
+   "why": "FR-002 makes a declaration its text and its subject, 'one of several like parts included'. The caption's text is plural and names the tubs. The migration chose one tub by its nearness to the caption's hand position, which is the position-reading FR-002 removes. Ubame's caption already names every tub. That a measurement surfaced the error does not make the correction a way around the measurement: the new subject is right on its own terms."
+  },
+  {
+   "id": "D21",
+   "summary": "The program and size readers use data-kind tags (the largest structure tagged with the kind; no notice-board fallback; _size_table by data-kind). The crop check (ink_bounds) skips a declared caption rather than render the placed sheet. The cost, recorded: a margin that only a caption fills would read as slack.",
+   "class": "within",
+   "why": "FR-005 forbids reading hand coordinates. By skipping a declared caption, ink_bounds reads no position at all, so it cannot depend on where the text was left, and that dependence is what FR-005 exists to end. Without the skip, a caption with no x would read as ink at the origin. The crop check does not judge placement, so FR-004 does not reach it. The tag-based readers are FR-005 as written. The 10-62 s timing carries only the section's date. Give it a label."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

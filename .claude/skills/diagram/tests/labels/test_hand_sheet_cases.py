@@ -239,7 +239,7 @@ def test_a_leader_does_not_cross_a_wall_unless_it_names_the_wall() -> None:
     thin = sl.Shape("line", "partition", [(0.0, 80.0), (200.0, 80.0)], half=0.5, line=True, dark=True)
     sub = Subject("point", ((90.0, 90.0), (110.0, 90.0), (110.0, 100.0), (90.0, 100.0)))
     lead = sl.leader_blockers([wall, thin], set(), [], sub)
-    assert [o.weight for o in lead.obstacles] == [sl.WEIGHT_DARK], "the wall, not the partition"
+    assert [o.weight for o in lead.obstacles] == [sl.WEIGHT_TEXT], "the wall, as much as a name - not the partition"
     assert sl.leader_blockers([wall, thin], set(), [], sub, [wall]).obstacles == [], "a wall the caption names"
 
     def building(x: float, y: float, kind: str) -> sl.Shape:
@@ -260,3 +260,23 @@ def test_a_glyph_in_a_named_ground_is_named_after_the_ground() -> None:
     placed = sl.seat(src)
     ground = next(p for c, p, _ in placed if c[0].text == "practice ground")
     assert ground.position == "inside" and ground.cost == 0.0
+
+
+def test_a_grounds_name_keeps_off_another_named_ground_and_stays_in_its_own() -> None:
+    """Feature 286: a court's name set on the practice ground reads as naming it, wherever that ground lies; and a
+    ground's name stays in its ground when its only seats there cover a little ink rather than another name - led out
+    past the wall, Ubame's OUTER COURT named the gate range it crossed."""
+    practice = '  <g data-kind="practice ground"><rect x="300" y="200" width="60" height="40" fill="#E8D8B0"/><text font-size="8">drill</text></g>\n'
+    court = '  <g data-kind="outer court"><rect x="20" y="20" width="200" height="100" fill="#D9C28E"/><text font-size="13">OUTER COURT</text></g>\n'
+    shapes, view = sl.read_sheet(_sheet(court, practice))
+    i, cap = _text(shapes, "OUTER COURT")
+    box = [(20.0, 20.0), (220.0, 20.0), (220.0, 120.0), (20.0, 120.0)]
+    named = frozenset({"outer court", "practice ground"})
+    index = sl.classify(shapes, view, {i}, kind="outer court", subject=box, area=True, named=named)
+    assert (sl.WEIGHT_TEXT, (300.0, 200.0, 360.0, 240.0)) in [(o.weight, sl.bbox(list(o.poly))) for o in index.obstacles]
+    well = sl.classify(shapes, view, {i, _text(shapes, "drill")[0]}, kind="well", subject=box, named=named)
+    assert all(o.weight != sl.WEIGHT_TEXT for o in well.obstacles), "a thing's name beside it on open ground is free"
+    lines = "".join(f'<line x1="{x}" y1="20" x2="{x}" y2="120" stroke="#8C6F3E" stroke-width="1"/>' for x in range(30, 220, 12))
+    crossed = court.replace("<text", lines + "<text")
+    (_c, p, _per) = sl.seat(_sheet(crossed))[0]
+    assert p.position == "inside" and 0 < p.cost < sl.WEIGHT_TEXT, "covering a little in its ground, not led out"

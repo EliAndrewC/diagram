@@ -296,3 +296,29 @@ def test_the_index_skips_by_boxes_and_measures_level_rectangles_by_them() -> Non
     near_turned = rect(0.0, 90.0, 4.0, 3.0)
     assert index.cost(near_turned, 3.0) == (1000.0 if poly_gap(near_turned, list(turned.poly)) < 3.0 else 0.0)
     assert level_rect(rect(0.0, 0.0, 4.0, 3.0)) and not level_rect(turned.poly) and not level_rect(((0.0, 0.0), (1.0, 1.0), (2.0, 0.0)))
+
+
+def test_an_obstacle_keeps_its_own_gap_when_larger() -> None:
+    """Feature 286: a placed caption keeps its own clearance from the next one - a small name 4 px from a large one was
+    clear by its own 3 px gap and inside the large one's 5.5."""
+    far = rect(200.0, 0.0, 10.0, 5.0)
+    big = Obstacle(tuple(rect(0.0, 0.0, 20.0, 5.0)), 1000.0, keep=5.5)
+    block = rect(28.0, 0.0, 4.0, 3.0)  # 4 px from the big one's right edge
+    assert ObstacleIndex([big]).cost(block, 3.0) == 1000.0, "inside its keep"
+    assert ObstacleIndex([Obstacle(big.poly, 1000.0)]).cost(block, 3.0) == 0.0, "clear by the caption's own gap"
+    assert ObstacleIndex([big, Obstacle(tuple(far), 1000.0)]).cost(rect(31.0, 0.0, 4.0, 3.0), 3.0) == 0.0, "past both"
+
+
+def test_the_nudge_stays_in_the_frame_and_a_line_has_no_fallback() -> None:
+    """Feature 286: a nudge never moves a caption off the picture; a line subject's stations already walk its length, so
+    the fallback adds no seat for it."""
+    from l7r.diagram.labels.placer import _Cand, _extended_cands, nudge
+
+    sub = Subject("point", tuple(rect(0.0, 0.0, 5.0, 5.0)))
+    index = ObstacleIndex([Obstacle(tuple(rect(20.0, 0.0, 6.0, 6.0)), WEIGHT_OBSTACLE)])
+    c = _Cand(0, 0, "right", (20.0, 0.0), 0.0, ("x",), (4.0, 3.0), 9.0)
+    frame = (16.0, -3.0, 24.0, 3.0)  # exactly the block: every move leaves the picture
+    cost, moved, _ = nudge(1000.0, c, rect(20.0, 0.0, 4.0, 3.0), sub, index, 0.5, list(sub.poly), "x", frame, None)
+    assert cost == 1000.0 and moved.center == (20.0, 0.0)
+    line = Subject("line", ((0.0, 0.0), (100.0, 0.0)), half_width=2.0)
+    assert list(_extended_cands("lane", 9.0, line)) == []
