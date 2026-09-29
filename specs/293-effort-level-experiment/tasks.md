@@ -11,7 +11,7 @@ the freeze (Phase 3), the freeze before the first run, the runs one at a time.
 - [ ] T01 [US2] `scripts/page-session.sh`, `_page_session_runner.py`, the Makefile's `page-session`: `EFFORT=` and `AGENTS=` passed through as `--effort` and `--agents` on every session; unset, the command line unchanged (contracts/cli.md; FR-003, FR-005)
       research: rendering
       verify: `make test-file` on `test_page_session.py` - new cases for both flags and for the unchanged default, red before the change
-- [ ] T02 [US2] `scripts/_effort_run.py` + `make effort-run`: the refusals (a live run, rubrics changed since the freeze, prompt hash differs, `--agents` hash differs), the fresh clone at `COMMIT`, the per-run sources copy (`L7R_SOURCES_HOME`, R6 D4), `CLAUDE_CODE_EFFORT_LEVEL` removed (R1 D1), the detached start for R (via the runner) and I (one full session), the claims release after an R run (R6 D5), the run record with `shared_state` (R6 D6) (FR-001, FR-003, FR-004, FR-005)
+- [ ] T02 [US2] `scripts/_effort_run.py` + `make effort-run`: the refusals (a live run, memory over the headroom threshold or a fresh memwatch warning (R5 D7), rubrics changed since the freeze, prompt hash differs, `--agents` hash differs), the fresh clone at `COMMIT`, the per-run sources copy (`L7R_SOURCES_HOME`, R6 D4), `CLAUDE_CODE_EFFORT_LEVEL` removed (R1 D1), the detached start for R (via the runner) and I (one full session), the claims release after an R run (R6 D5), the run record with `shared_state` (R6 D6) (FR-001, FR-003, FR-004, FR-005)
       research: rendering
       verify: `make test-file` on `test_effort_run.py` against a throwaway repository and a fake `claude` on `PATH` that records its argv; every refusal and every argv field asserted
 - [ ] T03 [US1] `scripts/_effort_measure.py` + `make effort-measure`: tokens folded per message id by `_agent_census`'s fold (R3), main vs subagents, the `result.json` cross-check, wall-clock minus pauses, tool calls, dispatches, the ad-hoc dispatch list and count (R1 D3), every rework signal of R4 with its matched lines, the void rule (R5) (FR-006, FR-007)
@@ -50,7 +50,7 @@ the freeze (Phase 3), the freeze before the first run, the runs one at a time.
 
 ## Phase 4 - the runs (one at a time, each measured before the next)
 
-- [ ] T12 [US2] Run 1 (`e1`): `make effort-run` in the drawn order; on its completion notification `make effort-measure RUN=e1`
+- [ ] T12 [US2] Run 1 (`e1`): `make effort-run` in the drawn order, under the headroom check (R5 D7); nothing else of the experiment while it is live; on its completion notification `make effort-measure RUN=e1`
       research: rendering
       verify: `runs/e1.json` complete, `measurements/e1.json` written, status valid (or void and re-run as the next id, logged)
 - [ ] T13 [US2] Run 2 (`e2`), as T12
@@ -61,14 +61,14 @@ the freeze (Phase 3), the freeze before the first run, the runs one at a time.
       verify: as T12
 - [ ] T15 [US2] Run 4 (`e4`), as T12
       research: rendering
-      verify: as T12; SC-006 (no overlaps, no counted void)
+      verify: as T12; SC-006 (no overlaps, no counted void, every launch under the threshold, nothing of the experiment beside a live run)
 
 ## Phase 5 - grading and the report
 
 - [ ] T16 [US3] Blind and grade task R: `make effort-blind TASK=R`; `effort-grader` on the bundle; the GM's grade on the same bundle; both recorded, THEN the key opened and committed
       research: rendering
       verify: `grades/R-effort-grader.json` and `grades/R-gm.json` committed before `keys/R.json`
-- [ ] T17 [US3] Blind and grade task I, as T16
+- [ ] T17 [US3] Blind and grade task I, as T16, after T16's grading has ended (one grading at a time)
       research: rendering
       verify: as T16
 - [ ] T18 [US1] `report.md`: the per-task table, the differences, the tiers that ran and any control unmet, the interventions, the FR-011 outcome per task type with its arithmetic, whether to expand, the caveats; the recommended `.claude/settings.local.json` setting if a default changes; through `escalation-check` before it reaches the GM

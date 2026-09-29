@@ -82,9 +82,17 @@ fix-commit match) the measurement lists the matched lines so the report's reader
 ## R5 - Memory and sequencing
 
 Containers share a 9 GB cap; memwatch warns at 8 GB (the handoff). A `make done` alone reaches ~3.2 GiB at its test-phase peak (observed 2026-09-13, one-shot, method: the gate RAM profile; memory
-note of 2026-09-13). The launcher refuses to start a run while any other effort run's session is live (its record has a start and no
-`result.json`) and prints the current container memory from `/sys/fs/cgroup/memory.current`; other sessions' work is the implementing
-session's to schedule around (the quickstart says to run when the host is otherwise quiet). A run that ends with exit 137 is marked void
+note of 2026-09-13). **D7 - strictly sequential, gated on headroom** (the GM, 2026-09-29: "run these tests sequentially rather than in parallel for memory
+reasons"). The launcher refuses to start a run while any other effort run's session is live (its record has a start and no
+`result.json`), and refuses while the container's memory (`/sys/fs/cgroup/memory.current`, this container's own figure; memwatch's
+shared total is only seen when it warns) is above **4.5 GB**, or while a memwatch warning newer than 15 minutes stands in
+`~/.claude/memwatch/events/`. The threshold is a GUESS with its arithmetic: the 9.0 GB cap less a run's own peak (a `make done`'s
+test phase, above, plus the run's session and its subagents' processes at about 0.5 GB each as memwatch lists them) leaves roughly
+4.5 GB for everything else. The refusal prints the figure and the wait is logged in `interventions.md`; the implementing session
+retries on its next turn rather than polling. While a run is live the implementing session runs nothing memory-heavy of its own: the
+measurement of the previous run, the blinding and the grading are done between runs, one at a time, and the tooling is built and gated
+before the first run. Other sessions' work is the implementing session's to schedule around (the quickstart says to run when the host
+is otherwise quiet); a memwatch warning DURING a run does not stop it, and is logged. A run that ends with exit 137 is marked void
 by `effort-measure` from its `result.json`/`stderr.txt`, and re-launched with the same prompt and a new run id.
 
 ## R6 - Shared state a run reads or writes outside its clone

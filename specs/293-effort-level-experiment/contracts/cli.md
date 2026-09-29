@@ -7,7 +7,8 @@ to every session the runner starts (after `--model`, if any). Unset, the command
 
 ## `make effort-run TASK=R|I RUN=<run-id> ARM=medium|xhigh COMMIT=<sha> [ORDER=<n> SEED=<s>]`
 
-1. Refuses if another effort run is live (a run record with no `ended`), if the rubrics changed since their freeze commit, or if the prompt
+1. Refuses if another effort run is live (a run record with no `ended`), if the container's memory is above the 4.5 GB threshold or a
+   memwatch warning is under 15 minutes old (research R5 D7; the figure and the reading go in the refusal and the run record), if the rubrics changed since their freeze commit, or if the prompt
    files differ from the hashes recorded for this task's earlier run.
 2. `git clone /diagram /diagram/.clones/diagram-exp-<run-id>`, checks out `COMMIT` detached-free (a fresh `main` reset to it in the new
    clone), and copies the sources snapshot to `<clone>/.git/effort-sources/` (R6 D4).
