@@ -911,6 +911,8 @@ hangtu	rammed earth
 hanko	hanko
 hansho	hansho
 hanshō	hansho
+harakata	harakata-shu
+harakata-shu	harakata-shu
 hardiness zone	hardiness zone
 hari-ma	hari-ma
 hasa	hazakake
