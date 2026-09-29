@@ -118,7 +118,7 @@ class ShrineApproach(Kind):
     row of arches along it is a donors' row, each arch a gift - before modern times only at a great Inari site. This setting raises arches along any shrine's approach, a deliberate deviation from the historical norm. So the path runs straight up the axis, and the arches
     stand over it.
 
-    Note: The approach and the arch at its entry are read; a row of arches at an ordinary shrine is attested only in modern times; its width is a guess, and the arches' number and pitch are
+    Note: The approach and the arch at its entry are read; a row of arches at an ordinary shrine is attested only in modern times, and drawn here as a deliberate deviation; its width is a guess, and the arches' number and pitch are
     the GM's rulings, not the record's.
 
     Caveat: a row of arches at an ordinary shrine is attested only in modern times, and drawn here as a deliberate deviation; its width is a guess, and the arches' number and pitch are the GM's rulings, not the record's.
