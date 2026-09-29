@@ -1,0 +1,53 @@
+{
+ "run_id": "e1",
+ "task": "R",
+ "arm": "xhigh",
+ "seed": 853050,
+ "order": 1,
+ "start_commit": "ec99356cf081c1ac44ae227723edfdcf5675e6f7",
+ "clone": "/diagram/.clones/diagram-exp-e1",
+ "started": "2026-09-29T21:53:19Z",
+ "ended": null,
+ "pauses": [],
+ "memory_at_launch": {
+  "source": "shared-slice",
+  "working_set_gb": 2.89,
+  "offset_gb": 0.0,
+  "threshold_gb": 4.5,
+  "fresh_warning": ""
+ },
+ "agents_json_sha256": "24263244a3376b800ab3b9caba5c50be0adf746e32a3332b9a08f98683f5cafd",
+ "env": {
+  "L7R_SOURCES_HOME": "/diagram/.clones/.runs-293/e1/sources",
+  "CLAUDE_CODE_EFFORT_LEVEL": "unset",
+  "SPECIFY_FEATURE": "unset"
+ },
+ "shared_state": {
+  "sources_snapshot_sha256": "8b2c60bbc18d59d20f68516400de28734969a44c5679c1d1d49607bf58cec2a6",
+  "claims_sha256_at_start": "331988c3778456a79ea4057f880463092d996359a816ce2ef7ba54e16d937ae9",
+  "claims_lines_at_start": []
+ },
+ "sessions": [
+  {
+   "brief": "/diagram/.clones/diagram-exp-e1/handoffs/293/R-write.md",
+   "prompt_sha256": "6dd186908dd224e9131161df0d96daff039a7a1fe01fd5dc29515ebfeeea105d",
+   "effort": "xhigh",
+   "log": null
+  },
+  {
+   "brief": "/diagram/.clones/diagram-exp-e1/handoffs/293/R-check.md",
+   "prompt_sha256": "bb63a71b8603ed9b83e43d624d4b6b557e59f12adb40cfc7a65c016600217bb7",
+   "effort": "xhigh",
+   "log": null
+  }
+ ],
+ "argv": [
+  "/diagram/.clones/diagram-exp-e1/scripts/page-session.sh",
+  "/diagram/.clones/diagram-exp-e1/handoffs/293/R-write.md /diagram/.clones/diagram-exp-e1/handoffs/293/R-check.md",
+  "diagram-exp-e1",
+  "",
+  "xhigh",
+  "/diagram/.clones/.runs-293/e1/agents.json"
+ ],
+ "runner_stdout": "page-session: R-write.md\n  session:    7d89826a-dbb8-4100-ba24-90e576d96507\n  transcript: /home/agent/.claude/projects/-diagram--clones-diagram-exp-e1/7d89826a-dbb8-4100-ba24-90e576d96507.jsonl\n  log:        /diagram/.clones/diagram-exp-e1/.git/page-sessions/7d89826a-dbb8-4100-ba24-90e576d96507\npage-session: R-check.md\n  session:    be70d50f-d73e-43ae-b2db-72c147e6f966\n  transcript: /home/agent/.claude/projects/-diagram--clones-diagram-exp-e1/be70d50f-d73e-43ae-b2db-72c147e6f966.jsonl\n  log:        /diagram/.clones/diagram-exp-e1/.git/page-sessions/be70d50f-d73e-43ae-b2db-72c147e6f966\npage-session: started - each result.json is written when its session ends, and the next session begins\npage-session: to be told when the whole queue has ended, run this BACKGROUNDED (run_in_background):\n    until grep -q '^ALL DONE' /diagram/.clones/diagram-exp-e1/.git/page-sessions/run-e1dafca2.log; do sleep 60; done; tail -20 /diagram/.clones/diagram-exp-e1/.git/page-sessions/run-e1dafca2.log\n"
+}
