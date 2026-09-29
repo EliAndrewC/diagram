@@ -13,7 +13,7 @@ Token figures are the read's characters / 4, and "carry" multiplies that by the 
 The data is in `/diagram/.clones/.tools/logs/reread-2026-09-29/` (`result.json`, `per_url.json`,
 `cited_questions.json`); the scripts and the small results are copied beside this file under `measurement/`.
 
-**Figures** (629 research transcripts; 10,720 source reads of 4,282 distinct pages):
+**Figures** (observed 2026-09-29 by the method above; 629 research transcripts; 10,720 source reads of 4,282 distinct pages):
 - **Repeats:** 60% of reads repeat an earlier one, mostly the check pipeline re-reading within one session by design
   (`result.json` `classes`: 5,236 repeats within an hour of the one before, 174 more than a day apart).
 - **Rejected pages rediscovered:** 208 uncited pages were read again in a later session, 144 of them in a different

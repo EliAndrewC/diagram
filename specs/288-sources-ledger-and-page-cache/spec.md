@@ -157,7 +157,7 @@ is not re-read without a reason. The feature-274 drift test stays green.
   rules (check the ledger; record the outcome with `make source-outcome`; no re-read of a page `rejected` for the
   same question without a reason); the feature-274 drift test stays green.
 - **FR-014** No guard is added; every existing make target keeps its interface.
-- **FR-015** 100% coverage of the new and changed code, tests beside the existing ones; the new Makefile targets carry
+- **FR-015** Full coverage (the gate's floor) of the new and changed code, tests beside the existing ones; the new Makefile targets carry
   `GUARD_EDIT_OK` with the feature and a reason.
 
 ### Key Entities
@@ -189,7 +189,7 @@ is not re-read without a reason. The feature-274 drift test stays green.
 ## Decisions Recorded
 
 - **D1 - check reads stay out of the ledger**:
-  check-bundle's own saves use the cache but neither print nor append ledger lines. R1 found 60% of reads were the
+  check-bundle's own saves use the cache but neither print nor append ledger lines. R1 (observed 2026-09-29; method: research.md R1) found 60% of reads were the
   check pipeline re-reading within a session BY DESIGN; logging those as `pending` reads would bury the research
   reads the ledger exists to surface.
 - **D2 - "when the entry is filled" is found by a pass**, run by `make record` (which every research session runs
