@@ -7,7 +7,7 @@
  "start_commit": "ec99356cf081c1ac44ae227723edfdcf5675e6f7",
  "clone": "/diagram/.clones/diagram-exp-e1",
  "started": "2026-09-29T21:53:19Z",
- "ended": null,
+ "ended": "2026-09-29T23:24:53Z",
  "pauses": [],
  "memory_at_launch": {
   "source": "shared-slice",
@@ -25,7 +25,20 @@
  "shared_state": {
   "sources_snapshot_sha256": "8b2c60bbc18d59d20f68516400de28734969a44c5679c1d1d49607bf58cec2a6",
   "claims_sha256_at_start": "331988c3778456a79ea4057f880463092d996359a816ce2ef7ba54e16d937ae9",
-  "claims_lines_at_start": []
+  "claims_lines_at_start": [],
+  "claims_release_line": "293 | run e1 ended - claim released | 2026-09-29",
+  "ledger_lines_appended": 69,
+  "prefixes_reserved": [
+   ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary/18670-side range.json",
+   ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary/18680-ridge tablet.json",
+   ".claude/skills/diagram/research/sources/010-works-cited/20170-hoppou-shibata-ashigaru-nagaya.html",
+   ".claude/skills/diagram/research/sources/010-works-cited/20180-uematsu-2000-kochi-yashiki.html",
+   ".claude/skills/diagram/research/sources/010-works-cited/20190-tanaka-kaga-hongo-nagaya.html",
+   ".claude/skills/diagram/research/sources/010-works-cited/20200-kotobank-nagaya.html",
+   ".claude/skills/diagram/research/sources/010-works-cited/20210-kotobank-heya.html",
+   ".claude/skills/diagram/research/sources/010-works-cited/20220-yamaguchi-asa-mori-nagaya.html",
+   ".claude/skills/diagram/research/sources/010-works-cited/20230-tynews-jinshang-dayuan.html"
+  ]
  },
  "sessions": [
   {
@@ -49,5 +62,7 @@
   "xhigh",
   "/diagram/.clones/.runs-293/e1/agents.json"
  ],
- "runner_stdout": "page-session: R-write.md\n  session:    7d89826a-dbb8-4100-ba24-90e576d96507\n  transcript: /home/agent/.claude/projects/-diagram--clones-diagram-exp-e1/7d89826a-dbb8-4100-ba24-90e576d96507.jsonl\n  log:        /diagram/.clones/diagram-exp-e1/.git/page-sessions/7d89826a-dbb8-4100-ba24-90e576d96507\npage-session: R-check.md\n  session:    be70d50f-d73e-43ae-b2db-72c147e6f966\n  transcript: /home/agent/.claude/projects/-diagram--clones-diagram-exp-e1/be70d50f-d73e-43ae-b2db-72c147e6f966.jsonl\n  log:        /diagram/.clones/diagram-exp-e1/.git/page-sessions/be70d50f-d73e-43ae-b2db-72c147e6f966\npage-session: started - each result.json is written when its session ends, and the next session begins\npage-session: to be told when the whole queue has ended, run this BACKGROUNDED (run_in_background):\n    until grep -q '^ALL DONE' /diagram/.clones/diagram-exp-e1/.git/page-sessions/run-e1dafca2.log; do sleep 60; done; tail -20 /diagram/.clones/diagram-exp-e1/.git/page-sessions/run-e1dafca2.log\n"
+ "runner_stdout": "page-session: R-write.md\n  session:    7d89826a-dbb8-4100-ba24-90e576d96507\n  transcript: /home/agent/.claude/projects/-diagram--clones-diagram-exp-e1/7d89826a-dbb8-4100-ba24-90e576d96507.jsonl\n  log:        /diagram/.clones/diagram-exp-e1/.git/page-sessions/7d89826a-dbb8-4100-ba24-90e576d96507\npage-session: R-check.md\n  session:    be70d50f-d73e-43ae-b2db-72c147e6f966\n  transcript: /home/agent/.claude/projects/-diagram--clones-diagram-exp-e1/be70d50f-d73e-43ae-b2db-72c147e6f966.jsonl\n  log:        /diagram/.clones/diagram-exp-e1/.git/page-sessions/be70d50f-d73e-43ae-b2db-72c147e6f966\npage-session: started - each result.json is written when its session ends, and the next session begins\npage-session: to be told when the whole queue has ended, run this BACKGROUNDED (run_in_background):\n    until grep -q '^ALL DONE' /diagram/.clones/diagram-exp-e1/.git/page-sessions/run-e1dafca2.log; do sleep 60; done; tail -20 /diagram/.clones/diagram-exp-e1/.git/page-sessions/run-e1dafca2.log\n",
+ "status": "valid",
+ "void_reason": ""
 }
