@@ -23,6 +23,7 @@ from ..consts import (
     Pt,
 )
 from ..plan import SitePlan
+from . import law
 from .bund import a_way_onto_the_bund, cut_past_the_junction, run_lanes_on_to_the_bund, worked_ground_of
 from .checks import drawn_water_segs
 from .clearance import clear_runs, clip_to_clear
@@ -269,6 +270,7 @@ def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
         return 0.0 <= q[0] <= _W and 0.0 <= q[1] <= _H
 
     _fabric_now = [poly for poly, _owner, _kind in _homestead_polys(s)]  # what the connector's end must stay clear of, as `_thread_the_fabric` left it
+    _solid_now = law.solid_boxes(s.M)  # ...and the buildings' boxes its legs may not run through (`law.breaks_through`)
     _nowhere: list[int] = []  # lanes that serve nothing at either end - dropped after the loop, back to front
     # THE FIELD AS DRAWN, not the plan's envelope (feature 261): an end serves the field where it reaches the paddy a reader
     # sees - the bar the pool's lane-end test holds - and the envelope stands well out from it on a polder, so a skeleton
@@ -302,7 +304,7 @@ def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
         # are named so the tidy-up cannot strand one (cohort seed 39's farmhouse, `_trim_to_service`).
         _keep = [_h for _h in _final_houses if all(seg_dist(_h[0], _h[1], _a, _b) > WEB_REACH_FT for _a, _b in _others)]
         _kept = (
-            _pull_back_to_service(_pts, _others, _final_houses, _inside, _fabric_now)
+            kept_connector(_pts, _pull_back_to_service(_pts, _others, _final_houses, _inside, _fabric_now), _solid_now)
             if _ln.get("connector")
             else _trim_to_service(_pts, _others, _final_houses, _ground, keep=_keep, steadings=_final_steadings)
         )
@@ -693,6 +695,13 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # cuts; the straggler redraw that stood in for the corridor until it landed is gone with the driver's re-roll.
     _pass("settle")
     s.M["meta"]["web_settle"] = settle_the_web(s)
+
+
+def kept_connector(pts: Poly, pulled: Poly, solid: Sequence[tuple[float, float, float, float]]) -> Poly:
+    """The connector as the late pass leaves it: `pulled` (its inner end walked on to the network, `_pull_back_to_service`)
+    unless a leg of that runs through a building (`law.breaks_through` over `solid`), where the connector stays as placed
+    (`pts`) - the pull-back is a tidy-up, and the connector's placer decided it runs through nothing (ways: break-mid-run)."""
+    return list(pts) if law.breaks_through(pulled, solid) else pulled
 
 
 def _reachable_runs(cands: Sequence[Poly], seed_segs: Sequence[tuple[Pt, Pt]]) -> list[Poly]:

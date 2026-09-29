@@ -9,7 +9,9 @@ changes nothing. It is the guarantee; the passes before it are best-effort drawi
 WHAT A REPAIR MAY DO. It only takes material AWAY from an ordinary lane - cuts a crossing, a fold or a foul out of it,
 shortens an end, re-aims an end's last leg at the foot of its own previous vertex (never longer than the leg it replaces),
 drops a piece that no longer joins the connector's network - or squares a crossing. It never cuts the TREE (`corridors.
-is_tree`: the connector, whose hook alone it takes off, and the lanes step 4 draws). That is the termination argument:
+is_tree`: the connector, whose hook alone it takes off, and the lanes step 4 draws); the one tree edit is step 3's, which
+takes a tree lane away WHOLE where it alone carries a way out over the brook and back, and step 4 lays that reach again
+only where it adds no such way out (`Lawful`). That is the termination argument:
 every repair but the squaring strictly shortens the non-tree web, the squaring is idempotent (`checks.square_crossings`),
 and step 4 adds a tree lane at most once per house, way target and field. Should the rounds run out with a rule still
 broken, the lanes still breaking one are dropped whole, round by round, until none is (FR-005: a lane that cannot be
@@ -227,10 +229,8 @@ def fouled_segment(p: Poly, width: float, houses: Sequence[Mapping[str, Any]], y
             return k
         if house_hit([a, b], width, houses) or _crosses_fabric([a, b], near, _TOUCH_GAP):
             return k
-        if math.dist(a, b) > law.BREAK_SPAN_FT:
-            mid = ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)
-            if any(x0 <= mid[0] <= x1 and y0 <= mid[1] <= y1 for x0, y0, x1, y1 in solid):
-                return k
+        if law.breaks_through([a, b], solid):
+            return k
     return None
 
 
@@ -327,22 +327,21 @@ def settle_shapes(s: Any) -> int:
 
 
 def settle_way_outs(s: Any) -> int:
-    """Step 3 (ways W08): while some household's way out crosses one brook more than once, cut the crossing nearest that
-    household out of the ordinary lane that carries it."""
+    """Step 3 (ways W08): while some household's way out crosses one brook more than once (`law.way_out_carriers`), cut the
+    crossing nearest that household out of the ordinary lane that carries it. WHERE ONLY TREE LANES CARRY IT (a corridor, a
+    spur or the field way, laid when a lane since cut gave that household a shorter way out), the first of them goes whole:
+    step 4 lays its reach again under `Lawful`, which refuses a lane that adds such a way out - so the tree is no exemption
+    from the rule, only from the cutting."""
     M = s.M
-    routes = departure_routes(M)
     lanes = M.get("lanes") or []
-    for brook in law._brooks(M):
-        for r in routes:
-            xs = [x for _k, x in law.crossing_points(list(r), brook)]
-            if len(xs) <= 1:
-                continue
-            for x in xs:
-                for i in _ordinary(M):
-                    p = _pts(lanes[i])
-                    for k, y in law.crossing_points(p, brook):
-                        if math.dist(x, y) <= 12.0:
-                            return apply_pieces(s, {i: cut_around(p, arc_at(p, k, y), _cut_gap(M, y) + CROSSING_GAP_FT)})
+    carriers = law.way_out_carriers(M, departure_routes(M))
+    for i, k, y in carriers:
+        if not is_tree(lanes[i]):
+            p = _pts(lanes[i])
+            return apply_pieces(s, {i: cut_around(p, arc_at(p, k, y), _cut_gap(M, y) + CROSSING_GAP_FT)})
+    if carriers:
+        s.drop_lanes([carriers[0][0]])
+        return 1
     return 0
 
 
@@ -690,12 +689,17 @@ def _box(p: Poly, pad: float) -> tuple[float, float, float, float]:
 class Lawful:
     """Would a run, drawn as a new lane of a given width, keep every per-lane rule of the law - no kink or hook, no crossing
     fault, no foul of the fabric, no field, dry plot or marsh underfoot (`open_ground_rings`) - and meet the ways it comes near
-    as the law asks: no needle, fold or hairpin at either end, no tail doubled along a way, either way round? The ONE
+    as the law asks: no needle, fold or hairpin at either end, no tail doubled along a way, either way round - and, for a
+    TREE lane (`tree`), no household's way out left crossing the brook twice (`law.adds_a_way_out_crossing`)? The ONE
     question the web asks before it adds a tree lane, since a tree lane is never cut afterwards. The map's fabric, water
-    and wet ground are read once, when it is built, for every run a step asks about."""
+    and wet ground are read once, when it is built, for every run a step asks about. The way-out clause is the tree's
+    alone: an ordinary lane re-laid by a repair is cut by step 3 if it carries such a way out, and the route it asks costs
+    two walks of the whole web a run (measured 30-60 ms on cohort seeds 3 and 12, most of the settle's time when every
+    re-laid end asked it)."""
 
-    def __init__(self, s: Any) -> None:
+    def __init__(self, s: Any, tree: bool = False) -> None:
         self.M = s.M
+        self.tree = tree
         self.wet = flooded_ground(s.M)
         self.yards, self.houses = _fabric(s)
         self.solid = law.solid_boxes(s.M)
@@ -767,7 +771,11 @@ class Lawful:
         trial = {**M, "lanes": tl}
         if any(n == k for n, _e in law.dangling_lane_ends(trial, self.ground)) or any(n == k for n, _e, _h in law.ends_behind(trial, self.ground)):
             return False
-        return not any(along_tail(p, q, deg=_DOUBLED_DEG) is not None for o in (_pts(ln) for ln in near) for p, q in ((run, o), (run[::-1], o), (o, run), (o[::-1], run)))
+        if any(along_tail(p, q, deg=_DOUBLED_DEG) is not None for o in (_pts(ln) for ln in near) for p, q in ((run, o), (run[::-1], o), (o, run), (o[::-1], run))):
+            return False
+        # ...AND IT HANDS NO HOUSEHOLD A WAY OUT OVER THE BROOK AND BACK (ways W08): a way out is a route through the whole
+        # web, so it is asked last, of the lanes the run would join - a tree lane is never cut for it afterwards
+        return not (self.tree and law.adds_a_way_out_crossing(M, run, width, lanes))
 
 
 def square_run(M: Mapping[str, Any], run: Poly) -> Poly:
@@ -873,7 +881,7 @@ def settle_reach(s: Any) -> int:
     to each way target (`settle_targets`), and the field way (`settle_field`)."""
     if not (unreached_houses(s.M) or law.unreached_targets(s.M) or law.field_unreached(s.M)):
         return 0
-    lawful = Lawful(s)
+    lawful = Lawful(s, tree=True)
     route = field_router(s, next(iter(law._brooks(s.M)), []))
     return draw_corridors(s, lambda run: lawful(run, ACCESS_WIDTH), route, lambda run: square_run(s.M, run)) + settle_targets(s, lawful) + settle_field(s, lawful)
 
@@ -912,7 +920,11 @@ def lane_violators(s: Any) -> list[int]:
     bad |= {i for _face, bounding in law.needle_loops(M) for i in bounding}
     if law.way_outs_crossing(M):
         bad |= {i for brook in law._brooks(M) for i in _ordinary(M) if law.crossing_points(_pts(lanes[i]), brook)}
-    return sorted(i for i in bad if not is_tree(lanes[i]))
+    out = {i for i in bad if not is_tree(lanes[i])}
+    carriers = {i for i, _k, _y in law.way_out_carriers(M)}
+    if carriers and not carriers & out:
+        out |= carriers  # a way out over the brook and back that only tree lanes carry: they go too (`settle_way_outs`)
+    return sorted(out)
 
 
 STEPS = (settle_husks, square_every_crossing, settle_shapes, settle_way_outs, settle_ends, settle_joins, settle_needles, settle_reach, settle_network, settle_fragments, settle_widths, settle_husks)
@@ -944,6 +956,13 @@ def settle_the_web(s: Any, rounds: int = SETTLE_ROUNDS) -> dict[str, Any]:
         # cleanly, the reach a drop took away drawn again, the network, a fragment that no longer earns, one width a way
         for step in (settle_joins, settle_reach, settle_network, settle_fragments, settle_widths, settle_husks):
             step(s)
+        # ...and a drop there that handed a household a way out over the brook and back loses the lane carrying it, tree or
+        # not (ways W08: no fallback keeps the violation); a household left unreached by it is the report's to name
+        while carriers := sorted({i for i, _k, _y in law.way_out_carriers(s.M)}):
+            s.drop_lanes(carriers)
+            dropped += len(carriers)
+            settle_network(s)
+            settle_husks(s)
     return {
         "rounds": done,
         "seconds": round(time.perf_counter() - t0, 3),

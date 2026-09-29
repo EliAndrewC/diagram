@@ -157,7 +157,7 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
 
 
 _JOIN_FT = 4.0
-"""The INK tolerance the one-network rule uses (`tests/gate/test_lane_network.py` JOIN_TOL): two treads nearer
+"""The INK tolerance the one-network rule uses (`law.JOIN_TOL`, the lane law's join tolerance): two treads nearer
 than this are one network, and a footpath further off joins nothing."""
 
 

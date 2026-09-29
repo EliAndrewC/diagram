@@ -188,6 +188,55 @@ def test_no_way_out_crosses_the_brook_twice() -> None:
     assert settle.settle_way_outs(s) == 0
 
 
+def _over_and_back_on_the_tree():
+    """A household on the west bank whose only way out is two TREE lanes - its field way east over the brook, and a spur
+    back west over it to the connector's start: every crossing of its way out is on a lane no repair cuts."""
+    back = ([(50.0, 0.0), (50.0, 100.0), (150.0, 100.0), (150.0, 300.0)], {"role": "way target"})
+    out = ([(150.0, 300.0), (50.0, 300.0)], {"role": "field way"})
+    s = _S([_c((50.0, 0.0), (-1000.0, 0.0))], houses=[(40.0, 340.0)], streams=[BROOK], meta={**_GEN, "brook_fords": [[100.0, 100.0], [100.0, 300.0]]})
+    for pts, kw in (back, out):
+        s.M["lanes"].append({"pts": [list(q) for q in pts], "w": 3, "worn": True, **kw})
+    s.M["houses"][0]["rot"] = 180.0  # its front faces the field way's end
+    return s
+
+
+def test_a_way_out_only_tree_lanes_carry_over_and_back_loses_the_tree_lane_nearest_the_house() -> None:
+    """Ways W08, the tree half: `settle_way_outs` cut only ordinary lanes, so a way out carried over the brook and back on
+    tree lanes alone was left (the kept test's reason). The first tree lane carrying it goes whole; the reach is the next
+    step's to lay again, under `Lawful`."""
+    s = _over_and_back_on_the_tree()
+    assert law.way_outs_crossing(s.M) and all(co.is_tree(s.M["lanes"][i]) for i, _k, _y in law.way_out_carriers(s.M)), "the fixture provokes it on the tree"
+    assert settle.lane_violators(s) == [1, 2], "the last resort names the tree lanes when no ordinary lane carries it"
+    assert settle.settle_way_outs(s) == 1
+    assert [ln.get("role") for ln in s.M["lanes"]] == [None, "way target"] and law.way_outs_crossing(s.M) == []
+    assert law.way_out_carriers(s.M) == [] and settle.settle_way_outs(s) == 0
+
+
+def test_lawful_refuses_a_tree_lane_that_hands_a_household_a_way_out_over_the_brook_and_back(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`Lawful` asks the ROUTE, not only the lane (`law.adds_a_way_out_crossing`): the field way east over the brook is a
+    clean lane, crossing once at a ford, but it makes the household's way out cross twice - refused; a run on its own bank
+    is not."""
+    s = _over_and_back_on_the_tree()
+    field_way = settle._pts(s.M["lanes"][2])
+    del s.M["lanes"][2]
+    assert law.way_outs_crossing(s.M) == [] and law.adds_a_way_out_crossing(s.M, field_way, 3.0), "the violating case"
+    assert not law.adds_a_way_out_crossing(s.M, [(50.0, 300.0), (50.0, 150.0)], 3.0), "a run on the household's own bank"
+    assert not law.adds_a_way_out_crossing({**s.M, "streams": []}, field_way, 3.0), "no brook, no way out to cross it"
+    assert not settle.Lawful(s, tree=True)(field_way, 3.0)
+    assert settle.Lawful(s)(field_way, 3.0), "...and it is the way out that refuses it: an ordinary lane keeps every other rule"
+    monkeypatch.setattr(law, "adds_a_way_out_crossing", lambda *a, **k: False)
+    assert settle.Lawful(s, tree=True)(field_way, 3.0)
+
+
+def test_a_way_out_left_over_the_brook_after_the_last_resort_loses_its_lanes(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The last resort's tail: a way out over the brook and back that is still there after the final steps loses every
+    lane carrying it, tree or not - never kept as the least bad (FR-005)."""
+    s = _over_and_back_on_the_tree()
+    monkeypatch.setattr(settle, "lane_violators", lambda s: [])
+    got = settle.settle_the_web(s, rounds=0)
+    assert law.way_outs_crossing(s.M) == [] and got["dropped"] >= 1
+
+
 # ---- step 4: joints and ends -------------------------------------------------------------------------------------
 
 

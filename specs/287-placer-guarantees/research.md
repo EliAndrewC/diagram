@@ -429,6 +429,8 @@ full gate run, of which 216.45 s is one unit test (below); the finished-map test
 | ::test_the_polder_s_lanes_bend_like_paths | soak | as the kink |
 | ::test_the_polder_seats_its_households_and_lands_its_acreage (with its 85% floor) | soak | as the grid test |
 | soak/test_seatings::test_lane_frontage_seats_the_hamlet_when_the_field_row_offers_nothing (and its seating variant) | soak | `SiteRefused`; test_seats::test_lane_frontage_skips_web_lanes_and_lanes_of_the_other_kind |
+| hamletgen/test_pool_261::test_every_way_out_crosses_the_brook_at_most_once (5) (wave 5) | 0.22 | `ways/settle.py:settle_way_outs` (an ordinary lane's crossing cut, else the tree lane carrying it dropped whole), `lane_violators` and the last resort's tail (tree carriers too), `Lawful` asking the route (`law.adds_a_way_out_crossing`) before any tree lane is laid, `track.connector_keeps_the_law` (the connector crosses a brook at most once, so every such way out has a carrier the web may take); test_settle::test_no_way_out_crosses_the_brook_twice, ::test_a_way_out_only_tree_lanes_carry_over_and_back_loses_the_tree_lane_nearest_the_house, ::test_lawful_refuses_a_tree_lane_that_hands_a_household_a_way_out_over_the_brook_and_back, ::test_a_way_out_left_over_the_brook_after_the_last_resort_loses_its_lanes; test_track::test_a_connector_through_a_building_or_over_the_brook_twice_takes_the_dry_exit |
+| gate/test_lane_network::test_the_connector_does_not_break_mid_run (wave 5) | <0.005 | `track.connector_keeps_the_law` (the connector as drawn, squared first, runs through no `law.breaks_through` box, else the dry exit) with `stage_track` walling the sweep and the dry exit by `law.solid_quads`; the later writers ask the same predicate (`web.kept_connector`, `joints.fold_the_connector_hairpin`); test_track::test_the_connector_sweep_refuses_a_bearing_with_a_house_on_it_and_takes_the_next, ::test_a_connector_through_a_building_or_over_the_brook_twice_takes_the_dry_exit, test_web::test_the_late_pass_keeps_the_connector_as_placed_where_its_pulled_back_end_would_run_through_a_building, test_joints::test_a_connector_fold_whose_new_first_leg_runs_through_a_building_is_refused. The settle's hook repair only shortens a leg of at most `_HOOK_FT` (no leg past `BREAK_SPAN_FT` is made), and its squaring is a no-op on the already-squared connector |
 
 **Clauses retired from kept tests**: the seating floor and `ACREAGE_SHORT`'s skip and `GATE_COHORT_EXPECTED`'s pins in
 gate/hamletgen/test_driver (FR-006); the household clause of gate/hamletgen/test_water; the channel-under-plot clause of
@@ -452,8 +454,7 @@ excuse of test_the_board_caption_notches_no_crown (FR-006: no engine code writes
 | ::test_every_channel_runs_downhill | <0.005 | (b) only the sink's routes ask `runs_downhill`; the feed and head-race record and the comb's drain run do not |
 | ::test_every_stream_end_is_anchored_to_what_it_declares | <0.005 | (b) `brook_violations` judges the source end only; the exit end rests on construction, untested |
 | gate/test_water_junctions::test_no_watercourse_crosses_another_mid_run | 18.63 | (b) the feed brook's last candidate (round the field) is returned unjudged. 18.60 s is setup: the Inashiro pool map's cold obtain, shared |
-| gate/test_lane_network::test_the_connector_does_not_break_mid_run (narrowed) | <0.005 | (b) the connector is exempt from `settle_shapes`; `connector_track`'s refusal has no unit test with a house in the bearing |
-| ::test_no_tree_is_planted_in_a_path | 0.06 | (b) only the belt keeps its trunks off the treads; the commons, the forest and the persimmon (seated before the web) do not |
+| gate/test_lane_network::test_no_tree_is_planted_in_a_path | 0.06 | (b) only the belt keeps its trunks off the treads; the commons, the forest and the persimmon (seated before the web) do not |
 | gate/test_crossings_and_cover::test_the_countryside_has_no_holes_in_it | 0.04 | (b) `finish.py:_title_band` grows the view after `fill_the_holes`; the band is counted and refilled by nothing |
 | gate/test_cluster_and_homes::test_the_cluster_draws_inside_the_band_of_the_shape_it_declared (narrowed) | <0.005 | (b) `shapes_drawn_at` declares `elongated` past every band; a string past 12:1 is not refused |
 | ::test_every_household_can_reach_water | <0.005 | (b) `lot.py:needs_pocket` is asked at the seek point, not the placed center |
@@ -475,7 +476,6 @@ excuse of test_the_board_caption_notches_no_crown (FR-006: no engine code writes
 | ::test_no_brook_runs_ruled_for_most_of_its_course_on_the_page (5) | 0.08 | (b) the same |
 | ::test_no_brook_segment_lies_on_a_screen_axis_but_the_tap_run (5) | 0.06 | (b) the same |
 | ::test_a_way_reaches_the_field (5) | 0.21 | (b) `settle_reach` reports `field_unreached`, it does not refuse |
-| ::test_every_way_out_crosses_the_brook_at_most_once (5) | 0.22 | (b) tree lanes are exempt from the last-resort drop; `Lawful` judges a lane, not a route |
 | ::test_the_board_caption_names_the_board_only (4) | 0.04 | (b) plan D12's terminal |
 | ::test_the_board_caption_stands_nearest_its_own_board (5) | 0.05 | (b) plan D12's terminal |
 | ::test_the_board_caption_notches_no_crown (5, excuse removed) | 0.15 | (b) plan D12's terminal |
@@ -514,7 +514,7 @@ village entrypoint's coverage, 3.4 s), `tests/gate/pipeline/*`, `tests/full/haml
 - **Six failures at 0e792a665** in the worktree's run: the two overlap-matrix tests (kept, above), two
   `test_notes_census` blocks (Inashiro, Kuwabata) and two test_pool_261 params on Mizuguchi's committed manifest (both
   retired here).
-- **Stale mentions left in files this task does not own**: `hamletgen/ways/law.py`'s docstring and
-  `hamletgen/homesteads/wells.py` name retired tests; `tests/hamletgen/test_surface.py:105` names the deleted cohort module.
+- **Stale mentions left in files this task does not own**: `hamletgen/ways/law.py`'s docstring (fixed in wave 5, with
+  `ways/serve.py`'s `_JOIN_FT` pointer to the retired one-network test) and `hamletgen/homesteads/wells.py` name retired tests; `tests/hamletgen/test_surface.py:105` names the deleted cohort module.
 - **Not touched, owned elsewhere now**: homes:H32's fixtures-unseated excuse tests in `tests/hamletgen/test_homesteads.py`
   (the performance implementer's file) and woods:W17's `tools/mapcheck.py` tripwire (not a test).

@@ -148,3 +148,55 @@ def test_the_gateway_stands_on_the_exit_strip_the_seating_reserved() -> None:
     s.M["access_exit"] = [[500.0, 500.0], [500.0, 900.0]]
     on = _cluster_gateway(s, seat, (0.0, 0.0))
     assert seg_dist(on[0], on[1], (500.0, 500.0), (500.0, 900.0)) < 1e-9 and on[1] > 520.0, "on the strip, past the cloud"
+
+
+def _box_on(a, b):
+    """A 40 x 28 ft building's box standing on the middle of the leg a-b."""
+    mx, my = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2
+    return (mx - 20.0, my - 14.0, mx + 20.0, my + 14.0)
+
+
+def test_the_connector_sweep_refuses_a_bearing_with_a_house_on_it_and_takes_the_next() -> None:
+    """Ways, the connector half of break-mid-run: the swept bearing a track would leave by has a house on its first leg
+    (the violating case - `law.breaks_through` names it), and with the house in the fabric the sweep takes the next
+    bearing, whose drawn legs keep `TRACK_FABRIC_GAP` off it and run through no building."""
+    from l7r.diagram.hamletgen.consts import TRACK_FABRIC_GAP
+    from l7r.diagram.hamletgen.ways import law
+    from l7r.diagram.hamletgen.ways.fabric import _fabric_hits
+
+    plan = a_plan()
+    plan.seat = hg.seat_cluster(plan)
+    free = hg.connector_track(plan, (700.0, 200.0), avoid=[SQUARE])
+    box = _box_on(free[0], free[1])
+    assert law.breaks_through(free, [box]), "the violating case: the ideal bearing runs through the house"
+    quad = law.solid_quads({"houses": [{"x": (box[0] + box[2]) / 2, "y": (box[1] + box[3]) / 2, "w": 40.0, "h": 28.0}]})
+    track = hg.connector_track(plan, (700.0, 200.0), avoid=[SQUARE], fabric=quad)
+    assert track != free and law.breaks_through(track, [box]) == [] and _fabric_hits(track, quad, TRACK_FABRIC_GAP) == 0
+
+
+def test_a_connector_through_a_building_or_over_the_brook_twice_takes_the_dry_exit(monkeypatch) -> None:
+    """`connector_keeps_the_law` decides the drawn connector: a run whose long leg stands in a building's box, or that
+    crosses the brook twice, is refused and the dry exit (walled by the same boxes, crossing no water) is drawn instead."""
+    from l7r.diagram.hamletgen.ways import track
+
+    s, plan = _walled_settlement()
+    run = [(10.0, 10.0), (-900.0, 10.0)]
+    assert track.connector_keeps_the_law({"houses": []}, run)
+    through = {"houses": [{"x": -445.0, "y": 10.0, "w": 40.0, "h": 28.0}]}
+    assert not track.connector_keeps_the_law(through, run), "a leg through a house"
+    twice = {"streams": [{"poly": [[-100.0, -50.0], [-200.0, 50.0], [-300.0, -50.0]]}]}
+    assert not track.connector_keeps_the_law(twice, run), "over the brook and back"
+    assert track.connector_keeps_the_law({"streams": [{"poly": [[-100.0, -50.0], [-100.0, 50.0]]}]}, run), "once is a crossing"
+    dry = [(1.0, 1.0), (-500.0, 1.0)]
+    monkeypatch.setattr(track, "connector_dry_exit", lambda *a: dry)
+    monkeypatch.setattr(track, "route_around", lambda poly, path, margin: path)
+    monkeypatch.setattr(track, "_thread_the_fabric", lambda s, plan, run: run)
+    from l7r.diagram.hamletgen.ways import law
+
+    s.M["streams"] = [{"poly": [[-300.0, -200.0], [-500.0, 200.0]], "w": 6.0}]  # the brook, crossed once, 27 degrees off square
+    assert law.oblique_crossings({**s.M, "lanes": [{"pts": run}]}), "the threaded run crosses it oblique"
+    squared = track.connector_through(s, plan, run, [], [], [], [])
+    assert squared != run and law.oblique_crossings({**s.M, "lanes": [{"pts": squared}]}) == [], "drawn and judged square"
+    s.M["streams"] = []
+    s.M["houses"].append({"x": -445.0, "y": 10.0, "w": 40.0, "h": 28.0})
+    assert track.connector_through(s, plan, run, [], [], [], []) == dry

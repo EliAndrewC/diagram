@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import math
 from collections.abc import Mapping, Sequence
-from typing import cast
+from typing import Any, cast
 
 from l7r.diagram.settlement import Settlement, edge_dist, seg_intersect, segments_cross, skeleton_layout
 from l7r.diagram.settlement._geom import ring_offset
@@ -25,6 +25,7 @@ from ..consts import (
     Pt,
 )
 from ..plan import SitePlan
+from . import law
 from .bund import RunOnBlocks, tip_onto_the_bund
 from .checks import PathChecker, brook_fords, drawn_water_segs, ford_crossing, gap_segments, stream_segs
 from .clearance import _HAIRPIN_DEG, clip_to_clear, route_around
@@ -375,7 +376,11 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # The steadings, read ONCE for the whole stage: the bearing sweep ranks against them and
     # `_thread_the_fabric` re-reads them for the clip. They cannot change during this stage -
     # nothing here draws a homestead - so a second walk would only be a second chance to disagree.
-    fabric = [poly for poly, _owner, _kind in _homestead_polys(s)]
+    # ...WITH THE BUILDINGS' BOXES AS THE LANE LAW READS THEM (`law.solid_quads`, ways: break-mid-run): the sweep and the
+    # dry exit keep `TRACK_FABRIC_GAP` off the very boxes `law.breaks_through` asks a connector leg's midpoint to stay out
+    # of, so the connector they hand back cannot run through a building by the rule's own reading (a turned house's box
+    # is not its drawn quad)
+    fabric = [poly for poly, _owner, _kind in _homestead_polys(s)] + law.solid_quads(s.M)
 
     def to_screen(p: Pt) -> Pt:
         """Seat frame (along the margin, away from the field) -> screen."""
@@ -698,10 +703,28 @@ def wet_grown_by_the_lane(w: Poly) -> Poly:
 def connector_through(s: Settlement, plan: SitePlan, track: Poly, avoid: Sequence[Poly], wet: Sequence[Poly], waters: Sequence[tuple[Pt, Pt]], fabric: Sequence[Poly]) -> Poly:
     """The connector as drawn: the swept track bent round the field (`route_around`) and threaded through the steadings
     (`_thread_the_fabric`); where either cannot make it clean, the flood fill's dry exit from the same gateway (ways W24,
-    W25) - never the track still across the field or a farmstead."""
+    W25) - never the track still across the field or a farmstead. It is SQUARED at its water crossings first (`settle.
+    square_run`, what the web's last pass does to every lane) and judged as squared (`connector_keeps_the_law`): the web's
+    squaring drops a vertex standing in the water and so merges two legs into one, which is a new leg the rule must see
+    here, since no repair cuts the connector afterwards."""
+    from .settle import square_run  # the web's last pass sits above this layer
+
     around = route_around(plan.envelope, track, SPUR_SETBACK)
     run = _thread_the_fabric(s, plan, around) if around is not None else []
-    return run if len(run) >= 2 else connector_dry_exit(plan, track[0], avoid, wet, waters, fabric)
+    run = square_run(s.M, run) if len(run) >= 2 else run
+    return run if len(run) >= 2 and connector_keeps_the_law(s.M, run) else connector_dry_exit(plan, track[0], avoid, wet, waters, fabric)
+
+
+def connector_keeps_the_law(M: Mapping[str, Any], run: Poly) -> bool:
+    """May `run` be drawn as the connector? Its legs run through no building (`law.breaks_through` over `law.solid_boxes`,
+    the lane law's own reading - the connector is a tree lane no settle repair cuts, so this is where the rule is decided),
+    and it crosses each brook at most once (`law.crossing_points`), so a household's way out along it never crosses the
+    brook twice on the connector alone (`law.way_out_carriers` names a crossing on another lane for every such way out).
+    A run refused here is replaced by the dry exit, which crosses no water line and keeps `TRACK_FABRIC_GAP` off every
+    box (`stage_track` walls it with `law.solid_quads`)."""
+    if law.breaks_through(run, law.solid_boxes(M)):
+        return False
+    return all(len(law.crossing_points(run, brook)) <= 1 for brook in law._brooks(M))
 
 
 class NoDryExit(ValueError):

@@ -5,10 +5,12 @@ last pass settle the lane law (`hamletgen/ways/settle.py:settle_the_web`, repair
 as a T or close a join, to a fixed point, the lane law's one predicate per rule in `law.py`) and refused every tree lane
 that would break one (`Lawful`), each unit-tested on the violating case in `tests/hamletgen/ways/test_settle.py` - and
 retired the finished-map tests of one network, the kink, the fold and hook, the lane end reaching something and the
-doorstep's two ends, with their every-shipped-hamlet twins (specs/287-placer-guarantees/research.md R8).
+doorstep's two ends, with their every-shipped-hamlet twins (specs/287-placer-guarantees/research.md R8). The last of
+them, a break mid-run on the CONNECTOR (which the settle pass exempts), went in wave 5: the connector's placer decides it
+(`track.connector_keeps_the_law`, and every later writer of the connector asks `law.breaks_through` too), unit-tested in
+`tests/hamletgen/ways/test_track.py`, `test_web.py` and `test_joints.py`.
 
-KEPT, because no placer guarantees them yet:
-- a break mid-run on the CONNECTOR, which the settle pass exempts (see the test);
+KEPT, because no placer guarantees it yet:
 - `groves_clear_of_lanes`: only the belt's placer (`stands.py:village_grove`) keeps its trunks off the lanes' treads; the
   woodland commons, the forest and the yard's persimmon (seated before the web, which never reads it) have no guarantee.
 """
@@ -19,7 +21,6 @@ import math
 
 import pytest
 
-from l7r.diagram.hamletgen.ways import law
 from tests import rolls
 from tests.gate import _pool
 
@@ -49,22 +50,6 @@ def lanes():
     ways = [p for p in _ways(M) if len(p) >= 2]
     assert len(ways) >= 2, "the roll drew fewer than two lanes, so the network rules would judge nothing"
     return M, ways
-
-
-def test_the_connector_does_not_break_mid_run(lanes) -> None:
-    """`lanes_do_not_break_mid_run`, on the CONNECTOR only (feature 287: the web's lanes are cut where they foul a solid
-    box by `settle.py:settle_shapes` and refused by `Lawful`, unit-tested in `tests/hamletgen/ways/test_settle.py`; the
-    connector is exempt from those passes and rests on `track.connector_track`'s ranking, whose refusal no unit test
-    drives with a house in the swept bearing). A lane's drawn tread stops where something solid stands in it and
-    resumes on the far side, which on the page reads as a path that vanishes and reappears. The physical
-    claim is simpler than the geometry: ground either carries a path or it does not, and a gap in the ink
-    with nothing in the gap is the drawing forgetting to finish the line."""
-    M, _ways_all = lanes
-    assert law.solid_boxes(M), "the roll placed nothing solid, so a break would have nothing to be explained by"
-    connector = [ln for ln in (M.get("lanes") or []) if ln.get("connector")]
-    assert connector, "the roll drew no connector, so this rule would judge nothing"
-    gaps = law.breaks_mid_run({**M, "lanes": connector})
-    assert not gaps, f"the connector runs straight through something solid at {gaps[:4]}"
 
 
 def test_no_tree_is_planted_in_a_path(lanes) -> None:

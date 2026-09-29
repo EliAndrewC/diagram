@@ -1,11 +1,13 @@
 """The lane law: every rule a finished lane web must keep, each as ONE predicate (feature 287, M1).
 
-A LIFT, NOT A RE-DERIVATION. Each predicate below is the body a finished-map test asserts - `tests/gate/test_lane_network.py`,
-`tests/gate/test_cohort_lane_rules.py`, `tests/gate/test_crossings_and_cover.py` and the ways rows of
-`tests/hamletgen/test_pool_261.py` - moved into the engine, and those tests now call it. The placer that owns a rule
-(`settle.settle_the_web`, the web's last pass) calls the same predicate, which is the skill's standing rule
-("placement and its check must read the SAME source") made structural: there is one body per rule, so the two cannot
-drift. The acceptance sweep (M9) runs `violations` over every finished map, so this module is the registry of the rules.
+A LIFT, NOT A RE-DERIVATION. Each predicate below is the body a finished-map test asserted - the lane network, the
+cohort's lane rules, the crossings and the ways rows of feature 261's pool tests - moved into the engine. The placer that
+owns a rule (`settle.settle_the_web`, the web's last pass, and the connector's `track.connector_through`) calls the same
+predicate, and so does the placer's unit test on the violating case (`tests/hamletgen/ways/`); the finished-map tests
+those unit tests made unnecessary are retired, each listed with its placer test in feature 287's research R8. That is
+the skill's standing rule ("placement and its check must read the SAME source") made structural: there is one body per
+rule, so the two cannot drift. The acceptance sweep (M9) runs `violations` over every finished map, so this module is the
+registry of the rules.
 
 Every predicate answers with what VIOLATES the rule - an empty list (or zero, or False) is a pass - so a test states the
 found thing in its failure message and a placer knows where to cut.
@@ -581,18 +583,31 @@ def solid_boxes(M: Mapping[str, Any]) -> list[tuple[float, float, float, float]]
     return solid
 
 
+def solid_quads(M: Mapping[str, Any]) -> list[Poly]:
+    """`solid_boxes` as polygons - the ground a placer that walls by polygon (the connector's sweep and its dry exit) keeps
+    off, so it keeps off the very boxes `breaks_through` reads."""
+    return [[(x0, y0), (x1, y0), (x1, y1), (x0, y1)] for x0, y0, x1, y1 in solid_boxes(M)]
+
+
+def breaks_through(pts: Sequence[Pt], solid: Sequence[tuple[float, float, float, float]]) -> list[tuple[int, Pt]]:
+    """(segment index, midpoint) for every segment of a run longer than `BREAK_SPAN_FT` whose midpoint stands inside one of
+    the `solid` boxes (`solid_boxes`) - a tread drawn straight through a building. THE ONE PREDICATE of the rule: the
+    finished-map reading (`breaks_mid_run`), the web's foul test (`settle.fouled_segment`) and the connector's placer
+    (`track.connector_through`) all ask it."""
+    out = []
+    for k, (a, b) in enumerate(zip(pts, pts[1:], strict=False)):
+        if math.dist(a, b) <= BREAK_SPAN_FT:
+            continue
+        mid = ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)
+        if any(x0 <= mid[0] <= x1 and y0 <= mid[1] <= y1 for x0, y0, x1, y1 in solid):
+            out.append((k, mid))
+    return out
+
+
 def breaks_mid_run(M: Mapping[str, Any]) -> list[tuple[int, int]]:
-    """The midpoints of lane segments longer than `BREAK_SPAN_FT` that stand inside a building's box (`solid_boxes`)."""
+    """The midpoints of lane segments longer than `BREAK_SPAN_FT` that stand inside a building's box (`breaks_through`)."""
     solid = solid_boxes(M)
-    gaps = []
-    for p in _ways(M):
-        for i in range(len(p) - 1):
-            if math.dist(p[i], p[i + 1]) <= BREAK_SPAN_FT:
-                continue
-            mid = ((p[i][0] + p[i + 1][0]) / 2, (p[i][1] + p[i + 1][1]) / 2)
-            if any(x0 <= mid[0] <= x1 and y0 <= mid[1] <= y1 for x0, y0, x1, y1 in solid):
-                gaps.append((round(mid[0]), round(mid[1])))
-    return gaps
+    return [(round(mid[0]), round(mid[1])) for p in _ways(M) for _k, mid in breaks_through(p, solid)]
 
 
 def fouls_fabric(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]], fabric: Sequence[tuple[Poly, Pt | None, str]], own: Pt | None = None) -> bool:
@@ -758,6 +773,45 @@ def way_outs_crossing(M: Mapping[str, Any], routes: Sequence[Sequence[Pt]] | Non
             if n > 1:
                 out.append((round(r[0][0]), round(r[0][1]), n))
     return out
+
+
+WAY_OUT_CARRY_FT = 12.0
+"""How near a lane's own crossing of the brook must stand to a crossing of a household's way out for that lane to be the
+one carrying it: a way out is walked over lane samples 10 ft apart (`departure_routes`), so its crossing lies within half a
+sample, and a crossing of another lane is at least a ford's width away."""
+
+
+def way_out_carriers(M: Mapping[str, Any], routes: Sequence[Sequence[Pt]] | None = None) -> list[tuple[int, int, Pt]]:
+    """(lane index, segment index, point) for every crossing of a brook by a lane OTHER than the connector that carries a
+    crossing of a household's way out crossing that brook more than once (`way_outs_crossing`), in the order the ways out
+    meet them - the crossings the web may take away to hold the rule. The connector's are never among them: it crosses no
+    brook more than once (`track.connector_through`), so a way out crossing twice always has a crossing on another lane."""
+    routes = departure_routes(M) if routes is None else routes
+    lanes = M.get("lanes") or []
+    out: list[tuple[int, int, Pt]] = []
+    for brook in _brooks(M):
+        for r in routes:
+            xs = [x for _k, x in crossing_points(list(r), brook)]
+            if len(xs) <= 1:
+                continue
+            for x in xs:
+                for i, ln in enumerate(lanes):
+                    if ln.get("connector") or len(ln.get("pts") or []) < 2:
+                        continue
+                    out.extend((i, k, y) for k, y in crossing_points(lane_pts(ln), brook) if math.dist(x, y) <= WAY_OUT_CARRY_FT and (i, k, y) not in out)
+    return out
+
+
+def adds_a_way_out_crossing(M: Mapping[str, Any], run: Poly, width: float, lanes: Lanes | None = None) -> bool:
+    """Would drawing `run` as a lane `width` wide beside `lanes` (the manifest's own by default) leave more households' ways
+    out crossing a brook more than once (`way_outs_crossing`) than without it? A way out is a ROUTE, not a lane: a new lane
+    that crosses nothing twice can still hand some household a shorter way out over the brook and back. THE ONE QUESTION the
+    web asks before it lays a tree lane (`settle.Lawful`), which no repair takes away afterwards."""
+    if not _brooks(M):
+        return False
+    lanes = list(M.get("lanes") or []) if lanes is None else list(lanes)
+    after = len(way_outs_crossing({**M, "lanes": [*lanes, {"pts": [list(q) for q in run], "w": width}]}))
+    return after > 0 and after > len(way_outs_crossing({**M, "lanes": lanes}))  # the web without it walked only when it could matter
 
 
 # ---- the registry --------------------------------------------------------------------------------------------------

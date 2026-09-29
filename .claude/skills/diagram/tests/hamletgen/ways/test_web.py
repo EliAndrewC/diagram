@@ -207,3 +207,15 @@ def test_a_lane_that_is_the_only_link_between_two_parts_of_the_web_is_not_droppe
     ]
     assert unsplitting_drops(lanes, [1, 3]) == [3]
     assert unsplitting_drops(lanes, []) == []
+
+
+def test_the_late_pass_keeps_the_connector_as_placed_where_its_pulled_back_end_would_run_through_a_building() -> None:
+    """`kept_connector` (ways, the connector half of break-mid-run): the pull-back walks the inner end on to the network,
+    and where the new leg's middle stands in a building's box the connector stays as placed."""
+    from l7r.diagram.hamletgen.ways.web import kept_connector
+
+    placed = [(0.0, 0.0), (0.0, 200.0), (-900.0, 200.0)]
+    pulled = [(100.0, 100.0), (0.0, 200.0), (-900.0, 200.0)]
+    box = (40.0, 140.0, 60.0, 160.0)  # the middle of the pulled end's new 141 ft leg
+    assert kept_connector(placed, pulled, [box]) == placed
+    assert kept_connector(placed, pulled, []) == pulled

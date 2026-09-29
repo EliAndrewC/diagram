@@ -12,14 +12,13 @@ a unit test on the violating case - the brook bridged and crossed only at fords,
 part on its house's bank and no farmhouse on the brook (`settlement/rolling/fit.py`), the entrance board
 (`structures/fixtures/siting.py`), the board caption at the board's angle (`board_seat.py`), the ruled row of woodland
 (`hinterland/parcels.py`), the copse off the marsh and the belt's alder (`homestead_parts/stands.py`) and no household
-grain plot (its producer is gone). What is left is KEPT because no placer guarantees it yet, and each test says why:
+grain plot (its producer is gone). Wave 5 retired a fifteenth, a way out crossing the brook at most once: the tree lanes
+carrying such a way out are taken away too, `Lawful` asks the route (`law.adds_a_way_out_crossing`) before a tree lane is
+laid, and the connector crosses a brook at most once (`track.connector_keeps_the_law`). What is left is KEPT because no
+placer guarantees it yet, and each test says why:
 - the brook's shape (fold, ruled run along the frame and on the page, the screen axis): `hamletgen/water/brook.py:feed_brook`
   returns its last candidate (round the field) unjudged, and the drawn course is rounded after it is judged;
 - a way reaching the field: `settle.py:settle_reach` reports `field_unreached`, it does not refuse;
-- a way out crossing the brook at most once: tree lanes are exempt from the last-resort drop, and `Lawful` judges one
-  lane, not a route;
-- the copse's reach and bank: a reserved wood seat is planted without the reach test, and a re-seated one is not asked
-  its reach or bank again (and against_the_belt's reach is from the belt, which the reservation does not know);
 - the board caption off the roofs, nearest its board and off the crowns: guaranteed except at plan D12's terminal, kept
   for the GM (`meta.kosatsuba_d12`).
 """
@@ -167,21 +166,6 @@ def test_the_board_caption_stands_nearest_its_own_board(gen: str) -> None:
     assert others, "non-vacuity: built footprints to compare against"
     nearest = min(others)
     assert nearest[0] > own, f"the caption stands {nearest[0]:.1f} ft from a {nearest[1]} record and {own:.1f} ft from its board"
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_every_way_out_crosses_the_brook_at_most_once(gen: str) -> None:
-    """A household's way OUT - its route through the lanes and along the connector - crosses the brook at most once: out
-    over a plank and home over the next is two planks for nothing (settlement-review of Mizuguchi, feature 261: two
-    north-bank farmsteads reached their own bank's lane 284 ft away by 1,010 ft over two planks). Asked per route, not per
-    lane record: no single lane crossed twice."""
-    from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
-
-    m = _manifest(gen)
-    routes = departure_routes(m)
-    assert routes, "non-vacuity: the map has ways out"
-    twice = law.way_outs_crossing(m, routes)
-    assert not twice, f"the way(s) out from {twice[:4]} (x, y, crossings) cross the brook more than once"
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)

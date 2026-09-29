@@ -395,6 +395,7 @@ def fold_the_connector_hairpin(s: Settlement, fabric: Sequence[Poly] = ()) -> in
     connector is started at the lane's vertex before that leg instead - a T - and the leg dropped, record and ink
     together, when the moved connector may be written (`may_write`). Returns the folds made."""
     from .clearance import may_write
+    from .law import breaks_through, solid_boxes  # the law sits above this layer (it reads `hairpin_over_a_short_leg`)
 
     lanes: list[dict[str, Any]] = s.M.get("lanes") or []
     conn = [(k, o) for k, o in enumerate(lanes) if o.get("connector") and len(o.get("pts") or []) >= 2]
@@ -410,8 +411,8 @@ def fold_the_connector_hairpin(s: Settlement, fabric: Sequence[Poly] = ()) -> in
                 if math.dist(j, cp[0]) > 1.5 or not hairpin_over_a_short_leg(a, b, j, cp[1]):
                     continue
                 new_c = [b, *cp[1:]]
-                if not may_write(cp, new_c, float(co.get("w") or 5.0), fabric):
-                    continue
+                if not may_write(cp, new_c, float(co.get("w") or 5.0), fabric) or breaks_through(new_c, solid_boxes(s.M)):
+                    continue  # ...nor a connector started so that its new first leg runs through a building (the lane law's reading)
                 kept = seq[:-1]
                 ln["pts"] = _rounded(kept[::-1] if back else kept)
                 co["pts"] = _rounded(new_c)

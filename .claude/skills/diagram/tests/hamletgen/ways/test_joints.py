@@ -175,3 +175,17 @@ def test_a_connector_fold_that_would_crowd_the_fabric_is_refused() -> None:
     s = _StubSettlement(lanes=[[(2055.3, 25.3), (1408.0, -20.4)], [(1929.1, 56.4), (2054.3, 40.0), (2055.3, 25.3)]])
     yard = [(1990.0, 30.0), (2010.0, 30.0), (2010.0, 42.0), (1990.0, 42.0)]  # a steading just below the old connector
     assert fold_the_connector_hairpin(s, [yard]) == 0 and s.M["lanes"][0]["pts"][0] == [2055.3, 25.3]
+
+
+def test_a_connector_fold_whose_new_first_leg_runs_through_a_building_is_refused() -> None:
+    """`fold_the_connector_hairpin` asks the lane law too (`law.breaks_through`): the connector started at the lane's vertex
+    would run its first long leg through a byre's box, so the fold is not made and the connector stays as placed."""
+    from l7r.diagram.hamletgen.ways import law
+    from l7r.diagram.hamletgen.ways.joints import fold_the_connector_hairpin
+
+    from ._builders import _StubSettlement
+
+    s = _StubSettlement(lanes=[[(2055.3, 25.3), (1408.0, -20.4)], [(1929.1, 56.4), (2054.3, 40.0), (2055.3, 25.3)]])
+    s.M["byres"] = [{"x": 1731.0, "y": 10.0, "w": 10.0, "h": 8.0}]  # on the middle of the leg the fold would draw, off the old one's
+    assert law.breaks_mid_run(s.M) == [], "the connector as placed runs through nothing"
+    assert fold_the_connector_hairpin(s) == 0 and s.M["lanes"][0]["pts"][0] == [2055.3, 25.3]
