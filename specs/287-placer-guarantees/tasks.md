@@ -6,8 +6,9 @@ constructed inputs including the violating case (FR-004), and retires the tests 
 
 ## P0 - Measurements owed
 
-- [ ] T01 [US1] P0: the polder's two failures read from the record (research R5); seed 31's yard over a paddy; the belt cases D8 leaves; the field pond's knob (D9); the seats D2 refuses (households unseated today over cohort 1-48, the probes and the pool); the board terminal counted once the strict caption predicate exists (labels L4, D12)
+- [x] T01 [US1] P0: the polder's two failures read from the record (research R5); seed 31's yard over a paddy; the belt cases D8 leaves; the field pond's knob (D9); the seats D2 refuses (households unseated today over cohort 1-48, the probes and the pool); the board terminal counted once the strict caption predicate exists (labels L4, D12)
       research: rendering
+      verify: DONE. DONE (research R5): the polder's two failures closed on record, W48 an excuse to remove; every map of pool and cohort 1-48 seats all households today, eight by re-rolling; the field pond is rolled (D9 applies); the belt leftovers, D2's refusals and the board terminal are counted where their mechanisms land (P5, P3, P6)
 
 ## P1 - The shared mechanisms, no placer changed yet
 
