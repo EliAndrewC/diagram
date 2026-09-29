@@ -62,5 +62,13 @@ def test_every_house_style_and_research_rule_reaches_a_page_session() -> None:
 
 def test_the_slim_file_states_the_caps_and_the_line_rule() -> None:
     slim = " ".join(SLIM.read_text(encoding="utf-8").split())
-    for phrase in ("make lines FILE=", "make append FILE=", "at most four questions", "ten new registry keys", "$L7R_CONTINUE"):
+    for phrase in (
+        "make lines FILE=",
+        "make append FILE=",
+        "at most four questions",
+        "ten new registry keys",
+        "$L7R_CONTINUE",
+        "make source-outcome",
+        "rejected` for the same question",
+    ):  # feature 288: the ledger's two rules
         assert phrase in slim, phrase

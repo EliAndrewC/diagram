@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import pathlib
 
 import pytest
@@ -94,13 +95,16 @@ def test_a_source_bundle_holds_the_entry(tmp_path: pathlib.Path, monkeypatch: py
     assert cb.main(["--key", "edo-enwiki", "--out", str(out), "--root", str(REPO)]) == 0
     assert (out / "sources" / "edo-enwiki.html").is_file()
     # D19: the bundle hands source-pages the passages the record quotes from the key, so a long page is excerpted
-    assert fetched == [["_source_pages.py", str(out / "pages"), "https://en.wikipedia.org/wiki/Edo", "--quotes", str(out / "quotes.json")]]
+    assert fetched == [["_source_pages.py", str(out / "pages"), "https://en.wikipedia.org/wiki/Edo", "--quotes", str(out / "quotes.json"), "--no-ledger"]]
     assert isinstance(json.loads((out / "quotes.json").read_text(encoding="utf-8")), list)
     fetched.clear()
     whole = tmp_path / "whole"
     assert cb.main(["--key", "edo-enwiki", "--whole", "--out", str(whole), "--root", str(REPO)]) == 0
     assert fetched == [["_source_pages.py", str(whole / "pages"), "https://en.wikipedia.org/wiki/Edo"]], "source-reader's form: the whole page, no excerpt"
     assert not (whole / "quotes.json").exists()
+    fetched.clear()
+    assert cb.main(["--key", "edo-enwiki", "--whole", "--question", "ways/010", "--out", str(whole), "--root", str(REPO)]) == 0
+    assert fetched == [["_source_pages.py", str(whole / "pages"), "https://en.wikipedia.org/wiki/Edo", "--question", "ways/010"]], "a WHOLE read carries its question to the ledger"
     assert cb.main(["--key", "no-such-key", "--out", str(tmp_path / "none"), "--root", str(REPO)]) == 2
 
 
@@ -178,3 +182,80 @@ def test_a_shared_modal_name_is_qualified_by_its_module() -> None:
     sheet = cb.kind_docstring(REPO, "household.Well")
     assert bare and sheet and "classes/water_and_ways.py" in bare[0] and "compound_kinds/household.py" in sheet[0]
     assert cb.kind_docstring(REPO, "nosuchmodule.Well") is None
+
+
+# ---- feature 288: a WHOLE read is a research read and is ledgered; an excerpt is a re-check and is not ----
+
+
+def test_the_whole_bundle_prints_and_ledgers_and_the_excerpt_does_not(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """SC-001, end to end with no network: the key's page is in the page cache, so the real `_source_pages.py` run
+    reads it from there. The WHOLE bundle prints the page's earlier read and appends `pending` with its question; the
+    excerpt bundle of the same key appends nothing."""
+    src = _load_sources()
+    where = pathlib.Path(os.environ["L7R_SOURCES_HOME"])
+    url = cb.url_of(cb.registry_entry(REPO, "edo-enwiki").read_text(encoding="utf-8"))
+    src.put(where, url, "Edo was the seat of the shogunate. It grew large.")
+    src.append(where, [src.line({"feature": "250", "clone": "x", "session": "s"}, url, "nothing-found", ["ways/010"])])
+    assert cb.main(["--key", "edo-enwiki", "--whole", "--question", "ways/020", "--out", str(tmp_path / "w"), "--root", str(REPO)]) == 0
+    out = capsys.readouterr().out
+    assert "read 1 time(s) before:" in out and "nothing-found  q: ways/010" in out
+    assert "from the page cache" in (tmp_path / "w" / "pages" / "MANIFEST.txt").read_text(encoding="utf-8")
+    assert [(r["outcome"], r["questions"]) for r in src.read(where)][1:] == [("pending", ["ways/020"])]
+    assert cb.main(["--key", "edo-enwiki", "--out", str(tmp_path / "e"), "--root", str(REPO)]) == 0
+    assert "sources-consulted:" not in capsys.readouterr().out
+    assert len(src.read(where)) == 2, "the excerpt bundle wrote no ledger line"
+    assert cb.ledger_part("pointer | file | state\nx\n") == ""
+
+
+def _load_sources():  # noqa: ANN202
+    spec = importlib.util.spec_from_file_location("_sources", REPO / "scripts" / "_sources.py")
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_quote_check_s_bundle_carries_the_cached_text_of_each_residue_page(tmp_path: pathlib.Path) -> None:
+    """Feature 288 FR-010, FR-011: the pages a quotation was NOT found verbatim on are saved into the bundle from the
+    page cache only - a page it does not hold is named NOT-CACHED, never fetched - and a clean report saves nothing."""
+    src = _load_sources()
+    out = tmp_path / "b"
+    out.mkdir()
+    assert cb.residue_pages(out) == 0, "no report, nothing to save"
+    report = {
+        "footnotes": [
+            {"links": ["https://example.org/ok"], "passages": [{"quotation": "VERBATIM"}]},
+            {"links": ["https://example.org/differs", "SOURCES.html#own"], "passages": [{"quotation": "VERBATIM"}, {"quotation": "DIFFERS"}]},
+            {"links": ["https://example.org/gone", "https://example.org/differs"], "passages": [{"quotation": "UNFETCHABLE"}]},
+            {"links": ["https://example.org/nothing-quoted"], "passages": []},
+        ]
+    }
+    (out / "quote-verbatim.json").write_text(json.dumps(report), encoding="utf-8")
+    src.put(pathlib.Path(os.environ["L7R_SOURCES_HOME"]), "https://example.org/differs", "The page. Its own words.")
+    assert cb.residue_pages(out) == 2
+    manifest = (out / "pages" / "MANIFEST.txt").read_text(encoding="utf-8").splitlines()
+    assert manifest[1].startswith("https://example.org/differs | 01-example.org.txt | FETCHED - ") and "from the page cache" in manifest[1]
+    assert manifest[2].startswith("https://example.org/gone | - | NOT-CACHED - not in the page cache")
+    assert (out / "pages" / "01-example.org.txt").read_text(encoding="utf-8") == "The page.\nIts own words.\n"
+    assert cb.NotCached.refused == {}
+
+
+def test_an_entry_bundle_lists_its_residue_pages(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The quote-check bundle names its `pages/` in the MANIFEST when the report left a residue (no network: the
+    quote-verbatim run is replaced by the report it would write)."""
+    src = _load_sources()
+    src.put(pathlib.Path(os.environ["L7R_SOURCES_HOME"]), "https://example.org/differs", "Its own words.")
+    real = cb.run_script
+
+    def run(name: str, args: list[str], root: pathlib.Path) -> tuple[int, str]:
+        if name != "_quote_verbatim.py":
+            return real(name, args, root)
+        report = {"footnotes": [{"links": ["https://example.org/differs"], "passages": [{"quotation": "DIFFERS"}]}]}
+        pathlib.Path(args[args.index("--json") + 1]).write_text(json.dumps(report), encoding="utf-8")
+        return 0, "quote-verbatim: 1 footnote"
+
+    monkeypatch.setattr(cb, "run_script", run)
+    out = tmp_path / "q"
+    assert cb.main(["ways", "--section", "010", "--for", "quote-check", "--out", str(out), "--root", str(REPO)]) == 0
+    assert "| `pages/` | `the host's page cache (feature 288)` |" in (out / "MANIFEST.md").read_text(encoding="utf-8")
+    assert (out / "pages" / "01-example.org.txt").is_file()
