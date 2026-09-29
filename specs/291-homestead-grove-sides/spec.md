@@ -142,7 +142,8 @@ per-house groves pass every check a grove answers to.
 - **SC-004** (FR-007, FR-008): unit tests prove the faces planted for each side count and windward key, and that the
   non-windward bands are thinner than the windward arms.
 - **SC-005** (FR-010, FR-011): the cohort passes (every seed's checks green, every household seated) with the three
-  forms rolled and each side count present among its non-nucleated seeds.
+  forms rolled and each side count present among its non-nucleated seeds; and in every non-nucleated seed every farm's
+  grove plants every side its settlement rolled - no farm on fewer.
 - **SC-006** (FR-012): the pool is regenerated, `make done` is green, and every regenerated pool map whose layout moved
   gets its settlement-review.
 
@@ -175,3 +176,6 @@ for the belt; the no-room edge case deleted and FR-010 requiring every farm seat
 FR-010 naming every rule feature 126 measured failing, `groves_on_windward_side` included; flood-prone ground defined
 (pinnable, else the polder archetypes or dike-top houses) with a test on a real polder site; the front defined as the
 lee side with the yard and the way in, the side three leaves open.
+
+**Round 2** (spec-fidelity-verify, MODE 3, 2026-09-29): CHANGES, one item - SC-005 now checks that every farm in a
+non-nucleated seed plants every side its settlement rolled, so the fallback round 1 removed cannot return unseen.
