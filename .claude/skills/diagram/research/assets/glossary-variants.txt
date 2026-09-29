@@ -1179,6 +1179,7 @@ hikiri-ichi	hikiri-ichi
 hill-and-plain castle	hill-and-plain castle
 hill-style	tsukiyama
 hinin	hinin
+hinoe-inu	sexagenary year
 hinoki	hinoki
 hinomi-yagura	hinomi-yagura
 hip roof	hip roof
@@ -1605,6 +1606,8 @@ keio era	Keio
 ken	ken
 kenchi-cho	kenchicho
 kenchicho	kenchicho
+kengyo	kengyō
+kengyō	kengyō
 kera	kera
 kesa	kesa
 kesa cut	kesa
@@ -2643,6 +2646,7 @@ settling basins	settling basin
 settsu	Settsu
 seven autumn grasses	seven autumn grasses
 seven-hall garan	garan
+sexagenary year	sexagenary year
 seyakuin	seyakuin
 shacho-sen'yokata	shacho-sen'yokata
 shadoof	jiegao
@@ -3012,6 +3016,7 @@ tenmacho	Tenmacho
 tenmacho jail	Tenmacho
 tenmacho's	Tenmacho
 tenmangu	Tenmangu
+tenmangū	Tenmangu
 tenmei	Tenmei
 tenmei era	Tenmei
 tenmei famine	Tenmei
@@ -3163,6 +3168,7 @@ tsinan	Tsinan
 tsinan's	Tsinan
 tsubo	tsubo
 tsubo-niwa	tsubo-niwa
+tsuchinoe-ne	sexagenary year
 tsuchiusu	clay mill
 tsugaru	Tsugaru
 tsuijibei	tsuijibei

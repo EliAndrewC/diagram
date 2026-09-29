@@ -9376,7 +9376,8 @@
  "Tenmangu": {
   "def": "A shrine to Tenjin, the deified courtier-scholar Sugawara no Michizane, patron of learning; \"Tenjin shrine\" and \"Tenmangu\" name the same kind of shrine.",
   "variants": [
-   "Tenmangu"
+   "Tenmangu",
+   "Tenmangū"
   ]
  },
  "offering hall": {
@@ -13058,6 +13059,22 @@
    "finance commissioner",
    "finance commissioners",
    "kanjo bugyo"
+  ]
+ },
+ "kengyō": {
+  "def": "The highest rank in the Edo-period guild of blind men, who worked as musicians, masseurs and moneylenders. Written after a personal name as a title.",
+  "variants": [
+   "kengyō",
+   "Kengyō",
+   "kengyo"
+  ]
+ },
+ "sexagenary year": {
+  "def": "A year's name in the sixty-year cycle, which pairs one of ten \"stems\" with one of the twelve zodiac animals. Inscriptions gave it beside the era year.",
+  "variants": [
+   "sexagenary year",
+   "tsuchinoe-ne",
+   "hinoe-inu"
   ]
  }
 }
