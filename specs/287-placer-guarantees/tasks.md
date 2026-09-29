@@ -12,20 +12,27 @@ constructed inputs including the violating case (FR-004), and retires the tests 
 
 ## P1 - The shared mechanisms, no placer changed yet
 
-- [ ] T02 [US1] M1: `waterfields/ring_rules.py` - every paddy-ring rule as one predicate, each tested against the test body it replaces
+- [x] T02 [US1] M1: `waterfields/ring_rules.py` - every paddy-ring rule as one predicate, each tested against the test body it replaces
       research: rendering
-- [ ] T03 [US1] M1: `hamletgen/ways/law.py` - every lane rule as one predicate (the 30 ft ford constant, `_deck_corners_clear` for decks), each tested against its old test body
+      verify: DONE. DONE: waterfields/ring_rules.py (needle, too_small, overcount, staircase, self_crossing, arrowhead, narrow/working_width, dart, under_island, crosses_pond_rim, supply_intrusions, collector_crossings; ring_violations); tests/waterfields/test_ring_rules.py 14 tests, 100% of the module; the gate tests call the predicates; width and dart thresholds labeled GUESS pending T13's research pass
+- [x] T03 [US1] M1: `hamletgen/ways/law.py` - every lane rule as one predicate (the 30 ft ford constant, `_deck_corners_clear` for decks), each tested against its old test body
       research: rendering
-- [ ] T04 [US1] M1: the one-predicate fixes where placer and test disagree (wells' spacing, the eave gap on a turned house, the pond's rim, the flooded tint's ring, the woodland's dry sample, the drip lines, the same-bank test)
+      verify: DONE. DONE: hamletgen/ways/law.py (19 ways rules + W01 via unreached_houses; LAW, violations(M)), tests/hamletgen/ways/test_law.py 28 tests, 100%; four test files call it; placer/test disagreements listed for P4 (bends one segment vs whole run, the weaker service set, the connector hairpin constant); pool findings for P4: Kuwabata hairpin and lateral-ditch planks, Mizuguchi needle join
+- [x] T04 [US1] M1: the one-predicate fixes where placer and test disagree (wells' spacing, the eave gap on a turned house, the pond's rim, the flooded tint's ring, the woodland's dry sample, the drip lines, the same-bank test)
       research: rendering
-- [ ] T05 [US2] M2: `brook.py:finished_course` and `round_the_brooks` moved after `stage_sink`, the pool regenerated and every moved map recorded
+      verify: DONE. DONE: well_gap_to_dwellings, ring_meets_ellipse, the raw-ring needle for the tint, crosses_a_stream, eave_gap - each read by placer and test, unit-tested where they disagreed
+- [x] T05 [US2] M2: `brook.py:finished_course` and `round_the_brooks` moved after `stage_sink`, the pool regenerated and every moved map recorded
       research: rendering
-- [ ] T06 [US2] M6: the view decided once at the end of `stage_hinterland`; `stage_frame` takes it
+      verify: DONE. DONE: finished_course and round_the_brooks at the end of stage_sink; the ways route the first-drawn course; the pool regenerated (research R6): Inashiro, Kashikawa, Mizuguchi re-seat, all seat every household in one roll; two Mizuguchi rules fail until P4/P6 guarantee them
+- [x] T06 [US2] M6: the view decided once at the end of `stage_hinterland`; `stage_frame` takes it
       research: rendering
-- [ ] T07 [US1] M7: the recorded marsh outline is the drawn marsh; every marsh test reads it
+      verify: DONE. DONE: the view decided once after the belt is planted (content_view, frame_for, plan.view; stage_frame takes it, records view_drift); the pool's five views and belts identical to before; no drift
+- [x] T07 [US1] M7: the recorded marsh outline is the drawn marsh; every marsh test reads it
       research: rendering
-- [ ] T08 [US1] M9: `sweep/harness.py` - the pool and cohort 1-48, plain and with 284's A* and field-search probes, every M1 predicate, failures and re-rolls counted; its first run recorded as the baseline
+      verify: DONE. DONE: drawn_ground records the marsh the reeds are drawn on; marsh_ground the one reading (18 readers swept); the pool's toe marshes shrank to their drawn ground
+- [x] T08 [US1] M9: `sweep/harness.py` - the pool and cohort 1-48, plain and with 284's A* and field-search probes, every M1 predicate, failures and re-rolls counted; its first run recorded as the baseline
       research: rendering
+      verify: DONE. DONE: sweep/harness.py (law.violations, ring_violations per ring, 102 census tests called per manifest; 16 not yet runnable, listed); baseline.json at cc39f599a - 0 of 53 clean either pass; 8 maps re-roll; the belt-depth test raises StopIteration on cohort 20 (a test defect to fix with its predicate)
 
 ## P2 - Water
 
