@@ -97,7 +97,8 @@ class Windbreak(Kind):
     Note: The grove count follows the Fujian figure (forests-2020), the density the Pearl-delta patches
     (hu-2011-fengshui-patches), and the size the Hong Kong survey (afcd-ncsc-9-06), measured in modern times on groves centuries old, no older measurement being known; the water-mouth cluster's
     size and the tree counts are guesses bracketed by Korean village-grove analogues; the belt's shape follows
-    the terrain and the cluster. The side it stands on follows the Japanese homestead grove, kept on the north
+    the terrain and the cluster. The side it stands on follows the Chinese village's grove behind the cluster
+    (coggins-minor-2018) and the Japanese homestead grove, kept on the north
     and west against the northwesterly winter wind (irie-2020-igune, yashikirin-jawiki), and the GM's rulings
     that the maps show that regional wind unless a place declares its own. The two forms are read (the four-region
     survey, takehara-2004-yashikirin; the delta patches), and so is the bamboo, in the Japanese farmstead grove only
