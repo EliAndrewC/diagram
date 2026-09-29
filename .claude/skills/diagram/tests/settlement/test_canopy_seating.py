@@ -77,3 +77,13 @@ def test_a_crown_is_refused_over_a_wellhead() -> None:
     kcirc = [(300.0, 300.0, 12.0)]
     assert s._crown_covers(305.0, 300.0, 14.0, [], kcirc, s.CANOPY_PAD), "a crown over the wellhead is refused"
     assert not s._crown_covers(800.0, 300.0, 14.0, [], kcirc, s.CANOPY_PAD), "and one away from it is not"
+
+
+def test_a_burial_ground_s_middle_is_kept_out_of_the_canopy() -> None:
+    """Feature 273's cemetery core: no scripted hamlet draws its own ground since feature 280 (M68), so it is asked directly."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="Woods", scale="hamlet", ftpx=1, down_deg=90)
+    s.M["cemeteries"] = [{"x": 500.0, "y": 500.0, "w": 60.0, "h": 40.0}, {"x": 5000.0, "y": 5000.0, "w": 60.0, "h": 40.0}]
+    rects, _circles = s._canopy_keepouts((0.0, 0.0, 1000.0, 1000.0))
+    core = (500.0, 500.0, 30.0 * s.CEMETERY_CORE, 20.0 * s.CEMETERY_CORE)
+    assert core in rects and not any(r[0] == 5000.0 for r in rects), "the ground in the box is kept out, one outside is not"

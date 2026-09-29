@@ -100,10 +100,19 @@ def test_unhooked_takes_the_hook_off_a_lane_end() -> None:
 
 def test_the_pass_takes_hooks_off_both_ends() -> None:
     s = _webbed([{"pts": [[108.0, 1206.0], [100.0, 1200.0], [300.0, 1200.0], [292.0, 1206.0]], "w": 3}, {"pts": [[500.0, 1200.0], [600.0, 1200.0], [592.0, 1206.0]], "w": 3}])
-    s.M["lanes"][1]["connector"] = True  # the cart route out is never re-shaped here, hook or no hook
+    s.M["lanes"][1]["connector"] = True  # the route out's far end is never re-shaped here, hook or no hook
     assert straighten_joints(s, [], [], []) == 2
     assert s.M["lanes"][0]["pts"] == [[100.0, 1200.0], [300.0, 1200.0]]
     assert math.isclose(s.M["lanes"][1]["pts"][-1][0], 592.0)
+
+
+def test_a_connector_start_that_overshoots_a_lane_and_hooks_back_is_cut_where_it_crosses() -> None:
+    """Kashikawa (feature 280): the connector's start ran 7.6 ft past a 3 ft lane and hooked back onto it."""
+    s = _webbed([{"pts": [[200.0, 1100.0], [200.0, 1300.0]], "w": 3}, {"pts": [[200.0, 1206.0], [193.0, 1200.0], [600.0, 1200.0]], "w": 6}])
+    s.M["lanes"][1]["connector"] = True
+
+    assert straighten_joints(s, [], [], []) == 1
+    assert s.M["lanes"][1]["pts"] == [[200.0, 1200.0], [600.0, 1200.0]]
 
 
 def test_an_end_on_another_lanes_tread_is_set_on_its_centerline() -> None:

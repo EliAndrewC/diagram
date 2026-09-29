@@ -57,10 +57,8 @@ class IrrigationDitch(Kind):
     (Bungotakada); how few ditches that form left is this record's own reading, since no page read counts
     ditches: the pages on it describe water passing from paddy to paddy, the one village page giving its merit
     as saving water, not saving digging, and keeping many weirs; prefectural and ministry papers a search
-    showed saying such districts have hardly any channels could not be read. That a ditch beside every paddy is a Meiji anachronism is likewise the record's reading of that contrast: the Ishikawa method of 1887 put each squared parcel on a channel, and the 1899 law set out to build irrigation and drainage works, not in so many words a ditch to every paddy. The widths are weaker than they look.
-    The third of a meter is a modern design MINIMUM rather than a measured ditch, and the Chinese doctrine is
-    carried by a 2021 provincial standard for consolidated farmland, so what it gives is the doctrine and not
-    a premodern layout. The national standard the record once leaned on for both is readable nowhere and is
+    showed saying such districts have hardly any channels could not be read. That a ditch beside every paddy is a Meiji anachronism is likewise the record's reading of that contrast: the Ishikawa method of 1887 put each squared parcel on a channel, and the 1899 law set out to build irrigation and drainage works, not in so many words a ditch to every paddy. The widths are drawn at true size on a ladder whose rungs are each dated before modern times: the head race's 6 ft matches the central canal of an excavated early paddy and a channel fixed by rule in 1537, and every drawn width but the drain's outfall has a width from before modern times beside it.
+    The third of a meter is a modern design MINIMUM rather than a measured ditch, though the Rites of Zhou already name a finest field channel of about a foot, and the right-angle rule is carried by the classical commentary on the Rites of Zhou, the Song polders of the Lake Tai plain and the jori grid, so the rule is premodern and not a modern standard's invention. The national standard the record once leaned on for both is readable nowhere and is
     not cited. And the Kishu attribution is the layout's, not the name's: the school is attested for river
     channelization rather than for a field plan. Nor is the shape of this one drawn from a survey: the head
     race's length from the intake to the fork follows the fan's geometry, the record giving no distance. The
@@ -85,8 +83,9 @@ class DrainageDitch(Kind):
     gathering what runs out of the basins, and its run onward - into the pond at the field's foot, into the
     passing brook, or off the edge of the map.
 
-    Why: Supply and drainage are kept apart on the ground, as modern field consolidation lays them out, the supply along the high margins and the one
-    collector on the lowest line, so that every plot can be filled and emptied on its own; before modern
+    Why: Supply and drainage are kept apart on the ground, the supply along the high margins and the one
+    collector on the lowest line - the layout of the Edo reclamation of the Minuma reservoir in 1728, its supply canals a
+    step higher along the edge and its drain on the paddies' lowest ground; before modern
     consolidation the water that left a village's paddies went on down to the river, or to the next field, to
     be used again below. On a comb field the collector widens as it goes - a thread where it starts
     between the last plots, its full width where it leaves the field - because every plot it passes adds that
@@ -97,8 +96,7 @@ class DrainageDitch(Kind):
     lower on the ground than the end it starts from. It lets its water go at its lowest point - its low end, or partway along where its run meets a sink - off the map, into
     the passing brook, or into the pond at the field's foot, whichever lies below it.
 
-    Note: The collector's form and its separation from the supply net are read, as the layout of modern
-    consolidation, and so is a drain letting its water go into a river or a natural watercourse, in a modern
+    Note: The collector's form and its separation from the supply net are read, as an Edo layout (Minuma, 1728), and so is a drain letting its water go into a river or a natural watercourse, in a modern
     design standard and in a Saitama drain, which its article does not date, that carried the spent water of a district its canals watered in the
     Edo period; whether it widens along its run follows the field it drains; it is drawn for every hamlet,
     a deliberate trade over the older field-to-field and combined forms the record also holds, so a reader
@@ -123,7 +121,7 @@ class Weir(Kind):
     """
     What: A low bar thrown across the brook at the intake, set at a slant so that it runs diagonally upstream
     from the point where the head race leaves the bank. Each weir hamlet builds it in one of four ways: a fence
-    of driven stakes with reed woven between them, a frame of stakes and logs packed with clay, a crib of
+    of driven stakes with brushwood woven between them, a frame of stakes and logs packed with clay, a crib of
     timber packed with stone, or a course of stone-filled baskets.
 
     Why: A weir does not take the brook - it raises its surface a little, so that water enters the canal
@@ -143,12 +141,14 @@ class Weir(Kind):
     builds is rolled per settlement with an even chance, and that evenness is a guess, as is the even chance
     of a weir at all. Each form is drawn at its own thickness: the baskets at their read diameter, about 2 ft;
     the fence at about 1.5 ft, wider than a row of stakes so that it can be seen; the frame and the crib at
-    5 ft, a guess, no source read giving the thickness of a village weir.
+    5 ft, a guess, no source read giving the thickness of a village weir. The woven stake fence is ancient - the
+    shigarami, stakes woven with brushwood or bamboo across a river, is in the Man'yoshu of the 8th century - but a
+    weave of reed is found only in a present-day weir, so the fence is woven with brushwood.
 
     Name: weir
     Covers: `weirs` - the bar across the brook at a weir hamlet's intake
     Label: convention
-    Sources: maff-toshuko-history, jsidre-miwa-2023, jawiki-seki, japanriver-koborebanashi-21, wangzhen-nongshu-18, suido-ishizue-iseki, hrr-agagawa-dento, kotobank-jakago, people-zhishui-2025, pwsannong-quxi
+    Sources: maff-toshuko-history, jsidre-miwa-2023, jawiki-seki, japanriver-koborebanashi-21, wangzhen-nongshu-18, suido-ishizue-iseki, kotobank-shigarami, hrr-agagawa-dento, kotobank-jakago, people-zhishui-2025, pwsannong-quxi
     Entry: research/water.html - 'Is there a weir at the intake', 'What was a village weir built of', 'What does the intake mouth look like', 'Where does the brook stop being a brook and become the ditch'
     """
 
@@ -368,7 +368,8 @@ class Well(Kind):
     stands, not how much ground it takes. A hand-dug well's shaft is about 1 m across, big enough for a
     person to work in, under a well house that is posts and a roof and nothing more; the width of the curb
     frame is read from one bucket well measured for a book of old implements, 118 cm square - about 4 ft. The Edo aqueduct intake is read, and of the village figures only these are:
-    the capacity (Sphere: one open well serves about 400 inhabitants), and that digging was costly so
+    the capacity (a well served several hundred - late-Qing Beijing at least about 650 persons to a well, a capital's
+    figure), and that digging was costly so
     shared wells were the majority; the one-to-three count, the settled-and-boiled surface water, the
     subscription financing, the typical two, the households-per-well ratio, and the shallow water table that
     makes a farmstead's own well cheap (the groundwater paper gives no depth) were searched for and not
@@ -378,7 +379,7 @@ class Well(Kind):
     Name: well
     Covers: `wells` - the wellheads
     Label: convention
-    Sources: sphere-2004-water, saijo-mizu-rekishikan, kotobank-idoyakata
+    Sources: qq-2024-beijing-wells, saijo-mizu-rekishikan, kotobank-idoyakata
     Entry: research/urban-features.html - 'Wells - the research, and the deliberate liberty', 'Communal wells and the samurai exception'; research/homesteads.html - 'Does a DISPERSED hamlet's outlying farm have its own well?'
     """
 

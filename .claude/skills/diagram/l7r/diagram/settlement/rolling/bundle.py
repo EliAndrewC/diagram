@@ -6,8 +6,9 @@ Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.
 import math
 from typing import TYPE_CHECKING, Any
 
-from ..homestead_parts.fixture_seats import FixtureForms, lay_fixtures
+from ..homestead_parts.fixture_seats import FixtureForms, FixtureUnlaid, lay_fixtures
 from ..shrines_wells.byres import BYRE_FT, YARD_SHED_GAP_FT, byre_part
+from .lot import kura_rect
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -120,10 +121,13 @@ class BundleGeomMixin:
         def moved(r: Any) -> Any:
             return None if r is None else (r[0] + hx, r[1] + hy, r[2], r[3])
 
-        base: dict[str, Any] = {k: ([moved(r) for r in v] if k == "gardens" else {f: moved(r) for f, r in v.items()} if k == "fixtures" else moved(v)) for k, v in tpl.items()}
+        base: dict[str, Any] = {
+            k: ([moved(r) for r in v] if k == "gardens" else {f: moved(r) for f, r in v.items()} if k == "fixtures" else v if k in ("fixture_notes", "unlaid") else moved(v)) for k, v in tpl.items()
+        }
         frame = base.pop("_frame", None)
         turn = self._turn_at(hx, hy) if rot is None else rot
         self._rake_parts(base, hx, hy, turn)
+        base["turn"] = turn  # the parts' turn, so a reader of their true sizes (`access.doors_of`) measures them as drawn
         # `turned_box` for every part, its turn's cosine and sine taken once (the same arithmetic, part by part)
         _th = math.radians(turn)
         _c, _s = abs(math.cos(_th)), abs(math.sin(_th))
@@ -230,7 +234,8 @@ class BundleGeomMixin:
             base["gardens"] = beds  # 1 bed normally; 2 (flanking / stacked / side-by-side) when fragmented
             base["garden"] = beds[0]  # primary bed (kept for the shading score + back-compat)
             if shed:  # a north-wall kura, reserved so a neighbor never lands on it
-                base["shed"] = (hx, hy - 0.60 * hh, 0.46 * hw, 0.30 * hh)
+                _kx, _ky, _kw, _kh = kura_rect(hw, hh, "N")  # the drawn annex (`house`, feature 280 M18: 1.67 to one)
+                base["shed"] = (hx + _kx, hy + _ky, _kw, _kh)
             # THE HOUSEHOLD'S BEAST, a part of its homestead (feature 287, homes H06): a keeper's byre - the inner stable's
             # arm or the outer stable's shed, on the flank away from the garden - is laid in the bundle, so the envelope
             # admits the household only with room for it and no later stage can take that room (`byre_part`)
@@ -289,8 +294,14 @@ class BundleGeomMixin:
         ground = [rel(base["yard"]), *(rel(g) for g in base["gardens"])]
         forms = getattr(self, "_fixture_forms", None) or FixtureForms()
         annex = rel(base["byre"]) if base.get("byre") is not None else None
-        laid = lay_fixtures(kinds, hw, hh, roofs, ground, rel(base["yard"]), shed, lambda salt: self._hjit(sx, sy, salt), forms, self.px, annex)
+        notes: dict[str, Any] = {}
+        try:
+            laid = lay_fixtures(kinds, hw, hh, roofs, ground, rel(base["yard"]), shed, lambda salt: self._hjit(sx, sy, salt), forms, self.px, annex, notes)
+        except FixtureUnlaid as refused:  # a bath room or a wood shed with no seat in this layout: the fit refuses it (feature 280)
+            base["unlaid"] = str(refused)
+            return
         base["fixtures"] = {k: (hx + r[0], hy + r[1], r[2], r[3]) for k, r in laid.items()}
+        base["fixture_notes"] = notes  # the rolled sizes and the bath room's wall (feature 280), for the record the drawing reads
 
     def _rake_parts(self: Settlement, base: dict[str, Any], hx: float, hy: float, rot: float) -> None:  # type: ignore[misc]
         """Carry the yard, the garden bed(s) and the kura round the house center by the house's rake, in place.

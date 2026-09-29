@@ -182,3 +182,12 @@ def test_a_free_end_run_on_past_its_junction_to_nothing_is_cut_back_to_it() -> N
     far = [(700.0, 1241.1), *spur[1:]]
     assert B.cut_stub_ends(far, way, [], WorkedGround([])) == far, "too long a run to be a stub"
     assert B.cut_stub_ends(spur, [*way, ((594.7, 1200.0), (594.7, 1300.0))], [], ground) == spur, "the end on a way"
+
+
+def test_the_pass_cuts_a_free_end_stub_back_to_its_junction() -> None:
+    """`cut_past_the_junction` on the manifest (feature 280: no pool roll of the re-packed layouts draws such a stub)."""
+    spur = [(594.7, 1241.1), (567.0, 1239.4), (570.0, 1300.0), (600.0, 1400.0)]
+    s = _StubSettlement(lanes=[[(567.0, 1000.0), (567.0, 1239.4)], spur])
+    assert B.cut_past_the_junction(s) == 1
+    assert s.M["lanes"][1]["pts"] == [list(q) for q in spur[1:]]
+    assert B.cut_past_the_junction(s) == 0, "and a second pass finds nothing"

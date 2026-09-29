@@ -246,6 +246,11 @@ def test_the_linear_frontage_stops_once_the_households_are_housed_with_seats_sti
     # never reserved on the toe, `wood_share.ground_blocks`) - the pass under test is the frontage's, so the toe is not drawn
     monkeypatch.setattr(s, "toe_band", lambda *a, **kw: None)
     monkeypatch.setattr(access_mod, "parts_clear", lambda *a: True)  # ...nor a corridor's own parts (`access.parts_clear`)
+    # ...nor the fixtures and the wood shares: under feature 280's forms (the wood shed 24 x 12 ft a ken off its wall, the
+    # bath room, the 1.67-to-one kura) the toy's frontage seats no longer held a household's parts and its wood together,
+    # and the pass's quota, not the parts, is under test (`test_fixture_seats.py` and `test_wood_share.py` are theirs)
+    monkeypatch.setattr(stages, "fixture_quota", lambda *a: {})
+    monkeypatch.setattr(stages, "install_wood_shares", lambda *a: None)
     real, offers = stages.front_row, []
 
     def row(plan_: hg.SitePlan, count: int, **kw: object) -> list[object]:

@@ -641,7 +641,11 @@ def lay_sink(s: Settlement, plan: SitePlan) -> None:
         return
     # Sized to the settlement: a tameike serving ~15 households reads at roughly Ikegami's 116x74 px
     # (~230 x 150 ft), and the radius scales with the square root of the households it waters, since
-    # a reservoir's job is a VOLUME and its depth does not grow with the hamlet.
+    # a reservoir's job is a VOLUME and its depth does not grow with the hamlet. By AREA (feature 280 M12,
+    # research/fields/650): a pond that is its fields' only water took two or three tenths of the land in a Song
+    # manual of 1149; this one gathers the fan's drainage below a stream-fed field, so it is held well below that
+    # measure - a GUESS, since no page gives how much a feeding stream saves. No storage per hectare is used: the
+    # m3/ha figures once cited are on no page read, in any period.
     grow = math.sqrt(plan.spec.households / REF_HOUSEHOLDS)
     prx, pry = 116.0 * grow, 74.0 * grow
     # THE SET-BACK IS SOLVED, NOT PICKED. `pond_clear_of_field` wants the whole ellipse outside the

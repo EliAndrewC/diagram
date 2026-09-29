@@ -150,7 +150,10 @@ def unhooked(pts: Poly, others: Sequence[Poly]) -> Poly | None:
     if len(met) != 1:
         return None
     a, b = pts[-3], pts[-2]
-    hits = [x for u, v in _segs(met[0]) if (x := _seg_cross(a, b, u, v)) is not None]
+    # a long leg overshooting by a few feet crosses within the last 2% of it (Kashikawa: 7.6 ft past, on a 720 ft
+    # leg), so the crossing need only lie 0.1 ft inside the leg
+    near = min(0.02, 0.1 / max(math.dist(a, b), 1e-9))
+    hits = [x for u, v in _segs(met[0]) if (x := _seg_cross(a, b, u, v, near)) is not None]
     if not hits:
         return None
     return [*pts[:-2], min(hits, key=lambda x: math.dist(a, x))]
@@ -162,6 +165,10 @@ def _rounded(p: Poly) -> list[list[float]]:
 
 def straighten_joints(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
     """The pass (see the module docstring). Returns the number of joints rewritten."""
+    # A FIX THAT FAILED (feature 280, Kashikawa's skeleton lanes 8 and 10, bends 140 and 232 ft out in the grazing): pulling a
+    # stray bend in along the line to its neighbors' midpoint. Measured on both lanes, every step of ten was refused - the
+    # chord side crosses the farmhouse and its yard, so the clear bend is round the yard's far corner, not on that line. The
+    # fix is a re-route (future-work/farming-communities.md, "Found by feature 280's settlement-reviews").
     lanes: list[dict[str, Any]] = s.M.get("lanes") or []
     houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
     changed = 0
@@ -173,13 +180,15 @@ def straighten_joints(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
 
 
 def _one_hook(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> bool:
-    """Take the hook off the first lane end that has one and can lose it; False when none can."""
+    """Take the hook off the first lane end that has one and can lose it; False when none can. The connector is
+    read at its START only - the end on the web; its other end runs off the map (Kashikawa, feature 280: the
+    connector overshot a 3 ft lane by 7.6 ft and hooked back onto it, and no pass read a connector's hook)."""
     for i, ln in enumerate(lanes):
         p = _pts(ln)
-        if ln.get("connector") or len(p) < 3:
+        if len(p) < 3:
             continue
         others = [_pts(o) for k, o in enumerate(lanes) if k != i and len(o.get("pts") or []) >= 2]
-        for q, back in ((p, False), (p[::-1], True)):
+        for q, back in ((p[::-1], True),) if ln.get("connector") else ((p, False), (p[::-1], True)):
             new = unhooked(q, others)
             if new is None:
                 continue

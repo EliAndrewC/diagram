@@ -19,14 +19,19 @@ import random
 from collections.abc import Mapping
 from typing import Any
 
+from ..farm_fixtures import KURA_PARTS as KURA_PARTS
+from ..farm_fixtures import kura_rect as kura_rect
+
 #: The nucleated farmhouse's length and depth factors over its 46 x 28 ft base (`_try_place_bundle`): a minka grew by
 #: adding bays along the ridge, so the length varies a lot and the depth a little (the ranges are the placer's own).
 LENGTH_FACTORS = (0.85, 1.35)
 DEPTH_FACTORS = (0.90, 1.10)
 
-#: The share of plain farmhouses that carry a kura storehouse (research/homesteads, "Which farmhouses have a
-#: storehouse?": 0.2993 of the surveyed households).
-KURA_SHARE = 0.2993
+#: The share of plain farmhouses that carry a kura storehouse annex: ONE FARM IN EIGHT (feature 280 M20,
+#: research/homesteads/720 - a calibration on the one premodern count read, Kakimochi's 2 storehouses in 16 households,
+#: both powerful). The 0.2993 it was drawn at came from Sugiura's 1972 survey, modern. The headman keeps one always (his by
+#: the GM's ruling of 2026-07-21, `Settlement._try_place_bundle`), outside the lots.
+KURA_SHARE = 0.125
 
 #: No drawn farmhouse runs longer than this against its width (homes H08): the minka norm is about 1.3-2.5:1, and a
 #: footprint past 2.7:1 reads as a shed. The ladder's corner (1.35 x 46 over 0.90 x 28) is 2.46.
@@ -49,6 +54,23 @@ def _order(seed: int, salt: str, n: int) -> list[int]:
 def quota_carriers(seed: int, salt: str, n: int, p: float) -> list[bool]:
     """Which of `n` households (by seat ordinal) carry a part of share `p`: exactly `round(n * p)` of them."""
     return [quota_member(j, p) for j in _order(seed, salt, n)]
+
+
+#: The fixture kinds whose quota goes to the larger houses first (feature 280 M21, research/homesteads/720: "the storehouse
+#: and the sheds go to the larger houses first" - the wood shed, a building of its own on about four farmsteads in ten).
+LARGER_FIRST = frozenset({"woodpile"})
+
+
+def larger_first(seed: int, salt: str, sizes: list[tuple[float, float]], p: float) -> list[bool]:
+    """Which households (by seat ordinal) carry a part of share `p` that goes to the larger houses first: exactly as many
+    as `quota_carriers` gives (round(n x p)), taken largest footprint first (the size ladder's length x depth factors), the
+    seed-shuffled order breaking ties."""
+    n = len(sizes)
+    count = sum(quota_carriers(seed, salt, n, p))
+    order = _order(seed, salt, n)
+    ranked = sorted(range(n), key=lambda k: (-sizes[k][0] * sizes[k][1], order[k]))
+    keep = set(ranked[:count])
+    return [k in keep for k in range(n)]
 
 
 def size_ladder(seed: int, n: int) -> list[tuple[float, float]]:
@@ -86,8 +108,9 @@ class HouseholdLots:
         self.sizes = size_ladder(seed, n)
         self.kura = quota_carriers(seed, "kura", n, KURA_SHARE)
         self.byre = quota_carriers(seed, "byre", n, byre_share)
-        # THE FARMSTEAD FIXTURES, a quota per kind (feature 287, homes H32): exactly round(n x share) households keep each
-        self.fixtures = {k: quota_carriers(seed, f"fixture_{k}", n, p) for k, p in (fixture_shares or {}).items()}
+        # THE FARMSTEAD FIXTURES, a quota per kind (feature 287, homes H32): exactly round(n x share) households keep each -
+        # the wood shed on the LARGER houses first (`larger_first`, feature 280 M21), every other kind by the shuffled order
+        self.fixtures = {k: larger_first(seed, f"fixture_{k}", self.sizes, p) if k in LARGER_FIRST else quota_carriers(seed, f"fixture_{k}", n, p) for k, p in (fixture_shares or {}).items()}
 
     def fixtures_of(self, k: int) -> tuple[str, ...]:
         """The fixture kinds household `k` keeps, in the settlement's order of kinds."""
@@ -168,6 +191,14 @@ def record_parts(s: Any, rec: dict[str, Any], geom: Any, form: str | None) -> No
     boxes = (geom.get("boxes") or {}).get("fixtures") or {}
     if geom.get("fixtures"):  # the fixtures laid in the bundle (homes H32), drawn where they were laid (`farmstead_fixtures`)
         rec["fixtures"] = [{"kind": k, "x": r[0], "y": r[1], "w": r[2], "h": r[3], "box": list(boxes[k])} for k, r in geom["fixtures"].items()]
+        # ...with the size each was laid at (`fixture_ft`: the privy's and the bath room's are rolled per household, feature
+        # 280) and the wall the bath room took, so the drawing draws the laid footprint and records its seat
+        notes = geom.get("fixture_notes") or {}
+        for f in rec["fixtures"]:
+            if f["kind"] in (notes.get("ft") or {}):
+                f["ft"] = list(notes["ft"][f["kind"]])
+            if f["kind"] == "bath" and notes.get("bath_seat"):
+                f["seat"] = notes["bath_seat"]
     seats = geom.pop("wood", None)
     wood = getattr(s, "_wood", None)
     if seats is not None and wood is not None:  # its share of the wood floor (woods W25, plan D9), reserved and on the record

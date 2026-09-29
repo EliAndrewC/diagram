@@ -21,13 +21,14 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, knob_rng
 from l7r.diagram.settlement.farm_fixtures import STY_FT
+from l7r.diagram.settlement.fields.landuse import DIKEPOND_WATER_INSET
 
 from .consts import Pt
 from .plan import SitePlan
 
 # The per-hamlet share band, as a fraction of households - a GUESS (see the module docstring).
 STY_SHARE = (0.25, 0.50)
-BANK_INSET_FT = 5.5  # half the ~11 ft bank between the parcel edge (the canal) and the water inset
+BANK_INSET_FT = DIKEPOND_WATER_INSET / 2  # half the bank between the parcel edge (the canal) and the water inset (feature 280 M58)
 
 
 def _centroid(poly: list[Any]) -> Pt:
@@ -74,6 +75,13 @@ def sty_on_near_half(seat: Pt, parcel: list[Any], hc: Pt, margin: float = 0.0) -
     return math.dist(seat, hc) + margin <= math.dist(_centroid(parcel), hc)
 
 
+def sty_in_reach(s: Settlement, seat: Pt, houses: list[Any]) -> bool:
+    """THE RULE (feature 280, settlement-review of Kuwabata; carried into feature 287's placer): a sty stands within
+    `STY_HOUSE_REACH_FT` of a farmhouse - it is a household's. The placer and its test read this one predicate; the
+    reservation asks it of the seat's center, before the houses stand."""
+    return any(math.dist(seat, (float(h["x"]), float(h["y"]))) <= s.px(STY_HOUSE_REACH_FT) for h in houses)
+
+
 STY_RESERVE_REACH_FT = (
     24.0  # the largest footprint's half-diagonal a reserved sty seat is held clear of - a farmhouse of about 40 x 28 ft; a GUESS at the envelope, not a researched figure (feature 287, water W50)
 )
@@ -97,7 +105,14 @@ def reserve_sty_seat(s: Settlement, plan: SitePlan) -> tuple[Pt, float, int] | N
         return None
     for i in order:
         par = ponds[i]["parcel"]
-        seat = next((((x, y), rot) for (x, y), rot in _bank_seats(par, toward) if sty_on_near_half((x, y), par, toward, 0.5) and s.pond_fixture_fits(x, y, rot)), None)
+        seat = next(
+            (
+                ((x, y), rot)
+                for (x, y), rot in _bank_seats(par, toward)
+                if sty_on_near_half((x, y), par, toward, 0.5) and sty_in_reach(s, (x, y), [{"x": toward[0], "y": toward[1]}]) and s.pond_fixture_fits(x, y, rot)
+            ),
+            None,
+        )
         if seat is None:
             continue
         (x, y), rot = seat
@@ -105,13 +120,19 @@ def reserve_sty_seat(s: Settlement, plan: SitePlan) -> tuple[Pt, float, int] | N
         s.block_polys.append([(x + reach * math.cos(math.tau * k / 16), y + reach * math.sin(math.tau * k / 16)) for k in range(16)])
         s.__dict__["_sty_seat"] = ((x, y), rot, i)
         return (x, y), rot, i
-    raise StyRefused(f"{plan.spec.name}: no bank seat on the near half of any of {len(order)} grow-out pond(s) clears the sluices for the sty the hamlet owes")
+    raise StyRefused(f"{plan.spec.name}: no bank seat on the near half of any of {len(order)} grow-out pond(s), within reach of the seat, clears the sluices for the sty the hamlet owes")
 
 
 class StyRefused(ValueError):
     """A dike-pond hamlet whose sty cannot be seated within its rules (feature 287 wave 5, water W50/W51): it owes at least
     one (feature 150 A3) on the near half of a grow-out pond (`sty_on_near_half`), and no seat fits. Refused, naming it,
     as `SeatRefused` and `SiteRefused` refuse theirs - never a hamlet drawn with none."""
+
+
+STY_HOUSE_REACH_FT = 320.0
+"""How far from a farmhouse a sty may stand: the farthest main drew (feature 233's sties, 155-320 ft). A sty is a household's,
+and once feature 280's fry village took the smaller ponds the grow-out ponds left lay out to the block's far end - sties
+480-1,235 ft from any house (settlement-review of Kuwabata); a household with no grow-out pond in reach keeps none."""
 
 
 def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
@@ -148,7 +169,7 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
     reserved = s.__dict__.get("_sty_seat")
     if reserved is not None:
         (rx, ry), rrot, ri = reserved
-        if sty_on_near_half((rx, ry), ponds[ri]["parcel"], hc, 0.5) and s.pond_fixture_fits(rx, ry, rrot):
+        if sty_on_near_half((rx, ry), ponds[ri]["parcel"], hc, 0.5) and sty_in_reach(s, (rx, ry), houses) and s.pond_fixture_fits(rx, ry, rrot):
             s.pig_sty(rx, ry, rot=rrot, pond=ri)
             done += 1
             order = [i for i in order if i != ri]
@@ -166,14 +187,19 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
         # cluster than the pond's own PARCEL center is (`_centroid(parcel)` below), which keeps the sty on
         # the side of the water the households are on. Figures: specs/233-pigsty-clear-of-the-sluice/research.md R7.
         par = ponds[i]["parcel"]
-        seat = next((((x, y), rot) for (x, y), rot in _bank_seats(par, hc) if sty_on_near_half((x, y), par, hc, 0.5) and s.pond_fixture_fits(x, y, rot)), None)
+        # ...AND WITHIN A HOUSEHOLD'S REACH (feature 280, `sty_in_reach`): a seat past every farmhouse's reach is no seat
+        seat = next(
+            (((x, y), rot) for (x, y), rot in _bank_seats(par, hc) if sty_on_near_half((x, y), par, hc, 0.5) and sty_in_reach(s, (x, y), houses) and s.pond_fixture_fits(x, y, rot)),
+            None,
+        )
         if seat is None:
             continue
         (x, y), rot = seat
         s.pig_sty(x, y, rot=rot, pond=i)
         done += 1
-    # AT LEAST ONE, OR THE SITE IS REFUSED (feature 287 wave 5, water W50): the reserved seat is off the near half for the
-    # houses as seated and every other near-half seat is built on - no seat within the rules, so none is drawn and the
-    # hamlet is refused by name rather than shipped without the sty its archetype owes.
+    s.M["meta"]["pond_stock"]["drawn"] = done
+    # AT LEAST ONE, OR THE SITE IS REFUSED (feature 287 wave 5, water W50): the reserved seat is off the near half or out of
+    # every household's reach for the houses as seated and every other such seat is built on - no seat within the rules,
+    # so none is drawn and the hamlet is refused by name rather than shipped without the sty its archetype owes.
     if done == 0 and any(p.get("kind") != "fry" for p in ponds):
-        raise StyRefused(f"{plan.spec.name}: no near-half bank seat of any grow-out pond is free for the sty the hamlet owes")
+        raise StyRefused(f"{plan.spec.name}: no near-half bank seat of any grow-out pond within a household's reach is free for the sty the hamlet owes")

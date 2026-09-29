@@ -1,0 +1,8 @@
+{
+ "term": "evapotranspiration",
+ "def": "The water a flooded field loses to the air - by evaporation from the water and soil and by transpiration through the rice plants' leaves - counted with what seeps down as the daily loss the supply must make good.",
+ "variants": [
+  "evapotranspiration",
+  "evapotranspiration-and-percolation"
+ ]
+}

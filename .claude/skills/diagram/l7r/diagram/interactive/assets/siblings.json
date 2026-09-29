@@ -1,14 +1,8 @@
 {
   "texts": {
-    "crop-vs-perimeter": "The crop dike is the wall AROUND one pond - a planted collar of dredged mud, part of the loop that feeds the fish. The perimeter dike is the polder's own embankment, the one that holds the river off the whole settlement. You can walk a crop dike round in about three minutes; the polder's takes the better part of twenty, and it is the reason the hamlet is dry.",
-    "pond-vs-polder-sluice": "Both are boards in a cut, and the difference is which wall they sit in. A pond sluice is a gate in a fish pond's own dike, worked by the household that farms that pond - it moves water between pond and channel. A sluice gate is set in the POLDER dike, and it is what lets water in or out of the settlement as a whole; nobody opens one on their own account."
+    "crop-vs-perimeter": "The crop dike is the wall AROUND one pond - a planted collar of dredged mud, part of the loop that feeds the fish. The perimeter dike is the polder's own embankment, the one that holds the river off the whole settlement. You can walk a crop dike round in about three minutes; the polder's takes the better part of twenty, and it is the reason the hamlet is dry."
   },
   "pairs": [
-    [
-      "pond sluice",
-      "sluice gate",
-      "@pond-vs-polder-sluice"
-    ],
     [
       "mulberry dike",
       "perimeter dike",
@@ -233,11 +227,6 @@
       "irrigation ditch",
       "drainage ditch",
       "The irrigation ditches bring the water in - the head race from the intake on the brook, the supply canals along the high margins, the delivery ditches down between the plots. The drainage ditch takes it away: one collector along the field's lowest line, wider at its outfall than the head race that fed the same ground, running on to the pond, the passing brook or the edge of the map."
-    ],
-    [
-      "irrigation ditch",
-      "pond sluice",
-      "An irrigation ditch carries water through the CROP - it is the paddy fabric's own plumbing, cut between the plots and crossed here and there by a log, a deck of logs under earth or a plank. A pond sluice is a gate in a dike: a cut closed with boards that lets one fish pond take water in at its high side and let it out at its low side. The ditch moves water along; the sluice decides whether it moves at all."
     ],
     [
       "stream",

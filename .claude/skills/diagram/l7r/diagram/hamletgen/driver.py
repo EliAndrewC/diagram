@@ -91,7 +91,7 @@ STAGES = (
     stage_track,  # the connector and the field spur, derived from the placed houses
     stage_appurtenances,
     stage_pond_stock,  # a dike-pond hamlet's pig sties, on the ponds nearest the houses (feature 150 A3; the duck pen retired, 269 B32)
-    stage_burial,  # the hamlet's own burial ground at its edge (feature 273): seated against the placed houses and wells, reserving ground the web and the scrub work around
+    stage_burial,  # where the hamlet's dead lie - the village's ground, nothing drawn (feature 273; feature 280 M68): seated against the placed houses and wells, reserving ground the web and the scrub work around
     # THE WEB RUNS LAST OF THE BUILT THINGS, after the byres, sheds and wells - not just after the
     # houses. It FILLS leftover ground, so everything that RESERVES ground has to be seated first;
     # that is the same rule that put it after `stage_homesteads` in the first place, applied

@@ -73,7 +73,7 @@ def test_a_seating_draws_a_well_at_every_pocket_it_laid() -> None:
     from l7r.diagram.hamletgen.homesteads import stage_homesteads
     from l7r.diagram.hamletgen.homesteads.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
 
-    s, plan = _toy_hamlet(10)
+    s, plan = _toy_hamlet(10, seed=4)  # seed 4: under feature 280's forms seed 3's margin seats eight of ten and is refused
     stage_homesteads(s, plan)
     pockets = [h for h in s.M["houses"] if h.get("well_pocket")]
     assert pockets and pockets[0] is s.M["houses"][0], "the first household carries one"
@@ -108,13 +108,29 @@ def test_a_household_bamboo_strip_stands_on_its_house_bank_and_names_its_house()
     assert got, "some strips seated over the seeds"
 
 
-def test_the_woodpile_form_a_homestead_draws_is_the_one_the_predicate_names() -> None:
-    """Feature 287, homes H33: the kizuma where the knob rolled it and the belt stands within reach, else the eaves stack."""
-    from l7r.diagram.hamletgen.homesteads.fixtures import woodpile_form_for
+def test_a_household_bamboo_strip_gives_way_to_every_reserved_copse_seat() -> None:
+    """Feature 280 keeps the copse two crowns off the bamboo, feature 287 woods W25 plants every reserved seat: a strip is
+    refused where a household's reserved seat falls in its keep-out (`stand_spares_seats`), and the next side tried."""
+    from l7r.diagram.hamletgen.homesteads.bamboo import household_bamboo
+    from l7r.diagram.settlement.homestead_parts.bamboo_keepout import stand_spares_seats
 
-    assert woodpile_form_for("kizuma", True) == "kizuma"
-    assert woodpile_form_for("kizuma", False) == "eaves"
-    assert woodpile_form_for("shed", False) == "shed" and woodpile_form_for("eaves", True) == "eaves"
+    for seed in range(40):
+        s, plan = _toy_hamlet(10, seed=seed)
+        plan.bamboo = "homestead"
+        house = {"x": 600.0, "y": 400.0, "w": 46.0, "h": 28.0, "rot": 0.0, "shed_side": "N"}
+        first = household_bamboo(s, plan, [house])
+        if not first:
+            continue
+        ring = first[0]
+        seat = (sum(p[0] for p in ring) / 4, sum(p[1] for p in ring) / 4)
+        s, plan = _toy_hamlet(10, seed=seed)
+        plan.bamboo = "homestead"
+        s.M["houses"] = [{**house, "wood_share": {"seats": [list(seat)]}}]
+        for r in household_bamboo(s, plan, [house]):
+            xs, ys = [p[0] for p in r], [p[1] for p in r]
+            assert stand_spares_seats((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2, max(xs) - min(xs), max(ys) - min(ys), [seat], s.bscale)
+        return
+    raise AssertionError("no seed seated a strip")
 
 
 # ---- homes H06: the shared sheds' pockets, reserved before any house ----------------------------------------------

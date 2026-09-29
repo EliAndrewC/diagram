@@ -111,17 +111,17 @@ class WritingRoom(Kind):
 
 class ShrineApproach(Kind):
     """
-    What: The approach - the path that runs from where the way enters the precinct under the arches to the hall's
+    What: The approach - the path that runs from where the way enters the precinct under its arch to the hall's
     step.
 
     Why: A shrine is entered along its approach, and the arch stands where the approach enters the shrine's ground; a
-    row of arches along it is a donors' row, each arch a gift. So the path runs straight up the axis, and the arches
+    row of arches along it is a donors' row, each arch a gift - before modern times only at a great Inari site. This setting raises arches along any shrine's approach, a deliberate deviation from the historical norm. So the path runs straight up the axis, and the arches
     stand over it.
 
-    Note: The approach and the arch at its entry are read; its width is a guess, and the arches' number and pitch are
+    Note: The approach and the arch at its entry are read; a row of arches at an ordinary shrine is attested only in modern times, and drawn here as a deliberate deviation; its width is a guess, and the arches' number and pitch are
     the GM's rulings, not the record's.
 
-    Caveat: its width is a guess, and the arches' number and pitch are the GM's rulings, not the record's.
+    Caveat: a row of arches at an ordinary shrine is attested only in modern times, and drawn here as a deliberate deviation; its width is a guess, and the arches' number and pitch are the GM's rulings, not the record's.
 
     Name: approach
     Covers: the path from the precinct's edge to the hall
@@ -180,26 +180,28 @@ class SacredTree(Kind):
 
 class SweptClearing(Kind):
     """
-    What: The swept ground round the building - bare earth kept clear about it, its edge ragged, with the forecourt
-    before the hall's step where the villagers gather.
+    What: The open ground of the precinct round the building - bare earth left clear of the wood about it, its edge
+    ragged, with the forecourt before the hall's step where the villagers gather.
 
-    Why: The ground at a shrine was kept swept, its wood left standing, and the parish did the sweeping;
-    swept ground spreads from where people walk and stops where they do not, so its edge is ragged, never ruled.
+    Why: A village shrine's precinct held its wood and open ground, the wood covering some or nearly all of it and the
+    rest open, and the open ground is where the hall, its sanctuary and the forecourt stand. Open ground spreads from
+    where people walk and stops where they do not, so its edge is ragged, never ruled. That the ground about a shrine
+    was swept is found only in present-day folklore that gives no date, so the map claims no sweeping.
 
-    Note: The swept ground and the parish's keeping of it are read; its ragged edge is the project's reading of how
-    such ground spreads, and the forecourt's depth is a guess from its use.
+    Note: The precinct's open ground is read; its ragged edge is the project's reading of how such ground spreads, and
+    the forecourt's depth is a guess from its use.
 
     Caveat: its ragged edge is the project's reading of how such ground spreads, and the forecourt's depth is a guess
     from its use.
 
-    Name: swept clearing
-    Covers: the swept ground and the forecourt about the building
+    Name: precinct clearing
+    Covers: the open ground and the forecourt about the building
     Label: accurate
-    Sources: chinju-no-mori-jawiki, sando-jawiki, kotobank-ujiko, ndl-crd-nanukabon
+    Sources: chinju-no-mori-jawiki, sando-jawiki
     Entry: research/religion-and-death.html - 'Is the ground around a shrine or a grave swept clear of scrub?', 'Why does that swept ground have a ragged edge?'
     """
 
-    key = "swept clearing"
+    key = "precinct clearing"
 
 
 class Footpath(Kind):
@@ -226,12 +228,12 @@ class GuardianFigures(Kind):
     What: A pair of stone guardian figures facing each other across the approach - lion-dogs, or at a Bishamon shrine
     his tigers.
 
-    Why: Stone guardian pairs were villagers' donations of the late Edo period, so a shrine has them only as its parish
+    Why: Stone guardian pairs were commoners' donations, multiplying from the Edo period on, so a shrine has them only as its parish
     grows richer; at average wealth there are none.
 
-    Note: The donations and their date are read; which shrines carry them is the wealth knob.
+    Note: The donations and their date are read, as are Bishamon's tigers at named temples; that the tigers reach a village shrine is a guess, and which shrines carry them is the wealth knob.
 
-    Caveat: which shrines carry them is the wealth knob.
+    Caveat: that the tigers reach a village shrine is a guess, and which shrines carry them is the wealth knob.
 
     Name: guardian figures
     Covers: the guardian pair beside the approach
@@ -310,12 +312,12 @@ class SumoRing(Kind):
     """
     What: A sumo ring on the shrine's ground, for the bouts dedicated to its deity.
 
-    Why: Dedicatory sumo was held at ordinary shrines, so a ring is attested at village scale; it is a knob, absent by
+    Why: The ring's consecration rite is performed for the sumo offered at shrines across the country, though no page read dates it or places a ring at a village shrine; it is a knob, absent by
     default.
 
-    Note: The dedicatory bouts at ordinary shrines are read; whether a shrine has a ring is a knob.
+    Note: The rite for sumo offered at shrines across the country is read, in the present tense and undated; a ring at a village shrine is not read, and whether a shrine has one is a knob.
 
-    Caveat: whether a shrine has a ring is a knob.
+    Caveat: a ring at a village shrine is not read, and whether a shrine has one is a knob.
 
     Name: sumo ring
     Covers: the sumo ring

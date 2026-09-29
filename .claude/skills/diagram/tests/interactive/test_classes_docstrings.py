@@ -27,6 +27,12 @@ SINCE_189: dict[str, tuple[str, ...]] = {
     "banana dike": (),
     "vegetable ground": (),
     "duck pen": (),
+    # feature 280 M57 (research/archetypes/150): a sluice through each pond's dike is a modern manual's form - retired
+    "pond sluice": (),
+    # feature 280 (settlement-review of Inashiro): the heading named the form eliminated - the bath is a room joined to the
+    # house (M22) and the firewood is kept in a wood shed (M21); renamed, the prose and data carried over unchanged
+    "bathhouse": ("bath room",),
+    "woodpile": ("wood shed",),
 }
 #: Kinds the map draws that the snapshot's registry did not have at all.
 ADDED_SINCE_189: tuple[str, ...] = (
@@ -137,7 +143,17 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     the one centered mat and the south-edge rack were accurate, and research homesteads 025 and 505 found the harvest yard
     covered in mats and racks by the house only where the harvest weather is changeable - so the glyph now draws mats over
     the whole yard, fewer than covered it (a CONVENTION, the GM's own form), and a rack by the house on its weather; the
-    garden sibling's "bare" moved with it."""
+    garden sibling's "bare" moved with it.
+
+    Feature 280 (the modern-only sweep, the GM's ruling of 2026-09-28 that nothing attested only in modern times is drawn)
+    moved data fields under the same bar, each with the prose that research rewrote: `woodpile`'s `label` guess to
+    accurate and its `covers` to the wood shed (homesteads/212, 720 - the shed attested in 1824 and the Kakimochi count,
+    the open stack and the kizuma not drawn); `fry pond`'s `label` to accurate and its `covers` to a fry village's ponds
+    (archetypes/200 - the two attested kinds of village, now rolled); `bathhouse`'s `covers` to the bath room joined to the
+    house (homesteads/740); `storage shed`'s to the storehouse against the farmhouse (720, 440); `pig sty`'s to the pond
+    bank (archetypes/171, 180 - no shed flushing into the pond); `shared bamboo grove`'s to the settlement's edge
+    (vegetation/640). The same rewrites moved the `sources` of those six and of farmhouse, privy, fish pond, bund, paddy
+    and well to the keys their new prose rests on."""
     before = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     added = {s for succ in SINCE_189.values() for s in succ} | set(ADDED_SINCE_189)
     assert set(SINCE_189) <= set(before) and not (added & set(before)), "the tables name snapshot keys and NEW keys only"

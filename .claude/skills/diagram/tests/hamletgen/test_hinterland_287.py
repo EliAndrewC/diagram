@@ -175,6 +175,27 @@ def test_no_thicket_is_seated_on_a_lane() -> None:
     assert all(not point_in_poly(x, cy, r) for r in again for x in range(0, int(plan.W), 2)), "no stand stands on the tread"
 
 
+def test_the_thicket_gives_way_to_every_reserved_copse_seat() -> None:
+    """Feature 280 keeps the copse two crowns off the bamboo; feature 287 woods W25 plants every household's reserved seat.
+    So the thicket is seated with each reserved seat outside its keep-out (`stand_spares_seats`): a seat reserved where the
+    thicket stood moves the thicket, never the seat."""
+    from l7r.diagram.settlement.homestead_parts.bamboo_keepout import stand_spares_seats
+
+    plan = a_plan()
+    s = Settlement(plan.W, plan.H, seed=plan.spec.seed)
+    s.meta(name="B", scale="hamlet", ftpx=1, down_deg=90)
+    s.M["houses"] = [{"x": 700.0 + 60.0 * k, "y": 300.0, "w": 40.0, "h": 30.0} for k in range(3)]
+    plan.bamboo = "thicket"
+    (ring,) = bamboo_seats(s, plan)
+    cx, cy = sum(q[0] for q in ring) / len(ring), sum(q[1] for q in ring) / len(ring)
+    s.M["houses"][0]["wood_share"] = {"seats": [[cx, cy]]}  # a household's reserved seat where the thicket stood
+    plan.bamboo_roles = []
+    (moved,) = bamboo_seats(s, plan)
+    xs, ys = [q[0] for q in moved], [q[1] for q in moved]
+    box = ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2, max(xs) - min(xs), max(ys) - min(ys))
+    assert stand_spares_seats(*box, [(cx, cy)], s.bscale), "the thicket moved off the seat"
+
+
 # ---- woods W18: the belt's band on the wind's side of the houses ---------------------------------------------------
 
 

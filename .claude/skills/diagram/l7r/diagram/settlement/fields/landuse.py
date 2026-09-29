@@ -25,6 +25,45 @@ if TYPE_CHECKING:
 # THE DIKE CROP TYPES and the highlight class each draws (feature 150 A6; 269 B34 re-read the options - the
 # premodern plantings only, research/archetypes/230): one hamlet is one type.
 DIKE_CROP_CLASS = {"mulberry": "mulberry dike", "fruit": "fruit dike", "tea": "tea dike"}
+# THE POND'S WATER INSET INSIDE ITS PARCEL (feature 280 M58, research/archetypes/610): 23 ft of planted dike round the
+# water leaves about six parts in ten of a parcel water, the reading of Qu Dajun's figures for Jiujiang (1678) - the
+# oldest there are; every ratio written as a number is modern. It was 11 ft, which left 80%, wetter than any figure read.
+DIKEPOND_WATER_INSET = 23.0
+
+# A FRY VILLAGE'S NURSERY SHARE (feature 280 M60, research/archetypes/200): Qu Dajun (1678) has seven parts in ten of the pond
+# water at Jiujiang raising fry. Read as a share of the block's pond AREA - the record's reading, the smallest ponds first.
+FRY_VILLAGE_SHARE = 0.7
+
+
+MULBERRY_ROW_FT = 5.5
+"""The spacing between rows of coppiced mulberry across a bank: two rows on the 11 ft bank drawn before feature 280, with the
+4.4 ft pitch along a row, gave the bush per ~23 sq ft the GM ruled (the premodern spacing, research/archetypes/140)."""
+
+
+def mulberry_row_ts(band: float) -> list[float]:
+    """Where the mulberry rows run across a bank `band` wide, as shares of it from the water's edge: one row per
+    `MULBERRY_ROW_FT`, at least two (feature 280, settlement-review of Kuwabata: the bank widened to 23 ft kept two rows
+    and the bushes thinned from one per 23 sq ft to one per 47)."""
+    n = max(2, round(band / MULBERRY_ROW_FT))
+    return [0.08 + 0.84 * (k + 0.5) / n for k in range(n)]
+
+
+FRY_WATER = "#9FA898"  # the turbid fry water, a grayer, muddier green than the clear grow-out pond's #93B7AC - still water, not the polder grass #A6C398 (review, round 4)
+
+
+def fry_pond_ids(chosen: Sequence[Any], area: Any, share: float) -> set[int]:
+    """The ids of a fry village's fry ponds (feature 280 M60): the smallest parcels first, taken while their area stays
+    within `share` of the block's whole pond area - so the nursery water is about that share, never more."""
+    total = sum(area(p["poly"]) for p in chosen)
+    out: set[int] = set()
+    acc = 0.0
+    for p in sorted(chosen, key=lambda q: area(q["poly"])):
+        a = area(p["poly"])
+        if acc + a > share * total:
+            break
+        acc += a
+        out.add(id(p))
+    return out
 
 
 def line_cuts(poly: Sequence[Sequence[float]], px: float, py: float, dx: float, dy: float) -> list[tuple[float, float]] | None:
@@ -69,7 +108,15 @@ def row_cuts(poly: Sequence[Sequence[float]], y: float) -> list[tuple[float, flo
 
 class LandUseMixin:
     def apply_land_use(  # type: ignore[misc]
-        self: Settlement, net: dict[str, Any], overlay: str, rng: random.Random, fraction: float = 0.55, eligible: str = "wet", dike_crop: str = "mulberry", leftover: str = "rice"
+        self: Settlement,
+        net: dict[str, Any],
+        overlay: str,
+        rng: random.Random,
+        fraction: float = 0.55,
+        eligible: str = "wet",
+        dike_crop: str = "mulberry",
+        leftover: str = "rice",
+        fry_form: str = "none",
     ) -> int:
         """Overlay a LAND-USE archetype (feature 005 US4 `land_use_overlay`) onto an already-drawn comb field:
         recolor a FRACTION of the paddy plots (or, for tea, a hill-margin fringe) as the overlay crop, so a
@@ -173,19 +220,20 @@ class LandUseMixin:
             cpp = ch["pts"]
             chansegs += [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for a, b in zip(cpp, cpp[1:], strict=False)]
 
-        # FRY NURSERY PONDS (feature 150, GM 2026-08-28 choosing audit A5): fry are reared in small ponds before
-        # stocking the grow-out ponds - the delta's fry trade had its own Ming-era center (Miles 2003; the
-        # Sangyuanwei proverb 男贩鱼花). On the WHOLESALE archetype the smallest parcels of the block are
-        # designated fry ponds: no new ink, a record and a class of their own for the interactive map. The
-        # share (about one parcel in ten, one to three per hamlet) is a GUESS - nothing read gives a fry-pond
-        # count per household - and is labeled so in the class entry.
+        # FRY NURSERY PONDS (feature 150, GM 2026-08-28 choosing audit A5; feature 280 M60, research/archetypes/200): the
+        # ordinary delta hamlet BOUGHT its fry and kept no nursery ponds; the fry village of Jiujiang raised fry in seven
+        # parts of ten of its pond water (Qu Dajun, 1678) - the hamlet's `fry_form` (hamletgen `FRY_FORMS`). On a fry
+        # village the smallest ponds are the fry ponds, up to that share of the block's pond area (the smallest first is
+        # this record's assumption, 172): no new ink, a record and a class of their own for the interactive map. The one
+        # parcel in ten drawn before is on no page read, premodern or modern, and is gone.
         def _area(poly: Any) -> float:
             return float(abs(sum(poly[i][0] * poly[(i + 1) % len(poly)][1] - poly[(i + 1) % len(poly)][0] * poly[i][1] for i in range(len(poly))))) / 2
 
         fry_ids: set[int] = set()
-        if overlay == "mulberry_fishpond" and eligible == "all" and len(chosen) >= 4:
-            _n_fry = min(3, max(1, round(0.1 * len(chosen))))
-            fry_ids = {id(p) for p in sorted(chosen, key=lambda q: _area(q["poly"]))[:_n_fry]}
+        if overlay == "mulberry_fishpond":
+            self.M["meta"]["fry_form"] = fry_form
+            if fry_form == "fry_village":
+                fry_ids = fry_pond_ids(chosen, _area, FRY_VILLAGE_SHARE)
         for p in chosen:
             pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in p["poly"])
             cx = sum(v[0] for v in p["poly"]) / len(p["poly"])
@@ -194,7 +242,6 @@ class LandUseMixin:
             n += 1
         if dikeponds:
             self.M["dikeponds"] = dikeponds
-            self._landuse_dikepond_sluices(net, dikeponds)
         # the recolored plots (ponds / lotus) are FIELD GROUND, so the ditch net must draw OVER them: re-anchor
         # the LATE water block past this overlay. Without it a MEANDERING mosaic lateral, whose midpoint drifts
         # onto a pond parcel painted here (after the channels were queued), vanishes under it (test_villages
@@ -353,7 +400,7 @@ class LandUseMixin:
                 _s2 = max(0.7, 1.0 - (pen + 1.0) / max(1.0, _dm))
                 qpoly = [(cx + (qx - cx) * _s2, cy + (qy - cy) * _s2) for qx, qy in qpoly]
             bd, bpoly = self._rounded_pond(qpoly, inset=0.0, reach=8.0, rng=rng)
-            wd, wpoly = self._rounded_pond(qpoly, inset=11.0, reach=16.0, rng=rng)
+            wd, wpoly = self._rounded_pond(qpoly, inset=DIKEPOND_WATER_INSET, reach=16.0, rng=rng)
             # THE BANK IS A RING, NOT A DISK UNDER THE POND (feature 228, GM 2026-09-12, on Kuwabata's page: hovering
             # the mulberry dike "lights up not only the Mulberry Dyke itself, but the fish ponds Inside each Mulberry
             # dike ... basically the same behavior that we give to the perimeter dyke"). One path, the bank outline
@@ -366,7 +413,10 @@ class LandUseMixin:
             # the ring; measured on Kuwabata, 6% of the water area at the rim still lights), the ring's inner stroke
             # lies under the pond's own wider, later stroke, and the `dikeponds` records do not move.
             self.add(f'<path d="{bd} {wd}" fill-rule="evenodd" fill="#C2A772" stroke="#9C8558" stroke-width="1.2" stroke-linejoin="round" opacity="0.95"/>', cls=DIKE_CROP_CLASS[dike_crop])
-            self.add(f'<path d="{wd}" fill="{colors[overlay]}" stroke="#6C9CBE" stroke-width="1.4"/>', cls="fry pond" if fry else "fish pond")
+            # A FRY POND IS DRAWN TURBID (settlement-review of Kuwabata, feature 280): Qu Dajun (1678) - fry water is turbid,
+            # grown-fish water clear, and the color of the water tells what it holds (research/archetypes/200) - so a fry
+            # village reads as one without a hover
+            self.add(f'<path d="{wd}" fill="{FRY_WATER if fry else colors[overlay]}" stroke="#6C9CBE" stroke-width="1.4"/>', cls="fry pond" if fry else "fish pond")
             crown_q.append((qpoly, bd, cx, cy))  # crowns drawn after the late-water anchor (see below)
             # `bank` = the planted band's outer edge, recorded so mulberry_banks_clear_of_channels has
             # manifest teeth: the crowns fill the bank, so "no canal runs inside a bank" bounds the bushes
@@ -382,75 +432,6 @@ class LandUseMixin:
             self.add(f'<polygon points="{pts}" fill="{colors[overlay]}" stroke="#6C9CBE" stroke-width="1.6" stroke-linejoin="round"/>')
             self.add("".join(f'<circle cx="{cx + rng.uniform(-14, 14):.1f}" cy="{cy + rng.uniform(-10, 10):.1f}" r="{rng.uniform(2.5, 4):.1f}" fill="#C98BA6" opacity="0.85"/>' for _ in range(3)))
 
-    def _landuse_dikepond_sluices(self: Settlement, net: dict[str, Any], dikeponds: list[dict[str, Any]]) -> None:  # type: ignore[misc]
-        """Plumb each pond inlet-HIGH and outlet-LOW: a feeder from uphill, a drain to downhill, so the
-        whole dike-pond net runs in series down the slope from the high intake to the low outfall."""
-        # FEED + DRAIN SLUICES (GM 2026-07-22): a pond on a slope is plumbed inlet-HIGH, outlet-LOW so water
-        # flows DOWNHILL through it - so each pond gets TWO gates: a FEEDER from an uphill point on the creek
-        # network (water runs down INTO the pond at its uphill corner) and a separate DRAIN to a downhill
-        # point (water runs down OUT of it at its downhill corner). Each connects to the nearest channel OR
-        # neighbor pond that lies in the right fall direction, so the whole dike-pond net runs in series
-        # down the slope from the high intake to the low outfall. Drawn as `<line>` culverts (the channel
-        # z-order audit ignores them). See research/archetypes.html 'A dike-pond is fed and drained through sluice gates'.
-        dd = float(self.M["meta"].get("down_deg", 90))
-        _dx, _dy = math.cos(math.radians(dd)), math.sin(math.radians(dd))
-
-        def _fall(q: Pt) -> float:
-            return q[0] * _dx + q[1] * _dy
-
-        _cpts: Poly = []  # densified channel points - the creek-network connection candidates
-        for ch in net["channels"]:
-            cpp = ch["pts"]
-            for a, b in zip(cpp, cpp[1:], strict=False):
-                steps = max(1, int(math.hypot(b[0] - a[0], b[1] - a[1]) / 8))
-                for k in range(steps + 1):
-                    _cpts.append((a[0] + (b[0] - a[0]) * k / steps, a[1] + (b[1] - a[1]) * k / steps))
-        waters = [dp["water"] for dp in dikeponds]
-        _reach, _margin = 62.0, 8.0
-        # INDEXED, NOT COARSENED (GM 2026-08-26, feature 133 T16). `_target` used to scan EVERY densified
-        # channel point plus every other pond's outline for each of the ~1,000 sluice anchors - 7.8M
-        # `_fall` calls on a 522-plot comb, 3.2 s of a 4.4 s test (profiled). A connection must lie within
-        # `_reach`, so a point grid queried at that pad hands back only the candidates that can qualify.
-        # EXACT: the survivors are iterated in their ORIGINAL scan order (channel points first, then the
-        # ponds in index order, each in outline order), so the strict `d < bd` tie-breaking picks the same
-        # point the full scan did - verified on 16 variants x 2 seeds before this landed.
-        from l7r.diagram.settlement._geom import boxed_grid
-
-        _cand_grid = boxed_grid(
-            [(n, -1, q[0], q[1], q[0], q[1], q[0], q[1]) for n, q in enumerate(_cpts)]
-            + [(len(_cpts) + n, j, q[0], q[1], q[0], q[1], q[0], q[1]) for n, (j, q) in enumerate((j, q) for j, w2 in enumerate(waters) for q in w2)]
-        )
-
-        def _target(anchor: Pt, i: int, uphill: bool) -> Pt | None:
-            # nearest connection point (a channel point OR another pond's edge) strictly up/down-hill of it
-            af = _fall(anchor)
-            best: Pt | None = None
-            bd = _reach * _reach
-            for _n, j, qx, qy, _x0, _y0, _x1, _y1 in sorted(_cand_grid.near(anchor[0], anchor[1], _reach), key=lambda c: c[0]):
-                if j == i:
-                    continue  # a pond does not connect to itself
-                q = (qx, qy)
-                qf = _fall(q)
-                if (qf < af - _margin) if uphill else (qf > af + _margin):
-                    d = (anchor[0] - q[0]) ** 2 + (anchor[1] - q[1]) ** 2
-                    if d < bd:
-                        bd, best = d, (q[0], q[1])
-            return best
-
-        sluices: list[dict[str, Any]] = []
-        for i, w in enumerate(waters):
-            top = min(w, key=_fall)  # the pond's uphill corner - fed here (water runs down in)
-            bot = max(w, key=_fall)  # the pond's downhill corner - drained here (water runs down out)
-            for anchor, uphill, kind in ((top, True, "feed"), (bot, False, "drain")):
-                tp = _target((anchor[0], anchor[1]), i, uphill)
-                if tp is not None:
-                    self.add(
-                        f'<line x1="{anchor[0]:.1f}" y1="{anchor[1]:.1f}" x2="{tp[0]:.1f}" y2="{tp[1]:.1f}" stroke="#6C9CBE" stroke-width="2.4" stroke-linecap="round" opacity="0.95"/>',
-                        cls="pond sluice",
-                    )
-                    sluices.append({"a": [round(anchor[0], 1), round(anchor[1], 1)], "b": [round(tp[0], 1), round(tp[1], 1)], "kind": kind})
-        self.M["dikepond_sluices"] = sluices
-
     def _mulberry_rows(self: Settlement, poly: Sequence[Pt], bank_d: str, cx: float, cy: float, rng: random.Random, channels: Sequence[tuple[Pt, Pt]] | None = None, crop: str = "mulberry") -> None:  # type: ignore[misc]
         """The 桑基 (mulberry-dike) half of a dike-pond unit rendered as what it is: PLANTED ground. Sparse
         earth mottle (patch-repairs, the perimeter dike's look) under two planted ROWS of coppiced mulberry
@@ -458,7 +439,7 @@ class LandUseMixin:
         bushes with ~4-6 ft crowns in dense rows (~1 bush per 10-20 sq ft - hundreds per pond), so at
         1 px = 1 ft honest "actual trees" ARE a packed dot band; the crowns here are r 2.2-3.6 px at ~6 px
         in-row spacing (the loose end of the attested 3-5 ft, for pixel separation), never inflated glyphs.
-        Rows are homothetic loops between the water inset (11 px) and the bank edge (the true parcel line);
+        Rows are homothetic loops between the water inset (`DIKEPOND_WATER_INSET`) and the bank edge (the true parcel line);
         everything clips to the bank path, so a crown may overhang the water edge (organic) but never
         spills onto the polder floor. BUSHES KEEP CLEAR OF THE CANALS (GM 2026-07-23, refined 2026-07-24):
         the bush TRUNK stays off the canal - any crown whose CENTER lies within 3.5 px of a channel
@@ -470,9 +451,9 @@ class LandUseMixin:
         n = len(poly)
         mids = [((poly[i][0] + poly[(i + 1) % n][0]) / 2, (poly[i][1] + poly[(i + 1) % n][1]) / 2) for i in range(n)]
         apo = sum(math.hypot(mx - cx, my - cy) for mx, my in mids) / n
-        if apo <= 12.0:
+        if apo <= DIKEPOND_WATER_INSET + 1.0:
             return  # a parcel too small to hold the water inset has no bank to plant
-        s_w = max(0.4, 1.0 - 11.0 / apo)  # the water-edge homothety (matches _rounded_pond's inset=11)
+        s_w = max(0.4, 1.0 - DIKEPOND_WATER_INSET / apo)  # the water-edge homothety (matches _rounded_pond's inset)
         s_b = 1.0  # the bank edge is the TRUE parcel line (the canal at the toe bounds the bank)
         cid = self._cid("mb")
         g = [f'<clipPath id="{cid}"><path d="{bank_d}"/></clipPath>', f'<g clip-path="url(#{cid})">']
@@ -510,7 +491,7 @@ class LandUseMixin:
         # The pitches are drawing calibrations from each plant's habit, not surveyed dikes (nothing read gives a
         # spacing along a dike, archetypes/230) - labeled so in the class entries.
         if crop == "mulberry":
-            for t in (0.30, 0.72):  # two planted rows across the band
+            for t in mulberry_row_ts(DIKEPOND_WATER_INSET):  # the planted rows across the band
                 for x, y in walk(s_w + t * (s_b - s_w), 4.4):
                     jx, jy = x + rng.uniform(-1.3, 1.3), y + rng.uniform(-1.3, 1.3)
                     r = rng.uniform(2.2, 3.6)

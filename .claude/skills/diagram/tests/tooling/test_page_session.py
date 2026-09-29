@@ -151,9 +151,32 @@ def test_a_session_the_usage_limit_ends_is_resumed_after_the_wait_not_skipped(tm
     assert len(calls) == 3, "a, a resumed, then b"
     assert calls[1][calls[1].index("--resume") + 1] == first and "--session-id" not in calls[1]
     assert calls[1][calls[1].index("-p") + 1] == ps.RESUME and "--session-id" in calls[2], "the next brief is a fresh session"
-    assert slept == [3600 + 120], "until two minutes past the reset the message names"
+    assert slept == [ps.RETRY_EVERY], "the reset is an hour off, but the retry comes after 15 minutes at most"
     kinds = [ln.split()[0] for ln in run_log.read_text(encoding="utf-8").splitlines()]
     assert kinds == ["started", "failed", "ended", "started", "ended", "ALL"], kinds
+
+
+def test_every_retry_sleep_is_capped_at_15_minutes_and_the_reach_stays_about_11_hours(tmp_path: pathlib.Path, monkeypatch) -> None:
+    """Feature 280 (2026-09-28): a limit the GM resets early must not leave the queue idle for the rest of a six-hour
+    wait. Every sleep is at most RETRY_EVERY, and RETRIES x RETRY_EVERY keeps the ~11 hour reach."""
+    (tmp_path / "a.md").write_text(BRIEF, encoding="utf-8")
+    queue = ps.plan(str(tmp_path), "n", "/p", [], [str(tmp_path / "a.md")])
+    outcomes = iter([(1, '{"is_error": true, "result": "limit reached - resets 3am"}')] * 3 + [(0, '{"subtype": "success"}')])
+
+    def fake_run(cmd, **kw):  # noqa: ANN001, ANN003, ANN202
+        rc, out = next(outcomes)
+        kw["stdout"].write(out)
+        return ps.subprocess.CompletedProcess(cmd, rc)
+
+    slept: list[float] = []
+    monkeypatch.setattr(ps.subprocess, "run", fake_run)
+    monkeypatch.setattr(ps.time, "sleep", slept.append)
+    monkeypatch.setattr(ps.time, "time", lambda: 1_900_000_000.0)  # 17:46 UTC, so 3am is over five hours off
+    run_log = tmp_path / "run.log"
+    ps.work(str(tmp_path), "n", [], queue, str(run_log))
+    assert slept == [ps.RETRY_EVERY] * 3 and ps.RETRY_EVERY == 900, slept
+    assert "waiting 15 min (reset in" in run_log.read_text(encoding="utf-8")
+    assert 10.5 * 3600 <= ps.RETRIES * ps.RETRY_EVERY <= 11.5 * 3600, "the reach stays about 11 hours"
 
 
 def test_the_wait_reads_the_reset_or_backs_off() -> None:

@@ -211,8 +211,9 @@ class CharcoalStore(Kind):
     Why: Charcoal was an industrial fuel moved at state scale, and this map keeps a store of it as a supervised, tallied depot
     rather than a back room. A plastered storehouse was built to protect what it held against fire, damp and
     theft - its walls often a foot thick, its outer doors sometimes faced with earth and plaster, and gunpowder among what
-    such stores kept - so its own wall does for the charcoal what 30 ft of open ground does for an open stack in
-    a charcoal yard. Fresh charcoal heats itself to ignition when packed, so it goes in only once it has cooled.
+    such stores kept - so the store stands at the ordinary spacing of the buildings round it. The charcoal comes to it
+    already cooled: before modern times charcoal was cooled at the kiln - black charcoal in the sealed kiln, white
+    charcoal smothered beside it - and reached a town cooled and baled.
 
     Note: No page read says charcoal was kept in a plastered storehouse, or gives a spacing between a storehouse
     and its neighbors, so keeping it in one, at ordinary spacing with no fire gap, is a guess resting on the
@@ -222,7 +223,7 @@ class CharcoalStore(Kind):
     Covers: the sealed charcoal kura and its labels
     Label: guess
     Sources: dozo-jawiki, kotobank-dozozukuri, wagner-ming-iron, fao-charcoal-safety
-    Entry: research/urban-features.html - "Does the charcoal yard's 30 ft fire gap apply to charcoal kept in a plastered storehouse?", 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
+    Entry: research/urban-features.html - "Does the charcoal yard's 30 ft fire gap apply to charcoal kept in a plastered storehouse?", 'Is a fire gap kept round a charcoal yard?', 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
     """
 
     key = "charcoal store"
@@ -245,7 +246,7 @@ class WoodKamiAltar(Kind):
     Covers: the altar and its label with the "personally maintained" sublabel
     Label: deviation
     Sources: hokora-jawiki, tokushima-yashikigami, jawiki-yashikigami
-    Entry: research/religion-and-death.html - 'Torii are VOTIVE DONATIONS'; research/homesteads.html - "The farmstead's fixtures"
+    Entry: research/religion-and-death.html - 'Torii are VOTIVE DONATIONS'; research/homesteads.html - "Which farmsteads had a household shrine"
     """
 
     key = "wood-kami altar"
@@ -284,18 +285,17 @@ class Dock(Kind):
     Why: A river's level rises and falls through the year, so the usual landing is steps cut into a faced bank,
     which meet a moored hull at whatever height the water stands; a pier is the exception, for a bank that
     shelves too gently. Where samurai residences stood on a river, as on Hiroshima's, they were built back from
-    the revetment and walled, and it is thought no gated landing opened from them onto the steps - a back gate straight onto
-    the steps is the merchants' form on the landings that survive, built from the Meiji period on - so the compound reaches its steps from a gate in its wall, across the
-    street.
+    the revetment and walled, and it is thought no gated landing opened from them onto the steps, so the compound reaches
+    its steps from a gate in its wall, across the street. The early-modern stepped landings were built where boats
+    berthed and goods came ashore, above all in the townsmen's quarters; a private landing, a merchant's back gate onto
+    the steps among them, is dated only to the modern period.
 
     Note: The steps across the bank street, reached from a gate in the compound's wall rather than a back gate
     onto the steps, follow the record of samurai residences built back from the bank and walled, thought to have
-    had no gated landing. That the back gate was already the merchants' form in the Edo period is this map's
-    reading of landings built from the Meiji period on. No page read describes an official's compound with a
-    landing of its own, so that these steps are the compound's own rather than a public landing is a guess.
+    had no gated landing. No page read describes an official's compound with a landing of its own, so that these
+    steps are the compound's own rather than a public landing is a guess.
 
-    Caveat: That the back gate was already the merchants' form in the Edo period is this map's reading of landings
-    built from the Meiji period on. No page read describes an official's compound with a landing of its own, so that these steps are the
+    Caveat: No page read describes an official's compound with a landing of its own, so that these steps are the
     compound's own rather than a public landing is a guess.
 
     Name: dock
@@ -317,10 +317,10 @@ class TaxBarge(Kind):
 
     Note: The barge's size, inside the record's range for such a boat, and the hiring of hulls for tax rice (read for the shogunate's sea shipments; a county's grain going downriver on them is this map's reading),
     follow the record. The bales aboard are drawn about 4 ft long so that they read, where a rice bale of today's 60 kg size is about
-    2.5 ft long and 1.5 ft across, varying with what it held.
+    2.5 ft long and 1.5 ft across; no bale of the Edo period was found measured, and one scaled from what it held is guessed within a tenth of that size.
 
     Caveat: The bales aboard are drawn about 4 ft long so that they read, where a rice bale of today's 60 kg size is about 2.5 ft long
-    and 1.5 ft across, varying with what it held.
+    and 1.5 ft across; no bale of the Edo period was found measured, and one scaled from what it held is guessed within a tenth of that size.
 
     Name: tax barge
     Covers: the moored barge, its lines, its bales and its label
@@ -334,24 +334,23 @@ class TaxBarge(Kind):
 
 class BoatmensAltar(Kind):
     """
-    What: A small shrine at the head of the landing, kept by the boatmen who work the river.
+    What: A small shrine beside the landing, kept by the boatmen who work the river.
 
-    Why: A boat's own guardian, the funadama, lives aboard, at the foot of the mast, and is only sometimes given
-    a shrine on land; what river boatmen are recorded keeping ashore is a water god. In Katsushika, now a ward of
-    Tokyo, the boatmen of the night-soil boats kept a water-god shrine, a Suitengu, that once stood on a river
-    bank, and on its festival day they moored their boats near the bank and spent the day in its precinct.
+    Why: A boat's own guardian, the funadama, lives aboard, at the foot of the mast, and is sometimes given a shrine
+    on land, and that shrine is the one drawn here. The water god's shrine that river boatmen are recorded keeping, a
+    Suitengu, is dated no earlier than the late 1920s by its one source, and nothing read places boatmen keeping one
+    before modern times, so it is not drawn.
 
-    Note: Both forms are attested - a shrine on land to the boats' guardian, and a water-god shrine kept by the
-    boatmen - and a landing keeps one of them, named in the map's notes. Neither is recorded standing at a
-    landing itself, or with a size, so the shrine's place at the head of the landing and its size are a guess.
+    Note: The boats' guardian and its shrine on land are read. The shrine is not recorded standing at a landing
+    itself, or with a size, so its place beside the landing and its size are a guess.
 
-    Caveat: Neither is recorded standing at a landing itself, or with a size, so the shrine's place at the head
-    of the landing and its size are a guess.
+    Caveat: The shrine is not recorded standing at a landing itself, or with a size, so its place beside the
+    landing and its size are a guess.
 
     Name: boatmen's altar
     Covers: the altar on the bank and its label
     Label: accurate
-    Sources: funadama-jawiki, kotobank-funadama, katsushika-suijin
+    Sources: funadama-jawiki, kotobank-funadama, kotobank-suitengu
     Entry: research/cities/river-cities.html - 'Did the boatmen keep a shrine at the landing?'
     """
 
@@ -392,7 +391,7 @@ class Steelyard(Kind):
     What: The steelyard on Ubame's weighing floor where bales of charcoal are weighed before the tally is written: a
     wooden beam with a hook at one end for the bale and a weight on the other, slid along the beam until it balances.
 
-    Why: Charcoal was packed by grade rather than to one weight, so a bale is weighed at the point of sale, and
+    Why: Charcoal was packed by grade rather than to one weight, in one district at least, so a bale is taken to be weighed at the point of sale, though no source read says a dealer weighed bales at sale, and
     one account, naming no country or period, has the steelyard weighing food and everyday goods and the two-pan balance serving valuables. Japan used
     steelyards from the Edo period, in sizes that included one for a load of four of the best charcoal bales, and China's was its
     traditional market scale, built for heavy loads too.
@@ -423,6 +422,8 @@ class CharcoalBales(Kind):
 
     Note: we have drawn each bale about 4 ft long, in order to make it read on the plan; a charcoal bale is about
     2 by 1.3 ft, as a mid-20th-century one in a museum measures, and no page read measures one of the Edo period.
+    Scaled from its capacity, an Edo rice bale would be within a tenth of today's - a guess; the charcoal bale has no
+    older measure.
 
     Name: charcoal bales
     Covers: the stacked bales on the weighing floor

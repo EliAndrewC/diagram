@@ -1,0 +1,29 @@
+<h2 id="how-did-work-yard-sizes-spread-from-farm-to-farm">How did work-yard sizes spread from farm to farm?</h2>
+<!-- researched 2026-08-28, feature 134 T49; split from homesteads 020 on 2026-09-28 (feature 280 H2, the question-size cap) -->
+<!-- Grounds: homestead_parts.YARD_SIGMA_LN / YARD_HOUSE_BETA / YARD_MIN_TSUBO; yard_sizes="allotted" -->
+<!-- Evidence: attested (the shape, from Edo cadastres; the allotted form, Santome 1696) -->
+<p><strong>Sources:</strong> <a href="https://www.jstage.jst.go.jp/article/aijax/418/0/418_KJ00004075360/_pdf"><code>kamikanai-1771-houses</code></a> (the skewed house sizes and how they follow the holding), <a href="https://www.jstage.jst.go.jp/article/aijsaxx/222/0/222_KJ00003747888/_pdf"><code>kikoba-kenchi</code></a> (the spread of homestead lots, and how they follow the holding), <a href="https://www.jstage.jst.go.jp/article/aijax/436/0/436_KJ00004077200/_pdf"><code>santome-shinden-allotment</code></a> (the colony of equal homesteads), <a href="https://kdas.jp/test2/detail_display.php?t_cd=1&amp;acc_cd=3&amp;aclc_cd=0&amp;chap=6&amp;hp_page=74&amp;bc_cd=1"><code>kitamoto-mushiro-niwa</code></a> (the band and its tail)</p>
+<p>How big the median yard is, and what it rests on, is at <a href="#how-big-was-the-work-yard-and-how-did-the-sizes-spread">How big was the work yard?</a> This question is how the sizes
+spread around it.</p>
+<p><strong>The spread is lognormal, and it is right-skewed.</strong> No survey gives a histogram of yards, so the
+shape comes from what the cadastres do tabulate, and every one is right-skewed: <a href="https://www.jstage.jst.go.jp/article/aijax/418/0/418_KJ00004075360/_pdf">Kamikanai (1771)</a>
+gives a complete main-house histogram whose<sup class="fn" data-note="kamikanai-1771-houses"></sup> 31 commoner houses fit a lognormal of median 22.5 tsubo
+and <strong>sigma 0.46 in log space</strong><!-- sigma_ln 0.46 -->, with the headman detached at 3.1x; <a href="https://www.jstage.jst.go.jp/article/aijsaxx/222/0/222_KJ00003747888/_pdf">Kikoba</a>'s Genroku 検地帳 (<em>kenchicho</em>, the land-survey register) puts homestead lots
+at 20-100 bu, and its table of lots and house footprints together peaks at 30 bu and 50 bu.<sup class="fn" data-note="kikoba-kenchi"></sup> <a href="https://kdas.jp/test2/detail_display.php?t_cd=1&amp;acc_cd=3&amp;aclc_cd=0&amp;chap=6&amp;hp_page=74&amp;bc_cd=1">Kitamoto</a>'s own
+band-and-tail, 40 to 60 <em>mushiro</em> usually and past 100 for a few,<sup class="fn" data-note="kitamoto-mushiro-niwa-4"></sup> implies <strong>sigma 0.35-0.45</strong> - that convergence is what the drawn sigma of 0.40 rests
+on. A floor exists but is not zero: early registers carry a no-homestead class (無屋敷登録人, <em>muyashiki torokunin</em>), but by
+Genroku, as the record has it on no page it could read, every peasant household, the fieldless included, had come to hold a house plot<sup class="fn" data-note="how-big-was-the-work-yard-and-how-did-the-sizes-spread-3"></sup> - the landless simply occupy the small
+end, so the roll is floored at 8 tsubo rather than allowed to vanish.</p>
+<p><strong>The yard follows the household, but not proportionally.</strong> The proportional coupling is
+ADDITIVE - 「if the holding increases by about 5 koku, the tsubo count increases by about 10 tsubo」 (translated from the Japanese by this project; original: 「持高が5石ほど増加すれば坪数が10坪ほど増加する」)<sup class="fn" data-note="kamikanai-1771-houses-2"></sup> - so a 20x holder does not get a 20x yard
+(the sentence is the paper's own on Meiwa-era Kamikanai, and is of the main house's floor area, not the yard; of Kyoho-era Iwahara village
+the same paper finds no fixed correspondence between holding and floor area, and holdings inside that village span
+landless to about 30 koku).<sup class="fn" data-note="kamikanai-1771-houses-3"></sup> Kikoba's register ties the lot itself to
+the holding the same way: the lot averages 67.3 tsubo among holders of 100 <em>se</em> (畝, a tenth of a tan) and
+more, and 33.3 tsubo among holders of 0-25 <em>se</em> - twice the lot, not four times.<sup class="fn" data-note="kikoba-kenchi-2"></sup> The generator gives the yard the
+household's own deviation in log space, amplified and then perturbed by an<!-- the amplifier is YARD_HOUSE_BETA -->
+independent positional draw: a large household is overwhelmingly likely to have a large yard, a
+mismatch is possible and rare - the GM's own reading of what the record implies.</p>
+<p><strong>One attested form is NOT skewed, and is a knob.</strong> A planned <em>shinden</em> colony issued every settler
+an identical homestead - <a href="https://www.jstage.jst.go.jp/article/aijax/436/0/436_KJ00004077200/_pdf">Santome 1696</a>, <em>"the size of the house lots is an entirely equal allotment"</em> (translated from the Japanese by this project; original: 「屋敷の規模はまったくの均等配分」)<sup class="fn" data-note="santome-shinden-allotment"></sup> - so an "allotted" yard setting
+draws uniform yards. Two attested forms become a per-settlement knob.<!-- yard_sizes="allotted"; constitution Principle XII's ladder --></p>

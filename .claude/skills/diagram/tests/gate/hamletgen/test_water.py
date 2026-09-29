@@ -31,7 +31,15 @@ def test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks() -> None:
     assert m["field_archetype"] == "mulberry_dike_fishpond" and m["pond_layout"] == "mosaic"
     assert any(r["overlay"] == "mulberry_fishpond" and r["count"] >= 20 for r in M["land_use"])
     assert M.get("dikeponds"), "the ponds are recorded as dike-ponds"
-    assert 1 <= sum(1 for d in M["dikeponds"] if d.get("kind") == "fry") <= 3, "a few of the smallest parcels are fry nursery ponds (feature 150 A5)"
+    # THE FRY FORM (feature 280 M60, research/archetypes/200): an ordinary hamlet keeps no nursery ponds; a fry village's
+    # smallest ponds are nursery water, up to seven tenths of the pond area
+    fry = [d for d in M["dikeponds"] if d.get("kind") == "fry"]
+    if m.get("fry_form") == "fry_village":
+        area = lambda p: abs(sum(p[i][0] * p[(i + 1) % len(p)][1] - p[(i + 1) % len(p)][0] * p[i][1] for i in range(len(p)))) / 2  # noqa: E731
+        share = sum(area(d["water"]) for d in fry) / sum(area(d["water"]) for d in M["dikeponds"])
+        assert fry and share <= 0.7 + 1e-9, f"a fry village's nursery water is at most seven tenths: {share:.2f}"
+    else:
+        assert not fry, "an ordinary dike-pond hamlet buys its fry and keeps no nursery ponds"
     assert not M.get("duck_pens"), "no duck pen: a modern form, retired (269 B32)"
     assert set(m["waterward"]) and set(m["waterward"]) <= {"N", "E", "S", "W"}
     assert sum(1 for q in M["marshes"] if q.get("role") == "waterside") == len(m["waterward"])

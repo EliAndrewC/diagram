@@ -14,7 +14,7 @@ class HomesteadBamboo(Kind):
     What: A household's own bamboo stand on its plot - a clonal thicket, in most cases of nearly one species,
     drawn as paired culm strokes with a leafy fork.
 
-    Why: Below the frost line bamboo was a matter of course in a lowland paddy hamlet - baskets, fans, food
+    Why: Below the frost line a lowland paddy hamlet could keep bamboo, and this record infers it commonly did - baskets, fans, food
     wrappings, building timber and everyday tools; on the Tonami plain bamboo stands once grew in many a farmstead's
     grove, beside the cedar that led it. Which side of the plot it stood on was done more than one way: on the Tonami
     plain with the storehouses and fruit trees to the south; by rivers and in flood-prone ground at the wet edge, its
@@ -28,8 +28,8 @@ class HomesteadBamboo(Kind):
     Note: we have rendered the bamboo stand as paired culm strokes with a leafy fork on a 7 ft grid, in order to
     show a stand that cannot be drawn at true scale: a culm is only inches across, madake at most about four inches,
     a fraction of a pixel at one foot per pixel. The stand's extent is to scale; the marks inside it are symbolic - the convention
-    Japan's own topographic legend uses. Presence below the frost line, the stand's two places (the
-    household's plot, the village-edge thicket - that one from a page's present-day observation) and the three sides
+    Japan's modern topographic legend uses, a symbol of the national survey's maps of about 1910 that no page read traces to a map before 1868; older maps drew the growth itself. Presence below the frost line, the stand's two places (the
+    household's plot, the village's own thicket, kept before modern times round its houses, on dry ground) and the three sides
     of the plot are read; the weights among the sides
     (behind the house and the windward side the likeliest), the share of farmsteads keeping one (about three in five)
     and the 22 by 16 ft strip are guesses, no page giving a share or a size.
@@ -46,23 +46,27 @@ class HomesteadBamboo(Kind):
 
 class SharedBambooGrove(Kind):
     """
-    What: A bamboo thicket standing on its own at the field margin, cut in moderation and renewed from its shoots.
+    What: A bamboo thicket standing on its own at the settlement's edge, on dry ground behind its houses, cut in
+    moderation and renewed from its shoots.
 
     Why: The record gives bamboo two places: the household's own strip, and the take-yabu as a stand of its own
-    at the village edge, where the plain meets the worked hills. The record supports both, so whether a hamlet's
+    round the settlement - an early-Edo screen paints settlements ringed by bamboo groves, the villages of one Kyoto
+    district managed bamboo groves through the Edo period, and a sixth-century Chinese manual wants bamboo on high,
+    dry ground. The record supports both, so whether a hamlet's
     bamboo stands in its farmsteads, in a thicket of its own, or both is rolled per settlement rather than the project
     picking one.
 
     Note: we have rendered the shared grove with the same stand-level glyph as a homestead stand - paired culm
     strokes on a 7 ft grid - in order to show it at all: a culm is only inches across, madake at most about four
     inches, and cannot be drawn at one foot per pixel. The grove's extent is to scale; the marks are symbolic.
-    Bamboo below the frost line and its two places are read, though the page placing the thicket at the plain's
-    edge describes the present day; that it was cut like a coppice is this record's likeness, no page making it.
+    Bamboo below the frost line and its two places are read; which side of the settlement the thicket takes, and
+    that it was held in common, are guesses; that it was cut like a coppice is this record's likeness, no page making
+    it.
 
     Name: shared bamboo grove
-    Covers: `bamboo_stands` with any role other than homestead - the take-yabu at the field margin
+    Covers: `bamboo_stands` with any role other than homestead - the take-yabu at the settlement's edge
     Label: convention
-    Sources: chikurin-jawiki, take-jawiki, satoyama-enwiki, phyllostachys-enwiki
+    Sources: chikurin-jawiki, take-jawiki, nagaokakyo-take-nishiyama, nagaokakyo-take-takenoko, qimin-yaoshu-zhongzhu, phyllostachys-enwiki
     Entry: research/vegetation.html - 'Bamboo: how common, and where it stood', 'How is bamboo drawn, when one culm is too small to see?'
     """
 
@@ -91,7 +95,7 @@ class Windbreak(Kind):
     windward side, filling the bare lower part against the wind.
 
     Note: The grove count follows the Fujian figure (forests-2020), the density the Pearl-delta patches
-    (hu-2011-fengshui-patches), and the size the Hong Kong survey (afcd-ncsc-9-06); the water-mouth cluster's
+    (hu-2011-fengshui-patches), and the size the Hong Kong survey (afcd-ncsc-9-06), measured in modern times on groves centuries old, no older measurement being known; the water-mouth cluster's
     size and the tree counts are guesses bracketed by Korean village-grove analogues; the belt's shape follows
     the terrain and the cluster. The side it stands on follows the Japanese homestead grove, kept on the north
     and west against the northwesterly winter wind (irie-2020-igune, yashikirin-jawiki), and the GM's rulings
@@ -203,7 +207,7 @@ class WoodlandCommons(Kind):
     Note: The commons regime, the raked floor, the order of houses, fields and wood, and the stocking are read (the
     Yamaguni study, the satoyama, village-boundary and iriai-land entries, a 1910 forester's account of the Musashino
     upland, the Nagano and Tsukuba konara stands); reading "beyond the fields" as higher than the field a wood adjoins
-    is this record's reading of "the slopes around the settlement". The 1,700 a hectare is calibrated on a planted
+    is this record's reading of "the slopes around the settlement". Every stem count read was taken in the twentieth century and no record before modern times counts a worked wood's stems, so the stocking is a modern calibration with no older figure beside it; the 1,700 a hectare is calibrated on a planted
     konara stand of 29 years and on Nagano woods of 26-31 that this record reads, the report not saying so, as fuel
     woods left uncut - both a little past the age a wood was cut - so the wood may read a little more open than it
     stood, and each crown's 8-9 ft width is a guess sized from the spacing, no
@@ -235,8 +239,8 @@ class ScrubAndRoughGrazing(Kind):
     the water's edge.
 
     Note: That bund grass is cut several times a season today, and that cut land does not go over to scrub, are read;
-    that it was cut as often in the past is a guess, no page giving the old rate;
-    the 6 ft is this record's choice, no page giving one, and it is a flat-ground figure: on terraced ground the
+    that it was cut before modern times, for green manure, is read, and that it was cut as often then is a guess, no page giving the old rate;
+    the 6 ft is this record's choice, wider than the one old figure found, and it is a flat-ground figure: on terraced ground the
     kept-cut slope face below a field is wider, at times wider than the field itself, and the map does not set that
     width. The channel bank takes the same 6 ft by the GM's ruling, and that a bank was kept like a bund at all is this
     record's analogy, no page read speaking of a channel bank; nothing describes how
@@ -274,7 +278,8 @@ class Marsh(Kind):
     and it is the small ponds where water use has STOPPED and bank mowing has fallen off that have been given up
     furthest. The reeds
     are a sign of a pond in use. The EMBANKMENT is the other half of the same finding and is different
-    ground: it is mown and burned and may not be cultivated, to keep the bank strong, and what grows on it
+    ground: a dry, firm bank kept for its strength and not cultivated - turfed or trodden before modern times, a Chinese
+    classic's commentary already keeping the water plants off it, and mown and burned today - and what grows on it
     is dry-grassland herbs. So reeds stand in the shallows and stop at the foot of the bank - which is why
     you will not see the wet haze on a dike or a pond's raised rim. Whether a pond's own reed was cut as a crop, no page
     read says - the reed harvest is attested for Lake Biwa and river reed beds, not for a tameike - so the pond's fringe
@@ -285,7 +290,8 @@ class Marsh(Kind):
     carried across from thatch fields in general and Lake Biwa's reed beds, no page saying it of a village marsh; that
     every toe is drawn in the cut, open form is a shortfall, the record supporting an alder-willow carr as well and the
     map not yet rolling between them; that sedge was cut for fodder is unsourced; a pond's fringe shows no harvest
-    because none is read there; the embankment is mown in the record as it is bare on the map.
+    because none is read there; the embankment's mowing and burning are present-day management, the reed-free bank
+    itself older.
 
     Caveat: that a village cut its own toe marsh the same way is carried across from thatch fields in general and Lake
     Biwa's reed beds, no page saying it of a village marsh; that every toe is drawn in the cut, open form is a

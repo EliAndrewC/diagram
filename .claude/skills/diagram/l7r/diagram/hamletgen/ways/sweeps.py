@@ -6,7 +6,7 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import PointGrid, Settlement, edge_dist, point_in_poly, seg_closest, seg_dist, seg_intersect, segments_cross
+from l7r.diagram.settlement import PointGrid, Settlement, edge_dist, point_in_poly, seg_closest, seg_dist, segments_cross
 
 from ..consts import (
     STEADING_ARRIVAL_FT,
@@ -865,105 +865,14 @@ _REACH_FT = 60.0  # ft: `WAY_END_REACH_FT`, the reach to another way; here the r
 _SERVE_FT = 100.0  # ft: a way serves a house within this - `farmhouses_reach_a_way`'s own figure, so a dropped fragment never strands one
 
 
-_ALONG_FT = 14.0  # ft: two centerlines this close read as one tread doubled - a 6 ft way's width plus its soft shoulders
-_ALONG_MIN_FT = 30.0  # ft: shorter than this, running beside a way is just the approach to the junction
-_ALONG_DEG = 25.0  # deg: nearer to parallel than this, the lane is running WITH the way, not meeting it
-_DOUBLED_DEG = 15.0  # deg: a finished tail this near parallel is one tread doubled (Kuwabata's ran at ~3, Sawada's at 9.5); between
-# this and `_ALONG_DEG` the sweep still cuts it, to the crossing it overran, which then stands as a shallow Y - a junction, not a
-# doubling (Inashiro's straggler meets its join lane at 21.6 degrees)
-_CROSS_BACK_FT = 40.0  # ft: a crossing this close before the cut is the junction the doubled tail overran (Sawada's was 24)
-
-
-def along_tail(pts: Sequence[Pt], other: Sequence[Pt], step: float = 4.0, deg: float = _ALONG_DEG) -> int | None:
-    """The index in `pts`' samples where its END starts running alongside `other` - within `_ALONG_FT` of it, nearly
-    parallel (within `deg`), for at least `_ALONG_MIN_FT` - or None. Samples every `step` along `pts` from its end inward."""
-    samples: list[Pt] = []
-    for a, b in zip(pts, pts[1:], strict=False):
-        n = max(1, int(math.dist(a, b) // step))
-        samples += [(a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n) for i in range(n)]
-    samples.append(pts[-1])
-    segs = list(zip(other, other[1:], strict=False))
-    if not segs:
-        return None
-    k = len(samples) - 1
-    while k > 0:
-        q = samples[k]
-        a, b = min(segs, key=lambda ab: seg_dist(q[0], q[1], ab[0], ab[1]))
-        if seg_dist(q[0], q[1], a, b) > _ALONG_FT:
-            break
-        u = (samples[k][0] - samples[k - 1][0], samples[k][1] - samples[k - 1][1])
-        v = (b[0] - a[0], b[1] - a[1])
-        nu, nv = math.hypot(*u), math.hypot(*v)
-        if nu and nv and math.degrees(math.acos(min(1.0, abs(u[0] * v[0] + u[1] * v[1]) / (nu * nv)))) > deg:
-            break
-        k -= 1
-    if polyline_len(samples[k:]) < _ALONG_MIN_FT:
-        return None
-    return k
-
-
-def cut_at_tail(pts: Sequence[Pt], k: int, other: Sequence[Pt], step: float = 4.0) -> list[Pt]:
-    """`pts` cut at its `k`th sample (the `along_tail` index) and ended on its snap onto `other`: the vertices before the
-    cut, the cut point, and the nearest point of `other` to it."""
-    samples: list[Pt] = []
-    for a, b in zip(pts, pts[1:], strict=False):
-        n = max(1, int(math.dist(a, b) // step))
-        samples += [(a[0] + (b[0] - a[0]) * t / n, a[1] + (b[1] - a[1]) * t / n) for t in range(n)]
-    samples.append(pts[-1])
-    cut = samples[k]
-    cut_at = polyline_len(samples[: k + 1])
-    out, acc = [pts[0]], 0.0
-    for a, b in zip(pts, pts[1:], strict=False):
-        acc += math.dist(a, b)
-        if acc >= cut_at:
-            break
-        out.append(b)
-    # ...UNLESS IT HAS ALREADY CROSSED THE WAY on its last run in (settlement-review of Sawada, feature 261): the snap then
-    # lies behind the crossing, and the cut lane ran 24 ft past the way it met and bent back 116 degrees onto it - a hook.
-    # A crossing within `_CROSS_BACK_FT` of the cut is where the lane met the way, and it ends there.
-    kept = [*out, cut]
-    walked = 0.0
-    for m in range(len(kept) - 1, 0, -1):
-        u, v = kept[m - 1], kept[m]
-        hit = next((seg_intersect(u, v, c, d) for c, d in zip(other, other[1:], strict=False) if segments_cross(u, v, c, d)), None)
-        if hit is not None:
-            return [*kept[:m], (float(hit[0]), float(hit[1]))]
-        walked += math.dist(u, v)
-        if walked > _CROSS_BACK_FT:
-            break
-    a, b = min(zip(other, other[1:], strict=False), key=lambda ab: seg_dist(cut[0], cut[1], ab[0], ab[1]))
-    snap = seg_closest(cut[0], cut[1], a, b)
-    return [*kept, (float(snap[0]), float(snap[1]))]
-
-
-def _sweep_doubled_tails(s: Settlement) -> int:
-    """A lane whose end runs ALONGSIDE another way has met that way where it first came alongside, and ends there
-    (settlement-review of Kuwabata, feature 261: a join lane ran back 122 ft beside the connector, 12.7 ft apart and
-    merging to one stroke, past the corner where it met it - a doubled road and a dead end). The tail is cut at its first
-    sample alongside and the end snapped onto the way, so the two meet in one junction. Each end is asked in turn."""
-    lanes = s.M.get("lanes") or []
-    fixed = 0
-    # THE NARROWER TAIL IS CUT, NEVER THE WIDER (settlement-review of Sawada, feature 261): a 6 ft track and a 3 ft
-    # straggler ran into the hub side by side, the track was cut, and the route out necked to 69.7 ft of footpath -
-    # the thing `_keep_the_route_wide` exists to prevent, arriving after it ran. Narrow lanes are asked first, and a lane
-    # is never cut back along a narrower one.
-    for i in sorted(range(len(lanes)), key=lambda k: float(lanes[k].get("w") or 3)):
-        ln = lanes[i]
-        if ln.get("connector") or ln.get("spur") or len(ln.get("pts") or []) < 2:
-            continue
-        pts = [(float(x), float(y)) for x, y in ln["pts"]]
-        changed = False
-        for _end in range(2):
-            for j, o in enumerate(lanes):
-                op = [(float(x), float(y)) for x, y in (o.get("pts") or [])]
-                if j == i or len(op) < 2 or float(o.get("w") or 3) < float(ln.get("w") or 3):
-                    continue
-                k = along_tail(pts, op)
-                if k is not None:
-                    pts, changed = cut_at_tail(pts, k, op), True
-                    fixed += 1
-                    break
-            pts.reverse()
-        if changed and s.reshape_lane(ln, pts):  # asked of the overlap matrix (feature 287 M8)
-            s.reink_lane(i)
-    return fixed
+from .tails import (  # noqa: E402, F401 - split out at the 1,000-line bar (feature 280); re-exported for the web and the tests
+    _ALONG_DEG,
+    _ALONG_FT,
+    _DOUBLED_DEG,
+    _RESEAT_FT,
+    _sweep_doubled_tails,
+    along_tail,
+    cut_at_tail,
+    cut_keeps_network,
+    reseat_on_way,
+)

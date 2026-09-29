@@ -419,7 +419,7 @@ full gate run, of which 216.45 s is one unit test (below); the finished-map test
 | ::test_a_dooryard_copse_stands_clear_of_the_windbreak | 0.03 | `stands.py:village_grove`; test_woods_287::test_a_copse_over_a_belt_crown_stands_clear_of_its_canopy |
 | ::test_no_canopy_stands_over_open_water | 0.07 | `stands.py`, `wood_share.py`; test_woods_287::test_no_grove_clump_stands_over_a_stream_through_its_band |
 | gate/test_no_feature_overlaps::test_the_ground_cover_scatter_respects_what_was_swept_before_it | 0.01 | `cover.py:_clear_ground`; test_woods_287::test_a_clearing_swept_after_the_scrub_takes_its_blades_and_marks_out (and a subset of the matrix test's verdict) |
-| ::test_no_pond_fixture_stands_on_its_ponds_sluice | 0.01 | `farm_fixtures.py:pond_fixture_fits`; test_farm_fixtures::test_a_pond_fixture_will_not_stand_on_its_sluice |
+| ::test_no_pond_fixture_stands_on_its_ponds_sluice | 0.01 | `farm_fixtures.py:pond_fixture_fits`; test_farm_fixtures::test_a_pond_fixture_will_not_stand_on_its_sluice. SUPERSEDED by feature 280 M57 (merged 2026-09-29): no per-pond sluice is drawn, so the rule has no subject - `fields/landuse.py` records none (test_fields asserts `dikepond_sluices` absent); 280's replacement `test_no_pond_is_cut_by_a_sluice_of_its_own` stays retired with the module (below) |
 | ::test_every_pond_fixture_keeps_to_the_near_half_of_its_pond | <0.005 | `pondstock.py:sty_on_near_half`; test_pondstock::test_a_sty_never_stands_on_the_far_half_of_its_pond |
 | hamletgen/test_pool_261::test_every_way_across_the_brook_is_bridged (5) | 0.38 | `city/bridges.py:bridges`; test_city::test_a_crossing_is_decked_unless_a_standing_deck_covers_it |
 | ::test_every_farmstead_part_stands_on_its_house_bank (5) | 0.22 | `fit.py:_parts_across_stream`, `byres.py`, `bamboo.py`, `fixtures.py`; test_rolling::test_parts_across_stream_refuses_a_garden_on_the_far_bank |
@@ -561,3 +561,65 @@ None) over 400 random scenes and 16 sited hamlets under small crowns (observed 2
   `ways/serve.py`'s `_JOIN_FT` pointer to the retired one-network test) and `hamletgen/homesteads/wells.py` name retired tests; `tests/hamletgen/test_surface.py:105` names the deleted cohort module. (Homes wave 5: the `wells.py` pointer and the stale `cohort_specs` pin fixed.)
 - **Not touched, owned elsewhere now** (homes wave 5: the two `contextlib.suppress(SiteRefused)` excuses in `tests/hamletgen/test_homesteads.py` now assert the refusal): homes:H32's fixtures-unseated excuse tests in `tests/hamletgen/test_homesteads.py`
   (the performance implementer's file) and woods:W17's `tools/mapcheck.py` tripwire (not a test).
+
+### Merged with feature 280 (2026-09-29)
+
+Feature 280 (the GM's rulings of 2026-09-29, the settlement-reviews, the modern-only forms eliminated, the dike-pond
+changes) was merged into this feature. Its two edits to modules this feature deleted, and its new finished-map rules, were
+judged by the method above - the placer that decides the rule and the unit test that drives it on the violating case.
+
+- **`tests/gate/test_no_feature_overlaps.py` stays deleted.** 280 replaced the sluice-clearance test with
+  `test_no_pond_is_cut_by_a_sluice_of_its_own` (M57: no per-pond sluice is drawn). The placer that decides it is
+  `fields/landuse.py`, which records no `dikepond_sluices`; its unit test is 280's own `test_fields` assertion that the key
+  is absent. 280's other edit there removed the sluice import. Nothing is left that no placer guarantees.
+- **`tests/hamletgen/test_pool_282.py` stays deleted**, and its frozen fixture `tests/fixtures/sawada_yards_282.json` (280
+  added it only for this module) is removed. 280 moved the oracle test onto the frozen fixture because its 25-tsubo yard
+  median (M16) moved Sawada's yards; it added no assertion. The rule is the one retired above to `homestead_parts/yards.py`
+  and test_yard_mats_282.
+- **280's rules checked on the finished map, turned into placer guarantees:**
+  - *A sty stands within a household's reach* (`STY_HOUSE_REACH_FT`, settlement-review of Kuwabata). One predicate,
+    `pondstock.sty_in_reach`, is asked by the reservation (of the seat's center, before the houses stand) and by
+    `stage_pond_stock` (of the houses as seated); with 287's at-least-one rule, a dike-pond hamlet with no sty seat in any
+    household's reach is refused (`StyRefused`) instead of shipped without one (280 drew none). Tests:
+    test_plan::test_a_sty_stands_within_a_household_s_reach_or_not_at_all (the violating case refused, drawn 0),
+    test_water_287::test_no_reservation_where_the_hamlet_keeps_no_ponds_or_no_seat (the reservation past reach refused).
+  - *The copse keeps two crowns off the bamboo* (`bamboo_rings`, rounds 3-4). The copse refuses a seat in a stand's grown
+    ring; so that no household's RESERVED copse seat (woods W25, planted where reserved) is ever refused by it, every bamboo
+    placer - the thicket's scan and the household strips - keeps the reserved seats outside the keep-out, by the one
+    predicate `homestead_parts/bamboo_keepout.stand_spares_seats`. Tests: test_grove_blocks (the predicate against
+    `grown_ring` over random rings), test_hinterland_287::test_the_thicket_gives_way_to_every_reserved_copse_seat,
+    test_homesteads_287::test_a_household_bamboo_strip_gives_way_to_every_reserved_copse_seat.
+  - *The bath is a room joined to the house; the wood shed stands a ken off its wall, never walked out across the
+    dooryard* (M21, M22). 280 seated them in its late placer and passed a fixture with no seat to the next house; here they
+    are laid in the bundle (`fixture_seats.lay_fixtures`) with a predicate each - `joined_to_house`, `shed_off_a_wall` - and
+    a layout where the lot's bath room or wood shed finds no seat is refused by the fit (`FixtureUnlaid`, `unlaid`,
+    `_bundle_side_fits`), so another garden side or seat is sought: no fixture recorded short, none walked into the yard.
+    Tests: test_fixture_seats (the bath on each wall, slid along it, refused; the shed a ken off, refused, the predicate's
+    both edges). The wood shed's quota goes to the larger houses first (`lot.larger_first`, test_homesteads), the privy and
+    the bath room take the household's rolled size (`fixture_ft`, carried on the laid record as `ft` and drawn at it).
+  - *No hamlet draws a burial ground of its own* (M68): 280's `stage_burial` is taken whole; 287's own-ground narrowing and
+    its way target (homes H36) have no subject and went with it (`plan.way_targets` and the web's service of it stay, fed by
+    nothing until a form that owes a path returns).
+  - *A fry village's nursery water is at most seven tenths* (M60): guaranteed at `landuse.fry_pond_ids` (280's test_fields);
+    the kept gate test (`gate/hamletgen/test_water.py`) carries 280's fry clause as the archetype's record, and loses its sty
+    clause (retired above: `StyRefused`).
+- **Where 280 fixed what 287 guarantees differently, 287's mechanism kept:** the doubled-tail sweep (moved to
+  `ways/tails.py` by 280) writes every lane through `reshape_lane` and carries a stranded end onto the way only where the
+  overlap matrix admits it (all or none; test_sweeps); the thicket's 9 x 5 sample grid is 287's `stand_samples` at
+  `BAMBOO_SAMPLE_FT`, finer than a persimmon's crown and its pad on either axis; the kura's 1.67-to-one annex (M18) is one
+  table, `farm_fixtures.kura_rect`, read by the drawing, the bundle, the flush's side choice and the fixtures' walls (280's
+  change had reached two of the four copies); the lots' kura quota is 280's one farm in eight (M20).
+- **The seat band's area grows with 280's yards** (`consts.HOMESTEAD_GROUND_FT`, 104 ft, read by `plan.band_extent`): at
+  the row pitch's 100 the merged seat band held 13 of cohort seed 18's 15 households and the site was refused (287's HEAD
+  seats it, measured in a detached worktree); the median yard is 3.8 ft deeper at 25 tsubo (M16), so the ground one
+  homestead takes is 104. The row pitch and the web's reach stay 100 - raising them too left a farmhouse off the way
+  network on seeds 11 and 43 (measured, not taken).
+- **A 287 defect the bigger yards exposed, fixed at its placer** (`access.doors_of`, test_access): the far-edge door was
+  set by the yard's axis-aligned box, which overstates a turned yard; with 280's 25-tsubo yards a door stood 16 ft past
+  the drawn yard (cohort seed 32, a yard turned 12 degrees), an end `end_serves` reads as reaching nothing, so the reserved
+  corridor could not be drawn and a farmhouse stood off the network. The bundle now records its turn (`geom["turn"]`) and
+  the door stands on the drawn edge.
+- **Toy tests re-seeded, not weakened:** 280's geometry (no quarter-turned tenth, M26; the larger annex; the wood shed)
+  moved the toy hamlet's seed 3: the front-row tests take seed 5, the wells test seed 4, the rank-round refusal 13
+  households (twelve now fit the strip); the linear-frontage test keeps its fixtures and wood shares out, as the other
+  seating-count tests already did.

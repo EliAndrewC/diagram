@@ -44,7 +44,7 @@
   },
   "bathhouse": {
     "caveat": "",
-    "covers": "`farm_fixtures[kind=bath]`",
+    "covers": "`farm_fixtures[kind=bath]` - the bath room joined to the house",
     "entry": "research/homesteads.html - 'Did a farmhouse have a bath shed, and where did it stand?'; 'The farmstead's fixtures'",
     "key": "bathhouse",
     "label": "accurate",
@@ -52,10 +52,8 @@
     "name": "bathhouse",
     "siblings": {},
     "sources": [
-      "mizumaki-goemonburo",
-      "sugiura-1973-fuzoku",
-      "sugiura-1977-tohoku",
-      "mizu-no-bunka-11-furo"
+      "tsuda-1991-nikko-shasan-minka",
+      "mizumaki-goemonburo"
     ],
     "what": "A small bath shed - the iron goemon-buro tub under its own roof.",
     "why": "The cauldron bath was widely used in self-sufficient farm villages; the 1972 survey found a bath shed on about three farms in ten and a bath inside the house on half, so only the shed share is drawn and the rest bathe indoors, unseen."
@@ -97,11 +95,13 @@
       "bund beans": "The bund is the earthwork - the puddled-mud ridge between two basins, re-plastered every spring so each paddy holds its water. The beans are the crop planted along its top (azemame): the bund is soil, the beans are what grows on it, so each highlights on its own."
     },
     "sources": [
-      "aze-standard",
+      "kotobank-azebiki",
+      "hattori-site-yayoiken",
       "kato-1999-ittanbu-kukaku",
       "kotobank-aze-sekai-daihyakka",
       "kigosai-azenuri",
-      "kubota-azenuri-kuwa"
+      "kubota-azenuri-kuwa",
+      "aze-standard"
     ],
     "what": "The aze: a puddled-mud ridge one to two feet wide and about a foot high between two basins, re-plastered every spring so each paddy holds its water; the walking bunds ran two to five feet. Where bunds cross, the earth is piled into a lumpy node - the most-worked point in a field.",
     "why": "A bund is the wall BETWEEN two basins and is built once, so the fabric is one connected network meeting at T-junctions - never two parallel ridges with idle ground between. Farmers walked the bunds to reach the plots; the footplanks over the ditches serve that walking."
@@ -129,7 +129,7 @@
   "byre": {
     "caveat": "the attached stable wing (magariya) is a cold-country form and is deliberately not drawn.",
     "covers": "`byres` - the draft-animal sheds",
-    "entry": "research/homesteads.html - 'Where did a village's draft ox stand', 'May a byre stand beside a wellhead?', 'What stood on a farmstead'",
+    "entry": "research/homesteads.html - 'Where did a village's draft ox stand', 'May a byre stand beside a wellhead?', 'What stood on a farmstead - the inventory'",
     "key": "byre",
     "label": "accurate",
     "label_note": "The separate byre is the temperate reading of the record; the attached stable wing (magariya) is a cold-country form and is deliberately not drawn.",
@@ -217,7 +217,7 @@
   "farmhouse": {
     "caveat": "the setback from the paddy is DERIVED - no source states it in feet - so it is set at the near end of what the read bounds allow, close enough that the household works its own ground.",
     "covers": "`houses` - the dwelling of each household",
-    "entry": "research/homesteads.html - 'What stood on a farmstead', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane', 'Why do a village's farmhouses face different ways'",
+    "entry": "research/homesteads.html - 'What stood on a farmstead - the inventory', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane', 'Why do a village's farmhouses face different ways'",
     "key": "farmhouse",
     "label": "accurate",
     "label_note": "Placement and form follow the read record; the setback from the paddy is DERIVED - no source states it in feet - so it is set at the near end of what the read bounds allow, close enough that the household works its own ground.",
@@ -227,8 +227,9 @@
       "storage shed": "The farmhouse is the dwelling; a storage shed is a roofed outbuilding for grain, straw, tools and fuel - Sugiura's 1972 survey counted 4.4 outbuildings per household, and the sheds drawn here stand for that inventory, not for a second house."
     },
     "sources": [
-      "sugiura-1973-fuzoku",
-      "sakamoto-tsubaki-1985-omoya-muki"
+      "sakamoto-tsubaki-1985-omoya-muki",
+      "yamamoto-2014-koshijo-shuraku",
+      "oamishirasato-choshi-kaoku"
     ],
     "what": "The dwelling of one farming household: a thatched minka, its ridge on the long axis, standing on the slightly raised ground the homesteads share, its work yard and garden beside it and, where a farm stands alone, its own yashikirin sheltering it.",
     "why": "A house in a nucleated hamlet is reached by a lane and stands close to the paddy - up against it, but never on the bund. The lanes between farmsteads are trodden by the households already living there."
@@ -303,11 +304,11 @@
     "sources": [
       "isis-dykepond",
       "ruddle-zhong-1988",
-      "fao-ac241e",
       "gmrb-2024-sangji",
       "guangdong-xinyu-22",
       "pwsannong-zhusanjiao-nongyeshi",
-      "nongzheng-quanshu-41"
+      "nongzheng-quanshu-41",
+      "minle-dou-people"
     ],
     "what": "A stocked carp pond dug out of a former paddy parcel, two to three meters deep, its water held back by the planted dike piled from its own spoil - one cell of the mulberry-dike fish-pond system (桑基魚塘).",
     "why": "A dike-pond is dug where the ground was low and flood-prone: the digging drains the hollow and the spoil raises the dike, so the landscape was made cell by cell by the households that farmed it, over centuries. Each pond is fed and drained through a sluice in its dike, plumbed inlet-high and outlet-low, and is drained two or three times a year to dredge the mud onto the dikes. The ponds here are 0.4 to 0.6 hectare oblongs, the size the surveys of the traditional landscape record."
@@ -355,16 +356,15 @@
   },
   "fry pond": {
     "caveat": "",
-    "covers": "the dug water of a `dikeponds[]` parcel recorded `kind: fry` - the block's smallest parcels",
+    "covers": "the dug water of a `dikeponds[]` parcel recorded `kind: fry` - a fry village's smallest ponds",
     "entry": "research/archetypes.html - \"Did a dike-pond village rear its own fish fry, or buy them? Most bought them - the nursery ponds were one township's trade\", 'Were fish fry a trade, and which ponds were the nursery ponds?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'",
     "key": "fry pond",
-    "label": "guess",
+    "label": "accurate",
     "label_note": "GUESS: the fry trade and the nursery stage are read, but nothing read gives how many fry ponds a hamlet kept or which parcels - the one-in-ten share and the choice of the smallest parcels are the generator's.",
     "name": "fry pond",
     "siblings": {},
     "sources": [
       "cssn-sangyuanwei",
-      "isis-dykepond",
       "guangdong-xinyu-22",
       "pwsannong-zhusanjiao-nongyeshi"
     ],
@@ -630,6 +630,8 @@
       "zennoh-mizukanri",
       "horikawa-2011-nakaboshi",
       "doyoboshi-jawiki",
+      "qimin-yaoshu-juan2",
+      "chenfu-nongshu-juanshang",
       "guangdong-xinyu-20",
       "pwsannong-zhusanjiao-nongyeshi"
     ],
@@ -681,7 +683,7 @@
   },
   "pig sty": {
     "caveat": "",
-    "covers": "every `pig_sties[]` record - a shed with its railed pen on a pond dike",
+    "covers": "every `pig_sties[]` record - a shed with its railed pen on a pond bank",
     "entry": "research/archetypes.html - \"Does a pig sty have to stand back from the water, or from the pond's sluice?\", 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields', 'Does a dike-pond hamlet keep pigs and ducks on its pond dikes?', 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'",
     "key": "pig sty",
     "label": "accurate",
@@ -689,16 +691,11 @@
     "name": "pig sty",
     "siblings": {},
     "sources": [
-      "fao-ac264e",
-      "fao-ac264e-ch9",
-      "fao-y1187e",
       "qimin-yaoshu-yangzhu",
-      "fao-ac257e",
-      "fao-x6708e",
       "isis-dykepond",
-      "ruddle-zhong-1988",
       "pwsannong-zhusanjiao-nongyeshi",
-      "nongzheng-quanshu-41"
+      "nongzheng-quanshu-41",
+      "fao-ac264e"
     ],
     "what": "A simple pig shed built on the dike of a fish pond, its pen railed at the water's edge so the pigs' manure runs straight into the pond.",
     "why": "The dike-pond loop fed its fish with more than silkworm waste: pigs, chickens and ducks were reared on the dikes to manure the ponds, and a cane hamlet fed its pigs on bagasse. The shed stands on the pond nearest the houses."
@@ -755,11 +752,11 @@
       "manure heap": "The privy is the one-room outhouse; the manure heap is where its night soil and the byre's litter are composted before going onto the fields. A heap stands beyond the privy, because the two were one cluster - in Han China the latrine sat over the pigsty and drained to the cesspool - while a night-soil pit stands beside the privy or out at the edge of the household's fields."
     },
     "sources": [
-      "kotobank-benjo",
-      "sinyoken-madori",
-      "sugiura-1973-fuzoku",
+      "koshigaya-shishi-noumin-jukyo",
+      "oamishirasato-choshi-kaoku",
       "suzuki-1959-noson-benjo",
-      "sugiura-1977-tohoku"
+      "sugiura-1977-tohoku",
+      "sinyoken-madori"
     ],
     "what": "The household privy - on a farm, the urinal and the privy were one small building standing apart from the main house.",
     "why": "Near-universal: the Nipponica entry calls the detached privy the norm, and the 1972 survey counted one on 87 of 100 households. Its seat is rolled from three attested positions - by the back door, at the gate, or by the shed."
@@ -786,7 +783,7 @@
   },
   "shared bamboo grove": {
     "caveat": "",
-    "covers": "`bamboo_stands` with any role other than homestead - the take-yabu at the field margin",
+    "covers": "`bamboo_stands` with any role other than homestead - the take-yabu at the settlement's edge",
     "entry": "research/vegetation.html - 'Bamboo: how common, and where it stood', 'How is bamboo drawn, when one culm is too small to see?'",
     "key": "shared bamboo grove",
     "label": "convention",
@@ -798,7 +795,9 @@
     "sources": [
       "chikurin-jawiki",
       "take-jawiki",
-      "satoyama-enwiki",
+      "nagaokakyo-take-nishiyama",
+      "nagaokakyo-take-takenoko",
+      "qimin-yaoshu-zhongzhu",
       "phyllostachys-enwiki"
     ],
     "what": "A bamboo thicket held by the hamlet at the field margin, cut like a coppice.",
@@ -851,7 +850,7 @@
   },
   "storage shed": {
     "caveat": "the drawn count per household is deliberately set below the source's Tohoku figure, which is a colder and better-stocked district than this one.",
-    "covers": "`houses[].shed` (the lean-to against a farmhouse) and `farm_sheds` (the detached sheds of the same household)",
+    "covers": "`houses[].shed` (the storehouse against a farmhouse) and `farm_sheds` (its record)",
     "entry": "research/homesteads.html - 'What stood on a farmstead - the inventory, with numbers'",
     "key": "storage shed",
     "label": "accurate",
@@ -862,7 +861,10 @@
       "farmhouse": "The farmhouse is the dwelling; a storage shed is a roofed outbuilding for grain, straw, tools and fuel - Sugiura's 1972 survey counted 4.4 outbuildings per household, and the sheds drawn here stand for that inventory, not for a second house."
     },
     "sources": [
-      "sugiura-1973-fuzoku"
+      "oamishirasato-choshi-kaoku",
+      "koshigaya-shishi-noumin-jukyo",
+      "bunka-minami-naya",
+      "nerima-mitome-naya"
     ],
     "what": "A roofed outbuilding for storage - grain, straw, tools, fuel. Some stand as a lean-to against the farmhouse, some free in the yard; storage either way.",
     "why": "A July 1972 survey of 87 households in three Miyagi hamlets counted 4.4 outbuildings per household - firewood shed, straw shed, barn, work shed, storehouse - so a farmstead with only its house would be the anomaly. The count drawn here is a band below that snow-country figure, because the temperate lowland hamlet this map draws kept fewer."
@@ -971,7 +973,7 @@
     "name": "well",
     "siblings": {},
     "sources": [
-      "sphere-2004-water",
+      "qq-2024-beijing-wells",
       "saijo-mizu-rekishikan",
       "kotobank-idoyakata"
     ],
@@ -1049,20 +1051,17 @@
   },
   "woodpile": {
     "caveat": "",
-    "covers": "`farm_fixtures[kind=woodpile]`",
+    "covers": "`farm_fixtures[kind=woodpile]` - the wood shed",
     "entry": "research/homesteads.html - 'Where was the firewood stacked, and how big was the pile?'; 'The farmstead's fixtures'",
     "key": "woodpile",
-    "label": "guess",
+    "label": "accurate",
     "label_note": "The firewood SHED is read (Boso-no-Mura); where the open STACK stood relative to the house was found nowhere - the back wall or the shed's outer wall is a guess, and the stack's height is modern practice.",
     "name": "woodpile",
     "siblings": {},
     "sources": [
       "boso-no-mura-kigoya",
-      "326woods-stack",
-      "sugiura-1973-fuzoku",
-      "suido-ishizue-kizuma",
-      "sugiura-1977-tohoku",
-      "sato-1962-haichi"
+      "koshigaya-shishi-noumin-jukyo",
+      "oamishirasato-choshi-kaoku"
     ],
     "what": "The household's fuel: split logs stacked head-high against a wall, out of the rain.",
     "why": "Firewood and charcoal were the fuel, and a shed for them stood on three farms in four; the open stack under the eaves is the cheaper and older form, and the one drawn."

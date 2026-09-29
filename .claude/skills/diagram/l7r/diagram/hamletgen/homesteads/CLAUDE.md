@@ -10,7 +10,7 @@ Its modules are LAYERS, emitted bottom-up: every cross-module reference points b
 |---|---|
 | `seats.py` (162) | where a homestead may sit - the front row, the lane frontage that fronts it, the cluster's aspect ratio, and whether a seat is allowed at all |
 | `bamboo.py` (144) | the household bamboo strip: whether a strip is blocked, and the per-household placement |
-| `fixtures.py` | what stands in a farmstead's yard - the hamlet's fixture shares and forms (`fixture_quota`, `fixture_forms`, handed to the seating) and `farmstead_fixtures`, which DRAWS each fixture where the bundle laid it (feature 287, homes H32: `settlement/homestead_parts/fixture_seats.py` lays them; the kizuma and the field pit take their own form at the hinterland call where they can) |
+| `fixtures.py` | what stands in a farmstead's yard - the hamlet's fixture shares and forms (`fixture_quota`, `fixture_forms`, handed to the seating) and `farmstead_fixtures`, which DRAWS each fixture where the bundle laid it (feature 287, homes H32: `settlement/homestead_parts/fixture_seats.py` lays them - the bath room joined to the house, the wood shed a ken off a wall, feature 280; the field pit takes its own form at the hinterland call where it can) |
 | `retirement.py` (135) | the retirement house (269 B42, settlements/035): the `family_form` knob (one roof, or a retirement house in some yards), its share, size and seat off the farmhouse's back or flank, recorded under `retirement_houses` - never a household - and seated after the byres in `stage_appurtenances` |
 | `wells.py` (314) | the public wells - how many a settlement of this size wants, and the pass that seats them |
 | `stages.py` (334) | STAGES 5 and 6 - the homesteads themselves and what stands among them. Read this first |

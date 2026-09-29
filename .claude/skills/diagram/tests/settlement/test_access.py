@@ -47,6 +47,23 @@ def test_a_homestead_leaves_by_its_dooryard_never_a_back_wall() -> None:
     assert doors_of({"house": (0.0, 0.0, 40.0, 20.0), "yard": None}) == [(0.0, 12.0)], "no yard: a step off the front wall"
 
 
+def test_a_turned_yards_far_edge_door_stands_on_its_drawn_edge_not_its_box() -> None:
+    """Merge of features 280 and 287 (cohort seed 32): a turned yard's axis-aligned box reaches past the drawn yard, and a
+    far-edge door set by the box stood 16 ft beyond it - an end the lane law reads as reaching nothing. With the bundle's
+    turn the door is on the drawn edge: here a 50 x 28 yard turned 12 degrees, straight out along its own axis."""
+    import math
+
+    th = math.radians(12.0)
+    u = (-math.sin(th), math.cos(th))  # the house's front normal, turned
+    yard = (u[0] * 40.0, u[1] * 40.0, 50.0, 28.0)
+    box = (yard[0], yard[1], 50.0 * math.cos(th) + 28.0 * math.sin(th), 50.0 * math.sin(th) + 28.0 * math.cos(th))
+    geom = {"house": (0.0, 0.0, 46.0, 28.0), "yard": yard, "boxes": {"house": (0.0, 0.0, 46.0, 28.0), "yard": box}, "turn": 12.0}
+    far = doors_of(geom)[1]
+    assert math.dist(far, yard[:2]) == pytest.approx(14.0), "the yard's own half depth"
+    del geom["turn"]
+    assert math.dist(doors_of(geom)[1], yard[:2]) > 20.0, "the box alone overstates it"
+
+
 def test_the_exit_strip_starts_the_tree_and_the_manifest_records_it() -> None:
     s = _open()
     tree = start_tree(s, (100.0, 100.0), (0.0, 1.0), 50.0)

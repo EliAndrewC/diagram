@@ -323,23 +323,33 @@ POLDER_ARCHETYPES = ("polder_grid", "mulberry_dike_fishpond")
 
 # THE PARCEL FABRIC PER POLDER ARCHETYPE - every number is `build_polder`'s TRUE-SCALE SIZING note
 # (researched 2026-07-21, source-verified the same day; 1 px = 1 ft, no legibility inflation):
-# - a RICE polder's module is ~110 ft (whole bay ~1.9 mu, halves ~0.9, thirds ~0.6 - Buck's
-#   1929-33 mean parcel ~1 mu), most bays split into strips ((0.52, 0.16, 0.12)), with 3 ft walking
+# - a RICE polder's module is ~190 ft (feature 280 M54, research/archetypes/050: a polder parcel before modernity ran about
+#   three mu - the 1897 fish-scale register of nineteen Taipingqiao polders outside Suzhou, 3,700 parcels on 11,000 mu -
+#   so the bay/half/third mix of the old ~110 ft module, whose ~1 mu mean was Buck's 1929-33 survey, is carried to
+#   110 x sqrt 3 ~ 190 ft), most bays split into strips ((0.52, 0.16, 0.12)), with 3 ft walking
 #   bunds between rows and 8 ft ditch corridors on the module lines ((1.5, 4.0));
 # - a DIKE-POND's ponds were 0.4-0.6 ha oblongs (Ruddle & Zhong / FAO; CAVEAT in the note: the
 #   sizes are Republican-to-1980s surveys of the traditional landscape, not Ming/Qing documents),
 #   so a ~160 ft module with a merge-heavy mix ((0.10, 0.0, 0.60): mostly 160x320 ft ~0.48 ha 1:2
-#   ponds, a square ~2.4-mu minority) and ~22 ft mulberry dikes ((11, 11)) - the 6:4 water-to-dike
-#   ratio measured on Kuwabata at 76% water per parcel, 50% over the block (research/archetypes.html
-#   "The 6:4 water-to-dike ratio").
+#   ponds, a square ~2.4-mu minority), the grid's ~22 ft gaps ((11, 11)), and each pond's water inset 23 ft inside its
+#   parcel (`settlement/fields/landuse.py` `DIKEPOND_WATER_INSET`). THE WATER SHARE (feature 280 M58,
+#   research/archetypes/610): every page that writes the water-to-dike split as a number (6:4, 7:3, 4:6) is modern, and
+#   the oldest figures are Qu Dajun's for Jiujiang in 1678 - read together (a GUESS, this record's arithmetic) water to
+#   dike about 5:3 - so a parcel is calibrated to about 6 parts water in 10 (0.62 measured on Kuwabata, 2026-09-29);
+#   the 11 ft inset it replaced left 80% water per parcel, wetter than any figure read in any period. The dike's
+#   width itself has no premodern figure (the 6-10 m once cited is a modern manual's): it follows from the share.
 # `fit_polder` scales the GRID to the acreage and never the cell, so these calibrations hold
 # whatever the household count asks for.
 POLDER_FABRIC: dict[str, dict[str, Any]] = {
-    "polder_grid": {"cell": 110.0, "parcel_mix": (0.52, 0.16, 0.12), "gap": (1.5, 4.0)},
+    "polder_grid": {"cell": 190.0, "parcel_mix": (0.52, 0.16, 0.12), "gap": (1.5, 4.0)},
     "mulberry_dike_fishpond": {"cell": 160.0, "parcel_mix": (0.10, 0.0, 0.60), "gap": (11.0, 11.0)},
 }
 
-# THE POND LAYOUT KNOB - two attested FORMS, so a knob rather than a choice (constitution XII,
+# THE POND LAYOUT - ONE ATTESTED FORM AT POND SCALE (feature 280 M56, research/archetypes/130): the grid is attested for
+# the Song tangpu CANALS, the mosaic for the PONDS, while a uniform chessboard of ponds is found only as today's aerial view
+# of Digang - so a dike-pond block is drawn as the mosaic and the pond grid is no longer rolled. The GM ruled the knob in on
+# 2026-08-18 on the reading that both were attested ponds; that reading is withdrawn at pond scale and the reversal
+# reported. What follows is the knob's original note (constitution XII,
 # GM 2026-08-18). research/archetypes.html "Grid vs mosaic": the lower-Yangtze wei-tian was a SURVEYED
 # rectilinear grid (the Song tangpu lattice) while the Pearl-delta dike-pond accreted household by
 # household into a MOSAIC - rectangles of varied size at varied local orientation around winding
@@ -349,7 +359,15 @@ POLDER_FABRIC: dict[str, dict[str, Any]] = {
 # to before this knob existed). The uniform chessboard is also the MODERN consolidated look, which
 # is why the mosaic is the more common roll. `build_polder(mosaic=)` is the engine's dial: 0.0 is
 # the grid, 0.5 the mosaic Kuwabata was drawn with (the GM saw and accepted that map's ponds).
-POND_LAYOUTS = ("mosaic", "mosaic", "grid")
+POND_LAYOUTS = ("mosaic",)
+
+# THE FRY FORM - which nursery a dike-pond hamlet keeps (feature 280 M60, research/archetypes/200 and 172): the ordinary
+# delta hamlet raised grown fish and BOUGHT its fry, with no nursery ponds; the fry village of Jiujiang raised fry in seven
+# parts of ten of its pond water (Qu Dajun, 1678). The "one parcel in ten" once drawn is on no page read, premodern or
+# modern. Two attested forms, so a knob; the fry village rare (Qu Dajun: fry ponds only in Jiujiang) - the odds a GUESS.
+# The third form read, a small fry pit beside each big pond (Nongzheng quanshu, 1639), is OFF the delta, and the block
+# drawn is the delta's mosaic.
+FRY_FORMS = ("none", "none", "none", "fry_village")
 
 # THE MANURE FIXTURE'S FORM - heap or pit, two attested forms so a knob (constitution XII; feature 150, GM
 # 2026-08-28 choosing audit A2). Sugiura 1973 counts the manure shed/heap on Tohoku farmsteads; Fei 1939 has
@@ -467,6 +485,17 @@ POLDER_CELL_FT = 110.0
 # seed 18 grew a two-farm satellite 500 px off the nucleus, 777 px from the nearest water against a
 # 760 px reach, with every legal well seat around it already taken by its own two courtyards.
 BUNDLE_PITCH = 100.0
+
+# THE GROUND ONE HOMESTEAD TAKES, as the side of a square (feature 280 M16 merged into feature 287, 2026-09-29): the seat
+# band's AREA (`plan.band_extent`, `households x HOMESTEAD_GROUND_FT^2`, which also sizes the canvas's room for the seat).
+# It was `BUNDLE_PITCH`, and grows with the yard: 280 moved the rice hamlet's yard median from 18 to 25 tsubo, and at the
+# apron's 1.45 aspect the median yard is sqrt(18 x 35.583 / 1.45) = 21.0 ft deep before and sqrt(25 x 35.583 / 1.45) =
+# 24.8 ft after - 3.8 ft more ground in the row's sum above, so 104. The ROW pitch stays 100: it plans offers the placer
+# staggers from (and the web's reach is tied to it, `WEB_REACH_FT`). MEASURED (`make cohort N=1 SEED=<n>`; a detached
+# worktree at 287's HEAD passes seed 18): with the band at 100 the merge held 13 of seed 18's 15 households on its best
+# margin and refused the site; with the band at 104 all 15 seat. Raising the row pitch to 104 as well seated seed 18 but
+# left one farmhouse off the way network on seeds 11 and 43 - measured and not taken.
+HOMESTEAD_GROUND_FT = 104.0
 
 # How far below the drain outfall a tameike may stand before the map is better off without one.
 # Calibrated against the drawn ponds: an ordinary set-back lands well under 200 px, and the case

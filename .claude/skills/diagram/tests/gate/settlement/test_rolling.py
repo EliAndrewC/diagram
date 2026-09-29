@@ -39,3 +39,18 @@ def test_roll_village_honors_a_pinned_knob():
 
     k, _how = rollcache.obtain("roll_village:pond:pins:elongated+spine:seed7:hh18", produce)
     assert k["cluster_shape"] == "elongated" and k["lane_skeleton"] == "spine"
+
+
+@pytest.mark.rolls_map
+def test_roll_village_stops_seeding_once_every_household_has_landed():
+    """The cluster's seed walk ends when the households are all placed (feature 280: the 18-household rolls here seat 13-15,
+    so no roll reached the stop)."""
+
+    def produce():
+        s = Settlement(W=2000, H=2600, seed=7)
+        s.meta(name="Two", scale="hamlet", ftpx=1, toscale=True, households=2, field_footbridges=True)
+        s.roll_village("Two", households=2, down_deg=90, water_kind="pond", field_fall=1260)
+        return s.M
+
+    M, _how = rollcache.obtain("roll_village:pond:seed7:hh2", produce)
+    assert len(M["houses"]) == 2

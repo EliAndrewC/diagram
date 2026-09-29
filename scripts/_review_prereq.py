@@ -131,7 +131,13 @@ def answers_hint(clone: pathlib.Path, name: str) -> str:
 def raised_findings(verdict: dict) -> list[dict]:
     """The findings a verdict leaves to be dispositioned: its own, or - on a NOT-REVIEWABLE verdict, which names missing
     prerequisites rather than findings - the ones it CARRIED from the verdict it stopped over (see `write_verdict`)."""
-    own = verdict.get("carried", []) if verdict.get("verdict") == "NOT-REVIEWABLE" else verdict.get("findings", [])
+    # ...AND A VERDICT A RED GATE DOWNGRADED raises its OWN findings (feature 280, the settlement-review of Sawada): it is
+    # NOT-REVIEWABLE by the gate, not by a missing prerequisite, and keeps the reviewer's conclusion under `concluded` and its
+    # findings under `findings` - reading only `carried` left every one of them unasked-for, and carried nothing forward.
+    if verdict.get("verdict") == "NOT-REVIEWABLE":
+        own = list(verdict.get("carried", [])) + (list(verdict.get("findings", [])) if verdict.get("concluded") else [])
+    else:
+        own = verdict.get("findings", [])
     return [f for f in own if isinstance(f, dict)]
 
 

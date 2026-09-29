@@ -186,3 +186,18 @@ the rows marked GM wait on a ruling that the conversion puts to the GM through `
   history reads 2/3 as low. Sketch: the GM rules a higher share, and the extramural estates are drawn as country estates.
 - **The canal's mouth (B46).** Measurement: `settlement/city/canals.py` allows both forms and chooses none. Sketch: a knob
   rolled per city, the moat with a water gate or the canal's own mouth to the river.
+
+## OWED AT CONVERSION: the frozen cities' modern-only forms (feature 280, the modern-only sweep, 2026-09-29)
+
+Beside 269's list above, the modern-only sweep found these on the frozen provincial cities (each item's finding:
+`specs/280-modern-only-sweep/outcomes.md`; the town items are in `towns.md`).
+
+- **Minami**: M120 (the funerary ground's pyre clearance and its "triple the bonfire" reasoning, in `citybudget`'s
+  comment), M123 (the moat offtake angles, a guess on modern hydraulics), M124 (private back-gate landings), M126 (the generous lot,
+  capped at about double the Fukui ladder), M127 (the storehouse cap ~1 to 10 houses), M130 (the moat ~36 ft
+  provincial, ~10 ft county - not 66), M14 (the sun lane from the belt's 10 m, a modern working height), M69 (the crematory
+  set-back a guess, 190 ft), M84, M85, M86 (the inn, the stall, the flophouse - as in `towns.md`), M96 (a plain one-sided
+  stable trough), M97 (the well's capacity), M99 (the brewery's vat hall 50-62 ft), M103 (no log-boom chain fence or
+  pens - moored rafts or a pond), M104 (no charcoal cooling ground), M108 (the farrier's sling frame is Western; the Qing two-post tie frame is the attested alternative).
+- **Nagahara**: M120, M123, M124, M126, M127, M130, M69, M84, M85, M86, M96, M97, M99, M108.
+- **Tango**: M120, M123, M126, M127, M130, M69, M84, M85, M86, M96, M97, M99, M108.

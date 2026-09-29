@@ -1,0 +1,6 @@
+{
+  "utc": "20260929T121634Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the paired gate evicts the pool renders mid-run; the snapshot below was taken before it started and holds the full map"
+}

@@ -16,7 +16,6 @@ from l7r.diagram.settlement._knobs import KNOBS
 from .consts import (
     BAMBOO_FORMS,
     BROOK_FLANKS,
-    BUNDLE_PITCH,
     CARDINAL_BEARINGS,
     CLUSTER_BAND_ASPECT,
     CLUSTER_SHAPES,
@@ -27,10 +26,12 @@ from .consts import (
     FALL_BEARINGS,
     FAN_ASPECTS,
     FIELD_ARCHETYPES,
+    FRY_FORMS,
     GRAIN_DRIFTS,
     GROSS_ACRES_PER_HOUSEHOLD,
     HARVEST_WEATHERS,
     HEAD_RACE_LEAD,
+    HOMESTEAD_GROUND_FT,
     HOUSEHOLD_BAND,
     INTAKE_FORMS,
     KOSATSUBA_SITINGS,
@@ -199,7 +200,9 @@ class SitePlan:
     bamboo_polys: list[Poly] = field(default_factory=list)
     bamboo_roles: list[str] = field(default_factory=list)
     bamboo_of: dict[int, Pt] = field(default_factory=dict)  # a homestead strip's owner house, by its index in `bamboo_polys` (feature 287, homes H01)
-    way_targets: list[Pt] = field(default_factory=list)  # points a way must reach - a burial ground's edge (feature 287, homes H36); the web serves each
+    # points a way must reach (feature 287, homes H36); the web serves each. Its one producer, the hamlet's own burial
+    # ground, was eliminated by feature 280 M68 (modern-only), so none is registered until a form that owes a path returns
+    way_targets: list[Pt] = field(default_factory=list)
     fixtures_min: dict[str, int] = field(
         default_factory=dict
     )  # the spec's floor per fixture kind (T61); the placer forces presence up to it  # "thicket" (communal, one) or "homestead" (per farmstead), parallel to bamboo_polys
@@ -216,6 +219,7 @@ class SitePlan:
     # THE VIEW, DECIDED ONCE (feature 287, M6): (x, y, w, h), fixed at the end of `stage_hinterland`'s seating by
     # `hinterland.frame.frame_for`, and set exactly by `stage_frame`. Every rule that reads the picture reads this.
     view: tuple[float, float, float, float] | None = None
+    fry_form: str = "none"  # none | fry_village (feature 280 M60, `FRY_FORMS`): a dike-pond hamlet's nursery, read by `stage_polder`
 
     @property
     def fall(self) -> Pt:
@@ -283,10 +287,10 @@ def canvas_for(target_acres: float, ftpx: float) -> tuple[int, int]:
 def band_extent(households: int, shape: str | None) -> tuple[float, float]:
     """The seat band's half-depth and length, `(dep, lat)`, from the household count and the cluster shape - the ONE
     derivation `seat_cluster` seats with and `seat_room` sizes the canvas with (feature 287, homes H31). Area is held
-    (`households * BUNDLE_PITCH^2`, the ground a homestead takes), so the shape sets only the band's aspect."""
+    (`households * HOMESTEAD_GROUND_FT^2`, the ground a homestead takes), so the shape sets only the band's aspect."""
     asp = CLUSTER_BAND_ASPECT.get(shape or "crescent", 3.0)
-    dep = max(112.0, min(math.sqrt(households * (BUNDLE_PITCH**2) / (asp * math.pi)), 300.0))
-    lat = max(240.0, min(households * (BUNDLE_PITCH**2) / (math.pi * dep), 1100.0))
+    dep = max(112.0, min(math.sqrt(households * (HOMESTEAD_GROUND_FT**2) / (asp * math.pi)), 300.0))
+    lat = max(240.0, min(households * (HOMESTEAD_GROUND_FT**2) / (math.pi * dep), 1100.0))
     return dep, lat
 
 
@@ -390,6 +394,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         kosatsuba_siting=spec.kosatsuba_siting or str(_roll(spec.seed, "kosatsuba_siting", KOSATSUBA_SITINGS)),
         dike_crop=(spec.dike_crop or str(_roll(spec.seed, "dike_crop", DIKE_CROPS))) if _archetype == "mulberry_dike_fishpond" else "mulberry",
         leftover=(spec.leftover or str(_roll(spec.seed, "leftover", LEFTOVER_FORMS))) if _archetype == "mulberry_dike_fishpond" else "rice",
+        fry_form=str(_roll(spec.seed, "fry_form", FRY_FORMS)) if _archetype == "mulberry_dike_fishpond" else "none",
         plot_size=spec.plot_size or str(_roll(spec.seed, "plot_size", PLOT_SIZES)),
         grain_drift=spec.grain_drift if spec.grain_drift is not None else int(_roll(spec.seed, "grain_drift", GRAIN_DRIFTS)),
         woodland_patches=spec.woodland_patches if spec.woodland_patches is not None else int(_roll(spec.seed, "woodland_patches", (2, 3, 3, 4))),

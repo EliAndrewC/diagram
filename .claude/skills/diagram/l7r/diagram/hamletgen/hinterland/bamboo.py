@@ -8,6 +8,7 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
 from l7r.diagram.settlement._geom.indexes import BambooObstacles
+from l7r.diagram.settlement.homestead_parts.bamboo_keepout import stand_spares_seats
 from l7r.diagram.settlement.land.wet import marsh_ground
 
 from ..consts import Poly, Pt
@@ -17,8 +18,11 @@ from .parcels import _parcel_outline
 
 # THE BAMBOO STANDS (feature 133 T47/T48, GM 2026-08-27; research/vegetation.html "Bamboo: how common, where
 # it stood, and how to show it"). Two attested forms, the `bamboo` knob's values: the THICKET (take-yabu),
-# ONE communal stand at the village edge held and cut under the village's rules like its coppice, seated
-# here on the cluster's shady side; and HOUSEHOLD bamboo, a small strip on each farmstead that keeps one
+# ONE stand at the settlement's edge, seated here on dry ground just beyond the cluster's back (north) row - not at
+# the field margin: feature 280 M49 (research/vegetation/640) finds a bamboo thicket round the settlement before modern
+# times (an early-Edo screen, the Nagaokakyo bamboo villages, the Qimin yaoshu's high dry ground), while the field
+# margin's shady end rested on a present-day page; which side of the cluster, and that the stand is held in common,
+# are GUESSES; and HOUSEHOLD bamboo, a small strip on each farmstead that keeps one
 # (`household_bamboo` in homesteads.py, seated with the sheds and gardens). The thicket's size is a working
 # harvested stand in real feet; a stand under the legibility floor does not read at fit zoom.
 BAMBOO_THICKET_FT = (84.0, 58.0)
@@ -135,19 +139,16 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     north = min(hy)
     top = sorted(houses, key=lambda o: o["y"])[:3]
     home_target = (sum(float(o["x"]) for o in top) / len(top), north - px(40.0))
-    env = [(float(a), float(b)) for a, b in plan.envelope]
-    if env:
-        ecx, ecy = sum(q[0] for q in env) / len(env), sum(q[1] for q in env) / len(env)
-        near = min(env, key=lambda q: math.hypot(q[0] - home_target[0], q[1] - north))
-        d = math.hypot(near[0] - ecx, near[1] - ecy) or 1.0
-        thicket_target = (near[0] + (near[0] - ecx) / d * px(50.0), near[1] + (near[1] - ecy) / d * px(50.0))
-    else:
-        thicket_target = home_target  # pragma: no cover - a hamlet always has its field [174: KEPT, not deletable - an else branch that binds thicket_target]
+    thicket_target = home_target  # the settlement's edge, on the dry ground behind its back row (feature 280 M49)
     rects: list[tuple[float, float, float, float, float]] = []  # (x, y, w, h, pad)
     for key, pad in (("houses", 10.0), ("threshing_yards", 8.0), ("gardens", 8.0), ("farm_sheds", 8.0), ("byres", 8.0), ("retirement_houses", 10.0), ("wells", 14.0), ("kosatsuba", 12.0)):
         for o in s.M.get(key, []):
             if all(isinstance(o.get(f), (int, float)) for f in ("x", "y", "w", "h")):
                 rects.append((float(o["x"]), float(o["y"]), float(o["w"]), float(o["h"]), px(pad)))
+    # ...AND THE YARD PERSIMMONS, by their crowns: a take-yabu is a near single-species stand, and once feature 280 seated the
+    # thicket behind the back row a dooryard persimmon stood inside it (settlement-review of Kashikawa, round 3)
+    rects += [(float(o["x"]), float(o["y"]), 2.0 * float(o["r"]), 2.0 * float(o["r"]), px(2.0)) for o in s.M.get("persimmons", []) if all(isinstance(o.get(f), (int, float)) for f in ("x", "y", "r"))]
+
     lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(10.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
     # ...AND THE WATER (settlement-review of Mizuguchi, feature 261): nothing refused a watercourse, and when the houses moved
     # north of the brook the thicket's target on the field edge fell on it - 13 culms on the 7 ft ribbon, read as reeds in
@@ -184,8 +185,16 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     # `BAMBOO_SAMPLE_FT / sqrt(2)` of one, under the lane's refusal reach (its half-width and 10 ft): a tread that enters the
     # stand is always seen
     _sample = px(BAMBOO_SAMPLE_FT)
+    # ...AND CLEAR OF EVERY HOUSEHOLD'S RESERVED COPSE SEATS by the copse's bamboo keep-out (`stand_spares_seats`; feature
+    # 280 keeps the copse two crowns off the bamboo, feature 287 plants every reserved seat): the stand gives way, not the seat
+    _seats = [(float(p[0]), float(p[1])) for h in s.M.get("houses") or [] for p in (h.get("wood_share") or {}).get("seats") or ()]
 
     def _fits(cx: float, cy: float, hw: float, hh: float) -> bool:
+        if not stand_spares_seats(cx, cy, 2.0 * hw, 2.0 * hh, _seats, s.bscale):
+            return False
+        # a yard persimmon's crown fitted between the samples of a 72 x 55 ft thicket at five by three (settlement-review of
+        # Kashikawa, feature 280, which went to nine by five); the `BAMBOO_SAMPLE_FT` grid is finer than a crown and its pad
+        # (`PERSIMMON_CROWN_FT`, 23 ft across) on either axis, so a crown anywhere over the stand is always seen
         return not any(_blocked(x, y) for x, y in stand_samples(cx, cy, hw, hh, _sample))
 
     out: list[Poly] = []

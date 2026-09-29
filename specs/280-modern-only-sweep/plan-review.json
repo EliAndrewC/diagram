@@ -1,0 +1,81 @@
+{
+ "feature": "280-modern-only-sweep",
+ "plan_sha256": "a88dd61176ca6405434b49d45e1dc548dad078cd68fd7aeeb5889931d96d9c77",
+ "reviewed": "2026-09-28",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Audit read-only over a copy of the record taken from 269's clone (main plus 269's unlanded research); every section classed; judgment on Opus",
+   "class": "within",
+   "why": "FR-001's coverage; reading the newest text widens, not narrows, what is swept."
+  },
+  {
+   "id": "D2",
+   "summary": "Research in page sessions from generated briefs, four-question cap, reserved prefixes, three outcomes incl. undated-custom",
+   "class": "within",
+   "why": "Restates FR-003, FR-004 and spec D1."
+  },
+  {
+   "id": "D3-order",
+   "summary": "One serial queue; groups on sections 269 rewrote run after the others, behind wait269.sh (research-on-main as the proxy for 269 landing); 279's R5 last",
+   "class": "within",
+   "why": "Ordering only; spec Edge Cases hold 269's sections until it lands, and 269 cannot push its record before its tasks close, so the proxy is sound."
+  },
+  {
+   "id": "D4",
+   "summary": "Eliminations only after research and from outcomes.md; nothing touches a 269 module before 269 lands; per-form removal, retirement or prose narrowing, regeneration, review, make done; MIXED keeps attested forms and calibrates degrees",
+   "class": "within",
+   "why": "Spec phase 3, FR-005, FR-010, acceptance scenario 3."
+  },
+  {
+   "id": "D5",
+   "summary": "Unknowingly ruled-in forms eliminated and reported; knowingly ruled-in forms to the GM via escalation-check before removal",
+   "class": "within",
+   "why": "FR-006 verbatim; the exception was ruled on at spec round 2."
+  },
+  {
+   "id": "D6",
+   "summary": "Legacy maps not edited; each modern-only form recorded in migration-plan.md owed at conversion; list to the GM via escalation-check",
+   "class": "within",
+   "why": "Spec D2, FR-007, SC-004; judged legitimate at spec round 1 and the plan adds nothing to it."
+  },
+  {
+   "id": "D7",
+   "summary": "Findings owed to another feature's section go in the handoff to the owner",
+   "class": "within",
+   "why": "Spec Edge Cases."
+  },
+  {
+   "id": "D8",
+   "summary": "Stray fixes found by the audit made in place when outside every held module and section; else listed with owner",
+   "class": "within",
+   "why": "Constitution XIV; bounded by FR-010."
+  },
+  {
+   "id": "D3-269-timeout",
+   "summary": "wait269.sh waits up to 24 hours; if 269 has not landed it prints a nonexistent brief path, the runner refuses it (admit raises Refused) and clears the queue; the 269-held tail is queue-269.txt, started once 269 lands",
+   "class": "within",
+   "why": "Round-1 item 2 resolved: the queue never proceeds into 269-held groups, nothing is dropped (queue-269.txt equals the queue tail after wait269), so FR-003/SC-002 and FR-010 both hold."
+  },
+  {
+   "id": "D3-held",
+   "summary": "A held section (claims line open for another feature, or rewritten by 269 and not on origin/main whatever its claim line says) is researched, not edited; the outcome goes in the handoff marked OWED-TO with the exact text, applied via briefs/extra/ once the hold clears",
+   "class": "within",
+   "why": "Round-1 items 1 and 3 resolved: this is the spec's own Edge Cases routing (research, hand the finding to the owner); no item leaves without an outcome; the blanket ban on religion-and-death 124-129 is gone from gen.py and every regenerated brief, so R5 runs and researches."
+  },
+  {
+   "id": "D4-phase3-gate",
+   "summary": "Phase 3 starts only when M01-M130 each have an outcome line or an exclusion naming its owner, and each OWED-TO text is applied or sent (T44)",
+   "class": "within",
+   "why": "Enforces FR-003/SC-002; round-1 item 1's T44 check."
+  },
+  {
+   "id": "D4-hoshigaoka",
+   "summary": "A change to the hoshigaoka-shrine sheet from R5's outcomes is agreed with 279 (its claim) first",
+   "class": "within",
+   "why": "Coordination with the claim holder, per spec Edge Cases and FR-010; it does not drop the elimination."
+  }
+ ],
+ "verdict": "CLEAR"
+}

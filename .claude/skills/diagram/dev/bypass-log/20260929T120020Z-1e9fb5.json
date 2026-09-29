@@ -1,0 +1,6 @@
+{
+  "utc": "20260929T120020Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the paired gate evicts the pool renders mid-run; the snapshot below was taken before it started and holds the full map; and this map's last record lost its carried findings to the _review_prereq bug fixed in a39bb922e, so their dispositions are given here"
+}

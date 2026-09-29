@@ -554,19 +554,6 @@ def test_a_planted_tag_is_a_str_and_so_takes_every_str_path() -> None:
     assert ink_census([RECT], [tag])[0]["mulberry dike"] == 1
 
 
-def test_a_pond_sluice_gets_the_field_ditchs_widening() -> None:
-    """The GM, 2026-08-29: the sluices are "really hard to click on ... a larger highlight box, similar
-    to what we are doing with the field ditches". Same factors; the sluice's mark being thinner, the
-    box comes out smaller in absolute terms and larger relative to the ink, which is the point."""
-    from l7r.diagram.interactive.page import HIT_WIDEN
-
-    assert HIT_WIDEN["pond sluice"] == HIT_WIDEN["irrigation ditch"]
-    sluice = '<line x1="10" y1="10" x2="30" y2="10" stroke="#37637F" stroke-width="2.4"/>'
-    out = hit_layer([sluice], ["pond sluice"])
-    widths = [float(w) for w in re.findall(r'class="hit"[^>]*stroke-width: ([\d.]+)px', out)]
-    assert widths == [14.4], f"one invisible copy, six times the drawn 2.4 px: {out}"
-
-
 def test_outlined_shapes_that_overlap_keep_their_own_paint_order() -> None:
     """Feature 153, measured on Kuwabata. One <path> paints every subpath's FILL and only then its
     stroke, so an earlier crown's outline that a later crown's fill used to cover comes back over it -
@@ -620,7 +607,18 @@ def test_a_fill_only_shape_is_not_outlined_and_still_merges_where_it_overlaps() 
     assert merge_primitives(over).count("<circle") == 0
 
 
-def test_only_the_lifted_class_leaves_its_own_group() -> None:
+@pytest.fixture
+def lifted_sluice(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A stand-in lifted class for the on-top hit layer (feature 153): the pond sluice it was built for is retired (feature
+    280 M57), so `HIT_ON_TOP` is empty and these tests lift a 'pond sluice' mark of their own, widened as a ditch is."""
+    from l7r.diagram.interactive import page as pg
+
+    monkeypatch.setattr(pg, "HIT_ON_TOP", frozenset({"pond sluice"}))
+    monkeypatch.setattr(pg, "HIT_WIDEN", {**pg.HIT_WIDEN, "pond sluice": pg.HIT_WIDEN["irrigation ditch"]})
+    monkeypatch.setattr(pg, "HIT_PRIORITY", (*pg.HIT_PRIORITY, "pond sluice"))
+
+
+def test_only_the_lifted_class_leaves_its_own_group(lifted_sluice: None) -> None:
     """Feature 153. A pond sluice is a gate IN a watercourse, so 49 of Kuwabata's 52 are drawn on top of
     a field ditch - and while every box rode inside its own class group, the ditch's group came later
     and its 14.4 px box took the pointer from the sluice's own 2.4 px line (the sluice won 42.4% of its
@@ -628,18 +626,18 @@ def test_only_the_lifted_class_leaves_its_own_group() -> None:
     alone fixes it - 88.6%, worst 75.8% - and lifting EVERY box does not: above the ink the bund's 12 px
     box stops being buried and takes 5,112 sample points off the dikes, the vegetable ground and the
     paddy. So the layer holds exactly `HIT_ON_TOP`, and everything else stays where the GM tuned it."""
-    from l7r.diagram.interactive.page import HIT_ON_TOP
+    from l7r.diagram.interactive import page as pg
 
     ditch = '<line x1="0" y1="10" x2="100" y2="10" stroke="#6E93A8" stroke-width="3.5"/>'
     sluice = '<line x1="48" y1="10" x2="52" y2="10" stroke="#37637F" stroke-width="2.4"/>'
-    assert frozenset({"pond sluice"}) == HIT_ON_TOP
+    assert frozenset({"pond sluice"}) == pg.HIT_ON_TOP, "the stand-in, lifted alone"
     assert 'class="hit"' not in wrap(sluice, "pond sluice"), "the lifted class leaves nothing behind"
     assert 'class="hit"' in wrap(ditch, "irrigation ditch"), "every other widened class keeps its box inline"
     layer = hit_layer([ditch, sluice], ["irrigation ditch", "pond sluice"])
     assert 'data-k="pond sluice"' in layer and 'data-k="irrigation ditch"' not in layer
 
 
-def test_a_lifted_box_gives_up_the_ground_a_structure_stands_on() -> None:
+def test_a_lifted_box_gives_up_the_ground_a_structure_stands_on(lifted_sluice: None) -> None:
     """Feature 153, settlement-review round 2. Lifting the sluice above the ink broke the rule the lift
     is allowed under: its 14.4 px box swallowed 88.4% of one pig sty's own footprint and 42.8% of a duck
     pen's - the sty's center sits 4.67 px from a lifted line whose half-width is 7.2. The layer is
@@ -656,7 +654,7 @@ def test_a_lifted_box_gives_up_the_ground_a_structure_stands_on() -> None:
     assert hit_layer([sluice], ["pond sluice"], junk).count("M94.9,95.9") == 1, "a record it cannot read is skipped, not fatal"
 
 
-def test_a_record_s_auxiliary_polygon_is_held_clear_by_its_box() -> None:
+def test_a_record_s_auxiliary_polygon_is_held_clear_by_its_box(lifted_sluice: None) -> None:
     """A glyph drawn outside its own `w` x `h` (a `poly` on the record) punches a second hole, its bounding box
     padded the tenth of a pixel the coordinates round to; a `poly` of two points is no polygon and adds none."""
     from l7r.diagram.interactive.page import hit_layer
@@ -669,7 +667,7 @@ def test_a_record_s_auxiliary_polygon_is_held_clear_by_its_box() -> None:
     assert hit_layer([sluice], ["pond sluice"], {"pig_sties": [two]}).count("h6.2v6.2") == 0
 
 
-def test_a_rotated_footprint_is_held_clear_by_its_whole_box() -> None:
+def test_a_rotated_footprint_is_held_clear_by_its_whole_box(lifted_sluice: None) -> None:
     """The hole is the axis-aligned box of the ROTATED glyph - a superset, so it is never smaller than
     the thing it protects."""
     from l7r.diagram.interactive.page import hit_layer
@@ -679,7 +677,7 @@ def test_a_rotated_footprint_is_held_clear_by_its_whole_box() -> None:
     assert "h14.3v14.3" in out, f"10 x 10 turned 45 degrees needs a 14.14 px box, plus the 0.2 pad: {out}"
 
 
-def test_a_lifted_class_the_priority_list_forgets_still_wins() -> None:
+def test_a_lifted_class_the_priority_list_forgets_still_wins(lifted_sluice: None) -> None:
     """The list ranks the lifted classes against each other; a class lifted BECAUSE it cannot otherwise
     be hit must not land in the weakest place because someone forgot to add it (the first version's
     `-1` fallback did exactly that)."""

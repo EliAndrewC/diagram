@@ -189,11 +189,27 @@ def test_cremation_ground_is_drawn_ragged_with_its_fire_bed_off_center() -> None
 
 
 def test_a_cremation_ground_draws_its_six_jizo_only_when_asked() -> None:
-    """Research 530 (feature 273): six stone jizo stood at a cremation ground; the glyph draws them when the caller
-    asks (the village roller), and not by default, so no other map's ground changes."""
+    """Feature 280 M71 (research 700): six stone jizo stood at a burial ground's entrance; the glyph draws them when the
+    caller asks - a cremation ground beside a burial ground - and not by default."""
     v = Settlement(1000, 1000, seed=2)
     v.meta(name="V", scale="village")
     v.cremation_ground(500.0, 500.0, jizo=True)
     v.cremation_ground(300.0, 300.0)
     with_j, without = v.M["cremation_grounds"]
     assert len(with_j["jizo"]) == 6 and "jizo" not in without
+
+
+def test_a_cremation_ground_is_open_air_on_most_seats_and_draws_no_pyre_platform_or_hut() -> None:
+    """Feature 280 M70 (research 202): most grounds were open-air to the end of Edo, a roof on four posts over the bed the
+    minority; no raised pyre platform or officiants' hut is attested, so neither is drawn."""
+    from l7r.diagram.settlement.civic_grounds.funerary import ROOFED_SHARE
+
+    v = Settlement(3000, 3000, seed=2)
+    v.meta(name="V", scale="village")
+    seats = [(200.0 + 130.0 * k, 200.0 + 110.0 * (k % 7)) for k in range(20)]
+    for x, y in seats:
+        v.cremation_ground(x, y, label="")
+    roofed = [g["roofed"] for g in v.M["cremation_grounds"]]
+    assert any(roofed) and not all(roofed) and sum(roofed) < len(roofed) / 2, f"the roof the minority ({ROOFED_SHARE}): {roofed}"
+    drawn = "".join(v.out)
+    assert "#CDB890" in drawn and drawn.count('fill="#8C8470"') == 0, "a roof's outline where rolled; no pyre platform"

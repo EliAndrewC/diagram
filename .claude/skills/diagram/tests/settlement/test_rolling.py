@@ -584,9 +584,10 @@ def _village_with_houses(seed: int = 1, pin: str | None = None) -> Settlement:
     return s
 
 
-def test_a_village_cremation_ground_stands_apart_with_its_six_jizo() -> None:
-    """Research 530 and the GM's ruling of 2026-09-27 (feature 273): a village draws its own cremation ground,
-    120 ft clear of the houses, within ~650 ft of their middle, down the fall line where clear, with six jizo."""
+def test_a_village_cremation_ground_stands_apart_and_on_its_own_draws_no_jizo() -> None:
+    """Research 530 and the GM's ruling of 2026-09-27 (feature 273): a village draws its own cremation ground, 120 ft
+    clear of the houses, near their middle, down the fall line where clear. Feature 280 M71 (research 700): the six jizo
+    stand at a burial ground's entrance, and a cremation ground on its own draws none."""
     from l7r.diagram.settlement.civic_grounds.edge_seat import rect_gap
 
     s = _village_with_houses(pin="apart")
@@ -596,7 +597,7 @@ def test_a_village_cremation_ground_stands_apart_with_its_six_jizo() -> None:
     assert g["y"] > 800, "below the houses, down the fall line"
     assert min(rect_gap((g["x"], g["y"], g["w"], g["h"]), (h["x"], h["y"], h["w"], h["h"])) for h in s.M["houses"]) >= s.px(120)
     assert math.dist((g["x"], g["y"]), (780, 780)) <= s.px(650)
-    assert len(g["jizo"]) == 6
+    assert "jizo" not in g
 
 
 def test_beside_the_burial_ground_says_so_while_the_village_draws_none() -> None:

@@ -265,8 +265,9 @@ def push_clear_of_fabric(base: Pt, unit: Pt, edge: float, fabric: Sequence[Poly]
     return (base[0] + unit[0] * edge, base[1] + unit[1] * edge)
 
 
-def _seg_cross(a: Pt, b: Pt, c: Pt, d: Pt) -> Pt | None:
-    """Where segment a-b crosses segment c-d STRICTLY inside both (never at an end), else None."""
+def _seg_cross(a: Pt, b: Pt, c: Pt, d: Pt, ab_eps: float = 0.02) -> Pt | None:
+    """Where segment a-b crosses segment c-d STRICTLY inside both (never at an end), else None. `ab_eps` is how far
+    inside a-b, as a share of it, a crossing must lie."""
     r = (b[0] - a[0], b[1] - a[1])
     q = (d[0] - c[0], d[1] - c[1])
     den = r[0] * q[1] - r[1] * q[0]
@@ -276,7 +277,7 @@ def _seg_cross(a: Pt, b: Pt, c: Pt, d: Pt) -> Pt | None:
     t = (w[0] * q[1] - w[1] * q[0]) / den
     u = (w[0] * r[1] - w[1] * r[0]) / den
     eps = 0.02
-    if eps < t < 1 - eps and eps < u < 1 - eps:
+    if ab_eps < t < 1 - ab_eps and eps < u < 1 - eps:
         return (a[0] + t * r[0], a[1] + t * r[1])
     return None
 

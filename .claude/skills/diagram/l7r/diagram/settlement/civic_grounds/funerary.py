@@ -18,6 +18,11 @@ from .._knobs import CITY_TIER_SCALES
 if TYPE_CHECKING:
     from ..core import Settlement
 
+# THE ROOFED FIRE BED IS THE MINORITY (feature 280 M70, research/religion-and-death/202): most cremation grounds were
+# open-air to the end of Edo, the four-post roofed bed and the snow-country hut coming in around mid-Edo. How many were
+# roofed no page says - a GUESS, rolled off the ground's own seat.
+ROOFED_SHARE = 0.25
+
 
 def cremation_outline(cx: float, cy: float, rx: float, ry: float, n: int, jitter: float, rnd: random.Random) -> str:
     """An SVG points string for a worn, ragged oval: n vertices round (cx, cy), each radius scaled by a factor
@@ -101,7 +106,10 @@ class FuneraryGroundsMixin:
         self.placed.append((cx, cy, w, h))
         bm = 8
         self.block_polys.append([(cx - w / 2 - bm, cy - h / 2 - bm), (cx + w / 2 + bm, cy - h / 2 - bm), (cx + w / 2 + bm, cy + h / 2 + bm), (cx - w / 2 - bm, cy + h / 2 + bm)])
-        self._clear_ground(cx, cy, w, h, 30)  # the tended grave collar - scrub trimmed back off the markers (the waste around it stays scrubby)
+        # THE GROUND CLEARS ONLY ITSELF (feature 280 M66, research/religion-and-death/720): the grave itself was weeded and
+        # topped up at Qingming in 1630s Beijing, but no cleared band round a graveyard is attested in any period - the
+        # 30 px collar it had is gone, and the waste around it stays scrubby to its edge
+        self._clear_ground(cx, cy, w, h, 0)
         if label:
             ly = cy - h / 2 - 8 if label_above else cy + h / 2 + 14
             # label_xy slides the caption ALONG the plot it names (it must still hug it) - a parish
@@ -191,11 +199,18 @@ class FuneraryGroundsMixin:
         """The CREMATORY (kasoba) - where the dead are burned before their bones are interred. Smoke, fire
         risk, and death-pollution put it OUTSIDE the walls; monks officiate with burakumin assistants (a
         religious order stands outside the caste system, so handling the dead does not pollute its caste).
-        A cleared, scorched ground with a raised stone pyre platform, a wisp of smoke, and a small roofed
-        shelter for the rite. Records M['cremation_grounds']; blocks placement."""
+        A cleared, scorched ground with its fire bed - a stone-framed trench on the leveled ground, open to the sky on most
+        grounds and under a roof on four posts on a few (`roofed`). Records M['cremation_grounds']; blocks placement.
+
+        THE FORMS BEFORE MODERN TIMES (feature 280 M70, research/religion-and-death/202): the open pyre, the stone-framed
+        trench beside a burial ground, and the four-post roofed bed and the snow-country hut dated to around mid-Edo - with
+        most grounds open-air to the end of Edo. So the roof is the minority (`ROOFED_SHARE`, a GUESS), and no raised stone
+        pyre platform or officiants' hut is drawn: neither is attested. A roof stands on four posts a few feet out from the
+        bed, about 11 ft square. SIX JIZO (`jizo`) stand at a BURIAL ground's entrance (feature 280 M71, 700): a caller
+        passes them only for a cremation ground beside a burial ground; one standing on its own has none."""
         # TO SCALE (GM 2026-07-19; anchors in research/religion-and-death.html, the funerary-size entry): a sanmai's cleared working core is
-        # 30-80 real ft for a village/town, ~80-160 ft for a provincial city (even metropolitan
-        # Edo's Yoyogi crematory was only ~180 ft square); the pyre platform ~15x10 ft. The old
+        # 30-80 real ft for a village/town (a GUESS: the only sizes are 1922 and later - 202), ~80-160 ft for a provincial
+        # city (Edo's Yoyogi crematory, 900 tsubo, ~180 ft square, the one premodern extent); the fire bed ~12x8 ft. The old
         # glyph was FIXED-PIXEL (116x80px) and silently tripled at city scale.
         across = 130.0 if self.M["meta"].get("scale") in CITY_TIER_SCALES else 75.0
         crx, cry = max(self.px(across) / 2, 14.0), max(self.px(across * 0.7) / 2, 10.0)
@@ -209,20 +224,21 @@ class FuneraryGroundsMixin:
         )  # cleared scorched ground
         fx = cx + crx * 0.08  # the fire bed a little east of center; the shelter keeps the east rim
         self.add(f'<polygon points="{cremation_outline(fx + crx * 0.05, cy + cry * 0.07, crx * 0.52, cry * 0.5, 14, 0.2, rnd)}" fill="#9A8A6A" opacity="0.5"/>')  # the burned ground
-        ppw, pph = max(self.px(15), 7.0), max(self.px(10), 5.0)
+        abw, abh = max(self.px(12), 5.0), max(self.px(8), 3.6)  # the fire bed (~12x8 ft burn area), a trench in the leveled ground
         self.add(
-            f'<rect x="{fx - ppw / 2:.1f}" y="{cy - pph / 2:.1f}" width="{ppw:.1f}" height="{pph:.1f}" rx="1.5" fill="#8C8470" stroke="#4A463C" stroke-width="1.2"/>'
-        )  # stone pyre platform (~15x10 ft)
-        abw, abh = max(self.px(12), 5.0), max(self.px(8), 3.6)  # the ash bed ON the platform (~12x8 ft burn area)
+            f'<rect x="{fx - abw / 2 - 0.8:.1f}" y="{cy - abh / 2 - 0.8:.1f}" width="{abw + 1.6:.1f}" height="{abh + 1.6:.1f}" rx="0.8" fill="none" stroke="#8C8470" stroke-width="1.2"/>'
+        )  # its stone frame
         self.add(f'<polygon points="{cremation_outline(fx, cy, abw / 2, abh / 2, 9, 0.25, rnd)}" fill="#5A463A"/>')  # the ash bed, irregular
-        shw, shh = max(self.px(14), 7.0), max(self.px(10), 5.0)  # the officiants' shelter (~14x10 ft hut)
-        shx = cx + crx * 0.52
-        self.add(f'<rect x="{shx:.1f}" y="{cy - shh / 2:.1f}" width="{shw:.1f}" height="{shh:.1f}" rx="1.5" fill="#CDB890" stroke="#5A4326" stroke-width="1.2"/>')
-        self.add(f'<rect x="{shx:.1f}" y="{cy - shh / 2:.1f}" width="{shw:.1f}" height="{shh * 0.32:.1f}" fill="#5A4326"/>')
-        rec: dict[str, Any] = {"x": round(cx, 1), "y": round(cy, 1), "w": round(2 * crx, 1), "h": round(2 * cry, 1), "rot": 0}
+        roofed = self._hjit(cx, cy, 202.0) < ROOFED_SHARE
+        if roofed:  # a roof on four posts a few feet out from the bed (~11 ft square), drawn as its outline and its posts
+            rw = max(self.px(11), 6.0)
+            self.add(f'<rect x="{fx - rw / 2:.1f}" y="{cy - rw / 2:.1f}" width="{rw:.1f}" height="{rw:.1f}" fill="#CDB890" fill-opacity="0.35" stroke="#5A4326" stroke-width="1.0"/>')
+            self.add("".join(f'<circle cx="{fx + sx * (rw / 2 - 0.8):.1f}" cy="{cy + sy * (rw / 2 - 0.8):.1f}" r="0.9" fill="#5A4326"/>' for sx in (-1, 1) for sy in (-1, 1)))
+        rec: dict[str, Any] = {"x": round(cx, 1), "y": round(cy, 1), "w": round(2 * crx, 1), "h": round(2 * cry, 1), "rot": 0, "roofed": roofed}
         if jizo:
-            # SIX STONE JIZO in a row on the ground's upper rim (research religion-and-death 530: a cremation ground
-            # always had six). A stone jizo is about 2 ft; drawn at least 2.4 x 3.2 px - a map drawing convention, so
+            # SIX STONE JIZO in a row on the ground's upper rim - the entrance of the burial ground this cremation ground
+            # stands beside (research religion-and-death 700, feature 280 M71: dated at graveyards, 1678-1797; at a
+            # cremation ground on its own only one undated modern page puts them). A stone jizo is about 2 ft; drawn at least 2.4 x 3.2 px - a map drawing convention, so
             # they can be seen (the hand-drawn Hoshigaoka ground's size, feature 272).
             jw, jh = max(self.px(2.0), 2.4), max(self.px(2.7), 3.2)
             pitch = jw * 1.4

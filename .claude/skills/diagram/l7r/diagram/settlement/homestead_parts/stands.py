@@ -7,6 +7,8 @@ from typing import TYPE_CHECKING, Any
 from .._geom import CanopyArea, point_in_poly
 from ..land.wet import MARSH_FEATHER_BS, marsh_ground
 from ._helpers import _BELT_GAP_FT, _belt_axis
+from .bamboo_keepout import copse_bamboo_reach, grown_ring
+from .bamboo_keepout import stand_spares_seats as stand_spares_seats
 from .belt_law import settle_the_belt
 from .grove_blocks import GroveBlocks, Seats
 from .groves import RANK_JITTER_FT, bamboo_mark, crown_lift
@@ -298,6 +300,7 @@ class StandsMixin:
         seats: Sequence[tuple[float, float]] | None = None,
         keep_off: Sequence[tuple[float, float]] | None = None,
         seat_near: tuple[Any, ...] | None = None,
+        bamboo_rings: Sequence[Any] = (),
     ) -> int:
         """A COMMUNAL village grove - the Chinese *fengshui* forest (风水林). Unlike the per-house *yashikirin*,
         a NUCLEATED village shelters behind ONE village-scale grove, in three roles (see research/vegetation.html 'What are the village's three groves' 'Village
@@ -480,7 +483,18 @@ class StandsMixin:
             # that took Sawada's belt from 179 crowns to 104 was the wrong one - it ran under ground drawn dry - and since M7 the
             # record IS the drawn marsh, so the belt is held to it too, with the margin (`MARSH_FEATHER_BS`, the reeds' own
             # thinning band) left to it: a belt clump based in the margin is drawn as alder, one deeper is not seated
-            dikes=[dk["outline"] for dk in self.M.get("dikes", [])] + (marsh_ground(self.M) if role == "copse" else deep_marsh(marsh_ground(self.M), MARSH_FEATHER_BS * bs)),
+            dikes=[dk["outline"] for dk in self.M.get("dikes", [])]
+            + (marsh_ground(self.M) if role == "copse" else deep_marsh(marsh_ground(self.M), MARSH_FEATHER_BS * bs))
+            # ...AND OFF THE BAMBOO, grown by a crown: a take-yabu is a clonal near single-species stand (research/vegetation 150),
+            # and once feature 280 seated the thicket behind the back row the copse's crowns stood inside it (settlement-reviews
+            # of Kashikawa and Mizuguchi: four crowns centered inside, culms drawn over them)
+            # The rings come from the CALLER (`bamboo_rings`, the plan's seated stands): the stands are drawn by a later stage, so
+            # `M['bamboo_stands']` is still empty when the copse is seeded - reading it made the keep-out a no-op (round 3)
+            # grown by TWO crowns: a clump draws its crowns scattered about its seat, so a seat one crown off the stand still
+            # drew a crown centered inside it (measured on the round-3 fix: one to two a map). `copse_bamboo_reach` is that
+            # margin, and every bamboo placer keeps the reserved copse seats outside it (`stand_spares_seats`, feature 287
+            # woods W25), so no household's reserved share is refused here
+            + ([grown_ring(b, copse_bamboo_reach(bs)) for b in bamboo_rings if len(b) >= 3] if role == "copse" else []),
             water=[(wl, whw + cr) for wl, whw in water_lines],
             corridors=corr,
             circles=occ,

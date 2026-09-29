@@ -150,8 +150,8 @@ def stage_bamboo(s: Settlement, plan: SitePlan) -> None:
     A take-yabu is a clonal thicket with a hard edge - a stand, not a seasoning - and a culm is inches across,
     so at this scale bamboo is drawn as a STAND-LEVEL glyph: the stand's position and extent to scale, the marks
     inside symbolic (the convention of Japan's own topographic legend, which gives bamboo its own symbol beside
-    broadleaf and conifer). Seated by the previous stage on the cluster's shady side or at the field margin's
-    shady end, per the `bamboo` knob; drawn here, after the belt, over scrub that already kept out of it. Before
+    broadleaf and conifer). Seated by the previous stage in the farmsteads or at the settlement's edge behind its
+    back row (feature 280 M49: not at the field margin), per the `bamboo` knob; drawn here, after the belt, over scrub that already kept out of it. Before
     this stage existed bamboo was 20% of the belt's crowns, one six-foot culm at a time, and invisible.
 
     The bamboo stands, drawn on the seats `stage_hinterland` scanned (T47). After the belt, so the
@@ -388,8 +388,18 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # ...EVERY HOUSEHOLD'S RESERVED SHARE FIRST (feature 287, woods W25; plan D9): the seats the seating reserved for each
     # household's share of the floor (`wood_share`) are planted before any other clump, on either siting - each within its
     # own house's dooryard reach, not the siting's `near` - and the goal counts them, so the grid fills only the rest.
+    # ...AND OFF THE SEATED BAMBOO (feature 280, `bamboo_rings`): every stand was seated clear of the reserved seats
+    # (`stand_spares_seats`), so the keep-out refuses only the grid's own clumps.
     s.village_grove(
-        _box, role="copse", dense=False, reserved=title_pocket(s, plan), near=_copse_near, area=_copse_goal, seats=_seats, seat_near=_dooryard
+        _box,
+        role="copse",
+        dense=False,
+        reserved=title_pocket(s, plan),
+        near=_copse_near,
+        area=_copse_goal,
+        seats=_seats,
+        seat_near=_dooryard,
+        bamboo_rings=plan.bamboo_polys,
     )  # the map's name has ground reserved; the copse honors it like the belt does
     s.standing.reserved.release_seats()  # planted: the seats stand as the copse's clumps now (feature 287 M8, `overlap/reserved.py`)
     # ...AND NEVER UNDER THE REGISTER'S FLOOR (feature 287, woods W25; plan D9), BY CONSTRUCTION: each household is seated only

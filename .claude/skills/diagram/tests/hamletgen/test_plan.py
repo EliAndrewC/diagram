@@ -147,13 +147,17 @@ def test_the_dike_pond_is_a_declared_archetype_laid_to_a_cardinal_fall() -> None
         assert plan.down_deg in hg.CARDINAL_BEARINGS
 
 
-def test_a_dike_pond_rolls_its_arrangement_and_a_rice_polder_is_the_grid() -> None:
-    """Two attested forms roll (`POND_LAYOUTS`); the rice polder never rolls, so every polder_grid
-    map is byte-identical to before the knob existed."""
+def test_a_dike_pond_is_the_mosaic_and_a_rice_polder_is_the_grid() -> None:
+    """Feature 280 M56 (research/archetypes/130): the pond grid is a modern aerial view, so a dike-pond rolls the mosaic only
+    (`POND_LAYOUTS`); the rice polder never rolls. A spec may still name the grid - the engine's dial is kept. And the fry
+    form (feature 280 M60, `FRY_FORMS`) rolls both attested forms on a dike-pond and is none elsewhere."""
     rolled = {hg.plan_site(hg.HamletSpec(name="X", seed=s, households=16, field_archetype="mulberry_dike_fishpond")).pond_layout for s in range(1, 40)}
-    assert rolled == {"grid", "mosaic"}
+    assert rolled == {"mosaic"}
+    fry = {hg.plan_site(hg.HamletSpec(name="X", seed=s, households=16, field_archetype="mulberry_dike_fishpond")).fry_form for s in range(1, 40)}
+    assert fry == {"none", "fry_village"} and hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16)).fry_form == "none"
     assert all(hg.plan_site(hg.HamletSpec(name="X", seed=s, households=16, field_archetype="polder_grid")).pond_layout == "grid" for s in range(1, 12))
-    assert hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16, field_archetype="mulberry_dike_fishpond", pond_layout="grid")).pond_layout == "grid"
+    with pytest.raises(ValueError, match="pond_layout"):
+        hg.HamletSpec(name="X", seed=3, households=16, field_archetype="mulberry_dike_fishpond", pond_layout="grid")
 
 
 def test_the_manure_form_rolls_both_ways_and_pins() -> None:
@@ -294,3 +298,43 @@ def test_a_byre_form_is_declarable_and_a_nonsense_one_refused() -> None:
     assert hg.HamletSpec(name="X", seed=4, byre_form="courtyard").byre_form == "courtyard"
     with pytest.raises(ValueError, match="byre_form"):
         hg.HamletSpec(name="X", seed=4, byre_form="barn")
+
+
+def test_a_sty_stands_within_a_household_s_reach_or_not_at_all() -> None:
+    """Feature 280 (settlement-review of Kuwabata): the grow-out ponds a fry village leaves lay far out, and sties followed.
+    No sty is drawn past every household's reach (`sty_in_reach`), and a hamlet left with none it owes is refused
+    (feature 287, water W50) rather than shipped without one."""
+    from l7r.diagram.hamletgen.pondstock import STY_HOUSE_REACH_FT, StyRefused, stage_pond_stock, sty_in_reach
+    from l7r.diagram.settlement import Settlement
+
+    plan = hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16, field_archetype="mulberry_dike_fishpond"))
+    parcel = [(390.0, 1560.0), (510.0, 1560.0), (510.0, 1640.0), (390.0, 1640.0)]
+    s = Settlement(W=900, H=1800, seed=1)
+    s.meta(name="X", scale="hamlet")
+    s.M["houses"] = [{"x": 450.0, "y": 450.0, "w": 46.0, "h": 28.0} for _ in range(8)]
+    s.M["dikeponds"] = [{"parcel": parcel, "water": parcel, "kind": "growout"}]
+    with pytest.raises(StyRefused, match="within a household's reach"):
+        stage_pond_stock(s, plan)
+    assert STY_HOUSE_REACH_FT < 1560.0 - 450.0 and not s.M.get("pig_sties") and s.M["meta"]["pond_stock"]["drawn"] == 0
+    assert sty_in_reach(s, (450.0, 450.0 + STY_HOUSE_REACH_FT), s.M["houses"]) and not sty_in_reach(s, (450.0, 451.0 + STY_HOUSE_REACH_FT), s.M["houses"])
+
+
+def test_the_sty_walk_stops_once_every_rolled_sty_is_drawn() -> None:
+    """Ponds to spare within reach: the walk takes as many as were rolled and stops (feature 280: Kuwabata's roll no longer
+    has more near grow-out ponds than sties)."""
+    from l7r.diagram.hamletgen.pondstock import stage_pond_stock
+    from l7r.diagram.settlement import Settlement
+
+    plan = hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16, field_archetype="mulberry_dike_fishpond"))
+
+    def _pond(x: float, y: float) -> dict:
+        parcel = [(x - 60.0, y - 40.0), (x + 60.0, y - 40.0), (x + 60.0, y + 40.0), (x - 60.0, y + 40.0)]
+        return {"parcel": parcel, "water": parcel, "kind": "growout"}
+
+    s = Settlement(W=1400, H=1400, seed=1)
+    s.meta(name="X", scale="hamlet")
+    s.M["houses"] = [{"x": 700.0, "y": 700.0, "w": 46.0, "h": 28.0} for _ in range(4)]
+    s.M["dikeponds"] = [_pond(700.0 + dx, 700.0 + dy) for dx, dy in ((-200, -150), (200, -150), (-200, 150), (200, 150), (0, 250), (0, -250), (-280, 0), (280, 0))]
+    stage_pond_stock(s, plan)
+    stock = s.M["meta"]["pond_stock"]
+    assert 1 <= stock["sties"] < 8 and stock["drawn"] == stock["sties"] == len(s.M["pig_sties"])

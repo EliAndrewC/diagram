@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 import statistics
 
 import pytest
@@ -17,7 +18,8 @@ def test_a_quota_closes_at_the_rounded_share_for_every_count() -> None:
 
 
 def test_the_kura_count_is_the_share_of_the_households_whatever_the_seed() -> None:
-    """H45: n households carry exactly round(n x 0.2993) kura - the count the positional roll under-delivered 2.2x."""
+    """H45: n households carry exactly round(n x `KURA_SHARE`) kura - the count the positional roll under-delivered 2.2x (the
+    share one farm in eight since feature 280 M20)."""
     for seed in range(20):
         for n in range(5, 41):
             got = sum(quota_carriers(seed, "kura", n, KURA_SHARE))
@@ -53,14 +55,14 @@ def _village() -> Settlement:
 
 
 def test_a_row_of_seats_at_one_pitch_carries_its_share_of_kura() -> None:
-    """H45's aliasing case: twelve seats along one row at one pitch, each household with its lot - 4 kura (round(12 x
-    0.2993)), and each house drawn at its rung of the ladder."""
+    """H45's aliasing case: twelve seats along one row at one pitch, each household with its lot - 2 kura (12 x 0.125,
+    a half rounded up: feature 280 M20's one farm in eight), and each house drawn at its rung of the ladder."""
     s = _village()
     s._lots = HouseholdLots(3, 12)
     for k in range(12):
         assert s.try_place(150.0 + k * 100.0, 700.0, "plain")
     houses = s.M["houses"]
-    assert sum(1 for h in houses if h["shed"]) == 4
+    assert sum(1 for h in houses if h["shed"]) == math.floor(12 * KURA_SHARE + 0.5) == 2
     assert [(round(h["w"] / 46, 6), round(h["h"] / 28, 6)) for h in houses] == [(round(a, 6), round(b, 6)) for a, b in size_ladder(3, 12)]
 
 

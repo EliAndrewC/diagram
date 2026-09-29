@@ -148,6 +148,12 @@ now says it first.
 | Provincial city | 3 ft/px | NOT STARTED | Tango, Minami, Nagahara | wall circuit, wards, garrison, temple complexes, districts |
 | Capital | 3 ft/px | NOT STARTED, tier itself unfinished | Shiro Daika (`wip/`, housing pass still open) | castle, great houses, the capital's own street grammar |
 
+**The exemplars carry forms the GM's rule of 2026-09-28 eliminates** (anything attested only in modern times; feature
+280). They are not redrawn: a converted tier must NOT copy them. The forms owed, by map, are in
+`future-work/farming-communities.md` (the frozen hamlets and villages), `future-work/towns.md` and `future-work/cities.md`,
+each headed "feature 280"; read the one for the tier before drawing its first scripted map.
+
+
 ### Mode A (compound plans) - out of scope, listed so nobody wonders
 
 Magistracies (Ochiba, Hayakawa, Ubame, plus the generic county example) are hand-authored by design.

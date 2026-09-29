@@ -554,3 +554,14 @@ def test_hard_clear_from_its_box_index_equals_the_scan():
             assert s._hard_clear(x, y, w, h) == want
             clear += want
         assert 100 < clear < 1400, f"non-vacuity, round {rnd}"
+
+
+def test_the_storehouse_is_drawn_in_its_own_gray_not_the_roof_color() -> None:
+    """Feature 280 (settlement-review of Sawada): in the house's roof color the storehouse read as a wing of the house."""
+    from l7r.diagram.settlement import Settlement
+    from l7r.diagram.settlement.houses import STOREHOUSE_GRAY
+
+    s = Settlement(W=400, H=400, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    s.house(200.0, 200.0, 46.0, 28.0, shed=True, shed_side="N")
+    assert STOREHOUSE_GRAY in s.out[-1], "the storehouse's fill"

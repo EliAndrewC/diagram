@@ -105,8 +105,8 @@ _OVERLAP_STRUCTS = (
     "tanning_yards",
     # the charcoal district's trade works (feature 016). For OVERLAP purposes these are ordinary
     # solid premises like any other; what is special about them is a SEPARATION rule each
-    # (charcoal_yard_keeps_fire_gap, refining_forge_stands_off_dwellings), which is a different
-    # shape and lives in its own check rather than in this registry.
+    # (refining_forge_stands_off_dwellings; the charcoal yard's 30 ft gap was retired by feature 280 M104, a modern figure),
+    # which is a different shape and lives in its own check rather than in this registry.
     "charcoal_yards",
     "refining_forges",
     # martial training (GM 2026-07-25): the state hall and the private dojos - solid compounds like
@@ -159,7 +159,7 @@ _OVERLAP_EXEMPT = {
     "borders": "a drawn CLAN/jurisdictional border is a LINE OF LAW, not a physical object - it has no footprint (no w/h), reserves no ground and blocks nothing. Being overlapped is the POINT: a frontier magistracy stands its wall ON the line so the border runs across the parley-room floor (the Mode A ubame-magistracy sheet), and the period PHYSICAL marker - an earthen mound, as at the Nanbu-Date boundary - is deliberately NOT what this draws, precisely because a mound would be a structure everything then had to stay clear of",
     "farm_sheds": "a farmstead's grain-storehouse kura drawn as an annex abutting its own farmhouse's back wall (farm_sheds_attached verifies the attachment)",
     "pig_sties": "a pig shed ON a pond dike, over the water's edge, by construction (feature 150 A3; FAO/NACA: 'the simple pig shed constructed on the pond dyke or over the water surface')",
-    "farm_fixtures": "a farmstead's small fixtures - privy, woodpile, manure heap, bath shed, chicken coop, household shrine - each seated against its own farmhouse by the placer, which tests the seat against every placed footprint, lane, paddy and water (feature 133 T53-T59; farm_fixtures_attached verifies the attachment)",
+    "farm_fixtures": "a farmstead's small fixtures - privy, wood shed, manure heap, bath room, chicken coop, household shrine - each seated against its own farmhouse by the placer, which tests the seat against every placed footprint, lane, paddy and water (feature 133 T53-T59; farm_fixtures_attached verifies the attachment)",
     "persimmons": "the yard persimmon: a crown record (x, y, r) whose ink is also in tree_crowns, which structures_clear_of_trees tests; the placer keeps the trunk off every footprint (feature 133 T57)",
     "threshing_yards": "a farmstead's threshing/drying yard drawn as an annex abutting its own farmhouse",
     "gardens": "a farmstead's dooryard kitchen garden drawn as a plot abutting its own farmhouse",

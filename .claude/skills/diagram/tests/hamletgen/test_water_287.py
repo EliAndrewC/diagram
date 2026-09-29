@@ -13,7 +13,7 @@ from typing import Any
 import pytest
 
 from l7r.diagram import hamletgen as hg
-from l7r.diagram.hamletgen.pondstock import StyRefused, _bank_seats, reserve_sty_seat, stage_pond_stock, sty_on_near_half
+from l7r.diagram.hamletgen.pondstock import StyRefused, _bank_seats, reserve_sty_seat, stage_pond_stock, sty_in_reach, sty_on_near_half
 from l7r.diagram.hamletgen.water.brook import course_corner, join_vertices, round_the_brooks
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.city.bridges import SUPPLY_ROLES
@@ -209,9 +209,12 @@ def test_no_reservation_where_the_hamlet_keeps_no_ponds_or_no_seat() -> None:
     s.M["dikeponds"] = [dict(p, kind="fry") for p in s.M["dikeponds"]]
     assert reserve_sty_seat(s, plan) is None, "fry ponds alone owe no sty"
     s, plan = _dikepond()
-    s.M["dikepond_sluices"] = [{"a": [p[0], p[1]], "b": [p[0] + 0.1, p[1]]} for pond in s.M["dikeponds"] for p, _r in _bank_seats(pond["parcel"], (450.0, 150.0))]
+    plan.seat = {"cx": 450.0, "cy": -600.0, "out": (0.0, -1.0)}  # the seat stands past a household's reach of every bank seat
     with pytest.raises(StyRefused, match="grow-out pond"):
-        reserve_sty_seat(s, plan)  # every bank seat on a sluice: the sty the hamlet owes cannot be seated - refused, not skipped
+        reserve_sty_seat(s, plan)  # no seat within the rules: the sty the hamlet owes cannot be seated - refused, not skipped
+    s, plan = _dikepond()
+    got = reserve_sty_seat(s, plan)
+    assert got is not None and sty_in_reach(s, got[0], [{"x": 450.0, "y": 150.0}]), "the reserved seat is within reach of the seat's center (feature 280)"
 
 
 def test_a_dike_pond_hamlet_whose_every_near_half_seat_is_built_on_is_refused_never_drawn_without_its_sty() -> None:

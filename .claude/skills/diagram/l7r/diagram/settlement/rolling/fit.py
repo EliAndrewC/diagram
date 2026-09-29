@@ -757,7 +757,10 @@ class BundleFitMixin:
     def _bundle_side_fits(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """The fit checks that DO move with the garden side (via the bundle bbox): in-bounds, inside any
         bounding ring, the garden bed(s) clear of every paddy/block/lane, and the whole bbox clear of every
-        placed homestead."""
+        placed homestead. A layout whose lot's bath room or wood shed found no seat (`unlaid`, `FixtureUnlaid`, feature 280
+        M21/M22 carried into feature 287) is refused: the envelope admits a household only with room for every part it keeps."""
+        if geom.get("unlaid"):
+            return False
         cx, cy, W, H = geom["bbox"]
         if cx - W / 2 < 6 or cx + W / 2 > self.W - 6 or cy - H / 2 < 6 or cy + H / 2 > self.H - 6:
             return False

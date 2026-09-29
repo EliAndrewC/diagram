@@ -276,8 +276,9 @@ register_knob(Knob("cluster_shape", ["round", "elongated", "crescent", "split"],
 register_knob(Knob("lane_web", list(LANE_WEBS), default="alleys"))
 # BAMBOO (feature 133 T47, GM 2026-08-27; research/vegetation.html "Bamboo: how common, where it stood,
 # and how to show it"): below the frost line a village has bamboo as a matter of course - a stand,
-# not a seasoning - and above it none. Two attested forms of WHERE: the homestead's damp N/W strip
-# and a take-yabu thicket at the field margin's shady end; a hamlet may have either, both, or (cold
+# not a seasoning - and above it none. Two attested forms of WHERE: bamboo on the homestead (which side a GUESS -
+# feature 280 M15: the damp N/W side rests on no record before 1868) and a take-yabu thicket at the settlement's edge
+# (feature 280 M49: not at the field margin, which rested on a present-day page); a hamlet may have either, both, or (cold
 # uplands) none. Rolled per settlement so two maps can honestly differ.
 register_knob(Knob("bamboo", ["none", "homestead", "thicket", "both"], default="homestead"))
 register_knob(Knob("lane_skeleton", ["spine", "T", "Y", "cross", "waterside"], default="spine", typing_rule=_lane_skeleton_ok))
@@ -421,7 +422,8 @@ TORII_WEIGHTS = {
     # more potent in Rokugan than in the real world). Weights per settlement tier; the richer the tier,
     # the deeper the accumulated patronage (torii are DONATED votive gates - see research/religion-and-death.html 'Torii are votive donations - the count records patronage'
     # for the historical grounding and the deliberate Rokugan liberties). "capital" is recorded ahead of
-    # need - no capital-city maps exist yet.
+    # need - no capital-city maps exist yet. A row of arches at an ordinary shrine is a DELIBERATE DEVIATION
+    # (GM 2026-09-29; research/religion-and-death.html 'Did a village shrine have an avenue of arches before modern times?').
     "village": ((1, 0.60), (3, 0.30), (7, 0.10)),
     "town": ((1, 0.30), (3, 0.60), (7, 0.10)),
     "city": ((1, 0.30), (3, 0.40), (7, 0.30)),

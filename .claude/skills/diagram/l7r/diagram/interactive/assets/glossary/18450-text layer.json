@@ -1,0 +1,8 @@
+{
+ "term": "text layer",
+ "def": "The machine-read text that a scanned PDF carries beneath its page images, which can be searched and copied. It can misread the scan, so a quotation taken from it is checked against the image.",
+ "variants": [
+  "text layer",
+  "text layers"
+ ]
+}

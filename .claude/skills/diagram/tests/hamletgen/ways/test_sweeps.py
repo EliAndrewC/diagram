@@ -688,3 +688,38 @@ def test_a_cut_on_a_later_leg_keeps_the_vertices_before_it() -> None:
 
     got = cut_at_tail([(0.0, 0.0), (10.0, 0.0), (20.0, 0.0), (30.0, 0.0)], 5, [(0.0, 6.0), (60.0, 6.0)])
     assert got[:3] == [(0.0, 0.0), (10.0, 0.0), (20.0, 0.0)] and (30.0, 0.0) not in got
+
+
+def test_a_cut_that_strands_a_lane_does_not_keep_the_network() -> None:
+    """Sawada (feature 280): a doubled tail that a third lane joined is not cut back past that junction."""
+    from l7r.diagram.hamletgen.ways.sweeps import cut_keeps_network
+
+    tail = [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0)]
+    lanes = [{"pts": [list(p) for p in tail]}, {"pts": [[150.0, 0.0], [150.0, 80.0]]}, {"pts": [[0.0, 0.0], [0.0, -90.0]]}]
+    assert cut_keeps_network(lanes, 0, tail, [(0.0, 0.0), (100.0, 0.0)]) is False, "the lane joining at x=150 is stranded"
+    assert cut_keeps_network(lanes, 0, tail, [(0.0, 0.0), (160.0, 0.0)]) is True, "the junction is kept"
+    assert cut_keeps_network([{"pts": [list(p) for p in tail]}], 0, tail, [(0.0, 0.0), (10.0, 0.0)]) is True, "one lane is one piece"
+    from l7r.diagram.hamletgen.ways.sweeps import _sweep_doubled_tails
+
+    far = [(0.0, -300.0), (0.0, 300.0)], [(100.0, 200.0), (6.0, 150.0), (6.0, 60.0)], [(80.0, 90.0), (9.5, 90.0)], [(100.0, 200.0), (100.0, 300.0), (0.0, 300.0)]
+    s = _StubSettlement(lanes=list(far))
+    for ln in s.M["lanes"]:
+        ln["connector"], ln["w"] = False, 3
+    n = _sweep_doubled_tails(s)  # the fourth lane joins the straggler to the way, so the web is one piece
+    assert n == 0
+    assert s.M["lanes"][1]["pts"] == [[100.0, 200.0], [6.0, 150.0], [6.0, 60.0]], "a third lane 9.5 ft off the way keeps the tail"
+    # Sawada (feature 280): the third lane's end 8 ft off the way is carried onto it, and the tail is cut
+    s = _StubSettlement(lanes=[far[0], far[1], [(80.0, 90.0), (8.0, 90.0)], far[3]])
+    for ln in s.M["lanes"]:
+        ln["connector"], ln["w"] = False, 3
+    assert _sweep_doubled_tails(s) == 1
+    assert s.M["lanes"][2]["pts"][-1] == [0.0, 90.0], "the straggler meets the way"
+    assert s.M["lanes"][1]["pts"] != [[100.0, 200.0], [6.0, 150.0], [6.0, 60.0]], "and the doubled tail is cut"
+    # ...BUT ONLY WHERE THE OVERLAP MATRIX ADMITS THE CARRIED END (feature 287 M8, merged with feature 280's carry): a carried
+    # end the matrix refuses would stay on the cut tail, stranded, so the tail is not cut and no lane is rewritten
+    s = _StubSettlement(lanes=[far[0], far[1], [(80.0, 90.0), (8.0, 90.0)], far[3]])
+    for ln in s.M["lanes"]:
+        ln["connector"], ln["w"] = False, 3
+    s.admits = lambda *a, **k: False  # type: ignore[method-assign]
+    assert _sweep_doubled_tails(s) == 0
+    assert s.M["lanes"][2]["pts"][-1] == [8.0, 90.0] and s.M["lanes"][1]["pts"] == [[100.0, 200.0], [6.0, 150.0], [6.0, 60.0]]

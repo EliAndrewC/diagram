@@ -55,7 +55,8 @@ from .brook_rules import (
     turn_deg,
 )
 
-# THE WEIR'S FORM (269 B22; research/water/300): a fence of stakes and woven reed, a frame of stakes and logs packed
+# THE WEIR'S FORM (269 B22; research/water/300): a fence of stakes woven with brushwood (feature 280 M36: the woven stake
+# fence is in the Man'yoshu, the reed weave only in a present-day weir - research/water/640), a frame of stakes and logs packed
 # with clay, a crib of timber packed with stone, or a course of stone-filled baskets, each drawn at its own thickness
 # (`WEIR_THICK_FT`). "The rule the map follows: a weir hamlet's weir takes one of four forms, rolled per settlement
 # with an even chance" - the EVEN chance a GUESS, no source counting them. `crib` is the default because it is the
@@ -947,7 +948,7 @@ def weir_glyph(form: str, poly: Sequence[Pt], c: Pt, along: Pt, down: Pt, half: 
     - `crib`, timber packed with stone: stone gray, the crib's baulks ticked across it (the glyph before the knob);
     - `frame`, stakes and logs packed with clay: clay brown-gray, the logs drawn along it and the stakes as dots;
     - `gabion`, stone-filled baskets: gray, the baskets' seams across it and the weave hatched on the diagonal;
-    - `fence`, stakes with reed woven between them: a thin reed-colored band with its stakes as dark dots."""
+    - `fence`, stakes with brushwood woven between them: a thin straw-colored band with its stakes as dark dots."""
     cx, cy = c
     ax, ay = along
     hx, hy = down

@@ -496,11 +496,15 @@ class ThreshingYardsMixin:
     # by the mugi crop the household spreads whole. Wet rice is field-dried on hazakake racks for 10-14
     # days before it reaches the yard, and is threshed in batches over days, so a paddy household needs
     # less standing floor: the crop derivation (1.3 koku/tan -> 247 kg momi -> mats at a 2.5 cm spread,
-    # batched) gives 55-100 sq m for a full cho, 35-65 for five tan. Hence 18 tsubo (59.5 sq m) as the
-    # median for a rice hamlet, with Kitamoto's 25 tsubo kept as YARD_MEDIAN_TSUBO_DRYFIELD for the
-    # barley village this generator does not yet draw. The SHAPE - lognormal, sigma 0.40 - is Kitamoto's
+    # batched) gives 55-100 sq m for a full cho, 35-65 for five tan. That derivation gave 18 tsubo
+    # (59.5 sq m) for a rice hamlet until feature 280 retired its modern spreading depth (below); Kitamoto's 25 tsubo is
+    # YARD_MEDIAN_TSUBO_DRYFIELD, and a rice hamlet now takes the same median. The SHAPE - lognormal, sigma 0.40 - is Kitamoto's
     # and Kamikanai's and applies to both.
-    YARD_MEDIAN_TSUBO = 18.0  # wet rice, crop-derived (59.5 sq m); the map's `yard_sizes` knob may name the dry-field figure instead
+    # FEATURE 280 M16 (research/homesteads/020): the crop derivation behind 18 tsubo spread the momi at IRRI's 2.5 cm, modern
+    # tropical extension advice and the only depth found, so it is retired; the one rice-district figure is the Okayama museum's
+    # ~50 mats a farm for sun-drying momi, about 25 tsubo, the middle of Kitamoto's band - so a rice hamlet's yards are centered
+    # at 25 like the dry-field yard. Both are undated records of remembered practice, a calibration the GM may re-sort.
+    YARD_MEDIAN_TSUBO = 25.0  # wet rice as the dry field: the Okayama ~50 mats; the map's `yard_sizes` knob may name the dry-field figure instead
     YARD_SIGMA_LN = 0.40  # Kamikanai 0.46; Kitamoto's band-and-tail 0.35-0.45
     YARD_MEDIAN_TSUBO_DRYFIELD = 25.0  # Kitamoto's 50 mats - a barley/wheat household spreads the whole crop
     YARD_MIN_TSUBO = 8.0  # nobody is yardless (by Genroku every peasant held a homestead); the landless sit at the small end

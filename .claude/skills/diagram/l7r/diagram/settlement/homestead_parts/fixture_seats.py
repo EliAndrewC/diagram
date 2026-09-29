@@ -16,9 +16,12 @@ Every seat table is the one the late placer read (research/homesteads.html "The 
 labeled there), in the house's unturned frame: +y the sunny front where the yard is, -y the back wall, the kura on the
 north wall. A seat is taken when its box clears every part laid before it by the wall gap; failing every recorded seat, a
 fixture is offered the same seats stepped outward a pace at a time - still its own plot, where the ground past the parts
-is free by construction (the parts are finite, the steps are not) - except the two forms whose rule is the seat itself:
-the eaves stack stands against a wall of its steading (`against_a_wall`, homes H35) and the joined bath at a corridor's
-length off a wall (269 B12), each offered every place along the walls instead.
+is free by construction (the parts are finite, the steps are not) - except the two kinds whose rule is the seat itself
+(feature 280, the modern-only forms eliminated): the BATH is a room of the house, abutting its front wall beside the main
+door, the stable wing's end wall or the floored rooms' end wall (`bath_room_seats`, `joined_to_house`; M22), offered every
+place along those walls; and the WOOD SHED stands a ken off a wall of its steading, never walked out across the dooryard
+(`shed_off_a_wall`; M21), offered every place a ken off the walls. The privy and the bath room take a size rolled per
+household (`fixture_ft`: the Kakimochi table's sixteen privies, a room 6 ft out by 6-12 ft along).
 """
 
 from __future__ import annotations
@@ -30,30 +33,54 @@ from functools import lru_cache
 from itertools import chain
 from typing import Any
 
-from ..farm_fixtures import FIXTURE_FT, PERSIMMON_CROWN_FT, PIT_FT, WOODPILE_FORM_FT
+from ..farm_fixtures import FIXTURE_FT, PERSIMMON_CROWN_FT, PIT_FT, kura_rect
 
 Rect = tuple[float, float, float, float]  # (center x, center y, width, height), the house's unturned frame
 
 #: The order the kinds are laid in: the retirement house first - a second roof of the family, off the back wall or a flank
-#: (269 B42), the largest part after the kura; then the two whose rule IS the seat - the joined bath a corridor off a
-#: wall, the eaves stack against one (which has the kura's, the byre's and the retirement house's walls besides) - so the
-#: walls are theirs before the free-standing kinds take the ground by them; then the late placer's order (the buildings,
-#: then the stack, which has the most seats); the persimmon last - its crown may overhang the yard and the beds, never a
-#: roof.
+#: (269 B42), the largest part after the kura; then the two whose rule IS the seat - the bath room on a wall of the house,
+#: the wood shed a ken off a wall of the steading - so the walls are theirs before the free-standing kinds take the ground
+#: by them; then the late placer's order; the persimmon last - its crown may overhang the yard and the beds, never a roof.
 FIXTURE_ORDER = ("retirement", "bath", "woodpile", "privy", "manure", "coop", "shrine", "persimmon")
 
 WALL_GAP_FT = 3.5  # a fixture's edge off the wall or part it stands by: the review measured -0.3 ft at 3.0 against the drawn wall
 STEP_FT = 8.0  # the outward pace a fixture takes when every recorded seat is taken (the late placer's own rung)
 OUT_STEPS = 24  # paces offered: 192 ft, past any bundle's parts
-WALL_SLIDE_FT = 4.0  # the spacing of the places offered along a wall to an eaves stack or a joined bath
+WALL_SLIDE_FT = 4.0  # the spacing of the places offered along a wall to a bath room or a wood shed
 PRIVY_YARD_STEP_FT = 6.0  # the yard outhouse a ken off the back wall (GUESS)
 PRIVY_FRONT_STEP_FT = 8.0  # the front-yard privy a step out from the front wall (GUESS)
 PRIVY_SUN_MIN_FT = 18.0  # the sun-side search's radii, 18 to 48 ft (`PRIVY_SUN_MAX_FT`'s reasons, fixtures.py)
 PRIVY_SUN_MAX_FT = 48.0
 PRIVY_SUNNY_SHARE = 0.727  # Wang & Ochiai 2022: 72.7% of outhouses SE to S (the GM, 2026-08-29: used literally)
-WOODSHED_STEP_FT = 6.0  # the woodshed a ken off the wall it serves (GUESS)
-BATH_CORRIDOR_FT = 6.0  # the joined bath's corridor, one ken long (GUESS)
-BATH_CORRIDOR_W_FT = 3.0  # and half a ken wide (GUESS)
+WOODSHED_STEP_FT = 6.0  # the wood shed a ken off the wall it serves, a building of its own (GUESS: where on the plot no page says)
+# THE PRIVY'S SIZE (feature 280, research/homesteads/750): each homestead's privy is one of the sixteen of the Kakimochi table
+# (Meiji 18, read back to the last years of the shogunate), frontage by depth in feet at 6 ft to the ken - each as likely as
+# the next. A calibration against one village's table; the old 6 x 6 ft one-ken module was a GUESS.
+PRIVY_SIZES_FT: tuple[tuple[float, float], ...] = (
+    (27.0, 15.0),
+    (6.0, 5.0),
+    (12.0, 6.0),
+    (18.0, 12.0),
+    (15.0, 12.0),
+    (15.0, 9.0),
+    (24.0, 12.0),
+    (24.0, 12.0),
+    (5.0, 5.0),
+    (24.0, 12.0),
+    (18.0, 12.0),
+    (15.0, 9.0),
+    (9.0, 6.0),
+    (24.0, 12.0),
+    (24.0, 12.0),
+    (6.0, 6.0),
+)
+# THE BATH ROOM (feature 280 M22, research/homesteads/740): joined to the main house - beside its main door, at the far end
+# of its stable wing (the house's -x end, where the doma and its stable are), or joined to its floored rooms (the +x end) -
+# a room of 1-2 tsubo: one ken out from the wall, one to two ken along it, rolled per household (a calibration on the
+# registers' 1-2 tsubo). The free-standing bath shed is found only in the twentieth century, and is not drawn.
+BATH_DEPTH_FT = 6.0
+BATH_LENGTH_FT = (6.0, 12.0)
+BATH_WALLS = ("main_door", "stable_end", "floored_rooms")
 SHRINE_CORNER_FT = 14.0  # the household shrine a plot corner off the house's corner
 TRUNK_FT = 4.0  # the persimmon's trunk box
 CANOPY_PAD = 0.6  # the crown's placement clearance off a roof (`Settlement.CANOPY_PAD`)
@@ -64,14 +91,22 @@ CORNER_SIGNS = {"NW": (-1.0, -1.0), "NE": (1.0, -1.0), "SW": (-1.0, 1.0)}
 SALT = {"privy": 101.0, "manure": 102.0, "woodpile": 103.0, "bath": 104.0, "coop": 105.0, "shrine": 106.0, "persimmon": 107.0, "retirement": 131.7}
 
 
+class FixtureUnlaid(ValueError):
+    """A kind whose rule is its seat found none in this bundle (feature 280 M21, M22, carried into feature 287): a bath
+    room with no free place on the house's three attested walls, or a wood shed with no place a ken off a wall of its
+    steading. The bundle is then NOT the household's (`BundleGeomMixin._lay_fixtures` marks it `unlaid` and the fit refuses
+    it, `_bundle_side_fits`): the envelope admits a household only with room for every part its lot keeps, so another
+    garden side or another seat is sought - never a room walked out into the yard, and never a fixture recorded short."""
+
+
 @dataclass(frozen=True)
 class FixtureForms:
     """The hamlet's fixture forms, rolled once per map (`hamletgen/homesteads/fixtures.py`, `fixture_forms`): the privy
-    seats' weights, the bath's seat, the woodpile's form, the persimmon's front share and the manure's form."""
+    seats' weights, the bath room's wall, the persimmon's front share and the manure's form. The woodpile has one form
+    left, the wood shed (feature 280 M21: the eaves stack and the kizuma are modern-only), so it rolls none."""
 
     privy_weights: tuple[tuple[str, float], ...] = (("yard", 0.35), ("front", 0.30), ("stable", 0.20), ("barn", 0.15))
-    bath_seat: str = "front_yard"
-    woodpile_form: str = "eaves"
+    bath_seat: str = "main_door"
     persimmon_front: float = 0.7
     manure_form: str = "heap"
     retirement_ft: tuple[float, float] = (18.0, 15.0)  # `hamletgen/homesteads/retirement.py` RETIREMENT_FT
@@ -88,18 +123,35 @@ def weighted(weights: Sequence[tuple[str, float]], u: float) -> str:
     return weights[-1][0]
 
 
-def fixture_size(kind: str, forms: FixtureForms, px: Callable[[float], float]) -> tuple[float, float]:
-    """A fixture's footprint `(along its wall, out from it)` at the map's scale, in the form the hamlet rolled."""
+def privy_sun_reach_ft(w_ft: float, d_ft: float) -> float:
+    """How far from its house's center the sun-side search may seat a privy of `w_ft` x `d_ft`: `PRIVY_SUN_MAX_FT`, plus the
+    half-length it has past the one-ken default, so its near edge stands no farther out than a one-ken privy's (feature
+    280, settlement-review of Sawada: every privy of 18 x 12 ft or more fell through to the north-east seat, 7 of 17)."""
+    return PRIVY_SUN_MAX_FT + max(0.0, (max(w_ft, d_ft) - 6.0) / 2.0)
+
+
+def fixture_ft(kind: str, forms: FixtureForms, roll: Callable[[float], float] | None = None) -> tuple[float, float]:
+    """A fixture's size in real feet, `(along its wall, out from it)`, in the form the hamlet rolled: the privy one of the
+    Kakimochi table's sixteen and the bath room 6 ft out by 6-12 ft along, each rolled off the household's own position roll
+    `roll` (feature 280, research/homesteads/750 and 740; the kinds' one-ken default without one); every other kind its one
+    size (`FIXTURE_FT`), the pit's, the crown's or the retirement house's."""
+    if kind == "privy" and roll is not None:
+        return PRIVY_SIZES_FT[int(roll(101.3) * len(PRIVY_SIZES_FT)) % len(PRIVY_SIZES_FT)]
+    if kind == "bath" and roll is not None:
+        lo, hi = BATH_LENGTH_FT
+        return (float(round(lo + (hi - lo) * roll(104.3))), BATH_DEPTH_FT)
     if kind == "manure" and forms.manure_form == "pit":
-        return px(PIT_FT), px(PIT_FT)
-    if kind == "woodpile" and forms.woodpile_form == "shed":
-        ft = WOODPILE_FORM_FT["shed"]
-        return px(ft[0]), px(ft[1])
+        return PIT_FT, PIT_FT
     if kind == "persimmon":
-        return px(PERSIMMON_CROWN_FT) * 2.0, px(PERSIMMON_CROWN_FT) * 2.0
+        return PERSIMMON_CROWN_FT * 2.0, PERSIMMON_CROWN_FT * 2.0
     if kind == "retirement":
-        return px(forms.retirement_ft[0]), px(forms.retirement_ft[1])
-    ft = FIXTURE_FT[kind]
+        return forms.retirement_ft
+    return FIXTURE_FT[kind]
+
+
+def fixture_size(kind: str, forms: FixtureForms, px: Callable[[float], float], roll: Callable[[float], float] | None = None) -> tuple[float, float]:
+    """A fixture's footprint `(along its wall, out from it)` at the map's scale (`fixture_ft`, in px)."""
+    ft = fixture_ft(kind, forms, roll)
     return px(ft[0]), px(ft[1])
 
 
@@ -114,20 +166,18 @@ def clears(r: Rect, taken: Sequence[Rect], gap: float) -> bool:
 
 
 def steading_rects(hw: float, hh: float, kura_side: str | None) -> list[Rect]:
-    """The walls an eaves stack may stand against, in the house's unturned frame: the house, and its kura where it keeps
-    one (north, or the west end - `Settlement.house`'s own kura footprint)."""
+    """The walls of a steading's buildings in the house's unturned frame: the house, and its kura where it keeps one
+    (north, or the west end - `kura_rect`, the table `Settlement.house` draws from)."""
     rects = [(0.0, 0.0, hw, hh)]
-    if kura_side == "N":
-        rects.append((0.0, -0.60 * hh, 0.46 * hw, 0.30 * hh))
-    elif kura_side is not None:
-        rects.append((-0.64 * hw, 0.0, 0.32 * hw, 0.56 * hh))
+    if kura_side is not None:
+        rects.append(kura_rect(hw, hh, kura_side))
     return rects
 
 
 def against_a_wall(seat: Sequence[float], rects: Sequence[Rect], g: float, tol: float = 1.5) -> bool:
     """Does a seat `(lx, ly, w, d)` in the house frame stand against a wall of its steading - its edge within the wall gap
-    `g` (plus `tol`) of one of `rects`, and overlapping it along that wall (feature 287, homes H35: 5-7 of Mizuguchi's 10
-    stacks stood 10.5-27.8 ft off any building)? The one predicate the placer and its test read."""
+    `g` (plus `tol`) of one of `rects`, and overlapping it along that wall (feature 287, homes H35)? The one predicate the
+    wood shed's (`shed_off_a_wall`) and the bath room's (`joined_to_house`) placers and their tests read."""
     lx, ly, cw, ch = seat[0], seat[1], seat[2], seat[3]
     for rx, ry, rw, rh in rects:
         gx = abs(lx - rx) - (cw + rw) / 2
@@ -179,35 +229,42 @@ def lay_fixtures(
     forms: FixtureForms,
     px: Callable[[float], float],
     annex: Rect | None = None,
+    notes: dict[str, Any] | None = None,
 ) -> dict[str, Rect]:
     """Each of `kinds` laid beside the parts already laid, in the house's unturned frame centered on it: `{kind: (x, y, w,
-    h)}`, the box AS LAID (a flank seat turned to lie along its flank), plus `bath_corridor` for a joined bath. `roofs` are
-    the built parts - the house first, the kura, the byre, the well-house - and `ground` the open ones, the yard and the
-    beds, which a persimmon's crown may shade; `yard` is the threshing yard, `kura` whether the house keeps one on its
-    north wall, `annex` the byre where the household keeps one (its walls take an eaves stack too); `roll` the household's
-    position roll (`Settlement._hjit` at its seat). Every kind is laid: the outward
-    paces reach free ground past any parts. Raises only for an eaves stack or a joined bath with no place along any wall,
-    which the bundle's own parts cannot cause (they cover at most three sides of a house)."""
+    h)}`, the box AS LAID (a flank seat turned to lie along its flank). `roofs` are the built parts - the house first, the
+    kura, the byre, the well-house - and `ground` the open ones, the yard and the beds, which a persimmon's crown may shade;
+    `yard` is the threshing yard, `kura` whether the house keeps one on its north wall, `annex` the byre where the household
+    keeps one (its walls take a wood shed too); `roll` the household's position roll (`Settlement._hjit` at its seat).
+    `notes`, where given, receives what the drawing needs beyond the box: each rolled size in feet (`ft`, `fixture_ft`) and
+    the wall the bath room took (`bath_seat`). Every kind is laid: the outward paces reach free ground past any parts. Raises
+    only for a bath room with no place along the house's three attested walls, or a wood shed with no place a ken off a
+    wall of its steading, each named - a refusal, never a room walked out into the yard (feature 280 M21, M22)."""
     g = px(WALL_GAP_FT)
     taken: list[Rect] = [*roofs, *ground]
     built: list[Rect] = list(roofs)
     laid: dict[str, Rect] = {}
+    ft: dict[str, tuple[float, float]] = {}
     for kind in [k for k in FIXTURE_ORDER if k in kinds]:
-        w, d = fixture_size(kind, forms, px)
+        ft[kind] = fixture_ft(kind, forms, roll)
+        w, d = px(ft[kind][0]), px(ft[kind][1])
         u = roll(SALT[kind] + 0.5)
         if kind == "persimmon":
             seat = _persimmon(hw, hh, yard, taken, built, u < forms.persimmon_front, px)
-        elif kind == "woodpile" and forms.woodpile_form != "shed":
+        elif kind == "woodpile":
             walls = steading_rects(hw, hh, "N" if kura else None) + ([annex] if annex is not None else []) + ([laid["retirement"]] if "retirement" in laid else [])
-            found = _first(wall_places(walls, w, d, g, px(WALL_SLIDE_FT)), taken, g)
-            if found is None:
-                raise ValueError("an eaves stack found no place along any wall of its steading")
-            seat = found
-        elif kind == "bath" and forms.bath_seat == "corridor":
-            seat, corridor = _joined_bath(hw, hh, w, d, taken, g, px)
-            laid["bath_corridor"] = corridor
-            taken.append(corridor)
-            built.append(corridor)
+            seat = _wood_shed(hw, hh, w, d, g, walls, taken, px)
+        elif kind == "bath":
+            named = bath_room_seats(forms.bath_seat, hw, hh, w, d, (yard[0], yard[2] / 2) if yard is not None else None)
+            named += bath_room_slides(forms.bath_seat, hw, hh, w, d, px(WALL_SLIDE_FT))
+            house = roofs[0]
+            others = [t for t in taken if t is not house]
+            got = next(((q, n) for q, n in named if clears(q, [house], -1e-6) and clears(q, others, g)), None)
+            if got is None:
+                raise FixtureUnlaid("a bath room found no place on the house's front wall or either end wall")
+            seat = got[0]
+            if notes is not None:
+                notes["bath_seat"] = got[1]
         else:
             seats = _seats(kind, hw, hh, w, d, g, yard, laid.get("privy"), roll, u, forms, px)
             found = _first(chain(seats, outward(seats, px(STEP_FT), OUT_STEPS)), taken, g)
@@ -217,7 +274,72 @@ def lay_fixtures(
         taken.append(_trunk(seat, px) if kind == "persimmon" else seat)
         if kind != "persimmon":
             built.append(seat)
+    if notes is not None:
+        notes["ft"] = ft
     return laid
+
+
+def shed_off_a_wall(seat: Rect, walls: Sequence[Rect], g: float, px: Callable[[float], float]) -> bool:
+    """THE WOOD SHED'S RULE (feature 280 M21; settlement-reviews of Inashiro and Kuwabata, where sheds stood 25-37 ft out,
+    between farmsteads): a building of its own a ken off its house - clear of the house by the wall gap and `WOODSHED_STEP_FT`
+    - and never walked out across the dooryard: within the gap, a ken and one outward pace (`STEP_FT`) of a wall of its
+    steading (`against_a_wall`), overlapping that wall along it. The one predicate the placer and its test read."""
+    return clears(seat, walls[:1], g + px(WOODSHED_STEP_FT) - 1e-6) and against_a_wall(seat, walls, g + px(WOODSHED_STEP_FT) + px(STEP_FT))
+
+
+def joined_to_house(seat: Rect, hw: float, hh: float, tol: float = 1e-6) -> bool:
+    """THE BATH ROOM'S RULE (feature 280 M22): a room of the house - one edge on a wall of the `hw` x `hh` house, overlapping
+    it along that wall, and not inside it. The one predicate the placer and its test read."""
+    gx = abs(seat[0]) - (seat[2] + hw) / 2
+    gy = abs(seat[1]) - (seat[3] + hh) / 2
+    return (abs(gx) <= tol and gy < 0.0) or (abs(gy) <= tol and gx < 0.0)
+
+
+def _wood_shed(hw: float, hh: float, w: float, d: float, g: float, walls: Sequence[Rect], taken: Sequence[Rect], px: Callable[[float], float]) -> Rect:
+    """The wood shed (feature 280 M21): the recorded seats - off the back wall and the flanks, a ken further out than a stack
+    stood - then those a pace further, then every place a ken off each wall of the steading; the first that clears the parts
+    laid and keeps `shed_off_a_wall`. None of them walks it out into the dooryard."""
+    seats = _seats("woodpile", hw, hh, w, d, g, None, None, lambda _salt: 0.0, 0.0, FixtureForms(), px)
+    offered = chain(seats, outward(seats, px(STEP_FT), 1), wall_places(walls, w, d, g + px(WOODSHED_STEP_FT), px(WALL_SLIDE_FT)))
+    found = _first((q for q in offered if shed_off_a_wall(q, walls, g, px)), taken, g)
+    if found is None:
+        raise FixtureUnlaid("a wood shed found no place a ken off any wall of its steading")
+    return found
+
+
+def bath_room_seats(first: str, hw: float, hh: float, w: float, d: float, yard: tuple[float, float] | None = None) -> list[tuple[Rect, str]]:
+    """The bath room's seats in the house frame (feature 280 M22, research/homesteads/740), `first` tried first then the
+    other attested seats: beside the MAIN DOOR (the front wall, either side of the door at its middle), at the far end of
+    the STABLE WING (the -x end wall, where the doma and its stable are), or joined to the FLOORED ROOMS (the +x end wall).
+    Each abuts its wall - a room of the house, not a building beside it. Each seat carries its name, and the record keeps the
+    one taken: the work yard lies before the front wall, and where it covers the wall the bath falls to the next seat - the
+    reviews of Kuwabata and Sawada (feature 280) found a declared `main_door` never drawn, and then an end-wall corner offered
+    as `main_door` that read as the floored rooms' seat, so the record now says which seat each bath room took."""
+    front, side = hh / 2 + d / 2, hw / 2 + d / 2
+    # ...AND JUST PAST THE YARD'S SIDES (`yard`: its center x and half-width in the house frame), still on the front wall: the
+    # yard is centered before the door and covered both door-side seats on every house, so the seat was never drawn
+    # (settlement-review of Kuwabata, feature 280); the room stands under the eaves beside the door, the yard beside it
+    past = [yard[0] + sx * (yard[1] + w / 2 + 3.0) for sx in (1.0, -1.0)] if yard else []  # 3 ft: the placer keeps 2 ft off a footprint
+    door = [(hw * 0.22 + w / 2, front, w, d), (-(hw * 0.22 + w / 2), front, w, d)] + [(x, front, w, d) for x in past if abs(x) + w / 2 <= hw / 2]
+    table = {
+        "main_door": door,
+        "stable_end": [(-side, 0.0, d, w), (-side, -hh * 0.25, d, w), (-side, hh * 0.25, d, w)],
+        "floored_rooms": [(side, 0.0, d, w), (side, -hh * 0.25, d, w), (side, hh * 0.25, d, w)],
+    }
+    return [(q, first) for q in table[first]] + [(q, k) for k, v in table.items() if k != first for q in v]
+
+
+def bath_room_slides(first: str, hw: float, hh: float, w: float, d: float, step: float) -> list[tuple[Rect, str]]:
+    """Every place along the bath room's three attested walls (`bath_room_seats`' walls), `step` apart and at each wall's
+    ends, `first`'s wall first: offered after the recorded seats, so a house whose recorded seats are taken by its yard,
+    beds, byre or retirement house still joins its bath to a wall where the room fits (feature 287: every kind is laid)."""
+    front, side = hh / 2 + d / 2, hw / 2 + d / 2
+    table = {
+        "main_door": [(u, front, w, d) for u in along(max(0.0, (hw - w) / 2), step)],
+        "stable_end": [(-side, u, d, w) for u in along(max(0.0, (hh - w) / 2), step)],
+        "floored_rooms": [(side, u, d, w) for u in along(max(0.0, (hh - w) / 2), step)],
+    }
+    return [(q, first) for q in table[first]] + [(q, k) for k, v in table.items() if k != first for q in v]
 
 
 def _first(seats: Iterable[Rect], taken: Sequence[Rect], g: float) -> Rect | None:
@@ -266,7 +388,10 @@ def _seats(
         # sector walked nearest first - bearings in the house's frame, where its front is the south it was seated facing
         if roll(SALT[kind] + 0.25) >= PRIVY_SUNNY_SHARE:
             return attested
-        return [*_sun_sector(w, d, tuple(px(float(r_ft)) for r_ft in range(int(PRIVY_SUN_MIN_FT), int(PRIVY_SUN_MAX_FT) + 1, 4))), *attested]
+        # ...THE RADIUS IS TO THE PRIVY'S CENTER, so a privy of a rolled size reaches the same NEAR EDGE as a one-ken one
+        # (`privy_sun_reach_ft`, feature 280)
+        reach_ft = privy_sun_reach_ft(w / px(1.0), d / px(1.0))
+        return [*_sun_sector(w, d, tuple(px(float(r_ft)) for r_ft in range(int(PRIVY_SUN_MIN_FT), int(reach_ft) + 1, 4))), *attested]
     if kind == "manure":
         if privy is None:
             return [(hw * 0.3, -(hh / 2 + g + d / 2), w, d), (hw / 2 + g + d / 2, hh * 0.3, d, w)]
@@ -284,20 +409,6 @@ def _seats(
             (plx + w * 1.9, ply, w, d),
             (plx - w * 1.9, ply, w, d),
         ]
-    if kind == "bath":  # IN THE FRONT YARD BESIDE THE WORK YARD (269 B12), then the old back-wall and flank seats
-        lead: list[Rect] = []
-        if yard is not None:
-            side = yard[2] / 2 + g + w / 2
-            lead = [(yard[0] + sx * side, yard[1] + oy, w, d) for oy in (0.0, yard[3] / 2 - d / 2) for sx in (1.0, -1.0)]
-        fr = hh / 2 + g + d / 2
-        lead += [(hw * 0.35, fr, w, d), (-hw * 0.35, fr, w, d), (hw * 0.35, fr + px(8.0), w, d), (-hw * 0.35, fr + px(8.0), w, d)]
-        return lead + [
-            (-hw * 0.3, -(hh / 2 + g + d / 2), w, d),
-            (-(hw / 2 + g + d / 2), hh * 0.2, d, w),
-            (hw / 2 + g + d / 2, -hh * 0.3, d, w),
-            (-hw * 0.3, -(hh / 2 + g + d * 1.5 + g), w, d),
-            (hw * 0.3, -(hh / 2 + g + d * 1.5 + g), w, d),
-        ]
     if kind == "retirement":  # OFF THE BACK WALL OR A FLANK, a ken out and then two (269 B42), the side rolled per homestead
         sides = [(0.0, -1.0), (1.0, 0.0), (-1.0, 0.0)]
         k = int(u * 3) % 3
@@ -311,7 +422,7 @@ def _seats(
         seats = [(hw / 2 + g + d / 2, hh * 0.3, d, w), (cjx, -(hh / 2 + g + d / 2), w, d), (-(hw / 2 + g + d / 2), -hh * 0.3, d, w)]
         k = int(roll(105.5) * len(seats)) % len(seats)
         return seats[k:] + seats[:k]
-    if kind == "woodpile":  # THE WOODSHED (269 B15): the stack's walls, a ken further out - a building of its own
+    if kind == "woodpile":  # THE WOOD SHED (feature 280 M21): the old stack's walls, a ken further out - a building of its own
         st, back = px(WOODSHED_STEP_FT), -(hh / 2 + g + d / 2)
         return [(-hw * 0.25, back - st, w, d), (hw * 0.25, back - st, w, d), (hw / 2 + g + st + d / 2, hh * 0.1, d, w), (-(hw / 2 + g + st + d / 2), hh * 0.1, d, w)]
     # the household shrine: a plot corner, rolled by compass name (NW the likeliest, 17 of 37; NE the kimon; SW Tokushima)
@@ -319,27 +430,6 @@ def _seats(
     corner = {k: (sx * (hw / 2 + off), sy * (hh / 2 + off), w, d) for k, (sx, sy) in CORNER_SIGNS.items()}
     first = weighted(SHRINE_CORNERS, u)
     return [corner[first]] + [corner[k] for k, _ in SHRINE_CORNERS if k != first]
-
-
-def _joined_bath(hw: float, hh: float, w: float, d: float, taken: Sequence[Rect], g: float, px: Callable[[float], float]) -> tuple[Rect, Rect]:
-    """A bath joined to its house by a corridor (269 B12): the shed a corridor's length off the back wall or a flank, the
-    corridor between them - both clear of the parts laid. Every place along the back wall and the flanks is offered."""
-    cl, cw = px(BATH_CORRIDOR_FT), px(BATH_CORRIDOR_W_FT)
-    for sx, lx, ly in _corridor_walls(hw, hh, w, d, cl, px(WALL_SLIDE_FT)):
-        shed = (lx, ly, d, w) if sx else (lx, ly, w, d)
-        corridor = (math.copysign(hw / 2 + cl / 2, lx), ly, cl, cw) if sx else (lx, math.copysign(hh / 2 + cl / 2, ly), cw, cl)
-        if clears(shed, taken, g) and clears(corridor, taken, 0.0):
-            return shed, corridor
-    raise ValueError("a joined bath found no wall with room for its corridor")
-
-
-def _corridor_walls(hw: float, hh: float, w: float, d: float, cl: float, step: float) -> list[tuple[int, float, float]]:
-    """`(on a flank?, x, y)` places for a joined bath's shed: along the back wall from its middle out, then along each flank,
-    then along the front wall beside the yard - a corridor's length off the wall. The front is the last resort, a GUESS: the
-    interview names a corridor, not the wall it leaves (269 B12), and Sugiura's indoor baths stood in the back corner."""
-    out: list[tuple[int, float, float]] = [(0, u, -(hh / 2 + cl + d / 2)) for u in along((hw - w) / 2, step)]
-    out += [(1, sx * (hw / 2 + cl + d / 2), u) for sx in (1.0, -1.0) for u in along((hh - w) / 2, step)]
-    return out + [(0, u, hh / 2 + cl + d / 2) for u in along((hw - w) / 2, step)]
 
 
 def _persimmon(hw: float, hh: float, yard: Rect | None, taken: Sequence[Rect], roofs: Sequence[Rect], front_first: bool, px: Callable[[float], float]) -> Rect:
@@ -362,5 +452,5 @@ def _persimmon(hw: float, hh: float, yard: Rect | None, taken: Sequence[Rect], r
 
 
 def world_fixtures(laid: Mapping[str, Any]) -> list[tuple[str, Rect]]:
-    """The laid fixtures in drawing order, the corridor after its bath."""
-    return [(k, laid[k]) for k in (*FIXTURE_ORDER, "bath_corridor") if k in laid]
+    """The laid fixtures in drawing order."""
+    return [(k, laid[k]) for k in FIXTURE_ORDER if k in laid]

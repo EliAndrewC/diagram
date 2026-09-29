@@ -1,0 +1,6 @@
+{
+  "utc": "20260929T114027Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the five settlement-reviews for engine key 3f291ffa are already running; only tests changed since"
+}

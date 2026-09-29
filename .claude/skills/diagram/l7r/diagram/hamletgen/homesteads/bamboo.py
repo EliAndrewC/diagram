@@ -6,13 +6,14 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, seg_dist, segments_cross
+from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross
 from l7r.diagram.settlement._geom import PointGrid, boxed_grid, boxed_ring_hit, boxed_rings, boxed_segs
 from l7r.diagram.settlement._geom.water_index import crosses_a_stream
+from l7r.diagram.settlement.homestead_parts.bamboo_keepout import stand_spares_seats
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.settlement.rolling.bearing import turned_box
 
-from ..consts import Poly
+from ..consts import Poly, Pt
 from ..plan import SitePlan
 
 # HOUSEHOLD BAMBOO (feature 133 T48, GM 2026-08-27; research/vegetation.html "Bamboo: how common, where it
@@ -71,6 +72,7 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
     pond = s.M.get("pond")
     lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(6.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
     footing = Footing(s, fields, marsh)  # the static ground, indexed once for every strip this pass tests (feature 218)
+    seats = [(float(p[0]), float(p[1])) for q in s.M.get("houses") or [] for p in (q.get("wood_share") or {}).get("seats") or ()]
     for h in houses:
         hx, hy, hw, hh = float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"])
         if s._hjit(hx, hy, 95.0) >= HOUSEHOLD_BAMBOO_PREVALENCE:
@@ -109,7 +111,12 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
                 d = math.hypot(lx0, ly0) or 1.0
                 lx, ly = lx0 + lx0 / d * k * sh, ly0 + ly0 / d * k * sh
                 cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
-                if _strip_blocked(s, cx, cy, cw, ch, hx, hy, fields, marsh, pond, lanes, footing):
+                if _strip_blocked(s, cx, cy, cw, ch, hx, hy, fields, marsh, pond, lanes, footing) or in_belt(plan.belt, cx, cy, cw, ch):
+                    continue
+                # ...and off every household's reserved copse seats by the copse's bamboo keep-out (feature 280's copse off
+                # the bamboo, feature 287 woods W25's seats planted where reserved - `stand_spares_seats`); the strip is
+                # drawn axis-aligned in (cw, ch) at (cx, cy), the rect the predicate reads
+                if not stand_spares_seats(cx, cy, cw, ch, seats, s.bscale):
                     continue
                 if crosses_a_stream((hx, hy), (cx, cy), s.M.get("streams", [])):
                     continue  # the household's strip stands on its house's bank (feature 287, homes H01)
@@ -122,6 +129,16 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
                 seated = True
                 break
     return out
+
+
+def in_belt(belt: Sequence[Pt] | None, cx: float, cy: float, cw: float, ch: float) -> bool:
+    """Does a household strip centered (cx, cy), cw x ch, reach into the windbreak belt (its center or a corner inside)? The
+    stands are drawn after the belt's crowns, so a strip in the belt painted its culms over the conifers - the reverse of the
+    belt's own order, conifers over the bamboo between them (269 B30; settlement-review of Inashiro, feature 280)."""
+    if not belt or len(belt) < 3:
+        return False
+    pts = [(cx, cy)] + [(cx + sx * cw / 2, cy + sy * ch / 2) for sx in (-1.0, 1.0) for sy in (-1.0, 1.0)]
+    return any(point_in_poly(x, y, list(belt)) for x, y in pts)
 
 
 class Footing:

@@ -458,20 +458,26 @@ def test_comb_base_fill_noops_on_an_empty_net():
     assert "empty" not in s.M.get("comb_floors", {})
 
 
-def test_apply_land_use_leaves_a_lone_pond_ungated():
-    # a dike-pond with NO adjacent canal (<46 px) and NO neighbor pond within reach (<52 px) gets no sluice -
-    # the defensive cap that stops a lone basin drawing a giant culvert across bare ground to a distant pond.
-    s = Settlement(2000, 2000, seed=1)
-    s.meta(field_archetype="mulberry_dike_fishpond")
-    net = {
-        "plots": [
-            {"poly": [(100, 100), (200, 100), (200, 200), (100, 200)], "low": True},
-            {"poly": [(1500, 1500), (1600, 1500), (1600, 1600), (1500, 1600)], "low": True},  # far from the other pond
-        ],
-        "channels": [{"pts": [(1900, 100), (1950, 150)]}],  # a canal far from BOTH ponds
-    }
-    s.apply_land_use(net, "mulberry_fishpond", random.Random(1), fraction=1.0, eligible="all")
-    assert s.M.get("dikepond_sluices") == []  # both basins ungated: no canal near, no neighbor near
+def test_a_fry_village_takes_the_smallest_ponds_up_to_its_share_and_no_pond_is_sluiced():
+    """Feature 280 M57/M60 (research/archetypes/150, 200): a fry village's fry ponds are its smallest, their area within
+    seven tenths of the block's ponds; an ordinary hamlet has none; and no pond is cut by a sluice of its own."""
+    from l7r.diagram.settlement.fields.landuse import FRY_VILLAGE_SHARE, fry_pond_ids
+
+    def sq(x: float, side: float) -> dict:
+        return {"poly": [(x, 100.0), (x + side, 100.0), (x + side, 100.0 + side), (x, 100.0 + side)], "low": True}
+
+    plots = [sq(100.0, 40.0), sq(300.0, 50.0), sq(500.0, 60.0), sq(700.0, 100.0)]
+    area = lambda poly: float(abs(sum(poly[i][0] * poly[(i + 1) % len(poly)][1] - poly[(i + 1) % len(poly)][0] * poly[i][1] for i in range(len(poly))))) / 2  # noqa: E731
+    got = fry_pond_ids(plots, area, FRY_VILLAGE_SHARE)
+    assert got == {id(plots[0]), id(plots[1]), id(plots[2])}, "the three small ponds are 7,700 of 17,700 sq ft; the big one would pass 0.7"
+    assert fry_pond_ids(plots, area, 0.0) == set()
+    for form, fry in (("none", 0), ("fry_village", 3)):
+        s = Settlement(2000, 2000, seed=1)
+        s.meta(field_archetype="mulberry_dike_fishpond")
+        net = {"plots": [dict(p) for p in plots], "channels": [{"pts": [(1900, 100), (1950, 150)]}]}
+        s.apply_land_use(net, "mulberry_fishpond", random.Random(1), fraction=1.0, eligible="all", fry_form=form)
+        assert s.M["meta"]["fry_form"] == form and sum(d["kind"] == "fry" for d in s.M["dikeponds"]) == fry
+        assert "dikepond_sluices" not in s.M
 
 
 def test_apply_land_use_reanchor_leaves_a_placeholder_slot():
@@ -529,7 +535,7 @@ def test_mulberry_rows_crowns_avoid_channels():
 
 
 def test_mulberry_rows_skips_a_parcel_too_small_to_plant():
-    # fourth pass: a parcel whose apothem cannot hold the 11 px water inset has no bank to plant - the
+    # fourth pass: a parcel whose apothem cannot hold the water inset (`DIKEPOND_WATER_INSET`) has no bank to plant - the
     # helper draws nothing rather than wrapping crown rows around a degenerate loop.
     s = Settlement(400, 400, seed=1)
     before = len(s.out)
@@ -846,11 +852,13 @@ def test_the_patch_seeds_are_A_HANDFUL_not_everyone_at_once() -> None:
     assert len(picked) == 2, "even a two-plot conversion has a seed to grow from"
 
 
-def test_a_TEA_dike_is_drawn_as_clipped_hedgerows_not_as_crowns() -> None:
+def test_a_TEA_dike_is_drawn_as_clipped_hedgerows_not_as_crowns(monkeypatch: pytest.MonkeyPatch) -> None:
     """269 B34: tea is the third premodern dike planting (research/archetypes/230). A clipped tea bush reads
     as a hedge, so its rows are runs of dark stroke, broken between bushes - a different SHAPE from the
     mulberry's scatter of round crowns, which is what lets a reader tell the two at fit zoom.
     """
+    # the toy comb's plots are small; the crop's glyph is the subject, not feature 280's deeper water inset (M58)
+    monkeypatch.setattr(__import__("l7r.diagram.settlement.fields.landuse", fromlist=["x"]), "DIKEPOND_WATER_INSET", 11.0)
     net = _comb(1300, 1700, (520, 220), full_or(2, 5), down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=())
     s = Settlement(1400, 1800, seed=3)
     s.meta(name="LUT", scale="village", ftpx=1, down_deg=90)
@@ -862,7 +870,7 @@ def test_a_TEA_dike_is_drawn_as_clipped_hedgerows_not_as_crowns() -> None:
     assert "tea dike" in "".join(str(c) for c in s.out_cls), "the bank and its bushes light as the tea dike"
 
 
-def test_every_attested_DIKE_CROP_draws_a_form_that_tells_it_from_the_others() -> None:
+def test_every_attested_DIKE_CROP_draws_a_form_that_tells_it_from_the_others(monkeypatch: pytest.MonkeyPatch) -> None:
     """`DIKE_CROPS` holds three distinct premodern plantings (269 B34; research/archetypes/230) and each is a
     different SHAPE at fit zoom, which is the whole reason they are separate forms rather than colors:
 
@@ -873,6 +881,8 @@ def test_every_attested_DIKE_CROP_draws_a_form_that_tells_it_from_the_others() -
     So the test is that no two draw the same ink - which is the property a reader depends on, and the one a
     fourth crop added as a color would break. The modern cane, banana and vegetable dikes are refused.
     """
+    # the toy comb's plots are small; the crop's glyph is the subject, not feature 280's deeper water inset (M58)
+    monkeypatch.setattr(__import__("l7r.diagram.settlement.fields.landuse", fromlist=["x"]), "DIKEPOND_WATER_INSET", 11.0)
     net = _comb(1300, 1700, (520, 220), full_or(2, 5), down_deg=90, field_fall=760, offtakes_a=(0.32, 0.7), offtakes_b=())
     ink = {}
     for crop in ("mulberry", "tea", "fruit"):
@@ -924,3 +934,11 @@ def test_a_dike_pond_bank_is_a_ring_around_its_water():
     assert outer.startswith("M ") and outer.endswith("Z") and outer != pond_d
     bank, water = s.M["dikeponds"][0]["bank"], s.M["dikeponds"][0]["water"]  # the records are untouched (FR-003)
     assert min(x for x, _y in bank) < min(x for x, _y in water) and max(x for x, _y in bank) > max(x for x, _y in water)
+
+
+def test_the_mulberry_rows_grow_with_the_bank_so_the_spacing_holds() -> None:
+    """Feature 280 (settlement-review of Kuwabata): a 23 ft bank kept two rows and the bushes thinned by half."""
+    from l7r.diagram.settlement.fields.landuse import mulberry_row_ts
+
+    assert len(mulberry_row_ts(11.0)) == 2 and len(mulberry_row_ts(23.0)) == 4 and len(mulberry_row_ts(3.0)) == 2
+    assert all(0.0 < t < 1.0 for t in mulberry_row_ts(23.0))

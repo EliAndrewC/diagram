@@ -10,7 +10,6 @@ import pytest
 import l7r.diagram.settlement.rolling.access as access_mod
 from l7r.diagram.hamletgen.homesteads import fixtures as fx
 from l7r.diagram.settlement import Settlement
-from l7r.diagram.settlement.homestead_parts.fixture_seats import FixtureForms
 from l7r.diagram.settlement.rolling.lot import HouseholdLots
 
 from ._builders import a_plan
@@ -43,14 +42,14 @@ def test_a_seated_hamlet_draws_every_fixture_its_lots_keep_and_records_none_shor
     assert laid and all(h.get("fixtures") for h in houses), "every household keeps some"
     drawn = fx.farmstead_fixtures(s, plan, houses, early=True)
     pending = len(s._fixtures_pending)
-    assert drawn + pending == sum(v for k, v in laid.items() if k not in ("bath_corridor", "retirement"))
+    assert drawn + pending == sum(v for k, v in laid.items() if k != "retirement")
     target = s.M["meta"]["farm_fixtures_target"]
-    assert {k: v for k, v in target.items() if v} == {k: v for k, v in laid.items() if k not in ("bath_corridor", "retirement")}, "the declared counts are the laid ones"
+    assert {k: v for k, v in target.items() if v} == {k: v for k, v in laid.items() if k != "retirement"}, "the declared counts are the laid ones"
     assert fx.farmstead_fixtures(s, plan, houses) == pending, "the later call draws the held-back forms and nothing twice"
     got = Counter(r["kind"] for r in s.M["farm_fixtures"])
     got["persimmon"] = len(s.M.get("persimmons") or [])
     assert {k: v for k, v in got.items() if v} == {k: v for k, v in target.items() if v}
-    assert "farm_fixtures_unseated" not in s.M["meta"] and "woodpile_forms_drawn" in s.M["meta"]
+    assert "farm_fixtures_unseated" not in s.M["meta"] and "bath_seats_drawn" in s.M["meta"]
 
 
 def _house(fixtures: list[dict[str, object]]) -> dict[str, object]:
@@ -65,28 +64,6 @@ def _sheet() -> Settlement:
     s = Settlement(W=900, H=700, seed=7)
     s.meta(name="T", scale="hamlet", ftpx=1)
     return s
-
-
-def test_a_kizuma_stands_along_the_windbreak_to_windward_else_the_laid_eaves_stack() -> None:
-    """269 B15: on a kizuma hamlet the stack is drawn along the belt's inner edge where the belt is at this yard's windward
-    back; a homestead with no belt there keeps the eaves stack the seating laid."""
-    stack = _laid("woodpile", 400.0, 350.0 - 14.0 - 3.5 - 1.75, 10.0, 3.5)
-    plan = a_plan()
-    plan.belt = [(330.0, 270.0), (470.0, 270.0), (470.0, 316.0), (330.0, 316.0)]  # NW is the default wind: the belt at the back
-    s = _sheet()
-    s._fixture_forms = FixtureForms(woodpile_form="kizuma")
-    house = _house([stack])
-    s.M["houses"].append(house)
-    assert fx.farmstead_fixtures(s, plan, [house]) == 1
-    (kiz,) = s.M["farm_fixtures"]
-    assert kiz["form"] == "kizuma" and kiz["w"] == 24.0 and kiz["y"] < 322.0
-    assert s.M["meta"]["woodpile_forms_drawn"] == {"kizuma": 1}
-    plan.belt = [(330.0, 400.0), (470.0, 400.0), (470.0, 440.0), (330.0, 440.0)]  # to leeward: not this yard's windbreak
-    s = _sheet()
-    s._fixture_forms = FixtureForms(woodpile_form="kizuma")
-    fx.farmstead_fixtures(s, plan, [_house([stack])])
-    (eaves,) = s.M["farm_fixtures"]
-    assert "form" not in eaves and (eaves["x"], eaves["y"]) == pytest.approx((400.0, stack["y"]), abs=0.06), "where the seating laid it"
 
 
 def test_a_field_pit_stands_at_the_paddy_edge_else_the_laid_pit(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -107,18 +84,20 @@ def test_a_field_pit_stands_at_the_paddy_edge_else_the_laid_pit(monkeypatch: pyt
     assert (laid["x"], laid["y"]) == (pit["x"], pit["y"]) and "seat" not in laid
 
 
-def test_a_joined_bath_is_drawn_with_its_corridor_and_a_flank_seat_along_its_flank() -> None:
+def test_a_bath_room_is_drawn_at_its_laid_size_with_its_wall_and_a_flank_seat_along_its_flank() -> None:
+    """Feature 280 M22 carried into 287's drawing: the bath room is drawn at the size the household rolled (`ft`, on the
+    laid record) and records the wall it took (`seat`, counted in `bath_seats_drawn`); the wood shed laid along a flank is
+    turned to it."""
     plan = a_plan()
     s = _sheet()
-    s._fixture_forms = FixtureForms(bath_seat="corridor")
-    bath = _laid("bath", 400.0 + 23.0 + 6.0 + 3.0, 350.0, 6.0, 6.0)
-    corridor = _laid("bath_corridor", 400.0 + 23.0 + 3.0, 350.0, 6.0, 3.0)
+    bath = {**_laid("bath", 400.0 + 23.0 + 3.0, 350.0, 6.0, 10.0), "ft": [10.0, 6.0], "seat": "floored_rooms"}  # along the east end wall
     coop = _laid("coop", 400.0 - 23.0 - 3.5 - 2.5, 350.0, 5.0, 5.0)
-    stack = _laid("woodpile", 400.0 - 23.0 - 3.5 - 1.75, 330.0, 3.5, 10.0)  # along the west flank
-    fx.farmstead_fixtures(s, plan, [_house([bath, corridor, coop, stack])])
+    shed = _laid("woodpile", 400.0 - 23.0 - 3.5 - 6.0 - 6.0, 330.0, 12.0, 24.0)  # along the west flank
+    fx.farmstead_fixtures(s, plan, [_house([bath, coop, shed])])
     got = {r["kind"]: r for r in s.M["farm_fixtures"]}
-    assert got["bath"]["corridor"]["x"] == pytest.approx(426.0) and s.M["meta"]["bath_seats_drawn"] == {"corridor": 1}
-    assert got["woodpile"]["rot"] == 90.0 and got["coop"]["rot"] == 0.0, "a stack laid along a flank is turned to it"
+    assert got["bath"]["seat"] == "floored_rooms" and s.M["meta"]["bath_seats_drawn"] == {"floored_rooms": 1}
+    assert (got["bath"]["w"], got["bath"]["h"]) == (10.0, 6.0) and got["bath"]["rot"] == 90.0, "its rolled size, turned along its wall"
+    assert got["woodpile"]["rot"] == 90.0 and got["coop"]["rot"] == 0.0 and "form" not in got["woodpile"], "the shed laid along a flank is turned to it"
 
 
 def test_no_house_no_fixture() -> None:
@@ -138,19 +117,3 @@ def test_a_spec_floor_is_declared_and_a_field_pit_across_the_brook_is_not_taken(
     fx.farmstead_fixtures(s, plan, [_house([pit])])
     (laid,) = s.M["farm_fixtures"]
     assert s.M["meta"]["farm_fixtures_min"] == {"shrine": 1} and "seat" not in laid and laid["x"] == pytest.approx(410.0)
-
-
-def test_a_kizuma_seat_under_a_lane_is_refused_for_the_laid_eaves_stack() -> None:
-    """Feature 287, ways (`law.over_a_fixture`): the flexible forms are seated after the web, so a seat under a lane's tread
-    is refused and the laid seat - the web was routed round it - is drawn instead."""
-    stack = _laid("woodpile", 400.0, 350.0 - 14.0 - 3.5 - 1.75, 10.0, 3.5)
-    plan = a_plan()
-    plan.belt = [(330.0, 270.0), (470.0, 270.0), (470.0, 316.0), (330.0, 316.0)]
-    s = _sheet()
-    s._fixture_forms = FixtureForms(woodpile_form="kizuma")
-    s.M.setdefault("lanes", []).append({"pts": [[300.0, 318.0], [500.0, 318.0]], "w": 3.0})  # along the belt's inner edge, where the kizuma stands
-    fx.farmstead_fixtures(s, plan, [_house([stack])])
-    (got,) = s.M["farm_fixtures"]
-    assert "form" not in got, "the eaves stack the seating laid"
-    assert not fx.under_a_lane(s.M, (got["x"], got["y"], got["w"], got["h"], got.get("rot", 0.0)))
-    assert fx.under_a_lane(s.M, (400.0, 318.0, 24.0, 5.0, 0.0))

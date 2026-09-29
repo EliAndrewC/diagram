@@ -81,8 +81,13 @@ def test_the_hit_widths_are_per_class_as_the_gm_tuned_them() -> None:
     assert "stroke-width: 20.0px" in wrap(lane, "village lane")
 
 
-def test_the_hit_layer_sits_above_the_ink_it_widens() -> None:
-    """One layer for every widened box, emitted after the drawn record and before `</svg>`."""
+def test_the_hit_layer_sits_above_the_ink_it_widens(monkeypatch: pytest.MonkeyPatch) -> None:
+    """One layer for every widened box, emitted after the drawn record and before `</svg>`. Its one class, the pond sluice,
+    is retired (feature 280 M57), so a stand-in is lifted for the test."""
+    from l7r.diagram.interactive import page as pg
+
+    monkeypatch.setattr(pg, "HIT_ON_TOP", frozenset({"pond sluice"}))
+    monkeypatch.setattr(pg, "HIT_WIDEN", {**pg.HIT_WIDEN, "pond sluice": pg.HIT_WIDEN["irrigation ditch"]})
     strings = ['<svg viewBox="0 0 20 20">', '<line x1="1" y1="1" x2="9" y2="9" stroke="#37637F" stroke-width="2.4"/>', "</svg>"]
     tags = [NOT_HIGHLIGHTED, "pond sluice", None]
     page = render_page(strings, tags, "t")

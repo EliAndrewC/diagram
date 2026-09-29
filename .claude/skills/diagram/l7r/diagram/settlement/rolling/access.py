@@ -139,6 +139,14 @@ def doors_of(geom: Any, half: float = 0.0) -> list[Pt]:
     d = math.hypot(yx - hx, yy - hy) or 1.0
     ux, uy = (yx - hx) / d, (yy - hy) / d
     along = yw / 2 * abs(ux) + yh / 2 * abs(uy)  # the yard's half extent away from the house
+    if geom.get("turn") is not None and geom.get("yard") is not None:
+        # ...AS DRAWN, where the bundle says how its parts are turned (`BundleGeomMixin._bundle_geom`): its axis-aligned box
+        # overstates a turned yard's extent, and a far-edge door set by it stood past the yard (merge of features 280 and 287,
+        # cohort seed 32: a 25-tsubo yard turned 12 degrees put the door 16 ft beyond it, a lane end the law reads as reaching
+        # nothing, `end_serves`, so the reserved corridor could not be drawn). The true rect's half extent along the bearing.
+        tw, th_ = float(geom["yard"][2]), float(geom["yard"][3])
+        c, sn = math.cos(math.radians(float(geom["turn"]))), math.sin(math.radians(float(geom["turn"])))
+        along = tw / 2 * abs(ux * c + uy * sn) + th_ / 2 * abs(-ux * sn + uy * c)
     across = max(yw / 2 * abs(uy) + yh / 2 * abs(ux), hw / 2 * abs(uy) + hh / 2 * abs(ux) + half + 1.0)  # ...and across, past the gable
     return [(yx, yy), (yx + ux * along, yy + uy * along), (yx - uy * across, yy + ux * across), (yx + uy * across, yy - ux * across)]
 
