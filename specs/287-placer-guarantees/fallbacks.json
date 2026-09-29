@@ -155,11 +155,12 @@
  {
   "where": "settlement/water_ways/wards.py:_ward_ends_on_wall:42-45",
   "what": "a fence end further than `reach` from the wall is left exactly as placed, not joined",
-  "compromise": "breaks-rule",
+  "compromise": "town-only",
   "rule": "a ward fence's ends abut the city wall (ward() docstring wards.py:66-70; city_ward_fence_meets_wall, overlap/taxonomy.py:541)",
   "reachable": "rare (a hand-authored city gen that places a fence end > reach off the rampart)",
   "sketch": "refuse the ward() call (raise) when an end is out of reach, so the gen author fixes the input rather than the map shipping an open fence",
-  "group": 1
+  "group": 1,
+  "notes": "recorded, not converted: only a town or city map (frozen, no live generator) reaches it (the Edge Cases)"
  },
  {
   "where": "settlement/water_ways/wards.py:ward:74",
@@ -1330,5 +1331,23 @@
   "reachable": "yes",
   "sketch": "",
   "group": 4
+ },
+ {
+  "where": "settlement/city/bridges.py:seat_deck:104",
+  "what": "when no deck seats by growth or skew, the original undersized span comes back and the caller draws it",
+  "compromise": "breaks-rule",
+  "rule": "bridges_span_their_water (a deck spans its water; the docstring: 'an undersized deck that bridges_span_their_water then fails is better than none')",
+  "reachable": "rare (a near-parallel crossing; cohort seed 47 reached it)",
+  "sketch": "seat the crossing where a deck spans (move the crossing along the way, or square the way at the water as square_crossings does) and never draw an undersized deck",
+  "group": "review"
+ },
+ {
+  "where": "settlement/city/bridges.py:channel_footbridges:377-386",
+  "what": "a ditch the gate needs crossed gets a plank at the best available spot even where the water there does not earn a board",
+  "compromise": "breaks-rule",
+  "rule": "worth_planking (a plank stands on water that earns one)",
+  "reachable": "rare (cohort seeds 41 and 43 before the preference)",
+  "sketch": "offer only seats whose water earns a board, and make the crossing need satisfiable (a seat on the qualifying run) rather than planking narrow water",
+  "group": "review"
  }
 ]

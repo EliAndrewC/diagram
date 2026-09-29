@@ -23,8 +23,8 @@ things of this nature"* included, and the tests no longer needed afterwards reti
 The scope, from three sources (research R1-R3): every placement rule asserted on a finished map (a census of the tests: 118
 rules); every placer fallback that knowingly emits a compromise of a recorded rule (a census of the engine's code); and every
 violation already on record but excused (a test's skip list, a strict xfail, a future-work entry). Research R1 counts
-118 placement rules asserted on finished maps; R2 finds 30 placer fallbacks that break a stated rule when their branch runs
-(of 148 read); R3 finds 58 violations on record and not fixed (of 116 items read). They overlap, and the plan joins them by
+118 placement rules asserted on finished maps; R2 finds 31 placer fallbacks that break a stated rule when their branch runs
+(of 150 read); R3 finds 58 violations on record and not fixed (of 116 items read). They overlap, and the plan joins them by
 owning placer. Each becomes a guarantee
 made where the placer decides - so no roll of any spec can produce the violation - with a unit test of that placer; and the
 finished-map tests it makes unnecessary are retired.
@@ -71,9 +71,10 @@ repairs or never emits it.
   placer puts ON a hand sheet - the captions the one caption placer seats (feature 266) - is in scope. The rows this puts
   out: the hand-drawing half of `tests/test_mode_a_sheets.py::test_every_mode_a_sheet_passes_its_checks` (the two generated
   sheets are in).
-- A tier no live generator produces (the town and city tiers, whose maps are frozen legacy exhibits): its code places
-  nothing that ships, so its fallbacks are recorded in the census but not converted; a live generator's code is in scope
-  whatever module it lives in.
+- A tier no live generator produces (the town and city tiers, whose maps are frozen legacy exhibits - the GM's 2026-08-16
+  freeze, `migration-plan.md`): code only those tiers run places nothing that ships, so its fallbacks are recorded in the
+  census but not converted (research R2 names the one: `wards.py:_ward_ends_on_wall`). The line is drawn by code path, not
+  module: a city module a live generator calls (`settlement/city/bridges.py`, from every hamlet) is in scope.
 
 ## Requirements *(mandatory)*
 
@@ -105,11 +106,13 @@ repairs or never emits it.
 - **FR-006 Excused violations end.** Each test-side carve-out that excuses a known violation (the `ACREAGE_SHORT` seeds, the
   seed-43 strict xfail, and any R3 finds) is removed and the test asserts the rule on those seeds; a carve-out that is part
   of the rule itself (the polder's cell band) stays.
-- **FR-007 The tests no longer needed are retired** (the GM, 2026-09-29: *"retire any unit tests which are no longer
-  necessary after this refactor, especially ones which impact performance without any longer being needed to guarantee
-  correctness"*). A finished-map test whose rule its placer now guarantees, with the placer's own unit test proving it, is
-  retired; the rolls and roster rows only it needed go with it. What the gate keeps is recorded with its reason; the
-  end-to-end proof is SC-003's sweep, run at acceptance.
+- **FR-007 Every test the refactor makes unnecessary is retired** (the GM, 2026-09-29: *"retire any unit tests which are no
+  longer necessary after this refactor, especially ones which impact performance without any longer being needed to
+  guarantee correctness"*). That is any test, not only the finished-map ones: a finished-map test whose rule its placer now
+  guarantees with its own unit test; a test of the re-roll loop FR-002 removes; a test of a fallback branch FR-005 converts;
+  the excuse lists FR-006 removes - and the rolls, roster rows and fixtures only they needed. A test is kept for exactly one
+  reason: it guards correctness that no placer unit test covers, and the record names that correctness. Keeping a test as a
+  witness, or out of caution, is not a reason. The end-to-end proof is SC-003's sweep, run at acceptance.
 - **FR-008 The census is taken again at the end**, over the same selection by a re-runnable script (`census_select.py`) and
   the same judgment, and every placement rule reads guaranteed - its placer's mechanism cited.
 - **FR-009 Maps may move.** A guarantee that changes what a placer emits moves maps, within the GM's standing ruling (map
@@ -127,15 +130,16 @@ repairs or never emits it.
 - **SC-004** (FR-006, FR-009): `make done` green; every live pool map regenerates and passes every rule; `make cohort
   N=24` shows zero failing seeds on any placement rule (not merely none newly failing); every moved map's before and after
   is in the research.
-- **SC-005** (FR-007): the gate's test phase does not get slower for the guarantees - the finished-map tests retired, what
-  remains of them recorded with its reason, and the gate's cost measured before and after (`make audit`).
+- **SC-005** (FR-007): every retired test is listed with the cost the gate no longer pays for it (its measured seconds, and
+  the rolls it alone required); every kept test that reads or rolls a finished map is listed with the correctness it guards
+  that no placer unit test covers; and the gate's test phase is measured before and after (`make audit`) and is not slower.
 - **SC-006** (constitution VI): `make perf-report` against the feature's start bookend; an increase owes its record.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| A finished-map test whose rule its placer guarantees is retired; SC-003's sweep is the end-to-end proof at acceptance | map drawing convention (a test policy) | the GM, 2026-09-29 | FR-007 |
+| Every test the refactor makes unnecessary is retired, kept only for correctness no placer test covers; SC-003's sweep is the end-to-end proof at acceptance | map drawing convention (a test policy) | the GM, 2026-09-29 | FR-007 |
 | Per-rule fallbacks when a placer runs out of legal candidates | decided per rule in the plan | FR-005 | each point of change |
 | The town and city tiers' fallbacks recorded, not converted: no live generator produces those tiers | map drawing convention (scope) | Edge Cases | research R2 |
 
