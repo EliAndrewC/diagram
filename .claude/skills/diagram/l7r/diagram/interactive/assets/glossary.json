@@ -13095,5 +13095,20 @@
   "variants": [
    "Pacific High"
   ]
+ },
+ "fan foot": {
+  "def": "The lower rim of an alluvial fan, where the water that sank into the fan's gravel rises again as springs; settlements often line up along it in an arc.",
+  "variants": [
+   "fan foot",
+   "fan's foot",
+   "fan-foot"
+  ]
+ },
+ "forest village": {
+  "def": "A village form of northern Germany in which each farm's house stands at the head of its own long strip of field, with woodland at the strip's far end. The Musashino strip rows take the same form.",
+  "variants": [
+   "forest village",
+   "forest villages"
+  ]
  }
 }

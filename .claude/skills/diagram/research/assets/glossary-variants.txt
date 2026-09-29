@@ -753,10 +753,13 @@ fabric	building fabric
 fabric is later	building fabric
 fairway	fairway
 fall line	fall line
+fan foot	fan foot
 fan head	alluvial fan
 fan palm	fan palm
 fan palms	fan palm
+fan's foot	fan foot
 fan's head	alluvial fan
+fan-foot	fan foot
 fan-palm	fan palm
 fan-palm-dike	fan palm
 fang	fang
@@ -870,6 +873,8 @@ footslopes	footslope
 forest litter	forest litter
 forest litters	forest litter
 forest stand	forest stand
+forest village	forest village
+forest villages	forest village
 formwork	formwork
 fortune	Fortune
 fortunes	Fortune
