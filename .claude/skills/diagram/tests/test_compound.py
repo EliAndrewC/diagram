@@ -805,3 +805,85 @@ def test_a_repair_skips_a_far_neighbor_and_one_whose_lifting_frees_nothing() -> 
     ]
     seats = [far, near]
     assert _repair(2, requests, box, seats, {}, (0.0, 0.0, 400.0, 400.0)) is None and seats == [far, near]
+
+
+# ---- feature 287 wave 6, homes H29b: a generated sheet's sitings held where the draft is composed ----------------------
+
+
+def _ring(*placed: tuple[c.BuildingSpec, float, float], env: c.Envelope | None = None) -> c.PlaceResult:
+    """A constructed placement: the masses where the test puts them, in `env`."""
+    return c.PlaceResult(placed=[c.Placed(s, x, y) for s, x, y in placed], envelope=env or _env(100.0, 100.0, 50.0))
+
+
+def test_the_composition_is_asked_the_audits_own_bands() -> None:
+    """The one predicate (`composition_sitings`: the pack audit's registered `coverage_band` and `perimeter_hugging`, asked
+    of the placed masses): a ring of masses along the walls is in both bands; the same built area pulled into the middle
+    of its courts fails the hugging floor; too little built fails the coverage band; a check the type does not list is
+    not asked."""
+    row = _b("row", 94.0, 20.0, "inner", "N")
+    hall = _b("hall", 94.0, 20.0, "outer", "divider")
+    ring = _ring((row, 3.0, 3.0), (hall, 3.0, 52.0))
+    assert c.composition_sitings(ring) == []
+    block = _b("block", 60.0, 60.0, "inner", "N")
+    middle = _ring((block, 20.0, 20.0), env=_env(100.0, 100.0, 90.0))
+    found = c.composition_sitings(middle)
+    assert len(found) == 1 and "within 25 ft of a wall" in found[0], found
+    sparse = _ring((_b("hut", 20.0, 10.0, "inner", "N"), 3.0, 3.0))
+    assert any("building coverage" in f for f in c.composition_sitings(sparse))
+    assert c.composition_sitings(sparse, ("perimeter_hugging",)) == [], "the type lists no coverage band: not asked"
+    assert "coverage_band" in c._declared_checks("magistracies") and c._declared_checks("no-such-tier") == ()
+
+
+def test_a_grown_compound_that_falls_out_of_its_band_is_refused_naming_what_grew_it() -> None:
+    """Homes H29b, the violating case: growing the envelope for an overflowing building adds unbuilt ground. A composition
+    in band until its last building overflows the north wall, whose growth leaves it under the coverage floor, is refused
+    at composition naming that building (plan D7) - the same program of no declared type places as before."""
+    full = (
+        _b("row", 94.0, 20.0, "inner", "N", order=9),
+        _b("hall", 94.0, 20.0, "outer", "divider", order=9),
+        _b("late", 60.0, 10.0, "inner", "N", order=1),
+    )
+    free = c.CompoundProgram("t", _env(100.0, 100.0, 50.0), (), full, max_w_ft=400.0)
+    grown = c.place(free)
+    assert grown.envelope is not None and grown.envelope.w_ft > 100.0 and not grown.overflow, "the input holds the violation"
+    assert any("building coverage" in f for f in c.composition_sitings(grown))
+    with pytest.raises(ValueError, match=r"grown for 'late'.*building coverage"):
+        c.place(replace(free, tier="magistracies"))
+    in_band = c.CompoundProgram("t", _env(100.0, 100.0, 50.0), (), full[:2], tier="magistracies")
+    assert c.place(in_band).placed, "a composition in its bands is placed"
+
+
+def test_the_generated_drafts_are_composed_in_band_and_drawn_in_band() -> None:
+    """Both generated drafts declare their type, their compositions pass the bands, and the drawn sheet the audit reads
+    agrees: its coverage stands at or over the masses' (the point features only add built ground)."""
+    from l7r.diagram.tools import pack_audit as pa
+
+    prog, result, svg = _county()
+    assert prog.tier == "magistracies" and c.composition_sitings(result) == []
+    drawn = pa.parse_svg(svg)
+    assert pa.coverage_band(drawn) == [] and pa.perimeter_hugging(drawn) == []
+    assert pa.coverage(drawn) >= pa.coverage(c.composition_plan(result)) - 0.005
+
+
+def test_the_garden_well_is_seated_on_clear_ground_or_not_at_all() -> None:
+    """Homes H29b, the Mode A wells: the garden well takes the garden's north-east corner where it is free, the next clear
+    seat along the north edge where something already stands there, and none where the garden holds no clear seat."""
+    env = _env(200.0, 200.0, 100.0)
+    garden = c.CourtZone("garden", 60.0, 20.0, 80.0, 30.0)
+    assert cp.garden_well(env, garden, []) == pytest.approx((135.0, 25.0))
+    corner = [(125.0, 18.0, 142.0, 34.0)]
+    x, y = cp.garden_well(env, garden, corner)  # type: ignore[misc]
+    assert y == pytest.approx(25.0) and x + cp.WELL_HALF_FT + 1.0 <= 125.0, "clear of what stands at the corner"
+    assert cp.garden_well(env, garden, [(55.0, 15.0, 145.0, 55.0)]) is None
+
+
+def test_a_program_that_requires_a_well_and_has_no_seat_for_one_is_refused() -> None:
+    """Homes H29b; plan D7: the magistracy's declaration requires a well, so a draft with no seat for any is refused at
+    composition naming it - never a sheet drawn without its well. A program of no declared type is held to nothing."""
+    prog = c.CompoundProgram("t", _env(), (), (_b("hall", 40.0, 20.0, "outer", "divider", order=10, feature="office hall"),))
+    result = c.place(prog)
+    assert ">well<" not in "".join(c._point_features(prog, result, lambda *a: "R", lambda *a: "L", 0.0, 0.0))
+    typed = replace(prog, tier="magistracies")
+    with pytest.raises(ValueError, match="no seat for a well"):
+        c._point_features(typed, result, lambda *a: "R", lambda *a: "L", 0.0, 0.0)
+    assert cp.requires(typed, "well") and not cp.requires(prog, "well") and not cp.requires(typed, "unicorn stable")

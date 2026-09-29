@@ -3,7 +3,7 @@
 The one caption placer never refuses a caption (the GM: *"we'll treat labels as mandatory"*), so a caption rule about
 the board cannot be held inside the placer by dropping the caption. It is held by the placer that decides the SUBJECT:
 `place_kosatsuba` keeps only a board seat whose caption the one placer seats clean (`board_caption_seat`), inside the
-view (`board_in_view`), off the title placard (`under_placard`), and - for an `entrance` board - where every household's
+view (`board_in_view`), off the title placard (`under_placard`), turned square to its way (`WayFacing.turn`), and - for an `entrance` board - where every household's
 way out passes it (`entrance_seat_ok`). The seat it proved rides to the label phase and is drawn as proved. The
 functions here are the rules' ONE predicates: the siter calls them and the tests call them (FR-003).
 
@@ -21,7 +21,7 @@ from collections.abc import Callable, Sequence
 from typing import Any, NamedTuple
 
 from ....labels import ObstacleIndex, Placement, caption_clears_ways, keyed, place
-from ..._geom import nearest_way_bearing
+from ..._geom import PointGrid, nearest_way_bearing, seg_dist, street_runs
 from ..._knobs import KNOBS, Knob, resolve_knob
 from ._helpers import KOSATSUBA_ANCHOR_BAND_FT, KOSATSUBA_ENTRANCE_REACH_FT, KOSATSUBA_HANDOVER_BAND_FT, RouteReach
 from .boards import BOARD_CAPTION_SIZE, board_subject
@@ -46,6 +46,66 @@ names - a caption breaking the board caption's own rules (beside the board, no l
 (0 of 53 maps reached the terminal: research R5.)"""
 
 
+FACING_DEG = 45.0
+"""How far off parallel to its way a board may stand and still face it (`kosatsuba_faces_the_road`, labels L12): past it the
+plank is side-on, unreadable to the traffic it was posted for. The retired gate test's `FACING_DEG`, stated once here."""
+
+FACING_TIE_PX = 1.0
+"""How near two ways must stand to a board for BOTH to be its "nearest way" (feature 287 wave 6, labels L12). Beside a
+lane's corner the seat is equidistant from both arms, and which one is nearest is decided by rounding: the manifest
+records the board and every lane vertex to 0.1 px, which moves a distance by up to ~0.15 px. Measured (2026-09-29, method:
+cohort seeds 25 and 42 rolled and read by a spec harness): seed 25's board stood 9.449 px from one arm and 9.500 px from
+the other, 54.7 degrees apart; seed 42's stood 8.006 px from both arms of a corner 86 degrees apart - each turned to one arm
+and judged against the other. One px is several times the rounding and far below any verge step (5 px), so it catches
+every such tie and nothing else."""
+
+
+def off_parallel(a: float, b: float) -> float:
+    """Degrees between two bearings read as undirected lines (0-90): a board faces its way when its long axis is PARALLEL
+    to the way's bearing, the face normal to it."""
+    return abs((a - b + 90.0) % 180.0 - 90.0)
+
+
+class WayFacing:
+    """Every way segment the board is turned by (`street_runs`, the reading `nearest_way_bearing` uses), filed once per
+    siting so each candidate asks only its neighborhood (constitution X clause 15): `turn` is `nearest_way_bearing`'s
+    answer, the same distance and the same first-in-order tie-break, with the refusal L12 needs."""
+
+    def __init__(self, M: Any, pad: float) -> None:
+        self.pad = pad
+        self.segs: list[tuple[Any, Any, int]] = []
+        for pts in street_runs(M):
+            for k in range(len(pts) - 1):
+                self.segs.append((pts[k], pts[k + 1], len(self.segs)))
+        self.grid = PointGrid()
+        self.grid.extend((a, b, n, min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])) for a, b, n in self.segs)
+
+    def _near(self, x: float, y: float) -> list[tuple[float, int, float]]:
+        """(distance, manifest order, bearing) of every segment within `FACING_TIE_PX` of the nearest - from the grid when
+        the nearest stands inside its pad (a segment within `d` of a point has its box within `d`, so none is missed), else
+        from every segment."""
+        found = {n: (a, b) for a, b, n, *_box in self.grid.near(x, y, self.pad + FACING_TIE_PX)}
+        near = [(seg_dist(x, y, a, b), n, a, b) for n, (a, b) in found.items()]
+        if not near or min(d for d, *_ in near) > self.pad:
+            near = [(seg_dist(x, y, a, b), n, a, b) for a, b, n in self.segs]
+        if not near:
+            return []
+        least = min(d for d, *_ in near)
+        return sorted((d, n, math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]))) for d, n, a, b in near if d <= least + FACING_TIE_PX)
+
+    def turn(self, x: float, y: float, fallback: float) -> float | None:
+        """THE ONE PREDICATE of `kosatsuba_faces_the_road` (labels L12): the bearing a board seated at (x, y) is turned to -
+        its nearest way's (`nearest_way_bearing`: the least distance, a tie to the first in manifest order) - or None where
+        that turned board cannot face its way: some other way stands as near (within `FACING_TIE_PX`, the corner of a lane)
+        more than `FACING_DEG` off parallel to it, so which way it "faces" is decided by rounding. `fallback` where the map
+        drew no way."""
+        near = self._near(x, y)
+        if not near:
+            return fallback
+        bearing = near[0][2]  # sorted by (distance, manifest order): `nearest_way_bearing`'s strict-less scan
+        return bearing if all(off_parallel(b, bearing) <= FACING_DEG for _d, _n, b in near) else None
+
+
 class BoardSeat(NamedTuple):
     """A candidate board seat: its traffic count and score, its center and bearing, its gap from the tread edge to the
     board's edge, whether trees stand over it, and whether it stands on the approach itself."""
@@ -62,7 +122,8 @@ class BoardSeat(NamedTuple):
 
 class SiteEnv(NamedTuple):
     """What every candidate seat is tested against, built once per siting: the view, the way beds' segment index, the
-    dwellings a seat's traffic counts, the `kosatsuba_siting` knob and the wells it reads, and the crowns."""
+    dwellings a seat's traffic counts, the `kosatsuba_siting` knob and the wells it reads, the crowns, and the ways the
+    board is turned by (`WayFacing`)."""
 
     view: Any
     beds: Any
@@ -70,6 +131,7 @@ class SiteEnv(NamedTuple):
     siting: str
     wells: list[tuple[float, float]]
     canopy: Any
+    facing: WayFacing
 
 
 def board_in_view(view: Sequence[float] | None, x: float, y: float, w: float, h: float) -> bool:

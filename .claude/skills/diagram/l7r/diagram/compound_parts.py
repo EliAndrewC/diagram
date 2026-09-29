@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Sequence
 
+from .buildings.types import by_tier
 from .compound_model import (
     BATH_H_FT,
     BATH_W_FT,
@@ -335,6 +336,29 @@ def _roomiest(points: list[tuple[float, float]], boxes: list[Box]) -> tuple[floa
     return max(points, key=room)
 
 
+def requires(program: CompoundProgram, kind: str) -> bool:
+    """Does the program's declared type (`CompoundProgram.tier`) require an item of `kind` that is not optional? False for
+    a program of no declared type."""
+    btype = by_tier(program.tier) if program.tier is not None else None
+    return btype is not None and any(r.kind == kind and not r.optional for r in btype.required)
+
+
+WELL_HALF_FT = 3.65
+"""Half a well curb's side: the draft draws every well as a 7.3 ft square (`_point_features`)."""
+
+
+def garden_well(env: Envelope, garden: CourtZone, taken: Sequence[Box]) -> tuple[float, float] | None:
+    """The garden well's center: the first seat, from the garden's north-east corner westward along its north edge and
+    then down its east edge, whose curb stands inside the garden and clear of everything already seated (`_is_clear`'s
+    1 ft margin) - None where the garden holds no such seat (feature 287 wave 6, homes H29b: the well was stamped at the
+    corner whether or not the corner was free)."""
+    lo, hi = garden.x_ft + WELL_HALF_FT + 1.35, garden.x2 - WELL_HALF_FT - 1.35
+    top, bot = garden.y_ft + WELL_HALF_FT + 1.35, garden.y2 - WELL_HALF_FT - 1.35
+    seats = [(hi - k, top) for k in range(int(hi - lo) + 1)] + [(hi, top + k) for k in range(1, int(bot - top) + 1)]
+    side = 2 * WELL_HALF_FT
+    return next(((cx, cy) for cx, cy in seats if _is_clear(env, list(taken), cx - WELL_HALF_FT, cy - WELL_HALF_FT, side, side)), None)
+
+
 def tub_by_its_eaves(tub: tuple[float, float], host: Box) -> bool:
     """THE ONE PREDICATE of `fire_water_adrift` (feature 287, homes H29b), in feet: a fire-water tub's CENTER stands within
     `TUB_MAX_GAP_FT` of the building whose gutter feeds it. The draft's tub seat asserts it of every seat it offers, and
@@ -426,11 +450,16 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
         if p.spec.feature in ("kitchen", "stables") and (w := seat(p, 7.3, (0.2, 0.8, 0.3, 0.7, 0.5), (9.0, 12.0, 15.0, 20.0, 6.0))):
             wells.append(w)
     for z in program.spine:
-        if z.name == "garden":
-            # the garden well stands at the garden's EAST end, where the bath stood before it joined the house: at the
-            # west end it stood 8 ft from the kitchen well seated past the bath, and read as its duplicate
-            wells.append((z.x2 - 5.0, z.y_ft + 5.0))
-            taken.append((z.x2 - 8.65, z.y_ft + 1.35, z.x2 - 1.35, z.y_ft + 8.65))
+        # the garden well stands at the garden's EAST end, where the bath stood before it joined the house: at the west
+        # end it stood 8 ft from the kitchen well seated past the bath, and read as its duplicate. ASKED, NOT STAMPED
+        # (feature 287 wave 6, homes H29b): it was set at the corner unconditionally, over whatever stood there
+        if z.name == "garden" and (gw := garden_well(env, z, taken)):
+            wells.append(gw)
+            taken.append((gw[0] - WELL_HALF_FT, gw[1] - WELL_HALF_FT, gw[0] + WELL_HALF_FT, gw[1] + WELL_HALF_FT))
+    if not wells and requires(program, "well"):
+        # THE PROGRAM'S WELL IS DRAWN OR THE DRAFT IS REFUSED (homes H29b; plan D7): a magistracy's program requires one
+        # (`buildings/types.json`), and a draft with none fails `program_complete` - never a sheet drawn without it
+        raise ValueError(f"{program.title}: no seat for a well - the kitchen's and the stables' faces and the garden are all taken; change the program")
     # THE PRIVIES (feature 267, research buildings 220 'Privies attach to the house; night-soil drives their placement':
     # "privy count scales with occupancy (~1 per functional zone, ~3-4 at a county manor), the residence privy attaches
     # to the house with its cesspit to the rear/service wall, and servants'/outer privies line service walls near a

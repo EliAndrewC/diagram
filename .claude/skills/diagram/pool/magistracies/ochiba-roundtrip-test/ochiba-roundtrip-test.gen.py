@@ -66,7 +66,7 @@ def ochiba_program() -> C.CompoundProgram:
         b("clerks' room", "service", 28.0, 18.0, "outer", "W", order=3, feature="clerks' room"),  # a room of the hall on the sheet; a mass here (feature 254)
         b("guest room", "lord", 22.0, 15.0, "inner", "E", order=2, feature="guest quarters"),  # a room of the residence on the sheet; a mass here (feature 254)
     )
-    return C.CompoundProgram("Ochiba County Magistracy (placer round-trip)", env, spine, buildings)
+    return C.CompoundProgram("Ochiba County Magistracy (placer round-trip)", env, spine, buildings, tier="magistracies")  # its declared type: the bands it is placed to (feature 287 H29b)
 
 
 def main() -> int:

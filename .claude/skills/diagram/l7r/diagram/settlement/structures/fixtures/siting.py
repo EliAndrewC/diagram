@@ -9,7 +9,6 @@ from ..._geom import (
     Manifest,
     PointGrid,
     Pt,
-    nearest_way_bearing,
     point_in_poly,
     seg_dist,
     seg_reach_index,
@@ -35,6 +34,7 @@ from .board_seat import (
     BoardSeat,
     Proof,
     SiteEnv,
+    WayFacing,
     board_caption_seat,
     board_in_view,
     choose_board,
@@ -168,6 +168,7 @@ class FixtureSitingMixin:
             str(meta.get("kosatsuba_siting") or "frontage"),
             [(float(_w["x"]), float(_w["y"])) for _w in (self.M.get("wells") or []) if "x" in _w],
             canopy_index(self.M),
+            WayFacing(self.M, KOSATSUBA_WAY_REACH_FT / ftpx + math.hypot(w, h)),
         )
         proved: dict[tuple[float, float, float], tuple[bool, Placement | None]] = {}
 
@@ -219,11 +220,11 @@ class FixtureSitingMixin:
             meta["kosatsuba_d12"] = D12_AWAITING_THE_GM
         meta["kosatsuba_seat"] = placement
         x, y = seat.x, seat.y
-        # THE BOARD FACES THE WAY A READER SEES IT BY, which is the NEAREST one (`kosatsuba_faces_the_road`, labels L12),
-        # through the shared reading of "nearest" (`_geom.ways.nearest_way_bearing`, feature 230: its tie-break at a lane's
-        # corner is the rule's, not a loop's). The caption was proved at this same turn (`board_caption_seat`).
-        nb = nearest_way_bearing(self.M, x, y)
-        rot = nb if nb is not None else seat.rot
+        # THE BOARD FACES THE WAY A READER SEES IT BY, which is the NEAREST one (`kosatsuba_faces_the_road`, labels L12): every
+        # seat was turned to it as it was sampled (`WayFacing.turn`, the shared reading of "nearest") and a seat whose turned
+        # board could not face it was refused there, so the seat's turn is the drawn one. The caption was proved at this same
+        # turn (`board_caption_seat`).
+        rot = seat.rot
         # RECORD WHAT WAS DRAWN, NOT ONLY WHAT WAS ROLLED (settlement-review, feature 154): `kosatsuba_siting` bids through
         # the traffic score while `kosatsuba_seat` culls the ground, and where the anchor's ground holds no wellhead the siting
         # knob decides nothing - so the achieved distance to the nearest well is stated beside the rolled knobs. A
@@ -287,6 +288,10 @@ class FixtureSitingMixin:
                             and all(seg_dist(x, y, a, b) >= reach for a, b, reach, _x0, _y0, _x1, _y1 in env.beds.near(x, y) if _x0 <= x <= _x1 and _y0 <= y <= _y1)
                             and self.fixture_clear_of_water(x, y, half)
                             and self._fits(x, y, w, h, corridors=False, top=26.0)
+                            # TURNED TO ITS NEAREST WAY, and refused where that board cannot face it (labels L12, feature 287
+                            # wave 6): beside a lane's corner both arms are as near, and a board turned to one stood 55 and 86
+                            # degrees off the other (cohort seeds 25 and 42) - asked last, of a seat every cheaper test kept
+                            and (turn := env.facing.turn(x, y, rot)) is not None
                         ):
                             # BUSY IS WHERE THE FEET ARE (feature 140's Inashiro review): the near count is weighted double
                             busy = sum(1 for sx, sy in env.spots if math.hypot(x - sx, y - sy) < 260) + 2 * sum(1 for sx, sy in env.spots if math.hypot(x - sx, y - sy) < 150)
@@ -295,7 +300,7 @@ class FixtureSitingMixin:
                             if env.siting == "waterside" and env.wells:
                                 dw = min(math.hypot(x - wx, y - wy) for wx, wy in env.wells)
                                 busy += 14 if dw < 40.0 else (8 if dw < 90.0 else 0)
-                            out.append(BoardSeat(busy, busy * 10 - off / 3, x, y, rot, off - rw / 2 - h / 2, under_canopy(env.canopy, x, y, half), approach))
+                            out.append(BoardSeat(busy, busy * 10 - off / 3, x, y, turn, off - rw / 2 - h / 2, under_canopy(env.canopy, x, y, half), approach))
                         off += 5.0
         return out
 

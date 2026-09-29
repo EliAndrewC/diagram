@@ -25,8 +25,9 @@ from __future__ import annotations
 import os
 import sys
 from dataclasses import replace
+from typing import Any
 
-from .buildings.types import load_types
+from .buildings.types import by_tier, load_types
 from .compound_model import (
     COURT_FILL,
     DIVIDER_INK_FT,
@@ -190,6 +191,7 @@ def place(program: CompoundProgram) -> PlaceResult:
     naming the building (plan D7: the composer is seedless, so this is an impossible input refused before any sheet
     exists, never a sheet drawn with a building off its wall). The result carries the envelope it was placed in."""
     env = program.envelope
+    grew: list[str] = []
     while True:
         result = PlaceResult(envelope=env)
         for spec in sorted(program.buildings, key=lambda s: (s.rank, _wall_tier(s.wall), -s.order, -(s.w_ft * s.h_ft))):
@@ -199,7 +201,16 @@ def place(program: CompoundProgram) -> PlaceResult:
             else:
                 result.placed.append(placed)
         if not result.overflow:
+            # THE COMPOSITION IS IN ITS BANDS OR IT IS REFUSED (feature 287 wave 6, homes H29b; plan D7): coverage and
+            # perimeter hugging are asked of the placed masses by the pack audit's own registered checks
+            # (`composition_sitings`) - growing the envelope for an overflowing building adds unbuilt ground, and nothing
+            # asked whether the coverage band survived it. The composer is seedless, so a composition out of its bands is
+            # an impossible program, refused here naming what failed, never a sheet drawn out of band.
+            if program.tier is not None and (found := composition_sitings(result, _declared_checks(program.tier))):
+                why = f" (the compound was grown for {', '.join(repr(g) for g in grew)})" if grew else ""
+                raise ValueError(f"{program.title}: the composition fails its bands{why}: " + "; ".join(found))
             return result
+        grew.append(result.overflow[0].name)
         grown = _grown(env, result.overflow[0], program)
         if grown is None:
             spec = result.overflow[0]
@@ -208,6 +219,48 @@ def place(program: CompoundProgram) -> PlaceResult:
                 "shrink the building, move it, or state a larger compound (max_w_ft / max_h_ft)"
             )
         env = grown
+
+
+DRAFT_MARGIN_FT = 7.0
+"""The draft's parchment margin (`emit_svg`'s default): the checklist's ~15-25 px, 7 ft = 21 px."""
+
+
+def composition_plan(result: PlaceResult, margin_ft: float = DRAFT_MARGIN_FT) -> Any:
+    """The composition as the pack audit reads a sheet (`tools/pack_audit/parse.ParsedPlan`): the precinct's two courts,
+    every placed mass and the court divider, at the draft's own pixel frame and rounding (`emit_svg` writes each rect
+    at `ox + x * FTPX` to the whole pixel), so the audit's grid measures - `coverage`, `perimeter_hugging_pct` - read the
+    composition the way they read the drawn sheet. The point features the draft adds later (the bath, the corridor, the
+    privies) are not in it: they are seated around the masses and add built ground (measured on both generated drafts,
+    2026-09-29: the drawn sheet's coverage 1.2 points over the masses' alone)."""
+    from .tools.pack_audit.parse import ParsedPlan, Rect
+
+    assert result.envelope is not None, "place() records the envelope it placed in"
+    env = result.envelope
+    ox, oy = margin_ft * FTPX, (margin_ft + 8.0) * FTPX
+
+    def rect(x: float, y: float, w: float, h: float) -> Rect:
+        return Rect(round(ox + x * FTPX), round(oy + y * FTPX), round(w * FTPX), round(h * FTPX))
+
+    interior = (rect(0.0, 0.0, env.w_ft, env.divider_ft), rect(0.0, env.divider_ft, env.w_ft, env.h_ft - env.divider_ft))
+    divider = Rect(round(ox), round(oy + env.divider_ft * FTPX), round(env.w_ft * FTPX), 2.0)  # the audit's thin rect of a divider line
+    return ParsedPlan(interior, tuple(rect(p.x_ft, p.y_ft, p.spec.w_ft, p.spec.h_ft) for p in result.placed), (), (), (divider,))
+
+
+def _declared_checks(tier: str) -> tuple[str, ...]:
+    """The checks the declaration lists for `tier` (none for a tier it does not declare)."""
+    btype = by_tier(tier)
+    return btype.checks if btype is not None else ()
+
+
+def composition_sitings(result: PlaceResult, checks: tuple[str, ...] = ("coverage_band", "perimeter_hugging")) -> list[str]:
+    """THE ONE PREDICATE of a generated sheet's coverage band and perimeter hugging (feature 287 wave 6, homes H29b): the
+    pack audit's own registered checks (`shared.coverage_band`, `shared.perimeter_hugging`) asked of the composition
+    (`composition_plan`), each only where `checks` (the type's declaration) lists it - each finding the audit would
+    print, none where the composition is in its bands."""
+    from .tools.pack_audit.shared import coverage_band, perimeter_hugging
+
+    plan = composition_plan(result)
+    return (coverage_band(plan) if "coverage_band" in checks else []) + (perimeter_hugging(plan) if "perimeter_hugging" in checks else [])
 
 
 def _grown(env: Envelope, spec: BuildingSpec, program: CompoundProgram) -> Envelope | None:
@@ -389,7 +442,7 @@ _DEFS = (
 )
 
 
-def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = 7.0) -> str:
+def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = DRAFT_MARGIN_FT) -> str:
     """Build a composed draft SVG (feet -> px). Not a final map - the GM refines it.
 
     The parchment margin is the checklist's ~15-25 px (7 ft = 21 px; `viewbox_cropped` holds every
@@ -790,7 +843,7 @@ def county_magistracy_program() -> CompoundProgram:
         # a GUESS), 44 x 18 ft. It takes the corner (order above the stables') so the stables' privy keeps its end face.
         b("grooms' row", "service", 44.0, 18.0, "outer", "S", order=6, feature="servants' quarters"),
     )
-    return CompoundProgram("County Magistracy (example)", env, spine, buildings)
+    return CompoundProgram("County Magistracy (example)", env, spine, buildings, tier=_EXAMPLE_TIER)
 
 
 def main(argv: list[str] | None = None) -> int:

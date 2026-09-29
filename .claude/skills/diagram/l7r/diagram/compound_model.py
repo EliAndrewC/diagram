@@ -208,6 +208,10 @@ class CompoundProgram:
     buildings: tuple[BuildingSpec, ...] = ()
     max_w_ft: float | None = None
     max_h_ft: float | None = None
+    tier: str | None = None
+    """The Mode A type the program draws (`buildings/types.json`): its declared composition checks - the coverage band
+    and perimeter hugging - are asked of the placement (feature 287 wave 6, homes H29b). None: a program of no declared
+    type (a unit test's), held to no type's bands."""
 
 
 TUB_MAX_GAP_FT: float = 3.5

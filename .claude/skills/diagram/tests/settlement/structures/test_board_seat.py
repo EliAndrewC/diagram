@@ -12,16 +12,20 @@ import pytest
 from l7r.diagram.labels import Obstacle, ObstacleIndex, Placement, Way, caption_clears_ways, keyed
 from l7r.diagram.labels.geom import poly_gap, rect
 from l7r.diagram.settlement import Settlement, nearest_way_bearing
-from l7r.diagram.settlement._geom import seg_dist
+from l7r.diagram.settlement._geom import seg_dist, street_runs
 from l7r.diagram.settlement._knobs import resolve_knob
 from l7r.diagram.settlement.structures.fixtures import kosatsuba_affordances
 from l7r.diagram.settlement.structures.fixtures._helpers import KOSATSUBA_ANCHOR_BAND_FT, KOSATSUBA_ENTRANCE_REACH_FT, RouteReach, departure_routes, kosatsuba_anchor, routes_missed
 from l7r.diagram.settlement.structures.fixtures.board_seat import (
+    FACING_DEG,
+    FACING_TIE_PX,
     KOSATSUBA_WAY_REACH_FT,
     BoardSeat,
+    WayFacing,
     board_in_view,
     choose_board,
     entrance_seat_ok,
+    off_parallel,
     resolve_seat,
     terminal_caption,
     under_placard,
@@ -180,6 +184,97 @@ def test_the_board_stands_by_its_way_and_faces_it() -> None:
     pts = s.M["lanes"][0]["pts"]
     assert min(seg_dist(spot[0], spot[1], a, b) for a, b in zip(pts, pts[1:], strict=False)) <= KOSATSUBA_WAY_REACH_FT
     assert s.M["kosatsuba"][-1]["rot"] == pytest.approx(round(nearest_way_bearing(s.M, *spot), 1), abs=0.06)
+
+
+def test_a_board_stands_no_farther_from_its_way_than_the_reach_even_where_only_the_far_ground_is_open() -> None:
+    """Labels L11, the violating case: every verge within the reach is refused but a strip at its far edge, and open ground
+    lies beyond it. The board takes the far strip, never the open ground past the reach; with the strip closed too, no
+    board is posted rather than one off its way."""
+    reach = KOSATSUBA_WAY_REACH_FT
+
+    def site(open_from: float) -> tuple[Settlement, Any]:
+        s = _hamlet(view=(0.0, 0.0, 1000.0, 800.0))
+        s.M["lanes"] = [{"pts": [[100.0, 400.0], [900.0, 400.0]], "w": 5}]
+        _house(s, 500.0, 300.0)
+        for sign in (1.0, -1.0):  # both sides refused from the tread out to `open_from`
+            y0, y1 = 400.0 + sign * 3.0, 400.0 + sign * open_from
+            s.block_polys.append([(60.0, min(y0, y1)), (940.0, min(y0, y1)), (940.0, max(y0, y1)), (60.0, max(y0, y1))])
+        return s, s.place_kosatsuba()
+
+    s, spot = site(reach - 4.0)
+    assert spot is not None, "the far strip inside the reach takes the board"
+    d = abs(spot[1] - 400.0)
+    assert reach - 4.0 <= d <= reach, f"the board stands {d} px out: in the far strip, not past the reach"
+    s, spot = site(reach + 30.0)
+    assert spot is None and not s.M.get("kosatsuba"), "open ground past the reach is no seat"
+
+
+def _block_all_but(s: Settlement, keep: list[tuple[float, float, float, float]]) -> None:
+    """Refuse every seat on the sheet but those inside the `keep` boxes (x0, y0, x1, y1): the complement as strips."""
+    ys = sorted({0.0, float(s.H), *(b[1] for b in keep), *(b[3] for b in keep)})
+    for y0, y1 in zip(ys, ys[1:], strict=False):
+        spans = sorted((b[0], b[2]) for b in keep if b[1] <= y0 and y1 <= b[3])
+        x = 0.0
+        for a, b in [*spans, (float(s.W), float(s.W))]:
+            if a > x:
+                s.block_polys.append([(x, y0), (a, y0), (a, y1), (x, y1)])
+            x = max(x, b)
+
+
+def _corner_hamlet() -> Settlement:
+    """An L lane whose busiest open ground lies OUTSIDE its corner, where every seat stands as near both arms (90 degrees
+    apart), and whose only other open ground is a quiet verge on the first arm."""
+    s = _hamlet(view=(0.0, 0.0, 1000.0, 800.0))
+    s.M["lanes"] = [{"pts": [[200.0, 200.0], [600.0, 200.0], [600.0, 600.0]], "w": 5}]
+    for x, y in ((680.0, 150.0), (700.0, 240.0), (660.0, 110.0), (720.0, 130.0)):
+        _house(s, x, y, 24.0, 18.0)
+    _block_all_but(s, [(603.0, 150.0, 640.0, 205.0), (300.0, 140.0, 340.0, 196.0)])
+    return s
+
+
+def _judged_off(M: Any, x: float, y: float, rot: float) -> float:
+    """The retired gate test's reading with rounding's margin: the worst angle between the board and ANY way standing as
+    near it as the nearest (within `FACING_TIE_PX`) - a board faces its way only if it faces every way that could be read
+    as the nearest."""
+    segs = [(a, b) for pts in street_runs(M) for a, b in zip(pts, pts[1:], strict=False)]
+    least = min(seg_dist(x, y, a, b) for a, b in segs)
+    return max(off_parallel(rot, math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]))) for a, b in segs if seg_dist(x, y, a, b) <= least + FACING_TIE_PX)
+
+
+def test_a_board_is_turned_to_its_way_and_refused_where_it_cannot_face_it(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Labels L12, the violating case (cohort seeds 25 and 42: 55 and 86 degrees off): the busiest seat stands outside an L
+    corner, as near both arms. Turned to its nearest arm with no refusal, the board stands side-on to the other; the
+    siter refuses that seat and the board it posts faces every way as near it."""
+    lenient = WayFacing.turn
+    monkeypatch.setattr(WayFacing, "turn", lambda self, x, y, f: (self._near(x, y) or [(0.0, 0, f)])[0][2])
+    s = _corner_hamlet()
+    spot = s.place_kosatsuba()
+    assert spot is not None and _judged_off(s.M, *spot, s.M["kosatsuba"][-1]["rot"]) > FACING_DEG, "the input holds the violation"
+    monkeypatch.setattr(WayFacing, "turn", lenient)
+    s = _corner_hamlet()
+    spot = s.place_kosatsuba()
+    assert spot is not None
+    rot = s.M["kosatsuba"][-1]["rot"]
+    assert _judged_off(s.M, *spot, rot) <= FACING_DEG
+    assert rot == pytest.approx(round(nearest_way_bearing(s.M, *spot), 1), abs=0.06), "turned to the shared reading"
+
+
+def test_the_facing_predicate_turns_to_the_nearest_way_and_refuses_a_corner_tie() -> None:
+    """Labels L12's one predicate on constructed ways: beside a straight run, its bearing; outside a right-angle corner, as
+    near both arms, refused; outside a shallow bend, the first arm (`nearest_way_bearing`'s tie-break); nearer one arm by
+    more than the tie, that arm; far from every way (past the index's pad), still the nearest; no way, the fallback."""
+    M = {"lanes": [{"pts": [[0.0, 0.0], [100.0, 0.0], [100.0, 100.0]]}, {"pts": [[300.0, 0.0], [400.0, 0.0], [500.0, 30.0]]}]}
+    f = WayFacing(M, 20.0)
+    assert f.turn(50.0, 8.0, 7.0) == pytest.approx(0.0)
+    assert f.turn(106.0, -6.0, 7.0) is None, "the right-angle corner: 90 degrees between the arms as near"
+    assert f.turn(99.5, -6.0, 7.0) is None, "0.02 px nearer one arm: within the tie, where rounding would pick the arm"
+    assert f.turn(95.0, -6.0, 7.0) == pytest.approx(0.0), "nearer one arm by more than the tie: that arm"
+    assert f.turn(110.0, 50.0, 7.0) == pytest.approx(90.0)
+    bend = f.turn(400.0, -8.0, 7.0)
+    assert bend == pytest.approx(0.0) and bend == pytest.approx(nearest_way_bearing(M, 400.0, -8.0))
+    assert f.turn(250.0, 400.0, 7.0) == pytest.approx(nearest_way_bearing(M, 250.0, 400.0)), "past the pad: every segment asked"
+    assert WayFacing({}, 20.0).turn(5.0, 5.0, 7.0) == 7.0
+    assert off_parallel(170.0, -10.0) == pytest.approx(0.0) and off_parallel(0.0, 91.0) == pytest.approx(89.0)
 
 
 def test_no_board_is_posted_under_the_title_placard() -> None:
