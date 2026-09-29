@@ -270,6 +270,7 @@ CANOPY_STRUCT_KEYS = (
     "flophouses",
     "byres",
     "farm_sheds",
+    "retirement_houses",
     "religious",
     "shrines",
     "manors",

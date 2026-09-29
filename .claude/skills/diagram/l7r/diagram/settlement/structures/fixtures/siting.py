@@ -1,6 +1,7 @@
 """Split from settlement/structures/fixtures.py by feature 173 - see this package's CLAUDE.md for the index."""
 
 import math
+from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
 from ....labels import Subject, place
@@ -70,6 +71,47 @@ def under_canopy(grid: PointGrid, x: float, y: float, half: float) -> bool:
     points around the glyph canopy green), and on Sawada a crown center stood 1.8 ft from it. Both boards had
     clear verge 18-30 ft away on the same lane; the seat search simply could not see the difference."""
     return any(math.hypot(x - float(it[0]), y - float(it[1])) < float(it[2]) + half for it in grid.near(x, y, half))
+
+
+VERGE_FIRST = True
+"""`place_kosatsuba` samples the verge band before the whole band (feature 284, FR-007); off only in the test that proves the
+two give the same board."""
+
+BOARD_ALONG_STEP_PX = 12.0
+"""How far apart the board's candidate seats stand along a route. 24 was TRIED AND WITHDRAWN (feature 284, FR-007): the
+coarser lattice left no approach seat inside the 20 ft band every departure passes (`KOSATSUBA_HANDOVER_BAND_FT`), so an
+entrance board went up on the straggler lane, side-on to the track - the placement feature 261's settlement-review ruled out
+(`test_an_entrance_board_stands_on_the_approach_and_not_on_a_straggler_at_its_join`). The board's costliest question, its
+caption's level, is asked lazily instead (`board_choice`), which moves no seat."""
+
+BOARD_CAPTION_TOP = 2
+"""`board_caption_level`'s best answer: the caption clear of every crown."""
+
+
+def board_choice(seats: list[Any], level: Callable[[Any], int]) -> Any:
+    """The board's seat among `seats`: the caption that fits best, then open ground among those, then (a caption seat by the
+    defaults, the traffic score) - `max(open or fitting, key=(level, lab, score))`, the first maximal seat on a tie.
+
+    ASKED LAZILY (feature 284, FR-007): the caption's level is a placement of the caption against every obstacle, and it was
+    asked of every seat. The seats are walked in the order of the rest of the key (stably, so a tie keeps the first seat),
+    and the first open seat at the best level possible is the answer; a shaded one at that level is the fallback. Only
+    where no seat reaches the best level is every seat asked and the old expression applied. The same seat, always."""
+    order = sorted(seats, key=lambda c: (c[5] is not None, c[1]), reverse=True)  # stable: equal keys keep their order
+    asked: dict[int, int] = {}
+    first_top = None
+    for c in order:
+        lv = asked[id(c)] = level(c)
+        if lv == BOARD_CAPTION_TOP:
+            if not c[7]:
+                return c
+            if first_top is None:
+                first_top = c
+    if first_top is not None:
+        return first_top
+    best = max(asked.values())
+    fitting = [c for c in seats if asked[id(c)] == best]
+    in_the_open = [c for c in fitting if not c[7]] or fitting
+    return max(in_the_open, key=lambda c: (asked[id(c)], c[5] is not None, c[1]))
 
 
 class FixtureSitingMixin:
@@ -298,60 +340,72 @@ class FixtureSitingMixin:
         _canopy = canopy_index(self.M)  # built ONCE for the whole probe, not per seat - see `canopy_index`
         cands: list[tuple[int, float, float, float, float, int | None, float, bool]] = []  # (busy, score, x, y, rot, label_above|None, gap from tread edge to board edge, under the trees)
         _approach_ways = [[(p[0], p[1]) for p in ln["pts"]] for ln in self.M.get("lanes") or [] if ln.get("connector")]
+        _along = BOARD_ALONG_STEP_PX
         _on_approach: set[int] = set()  # id() of the candidates standing on the approach itself (the entrance rule below)
-        for pts, _rw in routes:
-            for i in range(len(pts) - 1):
-                (ax, ay), (bx, by) = pts[i], pts[i + 1]
-                seg = math.hypot(bx - ax, by - ay)
-                if not seg:
-                    continue
-                ux, uy = -(by - ay) / seg, (bx - ax) / seg  # verge normal
-                # long axis ALONG the route: the board's face is broadside to the traffic that
-                # reads it, never edge-on (kosatsuba_faces_the_road; see kosatsuba's docstring)
-                rot = math.degrees(math.atan2(by - ay, bx - ax))
-                for t in range(int(seg // 12) + 1):
-                    f = t * 12 / seg
-                    mx, my = ax + (bx - ax) * f, ay + (by - ay) * f
-                    for side in (1.0, -1.0):
-                        off = _rw / 2 + h / 2 + 4
-                        while off <= lim:
-                            x, y = mx + ux * off * side, my + uy * off * side
-                            if (
-                                off_every_bed(x, y) and self.fixture_clear_of_water(x, y, math.hypot(w, h) / 2) and self._fits(x, y, w, h, corridors=False, top=26.0)
-                            ):  # the canvas top as its bottom: no title band for a plank (feature 261)
-                                # BUSY IS WHERE THE FEET ARE (feature 140's Inashiro review, 2026-08-28): counting dwellings within 260 px
-                                # could not tell the frontage (11 within 150 ft) from the exit throat (5 within 150 ft) - both had ~16-21
-                                # within 260 - and a re-roll sat the board at the throat. The near count is weighted double.
-                                busy = sum(1 for sx, sy in spots if math.hypot(x - sx, y - sy) < 260) + 2 * sum(1 for sx, sy in spots if math.hypot(x - sx, y - sy) < 150)
-                                # WHERE THE BOARD STANDS IS A KNOB (feature 152 T21, constitution XII).
-                                # The takafuda stood at crossroads and bridgeheads AND at the village
-                                # well - both attested, so this is two supportable answers rather than one
-                                # right one, and picking either permanently throws away a way two hamlets
-                                # can honestly differ. `frontage` is the busiest built ground, which is
-                                # what this score has always measured. `waterside` is the drawing-water
-                                # place: a settlement-review measured Mizuguchi's board at the wellhead,
-                                # 7 of 12 households within 250 ft against 11 of 12 at the frontage
-                                # optimum, and called it defensible - which it is, on the other answer.
-                                if _siting == "waterside" and _wells:
-                                    _dw = min(math.hypot(x - wx2, y - wy2) for wx2, wy2 in _wells)
-                                    busy += 14 if _dw < 40.0 else (8 if _dw < 90.0 else 0)
-                                # THE CAPTION IS PART OF THE SEAT (GM 2026-07-27). The glyph is 11 px
-                                # and fits almost anywhere; its caption does not, and the busiest
-                                # frontage is exactly where there is least room for one - so a siter
-                                # that hunts for ground big enough to hold BOTH walks away from the
-                                # traffic and out to the quiet end of the road, which is how Ubame's
-                                # board came to stand across the bridge from its own town.
-                                lab = (
-                                    0
-                                    if self.label_seat_clear(x, y + h / 2 + 11, tw_lab, 8.0, kb_boxes, lanes=kb_lanes)
-                                    else (1 if self.label_seat_clear(x, y - h / 2 - 11, tw_lab, 8.0, kb_boxes, lanes=kb_lanes) else None)
-                                )
-                                cands.append(
-                                    (busy, busy * 10 - off / 3, x, y, rot, lab, off - _rw / 2 - h / 2, under_canopy(_canopy, x, y, math.hypot(w, h) / 2))
-                                )  # last two: the gap from tread edge to board edge, and whether trees stand over it
-                                if pts in _approach_ways:
-                                    _on_approach.add(id(cands[-1]))
-                            off += 5.0
+        # ROADSIDE FIRST, BEFORE THE TESTS (feature 284, FR-007): at the lane tiers the roadside rule below keeps only the seats
+        # within `KOSATSUBA_VERGE_FT` of a tread whenever any exists, so the farther offsets were tested and then thrown away -
+        # most of the board's `_fits` calls. The verge band is sampled first; only when it holds no seat is the whole band
+        # sampled, from scratch, in the order it always was. The same candidates reach the rule, in the same order.
+        _scale0 = str((self.M.get("meta") or {}).get("scale") or "")
+        _verge = KOSATSUBA_VERGE_FT / ftpx + 1e-6
+        for _verge_only in (True, False) if VERGE_FIRST and _scale0 in ("hamlet", "village") else (False,):
+            if cands:
+                break
+            for pts, _rw in routes:
+                for i in range(len(pts) - 1):
+                    (ax, ay), (bx, by) = pts[i], pts[i + 1]
+                    seg = math.hypot(bx - ax, by - ay)
+                    if not seg:
+                        continue
+                    ux, uy = -(by - ay) / seg, (bx - ax) / seg  # verge normal
+                    # long axis ALONG the route: the board's face is broadside to the traffic that
+                    # reads it, never edge-on (kosatsuba_faces_the_road; see kosatsuba's docstring)
+                    rot = math.degrees(math.atan2(by - ay, bx - ax))
+                    for t in range(int(seg // _along) + 1):
+                        f = t * _along / seg
+                        mx, my = ax + (bx - ax) * f, ay + (by - ay) * f
+                        for side in (1.0, -1.0):
+                            off = _rw / 2 + h / 2 + 4
+                            while off <= lim:
+                                if _verge_only and off - _rw / 2 - h / 2 > _verge:  # past the verge: the roadside rule below would drop it
+                                    break
+                                x, y = mx + ux * off * side, my + uy * off * side
+                                if (
+                                    off_every_bed(x, y) and self.fixture_clear_of_water(x, y, math.hypot(w, h) / 2) and self._fits(x, y, w, h, corridors=False, top=26.0)
+                                ):  # the canvas top as its bottom: no title band for a plank (feature 261)
+                                    # BUSY IS WHERE THE FEET ARE (feature 140's Inashiro review, 2026-08-28): counting dwellings within 260 px
+                                    # could not tell the frontage (11 within 150 ft) from the exit throat (5 within 150 ft) - both had ~16-21
+                                    # within 260 - and a re-roll sat the board at the throat. The near count is weighted double.
+                                    busy = sum(1 for sx, sy in spots if math.hypot(x - sx, y - sy) < 260) + 2 * sum(1 for sx, sy in spots if math.hypot(x - sx, y - sy) < 150)
+                                    # WHERE THE BOARD STANDS IS A KNOB (feature 152 T21, constitution XII).
+                                    # The takafuda stood at crossroads and bridgeheads AND at the village
+                                    # well - both attested, so this is two supportable answers rather than one
+                                    # right one, and picking either permanently throws away a way two hamlets
+                                    # can honestly differ. `frontage` is the busiest built ground, which is
+                                    # what this score has always measured. `waterside` is the drawing-water
+                                    # place: a settlement-review measured Mizuguchi's board at the wellhead,
+                                    # 7 of 12 households within 250 ft against 11 of 12 at the frontage
+                                    # optimum, and called it defensible - which it is, on the other answer.
+                                    if _siting == "waterside" and _wells:
+                                        _dw = min(math.hypot(x - wx2, y - wy2) for wx2, wy2 in _wells)
+                                        busy += 14 if _dw < 40.0 else (8 if _dw < 90.0 else 0)
+                                    # THE CAPTION IS PART OF THE SEAT (GM 2026-07-27). The glyph is 11 px
+                                    # and fits almost anywhere; its caption does not, and the busiest
+                                    # frontage is exactly where there is least room for one - so a siter
+                                    # that hunts for ground big enough to hold BOTH walks away from the
+                                    # traffic and out to the quiet end of the road, which is how Ubame's
+                                    # board came to stand across the bridge from its own town.
+                                    lab = (
+                                        0
+                                        if self.label_seat_clear(x, y + h / 2 + 11, tw_lab, 8.0, kb_boxes, lanes=kb_lanes)
+                                        else (1 if self.label_seat_clear(x, y - h / 2 - 11, tw_lab, 8.0, kb_boxes, lanes=kb_lanes) else None)
+                                    )
+                                    cands.append(
+                                        (busy, busy * 10 - off / 3, x, y, rot, lab, off - _rw / 2 - h / 2, under_canopy(_canopy, x, y, math.hypot(w, h) / 2))
+                                    )  # last two: the gap from tread edge to board edge, and whether trees stand over it
+                                    if pts in _approach_ways:
+                                        _on_approach.add(id(cands[-1]))
+                                off += 5.0
         if not cands:
             return None
         # ROADSIDE FIRST (GM 2026-08-26): at the lane tiers, if any seat stands within KOSATSUBA_VERGE_FT
@@ -479,10 +533,7 @@ class FixtureSitingMixin:
         # 261): open ground was filtered first, every seat with room for its caption stood under a crown, and the board
         # went up where its caption could only name the byre beside it. The GM's ruling (2026-08-29) is that a board under
         # a canopy is fine "as long as there is a label attached to it and the label is visible".
-        _fits = {id(c): _sitable(c[2], c[3], w / 2, h / 2, c[4]) for c in _above_floor}
-        _fitting = [c for c in _above_floor if _fits[id(c)] == max(_fits.values())]
-        _in_the_open = [c for c in _fitting if not c[7]] or _fitting
-        _b, _s, x, y, rot, lab, _gap, _shaded = max(_in_the_open, key=lambda c: (_fits[id(c)], c[5] is not None, c[1]))
+        _b, _s, x, y, rot, lab, _gap, _shaded = board_choice(_above_floor, lambda c: _sitable(c[2], c[3], w / 2, h / 2, c[4]))
         # THE BOARD FACES THE WAY A READER SEES IT BY, which is the NEAREST one (`kosatsuba_faces_the_road`, the
         # gate's own measure). `rot` above is the bearing of the lane the seat was scored against, and at a
         # junction - or where a later pass lays a footpath across the verge - another way can end up nearer:

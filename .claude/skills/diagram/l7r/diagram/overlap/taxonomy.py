@@ -87,6 +87,7 @@ _OVERLAP_STRUCTS = (
     "fire_towers",
     "drum_towers",
     "byres",
+    "retirement_houses",  # the retirement house (inkyoya), a second roof of its farmhouse's family in the same yard (269 B42)
     "kosatsuba",
     # the justice works (research/urban-features.html "The justice works - why a county seat executes, and why the ground is outside")
     "punishment_spots",
@@ -158,7 +159,6 @@ _OVERLAP_EXEMPT = {
     "borders": "a drawn CLAN/jurisdictional border is a LINE OF LAW, not a physical object - it has no footprint (no w/h), reserves no ground and blocks nothing. Being overlapped is the POINT: a frontier magistracy stands its wall ON the line so the border runs across the parley-room floor (the Mode A ubame-magistracy sheet), and the period PHYSICAL marker - an earthen mound, as at the Nanbu-Date boundary - is deliberately NOT what this draws, precisely because a mound would be a structure everything then had to stay clear of",
     "farm_sheds": "a farmstead's grain-storehouse kura drawn as an annex abutting its own farmhouse's back wall (farm_sheds_attached verifies the attachment)",
     "pig_sties": "a pig shed ON a pond dike, over the water's edge, by construction (feature 150 A3; FAO/NACA: 'the simple pig shed constructed on the pond dyke or over the water surface')",
-    "duck_pens": "a duck pen's dry run on the dike and its wet run fenced INTO the pond, by construction (feature 150 A4)",
     "farm_fixtures": "a farmstead's small fixtures - privy, woodpile, manure heap, bath shed, chicken coop, household shrine - each seated against its own farmhouse by the placer, which tests the seat against every placed footprint, lane, paddy and water (feature 133 T53-T59; farm_fixtures_attached verifies the attachment)",
     "persimmons": "the yard persimmon: a crown record (x, y, r) whose ink is also in tree_crowns, which structures_clear_of_trees tests; the placer keeps the trunk off every footprint (feature 133 T57)",
     "threshing_yards": "a farmstead's threshing/drying yard drawn as an annex abutting its own farmhouse",
@@ -210,8 +210,8 @@ _LABEL_GROUP = {
     # with the gate green by construction. Under the "farmhouse" group a farmhouse caption may still cover it
     # and nothing else may.
     "byres": "farmhouse",
+    "retirement_houses": "farmhouse",  # 269 B42: a small dwelling a ken or two off its own farmhouse, in the same homestead as a byre
     "pig_sties": "sty",
-    "duck_pens": "duck pen",
     "quays": "quay",
     "theater_stage": "theater",
     "granaries": "granary",
@@ -393,8 +393,8 @@ OVERLAP_CLASS: dict[str, str] = {
     **{k: "WAY" for k in ("road", "roads", "town_streets", "alleys", "lanes", "towpaths", "quays")},
     # ANNEX - belongs to a named parent and abuts IT (and nothing else)
     **{
-        k: "ANNEX" for k in ("gardens", "threshing_yards", "farm_sheds", "storehouses", "byres", "farm_fixtures", "persimmons", "pig_sties", "duck_pens")
-    },  # pig_sties / duck_pens stand ON the pond dike by construction (feature 150)
+        k: "ANNEX" for k in ("gardens", "threshing_yards", "farm_sheds", "storehouses", "byres", "retirement_houses", "farm_fixtures", "persimmons", "pig_sties")
+    },  # pig_sties stand ON the pond dike by construction (feature 150)
     # --- PERMISSIVE CLASSES (never tested; each row below records WHY) ---------------------------
     **{k: "COVER" for k in ("commons", "pastures", "marsh", "marshes")},
     "quarters": "OVERLAY",
@@ -578,6 +578,7 @@ _MATRIX_PARENT_FIELD = {
     "farm_fixtures": "of",
     "persimmons": "of",
     "byres": "of",
+    "retirement_houses": "of",
     "storehouses": "of",
     "field_ditches": "field",  # a field's own irrigation, drawn ON it by design
 }

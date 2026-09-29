@@ -35,6 +35,9 @@ class _StubSettlement:
     def reink_lane(self, i):
         pass  # the stub has no ink; the record is what the helpers are tested on
 
+    def toe_band(self):
+        return None  # no wet toe: the run-on to the bund (269 B04) asks for one
+
     def drop_lanes(self, idxs):
         for i in sorted(set(idxs), reverse=True):
             del self.M["lanes"][i]

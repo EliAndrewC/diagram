@@ -181,14 +181,16 @@ def test_steading_footprints_reads_the_built_ground_and_not_the_ground_cover() -
     assert hg.ways.steading_footprints({}) == []
 
 
-def test_trim_to_service_counts_ARRIVING_AT_THE_FIELD_as_service() -> None:
-    """The spur's whole purpose is the crop, which is neither a house nor another lane. At the gate's own bar
-    since feature 227, which is the only bar the trim has: the looser private triple this test used to reach
-    through `end_reach=None` was reachable from nothing that ships, and went."""
+def test_trim_to_service_counts_ARRIVING_AT_THE_BUND_as_service() -> None:
+    """The spur's whole purpose is the crop, which is neither a house nor another lane - and it arrives ON the bund
+    (269 B04, research/fields/290: the path "never ends in open ground short of the bund"), no longer anywhere within
+    the gate's 60 ft of the field."""
     field = [(400.0, 0.0), (600.0, 0.0), (600.0, 200.0), (400.0, 200.0)]
     run = [(0.0, 100.0), (200.0, 100.0), (395.0, 100.0)]
-    assert _trim_to_service(run, [], [(0.0, 100.0)], [field]) == run
-    assert len(_trim_to_service(run, [], [(0.0, 100.0)], [])) == 2
+    assert _trim_to_service(run, [], [(0.0, 100.0)], hg.ways.WorkedGround([field])) == run, "5 ft off the bund is on it"
+    assert len(_trim_to_service(run, [], [(0.0, 100.0)], None)) == 2
+    short = [(0.0, 100.0), (200.0, 100.0), (360.0, 100.0)]
+    assert _trim_to_service(short, [], [(0.0, 100.0)], hg.ways.WorkedGround([field])) != short, "40 ft short of the bund is open ground"
 
 
 # ---- the splice helpers (feature 137 T04) ---------------------------------------------------------
@@ -600,3 +602,20 @@ def test_shadow_share_of_a_one_point_lane_is_nothing() -> None:
     from l7r.diagram.hamletgen.ways.geom import shadow_share
 
     assert shadow_share([(10.0, 10.0)], [[(0.0, 0.0), (100.0, 0.0)]], 8.0) == 0.0
+
+
+def test_touch_junctions_never_drops_the_connector() -> None:
+    """The connector is the track off the map: stranded from the web and serving no house of its own, it is still kept -
+    deleting it shipped cohort seed 15 with no way out and a reach check that passed on what was left (feature 284)."""
+    from l7r.diagram.hamletgen.ways import _touch_junctions
+
+    s = _StubWeb(
+        lanes=[
+            {"pts": [[0.0, 0.0], [200.0, 0.0]], "w": 3},
+            {"pts": [[0.0, 900.0], [120.0, 900.0]], "w": 6, "connector": True},
+        ],
+        houses=[{"x": 60.0, "y": 5.0}],  # on the web, not on the connector
+    )
+    _touch_junctions(s, [], [], [], only_orphans=False)  # type: ignore[arg-type]
+    assert [ln.get("connector") for ln in s.M["lanes"]] == [None, True], "the connector stays, record and all"
+    assert not s.M["meta"].get("lane_fragments_dropped")

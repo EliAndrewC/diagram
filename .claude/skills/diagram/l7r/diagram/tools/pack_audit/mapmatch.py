@@ -45,7 +45,7 @@ CLASSES: dict[str, tuple[str, ...]] = {
     "arch": ("torii",),
     "water": ("streams", "channels", "pond", "crescent_ponds"),
     "lane": ("lanes",),
-    "building": ("houses", "byres", "farm_sheds", "storehouses", "buildings"),
+    "building": ("houses", "byres", "farm_sheds", "retirement_houses", "storehouses", "buildings"),
 }
 # How the sheet marks each class, by element id (trees are known by their drawing - `parse.TREE_FILL`).
 SHEET_IDS: dict[str, str] = {"burial_ground": "burial_ground", "well": "water_point", "basin": "water_point", "arch": "arch", "water": "water", "lane": "lane", "building": "building"}

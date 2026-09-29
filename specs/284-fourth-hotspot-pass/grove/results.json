@@ -1,0 +1,23 @@
+{
+ "kashikawa": {
+  "buffer": 0.2809,
+  "union": 0.0284,
+  "simplify": 0.0407,
+  "_absorb": 0.3173,
+  "close_seams": 0.8902,
+  "clear": 0.0215,
+  "_draw_grove": 0.1277,
+  "build": 4.4566
+ },
+ "sawada": {
+  "buffer": 0.3518,
+  "union": 0.0541,
+  "simplify": 0.0844,
+  "_absorb": 0.681,
+  "close_seams": 1.6282,
+  "clear": 0.0165,
+  "_draw_grove": 0.0915,
+  "build": 4.7147
+ },
+ "load": 3.55224609375
+}

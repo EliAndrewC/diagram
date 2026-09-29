@@ -220,8 +220,13 @@ _NON_LATIN = re.compile(r"[\u0370-\u03ff\u0400-\u04ff\u0590-\u06ff\u0e00-\u0e7f\
 _GERMAN = re.compile(r"\b(und|der|die|das|von|mit|nach|sich|ist|ein|eine|nicht|auch|bei|zum|zur|des|dem|wird|werden|oder)\b")
 
 
+#: An English page's own gloss of a term in its native script - "Satoyama (里山) is..." on en.wikipedia - is not a
+#: foreign quote: a parenthesis holding no Latin letter is dropped before the script test (feature 269, V1 check).
+_GLOSS = re.compile(r"[(（][^()（）A-Za-z]*[)）]")
+
+
 def _looks_foreign(passage: str) -> bool:
-    return bool(_NON_LATIN.search(passage)) or len(_GERMAN.findall(passage)) >= 2
+    return bool(_NON_LATIN.search(_GLOSS.sub("", passage))) or len(_GERMAN.findall(passage)) >= 2
 
 
 def _anchor_spans(block: str) -> list[tuple[int, int]]:
@@ -274,3 +279,5 @@ def test_the_translation_form_is_told_apart() -> None:
     assert unmarked_foreign_quotes(de) and unmarked_foreign_quotes(ko)
     assert unmarked_foreign_quotes(ok) == [] and unmarked_foreign_quotes("<p>「plain ascii quote here」</p>") == []
     assert unmarked_foreign_quotes("<li>「the daimyō’s rice — stored (1603–1867)」 (English with macrons and the source's dashes)</li>") == []
+    assert unmarked_foreign_quotes("<li>「Satoyama (里山) is a Japanese term」 (English, glossing a term)</li>") == []
+    assert unmarked_foreign_quotes("<li>「屋敷林（やしきりん）とは」 (no note)</li>")

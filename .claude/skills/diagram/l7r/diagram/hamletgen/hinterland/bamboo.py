@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
@@ -74,10 +74,38 @@ def bamboo_blocked_indexed(x: float, y: float, extent: Pt, pocket: tuple[float, 
     return bool(((x - pond[0]) / (pond[2] + pond_pad)) ** 2 + ((y - pond[1]) / (pond[3] + pond_pad)) ** 2 <= 1.0)
 
 
+BAMBOO_SEAT_STEP_FT = 16.0
+"""The lattice a bamboo stand's seat is searched on, in feet (feature 284, B6, a map drawing convention: the same keep-outs
+and reach, sampled coarser). It was 8 ft; the walk outward (`nearest_fitting`) removed the tests the whole-square scan wasted
+but on Mizuguchi, whose thicket seats far from its target, the bamboo still asked 226,223 calls (1.23x fewer, against the
+spec's 2x floor), so the spec's fallback is taken: a stand seats at the nearest fitting point of the coarser lattice,
+which can be a step or two from where the 8 ft lattice put it (18 and 24.5 ft on the pool's two thickets, specs/284 R6). The thicket is 84 by 58 ft (`BAMBOO_THICKET_FT`), so a stand on the coarser lattice is the same stand on the same ground."""
+
+
+def nearest_fitting(target: Pt, reach: float, step: float, fits: Callable[[float, float], bool]) -> tuple[float, float, float] | None:
+    """The fitting position nearest `target` on the `step` lattice of the square `reach` round it, as (distance, x, y) - or
+    None - by walking OUTWARD and stopping at the first fit (feature 284, FR-008). The square was scanned whole, every
+    position tested, the nearest fit kept (the first met in row order on a tie); the same positions, made by the same
+    accumulation so every coordinate is the same float, are tested nearest first, ties in the old row order."""
+    spots: list[tuple[float, int, float, float]] = []
+    y = target[1] - reach
+    while y <= target[1] + reach:
+        x = target[0] - reach
+        while x <= target[0] + reach:
+            spots.append((math.hypot(x - target[0], y - target[1]), len(spots), x, y))
+            x += step
+        y += step
+    spots.sort()
+    for d, _k, x, y in spots:
+        if fits(x, y):
+            return (d, x, y)
+    return None
+
+
 def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     """Where the hamlet's bamboo stands go, per the `bamboo` knob - SCANNED, like the coppice patches.
 
-    A candidate is a rect on an 8 ft lattice around its target, refused when any of its perimeter
+    A candidate is a rect on a `BAMBOO_SEAT_STEP_FT` lattice around its target, refused when any of its perimeter
     samples stands on a house, yard, garden, shed, byre, well, board, lane, paddy, marsh, pond, the belt,
     a coppice patch or the other stand (each with its own pad), and the surviving candidate nearest the
     target wins; a stand that fits nowhere at full size is tried once at 70%, then dropped - a hamlet
@@ -102,7 +130,7 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     else:
         thicket_target = home_target  # pragma: no cover - a hamlet always has its field [174: KEPT, not deletable - an else branch that binds thicket_target]
     rects: list[tuple[float, float, float, float, float]] = []  # (x, y, w, h, pad)
-    for key, pad in (("houses", 10.0), ("threshing_yards", 8.0), ("gardens", 8.0), ("farm_sheds", 8.0), ("byres", 8.0), ("wells", 14.0), ("kosatsuba", 12.0)):
+    for key, pad in (("houses", 10.0), ("threshing_yards", 8.0), ("gardens", 8.0), ("farm_sheds", 8.0), ("byres", 8.0), ("retirement_houses", 10.0), ("wells", 14.0), ("kosatsuba", 12.0)):
         for o in s.M.get(key, []):
             if all(isinstance(o.get(f), (int, float)) for f in ("x", "y", "w", "h")):
                 rects.append((float(o["x"]), float(o["y"]), float(o["w"]), float(o["h"]), px(pad)))
@@ -145,21 +173,11 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     for _form in forms:
         wft, hft = BAMBOO_THICKET_FT
         target = thicket_target
-        step = px(8.0)
+        step = px(BAMBOO_SEAT_STEP_FT)
         best: tuple[float, float, float] | None = None
         for scale in (1.0, 0.7):
             hw, hh = px(wft) * scale / 2, px(hft) * scale / 2
-            reach = px(220.0)
-            y = target[1] - reach
-            while y <= target[1] + reach:
-                x = target[0] - reach
-                while x <= target[0] + reach:
-                    if _fits(x, y, hw, hh):
-                        d = math.hypot(x - target[0], y - target[1])
-                        if best is None or d < best[0]:
-                            best = (d, x, y)
-                    x += step
-                y += step
+            best = nearest_fitting(target, px(220.0), step, lambda x, y, hw=hw, hh=hh: _fits(x, y, hw, hh))
             if best is not None:
                 ring = _parcel_outline(s, best[1], best[2], hw, hh, 1.0, 0.0)
                 out.append(ring)

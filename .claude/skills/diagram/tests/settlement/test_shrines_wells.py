@@ -115,6 +115,7 @@ def test_torii_refuses_a_seat_standing_in_a_wall():
 
 def test_draft_byres_scatters_shared_sheds_among_the_houses():
     s, hs = _byre_village()
+    s.pin_knob("byre_form", "detached_commons")  # the shared shed, the rare guess (269 B16) - the one form `fraction` sizes
     placed = s.draft_byres(fraction=0.6, gap=40)  # ~60% of 5 = 3 shared byres
     assert len(placed) == 3 and len(s.M["byres"]) == 3
     assert all(b["w"] > 0 and b["h"] > 0 for b in s.M["byres"])
@@ -639,3 +640,56 @@ def test_courtyard_annex_span_and_a_house_with_neither_side_wall_free():
         {"x": 300.0 + 40.0, "y": 300.0, "w": 40.0, "h": 28.0, "kind": "plain", "rot": 0.0, "wealth": 1.0},
     ]
     assert s._courtyard_byre_seat(owner, 15.5, 10.5) is None
+
+
+def test_the_outer_stable_stands_on_its_own_in_its_owners_yard_on_about_half_the_households() -> None:
+    """269 B16 (research/homesteads/300): on a household form the beast lives with its household - the byre names its owner
+    (`of`), stands raked with that house a ken off one of its walls, and about half the households keep one (`byre_share`,
+    rolled in `BYRE_KEEPER_SHARE`; the caller's `fraction` sizes only the shared form)."""
+    from l7r.diagram.settlement.shrines_wells.byres import BYRE_KEEPER_SHARE
+
+    s, hs = _byre_village()
+    s.pin_knob("byre_form", "yard_shed")
+    placed = s.draft_byres(fraction=0.9, gap=40)
+    share = s.M["meta"]["byre_share"]
+    assert BYRE_KEEPER_SHARE[0] <= share <= BYRE_KEEPER_SHARE[1] and s.M["meta"]["byre_target"] == max(1, round(5 * share))
+    assert len(placed) == s.M["meta"]["byre_target"] == len(s.M["byres"]), "the target met, not the caller's 0.9"
+    owners = {(h["x"], h["y"]): h for h in hs}
+    for b in s.M["byres"]:
+        h = owners[tuple(b["of"])]
+        assert b["rot"] in (h["rot"], h["rot"] + 90.0), "raked with its house, long side along the wall it faces"
+        gap = max(abs(b["x"] - h["x"]) - h["w"] / 2, abs(b["y"] - h["y"]) - h["h"] / 2)
+        assert gap > 6.0, f"a shed of its own, not the inner stable's arm ({gap:.1f} px off the wall)"
+
+
+def test_a_courtyard_byre_with_no_free_wall_takes_the_outer_stable_and_a_yard_with_no_room_the_spiral(monkeypatch: pytest.MonkeyPatch) -> None:
+    """269 B16: the inner stable's arm needs a free side wall; without one the household's beast gets the outer stable's
+    shed, and where the yard has no room either the spiral seats it - still naming its owner, whatever the fallback."""
+    s = _crop_settlement()
+    owner = {"x": 300.0, "y": 300.0, "w": 40.0, "h": 28.0, "kind": "plain", "rot": 0.0, "wealth": 2.0}
+    s.M["houses"] = [
+        owner,
+        {"x": 300.0 - 40.0, "y": 300.0, "w": 40.0, "h": 28.0, "kind": "plain", "rot": 0.0, "wealth": 1.0},
+        {"x": 300.0 + 40.0, "y": 300.0, "w": 40.0, "h": 28.0, "kind": "plain", "rot": 0.0, "wealth": 1.0},
+    ]
+    s.pin_knob("byre_form", "courtyard")
+    s.draft_byres()
+    first = s.M["byres"][0]
+    assert first["of"] == [300.0, 300.0] and first["y"] < 300.0 - 14.0, "behind its owner's back wall, not against a flank"
+
+    s2 = _crop_settlement()  # a small house: the household spiral's short leash clears only a small footprint
+    s2.M["houses"] = [{"x": 300.0, "y": 300.0, "w": 20.0, "h": 14.0, "kind": "plain", "rot": 0.0, "wealth": 1.0}]
+    s2.placed.append((300.0, 300.0, 20.0, 14.0))
+    s2.pin_knob("byre_form", "yard_shed")
+    monkeypatch.setattr(Settlement, "_yard_shed_seat", lambda self, h, bw, bh: None)
+    s2.draft_byres()
+    assert s2.M["byres"] and all("of" in b and b["rot"] == 0 for b in s2.M["byres"]), "the spiral's shed, still its household's"
+
+
+def test_the_outer_stable_finds_no_seat_on_the_paddy() -> None:
+    """269 B16: every yard seat the outer stable tries is refused where the ground round the house is basin."""
+    s = _crop_settlement()
+    owner = {"x": 300.0, "y": 300.0, "w": 40.0, "h": 28.0, "kind": "plain", "rot": 0.0, "wealth": 1.0}
+    s.M["houses"] = [owner]
+    s.field_polys.append([(200.0, 200.0), (400.0, 200.0), (400.0, 400.0), (200.0, 400.0)])
+    assert s._yard_shed_seat(owner, 15.5, 10.5) is None

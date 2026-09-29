@@ -279,6 +279,54 @@ class PointGrid:
         return out
 
 
+class CrownIndex:
+    """The crowns seated so far, for "no crown centered under another's" (`TreeStandsMixin._crown_seat_clear`),
+    asked of a grid instead of the whole list (269 B28: a woodland commons at the coppice's real stocking seats
+    hundreds of crowns a parcel, and the linear scan was quadratic in them - dev/performance.md's first shape).
+
+    Exact: a crown `(x, y, r)` conflicts with a seated `(cx, cy, cr)` when `d < max(r, cr)`, so every conflict lies
+    within `max(r, cr)` of the new center; each seated crown is filed at its own radius and the query pads by the new
+    one, so the grid never omits a conflict and the same expression decides."""
+
+    __slots__ = ("grid",)
+
+    def __init__(self, crowns: Any = ()) -> None:
+        self.grid = PointGrid(32.0)
+        for cx, cy, cr in crowns:
+            self.add(cx, cy, cr)
+
+    def add(self, x: float, y: float, r: float) -> None:
+        self.grid.extend([(x, y, r, x - r, y - r, x + r, y + r)])
+
+    def clear(self, x: float, y: float, r: float) -> bool:
+        """`_crown_seat_clear`'s verdict: no seated crown's center within this one, nor this center within it."""
+        return all((x - cx) ** 2 + (y - cy) ** 2 >= max(r, cr) ** 2 for cx, cy, cr, *_ in self.grid.near(x, y, r))
+
+
+class CanopyArea:
+    """The ground a stand's crowns cover, counted on a raster of `cell`-sized squares as crowns are added (269 B26:
+    the copse is filled to an AREA, the homesteads' woods, and a union of discs asked per clump is the scan
+    dev/performance.md forbids). A cell counts when its center lies inside a crown; the error is a fraction of a cell
+    along each edge, and the count only ever grows."""
+
+    __slots__ = ("cell", "cells")
+
+    def __init__(self, cell: float = 2.0) -> None:
+        self.cell = cell
+        self.cells: set[tuple[int, int]] = set()
+
+    def add(self, x: float, y: float, r: float) -> None:
+        c = self.cell
+        for i in range(int((x - r) // c), int((x + r) // c) + 1):
+            for j in range(int((y - r) // c), int((y + r) // c) + 1):
+                if ((i + 0.5) * c - x) ** 2 + ((j + 0.5) * c - y) ** 2 <= r * r:
+                    self.cells.add((i, j))
+
+    @property
+    def area(self) -> float:
+        return len(self.cells) * self.cell * self.cell
+
+
 def seg_reach_index(lines: Any, extra: float) -> PointGrid:
     """Every segment of `(polyline, half-width)` pairs as `(a, b, reach, x0, y0, x1, y1)`: its refusal distance
     (`half-width + extra`) and its box widened by that distance (feature 278). A point outside a segment's widened box

@@ -12,12 +12,25 @@ from .._geom import (
     edge_dist,
     point_in_poly,
 )
+from .._knobs import knob_rng
 
 if TYPE_CHECKING:
     from ..core import Settlement
 
 
 _BORROW_REACH = 120.0  # a neighbor this close can walk over and borrow the team (see draft_byres)
+
+# HOW MANY HOUSEHOLDS KEEP A BEAST, on the two household forms (269 B16, research/homesteads/300): "from the early
+# eighteenth century only about half the farm households of Bizen kept an ox or a horse at all - the same share as in
+# Mimasaka - and fewer as time went on". A degree along a continuum, so a band rolled per settlement: its top is the
+# half the record reads, its bottom the "fewer" after it (how many fewer no page gives - 0.35 is calibrated liberty).
+# The commons form keeps the caller's `fraction`: a shared shed serves several households, so its count is not this.
+BYRE_KEEPER_SHARE = (0.35, 0.50)
+HOUSEHOLD_FORMS = ("courtyard", "yard_shed")
+# THE OUTER STABLE'S SEAT (269 B16): "the outer stable standing on its own" (kotobank-umaya) - no page gives how far
+# from the house, so one ken off the wall, and a second ken out when that is taken, is a GUESS; it keeps the shed
+# distinct from the inner stable's arm, which stands a 3 ft drip line off the same wall.
+YARD_SHED_GAP_FT = (6.0, 12.0)
 
 # HOW FAR A COURTYARD-FORM BYRE MAY STAND FROM THE HOUSE IT BELONGS TO. In that form the shed is the
 # homestead's own stable wing, not common property, so it gets its owner's yard and no more: the
@@ -99,6 +112,29 @@ class DraftByresMixin:
                     return cx, cy, brot, aw, ah
         return None
 
+    def _yard_shed_seat(self: Settlement, h: Mapping[str, Any], bw: float, bh: float) -> tuple[float, float, float, float, float] | None:  # type: ignore[misc]
+        """The OUTER stable's seat (269 B16): a shed standing on its own in its owner's homestead, a ken off the back
+        wall or a flank (a second ken out when those are taken), raked with the house - its long side along the wall it
+        faces. Which wall is tried first turns with the homestead's own hash, so the sheds of one hamlet do not all
+        stand at the same bearing. Returns `(x, y, rot, aabb_w, aabb_h)` or None."""
+        hw, hh, rot = float(h["w"]), float(h["h"]), float(h.get("rot", 0.0) or 0.0)
+        hx, hy = float(h["x"]), float(h["y"])
+        th = math.radians(rot)
+        seats: list[tuple[float, float, float]] = []  # (lx, ly, turn) in the house frame
+        for gap in (self.px(g) for g in YARD_SHED_GAP_FT):
+            seats += [(fx * hw, -(hh / 2 + gap + bh / 2), 0.0) for fx in (0.0, -0.3, 0.3)]
+            seats += [(sx * (hw / 2 + gap + bh / 2), fy * hh, 90.0) for fy in (0.0, -0.25) for sx in (-1.0, 1.0)]
+        k = int(self._hjit(hx, hy, 131.0) * 5) % 5  # the first ring's five seats, turned
+        seats = seats[k:5] + seats[:k] + seats[5:]
+        for lx, ly, turn in seats:
+            cx, cy = hx + lx * math.cos(th) - ly * math.sin(th), hy + lx * math.sin(th) + ly * math.cos(th)
+            brot = rot + turn
+            _c, _s = abs(math.cos(math.radians(brot))), abs(math.sin(math.radians(brot)))
+            aw, ah = bw * _c + bh * _s, bw * _s + bh * _c
+            if self._byre_clear_of_all_but(cx, cy, aw, ah, h):
+                return cx, cy, brot, aw, ah
+        return None
+
     def _byre_clear_of_all_but(self: Settlement, cx: float, cy: float, aw: float, ah: float, h: Mapping[str, Any]) -> bool:  # type: ignore[misc]
         """Collision test for an ATTACHED annex: clear of everything placed EXCEPT its own farmhouse.
 
@@ -127,7 +163,10 @@ class DraftByresMixin:
         for poly in self.field_polys:  # a byre stands on dry ground, off the paddies
             if point_in_poly(cx, cy, poly) or edge_dist(cx, cy, poly) < r:
                 return False
-        for px, py, pw, ph, *_ in self.placed:
+        # ASKED OF THE INDEX (269 B16, dev/performance.md "Three more shapes"): the placed footprints near this seat come
+        # from `_fits`'s own reach grid, which boxes each by its half-diagonal plus 4 - a superset of every box that can
+        # meet this one within the 2 px below, so the verdict is the scan's. The owner's bundle is found the same way.
+        for px, py, pw, ph, *_ in self._reach_index(self.placed, "placed_reach").near(cx, cy, math.hypot(aw, ah) / 2 + 2):
             if abs(hx - px) <= pw / 2 + 0.5 and abs(hy - py) <= ph / 2 + 0.5:
                 continue  # the owner's own homestead bundle - the arm belongs INSIDE it
             if abs(cx - px) < (aw + pw) / 2 + 2 and abs(cy - py) < (ah + ph) / 2 + 2:
@@ -162,14 +201,17 @@ class DraftByresMixin:
         self.add(''.join(g), cls="byre")
 
     def draft_byres(self: Settlement, fraction: float = 0.2, gap: float = 64) -> list[Pt]:  # type: ignore[misc]
-        """DRAFT-ANIMAL BYRES (ox / water-buffalo sheds) standing in the courtyards among the homesteads.
-        Wet-rice plowing and puddling turns on a draft animal, but a buffalo was a costly asset that poorer
-        households SHARED or hired, so a village keeps only a MINORITY of byres (~one per 4-5 households ->
-        `fraction`) - shared sheds, not one per farm. HOUSE-DRIVEN: for the wealthier homesteads (buffalo
-        owners) in turn, spiral outfrom the house to find the nearest clear gap just past its reserved
-        footprint (off every other footprint, lane, block, crop, via `_fits`), keeping byres `gap` px apart so
-        they read as scattered, not clumped; a homestead boxed in on all sides is skipped. Call AFTER
-        farmsteads() (homesteads fixed) and BEFORE the grove (which then skips the byres). Records M['byres']."""
+        """DRAFT-ANIMAL BYRES (ox / water-buffalo sheds) among the homesteads, in the form the `byre_form` knob rolled.
+
+        The two household forms (269 B16, research/homesteads/300): the beast lived with the household that owned it
+        or had it on loan, and about half the households kept one (`BYRE_KEEPER_SHARE`, rolled per settlement; `fraction`
+        is then unused) - the INNER stable drawn as the arm against the farmhouse (`courtyard`), or the OUTER stable,
+        a shed of its own in the yard (`yard_shed`). The rare `detached_commons` form is the older reading, a labeled
+        GUESS: a minority of shared sheds (`fraction` of the households) spread among the homesteads, each spiralled out
+        from its owner's house to the nearest clear gap past its reserved footprint (via `_fits`), `gap` px apart.
+        HOUSE-DRIVEN on every form: the wealthier homesteads in turn; a homestead boxed in on all sides is skipped
+        and the next one asked. Call AFTER farmsteads() (homesteads fixed) and BEFORE the grove (which then skips the
+        byres). Records M['byres']."""
         bs = self.bscale
         # SIZE: a shared byre houses ~1-2 draft animals (an ox / water-buffalo stall is ~2x3 m) plus fodder ->
         # ~16 x 11 ft ~ 15 m2, well under the ~120 m2 farmhouse. To-scale tiers carry it in FEET (drawn at ftpx);
@@ -189,7 +231,10 @@ class DraftByresMixin:
         # because a form nobody records is a form nothing can check.
         form = self.resolve("byre_form")
         self.M["meta"]["byre_form"] = form
-        _courtyard = form == "courtyard"
+        # THE BEAST LIVES WITH ITS HOUSEHOLD (269 B16, research/homesteads/300): on both household forms the byre is its
+        # owner's, taken down the wealth ranking and seated in the owner's own homestead, and it records its owner (`of`).
+        # `detached_commons` - the shared shed below - is the rare labeled GUESS the record has not found.
+        _courtyard = form in HOUSEHOLD_FORMS
         _reach = COURTYARD_REACH if _courtyard else 70.0
         _sep = 0.0 if _courtyard else gap
         houses = [h for h in self.M.get("houses", []) if h.get("kind") == "plain"]
@@ -212,6 +257,10 @@ class DraftByresMixin:
         # DOES set it still wins; area breaks the tie it leaves behind; position only breaks an exact
         # tie between two identical houses.
         ranked = sorted(houses, key=lambda h: (-h.get("wealth", 1.0), -(float(h["w"]) * float(h["h"])), h["x"], h["y"]))
+        if _courtyard:  # about half the households kept a beast, and fewer later (BYRE_KEEPER_SHARE)
+            _lo, _hi = BYRE_KEEPER_SHARE
+            fraction = round(_lo + knob_rng(self.seed, "byre_share").random() * (_hi - _lo), 3)
+            self.M["meta"]["byre_share"] = fraction
         target = max(1, round(len(houses) * fraction))
         self.M["meta"]["byre_target"] = target  # the ASK, recorded so a silent shortfall is visible (byres_meet_their_target)
         out: list[Pt] = []
@@ -279,8 +328,9 @@ class DraftByresMixin:
             else:
                 h = _pool[0]
             _pool.remove(h)
-            if _courtyard:  # the arm on its owner's wall; the spiral below is only the fallback
-                _seat = self._courtyard_byre_seat(h, bw, bh)
+            if _courtyard:  # the inner stable's arm on its owner's wall, else the outer stable's shed in its yard
+                _seat = self._courtyard_byre_seat(h, bw, bh) if form == "courtyard" else None
+                _seat = _seat or self._yard_shed_seat(h, bw, bh)
                 if _seat is not None:
                     _cx, _cy, _brot, _aw, _ah = _seat
                     self._draw_byre(_cx, _cy, bw, bh, _brot)
@@ -305,7 +355,10 @@ class DraftByresMixin:
                     ):
                         self._draw_byre(cx, cy, bw, bh)
                         self.placed.append((cx, cy, bw, bh))
-                        self.M["byres"].append({"x": round(cx, 1), "y": round(cy, 1), "w": bw, "h": bh, "rot": 0})
+                        _rec: dict[str, Any] = {"x": round(cx, 1), "y": round(cy, 1), "w": bw, "h": bh, "rot": 0}
+                        if _courtyard:  # a household's byre names its household, wherever the fallback put it (269 B16)
+                            _rec["of"] = [round(h["x"], 1), round(h["y"], 1)]
+                        self.M["byres"].append(_rec)
                         out.append((cx, cy))
                         done = True
                         break

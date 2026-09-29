@@ -149,15 +149,19 @@ class PracticeGround(Kind):
     What: A patch of swept earth in the outer court, marked by the gear that stands on it: the place where the
     compound's samurai keep up their daily practice.
 
-    Why: A dojo with a resident teacher and enrolled students was an institution of cities, in Japan and
-    China alike; rural samurai most likely trained at home in an earthen yard, in a hall cleared for the
-    purpose, or on shrine grounds. A county seat holds about fifteen samurai - no student body and no living for a teacher -
+    Why: Formal martial training belonged to the towns. A domain taught the martial arts at its school, built
+    in its own territory and in the castle town as a rule, and many domains attached a practice hall to it;
+    the great enrolled halls grew in Edo, where the pupils were. Private halls, kept by masters at their own
+    houses, did reach every part of the country, but late - they flourished at the end of the Edo period, with
+    townsmen and farmers training beside samurai - and before the mid-Edo period practice was mostly held
+    outdoors or on an earthen floor. So rural samurai most likely trained at home in an earthen yard, in a hall
+    cleared for the purpose, or on shrine grounds. A county seat holds about fifteen samurai - no student body and no living for a teacher -
     so its magistracy trains on open ground in its own compound, and what marks that ground is the gear
     practice leaves behind, not a building. It is sized to the samurai who drill there, about 90 to 135 sq ft
     each.
 
     Note: Courtyard keiko in place of a dojo follows the record only in part: the famous private fencing
-    dojos read on stood in Edo, and practice before the mid-Edo period was held outdoors or on earthen floors.
+    dojos read on stood in Edo, and practice before the mid-Edo period was held outdoors or on earthen floors. Private halls did reach every part of the country late in the period, so that a county seat keeps none is the map's own calibration, counted on its samurai alone though townsmen and farmers trained at them too.
     The one martial ground the pages read on an intendant's office name there is a riding ground, and the
     drill ground read on stood at a small domain's jin'ya, so they confirm the practice ground. That domain
     schools stood in castle towns and cities as a rule (the two read, Hagi's and Mito's, stood inside their
@@ -428,7 +432,7 @@ class ApproachRoad(Kind):
     What: The ways that bring traffic to the compound: the road or town street up to the main gate, and the
     lanes that serve its lesser doors.
 
-    Why: A magistrate's manor stands at the edge of the settlement it administers, and its gate faces what it
+    Why: On the Japanese model a magistrate's manor stands at the edge of the settlement it administers, on the Chinese model inside the wall on the main street, and its gate faces what it
     fronts - the town, or the road it sits beside - opening onto the roadbed; where a manor fronts a road at
     an angle, the whole compound turns so its front wall runs parallel to the way. So a road always arrives at
     the main gate. A planned Chinese capital was a grid of avenues keyed to its gates, and a county seat's
@@ -442,14 +446,14 @@ class ApproachRoad(Kind):
     towns. The road at the gate is drawn at the width of the road the compound stands on, 15 to 24 ft where it is
     a highway, as read; no page read gives the width of the road before an official's gate, so any wider ground
     before the gate is a guess, and so is a lane to a side or cart gate, drawn at about 6 ft where carts use it.
-    The record read gives only a south-facing gate for a Chinese county office; that the manor stands at the edge
-    of its town and opens its gate onto the road it fronts is this project's own siting, set against the drawn
+    The record read sets a Japanese seat beside the settlement it administers and a Chinese county yamen inside its town on the main street, and gives a south-facing gate for a Chinese county office; that the manor's gate faces what it fronts
+    and opens onto the road it stands on is this project's own calibration, set against the drawn
     maps rather than read from a source.
 
     Name: road
     Covers: the approach road or town street, the lanes to the lesser doors, and a road across a border
     Label: deviation
-    Sources: ctie-michi-nazenaze, hiroshima-saigoku-kaido, mlit-kinsei-michi, kotobank-daihachiguruma, l7r-wagons, neixiang-xianya-zhwiki, song-architecture-enwiki, jokamachi-jawiki, lowtech-chinese-wheelbarrow, toyama-1988-road-undevelopment
+    Sources: ctie-michi-nazenaze, hiroshima-saigoku-kaido, mlit-kinsei-michi, kotobank-daihachiguruma, l7r-wagons, neixiang-xianya-zhwiki, song-architecture-enwiki, jokamachi-jawiki, lowtech-chinese-wheelbarrow, toyama-1988-road-undevelopment, jinya-jawiki, tamba-kashiwara-jinya, sina-neixiang-xianya, bjd-qing-yamen
     Entry: research/ways.html - 'How wide is the road at a compound's gate?', 'Could a cart use the roads here, and where would it go?', 'What vehicle used a village lane, and where could the lane run?'; research/towns.html - 'Where does a magistrate's manor stand, and which way does its gate face?', 'Chinese towns were PLANNED - the gate-to-yamen axis'
     """
 

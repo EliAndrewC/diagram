@@ -4,10 +4,13 @@ from __future__ import annotations
 
 import math
 from collections.abc import Mapping, Sequence
+from typing import Any, cast
 
-from l7r.diagram.settlement import PointGrid, edge_dist, point_in_poly, seg_closest, seg_dist, seg_intersect, segments_cross
+from l7r.diagram.settlement import PointGrid, point_in_poly, rot_rect, seg_closest, seg_dist, seg_intersect, segments_cross
+from l7r.diagram.settlement.water_ways._helpers import BUND_REACH_FT
 from l7r.diagram.sitegen.geom import centroid, unit
 
+from ..clearance import ring_index
 from ..consts import (
     STEADING_ARRIVAL_FT,
     TRACK_FABRIC_GAP,
@@ -251,9 +254,12 @@ def push_clear_of_fabric(base: Pt, unit: Pt, edge: float, fabric: Sequence[Poly]
     LAST line a real branch: a cluster ringed all the way round returns a point that does not clear, and the
     caller draws from it anyway rather than returning nothing. No live hamlet is that crowded.
     """
+    # EACH POLYGON'S BOX, ONCE (feature 284, FR-009): a point farther than `gap` outside a polygon's box is farther than
+    # `gap` from its ring, so only the polygons whose widened box holds the point are asked - the same verdict.
+    boxes = [(poly, min(p[0] for p in poly) - gap, min(p[1] for p in poly) - gap, max(p[0] for p in poly) + gap, max(p[1] for p in poly) + gap) for poly in fabric if poly]
     for _ in range(24):
         gx, gy = base[0] + unit[0] * edge, base[1] + unit[1] * edge
-        if all(edge_dist(gx, gy, poly) >= gap for poly in fabric):
+        if not any(x0 <= gx <= x1 and y0 <= gy <= y1 and ring_within(gx, gy, poly, gap, closed=False) for poly, x0, y0, x1, y1 in boxes):  # `edge_dist >= gap` for every one
             return (gx, gy)
         edge += 6.0
     return (base[0] + unit[0] * edge, base[1] + unit[1] * edge)
@@ -278,7 +284,7 @@ def _seg_cross(a: Pt, b: Pt, c: Pt, d: Pt) -> Pt | None:
 def steading_footprints(M: Mapping[str, object]) -> list[Poly]:
     """Every piece of a steading's own BUILT ground, as the shapes a lane end can arrive at.
 
-    The farm buildings as rectangles - houses, byres, field sheds, the three keys
+    The farm buildings as their drawn quads - houses, byres, field sheds, the three keys
     `lanes_do_not_break_mid_run` already treats as solid - and the steading's plots as their recorded
     rings: the threshing yard and the kitchen garden, which are the dooryard a path is worn to.
 
@@ -287,15 +293,14 @@ def steading_footprints(M: Mapping[str, object]) -> list[Poly]:
     built on it, and a lane crosses them. A tread that stops 29 ft into the commons has stopped in a
     field, which is what this rule exists to catch, so they are not in this set.
 
-    Axis-aligned for the rectangles, like every other solid the lane rules read: a farmhouse's `rot`
-    turns its roof, and a rotated quad would move these distances by less than the 4 ft step the
-    clip walks in."""
+    TURNED AS DRAWN (269 B18). The rectangles were read axis-aligned while a farmhouse's rake was 5 degrees, which moved
+    these distances by less than the clip's 4 ft step; a house turned 30 degrees, or a quarter turn, is not that, so each
+    building is its `rot_rect` at its own `rot`."""
     out: list[Poly] = []
-    for key in ("houses", "byres", "farm_sheds"):
+    for key in ("houses", "byres", "farm_sheds", "retirement_houses"):
         for r in M.get(key) or []:  # type: ignore[union-attr]
             if all(k in r for k in ("x", "y", "w", "h")):
-                x, y, hw, hh = float(r["x"]), float(r["y"]), float(r["w"]) / 2.0, float(r["h"]) / 2.0
-                out.append([(x - hw, y - hh), (x + hw, y - hh), (x + hw, y + hh), (x - hw, y + hh)])
+                out.append(rot_rect(float(r["x"]), float(r["y"]), float(r["w"]), float(r["h"]), float(r.get("rot") or 0.0)))
     for key in ("threshing_yards", "gardens"):
         for r in M.get(key) or []:  # type: ignore[union-attr]
             ring = r.get("poly") or r.get("outline") or ()
@@ -304,40 +309,125 @@ def steading_footprints(M: Mapping[str, object]) -> list[Poly]:
     return out
 
 
+def ring_within(x: float, y: float, poly: Sequence[Pt], limit: float, closed: bool = True) -> bool:
+    """`edge_dist(x, y, poly) <= limit` (or `< limit` with `closed=False`), exactly, from the ring's shared index (feature 284,
+    FR-009): `edge_dist` walks every edge; the index measures only the edges near the point, with the same `seg_dist`.
+    `edge_within` answers strictly under its limit, so a closed test asks it a hair wide and re-applies `<=`."""
+    d = ring_index(list(poly)).edge_within(x, y, limit + 1e-9 if closed else limit)
+    return d is not None and (d <= limit if closed else d < limit)
+
+
+def worked_ground_rings(M: Mapping[str, Any]) -> list[list[Pt]]:
+    """The field a way may END at: the paddy's outlines AND its dry hem, which is worked ground of the same field (feature
+    261: Mizuguchi's spur crossed the brook and stopped at the hem plots between the water and the paddy, 108 ft from the
+    paddy's own outline, and was dropped as an end in open ground - the hamlet's only way to its rice). One definition,
+    read by the sweep that trims ends and by the gate that checks them."""
+    rings = [[(float(a), float(b)) for a, b in (f.get("outline") or [])] for f in (M.get("fields") or [])]
+    return rings + [[(float(a), float(b)) for a, b in (d.get("poly") or [])] for d in (M.get("dry_plots") or []) if d.get("poly")]
+
+
+class WorkedGround:
+    """The worked ground's EDGE - the bund a way arrives on (269 B04, research/fields/290) - built once and asked per end.
+
+    The paddy's outline, its dry plots, and its drawn rice: the outline runs 3-9 ft off the rice on a valley fan and a
+    plot can stand up to 12 ft past it (measured on the five pool hamlets), so a tip measured to the outline alone could
+    stop on the rice or short of it. The union is taken once (shapely), and a query is one distance to its boundary - no
+    walk over the rings per end (dev/performance.md)."""
+
+    def __init__(self, rings: Sequence[Sequence[Pt]]) -> None:
+        from shapely.geometry import Polygon
+        from shapely.ops import unary_union
+
+        polys = [Polygon(r).buffer(0) for r in rings if len(r) >= 3]
+        polys = [p for p in polys if not p.is_empty]
+        self.union: Any = unary_union(polys) if polys else None
+        self.edge: Any = self.union.boundary if self.union is not None else None
+
+    def dist(self, q: Pt) -> float:
+        """How far `q` stands from the worked ground's edge, inside or out; infinite where there is no ground."""
+        from shapely.geometry import Point
+
+        return float(self.edge.distance(Point(q))) if self.edge is not None else float("inf")
+
+    def inside(self, q: Pt) -> bool:
+        from shapely.geometry import Point
+
+        return bool(self.union is not None and self.union.contains(Point(q)))
+
+    def nearest(self, q: Pt) -> Pt | None:
+        """The point of the edge nearest `q`, or None where there is no ground."""
+        from shapely.geometry import Point
+        from shapely.ops import nearest_points
+
+        if self.edge is None:
+            return None
+        p = nearest_points(self.edge, Point(q))[0]
+        return (float(p.x), float(p.y))
+
+
+def ground_key(M: Mapping[str, Any]) -> tuple[int, ...]:
+    """What a settlement's worked ground is built from, by count: the field and dry-plot registries are only appended to
+    while a roll lays its ways, so the same counts on the same settlement are the same ground."""
+    fields, dry = M.get("fields") or [], M.get("dry_plots") or []
+    return (len(fields), len(dry), sum(len(f.get("plot_rings") or []) for f in fields))
+
+
+def memo_ground(s: Any, tag: str, build: Any) -> WorkedGround:
+    """The worked ground `build(s.M)` makes, BUILT ONCE per settlement while the registries it reads stand unchanged
+    (dev/performance.md, "build the blocked ground once"): the union of a fan's 600-odd rice plots is the costly part, and
+    the web stage asks for it from five passes. Kept ON the settlement, so no other roll can ever read it."""
+    memo = s.__dict__.setdefault("_ground_memo", {})
+    key = ground_key(s.M)
+    hit = memo.get(tag)
+    if hit is not None and hit[0] == key:
+        return cast(WorkedGround, hit[1])
+    ground: WorkedGround = build(s.M)
+    memo[tag] = (key, ground)
+    return ground
+
+
+def worked_ground(M: Mapping[str, Any]) -> WorkedGround:
+    """The worked ground of a manifest (`WorkedGround`): `worked_ground_rings` and every field's drawn rice plots."""
+    rice = [[(float(a), float(b)) for a, b in r] for f in (M.get("fields") or []) for r in (f.get("plot_rings") or []) if len(r) >= 3]
+    return WorkedGround(worked_ground_rings(M) + rice)
+
+
 def end_serves(
     q: Pt,
     segs: Sequence[tuple[Pt, Pt]] = (),
     houses: Sequence[Pt] = (),
-    fields: Sequence[Poly] = (),
+    ground: WorkedGround | None = None,
     steadings: Sequence[Poly] = (),
-    bars: tuple[float, float, float] = (WAY_END_REACH_FT, WAY_END_REACH_FT, WAY_END_REACH_FT),
 ) -> bool:
-    """Does a lane END reach something worth walking to - another way, a farmhouse, the field, or the
-    built ground of a steading it has arrived at?
+    """Does a lane END reach something worth walking to - another way, a farmhouse, the bund, or the built ground of a
+    steading it has arrived at?
 
     ONE BODY, READ BY THE PLACER AND BY THE CHECK, which is this skill's standing rule about a rule and
     its verdict ("placement and its check must read the SAME source"). They had drifted twice over:
     `_trim_to_service` measured ways at 40 ft and house centers at 90 while the gate asked 60 of all
     three (fixed earlier in feature 227 by `WAY_END_REACH_FT`), and then NEITHER of them could see a
-    tread that had arrived at a garden fence - the fourth clause here, at `STEADING_ARRIVAL_FT`, which
-    is its own distance for the reason that constant records. `bars` exists for the one caller that
-    wants its own three figures: a field spur stops at the baulk, not at the crop."""
-    _way, _house, _field = bars
-    if any(seg_dist(q[0], q[1], a, b) <= _way for a, b in segs):
+    tread that had arrived at a garden fence - the steading clause, at `STEADING_ARRIVAL_FT`. An end served by a house
+    alone is cut beside it, at its closest approach, by `_trim_to_service` (the GM's road to nowhere, 2026-09-27; 269 B17,
+    research/homesteads/310: "pulled back to the last house it serves").
+
+    THE FIELD IS REACHED ON ITS BUND (269 B04, research/fields/290: the path "never ends in open ground short of the
+    bund"): within `BUND_REACH_FT` of the worked ground's edge, where it used to be anywhere within 60 ft of the field. An
+    end short of the bund is carried on to it (`ways/bund.py`) before the trims that read this."""
+    if any(seg_dist(q[0], q[1], a, b) <= WAY_END_REACH_FT for a, b in segs):
         return True
-    if any(math.dist(q, h) <= _house for h in houses):
+    if any(math.dist(q, h) <= WAY_END_REACH_FT for h in houses):
         return True
-    if any(edge_dist(q[0], q[1], f) <= _field for f in fields):
+    if ground is not None and ground.dist(q) <= BUND_REACH_FT:
         return True
-    return any(edge_dist(q[0], q[1], sp) <= STEADING_ARRIVAL_FT for sp in steadings)
+    return any(ring_within(q[0], q[1], sp, STEADING_ARRIVAL_FT) for sp in steadings)
 
 
-def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt], fields: Sequence[Poly] = (), keep: Sequence[Pt] = (), steadings: Sequence[Poly] = ()) -> Poly:
+def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt], ground: WorkedGround | None = None, keep: Sequence[Pt] = (), steadings: Sequence[Poly] = ()) -> Poly:
     """Pull a run's ends back to the last point that actually serves something.
 
     ONE BAR, THE GATE'S, FOR EVERY CALLER. `WAY_END_REACH_FT` is what
-    `lanes_reach_something` asks of every internal lane end - within it of another way, a farmhouse or
-    the field - so that is what this trims to, and a caller cannot leave an end the gate will then fail.
+    `lanes_reach_something` asks of every internal lane end - within it of another way or a farmhouse, on the bund, or at a
+    steading's dooryard (`end_serves`) - so that is what this trims to, and a caller cannot leave an end the gate will then fail.
     There used to be an `end_reach` parameter whose absence meant a looser private triple (40 ft to a
     way, 90 ft to a HOUSE CENTER, `SPUR_SETBACK + 4` to the field); feature 227 moved all four callers
     onto the gate's figure one at a time, at which point the default was reachable only from this
@@ -374,7 +464,7 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
             return True
         # ...counting no way the run's OTHER end stands on (settlement-review of Mizuguchi, feature 261): a lane that left the
         # connector and ran 61 ft past its house counted as reaching the connector it had left
-        return end_serves(q, segs if other is None else [sg for sg in segs if seg_dist(other[0], other[1], sg[0], sg[1]) > _TOUCH_GAP], houses, fields, steadings)
+        return end_serves(q, segs if other is None else [sg for sg in segs if seg_dist(other[0], other[1], sg[0], sg[1]) > _TOUCH_GAP], houses, ground, steadings)
 
     out = list(run)
     while len(out) > 2 and not serves(out[-1], out[0]):
@@ -408,7 +498,7 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
         # the one the run's far end already stands on (settlement-review of Mizuguchi, feature 261: a lane ran 61 ft past
         # its house into the grass, and counted as arrived because it was still within reach of the connector it left)
         _left = [sg for sg in segs if seg_dist(other[0], other[1], sg[0], sg[1]) > _TOUCH_GAP]
-        if end_serves(q, _left, (), fields, steadings):
+        if end_serves(q, _left, (), ground, steadings):
             return None
         return [h for h in houses if math.dist(q, h) <= WAY_END_REACH_FT] + [h for h in keep if math.dist(q, h) <= WEB_REACH_FT]
 

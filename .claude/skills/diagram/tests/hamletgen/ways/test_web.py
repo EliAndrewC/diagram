@@ -192,3 +192,18 @@ def test_a_lane_the_smoothing_collapsed_is_emptied_reinked_and_deleted() -> None
     assert _web._drop_collapsed(s) == [1, 2, 4]  # type: ignore[arg-type]
     assert s.reinked == [1, 2, 4], "each collapsed lane is reinked at its ORIGINAL index before any deletion"
     assert [ln["pts"] for ln in s.M["lanes"]] == [[[0.0, 0.0]], [[30.0, 30.0], [80.0, 30.0], [80.0, 80.0]]]
+
+
+def test_a_lane_that_is_the_only_link_between_two_parts_of_the_web_is_not_dropped() -> None:
+    """`unsplitting_drops` (the 269 landing, Inashiro): of two lanes the tidy would drop, the one tying an arm to the web
+    stays and the loose one goes."""
+    from l7r.diagram.hamletgen.ways.web import unsplitting_drops
+
+    lanes = [
+        {"pts": [[0.0, 0.0], [100.0, 0.0]]},  # the web
+        {"pts": [[100.0, 0.0], [100.0, 100.0]]},  # the only link to the arm below
+        {"pts": [[100.0, 100.0], [200.0, 100.0]]},  # the arm
+        {"pts": [[0.0, 0.0], [0.0, 50.0]]},  # a spur hanging off the web, tied to nothing else
+    ]
+    assert unsplitting_drops(lanes, [1, 3]) == [3]
+    assert unsplitting_drops(lanes, []) == []

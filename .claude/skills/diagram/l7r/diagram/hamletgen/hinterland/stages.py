@@ -7,6 +7,8 @@ from collections.abc import Sequence
 from typing import Any, cast
 
 from l7r.diagram.settlement import Settlement
+from l7r.diagram.settlement._geom import CanopyArea
+from l7r.diagram.settlement.homestead_parts.groves import homestead_wood_ft2
 
 from ..consts import COPSE_BELT_REACH_FT, COPSE_HOUSE_REACH_FT
 from ..homesteads import farmstead_fixtures, household_bamboo
@@ -117,8 +119,9 @@ def stage_woodland(s: Settlement, plan: SitePlan) -> None:
 
     Managed coppice on ground nothing else wanted, drawn on the parcels the previous stage scanned - so the
     scrub has already kept out of them. Each parcel is an irregular ring inside the reach its keep-outs were
-    tested at, never a rectangle (T36): an iriai wood was bounded by ridge, stream and path, and governed by
-    rules rather than parcel lines.
+    tested at, never a rectangle (T36): an iriai wood's edge was a line the villages agreed or were given, bent to
+    the ground, and the wood was governed by rules rather than parcel lines (research/vegetation/140). That the line
+    followed ridge, stream and path is a GUESS - no page read says so.
 
     A few managed-woodland patches on the high, far ground - the green EXCEPTION to the scrub.
 
@@ -270,7 +273,10 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # ...AND ON ITS OWN BANK: a clump near a house across the brook is not among the houses (settlement-review of Kashikawa,
     # feature 261: three clumps stood across the water from every farmhouse, within reach only as the crow flies)
     _brook = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for f in s.M.get("streams") or [] for a, b in zip(f.get("poly") or [], (f.get("poly") or [])[1:], strict=False)]
-    _copse_near: tuple[Any, ...] = ([(float(x), float(y)) for x, y in zip(xs, ys, strict=False)], s.px(COPSE_HOUSE_REACH_FT), _brook)
+    # ...A HAIR INSIDE THE REACH (269 E2): the manifest records a clump to 0.1 px, so a clump the placer seats at the reach's
+    # very edge can read as beyond it - Kashikawa's clump at (1069.3, 1011.6) stood 89.99 ft from its house as placed and
+    # 90.01 as recorded. The same placement-side margin `CANOPY_PAD` keeps for a crown against a wall.
+    _copse_near: tuple[Any, ...] = ([(float(x), float(y)) for x, y in zip(xs, ys, strict=False)], s.px(COPSE_HOUSE_REACH_FT) - 0.1, _brook)
     if plan.copse_siting == "against_the_belt" and _dented:
         # the belt's own footprint, stood off the houses so the two stands read as one wood at its back
         _bx = [q[0] for q in _dented]
@@ -282,7 +288,20 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
         # two crowns are its lee face, and a copse anchored round them stood beyond its windward side (Mizuguchi, two crowns)
         _half = s.px(COPSE_BELT_REACH_FT) / 2.0
         _copse_near = ([(x - plan.wind[0] * _half, y - plan.wind[1] * _half) for x, y in lee_face(_belt, plan.wind)], _half, _brook)
-    s.village_grove(_box, role="copse", dense=False, reserved=title_pocket(s, plan), near=_copse_near)  # the map's name has ground reserved; the copse honors it like the belt does
+    # THE COPSE IS THE HOMESTEADS' WOODS, SIZED BY THEM (269 B26; research/vegetation/210): each homestead's wood - its
+    # windward grove and its share of the copse together, which the record knows as one - is rolled within the 1684
+    # register's range, and the copse is filled to what the belt leaves of their sum. It used to be whatever one grid's
+    # gaps gave: 750-1,700 sq ft a homestead beside a belt share of 3,700-9,200, so four of five maps drew less wood
+    # than the register's smallest household.
+    _wood_ft2 = sum(homestead_wood_ft2(s._hjit(float(h["x"]), float(h["y"]), 210.0)) for h in houses)
+    _ft2 = s.px(1.0) ** 2  # px^2 per sq ft
+    _belt_canopy = CanopyArea(2.0 * s.bscale)
+    for g in s.M.get("village_groves") or []:
+        if g.get("role") == "windbreak":
+            for c in (g.get("clumps") or []) + (g.get("clumps_offpage") or []):
+                _belt_canopy.add(float(c[0]), float(c[1]), float(g.get("r") or 0.0))
+    _copse_goal = max(0.0, _wood_ft2 * _ft2 - _belt_canopy.area)
+    s.village_grove(_box, role="copse", dense=False, reserved=title_pocket(s, plan), near=_copse_near, area=_copse_goal)  # the map's name has ground reserved; the copse honors it like the belt does
     # RECORD WHAT THE GROUND GAVE, beside what the knob asked for (settlement-review, feature 230 pass 12; the same
     # move `place_kosatsuba` makes with `kosatsuba_well_ft`, and for the same reason). `copse_siting` says
     # `among_the_houses` on four of the five pool maps, and what that produces depends entirely on whether the
@@ -296,3 +315,13 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
         _near = sorted(min(math.dist((float(c[0]), float(c[1])), h) for h in _hs) for c in _cop["clumps"])
         s.M["meta"]["copse_clumps"] = len(_near)
         s.M["meta"]["copse_house_ft"] = round(_near[len(_near) // 2] * float(s.M["meta"].get("ftpx") or 1), 1)
+    # ...and what the woods came to beside what was rolled, so a copse the ground could not hold is a number, not a silence
+    _copse_canopy = CanopyArea(2.0 * s.bscale)
+    if _cop:
+        for c in _cop.get("clumps") or []:
+            _copse_canopy.add(float(c[0]), float(c[1]), float(_cop["r"]))
+    if _hs:
+        s.M["meta"]["homestead_wood_ft2"] = {
+            "rolled": round(_wood_ft2 / len(_hs)),
+            "drawn": round((_belt_canopy.area + _copse_canopy.area) / _ft2 / len(_hs)),
+        }

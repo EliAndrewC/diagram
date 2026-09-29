@@ -543,8 +543,8 @@ def test_grove_fits_rejects_a_belt_on_a_lane_tread() -> None:
 
 
 def test_draw_grove_draws_a_mixed_stand_at_its_seat() -> None:
-    """Feature 146: the clump draws conifer and broadleaf crowns at its own seat. It does NOT draw bamboo -
-    the threshold that would select it is 0.0 in both mixes, so that arm was unreachable and is gone."""
+    """Feature 146: the clump draws conifer and broadleaf crowns at its own seat. The old per-crown culm (#BBD06A) is
+    gone; the bamboo 269 B29 put back is the stand's culm mark, low in the gaps (tests/settlement/test_homestead_woods.py)."""
     s = Settlement(1000, 1000, seed=1)
     s.meta(name="G", scale="hamlet", ftpx=1)
     before = len(s.out)

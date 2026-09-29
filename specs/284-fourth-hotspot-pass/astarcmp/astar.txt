@@ -1,0 +1,48 @@
+def lattice_search(
+    start: tuple[int, int],
+    goal: tuple[int, int],
+    nx: int,
+    ny: int,
+    is_free: Callable[[int, int], bool],
+    in_band: Callable[[int, int], bool],
+    toll: float,
+    cell: float,
+) -> tuple[dict[tuple[int, int], float], dict[tuple[int, int], tuple[int, int]]]:
+    """The router's search over its lattice: each cell's cost from `start` and the cell it was reached from, as far as the
+    search went - to `goal`, or every reachable cell when there is no way.
+
+    A* TOWARD THE GOAL (feature 284, FR-001): Dijkstra settled every cell nearer the start than the goal. Ordered by the cost
+    so far plus the straight-line distance still to go - never more than any path's remaining cost, since a step costs
+    `hypot * cell` plus a toll that is never negative, and consistent for the same reason - the search settles the cells
+    toward the goal first and returns a path costing no more than Dijkstra's. Where two lattice paths cost the same it may
+    return the other one; the drawn path is held within `5%` of the old router's length (spec 284, SC-002)."""
+    sx, sy = start
+    gx, gy = goal
+
+    def _h(ix: int, iy: int) -> float:
+        return math.hypot(ix - gx, iy - gy) * cell
+
+    dist = {(sx, sy): 0.0}
+    prev: dict[tuple[int, int], tuple[int, int]] = {}
+    heap = [(_h(sx, sy), 0.0, sx, sy)]
+    while heap:
+        _f, d, ix, iy = heapq.heappop(heap)
+        if (ix, iy) == (gx, gy):
+            break
+        if d > dist.get((ix, iy), 1e18):
+            continue
+        for dx2 in (-1, 0, 1):
+            for dy2 in (-1, 0, 1):
+                jx, jy = ix + dx2, iy + dy2
+                # A DIAGONAL MAY NOT CUT A BLOCKED CORNER. Cell centers can both be clear while the
+                # step between them clips the corner of a steading standing between them - so the
+                # planned route was not actually walkable and failed its own acceptance test a moment
+                # later, having been "found". Requiring both orthogonal neighbors makes the lattice
+                # tell the truth about what it can walk.
+                if (dx2 or dy2) and 0 <= jx < nx and 0 <= jy < ny and is_free(jx, jy) and (not (dx2 and dy2) or (is_free(jx, iy) and is_free(ix, jy))):
+                    nd = d + math.hypot(dx2, dy2) * cell + (toll if toll and in_band(jx, jy) and not in_band(ix, iy) else 0.0)
+                    if nd < dist.get((jx, jy), 1e18):
+                        dist[(jx, jy)] = nd
+                        prev[(jx, jy)] = (ix, iy)
+                        heapq.heappush(heap, (nd + _h(jx, jy), nd, jx, jy))
+    return dist, prev

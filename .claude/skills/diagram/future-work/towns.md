@@ -39,3 +39,10 @@ fix wants its own pass with its own sweep rather than riding along.
    important object. **Fix sketch**: offset the 2-cottage case the way the 3-cottage case already
    is asymmetric in effect, or move the private well off the axis. Cheap, but it changes every
    two-cottage works, so it belongs with item 1 in one pass.
+
+## OWED AT CONVERSION (269 B43, 2026-09-28): where a Chinese-model town seats its magistrate
+
+Measurement: the town tier seats the magistrate's compound at the town's edge on every map. The record
+(research/towns 250) puts a Chinese-model town's yamen on the main avenue; the Japanese form keeps the edge
+(research/towns 120). Mechanism: one seat rule for both models. Sketch: the scripted town generator reads the
+settlement's model and seats the compound on the main avenue for the Chinese model, at the edge for the Japanese.

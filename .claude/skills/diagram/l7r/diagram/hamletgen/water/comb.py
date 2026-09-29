@@ -13,7 +13,7 @@ from ..consts import (
     POLDER_ARCHETYPES,
 )
 from ..plan import SitePlan
-from .brook import draw_intake, feed_brook
+from .brook import draw_intake, feed_brook, open_race_mouth
 from .fit import fit_field, head_sluice
 from .polder import stage_polder
 
@@ -30,6 +30,7 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.sitegen.geom.net_acres
         l7r.diagram.hamletgen.water.comb.head_sluice
         l7r.diagram.hamletgen.water.brook.feed_brook
+        l7r.diagram.hamletgen.water.brook.open_race_mouth
         l7r.diagram.hamletgen.water.brook.draw_intake
         l7r.diagram.settlement.Settlement.draw_comb_field
         l7r.diagram.settlement.Settlement.plot_texture
@@ -43,7 +44,8 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
     s.M["meta"]["water_source_position"] = position
 
     across, step = s.plot_texture(plan.plot_size, "organic")
-    net = fit_field(plan, sluice, plan.spec.seed, across, step)
+    s.M["meta"]["fan_middle"] = fan_middle = s.resolve("fan_middle")  # 269 B07: where the dry band lies (`FAN_MIDDLE`, fit.py)
+    net = fit_field(plan, sluice, plan.spec.seed, across, step, fan_middle=fan_middle)
     plan.net = net
     plan.acres = net_acres(net, plan.ftpx)
 
@@ -75,6 +77,7 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
     # against a 34 ft skirt). The canals run inside the plots they water, so clearing the plots clears them.
     plan.brook = feed_brook(plan, sluice, [[(float(x), float(y)) for x, y in p["poly"]] for p in net["plots"] + net["dry_plots"]])
     s.draw_comb_field(net, f"{plan.spec.name.lower()}-paddies", {"kind": "stream", "stream": plan.brook})
+    open_race_mouth(s, sluice)  # the race opens out of the brook's bank, not onto the stream (269 B22)
     draw_intake(s, plan, sluice)
     # THE PARTS OF A DITCH THAT RUN OUTSIDE THE CROP become no-build corridors.
     #

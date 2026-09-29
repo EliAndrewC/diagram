@@ -318,7 +318,7 @@ def _scripted_rolls(monkeypatch, script: dict[int, tuple[int, list[tuple[float, 
         def finish(self, out: str, render: bool = False) -> None:
             pass
 
-    def fake_build(plan: Any, avoid: Any = ()) -> _S:
+    def fake_build(plan: Any, avoid: Any = (), snapshot: Any = None) -> _S:
         placed, stranded = script[len(avoid)]
         plan.placed = placed
         plan.acres = 1.0
@@ -408,7 +408,7 @@ def test_only_the_attempt_kept_is_finished(monkeypatch, tmp_path) -> None:  # ty
             finished.append(self.n)
 
     def scripted(script):  # type: ignore[no-untyped-def]
-        def fake_build(plan: Any, avoid: Any = ()) -> _S:
+        def fake_build(plan: Any, avoid: Any = (), snapshot: Any = None) -> _S:
             placed, stranded = script[len(avoid)]
             plan.placed, plan.acres = placed, 1.0
             return _S(len(avoid), stranded)

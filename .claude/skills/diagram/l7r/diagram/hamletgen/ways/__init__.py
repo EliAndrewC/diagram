@@ -16,6 +16,9 @@ import types as _types
 from l7r.diagram.settlement import seg_dist as seg_dist
 
 from ..consts import WEB_REACH_FT as WEB_REACH_FT
+from .bund import a_way_onto_the_bund as a_way_onto_the_bund
+from .bund import run_lanes_on_to_the_bund as run_lanes_on_to_the_bund
+from .bund import tip_onto_the_bund as tip_onto_the_bund
 from .checks import crossing_lands_on_crop as crossing_lands_on_crop
 from .checks import drawn_water_segs as drawn_water_segs
 from .checks import lanes_share_tread as lanes_share_tread
@@ -41,6 +44,7 @@ from .fabric import _homestead_polys as _homestead_polys
 from .fabric import _margin_frame as _margin_frame
 from .fabric import _pull_back_to_service as _pull_back_to_service
 from .geom import _TOUCH_GAP as _TOUCH_GAP
+from .geom import WorkedGround as WorkedGround
 from .geom import _aim_off as _aim_off
 from .geom import _components as _components
 from .geom import _nearest_seg as _nearest_seg
@@ -57,6 +61,9 @@ from .geom import push_clear_of_fabric as push_clear_of_fabric
 from .geom import push_out_of as push_out_of
 from .geom import shadowing_lane as shadowing_lane
 from .geom import steading_footprints as steading_footprints
+from .geom import worked_ground as worked_ground
+from .geom import worked_ground_rings as worked_ground_rings
+from .joints import meet_end_to_end as meet_end_to_end
 from .joints import straighten_joints as straighten_joints
 from .route import _EASE_FT as _EASE_FT
 from .route import _EASE_STEPS as _EASE_STEPS

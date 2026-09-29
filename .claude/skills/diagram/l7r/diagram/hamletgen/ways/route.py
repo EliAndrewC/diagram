@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import heapq
 import math
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 
 from ..clearance import fabric_index
 from ..consts import (
@@ -13,14 +13,14 @@ from ..consts import (
     Poly,
     Pt,
 )
-from .clearance import _clear_link, _clear_touch
+from .clearance import _clear_link, _clear_touch, link_index
 from .geom import _TOUCH_GAP, _turn_deg
 
 # THE BROOK'S BAND AND WHAT ENTERING IT COSTS, for the roll being drawn (feature 261). `_route` has a dozen callers and
 # none holds the settlement, so the ways stage sets this once where it lays the fords (`set_crossing`) - every map
 # rolled sets it afresh, a brookless map to nothing. Cells: the lattice cell keys (at the cell size asked) are not
 # known in advance, so the band is kept as brook sample points in a 20 px bucket grid and asked per cell center.
-_CROSSING: dict[str, object] = {"grid": {}, "radius": 0.0, "cost": 0.0, "cell": 20.0}
+_CROSSING: dict[str, object] = {"grid": {}, "radius": 0.0, "cost": 0.0, "cell": 20.0, "near": set()}
 
 
 def set_crossing(brook: Sequence[Pt], radius: float, cost: float) -> None:
@@ -38,13 +38,18 @@ def set_crossing(brook: Sequence[Pt], radius: float, cost: float) -> None:
         for i in range(n + 1):
             q = (a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n)
             grid.setdefault((int(q[0] // cell), int(q[1] // cell)), []).append(q)
-    _CROSSING.update(grid=grid, radius=radius, cost=cost if grid else 0.0, cell=cell)
+    # ...AND THE CELLS NEAR IT, ONCE (feature 284, FR-010): an ask far from the course read nine empty cells; a point whose cell
+    # has no sample in its 3 x 3 neighborhood is out of the band without reading any of them.
+    near = {(gx + dx, gy + dy) for gx, gy in grid for dx in (-1, 0, 1) for dy in (-1, 0, 1)}
+    _CROSSING.update(grid=grid, radius=radius, cost=cost if grid else 0.0, cell=cell, near=near)
 
 
 def in_brook_band(p: Pt) -> bool:
     """Is `p` within the recorded brook's band?"""
     grid, r, c = _CROSSING["grid"], float(_CROSSING["radius"]), float(_CROSSING["cell"])  # type: ignore[arg-type]
     gx, gy = int(p[0] // c), int(p[1] // c)
+    if (gx, gy) not in _CROSSING["near"]:  # type: ignore[operator]
+        return False
     return any(math.dist(p, q) <= r for dx in (-1, 0, 1) for dy in (-1, 0, 1) for q in grid.get((gx + dx, gy + dy), ()))  # type: ignore[union-attr]
 
 
@@ -58,7 +63,60 @@ def _new_crossing(path: Sequence[Pt], i: int, j: int) -> bool:
     return any(in_brook_band((ax + (bx - ax) * k / n, ay + (by - ay) * k / n)) for k in range(n + 1))
 
 
-def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], cell: float = 10.0, gap: float = WEB_FABRIC_GAP, pad_mult: float = 0.75) -> Poly:
+ROUTE_CELL = 10.0
+"""The router's standard lattice cell, in px - every call that does not ask a finer one (the deliberately fine lattices - 5,
+6, `_FINE_CELL`, the sweeps' own - are not it). KEPT AT 10 BY MEASUREMENT (feature 284, B2, specs/284 research R4): cells
+12, 14, 16 and 18 over the pool, the toys and cohort seeds 1-24 each stranded houses the 10 px lattice did not (12: 8
+unreached over every attempt against 5, on cohort seed 08 and Sawada), and no coarser cell was faster in all, so the
+coarser lattice was withdrawn. A stranding costs a whole re-roll, which is more than the router's share of a roll."""
+
+
+def lattice_search(
+    start: tuple[int, int],
+    goal: tuple[int, int],
+    nx: int,
+    ny: int,
+    is_free: Callable[[int, int], bool],
+    in_band: Callable[[int, int], bool],
+    toll: float,
+    cell: float,
+) -> tuple[dict[tuple[int, int], float], dict[tuple[int, int], tuple[int, int]]]:
+    """The router's search over its lattice: each cell's cost from `start` and the cell it was reached from, as far as the
+    search went - to `goal`, or every reachable cell when there is no way. Dijkstra, in cost order.
+
+    A* TOWARD THE GOAL WAS TRIED AND WITHDRAWN (feature 284, FR-001, specs/284 research R6). With the straight-line heuristic
+    it returns a path of the same cost but, where two lattice paths tie, often the other one, and the maps it moves re-roll a
+    little more often. Measured alone over the pool and cohort seeds 1-24 on the engine as it ships, it was 5.0 s under this
+    search's mean against a run-to-run spread of 8.9 s - not faster beyond the noise, while moving maps."""
+    sx, sy = start
+    gx, gy = goal
+    dist = {(sx, sy): 0.0}
+    prev: dict[tuple[int, int], tuple[int, int]] = {}
+    heap = [(0.0, sx, sy)]
+    while heap:
+        d, ix, iy = heapq.heappop(heap)
+        if (ix, iy) == (gx, gy):
+            break
+        if d > dist.get((ix, iy), 1e18):
+            continue
+        for dx2 in (-1, 0, 1):
+            for dy2 in (-1, 0, 1):
+                jx, jy = ix + dx2, iy + dy2
+                # A DIAGONAL MAY NOT CUT A BLOCKED CORNER. Cell centers can both be clear while the
+                # step between them clips the corner of a steading standing between them - so the
+                # planned route was not actually walkable and failed its own acceptance test a moment
+                # later, having been "found". Requiring both orthogonal neighbors makes the lattice
+                # tell the truth about what it can walk.
+                if (dx2 or dy2) and 0 <= jx < nx and 0 <= jy < ny and is_free(jx, jy) and (not (dx2 and dy2) or (is_free(jx, iy) and is_free(ix, jy))):
+                    nd = d + math.hypot(dx2, dy2) * cell + (toll if toll and in_band(jx, jy) and not in_band(ix, iy) else 0.0)
+                    if nd < dist.get((jx, jy), 1e18):
+                        dist[(jx, jy)] = nd
+                        prev[(jx, jy)] = (ix, iy)
+                        heapq.heappush(heap, (nd, jx, jy))
+    return dist, prev
+
+
+def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], cell: float | None = None, gap: float = WEB_FABRIC_GAP, pad_mult: float = 0.75) -> Poly:
     """A walkable route from a door to a way, THREADING the steadings rather than assuming a line.
 
     A straight run plus a few dog-legs was the first two attempts and it is not enough. Measured on
@@ -77,6 +135,7 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
     Returns [] when there is genuinely no way through - which is a real answer, and better than the
     caret a review found on Mizuguchi: a 38 ft mark drawn 71 ft from the house it served, touching
     nothing, to cure a one-foot violation."""
+    cell = ROUTE_CELL if cell is None else cell  # the standard lattice unless a caller asks a finer one
     span = math.dist(start, goal)
     if span < 1.0:
         return [start, goal]
@@ -141,29 +200,7 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
             v = band[(ix, iy)] = in_brook_band(to_pt(ix, iy))
         return v
 
-    dist = {(sx, sy): 0.0}
-    prev: dict[tuple[int, int], tuple[int, int]] = {}
-    heap = [(0.0, sx, sy)]
-    while heap:
-        d, ix, iy = heapq.heappop(heap)
-        if (ix, iy) == (gx, gy):
-            break
-        if d > dist.get((ix, iy), 1e18):
-            continue
-        for dx2 in (-1, 0, 1):
-            for dy2 in (-1, 0, 1):
-                jx, jy = ix + dx2, iy + dy2
-                # A DIAGONAL MAY NOT CUT A BLOCKED CORNER. Cell centers can both be clear while the
-                # step between them clips the corner of a steading standing between them - so the
-                # planned route was not actually walkable and failed its own acceptance test a moment
-                # later, having been "found". Requiring both orthogonal neighbors makes the lattice
-                # tell the truth about what it can walk.
-                if (dx2 or dy2) and 0 <= jx < nx and 0 <= jy < ny and is_free(jx, jy) and (not (dx2 and dy2) or (is_free(jx, iy) and is_free(ix, jy))):
-                    nd = d + math.hypot(dx2, dy2) * cell + (_toll if _toll and in_band(jx, jy) and not in_band(ix, iy) else 0.0)
-                    if nd < dist.get((jx, jy), 1e18):
-                        dist[(jx, jy)] = nd
-                        prev[(jx, jy)] = (ix, iy)
-                        heapq.heappush(heap, (nd, jx, jy))
+    dist, prev = lattice_search((sx, sy), (gx, gy), nx, ny, is_free, in_band, _toll, cell)
     if (gx, gy) not in dist:
         return []
     path: Poly = []
@@ -174,7 +211,9 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
     path.append(start)
     path.reverse()
     path[-1] = goal
-    # STRING-PULL against the real geometry, so the lattice never shows in the drawing.
+    # STRING-PULL against the real geometry, so the lattice never shows in the drawing - every link asking ONE index (feature
+    # 284, FR-002): `_clear_link` asked the fabric memo per link, rebuilding its key over every polygon and water line.
+    _links = link_index(hard, walls, water, gap)
     out: Poly = [path[0]]
     i = 0
     while i < len(path) - 1:
@@ -184,7 +223,7 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
         # acceptance test a moment later - the router found a way through at 5 ft and the pull then
         # refused every shortcut along it at 7, leaving a chain of lattice steps whose diagonals
         # clipped the corners the cell centers had cleared. One number, used by both.
-        while j > i + 1 and (not _clear_link(path[i], path[j], hard, walls, water, gap=gap) or (_toll and _new_crossing(path, i, j))):
+        while j > i + 1 and (not _clear_link(path[i], path[j], hard, walls, water, gap=gap, index=_links) or (_toll and _new_crossing(path, i, j))):
             j -= 1
         out.append(path[j])
         i = j

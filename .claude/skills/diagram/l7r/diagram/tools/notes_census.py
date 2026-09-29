@@ -35,6 +35,8 @@ def census(M: dict[str, Any]) -> str:
         f"- windbreak: **{sum(len(g['clumps']) for g in wb)}** clumps drawn, **{sum(len(g.get('clumps_offpage') or []) for g in wb)}** off the page",
         f"- copse: **{sum(len(g['clumps']) for g in cp)}** clumps drawn",
         f"- farmhouses: **{len(houses)}**",
+        # the family form (269 B42, settlements/035): a retirement house is its farmhouse's second roof, never a household
+        f"- family form: **{(M.get('meta') or {}).get('family_form', 'one_roof')}**, retirement houses **{len(M.get('retirement_houses') or [])}**",
         f"- farmstead fixtures: {', '.join(f'{k} **{v}**' for k, v in sorted(fx.items())) or 'none'}",
     ]
     boards = [b for b in (M.get("kosatsuba") or []) if isinstance(b, dict)]

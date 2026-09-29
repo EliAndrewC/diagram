@@ -368,7 +368,8 @@ def test_a_weir_hamlet_draws_an_oblique_bar_across_the_brook_and_an_open_one_dra
     s = Settlement(int(plan.W), int(plan.H))
     hg.draw_intake(s, plan, (700.0, 300.0))
     rec = s.M["weirs"][0]
-    assert rec["len"] == pytest.approx(2 * hg.WEIR_HALF_FT) and rec["w"] == pytest.approx(hg.WEIR_THICK_FT)
+    assert rec["len"] == pytest.approx(2 * hg.WEIR_HALF_FT) and rec["w"] == pytest.approx(hg.WEIR_THICK_FT[rec["form"]])
+    assert s.M["meta"]["weir_form"] == rec["form"]
     # the brook runs due south; the bar lies across it, off square by WEIR_SKEW_DEG
     assert min(rec["deg"] % 180.0, 180.0 - rec["deg"] % 180.0) == pytest.approx(hg.WEIR_SKEW_DEG, abs=0.5)
     # settlement-review pass 10: THE MOUTH IS ABOVE THE WEIR, and the bar climbs upstream away from the intake bank
@@ -379,6 +380,47 @@ def test_a_weir_hamlet_draws_an_oblique_bar_across_the_brook_and_an_open_one_dra
     bank_end = max(ring, key=lambda q: q[0] * (1 if rx > 0 else -1))
     far_end = min(ring, key=lambda q: q[0] * (1 if rx > 0 else -1))
     assert bank_end[1] > far_end[1], "the bar's end on the intake bank is its downstream end"
+
+
+def test_each_weir_form_draws_at_its_own_thickness() -> None:
+    """269 B22 (research/water/300): the weir's form is a knob, and each form is drawn at its own thickness - the fence
+    at 1.5 ft, the gabion course at 2, the frame and the crib at 5 - with its own glyph, every one with the lip along
+    the upstream face that tells a weir from a deck."""
+    glyphs = set()
+    for form, thick in hg.WEIR_THICK_FT.items():
+        plan = a_plan()
+        plan.intake = "weir"
+        plan.brook = [(700.0, 100.0), (700.0, 300.0), (700.0, 600.0)]
+        s = Settlement(int(plan.W), int(plan.H))
+        s.pin_knob("weir_form", form)
+        hg.draw_intake(s, plan, (700.0, 300.0))
+        rec = s.M["weirs"][0]
+        assert rec["form"] == form and rec["w"] == pytest.approx(thick / plan.ftpx)
+        ink = s.out[[i for i, t in enumerate(s.out_cls) if t == "weir"][0]]
+        assert 'stroke="#8FA6AE"' in ink  # the upstream lip
+        glyphs.add(ink.split('fill="', 1)[1][:7])
+    assert len(glyphs) == 4, "four forms, four bodies a reader can tell apart"
+
+
+def test_the_race_opens_out_of_the_brook_bank() -> None:
+    """269 B22 (research/water/310): the head race begins at the brook's bank, not on the stream. Its first stroke is
+    carried back to the tap and the brook's bed moved to paint after it, so the bank is where the ditch begins."""
+    from l7r.diagram.hamletgen.water.brook import open_race_mouth
+
+    s = Settlement(1000, 1000)
+    s.stream([(500.0, 100.0), (500.0, 300.0), (500.0, 600.0)], width=7)
+    s.field_channel([(502.6, 303.7), (560.0, 385.0)], "#7FA3BD", 6.0, 6.0, late=True)
+    brook = s.M["streams"][0]
+    open_race_mouth(s, (500.0, 300.0))
+    assert not any(w["rec"] is brook for w in s.water) and s.late_water[-1]["rec"] is brook
+    race = s.M["drawn_channels"][0]
+    assert race["pts"][0] == [500.0, 300.0]
+    assert s.late_water[0]["bed"].count(' d="M500.0,300.0 L') == 1
+    # no brook through the tap (or none at all): nothing moves
+    s2 = Settlement(1000, 1000)
+    s2.field_channel([(502.6, 303.7), (560.0, 385.0)], "#7FA3BD", 6.0, 6.0, late=True)
+    open_race_mouth(s2, (500.0, 300.0))
+    assert s2.M["drawn_channels"][0]["pts"][0] != [500.0, 300.0]
 
 
 def test_the_weir_bar_is_placed_off_the_fall_when_the_intake_is_not_on_the_brook() -> None:

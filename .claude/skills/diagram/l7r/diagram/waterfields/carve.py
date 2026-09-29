@@ -16,6 +16,7 @@ from l7r.diagram.settlement._geom import PointGrid
 
 from .banks import StrokeIndex, polyline_cum
 from .frame import BANK_MARGIN, CANAL_BERM_FT, Poly, Pt, _at_f, _f_at_u, _Frame, _miter_normals, _pip, _seg_d, _Thread, at_f_cache, plot_boxes, taper_w
+from .furrows import TRACT_PLOT_TURN_RAD, tract_ways
 from .palette import DRY_CROPS, RICE_GREENS
 from .sector_rows import _BankAt, _sector_body_rows, _sector_canal_closers, _sector_closing_rank
 
@@ -510,6 +511,7 @@ def _dry_fields(
     furrow_spread: float = 1.1,
     grain_drift: float = 0.0,
     supply: Sequence[dict[str, Any]] = (),
+    tract0: int = 0,
 ) -> list[dict[str, Any]]:
     """DRY FIELDS (hatake) on the UPSLOPE margin the irrigation cannot command - the band just ABOVE the
     supply canal. Grain and pulses (barley/wheat, millet, buckwheat, field soy) in an irregular PATCHWORK of
@@ -527,7 +529,8 @@ def _dry_fields(
     px: a THIN fringe (default) for a water-rich valley floor.
 
     FURROWS run along the CONTOUR (perpendicular to the fall), the traditional ridge-along-contour that dams
-    rain and checks runoff - so the furrow direction is the contour heading, varied per plot; `theta` per plot."""
+    rain and checks runoff - or down to the outfall, set TRACT BY TRACT (`tract_ways`); `theta` per plot, and `tract`
+    numbered from `tract0`, so a caller laying a second band keeps its tracts apart from the first."""
     plots = []
     plot = plot * g  # the along-canal parcel width and the 36px row depth below are REAL-FEET
     # quantities tuned at the village grain (1px = 2ft; ~1 mu strips per Buck) - unscaled at a
@@ -567,33 +570,14 @@ def _dry_fields(
         # only: the vetted village maps carry the same (milder, in-band) artifact byte-stably.
         bounds.insert(-1, (bounds[-1] + bounds[-2]) / 2)
 
-    # FURROW ANGLE varies PER PLOT (a mosaic of family strips): each plot drops its ridges into the LARGEST gap
-    # between the angles of its already-placed NEIGHBORS, guaranteeing separation (drives dry_plot_furrows_vary).
-    HW = furrow_spread
-    placed: list[tuple[float, float, float]] = []
-    # THE FURROW-VARIETY NEIGHBORHOOD SCALES WITH THE PLOTS (2026-08-19). It was a flat 56 px, on the
-    # reasoning - sound in itself - that `dry_plot_furrows_vary` judges adjacency at a fixed px radius
-    # and "a generator that varies over a WIDER circle than the check demands is safely conservative".
-    # 56 was indeed wider than the check's 50. What defeated it is that BOTH were ABSOLUTE radii while
-    # the thing they measure grew: the hem's plots now sit 54-59 px apart, so the map fell off a
-    # ONE-FOOT CLIFF depending on its spacing, and the generator and the check went blind together.
-    #
-    # The degeneration is silent, which is why it survived. This is a maximize-separation algorithm -
-    # it seats each plot's furrows in the WIDEST angular gap between the neighbors it can see - and
-    # with NO neighbor in range `edges` collapses to `[lo, hi]`, the widest gap is the whole
-    # allowance, and every plot gets `(lo+hi)/2` = `theta0`, the contour angle, plus a +/-1.7 deg
-    # jitter. Measured on the shipped pool before this fix:
-    #     kashikawa closest 54.4 ft -> sees neighbors -> 33.98 deg of spread   (healthy)
-    #     mizuguchi closest 55.7 ft -> sees neighbors -> 32.37 deg             (healthy)
-    #     sawada    closest 57.0 ft -> sees NONE      ->  3.27 deg             (collapsed)
-    #     inashiro  closest 58.5 ft -> sees NONE      ->  3.15 deg             (collapsed)
-    # One foot of spacing was the whole distance between a patchwork of family strips and one ruled
-    # hatch across the hem - on maps whose `meta.dry_furrows_vary` declares the patchwork.
-    #
-    # Scaled off the nominal cell (`plot * g`) rather than a constant, so it tracks the plots on THIS
-    # map. 1.6 keeps it comfortably wider than the check's `1.25 * mean_side`, preserving the original
-    # conservative-generator intent - the intent was right, only its units were wrong.
-    ADJ2 = (1.6 * plot * g) ** 2
+    # THE ROW DIRECTION IS SET TRACT BY TRACT (269 B06; research/fields.html 'Why do neighboring dry plots run their
+    # furrows different ways?', fields/180). The land set the direction: a run of neighboring plots on one lie of ground
+    # shares one row direction, turned a few degrees from plot to plot, and the direction changes at the seam between
+    # tracts, by as much as a right angle - along the contour or down to the outfall, never straight down a steep slope.
+    # The seams, not every plot boundary, are what read the family strips apart. This replaced a per-plot rule that
+    # seated each plot's angle in the widest gap between its neighbors': it forbade the neighbors that share a
+    # direction, which the record makes the common case. `tract_ways` rolls each tract's heading.
+    tracts = tract_ways(R, len(bounds) - 1, theta0, furrow_spread)
     prev_crop = R.choice(list(DRY_CROPS))
     # THE BERM IS MEASURED FROM THE CANAL'S BANK, NOT ITS CENTERLINE (settlement-review 2026-08-17).
     # This used to be a flat `8 * g` from the centerline, which silently bundled the canal's own
@@ -738,13 +722,9 @@ def _dry_fields(
             # the fork reads as ordinary.
             if _quad_in_berm(quad):
                 continue
-            lo, hi = theta0 - HW, theta0 + HW  # furrows stay within HW rad of the contour
-            nb = sorted(min(hi, max(lo, t)) for (px, py, t) in placed if (cx - px) ** 2 + (cy - py) ** 2 < ADJ2)
-            edges = [lo] + nb + [hi]
-            gi = max(range(len(edges) - 1), key=lambda j: edges[j + 1] - edges[j])  # the widest gap between neighbors
-            theta = min(hi, max(lo, (edges[gi] + edges[gi + 1]) / 2 + R.uniform(-0.03, 0.03)))
-            placed.append((cx, cy, theta))
-            plots.append({"poly": [(round(p[0], 1), round(p[1], 1)) for p in quad], "crop": crop, "fill": fill, "furrow": furrow, "theta": round(theta, 3)})
+            tract, heading = tracts[i]
+            theta = heading + R.uniform(-TRACT_PLOT_TURN_RAD, TRACT_PLOT_TURN_RAD)  # the few degrees a plot turns within its tract
+            plots.append({"poly": [(round(p[0], 1), round(p[1], 1)) for p in quad], "crop": crop, "fill": fill, "furrow": furrow, "theta": round(theta, 3), "tract": tract0 + tract})
     return plots
 
 

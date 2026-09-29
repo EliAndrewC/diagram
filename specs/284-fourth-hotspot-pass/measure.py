@@ -2,8 +2,9 @@
 
     python3 specs/281-third-hotspot-pass/measure.py before   # the clone at the base commit: before-* keys
     python3 specs/281-third-hotspot-pass/measure.py after    # the base worktree, then the clone, back to back
+    python3 specs/284-fourth-hotspot-pass/measure.py after-main   # main as merged into the clone (MAIN), then the clone
 
-The base is `f52ed6aa8`, main when this work began (281 landed), in a detached worktree at `/tmp/base281` (created if missing). Seconds
+The base is `5f15c65bd`, main as this work was re-based on it (281 and 282 landed), in a detached worktree at `/tmp/base281` (created if missing). Seconds
 depend on the machine's load, so the after-run takes the base and the clone one straight after the other: the base as
 `base-rerun-*` beside the recorded `before-*`, the clone as `after-*`. Counts (`counts.py`, from the profiles) do not.
 """
@@ -18,19 +19,28 @@ import subprocess
 import sys
 from pathlib import Path
 
-BASE = "f52ed6aa8"
+BASE = "5f15c65bd"
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 WT = Path("/tmp/base284")
+# MAIN AS MERGED (feature 269 landed while this work ran, with its own changes to the stages): the timing that says what
+# this feature buys over the main it lands on, beside the base the counts were set against
+MAIN = "7c0c94f94"
+MAIN_WT = Path("/tmp/main284")
 ENGINE = Path(".claude/skills/diagram/l7r/diagram")
 # the named callee of each entry bucket (plan C's table); every bucket also records its TOTAL
 BUCKET_CALLEES: dict[str, tuple[str, ...]] = {
     "router": ("_route.<locals>.is_free", "_route.<locals>.in_band", "heapq.heappop"),
     "field": ("carve_comb", "_carve_sector", "close_seams"),
-    "notice": ("_fits", "label_seat_clear", "place"),
+    "notice": ("HousesMixin._fits", "CaptionProbesMixin.label_seat_clear", "place"),
     "bamboo": ("bamboo_blocked",),
     "page": ("merge_primitives", "drop_offmap"),
     "edge_scan": ("edge_dist",),
+    "grove_draw": ("TreeStandsMixin._crown_seat_clear",),
+    "seams": ("_absorb",),
+    "commons": ("grass_scatter",),
+    "flush": ("merge_lines",),
+    "mats": ("point_in_poly", "_quad_gap"),
     "clip": ("seg_dist",),
     "fabric": ("RingIndex.__init__",),
     "toll": ("dict.get",),
@@ -97,6 +107,13 @@ def main() -> int:
     if mode == "before":  # the BASE, wherever the clone has moved since (first taken in the clone while it stood at BASE)
         t, c, load = run(WT, scratch / "before")
         rec.update(keys("before", t, c, f"harness.py in the detached worktree of {BASE} (the unmodified engine)", command, load))
+    elif mode == "after-main":
+        if not MAIN_WT.exists():
+            subprocess.run(["git", "-C", str(ROOT), "worktree", "add", "--detach", str(MAIN_WT), MAIN], check=True, capture_output=True)
+        t, c, load = run(MAIN_WT, scratch / "main")
+        rec.update(keys("main-rerun", t, c, f"harness.py in the detached worktree of {MAIN} (main as merged), run just before the clone's", command, load))
+        t, c, load = run(ROOT, scratch / "after")
+        rec.update(keys("after", t, c, "harness.py in the clone, run just after main's", command, load))
     else:
         t, c, load = run(WT, scratch / "base")
         rec.update(keys("base-rerun", t, c, f"harness.py in the detached worktree of {BASE}, run just before the clone's", command, load))

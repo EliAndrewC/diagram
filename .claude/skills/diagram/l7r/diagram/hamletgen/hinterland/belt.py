@@ -60,6 +60,23 @@ def fringe_profile(uv: Sequence[tuple[float, float]], cols: int, half: float, v_
     return [(v, u if u is not None else known[min(known, key=lambda j: abs(j - k))]) for k, (v, u) in enumerate(raw)]
 
 
+def trim_receding_ends(cols: Sequence[tuple[float, float]], drop: float) -> list[tuple[float, float]]:
+    """The fringe profile `cols` ((v, u), in order across the wind) without its END columns that fall back more than `drop`
+    downwind of their inner neighbor, from each end inward while that holds.
+
+    THE BELT STANDS ACROSS THE WIND (settlement-review of Sawada at the 269 landing). Where a cluster lies along the wind,
+    the column at the belt's end leans on a house far downwind of the rest - Sawada's end column stood 766 ft behind its
+    neighbor - and the band followed it into an arm lying along the wind: 500 ft of one row of trees, 35-60 ft across,
+    sheltering nothing, where research/vegetation asks a belt never thinner than 80 ft. A column that recedes more than a
+    belt's own depth is not the windward fringe any more; the belt ends at the column before it."""
+    out = list(cols)
+    while len(out) > 2 and out[1][1] - out[0][1] > drop:
+        out.pop(0)
+    while len(out) > 2 and out[-2][1] - out[-1][1] > drop:
+        out.pop()
+    return out
+
+
 BELT_LANE_CLEAR_FT = 12.0  # ft: a belt whose band a lane runs along stands this far beyond the lane's tread
 
 
@@ -278,7 +295,14 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     _near_n = [0]  # how many of the band's vertices are its near face, recorded for the depth measure (the far face has more)
 
     def band(span_f: float, back: float) -> Poly:
-        cols = past_the_lanes(round_the_houses(profile(span_f), uv, BELT_NEAR_FT + _sun_off), _lanes, half * span_f / COLS, near=BELT_NEAR_FT, depth=BELT_NEAR_FT + BELT_DEPTH_FT, wet=_in_marsh)
+        cols = past_the_lanes(
+            round_the_houses(trim_receding_ends(profile(span_f), BELT_DEPTH_FT), uv, BELT_NEAR_FT + _sun_off),
+            _lanes,
+            half * span_f / COLS,
+            near=BELT_NEAR_FT,
+            depth=BELT_NEAR_FT + BELT_DEPTH_FT,
+            wet=_in_marsh,
+        )
         # 36 px, not 24. `village_grove` filters clumps against every structure and crop, and it
         # filters the near face hardest - so a belt whose POLYGON sits clearly windward can still
         # have its DRAWN clumps average back onto the cluster's own line, which is what

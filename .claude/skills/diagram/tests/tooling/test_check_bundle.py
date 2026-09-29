@@ -44,6 +44,8 @@ def test_the_keys_a_question_cites_are_read_off_its_links() -> None:
         ('<p>en.wikipedia "Edo" (https://en.wikipedia.org/wiki/Edo)</p>', "https://en.wikipedia.org/wiki/Edo"),
         ("<p>kotobank (https://ja.wikipedia.org/wiki/町屋_(商家))</p>", "https://ja.wikipedia.org/wiki/町屋_(商家)"),
         ("<p>a book, no pointer</p>", ""),
+        ("<p>a paper (in Japanese; https://www.agrinews.co.jp/news/index/174809), 5 August 2023</p>", "https://www.agrinews.co.jp/news/index/174809"),
+        ("<p>a reference answer (https://crd.ndl.go.jp/entry/index.php?id=1&amp;page=ref_view)</p>", "https://crd.ndl.go.jp/entry/index.php?id=1&page=ref_view"),
         ('<p>NDL (https://crd.ndl.go.jp/reference/entry/index.php?page=ref_view&amp;id=1000130073)</p>', "https://crd.ndl.go.jp/reference/entry/index.php?page=ref_view&id=1000130073"),
     ],
 )

@@ -106,6 +106,24 @@ def test_channel_footbridges_plank_each_long_ditch_perpendicular():
     assert all(190 < b["y"] < 210 for b in s.M["bridges"])  # both sit ON the ditch line
 
 
+def test_channel_footbridges_lay_every_crossing_in_the_settlement_s_rolled_form():
+    """269 B21 (research/water/290): a settlement's ditch crossings all take one form - a single log, logs under earth,
+    or a planked deck - declared in meta and on each deck; the form changes the glyph, never the deck's box."""
+    boxes = {}
+    for form in settlement.city.bridges.FOOTBRIDGE_FORMS:
+        s = _crop_settlement()
+        s.pin_knob("footbridge_form", form)
+        s.M["fields"] = [{"outline": [[50, 120], [850, 120], [850, 280], [50, 280]]}]
+        s.M["field_ditches"] = [{"poly": [[100, 200], [400, 200], [800, 200]], "w": 5, "role": "main"}]
+        assert s.channel_footbridges(spacing=320) == 2
+        assert s.M["meta"]["footbridge_form"] == form and all(b["form"] == form for b in s.M["bridges"])
+        boxes[form] = [(b["x"], b["y"], b["rot"], b["span"], b["w"]) for b in s.M["bridges"]]
+    assert boxes["log"] == boxes["earthen"] == boxes["plank"]
+    glyphs = {f: settlement.city.bridges.deck_glyph(0, 0, 90, 20, 2, f) for f in settlement.city.bridges.FOOTBRIDGE_FORMS}
+    assert 'rx="0.7"' in glyphs["log"] and "#BFA274" in glyphs["earthen"] and 'height="2.6"' in glyphs["plank"]
+    assert len(set(glyphs.values())) == 3
+
+
 def test_channel_footbridges_slides_a_plank_clear_of_a_farmhouse():
     s = _crop_settlement()
     s.M["fields"] = [{"outline": [[50, 220], [750, 220], [750, 380], [50, 380]]}]  # paddy straddling the y=300 ditch

@@ -1,0 +1,20 @@
+# 269 S1 handoff - settlements: is every household drawn (B42)
+
+- SECTION=settlements/030
+- KEY=nawata-sangiin-2006
+- KEY=okada-bitchu-2004
+- KEY=kotobank-inkyo
+- KEY=kotobank-inkyoya
+
+B42 KNOB - settlements 030 now cites the household of five (canon) against the registers (Bitchu 1870 about 6.4, commonest 5; Echizen about 5.8; two Nihonmatsu villages about 6.6; Suwa about 8 in the seventeenth century falling to about 4 in the nineteenth), cites the stem family as the ordinary later-Edo household with joint households up to a quarter in Bitchu, and adds a finding the record lacked: the retirement house (inkyoya), a second small house in the same yard with its own entrance, where the old couple lived as a separate household of the same family. It was strong from the Pacific coast west of Kanto through the Inland Sea, Kyushu and Shikoku, and thin in the northeast and on the Sea of Japan side, where the generations stayed under one roof. So there are two attested forms, rolled per settlement: "one roof" or "a farmhouse plus a retirement house". The early-Edo house plot, with dependents' huts counted as one hearth, is recorded and deliberately not drawn (a project decision, with a GROUNDS note). - For the hamlet and village generators, the one-house-per-household band (0.85-1.05) is unchanged and needs no change. What is new is a per-settlement knob: under the retirement-house form, some homesteads carry a small second dwelling in their yard, near the farmhouse and entered separately. It is an outbuilding of that household: it does not count toward the declared households or against the band, and the page's population sentence is unchanged. The share of homesteads that have one, the weighting between the two forms, and the retirement house's size are GUESSES (an absence note, searched 2026-09-27). The engine does not draw a retirement house today, so it needs a feature to draw (and a kind for the interactive page, written from 030) before the knob can be encoded. The spec paragraph in 030 states the rule until then.
+
+## Left open, and notes for the orchestrator
+
+- **The share of homesteads with a retirement house, and its size**: no readable source gives either (an absence note is in 030). These would be a GM question only if the generator work wants a number. Otherwise they are guesses to calibrate against the drawn maps.
+- **`kotobank-yashiki` collision avoided, not merged.** The fuller kotobank page for 屋敷 (the house plot) holds the same Heibonsha passage on the early-Edo plot with dependents' huts. `kotobank-yashiki` (11780) already exists on origin/main, from 271's diagram-research-1, at a different kotobank id (145028), and this clone is about 280 commits behind main, so I cited the smaller 隠居屋 page as a new key, `kotobank-inkyoya`, instead. Whoever merges can keep both, or repoint the note `kotobank-inkyoya` to `kotobank-yashiki` once that entry is in the clone.
+- **The glossary term `kadoya` is reserved in diagram-research-1** (12200). 030 therefore says "gate-houses" in English and uses no `kadoya` term.
+- **Two sources were PDFs.** `make source-pages` cannot read them, so I downloaded them with curl and converted them with `pdftotext -layout` into the S1 pages directory (`/tmp/l7r-check/269-s1-pages`, files 01 and 02; the MANIFEST lists them). The source-reader read those text files. The check sessions' `quote-check` needs the same route: `make quote-verbatim` may report the two PDF keys as unreadable when they are not.
+- **`/tmp/l7r-check/269-s1-pages/07-kotobank.jp.txt` is the wrong page.** kotobank served 日本教育学会 for the 名子 URL. Nothing is cited from it.
+- **Not claimed by anyone else** at the start: B42 was free on RESEARCH-CLAIMS.md.
+- **No section owned by 265, 267 or 268 owes a correction** from this finding.
+- **Pre-existing question-size failures seen but not touched**, because they are not S1's: homesteads 210 (20,107), religion-and-death 160 (20,082), vegetation 120 (20,095), water 070 (20,442), water 270 (21,396).

@@ -173,9 +173,19 @@ def test_every_pool_belt_keeps_its_depth_across_its_windward_face(gen: str) -> N
     if not judged:
         # A BELT THE FRAME HOLDS WHOLE: every bin is cut by the page's edge, parted by a way or the brook, or a tip. That is
         # only honest when the belt really does stand against the page - every crown within its designed depth of the edge.
+        # STANDING AGAINST THE PAGE is judged per stretch: across every 40 ft bin, the belt's crown NEAREST the edge stands
+        # within its designed depth of it. The first form asked it of EVERY crown, which fails a belt that meets the page
+        # and is deeper than designed - Kuwabata's and Mizuguchi's at the 269 landing, their inmost crowns 116-163 ft in
+        # (2026-09-28) - while a thin belt standing off the page still fails, its nearest crown in some bin far from the edge.
         x0, y0, w, h = (float(c) for c in m["meta"]["view"])
         crowns = next(g for g in m["village_groves"] if g["role"] == "windbreak")["clumps"]
-        assert all(min(x - x0, y - y0, x0 + w - x, y0 + h - y) <= BELT_DESIGN_DEPTH_FT for x, y in crowns), "no bin judged, yet the belt stands off the page's edge"
+        q = {"NW": (-1.0, -1.0), "N": (0.0, -1.0), "W": (-1.0, 0.0)}[m["meta"]["windward"]]
+        ax, ay = q[1] / math.hypot(*q), -q[0] / math.hypot(*q)  # across the wind, as `belt_depths` bins it
+        near: dict[int, float] = {}
+        for x, y in crowns:
+            b = int((x * ax + y * ay) // DEPTH_BIN_FT)
+            near[b] = min(near.get(b, math.inf), min(x - x0, y - y0, x0 + w - x, y0 + h - y))
+        assert all(d <= BELT_DESIGN_DEPTH_FT for d in near.values()), f"no bin judged, yet the belt stands off the page's edge: {near}"
         return
     assert min(judged) >= MIN_BELT_DEPTH_FT, f"belt depths per {DEPTH_BIN_FT:.0f} ft: {depths}"
 
