@@ -5,7 +5,9 @@ Split from hamletgen.py by feature 111; bodies verbatim. See hamletgen/CLAUDE.md
 
 from __future__ import annotations
 
+import math
 from collections.abc import Sequence
+from typing import Any
 
 from l7r.diagram.settlement import Settlement
 
@@ -207,12 +209,33 @@ def waterward_to_the_frame(s: Settlement) -> None:
         s.marsh(band_to_edge(rec["poly"], face, view), role="waterside")
         if len(s.M["marshes"]) == n:
             continue  # nothing open to scatter on: the wild ground there is all keep-out
+        # ...AND THE STRIP IS ONE RECORD WITH ITS EXTENSION, always (feature 287, homes wave 5): the two grounds as one ring -
+        # a hole keyholed, a keep-out between them (a lane) bridged by a zero-width seam - so the record is exactly the ground
+        # the reeds are drawn on and the strip it names runs to the view's edge. The extension used to stay its own record
+        # where the two could not join, which left the strip's record stopping inside the frame.
         joined = unary_union([Polygon(rec["poly"]).buffer(0), Polygon(s.M["marshes"][-1]["poly"]).buffer(0)])
-        if isinstance(joined, Polygon) and not joined.interiors:  # one ring, as every marsh record is
-            s.M["marshes"].pop()
-            ring = [[round(float(x), 1), round(float(y), 1)] for x, y in list(joined.exterior.coords)[:-1]]
-            xs, ys = [q[0] for q in ring], [q[1] for q in ring]
-            rec.update(poly=ring, x=round((min(xs) + max(xs)) / 2, 1), y=round((min(ys) + max(ys)) / 2, 1), w=round(max(xs) - min(xs), 1), h=round(max(ys) - min(ys), 1))
+        s.M["marshes"].pop()
+        ring = [[round(float(x), 1), round(float(y), 1)] for x, y in one_ring(joined)]
+        xs, ys = [q[0] for q in ring], [q[1] for q in ring]
+        rec.update(poly=ring, x=round((min(xs) + max(xs)) / 2, 1), y=round((min(ys) + max(ys)) / 2, 1), w=round(max(xs) - min(xs), 1), h=round(max(ys) - min(ys), 1))
+
+
+def one_ring(g: Any) -> list[tuple[float, float]]:
+    """A polygon or a multipolygon as ONE ring whose inside is exactly its ground: each hole keyholed (`wet._keyholed`) and
+    each further piece spliced in along a zero-width seam from the ring's nearest vertex, walked the same way round - so an
+    even-odd reader counts the seam twice and the ground between the pieces stays outside."""
+    from l7r.diagram.settlement.land.wet import _keyholed, _signed_area  # noqa: PLC0415
+
+    pieces = sorted((p for p in getattr(g, "geoms", [g]) if p.geom_type == "Polygon" and not p.is_empty), key=lambda p: -p.area)
+    ring: list[tuple[float, float]] = list(_keyholed(pieces[0]))
+    for p in pieces[1:]:
+        loop: list[tuple[float, float]] = list(_keyholed(p))
+        i, j = min(((a, b) for a in range(len(ring)) for b in range(len(loop))), key=lambda ab: math.dist(ring[ab[0]], loop[ab[1]]))
+        loop = loop[j:] + loop[:j]
+        if _signed_area(loop) * _signed_area(ring) < 0:
+            loop = [loop[0], *reversed(loop[1:])]  # ...the same way round as the ring, so the piece adds
+        ring = ring[: i + 1] + loop + [loop[0], ring[i]] + ring[i + 1 :]
+    return ring
 
 
 def stage_labels(s: Settlement, plan: SitePlan) -> None:

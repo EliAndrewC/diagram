@@ -124,6 +124,21 @@ def corridor_chain(M: Mapping[str, Any], house: Pt, to_connector: bool = True) -
     return [q for k, q in enumerate(path) if k == 0 or math.dist(q, path[k - 1]) > 1e-6]
 
 
+def field_chain(M: Mapping[str, Any]) -> Poly | None:
+    """The field's reserved corridor (`homesteads.stages.reserve_field_corridor`) as a run from the bund toward the network:
+    its legs in the order the seating recorded them, then on along the exit strip to the connector's start, as a house's
+    chain runs (`corridor_chain`). None where the seating reserved none."""
+    legs = [c["pts"] for c in M.get("access_corridors") or [] if c.get("field") and len(c.get("pts") or ()) >= 2]
+    if not legs:
+        return None
+    path: Poly = [(float(legs[0][0][0]), float(legs[0][0][1]))] + [(float(b[0]), float(b[1])) for _a, b in legs]
+    start, strip = connector_start(M), M.get("access_exit")
+    if start is not None and strip:
+        a, b = (float(strip[0][0]), float(strip[0][1])), (float(strip[1][0]), float(strip[1][1]))
+        path += [seg_closest(start[0], start[1], a, b), start]
+    return [q for k, q in enumerate(path) if k == 0 or math.dist(q, path[k - 1]) > 1e-6]
+
+
 def _dedup(run: Poly) -> Poly:
     return [p for j, p in enumerate(run) if j == 0 or math.dist(p, run[j - 1]) > 1e-6]
 

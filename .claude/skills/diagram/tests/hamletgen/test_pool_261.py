@@ -20,10 +20,11 @@ laid, and the connector crosses a brook at most once (`track.connector_keeps_the
 too (fold, ruled run along the frame and on the page, the screen axis): `hamletgen/water/brook.py:feed_brook` judges every
 candidate, the routes round the field included, on the course as drawn (`drawn_course`) and refuses the site past the last
 (`BrookRefused`), and the sink judges each confluence it adds with the brook as drawn (`sink.confluence_keeps_the_brook`),
-on the violating cases in `tests/hamletgen/test_brook.py` and `test_sink.py`; the pool's brook non-vacuity stays, for the
-way that reaches the field across it. What is left is KEPT because no
-placer guarantees it yet, and each test says why:
-- a way reaching the field: `settle.py:settle_reach` reports `field_unreached`, it does not refuse;
+on the violating cases in `tests/hamletgen/test_brook.py` and `test_sink.py`. Wave 5 retired a way reaching the field,
+with the pool's brook non-vacuity that served it: the seating reserves the field's corridor with the exit strip, or seats no
+one on the margin (`homesteads/stages.py:reserve_field_corridor`), and the web draws it first where no way reaches the field
+(`ways/settle.py:settle_field`), on the violating cases in `tests/hamletgen/test_homesteads_287.py` and
+`tests/hamletgen/ways/test_settle.py`. What is left is KEPT because no placer guarantees it yet, and each test says why:
 - the board caption off the roofs, nearest its board and off the crowns: guaranteed except at plan D12's terminal, kept
   for the GM (`meta.kosatsuba_d12`).
 """
@@ -37,8 +38,6 @@ import os
 
 import pytest
 
-from l7r.diagram.hamletgen.ways import law
-
 SKILL = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 GENS = sorted(glob.glob(os.path.join(SKILL, "pool", "hamlets", "*", "*.gen.py")))
 IDS = [os.path.basename(g).removesuffix(".gen.py") for g in GENS]
@@ -47,28 +46,6 @@ IDS = [os.path.basename(g).removesuffix(".gen.py") for g in GENS]
 def _manifest(gen: str) -> dict:
     with open(gen.removesuffix(".gen.py") + ".json", encoding="utf-8") as fh:
         return json.load(fh)
-
-
-def _brooks(m: dict) -> list[list[tuple[float, float]]]:
-    return [[(float(p[0]), float(p[1])) for p in s["poly"]] for s in m.get("streams", []) if len(s.get("poly", ())) >= 2]
-
-
-def test_the_pool_has_a_brook_to_cross() -> None:
-    brooked = [g for g in GENS if _brooks(_manifest(g))]
-    assert len(brooked) >= 3, "non-vacuity: most scripted hamlets carry a brook"
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_a_way_reaches_the_field(gen: str) -> None:
-    """FR-012 / SC-008: at least one of the hamlet's own ways (not the track out) comes within the 60 ft `lanes_reach_something`
-    asks of the field - its paddy or its dry hem, which is the same worked ground. Inashiro, Kashikawa and Mizuguchi, whose
-    houses stand across the brook from their rice, each lost that way at one step of this feature."""
-    m = _manifest(gen)
-    if not _brooks(m):
-        pytest.skip("no brook stands between this hamlet and its field (FR-012 is about the crossing)")
-    assert [f for f in m.get("fields", []) if f.get("outline")] or [d for d in m.get("dry_plots") or [] if d.get("poly")], "non-vacuity: the map has a field"
-    near = law.field_reach_ft(m)
-    assert not law.field_unreached(m), f"the nearest way stops {near:.0f} ft from the field"
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)

@@ -3,7 +3,10 @@ the rule and of one that breaks it."""
 
 import math
 
+import pytest
+
 from l7r.diagram.hamletgen.ways import law
+from l7r.diagram.settlement.homestead_parts.stands import trunk_on_tread
 
 
 def _lane(*pts, **kw):
@@ -375,3 +378,15 @@ def test_a_lane_over_a_farmstead_fixture_is_named() -> None:
     assert law.over_a_fixture([(0.0, 6.5), (200.0, 6.5)], 3.0, law.fixture_quads(M)) is None
     assert law.over_a_fixture([(0.0, 50.0), (100.0, 1.0)], 3.0, law.fixture_quads(M)) == 0, "an end standing in it"
     assert law.lanes_over_fixtures({"lanes": M["lanes"]}) == []
+
+
+def test_a_lane_through_a_yard_persimmons_trunk_is_named_and_one_under_its_crown_is_not() -> None:
+    """Feature 287, homes H43 (cohort seed 42: a straggler through a neighbor's persimmon): the trunk's box, the seating's
+    own (`TRUNK_FT`), is a fixture quad the web keeps its tread off; the crown's reach is not - a lane may pass under it."""
+    tree = {"x": 100.0, "y": 0.0, "r": 11.5}
+    M = {"persimmons": [tree, {"r": 3.0}], "meta": {"ftpx": 2.0}, "lanes": [_lane((0.0, 1.0), (200.0, 1.0), w=3.0), _lane((0.0, 9.0), (200.0, 9.0), w=3.0)]}
+    (quad,) = law.fixture_quads(M)
+    assert max(abs(q[0] - 100.0) for q in quad) == pytest.approx(law.TRUNK_FT / 2.0 / 2.0), "the box read in px at the map's scale"
+    assert law.lanes_over_fixtures(M) == [(0, 0)], "the trunk on the tread"
+    assert trunk_on_tread(100.0, 0.0, M["lanes"][:1]) and not trunk_on_tread(100.0, 0.0, M["lanes"][1:])
+    assert law.over_a_fixture([(0.0, 9.0), (200.0, 9.0)], 3.0, law.fixture_quads(M)) is None, "under the crown, clear of the trunk"

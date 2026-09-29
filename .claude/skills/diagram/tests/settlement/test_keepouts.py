@@ -7,6 +7,8 @@ from __future__ import annotations
 import math
 import random
 
+import pytest
+
 from l7r.diagram.settlement import Settlement, point_in_poly
 from l7r.diagram.settlement._geom.primitives import FIELD_KEEPOUT_EPS, chain_distance, chain_violated, edge_dist, facing_chains, keepout_ring, ring_offset, seg_dist, simplify_ring
 
@@ -154,3 +156,24 @@ def test_a_noisy_band_takes_no_more_chords_than_the_cap_and_still_contains_every
     assert all(point_in_poly(x, y, outer) or edge_dist(x, y, outer) < 1e-6 for x, y in ring)
     chains = facing_chains(ring, (1500.0, 500.0), 1.0)
     assert 1 <= sum(len(c) for c in chains) <= FACING_CHORD_CAP
+
+
+def test_a_band_the_inner_tolerance_misses_at_an_acute_corner_is_contained_all_the_same(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 287, homes wave 5 (the polder soak's `test_the_polder_dikes_keep_out_contains_its_drawn_band`): the inner
+    edge's tolerance is a heuristic - at an acute corner of the crest the band's inner corner stands 38.6 px in, and the
+    un-mitered inner edge reaches 19.5. The ring is asked of every covered point and pushed until it holds them all; past
+    `KEEPOUT_GROWTHS` pushes the band is refused by name, never a ring that leaves part of it out."""
+    from shapely.geometry import Polygon
+
+    from l7r.diagram.settlement._geom import primitives
+
+    crest = [(0.0, 0.0), (400.0, 0.0), (200.0, 60.0)]  # a sliver: the apex at (0, 0) turns through ~163 degrees
+    inner = [(float(x), float(y)) for x, y in Polygon(crest).buffer(-6.0, join_style=2).exterior.coords[:-1]]
+    band = crest + inner
+    old = ring_offset(crest, 1.0, 6.0 + 3.0)
+    assert not all(point_in_poly(x, y, old) for x, y in band), "the case: the heuristic ring leaves the band's inner corner out"
+    keep, chords = keepout_ring(crest, band, 1.0)
+    assert chords == crest and all(point_in_poly(x, y, keep) for x, y in band)
+    monkeypatch.setattr(primitives, "KEEPOUT_GROWTHS", 1)
+    with pytest.raises(ValueError, match="contains its band"):
+        keepout_ring(crest, band, 1.0)

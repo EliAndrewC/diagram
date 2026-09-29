@@ -122,6 +122,15 @@ def needs_pocket(s: Any, x: float, y: float) -> bool:
     return all(math.hypot(x - px, y - py) > reach for px, py in pockets) and surface_water_dist(s.M, x, y) > reach
 
 
+def watered(s: Any, x: float, y: float, well: bool) -> bool:
+    """THE ONE PREDICATE of a household's water (feature 287, homes wave 5; `test_every_household_can_reach_water`): a
+    household whose house stands at (x, y) reaches water - it carries its own well pocket (`well`), or a pocket already laid
+    or surface water stands within `WATER_REACH_FT` (`needs_pocket` asks no more of it). Asked of the house where it is
+    PLACED: the pocket was decided at the point the seat was sought from, and the placer may move the house off it (the
+    envelope's computed move, the dispersed slides), so a candidate carried out of every pocket's reach is refused."""
+    return well or not needs_pocket(s, x, y)
+
+
 def household_parts(s: Any, x: float, y: float, kind: str, role: Any) -> tuple[tuple[float, float, bool, bool] | None, str | None, bool]:
     """What the household about to be seated at (x, y) carries (plan M5): its lot (the k-th plain household takes lot
     k), the byre form its bundle reserves a stall for (a keeper on a household form), and whether it carries a well
@@ -133,12 +142,13 @@ def household_parts(s: Any, x: float, y: float, kind: str, role: Any) -> tuple[t
     form = getattr(s, "_byre_form", None) if lot is not None and lot[3] else None
     well = kind == "plain" and needs_pocket(s, x, y)
     s._household_byre, s._household_well = form, well
+    s._household_watered = kind == "plain"  # the placer holds a household's candidates to `watered`
     s._household_fixtures = lots.fixtures_of(k) if lots is not None and lot is not None else ()
     return lot, form, well
 
 
 def seat_parts_done(s: Any) -> None:
-    s._household_byre, s._household_well, s._household_fixtures = None, False, ()
+    s._household_byre, s._household_well, s._household_fixtures, s._household_watered = None, False, (), False
 
 
 def record_parts(s: Any, rec: dict[str, Any], geom: Any, form: str | None) -> None:

@@ -5,7 +5,7 @@ from __future__ import annotations
 import math
 import random
 import types
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Iterator, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_dist
@@ -271,6 +271,15 @@ def shapes_drawn_at(drawn: float) -> list[str]:
     return held or [min(CLUSTER_DRAWN_ASPECT, key=lambda k: min(abs(drawn - CLUSTER_DRAWN_ASPECT[k][0]), abs(drawn - CLUSTER_DRAWN_ASPECT[k][1])))]
 
 
+def in_a_shapes_band(houses: Sequence[dict[str, Any]]) -> bool:
+    """THE ONE PREDICATE of `test_the_cluster_draws_inside_the_band_of_the_shape_it_declared` (feature 287, homes wave 5):
+    do the houses draw an aspect (`cluster_aspect`) some shape's band holds (`CLUSTER_DRAWN_ASPECT`)? Every aspect is at
+    least round's floor, so the one way out is past the longest band's ceiling - elongated's 12:1 - where `shapes_drawn_at`
+    could only name the nearest band, which the drawing breaks. `seat_every_household` keeps no seating that fails it."""
+    drawn = cluster_aspect([h["x"] for h in houses] or [0.0], [h["y"] for h in houses] or [0.0])
+    return any(lo <= drawn <= hi for lo, hi in CLUSTER_DRAWN_ASPECT.values())
+
+
 def declare_cluster_shape(houses: Sequence[dict[str, Any]], shape: str | None, seed: int) -> dict[str, Any]:
     """The cluster shape the manifest declares, and the plan keeps: the rolled shape wherever the houses draw it, and
     otherwise the knob RESOLVED OVER THE SHAPES THE DRAWING ADMITS (feature 287, homes H05, plan D4) - `shapes_drawn_at`,
@@ -307,7 +316,9 @@ def seat_every_household(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     tried = [placed]
     ladder = margin_ladder(plan, plan.field_archetype in POLDER_ARCHETYPES)
     toe: Any = None
-    for margin in ladder if placed < want else ():
+    # ...AND A SEATING WHOSE HOUSES DRAW NO SHAPE'S BAND IS NOT KEPT (feature 287, homes wave 5): past the longest band's
+    # ceiling (`in_a_shapes_band`, a string past 12:1) the margin is taken back as one that seated too few is
+    for margin in ladder if placed < want or not in_a_shapes_band(s.M.get("houses") or []) else ():
         # A RUNG WITH NO DRY WAY OUT IS NOT SEATED (feature 287, ways W23): `seat_cluster` asked the head; each rung is
         # asked the same, lazily, before the houses on it are taken back
         toe = (s.toe_band() or None,) if toe is None else toe
@@ -319,10 +330,12 @@ def seat_every_household(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         s.M["meta"]["seat_offwind"] = bool(margin.get("offwind"))
         placed, cloud = _seat_households(s, plan)
         tried.append(placed)
-        if placed >= want:
+        if placed >= want and in_a_shapes_band(s.M.get("houses") or []):
             break
     if placed < want:
         raise SiteRefused(f"{plan.spec.name} (seed {plan.spec.seed}): no margin seats all {want} households - seated {tried} on the {len(tried)} margin(s) tried")
+    if not in_a_shapes_band(s.M.get("houses") or []):
+        raise SiteRefused(f"{plan.spec.name} (seed {plan.spec.seed}): no margin seats its households inside a cluster shape's band")
     s.M["meta"]["seat_margin"] = len(tried)
     return placed, cloud
 
@@ -347,6 +360,50 @@ def corridor_ground(s: Settlement) -> Callable[[list[Pt]], bool]:
         return bool(memo["law"].on_lawful_ground(memo["law"].squared(run), ACCESS_WIDTH))
 
     return ground
+
+
+def reserve_field_corridor(s: Settlement) -> bool:
+    """THE FIELD'S CORRIDOR, reserved with the exit strip (feature 287, ways W03; homes wave 5): on a brook map a way of the
+    hamlet's own must reach its field (`law.field_unreached`), and the web used to look for one only among what the seating
+    had left - reported where none kept the law, never refused. So the run the web draws first is reserved before any house
+    stands: the ways' own field paths from the tree, the straight ones and then the ones the web's router threads
+    (`corridors.field_runs`, `routed_field_runs`: on to the bund, over the brook at a ford where it lies between) - the
+    first on lawful ground (`settle.corridor_on_lawful_ground`, the seating's question of every corridor). It joins the
+    tree, so no envelope covers it (`AccessTree.covers_box`) and no share of the wood floor stands on it
+    (`WoodShares.share`), and it is recorded as the tree's legs are (`field` on each), oriented toward the tree, for the web
+    to draw where no way of its own reaches the field (`settle.settle_field`), bowed round a shed on it as a house's
+    corridor is. True where one is reserved or the rule asks none (no brook, no field); False where no lawful run reaches
+    the field from this margin - `_seat_households` then seats no one on it and the ladder offers the next."""
+    from ..ways import law
+    from ..ways.bund import BRANCH_WIDTH, paddy_ground
+    from ..ways.corridors import field_runs, routed_field_runs
+    from ..ways.geom import memo_ground, worked_ground
+    from ..ways.settle import corridor_on_lawful_ground, field_router
+
+    tree = getattr(s, "_access", None)
+    brook = next(iter(law._brooks(s.M)), [])
+    if tree is None or len(brook) < 2:
+        return True
+    grounds = [g for g in (paddy_ground(s), memo_ground(s, "worked", worked_ground)) if g.edge is not None]
+    if not grounds:
+        return True
+    fords = [(float(x), float(y)) for x, y in (s.M.get("meta") or {}).get("brook_fords") or []]
+    segs = list(tree.segs)
+
+    def candidates() -> Iterator[list[Pt]]:
+        yield from field_runs(segs, grounds, BRANCH_WIDTH / 2.0, brook, fords)
+        route = field_router(s, brook)
+        for ground in grounds:
+            yield from routed_field_runs(segs, ground, BRANCH_WIDTH / 2.0, route, brook, fords)
+
+    run = next((r for r in candidates() if len(r) >= 2 and corridor_on_lawful_ground(s.M, r, BRANCH_WIDTH)), None)
+    if run is None:
+        return False
+    back = [(float(x), float(y)) for x, y in run[::-1]]
+    for a, b in zip(back, back[1:], strict=False):
+        tree.add(a, b)
+        s.M.setdefault("access_corridors", []).append({"pts": [[round(a[0], 1), round(a[1], 1)], [round(b[0], 1), round(b[1], 1)]], "field": True})
+    return True
 
 
 def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
@@ -469,6 +526,8 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         if _out is None:
             return 0, 0
         start_tree(s, (float(seat["cx"]), float(seat["cy"])), _out, _length)
+        if not reserve_field_corridor(s):
+            return 0, 0  # ...AND ITS FIELD'S CORRIDOR (ways W03): a margin with no lawful way on to its field seats no one here
 
     # THREE standoffs, not two. `field_ringed` (retired, feature 141) wants five farmhouses within 165 px of the field
     # outline and the placer refuses any bundle that laps a bund or a ditch, so a single ring of

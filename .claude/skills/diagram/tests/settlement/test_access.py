@@ -151,6 +151,39 @@ def test_a_tree_behind_the_house_is_reached_round_the_gable_from_the_dooryard() 
     assert access.legs(got) == [(door, turn), (turn, _q)]
 
 
+def test_a_corridor_round_the_gable_never_doubles_back_to_a_tree_in_front(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 287, homes wave 5 (cohort seed 32): with every straight run from the dooryard refused, a flank door carried
+    past the gable to a tree point back in FRONT of the house turns by more than the web's bend law allows (`doubles_back`,
+    `HAIRPIN_DEG`, the ways' own `_HAIRPIN_DEG`) - the web could not draw it and left the house with no way. The seat is
+    refused instead; the same search to a tree behind the house still goes round the gable."""
+    from l7r.diagram.hamletgen.ways.clearance import _HAIRPIN_DEG
+
+    assert access.HAIRPIN_DEG == _HAIRPIN_DEG
+    assert access.doubles_back((0.0, 0.0), (0.0, -10.0), (1.0, 20.0)) and not access.doubles_back((0.0, 0.0), (0.0, -10.0), (20.0, -12.0))
+    assert not access.doubles_back((0.0, 0.0), (0.0, 0.0), (1.0, 1.0)), "a leg of no length turns nowhere"
+    turns: list[tuple[float, float]] = []
+    real = access.round_the_gable
+
+    def gable(geom, door, half):  # type: ignore[no-untyped-def]
+        turns.append(turn := real(geom, door, half))
+        return turn
+
+    monkeypatch.setattr(access, "round_the_gable", gable)
+    monkeypatch.setattr(access, "standing_clear", lambda s_, a, b, memo=None: any(access.math.dist(p, t) < 1e-6 for t in turns for p in (a, b)))
+
+    def search(tree_at: tuple[float, float], out: tuple[float, float]) -> tuple[tuple[float, float], ...] | None:
+        s = _open()
+        turns.clear()
+        start_tree(s, tree_at, out, 60.0)
+        return access_corridor(s, s._bundle_geom(720.0, 520.0, 46.0, 28.0, "SE", rot=0.0))
+
+    assert search((820.0, 750.0), (1.0, 0.0)) is None, "the tree in front, beside the house: only a hairpin reaches it"
+    assert len(search((720.0, 400.0), (0.0, -1.0)) or ()) == 3, "the tree behind: round the gable"
+    monkeypatch.setattr(access, "doubles_back", lambda a, b, c: False)
+    got = search((820.0, 750.0), (1.0, 0.0))
+    assert got is not None and len(got) == 3, "the refusal is the hairpin's: without it the gable run is taken"
+
+
 def test_what_stands_is_asked_once_while_nothing_of_it_changes() -> None:
     s = _open()
     start_tree(s, (100.0, 100.0), (0.0, 1.0), 50.0)
@@ -197,7 +230,7 @@ def _plain_search(s, geom):  # type: ignore[no-untyped-def]
         turn = access.round_the_gable(geom, door, tree.half)
         if corridor_clear(s, door, turn, geom):
             for q in tree.targets(turn):
-                if access.math.dist(turn, q) < 1e-6 or corridor_clear(s, turn, q, geom):
+                if access.math.dist(turn, q) < 1e-6 or (not access.doubles_back(door, turn, q) and corridor_clear(s, turn, q, geom)):
                     return (door, turn, q)
     return None
 

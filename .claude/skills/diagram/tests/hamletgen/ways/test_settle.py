@@ -441,6 +441,32 @@ def test_a_way_target_gets_its_spur_and_the_field_its_way() -> None:
     assert settle.settle_targets(s, settle.Lawful(s)) == 0 and settle.settle_field(s, settle.Lawful(s)) == 0, "each drawn once"
 
 
+def test_the_field_corridor_the_seating_reserved_is_drawn_first_and_alone_where_nothing_else_keeps_the_law(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 287, ways W03 (homes wave 5): the field's corridor the seating reserved (`access_corridors` legs marked
+    `field`, oriented toward the tree) is what the settle draws when no way reaches the field - from the bund to its first
+    clean contact with the network, over the brook at its ford - even where no other field path keeps the law (here none
+    is offered at all); without a reservation the field stays unreached, as before."""
+    field = [[200.0, -300.0], [500.0, -300.0], [500.0, 300.0], [200.0, 300.0]]
+    legs = [[[195.0, 150.0], [112.0, 150.0]], [[112.0, 150.0], [88.0, 150.0]], [[88.0, 150.0], [0.0, 150.0]]]
+    meta = {**_GEN, "brook_fords": [[100.0, 150.0]]}
+    monkeypatch.setattr(settle, "field_runs", lambda *a, **k: [])
+    monkeypatch.setattr(settle, "routed_field_runs", lambda *a, **k: [])
+    for reserved in (True, False):
+        s = _S([CONN, [(0.0, 0.0), (0.0, 300.0)]], meta=dict(meta), streams=[BROOK], fields=[{"outline": field}])
+        s.M["access_exit"] = [[0.0, 0.0], [0.0, 300.0]]
+        s.M["access_corridors"] = [{"pts": [[-50.0, 10.0], [0.0, 10.0]], "of": [-60.0, 10.0]}] + ([{"pts": p, "field": True} for p in legs] if reserved else [])
+        assert law.field_unreached(s.M)
+        assert settle.field_chain(s.M) == ([(195.0, 150.0), (112.0, 150.0), (88.0, 150.0), (0.0, 150.0), (0.0, 0.0)] if reserved else None)
+        assert settle.settle_field(s, settle.Lawful(s, tree=True)) == int(reserved)
+        assert law.field_unreached(s.M) is not reserved
+    s = _S([CONN, [(0.0, 0.0), (0.0, 300.0)]], meta=dict(meta), streams=[BROOK], fields=[{"outline": field}])
+    s.M["access_corridors"] = [{"pts": p, "field": True} for p in legs]
+    assert settle.field_chain(s.M)[-1] == (0.0, 150.0), "no exit strip recorded: the legs alone"
+    settle.settle_field(s, settle.Lawful(s, tree=True))
+    drawn = s.M["lanes"][-1]
+    assert drawn["role"] == "field way" and [round(v) for v in drawn["pts"][-1]] == [195, 150], "on to the bund where it was reserved"
+
+
 def test_a_target_or_a_field_no_lawful_run_reaches_is_left_unreached_not_drawn_least_bad(monkeypatch: pytest.MonkeyPatch) -> None:
     """FR-005: with no run keeping the law, nothing is drawn - the report says what is still owed."""
     field = [[200.0, -300.0], [500.0, -300.0], [500.0, 300.0], [200.0, 300.0]]
@@ -565,6 +591,20 @@ def test_a_lane_over_a_fixture_is_cut_and_no_tree_lane_is_laid_over_one() -> Non
     settle.settle_shapes(s)
     assert law.lanes_over_fixtures(s.M) == [], "the leg over the heap is cut"
     assert not settle.Lawful(s)([(-200.0, 0.0), (-100.0, 100.0)], 3.0)
+
+
+def test_a_lane_through_a_yard_persimmons_trunk_is_cut_and_no_tree_lane_is_laid_through_one() -> None:
+    """Feature 287, homes H43 (`test_no_tree_is_planted_in_a_path`; cohort seed 42 laid a straggler through a neighbor's
+    persimmon, seated with its household before the web): the trunk is a fixture quad, so the leg through it is cut and a
+    tree lane through it refused - a lane under the crown, clear of the trunk, is let stand."""
+    from l7r.diagram.settlement.homestead_parts.stands import trunk_on_tread
+
+    s = _S([CONN, [(-100.0, 0.0), (-100.0, 200.0)], [(-140.0, 0.0), (-140.0, 200.0)]], persimmons=[{"x": -100.0, "y": 100.0, "r": 11.5}, {"x": -150.0, "y": 100.0, "r": 11.5}])
+    assert law.lanes_over_fixtures(s.M) == [(1, 0)] and trunk_on_tread(-100.0, 100.0, s.M["lanes"][1:2])
+    settle.settle_shapes(s)
+    assert law.lanes_over_fixtures(s.M) == [] and not any(trunk_on_tread(-100.0, 100.0, [ln]) for ln in s.M["lanes"])
+    assert [(-140.0, 0.0), (-140.0, 200.0)] in [_pts(s, i) for i in range(len(s.M["lanes"]))], "under the other crown, 10 ft off its trunk: kept"
+    assert not settle.Lawful(s)([(-200.0, 100.0), (-50.0, 100.0)], 3.0)
 
 
 def test_seed_8_a_corridor_over_the_brook_at_its_ford_is_squared_and_drawn() -> None:

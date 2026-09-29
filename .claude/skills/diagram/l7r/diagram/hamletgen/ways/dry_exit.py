@@ -17,7 +17,8 @@ from __future__ import annotations
 
 import math
 from collections import deque
-from collections.abc import Sequence
+from collections.abc import Sequence, Set
+from functools import lru_cache
 
 from l7r.diagram.settlement import edge_dist, point_in_poly, seg_dist
 
@@ -61,13 +62,22 @@ def _blocked_cells(walls: Sequence[tuple[Poly, float]], lines: Sequence[tuple[Pt
     return out
 
 
+@lru_cache(maxsize=8)
+def _blocked_memo(walls: tuple[tuple[tuple[Pt, ...], float], ...], lines: tuple[tuple[Pt, Pt], ...], x0: float, y0: float, nx: int, ny: int, cell: float) -> frozenset[tuple[int, int]]:
+    """`_blocked_cells`, REMEMBERED by what it reads: the seat search asks every margin of a site with the same walls and
+    water lines (cohort seed 44: 0.8 s rebuilding the one raster per margin), and only the start differs."""
+    return frozenset(_blocked_cells([(list(p), m) for p, m in walls], list(lines), x0, y0, nx, ny, cell))
+
+
 def dry_exit(start: Pt, walls: Sequence[tuple[Poly, float]], lines: Sequence[tuple[Pt, Pt]], W: float, H: float, cell: float = EXIT_CELL_FT) -> Poly | None:
     """A track from `start` off the canvas (0..W, 0..H) that stands clear of every wall - (polygon, margin) - and crosses no
     water line, or None when the start is walled in. The start's own cell is walkable whatever stands there (the gateway it
     leaves from is the caller's)."""
     x0, y0 = -2 * cell, -2 * cell
     nx, ny = int((W + 4 * cell) // cell) + 1, int((H + 4 * cell) // cell) + 1
-    blocked = _blocked_cells(walls, lines, x0, y0, nx, ny, cell)
+    blocked = _blocked_memo(
+        tuple((tuple((float(q[0]), float(q[1])) for q in poly), float(m)) for poly, m in walls), tuple(((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for a, b in lines), x0, y0, nx, ny, cell
+    )
     si, sj = int((start[0] - x0) // cell), int((start[1] - y0) // cell)
     back: dict[tuple[int, int], tuple[int, int] | None] = {(si, sj): None}
     queue = deque([(si, sj)])
@@ -98,7 +108,7 @@ def dry_exit(start: Pt, walls: Sequence[tuple[Poly, float]], lines: Sequence[tup
     return [*pulled[:-1], (b[0] + (b[0] - a[0]) / d * EXIT_OVERSHOOT_FT, b[1] + (b[1] - a[1]) / d * EXIT_OVERSHOOT_FT)]
 
 
-def _pull(pts: Poly, blocked: set[tuple[int, int]], x0: float, y0: float, cell: float, start: tuple[int, int]) -> Poly:
+def _pull(pts: Poly, blocked: Set[tuple[int, int]], x0: float, y0: float, cell: float, start: tuple[int, int]) -> Poly:
     """String-pull the chain of cell centers: from each point, the farthest later point whose straight leg samples only
     walkable cells (the start's own cell included)."""
 

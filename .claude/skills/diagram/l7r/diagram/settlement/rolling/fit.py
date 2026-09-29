@@ -11,6 +11,7 @@ from .._geom.indexes import indexed_grid
 from .._geom.primitives import FIELD_KEEPOUT_EPS, chain_distance, chain_violated, facing_chains, keepout_ring
 from .._geom.water_index import crosses_a_stream
 from .access import access_corridor, legs
+from .lot import watered
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -154,6 +155,7 @@ class BundleFitMixin:
     _byre_form: str | None = None
     _household_byre: str | None = None
     _household_well: bool = False
+    _household_watered: bool = False  # the household being sought is held to `lot.watered` (homes wave 5)
     _byre_pockets: Any = None  # the shared sheds' pockets the seating reserved (`detached_commons`, homes H06)
     _household_fixtures: Any = ()  # the fixture kinds the household being sought a seat keeps (homes H32)
     _fixture_forms: Any = None  # the hamlet's rolled fixture forms, set by the seating (`FixtureForms`)
@@ -404,6 +406,8 @@ class BundleFitMixin:
         if _rm is None or _rm[0] != house[0] or _rm[1] != house[1] or _rm[2] is not self._site_chains:
             _rm = self.__dict__["_reach_memo"] = (house[0], house[1], self._site_chains, within_field_reach(self, house[0], house[1]))
         if not _rm[3]:
+            return False
+        if not self._candidate_watered(geom):
             return False
         # ...AND A CLEAR CORRIDOR FROM ITS DOOR TO THE ACCESS TREE (feature 287, plan M3's seat half): a house the tree
         # cannot reach from its door is refused here, before it stands, instead of being found stranded on the finished
@@ -703,10 +707,19 @@ class BundleFitMixin:
         garden's sun, and how far the windbreak shades"."""
         self._west_sun_ft = float(feet)
 
+    def _candidate_watered(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
+        """Does the household being seated reach water from this candidate's house (`lot.watered`)? Asked only while a
+        household is sought (`_household_watered`, set by `household_parts`)."""
+        if not getattr(self, "_household_watered", False):
+            return True
+        return watered(self, geom["house"][0], geom["house"][1], geom.get("well") is not None)
+
     def _bundle_common_fits(self: Settlement, geom: Any, grove_off_field: bool = True) -> bool:  # type: ignore[misc]
         """The fit checks that do NOT depend on which side the garden is on - the house, the south threshing
         yard, a north kura, the windward grove (dispersed only), and the yard sun-corridor. Same for every
         garden side at a given position, so it is tested once per position."""
+        if not self._candidate_watered(geom):
+            return False
         if (
             self._rect_blocked(part_box(geom, "house"), fields=True)
             or (geom.get("yard") is not None and self._rect_blocked(part_box(geom, "yard"), fields=True))

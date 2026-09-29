@@ -41,6 +41,7 @@ from l7r.diagram.settlement.city.bridges import PLANK_DITCH_FT as PLANK_DITCH_FT
 from l7r.diagram.settlement.city.bridges import deck_covers as deck_covers
 from l7r.diagram.settlement.city.bridges import flooded_ground, plank_ditch, plank_on_supply
 from l7r.diagram.settlement.city.bridges import undeckable_at as undeckable_at
+from l7r.diagram.settlement.homestead_parts.fixture_seats import TRUNK_FT
 from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
 from l7r.diagram.settlement.water_ways._helpers import BUND_REACH_FT
 from l7r.diagram.settlement.water_ways.lanes import behind_house, reaches_dooryard
@@ -543,8 +544,14 @@ touches the glyph reads as walking over it."""
 
 
 def fixture_quads(M: Mapping[str, Any]) -> list[Poly]:
-    """Every farmstead fixture's drawn quad (`farm_fixtures`: privy, manure heap, bath, coop, hokora), turned as drawn."""
-    return [rot_rect(float(r["x"]), float(r["y"]), float(r["w"]), float(r["h"]), float(r.get("rot") or 0.0)) for r in M.get("farm_fixtures") or [] if all(k in r for k in ("x", "y", "w", "h"))]
+    """Every farmstead fixture's drawn quad (`farm_fixtures`: privy, manure heap, bath, coop, hokora), turned as drawn, and
+    every yard persimmon's TRUNK box (feature 287, homes H43: the persimmon is seated with its household before the web, so
+    the web keeps its trunk off the tread as it keeps a privy - a lane may pass under the crown, never through the trunk;
+    cohort seed 42 laid a straggler through a neighbor's persimmon). The box is the seating's own (`fixture_seats.TRUNK_FT`,
+    which its own door corridor keeps off), so a tread clear of it is clear of the trunk (`stands.trunk_on_tread`)."""
+    quads = [rot_rect(float(r["x"]), float(r["y"]), float(r["w"]), float(r["h"]), float(r.get("rot") or 0.0)) for r in M.get("farm_fixtures") or [] if all(k in r for k in ("x", "y", "w", "h"))]
+    trunk = TRUNK_FT / float((M.get("meta") or {}).get("ftpx") or 1.0)
+    return quads + [rot_rect(float(r["x"]), float(r["y"]), trunk, trunk, 0.0) for r in M.get("persimmons") or [] if "x" in r and "y" in r]
 
 
 def over_a_fixture(pts: Sequence[Pt], width: float, quads: Sequence[Poly]) -> int | None:

@@ -118,6 +118,7 @@ def test_draft_byres_scatters_shared_sheds_among_the_houses():
     s.pin_knob("byre_form", "detached_commons")  # the shared shed, the rare guess (269 B16) - the one form `fraction` sizes
     placed = s.draft_byres(fraction=0.6, gap=40)  # ~60% of 5 = 3 shared byres
     assert len(placed) == 3 and len(s.M["byres"]) == 3
+    assert s.M["meta"]["byre_form"] == "detached_commons", "a map that draws byres declares their form (`byre_form_declared`)"
     assert all(b["w"] > 0 and b["h"] > 0 for b in s.M["byres"])
     assert "<rect" in s.out[-1]  # a byre glyph was drawn
 

@@ -376,8 +376,26 @@ def _house_candidates(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tu
         if not clear(door, turn):
             continue
         for q in tree.targets(turn):
-            if math.dist(turn, q) < 1e-6 or clear(turn, q):
+            # ...never back past the house it went round (`doubles_back`): the web could not draw it (cohort seed 32)
+            if math.dist(turn, q) < 1e-6 or (not doubles_back(door, turn, q) and clear(turn, q)):
                 yield (door, turn, q)
+
+
+#: A turn a path cannot take, in degrees off straight on: the web's own bend law (`hamletgen/ways/clearance._HAIRPIN_DEG`,
+#: "doubles back"), which this package cannot import; `tests/settlement/test_access.py` holds the two equal.
+HAIRPIN_DEG = 140.0
+
+
+def doubles_back(a: Pt, b: Pt, c: Pt) -> bool:
+    """THE ONE PREDICATE of a corridor's turn (feature 287, homes wave 5): does the run a-b-c turn at b by `HAIRPIN_DEG` or
+    more? A corridor carried round the gable to a tree point back in front of the house doubles back on itself, and the web
+    - which draws a way along a corridor only where its bend law admits it - left the house with no way at all."""
+    u, v = (b[0] - a[0], b[1] - a[1]), (c[0] - b[0], c[1] - b[1])
+    nu, nv = math.hypot(*u), math.hypot(*v)
+    if nu < 1e-9 or nv < 1e-9:
+        return False
+    cos = max(-1.0, min(1.0, (u[0] * v[0] + u[1] * v[1]) / (nu * nv)))
+    return math.degrees(math.acos(cos)) >= HAIRPIN_DEG
 
 
 def legs(corridor: tuple[Pt, ...]) -> list[tuple[Pt, Pt]]:

@@ -9,8 +9,10 @@ row direction (`waterfields/hem.py`, `tests/waterfields/test_furrows.py`), and t
 (`land/dikes.py`, `hamletgen/water/polder.py:gaps_for_courses`, `hamletgen/sink.py:breaches_any_dike`).
 
 KEPT, because no placer guarantees it yet: `waterward_strips_run_off_the_frame`. `hamletgen/frame.py:waterward_to_the_frame`
-extends the strip to the decided view but never re-judges it; where the band has no open ground nothing is added, so a
-strip can still stop inside the frame.
+extends the strip to the decided view and, since homes wave 5, always joins the extension to the strip as ONE record
+(`frame.one_ring`: a hole keyholed, a keep-out between the two bridged by a zero-width seam), so the case where the two
+could not join is closed; where the band between the strip and the view's edge holds no open ground at all nothing can be
+drawn, and the strip still stops inside the frame there - closing that needs the view refused, the GM's rule to read.
 """
 
 from __future__ import annotations

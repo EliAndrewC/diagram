@@ -14,9 +14,10 @@ KEPT, because no placer guarantees it yet:
 - `groves_clear_of_lanes`: the belt and the copse (`stands.py:village_grove`, whose tread keep-out counts the lift a crown
   is drawn at since wave 5 - cohort seed 3's copse crown stood 0.8 px from a footpath), the woodland commons (its crowns
   thrown against the commons' corridor keep-out) and a wood's stand (`shrines_wells/woods.py:trees_off_the_treads`) keep
-  their trunks off the treads; the yard's persimmon does not - it is seated with its household before the web, and the web
-  keeps off the farmstead fixtures' quads (`ways/law.py:fixture_quads`) but not the persimmon's trunk (cohort 1-60 at wave
-  5: a persimmon on a lane on seeds 17, 20, 38, 41, 42, 47 and 58). That is the WAYS and HOMES modules' to close.
+  their trunks off the treads, and since wave 5 the yard's persimmon too: seated with its household before the web, its
+  trunk is a fixture quad the web keeps its tread off (`ways/law.py:fixture_quads`; cohort seed 42's straggler). Still
+  open, WOODS': a copse crown drawn further from its seat than `stands.crown_reach` allows (cohort seed 31 after homes wave
+  5: a trunk 15.3 px from its clump against a reach of 15.0, 2.8 px from a 6 ft lane's centerline).
 """
 
 from __future__ import annotations

@@ -95,6 +95,7 @@ def test_a_keepers_byre_is_a_part_of_its_bundle_and_every_one_is_drawn(form: str
     s.placed.extend([(h["x"], h["y"] + 60.0, 200.0, 60.0) for h in s.M["houses"]])
     got = s.draft_byres()
     assert len(got) == 4 == s.M["meta"]["byre_target"] and all(b["of"] for b in s.M["byres"])
+    assert s.M["meta"]["byre_form"] == form, "a map that draws byres declares their form (`byre_form_declared`)"
 
 
 def test_a_commons_form_or_a_dispersed_seating_lays_no_byre_in_a_bundle() -> None:

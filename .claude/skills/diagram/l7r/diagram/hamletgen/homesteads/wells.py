@@ -19,8 +19,9 @@ It is the `vr` the glyph draws (not the `r` clearance radius), because the frame
 
 
 WELL_AMONG_DWELLINGS_PX = 95.0
-"""How far a well may stand from the nearest dwelling's WALL - `wells_among_dwellings`' bar, the finished-map test's own
-figure (`test_every_well_stands_among_the_doors_it_serves`), unchanged by feature 287. Its origin is not recorded beside
+"""How far a well may stand from the nearest dwelling's WALL - `wells_among_dwellings`' bar, the figure the retired
+finished-map test read, unchanged by feature 287, which lays each well pocket inside its household's envelope beside the
+yard, so every well stands within it by construction (`test_homesteads_287.py`). Its origin is not recorded beside
 it; what the record gives is the reason for a bar at all - a well is dug among the doors it serves, the dooryard well of
 the idiom 井戸端会議 (idobata kaigi, "well-side meeting"), not out in the commons."""
 

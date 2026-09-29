@@ -178,6 +178,31 @@ def test_a_site_no_margin_can_seat_is_refused_naming_it(monkeypatch: pytest.Monk
         stages.seat_every_household(s, plan)
 
 
+def test_a_seating_drawn_past_every_shapes_band_is_taken_back_and_the_next_margin_seated(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 287, homes wave 5: a margin that seats every household in a string past 12:1 (`in_a_shapes_band`: no band
+    holds it; `declare_cluster_shape` could only name the nearest) is taken back as a short one is; the next margin's
+    round cluster is kept - and a site whose every margin draws a string is refused, naming it."""
+    s, plan = _toy(10)
+    calls: list[int] = []
+
+    def seat_on(s_: Settlement, plan_: hg.SitePlan) -> tuple[int, int]:
+        calls.append(1)
+        string = len(calls) == 1 or len(plan_.seat["ladder"]) == 1
+        for k in range(10):
+            s_.M["houses"].append({"x": 40.0 * k, "y": 1.0 * (k % 2), "kind": "plain"} if string else {"x": 40.0 * (k % 4), "y": 40.0 * (k // 4), "kind": "plain"})
+        return 10, 0
+
+    monkeypatch.setattr(stages, "_seat_households", seat_on)
+    assert not stages.in_a_shapes_band([{"x": 40.0 * k, "y": 1.0 * (k % 2)} for k in range(10)])
+    assert stages.in_a_shapes_band([{"x": 40.0 * k, "y": 40.0 * (k % 2)} for k in range(10)]), "a string inside 12:1"
+    assert stages.seat_every_household(s, plan) == (10, 0) and len(calls) == 2 and s.M["meta"]["seat_margin"] == 2
+    assert stages.in_a_shapes_band(s.M["houses"]) and len(s.M["houses"]) == 10
+    t, plan_t = _toy(10)
+    plan_t.seat["ladder"] = plan_t.seat["ladder"][:1]
+    with pytest.raises(SiteRefused, match="inside a cluster shape's band"):
+        stages.seat_every_household(t, plan_t)
+
+
 def test_the_chosen_margin_that_seats_everyone_is_kept_without_the_ladder(monkeypatch: pytest.MonkeyPatch) -> None:
     s, plan = _toy(10)
     monkeypatch.setattr(stages, "_seat_households", lambda s_, p_: (10, 3))
@@ -207,6 +232,38 @@ def test_the_stage_seats_no_more_houses_than_households() -> None:
     s, plan = _toy(10)
     stages.stage_homesteads(s, plan)
     assert len(s.M["houses"]) == 10 and s.M["meta"]["seat_margin"] == 1
+
+
+def test_the_linear_frontage_stops_once_the_households_are_housed_with_seats_still_on_offer(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 287, homes wave 5 (the soak's `test_the_linear_frontage_pass_stops_once_the_households_are_housed`, on the
+    violating input it lacked here): a linear hamlet's frontage offers every seat the front row would have - many more than
+    its three households - with the front row silent, and the pass seats exactly three: the quota, not the verge, stops it."""
+    s, plan = _toy(10)
+    plan.settlement_form = "linear"
+    object.__setattr__(plan.spec, "households", 3)  # frozen; the site stays a real hamlet's, only the target is cut
+    real, offers = stages.front_row, []
+
+    def row(plan_: hg.SitePlan, count: int, **kw: object) -> list[object]:
+        offers[:] = [p for p, _n in real(plan_, 12, **{**kw, "with_normals": True})]  # type: ignore[arg-type]
+        return []
+
+    offered: list[int] = []
+    monkeypatch.setattr(stages, "front_row", row)
+    monkeypatch.setattr(stages, "lane_frontage", lambda s_, seat, step=86.0, connector=False: offered.append(len(offers)) or list(offers))
+    stages.stage_homesteads(s, plan)
+    assert offered and min(offered) > 3, "the case: the frontage offered more seats than households"
+    assert len(s.M["houses"]) == 3 and s.M["meta"]["cluster_seeding"] == "frontage"
+
+
+def test_the_cloud_alone_seats_the_hamlet_when_the_rows_offer_nothing(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 287, homes wave 5 (the soak's `test_the_cluster_seeds_cloud_still_seats_a_hamlet_when_the_rows_offer_nothing`,
+    on a constructed site): with the front row and the frontage both silent, the ranks and the cloud behind them seat every
+    household, and the record says the cloud did."""
+    s, plan = _toy(10)
+    monkeypatch.setattr(stages, "front_row", lambda plan_, count, **kw: [])
+    monkeypatch.setattr(stages, "lane_frontage", lambda s_, seat, step=86.0, connector=False: [])
+    stages.stage_homesteads(s, plan)
+    assert len(s.M["houses"]) == 10 and s.M["meta"]["cluster_seeding"] == "cloud"
 
 
 def test_no_writer_of_a_household_grain_plot_is_left_in_the_engine() -> None:

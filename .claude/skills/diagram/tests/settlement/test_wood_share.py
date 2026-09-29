@@ -8,6 +8,7 @@ import math
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._geom import CanopyArea, seg_dist
 from l7r.diagram.settlement.homestead_parts.groves import HOMESTEAD_WOOD_FT2
+from l7r.diagram.settlement.homestead_parts.stands import crown_reach
 from l7r.diagram.settlement.homestead_parts.wood_share import (
     BAR_MARGIN_PX,
     ReservedSeats,
@@ -96,6 +97,25 @@ def test_a_seat_across_a_stream_is_refused() -> None:
     assert wood.seat_barred(700.0, 620.0, (700.0, 700.0), ([], []), [], banks=[]) is False, "no reach asked: nothing crossed"
 
 
+def test_every_seat_reserved_is_a_seat_the_copse_plants_within_its_reach_and_on_its_bank() -> None:
+    """Feature 287, homes wave 5 (the reservation half of the copse's reach and bank, woods W25): the copse asks a reserved
+    seat, where it plants it and where it re-seats it, for a house within `COPSE_HOUSE_REACH_FT` on its own side of the
+    brook (`stands.BankNear`). The reservation bars more - its OWN house, past the reach less `BAR_MARGIN_PX` - so every seat
+    it reserves passes the planting's question: here on a site the brook cuts, with a seat across it refused."""
+    from l7r.diagram.hamletgen.consts import COPSE_HOUSE_REACH_FT
+    from l7r.diagram.settlement.homestead_parts.stands import BankNear
+
+    s = _open()
+    s.M["streams"].append({"poly": [[500.0, 640.0], [900.0, 640.0]], "w": 6.0})
+    wood = install_wood_shares(s, FLOOR, COPSE_HOUSE_REACH_FT, 7.0)
+    geom = s._bundle_geom(700.0, 700.0, 46.0, 28.0, "SE", rot=0.0)
+    seats = wood.share(geom, 0.0, [])
+    assert seats
+    near = BankNear([(700.0, 700.0)], s.px(COPSE_HOUSE_REACH_FT), wood.banks)
+    assert all(near.too_near(x, y) for x, y in seats)
+    assert not near.too_near(700.0, 620.0) and wood.seat_barred(700.0, 620.0, (700.0, 700.0), wood.keepouts(geom), []), "across: refused by both"
+
+
 def test_the_one_predicate_refuses_each_kind_of_ground() -> None:
     s = _open(400.0)
     s.field_polys.append([(300.0, 0.0), (400.0, 0.0), (400.0, 400.0), (300.0, 400.0)])
@@ -110,6 +130,21 @@ def test_the_one_predicate_refuses_each_kind_of_ground() -> None:
     assert wood.seat_barred(150.0, 240.0, (100.0, 200.0), none, []), "in a filed disc"
     assert wood.seat_barred(110.0, 110.0, (100.0, 160.0), none, []), "in a filed rectangle"
     assert not wood.seat_barred(150.0, 200.0, (100.0, 200.0), none, [])
+
+
+def test_a_seat_the_copse_would_refuse_for_its_lifted_crown_on_the_tread_is_barred() -> None:
+    """Feature 287, homes H43: the copse keeps a clump off a lane by the reach of a crown drawn `3 * bs` up the sheet
+    (`stands.crown_reach(lift=)`), so the reservation bars a seat by that reach too - a seat just past the unlifted reach of
+    a corridor's strip, which the planting would refuse on the tread, is never reserved."""
+    s = _open(400.0)
+    wood = install_wood_shares(s, FLOOR, REACH, 7.0)
+    lifted = crown_reach(wood.clump, lift=3.0 * s.bscale)
+    assert wood.lane_gap == 7.0 + max(wood.clump * 0.45 + 4, lifted) + BAR_MARGIN_PX
+    flat = 7.0 + max(wood.clump * 0.45 + 4, crown_reach(wood.clump)) + BAR_MARGIN_PX
+    assert flat < wood.lane_gap, "the lift reaches past the flat box"
+    none: tuple[list[tuple[float, float, float]], list[tuple[float, float, float, float]]] = ([], [])
+    x = 150.0 + (flat + wood.lane_gap) / 2.0
+    assert wood.seat_barred(x, 200.0, (x - 20.0, 200.0), none, [((150.0, 150.0), (150.0, 250.0))]), "clear of the flat reach, not of the lifted one"
 
 
 def test_a_later_homestead_may_not_stand_over_a_reserved_seat_nor_share_its_ground() -> None:

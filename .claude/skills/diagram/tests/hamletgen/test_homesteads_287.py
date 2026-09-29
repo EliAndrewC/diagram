@@ -47,6 +47,25 @@ def test_every_household_seated_has_a_well_pocket_or_water_within_reach() -> Non
     assert not needs_pocket(s, 1000.0, 100.0), "open water beside it"
 
 
+def test_a_household_moved_off_the_seat_it_was_sought_from_past_every_pockets_reach_is_refused() -> None:
+    """Feature 287, homes wave 5 (`test_every_household_can_reach_water`): the pocket is decided at the seek point, and the
+    placer may carry the house off it - a candidate out of every pocket's and every water's reach, carrying no pocket of its
+    own, is refused (`lot.watered`, asked by `_parts_fit` and `_bundle_common_fits`); within reach, or with its own pocket,
+    it is not. The rule rests once the household is seated."""
+    from l7r.diagram.settlement.rolling.lot import household_parts, seat_parts_done, watered
+
+    s = Settlement(3000, 3000, seed=3)
+    s.meta(name="W", scale="hamlet", ftpx=1, toscale=True)
+    s._pockets = [(800.0, 300.0)]
+    assert household_parts(s, 800.0, 1000.0, "plain", None)[2] is False, "sought 700 ft from the pocket: no pocket of its own"
+    near, far = s._bundle_geom(800.0, 1000.0, 46.0, 28.0), s._bundle_geom(800.0, 1100.0, 46.0, 28.0)
+    assert s._candidate_watered(near) and s._bundle_common_fits(near)
+    assert not s._candidate_watered(far) and not s._bundle_common_fits(far) and not s._parts_fit(far), "moved 100 ft on, 800 ft off: dry"
+    assert watered(s, 800.0, 1100.0, True), "a candidate carrying its own pocket is watered wherever it stands"
+    seat_parts_done(s)
+    assert s._candidate_watered(far), "no household sought: nothing asked"
+
+
 def test_a_seating_draws_a_well_at_every_pocket_it_laid() -> None:
     """The seat half and the draw half together: a toy hamlet's pockets are laid in the bundles (inside each envelope,
     beside the yard, among the doors) and `place_wells` draws every one."""
@@ -158,3 +177,53 @@ def test_the_free_ground_grid_covers_the_fields_reach_not_the_canvas() -> None:
     assert free_ground_bounds(chains, 300.0, 5000.0, 5000.0) == (700.0, 700.0, 1500.0, 1300.0)
     assert free_ground_bounds(chains, 2000.0, 2500.0, 2500.0) == (0.0, 0.0, 2500.0, 2500.0)
     assert free_ground_bounds([], 300.0, 5000.0, 4000.0) == (0.0, 0.0, 5000.0, 4000.0)
+
+
+def _brook_site() -> Settlement:
+    """A brook between the cluster (west) and its field (east), a ford on it, and the tree's exit strip running west."""
+    from l7r.diagram.settlement.rolling.access import start_tree
+
+    s = Settlement(1400, 1400, seed=3)
+    s.meta(name="F", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=True)
+    field = [(800.0, 400.0), (1200.0, 400.0), (1200.0, 1000.0), (800.0, 1000.0)]
+    s.M["fields"] = [{"outline": [list(p) for p in field]}]
+    s.field_polys.append(field)
+    s.M["streams"] = [{"poly": [[700.0, 0.0], [700.0, 1400.0]], "w": 6.0}]
+    s.M["meta"]["brook_fords"] = [[700.0, 650.0]]
+    start_tree(s, (500.0, 700.0), (-1.0, 0.0), 300.0)
+    return s
+
+
+def test_the_field_corridor_is_reserved_with_the_exit_strip_and_no_homestead_covers_it() -> None:
+    """Feature 287, ways W03 (homes wave 5): on a brook map the seating reserves the field's corridor before any house -
+    the ways' own field path from the tree on to the bund, over the brook at its ford - as legs of the tree marked `field`,
+    oriented toward the tree; an envelope on it is refused (`covers_box`). Where the rule asks nothing (no brook) nothing is
+    reserved and the margin stands."""
+    from l7r.diagram.hamletgen.homesteads.stages import reserve_field_corridor
+
+    s = _brook_site()
+    assert not s._access.covers_box((640.0, 650.0, 20.0, 20.0)), "the case: before the reservation the ground is free"
+    assert reserve_field_corridor(s)
+    legs = [c["pts"] for c in s.M["access_corridors"] if c.get("field")]
+    assert legs == [[[796.5, 650.0], [722.0, 650.0]], [[722.0, 650.0], [678.0, 650.0]], [[678.0, 650.0], [500.0, 700.0]]], (
+        "from the bund, square over the brook at its ford, to the exit strip's root: one chain toward the tree"
+    )
+    mid = ((legs[0][0][0] + legs[0][1][0]) / 2, (legs[0][0][1] + legs[0][1][1]) / 2)
+    assert s._access.covers_box((mid[0], mid[1], 10.0, 10.0)), "an envelope on the corridor is refused"
+    t = _brook_site()
+    t.M["streams"] = []
+    assert reserve_field_corridor(t) and not any(c.get("field") for c in t.M["access_corridors"])
+
+
+def test_a_margin_with_no_lawful_field_corridor_seats_no_one(monkeypatch: pytest.MonkeyPatch) -> None:
+    """...and where no field path from the margin keeps the law, the margin seats no one (the ladder offers the next; past
+    the last the site is refused) - `reserve_field_corridor` False on the violating case, the seating's refusal after it."""
+    from l7r.diagram.hamletgen.homesteads import stages
+    from l7r.diagram.hamletgen.ways import settle
+
+    s = _brook_site()
+    monkeypatch.setattr(settle, "corridor_on_lawful_ground", lambda M, run, width=3.0: False)
+    assert stages.reserve_field_corridor(s) is False and not any(c.get("field") for c in s.M["access_corridors"])
+    toy, plan = _toy_hamlet(10)
+    monkeypatch.setattr(stages, "reserve_field_corridor", lambda s_: False)
+    assert stages._seat_households(toy, plan) == (0, 0) and toy.M["houses"] == []

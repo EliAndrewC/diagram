@@ -53,8 +53,11 @@ from .corridors import (
     _poly_box,
     building_quads,
     draw_corridors,
+    field_chain,
     field_runs,
+    first_contact,
     is_tree,
+    lawful_run,
     round_the_gable,
     routed_field_runs,
     spur_runs,
@@ -862,6 +865,15 @@ def settle_field(s: Any, lawful: Lawful) -> int:
     brook = next(iter(law._brooks(M)), [])
     fords = [(float(x), float(y)) for x, y in (M.get("meta") or {}).get("brook_fords") or []]
     segs, grounds = served_network(M.get("lanes") or []), (paddy_ground(s), memo_ground(s, "worked", worked_ground))
+    # THE RESERVED CORRIDOR FIRST (feature 287, W03): the field's run the seating kept clear (`field_chain`), drawn from the
+    # bund up to its first clean contact with the network, bowed round a building on it where need be - as a stranded
+    # house's corridor is (`draw_corridors`)
+    chain = field_chain(M)
+    reached = first_contact(chain, segs) if chain is not None else None
+    run = lawful_run(reached[::-1], building_quads(M) + law.fixture_quads(M), lambda r: lawful(r, BRANCH_WIDTH), norm=lambda r: square_run(M, r)) if reached is not None else None
+    if run is not None:
+        _draw_tree_lane(s, run, BRANCH_WIDTH, FIELD_ROLE)
+        return 1
     runs = field_runs(segs, grounds, BRANCH_WIDTH / 2.0, brook, fords)
     run = next((r for r in runs if lawful(r, BRANCH_WIDTH)), None)
     if run is None:

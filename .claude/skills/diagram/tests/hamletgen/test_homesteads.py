@@ -3,7 +3,6 @@
 Split from test_hamletgen.py by feature 111; test bodies verbatim. See hamletgen/CLAUDE.md.
 """
 
-import contextlib
 import math
 
 import pytest
@@ -336,7 +335,10 @@ def test_a_rank_round_that_seats_nothing_grows_the_cluster_along_the_field() -> 
         (cx + ox * 5000 - ax * 5000, cy + oy * 5000 - ay * 5000),
     ]
     s.block_polys.append(back)
-    with contextlib.suppress(SiteRefused):  # the strip holds fewer than twelve homesteads with their fixtures (homes H32)
+    # ...AND A STRIP THAT CANNOT HOLD THE QUOTA IS REFUSED, NAMED (feature 287, homes H14 and H32: every household with its
+    # fixtures, or the site refused) - asserted, not suppressed: the ends were offered and taken before the refusal
+    plan.seat["ladder"] = []
+    with pytest.raises(SiteRefused, match="no margin seats all 12 households"):
         stage_homesteads(s, plan)
     ss = s._seat_search
     assert ss["rounds"] >= 1, "the ranks ran"
@@ -387,7 +389,10 @@ def test_the_free_ground_changes_no_seat(form: str, scenario: str, monkeypatch: 
     def roll():  # type: ignore[no-untyped-def]
         s, plan = _rescue(form) if scenario == "rescue" else _toy_hamlet(15)
         s._nucleated = form == "nucleated"
-        with contextlib.suppress(SiteRefused):  # the rescue ground cannot hold its quota (D2); the seats it took are compared all the same
+        if scenario == "rescue":  # the rescue ground cannot hold its quota (D2): refused, and the seats it took compared all the same
+            with pytest.raises(SiteRefused):
+                stage_homesteads(s, plan)
+        else:
             stage_homesteads(s, plan)
         return _seats(s)
 

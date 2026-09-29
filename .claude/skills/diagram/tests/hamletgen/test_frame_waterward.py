@@ -5,7 +5,7 @@ from typing import Any
 import pytest
 
 from l7r.diagram import hamletgen as hg
-from l7r.diagram.settlement import Settlement
+from l7r.diagram.settlement import Settlement, point_in_poly
 
 fr = hg.frame
 
@@ -64,7 +64,23 @@ def test_a_band_with_no_open_ground_adds_nothing_and_a_separate_ground_keeps_its
     t.marsh([(520.0, 770.0), (790.0, 770.0), (790.0, 1220.0), (520.0, 1220.0)], role="waterside")
     t.block_polys.append([(505.0, 0.0), (530.0, 0.0), (530.0, 2400.0), (505.0, 2400.0)])  # a lane between strip and band
     fr.waterward_to_the_frame(t)
-    assert len(t.M["marshes"]) == 2, "two grounds that do not join keep a record each"
+    (strip,) = t.M["marshes"]
+    assert fr.strip_reaches_view(strip["poly"], t.M["meta"]["view"], ["W"]), "two grounds that do not join are one record, bridged"
+    assert point_in_poly(515.0, 1000.0, strip["poly"]) is False, "the lane between them stays outside the record"
+    assert point_in_poly(600.0, 1000.0, strip["poly"]) and point_in_poly(300.0, 1000.0, strip["poly"])
+
+
+def test_one_ring_keeps_a_hole_out_and_bridges_a_second_piece_either_way_round() -> None:
+    from shapely.geometry import MultiPolygon, Polygon
+
+    sq = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)]
+    far = [(30.0, 0.0), (40.0, 0.0), (40.0, 10.0), (30.0, 10.0)]
+    holed = Polygon(sq, [[(4.0, 4.0), (6.0, 4.0), (6.0, 6.0), (4.0, 6.0)]])
+    for other in (far, far[::-1]):
+        ring = fr.one_ring(MultiPolygon([holed, Polygon(other)]))
+        inside = {(x, y): point_in_poly(x, y, ring) for x, y in ((2.0, 2.0), (5.0, 5.0), (20.0, 5.0), (35.0, 5.0))}
+        assert inside == {(2.0, 2.0): True, (5.0, 5.0): False, (20.0, 5.0): False, (35.0, 5.0): True}
+        assert Polygon(ring).buffer(0).area == pytest.approx(100.0 - 4.0 + 100.0)
 
 
 def test_no_waterward_declaration_changes_nothing() -> None:

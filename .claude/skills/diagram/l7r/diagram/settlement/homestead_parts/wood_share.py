@@ -190,8 +190,10 @@ class WoodShares:
         self.sun_depth = float(getattr(s, "_sun_corridor_ft", 22.0))
         self.well_vr = float(s._well_vr())
         # a clump keeps its crown off a lane's tread (`village_grove`'s corridor buffer); a corridor's way runs anywhere in
-        # its strip, so a seat keeps the strip's half plus that buffer off the corridor's line
-        self.lane_gap = corridor_half + max(self.clump * 0.45 + 4, crown_reach(self.clump)) + BAR_MARGIN_PX
+        # its strip, so a seat keeps the strip's half plus that buffer off the corridor's line - the buffer the copse plants
+        # by, crowns drawn `3 * bs` up the sheet included (`crown_reach(lift=)`, feature 287 homes H43): without the lift a
+        # reserved seat could stand where the copse's own lane buffer refuses it
+        self.lane_gap = corridor_half + max(self.clump * 0.45 + 4, crown_reach(self.clump, lift=3.0 * s.bscale)) + BAR_MARGIN_PX
         self.W, self.H = float(s.W), float(s.H)
         self.ground = ground_blocks(s, self.clump)
         self.banks = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for f in s.M.get("streams") or [] for a, b in zip(f.get("poly") or [], (f.get("poly") or [])[1:], strict=False)]

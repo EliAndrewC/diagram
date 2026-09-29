@@ -277,7 +277,25 @@ def keepout_ring(chain: Sequence[Pt], covered: Sequence[Pt], eps: float, filled:
         # (where the outer and inner rings join) is a zero-width slit that a chord vertex can land ON and be read as
         # outside; a filled ring has no seam.
         return ring_offset(chords, out_reach + eps, 0.0)[: len(chords)], chords
-    return ring_offset(chords, out_reach + eps, in_reach + eps * 3.0), chords  # the inner edge is un-mitered (see ring_offset), so it carries extra tolerance
+    # the inner edge is un-mitered (see ring_offset), so it starts with extra tolerance - AND IS THEN HELD TO CONTAIN THE BAND
+    # (feature 287, homes wave 5): the tolerance was a heuristic, so the ring is asked of every covered point
+    # (`point_in_poly`, the containment test's own reading) and the side a point escapes on is pushed a further `eps` until
+    # none escapes. Each push only moves that edge away from the chords, so a point once inside stays inside.
+    out_pad, in_pad = out_reach + eps, in_reach + eps * 3.0
+    for _ in range(KEEPOUT_GROWTHS):
+        keep = ring_offset(chords, out_pad, in_pad)
+        escaped = [p for p in covered if not point_in_poly(p[0], p[1], keep)]
+        if not escaped:
+            return keep, chords
+        inside = [point_in_poly(p[0], p[1], chords) for p in escaped]
+        in_pad += eps if any(inside) else 0.0
+        out_pad += eps if not all(inside) else 0.0
+    raise ValueError(f"no keep-out of {n} chords contains its band within {KEEPOUT_GROWTHS} pushes of {eps}")
+
+
+#: How many `eps` pushes `keepout_ring` gives a band's keep-out to contain it before refusing the band by name: far past what a
+#: drawn dike's band ever asked (a band `w` wide about its crest needs no more than `w / eps`).
+KEEPOUT_GROWTHS = 200
 
 
 Chord = tuple[Pt, Pt, Pt]  # (a, b, outward normal): a pushed-out chord of a field outline and the side the houses are on

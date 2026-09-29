@@ -38,3 +38,20 @@ def test_a_start_walled_in_has_no_dry_exit() -> None:
     assert dry_exit(hole, walls, [], 1400.0, 1000.0) is None
     assert dry_exit(hole, [], [], 1400.0, 1000.0, cell=EXIT_CELL_FT) is not None, "open ground has an exit"
     assert dry_exit(hole, [([(0.0, 0.0), (1.0, 1.0)], 0.0)], [], 1400.0, 1000.0) is not None, "a wall of under three points is no wall"
+
+
+def test_the_raster_is_built_once_for_the_same_walls_and_lines_whatever_the_start() -> None:
+    """Homes wave 5 (performance): the margins of one site ask the same walls and lines from different starts; the blocked
+    cells are remembered by what they read (`_blocked_memo`), and the answer from each start is the fresh build's."""
+    from l7r.diagram.hamletgen.ways import dry_exit as de
+
+    de._blocked_memo.cache_clear()
+    wall = [([(40.0, 0.0), (60.0, 0.0), (60.0, 90.0), (40.0, 90.0)], 2.0)]
+    lines = [((0.0, 95.0), (100.0, 95.0))]
+    a = de.dry_exit((20.0, 50.0), wall, lines, 100.0, 100.0)
+    b = de.dry_exit((80.0, 50.0), [(list(p), m) for p, m in wall], list(lines), 100.0, 100.0)
+    assert a is not None and b is not None
+    info = de._blocked_memo.cache_info()
+    assert (info.misses, info.hits) == (1, 1)
+    x0, n = -2 * de.EXIT_CELL_FT, int((100.0 + 4 * de.EXIT_CELL_FT) // de.EXIT_CELL_FT) + 1
+    assert de._blocked_memo(tuple((tuple(p), m) for p, m in wall), tuple(lines), x0, x0, n, n, de.EXIT_CELL_FT) == frozenset(de._blocked_cells(wall, lines, x0, x0, n, n, de.EXIT_CELL_FT))
