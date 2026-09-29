@@ -204,3 +204,59 @@ def record_parts(s: Any, rec: dict[str, Any], geom: Any, form: str | None) -> No
     if seats is not None and wood is not None:  # its share of the wood floor (woods W25, plan D9), reserved and on the record
         covered = wood.commit(geom, seats)
         rec["wood_share"] = {"seats": [[x, y] for x, y in seats], "r": wood.cr, "ft2": round(covered / s.px(1.0) ** 2)}
+
+
+#: The laid fixtures drawn as a record of their own, and so held until drawn (`hamletgen/homesteads/holds.py`): the farmstead
+#: fixtures and the retirement house. A persimmon is recorded by its crown's radius alone, which the matrix reads no extent
+#: from; a bath's corridor is drawn with its bath.
+HELD_KINDS = frozenset({"privy", "manure", "bath", "coop", "woodpile", "shrine", "retirement"})
+
+
+def held_part_records(hx: float, hy: float, well: Any, fixtures: Any, vr: float) -> list[tuple[str, dict[str, Any]]]:
+    """(key, record) for each part a household's seating laid that stands HELD until it is drawn: the well pocket as its
+    wellhead (`well`, its center, or None) and each fixture of `HELD_KINDS` as its seat's box (`fixtures`: (kind, box)
+    pairs, the box (cx, cy, w, h) as drawn). The ONE form both the hold (`hold_laid_parts`) and the seat's question
+    (`bundle_admitted`) use, so the part asked of the registry is the part held there."""
+    out: list[tuple[str, dict[str, Any]]] = []
+    if well is not None:
+        out.append(("wells", {"x": round(float(well[0]), 1), "y": round(float(well[1]), 1), "r": 8, "vr": vr}))
+    of = [round(float(hx), 1), round(float(hy), 1)]
+    for kind, bx in fixtures:
+        if kind not in HELD_KINDS or not bx:
+            continue
+        key = "retirement_houses" if kind == "retirement" else "farm_fixtures"
+        out.append((key, {"x": float(bx[0]), "y": float(bx[1]), "w": float(bx[2]), "h": float(bx[3]), "of": of}))
+    return out
+
+
+#: The key each built or worked part of a bundle is recorded under when it is drawn (`houses.py`, `yards.py`, `gardens.py`,
+#: `byres.py`): the part asked of the registry at seat time under the key the matrix will judge it by.
+BUNDLE_PART_KEYS = (("house", "houses"), ("yard", "threshing_yards"), ("shed", "farm_sheds"), ("byre", "byres"))
+
+
+def bundle_records(geom: Mapping[str, Any], vr: float) -> list[tuple[str, dict[str, Any]]]:
+    """(key, record) for EVERY part a homestead bundle lays (feature 287, water W53): the house, its yard, its kura, its
+    byre and each garden bed as the turned rect it will be drawn as (`rot` the bundle's turn), and the parts held until
+    drawn as they are held (`held_part_records`)."""
+    hx, hy = float(geom["house"][0]), float(geom["house"][1])
+    rot = float(geom.get("turn") or 0.0)
+    of = [round(hx, 1), round(hy, 1)]
+
+    def rect(r: Any, parent: bool) -> dict[str, Any]:
+        rec = {"x": round(float(r[0]), 1), "y": round(float(r[1]), 1), "w": float(r[2]), "h": float(r[3]), "rot": rot}
+        return {**rec, "of": of} if parent else rec
+
+    out = [(key, rect(geom[part], key != "houses")) for part, key in BUNDLE_PART_KEYS if geom.get(part) is not None]
+    out += [("gardens", rect(g, True)) for g in geom.get("gardens") or ()]
+    boxes = (geom.get("boxes") or {}).get("fixtures") or {}
+    return out + held_part_records(hx, hy, geom.get("well"), [(k, boxes.get(k)) for k in (geom.get("fixtures") or {})], vr)
+
+
+def bundle_admitted(s: Any, geom: Mapping[str, Any]) -> bool:
+    """THE BUNDLE ASKS THE REGISTRY FIRST (feature 287, water W53 and plan M8): does the overlap matrix admit every part this
+    bundle lays on what already stands - the field's ditches and channels, the streams, the lanes, the houses and parts
+    already recorded, and the ground the seating reserved? A layout it refuses is refused and the placer tries the next.
+    Under feature 284's probes Inashiro laid a privy on a field ditch at (2960, 1780) that no fit rule of the seat asked
+    about, and the hold raised `OverlapRefused` at the seating's end (research R9, failure 4)."""
+    vr = float(s._well_vr())
+    return all(s.admits(k, rec) for k, rec in bundle_records(geom, vr))

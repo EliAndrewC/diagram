@@ -19,20 +19,30 @@ def boxes_meet(a: Any, b: Any) -> bool:
     return bool(abs(a[0] - b[0]) < (a[2] + b[2]) / 2 and abs(a[1] - b[1]) < (a[3] + b[3]) / 2)
 
 
+def box_gap(a: Any, b: Any) -> float:
+    """The edge gap between two (cx, cy, w, h) boxes: the larger of the two axes' clear distances, negative where they
+    overlap on both (so `box_gap(a, b) < 0` is `boxes_meet(a, b)`, and 0 is a shared edge)."""
+    return float(max(abs(a[0] - b[0]) - (a[2] + b[2]) / 2, abs(a[1] - b[1]) - (a[3] + b[3]) / 2))
+
+
 def pocket_clear_of_beds(xs: Any, y: float, p: float, beds: Any, gap: float) -> tuple[float, float, float, float]:
     """THE WELL POCKET NEVER ON A BED (feature 287 M8: the overlap matrix forbids a wellhead on a garden, its own household's
     too). The pocket, `p` square at height `y`, is offered at each flank in `xs` in turn (the flank away from the primary
     bed first); a bed split to flank the house on both walls (`_garden_beds`) can stand on either, and cohort 1-60 laid 8
     wells on a bed so. Where both flanks hold a bed, the pocket stands past the outermost bed of the first flank, `gap`
-    beyond it - still beside the dooryard, on the same line."""
+    beyond it - still beside the dooryard, on the same line.
+
+    PUSHED, IT KEEPS THE GAP FROM EVERY BED (feature 287, homes H09): the push steps past each bed within `gap` of the
+    pocket (`box_gap`), not only the beds it lies on, so a bed it clears by a hair - on the line, or beside it - is stepped
+    past too, and the pocket it returns stands at least `gap` from every bed."""
     for x in xs:
         box = (x, y, p, p)
         if not any(boxes_meet(box, b) for b in beds):
             return box
     x = xs[0]
     side = 1.0 if x >= xs[-1] else -1.0
-    while hit := [b for b in beds if boxes_meet((x, y, p, p), b)]:
-        x = max(b[0] * side + b[2] / 2 for b in hit) * side + side * (gap + p / 2)  # past the bed's outer edge on this flank
+    while near := [b for b in beds if box_gap((x, y, p, p), b) < gap - 1e-9]:
+        x = max(b[0] * side + b[2] / 2 for b in near) * side + side * (gap + p / 2)  # past the bed's outer edge on this flank
     return (x, y, p, p)
 
 

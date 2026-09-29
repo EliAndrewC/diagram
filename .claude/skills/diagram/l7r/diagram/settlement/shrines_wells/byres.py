@@ -156,7 +156,8 @@ class DraftByresMixin:
         clear = self.px(POCKET_TREE_CLEAR_FT)
         if tree is not None and tree.covers_box((x, y, bw + 6 + 2 * clear, bh + 6 + 2 * clear)):
             return False
-        return bool(self._fits(x, y, bw + 6, bh + 6))
+        # ...and the registry of what stands admits the shed as `draft_byres` will record it (feature 287, water W53)
+        return bool(self._fits(x, y, bw + 6, bh + 6)) and self.admits("byres", {"x": round(x, 1), "y": round(y, 1), "w": bw, "h": bh, "rot": 0})
 
     def _courtyard_byre_seat(self: Settlement, h: Mapping[str, Any], bw: float, bh: float) -> tuple[float, float, float, float, float] | None:  # type: ignore[misc]
         """A courtyard-form byre's seat: the magariya's short arm, ABUTTING a free side wall of its owner.

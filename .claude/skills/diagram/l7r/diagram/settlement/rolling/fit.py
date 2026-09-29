@@ -11,7 +11,7 @@ from .._geom.indexes import indexed_grid
 from .._geom.primitives import FIELD_KEEPOUT_EPS, chain_distance, chain_violated, facing_chains, keepout_ring
 from .._geom.water_index import crosses_a_stream
 from .access import access_corridor, legs
-from .lot import watered
+from .lot import bundle_admitted, watered
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -447,6 +447,10 @@ class BundleFitMixin:
         # `_rect_on_water` keeps, the test the solid rects of the legacy path take.
         if any(self._rect_on_water(g) for g in part_box(geom, "gardens") or ()):
             return False
+        # ...AND EVERY PART IT LAYS ASKS THE REGISTRY OF WHAT STANDS (feature 287, water W53): the field's ditches, the
+        # streams, what is recorded and what the seating reserved - the one question the hold at the seating's end asks again
+        if not bundle_admitted(self, geom):
+            return False
         if self._house_on_a_tread(house) or self._house_too_near_a_neighbor(house) or self._house_unreachable(house):
             return False
         if not self._sun_corridor_ok(geom) or self._yard_sun_conflict(geom):
@@ -606,7 +610,7 @@ class BundleFitMixin:
         every garden side at a position) and a side-DEPENDENT half (the garden bed + the bbox it grows), so
         the nucleated placer can test the common half ONCE across all four sides (see `_fits_any_side`). The
         conjunction is order-independent, so the result is unchanged from the old single test."""
-        return self._bundle_common_fits(geom, grove_off_field) and self._bundle_side_fits(geom)
+        return self._bundle_common_fits(geom, grove_off_field) and self._bundle_side_fits(geom) and bundle_admitted(self, geom)
 
     def _sun_corridor_ok(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """Does this homestead leave every threshing yard - its own and the neighbors' - its sun?

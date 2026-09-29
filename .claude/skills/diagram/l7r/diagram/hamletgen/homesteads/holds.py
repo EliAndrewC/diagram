@@ -6,9 +6,8 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement
-
-#: The laid fixtures drawn as a record of their own, and so held until drawn: the farmstead fixtures and the retirement house.
-HELD_KINDS = frozenset({"privy", "manure", "bath", "coop", "woodpile", "shrine", "retirement"})
+from l7r.diagram.settlement.rolling.lot import HELD_KINDS as HELD_KINDS
+from l7r.diagram.settlement.rolling.lot import held_part_records
 
 
 def hold_laid_parts(s: Settlement, houses: Sequence[Mapping[str, Any]]) -> int:
@@ -18,20 +17,18 @@ def hold_laid_parts(s: Settlement, houses: Sequence[Mapping[str, Any]]) -> int:
     1-60 drew 8 fixtures and a wellhead on a lane so. So each is stood in the registry of what stands (`Standing.hold`) at
     the seating's end, as the record it will be drawn as - the pocket as its wellhead, a fixture as its seat's box - and
     every way the track and the web lay keeps off it by the overlap matrix; drawn, it is released and recorded as itself.
-    Returns the parts held."""
+    Each is the record the seat asked the registry about before it chose (`rolling/lot.py:bundle_admitted`, water W53), so a
+    hold never lands on what the matrix forbids. Returns the parts held."""
     held: dict[Any, Any] = {}
     vr = float(s._well_vr())
     for h in houses:
-        hx, hy = float(h["x"]), float(h["y"])
+        fixtures = [f for f in h.get("fixtures") or () if f.get("kind") in HELD_KINDS and f.get("box")]
+        recs = held_part_records(float(h["x"]), float(h["y"]), h.get("well_pocket"), [(f["kind"], f["box"]) for f in fixtures], vr)
         if h.get("well_pocket"):
-            wx, wy = round(float(h["well_pocket"][0]), 1), round(float(h["well_pocket"][1]), 1)
-            held[("wells", wx, wy)] = s.standing.hold("wells", {"x": wx, "y": wy, "r": 8, "vr": vr})
-        for f in h.get("fixtures") or ():
-            if f.get("kind") not in HELD_KINDS or not f.get("box"):
-                continue  # a persimmon is held off by its trunk (`law.fixture_quads`); a bath's corridor is drawn with its bath
-            bx = f["box"]
-            key = "retirement_houses" if f.get("kind") == "retirement" else "farm_fixtures"
-            held[(key, id(f))] = s.standing.hold(key, {"x": float(bx[0]), "y": float(bx[1]), "w": float(bx[2]), "h": float(bx[3]), "of": [round(hx, 1), round(hy, 1)]})
+            key, rec = recs.pop(0)
+            held[(key, rec["x"], rec["y"])] = s.standing.hold(key, rec)
+        for f, (key, rec) in zip(fixtures, recs, strict=True):
+            held[(key, id(f))] = s.standing.hold(key, rec)
     s._held_parts = held  # type: ignore[attr-defined]
     return len(held)
 

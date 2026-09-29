@@ -177,7 +177,8 @@ class PondStockMixin:
             for o in self.M.get(key, []):
                 if "x" in o and math.hypot(float(o["x"]) - cx, float(o["y"]) - cy) < half + math.hypot(float(o.get("w", 6)), float(o.get("h", 6))) / 2:
                     return False
-        return True
+        # ...and the registry of what stands admits the sty as `pig_sty` will record it (feature 287, water W53)
+        return self.admits("pig_sties", {"x": round(cx, 1), "y": round(cy, 1), "w": round(w, 1), "h": round(h, 1), "rot": round(rot, 1)})
 
     def pig_sty(self: Settlement, cx: float, cy: float, rot: float = 0.0, pond: int | None = None) -> None:  # type: ignore[misc]
         """A pig shed on a pond dike: a small pitched shed with its pen rail, raked along the bank."""
