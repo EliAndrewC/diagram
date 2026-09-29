@@ -12,12 +12,17 @@ a unit test on the violating case - the brook bridged and crossed only at fords,
 part on its house's bank and no farmhouse on the brook (`settlement/rolling/fit.py`), the entrance board
 (`structures/fixtures/siting.py`), the board caption at the board's angle (`board_seat.py`), the ruled row of woodland
 (`hinterland/parcels.py`), the copse off the marsh and the belt's alder (`homestead_parts/stands.py`) and no household
-grain plot (its producer is gone). Wave 5 retired a fifteenth, a way out crossing the brook at most once: the tree lanes
+grain plot (its producer is gone). Wave 5 also retired the copse's reach and bank: every clump `village_grove` plants is
+asked its reach and bank where it is seated and again where it is re-seated - a household's reserved seat its dooryard's
+(`seat_near`), every other clump its siting's (`near`) - on the violating cases in `tests/settlement/test_woods_287.py`. Wave 5 retired a fifteenth, a way out crossing the brook at most once: the tree lanes
 carrying such a way out are taken away too, `Lawful` asks the route (`law.adds_a_way_out_crossing`) before a tree lane is
-laid, and the connector crosses a brook at most once (`track.connector_keeps_the_law`). What is left is KEPT because no
+laid, and the connector crosses a brook at most once (`track.connector_keeps_the_law`). Wave 5 retired the brook's shape
+too (fold, ruled run along the frame and on the page, the screen axis): `hamletgen/water/brook.py:feed_brook` judges every
+candidate, the routes round the field included, on the course as drawn (`drawn_course`) and refuses the site past the last
+(`BrookRefused`), and the sink judges each confluence it adds with the brook as drawn (`sink.confluence_keeps_the_brook`),
+on the violating cases in `tests/hamletgen/test_brook.py` and `test_sink.py`; the pool's brook non-vacuity stays, for the
+way that reaches the field across it. What is left is KEPT because no
 placer guarantees it yet, and each test says why:
-- the brook's shape (fold, ruled run along the frame and on the page, the screen axis): `hamletgen/water/brook.py:feed_brook`
-  returns its last candidate (round the field) unjudged, and the drawn course is rounded after it is judged;
 - a way reaching the field: `settle.py:settle_reach` reports `field_unreached`, it does not refuse;
 - the board caption off the roofs, nearest its board and off the crowns: guaranteed except at plan D12's terminal, kept
   for the GM (`meta.kosatsuba_d12`).
@@ -32,9 +37,7 @@ import os
 
 import pytest
 
-from l7r.diagram.hamletgen.consts import BROOK_MAX_TURN_DEG, BROOK_WANDER_STEP, COPSE_BELT_REACH_FT, COPSE_HOUSE_REACH_FT
 from l7r.diagram.hamletgen.ways import law
-from l7r.diagram.settlement import segments_cross
 
 SKILL = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 GENS = sorted(glob.glob(os.path.join(SKILL, "pool", "hamlets", "*", "*.gen.py")))
@@ -56,37 +59,6 @@ def test_the_pool_has_a_brook_to_cross() -> None:
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_the_copse_stands_within_reach_of_what_it_is_named_for(gen: str) -> None:
-    """FR-014 / SC-010: a dooryard copse among the houses (within 90 ft of a farmhouse), an against-the-belt copse at
-    the belt's back (within 60 ft of a belt crown) - never spread over the cluster's bounding box."""
-    m = _manifest(gen)
-    groves = {g["role"]: g for g in m.get("village_groves", [])}
-    if "copse" not in groves:
-        pytest.skip("this map rolled no copse")
-    clumps = groves["copse"]["clumps"]
-    assert clumps, "non-vacuity: the copse has crowns"
-    if m["meta"].get("copse_siting") == "against_the_belt":
-        near, reach = groves["windbreak"]["clumps"] + groves["windbreak"].get("clumps_offpage", []), COPSE_BELT_REACH_FT  # the belt runs on off the page
-    else:
-        near, reach = [(h["x"], h["y"]) for h in m["houses"]], COPSE_HOUSE_REACH_FT
-    far = [c for c in clumps if min(math.hypot(c[0] - q[0], c[1] - q[1]) for q in near) > reach + 1.0]
-    assert not far, f"{len(far)} copse crowns stand beyond {reach:.0f} ft of what the copse is named for"
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_no_brook_folds_back_on_itself(gen: str) -> None:
-    """FR-017 / SC-013: no vertex of a brook's course turns it more than the brook's own bend limit - Sawada's
-    doubled back 123 degrees where it left the frame."""
-    for brook in _brooks(_manifest(gen)):
-        for p, q, r in zip(brook, brook[1:], brook[2:], strict=False):
-            a, b = (q[0] - p[0], q[1] - p[1]), (r[0] - q[0], r[1] - q[1])
-            na, nb = math.hypot(*a), math.hypot(*b)
-            if na and nb:
-                turn = math.degrees(math.acos(max(-1.0, min(1.0, (a[0] * b[0] + a[1] * b[1]) / (na * nb)))))
-                assert turn <= BROOK_MAX_TURN_DEG + 1e-6, f"the brook turns {turn:.0f} deg at ({q[0]:.0f}, {q[1]:.0f})"
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
 def test_a_way_reaches_the_field(gen: str) -> None:
     """FR-012 / SC-008: at least one of the hamlet's own ways (not the track out) comes within the 60 ft `lanes_reach_something`
     asks of the field - its paddy or its dry hem, which is the same worked ground. Inashiro, Kashikawa and Mizuguchi, whose
@@ -97,25 +69,6 @@ def test_a_way_reaches_the_field(gen: str) -> None:
     assert [f for f in m.get("fields", []) if f.get("outline")] or [d for d in m.get("dry_plots") or [] if d.get("poly")], "non-vacuity: the map has a field"
     near = law.field_reach_ft(m)
     assert not law.field_unreached(m), f"the nearest way stops {near:.0f} ft from the field"
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_no_brook_runs_ruled_along_the_frame(gen: str) -> None:
-    """FR-017: no stretch of brook within 80 ft of the view's edge runs level along that edge for more than 150 ft - the GM's
-    ruling on Sawada (2026-08-26): a course that "appears to run exactly east to west parallel to the edge of the map ...
-    makes it look like a mistake". The settlement-review measured 457 ft of it pinned against the frame box."""
-    m = _manifest(gen)
-    x0, y0, w, h = m["meta"]["view"]
-    for brook in _brooks(m):
-        for i in range(len(brook)):
-            for axis, lo, hi in ((0, x0, x0 + w), (1, y0, y0 + h)):
-                if min(abs(brook[i][axis] - lo), abs(brook[i][axis] - hi)) > 80.0:
-                    continue
-                j = i
-                while j + 1 < len(brook) and abs(brook[j + 1][axis] - brook[i][axis]) <= 4.0:
-                    j += 1
-                run = sum(math.dist(brook[k], brook[k + 1]) for k in range(i, j))
-                assert run <= 150.0, f"{run:.0f} ft of brook ruled along the frame from ({brook[i][0]:.0f}, {brook[i][1]:.0f})"
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)
@@ -184,75 +137,6 @@ def test_the_board_caption_notches_no_crown(gen: str) -> None:
     # of the crowns (`board_seat.py:board_caption_seat`). Plan D12's terminal (no verge takes a clean caption) is not
     # excused either: it is the gap this test is kept for.
     assert not on, "the board's caption lies on a crown"
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_every_copse_clump_stands_on_the_bank_of_a_house_within_reach(gen: str) -> None:
-    """The dooryard copse is the trees in the gaps between the houses, so every clump has a house within the copse's reach
-    on its own side of the brook (settlement-review of Kashikawa, feature 261: three clumps within reach only as the crow
-    flies). Asked of a house within reach, not of the nearest: with houses on both banks a clump in the gap by its own
-    house can stand a few feet nearer one across the water (Kashikawa, 81 against 77 ft)."""
-    m = _manifest(gen)
-    if m["meta"].get("copse_siting") == "against_the_belt":
-        pytest.skip("the copse stands at the belt's back, named for the belt rather than a house")
-    copse = [c for g in m.get("village_groves") or [] if g.get("role") == "copse" for c in g.get("clumps") or []]
-    assert copse and m["houses"], "non-vacuity: a copse and its houses"
-    for brook in _brooks(m):
-        segs = list(zip(brook, brook[1:], strict=False))
-        for c in copse:
-            p = (float(c[0]), float(c[1]))
-            mine = [h for h in m["houses"] if math.dist((h["x"], h["y"]), p) <= COPSE_HOUSE_REACH_FT and not any(segments_cross(p, (h["x"], h["y"]), a, b) for a, b in segs)]
-            assert mine, f"a copse clump at ({p[0]:.0f}, {p[1]:.0f}) has no house within reach on its own bank"
-
-
-def _straightest(pts: list[tuple[float, float]], tol: float) -> float:
-    """The longest chord between two vertices of `pts` with every vertex between within `tol` ft of it."""
-    best = 0.0
-    for i in range(len(pts)):
-        for j in range(i + 2, len(pts)):
-            a, b = pts[i], pts[j]
-            span = math.dist(a, b)
-            if span > best and all(abs((b[0] - a[0]) * (a[1] - q[1]) - (a[0] - q[0]) * (b[1] - a[1])) / span <= tol for q in pts[i : j + 1]):
-                best = span
-    return best
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_no_brook_runs_ruled_for_most_of_its_course_on_the_page(gen: str) -> None:
-    """A natural brook does not run straight for most of the page (settlement-review of Sawada, round 0ae309f0: 872 ft
-    within 3.1 ft of a line, 70% of the course on the page). No straight run - every vertex within 3.1 ft of the chord -
-    covers more than 40% of the brook's length inside the view; the pool measured 17-31% once the walk swung across its
-    band (specs/261 measurements)."""
-    m = _manifest(gen)
-    x0, y0, w, h = m["meta"]["view"]
-    for brook in _brooks(m):
-        on = [p for p in brook if x0 <= p[0] <= x0 + w and y0 <= p[1] <= y0 + h]
-        length = sum(math.dist(a, b) for a, b in zip(on, on[1:], strict=False))
-        if length < 300.0:
-            continue
-        run = _straightest(on, 3.1)
-        assert run <= 0.4 * length, f"{run:.0f} of {length:.0f} ft of brook on the page runs straight"
-
-
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_no_brook_segment_lies_on_a_screen_axis_but_the_tap_run(gen: str) -> None:
-    """A drawn watercourse runs on no screen axis (the GM, 2026-08-26: a course "exactly east to west parallel to the edge
-    of the map ... makes it look like a mistake"), except the tap run, which lies on the fall by construction: the
-    approach ends at the sluice, the vertex the head race leaves from, and the two segments from it are the run the head race's offtake
-    angle is measured along. Sawada drew the segment leaving its tap run exactly vertical and Inashiro an approach leg
-    1.2 degrees off one (settlement-review round 0ae309f0, feature 261)."""
-    m = _manifest(gen)
-    heads = [(float(c["poly"][0][0]), float(c["poly"][0][1])) for c in m.get("channels") or [] if (c.get("frm") or {}).get("kind") == "stream"]
-    for brook in _brooks(m):
-        # the tap is the vertex the head race leaves from - found by position, since the approach's bends are rounded
-        tap = min(range(len(brook)), key=lambda k: min((math.dist(brook[k], h) for h in heads), default=0.0))
-        for i, (a, b) in enumerate(zip(brook, brook[1:], strict=False)):
-            # a chord of a rounded bend (`BROOK_BEND_FT`) is not a run: a curve that turns through an axis has one chord on
-            # it, and the GM's objection is to a course that runs along one - so only runs of a wander stride or more count
-            if i in (tap, tap + 1) or math.dist(a, b) < BROOK_WANDER_STEP:
-                continue
-            deg = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])) % 90.0
-            assert min(deg, 90.0 - deg) >= 1.6, f"brook segment {i} lies {min(deg, 90.0 - deg):.1f} degrees off a screen axis"
 
 
 def test_a_house_beyond_the_reach_of_every_lane_has_no_way_out() -> None:

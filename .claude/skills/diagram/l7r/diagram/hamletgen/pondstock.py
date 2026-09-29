@@ -85,12 +85,16 @@ def reserve_sty_seat(s: Settlement, plan: SitePlan) -> tuple[Pt, float, int] | N
     the grow-out pond nearest the seat's center gives its nearest bank seat on the near half (`sty_on_near_half`) that
     clears the sluices (`pond_fixture_fits`), and a disc about it - the sty's own reach plus the largest footprint's
     half-diagonal (`STY_RESERVE_REACH_FT`) - goes into `block_polys`, which every homestead placer refuses. Recorded on
-    the settlement for `stage_pond_stock`; returns (seat, rotation, pond) or None where the hamlet keeps no ponds."""
+    the settlement for `stage_pond_stock`; returns (seat, rotation, pond), or None where the hamlet keeps no grow-out pond
+    (no sty is owed). A hamlet with grow-out ponds and no seat on any of them is refused, naming it (`StyRefused`, feature
+    287 wave 5): the sty it owes could never be seated, and nothing after this may emit a dike-pond hamlet without one."""
     ponds = s.M.get("dikeponds") or []
     if plan.field_archetype != "mulberry_dike_fishpond" or not ponds or not plan.seat:
         return None
     toward = (float(plan.seat["cx"]), float(plan.seat["cy"]))
     order = sorted((i for i, p in enumerate(ponds) if p.get("kind") != "fry"), key=lambda i: math.dist(_centroid(ponds[i]["parcel"]), toward))
+    if not order:
+        return None
     for i in order:
         par = ponds[i]["parcel"]
         seat = next((((x, y), rot) for (x, y), rot in _bank_seats(par, toward) if sty_on_near_half((x, y), par, toward, 0.5) and s.pond_fixture_fits(x, y, rot)), None)
@@ -101,7 +105,13 @@ def reserve_sty_seat(s: Settlement, plan: SitePlan) -> tuple[Pt, float, int] | N
         s.block_polys.append([(x + reach * math.cos(math.tau * k / 16), y + reach * math.sin(math.tau * k / 16)) for k in range(16)])
         s.__dict__["_sty_seat"] = ((x, y), rot, i)
         return (x, y), rot, i
-    return None
+    raise StyRefused(f"{plan.spec.name}: no bank seat on the near half of any of {len(order)} grow-out pond(s) clears the sluices for the sty the hamlet owes")
+
+
+class StyRefused(ValueError):
+    """A dike-pond hamlet whose sty cannot be seated within its rules (feature 287 wave 5, water W50/W51): it owes at least
+    one (feature 150 A3) on the near half of a grow-out pond (`sty_on_near_half`), and no seat fits. Refused, naming it,
+    as `SeatRefused` and `SiteRefused` refuse theirs - never a hamlet drawn with none."""
 
 
 def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
@@ -162,3 +172,8 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
         (x, y), rot = seat
         s.pig_sty(x, y, rot=rot, pond=i)
         done += 1
+    # AT LEAST ONE, OR THE SITE IS REFUSED (feature 287 wave 5, water W50): the reserved seat is off the near half for the
+    # houses as seated and every other near-half seat is built on - no seat within the rules, so none is drawn and the
+    # hamlet is refused by name rather than shipped without the sty its archetype owes.
+    if done == 0 and any(p.get("kind") != "fry" for p in ponds):
+        raise StyRefused(f"{plan.spec.name}: no near-half bank seat of any grow-out pond is free for the sty the hamlet owes")

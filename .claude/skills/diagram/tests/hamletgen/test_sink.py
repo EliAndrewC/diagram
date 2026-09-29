@@ -441,3 +441,72 @@ def test_the_constructed_route_runs_on_down_the_fall_until_it_is_downhill() -> N
     route, to = hg.sink.hull_route(plan, (150.0, 925.0), (1.0, 0.0), [])
     assert to == "offmap" and hg.sink.runs_downhill(route, plan.fall)
     assert route[-1][1] > plan.H + 260.0 + 300.0, "lengthened past its first reach"
+
+
+def test_a_pond_reached_only_across_the_brook_is_no_pond_and_the_field_drains_by_a_route_that_crosses_nothing(monkeypatch: pytest.MonkeyPatch) -> None:
+    """water:W08 at the pond run, on the violating case (feature 287 wave 5): the brook runs across the fall between the
+    outfall and every seat the pond can take, so the ditch to the pond would cross the open water mid-run. The pond is
+    refused and the field drains by the off-map routes, which refuse the crossing too - no channel crosses the brook."""
+    from l7r.diagram.hamletgen.water.brook_rules import crosses_mid_run
+
+    plan = a_plan()
+    plan.water_sink = "pond"
+    plan.brook = [(0.0, 1090.0), (1400.0, 1080.0)]
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.meta(name="Test", scale="hamlet", ftpx=1)
+    monkeypatch.setattr(hg.sink, "drain_outfall", lambda s_, name: (700.0, 1010.0))
+    monkeypatch.setattr(hg.sink, "drain_heading", lambda s_, name: (1.0, 0.0))
+    back, sway = hg.sink.pond_seat(plan, (700.0, 1010.0), 116.0, 74.0)
+    ditch = hg.sink.pond_run((700.0, 1010.0), (1.0, 0.0), (700.0 - plan.fall[1] * sway + plan.fall[0] * back, 1010.0 + plan.fall[1] * back + plan.fall[0] * sway), plan.fall)
+    assert crosses_mid_run(plan.brook, ditch), "the case: the pond's ditch would cross the brook"
+    hg.sink.lay_sink(s, plan)
+    assert plan.water_sink == "offmap" and not s.M.get("pond")
+    assert s.M["channels"] and not any(crosses_mid_run(hg.sink.drawn_brook(s, plan), c["poly"]) for c in s.M["channels"])
+
+
+def test_the_confluence_is_the_nearest_one_the_brook_as_drawn_keeps_its_rules_with(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 287 wave 5: the drain's confluence is held as a vertex when the brook is rounded (`drawn_course`), so it is
+    judged with the brook as drawn (`confluence_keeps_the_brook`) - the nearest junction whose drawing breaks a rule of
+    the brook is passed over for the next; where the constructed route's meeting would, the sink is refused by name."""
+    plan = a_plan()
+    plan.brook = [(1130.0, 400.0), (1130.0, 1600.0)]
+    near = hg.brook_join(plan, (1050.0, 1050.0))
+    assert near is not None
+    other = hg.brook_join(plan, (1050.0, 1050.0), keeps=lambda q: q != near)
+    assert other is not None and other != near and other[1] > near[1]
+    assert hg.brook_join(plan, (1050.0, 1050.0), keeps=lambda q: False) is None
+    tap = (700.0, 300.0)
+    plan = a_plan()
+    plan.brook = hg.water.brook.feed_brook(plan, tap)
+    s = Settlement(W=plan.W, H=plan.H, seed=1)
+    assert hg.sink.confluence_keeps_the_brook(s, plan, plan.brook[-2]), "no head race recorded yet: nothing to judge against"
+    s.M["channels"].append({"poly": [list(tap), [720.0, 400.0]], "frm": {"kind": "stream"}, "to": {"kind": "field"}})
+    k = plan.brook.index(tap) + 3
+    mid = ((plan.brook[k][0] + plan.brook[k + 1][0]) / 2, (plan.brook[k][1] + plan.brook[k + 1][1]) / 2)
+    assert hg.sink.confluence_keeps_the_brook(s, plan, mid)
+    monkeypatch.setattr(hg.sink, "brook_violations", lambda course, plan_, sluice, ditches=(), joins=(): ["fold"] if joins else [])
+    assert not hg.sink.confluence_keeps_the_brook(s, plan, mid)
+    plan2, drawn, _out = _u_field_stage(monkeypatch)
+    plan2.brook = [(0.0, 2400.0), (1500.0, 2420.0), (3000.0, 2440.0)]
+    monkeypatch.setattr(hg.sink, "confluence_keeps_the_brook", lambda s_, plan_, q: False)
+    with pytest.raises(hg.sink.SinkRefused, match="meets the brook"):
+        hg.sink.stage_sink(Settlement(W=plan2.W, H=plan2.H, seed=1), plan2)
+
+
+def test_the_pond_seat_steps_across_the_fall_to_where_its_ditch_crosses_no_brook() -> None:
+    """water:W08 at the pond's seat (feature 287 wave 5): a brook ending just below the outfall lies across the straight
+    seat's ditch; the seat steps across the fall to one whose ditch reaches the pond without crossing the water - the
+    reservoir kept, as on the six maps of cohort 1-60 and the pool whose ditch crossed their brook at HEAD."""
+    from l7r.diagram.hamletgen.water.brook_rules import crosses_mid_run
+
+    plan = a_plan()
+    out, heading = (700.0, 1010.0), (1.0, 0.0)
+    brook = [(400.0, 1085.0), (715.0, 1080.0)]
+    straight = hg.sink.pond_seat(plan, out, 116.0, 74.0)
+    assert straight[1] == 0.0
+    center = (out[0] + plan.fall[0] * straight[0], out[1] + plan.fall[1] * straight[0])
+    assert crosses_mid_run(brook, hg.sink.pond_run(out, heading, center, plan.fall)), "the case: the straight seat's ditch crosses"
+    back, sway = hg.sink.pond_seat(plan, out, 116.0, 74.0, heading, brook)
+    assert sway != 0.0
+    center = (out[0] - plan.fall[1] * sway + plan.fall[0] * back, out[1] + plan.fall[0] * sway + plan.fall[1] * back)
+    assert not crosses_mid_run(brook, hg.sink.pond_run(out, heading, center, plan.fall))

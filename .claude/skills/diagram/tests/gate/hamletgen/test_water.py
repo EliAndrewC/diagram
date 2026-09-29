@@ -19,9 +19,10 @@ def test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks() -> None:
     (declared AND wet, so `polder_waterward_flanks_wet` has teeth rather than skipping).
 
     KEPT through feature 287 (specs/287-placer-guarantees/research.md R8): no placer unit test holds the archetype's own
-    record (the overlay count, the fry ponds, no duck pen, a wet strip per waterward face, forecourt yards), and the sty
-    is not guaranteed - `pondstock.py:reserve_sty_seat` returns None when no seat fits and the walk that follows refuses
-    nothing when it finds none. Its household clause was retired: every household is seated or the site refused."""
+    record (the overlay count, the fry ponds, no duck pen, a wet strip per waterward face, forecourt yards). Its household
+    clause was retired: every household is seated or the site refused. Its sty clause was retired in wave 5: a dike-pond
+    hamlet with a grow-out pond seats its sty or is refused (`pondstock.py`, `StyRefused` - at the reservation where no
+    seat fits, at `stage_pond_stock` where none is left on the near half), `tests/hamletgen/test_water_287.py`."""
     # THE KUWABATA SPEC, SHARED WITH THE THREE GATE FILES THAT ALREADY ROLL IT (2026-08-31). This test
     # was a spec of its own differing only in leaving `dike_crop` to roll (seed 21 once gave sugarcane, a planting 269 B34 retired), and
     # it asserts nothing about the crop. Measured: Kuwabata's map carries every assertion below.
@@ -31,7 +32,6 @@ def test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks() -> None:
     assert any(r["overlay"] == "mulberry_fishpond" and r["count"] >= 20 for r in M["land_use"])
     assert M.get("dikeponds"), "the ponds are recorded as dike-ponds"
     assert 1 <= sum(1 for d in M["dikeponds"] if d.get("kind") == "fry") <= 3, "a few of the smallest parcels are fry nursery ponds (feature 150 A5)"
-    assert M.get("pig_sties"), "the stock on the ponds (feature 150 A3)"
     assert not M.get("duck_pens"), "no duck pen: a modern form, retired (269 B32)"
     assert set(m["waterward"]) and set(m["waterward"]) <= {"N", "E", "S", "W"}
     assert sum(1 for q in M["marshes"] if q.get("role") == "waterside") == len(m["waterward"])

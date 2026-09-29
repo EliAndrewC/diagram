@@ -7,8 +7,8 @@ quads - so a map could pass the placer and fail the test, and nothing but a re-r
 rule is written once, at the GATE's own threshold: the finished-map test calls it, and a placer that writes a
 ring (the seam pass, water design W16-W28) refuses any candidate for which `ring_violations` is non-empty.
 
-EACH BODY IS THE TEST BODY IT REPLACES, thresholds and all (`tests/gate/test_paddy_fabric.py`,
-`tests/gate/test_bunds_and_dikes.py`, `tests/gate/test_water_junctions.py`). The rules no finished-map test asserts
+EACH BODY IS THE TEST BODY IT REPLACES, thresholds and all (the retired `tests/gate/test_paddy_fabric.py`,
+`tests/gate/test_bunds_and_dikes.py`, the retired `tests/gate/test_water_junctions.py`). The rules no finished-map test asserts
 yet - the arrowhead (W25) and the grave island (W28) - are written from the water design's mechanism.
 
 TWO RULES ARE WRITTEN DOWN AND NOT ENFORCED: the working width (W26) and the dart (W27). Their research pass (feature

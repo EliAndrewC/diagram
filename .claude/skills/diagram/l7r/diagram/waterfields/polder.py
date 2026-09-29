@@ -782,10 +782,15 @@ def unpoint_parcels(plots: list[dict[str, Any]]) -> None:
     ring is first re-hemmed without the vertex that makes the apex - only where that vertex is CONVEX, so the ring
     shrinks inside the ground it already had and cannot reach back onto the water the cleanup pushed it off - and the
     pass repeats while the ring is still pointed. A ring left pointed (a reflex notch, or too few vertices to be a basin)
-    is dropped from the crop and left as bank ground: the polder's own berm fill, never a pointed parcel."""
+    is dropped from the crop and left as bank ground: the polder's own berm fill, never a pointed parcel.
+
+    THE RING IS JUDGED AS IT WILL BE RECORDED - rounded to 0.1 px, as `fields/comb.py` writes `plot_rings` - so the ring on
+    the map is the ring this pass judged (feature 287 wave 5): a corner at 15.0 degrees raw can round to 14.9 and a record
+    of the unrounded judgment would carry a needle the placer never saw. A parcel whose rounded ring passes keeps its
+    unrounded vertices (the record rounds them to the ring judged here); one re-hemmed is written rounded."""
     kept: list[dict[str, Any]] = []
     for p in plots:
-        ring = [(float(x), float(y)) for x, y in p["poly"]]
+        ring = [(round(float(x), 1), round(float(y), 1)) for x, y in p["poly"]]
         while len(ring) >= 4 and _needle(ring):
             k = _apex(ring)
             if k is None:
@@ -793,7 +798,7 @@ def unpoint_parcels(plots: list[dict[str, Any]]) -> None:
             ring = ring[:k] + ring[k + 1 :]
         if len(ring) >= 3 and not _needle(ring):
             if len(ring) != len(p["poly"]):
-                p["poly"] = [(round(x, 1), round(y, 1)) for x, y in ring]
+                p["poly"] = ring
             kept.append(p)
     plots[:] = kept
 

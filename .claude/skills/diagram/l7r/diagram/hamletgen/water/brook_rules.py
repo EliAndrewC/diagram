@@ -26,7 +26,7 @@ def turn_deg(p: Pt, q: Pt, r: Pt) -> float:
 
 def max_turn_deg(course: Sequence[Pt]) -> float:
     """The sharpest turn anywhere on `course`, degrees - held at or under `BROOK_MAX_TURN_DEG` on the drawn course
-    (water:W01, `test_no_brook_folds_back_on_itself`)."""
+    (water:W01, the retired `test_no_brook_folds_back_on_itself`)."""
     return max((turn_deg(p, q, r) for p, q, r in zip(course, course[1:], course[2:], strict=False)), default=0.0)
 
 

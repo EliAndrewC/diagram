@@ -289,7 +289,7 @@ def _weld_apex(ring: Poly) -> float:
     """How sharp a weld's recorded ring is, read the way the gate reads it - which is TWO ways.
 
     The deduped ring is the measurement `paddy_plots_are_workable_basins` makes, and the weld is held to a stricter
-    THRESHOLD on it (`_WELD_MIN_APEX`, 18 against 15). But the shipped-hamlet test
+    THRESHOLD on it (`_WELD_MIN_APEX`, 18 against 15). But the shipped-hamlet test (retired by feature 287)
     (`tests/gate/test_paddy_fabric.py::test_no_shipped_hamlet_has_a_basin_tapering_to_a_point`) reads the ring AS
     RECORDED, the rule `_is_a_needle` already applies to every repair in `_unjog`. This guard read only the deduped ring
     (it used to say that one was the gate's only reading), so a weld recording a hairline spur - a vertex 0.5 px out and

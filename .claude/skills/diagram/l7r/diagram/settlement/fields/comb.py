@@ -56,6 +56,20 @@ def channel_end_on_stream(end: Sequence[float], stream: Sequence[Sequence[float]
     return any(seg_dist(float(end[0]), float(end[1]), a, b) <= tol for a, b in zip(pts, pts[1:], strict=False))
 
 
+DOWNHILL_FRACTION = 0.2
+#: How much of a watercourse's net travel must run down the fall (water:W10, `channels_flow_downhill`): a delivery may take
+#: an oblique line, but not one whose net travel is level or uphill. The retired gate test's own figure.
+
+
+def runs_downhill(course: Sequence[Sequence[float]], fall: Sequence[float], frac: float = DOWNHILL_FRACTION) -> bool:
+    """Does `course`'s net displacement, first point to last, run down `fall` by at least `frac` of its length - the
+    channel rule (water:W10), ONE predicate for every writer of `M['channels']`: the sink's routes (`hamletgen/sink.py`)
+    and the hairline feed (`_comb_source_channel`). A course that ends where it starts has no direction to judge."""
+    vx, vy = float(course[-1][0]) - float(course[0][0]), float(course[-1][1]) - float(course[0][1])
+    L = math.hypot(vx, vy)
+    return L == 0 or vx * float(fall[0]) + vy * float(fall[1]) >= frac * L
+
+
 def bead_drowned(q: Pt, water: Any, ellipses: Sequence[tuple[float, float, float, float]]) -> bool:
     """THE RULE (feature 287, water W33; `bund_beans_on_bunds`): an azemame bead stands on water paint - inside a pond's rim
     (`ellipses`, each grown by the rim stroke and a bead radius) or nearer than a ditch's or channel's half-width to its
@@ -523,7 +537,7 @@ class CombMixin:
             # no "stream" polyline = an existing on-map stream already runs at the sluice (the town
             # pattern: the comb taps the map's stream via a weir); nothing extra is drawn, the
             # hairline topology channel below still anchors to that stream
-            self.stream(source["stream"], frm={"kind": "offmap"}, width=7)
+            self.stream(source["stream"], frm={"kind": "offmap"}, to=source.get("to"), width=7)  # `to`: where a brook that runs on past the sluice leaves (feature 287, water:W07)
         return pond_rec
 
     def _comb_draw_ditches(self: Settlement, net: dict[str, Any]) -> None:  # type: ignore[misc]
@@ -733,6 +747,8 @@ class CombMixin:
                 din = (_q_in[0] + _nx_in * 14.0, _q_in[1] + _ny_in * 14.0)
             start = pond_rec if pond_rec else (sluice[0], sluice[1])
             frm = {"kind": "pond"} if pond_rec else {"kind": "stream"}
+            _fdd = math.radians(float(net["down_deg"]) if net.get("down_deg") is not None else float(dd))
+            _feed_fall = (math.cos(_fdd), math.sin(_fdd))  # the field's own fall, as the channel rule reads it (its record's `down_deg`)
             if not pond_rec:
                 # snap the intake's START onto the nearest stream centerline (within the 30px anchor
                 # band): an offtake JOINS its stream at a confluence like any junction - the symmetric
@@ -747,7 +763,9 @@ class CombMixin:
                         dq = math.hypot(start[0] - fq[0], start[1] - fq[1])
                         if nearest is None or dq < nearest[0]:
                             nearest = (dq, fq)
-                if nearest and 0.5 < nearest[0] <= 30:
+                # ...ONLY WHERE THE FEED STILL RUNS DOWNHILL FROM IT (feature 287, water:W10): the record runs from `start` to the
+                # fork, so a snap that left its net travel level or uphill is not taken and the feed keeps the sluice
+                if nearest and 0.5 < nearest[0] <= 30 and runs_downhill([nearest[1], fork], _feed_fall):
                     start = nearest[1]
                 # ...AND IT DECLARES A STREAM ONLY WHERE IT REACHES ONE (feature 287, labels L16): beyond the anchor band
                 # the intake is not snapped, so its mouth stood in the grass while the record said it joined the brook.
@@ -799,6 +817,12 @@ class CombMixin:
                 # projection along the source -> mouth chord.
                 _fk_t = ((_fk[0] - start[0]) * vx + (_fk[1] - start[1]) * vy) / (vl * vl)
                 _ch_poly.insert(1 if _fk_t < 0.5 else len(_ch_poly) - 1, [round(_fk[0], 1), round(_fk[1], 1)])
+            # THE FEED RUNS DOWNHILL OR IS NOT RECORDED (feature 287, water:W10): from the sluice the race leaves at the offtake
+            # angle (35 degrees off the fall, so its net travel runs 0.82 of its length down it) and a polder's reservoir
+            # stands above the block's high corner, so by construction it always does; a feed that climbs is refused by
+            # name here, never recorded as water running uphill
+            if not runs_downhill(_ch_poly, _feed_fall):
+                raise ValueError(f"{name}: the feed from its {frm['kind']} to the field runs level or uphill ({_ch_poly[0]} -> {_ch_poly[-1]})")
             self.M["channels"].append(
                 {
                     "poly": _ch_poly,

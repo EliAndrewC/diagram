@@ -404,9 +404,57 @@ def test_a_level_run_no_leg_can_bend_is_left_for_the_judgment(monkeypatch: pytes
 
 def test_the_last_candidate_bows_a_clear_way_straight_up_the_fall(monkeypatch: pytest.MonkeyPatch) -> None:
     """Where every bearing is refused for a reason of its own and the way straight up the fall is clear of the field, the
-    last candidate is that way bowed at its middle - a course with a leg dead on the fall's axis would be refused too."""
+    first last candidate is that way bowed at its middle - a course with a leg dead on the fall's axis would be refused too.
+    Judged like every other (feature 287 wave 5): it is taken because it keeps every rule."""
     plan = a_plan()
-    monkeypatch.setattr(wb, "brook_violations", lambda *a: ["refused"])
+    real = wb.brook_violations
+    calls: list[int] = []
+    monkeypatch.setattr(wb, "brook_violations", lambda *a: ["refused"] if len(calls.append(1) or calls) <= 15 else real(*a))  # the fifteen bearings refused
     course = wb.feed_brook(plan, TAP)
-    assert TAP in course and course[0][0] == pytest.approx(TAP[0])
+    assert len(calls) == 16 and TAP in course and course[0][0] == pytest.approx(TAP[0])
+    assert real(course, plan, TAP) == []
     assert br.axis_segments(wb.finished_course(course, br.BROOK_DRAWN_W, [TAP]), [TAP]) == []
+
+
+def test_a_last_candidate_that_breaks_a_rule_is_never_returned_the_next_bearing_is_or_the_site_is_refused(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The violating case (feature 287 wave 5): the route round the field used to be returned UNJUDGED. Here every
+    approach is refused and the round-the-field course from straight up the fall breaks a rule (its source stands on the
+    canvas) - the placer takes the next bearing's route round the field, never the breaking one; where every last
+    candidate breaks a rule, on both skirts, the site is refused by name."""
+    plan = a_plan()
+    monkeypatch.setattr(wb, "approach_legs", lambda *a: None)
+    real_round = wb.round_the_field
+    straight = math.radians(math.degrees(math.atan2(-plan.fall[1], -plan.fall[0])))
+
+    def on_canvas_when_straight(plan_: hg.SitePlan, sluice: tuple[float, float], th: float, run: float) -> list[tuple[float, float]]:
+        path = real_round(plan_, sluice, th, run)
+        return [(sluice[0], sluice[1] - 200.0), *path[1:]] if abs(th - straight) < 1e-9 else path
+
+    monkeypatch.setattr(wb, "round_the_field", on_canvas_when_straight)
+    assert "source" in wb.brook_violations([*on_canvas_when_straight(plan, TAP, straight, 420.0), TAP, *_skirt_below(plan)], plan, TAP), "the case"
+    course = wb.feed_brook(plan, TAP)
+    assert wb.brook_violations(course, plan, TAP) == [] and course[0][1] < 0.0
+    monkeypatch.setattr(wb, "round_the_field", lambda plan_, sluice, th, run: [(sluice[0], sluice[1] - 200.0)])
+    monkeypatch.setattr(wb, "settle_course", lambda course, plan_, sluice: list(course))  # no repair moves a source onto the canvas off it; skipped for time
+    real = wb.brook_violations
+    judged: list[list[str]] = []
+    monkeypatch.setattr(wb, "brook_violations", lambda c, *a: judged.append(["source"] if not br.ends_off_canvas(c, plan.W, plan.H, ends=(0,)) else real(c, *a)) or judged[-1])
+    with pytest.raises(wb.BrookRefused, match="keeps every rule"):
+        wb.feed_brook(plan, TAP)
+    assert len(judged) == 30 and all(j == ["source"] for j in judged), "every bearing, on both skirts, judged and refused"
+
+
+def test_the_mouth_leaves_the_canvas_however_far_across_the_fall_the_course_heads() -> None:
+    """water:W07 at the mouth, on the violating case: the last stations head almost across the fall (fall due south, the
+    course running east and barely down), 5,000 ft above the canvas' foot. The four exit legs blend that heading onto the
+    fall over a span measured along the fall, so they alone stop inside the sheet; the last leg, straight down the fall,
+    is lengthened past the edge - along itself, so no new turn."""
+    fall, W, H = (0.0, 1.0), 6000.0, 6000.0
+    out = [(2940.0, 988.0), (2960.0, 992.0), (2980.0, 996.0), (3000.0, 1000.0)]
+    legs = wb.exit_legs(out, fall, W, H)
+    assert br.ends_off_canvas([*out, *legs], W, H, ends=(-1,))
+    last = (legs[-1][0] - legs[-3][0], legs[-1][1] - legs[-3][1])
+    assert abs(last[0]) < 1e-6 and last[1] > 0.0, "the last leg runs straight down the fall"
+    span = (H - out[-1][1]) + 260.0
+    assert legs[-3][1] + 0.26 * span < H, "the case: the unlengthened leg ended on the sheet"
+    assert "mouth" in wb.brook_violations([(700.0, -100.0), (700.0, 200.0), TAP, (700.0, 400.0), (1100.0, 900.0), (1150.0, 1300.0)], a_plan(), TAP)

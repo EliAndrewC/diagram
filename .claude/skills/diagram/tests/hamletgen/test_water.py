@@ -171,7 +171,8 @@ def test_fit_field_probes_saturation_and_rerolls_the_best_aspect_in_full(monkeyp
         k = float(kw["field_fall"]) / w.REF_FIELD_FALL  # type: ignore[arg-type]
         aspect = float(kw["canal_a_len"][0]) / (w.REF_CANAL_A[0] * k)  # type: ignore[index]
         carves.append((round(aspect, 2), round(k, 3)))
-        return SimpleNamespace(net={"k": k, "aspect": aspect}, planted_area=lambda k=k: min(9.0 * k**2, 10.0) * SQ_FT_PER_ACRE)  # saturates at 10 acres (ftpx 1)
+        acres = min(9.0 * k**2, 10.0)  # saturates at 10 acres (ftpx 1)
+        return SimpleNamespace(net={"k": k, "aspect": aspect, "acres": acres}, planted_area=lambda acres=acres: acres * SQ_FT_PER_ACRE)
 
     def fake_finish(carve: SimpleNamespace) -> dict[str, object]:
         finishes.append(carve)
@@ -181,8 +182,11 @@ def test_fit_field_probes_saturation_and_rerolls_the_best_aspect_in_full(monkeyp
     monkeypatch.setattr(w, "finish_comb", fake_finish)  # type: ignore[attr-defined]  # feature 220: the search carves, the winner alone is finished
     monkeypatch.setattr(w, "tail_dangles", lambda net: False)  # type: ignore[attr-defined]
     monkeypatch.setattr(w, "net_bends_acutely", lambda net: False)  # type: ignore[attr-defined]
+    monkeypatch.setattr(w, "net_acres", lambda net, ftpx: net["acres"])  # type: ignore[attr-defined]
+    # 11 acres against a 10-acre ceiling: no aspect lands the 6% the search aims at, and the best lands inside the 15% band
+    # (feature 287) - past it the site is refused, `tests/hamletgen/test_fit_flanks.py`
     plan = SimpleNamespace(
-        W=1000.0, H=1000.0, down_deg=90.0, offtakes_a=(), offtakes_b=(), grain_drift=0.0, fan_aspect=w.FAN_ASPECTS[0], target_acres=16.0, ftpx=1.0, head_deg=55.0, head_lead=105.0, brook_side=1
+        W=1000.0, H=1000.0, down_deg=90.0, offtakes_a=(), offtakes_b=(), grain_drift=0.0, fan_aspect=w.FAN_ASPECTS[0], target_acres=11.0, ftpx=1.0, head_deg=55.0, head_lead=105.0, brook_side=1
     )
     net = w.fit_field(plan, (0.0, 0.0), 1, 20.0, (30.0, 40.0))  # type: ignore[arg-type]
     per_aspect = {}
@@ -207,7 +211,7 @@ def test_a_saturated_aspect_stops_after_the_probe_instead_of_bisecting_a_fan_it_
 
     plan = a_plan()
     plan.target_acres = 500.0  # far past anything this envelope can hold: every aspect saturates
-    # ...on a COARSE plot grid, for the reason recorded at `test_the_fit_gives_a_saturated_best_aspect`
+    # ...on a COARSE plot grid, for the reason recorded at the retired `test_the_fit_gives_a_saturated_best_aspect` (test_seed_branches_147.py)
     # (feature 158): the probe's decision is about the TARGET being unreachable, not about how many
     # plots a carve lays, and the plot count is all this test's seconds were.
     (bad, err), carve = _fit_at_aspect(plan, (700.0, 300.0), 3, 138.0, (78.0, 90.0), 1.0, 0.06, 9, probe=True)

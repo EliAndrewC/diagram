@@ -13,7 +13,7 @@ from typing import Any
 import pytest
 
 from l7r.diagram import hamletgen as hg
-from l7r.diagram.hamletgen.pondstock import _bank_seats, reserve_sty_seat, stage_pond_stock, sty_on_near_half
+from l7r.diagram.hamletgen.pondstock import StyRefused, _bank_seats, reserve_sty_seat, stage_pond_stock, sty_on_near_half
 from l7r.diagram.hamletgen.water.brook import course_corner, join_vertices, round_the_brooks
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.city.bridges import SUPPLY_ROLES
@@ -80,7 +80,7 @@ def test_a_drain_with_no_route_through_a_gap_is_refused_by_name_never_drawn_acro
 
 def test_a_confluence_reached_only_across_the_crest_is_not_taken(monkeypatch: pytest.MonkeyPatch) -> None:
     plan, s, drawn = _sink_stage(monkeypatch, (700.0, 1020.0))
-    monkeypatch.setattr(hg.sink, "brook_join", lambda plan_, out: (1000.0, 1060.0))  # crosses the crest ~130 px east of the gap
+    monkeypatch.setattr(hg.sink, "brook_join", lambda plan_, out, keeps=None: (1000.0, 1060.0))  # crosses the crest ~130 px east of the gap
     hg.sink.lay_sink(s, plan)
     assert drawn and drawn[0][1] == "offmap" and not breaches_any_dike(drawn[0][0], s.M["dikes"])
 
@@ -206,8 +206,28 @@ def test_no_reservation_where_the_hamlet_keeps_no_ponds_or_no_seat() -> None:
     s.M["dikeponds"] = []
     assert reserve_sty_seat(s, plan) is None
     s, plan = _dikepond()
+    s.M["dikeponds"] = [dict(p, kind="fry") for p in s.M["dikeponds"]]
+    assert reserve_sty_seat(s, plan) is None, "fry ponds alone owe no sty"
+    s, plan = _dikepond()
     s.M["dikepond_sluices"] = [{"a": [p[0], p[1]], "b": [p[0] + 0.1, p[1]]} for pond in s.M["dikeponds"] for p, _r in _bank_seats(pond["parcel"], (450.0, 150.0))]
-    assert reserve_sty_seat(s, plan) is None, "a pond with every bank seat on a sluice gives no seat"
+    with pytest.raises(StyRefused, match="grow-out pond"):
+        reserve_sty_seat(s, plan)  # every bank seat on a sluice: the sty the hamlet owes cannot be seated - refused, not skipped
+
+
+def test_a_dike_pond_hamlet_whose_every_near_half_seat_is_built_on_is_refused_never_drawn_without_its_sty() -> None:
+    """W50 on the violating case: the reservation stands off the near half for the houses as seated (the village turned out
+    below the ponds) and every near-half bank seat of both ponds carries a house - the stage used to draw no sty and
+    refuse nothing; it now refuses the site by name."""
+    s, plan = _dikepond()
+    reserve_sty_seat(s, plan)
+    hc = (450.0, 850.0)
+    houses = [{"x": 450.0, "y": 870.0, "w": 20.0, "h": 14.0} for _ in range(40)]
+    for pond in s.M["dikeponds"]:
+        houses += [{"x": q[0], "y": q[1], "w": 20.0, "h": 14.0} for q, _r in _bank_seats(pond["parcel"], hc) if sty_on_near_half(q, pond["parcel"], hc)]
+    s.M["houses"] = houses
+    with pytest.raises(StyRefused, match="near-half"):
+        stage_pond_stock(s, plan)
+    assert not s.M.get("pig_sties")
 
 
 # ---- the polder's crossings ask no plank the law refuses; a same-flank re-seat keeps the fringe ----------------------

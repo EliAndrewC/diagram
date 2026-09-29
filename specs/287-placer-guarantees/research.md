@@ -311,6 +311,17 @@ Decisions review and for what goes to the GM once the work runs.
   only, since its dry ground is the toe strip alone (2.5-5.2 acres against a need of 8.5-17). Cost: the bare-winter form
   never appears on a cleared fan. Alternative priced: a deep reserve on cleared ground (no research places it). Chosen by
   the session; for the Decisions review.
+- **Wave 5, water: what a placer does when its candidates run out (FR-005)** - every one a refusal by name, none a kept
+  violation; measured 2026-09-29 over cohort 1-60 and the pool, none fires. The fan (`fit.py:fit_field`): the search is
+  widened to every aspect in full, then `FieldRefused` - the canvas is not grown, because it is `plan.py`'s decision
+  (HOMES') and no fan needed it (worst 6.7% of the 15% band). The sty (`pondstock.py`): `StyRefused` where no near-half bank
+  seat of any grow-out pond fits, at the reservation or at the stage. The feed brook (`brook.py:feed_brook`): the routes
+  round the field from every bearing on both skirts, then `BrookRefused`. The feed hairline (`fields/comb.py`): a snap
+  that would leave it level is not taken; one that climbs from the sluice is refused (by construction it never does).
+  The drain's pond (`sink.py:pond_seat`): a seat whose ditch crosses the brook is no seat, and past the last the field
+  drains off the frame (the existing fallback); six maps moved their pond to the other side of the outfall, none lost it.
+  The constructed drain route meeting the brook where the drawn brook breaks a rule: `SinkRefused`. Historically neutral
+  (refusals of drawings the rules forbid); chosen by the session, for the Decisions review.
 
 ## R8 - Tests retired and kept (2026-09-29)
 
@@ -431,6 +442,25 @@ full gate run, of which 216.45 s is one unit test (below); the finished-map test
 | soak/test_seatings::test_lane_frontage_seats_the_hamlet_when_the_field_row_offers_nothing (and its seating variant) | soak | `SiteRefused`; test_seats::test_lane_frontage_skips_web_lanes_and_lanes_of_the_other_kind |
 | hamletgen/test_pool_261::test_every_way_out_crosses_the_brook_at_most_once (5) (wave 5) | 0.22 | `ways/settle.py:settle_way_outs` (an ordinary lane's crossing cut, else the tree lane carrying it dropped whole), `lane_violators` and the last resort's tail (tree carriers too), `Lawful` asking the route (`law.adds_a_way_out_crossing`) before any tree lane is laid, `track.connector_keeps_the_law` (the connector crosses a brook at most once, so every such way out has a carrier the web may take); test_settle::test_no_way_out_crosses_the_brook_twice, ::test_a_way_out_only_tree_lanes_carry_over_and_back_loses_the_tree_lane_nearest_the_house, ::test_lawful_refuses_a_tree_lane_that_hands_a_household_a_way_out_over_the_brook_and_back, ::test_a_way_out_left_over_the_brook_after_the_last_resort_loses_its_lanes; test_track::test_a_connector_through_a_building_or_over_the_brook_twice_takes_the_dry_exit |
 | gate/test_lane_network::test_the_connector_does_not_break_mid_run (wave 5) | <0.005 | `track.connector_keeps_the_law` (the connector as drawn, squared first, runs through no `law.breaks_through` box, else the dry exit) with `stage_track` walling the sweep and the dry exit by `law.solid_quads`; the later writers ask the same predicate (`web.kept_connector`, `joints.fold_the_connector_hairpin`); test_track::test_the_connector_sweep_refuses_a_bearing_with_a_house_on_it_and_takes_the_next, ::test_a_connector_through_a_building_or_over_the_brook_twice_takes_the_dry_exit, test_web::test_the_late_pass_keeps_the_connector_as_placed_where_its_pulled_back_end_would_run_through_a_building, test_joints::test_a_connector_fold_whose_new_first_leg_runs_through_a_building_is_refused. The settle's hook repair only shortens a leg of at most `_HOOK_FT` (no leg past `BREAK_SPAN_FT` is made), and its squaring is a no-op on the already-squared connector |
+| gate/test_settlement_cover::test_every_recorded_grove_holds_trees (module deleted; wave 5) | <0.005 | `stands.py:stocked_box` - every grove is recorded at its band's box where its clumps stock it, else the extent they are drawn at, else their main stand's (`main_stand`), judged at the record's 0.1 px grain (`stocked_at_grain`); `village_grove` records through it and `core.py:_partition_grove_clumps` re-decides the box over the clumps the page shows; test_woods_287::test_a_grove_is_recorded_at_an_extent_its_clumps_stock, ::test_village_grove_records_a_windbreak_its_clumps_stock, ::test_the_page_partition_records_the_grove_again_at_what_the_page_shows |
+| gate/test_scatter_frame::test_no_shipped_hamlet_breaches_its_scatter_frame (5) (wave 5) | 0.28 | `hinterland/frame.py:scatter_frame_for` - the decided view's scatter frame carries the title band's allowance below the view as well as above (the band goes under the map when every seat above is crossed; cohort seed 8 reached 98 px past the old pad), so the view the band grows stays inside it; the finish's unused re-throw (`_scatter_rethrows`, set by nothing) deleted; test_finish_287::test_a_scatter_frame_of_the_decided_view_holds_the_title_band_on_either_side, test_hinterland::test_after_the_view_is_decided_the_scatter_throws_within_it_and_the_placers_ask_it |
+| gate/test_crossings_and_cover::test_the_countryside_has_no_holes_in_it (module deleted; wave 5) | 0.04 | `finish.py:_title_band` clothes the band it grows (`cover.py:refill_the_view`, the fill again over the final `map_window` - the view, or the neatline where the band is sheet outside the map) on a map that filled its holes; test_finish_287::test_the_title_band_is_clothed_as_the_view_was |
+| hamletgen/test_pool_261::test_the_copse_stands_within_reach_of_what_it_is_named_for (5) (wave 5) | 0.15 | `stands.py:village_grove` asks every clump its reach where it is seated and again where it is re-seated (`_reseat(reach_of=...)`): a household's reserved seat its dooryard's (`seat_near`: a house within `COPSE_HOUSE_REACH_FT` on its bank, passed by `stage_windbreak` on either siting), every other clump the siting's `near` (the belt's lee on against_the_belt); test_woods_287::test_a_reserved_seat_is_asked_its_households_reach_and_bank, ::test_a_reserved_seat_moved_round_another_groves_crown_is_asked_its_reach_again. The rule as W25 restated it: a reserved seat is its household's share, standing by its house on either siting (cohort 1-60 at wave 5 start: 172-279 such crowns a map beyond 60 ft of the belt on the against_the_belt seeds) |
+| ::test_every_copse_clump_stands_on_the_bank_of_a_house_within_reach (4) (wave 5) | 0.15 | the same (`BankNear`: the house within reach on the clump's own side of the brook) |
+| hamletgen/test_pool_wind::test_every_pool_hamlet_has_its_belt_on_the_regional_northwest (5) (wave 5; its record clause kept as ::test_every_pool_hamlet_records_the_regional_northwest) | 0.10 | `stands.py:trim_to_the_wind` - the end trim converges on the crown nearest the wind's bearing, and where even that bears off the wind's quarter no belt is planted (never one off the wind); the non-settling path trims a one-crown belt too; test_woods_287::test_a_belt_wrapped_round_the_cluster_is_trimmed_to_a_hook_on_the_wind (the lone crown off the wind), ::test_a_belt_with_no_crown_on_the_wind_is_not_planted |
+| gate/test_captions_and_boards::test_no_caption_lies_across_a_way (module deleted; wave 5) | <0.005 | a hamlet's one caption is its notice board's (the pool's five manifests draw no other), and `board_seat.py` decides it clear of every way on both paths: `board_caption_seat` (strict, the way term `caption_clears_ways` reads) and, at plan D12's terminal, `terminal_caption` - the caption on a leader or in the key (D10, no hard ink: a settlement's ways are hard) at a seat whose key mark clears every way, else the next seat; `place(least=True)`, the retired least-cost seat that could lie across a lane, is deleted. test_board_seat::test_with_no_clean_caption_anywhere_the_question_stands_for_the_gm (a verge seat whose mark would lie on the road refused), ::test_the_terminal_caption_clears_every_way_or_is_refused, test_placer_287::test_a_way_crossed_between_the_blocks_corners_is_seen |
+| ::test_every_pool_belt_keeps_its_depth_across_its_windward_face (5) (wave 5) | 0.08 | `belt_law.py:BeltReading.depths` - a belt no bin of which is judged, some stretch of which stands farther than `BELT_DESIGN_DEPTH_FT` from the page's edge (`off_the_page`, the retired test's frame-held clause), has every crowned bin judged, which `settle_the_belt` deepens or ends; test_belt_law::test_a_belt_no_bin_judges_is_judged_whole_where_it_stands_off_the_page |
+| gate/test_paddy_fabric::test_the_supply_commands_both_flanks_of_the_fan (module deleted; wave 5) | <0.005 | `water/fit.py:fit_field` - a fan is legal only where `flanks_commanded` holds (with `tail_dangles` and `net_bends_acutely`, one `fan_legal`), judged again on the finished net; the least-bad keep is gone: past a search widened to every aspect in full the site is refused (`FieldRefused`); test_fit_flanks::test_a_fan_whose_supply_leaves_a_flank_uncommanded_is_never_returned, ::test_a_flank_whose_supply_is_trimmed_short_is_uncommanded |
+| ::test_no_shipped_polder_parcel_tapers_to_a_point (wave 5) | 0.30 | `waterfields/polder.py:unpoint_parcels` judges and writes the ring AS RECORDED (rounded to 0.1 px, as `fields/comb.py`'s `plot_rings`); test_polder_ring::test_a_parcel_blunt_unrounded_but_a_needle_as_recorded_is_re_hemmed (15.0 degrees raw, 14.9 recorded) |
+| gate/test_water_flow (module deleted; wave 5): ::test_every_channel_runs_downhill | <0.005 | `fields/comb.py:runs_downhill`, the ONE channel rule every writer of `channels` decides by: the sink's routes, pond seat and confluence (`sink.py`, as before) and now the hairline feed (`_comb_source_channel`: a snap onto the stream taken only where the feed still runs downhill, a feed that climbs refused by name); test_field_guarantees::test_the_feed_runs_downhill_its_snap_refused_where_it_would_climb_and_a_climbing_feed_refused, test_sink::test_a_run_downhill_keeps_a_fifth_of_its_travel_on_the_fall |
+| ::test_every_stream_end_is_anchored_to_what_it_declares | <0.005 | the feed brook declares both ends off the map (`water/comb.py`, `to: offmap`) and `brook_violations` holds the source AND the mouth off the canvas on every candidate (`ends_off_canvas`), the mouth by construction (`brook.py:exit_legs` lengthens the last leg down the fall; cohort seed 48's stopped 60 ft inside the sheet at HEAD); test_brook::test_the_mouth_leaves_the_canvas_however_far_across_the_fall_the_course_heads, ::test_the_source_is_off_the_canvas_however_wide_the_canvas. No hamlet stream declares a pond end (the drain's run to a pond is a channel) |
+| ::test_the_map_declares_the_fall_every_rule_below_is_measured_against | 0.05 | non-vacuity for the two above |
+| gate/test_water_junctions::test_no_watercourse_crosses_another_mid_run (module deleted; wave 5) | 18.63 | every candidate of `feed_brook`, the routes round the field included, judged on the drawn course against the net's ditches (`crosses_mid_run`), else `BrookRefused`; the sink's routes as before; the pond seat refuses a ditch over the brook (`pond_seat`; six maps of cohort 1-60 and the pool, Mizuguchi among them, drew one across it at HEAD - each now keeps its pond on the other side); each confluence judged with the brook as drawn (`confluence_keeps_the_brook`); test_brook::test_a_ditch_tail_on_the_brooks_flank_is_skirted_not_crossed, test_sink::test_the_pond_seat_steps_across_the_fall_to_where_its_ditch_crosses_no_brook, ::test_a_pond_reached_only_across_the_brook_is_no_pond_and_the_field_drains_by_a_route_that_crosses_nothing. 18.60 s of the figure is the Inashiro pool map's cold obtain, shared, so the retirement frees about 0.03 s |
+| hamletgen/test_pool_261::test_no_brook_folds_back_on_itself (5) (wave 5) | 0.12 | `brook.py:feed_brook` judges EVERY candidate - the routes round the field from every bearing on both skirts, where the last used to be returned unjudged - on `drawn_course` (the tap and any confluence held, as `round_the_brooks` draws it), and refuses the site past the last (`BrookRefused`); the sink judges the confluence it adds with the brook as drawn (`sink.confluence_keeps_the_brook`), so the course is never rounded after its judgment; test_brook::test_a_last_candidate_that_breaks_a_rule_is_never_returned_the_next_bearing_is_or_the_site_is_refused, ::test_the_last_candidate_bows_a_clear_way_straight_up_the_fall, test_sink::test_the_confluence_is_the_nearest_one_the_brook_as_drawn_keeps_its_rules_with |
+| ::test_no_brook_runs_ruled_along_the_frame (5) (wave 5) | 0.09 | the same (`level_runs_any_view`, a superset of every view) |
+| ::test_no_brook_runs_ruled_for_most_of_its_course_on_the_page (5) (wave 5) | 0.08 | the same (`ruled_excess`, the view-independent bound) |
+| ::test_no_brook_segment_lies_on_a_screen_axis_but_the_tap_run (5) (wave 5) | 0.06 | the same (`axis_segments`) |
+| hamletgen/test_seed_branches_147::test_the_fit_gives_a_saturated_best_aspect_the_full_search_it_was_denied (wave 5) | cached (~11 s cold, its own record) | a test of the closest-miss branch FR-005 converts: at an unreachable target the fit now refuses (`FieldRefused`) after every aspect is searched in full; test_fit_flanks::test_a_fan_no_aspect_can_bring_into_its_acreage_band_is_refused_after_every_aspect_is_searched_in_full; the best aspect's full re-search keeps test_water::test_fit_field_probes_saturation_and_rerolls_the_best_aspect_in_full (stand-in carves) |
 
 **Clauses retired from kept tests**: the seating floor and `ACREAGE_SHORT`'s skip and `GATE_COHORT_EXPECTED`'s pins in
 gate/hamletgen/test_driver (FR-006); the household clause of gate/hamletgen/test_water; the channel-under-plot clause of
@@ -439,7 +469,11 @@ the comb fans' half of the shipped-hamlet needle test; the pond and drain clause
 every clause but the band of the cluster-shape test; every lane but the connector in the break-mid-run test; the seat and
 household clauses of test_pool_wind's northwest test and the judged half of its depth test; the chord caps and the facing
 chains of the polder soak's keep-out test; the shape-record clause of the cloud seating; the `kosatsuba_caption_level == 1`
-excuse of test_the_board_caption_notches_no_crown (FR-006: no engine code writes it since ec241c0b1).
+excuse of test_the_board_caption_notches_no_crown (FR-006: no engine code writes it since ec241c0b1). Wave 5: the acreage clause of
+gate/hamletgen/test_driver (`fit_field` lands the fan within `FIELD_ACRE_BAND` on the finished net or refuses; test_fit_flanks's
+three fit tests), and the sty clause of gate/hamletgen/test_water (a dike-pond hamlet with a grow-out pond seats its sty or is
+refused, `StyRefused`; test_water_287::test_a_dike_pond_hamlet_whose_every_near_half_seat_is_built_on_is_refused_never_drawn_without_its_sty,
+::test_no_reservation_where_the_hamlet_keeps_no_ponds_or_no_seat).
 
 ### Kept, and the correctness each guards
 
@@ -447,42 +481,25 @@ excuse of test_the_board_caption_notches_no_crown (FR-006: no engine code writes
 
 | kept map-reading test | s | why |
 |---|---|---|
-| gate/test_bunds_and_dikes::test_the_waterward_reed_strip_runs_off_the_frame | <0.005 | (b) `frame.py:waterward_to_the_frame` extends the strip but never re-judges it; with no open ground nothing is added |
-| gate/test_paddy_fabric::test_the_supply_commands_both_flanks_of_the_fan | <0.005 | (b) `fit.py:fit_field` ranks aspects and keeps the least-bad fan; no refusal, no violating-case test |
-| ::test_no_shipped_polder_parcel_tapers_to_a_point (narrowed to the forkless fields) | 0.30 | (b) `polder.py:unpoint_parcels` judges the unrounded ring; the record is rounded after |
-| gate/test_water_flow::test_the_map_declares_the_fall_every_rule_below_is_measured_against | 0.05 | non-vacuity for the two below |
-| ::test_every_channel_runs_downhill | <0.005 | (b) only the sink's routes ask `runs_downhill`; the feed and head-race record and the comb's drain run do not |
-| ::test_every_stream_end_is_anchored_to_what_it_declares | <0.005 | (b) `brook_violations` judges the source end only; the exit end rests on construction, untested |
-| gate/test_water_junctions::test_no_watercourse_crosses_another_mid_run | 18.63 | (b) the feed brook's last candidate (round the field) is returned unjudged. 18.60 s is setup: the Inashiro pool map's cold obtain, shared |
-| gate/test_lane_network::test_no_tree_is_planted_in_a_path | 0.06 | (b) only the belt keeps its trunks off the treads; the commons, the forest and the persimmon (seated before the web) do not |
-| gate/test_crossings_and_cover::test_the_countryside_has_no_holes_in_it | 0.04 | (b) `finish.py:_title_band` grows the view after `fill_the_holes`; the band is counted and refilled by nothing |
+| gate/test_bunds_and_dikes::test_the_waterward_reed_strip_runs_off_the_frame | <0.005 | (b) `frame.py:waterward_to_the_frame` extends the strip but never re-judges it; with no open ground nothing is added, and an extension that cannot be joined into one ring leaves the strip's own record short. The view is decided in `hamletgen/frame.py` (WAYS' module in wave 5), so water:W43 stays open there: record the band to the view edge with its strip whether or not `marsh` finds open ground (or refuse the view that outruns a keep-out band) |
+| gate/test_lane_network::test_no_tree_is_planted_in_a_path | 0.06 | (b) wave 5 closed the belt and copse (the tread keep-out counts a crown's 3 bs lift, `crown_reach(lift=)`; seed 3), the commons (its corridor keep-out) and a wood's stand (`woods.py:trees_off_the_treads`); the yard persimmon is not closed - seated with its household before the web, whose fixture keep-out (`ways/law.py:fixture_quads`) does not hold its trunk: on a lane on cohort seeds 17, 20, 38, 41, 42, 47, 58 at wave 5's start. WAYS' or HOMES' modules |
 | gate/test_cluster_and_homes::test_the_cluster_draws_inside_the_band_of_the_shape_it_declared (narrowed) | <0.005 | (b) `shapes_drawn_at` declares `elongated` past every band; a string past 12:1 is not refused |
 | ::test_every_household_can_reach_water | <0.005 | (b) `lot.py:needs_pocket` is asked at the seek point, not the placed center |
 | gate/test_generator_contracts::test_a_map_that_draws_byres_declares_their_form | <0.005 | (b) written by construction, but no unit test asserts `meta.byre_form` |
 | gate/test_map_vocabulary::test_every_mark_on_the_map_has_been_ruled_on | <0.005 | (a) every layer's ink carries a class |
-| gate/test_captions_and_boards::test_no_caption_lies_across_a_way | <0.005 | (b) plan D12's least-cost terminal and the placer's non-strict path |
-| gate/test_settlement_cover::test_every_recorded_grove_holds_trees | <0.005 | (b) no placer decides the belt's or the water mouth's density; `_partition_grove_clumps` moves clumps without re-recording the size |
 | gate/test_no_feature_overlaps::test_the_comb_hamlet_draws_no_forbidden_overlap | 0.05 | (a) the matrix over every pair of layers; M8 (T83) has not landed. FAILS at 0e792a665 |
 | ::test_the_polder_hamlet_draws_no_forbidden_overlap | 0.06 | (a) as above. FAILS at 0e792a665 |
-| gate/test_scatter_frame::test_no_shipped_hamlet_breaches_its_scatter_frame (5) | 0.28 | (b) the finish's repair never runs in production (nothing sets `_scatter_rethrows`); a south title band passes the pad |
 | ::test_no_stage_after_the_view_is_decided_moves_the_frame (5) | 0.33 | (a) a contract over every stage after the view is decided |
-| gate/hamletgen/test_driver::test_a_rolled_cohort_passes_the_whole_gate | 0.09 | (b) the fan's acreage (`fit_field` keeps its closest miss); (a) the roll's reach verdict, reported not refused |
-| gate/hamletgen/test_water::test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks | 0.04 | (b) the archetype's record and the sty (`reserve_sty_seat` may seat none, and nothing refuses) |
-| hamletgen/test_pool_261::test_the_pool_has_a_brook_to_cross | 0.08 | non-vacuity for the brook tests below |
-| ::test_the_copse_stands_within_reach_of_what_it_is_named_for (5) | 0.15 | (b) a reserved wood seat is planted without the reach test (against_the_belt's reach is from the belt) |
-| ::test_every_copse_clump_stands_on_the_bank_of_a_house_within_reach (4) | 0.15 | (b) a re-seated reserved seat is not asked its reach or bank again |
-| ::test_no_brook_folds_back_on_itself (5) | 0.12 | (b) `feed_brook`'s last candidate unjudged; the drawn course is rounded after the judgment |
-| ::test_no_brook_runs_ruled_along_the_frame (5) | 0.09 | (b) the same |
-| ::test_no_brook_runs_ruled_for_most_of_its_course_on_the_page (5) | 0.08 | (b) the same |
-| ::test_no_brook_segment_lies_on_a_screen_axis_but_the_tap_run (5) | 0.06 | (b) the same |
+| gate/hamletgen/test_driver::test_a_rolled_cohort_passes_the_whole_gate (narrowed, wave 5) | 0.09 | (a) the roll's reach verdict, reported not refused |
+| gate/hamletgen/test_water::test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks (narrowed, wave 5) | 0.04 | (b) the archetype's record (the overlay count, the fry ponds, no duck pen, a wet strip per waterward face, forecourt yards): no placer unit test holds it |
+| hamletgen/test_pool_261::test_the_pool_has_a_brook_to_cross | 0.08 | non-vacuity for the way that reaches the field across the brook (below) |
 | ::test_a_way_reaches_the_field (5) | 0.21 | (b) `settle_reach` reports `field_unreached`, it does not refuse |
 | ::test_the_board_caption_names_the_board_only (4) | 0.04 | (b) plan D12's terminal |
 | ::test_the_board_caption_stands_nearest_its_own_board (5) | 0.05 | (b) plan D12's terminal |
 | ::test_the_board_caption_notches_no_crown (5, excuse removed) | 0.15 | (b) plan D12's terminal |
 | hamletgen/test_pool_wind::test_the_pool_has_scripted_hamlets_to_judge | <0.005 | non-vacuity |
 | ::test_no_pool_hamlet_declares_a_wind (5) | <0.005 | (a) the GM's ruling on the pool's content; no placer owns a spec file |
-| ::test_every_pool_hamlet_has_its_belt_on_the_regional_northwest (5, narrowed) | 0.10 | (b) `trim_to_the_wind` converges on the crown nearest the wind even off it, and refuses nothing |
-| ::test_every_pool_belt_keeps_its_depth_across_its_windward_face (5, narrowed) | 0.08 | (b) no placer decides that a belt no bin judges stands against the page's edge |
+| ::test_every_pool_hamlet_records_the_regional_northwest (5; wave 5, the record clause of the retired belt test) | <0.005 | (a) the GM's ruling on the pool's content: no declared wind, the region's northwest recorded |
 | full/test_villages::test_village_passes_gate (5) | 69.85 | (a) every shipped generator runs in its budget and to a manifest (this is the pool's regeneration, the gate's largest cost, which no retirement touches); (b) the paddy cell band (no placer holds it; it judges no map the pool ships today) |
 | full/settlement/test_rolling::test_pinned_knob_is_byte_identical_across_regens_and_rejects_incompatible_pins | 8.75 | (a) determinism of the whole roll |
 | soak/test_polder_fall_0::test_the_polder_dikes_keep_out_contains_its_drawn_band (narrowed) | soak | (b) the keep-out's inner edge is padded by a heuristic; no unit test holds a real band inside it |
@@ -496,13 +513,19 @@ village entrypoint's coverage, 3.4 s), `tests/gate/pipeline/*`, `tests/full/haml
 
 ### Gaps (FR-006: an excuse removed on a rule no placer guarantees yet)
 
-- **The fan's acreage.** `ACREAGE_SHORT` is gone and the cohort test asserts the 15% band on every member, but
-  `hamletgen/water/fit.py:fit_field` keeps its closest miss (no band, no refusal) and the canvas sizing is a measurement.
-  Seeds 45 and 47 are no member of the gate's population, so nothing rolls the case the excuse named.
+- **The fan's acreage** - CLOSED in wave 5: `fit_field` returns only a fan legal and within `FIELD_ACRE_BAND` (15%) on the
+  finished net; where none is, the search is widened to every aspect in full and then the site is refused (`FieldRefused`),
+  never the closest miss. Measured 2026-09-29 over cohort 1-60 and the pool (64 comb fans, Kuwabata a polder): 0 refused,
+  every fan legal on the first search and within 6.7% (seed 20), no map moved.
 - **The board caption on a crown, on a way, off its board.** The level-1 excuse is gone; plan D12's terminal (0 of 53
-  maps) is the GM's question and the three pool tests are kept for it.
-- **The runoff brook downhill from the outfall** now has no reader at all: the retired test's brook clause judged nothing on
-  Inashiro, and `feed_brook`'s last candidate is unjudged.
+  maps) is the GM's question and the three pool tests are kept for it. ON A WAY - CLOSED in wave 5: the terminal's caption
+  is D10's (leader or key, never overlapping) at a seat whose key mark clears every way (`board_seat.terminal_caption`),
+  in place of the least-cost seat D10 had retired everywhere else. That is still the question's option (c), a caption
+  breaking the board caption's own rules (beside the board, no leader), so the GM's answer is not presumed; the crown
+  and off-its-board clauses stay open with it.
+- **The runoff brook downhill from the outfall** - CLOSED in wave 5: every candidate of `feed_brook`, the routes round the
+  field included, is judged on the drawn course with `monotone_down` below the tap (`climbs`), so the brook passing the
+  outfall runs downhill wherever it passes it; the drain's continuation is held by `runs_downhill` at every writer.
 
 ### Found on the way (for the lead)
 
@@ -510,7 +533,20 @@ village entrypoint's coverage, 3.4 s), `tests/gate/pipeline/*`, `tests/full/haml
   function up). The retired ones will read "no such test function in its module" there; the sweep at acceptance needs
   them from the pre-retirement tree or their predicates called directly.
 - **216 s**: `place_kosatsuba` on a road under one 600 px crown took 216.45 s at 0e792a665 (the strict siter proving
-  every seat before plan D12's terminal); a real map whose board stands under a canopy pays the same.
+  every seat before plan D12's terminal); a real map whose board stands under a canopy pays the same. CLOSED in wave 5,
+  indexed and exact: rebuilt as a timing probe (the retired test's scene, 1,072 seats), 305.5 s at 920c5ad9f and 4.6 s
+  after (observed 2026-09-29, a direct call in the clone and in a detached worktree at 920c5ad9f, both under the same
+  load). The profile's two scans: `choose_board` proved every shaded seat on its way to an open one (595 of 713 profiled
+  s: every seat was shaded, each proved by the full least-cost search), now open seats first and then shaded, the same
+  seat; and each strict proof scored ~140 blocks with the association's outline gap (four fifths of a proof), now
+  `ObstacleIndex.blocked` refuses a block held past a nudge's reach unmeasured (a gap under the clearance less the reach,
+  or an overlap deeper than it) and `_strict_seat` measures the refused ones only where one might be the least-cost seat
+  the nudge starts from. With them: the way term measures a segment once (a long road was re-measured in every cell) and
+  clears it by the boxes first; `nearest_points` skips its crossing tests for outlines whose boxes stand apart. Held
+  exact by test_strict_index (the indexed strict search against the scan over 60 scenes; `blocked` against every nudge
+  over 400 blocks) and a differential run of 400 placements and 25 sited hamlets against 920c5ad9f; the fast siting test
+  is test_fixtures::test_a_board_under_one_wide_canopy_is_sited_without_measuring_a_seat_it_cannot_take (0.6 s, the
+  scene on a 200 px road: the only seats scored are the one terminal search's).
 - **Six failures at 0e792a665** in the worktree's run: the two overlap-matrix tests (kept, above), two
   `test_notes_census` blocks (Inashiro, Kuwabata) and two test_pool_261 params on Mizuguchi's committed manifest (both
   retired here).

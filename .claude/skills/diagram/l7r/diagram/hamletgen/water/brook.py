@@ -73,6 +73,50 @@ def exit_bend(start: tuple[float, float], heading: tuple[float, float], leg: flo
     return (start[0] + heading[0] * leg / 2 - heading[1] * off, start[1] + heading[1] * leg / 2 + heading[0] * off)
 
 
+def exit_legs(out: Sequence[Pt], fall: Pt, W: float, H: float) -> list[Pt]:
+    """The course's way OFF the frame from its last station `out[-1]`: four legs turning from the course's own heading onto
+    the fall `fall`, each still on the page bent once at its middle, the last lengthened down the fall until the mouth is
+    off the (0, 0, W, H) canvas (feature 287 wave 5, water:W07) - lifted out of `brook_skirt` so the mouth's guarantee is
+    tested on plain inputs. Returns the points to append."""
+    dx, dy = fall
+    lx, ly = out[-1]
+    legs: list[Pt] = []
+    edge = [((W if dx > 0 else 0.0) - lx) / dx if abs(dx) > 1e-6 else 1e9, ((H if dy > 0 else 0.0) - ly) / dy if abs(dy) > 1e-6 else 1e9]
+    span = max(120.0, min(edge)) + 260.0
+    # the heading the exit starts on is the course's own over its LAST FEW stations, and never one that has
+    # stopped descending: a single segment's bearing can point back up the slope where the last station was held
+    # against the frame bound, and the exit then folded the course back on itself (131 and 119 degrees, the last
+    # two corners left on the pool)
+    _back = out[max(0, len(out) - 4)]
+    # the course's own heading, unless it has stopped going downhill - a tail that runs across the fall or back
+    # up it has no heading worth keeping, and the exit takes the fall directly (one expression, so the fall case
+    # is not a branch that only a particular crop shape can reach)
+    _h = unit(lx - _back[0], ly - _back[1]) if len(out) > 1 else (dx, dy)
+    heading = _h if _h[0] * dx + _h[1] * dy > 0.15 else (dx, dy)
+    px_, py_ = lx, ly
+    # NO WANDER IN THE EXIT, and the turn onto the fall spread over four legs. A lateral term on a leg
+    # hundreds of feet long folded the course back on itself (129 degrees on one map, 113 on another, both in
+    # the last four vertices), and the part that leaves the sheet is the one place a straight run costs nothing.
+    for k, (f, blend) in enumerate(((0.22, 0.3), (0.26, 0.6), (0.26, 0.85), (0.26, 1.0))):
+        hx, hy = unit(heading[0] * (1.0 - blend) + dx * blend, heading[1] * (1.0 - blend) + dy * blend)
+        # ...BUT A LEG STILL ON THE PAGE BENDS AT ITS MIDDLE (settlement-review of Sawada, feature 261): the exit starts
+        # where the frame would pin the course, and on a map where that is 940 ft inside the sheet the straight legs drew
+        # 70% of the brook as a ruled line. One gentle bend per leg that starts in frame, alternating side, sized to the
+        # leg (`exit_bend`) - a turn of about 27 degrees, where the long lateral terms that folded the course were 113-129
+        if 0.0 <= px_ <= W and 0.0 <= py_ <= H:
+            legs.append(exit_bend((px_, py_), (hx, hy), span * f, 1.0 if k % 2 == 0 else -1.0))
+        px_, py_ = px_ + hx * span * f, py_ + hy * span * f
+        legs.append((px_, py_))
+    # ...AND THE MOUTH LEAVES THE CANVAS BY CONSTRUCTION (feature 287 wave 5, water:W07): `span` is measured along the fall
+    # from the last station, but the legs run the blend of the course's heading and the fall, so a heading far across
+    # the fall left the mouth on the sheet (cohort seed 48: the brook stopped 60 ft inside it). The last leg runs straight
+    # down the fall (its blend is 1), so it is lengthened along itself past the edge - no new turn, no new vertex.
+    if 0.0 <= px_ <= W and 0.0 <= py_ <= H:
+        reach = to_edge((px_, py_), (dx, dy), W, H) + 60.0
+        legs[-1] = (px_ + dx * reach, py_ + dy * reach)
+    return legs
+
+
 def _wander(rng: random.Random, stray: float, swing: int) -> tuple[float, int]:
     """One step of the brook's lateral walk: (how far outside the skirt floor, which way it is going).
 
@@ -258,9 +302,17 @@ def round_the_brooks(s: Settlement) -> None:
         course = rec.get("stations") or rec.get("poly") or []
         if len(course) < 3:
             continue
-        course, held = join_vertices(course, heads)
-        course, held_j = join_vertices(course, joins, hold_corners=False)
-        s.round_stream(rec, finished_course(course, float(rec.get("w") or 7.0), held + held_j))
+        s.round_stream(rec, drawn_course(course, heads, joins, float(rec.get("w") or 7.0)))
+
+
+def drawn_course(course: Sequence[Pt], taps: Sequence[Pt], joins: Sequence[Pt] = (), w: float = BROOK_DRAWN_W) -> Poly:
+    """The brook AS THE MAP DRAWS IT (feature 287 wave 5): every tap and confluence on `course` made a vertex and held
+    (`join_vertices` - a confluence on a corner left to the rounding), then rounded (`finished_course`). The ONE geometry
+    `round_the_brooks` draws and `brook_violations` judges, so a confluence the sink adds after the brook was judged is
+    judged with it - where the rounding round a held join changed the course, the judged and the drawn used to differ."""
+    pts, held = join_vertices(course, taps)
+    pts, held_j = join_vertices(pts, joins, hold_corners=False)
+    return finished_course(pts, w, held + held_j)
 
 
 def _off_the_axes(course: Poly, away: Pt, eps: float = 1.6, nudge: float = 11.0, hold: int = 0) -> Poly:
@@ -395,32 +447,7 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
     # downhill from a station that is well out to the side puts a corner exactly where the brook should be
     # running off the sheet (121 degrees on one map, and the sharpest thing on it).
     lx, ly = out[-1]
-    edge = [((plan.W if dx > 0 else 0.0) - lx) / dx if abs(dx) > 1e-6 else 1e9, ((plan.H if dy > 0 else 0.0) - ly) / dy if abs(dy) > 1e-6 else 1e9]
-    span = max(120.0, min(edge)) + 260.0
-    # the heading the exit starts on is the course's own over its LAST FEW stations, and never one that has
-    # stopped descending: a single segment's bearing can point back up the slope where the last station was held
-    # against the frame bound, and the exit then folded the course back on itself (131 and 119 degrees, the last
-    # two corners left on the pool)
-    _back = out[max(0, len(out) - 4)]
-    # the course's own heading, unless it has stopped going downhill - a tail that runs across the fall or back
-    # up it has no heading worth keeping, and the exit takes the fall directly (one expression, so the fall case
-    # is not a branch that only a particular crop shape can reach)
-    _h = unit(lx - _back[0], ly - _back[1]) if len(out) > 1 else (dx, dy)
-    heading = _h if _h[0] * dx + _h[1] * dy > 0.15 else (dx, dy)
-    px_, py_ = lx, ly
-    # NO WANDER IN THE EXIT, and the turn onto the fall spread over four legs. A lateral term on a leg
-    # hundreds of feet long folded the course back on itself (129 degrees on one map, 113 on another, both in
-    # the last four vertices), and the part that leaves the sheet is the one place a straight run costs nothing.
-    for k, (f, blend) in enumerate(((0.22, 0.3), (0.26, 0.6), (0.26, 0.85), (0.26, 1.0))):
-        hx, hy = unit(heading[0] * (1.0 - blend) + dx * blend, heading[1] * (1.0 - blend) + dy * blend)
-        # ...BUT A LEG STILL ON THE PAGE BENDS AT ITS MIDDLE (settlement-review of Sawada, feature 261): the exit starts
-        # where the frame would pin the course, and on a map where that is 940 ft inside the sheet the straight legs drew
-        # 70% of the brook as a ruled line. One gentle bend per leg that starts in frame, alternating side, sized to the
-        # leg (`exit_bend`) - a turn of about 27 degrees, where the long lateral terms that folded the course were 113-129
-        if 0.0 <= px_ <= plan.W and 0.0 <= py_ <= plan.H:
-            out.append(exit_bend((px_, py_), (hx, hy), span * f, 1.0 if k % 2 == 0 else -1.0))
-        px_, py_ = px_ + hx * span * f, py_ + hy * span * f
-        out.append((px_, py_))
+    out += exit_legs(out, (dx, dy), float(plan.W), float(plan.H))
 
     # THE CORNERS ARE CUT, not led into. Inserting lead stations per step was the first answer and it made the
     # thing it was meant to prevent: short jogs between long legs, 16 turns past 70 degrees on one map and a
@@ -480,12 +507,12 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
     )  # the tap run: two cut points on the fall; the segment that leaves it is nudged off an axis like any other (feature 261: Sawada's drew exactly vertical below its tap)
 
 
-def brook_violations(course: Sequence[Pt], plan: SitePlan, sluice: Pt, ditches: Sequence[Poly] = ()) -> list[str]:
-    """Which of the brook's rules the DRAWN course (`finished_course` of `course`) breaks - empty for a course the placer
-    may take. One predicate per rule: W01 `max_turn_deg`, W02 `level_runs_along_frame` over the whole canvas, W03
-    `ruled_excess`, W04 `axis_segments`, W06 `course_enters`, W07 `ends_off_canvas` (the off-map source), W08
+def brook_violations(course: Sequence[Pt], plan: SitePlan, sluice: Pt, ditches: Sequence[Poly] = (), joins: Sequence[Pt] = ()) -> list[str]:
+    """Which of the brook's rules the DRAWN course (`drawn_course` of `course`, its tap and any confluence `joins` held)
+    breaks - empty for a course the placer may take. One predicate per rule: W01 `max_turn_deg`, W02 `level_runs_along_frame` over the whole canvas, W03
+    `ruled_excess`, W04 `axis_segments`, W06 `course_enters`, W07 `ends_off_canvas` (the off-map source and the mouth), W08
     `crosses_mid_run`, W11 `monotone_down` below the tap."""
-    fin = finished_course(course, BROOK_DRAWN_W, [sluice])
+    fin = drawn_course(course, [sluice], joins)
     W, H = float(plan.W), float(plan.H)
     box = reserved_box(course, plan)
     run, bound, _a, _b = ruled_excess(fin, W, H, box)
@@ -496,6 +523,7 @@ def brook_violations(course: Sequence[Pt], plan: SitePlan, sluice: Pt, ditches: 
         "axis": bool(axis_segments(fin, [sluice])),
         "enters": course_enters(fin, [plan.envelope]),
         "source": not ends_off_canvas(fin, W, H, ends=(0,)),
+        "mouth": not ends_off_canvas(fin, W, H, ends=(-1,)),  # the brook runs on past the fan and leaves the map (feature 230)
         "crosses": any(crosses_mid_run(fin, d) for d in ditches),
         "climbs": not monotone_down(fin[tap_index(fin, [sluice]) :], plan.fall, slack=BEND_DIP_FT),
     }
@@ -704,9 +732,10 @@ def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float
 
     EVERY RULE OF THE BROOK IS DECIDED HERE (feature 287): each candidate - a bearing, and the skirt as laid or, where
     that crosses a ditch mid-run, laid round the ditches' outside stretches - is repaired (`settle_course`) and taken
-    only where `brook_violations` finds nothing on the course as drawn. THE LAST CANDIDATE goes round the field
-    (`around_the_field`): from straight up the fall, the shortest course that keeps half a skirt clear of the rice - the
-    route this loop promises when every bearing is blocked, repaired like any other. The other flank is NOT a
+    only where `brook_violations` finds nothing on the course as drawn. THE LAST CANDIDATES go round the field
+    (`around_the_field`): from straight up the fall and then from every other bearing, the shortest course that keeps
+    half a skirt clear of the rice - repaired and judged like any other; past them the site is refused (`BrookRefused`).
+    The other flank is NOT a
     candidate, though the design proposed it: the head race and the fan's trim were carved for the rolled flank before
     the brook is laid (`plan.head_deg`, `fit.py`), so a brook on the other side would run where the race leaves."""
     dx, dy = plan.fall
@@ -724,11 +753,34 @@ def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float
         course = settle_course([*legs, sluice, *skirt], plan, sluice)
         if not brook_violations(course, plan, sluice, ditches):
             return course
-    reach = max(run, to_edge(sluice, (-dx, -dy), float(plan.W), float(plan.H)) + 60.0)
-    path = around_the_field(plan.envelope, (sluice[0] - dx * reach, sluice[1] - dy * reach), sluice)
-    if len(path) == 1:  # the way straight up the fall is clear: bowed at its middle as every approach is, off the axis
-        path = [path[0], ((path[0][0] + sluice[0]) / 2 + dy * 26, (path[0][1] + sluice[1]) / 2 - dx * 26)]
-    return settle_course([*path, sluice, *skirt], plan, sluice)
+    # THE LAST CANDIDATES ARE JUDGED LIKE EVERY OTHER (feature 287 wave 5): the route round the field used to be returned
+    # unjudged, so a brook it drew folded, ruled, on an axis, across a ditch or climbing reached the map with nothing to
+    # refuse it. It is tried from straight up the fall first (the route this loop always drew), then from every other
+    # bearing's source, then on the skirt laid round the ditches' outside stretches - and past the last the site is
+    # refused by name (`BrookRefused`). Measured 2026-09-29 over cohort 1-60 and the pool: no brook reaches the refusal.
+    for again in (False, True):
+        sk = brook_skirt(plan, sluice, plan.brook_side, [*crop, *outside_stretches(plan, ditches)]) if again else skirt
+        for swing in sorted((10.0 * k for k in range(-7, 8)), key=abs):
+            course = settle_course([*round_the_field(plan, sluice, math.radians(base + swing), run), sluice, *sk], plan, sluice)
+            if not brook_violations(course, plan, sluice, ditches):
+                return course
+    raise BrookRefused(f"{plan.spec.name}: no course of the feed brook - any bearing, round the field or not - keeps every rule of the brook")
+
+
+class BrookRefused(ValueError):
+    """The feed brook has no course its rules allow (feature 287, FR-005): refused by name, never drawn in breach - as
+    `SinkRefused`, `SeatRefused` and `SiteRefused` refuse theirs."""
+
+
+def round_the_field(plan: SitePlan, sluice: Pt, th: float, run: float) -> Poly:
+    """The approach from the source on bearing `th` round the field to the tap (`around_the_field`) - the source off the
+    canvas as `approach_legs` sets it; a way the field leaves clear is bowed at its middle as every approach is."""
+    d = (math.cos(th), math.sin(th))
+    reach = max(run, to_edge(sluice, d, float(plan.W), float(plan.H)) + 60.0)
+    path = around_the_field(plan.envelope, (sluice[0] + d[0] * reach, sluice[1] + d[1] * reach), sluice)
+    if len(path) == 1:  # the way from the source is clear: bowed at its middle as every approach is, off the axis
+        path = [path[0], ((path[0][0] + sluice[0]) / 2 - d[1] * 26, (path[0][1] + sluice[1]) / 2 + d[0] * 26)]
+    return path
 
 
 def around_the_field(envelope: Sequence[Pt], start: Pt, goal: Pt, pad: float = BROOK_SKIRT / 2.0, intake: float = 40.0) -> Poly:

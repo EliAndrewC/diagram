@@ -190,3 +190,21 @@ def test_no_polder_parcel_tapers_to_a_point() -> None:
     for seed, wander, mosaic in ((3, 0.5, 0.0), (8, 0.3, 0.6), (21, 0.4, 0.3)):
         net = build_polder(2400, 2400, (300.0, 300.0), seed=seed, edge_wander=wander, mosaic=mosaic)
         assert net["plots"] and not [p for p in net["plots"] if needle(p["poly"])], seed
+
+
+def test_a_parcel_blunt_unrounded_but_a_needle_as_recorded_is_re_hemmed() -> None:
+    """The violating case of the polder needle's record (feature 287 wave 5): a corner at 15.0 degrees unrounded that the
+    record's 0.1 px rounding (`fields/comb.py`'s `plot_rings`) takes to a needle. The pass judges the ring as recorded, so
+    the ring it leaves - rounded as the map records it - is no needle."""
+    import math
+
+    from l7r.diagram.waterfields.polder import unpoint_parcels
+    from l7r.diagram.waterfields.ring_rules import needle
+
+    a = math.radians(15.0)
+    ring = [(0.0, 0.0), (200.0, 0.0), (200.0, 50.0), (100.0, 60.0), (12.0 * math.cos(a), 12.0 * math.sin(a))]
+    assert not needle(ring) and needle([(round(x, 1), round(y, 1)) for x, y in ring]), "the case: blunt raw, a needle as recorded"
+    plots = [{"poly": ring}]
+    unpoint_parcels(plots)
+    assert all(not needle([(round(x, 1), round(y, 1)) for x, y in p["poly"]]) for p in plots)
+    assert plots and len(plots[0]["poly"]) == 4, "re-hemmed without the apex, not dropped"
