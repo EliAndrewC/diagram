@@ -37,3 +37,15 @@ right, bottom right, left, top left, bottom left - and the record calls it a sta
 - **The standard as published.** PerceptPPO is an eight-position order; the textbook order's two "slightly" positions
   are not part of it and are dropped, rather than kept after it (a mix would be neither standard).
 - **Supersedes feature 289's order**; 289's research and citations stand, and its record paragraph is rewritten.
+- **A correction to 289** (found by this feature's quote-check, confirmed on Mapbox's style specification, which says of
+  the anchor `top`: "The top of the text is placed closest to the anchor"): the Mapbox example's anchors top, bottom,
+  left, right put the label below, above, right and left of its point - not above, below, left, right as feature 289
+  recorded, so the GM's order was never that example's. The record now says only that the example tries the four
+  places beside the point and no corner; told to the GM at hand-back.
+
+## Review history
+
+**Round 1** (spec-fidelity, MODE 2, 2026-09-29): FAITHFUL. Dropping the two "slightly" positions is the standard as
+published - the study says so itself: *"with current advancements in typesetting, the necessity for these auxiliary
+positions has become obsolete"*; appending them would mix two orders. The fallback's sides follow PerceptPPO (right
+before left); leaving 289's left-before-right would keep part of the deviation the GM dropped.

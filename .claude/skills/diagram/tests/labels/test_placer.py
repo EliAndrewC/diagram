@@ -28,19 +28,21 @@ def test_the_first_position_is_directly_above_at_the_preferred_offset() -> None:
     assert centroid(list(p.block))[0] == pytest.approx(500.0) and max(q[1] for q in p.block) < 497.5, "centered, above"
 
 
-# A post in each of the four adjacent seats at the preferred gap, clear of every other seat
-ABOVE, BELOW = rect(500.0, 489.0, 4.0, 2.0), rect(500.0, 511.0, 4.0, 2.0)
-LEFT, RIGHT = rect(466.0, 502.0, 4.0, 1.0), rect(534.0, 502.0, 4.0, 1.0)
+# A post in the seat directly above the board at the preferred gap, clear of every other seat
+ABOVE = rect(500.0, 489.0, 4.0, 2.0)
 
 
 def test_a_blocked_position_falls_to_the_next_ranked_one() -> None:
-    """Scenario 2 and feature 289's SC-001: adjacent before diagonal - directly above, then below, then left, then
-    right, and only with all four taken a corner, the standard's upper right first; each at the preferred gap."""
-    blocked: list[Obstacle] = []
-    for seat, want in ((ABOVE, "below"), (BELOW, "left"), (LEFT, "right"), (RIGHT, "upper right")):
-        blocked.append(Obstacle(tuple(seat), WEIGHT_OBSTACLE))
-        p = place("notice board", SIZE, BOARD, ObstacleIndex(blocked))
+    """Scenario 2 and feature 290's SC-001: the user-tested order (PerceptPPO) - above, below, right, upper right, lower
+    right, left, upper left, lower left - each seat, once taken by a post, sending the caption to the next, every one
+    at the preferred gap with no leader."""
+    order = ["above", "below", "right", "upper right", "lower right", "left", "upper left", "lower left"]
+    posts: list[Obstacle] = []
+    for want in order:
+        p = place("notice board", SIZE, BOARD, ObstacleIndex(posts))
         assert (p.position, p.ring, p.leader) == (want, 0, None), want
+        cx, cy = centroid(list(p.block))
+        posts.append(Obstacle(tuple(rect(cx, cy, 1.0, 1.0)), WEIGHT_OBSTACLE))
 
 
 def test_every_adjacent_seat_is_tried_before_a_farther_one_and_the_farther_one_gets_a_leader() -> None:
@@ -203,17 +205,15 @@ def test_an_unknown_subject_kind_is_refused() -> None:
 
 
 def test_the_positions_rings_and_upright_rule() -> None:
-    assert [n for n, _x, _y in POSITIONS] == [
+    assert [n for n, _x, _y in POSITIONS] == [  # PerceptPPO, Bobák, Čmolík and Čadík 2024 (feature 290)
         "above",
         "below",
-        "left",
-        "right",  # the GM's deviation, feature 289
+        "right",
         "upper right",
-        "upper left",
         "lower right",
+        "left",
+        "upper left",
         "lower left",
-        "above, slightly right",
-        "below, slightly left",
     ]
     rs = rings(SIZE)
     assert rs[0] == PREFERRED_OFFSET_EM * SIZE and rs[-1] == pytest.approx(REACH_EM * SIZE)
