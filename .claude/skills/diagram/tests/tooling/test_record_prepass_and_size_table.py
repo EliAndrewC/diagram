@@ -92,6 +92,13 @@ def test_render_and_main_over_a_fixture_tree(tmp_path, capsys):
     assert rp.main(["absent", "--root", str(tmp_path)]) == 2
 
 
+def test_a_heading_s_link_to_its_rendering_section_is_not_its_text():
+    """Feature 292: the assembly writes the research <-> rendering link inside the heading; the prepass finds the
+    section by its heading, so the link is dropped before the heading is read."""
+    page = '<h2 id="x"><span class="xref"><a href="r.html#y">How it\'s drawn</a></span>Work yards</h2><p>a yard</p>'
+    assert [h for h, _b in rp.sections(page)] == ["Work yards"]
+
+
 def test_the_prepass_reads_the_real_record():
     glossary = json.loads((REPO / rp.GLOSSARY).read_text(encoding="utf-8"))
     listing = rp.prepass((SKILL / "research" / "ways.html").read_text(encoding="utf-8"), glossary)
