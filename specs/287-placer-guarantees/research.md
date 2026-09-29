@@ -236,7 +236,6 @@ feature's scope (FR-006 for the test-side excuses, FR-001 for the rest):
 
 **Method** (observed 2026-09-29, method: `make durations` in the clone before any 287 engine change, load 1.3): 5,258 tests
 passed, 12 skipped, in 57.13 s. The slowest, which FR-007 and SC-005 weigh against what they guard:
-
     10.10s call     tests/gate/test_bunds_and_dikes.py::test_every_beaded_bund_segment_shows_at_least_two_beads[kashikawa.gen.py]
     10.09s call     tests/gate/test_bunds_and_dikes.py::test_every_beaded_bund_segment_shows_at_least_two_beads[sawada.gen.py]
     9.85s setup    tests/gate/test_bunds_and_dikes.py::test_no_bund_is_drawn_down_the_middle_of_a_supply_channel
