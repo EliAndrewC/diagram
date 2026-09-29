@@ -12808,5 +12808,38 @@
    "Rakugai-zu screens",
    "Rakugai-zu screen painting"
   ]
+ },
+ "qiu": {
+  "def": "A Chinese timber tree (楸, a kind of catalpa). The sixth-century farm manual says it has no seed, so it is raised from suckers dug around a grown tree, and spaced like catalpa.",
+  "variants": [
+   "qiu"
+  ]
+ },
+ "catalpa": {
+  "def": "A broad-leaved tree grown in China for timber. The sixth-century farm manual sets it two paces apart because it must grow large.",
+  "variants": [
+   "catalpa",
+   "catalpas"
+  ]
+ },
+ "thinning": {
+  "def": "Cutting out some of the trees of a young planted wood so the rest have room to grow on. Edo documents say a thick planting could not reach its aim without it.",
+  "variants": [
+   "thinning",
+   "thinned",
+   "thin out",
+   "thinned out"
+  ]
+ },
+ "forest stand": {
+  "def": "A patch of woodland treated as one unit for counting and management, with its trees of about the same age and kind. Foresters give its stems per hectare and its age in years (a \"23-year stand\").",
+  "variants": [
+   "forest stand",
+   "stand age",
+   "stand density",
+   "trial stands",
+   "trial stand",
+   "unthinned stand"
+  ]
  }
 }

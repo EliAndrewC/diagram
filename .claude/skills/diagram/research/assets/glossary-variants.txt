@@ -859,6 +859,7 @@ footslope	footslope
 footslopes	footslope
 forest litter	forest litter
 forest litters	forest litter
+forest stand	forest stand
 formwork	formwork
 fortune	Fortune
 fortunes	Fortune
@@ -2780,6 +2781,8 @@ srtm	SRTM
 staggered shelves	staggered shelves
 staking frame	staking frame
 staking frames	staking frame
+stand age	forest stand
+stand density	forest stand
 state shinto	State Shinto
 steading	steading
 steadings	steading
@@ -3083,6 +3086,8 @@ treads	tread
 trebuchet	trebuchet
 trebuchets	trebuchet
 trevis	ox-shoeing frame
+trial stand	forest stand
+trial stands	forest stand
 tributary	tributary
 trigram	eight trigrams
 trigrams	eight trigrams
@@ -3174,6 +3179,7 @@ unhaired	unhair
 unhairing	unhair
 unhairs	unhair
 unjo-gura	levy storehouse
+unthinned stand	forest stand
 uogashi	uogashi
 upland field	hatake
 upland fields	hatake
