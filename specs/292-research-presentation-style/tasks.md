@@ -5,6 +5,7 @@ Pilot phase. The sweep's tasks are added only after T09 is ticked (FR-011).
 - [x] T01 The GM's request verbatim, the spec, spec-fidelity round 1 applied (FR-001 - FR-011). research: rendering
 - [x] T02 The style guide `research/STYLE.md`, each rule marked GM or inferred; the rules file points at it (FR-001, FR-006, SC-001). research: rendering
 - [x] T03 The hover's key link leads to the work's entry on the citations page, with its test (FR-005, SC-005). research: rendering
+- [x] T03a Links to the citations page open in a new tab - the hover's key link (derived script) and the footnote number (record.js); unit test and the record-page browser test (FR-005). research: rendering
 - [x] T04 A roster-less section's sources are read from its footnotes, with its test (FR-004, SC-004). research: rendering
 - [x] T05 Glossary: `knob` redefined, `canopy-tree` added, `appurtenance` retired as unused (FR-007, SC-006). research: rendering
 - [x] T06 The `record-style` agent, its tier, its bundle part and its guard entry (FR-008). research: rendering

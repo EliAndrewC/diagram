@@ -95,9 +95,10 @@ def to_work_entries(body: str, page_rel: str) -> str:
     itself links the source (feature 292, GM 2026-09-29: the link in the tooltip *"should instead take us to
     citations/homesteads.html#work-kashima-kainyo-1987 which itself opens with a `kashima-kainyo-1987` link to the
     actual source"*). The path is relative to the research page - `citations/x.html` from `research/`,
-    `../citations/cities/x.html` from `research/cities/`. The citations page itself keeps the source links."""
+    `../citations/cities/x.html` from `research/cities/`. The citations page itself keeps the source links. The link opens
+    in a new tab (GM 2026-09-29: *"links to citations should open in a new tab"*), so the reader keeps their place."""
     target = os.path.relpath(citations_page(page_rel), os.path.dirname(page_rel) or ".")
-    return _KEY_LINK.sub(lambda m: f'<a href="{target}#work-{m.group(1)}"><code>{m.group(1)}</code></a>', body)
+    return _KEY_LINK.sub(lambda m: f'<a href="{target}#work-{m.group(1)}" target="_blank" rel="noopener"><code>{m.group(1)}</code></a>', body)
 
 
 def script_js(page_rel: str, page_notes: list[tuple[str, str]]) -> str:

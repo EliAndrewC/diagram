@@ -130,7 +130,7 @@ def test_a_note_for_the_script_loses_its_back_link_and_is_rebased_to_the_researc
     assert "fnback" not in out and 'href="SOURCES.html#canon"' in out and 'href="water.html#x"' in out
     assert "https://x.y/z" in note_for_script(notes(_NOTES)[0][1]), "an absolute link is untouched"
     js = script_js("p.html", notes(_NOTES))
-    assert js.startswith("// DERIVED FILE") and "window.RECORD_CITATIONS = {" in js and '"fn-2": "<a href=\\"citations/p.html#work-canon\\">' in js
+    assert js.startswith("// DERIVED FILE") and "window.RECORD_CITATIONS = {" in js and '"fn-2": "<a href=\\"citations/p.html#work-canon\\" target=\\"_blank\\" rel=\\"noopener\\">' in js
     assert "fnback" not in js and 'href=\\"water.html#x\\"' in js, "a link that is not a source key keeps its rebased target"
 
 
@@ -140,7 +140,8 @@ def test_the_hover_links_a_source_key_to_its_work_entry_on_the_citations_page() 
     is one directory further off. Only the hover's copy changes: the citations page keeps its links to the sources."""
     body = '<a href="https://x.y/z"><code>k-1</code></a> - 「q」 and <a href="https://a.b/c"><code>k-2</code></a> - 「r」'
     assert to_work_entries(body, "homesteads.html") == (
-        '<a href="citations/homesteads.html#work-k-1"><code>k-1</code></a> - 「q」 and <a href="citations/homesteads.html#work-k-2"><code>k-2</code></a> - 「r」'
+        '<a href="citations/homesteads.html#work-k-1" target="_blank" rel="noopener"><code>k-1</code></a> - 「q」 and '
+        '<a href="citations/homesteads.html#work-k-2" target="_blank" rel="noopener"><code>k-2</code></a> - 「r」'
     )
     assert 'href="../citations/cities/fabric.html#work-k-1"' in to_work_entries(body, "cities/fabric.html")
     assert "https://x.y/z" not in script_js("p.html", notes(_NOTES)), "the hover never links the source directly"

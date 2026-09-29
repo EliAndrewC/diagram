@@ -41,7 +41,9 @@ the pilot; the GM reads the pages in this feature's clone.
 - **FR-004**: A section's sources, as the map's references read them, MUST be derived from the keys its footnotes
   cite when it has no roster.
 - **FR-005**: The source link inside a footnote's hover MUST lead to that work's entry on the page's citations page
-  (`citations/<page>.html#work-<key>`), which itself links the source.
+  (`citations/<page>.html#work-<key>`), which itself links the source; every link that leads to the citations page -
+  that one and the footnote number itself - opens in a new tab (GM 2026-09-29: *"links to citations should open in a
+  new tab"*).
 - **FR-006**: The guide MUST say the GM's inciting question appears nowhere in a section. The practice of quoting it
   was never written as a rule (a search of every rules file, agent, template and test found none - 44 `The question`
   paragraphs, all on the water page, follow it), so there is no rule text to strike; removing the quotations is the

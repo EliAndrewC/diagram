@@ -503,4 +503,7 @@ def test_the_record_page_defines_its_terms_on_hover_in_the_footnote_box(record: 
     note = record.js("() => document.getElementById('fntip').textContent")
     assert "a derived note naming a tameike" in note, f"a note from window.RECORD_CITATIONS shows in the box ({record.errors})"
     assert record.js("() => document.querySelector('#fntip span.gl').getAttribute('title')").startswith("An irrigation reservoir")
+    # GM 2026-09-29: a reference to the citations page opens it in a new tab; one to a note in the page does not
+    assert record.js("() => document.querySelector(\"sup.fn a[href$='#fn-2']\").target") == "_blank"
+    assert record.js("() => document.querySelector(\"sup.fn a[href='#fn-1']\").target") == ""
     assert record.errors == [] and record.requests == []

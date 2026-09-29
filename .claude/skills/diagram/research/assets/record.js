@@ -36,6 +36,12 @@
     var y = r.bottom + 6; if (y + h + margin > vh) { y = r.top - h - 6; } if (y < margin) { y = margin; }
     tip.style.left = (window.scrollX + x) + 'px'; tip.style.top = (window.scrollY + y) + 'px';
   }
+  // A reference that leads to the CITATIONS PAGE opens it in a new tab (GM 2026-09-29: "links to citations should open
+  // in a new tab"), so the reader keeps their place; the hover's own links to a work's entry carry the same attribute
+  // from `make citations`. A note still in the page (`#fn-n`) is a jump within it and is left alone.
+  document.querySelectorAll('sup.fn a[href*="citations/"]').forEach(function (ref) {
+    ref.setAttribute('target', '_blank'); ref.setAttribute('rel', 'noopener');
+  });
   document.querySelectorAll('sup.fn a[href*="#fn-"]').forEach(function (ref) {
     ref.addEventListener('mouseenter', function () { keep(); show(ref); });
     ref.addEventListener('focus', function () { keep(); show(ref); });
