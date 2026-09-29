@@ -43,6 +43,7 @@ import argparse
 import difflib
 import hashlib
 import html
+import importlib.util
 import json
 import pathlib
 import re
@@ -453,6 +454,16 @@ def wanted(spec: str) -> set[str] | None:
     return ids or None
 
 
+def cached_pages():  # noqa: ANN201
+    """The fetcher behind the host's page cache (feature 288 D8), EXACT: an imported copy holds the saved form, not the
+    page as fetched, and a character-for-character check fetches that page afresh (replacing the copy)."""
+    spec = importlib.util.spec_from_file_location("_sources", pathlib.Path(__file__).resolve().parent / "_sources.py")
+    assert spec and spec.loader
+    src = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(src)
+    return src.CachedPages(Pages(), src.home(), refresh=src.refresh_wanted(), exact=True)
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("page", help="a research page name: hamlets, cities/tango")
@@ -469,7 +480,7 @@ def main(argv: list[str] | None = None) -> int:
     if not page_file.is_file() or not cite_file.is_file():
         print(f"quote-verbatim: no such page - wanted {page_file} and {cite_file}", file=sys.stderr)
         return 2
-    pages = Pages(pathlib.Path(args.offline) if args.offline else None)
+    pages = Pages(pathlib.Path(args.offline)) if args.offline else cached_pages()
     only = wanted(args.notes)
     fragments: list[str] = []
     if args.section:

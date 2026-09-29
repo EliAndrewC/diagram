@@ -16,6 +16,7 @@ from __future__ import annotations
 import importlib.util
 import io
 import json
+import os
 import pathlib
 import urllib.error
 
@@ -287,3 +288,34 @@ def test_a_cjk_compatibility_ideograph_on_the_page_is_the_same_character_as_the_
     """Feature 268: the Sano gazetteer writes 社 as U+FA4C; a quote in the unified form is still VERBATIM."""
     page = "<p>郡内には別格官幣" + chr(0xFA4C) + "一" + chr(0xFA4C) + "郷" + chr(0xFA4C) + "五" + chr(0xFA4C) + "</p>"
     assert qv.verdict("郡内には別格官幣社一社郷社五社", qv.visible_text(page))["quotation"] == "VERBATIM"
+
+
+def test_with_no_offline_directory_the_page_cache_serves_an_exact_copy_only(tmp_path, monkeypatch):
+    """Feature 288 D8 (SC-005): the page is in the host's page cache, so the run makes no request; an IMPORTED copy -
+    the saved form, not the page as fetched - is not trusted for a character-for-character check, and is fetched."""
+    spec = importlib.util.spec_from_file_location("_sources", REPO / "scripts" / "_sources.py")
+    assert spec and spec.loader
+    src = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(src)
+    where = pathlib.Path(os.environ["L7R_SOURCES_HOME"])
+    research = tmp_path / ".claude/skills/diagram/research"
+    (research / "citations").mkdir(parents=True)
+    (research / "x.html").write_text(RESEARCH, encoding="utf-8")
+    (research / "citations" / "x.html").write_text(NOTE, encoding="utf-8")
+    calls: list[str] = []
+
+    def opener(req, timeout=0):
+        calls.append(req.full_url)
+        raise urllib.error.URLError("no network in a test")
+
+    real = qv.Pages
+    monkeypatch.setattr(qv, "Pages", lambda offline=None: real(offline, opener=opener))
+    got = qv.cached_pages()
+    assert type(got).__name__ == "CachedPages" and got.exact and got.where == where
+    src.put(where, "https://ja.example/wiki/アブラナ", "秋に種をまき、冬を越す。")
+    out = tmp_path / "report.json"
+    assert qv.main(["x", "--root", str(tmp_path), "--notes", "1", "--json", str(out)]) == 0
+    assert calls == [] and '"VERBATIM"' in out.read_text(encoding="utf-8")
+    src.put(where, "https://ja.example/wiki/アブラナ", "秋に種をまき、\n冬を越す。\n", exact=False)
+    assert qv.main(["x", "--root", str(tmp_path), "--notes", "1", "--json", str(out)]) == 0
+    assert len(calls) == 1, "an imported copy is fetched afresh"

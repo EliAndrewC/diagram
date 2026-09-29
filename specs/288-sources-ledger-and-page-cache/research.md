@@ -28,3 +28,22 @@ The data is in `/diagram/.clones/.tools/logs/reread-2026-09-29/` (`result.json`,
 **What it decided.** The GM asked for both cheap fixes (request.md): a ledger, so an earlier read and its outcome are
 known, and a cache, so a saved page is found again. No guard: the saving is too small for a refusal to be worth a
 false firing; the tooling prints what is known at the moment it matters and saves the page where it can be found.
+
+## R2. The one-time seed and import (run 2026-09-29)
+
+**Method.** `make sources-import` (feature 288 plan D9), run once on the host from this clone at the landing, then
+counted from `/diagram/.specify/sources-consulted.jsonl` and `/diagram/.specify/page-cache/` (observed 2026-09-29).
+
+- **The ledger seed:** 7,161 lines, one per URL, feature and session of the measurement's reads, covering all 4,282
+  URLs of `per_url.json` and all 10,720 of its reads. 3,847 lines (1,458 URLs) are `cited:<key>`, where a registry
+  entry of this clone carries the URL; 3,314 are `unknown-outcome`. The measurement counted 1,625 URLs "in a registry"
+  (R1) because it also read every other clone's unlanded entries; the seed reads this clone's, which is main's.
+  A seeded line's questions are what the read asked of the page: a fetch prompt for an agent's `WebFetch`, the
+  command line itself for a main session's `make source-pages` - the measurement recorded no better question for
+  those, so the seed carries what it has.
+- **The first fill pass** (the first `make sources-consulted` after the seed) added 433 `cited:<key>` lines: registry
+  entries whose pointer the measurement never saw read (entries written before 2026-09-26).
+- **The page-cache import:** 1,317 manifests under `/tmp/l7r-check`, 3,853 saved rows; 23 excerpts and 7 rows whose
+  file was gone were skipped; 2,365 distinct pages imported, 106 MB, each marked `exact: false`. R1's "4,612 saves of
+  3,089 pages" counted every saved-page READ the transcripts showed, excerpts and since-deleted runs among them; this
+  counts the whole pages still on disk.

@@ -8,7 +8,10 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Measurement: [`
   seed and import, and the command line the new make targets call. `_source_pages.py`, `_quote_verbatim.py`,
   `_check_bundle.py` and `reserve-prefix.py` load it the way they load each other (by path). The saved form of a
   page - one sentence to a line, a page over 20,000 characters in parts - moves from `_source_pages.py` into it,
-  because the cache stores that form too; `_source_pages` keeps the names `wrapped`, `parts`, `PART`.
+  because the cache stores that form too; `_source_pages` keeps the names `wrapped`, `parts`, `PART`. A defect in
+  that form is fixed as it moves (constitution XIV, found by the plan review): a Latin stop broke the line even with no
+  space after it, so "3.5 m" was saved as "3." and "5 m" and a grep for the figure missed it; a Latin stop now breaks
+  only before whitespace, a CJK stop as before.
 - **D2 - the ledger** (FR-001, FR-002). `<mirror>/.specify/sources-consulted.jsonl` (the mirror found as `make
   reserve` finds it: a clone's grandparent under `.clones/`), appended under `flock` on
   `<mirror>/.specify/sources-consulted.lock`, polled with a 30-second limit as `make reserve`'s lock is. One JSON
@@ -69,6 +72,12 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). Measurement: [`
   whose file (or all its parts) is on disk and is not an EXCERPT (feature 250 D19: an excerpt is not the page); per
   normalized URL the newest such save; stored with `exact: false`, `origin: import:<dir>`, `fetched` = the file's
   modification time; a URL already in the cache is left alone. The counts of both go into research.md R2.
+- **D8a - quote-check's bundle carries the cached text** (FR-010, FR-011; found while implementing D10). A
+  `make check-bundle PAGE= SECTION=` bundle carried no page text, so "the cached text the bundle carries" would name
+  nothing for quote-check. After its quote-verbatim run, the bundle saves under `pages/` the cached text of every page
+  a quotation was NOT found verbatim on (the residue the agent would otherwise fetch), read from the cache ONLY: a page
+  the cache does not hold is listed `NOT-CACHED` in `pages/MANIFEST.txt` and never fetched (quote-verbatim has just
+  tried it). A re-verification read, so no ledger line (spec D1). The MANIFEST.md names `pages/`; it is not inlined.
 - **D10 - the agent files** (FR-011). One sentence each, in the step that already says to read saved pages before
   fetching: `source-reader` step 0 and `quote-check` procedure step 2 - the bundle's saved text comes from the
   host's page cache, so read it before any `WebFetch`, and fetch only a page the bundle does not carry (or one its

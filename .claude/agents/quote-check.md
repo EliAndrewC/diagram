@@ -129,7 +129,11 @@ run the whole procedure: nothing this check covers goes unchecked for want of th
 
 1. `Read` the report, then the file (or section) for context. The report lists every footnote with its ASSERTION;
    where it names none, find the sentence yourself.
-2. Fetch ONLY the residue, each DISTINCT URL ONCE (one attempt per host; a refused host is recorded, never
+2. **Read the cached text first** (feature 288): the bundle's `pages/` holds the saved text of each residue page from
+   the host's page cache, listed in `pages/MANIFEST.txt`. Look for the passage there (`Read` it; each file is one
+   sentence to a line) before any `WebFetch`, and quote the page's text from the file. Then fetch ONLY the residue the
+   cache did not settle - a page `pages/MANIFEST.txt` marks NOT-CACHED, or one whose saved text does not carry the
+   passage - each DISTINCT URL ONCE (one attempt per host; a refused host is recorded, never
    retried). The URL you fetch is the footnote's OWN link - not the registry entry, not a page you know of.
 3. Per footnote, three verdicts - the first two from the report except for the residue. The first is the GM's rule of 2026-09-06 (feature 195): *"if we are not able to
    simultaneously quote a relevant passage with a quote which actually backs up our assertion and then link to a

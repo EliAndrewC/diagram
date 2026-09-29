@@ -78,7 +78,9 @@ is `.claude/skills/diagram/research/CLAUDE.md`, which auto-loads when a session 
   in the agent's prompt: `make source-pages OUT=<dir> URL=<u>` before `source-reader` (the page itself, saved
   to grep, where a fetch gives an extract), `make quote-verbatim PAGE=<name> [NOTES=<ids>]` before `quote-check` (is the
   passage on the page, character for character), `make record-prepass PAGE=<name>` before
-  `record-format`, `make size-table PLAN=<svg>` before `size-audit`.
+  `record-format`, `make size-table PLAN=<svg>` before `size-audit`. `make source-pages` also prints each page's
+  earlier reads from the sources-consulted ledger and saves it once in the host's page cache; record every page's
+  outcome with `make source-outcome` (feature 288).
 - A record check reads a BUNDLE: `make check-bundle PAGE=<p> SECTION=<q>` (or `KEY=<k>`) copies what it
   needs, prepass output included, OUT of the repository, and the dispatch names its `MANIFEST.md` - an
   agent reading a file here is handed every `CLAUDE.md` above it, ~28,000 tokens (feature 250). The agent's

@@ -1,0 +1,108 @@
+{
+ "feature": "288-sources-ledger-and-page-cache",
+ "plan_sha256": "afbd0f9aee410e9432b8ccd0699bd642f9df93d2d94a453cf67c79b17bc7021a",
+ "reviewed": "2026-09-29",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "one module scripts/_sources.py; the saved form (wrapped, parts) moves into it",
+   "class": "within",
+   "why": "Code organization; every FR still carried."
+  },
+  {
+   "id": "D2",
+   "summary": "ledger path, flock lock, line fields, outcome forms, append-only, L7R_SOURCES_HOME test seam",
+   "class": "within",
+   "why": "Implements FR-001/FR-002 as written; the env seam only isolates tests."
+  },
+  {
+   "id": "D3-print",
+   "summary": "print format before each fetch (cache hit included); pending line after each FETCHED save; QUESTION passed by WHOLE=1; excerpt bundle --no-ledger",
+   "class": "within",
+   "why": "FR-003 and spec D1 as accepted."
+  },
+  {
+   "id": "D3-same-OUT",
+   "summary": "a URL already FETCHED in the same OUT is neither fetched nor printed",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The brief itself ties the print to a fetch ('printed before a page is fetched again') and FR-003 says 'BEFORE fetching it'; the existing feature-250 D15 behavior does no fetch and no cache read for such a URL, and the save that put it in OUT already printed its ledger lines. Implied by the GM's own words."
+  },
+  {
+   "id": "D4",
+   "summary": "source-outcome appends and echoes, exit 2 naming the five forms; sources-consulted by URL or KEY regex, running the fill pass first",
+   "class": "within",
+   "why": "FR-004, FR-006, spec D2."
+  },
+  {
+   "id": "D5",
+   "summary": "reserve URL= writes stub with h3 and pointer line and a cited line; fill pass run by make record (not under CHECK=1) and by the lookup, idempotent",
+   "class": "within",
+   "why": "FR-005 and spec D2; CHECK=1 is already a write-nothing mode."
+  },
+  {
+   "id": "D6",
+   "summary": "cache layout under <mirror>/.specify/page-cache, atomic rename under lock, OUT filled by copying, manifest note says from cache",
+   "class": "within",
+   "why": "FR-008 and the edge cases; copying keeps OUT's names and shape."
+  },
+  {
+   "id": "D7",
+   "summary": "age = seven days; REFRESH read from the environment",
+   "class": "within",
+   "why": "FR-009 asks for a stated age with its reason; both are stated."
+  },
+  {
+   "id": "D8-seam",
+   "summary": "CachedPages wraps Pages for source-pages, every check-bundle mode and quote-verbatim; failures never cached",
+   "class": "within",
+   "why": "FR-008, FR-010, the fetch-failure edge case."
+  },
+  {
+   "id": "D8-exact",
+   "summary": "quote-verbatim refetches (once) a page whose cached copy is an imported, non-exact saved form, and replaces the entry with exact text",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Narrows FR-010/SC-005 ('no fetch for a cached page') for imported copies only. An imported copy is the wrapped saved form, which inserts line breaks after every '.', '!' or '?' followed by a non-space (the committed _source_pages.wrapped), so after quote-verbatim's whitespace squeeze '3.5' reads '3. 5' and a verbatim quote can fail or be judged against altered text; parts cut long lines mid-text. Using it would defeat quote-verbatim's own purpose (a character-for-character check). The refetch happens once per imported page and the cache then serves it, so the cache's purpose is kept."
+  },
+  {
+   "id": "D9-seed",
+   "summary": "seed one line per URL/feature/session with first read time, read count, up to three questions of 200 chars, cited:<key> else unknown-outcome; idempotent",
+   "class": "within",
+   "why": "FR-007; the spec's Key Entities already give a seeded line a 'reads' field, so aggregation of reads is anticipated, and every URL is still seeded."
+  },
+  {
+   "id": "D9-import",
+   "summary": "import only FETCHED, on-disk, non-EXCERPT saves, newest per normalized URL, exact:false; a URL already cached left alone",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Narrows SC-006 ('each distinct page of /tmp/l7r-check') by skipping pages saved only as excerpts or missing from disk. The spec's own edge case says the cache holds the WHOLE page; importing an excerpt as the page would hand every later whole-page read a cut page, defeating the cache. A file not on disk cannot be imported. Each case is separately justified; both implied by the spec's definition of a cache entry."
+  },
+  {
+   "id": "D10",
+   "summary": "one sentence each in source-reader step 0 and quote-check step 2; frontmatter untouched",
+   "class": "within",
+   "why": "FR-011."
+  },
+  {
+   "id": "D11",
+   "summary": "the three rules in research/CLAUDE.md and page-session-rules.md; root CLAUDE.md clause; drift-test phrase list gains make source-outcome",
+   "class": "within",
+   "why": "FR-013; the root clause and the phrase check only enforce and point at the requested rules."
+  },
+  {
+   "id": "D12",
+   "summary": "new targets source-outcome, sources-consulted, sources-import with GUARD_EDIT_OK; optional QUESTION= and URL=; record gains the fill pass; .gitignore entries",
+   "class": "within",
+   "why": "FR-014, FR-015; existing interfaces kept."
+  },
+  {
+   "id": "D13",
+   "summary": "tests in test_sources.py and additions to four existing test files, no network, full coverage",
+   "class": "within",
+   "why": "FR-015, SC-001..SC-008."
+  }
+ ],
+ "verdict": "CLEAR"
+}

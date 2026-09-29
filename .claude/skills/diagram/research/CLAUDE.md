@@ -36,6 +36,15 @@ prints a few notes and the paragraphs carrying them. **A page is worked in fresh
 with briefs: write, then check-and-apply in groups of two questions), and a report's findings are applied in
 ONE turn - every turn re-reads the whole context.
 
+**Every page read is on the sources-consulted ledger** (feature 288). `make source-pages OUT=<dir> URL=<u>
+QUESTION=<page/NNN>` prints each page's earlier reads - when, which feature and session, for which question, with
+what outcome - BEFORE it fetches, and saves each page once in the host's page cache (a copy under seven days old is
+not fetched again; `REFRESH=1` fetches it). Check what it prints: a page already `rejected` for the same question is
+not re-read without a reason. Record every page's outcome with `make source-outcome URL=<u>
+OUTCOME=cited:<key>|rejected:<why>|nothing-found|unreadable [QUESTION=<page/NNN>]`; `make reserve KIND=registry
+KEY=<k> URL=<u>` marks a new entry's source `cited:<k>` itself. `make sources-consulted URL=<u>` (or `KEY=<regex>`)
+looks a page up without fetching it.
+
 **A write session takes at most four questions and ten new registry keys** (feature 274). Measured over 282
 sessions (its research R1): a write session's cost follows its turn count (r = 0.92) and grows roughly with the square
 of its length - median 74 turns, peak context 246 K against 250's 102-171 K, one of 109 turns cost 24.5 M. The runner
