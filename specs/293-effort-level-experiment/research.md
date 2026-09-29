@@ -85,9 +85,9 @@ Containers share a 9 GB cap; memwatch warns at 8 GB (the handoff). A `make done`
 note of 2026-09-13). **D7 - strictly sequential, gated on headroom** (the GM, 2026-09-29: "run these tests sequentially rather than in parallel for memory
 reasons"). The launcher refuses to start a run while any other effort run's session is live (its record has a start and no
 `result.json`), and refuses while the container's memory (`/sys/fs/cgroup/memory.current`, this container's own figure; memwatch's
-shared total is only seen when it warns) is above **4.5 GB**, or while a memwatch warning newer than 15 minutes stands in
+shared total is only seen when it warns) is above **4.5 GB**, or while a memwatch warning newer than 15 minutes (a GUESS: long enough that a warning raised by the previous run's tail or another session's gate has passed, short enough not to stall the experiment for an old one) stands in
 `~/.claude/memwatch/events/`. The threshold is a GUESS with its arithmetic: the 9.0 GB cap less a run's own peak (a `make done`'s
-test phase, above, plus the run's session and its subagents' processes at about 0.5 GB each as memwatch lists them) leaves roughly
+test phase, above, plus the run's session and its subagents' processes at about 0.5 GB each - observed 2026-09-29, one-shot, method: the memwatch warning of 15:34 listing the four biggest processes) leaves roughly
 4.5 GB for everything else. The refusal prints the figure and the wait is logged in `interventions.md`; the implementing session
 retries on its next turn rather than polling. While a run is live the implementing session runs nothing memory-heavy of its own: the
 measurement of the previous run, the blinding and the grading are done between runs, one at a time, and the tooling is built and gated
