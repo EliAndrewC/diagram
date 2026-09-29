@@ -231,3 +231,21 @@ feature's scope (FR-006 for the test-side excuses, FR-001 for the rest):
 | l7r/diagram/hamletgen/driver.py re-roll loop (tests/gate/hamletgen/test_driver.py test_a_map_that_strands_a_farmhouse_is_re_rolled_with_that_ground_forbidden) | Farmhouse reach is enforced by re-rolling with stranded ground forbidden and keeping the least-bad attempt; a map can still ship with meta.roll_failures farmhouses_reach_a_way. | Rule: every farmhouse reaches the way network (ways.unreached_houses). A retry is not a guarantee; driver.py's comment calls it 'the one thing no placer can promise in advance'. | yes | `hamletgen/driver.py + homesteads seating + ways straggler pass` | Same as the 2b item: a post-pack re-seat of the stranded steading so the finished roll always satisfies unreached_houses == []. |
 | tests/hamletgen/test_pool_261.py test_the_board_caption_notches_no_crown ('or meta.kosatsuba_caption_level == 1') | A board caption may lie on a crown when the siter records that no seat offered a clear one. | Rule: the caption halo notches no crown (settlement-review, features 230/261); the level-1 fallback is excused by the GM's 2026-08-29 allowance for a board under canopy with a visible label, so the placer does not guarantee a clear caption. | yes | `structures/fixtures/siting.py place_kosatsuba + the board caption seat` | Rank board positions by a crown-clear caption seat so level 1 cannot occur, or have the GM confirm the fallback is the rule. |
 | tests/soak/test_polder_fall_0.py test_a_polder_hamlet_draws_its_grid_dike_and_reservoir docstring; hamletgen.md 'down to two named failures' | The polder grid is WIP with two named gate failures in build_polder's own geometry; the test deliberately does not assert a clean gate, and no pool map is a polder grid. | The polder_grid archetype is a live hamletgen path (coverage rolls Polder 12/19); the two failures are not named in the test and the soak tier rarely runs. | unknown | `hamletgen/water/polder.py build_polder` | Name the two failures, make each a build_polder unit test, and assert the clean placement properties on the polder roll. |
+
+## R4 - What the gate costs before the work (2026-09-29)
+
+**Method** (observed 2026-09-29, method: `make durations` in the clone before any 287 engine change, load 1.3): 5,258 tests
+passed, 12 skipped, in 57.13 s. The slowest, which FR-007 and SC-005 weigh against what they guard:
+
+    10.10s call     tests/gate/test_bunds_and_dikes.py::test_every_beaded_bund_segment_shows_at_least_two_beads[kashikawa.gen.py]
+    10.09s call     tests/gate/test_bunds_and_dikes.py::test_every_beaded_bund_segment_shows_at_least_two_beads[sawada.gen.py]
+    9.85s setup    tests/gate/test_bunds_and_dikes.py::test_no_bund_is_drawn_down_the_middle_of_a_supply_channel
+    5.68s call     tests/gate/test_bunds_and_dikes.py::test_every_beaded_bund_segment_shows_at_least_two_beads[mizuguchi.gen.py]
+    5.32s call     tests/hamletgen/test_homesteads.py::test_the_free_ground_changes_no_seat[rescue-dispersed]
+    4.77s call     tests/test_engine_ast.py::test_the_four_scans_parse_each_file_once
+    4.61s call     tests/gate/test_bunds_and_dikes.py::test_every_beaded_bund_segment_shows_at_least_two_beads[kuwabata.gen.py]
+    4.31s call     tests/tools/test_pack_audit_sun.py::test_the_red_fixture_fails_naming_the_wood
+    3.08s call     tests/tooling/test_incremental_gate.py::test_the_fast_core_keeps_every_context_once_its_events_are_re_armed
+    2.97s call     tests/settlement/test_exact_pieces_284.py::test_the_board_sampled_verge_first_is_the_board_sampled_whole
+    2.95s call     tests/tools/test_registry.py::test_every_check_fires_on_its_red_fixture[garden_sun]
+    2.79s call     tests/tools/test_registry.py::test_every_check_passes_the_pool_sheets_of_its_tiers[garden_sun]
