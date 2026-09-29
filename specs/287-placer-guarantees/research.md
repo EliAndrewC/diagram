@@ -262,3 +262,14 @@ polder roll is held to every placement rule like any other.
 through `generate`; `p0/results.json`): all 53 maps seat every household, every one draws its connector, none fails; eight
 re-roll to get there - cohort seeds 6, 8, 19, 33, 38 and 42 once, 23 twice, 45 three times. Those re-rolls are what M3's
 corridor must make unnecessary; the count that decides D2's question is P3's, under the new placer.
+
+**The field pond's count (D9)** (observed 2026-09-29, method: reading `settlement/fields/features.py:_paddy_features`): it is
+ROLLED - `rng.random() < 0.55` per valley field with low plots, a disclosed calibrated liberty - and when the roll says yes
+and no low plot takes a legible pond, nothing is drawn. So D9 applies: the roll is taken only over the fields where some low
+plot can hold a pond (the fits found first, then the roll), and a rolled pond is always drawn.
+
+**What P0 leaves to the phases that build the mechanisms.** Three of P0's counts are of what a new mechanism LEAVES, so they
+are taken where the mechanism lands, before anything depends on it: the belt cases D8 leaves (with P5's belt guarantee), the
+seats D2 refuses (with P3's corridor and capacity), and the board terminal (with P6's strict caption predicate). Seed 31's
+yard over a paddy is not measured separately: homes H44 guarantees the yard clear of every paddy as drawn whatever it reads
+today, and P9's sweep checks it.
