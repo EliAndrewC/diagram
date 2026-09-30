@@ -196,7 +196,7 @@ def size_sentence(kind: Kind, meta: dict[str, Any], houses: int) -> str:
     if population:
         # SAY THE HOUSEHOLDS WHERE THE ARITHMETIC WOULD NOT WORK (settlement-review, 2026-08-29).
         # A to-scale map depicts essentially every household - 0.85 to 1.05 occupied farmhouses per
-        # declared household (research/settlements.html "Is every household in a hamlet actually drawn?");
+        # declared household (research/rendering/settlements.html "How our maps count and draw households");
         # sixteen of seventeen pool maps sit at 1.00 and Hikari no Sato at 0.94 - 66 drawn against 70
         # households - so a card reading "66 farmhouses, population ~350" invites a reader to divide
         # and get 5.3. Named only when the two differ, which is rare.

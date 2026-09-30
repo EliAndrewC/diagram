@@ -144,7 +144,7 @@ class RetirementHouse(Kind):
     Covers: `retirement_houses` - the retired couple's own roof in the homestead
     Label: accurate
     Sources: kotobank-inkyo, kotobank-inkyoya
-    Entry: research/settlements.html - 'How many lived in one farmhouse, and under how many roofs?', 'Is every household in a hamlet actually drawn?'
+    Entry: research/settlements.html - 'Households: how many live in a house, and under how many roofs (ie)'; research/rendering/settlements.html - 'How our maps count and draw households'
     """
 
     key = 'retirement house'
