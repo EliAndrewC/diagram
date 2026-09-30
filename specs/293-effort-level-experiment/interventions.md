@@ -46,3 +46,4 @@ given, identically, to the other.
 - 2026-09-30T05:09:22Z | e5 | memwatch | warning at 05:08 UTC during the run (8.5 GB raw; a python3 at 1.3 GB)
 - 2026-09-30T05:18:46Z | e5 | memwatch | warning at 05:17 UTC during the run (8.1 GB raw); the run continues
 - 2026-09-30T07:15:38Z | e5 | resume | the session launched a detached make map at 05:26, said it was waiting, and sat idle ~2 h (a headless session has nothing to wake it; the project's stop hook told it so). A harness stall, not the arm's: resumed with the one fixed message (_effort_run.RESUME_MESSAGE); the wait is a pause excluded from its wall-clock. The same message goes to any run that stalls the same way.
+- 2026-09-30T07:16:04Z | e5 | resume | the idle original process (pid 444937) was stopped by hand: the launcher's pgrep read its '--session-id' pattern as an option (fixed: 'pgrep -f -- <pattern>'); it had written nothing since 05:27, so only the resumed process writes the session
