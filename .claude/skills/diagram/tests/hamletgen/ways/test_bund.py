@@ -217,3 +217,13 @@ def test_a_junction_end_is_carried_on_as_a_path_of_its_own() -> None:
     free = _StubSettlement(lanes=[[(100.0, 100.0), (250.0, 100.0)]])
     B.carry_on(free, 0, -1, (250.0, 100.0), (396.0, 100.0))
     assert free.M["lanes"][0]["pts"][-1] == [396.0, 100.0]
+
+
+def test_a_step_over_the_water_is_bent_onto_a_square_crossing() -> None:
+    """`squared_step` (feature 291): a step crossing no water, or crossing square, is straight; one crossing oblique bends
+    to a point before the water on its normal, then crosses square to as far out as it was going."""
+    water = [((0.0, -100.0), (0.0, 100.0))]  # a stream running south along x = 0
+    assert B.squared_step((-50.0, 0.0), (-10.0, 0.0), water) == [(-10.0, 0.0)], "no water crossed"
+    assert B.squared_step((-50.0, 0.0), (20.0, 0.0), water) == [(20.0, 0.0)], "already square"
+    pre, post = B.squared_step((-40.0, -40.0), (20.0, 20.0), water)
+    assert pre == (-B.SQUARE_APPROACH_FT, 0.0) and post == (20.0, 0.0), "the leg over the water runs along its normal"

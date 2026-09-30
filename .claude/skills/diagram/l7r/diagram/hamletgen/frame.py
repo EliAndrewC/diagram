@@ -99,6 +99,20 @@ def reseat_ends(lanes: Sequence[Mapping[str, Any]], i: int, old: Sequence[Pt], n
     return moves
 
 
+def relay_squared(s: Settlement, i: int, old: Sequence[Pt], new: Sequence[Pt]) -> bool:
+    """Re-lay lane `i` from `old` to `new` (squared at a crossing), carrying every other lane's end that met it onto it
+    (`reseat_ends`); False, and nothing changed, where one of them stands too far to carry."""
+    moved = reseat_ends(s.M.get("lanes", []), i, old, new)
+    if moved is None:
+        return False
+    for k, end_i, q in moved:
+        s.M["lanes"][k]["pts"][end_i] = [round(q[0], 1), round(q[1], 1)]
+        s.reink_lane(k)
+    s.M["lanes"][i]["pts"] = [[x, y] for x, y in new]
+    s.reink_lane(i)
+    return True
+
+
 def keeps_the_ends(lanes: Sequence[Mapping[str, Any]], i: int, old: Sequence[Pt], new: Sequence[Pt]) -> bool:
     """Does lane `i`, re-laid from `old` to `new`, still meet every other lane end that met it - within the 4 ft the web's
     one-network rule joins at (`_TOUCH_GAP`)?"""
@@ -155,13 +169,7 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
                 # ...AND ANOTHER LANE'S END THAT MET IT MEETS IT STILL: carried to the squared line where it stands near, else
                 # the squaring is refused (Mizuguchi: a door path left 87 ft off its street). Refused outright, a field path
                 # whose head a join lane met was left crossing the brook 45 degrees off square (Kashikawa, 2026-09-30).
-                moved = reseat_ends(s.M.get("lanes", []), i, pts, squared)
-                if moved is not None:
-                    for k, end_i, q in moved:
-                        s.M["lanes"][k]["pts"][end_i] = [round(q[0], 1), round(q[1], 1)]
-                        s.reink_lane(k)
-                    ln["pts"] = [[x, y] for x, y in squared]
-                    s.reink_lane(i)
+                relay_squared(s, i, pts, squared)
     s.bridges()
     if s.M.get("field_ditches"):
         if plan.field_archetype in POLDER_ARCHETYPES:
