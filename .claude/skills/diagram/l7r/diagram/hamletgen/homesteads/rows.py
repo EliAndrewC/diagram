@@ -236,6 +236,12 @@ def frame_on_holdings(frame: tuple[float, float, float, float], holdings: Sequen
     return any(fb.intersects(Polygon(q)) for q in holdings)
 
 
+def seat_allowed(hx: float, hy: float, w: float, h: float, allowed: Any) -> bool:
+    """May a row farm's house stand at (`hx`, `hy`): on the `w` x `h` sheet, and where the stage's `allowed` says it may
+    (lifted from `seat_rows`, feature 291: no pool roll reaches the refusal once the streets keep inside the sheet)."""
+    return 0 < hx < w and 0 < hy < h and (allowed is None or bool(allowed(hx, hy)))
+
+
 def frame_refused(fr: tuple[float, float, float, float], front: Sequence[float], lane_pad: float, hard: Any, door_room: float, all_streets: Any, holdings: Sequence[Sequence[Pt]]) -> bool:
     """Is a row seat's frame refused (lifted from `seat_rows`, feature 291)? Its door has no room (`door_clear`); or the
     frame reaches across ANY of the row's streets where a line bends - square to its own line at its seat, it stood on a
@@ -287,9 +293,63 @@ def draw_holdings(s: Settlement) -> int:
     return n
 
 
+def inside_the_sheet(line: Sequence[tuple[Pt, Pt]], bounds: tuple[float, float, float, float]) -> list[tuple[Pt, Pt]]:
+    """The longest run of consecutive `line` samples inside `bounds` (x0, y0, x1, y1); [] where none is."""
+    best: list[tuple[Pt, Pt]] = []
+    run: list[tuple[Pt, Pt]] = []
+    for p, n in line:
+        if bounds[0] <= p[0] <= bounds[2] and bounds[1] <= p[1] <= bounds[3]:
+            run.append((p, n))
+            if len(run) > len(best):
+                best = list(run)
+        else:
+            run = []
+    return best
+
+
+def longest_part(geom: Any) -> list[Pt]:
+    """The coordinates of a line geometry's longest part - itself for a LineString; [] for an empty or zero-length one."""
+    if geom.geom_type == "MultiLineString":
+        geom = max(geom.geoms, key=lambda g: g.length)
+    if geom.is_empty or geom.length <= 0.0:
+        return []
+    return [(float(x), float(y)) for x, y in geom.coords]
+
+
 def parallel(line: Sequence[tuple[Pt, Pt]], d: float) -> list[tuple[Pt, Pt]]:
-    """`line` set out `d` along each sample's own outward normal (the next street of a row village, plan D15)."""
-    return [((p[0] + n[0] * d, p[1] + n[1] * d), n) for p, n in line]
+    """`line` set out `d` on its outward side (the next street of a row village, plan D15), as a TRUE parallel curve
+    (`offset_curve`, rounded at the joins) resampled at the line's own spacing, each sample carrying the outward normal
+    of the first street's sample nearest it. Set out sample by sample along each one's own normal, the samples on the
+    inside of a bend tighter than `d` crossed over each other and the street drawn through them doubled back: Mizuguchi's
+    second street, set out 400 ft beyond a first that curves with the brook's bank, was a 7,208 ft line with 17 turns past
+    140 degrees (settlement-review, 2026-09-30); dropping the samples that ran back still left two folds."""
+    if len(line) < 2 or d == 0.0:
+        return [((p[0] + n[0] * d, p[1] + n[1] * d), n) for p, n in line]
+    from shapely.geometry import LineString, Point
+
+    pts = [p for p, _n in line]
+    base = LineString(pts)
+    mid = len(line) // 2
+    probe = Point(pts[mid][0] + line[mid][1][0] * d, pts[mid][1] + line[mid][1][1] * d)
+    off = min((base.offset_curve(d, join_style="round"), base.offset_curve(-d, join_style="round")), key=lambda g: g.distance(probe))
+    coords = longest_part(off)
+    if len(coords) < 2:
+        return []
+    off = LineString(coords)  # in the first street's direction on either side: shapely 2 keeps an offset's direction
+    step = max(math.dist(pts[0], pts[1]), 1.0)
+    k = max(1, int(off.length // step))
+    qs = [(float(q.x), float(q.y)) for q in (off.interpolate(off.length * i / k) for i in range(k + 1))]
+    out: list[tuple[Pt, Pt]] = []
+    for i, qp in enumerate(qs):
+        # THE NORMAL OF THE NEW STREET ITSELF, square to its own tangent on the first street's outward side: borrowed from the
+        # first street's nearest sample, every sample round a rounded corner took the corner's one normal, and the farms
+        # seated along the arc all faced one way and stood behind each other (cohort seed 904)
+        a, b = qs[max(0, i - 1)], qs[min(len(qs) - 1, i + 1)]
+        tl = math.dist(a, b) or 1.0
+        n0 = min(line, key=lambda s: math.dist(s[0], qp))[1]
+        nx, ny = -(b[1] - a[1]) / tl, (b[0] - a[0]) / tl
+        out.append((qp, (nx, ny) if nx * n0[0] + ny * n0[1] >= 0.0 else (-nx, -ny)))
+    return out
 
 
 def clear_frames(
@@ -398,14 +458,16 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
         # two lots of slack beyond what the row needs: a refused seat is taken up at the row's end rather than sent to a
         # second street across the holdings (Kashikawa: one farm alone on a second street no way could reach). Each next
         # street is the FIRST one set out parallel, so the streets stay a grid beside each other (FR-016)
-        line = planned[offsets.index(off)]
+        # ...ITS STRETCH INSIDE THE SHEET BY HALF A FRAME: set out round a bend, Mizuguchi's second street ran 675 ft down
+        # the canvas's west edge, outside the farms it served and past the view the map is cropped to - a second way off
+        # the map past its notice board (settlement-review, 2026-09-30)
+        line = inside_the_sheet(planned[offsets.index(off)], (fd / 2, fd / 2, float(s.W) - fd / 2, float(s.H) - fd / 2))
         took = 0
-        for (fx, fy), side, t, nrm in row_seats(line, frame, sides, gap):
+        seats = [q for q in row_seats(line, frame, sides, gap) if seat_allowed(q[0][0] - hx_off, q[0][1] - hy_off, float(s.W), float(s.H), allowed)]
+        for (fx, fy), side, t, nrm in seats:
             if placed >= want:
                 break
             hx, hy = fx - hx_off, fy - hy_off
-            if not (0 < hx < s.W and 0 < hy < s.H) or (allowed is not None and not allowed(hx, hy)):
-                continue
             # A FAR-ROW FARM IS SEATED ONLY WITH ITS HOLDING (plan D16): behind its lot, away from the street, clear of the
             # hard ground and every reserved box - else not seated here, as a farm whose grove has no room is not.
             if frame_refused((fx, fy, float(frame[2]), float(frame[3])), front, lane_pad, hard, door_room, all_streets, [hq for hq, *_r in holdings]):

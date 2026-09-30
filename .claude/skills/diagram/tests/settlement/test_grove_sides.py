@@ -304,3 +304,17 @@ def test_a_lane_through_a_farm_s_grove_band_is_found_once() -> None:
     g = {"x": 100.0, "y": 100.0, "w": 40.0, "h": 20.0}
     M = {"groves": [g, {"x": 5.0}], "lanes": [{"pts": [[0.0, 100.0], [90.0, 100.0], [200.0, 100.0]], "w": 3}, {"pts": [[0.0, 300.0], [200.0, 300.0]]}]}
     assert groves_crossed_by_lanes(M) == [(0, g)]
+
+
+def test_a_bamboo_patch_sits_mid_band_against_the_house_side() -> None:
+    """`bamboo_patch` (feature 291): 22 ft along the band by 16 across, in its middle, against the side opposite its face;
+    `in_box` answers for the patch and is False with none."""
+    from l7r.diagram.settlement.homestead_parts.groves import bamboo_patch, in_box
+
+    north = bamboo_patch(100.0, 50.0, 80.0, 40.0, (0.0, -1.0), 22.0, 16.0)  # a north band: the house is south of it
+    assert north == (89.0, 54.0, 111.0, 70.0)
+    west = bamboo_patch(50.0, 100.0, 40.0, 80.0, (-1.0, 0.0), 22.0, 16.0)  # a west band: the house is east of it
+    assert west == (54.0, 89.0, 70.0, 111.0)
+    tiny = bamboo_patch(0.0, 0.0, 10.0, 8.0, (0.0, 1.0), 22.0, 16.0)
+    assert tiny == (-5.0, -4.0, 5.0, 4.0), "clamped to the band"
+    assert in_box(100.0, 60.0, north) and not in_box(100.0, 40.0, north) and not in_box(0.0, 0.0, None)

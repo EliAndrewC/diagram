@@ -726,7 +726,9 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
     n = 0
     for h in list(s.M.get("houses", [])):
         door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
-        streets = [[(tuple(a), tuple(b)) for a, b in zip(ln["pts"], ln["pts"][1:], strict=False)] for ln in s.M.get("lanes") or [] if ln.get("street")]
+        streets = [
+            [(tuple(a), tuple(b)) for a, b in zip(ln["pts"], ln["pts"][1:], strict=False)] for ln in s.M.get("lanes") or [] if ln.get("street") and ln.get("street_index") is not None
+        ]  # a row's own street, not a join
         k = own_street(h, streets)  # type: ignore[arg-type]
         segs = streets[k] if k is not None else served_network(s.M.get("lanes") or [])
         if door is None or not segs or min(seg_dist(door[0], door[1], a, b) for a, b in segs) <= reach:  # type: ignore[arg-type]

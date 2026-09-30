@@ -142,3 +142,19 @@ def test_crop_boxes_city_excludes_the_extramural_shop_string_but_keeps_one_insid
 
     no_wall = [b[4] for b in crop_boxes({"buildings": [outside]}, True, _FT, _W, _H)]
     assert "buildings[0]" in no_wall, "with no wall recorded there is nothing to be outside of"
+
+
+def test_a_row_village_s_streets_set_the_frame_but_their_joins_do_not() -> None:
+    """Feature 291: a row's street is its spine and is framed; a street's join, the connector and a web lane clip."""
+    from l7r.diagram.settlement._knobs import crop_boxes
+
+    M = {
+        "lanes": [
+            {"pts": [[100.0, 50.0], [900.0, 60.0]], "street": True, "street_index": 0},
+            {"pts": [[900.0, 60.0], [950.0, 5.0]], "street": True, "street_index": None},
+            {"pts": [[0.0, 0.0], [10.0, 10.0]], "connector": True},
+            {"pts": [[5.0]], "street": True, "street_index": 1},
+        ]
+    }
+    got = [b for b in crop_boxes(M, False, 1.0, 1000.0, 1000.0) if b[4].startswith("row street")]
+    assert got == [(100.0, 900.0, 50.0, 60.0, "row street[0]")]

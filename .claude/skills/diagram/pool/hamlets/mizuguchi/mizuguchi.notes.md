@@ -608,7 +608,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - farmhouses: **12**
 - family form: **retirement_house**, retirement houses **5**
 - farmstead fixtures: bath **3**, coop **10**, pit **8**, privy **11**, shrine **1**, woodpile **5**
-- notice board at the entrance, **(2320.9, 1363.5)**: **12** of 12 households' ways out pass it
+- notice board at the entrance, **(2300.1, 1363.2)**: **12** of 12 households' ways out pass it
 <!-- /census -->
 
 ## 2026-09-09 - feature 220 (the field fitted once)
@@ -868,5 +868,5 @@ forms (homesteads/155 and 156, feature 291 amendment 3); the reference (Inashiro
 - **A service strip** stands between each house and its windward stand, for the wood shed and the bath room.
 
 Measured on this roll (2026-09-30): 12 houses on 2 streets, 12 grove farms; 24 bands, all deep; 12 private wells;
-bath rooms 3, wood sheds 5, privies 11, coops 10, manure heaps 8, shrine 1 - every declared fixture seated; 14 lanes;
+bath rooms 3, wood sheds 5, privies 11, coops 10, manure heaps 8, shrine 1 - every declared fixture seated; 15 lanes;
 every row, water, door, bamboo, grove and overlap rule clean; attempt 1.

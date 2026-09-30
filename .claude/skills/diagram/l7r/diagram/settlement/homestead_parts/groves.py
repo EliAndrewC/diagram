@@ -35,6 +35,33 @@ def band_clumps(cx: float, cy: float, w: float, h: float, cap_area: float) -> li
 
 GROVE_BAMBOO_SHARE = 0.08  # of a windbreak clump's items, the bamboo under its crowns: a GUESS (269 B29, vegetation/260)
 
+GROVE_BAMBOO_PATCH_FT = (22.0, 16.0)
+"""A farm's household bamboo, where it rolled a stand and keeps it in its own grove (feature 291, vegetation/154): a patch
+this size - along the band, then across it - on the house side of each windward (deep) band, every item in it bamboo,
+so it is inked as culms rather than a crown. The size is the household strip's (`hamletgen/homesteads/bamboo.py`
+`HOUSEHOLD_BAMBOO_FT`, a GUESS); each windward band, because the Tonami grove held its bamboo "from the west round to the
+north". Drawn only as the share of `GROVE_BAMBOO_SHARE` - in the gaps between crowns - 8 of Kashikawa's 15 bamboo farms
+drew no culm at all (settlement-review, 2026-09-30)."""
+
+
+def in_box(x: float, y: float, box: tuple[float, float, float, float] | None) -> bool:
+    """Is (x, y) inside the axis-aligned `box` (x0, y0, x1, y1)? False with no box."""
+    return box is not None and box[0] <= x <= box[2] and box[1] <= y <= box[3]
+
+
+def bamboo_patch(cx: float, cy: float, w: float, h: float, face: tuple[float, float], along: float, across: float) -> tuple[float, float, float, float]:
+    """The household bamboo patch of a band centered (`cx`, `cy`), `w` x `h`, whose outward face is `face`: `along` x
+    `across` (clamped to the band), in the band's middle, against its HOUSE side (the side opposite `face`)."""
+    fx, fy = face
+    if abs(fx) > abs(fy):  # an east or west band: along it is y, across it is x
+        pw, ph = min(across, w), min(along, h)
+        x = cx - fx * (w - pw) / 2
+        return (x - pw / 2, cy - ph / 2, x + pw / 2, cy + ph / 2)
+    pw, ph = min(along, w), min(across, h)
+    y = cy - fy * (h - ph) / 2
+    return (cx - pw / 2, y - ph / 2, cx + pw / 2, y + ph / 2)
+
+
 # THE VILLAGE BELT HAS TWO ATTESTED FORMS, SO IT IS A KNOB (269 B30; research/vegetation/270, "Was a windbreak one kind of
 # tree in a row?"). Neither is a line of one kind of tree. `conifer_led` is the Japanese farmstead grove drawn at village
 # scale - planted in rows round one tall conifer (cedar at every homestead of three surveyed regions, the igune's four tall
@@ -504,6 +531,7 @@ class GrovesMixin:
         cls: str | None = None,
         tally: dict[str, int] | None = None,
         bamboo: bool = True,
+        bamboo_box: tuple[float, float, float, float] | None = None,
     ) -> int:
         """Draw one windbreak/grove clump as a DENSE MIXED STAND - overlapping canopies packed into a real
         grove (not a few scattered trees), of three species: tall EVERGREEN conifer (darker, larger crown - the
@@ -555,7 +583,7 @@ class GrovesMixin:
                 px = random.uniform(-w / 2 + 2, w / 2 - 2)
                 py = random.uniform(-h / 2 + 2, h / 2 - 2)
                 roll = random.random()
-                kind = "bamboo" if roll < b_th else ("conifer" if roll < c_th else "broadleaf")
+                kind = "bamboo" if roll < b_th or in_box(cx + px, cy + py, bamboo_box) else ("conifer" if roll < c_th else "broadleaf")
                 band = LESSER_BROADLEAF_S if mix == "conifer_led" else ((1.25, 1.7) if random.random() < 0.25 else (0.72, 1.05))  # a few emergent crowns over many small
                 size = random.uniform(*band)
                 items.append((px, py, kind, size))

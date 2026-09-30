@@ -126,7 +126,20 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     home_target = (sum(float(o["x"]) for o in top) / len(top), north - px(40.0))
     thicket_target = home_target  # the settlement's edge, on the dry ground behind its back row (feature 280 M49)
     rects: list[tuple[float, float, float, float, float]] = []  # (x, y, w, h, pad)
-    for key, pad in (("houses", 10.0), ("threshing_yards", 8.0), ("gardens", 8.0), ("farm_sheds", 8.0), ("byres", 8.0), ("retirement_houses", 10.0), ("wells", 14.0), ("kosatsuba", 12.0)):
+    # ...AND EACH FARM'S OWN GROVE (feature 291): a take-yabu seated 40 ft north of the back row stood inside the north band
+    # of Kashikawa's north-east far-row farm, and read as that farm's own bamboo in a grove that rolled none
+    # (settlement-review, 2026-09-30)
+    for key, pad in (
+        ("houses", 10.0),
+        ("threshing_yards", 8.0),
+        ("gardens", 8.0),
+        ("farm_sheds", 8.0),
+        ("byres", 8.0),
+        ("retirement_houses", 10.0),
+        ("wells", 14.0),
+        ("kosatsuba", 12.0),
+        ("groves", 4.0),
+    ):
         for o in s.M.get(key, []):
             if all(isinstance(o.get(f), (int, float)) for f in ("x", "y", "w", "h")):
                 rects.append((float(o["x"]), float(o["y"]), float(o["w"]), float(o["h"]), px(pad)))

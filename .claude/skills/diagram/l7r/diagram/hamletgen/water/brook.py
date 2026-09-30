@@ -10,6 +10,7 @@ import math
 import random
 import re
 from collections.abc import Sequence
+from typing import Any
 
 from l7r.diagram.settlement import Settlement, knob_rng
 from l7r.diagram.settlement._knobs import Knob, register_knob
@@ -347,6 +348,36 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
     return _off_the_axes(unfold(_off_the_axes([*cut, *keep_tail], (px, py), hold=1), BROOK_MAX_TURN_DEG), (px, py), hold=1)
 
 
+def off_the_sheet(head: Pt, th: float, w: float, h: float, wob: Any, beyond: float = 40.0) -> list[Pt]:
+    """The brook's course from off the sheet down to its approach's `head`: on up the approach's bearing `th` (from the
+    sluice upslope) until it leaves the `w` x `h` canvas by `beyond`, with a wander on the way, returned from the edge down
+    to (not including) `head` - so the brook comes from off the map, as its record says (`frm: offmap`). The approach alone
+    was 420 ft, and once a row village's streets set the crop Mizuguchi's view showed its head: a rounded cap in the scrub
+    that read as a spring, and the row street, set along the dry edge, looped round it (settlement-review, 2026-09-30).
+    [] where the head already stands off the sheet."""
+    ux, uy = math.cos(th), math.sin(th)
+    if not (0.0 <= head[0] <= w and 0.0 <= head[1] <= h):
+        return []
+    ts = [
+        t
+        for t in (
+            (-head[0] - beyond) / ux if ux < -1e-9 else None,
+            (w + beyond - head[0]) / ux if ux > 1e-9 else None,
+            (-head[1] - beyond) / uy if uy < -1e-9 else None,
+            (h + beyond - head[1]) / uy if uy > 1e-9 else None,
+        )
+        if t is not None
+    ]
+    far = min(ts)
+    k = max(1, int(far // 140.0))  # a bend about every 140 ft, as the approach's own legs
+    out: list[Pt] = []
+    for i in range(k, 0, -1):
+        j = 0.0 if i == k else wob.uniform(-18.0, 18.0)
+        t = far * i / k
+        out.append((head[0] + ux * t - uy * j, head[1] + uy * t + ux * j))
+    return out
+
+
 def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float = 420.0) -> Poly:
     """The brook: down off the high ground to the intake, and ON PAST the fan to leave the map.
 
@@ -381,7 +412,7 @@ def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float
             # 49 ft at 1.2 degrees off vertical (feature 261, found beside Sawada's tap-leaving segment). The nudge moves a
             # leg's far end across the approach, never the sluice, so the tap stays where the head race leaves it.
             legs = _off_the_axes(legs, (-math.sin(th), math.cos(th)))
-            return [*legs, sluice, *brook_skirt(plan, sluice, plan.brook_side, crop)]
+            return [*off_the_sheet(legs[0], th, float(plan.W), float(plan.H), wob), *legs, sluice, *brook_skirt(plan, sluice, plan.brook_side, crop)]
     up = (
         sluice[0] - dx * run,
         sluice[1] - dy * run,
