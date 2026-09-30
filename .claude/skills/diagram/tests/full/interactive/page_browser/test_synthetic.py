@@ -511,7 +511,9 @@ def test_the_record_page_defines_its_terms_on_hover_in_the_footnote_box(record: 
     shape = record.js("() => Array.from(document.querySelectorAll('#fntip .pass, #fntip .sep')).map(e => e.className + ':' + getComputedStyle(e).display)")
     assert shape == ["sep:none", "pass:list-item", "sep:none", "pass sub:list-item"], shape  # the key's ` - ` is hidden too
     # GM 2026-09-29: the link to the rendering section sits on its heading's own line, at the right
-    geo = record.js("() => { const h = document.querySelector('h2').getBoundingClientRect(), x = document.querySelector('h2 .xref').getBoundingClientRect(); return [h.top, h.bottom, h.right, x.top, x.bottom, x.right]; }")
+    geo = record.js(
+        "() => { const h = document.querySelector('h2').getBoundingClientRect(), x = document.querySelector('h2 .xref').getBoundingClientRect(); return [h.top, h.bottom, h.right, x.top, x.bottom, x.right]; }"
+    )
     assert geo[3] >= geo[0] and geo[4] <= geo[1] and abs(geo[2] - geo[5]) < 2, geo
     # GM 2026-09-29: a translated quotation's original is collapsed - in the page and in the footnote box - and a click
     # on its toggle shows it

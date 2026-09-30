@@ -13,9 +13,9 @@ from __future__ import annotations
 import os
 import re
 
+from l7r.diagram.interactive.record import absence, originals, passages, xref
 from l7r.diagram.interactive.record import citations_side as cite
 from l7r.diagram.interactive.record import fragments as frag
-from l7r.diagram.interactive.record import absence, originals, passages, xref
 from l7r.diagram.interactive.record.assemble import assemble
 from l7r.diagram.interactive.record.notes import allocate, merge, notes_of, number_references
 from l7r.diagram.interactive.record.split import Entry, Page, Section, split
