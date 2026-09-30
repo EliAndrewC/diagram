@@ -764,6 +764,7 @@ fan foot	fan foot
 fan head	alluvial fan
 fan palm	fan palm
 fan palms	fan palm
+fan plain	alluvial fan
 fan's foot	fan foot
 fan's head	alluvial fan
 fan-foot	fan foot
@@ -2606,6 +2607,9 @@ sanmon	sanmon
 sannomaru	sannomaru
 sanshaku-michi	sanshaku-michi
 sanson	sankyoson
+santome	Santome
+santome shinden	Santome
+santome's	Santome
 sanuki	Sanuki
 sanuki plain	Sanuki
 sanyo-do	Sanyodo
@@ -3596,6 +3600,7 @@ zushi-nikai	half-story
 スブタ	Blyxa
 ホオノキ	hoonoki
 ミズオオバコ	Ottelia
+三富新田	Santome
 合掌造り	gassho
 四間取り	four-room type
 圃場整備	hojo seibi
