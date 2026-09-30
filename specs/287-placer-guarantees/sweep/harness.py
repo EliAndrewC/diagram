@@ -570,6 +570,30 @@ def belt_failures(M: dict[str, Any]) -> dict[str, int]:
     return {k: v for k, v in out.items() if v}
 
 
+def w26_crossings(plan: Any, M: dict[str, Any]) -> dict[str, int]:
+    """Woods W26 read off the finished manifest, as far as a manifest can carry it: the crossing half of
+    `hinterland/parcels.py:lot_follows_its_bounds` - no edge of a drawn woodland lot crosses a lane's centerline, a
+    brook's line or a field's ring (the plan's envelope and every dry plot, the crops `open_ground_patches` bounds lots by).
+    The follows-its-line half is not asked here: it reads the bounds at the SCAN (the lanes laid by then, the set-back of
+    the rung the lot was seated at, `_sb_n`), neither of which the manifest records. Counted per lot (`woods:w26_crossing`);
+    kept beside `failing`, not in it, so R11's clean-map count stays comparable."""
+    from l7r.diagram.hamletgen.hinterland.parcels import lot_bounds
+    from l7r.diagram.settlement import segments_cross
+
+    lanes = [ln["pts"] for ln in M.get("lanes") or [] if ln.get("pts")]
+    streams = [st["poly"] for st in M.get("streams") or [] if st.get("poly")]
+    crops = [list(plan.envelope)] + [[(float(v[0]), float(v[1])) for v in d["poly"]] for d in M.get("dry_plots") or []]
+    bounds = lot_bounds(lanes, streams, crops, 80.0)
+    hit = 0
+    lots = [c["poly"] for c in M.get("commons") or [] if c.get("role") == "woodland" and c.get("poly")]
+    for ring in lots:
+        ring = [(float(p[0]), float(p[1])) for p in ring]
+        edges = list(zip(ring, [*ring[1:], ring[0]], strict=False))
+        if any(segments_cross(a, c, s0, s1) for b in bounds for a, c in edges for s0, s1 in b[0]):
+            hit += 1
+    return {"lots": len(lots), "woods:w26_crossing": hit}
+
+
 def engine_verdicts(failing: dict[str, int]) -> dict[str, list[str]]:
     """Each retired census test (`ENGINE`) with the predicates of its that fail on this map - empty when it holds."""
     out = {}
@@ -593,20 +617,18 @@ def one_map(job: tuple[str, Any, str, list[tuple[str, str, str]]]) -> dict[str, 
     from l7r.diagram.hamletgen import driver
     from l7r.diagram.hamletgen.plan import HamletSpec
 
+    from l7r.diagram.hamletgen.ways.checks import unreached_houses
+
     per_attempt: list[int] = []
     builds: list[int] = []
-    real, real_build = driver.unreached_houses, driver.build
-
-    def counted(M: Any) -> Any:
-        got = real(M)
-        per_attempt.append(len(got))
-        return got
+    real_build = driver.build
 
     def counted_build(*a: Any, **k: Any) -> Any:
         builds.append(1)
         return real_build(*a, **k)
 
-    driver.unreached_houses = counted
+    # since 2925e9b5c the driver asks no unreached verdict (the web refuses a settle that leaves one, `WebRefused`), so the
+    # one verdict is read off the produced manifest by the same predicate (`ways/checks.py:unreached_houses`)
     driver.build = counted_build
     if pass_ == "probes":
         apply_probes()
@@ -628,6 +650,7 @@ def one_map(job: tuple[str, Any, str, list[tuple[str, str, str]]]) -> dict[str, 
         return row
     roll_s = time.perf_counter() - t
     M = rep.manifest or {}
+    per_attempt.append(len(unreached_houses(M)))
     failing, errors = law_failures(M)
     rings, judged = ring_failures(M)
     failing.update(rings)
@@ -639,6 +662,11 @@ def one_map(job: tuple[str, Any, str, list[tuple[str, str, str]]]) -> dict[str, 
         failing.update(matrix_failures(M))
     except Exception as e:  # noqa: BLE001
         errors["matrix"] = f"{type(e).__name__}: {str(e)[:200]}"
+    try:
+        w26 = w26_crossings(rep.plan, M)
+    except Exception as e:  # noqa: BLE001
+        w26 = {}
+        errors["w26"] = f"{type(e).__name__}: {str(e)[:200]}"
     households, seated = int(rep.plan.spec.households), int(rep.plan.placed)
     if seated < households:
         failing["roll:unseated"] = households - seated
@@ -686,6 +714,7 @@ def one_map(job: tuple[str, Any, str, list[tuple[str, str, str]]]) -> dict[str, 
         skipped=skipped,
         errors=errors,
         rings_judged=judged,
+        w26=w26,
         builds=len(builds),
         per_attempt_unreached=per_attempt,
         roll_failures=list(rep.failures),
@@ -721,6 +750,9 @@ def summarize(rows: list[dict[str, Any]], cannot: dict[str, str]) -> dict[str, A
         out[pass_] = {
             "maps": len(rs),
             "roll_errors": {r["map"]: r["roll_error"] for r in rs if "roll_error" in r},
+            "refusals_by_kind": dict(collections.Counter(r["roll_error"].split(":")[0] for r in rs if "roll_error" in r)),
+            "w26_crossing": {r["map"]: r["w26"]["woods:w26_crossing"] for r in rs if (r.get("w26") or {}).get("woods:w26_crossing")},
+            "w26_lots": sum((r.get("w26") or {}).get("lots", 0) for r in rs),
             "maps_clean": sum(1 for r in rs if "roll_error" not in r and not r.get("failing")),
             "rules": dict(sorted(by_rule.items(), key=lambda kv: (-kv[1]["maps"], kv[0]))),
             "rerolled_maps": sum(1 for r in rs if r.get("builds", 1) > 1 or len(r.get("per_attempt_unreached", [0])) > 1),

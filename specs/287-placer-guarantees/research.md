@@ -1032,3 +1032,96 @@ R11 manifest of cohort 34).
 
 **After R12, W26** (2026-09-30): built on research/vegetation/140's labeled GUESS (R7), so SC-001 stands at 163
 guaranteed and 12 recorded decisions of 175.
+
+## R13 - The acceptance sweep at the final engine (2026-09-30)
+
+**Method** (observed 2026-09-30, method: `make spec-harness SPEC=specs/287-placer-guarantees/sweep OUT=<json>` in the
+clone at eab8235b9 with the harness as amended below, `SWEEP_WORKERS=4` and `PYTHON_CPU_COUNT=6` under the session's
+cohort lock, 106 rolls in 347 s wall; the output is the session's `sweep-287-r13.json`, not kept). The same 53 maps, the
+same two passes and the same predicates as R11 (the lane law's 29 rules, the ring rules over 32,902 rings plain and 31,822
+under the probes, the overlap matrix, the belt reading, the roll's seating and reach, the same 101 census tests with the
+same 17 that cannot run on a map), at the engine with the settle's last resort (`ways/last_resort.py`: only ordinary lanes
+dropped, `WebRefused`, `refuse_unreached`), the well pocket's dwelling gap and woods W26 (`lot_follows_its_bounds`).
+
+**What changed in the harness since R11**: two adapters and one added reading, no predicate re-pointed.
+
+- The driver no longer asks an unreached verdict (2925e9b5c: the web refuses a settle that leaves a farmhouse unreached,
+  `refuse_unreached`, and `meta.roll_failures` is gone), so the wrap of `driver.unreached_houses` is replaced by the same
+  predicate (`ways/checks.py:unreached_houses`) asked once of each produced manifest. The first run at this HEAD, before
+  the adapter, raised `AttributeError: module 'l7r.diagram.hamletgen.driver' has no attribute 'unreached_houses'` on every
+  roll and is not counted (observed 2026-09-30, method: the same command).
+- The summary counts each pass's refusals by exception type (`refusals_by_kind`), so a `WebRefused` is counted apart from
+  plan D2's `SiteRefused`.
+- **Woods W26, as far as a manifest carries it.** The harness takes no list of rules - each family is a function it calls
+  - so W26 is read by one added function, `w26_crossings`: the crossing half of `lot_follows_its_bounds` (no edge of a
+  drawn woodland lot crosses a lane's centerline, a brook's line, the plan's field envelope or a dry plot's ring), asked of
+  every woodland `commons` ring with `hinterland/parcels.py:lot_bounds`. The follows-its-line half is NOT asked: it reads
+  the bounds at the scan (the lanes laid by then, and the set-back of the rung the lot was seated at, `_sb_n`), neither of
+  which the manifest records, so a manifest reading would refuse lots the placer rightly admitted. Kept beside `failing`,
+  not in it, so the clean-map count stays comparable with R11.
+
+**The result.** Zero re-rolls, zero unreached houses and zero failing predicates under the probes hold; plain, one map
+fails one retired test's body, the same map and clause as R11.
+
+| | plain | under the probes |
+|---|---|---|
+| rolls; rolls that produced a map | 53; 53 | 53; 52 (cohort seed 18 refused by plan D2) |
+| maps clean of every predicate | 52 | 52 of 52 produced |
+| builds per roll; re-rolled maps | 1; 0 | 1; 0 |
+| households unseated on a produced map | 0 | 0 |
+| unreached farmhouses on a produced map (`unreached_houses`, `law:unreached_houses`) | 0 | 0 |
+| `law:fragments` | 0 | 0 |
+| `test_the_notice_board_faces_the_way` | 0 | 0 |
+| maps reaching plan D12's terminal | 0 | 0 |
+| maps recording their woodland off the sheet (plan D11) | 5 (cohort 4, 13, 16, Kuwabata, Mizuguchi) | 4 (cohort 13, 16, Kuwabata, Mizuguchi) |
+| woods W26, crossing half: woodland lots whose edge crosses a lane, brook or field line | 0 of 101 lots | 0 of 100 lots |
+| retired test `test_every_pool_belt_keeps_its_depth_across_its_windward_face` (its frame-held half, body as last stood) | 1 map (cohort 34) | 0 |
+| every other predicate: every lane rule, every enforced ring rule, the matrix, `belt:thin`, `belt:holes`, every engine reading (37 tests), every other census test | 0 | 0 |
+
+(Figures in the table: observed 2026-09-30, method: the sweep above, `summary` and each map's `failing`, `builds`,
+`per_attempt_unreached`, `seated`, `d12`, `woodland_offsheet` and `w26`. Against R11, observed 2026-09-30 at 0e4bf59c5:
+the same counts on every row but D11's, where cohort seed 16 is new in both passes - W26's cut moved its lots; R11 had
+no W26 row.)
+
+**The one failure** (observed 2026-09-30, method: the sweep's `messages` for the map, truncated by the harness at 300
+characters): cohort seed 34, plain, the retired belt test's frame-held clause ("no bin judged, yet the belt stands off
+the page's edge"), R11's reading on the same map - the retired body's bins from the origin against
+`BeltReading.off_the_page`'s bins from the belt's start; `belt:thin` and `belt:holes` pass it. Not re-diagnosed here.
+
+**The refusals** (observed 2026-09-30, method: the sweep above, `refusals_by_kind` and `roll_errors`):
+
+| refusal | plain | under the probes |
+|---|---|---|
+| plan D2, `SiteRefused` | 0 | 1 (cohort seed 18: no margin of the 17 tried seats all 15 households; seated per margin 11, 11, 12, 10, 10, 11, 11, 8, 14, 9, 13, 12, 11, 14, 11, 10, 11 - the best 14) |
+| the last resort, `WebRefused` | 0 | 0 |
+| any other exception | 0 | 0 |
+
+D2's refusal is R11's, roll for roll; 1 of 106 rolls, under the probes only. No roll reached `WebRefused`.
+
+**The twins and the restated two** (not counted, recorded; observed 2026-09-30, method: the sweep above,
+`base_messages`, counting outcomes): the wells' test at cc39f599a fails 5 rolls and the belt-depth test at cc39f599a
+fails 3; the copse-reach body fails 44, which W25's restatement passes; the runoff body fails 21, which the corrected
+predicate passes - R11's counts.
+
+**D6's count: the bare-ground rule moves no map** (observed 2026-09-30, method: a scratch harness through `make
+spec-harness`, 4 workers under the cohort lock, 50 rolls in 161 s; not kept). The pool and cohort seeds 1-20 (25 maps)
+were each rolled twice: as is, and with `settlement/land/cover.py:covered_ground` replaced in each forked worker by one
+counting only drawn cover - the records the pre-D6 gate counted (`test_the_countryside_has_no_holes_in_it` at
+16383f9e4^: fields, commons, marshes, village groves, dry plots, gardens, threshing yards, houses, sheds, byres, the pond)
+plus the bamboo stands, the retirement houses, the pig sties and the planned cover, never a tread, a well, a clearing, a
+burial ground or a fixture. No engine file was edited. Filled cells were counted at `block_ring`, which `fill_the_holes`
+calls once per block it clothes.
+
+| | as is (D6) | drawn cover only |
+|---|---|---|
+| maps whose manifest differs between the two rolls | 0 of 25 | |
+| blocks clothed by `fill_the_holes` | 0 | 0 |
+| filled cells (sample points on the `BARE_STEP` grid) | 0 | 0 |
+| bare share of the finished map window | 0.0 on every map | 0.0 on every map |
+
+Why nothing moves: the settlement's own commons pass (`s.hinterland(...)`, the call just before `fill_the_holes` in
+`hinterland/stages.py`) already lays five grazing commons that together cover the whole view (on the pool maps, the
+commons cover 100% of the map window, the largest 47-54% alone; observed 2026-09-30, method: shapely union of each pool
+manifest's `commons` against `map_window`). So `fill_the_holes` finds no bare sample point under either predicate, and
+D6's choice of what counts as covered decides nothing on any map measured. It would decide something only on a roll
+whose commons pass left ground open.
