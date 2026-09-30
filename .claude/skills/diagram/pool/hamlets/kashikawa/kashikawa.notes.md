@@ -1045,22 +1045,21 @@ Measured on this roll (2026-09-29): 20 houses; bath rooms 5 (by seat: floored_ro
 
 The GM's ruling of 2026-09-29 made the homestead grove's sides a knob (two sides 5 in 10, three 3 in 10, a ring 2 in 10;
 flood ground rolls the ring at 4 in 10) and put the dispersed and linear forms back into the roll (5:3:2 nucleated,
-dispersed, linear). Kashikawa's seed rolls **linear**, so this map is now a row village; the reference (Inashiro) is pinned
-nucleated and did not move.
+dispersed, linear). Kashikawa's seed rolls **linear**, so this map is now a row village, drawn from the record's row
+forms (homesteads/155 and 156, feature 291 amendment 3); the reference (Inashiro) is pinned nucleated and did not move.
 
-- **Every farm carries its own grove** on the sides the hamlet rolled - here **three**: the deep stand (1.57 house depths,
-  about 44 ft) on the windward north and west, and a thinner one-tree band, 17 ft, on the east beyond the garden's morning
-  sun (homesteads/010 and 715). No village belt is drawn where the farms carry their own groves (vegetation/030).
-- **The household bamboo is carried in the farm's grove** (12 farms), not in a strip of its own (vegetation/154).
-- **A street is laid door to door along the row** (homesteads/150; the length a GUESS). On this map it is only half a row:
-  the field's edge facing the seat holds 3 farms at a grove farm's width (some 240 ft), so 7 of the 20 stand within 80 ft
-  of the street and the other 13 in ranks behind it, reached by lanes - a block more than a row. Left open for the GM.
-- **A service strip, about 24 ft, stands between the house and its windward stand**, behind the back wall and off the
-  windward end, for the wood shed and the bath room at the stable end; before it this map seated 1 of 7 rolled wood sheds
-  (homesteads/715; a GUESS sized to the shed).
-- **Two farms' groves stand at least 32 ft apart**, a lane's room, and the lanes are routed round the bands, never through
-  them (homesteads/715).
+- **The row**: its seed rolled a **street laid first** (drawn straight, the planned row's form a paddy row may borrow)
+  with farms on **both sides** - the near row between the street and the field, the far row beyond it - one farmstead
+  frame apart, lot against lot, never in ranks. The connector runs on from the street's end as the road the row stands on.
+- **The far row's holdings**: a strip of dry field behind each far farm, one lot wide and three lots deep, in plots
+  (homesteads/156: the planned row's order - house lot, field, woodland; the depth and crop a GUESS).
+- **Every farm carries its own grove** on three sides - the deep stand on the windward north and west, a thinner band
+  on the east - and no village belt or copse is drawn (vegetation/030); the household bamboo is carried in the grove of
+  the farms that rolled a stand, and only theirs (vegetation/154).
+- **The row's water** rolled **shared**: wells beside the street, every farm within the watering reach of one.
+- **A service strip** stands between each house and its windward stand, for the wood shed and the bath room.
 
-Measured on this roll (2026-09-29): 20 houses, all 20 grove farms, 7 within 80 ft of the street; 60 bands, 40 deep and 20 thin; bath rooms 5 (all
-stable_end), wood sheds 7, privies 17, coops 18, manure heaps 9, shrine 1 - every declared fixture seated, none inside a
-band; 18 lanes; no lane across a band; attempt 1, no farmhouse off the way network.
+Measured on this roll (2026-09-29): 20 houses, all on one street, 20 grove farms; 60 bands, 40 deep and 20 thin;
+11 far-row holdings in 33 plots; 2 shared wells; bath rooms 5, wood sheds 7, privies 17, coops 18, manure heaps 9,
+shrine 1 - every declared fixture seated; household bamboo in 7 groves; 41 lanes; every row, water, door, bamboo, grove
+and overlap rule clean; attempt 1.
