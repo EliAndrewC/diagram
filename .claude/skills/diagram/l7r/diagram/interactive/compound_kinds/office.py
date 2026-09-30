@@ -94,11 +94,13 @@ class ClerksRoom(Kind):
     worked, and a room used only for writing, where the documents sent to the shogunate were drawn up, had a
     binding room beside it. At the Edo town magistracy, too, the duty rooms of two of its record sections
     stood in the quarter of the compound that held its court. What stood apart as buildings of their own were
-    the staff's houses; no page read gives the clerks a building of their own to work in. In both traditions the paperwork was run by locally hired
-    commoners under a tiny elite staff; in Japan the tedai were drawn from the peasants and townsmen who knew
-    the district. Scaled to a county of this setting, that is three or four clerks, scribes by caste
+    the staff's houses; no page read gives the clerks a building of their own to work in. In Japan the
+    paperwork was run by clerks, the tedai, chosen from the peasants and townsmen versed in rural
+    administration, under officials sent by the shogunate; a Chinese county kept its clerks in six chambers
+    of a few men each. Scaled to a county of this setting, that is three or four clerks, scribes by caste
     (heimen), who live in town and come in to the manor each day - and who, as permanent locals, are the
-    office's memory under one magistrate after another.
+    office's memory under one magistrate after another, this project's reading of the entrenched clerks of
+    China's offices.
 
     Note: The clerks' room as a room of the office hall follows the record. Their number of three or four is
     this project's scaling from a Chinese county population the record gives no source for, and the room's
@@ -112,7 +114,7 @@ class ClerksRoom(Kind):
     Covers: the clerks' room inside the office hall, its floor and its label
     Label: accurate
     Sources: mapple-takayama-jinya, edo-ashigaru-bugyosho, jinya-kotobank, tedai-jawiki, xuli-zhwiki
-    Entry: research/buildings.html - 'The office hall and its clerks (goyakusho)'; research/rendering/buildings.html - 'How our maps draw the office hall and the clerks' rooms'
+    Entry: research/buildings.html - 'The office hall and its clerks (goyakusho)'; research/rendering/buildings.html - 'How our maps draw the office hall and its clerks (goyakusho)'
     """
 
     key = "clerks' room"

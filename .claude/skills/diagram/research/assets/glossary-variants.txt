@@ -1052,6 +1052,7 @@ goulan	goulan
 governor-general	governor-general
 governor-general's	governor-general
 governors-general	governor-general
+goyakusho	goyakusho
 goyo shonin	purveyor merchant
 goyoba	goyoba
 goyobeya	goyobeya
@@ -1720,6 +1721,7 @@ koshin towers	koshin tower
 kotai-yoriai	kotaiyoriai
 kotaiyoriai	kotaiyoriai
 kotobank	kotobank
+koya	koya
 kozashi	kozashi
 kuai	kuai
 kuchi-agariya	agariya
