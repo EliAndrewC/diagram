@@ -1,0 +1,33 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "41d2d2cde",
+    "label": "287-start",
+    "utc": "20260929T031041Z"
+  },
+  "binding": "368459bd5ddce445299b393ac705d04c6f4c06a6c161ed7f4efe1e8c6d3be1dd",
+  "end": {
+    "commit": "702900456",
+    "label": "287-end",
+    "utc": "20260930T044507Z"
+  },
+  "environment": "local",
+  "feature": "287-placer-guarantees",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "f70424b3-a8eb-45cf-8472-6eb804c5e7c2",
+    "utc": "20260930T045437Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "seeds": {
+      "25": 36.2,
+      "39": 4.3,
+      "4": 10.3,
+      "47": -1.7
+    },
+    "total_pct": 11.5
+  },
+  "note": "Inconsistent on its two totals; the stages and per-seed sizes match. Control reference-snapshot-main found and reproduced by reviewer runs in detached worktrees at 80af74aef and 702900456, three rounds alternated at load 5.7-15: main 25.8/26.2/26.2 s, end 28.1/23.2/24.5 s. Against main (medians): homesteads +1.12/+0.48/+0.34 s on seeds 4/25/39 and +0.71 s on 47 at the bookend; hinterland +0.46 to +0.63 s; field +0.27 s on seed 4 and +1.35 s on seed 25; seed 39 web 6.52 -> 0.53 s; notice -0.51 to -0.98 s on three seeds; windbreak -1.1 s in all. Between the 2e0e4d8a4 and 702900456 bookends the drop is confined to the web (-3.12 s over the four seeds, every other stage +0.32 s or less in total). What does not match: the guarantees cost about +5 s gross is +7.1 to +8.7 s against main (+28-35% of the 24.95 s control), and the three stages the explanation itself names already sum to 6.3-7.1 s; gives back about 6.4 s is 8.7 to 9.7 s (seed 39 web alone -5.4 to -6.0 s, plus notice -2.2 s and windbreak -1.1 s). Only the net is right (-1.0 to -2.5 s against main). And the web stage elsewhere is not a give-back against main: it is +0.14/+0.21 s on seeds 4/25 and within 0.4 s on 47. Rewrite the gross as about +7 to +8.5 s and the give-back as about 9 s, keeping the net, then re-confirm.",
+  "verdict": "inconsistent"
+}
