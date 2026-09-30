@@ -53,7 +53,7 @@ class CastleCivicMixin:
         the match. The two would drift silently and the map would end up asserting something the
         compound plan contradicts. In the GM's words: "I'd rather nothing be shown than the WRONG
         thing be shown." An empty court asserts nothing and can never be wrong. The same doctrine
-        governs `manor` and `governor_mansion`; see research/rendering/cities/capitals.html, "How our maps draw the castle".
+        governs `manor` and `governor_mansion`; see research/rendering/cities/capitals.html, "How our maps draw the castle in a capital".
 
         WHAT IS DRAWN, AND WHY THE KEEP IS NOT AMONG IT. A castle reads as a castle from its WORKS,
         never from its keep: at a capital's 3 ft/px a tenshu footprint is just another building box

@@ -4409,12 +4409,6 @@
    "luocheng"
   ]
  },
- "yicheng": {
-  "def": "A wing wall: an extra ring some Chinese cities threw around a suburb that had grown beyond the outer wall, as at Quanzhou.",
-  "variants": [
-   "yicheng"
-  ]
- },
  "rinkaku": {
   "def": "A castle plan whose baileys ring the main bailey on every side, one enclosure inside the next.",
   "variants": [
@@ -13493,6 +13487,12 @@
   "def": "Japanese for a graveyard or burial ground: the ground where a settlement, a temple or a household buries its dead.",
   "variants": [
    "bochi"
+  ]
+ },
+ "joka": {
+  "def": "Short for jokamachi: the castle town, laid out around a daimyo's castle with the samurai nearest it and the townspeople beyond.",
+  "variants": [
+   "joka"
   ]
  }
 }
