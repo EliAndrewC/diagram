@@ -183,7 +183,7 @@ class PracticeGround(Kind):
     Covers: the keiko patch and its label
     Label: accurate
     Sources: hanko-jawiki, hagi-meirinkan-guide, kodokan-mito-jawiki, edo-three-dojos-jawiki, jinya-jawiki, dojo-jawiki, genbukan-jawiki, kotobank-machidojo
-    Entry: research/buildings.html - 'A dojo is a city institution; county training is courtyard keiko'; research/cities/government.html - 'Martial training is an URBAN institution'
+    Entry: research/buildings.html - 'Martial training grounds and dojo'; research/rendering/buildings.html - 'How our maps draw practice grounds and dojo'
     """
 
     key = "practice ground"
@@ -620,7 +620,7 @@ class StrikingPosts(Kind):
     Covers: the standing posts on the practice ground and their label
     Label: convention
     Sources: jigen-ryu-jawiki, kotobank-tategi-uchi, nodachi-jigen-ryu, bujutsukarate-tategi, jinya-jawiki, dojo-jawiki
-    Entry: research/buildings.html - 'What did a practice ground's striking posts and weapon rack look like?', 'A dojo is a city institution; county training is courtyard keiko'
+    Entry: research/buildings.html - 'Martial training grounds and dojo'; research/rendering/buildings.html - 'How our maps draw practice grounds and dojo'
     """
 
     key = "striking posts"
@@ -646,7 +646,7 @@ class WeaponRack(Kind):
     Covers: the rack at the practice ground's edge and its label
     Label: guess
     Sources: kotobank-katanakake, kotobank-mitsu-dogu
-    Entry: research/buildings.html - 'What did a practice ground's striking posts and weapon rack look like?', 'A dojo is a city institution; county training is courtyard keiko'
+    Entry: research/buildings.html - 'Martial training grounds and dojo'; research/rendering/buildings.html - 'How our maps draw practice grounds and dojo'
     """
 
     key = "weapon rack"

@@ -91,8 +91,8 @@ CIVIC_PROGRAM: tuple[tuple[str, int | None, float], ...] = (
     # forge (GM 2026-07-25) adds ~120 px^2 more (a 28x38 ft shed-plus-apron is 9.3x12.7 px at
     # ftpx=3), so the line is 1,500. Kilns and lumber yards sit OUTSIDE the walls and cost no
     # interior.
-    # Martial training (GM 2026-07-25; research/cities/government.html "Martial training is an urban
-    # institution"). The state PROVINCIAL MARTIAL HALL is a 130x100 ft walled compound (hall +
+    # Martial training (GM 2026-07-25; research/rendering/buildings.html "How our maps draw practice
+    # grounds and dojo"). The state PROVINCIAL MARTIAL HALL is a 130x100 ft walled compound (hall +
     # sensei's house + a 100 ft archery lane) = 43.3x33.3 px at 3 ft/px = 1,442 px^2; the PRIVATE
     # dojos are 76x44 ft lots = 372 px^2 each, and the line carries the 2-roll figure so a rolled
     # second dojo never starves. 1,442 + 2x372 ~ 2,200.

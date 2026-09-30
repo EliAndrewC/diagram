@@ -3070,6 +3070,7 @@ tartary	Tartary
 tatami	tatami
 tatara	tatara
 tateba	tateba
+tategi	tategi
 tatemachi	tatemachi
 tauchiguruma	tauchiguruma
 tawara	hyō
