@@ -409,7 +409,7 @@ class Well(Kind):
     Covers: `wells` - the wellheads
     Label: convention
     Sources: qq-2024-beijing-wells, saijo-mizu-rekishikan, kotobank-idoyakata
-    Entry: research/urban-features.html - 'Wells - the research, and the deliberate liberty', 'Communal wells and the samurai exception'; research/homesteads.html - 'Does a DISPERSED hamlet's outlying farm have its own well?'
+    Entry: research/urban-features.html - 'Communal wells (ido)'; research/rendering/urban-features.html - 'How our maps place and draw wells (ido)'; research/homesteads.html - 'Does a DISPERSED hamlet's outlying farm have its own well?'
     """
 
     key = 'well'

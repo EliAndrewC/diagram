@@ -51,3 +51,5 @@ one, since its `What:` is the nearest thing to the record's definition today.
 - Merchants' townhouses (machiya) / How big is a rich merchant's walled house, and how is it laid out?: a shop-front townhouse on the street vs a rich merchant's walled compound
 - Inns (hatago and carters' inns) / Where did lords and officials lodge on the road, and how big was it?: a commercial inn for any paying traveler vs the official lodging kept for lords and officials (honjin)
 - Inns (hatago and carters' inns) / The market-day flophouse - who actually stays over: an inn's building and plan vs the cheap lodging a market town keeps for its market days
+- Communal wells (ido) / Did a village lift water onto its fields - and with what?: a communal well is the households' draw-point for drinking and washing, among the houses; a field well lifts irrigation water onto a dry crop, in the field it serves
+- Communal wells (ido) / Does a samurai's house have its own well?: a communal well is shared by commoner households in a village or a tenement alley; a samurai household's well is its own, inside its fence

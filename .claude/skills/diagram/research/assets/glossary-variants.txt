@@ -1480,7 +1480,6 @@ jinan	Tsinan
 jinan's	Tsinan
 jingshi fangxiang zhi	Jingshi fangxiang zhi
 jingtai	Jingtai
-jingtian	jingtian
 jingu	Jingu
 jinguji	jingūji
 jingū	Jingu
@@ -2662,7 +2661,6 @@ satoyama	satoyama
 satsuma	Satsuma
 scattered farmstead	sankyoson
 scattered-farmstead	sankyoson
-schistosomiasis	schistosomiasis
 scour	scour
 screen gate	screen gate
 screen gates	screen gate

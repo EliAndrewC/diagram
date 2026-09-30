@@ -324,7 +324,7 @@ class Well(Kind):
     Covers: every well curb glyph and its label
     Label: convention
     Sources: kanda-josui-jawiki, nagaya-jawiki, saijo-mizu-rekishikan, kotobank-idoyakata, ido-jawiki, shoinzukuri-jawiki
-    Entry: research/urban-features.html - 'Communal wells and the samurai exception', 'Wells - the research, and the deliberate liberty'; research/buildings.html - 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)'
+    Entry: research/urban-features.html - 'Communal wells (ido)'; research/rendering/urban-features.html - 'How our maps place and draw wells (ido)'; research/buildings.html - 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)'
     """
 
     key = "well"
