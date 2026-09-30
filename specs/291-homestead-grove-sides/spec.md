@@ -288,3 +288,9 @@ used for cooking, washing and drinking water" (tonami-sankyoson-museum, translat
 "we should try to find out from our research what types of settlement layouts existed, and then have our settlements
 reflect the range ... we make a tunable knob for the various possibilities") makes it a knob: the channel, attested,
 and the well, the reading of "many areas".
+
+**Amendment 5, round 1** (spec-fidelity-verify, MODE 3, 2026-09-30): CHANGES - faithful in substance; the nearest source
+and the brook to be labeled, plan D18/D19 and T16 to carry the knob, and homesteads/200's map paragraph to be owed by a
+task. **Round 2**: CHANGES - the brook standing for the irrigation water labeled a GUESS. **Round 3**: FAITHFUL.
+Amendment 5 is accepted. The reviewer's aside for the GM: the source ties the channel to the fan's deep water table, so
+if the generator ever knows its ground, the ground could set the value rather than an even roll.
