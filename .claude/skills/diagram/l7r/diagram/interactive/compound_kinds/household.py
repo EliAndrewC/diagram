@@ -473,7 +473,7 @@ class FireWaterTubs(Kind):
 class CompoundShrine(Kind):
     """
     What: The shrine every administrative compound keeps inside its walls - a modest hall, Inari's by default,
-    with ground around it kept as garden or grove. Where a plan draws its altars, or a torii before a hall set in
+    standing in a corner of the compound's ground with a tree beside it. Where a plan draws its altars, or a torii before a hall set in
     its own grove, each is its own feature; where a compound serves a second kami, it may give that kami a small
     shrine of its own on the same ground.
 
@@ -489,12 +489,14 @@ class CompoundShrine(Kind):
     of the Jōge post and on a Chinese yamen's three shrines, and a second kami in a small shrine of its own is one
     of three attested forms; the program classes the shrine as accurate, with a hall-shrine ceiling of about 36
     by 30 ft subordinate to the residence, a ceiling that is this project's guess, since no page read measures a
-    worship hall. Making it Inari's by default is a guess resting on that one post, whose
-    shrines are known from the drawing alone: the excavation found the post's walls, steps and foundation stones,
-    not its shrines. The ranking below the residence, and the small worship hall it rests on, are the record's
-    own reading, no page read giving a worship hall's size or ranking a compound's buildings.
+    worship hall. One shrine is drawn however many a real office kept - Jōge two, Neixiang shrines to three gods - and a
+    garden around it is a guess, no page read describing one. Making it Inari's by default is a guess resting on
+    that one post, whose shrines are known from the drawing alone: the excavation found the post's walls, steps
+    and foundation stones, not its shrines. The ranking below the residence, and the small worship hall it rests
+    on, are the record's own reading, no page read giving a worship hall's size or ranking a compound's buildings.
 
-    Caveat: Making it Inari's by default is a guess resting on that one post, whose shrines are known from the
+    Caveat: One shrine is drawn however many a real office kept - Jōge two, Neixiang shrines to three gods - and a garden
+    around it is a guess, no page read describing one. Making it Inari's by default is a guess resting on that one post, whose shrines are known from the
     drawing alone: the excavation found the post's walls, steps and foundation stones, not its shrines. The
     ranking below the residence, and the small worship hall it rests on, are the record's own reading, no page
     read giving a worship hall's size or ranking a compound's buildings.
@@ -503,7 +505,7 @@ class CompoundShrine(Kind):
     Covers: the shrine hall or halls, their edging and dividing rail, and the shrine labels
     Label: accurate
     Sources: fuchu-joge-pamphlet, neixiang-yamen-zhwiki, henan-neixiang, jawiki-saijin, jawiki-goshi, kotobank-aidono, hokora-jawiki, nara-nagao-jinja
-    Entry: research/buildings.html - 'Magistrates' compounds (jin'ya and yamen)', 'The compound's own shrine (yashikigami)', 'The size of a compound and the rank of its buildings'; research/religion-and-death.html - 'When one shrine hall serves several kami, does each have its own altar?'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps draw the compound's shrine'
+    Entry: research/buildings.html - 'Magistrates' compounds (jin'ya and yamen)', 'Shrines kept inside government offices and houses (yashikigami)', 'The size of a compound and the rank of its buildings'; research/religion-and-death.html - 'When one shrine hall serves several kami, does each have its own altar?'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps draw shrines kept inside government offices'
     """
 
     key = "compound shrine"
@@ -806,14 +808,16 @@ class ShrineAltar(Kind):
     the main one's altar, or gave a kami a small shrine of its own inside the precinct.
 
     Note: Several kami in one hall, and their altars side by side, a bay to each, are recorded findings; which of
-    the three forms a compound takes is rolled per map, and each map's note says which. The single altar with the
-    others behind it is attested for a household shelf only, so for a hall it is a guess. What the pages
-    attest is a hall of two bays or small halls joined under one roof, not separate altars inside one undivided
+    the three forms a compound takes is rolled per map, and each map's note says which. A compound's shrine
+    serving more than one kami is a deviation of ours, drawn at Ochiba alone because its magistrate is also a
+    priest; any other compound's shrine serves one. The single altar with the others behind it is attested for a
+    household shelf only, so for a hall it is a guess. What the pages attest is a hall of two bays or small halls joined under one roof, not separate altars inside one undivided
     hall, so drawing them in one undivided hall is a guess. What each altar serves is the setting's or the map's
     own, and each glyph is drawn as a marker, not the altar at its size.
 
-    Caveat: The single altar with the others behind it is attested for a household shelf only, so for a hall it is
-    a guess. What the pages attest is a hall of two bays or small halls joined under one roof, not separate altars
+    Caveat: A compound's shrine serving more than one kami is a deviation of ours, drawn at Ochiba alone because its
+    magistrate is also a priest; any other compound's shrine serves one. The single altar with the others behind
+    it is attested for a household shelf only, so for a hall it is a guess. What the pages attest is a hall of two bays or small halls joined under one roof, not separate altars
     inside one undivided hall, so drawing them in one undivided hall is a guess. What each altar serves is the
     setting's or the map's own, and each glyph is drawn as a marker, not the altar at its size.
 
@@ -821,7 +825,7 @@ class ShrineAltar(Kind):
     Covers: each altar glyph inside a shrine hall, with its name and sublabels
     Label: accurate
     Sources: kotobank-aidono, jawiki-saijin, genbu-honden-styles, jawiki-goshi, tokyo-jinjacho-kamidana
-    Entry: research/religion-and-death.html - 'When one shrine hall serves several kami, does each have its own altar?'; research/buildings.html - 'The compound's own shrine (yashikigami)'; research/rendering/buildings.html - 'How our maps draw the compound's shrine'
+    Entry: research/religion-and-death.html - 'When one shrine hall serves several kami, does each have its own altar?'; research/buildings.html - 'Shrines kept inside government offices and houses (yashikigami)'; research/rendering/buildings.html - 'How our maps draw shrines kept inside government offices'
     """
 
     key = "shrine altar"
