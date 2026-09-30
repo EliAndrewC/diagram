@@ -77,6 +77,8 @@ assignation house	assignation house
 assignation houses	assignation house
 assize	assize
 association	plant association
+asuka	Asuka period
+asuka period	Asuka period
 asunaro	asunaro
 at grade	at grade
 autumn assize	assize
@@ -178,6 +180,8 @@ beitang	beitang
 beiyang government	Beiyang government
 bell-and-drum tower	gulou
 benjo	kawaya
+benten	Benten
+benten's	Benten
 berm	berm
 berms	berm
 betto	bettō
@@ -533,6 +537,8 @@ daijisen	Digital Daijisen
 daijokan	Daijokan
 daikan	daikan
 daikansho	daikansho
+daikoku	Daikoku
+daikoku's	Daikoku
 daikon	daikon
 daiku-machi	Daikumachi
 daikumachi	Daikumachi
@@ -988,6 +994,7 @@ gassho-zukuri	gassho
 gasshozukuri	gassho
 gate field	gate paddy
 gate fields	gate paddy
+gate lands	gate-land
 gate market	gate market
 gate paddies	gate paddy
 gate paddy	gate paddy
@@ -1295,6 +1302,8 @@ horse-head wall	horse-head wall
 horse-head walls	horse-head wall
 hot shoeing	hot-shoeing
 hot-shoeing	hot-shoeing
+hotei	Hotei
+hotei's	Hotei
 hotoke	hotoke
 hou ji	Hou Ji
 houlongshan	houlongshan
@@ -1528,6 +1537,8 @@ jujutsu	jujutsu
 juku	shukuba
 junk	junk
 junks	junk
+jurojin	Jurojin
+jurojin's	Jurojin
 juyangyuan	juyangyuan
 jō	jo
 jōdo	Jodo
@@ -1701,6 +1712,7 @@ koedame	koedame
 koeki kokusanko	Koeki Kokusanko
 kofun	Kofun period
 kofun period	Kofun period
+kogein	kogein
 koguchi	koguchi
 koike	koike
 koji	koji

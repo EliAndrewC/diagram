@@ -9267,7 +9267,8 @@
   "def": "Ground in front of a temple or shrine gate, laid out as narrow, deep house lots, so that town houses line the street and the temple stands behind them at the end of an approach (see monzen).",
   "variants": [
    "gate-land",
-   "gate-land lots"
+   "gate-land lots",
+   "gate lands"
   ]
  },
  "field grain": {
@@ -13307,6 +13308,47 @@
   "variants": [
    "training retreat",
    "training retreats"
+  ]
+ },
+ "kogein": {
+  "def": "Another name for a great house's family temple (bodaiji): the Date house's Zuihoji is called one, where the Tokugawa's Kan'eiji and Zojoji are called bodaiji.",
+  "variants": [
+   "kogein"
+  ]
+ },
+ "Asuka period": {
+  "def": "An early period of Japanese history, from which clans first built temples of their own (ujidera) - nine centuries before the castle towns.",
+  "variants": [
+   "Asuka period",
+   "Asuka"
+  ]
+ },
+ "Benten": {
+  "def": "The Fortune of romantic love, one of the setting's Fortunes.",
+  "variants": [
+   "Benten",
+   "Benten's"
+  ]
+ },
+ "Jurojin": {
+  "def": "The Fortune of longevity, one of the setting's Fortunes.",
+  "variants": [
+   "Jurojin",
+   "Jurojin's"
+  ]
+ },
+ "Hotei": {
+  "def": "The Fortune of contentment, one of the setting's Fortunes.",
+  "variants": [
+   "Hotei",
+   "Hotei's"
+  ]
+ },
+ "Daikoku": {
+  "def": "The Fortune of wealth, one of the setting's Fortunes.",
+  "variants": [
+   "Daikoku",
+   "Daikoku's"
   ]
  }
 }
