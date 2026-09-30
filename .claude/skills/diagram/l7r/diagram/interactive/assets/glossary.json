@@ -13493,5 +13493,20 @@
   "variants": [
    "bochi"
   ]
+ },
+ "Nikko Kaido": {
+  "def": "The highway leaving Edo to the north, toward Nikko; the Kozukappara execution ground stood at the city's entrance on it.",
+  "variants": [
+   "Nikko Kaido",
+   "Nikko-Kaido"
+  ]
+ },
+ "Fox Clan": {
+  "def": "A minor clan of the setting, ruled by the Kitsune lineage from the Kitsune forest, with four provincial lineages each administering one of its four provinces; its living comes from the forest, charcoal above all.",
+  "variants": [
+   "Fox Clan",
+   "Fox"
+  ],
+  "cased": true
  }
 }

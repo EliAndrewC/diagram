@@ -926,6 +926,8 @@ four-gods formulation	four gods
 four-room	four-room type
 four-room type	four-room type
 fourier	Fourier
+fox	Fox Clan
+fox clan	Fox Clan
 foxnut	foxnut
 foxnuts	foxnut
 foxtail millet	foxtail millet
@@ -2192,6 +2194,8 @@ nihon rekishi chimei taikei	Nihon Rekishi Chimei Taikei
 nihonbashi	Nihonbashi
 nihonmatsu	Nihonmatsu
 nihonshi shojiten	Yamakawa Nihonshi Shojiten
+nikko kaido	Nikko Kaido
+nikko-kaido	Nikko Kaido
 nimosaku	nimosaku
 ninbetsu aratame cho	shumon aratame cho
 ninjobon	ninjōbon
