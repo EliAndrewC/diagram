@@ -162,7 +162,7 @@ class LanesMixin:
         a house when it stands within `dooryard_reach` of the house's drawn footprint, yard or beds, or within `house_reach`
         of its center while the house still lies ahead of it - never past it. It was 90 ft from the CENTER, in any
         direction, which let an arm run on past the last steading into the grass (Sawada, Kashikawa). An end on the field's
-        bund has arrived too (`BUND_REACH_FT`, research/fields/290).
+        bund has arrived too (`BUND_REACH_FT`, research/rendering/fields/260).
 
         MEASURED before it existed: five internal lane ends across the four live scripted hamlets
         (and honda, ubame x4, kikuta x2, tanada, hoshizora among the frozen ones) ended more than

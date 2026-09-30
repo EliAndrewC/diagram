@@ -86,7 +86,7 @@
   "bund": {
     "caveat": "",
     "covers": "the stroke of every paddy plot and the piled junctions between them",
-    "entry": "research/fields.html - 'Bunds are SHARED, and the fabric is continuous', 'A bund runs on, or it turns for a reason', 'How wide is a bund, and how wide is the one a farmer walks on?'; research/water.html - 'The bund runs along the channel bank'",
+    "entry": "research/fields.html - 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; research/water.html - 'The bund runs along the channel bank'",
     "key": "bund",
     "label": "accurate",
     "label_note": "Construction, width and the shared-wall finding are read; the drawn stroke is at true size.",
@@ -109,7 +109,7 @@
   "bund beans": {
     "caveat": "",
     "covers": "the bead run along the bunds (`bund_beans`)",
-    "entry": "research/fields.html - 'Rice paddies and their plots (suiden)'; 'Bunds are SHARED, and the fabric is continuous'; 'What a bund bean actually looks like'; waterfields/palette.py BEAN_GREEN (the color decision)",
+    "entry": "research/fields.html - 'Rice paddies and their plots (suiden)', 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; waterfields/palette.py BEAN_GREEN (the color decision)",
     "key": "bund beans",
     "label": "convention",
     "label_note": "we have rendered the bund beans as round beads about 3 ft across in a deep pine green, darker than the plant, in order to make them visible on the map at this scale against the pale rice. A soybean is an erect, bushy annual 50 to 125 cm tall (roughly 2 to 4 ft) with medium-green leaflets, sown in a row along the bund after transplanting and harvested with the rice; how wide one plant stands on the bund was not found, so the bead's width is not compared to it. The practice is attested.",
@@ -947,7 +947,7 @@
   "village lane": {
     "caveat": "the drawn WIDTHS (3, 5 and 6 ft) are a GUESS - no source gives a figure for an ordinary hamlet lane - laddered from a footpath to a wheelbarrow's width, with the connector kept under the 9 ft of the one cart road the record does measure.",
     "covers": "`lanes` - every lane on the map: the web, the internal skeleton, a row village's streets, the connector to the off-map road and the field spur",
-    "entry": "research/homesteads.html - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?', 'How far does a village lane run past its last farmhouse?', 'How was a row village laid out?'; research/fields.html - 'Where does the path to the fields end?'; research/SOURCES.html re-sourcing queue (lane width)",
+    "entry": "research/homesteads.html - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?', 'How far does a village lane run past its last farmhouse?', 'How was a row village laid out?'; research/fields.html - 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; research/SOURCES.html re-sourcing queue (lane width)",
     "key": "village lane",
     "label": "accurate",
     "label_note": "Access and form are read; the drawn WIDTHS (3, 5 and 6 ft) are a GUESS - no source gives a figure for an ordinary hamlet lane - laddered from a footpath to a wheelbarrow's width, with the connector kept under the 9 ft of the one cart road the record does measure.",

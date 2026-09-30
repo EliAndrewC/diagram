@@ -44,7 +44,7 @@ HOUSE_SERVE_FT = 60.0
 # An end has walked past a house when the foot of the perpendicular from the house falls more than this far back along
 # its last segment - the 4 ft grain `_trim_to_service` walks in, and the `_stop_at_closest_approach` cut's own.
 PAST_GRAIN_FT = 4.0
-# ...OR RUNS ON TO THE BUND (269 B04/B17, research/fields/290 - "the field path runs from the hamlet to the paddy's outer
+# ...OR RUNS ON TO THE BUND (269 B04/B17, research/rendering/fields/260 - "the field path runs from the hamlet to the paddy's outer
 # bund and joins it ... it never ends in open ground short of the bund"). An end has arrived when its centerline stops
 # within a bund's width (~1.5 ft) and the widest lane's half-tread (3 ft) of the worked ground's edge, with a foot and a
 # half of drawing margin: the cap of the tread then lies on the bund line. A map drawing convention.

@@ -918,7 +918,7 @@ def _comb_dry_and_beans(
     fork: Pt,
 ) -> tuple[list[dict[str, Any]], float, list[Poly]]:
     """DRY FIELDS (hatake) on the uncommanded upslope margin above the supply canal, and
-    BUND BEANS (azemame) beaded along a fraction of the paddy bunds - see research/fields.html 'What a bund bean actually looks like'."""
+    BUND BEANS (azemame) beaded along a fraction of the paddy bunds - see research/rendering/fields.html 'How our maps draw bunds between the paddies (aze)'."""
     # The hem's stand-off is derived from the SUPPLY strokes' drawn banks (`CANAL_BERM_FT`), so the
     # drawn channels have to be in hand - they are, because this pass runs after `_comb_canal_pieces`
     # and after `round_channel_joints`, i.e. against the geometry that will actually be painted.

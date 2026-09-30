@@ -150,7 +150,7 @@ class PaddyMixin:
         # together by piecemeal reclamation and inheritance - NOT the regular grid of modern (Meiji/Showa)
         # land consolidation. Build it by recursively splitting the field with straight, slightly-angled aze
         # (bund) lines that cut the LONG axis of each plot at a jittered fraction, down to the target grain
-        # (with size variation), so bunds meet at T-junctions like real cadastral paddy. See research/fields.html 'Bunds are shared and the fabric is continuous'.
+        # (with size variation), so bunds meet at T-junctions like real cadastral paddy. See research/fields.html 'Bunds between the paddies (aze)'.
         _fillstate = random.getstate()  # ISOLATE the paddy fill RNG: the patchwork, crop
         random.seed(int(abs(x0) * 7 + abs(y0) * 13 + abs(x1) * 3 + len(name)))  # roll, growth stage and mottle
         plots = self._paddy_plots((ex0, ey0, ex1, ey1), plot)  # are decorative and must NOT shift

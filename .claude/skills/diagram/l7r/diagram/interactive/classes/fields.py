@@ -118,7 +118,7 @@ class Bund(Kind):
     Covers: the stroke of every paddy plot and the piled junctions between them
     Label: accurate
     Sources: kotobank-azebiki, hattori-site-yayoiken, kato-1999-ittanbu-kukaku, kotobank-aze-sekai-daihyakka, kigosai-azenuri, kubota-azenuri-kuwa, aze-standard
-    Entry: research/fields.html - 'Bunds are SHARED, and the fabric is continuous', 'A bund runs on, or it turns for a reason', 'How wide is a bund, and how wide is the one a farmer walks on?'; research/water.html - 'The bund runs along the channel bank'
+    Entry: research/fields.html - 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; research/water.html - 'The bund runs along the channel bank'
     """
 
     key = 'bund'
@@ -142,7 +142,7 @@ class BundBeans(Kind):
     Covers: the bead run along the bunds (`bund_beans`)
     Label: convention
     Sources: nabunken-azemame, wikipedia-soybean, cropfarming-soybeans
-    Entry: research/fields.html - 'Rice paddies and their plots (suiden)'; 'Bunds are SHARED, and the fabric is continuous'; 'What a bund bean actually looks like'; waterfields/palette.py BEAN_GREEN (the color decision)
+    Entry: research/fields.html - 'Rice paddies and their plots (suiden)', 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; waterfields/palette.py BEAN_GREEN (the color decision)
     """
 
     key = 'bund beans'
