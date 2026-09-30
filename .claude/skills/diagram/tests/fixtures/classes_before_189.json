@@ -516,7 +516,7 @@
   "marsh": {
     "caveat": "",
     "covers": "`marshes` - every marsh patch, whatever its role",
-    "entry": "research/water.html - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN', 'Reservoir ponds (tameike)'; research/rendering/water.html - 'How our maps draw reservoir ponds, their reeds and their embankments'; research/vegetation.html - 'The marsh margin', 'Were the reed beds cut'",
+    "entry": "research/water.html - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN', 'Reservoir ponds (tameike)'; research/rendering/water.html - 'How our maps draw reservoir ponds (tameike), their reeds and their embankments'; research/vegetation.html - 'The marsh margin', 'Were the reed beds cut'",
     "key": "marsh",
     "label": "accurate",
     "label_note": "The reclaimed-from-marsh finding, the margin gradient, and the reeded-shore finding are all read; the embankment is mown in the record as it is bare on the map.",
@@ -706,7 +706,7 @@
   "pond": {
     "caveat": "",
     "covers": "`pond` - the tameike",
-    "entry": "research/water.html - 'Irrigation canals and how they are laid out (yosuiro)', 'Reservoir ponds (tameike)'; research/rendering/water.html - 'How our maps lay out irrigation canals', 'How our maps draw reservoir ponds, their reeds and their embankments'",
+    "entry": "research/water.html - 'Irrigation canals and how they are laid out (yosuiro)', 'Reservoir ponds (tameike)'; research/rendering/water.html - 'How our maps lay out irrigation canals', 'How our maps draw reservoir ponds (tameike), their reeds and their embankments'",
     "key": "pond",
     "label": "accurate",
     "label_note": "Form, siting and the single outlet are read (Tabayashi 1986, the Kagawa tameike documents).",
@@ -719,7 +719,8 @@
     },
     "sources": [
       "tabayashi-1987",
-      "kagawa-tameike"
+      "kagawa-tameike",
+      "chenfu-nongshu-juanshang"
     ],
     "what": "An irrigation reservoir - a valley-head tameike behind an earthen dike, sitting above the fields it waters.",
     "why": "A tameike is built by dividing off a valley mouth with a dike, at an elevation above the paddies it serves, with ONE outlet: an inclined intake feeding a bottom conduit through the dam. The spillway is for floods, never for distribution. On this map the pond is the field's drainage sink, at its low foot."
