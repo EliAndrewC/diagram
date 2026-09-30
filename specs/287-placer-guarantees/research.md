@@ -380,13 +380,14 @@ Decisions review and for what goes to the GM once the work runs.
   frozen hand-drawn pool, and the band becomes a placer guarantee in the village tier's conversion
   (`migration-plan.md`). `tests/full/test_villages.py` keeps the band as that tier's guard. Map drawing convention;
   decided by the session on the GM's standing ruling (the pixel grain).
-- **woods:W26, what a coppice lot's line followed - HELD FOR THE GM.** The not-a-disc half is guaranteed by construction
-  (`hinterland/parcels.py:_parcel_outline`); the bounded-by half has no attested form to build. research/vegetation/140
-  labels it a GUESS after a 2026-09-27 search pass, and a second pass (2026-09-29: 割山, 山割, wariyama, 入会山 with 尾根,
-  沢 or 道 and 村絵図, 平地林 with 境木 and 武蔵野; kotobank, the Gakugei Musashino lecture, the J-STAGE Wariyama
-  abstract) found no page stating what a lot's line followed. The record is silent, so it is the GM's question; the
-  engine draws the not-a-disc form until the GM answers.
-
+- **woods:W26, what a coppice lot's line followed - BUILT on the record's labeled GUESS.** research/vegetation/140
+  answers it as a GUESS ("Whether it followed ridges, streams and paths is a GUESS: no page read says so"), which is the
+  record answering, not a silence (escalation-check, 2026-09-30). The lot's line follows the brook, lane or field edge it
+  comes near: `hinterland/parcels.py:lot_follows_its_bounds` is the one predicate, `follow_the_bounds` cuts the stamped
+  outline to it at the scan, and a lot the cut shrinks under the commons floor is not drawn. `LOT_BOUND_REACH` 45 px is a
+  labeled GUESS (half the scan's lattice step). It moved 21 of 48 parcels over the pool and cohort 1-20 (observed
+  2026-09-30, method: the pool specs and cohort 1-20 rolled before and after with `render=False`). Guess, labeled at the
+  point of change.
 ## R8 - Tests retired and kept (2026-09-29)
 
 **Method** (T84, T85; FR-006, FR-007, SC-005). Every finished-map test in `tests/gate/`, `tests/hamletgen/test_pool_*.py`,
@@ -1027,3 +1028,6 @@ one belt-depth reading on cohort 34 is the retired test's grouping, not the rule
 (`belt_law.BeltReading.off_the_page`, which feature 287 made the placer's and the test's) passes that map, and every
 stretch of its belt reads 88-315 ft deep (observed 2026-09-30, method: the sweep implementer's scratch harness over the
 R11 manifest of cohort 34).
+
+**After R12, W26** (2026-09-30): built on research/vegetation/140's labeled GUESS (R7), so SC-001 stands at 163
+guaranteed and 12 recorded decisions of 175.

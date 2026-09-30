@@ -346,3 +346,94 @@ def test_a_parcel_whose_room_later_fixtures_took_is_clothed_as_grazing_not_drawn
     stock_woodland(t, ring)
     woods = [c for c in t.M["commons"] if c.get("role") == "woodland"]
     assert woods and woods[0]["crowns"] >= WOODLAND_MIN_CROWNS and "woodland_regraded" not in t.M["meta"]
+
+
+# ---- woods W26: a coppice lot's line follows the brook, the lane and the field edge it comes near --------------------
+
+_BROOK = [(300.0, 0.0), (300.0, 1000.0)]
+
+
+def _brook_dist(p) -> float:  # type: ignore[no-untyped-def]
+    return min(seg_dist(p[0], p[1], _BROOK[k], _BROOK[k + 1]) for k in range(len(_BROOK) - 1))
+
+
+def test_a_stamped_ring_across_a_brook_does_not_follow_it_and_the_cut_ring_does() -> None:
+    """Woods W26, the violating case: a stamped outline seated 120 px off a brook wanders across it and lies ragged within
+    reach of it - `lot_follows_its_bounds` refuses it. `follow_the_bounds` pulls every vertex within reach of the brook's
+    line in toward the lot's own center until it keeps off the brook by the line plus the reach: those vertices then run
+    parallel to the brook (a run of at least two), the ones already beyond reach are untouched, and the predicate holds."""
+    s = Settlement(1000, 1000, seed=3)
+    bounds = parcels.lot_bounds([], [_BROOK], [], 80.0)
+    line, reach = parcels.STREAM_LOT_LINE, parcels.LOT_BOUND_REACH
+    c = (420.0, 500.0)
+    stamped = parcels._parcel_outline(s, c[0], c[1], 160.0, 90.0, 1.0, 0.0)
+    assert min(p[0] for p in stamped) < 300.0, "the case: the stamped ring wanders across the brook"
+    assert not parcels.lot_follows_its_bounds(stamped, bounds)
+    cut = parcels.follow_the_bounds(stamped, c, bounds)
+    assert parcels.lot_follows_its_bounds(cut, bounds)
+    run = [q for q in cut if abs(_brook_dist(q) - (line + reach)) <= 1.0]
+    assert len(run) >= 2, "the lot's line runs along the brook"
+    for p, q in zip(stamped, cut, strict=True):
+        if _brook_dist(p) >= line + reach:
+            assert q == p, "a vertex beyond reach is not moved"
+        else:
+            assert math.dist(q, c) < math.dist(p, c), "only ever pulled in: no ground is bought"
+
+
+def test_a_lot_ragged_near_a_brook_or_crossing_a_line_is_refused() -> None:
+    """Woods W26: vertices wandering 65-90 px off a brook (inside the reach of its 60 px line, on it nowhere) are ragged
+    near it; a lot whose vertices all keep off but whose edge crosses the brook, or that stands in a field, crosses a line;
+    a lot snapped onto the line itself follows it; a lot whose own center is within reach cannot be cut to follow."""
+    bounds = parcels.lot_bounds([], [_BROOK], [], 80.0)
+    ragged = [(370.0, 400.0), (385.0, 450.0), (365.0, 500.0), (390.0, 550.0), (372.0, 600.0), (600.0, 600.0), (600.0, 400.0)]
+    assert not parcels.lot_follows_its_bounds(ragged, bounds)
+    snapped = [(360.0, 400.0), (360.0, 600.0), (600.0, 600.0), (600.0, 400.0)]
+    assert parcels.lot_follows_its_bounds(snapped, bounds)
+    astride = [(100.0, 400.0), (500.0, 400.0), (500.0, 600.0), (100.0, 600.0)]
+    assert all(_brook_dist(p) >= 150.0 for p in astride) and not parcels.lot_follows_its_bounds(astride, bounds)
+    field = [(0.0, 0.0), (1000.0, 0.0), (1000.0, 300.0), (0.0, 300.0)]
+    in_field = [(500.0, 100.0), (600.0, 100.0), (600.0, 200.0), (500.0, 200.0)]
+    assert not parcels.lot_follows_its_bounds(in_field, parcels.lot_bounds([], [], [field], 80.0))
+    assert parcels.lot_follows_its_bounds(in_field, parcels.lot_bounds([[(0.0, 900.0), (1000.0, 900.0)]], [], [], 80.0)), "a lane out of reach"
+    near = [(320.0, 450.0), (420.0, 450.0), (420.0, 550.0), (320.0, 550.0)]
+    assert not parcels.lot_follows_its_bounds(parcels.follow_the_bounds(near, (370.0, 500.0), bounds), bounds)
+
+
+def _scan_by_brook(plan, brook, count: int = 3) -> list:  # type: ignore[no-untyped-def]
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.M["fields"] = []
+    s.M["streams"] = [{"poly": brook}]
+    plan.belt = []
+    plan.title_pocket = None
+    return parcels.open_ground_patches(s, plan, count=count)
+
+
+def test_the_scan_draws_every_lot_following_the_brook_beside_it() -> None:
+    """Woods W26 at the placer: a brook laid beside where the open canvas seats its first parcel. Every ring the scan draws
+    follows it by the rule's own predicate, and at least one was cut to run along it (non-vacuity)."""
+    plan = a_plan()
+    free = _scan(plan, count=3)
+    assert free, "non-vacuity: the open canvas seats a parcel"
+    x0 = min(p[0] for p in free[0])
+    brook = [(x0 - 90.0, 0.0), (x0 - 90.0, float(plan.H))]
+    got = _scan_by_brook(plan, brook)
+    bounds = parcels.lot_bounds([], [brook], [], 80.0)
+    assert got and all(parcels.lot_follows_its_bounds(r, bounds) for r in got)
+    band = parcels.STREAM_LOT_LINE + parcels.LOT_BOUND_REACH
+    assert any(sum(1 for q in r if abs(abs(q[0] - brook[0][0]) - band) <= 1.0) >= 2 for r in got), "a lot's line runs along the brook"
+
+
+def test_the_scan_refuses_a_ring_that_does_not_follow_its_bounds_and_takes_the_next_seat(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Woods W26 at the placer: a ring the predicate refuses is not drawn; the scan goes on to the next seat."""
+    plan = a_plan()
+    assert _scan(plan, count=2), "non-vacuity"
+    asked: list[list] = []
+    real = parcels.lot_follows_its_bounds
+
+    def _first_refused(ring, bounds, reach=parcels.LOT_BOUND_REACH):  # type: ignore[no-untyped-def]
+        asked.append(ring)
+        return False if len(asked) == 1 else real(ring, bounds, reach)
+
+    monkeypatch.setattr(parcels, "lot_follows_its_bounds", _first_refused)
+    got = _scan(plan, count=2)
+    assert asked[0] not in got and got
