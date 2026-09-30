@@ -53,3 +53,4 @@ one, since its `What:` is the nearest thing to the record's definition today.
 - Dry fields and their crops (hatake) / How big was a dooryard garden?: a dry field is a grain or bean plot away from the house, where the paddy water stops; the kitchen bed (yashikibatake) is the household's small plot of daily greens at its house
 - How much farmland a settlement works, and in what tracts / Rice paddies and their plots (suiden): a tract is the whole field system one work waters (a pond, a weir and its canals); a plot is one leveled cell within it
 - Farmland around towns and cities / Does a city farm inside its walls?: the fields that ring a town or city outside it, against ground farmed within the wall
+- Temple fields (jochi) / Village shrines: where they stand and how big their grounds are: temple fields are the tax-free farmland worked to support the temple or its monk, out among the village's fields; a shrine's grounds are its precinct around the halls

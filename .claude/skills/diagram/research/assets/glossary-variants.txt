@@ -1060,7 +1060,6 @@ girder	girder
 girders	girder
 gis	GIS
 glacis	glacis
-glebe	glebe
 glulam	glulam
 glyph	glyph
 glyphs	glyph
