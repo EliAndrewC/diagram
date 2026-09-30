@@ -287,6 +287,20 @@ def draw_holdings(s: Settlement) -> int:
     return n
 
 
+def inside_the_sheet(line: Sequence[tuple[Pt, Pt]], bounds: tuple[float, float, float, float]) -> list[tuple[Pt, Pt]]:
+    """The longest run of consecutive `line` samples inside `bounds` (x0, y0, x1, y1); [] where none is."""
+    best: list[tuple[Pt, Pt]] = []
+    run: list[tuple[Pt, Pt]] = []
+    for p, n in line:
+        if bounds[0] <= p[0] <= bounds[2] and bounds[1] <= p[1] <= bounds[3]:
+            run.append((p, n))
+            if len(run) > len(best):
+                best = list(run)
+        else:
+            run = []
+    return best
+
+
 def longest_part(geom: Any) -> list[Pt]:
     """The coordinates of a line geometry's longest part - itself for a LineString; [] for an empty or zero-length one."""
     if geom.geom_type == "MultiLineString":
@@ -433,7 +447,10 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
         # two lots of slack beyond what the row needs: a refused seat is taken up at the row's end rather than sent to a
         # second street across the holdings (Kashikawa: one farm alone on a second street no way could reach). Each next
         # street is the FIRST one set out parallel, so the streets stay a grid beside each other (FR-016)
-        line = planned[offsets.index(off)]
+        # ...ITS STRETCH INSIDE THE SHEET BY HALF A FRAME: set out round a bend, Mizuguchi's second street ran 675 ft down
+        # the canvas's west edge, outside the farms it served and past the view the map is cropped to - a second way off
+        # the map past its notice board (settlement-review, 2026-09-30)
+        line = inside_the_sheet(planned[offsets.index(off)], (fd / 2, fd / 2, float(s.W) - fd / 2, float(s.H) - fd / 2))
         took = 0
         for (fx, fy), side, t, nrm in row_seats(line, frame, sides, gap):
             if placed >= want:

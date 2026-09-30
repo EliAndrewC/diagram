@@ -226,3 +226,12 @@ def test_the_longest_part_of_an_offset() -> None:
 
     assert longest_part(MultiLineString([[(0, 0), (1, 0)], [(0, 5), (9, 5)]])) == [(0.0, 5.0), (9.0, 5.0)]
     assert longest_part(LineString()) == []
+
+
+def test_a_street_keeps_its_longest_stretch_inside_the_sheet() -> None:
+    from l7r.diagram.hamletgen.homesteads.rows import inside_the_sheet
+
+    n = (0.0, 1.0)
+    line = [((x, 50.0), n) for x in (5.0, 20.0, 40.0, 60.0, 95.0, 40.0)] + [((50.0, 50.0), n)]
+    assert inside_the_sheet(line, (10.0, 10.0, 90.0, 90.0)) == [((20.0, 50.0), n), ((40.0, 50.0), n), ((60.0, 50.0), n)]
+    assert inside_the_sheet(line[:1], (10.0, 10.0, 90.0, 90.0)) == []
