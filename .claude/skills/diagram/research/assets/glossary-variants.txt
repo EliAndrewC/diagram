@@ -402,6 +402,9 @@ clone	clonal
 clones	clonal
 closed canopy	closed-canopy
 closed-canopy	closed-canopy
+cluster's spine	cluster's spine
+clustered village	kaison
+clustered villages	kaison
 coefficient of variation	coefficient of variation
 coke	coke
 collective farm	collective farm
@@ -733,6 +736,8 @@ enokida	Enokida
 enpo	Enpo era
 enpo era	Enpo era
 eta	eta
+etchu	Etchu
+etchu's	Etchu
 eunis	EUNIS
 europe pmc	Europe PMC
 eutrophic	eutrophication
@@ -759,6 +764,7 @@ fan foot	fan foot
 fan head	alluvial fan
 fan palm	fan palm
 fan palms	fan palm
+fan plain	alluvial fan
 fan's foot	fan foot
 fan's head	alluvial fan
 fan-foot	fan foot
@@ -805,6 +811,8 @@ field grain	field grain
 field grains	field grain
 field pit	nodame
 field pits	nodame
+field road	sakuba-michi
+field roads	sakuba-michi
 field to field	tagoshi kangai
 field-to-field	tagoshi kangai
 field-to-field irrigation	tagoshi kangai
@@ -855,6 +863,8 @@ five-household group	five-household group
 five-household groups	five-household group
 five-ring pagoda	five-ring pagoda
 five-ring pagodas	five-ring pagoda
+fixed rate	fixed-rate
+fixed-rate	fixed-rate
 floating-leaf	floating-leaf plant
 floating-leaf plant	floating-leaf plant
 floating-leaf plants	floating-leaf plant
@@ -1293,6 +1303,7 @@ hui-style	Hui style
 huiguan	huiguan
 huizhou	Huizhou
 huizhou style	Hui style
+hundred articles	hundred articles
 hutong	hutong
 hutongs	hutong
 huzhou	Huzhou-Jiaxing
@@ -1326,6 +1337,7 @@ idobata	idobata
 idowaku	igeta
 idoyakata	idoyakata
 ieyasu	Ieyasu
+ieyasu hundred articles	hundred articles
 ieyasu's	Ieyasu
 ifc	IFC
 igeta	igeta
@@ -1778,6 +1790,7 @@ laterals	lateral
 leaf litter	forest litter
 leat	leat
 leats	leat
+legacy of ieyasu	hundred articles
 legibility floor	legibility floor
 legibility floors	legibility floor
 leping	Leping
@@ -2422,6 +2435,8 @@ reaches	reach
 reaction	reaction
 reactions	reaction
 readjustment	kochi seiri
+recension	recension
+recensions	recension
 recharge	recharge
 recharges	recharge
 red chinquapin	chinquapin
@@ -2553,6 +2568,7 @@ sakagura	sakagura
 sakaki	sakaki
 sakimono-gashira	sakimono-gashira
 sakoda	sakoda
+sakuba-michi	sakuba-michi
 sakutoku	sakutoku
 sakutoku landlord	sakutoku
 sakutoku landlords	sakutoku
@@ -2591,6 +2607,9 @@ sanmon	sanmon
 sannomaru	sannomaru
 sanshaku-michi	sanshaku-michi
 sanson	sankyoson
+santome	Santome
+santome shinden	Santome
+santome's	Santome
 sanuki	Sanuki
 sanuki plain	Sanuki
 sanyo-do	Sanyodo
@@ -2605,6 +2624,8 @@ satetsu	satetsu
 satoyama	satoyama
 satsuma	Satsuma
 scattered farmstead	sankyoson
+scattered village	sankyoson
+scattered villages	sankyoson
 scattered-farmstead	sankyoson
 schistosomiasis	schistosomiasis
 scour	scour
@@ -3579,6 +3600,7 @@ zushi-nikai	half-story
 スブタ	Blyxa
 ホオノキ	hoonoki
 ミズオオバコ	Ottelia
+三富新田	Santome
 合掌造り	gassho
 四間取り	four-room type
 圃場整備	hojo seibi

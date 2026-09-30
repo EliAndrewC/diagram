@@ -541,7 +541,8 @@
    "fan's head",
    "fan head",
    "alluvial fans",
-   "alluvial fan"
+   "alluvial fan",
+   "fan plain"
   ]
  },
  "anaerobic": {
@@ -3365,7 +3366,9 @@
    "sankyoson",
    "sanson",
    "scattered farmstead",
-   "scattered-farmstead"
+   "scattered-farmstead",
+   "scattered village",
+   "scattered villages"
   ]
  },
  "sanmai": {
@@ -9292,7 +9295,9 @@
  "kaison": {
   "def": "A lump village: a Japanese settlement whose houses are gathered irregularly in a lump, typically at a hill's foot, on a river terrace, or at a highway crossing where water can be got.",
   "variants": [
-   "kaison"
+   "kaison",
+   "clustered village",
+   "clustered villages"
   ]
  },
  "Rinzai": {
@@ -13135,6 +13140,58 @@
   "variants": [
    "field channel",
    "field channels"
+  ]
+ },
+ "sakuba-michi": {
+  "def": "A field road: a narrow way from a village out to its fields. One Edo-period table of road classes gives it as 3 shaku (about 90 cm) wide.",
+  "variants": [
+   "sakuba-michi",
+   "field road",
+   "field roads"
+  ]
+ },
+ "hundred articles": {
+  "def": "A document of about a hundred instructions on governing, credited to Ieyasu and often called his testament. It exists in several versions, was added to after his death and was partly drafted by his successors.",
+  "variants": [
+   "hundred articles",
+   "Ieyasu hundred articles",
+   "Legacy of Ieyasu"
+  ]
+ },
+ "recension": {
+  "def": "One of several versions of the same text, each revised or edited differently from the others.",
+  "variants": [
+   "recension",
+   "recensions"
+  ]
+ },
+ "cluster's spine": {
+  "def": "A hamlet's main lane, the one the whole settlement walks to its paddy, running through its cluster of farmsteads; the maps draw it one rank wider than a footpath.",
+  "variants": [
+   "cluster's spine"
+  ]
+ },
+ "fixed-rate": {
+  "def": "A land tax set at one rate for an agreed term of years, whatever the harvest, which a village asked its lord for and was granted.",
+  "variants": [
+   "fixed-rate",
+   "fixed rate"
+  ]
+ },
+ "Etchu": {
+  "def": "The old province on the Toyama plain, on the Sea of Japan coast, where the present Toyama prefecture is.",
+  "variants": [
+   "Etchu",
+   "Etchu's"
+  ]
+ },
+ "Santome": {
+  "def": "A new-field colony (shinden) on the water-poor Musashino plateau. It was laid out on roads 6 ken wide running lengthwise and crosswise, and each farm was a strip 40 ken wide and 375 ken deep, divided back from the road into house lot, field and woodland. At first its 11 wells were dug deep and shared.",
+  "variants": [
+   "Santome",
+   "Santome's",
+   "Santome Shinden",
+   "三富新田"
   ]
  }
 }
