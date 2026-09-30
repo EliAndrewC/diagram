@@ -62,7 +62,7 @@ class Residence(Kind):
     Covers: the lord's residence blocks' fill and outlines, their room dividers, and the RESIDENCE band label
     Label: accurate
     Sources: watariroka-kotobank, irikawa-kotobank, katsura-rikyu-jawiki, touken-world-buke-madori, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, neixiang-yamen-zhwiki, takayama-jinya-city, takayama-jinya-jawiki, machi-bugyo-jawiki, jinya-jawiki, yamen-enwiki, neixiang-xianya-zhwiki, kotobank-katteguchi, shoinzukuri-jawiki
-    Entry: research/buildings.html - 'Were a residence's wings joined by corridors and set in echelon, like geese in flight?', 'The formal entrance and a guest's arrival (genkan)', 'Magistrates' compounds (jin'ya and yamen)', 'The shady rear is the service strip', 'The size of a compound and the rank of its buildings', 'How big was a samurai's house, and what rank is a 67-tsubo house?'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps draw a magistrate's compound', 'How our maps route a guest from the gate to the entrance'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'The formal entrance and a guest's arrival (genkan)', 'Magistrates' compounds (jin'ya and yamen)', 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps lay out the residence', 'How our maps size a compound and its buildings', 'How our maps draw a magistrate's compound', 'How our maps route a guest from the gate to the entrance'
     """
 
     key = "residence"
@@ -188,7 +188,7 @@ class ServantsQuarters(Kind):
     Covers: the servants' nagaya and its label
     Label: accurate
     Sources: jta-nagayamon, fukui-bushi-jutaku, aizu-bukeyashiki-jawiki, kotobank-degawari, nagayamon-jawiki, nando-jawiki, daozuofang, shoinzukuri-jawiki, kotobank-bukeyashiki, kotobank-nagayamon
-    Entry: research/cities/government.html - 'Servant housing in the samurai ward', "Where do a samurai household's servants sleep when the house has no gate range?"; research/buildings.html - 'The shady rear is the service strip'
+    Entry: research/cities/government.html - 'Servant housing in the samurai ward', "Where do a samurai household's servants sleep when the house has no gate range?"; research/buildings.html - 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps lay out the residence'
     """
 
     key = "servants' quarters"
@@ -219,7 +219,7 @@ class GuestQuarters(Kind):
     Covers: the guest room of the residence with its floor and label, or a detached guest house and its label
     Label: accurate
     Sources: shirobito-1717-takayama, boso-no-mura-takei, honjin-jawiki, yakage-honjin, kotobank-shikidai, kominkai-genkan
-    Entry: research/buildings.html - 'Did a guest stay in the house, or in a guest house of their own?', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps route a guest from the gate to the entrance'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps lay out the residence', 'How our maps route a guest from the gate to the entrance'
     """
 
     key = "guest quarters"
@@ -258,7 +258,7 @@ class Kitchen(Kind):
     Covers: the kitchen and pantries building and its label
     Label: accurate
     Sources: boso-no-mura-takei, liq-takayasu-daidokoro, kotobank-katteguchi, kotobank-uchigenkan, matsue-bukeyashiki, matsue-bukeyashiki-about, matsushiro-bukeyashiki, tfd-hongou-fire-history, thepaper-taipinggang, edo-no-kaji-jawiki, machibikeshi-jawiki
-    Entry: research/buildings.html - 'What fire did a residence's kitchen cook on - a kamado range, or a sunken hearth?', 'How many doors does a residence's kitchen have, and who comes in by them?', 'How big was a samurai's house, and what rank is a 67-tsubo house?', 'The size of a compound and the rank of its buildings', 'Fire, and the fireproof storehouses (dozō)', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps route a guest from the gate to the entrance', 'How our maps draw fire water and the fireproof storehouses (dozō)'
+    Entry: research/buildings.html - 'What fire did a residence's kitchen cook on - a kamado range, or a sunken hearth?', 'How many doors does a residence's kitchen have, and who comes in by them?', 'Samurai residences and their rooms (buke yashiki)', 'The size of a compound and the rank of its buildings', 'Fire, and the fireproof storehouses (dozō)', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps lay out the residence', 'How our maps size a compound and its buildings', 'How our maps route a guest from the gate to the entrance', 'How our maps draw fire water and the fireproof storehouses (dozō)'
     """
 
     key = "kitchen"
@@ -314,7 +314,7 @@ class Well(Kind):
     Covers: every well curb glyph and its label
     Label: convention
     Sources: kanda-josui-jawiki, nagaya-jawiki, saijo-mizu-rekishikan, kotobank-idoyakata, ido-jawiki, shoinzukuri-jawiki
-    Entry: research/urban-features.html - 'Communal wells and the samurai exception', 'Wells - the research, and the deliberate liberty'; research/buildings.html - 'The shady rear is the service strip'
+    Entry: research/urban-features.html - 'Communal wells and the samurai exception', 'Wells - the research, and the deliberate liberty'; research/buildings.html - 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps lay out the residence'
     """
 
     key = "well"
@@ -349,7 +349,7 @@ class Latrine(Kind):
     Covers: every privy building and its label
     Label: accurate
     Sources: sayama-jinya-uematsu, kotobank-benjo, tajima-2007-night-soil, guernica-night-soil, sinyoken-madori, shoinzukuri-jawiki
-    Entry: research/buildings.html - 'Where does a residence put its guests' privy?', 'Privies attach to the house', 'The shady rear is the service strip'
+    Entry: research/buildings.html - 'Where does a residence put its guests' privy?', 'Privies attach to the house', 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps lay out the residence'
     """
 
     key = "latrine"
@@ -434,7 +434,7 @@ class Storehouse(Kind):
     Covers: the household storehouse and its label
     Label: accurate
     Sources: matsushiro-bukeyashiki, takayama-jinya-gifu, matsushiro-kankou-higuchi, kojodan-higuchi, bunka-yokota-dozo, suumo-kura-size
-    Entry: research/buildings.html - 'The shady rear is the service strip', 'Where did a residence keep its vegetable garden, and how big was it?', 'Fire, and the fireproof storehouses (dozō)'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'Where did a residence keep its vegetable garden, and how big was it?', 'Fire, and the fireproof storehouses (dozō)'; research/rendering/buildings.html - 'How our maps lay out the residence'
     """
 
     key = "storehouse"
@@ -653,7 +653,7 @@ class ResidenceCorridor(Kind):
     Covers: the corridor between the residence blocks
     Label: accurate
     Sources: watariroka-kotobank, irikawa-kotobank, katsura-rikyu-jawiki
-    Entry: research/buildings.html - 'Were a residence's wings joined by corridors and set in echelon, like geese in flight?'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps lay out the residence'
     """
 
     key = "residence corridor"
@@ -685,7 +685,7 @@ class LordsQuarters(Kind):
     Covers: the lord's suite in the residence, its floor and its labels
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, shoinzukuri-kotobank, matsue-bukeyashiki, touken-world-buke-madori, takayama-jinya-jawiki, takayama-jinya-city, aizu-bukeyashiki-jawiki
-    Entry: research/buildings.html - 'In what order do a residence's rooms run - the reception, the master's rooms, the family's?', 'The hearing court (shirasu)'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)'; research/cities/government.html - 'Servant housing in the samurai ward'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'The hearing court (shirasu)'; research/rendering/buildings.html - 'How our maps lay out the residence', 'How our maps draw the hearing court (shirasu)'; research/cities/government.html - 'Servant housing in the samurai ward'
     """
 
     key = "lord's quarters"
@@ -712,7 +712,7 @@ class FamilyQuarters(Kind):
     Covers: the family's bay of the residence, its floor and its labels
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, shoinzukuri-kotobank, matsue-bukeyashiki, neixiang-yamen-zhwiki, aizu-bukeyashiki-jawiki, jinya-jawiki, takayama-jinya-jawiki
-    Entry: research/buildings.html - 'In what order do a residence's rooms run - the reception, the master's rooms, the family's?', 'Magistrates' compounds (jin'ya and yamen)'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'Magistrates' compounds (jin'ya and yamen)'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps lay out the residence', 'How our maps draw a magistrate's compound'
     """
 
     key = "family quarters"
@@ -737,7 +737,7 @@ class InnerRooms(Kind):
     Covers: the innermost bay of the residence, its floor and its label
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, butsuma-kotobank, aizu-bukeyashiki-jawiki
-    Entry: research/buildings.html - 'In what order do a residence's rooms run - the reception, the master's rooms, the family's?', 'Where does the butsuma sit - by the zashiki, or among the private rooms?'; research/cities/government.html - 'Servant housing in the samurai ward'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'Where does the butsuma sit - by the zashiki, or among the private rooms?'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps lay out the residence'
     """
 
     key = "inner rooms"
@@ -766,7 +766,7 @@ class ReceptionRoom(Kind):
     Covers: the reception bay of the residence, its floor and its labels
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, shoinzukuri-kotobank, touken-world-buke-madori, matsue-bukeyashiki, shoinzukuri-jawiki, aizu-bukeyashiki-jawiki
-    Entry: research/buildings.html - 'In what order do a residence's rooms run - the reception, the master's rooms, the family's?', 'The shady rear is the service strip'; research/cities/government.html - 'Servant housing in the samurai ward'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps lay out the residence'
     """
 
     key = "reception room"

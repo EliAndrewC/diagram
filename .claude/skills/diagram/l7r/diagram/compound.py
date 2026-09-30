@@ -509,10 +509,10 @@ def county_magistracy_program() -> CompoundProgram:
     # the head of the cart yard; its 6 ft passage is a GUESS, narrower than the main gate.
     env = Envelope(w_ft=270.0, h_ft=200.0, divider_ft=90.0, gate_w_ft=8.0, posterns=(("W", 50.0, 6.0), ("S", 244.0, 6.0)))
     spine = (
-        # THE GARDEN LIES BEFORE THE HOUSE (research buildings 230 'The shady rear is the service strip': the garden faces
-        # the reception rooms). Pass 7 (building-review round 6: ~62 x 66 ft of bare inner court east of a garden sized to
+        # THE GARDEN LIES BEFORE THE HOUSE (research buildings 380 'Samurai residences and their rooms (buke yashiki)' and
+        # rendering 'How our maps lay out the residence': the garden faces the reception rooms). Pass 7 (building-review round 6: ~62 x 66 ft of bare inner court east of a garden sized to
         # the house alone) runs it on to the guest house, x 104-226, so the one garden faces the reception and the guest
-        # house both - guests were received in the garden-facing rooms (research buildings 330); the servants' row it once
+        # house both - guests were received in the garden-facing rooms (research buildings 380); the servants' row it once
         # faced is on the kitchen yard since pass 6. From the house's veranda (y 36) 46 ft deep to y 82, an 8 ft walk
         # along the divider. Its size is a GUESS.
         CourtZone("garden", 104.0, 36.0, 122.0, 46.0),
@@ -553,13 +553,14 @@ def county_magistracy_program() -> CompoundProgram:
     b = BuildingSpec
     buildings = (
         # inner (residence) court - buildings ring N/E/W walls + back the divider
-        # The residence: one block under one roof (R02's ordinary form, research buildings 250), MASSED IN TWO ROWS front
-        # and back (forms.md R02; the Kuchiba house's rooms "stand in two rows, front and back", research buildings 260).
+        # The residence (research buildings 380 'Samurai residences and their rooms (buke yashiki)', rendering 'How our
+        # maps lay out the residence'): one block under one roof (R02's ordinary form), MASSED IN TWO ROWS front
+        # and back (forms.md R02; the Kuchiba house's rooms "stand in two rows, front and back").
         # Its rooms take the palace order's lesser form - the reception at the east END, the full depth, nearest the
         # middle gate; the master's rooms beside it on the garden row; the family's beyond, with the inner rooms behind
-        # (R03, research buildings 260). The veranda runs along the garden face alone, 4 ft (R01's first form, research
+        # (R03). The veranda runs along the garden face alone, 4 ft (R01's first form, research
         # buildings 240: 3-6 ft). Its inner entrance opens on its west face, toward the kitchen (research buildings 370).
-        # It stands 10 ft off the north wall: the rear band narrowed to a cart/servant alley (research buildings 230),
+        # It stands 10 ft off the north wall: the rear band narrowed to a cart/servant alley (research buildings 380),
         # the family privy flush to the wall in it.
         # THE HOUSE'S SIZE is research buildings 380's: the Yokota house of a 150-koku district magistrate (gun-bugyo, the
         # county post itself) had a main house of about 49 tsubo, ~1,740 sq ft. Pass 6 takes that house, not the 67-tsubo
@@ -605,7 +606,7 @@ def county_magistracy_program() -> CompoundProgram:
         # is Ochiba's particular - buildings/programs.md: the shrine is universal equipment, its scale the per-manor
         # particular; buildings.md "Modest shrine"). The size is a GUESS inside the shrine band (40-1,150 sq ft).
         b("shrine", "shrine", 18.0, 14.0, "inner", "E", order=4, feature="compound shrine"),
-        # A detached guest house is a GUESS (R10, research buildings 330: guests were received in the main house, and a
+        # A detached guest house is a GUESS (R10, research buildings 380: guests were received in the main house, and a
         # guest house apart at a samurai house was not found); kept as the example's draft of the item.
         b("guest house", "lord", 33.0, 32.0, "inner", "E", order=3, feature="guest quarters"),  # 33 x 32 (was 33 x 30; pass 6, the house's mass returned)
         # outer (administrative) court - office hall backs the divider (oshirasu in front)
