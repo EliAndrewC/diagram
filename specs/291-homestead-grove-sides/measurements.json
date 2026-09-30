@@ -482,5 +482,38 @@
   "observed": "2026-09-30",
   "source": ".claude/skills/diagram/l7r/diagram/interactive/classes/water_and_ways.py VillageLane; glossary dry edge",
   "method": "the why says the line the ground gives, a levee, a dike or a fan's foot; the dry-edge street is labeled this record's reading in the note and in the gloss"
+ },
+ "kuwabata-r7-f2": {
+  "verifies": "F2",
+  "subject": "kuwabata",
+  "answers": "c6ebc8e2139f",
+  "quantity": "\"levee\" in the lane card resolving to the paddy-bund gloss",
+  "value": 0,
+  "unit": "occurrences",
+  "observed": "2026-09-30",
+  "source": ".claude/skills/diagram/l7r/diagram/interactive/classes/water_and_ways.py VillageLane",
+  "method": "the card now says \"a natural levee\", which resolves to the natural-levee gloss"
+ },
+ "inashiro-r7-f1": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "answers": "c6ebc8e2139f",
+  "quantity": "the fan's foot stated in the accurate why",
+  "value": 0,
+  "unit": "occurrences",
+  "observed": "2026-09-30",
+  "source": ".claude/skills/diagram/l7r/diagram/interactive/classes/water_and_ways.py VillageLane",
+  "method": "the why names a natural levee or a dike; the fan's foot is in the note as this record's reading"
+ },
+ "inashiro-r7-f2": {
+  "verifies": "F2",
+  "subject": "inashiro",
+  "answers": "c6ebc8e2139f",
+  "quantity": "the fan-foot gloss making one fan's arc a general pattern",
+  "value": 0,
+  "unit": "glosses",
+  "observed": "2026-09-30",
+  "source": ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary (term fan foot)",
+  "method": "the gloss now says settlements often sit along a fan's foot and at some fans line up in an arc"
  }
 }
