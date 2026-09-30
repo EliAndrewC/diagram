@@ -388,6 +388,7 @@ Decisions review and for what goes to the GM once the work runs.
   labeled GUESS (half the scan's lattice step). It moved 21 of 48 parcels over the pool and cohort 1-20 (observed
   2026-09-30, method: the pool specs and cohort 1-20 rolled before and after with `render=False`). Guess, labeled at the
   point of change.
+
 ## R8 - Tests retired and kept (2026-09-29)
 
 **Method** (T84, T85; FR-006, FR-007, SC-005). Every finished-map test in `tests/gate/`, `tests/hamletgen/test_pool_*.py`,
