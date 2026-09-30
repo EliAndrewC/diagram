@@ -13538,5 +13538,37 @@
    "genpuku",
    "gempuku"
   ]
+ },
+ "Okido": {
+  "def": "A great gate at the edge of Edo where a highway entered the city; the one at Yotsuya was set up in 1616 on the Koshu highway. The Tamagawa aqueduct's open channel ended at the Yotsuya Okido, where a water-watch station stood and the water went underground into buried pipes.",
+  "variants": [
+   "Okido",
+   "Ōkido",
+   "Okidos"
+  ]
+ },
+ "Yuanhe era": {
+  "def": "A reign era of the Tang dynasty, 806 to 820; its tenth year, when Meng Jian raised the Shaoxing towpath, is 815.",
+  "variants": [
+   "Yuanhe era",
+   "Yuanhe"
+  ]
+ },
+ "surveillance commissioner": {
+  "def": "A Tang-dynasty official over a region; Meng Jian held the post for Eastern Zhejiang when he raised or renovated the Shaoxing towpath in 815.",
+  "variants": [
+   "surveillance commissioner",
+   "surveillance commissioners"
+  ]
+ },
+ "mizubansho": {
+  "def": "A 水番所, a station where an aqueduct's keepers watched and regulated its flow. On the Tamagawa aqueduct it stood at the Yotsuya Okido, where the open channel went into buried pipes.",
+  "variants": [
+   "mizubansho",
+   "water-watch station",
+   "water-watch stations",
+   "water-guard station",
+   "water-guard stations"
+  ]
  }
 }

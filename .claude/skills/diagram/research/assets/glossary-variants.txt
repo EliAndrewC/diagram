@@ -2048,6 +2048,7 @@ mitsumata field	mitsumata
 mitsumata fields	mitsumata
 miyaza	miyaza
 mizu-oobako	Ottelia
+mizubansho	mizubansho
 mizugaki	mizugaki
 mizugashira	mizugashira
 mizuguchi	mizuguchi
@@ -2271,6 +2272,8 @@ ojoya	ogashoya
 okabasho	okabasho
 okaji	ōkaji
 okajiba	ōkaji
+okido	Okido
+okidos	Okido
 oku	oku
 oku-agariya	agariya
 oku-muki	oku
@@ -3053,6 +3056,8 @@ superelevated	superelevation
 superelevates	superelevation
 superelevation	superelevation
 superstructure	superstructure
+surveillance commissioner	surveillance commissioner
+surveillance commissioners	surveillance commissioner
 survey register	kenchicho
 survey registers	kenchicho
 sus	Sus
@@ -3506,9 +3511,13 @@ water teahouse	water teahouse
 water teahouses	water teahouse
 water-and-land hall	water-and-land hall
 water-and-land halls	water-and-land hall
+water-guard station	mizubansho
+water-guard stations	mizubansho
 water-head	water-head
 water-mouth	water-mouth
 water-tail	water-mouth
+water-watch station	mizubansho
+water-watch stations	mizubansho
 wayside hall	tsujido
 wayside halls	tsujido
 wazi	wazi
@@ -3651,6 +3660,8 @@ yu	yu
 yuan	Yuan dynasty
 yuan dynasty	Yuan dynasty
 yuan rebuild	Yuan dynasty
+yuanhe	Yuanhe era
+yuanhe era	Yuanhe era
 yudono	yudono
 yuecheng	yuecheng
 yui	yui
@@ -3706,6 +3717,7 @@ zushi-nikai	half-story
 ōiya	ōiya
 ōkaji	ōkaji
 ōkajiba	ōkaji
+ōkido	Okido
 ōmi	Omi
 ōnin war	Onin war
 ōte	ote-mon
