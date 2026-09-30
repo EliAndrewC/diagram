@@ -30,7 +30,7 @@ class Stream(Kind):
     Covers: `streams` - the brook
     Label: convention
     Sources: jsslkx-002-2021, toro-site
-    Entry: research/water.html - 'Water-width ladder - the real-world tiers', 'Drawn width is RANK, not discharge'
+    Entry: research/water.html - 'How wide canals and ditches are: the ladder of channel widths'; research/rendering/water.html - 'How our maps draw channel widths'
     """
 
     key = 'stream'
@@ -77,7 +77,7 @@ class IrrigationDitch(Kind):
     Covers: `field_ditches` whose role is not `drain` (except on a dike-pond field, whose canals are the pond canal), and `channels` not leaving a drain - the head race, the supply canals, the delivery ditches, a source-to-field feed
     Label: accurate
     Sources: tabayashi-1987, jsidre-minumadai, jsslkx-002-2021, nougyoudoboku-matsutan, bungotakada-tagoshi, suido-ishizue-iseki, people-zhishui-2025, pwsannong-gudai-shuili, thepaper-guangai
-    Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'Irrigation canals and how they are laid out (yosuiro)', 'Where the ditch leaves the brook: the intake and its weir (toshuko and seki)'; research/rendering/water.html - 'How our maps lay out irrigation canals', 'How our maps draw the intake and its weir (toshuko and seki)'
+    Entry: research/water.html - 'How wide canals and ditches are: the ladder of channel widths', 'Where the drawn net STOPS', 'Irrigation canals and how they are laid out (yosuiro)', 'Where the ditch leaves the brook: the intake and its weir (toshuko and seki)'; research/rendering/water.html - 'How our maps draw channel widths', 'How our maps draw a channel narrowing along its run', 'How our maps lay out irrigation canals', 'How our maps draw the intake and its weir (toshuko and seki)'
     """
 
     key = "irrigation ditch"
@@ -143,7 +143,7 @@ class DrainageDitch(Kind):
     Covers: `field_ditches` whose role is `drain`, and `channels` leaving a drain - the collector and its run to the pond, the brook or the frame
     Label: accurate
     Sources: tabayashi-1987, maff-nogyoyosui-suiden, jawiki-yosuiro, maff-drain-shape, shonairyo-akusuiro-jawiki, fao-drainage-systems, akusuiro-kotobank
-    Entry: research/water.html - 'Where does a field's drain let its water go?', 'Where does the water go once it has watered the paddies', 'The comb net is drawn at TRUE SIZE'; research/fields.html - 'Why does the drain run across the slope instead of down it?'
+    Entry: research/water.html - 'Where does a field's drain let its water go?', 'Where does the water go once it has watered the paddies', 'How wide canals and ditches are: the ladder of channel widths'; research/fields.html - 'Why does the drain run across the slope instead of down it?'; research/rendering/water.html - 'How our maps draw channel widths', 'How our maps draw a channel narrowing along its run'
     """
 
     key = "drainage ditch"

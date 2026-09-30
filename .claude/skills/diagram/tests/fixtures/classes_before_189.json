@@ -877,7 +877,7 @@
   "stream": {
     "caveat": "",
     "covers": "`streams` - the brook",
-    "entry": "research/water.html - 'Water-width ladder - the real-world tiers', 'Drawn width is RANK, not discharge'",
+    "entry": "research/water.html - 'How wide canals and ditches are: the ladder of channel widths'; research/rendering/water.html - 'How our maps draw channel widths'",
     "key": "stream",
     "label": "convention",
     "label_note": "we have drawn the stream's width by its RANK in the water hierarchy rather than by its real width, in order to keep brook, head race and ditch readable at every zoom - so junctions do not conserve width (the GM's ruling). A village creek runs about 2 m wide in reality, some six times a field ditch. The stream's type and place are read.",
