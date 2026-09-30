@@ -51,10 +51,10 @@ class HousesMixin:
         # (nucleated farms, where the garden takes the sunnier walls). Shared by the draw + the record below.
         # THE NORTH ANNEX'S PROPORTIONS (feature 280 M18, research/homesteads/440): the sheds dated to the end of the Edo period
         # run about 18-27 ft long and 1.5-1.8 times as long as deep (Hannan 3 x 2 ken; Nerima 8.17 x 4.54 m) - 0.46 of an ordinary
-        # 46 ft minka is 21 ft, and 0.45 of its 28 ft depth is 12.6 ft, 1.67 to one (a 40 ft house gives 1.46, just under the band -
-        # future-work); the 1.8-2.4 of the Meiji-Taisho barns is not
-        # drawn. It overlaps the back wall by 0.05 h, as before, so the annex reads as joined. `kura_rect` is the one table.
-        _sox, _soy, _ssw, _ssh = kura_rect(w, h, shed_side)
+        # 46 ft minka is 21 ft, and 0.45 of its 28 ft depth is 12.6 ft, 1.67 to one; the 1.8-2.4 of the Meiji-Taisho barns is not
+        # drawn. It overlaps the back wall by 0.05 h, as before, so the annex reads as joined. `kura_rect` is the one table, and
+        # holds the length inside the band (feature 293: on the largest houses the shares alone ran past it).
+        _sox, _soy, _ssw, _ssh = kura_rect(w, h, shed_side, self.px(1.0))
         # EMIT WHAT WAS PLACED (feature 121, found by settlement-review on Sawada). This rounded the
         # center to whole pixels and the rake to whole DEGREES, while the placer clears and the gate
         # measure full floats - so after all of this feature's work the drawn quad was still not the

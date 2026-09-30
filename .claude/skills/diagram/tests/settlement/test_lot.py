@@ -108,3 +108,17 @@ def test_a_commons_form_or_a_dispersed_seating_lays_no_byre_in_a_bundle() -> Non
     assert household_byre_form(s) == (None, 0.0)
     s._nucleated = False
     assert household_byre_form(s) == (None, 0.0)
+
+
+def test_the_storehouse_goes_to_the_largest_houses_first() -> None:
+    """Feature 293 (research/homesteads/120): the kura count is the quota's, and the houses that carry it are exactly the
+    largest by the main house's footprint, on every seed and count."""
+    for seed in range(30):
+        for n in range(5, 25):
+            lots = HouseholdLots(seed, n)
+            areas = [lf * df for lf, df in lots.sizes]
+            carriers = [a for a, k in zip(areas, lots.kura, strict=True) if k]
+            rest = [a for a, k in zip(areas, lots.kura, strict=True) if not k]
+            assert len(carriers) == sum(quota_carriers(seed, "kura", n, KURA_SHARE))
+            assert not carriers or not rest or min(carriers) >= max(rest), (seed, n)
+    assert sum(HouseholdLots(3, 16).kura) == 2, "Kakimochi's 2 of 16"

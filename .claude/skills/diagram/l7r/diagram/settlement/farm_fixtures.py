@@ -61,10 +61,38 @@ FIXTURE_KINDS = tuple(FIXTURE_FT)
 KURA_PARTS: dict[str, tuple[float, float, float, float]] = {"N": (0.0, -0.675, 0.46, 0.45), "W": (-0.64, 0.0, 0.32, 0.56)}
 
 
-def kura_rect(w: float, h: float, side: str | None) -> tuple[float, float, float, float]:
-    """The storehouse annex of a `w` x `h` house on `side` ("N", else the west), in the house's frame (`KURA_PARTS`)."""
+#: THE NORTH ANNEX'S BAND (feature 280 M18, research/homesteads/440): the farm sheds dated to the end of the Edo period run
+#: about 18 to 27 ft long and 1.5 to 1.8 times as long as deep (Hannan 3 x 2 ken; Nerima 8.17 x 4.54 m); the 1.8 to 2.4 of
+#: the Meiji-Taisho barns is not drawn.
+ANNEX_LENGTH_FT = (18.0, 27.0)
+ANNEX_RATIO = (1.5, 1.8)
+
+
+def kura_rect(w: float, h: float, side: str | None, ppf: float) -> tuple[float, float, float, float]:
+    """The storehouse annex of a `w` x `h` house on `side` ("N", else the west), in the house's frame (`KURA_PARTS`), at
+    `ppf` pixels per foot (`Settlement.px(1.0)`).
+
+    THE NORTH ANNEX'S LENGTH IS HELD INSIDE ITS BAND (feature 293): 18 to 27 ft, and 1.5 to 1.8 times its depth. Once the
+    annex went to the largest houses first, the shares alone drew it on the longest houses past 27 ft and at 1.9 to 2.3 to
+    one, the barns' proportion (the settlement-reviews of the earlier 293 pass). An ordinary 46 x 28 ft minka is inside the
+    band and unchanged, 21.2 x 12.6 ft; a 62 x 28 ft house draws 22.7 x 12.6 ft.
+
+    THE DEPTH STAYS A SHARE, AND THE LENGTH GIVES (measured in that pass): held to the band by deepening instead - a long
+    house's annex stopping at 27 ft and deepening to 1.8 to one, 27 x 15 ft - it moved every homestead that kept one, and
+    the five pool hamlets re-packed with three finished-map checks failing. The length lies within the house's own width,
+    so the bundle's reserved box moves only by the turn of its corner. Where the band cannot be met - a house under about
+    22 ft deep - the 1.8 wins.
+
+    THE SIZE IS A DELIBERATE DEVIATION: the record reads the annex as the kura (research/homesteads/120), and the kura read
+    were about 15 by 18 ft, Kakimochi's two 12 by 18 - so the band's longer annexes are longer than a kura was. Kept: sizing
+    it to the kura re-seats every scripted hamlet's houses, in a task that asked only which houses carry it; that resize is
+    priced for the GM (specs/293-effort-level-experiment/outputs/I-port-handoff.md)."""
     fx, fy, fw, fh = KURA_PARTS["N" if side == "N" else "W"]
-    return (fx * w, fy * h, fw * w, fh * h)
+    if side != "N":
+        return (fx * w, fy * h, fw * w, fh * h)
+    depth = fh * h
+    lo, hi = max(ANNEX_LENGTH_FT[0] * ppf, ANNEX_RATIO[0] * depth), min(ANNEX_LENGTH_FT[1] * ppf, ANNEX_RATIO[1] * depth)
+    return (fx * w, fy * h, min(max(fw * w, lo), hi), depth)
 
 
 SHRINE_RED = "#A03020"  # the same vermilion as small_shrine's roof - the GM's "red marking" convention

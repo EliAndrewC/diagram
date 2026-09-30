@@ -57,7 +57,8 @@ def quota_carriers(seed: int, salt: str, n: int, p: float) -> list[bool]:
 
 
 #: The fixture kinds whose quota goes to the larger houses first (feature 280 M21, research/homesteads/720: "the storehouse
-#: and the sheds go to the larger houses first" - the wood shed, a building of its own on about four farmsteads in ten).
+#: and the sheds go to the larger houses first" - the wood shed, a building of its own on about four farmsteads in ten). The
+#: storehouse itself is dealt the same way (`HouseholdLots.kura`, feature 293).
 LARGER_FIRST = frozenset({"woodpile"})
 
 
@@ -106,7 +107,13 @@ class HouseholdLots:
     def __init__(self, seed: int, n: int, byre_share: float = 0.0, fixture_shares: Mapping[str, float] | None = None) -> None:
         self.n = n
         self.sizes = size_ladder(seed, n)
-        self.kura = quota_carriers(seed, "kura", n, KURA_SHARE)
+        # THE STOREHOUSE GOES TO THE LARGER HOUSES FIRST (feature 293, research/homesteads/120): the count is the quota's,
+        # dealt down the size ladder by the main house's footprint - the carriers are exactly the largest houses. The record's
+        # one village put its two with its 2nd- and 3rd-largest houses and its largest had none, so the strict cut is a
+        # DELIBERATE DEVIATION (the weighted draw was priced and not taken); a tie goes by the seed-shuffled order, a GUESS the
+        # record is silent on, and the ladder's distinct rungs make one all but impossible. It was the shuffled quota
+        # (`quota_carriers`), and Sawada's one storehouse stood against its 18th-largest house of 19.
+        self.kura = larger_first(seed, "kura", self.sizes, KURA_SHARE)
         self.byre = quota_carriers(seed, "byre", n, byre_share)
         # THE FARMSTEAD FIXTURES, a quota per kind (feature 287, homes H32): exactly round(n x share) households keep each -
         # the wood shed on the LARGER houses first (`larger_first`, feature 280 M21), every other kind by the shuffled order

@@ -10,7 +10,7 @@ from l7r.diagram.settlement.homestead_parts import fixture_seats as fs
 
 HW, HH = 46.0, 28.0
 HOUSE = (0.0, 0.0, HW, HH)
-KURA = kura_rect(HW, HH, "N")
+KURA = kura_rect(HW, HH, "N", 1.0)
 YARD = (0.0, HH / 2 + 3.0 + 12.0, 30.0, 24.0)
 GARDEN = (HW / 2 + 3.0 + 7.0, HH / 2 + 3.0 + 12.0, 14.0, 24.0)  # an SE bed, beside the yard
 EAST_BED = (HW / 2 + 3.0 + 7.0, 0.0, 14.0, 24.0)  # an E bed, on the floored rooms' end wall
@@ -35,7 +35,7 @@ def test_every_kind_a_household_keeps_is_laid_clear_of_every_part_and_of_each_ot
     crown = laid["persimmon"]
     assert fs.clears(crown, [HOUSE, KURA, *(r for _k, r in solid)], fs.CANOPY_PAD - 1e-6), "no crown over a roof"
     assert fs.clears((crown[0], crown[1], 4.0, 4.0), [YARD, GARDEN], 2.0 - 1e-6), "the trunk stands off the yard and the beds"
-    assert fs.shed_off_a_wall(laid["woodpile"], [*fs.steading_rects(HW, HH, "N"), laid["retirement"]], fs.WALL_GAP_FT, _px), "the wood shed a ken off a wall"
+    assert fs.shed_off_a_wall(laid["woodpile"], [*fs.steading_rects(HW, HH, "N", 1.0), laid["retirement"]], fs.WALL_GAP_FT, _px), "the wood shed a ken off a wall"
     assert fs.joined_to_house(laid["bath"], HW, HH), "the bath a room of the house"
 
 
@@ -89,20 +89,20 @@ def test_the_wood_shed_stands_a_ken_off_a_wall_of_its_steading_or_is_refused() -
     byre = (-(HW / 2 + 3.0 + 5.5), 0.0, 11.0, 16.0)
     walls_taken = [(0.0, -HH - 6.0, 3 * HW, HH * 0.9), (HW + 6.0, 0.0, HW * 0.9, 3 * HH), (0.0, HH + 6.0, 3 * HW, HH * 0.9)]
     shed = _lay(("woodpile",), ground=walls_taken, annex=byre)["woodpile"]
-    walls = [*fs.steading_rects(HW, HH, "N"), byre]
+    walls = [*fs.steading_rects(HW, HH, "N", 1.0), byre]
     assert fs.shed_off_a_wall(shed, walls, fs.WALL_GAP_FT, _px) and sorted(shed[2:]) == [12.0, 24.0]
     assert fs.clears(shed, [HOUSE], fs.WALL_GAP_FT + fs.WOODSHED_STEP_FT - 1e-6), "a ken off the house"
     with pytest.raises(ValueError, match="wood shed"):
         _lay(("woodpile",), ground=[*walls_taken, (-HW - 6.0, 0.0, HW * 0.9, 3 * HH)])
     far = (0.0, -(HH / 2 + 3.5 + 6.0 + 8.0 + 1.5 + 6.0 + 1.0), 24.0, 12.0)
-    assert not fs.shed_off_a_wall(far, fs.steading_rects(HW, HH, None), fs.WALL_GAP_FT, _px), "past a pace out: walked into the dooryard"
-    assert not fs.shed_off_a_wall((0.0, -(HH / 2 + 3.5 + 6.0), 24.0, 12.0), fs.steading_rects(HW, HH, None), fs.WALL_GAP_FT, _px), "under a ken off"
+    assert not fs.shed_off_a_wall(far, fs.steading_rects(HW, HH, None, 1.0), fs.WALL_GAP_FT, _px), "past a pace out: walked into the dooryard"
+    assert not fs.shed_off_a_wall((0.0, -(HH / 2 + 3.5 + 6.0), 24.0, 12.0), fs.steading_rects(HW, HH, None, 1.0), fs.WALL_GAP_FT, _px), "under a ken off"
 
 
 def test_the_woodshed_stands_a_ken_off_and_the_shrine_in_its_rolled_corner() -> None:
     laid = _lay(("woodpile", "shrine"), roll=0.1)
     shed = laid["woodpile"]
-    assert sorted(shed[2:]) == [12.0, 24.0] and not fs.against_a_wall(shed, fs.steading_rects(HW, HH, "N"), fs.WALL_GAP_FT)
+    assert sorted(shed[2:]) == [12.0, 24.0] and not fs.against_a_wall(shed, fs.steading_rects(HW, HH, "N", 1.0), fs.WALL_GAP_FT)
     shrine = laid["shrine"]
     assert shrine[0] < -HW / 2 and shrine[1] < -HH / 2, "NW, the likeliest corner, rolled first"
 
@@ -120,8 +120,8 @@ def test_the_helpers_read_as_they_say() -> None:
     assert fs.weighted((("a", 0.3), ("b", 0.3)), 0.99) == "b" and fs.weighted((("a", 0.3), ("b", 0.3)), 0.1) == "a"
     assert fs.along(0.0, 4.0) == [0] and fs.along(9.0, 4.0) == [0, -4, 4, -8, 8, -9.0, 9.0] and fs.along(8.0, 4.0) == [0, -4, 4, -8, 8]
     assert fs.fixture_size("woodpile", fs.FixtureForms(), _px) == (24.0, 12.0) and fs.fixture_size("persimmon", fs.FixtureForms(), _px)[0] == 23.0
-    assert len(fs.steading_rects(HW, HH, "W")) == 2 and len(fs.steading_rects(HW, HH, None)) == 1
-    assert fs.steading_rects(HW, HH, "N")[1] == kura_rect(HW, HH, "N") == (0.0, -0.675 * HH, 0.46 * HW, 0.45 * HH), "the drawn annex (feature 280 M18)"
+    assert len(fs.steading_rects(HW, HH, "W", 1.0)) == 2 and len(fs.steading_rects(HW, HH, None, 1.0)) == 1
+    assert fs.steading_rects(HW, HH, "N", 1.0)[1] == kura_rect(HW, HH, "N", 1.0) == (0.0, -0.675 * HH, 0.46 * HW, 0.45 * HH), "the drawn annex (feature 280 M18)"
     assert list(fs.outward([(0.0, 0.0, 2.0, 2.0)], 8.0, 1)) == [(0.0, 0.0, 2.0, 2.0)], "a seat at the center stays"
     assert fs.world_fixtures({"bath": 1, "privy": 2}) == [("bath", 1), ("privy", 2)]
 
