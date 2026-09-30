@@ -367,6 +367,10 @@ cho-hanare	machi-hanare
 chobu	cho
 chodaigamae	nando-gamae
 chome	chome
+chongsheng hall	Chongsheng shrine
+chongsheng halls	Chongsheng shrine
+chongsheng shrine	Chongsheng shrine
+chongsheng shrines	Chongsheng shrine
 chongzhen	Chongzhen era
 chongzhen era	Chongzhen era
 chonin	chonin
@@ -1081,6 +1085,9 @@ goyobeya	goyobeya
 goyōba	goyoba
 goza-no-ma	goza-no-ma
 grain of the paddy	field grain
+grand abbot	grand abbot
+grand abbots	grand abbot
+grand abbots'	grand abbot
 grand canal	Grand Canal
 grass carp	grass carp
 grass hill	kusayama
@@ -1856,6 +1863,8 @@ linear villages	ressen
 ling canal	Lingqu
 lingnan	Lingnan
 lingqu	Lingqu
+lingxing gate	lingxing gate
+lingxing gates	lingxing gate
 lion-dog	lion-dog
 lion-dogs	lion-dog
 lishe	gongxiefang
@@ -2005,6 +2014,8 @@ ming dynasty	Ming dynasty
 ming taizu	Taizu
 ming-dynasty	Ming dynasty
 ming-qing	Qing dynasty
+minglun hall	Minglun hall
+minglun halls	Minglun hall
 ministry of rites	Ministry of Rites
 minka	minka
 mino	Mino
@@ -2406,6 +2417,7 @@ post-station	shukuba
 post-stations	shukuba
 postern	postern
 preceptor	preceptor
+preceptor's	preceptor
 preceptors	preceptor
 precinct	precinct
 precincts	precinct
@@ -2935,6 +2947,8 @@ staking frame	staking frame
 staking frames	staking frame
 stand age	forest stand
 stand density	forest stand
+state altar	state altar
+state altars	state altar
 state cult	state cult
 state cult's	state cult
 state shinto	State Shinto
@@ -3648,6 +3662,8 @@ zongjia	zongjia
 zooplankton	zooplankton
 zuiie-chi	jōgōe-chi
 zuku	zuku
+zunjing pavilion	Zunjing pavilion
+zunjing pavilions	Zunjing pavilion
 zuo zhuan	Zuo Zhuan
 zushi nikai	half-story
 zushi-nikai	half-story

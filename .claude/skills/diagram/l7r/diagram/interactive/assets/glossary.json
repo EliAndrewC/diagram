@@ -8399,7 +8399,8 @@
   "def": "A cleric of one of the setting's Orders; every town has one preceptor per Order, and a town preceptor serves in a town monastery, where the Order's monks live under them.",
   "variants": [
    "preceptor",
-   "preceptors"
+   "preceptors",
+   "preceptor's"
   ]
  },
  "Sōtō": {
@@ -13419,6 +13420,51 @@
    "Republican era",
    "Republican-era",
    "Republican"
+  ]
+ },
+ "lingxing gate": {
+  "def": "The ceremonial gateway at the front of a Chinese Confucian temple, first on the temple's axis, before the Dacheng gate.",
+  "variants": [
+   "lingxing gate",
+   "lingxing gates"
+  ]
+ },
+ "Minglun hall": {
+  "def": "The lecture hall of a Chinese Confucian official school, on the school's own axis beside or behind its temple.",
+  "variants": [
+   "Minglun hall",
+   "Minglun halls"
+  ]
+ },
+ "Chongsheng shrine": {
+  "def": "The rear shrine or hall of a Chinese Confucian temple, standing behind its main hall, the Dacheng Hall.",
+  "variants": [
+   "Chongsheng shrine",
+   "Chongsheng hall",
+   "Chongsheng shrines",
+   "Chongsheng halls"
+  ]
+ },
+ "Zunjing pavilion": {
+  "def": "The library pavilion of a Chinese Confucian official school, last on the school's axis.",
+  "variants": [
+   "Zunjing pavilion",
+   "Zunjing pavilions"
+  ]
+ },
+ "grand abbot": {
+  "def": "In this setting, the head of one of the Orders across a domain, serving in the Order's sovereign temple in the domain capital; every domain capital keeps at least two, above the provincial abbots of its provincial cities.",
+  "variants": [
+   "grand abbot",
+   "grand abbots",
+   "grand abbots'"
+  ]
+ },
+ "state altar": {
+  "def": "In Ming and Qing China, an altar at a seat of local government where the state's own sacrifices were made - to the gods of soil and grain, to wind, clouds, thunder, rain, mountains and rivers, and to the unquiet dead; the gazetteers set each toward its own side of the seat, several outside a gate.",
+  "variants": [
+   "state altar",
+   "state altars"
   ]
  }
 }
