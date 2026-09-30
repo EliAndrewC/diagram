@@ -2617,6 +2617,8 @@ scattered farmstead	sankyoson
 scattered-farmstead	sankyoson
 schistosomiasis	schistosomiasis
 scour	scour
+screen gate	screen gate
+screen gates	screen gate
 screen wall	screen wall
 screen walls	screen wall
 se	se
@@ -2827,6 +2829,7 @@ soffits	soffit
 sogamae	sogamae
 sokohi	sokohi
 solidity	solidity
+son of heaven	Son of Heaven
 song dynasty	Song dynasty
 song yingxing	Song Yingxing
 song-dynasty	Song dynasty

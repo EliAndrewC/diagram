@@ -28,7 +28,9 @@ class OfficeHall(Kind):
     could burn, and many did (the Sado magistracy was rebuilt five times, though Takayama's never burned),
     which, this project judges, is why the documents and the tax grain are kept in storehouses of their own.
 
-    Note: The hall's form and its place follow the record. The day office and official study behind the dais
+    Note: The hall's form follows the record; its place in the front court, with the residence behind, is the
+    Chinese yamen's order, and for the Japanese form a deliberate simplification, since at Takayama the residence
+    stood beside the office, not behind it. The day office and official study behind the dais
     are this project's reading of what the block must hold, since no page read names them. That it out-sizes the
     residence follows Takayama, the one office measured building by building (about 8,100 sq ft against 6,400); no
     second office gives an area for any building, and why the papers and grain went to storehouses is this
@@ -470,11 +472,13 @@ class KneelingPositions(Kind):
     and landlords behind on one side and the plaintiff behind on the other.
 
     Note: Commoners kneeling on straw mats below the raised hall follow the record. The arrangement of the
-    mats is attested only at Edo, so carrying it to a county court is a guess, and the mats' size is this
-    project's own figure.
+    mats is attested only at Edo; a Chinese county court at Neixiang marked only two places, kneeling stones
+    for the plaintiff to the east and the defendant, so carrying the Edo arrangement to a county court is a
+    guess, and the mats' size is this project's own figure.
 
-    Caveat: The arrangement of the mats is attested only at Edo, so carrying it to a county court is a guess,
-    and the mats' size is this project's own figure.
+    Caveat: The arrangement of the mats is attested only at Edo; a Chinese county court at Neixiang marked only
+    two places, kneeling stones for the plaintiff to the east and the defendant, so carrying the Edo arrangement
+    to a county court is a guess, and the mats' size is this project's own figure.
 
     Name: kneeling positions
     Covers: the straw mats on the hearing court and their label

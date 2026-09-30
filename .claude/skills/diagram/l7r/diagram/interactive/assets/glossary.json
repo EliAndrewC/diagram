@@ -13162,5 +13162,18 @@
   "variants": [
    "cluster's spine"
   ]
+ },
+ "Son of Heaven": {
+  "def": "The title of the Chinese emperor, who ruled as heaven's appointee; an old ritual order gave his palace five gates, which a county yamen's five gates echo.",
+  "variants": [
+   "Son of Heaven"
+  ]
+ },
+ "screen gate": {
+  "def": "The fourth of the five gates on a Chinese county yamen's axis, between the ceremonial gate and the inner residence gate.",
+  "variants": [
+   "screen gate",
+   "screen gates"
+  ]
  }
 }

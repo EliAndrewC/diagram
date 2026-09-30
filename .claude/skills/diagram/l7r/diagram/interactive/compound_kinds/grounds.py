@@ -63,7 +63,8 @@ class InnerCourt(Kind):
 
     Note: The household inside the compound follows the record; the residence-behind-the-office order is
     Chinese regulation (Neixiang), while the Japanese pages read show no front-and-rear order - at Takayama the
-    residence stood beside the office, to the west. The two-court split and the formal garden south of the
+    residence stood beside the office, to the west, so drawing it behind in a Japanese-led plan is a deliberate
+    simplification. The two-court split and the formal garden south of the
     reception rooms follow the record. That a household's storehouse stood behind the house is read, at the Higuchi
     house; the rest of the service strip along the shady north rear is this record's own reasoning from where the
     formal garden sat, not something a source describes.
@@ -414,7 +415,7 @@ class CourtDivider(Kind):
     Why: The split between the courts is the split between state and home: the office and its public business
     in front, the household behind, with only the one door between them.
 
-    Note: The internal wall between the two courts follows the Chinese record, where regulation put the office in front and the residence behind an inner residence gate; for Japanese compounds that front-and-rear order is on no page read, and at Takayama the residence stood beside the office rather than behind it. No source measures the divider: the wall's
+    Note: The internal wall between the two courts follows the Chinese record, where regulation put the office in front and the residence behind an inner residence gate; for Japanese compounds that front-and-rear order is on no page read, and at Takayama the residence stood beside the office rather than behind it, so drawing a Japanese compound's residence behind its office is a deliberate simplification. No source measures the divider: the wall's
     2 ft thickness is this project's own figure.
 
     Caveat: No source measures the divider: the wall's 2 ft thickness is this project's own figure.
@@ -642,8 +643,8 @@ class WeaponRack(Kind):
 
 class Nakamon(Kind):
     """
-    What: The nakamon - the one narrow household door in the wall between the outer and inner courts, on the main
-    axis directly behind the office hall.
+    What: The nakamon - the one narrow household door in the wall between the outer and inner courts, set
+    directly behind the office hall.
 
     Why: The internal gate between the courts is the hinge between state and home. Official business stops at the
     office hall; the family, its servants and the household's own guests of rank pass this door into the private
@@ -652,11 +653,11 @@ class Nakamon(Kind):
     Note: The gate between the two courts follows the Chinese record, where the inner residence gate is one
     of Neixiang's five; no Japanese page read gives the front-and-rear order, and at Takayama the residence
     stood beside the office, not behind it. Who passes the gate, and the hall screening the private court,
-    are this project's own reading; no page read says either. Its seat on the main axis directly behind the
-    office hall is the drawing program's own placement, not a recorded custom, and no source measures the
-    household door: its 8 ft width is this project's own figure.
+    are this project's own reading; no page read says either. Our plans keep no fixed central axis. Its seat
+    directly behind the office hall is the drawing program's own placement, not a recorded custom, and no source
+    measures the household door: its 8 ft width is this project's own figure.
 
-    Caveat: Its seat on the main axis directly behind the office hall is the drawing program's own placement, not
+    Caveat: Its seat directly behind the office hall is the drawing program's own placement, not
     a recorded custom, and no source measures the household door: its 8 ft width is this project's own figure.
 
     Name: nakamon
