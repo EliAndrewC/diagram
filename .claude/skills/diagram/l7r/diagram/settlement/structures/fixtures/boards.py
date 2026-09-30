@@ -22,8 +22,8 @@ class BoardsMixin:
         M['fire_towers'] (an overlap-checked struct: it must stand clear of the wall, roads, and
         buildings) and reserves a small no-build block (it needs clear sightlines). Place it among the
         laborer/merchant blocks. The history is research/urban-features.html 'Fire watch towers and firefighting
-        gear (hinomi yagura)'; the rules are research/rendering/urban-features.html 'How our maps draw a town's
-        fire watch and fire gear'."""
+        gear (hinomi yagura)'; the rules are research/rendering/urban-features.html 'How our maps draw fire
+        watch towers and firefighting gear (hinomi yagura)'."""
         if tw is None:
             tw = self.px(26)  # ~26 ft square, a town-calibrated glyph: no tower's footprint is on any page read (convention)
         h = tw / 2

@@ -695,7 +695,8 @@ class Door(Kind):
     outside to the kitchen - a word the dictionaries date from 1666; who came in by it is told only
     by pages of today, so the map says nothing of it. A guest's arrival
     comes across open ground to its door; a servants' row turns its doors inward, into the compound; and a
-    plastered storehouse keeps outer doors faced in earth and plaster so that fire cannot get in.
+    plastered storehouse might face its outer doors in earth and plaster, and in the great fires of the Edo
+    period fire often never reached inside.
 
     Note: The kitchen door, the inward-facing doors of a servants' row, the plastered storehouse doors and a
     guest's door onto open ground follow the record; a guest's door drawn opening into a garden instead of a court is a guess. The kitchen door's place on its earth floor, a second outside door on a kitchen, and the route by which food reached the

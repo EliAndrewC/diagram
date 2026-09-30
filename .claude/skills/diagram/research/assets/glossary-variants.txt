@@ -594,7 +594,6 @@ desire paths	desire path
 desire-line	desire path
 detached territories	detached territory
 detached territory	detached territory
-detached village grain	village grain
 detritus	detritus
 dharma hall	dharma hall
 dharma halls	dharma hall
@@ -1824,8 +1823,10 @@ legibility floors	legibility floor
 leping	Leping
 levee	levee
 levees	levee
+levy store	levy storehouse
 levy storehouse	levy storehouse
 levy storehouses	levy storehouse
+levy stores	levy storehouse
 li	li
 li river	Li River
 liberties	liberty
@@ -3396,7 +3397,6 @@ vermilion-seal land	shuinchi
 vermilion-seal lands	shuinchi
 vff	VFF
 village district	village district
-village grain	village grain
 visiting grave	visiting grave
 visiting graves	visiting grave
 volatile	volatiles

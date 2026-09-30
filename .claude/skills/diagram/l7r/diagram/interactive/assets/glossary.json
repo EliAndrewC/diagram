@@ -9212,6 +9212,8 @@
   "variants": [
    "levy storehouse",
    "levy storehouses",
+   "levy store",
+   "levy stores",
    "unjo-gura"
   ]
  },
@@ -10482,13 +10484,6 @@
   "def": "The older romanized spelling of Henan, the province on the middle Yellow River in north China; the spelling 1920s-1930s surveys such as Buck's use.",
   "variants": [
    "Honan"
-  ]
- },
- "village grain": {
-  "def": "The loose spacing of a farming village: houses stand apart, each among its own plots, with open field between them rather than walls shared along a street.",
-  "variants": [
-   "village grain",
-   "detached village grain"
   ]
  },
  "yabusame": {
