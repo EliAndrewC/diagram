@@ -1,0 +1,38 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "41d2d2cde",
+    "label": "287-start",
+    "utc": "20260929T031041Z"
+  },
+  "binding": "04cdde45831516a1ddf15eba160986129ed7934292cf352bc0a632b075241b0d",
+  "criteria": {
+    "commensurate": "Not decidable on the case as written. It argues +13% (3.2 s) over main, but that figure is net of about 4.5 s saved on seed 39 by the route memo in ways/serve.py. That memo is a byte-identical cache, independent of the guarantees, and would speed main just as much. Against main the guarantees cost +2.4/+3.1/+1.7 s on seeds 4/25/47 (+47%) and about +8.4 s (+43%) gross over the four seeds. None of the four reference seeds re-rolls on main (every main stage but seed 39 web matches start), so the snapshot shows the guarantees' cost and none of the re-roll savings. The number to judge is +43%, weighed against the gate's 228.6 s saved and the re-rolls removed (8 of 53 maps), stated by a rewritten explanation.",
+    "necessary": "Yes for the guarantees themselves. The GM asked that every rule be guaranteed by the placement algorithm rather than just happening to work on particular seeds (request.md; spec FR-001, FR-002), and the growth is in the stages that now do that work: homesteads (seat_the_rest and access_corridor, 1,122 corridor searches on seed 4, 2.1 of 5.0 profiled s), web (settle_the_web and the straggler pass), hinterland and field. The notice and windbreak drops are finished-map work that the guarantees replaced.",
+    "no_way_around": "Open. The two recovery passes are real (35.0 -> 29.3 s, byte-identical), and the full-pitch-first seat lattice was measured and declined as a change of form. But the session names a lever it did not measure (dropping the straggler footpaths), and the seed 4 homesteads profile at 6e8322e3a shows the exhaustive seat pass making 779 bundle placements and 1,122 corridor searches to seat 15 households. Whether a cheaper refusal can come before the corridor search is not shown either way. To settle it: measure the straggler lever, and time the seat pass with the corridor search asked only of offers that pass every cheaper refusal."
+  },
+  "end": {
+    "commit": "6e8322e3a",
+    "label": "287-end",
+    "utc": "20260930T020325Z"
+  },
+  "environment": "local",
+  "feature": "287-placer-guarantees",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "f70424b3-a8eb-45cf-8472-6eb804c5e7c2",
+    "utc": "20260930T021139Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "seeds": {
+      "25": 55.3,
+      "39": 21.7,
+      "4": 24.1,
+      "47": 31.0
+    },
+    "total_pct": 32.5
+  },
+  "note": "Adjudicated on reviewer runs, not on the explanation: main and end alternated in detached worktrees (see the band-1 confirmation). Band 3 also owed: the GM's sign-off at a terminal; total +32.5% and every seed over 20%.",
+  "verdict": "cannot-determine"
+}
