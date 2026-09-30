@@ -418,6 +418,9 @@ clone	clonal
 clones	clonal
 closed canopy	closed-canopy
 closed-canopy	closed-canopy
+clothier	clothier
+clothier's	clothier
+clothiers	clothier
 cluster's spine	cluster's spine
 coefficient of variation	coefficient of variation
 coke	coke
@@ -1217,6 +1220,9 @@ hereditary temples	hereditary temple
 hexi	Hexi Corridor
 hexi corridor	Hexi Corridor
 hidenin	hidenin
+high loom	high loom
+high looms	high loom
+high-loom	high loom
 high-volatile	volatiles
 hikae-no-ma	hikae-no-ma
 hikan	hikan
@@ -2200,6 +2206,7 @@ ninomaru	ninomaru
 ninsokusashi	ninsokusashi
 nippo jisho	Nippo Jisho
 nipponica	Nipponica
+nishijin	Nishijin
 niwa	niwa
 noborigama	noborigama
 nodame	nodame
@@ -3658,6 +3665,7 @@ zennoh	Zennoh
 zhalan	zhalan
 zhalou	zhalou
 zhang	zhang
+zhen	zhen
 zhengde	Zhengde
 zhengtong	Zhengtong
 zhengyi	Zhengyi

@@ -13521,5 +13521,33 @@
   "variants": [
    "chaya"
   ]
+ },
+ "clothier": {
+  "def": "A maker and seller of cloth, who had it woven in their own house or put the work out to farm households to weave in the slack farming season. The setting's farming county has a local clothier among its specialized trades.",
+  "variants": [
+   "clothier",
+   "clothiers",
+   "clothier's"
+  ]
+ },
+ "zhen": {
+  "def": "A Chinese market town: from the Song dynasty on, a trading settlement below the county seat, counted with the shi among the urban settlements that grew with commerce.",
+  "variants": [
+   "zhen"
+  ]
+ },
+ "Nishijin": {
+  "def": "The weaving quarter of Kyoto. It grew up after the Onin war on the site of the western army's camp, which gave it its name, and its high-loom weavers formed a guild there.",
+  "variants": [
+   "Nishijin"
+  ]
+ },
+ "high loom": {
+  "def": "The tall loom (takabata) on which patterned silks were woven; in Kyoto it was the loom of the Nishijin weavers.",
+  "variants": [
+   "high loom",
+   "high-loom",
+   "high looms"
+  ]
  }
 }
