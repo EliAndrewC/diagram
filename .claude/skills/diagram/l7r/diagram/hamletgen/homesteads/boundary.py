@@ -210,7 +210,10 @@ class SiteCorridors:
         # ONE LOOKUP FOR ALL THE POINTS (feature 276): every point lies in the points' own box, so the items the grid returns
         # for that box include every item near any one of them - nine lookups a rectangle were 320,469 on the rescue
         # scenario. The same distance and containment tests decide.
-        if any(seg_dist(x, y, a, b) < clr for a, b, clr, _x0, _y0, _x1, _y1 in self.full.near(cx_, cy_, pad) for x, y in pts):
+        # ...and a point outside an item's box, widened by its clearance, stands farther than the clearance: it is passed
+        # without the distance (feature 287 perf: 138,229 distances on the reference seed 4's seating, most of them points
+        # the box already answers for)
+        if any(x0 <= x <= x1 and y0 <= y <= y1 and seg_dist(x, y, a, b) < clr for a, b, clr, x0, y0, x1, y1 in self.full.near(cx_, cy_, pad) for x, y in pts):
             return True
         seen: set[int] = set()
         for ring, verts, bx0, by0, bx1, by1 in self.rings.near(cx_, cy_, pad):

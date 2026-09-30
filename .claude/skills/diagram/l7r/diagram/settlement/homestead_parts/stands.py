@@ -10,7 +10,7 @@ from ._helpers import _BELT_GAP_FT, _belt_axis
 from .bamboo_keepout import copse_bamboo_reach, grown_ring
 from .bamboo_keepout import stand_spares_seats as stand_spares_seats
 from .belt_law import settle_the_belt
-from .grove_blocks import GroveBlocks, Seats
+from .grove_blocks import BankNear, GroveBlocks, Seats
 from .groves import RANK_JITTER_FT, bamboo_mark, crown_lift
 
 if TYPE_CHECKING:
@@ -209,26 +209,6 @@ def record_box(g: dict[str, Any], box: Box) -> None:
     """Write `box` (x0, y0, x1, y1) into a grove record's `x`, `y`, `w`, `h`, at the record's grain."""
     g["x"], g["y"] = round((box[0] + box[2]) / 2, 1), round((box[1] + box[3]) / 2, 1)
     g["w"], g["h"] = round(box[2] - box[0], 1), round(box[3] - box[1], 1)
-
-
-class BankNear:
-    """`near`'s index when the points have a BANK (feature 261, settlement-review of Kashikawa): a clump is near a point
-    only within `reach` of it AND on its side of `barriers` - three dooryard-copse clumps stood 79-86 ft from a house as
-    the crow flies, across the brook from every farmhouse, where the copse is the trees "in the gaps between the houses".
-    Asked per clump like `Seats.too_near`."""
-
-    def __init__(self, points: Any, reach: float, barriers: Any) -> None:
-        from .._geom import PointGrid
-
-        self.reach = reach
-        self.points = PointGrid(max(reach, 1.0))
-        self.points.extend([((float(p[0]), float(p[1])), float(p[0]), float(p[1]), float(p[0]), float(p[1])) for p in points])
-        self.barriers = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for a, b in barriers]
-
-    def too_near(self, x: float, y: float) -> bool:
-        from .._geom import segments_cross
-
-        return any(math.dist((x, y), it[0]) <= self.reach and not any(segments_cross((x, y), it[0], a, b) for a, b in self.barriers) for it in self.points.near(x, y, self.reach))
 
 
 class StandsMixin:

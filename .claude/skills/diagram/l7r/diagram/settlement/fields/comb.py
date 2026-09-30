@@ -32,7 +32,31 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
-def hem_on_water(poly: Poly, wet: Sequence[tuple[Any, float]], pond: Any) -> bool:
+class WetLines:
+    """The `(polyline, half-width)` pairs `hem_on_water` asks, each segment filed once by its box widened by its half-width
+    (`seg_reach_index`), so a plot asks only the segments whose widened box meets its own box (feature 287 perf: the
+    coarse-grain top-up asks the whole wild middle, 558 plots on the reference seed 4, and each walked every ditch segment
+    on the map - 35,000 `quad_hits_seg`). EXACT: a stroke that meets a plot has a point within its half-width of the
+    plot, so its widened box meets the plot's box; a segment it skips could not have hit, and `any` does not care about
+    order."""
+
+    __slots__ = ("grid",)
+
+    def __init__(self, wet: Sequence[tuple[Any, float]]) -> None:
+        self.grid = seg_reach_index([([(float(q[0]), float(q[1])) for q in pl], float(hw)) for pl, hw in wet], 0.0)
+
+    def hit(self, poly: Poly) -> bool:
+        x0, y0 = min(q[0] for q in poly), min(q[1] for q in poly)
+        x1, y1 = max(q[0] for q in poly), max(q[1] for q in poly)
+        for a, b, hw, bx0, by0, bx1, by1 in self.grid.near((x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0) / 2):
+            if bx1 < x0 or bx0 > x1 or by1 < y0 or by0 > y1:
+                continue
+            if quad_hits_seg(poly, a, b, hw):
+                return True
+        return False
+
+
+def hem_on_water(poly: Poly, wet: Sequence[tuple[Any, float]] | WetLines, pond: Any) -> bool:
     """Does this dry-hem plot lie across a watercourse or over the pond?
 
     LIFTED OUT OF `_comb_draw_hem` (feature 146, GM 2026-08-28 on inner functions and testability). The
@@ -41,7 +65,7 @@ def hem_on_water(poly: Poly, wet: Sequence[tuple[Any, float]], pond: Any) -> boo
     straight across a stream that had been authored earlier (Ubame's). The stream arm and the pond arm are
     different geometry and want asking separately, which through the method meant building a whole comb net.
     """
-    if any(quad_hits_seg(poly, pl_[i], pl_[i + 1], hw_) for pl_, hw_ in wet for i in range(len(pl_) - 1)):
+    if (wet if isinstance(wet, WetLines) else WetLines(wet)).hit(poly):  # a caller asking many plots hands the index in
         return True
     return bool(pond is not None and point_quad_dist(pond[0], pond[1], poly) < max(pond[2], pond[3]))
 
@@ -349,8 +373,10 @@ class CombMixin:
             # the plot's plow boundary - the crop stops at the bank, and a bund is the thing that stops it.
             _wet.append(([(float(q[0]), float(q[1])) for q in _src_brook], 9.0 / 2 + 3.0))
 
+        _wet_lines = WetLines(_wet)  # filed once: every hem and reserve plot asks it
+
         def _hem_on_water(poly: Poly) -> bool:
-            return hem_on_water(poly, _wet, _wpond)
+            return hem_on_water(poly, _wet_lines, _wpond)
 
         def _refused(poly: Poly) -> bool:
             # the crop stops at the bank - and a plot the registry of what stands refuses is not offered (feature 287, water

@@ -418,7 +418,12 @@ def _fabric_hits(run: Poly, fabric: Sequence[Poly], gap: float) -> int:
     return sum(1 for poly in fabric if _crosses_fabric(run, [poly], gap))
 
 
-def _crosses_fabric(run: Poly, fabric: Sequence[Poly], gap: float) -> bool:
+def poly_box(poly: Poly) -> tuple[float, float, float, float]:
+    """(x0, y0, x1, y1) of a polygon's vertices - the box `_crosses_fabric` prefilters by."""
+    return min(p[0] for p in poly), min(p[1] for p in poly), max(p[0] for p in poly), max(p[1] for p in poly)
+
+
+def _crosses_fabric(run: Poly, fabric: Sequence[Poly], gap: float, boxes: Sequence[tuple[float, float, float, float]] | None = None) -> bool:
     """Does this polyline pass within `gap` of anything already standing?
 
     The clip is not self-verifying: `clip_to_clear` shortens a run at the first obstruction, and a
@@ -439,10 +444,12 @@ def _crosses_fabric(run: Poly, fabric: Sequence[Poly], gap: float) -> bool:
     # every polygon. A crossing needs the two boxes to meet, and each distance below `gap` needs them within `gap` of each
     # other, so a polygon - or a run segment - whose box, widened by `gap`, misses the other's cannot answer True; the same
     # tests decide the rest.
+    # ...and a caller asking many runs of one fabric hands in each polygon's box (`boxes`, parallel to `fabric`, `poly_box`),
+    # taken once (feature 287 perf: the straggler pass re-derived every polygon's box per candidate, 70% of this test)
     rx0, ry0 = min(p[0] for p in run) - gap, min(p[1] for p in run) - gap
     rx1, ry1 = max(p[0] for p in run) + gap, max(p[1] for p in run) + gap
-    for poly in fabric:
-        px0, py0, px1, py1 = min(p[0] for p in poly), min(p[1] for p in poly), max(p[0] for p in poly), max(p[1] for p in poly)
+    for n, poly in enumerate(fabric):
+        px0, py0, px1, py1 = poly_box(poly) if boxes is None else boxes[n]
         if px1 < rx0 or px0 > rx1 or py1 < ry0 or py0 > ry1:
             continue
         for k in range(len(run) - 1):

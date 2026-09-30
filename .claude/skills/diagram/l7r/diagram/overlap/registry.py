@@ -180,8 +180,12 @@ def box_of(poly: Sequence[Sequence[float]]) -> Box:
 
 
 def pair_forbidden(a: Extent, b: Extent, priv: Iterable[Any] | set[Any], box_a: Box | None = None, box_b: Box | None = None) -> bool:
-    """THE predicate: do `a` and `b` overlap where the matrix forbids it? Permission first (cheap), then the boxes, then
-    the separating axes (touching edges do not count)."""
+    """THE predicate: do `a` and `b` overlap where the matrix forbids it? The boxes first where they are handed in (four
+    comparisons), then the permission, then the separating axes (touching edges do not count). A conjunction of pure
+    tests, so the order changes no verdict: the registry's cells hand `conflicts` mostly pairs whose boxes miss, and the
+    permission's class lookups were asked of every one of them first (feature 287 perf: 76,125 on the reference seed 4)."""
+    if box_a is not None and box_b is not None and (box_a[2] < box_b[0] or box_a[0] > box_b[2] or box_a[3] < box_b[1] or box_a[1] > box_b[3]):
+        return False
     if pair_permitted(a, b, priv):
         return False
     ba = box_a or box_of(a[1])

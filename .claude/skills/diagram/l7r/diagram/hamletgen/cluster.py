@@ -42,13 +42,17 @@ def back_fouled(anchor: Pt, out: Pt, dep: float, dry_plots: Sequence[Poly], reac
     ax, ay = -out[1], out[0]
     hit = 0
     total = 0
+    # EACH PLOT COPIED AND SPANNED ONCE, NOT PER SAMPLE (feature 287 perf: 110,000 ray tests on the reference seed 4's seat,
+    # each copying its ring). A ray test counts an edge only where `(yi > py) != (yj > py)`, so a point outside a ring's
+    # [lowest, highest) y can count none and is outside it - the same verdict, without the walk.
+    rings = [(min(q[1] for q in r), max(q[1] for q in r), r) for r in (list(poly) for poly in dry_plots) if r]
     for i in range(samples):
         t = (i + 0.5) / samples
         for lat in (-0.5, 0.0, 0.5):
             px = anchor[0] + out[0] * dep * reach * t + ax * dep * lat
             py = anchor[1] + out[1] * dep * reach * t + ay * dep * lat
             total += 1
-            hit += any(point_in_poly(px, py, list(poly)) for poly in dry_plots)
+            hit += any(y0 <= py < y1 and point_in_poly(px, py, r) for y0, y1, r in rings)
     return hit / total
 
 

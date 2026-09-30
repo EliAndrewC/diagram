@@ -7,6 +7,7 @@ from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_closest, seg_dist
+from l7r.diagram.settlement._geom.indexes import seg_reach_index
 from l7r.diagram.settlement.water_ways.lanes import reaches_dooryard
 from l7r.diagram.sitegen.geom import crop_polys, unit
 
@@ -24,7 +25,7 @@ from ..consts import (
 from ..plan import SitePlan
 from .checks import stream_segs
 from .clearance import _bends_badly, _clear_link, clear_runs
-from .fabric import _LANE_JOIN_FT, _crosses_fabric, _draw_web, _hits_a_steading, _net_segs
+from .fabric import _LANE_JOIN_FT, _crosses_fabric, _draw_web, _hits_a_steading, _net_segs, poly_box
 from .geom import _TOUCH_GAP, _drop_collinear, _net_reach, _reach, _trim_to_service, polyline_len, steading_footprints
 from .route import _route, _unjog
 from .sweeps import _FINE_CELL, _LINK_DIRECTNESS, _PATH_DIRECTNESS
@@ -192,6 +193,22 @@ def _from_arc(p: Poly, s0: float) -> Poly:
     return out
 
 
+JUNCTION_WATER_PX = 14.0
+"""How far off every watercourse a footpath's junction stands (`_serve_stragglers`): the router's own line margin."""
+
+
+def water_index(water: Sequence[tuple[Pt, Pt]]) -> Any:
+    """The watercourse segments filed once by their boxes widened by `JUNCTION_WATER_PX` (`seg_reach_index`), for
+    `near_water` (feature 287 perf: the straggler pass walked every segment for each of its targets)."""
+    return seg_reach_index([([a, b], 0.0) for a, b in water], JUNCTION_WATER_PX)
+
+
+def near_water(index: Any, q: Pt) -> bool:
+    """`min(seg_dist(q, a, b) for a, b in water) < JUNCTION_WATER_PX`, asked of the segments `index` (`water_index`) files
+    near q: a segment whose widened box does not hold q stands farther than the margin from it."""
+    return any(bx0 <= q[0] <= bx1 and by0 <= q[1] <= by1 and seg_dist(q[0], q[1], a, b) < r for a, b, r, bx0, by0, bx1, by1 in index.near(q[0], q[1]))
+
+
 _JOIN_FT = 4.0
 """The INK tolerance the one-network rule uses (`law.JOIN_TOL`, the lane law's join tolerance): two treads nearer
 than this are one network, and a footpath further off joins nothing."""
@@ -278,6 +295,18 @@ def _serve_stragglers(
     _crops = crop_polys(s)
     _exhausted: dict[int, tuple[tuple[float, float], ...]] = {}
     _steadings = steading_footprints(s.M)  # fixed for the whole pass: the fabric is drawn and the trim asks it per path
+    # WHAT THIS PASS ASKS AGAIN, ANSWERED ONCE (feature 287 perf). Nothing here moves a stream, a ford, `hard`, `water` or
+    # the fabric - the pass only draws lanes - so the brook's segments are read once, and a house's route to a target and a
+    # candidate's clear runs are the same answers on every later pass and every later house that asks them: a house the
+    # first pass could not serve asked the same 40-odd routes again on each of the next three (reference seed 47: 144
+    # routes, 47 distinct). What reads the growing network (the reach, the join, the steading tests) is still asked fresh.
+    _streams = stream_segs(s)
+    _routes: dict[tuple[object, ...], Poly] = {}
+    _runs: dict[tuple[object, ...], list[Poly]] = {}
+    _boxes: dict[int, tuple[float, float, float, float]] = {}  # each fabric polygon's box (`poly_box`), taken once
+    # ...and the watercourses filed once for the junction's 14 px test below, which walked every segment per target
+    _water_idx = water_index(water)
+
     for _pass in range(4):
         lanes = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in s.M.get("lanes", [])]
         segs = [(a, b) for ln in lanes for a, b in zip(ln, ln[1:], strict=False)]
@@ -325,6 +354,10 @@ def _serve_stragglers(
             _mine = [id(poly) for poly, owner, kind in fabric if owner is not None and math.dist(owner, c) <= 1.0 and kind in ("threshing_yards", "gardens")]
             others = [poly for poly, _owner, kind in fabric if kind not in ("commons", "village_groves")]
             passable = [poly for poly in others if id(poly) not in _mine]
+            for poly in passable:
+                if id(poly) not in _boxes:
+                    _boxes[id(poly)] = poly_box(poly)
+            _pboxes = [_boxes[id(poly)] for poly in passable]
             # The door stands clear of the steading's own wall by the same margin every other lane
             # keeps, so it is a legal starting point with the house left in the obstacle set.
             step = math.hypot(float(h["w"]), float(h["h"])) / 2 + 8.0 + FOOTPATH_FABRIC_GAP
@@ -350,7 +383,7 @@ def _serve_stragglers(
                 # sat 1.3 px off the brook's centerline - a crossing gets a plank from `stage_crossings`, an
                 # ENDPOINT on the water gets nothing, and `ways_cross_water_on_a_deck` fired on the first sample.
                 # The router keeps 14 px off every watercourse (`_route`'s line margin); the junction owes the same.
-                if water and min(seg_dist(tgt[0], tgt[1], a, b) for a, b in water) < 14.0:
+                if water and near_water(_water_idx, tgt):
                     continue
                 # The radius is generous on purpose. A steading the web could not reach is by
                 # definition one whose nearest way is already beyond the reach, so a search bounded
@@ -436,7 +469,10 @@ def _serve_stragglers(
                 # that needs a DECK rather than a plank - and it is the whole list a blanket veto got
                 # wrong (41/48 -> 26/48 on the cohort, recorded in that helper). A footpath may still
                 # cross any ditch, and may still cross the brook; it may not cross the brook at a slant.
-                routed = _route(door, tgt, hard, passable, stream_segs(s), gap=FOOTPATH_FABRIC_GAP)
+                _rk = (door, tgt, tuple(map(id, passable)))  # `passable` is this house's: its polygons, the pass's fabric
+                if _rk not in _routes:
+                    _routes[_rk] = _route(door, tgt, hard, passable, _streams, gap=FOOTPATH_FABRIC_GAP)
+                routed = list(_routes[_rk])
                 if routed:
                     cands.append(routed)
                 # THE BEND IS A FRACTION OF THE RUN, not a fixed number of feet. Offsets of 40, 80
@@ -450,7 +486,10 @@ def _serve_stragglers(
                 hit: list[Poly] = []
                 _fallback_hit: list[Poly] | None = None
                 for cand in cands:
-                    runs = clear_runs(cand, hard, WEB_HARD_GAP, step=4.0, lines=[] if cand is routed else water, tight=others, tight_margin=FOOTPATH_FABRIC_GAP, floor=20.0)
+                    _ck = (tuple(cand), cand is routed)  # `others` is the same polygons for every house (the pass's fabric)
+                    if _ck not in _runs:
+                        _runs[_ck] = clear_runs(cand, hard, WEB_HARD_GAP, step=4.0, lines=[] if cand is routed else water, tight=others, tight_margin=FOOTPATH_FABRIC_GAP, floor=20.0)
+                    runs = [list(r) for r in _runs[_ck]]
                     # A CLIPPED RUN IS A STAIRCASE OF SAMPLES, NOT A LANE (feature 134 T50, 2026-08-29).
                     # `clear_runs` walks the candidate every 4 ft and hands back the stretches that are
                     # clear, so what gets drawn is twenty-five collinear points where a footpath has two
@@ -586,7 +625,7 @@ def _serve_stragglers(
                         # the one drawn. An overlap is a rule the matrix forbids outright: a fouling cut is refused, a
                         # clean one is taken, and a clean one that bends stands only until a straight one is found (the
                         # bend is refused below, as every fold is).
-                        if _crosses_fabric(_p, passable, _TOUCH_GAP):
+                        if _crosses_fabric(_p, passable, _TOUCH_GAP, _pboxes):
                             continue
                         if not _bends_badly(_p):
                             _picked = _p
@@ -661,7 +700,7 @@ def _serve_stragglers(
                     # the orphan joiner makes when it keeps a disconnected piece rather than inventing a link.
                     # ...and a neighbor's yard or garden is fabric too (feature 287, ways W19): the path as it will be
                     # drawn - trimmed and unjogged since its cut was chosen - is asked again, at the junction margin.
-                    if _hits_a_steading(s, path, 3) or _crosses_fabric(path, passable, _TOUCH_GAP) or _bends_badly(path):
+                    if _hits_a_steading(s, path, 3) or _crosses_fabric(path, passable, _TOUCH_GAP, _pboxes) or _bends_badly(path):
                         continue
                     if not _ends_worth_walking_to(s, path, c, segs, _crops):
                         continue

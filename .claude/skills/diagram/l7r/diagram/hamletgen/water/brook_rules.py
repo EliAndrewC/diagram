@@ -206,12 +206,12 @@ def reserved_box(course: Sequence[Pt], plan: SitePlan) -> tuple[float, float, fl
       the plots it would drop are left out here by the same predicate.
 
     A view is a box, so it holds the box round them all."""
-    from l7r.diagram.settlement.fields.comb import hem_on_water  # noqa: PLC0415 - the settlement package imports late here
+    from l7r.diagram.settlement.fields.comb import WetLines, hem_on_water  # noqa: PLC0415 - the settlement package imports late here
 
     net = plan.net or {}
     paddies = [list(p["poly"]) for p in net.get("plots") or []] or [list(plan.envelope)]
     xs, ys = [float(q[0]) for r in paddies for q in r], [float(q[1]) for r in paddies for q in r]
-    wet = [([(float(x), float(y)) for x, y in course], 9.0 / 2 + 3.0)]
+    wet = WetLines([([(float(x), float(y)) for x, y in course], 9.0 / 2 + 3.0)])  # filed once, asked per hem plot
     hem = [list(p["poly"]) for p in net.get("dry_plots") or [] if not hem_on_water(p["poly"], wet, None)]
     fx = [float(q[0]) for r in [list(plan.envelope), *hem] for q in r]
     fy = [float(q[1]) for r in [list(plan.envelope), *hem] for q in r]

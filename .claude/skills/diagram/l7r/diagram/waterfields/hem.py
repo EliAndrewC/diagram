@@ -153,21 +153,42 @@ def middle_reserve(
         return []
     depth = math.hypot(W, H) * MIDDLE_DEPTH_OF_CANVAS
     deep = _dry_fields(random.Random(R.getrandbits(32)), F, run, W, H, keepout, band=(depth, depth), g=g, furrow_spread=furrow_spread, grain_drift=grain_drift, supply=supply, tract0=tract0)
-    taken = [p["poly"] for p in paddies if len(p["poly"]) >= 3] + [d["poly"] for d in drawn]
+    taken = BoxedRings([p["poly"] for p in paddies if len(p["poly"]) >= 3] + [d["poly"] for d in drawn])
     keep = [d for d in deep if not overlaps_any(d["poly"], taken)]
     return sorted(keep, key=lambda d: -F.to_uf(*_ring_mean(d["poly"]))[1])
 
 
-def overlaps_any(poly: Poly, rings: Sequence[Poly]) -> bool:
+class BoxedRings:
+    """`overlaps_any`'s rings with each one's box taken once and its cleaned polygon built at most once, the first time a
+    plot's box meets it (feature 287 perf: the wild middle's every plot re-derived every paddy's box and re-built its
+    polygon - 474 plots on the reference seed 4). The same boxes and the same polygons, so the same verdicts."""
+
+    __slots__ = ("boxes", "polys", "rings")
+
+    def __init__(self, rings: Sequence[Poly]) -> None:
+        self.rings = list(rings)
+        self.boxes = [(min(q[0] for q in r), min(q[1] for q in r), max(q[0] for q in r), max(q[1] for q in r)) for r in self.rings]
+        self.polys: list[Any] = [None] * len(self.rings)
+
+    def poly(self, k: int) -> Any:
+        from shapely.geometry import Polygon
+
+        if self.polys[k] is None:
+            self.polys[k] = Polygon(self.rings[k]).buffer(0)
+        return self.polys[k]
+
+
+def overlaps_any(poly: Poly, rings: Sequence[Poly] | BoxedRings) -> bool:
     """Does `poly` share more than a square pixel of ground with any of `rings` (a seam shared edge to edge does not count)?"""
     from shapely.geometry import Polygon
 
+    boxed = rings if isinstance(rings, BoxedRings) else BoxedRings(rings)
     a = Polygon(poly).buffer(0)
     x0, y0, x1, y1 = a.bounds
-    for r in rings:
-        if max(q[0] for q in r) < x0 or min(q[0] for q in r) > x1 or max(q[1] for q in r) < y0 or min(q[1] for q in r) > y1:
+    for k, (rx0, ry0, rx1, ry1) in enumerate(boxed.boxes):
+        if rx1 < x0 or rx0 > x1 or ry1 < y0 or ry0 > y1:
             continue
-        if a.intersection(Polygon(r).buffer(0)).area > 1.0:
+        if a.intersection(boxed.poly(k)).area > 1.0:
             return True
     return False
 

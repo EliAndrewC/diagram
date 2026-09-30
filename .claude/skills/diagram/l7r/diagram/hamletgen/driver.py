@@ -206,6 +206,7 @@ def roll_scope(spec: HamletSpec | None = None) -> Iterator[None]:
     from l7r.diagram import _census
     from l7r.diagram._memory import trim_heap
     from l7r.diagram.hamletgen import clearance
+    from l7r.diagram.hamletgen.ways.geom import reset_grounds
 
     t0 = time.time()
     ok = False
@@ -214,6 +215,7 @@ def roll_scope(spec: HamletSpec | None = None) -> Iterator[None]:
         ok = True
     finally:
         clearance.reset()
+        reset_grounds()  # ...and the worked grounds, kept per manifest (`ways.geom.memo_ground`)
         trim_heap()
         _census.record("roll", spec=_census.spec_row(spec), ok=ok, dt=round(time.time() - t0, 1))
 

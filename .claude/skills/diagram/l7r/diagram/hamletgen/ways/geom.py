@@ -373,12 +373,30 @@ def ground_key(M: Mapping[str, Any]) -> tuple[int, ...]:
     return (len(fields), len(dry), sum(len(f.get("plot_rings") or []) for f in fields))
 
 
+_GROUNDS: list[tuple[Any, dict[str, tuple[tuple[int, ...], WorkedGround]]]] = []
+"""`memo_ground`'s memos, one per MANIFEST (the manifest object held, so its identity is never reused while it is here),
+newest last and at most `_GROUNDS_MAX`; emptied when a roll ends (`reset_grounds`, from `driver.roll_scope`)."""
+_GROUNDS_MAX = 4
+
+
+def reset_grounds() -> None:
+    """Forget every manifest's worked ground - a roll's end (`driver.roll_scope`), as the clearance memo is."""
+    _GROUNDS.clear()
+
+
 def memo_ground(s: Any, tag: str, build: Any) -> WorkedGround:
     """The worked ground `build(s.M)` makes, BUILT ONCE per settlement while the registries it reads stand unchanged
     (dev/performance.md, "build the blocked ground once"): the union of a fan's 600-odd rice plots is the costly part, and
-    the web stage asks for it from five passes. Kept ON the settlement, so no other roll can ever read it."""
-    memo = s.__dict__.setdefault("_ground_memo", {})
-    key = ground_key(s.M)
+    the web stage asks for it from five passes. Kept per MANIFEST, so no other roll can ever read it - and every view of
+    one manifest shares it (feature 287 perf: the seating's view, `corridor_on_lawful_ground`'s and the settlement itself
+    each kept their own, and the reference seed 4's seating took the same 683-ring union three times, 56 ms each)."""
+    M = s.M
+    memo = next((m for owner, m in _GROUNDS if owner is M), None)
+    if memo is None:
+        memo = {}
+        _GROUNDS.append((M, memo))
+        del _GROUNDS[:-_GROUNDS_MAX]
+    key = ground_key(M)
     hit = memo.get(tag)
     if hit is not None and hit[0] == key:
         return cast(WorkedGround, hit[1])

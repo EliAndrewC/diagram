@@ -63,6 +63,10 @@ def test_the_matrix_on_a_finished_map_reads_the_same_extractor_and_pair_test() -
     assert not pair_permitted(a, b, set()) and pair_forbidden(a, b, set())
     far = element_extents("gardens", dict(GARDEN, x=900.0), {})[0]
     assert not pair_forbidden(a, far, set()), "boxes apart: no overlap"
+    from l7r.diagram.overlap.registry import box_of
+
+    assert not pair_permitted(far, b, set()), "a stranger's garden and yard: forbidden where they meet"
+    assert not pair_forbidden(far, b, set()) and not pair_forbidden(far, b, set(), box_of(far[1]), box_of(b[1])), "boxes apart, derived or handed in"
     st = Standing({})
     priv = {"x": 100.0, "y": 100.0, "r": 8, "private": True}
     st.record("wells", priv)

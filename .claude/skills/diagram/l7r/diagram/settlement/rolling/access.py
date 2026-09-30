@@ -242,11 +242,28 @@ def standing_clear(s: Settlement, a: Pt, b: Pt, memo: dict[Any, Any] | None = No
     the houses the ground test reads): the four garden sides of one seat ask the same doors of the same targets, and seed 14
     spent 136 of its 215 s asking them again (361,575 calls)."""
     memo = _standing_memo(s)[1] if memo is None else memo  # a caller asking many lines at one state hands its memo in
+    return standing_ground(s, a, b, memo) and lawful_leg(s, a, b, memo)
+
+
+def standing_ground(s: Settlement, a: Pt, b: Pt, memo: dict[Any, Any]) -> bool:
+    """`standing_clear` but for its last conjunct, the ways' ground test (`lawful_leg`), remembered the same way. The corridor
+    search asks this of every line it tries and the ways' test only of a line whose corridor its own fixtures and beds leave
+    clear (`access_corridor`): the ways' test is the dearest conjunct and refuses almost nothing the others pass (reference
+    seed 4, feature 287 perf: 1 of 1,317 lines), while the fixtures and beds refuse most of what it was asked of."""
     key = (round(a[0], 3), round(a[1], 3), round(b[0], 3), round(b[1], 3))
     hit = memo.get(key)
     if hit is None:
         hit = memo[key] = _standing_clear(s, a, b)
     return hit
+
+
+def lawful_leg(s: Settlement, a: Pt, b: Pt, memo: dict[Any, Any]) -> bool:
+    """`lawful_ground` of the line a-b, remembered with the rest of what stands (`_standing_memo`)."""
+    key = ("lawful", round(a[0], 3), round(a[1], 3), round(b[0], 3), round(b[1], 3))
+    hit = memo.get(key)
+    if hit is None:
+        hit = memo[key] = lawful_ground(s, a, b)
+    return bool(hit)
 
 
 def _standing_memo(s: Settlement) -> tuple[Any, dict[Any, Any]]:
@@ -283,9 +300,7 @@ def _standing_clear(s: Settlement, a: Pt, b: Pt) -> bool:
         # most of boxes in the long corridor's bounding box but nowhere near its line)
         if seg_box_within(a, b, (it[0], it[1], it[2], it[3]), half):
             return False
-    if not site_samples_clear(s, edge):
-        return False
-    return lawful_ground(s, a, b)
+    return site_samples_clear(s, edge)  # ...and the ways' ground test last, apart (`lawful_leg`)
 
 
 def site_edge_samples(s: Settlement, a: Pt, b: Pt) -> Iterable[Pt] | None:
@@ -392,7 +407,10 @@ def access_corridor(s: Settlement, geom: Any) -> tuple[Pt, ...] | None:
         corridor = seen[k]
         # the leg onto the tree passes unasked where it has no length, as the search passed it; every other leg is asked
         last = len(corridor) - 2
-        if all((n == last and math.dist(a, b) < 1e-6) or (fixtures_clear(s, a, b, geom) and parts_clear(s, a, b, geom)) for n, (a, b) in enumerate(legs(corridor))):
+        # ...and the ways' ground test of each leg the search asked, after its own fixtures and beds (`standing_ground`)
+        if all((n == last and math.dist(a, b) < 1e-6) or (fixtures_clear(s, a, b, geom) and parts_clear(s, a, b, geom)) for n, (a, b) in enumerate(legs(corridor))) and all(
+            (n == last and math.dist(a, b) < 1e-6) or lawful_leg(s, a, b, memo) for n, (a, b) in enumerate(legs(corridor))
+        ):
             # ...AS IT WILL BE DRAWN - from where it leaves its own threshing yard (`drawn_corridor`) - AND ONLY WHERE THE WHOLE
             # TREE STAYS LAWFUL WITH IT (feature 287 wave 6, ways W01): every joint among the tree's lanes is known here, so a
             # corridor the tree cannot take lawfully is refused now and the next tried, never found at the web's draw
@@ -486,7 +504,8 @@ def _house_candidates(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tu
 
     def clear(a: Pt, b: Pt) -> bool:
         # a strip the site's raster refused (`prime_site`) is refused by the standing ground before anything is asked
-        return memo.get(("site", a, b), ()) is not None and house_clear(a, b, geom, hgap) and standing_clear(s, a, b, memo)
+        # ...the ways' ground test left to `access_corridor`, which asks it after the fixtures and beds (`standing_ground`)
+        return memo.get(("site", a, b), ()) is not None and house_clear(a, b, geom, hgap) and standing_ground(s, a, b, memo)
 
     yard = (geom.get("boxes") or {}).get("yard")
     gap = s.px(TREAD_HALF_FT + PART_MARGIN_FT)

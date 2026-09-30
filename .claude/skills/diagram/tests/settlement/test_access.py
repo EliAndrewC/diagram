@@ -190,7 +190,7 @@ def test_a_corridor_round_the_gable_never_doubles_back_to_a_tree_in_front(monkey
 
     monkeypatch.setattr(access, "round_the_gable", gable)
     monkeypatch.setattr(access, "parts_clear", lambda *a: True)  # the SE bed at the flank door is not under test (M8)
-    monkeypatch.setattr(access, "standing_clear", lambda s_, a, b, memo=None: any(access.math.dist(p, t) < 1e-6 for t in turns for p in (a, b)))
+    monkeypatch.setattr(access, "standing_ground", lambda s_, a, b, memo=None: any(access.math.dist(p, t) < 1e-6 for t in turns for p in (a, b)))
 
     def search(tree_at: tuple[float, float], out: tuple[float, float]) -> tuple[tuple[float, float], ...] | None:
         s = _open()

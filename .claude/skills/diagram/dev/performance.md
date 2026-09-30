@@ -492,6 +492,21 @@ cost of a roll and of a gate (the full record: `specs/287-placer-guarantees/rese
   method: a direct call in the clone and in a detached worktree, research R8). The finished-map tests themselves cost
   10.4 s together: **a finished-map test's cost is the roll it reads, and that roll is shared**, so retiring one frees
   little unless it was the only reader of its map.
+- **What the guarantees cost a roll, and the part of it that was work done twice** (the feature's last perf pass,
+  2026-09-30). The guarantees made the reference bookend about a third slower than main; profiled per stage, most of the
+  rise was the shapes of this file, in the code the feature added. The same route asked again on each of the straggler
+  pass's four passes (seed 47: 144 routes, 47 distinct - `ways/serve.py` remembers them, and each candidate's clear runs,
+  for the pass); the coarse-grain top-up's 558 reserve plots each walking every ditch segment (`WetLines`) and every
+  paddy ring re-boxed and re-built per plot (`BoxedRings`); the ways' ground test asked of 1,317 corridor lines of which
+  it refused one, before the fixtures and beds that refuse most of them (`access.lawful_leg`, asked last); the copse's
+  brook barriers walked per clump (`BankNear`, 381,637 crossing tests); the same 683-ring union of the worked ground
+  taken three times in one seating, once per view of the manifest (`memo_ground`, now kept per manifest). Every lever
+  prunes or remembers; the old test decides (`tests/settlement/test_exact_pieces_287.py`), and the pool and cohort 1-20
+  came out byte-identical. The bookend went from 35.0 / 34.6 s to 29.3 / 29.0 s, against main's 25.9 / 25.5 (observed
+  2026-09-30, method: `make perf LABEL=adhoc` alternated over detached worktrees of the feature's head and of main, load
+  4.6-6.4). **What is left is the guarantees' own work**: the exhaustive seat pass offers hundreds of seats
+  for the last few households (seed 4: 523 offered, 9 taken) and each pays four bundle layouts and a corridor search;
+  its counts are the manifest's `seat_search`, so pruning offers changes the record, and was not done here.
 - **The bookends**: `287-start` total 20.9 s, median 5.2 s, worst 5.8 s (observed 2026-09-29, method: `make perf
   LABEL=287-start` before any engine change, load 1.3); the `287-end` comparison is the feature's T89, recorded in its
   plan.
