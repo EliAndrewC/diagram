@@ -9,7 +9,7 @@ reduced version when either changes significantly.
 | task type | quality | cost (`xhigh` / `medium`) | FR-011 outcome | the GM's ruling |
 |---|---|---|---|---|
 | research | the same, under the bar fixed before the key was opened (blind: both grader runs prefer `xhigh`, by 1 and 5 of 40, under the bar of 6; they DISAGREE on whether it is strongly better - run 1 no, run 2 yes; the GM, not blind: no noticeable difference) | total tokens 2.1x (output 2.4x), API time 2.2x, wall-clock 3.0x | **keep `medium`** (quality the same, cost over 1.25x) | no setting ruling: "I don't really find either of the research pages to be particularly noticeably better than the other" - a blind check asked for |
-| implementation | `xhigh` better (the GM, not blind) | output tokens 2.3x, API time 3.0x, wall-clock 2.9x | **adopt `xhigh`** on quality (the GM prefers it, with its reason) | **keep `medium` as the default**; go higher "in cases where I believe that it will be necessary for the session to really go deep and take the initiative to do research and find semi-related bugs and fix them" |
+| implementation | `xhigh` better (the GM, not blind) | total tokens 2.7x (output 2.3x), API time 3.0x, wall-clock 2.9x | **adopt `xhigh`** on quality (the GM prefers it, with its reason) | **keep `medium` as the default**; go higher "in cases where I believe that it will be necessary for the session to really go deep and take the initiative to do research and find semi-related bugs and fix them" |
 
 **Recommendation:** keep `medium`, Opus 5.5's own default, as this repository's default effort for both task types. No setting
 changes: `.claude/settings.local.json` needs no `effortLevel`, since `medium` is what a session gets without one. Raise it per session
@@ -52,6 +52,10 @@ entries to the same floor; the difference effort made was one source found, whic
   prompt and rubric were re-frozen once when the GM replaced the task, before its runs.
 - **Sequential, under memory headroom:** no two runs overlapped; each launch was gated on the shared container cgroup's working set
   (research R5 D7); none was killed at the memory cap.
+- **No leak of the arm:** run clones first carried the feature directory and, through `git clone`, the session's later commits; e2 and
+  e3 never read either (their transcripts). From e5 on, a run clone holds the start commit alone.
+- **Stalls, and the timing they touch:** a headless session that ends its turn waiting on background work is never woken - e5 three
+  times, e7 five. Each was resumed with one fixed, arm-neutral message, and each wait is a pause excluded from the wall-clock above.
 
 ## Quality
 
@@ -99,25 +103,15 @@ made moot:
 - The port's gate: `make done` green, 100% coverage, the 48-seed cohort 48/48, two review rounds, all five maps PASS; then the merge of
   feature 291 (`outputs/I-port-handoff.md` records how it resolved).
 
-**For the GM (from the port, through `escalation-check`):** (1) the storehouse annex's size is the Edo farm sheds' band (about 21-25 by
-11-14 ft), labeled a deliberate deviation from the kura sizes read (about 15 by 18 and 12 by 18 ft); sizing it as the kura re-packs every
-hamlet. (2) Sawada's sheds shipped as they are, the fix deferred.
+**Filed for later (future-work):** the record classes the storehouse annex two ways - as the farm shed (naya, feature 280 M18,
+homesteads/440) and as the kura (homesteads/120, 430) - so research is owed on which it is, and its size follows; the port kept 280's
+band. Sawada's sheds point at the existing entry that would retire the shared byre altogether (269 B16).
 
-## What went wrong, and what it cost
+## A tooling finding
 
-- **e1 void:** the launcher, run through `make`, exported make's variables into the run (`ARM=xhigh` named the arm; `MAKEFLAGS` broke two
-  of its make calls). Fixed; re-run as e2.
-- **e4 set aside:** task I's first pick (a footpath to the hamlet's burial ground) had lost its premise the day before the runs (feature
-  280 M68 removed the hamlet's own burial ground). The pre-flight had checked the future-work entry, not the engine; it now checks the code.
-  The GM replaced the task.
-- **e6 void:** the headless session failed at launch ("No messages returned from query"); re-run as e7.
-- **Stalls:** a headless session that ends its turn waiting on background work (a detached `make`, background review agents) is never
-  woken - e5 three times, e7 five. Each was resumed with one fixed, arm-neutral message and the wait excluded as a pause; a watchdog did it
-  after its two bugs were fixed (`bfs` rejects `find -newermt`; hook processes counted as work). **For any future headless work here: tell
-  the session to run long commands and review agents in the foreground.**
-- **Leaks checked and closed:** run clones first carried the feature directory and, through `git clone`, the session's later commits; e2
-  and e3 never read either (their transcripts). From e5 on, a run clone holds the start commit alone.
-- **Usage limit:** the port session stopped once at the session usage limit and was resumed after the reset.
+Headless sessions stall on this repository's own guard: `no-poll-hooks.sh` turns a foreground wait into a background one, and in a
+headless `-p` session nothing wakes a backgrounded wait. Every stall above has that shape. Filed in future-work (cross-cutting). The runs
+voided or set aside (e1, e4, e6), the task replacement and the resumes are each a line in `interventions.md`.
 
 ## Interventions
 
@@ -129,5 +123,4 @@ warnings during runs, the GM's cap and memwatch change (2026-09-30), the port an
 - n = 1 per cell. The same effort level run twice can differ a lot (the handoff); the grader's two runs agreed in direction but differed
   by 4 points in margin.
 - The GM's grading was not blind (the arms were known before the pages were read).
-- Wall-clock is confounded by host load; API time and tokens are not.
 - The thresholds (1.25x, 2x, the 6-point bar) are guesses fixed before the results, not measurements.
