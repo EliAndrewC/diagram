@@ -111,6 +111,15 @@ the pilot; the GM reads the pages in this feature's clone.
   several things; no untranslated foreign word stands in our own text. The prepass lists old-form absence notes and
   foreign script in our words; `record-style` and `record-format` report them. The grove topic's six are converted; the
   other ~720 are the sweep's.
+- **FR-026** (GM 2026-09-30): a claim of what a page we could not read says does not stand - it is read and quoted, or
+  removed with its history in a comment; the style prepass lists every sentence resting on an absence note, and
+  `record-style` rules on each. The work-yard topic's three such claims (the Kodaira yard, the Akishima lot band, the
+  Genroku house plots - all from feature 134's pass of 2026-08-28, before the read-and-quote rules) are removed; the
+  Kodaira page, which a person can open, is on the GM's download list (no. 302).
+- **FR-027** (GM 2026-09-30): kanji in our own words takes one form, `漢字 (romaji, "English meaning")`, and the style
+  prepass fails any other; a gloss whose characters or meaning changed is owed a `translation-check`.
+- **FR-028** (GM 2026-09-30): no glossary variant is a common English word ("are" wrapped as the land unit); a gate test
+  holds it - the term keeps its unambiguous forms ("ares") or is matched only as written.
 - **FR-011**: The GM's sign-off on the guide and the check MUST be an open task, and the sweep's tasks MUST NOT be
   written or started before it is ticked.
 

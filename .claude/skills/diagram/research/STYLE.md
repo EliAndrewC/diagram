@@ -123,6 +123,11 @@ highlights into questions ... I think that we need to come up with a different n
   passage its own footnote quoted is quoted by one, and anything the roster says that the section does not (a work's
   gloss, say) is carried into the text - a removal never loses a citation or a fact. (GM: *"we should never be
   removing a citation ... keep that information just not in a sources section."*)
+- **A claim about what a page we could not read says.** "A yard at Kodaira is given as 70 tsubo, from a page we could not
+  read" asserts a page's content that no one here has seen - it may be a figure an early pass took from a search summary,
+  or invented. Such a claim does not stand: the page is read and quoted (a page only a person can open goes on the GM's
+  download list, `academic-sources/TO-DOWNLOAD.md`), or the claim is removed, its history kept in a comment. An absence
+  note supports only a stated silence ("no page we read gives it") or a GUESS of our own. (GM, 2026-09-30: *"we explicitly call out pages that we assert exist and that we further assert contain data, like specific answers, but which we are saying do not load ... why it is that we believe this information is on this page or these pages in the first place if we cannot load the page ... As of now, it looks very suspicious."*)
 - **Pointer paragraphs between merged sections** ("The size ... is at X; this question asks which ...") - after a
   merge there is nothing to point at. (inferred)
 - **Shouted emphasis.** Capitals for emphasis (STAND, LARGEST, EVERY) become plain words, or bold where a number
@@ -137,8 +142,11 @@ highlights into questions ... I think that we need to come up with a different n
 - Project jargon ("arm", "belt", "appurtenance", "roll", "footprint", "tier") is replaced by the plain word where one
   exists, and glossed where it must stay. (inferred)
 - **No untranslated foreign words in our own text** - footnotes included. A page is named by what it is ("the Japanese
-  Wikipedia article on homestead groves", not "ja.wikipedia 屋敷林"); a term in its own script stands only as a gloss
-  beside its English. Quotations and originals keep their own script. (GM, 2026-09-29: *"this still has some
+  Wikipedia article on homestead groves", not "ja.wikipedia 屋敷林"). Where the characters themselves are worth showing,
+  they take ONE form: `垣根 (kakine, "hedge")` - the characters, then the reading and the English meaning in quotes; a
+  reading alone is not a translation. Where they add nothing, they are dropped. The style prepass fails any other kanji in
+  our words; `make translation-owed` lists a gloss whose characters or meaning changed, for `translation-check`.
+  Quotations and originals keep their own script. (GM, 2026-09-30: *"I don't know what that means, and I presume that 'muyashiki torokunin' is the transliteration, but that doesn't actually help me because a transliteration is not a translation ... if we always ... show a translation in the same format immediately following some kanji, then that would allow us to have a mechanical check"*) (GM, 2026-09-29: *"this still has some
   untranslated foreign words, i.e. '屋敷林' should get translated"*)
 
 - **Number follows the map.** A feature a map has one of is singular - "a settlement's notice board"; a feature it has

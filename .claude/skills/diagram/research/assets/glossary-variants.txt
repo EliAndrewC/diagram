@@ -64,7 +64,6 @@ aquifer	aquifer
 aquifers	aquifer
 aragaki	aragaki
 araiba	kawado
-are	are
 ares	are
 arresting tools	three arresting tools
 arrow bamboo	yadake

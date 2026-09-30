@@ -27,6 +27,7 @@ import sys
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import _quote_verbatim as qv  # noqa: E402
+import _style_prepass as sp  # noqa: E402
 
 RECORD = ".claude/skills/diagram/research"
 _NOTE = re.compile(r'<li data-note="([^"]+)">(.*?)</li>', re.S)
@@ -68,8 +69,13 @@ def record_pairs(root: pathlib.Path, rev: str | None) -> dict[tuple[str, str], l
         read = lambda f: _git(root, "show", f"{rev}:{f}")  # noqa: E731
     out: dict[tuple[str, str], list[tuple[str, str, str, str]]] = {}
     for f in files:
-        for key, lang, quote, original in pairs(read(f), read(f[: -len(".notes.html")] + ".originals.html")):
+        notes = read(f)
+        for key, lang, quote, original in pairs(notes, read(f[: -len(".notes.html")] + ".originals.html")):
             out.setdefault((quote, original), []).append((f, key, lang, quote))
+        # a term glossed in our own words (feature 292: `垣根 (kakine, "hedge")`) is a translation too - the meaning
+        # against the characters - in the question and in its notes
+        for chars, reading, meaning in sp.glosses(read(f[: -len(".notes.html")] + ".html")) + sp.glosses(notes):
+            out.setdefault((f'{meaning} (read {reading})', chars), []).append((f, "a term's gloss", "", meaning))
     return out
 
 

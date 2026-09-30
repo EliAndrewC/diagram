@@ -103,12 +103,16 @@ that it contradicts one; if a rule seems to, say so as a NOTE, naming both.
    ("a map's groves", one to a farmhouse - never "a map's grove"). A singular where the map has many, in a lead line
    or a statement about the map, is a FAIL with the plural; a generic singular that plainly means each one ("a grove's
    trees") is not.
+9c. **Claims resting on an unread page.** The prepass lists every sentence whose footnote is an absence note. Each may
+   state a silence ("no page we read gives it") or a GUESS of our own. One that states what a particular page SAYS - a
+   figure, a finding, "given as", "records", "it comes from" - where the note says that page could not be read, is a
+   FAIL: the claim is removed (its history to a comment) or the page read and quoted.
 9b. **Absence notes and foreign words.** The prepass lists every absence note still in the old form (its search
    visible) - each a FAIL: the date and terms go into a comment after the marker, and what was found is the visible
    text, a list of `pass` items (nested with `pass sub`) when it is several things, written in plain words (a page
    named by what it is, "the Japanese Wikipedia article on homestead groves", not its title in its own script). It also
-   lists every run of foreign script in our own words: rule on each - a FAIL with its translation, unless it is a gloss
-   standing beside its English (the kanji, its reading, its meaning).
+   lists every kanji in our own words not in the one gloss form, `垣根 (kakine, "hedge")` - each a FAIL: give the
+   reading and the meaning in that form, or drop the characters where they add nothing.
 10. **Units.** Each metric figure the prepass lists is a FAIL, with its conversion (nearest foot with a tilde; inches
     under a foot; acres or square feet for an area). Never flag a figure inside a quotation or a footnote.
 11. **Terms.** A term a newcomer would not know - grep the variant list first - that is explained neither by a tooltip

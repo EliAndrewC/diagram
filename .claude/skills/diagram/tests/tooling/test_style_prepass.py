@@ -45,7 +45,7 @@ def test_every_lead_line_is_listed_as_a_question_or_a_statement_with_its_body() 
 def test_the_report_names_each_fragment_and_says_none_when_clean(tmp_path: pathlib.Path) -> None:
     out = sp.report({"010-x.html": "<p>12 m wide</p>", "020-y.html": "<p>clean</p>"})
     assert "== 010-x.html" in out and "METRIC WITHOUT A CONVERSION (1)" in out and "12 m" in out
-    assert out.count("  none") == 13, "every empty list of both questions says none"
+    assert out.count("  none") == 15, "every empty list of both questions says none"
 
 
 def test_a_visible_gm_ruling_is_listed_and_one_in_a_comment_is_not() -> None:
@@ -91,7 +91,25 @@ def test_an_old_form_absence_note_and_foreign_script_in_our_words_are_listed() -
     assert [f.split(" - ")[0] for f in found] == ["屋敷林", "江戸時代", "屋敷林"], "the old note's visible search, not the comment's"
     assert sp.foreign_in_own_text('<p>written 垣根 in its documents; 「引用」 <!-- 註 --><span class="orig">original: 「原文」</span></p>')[0].startswith("垣根 - ")
     out = sp.report({"q.html": "<p>x</p>"}, set(), {"q.html": notes})
-    assert "ABSENCE NOTE IN THE OLD FORM (1)" in out and "FOREIGN SCRIPT IN OUR OWN TEXT (3)" in out
+    assert "ABSENCE NOTE IN THE OLD FORM (1)" in out and "KANJI WITHOUT ITS GLOSS (3)" in out
+
+
+def test_kanji_in_our_words_passes_only_with_its_reading_and_meaning() -> None:
+    """GM 2026-09-30: *"a transliteration is not a translation"* - one format, `漢字 (romaji, "meaning")`, which a script
+    can hold; the meaning is then the translation-check's to judge."""
+    ok = '<p>written 垣根 (kakine, "hedge") in its documents</p>'
+    assert sp.foreign_in_own_text(ok) == [] and sp.glosses(ok) == [("垣根", "kakine", "hedge")]
+    assert sp.foreign_in_own_text('<p>a class (無屋敷登録人, muyashiki torokunin)</p>')[0].startswith("無屋敷登録人 - "), "a reading alone is not a gloss"
+    assert sp.glosses('<p>垣根 (kakine, &quot;hedge&quot;) and "a quoted aside"</p>') == [("垣根", "kakine", "hedge")]
+
+
+def test_a_sentence_resting_on_an_absence_note_is_listed_for_a_ruling() -> None:
+    """GM 2026-09-30: a sentence saying what an unread page contains "looks very suspicious" - every sentence whose
+    footnote is an absence note is listed, for the check to rule it a silence, a guess, or a claim to cut."""
+    notes = '<li data-note="a">no publicly readable source<!-- searched 2026-09-30: x --> The page did not load.</li>\n<li data-note="b"><a href="x"><code>k</code></a> - "q"</li>\n'
+    prose = '<p>A yard at Kodaira is 70 tsubo, from a page we could not read.<sup class="fn" data-note="a"></sup> Mats covered it.<sup class="fn" data-note="b"></sup></p>'
+    assert sp.absence_sentences(prose, notes) == ["[a] A yard at Kodaira is 70 tsubo, from a page we could not read."]
+    assert "SENTENCES RESTING ON AN ABSENCE NOTE (1)" in sp.report({"q.html": prose}, set(), {"q.html": notes})
 
 
 def test_the_hook_helper_and_the_engine_name_the_same_collections() -> None:

@@ -75,6 +75,23 @@ def test_only_a_new_or_changed_pair_is_owed_and_a_moved_one_is_not(tmp_path: pat
     assert out.startswith("translation-owed: 2 ") and "  ORIGINAL:    杉" in out
 
 
+def test_a_new_term_gloss_in_our_own_words_is_owed_too(tmp_path: pathlib.Path) -> None:
+    """Feature 292 (GM 2026-09-30): kanji in our own words carries `(romaji, "meaning")`, and that meaning is a
+    translation the check reads when the characters or the meaning change."""
+    d = tmp_path
+    _git(d, "init", "-q", "-b", "main")
+    _git(d, "config", "user.email", "t@t")
+    _git(d, "config", "user.name", "t")
+    _note(d, "p/010-a.notes.html", "")
+    (d / R / "p/010-a.html").write_text('<p>written 垣根 (kakine, "hedge")</p>', encoding="utf-8")
+    _git(d, "add", "-A")
+    _git(d, "commit", "-qm", "base")
+    _git(d, "update-ref", "refs/remotes/origin/main", "HEAD")
+    assert to.owed(d) == []
+    (d / R / "p/010-a.html").write_text('<p>written 垣根 (kakine, "fence")</p>', encoding="utf-8")
+    assert [(r[1], r[4]) for r in to.owed(d)] == [("a term's gloss", "垣根")]
+
+
 def test_the_command_scopes_to_one_question(capsys) -> None:  # noqa: ANN001
     assert to.main(["--root", str(REPO), "--page", "homesteads", "--section", "010"]) == 0
     out = capsys.readouterr().out

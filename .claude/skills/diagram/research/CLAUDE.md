@@ -146,7 +146,9 @@ A note is one of THREE forms:
   visible - a list of `<span class="pass">` items (`pass sub` nested) where it is several things (feature 292, GM
   2026-09-29: the search log is for a session, so it is a comment; the reader sees the one opening sentence
   `record/absence.py` keeps, which `make record` puts in place of the marker, and the findings). The old form, the
-  search in visible parentheses, still reads and is converted by the sweep. No key, no URL; the
+  search in visible parentheses, still reads and is converted by the sweep. An absence note supports only a stated silence
+  or a GUESS of our own - never a claim of what a named page says that no one here could read (feature 292, GM
+  2026-09-30); such a claim is read and quoted, or removed. No key, no URL; the
   assertion stands, honestly labeled; the registry entry stays, marked *Not cited*. It may carry `settled DATE`
   only after two independent passes on different dates, the second using a tool the first lacked, and it re-opens
   on anything that changes what can be read. Settling is never obligatory.
