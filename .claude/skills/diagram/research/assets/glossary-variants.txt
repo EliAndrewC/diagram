@@ -246,6 +246,7 @@ bugyosho	machi-bugyosho
 buke	bushi
 buke-chi	buke-chi
 buke-yashiki	buke-yashiki
+bukeyashiki	buke-yashiki
 bund	bund
 bund tea	keihan-cha
 bunded	bund
