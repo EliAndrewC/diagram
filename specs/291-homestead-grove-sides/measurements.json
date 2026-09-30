@@ -394,5 +394,126 @@
   "observed": "2026-09-30",
   "source": ".claude/skills/diagram/l7r/diagram/interactive/classes/fields.py Holding",
   "method": "the modal now says the map draws the lot and the field, the woodland beyond not drawn"
+ },
+ "mizuguchi-r5-f1": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "answers": "8732a33e04ea",
+  "quantity": "the brook's head inside the canvas, and a row street's sharpest turn over two legs",
+  "value": 0,
+  "unit": "heads inside (the head at x -40); the sharpest two-leg turn 64 degrees",
+  "observed": "2026-09-30",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json streams[0].poly and lanes[street]",
+  "method": "the brook carried on from its approach's head up its bearing past the canvas edge (water/brook.off_the_sheet); the first street's heading change across every two consecutive legs, the double-back the per-vertex rule could not see: 64 degrees at most (it was about 175 round the false head)"
+ },
+ "kashikawa-r6-f1": {
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "answers": "a3f0a3ca1df2",
+  "quantity": "the worst lane crossing of the brook, degrees off square",
+  "value": 2.5,
+  "unit": "degrees (the rule 10)",
+  "observed": "2026-09-30",
+  "source": "pool/hamlets/kashikawa/kashikawa.json lanes against streams",
+  "method": "every lane-brook crossing measured: at most 2.5 off square; a short segment now takes a shorter square leg (ways/checks.square_crossings), and a lane squared at a crossing carries another lane's end with it (frame.reseat_ends)"
+ },
+ "kashikawa-r6-f3": {
+  "verifies": "F3",
+  "subject": "kashikawa",
+  "answers": "a3f0a3ca1df2",
+  "quantity": "notes lines contradicting the drawn crossing",
+  "value": 0,
+  "unit": "lines",
+  "observed": "2026-09-30",
+  "source": "pool/hamlets/kashikawa/kashikawa.notes.md lines 25 and 961 against pool/hamlets/kashikawa/kashikawa.json",
+  "method": "the field path crosses the brook square on its plank again, which is what the notes say"
+ },
+ "mizuguchi-r6-f1": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "answers": "a3f0a3ca1df2",
+  "quantity": "a way reaching the paddy's bund",
+  "value": 1,
+  "unit": "field path (meta.field_path branch), bridged",
+  "observed": "2026-09-30",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json meta.field_path, lanes, bridges",
+  "method": "the last-resort field path may cross one water course (ways/bund.a_way_onto_the_bund, RunOnBlocks.clear over_water); the crossings stage squares it (1.1 degrees off square at worst) and planks it"
+ },
+ "mizuguchi-r6-f2": {
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "answers": "a3f0a3ca1df2",
+  "quantity": "the brook segments within 1.6 degrees of a screen axis, over its off-sheet run",
+  "value": 0,
+  "unit": "segments (the least 3.2 degrees)",
+  "observed": "2026-09-30",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json streams[0].poly",
+  "method": "the off-sheet run nudged off the axes from the head outward (water/brook.feed_brook, _off_the_axes)"
+ },
+ "mizuguchi-r6-f3": {
+  "verifies": "F3",
+  "subject": "mizuguchi",
+  "answers": "a3f0a3ca1df2",
+  "quantity": "the second street's length, spanned over its own farms",
+  "value": 160,
+  "unit": "ft (1 farm)",
+  "observed": "2026-09-30",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json lanes[street_index 1]",
+  "method": "each street spans the farms seat_rows seated on it (s._row_street_farms), not every farm within reach"
+ },
+ "mizuguchi-r6-f4": {
+  "verifies": "F4",
+  "subject": "mizuguchi",
+  "answers": "a3f0a3ca1df2",
+  "quantity": "the notes' measured line against the manifest",
+  "value": 1,
+  "unit": "line matching",
+  "observed": "2026-09-30",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.notes.md against pool/hamlets/mizuguchi/mizuguchi.json",
+  "method": "bath rooms 2 of 3 (one unseated), 10 lanes, the field path over the brook - counted off the manifest"
+ },
+ "inashiro-r6-f1": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "answers": "a3f0a3ca1df2",
+  "quantity": "a street along the dry edge stated in the accurate why",
+  "value": 0,
+  "unit": "sentences",
+  "observed": "2026-09-30",
+  "source": ".claude/skills/diagram/l7r/diagram/interactive/classes/water_and_ways.py VillageLane; glossary dry edge",
+  "method": "the why says the line the ground gives, a levee, a dike or a fan's foot; the dry-edge street is labeled this record's reading in the note and in the gloss"
+ },
+ "kuwabata-r7-f2": {
+  "verifies": "F2",
+  "subject": "kuwabata",
+  "answers": "c6ebc8e2139f",
+  "quantity": "\"levee\" in the lane card resolving to the paddy-bund gloss",
+  "value": 0,
+  "unit": "occurrences",
+  "observed": "2026-09-30",
+  "source": ".claude/skills/diagram/l7r/diagram/interactive/classes/water_and_ways.py VillageLane",
+  "method": "the card now says \"a natural levee\", which resolves to the natural-levee gloss"
+ },
+ "inashiro-r7-f1": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "answers": "c6ebc8e2139f",
+  "quantity": "the fan's foot stated in the accurate why",
+  "value": 0,
+  "unit": "occurrences",
+  "observed": "2026-09-30",
+  "source": ".claude/skills/diagram/l7r/diagram/interactive/classes/water_and_ways.py VillageLane",
+  "method": "the why names a natural levee or a dike; the fan's foot is in the note as this record's reading"
+ },
+ "inashiro-r7-f2": {
+  "verifies": "F2",
+  "subject": "inashiro",
+  "answers": "c6ebc8e2139f",
+  "quantity": "the fan-foot gloss making one fan's arc a general pattern",
+  "value": 0,
+  "unit": "glosses",
+  "observed": "2026-09-30",
+  "source": ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary (term fan foot)",
+  "method": "the gloss now says settlements often sit along a fan's foot and at some fans line up in an arc"
  }
 }

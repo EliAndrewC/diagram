@@ -70,6 +70,49 @@ def round_the_brooks(s: Settlement) -> None:
         s.round_stream(rec, BROOK_BEND_WIDTHS * float(rec.get("w") or 7.0), hold=taps)
 
 
+RESEAT_END_FT = 30.0
+"""How far another lane's end may be carried to meet a lane squared at a crossing (a map drawing convention: a step, not a
+re-route)."""
+
+
+def reseat_ends(lanes: Sequence[Mapping[str, Any]], i: int, old: Sequence[Pt], new: Sequence[Pt], reach: float = RESEAT_END_FT) -> list[tuple[int, int, Pt]] | None:
+    """The moves that keep every other lane's end meeting lane `i` once it is re-laid from `old` to `new`: (lane, end index,
+    point on `new`) for each end that met `old` and misses `new` - None where one of them stands farther than `reach`."""
+    from l7r.diagram.settlement import seg_closest
+
+    on_new = list(zip(new, new[1:], strict=False))
+    moves: list[tuple[int, int, Pt]] = []
+    if keeps_the_ends(lanes, i, old, new):
+        return moves
+    for k, ln in enumerate(lanes):
+        p = ln.get("pts") or []
+        if k == i or len(p) < 2:
+            continue
+        for end_i in (0, len(p) - 1):
+            x, y = float(p[end_i][0]), float(p[end_i][1])
+            if not any(seg_dist(x, y, a, b) <= _TOUCH_GAP for a, b in zip(old, old[1:], strict=False)) or any(seg_dist(x, y, a, b) <= _TOUCH_GAP for a, b in on_new):
+                continue  # it did not meet the lane, or meets it still
+            q = min((seg_closest(x, y, a, b) for a, b in on_new), key=lambda c: math.dist(c, (x, y)))
+            if math.dist(q, (x, y)) > reach:
+                return None
+            moves.append((k, end_i, q))
+    return moves
+
+
+def relay_squared(s: Settlement, i: int, old: Sequence[Pt], new: Sequence[Pt]) -> bool:
+    """Re-lay lane `i` from `old` to `new` (squared at a crossing), carrying every other lane's end that met it onto it
+    (`reseat_ends`); False, and nothing changed, where one of them stands too far to carry."""
+    moved = reseat_ends(s.M.get("lanes", []), i, old, new)
+    if moved is None:
+        return False
+    for k, end_i, q in moved:
+        s.M["lanes"][k]["pts"][end_i] = [round(q[0], 1), round(q[1], 1)]
+        s.reink_lane(k)
+    s.M["lanes"][i]["pts"] = [[x, y] for x, y in new]
+    s.reink_lane(i)
+    return True
+
+
 def keeps_the_ends(lanes: Sequence[Mapping[str, Any]], i: int, old: Sequence[Pt], new: Sequence[Pt]) -> bool:
     """Does lane `i`, re-laid from `old` to `new`, still meet every other lane end that met it - within the 4 ft the web's
     one-network rule joins at (`_TOUCH_GAP`)?"""
@@ -122,9 +165,11 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
             # on cohort seed 22 the dropped one was a detour round five farm grove bands, so the chord cut across them all
             # ...NOR WHERE IT LEAVES ANOTHER LANE'S END IN THE AIR (feature 291): Mizuguchi's street was squared at a crossing
             # and the door path that met it where it had bent to the ford was left 87 ft off it, the web in two pieces
-            if len(squared) != len(pts) and not _crosses_fabric(squared, _fabric_now, 0.0) and keeps_the_ends(s.M.get("lanes", []), i, pts, squared):
-                ln["pts"] = [[x, y] for x, y in squared]
-                s.reink_lane(i)
+            if len(squared) != len(pts) and not _crosses_fabric(squared, _fabric_now, 0.0):
+                # ...AND ANOTHER LANE'S END THAT MET IT MEETS IT STILL: carried to the squared line where it stands near, else
+                # the squaring is refused (Mizuguchi: a door path left 87 ft off its street). Refused outright, a field path
+                # whose head a join lane met was left crossing the brook 45 degrees off square (Kashikawa, 2026-09-30).
+                relay_squared(s, i, pts, squared)
     s.bridges()
     if s.M.get("field_ditches"):
         if plan.field_archetype in POLDER_ARCHETYPES:

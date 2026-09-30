@@ -100,9 +100,13 @@ def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: li
     steading in its way (`thread`), joined to the connector or a street already laid (`join_to`), drawn at the street's
     tread and recorded `street` with its index. Returns the streets drawn."""
     centers = [(float(h["x"]), float(h["y"])) for h in houses]
+    # EACH STREET SPANS ITS OWN FARMS, as `seat_rows` seated them: spanned over every farm within reach, Mizuguchi's second
+    # street, set out 238 ft behind the first row, took all twelve and ran 1,642 ft for the one farm of its own
+    # (settlement-review, 2026-09-30)
+    own = getattr(s, "_row_street_farms", None) or []
     n = 0
     for k, line in enumerate(getattr(s, "_row_streets", None) or []):
-        path = thread(street_span(line, centers, reach, pad), walls, hard, water)
+        path = thread(street_span(line, own[k] if k < len(own) else centers, reach, pad), walls, hard, water)
         # A FURTHER STREET JOINS THE ROW'S STREETS, NOT THE ROAD: joined to the nearest of either, Mizuguchi's second street
         # met the connector at its head, 96 ft past the entrance board, and two of its farms left without passing the board
         # (settlement-review, 2026-09-30); only the first street takes the road

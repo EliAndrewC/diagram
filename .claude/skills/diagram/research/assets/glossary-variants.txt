@@ -2465,6 +2465,7 @@ rent bursary	rent bursary
 rent-collection bursaries	rent bursary
 rent-collection bursary	rent bursary
 ressen	ressen
+resson	ressen
 rest stop	tateba
 rest stops	tateba
 restoration	Restoration
@@ -2474,7 +2475,7 @@ retirement house	inkyo
 retirement houses	inkyo
 retiring house	retiring house
 retiring houses	retiring house
-retsuson	retsuson
+retsuson	ressen
 return flow	return flow
 reverse-kesa	kesa
 revetment	revetment

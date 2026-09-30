@@ -405,3 +405,23 @@ def test_squaring_a_crossing_keeps_every_lane_end_that_met_the_lane() -> None:
     lanes = [{"pts": [[0.0, 0.0], [100.0, 50.0], [200.0, 0.0]]}, {"pts": [[100.0, 150.0], [100.0, 50.0]]}, {"pts": [[1.0]]}]
     assert not keeps_the_ends(lanes, 0, old, [(0.0, 0.0), (200.0, 0.0)]), "the door path met the bend the squaring removed"
     assert keeps_the_ends(lanes, 0, old, [(0.0, 0.0), (100.0, 51.0), (200.0, 0.0)])
+
+
+def test_a_lane_squared_at_a_crossing_carries_the_ends_that_met_it() -> None:
+    """`reseat_ends` / `relay_squared` (feature 291): an end that met the old line and misses the new one is carried onto
+    it where it stands within the reach; one farther refuses the whole re-lay; one that still meets it is left."""
+    from l7r.diagram.hamletgen.frame import relay_squared, reseat_ends
+    from l7r.diagram.settlement import Settlement
+
+    old = [(0.0, 0.0), (100.0, 0.0)]
+    new = [(0.0, 10.0), (100.0, 10.0)]
+    lanes = [{"pts": [[0.0, 0.0], [100.0, 0.0]]}, {"pts": [[50.0, -40.0], [50.0, 0.0]]}, {"pts": [[1.0]]}]
+    assert reseat_ends(lanes, 0, old, new) == [(1, 1, (50.0, 10.0))]
+    assert reseat_ends(lanes, 0, old, [(0.0, 60.0), (100.0, 60.0)]) is None, "60 ft is past the reach"
+    assert reseat_ends(lanes, 0, old, old) == [], "nothing moved"
+    s = Settlement(400, 400, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.lane([(0.0, 0.0), (100.0, 0.0)], width=3)
+    s.lane([(50.0, -40.0), (50.0, 0.0)], width=3)
+    assert relay_squared(s, 0, old, new) and s.M["lanes"][1]["pts"][1] == [50.0, 10.0] and s.M["lanes"][0]["pts"][0] == [0.0, 10.0]
+    assert not relay_squared(s, 0, new, [(0.0, 80.0), (100.0, 80.0)])

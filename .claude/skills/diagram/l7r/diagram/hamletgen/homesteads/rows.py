@@ -433,6 +433,7 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
     door_room = s.px(DOOR_ROOM_FT)
     lane_pad = s.px(LANE_ROOM_FT) / 2
     streets: list[list[Pt]] = []
+    street_farms: list[list[Pt]] = []
     placed = 0
     s._exact_seat = True  # type: ignore[attr-defined]  # the placer nudges a row's seat, never slides it (`_place_bundle_dispersed`)
     hold_depth = fd * HOLDING_DEPTH_FRAMES.get(plan.row_line, 1.0)
@@ -463,6 +464,7 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
         # the map past its notice board (settlement-review, 2026-09-30)
         line = inside_the_sheet(planned[offsets.index(off)], (fd / 2, fd / 2, float(s.W) - fd / 2, float(s.H) - fd / 2))
         took = 0
+        mine: list[Pt] = []  # this street's farms, as seated - what its span is drawn over (`ways/street.lay_row_streets`)
         seats = [q for q in row_seats(line, frame, sides, gap) if seat_allowed(q[0][0] - hx_off, q[0][1] - hy_off, float(s.W), float(s.H), allowed)]
         for (fx, fy), side, t, nrm in seats:
             if placed >= want:
@@ -484,6 +486,7 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
             if s.try_place(hx, hy, "plain"):
                 placed += 1
                 took += 1
+                mine.append((float(s._pending_farmsteads[-1]["x"]), float(s._pending_farmsteads[-1]["y"])))
                 if hold is not None:
                     rec = s._pending_farmsteads[-1]  # the farm just seated (`try_place` queues its record)
                     holdings.append((hold, t, nrm, hold_depth))
@@ -493,9 +496,11 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
         if took:
             on_sheet = [p for p, _n in line if 0.0 <= p[0] <= s.W and 0.0 <= p[1] <= s.H]  # the sheet's part: the road runs on from its edge
             streets.append(on_sheet if len(on_sheet) >= 2 else [p for p, _n in line])
+            street_farms.append(mine)
     s._exact_seat = False  # type: ignore[attr-defined]
     s._row_holdings = holdings  # type: ignore[attr-defined]
     s._row_streets = streets  # type: ignore[attr-defined]
+    s._row_street_farms = street_farms  # type: ignore[attr-defined]
     s.M["meta"]["row_streets"] = len(streets)
     s.M["row_street_plans"] = [[[round(x, 1), round(y, 1)] for x, y in line[:: max(1, len(line) // 60)] + line[-1:]] for line in streets]  # the planned lines, for the street and row rules
     return placed

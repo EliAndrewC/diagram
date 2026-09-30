@@ -85,7 +85,7 @@ def test_the_streams_are_read_through_the_fords() -> None:
 
 def test_an_oblique_crossing_is_squared_and_a_square_or_short_one_is_left() -> None:
     """Feature 261: a way crossing the brook more than FORD_SQUARE_TOL_DEG off square gets a leg along the brook's
-    normal at the crossing; a square crossing, and one whose segment cannot hold the leg, are left as drawn."""
+    normal at the crossing (a shorter one where the segment cannot hold it); a square crossing is left as drawn."""
     from l7r.diagram.hamletgen.ways.checks import square_crossings
 
     brook = [(0.0, 0.0), (0.0, 200.0)]  # a brook running south
@@ -98,8 +98,12 @@ def test_an_oblique_crossing_is_squared_and_a_square_or_short_one_is_left() -> N
     assert back[1][0] > back[2][0], "walked the other way, the leg runs east to west"
     square = [(-100.0, 100.0), (100.0, 101.0)]
     assert square_crossings(square, brook, 10.0) == square
-    short = [(-5.0, 90.0), (5.0, 110.0)]
-    assert square_crossings(short, brook, 15.0) == short
+    short = [(-5.0, 90.0), (5.0, 110.0)]  # too short for the full 15 ft either side: a shorter square leg (feature 291)
+    got = square_crossings(short, brook, 15.0)
+    assert len(got) == 4 and abs(got[1][1] - got[2][1]) < 1e-9 and got[1][0] < 0.0 < got[2][0], "square across, within the segment"
+    near = [(-0.5, 99.0), (60.0, 180.0)]  # the crossing a step from the segment's start: no bend point there, no hook
+    got = square_crossings(near, brook, 10.0)
+    assert got[0] == near[0] and len(got) == 3 and abs(got[1][1] - near[0][1]) < 1.0
     assert square_crossings([], brook, 10.0) == []
     assert square_crossings(oblique, [(0.0, 0.0), (0.0, 0.0)], 10.0) == oblique
 

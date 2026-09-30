@@ -117,7 +117,10 @@ def test_the_paddy_is_reached_by_a_joined_end_a_run_on_a_branch_or_the_map_says_
     assert B.a_way_onto_the_bund(branch) == "branch" and branch.M["lanes"][-1]["w"] == B.BRANCH_WIDTH
     moat = _stub(streams=[{"poly": [[380.0, -100.0], [380.0, 400.0]], "w": 6}])
     moat.M["lanes"].append({"pts": [[300.0, 100.0], [300.0, 150.0]], "w": 3})
-    assert B.a_way_onto_the_bund(moat).startswith("none: "), "every way to the paddy crosses the water"
+    assert B.a_way_onto_the_bund(moat) == "branch", "across the one water course, for the crossings stage to plank (feature 291)"
+    moat2 = _stub(streams=[{"poly": [[380.0, -100.0], [380.0, 400.0]], "w": 6}, {"poly": [[390.0, -100.0], [390.0, 400.0]], "w": 6}])
+    moat2.M["lanes"].append({"pts": [[300.0, 100.0], [300.0, 150.0]], "w": 3})
+    assert B.a_way_onto_the_bund(moat2).startswith("none: "), "every way to the paddy crosses two water courses"
 
 
 def test_the_ground_falls_back_to_the_envelope_where_the_map_records_no_field() -> None:
@@ -214,3 +217,13 @@ def test_a_junction_end_is_carried_on_as_a_path_of_its_own() -> None:
     free = _StubSettlement(lanes=[[(100.0, 100.0), (250.0, 100.0)]])
     B.carry_on(free, 0, -1, (250.0, 100.0), (396.0, 100.0))
     assert free.M["lanes"][0]["pts"][-1] == [396.0, 100.0]
+
+
+def test_a_step_over_the_water_is_bent_onto_a_square_crossing() -> None:
+    """`squared_step` (feature 291): a step crossing no water, or crossing square, is straight; one crossing oblique bends
+    to a point before the water on its normal, then crosses square to as far out as it was going."""
+    water = [((0.0, -100.0), (0.0, 100.0))]  # a stream running south along x = 0
+    assert B.squared_step((-50.0, 0.0), (-10.0, 0.0), water) == [(-10.0, 0.0)], "no water crossed"
+    assert B.squared_step((-50.0, 0.0), (20.0, 0.0), water) == [(20.0, 0.0)], "already square"
+    pre, post = B.squared_step((-40.0, -40.0), (20.0, 20.0), water)
+    assert pre == (-B.SQUARE_APPROACH_FT, 0.0) and post == (20.0, 0.0), "the leg over the water runs along its normal"
