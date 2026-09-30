@@ -54,8 +54,9 @@ def _uf_xy(u: float, f: float) -> Pt:
     return (_UF_RT * (u + f), _UF_RT * (f - u))
 
 
-# IS ANY PADDY LEFT TO REST? (269 B01; research/fields.html 'Is any paddy left to rest - and where does a resting plot
-# lie?', fields/250). The record attests two forms of a village's paddy, so it is a KNOB rolled per settlement:
+# IS ANY PADDY LEFT TO REST? (269 B01; research/fields.html 'Paddies left to rest (kataarashi)' and
+# research/rendering/fields.html 'How our maps place paddies left to rest (kataarashi)', fields/250). The record attests
+# two forms of a village's paddy, so it is a KNOB rolled per settlement:
 #   settled    - cropped every year, no plot rests: the nucleated village on stable ground, and the setting's canon (a
 #                paddy once made crops for centuries, and what limits rice is hands, not soil) sides with it.
 #   unsettled  - this year a few whole plots rest (kataarashi), each scattered among the cropped plots, never a block,

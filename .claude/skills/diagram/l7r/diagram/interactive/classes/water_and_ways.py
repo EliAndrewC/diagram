@@ -232,7 +232,7 @@ class FieldPond(Kind):
     Covers: `field_ponds` - the in-field pond sunk into one low paddy
     Label: accurate
     Sources: not recorded
-    Entry: research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least'
+    Entry: research/fields.html - 'Ponds, rocks and graves in the middle of the fields'; research/rendering/fields.html - 'How our maps place ponds, rocks and graves in the fields'
     """
 
     key = 'field pond'
@@ -255,7 +255,7 @@ class FieldRock(Kind):
     Covers: `field_rocks` - a bedrock outcrop inside a plot
     Label: guess
     Sources: not recorded
-    Entry: research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least'
+    Entry: research/fields.html - 'Ponds, rocks and graves in the middle of the fields'; research/rendering/fields.html - 'How our maps place ponds, rocks and graves in the fields'
     """
 
     key = 'field rock'
@@ -286,7 +286,7 @@ class GraveIsland(Kind):
     Covers: `field_graves` - a grave mound inside a paddy plot or in its corner
     Label: accurate
     Sources: henriot-shanghai-graves, henan-grave-removal-enwiki, ryobosei-jawiki, yashikibaka-ibaraki-blog
-    Entry: research/religion-and-death.html - 'Where a village buries its dead: its own ground, the temple yard, the fields or the home plot'; research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least'; research/rendering/religion-and-death.html - 'How our maps choose where a village's and a hamlet's dead lie'
+    Entry: research/religion-and-death.html - 'Where a village buries its dead: its own ground, the temple yard, the fields or the home plot'; research/fields.html - 'Ponds, rocks and graves in the middle of the fields'; research/rendering/fields.html - 'How our maps place ponds, rocks and graves in the fields'; research/rendering/religion-and-death.html - 'How our maps choose where a village's and a hamlet's dead lie'
     """
 
     key = 'grave island'

@@ -85,7 +85,7 @@ class WetPaddy(Kind):
     Covers: the plots of a `fields[kind=paddy]` drawn with open water showing - the wettest ground the field has
     Label: accurate
     Sources: kotobank-shitsuden, kotobank-kanden, kotobank-yatsuda, kotobank-fukada, fao-rice-water
-    Entry: research/fields.html - 'The wettest plots are their own kind of ground - shitsuden, and why they read blue'
+    Entry: research/fields.html - 'Wet paddies that never drain (shitsuden)'; research/rendering/fields.html - 'How our maps draw wet paddies (shitsuden)'
     """
 
     key = 'wet paddy'
@@ -373,7 +373,7 @@ class Fallow(Kind):
     Covers: `fallow_patches`
     Label: accurate
     Sources: nishitani-2023-chusei-nogyo, kotobank-kataarashi-yamakawa, kotobank-kataarashi-nipponica, mizkan-2005-sato-kyuko
-    Entry: research/fields.html - 'Is any paddy left to rest - and where does a resting plot lie?'
+    Entry: research/fields.html - 'Paddies left to rest (kataarashi)'; research/rendering/fields.html - 'How our maps place paddies left to rest (kataarashi)'
     """
 
     key = 'fallow'
