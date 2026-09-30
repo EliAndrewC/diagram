@@ -973,6 +973,7 @@ fudō myōō	Fudo
 fuel-and-fodder commons	commons
 fujiwara	Fujiwara-kyo
 fujiwara-kyo	Fujiwara-kyo
+fujiwara-kyo's	Fujiwara-kyo
 fukada	fukada
 fuki	fuki
 fukugi	fukugi
