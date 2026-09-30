@@ -6,7 +6,7 @@ You are a FRESH session for one part of feature 291. This brief is the whole of 
 `CLAUDE.md` above all.
 
 **What moved.** Session 1 relabeled one sentence of homesteads/200's map paragraph (a channel led off another farm's channel) a GUESS.
-own water (the `farm_water` knob: a channel into the grounds, or its own well), each value in its class. Its handoff is
+Its handoff is
 `specs/291-homestead-grove-sides/briefs/r9-handoff.md`.
 
 **Your questions:** PAGE=homesteads SECTION=200
