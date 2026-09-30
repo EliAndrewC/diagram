@@ -349,8 +349,8 @@ class WetGroundMixin:
             # A BLADE REACHES UP, NOT SIDEWAYS (settlement-review 2026-08-29, Mizuguchi). The pad against the
             # water was the mark's own isotropic reach - 7 ft for a tuft - so reeds were held 7.7 ft off the
             # waterline all round, and the density profile out from the rim ran 12.0 / 27.4 / 33.0 / 24.4 per
-            # 1,000 sq ft: THINNEST exactly where the record says reeds are thickest (research/water.html, "A
-            # reservoir's shore is reeded"; the emergent belt roots in the shallows). But a reed tuft's blades
+            # 1,000 sq ft: THINNEST exactly where the record says reeds are thickest (research/water.html, "Reservoir
+            # ponds (tameike)"; the emergent belt roots in the shallows). But a reed tuft's blades
             # are drawn near-VERTICAL - `random.uniform(-0.2, 0.2)` radians off vertical, 4-7 ft long - so they
             # reach ~7 ft UP the sheet and at most ~1.4 ft to the side. The pad is therefore split: the LATERAL
             # reach keeps the tuft's own point off the water, and the blade TOP is tested separately, so a tuft
@@ -367,8 +367,8 @@ class WetGroundMixin:
         marks: list[tuple[float, float, float, float, str]] = []  # (extent, string): the tint and the glints, culled to the frame at finish (feature 225)
         blades: list[tuple[str, str, str, str]] = []  # SVG-size lever 2: bucket the constant-styled reed blades (see the note in cover.py's `commons`)
         # A NARROW BAND GETS A SMALLER HAZE, NOT NO HAZE (settlement-review 2026-08-29). That a pond fringe
-        # reads WET at all is a RESEARCH finding, not a rendering choice - research/water.html "A reservoir's
-        # shore is reeded, and its EMBANKMENT is mown": the intuitive counter-hypothesis (a maintained
+        # reads WET at all is a RESEARCH finding, not a rendering choice - research/water.html "Reservoir ponds
+        # (tameike)" and its rendering section: the intuitive counter-hypothesis (a maintained
         # reservoir has a bare margin, so reeds there would mean neglect) is contradicted by a Kagawa study
         # in which dredging and algae-cutting correlate POSITIVELY with emergent-plant richness. The tint keeps its
         # own radius clear of the open water, and for a pond fringe that pad - 28 ft - is wider than the band

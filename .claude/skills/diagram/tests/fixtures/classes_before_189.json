@@ -516,7 +516,7 @@
   "marsh": {
     "caveat": "",
     "covers": "`marshes` - every marsh patch, whatever its role",
-    "entry": "research/water.html - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN', \"A reservoir's shore is reeded, and its EMBANKMENT is mown\", \"Why is a reservoir's embankment bare of reeds\", \"Was the reed at a reservoir's margin cut as a crop\"; research/vegetation.html - 'The marsh margin', 'Were the reed beds cut'",
+    "entry": "research/water.html - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN', 'Reservoir ponds (tameike)'; research/rendering/water.html - 'How our maps draw reservoir ponds, their reeds and their embankments'; research/vegetation.html - 'The marsh margin', 'Were the reed beds cut'",
     "key": "marsh",
     "label": "accurate",
     "label_note": "The reclaimed-from-marsh finding, the margin gradient, and the reeded-shore finding are all read; the embankment is mown in the record as it is bare on the map.",
@@ -706,7 +706,7 @@
   "pond": {
     "caveat": "",
     "covers": "`pond` - the tameike",
-    "entry": "research/water.html - 'Irrigation canals and how they are laid out (yosuiro)'; research/rendering/water.html - 'How our maps lay out irrigation canals'",
+    "entry": "research/water.html - 'Irrigation canals and how they are laid out (yosuiro)', 'Reservoir ponds (tameike)'; research/rendering/water.html - 'How our maps lay out irrigation canals', 'How our maps draw reservoir ponds, their reeds and their embankments'",
     "key": "pond",
     "label": "accurate",
     "label_note": "Form, siting and the single outlet are read (Tabayashi 1986, the Kagawa tameike documents).",

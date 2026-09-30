@@ -212,7 +212,7 @@ class Pond(Kind):
     Covers: `pond` - the tameike
     Label: accurate
     Sources: tabayashi-1987, kagawa-tameike
-    Entry: research/water.html - 'Irrigation canals and how they are laid out (yosuiro)'; research/rendering/water.html - 'How our maps lay out irrigation canals'
+    Entry: research/water.html - 'Irrigation canals and how they are laid out (yosuiro)', 'Reservoir ponds (tameike)'; research/rendering/water.html - 'How our maps lay out irrigation canals', 'How our maps draw reservoir ponds, their reeds and their embankments'
     """
 
     key = 'pond'

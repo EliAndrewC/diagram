@@ -339,7 +339,7 @@ class Marsh(Kind):
     Covers: `marshes` - every marsh patch, whatever its role
     Label: accurate
     Sources: aas-rice-technology, mineta-2007-tameike, tameike-jawiki, kagawa-tameike-structure, maff-tameike-shizen, nies-tameike, inamino-tameike-museum, kayabun-kayabuki, ohmi-yoshi, biwako-visitors-yoshi-hiire, opal-biwa-yoshi-hara
-    Entry: research/water.html - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN', "A reservoir's shore is reeded, and its EMBANKMENT is mown", "Why is a reservoir's embankment bare of reeds", "Was the reed at a reservoir's margin cut as a crop"; research/vegetation.html - 'The marsh margin', 'Were the reed beds cut'
+    Entry: research/water.html - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN', 'Reservoir ponds (tameike)'; research/rendering/water.html - 'How our maps draw reservoir ponds, their reeds and their embankments'; research/vegetation.html - 'The marsh margin', 'Were the reed beds cut'
     """
 
     key = 'marsh'
