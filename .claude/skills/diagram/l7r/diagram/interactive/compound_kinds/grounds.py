@@ -106,7 +106,7 @@ class BorderCourt(Kind):
     Covers: the receiving court behind a border posting's parley door, and its label
     Label: deviation
     Sources: kotobank-bansho, bunka-nuruyu-bansho, bansho-jawiki, kotobank-shikidai, kominkai-genkan
-    Entry: research/buildings.html - 'Why would a border posting keep a court for those crossing?', 'How did a guest of rank arrive, from the gate to the entrance?', 'Guest doors feed courts, not flanks'
+    Entry: research/buildings.html - 'Why would a border posting keep a court for those crossing?', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps route a guest from the gate to the entrance'
     """
 
     key = "border court"
@@ -224,7 +224,7 @@ class CompoundGarden(Kind):
     Covers: the inner garden, a garden path, a shrine garden and a guest garden, and their labels
     Label: accurate
     Sources: oniwa-takayama-jinya, kotobank-teien, okutono-jinya-garden, chiran-bukeyashiki-gardens, genkan-jawiki, shirobito-1717-takayama, shiroishi-koseki, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, kotobank-yashikigami, jawiki-yashikigami, shoinzukuri-jawiki
-    Entry: research/buildings.html - 'Did the private rooms of an ordinary posting have a garden of their own?', 'Did a residence garden have a pond, and did a county post keep one?', 'Where is the formal entrance, and how does a guest reach it?', 'How did a guest of rank arrive, from the gate to the entrance?', 'What grew around the compound's own shrine?', 'The shady rear is the service strip', 'Guest doors feed courts, not flanks'
+    Entry: research/buildings.html - 'Did the private rooms of an ordinary posting have a garden of their own?', 'Did a residence garden have a pond, and did a county post keep one?', 'The formal entrance and a guest's arrival (genkan)', 'What grew around the compound's own shrine?', 'The shady rear is the service strip'; research/rendering/buildings.html - 'How our maps route a guest from the gate to the entrance'
     """
 
     key = "garden"
@@ -370,7 +370,7 @@ class MainGate(Kind):
     Covers: the posts flanking the main opening
     Label: accurate
     Sources: nagayamon-jawiki, tamba-kashiwara-jinya, bunka-saito-nagayamon, bunka-adachi-yakuimon, bunka-omi-yakuimon, bunka-fujioka-yakuimon, sohu-yamen-gate, bjd-qing-yamen, neixiang-xianya-zhwiki, kotobank-shikidai, kominkai-genkan
-    Entry: research/buildings.html - 'The main gate and its gatekeepers (nagaya-mon)', 'How did a guest of rank arrive, from the gate to the entrance?', 'Guest doors feed courts, not flanks'; research/towns.html - 'Where does a magistrate's manor stand, and which way does its gate face?'; research/rendering/buildings.html - 'How our maps draw the main gate and its gatekeepers (nagaya-mon)', 'How our maps draw compound walls (neribei and tsuijibei)'
+    Entry: research/buildings.html - 'The main gate and its gatekeepers (nagaya-mon)', 'The formal entrance and a guest's arrival (genkan)'; research/towns.html - 'Where does a magistrate's manor stand, and which way does its gate face?'; research/rendering/buildings.html - 'How our maps draw the main gate and its gatekeepers (nagaya-mon)', 'How our maps draw compound walls (neribei and tsuijibei)', 'How our maps route a guest from the gate to the entrance'
     """
 
     key = "main gate"
@@ -403,7 +403,7 @@ class SideGate(Kind):
     Covers: the posts of the posterns, service gates, landing gate, cart gate and guests' door
     Label: accurate
     Sources: kotobank-katteguchi, tajima-2007-night-soil, guernica-night-soil, kotobank-benjo, kotobank-shikidai, kominkai-genkan, kotobank-daihachiguruma, l7r-wagons
-    Entry: research/ways.html - 'Could a cart use the roads here, and where would it go?'; research/buildings.html - 'How did a guest of rank arrive, from the gate to the entrance?', 'Guest doors feed courts, not flanks', 'Privies attach to the house; night-soil drives their placement'
+    Entry: research/ways.html - 'Could a cart use the roads here, and where would it go?'; research/buildings.html - 'The formal entrance and a guest's arrival (genkan)', 'Privies attach to the house; night-soil drives their placement'; research/rendering/buildings.html - 'How our maps route a guest from the gate to the entrance'
     """
 
     key = "side gate"
@@ -522,7 +522,7 @@ class GardenPond(Kind):
     Covers: the pond, or the dry garden, in the inner garden
     Label: accurate
     Sources: kotobank-teien, oniwa-takayama-jinya, okutono-jinya-garden, chiran-bukeyashiki-gardens, shiroishi-koseki
-    Entry: research/buildings.html - 'Did a residence garden have a pond, and did a county post keep one?', 'Where is the formal entrance, and how does a guest reach it?'
+    Entry: research/buildings.html - 'Did a residence garden have a pond, and did a county post keep one?', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps route a guest from the gate to the entrance'
     """
 
     key = "garden pond"
@@ -704,7 +704,7 @@ class Door(Kind):
     Covers: every small door glyph on a building's wall
     Label: accurate
     Sources: madoken-odoguchi, hongofuji-koiwai, s-kent-kuratomae, kotobank-katteguchi, kotobank-uchigenkan, matsue-bukeyashiki, homes-jin-bukeyashiki, dozo-jawiki, gogura-jawiki, nagayamon-jawiki, jta-nagayamon
-    Entry: research/buildings.html - 'How wide was a real doorway, and how wide are the drawn doors?', 'How many doors does a residence's kitchen have, and who comes in by them?', 'Guest doors feed courts, not flanks'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound'
+    Entry: research/buildings.html - 'How wide was a real doorway, and how wide are the drawn doors?', 'How many doors does a residence's kitchen have, and who comes in by them?', 'The formal entrance and a guest's arrival (genkan)'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound', 'How our maps route a guest from the gate to the entrance'
     """
 
     key = "door"

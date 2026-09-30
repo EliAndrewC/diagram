@@ -62,7 +62,7 @@ class Residence(Kind):
     Covers: the lord's residence blocks' fill and outlines, their room dividers, and the RESIDENCE band label
     Label: accurate
     Sources: watariroka-kotobank, irikawa-kotobank, katsura-rikyu-jawiki, touken-world-buke-madori, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, neixiang-yamen-zhwiki, takayama-jinya-city, takayama-jinya-jawiki, machi-bugyo-jawiki, jinya-jawiki, yamen-enwiki, neixiang-xianya-zhwiki, kotobank-katteguchi, shoinzukuri-jawiki
-    Entry: research/buildings.html - 'Were a residence's wings joined by corridors and set in echelon, like geese in flight?', 'How did a guest of rank arrive, from the gate to the entrance?', 'Magistrates' compounds (jin'ya and yamen)', 'Guest doors feed courts, not flanks', 'The shady rear is the service strip', 'The size of a compound and the rank of its buildings', 'How big was a samurai's house, and what rank is a 67-tsubo house?'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps draw a magistrate's compound'
+    Entry: research/buildings.html - 'Were a residence's wings joined by corridors and set in echelon, like geese in flight?', 'The formal entrance and a guest's arrival (genkan)', 'Magistrates' compounds (jin'ya and yamen)', 'The shady rear is the service strip', 'The size of a compound and the rank of its buildings', 'How big was a samurai's house, and what rank is a 67-tsubo house?'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps draw a magistrate's compound', 'How our maps route a guest from the gate to the entrance'
     """
 
     key = "residence"
@@ -219,7 +219,7 @@ class GuestQuarters(Kind):
     Covers: the guest room of the residence with its floor and label, or a detached guest house and its label
     Label: accurate
     Sources: shirobito-1717-takayama, boso-no-mura-takei, honjin-jawiki, yakage-honjin, kotobank-shikidai, kominkai-genkan
-    Entry: research/buildings.html - 'Did a guest stay in the house, or in a guest house of their own?', 'How did a guest of rank arrive, from the gate to the entrance?', 'Guest doors feed courts, not flanks'
+    Entry: research/buildings.html - 'Did a guest stay in the house, or in a guest house of their own?', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps route a guest from the gate to the entrance'
     """
 
     key = "guest quarters"
@@ -258,7 +258,7 @@ class Kitchen(Kind):
     Covers: the kitchen and pantries building and its label
     Label: accurate
     Sources: boso-no-mura-takei, liq-takayasu-daidokoro, kotobank-katteguchi, kotobank-uchigenkan, matsue-bukeyashiki, matsue-bukeyashiki-about, matsushiro-bukeyashiki, tfd-hongou-fire-history, thepaper-taipinggang, edo-no-kaji-jawiki, machibikeshi-jawiki
-    Entry: research/buildings.html - 'What fire did a residence's kitchen cook on - a kamado range, or a sunken hearth?', 'How many doors does a residence's kitchen have, and who comes in by them?', 'How big was a samurai's house, and what rank is a 67-tsubo house?', 'The size of a compound and the rank of its buildings', 'Fire-water is distributed to the halls', 'Guest doors feed courts, not flanks'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
+    Entry: research/buildings.html - 'What fire did a residence's kitchen cook on - a kamado range, or a sunken hearth?', 'How many doors does a residence's kitchen have, and who comes in by them?', 'How big was a samurai's house, and what rank is a 67-tsubo house?', 'The size of a compound and the rank of its buildings', 'Fire-water is distributed to the halls', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps route a guest from the gate to the entrance'
     """
 
     key = "kitchen"
@@ -592,7 +592,7 @@ class Genkan(Kind):
     Covers: the entry porch at the formal entrance
     Label: accurate
     Sources: genkan-jawiki, bukeyashiki-wiki, shirobito-1717-takayama, shiroishi-koseki, kotobank-shikidai, kominkai-genkan, jaanus-uchigenkan, fuchu-joge-pamphlet, takayama-jinya-jawiki, takayama-jinya-city
-    Entry: research/buildings.html - 'Where is the formal entrance, and how does a guest reach it?', 'How did a guest of rank arrive, from the gate to the entrance?', 'Guest doors feed courts, not flanks'
+    Entry: research/buildings.html - 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps route a guest from the gate to the entrance'
     """
 
     key = "genkan"
