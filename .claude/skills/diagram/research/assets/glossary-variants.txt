@@ -348,6 +348,7 @@ chen fu	Chen Fu
 cheng-zhu	Cheng-Zhu Neo-Confucianism
 cheng-zhu neo-confucianism	Cheng-Zhu Neo-Confucianism
 chenghua	Chenghua
+chenghuang miao	chenghuangmiao
 chenghuangmiao	chenghuangmiao
 chi	chi
 chigaidana	staggered shelves
