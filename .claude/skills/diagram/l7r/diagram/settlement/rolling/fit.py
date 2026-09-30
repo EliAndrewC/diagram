@@ -577,8 +577,7 @@ class BundleFitMixin:
         and SOUTHWEST of every threshing yard and garden bed - the afternoon sun. Off by default; a
         generator opts in, exactly as with `sun_corridor` (feature 133 T10, GM 2026-08-25: "the
         windbreak forest ... is so close to the gardens ... that I do not believe that those gardens
-        would get sufficient sunlight"). The number's derivation is in research/homesteads.html, "The
-        garden's sun, and how far the windbreak shades"."""
+        would get sufficient sunlight"). The number's derivation is in research/rendering/homesteads.html, "How our maps keep yards and gardens in the sun"."""
         self._west_sun_ft = float(feet)
 
     def _bundle_common_fits(self: Settlement, geom: Any, grove_off_field: bool = True) -> bool:  # type: ignore[misc]
@@ -621,8 +620,7 @@ class BundleFitMixin:
 
     def _garden_sun_conflict(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """A dooryard garden takes its MORNING sun from the east, so no grove band may stand hard against a garden's east
-        across its height - within the reach `_east_trees` reads (research/homesteads.html, "The garden's sun, and how
-        far the windbreak shades"). Tests the candidate's grove against every placed garden and the candidate's garden
+        across its height - within the reach `_east_trees` reads (research/rendering/homesteads.html, "How our maps keep yards and gardens in the sun"). Tests the candidate's grove against every placed garden and the candidate's garden
         against every placed grove, as `_yard_sun_conflict` does for the yard's southern strip.
 
         WHY AT THE SEAT (feature 291). The rule was `gardens_unshaded_from_east`, a check of the retired battery, and

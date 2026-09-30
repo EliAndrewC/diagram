@@ -207,7 +207,7 @@ class Garden(Kind):
     Covers: `gardens`
     Label: accurate
     Sources: not recorded
-    Entry: research/homesteads.html - 'The garden's sun, and how far the windbreak shades'; 'How much open ground does a kitchen garden keep to its south and east?'; 'The threshing yard's sun, and how far a farmhouse shades' (the garden rule is derived from it)
+    Entry: research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'
     """
 
     key = 'garden'

@@ -15,8 +15,7 @@ from ..homestead_parts.grove_sides import THIN_BAND_FT as THIN_BAND_FT
 from ..homestead_parts.grove_sides import E, N, S, Turn, W, turn_face, turns_axes
 
 # THE GARDEN'S MORNING SUN: no grove band stands within this reach east of a garden across its height - the reach
-# `_east_trees` reads (px at the village grain, scaled by `bscale`; research/homesteads.html "The garden's sun, and how far
-# the windbreak shades").
+# `_east_trees` reads (px at the village grain, scaled by `bscale`; research/rendering/homesteads.html "How our maps keep yards and gardens in the sun").
 EAST_SHADE_REACH = 22.0
 # THE YARD'S DRYING SUN: the strip south of a threshing yard no grove may stand in - `_yard_sun_conflict`'s 22 px strip.
 YARD_SUN_STRIP = 22.0

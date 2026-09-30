@@ -299,7 +299,7 @@ SUN_CORRIDOR_FT = 39.0
 # the attested band, not a choice between forms. THE FRAME QUESTION WAS THEN SETTLED SEPARATELY
 # (GM 2026-08-26): the belt's inner face now sets the frame (`windbreak_face`), so a taller belt
 # would no longer be cropped away - 10 m stays because it is the record's measured working height,
-# not because the frame forces it. research/homesteads.html, "The garden's sun".
+# not because the frame forces it. research/rendering/homesteads.html, "How our maps keep yards and gardens in the sun".
 WEST_SUN_FT = 50.0
 
 # THE FIELD ARCHETYPES this generator can draw, and why there are two rather than five. The pool's

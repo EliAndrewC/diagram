@@ -2911,8 +2911,6 @@ sukego	sukego
 summer-green	summer-green
 summer-green broadleaf forest	summer-green
 summer-green forest	summer-green
-sun lane	sun lane
-sun lanes	sun lane
 superelevated	superelevation
 superelevates	superelevation
 superelevation	superelevation

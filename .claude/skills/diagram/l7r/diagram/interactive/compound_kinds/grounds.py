@@ -263,7 +263,7 @@ class VegetableGarden(Kind):
     over about half the grounds, and each sheet takes its own; its seat is one of four attested ones - west of the
     house, south beside the formal garden, the rear service ground, or a parcel of its own ("Where does a walled
     compound keep its vegetable garden, and does the sun decide it?"). The sun rules out a seat where the bed gets under
-    its six hours in the autumn ("How many hours of direct sun does a kitchen bed need?"; a sheet may declare a
+    its six hours in the autumn ("Sunlight and shade on the farm"; a sheet may declare a
     half-shade bed, which needs three). Where the west and the rear lie in the shade of the house and the kitchen, the
     bed stands in the inner court beside the formal garden; at a country shrine it is the resident keeper's plot, near
     the dwelling on whatever open ground gets its sun. That a household chose its seat by the sun is a guess, and so are
@@ -276,7 +276,7 @@ class VegetableGarden(Kind):
     Covers: the kitchen garden's beds and label
     Label: accurate
     Sources: boso-no-mura-takei, matsushiro-bukeyashiki, sanada-higuchi, kasama-iwama-jinya, kotobank-kisaku-daikansho, gujin-xie-yamen, atariya-nisho
-    Entry: research/buildings.html - 'Where did a residence keep its vegetable garden, and how big was it?', 'Where does a walled compound keep its vegetable garden, and does the sun decide it?'; research/homesteads.html - 'How many hours of direct sun does a kitchen bed need?'
+    Entry: research/buildings.html - 'Where did a residence keep its vegetable garden, and how big was it?', 'Where does a walled compound keep its vegetable garden, and does the sun decide it?'; research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'
     """
 
     key = "vegetable garden"

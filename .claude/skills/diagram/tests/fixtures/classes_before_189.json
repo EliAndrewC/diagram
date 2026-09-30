@@ -374,7 +374,7 @@
   "garden": {
     "caveat": "the record fixes the bed's AREA and that it is hand-worked and irregular, but gives no proportion or row count, so those are drawn to read as a worked kitchen bed at this scale.",
     "covers": "`gardens`",
-    "entry": "research/homesteads.html - 'The garden's sun, and how far the windbreak shades'; 'How much open ground does a kitchen garden keep to its south and east?'; 'The threshing yard's sun, and how far a farmhouse shades' (the garden rule is derived from it)",
+    "entry": "research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'",
     "key": "garden",
     "label": "accurate",
     "label_note": "Presence and the sun rule are read; the record fixes the bed's AREA and that it is hand-worked and irregular, but gives no proportion or row count, so those are drawn to read as a worked kitchen bed at this scale.",
@@ -1004,7 +1004,7 @@
   "windbreak": {
     "caveat": "",
     "covers": "`village_groves[role=windbreak]`",
-    "entry": "research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest'; research/vegetation.html - 'Does a shelter belt wrap the settlement? No - it stands on one or two windward sides'; research/homesteads.html - 'The garden's sun, and how far the windbreak shades'; research/vegetation.html - 'Was a windbreak one kind of tree in a row', \"Did a farmstead's grove carry bamboo\"",
+    "entry": "research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest'; research/vegetation.html - 'Does a shelter belt wrap the settlement? No - it stands on one or two windward sides'; research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'; research/vegetation.html - 'Was a windbreak one kind of tree in a row', \"Did a farmstead's grove carry bamboo\"",
     "key": "windbreak",
     "label": "accurate",
     "label_note": "Scale, density and placement follow the surveyed figures (forests-2020); the belt's shape follows the terrain and the cluster.",
