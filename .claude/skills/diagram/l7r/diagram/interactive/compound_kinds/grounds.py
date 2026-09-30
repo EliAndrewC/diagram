@@ -226,7 +226,7 @@ class CompoundGarden(Kind):
     Covers: the inner garden, a garden path, a shrine garden and a guest garden, and their labels
     Label: accurate
     Sources: oniwa-takayama-jinya, kotobank-teien, okutono-jinya-garden, chiran-bukeyashiki-gardens, genkan-jawiki, shirobito-1717-takayama, shiroishi-koseki, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, kotobank-yashikigami, jawiki-yashikigami, shoinzukuri-jawiki
-    Entry: research/buildings.html - 'Did the private rooms of an ordinary posting have a garden of their own?', 'Did a residence garden have a pond, and did a county post keep one?', 'The formal entrance and a guest's arrival (genkan)', 'Shrines kept inside government offices and houses (yashikigami)', 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps route a guest from the gate to the entrance', 'How our maps draw shrines kept inside government offices', 'How our maps lay out samurai residences and their rooms (buke yashiki)'
+    Entry: research/buildings.html - 'Ornamental gardens, ponds and stone lanterns (teien)', 'The formal entrance and a guest's arrival (genkan)', 'Shrines kept inside government offices and houses (yashikigami)', 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps draw compound gardens, ponds and lanterns', 'How our maps route a guest from the gate to the entrance', 'How our maps draw shrines kept inside government offices', 'How our maps lay out samurai residences and their rooms (buke yashiki)'
     """
 
     key = "garden"
@@ -524,7 +524,7 @@ class GardenPond(Kind):
     Covers: the pond, or the dry garden, in the inner garden
     Label: accurate
     Sources: kotobank-teien, oniwa-takayama-jinya, okutono-jinya-garden, chiran-bukeyashiki-gardens, shiroishi-koseki
-    Entry: research/buildings.html - 'Did a residence garden have a pond, and did a county post keep one?', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps route a guest from the gate to the entrance'
+    Entry: research/buildings.html - 'Ornamental gardens, ponds and stone lanterns (teien)', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps draw compound gardens, ponds and lanterns', 'How our maps route a guest from the gate to the entrance'
     """
 
     key = "garden pond"
@@ -556,7 +556,7 @@ class StoneLantern(Kind):
     Covers: each stone-lantern glyph in a garden or the border court
     Label: accurate
     Sources: kotobank-ishidoro, kotobank-teien
-    Entry: research/buildings.html - 'Where did a stone lantern stand - in the garden, or in a court where guests were received?'
+    Entry: research/buildings.html - 'Ornamental gardens, ponds and stone lanterns (teien)'; research/rendering/buildings.html - 'How our maps draw compound gardens, ponds and lanterns'
     """
 
     key = "stone lantern"

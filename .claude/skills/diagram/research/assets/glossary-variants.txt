@@ -1591,6 +1591,7 @@ karahafu	karahafu
 karamete	karamete-mon
 karamete-mon	karamete-mon
 karamon	Chinese-style gate
+karesansui	karesansui
 karishiki	karishiki
 karo	karo
 karō	karo
@@ -3070,6 +3071,7 @@ tayu	tayu
 tayū	tayu
 tazuke kusayama	kusayama
 tedai	tedai
+teien	teien
 teikaku	teikaku
 temizuya	temizuya
 temple bell tower	shoro

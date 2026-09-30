@@ -13316,5 +13316,17 @@
    "lower privy",
    "lower privies"
   ]
+ },
+ "teien": {
+  "def": "A Japanese ornamental garden, of three kinds: the pond garden built around real water, the dry landscape (karesansui) that shows water without using any, and the tea garden. It was made of a pond and its water, set stones, made hills and planting, with stepping stones, paving, stone lanterns and fences as its furnishings.",
+  "variants": [
+   "teien"
+  ]
+ },
+ "karesansui": {
+  "def": "A dry landscape garden: set stones, and white sand or gravel standing for water, that show water without using a drop of it.",
+  "variants": [
+   "karesansui"
+  ]
  }
 }
