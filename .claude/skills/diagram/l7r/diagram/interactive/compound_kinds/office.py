@@ -185,7 +185,7 @@ class Granary(Kind):
     Covers: the granary, on posts or earth-walled, and its label
     Label: accurate
     Sources: takayukashiki-jawiki, takayama-onkura-heritage, dozo-jawiki, takayama-jinya-city, takayama-jinya-jawiki, nishimawari-koro-jawiki, gokura-jawiki, hatakata-men-jawiki, kuramai-jawiki, kakoimai-jawiki
-    Entry: research/buildings.html - 'Did a granary stand on posts, and why raise its floor away from a river?', 'The granary is a staging node, not the terminal store', 'The granary holds grain, not just rice'; research/towns.html - 'Why is the magistrate's manor drawn as a plain walled box?'
+    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/towns.html - 'Why is the magistrate's manor drawn as a plain walled box?'
     """
 
     key = "granary"
@@ -350,7 +350,7 @@ class TallyOffice(Kind):
     Covers: the tally office or tally shed and its label
     Label: accurate
     Sources: nishimawari-koro-jawiki, wagner-ming-iron, tonya-enwiki, economy-song-enwiki
-    Entry: research/buildings.html - 'The granary is a staging node, not the terminal store'; research/urban-features.html - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
+    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/urban-features.html - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
     """
 
     key = "tally office"
@@ -511,7 +511,7 @@ class GranaryStilts(Kind):
     Covers: the posts at the granary's foot
     Label: accurate
     Sources: takayukashiki-jawiki, takayama-onkura-heritage, kuramae-jawiki, wheatbaku-asakusa-okura
-    Entry: research/buildings.html - 'Did a granary stand on posts, and why raise its floor away from a river?'; research/cities/capitals.html - "The sluice's lifting frame"
+    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/cities/capitals.html - "The sluice's lifting frame"
     """
 
     key = "granary stilts"

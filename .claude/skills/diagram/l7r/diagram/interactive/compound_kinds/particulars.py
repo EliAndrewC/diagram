@@ -95,7 +95,7 @@ class River(Kind):
     Covers: the river band and its labels
     Label: accurate
     Sources: gokura-jawiki, nishimawari-koro-jawiki, takayama-jinya-city, takayama-jinya-jawiki, chinaknowledge-caoyun, daba-jawiki, chuma-jawiki, kashi-jawiki
-    Entry: research/buildings.html - 'The granary is a staging node, not the terminal store'; research/ways.html - "Where does a village's freight go?"
+    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/ways.html - "Where does a village's freight go?"
     """
 
     key = "river"
@@ -119,7 +119,7 @@ class RiverLanding(Kind):
     Covers: the landing label - its dock, revetment, barge, watch post and altar are each their own kind
     Label: accurate
     Sources: nishimawari-koro-jawiki, kashi-jawiki, gangi-kowan-jawiki, takasebune-jawiki, kotobank-takasebune, matou-zhwiki, kuramae-jawiki, chinaknowledge-caoyun
-    Entry: research/buildings.html - 'The granary is a staging node, not the terminal store'; research/cities/river-cities.html - "The wharf's working face"; research/cities/capitals.html - "The sluice's lifting frame"; research/ways.html - "Where does a village's freight go?"
+    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/cities/river-cities.html - "The wharf's working face"; research/cities/capitals.html - "The sluice's lifting frame"; research/ways.html - "Where does a village's freight go?"
     """
 
     key = "river landing"
@@ -326,7 +326,7 @@ class TaxBarge(Kind):
     Covers: the moored barge, its lines, its bales and its label
     Label: accurate
     Sources: takasebune-jawiki, kotobank-takasebune, gokura-jawiki, takayama-jinya-city, tawara-unit-jawiki, nisira-komedawara
-    Entry: research/urban-features.html - 'How big is a bale of rice or charcoal?'; research/buildings.html - 'The granary is a staging node, not the terminal store'; research/cities/river-cities.html - "The wharf's working face"
+    Entry: research/urban-features.html - 'How big is a bale of rice or charcoal?'; research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/cities/river-cities.html - "The wharf's working face"
     """
 
     key = "tax barge"
