@@ -352,6 +352,7 @@ cheng-zhu neo-confucianism	Cheng-Zhu Neo-Confucianism
 chenghua	Chenghua
 chenghuang miao	chenghuangmiao
 chenghuangmiao	chenghuangmiao
+chengqiang	chengqiang
 chi	chi
 chigaidana	staggered shelves
 chikaraishi	chikaraishi
