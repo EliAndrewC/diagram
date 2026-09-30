@@ -326,7 +326,7 @@ class TaxBarge(Kind):
     Covers: the moored barge, its lines, its bales and its label
     Label: accurate
     Sources: takasebune-jawiki, kotobank-takasebune, gokura-jawiki, takayama-jinya-city, tawara-unit-jawiki, nisira-komedawara
-    Entry: research/urban-features.html - 'How big is a bale of rice or charcoal?'; research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/cities/river-cities.html - "The wharf's working face"
+    Entry: research/urban-features.html - 'Straw bales of rice and charcoal (tawara)'; research/rendering/urban-features.html - 'How our maps draw straw bales of rice and charcoal (tawara)'; research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/cities/river-cities.html - "The wharf's working face"
     """
 
     key = "tax barge"
@@ -429,7 +429,7 @@ class CharcoalBales(Kind):
     Covers: the stacked bales on the weighing floor
     Label: convention
     Sources: tawara-jawiki, tawara-unit-jawiki, edo-tokyo-sumidawara
-    Entry: research/urban-features.html - 'How big is a bale of rice or charcoal?', 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and charcoal stores'
+    Entry: research/urban-features.html - 'Straw bales of rice and charcoal (tawara)', 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw straw bales of rice and charcoal (tawara)', 'How our maps draw charcoal yards and charcoal stores'
     """
 
     key = "charcoal bales"

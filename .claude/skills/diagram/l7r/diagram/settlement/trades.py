@@ -306,7 +306,7 @@ class TradesMixin:
         households that work it. `rot` lays the kiln's UPSLOPE axis along local +x, so the stoke
         mouth is at local -x and the chimney at local +x.
 
-        Historical grounding (the "why" - see research/urban-features.html "KILN WORKS", full
+        Historical grounding (the "why" - see research/urban-features.html "Pottery kilns (noborigama)" and research/rendering/urban-features.html "How our maps draw kiln works", full
         record in research/urban-features.html). Two GM questions on 2026-07-27 drove the whole
         feature: *"would whoever works the kiln also live next to it?"* and *"why is it
         specifically a tile kiln and not just a kiln?"*
@@ -520,7 +520,7 @@ class TradesMixin:
         """A REFINING FORGE - an okaji 大鍛冶, where pig iron smelted out at the fuel is worked into
         wrought bar. `rot` lays the OPEN WORKING FRONT toward local +y.
 
-        Historical grounding (the "why" - see research/urban-features.html "REFINING FORGES"):
+        Historical grounding (the "why" - see research/urban-features.html "Iron refining forges (chao)" and research/rendering/urban-features.html "How our maps draw iron refining forges (chao)"):
           - CHINA FIRST. Ming ironworks converted blast-furnace pig to wrought iron by FINING,
             Chinese chao 炒, "stir-frying": an OPEN fire under a forced blast, fuelled with charcoal,
             into which wood, charcoal and broken cast iron were charged and then stirred with an iron
