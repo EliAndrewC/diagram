@@ -660,6 +660,8 @@ dressed stone	dressed stone
 drill ground	drill ground
 drum tower	drum tower
 drum towers	drum tower
+dry edge	dry edge
+dry edges	dry edge
 dry paddy	kanden
 dry run	wet run
 dry runs	wet run
@@ -794,6 +796,8 @@ festival's host house	festival lodging
 fetch	fetch
 field boat	field boat
 field boats	field boat
+field channel	field channel
+field channels	field channel
 field comb	comb
 field combs	comb
 field consolidation	kochi seiri
@@ -1797,6 +1801,8 @@ lineage chancellors	chancellor
 lineage village	lineage village
 lineage villages	lineage village
 lineages	lineage
+linear village	ressen
+linear villages	ressen
 ling canal	Lingqu
 lingnan	Lingnan
 lingqu	Lingqu
@@ -2450,6 +2456,7 @@ rennyo	Rennyo
 rent bursary	rent bursary
 rent-collection bursaries	rent bursary
 rent-collection bursary	rent bursary
+ressen	ressen
 rest stop	tateba
 rest stops	tateba
 restoration	Restoration
@@ -2503,6 +2510,8 @@ river terrace	river terrace
 river terraces	river terrace
 road magistrate	road magistrate
 road magistrates	road magistrate
+road village	roson
+road villages	roson
 roji	roji
 roju	Roju
 rokudo crossroads	Rokudō crossroads
@@ -2521,6 +2530,7 @@ root-cutting	root-cut
 roson	roson
 rotation period	rotation period
 row village	roson
+row villages	roson
 rowhouse gate	nagayamon
 rowhouse gates	nagayamon
 runners	yayi
@@ -2722,6 +2732,7 @@ shinpen tsuika	Shinpen Tsuika
 shinsei	Shinsei
 shinshu	Jodo Shinshu
 shinshū	Jodo Shinshu
+shirakashi	shirakashi
 shirasu	oshirasu
 shirimito	shirimito
 shironameshi	shironameshi
@@ -3399,6 +3410,7 @@ wet-tint	wet-tint haze
 wet-tint haze	wet-tint haze
 wetted perimeter	wetted perimeter
 white charcoal	white charcoal
+white oak	shirakashi
 white-charcoal	white charcoal
 white-sand court	oshirasu
 white-tawed	shironameshi

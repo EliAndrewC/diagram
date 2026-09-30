@@ -3293,7 +3293,10 @@
   "def": "Row village: a settlement strung in one or two lines along a road, river or valley floor, each holding's land running back from its house.",
   "variants": [
    "roson",
-   "row village"
+   "row village",
+   "row villages",
+   "road village",
+   "road villages"
   ]
  },
  "row house": {
@@ -13109,6 +13112,35 @@
   "variants": [
    "forest village",
    "forest villages"
+  ]
+ },
+ "ressen": {
+  "def": "列村: a settlement stretched long and thin in a line, its houses along a natural levee, the spring line at a hill's foot, a spring or a waterway, standing on one side of that line or on both. Japanese geography sets it beside the road village (roson), whose line is a road.",
+  "variants": [
+   "ressen",
+   "linear village",
+   "linear villages"
+  ]
+ },
+ "shirakashi": {
+  "def": "Shirakashi (シラカシ), a Japanese oak rendered \"white oak\" - one of the kashi oaks of a tree list - planted with zelkova along a Santome homestead's road side, where the two made an avenue.",
+  "variants": [
+   "shirakashi",
+   "white oak"
+  ]
+ },
+ "dry edge": {
+  "def": "The line where the dry ground a village stands on meets the wet paddy below it. On the map it is the field's margin, standing for a levee, a dike or a fan's foot, and a row village strings its farms along it.",
+  "variants": [
+   "dry edge",
+   "dry edges"
+  ]
+ },
+ "field channel": {
+  "def": "The smallest ditch of the irrigation system, led off a branch ditch to the paddies it waters; the map draws it with a 2.5 ft bed, the narrowest water it draws legibly.",
+  "variants": [
+   "field channel",
+   "field channels"
   ]
  }
 }
