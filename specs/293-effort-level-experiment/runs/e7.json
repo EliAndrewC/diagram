@@ -7,7 +7,7 @@
  "start_commit": "ec99356cf081c1ac44ae227723edfdcf5675e6f7",
  "clone": "/diagram/.clones/diagram-exp-e7",
  "started": "2026-09-30T11:32:22Z",
- "ended": null,
+ "ended": "2026-09-30T19:52:55Z",
  "pauses": [
   [
    "2026-09-30T15:02:38.974Z",
@@ -16,6 +16,18 @@
   [
    "2026-09-30T15:34:58.651Z",
    "2026-09-30T17:31:47Z"
+  ],
+  [
+   "2026-09-30T17:36:32.778Z",
+   "2026-09-30T17:51:58Z"
+  ],
+  [
+   "2026-09-30T18:00:44.712Z",
+   "2026-09-30T18:16:05Z"
+  ],
+  [
+   "2026-09-30T18:48:40.799Z",
+   "2026-09-30T19:04:19Z"
   ]
  ],
  "memory_at_launch": {
@@ -47,7 +59,9 @@
    "293 | task R (buildings new 910, the servants' rowhouse doors + 3 keys) written, committed in clone diagram-exp-e3, checks owed | 2026-09-30",
    "293 | task R checked, committed in clone | 2026-09-30",
    "293 | run e3 ended - claim released | 2026-09-30"
-  ]
+  ],
+  "ledger_lines_appended": 2,
+  "prefixes_reserved": []
  },
  "sessions": [
   {
@@ -87,6 +101,23 @@
    "at": "2026-09-30T17:31:47Z",
    "message": "The detached run you were waiting for has ended - nothing will notify you of it in this headless session. Read its output and continue the task.",
    "result": "/diagram/.clones/.runs-293/e7/session/result-1.json"
+  },
+  {
+   "at": "2026-09-30T17:51:58Z",
+   "message": "The detached run you were waiting for has ended - nothing will notify you of it in this headless session. Read its output and continue the task.",
+   "result": "/diagram/.clones/.runs-293/e7/session/result-2.json"
+  },
+  {
+   "at": "2026-09-30T18:16:05Z",
+   "message": "The detached run you were waiting for has ended - nothing will notify you of it in this headless session. Read its output and continue the task.",
+   "result": "/diagram/.clones/.runs-293/e7/session/result-3.json"
+  },
+  {
+   "at": "2026-09-30T19:04:19Z",
+   "message": "The detached run you were waiting for has ended - nothing will notify you of it in this headless session. Read its output and continue the task.",
+   "result": "/diagram/.clones/.runs-293/e7/session/result-4.json"
   }
- ]
+ ],
+ "status": "valid",
+ "void_reason": ""
 }
