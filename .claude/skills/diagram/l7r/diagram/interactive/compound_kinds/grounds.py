@@ -332,7 +332,7 @@ class CompoundWall(Kind):
     Covers: the outer wall's strokes
     Label: convention
     Sources: kunishitei-toyonaga-neribei, kojodan-dobei, hei-jokaku-jawiki, mlit-kanazawa-dobei, tsuijibei-jawiki
-    Entry: research/buildings.html - 'How thick was a compound's earth wall?', 'A compound wall is a building, not a boundary line', 'Magistrates' compounds (jin'ya and yamen)'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound'
+    Entry: research/buildings.html - 'Compound walls (neribei and tsuijibei)', 'Magistrates' compounds (jin'ya and yamen)'; research/rendering/buildings.html - 'How our maps draw compound walls', 'How our maps draw a magistrate's compound'
     """
 
     key = "compound wall"
