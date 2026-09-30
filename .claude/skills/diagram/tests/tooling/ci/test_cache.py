@@ -119,12 +119,12 @@ def test_the_raster_and_the_page_are_NOT_cached(spec: Path) -> None:
 @pytest.mark.parametrize("spec", BUILDSPECS, ids=lambda p: p.name)
 def test_the_cached_paths_are_what_a_HIT_needs(spec: Path) -> None:
     """FR-002: the set is derived from what `gate_obtain` proves it needs (research R3) - the
-    manifest the gate judges, the `.svg` the z-order audit reads, and the coverage data without which
+    manifest the gate judges, the `.svg` the cell-size audit reads, and the coverage data without which
     a hit cannot happen at all. A cache missing any of these would restore and still MISS."""
     paths = _cache_paths(spec.read_text(encoding="utf-8"))
     joined = "\n".join(paths)
     assert "*.json" in joined, "the manifest is what the gate judges"
-    assert "*.svg" in joined, "_channels_under_plots reads the svg"
+    assert "*.svg" in joined, "_typical_cell_acres reads the svg"
     assert "coverage." in joined, "without the coverage data gate_obtain cannot HIT at all"
     # FEATURE 177: THE INVARIANT IS WIDENED AND STILL CLOSED. This used to be
     # `all(p.startswith(".gencache/"))`, which was right until the freshness state had to travel too -

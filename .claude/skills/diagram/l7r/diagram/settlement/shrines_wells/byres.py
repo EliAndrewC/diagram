@@ -12,6 +12,7 @@ from .._geom import (
     edge_dist,
     point_in_poly,
 )
+from .._geom.water_index import crosses_a_stream
 from .._knobs import knob_rng
 
 if TYPE_CHECKING:
@@ -50,7 +51,114 @@ def courtyard_annex_span(hw: float, hh: float, bh: float) -> float:
     return max(hw, hh) / 2 + bh * 0.55 + COURTYARD_REACH
 
 
+def byre_keeper_share(seed: int) -> float:
+    """The share of households that keep a beast on a household form, rolled once per settlement within
+    `BYRE_KEEPER_SHARE` - one roll read by the seat's lots (feature 287, homes H06) and by `draft_byres`."""
+    lo, hi = BYRE_KEEPER_SHARE
+    return round(lo + knob_rng(seed, "byre_share").random() * (hi - lo), 3)
+
+
+def household_byre_form(s: Any) -> tuple[str | None, float]:
+    """`(form, keeper share)` for a seating that lays each keeper's byre in its bundle (feature 287, homes H06): the
+    settlement's `byre_form` where it is a household form on a nucleated seating, else `(None, 0.0)` - the shared shed
+    on the commons (`detached_commons`) is no household's part and keeps its own pass."""
+    if not getattr(s, "_nucleated", False):
+        return None, 0.0
+    form = s.resolve("byre_form")
+    return (form, byre_keeper_share(s.seed)) if form in HOUSEHOLD_FORMS else (None, 0.0)
+
+
+#: The byre's footprint in feet (a stall for one or two beasts and their fodder, ~15 sq m): the glyph's own size.
+BYRE_FT = (16.12, 10.92)
+
+#: THE SHARED SHED'S COUNT AND SPACING (`detached_commons`, a labeled GUESS): about one shed to four or five households,
+#: sheds at least 60 px apart - the figures `stage_appurtenances` has always asked `draft_byres` for.
+COMMONS_BYRE_FRACTION = 0.22
+COMMONS_BYRE_GAP = 60.0
+#: How far the seat band is widened, round by round, when its core holds no free pocket (homes H06).
+_POCKET_WIDENING = (0.8, 1.0, 1.5, 2.0)
+
+
+def commons_byre_target(households: int, fraction: float = COMMONS_BYRE_FRACTION) -> int:
+    """How many shared sheds a settlement of `households` asks for: one at least (`draft_byres`'s own count)."""
+    return max(1, round(households * fraction))
+
+
+def byre_part(hw: float, hh: float, bw: float, bh: float, garden_side: str, form: str, gap: float) -> tuple[float, float, float, float, float]:
+    """A household's byre as a PART of its homestead bundle (feature 287, homes H06): `(dx, dy, w, h, turn)` - its
+    center off the house's center and its footprint, both in the house's unturned frame, and the turn the stall is drawn
+    at relative to the house. On the flank AWAY from the garden (the garden takes its side of the house first): the
+    inner stable's arm (`courtyard`) abuts that wall a 3 ft drip line off, reaching toward the court as
+    `_courtyard_byre_seat` sets it; the outer stable (`yard_shed`) stands a ken (`YARD_SHED_GAP_FT[0]`, `gap`) off it. Its
+    long side runs along the wall either way, so its footprint is `bh` across the frame and `bw` along it."""
+    sx = -1.0 if garden_side in ("E", "SE") else 1.0
+    if form == "courtyard":
+        return sx * (hw / 2.0 + bh / 2.0 + 3.0), max(0.0, hh / 2.0 - bw / 2.0), bh, bw, (90.0 if sx < 0 else -90.0)
+    return sx * (hw / 2.0 + gap + bh / 2.0), 0.0, bh, bw, 90.0
+
+
+#: How far a shared shed's pocket keeps off the access tree's strips beyond their half-width, in feet: half a bundle pitch
+#: (`BUNDLE_PITCH`, 100 ft) - every household's corridor comes to the exit strip, so the ground either side of it is
+#: its approach, not a shed's (feature 287 M8). A map drawing convention.
+POCKET_TREE_CLEAR_FT = 50.0
+
+
 class DraftByresMixin:
+    def reserve_commons_byres(self: Settlement, seat: Mapping[str, Any], households: int) -> list[Pt]:  # type: ignore[misc]
+        """THE SHARED SHEDS' POCKETS, reserved in the seat band BEFORE any house (feature 287, homes H06): on a settlement
+        whose byre form is `detached_commons`, `commons_byre_target` pockets of a shed's ground (its box plus 3 px round)
+        are laid in the band the houses will fill, so the houses pack round them and `draft_byres` draws each shed where
+        its pocket stands - the count asked is the count drawn, never a spiral that finds the courtyards full. Spread as
+        the drawing spread them (farthest from the pockets already laid), first nearest the band's middle; offered over
+        the band's core first, then the band widened round by round (`_POCKET_WIDENING`). Records `_byre_pockets` and
+        returns them; fewer than asked only where the band has no free ground, which the caller refuses."""
+        bw, bh = round(self.px(BYRE_FT[0]), 1), round(self.px(BYRE_FT[1]), 1)
+        target = commons_byre_target(households)
+        cx, cy = float(seat["cx"]), float(seat["cy"])
+        ax, ay = seat["along"]
+        ox, oy = seat["out"]
+        lat, dep = float(seat["lat"]), float(seat["dep"])
+        pockets: list[Pt] = []
+        for widen in _POCKET_WIDENING:
+            nu, nv = max(1, int(lat * widen / bw)), max(1, int(2.0 * dep * widen / bh))
+            cands = [
+                (cx + ax * lat * widen * (i / nu - 0.5) + ox * dep * widen * (2.0 * j / nv - 1.0), cy + ay * lat * widen * (i / nu - 0.5) + oy * dep * widen * (2.0 * j / nv - 1.0))
+                for i in range(nu + 1)
+                for j in range(nv + 1)
+            ]
+            cands = [q for q in cands if self._commons_pocket_clear(q[0], q[1], bw, bh, pockets)]
+            while cands and len(pockets) < target:
+                q = (
+                    min(cands, key=lambda c: (math.hypot(c[0] - cx, c[1] - cy), c))
+                    if not pockets
+                    else max(cands, key=lambda c: (min(math.hypot(c[0] - p[0], c[1] - p[1]) for p in pockets), -c[0], -c[1]))
+                )
+                pockets.append(q)
+                self.placed.append((q[0], q[1], bw + 6.0, bh + 6.0))
+                cands = [c for c in cands if self._commons_pocket_clear(c[0], c[1], bw, bh, pockets)]
+            if len(pockets) >= target:
+                break
+        self._byre_pockets = pockets
+        return pockets
+
+    def _commons_pocket_clear(self: Settlement, x: float, y: float, bw: float, bh: float, pockets: list[Pt]) -> bool:  # type: ignore[misc]
+        """May a shared shed's pocket stand at (x, y)? The fit test at its box plus 3 px round, off the paddy by a stall's
+        depth, and `COMMONS_BYRE_GAP` from every pocket laid."""
+        if any(math.hypot(x - p[0], y - p[1]) <= COMMONS_BYRE_GAP for p in pockets):
+            return False
+        if any(point_in_poly(x, y, ff) or edge_dist(x, y, ff) < bh for ff in self.field_polys):
+            return False
+        # ...nor on or beside the exit strip or the field's corridor the seating reserved first (feature 287 M8: the registry
+        # refuses a shed on an access corridor, and the web draws its way along one). Held off them by half a bundle pitch
+        # besides: every household's corridor comes to the strip, and a shed standing against it walls that side of it off -
+        # the toy hamlet's one pocket, laid beside the strip's root, left no house on its far side a way in
+        tree = getattr(self, "_access", None)
+        clear = self.px(POCKET_TREE_CLEAR_FT)
+        if tree is not None and tree.covers_box((x, y, bw + 6 + 2 * clear, bh + 6 + 2 * clear)):
+            return False
+        # ...and the registry of what stands admits the shed as `draft_byres` will record it (feature 287, water W53)
+        return bool(self._fits(x, y, bw + 6, bh + 6)) and self.admits("byres", {"x": round(x, 1), "y": round(y, 1), "w": bw, "h": bh, "rot": 0})
+
     def _courtyard_byre_seat(self: Settlement, h: Mapping[str, Any], bw: float, bh: float) -> tuple[float, float, float, float, float] | None:  # type: ignore[misc]
         """A courtyard-form byre's seat: the magariya's short arm, ABUTTING a free side wall of its owner.
 
@@ -159,6 +267,10 @@ class DraftByresMixin:
         hx, hy = float(h["x"]), float(h["y"])
         if self._in_blocked(cx, cy) or self._near_corridor(cx, cy):
             return False
+        # ON ITS HOUSE'S BANK (feature 287, homes H01): a household's beast is stabled on the bank its house stands on -
+        # the one same-bank predicate the homestead's parts and the fixtures read
+        if crosses_a_stream((hx, hy), (cx, cy), self.M.get("streams", [])):
+            return False
         r = math.hypot(aw, ah) / 2
         for poly in self.field_polys:  # a byre stands on dry ground, off the paddies
             if point_in_poly(cx, cy, poly) or edge_dist(cx, cy, poly) < r:
@@ -171,13 +283,14 @@ class DraftByresMixin:
                 continue  # the owner's own homestead bundle - the arm belongs INSIDE it
             if abs(cx - px) < (aw + pw) / 2 + 2 and abs(cy - py) < (ah + ph) / 2 + 2:
                 return False
-        for _key in ("houses", "threshing_yards", "gardens", "farm_sheds", "byres"):
+        for _key in ("houses", "threshing_yards", "gardens", "farm_sheds", "byres", "farm_fixtures"):
             for _o in self.M.get(_key) or []:
                 if _key == "houses" and abs(float(_o["x"]) - hx) < 0.05 and abs(float(_o["y"]) - hy) < 0.05:
                     continue  # its OWN wall: the arm joins the house, it does not clear it
                 if abs(cx - float(_o["x"])) < (aw + float(_o["w"])) / 2 + 2 and abs(cy - float(_o["y"])) < (ah + float(_o["h"])) / 2 + 2:
                     return False
-        return True
+        # ...AND NO ROOF UNDER A YARD PERSIMMON'S CROWN (feature 287, homes H32: the fixtures are drawn before the annexes now)
+        return not any(abs(cx - float(p["x"])) < aw / 2 + float(p["r"]) + 1 and abs(cy - float(p["y"])) < ah / 2 + float(p["r"]) + 1 for p in self.M.get("persimmons") or [])
 
     def _draw_byre(self: Settlement, cx: float, cy: float, w: float, h: float, rot: float = 0) -> None:  # type: ignore[misc]
         """A small OPEN-FRONTED draft-animal shed (ox / water-buffalo byre): a plank-and-thatch roof with a
@@ -256,10 +369,36 @@ class DraftByresMixin:
         # what `farmhouse_sizes_vary` already makes meaningful. `wealth` stays first so a tier that
         # DOES set it still wins; area breaks the tie it leaves behind; position only breaks an exact
         # tie between two identical houses.
+        # THE STALLS THE SEATING RESERVED (feature 287, homes H06): where the households were seated with their lots, each
+        # keeper's byre is a part of its homestead, laid inside the envelope that admitted it - so every one is drawn,
+        # where it was reserved, and the count is the lots' quota (round(n x the keeper share)) by construction. Nothing is
+        # sought here, so no full courtyard can lose a beast.
+        if _courtyard and getattr(self, "_byre_form", None) == form:
+            fraction = byre_keeper_share(self.seed)
+            self.M["meta"]["byre_share"] = fraction
+            seated: list[Pt] = []
+            for h in houses:
+                b = h.get("byre")
+                if not b:
+                    continue
+                self._draw_byre(float(b["x"]), float(b["y"]), bw, bh, float(b["rot"]))
+                self.placed.append(tuple(b["box"]))
+                self.M["byres"].append({"x": round(b["x"], 1), "y": round(b["y"], 1), "w": bw, "h": bh, "rot": round(b["rot"], 1), "of": [round(h["x"], 1), round(h["y"], 1)]})
+                seated.append((float(b["x"]), float(b["y"])))
+            self.M["meta"]["byre_target"] = len(seated)
+            return seated
+        # THE SHARED SHEDS' POCKETS THE SEATING RESERVED (feature 287, homes H06): each shed drawn in its pocket, which the
+        # houses packed round, so the count asked is the count drawn
+        pockets = getattr(self, "_byre_pockets", None)
+        if not _courtyard and pockets:
+            for x, y in pockets:
+                self._draw_byre(x, y, bw, bh)
+                self.M["byres"].append({"x": round(x, 1), "y": round(y, 1), "w": bw, "h": bh, "rot": 0})
+            self.M["meta"]["byre_target"] = len(pockets)
+            return list(pockets)
         ranked = sorted(houses, key=lambda h: (-h.get("wealth", 1.0), -(float(h["w"]) * float(h["h"])), h["x"], h["y"]))
         if _courtyard:  # about half the households kept a beast, and fewer later (BYRE_KEEPER_SHARE)
-            _lo, _hi = BYRE_KEEPER_SHARE
-            fraction = round(_lo + knob_rng(self.seed, "byre_share").random() * (_hi - _lo), 3)
+            fraction = byre_keeper_share(self.seed)  # the one roll the seating's lots read too (feature 287)
             self.M["meta"]["byre_share"] = fraction
         target = max(1, round(len(houses) * fraction))
         self.M["meta"]["byre_target"] = target  # the ASK, recorded so a silent shortfall is visible (byres_meet_their_target)
@@ -352,6 +491,7 @@ class DraftByresMixin:
                         self._fits(cx, cy, bw + 6, bh + 6)
                         and not any(point_in_poly(cx, cy, ff) or edge_dist(cx, cy, ff) < bh for ff in self.field_polys)
                         and all((bx - cx) ** 2 + (by - cy) ** 2 > _sep * _sep for bx, by in out)
+                        and not (_courtyard and crosses_a_stream((float(h["x"]), float(h["y"])), (cx, cy), self.M.get("streams", [])))  # a household's byre on its house's bank (H01)
                     ):
                         self._draw_byre(cx, cy, bw, bh)
                         self.placed.append((cx, cy, bw, bh))

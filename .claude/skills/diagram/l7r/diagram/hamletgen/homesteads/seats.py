@@ -164,16 +164,3 @@ def cluster_aspect(xs: list[float], ys: list[float]) -> float:
     _du = max(_along) - min(_along)
     _dv = max(_across) - min(_across)
     return max(_du, _dv) / max(1.0, min(_du, _dv))
-
-
-def _seat_allowed(s: Settlement, x: float, y: float) -> bool:
-    """Is this ground allowed to take a steading on this roll?
-
-    Empty on a first roll. `generate` re-rolls a map whose finished manifest stranded a farmhouse and
-    passes the ground those houses stood on - which the previous roll PROVED no way can reach - so the
-    retry seats elsewhere. Half a bundle pitch is the radius: enough to clear the pocket, not so much
-    that the retry merely nudges the same steading along it."""
-    avoid = getattr(s, "_avoid_seats", None)
-    if not avoid:
-        return True
-    return all(math.hypot(x - ax, y - ay) > BUNDLE_PITCH / 2 for ax, ay in avoid)

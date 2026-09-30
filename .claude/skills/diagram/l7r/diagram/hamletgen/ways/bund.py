@@ -20,6 +20,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, segments_cross
+from l7r.diagram.settlement.land.wet import marsh_ground
 
 from ..consts import FOOTPATH_FABRIC_GAP, LANE_CLEARANCE, WAY_END_REACH_FT, Poly, Pt
 from .checks import drawn_water_segs
@@ -112,7 +113,7 @@ class RunOnBlocks:
         self.s = s
         self.water = drawn_water_segs(s)
         toe = s.toe_band()
-        self.wet: list[Poly] = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes") or [] if m.get("role") != "defense" and m.get("poly")]
+        self.wet: list[Poly] = marsh_ground(s.M, but=("defense",))
         if toe:
             self.wet.append(list(toe))
         self.fabric = [poly for poly, _own, kind in _homestead_polys(s) if kind not in ("commons", "village_groves")]
@@ -160,8 +161,7 @@ def run_lanes_on_to_the_bund(s: Settlement, ground: WorkedGround, blocks: RunOnB
                 if tgt is not None and not turns_back(pts[-2], pts[-1], tgt) and blocks.clear(pts[-1], tgt, 2.0 * half):
                     pts, changed = [*pts, tgt], True
             pts.reverse()
-        if changed:
-            ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
+        if changed and s.reshape_lane(ln, pts):  # asked of the overlap matrix (feature 287 M8)
             s.reink_lane(i)
             moved += 1
     return moved
@@ -201,7 +201,8 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
             pts = [(float(x), float(y)) for x, y in lanes[i]["pts"]]
             to = over_the_water(q, p, blocks.water)
             pts = [*pts, to] if e == -1 else [to, *pts]
-            lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
+            if not s.reshape_lane(lanes[i], pts):  # ...where the overlap matrix admits the carried end (feature 287 M8)
+                continue
             s.reink_lane(i)
             return "run_on"
     for i, e, q in sorted(ends, key=lambda t: paddy.dist(t[2])):
@@ -210,7 +211,8 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
         if tgt is not None and not turns_back(prev, q, tgt) and blocks.clear(q, tgt, float(lanes[i].get("w") or 3)):
             pts = [(float(x), float(y)) for x, y in lanes[i]["pts"]]
             pts = [*pts, tgt] if e == -1 else [tgt, *pts]
-            lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
+            if not s.reshape_lane(lanes[i], pts):  # ...where the overlap matrix admits the run on (feature 287 M8)
+                continue
             s.reink_lane(i)
             return "run_on"
     samples: list[Pt] = []
@@ -221,7 +223,7 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
             samples.extend((a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n) for k in range(n))
     for q in sorted(samples, key=paddy.dist):
         tgt = run_on_target(q, paddy, BRANCH_WIDTH / 2.0, reach=float("inf"))
-        if tgt is not None and blocks.clear(q, tgt, BRANCH_WIDTH):
+        if tgt is not None and blocks.clear(q, tgt, BRANCH_WIDTH) and s.admits_lane([q, tgt], BRANCH_WIDTH):  # ...and the matrix (M8)
             s.lane([q, tgt], width=BRANCH_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)
             return "branch"
     return "none: every straight way from the lanes to the paddy crosses water, the marsh or a steading"

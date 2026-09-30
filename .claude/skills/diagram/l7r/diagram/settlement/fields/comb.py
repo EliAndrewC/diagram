@@ -6,10 +6,11 @@ Split from settlement/fields.py by feature 112 - see settlement/fields/CLAUDE.md
 import hashlib
 import math
 import random
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from typing import TYPE_CHECKING, Any, cast
 
 from l7r.diagram.interactive.tags import Split
+from l7r.diagram.overlap.registry import refuse_unadmitted
 
 from .._geom import (
     Poly,
@@ -21,16 +22,41 @@ from .._geom import (
     seg_dist,
     seg_reach_index,
 )
-from .._knobs import _centroid, _sharp_corners, _toward
+from .._knobs import _centroid, _sharp_corners, _toward, resolve_knob
 from ..land.wet import pond_fringe_ring
 from ..water_ways.water import ditch_style
+from .grain import SQ_FT_PER_ACRE, dry_need_acres, poly_area, top_up
 from .landuse import line_cuts
 
 if TYPE_CHECKING:
     from ..core import Settlement
 
 
-def hem_on_water(poly: Poly, wet: Sequence[tuple[Any, float]], pond: Any) -> bool:
+class WetLines:
+    """The `(polyline, half-width)` pairs `hem_on_water` asks, each segment filed once by its box widened by its half-width
+    (`seg_reach_index`), so a plot asks only the segments whose widened box meets its own box (feature 287 perf: the
+    coarse-grain top-up asks the whole wild middle, 558 plots on the reference seed 4, and each walked every ditch segment
+    on the map - 35,000 `quad_hits_seg`). EXACT: a stroke that meets a plot has a point within its half-width of the
+    plot, so its widened box meets the plot's box; a segment it skips could not have hit, and `any` does not care about
+    order."""
+
+    __slots__ = ("grid",)
+
+    def __init__(self, wet: Sequence[tuple[Any, float]]) -> None:
+        self.grid = seg_reach_index([([(float(q[0]), float(q[1])) for q in pl], float(hw)) for pl, hw in wet], 0.0)
+
+    def hit(self, poly: Poly) -> bool:
+        x0, y0 = min(q[0] for q in poly), min(q[1] for q in poly)
+        x1, y1 = max(q[0] for q in poly), max(q[1] for q in poly)
+        for a, b, hw, bx0, by0, bx1, by1 in self.grid.near((x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0) / 2):
+            if bx1 < x0 or bx0 > x1 or by1 < y0 or by0 > y1:
+                continue
+            if quad_hits_seg(poly, a, b, hw):
+                return True
+        return False
+
+
+def hem_on_water(poly: Poly, wet: Sequence[tuple[Any, float]] | WetLines, pond: Any) -> bool:
     """Does this dry-hem plot lie across a watercourse or over the pond?
 
     LIFTED OUT OF `_comb_draw_hem` (feature 146, GM 2026-08-28 on inner functions and testability). The
@@ -39,9 +65,67 @@ def hem_on_water(poly: Poly, wet: Sequence[tuple[Any, float]], pond: Any) -> boo
     straight across a stream that had been authored earlier (Ubame's). The stream arm and the pond arm are
     different geometry and want asking separately, which through the method meant building a whole comb net.
     """
-    if any(quad_hits_seg(poly, pl_[i], pl_[i + 1], hw_) for pl_, hw_ in wet for i in range(len(pl_) - 1)):
+    if (wet if isinstance(wet, WetLines) else WetLines(wet)).hit(poly):  # a caller asking many plots hands the index in
         return True
     return bool(pond is not None and point_quad_dist(pond[0], pond[1], poly) < max(pond[2], pond[3]))
+
+
+STREAM_JOIN_TOL = 13.0  # px: a channel declaring a stream end has that end within this of the stream's drawn bed - the gate's TRUNK_TOL (feature 287, labels L16)
+
+
+def channel_end_on_stream(end: Sequence[float], stream: Sequence[Sequence[float]], tol: float = STREAM_JOIN_TOL) -> bool:
+    """THE RULE (feature 287, labels L16; `channels_join_streams_at_confluence`): a channel end that declares a stream lies
+    within `tol` of that stream's centerline - the mouth reaches INTO the water, never dying in the grass beside it. The
+    intake that declares it and the test of it read this one predicate."""
+    pts = [(float(q[0]), float(q[1])) for q in stream]
+    return any(seg_dist(float(end[0]), float(end[1]), a, b) <= tol for a, b in zip(pts, pts[1:], strict=False))
+
+
+DOWNHILL_FRACTION = 0.2
+#: How much of a watercourse's net travel must run down the fall (water:W10, `channels_flow_downhill`): a delivery may take
+#: an oblique line, but not one whose net travel is level or uphill. The retired gate test's own figure.
+
+
+def runs_downhill(course: Sequence[Sequence[float]], fall: Sequence[float], frac: float = DOWNHILL_FRACTION) -> bool:
+    """Does `course`'s net displacement, first point to last, run down `fall` by at least `frac` of its length - the
+    channel rule (water:W10), ONE predicate for every writer of `M['channels']`: the sink's routes (`hamletgen/sink.py`)
+    and the hairline feed (`_comb_source_channel`). A course that ends where it starts has no direction to judge."""
+    vx, vy = float(course[-1][0]) - float(course[0][0]), float(course[-1][1]) - float(course[0][1])
+    L = math.hypot(vx, vy)
+    return L == 0 or vx * float(fall[0]) + vy * float(fall[1]) >= frac * L
+
+
+def outfall_run(b0: Sequence[float], b1: Sequence[float], fall: Sequence[float], lead: float = 70.0, reach: float = 520.0) -> list[Pt]:
+    """The village and city comb's drain-outfall run (water:W10): `lead` px on along the drain's own exit (`b0` toward
+    `b1`) for a smooth junction, then `reach` px straight down the unit `fall` off the map - taken only where it
+    `runs_downhill`, which at the drawn 70 and 520 it always does (the lead can take back at most 70 of 520 px down the
+    fall, so the run's net descent never drops under three quarters of its length). Where it would not, the run goes
+    straight down the fall from the drain's end, which runs downhill by construction."""
+    ex, ey = float(b1[0]) - float(b0[0]), float(b1[1]) - float(b0[1])
+    el = math.hypot(ex, ey) or 1.0
+    start = (float(b0[0]), float(b0[1]))
+    mid = (start[0] + ex / el * lead, start[1] + ey / el * lead)
+    run = [start, mid, (mid[0] + float(fall[0]) * reach, mid[1] + float(fall[1]) * reach)]
+    if runs_downhill(run, fall):
+        return run
+    return [start, (start[0] + float(fall[0]) * (lead + reach), start[1] + float(fall[1]) * (lead + reach))]
+
+
+def bead_drowned(q: Pt, water: Any, ellipses: Sequence[tuple[float, float, float, float]]) -> bool:
+    """THE RULE (feature 287, water W33; `bund_beans_on_bunds`): an azemame bead stands on water paint - inside a pond's rim
+    (`ellipses`, each grown by the rim stroke and a bead radius) or nearer than a ditch's or channel's half-width to its
+    stroke (`water`, a `seg_reach_index` of (run, half) pairs). The bead drop and the test of it read this one predicate."""
+    if any(((q[0] - ex) / erx) ** 2 + ((q[1] - ey) / ery) ** 2 <= 1.0 for ex, ey, erx, ery in ellipses):
+        return True
+    return any(x0 <= q[0] <= x1 and y0 <= q[1] <= y1 and seg_dist(q[0], q[1], a, b) < half for a, b, half, x0, y0, x1, y1 in water.near(q[0], q[1]))
+
+
+def recorded_water(M: Mapping[str, Any]) -> Any:
+    """Every recorded ditch and channel as the bead rule reads them: (run, half-width) filed once in a `seg_reach_index`.
+    A ditch's half is its WIDEST - the tail of a tapered collector - since that is what the painter reaches."""
+    runs = [([(float(q[0]), float(q[1])) for q in d["poly"]], max(float(d.get("w", 3.0)), float(d.get("w_tail", 3.0))) / 2.0) for d in (M.get("field_ditches") or []) if len(d.get("poly") or ()) >= 2]
+    runs += [([(float(q[0]), float(q[1])) for q in c["poly"]], float(c.get("w", 3.0)) / 2.0) for c in (M.get("channels") or []) if len(c.get("poly") or ()) >= 2]
+    return seg_reach_index(runs, 0.0)
 
 
 class CombMixin:
@@ -76,17 +160,17 @@ class CombMixin:
         floor = net.get("floor")
         if floor:
             fpts = " ".join(f"{x:.1f},{y:.1f}" for x, y in floor)
-            self.add(f'<polygon points="{fpts}" fill="{col}" stroke="none"/>', cls="paddy")
+            self.add_paddy(f'<polygon points="{fpts}" fill="{col}" stroke="none"/>', cls="paddy")
             self.M.setdefault("comb_floors", {})[name] = [[round(x, 1), round(y, 1)] for x, y in floor]
             return
         if full_envelope:
-            self.add(f'<polygon points="{epts}" fill="{col}" stroke="none"/>', cls="paddy")
+            self.add_paddy(f'<polygon points="{epts}" fill="{col}" stroke="none"/>', cls="paddy")
         else:
             cid = self._cid("padbase")
             px0, px1 = min(v[0] for v in pv), max(v[0] for v in pv)
             py0, py1 = min(v[1] for v in pv), max(v[1] for v in pv)
             self.add(f'<clipPath id="{cid}"><rect x="{px0:.1f}" y="{py0:.1f}" width="{px1 - px0:.1f}" height="{py1 - py0:.1f}"/></clipPath>')
-            self.add(f'<polygon points="{epts}" fill="{col}" clip-path="url(#{cid})"/>', cls="paddy")  # the field floor reads as paddy (feature 134)
+            self.add_paddy(f'<polygon points="{epts}" fill="{col}" clip-path="url(#{cid})"/>', cls="paddy")  # the field floor reads as paddy (feature 134)
         self.M.setdefault("comb_floors", {})[name] = [[round(x, 1), round(y, 1)] for x, y in env]
 
     def bund_junctions(self: Settlement, plots: Sequence[Mapping[str, Any]], name: str) -> None:  # type: ignore[misc]
@@ -190,9 +274,23 @@ class CombMixin:
         # imperfect tessellation never shows the parchment background as bare "white" gaps (research.md D5).
         self.comb_base_fill(net, name)
 
+        # THE WATER IS RECORDED BEFORE THE GROUND THAT ASKS AGAINST IT (feature 287, water W53). The ditch net is the field's
+        # skeleton - the plots are cut between its threads - so its records stand before any plot is offered: the dry hem
+        # then refuses a plot one of the field's own ditches crosses (`dry_plots` on `field_ditches` is forbidden), where it
+        # used to be recorded first and leave the ditch to be refused on it. Recording draws nothing; the net is still
+        # painted below, where it always was. (The feed from the source is recorded after the source is drawn, since it
+        # snaps to the brook; it names its field, and a field's own water may lie on its own resting basin.)
+        self._comb_record_ditches(net, name)
         self._comb_draw_hem(net, source, name)
+        # THE IN-FIELD FEATURES ARE SEATED BEFORE THE PADDIES ARE DRAWN, AND INKED AFTER THEM (feature 287, water W28): a
+        # grave carves the rings the paddies are drawn from, so the paddies must be drawn from the carved rings; the
+        # features' own ink is held and emitted where it always was, over the paddies.
+        _feature_ink: list[tuple[str, str]] = []
+        self._paddy_features(net, _feature_ink)
         self._comb_draw_paddies(net, name)
         self.bund_junctions(net["plots"], name)
+        for _svg, _cls in _feature_ink:
+            self.add(_svg, cls=_cls)
         # WATER-HONEST BEADS, the draw-site half (GM 2026-08-15: "fix the water-buried beads so
         # the record stays honest"; settlement-review found 40 of Inashiro's 727 recorded beads
         # invisible under water paint). `_bund_beans` already drops plot-buried beads and beads
@@ -201,11 +299,12 @@ class CombMixin:
         # interior, so their geometry must exist before the bead line commits; it draws from its
         # own seeded rng, so the move ripples no stream), then every bead inside the source pond
         # or a pocket pond is dropped BEFORE drawing and recording, so dots and manifest agree.
-        self._paddy_features(net)
         sluice = net["channels"][0]["pts"][0]
         pond_rec = self._comb_draw_source(net, source, sluice)
         self._comb_draw_ditches(net)
-        self._comb_record_ditches(net, name)
+        # ...AND THE HAIRLINE FEED IS RECORDED BEFORE THE BEADS ARE DROPPED (feature 287, water W33): it is water the bead
+        # drop reads (`M["channels"]`), and recorded after the drop it could lay a bead under its own stroke.
+        self._comb_source_channel(net, name, source, sluice, pond_rec, join_head)
         # ...AND THE DITCHES ARE RECORDED BEFORE THE FIELD IS (feature 230). The field record carries the bead
         # POINTS, so a bead dropped after it is dropped from the picture and not from the manifest - which is
         # the drift `bunds_and_dikes` exists to catch, and which is how a bead under a drain's wide tail came
@@ -224,7 +323,6 @@ class CombMixin:
         # source kind "cascade" = the field is fed plot-to-plot from an UPSTREAM field (the caller
         # records its own connector channel with to={"kind":"field",...}), so no hairline is added -
         # its frm={"kind":"stream"} anchor would dangle with no stream at the sluice.
-        self._comb_source_channel(net, name, source, sluice, pond_rec, join_head)
         _fringe = self._pending_fringe  # see `_comb_draw_source`: the reeds keep off water that exists
         if _fringe:
             self._pending_fringe = None
@@ -275,16 +373,21 @@ class CombMixin:
             # the plot's plow boundary - the crop stops at the bank, and a bund is the thing that stops it.
             _wet.append(([(float(q[0]), float(q[1])) for q in _src_brook], 9.0 / 2 + 3.0))
 
-        def _hem_on_water(poly: Poly) -> bool:
-            return hem_on_water(poly, _wet, _wpond)
+        _wet_lines = WetLines(_wet)  # filed once: every hem and reserve plot asks it
 
-        for p in net["dry_plots"]:  # the dry upslope hem
-            if any(hem_on_paddy(p["poly"], _pol) for _pol in _prior_paddies):
-                continue
-            if _hem_on_water(p["poly"]):
-                continue  # standing water was here first - the crop stops at the bank
+        def _hem_on_water(poly: Poly) -> bool:
+            return hem_on_water(poly, _wet_lines, _wpond)
+
+        def _refused(poly: Poly) -> bool:
+            # the crop stops at the bank - and a plot the registry of what stands refuses is not offered (feature 287, water
+            # W53): the field's own ditch net is recorded before the hem, so a plot one of its ditches crosses is refused here
+            return any(hem_on_paddy(poly, _pol) for _pol in _prior_paddies) or _hem_on_water(poly) or not self.admits("dry_plots", {"poly": [[round(x, 1), round(y, 1)] for x, y in poly]})
+
+        drawn = [p for p in net["dry_plots"] if not _refused(p["poly"])]  # the dry upslope hem
+        drawn += self._coarse_grain_top_up(net, sum(poly_area(p["poly"]) for p in drawn), _refused)
+        for p in drawn:
             pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in p["poly"])
-            self.add(f'<polygon points="{pts}" fill="{p["fill"]}" stroke="#A98C58" stroke-width="1.4" stroke-linejoin="round"/>', cls=p["crop"])  # each dry crop is its own class (feature 134)
+            self.add_paddy(f'<polygon points="{pts}" fill="{p["fill"]}" stroke="#A98C58" stroke-width="1.4" stroke-linejoin="round"/>', cls=p["crop"])  # each dry crop is its own class (feature 134)
             self._draw_furrows(p["poly"], p["furrow"], p["theta"], cls=p["crop"])
             # ...with its TRACT (269 B06), named by field so two fans' tracts never share a name: `dry_plot_furrows_vary` judges the
             # plots of one tract to share a row direction and the plots across a seam to differ.
@@ -305,6 +408,34 @@ class CombMixin:
             self.block_polys.append(p["poly"])
             self.dry_polys.append(p["poly"])
 
+    def _coarse_grain_top_up(self: Settlement, net: dict[str, Any], drawn_px2: float, refused: Callable[[Poly], bool]) -> list[dict[str, Any]]:  # type: ignore[misc]
+        """The reserve plots a wild fan middle adds to the drawn strip so it holds the coarse-grain need (feature 287, W36;
+        `grain.py`, research/fields.html fields/165): none where the hamlet grows its barley on its drained paddy over the
+        winter and that covers the need, the middle's plots nearest the toe first where it does not. The winter crop is
+        rolled only among the forms this ground can feed (`WINTER_CROP`'s typing rule), so the band returned holds the
+        need by construction. A generated comb hamlet only - it alone rolls `fan_middle`; the form and the acreage go in the meta."""
+        from l7r.diagram.waterfields import FLOODED
+
+        meta = self.M["meta"]
+        if meta.get("generated_by") != "hamletgen" or "fan_middle" not in meta or "dry_reserve" not in net:
+            return []
+        ft2 = float(meta.get("ftpx") or 1.0) ** 2 / SQ_FT_PER_ACRE
+        drained = sum(poly_area(p["poly"]) for p in net.get("plots", []) if p.get("fill") != FLOODED) * ft2
+        offered = [p for p in net["dry_reserve"] if not refused(p["poly"])]
+        households = int(meta.get("households") or 0)
+        room = (drawn_px2 + sum(poly_area(p["poly"]) for p in offered)) * ft2
+        form = resolve_knob("winter_crop", self.seed, {**self.knob_context(), "grain_households": households, "grain_drained_acres": drained, "grain_room_acres": room}, self.knob_pins)
+        self._resolved_knobs["winter_crop"] = form
+        need = dry_need_acres(households, drained, form)
+        added = top_up(drawn_px2, offered, need / ft2, refused)
+        meta.update(
+            winter_crop=form,
+            coarse_grain_room_acres=round(room, 2),
+            coarse_grain_dry_need_acres=round(need, 2),
+            coarse_grain_dry_acres=round((drawn_px2 + sum(poly_area(p["poly"]) for p in added)) * ft2, 2),
+        )
+        return added
+
     def _comb_draw_paddies(self: Settlement, net: dict[str, Any], name: str = "") -> None:  # type: ignore[misc]
         """Draw the flooded paddy plots, and write the topography record and the paint record the overlay
         and flooded-wedge checks read."""
@@ -324,7 +455,7 @@ class CombMixin:
         for i, p in enumerate(net["plots"]):  # the flooded paddies
             if i in _rest:
                 p["rest"] = True
-                self.rest_basin(p["poly"], aze_w(self.ftpx))
+                self.rest_basin(p["poly"], aze_w(self.ftpx), name)
                 continue
             pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in p["poly"])
             # ONE polygon, TWO classes (feature 134 `Split`): the fill is the flooded paddy, the stroke is
@@ -335,7 +466,7 @@ class CombMixin:
             # and the color cannot disagree. The bund half is untouched: a blue plot's stroke is a bund
             # like every other, and hovering one still lights the whole fabric.
             plot_cls = "wet paddy" if p["fill"] == _WF_FLOODED else "paddy"
-            self.add(f'<polygon points="{pts}" fill="{p["fill"]}" stroke="{AZE}" stroke-width="{aze_w(self.ftpx):.2f}" stroke-linejoin="round"/>', cls=Split(plot_cls, "bund"))
+            self.add_paddy(f'<polygon points="{pts}" fill="{p["fill"]}" stroke="{AZE}" stroke-width="{aze_w(self.ftpx):.2f}" stroke-linejoin="round"/>', cls=Split(plot_cls, "bund"))
             # Record the LOW/WET plots (feature 010). This is the topographic ELIGIBILITY set the
             # plot-based land-use overlays draw from. It is written HERE, by the field pass, so that
             # `overlays_on_wet_ground_only` compares two INDEPENDENTLY-produced records rather than
@@ -372,21 +503,23 @@ class CombMixin:
             _bwx, _bwy, _bwrx, _bwry = source["pond"]
             _bw.append((_bwx, _bwy, _bwrx + 3.0, _bwry + 3.0))  # +3: the rim stroke and a bead radius
         _bw += [(fp["x"], fp["y"], fp["rx"] + 3.0, fp["ry"] + 3.0) for fp in self.M.get("field_ponds") or []]
-        _water = [
-            ([(float(q[0]), float(q[1])) for q in d["poly"]], max(float(d.get("w", 3.0)), float(d.get("w_tail", 3.0))) / 2.0)
-            for d in (self.M.get("field_ditches") or [])
-            if len(d.get("poly") or ()) >= 2
-        ]
-        _water += [([(float(q[0]), float(q[1])) for q in c["poly"]], float(c.get("w", 3.0)) / 2.0) for c in (self.M.get("channels") or []) if len(c.get("poly") or ()) >= 2]
-
+        net["bead_ponds"] = _bw  # ...and kept with the net, for `settle_beads` to judge the same beads against the same ponds
         # THE WATER LINES FILED ONCE (feature 284, FR-009): every bead measured every segment of every ditch and channel. A
         # bead nearer than `half` to a segment stands inside that segment's box widened by `half`, so the segments whose
-        # widened box holds the bead are every one that can drown it, and the same `seg_dist` decides.
-        _water_idx = seg_reach_index(_water, 0.0)
+        # widened box holds the bead are every one that can drown it, and the same `seg_dist` decides - `bead_drowned`,
+        # the one predicate (feature 287, water W33).
+        _water_idx = recorded_water(self.M)
+        # A GRAVE CARVED INTO THE FIELD (feature 287, water W28) takes its mound's ground out from under the bunds the beads
+        # were laid along, and may weld or bare a carved piece: a bead on the mound, or on a stretch of bund no ring now
+        # has, is dropped. Only where a grave was carved, so every other field's beads are judged exactly as before.
+        _graves = net.get("grave_discs") or []
+        _bunds = seg_reach_index([([*p["poly"], p["poly"][0]], 1.0) for p in net["plots"] if len(p["poly"]) >= 3], 0.0) if _graves else None
 
         def _dry(q: tuple[float, float]) -> bool:
-            return all(((q[0] - _wx) / _wrx) ** 2 + ((q[1] - _wy) / _wry) ** 2 > 1.0 for _wx, _wy, _wrx, _wry in _bw) and not any(
-                x0 <= q[0] <= x1 and y0 <= q[1] <= y1 and seg_dist(q[0], q[1], a, b) < half for a, b, half, x0, y0, x1, y1 in _water_idx.near(q[0], q[1])
+            return (
+                not bead_drowned(q, _water_idx, _bw)
+                and all(math.hypot(q[0] - gx, q[1] - gy) >= gr for gx, gy, gr in _graves)
+                and (_bunds is None or any(x0 <= q[0] <= x1 and y0 <= q[1] <= y1 and seg_dist(q[0], q[1], a, b) <= tol for a, b, tol, x0, y0, x1, y1 in _bunds.near(q[0], q[1])))
             )
 
         net["bund_bean_runs"] = [part for run in net["bund_bean_runs"] for part in bead_runs(run, _dry)]
@@ -397,7 +530,38 @@ class CombMixin:
         from l7r.diagram.waterfields import BEAN_GREEN
 
         beads = "".join(f'<circle cx="{x}" cy="{y}" r="1.4" fill="{BEAN_GREEN}"/>' for x, y in net["bund_beans"])
-        self.add(f'<g opacity="0.85">{beads}</g>', cls="bund beans")
+        z = self.add(f'<g opacity="0.85">{beads}</g>', cls="bund beans")
+        # THE SLOT IS KEPT ON THE SETTLEMENT (`_bead_slots`), so a re-roll's deep copy of it carries its beads' slots with it
+        self._bead_slots.append((z, net["bund_bean_runs"], self.M["fields"][-1] if self.M.get("fields") else None, list(net.get("bead_ponds") or [])))
+
+    def settle_beads(self: Settlement) -> int:  # type: ignore[misc]
+        """Drop every bead water recorded AFTER its field now lies under, from the ink and the record together; return
+        how many were dropped (feature 287, water W33).
+
+        The field drops its drowned beads over the water recorded when it is drawn, and a later stage can record more -
+        the sink's drain run (`hamletgen/sink.py` `drain_run`) leaves the field over its bunds. So the rule is held
+        where the LAST water writer has run: each field's bead ink is rewritten in its own slot from the runs that
+        survive `bead_drowned` over every ditch and channel then recorded, each run re-split by `bead_runs` (a run left
+        under two beads goes), and the field's record re-flattened from the same runs - the dots and the manifest agree."""
+        from l7r.diagram.waterfields import BEAN_GREEN, bead_runs
+
+        water = recorded_water(self.M)
+        # ...and every pond recorded by now: the tameike `stage_sink` digs below the field, a field pond laid after it
+        now = [(float(p[0]), float(p[1]), float(p[2]) + 3.0, float(p[3]) + 3.0) for p in [self.M.get("pond")] if p]
+        now += [(float(fp["x"]), float(fp["y"]), float(fp["rx"]) + 3.0, float(fp["ry"]) + 3.0) for fp in self.M.get("field_ponds") or []]
+        dropped = 0
+        for k, (z, runs, rec, ponds) in enumerate(self._bead_slots):
+            kept = [part for run in runs for part in bead_runs(run, lambda q, _p=ponds + now: not bead_drowned(q, water, _p))]
+            before, after = sum(len(r) for r in runs), sum(len(r) for r in kept)
+            if after == before:
+                continue
+            dropped += before - after
+            flat = [q for run in kept for q in run]
+            self.out[z] = '<g opacity="0.85">' + "".join(f'<circle cx="{x}" cy="{y}" r="1.4" fill="{BEAN_GREEN}"/>' for x, y in flat) + "</g>"
+            if rec is not None:
+                rec["bund_beans"] = [[round(x, 1), round(y, 1)] for x, y in flat]
+            self._bead_slots[k] = (z, kept, rec, ponds)
+        return dropped
 
     def _comb_draw_source(self: Settlement, net: dict[str, Any], source: dict[str, Any], sluice: Any) -> Any:  # type: ignore[misc]
         """Draw the water SOURCE - a tameike with its fringe and no-build block, or a feeder stream.
@@ -424,7 +588,7 @@ class CombMixin:
             # no "stream" polyline = an existing on-map stream already runs at the sluice (the town
             # pattern: the comb taps the map's stream via a weir); nothing extra is drawn, the
             # hairline topology channel below still anchors to that stream
-            self.stream(source["stream"], frm={"kind": "offmap"}, width=7)
+            self.stream(source["stream"], frm={"kind": "offmap"}, to=source.get("to"), width=7)  # `to`: where a brook that runs on past the sluice leaves (feature 287, water:W07)
         return pond_rec
 
     def _comb_draw_ditches(self: Settlement, net: dict[str, Any]) -> None:  # type: ignore[misc]
@@ -453,19 +617,23 @@ class CombMixin:
             bdx, bdy = math.cos(math.radians(ddb)), math.sin(math.radians(ddb))
             b0 = net["brook"][0]
             b1 = net["brook"][1] if len(net["brook"]) > 1 else (b0[0] + bdx, b0[1] + bdy)
-            ex, ey = b1[0] - b0[0], b1[1] - b0[1]  # the drain's own exit direction (smooth junction)
-            el = math.hypot(ex, ey) or 1.0
-            mid = (b0[0] + ex / el * 70, b0[1] + ey / el * 70)  # a short smooth continuation, THEN turn downhill
             # (first segment = drain direction -> smooth junction; then straight downhill AWAY from the field ->
             # clears a fan envelope's concave lobe without an acute turn, since the drain already runs downhill)
             # A DRAINAGE DITCH, not a stream (feature 230): the collector's dug continuation, drawn at the
             # collector's tail width with the drain's hue and class, recorded in `channels` like the pond run
             # - the same stroke `hamletgen/sink.py` `drain_run` draws, so every sink carries one kind of thing.
-            _run = [b0, mid, (mid[0] + bdx * 520, mid[1] + bdy * 520)]
+            # ...AND IT RUNS DOWNHILL BY THE CHANNEL RULE'S OWN PREDICATE (feature 287, water W10): `outfall_run` asks
+            # `runs_downhill`, as the hamlet's sink routes do
+            _run = outfall_run(b0, b1, (bdx, bdy))
             _dw = next((float(_c.get("w_tail", _c["w"])) for _c in net["channels"] if _c.get("role") == "drain"), 5.5)
             col, cls = ditch_style("drain")
-            self.field_channel(_run, col, _dw, _dw, cls=cls)
-            self.M["channels"].append({"poly": [[round(x, 1), round(y, 1)] for x, y in _run], "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": 2.5})
+            # ...INTO THE LATE BLOCK WITH THE NET (feature 287, water W38): drawn into the shared early block it was spliced
+            # at the FIRST water call, before every plot painted after it - a second fan's paddies, or this fan's own where
+            # the run's middle lies over the toe - so the plots covered it. The late block re-anchors after the last field.
+            _rec = {"poly": [[round(x, 1), round(y, 1)] for x, y in _run], "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": 2.5}
+            refuse_unadmitted(self.M, "channels", _rec)  # asked before it is drawn: the straight run is the only one (W53)
+            self.field_channel(_run, col, _dw, _dw, late=True, cls=cls)
+            self.M["channels"].append(_rec)
             self.corridors.append((list(_run), 33.0))
 
     def _comb_record_field(self: Settlement, net: dict[str, Any], name: str) -> None:  # type: ignore[misc]
@@ -576,6 +744,7 @@ class CombMixin:
                 rec["trimmed"] = True
             if c.get("seg"):  # a polder ring-side tag (feeder/e_toe/w_toe/drain/lateral), so footbridge placement can be side-aware
                 rec["seg"] = c["seg"]
+            refuse_unadmitted(self.M, "field_ditches", rec)  # the skeleton, recorded before the ground that asks against it (W53)
             self.M["field_ditches"].append(rec)
 
     def _comb_source_channel(self: Settlement, net: dict[str, Any], name: str, source: dict[str, Any], sluice: Any, pond_rec: Any, join_head: bool) -> None:  # type: ignore[misc]
@@ -631,6 +800,8 @@ class CombMixin:
                 din = (_q_in[0] + _nx_in * 14.0, _q_in[1] + _ny_in * 14.0)
             start = pond_rec if pond_rec else (sluice[0], sluice[1])
             frm = {"kind": "pond"} if pond_rec else {"kind": "stream"}
+            _fdd = math.radians(float(net["down_deg"]) if net.get("down_deg") is not None else float(dd))
+            _feed_fall = (math.cos(_fdd), math.sin(_fdd))  # the field's own fall, as the channel rule reads it (its record's `down_deg`)
             if not pond_rec:
                 # snap the intake's START onto the nearest stream centerline (within the 30px anchor
                 # band): an offtake JOINS its stream at a confluence like any junction - the symmetric
@@ -645,8 +816,15 @@ class CombMixin:
                         dq = math.hypot(start[0] - fq[0], start[1] - fq[1])
                         if nearest is None or dq < nearest[0]:
                             nearest = (dq, fq)
-                if nearest and 0.5 < nearest[0] <= 30:
+                # ...ONLY WHERE THE FEED STILL RUNS DOWNHILL FROM IT (feature 287, water:W10): the record runs from `start` to the
+                # fork, so a snap that left its net travel level or uphill is not taken and the feed keeps the sluice
+                if nearest and 0.5 < nearest[0] <= 30 and runs_downhill([nearest[1], fork], _feed_fall):
                     start = nearest[1]
+                # ...AND IT DECLARES A STREAM ONLY WHERE IT REACHES ONE (feature 287, labels L16): beyond the anchor band
+                # the intake is not snapped, so its mouth stood in the grass while the record said it joined the brook.
+                # Such a feed is sourced from the sluice itself, and says so.
+                if not any(channel_end_on_stream(start, st_["poly"]) for st_ in self.M.get("streams", []) if len(st_.get("poly") or ()) >= 2):
+                    frm = {"kind": "sluice"}
             vx, vy = din[0] - start[0], din[1] - start[1]
             vl = math.hypot(vx, vy) or 1.0
             midx, midy = (start[0] + din[0]) / 2 - vy / vl * 20, (start[1] + din[1]) / 2 + vx / vl * 20
@@ -692,14 +870,17 @@ class CombMixin:
                 # projection along the source -> mouth chord.
                 _fk_t = ((_fk[0] - start[0]) * vx + (_fk[1] - start[1]) * vy) / (vl * vl)
                 _ch_poly.insert(1 if _fk_t < 0.5 else len(_ch_poly) - 1, [round(_fk[0], 1), round(_fk[1], 1)])
-            self.M["channels"].append(
-                {
-                    "poly": _ch_poly,
-                    "frm": frm,
-                    "to": {"kind": "field", "name": name},
-                    "w": 2.5,
-                }
-            )
+            # THE FEED RUNS DOWNHILL OR IS NOT RECORDED (feature 287, water:W10): from the sluice the race leaves at the offtake
+            # angle (35 degrees off the fall, so its net travel runs 0.82 of its length down it) and a polder's reservoir
+            # stands above the block's high corner, so by construction it always does; a feed that climbs is refused by
+            # name here, never recorded as water running uphill
+            if not runs_downhill(_ch_poly, _feed_fall):
+                raise ValueError(f"{name}: the feed from its {frm['kind']} to the field runs level or uphill ({_ch_poly[0]} -> {_ch_poly[-1]})")
+            # ...AND IT NAMES THE FIELD IT FEEDS (feature 287, water W53): it traces the head race, and a field's own water may
+            # lie along its own resting basin (`_MATRIX_SAME_PARENT_OK`); a stranger's may not. Asked before it is recorded.
+            _feed = {"poly": _ch_poly, "frm": frm, "to": {"kind": "field", "name": name}, "w": 2.5, "field": name}
+            refuse_unadmitted(self.M, "channels", _feed)
+            self.M["channels"].append(_feed)
 
     def _draw_furrows(self: Settlement, poly: Any, color: str, theta: float, cls: str | None = None) -> None:  # type: ignore[misc]
         """Stylised ridge/furrow lines within a dry-field plot (dry crops are row-cultivated)."""

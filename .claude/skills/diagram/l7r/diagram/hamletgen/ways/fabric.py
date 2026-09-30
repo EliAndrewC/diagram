@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import math
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
+from typing import Any
 
 from l7r.diagram.settlement import Settlement, edge_dist, rot_rect, seg_closest, seg_dist, segments_cross
 from l7r.diagram.sitegen.geom import centroid, unit
@@ -186,6 +187,14 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
         for r in s.M.get(key, []):
             own = r.get("of")
             out.append((rot_rect(float(r["x"]), float(r["y"]), float(r["w"]), float(r["h"]), float(r.get("rot", 0.0))), (float(own[0]), float(own[1])) if own else None, key))
+    # THE FARMSTEAD FIXTURES ARE BUILT GROUND TOO (feature 287: laid in each bundle since HOMES' wave 3 and recorded as
+    # `farm_fixtures`) - a privy, a manure heap, a bath, a coop, a hokora - and UNOWNED: a door path may leave its own yard,
+    # never walk over its own privy. Measured before: 233 lane crossings of a fixture over 64 maps
+    out.extend(
+        (rot_rect(float(r["x"]), float(r["y"]), float(r["w"]), float(r["h"]), float(r.get("rot", 0.0))), None, "farm_fixtures")
+        for r in s.M.get("farm_fixtures", [])
+        if all(k in r for k in ("x", "y", "w", "h"))
+    )
     return out
 
 
@@ -242,8 +251,14 @@ def _hits_a_steading(s: Settlement, pts: Poly, width: int) -> bool:
     # corners. The first cut of this helper used a quad-versus-segment overlap at half the tolerance, and
     # so passed paths the gate still failed: same intent, different window, which is exactly the drift
     # the rule exists to stop.
+    return house_hit(pts, width, s.M.get("houses") or [])
+
+
+def house_hit(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]]) -> bool:
+    """`_hits_a_steading`'s body on plain records (feature 287, M1): the lane law (`law.fouls_fabric`) asks it of a
+    manifest's houses, the web pass of the settlement's - one predicate, read by both."""
     half = width / 2.0 + 2.0
-    for h in s.M.get("houses") or []:
+    for h in houses:
         quad = rot_rect(float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"]), float(h.get("rot", 0.0)))
         probes = [*quad, (float(h["x"]), float(h["y"]))]
         for i in range(len(pts) - 1):
@@ -282,6 +297,10 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
     # drawn through a farmhouse is a map that looks finished and is wrong. The piece is kept and the
     # gate says so, which is the same ruling as the orphan joiner's "KEPT, not dropped".
     if joins and _hits_a_steading(s, pts, width):
+        return False
+    # ...AND NEVER ON WHAT THE OVERLAP MATRIX FORBIDS A WAY ON (feature 287 M8): a burial ground, a bed, a well - the registry
+    # of what stands answers, and a refused web lane is not drawn (its house is served by its reserved corridor, which the settle draws)
+    if not s.admits_lane(pts, width):
         return False
     if not joins and polyline_len(pts) < _WEB_MIN_FT:
         segs = _net_segs(s)
@@ -399,6 +418,11 @@ def _fabric_hits(run: Poly, fabric: Sequence[Poly], gap: float) -> int:
     return sum(1 for poly in fabric if _crosses_fabric(run, [poly], gap))
 
 
+def poly_box(poly: Poly) -> tuple[float, float, float, float]:
+    """(x0, y0, x1, y1) of a polygon's vertices - the box `_crosses_fabric` prefilters by."""
+    return min(p[0] for p in poly), min(p[1] for p in poly), max(p[0] for p in poly), max(p[1] for p in poly)
+
+
 def _crosses_fabric(run: Poly, fabric: Sequence[Poly], gap: float) -> bool:
     """Does this polyline pass within `gap` of anything already standing?
 
@@ -420,10 +444,11 @@ def _crosses_fabric(run: Poly, fabric: Sequence[Poly], gap: float) -> bool:
     # every polygon. A crossing needs the two boxes to meet, and each distance below `gap` needs them within `gap` of each
     # other, so a polygon - or a run segment - whose box, widened by `gap`, misses the other's cannot answer True; the same
     # tests decide the rest.
+
     rx0, ry0 = min(p[0] for p in run) - gap, min(p[1] for p in run) - gap
     rx1, ry1 = max(p[0] for p in run) + gap, max(p[1] for p in run) + gap
     for poly in fabric:
-        px0, py0, px1, py1 = min(p[0] for p in poly), min(p[1] for p in poly), max(p[0] for p in poly), max(p[1] for p in poly)
+        px0, py0, px1, py1 = poly_box(poly)
         if px1 < rx0 or px0 > rx1 or py1 < ry0 or py0 > ry1:
             continue
         for k in range(len(run) - 1):

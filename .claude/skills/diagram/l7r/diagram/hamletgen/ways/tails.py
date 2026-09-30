@@ -156,15 +156,17 @@ def _sweep_doubled_tails(s: Settlement) -> int:
                     moved = reseat_on_way(lanes, i, pts, cut, op)
                     if not cut_keeps_network([{"pts": moved.get(n, lx.get("pts") or [])} for n, lx in enumerate(lanes)], i, pts, cut):
                         continue  # the tail carries another lane's junction: cutting it would strand that lane
+                    # ...AND EVERY LANE CARRIED ONTO THE WAY IS ADMITTED BY THE OVERLAP MATRIX (feature 287 M8), all or none:
+                    # a carried end the matrix refuses would be left on the cut tail, stranded, so the tail is not cut
+                    if not all(s.admits("lanes", {**lanes[n], "pts": [[round(x, 1), round(y, 1)] for x, y in w]}, ignore=lanes[n]) for n, w in moved.items()):
+                        continue
                     for n, w in moved.items():
-                        lanes[n]["pts"] = [[round(x, 1), round(y, 1)] for x, y in w]
+                        s.reshape_lane(lanes[n], w)
                         s.reink_lane(n)
-
                     pts, changed = cut, True
                     fixed += 1
                     break
             pts.reverse()
-        if changed:
-            ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
+        if changed and s.reshape_lane(ln, pts):  # asked of the overlap matrix (feature 287 M8)
             s.reink_lane(i)
     return fixed

@@ -174,7 +174,7 @@ class WardsMixin:
         if label:
             xs = [p[0] for p in poly]
             ys = [p[1] for p in poly]
-            self.label(sum(xs) / len(xs), sum(ys) / len(ys), label, 9, italic=True, color="#5A4326")
+            self.label(sum(xs) / len(xs), sum(ys) / len(ys), label, 9, italic=True, color="#5A4326", ref=(min(xs), min(ys), max(xs), max(ys)))
 
     def _draw_reserve(self: Settlement, poly: Any, kind: str) -> None:  # type: ignore[misc]
         """Render a reserve quarter's ground as its declared kind. A drill_ground is bare packed

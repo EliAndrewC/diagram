@@ -4,17 +4,29 @@ from __future__ import annotations
 
 import math
 import random
-from collections.abc import Sequence
+from collections.abc import Callable, Iterator, Sequence
+from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement._knobs import knob_rng
+from l7r.diagram.settlement.homestead_parts.groves import HOMESTEAD_WOOD_FT2, crown_lift
+from l7r.diagram.settlement.homestead_parts.stands import crown_reach
+from l7r.diagram.settlement.homestead_parts.wood_share import COPSE_CLUMP_BS, install_wood_shares
+from l7r.diagram.settlement.land.wet import marsh_ground
+from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT, exit_bearing, start_tree
 from l7r.diagram.settlement.rolling.bearing import COMMON_BEARING_DEG, MarginBearing, turned_reach, wrap_line_deg
+from l7r.diagram.settlement.rolling.lot import HouseholdLots
+from l7r.diagram.settlement.shrines_wells.byres import COMMONS_BYRE_FRACTION, COMMONS_BYRE_GAP, commons_byre_target, household_byre_form
 
-from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, MIN_WEB_GAP, SUN_CORRIDOR_FT, WEB_FABRIC_GAP, WEST_SUN_FT, Pt
-from ..plan import SitePlan
+from ..cluster import seat_has_dry_exit
+from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, CLUSTER_SHAPES, COPSE_HOUSE_REACH_FT, MIN_WEB_GAP, POLDER_ARCHETYPES, SUN_CORRIDOR_FT, WEB_FABRIC_GAP, WEST_SUN_FT, Pt
+from ..plan import SitePlan, _roll
 from .boundary import install_site_boundary
-from .retirement import retirement_houses
-from .seats import _seat_allowed, cluster_aspect, front_row, lane_frontage
+from .capacity import SiteRefused, margin_ladder, seat_the_rest, seating_mark, unseat_to
+from .fixtures import farmstead_fixtures, fixture_forms, fixture_quota
+from .holds import hold_laid_parts
+from .retirement import retirement_houses, retirement_quota
+from .seats import cluster_aspect, front_row, lane_frontage
 from .wells import place_wells
 
 #: The range a rank seat may stand off its exact rank, as a share of `BUNDLE_PITCH` - half of it each way (feature 261,
@@ -130,21 +142,29 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
 
     `households_consistent` wants the occupied farmhouses within 0.85-1.05x the declared households - a to-scale map
     depicts essentially every household (research/settlements.html "Is every household in a hamlet actually drawn?") -
-    so a hamlet that declares 15 and seats 12 fails, and the stage records
-    the shortfall on the roll rather than re-rolling the whole map to fix a local one.
+    and the stage aims at one apiece: EVERY declared household is seated, or the site is refused (feature 287, homes
+    H14 and plan D2; `seat_every_household`) - the exhaustive pass over the ground within reach, then the next margin,
+    never a shortfall shipped and never a whole-map re-roll.
 
     Steps:
+        l7r.diagram.hamletgen.homesteads.stages.seat_every_household
         l7r.diagram.hamletgen.homesteads.boundary.install_site_boundary
         l7r.diagram.hamletgen.homesteads.boundary.site_boundary
+        l7r.diagram.settlement.homestead_parts.wood_share.install_wood_shares
+        l7r.diagram.settlement.rolling.access.start_tree
+        l7r.diagram.settlement.rolling.lot.household_parts
         l7r.diagram.hamletgen.homesteads.seats.front_row
         l7r.diagram.hamletgen.homesteads.seats._front_row_from_chains
         l7r.diagram.hamletgen.homesteads.seats.lane_frontage
-        l7r.diagram.hamletgen.homesteads.seats._seat_allowed
         l7r.diagram.settlement.Settlement.try_place
         l7r.diagram.settlement.Settlement._place_bundle_nucleated
         l7r.diagram.settlement.Settlement._bundle_envelope
         l7r.diagram.settlement.Settlement._envelope_blocked
         l7r.diagram.settlement.Settlement._parts_fit
+        l7r.diagram.settlement.rolling.access.access_corridor
+        l7r.diagram.settlement.homestead_parts.wood_share.WoodShares.share
+        l7r.diagram.settlement.rolling.lot.record_parts
+        l7r.diagram.settlement.rolling.access.reserve
         l7r.diagram.settlement.Settlement.cluster_seeds
         l7r.diagram.settlement.Settlement.farmsteads
     """
@@ -157,11 +177,283 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # The belt's afternoon lane is opted into HERE too, though it is only read at `stage_windbreak`:
     # the two sun rules are one decision, made at the same place, for the same reason.
     s.west_sun_lane(WEST_SUN_FT)
+    _placed, _cloud_placed = seat_every_household(s, plan)
+
+    # THE SHAPE IS RECORDED ONLY IF THE CLOUD ACTUALLY SHAPED THE CLUSTER (2026-08-17).
+    # `cluster_seeds` used to stamp `meta.cluster_shape` on its first attempt, BEFORE it knew how
+    # many seats it would win - which was harmless while the cloud either ran for the whole hamlet
+    # or not at all. The front-row cap changed that: the rows now seat one rank and the cloud seats
+    # the SURPLUS, so on Sawada and Inashiro a knob describing a minority of the houses started
+    # being stamped for the first time. It is not idle bookkeeping - `check_village/driver.py`'s
+    # `TWIN_AXES` reads "the declared knob if present, else the cluster-bbox aspect", so Sawada
+    # began reporting its shape as "round" to the twin detector while drawing a 3.48:1 band.
+    #
+    # A DECLARATION MUST DESCRIBE THE DRAWING. The cloud shaped the cluster only if it seated most
+    # of it; below that the frontage rows did, and the rolled shape went unhonored exactly as it
+    # does when the cloud never runs at all. `meta.cluster_seeding` still records which happened, so
+    # nothing goes silent - that is the invariant `settlement_records_cluster_seeding` holds.
+    # THE SHAPE IS ALWAYS HONORED NOW, so it is always declared (2026-08-19). This used to stamp the
+    # knob only when the CLOUD seated most of the cluster, on the correct principle that a
+    # declaration must describe the drawing - but the census behind `CLUSTER_BAND_ASPECT` showed the
+    # cloud never runs at all, so the guard meant the knob was declared on no map and honored on no
+    # map. It binds at the cluster BAND now (`seat_cluster`), which is what the front rows are seated
+    # along, so every map both honors and declares it and `TWIN_AXES` reads a shape the sheet
+    # actually has.
+    # ...BUT ONLY IF THE SHEET ACTUALLY HAS THAT SHAPE. Measured, and this is the third thing the
+    # shape work turned up: on a 20-household hamlet the LANE SKELETON seats most of the cluster
+    # through `lane_frontage`, and a T spreads houses two ways whatever the band and the row do -
+    # Kashikawa declares `elongated` and draws 1.0:1. The band and row bindings are real (Inashiro
+    # 3.3:1 crescent, Mizuguchi 1.7:1 round, Sawada 1.1:1 round) but they do not outrank the
+    # skeleton, so a blanket declaration would put a shape on the manifest that `TWIN_AXES` reads
+    # and the sheet does not have - the same "declaration must describe the drawing" failure the
+    # old cloud-only guard was written for, in a worse form because it would look honored.
+    #
+    # So the DRAWN aspect decides. Where the shape bound, it is declared; where the skeleton
+    # overrode it, `cluster_shape_unhonored` records the roll that did not take, because a knob
+    # that silently fails to bind is what this whole defect was. `cluster_shape_matches_the_drawing`
+    # gates it.
+    # MEASURED ON THE CLUSTER'S OWN AXIS, NOT THE PAGE'S (2026-08-19, and this is the second time
+    # this one guard has been caught measuring the wrong quantity). The first cut took
+    # `max(dx,dy)/min(dx,dy)` over the axis-aligned bbox of house centers - and that ratio collapses
+    # toward 1.0 for a band on a diagonal no matter how string-like the cluster is, because it is a
+    # function of the field margin's COMPASS BEARING rather than of the cluster's proportion. It is
+    # maximally blind at exactly 45 degrees.
+    #
+    # Three independent settlement-review passes caught it on the same day, with numbers, and it
+    # failed in BOTH directions across the shipped pool - axis-aligned vs own-axis:
+    #     Kashikawa 1.22 vs 3.83  (rolled `elongated`, DREW 3.8:1, and was recorded unhonored)
+    #     Sawada    1.25 vs 3.02  (declared `round`, drew a string - falsely HONORED)
+    #     Mizuguchi 2.36 vs 2.77  (declared `round` over its own ceiling on the honest measure)
+    #     Inashiro  3.18 vs 3.59  (band near vertical, so the two roughly agree)
+    # So it denied an honored knob on one map and honored a contradicted one on another, and
+    # `TWIN_AXES` reads this field. The `CLUSTER_DRAWN_ASPECT` docstring promises a quantity that can
+    # be "read off a finished map with a ruler" - and a reader lays the ruler ALONG the cluster.
+    _declared = declare_cluster_shape(s.M.get("houses", []), plan.cluster_shape, plan.spec.seed)  # the one declaration (homes H04, H05)
+    s.M["meta"].update(_declared)
+    plan.cluster_shape = _declared["cluster_shape"]  # the knob as resolved over what the band draws (plan D4)
+    s.M["meta"]["seat_search"] = dict(s._seat_search)  # the guesses counted (feature 226 FR-003): candidates, placer calls, positions, rectangles
+    s._site_chains = None  # the boundary is the homestead stage's; every later placer runs the fit test's own path
+    s._site_corridors = None
+    s._free_ground = None
+    s._unreachable = None
+    s._access = None  # the access tree is the seating's; the manifest keeps it (`access_exit`, `access_corridors`)
+    s._pockets = None  # the pockets are drawn by `place_wells` from the house records (`well_pocket`)
+    s._corridor_ground = None  # the corridors' ground test is the seating's
+    setattr(s, "_corridor_tree", None)  # noqa: B010 - ...and so is the tree's (`ways/tree.py`); read by `access.tree_admits` with a default
+    s._wood = None  # the reservations are the seating's; each household's record keeps its own (`wood_share`)
+    s._lots = None  # the lots are the seating's (the byre form stays: `draft_byres` draws the stalls it reserved)
+    # THE ROLLED SHAPE MUST LEAVE A TRACE EVEN WHEN THE CLOUD NEVER RUNS (known-open ledger
+    # 2026-08-16, Kashikawa: the front rows + lane frontage seated all 20 households, the
+    # cluster-seeds cloud never ran, and the rolled cluster_shape knob went unhonored with no
+    # trace on the manifest - a knob that can silently not-record is the "check that never runs"
+    # shape). Record the seeding mode always: "cloud" when cluster_seeds ran (it records
+    # meta.cluster_shape itself), "frontage" when the rows/frontage passes seated every house and
+    # the rolled shape went unhonored. `settlement_records_cluster_seeding` holds the invariant.
+    # ...and this stays a SEPARATE record, keyed on what actually seated the houses rather than on
+    # whether the shape got stamped. It used to be derived from the presence of `cluster_shape`,
+    # which stopped meaning anything the moment the shape was always declared.
+    s.M["meta"]["cluster_seeding"] = "cloud" if _cloud_placed * 2 >= max(1, plan.spec.households) else "frontage"
+    plan.placed = s.farmsteads()
+    hold_laid_parts(s, s.M.get("houses") or [])  # the pockets and fixtures stand for the ways laid before they are drawn (M8)
+    reserve_the_seating(s)  # ...and the corridors and wood seats it reserved, for every placer after it (M8, `overlap/reserved.py`)
+    # how many farmhouses the quarter turn took (269 B18) - measured on what was drawn, so the share is a count, not a hope
+    s.M["meta"]["house_quarter_turns"] = sum(1 for h in s.M.get("houses") or [] if abs(wrap_line_deg(float(h.get("rot", 0.0)) - (s._house_bearing or 0.0))) > 45.0)
+    # THE TRIM MOVED OUT OF THIS STAGE (feature 126). It existed because the skeleton was laid
+    # before the houses, so its arms had to be shortened afterwards once there was something to
+    # measure them against. The arms are now laid after the houses and fitted to them, so there is
+    # nothing here to trim: at this moment the only ways drawn are the connector and the field spur,
+    # and trimming those against house positions is meaningless. `stage_web` trims once the lanes it
+    # trims actually exist.
+
+
+def shapes_drawn_at(drawn: float) -> list[str]:
+    """The cluster shapes whose drawn band (`CLUSTER_DRAWN_ASPECT`) holds a drawn aspect - a shape other than round only
+    past round's ceiling (the settlement-review of Inashiro, feature 261: crescent's band starts at 1.9 and round's ends
+    at 2.0, and a quarter-disc of houses drawn at 1.97 is round). Past every band, the nearest band's shape."""
+    ceiling = CLUSTER_DRAWN_ASPECT["round"][1]
+    held = [k for k, (lo, hi) in CLUSTER_DRAWN_ASPECT.items() if (lo if k == "round" else max(lo, ceiling + 1e-9)) <= drawn <= hi]
+    return held or [min(CLUSTER_DRAWN_ASPECT, key=lambda k: min(abs(drawn - CLUSTER_DRAWN_ASPECT[k][0]), abs(drawn - CLUSTER_DRAWN_ASPECT[k][1])))]
+
+
+def in_a_shapes_band(houses: Sequence[dict[str, Any]]) -> bool:
+    """THE ONE PREDICATE of `test_the_cluster_draws_inside_the_band_of_the_shape_it_declared` (feature 287, homes wave 5):
+    do the houses draw an aspect (`cluster_aspect`) some shape's band holds (`CLUSTER_DRAWN_ASPECT`)? Every aspect is at
+    least round's floor, so the one way out is past the longest band's ceiling - elongated's 12:1 - where `shapes_drawn_at`
+    could only name the nearest band, which the drawing breaks. `seat_every_household` keeps no seating that fails it."""
+    drawn = cluster_aspect([h["x"] for h in houses] or [0.0], [h["y"] for h in houses] or [0.0])
+    return any(lo <= drawn <= hi for lo, hi in CLUSTER_DRAWN_ASPECT.values())
+
+
+def declare_cluster_shape(houses: Sequence[dict[str, Any]], shape: str | None, seed: int) -> dict[str, Any]:
+    """The cluster shape the manifest declares, and the plan keeps: the rolled shape wherever the houses draw it, and
+    otherwise the knob RESOLVED OVER THE SHAPES THE DRAWING ADMITS (feature 287, homes H05, plan D4) - `shapes_drawn_at`,
+    rolled from the map's seed with the knob's own weights (`CLUSTER_SHAPES`). The drawn shape is the declared shape on
+    every map; there is no `cluster_shape_unhonored` record. The stage and its unit test read this one function.
+
+    D4'S OTHER HALF WAS TRIED FIRST AND MEASURED A NO-OP (2026-09-29): steering the rank rounds toward the rolled shape -
+    the along-the-field ends offered before the ranks while the standing houses draw rounder than the shape's band - left
+    31 of 64 maps (pool and cohort 1-60) drawing a crescent or a string rounder than its band, the same 31 as without it:
+    the front row, the brook's far bank and the field's chords seat the cluster, and the ends are refused where the ranks
+    were. The record of three earlier failed bindings (`CLUSTER_BAND_ASPECT`) says the same. So the knob is narrowed to
+    what the band draws, which D4 allows: on that measurement round is declared on 57 of the 64 maps, crescent on
+    6, elongated on 1."""
+    drawn = cluster_aspect([h["x"] for h in houses] or [0.0], [h["y"] for h in houses] or [0.0])
+    space = shapes_drawn_at(drawn)
+    rolled = shape or "crescent"
+    resolved = rolled if rolled in space else str(_roll(seed, "cluster_shape", tuple(v for v in CLUSTER_SHAPES if v in space) or tuple(space)))
+    return {"cluster_shape": resolved, "cluster_aspect_drawn": round(drawn, 2)}
+
+
+def seat_every_household(s: Settlement, plan: SitePlan) -> tuple[int, int]:
+    """Every declared household seated, or the site refused (feature 287, homes H14 and plan D2).
+
+    The chosen margin is seated first (`_seat_households`, whose last round is the exhaustive pass). Where even that
+    leaves a household without a house, the ground within reach of this margin is full, and the houses it seated are
+    taken back and the next margin of `seat_cluster`'s ranking is seated instead (`margin_ladder`; on a polder only the
+    margins on the chosen flank, the waterward fringe being drawn already). The seating kept is the one pass that
+    seated everyone - no second roll of anything. Past the last margin the site is refused, naming it: `SiteRefused`,
+    raised HERE rather than at `stage_seat` where plan D2 places it, because a margin's capacity is known only by
+    seating it. `meta.seat_margin` records which rung seated the hamlet (1: the chosen margin)."""
+    want = plan.spec.households
+    mark = seating_mark(s)
+    placed, cloud = _seat_households(s, plan)
+    tried = [placed]
+    ladder = margin_ladder(plan, plan.field_archetype in POLDER_ARCHETYPES)
+    toe: Any = None
+    # ...AND A SEATING WHOSE HOUSES DRAW NO SHAPE'S BAND IS NOT KEPT (feature 287, homes wave 5): past the longest band's
+    # ceiling (`in_a_shapes_band`, a string past 12:1) the margin is taken back as one that seated too few is
+    for margin in ladder if placed < want or not in_a_shapes_band(s.M.get("houses") or []) else ():
+        # A RUNG WITH NO DRY WAY OUT IS NOT SEATED (feature 287, ways W23): `seat_cluster` asked the head; each rung is
+        # asked the same, lazily, before the houses on it are taken back
+        toe = (s.toe_band() or None,) if toe is None else toe
+        if not seat_has_dry_exit(plan, (float(margin["cx"]), float(margin["cy"])), toe[0], marsh_ground(s.M, only=("pond_fringe",))):
+            continue
+        unseat_to(s, mark)
+        plan.seat = {**margin, "ladder": ladder}
+        s.field_face = (float(margin["cx"]), float(margin["cy"]))
+        s.M["meta"]["seat_offwind"] = bool(margin.get("offwind"))
+        placed, cloud = _seat_households(s, plan)
+        tried.append(placed)
+        if placed >= want and in_a_shapes_band(s.M.get("houses") or []):
+            break
+    if placed < want:
+        raise SiteRefused(f"{plan.spec.name} (seed {plan.spec.seed}): no margin seats all {want} households - seated {tried} on the {len(tried)} margin(s) tried")
+    if not in_a_shapes_band(s.M.get("houses") or []):
+        raise SiteRefused(f"{plan.spec.name} (seed {plan.spec.seed}): no margin seats its households inside a cluster shape's band")
+    s.M["meta"]["seat_margin"] = len(tried)
+    return placed, cloud
+
+
+def reserve_the_seating(s: Settlement) -> None:
+    """THE SEATING'S RESERVATIONS, HANDED TO THE REGISTRY OF WHAT STANDS (feature 287 M8; plan M3's keep-out, woods W25): the
+    access corridors (each leg at the corridor's half-width, for the household whose door it leaves - the legs a house's
+    corridor records follow its first, which names the house; the field's corridor and the exit strip are nobody's) and
+    every household's wood seats, with the clump the copse plants them at and the copse's own lane buffer about a lane
+    (`crown_reach` at the drawn lift, `village_grove`'s). Every placer after the seating then keeps off them by asking the
+    registry (`Settlement.admits`), and one that did not is refused at record time."""
+    res = s.standing.reserved
+    half = s.px(ACCESS_HALF_FT)
+    owner: Any = None
+    for c in s.M.get("access_corridors") or []:
+        owner = c["of"] if c.get("of") else (None if c.get("field") else owner)
+        pts = c.get("pts") or []
+        if len(pts) >= 2:
+            res.reserve_corridor(pts[0], pts[1], half, owner)
+    exit_seg = s.M.get("access_exit")
+    if exit_seg and len(exit_seg) >= 2:
+        res.reserve_corridor(exit_seg[0], exit_seg[1], half, None)
+    clump = COPSE_CLUMP_BS * s.bscale
+    seats = [p for h in s.M.get("houses") or [] for p in (h.get("wood_share") or {}).get("seats") or ()]
+    res.reserve_seats(seats, clump, max(clump * 0.45 + 4, crown_reach(clump, 0.0, lift=crown_lift(s.bscale))))
+
+
+def corridor_ground(s: Settlement) -> Callable[[list[Pt]], bool]:
+    """The ways' own test of a corridor's ground (`settle.corridor_on_lawful_ground`: the run squared at its crossings, then
+    `Lawful.on_lawful_ground`), for the seating to admit a corridor by (`access.lawful_ground`) - the settlement package
+    cannot import the hamlet generator, so it is installed on the settlement as `_corridor_ground`. The law it reads is the
+    seating's (`tree.seating_law`), built once per house seated, not per corridor asked."""
+    from ..ways.corridors import ACCESS_WIDTH
+    from ..ways.tree import seating_law
+
+    def ground(run: list[Pt]) -> bool:
+        law_ = seating_law(s)
+        return bool(law_.on_lawful_ground(law_.squared(run), ACCESS_WIDTH))
+
+    return ground
+
+
+def reserve_field_corridor(s: Settlement) -> bool:
+    """THE FIELD'S CORRIDOR, reserved with the exit strip (feature 287, ways W03; homes wave 5): on a brook map a way of the
+    hamlet's own must reach its field (`law.field_unreached`), and the web used to look for one only among what the seating
+    had left - reported where none kept the law, never refused. So the run the web draws first is reserved before any house
+    stands: the ways' own field paths from the tree, the straight ones and then the ones the web's router threads
+    (`corridors.field_runs`, `routed_field_runs`: on to the bund, over the brook at a ford where it lies between) - the
+    first on lawful ground (`settle.corridor_on_lawful_ground`, the seating's question of every corridor). It joins the
+    tree, so no envelope covers it (`AccessTree.covers_box`) and no share of the wood floor stands on it
+    (`WoodShares.share`), and it is recorded as the tree's legs are (`field` on each), oriented toward the tree, for the web
+    to draw where no way of its own reaches the field (`settle.settle_field`), bowed round a shed on it as a house's
+    corridor is. True where one is reserved or the rule asks none (no brook, no field); False where no lawful run reaches
+    the field from this margin - `_seat_households` then seats no one on it and the ladder offers the next."""
+    from ..ways import law
+    from ..ways.bund import BRANCH_WIDTH, paddy_ground
+    from ..ways.corridors import FIELD_ROLE, field_router, field_runs, routed_field_runs
+    from ..ways.geom import memo_ground, worked_ground
+    from ..ways.settle import corridor_on_lawful_ground
+    from ..ways.tree import admits, seating_law
+
+    tree = getattr(s, "_access", None)
+    brook = next(iter(law._brooks(s.M)), [])
+    if tree is None or len(brook) < 2:
+        return True
+    grounds = [g for g in (paddy_ground(s), memo_ground(s, "worked", worked_ground)) if g.edge is not None]
+    if not grounds:
+        return True
+    fords = [(float(x), float(y)) for x, y in (s.M.get("meta") or {}).get("brook_fords") or []]
+    segs = list(tree.segs)
+
+    def candidates() -> Iterator[list[Pt]]:
+        yield from field_runs(segs, grounds, BRANCH_WIDTH / 2.0, brook, fords)
+        route = field_router(s, brook)
+        for ground in grounds:
+            yield from routed_field_runs(segs, ground, BRANCH_WIDTH / 2.0, route, brook, fords)
+
+    # ...AND WHERE THE TREE STAYS LAWFUL WITH IT (feature 287 wave 6, `tree.admits`): the web draws it as a tree lane, never
+    # cut, so its joint with the exit strip is judged here with every other rule of the lane law
+    run = next(
+        (r for r in candidates() if len(r) >= 2 and corridor_on_lawful_ground(s.M, r, BRANCH_WIDTH) and admits(seating_law(s), s.M, [(float(x), float(y)) for x, y in r[::-1]], FIELD_ROLE)), None
+    )
+    if run is None:
+        return False
+    back = [(float(x), float(y)) for x, y in run[::-1]]
+    for a, b in zip(back, back[1:], strict=False):
+        tree.add(a, b)
+        s.M.setdefault("access_corridors", []).append({"pts": [[round(a[0], 1), round(a[1], 1)], [round(b[0], 1), round(b[1], 1)]], "field": True})
+    return True
+
+
+def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
+    """Seat the households on `plan.seat`'s margin: the site boundary installed for it, the front row, the ranks, the
+    rescue rounds, then the exhaustive pass over the legal ground within reach (homes H14). Returns `(placed, the
+    cloud's share)`; the boundary stays installed for the stage to take down."""
     seat = plan.seat
     # THE SITE BOUNDARY FIRST (feature 226): one outline separating the buildable ground from everything the map holds,
     # computed once; the fit test reads it instead of its five ground scans, and the seats below are proposed from it.
     install_site_boundary(s, plan)
     face_the_houses(s, plan)
+    # EACH HOUSEHOLD'S LOT, keyed on seat order (feature 287, plan M5): the k-th house seated takes rung k of the size
+    # ladder and the k-th place in the kura quota, so the counts close whatever seat each household lands on
+    s._byre_form, _share = household_byre_form(s)
+    s._byre_pockets = []
+    s._pockets = []  # the well pockets this seating has laid (feature 287, homes H10-H11; `needs_pocket`)
+    # ...AND EACH HOUSEHOLD'S SHARE OF THE WOOD FLOOR (feature 287, woods W25 made absolute; plan D9): a household is seated
+    # only where it can reserve copse seats covering `HOMESTEAD_WOOD_FT2`'s floor within the dooryard copse's reach of its
+    # own house, and no later household or corridor takes them (`homestead_parts/wood_share.py`)
+    if getattr(s, "_nucleated", False):
+        install_wood_shares(s, HOMESTEAD_WOOD_FT2[0], COPSE_HOUSE_REACH_FT, ACCESS_HALF_FT)
+    # ...AND ITS FARMSTEAD FIXTURES (feature 287, homes H32): a quota per kind, laid in the bundle with the hamlet's forms
+    s._fixture_forms = fixture_forms(plan.spec.seed, plan.manure_form)
+    _quota = {**fixture_quota(plan.spec.seed, plan.spec.households, {k: int(v) for k, v in plan.fixtures_min.items()}), **retirement_quota(s, plan.spec.households)}
+    s._lots = HouseholdLots(plan.spec.seed, plan.spec.households, _share, _quota) if getattr(s, "_nucleated", False) else None
     s._seat_search = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0, "rounds": 0}  # rounds: lattice rounds run (0 when the front row seated everything; over 4 = the rescue ran)
     _house_max = (s.px(46) * 1.35, s.px(28) * 1.10)  # the LARGEST house `_try_place_bundle` rolls: the front row's computed standoff clears it
 
@@ -186,12 +478,9 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
 
     ax, ay = seat["along"]
     ox, oy = seat["out"]
-    # A RE-ROLL DRAWS A DIFFERENT LATTICE (feature 226, cohort seeds 11 and 25). `generate` re-rolls a map that stranded a
-    # farmhouse with that ground forbidden, and under the old random cloud the retry explored new pockets by itself; the
-    # lattice keeps the FIRST survivors of the same draw, so a retry that forbade one seat kept every other, and the
-    # stranded house came back a pitch away. The draw is salted by how many seats are forbidden - the first roll is
-    # unchanged, and each retry lays the lattice at a new phase.
-    rng = random.Random((plan.spec.seed * 2654435761 + 7919 * len(getattr(s, "_avoid_seats", None) or ())) & 0xFFFFFFFF)
+    # THE LATTICE'S DRAW, one per map: the seed's own hash (feature 226's re-roll salt went with the re-roll, feature 287;
+    # the first roll's draw is this one, so no map moves).
+    rng = random.Random((plan.spec.seed * 2654435761) & 0xFFFFFFFF)
     placed = 0
     lat, dep = seat["lat"], seat["dep"]
 
@@ -242,6 +531,36 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
 
     def in_band(q: Pt) -> bool:
         return math.hypot(q[0] - seat["cx"], q[1] - seat["cy"]) <= bound
+
+    # THE ACCESS TREE'S FIRST CORRIDOR, THE EXIT STRIP (feature 287, plan M3's seat half): from the cluster's center
+    # outward past the furthest seat any round may offer, so every house after is admitted only with a corridor to it
+    # (`settlement/rolling/access.py`). A dispersed hamlet has no internal network and is not held to one.
+    # ...ON LAWFUL GROUND (feature 287, ways): the strip is held to the corridors' own test, turned off the outward bearing
+    # as far as a quarter turn where it is refused straight out; a margin with no lawful way out seats no one here, and
+    # the ladder offers the next (`seat_every_household`)
+    if plan.settlement_form != "dispersed":
+        from ..ways.tree import seating_judge
+
+        s._corridor_ground = corridor_ground(s)
+        setattr(s, "_corridor_tree", seating_judge(s))  # noqa: B010 - ...and the whole tree judged as lanes with each corridor (feature 287 wave 6)
+        _length = bound * 1.5 + BUNDLE_PITCH
+        _out = exit_bearing(s, (float(seat["cx"]), float(seat["cy"])), (float(ox), float(oy)), _length)
+        if _out is None:
+            return 0, 0
+        start_tree(s, (float(seat["cx"]), float(seat["cy"])), _out, _length)
+        if not reserve_field_corridor(s):
+            return 0, 0  # ...AND ITS FIELD'S CORRIDOR (ways W03): a margin with no lawful way on to its field seats no one here
+    # THE SHARED SHEDS' POCKETS BEFORE ANY HOUSE (feature 287, homes H06): on the `detached_commons` form the sheds are no
+    # household's part, so their ground is reserved in the band first and the houses pack round it - AFTER the exit strip
+    # and the field's corridor, whose strips a pocket keeps off (`_commons_pocket_clear`; M8: the registry refuses a shed on
+    # a corridor, and the first pocket, nearest the band's middle, stood where every exit strip starts), and filed with the
+    # wood shares so no household's seat is reserved under one
+    if getattr(s, "_nucleated", False) and s.resolve("byre_form") == "detached_commons":
+        want = commons_byre_target(plan.spec.households)
+        if len(s.reserve_commons_byres(seat, plan.spec.households)) < want:
+            raise SiteRefused(f"{plan.spec.name} (seed {plan.spec.seed}): the seat band holds no ground for {want} shared byres")
+        if s._wood is not None:
+            s._wood.file_byre_pockets(s, s._byre_pockets)
 
     # THREE standoffs, not two. `field_ringed` (retired, feature 141) wants five farmhouses within 165 px of the field
     # outline and the placer refuses any bundle that laps a bund or a ditch, so a single ring of
@@ -357,8 +676,14 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # the homestead's CORE - the house, the yard south of it, the kura north - is what always faces the paddy the same
     # way; the garden's side is chosen later by the sun, so it is not in the reach (counted, it stood every front house
     # off a paddy beside it by a garden's width, 81 px on Inashiro against the 60 the cluster is held to)
-    _g0 = s._bundle_geom(0.0, 0.0, _house_max[0], _house_max[1], "E", shed=True, rot=0.0)  # unturned: each seat adds its own turn
-    _core = s._bbox_of([r for r in (_g0["house"], _g0["yard"], _g0.get("shed")) if r is not None])
+    # ...AND THE WELL POCKET (feature 287, homes H10): a household carrying one - the first always does, and it is the most
+    # central front seat - reaches that much further toward a paddy beside or before its yard, so the row stands off by it
+    s._household_well = True
+    try:
+        _g0 = s._bundle_geom(0.0, 0.0, _house_max[0], _house_max[1], "E", shed=True, rot=0.0)  # unturned: each seat adds its own turn
+    finally:
+        s._household_well = False
+    _core = s._bbox_of([r for r in (_g0["house"], _g0["yard"], _g0.get("shed"), _g0.get("well")) if r is not None])
     _reach = (_core[0] - _core[2] / 2, _core[1] - _core[3] / 2, _core[0] + _core[2] / 2, _core[1] + _core[3] / 2)  # (left, top, right, bottom) about the house center
     for _rung in (0,):
         for (fx, fy), _n in front_row(plan, min(plan.spec.households, 12), standoff=None, chains=s._site_chains, house=_house_max, envelope=_reach, with_normals=True):
@@ -387,7 +712,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
             # split its lane web in two; the extra tries go only where the water moved the seat.
             _tries = [(fx, fy)] + ([(fx - _n[1] * d, fy + _n[0] * d) for d in (BUNDLE_PITCH / 4.0, -BUNDLE_PITCH / 4.0)] if _by_water else [])
             for tx, ty in _tries:
-                if math.hypot(tx - seat["cx"], ty - seat["cy"]) <= bound * 1.3 and _seat_allowed(s, tx, ty) and _pretest(tx, ty) and s.try_place(tx, ty, "plain"):
+                if math.hypot(tx - seat["cx"], ty - seat["cy"]) <= bound * 1.3 and _pretest(tx, ty) and s.try_place(tx, ty, "plain"):
                     placed += 1
                     break
     # ...then rows FLANKING the lanes, before any shape fill. A lane exists to be fronted, and a
@@ -429,7 +754,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         for lx, ly in lane_frontage(s, seat, connector=True):
             if placed >= plan.spec.households:
                 break
-            if in_band((lx, ly)) and _seat_allowed(s, lx, ly) and _pretest(lx, ly) and s.try_place(lx, ly, "plain"):
+            if in_band((lx, ly)) and _pretest(lx, ly) and s.try_place(lx, ly, "plain"):
                 placed += 1
     _cloud_placed = 0
     s._seat_search["front"] = placed  # the households the front row seated (R2 reads it beside the cap)
@@ -550,103 +875,18 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
                 # 0.18 and 0.25 each tipped Inashiro's rolled crescent under round's ceiling - a knob that moves which map fails.)
                 _dj = (s._hjit(_sx4, _sy4, 14.0) - 0.5) * BUNDLE_PITCH * RANK_DEPTH_JITTER if attempt < 4 and not _along_the_field and plan.lane_web == "alleys" else 0.0
                 for _tx, _ty in ((_sx4 + ox * _dj, _sy4 + oy * _dj), (_sx4, _sy4)) if _dj != 0.0 else ((_sx4, _sy4),):
-                    if _seat_allowed(s, _tx, _ty) and _pretest(_tx, _ty) and s.try_place(_tx, _ty, "plain"):
+                    if _pretest(_tx, _ty) and s.try_place(_tx, _ty, "plain"):
                         placed += 1
                         _cloud_placed += 1
                         break
             if _along_the_field or not (attempt < 4 and _standing and placed == _before_round and placed < plan.spec.households):
                 break
             _offered, _along_the_field = _ends, True
-
-    # THE SHAPE IS RECORDED ONLY IF THE CLOUD ACTUALLY SHAPED THE CLUSTER (2026-08-17).
-    # `cluster_seeds` used to stamp `meta.cluster_shape` on its first attempt, BEFORE it knew how
-    # many seats it would win - which was harmless while the cloud either ran for the whole hamlet
-    # or not at all. The front-row cap changed that: the rows now seat one rank and the cloud seats
-    # the SURPLUS, so on Sawada and Inashiro a knob describing a minority of the houses started
-    # being stamped for the first time. It is not idle bookkeeping - `check_village/driver.py`'s
-    # `TWIN_AXES` reads "the declared knob if present, else the cluster-bbox aspect", so Sawada
-    # began reporting its shape as "round" to the twin detector while drawing a 3.48:1 band.
-    #
-    # A DECLARATION MUST DESCRIBE THE DRAWING. The cloud shaped the cluster only if it seated most
-    # of it; below that the frontage rows did, and the rolled shape went unhonored exactly as it
-    # does when the cloud never runs at all. `meta.cluster_seeding` still records which happened, so
-    # nothing goes silent - that is the invariant `settlement_records_cluster_seeding` holds.
-    # THE SHAPE IS ALWAYS HONORED NOW, so it is always declared (2026-08-19). This used to stamp the
-    # knob only when the CLOUD seated most of the cluster, on the correct principle that a
-    # declaration must describe the drawing - but the census behind `CLUSTER_BAND_ASPECT` showed the
-    # cloud never runs at all, so the guard meant the knob was declared on no map and honored on no
-    # map. It binds at the cluster BAND now (`seat_cluster`), which is what the front rows are seated
-    # along, so every map both honors and declares it and `TWIN_AXES` reads a shape the sheet
-    # actually has.
-    # ...BUT ONLY IF THE SHEET ACTUALLY HAS THAT SHAPE. Measured, and this is the third thing the
-    # shape work turned up: on a 20-household hamlet the LANE SKELETON seats most of the cluster
-    # through `lane_frontage`, and a T spreads houses two ways whatever the band and the row do -
-    # Kashikawa declares `elongated` and draws 1.0:1. The band and row bindings are real (Inashiro
-    # 3.3:1 crescent, Mizuguchi 1.7:1 round, Sawada 1.1:1 round) but they do not outrank the
-    # skeleton, so a blanket declaration would put a shape on the manifest that `TWIN_AXES` reads
-    # and the sheet does not have - the same "declaration must describe the drawing" failure the
-    # old cloud-only guard was written for, in a worse form because it would look honored.
-    #
-    # So the DRAWN aspect decides. Where the shape bound, it is declared; where the skeleton
-    # overrode it, `cluster_shape_unhonored` records the roll that did not take, because a knob
-    # that silently fails to bind is what this whole defect was. `cluster_shape_matches_the_drawing`
-    # gates it.
-    # MEASURED ON THE CLUSTER'S OWN AXIS, NOT THE PAGE'S (2026-08-19, and this is the second time
-    # this one guard has been caught measuring the wrong quantity). The first cut took
-    # `max(dx,dy)/min(dx,dy)` over the axis-aligned bbox of house centers - and that ratio collapses
-    # toward 1.0 for a band on a diagonal no matter how string-like the cluster is, because it is a
-    # function of the field margin's COMPASS BEARING rather than of the cluster's proportion. It is
-    # maximally blind at exactly 45 degrees.
-    #
-    # Three independent settlement-review passes caught it on the same day, with numbers, and it
-    # failed in BOTH directions across the shipped pool - axis-aligned vs own-axis:
-    #     Kashikawa 1.22 vs 3.83  (rolled `elongated`, DREW 3.8:1, and was recorded unhonored)
-    #     Sawada    1.25 vs 3.02  (declared `round`, drew a string - falsely HONORED)
-    #     Mizuguchi 2.36 vs 2.77  (declared `round` over its own ceiling on the honest measure)
-    #     Inashiro  3.18 vs 3.59  (band near vertical, so the two roughly agree)
-    # So it denied an honored knob on one map and honored a contradicted one on another, and
-    # `TWIN_AXES` reads this field. The `CLUSTER_DRAWN_ASPECT` docstring promises a quantity that can
-    # be "read off a finished map with a ruler" - and a reader lays the ruler ALONG the cluster.
-    _cxs = [h["x"] for h in s.M.get("houses", [])] or [0.0]
-    _cys = [h["y"] for h in s.M.get("houses", [])] or [0.0]
-    _drawn = cluster_aspect(_cxs, _cys)
-    _lo, _hi = CLUSTER_DRAWN_ASPECT.get(plan.cluster_shape or "crescent", (1.9, 4.2))
-    # ...AND A DRAWING ROUND'S BAND ALSO HOLDS IS NOT DECLARED ANYTHING ELSE (settlement-review of Inashiro, feature 261):
-    # crescent's band starts at 1.9 and round's ends at 2.0, so a cluster drawn at 1.97 - a quarter-disc of houses with a
-    # 63 ft bow against 131 ft of scatter - was declared a crescent. The bands stay as they are for the front row's
-    # sizing above; a shape other than round is declared only past round's ceiling.
-    if (plan.cluster_shape or "crescent") != "round":
-        _lo = max(_lo, CLUSTER_DRAWN_ASPECT["round"][1] + 1e-9)
-    if _lo <= _drawn <= _hi:
-        s.M["meta"]["cluster_shape"] = plan.cluster_shape
-    else:
-        s.M["meta"]["cluster_shape_unhonored"] = plan.cluster_shape
-    s.M["meta"]["cluster_aspect_drawn"] = round(_drawn, 2)
-    s.M["meta"]["seat_search"] = dict(s._seat_search)  # the guesses counted (feature 226 FR-003): candidates, placer calls, positions, rectangles
-    s._site_chains = None  # the boundary is the homestead stage's; every later placer runs the fit test's own path
-    s._site_corridors = None
-    s._free_ground = None
-    s._unreachable = None
-    # THE ROLLED SHAPE MUST LEAVE A TRACE EVEN WHEN THE CLOUD NEVER RUNS (known-open ledger
-    # 2026-08-16, Kashikawa: the front rows + lane frontage seated all 20 households, the
-    # cluster-seeds cloud never ran, and the rolled cluster_shape knob went unhonored with no
-    # trace on the manifest - a knob that can silently not-record is the "check that never runs"
-    # shape). Record the seeding mode always: "cloud" when cluster_seeds ran (it records
-    # meta.cluster_shape itself), "frontage" when the rows/frontage passes seated every house and
-    # the rolled shape went unhonored. `settlement_records_cluster_seeding` holds the invariant.
-    # ...and this stays a SEPARATE record, keyed on what actually seated the houses rather than on
-    # whether the shape got stamped. It used to be derived from the presence of `cluster_shape`,
-    # which stopped meaning anything the moment the shape was always declared.
-    s.M["meta"]["cluster_seeding"] = "cloud" if _cloud_placed * 2 >= max(1, plan.spec.households) else "frontage"
-    plan.placed = s.farmsteads()
-    # how many farmhouses the quarter turn took (269 B18) - measured on what was drawn, so the share is a count, not a hope
-    s.M["meta"]["house_quarter_turns"] = sum(1 for h in s.M.get("houses") or [] if abs(wrap_line_deg(float(h.get("rot", 0.0)) - (s._house_bearing or 0.0))) > 45.0)
-    # THE TRIM MOVED OUT OF THIS STAGE (feature 126). It existed because the skeleton was laid
-    # before the houses, so its arms had to be shortened afterwards once there was something to
-    # measure them against. The arms are now laid after the houses and fitted to them, so there is
-    # nothing here to trim: at this moment the only ways drawn are the connector and the field spur,
-    # and trimming those against house positions is meaningless. `stage_web` trims once the lanes it
-    # trims actually exist.
+    # THE EXHAUSTIVE PASS (feature 287, homes H14): while the quota is short, every free point of the legal ground within
+    # the field's reach, a third of a pitch apart, is offered to the same placer - cohort seed 32 seated 13 of 14 when the
+    # rounds above alone decided.
+    placed = seat_the_rest(s, plan, placed)
+    return placed, _cloud_placed
 
 
 # ---- STAGE 6: what stands among the houses ------------------------------------------------------
@@ -669,9 +909,11 @@ def stage_appurtenances(s: Settlement, plan: SitePlan) -> None:
     Steps:
         l7r.diagram.hamletgen.homesteads.wells.place_wells
         l7r.diagram.settlement.Settlement.draft_byres
+        l7r.diagram.hamletgen.homesteads.fixtures.farmstead_fixtures
         l7r.diagram.hamletgen.homesteads.retirement.retirement_houses
     """
     houses = s.M.get("houses", [])
     place_wells(s, plan, houses)
-    s.draft_byres(fraction=0.22, gap=60)
+    s.draft_byres(fraction=COMMONS_BYRE_FRACTION, gap=COMMONS_BYRE_GAP)
+    farmstead_fixtures(s, plan, houses, early=True)  # the fixtures the seating laid in each bundle (homes H32), before the web
     retirement_houses(s, plan)  # after the byres, so the draft team keeps the seats it always had (269 B42)

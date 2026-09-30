@@ -486,6 +486,17 @@ POLDER_CELL_FT = 110.0
 # 760 px reach, with every legal well seat around it already taken by its own two courtyards.
 BUNDLE_PITCH = 100.0
 
+# THE GROUND ONE HOMESTEAD TAKES, as the side of a square (feature 280 M16 merged into feature 287, 2026-09-29): the seat
+# band's AREA (`plan.band_extent`, `households x HOMESTEAD_GROUND_FT^2`, which also sizes the canvas's room for the seat).
+# It was `BUNDLE_PITCH`, and grows with the yard: 280 moved the rice hamlet's yard median from 18 to 25 tsubo, and at the
+# apron's 1.45 aspect the median yard is sqrt(18 x 35.583 / 1.45) = 21.0 ft deep before and sqrt(25 x 35.583 / 1.45) =
+# 24.8 ft after - 3.8 ft more ground in the row's sum above, so 104. The ROW pitch stays 100: it plans offers the placer
+# staggers from (and the web's reach is tied to it, `WEB_REACH_FT`). MEASURED (`make cohort N=1 SEED=<n>`; a detached
+# worktree at 287's HEAD passes seed 18): with the band at 100 the merge held 13 of seed 18's 15 households on its best
+# margin and refused the site; with the band at 104 all 15 seat. Raising the row pitch to 104 as well seated seed 18 but
+# left one farmhouse off the way network on seeds 11 and 43 - measured and not taken.
+HOMESTEAD_GROUND_FT = 104.0
+
 # How far below the drain outfall a tameike may stand before the map is better off without one.
 # Calibrated against the drawn ponds: an ordinary set-back lands well under 200 px, and the case
 # that motivated the limit was 575. See `stage_sink`.
@@ -727,8 +738,9 @@ BROOK_MAX_TURN_DEG = 100.0
 # A BROOK TURNS ON A CURVE (feature 261, settlement-review of Sawada): every corner of the drawn course is filleted at this
 # many widths of its drawn bed, the ratio the ditches have been drawn at since 2026-07-25 (`fillet_polyline`,
 # research/water.html "Why does every ditch turn on a curve?": sharp corners belong to stone-lined channels, and nothing
-# on these maps shows one) - Sawada's brook drew mitred corners of 27-47 degrees. Rounded LATE, at the crossings stage,
-# and held at the tap the head race leaves from (`round_the_brooks`). A map drawing convention on an accurate rule.
+# on these maps shows one) - Sawada's brook drew mitred corners of 27-47 degrees. Rounded at the end of the water stages
+# (`round_the_brooks` in `stage_sink`, feature 287; the crossings stage until then) by `finished_course`, and held at
+# the tap the head race leaves from. A map drawing convention on an accurate rule.
 BROOK_BEND_WIDTHS = 2.5
 
 # WHAT A WAY PAYS TO CROSS THE BROOK (feature 261, settlement-review of Kashikawa). Fords made the brook passable, and

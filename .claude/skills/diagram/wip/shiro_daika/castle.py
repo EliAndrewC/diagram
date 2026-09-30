@@ -85,7 +85,7 @@ def _beside(a, b, off=17):
 # All three aqueduct words share the duct's bearing and the same ~20px uphill offset from the
 # channel line (GM 2026-08-09: the end labels were level while "aqueduct" lay along the cut).
 _IW = _beside(AQ[0], AQ[1])
-s.label(_IW[0], _IW[1], "intake weir", 9, italic=True, color="#5E7A8A", rot=151, linear=True, full_tilt=True)
+s.label(_IW[0], _IW[1], "intake weir", 9, italic=True, color="#5E7A8A", ref=(AQ[0][0], AQ[0][1], AQ[0][0], AQ[0][1]), rot=151, linear=True, full_tilt=True)
 # the terminus stands ON the moat's outer bank by design, so BOTH of its flanks are rampart ink -
 # the caption goes back UP the duct instead, over the open ground the cut runs through
 _SBd = math.hypot(AQ[-2][0] - AQ[-1][0], AQ[-2][1] - AQ[-1][1]) or 1.0
@@ -96,8 +96,12 @@ _SBu, _SBp = 26, 16
 _SBx = AQ[-1][0] + (AQ[-2][0] - AQ[-1][0]) / _SBd * _SBu - (AQ[-2][1] - AQ[-1][1]) / _SBd * _SBp
 _SBy = AQ[-1][1] + (AQ[-2][1] - AQ[-1][1]) / _SBd * _SBu + (AQ[-2][0] - AQ[-1][0]) / _SBd * _SBp
 _SB = (_SBx, _SBy)
-s.label(_SB[0], _SB[1], "settling basin", 9, italic=True, color="#5E7A8A", rot=-33, linear=True, full_tilt=True)  # beside the terminus, on the duct's uphill side
-s.label(2705, 1160, "aqueduct", 10, italic=True, color="#5E7A8A", rot=151, linear=True, full_tilt=True)
+s.label(
+    _SB[0], _SB[1], "settling basin", 9, italic=True, color="#5E7A8A", ref=(AQ[-1][0], AQ[-1][1], AQ[-1][0], AQ[-1][1]), rot=-33, linear=True, full_tilt=True
+)  # beside the terminus, on the duct's uphill side
+s.label(
+    2705, 1160, "aqueduct", 10, italic=True, color="#5E7A8A", ref=(min(p[0] for p in AQ), min(p[1] for p in AQ), max(p[0] for p in AQ), max(p[1] for p in AQ)), rot=151, linear=True, full_tilt=True
+)
 
 # ---- THE TOWPATH (feature 020): on the wharf's own (west) bank, coming up from downstream -
 # upstream haulage is the whole reason it exists - and ending at the wharf, no further.
@@ -106,7 +110,7 @@ s.label(2705, 1160, "aqueduct", 10, italic=True, color="#5E7A8A", rot=151, linea
 # river), and LABELED - the haulage path cannot explain itself at fit zoom
 s.towpath([(1877, 3109), (2221, 2400)])  # the CURRENT river's bank, offset w/2+6 landward (the old pts predated the re-route - GM 2026-08-10)
 _TWL = (1877 + (2221 - 1877) * 0.72, 3109 + (2400 - 3109) * 0.72)  # DERIVED from the towpath itself, up toward the wharf it serves
-s.label(_TWL[0], _TWL[1], "towpath", 10, italic=True, color="#8A7050", rot=-64, linear=True, full_tilt=True)
+s.label(_TWL[0], _TWL[1], "towpath", 10, italic=True, color="#8A7050", ref=(1877, 2400, 2221, 3109), rot=-64, linear=True, full_tilt=True)
 s.bridge(2000.2, 2459.3, -32.5, 49, 4)  # the wharf shore path's plank over the moat drain (GM 2026-08-10: no way stands in water without a deck)
 s.M["bridges"][-1]["foot"] = True
 s.bridge(

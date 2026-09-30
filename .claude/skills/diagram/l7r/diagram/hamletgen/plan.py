@@ -17,6 +17,7 @@ from .consts import (
     BAMBOO_FORMS,
     BROOK_FLANKS,
     CARDINAL_BEARINGS,
+    CLUSTER_BAND_ASPECT,
     CLUSTER_SHAPES,
     COPSE_SITINGS,
     DEFAULT_HARVEST_WEATHER,
@@ -30,6 +31,7 @@ from .consts import (
     GROSS_ACRES_PER_HOUSEHOLD,
     HARVEST_WEATHERS,
     HEAD_RACE_LEAD,
+    HOMESTEAD_GROUND_FT,
     HOUSEHOLD_BAND,
     INTAKE_FORMS,
     KOSATSUBA_SITINGS,
@@ -47,6 +49,7 @@ from .consts import (
     SETTLEMENT_FORMS,
     SINKS,
     SQ_FT_PER_ACRE,
+    WIND_BACK_MIN_DOT,
     WIND_VECTORS,
     Poly,
     Pt,
@@ -175,6 +178,10 @@ class SitePlan:
     W: int
     H: int
     ftpx: float = 1.0
+    # THE FIELD'S OWN SQUARE (feature 287, homes H31): the side `canvas_for` sizes from the acreage, inside the canvas
+    # the seat's room grows round it. The field is laid from the canvas middle at this span (`head_sluice`), so the
+    # room added for the seat and its belt moves nothing of the field's own geometry. 0 reads as min(W, H).
+    field_span: float = 0.0
     offtakes_a: tuple[float, ...] = ()
     offtakes_b: tuple[float, ...] = ()
     # filled in by the stages as the map is built, so a later stage can read an earlier one's result
@@ -192,6 +199,10 @@ class SitePlan:
     # The bamboo stands (T47), scanned in `stage_hinterland` before the scrub, drawn by `stage_bamboo`.
     bamboo_polys: list[Poly] = field(default_factory=list)
     bamboo_roles: list[str] = field(default_factory=list)
+    bamboo_of: dict[int, Pt] = field(default_factory=dict)  # a homestead strip's owner house, by its index in `bamboo_polys` (feature 287, homes H01)
+    # points a way must reach (feature 287, homes H36); the web serves each. Its one producer, the hamlet's own burial
+    # ground, was eliminated by feature 280 M68 (modern-only), so none is registered until a form that owes a path returns
+    way_targets: list[Pt] = field(default_factory=list)
     fixtures_min: dict[str, int] = field(
         default_factory=dict
     )  # the spec's floor per fixture kind (T61); the placer forces presence up to it  # "thicket" (communal, one) or "homestead" (per farmstead), parallel to bamboo_polys
@@ -205,6 +216,9 @@ class SitePlan:
     # thing on a watercourse that is a FEATURE rather than a runner - two waters meeting is a place - and the
     # crop deliberately ignores runners, which is how one came to be drawn 7.4 ft outside the picture.
     confluence: Pt | None = None
+    # THE VIEW, DECIDED ONCE (feature 287, M6): (x, y, w, h), fixed at the end of `stage_hinterland`'s seating by
+    # `hinterland.frame.frame_for`, and set exactly by `stage_frame`. Every rule that reads the picture reads this.
+    view: tuple[float, float, float, float] | None = None
     fry_form: str = "none"  # none | fry_village (feature 280 M60, `FRY_FORMS`): a dike-pond hamlet's nursery, read by `stage_polder`
 
     @property
@@ -270,6 +284,62 @@ def canvas_for(target_acres: float, ftpx: float) -> tuple[int, int]:
     return side, side
 
 
+def band_extent(households: int, shape: str | None) -> tuple[float, float]:
+    """The seat band's half-depth and length, `(dep, lat)`, from the household count and the cluster shape - the ONE
+    derivation `seat_cluster` seats with and `seat_room` sizes the canvas with (feature 287, homes H31). Area is held
+    (`households * HOMESTEAD_GROUND_FT^2`, the ground a homestead takes), so the shape sets only the band's aspect."""
+    asp = CLUSTER_BAND_ASPECT.get(shape or "crescent", 3.0)
+    dep = max(112.0, min(math.sqrt(households * (HOMESTEAD_GROUND_FT**2) / (asp * math.pi)), 300.0))
+    lat = max(240.0, min(households * (HOMESTEAD_GROUND_FT**2) / (math.pi * dep), 1100.0))
+    return dep, lat
+
+
+SEAT_STANDOFF = 12.0
+"""px from the field margin to the seat band's near edge (`cluster._seat_frame`'s standoff)."""
+BELT_REACH = 146.0
+"""px upwind of the cluster's windward fringe to the belt's far row (`belt_off_canvas` samples 36, 90 and 146)."""
+
+
+FAN_OVERHANG = 0.22
+"""How far a fitted fan may stand past its own square (`canvas_for`), as a share of the square's side - MEASURED, not
+derived: the head sluice is rolled up to 0.24 of the square off the fall axis (`HEAD_OFFSETS`) and the fan grows toward
+its untrimmed flank, so a fan is not centered in its square. Over the pool and cohort 1-60 on the grown canvas
+(2026-09-29) the largest overhang was 0.20 (cohort seed 45, whose fan the old canvas clamped 26% short of its acreage);
+0.22 holds that with a plot row's margin. The canvas carries it on every side, so the seat's room is counted from the
+fan as drawn, not from the square."""
+
+
+def seat_room(households: int, shape: str | None) -> float:
+    """The ground the seat and its windbreak need beyond the field, px (feature 287, homes H31 and plan D8): the band's
+    depth and standoff to its center, then the farther of half its length (the band on the canvas, `seat_cluster`'s
+    HARD 3) and its windward fringe plus the belt's reach (the belt on the canvas, `belt_off_canvas`). A seat whose back
+    is within 45 degrees of the wind has its fringe at most `0.7071 * lat + dep` upwind of its center.
+
+    A CLOSED-FORM BOUND FROM THE SEAT'S OWN QUANTITIES, not a tuned margin: the canvas grows by this on every side, so
+    whichever margin faces the wind has the room. The frame crops to content, so the room costs no ink."""
+    dep, lat = band_extent(households, shape)
+    return dep + SEAT_STANDOFF + max(lat * 0.5, WIND_BACK_MIN_DOT * lat + dep + BELT_REACH)
+
+
+def _fall_into_wind(down_deg: float, windward: str) -> float:
+    """The cosine between the land's fall and the quarter the wind comes from: 1 for a fall straight into the wind."""
+    wx, wy = WIND_VECTORS[windward]
+    return math.cos(math.radians(down_deg)) * wx + math.sin(math.radians(down_deg)) * wy
+
+
+def fall_backs_the_wind(down_deg: float, windward: str) -> bool:
+    """Does the fall leave the seat a wind-facing margin above the drain on EVERY field it can draw (feature 287, homes
+    H30 and plan D3)? True when the fall runs square to the wind or away from it: the wind then meets a flank or the
+    head. A fall 45 degrees off the wind, or into it, may still offer a seat - a flank's back turned to the wind
+    (`cluster.margin_candidates`) - but its wind-facing margins are only
+    the toe's corner - a fan widens downhill, so its flanks' normals lean UPHILL, away from the wind - and whether the
+    corner stands clear of the toe depends on the field the fit draws: 16 of 17 such cohort maps had one, cohort seed
+    24 had none (measured 2026-09-29, on the canvas `seat_room` grows). A rolled fall is rolled over the falls this
+    admits, so the seat's back to the wind holds by construction; it is also 背山面水 read whole - the back to the
+    hill AND to the wind, the high side and the windward side being one side (`seat_cluster`)."""
+    return _fall_into_wind(down_deg, windward) <= 1e-9
+
+
 def plan_site(spec: HamletSpec) -> SitePlan:
     """Turn a spec into a fully-resolved plan. PURE - no drawing, no engine, no RNG stream."""
     # A POLDER IS LAID TO THE CARDINAL SURVEY GRID, so its fall is rolled from the four cardinals
@@ -284,24 +354,33 @@ def plan_site(spec: HamletSpec) -> SitePlan:
     # A dike-pond rolls its arrangement; a rice polder IS the surveyed grid (`POND_LAYOUTS`), and
     # pinning it there rather than rolling keeps every polder_grid map exactly as it was.
     _pond_layout = (spec.pond_layout or str(_roll(spec.seed, "pond_layout", POND_LAYOUTS))) if _archetype == "mulberry_dike_fishpond" else "grid"
-    down_deg = spec.down_deg if spec.down_deg is not None else float(_roll(spec.seed, "down_deg", _falls))
+    # THE REGIONAL NORTHWEST unless the spec declares a local wind (feature 261; `DEFAULT_WINDWARD` for why).
+    windward = spec.windward or DEFAULT_WINDWARD
+    # THE FALL LEAVES THE SEAT A BACK TO THE WIND (feature 287, homes H30, plan D3): a ROLLED fall is rolled over the
+    # falls that leave a wind-facing margin above the drain on any field (`fall_backs_the_wind`) - the knob narrowed where
+    # it cannot be honored. A DECLARED fall is the GM's fact about the place and is taken as written: its site is refused
+    # only where `seat_cluster` finds no margin whose back it can turn to the wind (`SeatRefused`), never for its bearing.
+    down_deg = spec.down_deg if spec.down_deg is not None else float(_roll(spec.seed, "down_deg", tuple(f for f in _falls if fall_backs_the_wind(f, windward))))
     # A hamlet is ONE comb draining down ONE valley, so its drainage bearing IS its fall unless the
     # GM declares otherwise. Recording both separately keeps the map honest about which fact is
     # which (skill SKILL.md: "these are not the same fact and must not be derived from each other")
     # and leaves the door open for a spec that sets a channel running across the fall.
     water_flow = spec.water_flow if spec.water_flow is not None else down_deg
-    # THE REGIONAL NORTHWEST unless the spec declares a local wind (feature 261; `DEFAULT_WINDWARD` for why).
-    windward = spec.windward or DEFAULT_WINDWARD
     target_acres = spec.households * GROSS_ACRES_PER_HOUSEHOLD
     a, b = offtakes_for(spec.households)
-    W, H = canvas_for(target_acres, 1.0)
+    _cluster_shape = spec.cluster_shape or str(_roll(spec.seed, "cluster_shape", CLUSTER_SHAPES))
+    # THE CANVAS HOLDS THE FIELD AND, ON EVERY SIDE, THE SEAT WITH ITS BELT (feature 287, homes H31): the field's own
+    # square from the acreage, grown by `seat_room` all round, so the margin facing the wind always has the room
+    # `seat_cluster` asks of it - the seat is never cramped against the canvas edge.
+    span, _ = canvas_for(target_acres, 1.0)
+    W = H = int(round((span * (1.0 + 2.0 * FAN_OVERHANG) + 2.0 * seat_room(spec.households, _cluster_shape)) / 50.0) * 50)
     return SitePlan(
         spec=spec,
         down_deg=down_deg,
         water_flow=water_flow,
         windward=windward,
         water_sink=spec.water_sink or str(_roll(spec.seed, "water_sink", SINKS)),
-        cluster_shape=spec.cluster_shape or str(_roll(spec.seed, "cluster_shape", CLUSTER_SHAPES)),
+        cluster_shape=_cluster_shape,
         lane_skeleton=spec.lane_skeleton or str(_roll(spec.seed, "lane_skeleton", LANE_SKELETONS)),
         lane_web=spec.lane_web or str(_roll(spec.seed, "lane_web", LANE_WEBS)),
         bamboo=spec.bamboo or str(_roll(spec.seed, "bamboo", BAMBOO_FORMS)),
@@ -326,6 +405,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         target_acres=target_acres,
         W=W,
         H=H,
+        field_span=float(span),
         offtakes_a=a,
         offtakes_b=b,
     )

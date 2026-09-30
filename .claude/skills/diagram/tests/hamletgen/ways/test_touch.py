@@ -316,3 +316,19 @@ def test_an_isolated_field_spur_the_orphan_pass_drops_is_recorded_on_the_map() -
     hg.ways._touch_junctions(s, [], [], [], only_orphans=True)
     assert "isolated" in (s.M["meta"].get("field_spur_swept") or ""), "the swept spur is recorded"
     assert all(not ln.get("spur") for ln in s.M["lanes"]), "and its record is gone with it"
+
+
+def test_an_end_a_SPLICE_has_just_put_on_another_tread_is_not_linked_onward() -> None:
+    """Feature 137 T03, cohort seed 07 (the 9 ft zigzag), on the one shape that reaches the clause: `_by_way` is taken
+    before the ends are touched, so a lane the START's splice rewrites is still offered to the far END by its old line.
+    Here lane 2's end is run onto lane 1's start, and its new last stretch passes 2.5 ft from lane 1's far end - that end
+    now stands on lane 2's tread and is a junction; linking it onward to lane 2's OLD line 10 ft off would run a link
+    back over the tread it already stands on."""
+    s = _StubSettlement(
+        lanes=[[(160.0, 10.0), (160.0, 200.0)], [(0.0, 0.0), (40.0, 0.0)], [(160.0, 10.0), (-2.0, 10.0)]],
+    )
+    s.M.setdefault("meta", {"ftpx": 1})
+    n = hg.ways._touch_junctions(s, [], [], [])
+    assert n == 1, "one end is closed: lane 2's, spliced onto lane 1's start"
+    assert [tuple(q) for q in s.M["lanes"][2]["pts"]] == [(160.0, 10.0), (0.0, 0.0)], "the splice this test stands on"
+    assert [tuple(q) for q in s.M["lanes"][1]["pts"]] == [(0.0, 0.0), (40.0, 0.0)], "the far end already on lane 2's tread is not linked onward"

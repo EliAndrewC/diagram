@@ -75,6 +75,11 @@ def _edges(poly: Sequence[Pt]) -> list[tuple[Pt, Pt]]:
     return list(zip(poly, [*poly[1:], poly[0]], strict=True))
 
 
+_APART = 1e-6
+"""How far apart two boxes must stand for `nearest_points` to skip its crossing and containment tests - more than any
+rounding in them, so that no answer they would give is skipped."""
+
+
 def poly_gap(p: Sequence[Pt], q: Sequence[Pt]) -> float:
     """The gap between two polygons: 0 when they touch, overlap or one holds the other, else the least edge distance."""
     return math.dist(*nearest_points(p, q))
@@ -85,14 +90,20 @@ def nearest_points(p: Sequence[Pt], q: Sequence[Pt], closed: bool = True) -> tup
     polygon, or with `closed=False` an open polyline (a road). Checked by vertices against edges both ways, which is
     exact for outlines that do not cross; crossing and containment are tested first."""
     qe = _edges(q) if closed else list(zip(q, q[1:], strict=False))
-    if inside(p[0][0], p[0][1], q) and closed:
-        return p[0], p[0]
-    if inside(q[0][0], q[0][1], p):
-        return q[0], q[0]
-    for a, b in _edges(p):
-        for c, d in qe:
-            if segments_cross(a, b, c, d):
-                return a, a
+    # BOXES APART, OUTLINES APART (feature 287, the board's 216 s siting: this test was four fifths of proving a seat): two
+    # outlines whose boxes stand more than a rounding apart can neither cross nor hold one another, so the tests below
+    # would all answer no. Skipping them leaves the vertex-to-edge pass, which decides as before.
+    px0, py0, px1, py1 = bbox(p)
+    qx0, qy0, qx1, qy1 = bbox(q)
+    if not (px0 - qx1 > _APART or qx0 - px1 > _APART or py0 - qy1 > _APART or qy0 - py1 > _APART):
+        if inside(p[0][0], p[0][1], q) and closed:
+            return p[0], p[0]
+        if inside(q[0][0], q[0][1], p):
+            return q[0], q[0]
+        for a, b in _edges(p):
+            for c, d in qe:
+                if segments_cross(a, b, c, d):
+                    return a, a
     best: tuple[float, Pt, Pt] | None = None
     for v in p:
         for c, d in qe:

@@ -156,6 +156,15 @@ def test_the_worked_ground_is_built_once_per_settlement_until_its_registries_gro
     s.M.setdefault("dry_plots", []).append({"poly": [[0.0, 0.0], [10.0, 0.0], [10.0, 10.0]]})
     assert memo_ground(s, "worked", build) is not first and len(calls) == 2, "a plot laid since: built again"
     assert memo_ground(_stub(), "worked", build) is not first, "another settlement never reads it"
+    import types
+
+    from l7r.diagram.hamletgen.ways.geom import reset_grounds
+
+    grown = memo_ground(s, "worked", build)
+    n = len(calls)
+    assert memo_ground(types.SimpleNamespace(M=s.M), "worked", build) is grown and len(calls) == n, "a view of the same manifest shares it"
+    reset_grounds()
+    assert memo_ground(s, "worked", build) is not grown and len(calls) == n + 1, "a roll's end forgets it"
 
 
 def test_an_end_at_the_bund_with_water_between_is_carried_over_it() -> None:

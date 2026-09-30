@@ -11,4 +11,5 @@ Split from the 1,212-line `fixtures.py` by feature 173 (constitution Principle X
 | `_helpers.py` (191) | the module-level helpers lifted out for unit testing (GM 2026-08-28) - `kosatsuba_affordances`, `kosatsuba_anchor` |
 | `boards.py` (618) | the drawn fixtures themselves - the fire tower and the kosatsuba notice board, whose caption is a point subject handed to the one placer (feature 266) |
 | `siting.py` (429) | WHERE a fixture goes: the water and lane-clearance probes, and the two placement passes (`place_kosatsuba`, `place_punishment_spot`) |
+| `board_seat.py` | the notice board's rules as ONE predicate each, which `place_kosatsuba` calls where it decides the seat (feature 287): in the view, off the placard, an entrance every way out passes, the caption the one placer seats clean (`board_caption_seat`), the knob over the placements the map can site - and the D12 terminal awaiting the GM |
 | `__init__.py` | the composed surface only - the class this package exists to provide, plus the module-level helpers the tests import by name. Never add logic here |

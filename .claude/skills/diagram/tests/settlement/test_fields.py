@@ -285,13 +285,17 @@ def test_paddy_features_cover_every_archetype_branch():
     (pond / rock / grave-island each both ways), plus the dike-pond early return. Also confirms each glyph
     draws and records its manifest key. Synthetic net: 6 plots, the first 3 flagged low
     (44 x 34 px - roomy enough that the fit-to-polygon shrink in _plot_pond accepts them)."""
-    net = {"plots": [{"poly": [(float(i * 50), 0.0), (float(i * 50 + 44), 0.0), (float(i * 50 + 44), 34.0), (float(i * 50), 34.0)], "low": i < 3, "fill": "#A6C398"} for i in range(6)]}
+
+    def fresh() -> dict:  # a grave carves the plots it is seated among (feature 287, W28), so each roll gets its own
+        return {"plots": [{"poly": [(float(i * 50), 0.0), (float(i * 50 + 44), 0.0), (float(i * 50 + 44), 34.0), (float(i * 50), 34.0)], "low": i < 3, "fill": "#A6C398"} for i in range(6)]}
+
+    net = fresh()
     seen = {"field_ponds": 0, "field_rocks": 0, "field_graves": 0}
     for arch in ("valley_paddy", "contour_terraces", "polder_grid", "ribbon_valley", "mulberry_dike_fishpond"):
         for seed in range(40):
             s = Settlement(1200, 1200, seed=seed)
             s.meta(name="P", scale="village", ftpx=1, down_deg=90, field_archetype=arch)
-            s._paddy_features(net)
+            s._paddy_features(fresh())
             for k in seen:
                 seen[k] += len(s.M.get(k, []))
     # every glyph type got drawn at least once across the sweep (so all three _plot_* methods are covered)
@@ -324,12 +328,11 @@ def test_the_field_grave_takes_either_attested_form_and_a_corner_grave_stays_in_
     assert turning_corners(notched) == [0, 2, 3, 4], "the collinear side vertex is no corner"
     assert turning_corners([(0.0, 0.0), (1.0, 0.0), (2.0, 0.0)], 181.0) == [0, 1, 2], "every vertex when none turns"
     assert corner_seat(square, 6) == corner_seat(square, 2), "the vertex index wraps"
-    net = {"plots": [{"poly": square, "low": False, "fill": "#A6C398"}]}
     found = {}
     for seed in range(200):
         s = Settlement(1200, 1200, seed=seed)
         s.meta(name="G", scale="village", ftpx=1, down_deg=90, field_archetype="valley_paddy")
-        s._paddy_features(net)
+        s._paddy_features({"plots": [{"poly": list(square), "low": False, "fill": "#A6C398"}]})
         for g in s.M.get("field_graves", []):
             found.setdefault(g.get("form", "island"), g)
     assert set(found) == {"island", "corner"}, found
@@ -594,9 +597,9 @@ def test_draw_comb_field_drops_beads_in_pond_water():
     net["brook"] = []
     # ...AND PER RUN (feature 247): a run's drowned head leaves a part of two, kept; a drowned MIDDLE
     # splits a run into two singles, both dropped; the flat list is the kept runs flattened.
-    net["bund_bean_runs"] = [[(700.0, 1000.0), (500.0, 180.0), (520.0, 180.0)], [(100.0, 100.0), (300.0, 300.0), (120.0, 100.0)]]
+    net["bund_bean_runs"] = [[(700.0, 60.0), (500.0, 180.0), (520.0, 180.0)], [(100.0, 100.0), (300.0, 300.0), (120.0, 100.0)]]
     s.M["field_ponds"] = [{"x": 300.0, "y": 300.0, "rx": 20.0, "ry": 15.0}]
-    s.draw_comb_field(net, "f1", {"kind": "pond", "pond": (700, 1000, 60, 40)})
+    s.draw_comb_field(net, "f1", {"kind": "pond", "pond": (700, 60, 60, 40)})
     assert s.M["fields"][-1]["bund_beans"] == [[500.0, 180.0], [520.0, 180.0]]
     assert net["bund_bean_runs"] == [[(500.0, 180.0), (520.0, 180.0)]] and net["bund_beans"] == [(500.0, 180.0), (520.0, 180.0)]
 
@@ -712,6 +715,27 @@ def test_plot_pond_fits_the_polygon_not_the_bbox():
     for a in [i * math.pi / 12 for i in range(24)]:
         px, py = fp["x"] + fp["rx"] * math.cos(a), fp["y"] + fp["ry"] * math.sin(a)
         assert 100 <= px <= 190 and 100 <= py <= 170  # every rim point inside the plot
+
+
+def test_plot_pond_refuses_a_neighbor_corner_inside_the_rim_that_the_old_core_let_through():
+    """Feature 287 T04 (FR-003, water W29): the pond's placer and its test read ONE predicate on the FULL rim. The
+    constructed case is where the two used to disagree: a neighbor's corner 1.5 px inside the first-size pond's rim,
+    outside the 3 px inset core the placer used to ask - so the old placer drew the pond there and the test failed
+    it. Now the placer shrinks until the corner is clear, and the recorded pond passes the test's own call."""
+    from l7r.diagram.waterfields.ring_rules import crosses_pond_rim
+
+    s = Settlement(600, 600, seed=1)
+    s.meta(name="W", scale="village", ftpx=1, down_deg=90)
+    rect = {"poly": [(100.0, 100.0), (190.0, 100.0), (190.0, 170.0), (100.0, 170.0)]}
+    first_rx = 45.0 * 0.82  # the first size `_plot_pond` tries on this plot: rx 36.9 about the centroid x 145
+    corner = [(145.0 + first_rx - 1.5, 135.0), (200.0, 120.0), (200.0, 150.0)]  # a neighbor poking in from the east
+    assert (corner[0][0] - 145.0) / (first_rx - 3.0) > 1.0, "the corner lies outside the old 3 px core - the disagreement"
+    assert crosses_pond_rim(corner, (145.0, 135.0, first_rx, 35.0 * 0.82)), "and inside the full rim"
+    assert s._plot_pond(rect, [rect["poly"], corner]) is True
+    (fp,) = s.M["field_ponds"]
+    pond = (fp["x"], fp["y"], fp["rx"], fp["ry"])
+    assert fp["rx"] < round(first_rx, 1), "the pond shrank off the corner"
+    assert not crosses_pond_rim(corner, pond) and not crosses_pond_rim(rect["poly"], pond)
 
 
 def test_hem_on_water_sees_a_stream_and_a_pond_separately():

@@ -3,13 +3,79 @@
 Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.md for the index.
 """
 
+import math
 from typing import TYPE_CHECKING, Any
 
-from .._geom import turn_about
-from .bearing import turned_box
+from ..homestead_parts.fixture_seats import FixtureForms, FixtureUnlaid, lay_fixtures
+from ..shrines_wells.byres import BYRE_FT, YARD_SHED_GAP_FT, byre_part
+from ..shrines_wells.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
+from .lot import kura_rect
 
 if TYPE_CHECKING:
     from ..core import Settlement
+
+
+def boxes_meet(a: Any, b: Any) -> bool:
+    """Do two (cx, cy, w, h) boxes overlap - share more than an edge?"""
+    return bool(abs(a[0] - b[0]) < (a[2] + b[2]) / 2 and abs(a[1] - b[1]) < (a[3] + b[3]) / 2)
+
+
+def box_gap(a: Any, b: Any) -> float:
+    """The edge gap between two (cx, cy, w, h) boxes: the larger of the two axes' clear distances, negative where they
+    overlap on both (so `box_gap(a, b) < 0` is `boxes_meet(a, b)`, and 0 is a shared edge)."""
+    return float(max(abs(a[0] - b[0]) - (a[2] + b[2]) / 2, abs(a[1] - b[1]) - (a[3] + b[3]) / 2))
+
+
+class PocketUnlaid(ValueError):
+    """A well pocket that can keep neither its gap from every bed nor its wall gap to its own dwelling - within
+    `WELL_AMONG_DWELLINGS_PX` of the wall (`well_gap_to_dwellings`), its footprint clear of the house's (`box_gap`) - in
+    this layout (feature 287, homes H09). The layout is then NOT the household's (`_lay_well_pocket` marks it `unlaid`
+    and the fit refuses it, `_bundle_side_fits`), as a bath room with no seat is (`FixtureUnlaid`): another garden side
+    or another seat is sought - never a well drawn out in the commons."""
+
+
+def pocket_keeps_its_dwelling(box: tuple[float, float, float, float], house: tuple[float, float, float, float]) -> bool:
+    """Does the pocket `box` keep the wall gap the wells rule reads to its own `house` (both (cx, cy, w, h), unturned in the
+    house's frame, which the rake turns as one piece)? At most `WELL_AMONG_DWELLINGS_PX` from the wall, on the rule's own
+    predicate (`well_gap_to_dwellings`, its center to the house's drawn quad), and its footprint - the wellhead and its
+    margin - clear of the house's (`box_gap` at least 0: a shared edge, no overlap)."""
+    hx, hy, hw, hh = house
+    near = well_gap_to_dwellings([{"x": hx, "y": hy, "w": hw, "h": hh}], box[0], box[1]) <= WELL_AMONG_DWELLINGS_PX
+    return near and box_gap(box, house) >= 0.0
+
+
+def pocket_clear_of_beds(xs: Any, y: float, p: float, beds: Any, gap: float, house: tuple[float, float, float, float]) -> tuple[float, float, float, float]:
+    """THE WELL POCKET NEVER ON A BED (feature 287 M8: the overlap matrix forbids a wellhead on a garden, its own household's
+    too). The pocket, `p` square at height `y`, is offered at each flank in `xs` in turn (the flank away from the primary
+    bed first); a bed split to flank the house on both walls (`_garden_beds`) can stand on either, and cohort 1-60 laid 8
+    wells on a bed so. Where both flanks hold a bed, the pocket stands past the outermost bed of the first flank, `gap`
+    beyond it - still beside the dooryard, on the same line.
+
+    PUSHED, IT KEEPS THE GAP FROM EVERY BED (feature 287, homes H09): the push steps past each bed within `gap` of the
+    pocket (`box_gap`), not only the beds it lies on, so a bed it clears by a hair - on the line, or beside it - is stepped
+    past too, and the pocket it returns stands at least `gap` from every bed.
+
+    ...AND ITS WALL GAP TO ITS OWN DWELLING (homes H09's other half, research R12): wherever it stands, the pocket keeps
+    what the wells rule reads (`pocket_keeps_its_dwelling`) - a push past the beds walks it outward, so the push stops,
+    refusing the layout (`PocketUnlaid`), the moment it is carried past the rule's reach; that also bounds the push."""
+    for x in xs:
+        box = (x, y, p, p)
+        if not any(boxes_meet(box, b) for b in beds):
+            return _kept(box, house)
+    x = xs[0]
+    side = 1.0 if x >= xs[-1] else -1.0
+    while near := [b for b in beds if box_gap((x, y, p, p), b) < gap - 1e-9]:
+        x = max(b[0] * side + b[2] / 2 for b in near) * side + side * (gap + p / 2)  # past the bed's outer edge on this flank
+        _kept((x, y, p, p), house)  # every step walks it outward, so the first past the reach refuses (both flanks met a bed: one step at least)
+    return (x, y, p, p)
+
+
+def _kept(box: tuple[float, float, float, float], house: tuple[float, float, float, float]) -> tuple[float, float, float, float]:
+    """`box`, if it keeps its dwelling (`pocket_keeps_its_dwelling`); else `PocketUnlaid`, naming the gap."""
+    if not pocket_keeps_its_dwelling(box, house):
+        wall = well_gap_to_dwellings([{"x": house[0], "y": house[1], "w": house[2], "h": house[3]}], box[0], box[1])
+        raise PocketUnlaid(f"the well pocket at ({box[0]:.1f}, {box[1]:.1f}) stands {wall:.1f} px from its dwelling's wall, footprint gap {box_gap(box, house):.1f} px")
+    return box
 
 
 class BundleGeomMixin:
@@ -77,7 +143,17 @@ class BundleGeomMixin:
         (`turned_box`); every fit rule reads the boxes, and the bundle's `bbox` is theirs. Under the old +/-5 degree
         rake the difference was two pixels and was let stand; a house turned 30 degrees, or a quarter turn, is not."""
         seat = getattr(self, "_household_seat", None) or (hx, hy)
-        key = (hw, hh, garden_side, shed, bool(getattr(self, "_nucleated", False)), seat)
+        key = (
+            hw,
+            hh,
+            garden_side,
+            shed,
+            bool(getattr(self, "_nucleated", False)),
+            seat,
+            getattr(self, "_household_byre", None),
+            bool(getattr(self, "_household_well", False)),
+            tuple(getattr(self, "_household_fixtures", None) or ()),
+        )
         cache = self.__dict__.setdefault("_bundle_templates", {})
         tpl = cache.get(key)
         if tpl is None:
@@ -87,19 +163,40 @@ class BundleGeomMixin:
         def moved(r: Any) -> Any:
             return None if r is None else (r[0] + hx, r[1] + hy, r[2], r[3])
 
-        base: dict[str, Any] = {k: ([moved(r) for r in v] if k == "gardens" else moved(v)) for k, v in tpl.items()}
+        base: dict[str, Any] = {
+            k: ([moved(r) for r in v] if k == "gardens" else {f: moved(r) for f, r in v.items()} if k == "fixtures" else v if k in ("fixture_notes", "unlaid") else moved(v)) for k, v in tpl.items()
+        }
         frame = base.pop("_frame", None)
-        turn = self._house_rot(hx, hy) if rot is None else rot
+        turn = self._turn_at(hx, hy) if rot is None else rot
         self._rake_parts(base, hx, hy, turn)
-        boxes: dict[str, Any] = {k: (turned_box(base[k], turn) if base.get(k) is not None else None) for k in ("house", "yard", "shed")}
-        boxes["gardens"] = [turned_box(g, turn) for g in base["gardens"]]
+        base["turn"] = turn  # the parts' turn, so a reader of their true sizes (`access.doors_of`) measures them as drawn
+        # `turned_box` for every part, its turn's cosine and sine taken once (the same arithmetic, part by part)
+        _th = math.radians(turn)
+        _c, _s = abs(math.cos(_th)), abs(math.sin(_th))
+
+        def tbox(r: Any) -> tuple[float, float, float, float]:
+            x, y, w, h = float(r[0]), float(r[1]), float(r[2]), float(r[3])
+            return (x, y, w * _c + h * _s, w * _s + h * _c)
+
+        boxes: dict[str, Any] = {k: (tbox(base[k]) if base.get(k) is not None else None) for k in ("house", "yard", "shed", "byre", "well")}
+        boxes["gardens"] = [tbox(g) for g in base["gardens"]]
+        boxes["fixtures"] = {f: tbox(r) for f, r in (base.get("fixtures") or {}).items()}
         base["boxes"] = boxes
         if frame is None:  # nucleated: every part, as drawn
-            rects = [r for r in (boxes["house"], boxes["yard"], *boxes["gardens"], boxes.get("shed")) if r is not None]
+            rects = [r for r in (boxes["house"], boxes["yard"], *boxes["gardens"], boxes.get("shed"), boxes.get("byre"), boxes.get("well"), *boxes["fixtures"].values()) if r is not None]
             base["bbox"] = self._bbox_of(rects)
         else:  # dispersed: the grove's unraked frame with the turned yard and garden
-            base["bbox"] = self._bbox_of([frame, boxes["yard"], boxes["gardens"][0]])
+            base["bbox"] = self._bbox_of([frame, boxes["yard"], boxes["gardens"][0], *([boxes["well"]] if boxes.get("well") else [])])
         return base
+
+    def _turn_at(self: Settlement, hx: float, hy: float) -> float:  # type: ignore[misc]
+        """`_house_rot(hx, hy)`, remembered for the last seat asked while the bearing it reads stands: the four garden sides
+        of a seat, and the fit rules after them, ask the same seat (seed 44: 60,552 turns for 5,299 seats)."""
+        key = (hx, hy, self._house_bearing, self._bearing_follow)
+        got = self.__dict__.get("_turn_memo")
+        if got is None or got[0][0] != hx or got[0][1] != hy or got[0][2] != key[2] or got[0][3] is not key[3]:
+            got = self.__dict__["_turn_memo"] = (key, self._house_rot(hx, hy))
+        return got[1]
 
     def _bundle_layout(self: Settlement, hx: float, hy: float, hw: float, hh: float, garden_side: str, shed: bool, seat: Any) -> dict[str, Any]:  # type: ignore[misc]
         """The metric layout of one homestead BUNDLE around a house centered at (hx, hy). TWO forms:
@@ -112,7 +209,12 @@ class BundleGeomMixin:
         gap = self.px(3)  # 3 ft between a house and its yard/garden, at this map's ftpx
         gw, gh = 0.48 * hw, 0.85 * hh  # garden - tight to the house, scales with wealth
         sx, sy = seat  # the rolls key on the household's seat (see `_bundle_geom`)
-        yw, yh = self._yard_dims(hw, hh, sx, sy)  # threshing/drying yard - the rolled area (homestead_parts._yard_area_ft2); the placer reserves exactly what gets drawn
+        # the yard is the household's, the same for the four garden sides of its seat: rolled once per (size, seat)
+        _yk = (hw, hh, sx, sy)
+        _ym = self.__dict__.get("_yard_memo")
+        if _ym is None or _ym[0] != _yk:
+            _ym = self.__dict__["_yard_memo"] = (_yk, self._yard_dims(hw, hh, sx, sy))
+        yw, yh = _ym[1]  # threshing/drying yard - the rolled area (homestead_parts._yard_area_ft2); the placer reserves exactly what gets drawn
         if not getattr(self, "_nucleated", False):
             # CAP the DISPERSED appurtenances too, same doctrine as the nucleated branch below: a BIG house
             # (the 46x28 px headman) keeps an ORDINARY farm's garden/yard, not ones scaled to the grand
@@ -174,7 +276,18 @@ class BundleGeomMixin:
             base["gardens"] = beds  # 1 bed normally; 2 (flanking / stacked / side-by-side) when fragmented
             base["garden"] = beds[0]  # primary bed (kept for the shading score + back-compat)
             if shed:  # a north-wall kura, reserved so a neighbor never lands on it
-                base["shed"] = (hx, hy - 0.675 * hh, 0.46 * hw, 0.45 * hh)  # the drawn annex (`house`, feature 280 M18: 1.67 to one)
+                _kx, _ky, _kw, _kh = kura_rect(hw, hh, "N")  # the drawn annex (`house`, feature 280 M18: 1.67 to one)
+                base["shed"] = (hx + _kx, hy + _ky, _kw, _kh)
+            # THE HOUSEHOLD'S BEAST, a part of its homestead (feature 287, homes H06): a keeper's byre - the inner stable's
+            # arm or the outer stable's shed, on the flank away from the garden - is laid in the bundle, so the envelope
+            # admits the household only with room for it and no later stage can take that room (`byre_part`)
+            form = getattr(self, "_household_byre", None)
+            if form:
+                bw, bh = self.px(BYRE_FT[0]), self.px(BYRE_FT[1])
+                dx, dy, w, h, _turn = byre_part(hw, hh, bw, bh, garden_side, form, self.px(YARD_SHED_GAP_FT[0]))
+                base["byre"] = (hx + dx, hy + dy, w, h)
+            self._lay_well_pocket(base, hx, hy, hh, yh, gap)
+            self._lay_fixtures(base, hx, hy, hw, hh, shed, seat)
             return base  # raked and boxed by `_bundle_geom`, per seat
         # DISPERSED farmstead (the shipped ring-village behavior): the windward GROVE as an L (an N
         # band + a W band, for the default NW wind), sized so the grove footprint is ~6x the house. The
@@ -187,7 +300,54 @@ class BundleGeomMixin:
         base["grove_n"] = ((west + east) / 2, north + b / 2, east - west, b)
         base["grove_w"] = (west + b / 2, (north + b + south) / 2, b, south - (north + b))
         base["_frame"] = ((west + east) / 2, (north + south) / 2, east - west, south - north)  # the grove's frame, unraked
+        self._lay_well_pocket(base, hx, hy, hh, yh, gap)
         return base
+
+    def _lay_well_pocket(self: Settlement, base: dict[str, Any], hx: float, hy: float, hh: float, yh: float, gap: float) -> None:  # type: ignore[misc]
+        """THE HOUSEHOLD'S WELL POCKET, a part of its homestead (feature 287, homes H09-H11): where the seating asked this
+        household to carry one (`_household_well`), the wellhead's ground - its drawn well-house and a 3 ft margin - is
+        laid beside the yard on the dooryard side, on the flank away from the garden (the side the byre takes, below it), so
+        the envelope admits the household only with room for its well and the well stands among the doors it serves
+        (within `WELL_AMONG_DWELLINGS_PX` of the wall: `pocket_clear_of_beds` refuses a pocket that would not be, and the
+        layout is then marked `unlaid`, which the fit refuses). Beside the yard rather than before it, so the homestead
+        reaches no deeper toward a paddy the yard faces than the yard does."""
+        if not getattr(self, "_household_well", False):
+            return
+        p = 2.0 * self._well_vr() + self.px(6.0)
+        yard = base["yard"]
+        sx = -1.0 if base["garden"][0] > hx else 1.0  # away from the garden's side
+        wy = hy + hh / 2 + gap + p / 2 + self.px(2.0)
+        try:
+            base["well"] = pocket_clear_of_beds([hx + sx * (yard[2] / 2 + gap + p / 2), hx - sx * (yard[2] / 2 + gap + p / 2)], wy, p, base["gardens"], gap, base["house"])
+        except PocketUnlaid as refused:
+            base["unlaid"] = str(refused)
+
+    def _lay_fixtures(self: Settlement, base: dict[str, Any], hx: float, hy: float, hw: float, hh: float, shed: bool, seat: Any) -> None:  # type: ignore[misc]
+        """THE HOUSEHOLD'S FARMSTEAD FIXTURES, parts of its homestead (feature 287, homes H32, plan M5 and D9): the kinds its
+        lot keeps (`_household_fixtures`, set by the seat search) laid beside the parts already laid - built ones a crown may
+        not cover, the yard and the beds it may - in the house's frame (`homestead_parts/fixture_seats.py`), with the
+        hamlet's rolled forms (`_fixture_forms`) and the household's own position roll. So the envelope admits a household
+        only with room for its privy, its stack, its tree, and no later stage can take that room."""
+        kinds = getattr(self, "_household_fixtures", None) or ()
+        if not kinds:
+            return
+        sx, sy = seat
+
+        def rel(r: Any) -> Any:
+            return (r[0] - hx, r[1] - hy, r[2], r[3])
+
+        roofs = [rel(r) for r in (base["house"], base.get("shed"), base.get("byre"), base.get("well")) if r is not None]
+        ground = [rel(base["yard"]), *(rel(g) for g in base["gardens"])]
+        forms = getattr(self, "_fixture_forms", None) or FixtureForms()
+        annex = rel(base["byre"]) if base.get("byre") is not None else None
+        notes: dict[str, Any] = {}
+        try:
+            laid = lay_fixtures(kinds, hw, hh, roofs, ground, rel(base["yard"]), shed, lambda salt: self._hjit(sx, sy, salt), forms, self.px, annex, notes)
+        except FixtureUnlaid as refused:  # a bath room or a wood shed with no seat in this layout: the fit refuses it (feature 280)
+            base["unlaid"] = str(refused)
+            return
+        base["fixtures"] = {k: (hx + r[0], hy + r[1], r[2], r[3]) for k, r in laid.items()}
+        base["fixture_notes"] = notes  # the rolled sizes and the bath room's wall (feature 280), for the record the drawing reads
 
     def _rake_parts(self: Settlement, base: dict[str, Any], hx: float, hy: float, rot: float) -> None:  # type: ignore[misc]
         """Carry the yard, the garden bed(s) and the kura round the house center by the house's rake, in place.
@@ -201,13 +361,20 @@ class BundleGeomMixin:
         time, and every fit test the placer runs reads the moved centers - the ground cleared is the ground drawn.
         The grove arms are not moved: they are drawn unraked."""
 
+        # `turn_about` for every part, its turn's cosine and sine taken once (the same arithmetic, part by part)
+        th = math.radians(rot or 0.0)
+        c, sn = math.cos(th), math.sin(th)
+
         def turned(r: Any) -> Any:
-            ((x, y),) = turn_about([(r[0], r[1])], hx, hy, rot)
-            return (x, y, r[2], r[3])
+            px, py = r[0], r[1]
+            return (hx + (px - hx) * c - (py - hy) * sn, hy + (px - hx) * sn + (py - hy) * c, r[2], r[3])
 
         if base.get("yard") is not None:
             base["yard"] = turned(base["yard"])
         base["gardens"] = [turned(g) for g in base["gardens"]]
         base["garden"] = base["gardens"][0]
-        if "shed" in base:
-            base["shed"] = turned(base["shed"])
+        for part in ("shed", "byre", "well"):
+            if part in base:
+                base[part] = turned(base[part])
+        if base.get("fixtures"):
+            base["fixtures"] = {f: turned(r) for f, r in base["fixtures"].items()}

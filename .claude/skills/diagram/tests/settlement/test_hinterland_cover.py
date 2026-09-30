@@ -131,3 +131,38 @@ def test_the_scrub_keeps_off_each_farmstead_and_the_ground_between_near_neighbor
     assert any(point_in_poly(near / 2, 0.0, r) for r in rings)  # between the near pair
     assert any(point_in_poly(0.0, 385.0, r) for r in rings)  # the garden, on its own farmstead's outline
     assert not any(point_in_poly(0.0, 200.0, r) for r in rings)  # the far farmstead is its own island
+
+
+def test_bare_cells_counts_every_recorded_footprint_and_tread_as_covered() -> None:
+    """Woods W11 / plan D6: the bare-ground rule's one predicate. A view where lanes, a stream, a well, a clearing and a
+    burial ground fill the ground the old test counted as bare now counts them covered - "a hole in the cover is the map
+    admitting it has not decided what is there", and a recorded tread or footprint is decided ground."""
+    from l7r.diagram.settlement.land.cover import BARE_SHARE_CAP, bare_cells, covered_ground
+
+    view = (0.0, 0.0, 200.0, 200.0)
+    empty: dict = {}
+    holes, total = bare_cells(empty, view)
+    assert total == 64 and len(holes) == 64, "an empty map: every one of the 8 x 8 samples is bare"
+    assert covered_ground(empty) is None
+    M = {
+        "meta": {"view": list(view)},
+        "labels": [[0, 0, 200, 200, 1, "not ground"]],
+        "commons": [{"poly": [[0, 0], [100, 0], [100, 100], [0, 100]]}],  # cover: the top-left quarter
+        "lanes": [{"pts": [[100, 0], [100, 200]], "w": 60.0}],  # a lane 60 wide down the middle
+        "streams": [{"poly": [[0, 150], [200, 150]], "w": 50.0}],  # a brook across the bottom
+        "wells": [{"x": 175.0, "y": 50.0, "r": 30.0}],
+        "clearings": [{"poly": [[150, 0], [200, 0], [200, 25], [150, 25]]}],
+        "cemeteries": [{"x": 175.0, "y": 100.0, "w": 50.0, "h": 30.0, "rot": 0}],
+        "field_ponds": [{"x": 25.0, "y": 125.0, "rx": 25.0, "ry": 10.0}],
+        "pastures": [[[0, 190], [30, 190], [30, 200], [0, 200]]],  # a bare ring record
+        "bridges": [{"x": 10.0, "y": 10.0, "w": 4.0, "span": 12.0, "rot": 0}],  # no footprint of its own: counted by the tread under it
+        "pond": [37.5, 112.5, 5.0, 5.0],
+        "survey_points": [[5.0, 5.0]],  # a list that is no ring: no ground
+    }
+    holes, total = bare_cells(M, view)
+    old = [(x, y) for x, y in holes]  # what is left bare
+    assert len(holes) / total <= BARE_SHARE_CAP, f"{len(holes)} of {total} bare"
+    assert (112.5, 112.5) not in old and (62.5, 162.5) not in old, "the lane and the brook are covered"
+    assert (187.5, 62.5) not in old and (162.5, 12.5) not in old, "the well and the clearing are covered"
+    assert (187.5, 112.5) not in old, "the burial ground is covered"
+    assert (137.5, 112.5) in old, "ground nothing records stays bare - the predicate is not vacuous"

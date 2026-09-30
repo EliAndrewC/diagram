@@ -11,7 +11,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from l7r.diagram.settlement._knobs import Knob, register_knob
-from l7r.diagram.sitegen.geom import SQ_FT_PER_ACRE
+from l7r.diagram.sitegen.geom import SQ_FT_PER_ACRE, net_acres
 from l7r.diagram.waterfields import CombCarve, carve_comb, finish_comb
 
 from ..consts import (
@@ -46,7 +46,8 @@ def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_ste
     A script does not have to guess. `carve_comb` is pure and deterministic, so this bisects a
     single SIZE multiplier - applied to the fall length AND both canal lengths together, so the fan
     scales without changing shape - until the drawn plot area is within `tolerance` of the target.
-    Returns the best net found, which is the one whose acreage is closest, not merely the last.
+    Returns the best net found that is legal and lands the acreage band (`fan_admissible`); where the widened search
+    finds none, the site is refused (`FieldRefused`, feature 287) - never the closest miss.
 
     THE SEARCH CARVES; ONLY THE WINNER IS FINISHED (feature 220, GM 2026-09-09). Each guess used to
     run the whole `build_comb` - and seam closing, added after this docstring first promised a build
@@ -69,10 +70,11 @@ def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_ste
     # THE ASPECT IS PART OF THE SEARCH, not just a roll. A fan's legality - whether its supply canal
     # dies among the plots, whether its collector folds back on itself - depends on its SHAPE as much
     # as its size, and a roll can land on an aspect at which no size is legal. So the rolled aspect
-    # is tried first and the rest follow in order; the first legal fan wins, and if none is legal the
-    # closest-on-acreage is kept so the failure is a gate message rather than an exception.
+    # is tried first and the rest follow in order; the first legal fan wins, and if none is legal and in band the
+    # search is widened and then the site refused (below).
     best_aspect = plan.fan_aspect
-    for aspect in [plan.fan_aspect] + [a for a in FAN_ASPECTS if a != plan.fan_aspect]:
+    order = [plan.fan_aspect] + [a for a in FAN_ASPECTS if a != plan.fan_aspect]
+    for aspect in order:
         found = _fit_at_aspect(plan, sluice, seed, plot_across, row_step, aspect, tolerance, rounds)
         if best is None or found[0] < best[0]:
             best, best_aspect = found, aspect
@@ -94,8 +96,65 @@ def fit_field(plan: SitePlan, sluice: Pt, seed: int, plot_across: float, row_ste
         again = _fit_at_aspect(plan, sluice, seed, plot_across, row_step, best_aspect, tolerance, rounds, probe=False)
         if again[0] < best[0]:
             best = again
-    best[1].fan_middle = fan_middle  # where the dry band lies is the finish's question, not the search's (`fan_toe_hem`)
-    return finish_comb(best[1])  # ONE finish per roll: the seams closed, the dry plots laid, on the winner alone
+    net = _finish_first_admissible([best], fan_middle, plan)
+    if net is None:
+        # NO FAN IS KEPT OUTSIDE THE RULES (feature 287, FR-005; water W32 and the acreage band). The best fan so far is
+        # illegal, lands outside the band, or left the rules at its finish, so the search is WIDENED before anything is
+        # refused: every other aspect is searched in full, without the probe that ended each after two carves. A fan the
+        # widened search still cannot bring legal and into the band is refused by name (`FieldRefused`) - the closest
+        # miss this used to keep and hand the map is gone. Measured 2026-09-29 over cohort 1-60 and the pool: every fan
+        # lands legal within 6.7% on the first search, so neither the widening nor the refusal runs on any of them.
+        wider = [_fit_at_aspect(plan, sluice, seed, plot_across, row_step, a, tolerance, rounds, probe=False) for a in order if a != best_aspect]
+        net = _finish_first_admissible(wider, fan_middle, plan)
+    if net is None:
+        raise FieldRefused(
+            f"{getattr(getattr(plan, 'spec', None), 'name', 'the hamlet')}: no fan at any of {len(order)} aspects is legal (no supply tail"
+            f" dangling, no hairpin, both flanks commanded) and lands {plan.target_acres:.1f} acres within {FIELD_ACRE_BAND:.0%}"
+        )
+    return net
+
+
+def _finish_first_admissible(found: list[tuple[tuple[bool, float], CombCarve]], fan_middle: str, plan: SitePlan) -> dict[str, Any] | None:
+    """Finish the best admissible carve of `found` and return it if the FINISHED net is still inside the rules; else the
+    next. THE BAND IS JUDGED ON THE FINISHED NET, which is what the map records: the carve's prediction is within 0.05% of
+    the finish (`CombCarve.planted_area`), so the first admissible carve is the one finished on every map measured - ONE
+    finish per roll, on the winner - and a second is finished only if the seam pass moved the first out of the rules."""
+    for _score, carve in sorted((f for f in found if _admissible(f[0])), key=lambda f: f[0]):
+        carve.fan_middle = fan_middle  # where the dry band lies is the finish's question, not the search's (`fan_toe_hem`)
+        net = finish_comb(carve)
+        if fan_admissible(net, plan.down_deg, plan.ftpx, plan.target_acres):
+            return net
+    return None
+
+
+FIELD_ACRE_BAND = 0.15
+"""How far a comb fan's drawn paddy may land from the acreage its households need (research/fields 'Acreage from
+population'; the band the household ratchet has always read). The search aims at `tolerance` (6%) inside it."""
+
+
+class FieldRefused(ValueError):
+    """The site's field cannot be drawn within the rules: no fan the widened search finds is legal and lands its acreage
+    band (feature 287, FR-005) - the site is refused, naming it, as `SeatRefused` and `SiteRefused` refuse theirs."""
+
+
+def field_acres_in_band(acres: float, target: float, band: float = FIELD_ACRE_BAND) -> bool:
+    """Does a fan's drawn acreage land within `band` of the target? The ONE predicate the fit decides by and a test reads."""
+    return abs(acres - target) / target < band
+
+
+def fan_legal(net: Mapping[str, Any], down_deg: float, ftpx: float = 1.0) -> bool:
+    """Is a fan's water legal: no supply tail dangling, no hairpin, both flanks commanded (water W32)?"""
+    return not (tail_dangles(net) or net_bends_acutely(net) or not flanks_commanded(net, down_deg, ftpx))
+
+
+def fan_admissible(net: Mapping[str, Any], down_deg: float, ftpx: float, target: float) -> bool:
+    """A finished fan the fit may return: legal (`fan_legal`) and inside its acreage band (`field_acres_in_band`)."""
+    return fan_legal(net, down_deg, ftpx) and field_acres_in_band(net_acres(net, ftpx), target)
+
+
+def _admissible(score: tuple[bool, float]) -> bool:
+    """A search result's score - (illegal, acreage error) - inside the rules."""
+    return not score[0] and score[1] < FIELD_ACRE_BAND
 
 
 def _fit_at_aspect(
@@ -178,7 +237,9 @@ def _fit_at_aspect(
         # (`watercourse_ends_reach_water`). The offtake ladder keeps the tail SHORT, but whether a
         # short tail lands inside depends on how wide the fan happens to be there - so the bisection
         # picks the best fan that is legal rather than the best fan and then hoping.
-        score = (tail_dangles(net) or net_bends_acutely(net), err)
+        # ...AND A FAN WHOSE SUPPLY LEAVES A FLANK UNCOMMANDED IS NOT LEGAL (feature 287, water W32): judged beside the
+        # dangling tail and the hairpin, so a size or an aspect that commands both flanks always wins over one that does not
+        score = (not fan_legal(net, plan.down_deg, plan.ftpx), err)
         if best is None or score < best[0]:
             best = (score, carve)
         if err <= tolerance and not score[0]:
@@ -256,7 +317,7 @@ def head_sluice(plan: SitePlan) -> tuple[Pt, str]:
     cx, cy = plan.W / 2.0, plan.H / 2.0
     px, py = -dy, dx  # across the fall
     name, lateral = _roll(plan.spec.seed, "head_offset", HEAD_OFFSETS)
-    span = float(min(plan.W, plan.H))
+    span = float(plan.field_span or min(plan.W, plan.H))  # the field's own square, not the canvas grown for the seat (homes H31)
     return (cx - dx * span * 0.36 + px * span * lateral, cy - dy * span * 0.36 + py * span * lateral), str(name)
 
 
@@ -280,6 +341,41 @@ def tail_dangles(net: Mapping[str, Any], margin: float = 18.0) -> bool:
     ends = [q for c in net["channels"] if c["role"] == "main" for q in (c["pts"][0], c["pts"][-1])]
     free = [q for q in ends if sum(1 for r in ends if math.hypot(q[0] - r[0], q[1] - r[1]) < 5.0) == 1]
     return any(not (x0 <= q[0] <= x1 and y0 <= q[1] <= y1) for q in free[1:])  # [1:] drops the head intake, which is always outside the plots
+
+
+FLANK_REACH_FLOOR_FT = 80.0
+"""The least supply reach a flank of the fork is owed, in feet, whatever its extent (GM 2026-08-16,
+`comb_supply_commands_both_flanks`): with `FLANK_REACH_SHARE`, the finished-map test's own figures."""
+FLANK_REACH_SHARE = 0.3
+FLANK_MIN_EXTENT_FT = 150.0
+"""A flank narrower than this is not a flank the rule judges (the test's own non-vacuity bar)."""
+
+
+def flanks_commanded(net: Mapping[str, Any], down_deg: float, ftpx: float = 1.0) -> bool:
+    """Does the supply reach both flanks of the fork (feature 287, water W32)? Each side of the fork, measured across the
+    fall, is owed supply-ditch reach of at least max(80 ft, 30% of that flank's planted extent); a fan planted on one side
+    only commands no second flank. The ONE predicate the fit's legality reads and the finished-map test reads."""
+    fork = net.get("fork")
+    if fork is None:
+        return True
+    cross = (-math.sin(math.radians(down_deg)), math.cos(math.radians(down_deg)))
+
+    def offset(v: Any) -> float:
+        return float((v[0] - fork[0]) * cross[0] + (v[1] - fork[1]) * cross[1])
+
+    extent, reach = [0.0, 0.0], [0.0, 0.0]
+    for p in net.get("plots") or []:
+        for v in p.get("poly") or ():
+            o = offset(v)
+            extent[0 if o >= 0 else 1] = max(extent[0 if o >= 0 else 1], abs(o))
+    for c in net.get("channels") or []:
+        if c.get("role") in ("main", "branch"):
+            for v in c["pts"]:
+                o = offset(v)
+                reach[0 if o >= 0 else 1] = max(reach[0 if o >= 0 else 1], abs(o))
+    if min(extent) <= FLANK_MIN_EXTENT_FT / ftpx:
+        return False
+    return all(reach[i] >= max(FLANK_REACH_FLOOR_FT / ftpx, FLANK_REACH_SHARE * extent[i]) for i in (0, 1))
 
 
 def net_bends_acutely(net: Mapping[str, Any]) -> bool:

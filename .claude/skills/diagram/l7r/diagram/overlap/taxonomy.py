@@ -581,6 +581,23 @@ _MATRIX_PARENT_FIELD = {
     "retirement_houses": "of",
     "storehouses": "of",
     "field_ditches": "field",  # a field's own irrigation, drawn ON it by design
+    "fallow_patches": "field",  # a resting basin is one of its field's paddy plots (`rest_basin`)
+    "channels": "field",  # the hairline feed from a field's source names the field it feeds (`_comb_source_channel`)
+}
+
+# SIBLINGS OF ONE PARENT that may share ground, by key pair (feature 287, water W53). A resting basin (`fallow_patches`) is
+# one of its field's paddy plots with grass where the rice would be, inside its own bunds, and the field's own ditches run
+# along and between its plots by design - a ditch drawn ON its own paddy is what `field_ditches` is (the parent row above).
+# The basin was classed GROUND, and ground is ruined by water standing in it, so the field's own lateral kissing its own
+# resting basin's bund was refused as though a stranger's ditch had been cut through a dry crop: cohort seed 55 raised
+# `OverlapRefused` for exactly that pair at (3058, 2342). Another field's ditch across a basin is still forbidden.
+_MATRIX_SAME_PARENT_OK: dict[frozenset[str], str] = {
+    frozenset(
+        {"field_ditches", "fallow_patches"}
+    ): "a field's own ditch runs along its own resting basin - the basin is one of the field's paddy plots, and a ditch is drawn ON its own paddy by design",
+    # ...and the feed that traces the head race from the source to the fork lies along the same course as that ditch, so
+    # it meets the same basin wherever the race does
+    frozenset({"channels", "fallow_patches"}): "a field's own feed from its source traces its head race to the fork, along its own resting basin as the race does",
 }
 
 

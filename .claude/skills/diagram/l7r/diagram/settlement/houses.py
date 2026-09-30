@@ -7,7 +7,9 @@ from typing import TYPE_CHECKING, Any, cast
 
 from ._geom import PointGrid, Pt, boxed_polys, drawn_extent, edge_dist, indexed_grid, point_in_poly, rot_rect, seg_dist
 from ._knobs import skeleton_layout
+from .rolling.access import reserve
 from .rolling.bearing import house_rot
+from .rolling.lot import FARMHOUSE_MAX_ASPECT, KURA_SHARE, household_parts, kura_rect, record_parts, seat_parts_done
 
 # HOW FAR A FARMHOUSE WALL STANDS OFF THE PADDY (researched 2026-08-27, feature 133 T41; the record
 # in research/homesteads.html "How close does a farmhouse stand to the paddy?"). The paddy's margin is
@@ -21,9 +23,8 @@ from .rolling.bearing import house_rot
 # against the edge" as the GM expects. Real feet; `px()` scales it per tier. Held by the gate's
 # `houses_clear_of_paddies`.
 HOUSE_PADDY_GAP_FT = 6.0
-# THE STOREHOUSE ANNEX'S SHARE (feature 280 M20, research/homesteads/720): one farm in eight, the headman always (his by the
-# GM's ruling of 2026-07-21, below). A calibration on the one premodern count read, Kakimochi's 2 storehouses in 16 households.
-KURA_SHARE = 0.125
+# THE STOREHOUSE ANNEX'S SHARE is `rolling/lot.py`'s `KURA_SHARE` (feature 280 M20: one farm in eight, the headman always),
+# the lots' quota and the positional roll's threshold outside the lots alike.
 STOREHOUSE_GRAY = "#9A968C"
 
 if TYPE_CHECKING:
@@ -52,8 +53,8 @@ class HousesMixin:
         # run about 18-27 ft long and 1.5-1.8 times as long as deep (Hannan 3 x 2 ken; Nerima 8.17 x 4.54 m) - 0.46 of an ordinary
         # 46 ft minka is 21 ft, and 0.45 of its 28 ft depth is 12.6 ft, 1.67 to one (a 40 ft house gives 1.46, just under the band -
         # future-work); the 1.8-2.4 of the Meiji-Taisho barns is not
-        # drawn. It overlaps the back wall by 0.05 h, as before, so the annex reads as joined.
-        _sox, _soy, _ssw, _ssh = (0.0, -0.675 * h, 0.46 * w, 0.45 * h) if shed_side == "N" else (-0.64 * w, 0.0, 0.32 * w, 0.56 * h)
+        # drawn. It overlaps the back wall by 0.05 h, as before, so the annex reads as joined. `kura_rect` is the one table.
+        _sox, _soy, _ssw, _ssh = kura_rect(w, h, shed_side)
         # EMIT WHAT WAS PLACED (feature 121, found by settlement-review on Sawada). This rounded the
         # center to whole pixels and the rake to whole DEGREES, while the placer clears and the gate
         # measure full floats - so after all of this feature's work the drawn quad was still not the
@@ -658,8 +659,15 @@ class HousesMixin:
         # FEET, drawn at this map's ftpx (village 2 ft/px, hamlet 1): the plain house is the 46x28 ft 8:5 minka
         # (px(46) = 23px at 2 ft/px). A modest, position-seeded wealth tier scales the whole bundle. See
         # research/homesteads.html 'Homestead groves (yashikirin) - the real scale and prevalence' ('How far is it across this map? The scale, tier by tier'.
+        # THE HOUSEHOLD'S PARTS (feature 287, plan M5): its lot - the k-th plain household seated takes lot k, its size
+        # rung, its kura and its beast - and its well pocket, whatever seat it lands on (`rolling/lot.py`)
+        _lot, _byre_form, _well = household_parts(self, x, y, kind, role)
         if size is not None:  # explicit footprint in FEET (e.g. a larger headman)
+            if max(size) > FARMHOUSE_MAX_ASPECT * min(size):  # a caller's input error, not a map check (homes H08)
+                raise ValueError(f"a farmhouse of {size[0]} x {size[1]} ft runs past {FARMHOUSE_MAX_ASPECT}:1 - it would read as a shed")
             wf, hw, hh = 1.0, self.px(size[0]), self.px(size[1])
+        elif _lot is not None:  # the size ladder (homes H17): the footprints spread by construction
+            wf, hw, hh = 1.0, self.px(46) * _lot[0], self.px(28) * _lot[1]
         elif getattr(self, "_nucleated", False):
             # a minka grew by adding BAYS (ken) along the ridge, so a bigger farmhouse is LONGER far more
             # than it is wider (the roof span caps the depth) - vary length a lot, depth only a little, so
@@ -686,12 +694,19 @@ class HousesMixin:
         # the west/sunny walls but never the shaded NORTH, so a north kura is clear of it - and its footprint is
         # RESERVED in the homestead bundle so a neighbor never lands on it. Drawn + recorded in farmsteads() so
         # it always moves WITH the house (farm_sheds_attached guards it).
-        _shed = kind == "plain" and (role == "headman" or self._hjit(x, y, 3.0) < KURA_SHARE)
-        spot = self._place_bundle(x, y, hw, hh, shed=_shed)  # pack the bundle (incl. the reserved kura) near (x,y)
+        # ...A COUNT, NOT A PER-SEAT ROLL, where the household carries a lot (homes H45): exactly round(n x `KURA_SHARE`) of n
+        # seated households keep one, where the positional roll aliased along a row and under-delivered 2.2x.
+        _shed = kind == "plain" and (role == "headman" or (_lot[2] if _lot is not None else self._hjit(x, y, 3.0) < KURA_SHARE))
+        try:  # a keeper's byre and a well pocket are parts of the bundle: the envelope is sought with them in it (H06, H10)
+            spot = self._place_bundle(x, y, hw, hh, shed=_shed)  # pack the bundle (incl. the reserved kura) near (x,y)
+        finally:
+            seat_parts_done(self)
         if spot is None:
             return False
         cx, cy, geom = spot
         self.placed.append(geom["bbox"])  # reserve the whole homestead footprint as one rect
+        if geom.get("access") is not None:  # the corridor the seat was admitted with, reserved (feature 287, plan M3)
+            reserve(self, geom["access"], (cx, cy))
         rec = {
             "x": cx,
             "y": cy,
@@ -705,6 +720,7 @@ class HousesMixin:
             "wealth": wf,
             "geom": geom,
         }  # rot position-seeded, like _shed above
+        record_parts(self, rec, geom, _byre_form)  # the reserved stall and well pocket, on the record
         self.M["houses"].append(rec)
         self._pending_farmsteads.append(rec)
         return True

@@ -8,6 +8,8 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
 from l7r.diagram.settlement._geom.indexes import BambooObstacles
+from l7r.diagram.settlement.homestead_parts.bamboo_keepout import stand_spares_seats
+from l7r.diagram.settlement.land.wet import marsh_ground
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
@@ -105,6 +107,19 @@ def nearest_fitting(target: Pt, reach: float, step: float, fits: Callable[[float
     return None
 
 
+BAMBOO_SAMPLE_FT = 14.0
+"""How far apart a bamboo stand's samples stand across its rect (feature 287, woods W24). A way is refused within its
+half-width and 10 ft of a sample, so a tread anywhere in the rect lies within 14 / sqrt(2) = 9.9 ft of a sample and under
+that reach: a map drawing convention - the density is the geometry's, not a fact about bamboo."""
+
+
+def stand_samples(cx: float, cy: float, hw: float, hh: float, step: float) -> list[Pt]:
+    """The points a stand's rect (center, half-extents) is asked at: its corners and edges, and a grid through it no more
+    than `step` apart on either axis (feature 287, woods W24)."""
+    nx, ny = max(2, math.ceil(2.0 * hw / step)), max(2, math.ceil(2.0 * hh / step))
+    return [(cx - hw + 2.0 * hw * i / nx, cy - hh + 2.0 * hh * j / ny) for i in range(nx + 1) for j in range(ny + 1)]
+
+
 def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     """Where the hamlet's bamboo stands go, per the `bamboo` knob - SCANNED, like the coppice patches.
 
@@ -151,7 +166,7 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     # the one thing a farmer digs a trench to stop, so this is a placement error rather than a legibility one. The
     # gate could not catch it either: `bamboo_stands_clear_of_paddies` reads paddy outlines only (widened with this).
     polys += [([(float(a_), float(b_)) for a_, b_ in (o.get("poly") or [])], px(12.0)) for o in s.M.get("dry_plots", []) if len(o.get("poly") or []) >= 3]
-    polys += [([(float(a), float(b)) for a, b in m["poly"]], px(6.0)) for m in s.M.get("marshes", []) if m.get("poly")]
+    polys += [(ring, px(6.0)) for ring in marsh_ground(s.M)]
     polys += [(list(plan.belt), px(10.0))] if plan.belt else []
     polys += [(list(w), px(20.0)) for w in plan.woodland_polys]
     pond = s.M.get("pond")
@@ -165,11 +180,22 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     def _blocked(x: float, y: float) -> bool:
         return bamboo_blocked_indexed(x, y, (s.W, s.H), tp, index, pond, px(30.0))
 
+    # ...ASKED OVER THE WHOLE STAND, NOT ITS PERIMETER (feature 287, woods W24): a 5 x 3 grid 29 ft apart let a lane cross
+    # the stand between two rows. The samples stand `BAMBOO_SAMPLE_FT` apart, so every point of the rect lies within
+    # `BAMBOO_SAMPLE_FT / sqrt(2)` of one, under the lane's refusal reach (its half-width and 10 ft): a tread that enters the
+    # stand is always seen
+    _sample = px(BAMBOO_SAMPLE_FT)
+    # ...AND CLEAR OF EVERY HOUSEHOLD'S RESERVED COPSE SEATS by the copse's bamboo keep-out (`stand_spares_seats`; feature
+    # 280 keeps the copse two crowns off the bamboo, feature 287 plants every reserved seat): the stand gives way, not the seat
+    _seats = [(float(p[0]), float(p[1])) for h in s.M.get("houses") or [] for p in (h.get("wood_share") or {}).get("seats") or ()]
+
     def _fits(cx: float, cy: float, hw: float, hh: float) -> bool:
-        # nine by five: at five by three a yard persimmon's crown fitted between the samples of a 72 x 55 ft thicket
-        # (settlement-review of Kashikawa, feature 280)
-        samples = [(cx + dx * hw, cy + dy * hh) for dx in (-1.0, -0.75, -0.5, -0.25, 0.0, 0.25, 0.5, 0.75, 1.0) for dy in (-1.0, -0.5, 0.0, 0.5, 1.0)]
-        return not any(_blocked(x, y) for x, y in samples)
+        if not stand_spares_seats(cx, cy, 2.0 * hw, 2.0 * hh, _seats, s.bscale):
+            return False
+        # a yard persimmon's crown fitted between the samples of a 72 x 55 ft thicket at five by three (settlement-review of
+        # Kashikawa, feature 280, which went to nine by five); the `BAMBOO_SAMPLE_FT` grid is finer than a crown and its pad
+        # (`PERSIMMON_CROWN_FT`, 23 ft across) on either axis, so a crown anywhere over the stand is always seen
+        return not any(_blocked(x, y) for x, y in stand_samples(cx, cy, hw, hh, _sample))
 
     out: list[Poly] = []
     for _form in forms:

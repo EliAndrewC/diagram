@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import math
 
-from l7r.diagram.hamletgen.ways.smooth import _KNOT_FT, _smooth_web
+from l7r.diagram.hamletgen.ways.smooth import _JOG_FT, _KNOT_FT, _smooth_web, string_pull_chord_ok
 
 from ._builders import _StubSettlement
 
@@ -62,3 +62,26 @@ def test_a_lane_crossing_another_loses_its_short_head_past_the_crossing() -> Non
     assert _smooth_web(s, [], [], []) >= 1
     head = s.M["lanes"][1]["pts"][0]
     assert abs(head[0] - 100.0) < 1.0 and abs(head[1] - 0.0) < 1.0, head
+
+
+# A shed whose near edge stands 6 ft off the chord y = 0: inside the web's 8 ft hard margin (`_clear_link` refuses the
+# chord) and outside a 5 ft lane's own 4.5 ft keep-out (`_clear_touch` allows it) - the only ground on which the
+# jog bound decides.
+_SHED = [(40.0, 6.0), (60.0, 6.0), (60.0, 20.0), (40.0, 20.0)]
+
+
+def test_a_chord_at_the_lanes_own_margin_is_taken_when_every_skipped_vertex_is_a_JOG() -> None:
+    """Feature 133 T32 / 134 T50: the 4 ft stepping and the jogs a junction leaves are the SAME line drawn badly, so a
+    chord the web's margins refuse is still taken at the lane's own keep-out when every vertex it replaces lies within
+    `_JOG_FT` of it. Lifted out of `_smooth_web` because the straggler pass that reached it is gone."""
+    pts = [(0.0, 0.0), (30.0, -2.0), (70.0, -_JOG_FT + 0.5), (100.0, 0.0)]
+    assert not string_pull_chord_ok(pts, 0, 3, [_SHED], [], [], 10.0), "a keep-out wider than the shed's 6 ft refuses it outright"
+    assert string_pull_chord_ok(pts, 0, 3, [_SHED], [], [], 4.5), "every skipped vertex is a jog: the chord is a simplification"
+
+
+def test_a_chord_skipping_a_vertex_farther_than_the_jog_bound_is_refused() -> None:
+    """The same chord across the same ground, with one skipped vertex `_JOG_FT` + 4 ft off it: that vertex is a BEND, and
+    a new line across open ground owes the houses their corridor - the chord is refused at footprint margins."""
+    pts = [(0.0, 0.0), (30.0, -2.0), (70.0, -_JOG_FT - 4.0), (100.0, 0.0)]
+    assert not string_pull_chord_ok(pts, 0, 3, [_SHED], [], [], 4.5)
+    assert string_pull_chord_ok(pts, 0, 3, [], [], [], 4.5), "on open ground the web's own margins take it, bend or not"

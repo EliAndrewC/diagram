@@ -157,15 +157,15 @@ def test_an_unbuildable_band_measures_zero_rather_than_propagating(monkeypatch) 
     assert wet._band_half_width(square, None, "toe") == 0.0
 
 
-def test_a_clip_that_would_remove_everything_returns_the_polygon_unchanged() -> None:
-    """A marsh polygon wholly inside the dikes has nothing left after the subtraction. Handing back
-    an empty record would erase the feature from the manifest; handing back the original leaves it
-    visible and lets the checks report it, which is this engine's standing trade."""
+def test_a_clip_that_would_remove_everything_is_no_marsh() -> None:
+    """Woods W07 (feature 287): a marsh polygon wholly inside the dikes has nothing left after the subtraction, and it is
+    no marsh - never the outline handed back, which drew and recorded the reeds over the block they are subtracted from."""
     from l7r.diagram.settlement.land.wet import _clipped_to_open_ground
 
     poly = [(10.0, 10.0), (20.0, 10.0), (20.0, 20.0), (10.0, 20.0)]
     swallowing = [{"outline": [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]}]
-    assert _clipped_to_open_ground(poly, swallowing) == poly
+    assert _clipped_to_open_ground(poly, swallowing) is None
+    assert _clipped_to_open_ground(poly, [], fields=[[(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]]) is None, "wholly in a field"
     # a dike record with no usable outline contributes no ring, and with nothing to cut the outline
     # comes straight back rather than being run through shapely for nothing
     assert _clipped_to_open_ground(poly, [{"outline": [(0.0, 0.0), (1.0, 1.0)]}]) == poly
@@ -216,16 +216,40 @@ def test_keyholing_skips_a_hole_too_small_to_walk() -> None:
     assert _keyholed(_Degenerate()) == [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
 
 
-def test_an_outline_shapely_cannot_build_is_returned_unclipped() -> None:
-    """Feature 174: the `except (ValueError, GEOSException)` path - refuse to clip rather than fail.
-
-    A two-point ring is not a polygon, so `ShapelyPolygon` raises before any difference is taken. The
-    contract is that the caller gets its own outline back untouched, not an exception and not an
-    empty result - a marsh that cannot be clipped is still a marsh.
-    """
+def test_an_outline_shapely_cannot_build_is_no_marsh() -> None:
+    """Woods W07 (feature 287): the `except (ValueError, GEOSException)` path. A two-point ring is not a polygon, so
+    `ShapelyPolygon` raises on the first try and again on the repair - and an outline no repair can clip is no marsh,
+    never the unclipped outline (which would stand over the block)."""
     poly = [(0.0, 0.0), (10.0, 0.0)]
     dikes = [{"outline": [(0.0, 0.0), (5.0, 0.0), (5.0, 5.0)]}]
-    assert _clipped_to_open_ground(poly, dikes) == poly, "the outline is handed back as it came in"
+    assert _clipped_to_open_ground(poly, dikes) is None
+
+
+def test_a_clip_that_fails_once_is_repaired_and_taken_again(monkeypatch) -> None:
+    """Woods W07: a GEOS error on the first difference is not the end - every piece is made valid and the difference
+    taken again, so a bow-tie outline lapping a dike block comes back as a valid ring outside the block."""
+    from shapely.errors import GEOSException
+    from shapely.geometry import Polygon
+
+    from l7r.diagram.settlement.land import wet
+
+    wet._load_shapely()
+    real = wet.unary_union
+    calls: list[int] = []
+
+    def _once(parts):  # type: ignore[no-untyped-def]
+        calls.append(1)
+        if len(calls) == 1:
+            raise GEOSException("TopologyException: side location conflict")
+        return real(parts)
+
+    monkeypatch.setattr(wet, "unary_union", _once)
+    bowtie = [(0.0, 0.0), (200.0, 100.0), (200.0, 0.0), (0.0, 100.0)]  # crosses itself at (100, 50)
+    block = [{"outline": [(150.0, -10.0), (260.0, -10.0), (260.0, 110.0), (150.0, 110.0)]}]
+    got = wet._clipped_to_open_ground(bowtie, block)
+    assert len(calls) > 1 and got is not None, "the repair took the difference the first try could not"
+    ring = Polygon(got)
+    assert ring.is_valid and ring.area > 0 and max(p[0] for p in got) <= 150.0 + 1e-6, "outside the block"
 
 
 def test_the_hard_ground_sweep_SKIPS_a_ditch_that_carries_no_path() -> None:
@@ -250,3 +274,83 @@ def test_a_pond_bank_is_kept_off_whole_not_thinned() -> None:
     got = bank_rings([{"bank": ring}, {"bank": _ring(5000.0, 5000.0, 5100.0, 5100.0)}, {"bank": []}], lambda pts: pts[0][0] < 1000)
     assert got == [[(float(x), float(y)) for x, y in ring]]
     assert (700.0, 500.0) in got[0], "the corner a thinned ring cut is kept"
+
+
+# ---- feature 287, M7: the recorded marsh is the drawn marsh ---------------------------------------
+_TOE = [(200.0, 200.0), (800.0, 200.0), (800.0, 700.0), (200.0, 700.0)]
+_HOUSE_BLOCK = [(420.0, 420.0), (480.0, 420.0), (480.0, 470.0), (420.0, 470.0)]  # a no-build block inside the toe
+_FIELD = [(700.0, 100.0), (900.0, 100.0), (900.0, 300.0), (700.0, 300.0)]  # a paddy over the toe's corner
+
+
+def _toe_over_a_house_and_a_field() -> Settlement:
+    s = Settlement(1000, 1000, seed=3)
+    s.meta(name="V", scale="village")
+    s.field_polys.append(list(_FIELD))
+    s.block_polys.append(list(_HOUSE_BLOCK))
+    s.clearings.append([(250.0, 600.0), (300.0, 600.0), (300.0, 650.0), (250.0, 650.0)])
+    s.marsh(_TOE, role="toe")
+    return s
+
+
+def test_the_marsh_records_the_ground_its_reeds_are_drawn_on() -> None:
+    """Woods W08 / plan M7: the toe laid over a house block, a paddy corner and a swept clearing records a ring that holds
+    none of them - the scatter refused them all along, and the record kept the whole outline (the future-work entry's
+    Sawada belt lost 68 of 179 crowns to it) - and every reed the scatter drew stands inside the recorded ring."""
+    from l7r.diagram.settlement._geom import point_in_poly, seg_dist
+
+    s = _toe_over_a_house_and_a_field()
+    ring = [(float(a), float(b)) for a, b in s.M["marshes"][0]["poly"]]
+    assert not point_in_poly(450.0, 445.0, ring), "the house block is cut out of the record"
+    assert not point_in_poly(750.0, 250.0, ring) and not point_in_poly(695.0, 250.0, ring), "the paddy and its 10 px pad are cut out"
+    assert not point_in_poly(275.0, 625.0, ring), "the clearing is cut out"
+    assert point_in_poly(300.0, 300.0, ring), "the open toe is still marsh"
+    assert s.wet_polys[-1] == ring and s.block_polys[-1] == ring, "the no-build keep-out is the same ring"
+    marks = _marks(s)
+    assert marks, "the toe drew reeds"
+    # ...to the ink's own grain: a blade is written at 0.1 px, so one based a hair inside an edge can print ON it
+    edges = list(zip(ring, [*ring[1:], ring[0]], strict=True))
+    stray = [(x, y) for x, y in marks if not point_in_poly(x, y, ring) and min(seg_dist(x, y, a, b) for a, b in edges) > 0.05]
+    assert not stray, f"no reed stands outside the recorded marsh: {stray[:6]} of {len(marks)}"
+
+
+def test_marsh_ground_reads_the_recorded_rings_by_role() -> None:
+    """The ONE reading of "is this in the marsh" (woods S3): every consumer asks `marsh_ground`, by role."""
+    from l7r.diagram.settlement.land.wet import marsh_ground
+
+    M = {
+        "marshes": [
+            {"role": "toe", "poly": [[0, 0], [10, 0], [10, 10]]},
+            {"role": "defense", "poly": [[20, 0], [30, 0], [30, 10]]},
+            {"role": "pond_fringe", "poly": [[40, 0], [50, 0]]},  # under three points: not ground
+        ]
+    }
+    assert len(marsh_ground(M)) == 2
+    assert marsh_ground(M, but=("defense",)) == [[(0.0, 0.0), (10.0, 0.0), (10.0, 10.0)]]
+    assert marsh_ground(M, only=("defense",)) == [[(20.0, 0.0), (30.0, 0.0), (30.0, 10.0)]]
+    assert marsh_ground({}) == []
+
+
+def test_a_marsh_with_no_open_ground_left_is_neither_drawn_nor_recorded() -> None:
+    """A toe wholly under a paddy has no ground its reeds could stand on: nothing is drawn, nothing recorded, and the drop
+    is named in the manifest rather than a whole outline recorded over the crop."""
+    from l7r.diagram.settlement.land.wet import drawn_ground
+
+    s = Settlement(1000, 1000, seed=3)
+    s.meta(name="V", scale="village")
+    s.field_polys.append([(100.0, 100.0), (900.0, 100.0), (900.0, 900.0), (100.0, 900.0)])
+    s.marsh([(300.0, 300.0), (500.0, 300.0), (500.0, 500.0)], role="toe")
+    assert s.M["marshes"] == [] and s.wet_polys == []
+    assert s.M["meta"]["marsh_dropped"] == [{"role": "toe", "why": "no open ground left"}]
+    assert drawn_ground([(0.0, 0.0), (1.0, 1.0)]) is None, "two points are no ground"
+
+
+def test_drawn_ground_keeps_the_largest_piece_when_a_keep_out_cuts_the_marsh_in_two() -> None:
+    """A record carries one ring, so a block across the marsh leaves the larger piece as the marsh; a keep-out beyond the
+    marsh's reach cuts nothing and the outline comes back vertex for vertex."""
+    from l7r.diagram.settlement.land.wet import drawn_ground
+
+    band = [(0.0, 0.0), (300.0, 0.0), (300.0, 100.0), (0.0, 100.0)]
+    wall = [(90.0, -10.0), (110.0, -10.0), (110.0, 110.0), (90.0, 110.0)]
+    got = drawn_ground(band, blocks=[wall])
+    assert got is not None and min(p[0] for p in got) >= 110.0 - 1e-6, "the larger, eastern piece"
+    assert drawn_ground(band, blocks=[[(900.0, 900.0), (950.0, 900.0), (950.0, 950.0)]]) == band

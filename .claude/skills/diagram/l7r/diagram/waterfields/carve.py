@@ -144,6 +144,10 @@ def _edge_in_supply(a: Pt, b: Pt, sup_idx: list[_SupRow], g: float) -> bool:
     for _spts, _scum, _w0, _w1, sbb, sidx in sup_idx:
         if max(a[0], b[0]) < sbb[0] or min(a[0], b[0]) > sbb[2] or max(a[1], b[1]) < sbb[1] or min(a[1], b[1]) > sbb[3]:
             continue
+        # ...and none where the whole edge stands off every segment by more than its bank (feature 287 perf): a plot edge
+        # beside a canal is inside its box its whole length, and its every sample was asked
+        if sidx.edge_beyond(a, b, BANK_MARGIN * g - 0.5):
+            continue
         nstep = max(1, int(math.dist(a, b) / 3.0))
         for k in range(nstep + 1):
             t = k / nstep

@@ -9,6 +9,7 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly
 from l7r.diagram.settlement._geom import RingIndex
+from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import crop_polys
 
 from ..consts import Poly, Pt
@@ -252,7 +253,11 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     # fringe leads it, and keeps the whole band on the windward half where a back-village grove
     # belongs. The median, not the mean: one house pushed far upwind should not drag the wall out.
     u_sorted = sorted(u for u, _v in uv)
-    u_floor = u_sorted[len(u_sorted) // 2]
+    # ...AND NEVER BEHIND THE CLUSTER'S CENTER (feature 287, woods W18): where the median house stands downwind of the
+    # houses' centroid (a cluster lying diagonally to the wind), a column floored at the median could still lay its band
+    # level with the centroid. At 0 the band's near face stands `BELT_NEAR_FT` windward of the centroid in every column, so
+    # the planted belt starts on the wind's quarter and `trim_to_the_wind` only shortens its hook.
+    u_floor = max(u_sorted[len(u_sorted) // 2], 0.0)
 
     def profile(span_f: float) -> list[tuple[float, float]]:
         """(v, u) of the windward fringe, sampled in columns across the wind."""
@@ -284,7 +289,7 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
         for q in [(a[0] + (b[0] - a[0]) * t / 10, a[1] + (b[1] - a[1]) * t / 10) for t in range(11)]
     ]
 
-    _marsh = [[(float(q[0]), float(q[1])) for q in mk["poly"]] for mk in s.M.get("marshes") or [] if len(mk.get("poly") or []) >= 3]
+    _marsh = marsh_ground(s.M)
 
     def _in_marsh(v: float, u: float) -> bool:
         """Would the band moved to fringe `u` in column `v` stand in the marsh - its middle, half its depth behind its near face?"""
@@ -331,9 +336,20 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     # spends the SIZE budget (canopy worth 40% of the roof area it shelters, which a belt trimmed to
     # half its length cannot meet). Shrinking first cost both checks on two cohort maps.
     belt = band(1.0, 0.0)
+    span_f, back = 1.0, 0.0
     for span_f, back in ((1.0, 0.0), (1.0, 22.0), (1.0, 44.0), (0.88, 44.0), (0.74, 60.0), (0.6, 60.0)):
         belt = band(span_f, back)
         if not fouled(belt):
             break
     s.M.setdefault("meta", {})["belt_near_vertices"] = _near_n[0]
+    # THE BAND'S REACH (feature 287, woods W19): how far its designed far face stands from the house it is laid behind - the
+    # near stand-off, the depth, the far face's rag, the afternoon-sun offset and the step back the ladder took, ALONG the
+    # wind; and a column is laid behind the windward-most house within its own window ACROSS the wind (`fringe_profile`'s
+    # `near`, half a column and 40 ft), so the far face stands that much farther from that house on the diagonal. A crown
+    # farther than this from every farmhouse shelters none of them (Inashiro: 63 of 308 crowns over 200 ft from any house,
+    # the furthest 518, on a limb joining a cluster's two groups), so the belt is planted within it (`plant_the_belt`) and
+    # the stretch it leaves between two groups is a run break, not a hole (`belt_law`). The designed reach ALONG the wind
+    # alone was tried first and cut into the band the design lays: a column's far face stood beyond it wherever its house
+    # stood across the wind from it, the depth could not be kept there, and cohort seed 37's belt lost 120 of 332 crowns.
+    s.M["meta"]["belt_reach"] = round(math.hypot(BELT_NEAR_FT + BELT_DEPTH_FT + BELT_FAR_RAG_FT + _sun_off + back, half * span_f / COLS + 40.0), 1)
     return [(max(6.0, min(plan.W - 6.0, bx)), max(6.0, min(plan.H - 6.0, by))) for bx, by in belt]

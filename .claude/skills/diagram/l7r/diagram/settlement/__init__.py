@@ -56,12 +56,12 @@ from ._geom import quad_hits_seg as quad_hits_seg
 from ._geom import rail_quad as rail_quad
 from ._geom import rects_overlap as rects_overlap
 from ._geom import region_blocked as region_blocked
+from ._geom import ring_meets_ellipse as ring_meets_ellipse
 from ._geom import ring_touches as ring_touches
 from ._geom import rot_rect as rot_rect
 from ._geom import sat_overlap as sat_overlap
 from ._geom import seg_closest as seg_closest
 from ._geom import seg_dist as seg_dist
-from ._geom import seg_in_ellipse_core as seg_in_ellipse_core
 from ._geom import seg_intersect as seg_intersect
 from ._geom import segments_cross as segments_cross
 from ._geom import street_runs as street_runs

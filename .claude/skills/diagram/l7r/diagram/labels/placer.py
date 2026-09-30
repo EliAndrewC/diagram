@@ -10,8 +10,9 @@ leader line ties them back. The standard, in the order it decides:
 2. Within a ring, the RANKED POSITIONS (`standard.POSITIONS`: the user-tested order of Bobák, Čmolík and Čadík 2024 -
    above, below, right, then the corners on the right, left, the corners on the left; feature 290), then fewer lines
    before more (the GM's wrap rule).
-3. FREE SPACE WINS: the first candidate that covers nothing is taken. Only when nothing in reach is free does the
-   caption go where it covers the least weight - it is never dropped (the GM: "we'll treat labels as mandatory").
+3. FREE SPACE WINS: the first candidate that covers nothing is taken. When nothing in reach is free, the fallback
+   slides and then the leader rings out to the hug are searched; a caption is never dropped (the GM: "we'll treat
+   labels as mandatory") and never drawn overlapping (feature 287, D10) - with no free seat it goes in the sheet's key.
 4. A caption not at the preferred offset is no longer directly beside its feature, so a LEADER line joins it back
    (QGIS callouts, Esri's leader, PSU: "labels that do not fit on or directly adjacent to their respective feature").
 """
@@ -20,13 +21,29 @@ from __future__ import annotations
 
 import itertools
 import math
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass, replace
+from typing import Literal, overload
 
-from .geom import Poly, Pt, area_centroid, bbox, centroid, inside, nearest_points, rect, seg_closest
+from .geom import Poly, Pt, area_centroid, bbox, centroid, inside, nearest_points, poly_gap, rect, seg_closest
 from .layout import layouts
-from .obstacles import ObstacleIndex
-from .standard import CENTER_ABOVE_BASELINE_EM, CHAR_W_EM, CLEAR_EM, LINE_H_EM, PITCH_EM, POSITIONS, PREFERRED_OFFSET_EM, REACH_EM, RING_STEP_EM, WEIGHT_OBSTACLE, block_half, upright
+from .obstacles import ObstacleIndex, Way
+from .standard import (
+    CENTER_ABOVE_BASELINE_EM,
+    CHAR_W_EM,
+    CLEAR_EM,
+    HUG_PX,
+    LINE_H_EM,
+    PITCH_EM,
+    POSITIONS,
+    PREFERRED_OFFSET_EM,
+    REACH_EM,
+    RING_STEP_EM,
+    WEIGHT_KEY,
+    WEIGHT_OBSTACLE,
+    block_half,
+    upright,
+)
 
 AREA_SEATS = 400
 """How many interior seats an area caption tries, nearest the centroid first - a search bound, not a rule."""
@@ -64,6 +81,7 @@ class Placement:
     position: str
     cost: float
     leader: tuple[Pt, Pt] | None
+    keyed: bool = False
 
 
 @dataclass(frozen=True)
@@ -98,10 +116,30 @@ def sized_half(lines: list[str] | tuple[str, ...], size: float, char_w: float = 
     return bw, bh
 
 
+NUDGE_PX = 3
+"""How far, in whole pixels each way, the least-cost seat is nudged for a cheaper one (feature 286): a free band exactly as
+tall as a caption and its clearance - Hayakawa's guardroom - lies between any grid's points."""
+
+HUG_RING = HUG_PX - NUDGE_PX * math.sqrt(2.0)
+"""The farthest ring any seat stands on (feature 287, labels L10): the hug less the farthest a nudge can carry a seat."""
+
+
 def rings(size: float) -> list[float]:
-    """The ring distances for a caption of `size`: the preferred offset, then a step at a time out to the reach."""
+    """The ring distances for a caption of `size`: the preferred offset, then a step at a time out to the reach - never
+    past the hug (`HUG_RING`), whatever the caption's size."""
     n = int(round((REACH_EM - PREFERRED_OFFSET_EM) / RING_STEP_EM)) + 1
-    return [(PREFERRED_OFFSET_EM + k * RING_STEP_EM) * size for k in range(n)]
+    return [min((PREFERRED_OFFSET_EM + k * RING_STEP_EM) * size, HUG_RING) for k in range(n) if k == 0 or (PREFERRED_OFFSET_EM + k * RING_STEP_EM) * size <= HUG_RING]
+
+
+def outer_rings(size: float) -> list[tuple[int, float]]:
+    """The LEADER rings (feature 287, D10): past the standard's reach, a step at a time out to the hug, each with its ring
+    number - where a caption with no free seat in reach looks next, tied back by its leader, before it goes in the key."""
+    k = len(rings(size))
+    out: list[tuple[int, float]] = []
+    while (PREFERRED_OFFSET_EM + k * RING_STEP_EM) * size <= HUG_RING:
+        out.append((k, (PREFERRED_OFFSET_EM + k * RING_STEP_EM) * size))
+        k += 1
+    return out
 
 
 def _frame_of(angle: float) -> tuple[Pt, Pt]:
@@ -109,16 +147,27 @@ def _frame_of(angle: float) -> tuple[Pt, Pt]:
     return (math.cos(a), math.sin(a)), (-math.sin(a), math.cos(a))
 
 
-def _point_cands(text: str, size: float, subject: Subject, lays: list[list[str]], char_w: float = CHAR_W_EM, line_sizes: list[float] | None = None) -> Iterator[_Cand]:
-    ang = upright(subject.angle)
+def _ringed(size: float, ring_gaps: list[tuple[int, float]] | None) -> list[tuple[int, float]]:
+    return list(enumerate(rings(size))) if ring_gaps is None else ring_gaps
+
+
+def _box_frame(subject: Subject, ang: float) -> tuple[Pt, Pt, Pt, float, float]:
+    """The subject's box in the frame turned by `ang`: its center, the frame's two axes and its half-extents."""
     u, v = _frame_of(ang)
     c = centroid(subject.poly)
     pu = [(p[0] - c[0]) * u[0] + (p[1] - c[1]) * u[1] for p in subject.poly]
     pv = [(p[0] - c[0]) * v[0] + (p[1] - c[1]) * v[1] for p in subject.poly]
     cu, cv = (min(pu) + max(pu)) / 2, (min(pv) + max(pv)) / 2
     c = (c[0] + cu * u[0] + cv * v[0], c[1] + cu * u[1] + cv * v[1])  # the center of the subject's box in its frame
-    su, sv = (max(pu) - min(pu)) / 2, (max(pv) - min(pv)) / 2
-    for ring, g in enumerate(rings(size)):
+    return c, u, v, (max(pu) - min(pu)) / 2, (max(pv) - min(pv)) / 2
+
+
+def _point_cands(
+    text: str, size: float, subject: Subject, lays: list[list[str]], char_w: float = CHAR_W_EM, line_sizes: list[float] | None = None, ring_gaps: list[tuple[int, float]] | None = None
+) -> Iterator[_Cand]:
+    ang = upright(subject.angle)
+    c, u, v, su, sv = _box_frame(subject, ang)
+    for ring, g in _ringed(size, ring_gaps):
         for rank, (name, sx, sy) in enumerate(POSITIONS):
             for lines in lays:
                 bw, bh = sized_half(lines, size, char_w, line_sizes)
@@ -132,7 +181,9 @@ def _point_cands(text: str, size: float, subject: Subject, lays: list[list[str]]
                 yield _Cand(ring, rank, name, (c[0] + du * u[0] + dv * v[0], c[1] + du * u[1] + dv * v[1]), ang, tuple(lines), (bw, bh), size)
 
 
-def _line_cands(text: str, size: float, subject: Subject, lays: list[list[str]], char_w: float = CHAR_W_EM, line_sizes: list[float] | None = None) -> Iterator[_Cand]:
+def _line_cands(
+    text: str, size: float, subject: Subject, lays: list[list[str]], char_w: float = CHAR_W_EM, line_sizes: list[float] | None = None, ring_gaps: list[tuple[int, float]] | None = None
+) -> Iterator[_Cand]:
     pts = list(subject.poly)
     segs = list(zip(pts, pts[1:], strict=False))
     lengths = [math.dist(a, b) for a, b in segs]
@@ -159,7 +210,7 @@ def _line_cands(text: str, size: float, subject: Subject, lays: list[list[str]],
             s -= ln
         raise AssertionError("unreachable: the last segment returns")  # pragma: no cover - the loop's last pass returns
 
-    for ring, g in enumerate(rings(size)):
+    for ring, g in _ringed(size, ring_gaps):
         for j, s in enumerate(stations):
             p, bearing = at(s)
             ang = upright(bearing)
@@ -182,7 +233,9 @@ def _area_cands(text: str, size: float, subject: Subject, lays: list[list[str]],
             yield _Cand(0, rank, "inside", p, ang, tuple(lines), sized_half(lines, size, char_w, line_sizes), size)
 
 
-def _extended_cands(text: str, size: float, subject: Subject, lines: list[str] | None = None, char_w: float = CHAR_W_EM, line_sizes: list[float] | None = None) -> Iterator[_Cand]:
+def _extended_cands(
+    text: str, size: float, subject: Subject, lines: list[str] | None = None, char_w: float = CHAR_W_EM, line_sizes: list[float] | None = None, ring_gaps: list[tuple[int, float]] | None = None
+) -> Iterator[_Cand]:
     """THE FALLBACK SEARCH (feature 286), tried only when the standard's candidates found no free seat: an area's inside
     sampled over its whole extent, the step set by its size rather than one em (a large court's free ground lay beyond
     the 400 seats nearest its centroid); round a point subject, the block slid along each side between the ranked
@@ -201,15 +254,9 @@ def _extended_cands(text: str, size: float, subject: Subject, lines: list[str] |
         return
     if subject.kind != "point":
         return
-    u, v = _frame_of(ang)
-    c = centroid(subject.poly)
-    pu = [(p[0] - c[0]) * u[0] + (p[1] - c[1]) * u[1] for p in subject.poly]
-    pv = [(p[0] - c[0]) * v[0] + (p[1] - c[1]) * v[1] for p in subject.poly]
-    cu, cv = (min(pu) + max(pu)) / 2, (min(pv) + max(pv)) / 2
-    c = (c[0] + cu * u[0] + cv * v[0], c[1] + cu * u[1] + cv * v[1])
-    su, sv = (max(pu) - min(pu)) / 2, (max(pv) - min(pv)) / 2
+    c, u, v, su, sv = _box_frame(subject, ang)
     slides = [-1.0 + 2.0 * k / EXTENDED_SLIDES for k in range(EXTENDED_SLIDES + 1)]
-    for ring, g in enumerate(rings(size)):
+    for ring, g in _ringed(size, ring_gaps):
         for ln in lays:
             bw, bh = sized_half(ln, size, char_w, sizes)
             rank = 0
@@ -227,16 +274,116 @@ def _extended_cands(text: str, size: float, subject: Subject, lines: list[str] |
                     rank += 1
 
 
-def _cands(text: str, size: float, subject: Subject, lines: list[str] | None = None, char_w: float = CHAR_W_EM, line_sizes: list[float] | None = None) -> Iterator[_Cand]:
+def _cands(
+    text: str, size: float, subject: Subject, lines: list[str] | None = None, char_w: float = CHAR_W_EM, line_sizes: list[float] | None = None, ring_gaps: list[tuple[int, float]] | None = None
+) -> Iterator[_Cand]:
     lays = [lines] if lines else layouts(text)
     sizes = line_sizes if lines else None  # per-line sizes hold only for fixed lines
     if subject.kind == "point":
-        return _point_cands(text, size, subject, lays, char_w, sizes)
+        return _point_cands(text, size, subject, lays, char_w, sizes, ring_gaps)
     if subject.kind == "line":
-        return _line_cands(text, size, subject, lays, char_w, sizes)
+        return _line_cands(text, size, subject, lays, char_w, sizes, ring_gaps)
     if subject.kind == "area":
         return _area_cands(text, size, subject, lays, char_w, sizes)
     raise ValueError(f"a caption's subject is a point, a line or an area, not {subject.kind!r}")
+
+
+def _leader_cands(text: str, size: float, subject: Subject, lines: list[str] | None = None, char_w: float = CHAR_W_EM, line_sizes: list[float] | None = None) -> Iterator[_Cand]:
+    """THE LEADER SEARCH (feature 287, D10), tried only when nothing in the standard's reach is free: the standard's
+    positions and the fallback's slides on the rings past the reach, out to the hug (`outer_rings`), every seat tied back
+    by its leader. An area's name lies inside it, so it adds nothing for an area."""
+    outer = outer_rings(size)
+    if not outer or subject.kind == "area":
+        return
+    lays = [lines] if lines else layouts(text)
+    sizes = line_sizes if lines else None
+    if subject.kind == "line":
+        yield from _line_cands(text, size, subject, lays, char_w, sizes, outer)
+        return
+    yield from _point_cands(text, size, subject, lays, char_w, sizes, outer)
+    yield from _extended_cands(text, size, subject, lines, char_w, line_sizes, outer)
+
+
+def referent_box(subject: Subject, block: Poly | tuple[Pt, ...]) -> tuple[float, float, float, float]:
+    """The box of what a caption names, as its record carries it (element [6]): a point subject's UNROTATED box - its
+    extents in its own frame, about its center (`_record_label`'s note: it keeps the hug conservative) - an area's box,
+    or for a LINE the drawn way's width across from where the caption landed."""
+    if subject.kind == "point":
+        a = math.radians(subject.angle)
+        u, v = (math.cos(a), math.sin(a)), (-math.sin(a), math.cos(a))
+        c = centroid(subject.poly)
+        su = max(abs((q[0] - c[0]) * u[0] + (q[1] - c[1]) * u[1]) for q in subject.poly)
+        sv = max(abs((q[0] - c[0]) * v[0] + (q[1] - c[1]) * v[1]) for q in subject.poly)
+        return (c[0] - su, c[1] - sv, c[0] + su, c[1] + sv)
+    if subject.kind == "area":
+        return bbox(subject.poly)
+    cx, cy = centroid(block)
+    pts = list(subject.poly)
+    q = min((seg_closest((cx, cy), a, b) for a, b in zip(pts, pts[1:], strict=False)), key=lambda c: math.dist(c, (cx, cy)))
+    h = subject.half_width
+    return (q[0] - h, q[1] - h, q[0] + h, q[1] + h)
+
+
+def record_box(block: Poly | tuple[Pt, ...]) -> tuple[float, float, float, float]:
+    """A drawn block's record box - the block unturned about its own center, as `_record_label` writes elements [0:4]."""
+    cx, cy = centroid(block)
+    hw, hh = math.dist(block[0], block[1]) / 2, math.dist(block[1], block[2]) / 2
+    return (cx - hw, cy - hh, cx + hw, cy + hh)
+
+
+def hug_gap(block: Poly | tuple[Pt, ...], ref: tuple[float, float, float, float]) -> float:
+    """THE ONE PREDICATE of `label_hugs_its_referent` (feature 287, labels L10): the box-to-box gap between a caption's
+    record box and the box of what it names. The placer never offers a seat past `HUG_PX` by it."""
+    a = record_box(block)
+    return math.hypot(max(a[0] - ref[2], ref[0] - a[2], 0.0), max(a[1] - ref[3], ref[1] - a[3], 0.0))
+
+
+def caption_clears_ways(block: Poly | tuple[Pt, ...], ways: list[Way]) -> bool:
+    """THE ONE PREDICATE of `captions_clear_the_ways_they_stand_on` (feature 287, labels L5): no way comes within its drawn
+    half-width plus `WAY_NOTCH` of the block, segment against polygon - the index's own way term, so a curved tread's
+    middle crossing an edge between the block's corners is not missed."""
+    return ObstacleIndex(ways=ways).cost(list(block), 0.0) == 0.0
+
+
+Frame = tuple[float, float, float, float]
+
+
+@overload
+def place(
+    text: str,
+    size: float,
+    subject: Subject,
+    index: ObstacleIndex,
+    frame: Frame | None = None,
+    lines: list[str] | None = None,
+    char_w: float = CHAR_W_EM,
+    leader_index: ObstacleIndex | None = None,
+    line_sizes: list[float] | None = None,
+    extended: bool = True,
+    *,
+    strict: Literal[False] = False,
+    max_ring: int | None = None,
+    accept: Callable[[Placement], bool] | None = None,
+) -> Placement: ...
+
+
+@overload
+def place(
+    text: str,
+    size: float,
+    subject: Subject,
+    index: ObstacleIndex,
+    frame: Frame | None = None,
+    lines: list[str] | None = None,
+    char_w: float = CHAR_W_EM,
+    leader_index: ObstacleIndex | None = None,
+    line_sizes: list[float] | None = None,
+    extended: bool = True,
+    *,
+    strict: Literal[True],
+    max_ring: int | None = None,
+    accept: Callable[[Placement], bool] | None = None,
+) -> Placement | None: ...
 
 
 def place(
@@ -244,55 +391,162 @@ def place(
     size: float,
     subject: Subject,
     index: ObstacleIndex,
-    frame: tuple[float, float, float, float] | None = None,
+    frame: Frame | None = None,
     lines: list[str] | None = None,
     char_w: float = CHAR_W_EM,
     leader_index: ObstacleIndex | None = None,
     line_sizes: list[float] | None = None,
     extended: bool = True,
-) -> Placement:
+    *,
+    strict: bool = False,
+    max_ring: int | None = None,
+    accept: Callable[[Placement], bool] | None = None,
+) -> Placement | None:
     """Seat one caption by the standard (the module docstring). `frame` is the finished picture's (x0, y0, x1, y1); a
     block that leaves it is never a candidate, because a clipped caption cannot be read. `lines` fixes the caption's
-    lines (a hand-drawn caption with a line of its own under it) instead of the wrap rule's layouts. Never returns
-    nothing. `char_w` is the caption's width per character in ems - the standard's for the engine's own captions; a
-    hand sheet's bold, capital or letter-spaced caption runs wider (feature 267: `labels/hand_sheet.py` measures it).
-    `line_sizes` gives each fixed line its own size (a name over a smaller gloss). When no standard candidate is free, a
-    fallback search (`_extended_cands`) runs before the least-cost seat is taken.
-    `leader_index` holds what a seat's leader line may not pass over or end against - the other captions and the small
-    glyphs, which a hand sheet supplies (feature 283); the engine passes none, and its leaders are weighed as before."""
+    lines (a hand-drawn caption with a line of its own under it) instead of the wrap rule's layouts. `char_w` is the
+    caption's width per character in ems - the standard's for the engine's own captions; a hand sheet's bold, capital or
+    letter-spaced caption runs wider (feature 267: `labels/hand_sheet.py` measures it). `line_sizes` gives each fixed
+    line its own size (a name over a smaller gloss). `leader_index` holds what a seat's leader line may not pass over or
+    end against - the other captions and the small glyphs, which a hand sheet supplies (feature 283).
+
+    WHEN NO STANDARD SEAT IS FREE (features 286, 287): the fallback search (`_extended_cands`), then the leader rings past
+    the reach out to the hug (`_leader_cands`). A seat covering only `soft` ink (a hand sheet's) is then taken at the
+    least cost; a caption whose every seat overlaps goes in the sheet's KEY (`Placement.keyed`, D10). Never dropped,
+    never overlapping, never past the hug (`HUG_PX`).
+
+    `strict=True` returns None instead of anything but a free seat (feature 287: the notice board's siter and the
+    generated Mode A sheets ask it, and choose the SUBJECT or the program instead). The retired least-cost seat's last
+    caller, the board with no clean verge (D12), takes this non-strict path since feature 287's wave 5. `max_ring` keeps
+    only the seats on rings up to it (0: directly beside the subject, no leader - the notice board's caption).
+
+    `accept` is asked of every free candidate before it is returned, and of the strict search's nudged seat - a strict
+    search's every answer, so only a strict caller passes it - and a seat it refuses is passed over as if it were not
+    free (feature 287, labels L6: the board's siter asks whether the caption stands nearest its board AS IT WILL BE
+    RECORDED, `board_seat.board_caption_seat`). The search then goes on to the next seat, so a refused seat costs the
+    caption no seat another would have given it."""
     clear = CLEAR_EM * size
     own: Poly | None = list(subject.poly) if subject.kind != "line" else None
+    point = subject.kind == "point"
+    ref = referent_box(subject, subject.poly) if point else None
     best: tuple[float, int, _Cand, Poly] | None = None
-    first: tuple[_Cand, Poly] | None = None
+    soft: tuple[float, int, _Cand, Poly] | None = None
     # the standard's candidates, then - reached only when none was free, the chain being lazy - the fallback search
-    # (feature 286), before the least cost is taken
-    more = _extended_cands(text, size, subject, lines, char_w, line_sizes) if extended else iter(())
-    for order, cand in enumerate(itertools.chain(_cands(text, size, subject, lines, char_w, line_sizes), more)):
+    # (feature 286) and the leader rings (feature 287)
+    # `max_ring` generates only the rings up to it - the rings past it are never offered, so they are never built
+    near = None if max_ring is None else list(enumerate(rings(size)))[: max_ring + 1]
+    leaders = _leader_cands(text, size, subject, lines, char_w, line_sizes) if max_ring is None else iter(())
+    more = itertools.chain(_extended_cands(text, size, subject, lines, char_w, line_sizes, near), leaders) if extended else iter(())
+    deep: list[tuple[int, _Cand, Poly]] = []  # strict: the seats no nudge can free, measured only if one might be the best
+    for order, cand in enumerate(itertools.chain(_cands(text, size, subject, lines, char_w, line_sizes, near), more)):
         block = rect(cand.center[0], cand.center[1], cand.half[0], cand.half[1], cand.angle)
-        if first is None:
-            first = (cand, block)
-        bx0, by0, bx1, by1 = bbox(block)
-        if frame is not None and (bx0 < frame[0] or by0 < frame[1] or bx1 > frame[2] or by1 > frame[3]):
+        # the hug is held with the nudge's room to spare, so no nudge can carry a seat past it (labels L10)
+        if not _in_frame(block, frame) or (subject.kind != "area" and hug_gap(block, ref or referent_box(subject, block)) > HUG_RING):
             continue
-        cost = index.cost(block, clear, own, text, subject.civic)
-        if subject.kind == "area" and not all(inside(p[0], p[1], subject.poly) for p in block):
-            cost += WEIGHT_OBSTACLE  # an area's name lies inside the area; spilling out is covering what is outside it
-        if leader_index is not None:
-            cost += leader_cost(cand, block, subject, leader_index, clear, own, text)
+        if strict and index.blocked(block, clear, NUDGE_REACH, own, text, subject.civic):
+            deep.append((order, cand, block))
+            continue
+        cost, hard = _score(cand, block, subject, index, clear, own, text, leader_index)
         if cost == 0.0:
-            return _placement(cand, block, cost, subject)
+            free = _placement(cand, block, cost, subject)
+            if accept is None or accept(free):
+                return free
+            continue
         if best is None or cost < best[0]:
             best = (cost, order, cand, block)
-    if best is None:  # every candidate left the frame: the caption still goes down (never dropped), at the first seat
-        assert first is not None  # every subject kind yields at least one candidate
-        return _placement(first[0], first[1], index.cost(first[1], clear, own, text, subject.civic), subject)
+        if not hard and (soft is None or cost < soft[0]):
+            soft = (cost, order, cand, block)
+    if strict:
+        got = _strict_seat(best, deep, subject, index, clear, own, text, frame, leader_index)
+        return got if got is None or accept is None or accept(got) else None
+    if best is not None:
+        # a nudge may yet free the least-cost seat, or carry it off every overlap (feature 286's band between grid points)
+        cost, cand, block = nudge(best[0], best[2], best[3], subject, index, clear, own, text, frame, leader_index)
+        if (cost == 0.0 or not _score(cand, block, subject, index, clear, own, text, leader_index)[1]) and (soft is None or cost <= soft[0]):
+            return _placement(cand, block, cost, subject)
+    if soft is not None:
+        cost, cand, block = nudge(soft[0], soft[2], soft[3], subject, index, clear, own, text, frame, leader_index, soft_only=True)
+        return _placement(cand, block, cost, subject)
+    return keyed(text, size, subject, lines, best[0] if best is not None else 0.0)
+
+
+NUDGE_REACH = NUDGE_PX * math.sqrt(2.0) + 1e-3
+"""The farthest a nudge carries a seat, with a margin over rounding: a seat blocked by more than this stays blocked
+under every nudge (`ObstacleIndex.blocked`)."""
+
+
+def _strict_seat(
+    best: tuple[float, int, _Cand, Poly] | None,
+    deep: list[tuple[int, _Cand, Poly]],
+    subject: Subject,
+    index: ObstacleIndex,
+    clear: float,
+    own: Poly | None,
+    text: str,
+    frame: Frame | None,
+    leader_index: ObstacleIndex | None,
+) -> Placement | None:
+    """A strict search's answer once no candidate was free: the least-cost seat nudged free, or None. THE SAME ANSWER AS
+    MEASURING EVERY SEAT (feature 287, the board's siting): a seat `blocked` beyond a nudge's reach can be neither free nor
+    nudged free, so where every seat is, the answer is None unmeasured; otherwise those seats are measured now, since
+    one may still be the least-cost seat the nudge starts from (the first in order among the cheapest)."""
+    if best is None:
+        return None
+    for order, cand, block in deep:
+        cost = _score(cand, block, subject, index, clear, own, text, leader_index)[0]
+        if (cost, order) < best[:2]:
+            best = (cost, order, cand, block)
+    if any(best[1] == order for order, _c, _b in deep):
+        return None
     cost, cand, block = nudge(best[0], best[2], best[3], subject, index, clear, own, text, frame, leader_index)
-    return _placement(cand, block, cost, subject)
+    return _placement(cand, block, cost, subject) if cost == 0.0 else None
 
 
-NUDGE_PX = 3
-"""How far, in whole pixels each way, the least-cost seat is nudged for a cheaper one (feature 286): a free band exactly as
-tall as a caption and its clearance - Hayakawa's guardroom - lies between any grid's points."""
+def _in_frame(block: Poly, frame: tuple[float, float, float, float] | None) -> bool:
+    if frame is None:
+        return True
+    bx0, by0, bx1, by1 = bbox(block)
+    return not (bx0 < frame[0] or by0 < frame[1] or bx1 > frame[2] or by1 > frame[3])
+
+
+def _score(c: _Cand, block: Poly, subject: Subject, index: ObstacleIndex, clear: float, own: Poly | None, text: str, leader_index: ObstacleIndex | None) -> tuple[float, bool]:
+    """A seat's weight and whether it overlaps: what the block covers (with the association term for a point subject's
+    seat beside it), an area's name spilling out of the area, and what its leader passes over.
+
+    THE ASSOCIATION TERM IS ASKED OF A SEAT WITH NO LEADER (feature 287, labels L6). The design asked it of every ring,
+    and it cannot be: a ring-k block in a position whose ring-0 block an obstacle blocked stands within that obstacle's
+    gap plus the ring's step of it - under `clear + (g_k - g_0) = g_k`, its own gap - so every leader seat would be
+    refused and a caption with a leader could only go in the key. A leader carries the association itself (QGIS's
+    callouts, Esri's leaders: the line ties the words to their feature), so the term holds where the words alone must."""
+    og = poly_gap(block, list(subject.poly)) if subject.kind == "point" and c.ring == 0 else None
+    cost, hard = index.score(block, clear, own, text, subject.civic, og)
+    if subject.kind == "area" and not all(inside(p[0], p[1], subject.poly) for p in block):
+        cost, hard = cost + WEIGHT_OBSTACLE, True  # an area's name lies inside the area; spilling out is covering what is outside it
+    if leader_index is not None:
+        lc, lh = leader_score(c, block, subject, leader_index, clear, own, text)
+        cost, hard = cost + lc, hard or lh
+    return cost, hard
+
+
+def keyed(text: str, size: float, subject: Subject, lines: list[str] | None, cost: float) -> Placement:
+    """A caption with no seat on the sheet, entered in the sheet's KEY (feature 287, D10): its `block` is the numbered
+    mark's, set on what it names (a point's or an area's center, a line's hint or middle), and its lines are the words the
+    key carries. The caller draws the mark and the key."""
+    if subject.kind == "area":
+        c = area_centroid(subject.poly)
+    elif subject.kind == "line":
+        pts = list(subject.poly)
+        c = subject.hint if subject.hint is not None else pts[len(pts) // 2]
+    else:
+        c = centroid(subject.poly)
+    block = rect(c[0], c[1], KEY_MARK_EM * size / 2, LINE_H_EM * size / 2)
+    return Placement(
+        x=c[0], y=c[1] + CENTER_ABOVE_BASELINE_EM * size, angle=0.0, lines=tuple(lines or [text]), block=tuple(block), ring=-1, rank=-1, position="key", cost=WEIGHT_KEY + cost, leader=None, keyed=True
+    )
+
+
+KEY_MARK_EM = 1.2
+"""A key mark's width in ems - room for a two-digit number."""
 
 
 def nudge(
@@ -306,9 +560,10 @@ def nudge(
     text: str,
     frame: tuple[float, float, float, float] | None,
     leader_index: ObstacleIndex | None,
+    soft_only: bool = False,
 ) -> tuple[float, _Cand, Poly]:
     """The least-cost seat, or the cheapest one within `NUDGE_PX` of it in the caption's own frame - never a seat off
-    the frame, never one that spills an area's name outside the area."""
+    the frame, never one that spills an area's name outside the area, and with `soft_only` never one that overlaps."""
     best = (cost, cand, block)
     for dx in range(-NUDGE_PX, NUDGE_PX + 1):
         for dy in range(-NUDGE_PX, NUDGE_PX + 1):
@@ -316,15 +571,12 @@ def nudge(
                 return best
             c = replace(cand, center=(cand.center[0] + dx, cand.center[1] + dy))
             b = rect(c.center[0], c.center[1], c.half[0], c.half[1], c.angle)
-            bx0, by0, bx1, by1 = bbox(b)
-            if frame is not None and (bx0 < frame[0] or by0 < frame[1] or bx1 > frame[2] or by1 > frame[3]):
+            if not _in_frame(b, frame):
                 continue
             if subject.kind == "area" and not all(inside(p[0], p[1], subject.poly) for p in b):
                 continue
-            k = index.cost(b, clear, own, text, subject.civic)
-            if leader_index is not None:
-                k += leader_cost(c, b, subject, leader_index, clear, own, text)
-            if k < best[0]:
+            k, hard = _score(c, b, subject, index, clear, own, text, leader_index)
+            if k < best[0] and not (soft_only and hard):
                 best = (k, c, b)
     return best
 
@@ -342,15 +594,20 @@ def leader_of(ring: int, block: Poly, subject: Subject) -> tuple[Pt, Pt] | None:
 
 
 def leader_cost(c: _Cand, block: Poly, subject: Subject, index: ObstacleIndex, clear: float, own: Poly | None, text: str) -> float:
-    """What a seat's leader line passes over or ends against, of the things `index` holds: a leader through another
-    caption, or ending on a tub beside the feature it names, reads as naming the wrong thing (feature 283: Ochiba's
-    RESIDENCE led through INNER COURT to a tub at the house's corner)."""
+    """What a seat's leader line passes over or ends against (`leader_score`'s weight)."""
+    return leader_score(c, block, subject, index, clear, own, text)[0]
+
+
+def leader_score(c: _Cand, block: Poly, subject: Subject, index: ObstacleIndex, clear: float, own: Poly | None, text: str) -> tuple[float, bool]:
+    """What a seat's leader line passes over or ends against, of the things `index` holds, and whether that is an
+    overlap: a leader through another caption, or ending on a tub beside the feature it names, reads as naming the wrong
+    thing (feature 283: Ochiba's RESIDENCE led through INNER COURT to a tub at the house's corner)."""
     seg = leader_of(c.ring, block, subject)
     if seg is None or math.dist(*seg) < 1e-6:
-        return 0.0
+        return 0.0, False
     (ax, ay), (bx, by) = seg
     band = rect((ax + bx) / 2, (ay + by) / 2, math.dist(*seg) / 2, 0.5, math.degrees(math.atan2(by - ay, bx - ax)))
-    return index.cost(band, clear, own, text, subject.civic)
+    return index.score(band, clear, own, text, subject.civic)
 
 
 def _placement(c: _Cand, block: Poly, cost: float, subject: Subject) -> Placement:

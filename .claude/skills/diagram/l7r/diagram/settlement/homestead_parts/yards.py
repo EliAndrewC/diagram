@@ -393,6 +393,16 @@ def rack_segment(w: float, h: float, rot: float, ftpx: float, side: int) -> tupl
     return None
 
 
+def house_facing_edge(ox: float, oy: float, hx: float, hy: float, rot: float) -> str:
+    """Which edge of a yard centered at (ox, oy) faces its house at (hx, hy), in the HOUSE'S frame (turned by `rot`): N, S,
+    E or W of the yard's unturned quad (feature 287, homes H07). `_attach_yard` levels exactly this edge and its test reads
+    exactly this edge - the test once read the quad's north edge whatever side the house stood on."""
+    th = math.radians(rot)
+    mx, my = ox - hx, oy - hy
+    dx, dy = mx * math.cos(th) + my * math.sin(th), -mx * math.sin(th) + my * math.cos(th)
+    return ("N" if dy >= 0 else "S") if abs(dy) >= abs(dx) else ("W" if dx > 0 else "E")
+
+
 class ThreshingYardsMixin:
     def _draw_threshing_yard(self: Settlement, cx: float, cy: float, w: float, h: float, poly: Any, rot: float = 0.0) -> dict[str, Any]:  # type: ignore[misc]
         """Draw one tamped earthen threshing yard as the harvest leaves it (feature 282): a floor of straw mats, and a
@@ -567,10 +577,7 @@ class ThreshingYardsMixin:
         # is the south front; the legacy fallback may seat it east or west, and the facing edge follows it. Read in the
         # HOUSE'S frame (269 B18): the flat quad is turned by `rot` below, so a quarter-turned homestead's yard, west of its
         # house on the map, still has its house-facing edge on the quad's north
-        _th = math.radians(rot)
-        _mx, _my = ox - hx, oy - hy
-        _dx, _dy = _mx * math.cos(_th) + _my * math.sin(_th), -_mx * math.sin(_th) + _my * math.cos(_th)
-        _facing = ("N" if _dy >= 0 else "S") if abs(_dy) >= abs(_dx) else ("W" if _dx > 0 else "E")
+        _facing = house_facing_edge(ox, oy, hx, hy, rot)
         flat = self._quad(ox, oy, yw, yh, 0.10, 41.0, level=_facing)
         poly = turn_about(flat, ox, oy, rot)
         # A NO-RICE HAMLET DRAWS NO THRESHING FLOOR (feature 150, GM 2026-08-28: "thrashing yards on a

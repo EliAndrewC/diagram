@@ -1,0 +1,7 @@
+{
+  "utc": "2026-09-29T04:45:03Z",
+  "target": "bypass-audit",
+  "commit": "dfc9df7ea",
+  "outcome": "refused",
+  "why": "brook placer timing on a scratch roll, pool untouched"
+}

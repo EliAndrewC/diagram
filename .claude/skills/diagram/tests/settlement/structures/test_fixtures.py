@@ -32,7 +32,7 @@ def test_place_punishment_spot_probes_for_a_clear_caption_seat():
     # that are clear of every building but would bury another label
     for _ly in range(240, 390, 9):
         for _lx in range(210, 820, 55):
-            s.label(_lx, _ly, "riverside quarter", 9)
+            s.label(_lx, _ly, "riverside quarter", 9, ref=(_lx - 20, _ly - 4, _lx + 20, _ly + 4))
     spot = s.place_punishment_spot()
     assert spot is not None and s.M["punishment_spots"]
     s.place_labels()  # feature 157: the LABEL PHASE draws the queued caption
@@ -50,22 +50,6 @@ def test_place_punishment_spot_skips_a_degenerate_route_segment():
     assert s.place_punishment_spot() is not None
 
 
-def test_caption_lane_clearance_reads_a_tread_through_the_caption_box():
-    """Three verdicts, and only the middle one is reached by a rolled map. A lane VERTEX inside the box
-    is the worst case and returns a negative clearance (the tread's own half-width); a lane CROSSING an
-    edge without a vertex inside is zero clearance; a lane passing well clear is measured."""
-    s = Settlement(1000, 1000, seed=1)
-    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
-    s.M["lanes"] = [{"pts": [[500, 500], [520, 500]], "w": 4}]  # both vertices inside the box
-    assert s.caption_lane_clearance(510, 500, 40.0) == -2.0
-
-    s.M["lanes"] = [{"pts": [[400, 500], [700, 500]], "w": 4}]  # crosses the box, no vertex inside
-    assert s.caption_lane_clearance(510, 500, 40.0) == -2.0, "a crossing tread is zero clearance, less its half-width"
-
-    s.M["lanes"] = [{"pts": [[400, 900], [700, 900]], "w": 4}]
-    assert s.caption_lane_clearance(510, 500, 40.0) > 100.0, "well clear, and measured"
-
-
 def test_a_notice_board_with_no_caption_is_sitable_anywhere():
     """`_sitable` ranks a board position by whether its caption could find a seat there. A board with no
     caption to place has nothing to rank, so every position is equally good - the arm no pool map takes,
@@ -79,7 +63,8 @@ def test_a_notice_board_with_no_caption_is_sitable_anywhere():
 
 def test_a_notice_board_hemmed_on_every_side_still_gets_its_caption():
     """A board with nowhere clear to put its caption is still placed and still labeled (feature 266, the GM: "we'll
-    treat labels as mandatory") - every seat covers a building, and the seat covering the fewest wins."""
+    treat labels as mandatory") - and, every seat covering a building, never over one (feature 287, D10): its number
+    on the board, its words in the sheet's key."""
     s = Settlement(1000, 1000, seed=1)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
     for dx in range(-150, 151, 30):
@@ -94,6 +79,7 @@ def test_a_notice_board_hemmed_on_every_side_still_gets_its_caption():
     assert len(seat) == 1, "the caption is drawn all the same"
     rec = s.M["labels"][-1]
     assert rec[6] == [494.0, 497.5, 506.0, 502.5], "it records the board it names"
+    assert s.M["caption_key"] == [[1, "notice board"]] and rec[5] == "1", "its number on the board, its words in the key"
 
 
 def test_the_board_can_be_sited_on_a_manifest_that_records_runs_but_no_lane_records() -> None:
@@ -277,24 +263,55 @@ def test_a_caption_on_a_crown_is_on_the_canopy():
     assert not quad_on_canopy(quad, lambda x, y, pad: [(25.0, 40.0, 5.0)])
 
 
-def test_a_board_under_a_canopy_still_takes_a_seat():
-    # feature 261: a board whose caption would lie on crowns ranks below one clear of them, and is still offered - a
-    # board may stand under trees (the GM, 2026-08-29)
-    s = Settlement(1000, 1000, seed=1)
+def test_an_anchored_board_with_no_handover_keeps_to_the_seats_nearest_its_anchor():
+    # feature 287 R8: the band cut behind the retired canopy test (216 s on a 600 px crown) on a clear verge - an entrance
+    # anchor with no connector to hand over from keeps only the seats within the anchor band of the nearest one
+    import math
+
+    from l7r.diagram.settlement.structures.fixtures._helpers import KOSATSUBA_ANCHOR_BAND_FT
+
+    s = Settlement(600, 400, seed=1)
     s.meta(name="T", scale="hamlet", ftpx=1)
-    s.M["road"] = [[100, 300], [900, 300]]
-    s.M["tree_crowns"] = [500.0, 300.0, 600.0]
-    assert s.place_kosatsuba() is not None
+    s.M["road"] = [[20, 200], [580, 200]]  # a verge the whole width of the sheet, 400 px of it far from the anchor
+    s.M["houses"] = [{"x": 480.0, "y": 120.0, "w": 30.0, "h": 20.0, "rot": 0.0}, {"x": 520.0, "y": 120.0, "w": 30.0, "h": 20.0, "rot": 0.0}]
+    anchor = kosatsuba_anchor(s.M, "entrance")
+    assert anchor is not None and "lanes" not in s.M, "an anchor, and no connector to hand over from"
+    spot = s.place_kosatsuba()
+    assert spot is not None and math.dist(spot, anchor) <= 2 * KOSATSUBA_ANCHOR_BAND_FT, f"the board at {spot} strays from its anchor {anchor}"
 
 
-def test_a_board_whose_caption_cannot_fit_is_not_sitable():
-    # feature 261: the siter asks the one placer, and a caption the placer can only seat on an obstacle or at a leader's
-    # distance does not make the board's seat sitable - the board is still placed (a board is never dropped)
-    s = Settlement(400, 400, seed=1)
+def test_a_board_under_one_wide_canopy_is_sited_without_measuring_a_seat_it_cannot_take(monkeypatch):
+    # feature 287 wave 5: the retired canopy test's scene (216 s at 0e792a665, 305 s at 920c5ad9f) - a road under ONE
+    # crown - shortened to a 200 px road. Every seat's caption lies on the crown, so the siter proves every seat strictly
+    # (all refused), then takes D12's terminal. INDEXED, EXACT: `ObstacleIndex.blocked` refuses a strict seat without
+    # measuring it where the crown holds it past a nudge's reach, and the terminal walk is lazy, so the only seats scored
+    # are the ONE terminal search's - the same answer the scan gave, with none of its measuring
+    import math
+
+    from l7r.diagram.labels import caption_clears_ways, place
+    from l7r.diagram.labels import placer as placer_mod
+    from l7r.diagram.settlement.structures.fixtures.boards import BOARD_CAPTION_SIZE, board_subject
+
+    s = Settlement(600, 600, seed=1)
     s.meta(name="T", scale="hamlet", ftpx=1)
-    s.M["road"] = [[20, 200], [380, 200]]
-    s.M["houses"] = [{"x": float(x), "y": float(y), "w": 30.0, "h": 30.0, "rot": 0.0} for x in range(40, 380, 34) for y in (170, 230)]
-    assert s.place_kosatsuba() is not None
+    s.M["road"] = [[200, 300], [400, 300]]
+    s.M["tree_crowns"] = [300.0, 300.0, 600.0]
+    s.set_view(0.0, 0.0, 600.0, 600.0)  # sited against the finished frame, so the proved caption rides to the label phase
+    index = s.label_obstacles()  # the index the siter builds, before its board's caption joins it
+    scored: list[int] = []
+    real = placer_mod._score
+    monkeypatch.setattr(placer_mod, "_score", lambda *a: scored.append(1) or real(*a))
+    spot = s.place_kosatsuba()
+    assert spot is not None and s.M["meta"]["kosatsuba_d12"] is True
+    board = s.M["kosatsuba"][0]
+    assert abs(board["y"] - 300.0) > 15.5, "the verge seats would put the key mark on the road's bed"
+    proved = s._label_queue[-1][1][6]
+    assert proved.keyed and caption_clears_ways(proved.block, index.ways)
+    during = len(scored)
+    scored.clear()
+    again = place("notice board", BOARD_CAPTION_SIZE, board_subject(board["x"], board["y"], board["rot"], board["vw"], board["vh"]), index, (0.0, 0.0, 600.0, 600.0))
+    assert again == proved and during == len(scored), f"{during} seats scored: the strict proofs measured a seat under the crown"
+    assert math.dist(spot, (board["x"], board["y"])) == 0.0
 
 
 def test_a_hamlet_with_no_houses_or_no_handover_has_no_ways_out():

@@ -100,3 +100,28 @@ def test_a_bamboo_stand_grown_by_a_crown_keeps_the_copse_out() -> None:
     ring = grown_ring([(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)], 5.0)
     assert all(abs(abs(x - 5.0) - (5.0 + 5.0 / 2**0.5)) < 1e-9 for x, _ in ring), "each corner pushed a crown's radius out"
     assert grown_ring([(3.0, 3.0), (3.0, 3.0), (3.0, 3.0)], 2.0)[0] == (3.0, 3.0), "a degenerate ring does not divide by zero"
+
+
+def test_a_seat_the_stand_spares_is_outside_every_ring_it_could_grow() -> None:
+    """`stand_spares_seats` (feature 287 woods W25 with feature 280's copse off the bamboo): a seat the predicate passes lies
+    outside `grown_ring` of ANY ring inside the stand's rect grown by `copse_bamboo_reach` - so the copse, which refuses a
+    seat inside that grown ring, never refuses a reserved one. Checked over random rings in the rect and seats round it."""
+    import random
+
+    from l7r.diagram.settlement import point_in_poly
+    from l7r.diagram.settlement.homestead_parts.bamboo_keepout import copse_bamboo_reach, grown_ring, stand_spares_seats
+
+    rng = random.Random(4)
+    bs = 1.0
+    reach = copse_bamboo_reach(bs)
+    assert reach == 22.0, "two of the sparse copse's crowns' radii"
+    spared = 0
+    for _ in range(300):
+        cx, cy, w, h = rng.uniform(100, 200), rng.uniform(100, 200), rng.uniform(10, 90), rng.uniform(10, 60)
+        ring = [(cx + w / 2 * (k % 2 * 2 - 1) * rng.uniform(0.5, 1.0), cy + h / 2 * (k // 2 * 2 - 1) * rng.uniform(0.5, 1.0)) for k in (0, 1, 3, 2)]  # a quad in the rect
+        seat = (cx + rng.uniform(-w, w), cy + rng.uniform(-h, h))
+        if stand_spares_seats(cx, cy, w, h, [seat], bs):
+            spared += 1
+            assert not point_in_poly(seat[0], seat[1], grown_ring(ring, reach)), (cx, cy, w, h, seat)
+    assert 20 < spared < 300, "non-vacuity: seats spared and seats refused"
+    assert not stand_spares_seats(0.0, 0.0, 10.0, 10.0, [(5.0 + reach, 0.0)], bs) and stand_spares_seats(0.0, 0.0, 10.0, 10.0, [(5.0 + reach + 1.0, 0.0)], bs)
