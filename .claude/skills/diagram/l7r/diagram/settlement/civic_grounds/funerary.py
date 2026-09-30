@@ -208,7 +208,7 @@ class FuneraryGroundsMixin:
         pyre platform or officiants' hut is drawn: neither is attested. A roof stands on four posts a few feet out from the
         bed, about 11 ft square. SIX JIZO (`jizo`) stand at a BURIAL ground's entrance (feature 280 M71, 700): a caller
         passes them only for a cremation ground beside a burial ground; one standing on its own has none."""
-        # TO SCALE (GM 2026-07-19; anchors in research/rendering/religion-and-death.html 'How our maps draw cremation grounds and bone mounds'): a sanmai's cleared working core is
+        # TO SCALE (GM 2026-07-19; anchors in research/rendering/religion-and-death.html 'How our maps draw cremation grounds and bone mounds (kasoba)'): a sanmai's cleared working core is
         # 30-80 real ft for a village/town (a GUESS: the only sizes are 1922 and later - 202), ~80-160 ft for a provincial
         # city (Edo's Yoyogi crematory, 900 tsubo, ~180 ft square, the one premodern extent); the fire bed ~12x8 ft. The old
         # glyph was FIXED-PIXEL (116x80px) and silently tripled at city scale.
