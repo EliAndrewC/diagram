@@ -67,3 +67,10 @@ given, identically, to the other.
 - 2026-09-30T11:28:10Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
 - 2026-09-30T11:31:10Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
 - 2026-09-30T11:32:09Z | e6 | void | launched 10:58 UTC; claude -p exited at once with 'Error: No messages returned from query' and wrote no transcript (an API/harness failure). The three watchdog resume lines above found no session ('No conversation found'). e6 void; task I at xhigh re-runs as e7. The watchdog now reports a run whose session is gone with no result as DIED instead of resuming it.
+- 2026-09-30T11:39:56Z | e7 | memwatch | warning at 11:39 UTC during the run (8.4 GB raw); the run continues
+- 2026-09-30T11:47:45Z | e7 | memwatch | warning at 11:47 UTC during the run (8.4 GB raw); the run continues
+- 2026-09-30T11:59:32Z | e7 | memwatch | warning at 11:59 UTC during the run (8.2 GB raw); the run continues
+- 2026-09-30T13:28:44Z | e7 | memwatch | warning at 13:28 UTC during the run (8.1 GB raw); the run continues
+- 2026-09-30T14:03:09Z | e7 | memwatch | warning at 14:02 UTC during the run (8.1 GB raw); the run continues
+- 2026-09-30T14:37:59Z | - | host | the GM raised the containers' memory cap and changed memwatch to leave out inactive page cache (its warnings were firing on reclaimable cache); no run is waiting to launch, so the 4.5 GB launch threshold (derived from the 9.0 GB cap) is left as recorded
+- 2026-09-30T15:32:03Z | e7 | resume | the session left a cohort run going at 14:57 and ended its turn; the cohort finished and the headless session was not woken (idle ~35 min). The watchdog missed it: the session's own tab-title helper (a sleep loop) counted as work in its clone - fixed. Resumed with the same message by hand.
