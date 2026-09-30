@@ -83,7 +83,7 @@ class WallsMixin:
         )
         self.corridors.append(
             (loop, width / 2 + 21)
-        )  # buildings keep WELL off the ring road (even a large/rotated footprint's corner stays off its bed; research/cities/defenses.html "How far inside the wall does the patrol road run, and what may stand on it?")
+        )  # buildings keep WELL off the ring road (even a large/rotated footprint's corner stays off its bed; research/rendering/cities/defenses.html "How our maps keep the strip inside the wall clear")
         self.M["ring_road"] = [[round(x, 1), round(y, 1)] for x, y in loop]
         self.M["ring_road_width"] = width
         return ring
