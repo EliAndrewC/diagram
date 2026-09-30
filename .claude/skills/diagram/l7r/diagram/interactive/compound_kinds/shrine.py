@@ -212,7 +212,7 @@ class SweptClearing(Kind):
     Covers: the open ground and the forecourt about the building
     Label: accurate
     Sources: chinju-no-mori-jawiki, sando-jawiki
-    Entry: research/religion-and-death.html - 'Is the ground around a shrine or a grave swept clear of scrub?', 'Why does that swept ground have a ragged edge?'
+    Entry: research/religion-and-death.html - 'Ground swept clear around shrines and graves'; research/rendering/religion-and-death.html - 'How our maps draw the swept ground around shrines and graves'
     """
 
     key = "precinct clearing"

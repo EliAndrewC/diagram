@@ -106,7 +106,7 @@ class FuneraryGroundsMixin:
         self.placed.append((cx, cy, w, h))
         bm = 8
         self.block_polys.append([(cx - w / 2 - bm, cy - h / 2 - bm), (cx + w / 2 + bm, cy - h / 2 - bm), (cx + w / 2 + bm, cy + h / 2 + bm), (cx - w / 2 - bm, cy + h / 2 + bm)])
-        # THE GROUND CLEARS ONLY ITSELF (feature 280 M66, research/religion-and-death/720): the grave itself was weeded and
+        # THE GROUND CLEARS ONLY ITSELF (feature 280 M66, research/religion-and-death.html, 'Ground swept clear around shrines and graves'): the grave itself was weeded and
         # topped up at Qingming in 1630s Beijing, but no cleared band round a graveyard is attested in any period - the
         # 30 px collar it had is gone, and the waste around it stays scrubby to its edge
         self._clear_ground(cx, cy, w, h, 0)
