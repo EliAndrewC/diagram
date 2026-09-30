@@ -57,6 +57,6 @@ it rests on; free notes on how the two differ.
 
 ## Report - `report.md`
 
-The per-task table (run x: tokens by kind, main vs subagents, wall-clock, tool calls, the rework counts, both grades), the qualitative
+The per-task table (run x: tokens by kind, main vs subagents, wall-clock, tool calls, the rework counts, the research review's two grader runs and the GM's ruling on implementation), the qualitative
 differences, the later defects of the implementation winner, the FR-011 outcome per task type with its arithmetic, the tiers that ran and
 any control unmet, the interventions, the caveats.

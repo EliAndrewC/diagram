@@ -89,7 +89,7 @@ T15 = e6 (I, xhigh), both from the one start commit with task I's re-frozen prom
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
       verify: the run's own check verdicts re-read for the landed entry; `make record` clean; `entry-drift` on any modal the entry feeds
-- [ ] T20 [US4] Land `xhigh`'s implementation (e7, the GM's choice), ported onto current main: merged onto current main, `make done` and the moved maps' `settlement-review`s there, the merge work recorded apart, defects found added to the report's later-defects section; the future-work item closed
+- [ ] T20 [US4] Land `xhigh`'s implementation (e7, the GM's choice), ported onto current main: `make done` and the moved maps' `settlement-review`s there, the merge work recorded apart, defects found added to the report's later-defects section; the future-work item closed
       research: physical
       - [ ] research pass
       - [ ] source-reader confirmed

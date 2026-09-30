@@ -340,3 +340,4 @@ every change to a map is; the report links them.
   on the answer or citation criteria); the implementation pair is not blind-graded - the GM's ruling stands for it. The winner of the
   research review lands; the implementation lands as `xhigh`'s version (the GM's choice), ported onto current main. The review counter
   resets.
+- Amendment review of 2026-09-30 (the GM's rulings): round 1 CHANGES REQUIRED (the operative sections, the bar's origin, the report's account of grader run 2); round 2 CHANGES REQUIRED (tasks, quickstart and data model); round 3 FAITHFUL.
