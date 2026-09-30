@@ -3365,7 +3365,9 @@
    "sankyoson",
    "sanson",
    "scattered farmstead",
-   "scattered-farmstead"
+   "scattered-farmstead",
+   "scattered village",
+   "scattered villages"
   ]
  },
  "sanmai": {
@@ -9292,7 +9294,9 @@
  "kaison": {
   "def": "A lump village: a Japanese settlement whose houses are gathered irregularly in a lump, typically at a hill's foot, on a river terrace, or at a highway crossing where water can be got.",
   "variants": [
-   "kaison"
+   "kaison",
+   "clustered village",
+   "clustered villages"
   ]
  },
  "Rinzai": {
@@ -13164,6 +13168,13 @@
   "def": "A hamlet's main lane, the one the whole settlement walks to its paddy, running through its cluster of farmsteads; the maps draw it one rank wider than a footpath.",
   "variants": [
    "cluster's spine"
+  ]
+ },
+ "fixed-rate": {
+  "def": "A land tax set at one rate for an agreed term of years, whatever the harvest, which a village asked its lord for and was granted.",
+  "variants": [
+   "fixed-rate",
+   "fixed rate"
   ]
  }
 }

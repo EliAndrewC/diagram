@@ -403,6 +403,8 @@ clones	clonal
 closed canopy	closed-canopy
 closed-canopy	closed-canopy
 cluster's spine	cluster's spine
+clustered village	kaison
+clustered villages	kaison
 coefficient of variation	coefficient of variation
 coke	coke
 collective farm	collective farm
@@ -858,6 +860,8 @@ five-household group	five-household group
 five-household groups	five-household group
 five-ring pagoda	five-ring pagoda
 five-ring pagodas	five-ring pagoda
+fixed rate	fixed-rate
+fixed-rate	fixed-rate
 floating-leaf	floating-leaf plant
 floating-leaf plant	floating-leaf plant
 floating-leaf plants	floating-leaf plant
@@ -2614,6 +2618,8 @@ satetsu	satetsu
 satoyama	satoyama
 satsuma	Satsuma
 scattered farmstead	sankyoson
+scattered village	sankyoson
+scattered villages	sankyoson
 scattered-farmstead	sankyoson
 schistosomiasis	schistosomiasis
 scour	scour
