@@ -55,7 +55,7 @@ ROOFED_ZONES: dict[str, tuple[str, float]] = {"oshirasu": ("#5A3F1E", 2.0)}
 # post-and-beam front. Each post is drawn 1 ft square, at true size.
 ROOF_POST_BAY_FT: float = 12.0
 ROOF_POST_FT: float = 1.0
-# The covered corridor joining the kitchen to the residence (feature 267, research buildings 360/370: the kitchen is
+# The covered corridor joining the kitchen to the residence (feature 267, research buildings 'Kitchens (daidokoro)': the kitchen is
 # part of the HOUSE, joined as an ell or by a short covered corridor, never a freestanding cookhouse; buildings.md
 # "Kitchen + pantries"). Its width, one ken (~6 ft), is a GUESS; it is drawn only across a gap no wider than a
 # fire-gap - a longer run would be a gallery, not the short corridor the research describes.
@@ -80,7 +80,7 @@ NAKAMON_POST_D_FT = 10.0 / 3.0
 # 1.33 ft deep is the ink the hand sheets give one.
 DOOR_W_FT, DOOR_D_FT = 6.0, 4.0 / 3.0
 # The kinds given a door. The kitchen's is its one outside door, the service entrance on its earth floor (research
-# buildings 370); the residence's is the household's inner entrance, apart from the kitchen's (370 again) - the guest's
+# rendering/buildings 'How our maps draw the kitchen'); the residence's is the household's inner entrance, apart from the kitchen's (the same) - the guest's
 # way is the middle gate and the roji to the reception's veranda (R07, research buildings 300), so the residence
 # carries no genkan. The stables, the kura and the shrine carry theirs too (pass 5, building-review round 4: a building
 # with no drawn door reads as sealed). `BuildingSpec.door_face` sets the face a door goes on; the court face otherwise.
@@ -182,13 +182,14 @@ class BuildingSpec:
     # rendering/buildings 'How our maps lay out samurai residences and their rooms (buke yashiki)': the north band narrowed to a ~6-10 ft cart/servant alley).
     inset_ft: float = 0.0
     # A VERANDA (engawa) along the building's court face, this deep, drawn inside its footprint as a part of it
-    # (feature 267 R01: the veranda runs along the garden face; 3-6 ft). 0: none.
+    # (feature 267 R01, research rendering/buildings 'How our maps draw verandas and shuttered wings': the veranda runs
+    # along the garden face; 3-6 ft). 0: none.
     engawa_ft: float = 0.0
     # Stand BESIDE the main gate - flush west of its post on the south wall - rather than slide from the corner: the
     # freestanding gatehouse by the gate, Takayama's form (feature 267 R19, research buildings 420).
     beside_gate: bool = False
     # The face its door goes on ("N"|"S"|"E"|"W"), when not the court face: the residence's inner entrance opens on the
-    # kitchen side, off the garden its veranda faces (research buildings 370).
+    # kitchen side, off the garden its veranda faces (research rendering/buildings 'How our maps draw the kitchen').
     door_face: str = ""
     # More doors, on these faces (pass 6: the office hall's front room and its west end had none), and the fracs along
     # a face a door is tried at when not DOOR_FRACS

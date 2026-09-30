@@ -558,8 +558,9 @@ def county_magistracy_program() -> CompoundProgram:
         # and back (forms.md R02; the Kuchiba house's rooms "stand in two rows, front and back").
         # Its rooms take the palace order's lesser form - the reception at the east END, the full depth, nearest the
         # middle gate; the master's rooms beside it on the garden row; the family's beyond, with the inner rooms behind
-        # (R03). The veranda runs along the garden face alone, 4 ft (R01's first form, research
-        # buildings 240: 3-6 ft). Its inner entrance opens on its west face, toward the kitchen (research buildings 370).
+        # (R03). The veranda runs along the garden face alone, 4 ft (R01's first form, research rendering/buildings
+        # 'How our maps draw verandas and shuttered wings': 3-6 ft). Its inner entrance opens on its west face, toward the
+        # kitchen (research rendering/buildings 'How our maps draw the kitchen').
         # It stands 10 ft off the north wall: the rear band narrowed to a cart/servant alley (research buildings 380),
         # the family privy flush to the wall in it.
         # THE HOUSE'S SIZE is research buildings 380's: the Yokota house of a 150-koku district magistrate (gun-bugyo, the
@@ -592,7 +593,7 @@ def county_magistracy_program() -> CompoundProgram:
         # a nagaya two rooms deep for the ~10 household servants, a GUESS.
         b("servants' quarters", "service", 72.0, 22.0, "inner", "N", order=12, feature="servants' quarters"),
         # The kitchen stands between the servants' row and the house, joined to the residence's west end by the short
-        # corridor (research buildings 360/370), its yard - the bath, the well, its one door, the postern - to the south
+        # corridor (research buildings 'Kitchens (daidokoro)'), its yard - the bath, the well, its one door, the postern - to the south
         # and west. 20 x 18 ft, part of the house's 49 tsubo (above); the kitchen's own size is a GUESS (research 380:
         # "How much of either house was kitchen is not given").
         # Its one outside door opens WEST, onto the way between it and the servants' row that runs to the yard (pass 7,

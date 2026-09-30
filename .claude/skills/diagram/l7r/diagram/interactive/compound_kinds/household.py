@@ -263,7 +263,7 @@ class Kitchen(Kind):
     Covers: the kitchen and pantries building and its label
     Label: accurate
     Sources: boso-no-mura-takei, liq-takayasu-daidokoro, kotobank-katteguchi, kotobank-uchigenkan, matsue-bukeyashiki, matsue-bukeyashiki-about, matsushiro-bukeyashiki, tfd-hongou-fire-history, thepaper-taipinggang, edo-no-kaji-jawiki, machibikeshi-jawiki
-    Entry: research/buildings.html - 'What fire did a residence's kitchen cook on - a kamado range, or a sunken hearth?', 'How many doors does a residence's kitchen have, and who comes in by them?', 'Samurai residences and their rooms (buke yashiki)', 'The size of a compound and the rank of its buildings', 'Fire, and the fireproof storehouses (dozō)', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps size a compound and its buildings', 'How our maps route a guest from the gate to the entrance', 'How our maps draw fire water and the fireproof storehouses (dozō)'
+    Entry: research/buildings.html - 'Kitchens (daidokoro)', 'Samurai residences and their rooms (buke yashiki)', 'The size of a compound and the rank of its buildings', 'Fire, and the fireproof storehouses (dozō)', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps draw the kitchen', 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps size a compound and its buildings', 'How our maps route a guest from the gate to the entrance', 'How our maps draw fire water and the fireproof storehouses (dozō)'
     """
 
     key = "kitchen"
@@ -566,7 +566,7 @@ class Hearth(Kind):
     Covers: the fire glyph in each kitchen
     Label: accurate
     Sources: boso-no-mura-takei, liq-takayasu-daidokoro, matsue-bukeyashiki, irori-jawiki, tfd-hongou-fire-history, edo-no-kaji-jawiki, machibikeshi-jawiki, thepaper-taipinggang
-    Entry: research/buildings.html - 'What fire did a residence's kitchen cook on - a kamado range, or a sunken hearth?', 'Fire, and the fireproof storehouses (dozō)'; research/rendering/buildings.html - 'How our maps draw fire water and the fireproof storehouses (dozō)'
+    Entry: research/buildings.html - 'Kitchens (daidokoro)', 'Fire, and the fireproof storehouses (dozō)'; research/rendering/buildings.html - 'How our maps draw the kitchen', 'How our maps draw fire water and the fireproof storehouses (dozō)'
     """
 
     key = "hearth"
@@ -629,7 +629,7 @@ class Engawa(Kind):
     Covers: the veranda strip along the residence's garden face
     Label: accurate
     Sources: engawa-kotobank, shoinzukuri-kotobank, irikawa-kotobank, katsura-rikyu-jawiki
-    Entry: research/buildings.html - 'Which faces of a residence carry the veranda, and how wide is it?'
+    Entry: research/buildings.html - 'Verandas and storm shutters (engawa and amado)'; research/rendering/buildings.html - 'How our maps draw verandas and shuttered wings'
     """
 
     key = "engawa"
@@ -794,7 +794,7 @@ class ShutteredWing(Kind):
     Covers: the shuttered bay, its shutters and its labels
     Label: guess
     Sources: amado-kotobank
-    Entry: research/buildings.html - 'Did a residence keep the storm shutters shut on rooms it was not using?'
+    Entry: research/buildings.html - 'Verandas and storm shutters (engawa and amado)'; research/rendering/buildings.html - 'How our maps draw verandas and shuttered wings'
     """
 
     key = "shuttered wing"
