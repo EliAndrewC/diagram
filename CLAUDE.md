@@ -210,7 +210,7 @@ doctrine for writing a guard: `docs/guards.md`.
 | `conflict-marker-hooks.sh` | a `git add` or commit that would stage conflict markers | `CONFLICT_MARKERS_OK` |
 | `shell-check-hooks.sh` | a command that does not parse, an executing backtick, a `-m` with a quote or newline, a foreign co-author | `SHELL_CHECK_OK` |
 | `no-branch-hooks.sh` | no branches | `NO_BRANCH_OK` |
-| `no-poll-hooks.sh` | no busy-wait; corrects a self-matching `pgrep`, and scopes a wait on a make run to this tree (`_own-make.sh`); a file-watching loop is backgrounded and given a proof of life | `POLL_OK` |
+| `no-poll-hooks.sh` | no busy-wait; corrects a self-matching `pgrep`, and scopes a wait on a make run to this tree (`_own-make.sh`); refuses a pattern that matches its own command (launch-and-wait); a file-watching loop is backgrounded and given a proof of life; every wait loop gets a 90-minute ceiling (WAIT TIMED OUT, exit 4) | `POLL_OK` |
 | `batching-hooks.sh` | blocks a run of single-call recon turns, warning on every loaded turn before it | - |
 | `measure-hooks.sh` | a second expensive run with nothing changed between | `MEASURE_OK` |
 | `gate-hooks.sh` | no `-k` subset as the only run before the gate | `GATE_OK` |

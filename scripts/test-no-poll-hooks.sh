@@ -270,11 +270,24 @@ bgrewritten "a foreground one is backgrounded AND proofed in one rewrite" \
 # THE SHAPE THIS GUARD SHOULD BE PRODUCING WAS THE SHAPE IT REFUSED. Measured 2026-09-12: this exact command,
 # a log watch that also asks whether the producer is alive, was BLOCKED as a busy-wait, because every part of
 # a condition had to be one of the three file forms. A liveness clause can only end the loop sooner.
-untouched "a wait that already asks whether its producer is alive is permitted, unchanged" \
+# GUARD_EDIT_OK: 2026-09-30 (GM: "Yes, please go ahead") - these three were permitted UNCHANGED; since every wait gets its
+# ceiling they are permitted with the ceiling ONLY - nothing else of the command is touched (the proof is not re-added).
+ceiled_only() { # label, command, background(1|0)
+  local out; out=$(bgrun "$2" "$3" 2>/dev/null)
+  local got; got=$(printf '%s' "$out" | python3 -c 'import json,re,sys
+try: c = json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"]
+except Exception: c = ""
+print(re.sub(r" (\|\||&&) \{ \[ \"\$SECONDS\" -(ge|lt) \d+ \] (&&|\|\|) \{ echo \"WAIT TIMED OUT[^\"]*\"; exit 4; \}; \}", "", c))' 2>/dev/null)
+  if [ "$got" = "$2" ] && printf '%s' "$out" | grep -q "WAIT TIMED OUT"; then echo "  ok      $1"; PASS=$((PASS+1));
+  else echo "  FAIL    $1 (got '${got:-<nothing>}')"; FAIL=$((FAIL+1)); fi
+}
+ceiled_only "a wait that already asks whether its producer is alive gains the ceiling and nothing else" \
   'until grep -q "^EXIT=" $S/maps.log || ! pgrep -f "ma[p]s227b" > /dev/null; do sleep 15; done; tail -6 $S/maps.log' 1
-untouched "...the same, through the helper itself (idempotent: the hook does not re-proof its own rewrite)" \
+ceiled_only "...the same, through the helper itself (idempotent: the hook does not re-proof its own rewrite)" \
   'until grep -q DONE /tmp/a.log || ! /diagram/scripts/_writer-alive.sh "/tmp/a.log"; do sleep 5; done' 1
-untouched "...and the kill -0 form" 'until grep -q DONE /tmp/a.log || ! kill -0 $PID; do sleep 5; done' 1
+ceiled_only "...and the kill -0 form" 'until grep -q DONE /tmp/a.log || ! kill -0 $PID; do sleep 5; done' 1
+untouched "...and a wait that carries its ceiling already is left alone" \
+  'until grep -q DONE /tmp/a.log || ! kill -0 $PID || { [ "$SECONDS" -ge 5400 ] && { echo "WAIT TIMED OUT x"; exit 4; }; }; do sleep 5; done' 1
 # GUARD_EDIT_OK: feature 227 - the log's whole name may be a VARIABLE (`grep -qE "pat" $G`), which the path operand
 # did not admit; caught by the guard refusing a correct waiter on a detached gate's log on 2026-09-12.
 bgrewritten "a log named entirely by a variable is a file wait, and is proofed" \
@@ -284,6 +297,31 @@ bgcheck "a loop with ONLY a liveness test is still a process wait, and refused" 
   'until ! pgrep -f "[m]ake done"; do sleep 5; done' 1
 bgcheck "a liveness test beside a NETWORK call is still refused" blocked \
   'until curl -sf https://h/x || ! pgrep -f "[m]ake done"; do sleep 5; done' 1
+
+# GUARD_EDIT_OK: 2026-09-30 (GM: "Yes, please go ahead") - THE FOUR HOURS OF 2026-09-30, each shape that caused them.
+echo "7. a wait that finds itself is refused, a make wait with a path is scoped, and every wait ends"
+check "a launch-and-wait whose pattern matches the launch is refused (bracketed or not)" blocked \
+  'nohup resvg --width 10 a.svg > /tmp/r.log 2>&1 & until ! pgrep -f "[r]esvg --width" >/dev/null; do sleep 5; done  # POLL_OK: a detached render'
+check "...and so is a pkill whose pattern names a file the same command reads (it killed its own shell)" blocked \
+  'pkill -f "miz4.log"; tail -3 /tmp/miz4.log'
+check "a pattern that does not match its own command is not refused" ok 'pgrep -fa "[c]herryd"; echo done'
+rewritten "the real one: a make wait with a PATH in its target is scoped, so the launching shell cannot count" \
+  'setsid nohup make map GEN=pool/hamlets/mizuguchi/mizuguchi.gen.py > /tmp/m.log 2>&1 & sleep 5; until ! pgrep -f "[m]ake map GEN=pool/hamlets/mizuguchi" > /dev/null; do sleep 10; done  # POLL_OK: a detached roll' \
+  '_own-make.sh map GEN=pool/hamlets/mizuguchi'
+NP_NEVER=$(mktemp)
+np_cmd=$(bgrun "until grep -q NEVER-WRITTEN $NP_NEVER; do sleep 1; done; echo FALSE-SUCCESS" 1 2>/dev/null | python3 -c 'import json,sys
+try: print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"])
+except Exception: pass' 2>/dev/null)
+np_out=$(exec 9>>"$NP_NEVER"; SECONDS_AT=6000 timeout 20 bash -c "SECONDS=6000; $np_cmd" 2>/dev/null); np_rc=$?
+if [ "$np_rc" -eq 4 ] && printf '%s' "$np_out" | grep -q "WAIT TIMED OUT" && ! printf '%s' "$np_out" | grep -q FALSE-SUCCESS; then
+  echo "  ok      past the ceiling the wait ends with status 4 and says so - nothing after the loop runs"; PASS=$((PASS+1))
+else echo "  FAIL    the ceiling did not end the wait (rc=$np_rc, out='$np_out', cmd='$np_cmd')"; FAIL=$((FAIL+1)); fi
+rm -f "$NP_NEVER"
+PROBE_C=$(mktemp -d)
+( cd "$PROBE_C" && exec -a "bash -c make own-make-shell-probe & until" sleep 30 ) & NP_SHELL=$!
+sleep 0.5
+( cd "$PROBE_C" && "$HERE/_own-make.sh" own-make-shell-probe ) && { echo "  FAIL    a shell that only names the make run was counted as the run"; FAIL=$((FAIL+1)); } || { echo "  ok      a shell that only names the make run is not the run"; PASS=$((PASS+1)); }
+kill "$NP_SHELL" 2>/dev/null; wait "$NP_SHELL" 2>/dev/null; rm -rf "$PROBE_C"
 
 echo "6b. _writer-alive.sh answers from the file, not from a pattern"
 alive() { # label, expected(alive|dead), args...

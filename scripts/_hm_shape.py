@@ -172,6 +172,8 @@ def _cond_grammar(cond: str) -> str | None:
     question "where do I add the liveness clause?" cannot answer differently."""
     if "$(" in cond or "`" in cond:
         return None
+    # GUARD_EDIT_OK: 2026-09-30 - the hook's own ceiling (`add_ceiling`) is not part of what the loop waits for: set aside
+    cond = _CEILING_CLAUSE.sub(" ", cond)
     return _STDERR_NULL.sub(" ", _QUOTED.sub(lambda m: re.sub(r"[|<>;&]", "", m.group(0)[1:-1]), cond))
 
 
@@ -309,7 +311,9 @@ def bracket_pattern(cmd: str) -> str | None:
 # self-match but still matches another session's gate, which held a waiter open for six hours after its own gate
 # had failed. A match on `make <target>` (bracketed or not) becomes `_own-make.sh <target>`, which counts only
 # runs whose working directory is inside the asking tree. pkill is left alone: a kill is not a wait.
-_MAKEWAIT = re.compile(r"\bpgrep\b(?:\s+-[a-zA-Z]+)*\s+-[a-zA-Z]*f[a-zA-Z]*(?:\s+-[a-zA-Z]+)*\s+(['\"]?)(?:\[m\]|m)ake\s+([\w][\w .=-]*?)\1(?=[\s|;&)]|$)")
+# GUARD_EDIT_OK: 2026-09-30 (GM: "Yes, please go ahead") - a target may carry a PATH (`make map GEN=pool/hamlets/x.gen.py`):
+# without `/` in the class the wait was left unscoped, and its bracketed pattern matched the launching shell for four hours.
+_MAKEWAIT = re.compile(r"\bpgrep\b(?:\s+-[a-zA-Z]+)*\s+-[a-zA-Z]*f[a-zA-Z]*(?:\s+-[a-zA-Z]+)*\s+(['\"]?)(?:\[m\]|m)ake\s+([\w][\w .=/-]*?)\1(?=[\s|;&)]|$)")
 
 
 def scope_make_waits(cmd: str, helper: str) -> str | None:
@@ -321,6 +325,53 @@ def scope_make_waits(cmd: str, helper: str) -> str | None:
             continue
         out = out[: m.start()] + f"{helper} {target}" + out[m.end() :]
     return None if out == cmd else out
+
+
+# GUARD_EDIT_OK: 2026-09-30 (GM: "Yes, please go ahead") - A PATTERN THAT MATCHES ITS OWN COMMAND WAITS FOREVER, bracketed or
+# not. The bracket stops `pgrep` finding its own argument; it does nothing when the SAME command also names what the pattern
+# matches - it launched the run it waits for, or tails the log it names. The waiting shell's command line is the whole
+# command, so pgrep finds that shell every time (diagram-readability, 2026-09-30: `setsid nohup make map GEN=... & until !
+# pgrep -f "[m]ake map GEN=..."` waited four hours past its roll; `pkill -f miz4.log; tail miz4.log` killed its own shell).
+def self_matching(cmd: str) -> list[str]:
+    """Every process-match pattern in `cmd` that matches `cmd`'s own text - the waiting shell's command line."""
+    hits = []
+    for m in _PROCMATCH.finditer(cmd):
+        pat = m.group(4)
+        if "$" in pat or not pat.strip():
+            continue
+        try:
+            if re.search(pat, cmd):
+                hits.append(pat)
+        except re.error:
+            continue
+    return hits
+
+
+# GUARD_EDIT_OK: 2026-09-30 (GM: "Yes, please go ahead") - EVERY WAIT ENDS. A backgrounded loop whose condition can never
+# come true - a self-matching pattern, a producer that died without holding its log, a line that is never printed - wakes
+# nobody: the harness notifies when the command EXITS, and the stall checks run only at a turn's end, which an idle session
+# never reaches. Four hours were lost so on 2026-09-30. So every wait loop gets a ceiling in its own condition: past it the
+# command prints WAIT TIMED OUT and exits 4, and that exit is the notification that wakes the session to look.
+WAIT_CEILING_S = 90 * 60
+_CEILING_CLAUSE = re.compile(r'\s(?:\|\||&&) \{ \[ "\$SECONDS" -(?:ge|lt) \d+ \] (?:&&|\|\|) \{ echo "WAIT TIMED OUT[^"]*"; exit 4; \}; \}')
+_TIMED_OUT = "WAIT TIMED OUT"
+
+
+def add_ceiling(cmd: str, seconds: int = WAIT_CEILING_S) -> str | None:
+    """`cmd` with a deadline clause in every `until`/`while` loop head, or None when there is nothing to add (no loop, or
+    the ceiling is there already). `$SECONDS` is the shell's own clock since the command started."""
+    if _TIMED_OUT in cmd or not _LOOP_HEAD.search(cmd):
+        return None
+    note = f'echo "{_TIMED_OUT} after {seconds // 60} min (no-poll ceiling): what this waited for never came - look at the producer, and wait again if it is still working"'
+    out, shift = cmd, 0
+    for m in _LOOP_HEAD.finditer(cmd):
+        if m.group("kw") == "until":
+            clause = f' || {{ [ "$SECONDS" -ge {seconds} ] && {{ {note}; exit 4; }}; }}'
+        else:
+            clause = f' && {{ [ "$SECONDS" -lt {seconds} ] || {{ {note}; exit 4; }}; }}'
+        at = m.end("cond") + shift
+        out, shift = out[:at] + clause + out[at:], shift + len(clause)
+    return out
 
 
 # ---------------------------------------------------------------------------------------------
@@ -361,6 +412,14 @@ if __name__ == "__main__":
         out = bracket_pattern(scoped or CMD) or scoped
         if out:
             print(out)
+    elif mode == "self-match":
+        for pat in self_matching(CMD):
+            print(pat)
+    elif mode == "ceiling":
+        # argument 2, when given, is the command to ceil (a rewrite the hook already made); else the payload's own
+        _c = add_ceiling(sys.argv[2] if len(sys.argv) > 2 else CMD)
+        if _c:
+            print(_c)
     elif mode == "file-wait":
         try:
             whole = json.loads(RAW)
