@@ -164,7 +164,7 @@ class RetainersQuarters(Kind):
     Covers: the senior retainers' quarters, a family rowhouse for married retainers, and their labels
     Label: accurate
     Sources: hatchobori-jawiki, jinya-jawiki, takayama-jinya-jawiki, shibata-ashigaru-nagaya, hikone-ashigaru, aizu-bukeyashiki-guide
-    Entry: research/buildings.html - 'Staff housing spans a real spectrum'; research/cities/government.html - 'Servant housing in the samurai ward', "Where do a samurai household's servants sleep when the house has no gate range?"
+    Entry: research/buildings.html - 'Staff rowhouses and barracks (nagaya)'; research/cities/government.html - 'Servant housing in the samurai ward', "Where do a samurai household's servants sleep when the house has no gate range?"; research/rendering/buildings.html - 'How our maps draw staff rowhouses and barracks (nagaya)'
     """
 
     key = "retainers' quarters"
@@ -393,7 +393,7 @@ class Stables(Kind):
     Covers: the stable building, its stall divisions and its label
     Label: accurate
     Sources: kotobank-umaya, jaanus-umaya, qingming-shanghe-tu, caravanserai-enwiki, equine-nutrition-enwiki
-    Entry: research/buildings.html - 'What was a samurai's stable like, and how big was a stall?', 'The size of a compound and the rank of its buildings'; research/urban-features.html - 'Stable yards'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
+    Entry: research/buildings.html - 'Stables (umaya)', 'The size of a compound and the rank of its buildings'; research/urban-features.html - 'Stable yards'; research/rendering/buildings.html - 'How our maps draw stables (umaya)', 'How our maps size a compound and its buildings'
     """
 
     key = "stables"

@@ -291,7 +291,7 @@ class Barracks(Kind):
     Covers: the barracks building and its label
     Label: accurate
     Sources: hatchobori-jawiki, takayama-jinya-jawiki, jinya-jawiki
-    Entry: research/buildings.html - 'Staff housing spans a real spectrum', 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
+    Entry: research/buildings.html - 'Staff rowhouses and barracks (nagaya)', 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps draw staff rowhouses and barracks (nagaya)', 'How our maps size a compound and its buildings'
     """
 
     key = "barracks"
