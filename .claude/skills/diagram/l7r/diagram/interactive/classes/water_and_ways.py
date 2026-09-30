@@ -311,8 +311,8 @@ class VillageLane(Kind):
     paddies the way is the bund itself, the path a farmer walks to weed and manure, so the path to the fields
     runs on to the paddy's outer bund and joins it, and where a hamlet stands so close to its paddy that no
     path is left between them, its nearest lane runs on to the bund. In a row village the farms stand along a street
-    instead - a street laid out first, or one along the dry edge the ground gives - running on out of the map as
-    the road, with a path from each farm's door to it.
+    instead - a street laid out first, or one along the dry edge the ground gives - that runs on as the road the row
+    stands on, with a path from each farm's door to it.
 
     Note: That every house is reached by a way is read from a surveyed village's own lane hierarchy; of the two
     forms, the planned back lane is read and the alleys off the spine are on no publicly readable page, as is

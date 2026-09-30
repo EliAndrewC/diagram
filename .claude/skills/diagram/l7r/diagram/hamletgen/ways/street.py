@@ -103,7 +103,11 @@ def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: li
     n = 0
     for k, line in enumerate(getattr(s, "_row_streets", None) or []):
         path = thread(street_span(line, centers, reach, pad), walls, hard, water)
-        net = [(tuple(a), tuple(b)) for ln in s.M.get("lanes", []) if ln.get("connector") or ln.get("street") for a, b in zip(ln["pts"], ln["pts"][1:], strict=False)]
+        # A FURTHER STREET JOINS THE ROW'S STREETS, NOT THE ROAD: joined to the nearest of either, Mizuguchi's second street
+        # met the connector at its head, 96 ft past the entrance board, and two of its farms left without passing the board
+        # (settlement-review, 2026-09-30); only the first street takes the road
+        laid = [ln for ln in s.M.get("lanes", []) if ln.get("street")]
+        net = [(tuple(a), tuple(b)) for ln in (laid or [ln for ln in s.M.get("lanes", []) if ln.get("connector")]) for a, b in zip(ln["pts"], ln["pts"][1:], strict=False)]
         joined = join_to(path, net, hard, walls, water)  # type: ignore[arg-type]
         if len(path) >= 2 and _draw_web(s, path, STREET_WIDTH, houses=centers):
             s.M["lanes"][-1]["street"] = True

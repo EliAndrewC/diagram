@@ -5,8 +5,9 @@
 [`inashiro.notes.md`](inashiro.notes.md) for the head-to-head with the authored Ikegami.*
 
 **Kanji triangle**: 樫 *kashi* "evergreen oak" + 川 *kawa* "river". Kashikawa, "oak river" - named
-for the oaks the map draws as its managed coppice patches on the dry ground upslope of the hamlet, and as the
-fengshui belt on its windward north and west.
+for the oaks the map draws as its managed coppice patches on the dry ground upslope of the hamlet, and in the
+groves its farms keep on their windward north and west (the village fengshui belt that stood there until feature 291
+is not drawn where every farm keeps its own grove).
 
 **Subject**: ~20 households - the ceiling of the hamlet band, above which a place needs a headman, a
 shrine and tax-free plots and is a village instead - on land falling to the northeast, its drain
@@ -21,7 +22,7 @@ history rather than the map's current state; the reporting machinery is unchange
 re-roll that misses will say so again.
 
 **Known open**: Inashiro's two - the bare comb floor on the fan's shoulders (inherited from
-`build_comb`), and a windward quarter derived from the slope - CLOSED by feature 261: the wind is the regional northwest and the belt stands on the north and west. The map keeps seed 3; its field path crosses the brook at a ford (the 2026-09-27 entry below).
+`build_comb`), and a windward quarter derived from the slope - CLOSED by feature 261: the wind is the regional northwest and the belt stood on the north and west (feature 291: no village belt now - each farm's grove takes the north and west). The map keeps seed 3; its field path crosses the brook at a ford (the 2026-09-27 entry below).
 
 The woodland commons are
 DERIVED, not authored - their count and sizes move with the roll (this file went stale on the
@@ -94,20 +95,20 @@ beyond the frame.
 
 ### Place
 
-- **district**: Hirose
-- **district direction**: north
+- **district**: Kawakami
+- **district direction**: south-southwest
 
-*Hirose (広瀬, "broad rapids") is INVENTED for this map - drawn from gm-assistant's
+*Kawakami (川上, "upstream") is INVENTED for this map - drawn from gm-assistant's
 `place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
 DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the
-cluster - compass 5 deg, north (measured 2026-09-28, after main's feature 276 re-laid the map).*
+row - compass 211 deg, south-southwest (measured 2026-09-30, once feature 291 re-laid the map as a row village).*
 
-*It was Kawakami (川上, "upstream") until settlement-review measured the two against each other on
-2026-08-29: this land falls to the north-east, so upstream is roughly the opposite way from the
-district the track actually leads to, and Kashikawa is 樫川, "oak river" - the same water. An
-"upstream village" recorded downstream of its own hamlet is the sort of thing a reader checks. The
-bearing is measured and so cannot move; the name can, and a broad reach downstream is what Hirose
-names.*
+*The name has followed the bearing both ways. It was Kawakami until settlement-review measured the two against each
+other on 2026-08-29: this land falls to the north-east, and the track then left north, downstream, so an "upstream
+village" stood the wrong way and the name became Hirose (広瀬, "broad rapids", a broad reach downstream). Feature 291
+turned the track south-southwest, away from the water's fall - upstream again - and the settlement-review of 2026-09-30
+found "Hirose, which lies north" contradicting the drawing, so the name is Kawakami again. The bearing is measured and
+so cannot move; the name can.*
 
 
 ### Features
