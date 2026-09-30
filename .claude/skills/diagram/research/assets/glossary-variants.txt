@@ -618,7 +618,9 @@ diameter at breast height	DBH
 digital daijisen	Digital Daijisen
 dike-pond	dike-pond
 dike-ponds	dike-pond
+dilou	dilou
 diospyros kaki	Diospyros kaki
+dipeng	dipeng
 discharge	discharge
 dish pond	sara-ike
 dish ponds	sara-ike
@@ -2723,6 +2725,8 @@ sanyo-do	Sanyodo
 sanyodo	Sanyodo
 sapeck	sapeck
 sapecks	sapeck
+sapper	sapper
+sappers	sapper
 sara-ike	sara-ike
 sarae	sarae
 sasa	sasa

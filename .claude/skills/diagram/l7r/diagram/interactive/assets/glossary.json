@@ -13626,5 +13626,24 @@
    "tally",
    "tallies"
   ]
+ },
+ "dilou": {
+  "def": "A tower built on top of a mamian on a Chinese city wall; the name means \"enemy tower\".",
+  "variants": [
+   "dilou"
+  ]
+ },
+ "dipeng": {
+  "def": "A roofed shed built on top of a mamian on a Chinese city wall to shelter its defenders; the name means \"enemy shed\".",
+  "variants": [
+   "dipeng"
+  ]
+ },
+ "sapper": {
+  "def": "A soldier who digs under a fortification's wall to bring it down.",
+  "variants": [
+   "sapper",
+   "sappers"
+  ]
  }
 }
