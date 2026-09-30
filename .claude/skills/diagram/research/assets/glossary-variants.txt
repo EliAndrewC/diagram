@@ -1118,6 +1118,7 @@ hachiman	Hachiman
 hachure	hachure
 hachures	hachure
 hageyama	bald hill
+haibutsu kishaku	haibutsu kishaku
 haiden	haiden
 haikai	haikai
 hakata	Hakata
@@ -1470,6 +1471,7 @@ jingtai	Jingtai
 jingtian	jingtian
 jingu	Jingu
 jinguji	jingūji
+jinguji muka	Jinguji Muka
 jingū	Jingu
 jingū-ji	jingūji
 jingūji	jingūji

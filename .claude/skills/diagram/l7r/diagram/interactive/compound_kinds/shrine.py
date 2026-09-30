@@ -14,15 +14,17 @@ from ..classes import Kind
 class HallAndDwelling(Kind):
     """
     What: The shrine's one building under one roof: the villagers' hall at its center, the country monk's kitchen at
-    one end and his rooms at the other, the small sanctuary standing behind it on the approach's axis.
+    one end and their rooms at the other, the small sanctuary standing behind it on the approach's axis.
 
-    Why: A village shrine with a monk living at it was the ordinary form before 1868 - the shrine-temple kept by a
-    resident monk - and his dwelling was a farmhouse in form, earth-floored kitchen and matted rooms. One roof over
-    the hall and the dwelling is attested at one temple and is the GM's chosen form for the setting's country
-    shrines; so the building is a farmhouse with a hall at its heart, larger than a farmhouse because it contains one.
+    Why: A village shrine with a monk living at it was a common form before 1868, if an uncounted one - the
+    shrine-temple kept by a resident monk - and the monk's dwelling was a farmhouse in form, earth-floored kitchen and
+    matted rooms. One roof over the hall and the dwelling is attested at one temple and is the GM's chosen form for the
+    setting's country shrines; so the building is a farmhouse with a hall at its heart, larger than a farmhouse
+    because it contains one.
 
-    Note: The resident monk and his farmhouse-form dwelling are read; one roof over hall and dwelling is attested once
-    and is the GM's form for the setting. The building's size is set from the record's bands - a village hall about 20
+    Note: The resident monk and their farmhouse-form dwelling are read, though no source counts how many village
+    shrines had one; one roof over hall and dwelling is attested once, and called unusual there, and is the GM's form
+    for the setting. The building's size is set from the record's bands - a village hall about 20
     to 35 ft on a side, the one-roof building 2,100 to 3,600 sq ft, no deeper than the one attested example - and where
     in those bands it falls is a guess.
 
@@ -34,7 +36,7 @@ class HallAndDwelling(Kind):
     Covers: the one-roof building, its outline, its roof and its caption
     Label: accurate
     Sources: kuri-jawiki, jinguji-enwiki, bettoji-jawiki, sakai-kaieji, ehime-pref-honden-56, saitama-kannonji-kannondo
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)', 'The country monk who keeps a village shrine, and their dwelling (kuri)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)', 'How our maps draw the country monk's dwelling and writing room'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)', 'Keeping a village shrine or temple: its monk, the monk's dwelling (kuri), its records and its land'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)', 'How our maps draw a village shrine's monk, the monk's dwelling (kuri), its records and its land'
     """
 
     key = "hall and dwelling"
@@ -70,19 +72,20 @@ class MonksRooms(Kind):
     """
     What: The country monk's own rooms at the dwelling end of the building - matted living rooms, part of the one roof.
 
-    Why: The monk lives at the shrine, and his dwelling is a farmhouse in form: an earth-floored kitchen at one end and
-    matted rooms beyond it. An ordinary temple's priest's house was like a house of the district, not a great hall's
-    quarters.
+    Why: The monk lives at the shrine, and their dwelling is a farmhouse in form: an earth-floored kitchen at one end
+    and matted rooms beyond it. An ordinary temple's priest's house was like a house of the district, not a great
+    hall's quarters.
 
-    Note: The form is read - a priest's house like the farmhouse of its region. Its size is a guess: no small priest's
-    house has been measured, so the dwelling is sized from the village map's own farmhouse, 46 by 28 ft, and under one
-    roof it is no separate building but the hall's dwelling end.
+    Note: The form is read - a priest's house like the farmhouse of its region. Its size is a guess: no page we read
+    measures a small priest's house, so the dwelling is sized from the village map's own farmhouse, 46 by 28 ft, and
+    under one roof it is no separate building but the hall's dwelling end - a form attested once, at Kaie-ji, and
+    called unusual there; that a monk lived at a village shrine is read, but how common it was, no source counts.
 
     Name: the monk's rooms
     Covers: the dwelling end's rooms
     Label: guess
     Sources: kuri-jawiki, kawasaki-chonenji-kuri, bunka-tokuunji-kuri
-    Entry: research/religion-and-death.html - 'The country monk who keeps a village shrine, and their dwelling (kuri)'; research/rendering/religion-and-death.html - 'How our maps draw the country monk's dwelling and writing room'
+    Entry: research/religion-and-death.html - 'Keeping a village shrine or temple: its monk, the monk's dwelling (kuri), its records and its land'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's monk, the monk's dwelling (kuri), its records and its land'
     """
 
     key = "the monk's rooms"
@@ -93,20 +96,24 @@ class WritingRoom(Kind):
     What: A small room along the dwelling's front where the district's registers are kept and written - a desk and a
     record chest, in the monk's own house.
 
-    Why: The monk registers the district's households, as a temple did under the Edo registration, and a small shrine
-    had no office of its own: the books lived in the dwelling, never in a separate hall. So the writing room is a room
-    of his house, near its entrance, where the villagers who come on business are met.
+    Why: The monk keeps the district's registers, as a temple certified its parishioners under the Edo registration,
+    and a small shrine often had no office of its own, its business done at the keeper's home: so the books live in
+    the dwelling, never in a separate hall. So the writing room is a room of the monk's house, near its entrance, where
+    the villagers who come on business are met.
 
-    Note: That the registers lived in the dwelling, with no office at a small shrine, is read; the room itself, its
-    size and its place along the front are a guess.
+    Note: That a small shrine often had no office of its own, its business done at the keeper's home, is read; the
+    yearly register itself was compiled by the village headmen, so that the monk's house holds the district's
+    registers is this project's choice; the room itself, its size and its place along the front are a guess.
 
-    Caveat: the room itself, its size and its place along the front are a guess.
+    Caveat: the yearly register itself was compiled by the village headmen, so that the monk's house holds the
+    district's registers is this project's choice; the room itself, its size and its place along the front are a
+    guess.
 
     Name: writing room
     Covers: the writing room in the dwelling
     Label: accurate
     Sources: terauke-seido-jawiki, shumon-ninbetsu-jawiki, jaanus-shamusho
-    Entry: research/religion-and-death.html - 'The country monk who keeps a village shrine, and their dwelling (kuri)'; research/rendering/religion-and-death.html - 'How our maps draw the country monk's dwelling and writing room'
+    Entry: research/religion-and-death.html - 'Keeping a village shrine or temple: its monk, the monk's dwelling (kuri), its records and its land'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's monk, the monk's dwelling (kuri), its records and its land'
     """
 
     key = "writing room"
