@@ -47,7 +47,7 @@ class OfficeHall(Kind):
     Covers: the office hall's block, its outline and its front band
     Label: accurate
     Sources: takayama-jinya-jawiki, takayama-jinya-city, sado-bugyosho-fires
-    Entry: research/buildings.html - 'The courtroom is a room of the office hall, not a freestanding stage', 'Administrative culture is JAPAN-first for compound interiors', 'The size of a compound and the rank of its buildings', 'Fire discipline: halls burn, kura endure'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
+    Entry: research/buildings.html - 'The courtroom is a room of the office hall, not a freestanding stage', 'Magistrates' compounds (jin'ya and yamen)', 'The size of a compound and the rank of its buildings', 'Fire discipline: halls burn, kura endure'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps draw a magistrate's compound'
     """
 
     key = "office hall"
@@ -76,7 +76,7 @@ class MagistratesDais(Kind):
     Covers: the dais band on the office hall's court face, and its label
     Label: accurate
     Sources: oshirasu-jawiki, shirasu-kotobank, takayama-jinya-jawiki, takayama-jinya-city, neixiang-yamen-zhwiki
-    Entry: research/buildings.html - 'Who sat where at a hearing, and on what?', 'The courtroom is a room of the office hall, not a freestanding stage', 'Administrative culture is JAPAN-first for compound interiors'
+    Entry: research/buildings.html - 'Who sat where at a hearing, and on what?', 'The courtroom is a room of the office hall, not a freestanding stage', 'Magistrates' compounds (jin'ya and yamen)'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound'
     """
 
     key = "magistrate's dais"
@@ -139,7 +139,7 @@ class TaxArchive(Kind):
     Covers: the plastered archive kura and its label
     Label: accurate
     Sources: sado-bugyosho-fires, dozo-jawiki, tfd-hongou-fire-history
-    Entry: research/buildings.html - 'Fire discipline: halls burn, kura endure', 'Fire-water is distributed to the halls, not the kura', 'Administrative culture is JAPAN-first for compound interiors'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'
+    Entry: research/buildings.html - 'Fire discipline: halls burn, kura endure', 'Fire-water is distributed to the halls, not the kura', 'Magistrates' compounds (jin'ya and yamen)'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound'
     """
 
     key = "tax archive"
@@ -480,7 +480,7 @@ class KneelingPositions(Kind):
     Covers: the straw mats on the hearing court and their label
     Label: accurate
     Sources: oshirasu-jawiki, shirasu-kotobank, shirasu-imidas, henan-neixiang, neixiang-yamen-zhwiki
-    Entry: research/buildings.html - 'Who sat where at a hearing, and on what?', 'Administrative culture is JAPAN-first for compound interiors', 'The courtroom is a room of the office hall, not a freestanding stage'
+    Entry: research/buildings.html - 'Who sat where at a hearing, and on what?', 'Magistrates' compounds (jin'ya and yamen)', 'The courtroom is a room of the office hall, not a freestanding stage'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound'
     """
 
     key = "kneeling positions"

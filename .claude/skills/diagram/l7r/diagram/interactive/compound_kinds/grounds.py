@@ -42,7 +42,7 @@ class OuterCourt(Kind):
     Covers: the outer court's ground and its labels, the forecourt among them
     Label: accurate
     Sources: neixiang-yamen-zhwiki, takayama-jinya-jawiki, takayama-jinya-city, machi-bugyo-jawiki, jinya-jawiki, yamen-enwiki, neixiang-xianya-zhwiki
-    Entry: research/buildings.html - 'Office in front, residence behind - the two-court split is universal', 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
+    Entry: research/buildings.html - 'Magistrates' compounds (jin'ya and yamen)', 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps draw a magistrate's compound'
     """
 
     key = "outer court"
@@ -76,7 +76,7 @@ class InnerCourt(Kind):
     Covers: the inner court's ground and its label
     Label: accurate
     Sources: neixiang-yamen-zhwiki, takayama-jinya-jawiki, machi-bugyo-jawiki, jinya-jawiki, yamen-enwiki, shoinzukuri-jawiki
-    Entry: research/buildings.html - 'Office in front, residence behind - the two-court split is universal', 'The shady rear is the service strip'
+    Entry: research/buildings.html - 'Magistrates' compounds (jin'ya and yamen)', 'The shady rear is the service strip'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound'
     """
 
     key = "inner court"
@@ -331,7 +331,7 @@ class CompoundWall(Kind):
     Covers: the outer wall's strokes
     Label: convention
     Sources: kunishitei-toyonaga-neribei, kojodan-dobei, hei-jokaku-jawiki, mlit-kanazawa-dobei, tsuijibei-jawiki
-    Entry: research/buildings.html - 'How thick was a compound's earth wall?', 'A compound wall is a building, not a boundary line', 'Administrative culture is JAPAN-first for compound interiors'
+    Entry: research/buildings.html - 'How thick was a compound's earth wall?', 'A compound wall is a building, not a boundary line', 'Magistrates' compounds (jin'ya and yamen)'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound'
     """
 
     key = "compound wall"
@@ -423,7 +423,7 @@ class CourtDivider(Kind):
     Covers: the internal wall's strokes
     Label: accurate
     Sources: neixiang-yamen-zhwiki, machi-bugyo-jawiki, yamen-enwiki
-    Entry: research/buildings.html - 'Office in front, residence behind - the two-court split is universal'
+    Entry: research/buildings.html - 'Magistrates' compounds (jin'ya and yamen)'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound'
     """
 
     key = "court divider"
@@ -663,7 +663,7 @@ class Nakamon(Kind):
     Covers: the posts of the household door in the court divider
     Label: accurate
     Sources: neixiang-yamen-zhwiki, machi-bugyo-jawiki, yamen-enwiki
-    Entry: research/buildings.html - 'Office in front, residence behind - the two-court split is universal'
+    Entry: research/buildings.html - 'Magistrates' compounds (jin'ya and yamen)'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound'
     """
 
     key = "nakamon"
@@ -701,7 +701,7 @@ class Door(Kind):
     Covers: every small door glyph on a building's wall
     Label: accurate
     Sources: madoken-odoguchi, hongofuji-koiwai, s-kent-kuratomae, kotobank-katteguchi, kotobank-uchigenkan, matsue-bukeyashiki, homes-jin-bukeyashiki, dozo-jawiki, gogura-jawiki, nagayamon-jawiki, jta-nagayamon
-    Entry: research/buildings.html - 'How wide was a real doorway, and how wide are the drawn doors?', 'How many doors does a residence's kitchen have, and who comes in by them?', 'Guest doors feed courts, not flanks', 'Rendering / layout is checked automatically'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'; research/cities/government.html - 'Servant housing in the samurai ward'
+    Entry: research/buildings.html - 'How wide was a real doorway, and how wide are the drawn doors?', 'How many doors does a residence's kitchen have, and who comes in by them?', 'Guest doors feed courts, not flanks'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound'
     """
 
     key = "door"

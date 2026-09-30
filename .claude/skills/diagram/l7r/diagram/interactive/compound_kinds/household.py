@@ -62,7 +62,7 @@ class Residence(Kind):
     Covers: the lord's residence blocks' fill and outlines, their room dividers, and the RESIDENCE band label
     Label: accurate
     Sources: watariroka-kotobank, irikawa-kotobank, katsura-rikyu-jawiki, touken-world-buke-madori, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, neixiang-yamen-zhwiki, takayama-jinya-city, takayama-jinya-jawiki, machi-bugyo-jawiki, jinya-jawiki, yamen-enwiki, neixiang-xianya-zhwiki, kotobank-katteguchi, shoinzukuri-jawiki
-    Entry: research/buildings.html - 'Were a residence's wings joined by corridors and set in echelon, like geese in flight?', 'How did a guest of rank arrive, from the gate to the entrance?', 'Office in front, residence behind', 'Guest doors feed courts, not flanks', 'The shady rear is the service strip', 'The size of a compound and the rank of its buildings', 'How big was a samurai's house, and what rank is a 67-tsubo house?'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
+    Entry: research/buildings.html - 'Were a residence's wings joined by corridors and set in echelon, like geese in flight?', 'How did a guest of rank arrive, from the gate to the entrance?', 'Magistrates' compounds (jin'ya and yamen)', 'Guest doors feed courts, not flanks', 'The shady rear is the service strip', 'The size of a compound and the rank of its buildings', 'How big was a samurai's house, and what rank is a 67-tsubo house?'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps draw a magistrate's compound'
     """
 
     key = "residence"
@@ -503,7 +503,7 @@ class CompoundShrine(Kind):
     Covers: the shrine hall or halls, their edging and dividing rail, and the shrine labels
     Label: accurate
     Sources: fuchu-joge-pamphlet, neixiang-yamen-zhwiki, henan-neixiang, jawiki-saijin, jawiki-goshi, kotobank-aidono, hokora-jawiki, nara-nagao-jinja
-    Entry: research/buildings.html - 'What did the smallest branch office hold inside its walls?', 'Every administrative compound keeps a shrine', 'The size of a compound and the rank of its buildings'; research/religion-and-death.html - 'When one shrine hall serves several kami, does each have its own altar?'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
+    Entry: research/buildings.html - 'Magistrates' compounds (jin'ya and yamen)', 'Every administrative compound keeps a shrine', 'The size of a compound and the rank of its buildings'; research/religion-and-death.html - 'When one shrine hall serves several kami, does each have its own altar?'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps draw a magistrate's compound'
     """
 
     key = "compound shrine"
@@ -710,7 +710,7 @@ class FamilyQuarters(Kind):
     Covers: the family's bay of the residence, its floor and its labels
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, shoinzukuri-kotobank, matsue-bukeyashiki, neixiang-yamen-zhwiki, aizu-bukeyashiki-jawiki, jinya-jawiki, takayama-jinya-jawiki
-    Entry: research/buildings.html - 'In what order do a residence's rooms run - the reception, the master's rooms, the family's?', 'Office in front, residence behind'; research/cities/government.html - 'Servant housing in the samurai ward'
+    Entry: research/buildings.html - 'In what order do a residence's rooms run - the reception, the master's rooms, the family's?', 'Magistrates' compounds (jin'ya and yamen)'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound'
     """
 
     key = "family quarters"

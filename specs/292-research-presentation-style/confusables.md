@@ -15,3 +15,4 @@ one, since its `What:` is the nearest thing to the record's definition today.
 | work yard (niwa) | the homestead lot | the lot is the whole plot the farm stood on, 100-300 tsubo; the yard is the threshing floor in it, 20-30 tsubo | `threshing yard` / - |
 | work yard (niwa) | the south-China shared drying floor | one floor at the front of a village or inside a Hakka great house, used by many households | `threshing yard` / - |
 - The size of a compound and the rank of its buildings / How densely is a quarter built, and what counts as empty ground (cities/sizing): the first is how much of one walled compound its buildings cover and how they rank in size; the second is how densely a city quarter is built, compounds and all
+- Magistrates' compounds (jin'ya and yamen) / How big is a provincial governor's compound?: a magistrate's compound is a county or intendant's office (jin'ya, county yamen); a governor's is the provincial seat, drawn larger by addition
