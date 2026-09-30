@@ -20,7 +20,7 @@
   "barley": {
     "caveat": "the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
     "covers": "`dry_plots[crop=barley]` and their furrows",
-    "entry": "research/fields.html - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji', 'Why do neighboring dry plots run their furrows different ways?'",
+    "entry": "research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their furrows'",
     "key": "barley",
     "label": "accurate",
     "label_note": "Placement on the catena is read; the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
@@ -61,7 +61,7 @@
   "buckwheat": {
     "caveat": "the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
     "covers": "`dry_plots[crop=buckwheat]` and their furrows",
-    "entry": "research/fields.html - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji', 'Why do neighboring dry plots run their furrows different ways?'",
+    "entry": "research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their furrows'",
     "key": "buckwheat",
     "label": "accurate",
     "label_note": "Placement on the catena is read; the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
@@ -542,7 +542,7 @@
   "millet": {
     "caveat": "the crop MIX on any one map (how much millet against buckwheat and barley) is rolled from the seed and is a GUESS at the proportions.",
     "covers": "`dry_plots[crop=millet]` and their furrows",
-    "entry": "research/fields.html - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji', 'Why do neighboring dry plots run their furrows different ways?'",
+    "entry": "research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their furrows'",
     "key": "millet",
     "label": "accurate",
     "label_note": "Placement on the catena is read; the crop MIX on any one map (how much millet against buckwheat and barley) is rolled from the seed and is a GUESS at the proportions.",
@@ -825,7 +825,7 @@
   "soy": {
     "caveat": "the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
     "covers": "`dry_plots[crop=soy]` and their furrows",
-    "entry": "research/fields.html - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji', 'Why do neighboring dry plots run their furrows different ways?'",
+    "entry": "research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their furrows'",
     "key": "soy",
     "label": "accurate",
     "label_note": "Placement on the catena is read; the crop mix per map is rolled from the seed and is a GUESS at the proportions.",

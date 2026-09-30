@@ -960,7 +960,7 @@ def _comb_dry_and_beans(
     return dry_plots, dry_acres, _bund_beans(R, plots, bean_frac, channels=channels)
 
 
-# WHERE A FAN'S DRY BAND LIES (269 B07; research/fields.html 'Where dry (hatake) crops go - the topographic catena',
+# WHERE A FAN'S DRY BAND LIES (269 B07; research/fields.html 'Dry fields and their crops (hatake)',
 # fields/160). On an alluvial fan the middle, where the river sinks underground, is too short of water for paddy and was
 # often left as coppice or wild ground until late in the early modern period, while the spring-fed toe was settled early
 # with paddy beside it. The record calls that a tendency, not a rule - in old heartlands fans were cleared from early

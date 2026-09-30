@@ -189,7 +189,7 @@ class Millet(Kind):
     Covers: `dry_plots[crop=millet]` and their furrows
     Label: accurate
     Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo
-    Entry: research/fields.html - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji', 'Why do neighboring dry plots run their furrows different ways?'
+    Entry: research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their furrows'
     """
 
     key = 'millet'
@@ -239,7 +239,7 @@ class Buckwheat(Kind):
     Covers: `dry_plots[crop=buckwheat]` and their furrows
     Label: accurate
     Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo
-    Entry: research/fields.html - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji', 'Why do neighboring dry plots run their furrows different ways?'
+    Entry: research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their furrows'
     """
 
     key = 'buckwheat'
@@ -289,7 +289,7 @@ class Barley(Kind):
     Covers: `dry_plots[crop=barley]` and their furrows
     Label: accurate
     Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo
-    Entry: research/fields.html - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji', 'Why do neighboring dry plots run their furrows different ways?'
+    Entry: research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their furrows'
     """
 
     key = 'barley'
@@ -340,7 +340,7 @@ class Soy(Kind):
     Covers: `dry_plots[crop=soy]` and their furrows
     Label: accurate
     Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo
-    Entry: research/fields.html - 'Where dry (hatake) crops go - the topographic catena', 'Why ruled rows waited for Meiji', 'Why do neighboring dry plots run their furrows different ways?'
+    Entry: research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their furrows'
     """
 
     key = 'soy'
