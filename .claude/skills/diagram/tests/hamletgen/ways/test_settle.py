@@ -284,10 +284,11 @@ def test_a_street_s_dangling_end_is_cut_back_to_its_last_joint() -> None:
     """`settle_street_ends` (feature 293 on 291, cohort seed 903): a row's street, a tree lane, has the end the law calls
     dangling cut back to its last joint - the door path's; a map with no street, or a street no end dangles on, is left."""
     street = ([(0.0, 0.0), (0.0, 200.0), (0.0, 600.0)], {"w": 6})
-    s = _S([CONN, street, [(0.0, 200.0), (80.0, 200.0)]], houses=[(100.0, 200.0)])
+    s = _S([CONN, street, [(0.0, 200.0), (80.0, 200.0)], [(-300.0, 0.0), (-300.0, 200.0)]], houses=[(100.0, 200.0)])
     s.M["lanes"][1].update({"street": True, "street_index": 0})
-    assert (1, -1) in law.dangling_lane_ends(s.M)
+    assert {(1, -1), (3, -1)} <= set(law.dangling_lane_ends(s.M)), "the street's end, and an ordinary lane's"
     assert settle.settle_street_ends(s) == 1
+    assert _pts(s, 3)[-1] == (-300.0, 200.0), "an ordinary lane is the other repairs' to trim"
     assert _pts(s, 1)[-1] == (0.0, 200.0)
     assert settle.settle_street_ends(s) == 0, "cut already"
     assert settle.settle_street_ends(_S([CONN, [(0.0, 0.0), (0.0, 600.0)]])) == 0, "no street"

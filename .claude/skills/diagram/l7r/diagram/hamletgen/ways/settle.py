@@ -543,6 +543,7 @@ def settle_shadows(s: Any) -> int:
                     return apply_pieces(s, {k: []})
     return 0
 
+
 def settle_street_ends(s: Any) -> int:
     """A ROW'S STREET, a tree lane no trim cuts, has an end the lane law calls dangling cut back to its last joint
     (`end_to_its_joint`); returns the streets cut. The web cuts each street to its outermost joints before the settle
