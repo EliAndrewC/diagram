@@ -154,8 +154,12 @@ per-house groves pass every check a grove answers to.
 
 **What the reviews found** (amendment 3)
 
-- **FR-018**: A DISPERSED farm MUST draw from its own well in its dooryard, off its way in (homesteads/200: a dispersed
-  farm carries its own water; a shared well within reach is the nucleated arrangement). A LINEAR row's water MUST be a
+- **FR-018**: A DISPERSED farm MUST draw its own water (homesteads/200: a dispersed farm carries its own water; a shared
+  well within reach is the nucleated arrangement), in the form a per-settlement knob sets - pinnable, rolled at even odds
+  and recorded: a small channel led off the irrigation water (the nearest drawn ditch or the brook) into the farm's own
+  lot, ending in its dooryard (homesteads/200, the Tonami museum: "in many areas a small channel was led into the house's
+  grounds"), or its own well in its dooryard, off its way in (the other areas, this record's reading, a GUESS); the odds
+  a GUESS (amendment 5). A LINEAR row's water MUST be a
   per-settlement knob, pinnable, rolled at even odds and recorded: each farm its own well in its dooryard, or wells
   shared along the street within reach of the farms they serve - the record rules only on the dispersed farm, and its
   one row's wells (Santome's, few, deep and shared on a water-poor upland) do not transfer; the odds a GUESS.
@@ -189,7 +193,8 @@ per-house groves pass every check a grove answers to.
   within one frame depth of a street, no farm stands behind another on the same side of its street, each street is one
   continuous way, a BOTH row's far farms each have their holding drawn behind them, and both values of the line and of
   the sides appear among the linear seeds.
-- **SC-008** (FR-018, FR-019): in every dispersed seed every farm has a well of its own, not in its way in; in every linear
+- **SC-008** (FR-018, FR-019): in every dispersed seed the farm-water knob's value is drawn - every farm a channel ending in
+  its own lot, or a well of its own not in its way in - and both values appear among the dispersed seeds; in every linear
   seed the water knob's value is drawn (own wells, or every farm within reach of a shared well) and both values appear;
   in every linear seed and pool map every front door is within the door reach of a way; and in every non-nucleated seed
   and pool map the farms drawing grove bamboo are exactly the farms that rolled it.
@@ -229,6 +234,11 @@ per-house groves pass every check a grove answers to.
   behind on a street laid first (the borrowed planned form; dry field and depth a GUESS), compact near the house on the
   dry edge (homesteads/156: accurate for a dike row; a levee or fan-foot row this project's reading).
 - **Row water** (FR-018): the record rules on the dispersed farm only; a row's water is a knob, even odds, a GUESS.
+- **A dispersed farm's water** (FR-018, amendment 5): the channel into the lot is ACCURATE (homesteads/200, the Tonami
+  museum, "in many areas"); that the other areas dug a well is this record's reading, a GUESS, so the two are a knob at
+  even odds (a GUESS). The channel is drawn from the nearest irrigation water to the dooryard and ends there - its
+  return to the field is not drawn (a deliberate deviation: no page read says where it left the lot); where in the
+  dooryard it ends is a GUESS.
 
 ## Review history
 
@@ -268,3 +278,11 @@ remains held (FR-017, FR-019).
 **Amendment 4, round 1** (spec-fidelity-verify, MODE 3, 2026-09-29): the narrowing FAITHFUL - the GM never asked for the
 door clause, and homesteads/150 says a dispersed hamlet has no network to be reached by; one plan line (D19) to bring into
 line, done. Amendment 4 is accepted.
+
+**Amendment 5** (2026-09-30, the record's own finding): FR-018 and SC-008 - a dispersed farm's own water is a knob. The R7
+check of homesteads/200 found the own well unattested and a source that attests the other form: on the Tonami fan "the
+water table was deep and wells were hard to dig, so in many areas a small channel was led into the house's grounds and
+used for cooking, washing and drinking water" (tonami-sankyoson-museum, translated). The GM's standing rule (2026-09-29:
+"we should try to find out from our research what types of settlement layouts existed, and then have our settlements
+reflect the range ... we make a tunable knob for the various possibilities") makes it a knob: the channel, attested,
+and the well, the reading of "many areas".
