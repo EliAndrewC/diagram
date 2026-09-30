@@ -328,5 +328,71 @@
   "observed": "2026-09-30",
   "source": "pool/hamlets/mizuguchi/mizuguchi.json lanes[street] against the 3,900 ft canvas",
   "method": "a planned street keeps only its stretch inside the sheet by half a frame (rows.inside_the_sheet); the second street no longer runs down the west edge"
+ },
+ "mizuguchi-r4-f2": {
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "answers": "97a830d6c2dd",
+  "quantity": "the nearest a street (row street or its join) comes to the edge of the drawn view, and the households whose ways out pass the entrance board",
+  "value": 34,
+  "unit": "ft inside the view; 12 of 12 households pass the board",
+  "observed": "2026-09-30",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json lanes[street] against meta.view [34, 895, 2320, 1614]; the notes census (departure_routes against kosatsuba[0])",
+  "method": "every street point inside the view, the nearest 34 ft in (the joins meeting the road's head); a further street joins the row's streets, not the road, and the row streets set the crop; the census: 12 of 12 households' ways out pass the board at (2300.1, 1363.2)"
+ },
+ "inashiro-r4-f1": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "answers": "a7c0f83f2980",
+  "quantity": "the bamboo sides the modal names against the engine's four",
+  "value": 4,
+  "unit": "sides of 4",
+  "observed": "2026-09-30",
+  "source": ".claude/skills/diagram/l7r/diagram/interactive/classes/greenery.py HomesteadBamboo against hamletgen/homesteads/bamboo.py _HOUSEHOLD_BAMBOO_SIDES",
+  "method": "behind the house, then windward, then beside the shed, the other flank the least - the table's order (.35, .30, .25, .10)"
+ },
+ "inashiro-r4-f2": {
+  "verifies": "F2",
+  "subject": "inashiro",
+  "answers": "a7c0f83f2980",
+  "quantity": "comments claiming back and shed the likeliest two",
+  "value": 0,
+  "unit": "comments",
+  "observed": "2026-09-30",
+  "source": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/bamboo.py above _HOUSEHOLD_BAMBOO_SIDES",
+  "method": "the comment now reads back the likeliest, then wind, then shed, then the other flank"
+ },
+ "kuwabata-r4-f2": {
+  "verifies": "F2",
+  "subject": "kuwabata",
+  "answers": "a7c0f83f2980",
+  "quantity": "well-card sentences saying the map does not draw the farm channel",
+  "value": 0,
+  "unit": "sentences",
+  "observed": "2026-09-30",
+  "source": ".claude/skills/diagram/l7r/diagram/interactive/classes/water_and_ways.py Well",
+  "method": "the card now says a dispersed settlement draws the channel or a well of its own, rolled at even odds (a guess) - as farm_water.py draws and the FarmChannel card says"
+ },
+ "kashikawa-r4-f1": {
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "answers": "a7c0f83f2980",
+  "quantity": "holding-modal sentences saying every near farm backs on the rice field",
+  "value": 0,
+  "unit": "sentences",
+  "observed": "2026-09-30",
+  "source": ".claude/skills/diagram/l7r/diagram/interactive/classes/fields.py Holding",
+  "method": "the near farms back on the ground the row keeps off - the rice field, or the marsh or water beside it (rows.hard_ground)"
+ },
+ "kashikawa-r4-f4": {
+  "verifies": "F4",
+  "subject": "kashikawa",
+  "answers": "a7c0f83f2980",
+  "quantity": "holding-modal claims of a drawn woodland beyond the field",
+  "value": 0,
+  "unit": "claims",
+  "observed": "2026-09-30",
+  "source": ".claude/skills/diagram/l7r/diagram/interactive/classes/fields.py Holding",
+  "method": "the modal now says the map draws the lot and the field, the woodland beyond not drawn"
  }
 }
