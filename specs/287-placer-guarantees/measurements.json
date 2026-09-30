@@ -1,0 +1,14 @@
+{
+ "reference-snapshot-main": {
+  "value": 24.35,
+  "unit": "s",
+  "observed": "2026-09-30",
+  "method": "make perf LABEL=adhoc (the reference hamlet at seeds 4, 25, 39, 47) in a detached worktree at origin/main 80af74aef - feature 280 and the rest of main, without feature 287's placement guarantees - two runs alternated with the clone's HEAD at load 2.6-3.0: 24.4 s and 24.3 s"
+ },
+ "reference-snapshot-287-head": {
+  "value": 27.5,
+  "unit": "s",
+  "observed": "2026-09-30",
+  "method": "make perf LABEL=adhoc in the clone at eab8235b9 (feature 287's final engine, main merged), alternated with origin/main above: 28.2 s and 26.8 s; the 287-end bookend taken just before at load 3.0 read 27.7 s"
+ }
+}

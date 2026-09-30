@@ -1125,3 +1125,16 @@ commons cover 100% of the map window, the largest 47-54% alone; observed 2026-09
 manifest's `commons` against `map_window`). So `fill_the_holes` finds no bare sample point under either predicate, and
 D6's choice of what counts as covered decides nothing on any map measured. It would decide something only on a roll
 whose commons pass left ground open.
+
+## R14 - What the work cost and saved (2026-09-30)
+
+**The test suite** (T89, SC-005, SC-006; observed 2026-09-30, method: `make durations` in the clone at eab8235b9 against
+R4's `make durations` before the work): 4,732 tests pass in 39.08 s against R4's 5,258 in 57.13 s - 526 fewer tests and
+18.05 s (32%) less, the finished-map tests the guarantees made unnecessary retired with their cost (R8).
+
+**Generation** (T89; the bookends and the control, observed 2026-09-30, method: `make perf LABEL=287-end` at load 3.0 and
+the `reference-snapshot-main` / `reference-snapshot-287-head` runs in measurements.json, alternated on the same host):
+the reference snapshot 20.9 s at 287's start, 24.35 s on main without 287 (feature 280 and the rest of main), 27.7 s at
+287's end - band 3 against 287-start. Of the 6.8 s, about 3.45 s is main's own work merged in and about 3.2 s (+13% over
+main) is 287's guarantees; the session's explanation is recorded (`make perf-explain`, CONTROL=reference-snapshot-main),
+the perf-audit subagent's review follows, and band 3 owes the GM's sign-off (`make perf-signoff`) before the push.
