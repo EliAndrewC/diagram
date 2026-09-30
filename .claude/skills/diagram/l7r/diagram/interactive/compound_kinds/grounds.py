@@ -480,7 +480,7 @@ class ApproachRoad(Kind):
 class CartYard(Kind):
     """
     What: An open loading apron inside a cart gate, where goods carts stand to load and unload beside the
-    stores; where those stores hold something that can burn, the same open ground is the fire gap they need.
+    stores; the apron is working ground, not a fire gap kept round stores that can burn.
 
     Why: In this setting wagons and carts use the roads between towns, so a compound that ships or receives bulk
     goods - rice bales, charcoal - has a cart gate, a cart yard and a lane a cart can use. A compound keeps such
@@ -499,7 +499,7 @@ class CartYard(Kind):
     Covers: the loading apron inside the cart gate
     Label: deviation
     Sources: kotobank-daihachiguruma, mlit-kinsei-michi, l7r-wagons, fao-charcoal-safety, tonya-enwiki
-    Entry: research/ways.html - 'Could a cart use the roads here, and where would it go?', 'What vehicle used a village lane, and where could the lane run?'; research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and their fire gap'; research/buildings.html - 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
+    Entry: research/ways.html - 'Could a cart use the roads here, and where would it go?', 'What vehicle used a village lane, and where could the lane run?'; research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and charcoal stores'; research/buildings.html - 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
     """
 
     key = "cart yard"

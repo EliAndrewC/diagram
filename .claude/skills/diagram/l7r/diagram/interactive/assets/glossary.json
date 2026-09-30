@@ -2950,7 +2950,8 @@
  "nuriya": {
   "def": "Plaster-faced construction: a wooden building rendered outside with earth as a fire precaution, one step short of a full storehouse.",
   "variants": [
-   "nuriya"
+   "nuriya",
+   "nuriya-zukuri"
   ]
  },
  "oblique weir": {
@@ -13604,6 +13605,12 @@
   "def": "The Islamic washing of the whole body, owed after certain states of ritual impurity.",
   "variants": [
    "ghusl"
+  ]
+ },
+ "huanghuali": {
+  "def": "A Chinese rosewood: a dense, hard, fragrant timber prized in China for fine furniture and tools.",
+  "variants": [
+   "huanghuali"
   ]
  }
 }

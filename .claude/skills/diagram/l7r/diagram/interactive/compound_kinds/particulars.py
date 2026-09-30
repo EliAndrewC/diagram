@@ -223,7 +223,7 @@ class CharcoalStore(Kind):
     Covers: the sealed charcoal kura and its labels
     Label: guess
     Sources: dozo-jawiki, kotobank-dozozukuri, wagner-ming-iron, fao-charcoal-safety
-    Entry: research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and their fire gap'
+    Entry: research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and charcoal stores'
     """
 
     key = "charcoal store"
@@ -404,7 +404,7 @@ class Steelyard(Kind):
     Covers: the steelyard on the weighing floor
     Label: accurate
     Sources: zhwiki-ganchen, zjnews-cixi-steelyard, osaka-keiryo-history, kanazawa-saobakari
-    Entry: research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and their fire gap'
+    Entry: research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and charcoal stores'
     """
 
     key = "steelyard"
@@ -416,8 +416,8 @@ class CharcoalBales(Kind):
 
     Why: Charcoal traveled in straw bales, woven into a cylinder like the rice bale, and a bale had no standard
     size before the modern period - not even for rice, whose bale held anything from 2 to 5 to by time and place.
-    Charcoal was packed at a weight set by its grade: in one charcoal district, 4 kan for the best and 8 or 10 for
-    the lower grades. A bale of no standard size cannot be traded by count, which is why every bale is weighed
+    Charcoal was packed at a weight set by its grade: in one charcoal district, at a date its source does not give, 4 kan for the best and 8 or 10 for
+    the lower grades. A bale of no standard size cannot be traded by count, which is why, in our reading (no page we read says a dealer weighed the bales at sale), every bale is weighed
     before it is tallied.
 
     Note: we have drawn each bale about 4 ft long, in order to make it read on the plan; a charcoal bale is about
@@ -429,7 +429,7 @@ class CharcoalBales(Kind):
     Covers: the stacked bales on the weighing floor
     Label: convention
     Sources: tawara-jawiki, tawara-unit-jawiki, edo-tokyo-sumidawara
-    Entry: research/urban-features.html - 'How big is a bale of rice or charcoal?', 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and their fire gap'
+    Entry: research/urban-features.html - 'How big is a bale of rice or charcoal?', 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and charcoal stores'
     """
 
     key = "charcoal bales"

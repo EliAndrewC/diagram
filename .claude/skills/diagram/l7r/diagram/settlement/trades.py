@@ -472,7 +472,7 @@ class TradesMixin:
             economy, and fire-resistant stores were built precisely because urban timber burned.
           - THE STOCK MUST STAY DRY, which is why it draws under ROOFED sheds: white charcoal
             commands its premium for an odorless, smokeless burn, and damp stock loses it.
-          - NO COOLING APRON (feature 280 M104, research/rendering/urban-features.html 'How our maps draw charcoal yards and their fire gap'): the rule to stand new charcoal in the
+          - NO COOLING APRON (feature 280 M104, research/rendering/urban-features.html 'How our maps draw charcoal yards and charcoal stores'): the rule to stand new charcoal in the
             open for 24 hours is today's handling guidance; the older record cools charcoal AT THE KILN - black
             charcoal in the sealed kiln, white charcoal smothered beside it under ash and sand, late Muromachi into
             Edo - so it reached a town cooled and baled, and the yard draws no open ground for it. Nor does any

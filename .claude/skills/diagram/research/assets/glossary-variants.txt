@@ -1337,6 +1337,7 @@ houseman	gokenin
 housemen	gokenin
 houzhaofang	houzhaofang
 hsien	hsien
+huanghuali	huanghuali
 huc	Huc
 hucheng he	hucheng he
 hui	hui
@@ -2252,6 +2253,7 @@ numajiro	numajiro
 nuptiality	nuptiality
 nure-en	nure-en
 nuriya	nuriya
+nuriya-zukuri	nuriya
 nursery pond	nursery pond
 nursery ponds	nursery pond
 o-aza	ō-aza
