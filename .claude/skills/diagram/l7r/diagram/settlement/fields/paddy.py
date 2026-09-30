@@ -396,7 +396,7 @@ class PaddyMixin:
         FOLLOWS the water (rice hugging the ditches, dry upland crops where the network doesn't reach - wide-
         strip middles and the margins); the paddy is ~ONE green (a rice field, not a color mix). Records a
         feed channel (pond->field) and a drain channel (field->drain) so the checks see the supply. See
-        research/fields.html 'Where does a field's water come from, and how is it shared out?'."""
+        research/water.html 'Irrigation canals and how they are laid out (yosuiro)'."""
         if len(shape) == 4 and all(isinstance(v, (int, float)) for v in shape):
             bbox = tuple(shape)
             outline = organic_bbox(bbox, amp)

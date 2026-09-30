@@ -643,7 +643,7 @@ WEIR_SKEW_DEG = 30.0
 # one dangling collector. A last offtake at ~0.88 - which is also `build_comb`'s own default - keeps
 # the tail short and inside the rice.
 # ...AND EVERY ROW DRAWS CANAL B (GM caught Inashiro's bare west margin 2026-08-16; researched -
-# research/water.html "The head-race forks - supply commands both flanks"). A gravity canal commands
+# research/rendering/water.html "How our maps lay out irrigation canals"). A gravity canal commands
 # only the ground BELOW it, and the carve plants paddy on BOTH sides of the bunsuiguchi fork - so
 # the hamlet rows' old offtakes_b=() (copied from Ikegami's authored choice, now a frozen exhibit)
 # left the whole canal-B flank carved as watered ground with no drawn water: the modeled net and

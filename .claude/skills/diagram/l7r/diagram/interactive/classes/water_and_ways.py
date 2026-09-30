@@ -71,7 +71,7 @@ class IrrigationDitch(Kind):
     Covers: `field_ditches` whose role is not `drain` (except on a dike-pond field, whose canals are the pond canal), and `channels` not leaving a drain - the head race, the supply canals, the delivery ditches, a source-to-field feed
     Label: accurate
     Sources: tabayashi-1987, jsidre-minumadai, jsslkx-002-2021, nougyoudoboku-matsutan, bungotakada-tagoshi, suido-ishizue-iseki, people-zhishui-2025, pwsannong-gudai-shuili, thepaper-guangai
-    Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'The head-race forks', 'Where does the brook stop being a brook and become the ditch', 'Where on the brook's bank is the intake', 'What does the intake mouth look like'; research/fields.html - 'Where does a field's water come from, and how is it shared out?'
+    Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'Irrigation canals and how they are laid out (yosuiro)', 'Where does the brook stop being a brook and become the ditch', 'Where on the brook's bank is the intake', 'What does the intake mouth look like'; research/rendering/water.html - 'How our maps lay out irrigation canals'
     """
 
     key = "irrigation ditch"
@@ -206,7 +206,7 @@ class Pond(Kind):
     Covers: `pond` - the tameike
     Label: accurate
     Sources: tabayashi-1987, kagawa-tameike
-    Entry: research/fields.html - 'Where does a field's water come from, and how is it shared out?'
+    Entry: research/water.html - 'Irrigation canals and how they are laid out (yosuiro)'; research/rendering/water.html - 'How our maps lay out irrigation canals'
     """
 
     key = 'pond'
