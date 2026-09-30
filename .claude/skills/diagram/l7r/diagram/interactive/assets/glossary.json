@@ -13175,5 +13175,13 @@
    "screen gate",
    "screen gates"
   ]
+ },
+ "lath": {
+  "def": "Thin strips tied between the posts of a wall's frame to give the earth plaster something to hold; komai in Japanese.",
+  "variants": [
+   "lath",
+   "laths",
+   "komai"
+  ]
  }
 }

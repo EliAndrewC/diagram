@@ -1695,6 +1695,7 @@ kokumori	kokumori
 kokuso	kokuso
 kokuzo	kokuso
 komae	komae
+komai	lath
 komainu	lion-dog
 komatsuna	komatsuna
 komo	komo
@@ -1781,6 +1782,8 @@ landrace	landrace
 landraces	landrace
 lateral	lateral
 laterals	lateral
+lath	lath
+laths	lath
 leaf litter	forest litter
 leat	leat
 leats	leat
