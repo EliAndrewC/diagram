@@ -1160,6 +1160,8 @@ hakata	Hakata
 hakehi	hakehi
 hakka	Hakka
 hakone barrier	Hakone barrier
+half-fold	half-fold
+half-fold type	half-fold
 half-river closure	half-river closure
 half-river closures	half-river closure
 half-stories	half-story
@@ -1183,6 +1185,7 @@ hanko	hanko
 hansho	hansho
 hanshō	hansho
 hantei	Hantei
+haori	half-fold
 harakata	harakata-shu
 harakata-shu	harakata-shu
 hardiness zone	hardiness zone
@@ -1204,6 +1207,8 @@ head-race	head race
 head-works	head works
 header reservoir	header reservoir
 header reservoirs	header reservoir
+headland	headland
+headlands	headland
 headman	headman
 headmen	headman
 headworks	headworks

@@ -19,16 +19,19 @@ class Paddy(Kind):
 
     Why: Pre-modern paddies were fitted to land and water by piecemeal reclamation, so the plots are
     odd-sized and odd-shaped; the tidy rectangular grid is a Meiji/Showa land-consolidation artifact, though
-    the alluvial plains of the west kept the far older jori grid working into the medieval period. A flooded
-    paddy makes its own nitrogen, which is why the same basins were cropped year after year. On the Chinese
+    the alluvial plains of the west kept the far older jori grid working through the medieval period, and its
+    regular plots stayed widespread there up to Meiji. A paddy's soil was fed from within: in China the water
+    fern azolla was grown on the flooded paddy to take nitrogen from the air for the rice, and in Japan a
+    winter vetch, renge, was sown in the paddy as a green manure. On the Chinese
     delta the rice fields were also where the ducks fed: Qu Dajun, writing of Guangdong in 1678, says the
     coastal fields bred small crabs that ate the rice sprouts and only ducks could eat them, so the villages
     kept many ducks, herded in the fields - on the crabs in spring and summer, on the gleaned rice in autumn.
 
     Note: Plot form and the irregular patchwork are read, and so is the scattering of a household's holding;
     that the bunds meet at T-junctions is a guess no page read states; drawing the patchwork on the western
-    plains, where the jori grid ran, is a deviation; plot sizes are the map's own figures, placed inside a
-    pre-modern band no page read gives; the field is shown flooded, which is one moment of a cycle that runs
+    plains, where the jori grid ran, is a deviation; plot sizes are the map's own figures, a basin smaller
+    than the register parcels of the 1600s (about 0.09-0.44 acre, read) on the guess that a parcel was split
+    into several level basins, placed inside a pre-modern band no page read gives; the field is shown flooded, which is one moment of a cycle that runs
     from flooded to cracked and back - a cycle China's farming manuals give from the sixth century on, a paddy let out
     to sun its roots firm after weeding and drained again before the harvest; the depths behind that choice are modern
     extension figures, and no pre-modern depth was found; the midsummer drain appears in Edo-period farm books, in some places, and before
@@ -46,7 +49,7 @@ class Paddy(Kind):
     Covers: the wet plots of every `fields[kind=paddy]` - the flooded basins
     Label: accurate
     Sources: maff-suitou-mizu, zennoh-mizukanri, horikawa-2011-nakaboshi, doyoboshi-jawiki, qimin-yaoshu-juan2, chenfu-nongshu-juanshang, guangdong-xinyu-20, pwsannong-zhusanjiao-nongyeshi
-    Entry: research/fields.html - 'Rice paddies and their plots (suiden)', 'Plot sizes', 'How deep the water actually stands', 'Was a paddy drained in midsummer before modern times?'; research/rendering/fields.html - 'How our maps draw paddy plots'; research/archetypes.html - 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'
+    Entry: research/fields.html - 'Rice paddies and their plots (suiden)', 'Plot sizes', 'How deep the water actually stands', 'Was a paddy drained in midsummer before modern times?'; research/rendering/fields.html - 'How our maps draw rice paddies and their plots (suiden)'; research/archetypes.html - 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'
     """
 
     key = 'paddy'
@@ -125,8 +128,8 @@ class BundBeans(Kind):
     """
     What: Soybeans planted along the tops of the paddy bunds - azemame - drawn as dark green beads.
 
-    Why: A bund's top is soil that would otherwise grow weeds; planting it with beans took a second crop from the
-    same ground without touching the paddy. A share of the bunds is planted, rolled per map.
+    Why: The beans were a food crop of their own, sown along the bund tops after transplanting and harvested with
+    the rice; they took a second crop from the same ground without touching the paddy. A share of the bunds is planted, rolled per map.
 
     Note: we have rendered the bund beans as round beads about 3 ft across in a deep pine green, darker than the
     plant, in order to make them visible on the map at this scale against the pale rice, and any stretch of

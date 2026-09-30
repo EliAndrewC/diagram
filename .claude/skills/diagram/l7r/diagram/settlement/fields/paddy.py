@@ -124,7 +124,7 @@ class PaddyMixin:
         inside the real 130-600 m2 basin band, and the default (46 -> ~785 m2 at 2 ft/px) is within
         the real parcel range (mean ~1 mu = ~600 m2, merged holdings larger) - no legibility
         inflation is in play, and the houses are true-scale too. The bund stroke draws at near-true
-        aze width for the map scale. See research/rendering/fields.html 'How our maps draw paddy plots'."""
+        aze width for the map scale. See research/rendering/fields.html 'How our maps draw rice paddies and their plots (suiden)'."""
         from l7r.diagram.waterfields import AZE, aze_w
 
         bund = aze_w(self.ftpx)  # near-true-scale aze stroke (~1.5 real ft; the why lives at waterfields.AZE)

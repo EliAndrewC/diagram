@@ -13580,5 +13580,20 @@
   "variants": [
    "collateral kin"
   ]
+ },
+ "headland": {
+  "def": "An unplanted strip at the edge of a field; on our maps, the strip along the drain at the narrow end of a fan of paddies, where a point too sharp to level and plant is cut off.",
+  "variants": [
+   "headland",
+   "headlands"
+  ]
+ },
+ "half-fold": {
+  "def": "One of the ways the ancient jori grid divided a square of one cho into ten one-tan paddies: each plot 30 by 12 ken, laid in two rows of five.",
+  "variants": [
+   "half-fold",
+   "haori",
+   "half-fold type"
+  ]
  }
 }
