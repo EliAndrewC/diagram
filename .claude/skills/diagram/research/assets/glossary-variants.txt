@@ -1298,6 +1298,7 @@ horse-head gable walls	horse-head wall
 horse-head wall	horse-head wall
 horse-head walls	horse-head wall
 hot shoeing	hot-shoeing
+hot-shoe	hot-shoeing
 hot-shoeing	hot-shoeing
 hotoke	hotoke
 hou ji	Hou Ji
@@ -1560,6 +1561,7 @@ kainyo	kainyo
 kaisho	kaisho
 kaishochi	kaishochi
 kaison	kaison
+kaiu wall	Kaiu Wall
 kaji-ya	kaji-ya
 kajimachi	kajimachi
 kajiya	kaji-ya
@@ -2512,6 +2514,8 @@ regulator	regulator
 regulators	regulator
 rehe	Jehol
 reikurikata	reikurikata
+relay town	relay town
+relay towns	relay town
 remand	remand
 remanded	remand
 ren	ren
@@ -2737,6 +2741,7 @@ sexagenary year	sexagenary year
 seyakuin	seyakuin
 shacho-sen'yokata	shacho-sen'yokata
 shadoof	jiegao
+shadowlands	Shadowlands
 shaduf	jiegao
 shahi	shahi
 shaka	Shaka Nyorai
