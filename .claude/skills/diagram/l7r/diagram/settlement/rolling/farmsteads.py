@@ -53,7 +53,9 @@ class FarmsteadFlushMixin:
             _bamboo = self._farm_rolls_bamboo(rec["x"], rec["y"])
             for (cx, cy, w, h), (face, depth) in zip(geom.get("groves") or (), geom.get("grove_faces") or (), strict=True):
                 arms.append((cx, cy, w, h, face, depth, _bamboo))
-                self.M["groves"].append({"x": round(cx, 1), "y": round(cy, 1), "w": w, "h": h, "rot": 0, "of": [rec["x"], rec["y"]], "face": list(face), "depth": depth, "bamboo": _bamboo and depth == "deep"})
+                self.M["groves"].append(
+                    {"x": round(cx, 1), "y": round(cy, 1), "w": w, "h": h, "rot": 0, "of": [rec["x"], rec["y"]], "face": list(face), "depth": depth, "bamboo": _bamboo and depth == "deep"}
+                )
                 self.grove_rects.append((cx, cy, w, h))
             bundled.append(rec)
             survivors.append(rec)

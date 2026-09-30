@@ -541,7 +541,9 @@ class GrovesMixin:
             # items, taken from the broadleaf so the cedar backbone keeps its 38%. The dooryard and alder mixes carry none.
             # The village belt's two forms (269 B30) carry the same bamboo share; a conifer-led belt's conifers are its rows,
             # seated for the whole belt by `_belt_ranks`, so its clumps throw only the lesser crowns; a mixed broadleaf belt has none.
-            b_th = GROVE_BAMBOO_SHARE if bamboo and mix in ("windbreak", *WINDBREAK_BELT_FORMS) else 0.0  # `bamboo=False`: a farm that rolled none (feature 291)  # dooryard = fruit broadleaf, no conifer; alder = broadleaf only
+            b_th = (
+                GROVE_BAMBOO_SHARE if bamboo and mix in ("windbreak", *WINDBREAK_BELT_FORMS) else 0.0
+            )  # `bamboo=False`: a farm that rolled none (feature 291)  # dooryard = fruit broadleaf, no conifer; alder = broadleaf only
             c_th = b_th + 0.38 if mix == "windbreak" else b_th
             if mix == "conifer_led":
                 rows = max(0.0, (w - 4) * (h - 4)) / (self.px(RANK_ALONG_FT) * self.px(RANK_APART_FT))  # the row conifers this clump's box holds

@@ -1,7 +1,7 @@
 {
  "feature": "291-homestead-grove-sides",
- "plan_sha256": "2d7a096c4066e480263af0c6be2951bee0231d5564556b85db30e5cf146c4841",
- "reviewed": "2026-09-29",
+ "plan_sha256": "0d5df9f45559b4c2401b5752f5112a4f71fb1f8d65afe918bb016b26080e7900",
+ "reviewed": "2026-09-30",
  "declared": "spec-fidelity",
  "decisions": [
   {
@@ -55,9 +55,9 @@
   },
   {
    "id": "D9",
-   "summary": "Thin band drawn with the dooryard mix, deep bands the windbreak mix (GUESS for the ring)",
+   "summary": "Thin band drawn with the dooryard mix, deep bands the windbreak mix (GUESS for the ring); bands drawn as clumps of at most one clump's size, inset one crown on the house side; grove bamboo drawn only where the farm rolled a household bamboo stand",
    "class": "within",
-   "why": "Spec Decisions: 'Tonami's tall cedar on the windward faces and lesser trees elsewhere'; the species mix is left open to the plan."
+   "why": "Spec Decisions: 'Tonami's tall cedar on the windward faces and lesser trees elsewhere'; the species mix and clumping are left open to the plan; the bamboo clause is FR-019 word for word."
   },
   {
    "id": "D10",
@@ -85,15 +85,15 @@
   },
   {
    "id": "D14",
-   "summary": "rows.py row_line: flood_ground takes edge; else even-odds street/edge knob, pinnable, meta.row_line; edge = the field envelope buffered out (curving arc), street = a straight chord; row length n_side x frame centered on the seat, clipped to the canvas",
+   "summary": "row_line: flood_ground takes edge, else an even-odds street/edge knob, pinnable, meta.row_line; edge = the hard ground grown to the street's offset and cut to an arc; street = the principal-axis straight line of that stretch set out past it; the first street chosen by best_row_line among the seat's point and 16 points of the grown edge within a row's length, by clear frames, the seat breaking ties; hard ground = field, site no-build outline, water at clearance, toe marsh and drawn marshes; LINEAR_CANVAS 1.5 (a drawing convention)",
    "class": "within",
-   "why": "FR-013 word for word: both attested lines, the site's line on flood ground, even odds otherwise, pinnable and recorded; the straight surveyed street and the margin-following edge are the spec's own forms."
+   "why": "FR-013: both attested lines drawn, the dike line on flood ground, even odds otherwise, pinnable and recorded; the street straight as surveyed, the edge curving with the margin. WHERE along the margin the row stands, what ground it may not stand on, and the sheet's size are left open by the spec; choosing the stretch that holds the row seats the row the GM asked for and narrows nothing. Round-3 item 2 is answered (code: rows.py best_row_line, hard_ground)."
   },
   {
    "id": "D15",
-   "summary": "row_sides knob one/both (even odds, pinnable, meta.row_sides); farms one frame apart; ONE = street between the row and its field, BOTH = near row and far row either side of a street set out from the field; seats center-out; a full line grows a parallel street; the front-row, rank and rescue passes do not run for a linear hamlet",
+   "summary": "row_sides one/both knob; farms one frame apart, seats center-out through try_place; further streets are the first line set out parallel past the last row, holdings, lane room and field keep, the frame's depth along the normal; MAX_STREETS 6 (GUESS) with any farm past it reported unseated and failing the cohort, never ranked; a linear hamlet never takes the front-row, rank or rescue passes even with no street seated, and row_rules reports no_row_street; a seat is refused where its frame crosses any planned street, its door is within DOOR_ROOM_FT 16 ft (drawing convention) of hard ground, or it stands on a reserved holding; the placer nudges, never slides",
    "class": "within",
-   "why": "FR-014, FR-015 and FR-016. Switching off the rank and rescue passes enforces FR-013's 'never in ranks behind the row'; the overflow goes to FR-016's parallel street, and FR-010 / SC-005 still require every household seated."
+   "why": "FR-014, FR-015, FR-016 and FR-013's 'never in ranks behind the row'. Round-3 items 1, 3, 4 and 5 are answered and the code agrees (stages.py sets _rows_seated for every linear hamlet and both the front-row and rank/rescue loops stop on it; row_rules returns no_row_street). The street cap is not a carve-out: a farm the six streets cannot hold is not seated elsewhere or in a rank, it fails FR-010 / SC-005 in the cohort, so no map that breaks FR-016 can pass. The three seat refusals serve FR-017/FR-019 (a door a way can reach, a street the row can front) and FR-015 (the holding kept), and their only cost is a refused seat whose farm must still be seated for the cohort to pass."
   },
   {
    "id": "D16",
@@ -104,21 +104,21 @@
   },
   {
    "id": "D17",
-   "summary": "Each planned street laid as one width-6 lane (web lanes 3-5), joined to the connector or the previous street; no skeleton arms or web cuts for a linear hamlet with planned streets; each row farm's door path targets its own street, routed round its grove when the street is on the windward side, and records its farm",
+   "summary": "Each planned street laid as one width-6 lane, street: True, joined at its nearer end to the connector or the previous street, exempt from the web's trims as the connector is; the connector runs on from the first street's end nearer the sheet's edge along its line; no skeleton arms or web cuts for a linear hamlet with planned streets; each row farm's way ends on the street its front door faces, routed round its grove where needed",
    "class": "within",
-   "why": "FR-017 (one continuous way, joined to the connector, a rank wider, every farm reaching it) and FR-019 (the front door reached). Round 1's finding is cured: the way ends on the farm's own street. Leaving out the arms is not a narrowing: the request asks for no arms, and the streets are the lines FR-013 names."
+   "why": "FR-017 (one continuous way along its row, joined to the connector, a rank wider than the lanes, every farm reaching it) and FR-019. The trim exemption is what keeps the street one continuous way; the connector running on from the street is the join FR-017 asks for."
   },
   {
    "id": "D18",
-   "summary": "The dispersed bundle carries its well's seat in its layout (dooryard beside the yard, away from the garden, off the way in), drawn by own_wells; linear row_water knob own/shared (even odds, pinnable, meta.row_water); shared wells beside each street between lots, at least one every floor(reach/frame) farms, the reach the watering rule's 760 ft (WATER_REACH_FT)",
+   "summary": "A dispersed farm's own well seated in its dooryard by own_wells (a ring round the house out to the frame, nearest the work yard first, never on the way in); the layout-reserved well seat was built, measured to cost a household (cohort seed 19) and not used; water_rules fails any dispersed farm without its own well on every cohort roll and the gate's grove maps; linear row_water own/shared knob (even odds, pinnable, meta.row_water), shared wells spaced from WATER_REACH_FT so every farm is within reach",
    "class": "within",
-   "why": "FR-018 exactly: the dispersed farm's own well in its dooryard, off its way in (homesteads/200), and the row's water a recorded, pinnable, even-odds knob with shared wells within reach of the farms they serve. Round 1's finding is cured: spacing is taken from the reach, and the layout carries the well, so no farm is seated without water."
+   "why": "FR-018 exactly: own well in the dooryard, off the way in, for the dispersed farm; the row's water a pinnable, recorded, even-odds knob with shared wells within reach. Moving from a reserved seat to a seated search changes the mechanism, not the requirement, and the check makes a farm without its well a failure rather than an accepted gap."
   },
   {
    "id": "D19",
-   "summary": "row_rules, water_rules, doors_unreached and bamboo_mismatch predicates; the cohort audit runs them on every roll and adds pinned linear specs covering each value of row_line, row_sides and row_water; the gate test runs them on the linear pool maps",
+   "summary": "row_rules (houses within a frame depth of a street, none behind another, each street one lane, far farms' holdings behind, every row farm joined to its own street, no_row_street on a streetless linear map), water_rules, doors_unreached (linear row farms only, amendment 4), bamboo_mismatch; the cohort runs them every roll plus pinned linear specs covering both values of row_line, row_sides and row_water; the gate test on the linear pool maps",
    "class": "within",
-   "why": "Enforcement of SC-007 and SC-008 clause by clause. Pinned specs make 'both values appear' certain rather than left to the roll. Delete the requested behavior and these checks have nothing left to check, so they enforce the request (GM 2026-09-20)."
+   "why": "Enforcement of SC-007 and SC-008 clause by clause, the door check scoped as accepted amendment 4 scopes it. Delete the requested behavior and these checks have nothing left to check (GM 2026-09-20)."
   }
  ],
  "verdict": "CLEAR"

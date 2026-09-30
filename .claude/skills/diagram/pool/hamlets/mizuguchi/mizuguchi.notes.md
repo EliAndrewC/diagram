@@ -855,20 +855,18 @@ Measured on this roll (2026-09-29): 12 houses; bath rooms 3 (by seat: floored_ro
 
 The GM's ruling of 2026-09-29 made the homestead grove's sides a knob (two sides 5 in 10, three 3 in 10, a ring 2 in 10;
 flood ground rolls the ring at 4 in 10) and put the dispersed and linear forms back into the roll (5:3:2 nucleated,
-dispersed, linear). Mizuguchi's seed rolls **linear**, so this map is now a row village; the reference (Inashiro) is pinned
-nucleated and did not move.
+dispersed, linear). Mizuguchi's seed rolls **linear**, so this map is now a row village, drawn from the record's row
+forms (homesteads/155 and 156, feature 291 amendment 3); the reference (Inashiro) is pinned nucleated and did not move.
 
-- **Every farm carries its own grove** on the sides the hamlet rolled - here **two**, the windward north and west, both the
-  deep stand (1.57 house depths, about 44 ft; homesteads/010 and 715). No village belt is drawn where the farms carry
-  their own groves (vegetation/030).
-- **The farms front a street** laid along the road, the row as long as its households (homesteads/150; the length a GUESS).
-- **A service strip, about 24 ft, stands between the house and its windward stand**, behind the back wall and off the
-  windward end, where the wood shed stands a step off the wall and the bath room is joined at the stable end. Before it,
-  every bath room this map drew stood inside the west band and the shed seats were refused (homesteads/715; a GUESS sized to
-  the shed).
-- **Two farms' groves stand at least 32 ft apart**, a lane's room, and the lanes are routed round the bands, never through
-  them (homesteads/715).
+- **The row**: its seed rolled the **dry edge** - the row follows the field's margin along the brook's far bank,
+  curving with it (a levee or fan foot, which the margin stands for, is this project's reading) - with farms on **one
+  side** of the street, the field across it; one farmstead frame apart, never in ranks; a second street parallel to the
+  first takes the farms the first could not hold (homesteads/156: a colony grew more roads, not ranks).
+- **Every farm carries its own grove** on two sides, the deep stand on the windward north and west; no village belt is
+  drawn (vegetation/030). The hamlet's bamboo knob rolled the village thicket, so the farm groves carry none.
+- **The row's water** rolled **own**: each farm's own well in its dooryard, off its way in.
+- **A service strip** stands between each house and its windward stand, for the wood shed and the bath room.
 
-Measured on this roll (2026-09-29): 12 houses, all 12 grove farms, 11 within 80 ft of the street; 24 bands, all deep; bath rooms 3 (all stable_end), wood
-sheds 5, privies 11, coops 10, manure heaps 8, shrine 1 - every declared fixture seated, none inside a band; 8 lanes; no
-lane across a band; attempt 1, no farmhouse off the way network.
+Measured on this roll (2026-09-29): 12 houses on 2 streets, 12 grove farms; 24 bands, all deep; 12 private wells;
+bath rooms 3, wood sheds 5, privies 11, coops 10, manure heaps 8, shrine 1 - every declared fixture seated; 22 lanes;
+every row, water, door, bamboo, grove and overlap rule clean; attempt 1.

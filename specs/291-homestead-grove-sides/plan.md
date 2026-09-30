@@ -98,13 +98,19 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
 
 - **D14 - the row's line** (FR-013). A new module `hamletgen/homesteads/rows.py`. `row_line(plan)` is the site's or
   the roll's: `flood_ground` gives `edge`; otherwise `knob_rng(seed, "row_line")` at even odds between `street` and
-  `edge`, or `HamletSpec.row_line` pinned; recorded `meta.row_line`. A line is a polyline: `edge` - the field
-  envelope buffered outward (shapely) to the street's offset, its exterior ring cut to an arc centered on the seat's
-  projection (the row curves with the margin); `street` - a straight segment through that same projection along the
-  arc's chord, a surveyed road. The row's length along the line is what its farms need, `n_side x frame`, centered on
-  the seat, clipped to the canvas less the frame. A linear hamlet's canvas is 1.5 times `canvas_for`'s (`LINEAR_CANVAS`,
+  `edge`, or `HamletSpec.row_line` pinned; recorded `meta.row_line`. A line is a polyline: `edge` - the hard ground
+  (below) grown outward (shapely) to the street's offset, its exterior ring cut to an arc centered on the chosen point
+  (below) (the row curves with the margin); `street` - a straight line fitted to that same stretch of the ring (its
+  principal axis) and set out until the whole stretch lies behind it, a surveyed road. The row's length along the line is
+  what its farms need, `n_side x frame` and one frame more, with two frames of slack beyond, clipped to the sheet. A linear hamlet's canvas is 1.5 times `canvas_for`'s (`LINEAR_CANVAS`,
   a drawing convention - the unused ground is cropped): sized for a cluster, the canvas ran each street off the sheet
   after a few lots and cohort seed 12 seated 13 of 17 on six streets.
+  WHERE THE FIRST STREET GOES: not simply at the seat - of the lines centered on the seat's point of the hard ground's
+  grown edge and on 16 points of that edge within a row's length either way of it, the one whose row seats hold the most
+  clear frames (clear of the hard ground, on the sheet, with room at the door), the nearest the seat among equals
+  (`best_row_line`). The hard ground is the field, the site's other no-build outline, the water courses at their
+  clearance, the toe marsh and every drawn marsh (`hard_ground`) - offset from the field alone, a street ran between the
+  brook and the paddy.
 - **D15 - the seats** (FR-014, FR-015, FR-016). `row_sides(plan)` the same way (knob `row_sides`, `one`/`both`,
   `meta.row_sides`). The frame is the dispersed bundle's `_frame` at the largest house (grove, ground and the lane's
   room); farms step one frame width along the line. ONE side: the street at the field's standoff, the farms beyond it
@@ -113,6 +119,15 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   `try_place` (one computed move), in center-out order alternating the two ends. When a line is full or refused,
   `row_streets` offsets the next street parallel, one row set further out (FR-016), and the rows continue there. The
   front-row, rank and rescue passes do not run for a linear hamlet. The streets are kept on `s._row_streets` for the web.
+  THE STREETS' SPACING: each next street is the FIRST line set out parallel (each sample along its own normal), past the
+  last street's far row, its holdings (BOTH), the lane's room and the field keep - the frame's depth measured ALONG THE
+  LINE'S NORMAL, not its shorter side (a diagonal street reaches deeper). AT MOST SIX STREETS (`MAX_STREETS`, a GUESS); a
+  farm six streets cannot hold is reported unseated and fails the cohort under FR-010 - never put in a rank. A LINEAR
+  HAMLET NEVER TAKES THE RANK OR RESCUE PASSES, even when its streets seat no farm, and `row_rules` reports a linear map
+  with no seated street (`no_row_street`). A ROW SEAT IS REFUSED - the placer offered the next - when its frame crosses
+  ANY planned street (square to its line at its seat, a frame reached across a street at a bend), when its front door
+  stands within `DOOR_ROOM_FT` (16 ft, a map drawing convention: a footpath's gap and most of the router's cell) of hard
+  ground, or when it stands on a reserved holding; and the placer only nudges a row seat (at most 14 ft), never slides it.
 - **D16 - the far row's holding** (FR-015). On BOTH, each far-row farm's holding is BEHIND its lot (away from the
   street): on `street` a strip one frame wide and three frames deep, cut in plots of the near ring's cell (the planned
   row's order: house lot, then field, then woodland - homesteads/156); on `edge` one frame deep, compact and near the
@@ -129,7 +144,9 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   is given, for a row farm, its own street as the target - the street its front door faces, as drawn (not the nearest way
   to its house: a farm between two streets faces the one its door is on) - and routes from the front door round the
   farm's grove when the street lies on its windward side (the front is the wind's, D3); the path records the farm it
-  serves. The door-to-door street it replaces goes.
+  serves. The door-to-door street it replaces goes. A street is exempt from the web's trims as the connector is (it is
+  laid whole), and the connector runs on from the first street's end nearer the sheet's edge, straight out along its line
+  - the road the row stands on.
 - **D18 - water** (FR-018). A dispersed farm's own well is seated in its dooryard by `own_wells`: a ring round the house
   out to the frame, nearest the work yard first, tested by footprint against every reserved box, never on the way in
   (the line from the house through its yard). A well seat reserved in the bundle's layout was built and MEASURED: every
@@ -144,7 +161,7 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   street; no house behind another on its side; each street one lane; every far row farm with its holding behind it; every
   row farm joined by a way to its own street) and `water_rules(M)` (every dispersed farm with its own well, not in its
   way in; a linear map's `row_water` drawn - own wells, or every farm within reach of a shared well), and the door and
-  bamboo predicates (`doors_unreached`: every LINEAR row farm's front door within the door reach of a way (a dispersed farm needs none, homesteads/150); `bamboo_mismatch`:
+  bamboo predicates (`doors_unreached`: every LINEAR row farm's front door within the door reach of a way (a dispersed farm needs none, homesteads/150); `row_rules` also fails a linear map with no seated street; `bamboo_mismatch`:
   the farms drawing grove bamboo exactly the farms that rolled it). The cohort audit runs all of them on every roll and,
   beside its 24 seeds, rolls a PINNED linear spec for each value of `row_line`, `row_sides` and `row_water` (four
   line-by-sides specs, water alternating), so both values of each knob are asserted to appear, not left to the roll; the

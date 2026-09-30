@@ -39,7 +39,7 @@ def test_a_door_far_from_the_lanes_gets_a_footpath_to_them() -> None:
     door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
     assert door is not None and seg_dist(door[0], door[1], (100.0, 700.0), (1300.0, 700.0)) > DOOR_REACH_FT
     assert lay_door_paths(s, [], [], []) == 1
-    segs = [(a, b) for ln in s.M["lanes"] for a, b in zip(ln["pts"], ln["pts"][1:])]
+    segs = [(a, b) for ln in s.M["lanes"] for a, b in zip(ln["pts"], ln["pts"][1:], strict=False)]
     assert min(seg_dist(door[0], door[1], a, b) for a, b in segs) <= DOOR_REACH_FT
     assert lay_door_paths(s, [], [], []) == 0, "a door already reached gets nothing"
 

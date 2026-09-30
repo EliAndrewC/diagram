@@ -284,7 +284,9 @@ class VillageLane(Kind):
     trails off into empty ground. The way out to the rice does not stop at the field's edge either: among the
     paddies the way is the bund itself, the path a farmer walks to weed and manure, so the path to the fields
     runs on to the paddy's outer bund and joins it, and where a hamlet stands so close to its paddy that no
-    path is left between them, its nearest lane runs on to the bund.
+    path is left between them, its nearest lane runs on to the bund. In a row village the farms stand along a street
+    instead - a street laid out first, or one along the dry edge the ground gives - drawn a rank wider than the
+    lanes off it and running on out of the map as the road, with a path from each farm's door to it.
 
     Note: That every house is reached by a way is read from a surveyed village's own lane hierarchy; of the two
     forms, the planned back lane is read and the alleys off the spine are on no publicly readable page, as is
@@ -311,10 +313,10 @@ class VillageLane(Kind):
     the point where the field path joins its bund, the one nearest the hamlet.
 
     Name: village lane
-    Covers: `lanes` - every lane on the map: the web, the internal skeleton, the connector to the off-map road and the field spur
+    Covers: `lanes` - every lane on the map: the web, the internal skeleton, a row village's streets, the connector to the off-map road and the field spur
     Label: accurate
-    Sources: kotobank-nodo, kotobank-aze-sekai-daihyakka, aze-jawiki, kotobank-keihan, kotobank-nawate
-    Entry: research/homesteads.html - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?', 'How far does a village lane run past its last farmhouse?'; research/fields.html - 'Where does the path to the fields end?'; research/SOURCES.html re-sourcing queue (lane width)
+    Sources: kotobank-nodo, kotobank-aze-sekai-daihyakka, aze-jawiki, kotobank-keihan, kotobank-nawate, sonraku-jawiki
+    Entry: research/homesteads.html - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?', 'How far does a village lane run past its last farmhouse?', 'How was a row village laid out?'; research/fields.html - 'Where does the path to the fields end?'; research/SOURCES.html re-sourcing queue (lane width)
     """
 
     key = 'village lane'

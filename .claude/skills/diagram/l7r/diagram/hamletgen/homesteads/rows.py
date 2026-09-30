@@ -21,7 +21,6 @@ from collections.abc import Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement
-
 from l7r.diagram.settlement.homestead_parts.grove_sides import grove_faces
 from l7r.diagram.settlement.rolling.dispersed import LANE_ROOM_FT
 
@@ -262,9 +261,9 @@ def draw_holdings(s: Settlement) -> int:
                 continue
             cell = largest_ring(band)
             pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in cell)
-            s.add(f'<polygon points="{pts}" fill="{fill}" stroke="#A98C58" stroke-width="1.4" stroke-linejoin="round"/>')
+            s.add(f'<polygon points="{pts}" fill="{fill}" stroke="#A98C58" stroke-width="1.4" stroke-linejoin="round"/>', cls="farm holding")
             theta = math.atan2(nrm[1], nrm[0]) % math.pi  # the furrows run down the strip, across the street
-            s._draw_furrows(cell, fur, theta)
+            s._draw_furrows(cell, fur, theta, cls="farm holding")
             # `homestead`: a farm's own holding, not the field's hem - the reed toe is measured below the FIELD'S lowest crop
             # (`toe_band`), and read as field crop a holding moved the toe 220 ft onto three Kashikawa farms' doors
             s.M["dry_plots"].append({"poly": [[round(x, 1), round(y, 1)] for x, y in cell], "crop": crop, "theta": round(theta, 3), "holding": k, "homestead": True})
@@ -278,7 +277,9 @@ def parallel(line: Sequence[tuple[Pt, Pt]], d: float) -> list[tuple[Pt, Pt]]:
     return [((p[0] + n[0] * d, p[1] + n[1] * d), n) for p, n in line]
 
 
-def clear_frames(line: Sequence[tuple[Pt, Pt]], frame: Sequence[float], sides: str, gap: float, hard: Any, bounds: tuple[float, float, float, float], front: Sequence[float], pad: float, room: float) -> int:
+def clear_frames(
+    line: Sequence[tuple[Pt, Pt]], frame: Sequence[float], sides: str, gap: float, hard: Any, bounds: tuple[float, float, float, float], front: Sequence[float], pad: float, room: float
+) -> int:
     """How many of a line's row seats hold a frame clear of the hard ground, inside `bounds`, with room at its door - the
     measure `best_row_line` ranks a stretch by (the placer still decides each seat)."""
     from shapely.geometry import box
@@ -292,7 +293,22 @@ def clear_frames(line: Sequence[tuple[Pt, Pt]], frame: Sequence[float], sides: s
     return n
 
 
-def best_row_line(hard: Any, anchor: Pt, offset: float, length: float, form: str, slack: float, frame: Sequence[float], sides: str, gap: float, bounds: tuple[float, float, float, float], front: Sequence[float], pad: float, room: float, samples: int = 16) -> list[tuple[Pt, Pt]]:
+def best_row_line(
+    hard: Any,
+    anchor: Pt,
+    offset: float,
+    length: float,
+    form: str,
+    slack: float,
+    frame: Sequence[float],
+    sides: str,
+    gap: float,
+    bounds: tuple[float, float, float, float],
+    front: Sequence[float],
+    pad: float,
+    room: float,
+    samples: int = 16,
+) -> list[tuple[Pt, Pt]]:
     """The first street of a row village: of the lines centered on the planned seat's point of the hard ground's grown edge
     and on `samples` points of that edge within a row's length either way of it, the one holding the most clear frames
     (`clear_frames`), the nearest the seat among equals. [] where there is no hard ground."""

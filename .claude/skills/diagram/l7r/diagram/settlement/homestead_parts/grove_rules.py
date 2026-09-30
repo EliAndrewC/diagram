@@ -22,7 +22,6 @@ the rule was not vacuous (`grove_farms`).
 from __future__ import annotations
 
 import math
-
 from collections.abc import Mapping, Sequence
 from typing import Any
 
@@ -96,7 +95,11 @@ def groves_crossed_by_lanes(M: Mapping[str, Any]) -> list[tuple[int, Mapping[str
     matrix, classing groves as VEGETATION, lets pass). A farm's way in comes by its open front, never through its grove."""
     from .._geom import poly_gap  # the matrix's own quad gap, exact for convex quads
 
-    bands = [(g, [(g["x"] - g["w"] / 2, g["y"] - g["h"] / 2), (g["x"] + g["w"] / 2, g["y"] - g["h"] / 2), (g["x"] + g["w"] / 2, g["y"] + g["h"] / 2), (g["x"] - g["w"] / 2, g["y"] + g["h"] / 2)]) for g in M.get("groves") or () if all(k in g for k in ("x", "y", "w", "h"))]
+    bands = [
+        (g, [(g["x"] - g["w"] / 2, g["y"] - g["h"] / 2), (g["x"] + g["w"] / 2, g["y"] - g["h"] / 2), (g["x"] + g["w"] / 2, g["y"] + g["h"] / 2), (g["x"] - g["w"] / 2, g["y"] + g["h"] / 2)])
+        for g in M.get("groves") or ()
+        if all(k in g for k in ("x", "y", "w", "h"))
+    ]
     out: list[tuple[int, Mapping[str, Any]]] = []
     seen: set[tuple[int, int]] = set()
     for i, ln in enumerate(M.get("lanes") or ()):

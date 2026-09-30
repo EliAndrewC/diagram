@@ -15,7 +15,7 @@ from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, MIN_WEB_GAP, SUN_CORRID
 from ..plan import SitePlan
 from .boundary import install_site_boundary
 from .retirement import retirement_houses
-from .seats import _seat_allowed, cluster_aspect, front_row, lane_frontage
+from .seats import _seat_allowed, cluster_aspect, front_row
 from .wells import place_wells
 
 #: The range a rank seat may stand off its exact rank, as a share of `BUNDLE_PITCH` - half of it each way (feature 261,
@@ -144,7 +144,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.homesteads.boundary.site_boundary
         l7r.diagram.hamletgen.homesteads.seats.front_row
         l7r.diagram.hamletgen.homesteads.seats._front_row_from_chains
-        l7r.diagram.hamletgen.homesteads.seats.lane_frontage
+        l7r.diagram.hamletgen.homesteads.rows.seat_rows
         l7r.diagram.hamletgen.homesteads.seats._seat_allowed
         l7r.diagram.settlement.Settlement.try_place
         l7r.diagram.settlement.Settlement._place_bundle_nucleated
@@ -391,9 +391,11 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
 
         placed += seat_rows(s, plan, _g0["bbox"], allowed=lambda x, y: _seat_allowed(s, x, y))
         front_cap = placed
-        _rows_seated = bool(getattr(s, "_row_streets", None))
+        _rows_seated = True  # NEVER IN RANKS (FR-013, plan D15): whatever its streets could not hold is reported unseated, even all of it
     for _rung in (0,):
-        for (fx, fy), _n in front_row(plan, plan.spec.households if _linear else min(plan.spec.households, 12), standoff=None, chains=s._site_chains, house=_house_max, envelope=_reach, with_normals=True, **_row_kw):
+        for (fx, fy), _n in front_row(
+            plan, plan.spec.households if _linear else min(plan.spec.households, 12), standoff=None, chains=s._site_chains, house=_house_max, envelope=_reach, with_normals=True, **_row_kw
+        ):
             if placed >= front_cap:
                 break
             # THE ONE COMPUTED MOVE AGAINST THE GROUND (feature 227 FR-002, the GM's "measuring the distance ... and then
@@ -444,25 +446,9 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # 10. The ribbon's tighter fronting was an artifact of the defect, not a baseline worth keeping -
     # but ~98 is the figure an early review criticized against Ikegami's 55, and this loop is where
     # a future tightening belongs, since it is the pass now doing the seating.
-    # ONLY A LINEAR HAMLET FRONTS A WAY AT SEAT TIME, and the way it fronts is the CONNECTOR.
-    #
-    # This pass used to run for every map, offering seats along the verges of the internal lanes.
-    # Those lanes no longer exist when this runs, so for a nucleated or dispersed hamlet the pass
-    # now returns nothing and is pure cost - the front row and the cloud do the seating.
-    #
-    # For the LINEAR form it is the whole point. A row village IS a settlement strung along a
-    # through-route: the road came first, the farmsteads front it, each holding lies behind its own
-    # house. That is the one form in which siting a house against a way is historically right, and
-    # the connector is the only way on the map that genuinely predates the houses. `lane_frontage`
-    # skipped the connector precisely because fronting it "would string the hamlet along the road
-    # instead of nucleating it (that is the `linear` settlement form, a different archetype)" - so
-    # this is that archetype, asking for exactly what that comment described.
-    if plan.settlement_form == "linear":
-        for lx, ly in lane_frontage(s, seat, connector=True):
-            if placed >= plan.spec.households:
-                break
-            if in_band((lx, ly)) and _seat_allowed(s, lx, ly) and _pretest(lx, ly) and s.try_place(lx, ly, "plain"):
-                placed += 1
+    # THE CONNECTOR-FRONTAGE PASS IS RETIRED (feature 291 amendment 3): it seated a linear hamlet along the connector, which
+    # does not exist when the homesteads are seated, so it placed nothing; a row village's farms now stand along the
+    # streets its row planned (`rows.py`, research/homesteads/155 and 156), and a linear hamlet takes no other pass.
     _cloud_placed = 0
     s._seat_search["front"] = placed  # the households the front row seated (R2 reads it beside the cap)
     _row: list[Pt] = [(h["x"], h["y"]) for h in s.M.get("houses", [])]  # the front row as it stands: the lattice's rank 0

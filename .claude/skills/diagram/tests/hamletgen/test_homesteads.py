@@ -11,7 +11,7 @@ from l7r.diagram import hamletgen as hg
 from l7r.diagram.hamletgen.homesteads.fixtures import nearer_own_house
 from l7r.diagram.settlement import Settlement
 
-from ._builders import SQUARE, a_plan
+from ._builders import a_plan
 
 
 @pytest.mark.parametrize(("households", "wells"), [(10, 2), (12, 2), (15, 2), (20, 3)])
@@ -226,51 +226,28 @@ def test_a_woodpile_stacks_against_the_kura_when_the_shed_is_not_on_the_north_si
     assert all(abs(f["x"] - 700.0) < 200 and abs(f["y"] - 700.0) < 200 for f in s.M["farm_fixtures"])
 
 
-def test_a_linear_hamlet_strings_its_houses_along_the_connector() -> None:
-    """The `linear` settlement form is attested and implemented but pinned off (`SETTLEMENT_FORMS`), so
-    the arm that fronts the CONNECTOR - the only way on the map that predates the houses - has never
-    rolled. `lane_frontage` skips the connector for exactly the reason this form wants it: fronting it
-    strings the hamlet along the road instead of nucleating it, which is this archetype."""
+def test_a_linear_hamlet_stands_in_rows_along_its_streets_and_never_in_ranks() -> None:
+    """Feature 291 amendment 3 (research homesteads/155 and 156): a linear hamlet's farms stand in rows along the streets
+    its row planned - `seat_rows` - and it takes no rank round, whatever its streets could not hold; a nucleated hamlet on
+    the same ground is seated by its front row and ranks as before. (The connector-frontage pass this test used to hold is
+    retired: the connector does not exist when the homesteads are seated.)"""
     from l7r.diagram.hamletgen.homesteads import stage_homesteads  # through the MODULE: a stage is not package surface
 
-    # TEN HOUSEHOLDS, THE FLOOR OF THE HAMLET BAND (feature 158): the arm under test is the frontage
-    # loop, which does not care how many houses it strings - and every household is a seat search.
-    # Fifteen cost 4-5 s of every run in all three tiers; ten cost two thirds of that and prove the
-    # same thing. (Nine is not available: `HamletSpec` refuses anything outside 10-20.)
     for form in ("nucleated", "linear"):
         plan = a_plan(households=10)
         plan.seat = hg.seat_cluster(plan)
         plan.settlement_form = form
-        # a road 1,800 ft long on a canvas 2,400 wide (feature 291): a row farm's frame - its grove, the service strip and
-        # the lane's room - is some 200 ft across, and the toy's 800 ft road held eight of the ten
         s = Settlement(2400, 1400, seed=3)
         s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=True)
-        # the placer's own switch, said (feature 291): unset, BOTH arms laid farms with their own groves, and the nucleated
-        # control was not one
         s._nucleated = form == "nucleated"
         s.field_polys.append(list(plan.envelope))
-        # the connector has to BE there for the linear form to string anything along it - it is the one
-        # way on the map that predates the houses, which is the whole premise of the archetype
-        cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
-        s.M["lanes"] = [{"pts": [[cx_ - 900, cy_], [cx_ + 900, cy_]], "w": 6, "connector": True}]
         stage_homesteads(s, plan)
-        assert len(s.M["houses"]) == 10, f"{form}: every household seated"
-
-    # ...and the frontage loop STOPS when the households run out rather than filling the whole
-    # connector: the same plan, with the ask cut to three, seats three and leaves the rest of the
-    # road bare. A row village is as long as its households, not as long as its road.
-    spec = hg.HamletSpec(name="Row", seed=3, households=10, down_deg=90.0, windward="N")
-    plan = hg.plan_site(spec)
-    plan.envelope = list(SQUARE)
-    plan.seat = hg.seat_cluster(plan)
-    plan.settlement_form = "linear"
-    s = Settlement(1400, 1400, seed=3)
-    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=True)
-    s.field_polys.append(list(plan.envelope))
-    cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
-    s.M["lanes"] = [{"pts": [[cx_ - 620, cy_], [cx_ + 620, cy_]], "w": 6, "connector": True}]
-    stage_homesteads(s, plan)
-    assert len(s.M["houses"]) == 10
+        if form == "nucleated":
+            assert len(s.M["houses"]) == 10, "nucleated: every household seated"
+        else:
+            assert s.M.get("row_street_plans"), "the row planned its streets"
+            assert s.M["meta"]["seat_search"].get("rounds", 0) == 0, "no rank round ran"
+            assert len(s.M["houses"]) >= 8
 
 
 def test_nearer_own_house_with_no_other_houses_is_unambiguously_its_owners() -> None:

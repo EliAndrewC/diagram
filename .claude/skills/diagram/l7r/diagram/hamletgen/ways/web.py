@@ -13,7 +13,6 @@ from ..cluster import _arm_crossing_accidental
 from ..consts import (
     BUNDLE_PITCH,
     CLUSTER_SPAN_FACTOR,
-    FOOTPATH_FABRIC_GAP,
     LANE_CLEARANCE,
     MIN_WEB_GAP,
     WEB_FABRIC_GAP,
@@ -26,13 +25,13 @@ from ..plan import SitePlan
 from .bund import a_way_onto_the_bund, cut_past_the_junction, run_lanes_on_to_the_bund, worked_ground_of
 from .checks import drawn_water_segs
 from .clearance import clear_runs, clip_to_clear
-from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _draw_web, _homestead_polys, _margin_frame, _net_segs, _pass, _pull_back_to_service
+from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _homestead_polys, _margin_frame, _net_segs, _pass, _pull_back_to_service
 from .geom import _components, _trim_to_service, polyline_len, steading_footprints
 from .joints import center_lane_ends, fold_the_connector_hairpin, meet_end_to_end, split_at_crossings, straighten_joints
 from .route import _route
 from .serve import _lay_web_lane, _serve_stragglers, lay_door_paths
-from .street import lay_row_streets
 from .smooth import _STUB_REACH_FT, _smooth_web
+from .street import lay_row_streets
 from .sweeps import (
     _bridge_collinear_breaks,
     _drop_end_nubs,

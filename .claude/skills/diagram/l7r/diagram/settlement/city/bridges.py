@@ -315,7 +315,9 @@ class BridgesMixin:
         # lay on the beds.
         # Each by its recorded box, which is what `features_do_not_overlap` reads (a garden's box stood 0.75 ft wider than its
         # bed outline, and the plank that cleared the outline met the box), a foot wider all round.
-        ground_quads = [_deck_quad(g["x"], g["y"], g["w"] + 2.0, g["h"] + 2.0, g.get("rot", 0)) for key in ("gardens", "groves") for g in self.M.get(key, []) if all(k in g for k in ("x", "y", "w", "h"))]
+        ground_quads = [
+            _deck_quad(g["x"], g["y"], g["w"] + 2.0, g["h"] + 2.0, g.get("rot", 0)) for key in ("gardens", "groves") for g in self.M.get(key, []) if all(k in g for k in ("x", "y", "w", "h"))
+        ]
         DEFAULT_W = {"streams": 9.0, "channels": 2.5, "field_ditches": 4.2}
         # ...including the OTHER FIELD DITCHES, which is where the confluences actually are: a comb's
         # branch takes off from a main, and the plank the branch wants at its own head sits over the

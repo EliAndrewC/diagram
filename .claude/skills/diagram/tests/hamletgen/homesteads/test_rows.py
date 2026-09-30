@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-
 import pytest
 from shapely.geometry import Point
 
@@ -84,7 +83,13 @@ def test_largest_ring_takes_a_multipolygon_s_biggest_part() -> None:
 
 
 def _row_map(**over) -> dict:  # type: ignore[no-untyped-def]
-    house = {"x": 100.0, "y": 60.0, "w": 46.0, "h": 28.0, "geom": {"bbox": (100.0, 60.0, 200.0, 120.0), "groves": [(0, 0, 1, 1)], "grove_faces": [((0, -1), "deep")], "yard": (100.0, 90.0, 40.0, 20.0)}}
+    house = {
+        "x": 100.0,
+        "y": 60.0,
+        "w": 46.0,
+        "h": 28.0,
+        "geom": {"bbox": (100.0, 60.0, 200.0, 120.0), "groves": [(0, 0, 1, 1)], "grove_faces": [((0, -1), "deep")], "yard": (100.0, 90.0, 40.0, 20.0)},
+    }
     M = {
         "meta": {"settlement_form": "linear", "row_water": "own"},
         "row_street_plans": [[[0.0, 0.0], [1000.0, 0.0]]],
@@ -102,6 +107,7 @@ def _row_map(**over) -> dict:  # type: ignore[no-untyped-def]
 def test_row_rules_hold_on_a_good_row_and_name_each_break() -> None:
     assert row_rules(_row_map()) == []
     assert row_rules({"meta": {"settlement_form": "nucleated"}}) == []
+    assert row_rules({"meta": {"settlement_form": "linear"}, "houses": [{}]}) == [("no_row_street", 1)], "a linear map in no row fails"
     far = _row_map(houses=[{**_row_map()["houses"][0], "y": 400.0}])
     assert ("farm_off_its_street", (100.0, 400.0)) in row_rules(far)
     assert ("street_not_drawn", 0) in row_rules(_row_map(lanes=[]))

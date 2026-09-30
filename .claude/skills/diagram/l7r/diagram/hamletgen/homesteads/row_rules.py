@@ -66,11 +66,14 @@ def continuous(pieces: Sequence[Sequence[Sequence[float]]], tol: float = 1.5) ->
 
 
 def row_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
-    """Each (rule, subject) a linear map breaks; [] for another form or a map with no planned streets."""
+    """Each (rule, subject) a linear map breaks; [] for another form. A linear map with no seated street breaks the first
+    rule of all - its farms stand in no row (plan D15)."""
     meta = M.get("meta") or {}
     plans = M.get("row_street_plans") or []
-    if meta.get("settlement_form") != "linear" or not plans:
+    if meta.get("settlement_form") != "linear":
         return []
+    if not plans:
+        return [("no_row_street", len(M.get("houses") or []))]
     out: list[tuple[str, Any]] = []
     streets = [_segs(p) for p in plans]
     houses = list(M.get("houses") or [])

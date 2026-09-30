@@ -692,7 +692,7 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     ]
     fixed, emptied = 0, []
     for i, ln in enumerate(lanes):
-        if (ln.get("connector") or ln.get("street")):
+        if ln.get("connector") or ln.get("street"):
             continue
         pts = [(float(x), float(y)) for x, y in (ln.get("pts") or [])]
         if len(pts) < 2:

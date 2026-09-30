@@ -390,10 +390,17 @@ def _serve_stragglers(
                 door = next(
                     (
                         q
-                        for q in [*([_front] if _front is not None else []), *sorted(
-                            ((c[0] + math.cos(math.tau * k / 16) * (step + out), c[1] + math.sin(math.tau * k / 16) * (step + out)) for out in (0.0, 12.0, 24.0, 40.0, 60.0, 85.0) for k in range(16)),
-                            key=lambda q: (math.dist(q, c), -((q[0] - c[0]) * dx + (q[1] - c[1]) * dy)),
-                        )]
+                        for q in [
+                            *([_front] if _front is not None else []),
+                            *sorted(
+                                (
+                                    (c[0] + math.cos(math.tau * k / 16) * (step + out), c[1] + math.sin(math.tau * k / 16) * (step + out))
+                                    for out in (0.0, 12.0, 24.0, 40.0, 60.0, 85.0)
+                                    for k in range(16)
+                                ),
+                                key=lambda q: (math.dist(q, c), -((q[0] - c[0]) * dx + (q[1] - c[1]) * dy)),
+                            ),
+                        ]
                         # A POINT, NOT A LINK (feature 145): `_clear_link(q, q, ...)` returns True for any span
                         # under 1 px, so the standing place was never tested at all - cohort seed 41's footpath
                         # began 1.3 px from the drain brook. The same index the router uses judges the point.
