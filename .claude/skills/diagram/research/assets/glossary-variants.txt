@@ -2909,6 +2909,10 @@ spillways	spillway
 spiraea	Spiraea
 spirit wall	screen wall
 spirit walls	screen wall
+splayed brick walls	splayed walls
+splayed gate walls	splayed walls
+splayed wall	splayed walls
+splayed walls	splayed walls
 spoil bank	spoil bank
 spoil banks	spoil bank
 spot fire	spotting
@@ -3550,6 +3554,7 @@ yanagita kunio	Yanagita Kunio
 yangtze delta	Lower Yangzi
 yangtze-delta	Lower Yangzi
 yanushi	yamori
+yarai	yarai
 yashiki	yashiki
 yashikichi	yashikichi
 yashikigami	yashikigami
