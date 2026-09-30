@@ -1138,6 +1138,10 @@ apply-edits: ## [project] apply a quote-check or record-format report's EDIT and
 effort-init: ## [project] feature 293: record what every run of the effort experiment shares, once   START=<sha> SEED=<n> OFFSET=<GB> SOURCES_HOME=<dir> SNAPSHOT=<dir>
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_run.py init --start "$(START)" --seed "$(SEED)" --offset "$(OFFSET)" --sources-home "$(SOURCES_HOME)" --snapshot "$(SNAPSHOT)"
 
+# GUARD_EDIT_OK: feature 293 adds an operation - effort-refreeze, a replaced task frozen at its own start; nothing a guard decides changes.
+effort-refreeze: ## [project] feature 293: freeze a task the GM replaced at its own start commit, the other task untouched   TASK=R|I START=<sha>
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_run.py refreeze-task --task "$(TASK)" --start "$(START)"
+
 effort-run: ## [project] feature 293: launch ONE run, detached, in its own clone - refused while another run is live or memory is short   TASK=R|I RUN=<id> ARM=medium|xhigh ORDER=<n>
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_run.py run --task "$(TASK)" --run "$(RUN)" --arm "$(ARM)" --order "$(ORDER)"
 

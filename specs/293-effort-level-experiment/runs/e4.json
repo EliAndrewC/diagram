@@ -70,6 +70,6 @@
   "--output-format",
   "json"
  ],
- "status": "valid",
- "void_reason": ""
+ "status": "void",
+ "void_reason": "voided by the session: task I's premise was gone at START (feature 280 M68 removed the hamlet's own burial ground); the GM replaced task I on 2026-09-30 - e4 is kept as a data point (it found the stale premise, corrected the docs, gated green) and is not graded"
 }

@@ -15,6 +15,8 @@ The GM's answers to the session's questions, 2026-09-29, verbatim:
   2026-09-28, OWED: no way reaches a burial ground, at any size of settlement").
 - Replication: "Pilot: 1 per arm per task".
 - Arms: "medium vs xhigh to start with, and we can test more if there is a big difference between medium and xhigh"
+- Amendment, 2026-09-30 (task I's first run found its premise gone: feature 280 M68 had removed the hamlet's own burial ground). Asked
+  "How should the experiment continue?": "Replace the task (Recommended)"; asked "If replacing, which hamlet task?": "Storehouse by house size".
 - Amendment, 2026-09-29: "Please change the plan so that you will instead run these tests sequentially rather than in parallel for memory reasons. Because I don't want too many things running to be a problem for the container. do not actually begin the implementation, just update the spec kit spec to account for this. Thanks."
 
 The handoff the GM pointed at, copied verbatim (written 2026-09-29 by a session outside the containers):

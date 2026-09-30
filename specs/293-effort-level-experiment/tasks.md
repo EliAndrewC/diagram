@@ -50,6 +50,10 @@ the freeze (Phase 3), the freeze before the first run, the runs one at a time.
 
 ## Phase 4 - the runs (one at a time, each measured before the next)
 
+Run ids as made (interventions.md): e1 void (the launcher leaked make's variables); T12 = e2 (R, xhigh), T13 = e3 (R, medium); e4 ran
+task I's first pick, found its premise gone (280 M68) and is set aside; the GM replaced task I (2026-09-30), so T14 = e5 (I, medium) and
+T15 = e6 (I, xhigh), both from task I's re-frozen start.
+
 - [ ] T12 [US2] Run 1 (`e1`): `make effort-run` in the drawn order, under the headroom check (R5 D7); nothing else of the experiment while it is live; on its completion notification `make effort-measure RUN=e1`
       research: rendering
       verify: `runs/e1.json` complete, `measurements/e1.json` written, status valid (or void and re-run as the next id, logged)
@@ -85,7 +89,7 @@ the freeze (Phase 3), the freeze before the first run, the runs one at a time.
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
       verify: the run's own check verdicts re-read for the landed entry; `make record` clean; `entry-drift` on any modal the entry feeds
-- [ ] T20 [US4] Land task I's winner if it meets its pass line: merged onto current main (287's changes included), `make done` and the moved maps' `settlement-review`s there, the merge work recorded apart, defects found added to the report's later-defects section; the future-work item closed
+- [ ] T20 [US4] Land task I's winner if it meets its pass line: merged onto current main, `make done` and the moved maps' `settlement-review`s there, the merge work recorded apart, defects found added to the report's later-defects section; the future-work item closed
       research: physical
       - [ ] research pass
       - [ ] source-reader confirmed

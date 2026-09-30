@@ -202,14 +202,15 @@ def launch(args: argparse.Namespace, repo: pathlib.Path, now: float) -> dict:
     if clone.exists():
         raise Refused(f"{clone} exists - a run id is used once")
     subprocess.run(["git", "clone", "-q", args.origin or str(repo), str(clone)], check=True)
-    subprocess.run(["git", "-C", str(clone), "reset", "-q", "--hard", exp["start_commit"]], check=True)
+    start = start_of(exp, args.task)
+    subprocess.run(["git", "-C", str(clone), "reset", "-q", "--hard", start], check=True)
     work = base / ".runs-293" / run_id  # a neutral name: the sources path is in the run's environment
     sources = work / "sources"
     shutil.copytree(exp["sources_snapshot"], sources)
     env = run_env(dict(os.environ), sources)
     projects = pathlib.Path.home() / ".claude" / "projects" / mangled(clone)
     record = {"run_id": run_id, "task": args.task, "arm": arm, "seed": exp["seed"], "order": args.order,
-              "start_commit": exp["start_commit"], "clone": str(clone), "started": iso(now), "ended": None,
+              "start_commit": start, "clone": str(clone), "started": iso(now), "ended": None,
               "pauses": [], "memory_at_launch": reading, "agents_json_sha256": sha256(agents_json()),
               "env": {"L7R_SOURCES_HOME": str(sources), "CLAUDE_CODE_EFFORT_LEVEL": "unset", "SPECIFY_FEATURE": "unset"},
               "shared_state": {"sources_snapshot_sha256": exp["sources_snapshot_sha256"], **claims_at_start(args.claims)},
@@ -270,6 +271,32 @@ def iso(t: float) -> str:
     return dt.datetime.fromtimestamp(t, dt.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def start_of(exp: dict, task: str) -> str:
+    """The commit a task's runs start from: its own after a re-freeze (a task the GM replaced), else the experiment's."""
+    return exp.get("starts", {}).get(task) or exp["start_commit"]
+
+
+TASK_FILES = {"R": ("rubrics/research.md", *PROMPTS["R"]), "I": ("rubrics/implementation.md", *PROMPTS["I"])}
+
+
+def refreeze_task(repo: pathlib.Path, task: str, start: str, now: float) -> dict:
+    """Spec edge case (a task found impossible after the freeze, replaced after asking the GM): the task's prompt and rubric
+    are frozen again at a new start commit, which BOTH its arms start from; every other task's record is untouched."""
+    feature_dir = repo / "specs" / FEATURE
+    target = feature_dir / "experiment.json"
+    exp = json.loads(target.read_text())
+    runs = [json.loads(p.read_text()) for p in (feature_dir / "runs").glob("*.json")] if (feature_dir / "runs").is_dir() else []
+    if any(r["task"] == task and r.get("status") == "valid" for r in runs):
+        raise Refused(f"task {task} has a valid run - void or replace it before re-freezing")
+    hashes = frozen_hashes(feature_dir)
+    for f in TASK_FILES[task]:
+        exp["hashes"][f] = hashes[f]
+    exp.setdefault("starts", {})[task] = start
+    exp.setdefault("refrozen", []).append({"task": task, "start": start, "at": iso(now)})
+    target.write_text(json.dumps(exp, indent=1) + "\n", encoding="utf-8")
+    return exp
+
+
 def init(args: argparse.Namespace, repo: pathlib.Path, now: float) -> dict:
     """Pre-flight (T09-T11): record what every run shares. Refuses to overwrite an experiment already recorded."""
     feature_dir = repo / "specs" / FEATURE
@@ -302,6 +329,9 @@ def main(argv: list[str]) -> int:
     i.add_argument("--offset", type=float, required=True)
     i.add_argument("--sources-home", required=True)
     i.add_argument("--snapshot", required=True)
+    f = sub.add_parser("refreeze-task")
+    f.add_argument("--task", required=True, choices=TASKS)
+    f.add_argument("--start", required=True)
     r = sub.add_parser("run")
     r.add_argument("--task", required=True, choices=TASKS)
     r.add_argument("--run", required=True)
@@ -319,7 +349,10 @@ def main(argv: list[str]) -> int:
     repo = pathlib.Path(subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True,
                                        check=True).stdout.strip())
     try:
-        if args.cmd == "init":
+        if args.cmd == "refreeze-task":
+            exp = refreeze_task(repo, args.task, args.start, time.time())
+            print(f"effort-run: task {args.task} re-frozen at {exp['starts'][args.task][:10]}")
+        elif args.cmd == "init":
             exp = init(args, repo, time.time())
             print(f"effort-run: experiment recorded - start {exp['start_commit'][:10]}, order {exp['order']}")
         else:

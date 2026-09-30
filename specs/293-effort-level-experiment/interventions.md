@@ -30,3 +30,4 @@ given, identically, to the other.
 - 2026-09-30T02:32:22Z | e4 | memwatch | warning at 02:31 UTC during the run (8.1 GB raw); the run continues
 - 2026-09-30T02:35:06Z | e4 | memwatch | warning at 02:34 UTC during the run (8.0 GB raw); the run continues
 - 2026-09-30T02:47:16Z | e4 | memwatch | warning at 02:46 UTC during the run (8.3 GB raw); the run continues
+- 2026-09-30T03:43:12Z | e4 | replaced | task I's premise gone at START (280 M68); pre-flight R8 checked the future-work entry, not the engine - the check now confirms the defect on the code; the GM replaced task I with 'Storehouse by house size' (request.md); e4 set aside, not graded; task I re-frozen at its own start; runs e5 I/medium, e6 I/xhigh

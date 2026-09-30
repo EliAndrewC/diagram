@@ -308,3 +308,25 @@ def test_with_the_shared_figure_the_gate_reads_it_and_a_raw_warning_does_not_blo
     assert "4.6 GB (shared-slice)" in why
     why, reading = er.refusal(exp, world["fdir"], "I", cg, world["events"], time.time())
     assert "memwatch warning" in why and reading["source"] == "container+offset", "without the host: the old rule"
+
+
+def test_a_replaced_task_is_refrozen_at_its_own_start_and_the_other_task_keeps_its_own(world: dict, monkeypatch: pytest.MonkeyPatch,
+                                                                                      capsys: pytest.CaptureFixture[str]) -> None:
+    exp = _init(world)
+    (world["fdir"] / "prompts" / "I.md").write_text("# a replaced task\n")
+    (world["fdir"] / "rubrics" / "implementation.md").write_text("# its rubric\n")
+    _git("-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qam", "task I replaced", cwd=world["origin"])
+    new = _git("rev-parse", "HEAD", cwd=world["origin"])
+    (world["fdir"] / "runs").mkdir()
+    (world["fdir"] / "runs" / "e4.json").write_text(json.dumps({"task": "I", "status": "valid", "ended": "x"}))
+    with pytest.raises(er.Refused, match="has a valid run"):
+        er.refreeze_task(world["origin"], "I", new, 0.0)
+    (world["fdir"] / "runs" / "e4.json").write_text(json.dumps({"task": "I", "status": "void", "ended": "x"}))
+    monkeypatch.chdir(world["origin"])
+    assert er.main(["refreeze-task", "--task", "I", "--start", new]) == 0 and "re-frozen" in capsys.readouterr().out
+    after = json.loads((world["fdir"] / "experiment.json").read_text())
+    assert er.start_of(after, "I") == new and er.start_of(after, "R") == exp["start_commit"]
+    assert after["hashes"]["prompts/R-write.md"] == exp["hashes"]["prompts/R-write.md"]
+    assert after["hashes"]["prompts/I.md"] != exp["hashes"]["prompts/I.md"]
+    rec = er.launch(_run_args(world, "I", run="e5", arm="medium"), world["origin"], time.time())
+    assert rec["start_commit"] == new and _git("rev-parse", "HEAD", cwd=pathlib.Path(rec["clone"])) == new

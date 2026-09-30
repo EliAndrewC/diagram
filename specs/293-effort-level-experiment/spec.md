@@ -20,9 +20,11 @@ on two real, wanted tasks:
 - **Research (R)**: the Ubame servants' quarters - was a servants' nagaya one dormitory behind sliding partitions, or did
   each household have a door of its own? (`future-work/compounds.md`, "Ubame: the servants' quarters have one door for four
   bays").
-- **Implementation (I)**: a footpath to the hamlet's own burial ground (`future-work/farming-communities.md`, "OPEN
-  2026-09-28, OWED: no way reaches a burial ground, at any size of settlement"), hamlets only - the GM ruled out every
-  settlement type not yet scripted.
+- **Implementation (I)**: the storehouse annex goes to the larger houses first (`future-work/farming-communities.md`, "Found by
+  feature 280's settlement-reviews": the annex is rolled per house by position, not by size, against homesteads/720), scripted
+  hamlets only - the GM ruled out every settlement type not yet scripted. (The GM's first pick, a footpath to the hamlet's own
+  burial ground, was found impossible by its first run: feature 280 M68 had removed the hamlet's own ground the day after the
+  future-work entry was written. The GM replaced it, 2026-09-30.)
 
 Each run is a separate top-level headless session at its arm's effort, in its own clone, from one starting commit, given
 a byte-identical prompt. The runs are measured (tokens including subagents, wall-clock, tool calls, rework), their
@@ -122,7 +124,7 @@ and is opened only after both grades are recorded.
 
 ### User Story 4 - The better output lands; the other is discarded (Priority: P2)
 
-The experiment's work is real work: the winning research entry and the winning footpath land on main by the project's own procedure.
+The experiment's work is real work: the winning research entry and the winning implementation land on main by the project's own procedure.
 
 **Why this priority**: the handoff asks that the tasks be genuinely wanted so the experiment is not waste; landing is how that value is
 kept.
@@ -136,10 +138,10 @@ each task closes are closed.
 1. **Given** the research winner, **When** it lands, **Then** its entry has passed the checks every research entry passes (source-reader,
    quote-check, record-format, source-applicability), and the Ubame sheet itself is NOT edited by this feature (the entry says what the
    record found; changing the sheet is a follow-up left in `future-work/compounds.md`).
-2. **Given** the implementation winner, **When** it lands, **Then** every scripted hamlet that rolls its own burial ground draws a footpath
-   that reaches the ground's edge, the tests say so, the moved maps are regenerated and reviewed as the project reviews a moved map, and the
+2. **Given** the implementation winner, **When** it lands, **Then** on every scripted hamlet the houses that carry the storehouse annex are
+   the largest ones, at the share the record supports, the tests say so, the moved maps are regenerated and reviewed as the project reviews a moved map, and the
    gate is green.
-3. **Given** main has moved since the starting commit (feature 287 touches `burial.py` and the lane predicates), **When** the implementation
+3. **Given** main has moved since the starting commit (other features touch the hamlet generator), **When** the implementation
    winner lands, **Then** it is merged onto current main by the session that lands it, and the post-merge result, not the run's, is what the
    gate passes; the extra work of that merge is recorded in the report and not counted against either arm.
 4. **Given** neither output of a task meets its rubric's pass line, **When** grading ends, **Then** neither lands, the report says so, and the
@@ -169,8 +171,11 @@ says how to add an arm (`high`) or a second run per cell.
 - **A run fails outright** (does not finish, cannot pass its checks, exhausts a budget). It is scored as it stands - failure is data - and its
   counts stand in the table. It is re-run only if the failure was the environment (exit 137, a host outage, a network loss), which is recorded.
 - **Both outputs are equally good.** The rule below decides on cost; a tie in quality is a legitimate result.
-- **The task turns out already done or impossible at the starting commit** (e.g. feature 287 lands a burial-ground way first). Found before the
-  first run by the pre-flight check; the task is replaced after asking the GM, and the rubric is rewritten before any run.
+- **The task turns out already done or impossible at the starting commit** (e.g. another feature removes what the task
+  changes - as feature 280 M68 did to task I's first pick). Found by the pre-flight check, which confirms on the code or the maps that the
+  defect exists, not only that its future-work entry is open; the task is replaced after asking the GM, and its prompt and rubric are
+  rewritten and frozen again at a new start commit - which BOTH its arms start from - before its next run. A run of the replaced task stays in
+  the record, set aside, and is not graded.
 - **The prompt names its arm by accident** (e.g. a clone path containing "xhigh"). The clone names and session names use neutral run ids; the arm
   is recorded only in the run log.
 - **Usage-limit exhaustion mid-run.** The run is paused, not voided; its wall-clock excludes the pause, which is logged.
@@ -185,8 +190,8 @@ says how to add an arm (`high`) or a second run per cell.
 - **FR-001 Arms and runs**: the pilot is four runs - task R and task I, each at `medium` and at `xhigh` - with Opus 5.5 (`claude-opus-5-5`) as the
   model in every run. Adding `high`, or a second run per cell, is the expansion the decision rule may call for, not part of this pilot.
 - **FR-002 Tasks**: task R is the Ubame servants' quarters question written as one research question on the record (at most one new question plus
-  the registry keys it needs, within the page-session write cap), carried through its check-and-apply session. Task I is the burial-ground footpath
-  in the hamlet generator, carried to a green local `make done` with the moved maps regenerated. Each run stops short of landing: it commits in its
+  the registry keys it needs, within the page-session write cap), carried through its check-and-apply session. Task I is the storehouse annex ranked
+  by size in the hamlet generator, carried to a green local `make done` with the moved maps regenerated. Each run stops short of landing: it commits in its
   own clone and does not push.
 - **FR-003 Launch**: each run is a top-level headless session started by one command that takes the task, the arm and the seed, creates a fresh clone
   from the recorded starting commit under a neutral run id, sets the effort level for the whole session at launch, and logs the command line. Every
@@ -209,8 +214,8 @@ says how to add an arm (`high`) or a second run per cell.
 - **FR-008 Rubrics before runs**: one rubric per task, each with scored criteria and a stated pass line, committed before the first run starts and not
   edited afterwards. The research rubric scores at least: the answer to the question and whether the sources read support it; the breadth of the search
   (languages, kinds of source) and whether an absence is stated as one; citation correctness as the checks judge it; and clarity for the casual reader.
-  The implementation rubric scores at least: the acceptance criteria met (every hamlet with its own ground has a path that reaches it; the path is a
-  footpath's width; no new failure elsewhere); the regression and gate results; the review findings on the moved maps; the size and shape of the diff;
+  The implementation rubric scores at least: the acceptance criteria met (on every scripted hamlet the annex sits on the largest
+  houses, at the record's share; no new failure elsewhere); the regression and gate results; the review findings on the moved maps; the size and shape of the diff;
   and the decisions recorded in the four classes. Defects found in the implementation winner AFTER grading - at the landing merge, the post-merge
   gate, the moved-map reviews, and any later review before the report closes - are recorded in the report as their own section, not re-scored.
 - **FR-009 Blinding**: a step the grader does not read strips arm-identifying text from each output, labels the two outputs of a task A and B in a random
@@ -260,8 +265,8 @@ says how to add an arm (`high`) or a second run per cell.
 
 ## Decisions Recorded
 
-This feature is an experiment on process; it decides nothing about what a map draws. The rendering decisions of task I's footpath (its width, where it
-meets the ground, what the path is called on the page) and task R's findings are made and recorded by the winning run in its own work, in the four classes, as
+This feature is an experiment on process; it decides nothing about what a map draws. The rendering decisions of task I (how the houses are ranked, the tie
+rule, the share) and task R's findings are made and recorded by the winning run in its own work, in the four classes, as
 every change to a map is; the report links them.
 
 | Decision | Class | Why | Recorded at |
@@ -280,15 +285,15 @@ every change to a map is; the report links them.
 - The defined check agents already pin their own model and effort (twelve agent files: eight at `high`, four at `medium` today), so the checker control
   holds for them without change.
 - The runs are billed to the GM's subscription; the pilot's cost is roughly four sessions of 30-60 minutes plus grading, which the GM accepted by choosing the pilot.
-- Feature 287 is open and touches `burial.py` and the lane predicates; the implementation runs start from a fixed commit regardless, and the landing merges
-  onto whatever main is then (US4 AS3).
+- Other features may touch the hamlet generator while the runs are made; the implementation runs start from a fixed commit regardless, and the
+  landing merges onto whatever main is then (US4 AS3).
 - The runs are the implementing session's to launch; writing this spec, the plan and the tasks does not run them.
 
 ## Out of scope
 
 - A `high` arm, a second run per cell, other models, other task types - the expansion, proposed to the GM when the rule calls for it.
 - Changing the Ubame sheet from task R's finding.
-- The burial ground's way at any tier above the hamlet.
+- The storehouse annex at any tier above the hamlet.
 - Applying the recommended setting; the GM does that.
 
 ## Review history
@@ -306,3 +311,6 @@ every change to a map is; the report links them.
   `memory.current`, page cache included - now the working set); round 2 CHANGES REQUIRED (a quiet-host memwatch figure is never published
   - now an offset measured at a warning); round 3 FAITHFUL. Its two asides applied after: the offset re-derived with the gate's own
   subtraction (`inactive_file`, 0.9 GB - looser than the 1.5 GB it replaces, which had subtracted all page cache where the gate subtracts only the inactive part), and a leftover sentence reworded.
+- Amendment, 2026-09-30 (the GM, on task I's premise found gone): "Replace the task (Recommended)" and "Storehouse by house size". Task
+  I becomes the storehouse annex ranked by size; its prompt and rubric are rewritten and re-frozen at their own start; the edge case now
+  says the pre-flight confirms the defect on the code or the maps. The review counter resets.
