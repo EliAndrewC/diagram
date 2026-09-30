@@ -18,7 +18,7 @@ from .._knobs import CITY_TIER_SCALES
 if TYPE_CHECKING:
     from ..core import Settlement
 
-# THE ROOFED FIRE BED IS THE MINORITY (feature 280 M70, research/religion-and-death/202): most cremation grounds were
+# THE ROOFED FIRE BED IS THE MINORITY (feature 280 M70, research/religion-and-death/530 'Cremation grounds and bone mounds (kasoba)'): most cremation grounds were
 # open-air to the end of Edo, the four-post roofed bed and the snow-country hut coming in around mid-Edo. How many were
 # roofed no page says - a GUESS, rolled off the ground's own seat.
 ROOFED_SHARE = 0.25
@@ -202,13 +202,13 @@ class FuneraryGroundsMixin:
         A cleared, scorched ground with its fire bed - a stone-framed trench on the leveled ground, open to the sky on most
         grounds and under a roof on four posts on a few (`roofed`). Records M['cremation_grounds']; blocks placement.
 
-        THE FORMS BEFORE MODERN TIMES (feature 280 M70, research/religion-and-death/202): the open pyre, the stone-framed
+        THE FORMS BEFORE MODERN TIMES (feature 280 M70, research/religion-and-death/530 'Cremation grounds and bone mounds (kasoba)'): the open pyre, the stone-framed
         trench beside a burial ground, and the four-post roofed bed and the snow-country hut dated to around mid-Edo - with
         most grounds open-air to the end of Edo. So the roof is the minority (`ROOFED_SHARE`, a GUESS), and no raised stone
         pyre platform or officiants' hut is drawn: neither is attested. A roof stands on four posts a few feet out from the
         bed, about 11 ft square. SIX JIZO (`jizo`) stand at a BURIAL ground's entrance (feature 280 M71, 700): a caller
         passes them only for a cremation ground beside a burial ground; one standing on its own has none."""
-        # TO SCALE (GM 2026-07-19; anchors in research/religion-and-death.html, the funerary-size entry): a sanmai's cleared working core is
+        # TO SCALE (GM 2026-07-19; anchors in research/rendering/religion-and-death.html 'How our maps draw cremation grounds and bone mounds'): a sanmai's cleared working core is
         # 30-80 real ft for a village/town (a GUESS: the only sizes are 1922 and later - 202), ~80-160 ft for a provincial
         # city (Edo's Yoyogi crematory, 900 tsubo, ~180 ft square, the one premodern extent); the fire bed ~12x8 ft. The old
         # glyph was FIXED-PIXEL (116x80px) and silently tripled at city scale.

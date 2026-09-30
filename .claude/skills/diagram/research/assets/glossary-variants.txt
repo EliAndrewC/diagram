@@ -1043,7 +1043,6 @@ geomantic	geomancy
 geostrophic	geostrophic
 geshunin	geshunin
 geta	geta
-ghat	ghat
 ginmisho	ginmisho
 girder	girder
 girders	girder

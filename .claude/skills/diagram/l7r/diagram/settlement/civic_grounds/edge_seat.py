@@ -7,8 +7,8 @@ set-backs from water once drawn are attested in no period), as near the houses a
 seats, nearest the fall line - a drawing order among seats that clear, not a custom (the downstream side is attested in
 today's villages only, research/religion-and-death/160). The machinery is shared so the two cannot drift
 (the tiers' rule: MOVE, never copy). Research: research/religion-and-death.html "Where a village buries its dead: its own ground, the temple yard, the fields or the home plot",
-"Does a village burn its own dead, and where is its cremation ground?", "Village burial grounds (bochi)"; the map's rules at
-research/rendering/religion-and-death.html "How our maps draw village burial grounds".
+"Cremation grounds and bone mounds (kasoba)", "Village burial grounds (bochi)"; the map's rules at
+research/rendering/religion-and-death.html "How our maps draw village burial grounds (bochi)", "How our maps draw cremation grounds and bone mounds".
 
 NEAREST FIRST, NOT FALL LINE FIRST. A scan that followed the fall line out to its reach before turning put a hamlet's
 ground across its paddies from its houses, 700 ft off, where a side bearing had room 200 ft away (found by the

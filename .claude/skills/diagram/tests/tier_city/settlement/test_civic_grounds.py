@@ -200,7 +200,7 @@ def test_a_cremation_ground_draws_its_six_jizo_only_when_asked() -> None:
 
 
 def test_a_cremation_ground_is_open_air_on_most_seats_and_draws_no_pyre_platform_or_hut() -> None:
-    """Feature 280 M70 (research 202): most grounds were open-air to the end of Edo, a roof on four posts over the bed the
+    """Feature 280 M70 (research/religion-and-death/530 'Cremation grounds and bone mounds (kasoba)'): most grounds were open-air to the end of Edo, a roof on four posts over the bed the
     minority; no raised pyre platform or officiants' hut is attested, so neither is drawn."""
     from l7r.diagram.settlement.civic_grounds.funerary import ROOFED_SHARE
 
