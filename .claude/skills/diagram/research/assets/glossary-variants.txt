@@ -2725,6 +2725,7 @@ sexagenary year	sexagenary year
 seyakuin	seyakuin
 shacho-sen'yokata	shacho-sen'yokata
 shadoof	jiegao
+shaduf	jiegao
 shahi	shahi
 shaka	Shaka Nyorai
 shaka nyorai	Shaka Nyorai
