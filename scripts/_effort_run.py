@@ -292,7 +292,7 @@ def resume(repo: pathlib.Path, run_id: str, now: float, kill: bool = True) -> di
         raise Refused("only a task I session is resumed this way; a page session is resumed by its runner")
     sess = run["sessions"][0]
     if kill:
-        for pid in subprocess.run(["pgrep", "-f", "--", f"--session-id {sess['sid']}"], capture_output=True, text=True).stdout.split():
+        for pid in subprocess.run(["pgrep", "-f", "--", f"(--session-id|--resume) {sess['sid']}"], capture_output=True, text=True).stdout.split():
             subprocess.run(["kill", pid], check=False)
     clone = pathlib.Path(run["clone"])
     appended_file = clone / APPEND_PROMPT

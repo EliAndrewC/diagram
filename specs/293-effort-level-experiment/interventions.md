@@ -51,3 +51,4 @@ given, identically, to the other.
 - 2026-09-30T07:22:48Z | e5 | memwatch | warning at 07:21 UTC during the run (8.6 GB raw); the run continues
 - 2026-09-30T07:24:52Z | e5 | memwatch | warning at 07:24 UTC during the run (8.1 GB raw); the run continues
 - 2026-09-30T09:14:43Z | e5 | resume | second stall: at 07:29 the session dispatched five settlement-reviews and a perf-audit in the background and ended its turn; all six finished by 07:35 and the headless session was never woken for them (idle ~1.7 h). Resumed with the same fixed message; the wait a pause.
+- 2026-09-30T09:14:53Z | e5 | resume | the first resumed process (pid 1832975, idle since 07:35) stopped by hand - resume's pgrep matched '--session-id' only; it now matches '--resume' too
