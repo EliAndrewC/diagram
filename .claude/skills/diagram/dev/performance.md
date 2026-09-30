@@ -513,8 +513,19 @@ cost of a roll and of a gate (the full record: `specs/287-placer-guarantees/rese
   seat and up to 28% taller - a change of form, not of speed, and not taken (observed 2026-09-30, method: the reference
   spec's seating in the clone, the grid reordered, against the unmodified engine).
 - **The bookends**: `287-start` total 20.9 s, median 5.2 s, worst 5.8 s (observed 2026-09-29, method: `make perf
-  LABEL=287-start` before any engine change, load 1.3); the `287-end` comparison is the feature's T89, recorded in its
-  plan.
+  LABEL=287-start` before any engine change, load 1.3); `287-end` 25.7 s against origin/main's 24.0 s on the same host
+  (observed 2026-09-30, method: `make perf LABEL=287-end` at load 3.5 and two runs alternated with a worktree at
+  80af74aef - `reference-snapshot-main` in the spec's measurements.json). Against main the guarantees cost about +9.4 s
+  gross over the four seeds (homesteads, web, hinterland, field) and 287's exact speedups give back about 8.2 s (the
+  straggler route memo, seed 39's web -4.4 s; the board siting, notice -0.5 to -0.95 s on three seeds; the windbreak,
+  -1.1 s in all), a net +1.7 s (+7%). perf-audit: band 1 consistent, band 2 justified (2026-09-30); band 3 owes the GM.
+- **The seat pass's cheaper refusals first**: the wood check and the three sun rules are asked before the corridor search
+  in `_parts_fit` - they refuse 510 / 177 / 230 of the offers on seeds 4 / 25 / 47 for about 0.05 s, only refuse, and read
+  nothing the search writes, so every manifest stays byte-identical; the corridor searches on seed 4 fell 1,122 -> 612
+  and homesteads 6.03 -> 5.11 s over the four seeds (`refusals-before-corridor` in the spec's measurements.json).
+- **Measured and declined - the straggler footpaths dropped**: -3.0 s (-11.2%, all in the web), but every map's lanes
+  move (380 -> 347 lanes, -4.9% length) and it exposed a settle gap (cohort 14's doubled tail on the connector), now
+  closed by the settle's exit check; reverted as the GM's call (`straggler-footpaths-off`).
 
 ## Memory: the spike is C buffers, not Python objects, and it lands where nothing reads it (feature 208, 2026-09-07)
 

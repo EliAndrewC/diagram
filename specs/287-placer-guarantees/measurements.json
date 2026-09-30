@@ -10,5 +10,17 @@
   "unit": "s",
   "observed": "2026-09-30",
   "method": "the 287-end bookend at HEAD (load 3.48) and two alternated make perf LABEL=adhoc runs beside main: 25.7 s all three; per seed 6.8 / 6.9 / 5.3 / 6.7 s"
+ },
+ "straggler-footpaths-off": {
+  "value": -3.0,
+  "unit": "s",
+  "observed": "2026-09-30",
+  "method": "the reference snapshot (make perf LABEL=adhoc) alternated over detached worktrees, four valid rounds at load 3-5: HEAD 26.85 s mean, with `_serve_stragglers` returning at once 23.85 s mean (-11.2%, all in the web stage); every pool and cohort 1-20 map's lanes moved (380 -> 347 lanes, total length -4.9%) and cohort 14 then broke doubled_tails and needle_joins, the settle gap closed since; the change was reverted, not shipped"
+ },
+ "refusals-before-corridor": {
+  "value": -0.85,
+  "unit": "s",
+  "observed": "2026-09-30",
+  "method": "the reference snapshot alternated, four rounds: HEAD 26.85 s mean, with the wood check and the sun rules asked before the corridor search in _parts_fit 26.0 s mean (homesteads 6.03 -> 5.11 s); every manifest byte-identical incl. seat_search"
  }
 }
