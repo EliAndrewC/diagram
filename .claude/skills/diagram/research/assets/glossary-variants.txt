@@ -2181,6 +2181,7 @@ noborigama	noborigama
 nodame	nodame
 nogu benriron	Nogu benriron
 nogyo zensho	Nogyo Zensho
+noh	noh
 nokaji	nokaji
 nong shu	Nongshu
 nongshu	Nongshu

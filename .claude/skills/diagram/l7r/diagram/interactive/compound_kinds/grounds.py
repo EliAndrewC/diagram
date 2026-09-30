@@ -153,11 +153,11 @@ class PracticeGround(Kind):
     What: A patch of open earth in the outer court, marked by the gear that stands on it: the place where the
     compound's samurai keep up their daily practice.
 
-    Why: Formal martial training belonged to the towns. A domain taught the martial arts at its school, built
+    Why: Formal martial training was given at the domains' schools and at private halls. A domain taught the martial arts at its school, built
     in its own territory and in the castle town as a rule, and many domains attached a practice hall to it;
     the great enrolled halls grew in Edo, where the pupils were. Private halls, kept by masters at their own
     houses, did reach every part of the country, but late - they flourished at the end of the Edo period, with
-    townsmen and farmers training beside samurai - and before the mid-Edo period practice was mostly held
+    townsmen and farmers training beside samurai - and before the mid-Edo period practice was often held
     outdoors or on an earthen floor. So rural samurai most likely trained at home in an earthen yard, in a hall
     cleared for the purpose, or on shrine grounds. A county seat holds about fifteen samurai - no student body and no living for a teacher -
     so its magistracy trains on open ground in its own compound, and what marks that ground is the gear
@@ -167,7 +167,10 @@ class PracticeGround(Kind):
     Note: Courtyard keiko in place of a dojo follows the record only in part: the famous private fencing
     dojos read on stood in Edo, and practice before the mid-Edo period was held outdoors or on earthen floors. Private halls did reach every part of the country late in the period, so that a county seat keeps none is the map's own calibration, counted on its samurai alone though townsmen and farmers trained at them too.
     The one martial ground the pages read on an intendant's office name there is a riding ground, and the
-    drill ground read on stood at a small domain's jin'ya, so they confirm the practice ground. That domain
+    drill ground read on stood at a small domain's jin'ya - a different kind of seat, though the word jin'ya
+    covers both - so the practice ground rests on that analogy, and no page read describes rural practice or
+    its gear. Marking the ground by its gear is a map convention, and its 90 to 135 sq ft a samurai is a
+    guess no page read gives. That domain
     schools stood in castle towns and cities as a rule (the two read, Hagi's and Mito's, stood inside their
     castles), that rural samurai trained in yards, cleared halls or on shrine grounds, and that a Chinese
     county yamen had no training hall are guesses no page read confirms. That a
@@ -606,14 +609,14 @@ class StrikingPosts(Kind):
 
     Why: The swordsmanship of Satsuma trains by striking a standing timber from left and right with a shout, over
     and over, on a practice ground that can be open to the sky. In its main line the post is a log a little over
-    2 m long set about 70 cm into the ground, so that about 4.5 ft stands above it, struck from shoulder height
-    down to the stomach. A knee-high bundle of branches laid across is found only as a present-day practice and in
-    the 1940s, so it is not drawn. A county seat draws no dojo here, and what marks its open ground as a place of daily keiko is the
+    2 m long set about 70 cm into the ground, so that a little over 4 ft stands above it, struck from shoulder height
+    down to the stomach. A knee-high bundle of branches laid across is found only in the modern period, first dated
+    some time after 1946; what is said of it before then is undated hearsay, so it is not drawn. A county seat draws no dojo here, and what marks its open ground as a place of daily keiko is the
     gear that stands on it.
 
     Note: we have drawn the striking posts as small markers of where each stands rather than at their own size,
     in order to mark the open ground as a practice ground by its gear, the GM's convention for these plans; a
-    real upright post stood about 4.5 ft. The upright post is Satsuma practice, its school's founder of 1561-1643;
+    real upright post stood a little over 4 ft above the ground. The upright post is Satsuma practice, its school's founder of 1561-1643;
     carrying it to a practice ground outside that line is a guess, and so is the count.
 
     Name: striking posts
