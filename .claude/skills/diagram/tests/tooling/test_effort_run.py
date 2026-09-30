@@ -189,7 +189,8 @@ def test_task_r_is_the_two_page_sessions_through_the_runner_with_effort_and_agen
     argv = (world["out"] / "page.argv").read_text().split("\n")
     clone = world["tmp"] / "clones" / "diagram-exp-e3"
     assert argv[0] == f"{clone}/handoffs/293/R-write.md {clone}/handoffs/293/R-check.md", "a neutral path (FR-004)"
-    assert (clone / "handoffs" / "293" / "R-write.md").read_text() == (clone / FEATURE / "prompts" / "R-write.md").read_text()
+    assert (clone / "handoffs" / "293" / "R-write.md").read_text() == (world["fdir"] / "prompts" / "R-write.md").read_text()
+    assert not (clone / FEATURE).exists() and (clone / "scripts").is_dir(), "the feature directory is left out of the run's tree"
     assert argv[1:4] == ["diagram-exp-e3", "", "xhigh"] and pathlib.Path(argv[4]).read_text() == er.agents_json()
     assert "CLAUDE_CODE_EFFORT_LEVEL" not in (world["out"] / "page.env").read_text()
     assert [s["effort"] for s in rec["sessions"]] == ["xhigh", "xhigh"] and "page-session: started" in rec["runner_stdout"]
@@ -310,23 +311,27 @@ def test_with_the_shared_figure_the_gate_reads_it_and_a_raw_warning_does_not_blo
     assert "memwatch warning" in why and reading["source"] == "container+offset", "without the host: the old rule"
 
 
-def test_a_replaced_task_is_refrozen_at_its_own_start_and_the_other_task_keeps_its_own(world: dict, monkeypatch: pytest.MonkeyPatch,
-                                                                                      capsys: pytest.CaptureFixture[str]) -> None:
+def test_a_replaced_task_is_refrozen_and_still_starts_from_the_one_start_commit(world: dict, monkeypatch: pytest.MonkeyPatch,
+                                                                             capsys: pytest.CaptureFixture[str]) -> None:
     exp = _init(world)
-    (world["fdir"] / "prompts" / "I.md").write_text("# a replaced task\n")
-    (world["fdir"] / "rubrics" / "implementation.md").write_text("# its rubric\n")
-    _git("-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qam", "task I replaced", cwd=world["origin"])
-    new = _git("rev-parse", "HEAD", cwd=world["origin"])
     (world["fdir"] / "runs").mkdir()
     (world["fdir"] / "runs" / "e4.json").write_text(json.dumps({"task": "I", "status": "valid", "ended": "x"}))
+    (world["fdir"] / "prompts" / "I.md").write_text("# a replaced task\n")
+    (world["fdir"] / "rubrics" / "implementation.md").write_text("# its rubric\n")
+    assert "prompts/I.md" in er.refusal(exp, world["fdir"], "I", pathlib.Path(_run_args(world, "I").cgroup), world["events"], 0.0)[0]
     with pytest.raises(er.Refused, match="has a valid run"):
-        er.refreeze_task(world["origin"], "I", new, 0.0)
+        er.refreeze_task(world["origin"], "I", 0.0)
     (world["fdir"] / "runs" / "e4.json").write_text(json.dumps({"task": "I", "status": "void", "ended": "x"}))
     monkeypatch.chdir(world["origin"])
-    assert er.main(["refreeze-task", "--task", "I", "--start", new]) == 0 and "re-frozen" in capsys.readouterr().out
+    assert er.main(["refreeze-task", "--task", "I"]) == 0 and "re-frozen" in capsys.readouterr().out
     after = json.loads((world["fdir"] / "experiment.json").read_text())
-    assert er.start_of(after, "I") == new and er.start_of(after, "R") == exp["start_commit"]
-    assert after["hashes"]["prompts/R-write.md"] == exp["hashes"]["prompts/R-write.md"]
-    assert after["hashes"]["prompts/I.md"] != exp["hashes"]["prompts/I.md"]
-    rec = er.launch(_run_args(world, "I", run="e5", arm="medium"), world["origin"], time.time())
-    assert rec["start_commit"] == new and _git("rev-parse", "HEAD", cwd=pathlib.Path(rec["clone"])) == new
+    assert after["hashes"]["prompts/R-write.md"] == exp["hashes"]["prompts/R-write.md"] and "starts" not in after
+    assert after["hashes"]["prompts/I.md"] != exp["hashes"]["prompts/I.md"] and after["refrozen"][0]["task"] == "I"
+    er.launch(_run_args(world, "I", run="e5", arm="medium"), world["origin"], time.time())
+    clone = world["tmp"] / "clones" / "diagram-exp-e5"
+    assert _git("rev-parse", "HEAD", cwd=clone) == world["start"], "the one start commit"
+    for _ in range(100):
+        if (world["out"] / "claude.argv").exists() and "replaced" in (world["out"] / "claude.argv").read_text():
+            break
+        time.sleep(0.05)
+    assert "# a replaced task" in (world["out"] / "claude.argv").read_text(), "the frozen prompt, from the session's repository"

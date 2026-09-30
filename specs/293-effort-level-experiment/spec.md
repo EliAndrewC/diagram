@@ -104,14 +104,14 @@ The grader cannot tell which arm produced which output, and the criteria it grad
 **Why this priority**: token counts alone cannot say whether the extra effort bought anything; an unblinded or post-hoc grade would
 be worthless.
 
-**Independent Test**: the rubrics are committed to the repository before the first run's start time (the commit's timestamp is the
-proof); the graded outputs carry only labels A and B; the key mapping labels to arms is written by a step the grader does not read
+**Independent Test**: each task's rubric is committed to the repository before that task's first run starts (the commit's timestamp is
+the proof; a replaced task's rubric before the replacement's first run); the graded outputs carry only labels A and B; the key mapping labels to arms is written by a step the grader does not read
 and is opened only after both grades are recorded.
 
 **Acceptance Scenarios**:
 
-1. **Given** the rubric for a task, **When** it is written, **Then** it is committed before the first run of either task and never edited
-   afterwards; a later wish to grade something else is noted in the report as an observation, not scored.
+1. **Given** the rubric for a task, **When** it is written, **Then** it is committed before that task's first run - a replaced task's rubric
+   before the replacement's first run (see the edge case) - and never edited afterwards; a later wish to grade something else is noted in the report as an observation, not scored.
 2. **Given** two outputs of a task, **When** they are prepared for grading, **Then** anything naming the effort level or the run (session
    names, clone paths, the prompt's arm line, commit trailers) is stripped, and the outputs are labeled A and B in a random order.
 3. **Given** the blinded outputs, **When** they are graded, **Then** a fixed grader agent (one agent file, its model and effort pinned)
@@ -174,7 +174,9 @@ says how to add an arm (`high`) or a second run per cell.
 - **The task turns out already done or impossible at the starting commit** (e.g. another feature removes what the task
   changes - as feature 280 M68 did to task I's first pick). Found by the pre-flight check, which confirms on the code or the maps that the
   defect exists, not only that its future-work entry is open; the task is replaced after asking the GM, and its prompt and rubric are
-  rewritten and frozen again at a new start commit - which BOTH its arms start from - before its next run. A run of the replaced task stays in
+  rewritten and frozen again (their hashes recorded) before its next run, and its runs still start from the experiment's one start commit,
+  the launcher supplying the frozen files. A new start commit is allowed only when the replacement cannot be done at the original start,
+  measured and recorded; even then the run's clone holds no record linking a run id to an arm (FR-003). A run of the replaced task stays in
   the record, set aside, and is not graded.
 - **The prompt names its arm by accident** (e.g. a clone path containing "xhigh"). The clone names and session names use neutral run ids; the arm
   is recorded only in the run log.
@@ -194,7 +196,8 @@ says how to add an arm (`high`) or a second run per cell.
   by size in the hamlet generator, carried to a green local `make done` with the moved maps regenerated. Each run stops short of landing: it commits in its
   own clone and does not push.
 - **FR-003 Launch**: each run is a top-level headless session started by one command that takes the task, the arm and the seed, creates a fresh clone
-  from the recorded starting commit under a neutral run id, sets the effort level for the whole session at launch, and logs the command line. Every
+  from the recorded starting commit under a neutral run id, leaves out of it every record linking a run id or position to an arm (the run
+  records, the order, the interventions), sets the effort level for the whole session at launch, and logs the command line. Every
   headless session the run itself starts (a research page's write and check-and-apply sessions included) runs at the run's arm effort, and
   the run log records each session's effort; the project's existing headless runner, which today passes a model and no effort, is extended
   to carry it, rather than a second runner being written.
@@ -211,8 +214,8 @@ says how to add an arm (`high`) or a second run per cell.
 - **FR-007 Rework signals**, per run, from what the project already logs: guard firings by guard and rule (refusals and corrections separately), check
   and review verdicts that were not a pass and the rounds each needed, test and gate runs that failed before the last green one, the number of commits
   that revert or fix the run's own earlier work, and escalations - `escalation-check` verdicts and any question the run put to the GM.
-- **FR-008 Rubrics before runs**: one rubric per task, each with scored criteria and a stated pass line, committed before the first run starts and not
-  edited afterwards. The research rubric scores at least: the answer to the question and whether the sources read support it; the breadth of the search
+- **FR-008 Rubrics before runs**: one rubric per task, each with scored criteria and a stated pass line, committed before that task's first run starts (a
+  replaced task's rubric before the replacement's first run) and not edited afterwards. The research rubric scores at least: the answer to the question and whether the sources read support it; the breadth of the search
   (languages, kinds of source) and whether an absence is stated as one; citation correctness as the checks judge it; and clarity for the casual reader.
   The implementation rubric scores at least: the acceptance criteria met (on every scripted hamlet the annex sits on the largest
   houses, at the record's share; no new failure elsewhere); the regression and gate results; the review findings on the moved maps; the size and shape of the diff;
@@ -256,7 +259,8 @@ says how to add an arm (`high`) or a second run per cell.
 
 - **SC-001** (FR-001, FR-002, FR-003, FR-006, FR-007) all four runs complete (or fail on their own merits) with every count of FR-006 and FR-007 filled from the transcripts and logs, and none
   counted by hand.
-- **SC-002** (FR-004, FR-008) both rubrics are committed before the first run starts, and neither changes after it.
+- **SC-002** (FR-004, FR-008) each task's rubric is committed before that task's first run starts (a replaced task's before the replacement's
+  first run), and neither changes after it.
 - **SC-003** (FR-009, FR-010) the grader agent grades each pair without access to the key; the key is opened after both grades per task are recorded.
 - **SC-004** (FR-011, FR-012, FR-013) the report states an outcome under FR-011 for research and for implementation, and the arithmetic can be re-done from its table.
 - **SC-005** (FR-014) the better output of each task that meets its pass line is on main; the other is discarded; the future-work entries they close are closed.
@@ -314,3 +318,8 @@ every change to a map is; the report links them.
 - Amendment, 2026-09-30 (the GM, on task I's premise found gone): "Replace the task (Recommended)" and "Storehouse by house size". Task
   I becomes the storehouse annex ranked by size; its prompt and rubric are rewritten and re-frozen at their own start; the edge case now
   says the pre-flight confirms the defect on the code or the maps. The review counter resets.
+- Amendment review round 1 (spec-fidelity, 2026-09-30): CHANGES REQUIRED - the re-freeze gave task I its own start commit, which the
+  one-start-commit control does not allow when the task can be done at the original start (it could: the engine is the same at both); the
+  clones carried records naming the arms; four passages still froze the rubrics before the FIRST run of either task; the new premise check
+  was unrecorded. All four applied: one start commit, the frozen files supplied by the launcher, the feature directory left out of every
+  run clone (sparse checkout), the rubric passages per task, the premise check in interventions.md.

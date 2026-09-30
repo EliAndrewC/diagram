@@ -202,8 +202,11 @@ def launch(args: argparse.Namespace, repo: pathlib.Path, now: float) -> dict:
     if clone.exists():
         raise Refused(f"{clone} exists - a run id is used once")
     subprocess.run(["git", "clone", "-q", args.origin or str(repo), str(clone)], check=True)
-    start = start_of(exp, args.task)
+    start = exp["start_commit"]  # ONE start commit for every run (FR-005); a replaced task's files come from the freeze below
     subprocess.run(["git", "-C", str(clone), "reset", "-q", "--hard", start], check=True)
+    # Spec edge case / FR-003: the run's clone holds no record linking a run id or position to an arm - the feature directory
+    # (run records, the order, the interventions) is left out of the working tree; HEAD stays the start commit.
+    subprocess.run(["git", "-C", str(clone), "sparse-checkout", "set", "--no-cone", "/*", f"!/specs/{FEATURE}/"], check=True)
     work = base / ".runs-293" / run_id  # a neutral name: the sources path is in the run's environment
     sources = work / "sources"
     shutil.copytree(exp["sources_snapshot"], sources)
@@ -222,7 +225,7 @@ def launch(args: argparse.Namespace, repo: pathlib.Path, now: float) -> dict:
         neutral.mkdir(parents=True, exist_ok=True)
         briefs = []
         for p in PROMPTS["R"]:
-            shutil.copyfile(clone / "specs" / FEATURE / p, neutral / pathlib.Path(p).name)
+            shutil.copyfile(feature_dir / p, neutral / pathlib.Path(p).name)  # the frozen file (its hash was checked above)
             briefs.append(str(neutral / pathlib.Path(p).name))
         agents = work / "agents.json"
         agents.write_text(agents_json(), encoding="utf-8")
@@ -241,7 +244,7 @@ def launch(args: argparse.Namespace, repo: pathlib.Path, now: float) -> dict:
         sid = str(uuid.uuid4())
         log = work / "session"
         log.mkdir(parents=True)
-        prompt = (clone / "specs" / FEATURE / PROMPTS["I"][0]).read_text(encoding="utf-8")
+        prompt = (feature_dir / PROMPTS["I"][0]).read_text(encoding="utf-8")  # the frozen file (its hash was checked above)
         appended_file = clone / APPEND_PROMPT
         appended = appended_file.read_text(encoding="utf-8").strip() if appended_file.is_file() else ""
         cmd = full_session_cmd(prompt, clone.name, sid, arm, appended)
@@ -271,17 +274,13 @@ def iso(t: float) -> str:
     return dt.datetime.fromtimestamp(t, dt.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def start_of(exp: dict, task: str) -> str:
-    """The commit a task's runs start from: its own after a re-freeze (a task the GM replaced), else the experiment's."""
-    return exp.get("starts", {}).get(task) or exp["start_commit"]
-
-
 TASK_FILES = {"R": ("rubrics/research.md", *PROMPTS["R"]), "I": ("rubrics/implementation.md", *PROMPTS["I"])}
 
 
-def refreeze_task(repo: pathlib.Path, task: str, start: str, now: float) -> dict:
+def refreeze_task(repo: pathlib.Path, task: str, now: float) -> dict:
     """Spec edge case (a task found impossible after the freeze, replaced after asking the GM): the task's prompt and rubric
-    are frozen again at a new start commit, which BOTH its arms start from; every other task's record is untouched."""
+    are frozen again - their hashes recorded - before its next run; its runs still start from the one start commit, the
+    launcher supplying the frozen files; every other task's record is untouched."""
     feature_dir = repo / "specs" / FEATURE
     target = feature_dir / "experiment.json"
     exp = json.loads(target.read_text())
@@ -291,8 +290,8 @@ def refreeze_task(repo: pathlib.Path, task: str, start: str, now: float) -> dict
     hashes = frozen_hashes(feature_dir)
     for f in TASK_FILES[task]:
         exp["hashes"][f] = hashes[f]
-    exp.setdefault("starts", {})[task] = start
-    exp.setdefault("refrozen", []).append({"task": task, "start": start, "at": iso(now)})
+    exp.pop("starts", None)
+    exp.setdefault("refrozen", []).append({"task": task, "at": iso(now), "hashes": {f: hashes[f] for f in TASK_FILES[task]}})
     target.write_text(json.dumps(exp, indent=1) + "\n", encoding="utf-8")
     return exp
 
@@ -331,7 +330,6 @@ def main(argv: list[str]) -> int:
     i.add_argument("--snapshot", required=True)
     f = sub.add_parser("refreeze-task")
     f.add_argument("--task", required=True, choices=TASKS)
-    f.add_argument("--start", required=True)
     r = sub.add_parser("run")
     r.add_argument("--task", required=True, choices=TASKS)
     r.add_argument("--run", required=True)
@@ -350,8 +348,8 @@ def main(argv: list[str]) -> int:
                                        check=True).stdout.strip())
     try:
         if args.cmd == "refreeze-task":
-            exp = refreeze_task(repo, args.task, args.start, time.time())
-            print(f"effort-run: task {args.task} re-frozen at {exp['starts'][args.task][:10]}")
+            refreeze_task(repo, args.task, time.time())
+            print(f"effort-run: task {args.task}'s prompt and rubric re-frozen; its runs start from the experiment's start commit")
         elif args.cmd == "init":
             exp = init(args, repo, time.time())
             print(f"effort-run: experiment recorded - start {exp['start_commit'][:10]}, order {exp['order']}")

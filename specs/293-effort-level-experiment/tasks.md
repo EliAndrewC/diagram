@@ -52,7 +52,7 @@ the freeze (Phase 3), the freeze before the first run, the runs one at a time.
 
 Run ids as made (interventions.md): e1 void (the launcher leaked make's variables); T12 = e2 (R, xhigh), T13 = e3 (R, medium); e4 ran
 task I's first pick, found its premise gone (280 M68) and is set aside; the GM replaced task I (2026-09-30), so T14 = e5 (I, medium) and
-T15 = e6 (I, xhigh), both from task I's re-frozen start.
+T15 = e6 (I, xhigh), both from the one start commit with task I's re-frozen prompt and rubric.
 
 - [ ] T12 [US2] Run 1 (`e1`): `make effort-run` in the drawn order, under the headroom check (R5 D7); nothing else of the experiment while it is live; on its completion notification `make effort-measure RUN=e1`
       research: rendering
