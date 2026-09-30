@@ -48,3 +48,6 @@ one, since its `What:` is the nearest thing to the record's definition today.
 - Rooms for a parley across a border / Drawing a clan border (urban-features 170): where two sides met to deal across a border, against how the border line itself is drawn on a map
 - Border posts and their crossing court (kuchidome bansho) / Rooms for a parley across a border: the post that examined those crossing, against the place where two sides met to negotiate
 - Samurai country manors (bushi yakata) / Gentry estates are dispersed, not clustered at the wall (cities/hinterland 010): a samurai family's own manor among its fields and what it held, against where a city's gentry and samurai estates stand around it
+- Merchants' townhouses (machiya) / How big is a rich merchant's walled house, and how is it laid out?: a shop-front townhouse on the street vs a rich merchant's walled compound
+- Inns (hatago and carters' inns) / Where did lords and officials lodge on the road, and how big was it?: a commercial inn for any paying traveler vs the official lodging kept for lords and officials (honjin)
+- Inns (hatago and carters' inns) / The market-day flophouse - who actually stays over: an inn's building and plan vs the cheap lodging a market town keeps for its market days
