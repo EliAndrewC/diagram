@@ -262,5 +262,71 @@
   "observed": "2026-09-30",
   "source": "pool/hamlets/mizuguchi/mizuguchi.json gardens (beds)",
   "method": "0 of 12 (the finding's own words: context only, no norm sets a floor); recorded, not changed"
+ },
+ "inashiro-r3-f1": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "answers": "97a830d6c2dd",
+  "quantity": "glossary variants that gloss \"row village\" as roson",
+  "value": 0,
+  "unit": "variants",
+  "observed": "2026-09-30",
+  "source": ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary/4810-roson.json",
+  "method": "roson glossed as the road village, its variants roson / road village / road villages; \"row village\" is left unglossed (the record: roson the road village, retsuson the line village)"
+ },
+ "inashiro-r3-f2": {
+  "verifies": "F2",
+  "subject": "inashiro",
+  "answers": "97a830d6c2dd",
+  "quantity": "drawing claims left in the lane class's accurate why",
+  "value": 0,
+  "unit": "sentences",
+  "observed": "2026-09-30",
+  "source": ".claude/skills/diagram/l7r/diagram/interactive/classes/water_and_ways.py VillageLane",
+  "method": "\"drawn a rank wider than the lanes off it\" moved from the Why into the Note and Caveat: the drawn WIDTHS, the row street at the 6 ft, are a GUESS"
+ },
+ "kuwabata-r3-f1": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "answers": "97a830d6c2dd",
+  "quantity": "glossary variants that gloss \"row village\" as roson",
+  "value": 0,
+  "unit": "variants",
+  "observed": "2026-09-30",
+  "source": ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary/4810-roson.json",
+  "method": "as inashiro-r3-f1: the one gloss, fixed once"
+ },
+ "kuwabata-r3-f2": {
+  "verifies": "F2",
+  "subject": "kuwabata",
+  "answers": "97a830d6c2dd",
+  "quantity": "a feature-291 entry in the notes",
+  "value": 1,
+  "unit": "entry",
+  "observed": "2026-09-30",
+  "source": "pool/hamlets/kuwabata/kuwabata.notes.md, \"2026-09-30 (feature 291): the settlement's new knobs recorded, not drawn\"",
+  "method": "the entry names the seven recorded values (grove sides 2, flank -1, flood ground yes, row edge/one/shared, farm water channel) and says none is drawn on a nucleated map"
+ },
+ "mizuguchi-r3-f1": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "answers": "97a830d6c2dd",
+  "quantity": "lane turns past 140 degrees",
+  "value": 0,
+  "unit": "turns, all lanes",
+  "observed": "2026-09-30",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json lanes",
+  "method": "every lane vertex's turn measured: none past 140 (the second street was 17); the next street set out as a true offset curve (rows.parallel), 1,890 ft"
+ },
+ "mizuguchi-r3-f2": {
+  "verifies": "F2",
+  "subject": "mizuguchi",
+  "answers": "97a830d6c2dd",
+  "quantity": "nearest approach of a street to the canvas edge",
+  "value": 98,
+  "unit": "ft (the second street 899)",
+  "observed": "2026-09-30",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json lanes[street] against the 3,900 ft canvas",
+  "method": "a planned street keeps only its stretch inside the sheet by half a frame (rows.inside_the_sheet); the second street no longer runs down the west edge"
  }
 }
