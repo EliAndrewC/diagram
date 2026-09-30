@@ -422,7 +422,7 @@ class Kennel(Kind):
     Covers: the kennel building and its label
     Label: guess
     Sources: takagari-jawiki, kishuken-jawiki, inukai-kotobank, inugoya-jawiki
-    Entry: research/buildings.html - 'Did a samurai household keep hunting dogs, and where were they kept?'
+    Entry: research/buildings.html - 'Hunting dogs and kennels (inugoya)'; research/rendering/buildings.html - 'How our maps draw a kennel'
     """
 
     key = "kennel"
