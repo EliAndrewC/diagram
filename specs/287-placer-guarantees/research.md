@@ -371,6 +371,21 @@ Decisions review and for what goes to the GM once the work runs.
   lie across a lane; a seat whose key mark would lie on a way is refused, and where none clears the ways no board is
   posted, as when no verge fits. The GM's question stays marked (`meta.kosatsuba_d12`); the count reaching it is 0 of 53.
   Map drawing convention; for the GM with D12. (The figures in this list: observed 2026-09-29, method: `make cohort N=60` and the implementers' per-seed harnesses in the clone, as each entry says.)
+- **water:W39, the paddy cell's 0.030-0.072 acre band - a RECORDED DROP on the hamlet path** (the gate doctrine: a rule
+  about a map no scripted generator produces is a recorded drop with its grounding kept). The band is the village and city
+  calibration (`waterfields/palette.py`: "DELIBERATELY NOT applied to hamlets/towns"; research/fields/110 gives a
+  pre-modern plot as 0.02-0.25 acre), and the hamlet keeps the GM's pixel grain (`Settlement.plot_texture`, "by GM
+  request"; its small cells 0.023-0.026 acre, measured over cohort 1-60 on 2026-09-29, method: the fits' own plots, which
+  match the SVG measure within 0.0001 acre). No scripted generator draws a village or a city today; those tiers are the
+  frozen hand-drawn pool, and the band becomes a placer guarantee in the village tier's conversion
+  (`migration-plan.md`). `tests/full/test_villages.py` keeps the band as that tier's guard. Map drawing convention;
+  decided by the session on the GM's standing ruling (the pixel grain).
+- **woods:W26, what a coppice lot's line followed - HELD FOR THE GM.** The not-a-disc half is guaranteed by construction
+  (`hinterland/parcels.py:_parcel_outline`); the bounded-by half has no attested form to build. research/vegetation/140
+  labels it a GUESS after a 2026-09-27 search pass, and a second pass (2026-09-29: 割山, 山割, wariyama, 入会山 with 尾根,
+  沢 or 道 and 村絵図, 平地林 with 境木 and 武蔵野; kotobank, the Gakugei Musashino lecture, the J-STAGE Wariyama
+  abstract) found no page stating what a lot's line followed. The record is silent, so it is the GM's question; the
+  engine draws the not-a-disc form until the GM answers.
 
 ## R8 - Tests retired and kept (2026-09-29)
 
@@ -846,3 +861,169 @@ on maps in R9. Separately, plan D2 owes the GM its count: the seating refused on
 1 of 106 rolls. R2's fallbacks and R3's excuses are inside the
 175 through `scope-by-owner.json`; the one R2 row recorded and not converted is the town-only `wards.py:_ward_ends_on_wall`
 (spec, Edge Cases).
+
+## R11 - The acceptance sweep after wave 6 (2026-09-30)
+
+**Method** (observed 2026-09-30, method: `make spec-harness SPEC=specs/287-placer-guarantees/sweep OUT=<json>` in the
+clone at 0e4bf59c5 with the harness as amended below, four workers (`SWEEP_WORKERS=4`) under the session's cohort lock,
+106 rolls in 358 s wall; the output is the session's `sweep-287-r11b.json`, not kept). The same 53 maps and the same two
+passes as R9 - the five pool hamlets from their generators' `HamletSpec` and cohort seeds 1-48, plain and under feature
+284's two withdrawn levers as probes - each finished manifest asked the same predicates: the lane law (`law.LAW`, 29 rules
+by name), the ring rules over every recorded plot ring (32,902 rings plain, 31,822 under the probes), the overlap matrix,
+the windbreak as `settle_the_belt` reads it, the roll's own seating and reach verdict, and the same 101 census tests (98
+retired ones run as their bodies last stood, 9 baseline twins, 37 read through an engine predicate, 2 restated, 1
+superseded and listed, 17 that cannot run on a map - R9's list, unchanged).
+
+**What changed in the harness since R9**: one adapter, no predicate. Feature 287's perf pass (b7b88b9e1) gave the
+router's `lattice_search` two more arguments, the caller's verdict memos `free` and `band`, which the search reads before
+it asks `is_free` / `in_band`; those two callbacks fill the same memos, so the memos are a cache and not a rule. The A*
+probe (`astarcmp/astar.txt`, written before the memos existed) is wrapped to take them and ask the callbacks instead: the
+same verdicts, the same A* search 284 withdrew. The first run at this HEAD, before the adapter, raised
+`TypeError: lattice_search() takes 8 positional arguments but 10 were given` on 52 of the 53 probe rolls and is not
+counted (observed 2026-09-30, method: the same command, 342 s wall; its plain pass agreed with the one below map for map).
+The saturation probe's `_fit_at_aspect` keeps its signature and needed nothing. No predicate the harness names was renamed
+or moved since R9, so no test was re-pointed.
+
+**The result.** The bar is zero failing predicates, zero re-rolls and zero unreached houses. **Zero re-rolls and zero
+unreached houses hold; zero failing predicates holds under the probes and fails on one map plain, by one retired test's
+body, which the engine predicate R8 names in its place passes.**
+
+| | plain | under the probes |
+|---|---|---|
+| rolls; rolls that produced a map | 53; 53 | 53; 52 (cohort seed 18 refused by plan D2, below) |
+| maps clean of every predicate | 52 | 52 of 52 produced |
+| builds per roll; re-rolled maps | 1; 0 | 1; 0 |
+| households unseated on a produced map | 0 | 0 |
+| `law:unreached_houses` and the roll's `farmhouses_reach_a_way` | 0 | 0 |
+| `law:fragments` | 0 | 0 |
+| `test_the_notice_board_faces_the_way` | 0 | 0 |
+| maps reaching plan D12's terminal | 0 | 0 |
+| maps recording their woodland off the sheet (plan D11) | 4 (cohort 4, 13, Kuwabata, Mizuguchi) | 3 (cohort 13, Kuwabata, Mizuguchi) |
+| retired test `test_every_pool_belt_keeps_its_depth_across_its_windward_face` (its frame-held half, body as last stood) | 1 map (cohort 34) | 0 |
+| every other predicate: every lane rule, every enforced ring rule, the matrix, the belt's depth and holes (`belt:thin`, `belt:holes`), every engine reading (37 tests), every other census test | 0 | 0 |
+
+(Figures in the table: observed 2026-09-30, method: the sweep above, `summary` and each map's `failing`, `builds`,
+`per_attempt_unreached`, `seated`, `d12` and `woodland_offsheet`. Against R9, observed 2026-09-29: 45 clean plain and 43
+under the probes, 6 maps with fragments, 2 unreached farmhouses under the probes, 2 boards side-on, 2 probe rolls refused.)
+
+**The one failure, precisely** (observed 2026-09-30, method: the sweep's `messages` for the map, then a scratch harness
+rolling cohort seed 34 plain through `make spec-harness` and reading `belt_law.reading_of` beside the retired body's own
+arithmetic; the scratch harness is not kept). Cohort seed 34, plain: the retired test's frame-held clause - a belt no bin
+of which is judged must stand against the page, every 40 ft bin's crown nearest the edge within `BELT_DESIGN_DEPTH_FT`
+(110 ft) of it - fails on one bin: the body bins crowns from the origin (`int((x*ax + y*ay) // 40)`), and its bin 1 holds a
+single crown at the belt's far tip 117.8 ft from the page's edge. `BeltReading.off_the_page` - the predicate R8 names as
+this clause's replacement, which `settle_the_belt` asks - bins from the belt's own start (`rd.bin(v)`, bins 0-19), where
+that crown shares bin 0 with a crown 18 ft from the edge, so it returns no bin, the belt is left unjudged, and the engine
+reading passes. Read strictly (`_depths(lenient=False)`), every one of the belt's 20 bins is 88-315 ft deep, none under
+`MIN_BELT_DEPTH_FT` (30 ft). The two measures of one rule disagree on bin alignment alone; the map carries no thin stretch.
+Not fixed (the task is a measurement); FR-003's form for this is the retired body reading its placer's own predicate.
+
+**Cohort seed 18 under the probes: plan D2's refusal, for the GM as a count.** `SiteRefused`: no margin of the 17 tried
+seats all 15 households (seated per margin: 11, 11, 12, 10, 10, 11, 11, 8, 14, 9, 13, 12, 11, 14, 11, 10, 11 - the best
+14); 1 of 106 rolls, under the probes only, as in R9 (observed 2026-09-30, method: the sweep above, `roll_errors`). Not
+counted as a failure. Inashiro's probe roll, refused in R9 by `OverlapRefused`, now produces a clean map, and so do cohort 8
+and 39 under the probes (R9's unreached farmhouses).
+
+**The twins and the restated two** (not counted, recorded; observed 2026-09-30, method: the sweep above,
+`base_messages`): the wells' test at cc39f599a fails 5 rolls and the belt-depth test at cc39f599a fails 3, which the
+placers' own predicates pass; the copse-reach body fails 44 rolls, which W25's restatement passes; the runoff body fails
+21, every one R9's misreading, which the corrected predicate passes - the same counts as R9.
+
+## R12 - The closing census after wave 6 (2026-09-30)
+
+**The selection** (observed 2026-09-30, method: `python3 specs/287-placer-guarantees/census_select.py` on the clone at
+0e4bf59c5, diffed by name against `census-raw.txt`). It selects 89 tests (R10: 90): 65 of the opening selection remain,
+131 are gone, and the same 24 are new. The one fewer is `tests/gate/test_bunds_and_dikes.py::test_the_waterward_reed_strip_runs_off_the_frame`,
+one of R10's eight KEPT finished-map tests, retired with its module (fdc5e1209: water W43 held at the view's decision, the
+title band and the key band's neatline). Of the 65 that remain, 57 are mechanics, 1 is a placer unit test and 7 are the
+finished-map tests R8 KEPT (the three board-caption tests for plan D12, the dike-pond archetype's record, the cohort's
+reach report, the pool's regeneration, the Mode A sheets). No selected test asserts a placement rule outside the 175.
+
+**The judgment** (observed 2026-09-30, method: five Opus readers, one per area, each given its design file
+`design/design-<area>.json`, R7, R8, R10, the plan's decisions and the commit messages since R10, and asked of HEAD per
+rule: GUARANTEED (the placer that refuses, repairs or constrains, read, and one unit test on constructed input including
+the violating case, read), a recorded DECISION (cited), or a GAP; told that R10's readers had read H40 and L12 as
+guaranteed and the sweep broke them; then checked against R11 - no rule a reader read as guaranteed broke on a map; the
+readers' rows are the session's `close-<area>.json`, not kept). The same judgment as R1 and R10.
+
+| area | rules | guaranteed | recorded decision | gap |
+|---|---|---|---|---|
+| water | 59 | 54 | 4 | 1 |
+| homes | 47 | 40 | 7 | 0 |
+| ways | 25 | 25 | 0 | 0 |
+| woods | 26 | 25 | 0 | 1 |
+| labels | 18 | 18 | 0 | 0 |
+| **all** | **175** | **162** | **11** | **2** |
+
+**R10's ten gaps** (observed 2026-09-30, method: the readers above, each naming the placer and its unit test):
+
+| R10 gap | now | placer | unit test |
+|---|---|---|---|
+| water W39 | **gap** (below) | - | - |
+| water W43 | guaranteed | `finish.py:band_keeps_the_strips`, asked in `_title_band`, with `frame.py:to_the_strips` | `test_finish_287::test_the_title_band_is_not_grown_on_a_flank_a_reed_strip_runs_off` |
+| water W53 | guaranteed | every hamlet writer asks `Settlement.admits` first (`bundle_admitted`, `drain_admitted`, the weir's walk, `board_record`, `lanes.py:lane()`); a one-candidate writer raises `OverlapRefused` by name (`refuse_unadmitted`) | `test_w53_writers_287::test_a_stream_a_pond_and_a_sluice_the_matrix_forbids_are_refused_before_any_ink`, `test_m8_placers_287::test_the_bundle_fit_refuses_a_layout_the_registry_refuses` |
+| homes H29b | guaranteed | `compound.py:place` asks the audit's coverage and hugging bands of the placed composition (`composition_sitings`) and refuses out of band (plan D7); `compound_parts.py:garden_well` a clear seat or none | `tests/test_compound.py::test_a_grown_compound_that_falls_out_of_its_band_is_refused_naming_what_grew_it`, `::test_a_program_that_requires_a_well_and_has_no_seat_for_one_is_refused`, `::test_the_garden_well_is_seated_on_clear_ground_or_not_at_all` |
+| homes H40 | guaranteed | `ways/settle.py:settle_fragments` over `law.short_fragments`, tree lanes included | `tests/hamletgen/ways/test_settle.py::test_a_fragment_is_dropped_and_a_chain_takes_one_width` |
+| ways W01 | guaranteed | `access.py:access_corridor` admits a seat only when `tree.admits` passes; `tree.settle_tree` draws each chain as judged; `meta.access_refused` deleted | `test_access::test_a_seat_whose_corridor_the_tree_cannot_take_lawfully_is_refused_at_seating`, `test_settle::test_a_stranded_house_is_reached_along_its_corridor_and_the_tree_is_never_cut` |
+| ways W03 | guaranteed | `homesteads/stages.py:reserve_field_corridor` asks `corridor_on_lawful_ground` and `tree.admits(FIELD_ROLE)`; the field-unreached fallback deleted | `test_homesteads_287::test_a_margin_with_no_lawful_field_corridor_seats_no_one`, `test_settle::test_the_field_corridor_the_seating_reserved_is_the_field_way` |
+| woods W08 | guaranteed | `land/wet.py:shrink_marshes_off`, called from `cover.py:_cull_cover_in` on every swept clearing | `test_woods_287::test_a_clearing_swept_in_the_marsh_after_it_is_laid_leaves_the_marsh_record` |
+| woods W26 | **gap** (below) | - | - |
+| labels L12 | guaranteed | `board_seat.py:WayFacing.turn` turns every sampled seat; `siting.py:_route_seats` refuses a corner tie more than 45 degrees off | `test_board_seat.py::test_a_board_is_turned_to_its_way_and_refused_where_it_cannot_face_it`, `::test_the_facing_predicate_turns_to_the_nearest_way_and_refuses_a_corner_tie` |
+
+R10's caveats closed in the same wave: labels L11's violating case
+(`test_board_seat.py::test_a_board_stands_no_farther_from_its_way_than_the_reach_even_where_only_the_far_ground_is_open`);
+the L6 rounding tie (`board_caption_seat` passes `place(accept=)` the `stands_nearest` check on the recorded, rounded
+geometry; `::test_a_yard_just_nearer_than_the_board_on_the_record_moves_the_caption`); water W09 (the bar at the mouth's
+downstream lip recorded as historically accurate, research/water/253; woods W09's long wet leg walked back however long,
+`tests/settlement/test_land.py`); water W10 (the village drain run asks `runs_downhill`, `outfall_run`); woods W13
+(`hinterland/stages.py:stock_woodland`, `test_hinterland_287::test_a_parcel_whose_room_later_fixtures_took_is_clothed_as_grazing_not_drawn_a_thin_wood`);
+water W36's two R7 bullets now agree (0bb5bdede); homes H09's pushed well pocket keeps its gap from every bed
+(`pocket_clear_of_beds`).
+
+**Recorded decisions** (11, as R10): water W26 and W27 (recorded, not enforced; a guess held open for the GM - R7), W36
+(the winter-crop knob narrowed to what the site can feed - R7), W48 (no subject beyond the polder's other rules - R5);
+homes H02 (no producer - R8), H05 (plan D4), H13 (280 M57), H33 (280 M21), H34 (280 M22), H35 (280 M21), H36 (280 M68).
+Held for the GM with the rules they touch, as R10: D6 (woods W11), D11 (the woodland off a tight sheet: 4 maps plain, 3
+under the probes in R11), D12 (0 of 106 rolls in R11).
+
+**Gaps - rules neither guaranteed nor a recorded decision** (2):
+
+| rule | what is missing |
+|---|---|
+| water W39 - the paddy cell stays inside its 0.030-0.072 acre band | wave 6 calls it a village/city rule (hamlets keep the GM's grain, research/fields/110's 0.02-0.25 acre), but that is written only in commit aa49a0bd7's message: no line of this file, the plan, research/fields or the code records it, and `tests/full/test_villages.py` still says no placer holds the cell to the band. On villages and cities no placer holds it either. Either a placer on the village/city carve, or a decision recorded here and at the point of change taking the rule off hamlets and saying what that costs |
+| woods W26 - a coppice lot is bounded by what bounds it, not a stamped disc | unchanged from R10: the not-a-disc half holds by construction (`hinterland/parcels.py:_parcel_outline`); the bounded-by half (a lot's line following a lane, brook or crop line), its predicate and a violating-case test were never built. research/vegetation/140 labels "follows ridge, stream and path" a GUESS - the record is silent on what a lot's line followed, so it is the GM's question, but no decision records it as held for the GM |
+
+**Readers' caveats on rules left guaranteed** (for the lead, not gaps; observed 2026-09-30, method: the readers above):
+
+- ways W01 / W03, homes H16: the seating now guarantees every house and the field a lawful corridor, but `settle_the_web`'s
+  last resort (reached only when its rounds do not settle) drops every lane that hands a household a way out over the
+  brook and back, tree lanes included (ways W08), and a house or field that leaves unreached is reported in
+  `meta.roll_failures`, not refused (`ways/settle.py`, pinned by
+  `test_a_way_out_left_over_the_brook_after_the_last_resort_loses_its_lanes`). `tree.admits`' way-out check asks the new
+  house's chain only to the strip's end, so nothing rules the trigger out; R11 measured 0 unreached on 105 produced maps.
+- homes H09: the pushed pocket's gap from the beds holds; its gap from its own dwelling is still unasserted and the
+  push loop has no bound. H41: the violating case is `test_geom::test_trim_to_service_pulls_an_end_back_to_what_it_serves`;
+  tree lanes are exempt from the trim. H45: the kura share is 280 M20's one in eight, not the design's 0.2993. H29c as R10.
+- water W10's residue: the legacy `Settlement.channel` (`paddy.py`, `nearring.py`) and the city's
+  `moat.py:inwall_drain_outfall` record channels without asking `runs_downhill` (no hamlet path). W53: only the hamlet
+  registry is strict; town and city registries still record without refusing. W44's test asserts on two builds, not a
+  constructed miss.
+- woods W09: `trim_off_marsh` sees only marshes recorded when it runs (the toe marsh and the waterside strip are laid
+  later); W21 has no unit test putting a lane through a woodland parcel; W14's violating case is a patched share; ways W23 /
+  W24: the connector's squared crossings are not asked about wet ground again, unmeasured and unseen.
+- labels L3: its shaded-seat violating case is at siter level only; at D12's terminal the knob resolves without the
+  sitable filter (worst case no board).
+- `tasks.md` still carries open tasks for water (T12, T13, T14, T18) and woods (T68).
+
+**SC-001 is not met**: 2 of 175 placement rules are gaps (water W39, woods W26), neither seen on a map in R11; 162 are
+guaranteed and 11 are recorded decisions. SC-003's sweep (R11) meets zero re-rolls and zero unreached houses and misses
+zero failing predicates by one retired test's body on one map, which the engine predicate replacing it passes. Plan D2
+owes the GM its count: cohort seed 18 refused under the probes, 1 of 106 rolls.
+
+**After R12** (2026-09-30): the census's two gaps are recorded decisions in R7 - water W39 a recorded drop on the hamlet
+path (the village and city calibration; no scripted generator draws either tier yet), woods W26 held for the GM (the
+record silent after two search passes). SC-001 therefore stands at 162 guaranteed and 13 recorded decisions of 175. R11's
+one belt-depth reading on cohort 34 is the retired test's grouping, not the rule: the rule's one predicate
+(`belt_law.BeltReading.off_the_page`, which feature 287 made the placer's and the test's) passes that map, and every
+stretch of its belt reads 88-315 ft deep (observed 2026-09-30, method: the sweep implementer's scratch harness over the
+R11 manifest of cohort 34).

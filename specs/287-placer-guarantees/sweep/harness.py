@@ -256,7 +256,15 @@ def apply_probes() -> None:
 
     ns: dict[str, Any] = {}
     exec(compile(ASTAR.read_text(), "astar.txt", "exec"), vars(route) | ns, ns)  # noqa: S102 - the lever as 284 left it
-    route.lattice_search = ns["lattice_search"]
+    astar = ns["lattice_search"]
+
+    def lattice_search(start, goal, nx, ny, is_free, in_band, toll, cell, free=None, band=None):  # noqa: ANN001, ANN202, ARG001
+        # 287 perf (b7b88b9e1) hands the search the caller's two verdict memos, `free` and `band`, read before `is_free` /
+        # `in_band` are asked; those two callbacks fill the same memos, so the probe (written before the memos existed)
+        # takes them and asks the callbacks - the same verdicts, the same A* search 284 withdrew (R11)
+        return astar(start, goal, nx, ny, is_free, in_band, toll, cell)
+
+    route.lattice_search = lattice_search
     mod = types.ModuleType("l7r.diagram.hamletgen.water.b3_fit")
     mod.__package__ = "l7r.diagram.hamletgen.water"
     exec(compile(B3_FIT.read_text(), "b3_fit.py", "exec"), mod.__dict__)  # noqa: S102 - the lever's own fit.py

@@ -25,8 +25,10 @@ def test_village_passes_gate(gen):
     # catches a regression back to the old hand-set ~0.13 ac (or the old field-wide terrace/ribbon bands).
     # The polder / dike-pond archetypes are DELIBERATELY larger (Buck's ~1 mu parcels, 0.4-0.6 ha ponds -
     # true-scale per research/settlements.html, the scale entry), so they are excluded, not held to the leveled-cell target.
-    # KEPT through feature 287: no placer holds the cell to the band (`hamletgen/water/fit.py` records no cell size). It
-    # judges no map the pool ships today (all five are hamlets on a valley or dike-pond archetype).
+    # KEPT through feature 287 as the village and city tier's guard: the band is that tier's calibration, a RECORDED DROP on
+    # the hamlet path (the hamlet keeps the GM's pixel grain - specs/287-placer-guarantees/research.md R7, water W39), and it
+    # becomes a placer guarantee when the village tier converts to scripted generation. It judges no map the pool ships
+    # today (all five are hamlets on a valley or dike-pond archetype).
     with open(gen[: -len(".gen.py")] + ".json") as _fh:
         manifest = json.load(_fh)
     meta = manifest.get("meta", {})
