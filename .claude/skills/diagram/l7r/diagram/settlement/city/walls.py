@@ -97,7 +97,7 @@ class WallsMixin:
         runs along the wall and the depth projects across it (the caller berm-nudges so the outer part sits
         on the berm, not in the moat). A GATE tower (chenglou) passes a smaller ~52 x 30 ft. Strokes keep
         their legibility floor (the stroke convention); the footprint takes no license. Records
-        M['wall_towers'] (w = along, h = deep) and reserves a no-build block. See research/cities/defenses.html 'Gate structures - real footprints'."""
+        M['wall_towers'] (w = along, h = deep) and reserves a no-build block. See research/rendering/cities/defenses.html 'How our maps draw a city's gates (chengmen)'."""
         al, dp = self.px(along_ft), self.px(deep_ft)
         tb = self.px(min(34, along_ft * 0.55))  # the enemy-tower building on the spur (~30-40 ft, inset)
         z = self.add_top(
@@ -503,8 +503,8 @@ class WallsMixin:
         ring = list(pts) + [pts[0]]
         # the rampart renders in the WALL layer (over the ground lanes - a street running into the wall
         # passes UNDER it) with a GENUINE gap at each gate, so the road shows through the opening
-        # TRUE SCALE for the gate THROAT (GM 2026-07-27, closing bookend on Minami; research/cities/defenses.html
-        # "How wide is the opening a road passes through?" holds the 228 ft units bug and why no check was added). The 2026-07-22
+        # TRUE SCALE for the gate THROAT (GM 2026-07-27, closing bookend on Minami; research/rendering/cities/defenses.html
+        # 'How our maps draw a city's gates (chengmen)' holds the 228 ft units bug and why no check was added). The 2026-07-22
         # pass converted the gate furniture's FOOTPRINTS to real feet but left the OFFSETS that
         # POSITION them as fixed pixels, so at a city's 1 px = 3 ft everything stood three times too
         # far apart: the wall opened a 2*38 = 76 px = 228 ft hole, the piers stood +-35 px = +-105 ft

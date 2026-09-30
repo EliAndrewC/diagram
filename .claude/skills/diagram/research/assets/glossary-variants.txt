@@ -353,6 +353,7 @@ chenghe	chenghe
 chenghua	Chenghua
 chenghuang miao	chenghuangmiao
 chenghuangmiao	chenghuangmiao
+chengmen	chengmen
 chengqiang	chengqiang
 chi	chi
 chigaidana	staggered shelves
