@@ -2810,6 +2810,7 @@ shophouse	machiya
 shophouses	machiya
 shoro	shoro
 short-range spotting	spotting
+shosai	shosai
 shotoku	Shotoku era
 shotoku era	Shotoku era
 shoucheng lu	Shoucheng Lu

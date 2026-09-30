@@ -128,7 +128,7 @@ class KarosHouse(Kind):
     Covers: the karo's house and its label with the "house elder" gloss
     Label: guess
     Sources: l7r-budgets, bukeyashiki-wiki, aizu-saigo-karo, jinya-kotobank, daikan-tetsuki-jawiki, mapple-takayama-jinya
-    Entry: research/buildings.html - 'Where does the chief retainer live - inside the compound, or in a house of their own?'
+    Entry: research/buildings.html - 'The chief retainer's house (karō yashiki)'; research/rendering/buildings.html - 'How our maps house the chief retainer'
     """
 
     key = "karo's house"
@@ -443,7 +443,7 @@ class Storehouse(Kind):
     Covers: the household storehouse and its label
     Label: accurate
     Sources: matsushiro-bukeyashiki, takayama-jinya-gifu, matsushiro-kankou-higuchi, kojodan-higuchi, bunka-yokota-dozo, suumo-kura-size
-    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'Where did a residence keep its vegetable garden, and how big was it?', 'Fire, and the fireproof storehouses (dozō)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'Vegetable gardens at a samurai residence (saien)', 'Fire, and the fireproof storehouses (dozō)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)'
     """
 
     key = "storehouse"
@@ -540,7 +540,7 @@ class WritingPavilion(Kind):
     Covers: the pavilion and its label
     Label: guess
     Sources: shosai-kotobank, kyoto-ga-sanshisuimeisho, chinesepen-shuzhai
-    Entry: research/buildings.html - 'Did a study ever stand apart in the garden, as a building of its own?'
+    Entry: research/buildings.html - 'Detached studies (shosai)'; research/rendering/buildings.html - 'How our maps draw a detached study'
     """
 
     key = "writing pavilion"

@@ -265,8 +265,8 @@ class VegetableGarden(Kind):
 
     Note: At a residence or a walled compound its size is one of two attested forms, a soup-greens plot or a field
     over about half the grounds, and each sheet takes its own; its seat is one of four attested ones - west of the
-    house, south beside the formal garden, the rear service ground, or a parcel of its own ("Where does a walled
-    compound keep its vegetable garden, and does the sun decide it?"). The sun rules out a seat where the bed gets under
+    house, south beside the formal garden, the rear service ground, or a parcel of its own ("How our maps place
+    the vegetable garden in the sun"). The sun rules out a seat where the bed gets under
     its six hours in the autumn - the six hours is modern growing advice, and counting them in autumn, with an hour
     counted when half the bed is lit, is a guess ("Sunlight and shade on the farm"; a sheet may declare a
     half-shade bed, which needs three). Where the west and the rear lie in the shade of the house and the kitchen, the
@@ -281,7 +281,7 @@ class VegetableGarden(Kind):
     Covers: the kitchen garden's beds and label
     Label: accurate
     Sources: boso-no-mura-takei, matsushiro-bukeyashiki, sanada-higuchi, kasama-iwama-jinya, kotobank-kisaku-daikansho, gujin-xie-yamen, atariya-nisho
-    Entry: research/buildings.html - 'Where did a residence keep its vegetable garden, and how big was it?', 'Where does a walled compound keep its vegetable garden, and does the sun decide it?'; research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'
+    Entry: research/buildings.html - 'Vegetable gardens at a samurai residence (saien)'; research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/buildings.html - 'How our maps place the vegetable garden in the sun'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'
     """
 
     key = "vegetable garden"
