@@ -1867,6 +1867,9 @@ levy storehouse	levy storehouse
 levy storehouses	levy storehouse
 li	li
 li river	Li River
+liao	Liao dynasty
+liao dynasty	Liao dynasty
+liao dynasty's	Liao dynasty
 liberties	liberty
 liberty	liberty
 licensed quarter	yukaku
@@ -3126,6 +3129,8 @@ tako-beya	tako-beya
 tale of the heike	Heike monogatari
 talisman	talisman
 talismans	talisman
+tallies	tally
+tally	tally
 tamagaki	tamagaki
 tamahagane	tamahagane
 tamajari	tamajari
