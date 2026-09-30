@@ -2154,9 +2154,10 @@
   ]
  },
  "kaji-ya": {
-  "def": "A smith's shop: the ordinary town smithy of one forge and a little yard, which also shoes horses and oxen where iron is worth it.",
+  "def": "A smith, or a smith's workshop: in a village, a small family shop making farm tools, fishing gear and household tools to order; in a castle town, one of the houses of a street of smiths.",
   "variants": [
-   "kaji-ya"
+   "kaji-ya",
+   "kajiya"
   ]
  },
  "kakehi": {

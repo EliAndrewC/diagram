@@ -1562,6 +1562,7 @@ kaishochi	kaishochi
 kaison	kaison
 kaji-ya	kaji-ya
 kajimachi	kajimachi
+kajiya	kaji-ya
 kakaemoto	hitoyado
 kakehi	kakehi
 kakoigura	kakoigura
