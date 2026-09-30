@@ -1031,6 +1031,8 @@ gazetted	gazetted
 gazetteer	gazetteer
 gazetteers	gazetteer
 gejo	degawari
+gempukku	gempukku
+gempuku	gempukku
 genan	degawari
 genba	genba
 genba-oke	genba
@@ -1039,6 +1041,7 @@ genkan	genkan
 genkan-no-ma	genkan-no-ma
 genna	Genna
 genna era	Genna
+genpuku	gempukku
 genroku	Genroku
 gentry	gentry
 geomancer	geomancy
