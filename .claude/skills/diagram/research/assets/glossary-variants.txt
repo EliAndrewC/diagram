@@ -301,6 +301,8 @@ carex lyngbyei	Carex
 carr	carr
 carried deck	carried deck
 carried decks	carried deck
+cart inn	wagon inn
+cart inns	wagon inn
 cascade	cascade
 cascade column	cascade
 cascade columns	cascade
@@ -2795,6 +2797,8 @@ shiroyone senmaida	senmaida
 shiso	shiso
 shitomi	shitomi
 shitomi shutters	shitomi
+shitomi-do	shitomi
+shitomido	shitomi
 shitsuden	shitsuden
 shizai	shizai
 shizuoka method	Shizuoka method
@@ -3164,6 +3168,8 @@ threshing yards	threshing yard
 threshing-yard	threshing yard
 throat	throat
 throats	throat
+through passage	through-passage plan
+through-earth-floor	toriniwa
 through-lane	through-lane
 through-lanes	through-lane
 through-passage	through-passage plan
@@ -3208,9 +3214,11 @@ toons	toon
 top-dress	top-dressing
 top-dressed	top-dressing
 top-dressing	top-dressing
+tori-niwa	toriniwa
 torii	torii
 toriimoto	Toriimoto
 torimono mitsu dogu	three arresting tools
+toriniwa	toriniwa
 toritsugi	yoritsuki
 toro	Toro
 toro site	Toro
