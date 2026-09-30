@@ -3293,7 +3293,10 @@
   "def": "Row village: a settlement strung in one or two lines along a road, river or valley floor, each holding's land running back from its house.",
   "variants": [
    "roson",
-   "row village"
+   "row village",
+   "row villages",
+   "road village",
+   "road villages"
   ]
  },
  "row house": {
@@ -13109,6 +13112,21 @@
   "variants": [
    "forest village",
    "forest villages"
+  ]
+ },
+ "ressen": {
+  "def": "列村: a settlement stretched long and thin in a line, its houses along a natural levee, the spring line at a hill's foot, a spring or a waterway, standing on one side of that line or on both. Japanese geography sets it beside the road village (roson), whose line is a road.",
+  "variants": [
+   "ressen",
+   "linear village",
+   "linear villages"
+  ]
+ },
+ "shirakashi": {
+  "def": "Shirakashi (シラカシ), a Japanese oak rendered \"white oak\" - one of the kashi oaks of a tree list - planted with zelkova along a Santome homestead's road side, where the two made an avenue.",
+  "variants": [
+   "shirakashi",
+   "white oak"
   ]
  }
 }

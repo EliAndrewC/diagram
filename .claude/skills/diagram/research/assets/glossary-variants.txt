@@ -1797,6 +1797,8 @@ lineage chancellors	chancellor
 lineage village	lineage village
 lineage villages	lineage village
 lineages	lineage
+linear village	ressen
+linear villages	ressen
 ling canal	Lingqu
 lingnan	Lingnan
 lingqu	Lingqu
@@ -2450,6 +2452,7 @@ rennyo	Rennyo
 rent bursary	rent bursary
 rent-collection bursaries	rent bursary
 rent-collection bursary	rent bursary
+ressen	ressen
 rest stop	tateba
 rest stops	tateba
 restoration	Restoration
@@ -2503,6 +2506,8 @@ river terrace	river terrace
 river terraces	river terrace
 road magistrate	road magistrate
 road magistrates	road magistrate
+road village	roson
+road villages	roson
 roji	roji
 roju	Roju
 rokudo crossroads	Rokudō crossroads
@@ -2521,6 +2526,7 @@ root-cutting	root-cut
 roson	roson
 rotation period	rotation period
 row village	roson
+row villages	roson
 rowhouse gate	nagayamon
 rowhouse gates	nagayamon
 runners	yayi
@@ -2722,6 +2728,7 @@ shinpen tsuika	Shinpen Tsuika
 shinsei	Shinsei
 shinshu	Jodo Shinshu
 shinshū	Jodo Shinshu
+shirakashi	shirakashi
 shirasu	oshirasu
 shirimito	shirimito
 shironameshi	shironameshi
@@ -3399,6 +3406,7 @@ wet-tint	wet-tint haze
 wet-tint haze	wet-tint haze
 wetted perimeter	wetted perimeter
 white charcoal	white charcoal
+white oak	shirakashi
 white-charcoal	white charcoal
 white-sand court	oshirasu
 white-tawed	shironameshi

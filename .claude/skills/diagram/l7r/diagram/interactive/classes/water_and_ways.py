@@ -371,10 +371,11 @@ class Well(Kind):
     the capacity (a well served several hundred - late-Qing Beijing at least about 650 persons to a well, a capital's
     figure), and that digging was costly so
     shared wells were the majority; the one-to-three count, the settled-and-boiled surface water, the
-    subscription financing, the typical two, the households-per-well ratio, and the shallow water table that
-    makes a farmstead's own well cheap (the groundwater paper gives no depth) were searched for and not
+    subscription financing, the typical two and the households-per-well ratio were searched for and not
     found, and stand as this record's estimate; so does the well-house roof on every well, since the
-    dictionaries define the well house but do not say how common it was. The map draws more wells than that count - a hamlet one or two, a village of 60 households six to nine, a town about sixteen - as a disclosed liberty, and the distances that keep a well among the houses and every household within reach of a well or a channel are calibrations against the drawn maps, not figures from a record.
+    dictionaries define the well house but do not say how common it was. A dispersed farm's own well is a
+    guess: on the Tonami plain, where the water table lay deep and a well was hard to dig, the farms in many
+    areas led a small channel into their grounds instead, and the map does not draw that channel. The map draws more wells than that count - a hamlet one or two, a village of 60 households six to nine, a town about sixteen - as a disclosed liberty, and the distances that keep a well among the houses and every household within reach of a well or a channel are calibrations against the drawn maps, not figures from a record.
 
     Name: well
     Covers: `wells` - the wellheads
