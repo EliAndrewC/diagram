@@ -7,7 +7,7 @@
  "start_commit": "ec99356cf081c1ac44ae227723edfdcf5675e6f7",
  "clone": "/diagram/.clones/diagram-exp-e3",
  "started": "2026-09-30T00:59:59Z",
- "ended": null,
+ "ended": "2026-09-30T01:30:37Z",
  "pauses": [],
  "memory_at_launch": {
   "source": "shared-slice",
@@ -34,6 +34,13 @@
    "293 | task R (buildings new 910, the servants' rowhouse doors + 4 keys) written, committed in clone diagram-exp-e2, checks owed | 2026-09-30",
    "293 | task R checked, committed in clone | 2026-09-30",
    "293 | run e2 ended - claim released | 2026-09-30"
+  ],
+  "claims_release_line": "293 | run e3 ended - claim released | 2026-09-30",
+  "ledger_lines_appended": 26,
+  "prefixes_reserved": [
+   ".claude/skills/diagram/research/sources/010-works-cited/20290-shimizuen-ashigaru-nagaya.html",
+   ".claude/skills/diagram/research/sources/010-works-cited/20300-chugen-kanazawa-jta.html",
+   ".claude/skills/diagram/research/sources/010-works-cited/20310-nagaya-kotobank.html"
   ]
  },
  "sessions": [
@@ -58,5 +65,7 @@
   "medium",
   "/diagram/.clones/.runs-293/e3/agents.json"
  ],
- "runner_stdout": "page-session: R-write.md\n  session:    88b40589-a850-40da-99cd-8ab5b2f1c5fa\n  transcript: /home/agent/.claude/projects/-diagram--clones-diagram-exp-e3/88b40589-a850-40da-99cd-8ab5b2f1c5fa.jsonl\n  log:        /diagram/.clones/diagram-exp-e3/.git/page-sessions/88b40589-a850-40da-99cd-8ab5b2f1c5fa\npage-session: R-check.md\n  session:    59eb99fa-6d9e-4061-b24d-83ca9949d0c0\n  transcript: /home/agent/.claude/projects/-diagram--clones-diagram-exp-e3/59eb99fa-6d9e-4061-b24d-83ca9949d0c0.jsonl\n  log:        /diagram/.clones/diagram-exp-e3/.git/page-sessions/59eb99fa-6d9e-4061-b24d-83ca9949d0c0\npage-session: started - each result.json is written when its session ends, and the next session begins\npage-session: to be told when the whole queue has ended, run this BACKGROUNDED (run_in_background):\n    until grep -q '^ALL DONE' /diagram/.clones/diagram-exp-e3/.git/page-sessions/run-fb91cfad.log; do sleep 60; done; tail -20 /diagram/.clones/diagram-exp-e3/.git/page-sessions/run-fb91cfad.log\n"
+ "runner_stdout": "page-session: R-write.md\n  session:    88b40589-a850-40da-99cd-8ab5b2f1c5fa\n  transcript: /home/agent/.claude/projects/-diagram--clones-diagram-exp-e3/88b40589-a850-40da-99cd-8ab5b2f1c5fa.jsonl\n  log:        /diagram/.clones/diagram-exp-e3/.git/page-sessions/88b40589-a850-40da-99cd-8ab5b2f1c5fa\npage-session: R-check.md\n  session:    59eb99fa-6d9e-4061-b24d-83ca9949d0c0\n  transcript: /home/agent/.claude/projects/-diagram--clones-diagram-exp-e3/59eb99fa-6d9e-4061-b24d-83ca9949d0c0.jsonl\n  log:        /diagram/.clones/diagram-exp-e3/.git/page-sessions/59eb99fa-6d9e-4061-b24d-83ca9949d0c0\npage-session: started - each result.json is written when its session ends, and the next session begins\npage-session: to be told when the whole queue has ended, run this BACKGROUNDED (run_in_background):\n    until grep -q '^ALL DONE' /diagram/.clones/diagram-exp-e3/.git/page-sessions/run-fb91cfad.log; do sleep 60; done; tail -20 /diagram/.clones/diagram-exp-e3/.git/page-sessions/run-fb91cfad.log\n",
+ "status": "valid",
+ "void_reason": ""
 }

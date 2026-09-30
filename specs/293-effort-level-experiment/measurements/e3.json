@@ -1,0 +1,99 @@
+{
+ "run_id": "e3",
+ "tokens": {
+  "main": {
+   "input_tokens": 190,
+   "output_tokens": 53801,
+   "cache_read_input_tokens": 6682174,
+   "cache_creation_input_tokens": 201574
+  },
+  "subagents": {
+   "input_tokens": 70,
+   "output_tokens": 42597,
+   "cache_read_input_tokens": 397228,
+   "cache_creation_input_tokens": 155163
+  },
+  "total": {
+   "input_tokens": 260,
+   "output_tokens": 96398,
+   "cache_read_input_tokens": 7079402,
+   "cache_creation_input_tokens": 356737
+  }
+ },
+ "wall_clock_s": 1801,
+ "sessions": [
+  "59eb99fa-6d9e-4061-b24d-83ca9949d0c0",
+  "88b40589-a850-40da-99cd-8ab5b2f1c5fa"
+ ],
+ "tool_calls": {
+  "main": {
+   "Bash": 68,
+   "Agent": 9,
+   "Read": 7,
+   "Edit": 9,
+   "Write": 7,
+   "WebSearch": 11,
+   "WebFetch": 2
+  },
+  "subagents": {
+   "Read": 33,
+   "WebFetch": 7,
+   "Grep": 5
+  }
+ },
+ "dispatches": {
+  "quote-check@inherit": 2,
+  "record-format@inherit": 1,
+  "source-applicability@inherit": 5,
+  "source-reader@inherit": 1
+ },
+ "effort": {
+  "main": {
+   "medium": 93
+  },
+  "subagents": {
+   "source-applicability": {
+    "high": 15
+   },
+   "quote-check": {
+    "medium": 10
+   },
+   "record-format": {
+    "medium": 6
+   },
+   "source-reader": {
+    "high": 4
+   }
+  }
+ },
+ "adhoc_dispatches": [],
+ "adhoc_judging_at_session_effort": 0,
+ "rework": {
+  "guard": {
+   "finished-run:reminded:finished-not-running": 1,
+   "check-bundle:permitted:no-repo-path": 1,
+   "agent-model:permitted:pinned-type": 9,
+   "check-bundle:blocked:repo-path": 1,
+   "check-bundle:permitted:bundle-named": 7,
+   "pair:permitted:review-not-owed": 1,
+   "batching:reminded:serial-recon-notice": 5
+  },
+  "verdicts": {
+   "source-applicability": {
+    "unclear": 4
+   },
+   "quote-check": {
+    "pass": 2
+   },
+   "record-format": {
+    "unclear": 1
+   },
+   "source-reader": {
+    "not-pass": 1
+   }
+  },
+  "failed_make_runs": [],
+  "fix_commits": [],
+  "escalations": 0
+ }
+}
