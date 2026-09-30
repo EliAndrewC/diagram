@@ -20,6 +20,21 @@ def test_the_shadow_measure_counts_the_near_points_and_the_longest_unbroken_stre
     assert _serve.shadow_measure(away, road) == (8, pytest.approx(32.0))
 
 
+def test_a_way_shadowed_past_a_pitch_names_the_way_it_runs_beside() -> None:
+    """`shadowed_by` (feature 293 on 291): way against way, the longest unbroken stretch within `WEB_SHADOW_FT` past a
+    `BUNDLE_PITCH`; a way whose box stands off this one's is not measured, and a way of one point shadows nothing."""
+    road = [(0.0, 0.0), (400.0, 0.0)]
+    beside = [(0.0, 18.0), (240.0, 18.0), (240.0, 80.0)]
+    short = [(0.0, 18.0), (60.0, 18.0)]
+    far = [(0.0, 500.0), (400.0, 500.0)]
+    ways = [road, beside, short, far, [(5.0, 5.0)]]
+    assert _serve.shadowed_by(ways, 1) == 0
+    assert _serve.shadowed_by(ways, 2) is None, "60 ft beside it is under a pitch"
+    assert _serve.shadowed_by(ways, 3) is None, "a way 500 ft off is never measured"
+    assert _serve.shadowed_by(ways, 4) is None
+    assert _serve.sampled([(0.0, 0.0), (10.0, 0.0)]) == [(0.0, 0.0), (5.0, 0.0), (10.0, 0.0)]
+
+
 def test_a_web_lane_may_not_run_the_length_of_a_shelter_belt() -> None:
     """Crossing a belt costs it a lane's width of wall, which is a fair price for a way with
     somewhere to be. Running ALONG it splits one wind wall into two thinner ones - measured, a back

@@ -122,6 +122,18 @@ def test_a_street_is_cut_to_its_outermost_joints() -> None:
     assert trim_streets(s, 4.0) == 0, "cut already"
 
 
+def test_a_street_s_one_end_is_cut_back_to_its_last_joint() -> None:
+    """`end_to_its_joint` (feature 293 on 291): the named end only, to the joint nearest it; the other end as it is, and the
+    street as it is with no joint on it."""
+    from l7r.diagram.hamletgen.ways.street import end_to_its_joint
+
+    street = [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0), (300.0, 0.0)]
+    joints = [(50.0, 2.0), (250.0, -3.0), (150.0, 90.0)]
+    assert end_to_its_joint(street, joints, 4.0, -1) == [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0), (250.0, 0.0)]
+    assert end_to_its_joint(street, joints, 4.0, 0) == [(50.0, 0.0), (100.0, 0.0), (200.0, 0.0), (300.0, 0.0)]
+    assert end_to_its_joint(street, [(150.0, 90.0)], 4.0, -1) == street, "no joint on it: as it is"
+
+
 def test_the_first_street_is_carried_on_to_the_road_it_nearly_meets() -> None:
     """`meet_the_road` (feature 291 on 287): a street ending within the reach of the road's start is carried on to it, from
     whichever end is nearer; one that meets it, or stands beyond the reach, is left; a degenerate street or road too."""

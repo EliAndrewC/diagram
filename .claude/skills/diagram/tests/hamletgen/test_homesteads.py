@@ -185,9 +185,15 @@ def test_strip_blocked_excuses_its_own_farmhouse_and_the_skipped_bundle_boxes_an
 def test_a_linear_hamlet_stands_in_rows_along_its_streets_and_never_in_ranks() -> None:
     """Feature 291 amendment 3 (research homesteads/155 and 156): a linear hamlet's farms stand in rows along the streets
     its row planned - `seat_rows` - and it takes no rank round; a nucleated hamlet on the same ground is seated by its front
-    row and ranks as before. Both seat every household (feature 287 plan D2). (The connector-frontage pass this test used to
-    hold is retired: the connector does not exist when the homesteads are seated.)"""
-    from l7r.diagram.hamletgen.homesteads import stage_homesteads  # through the MODULE: a stage is not package surface
+    row and ranks as before. The row seats every household (feature 287 plan D2). (The connector-frontage pass this test used
+    to hold is retired: the connector does not exist when the homesteads are seated.)
+
+    THE NUCLEATED CONTROL PLANS NO ROW, AND SEATS EVERY HOUSEHOLD OR IS REFUSED BY NAME (feature 293 on 291). This square
+    test field gives the nucleated seat one margin and no ladder, and its band holds about ten households: measured on main
+    (291), 10 of 10 seated, then 10 of 11, 8 of 12 and 6 of 13; with the storehouse on the largest house (feature 293,
+    research/homesteads/120) 9 of 10, 6 of 11, 11 of 12 and 6 of 13 - where the site is refused, as plan D2 asks (the refusal
+    is the next test's subject). The count it seats is the fixture's edge, not the form's; the pool and the cohort hold it."""
+    from l7r.diagram.hamletgen.homesteads import capacity, stage_homesteads  # through the MODULE: a stage is not package surface
 
     for form in ("nucleated", "linear"):
         plan = a_plan(households=10, settlement_form=form)  # each form's own canvas (a row grows it, `LINEAR_CANVAS`)
@@ -196,13 +202,19 @@ def test_a_linear_hamlet_stands_in_rows_along_its_streets_and_never_in_ranks() -
         s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=True)
         s._nucleated = form == "nucleated"
         s.field_polys.append(list(plan.envelope))
-        stage_homesteads(s, plan)
         if form == "nucleated":
-            assert len(s.M["houses"]) == 10, "nucleated: every household seated"
-        else:
-            assert s.M.get("row_street_plans"), "the row planned its streets"
-            assert s.M["meta"]["seat_search"].get("rounds", 0) == 0, "no rank round ran"
-            assert len(s.M["houses"]) == 10, "linear: every household seated along the streets"
+            try:
+                stage_homesteads(s, plan)
+            except capacity.SiteRefused as refused:
+                assert "no margin seats all 10" in str(refused), "refused by name, never shipped short"
+            else:
+                assert len(s.M["houses"]) == 10, "nucleated: every household seated"
+            assert not s.M.get("row_street_plans"), "nucleated: no row planned"
+            continue
+        stage_homesteads(s, plan)
+        assert s.M.get("row_street_plans"), "the row planned its streets"
+        assert s.M["meta"]["seat_search"].get("rounds", 0) == 0, "no rank round ran"
+        assert len(s.M["houses"]) == 10, "linear: every household seated along the streets"
 
 
 def test_a_row_village_whose_streets_cannot_hold_every_farm_is_refused(monkeypatch: pytest.MonkeyPatch) -> None:

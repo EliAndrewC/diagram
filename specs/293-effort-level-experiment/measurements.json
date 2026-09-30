@@ -42,5 +42,16 @@
     "observed": "2026-09-30",
     "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md, the last paragraph; the board's move measured on the manifests: (1480.9, 2030.1) on main to (1390.2, 1949.4), 121.4 ft; the woodland stand at (1404, 2882) in `commons`, main's `meta.woodland_offsheet` W, 4 parcels",
     "method": "jq over main's and the clone's manifests, then the notes edited"
+  },
+  "sawada-r2-F1-handoff": {
+    "verifies": "F1",
+    "subject": "sawada",
+    "answers": "2dcb78c47692",
+    "quantity": "the round-2 record finding's two parts closed: the handoff the deferral names exists, and the deferral names its distance basis",
+    "value": 2,
+    "unit": "parts closed",
+    "observed": "2026-09-30",
+    "source": "specs/293-effort-level-experiment/outputs/I-port-handoff.md exists; future-work/farming-communities.md 'OPEN 2026-09-30 (feature 293, settlement-review of Sawada)' reads 'from each shared shed's center to the nearest farmhouse's center - the basis draft_byres compares against _BORROW_REACH'; re-measured on the merge with main (feature 291): Sawada 66, 124, 92, 174 ft against main's 66, 47, 92, 129, Inashiro 138, 74, 87 on both - the entry's figures stand",
+    "method": "ls and grep over the files; the distances with python over main's and the clone's manifests"
   }
 }

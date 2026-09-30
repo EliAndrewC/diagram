@@ -268,12 +268,16 @@ def needle_joins(lanes: Lanes) -> list[tuple[int, int]]:
 
 
 def doubled_tails(M: Mapping[str, Any]) -> list[int]:
-    """The lanes (the connector aside) whose end runs on beside another way, at `_DOUBLED_DEG` (`along_tail`), whatever the
-    two ways' widths."""
+    """The lanes (the connector aside) whose end - EITHER end - runs on beside another way, at `_DOUBLED_DEG` (`along_tail`,
+    asked of the lane and of it reversed), whatever the two ways' widths. `along_tail` walks in from a lane's last point, and
+    asked only that way it never saw a first end doubled: Mizuguchi's field spur left its street and ran 10-12 ft beside it
+    for 210 ft before it turned for the field (feature 293 on 291, the pool's side-by-side test)."""
     ways = _ways(M)
     lanes = M.get("lanes") or []
     return [
-        i for i, p in enumerate(ways) if not lanes[i].get("connector") and len(p) >= 2 and any(j != i and len(o) >= 2 and along_tail(p, o, deg=_DOUBLED_DEG) is not None for j, o in enumerate(ways))
+        i
+        for i, p in enumerate(ways)
+        if not lanes[i].get("connector") and len(p) >= 2 and any(j != i and len(o) >= 2 and any(along_tail(q, o, deg=_DOUBLED_DEG) is not None for q in (p, p[::-1])) for j, o in enumerate(ways))
     ]
 
 

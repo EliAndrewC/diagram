@@ -181,6 +181,15 @@ def to_its_joints(street: Sequence[Pt], ends: Sequence[Pt], touch: float) -> lis
     `touch` of it (a farm's door path, the join, the road run on from it) - or as it is where fewer than one joint stands on
     it. Past its last farm's path a street serves nothing the lane law counts (`end_serves`: a farmhouse stands most of a
     frame off its street), and the settle refuses a tree lane with a dangling end (feature 291 on 287, Mizuguchi)."""
+    arc, at = joints_along(street, ends, touch)
+    if not at:
+        return list(street)
+    lo, hi = min(at), max(at)
+    return cut_between(street, arc, lo, hi)
+
+
+def joints_along(street: Sequence[Pt], ends: Sequence[Pt], touch: float) -> tuple[list[float], list[float]]:
+    """The street's cumulative lengths, and the arc length along it of each lane end in `ends` within `touch` of it."""
     arc = [0.0]
     for a, b in zip(street, street[1:], strict=False):
         arc.append(arc[-1] + math.dist(a, b))
@@ -191,10 +200,17 @@ def to_its_joints(street: Sequence[Pt], ends: Sequence[Pt], touch: float) -> lis
             a, b = street[best[1]], street[best[1] + 1]
             q = seg_closest(e[0], e[1], a, b)
             at.append(arc[best[1]] + math.dist(a, q))
+    return arc, at
+
+
+def end_to_its_joint(street: Sequence[Pt], ends: Sequence[Pt], touch: float, end: int) -> list[Pt]:
+    """The street's `end` (-1 its last point, 0 its first) cut back to the joint nearest it (`to_its_joints`' outermost
+    joint on that side), the other end left as it is; the street as it is where no joint stands on it. The settle asks it of
+    a street end the lane law calls dangling (`settle_dangling`)."""
+    arc, at = joints_along(street, ends, touch)
     if not at:
         return list(street)
-    lo, hi = min(at), max(at)
-    return cut_between(street, arc, lo, hi)
+    return cut_between(street, arc, 0.0, max(at)) if end == -1 else cut_between(street, arc, min(at), arc[-1])
 
 
 def cut_between(pts: Sequence[Pt], arc: Sequence[float], lo: float, hi: float) -> list[Pt]:

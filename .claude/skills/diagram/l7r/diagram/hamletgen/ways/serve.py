@@ -43,6 +43,33 @@ def shadow_measure(run: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]]) -> tuple[in
     return sum(near_flags), worst * step_ft
 
 
+def sampled(p: Sequence[Pt], step: float = 4.0) -> list[Pt]:
+    """A way's points every `step` ft - the spacing `clear_runs` gives a web run before `_lay_web_lane` judges it."""
+    out: list[Pt] = []
+    for a, b in zip(p, p[1:], strict=False):
+        n = max(1, int(math.dist(a, b) // step))
+        out += [(a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n) for k in range(n)]
+    return [*out, p[-1]]
+
+
+def shadowed_by(ways: Sequence[Sequence[Pt]], i: int) -> int | None:
+    """The first other way that way `i` runs beside - within `WEB_SHADOW_FT`, unbroken, for more than a `BUNDLE_PITCH`
+    (`shadow_measure`, way against way) - or None: `_lay_web_lane`'s refusal, asked of a finished lane (`settle_shadows`).
+    Only a way whose box comes within `WEB_SHADOW_FT` of this one's is measured."""
+    p = ways[i]
+    if len(p) < 2:
+        return None
+    run = sampled(p)
+    x0, y0 = min(q[0] for q in p) - WEB_SHADOW_FT, min(q[1] for q in p) - WEB_SHADOW_FT
+    x1, y1 = max(q[0] for q in p) + WEB_SHADOW_FT, max(q[1] for q in p) + WEB_SHADOW_FT
+    for j, o in enumerate(ways):
+        if j == i or len(o) < 2 or max(q[0] for q in o) < x0 or min(q[0] for q in o) > x1 or max(q[1] for q in o) < y0 or min(q[1] for q in o) > y1:
+            continue
+        if shadow_measure(run, list(zip(o, o[1:], strict=False)))[1] > BUNDLE_PITCH:
+            return j
+    return None
+
+
 def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly], water: list[tuple[Pt, Pt]], belts: Sequence[Poly] = (), houses: Sequence[Pt] = ()) -> bool:
     """Draw one web lane - but ONLY if it joins the way network, and TOUCHING it where it joins.
 
