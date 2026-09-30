@@ -40,8 +40,9 @@ class IrrigationDitch(Kind):
     """
     What: The dug channels that bring water TO the paddies: the head race that leaves the brook at its intake,
     the two supply canals it forks into along the field's high margins, and the delivery ditches running
-    down-slope between the plots. The intake is only an opening in the brook's bank: the head race opens out
-    of the bank there, with no gate and no boards across its mouth.
+    down-slope between the plots. Some hamlets build a weir across the brook at the intake and some take their
+    water off the bare bank, where the intake is only an opening: the head race opens out of the bank there,
+    with no gate and no boards across its mouth.
 
     Why: The comb layout - supply along the high margins, delivery ditches perpendicular down-slope, one drain on
     the lowest line - is the Edo layout attributed to the Kishu school, and it is what Chinese canal doctrine
@@ -63,17 +64,20 @@ class IrrigationDitch(Kind):
     The third of a meter is a modern design MINIMUM rather than a measured ditch, though the Rites of Zhou already name a finest field channel of about a foot, and the right-angle rule is carried by the classical commentary on the Rites of Zhou, the Song polders of the Lake Tai plain and the jori grid, so the rule is premodern and not a modern standard's invention, though all three show it as an ideal or at the scale of district waterways and the grid's 109 m squares, and none shows how closely a village's own ditches kept to it. The national standard the record once leaned on for both is readable nowhere and is
     not cited. And the Kishu attribution is the layout's, not the name's: the school is attested for river
     channelization rather than for a field plan. Nor is the shape of this one drawn from a survey: the head
-    race's length from the intake to the fork follows the fan's geometry, the record giving no distance. The
+    race runs from the intake to the fork at the head of the fan, its shape derived, but the head race's length is
+    a guess chosen afresh for each map, the record giving no distance; and whether a hamlet has a weir at its intake
+    is chosen with even odds, a guess, since the record makes it follow the brook's level through the season,
+    which the map does not give, and no source counts the two forms. The
     bare mouth is read; that no gate or boards are drawn there rests on none being recorded at a village
     intake, and at a two-foot opening either would be smaller than the map can show.
 
-    Caveat: the head race's length from the intake to the fork follows the fan's geometry, the record giving no distance
+    Caveat: the head race's length is a guess chosen afresh for each map, the record giving no distance; and whether a hamlet has a weir at its intake is chosen with even odds, a guess
 
     Name: irrigation ditch
     Covers: `field_ditches` whose role is not `drain` (except on a dike-pond field, whose canals are the pond canal), and `channels` not leaving a drain - the head race, the supply canals, the delivery ditches, a source-to-field feed
     Label: accurate
     Sources: tabayashi-1987, jsidre-minumadai, jsslkx-002-2021, nougyoudoboku-matsutan, bungotakada-tagoshi, suido-ishizue-iseki, people-zhishui-2025, pwsannong-gudai-shuili, thepaper-guangai
-    Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'Irrigation canals and how they are laid out (yosuiro)', 'Where the ditch leaves the brook: the intake and its weir (toshuko and seki)'; research/rendering/water.html - 'How our maps lay out irrigation canals', 'How our maps draw the intake and its weir'
+    Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'Irrigation canals and how they are laid out (yosuiro)', 'Where the ditch leaves the brook: the intake and its weir (toshuko and seki)'; research/rendering/water.html - 'How our maps lay out irrigation canals', 'How our maps draw the intake and its weir (toshuko and seki)'
     """
 
     key = "irrigation ditch"
@@ -177,7 +181,7 @@ class Weir(Kind):
     Covers: `weirs` - the bar across the brook at a weir hamlet's intake
     Label: convention
     Sources: maff-toshuko-history, jsidre-miwa-2023, jawiki-seki, japanriver-koborebanashi-21, wangzhen-nongshu-18, suido-ishizue-iseki, kotobank-shigarami, hrr-agagawa-dento, kotobank-jakago, people-zhishui-2025, pwsannong-quxi
-    Entry: research/water.html - 'Where the ditch leaves the brook: the intake and its weir (toshuko and seki)'; research/rendering/water.html - 'How our maps draw the intake and its weir'
+    Entry: research/water.html - 'Where the ditch leaves the brook: the intake and its weir (toshuko and seki)'; research/rendering/water.html - 'How our maps draw the intake and its weir (toshuko and seki)'
     """
 
     key = "weir"

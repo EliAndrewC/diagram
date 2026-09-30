@@ -67,6 +67,7 @@ aquifer	aquifer
 aquifers	aquifer
 aragaki	aragaki
 araiba	kawado
+araizeki	araizeki
 ares	are
 arresting tools	three arresting tools
 arrow bamboo	yadake
@@ -1103,6 +1104,8 @@ grand canal	Grand Canal
 grass carp	grass carp
 grass hill	kusayama
 grass hills	kusayama
+grass weir	grass weir
+grass weirs	grass weir
 grave good	grave goods
 grave goods	grave goods
 grave island	grave island
@@ -3514,6 +3517,8 @@ warrens	warren
 warring states	Warring States
 warring-states	Warring States
 washe	wazi
+washing weir	araizeki
+washing weirs	araizeki
 wasi	wazi
 watari-roka	watari-roka
 watashiba	watashiba
@@ -3708,6 +3713,7 @@ zhalan	zhalan
 zhalou	zhalou
 zhang	zhang
 zhengde	Zhengde
+zhengguo canal	Zhengguo canal
 zhengtong	Zhengtong
 zhengyi	Zhengyi
 zhili	Zhili

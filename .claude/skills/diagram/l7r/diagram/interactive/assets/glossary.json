@@ -13664,5 +13664,26 @@
   "variants": [
    "kiku"
   ]
+ },
+ "araizeki": {
+  "def": "A weir built to let the water run over its crest at all times, not only in flood. With the grass weir, one of the two kinds an official handbook sorts the Edo-period farm weirs into.",
+  "variants": [
+   "araizeki",
+   "washing weir",
+   "washing weirs"
+  ]
+ },
+ "grass weir": {
+  "def": "A simple weir of stakes driven into a stream with reed (kaya) woven between them, used where a permanent weir is not allowed. One is still built today at Chiyoda, in Saga.",
+  "variants": [
+   "grass weir",
+   "grass weirs"
+  ]
+ },
+ "Zhengguo canal": {
+  "def": "An ancient Chinese irrigation canal of the third century BC; scholars disagree whether its head had a dam across the river or took the water off a bend without one.",
+  "variants": [
+   "Zhengguo canal"
+  ]
  }
 }
