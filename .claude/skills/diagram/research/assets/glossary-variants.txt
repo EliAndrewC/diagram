@@ -2217,7 +2217,6 @@ nuclei	nucleated
 nucleus	nucleated
 nukimon	nukimon
 numajiro	numajiro
-nunosarashi	nunosarashi
 nuptiality	nuptiality
 nure-en	nure-en
 nuriya	nuriya
@@ -3630,7 +3629,6 @@ zaigomachi	zaigomachi
 zaimachi	zaimachi
 zaimokuya	zaimokuya
 zama	Zama
-zaofang	zaofang
 zaojun	Zaojun
 zashiki	zashiki
 zelkova	keyaki

@@ -93,7 +93,7 @@ _OVERLAP_STRUCTS = (
     "punishment_spots",
     "execution_grounds",
     "boundary_markers",
-    # the trade works (GM 2026-07-24, research/urban-features.html "Trade works - which trades outgrow the shop glyph, and why")
+    # the trade works (GM 2026-07-24, research/rendering/urban-features.html "How our maps draw shops, and the trades that outgrow the shop glyph")
     "breweries",
     "dye_yards",
     "lumber_yards",

@@ -83,7 +83,7 @@ CIVIC_PROGRAM: tuple[tuple[str, int | None, float], ...] = (
     # the first draft oversized): a ~36 ft platform (Pingyao's Market Tower, ATTESTED 133.4 m^2
     # plan ~ 38 ft square - these towers dominate by height, not plan) = 12 px + its clear block.
     ("bell-and-drum tower", 1, 250.0),
-    # Trade works (GM 2026-07-24, research/urban-features.html "Trade works - which trades outgrow the shop glyph, and why"): the trades whose premises outgrow
+    # Trade works (GM 2026-07-24, research/rendering/urban-features.html "How our maps draw shops, and the trades that outgrow the shop glyph"): the trades whose premises outgrow
     # the shop glyph. The brewery is the big one (vat hall + shopfront + kura + well, ~32x20 px
     # drawn + margins); the dye yard, oil press, pawnshop court, and 1-2 bathhouses (the sento
     # count rolls from the population band, s.bathhouses) together add ~1,100-1,350 px^2 drawn -

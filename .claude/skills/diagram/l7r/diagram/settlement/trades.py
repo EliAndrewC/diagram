@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 class TradesMixin:
-    # ---- TRADE WORKS (GM 2026-07-24; grounding in research/urban-features.html "Trade works - which trades outgrow the shop glyph, and why"): the trades whose
+    # ---- TRADE WORKS (GM 2026-07-24; grounding in research/rendering/urban-features.html "How our maps draw shops, and the trades that outgrow the shop glyph"): the trades whose
     # real premises outgrow the generic shop glyph - big attached works, yards, and outbuildings
     # that visibly show at map scale. Each records a first-class manifest entry (overlap-checked)
     # and blocks placement; sizes are TRUE feet via self.px. The long tail of trades (tofu,
@@ -76,7 +76,7 @@ class TradesMixin:
 
     def brewery(self: Settlement, x: float, y: float, rot: float = 0.0, label: str = "brewery") -> None:  # type: ignore[misc]
         """A SAKE/MISO/SOY BREWERY compound - the biggest trade premises in a provincial seat
-        (research/urban-features.html "Trade works - which trades outgrow the shop glyph, and why": a minimal sakagura is a 60-120 ft vat hall BEHIND a normal
+        (research/rendering/urban-features.html "How our maps draw shops, and the trades that outgrow the shop glyph": a minimal sakagura is a 60-120 ft vat hall BEHIND a normal
         shopfront, 3-8x the shophouse footprint, very often the town's largest commercial building;
         1-2 per seat of ~3,000; brewers were town elite, sited IN town on good well water). Drawn
         as the long gabled VAT HALL (ridge + fermentation-vat circles + a masonry chimney), the
@@ -171,7 +171,7 @@ class TradesMixin:
     def pawnshop(self: Settlement, x: float, y: float, rot: float = 0.0, label: str = "pawnshop") -> None:  # type: ignore[misc]
         """A PAWNSHOP (shichiya): an ordinary shopfront whose tell is STORAGE - pledges are bulky,
         so the broker keeps 2-3 fireproof kura in a walled rear court (the existing kura glyph
-        multiplied, per research/urban-features.html "Trade works - which trades outgrow the shop glyph, and why"). Records M['pawnshops'] (city_has_pawnshop)."""
+        multiplied, per research/rendering/urban-features.html "How our maps draw shops, and the trades that outgrow the shop glyph"). Records M['pawnshops'] (city_has_pawnshop)."""
         sw_, sh_ = self.px(48) / 2, self.px(32) / 2
         kw_, kh_ = self.px(20) / 2, self.px(14) / 2
         ch_ = kh_ * 2 + 4.5  # the rear court's depth
@@ -233,7 +233,7 @@ class TradesMixin:
 
     def farrier(self: Settlement, x: float, y: float, rot: float = 0.0, label: str = "farrier") -> None:  # type: ignore[misc]
         """A FARRIER's shoeing forge - the one hoof-care premises that earns its own footprint
-        (grounding: research/urban-features.html "Trade works - which trades outgrow the shop glyph, and why", the FARRIERY sub-entry).
+        (grounding: research/rendering/urban-features.html "How our maps draw shops, and the trades that outgrow the shop glyph", the FARRIERY sub-entry).
 
         Rokugan shoes horses in IRON where Edo Japan used woven straw, for two reasons that are
         both already in the GM's canon: continental ore makes iron a normal industrial good (the
