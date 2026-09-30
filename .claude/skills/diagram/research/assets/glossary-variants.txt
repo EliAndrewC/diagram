@@ -1640,6 +1640,7 @@ kasō-dera	kaso-dera
 kata	kata
 kata-hōdōe-chi	jōgōe-chi
 katairo	eiro
+katakana	katakana
 katanagari	sword hunt
 katemeshi	katemeshi
 katsura	Katsura
@@ -2282,6 +2283,7 @@ origake	origake
 oroshi	oroshi
 oshi	oshi
 oshirasu	oshirasu
+ossuaries	ossuary
 ossuary	ossuary
 osuzu	Osuzu corridor
 osuzu corridor	Osuzu corridor
@@ -2336,6 +2338,10 @@ paper ingot	paper ingot
 paper ingots	paper ingot
 parapet	parapet
 parish	parish
+parish ground	parish
+parish grounds	parish
+parish plot	parish
+parish plots	parish
 parish temple	parish
 parish's	parish
 parishioners	parish
@@ -2556,6 +2562,9 @@ revetted	revetment
 rhizome	rhizome
 rhizomes	rhizome
 ri	ri
+ribbon valley	ribbon-valley
+ribbon-valley	ribbon-valley
+ribbon-valley paddy	ribbon-valley
 rice-transit town	rice-transit town
 rice-transit towns	rice-transit town
 rick	rick
@@ -3572,6 +3581,8 @@ yangtze-delta	Lower Yangzi
 yangzi delta	Lower Yangzi
 yanushi	yamori
 yashiki	yashiki
+yashiki-baka	yashiki-baka
+yashikibaka	yashiki-baka
 yashikichi	yashikichi
 yashikigami	yashikigami
 yashikigami-sama	yashikigami

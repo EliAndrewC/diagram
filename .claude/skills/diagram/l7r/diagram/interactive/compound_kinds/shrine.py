@@ -371,11 +371,11 @@ class ShrineBurialGround(Kind):
     Why: The graves lie by the monk-run building, and in the setting the country monk's shrine is the parish temple;
     so where a village buries in the shrine's yard, the burial ground stands by it.
 
-    Note: The graves at the monk-run building are the record's village rule for the setting, and it rests on the setting's own canon: real Shinto shuns death, and the two-grave villages surveyed keep the shrine at the upper end and the burial ground below the houses, so a ground in a shrine's own yard is this setting's and not history's.
+    Note: A ground in a shrine's own yard is a deliberate deviation, resting on the setting's own canon: real Shinto shuns death, and the two-grave villages surveyed keep the shrine at the upper end and the burial ground below the houses, so it is this setting's and not history's. Whether a village's one ground lies in the shrine's yard or apart from it is rolled per village at even odds, a guess, since no page counts the villages taking each form.
 
     Name: burial ground
     Covers: the burial ground by the shrine, where the village has it there
-    Label: accurate
+    Label: deviation
     Sources: danka-terauke-encyclopedia, bunkotsu-jawiki
     Entry: research/religion-and-death.html - 'Where a village buries its dead: its own ground, the temple yard, the fields or the home plot'; research/rendering/religion-and-death.html - 'How our maps choose where a village's and a hamlet's dead lie'
     """

@@ -429,18 +429,21 @@ class BurialGround(Kind):
     lineage's and a temple's, and the dead went more often to temple graves; that every hamlet kept a ground of its own
     rests only on twentieth-century records, so a hamlet draws none and its dead lie with the village's. That ground
     lies in the village shrine's own yard or, in other villages, as a ground of its own just beyond the last of the
-    houses; no set distance from them is drawn, none being found from before modern times. It is sized to everyone it
-    serves, at 7.5 to 18 sq ft for each inhabitant, with a death rate of about 25 to 30 in a thousand a year, inside what
-    Edo village registers give.
+    houses, downstream of them; no set distance from them is drawn, none being found from before modern times. It is
+    sized to everyone it serves, at 7.5 to 18 sq ft for each inhabitant, with a death rate of about 25 to 30 in a
+    thousand a year, inside what Edo village registers give.
 
-    Note: The village's ground and its two forms are read. Which form a village's ground takes, the shrine's yard or a
-    ground of its own, is rolled at even odds, and those odds are a guess; its size is this project's reckoning from the
-    Edo death rates and a reuse period no page gives; that its dead lie downstream of the houses is attested in today's
-    villages only, and the map claims no side.
+    Note: The village's ground and its two forms are read, but the attested yard is a temple's: putting it in the
+    shrine's yard is a deliberate deviation, since this setting's country monk keeps the shrine and performs the rites.
+    Which form a village's ground takes, the shrine's yard or a ground of its own, is rolled at even odds, and those
+    odds are a guess, as is the rule that a village whose shrine stands on a hill always takes a ground apart; its size
+    is this project's reckoning from the Edo death rates and a reuse period no page gives; that its dead lie downstream
+    of the houses, where the map draws a ground apart, is attested in today's villages only.
 
     Caveat: Which form a village's ground takes, the shrine's yard or a ground of its own, is rolled at even odds, and
-    those odds are a guess; its size is this project's reckoning from the Edo death rates and a reuse period no page
-    gives; that its dead lie downstream of the houses is attested in today's villages only, and the map claims no side.
+    those odds are a guess, as is the rule that a village whose shrine stands on a hill always takes a ground apart; its
+    size is this project's reckoning from the Edo death rates and a reuse period no page gives; that its dead lie
+    downstream of the houses, where the map draws a ground apart, is attested in today's villages only.
 
     Name: burial ground
     Covers: `cemeteries` - a village's burial ground

@@ -3036,7 +3036,8 @@
  "ossuary": {
   "def": "A place where the bones of the dead are kept together - here a low mound with one weathered stupa over the communal bones of the poor and the unclaimed.",
   "variants": [
-   "ossuary"
+   "ossuary",
+   "ossuaries"
   ]
  },
  "ote-mon": {
@@ -4884,7 +4885,11 @@
    "parish",
    "parishioners",
    "parish temple",
-   "parish's"
+   "parish's",
+   "parish ground",
+   "parish grounds",
+   "parish plot",
+   "parish plots"
   ]
  },
  "bay": {
@@ -13465,6 +13470,27 @@
   "variants": [
    "state altar",
    "state altars"
+  ]
+ },
+ "yashiki-baka": {
+  "def": "A household's grave set on its own house land, within the house plot or beside it, rather than at a temple or in a shared graveyard; many households once kept one, and from the Meiji period on many were moved to communal grounds.",
+  "variants": [
+   "yashiki-baka",
+   "yashikibaka"
+  ]
+ },
+ "katakana": {
+  "def": "One of the two Japanese syllabaries, which spells a word by its sound; a page writing a word in katakana rather than in Chinese characters gives its sound but not its written form.",
+  "variants": [
+   "katakana"
+  ]
+ },
+ "ribbon-valley": {
+  "def": "A narrow valley whose paddies run as a thin strip along its stream between the slopes on either side; one of the kinds of land a paddy map is drawn on.",
+  "variants": [
+   "ribbon-valley",
+   "ribbon-valley paddy",
+   "ribbon valley"
   ]
  }
 }
