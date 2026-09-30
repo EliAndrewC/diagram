@@ -7,7 +7,7 @@
  "start_commit": "ec99356cf081c1ac44ae227723edfdcf5675e6f7",
  "clone": "/diagram/.clones/diagram-exp-e2",
  "started": "2026-09-29T23:26:10Z",
- "ended": null,
+ "ended": "2026-09-30T00:57:26Z",
  "pauses": [],
  "memory_at_launch": {
   "source": "shared-slice",
@@ -30,6 +30,17 @@
    "293 | task R (buildings new 910, the servants' rowhouse doors + 7 keys) written, committed in clone, checks owed | 2026-09-29",
    "293 | task R checked, committed in clone | 2026-09-29",
    "293 | run e1 ended - claim released | 2026-09-29"
+  ],
+  "claims_release_line": "293 | run e2 ended - claim released | 2026-09-30",
+  "ledger_lines_appended": 73,
+  "prefixes_reserved": [
+   ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary/18720-batten ceiling.json",
+   ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary/18730-ridge tag.json",
+   ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary/18740-south range.json",
+   ".claude/skills/diagram/research/sources/010-works-cited/20240-shinke-nagayamon-kanazawa.html",
+   ".claude/skills/diagram/research/sources/010-works-cited/20250-kochi-hantei-jstage.html",
+   ".claude/skills/diagram/research/sources/010-works-cited/20260-hoppou-shibata-ashigaru.html",
+   ".claude/skills/diagram/research/sources/010-works-cited/20270-qianggen-siheyuan-layout.html"
   ]
  },
  "sessions": [
@@ -54,5 +65,7 @@
   "xhigh",
   "/diagram/.clones/.runs-293/e2/agents.json"
  ],
- "runner_stdout": "page-session: R-write.md\n  session:    29b33302-2b4d-496d-8d1e-62cff1f1ec3d\n  transcript: /home/agent/.claude/projects/-diagram--clones-diagram-exp-e2/29b33302-2b4d-496d-8d1e-62cff1f1ec3d.jsonl\n  log:        /diagram/.clones/diagram-exp-e2/.git/page-sessions/29b33302-2b4d-496d-8d1e-62cff1f1ec3d\npage-session: R-check.md\n  session:    9cbdba2c-7be4-4e03-9858-9538e1eedaa1\n  transcript: /home/agent/.claude/projects/-diagram--clones-diagram-exp-e2/9cbdba2c-7be4-4e03-9858-9538e1eedaa1.jsonl\n  log:        /diagram/.clones/diagram-exp-e2/.git/page-sessions/9cbdba2c-7be4-4e03-9858-9538e1eedaa1\npage-session: started - each result.json is written when its session ends, and the next session begins\npage-session: to be told when the whole queue has ended, run this BACKGROUNDED (run_in_background):\n    until grep -q '^ALL DONE' /diagram/.clones/diagram-exp-e2/.git/page-sessions/run-13bb2de9.log; do sleep 60; done; tail -20 /diagram/.clones/diagram-exp-e2/.git/page-sessions/run-13bb2de9.log\n"
+ "runner_stdout": "page-session: R-write.md\n  session:    29b33302-2b4d-496d-8d1e-62cff1f1ec3d\n  transcript: /home/agent/.claude/projects/-diagram--clones-diagram-exp-e2/29b33302-2b4d-496d-8d1e-62cff1f1ec3d.jsonl\n  log:        /diagram/.clones/diagram-exp-e2/.git/page-sessions/29b33302-2b4d-496d-8d1e-62cff1f1ec3d\npage-session: R-check.md\n  session:    9cbdba2c-7be4-4e03-9858-9538e1eedaa1\n  transcript: /home/agent/.claude/projects/-diagram--clones-diagram-exp-e2/9cbdba2c-7be4-4e03-9858-9538e1eedaa1.jsonl\n  log:        /diagram/.clones/diagram-exp-e2/.git/page-sessions/9cbdba2c-7be4-4e03-9858-9538e1eedaa1\npage-session: started - each result.json is written when its session ends, and the next session begins\npage-session: to be told when the whole queue has ended, run this BACKGROUNDED (run_in_background):\n    until grep -q '^ALL DONE' /diagram/.clones/diagram-exp-e2/.git/page-sessions/run-13bb2de9.log; do sleep 60; done; tail -20 /diagram/.clones/diagram-exp-e2/.git/page-sessions/run-13bb2de9.log\n",
+ "status": "valid",
+ "void_reason": ""
 }

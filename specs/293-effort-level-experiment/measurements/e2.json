@@ -1,0 +1,119 @@
+{
+ "run_id": "e2",
+ "tokens": {
+  "main": {
+   "input_tokens": 268,
+   "output_tokens": 153799,
+   "cache_read_input_tokens": 14147126,
+   "cache_creation_input_tokens": 385037
+  },
+  "subagents": {
+   "input_tokens": 144,
+   "output_tokens": 74250,
+   "cache_read_input_tokens": 975367,
+   "cache_creation_input_tokens": 220718
+  },
+  "total": {
+   "input_tokens": 412,
+   "output_tokens": 228049,
+   "cache_read_input_tokens": 15122493,
+   "cache_creation_input_tokens": 605755
+  }
+ },
+ "wall_clock_s": 5405,
+ "sessions": [
+  "29b33302-2b4d-496d-8d1e-62cff1f1ec3d",
+  "9cbdba2c-7be4-4e03-9858-9538e1eedaa1"
+ ],
+ "tool_calls": {
+  "main": {
+   "Bash": 101,
+   "Read": 16,
+   "WebSearch": 21,
+   "Agent": 13,
+   "Write": 10,
+   "Edit": 49
+  },
+  "subagents": {
+   "Read": 58,
+   "Grep": 14,
+   "WebFetch": 4,
+   "WebSearch": 1
+  }
+ },
+ "dispatches": {
+  "source-reader@inherit": 1,
+  "source-applicability@inherit": 8,
+  "quote-check@inherit": 2,
+  "record-format@inherit": 1,
+  "claude@haiku": 1
+ },
+ "effort": {
+  "main": {
+   "xhigh": 132
+  },
+  "subagents": {
+   "source-reader": {
+    "high": 9
+   },
+   "source-applicability": {
+    "high": 40
+   },
+   "record-format": {
+    "medium": 5
+   },
+   "claude": {
+    "unrecorded": 1
+   },
+   "quote-check": {
+    "medium": 13
+   }
+  }
+ },
+ "adhoc_dispatches": [
+  {
+   "type": "claude",
+   "model": "haiku",
+   "description": "placeholder wait",
+   "judging": false
+  }
+ ],
+ "adhoc_judging_at_session_effort": 0,
+ "rework": {
+  "guard": {
+   "finished-run:reminded:finished-not-running": 1,
+   "no-poll:rewrote:self-match": 1,
+   "agent-model:permitted:pinned-type": 12,
+   "check-bundle:permitted:no-repo-path": 1,
+   "no-poll:blocked:busy-wait-loop": 1,
+   "house-style:rewrote:corrected-edit": 1,
+   "check-bundle:permitted:bundle-named": 11,
+   "batching:reminded:serial-recon-notice": 10,
+   "pair:permitted:review-not-owed": 1,
+   "agent-model:permitted:model-named": 1
+  },
+  "verdicts": {
+   "source-reader": {
+    "not-pass": 1
+   },
+   "source-applicability": {
+    "unclear": 8
+   },
+   "record-format": {
+    "unclear": 1
+   },
+   "claude": {
+    "unclear": 1
+   },
+   "quote-check": {
+    "pass": 1,
+    "unclear": 1
+   }
+  },
+  "failed_make_runs": [
+   "make test-file FILE=\"tests/interactive/test_footnotes.py tests/interactive/test_citations.py tests/interactive/test_sources.py tests/interactive/test_record_for"
+  ],
+  "fix_commits": [],
+  "escalations": 0
+ }
+}

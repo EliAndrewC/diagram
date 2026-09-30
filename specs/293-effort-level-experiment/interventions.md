@@ -17,3 +17,8 @@ given, identically, to the other.
 - 2026-09-29T23:10:15Z | e1 | memwatch | warning at 23:09 UTC during the run (8.0 GB raw: diagram 7.2, gm-assistant 0.8); the run continues
 - 2026-09-29T23:17:44Z | e1 | memwatch | warning at 23:17 UTC during the run (8.0 GB raw: diagram 6.8, gm-assistant 1.2); the run continues
 - 2026-09-29T23:26:05Z | e1 | void | the launcher leaked make's variables (ARM=xhigh, MAKEFLAGS with TASK/RUN/ARM) into the run's environment: the arm was named to the run and two of its make calls failed until it unset them. A harness defect, not the arm's: e1 is void (kept for reference, not graded) and task R at xhigh re-runs as e2; the rest shift to e3 R/medium, e4 I/medium, e5 I/xhigh. The launcher now strips them (tested).
+- 2026-09-30T00:04:54Z | e2 | memwatch | warning at 00:04 UTC during the run (8.1 GB raw: diagram 7.1, gm-assistant 1.0); the run continues
+- 2026-09-30T00:10:01Z | e2 | memwatch | warning at 00:08 UTC during the run (8.2 GB raw); the run continues
+- 2026-09-30T00:10:18Z | e2 | memwatch | shared working set 7.94 GB at 00:09 UTC - another session's gate (diagram-readability, ~10 pytest workers) and a perf snapshot (/tmp/perfb), not the experiment's; e2 (~0.3 GB) continues
+- 2026-09-30T00:48:32Z | e2 | memwatch | warning at 00:47 UTC during the run (8.2 GB raw); the run continues
+- 2026-09-30T00:52:22Z | e2 | memwatch | warning at 00:51 UTC during the run (8.1 GB raw); the run continues
