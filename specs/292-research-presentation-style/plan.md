@@ -1,6 +1,6 @@
 # Plan - feature 292, how a research section is presented
 
-**Spec**: [`spec.md`](spec.md) | **Phase**: pilot
+**Spec**: [`spec.md`](spec.md) | **Phase**: sweep (the pilot signed off, 2026-09-30)
 
 ## Approach
 
@@ -37,3 +37,35 @@
 - **D5 - failures outside this feature**: 13 Kashikawa and Mizuguchi pool tests fail in this clone - pool-map checks
   in files this feature does not touch, over maps feature 291's work in progress is changing. Not yet measured at 291's
   commit alone; to be ledgered before anything here lands.
+
+## The sweep (after the GM's sign-off, 2026-09-30)
+
+The GM: *"proceed with reorganizing each and every research section, combining similar ones as appropriate, as we
+have been doing and then applying our new style guide"* (request.md, the last entry). The record holds 762 fragments
+over 12 pages and the `cities/` collection.
+
+- **D6 - a topic plan per page, made from a digest.** An Opus planner reads a digest of its pages (each section's
+  title, size, opening and the modals whose `Entry:` names it) and the titles of every section of the record, and
+  writes `sweep/plan-<page>.md`: the topics, each with the sections it folds, its rendering section, the modals to
+  re-aim and its size; the groups a writing session takes (at most four topics and 45,000 bytes of folded sections);
+  the folds across pages; the confusable pairs. The session reviews each plan before a brief is written from it. The
+  alternative - each writing session deciding its own folds from its slice of a page - cannot see a fold that crosses
+  its slice, which is how the sun topic's vegetation section would have been missed.
+- **D7 - every group is worked in two fresh headless sessions** (`make page-session`, the record's standing process,
+  features 250 and 274): a write session (fold, restyle, split the rendering section off, re-aim links and `Entry:`
+  tags, the prepass and the record tests) and a check-and-apply session (`record-style` with the merge audit,
+  `quote-check` in its batches, `record-format` on both sections, `entry-drift` on every modal whose section moved,
+  `translation-check` on the pairs `make translation-owed` names; each report applied, the record rebuilt and tested).
+  These are the checks the three pilot topics ran. The briefs are generated from the plan by `sweep/make_briefs.py`,
+  so every group gets the same procedure.
+- **D8 - the order: pages feature 291 is not editing first.** Feature 291's session is still editing homesteads,
+  vegetation and ways in its own clone; editing the same fragments here would make every merge of its work a
+  conflict. So buildings, religion-and-death, urban-features, towns, archetypes, fields, water, settlements,
+  presentation and the cities collection go first, and vegetation, ways and homesteads last, after 291's latest work
+  is merged in again.
+- **D9 - one queue at a time.** The containers share a 9 GB memory cap, and each check-and-apply session dispatches
+  up to three check agents; two queues would run six or more Claude processes. This session supervises the queue:
+  it reads each handoff and checks report, reads a sample of the finished sections, and corrects the brief template
+  when it sees a defect repeat.
+- **D10 - landing.** As D4: the sweep commits in this clone and nothing lands until feature 291 has landed; then main
+  is merged, the full gate runs, and the feature lands with every page restyled.

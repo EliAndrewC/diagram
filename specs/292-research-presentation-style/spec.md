@@ -1,6 +1,6 @@
 # Feature 292 - how a research section is presented
 
-**Feature**: 292-research-presentation-style | **Created**: 2026-09-29 | **Status**: Draft (pilot phase)
+**Feature**: 292-research-presentation-style | **Created**: 2026-09-29 | **Status**: Sweep (the pilot signed off by the GM, 2026-09-30)
 **Input**: the GM's request, verbatim in [`request.md`](request.md).
 
 ## Summary

@@ -37,5 +37,25 @@ Pilot phase. The sweep's tasks are added only after T09 is ticked (FR-011).
   - [x] translation-check on the 3 owed pairs: FAITHFUL 3
 - [x] T07n The GM's review of the work-yard topic (2026-09-30): the three unread-page claims traced to feature 134's pass of 2026-08-28 and removed, the minimum yard stated as this project's choice, Kodaira on the download list (FR-026); the kanji gloss form, the prepass's check of it and `translation-owed`'s gloss pairs, 垣根 glossed (FR-027); "are" dropped from the glossary and the common-English-word test (FR-028). research: rendering
   - [x] translation-check on the grove's owed pairs, the new gloss 垣根 (kakine, "hedge") among them: FAITHFUL 5
-- [ ] T09 **The GM signs off on the guide and the check** - after as many pilot topics as the GM asks for; only then are the sweep's tasks written (FR-011, SC-008). research: rendering
+- [x] T07o Third pilot topic (GM 2026-09-30: *"a section not specifically about garden sun, but about shade in general"*): homesteads 040 + 043 + 044 + 046 and vegetation 610 folded into "Sunlight and shade on the farm", the map rules into rendering/homesteads "How our maps keep yards and gardens in the sun"; checks: record-style x2 (with the merge audit: LOST 11, restored or kept in comments), quote-check x3 (7 PARTIAL applied; the minami-2022 full text read and made the key's link), record-format x2, entry-drift x4 (3 DRIFTED fixed), translation-check (FAITHFUL 1); two guide rules added (a topic can be a condition; a lead line states no more than its sources). research: rendering
+- [x] T09 **The GM signs off on the guide and the check** - after as many pilot topics as the GM asks for; only then are the sweep's tasks written (FR-011, SC-008). research: rendering
+  - [x] signed off 2026-09-30, after three pilot topics: *"What you have done so far seems good enough to roll out to the rest of our research Sections. So please update the feature to mark my acceptance of our current process and checks and whatnot."* (request.md)
+
+## The sweep (plan D6-D10)
+
+- [ ] T11 The sweep's machinery: a topic plan for every page (`sweep/plan-<page>.md`, D6), reviewed by the session; the brief generator `sweep/make_briefs.py` and its two templates (D7); the plan's sweep decisions reviewed by `spec-fidelity`. research: rendering
+- [ ] T12 buildings: every section in a topic, each group written and checked (D7); the page's checks report. research: rendering
+- [ ] T13 religion-and-death, as T12. research: rendering
+- [ ] T14 urban-features, as T12. research: rendering
+- [ ] T15 towns, as T12. research: rendering
+- [ ] T16 archetypes, as T12. research: rendering
+- [ ] T17 fields, as T12. research: rendering
+- [ ] T18 water, as T12. research: rendering
+- [ ] T19 settlements, as T12. research: rendering
+- [ ] T20 presentation, as T12. research: rendering
+- [ ] T21 the cities collection, as T12. research: rendering
+- [ ] T22 vegetation, after feature 291's latest work is merged in (D8), as T12. research: rendering
+- [ ] T23 ways, as T22. research: rendering
+- [ ] T24 homesteads (beyond the three pilot topics), as T22. research: rendering
+- [ ] T25 The record as a whole: a test that no section keeps a `Sources:` roster and every section's sources are its footnotes' (the sweep's completion, held); `make translation-owed` empty; `make done`; 291 landed, main merged, the feature landed (D10). research: rendering
 - [ ] T10 **Not to be confused with** (FR-016) - AFTER the sweep, when every section has its final title: the pairs as data (from `confusables.md`, two-way by construction), rendered at the top of each section by `make record`, a test that every pair resolves to a real section and every rendered list matches the data, and `record-style` checking a section that a reader could confuse with another has its list. research: rendering
