@@ -849,7 +849,7 @@ The GM's ruling of 2026-09-28 - "We should eliminate anything which is only mode
 - **The take-yabu thicket**, where the hamlet rolls one, stands at the settlement's edge behind its back row, on dry ground, not at the
   field margin (M49, vegetation/640).
 
-Measured on this roll (2026-09-29): 12 houses; bath rooms 3 (by seat: floored_rooms 1, stable_end 2; the hamlet's seat stable_end), wood sheds 5, privies 11 (5 on the sun side), storehouses 2, bamboo stands 1, woodland stands 1; house turns 0 to 12 degrees; every declared fixture seated.
+Measured on this roll (2026-09-29, the nucleated roll this map had before feature 291 - superseded by the entry below): 12 houses; bath rooms 3 (by seat: floored_rooms 1, stable_end 2; the hamlet's seat stable_end), wood sheds 5, privies 11 (5 on the sun side), storehouses 2, bamboo stands 1, woodland stands 1; house turns 0 to 12 degrees; every declared fixture seated.
 
 ## 2026-09-29 (feature 291): a row village of farms with their own groves - the layout moved
 
@@ -867,6 +867,6 @@ forms (homesteads/155 and 156, feature 291 amendment 3); the reference (Inashiro
 - **The row's water** rolled **own**: each farm's own well in its dooryard, off its way in.
 - **A service strip** stands between each house and its windward stand, for the wood shed and the bath room.
 
-Measured on this roll (2026-09-29): 12 houses on 2 streets, 12 grove farms; 24 bands, all deep; 12 private wells;
-bath rooms 3, wood sheds 5, privies 11, coops 10, manure heaps 8, shrine 1 - every declared fixture seated; 22 lanes;
+Measured on this roll (2026-09-30): 12 houses on 2 streets, 12 grove farms; 24 bands, all deep; 12 private wells;
+bath rooms 3, wood sheds 5, privies 11, coops 10, manure heaps 8, shrine 1 - every declared fixture seated; 14 lanes;
 every row, water, door, bamboo, grove and overlap rule clean; attempt 1.
