@@ -602,6 +602,8 @@ desire-line	desire path
 detached territories	detached territory
 detached territory	detached territory
 detritus	detritus
+dewa	Dewa
+dewa province	Dewa
 dharma hall	dharma hall
 dharma halls	dharma hall
 diameter at breast height	DBH
@@ -806,6 +808,8 @@ fengshui back grove	fengshui grove
 fengshui forest	fengshui grove
 fengshui grove	fengshui grove
 fengshuilin	fengshui grove
+fermenting store	fermenting store
+fermenting stores	fermenting store
 ferry landing	watashiba
 ferry landings	watashiba
 fertilizer boat	fertilizer boat
@@ -1322,6 +1326,10 @@ hui-style	Hui style
 huiguan	huiguan
 huizhou	Huizhou
 huizhou style	Hui style
+hulled	hulling
+huller	hulling
+hullers	hulling
+hulling	hulling
 hundred articles	hundred articles
 hutong	hutong
 hutongs	hutong
@@ -3298,6 +3306,7 @@ tsujido	tsujido
 tsujidos	tsujido
 tsuke-shoin	tsuke-shoin
 tsuke-tsubo	tsuke-tsubo
+tsukigomeya	tsukigomeya
 tsukiyama	tsukiyama
 tsukiyama-style	tsukiyama
 tsukubo	tsukubo
@@ -3406,6 +3415,8 @@ valley pond	valley pond
 valley ponds	valley pond
 variety hall	variety hall
 variety halls	variety hall
+vat hall	vat hall
+vat halls	vat hall
 verge	verge
 verges	verge
 vermilion line	shubiki
