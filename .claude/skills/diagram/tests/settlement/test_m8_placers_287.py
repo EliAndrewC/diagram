@@ -16,10 +16,14 @@ from l7r.diagram.settlement.homestead_parts.groves import crown_lift
 from l7r.diagram.settlement.homestead_parts.stands import crown_reach
 from l7r.diagram.settlement.homestead_parts.wood_share import BAR_MARGIN_PX, ground_blocks, open_water_discs
 from l7r.diagram.settlement.rolling import access, fit
-from l7r.diagram.settlement.rolling.bundle import box_gap, boxes_meet, pocket_clear_of_beds
+from l7r.diagram.settlement.rolling.bundle import BundleGeomMixin, PocketUnlaid, box_gap, boxes_meet, pocket_clear_of_beds, pocket_keeps_its_dwelling
 from l7r.diagram.settlement.rolling.lot import bundle_admitted, bundle_records, held_part_records
+from l7r.diagram.settlement.shrines_wells.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
 
 from ._builders import _crop_settlement
+
+HOUSE = (0.0, -40.0, 40.0, 20.0)
+"""The dwelling the pockets below keep: its front wall 30 px above their row, clear of every one they are laid at."""
 
 
 def _hamlet(W: float = 1400.0) -> Settlement:
@@ -32,11 +36,11 @@ def test_the_well_pocket_is_never_laid_on_a_bed() -> None:
     """A bed split to flank the house on both walls stood where the pocket is laid (cohort 1-60: 8 wells on a bed). The
     pocket takes the flank with no bed, else steps past the outermost bed of its flank."""
     beds = [(30.0, 0.0, 12.0, 20.0)]
-    assert pocket_clear_of_beds([30.0, -30.0], 0.0, 20.0, beds, 3.0) == (-30.0, 0.0, 20.0, 20.0), "the other flank"
+    assert pocket_clear_of_beds([30.0, -30.0], 0.0, 20.0, beds, 3.0, HOUSE) == (-30.0, 0.0, 20.0, 20.0), "the other flank"
     both = [(30.0, 0.0, 12.0, 20.0), (-30.0, 0.0, 12.0, 20.0), (50.0, 0.0, 12.0, 20.0)]
-    x, y, w, h = pocket_clear_of_beds([30.0, -30.0], 0.0, 20.0, both, 3.0)
+    x, y, w, h = pocket_clear_of_beds([30.0, -30.0], 0.0, 20.0, both, 3.0, HOUSE)
     assert (x, y) == (69.0, 0.0) and not any(boxes_meet((x, y, w, h), b) for b in both), "past the outermost bed, on its flank"
-    assert pocket_clear_of_beds([-30.0, 30.0], 0.0, 20.0, both, 3.0)[0] == -49.0
+    assert pocket_clear_of_beds([-30.0, 30.0], 0.0, 20.0, both, 3.0, HOUSE)[0] == -49.0
     assert not boxes_meet((0.0, 0.0, 10.0, 10.0), (10.0, 0.0, 10.0, 10.0)), "sharing an edge is not meeting"
 
 
@@ -235,5 +239,60 @@ def test_a_pushed_well_pocket_keeps_its_gap_from_every_bed() -> None:
     beds = [(30.0, 0.0, 12.0, 20.0), (-30.0, 0.0, 12.0, 20.0), (60.0, 21.0, 12.0, 20.0)]
     old_x = 36.0 + 3.0 + 10.0  # the old push: past the one bed it lay on, 1 px beside the next
     assert box_gap((old_x, 0.0, 20.0, 20.0), beds[2]) == 1.0, "the violating case: under the gap"
-    got = pocket_clear_of_beds([30.0, -30.0], 0.0, 20.0, beds, 3.0)
+    got = pocket_clear_of_beds([30.0, -30.0], 0.0, 20.0, beds, 3.0, HOUSE)
     assert got == (79.0, 0.0, 20.0, 20.0) and min(box_gap(got, b) for b in beds) >= 3.0
+
+
+def _houses(house: tuple[float, float, float, float]) -> list[dict[str, float]]:
+    return [{"x": house[0], "y": house[1], "w": house[2], "h": house[3]}]
+
+
+def test_a_pushed_well_pocket_keeps_its_wall_gap_to_its_own_dwelling_or_the_layout_is_refused() -> None:
+    """Homes H09's other half (research R12): a push past the beds walks the pocket outward, and nothing asked its gap to
+    its own dwelling. A row of beds that carries it past `WELL_AMONG_DWELLINGS_PX` from the wall - the wells rule's own
+    predicate, `well_gap_to_dwellings` - refuses the layout (`PocketUnlaid`) instead of laying a well out in the commons;
+    the push that stays within the reach is laid as before."""
+    row = [(30.0 + 25.0 * k, 0.0, 12.0, 20.0) for k in range(6)] + [(-30.0, 0.0, 12.0, 20.0)]  # beds 25 px apart, out to x=161
+    old_x = 161.0 + 3.0 + 10.0  # where the unchecked push laid it: past the last bed of the row
+    assert well_gap_to_dwellings(_houses(HOUSE), old_x, 0.0) > WELL_AMONG_DWELLINGS_PX, "the violating case: out of reach"
+    with pytest.raises(PocketUnlaid, match="from its dwelling's wall"):
+        pocket_clear_of_beds([30.0, -30.0], 0.0, 20.0, row, 3.0, HOUSE)
+    kept = pocket_clear_of_beds([30.0, -30.0], 0.0, 20.0, row[:2] + row[-1:], 3.0, HOUSE)
+    assert kept == (74.0, 0.0, 20.0, 20.0) and well_gap_to_dwellings(_houses(HOUSE), 74.0, 0.0) <= WELL_AMONG_DWELLINGS_PX
+
+
+def test_a_well_pocket_on_its_own_dwellings_footprint_is_refused() -> None:
+    """The lower bound: the pocket - the wellhead and its margin - clear of the house's footprint (a shared edge is clear,
+    an overlap is not), even where the flank it is offered holds no bed."""
+    assert pocket_keeps_its_dwelling((0.0, -20.0, 20.0, 20.0), HOUSE), "sharing the house's front wall"
+    assert not pocket_keeps_its_dwelling((0.0, -25.0, 20.0, 20.0), HOUSE), "5 px into the house"
+    assert not pocket_keeps_its_dwelling((0.0, 200.0, 20.0, 20.0), HOUSE), "out of reach"
+    with pytest.raises(PocketUnlaid, match="footprint gap -5.0 px"):
+        pocket_clear_of_beds([0.0, 40.0], -25.0, 20.0, [], 3.0, HOUSE)
+
+
+def test_a_layout_whose_well_pocket_is_refused_is_marked_unlaid() -> None:
+    """`_lay_well_pocket` turns the refusal into the layout's `unlaid` mark, which the fit refuses (`_bundle_side_fits`):
+    the envelope admits the household only where its well stands among its doors."""
+
+    class _Stub:
+        _household_well = True
+
+        def _well_vr(self) -> float:
+            return 7.0
+
+        def px(self, ft: float) -> float:
+            return ft
+
+    primary = (30.0, 12.0, 12.0, 20.0)  # the garden's bed on the east wall: the pocket is offered west first, then east
+    row = [(-30.0 - 25.0 * k, 12.0, 12.0, 20.0) for k in range(8)]  # beds out along the west flank, past the reach
+
+    def layout(beds: list[tuple[float, float, float, float]]) -> dict[str, Any]:
+        base: dict[str, Any] = {"house": (0.0, 0.0, 40.0, 20.0), "yard": (0.0, 40.0, 30.0, 20.0), "garden": primary, "gardens": [primary, *beds]}
+        BundleGeomMixin._lay_well_pocket(_Stub(), base, 0.0, 0.0, 20.0, 20.0, 3.0)  # type: ignore[arg-type]
+        return base
+
+    refused = layout(row)
+    assert "well" not in refused and "from its dwelling's wall" in refused["unlaid"]
+    kept = layout(row[:1])
+    assert kept["well"] == (-49.0, 25.0, 20.0, 20.0) and "unlaid" not in kept

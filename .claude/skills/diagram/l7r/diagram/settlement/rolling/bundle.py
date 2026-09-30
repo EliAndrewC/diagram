@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, Any
 
 from ..homestead_parts.fixture_seats import FixtureForms, FixtureUnlaid, lay_fixtures
 from ..shrines_wells.byres import BYRE_FT, YARD_SHED_GAP_FT, byre_part
+from ..shrines_wells.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
 from .lot import kura_rect
 
 if TYPE_CHECKING:
@@ -25,7 +26,25 @@ def box_gap(a: Any, b: Any) -> float:
     return float(max(abs(a[0] - b[0]) - (a[2] + b[2]) / 2, abs(a[1] - b[1]) - (a[3] + b[3]) / 2))
 
 
-def pocket_clear_of_beds(xs: Any, y: float, p: float, beds: Any, gap: float) -> tuple[float, float, float, float]:
+class PocketUnlaid(ValueError):
+    """A well pocket that can keep neither its gap from every bed nor its wall gap to its own dwelling - within
+    `WELL_AMONG_DWELLINGS_PX` of the wall (`well_gap_to_dwellings`), its footprint clear of the house's (`box_gap`) - in
+    this layout (feature 287, homes H09). The layout is then NOT the household's (`_lay_well_pocket` marks it `unlaid`
+    and the fit refuses it, `_bundle_side_fits`), as a bath room with no seat is (`FixtureUnlaid`): another garden side
+    or another seat is sought - never a well drawn out in the commons."""
+
+
+def pocket_keeps_its_dwelling(box: tuple[float, float, float, float], house: tuple[float, float, float, float]) -> bool:
+    """Does the pocket `box` keep the wall gap the wells rule reads to its own `house` (both (cx, cy, w, h), unturned in the
+    house's frame, which the rake turns as one piece)? At most `WELL_AMONG_DWELLINGS_PX` from the wall, on the rule's own
+    predicate (`well_gap_to_dwellings`, its center to the house's drawn quad), and its footprint - the wellhead and its
+    margin - clear of the house's (`box_gap` at least 0: a shared edge, no overlap)."""
+    hx, hy, hw, hh = house
+    near = well_gap_to_dwellings([{"x": hx, "y": hy, "w": hw, "h": hh}], box[0], box[1]) <= WELL_AMONG_DWELLINGS_PX
+    return near and box_gap(box, house) >= 0.0
+
+
+def pocket_clear_of_beds(xs: Any, y: float, p: float, beds: Any, gap: float, house: tuple[float, float, float, float]) -> tuple[float, float, float, float]:
     """THE WELL POCKET NEVER ON A BED (feature 287 M8: the overlap matrix forbids a wellhead on a garden, its own household's
     too). The pocket, `p` square at height `y`, is offered at each flank in `xs` in turn (the flank away from the primary
     bed first); a bed split to flank the house on both walls (`_garden_beds`) can stand on either, and cohort 1-60 laid 8
@@ -34,16 +53,29 @@ def pocket_clear_of_beds(xs: Any, y: float, p: float, beds: Any, gap: float) -> 
 
     PUSHED, IT KEEPS THE GAP FROM EVERY BED (feature 287, homes H09): the push steps past each bed within `gap` of the
     pocket (`box_gap`), not only the beds it lies on, so a bed it clears by a hair - on the line, or beside it - is stepped
-    past too, and the pocket it returns stands at least `gap` from every bed."""
+    past too, and the pocket it returns stands at least `gap` from every bed.
+
+    ...AND ITS WALL GAP TO ITS OWN DWELLING (homes H09's other half, research R12): wherever it stands, the pocket keeps
+    what the wells rule reads (`pocket_keeps_its_dwelling`) - a push past the beds walks it outward, so the push stops,
+    refusing the layout (`PocketUnlaid`), the moment it is carried past the rule's reach; that also bounds the push."""
     for x in xs:
         box = (x, y, p, p)
         if not any(boxes_meet(box, b) for b in beds):
-            return box
+            return _kept(box, house)
     x = xs[0]
     side = 1.0 if x >= xs[-1] else -1.0
     while near := [b for b in beds if box_gap((x, y, p, p), b) < gap - 1e-9]:
         x = max(b[0] * side + b[2] / 2 for b in near) * side + side * (gap + p / 2)  # past the bed's outer edge on this flank
+        _kept((x, y, p, p), house)  # every step walks it outward, so the first past the reach refuses (both flanks met a bed: one step at least)
     return (x, y, p, p)
+
+
+def _kept(box: tuple[float, float, float, float], house: tuple[float, float, float, float]) -> tuple[float, float, float, float]:
+    """`box`, if it keeps its dwelling (`pocket_keeps_its_dwelling`); else `PocketUnlaid`, naming the gap."""
+    if not pocket_keeps_its_dwelling(box, house):
+        wall = well_gap_to_dwellings([{"x": house[0], "y": house[1], "w": house[2], "h": house[3]}], box[0], box[1])
+        raise PocketUnlaid(f"the well pocket at ({box[0]:.1f}, {box[1]:.1f}) stands {wall:.1f} px from its dwelling's wall, footprint gap {box_gap(box, house):.1f} px")
+    return box
 
 
 class BundleGeomMixin:
@@ -276,15 +308,19 @@ class BundleGeomMixin:
         household to carry one (`_household_well`), the wellhead's ground - its drawn well-house and a 3 ft margin - is
         laid beside the yard on the dooryard side, on the flank away from the garden (the side the byre takes, below it), so
         the envelope admits the household only with room for its well and the well stands among the doors it serves
-        (within `WELL_AMONG_DWELLINGS_PX` of the wall, by construction). Beside the yard rather than before it, so the
-        homestead reaches no deeper toward a paddy the yard faces than the yard does."""
+        (within `WELL_AMONG_DWELLINGS_PX` of the wall: `pocket_clear_of_beds` refuses a pocket that would not be, and the
+        layout is then marked `unlaid`, which the fit refuses). Beside the yard rather than before it, so the homestead
+        reaches no deeper toward a paddy the yard faces than the yard does."""
         if not getattr(self, "_household_well", False):
             return
         p = 2.0 * self._well_vr() + self.px(6.0)
         yard = base["yard"]
         sx = -1.0 if base["garden"][0] > hx else 1.0  # away from the garden's side
         wy = hy + hh / 2 + gap + p / 2 + self.px(2.0)
-        base["well"] = pocket_clear_of_beds([hx + sx * (yard[2] / 2 + gap + p / 2), hx - sx * (yard[2] / 2 + gap + p / 2)], wy, p, base["gardens"], gap)
+        try:
+            base["well"] = pocket_clear_of_beds([hx + sx * (yard[2] / 2 + gap + p / 2), hx - sx * (yard[2] / 2 + gap + p / 2)], wy, p, base["gardens"], gap, base["house"])
+        except PocketUnlaid as refused:
+            base["unlaid"] = str(refused)
 
     def _lay_fixtures(self: Settlement, base: dict[str, Any], hx: float, hy: float, hw: float, hh: float, shed: bool, seat: Any) -> None:  # type: ignore[misc]
         """THE HOUSEHOLD'S FARMSTEAD FIXTURES, parts of its homestead (feature 287, homes H32, plan M5 and D9): the kinds its

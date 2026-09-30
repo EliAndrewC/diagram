@@ -32,7 +32,7 @@ from .plan import HamletSpec, SitePlan, plan_site
 from .pondstock import stage_pond_stock
 from .sink import stage_sink
 from .water import stage_field, stage_water_frame, stage_waterward
-from .ways import stage_seat, stage_track, stage_web, unreached_houses
+from .ways import stage_seat, stage_track, stage_web
 
 # THE PIPELINE. Read top to bottom: this is the generator.
 #
@@ -321,11 +321,11 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     reported a broken pond on every map with a pond, and the maps were fine. So the finish always
     runs; a cohort member with nowhere to go finishes into a scratch directory and is thrown away.
 
-    The roll then reports on ITSELF (feature 166): the only verdict a finished map can give that no
-    placer already guarantees is whether its ways reach every house it seated. Since feature 287 that
-    too is guaranteed where it is decided - the seating reserves a corridor from every door to the exit
-    strip, and the web draws it where its lanes do not reach the house (`ways/settle.py`) - so the
-    verdict is a measurement of the guarantee, and a map is built ONCE (FR-002): the re-roll that
+    The roll no longer reports on itself (feature 166 left it one verdict: whether its ways reach every
+    house it seated). Since feature 287 that too is guaranteed where it is decided - the seating reserves
+    a corridor from every door to the exit strip, the web draws it where its lanes do not reach the house
+    (`ways/settle.py`), and a settle that leaves one unreached is refused (`ways/last_resort.py`) - so a
+    produced map has no failure to report, and a map is built ONCE (FR-002): the re-roll that
     rebuilt a stranding map with its ground forbidden (feature 133 T33), its snapshot and resume
     (feature 284) and its choice between attempts (features 226, 278) are gone."""
     # FR-008: an expensive operation refuses IN-PROCESS too, not only at the CLI. Without this,
@@ -340,16 +340,13 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     # (`plan.bamboo_polys += ...`), and the report reads the plan the roll built on.
     plan = copy.deepcopy(plan_site(spec))
     s = build(plan)
-    # THE MANIFEST CARRIES ITS OWN VERDICT (feature 215, D3): the roll's self-report, what it seated and the acreage it
-    # reached go into the meta BEFORE the finish writes the file, so a map read back from disk - the pool's, which the
-    # gate's ratchet reads instead of rolling the reference again - answers the same questions the Report does.
-    # `unreached_houses` reads the lanes and the houses, which the stages have drawn by now; the finish only inks.
-    seats = [(float(x), float(y)) for x, y, _d in unreached_houses(s.M)]
-    failures = [f"farmhouses_reach_a_way[{len(seats)}]"] if seats else []
-    s.M["meta"]["roll_failures"] = list(failures)
+    # THE MANIFEST CARRIES WHAT THE ROLL SEATED (feature 215, D3): what it seated and the acreage it reached go into the
+    # meta BEFORE the finish writes the file, so a map read back from disk - the pool's, which the gate's ratchet reads
+    # instead of rolling the reference again - answers the same questions the Report does. The roll's self-report of an
+    # unreached farmhouse (`meta.roll_failures`, `farmhouses_reach_a_way`) is gone: the web refuses a settle that leaves
+    # one (`ways/last_resort.py:refuse_unreached`, feature 287), so a produced map has none to report.
     s.M["meta"]["roll_placed"] = int(plan.placed)
     s.M["meta"]["roll_acres"] = float(plan.acres)
-    lines = [f"FAIL farmhouses_reach_a_way  -> {len(seats)} farmhouse(s) stand off the connected way network, at {[(round(x), round(y)) for x, y in seats[:4]]}"] if seats else []
     # THE FINISH GOES INTO A STAGE that is then promoted onto `out_base` (`promote`), so a roll that dies mid-finish never
     # touches the map's own files (`discard_on_failure`, feature 261). A cohort member with nowhere to go finishes into a
     # scratch directory; finishing completes the manifest the report carries (feature 213).
@@ -360,7 +357,7 @@ def generate(spec: HamletSpec, out_base: str | None = None, render: bool = True)
     else:
         with tempfile.TemporaryDirectory() as tmp:
             s.finish(os.path.join(tmp, "scratch"), render=False)
-    return Report(plan=plan, failures=failures, path=out_base, fail_lines=lines, manifest=s.M)
+    return Report(plan=plan, failures=[], path=out_base, manifest=s.M)
 
 
 def cohort_specs(count: int, first_seed: int = 1, households: int | None = None) -> list[HamletSpec]:

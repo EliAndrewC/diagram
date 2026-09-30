@@ -29,11 +29,12 @@ Three invariants the split does NOT touch:
   map. A hard-coded coordinate silently becomes false when the thing it referenced moves; that is
   the project's standing rule and it is also what lets one script run at any size, seed or fall
   direction.
-- **A ROLL REPORTS ON ITSELF, AND ON ONE THING ONLY** (feature 166). `generate()` used to run the
-  whole check battery in-process on the finished manifest. It is retired: every rule it held is now
-  proven at the placer that makes it, or is a recorded drop. What a finished roll still says is
-  whether its ways reach every house it seated - the one property no placer can promise in advance,
-  because reachability depends on fabric that does not exist when the seats are chosen.
+- **A ROLL NO LONGER REPORTS ON ITSELF** (features 166, 287). `generate()` used to run the whole
+  check battery in-process on the finished manifest. It is retired: every rule it held is now proven
+  at the placer that makes it, or is a recorded drop. The last verdict it kept - whether its ways
+  reach every house it seated - is guaranteed since feature 287: the seating reserves a corridor from
+  every door, the web draws it, and a settle that leaves a house unreached is refused
+  (`ways/last_resort.py`), so `meta.roll_failures` is gone.
 
 ## Look here when
 
@@ -55,7 +56,7 @@ Three invariants the split does NOT touch:
 | `burial.py` | STAGE 6c (feature 273) - `stage_burial`: where the hamlet's dead lie - `hamlet_burial` keeps its one attested value, the village's ground, off the map (feature 280 M68: a hamlet's own ground is attested only in modern records); nothing is drawn |
 | `pondstock.py` | STAGE 6b (feature 150 A3/A4) - `stage_pond_stock`: a dike-pond hamlet's pig sties on the ponds nearest the houses (`STY_SHARE` is a GUESS band; the duck pen retired by 269 B32, a modern form; the glyphs live in `settlement/farm_fixtures.py` `PondStockMixin`) |
 | `frame.py` | THE CLOSING STAGES - `stage_crossings`, `stage_frame` (crop-to-content and the title), `stage_notice` (the kosatsuba, the last map FEATURE - feature 154), and `stage_labels` (the LABEL PHASE, the last stage of all - feature 157: every caption is seated here, against the finished map, because *"how we place labels will always depend on what else is on the map"*) |
-| `driver.py` | the pipeline and everything that drives it: the `STAGES` tuple, `Report`, `build`, `generate` (which builds ONCE, finishes, and reports the one thing a roll says of itself - whether its ways reach every house it seated, `meta.roll_failures`), `cohort` (fanned out across processes since 2026-08-16 - `generate` IS the worker; `jobs=1` forces serial, which is what in-gate callers want) and `main`. THE RE-ROLL IS GONE (feature 287, FR-002): a map that stranded a farmhouse used to be rebuilt with that ground forbidden (feature 133 T33), resumed from a snapshot (284) and the better attempt kept (226, 278); the seating now reserves a corridor from every door, judging the whole access tree as lanes with each (`ways/tree.py`), and the web draws the chains it owes as judged (`ways/settle.py`, `ways/tree.py`), so `attempt` / `rerolled_after` and `meta.roll_attempt` / `roll_after` went with it. `default_jobs` - the one cpus-minus-2 rule, reused by `cohort_audit.py` - moved to [`../sitegen/jobs.py`](../sitegen/CLAUDE.md) and is imported back in here, so `hamletgen.default_jobs` still resolves |
+| `driver.py` | the pipeline and everything that drives it: the `STAGES` tuple, `Report`, `build`, `generate` (which builds ONCE, finishes, and reports what it seated; an unreached house is refused in the web, `ways/last_resort.py`, so `meta.roll_failures` is gone), `cohort` (fanned out across processes since 2026-08-16 - `generate` IS the worker; `jobs=1` forces serial, which is what in-gate callers want) and `main`. THE RE-ROLL IS GONE (feature 287, FR-002): a map that stranded a farmhouse used to be rebuilt with that ground forbidden (feature 133 T33), resumed from a snapshot (284) and the better attempt kept (226, 278); the seating now reserves a corridor from every door, judging the whole access tree as lanes with each (`ways/tree.py`), and the web draws the chains it owes as judged (`ways/settle.py`, `ways/tree.py`), so `attempt` / `rerolled_after` and `meta.roll_attempt` / `roll_after` went with it. `default_jobs` - the one cpus-minus-2 rule, reused by `cohort_audit.py` - moved to [`../sitegen/jobs.py`](../sitegen/CLAUDE.md) and is imported back in here, so `hamletgen.default_jobs` still resolves |
 
 ## Adding a stage
 

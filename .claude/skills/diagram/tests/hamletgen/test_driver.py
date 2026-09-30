@@ -345,17 +345,18 @@ def test_a_roll_that_raises_leaves_no_stage_behind(tmp_path) -> None:
 
 @pytest.mark.rolls_map  # it calls `generate`, which the marker scan reads as a roll; `build` is scripted here, so nothing is actually rolled
 def test_generate_builds_once_and_reports_what_it_built(monkeypatch, tmp_path) -> None:  # type: ignore[no-untyped-def]
-    """Feature 287 (FR-002, ways W01): the re-roll is gone - a map is built ONCE, whatever its reach, and that build is the
-    one finished and reported. A stranded house (which the web's reserved corridors now prevent) is reported, never
-    rebuilt around: with an output path and without, one build and one finish."""
+    """Feature 287 (FR-002, ways W01): the re-roll is gone - a map is built ONCE and that build is the one finished and
+    reported: with an output path and without, one build and one finish. It reports no failure of its own: a web that
+    leaves a house unreached is refused where it settles (`ways/last_resort.py:refuse_unreached`), so `meta.roll_failures`
+    and its `farmhouses_reach_a_way` report went with their writer."""
     from l7r.diagram.hamletgen import driver
 
     built: list[int] = []
     finished: list[int] = []
 
     class _S:
-        def __init__(self, stranded: list[tuple[float, float]]) -> None:
-            self.M: dict[str, Any] = {"meta": {}, "houses": [], "lanes": [], "_stranded": stranded}
+        def __init__(self) -> None:
+            self.M: dict[str, Any] = {"meta": {}, "houses": [], "lanes": []}
 
         def finish(self, out: str, render: bool = False) -> None:
             finished.append(len(built))
@@ -363,15 +364,14 @@ def test_generate_builds_once_and_reports_what_it_built(monkeypatch, tmp_path) -
     def fake_build(plan: Any) -> _S:
         built.append(1)
         plan.placed, plan.acres = 12, 1.0
-        return _S(stranded)
+        return _S()
 
     monkeypatch.setattr(driver, "build", fake_build)
-    monkeypatch.setattr(driver, "unreached_houses", lambda M: [(x, y, 120) for x, y in M["_stranded"]])
     spec = hg.HamletSpec(name="Once", seed=5, households=12)
-    for stranded, out in (([], None), ([(1.0, 1.0)], None), ([(1.0, 1.0)], str(tmp_path / "once"))):
+    for out in (None, str(tmp_path / "once")):
         built.clear()
         finished.clear()
         rep = hg.generate(spec, out_base=out, render=False)
         assert built == [1] and finished == [1], f"one build, finished once ({out})"
-        assert rep.failures == ([f"farmhouses_reach_a_way[{len(stranded)}]"] if stranded else []) and (rep.manifest or {})["meta"]["roll_placed"] == 12
-        assert "roll_attempt" not in (rep.manifest or {})["meta"], "no attempt to attribute: there is only one"
+        assert rep.failures == [] and rep.ok and (rep.manifest or {})["meta"]["roll_placed"] == 12
+        assert "roll_failures" not in (rep.manifest or {})["meta"] and "roll_attempt" not in (rep.manifest or {})["meta"]

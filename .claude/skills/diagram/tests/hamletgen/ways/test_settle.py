@@ -208,7 +208,6 @@ def test_a_way_out_only_tree_lanes_carry_over_and_back_loses_the_tree_lane_neare
     step's to lay again, under `Lawful`."""
     s = _over_and_back_on_the_tree()
     assert law.way_outs_crossing(s.M) and all(co.is_tree(s.M["lanes"][i]) for i, _k, _y in law.way_out_carriers(s.M)), "the fixture provokes it on the tree"
-    assert settle.lane_violators(s) == [1, 2], "the last resort names the tree lanes when no ordinary lane carries it"
     assert settle.settle_way_outs(s) == 1
     assert [ln.get("role") for ln in s.M["lanes"]] == [None, "way target"] and law.way_outs_crossing(s.M) == []
     assert law.way_out_carriers(s.M) == [] and settle.settle_way_outs(s) == 0
@@ -228,15 +227,6 @@ def test_lawful_refuses_a_tree_lane_that_hands_a_household_a_way_out_over_the_br
     assert settle.Lawful(s)(field_way, 3.0), "...and it is the way out that refuses it: an ordinary lane keeps every other rule"
     monkeypatch.setattr(law, "adds_a_way_out_crossing", lambda *a, **k: False)
     assert settle.Lawful(s, tree=True)(field_way, 3.0)
-
-
-def test_a_way_out_left_over_the_brook_after_the_last_resort_loses_its_lanes(monkeypatch: pytest.MonkeyPatch) -> None:
-    """The last resort's tail: a way out over the brook and back that is still there after the final steps loses every
-    lane carrying it, tree or not - never kept as the least bad (FR-005)."""
-    s = _over_and_back_on_the_tree()
-    monkeypatch.setattr(settle, "lane_violators", lambda s: [])
-    got = settle.settle_the_web(s, rounds=0)
-    assert law.way_outs_crossing(s.M) == [] and got["dropped"] >= 1
 
 
 # ---- step 4: joints and ends -------------------------------------------------------------------------------------
@@ -334,29 +324,6 @@ def test_the_settled_web_breaks_no_rule_of_the_law() -> None:
     assert got["rounds"] >= 2
     left = {k: v for k, v in law.violations(s.M).items() if k not in ("unreached_houses", "field_unreached")}
     assert left == {}, left
-
-
-def test_the_last_resort_drops_what_the_rounds_could_not_mend(monkeypatch: pytest.MonkeyPatch) -> None:
-    """FR-005: when the rounds run out, a lane still breaking a rule goes whole - never kept as the least bad."""
-    s = _S([CONN, [(0.0, 2.0), (0.0, 200.0), (5.0, 150.0)]])
-    got = settle.settle_the_web(s, rounds=0)
-    assert got["dropped"] == 1 and len(s.M["lanes"]) == 1
-    assert settle.lane_violators(s) == []
-
-
-def test_every_per_lane_rule_names_its_violator() -> None:
-    lanes = [CONN, [(0.0, 2.0), (0.0, 200.0), (5.0, 150.0)], [(900.0, 0.0), (900.0, 100.0), (1000.0, 100.0), (1000.0, 0.0)], [(50.0, 150.0), (120.0, 10.0), (153.6, 0.4)], [(0.0, 0.0), (160.0, 0.0)]]
-    s = _S(lanes, houses=[(40.0, 320.0)], streams=[{"poly": [[950.0, -500.0], [950.0, 500.0]], "w": 6.0}], meta={"ftpx": 1.0, "brook_fords": [[950.0, 0.0], [950.0, 100.0]]})
-    bad = settle.lane_violators(s)
-    assert 1 in bad and 2 in bad and 0 not in bad
-    # ...and a way out over the brook and back names every lane that crosses it
-    out = _S(
-        [_c((50.0, 0.0), (-1000.0, 0.0)), [(50.0, 0.0), (50.0, 100.0)], [(50.0, 100.0), (150.0, 100.0), (150.0, 300.0), (50.0, 300.0)]],
-        houses=[(40.0, 320.0)],
-        streams=[BROOK],
-        meta={"ftpx": 1.0, "brook_fords": [[100.0, 100.0], [100.0, 300.0]]},
-    )
-    assert 2 in settle.lane_violators(out)
 
 
 # ---- joins, fragments, widths (homes H37-H40, H42) -------------------------------------------------------------------
@@ -702,7 +669,7 @@ def test_an_ordinary_join_that_would_break_a_rule_against_the_tree_is_taken_back
 def test_a_house_crowded_with_ends_keeps_the_trees_and_loses_an_ordinary_one() -> None:
     """Homes H41 under the tree (feature 287 wave 6): a house discharging three free ends keeps the tree lane's - never cut -
     and the settle cuts the ordinary end that is farther than the nearer ordinary one; a violator the tree names is an
-    ordinary lane (`lane_violators` reads `tree.tree_faults`)."""
+    ordinary lane (`last_resort.lane_violators` reads `tree.tree_faults`)."""
     s = _S([CONN, [(-300.0, 40.0), (-300.0, 170.0)], [(-200.0, 60.0), (-240.0, 180.0)], [(-400.0, 60.0), (-360.0, 190.0)]], houses=[(-300.0, 200.0)])
     s.M["lanes"][3]["role"] = co.ACCESS_ROLE
     assert len(law.fronting_ends(s.M)[0]) == 3
@@ -711,10 +678,3 @@ def test_a_house_crowded_with_ends_keeps_the_trees_and_loses_an_ordinary_one() -
     assert tree == [[(-400.0, 60.0), (-360.0, 190.0)]], "the tree lane stands"
     assert len(s.M["lanes"]) < 4 or _pts(s, 1) != [(-300.0, 40.0), (-300.0, 170.0)] or _pts(s, 2) != [(-200.0, 60.0), (-240.0, 180.0)], "an ordinary end cut"
     assert len(law.fronting_ends(s.M).get(0, [])) <= law.DOORSTEP_MAX
-
-
-def test_the_last_resort_names_an_ordinary_lane_the_tree_faults(monkeypatch: pytest.MonkeyPatch) -> None:
-    s = _S([CONN, [(-100.0, 0.0), (-100.0, 170.0)]])
-    s.M["lanes"].append({"pts": [[-50.0, 0.0], [-50.0, 100.0]], "w": 3, "role": co.ACCESS_ROLE})
-    monkeypatch.setattr(settle, "tree_faults", lambda M: [(1, (0.0, 0.0)), (2, (0.0, 0.0))])
-    assert settle.lane_violators(s) == [1], "the ordinary lane, never the tree's"

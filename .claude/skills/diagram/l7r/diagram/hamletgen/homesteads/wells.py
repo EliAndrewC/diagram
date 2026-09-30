@@ -6,8 +6,9 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, point_in_poly, point_quad_dist, rot_rect, surface_water_dist
+from l7r.diagram.settlement import Settlement, point_in_poly, surface_water_dist
 from l7r.diagram.settlement.homestead_parts.wood_share import ReservedSeats, well_keepout
+from l7r.diagram.settlement.shrines_wells.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
 
 from ..consts import Pt
 from ..plan import SitePlan
@@ -19,27 +20,8 @@ It is the `vr` the glyph draws (not the `r` clearance radius), because the frame
 `crop_not_held_open_by_one_feature` quotes a well's extent as 16 px across."""
 
 
-WELL_AMONG_DWELLINGS_PX = 95.0
-"""How far a well may stand from the nearest dwelling's WALL - `wells_among_dwellings`' bar, the figure the retired
-finished-map test read, unchanged by feature 287, which lays each well pocket inside its household's envelope beside the
-yard, so every well stands within it by construction (`test_homesteads_287.py`). Its origin is not recorded beside
-it; what the record gives is the reason for a bar at all - a well is dug among the doors it serves, the dooryard well of
-the idiom 井戸端会議 (idobata kaigi, "well-side meeting"), not out in the commons."""
-
-
-def well_gap_to_dwellings(houses: Sequence[Mapping[str, Any]], x: float, y: float) -> float:
-    """The gap from a well at (x, y) to the nearest dwelling's drawn wall - 0 inside one; abandoned houses are no dwelling.
-
-    THE ONE PREDICATE of the among-the-dwellings rule (feature 287, FR-003, homes H09): every seat `place_wells` offers
-    is held to `WELL_AMONG_DWELLINGS_PX` by it, and the finished-map test reads it. The two used to disagree: the
-    placer's lattice asked for a house CENTER within 105-112 px, which admits a wall 99 px off beside a 26 px-deep
-    house, while the test measured the gap to an unturned box. The test's reading is the right one, turned: a gap
-    verdict reads the footprint, never the center (`dev/placement.md`, "CENTER vs FOOTPRINT"), and a well stands among
-    the DOORS it serves, which are in the walls. Each house is measured on its drawn quad (`rot_rect` at its `rot`)."""
-    return min(
-        (point_quad_dist(x, y, rot_rect(h["x"], h["y"], h["w"], h["h"], h.get("rot", 0.0))) for h in houses if h.get("kind") != "abandoned"),
-        default=float("inf"),
-    )
+# THE AMONG-THE-DWELLINGS RULE lives with the wellhead (`settlement/shrines_wells/wells.py`: `WELL_AMONG_DWELLINGS_PX`,
+# `well_gap_to_dwellings`), moved there so the bundle's well pocket asks the same predicate (feature 287, homes H09)
 
 
 def _among_dwellings(houses: Sequence[Mapping[str, Any]], x: float, y: float) -> bool:
