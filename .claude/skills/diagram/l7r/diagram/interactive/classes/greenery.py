@@ -31,7 +31,7 @@ class HomesteadBamboo(Kind):
     Japan's modern topographic legend uses, a symbol of the national survey's maps of about 1910 that no page read traces to a map before 1868; older maps drew the growth itself. Presence below the frost line, the stand's two places (the
     household's plot, the village's own thicket, kept before modern times round its houses, on dry ground) and the three sides
     of the plot are read; the weights among the sides
-    (behind the house and the windward side the likeliest), the share of farmsteads keeping one (about three in five)
+    (behind the house the likeliest, then the windward side, then beside the shed, the other flank the least), the share of farmsteads keeping one (about three in five)
     and the 22 by 16 ft strip are guesses, no page giving a share or a size.
 
     Name: homestead bamboo
@@ -124,8 +124,8 @@ class Windbreak(Kind):
 
 class HomesteadGrove(Kind):
     """
-    What: A farm's own grove, where each farm stands apart with its fields round it rather than in a cluster: a dense
-    stand of real crowns hard against the house on the side the winter wind comes from, and on some farms a thinner
+    What: A farm's own grove, where each farm keeps its own shelter rather than sharing a village's - a farm standing
+    apart in its fields, or one of a row along a street: a dense stand of real crowns hard against the house on the side the winter wind comes from, and on some farms a thinner
     band of lesser trees round more of the house. Every farm in a settlement takes the same shape - two sides, three,
     or all four - and the shape is rolled for each settlement.
 

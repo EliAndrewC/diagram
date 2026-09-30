@@ -402,6 +402,7 @@ clone	clonal
 clones	clonal
 closed canopy	closed-canopy
 closed-canopy	closed-canopy
+cluster's spine	cluster's spine
 coefficient of variation	coefficient of variation
 coke	coke
 collective farm	collective farm
@@ -660,6 +661,8 @@ dressed stone	dressed stone
 drill ground	drill ground
 drum tower	drum tower
 drum towers	drum tower
+dry edge	dry edge
+dry edges	dry edge
 dry paddy	kanden
 dry run	wet run
 dry runs	wet run
@@ -753,10 +756,13 @@ fabric	building fabric
 fabric is later	building fabric
 fairway	fairway
 fall line	fall line
+fan foot	fan foot
 fan head	alluvial fan
 fan palm	fan palm
 fan palms	fan palm
+fan's foot	fan foot
 fan's head	alluvial fan
+fan-foot	fan foot
 fan-palm	fan palm
 fan-palm-dike	fan palm
 fang	fang
@@ -791,6 +797,8 @@ festival's host house	festival lodging
 fetch	fetch
 field boat	field boat
 field boats	field boat
+field channel	field channel
+field channels	field channel
 field comb	comb
 field combs	comb
 field consolidation	kochi seiri
@@ -798,6 +806,8 @@ field grain	field grain
 field grains	field grain
 field pit	nodame
 field pits	nodame
+field road	sakuba-michi
+field roads	sakuba-michi
 field to field	tagoshi kangai
 field-to-field	tagoshi kangai
 field-to-field irrigation	tagoshi kangai
@@ -870,6 +880,8 @@ footslopes	footslope
 forest litter	forest litter
 forest litters	forest litter
 forest stand	forest stand
+forest village	forest village
+forest villages	forest village
 formwork	formwork
 fortune	Fortune
 fortunes	Fortune
@@ -1284,6 +1296,7 @@ hui-style	Hui style
 huiguan	huiguan
 huizhou	Huizhou
 huizhou style	Hui style
+hundred articles	hundred articles
 hutong	hutong
 hutongs	hutong
 huzhou	Huzhou-Jiaxing
@@ -1317,6 +1330,7 @@ idobata	idobata
 idowaku	igeta
 idoyakata	idoyakata
 ieyasu	Ieyasu
+ieyasu hundred articles	hundred articles
 ieyasu's	Ieyasu
 ifc	IFC
 igeta	igeta
@@ -1770,6 +1784,7 @@ laterals	lateral
 leaf litter	forest litter
 leat	leat
 leats	leat
+legacy of ieyasu	hundred articles
 legibility floor	legibility floor
 legibility floors	legibility floor
 leping	Leping
@@ -1793,6 +1808,8 @@ lineage chancellors	chancellor
 lineage village	lineage village
 lineage villages	lineage village
 lineages	lineage
+linear village	ressen
+linear villages	ressen
 ling canal	Lingqu
 lingnan	Lingnan
 lingqu	Lingqu
@@ -2412,6 +2429,8 @@ reaches	reach
 reaction	reaction
 reactions	reaction
 readjustment	kochi seiri
+recension	recension
+recensions	recension
 recharge	recharge
 recharges	recharge
 red chinquapin	chinquapin
@@ -2446,6 +2465,7 @@ rennyo	Rennyo
 rent bursary	rent bursary
 rent-collection bursaries	rent bursary
 rent-collection bursary	rent bursary
+ressen	ressen
 rest stop	tateba
 rest stops	tateba
 restoration	Restoration
@@ -2499,6 +2519,8 @@ river terrace	river terrace
 river terraces	river terrace
 road magistrate	road magistrate
 road magistrates	road magistrate
+road village	roson
+road villages	roson
 roji	roji
 roju	Roju
 rokudo crossroads	Rokudō crossroads
@@ -2516,7 +2538,6 @@ root-cut	root-cut
 root-cutting	root-cut
 roson	roson
 rotation period	rotation period
-row village	roson
 rowhouse gate	nagayamon
 rowhouse gates	nagayamon
 runners	yayi
@@ -2540,6 +2561,7 @@ sakagura	sakagura
 sakaki	sakaki
 sakimono-gashira	sakimono-gashira
 sakoda	sakoda
+sakuba-michi	sakuba-michi
 sakutoku	sakutoku
 sakutoku landlord	sakutoku
 sakutoku landlords	sakutoku
@@ -2718,6 +2740,7 @@ shinpen tsuika	Shinpen Tsuika
 shinsei	Shinsei
 shinshu	Jodo Shinshu
 shinshū	Jodo Shinshu
+shirakashi	shirakashi
 shirasu	oshirasu
 shirimito	shirimito
 shironameshi	shironameshi
@@ -3392,6 +3415,7 @@ wet-tint	wet-tint haze
 wet-tint haze	wet-tint haze
 wetted perimeter	wetted perimeter
 white charcoal	white charcoal
+white oak	shirakashi
 white-charcoal	white charcoal
 white-sand court	oshirasu
 white-tawed	shironameshi

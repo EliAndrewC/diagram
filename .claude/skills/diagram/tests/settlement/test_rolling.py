@@ -808,3 +808,21 @@ def test_the_stream_index_is_rebuilt_when_the_courses_change_and_kept_while_they
     assert s._rect_on_stream(rect) is True and s._stream_idx_cache is not kept
     s.M["streams"] = [{"poly": [(900, 300), (900, 500)], "w": 9}, {"poly": [(0, 0), (1, 1)], "w": 4}]  # a new list, same length
     assert s._rect_on_stream(rect) is False
+
+
+def test_the_dispersed_placer_keeps_off_the_ground_a_re_roll_forbids() -> None:
+    """`_place_bundle_dispersed` (feature 291): the slides carried every re-roll's farm back onto the seat the last roll
+    stranded (cohort seed 23). A seat whose slid position is within 50 px of forbidden ground is passed over for the next
+    offset; with nothing forbidden, the first fit is the seat, as before."""
+
+    def placed(avoid):  # type: ignore[no-untyped-def]
+        s = Settlement(1400, 1400, seed=3)
+        s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+        s._nucleated = False
+        s._avoid_seats = avoid
+        return s._place_bundle(700.0, 700.0, 46.0, 28.0)
+
+    first = placed([])
+    assert first is not None
+    moved = placed([(first[0], first[1])])
+    assert moved is not None and math.hypot(moved[0] - first[0], moved[1] - first[1]) > 50.0, (first[:2], moved and moved[:2])

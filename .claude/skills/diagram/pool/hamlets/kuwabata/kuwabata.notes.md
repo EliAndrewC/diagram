@@ -788,3 +788,10 @@ And on the pond block:
   figures, Qu Dajun's for Jiujiang in 1678; every numeric ratio is modern) - measured 0.62 over 29 ponds, against 0.80 before.
 - **The fry form rolled `fry_village`** (M60, archetypes/200): a fry village of the Jiujiang kind, its smallest ponds nursery water up to
   seven tenths of the pond area - 22 fry ponds, 0.63 of the water. The one parcel in ten drawn before is on no page read.
+
+## 2026-09-30 (feature 291): the settlement's new knobs recorded, not drawn
+
+Feature 291 rolls every hamlet's farmstead-grove sides, its row village's line, sides and water, and a dispersed farm's own
+water, and records them all in the manifest (grove sides 2, flank -1, flood ground yes; row line edge, sides one, water shared; farm water channel). This map is **nucleated**, so none of them is drawn: a nucleated
+hamlet keeps no farm grove of its own and no row, and its wells are the shared ones (`interactive/place.py`
+`homestead_grove_default` puts no grove text on its page). The picture is unchanged (the render byte-identical to the roll before).

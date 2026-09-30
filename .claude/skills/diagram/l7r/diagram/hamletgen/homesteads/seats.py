@@ -30,8 +30,12 @@ def front_row(
     house: tuple[float, float] | None = None,
     envelope: tuple[float, float, float, float] | None = None,
     with_normals: bool = False,
+    pitch: float = BUNDLE_PITCH,
+    reach: float | None = None,
 ) -> list[Any]:
-    """Seats for the row of homesteads that FRONTS the field, offset from the field OUTLINE itself.
+    """Seats for the row of homesteads that FRONTS the field, offset from the field OUTLINE itself. `pitch` is the step
+    along the chains (a farm with its own grove is far wider than the nucleated pitch) and `reach` how far along the seat
+    the row may run (default: the rolled cluster's stretch; a row village takes the whole field edge - feature 291).
 
     Offsetting from the cluster band's straight near face is not the same thing and is not good
     enough: the outline curves away from the band, so a row laid along the face can sit 32 px from
@@ -45,11 +49,18 @@ def front_row(
     # in two on the hem, which the pre-test now refuses before the placer is asked) was unreachable and, under feature 174, deleted
     # rather than kept for a caller that no longer exists. `count` is kept in the signature for the callers' sake; the
     # chain walk samples at the pitch and caps at 64, as the walk did.
-    return _front_row_from_chains(plan, standoff, chains, house, envelope, with_normals)
+    return _front_row_from_chains(plan, standoff, chains, house, envelope, with_normals, pitch, reach)
 
 
 def _front_row_from_chains(
-    plan: SitePlan, standoff: float | None, chains: Any, house: tuple[float, float] | None = None, envelope: tuple[float, float, float, float] | None = None, with_normals: bool = False
+    plan: SitePlan,
+    standoff: float | None,
+    chains: Any,
+    house: tuple[float, float] | None = None,
+    envelope: tuple[float, float, float, float] | None = None,
+    with_normals: bool = False,
+    pitch: float = BUNDLE_PITCH,
+    reach: float | None = None,
 ) -> list[Any]:
     """The front row offset from the SITE BOUNDARY's chains (feature 226 FR-003): the paddy's facing chains, each
     chord pushed out by its keep-out, so a seat offset from them by `standoff` along the chord's outward normal is
@@ -60,7 +71,8 @@ def _front_row_from_chains(
     stretch the cluster fronts (the rolled shape's wrap, as there), ordered center-out (as there), at most 64."""
     seat = plan.seat
     ax, ay = seat["along"]
-    reach = seat["lat"] * CLUSTER_ROW_SPAN.get(plan.cluster_shape or "crescent", CLUSTER_SPAN_FACTOR)
+    if reach is None:
+        reach = seat["lat"] * CLUSTER_ROW_SPAN.get(plan.cluster_shape or "crescent", CLUSTER_SPAN_FACTOR)
     out: list[tuple[Pt, Pt]] = []
     for chain in chains:
         carry = 0.0
@@ -91,7 +103,7 @@ def _front_row_from_chains(
                 px, py = a[0] + (b[0] - a[0]) * t / seg, a[1] + (b[1] - a[1]) * t / seg
                 if abs((px - seat["anchor"][0]) * ax + (py - seat["anchor"][1]) * ay) <= reach:
                     out.append(((px + n[0] * off, py + n[1] * off), (float(n[0]), float(n[1]))))
-                t += BUNDLE_PITCH
+                t += pitch
             carry = t - seg
     if len(out) > 64:
         step = len(out) / 64.0

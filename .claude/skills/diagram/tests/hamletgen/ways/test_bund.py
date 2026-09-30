@@ -202,3 +202,15 @@ def test_a_run_on_crosses_no_dry_plot() -> None:
     assert not B.RunOnBlocks(_stub(**beside)).clear((300.0, 100.0), (396.0, 100.0), 3.0), "the tread's edge on the plot"
     clear = {"dry_plots": [{"poly": [[340.0, 102.0], [360.0, 102.0], [360.0, 120.0], [340.0, 120.0]]}]}
     assert B.RunOnBlocks(_stub(**clear)).clear((300.0, 100.0), (396.0, 100.0), 3.0), "on the baulk beside it"
+
+
+def test_a_junction_end_is_carried_on_as_a_path_of_its_own() -> None:
+    """`carry_on` (feature 291): an end on another lane's tread stays a junction - the step to the bund is a field path of
+    its own from it; a free end is lengthened as before."""
+    s = _StubSettlement(lanes=[[(300.0, 0.0), (300.0, 200.0)], [(100.0, 100.0), (300.0, 100.0)]])
+    B.carry_on(s, 1, -1, (300.0, 100.0), (396.0, 100.0))
+    assert s.M["lanes"][1]["pts"] == [[100.0, 100.0], [300.0, 100.0]], "the junction is kept"
+    assert s.M["lanes"][-1]["pts"][0] == [300.0, 100.0] and s.M["lanes"][-1]["w"] == B.BRANCH_WIDTH
+    free = _StubSettlement(lanes=[[(100.0, 100.0), (250.0, 100.0)]])
+    B.carry_on(free, 0, -1, (250.0, 100.0), (396.0, 100.0))
+    assert free.M["lanes"][0]["pts"][-1] == [396.0, 100.0]

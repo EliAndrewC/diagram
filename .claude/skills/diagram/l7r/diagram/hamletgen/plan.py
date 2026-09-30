@@ -24,6 +24,7 @@ from .consts import (
     DIKE_CROPS,
     FALL_BEARINGS,
     FAN_ASPECTS,
+    FARM_WATERS,
     FIELD_ARCHETYPES,
     FRY_FORMS,
     GRAIN_DRIFTS,
@@ -47,6 +48,9 @@ from .consts import (
     POND_LAYOUTS,
     REF_HOUSEHOLDS,
     ROLLED_ARCHETYPES,
+    ROW_LINES,
+    ROW_SIDES,
+    ROW_WATERS,
     SETTLEMENT_FORMS,
     SINKS,
     SQ_FT_PER_ACRE,
@@ -91,6 +95,10 @@ class HamletSpec:
     settlement_form: str | None = None
     grove_sides: int | None = None  # how many sides each farmstead's grove takes, 2 | 3 | 4 (feature 291; `GROVE_SIDES`)
     flood_ground: bool | None = None  # the farms stand on flood-prone ground (feature 291); None reads it off the site
+    row_line: str | None = None  # a linear row's line, street | edge (feature 291; `ROW_LINES`); None rolls it (flood ground: edge)
+    row_sides: str | None = None  # one | both sides of the row's street (feature 291; `ROW_SIDES`)
+    row_water: str | None = None  # own | shared wells along a row (feature 291; `ROW_WATERS`)
+    farm_water: str | None = None  # a dispersed farm's own water, channel | well (feature 291 amendment 5; `FARM_WATERS`)
     field_archetype: str | None = None
     pond_layout: str | None = None  # a dike-pond's arrangement, grid | mosaic (feature 150; `POND_LAYOUTS`)
     manure_form: str | None = None  # the manure fixture's form, heap | pit (feature 150; `MANURE_FORMS`)
@@ -133,6 +141,14 @@ class HamletSpec:
             raise ValueError(f"brook_side {self.brook_side!r} must be one of {sorted(BROOK_FLANKS)} - the two flanks the brook may pass the fan on")
         if self.byre_form is not None and self.byre_form not in KNOBS["byre_form"].value_space:
             raise ValueError(f"byre_form {self.byre_form!r} must be one of {KNOBS['byre_form'].value_space}")
+        for _name, _val, _space in (
+            ("row_line", self.row_line, ROW_LINES),
+            ("row_sides", self.row_sides, ROW_SIDES),
+            ("row_water", self.row_water, ROW_WATERS),
+            ("farm_water", self.farm_water, FARM_WATERS),
+        ):
+            if _val is not None and _val not in _space:
+                raise ValueError(f"{_name} {_val!r} must be one of {sorted(set(_space))}")
         if self.water_sink is not None and self.water_sink not in ("pond", "offmap"):
             raise ValueError(f"water_sink {self.water_sink!r} must be 'pond' (a tameike below the fields) or 'offmap' (the drain brook leaves the frame)")
 
@@ -216,6 +232,12 @@ class SitePlan:
     # thing on a watercourse that is a FEATURE rather than a runner - two waters meeting is a place - and the
     # crop deliberately ignores runners, which is how one came to be drawn 7.4 ft outside the picture.
     confluence: Pt | None = None
+    # THE ROW VILLAGE'S THREE CHOICES (feature 291 amendment 3; `ROW_LINES`, `ROW_SIDES`, `ROW_WATERS`): rolled for every
+    # hamlet and recorded, drawn only where the form is linear.
+    row_line: str = "edge"
+    row_sides: str = "one"
+    row_water: str = "own"
+    farm_water: str = "well"  # ...and a DISPERSED farm's own water (amendment 5; `FARM_WATERS`), drawn only where the form is dispersed
     fry_form: str = "none"  # none | fry_village (feature 280 M60, `FRY_FORMS`): a dike-pond hamlet's nursery, read by `stage_polder`
 
     @property
@@ -253,6 +275,11 @@ def offtakes_for(households: int) -> tuple[tuple[float, ...], tuple[float, ...]]
         if households < ceiling:
             return a, b
     return OFFTAKE_LADDER[-1][1], OFFTAKE_LADDER[-1][2]
+
+
+LINEAR_CANVAS = 1.5
+"""A linear or dispersed hamlet's canvas over `canvas_for`'s: room for grove farms (feature 291 plan D14) - a map drawing
+convention, sized so a twenty-farm row finds its streets on the sheet, and twenty dispersed farms their frames."""
 
 
 def canvas_for(target_acres: float, ftpx: float) -> tuple[int, int]:
@@ -313,6 +340,13 @@ def plan_site(spec: HamletSpec) -> SitePlan:
     target_acres = spec.households * GROSS_ACRES_PER_HOUSEHOLD
     a, b = offtakes_for(spec.households)
     W, H = canvas_for(target_acres, 1.0)
+    if _form in ("linear", "dispersed"):
+        # A ROW VILLAGE NEEDS ITS LENGTH (feature 291 plan D14): its farms stand one grove frame (some 240 ft) apart along
+        # their streets, and a canvas sized for a clustered hamlet ran each street off the sheet after a few lots (cohort
+        # seed 12: 13 of 17 seated on six streets). The unused ground is cropped away with the rest (`crop_to_content`).
+        # ...AND SO DOES A DISPERSED HAMLET OF GROVE FARMS, each farm the same frame: a twenty-farm one ran off the sheet's
+        # edge at sixteen (the pinned Audit-905, the same with a well or a channel)
+        W, H = int(W * LINEAR_CANVAS), int(H * LINEAR_CANVAS)
     return SitePlan(
         spec=spec,
         down_deg=down_deg,
@@ -328,6 +362,10 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         grove_sides=spec.grove_sides or int(_roll(spec.seed, "grove_sides", GROVE_SIDES_FLOOD if _flood else GROVE_SIDES)),
         flood_ground=_flood,
         grove_flank=int(_roll(spec.seed, "grove_flank", GROVE_FLANKS)),
+        row_line=spec.row_line or ("edge" if _flood else str(_roll(spec.seed, "row_line", ROW_LINES))),
+        row_sides=spec.row_sides or str(_roll(spec.seed, "row_sides", ROW_SIDES)),
+        row_water=spec.row_water or str(_roll(spec.seed, "row_water", ROW_WATERS)),
+        farm_water=spec.farm_water or str(_roll(spec.seed, "farm_water", FARM_WATERS)),
         field_archetype=_archetype,
         pond_layout=_pond_layout,
         manure_form=spec.manure_form or str(_roll(spec.seed, "manure_form", MANURE_FORMS)),

@@ -33,3 +33,9 @@ rolled nucleated, and the dispersed and linear forms (which carry the per-house 
 the feature should go. The GM chose "Knob + fix groves (Recommended)": correct the record, build the 2/3/4-sided knob
 with the flood-ground adjustment, AND fix per-house grove placement so dispersed and linear hamlets (which carry
 farmhouse groves) can be rolled again.
+
+---
+
+**2026-09-29, the GM, on the row village** (asked what a linear hamlet of grove farms should look like):
+
+As is often the case with these things, the answer is always that what it should look like should be based on our research and not just something that you ask me. I mean, I don't know what these kinds of historical farming communities actually looked like. And the point of what we are doing in this project is to draw maps that reflect the historical norms for these types of settlements. So it would be inappropriate for me or for you to simply make an arbitrary decision. we should try to find out from our research what types of settlement layouts existed, and then have our settlements reflect the range of settlement layouts that we are able to find. And then, if our research is thin and we are straightforwardly unable to come up with an answer, then we make a tunable knob for the various possibilities which all seem reasonable by virtue of being in line with our other research and not contradicting anything that our research has already established.

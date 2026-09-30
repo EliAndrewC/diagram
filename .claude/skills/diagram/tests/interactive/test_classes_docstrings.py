@@ -43,6 +43,8 @@ ADDED_SINCE_189: tuple[str, ...] = (
     "retirement house",  # 269 B42: the old couple's own roof in the homestead, on the family-form knob
     "tea dike",  # 269 E9 (B34): the attested tea dike, a third dike-crop form beside mulberry and fruit
     "homestead grove",  # feature 291: a farm's own grove, on the sides its settlement rolled - drawn once the forms rolled again
+    "farm holding",  # feature 291 amendment 3: a row village's far-row farm's holding behind its lot (research homesteads/156)
+    "farm channel",  # feature 291 amendment 5: the channel led into a dispersed farm's grounds (research homesteads/200)
 )  # feature 230: what stands where the head race leaves the brook; and a dike-pond's two-way canals, which the irrigation ditch mislabeled (pass 10)
 
 

@@ -632,6 +632,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--leftover", choices=LEFTOVER_FORMS, default=None, help="pin a dike-pond's leftover parcels (feature 150 B2)")
     ap.add_argument("--form", choices=("nucleated", "dispersed", "linear"), default=None, help="pin the settlement form (feature 291: the reference hamlet is pinned nucleated)")
     ap.add_argument("--grove-sides", type=int, choices=(2, 3, 4), default=None, help="pin how many sides each farm's grove takes (feature 291)")
+    ap.add_argument("--farm-water", choices=("channel", "well"), default=None, help="pin a dispersed farm's own water (feature 291 amendment 5)")
+    ap.add_argument("--row-line", choices=("street", "edge"), default=None, help="pin a row village's line (feature 291)")
+    ap.add_argument("--row-sides", choices=("one", "both"), default=None, help="pin a row village's sides (feature 291)")
+    ap.add_argument("--row-water", choices=("own", "shared"), default=None, help="pin a row village's water (feature 291)")
     ap.add_argument("--out", default=None, help="write <out>.svg/.png/.json")
     ap.add_argument("--no-render", action="store_true")
     ap.add_argument("--batch", type=int, default=0, help="roll N hamlets from consecutive seeds and gate them all")
@@ -670,6 +674,10 @@ def main(argv: Sequence[str] | None = None) -> int:
             leftover=args.leftover,
             settlement_form=args.form,
             grove_sides=args.grove_sides,
+            farm_water=args.farm_water,
+            row_line=args.row_line,
+            row_sides=args.row_sides,
+            row_water=args.row_water,
         ),
         out_base=args.out,
         render=not args.no_render,

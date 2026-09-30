@@ -15,7 +15,52 @@ if TYPE_CHECKING:
 
 
 ALDER_GREENS = ("#5E7F6A", "#6B8A74")  # the alder crowns' tint (a map drawing convention, `_draw_grove`)
+# A household's bamboo stand, rolled per farmstead from its position (`_hjit(x, y, 95.0)` under this share): the presence
+# rate is a GUESS - no source gives a share; "one of several secondary species" says common but not universal
+# (hamletgen/homesteads/bamboo.py carries the full note). Here since feature 291, because a farm with its own grove carries
+# its bamboo IN that grove, so the grove drawer makes the same roll.
+HOUSEHOLD_BAMBOO_PREVALENCE = 0.6
+GROVE_CLUMP_CROWNS = 28  # the most crowns one `_draw_grove` clump throws
+GROVE_CROWN_AREA = 48.0  # sq px of clump per crown at the town grain (~one 5 m crown); scaled by (bscale / 0.82) ** 2
+
+
+def band_clumps(cx: float, cy: float, w: float, h: float, cap_area: float) -> list[tuple[float, float, float, float]]:
+    """A grove band cut along its longer side into equal pieces of at most `cap_area` each (feature 291), so a band
+    larger than one clump's cap is drawn as several clumps at the one density rather than one sparse clump."""
+    k = max(1, math.ceil(w * h / cap_area)) if cap_area > 0 else 1
+    if w >= h:
+        return [(cx - w / 2 + w * (i + 0.5) / k, cy, w / k, h) for i in range(k)]
+    return [(cx, cy - h / 2 + h * (i + 0.5) / k, w, h / k) for i in range(k)]
+
+
 GROVE_BAMBOO_SHARE = 0.08  # of a windbreak clump's items, the bamboo under its crowns: a GUESS (269 B29, vegetation/260)
+
+GROVE_BAMBOO_PATCH_FT = (22.0, 16.0)
+"""A farm's household bamboo, where it rolled a stand and keeps it in its own grove (feature 291, vegetation/154): a patch
+this size - along the band, then across it - on the house side of each windward (deep) band, every item in it bamboo,
+so it is inked as culms rather than a crown. The size is the household strip's (`hamletgen/homesteads/bamboo.py`
+`HOUSEHOLD_BAMBOO_FT`, a GUESS); each windward band, because the Tonami grove held its bamboo "from the west round to the
+north". Drawn only as the share of `GROVE_BAMBOO_SHARE` - in the gaps between crowns - 8 of Kashikawa's 15 bamboo farms
+drew no culm at all (settlement-review, 2026-09-30)."""
+
+
+def in_box(x: float, y: float, box: tuple[float, float, float, float] | None) -> bool:
+    """Is (x, y) inside the axis-aligned `box` (x0, y0, x1, y1)? False with no box."""
+    return box is not None and box[0] <= x <= box[2] and box[1] <= y <= box[3]
+
+
+def bamboo_patch(cx: float, cy: float, w: float, h: float, face: tuple[float, float], along: float, across: float) -> tuple[float, float, float, float]:
+    """The household bamboo patch of a band centered (`cx`, `cy`), `w` x `h`, whose outward face is `face`: `along` x
+    `across` (clamped to the band), in the band's middle, against its HOUSE side (the side opposite `face`)."""
+    fx, fy = face
+    if abs(fx) > abs(fy):  # an east or west band: along it is y, across it is x
+        pw, ph = min(across, w), min(along, h)
+        x = cx - fx * (w - pw) / 2
+        return (x - pw / 2, cy - ph / 2, x + pw / 2, cy + ph / 2)
+    pw, ph = min(along, w), min(across, h)
+    y = cy - fy * (h - ph) / 2
+    return (cx - pw / 2, y - ph / 2, cx + pw / 2, y + ph / 2)
+
 
 # THE VILLAGE BELT HAS TWO ATTESTED FORMS, SO IT IS A KNOB (269 B30; research/vegetation/270, "Was a windbreak one kind of
 # tree in a row?"). Neither is a line of one kind of tree. `conifer_led` is the Japanese farmstead grove drawn at village
@@ -485,6 +530,8 @@ class GrovesMixin:
         mix: str = "windbreak",
         cls: str | None = None,
         tally: dict[str, int] | None = None,
+        bamboo: bool = True,
+        bamboo_box: tuple[float, float, float, float] | None = None,
     ) -> int:
         """Draw one windbreak/grove clump as a DENSE MIXED STAND - overlapping canopies packed into a real
         grove (not a few scattered trees), of three species: tall EVERGREEN conifer (darker, larger crown - the
@@ -496,7 +543,8 @@ class GrovesMixin:
         The village belt draws one of the `windbreak_belt` knob's two forms (269 B30, vegetation/270): a 'conifer_led'
         clump draws only the lesser broadleaf and the bamboo between the belt's rows of conifers, which `_belt_ranks`
         seats for the whole belt first; 'mixed_broadleaf' is rounded broadleaf crowns in the woods' irregular size mix,
-        no conifer. `tally`, when given, counts the crowns drawn by kind.
+        no conifer. `tally`, when given, counts the crowns drawn by kind. `bamboo=False` draws no bamboo in any mix: a farm
+        grove whose household rolled no bamboo stand (feature 291).
         Distinct from the big s.forest area feature and the striped kitchen-garden bed. Species and placement
         are seeded by position (stable across regenerations). Canopy count scales with footprint area."""
         # SCOPED (2026-08-08): a homestead grove's crowns are decoration keyed to the grove itself.
@@ -504,7 +552,7 @@ class GrovesMixin:
             bs = self.bscale / 0.82  # render scale relative to the town grain
             st = random.getstate()
             random.seed(int(abs(cx) * 5 + abs(cy) * 3 + round(w)))
-            n = max(5, min(28, round(w * h / (bs * bs * 48))))  # ~ one crown per ~48 px^2 at 2 ft/px (a ~5 m crown); ~40 across the 6:1 L-grove
+            n = max(5, min(GROVE_CLUMP_CROWNS, round(w * h / (bs * bs * GROVE_CROWN_AREA))))  # ~ one crown per ~48 px^2 at 2 ft/px (a ~5 m crown); ~40 across the 6:1 L-grove
             # BAMBOO LEFT THE MIX (feature 133 T47, GM 2026-08-27). It used to be 20% of a windbreak's
             # crowns and 45% of a dooryard copse's, drawn one culm at a time - 315 six-foot glyphs on
             # Inashiro that no one could see as bamboo, and not how bamboo grows: a stand is a clonal
@@ -521,7 +569,9 @@ class GrovesMixin:
             # items, taken from the broadleaf so the cedar backbone keeps its 38%. The dooryard and alder mixes carry none.
             # The village belt's two forms (269 B30) carry the same bamboo share; a conifer-led belt's conifers are its rows,
             # seated for the whole belt by `_belt_ranks`, so its clumps throw only the lesser crowns; a mixed broadleaf belt has none.
-            b_th = GROVE_BAMBOO_SHARE if mix in ("windbreak", *WINDBREAK_BELT_FORMS) else 0.0  # dooryard = fruit broadleaf, no conifer; alder = broadleaf only
+            b_th = (
+                GROVE_BAMBOO_SHARE if bamboo and mix in ("windbreak", *WINDBREAK_BELT_FORMS) else 0.0
+            )  # `bamboo=False`: a farm that rolled none (feature 291)  # dooryard = fruit broadleaf, no conifer; alder = broadleaf only
             c_th = b_th + 0.38 if mix == "windbreak" else b_th
             if mix == "conifer_led":
                 rows = max(0.0, (w - 4) * (h - 4)) / (self.px(RANK_ALONG_FT) * self.px(RANK_APART_FT))  # the row conifers this clump's box holds
@@ -533,7 +583,7 @@ class GrovesMixin:
                 px = random.uniform(-w / 2 + 2, w / 2 - 2)
                 py = random.uniform(-h / 2 + 2, h / 2 - 2)
                 roll = random.random()
-                kind = "bamboo" if roll < b_th else ("conifer" if roll < c_th else "broadleaf")
+                kind = "bamboo" if roll < b_th or in_box(cx + px, cy + py, bamboo_box) else ("conifer" if roll < c_th else "broadleaf")
                 band = LESSER_BROADLEAF_S if mix == "conifer_led" else ((1.25, 1.7) if random.random() < 0.25 else (0.72, 1.05))  # a few emergent crowns over many small
                 size = random.uniform(*band)
                 items.append((px, py, kind, size))

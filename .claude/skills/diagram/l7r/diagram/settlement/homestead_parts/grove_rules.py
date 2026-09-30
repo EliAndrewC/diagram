@@ -3,14 +3,17 @@
 Feature 126 measured four defects in the per-house grove - on a lane, on the lee side, shading a garden's morning sun,
 over a byre - and feature 166 then retired the check battery that had measured them, so a cohort roll's own verdict no
 longer saw any of them. The overlaps are the matrix's (`overlap.matrix_violations`, which classifies `groves` as
-VEGETATION against every structure and lane). These three are the rest, pure functions of the manifest, run by
+VEGETATION against every structure and lane). These are the rest, pure functions of the manifest, run by
 `tools/cohort_audit` on every roll and by the gate on every pool roll whose farms carry their own grove:
 
 - `grove_sides_missing`: every farm of a non-nucleated map carries a band on every face its settlement rolled
   (FR-010: no farm on fewer sides);
 - `groves_off_windward`: every deep band stands on a windward face, on that side of its own house;
 - `gardens_east_shaded`: no grove band stands hard against a garden's east across its height (the reach
-  `_east_trees` reads).
+  `_east_trees` reads);
+- `fixtures_on_groves`: no farm fixture stands inside a band. The matrix abstains on VEGETATION (the canopy keep-out
+  holds the drawn crowns off a roof, so a bath room inside a band drew as a clearing in the grove): every bath room and the
+  one wood shed Mizuguchi drew stood on its west band before the service strip went round that side too.
 
 Each returns the offending records, empty when the map keeps the rule - and says what it FOUND, so a caller can assert
 the rule was not vacuous (`grove_farms`).
@@ -18,6 +21,7 @@ the rule was not vacuous (`grove_farms`).
 
 from __future__ import annotations
 
+import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
@@ -128,4 +132,22 @@ def gardens_east_shaded(M: Mapping[str, Any]) -> list[tuple[Pt, Mapping[str, Any
             west = g["x"] - g["w"] / 2
             if gx1 - 2 <= west < gx1 + reach and g["y"] - g["h"] / 2 < gy1 and gy0 < g["y"] + g["h"] / 2:
                 out.append((_key((gd["x"], gd["y"])), g))
+    return out
+
+
+def fixtures_on_groves(M: Mapping[str, Any]) -> list[tuple[str, Mapping[str, Any]]]:
+    """Each (fixture kind, band) where a farm fixture's drawn box - its recorded size turned by its `rot`, so a flank seat's
+    shed lying along the wall is 12 ft across, not 24 (cohort seeds 6, 11, 16) - overlaps a grove band's box (both
+    recorded centered)."""
+    bands = [g for g in M.get("groves") or () if all(k in g for k in ("x", "y", "w", "h"))]
+    out = []
+    for f in M.get("farm_fixtures") or ():
+        if not all(k in f for k in ("x", "y", "w", "h")):  # a fixture with no box (a tree) has no footprint to test
+            continue
+        th = math.radians(float(f.get("rot", 0.0)))
+        fw = abs(f["w"] * math.cos(th)) + abs(f["h"] * math.sin(th))
+        fh = abs(f["w"] * math.sin(th)) + abs(f["h"] * math.cos(th))
+        for g in bands:
+            if abs(f["x"] - g["x"]) < (fw + g["w"]) / 2 and abs(f["y"] - g["y"]) < (fh + g["h"]) / 2:
+                out.append((str(f.get("kind")), g))
     return out

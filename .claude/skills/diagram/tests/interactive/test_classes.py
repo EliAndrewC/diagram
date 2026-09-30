@@ -21,6 +21,8 @@ from l7r.diagram.interactive.classes import ANNOUNCED, CLASSES, NOT_HIGHLIGHTED,
 SPEC_CLASSES = [
     "alder",  # feature 261: the belt's trees where it runs into the marsh
     "homestead grove",  # feature 291: a farm's own grove, on the sides its settlement rolled
+    "farm holding",  # feature 291 amendment 3: a row village's far-row holding
+    "farm channel",  # feature 291 amendment 5: the channel into a dispersed farm's grounds
     "farmhouse",
     "storage shed",
     "byre",

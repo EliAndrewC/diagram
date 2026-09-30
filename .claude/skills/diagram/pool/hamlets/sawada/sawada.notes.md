@@ -1017,3 +1017,10 @@ The GM's ruling of 2026-09-28 - "We should eliminate anything which is only mode
   field margin (M49, vegetation/640).
 
 Measured on this roll (2026-09-29): 19 houses; bath rooms 5 (by seat: floored_rooms 1, stable_end 4; the hamlet's seat main_door), wood sheds 8, privies 17 (7 on the sun side), storehouses 1, bamboo stands 6, woodland stands 2; house turns -11 to 5 degrees; every declared fixture seated.
+
+## 2026-09-30 (feature 291): the settlement's new knobs recorded, not drawn
+
+Feature 291 rolls every hamlet's farmstead-grove sides, its row village's line, sides and water, and a dispersed farm's own
+water, and records them all in the manifest (grove sides 3, flank -1, flood ground no; row line edge, sides one, water own; farm water well). This map is **nucleated**, so none of them is drawn: a nucleated
+hamlet keeps no farm grove of its own and no row, and its wells are the shared ones (`interactive/place.py`
+`homestead_grove_default` puts no grove text on its page). One thing moved: the 25 ft step from a lane junction on to the paddy's bund is now drawn as a field path of its own, 5 ft wide, where it had been the last leg of a 3 ft lane - a junction carried on to the bund stays a junction (`ways/bund.carry_on`).

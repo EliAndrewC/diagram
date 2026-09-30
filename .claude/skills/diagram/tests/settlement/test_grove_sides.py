@@ -248,3 +248,73 @@ def test_the_garden_relax_steers_clear_of_a_neighbors_whole_homestead() -> None:
     }
     s._relax_gardens_south([shaded, other])
     assert shaded["geom"]["gardens"][0][1] > 300
+
+
+def test_the_service_strip_stands_the_windward_bands_off_the_back_wall_and_the_west_end() -> None:
+    """`back` (`SERVICE_STRIP_FT`) sets both deep bands off the house - the north one off the back wall, the west one off
+    the end wall where the bath room and the wood shed go (Mizuguchi: every bath room stood on its west band)."""
+    tight = canonical_farmstead(50.0, 28.0, 3.0, (22.0, 24.0), (40.0, 30.0), sides=2, garden_by_yard=False, thin=17.0, sun_east=22.0, way_in=12.0)
+    strip = canonical_farmstead(50.0, 28.0, 3.0, (22.0, 24.0), (40.0, 30.0), sides=2, garden_by_yard=False, thin=17.0, sun_east=22.0, way_in=12.0, back=24.0)
+    for face, side in ((N, 3), (W, 2)):
+        was = next(_edges(r) for r, f, _d in tight["groves"] if f == face)
+        now = next(_edges(r) for r, f, _d in strip["groves"] if f == face)
+        assert was[side] - now[side] == pytest.approx(24.0), face
+
+
+def test_fixtures_on_groves_names_a_fixture_inside_a_band() -> None:
+    from l7r.diagram.settlement.homestead_parts.grove_rules import fixtures_on_groves
+
+    band = {"x": 0.0, "y": 0.0, "w": 40.0, "h": 80.0}
+    M = {
+        "groves": [band, {"poly": []}],
+        "farm_fixtures": [{"kind": "bath", "x": 18.0, "y": 0.0, "w": 7.0, "h": 6.0}, {"kind": "woodpile", "x": 60.0, "y": 0.0, "w": 24.0, "h": 12.0}, {"kind": "persimmon", "x": 0.0, "y": 0.0}],
+    }
+    assert fixtures_on_groves(M) == [("bath", band)], "the bath inside the band; the shed clear of it; a tree has no box"
+    assert fixtures_on_groves({}) == []
+
+
+def test_fixtures_on_groves_reads_the_fixture_turned() -> None:
+    """A flank seat's shed is recorded 24 x 12 at a quarter turn: drawn 12 across, it clears a band whose edge is 10 ft from its center."""
+    from l7r.diagram.settlement.homestead_parts.grove_rules import fixtures_on_groves
+
+    band = {"x": 0.0, "y": 0.0, "w": 40.0, "h": 80.0}
+    shed = {"kind": "woodpile", "x": 30.0, "y": 0.0, "w": 24.0, "h": 12.0}
+    assert fixtures_on_groves({"groves": [band], "farm_fixtures": [shed]}) == [("woodpile", band)]
+    assert fixtures_on_groves({"groves": [band], "farm_fixtures": [{**shed, "rot": 90.0}]}) == []
+
+
+def test_band_clumps_cuts_a_band_into_pieces_no_larger_than_the_cap() -> None:
+    """`band_clumps` (feature 291): a band over one clump's cap is cut along its longer side into equal pieces, each at
+    most the cap, tiling the band; a band under the cap, or a cap of zero, is one piece."""
+    from l7r.diagram.settlement.homestead_parts.groves import band_clumps
+
+    tall = band_clumps(0.0, 0.0, 40.0, 80.0, 1400.0)
+    assert len(tall) == 3 and all(w == 40.0 and h * w <= 1400.0 for _x, _y, w, h in tall)
+    assert sum(h for *_r, h in tall) == pytest.approx(80.0) and tall[0][1] < tall[-1][1]
+    wide = band_clumps(0.0, 0.0, 120.0, 20.0, 1400.0)
+    assert len(wide) == 2 and all(h == 20.0 for *_r, h in wide) and wide[0][0] < wide[1][0]
+    assert band_clumps(5.0, 6.0, 10.0, 10.0, 1400.0) == [(5.0, 6.0, 10.0, 10.0)]
+    assert band_clumps(5.0, 6.0, 10.0, 10.0, 0.0) == [(5.0, 6.0, 10.0, 10.0)]
+
+
+def test_a_lane_through_a_farm_s_grove_band_is_found_once() -> None:
+    """`groves_crossed_by_lanes` (feature 291): each (lane, band) whose stroked tread overlaps, once each."""
+    from l7r.diagram.settlement.homestead_parts.grove_rules import groves_crossed_by_lanes
+
+    g = {"x": 100.0, "y": 100.0, "w": 40.0, "h": 20.0}
+    M = {"groves": [g, {"x": 5.0}], "lanes": [{"pts": [[0.0, 100.0], [90.0, 100.0], [200.0, 100.0]], "w": 3}, {"pts": [[0.0, 300.0], [200.0, 300.0]]}]}
+    assert groves_crossed_by_lanes(M) == [(0, g)]
+
+
+def test_a_bamboo_patch_sits_mid_band_against_the_house_side() -> None:
+    """`bamboo_patch` (feature 291): 22 ft along the band by 16 across, in its middle, against the side opposite its face;
+    `in_box` answers for the patch and is False with none."""
+    from l7r.diagram.settlement.homestead_parts.groves import bamboo_patch, in_box
+
+    north = bamboo_patch(100.0, 50.0, 80.0, 40.0, (0.0, -1.0), 22.0, 16.0)  # a north band: the house is south of it
+    assert north == (89.0, 54.0, 111.0, 70.0)
+    west = bamboo_patch(50.0, 100.0, 40.0, 80.0, (-1.0, 0.0), 22.0, 16.0)  # a west band: the house is east of it
+    assert west == (54.0, 89.0, 70.0, 111.0)
+    tiny = bamboo_patch(0.0, 0.0, 10.0, 8.0, (0.0, 1.0), 22.0, 16.0)
+    assert tiny == (-5.0, -4.0, 5.0, 4.0), "clamped to the band"
+    assert in_box(100.0, 60.0, north) and not in_box(100.0, 40.0, north) and not in_box(0.0, 0.0, None)

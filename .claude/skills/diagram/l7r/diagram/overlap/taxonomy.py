@@ -156,6 +156,8 @@ _OVERLAP_LINEAR = (
 _OVERLAP_EXEMPT = {
     "drawn_channels": "z-order record of the drawn field-channel strokes (post-clip geometry + stroke widths w0/w1 + bedz), not a placement feature: the strokes duplicate the field_ditches/channels ground the structs already avoid, and their mouths deliberately touch the pond/moat/stream they join (pond_fill_covers_channel_mouths and water_channels_join_not_cross read this record - it is the only source that says what was actually stroked, and how wide)",
     "storehouses": "merchant kura drawn as an annex deliberately abutting its shop",
+    "row_street_plans": "a row village's PLANNED street lines (feature 291, `hamletgen/homesteads/rows.py`): bookkeeping the row rules read - the street drawn from each is a `lanes` record the matrix already reasons about",
+    "row_holdings": "a row village's far-row holdings as reserved (feature 291): bookkeeping the row rules read - the ground drawn is the `dry_plots` records the matrix already reasons about",
     "borders": "a drawn CLAN/jurisdictional border is a LINE OF LAW, not a physical object - it has no footprint (no w/h), reserves no ground and blocks nothing. Being overlapped is the POINT: a frontier magistracy stands its wall ON the line so the border runs across the parley-room floor (the Mode A ubame-magistracy sheet), and the period PHYSICAL marker - an earthen mound, as at the Nanbu-Date boundary - is deliberately NOT what this draws, precisely because a mound would be a structure everything then had to stay clear of",
     "farm_sheds": "a farmstead's grain-storehouse kura drawn as an annex abutting its own farmhouse's back wall (farm_sheds_attached verifies the attachment)",
     "pig_sties": "a pig shed ON a pond dike, over the water's edge, by construction (feature 150 A3; FAO/NACA: 'the simple pig shed constructed on the pond dyke or over the water surface')",
@@ -430,7 +432,9 @@ OVERLAP_CLASS: dict[str, str] = {
     #                   a pocket pond, bedrock outcrop, grave island or crescent pond sunk INTO one
     #                   paddy plot, the field tiling around it - the overlap is the feature
     #   borders         a drawn jurisdictional line is a LINE OF LAW, not a physical object
-    **{k: "RECORD" for k in ("drawn_channels", "field_ponds", "field_rocks", "field_graves", "crescent_ponds", "borders", "forest_edge", "lane")},
+    #   row_street_plans / row_holdings
+    #                   a row village's planned streets and reserved holdings (feature 291); drawn as lanes and dry plots
+    **{k: "RECORD" for k in ("drawn_channels", "field_ponds", "field_rocks", "field_graves", "crescent_ponds", "borders", "forest_edge", "lane", "row_street_plans", "row_holdings", "farm_channels")},
     # the intramural patrol strip has its OWN precise rule (ring_road_kept_clear), which knows the
     # real bed width and which frontages may legitimately stand against it; the matrix defers
     **{k: "RING_ROAD" for k in ("ring_road",)},

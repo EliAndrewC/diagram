@@ -152,26 +152,35 @@ class PlacerMixin:
     def _place_bundle_dispersed(self: Settlement, x: float, y: float, hw: float, hh: float) -> Any:  # type: ignore[misc]
         """The dispersed spiral: the nearest seat that fits, then the two slides (see `_place_bundle`)."""
         offsets = [(0, 0)]
-        for r in range(7, 92, 7):
+        # A ROW'S SEAT IS EXACT (feature 291 plan D15, `hamletgen/homesteads/rows.py`): the row planned each frame one lot
+        # along its street, and the two slides below - toward the field, then against the neighbor - carried the far row
+        # onto the street itself (Kashikawa: 10 of 20 frames on the planned line). Within a row the seat is nudged at most
+        # one step and never slid.
+        exact = bool(getattr(self, "_exact_seat", False))
+        for r in range(7, 15 if exact else 92, 7):
             for k in range(12):
                 a = k * math.pi / 6
                 offsets.append((round(r * math.cos(a)), round(r * math.sin(a))))
-        start: Pt | None = None
+        _avoid = getattr(self, "_avoid_seats", None)
         for nx, ny in offsets:
             # THE FREE GROUND PROPOSES, THE FIT TEST DECIDES (feature 276, plan D9): an offset whose house the index
             # refuses is one `_bundle_fits` would refuse, so it is dropped without building its bundle.
             if self._seat_refused(x + nx, y + ny, hw, hh):
                 continue
             geom = self._bundle_geom(x + nx, y + ny, hw, hh)
-            if not self._bundle_refused(geom) and self._bundle_fits(geom):
-                start = (x + nx, y + ny)
-                break
-        if start is None:
-            return None
-        cx, cy = start
-        cx, cy = self._slide(cx, cy, hw, hh, self._nearest_field_point, grove_off_field=True)  # grove hugs the bund
-        cx, cy = self._slide(cx, cy, hw, hh, self._nearest_placed_point, grove_off_field=True)  # pack against neighbor
-        return cx, cy, self._bundle_geom(cx, cy, hw, hh)
+            if self._bundle_refused(geom) or not self._bundle_fits(geom):
+                continue
+            cx, cy = x + nx, y + ny
+            if not exact:
+                cx, cy = self._slide(cx, cy, hw, hh, self._nearest_field_point, grove_off_field=True)  # grove hugs the bund
+                cx, cy = self._slide(cx, cy, hw, hh, self._nearest_placed_point, grove_off_field=True)  # pack against neighbor
+            # THE RE-ROLL'S FORBIDDEN GROUND, AFTER THE SLIDES (feature 291): the nucleated placer refuses a seat within 50 px
+            # of ground a previous roll proved unservable, and this one never asked - so the slides carried every re-roll's
+            # farm back onto the same spot (cohort seed 23: four attempts, the same two farms stranded at the same seats)
+            if _avoid and any(math.hypot(cx - _ax, cy - _ay) <= 50.0 for _ax, _ay in _avoid):
+                continue
+            return cx, cy, self._bundle_geom(cx, cy, hw, hh)
+        return None
 
     _NUC_SIDES = ("SE", "SW", "E", "W")  # garden-side preference: sunny south strip first, walls as fallback
 

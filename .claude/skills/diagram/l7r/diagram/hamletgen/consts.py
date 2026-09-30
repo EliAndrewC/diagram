@@ -918,6 +918,24 @@ from l7r.diagram.settlement.homestead_parts.grove_sides import GROVE_FLANKS as G
 from l7r.diagram.settlement.homestead_parts.grove_sides import GROVE_SIDES as GROVE_SIDES  # noqa: E402,F401
 from l7r.diagram.settlement.homestead_parts.grove_sides import GROVE_SIDES_FLOOD as GROVE_SIDES_FLOOD  # noqa: E402,F401
 
+# THE ROW VILLAGE (feature 291 amendment 3; research/homesteads/155 and 156). A linear hamlet's farms stand in a row
+# along ONE LINE - a street laid first (the planned row's form, which a paddy row may borrow; drawn straight, as a
+# surveyed road is) or the dry edge the ground gives (a levee, a dike, a fan's foot; the field's margin stands for it,
+# this project's reading; the row curves with it). Flood-prone ground takes the dike, the edge; otherwise the two at
+# even odds - a GUESS, no page counts them.
+ROW_LINES = ("street", "edge")
+# ...on ONE side of its street (the field across it, Shimotome) or BOTH (each farm's holding behind it, Santome and
+# Nobidome): both attested, no count - even odds, a GUESS.
+ROW_SIDES = ("one", "both")
+# ...and its WATER: each farm its own well, or wells shared along the street. The record rules only on the dispersed
+# farm (homesteads/200: its own water); the one row it knows (Santome, few deep shared wells on a water-poor upland)
+# does not transfer to a paddy row - even odds, a GUESS.
+ROW_WATERS = ("own", "shared")
+# A DISPERSED farm's own water (feature 291 amendment 5; homesteads/200): a small channel led off the irrigation water into
+# its grounds - the Tonami museum: "in many areas a small channel was led into the house's grounds", the fan's water table
+# too deep for a well (ACCURATE) - or its own well, the other areas as this record reads them (a GUESS). Even odds, a GUESS.
+FARM_WATERS = ("channel", "well")
+
 # Where the hamlet's bamboo stands (feature 133 T47; the `bamboo` knob's roll table). Weighted so a
 # temperate lowland hamlet usually has one - the research puts bamboo below the frost line as a
 # matter of course - and "none" is the cold-upland minority. Read the knob's note in `_knobs.py`.

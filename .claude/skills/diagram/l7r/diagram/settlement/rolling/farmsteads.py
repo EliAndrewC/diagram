@@ -7,6 +7,7 @@ import math
 from typing import TYPE_CHECKING, Any, cast
 
 from .._geom import Indexed
+from ..homestead_parts.groves import GROVE_BAMBOO_PATCH_FT, GROVE_CLUMP_CROWNS, GROVE_CROWN_AREA, HOUSEHOLD_BAMBOO_PREVALENCE, bamboo_patch, band_clumps
 from .fit import part_box
 
 if TYPE_CHECKING:
@@ -24,6 +25,13 @@ class FarmsteadFlushMixin:
                 return self._farmsteads_bundle()
             return self._farmsteads_legacy()
 
+    def _farm_rolls_bamboo(self: Settlement, hx: float, hy: float) -> bool:  # type: ignore[misc]
+        """Does the farm at (hx, hy) keep a household bamboo stand (feature 291)? The same positional roll the household
+        bamboo pass makes (`hamletgen/homesteads/bamboo.py`), under the settlement's `bamboo` knob as the generator sets
+        it (`_household_bamboo`); a map that never set it - the hand-drawn tiers - keeps the windbreak's bamboo as before."""
+        on = getattr(self, "_household_bamboo", None)
+        return True if on is None else bool(on) and self._hjit(hx, hy, 95.0) < HOUSEHOLD_BAMBOO_PREVALENCE
+
     def _farmsteads_bundle(self: Settlement) -> int:  # type: ignore[misc]
         """Draw every reserved homestead bundle: grove (back) -> yard -> garden -> house (on top). The hard
         work (fitting each whole bundle without overlap) already happened in try_place, one at a time, so
@@ -33,7 +41,7 @@ class FarmsteadFlushMixin:
         GROVES (the back layer), (2) after a south-nudge relaxation, draw the yards/gardens/houses on top."""
         survivors: list[Any] = []
         bundled: list[Any] = []
-        arms: list[tuple[float, float, float, float, tuple[int, int], str]] = []
+        arms: list[tuple[float, float, float, float, tuple[int, int], str, bool]] = []
         for rec in self._pending_farmsteads:
             geom = rec.get("geom")
             if geom is None:  # abandoned ruin / dispersed headman: lone house
@@ -42,9 +50,12 @@ class FarmsteadFlushMixin:
                 continue
             # EVERY BAND OF THE FARM'S OWN GROVE, on every side its settlement rolled (feature 291); a nucleated bundle
             # carries none. `depth` says which is the windward stand and which a thin band of lesser trees.
+            _bamboo = self._farm_rolls_bamboo(rec["x"], rec["y"])
             for (cx, cy, w, h), (face, depth) in zip(geom.get("groves") or (), geom.get("grove_faces") or (), strict=True):
-                arms.append((cx, cy, w, h, face, depth))
-                self.M["groves"].append({"x": round(cx, 1), "y": round(cy, 1), "w": w, "h": h, "rot": 0, "of": [rec["x"], rec["y"]], "face": list(face), "depth": depth})
+                arms.append((cx, cy, w, h, face, depth, _bamboo))
+                self.M["groves"].append(
+                    {"x": round(cx, 1), "y": round(cy, 1), "w": w, "h": h, "rot": 0, "of": [rec["x"], rec["y"]], "face": list(face), "depth": depth, "bamboo": _bamboo and depth == "deep"}
+                )
                 self.grove_rects.append((cx, cy, w, h))
             bundled.append(rec)
             survivors.append(rec)
@@ -63,8 +74,23 @@ class FarmsteadFlushMixin:
         # (The arm rects themselves are recorded above, before _relax_gardens_south, which needs them.)
         # A THIN BAND draws as lesser trees - fruit and flowering broadleaf, no conifer (`dooryard`; Tonami's sides away
         # from the wind carried flowering trees, persimmon and fig, and hackberry and alder): the mix a GUESS (feature 291).
-        for cx, cy, w, h, face, depth in arms:
-            self._draw_grove(cx, cy, w, h, face, mix="windbreak" if depth == "deep" else "dooryard", cls="homestead grove")
+        # ...AND A BAND IS DRAWN AS CLUMPS OF ONE CLUMP'S SIZE (feature 291, the settlement-review of Kashikawa): `_draw_grove`
+        # caps a clump at 28 crowns, one to about 48 sq px at the town grain, so a deep band - 40 x 80 ft, room for some 67 -
+        # drew at 0.57 of its box under canopy against the thin band's 0.78. Cut along its length into pieces that hold no
+        # more than the cap, every band is drawn at the one density.
+        _cap = GROVE_CLUMP_CROWNS * GROVE_CROWN_AREA * (self.bscale / 0.82) ** 2
+        # ...WITH ITS CANOPY'S EDGE, NOT ITS TRUNKS, AT THE BAND'S INNER EDGE: a clump seats its crowns' centers inside its box,
+        # so a crown overhung the service strip by its radius, and once the bands drew at their full density a wood shed's
+        # seat there was under a crown (Mizuguchi seated 4 of 5). The drawn box gives up one crown radius on the house's side.
+        _inset = self.px(self.CANOPY_R_FT)
+        for cx, cy, w, h, face, depth, has_bamboo in arms:
+            fx, fy = (float(face[0]), float(face[1])) if face else (0.0, 0.0)
+            cx, cy = cx + fx * _inset / 2, cy + fy * _inset / 2
+            w, h = max(4.0, w - abs(fx) * _inset), max(4.0, h - abs(fy) * _inset)
+            # ...AND A FARM THAT ROLLED BAMBOO KEEPS A PATCH OF IT IN EACH WINDWARD BAND (`GROVE_BAMBOO_PATCH_FT`)
+            _patch = bamboo_patch(cx, cy, w, h, (fx, fy), self.px(GROVE_BAMBOO_PATCH_FT[0]), self.px(GROVE_BAMBOO_PATCH_FT[1])) if has_bamboo and depth == "deep" else None
+            for px_, py_, pw, ph in band_clumps(cx, cy, w, h, _cap):
+                self._draw_grove(px_, py_, pw, ph, face, mix="windbreak" if depth == "deep" else "dooryard", cls="homestead grove", bamboo=has_bamboo, bamboo_box=_patch)
         self.M["houses"] = Indexed(
             [h for h in self.M["houses"] if h.get("on_dike")] + survivors
         )  # dike-top houses (dike_top_houses) are not pending farmsteads - keep them; Indexed for the fit rules' index

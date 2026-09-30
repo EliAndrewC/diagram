@@ -8,6 +8,7 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross
 from l7r.diagram.settlement._geom import PointGrid, boxed_grid, boxed_ring_hit, boxed_rings, boxed_segs
+from l7r.diagram.settlement.homestead_parts.groves import HOUSEHOLD_BAMBOO_PREVALENCE as HOUSEHOLD_BAMBOO_PREVALENCE
 from l7r.diagram.settlement.rolling.bearing import turned_box
 
 from ..consts import Poly, Pt
@@ -22,10 +23,12 @@ from ..plan import SitePlan
 # plain bamboo was often mixed into the grove from the west round to the north of the house, and the Sendai igune's
 # bamboo filled its low part against the wind. So the SIDE is rolled per farmstead, weighted toward the back, the
 # wind side and the shed's side, never fixed. The weights are a GUESS - no page gives a share per side; `wind` was
-# raised from .15 to .30 when the wind side was read, from `back` and `shed`, which stay the likeliest two together.
+# raised from .15 to .30 when the wind side was read, taken from `back` and `shed`: `back` stays the likeliest, then
+# `wind`, then `shed`, then the other flank.
 # The PRESENCE rate is a GUESS - no source gives a share; "one of several secondary
 # species" says common but not universal - set like the shed's, and labeled. Sizes are a working strip.
-HOUSEHOLD_BAMBOO_PREVALENCE = 0.6
+# HOUSEHOLD_BAMBOO_PREVALENCE lives with the grove drawer (settlement/homestead_parts/groves.py) since feature 291: a
+# farm with its own grove draws its bamboo in that grove, so the drawing makes the same positional roll.
 HOUSEHOLD_BAMBOO_FT = (22.0, 16.0)
 _HOUSEHOLD_BAMBOO_SIDES = (("back", 0.35), ("shed", 0.25), ("wind", 0.30), ("side", 0.10))
 
@@ -72,6 +75,15 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
     for h in houses:
         hx, hy, hw, hh = float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"])
         if s._hjit(hx, hy, 95.0) >= HOUSEHOLD_BAMBOO_PREVALENCE:
+            continue
+        # A FARM WITH ITS OWN GROVE KEEPS ITS BAMBOO IN THAT GROVE (feature 291; research/vegetation/260, "Did a farmstead's
+        # grove carry bamboo? Yes - mixed in low under the tall trees, on its windward side"). Its deep windward bands draw
+        # the windbreak mix, which carries the bamboo; a separate strip would stand exactly where the grove already does -
+        # and did not: once the dispersed and linear forms rolled again, every seat (back, shed, side, wind) lay in the
+        # grove and Kashikawa's 12 expected strips silently became 0. Counted, so the knob's household half is on record.
+        if (h.get("geom") or {}).get("groves"):
+            s.M["meta"]["household_bamboo_in_grove"] = int(s.M["meta"].get("household_bamboo_in_grove", 0)) + 1
+            s.M["meta"].setdefault("household_bamboo_in_grove_farms", []).append([round(hx, 1), round(hy, 1)])  # which, for `row_rules.bamboo_mismatch`
             continue
         th = math.radians(float(h.get("rot", 0.0)))
         ca, sa = math.cos(th), math.sin(th)

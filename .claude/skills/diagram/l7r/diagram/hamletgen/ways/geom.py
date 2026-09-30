@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import math
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from typing import Any, cast
 
 from l7r.diagram.settlement import PointGrid, point_in_poly, rot_rect, seg_closest, seg_dist, seg_intersect, segments_cross
@@ -217,6 +217,22 @@ def _components(ways: Sequence[Poly], touch: float) -> list[int]:
             ):
                 par[find(i)] = find(j)
     return [find(i) for i in range(len(ways))]
+
+
+_HOOK_FT = 12.0
+_HOOK_DEG = 90.0
+"""A HOOK: a lane's end leg of `_HOOK_FT` or less turning back `_HOOK_DEG` or more - drawing thresholds, reasoned in
+`joints` (four paces is too short a leg to be a route of its own; 90 degrees is where a turn stops reading as a bend)."""
+
+
+def door_unhooked(path: Poly, clear: Callable[[Pt, Pt], bool]) -> Poly:
+    """A door path (`path[0]` the door) without a hook at the door: a first leg of `_HOOK_FT` or less that the path turns
+    back from by `_HOOK_DEG` or more goes - the door joined straight to the vertex after it where `clear` allows, else the
+    path begins at that vertex (feature 291: Kashikawa's door path at (2300, 2777) stepped 6 ft south and turned back 124
+    degrees, the router's first cell)."""
+    if len(path) < 3 or math.dist(path[0], path[1]) > _HOOK_FT or _turn_deg(path[0], path[1], path[2]) < _HOOK_DEG:
+        return path
+    return [path[0], *path[2:]] if clear(path[0], path[2]) else path[1:]
 
 
 def _turn_deg(a: Pt, b: Pt, c: Pt) -> float:

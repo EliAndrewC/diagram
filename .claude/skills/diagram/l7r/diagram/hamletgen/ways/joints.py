@@ -35,7 +35,7 @@ from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
 
 from ..consts import WEB_CLEARANCE, Poly, Pt
 from .clearance import _HAIRPIN_DEG, _clear_link, _clear_touch
-from .geom import _TOUCH_GAP, _seg_cross, _turn_deg
+from .geom import _HOOK_DEG, _HOOK_FT, _TOUCH_GAP, _seg_cross, _turn_deg
 from .smooth import _JOG_FT, commit_lane, web_pieces
 from .sweeps import _SERVE_FT
 
@@ -45,8 +45,7 @@ _JOINT_FT = 1.0  # two lane ends this close are one point: the knot pass and the
 # turning 122-128 degrees (Kashikawa twice, Kuwabata once) - each a lane overshooting the way it joins and bending
 # back onto it, or a nub past a junction. Both figures are drawing thresholds, not findings: 12 ft is about four
 # paces, too short a leg to be a route of its own, and 90 degrees is where the turn stops reading as a bend.
-_HOOK_FT = 12.0
-_HOOK_DEG = 90.0
+# (the two figures live in `geom`, a layer below, since feature 291: the door paths in `serve` take their hook off too)
 
 
 def _pts(ln: Mapping[str, Any]) -> Poly:
@@ -61,7 +60,7 @@ def joints(lanes: Sequence[Mapping[str, Any]]) -> list[tuple[int, int, int, int]
     """Every point where exactly two lane ENDS meet and no other way touches: `(i, end_i, j, end_j)`, an end
     being 0 or -1. A connector's end counts as a way touching (the cart route is not merged into a footpath), and
     two lanes that meet at both ends are a loop, not a joint."""
-    live = [m for m, ln in enumerate(lanes) if not ln.get("connector") and len(ln.get("pts") or []) >= 2]
+    live = [m for m, ln in enumerate(lanes) if not (ln.get("connector") or ln.get("street")) and len(ln.get("pts") or []) >= 2]
     ends = [(m, e, _pts(lanes[m])[e]) for m in live for e in (0, -1)]
     out: list[tuple[int, int, int, int]] = []
     for a, (i, ei, q) in enumerate(ends):
@@ -317,7 +316,7 @@ def meet_end_to_end(s: Settlement, fabric: Sequence[Poly] = ()) -> int:
     closed = 0
     for i, ln in enumerate(lanes):
         p = _pts(ln)
-        if ln.get("connector") or len(p) < 2:
+        if (ln.get("connector") or ln.get("street")) or len(p) < 2:
             continue
         for k in (0, -1):
             q = p[k]
@@ -355,7 +354,7 @@ def split_at_crossings(s: Settlement) -> int:
         ln = lanes[i]
         p = _pts(ln)
         cut: tuple[int, Pt] | None = None
-        if not ln.get("connector") and len(p) >= 2:
+        if not (ln.get("connector") or ln.get("street")) and len(p) >= 2:
             for j, other in enumerate(lanes):
                 op = _pts(other)
                 if j == i or len(op) < 2:
@@ -412,7 +411,7 @@ def fold_the_connector_hairpin(s: Settlement, fabric: Sequence[Poly] = ()) -> in
         cp = _pts(co)
         for i, ln in enumerate(lanes):
             p = _pts(ln)
-            if i == ci or ln.get("connector") or len(p) < 3:
+            if i == ci or (ln.get("connector") or ln.get("street")) or len(p) < 3:
                 continue
             for seq, back in ((p, False), (p[::-1], True)):
                 a, b, j = seq[-3], seq[-2], seq[-1]

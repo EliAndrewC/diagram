@@ -5,6 +5,7 @@ from __future__ import annotations
 import math
 import random
 from collections.abc import Sequence
+from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement._knobs import knob_rng
@@ -14,7 +15,7 @@ from ..consts import BUNDLE_PITCH, CLUSTER_DRAWN_ASPECT, MIN_WEB_GAP, SUN_CORRID
 from ..plan import SitePlan
 from .boundary import install_site_boundary
 from .retirement import retirement_houses
-from .seats import _seat_allowed, cluster_aspect, front_row, lane_frontage
+from .seats import _seat_allowed, cluster_aspect, front_row
 from .wells import place_wells
 
 #: The range a rank seat may stand off its exact rank, as a share of `BUNDLE_PITCH` - half of it each way (feature 261,
@@ -22,9 +23,14 @@ from .wells import place_wells
 #: quarter pitch keeps a rank a rank while taking it off the surveyed line.
 RANK_DEPTH_JITTER = 0.25
 
-FORM_BOUND: dict[str, float] = {}
+FORM_BOUND: dict[str, float] = {"linear": 2.5}
 """Per-FORM override of how far from the seat center a homestead may stand, as a multiple of the
-seat band's diagonal. EMPTY, deliberately - every form uses the 1.15 default.
+seat band's diagonal; every other form uses the 1.15 default.
+
+A ROW NEEDS ITS LENGTH (feature 291). With the linear form's row taking every household (`front_cap`), the radius sized for
+a compact cluster ended the row after about seven farms carrying their own groves, and the rest were seated in ranks
+behind it - a block again (cohort seed 12). The row village grows long, not wide; 2.5 is a GUESS at the length a row of
+ten to twenty farms with their groves needs, not a researched extent.
 
 A FAILED FIX, recorded so it is not tried again (feature 126). Dispersed and linear maps were given
 2.2 and 1.8 here to cure Inashiro seating 13 of its 15 households. It did not cure it: the cause was
@@ -138,7 +144,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.homesteads.boundary.site_boundary
         l7r.diagram.hamletgen.homesteads.seats.front_row
         l7r.diagram.hamletgen.homesteads.seats._front_row_from_chains
-        l7r.diagram.hamletgen.homesteads.seats.lane_frontage
+        l7r.diagram.hamletgen.homesteads.rows.seat_rows
         l7r.diagram.hamletgen.homesteads.seats._seat_allowed
         l7r.diagram.settlement.Settlement.try_place
         l7r.diagram.settlement.Settlement._place_bundle_nucleated
@@ -284,6 +290,16 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # aspect is read on the house centers' own axis, so a block of L by N/L houses reads about half of L*L/N - seven
     # in Inashiro's row drew 1.66 on a rolled crescent (1.9-4.2), six in Kuwabata's 1.71 on a round (1.0-2.0).
     front_cap = min(plan.spec.households, max(6, round(math.sqrt(plan.spec.households * (_lo_a + _hi_a)))))
+    # ...BUT A ROW VILLAGE IS ONE ROW (feature 291; research/homesteads/150, "LINEAR": farmsteads strung along the way, each
+    # holding behind its house). The cap above exists to make a nucleated cluster stand in ranks; applied to the linear form
+    # it did the same, and since feature 126 every linear roll drew a block (settlement-review 2026-09-29: Mizuguchi 611 x
+    # 715 ft with 1 of 12 houses on its track, Kashikawa 2 of 20). The frontage pass below could not help: it fronts the
+    # CONNECTOR, which `stage_track` lays only after the houses, so at this moment it offers nothing. A linear hamlet's row
+    # takes every household it can seat along its field, and the track is then laid along the row (`stage_track`).
+    _linear = plan.settlement_form == "linear"
+    _rows_seated = False  # a row village whose streets were planned takes no ranks (feature 291 plan D15)
+    if _linear:
+        front_cap = plan.spec.households
 
     # ...AND A FRONT-ROW SEAT MUST ALSO BE REACHABLE FROM A TRACK, not merely near the paddy
     # (settlement-review, Inashiro 2026-08-17 - the same review round as the rank cap above, which
@@ -360,8 +376,26 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     _g0 = s._bundle_geom(0.0, 0.0, _house_max[0], _house_max[1], "E", shed=True, rot=0.0)  # unturned: each seat adds its own turn
     _core = s._bbox_of([r for r in (_g0["house"], _g0["yard"], _g0.get("shed")) if r is not None])
     _reach = (_core[0] - _core[2] / 2, _core[1] - _core[3] / 2, _core[0] + _core[2] / 2, _core[1] + _core[3] / 2)  # (left, top, right, bottom) about the house center
+    # A ROW VILLAGE'S ROW (feature 291): the whole farmstead - its grove too, which may face the field - stands off the field,
+    # the seats step at the farmstead's own width rather than the nucleated pitch, and the row runs the field's whole edge
+    _row_kw: dict[str, Any] = {}
+    if _linear:
+        _bb = _g0["bbox"]
+        _reach = (_bb[0] - _bb[2] / 2, _bb[1] - _bb[3] / 2, _bb[0] + _bb[2] / 2, _bb[1] + _bb[3] / 2)
+        _row_kw = {"pitch": max(_bb[2], _bb[3]), "reach": float("inf")}
+    # A ROW VILLAGE'S FARMS STAND IN ROWS ALONG THEIR STREETS (feature 291 amendment 3, `rows.py`; research/homesteads/155
+    # and 156): the row takes every household it can, and the front-row, frontage and rank passes below take only what the
+    # streets could not hold - a remainder the cohort's row rules report.
+    if _linear:
+        from .rows import seat_rows  # the row module reads this stage's frame; imported where it is used
+
+        placed += seat_rows(s, plan, _g0["bbox"], allowed=lambda x, y: _seat_allowed(s, x, y))
+        front_cap = placed
+        _rows_seated = True  # NEVER IN RANKS (FR-013, plan D15): whatever its streets could not hold is reported unseated, even all of it
     for _rung in (0,):
-        for (fx, fy), _n in front_row(plan, min(plan.spec.households, 12), standoff=None, chains=s._site_chains, house=_house_max, envelope=_reach, with_normals=True):
+        for (fx, fy), _n in front_row(
+            plan, plan.spec.households if _linear else min(plan.spec.households, 12), standoff=None, chains=s._site_chains, house=_house_max, envelope=_reach, with_normals=True, **_row_kw
+        ):
             if placed >= front_cap:
                 break
             # THE ONE COMPUTED MOVE AGAINST THE GROUND (feature 227 FR-002, the GM's "measuring the distance ... and then
@@ -412,25 +446,9 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # 10. The ribbon's tighter fronting was an artifact of the defect, not a baseline worth keeping -
     # but ~98 is the figure an early review criticized against Ikegami's 55, and this loop is where
     # a future tightening belongs, since it is the pass now doing the seating.
-    # ONLY A LINEAR HAMLET FRONTS A WAY AT SEAT TIME, and the way it fronts is the CONNECTOR.
-    #
-    # This pass used to run for every map, offering seats along the verges of the internal lanes.
-    # Those lanes no longer exist when this runs, so for a nucleated or dispersed hamlet the pass
-    # now returns nothing and is pure cost - the front row and the cloud do the seating.
-    #
-    # For the LINEAR form it is the whole point. A row village IS a settlement strung along a
-    # through-route: the road came first, the farmsteads front it, each holding lies behind its own
-    # house. That is the one form in which siting a house against a way is historically right, and
-    # the connector is the only way on the map that genuinely predates the houses. `lane_frontage`
-    # skipped the connector precisely because fronting it "would string the hamlet along the road
-    # instead of nucleating it (that is the `linear` settlement form, a different archetype)" - so
-    # this is that archetype, asking for exactly what that comment described.
-    if plan.settlement_form == "linear":
-        for lx, ly in lane_frontage(s, seat, connector=True):
-            if placed >= plan.spec.households:
-                break
-            if in_band((lx, ly)) and _seat_allowed(s, lx, ly) and _pretest(lx, ly) and s.try_place(lx, ly, "plain"):
-                placed += 1
+    # THE CONNECTOR-FRONTAGE PASS IS RETIRED (feature 291 amendment 3): it seated a linear hamlet along the connector, which
+    # does not exist when the homesteads are seated, so it placed nothing; a row village's farms now stand along the
+    # streets its row planned (`rows.py`, research/homesteads/155 and 156), and a linear hamlet takes no other pass.
     _cloud_placed = 0
     s._seat_search["front"] = placed  # the households the front row seated (R2 reads it beside the cap)
     _row: list[Pt] = [(h["x"], h["y"]) for h in s.M.get("houses", [])]  # the front row as it stands: the lattice's rank 0
@@ -453,7 +471,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # seed 8, the paddy to the south: the "clear" seats of every rank round failed, 9 of 11 seated)
     _rank_step = abs(ox) * _env[2] + abs(oy) * _env[3] + s.px(MIN_WEB_GAP) + max(0.0, -oy) * s.px(SUN_CORRIDOR_FT)
     for attempt in range(7):
-        if placed >= plan.spec.households:
+        if placed >= plan.spec.households or _rows_seated:  # NEVER IN RANKS BEHIND A ROW (FR-016): a farm its streets could not hold is reported unseated
             break
         s._seat_search["rounds"] = attempt + 1  # the rounds this roll needed (over 4 = the rescue ran); R2 reads it per map
         wlat, wdep = lat * (1.0 + 0.22 * attempt), dep * (1.0 + 0.16 * attempt)
@@ -638,7 +656,14 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     # whether the shape got stamped. It used to be derived from the presence of `cluster_shape`,
     # which stopped meaning anything the moment the shape was always declared.
     s.M["meta"]["cluster_seeding"] = "cloud" if _cloud_placed * 2 >= max(1, plan.spec.households) else "frontage"
+    s._household_bamboo = plan.bamboo in ("homestead", "both")  # type: ignore[attr-defined]  # a grove farm draws the bamboo it rolls (feature 291)
     plan.placed = s.farmsteads()
+    # A ROW VILLAGE'S FAR-ROW HOLDINGS, reserved at seating (feature 291 plan D16), drawn now - before the track and the web,
+    # so every way treats them as the crop they are (drawn after the track, Kashikawa's connector ran across one)
+    if getattr(s, "_row_holdings", None):
+        from .rows import draw_holdings
+
+        s.M["meta"]["row_holdings_drawn"] = draw_holdings(s)
     # how many farmhouses the quarter turn took (269 B18) - measured on what was drawn, so the share is a count, not a hope
     s.M["meta"]["house_quarter_turns"] = sum(1 for h in s.M.get("houses") or [] if abs(wrap_line_deg(float(h.get("rot", 0.0)) - (s._house_bearing or 0.0))) > 45.0)
     # THE TRIM MOVED OUT OF THIS STAGE (feature 126). It existed because the skeleton was laid
@@ -673,5 +698,6 @@ def stage_appurtenances(s: Settlement, plan: SitePlan) -> None:
     """
     houses = s.M.get("houses", [])
     place_wells(s, plan, houses)
+
     s.draft_byres(fraction=0.22, gap=60)
     retirement_houses(s, plan)  # after the byres, so the draft team keeps the seats it always had (269 B42)

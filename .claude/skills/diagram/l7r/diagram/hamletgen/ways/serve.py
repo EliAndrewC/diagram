@@ -24,7 +24,7 @@ from ..plan import SitePlan
 from .checks import stream_segs
 from .clearance import _bends_badly, _clear_link, clear_runs
 from .fabric import _LANE_JOIN_FT, _crosses_fabric, _draw_web, _hits_a_steading, _net_segs
-from .geom import _TOUCH_GAP, _drop_collinear, _net_reach, _reach, _trim_to_service, polyline_len, steading_footprints
+from .geom import _TOUCH_GAP, _drop_collinear, _net_reach, _reach, _trim_to_service, door_unhooked, polyline_len, steading_footprints
 from .route import _route, _unjog
 from .sweeps import _FINE_CELL, _LINK_DIRECTNESS, _PATH_DIRECTNESS
 
@@ -200,6 +200,46 @@ def _ends_worth_walking_to(s: Settlement, path: Poly, house: Pt, segs: Sequence[
     return joined and _fronts(path[0]) and _fronts(path[-1])
 
 
+def front_door(h: Mapping[str, Any], clear: float) -> Pt | None:
+    """Where a path to a farm with its own grove begins (feature 291): `clear` past the far edge of the farm's yard, straight
+    out along the line from the house through the yard - the front, the side a grove leaves open (or breaks for the way
+    in). None for a farm with no grove of its own, or no yard."""
+    g = h.get("geom") or {}
+    y = g.get("yard")
+    if not g.get("groves") or y is None:
+        return None
+    # A RING'S DOOR LINES UP WITH ITS WAY IN: the yard turns with the house's rake and the bands do not, so "straight out
+    # through the yard" can miss a gap 24 ft wide (cohort seed 12: three farms' doors walled on all four sides). The door
+    # stays just past the yard - a door out in the gap itself, ~80 ft from the house, is past the reach a path's arrival
+    # is judged by, and seed 12 then stranded 13 - but it takes the gap's middle across the front.
+    faces = list(g.get("grove_faces") or ())
+    split = [r for r, (face, _d) in zip(g["groves"], faces, strict=False) if sum(1 for f2, _d2 in faces if f2 == face) == 2]
+    gap_mid: Pt | None = None
+    if len(split) == 2:
+        (ax, ay, aw, ah), (bx, by, bw, bh) = split
+        if abs(ay - by) < 1e-6:  # a north or south front: the halves side by side along x
+            lo, hi = sorted(((ax, aw), (bx, bw)))
+            gap_mid = ((lo[0] + lo[1] / 2 + hi[0] - hi[1] / 2) / 2, ay)
+        else:
+            lo, hi = sorted(((ay, ah), (by, bh)))
+            gap_mid = (ax, (lo[0] + lo[1] / 2 + hi[0] - hi[1] / 2) / 2)
+    hx, hy = float(h["x"]), float(h["y"])
+    fx, fy = float(y[0]) - hx, float(y[1]) - hy
+    n = math.hypot(fx, fy)
+    if n < 1e-9:
+        return None
+    fx, fy = fx / n, fy / n
+    # the yard's reach along the front, unturned: where the ray from its middle leaves the box. It was the box's projected
+    # half-width (|fx| w/2 + |fy| h/2), which overshoots the edge on any slant - Kashikawa's farm at (2268, 2144), its front
+    # ten degrees off the box's side, took its door 12.4 ft past the yard, past the 12 ft a path's arrival is judged at
+    half = min(float(y[2]) / 2 / abs(fx) if abs(fx) > 1e-9 else math.inf, float(y[3]) / 2 / abs(fy) if abs(fy) > 1e-9 else math.inf)
+    door = (float(y[0]) + fx * (half + clear), float(y[1]) + fy * (half + clear))
+    if gap_mid is None:
+        return door
+    # across the front, the gap's line; along it, just past the yard
+    return (gap_mid[0], door[1]) if abs(split[0][1] - split[1][1]) < 1e-6 else (door[0], gap_mid[1])
+
+
 def _serve_stragglers(
     s: Settlement,
     plan: SitePlan,
@@ -344,13 +384,26 @@ def _serve_stragglers(
                 # not exist is the doorstep. Exempting the steading's own open ground was tried and
                 # rejected: it bought this house nothing and cost an overlap on another seed. Walking
                 # out past the yard is what a person does, and it keeps every footprint solid.
+                # ...BUT A FARM WITH ITS OWN GROVE IS ENTERED BY ITS OPEN FRONT (feature 291). Its grove closes the windward
+                # sides, and a ring closes the front too but for the way in, so the nearest clear standing-place was
+                # often inside the grove's own pocket, walled on three or four sides - cohort seed 12, whose farms are
+                # rings, stranded 16 of 17 that way. The door is the open ground just past the farm's own yard, on the
+                # side the yard faces (the front, where the way in is), tried before the ring round the house.
+                _front = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
                 door = next(
                     (
                         q
-                        for q in sorted(
-                            ((c[0] + math.cos(math.tau * k / 16) * (step + out), c[1] + math.sin(math.tau * k / 16) * (step + out)) for out in (0.0, 12.0, 24.0, 40.0, 60.0, 85.0) for k in range(16)),
-                            key=lambda q: (math.dist(q, c), -((q[0] - c[0]) * dx + (q[1] - c[1]) * dy)),
-                        )
+                        for q in [
+                            *([_front] if _front is not None else []),
+                            *sorted(
+                                (
+                                    (c[0] + math.cos(math.tau * k / 16) * (step + out), c[1] + math.sin(math.tau * k / 16) * (step + out))
+                                    for out in (0.0, 12.0, 24.0, 40.0, 60.0, 85.0)
+                                    for k in range(16)
+                                ),
+                                key=lambda q: (math.dist(q, c), -((q[0] - c[0]) * dx + (q[1] - c[1]) * dy)),
+                            ),
+                        ]
                         # A POINT, NOT A LINK (feature 145): `_clear_link(q, q, ...)` returns True for any span
                         # under 1 px, so the standing place was never tested at all - cohort seed 41's footpath
                         # began 1.3 px from the drain brook. The same index the router uses judges the point.
@@ -628,15 +681,63 @@ def _serve_stragglers(
                         continue
                     if not _ends_worth_walking_to(s, path, c, segs, _crops):
                         continue
-                    _draw_web(s, path, 3, houses=[c])
+                    # A PATH THE DRAWER REFUSED SERVES NOBODY (feature 291): `_draw_web` declines debris, and the pass
+                    # used to count the house served anyway and stop trying its targets - with farm grove bands as
+                    # fabric, a candidate clipped at the farm's own band trimmed to nothing, was refused, and two of
+                    # cohort seed 11's farms were stranded after four passes of it. The next target is tried instead.
+                    if not _draw_web(s, path, 3, houses=[c]):
+                        continue
                     added += 1
                     _served = True
                     break
-            if not _served and _folded is not None and _ends_worth_walking_to(s, _folded, c, segs, _crops):
-                _draw_web(s, _folded, 3, houses=[c])
+            if not _served and _folded is not None and _ends_worth_walking_to(s, _folded, c, segs, _crops) and _draw_web(s, _folded, 3, houses=[c]):
                 added += 1
                 _served = True
             if not _served:
                 _exhausted[id(h)] = _key
         if not added:
             return
+
+
+DOOR_REACH_FT = 40.0
+"""How far a grove farm's front door may stand from the lane network before a footpath is laid to it (feature 291; the
+settlement-review of Kashikawa: a farm whose only lane stopped against the outside of its east band, 89 ft from the door).
+The front is the side the grove leaves open for the way in (research/homesteads/715), so the path arrives there; 40 ft
+- about a yard's depth past the door - is a GUESS at 'at the door'."""
+
+
+def own_street(h: Mapping[str, Any], streets: Sequence[Sequence[tuple[Pt, Pt]]]) -> int | None:
+    """The index of the street a row farm's way ends on - the nearest to its FRONT DOOR (its house where it has none) - or
+    None where no street is laid. By the door, not the house: a farm between two streets faces the one its door is on
+    (cohort seed 903: a door 36 ft from one street, its house nearer the other)."""
+    if not streets:
+        return None
+    hx, hy = front_door(h, FOOTPATH_FABRIC_GAP + 4.0) or (float(h["x"]), float(h["y"]))
+    return min(range(len(streets)), key=lambda k: min((seg_dist(hx, hy, a, b) for a, b in streets[k]), default=float("inf")))
+
+
+def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], reach: float = DOOR_REACH_FT) -> int:
+    """A footpath from each grove farm's front door (`front_door`) to the ways, where the door stands more than `reach`
+    from them: to the connected lane network, or - for a row farm (feature 291 plan D17) - to its OWN street (the nearest
+    street laid, `own_street`), routed round the farm's grove when the street lies on its windward side. Each path records
+    the farm it serves (`serves`); the nearest few points are tried, nearest first. Returns the paths drawn."""
+    from .checks import served_network  # local: checks sits above serve in this package's layers
+
+    n = 0
+    for h in list(s.M.get("houses", [])):
+        door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
+        streets = [
+            [(tuple(a), tuple(b)) for a, b in zip(ln["pts"], ln["pts"][1:], strict=False)] for ln in s.M.get("lanes") or [] if ln.get("street") and ln.get("street_index") is not None
+        ]  # a row's own street, not a join
+        k = own_street(h, streets)  # type: ignore[arg-type]
+        segs = streets[k] if k is not None else served_network(s.M.get("lanes") or [])
+        if door is None or not segs or min(seg_dist(door[0], door[1], a, b) for a, b in segs) <= reach:  # type: ignore[arg-type]
+            continue
+        near = sorted((seg_closest(door[0], door[1], a, b) for a, b in segs), key=lambda q: math.dist(q, door))[:6]  # type: ignore[arg-type]
+        for q in near:
+            path = door_unhooked(_route(door, q, hard, walls, water, gap=FOOTPATH_FABRIC_GAP), lambda a, b: not _crosses_fabric([a, b], walls, 0.0) and not _crosses_fabric([a, b], hard, 0.0))
+            if len(path) >= 2 and not _crosses_fabric(path, walls, 0.0) and _draw_web(s, path, 3, houses=[(float(h["x"]), float(h["y"]))], joins=True):
+                s.M["lanes"][-1]["serves"] = [float(h["x"]), float(h["y"])]
+                n += 1
+                break
+    return n

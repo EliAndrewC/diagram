@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Any
 from .._geom import turn_about
 from ..homestead_parts.grove_sides import bundle_turn
 from .bearing import turned_box
-from .dispersed import EAST_SHADE_REACH, THIN_BAND_FT, WAY_IN_FT, dispersed_layout
+from .dispersed import EAST_SHADE_REACH, LANE_ROOM_FT, SERVICE_STRIP_FT, THIN_BAND_FT, WAY_IN_FT, dispersed_layout
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -192,6 +192,8 @@ class BundleGeomMixin:
             thin=self.px(THIN_BAND_FT),
             sun_east=EAST_SHADE_REACH * self.bscale,
             way_in=self.px(WAY_IN_FT),
+            pad=self.px(LANE_ROOM_FT) / 2.0,
+            back=self.px(SERVICE_STRIP_FT),
         )
 
     def _rake_parts(self: Settlement, base: dict[str, Any], hx: float, hy: float, rot: float) -> None:  # type: ignore[misc]
