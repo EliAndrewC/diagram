@@ -297,8 +297,9 @@ constructed inputs including the violating case (FR-004), and retires the tests 
 - [x] T88 [US1] SC-001, FR-008: the closing census by `census_select.py` and the same judgment - every placement rule guaranteed, its mechanism named
       research: rendering
       verify: DONE. verified at ade061bc7: research R12 names each rule's placer and unit test (the violating case included); make done green; cohort 1-60 60/60; the R11 sweep clean plain and under the 284 probes; R12 (162 guaranteed, 13 recorded decisions of 175)
-- [ ] T89 [US3] SC-005, SC-006: `make durations` and `make audit` against research R4; `make perf LABEL=287-end` and `make perf-report AGAINST=287-start`
+- [x] T89 [US3] SC-005, SC-006: `make durations` and `make audit` against research R4; `make perf LABEL=287-end` and `make perf-report AGAINST=287-start`
       research: rendering
+      verify: DONE. verified: make durations 4,732 tests in 39.08 s against R4's 5,258 in 57.13 s (R14); make perf LABEL=287-end 25.7 s against 287-start 20.9 s, main 24.0 s as the control (measurements.json); perf-explain recorded, perf-audit band 1 consistent and band 2 justified (2026-09-30); band 3 owes the GM's make perf-signoff
 - [x] T90 [US1] The record: `dev/performance.md` / `dev/gate.md` on the guarantees and what the gate now tests; future-work entries the feature closed marked closed
       research: rendering
       verify: DONE. verified at ade061bc7: research R12 names each rule's placer and unit test (the violating case included); make done green; cohort 1-60 60/60; the R11 sweep clean plain and under the 284 probes; dev/gate.md, dev/performance.md, future-work closed entries
