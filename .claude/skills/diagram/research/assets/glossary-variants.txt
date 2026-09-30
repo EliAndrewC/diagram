@@ -2912,6 +2912,7 @@ shukuba	shukuba
 shukuson taigaicho	Nakasendo Shukuson Taigaicho
 shumon aratame	shumon aratame cho
 shumon aratame cho	shumon aratame cho
+shunchengjie	shunchengjie
 shunde	Shunde
 shungiku	shungiku
 shunzhi	Shunzhi
@@ -3482,6 +3483,7 @@ wakato	wakato
 waki-honjin	waki-honjin
 waku	waku
 walled ward	lifang
+walled wards	lifang
 wallow	wallow
 wallows	wallow
 wamyo ruijusho	Wamyosho
@@ -3777,6 +3779,7 @@ zushi-nikai	half-story
 鈔關	chaoguan
 长藤结瓜	melon-on-the-vine
 雑木林	zokibayashi
+順城街	shunchengjie
 馬宿	umayado
 鲁班尺	Luban ruler
 동구숲	donggusup
