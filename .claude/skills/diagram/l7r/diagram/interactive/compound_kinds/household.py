@@ -477,14 +477,15 @@ class CompoundShrine(Kind):
     Why: Even the shogunate's post at Jōge, an outpost of three officials, had shrines inside its walls - an
     Inari shrine and a Tenjin shrine among them - and a full Chinese county yamen kept three, so a shrine is part
     of the equipment of any office, not a sign of a pious magistrate; what varies is its size and its
-    dedication. A shrine keeping more than one kami was the ordinary case, and a kami brought in from elsewhere
+    dedication. A shrine keeping more than one kami was the ordinary case, by the word of an encyclopedia article
+    that flags itself as short of sources, and a kami brought in from elsewhere
     could be kept in the main hall or given its own small shrine inside the precinct. The shrine stands in the
     inner court with the household and stays smaller than the residence - a worship hall is small even at a
     great shrine.
 
     Note: A modest shrine inside the walls of a post of any size is a recorded finding, read on the 1869 drawing
     of the Jōge post and on a Chinese yamen's three shrines, and a second kami in a small shrine of its own is one
-    of three attested forms; the program classes the shrine as accurate, with a hall-shrine ceiling of about 36
+    of three forms the record found, two of them attested and the single altar in one hall a guess; the program classes the shrine as accurate, with a hall-shrine ceiling of about 36
     by 30 ft subordinate to the residence. Making it Inari's by default is a guess resting on that one post, whose
     shrines are known from the drawing alone: the excavation found the post's walls, steps and foundation stones,
     not its shrines. The ranking below the residence, and the small worship hall it rests on, are the record's
@@ -499,7 +500,7 @@ class CompoundShrine(Kind):
     Covers: the shrine hall or halls, their edging and dividing rail, and the shrine labels
     Label: accurate
     Sources: fuchu-joge-pamphlet, neixiang-yamen-zhwiki, henan-neixiang, jawiki-saijin, jawiki-goshi, kotobank-aidono, hokora-jawiki, nara-nagao-jinja
-    Entry: research/buildings.html - 'What did the smallest branch office hold inside its walls?', 'Every administrative compound keeps a shrine', 'The size of a compound and the rank of its buildings'; research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's halls and furnishings'
+    Entry: research/buildings.html - 'What did the smallest branch office hold inside its walls?', 'Every administrative compound keeps a shrine', 'The size of a compound and the rank of its buildings'; research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "compound shrine"
@@ -801,7 +802,8 @@ class ShrineAltar(Kind):
     one roof, the main kami in the middle as on a household's three-shrine shelf. Some kept the lesser kami (for a hall, a guess from the household shelf) behind
     the main one's altar, or gave a kami a small shrine of its own inside the precinct.
 
-    Note: Several kami in one hall, and their altars side by side, a bay to each, are recorded findings; which of
+    Note: Several kami in one hall, and their altars side by side, a bay to each, are recorded findings at shrines,
+    though no page read describes one kept inside an official's compound; which of
     the three forms a compound takes is rolled per map, and each map's note says which. The single altar with the
     others behind it is attested for a household shelf only, so for a hall it is a guess. What the pages
     attest is a hall of two bays or small halls joined under one roof, not separate altars inside one undivided
@@ -817,7 +819,7 @@ class ShrineAltar(Kind):
     Covers: each altar glyph inside a shrine hall, with its name and sublabels
     Label: accurate
     Sources: kotobank-aidono, jawiki-saijin, genbu-honden-styles, jawiki-goshi, tokyo-jinjacho-kamidana
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/buildings.html - 'Every administrative compound keeps a shrine'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's halls and furnishings'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/buildings.html - 'Every administrative compound keeps a shrine'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "shrine altar"
@@ -848,7 +850,7 @@ class Torii(Kind):
     Covers: the approach torii before a compound shrine or a country shrine
     Label: accurate
     Sources: jinjahoncho-keidai, jawiki-torii, jawiki-yashikigami, torii-enwiki, fushimi-inari-jawiki, fushimi-inari-senbon, hokora-jawiki, nara-nagao-jinja, jinja-jawiki
-    Entry: research/religion-and-death.html - 'How far before a small shrine does its torii stand, and can two shrines share one?', 'Torii are VOTIVE DONATIONS', 'Torii spacing', 'Where do the first and the innermost arches stand, and where does the hall's label go?', 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's halls and furnishings'
+    Entry: research/religion-and-death.html - 'How far before a small shrine does its torii stand, and can two shrines share one?', 'Torii are VOTIVE DONATIONS', 'Torii spacing', 'Where do the first and the innermost arches stand, and where does the hall's label go?', 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "torii"

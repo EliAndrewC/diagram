@@ -34,7 +34,7 @@ class HallAndDwelling(Kind):
     Covers: the one-roof building, its outline, its roof and its caption
     Label: accurate
     Sources: kuri-jawiki, jinguji-enwiki, bettoji-jawiki, sakai-kaieji, ehime-pref-honden-56, saitama-kannonji-kannondo
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)', 'How big was the country monk's dwelling, and did it share the hall's roof?', 'Does the country monk live at the shrine?'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's halls and furnishings'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)', 'How big was the country monk's dwelling, and did it share the hall's roof?', 'Does the country monk live at the shrine?'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "hall and dwelling"
@@ -46,18 +46,21 @@ class Sanctuary(Kind):
     axis - one bay wide under a sweeping front roof.
 
     Why: A shrine's buildings line up on one axis, the hall of worship before and the sanctuary at the rear, where the
-    deity is enshrined and nobody gathers. At a village shrine it is small: the commonest style is one bay wide, and a
-    measured village sanctuary runs a few feet to a side. So it is drawn behind the hall, on the approach's line, at
+    deity is enshrined and nobody gathers. At a village shrine it is small: the sanctuary was often one bay wide, and
+    a measured village sanctuary runs a few feet to a side. So it is drawn behind the hall, on the approach's line, at
     its true few feet.
 
-    Note: The axis, the sanctuary at the rear and its one-bay style are read; its drawn size is the measured village
+    Note: The halls' axis, the sanctuary at the rear and its one-bay form are read; the approach running on that axis
+    is a map convention, and its drawn size is the measured village sanctuary's, about 6 ft.
+
+    Caveat: the approach running on that axis is a map convention, and its drawn size is the measured village
     sanctuary's, about 6 ft.
 
     Name: sanctuary
     Covers: the sanctuary behind the hall
     Label: accurate
     Sources: jaanus-honden, jaanus-haiden, nagarezukuri-jawiki, kotobank-nagarezukuri, ehime-pref-honden-56
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's halls and furnishings'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "sanctuary"
@@ -118,16 +121,16 @@ class ShrineApproach(Kind):
     row of arches along it is a donors' row, each arch a gift - before modern times only at a great Inari site. This setting raises arches along any shrine's approach, a deliberate deviation from the historical norm. So the path runs straight up the axis, and the arches
     stand over it.
 
-    Note: The approach and the arch at its entry are read; a row of arches at an ordinary shrine is attested only in modern times, and drawn here as a deliberate deviation; its width is a guess, and the arches' number and pitch are
+    Note: The approach and the arch at its entry are read; its running on the halls' axis is a map convention; a row of arches at an ordinary shrine is attested only in modern times, and drawn here as a deliberate deviation; its width is a guess, and the arches' number and pitch are
     the GM's rulings, not the record's.
 
-    Caveat: a row of arches at an ordinary shrine is attested only in modern times, and drawn here as a deliberate deviation; its width is a guess, and the arches' number and pitch are the GM's rulings, not the record's.
+    Caveat: its running on the halls' axis is a map convention; a row of arches at an ordinary shrine is attested only in modern times, and drawn here as a deliberate deviation; its width is a guess, and the arches' number and pitch are the GM's rulings, not the record's.
 
     Name: approach
     Covers: the path from the precinct's edge to the hall
     Label: accurate
     Sources: jinja-jawiki, kudamatsu-stone-torii, kato-kawataka-torii
-    Entry: research/religion-and-death.html - 'Torii spacing', 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's halls and furnishings'
+    Entry: research/religion-and-death.html - 'Torii spacing', 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "approach"
@@ -139,19 +142,20 @@ class ShrineBasin(Kind):
     worship.
 
     Why: The basin stands beside the approach, and the rite is old; the roofed pavilion over it is the newer and the
-    richer form, and many small shrines keep the basin in the open. Parishes gave their shrines dated basins.
+    richer form - the one found dated before 1868 stands at a shrine whose following reached Edo - and no page says
+    whether a village shrine's basin then stood in the open. A parish gave its shrine a dated basin in 1828.
 
     Note: The basin beside the approach and the rite are read; the plain, unroofed basin at a village shrine is a
-    guess - the pavilion's absence is attested today, not dated.
+    guess - neither the open basin nor the roofed one is attested at a village shrine before 1868.
 
-    Caveat: the plain, unroofed basin at a village shrine is a guess - the pavilion's absence is attested today, not
-    dated.
+    Caveat: the plain, unroofed basin at a village shrine is a guess - neither the open basin nor the roofed one is
+    attested at a village shrine before 1868.
 
     Name: basin
     Covers: the stone basin by the approach
     Label: accurate
     Sources: jinja-jawiki, liga-temizuya, kawasaki-nagao-chozubachi, ubusuna-jinja-ameblo
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's halls and furnishings'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "basin"
@@ -161,18 +165,21 @@ class SacredTree(Kind):
     """
     What: The sacred tree - the precinct's greatest tree, ringed at its trunk by a straw rope.
 
-    Why: A shrine keeps a sacred tree, marked as the deity's by the rope round it; many shrines were built where such
-    a tree already stood. So one great tree stands near the approach, roped.
+    Why: A shrine keeps a sacred tree, marked as the deity's by the rope round it; one encyclopedia article, itself
+    flagged as short of sources, says most shrines were built where such a tree already stood. So one great tree
+    stands near the approach, roped.
 
-    Note: The roped sacred tree is read; how common one was at a village shrine is a guess, no count having been found.
+    Note: The roped sacred tree is read; that shrines were built where such a tree stood rests on one article flagged
+    as short of sources, and how common one was at a village shrine is a guess, no count having been found.
 
-    Caveat: how common one was at a village shrine is a guess, no count having been found.
+    Caveat: that shrines were built where such a tree stood rests on one article flagged as short of sources, and how
+    common one was at a village shrine is a guess, no count having been found.
 
     Name: sacred tree
     Covers: the sacred tree and its rope
     Label: accurate
     Sources: kotobank-shinboku, shinboku-jawiki
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's halls and furnishings'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "sacred tree"
@@ -239,7 +246,7 @@ class GuardianFigures(Kind):
     Covers: the guardian pair beside the approach
     Label: accurate
     Sources: komainu-jawiki, gltjp-zenkokuji, darumamuseum-bishamonten
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's halls and furnishings'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "guardian figures"
@@ -260,7 +267,7 @@ class StoneLanterns(Kind):
     Covers: the stone lanterns along the approach
     Label: accurate
     Sources: niiza-ishigami-lantern
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's halls and furnishings'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "lanterns"
@@ -281,7 +288,7 @@ class StrengthStones(Kind):
     Covers: the strength stones beside the approach
     Label: accurate
     Sources: nerima-hikawa-chikaraishi
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's halls and furnishings'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "strength stones"
@@ -302,7 +309,7 @@ class FarmersStage(Kind):
     Covers: the farmers' stage
     Label: accurate
     Sources: noson-kabuki-butai-jawiki
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's halls and furnishings'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "stage"
@@ -323,7 +330,7 @@ class SumoRing(Kind):
     Covers: the sumo ring
     Label: accurate
     Sources: kokugakuin-dohyo
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's halls and furnishings'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "sumo ring"
@@ -343,7 +350,7 @@ class BellTower(Kind):
     Covers: the bell tower
     Label: guess
     Sources: homemate-shichido-garan
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's halls and furnishings'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "bell tower"

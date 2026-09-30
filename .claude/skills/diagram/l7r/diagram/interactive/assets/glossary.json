@@ -4833,11 +4833,13 @@
   ]
  },
  "lion-dog": {
-  "def": "One of the pair of stone guardian beasts, komainu, set at a shrine's entrance; a shrine of Bishamon sets tigers in their place.",
+  "def": "One of the pair of stone guardian beasts, komainu, set at a shrine's entrance; some temples of Bishamon set stone tigers in their place.",
   "variants": [
    "lion-dog",
    "lion-dogs",
-   "komainu"
+   "komainu",
+   "guardian dog",
+   "guardian dogs"
   ]
  },
  "terauke": {
@@ -5672,13 +5674,16 @@
  "ōiya": {
   "def": "A covering building put over a small shrine sanctuary to shelter it from wind and rain.",
   "variants": [
-   "ōiya"
+   "ōiya",
+   "covering house"
   ]
  },
  "chikaraishi": {
   "def": "A strength stone: a heavy river stone kept beside a shrine's approach and lifted by young men in trials of strength.",
   "variants": [
-   "chikaraishi"
+   "chikaraishi",
+   "strength stone",
+   "strength stones"
   ]
  },
  "sonsha": {
@@ -6409,7 +6414,8 @@
  "Jokyo": {
   "def": "The Japanese era 1684 to 1688, of the halving of retainers' fiefs the record quotes.",
   "variants": [
-   "Jokyo"
+   "Jokyo",
+   "Jōkyō"
   ]
  },
  "ronin": {
@@ -13203,6 +13209,20 @@
   "def": "A Buddhist deity, the lord of the sixth heaven of the world of desire, enshrined in many small village shrines of the Kanto region in the Edo period.",
   "variants": [
    "Dairokuten"
+  ]
+ },
+ "farmers' stage": {
+  "def": "A stage farmers built, most often on a shrine's grounds, for the kabuki and puppet plays performed in the villages from the eighteenth century on.",
+  "variants": [
+   "farmers' stage",
+   "farmers' stages"
+  ]
+ },
+ "talisman": {
+  "def": "A paper charm from a shrine, kept at home on the household's altar shelf.",
+  "variants": [
+   "talisman",
+   "talismans"
   ]
  }
 }

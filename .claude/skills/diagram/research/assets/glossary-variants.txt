@@ -475,6 +475,7 @@ coursing line	coursing
 court of the imperial stud	Court of the Imperial Stud
 courtesy name	courtesy name
 courtesy names	courtesy name
+covering house	ōiya
 cpc	CPC
 crenel	crenel
 crenelated	crenellated
@@ -772,6 +773,8 @@ fan-palm	fan palm
 fan-palm-dike	fan palm
 fang	fang
 fao	FAO
+farmers' stage	farmers' stage
+farmers' stages	farmers' stage
 farrier	farrier
 farriers	farrier
 farriery	farrier
@@ -1093,6 +1096,8 @@ guanxiang	guanxiang
 guard cities	guard city
 guard city	guard city
 guardian deities	thirty guardian deities
+guardian dog	lion-dog
+guardian dogs	lion-dog
 gulou	gulou
 gun bugyo	gun-bugyo
 gun-bugyo	gun-bugyo
@@ -1514,6 +1519,7 @@ jōdo	Jodo
 jōdo shinshū	Jodo Shinshu
 jōgyō hall	Jogyo hall
 jōgōe-chi	jōgōe-chi
+jōkyō	Jokyo
 jōmon	Jomon period
 jōmon period	Jomon period
 jōruri	joruri
@@ -2909,6 +2915,8 @@ straw ricks	rick
 stream order	stream order
 stream orders	stream order
 street village	gaison
+strength stone	chikaraishi
+strength stones	chikaraishi
 stringer	stringer
 stringers	stringer
 strip footing	strip footing
@@ -3005,6 +3013,8 @@ take-yabu	take-yabu
 takeyabu	take-yabu
 tako-beya	tako-beya
 tale of the heike	Heike monogatari
+talisman	talisman
+talismans	talisman
 tamagaki	tamagaki
 tamahagane	tamahagane
 tamajari	tamajari
