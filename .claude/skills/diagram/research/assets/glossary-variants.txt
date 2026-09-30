@@ -1254,6 +1254,7 @@ hikae-no-ma	hikae-no-ma
 hikan	hikan
 hikioi	hikioi
 hikiri-ichi	hikiri-ichi
+hill spacing	hill spacing
 hill-and-plain castle	hill-and-plain castle
 hill-style	tsukiyama
 hinin	hinin
@@ -1755,6 +1756,8 @@ kodera site	Kodera site
 koebune	fertilizer boat
 koedame	koedame
 koeki kokusanko	Koeki Kokusanko
+kofu	Kofu
+kofu basin	Kofu
 kofun	Kofun period
 kofun period	Kofun period
 kogein	kogein
@@ -2519,6 +2522,8 @@ quercus acutissima	kunugi
 quercus serrata	konara
 raft-mat	raft-mat
 raft-mats	raft-mat
+raised-bed river	raised-bed river
+raised-bed rivers	raised-bed river
 raku	raku
 rakuchu rakugai	Rakuchu rakugai
 rakuchu rakugai screens	Rakuchu rakugai
@@ -3179,6 +3184,7 @@ ten-volume wamyosho	Wamyosho
 tendai	Tendai
 tenjin	Tenjin
 tenjin shrine	Tenjin
+tenjogawa	raised-bed river
 tenma-cho	tenma-cho
 tenmacho	Tenmacho
 tenmacho jail	Tenmacho

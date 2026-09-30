@@ -20,7 +20,7 @@
   "barley": {
     "caveat": "the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
     "covers": "`dry_plots[crop=barley]` and their furrows",
-    "entry": "research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their furrows'",
+    "entry": "research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their crops (hatake)'",
     "key": "barley",
     "label": "accurate",
     "label_note": "Placement on the catena is read; the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
@@ -37,7 +37,8 @@
       "senjochi-kotobank",
       "zuozhuan-chenggong",
       "fao-aina-ridging",
-      "zgkpw-longzuo"
+      "zgkpw-longzuo",
+      "nogyo-zensho-joun-sera"
     ],
     "what": "A dry-field plot under barley - the winter grain, sown in autumn and taken in early summer - worked in ridged rows.",
     "why": "Dry crops take the higher, well-drained hem above the paddy, where the water cannot command the ground."
@@ -61,7 +62,7 @@
   "buckwheat": {
     "caveat": "the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
     "covers": "`dry_plots[crop=buckwheat]` and their furrows",
-    "entry": "research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their furrows'",
+    "entry": "research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their crops (hatake)'",
     "key": "buckwheat",
     "label": "accurate",
     "label_note": "Placement on the catena is read; the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
@@ -78,7 +79,8 @@
       "senjochi-kotobank",
       "zuozhuan-chenggong",
       "fao-aina-ridging",
-      "zgkpw-longzuo"
+      "zgkpw-longzuo",
+      "nogyo-zensho-joun-sera"
     ],
     "what": "A dry-field plot under buckwheat - the short-season crop for thin soil, sown late and taken in autumn - worked in ridged rows.",
     "why": "Dry crops take the higher, well-drained hem above the paddy, where the water cannot command the ground."
@@ -542,7 +544,7 @@
   "millet": {
     "caveat": "the crop MIX on any one map (how much millet against buckwheat and barley) is rolled from the seed and is a GUESS at the proportions.",
     "covers": "`dry_plots[crop=millet]` and their furrows",
-    "entry": "research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their furrows'",
+    "entry": "research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their crops (hatake)'",
     "key": "millet",
     "label": "accurate",
     "label_note": "Placement on the catena is read; the crop MIX on any one map (how much millet against buckwheat and barley) is rolled from the seed and is a GUESS at the proportions.",
@@ -559,7 +561,8 @@
       "senjochi-kotobank",
       "zuozhuan-chenggong",
       "fao-aina-ridging",
-      "zgkpw-longzuo"
+      "zgkpw-longzuo",
+      "nogyo-zensho-joun-sera"
     ],
     "what": "A dry-field (hatake) plot under millet, worked in ridged rows.",
     "why": "Wet-rice villages sort by a topographic catena: the paddy holds the flat valley bottom, dry crops take the higher, well-drained ground the water cannot command - the hem above the paddy and the raised ground the homesteads sit on - and coppice crowns the hills above."
@@ -825,7 +828,7 @@
   "soy": {
     "caveat": "the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
     "covers": "`dry_plots[crop=soy]` and their furrows",
-    "entry": "research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their furrows'",
+    "entry": "research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their crops (hatake)'",
     "key": "soy",
     "label": "accurate",
     "label_note": "Placement on the catena is read; the crop mix per map is rolled from the seed and is a GUESS at the proportions.",
@@ -843,7 +846,8 @@
       "senjochi-kotobank",
       "zuozhuan-chenggong",
       "fao-aina-ridging",
-      "zgkpw-longzuo"
+      "zgkpw-longzuo",
+      "nogyo-zensho-joun-sera"
     ],
     "what": "A dry-field plot under soybean (daizu) grown as a field crop of its own, worked in ridged rows - drawn a soybean green against the tan and ochre grains.",
     "why": "Dry crops take the higher, well-drained hem above the paddy, where the water cannot command the ground; the bean fixes its own nitrogen, which is why it also went along the bunds."

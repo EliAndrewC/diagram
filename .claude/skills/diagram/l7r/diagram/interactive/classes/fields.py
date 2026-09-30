@@ -168,9 +168,10 @@ class Millet(Kind):
     ground that is also their dry field, with the paddy in the wet ground behind it, is read too; the rest of the
     order is this record's own reading, and one source read puts paddy round houses built on slightly higher ground
     instead; the plot a household works by its own house is named for its own consumption, read, and no page read puts
-    grain there; ridged rows are read for China - a modern history says the sixth-century Qimin Yaoshu set ridge
-    rules for soybeans and millet - but for Japan they are a GUESS: no page read says whether a pre-modern Japanese
-    dry field was sown in rows or broadcast, and the only ridged rows found in Japan are modern. That the land sets
+    grain there; ridged rows are read - a modern history says the Northern Wei Qimin Yaoshu set ridge rules for
+    soybeans and millet, and a Japanese farming manual of 1697 weeds its dry fields along the ridges - but their
+    SPACING is a GUESS: no page read says how far apart a pre-modern Japanese dry field's rows stood, and the only
+    spacings found are modern. That the land sets
     the row direction tract by tract is this record's reading of a classical passage. The crop MIX on any one map
     (how much millet against buckwheat and barley) is rolled from the seed and is a GUESS at the proportions;
     whether a fan's middle stays wild is rolled per map too, since old heartlands such as Kinki and Kofu cleared
@@ -188,8 +189,8 @@ class Millet(Kind):
     Name: millet
     Covers: `dry_plots[crop=millet]` and their furrows
     Label: accurate
-    Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo
-    Entry: research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their furrows'
+    Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo, nogyo-zensho-joun-sera
+    Entry: research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their crops (hatake)'
     """
 
     key = 'millet'
@@ -218,10 +219,10 @@ class Buckwheat(Kind):
     order is this record's own reading, and one source read puts paddy
     round houses built on slightly higher ground instead; the plot a household works by its own house is named
     for its own consumption, read, and no page read puts grain there. Apart from the ridging, what is said here of
-    the crop itself is not drawn from the sections this entry names; ridged rows are read for China - a modern
-    history says the sixth-century Qimin Yaoshu set ridge rules for soybeans and millet - but no page read says
-    whether a pre-modern Japanese dry field was sown in rows or broadcast, and the only ridged rows found in Japan
-    are modern, so for Japan the rows are a GUESS. That the land sets the row direction tract by tract is this
+    the crop itself is not drawn from the sections this entry names; ridged rows are read - a modern
+    history says the Northern Wei Qimin Yaoshu set ridge rules for soybeans and millet, and a Japanese farming
+    manual of 1697 weeds its dry fields along the ridges - but no page read says how far apart a pre-modern
+    Japanese dry field's rows stood, and the only spacings found are modern, so the row SPACING is a GUESS. That the land sets the row direction tract by tract is this
     record's reading of a classical passage. The crop mix per map is rolled from the seed and is a GUESS at the
     proportions; whether a fan's middle stays wild is rolled per map too, since old heartlands such as Kinki and
     Kofu cleared theirs early, and the odds of that roll are a GUESS; where it stays wild the dry strip keeps to
@@ -238,8 +239,8 @@ class Buckwheat(Kind):
     Name: buckwheat
     Covers: `dry_plots[crop=buckwheat]` and their furrows
     Label: accurate
-    Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo
-    Entry: research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their furrows'
+    Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo, nogyo-zensho-joun-sera
+    Entry: research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their crops (hatake)'
     """
 
     key = 'buckwheat'
@@ -267,29 +268,32 @@ class Barley(Kind):
     on a fan two put the water-short middle late to clearing and the spring-fed toe early to paddy; elsewhere that
     order is this record's own reading, and one source read puts paddy
     round houses built on slightly higher ground instead; the plot a household works by its own house is named
-    for its own consumption, read, and no page read puts grain there. Apart from the ridging, what is said here of
-    the crop itself is not drawn from the sections this entry names; ridged rows are read for China - a modern
-    history says the sixth-century Qimin Yaoshu set ridge rules for soybeans and millet - but no page read says
-    whether a pre-modern Japanese dry field was sown in rows or broadcast, and the only ridged rows found in Japan
-    are modern, so for Japan the rows are a GUESS. That the land sets the row direction tract by tract is this
+    for its own consumption, read, and no page read puts grain there. The crop's season, sown in autumn and taken
+    in early summer, is read; ridged rows are read - a modern
+    history says the Northern Wei Qimin Yaoshu set ridge rules for soybeans and millet, and a Japanese farming
+    manual of 1697 weeds its dry fields along the ridges - but no page read says how far apart a pre-modern
+    Japanese dry field's rows stood, and the only spacings found are modern, so the row SPACING is a GUESS. That the land sets the row direction tract by tract is this
     record's reading of a classical passage. The crop mix per map is rolled from the seed and is a GUESS at the
     proportions; whether a fan's middle stays wild is rolled per map too, since old heartlands such as Kinki and
     Kofu cleared theirs early, and the odds of that roll are a GUESS; where it stays wild the dry strip keeps to
     the fan's toe, and where on the fall the toe begins is a GUESS; how many plots a tract holds, how far a plot
     turns within one, and that every tract on steep ground runs along the contour are GUESSES - no page read says
-    how rows ran there.
+    how rows ran there. The plot is drawn in ripe barley's early-summer gold though the map shows high summer, when
+    barley is already cut; which season to show is not yet decided.
 
     Caveat: The crop mix per map is rolled from the seed and is a GUESS at the proportions; whether a fan's middle
     stays wild is rolled per map too, since old heartlands such as Kinki and Kofu cleared theirs early, and the
     odds of that roll are a GUESS; where it stays wild the dry strip keeps to the fan's toe, and where on the fall
     the toe begins is a GUESS; how many plots a tract holds, how far a plot turns within one, and that every tract
-    on steep ground runs along the contour are GUESSES - no page read says how rows ran there.
+    on steep ground runs along the contour are GUESSES - no page read says how rows ran there. The plot is drawn in
+    ripe barley's early-summer gold though the map shows high summer, when barley is already cut; which season to
+    show is not yet decided.
 
     Name: barley
     Covers: `dry_plots[crop=barley]` and their furrows
     Label: accurate
-    Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo
-    Entry: research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their furrows'
+    Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo, nogyo-zensho-joun-sera
+    Entry: research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their crops (hatake)'
     """
 
     key = 'barley'
@@ -319,10 +323,10 @@ class Soy(Kind):
     order is this record's own reading, and one source read puts paddy
     round houses built on slightly higher ground instead; the plot a household works by its own house is named
     for its own consumption, read, and no page read puts grain there. Apart from the ridging, what is said here of
-    the crop itself is not drawn from the sections this entry names; ridged rows are read for China - a modern
-    history says the sixth-century Qimin Yaoshu set ridge rules for soybeans and millet - but no page read says
-    whether a pre-modern Japanese dry field was sown in rows or broadcast, and the only ridged rows found in Japan
-    are modern, so for Japan the rows are a GUESS. That the land sets the row direction tract by tract is this
+    the crop itself is not drawn from the sections this entry names; ridged rows are read - a modern
+    history says the Northern Wei Qimin Yaoshu set ridge rules for soybeans and millet, and a Japanese farming
+    manual of 1697 weeds its dry fields along the ridges - but no page read says how far apart a pre-modern
+    Japanese dry field's rows stood, and the only spacings found are modern, so the row SPACING is a GUESS. That the land sets the row direction tract by tract is this
     record's reading of a classical passage. The crop mix per map is rolled from the seed and is a GUESS at the
     proportions; whether a fan's middle stays wild is rolled per map too, since old heartlands such as Kinki and
     Kofu cleared theirs early, and the odds of that roll are a GUESS; where it stays wild the dry strip keeps to
@@ -339,8 +343,8 @@ class Soy(Kind):
     Name: soy
     Covers: `dry_plots[crop=soy]` and their furrows
     Label: accurate
-    Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo
-    Entry: research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their furrows'
+    Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo, nogyo-zensho-joun-sera
+    Entry: research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their crops (hatake)'
     """
 
     key = 'soy'

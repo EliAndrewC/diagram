@@ -5103,7 +5103,8 @@
   "def": "In fengshui, the vital energy believed to flow through land, wind and water; a grove at the water mouth was held to keep evil qi out.",
   "variants": [
    "qi"
-  ]
+  ],
+  "cased": true
  },
  "rhizome": {
   "def": "The underground stem a bamboo spreads by; new shoots come up from it, so a stand is one plant creeping outward.",
@@ -12879,7 +12880,8 @@
   "variants": [
    "jin",
    "catty"
-  ]
+  ],
+  "cased": true
  },
  "integrated fish farming": {
   "def": "Raising fish in the same farm as livestock or crops, so that the animals' manure and the farm's wastes go into the ponds and feed the fish, usually with pig sheds built on the pond dikes. The name and the manuals that teach it are modern.",
@@ -13637,6 +13639,27 @@
   "def": "The region along the Seto Inland Sea's northern shore, west of Kinki. It gets little rain, and like Shikoku it depends on irrigation ponds.",
   "variants": [
    "San'yo"
+  ]
+ },
+ "raised-bed river": {
+  "def": "A river whose bed has built up with gravel between fixed banks until it runs higher than the land around it.",
+  "variants": [
+   "raised-bed river",
+   "raised-bed rivers",
+   "tenjogawa"
+  ]
+ },
+ "hill spacing": {
+  "def": "In rice planting, the distance between hills, the clumps of seedlings set into the paddy together at one spot. Today it is about 30 cm; before the Meiji period the clumps were set by eye, in no even rows.",
+  "variants": [
+   "hill spacing"
+  ]
+ },
+ "Kofu": {
+  "def": "A basin in Kai province, today's Yamanashi, west of the Kanto plain. Its floor is built of alluvial fans, and they were cleared early.",
+  "variants": [
+   "Kofu",
+   "Kofu basin"
   ]
  }
 }
