@@ -610,6 +610,8 @@ dissection	dissection
 distributaries	distributary
 distributary	distributary
 district magistrate	gun-bugyo
+district shrine	gōsha
+district shrines	gōsha
 ditai	mamian
 dituan	dituan
 division point	bunsuiguchi
@@ -679,6 +681,7 @@ duty cycles	duty cycle
 duty of water	water duty
 dwarf bamboo	sasa
 dōba	dōba
+dōsojin	dosojin
 ear mound	ear mound
 early modern	early modern period
 early modern period	early modern period
@@ -1486,7 +1489,10 @@ jittering	jitter
 jitō	jito
 jiwari	warichi
 jizo	jizo
+jizo-bon	Jizo-bon
+jizobon	Jizo-bon
 jizō	jizo
+jizō-bon	Jizo-bon
 jo	jo
 jobikeshi	jobikeshi
 jobo	jobo
@@ -2064,11 +2070,13 @@ myoden landlord	myoden
 myoden landlords	myoden
 myoga	myoga
 myoji-taito	myoji-taito
+myojin	Myojin
 myoken	Myōken
 myoshu	myoshu
 mypedia	Mypedia
 myōden	myoden
 myōga	myoga
+myōjin	Myojin
 myōken	Myōken
 myōshu	myoshu
 naca	NACA
@@ -2847,6 +2855,7 @@ sodegarami	sodegarami
 soffit	soffit
 soffits	soffit
 sogamae	sogamae
+soja	soja
 sokohi	sokohi
 solidity	solidity
 song dynasty	Song dynasty
@@ -2990,6 +2999,7 @@ swi	SWI
 sword hunt	sword hunt
 sword hunts	sword hunt
 sōchinju	sōchinju
+sōja	soja
 sōtō	Sōtō
 sōzu	sōzu
 tabune	field boat
@@ -3232,6 +3242,7 @@ tsuijimatsu	tsuijimatsu
 tsujiban	tsujiban
 tsujido	tsujido
 tsujidos	tsujido
+tsujidō	tsujido
 tsuke-shoin	tsuke-shoin
 tsuke-tsubo	tsuke-tsubo
 tsukiyama	tsukiyama
@@ -3503,6 +3514,7 @@ yanagita	Yanagita Kunio
 yanagita kunio	Yanagita Kunio
 yangtze delta	Lower Yangzi
 yangtze-delta	Lower Yangzi
+yangzi delta	Lower Yangzi
 yanushi	yamori
 yashiki	yashiki
 yashikichi	yashikichi

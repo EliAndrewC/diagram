@@ -231,7 +231,8 @@
    "Taihu",
    "Lake Tai",
    "Yangtze delta",
-   "Yangtze-delta"
+   "Yangtze-delta",
+   "Yangzi delta"
   ]
  },
  "MAFF": {
@@ -1282,7 +1283,8 @@
  "dosojin": {
   "def": "Roadside guardian-deity stones, set most often on the lonely stretches of a highway and near mountain passes, and usually at a village's edge where a road from outside meets its houses.",
   "variants": [
-   "dosojin"
+   "dosojin",
+   "dōsojin"
   ]
  },
  "drainage ditch": {
@@ -8218,7 +8220,9 @@
   "def": "The district-shrine rank in Japan's modern shrine registers: the chief shrine of a district of about twenty villages, one step above the village shrine.",
   "variants": [
    "gōsha",
-   "gosha"
+   "gosha",
+   "district shrine",
+   "district shrines"
   ]
  },
  "sōchinju": {
@@ -8852,6 +8856,7 @@
   "def": "A small open wayside hall on four corner posts under a tiled roof, with a board floor about two mats in size, built by a settlement beside a road for travelers to rest and later housing a jizo or other stone image.",
   "variants": [
    "tsujido",
+   "tsujidō",
    "tsujidos",
    "wayside hall",
    "wayside halls"
@@ -13246,6 +13251,28 @@
   "def": "As the English encyclopedia names it, the government office that issued the first order separating the kami from the Buddhas, in April 1868.",
   "variants": [
    "Jinguji Muka"
+  ]
+ },
+ "Jizo-bon": {
+  "def": "A town block's festival for its jizo, centered on children, held chiefly in the Kinki region around Kyoto; a block with no jizo of its own borrows one from a temple or uses a Buddhist painting.",
+  "variants": [
+   "Jizo-bon",
+   "Jizō-bon",
+   "Jizobon"
+  ]
+ },
+ "Myojin": {
+  "def": "A title of honor given to a Shinto deity, meaning \"bright deity\", often joined to the deity's name, as in Wakamiya Myojin.",
+  "variants": [
+   "Myojin",
+   "myōjin"
+  ]
+ },
+ "soja": {
+  "def": "A shrine near a province's capital where all the province's deities were enshrined together, so that their rites could be performed at once.",
+  "variants": [
+   "soja",
+   "sōja"
   ]
  }
 }
