@@ -3060,6 +3060,9 @@ tenma-cho	tenma-cho
 tenmacho	Tenmacho
 tenmacho jail	Tenmacho
 tenmacho's	Tenmacho
+tenmachō	Tenmacho
+tenmachō jail	Tenmacho
+tenmachō's	Tenmacho
 tenmangu	Tenmangu
 tenmangū	Tenmangu
 tenmei	Tenmei

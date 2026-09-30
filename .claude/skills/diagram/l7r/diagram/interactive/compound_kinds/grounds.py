@@ -142,7 +142,7 @@ class HearingCourt(Kind):
     Covers: the roofed court before the dais and its label
     Label: accurate
     Sources: oshirasu-jawiki, takayama-jinya-city, takayama-gh-shirasu, shirasu-imidas, takayama-jinya-official, takayama-jinya-jawiki
-    Entry: research/buildings.html - 'The hearing court (shirasu)', 'Holding cells (agariya and rōya)', 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)', 'How our maps draw holding cells', 'How our maps size a compound and its buildings'
+    Entry: research/buildings.html - 'The hearing court (shirasu)', 'Holding cells (agariya and rōya)', 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)', 'How our maps draw holding cells (agariya and rōya)', 'How our maps size a compound and its buildings'
     """
 
     key = "hearing court"

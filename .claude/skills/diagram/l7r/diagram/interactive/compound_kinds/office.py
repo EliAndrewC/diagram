@@ -198,13 +198,15 @@ class Cell(Kind):
 
     Why: Edo jails held the accused pending judgment; the sentences were exile, flogging, fines or death -
     not, in the ordinary case, time in prison - and light offenders were sent home to their villages.
-    Only the largest jail, Edo's Tenmachō, was a moated compound of its own; the others stood inside
+    The largest jail, Edo's Tenmachō, was a walled and moated compound of its own; most others stood at
     magistrates' and daikan offices, and a magistracy that judged cases kept a temporary cell inside its own
     compound for those called before its court. So a county magistracy keeps a cell or two for remand and no
     prison block - and in Rokugan, where torture is unusual, no room built for interrogation either.
 
-    Note: Small remand cells follow the record (though no page read names exile or fines as sentences, or
-    says light offenders were sent home), and so does a temporary cell inside the office's own compound. The
+    Note: Small remand cells follow the record, though holding only one or two is a guess (and no page read
+    names exile or fines as sentences, or says light offenders were sent home), and so does a temporary cell
+    inside the office's own compound. Drawing no room for interrogation is this setting's own departure
+    from Edo, whose jails had one. The
     size of such a cell was not found, so the drawn size is a guess within the span of the single cell rooms
     read, from Osaka's 6-mat cell (about 12 by 9 ft) to Tenmacho's 18-mat room (about 18 by 18 ft): about 12
     by 10 ft, at the small end, because a county cell holds only a few until their hearing. That a cell may
@@ -221,7 +223,7 @@ class Cell(Kind):
     Covers: the barred holding cell and its label
     Label: accurate
     Sources: agariya-jawiki, roya-kotobank, edo-ashigaru-bugyosho, tenmacho-jawiki, chuo-royashiki, neixiang-yamen-zhwiki, henan-neixiang, takayama-jinya-city
-    Entry: research/buildings.html - 'Holding cells (agariya and rōya)'; research/rendering/buildings.html - 'How our maps draw holding cells'
+    Entry: research/buildings.html - 'Holding cells (agariya and rōya)'; research/rendering/buildings.html - 'How our maps draw holding cells (agariya and rōya)'
     """
 
     key = "cell"
@@ -394,14 +396,14 @@ class DayOffice(Kind):
     Note: The dais as the front of the office hall follows the record; the day office behind it is our own guess
     at what the block must hold, since no page we read names the room. That no room is built
     for interrogation is a setting decision (GM, 2026-07), not the record: Takayama had an examination room
-    (ginmisho) beside its roofed court, and its torture was done in the jail in the town.
+    (ginmisho) beside its roofed court, and its torture is reported to have been done in the jail in the town.
 
 
     Name: day office
     Covers: the day office's floor and its label
     Label: guess
     Sources: takayama-jinya-jawiki, takayama-jinya-city
-    Entry: research/buildings.html - 'The hearing court (shirasu)', 'Holding cells (agariya and rōya)'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)', 'How our maps draw holding cells'
+    Entry: research/buildings.html - 'The hearing court (shirasu)', 'Holding cells (agariya and rōya)'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)', 'How our maps draw holding cells (agariya and rōya)'
     """
 
     key = "day office"
