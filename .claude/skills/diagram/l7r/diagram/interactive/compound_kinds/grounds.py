@@ -106,7 +106,7 @@ class BorderCourt(Kind):
     Covers: the receiving court behind a border posting's parley door, and its label
     Label: deviation
     Sources: kotobank-bansho, bunka-nuruyu-bansho, bansho-jawiki, kotobank-shikidai, kominkai-genkan
-    Entry: research/buildings.html - 'Why would a border posting keep a court for those crossing?', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps route a guest from the gate to the entrance'
+    Entry: research/buildings.html - 'Border posts and their crossing court (kuchidome bansho)', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps draw a border crossing court', 'How our maps route a guest from the gate to the entrance'
     """
 
     key = "border court"
@@ -716,7 +716,7 @@ class Door(Kind):
     Covers: every small door glyph on a building's wall
     Label: accurate
     Sources: madoken-odoguchi, hongofuji-koiwai, s-kent-kuratomae, kotobank-katteguchi, kotobank-uchigenkan, matsue-bukeyashiki, homes-jin-bukeyashiki, dozo-jawiki, gogura-jawiki, nagayamon-jawiki, jta-nagayamon
-    Entry: research/buildings.html - 'How wide was a real doorway, and how wide are the drawn doors?', 'Kitchens (daidokoro)', 'The formal entrance and a guest's arrival (genkan)'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound', 'How our maps draw kitchens (daidokoro)','How our maps route a guest from the gate to the entrance'
+    Entry: research/buildings.html - 'Doorways and doors (to)', 'Kitchens (daidokoro)', 'The formal entrance and a guest's arrival (genkan)'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps draw doors', 'How our maps draw a magistrate's compound', 'How our maps draw kitchens (daidokoro)','How our maps route a guest from the gate to the entrance'
     """
 
     key = "door"

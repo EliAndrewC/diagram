@@ -75,8 +75,8 @@ GATE_POST_W_FT, GATE_POST_D_FT = 4.0 / 3.0, 14.0 / 3.0
 NAKAMON_POST_D_FT = 10.0 / 3.0
 # An informal door on each lodging block (feature 267, buildings/programs.md: no sealed boxes): a small dark rect set
 # flush inside the building's face, as the hand sheets draw one (`floating_doors` holds it to the wall). 6 ft along the
-# face is a MAP DRAWING CONVENTION (research buildings 620 'How wide was a real doorway, and how wide are the drawn
-# doors?': an ordinary door is about half a ken, ~3 ft; drawn doors run two to three times that to read at 3 px/ft);
+# face is a MAP DRAWING CONVENTION (research rendering/buildings 'How our maps draw doors', from buildings 'Doorways and
+# doors (to)': an ordinary door is about half a ken, ~3 ft; drawn doors run two to three times that to read at 3 px/ft);
 # 1.33 ft deep is the ink the hand sheets give one.
 DOOR_W_FT, DOOR_D_FT = 6.0, 4.0 / 3.0
 # The kinds given a door. The kitchen's is its one outside door, the service entrance on its earth floor (research

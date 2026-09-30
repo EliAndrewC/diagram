@@ -173,7 +173,7 @@ class ParleyRoom(Kind):
     Covers: the room in the border wall and its label
     Label: deviation
     Sources: kyakhta-trade-enwiki, wakan-kotobank
-    Entry: research/buildings.html - 'Did two sides ever meet in a room built across their border?'; research/urban-features.html - 'Drawing a clan border'
+    Entry: research/buildings.html - 'Rooms for a parley across a border'; research/rendering/buildings.html - 'How our maps draw a parley room on a border'; research/urban-features.html - 'Drawing a clan border'
     """
 
     key = "parley room"
@@ -452,7 +452,7 @@ class ParleyMats(Kind):
     Covers: the four kneeling mats in the parley room
     Label: deviation
     Sources: kyakhta-trade-enwiki, wakan-kotobank
-    Entry: research/buildings.html - 'Did two sides ever meet in a room built across their border?'; research/urban-features.html - 'Drawing a clan border'
+    Entry: research/buildings.html - 'Rooms for a parley across a border'; research/rendering/buildings.html - 'How our maps draw a parley room on a border'; research/urban-features.html - 'Drawing a clan border'
     """
 
     key = "parley mats"
