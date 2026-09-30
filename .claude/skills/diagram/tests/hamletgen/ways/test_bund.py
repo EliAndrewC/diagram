@@ -117,7 +117,10 @@ def test_the_paddy_is_reached_by_a_joined_end_a_run_on_a_branch_or_the_map_says_
     assert B.a_way_onto_the_bund(branch) == "branch" and branch.M["lanes"][-1]["w"] == B.BRANCH_WIDTH
     moat = _stub(streams=[{"poly": [[380.0, -100.0], [380.0, 400.0]], "w": 6}])
     moat.M["lanes"].append({"pts": [[300.0, 100.0], [300.0, 150.0]], "w": 3})
-    assert B.a_way_onto_the_bund(moat).startswith("none: "), "every way to the paddy crosses the water"
+    assert B.a_way_onto_the_bund(moat) == "branch", "across the one water course, for the crossings stage to plank (feature 291)"
+    moat2 = _stub(streams=[{"poly": [[380.0, -100.0], [380.0, 400.0]], "w": 6}, {"poly": [[390.0, -100.0], [390.0, 400.0]], "w": 6}])
+    moat2.M["lanes"].append({"pts": [[300.0, 100.0], [300.0, 150.0]], "w": 3})
+    assert B.a_way_onto_the_bund(moat2).startswith("none: "), "every way to the paddy crosses two water courses"
 
 
 def test_the_ground_falls_back_to_the_envelope_where_the_map_records_no_field() -> None:

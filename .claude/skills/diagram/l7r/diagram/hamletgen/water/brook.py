@@ -412,7 +412,11 @@ def feed_brook(plan: SitePlan, sluice: Pt, crop: Sequence[Poly] = (), run: float
             # 49 ft at 1.2 degrees off vertical (feature 261, found beside Sawada's tap-leaving segment). The nudge moves a
             # leg's far end across the approach, never the sluice, so the tap stays where the head race leaves it.
             legs = _off_the_axes(legs, (-math.sin(th), math.cos(th)))
-            return [*off_the_sheet(legs[0], th, float(plan.W), float(plan.H), wob), *legs, sluice, *brook_skirt(plan, sluice, plan.brook_side, crop)]
+            # ...off the screen axes too, nudged from the head outward so the approach and its tap stay where they are (a brook
+            # carried due west ran dead level: Mizuguchi, settlement-review 2026-09-30)
+            ext = off_the_sheet(legs[0], th, float(plan.W), float(plan.H), wob)
+            ext = _off_the_axes([legs[0], *ext[::-1]], (-math.sin(th), math.cos(th)))[1:][::-1] if ext else ext
+            return [*ext, *legs, sluice, *brook_skirt(plan, sluice, plan.brook_side, crop)]
     up = (
         sluice[0] - dx * run,
         sluice[1] - dy * run,

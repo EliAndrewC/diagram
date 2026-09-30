@@ -9295,12 +9295,6 @@
    "kaison"
   ]
  },
- "retsuson": {
-  "def": "A line village: a Japanese village whose houses stand in a line along a natural levee or a spring line at a hill's foot.",
-  "variants": [
-   "retsuson"
-  ]
- },
  "Rinzai": {
   "def": "One of Japan's two main Zen Buddhist sects, beside Soto.",
   "variants": [
@@ -13113,9 +13107,11 @@
   ]
  },
  "ressen": {
-  "def": "列村: a settlement stretched long and thin in a line, its houses along a natural levee, the spring line at a hill's foot, a spring or a waterway, standing on one side of that line or on both. Japanese geography sets it beside the road village (roson), whose line is a road.",
+  "def": "列村 (resson, read れっそん; also written ressen or retsuson): a settlement stretched long and thin in a line, its houses along a natural levee, the spring line at a hill's foot, a spring or a waterway, standing on one side of that line or on both. Japanese geography sets it beside the road village (roson), whose line is a road.",
   "variants": [
+   "resson",
    "ressen",
+   "retsuson",
    "linear village",
    "linear villages"
   ]
@@ -13128,7 +13124,7 @@
   ]
  },
  "dry edge": {
-  "def": "The line where the dry ground a village stands on meets the wet paddy below it. On the map it is the field's margin, standing for a levee, a dike or a fan's foot, and a row village strings its farms along it.",
+  "def": "The line where the dry ground a village stands on meets the wet paddy below it. On the map it is the field's margin, standing for a levee, a dike or a fan's foot - this project's reading - and a row village strings its farms along it.",
   "variants": [
    "dry edge",
    "dry edges"
