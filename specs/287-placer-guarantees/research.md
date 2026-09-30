@@ -1126,15 +1126,26 @@ manifest's `commons` against `map_window`). So `fill_the_holes` finds no bare sa
 D6's choice of what counts as covered decides nothing on any map measured. It would decide something only on a roll
 whose commons pass left ground open.
 
+**R13 re-run at the final engine** (observed 2026-09-30, method: the same `make spec-harness` sweep at c0367168d, after the
+settle's exit check, four workers under the cohort lock, 329 s): identical to R13 - plain 53 maps, 52 clean (the one
+reading the retired belt test's own grouping on cohort 34); under the probes 52 of 52 produced maps clean, one SiteRefused
+(cohort 18, plan D2's count, best margin 14 of 15); 0 re-rolls, 0 unseated, 0 WebRefused, 0 maps at D12's terminal, W26's
+crossing check 0 of 101 lots plain and 0 of 100 under the probes; woodland off the sheet (D11) on 5 maps plain and 4
+under the probes.
+
 ## R14 - What the work cost and saved (2026-09-30)
 
-**The test suite** (T89, SC-005, SC-006; observed 2026-09-30, method: `make durations` in the clone at eab8235b9 against
-R4's `make durations` before the work): 4,732 tests pass in 39.08 s against R4's 5,258 in 57.13 s - 526 fewer tests and
-18.05 s (32%) less, the finished-map tests the guarantees made unnecessary retired with their cost (R8).
+**The test suite** (T89, SC-005, SC-006; observed 2026-09-30, method: `make durations` in the clone against R4's `make
+durations` before the work - the same target, so the counts compare): 4,732 tests pass in 39.08 s against R4's 5,258 in
+57.13 s - 526 fewer tests and 18.05 s (32%) less, the finished-map tests the guarantees made unnecessary retired with
+their cost (R8). The full gate, which collects every tree (`make done INCREMENTAL=0`), runs 5,830 at the final engine.
 
-**Generation** (T89; the bookends and the control, observed 2026-09-30, method: `make perf LABEL=287-end` at load 3.0 and
-the `reference-snapshot-main` / `reference-snapshot-287-head` runs in measurements.json, alternated on the same host):
-the reference snapshot 20.9 s at 287's start, 24.35 s on main without 287 (feature 280 and the rest of main), 27.7 s at
-287's end - band 3 against 287-start. Of the 6.8 s, about 3.45 s is main's own work merged in and about 3.2 s (+13% over
-main) is 287's guarantees; the session's explanation is recorded (`make perf-explain`, CONTROL=reference-snapshot-main),
-the perf-audit subagent's review follows, and band 3 owes the GM's sign-off (`make perf-signoff`) before the push.
+**Generation** (T89; observed 2026-09-30, method: `make perf LABEL=287-end` at load 3.5 after the settle's exit check,
+and two runs alternated with a worktree at origin/main 80af74aef - `reference-snapshot-main` in measurements.json): the
+reference snapshot 20.9 s at 287's start, 24.0 s on main without 287, 25.7 s at 287's end - band 3 against 287-start
+(total +23.0%, seed 25 +46.8%) and +7% over main. Main's own growth over 287-start is one stage on one seed (seed 39's
+straggler web). Against main the guarantees cost about +9.4 s gross over the four seeds - the seating's access-tree
+check, the settled lane web, the belt and woodland lots, and seed 25's field, where the fit's legality refuses candidate
+fans on their carved channels at three aspects (13 carves against main's 5, each no dearer) - and 287's own exact
+speedups give back about 8.2 s (the straggler route memo, the board siting, the windbreak): a net +1.7 s. perf-audit,
+2026-09-30: the explanation consistent, the increase justified; band 3 owes the GM's `make perf-signoff`.
