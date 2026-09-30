@@ -250,8 +250,12 @@ def cut_the_overruns(s: Settlement) -> None:
             s.reink_lane(_i)
 
 
-def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
+def tidy_lane_ends(s: Settlement, envelope: Poly, streets: bool = False) -> None:
     """THE LAST PASS OVER EVERY LANE END, after the stragglers: pull back anything that still reaches nothing.
+
+    A ROW'S STREETS ARE TRIMMED APART, with `streets=True`, once the door paths are laid (feature 291 plan D17): a row
+    farm stands a frame's depth off its street and is reached by its door path, laid after this pass, so trimmed with
+    the rest a street was cut back to the first farm near enough to count (Kashikawa's, from 2,800 ft to 1,400).
 
     LIFTED TO MODULE LEVEL (feature 227, the GM's 2026-08-28 ruling on inner functions and testability). It was the
     tail of `stage_web`, and its shortening branch had no reader but the shipped rolls - so the moment the end rule
@@ -286,6 +290,8 @@ def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
         # guard stays because a future reorder would hand one straight to `_ln["pts"][0]`, and because
         # three separate passes have now had to learn this rule one at a time.
         if len(_ln.get("pts") or []) < 2:  # pragma: no cover - see above
+            continue
+        if bool(_ln.get("street")) != streets:
             continue
         _pts = [(float(x), float(y)) for x, y in _ln["pts"]]
         _others = [
@@ -578,7 +584,11 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     _pass("bridge-breaks")
     _bridge_collinear_breaks(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     _pass("straggler")
-    _serve_stragglers(s, plan, hard, fabric, list(plan.watercourses) + drawn_water)
+    # ...NOT ON A ROW VILLAGE (feature 291 plan D17): its farms are served at their front doors by `lay_door_paths`, last,
+    # each to its OWN street; run here as well, the stragglers drew every Kashikawa farm a second path from the same door
+    # to whatever way was nearest - two treads out of one gate, and a join-orphans lane to tie them in
+    if not _rows:
+        _serve_stragglers(s, plan, hard, fabric, list(plan.watercourses) + drawn_water)
     _pass("touch")
     _touch_junctions(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     # ...AND JOIN ORPHANS AGAIN, LAST. The first pass runs before the bridges and the footpaths, so
@@ -694,6 +704,12 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # ...AND A GROVE FARM IS REACHED AT ITS FRONT DOOR (feature 291 FR-019), LAST: laid before the trims, a door path was cut
     # back off its door by them (Mizuguchi: the farm at (232,1582) served, its door 60 ft from the path's trimmed end)
     lay_door_paths(s, hard_built, walls, list(plan.watercourses) + drawn_water)
+    if _rows:
+        # ...and a door path laid beside a lane that was there first meets it rather than doubling it (Kashikawa: a
+        # join-orphans lane ran on 64 ft beside the door path of the farm at (2299, 2724)) - the sweep that ran above,
+        # before any door path existed
+        _sweep_doubled_tails(s)
+        tidy_lane_ends(s, list(plan.envelope), streets=True)
     s.M["meta"]["field_path"] = a_way_onto_the_bund(s)
     s.M["meta"]["lane_web"] = plan.lane_web
 

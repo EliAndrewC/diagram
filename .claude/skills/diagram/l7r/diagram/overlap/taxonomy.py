@@ -434,7 +434,7 @@ OVERLAP_CLASS: dict[str, str] = {
     #   borders         a drawn jurisdictional line is a LINE OF LAW, not a physical object
     #   row_street_plans / row_holdings
     #                   a row village's planned streets and reserved holdings (feature 291); drawn as lanes and dry plots
-    **{k: "RECORD" for k in ("drawn_channels", "field_ponds", "field_rocks", "field_graves", "crescent_ponds", "borders", "forest_edge", "lane", "row_street_plans", "row_holdings")},
+    **{k: "RECORD" for k in ("drawn_channels", "field_ponds", "field_rocks", "field_graves", "crescent_ponds", "borders", "forest_edge", "lane", "row_street_plans", "row_holdings", "farm_channels")},
     # the intramural patrol strip has its OWN precise rule (ring_road_kept_clear), which knows the
     # real bed width and which frontages may legitimately stand against it; the matrix defers
     **{k: "RING_ROAD" for k in ("ring_road",)},

@@ -70,7 +70,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D13).
       - [ ] source-applicability confirmed
 - [ ] T15 The streets laid as one continuous way each, joined to the connector (D17; FR-017; SC-007)
       research: rendering
-- [ ] T16 Water: own wells for the dispersed farm, the row water knob (D18; FR-018; SC-008)
+- [ ] T16 Water: the dispersed farm-water knob (a channel into the lot, or its own well), the row water knob; homesteads/200's map paragraph says what the map draws (D18; FR-018; SC-008)
       research: physical
       - [ ] research pass
       - [ ] source-reader confirmed

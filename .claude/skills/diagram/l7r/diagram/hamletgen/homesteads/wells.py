@@ -180,9 +180,16 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
         streets = getattr(s, "_row_streets", None) or []
         if plan.settlement_form == "linear" and plan.row_water == "shared" and streets:
             shared_row_wells(s, grove_farms, streets)
+        elif plan.settlement_form == "dispersed" and plan.farm_water == "channel":
+            # A CHANNEL INTO EACH FARM'S GROUNDS (amendment 5, `farm_water`); a farm no course reaches digs its own well
+            # rather than going dry, and `row_rules.water_rules` reports it
+            from .farm_water import farm_channels  # local: it reads the ways' routing, a later layer
+
+            own_wells(s, farm_channels(s, grove_farms))
         else:
             own_wells(s, grove_farms)
         s.M["meta"]["row_water_drawn"] = plan.row_water if plan.settlement_form == "linear" else None
+        s.M["meta"]["farm_water_drawn"] = plan.farm_water if plan.settlement_form == "dispersed" else None
         houses = [h for h in houses if h not in grove_farms]  # the communal wells serve the rest, if any
         if not houses:
             return len(s.M.get("wells", []))

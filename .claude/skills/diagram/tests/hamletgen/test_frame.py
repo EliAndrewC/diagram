@@ -394,3 +394,14 @@ def test_the_re_seat_asks_the_one_placer_for_each_seats_caption_level() -> None:
     assert _caption_levels(s, seats, "notice board", None, 12.0, 5.0, None) == {seats[0]: 0, seats[1]: 1}  # type: ignore[arg-type]
     assert s.indexed == 1
     assert _caption_levels(s, seats, "", None, 12.0, 5.0, None) == {seats[0]: 0, seats[1]: 0}  # type: ignore[arg-type]
+
+
+def test_squaring_a_crossing_keeps_every_lane_end_that_met_the_lane() -> None:
+    """`keeps_the_ends` (feature 291): a lane re-laid square at a crossing must still meet every other lane's end that met
+    it - Mizuguchi's street, squared at a ford, left a door path's end 87 ft off it."""
+    from l7r.diagram.hamletgen.frame import keeps_the_ends
+
+    old = [(0.0, 0.0), (100.0, 50.0), (200.0, 0.0)]
+    lanes = [{"pts": [[0.0, 0.0], [100.0, 50.0], [200.0, 0.0]]}, {"pts": [[100.0, 150.0], [100.0, 50.0]]}, {"pts": [[1.0]]}]
+    assert not keeps_the_ends(lanes, 0, old, [(0.0, 0.0), (200.0, 0.0)]), "the door path met the bend the squaring removed"
+    assert keeps_the_ends(lanes, 0, old, [(0.0, 0.0), (100.0, 51.0), (200.0, 0.0)])

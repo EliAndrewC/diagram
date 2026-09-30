@@ -24,7 +24,7 @@ from ..plan import SitePlan
 from .checks import stream_segs
 from .clearance import _bends_badly, _clear_link, clear_runs
 from .fabric import _LANE_JOIN_FT, _crosses_fabric, _draw_web, _hits_a_steading, _net_segs
-from .geom import _TOUCH_GAP, _drop_collinear, _net_reach, _reach, _trim_to_service, polyline_len, steading_footprints
+from .geom import _TOUCH_GAP, _drop_collinear, _net_reach, _reach, _trim_to_service, door_unhooked, polyline_len, steading_footprints
 from .route import _route, _unjog
 from .sweeps import _FINE_CELL, _LINK_DIRECTNESS, _PATH_DIRECTNESS
 
@@ -229,7 +229,10 @@ def front_door(h: Mapping[str, Any], clear: float) -> Pt | None:
     if n < 1e-9:
         return None
     fx, fy = fx / n, fy / n
-    half = abs(fx) * float(y[2]) / 2 + abs(fy) * float(y[3]) / 2  # the yard's reach along the front, unturned
+    # the yard's reach along the front, unturned: where the ray from its middle leaves the box. It was the box's projected
+    # half-width (|fx| w/2 + |fy| h/2), which overshoots the edge on any slant - Kashikawa's farm at (2268, 2144), its front
+    # ten degrees off the box's side, took its door 12.4 ft past the yard, past the 12 ft a path's arrival is judged at
+    half = min(float(y[2]) / 2 / abs(fx) if abs(fx) > 1e-9 else math.inf, float(y[3]) / 2 / abs(fy) if abs(fy) > 1e-9 else math.inf)
     door = (float(y[0]) + fx * (half + clear), float(y[1]) + fy * (half + clear))
     if gap_mid is None:
         return door
@@ -730,7 +733,7 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
             continue
         near = sorted((seg_closest(door[0], door[1], a, b) for a, b in segs), key=lambda q: math.dist(q, door))[:6]  # type: ignore[arg-type]
         for q in near:
-            path = _route(door, q, hard, walls, water, gap=FOOTPATH_FABRIC_GAP)
+            path = door_unhooked(_route(door, q, hard, walls, water, gap=FOOTPATH_FABRIC_GAP), lambda a, b: not _crosses_fabric([a, b], walls, 0.0) and not _crosses_fabric([a, b], hard, 0.0))
             if len(path) >= 2 and not _crosses_fabric(path, walls, 0.0) and _draw_web(s, path, 3, houses=[(float(h["x"]), float(h["y"]))], joins=True):
                 s.M["lanes"][-1]["serves"] = [float(h["x"]), float(h["y"])]
                 n += 1

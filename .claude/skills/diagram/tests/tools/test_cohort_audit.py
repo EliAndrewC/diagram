@@ -91,15 +91,24 @@ def test_audit_tallies_the_residue_by_CHECK_and_its_rc_is_the_verdict(monkeypatc
     """The report's whole value is the residue table: which check is failing, how often, across the
     cohort. The seed index is stripped so the same check on four maps tallies as four, not one each."""
     answers = {1: [], 2: ["wells_are_shared[3]"], 3: ["wells_are_shared[9]"], 4: ["lanes_reach_something[1]"]}
-    monkeypatch.setattr(ca, "roll_one", lambda spec: (f"--- seed {spec[0]}", answers[spec[0]], [f"{f} detail" for f in answers[spec[0]]]))
+    # every row knob value rolled somewhere, so the "never rolled" line adds no failure of its own
+    monkeypatch.setattr(
+        ca,
+        "roll_one",
+        lambda spec: (
+            f"--- seed {spec[0]} row={('street/one/own', 'edge/both/shared')[spec[0] % 2]} water={('channel', 'well')[spec[0] % 2]}",
+            answers.get(spec[0], []),
+            [f"{f} detail" for f in answers.get(spec[0], [])],
+        ),
+    )
     assert ca.audit(4, 1, jobs=1) == 1
     out = capsys.readouterr().out
-    assert "1/4 passed the whole gate" in out
+    assert f"{1 + len(ca.PINNED_ROWS)}/{4 + len(ca.PINNED_ROWS)} passed the whole gate" in out
     assert "2  wells_are_shared" in out and "1  lanes_reach_something" in out
 
-    monkeypatch.setattr(ca, "roll_one", lambda spec: (f"--- seed {spec[0]}", [], []))
+    monkeypatch.setattr(ca, "roll_one", lambda spec: (f"--- seed {spec[0]} row={('street/one/own', 'edge/both/shared')[spec[0] % 2]} water={('channel', 'well')[spec[0] % 2]}", [], []))
     assert ca.audit(2, 1, jobs=1) == 0
-    assert "2/2 passed" in capsys.readouterr().out
+    assert f"{2 + len(ca.PINNED_ROWS)}/{2 + len(ca.PINNED_ROWS)} passed" in capsys.readouterr().out
 
 
 def test_only_narrows_both_the_tally_and_the_printed_lines(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:

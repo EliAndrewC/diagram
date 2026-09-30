@@ -35,7 +35,7 @@ from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
 
 from ..consts import WEB_CLEARANCE, Poly, Pt
 from .clearance import _HAIRPIN_DEG, _clear_link, _clear_touch
-from .geom import _TOUCH_GAP, _seg_cross, _turn_deg
+from .geom import _HOOK_DEG, _HOOK_FT, _TOUCH_GAP, _seg_cross, _turn_deg
 from .smooth import _JOG_FT, commit_lane, web_pieces
 from .sweeps import _SERVE_FT
 
@@ -45,8 +45,7 @@ _JOINT_FT = 1.0  # two lane ends this close are one point: the knot pass and the
 # turning 122-128 degrees (Kashikawa twice, Kuwabata once) - each a lane overshooting the way it joins and bending
 # back onto it, or a nub past a junction. Both figures are drawing thresholds, not findings: 12 ft is about four
 # paces, too short a leg to be a route of its own, and 90 degrees is where the turn stops reading as a bend.
-_HOOK_FT = 12.0
-_HOOK_DEG = 90.0
+# (the two figures live in `geom`, a layer below, since feature 291: the door paths in `serve` take their hook off too)
 
 
 def _pts(ln: Mapping[str, Any]) -> Poly:

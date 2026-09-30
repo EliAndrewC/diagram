@@ -32,6 +32,16 @@ def _manifest(gen: str) -> dict:
         return json.load(fh)
 
 
+def _copse(m: dict) -> list:
+    """The map's copse clumps - skipping a map whose farms carry their own groves and drew no copse: the copse is filled to
+    what the groves leave of the rolled wood (feature 291; `hinterland/stages`), and a dispersed or linear farm's grove
+    takes it all."""
+    copse = [c for g in m.get("village_groves") or [] if g.get("role") == "copse" for c in g.get("clumps") or []]
+    if not copse and m["meta"].get("settlement_form", "nucleated") != "nucleated":
+        pytest.skip(f"a {m['meta']['settlement_form']} map: the farm groves hold its wood, no copse drawn")
+    return copse
+
+
 def _brooks(m: dict) -> list[list[tuple[float, float]]]:
     return [[(float(p[0]), float(p[1])) for p in s["poly"]] for s in m.get("streams", []) if len(s.get("poly", ())) >= 2]
 
@@ -338,7 +348,7 @@ def test_no_copse_clump_is_based_in_the_marsh(gen: str) -> None:
     from l7r.diagram.settlement._geom import point_in_poly
 
     m = _manifest(gen)
-    copse = [c for g in m.get("village_groves") or [] if g.get("role") == "copse" for c in g.get("clumps") or []]
+    copse = _copse(m)
     assert copse, "non-vacuity: the map has a copse"
     for mk in m.get("marshes") or []:
         ring = [(float(q[0]), float(q[1])) for q in mk.get("poly") or []]
@@ -372,7 +382,7 @@ def test_every_copse_clump_stands_on_the_bank_of_a_house_within_reach(gen: str) 
     m = _manifest(gen)
     if m["meta"].get("copse_siting") == "against_the_belt":
         pytest.skip("the copse stands at the belt's back, named for the belt rather than a house")
-    copse = [c for g in m.get("village_groves") or [] if g.get("role") == "copse" for c in g.get("clumps") or []]
+    copse = _copse(m)
     assert copse and m["houses"], "non-vacuity: a copse and its houses"
     for brook in _brooks(m):
         segs = list(zip(brook, brook[1:], strict=False))
@@ -418,7 +428,9 @@ def test_no_household_grain_plot_is_laid_by_its_house(gen: str) -> None:
     a per-house grain plot, which feature 261 once laid, is not drawn (the GM, 2026-09-28, on the research pass)."""
     m = _manifest(gen)
     assert m["houses"], "non-vacuity: the map has houses"
-    assert not any(d.get("homestead") for d in m.get("dry_plots") or []), "a grain plot laid by a house"
+    # ...a row village's far-row HOLDING is not one: the field strip behind the farm the record finds for the planned row
+    # (research/homesteads/156; feature 291), marked `homestead` only so the marsh and the scrub treat it as the farm's
+    assert not any(d.get("homestead") and d.get("holding") is None for d in m.get("dry_plots") or []), "a grain plot laid by a house"
     assert "homestead_fields" not in (m.get("meta") or {})
 
 
