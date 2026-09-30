@@ -87,7 +87,9 @@ def world(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> dict:
     claims.write_text("- 280 towns\n- 293 servants' quarters (run e0) | claim released\n")
     events = tmp_path / "events"
     events.mkdir()
-    return {"origin": origin, "fdir": fdir, "home": home, "out": out, "tmp": tmp_path, "claims": claims, "events": events, "start": _git("rev-parse", "HEAD", cwd=origin)}
+    mirror = tmp_path / "mirror"
+    subprocess.run(["git", "clone", "-q", str(origin), str(mirror)], check=True)
+    return {"mirror": mirror, "origin": origin, "fdir": fdir, "home": home, "out": out, "tmp": tmp_path, "claims": claims, "events": events, "start": _git("rev-parse", "HEAD", cwd=origin)}
 
 
 def _init(w: dict, seed: int = 7) -> dict:
@@ -98,7 +100,7 @@ def _init(w: dict, seed: int = 7) -> dict:
 def _run_args(w: dict, task: str, run: str = "e1", arm: str = "xhigh", ws_gb: float = 2.0) -> argparse.Namespace:
     cg = _cgroup(w["tmp"] / f"cg-{run}-{ws_gb}", int((ws_gb + 1) * er.GB), er.GB)
     return argparse.Namespace(
-        task=task, run=run, arm=arm, order=1, origin=str(w["origin"]), clones=str(w["tmp"] / "clones"), claims=str(w["claims"]), cgroup=str(cg), events=str(w["events"]), host_diag=""
+        task=task, run=run, arm=arm, order=1, origin=str(w["origin"]), clones=str(w["tmp"] / "clones"), claims=str(w["claims"]), cgroup=str(cg), events=str(w["events"]), host_diag="", mirror=str(w["mirror"])
     )
 
 
@@ -185,12 +187,22 @@ def test_task_i_is_one_full_session_at_the_arm_effort_with_the_pinned_judge(worl
 
 def test_task_r_is_the_two_page_sessions_through_the_runner_with_effort_and_agents(world: dict) -> None:
     _init(world)
+    (world["fdir"] / "runs").mkdir()
+    (world["fdir"] / "runs" / "e0.json").write_text(json.dumps({"arm": "xhigh", "ended": "x"}))
+    _git("-c", "user.email=t@t", "-c", "user.name=t", "add", "-A", cwd=world["origin"])
+    _git("-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "a run record after the start", cwd=world["origin"])
+    world["tip_after_start"] = _git("rev-parse", "HEAD", cwd=world["origin"])
     rec = er.launch(_run_args(world, "R", run="e3", arm="xhigh"), world["origin"], time.time())
     argv = (world["out"] / "page.argv").read_text().split("\n")
     clone = world["tmp"] / "clones" / "diagram-exp-e3"
     assert argv[0] == f"{clone}/handoffs/293/R-write.md {clone}/handoffs/293/R-check.md", "a neutral path (FR-004)"
     assert (clone / "handoffs" / "293" / "R-write.md").read_text() == (world["fdir"] / "prompts" / "R-write.md").read_text()
     assert not (clone / FEATURE).exists() and (clone / "scripts").is_dir(), "the feature directory is left out of the run's tree"
+    later = world["tip_after_start"]
+    assert subprocess.run(["git", "-C", str(clone), "cat-file", "-e", later], capture_output=True).returncode != 0, (
+        "nothing after the start commit is reachable in the run clone (its reflog, its objects)"
+    )
+    assert "clone: from" not in _git("reflog", cwd=clone)
     assert argv[1:4] == ["diagram-exp-e3", "", "xhigh"] and pathlib.Path(argv[4]).read_text() == er.agents_json()
     assert "CLAUDE_CODE_EFFORT_LEVEL" not in (world["out"] / "page.env").read_text()
     assert [s["effort"] for s in rec["sessions"]] == ["xhigh", "xhigh"] and "page-session: started" in rec["runner_stdout"]
@@ -249,6 +261,8 @@ def test_the_command_line_refuses_and_reports(world: dict, capsys: pytest.Captur
                 a.events,
                 "--host-diag",
                 "",
+                "--mirror",
+                str(world["mirror"]),
             ]
         )
         == 0
@@ -279,6 +293,8 @@ def test_the_command_line_refuses_and_reports(world: dict, capsys: pytest.Captur
                 a.events,
                 "--host-diag",
                 "",
+                "--mirror",
+                str(world["mirror"]),
             ]
         )
         == 0

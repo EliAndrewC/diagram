@@ -185,6 +185,22 @@ def full_session_cmd(prompt: str, name: str, sid: str, effort: str, appended: st
     return cmd + ["--output-format", "json"]
 
 
+def make_clone(clone: pathlib.Path, source: str, start: str, mirror: str) -> None:
+    """The run's clone at `start`, holding nothing later (spec FR-003: no record linking a run id or position to an arm).
+
+    A `git clone` of the session's repository would copy every object and keep its tip in the reflog, where the run records
+    and the order can be read back (the amendment review, round 2); so a fresh repository fetches the start commit alone, the
+    feature directory is left out of the working tree, and `origin` is the mirror (main), as in any clone the hooks expect.
+    """
+    git = ["git", "-C", str(clone)]
+    subprocess.run(["git", "init", "-q", "-b", "main", str(clone)], check=True)
+    subprocess.run([*git, "fetch", "-q", source, start], check=True)
+    subprocess.run([*git, "sparse-checkout", "set", "--no-cone", "/*", f"!/specs/{FEATURE}/"], check=True)
+    subprocess.run([*git, "reset", "-q", "--hard", start], check=True)
+    subprocess.run([*git, "remote", "add", "origin", mirror], check=True)
+    subprocess.run([*git, "fetch", "-q", "origin"], check=True)
+
+
 def mangled(path: pathlib.Path) -> str:
     return str(path).replace("/", "-").replace(".", "-")
 
@@ -201,12 +217,8 @@ def launch(args: argparse.Namespace, repo: pathlib.Path, now: float) -> dict:
     clone = base / f"diagram-exp-{run_id}"
     if clone.exists():
         raise Refused(f"{clone} exists - a run id is used once")
-    subprocess.run(["git", "clone", "-q", args.origin or str(repo), str(clone)], check=True)
     start = exp["start_commit"]  # ONE start commit for every run (FR-005); a replaced task's files come from the freeze below
-    subprocess.run(["git", "-C", str(clone), "reset", "-q", "--hard", start], check=True)
-    # Spec edge case / FR-003: the run's clone holds no record linking a run id or position to an arm - the feature directory
-    # (run records, the order, the interventions) is left out of the working tree; HEAD stays the start commit.
-    subprocess.run(["git", "-C", str(clone), "sparse-checkout", "set", "--no-cone", "/*", f"!/specs/{FEATURE}/"], check=True)
+    make_clone(clone, args.origin or str(repo), start, args.mirror)
     work = base / ".runs-293" / run_id  # a neutral name: the sources path is in the run's environment
     sources = work / "sources"
     shutil.copytree(exp["sources_snapshot"], sources)
@@ -338,6 +350,7 @@ def main(argv: list[str]) -> int:
     # The runs clone from the SESSION's clone at the frozen start commit: the feature's tooling cannot land on main while its
     # tasks are open (sync-with-main's open-task refusal), so the start commit exists only here until the feature lands.
     r.add_argument("--origin", default="", help="default: this repository")
+    r.add_argument("--mirror", default="/diagram", help="the run clone's origin (main), fetched after the start commit")
     r.add_argument("--clones", default="/diagram/.clones")
     r.add_argument("--claims", default="/diagram/.clones/RESEARCH-CLAIMS.md")
     r.add_argument("--cgroup", default="/sys/fs/cgroup")

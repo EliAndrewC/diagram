@@ -28,7 +28,7 @@ on two real, wanted tasks:
 
 Each run is a separate top-level headless session at its arm's effort, in its own clone, from one starting commit, given
 a byte-identical prompt. The runs are measured (tokens including subagents, wall-clock, tool calls, rework), their
-outputs are graded blind against rubrics written before the first run, and a short report gives a recommendation per task
+outputs are graded blind against rubrics written before each task's first run, and a short report gives a recommendation per task
 type under a decision rule fixed in this spec. The better output of each task lands; the other is discarded.
 
 The working hypotheses the experiment tests (from the handoff, reasoning not measurement): (1) the project's checks catch

@@ -41,7 +41,7 @@ is given, identically, to the other.
 ## Rubric - `rubrics/research.md`, `rubrics/implementation.md`
 
 Criteria, each with a 0-4 scale anchored in words, a weight, and a pass line (a weighted total and any criterion that must be at least 2).
-Frozen by commit before the first run (spec SC-002); the test `test_effort_rubrics_frozen` (in `test_effort_run.py`) refuses a launch if the
+Frozen by commit before that task's first run - a replaced task's before the replacement's first run (spec SC-002); the test `test_effort_rubrics_frozen` (in `test_effort_run.py`) refuses a launch if the
 rubric files changed since the commit recorded as their freeze.
 
 ## Blinded pair and key

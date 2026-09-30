@@ -24,7 +24,7 @@ on what exists:
   the key outside anything the grader is given.
 - **The grader** is a new defined agent, `effort-grader` (Opus, `effort: high`, `omitClaudeMd: true`), reading a bundle made
   outside the repository, as every check here does.
-- **Rubrics and prompts** are committed before the first run; the report is `report.md` in this directory.
+- **Rubrics and prompts** are committed before each task's first run (a replaced task's before the replacement's); the report is `report.md` in this directory.
 
 Writing the plan and the tasks is this session's; building the tooling and running the four runs is the implementing session's.
 
@@ -109,7 +109,7 @@ outside its clone; R7 how task R maps onto page sessions; R8 feature 287's overl
 specs/293-effort-level-experiment/
 ├── request.md, spec.md, plan.md, research.md, data-model.md, quickstart.md, tasks.md
 ├── contracts/cli.md
-├── rubrics/research.md, rubrics/implementation.md        # committed before the first run
+├── rubrics/research.md, rubrics/implementation.md        # each committed before its task's first run
 ├── prompts/R-write.md, prompts/R-check.md, prompts/I.md  # byte-identical across arms; hashes in the run records
 ├── runs/<run-id>.json                                    # one per run (FR-003, the run log)
 ├── interventions.md                                      # every answer, pause, void and re-run
