@@ -1,6 +1,6 @@
 {
  "feature": "291-homestead-grove-sides",
- "plan_sha256": "26677f2798a55972dfaaeba6fdb0526265589a80748dd0352aec65c5469cc30f",
+ "plan_sha256": "5d4436da9518c3ea120db6f2d7f4710a90bdb14bf0595254a4c7d8910d9ebf39",
  "reviewed": "2026-09-30",
  "declared": "spec-fidelity",
  "decisions": [
