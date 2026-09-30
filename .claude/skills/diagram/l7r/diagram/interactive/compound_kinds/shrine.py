@@ -194,7 +194,7 @@ class SacredTree(Kind):
 
 class SweptClearing(Kind):
     """
-    What: The open ground of the precinct round the building - bare earth left clear of the wood about it, its edge
+    What: The open ground of the precinct round the building - ground left clear of the wood about it, its edge
     ragged, with the forecourt before the hall's step where the villagers gather.
 
     Why: A village shrine's precinct held its wood and open ground, the wood covering some or nearly all of it and the
@@ -202,11 +202,11 @@ class SweptClearing(Kind):
     where people walk and stops where they do not, so its edge is ragged, never ruled. That the ground about a shrine
     was swept is found only in present-day folklore that gives no date, so the map claims no sweeping.
 
-    Note: The precinct's open ground is read; its ragged edge is the project's reading of how such ground spreads, and
-    the forecourt's depth is a guess from its use.
+    Note: The precinct's open ground is read; how far the open ground reaches past the hall is a guess, its ragged edge
+    is the project's reading of how such ground spreads, and the forecourt's depth is a guess from its use.
 
-    Caveat: its ragged edge is the project's reading of how such ground spreads, and the forecourt's depth is a guess
-    from its use.
+    Caveat: how far the open ground reaches past the hall is a guess, its ragged edge is the project's reading of how
+    such ground spreads, and the forecourt's depth is a guess from its use.
 
     Name: precinct clearing
     Covers: the open ground and the forecourt about the building

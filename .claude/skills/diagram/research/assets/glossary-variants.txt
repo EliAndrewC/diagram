@@ -2715,6 +2715,10 @@ season words	season word
 secondary forest	secondary forest
 secondary woodland	secondary forest
 secondary woodlands	secondary forest
+sedan	sedan
+sedan chair	sedan
+sedan chairs	sedan
+sedans	sedan
 seed	seed
 seed drill	seed drill
 seed drills	seed drill
