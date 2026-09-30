@@ -7,7 +7,6 @@ import math
 
 import pytest
 
-import l7r.diagram.settlement.rolling.access as access_mod
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.hamletgen.homesteads import capacity, stages
 from l7r.diagram.hamletgen.homesteads.capacity import SiteRefused, compass, free_seats, margin_ladder, seat_the_rest, seating_mark, unseat_to
@@ -130,8 +129,12 @@ def test_a_margin_left_takes_back_every_house_it_seated() -> None:
     s.M["houses"].append({"x": 2.0, "y": 2.0})
     s.placed.append((2.0, 2.0, 2.0, 2.0))
     s._pending_farmsteads.append({})
+    s.M.setdefault("row_holdings", []).append({"id": 0})  # a far-row farm's holding, recorded and blocked (feature 291)
+    s.block_polys.append([(0.0, 0.0), (1.0, 0.0), (1.0, 1.0)])
+    s.hard_polys.append([(0.0, 0.0), (1.0, 0.0), (1.0, 1.0)])
     unseat_to(s, mark)
     assert (len(s.M["houses"]), len(s.placed), len(s._pending_farmsteads)) == (1, 1, 0)
+    assert (len(s.M["row_holdings"]), len(s.block_polys), len(s.hard_polys)) == (0, mark[4], mark[5]), "the holdings go with their farms"
 
 
 def test_a_margin_that_cannot_seat_everyone_hands_the_hamlet_to_the_next(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -235,43 +238,12 @@ def test_the_stage_seats_no_more_houses_than_households() -> None:
     assert len(s.M["houses"]) == 10 and s.M["meta"]["seat_margin"] == 1
 
 
-def test_the_linear_frontage_stops_once_the_households_are_housed_with_seats_still_on_offer(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Feature 287, homes wave 5 (the soak's `test_the_linear_frontage_pass_stops_once_the_households_are_housed`, on the
-    violating input it lacked here): a linear hamlet's frontage offers every seat the front row would have - many more than
-    its three households - with the front row silent, and the pass seats exactly three: the quota, not the verge, stops it."""
-    s, plan = _toy(10)
-    plan.settlement_form = "linear"
-    object.__setattr__(plan.spec, "households", 3)  # frozen; the site stays a real hamlet's, only the target is cut
-    # the toy's frontage runs along the field's low face, whose wood seats the reed toe takes since feature 287 M8 (a seat is
-    # never reserved on the toe, `wood_share.ground_blocks`) - the pass under test is the frontage's, so the toe is not drawn
-    monkeypatch.setattr(s, "toe_band", lambda *a, **kw: None)
-    monkeypatch.setattr(access_mod, "parts_clear", lambda *a: True)  # ...nor a corridor's own parts (`access.parts_clear`)
-    # ...nor the fixtures and the wood shares: under feature 280's forms (the wood shed 24 x 12 ft a ken off its wall, the
-    # bath room, the 1.67-to-one kura) the toy's frontage seats no longer held a household's parts and its wood together,
-    # and the pass's quota, not the parts, is under test (`test_fixture_seats.py` and `test_wood_share.py` are theirs)
-    monkeypatch.setattr(stages, "fixture_quota", lambda *a: {})
-    monkeypatch.setattr(stages, "install_wood_shares", lambda *a: None)
-    real, offers = stages.front_row, []
-
-    def row(plan_: hg.SitePlan, count: int, **kw: object) -> list[object]:
-        offers[:] = [p for p, _n in real(plan_, 12, **{**kw, "with_normals": True})]  # type: ignore[arg-type]
-        return []
-
-    offered: list[int] = []
-    monkeypatch.setattr(stages, "front_row", row)
-    monkeypatch.setattr(stages, "lane_frontage", lambda s_, seat, step=86.0, connector=False: offered.append(len(offers)) or list(offers))
-    stages.stage_homesteads(s, plan)
-    assert offered and min(offered) > 3, "the case: the frontage offered more seats than households"
-    assert len(s.M["houses"]) == 3 and s.M["meta"]["cluster_seeding"] == "frontage"
-
-
 def test_the_cloud_alone_seats_the_hamlet_when_the_rows_offer_nothing(monkeypatch: pytest.MonkeyPatch) -> None:
     """Feature 287, homes wave 5 (the soak's `test_the_cluster_seeds_cloud_still_seats_a_hamlet_when_the_rows_offer_nothing`,
     on a constructed site): with the front row and the frontage both silent, the ranks and the cloud behind them seat every
     household, and the record says the cloud did."""
     s, plan = _toy(10)
     monkeypatch.setattr(stages, "front_row", lambda plan_, count, **kw: [])
-    monkeypatch.setattr(stages, "lane_frontage", lambda s_, seat, step=86.0, connector=False: [])
     stages.stage_homesteads(s, plan)
     assert len(s.M["houses"]) == 10 and s.M["meta"]["cluster_seeding"] == "cloud"
 
@@ -289,3 +261,20 @@ def test_no_writer_of_a_household_grain_plot_is_left_in_the_engine() -> None:
     writers = [str(p) for p in root.rglob("*.py") if pat.search(p.read_text())]
     assert (root / "hamletgen" / "homesteads" / "stages.py").exists(), "the walk is over the engine"
     assert writers == []
+
+
+def test_a_rank_round_stops_offering_seats_once_the_quota_is_seated(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The rank rounds offer many seats; once every household has a house the rest of the round goes unoffered - with a
+    placer that seats every seat it is offered, the front row silent, the first round fills the quota part-way through."""
+    s, plan = _toy(10)
+    monkeypatch.setattr(stages, "front_row", lambda plan_, count, **kw: [])
+    offered: list[tuple[float, float]] = []
+
+    def seat(x: float, y: float, kind: str) -> bool:
+        offered.append((x, y))
+        s.M["houses"].append({"x": x, "y": y, "w": 46.0, "h": 28.0, "kind": kind, "geom": {}})
+        return True
+
+    monkeypatch.setattr(s, "try_place", seat)
+    placed, _cloud = stages._seat_households(s, plan)
+    assert placed == 10 and len(offered) == 10, "ten offered, ten seated, the rest of the round never asked"

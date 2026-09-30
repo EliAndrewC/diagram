@@ -338,3 +338,13 @@ def test_the_sty_walk_stops_once_every_rolled_sty_is_drawn() -> None:
     stage_pond_stock(s, plan)
     stock = s.M["meta"]["pond_stock"]
     assert 1 <= stock["sties"] < 8 and stock["drawn"] == stock["sties"] == len(s.M["pig_sties"])
+
+
+def test_an_unknown_farm_water_is_refused() -> None:
+    """Feature 291 amendment 5: `farm_water` is channel or well."""
+    import pytest
+
+    from l7r.diagram import hamletgen as hg
+
+    with pytest.raises(ValueError, match="farm_water"):
+        hg.HamletSpec(name="X", seed=1, households=12, farm_water="cistern")

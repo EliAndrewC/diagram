@@ -91,15 +91,24 @@ def test_audit_tallies_the_residue_by_CHECK_and_its_rc_is_the_verdict(monkeypatc
     """The report's whole value is the residue table: which check is failing, how often, across the
     cohort. The seed index is stripped so the same check on four maps tallies as four, not one each."""
     answers = {1: [], 2: ["wells_are_shared[3]"], 3: ["wells_are_shared[9]"], 4: ["lanes_reach_something[1]"]}
-    monkeypatch.setattr(ca, "roll_one", lambda spec: (f"--- seed {spec[0]}", answers[spec[0]], [f"{f} detail" for f in answers[spec[0]]]))
+    # every row knob value rolled somewhere, so the "never rolled" line adds no failure of its own
+    monkeypatch.setattr(
+        ca,
+        "roll_one",
+        lambda spec: (
+            f"--- seed {spec[0]} row={('street/one/own', 'edge/both/shared')[spec[0] % 2]} water={('channel', 'well')[spec[0] % 2]}",
+            answers.get(spec[0], []),
+            [f"{f} detail" for f in answers.get(spec[0], [])],
+        ),
+    )
     assert ca.audit(4, 1, jobs=1) == 1
     out = capsys.readouterr().out
-    assert "1/4 passed the whole gate" in out
+    assert f"{1 + len(ca.PINNED_ROWS)}/{4 + len(ca.PINNED_ROWS)} passed the whole gate" in out
     assert "2  wells_are_shared" in out and "1  lanes_reach_something" in out
 
-    monkeypatch.setattr(ca, "roll_one", lambda spec: (f"--- seed {spec[0]}", [], []))
+    monkeypatch.setattr(ca, "roll_one", lambda spec: (f"--- seed {spec[0]} row={('street/one/own', 'edge/both/shared')[spec[0] % 2]} water={('channel', 'well')[spec[0] % 2]}", [], []))
     assert ca.audit(2, 1, jobs=1) == 0
-    assert "2/2 passed" in capsys.readouterr().out
+    assert f"{2 + len(ca.PINNED_ROWS)}/{2 + len(ca.PINNED_ROWS)} passed" in capsys.readouterr().out
 
 
 def test_only_narrows_both_the_tally_and_the_printed_lines(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
@@ -188,3 +197,49 @@ def test_roll_one_reports_farmstead_parts_across_the_brook_and_an_offwind_seat(m
     header, failures, lines = ca.roll_one((9, 12))
     assert failures == ["farmstead_across_brook"] and "1 farmstead part" in lines[-1] and header.endswith("seat=OFFWIND")
     assert ca.parts_across_brook({}) == 0
+
+
+def test_roll_one_reports_the_matrix_and_the_grove_rules(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 291: the cohort's verdict reads the overlap matrix and the grove predicates on every roll - the retired
+    battery had been the only thing that saw 126's grove defects."""
+    rep = _report([])
+    rep.manifest = {"meta": {}}
+    monkeypatch.setattr(hg, "generate", lambda spec, out_base, render: rep)
+    monkeypatch.setattr(ca, "matrix_violations", lambda M: [("groves", "lanes", 1, 2)])
+    monkeypatch.setattr(ca, "gardens_east_shaded", lambda M: [((0.0, 0.0), {})])
+    _header, failures, lines = ca.roll_one((9, 12))
+    assert failures == ["features_do_not_overlap", "gardens_east_shaded"], failures
+    assert any("1 forbidden overlap" in ln for ln in lines)
+
+
+@pytest.mark.parametrize(("form", "want"), [("linear", "row=street/both/shared"), ("dispersed", "water=channel")])
+def test_roll_one_s_header_names_the_row_or_the_farm_water_knob(monkeypatch: pytest.MonkeyPatch, form: str, want: str) -> None:
+    """Feature 291: a linear roll's header carries its row knobs, a dispersed roll's its farm water - what the "knob values
+    never rolled" line reads."""
+
+    def generate(spec: Any, out_base: Any, render: bool) -> Any:
+        r = _report([])
+        for k, v in {"settlement_form": form, "grove_sides": 2, "row_line": "street", "row_sides": "both", "row_water": "shared", "farm_water": "channel"}.items():
+            setattr(r.plan, k, v)
+        return r
+
+    monkeypatch.setattr(hg, "generate", generate)
+    header, _f, _l = ca.roll_one((7, 13))
+    assert f"form={form}" in header and want in header
+
+
+def test_a_refused_roll_is_reported_by_name_not_raised(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 291 on 287: a roll that raises a refusal is that seed's verdict - its form and the refusal by name - and the
+    audit goes on to the other seeds."""
+    from l7r.diagram.tools import cohort_audit as ca
+
+    class Refused(ValueError):
+        pass
+
+    def refuse(*a, **k):  # type: ignore[no-untyped-def]
+        raise Refused("no margin seats all 12")
+
+    monkeypatch.setattr(ca.hg, "generate", refuse)
+    header, failures, lines = ca.roll_one((901, 12, {"row_line": "street"}))
+    assert header.startswith("Audit-901 households=12 form=linear") and header.endswith("REFUSED")
+    assert failures == ["refused:Refused"] and lines == ["FAIL refused:Refused -> no margin seats all 12"]

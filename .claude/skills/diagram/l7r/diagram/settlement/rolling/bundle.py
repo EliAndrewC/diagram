@@ -7,8 +7,10 @@ import math
 from typing import TYPE_CHECKING, Any
 
 from ..homestead_parts.fixture_seats import FixtureForms, FixtureUnlaid, lay_fixtures
+from ..homestead_parts.grove_sides import bundle_turn
 from ..shrines_wells.byres import BYRE_FT, YARD_SHED_GAP_FT, byre_part
 from ..shrines_wells.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
+from .dispersed import EAST_SHADE_REACH, LANE_ROOM_FT, SERVICE_STRIP_FT, THIN_BAND_FT, WAY_IN_FT, dispersed_layout
 from .lot import kura_rect
 
 if TYPE_CHECKING:
@@ -164,7 +166,8 @@ class BundleGeomMixin:
             return None if r is None else (r[0] + hx, r[1] + hy, r[2], r[3])
 
         base: dict[str, Any] = {
-            k: ([moved(r) for r in v] if k == "gardens" else {f: moved(r) for f, r in v.items()} if k == "fixtures" else v if k in ("fixture_notes", "unlaid") else moved(v)) for k, v in tpl.items()
+            k: ([moved(r) for r in v] if k in ("gardens", "groves") else {f: moved(r) for f, r in v.items()} if k == "fixtures" else v if k in ("fixture_notes", "unlaid", "grove_faces") else moved(v))
+            for k, v in tpl.items()
         }
         frame = base.pop("_frame", None)
         turn = self._turn_at(hx, hy) if rot is None else rot
@@ -186,7 +189,7 @@ class BundleGeomMixin:
             rects = [r for r in (boxes["house"], boxes["yard"], *boxes["gardens"], boxes.get("shed"), boxes.get("byre"), boxes.get("well"), *boxes["fixtures"].values()) if r is not None]
             base["bbox"] = self._bbox_of(rects)
         else:  # dispersed: the grove's unraked frame with the turned yard and garden
-            base["bbox"] = self._bbox_of([frame, boxes["yard"], boxes["gardens"][0], *([boxes["well"]] if boxes.get("well") else [])])
+            base["bbox"] = self._bbox_of([frame, boxes["yard"], boxes["gardens"][0], *([boxes["well"]] if boxes.get("well") else []), *boxes["fixtures"].values()])
         return base
 
     def _turn_at(self: Settlement, hx: float, hy: float) -> float:  # type: ignore[misc]
@@ -202,10 +205,9 @@ class BundleGeomMixin:
         """The metric layout of one homestead BUNDLE around a house centered at (hx, hy). TWO forms:
         NUCLEATED (self._nucleated) = house + lee GARDEN (E) + south YARD only, compact so a cluster can
         pack tight (no per-house grove - a nucleus shelters itself); DISPERSED (default) also carries the
-        windward GROVE as an L (an N band + a W band for the default NW wind), sized ~6x the house. The
-        dooryard GARDEN tucks tight to the house's E (lee) wall, the threshing YARD sits on the sunny S
-        front. Returns a dict of (cx, cy, w, h) rects keyed house/garden/yard (+ grove_n/grove_w when
-        dispersed) plus the whole-bundle bbox. (NW windward; other winds are a later generalisation.)"""
+        farm's own GROVE on the sides its settlement rolled, turned to the map's wind (`dispersed.dispersed_layout`,
+        feature 291). Returns a dict of (cx, cy, w, h) rects keyed house/garden/yard (+ `groves`, a list, with
+        `grove_faces` beside it, when dispersed)."""
         gap = self.px(3)  # 3 ft between a house and its yard/garden, at this map's ftpx
         gw, gh = 0.48 * hw, 0.85 * hh  # garden - tight to the house, scales with wealth
         sx, sy = seat  # the rolls key on the household's seat (see `_bundle_geom`)
@@ -228,8 +230,6 @@ class BundleGeomMixin:
             # Hoshigaoka's packing and pushed its fixed-coordinate graveyard off-frame.
             gw, gh = min(gw, self.px(42)), min(gh, self.px(30))
             # the yard is ROLLED, not scaled off the house (feature 134 T49), so it needs no headman cap
-        east = hx + hw / 2 + gap + gw
-        south = hy + hh / 2 + gap + yh
         base: dict[str, Any] = {
             "house": (hx, hy, hw, hh),
             "garden": (hx + hw / 2 + gap + gw / 2, hy, gw, gh),
@@ -289,19 +289,32 @@ class BundleGeomMixin:
             self._lay_well_pocket(base, hx, hy, hh, yh, gap)
             self._lay_fixtures(base, hx, hy, hw, hh, shed, seat)
             return base  # raked and boxed by `_bundle_geom`, per seat
-        # DISPERSED farmstead (the shipped ring-village behavior): the windward GROVE as an L (an N
-        # band + a W band, for the default NW wind), sized so the grove footprint is ~6x the house. The
-        # multi-bed garden split is a NUCLEATED feature (clean E/W walls, no grove or shed in the way); a
-        # dispersed farm keeps its single east garden (its west wall carries the windbreak grove).
-        base["gardens"] = [base["garden"]]
-        b = 1.57 * hh  # grove band depth -> grove ~= 6x house area
-        west = hx - hw / 2 - gap - b
-        north = hy - hh / 2 - gap - b
-        base["grove_n"] = ((west + east) / 2, north + b / 2, east - west, b)
-        base["grove_w"] = (west + b / 2, (north + b + south) / 2, b, south - (north + b))
-        base["_frame"] = ((west + east) / 2, (north + south) / 2, east - west, south - north)  # the grove's frame, unraked
-        self._lay_well_pocket(base, hx, hy, hh, yh, gap)
-        return base
+        # DISPERSED farmstead: the farm's own GROVE round the ground it works, on the sides its settlement rolled
+        # (feature 291, `grove_sides.py`). Laid out in the CANONICAL frame - the wind from the northwest, the deep bands
+        # on the north and west, the yard on the south front, the garden on the east - then carried to the map's wind
+        # by `dispersed_layout`'s turn. The multi-bed garden split is a NUCLEATED feature; a dispersed farm keeps one bed. Its
+        # own well pocket is laid in the canonical frame (`canonical_farmstead`), turned with the rest - never `_lay_well_pocket`.
+        dispersed = dispersed_layout(
+            hx,
+            hy,
+            hw,
+            hh,
+            gap,
+            (gw, gh),
+            (yw, yh),
+            sides=self._grove_sides(),
+            turn=bundle_turn(self._windward(), self._grove_flank()),
+            thin=self.px(THIN_BAND_FT),
+            sun_east=EAST_SHADE_REACH * self.bscale,
+            way_in=self.px(WAY_IN_FT),
+            pad=self.px(LANE_ROOM_FT) / 2.0,
+            back=self.px(SERVICE_STRIP_FT),
+            well=2.0 * self._well_vr() + self.px(6.0),  # the wellhead and a 3 ft margin, as `_lay_well_pocket`'s
+        )
+        # ...AND ITS FIXTURES, laid in the bundle as a nucleated household's are (feature 287, homes H32), clear of its own
+        # grove (feature 291): the envelope admits the farm only with room for its privy, its wood shed and its bath room
+        self._lay_fixtures(dispersed, hx, hy, hw, hh, False, seat, bands=dispersed["groves"])
+        return dispersed
 
     def _lay_well_pocket(self: Settlement, base: dict[str, Any], hx: float, hy: float, hh: float, yh: float, gap: float) -> None:  # type: ignore[misc]
         """THE HOUSEHOLD'S WELL POCKET, a part of its homestead (feature 287, homes H09-H11): where the seating asked this
@@ -322,12 +335,13 @@ class BundleGeomMixin:
         except PocketUnlaid as refused:
             base["unlaid"] = str(refused)
 
-    def _lay_fixtures(self: Settlement, base: dict[str, Any], hx: float, hy: float, hw: float, hh: float, shed: bool, seat: Any) -> None:  # type: ignore[misc]
+    def _lay_fixtures(self: Settlement, base: dict[str, Any], hx: float, hy: float, hw: float, hh: float, shed: bool, seat: Any, bands: Any = ()) -> None:  # type: ignore[misc]
         """THE HOUSEHOLD'S FARMSTEAD FIXTURES, parts of its homestead (feature 287, homes H32, plan M5 and D9): the kinds its
         lot keeps (`_household_fixtures`, set by the seat search) laid beside the parts already laid - built ones a crown may
         not cover, the yard and the beds it may - in the house's frame (`homestead_parts/fixture_seats.py`), with the
         hamlet's rolled forms (`_fixture_forms`) and the household's own position roll. So the envelope admits a household
-        only with room for its privy, its stack, its tree, and no later stage can take that room."""
+        only with room for its privy, its stack, its tree, and no later stage can take that room. A grove farm's `bands`
+        (feature 291) are built ground too: no fixture stands in its own grove."""
         kinds = getattr(self, "_household_fixtures", None) or ()
         if not kinds:
             return
@@ -336,7 +350,7 @@ class BundleGeomMixin:
         def rel(r: Any) -> Any:
             return (r[0] - hx, r[1] - hy, r[2], r[3])
 
-        roofs = [rel(r) for r in (base["house"], base.get("shed"), base.get("byre"), base.get("well")) if r is not None]
+        roofs = [rel(r) for r in (base["house"], base.get("shed"), base.get("byre"), base.get("well"), *bands) if r is not None]
         ground = [rel(base["yard"]), *(rel(g) for g in base["gardens"])]
         forms = getattr(self, "_fixture_forms", None) or FixtureForms()
         annex = rel(base["byre"]) if base.get("byre") is not None else None

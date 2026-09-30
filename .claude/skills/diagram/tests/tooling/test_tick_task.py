@@ -74,6 +74,7 @@ def test_the_boxes_are_matched_by_SHAPE_so_the_roster_may_grow() -> None:
         "      - [ ] research pass  - [ ] source-reader confirmed  - [ ] recorded and cited\n",
         "      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited\n",
         "      - [ ] a  - [ ] b  - [ ] c  - [ ] d  - [ ] e  - [ ] f  - [ ] g\n",
+        "      - [ ] research pass\n",  # one box a line (feature 291)
     ):
         assert tt._is_boxes_line(line), line
         assert "- [ ]" not in tt._tick_boxes(line)

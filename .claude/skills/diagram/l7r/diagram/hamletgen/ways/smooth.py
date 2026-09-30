@@ -215,7 +215,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
         return _near_segs(tip, others) <= _END_WAY_FT or min((math.dist(tip, h) for h in _houses), default=float("inf")) <= _END_HOUSE_FT
 
     for i, ln in enumerate(lanes):
-        if ln.get("connector") or len(ln.get("pts") or []) < 3:
+        if (ln.get("connector") or ln.get("street")) or len(ln.get("pts") or []) < 3:
             continue
         pts = [(float(x), float(y)) for x, y in ln["pts"]]
         others = _others_segs(i)
@@ -275,7 +275,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
     # onto it, and a lane running through the cluster has its vertices there replaced by the
     # node, so it passes through the junction rather than beside it.
     _ends: list[tuple[int, int, Pt]] = [
-        (i, e, ((float(ln["pts"][e][0]), float(ln["pts"][e][1])))) for i, ln in enumerate(lanes) if not ln.get("connector") and len(ln.get("pts") or []) >= 2 for e in (0, -1)
+        (i, e, ((float(ln["pts"][e][0]), float(ln["pts"][e][1])))) for i, ln in enumerate(lanes) if not (ln.get("connector") or ln.get("street")) and len(ln.get("pts") or []) >= 2 for e in (0, -1)
     ]
     _seen: set[tuple[int, int]] = set()
     for i, e, q in _ends:
@@ -323,7 +323,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
     # one is emptied; `_components` and the checks read an empty way as absent.
     for i, ln in enumerate(lanes):
         pts_i = [(float(x), float(y)) for x, y in ln.get("pts") or []]
-        if ln.get("connector") or len(pts_i) < 2:
+        if (ln.get("connector") or ln.get("street")) or len(pts_i) < 2:
             continue
         for j, other in enumerate(lanes):
             pts_j = [(float(x), float(y)) for x, y in other.get("pts") or []]
@@ -336,7 +336,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
                 break
     # 3. bow-ties: a lane that crosses another mid-run and runs on for less than an arm
     for i, ln in enumerate(lanes):
-        if ln.get("connector") or len(ln.get("pts") or []) < 2:
+        if (ln.get("connector") or ln.get("street")) or len(ln.get("pts") or []) < 2:
             continue
         pts = [(float(x), float(y)) for x, y in ln["pts"]]
         for k in range(len(pts) - 1):

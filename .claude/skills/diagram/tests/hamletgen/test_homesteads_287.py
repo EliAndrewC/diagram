@@ -57,6 +57,7 @@ def test_a_household_moved_off_the_seat_it_was_sought_from_past_every_pockets_re
 
     s = Settlement(3000, 3000, seed=3)
     s.meta(name="W", scale="hamlet", ftpx=1, toscale=True)
+    s._nucleated = True  # a nucleated bundle: a grove farm's carries its own pocket always (feature 291 on 287)
     s._pockets = [(800.0, 300.0)]
     assert household_parts(s, 800.0, 1000.0, "plain", None)[2] is False, "sought 700 ft from the pocket: no pocket of its own"
     near, far = s._bundle_geom(800.0, 1000.0, 46.0, 28.0), s._bundle_geom(800.0, 1100.0, 46.0, 28.0)

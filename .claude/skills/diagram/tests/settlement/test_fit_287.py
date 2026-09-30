@@ -92,3 +92,33 @@ def test_a_farmstead_fixture_on_a_paddy_or_across_the_brook_refuses_its_homestea
     s.field_polys.clear()
     s.M["streams"] = [{"poly": [[(400.0 + px_) / 2 - 300.0, (400.0 + py_) / 2 + 300.0], [(400.0 + px_) / 2 + 300.0, (400.0 + py_) / 2 - 300.0]], "w": 2.0}]
     assert s._parts_across_stream(geom), "the brook between the house and its privy"
+
+
+def test_a_grove_farm_is_refused_on_the_access_tree_or_with_a_fixture_in_a_band() -> None:
+    """`_on_the_access` / `_fixtures_in_bands` (feature 291 on 287): a bundle whose part stands on a corridor of the access
+    tree, or whose fixture - as turned - stands in its own grove band or a neighbor's, is refused; clear, it is not."""
+    from l7r.diagram.settlement.rolling.access import AccessTree
+
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    geom = {
+        "boxes": {"house": (500.0, 500.0, 40.0, 30.0), "yard": (500.0, 540.0, 30.0, 20.0), "gardens": [], "fixtures": {"privy": (560.0, 500.0, 10.0, 8.0)}},
+        "groves": [(500.0, 440.0, 200.0, 40.0)],
+        "bbox": (500.0, 500.0, 220.0, 160.0),
+    }
+    assert not s._on_the_access(geom), "no tree installed"
+    tree = AccessTree(7.0)
+    tree.add((0.0, 900.0), (1000.0, 900.0))
+    s._access = tree
+    assert not s._on_the_access(geom)
+    tree.add((560.0, 0.0), (560.0, 1000.0))
+    assert s._on_the_access(geom), "the privy stands on the corridor"
+    assert not s._fixtures_in_bands(geom)
+    geom["boxes"]["fixtures"]["privy"] = (560.0, 455.0, 10.0, 8.0)
+    assert s._fixtures_in_bands(geom), "in its own band"
+    geom["boxes"]["fixtures"] = {}
+    assert not s._fixtures_in_bands(geom), "no fixture"
+    geom["boxes"]["fixtures"] = {"coop": (800.0, 800.0, 6.0, 6.0)}
+    s.M["houses"].append({"x": 800.0, "y": 780.0, "w": 40.0, "h": 30.0, "geom": {"groves": [(800.0, 800.0, 100.0, 30.0)], "bbox": (800.0, 790.0, 120.0, 60.0)}})
+    geom["bbox"] = (650.0, 650.0, 400.0, 400.0)
+    assert s._fixtures_in_bands(geom), "in a neighbor's band"

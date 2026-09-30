@@ -6,6 +6,7 @@ from typing import Any
 
 from ..._geom import (
     PointGrid,
+    seg_closest,
     seg_dist,
     seg_reach_index,
 )
@@ -80,6 +81,52 @@ preferences carry the board 70-100 ft off it, onto a lane two of Kashikawa's hou
 (feature 261). 20 ft is the board's own verge off the tread plus a board's length either way along it."""
 
 
+DWELLING_REACH_FT = 150.0
+"""How far from a way a dwelling may stand and still be walked out by it - `departure_routes`' `reach`, one number for
+both, so the entrance and the routes it must be passed by cannot disagree."""
+
+
+def dwellings_joining(M: Any, track: Sequence[tuple[float, float]], houses: Sequence[tuple[float, float]]) -> list[tuple[float, float]]:
+    """Where each dwelling whose nearest way is `track` itself joins it - the point of `track` nearest the house, for every
+    house within `DWELLING_REACH_FT` of it and nearer it than to any other way (feature 291). A LINEAR village's roadside
+    farm steps straight onto the track out with no lane of its own; found on Mizuguchi once it rolled linear: one farm
+    joined the track about 200 ft out beyond the lanes' handover, so no seat by the handover was passed by its departure."""
+    if len(track) < 2:
+        return []
+    others = [
+        [(float(x), float(y)) for x, y in (ln.get("pts") or [])]
+        for ln in (M.get("lanes") or [])
+        if len(ln.get("pts") or []) >= 2 and [(float(x), float(y)) for x, y in ln["pts"]] not in (list(track), list(track)[::-1])
+    ]
+    out = []
+    for hx, hy in houses:
+        on = min((seg_closest(hx, hy, a, b) for a, b in zip(track, track[1:], strict=False)), key=lambda q: math.hypot(q[0] - hx, q[1] - hy))
+        d = math.hypot(on[0] - hx, on[1] - hy)
+        if d > DWELLING_REACH_FT:
+            continue
+        if any(seg_dist(hx, hy, a, b) < d for o in others for a, b in zip(o, o[1:], strict=False)):
+            continue
+        out.append(on)
+    return out
+
+
+def first_join(track: Sequence[tuple[float, float]], joins: Sequence[tuple[float, float] | None]) -> tuple[float, float] | None:
+    """Of `joins` (points on `track`, None skipped), the one met first walking `track` from its first vertex."""
+
+    def along(q: tuple[float, float]) -> float:
+        best, acc = (math.inf, 0.0), 0.0
+        for a, b in zip(track, track[1:], strict=False):
+            c = seg_closest(q[0], q[1], a, b)
+            d = math.hypot(c[0] - q[0], c[1] - q[1])
+            if d < best[0]:
+                best = (d, acc + math.dist(a, c))
+            acc += math.dist(a, b)
+        return best[1]
+
+    found = [q for q in joins if q is not None]
+    return min(found, key=along) if found else None
+
+
 def outermost_join(track: Sequence[tuple[float, float]], others: Sequence[Sequence[tuple[float, float]]], step: float = 5.0) -> tuple[float, float] | None:
     """The first point of `track`, walked from its first vertex, that another way comes within `KOSATSUBA_HANDOVER_PX` of -
     where the last way out joins it - or None when none does (feature 261).
@@ -115,7 +162,8 @@ def kosatsuba_handover(M: Any) -> tuple[float, float] | None:
             # ...AND THE ENTRANCE IS THE LAST JOIN ON THE WAY OUT, not the inner end (settlement-review of Inashiro, feature
             # 261): a household's own short lane met the track 190 ft below the inner end, so it left without passing a board
             # seated there. Walked in from the outer end, the first point a way meets is where every departure has joined
-            return outermost_join(pts if inner == pts[-1] else pts[::-1], _others) or inner
+            walk = pts if inner == pts[-1] else pts[::-1]
+            return first_join(walk, [outermost_join(walk, _others), *dwellings_joining(M, walk, houses)]) or inner
         # ...AND A TRACK THAT RUNS THROUGH hands over where a lane's END meets it (settlement-review of Mizuguchi): both of
         # its ends are off the sheet, so its "inner end" meets nothing; the junction nearest the houses is where the lanes
         # reach the way out
@@ -203,7 +251,7 @@ def kosatsuba_anchor(M: Any, placement: str) -> tuple[float, float] | None:
     return best[1] if best else None
 
 
-def departure_routes(M: Any, step: float = 10.0, join: float = 7.0, reach: float = 150.0) -> list[list[tuple[float, float]]]:
+def departure_routes(M: Any, step: float = 10.0, join: float = 7.0, reach: float = DWELLING_REACH_FT) -> list[list[tuple[float, float]]]:
     """Every household's way OUT, as the points it walks (feature 261 FR-015: an entrance board stands where every
     departure passes it). The drawn lanes are sampled every `step` into a graph whose samples within `join` of each other
     are one junction; each dwelling's nearest sample within `reach` walks the shortest route through them to the connector's

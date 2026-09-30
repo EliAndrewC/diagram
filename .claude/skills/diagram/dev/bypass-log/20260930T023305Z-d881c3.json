@@ -1,0 +1,6 @@
+{
+  "utc": "20260930T023305Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the running gate evicted the pool renders; the review reads the complete snapshot make verify took"
+}

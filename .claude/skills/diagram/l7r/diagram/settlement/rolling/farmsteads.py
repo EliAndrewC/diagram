@@ -6,8 +6,8 @@ Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.
 import math
 from typing import TYPE_CHECKING, Any, cast
 
-from .._geom import Indexed, point_in_poly
-from .._knobs import CITY_TIER_SCALES
+from .._geom import Indexed
+from ..homestead_parts.groves import GROVE_BAMBOO_PATCH_FT, GROVE_CLUMP_CROWNS, GROVE_CROWN_AREA, HOUSEHOLD_BAMBOO_PREVALENCE, bamboo_patch, band_clumps
 from .fit import part_box
 from .lot import kura_rect
 
@@ -26,6 +26,13 @@ class FarmsteadFlushMixin:
                 return self._farmsteads_bundle()
             return self._farmsteads_legacy()
 
+    def _farm_rolls_bamboo(self: Settlement, hx: float, hy: float) -> bool:  # type: ignore[misc]
+        """Does the farm at (hx, hy) keep a household bamboo stand (feature 291)? The same positional roll the household
+        bamboo pass makes (`hamletgen/homesteads/bamboo.py`), under the settlement's `bamboo` knob as the generator sets
+        it (`_household_bamboo`); a map that never set it - the hand-drawn tiers - keeps the windbreak's bamboo as before."""
+        on = getattr(self, "_household_bamboo", None)
+        return True if on is None else bool(on) and self._hjit(hx, hy, 95.0) < HOUSEHOLD_BAMBOO_PREVALENCE
+
     def _farmsteads_bundle(self: Settlement) -> int:  # type: ignore[misc]
         """Draw every reserved homestead bundle: grove (back) -> yard -> garden -> house (on top). The hard
         work (fitting each whole bundle without overlap) already happened in try_place, one at a time, so
@@ -35,19 +42,21 @@ class FarmsteadFlushMixin:
         GROVES (the back layer), (2) after a south-nudge relaxation, draw the yards/gardens/houses on top."""
         survivors: list[Any] = []
         bundled: list[Any] = []
-        arms: list[tuple[float, float, float, float, tuple[int, int]]] = []
+        arms: list[tuple[float, float, float, float, tuple[int, int], str, bool]] = []
         for rec in self._pending_farmsteads:
             geom = rec.get("geom")
             if geom is None:  # abandoned ruin / dispersed headman: lone house
                 self.house(rec["x"], rec["y"], rec["w"], rec["h"], rec["kind"], rec["rot"])
                 survivors.append(rec)
                 continue
-            for key, face in (("grove_n", (0, -1)), ("grove_w", (-1, 0))):
-                if key not in geom:  # nucleated bundle: no per-house grove
-                    continue
-                cx, cy, w, h = geom[key]
-                arms.append((cx, cy, w, h, face))
-                self.M["groves"].append({"x": round(cx, 1), "y": round(cy, 1), "w": w, "h": h, "rot": 0, "of": [rec["x"], rec["y"]], "face": list(face)})
+            # EVERY BAND OF THE FARM'S OWN GROVE, on every side its settlement rolled (feature 291); a nucleated bundle
+            # carries none. `depth` says which is the windward stand and which a thin band of lesser trees.
+            _bamboo = self._farm_rolls_bamboo(rec["x"], rec["y"])
+            for (cx, cy, w, h), (face, depth) in zip(geom.get("groves") or (), geom.get("grove_faces") or (), strict=True):
+                arms.append((cx, cy, w, h, face, depth, _bamboo))
+                self.M["groves"].append(
+                    {"x": round(cx, 1), "y": round(cy, 1), "w": w, "h": h, "rot": 0, "of": [rec["x"], rec["y"]], "face": list(face), "depth": depth, "bamboo": _bamboo and depth == "deep"}
+                )
                 self.grove_rects.append((cx, cy, w, h))
             bundled.append(rec)
             survivors.append(rec)
@@ -64,8 +73,25 @@ class FarmsteadFlushMixin:
         # means _draw_grove's keep-out sees the houses, so the belt THINS off the walls instead: no
         # tree is drawn over a building anywhere on the map, by one rule rather than by z-order.
         # (The arm rects themselves are recorded above, before _relax_gardens_south, which needs them.)
-        for cx, cy, w, h, face in arms:
-            self._draw_grove(cx, cy, w, h, face)
+        # A THIN BAND draws as lesser trees - fruit and flowering broadleaf, no conifer (`dooryard`; Tonami's sides away
+        # from the wind carried flowering trees, persimmon and fig, and hackberry and alder): the mix a GUESS (feature 291).
+        # ...AND A BAND IS DRAWN AS CLUMPS OF ONE CLUMP'S SIZE (feature 291, the settlement-review of Kashikawa): `_draw_grove`
+        # caps a clump at 28 crowns, one to about 48 sq px at the town grain, so a deep band - 40 x 80 ft, room for some 67 -
+        # drew at 0.57 of its box under canopy against the thin band's 0.78. Cut along its length into pieces that hold no
+        # more than the cap, every band is drawn at the one density.
+        _cap = GROVE_CLUMP_CROWNS * GROVE_CROWN_AREA * (self.bscale / 0.82) ** 2
+        # ...WITH ITS CANOPY'S EDGE, NOT ITS TRUNKS, AT THE BAND'S INNER EDGE: a clump seats its crowns' centers inside its box,
+        # so a crown overhung the service strip by its radius, and once the bands drew at their full density a wood shed's
+        # seat there was under a crown (Mizuguchi seated 4 of 5). The drawn box gives up one crown radius on the house's side.
+        _inset = self.px(self.CANOPY_R_FT)
+        for cx, cy, w, h, face, depth, has_bamboo in arms:
+            fx, fy = (float(face[0]), float(face[1])) if face else (0.0, 0.0)
+            cx, cy = cx + fx * _inset / 2, cy + fy * _inset / 2
+            w, h = max(4.0, w - abs(fx) * _inset), max(4.0, h - abs(fy) * _inset)
+            # ...AND A FARM THAT ROLLED BAMBOO KEEPS A PATCH OF IT IN EACH WINDWARD BAND (`GROVE_BAMBOO_PATCH_FT`)
+            _patch = bamboo_patch(cx, cy, w, h, (fx, fy), self.px(GROVE_BAMBOO_PATCH_FT[0]), self.px(GROVE_BAMBOO_PATCH_FT[1])) if has_bamboo and depth == "deep" else None
+            for px_, py_, pw, ph in band_clumps(cx, cy, w, h, _cap):
+                self._draw_grove(px_, py_, pw, ph, face, mix="windbreak" if depth == "deep" else "dooryard", cls="homestead grove", bamboo=has_bamboo, bamboo_box=_patch)
         self.M["houses"] = Indexed(
             [h for h in self.M["houses"] if h.get("on_dike")] + survivors
         )  # dike-top houses (dike_top_houses) are not pending farmsteads - keep them; Indexed for the fit rules' index
@@ -120,7 +146,7 @@ class FarmsteadFlushMixin:
                 if g.get("yard") is not None:
                     out.append(tuple(part_box(g, "yard")))
                 out += [tuple(b) for b in part_box(g, "gardens") or []]
-                out += [tuple(g[k]) for k in ("grove_n", "grove_w") if k in g]
+                out += [tuple(b) for b in g.get("groves") or ()]
             return out
 
         def overlaps(a: Any, b: Any) -> bool:
@@ -131,7 +157,9 @@ class FarmsteadFlushMixin:
             beds = geom.get("gardens")
             if not beds:
                 continue
-            own = [geom[k] for k in ("grove_n", "grove_w") if k in geom]
+            # ONLY THE OWN WINDWARD STAND is exempt from the east test: it stands on the wind's side, off the garden by
+            # construction. A thin band of its own grove may stand east of it, and is tested like a neighbor's (feature 291).
+            own = [r for r, (_f, depth) in zip(geom.get("groves") or (), geom.get("grove_faces") or (), strict=True) if depth == "deep"]
             gx1 = max(b[0] + b[2] / 2 for b in beds)
             gcy = sum(b[1] for b in beds) / len(beds)
             gh = max(b[1] + b[3] / 2 for b in beds) - min(b[1] - b[3] / 2 for b in beds)
@@ -139,7 +167,7 @@ class FarmsteadFlushMixin:
             if not any(overlaps((gcy - gh / 2, gcy + gh / 2), t) for t in trees):
                 continue  # not currently east-shaded - nothing to do
             maxshift = gh + rec["h"] + 6  # 'a little' - stays a dooryard garden near the house
-            others = footprints(i) + [tuple(part_box(geom, "house"))] + ([tuple(part_box(geom, "yard"))] if geom.get("yard") is not None else [])
+            others = footprints(i) + [tuple(part_box(geom, "house"))] + ([tuple(part_box(geom, "yard"))] if geom.get("yard") is not None else []) + [tuple(b) for b in geom.get("groves") or ()]
             dy = step
             while dy <= maxshift:
                 lane = (gcy + dy - gh / 2, gcy + dy + gh / 2)  # clear of EVERY east tree (a small shift can slip INTO a taller arm)
@@ -237,15 +265,13 @@ class FarmsteadFlushMixin:
         # CITY wall (an intramural plot is not an isolated farmstead - it is sheltered by the urban fabric
         # and sits on land too precious for a tree belt; meta(inwall_groves=True) to override). A farm whose
         # windward side is boxed in goes without. Returns the farmhouse count.
-        meta = self.M["meta"]
-        wall: Any = self.M.get("wall")
-        inwall_off = bool(wall) and meta.get("scale") in CITY_TIER_SCALES and not meta.get("inwall_groves", False)
         for rec in survivors:
-            if inwall_off and point_in_poly(rec["x"], rec["y"], wall):
-                continue
-            if self._grove_candidate(rec["x"], rec["y"]):
+            if self._wants_grove(rec["x"], rec["y"]):
                 wf = rec["wealth"]  # a wealthier farm's bigger house carries a bigger grove
-                arms = self._find_grove_arms(rec["x"], rec["y"], rec["w"] * wf, rec["h"] * wf)
+                held = rec.get("grove_reserve") or []
+                if held:  # the ground held for this farm's grove since it was seated (feature 291) is its own again
+                    self.placed = Indexed(p for p in self.placed if p not in held)
+                arms = self._find_grove_arms(rec["x"], rec["y"], rec["w"] * wf, rec["h"] * wf, held or None, rec.get("grove_avoid", ()))
                 if arms:
                     self._attach_grove(rec["x"], rec["y"], arms)
         return len(survivors)

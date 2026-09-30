@@ -146,7 +146,7 @@ def _sweep_doubled_tails(s: Settlement) -> int:
     # is never cut back along a narrower one.
     for i in sorted(range(len(lanes)), key=lambda k: float(lanes[k].get("w") or 3)):
         ln = lanes[i]
-        if ln.get("connector") or ln.get("spur") or len(ln.get("pts") or []) < 2:
+        if (ln.get("connector") or ln.get("street")) or ln.get("spur") or len(ln.get("pts") or []) < 2:
             continue
         pts = [(float(x), float(y)) for x, y in ln["pts"]]
         changed = False

@@ -35,8 +35,7 @@ def house_extent(rec: Any) -> tuple[float, float, float, float]:
     r = math.hypot(rec["w"], rec["h"]) / 2
     x0, y0, x1, y1 = rec["x"] - r, rec["y"] - r, rec["x"] + r, rec["y"] + r
     g = rec.get("geom") or {}
-    for key in ("yard", "grove_n", "grove_w", "shed", "byre", "well"):
-        part = part_box(g, key)
+    for part in [part_box(g, key) for key in ("yard", "shed", "byre", "well")] + list(g.get("groves") or ()):
         if part is not None:
             x0, y0 = min(x0, part[0] - part[2] / 2), min(y0, part[1] - part[3] / 2)
             x1, y1 = max(x1, part[0] + part[2] / 2), max(y1, part[1] + part[3] / 2)
@@ -617,7 +616,36 @@ class BundleFitMixin:
         every garden side at a position) and a side-DEPENDENT half (the garden bed + the bbox it grows), so
         the nucleated placer can test the common half ONCE across all four sides (see `_fits_any_side`). The
         conjunction is order-independent, so the result is unchanged from the old single test."""
-        return self._bundle_common_fits(geom, grove_off_field) and self._bundle_side_fits(geom) and bundle_admitted(self, geom)
+        return self._bundle_common_fits(geom, grove_off_field) and self._bundle_side_fits(geom) and not self._on_the_access(geom) and not self._fixtures_in_bands(geom) and bundle_admitted(self, geom)
+
+    def _fixtures_in_bands(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
+        """Does a fixture this bundle laid, AS TURNED with its house (`boxes`), stand in a grove band - its own farm's or a
+        neighbor's (`grove_rules.fixtures_on_groves`, the same boxes)? The fixtures are laid clear of the bands in the house's
+        unturned frame (`_lay_fixtures`), and the house's turn carried a privy or a manure heap into its own deep band on
+        three cohort seeds (feature 291 on 287)."""
+        fixtures = list(((geom.get("boxes") or {}).get("fixtures") or {}).values())
+        if not fixtures:
+            return False
+        bands = list(geom.get("groves") or ())
+        cx, cy, bw, bh = geom["bbox"]
+        for rec in houses_meeting(self.M["houses"], (cx - bw / 2, cy - bh / 2, cx + bw / 2, cy + bh / 2)):
+            g = rec.get("geom")
+            if g and g is not geom:
+                bands += list(g.get("groves") or ())
+        return any(abs(f[0] - b[0]) < (f[2] + b[2]) / 2 and abs(f[1] - b[1]) < (f[3] + b[3]) / 2 for f in fixtures for b in bands)
+
+    def _on_the_access(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
+        """Does any part of this bundle - its house, yard, beds, well pocket, fixtures or grove bands - stand on a corridor of
+        the access tree (`rolling.access.AccessTree.covers_box`)? The nucleated placer asks it of the whole envelope
+        (`_envelope_blocked`, plan M3: no later placement covers a corridor); a grove farm, seated by this path, never
+        asked, and Mizuguchi's first roll on feature 287 laid a farm's fixture across the exit strip, which the registry
+        then refused at record time (feature 291 on 287)."""
+        tree = getattr(self, "_access", None)
+        if tree is None:
+            return False
+        boxes = geom.get("boxes") or {}
+        parts = [boxes.get(k) for k in ("house", "yard", "well")] + list(boxes.get("gardens") or ()) + list((boxes.get("fixtures") or {}).values()) + list(geom.get("groves") or ())
+        return any(tree.covers_box(b) for b in parts if b is not None)
 
     def _sun_corridor_ok(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """Does this homestead leave every threshing yard - its own and the neighbors' - its sun?
@@ -750,7 +778,8 @@ class BundleFitMixin:
             return False
         if self._house_too_near_a_neighbor(geom["house"]) or self._house_unreachable(geom["house"]):
             return False
-        if "grove_n" in geom and any(self._rect_blocked(geom[k], fields=grove_off_field) for k in ("grove_n", "grove_w")):
+        groves = geom.get("groves") or ()  # every band of the farm's own grove, on every side it rolled (feature 291)
+        if any(self._rect_blocked(g, fields=grove_off_field) for g in groves):
             return False
         # A GROVE MAY NOT BE PLANTED ON A WAY EITHER (feature 126). `_rect_blocked` tests keep-out
         # polygons; it says nothing about a lane's drawn TREAD, which is why the house has its own
@@ -759,11 +788,44 @@ class BundleFitMixin:
         # scripted tier never rolled one. With the knob live, every linear and dispersed hamlet
         # planted yashikirin across the connector and the field spur - both of which are drawn
         # BEFORE the houses - and `groves_clear_of_lanes` reported it correctly. (History: so it was when this was written; since feature 126 the houses come first and no tread exists at seat time on a hamlet.)
-        if "grove_n" in geom and any(self._house_on_a_tread(geom[k]) for k in ("grove_n", "grove_w")):
+        if any(self._house_on_a_tread(g) for g in groves):
             return False
         if not self._sun_corridor_ok(geom):
             return False
-        return not self._yard_sun_conflict(geom)
+        return not self._yard_sun_conflict(geom) and not self._garden_sun_conflict(geom)
+
+    def _garden_sun_conflict(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
+        """A dooryard garden takes its MORNING sun from the east, so no grove band may stand hard against a garden's east
+        across its height - within the reach `_east_trees` reads (research/homesteads.html, "The garden's sun, and how
+        far the windbreak shades"). Tests the candidate's grove against every placed garden and the candidate's garden
+        against every placed grove, as `_yard_sun_conflict` does for the yard's southern strip.
+
+        WHY AT THE SEAT (feature 291). The rule was `gardens_unshaded_from_east`, a check of the retired battery, and
+        `_relax_gardens_south` nudges a shaded garden south after the fact - best-effort, "a garden boxed in to the south
+        stays put". With the dispersed and linear forms back in the roll, the cohort measured 8 of its 13 grove-carrying
+        seeds (1-24) with a neighbor's windward stand across a garden's morning sun, 1 to 12 gardens a map. A farm's OWN
+        bands never do: its deep bands stand on the wind's side and its thin east band beyond the reach, by construction
+        (`dispersed.canonical_farmstead`)."""
+        new_groves = tuple(geom.get("groves") or ())
+        if not new_groves:  # a nucleated bundle, on a map whose farms carry no grove
+            return False
+        new_gardens = list(part_box(geom, "gardens") or ())
+        reach = 22 * self.bscale
+
+        def shades(grove: Any, garden: Any) -> bool:
+            gx1, west = garden[0] + garden[2] / 2, grove[0] - grove[2] / 2
+            return cast(bool, gx1 - 2 <= west < gx1 + reach and grove[1] - grove[3] / 2 < garden[1] + garden[3] / 2 and garden[1] - garden[3] / 2 < grove[1] + grove[3] / 2)
+
+        cx, cy, W, H = geom["bbox"]
+        box = (cx - W / 2 - reach, cy - H / 2 - reach, cx + W / 2 + reach, cy + H / 2 + reach)
+        for rec in houses_meeting(self.M["houses"], box):
+            g = rec.get("geom")
+            if not g or g is geom:
+                continue
+            their_groves, their_gardens = tuple(g.get("groves") or ()), list(part_box(g, "gardens") or ())
+            if any(shades(gv, gd) for gv in new_groves for gd in their_gardens) or any(shades(gv, gd) for gv in their_groves for gd in new_gardens):
+                return True
+        return False
 
     def _bundle_side_fits(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """The fit checks that DO move with the garden side (via the bundle bbox): in-bounds, inside any
@@ -796,7 +858,7 @@ class BundleFitMixin:
             cyx, cyy = yard[0], yard[1] + yard[3] / 2 + 11
             return cast(bool, abs(grove[0] - cyx) < (grove[2] + yard[2]) / 2 and abs(grove[1] - cyy) < (grove[3] + 22) / 2)
 
-        new_groves = (geom["grove_n"], geom["grove_w"]) if "grove_n" in geom else ()
+        new_groves = tuple(geom.get("groves") or ())
         new_yard = part_box(geom, "yard")
         # FROM THE INDEX (feature 276): a yard a new grove shades has its south edge within 22 px north of the grove's box,
         # and a grove shading the new yard meets the 22 px strip south of it - so each such record's extent meets one of
@@ -819,7 +881,7 @@ class BundleFitMixin:
                 continue
             if g.get("yard") is not None and any(shades(gv, part_box(g, "yard")) for gv in new_groves):
                 return True
-            other_groves = (g["grove_n"], g["grove_w"]) if "grove_n" in g else ()
+            other_groves = tuple(g.get("groves") or ())
             if new_yard is not None and any(shades(gv, new_yard) for gv in other_groves):
                 return True
         return False

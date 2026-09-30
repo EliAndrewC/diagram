@@ -82,3 +82,10 @@ def test_the_ground_index_hands_back_only_what_comes_within_the_pad_in_filing_or
     assert ix.water_near([(60.0, 0.0), (90.0, 0.0)], 12.0) and not ix.water_near([(60.0, 0.0), (90.0, 0.0)], 5.0)
     assert not ix.open_ground([(250.0, 150.0), (250.0, 250.0)]), "into the outline"
     assert ix.open_ground([(250.0, 150.0), (250.0, 190.0)]) and ix.open_ground([(400.0, 150.0), (400.0, 400.0)])
+
+
+def test_a_row_street_and_a_door_path_are_tree_lanes() -> None:
+    """`is_tree` (feature 291 on 287): a row village's street and a grove farm's door path are the tree no settle repair
+    cuts, as a drawn corridor is; an ordinary lane is not."""
+    assert co.is_tree({"street": True}) and co.is_tree({"serves": [1.0, 2.0]}) and co.is_tree({"connector": True})
+    assert co.is_tree({"role": co.ACCESS_ROLE}) and not co.is_tree({"w": 3})

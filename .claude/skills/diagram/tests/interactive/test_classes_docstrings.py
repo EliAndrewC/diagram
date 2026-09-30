@@ -42,6 +42,9 @@ ADDED_SINCE_189: tuple[str, ...] = (
     "burial ground",  # feature 273: a hamlet's own burial ground, on its knob
     "retirement house",  # 269 B42: the old couple's own roof in the homestead, on the family-form knob
     "tea dike",  # 269 E9 (B34): the attested tea dike, a third dike-crop form beside mulberry and fruit
+    "homestead grove",  # feature 291: a farm's own grove, on the sides its settlement rolled - drawn once the forms rolled again
+    "farm holding",  # feature 291 amendment 3: a row village's far-row farm's holding behind its lot (research homesteads/156)
+    "farm channel",  # feature 291 amendment 5: the channel led into a dispersed farm's grounds (research homesteads/200)
 )  # feature 230: what stands where the head race leaves the brook; and a dike-pond's two-way canals, which the irrigation ditch mislabeled (pass 10)
 
 
@@ -99,6 +102,11 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     both. A label that research overturns is miscited exactly as a stale `sources` is; what a PROSE edit alone may
     never do is still move any of the three. The same feature moved `field rock` from accurate to guess: research fields
     010 found no source putting outcrops on terraces and off valley, polder and delta ground (entry-drift, 2026-09-27).
+
+    Feature 291 moved `windbreak`'s `sources`, the 233 direction: entry-drift found its `Note:` still grounding the belt's
+    one or two sides on the Japanese homestead grove "kept on the north and west", which the record no longer holds
+    (the farmstead grove's sides are now rolled, the Izumo ring among them); the rewritten note rests the belt on the
+    Chinese village's separate grove patches and the Sendai grove, and gained the key it now cites (`coggins-minor-2018`).
 
     Feature 269 (K1) moved `fallow`'s `label` from guess to accurate under the same bar: its section was recorded as
     silent, and fields/250 now reads the resting paddy basin - scattered among the cropped plots, grazed - which the

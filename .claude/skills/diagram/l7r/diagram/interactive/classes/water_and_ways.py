@@ -77,6 +77,32 @@ class IrrigationDitch(Kind):
     key = "irrigation ditch"
 
 
+class FarmChannel(Kind):
+    """
+    What: The small channel a farm standing alone in its fields leads off the irrigation water into its own grounds,
+    ending in the dooryard - its water for cooking, washing and drinking.
+
+    Why: A farm of a dispersed hamlet has no neighbors to share a well with, so it carries its own water. On the
+    Tonami plain, the canonical dispersed settlement, the fan's water table lay deep and a well was hard to dig, so in
+    many areas a small channel was led off the irrigation water into the house's grounds. The other areas are read as
+    having dug a well of their own, so a dispersed hamlet draws one form or the other, rolled per settlement.
+
+    Note: The channel into the grounds is read (the Tonami museum). That the other areas dug a well is this record's
+    reading, and the even odds between the two a guess. It is drawn from the nearest supply ditch, or the brook where
+    that is nearer; where it ends in the dooryard no page read says, and where it left the lot again is not drawn.
+
+    Caveat: where it ends in the dooryard no page read says, and where it left the lot again is not drawn
+
+    Name: farm channel
+    Covers: `farm_channels` - the channel led into a dispersed farm's grounds (feature 291), drawn with its record in `drawn_channels`
+    Label: accurate
+    Sources: tonami-sankyoson-museum
+    Entry: research/homesteads.html - 'Does a DISPERSED hamlet's outlying farm have its own well?'
+    """
+
+    key = "farm channel"
+
+
 class DrainageDitch(Kind):
     """
     What: The dug channel that carries water AWAY from the paddies: the collector along the field's low line,
@@ -284,11 +310,12 @@ class VillageLane(Kind):
     trails off into empty ground. The way out to the rice does not stop at the field's edge either: among the
     paddies the way is the bund itself, the path a farmer walks to weed and manure, so the path to the fields
     runs on to the paddy's outer bund and joins it, and where a hamlet stands so close to its paddy that no
-    path is left between them, its nearest lane runs on to the bund.
+    path is left between them, its nearest lane runs on to the bund. In a row village the farms stand along a street
+    instead - a street laid out first, or the line the ground gives, a natural levee or a dike.
 
     Note: That every house is reached by a way is read from a surveyed village's own lane hierarchy; of the two
     forms, the planned back lane is read and the alleys off the spine are on no publicly readable page, as is
-    the access passage this record paraphrases; the drawn WIDTHS (3, 5 and 6 ft) are a GUESS, laddered from a footpath to a
+    the access passage this record paraphrases; the drawn WIDTHS (3, 5 and 6 ft; a row village's street takes the 6 ft, a rank wider than the lanes off it) are a GUESS, laddered from a footpath to a
     wheelbarrow's width, with the connector kept under the 9 ft of the one cart road the record does measure.
     The record now carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to
     13 ft, reaching the house lots of a surveyed village - and the map deliberately draws below that band,
@@ -297,9 +324,12 @@ class VillageLane(Kind):
     lane stopped at the dooryard or ran on, so the map's rule - end at the dooryard or reach something seen,
     and a lane end that reaches nothing is pulled back to the last house it serves - is its own, and how close
     counts as serving a house (within 12 ft of its house, yard or beds, or beside it within 60 ft) is a guess
-    too, as is the point where the field path joins its bund, the one nearest the hamlet.
+    too, as is the point where the field path joins its bund, the one nearest the hamlet. A row village's street drawn along
+    the field's dry edge, standing for a natural levee, a dike or a fan's foot, is this record's reading (a row along
+    a fan's foot most of all: the record reads a row of villages there, not how the houses lay); its running on as the
+    road the row stands on, and a path from each farm's door to it, are map drawing conventions.
 
-    Caveat: the drawn WIDTHS (3, 5 and 6 ft) are a GUESS, laddered from a footpath to a wheelbarrow's width,
+    Caveat: the drawn WIDTHS (3, 5 and 6 ft; a row village's street takes the 6 ft, a rank wider than the lanes off it) are a GUESS, laddered from a footpath to a wheelbarrow's width,
     with the connector kept under the 9 ft of the one cart road the record does measure. The record now
     carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to 13 ft,
     reaching the house lots of a surveyed village - and the map deliberately draws below that band, because
@@ -311,10 +341,10 @@ class VillageLane(Kind):
     the point where the field path joins its bund, the one nearest the hamlet.
 
     Name: village lane
-    Covers: `lanes` - every lane on the map: the web, the internal skeleton, the connector to the off-map road and the field spur
+    Covers: `lanes` - every lane on the map: the web, the internal skeleton, a row village's streets, the connector to the off-map road and the field spur
     Label: accurate
-    Sources: kotobank-nodo, kotobank-aze-sekai-daihyakka, aze-jawiki, kotobank-keihan, kotobank-nawate
-    Entry: research/homesteads.html - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?', 'How far does a village lane run past its last farmhouse?'; research/fields.html - 'Where does the path to the fields end?'; research/SOURCES.html re-sourcing queue (lane width)
+    Sources: kotobank-nodo, kotobank-aze-sekai-daihyakka, aze-jawiki, kotobank-keihan, kotobank-nawate, sonraku-jawiki
+    Entry: research/homesteads.html - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?', 'How far does a village lane run past its last farmhouse?', 'How was a row village laid out?'; research/fields.html - 'Where does the path to the fields end?'; research/SOURCES.html re-sourcing queue (lane width)
     """
 
     key = 'village lane'
@@ -371,10 +401,11 @@ class Well(Kind):
     the capacity (a well served several hundred - late-Qing Beijing at least about 650 persons to a well, a capital's
     figure), and that digging was costly so
     shared wells were the majority; the one-to-three count, the settled-and-boiled surface water, the
-    subscription financing, the typical two, the households-per-well ratio, and the shallow water table that
-    makes a farmstead's own well cheap (the groundwater paper gives no depth) were searched for and not
+    subscription financing, the typical two and the households-per-well ratio were searched for and not
     found, and stand as this record's estimate; so does the well-house roof on every well, since the
-    dictionaries define the well house but do not say how common it was. The map draws more wells than that count - a hamlet one or two, a village of 60 households six to nine, a town about sixteen - as a disclosed liberty, and the distances that keep a well among the houses and every household within reach of a well or a channel are calibrations against the drawn maps, not figures from a record.
+    dictionaries define the well house but do not say how common it was. A dispersed farm's own well is a
+    guess: on the Tonami plain, where the water table lay deep and a well was hard to dig, the farms in many
+    areas led a small channel into their grounds instead, and a dispersed settlement draws that channel or a well of its own, rolled at even odds (a guess). The map draws more wells than that count - a hamlet one or two, a village of 60 households six to nine, a town about sixteen - as a disclosed liberty, and the distances that keep a well among the houses and every household within reach of a well or a channel are calibrations against the drawn maps, not figures from a record.
 
     Name: well
     Covers: `wells` - the wellheads

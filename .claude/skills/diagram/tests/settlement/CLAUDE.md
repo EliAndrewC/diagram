@@ -17,6 +17,7 @@ derived from each test's attribute references, not guessed from names). When edi
 | `test_<subsystem>.py` (fields, water_ways, shrines_wells, trades, homestead_parts, land, civic_grounds, city, castle_civic, houses, rolling, finish) | the same-named `settlement/` mixin module |
 | `test_bearing.py` | `rolling/bearing.py` - which way a farmhouse faces, the turned boxes the placer clears, the quarter-turned yard - and the dooryard clause of `water_ways/lanes.py` `trim_lane_stubs` (269 E3, B17/B18) |
 | `test_homestead_woods.py` | the homesteads' woods and the woods' own figures (269 E6): `CrownIndex` / `CanopyArea` (`_geom/indexes.py`), the commons' coppice stocking (`land/cover.py`), the bamboo under the belt and the yashikirin's range (`homestead_parts/groves.py`), the copse's area goal (`homestead_parts/stands.py`) |
+| `test_grove_sides.py` | the farmstead grove's sides (feature 291): `homestead_parts/grove_sides.py`, `grove_rules.py`, `rolling/dispersed.py` and the plan's roll of them |
 | `structures/` | `settlement/structures/`, which is itself a package - one file per submodule, its own index in `tests/settlement/structures/CLAUDE.md` (feature 174) |
 
 Adding a test: put it in the module matching the `settlement/` subfile (index in

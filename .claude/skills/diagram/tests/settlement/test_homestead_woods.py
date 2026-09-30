@@ -105,4 +105,4 @@ def test_a_lone_yashikirin_is_held_inside_the_register_s_range():
     s = _hamlet()
     arms = s._find_grove_arms(500.0, 500.0, 10.0, 10.0)
     assert arms, "an open site grows its arms"
-    assert max(min(w, h) for _cx, _cy, w, h, _face in arms) >= 35.0
+    assert max(min(w, h) for _cx, _cy, w, h, _face, _depth in arms) >= 35.0

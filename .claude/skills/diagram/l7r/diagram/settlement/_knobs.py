@@ -833,6 +833,14 @@ def crop_boxes(M: Any, city: bool, ftpx: float, W: float, H: float) -> list[tupl
     _txh, _tyu, _tyd = torii_halfbox(ftpx)  # a torii ARCH is a visible structure and must be framed
     for i, t in enumerate(M.get("torii", [])):
         out.append((t[0] - _txh, t[0] + _txh, t[1] - _tyu, t[1] + _tyd, f"torii[{i}]"))
+    # A ROW VILLAGE'S STREETS ARE ITS SPINE, NOT RUNNERS (feature 291): the row stands along them, and Mizuguchi's second
+    # street, clipped as a runner, ran a few feet above the view's top edge where it met the row (settlement-review,
+    # 2026-09-30). Its joins and the connector still clip like any way.
+    for i, ln in enumerate(M.get("lanes") or []):
+        if ln.get("street") and ln.get("street_index") is not None and len(ln.get("pts") or []) >= 2:
+            xs = [float(p[0]) for p in ln["pts"]]
+            ys = [float(p[1]) for p in ln["pts"]]
+            out.append((min(xs), max(xs), min(ys), max(ys), f"row street[{i}]"))
     for fd in M.get("fields", []):  # the field's VISIBLE extent, NOT its house-blocking envelope tail
         vb = fd.get("vis_bbox")
         if vb:

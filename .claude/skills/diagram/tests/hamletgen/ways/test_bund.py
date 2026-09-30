@@ -134,7 +134,10 @@ def test_the_paddy_is_reached_by_a_joined_end_a_run_on_a_branch_or_the_map_says_
     assert B.a_way_onto_the_bund(branch) == "branch" and branch.M["lanes"][-1]["w"] == B.BRANCH_WIDTH
     moat = _stub(streams=[{"poly": [[380.0, -100.0], [380.0, 400.0]], "w": 6}])
     moat.M["lanes"].append({"pts": [[300.0, 100.0], [300.0, 150.0]], "w": 3})
-    assert B.a_way_onto_the_bund(moat).startswith("none: "), "every way to the paddy crosses the water"
+    assert B.a_way_onto_the_bund(moat) == "branch", "across the one water course, for the crossings stage to plank (feature 291)"
+    moat2 = _stub(streams=[{"poly": [[380.0, -100.0], [380.0, 400.0]], "w": 6}, {"poly": [[390.0, -100.0], [390.0, 400.0]], "w": 6}])
+    moat2.M["lanes"].append({"pts": [[300.0, 100.0], [300.0, 150.0]], "w": 3})
+    assert B.a_way_onto_the_bund(moat2).startswith("none: "), "every way to the paddy crosses two water courses"
 
 
 def test_the_ground_falls_back_to_the_envelope_where_the_map_records_no_field() -> None:
@@ -217,3 +220,51 @@ def test_the_pass_cuts_a_free_end_stub_back_to_its_junction() -> None:
     assert B.cut_past_the_junction(s) == 1
     assert s.M["lanes"][1]["pts"] == [list(q) for q in spur[1:]]
     assert B.cut_past_the_junction(s) == 0, "and a second pass finds nothing"
+
+
+def test_a_run_on_crosses_no_dry_plot() -> None:
+    """Feature 291, cohort seed 17: a way carried to the paddy ran straight across a buckwheat plot between - the run-on
+    aims at the paddy alone, so the plots between were never asked. The tread as the matrix reads it, square-ended."""
+    plot = {"dry_plots": [{"poly": [[340.0, 90.0], [360.0, 90.0], [360.0, 110.0], [340.0, 110.0]]}]}
+    assert not B.RunOnBlocks(_stub(**plot)).clear((300.0, 100.0), (396.0, 100.0), 3.0), "straight through the plot"
+    beside = {"dry_plots": [{"poly": [[340.0, 101.0], [360.0, 101.0], [360.0, 120.0], [340.0, 120.0]]}]}
+    assert not B.RunOnBlocks(_stub(**beside)).clear((300.0, 100.0), (396.0, 100.0), 3.0), "the tread's edge on the plot"
+    clear = {"dry_plots": [{"poly": [[340.0, 102.0], [360.0, 102.0], [360.0, 120.0], [340.0, 120.0]]}]}
+    assert B.RunOnBlocks(_stub(**clear)).clear((300.0, 100.0), (396.0, 100.0), 3.0), "on the baulk beside it"
+
+
+def test_a_junction_end_is_carried_on_as_a_path_of_its_own() -> None:
+    """`carry_on` (feature 291): an end on another lane's tread stays a junction - the step to the bund is a field path of
+    its own from it; a free end is lengthened as before."""
+    s = _StubSettlement(lanes=[[(300.0, 0.0), (300.0, 200.0)], [(100.0, 100.0), (300.0, 100.0)]])
+    B.carry_on(s, 1, -1, (300.0, 100.0), (396.0, 100.0))
+    assert s.M["lanes"][1]["pts"] == [[100.0, 100.0], [300.0, 100.0]], "the junction is kept"
+    assert s.M["lanes"][-1]["pts"][0] == [300.0, 100.0] and s.M["lanes"][-1]["w"] == B.BRANCH_WIDTH
+    free = _StubSettlement(lanes=[[(100.0, 100.0), (250.0, 100.0)]])
+    B.carry_on(free, 0, -1, (250.0, 100.0), (396.0, 100.0))
+    assert free.M["lanes"][0]["pts"][-1] == [396.0, 100.0]
+
+
+def test_a_step_over_the_water_is_bent_onto_a_square_crossing() -> None:
+    """`squared_step` (feature 291): a step crossing no water, or crossing square, is straight; one crossing oblique bends
+    to a point before the water on its normal, then crosses square to as far out as it was going."""
+    water = [((0.0, -100.0), (0.0, 100.0))]  # a stream running south along x = 0
+    assert B.squared_step((-50.0, 0.0), (-10.0, 0.0), water) == [(-10.0, 0.0)], "no water crossed"
+    assert B.squared_step((-50.0, 0.0), (20.0, 0.0), water) == [(20.0, 0.0)], "already square"
+    pre, post = B.squared_step((-40.0, -40.0), (20.0, 20.0), water)
+    assert pre == (-B.SQUARE_APPROACH_FT, 0.0) and post == (20.0, 0.0), "the leg over the water runs along its normal"
+
+
+def test_a_carried_step_the_matrix_refuses_is_not_drawn(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`carry_on` (feature 287 M8): at a junction the step is a spur of its own, drawn only where the overlap matrix admits
+    it; refused, nothing is drawn and False is returned."""
+    from l7r.diagram.hamletgen.ways.bund import carry_on
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(400, 400, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    s.lane([(0.0, 100.0), (300.0, 100.0)], width=3)
+    s.lane([(150.0, 100.0), (150.0, 200.0)], width=3)
+    monkeypatch.setattr(s, "admits_lane", lambda pts, w: False)
+    n = len(s.M["lanes"])
+    assert carry_on(s, 1, 0, (150.0, 100.0), (150.0, 60.0)) is False and len(s.M["lanes"]) == n

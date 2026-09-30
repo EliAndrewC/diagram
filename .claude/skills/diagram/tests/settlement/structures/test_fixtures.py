@@ -347,6 +347,28 @@ def test_the_entrance_is_the_last_join_on_the_way_out_and_every_route_walks_to_t
     assert outermost_join([(0.0, 0.0), (0.0, 50.0)], [[(500.0, 500.0), (600.0, 500.0)]]) is None
 
 
+def test_a_roadside_farm_that_steps_onto_the_track_is_where_the_entrance_is() -> None:
+    """Feature 291 (Mizuguchi rolled linear): a farm with no lane of its own joins the track out beyond the lanes' handover,
+    so the entrance - the first join walked in from the edge - is where IT joins, and a board there is passed by all."""
+    from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes, dwellings_joining, first_join, kosatsuba_handover, routes_missed
+
+    M = {
+        "houses": [{"x": 0.0, "y": 0.0}, {"x": 60.0, "y": 600.0}],  # the second stands 60 ft off the track, far from any lane
+        "lanes": [
+            {"pts": [[0, 0], [0, 100]]},
+            {"pts": [[0, 100], [0, 400], [0, 2000]], "connector": True},
+        ],
+    }
+    hand = kosatsuba_handover(M)
+    assert hand is not None and abs(hand[1] - 600.0) <= 1.0 and hand[0] == 0.0, "where the roadside farm steps onto the track"
+    assert routes_missed(departure_routes(M), *hand, 20.0) == 0
+    track = [(0.0, 2000.0), (0.0, 400.0), (0.0, 100.0)]
+    assert dwellings_joining(M, track, [(500.0, 500.0)]) == [], "a house beyond the reach joins nothing"
+    assert dwellings_joining(M, track, [(-5.0, 90.0)]) == [], "a house nearer another way joins by that way"
+    assert dwellings_joining(M, [(0.0, 0.0)], [(0.0, 0.0)]) == []
+    assert first_join(track, [None, (0.0, 300.0), (0.0, 900.0)]) == (0.0, 900.0) and first_join(track, [None]) is None
+
+
 def test_an_entrance_board_stands_on_the_approach_and_not_on_a_straggler_at_its_join():
     # feature 261 (settlement-review of Inashiro): the outermost join is a one-farmstead web lane, whose verge passes every
     # departure as well as the track's does - but a board is squared to the way it stands on, so on the straggler it

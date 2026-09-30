@@ -8,12 +8,14 @@ guarantee."""
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
+from typing import Any
 
-from l7r.diagram.settlement import Settlement, point_in_poly, seg_closest, seg_dist
+from l7r.diagram.settlement import Settlement, point_in_poly, rot_rect, seg_closest, seg_dist, segments_cross
 
 from ..consts import (
     BUNDLE_PITCH,
+    FOOTPATH_FABRIC_GAP,
     WEB_FABRIC_GAP,
     WEB_HARD_GAP,
     WEB_REACH_FT,
@@ -22,8 +24,9 @@ from ..consts import (
     Pt,
 )
 from .clearance import _clear_link, clear_runs
-from .fabric import _LANE_JOIN_FT, _draw_web, _net_segs
-from .geom import _net_reach, _reach, _trim_to_service, polyline_len, steading_footprints
+from .fabric import _LANE_JOIN_FT, _crosses_fabric, _draw_web, _net_segs
+from .geom import _TOUCH_GAP, _net_reach, _reach, _trim_to_service, door_unhooked, polyline_len, steading_footprints
+from .route import _route
 
 
 def shadow_measure(run: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]]) -> tuple[int, float]:
@@ -161,3 +164,243 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
             run = ([q, *run]) if end == 0 else ([*run, q])
     _draw_web(s, run, 3)
     return True
+
+
+def front_door(h: Mapping[str, Any], clear: float) -> Pt | None:
+    """Where a path to a farm with its own grove begins (feature 291): `clear` past the far edge of the farm's yard, straight
+    out along the line from the house through the yard - the front, the side a grove leaves open (or breaks for the way
+    in). None for a farm with no grove of its own, or no yard."""
+    g = h.get("geom") or {}
+    y = g.get("yard")
+    if not g.get("groves") or y is None:
+        return None
+    # A RING'S DOOR LINES UP WITH ITS WAY IN: the yard turns with the house's rake and the bands do not, so "straight out
+    # through the yard" can miss a gap 24 ft wide (cohort seed 12: three farms' doors walled on all four sides). The door
+    # stays just past the yard - a door out in the gap itself, ~80 ft from the house, is past the reach a path's arrival
+    # is judged by, and seed 12 then stranded 13 - but it takes the gap's middle across the front.
+    faces = list(g.get("grove_faces") or ())
+    split = [r for r, (face, _d) in zip(g["groves"], faces, strict=False) if sum(1 for f2, _d2 in faces if f2 == face) == 2]
+    gap_mid: Pt | None = None
+    if len(split) == 2:
+        (ax, ay, aw, ah), (bx, by, bw, bh) = split
+        if abs(ay - by) < 1e-6:  # a north or south front: the halves side by side along x
+            lo, hi = sorted(((ax, aw), (bx, bw)))
+            gap_mid = ((lo[0] + lo[1] / 2 + hi[0] - hi[1] / 2) / 2, ay)
+        else:
+            lo, hi = sorted(((ay, ah), (by, bh)))
+            gap_mid = (ax, (lo[0] + lo[1] / 2 + hi[0] - hi[1] / 2) / 2)
+    hx, hy = float(h["x"]), float(h["y"])
+    fx, fy = float(y[0]) - hx, float(y[1]) - hy
+    n = math.hypot(fx, fy)
+    if n < 1e-9:
+        return None
+    fx, fy = fx / n, fy / n
+    # the yard's reach along the front, unturned: where the ray from its middle leaves the box. It was the box's projected
+    # half-width (|fx| w/2 + |fy| h/2), which overshoots the edge on any slant - Kashikawa's farm at (2268, 2144), its front
+    # ten degrees off the box's side, took its door 12.4 ft past the yard, past the 12 ft a path's arrival is judged at
+    half = min(float(y[2]) / 2 / abs(fx) if abs(fx) > 1e-9 else math.inf, float(y[3]) / 2 / abs(fy) if abs(fy) > 1e-9 else math.inf)
+    door = (float(y[0]) + fx * (half + clear), float(y[1]) + fy * (half + clear))
+    if gap_mid is None:
+        return door
+    # across the front, the gap's line; along it, just past the yard
+    return (gap_mid[0], door[1]) if abs(split[0][1] - split[1][1]) < 1e-6 else (door[0], gap_mid[1])
+
+
+DOOR_STEP_FT = 4.0
+"""How far a door on a fixture is stepped along the front at a time (`door_off_fixtures`; a map drawing convention)."""
+
+
+def door_off_fixtures(door: Pt, house: Pt, quads: Sequence[Poly], gap: float, step: float = DOOR_STEP_FT, tries: int = 8) -> Pt | None:
+    """`door` moved along the front - across the line from the house through it - to the nearest point `gap` clear of every
+    quad in `quads` (the walls a route keeps off, the fixtures among them; feature 291 on 287: the yard persimmon stands at
+    the middle of the yard's front, where the door is, and Kashikawa's door paths began inside its trunk); the door itself
+    where it is clear, None where no step within `tries` is."""
+    from l7r.diagram.settlement import edge_dist
+
+    fx, fy = door[0] - house[0], door[1] - house[1]
+    n = math.hypot(fx, fy) or 1.0
+    ax, ay = -fy / n, fx / n  # along the front
+    for k in range(tries + 1):
+        for sgn in (1.0,) if k == 0 else (1.0, -1.0):
+            q = (door[0] + sgn * ax * k * step, door[1] + sgn * ay * k * step)
+            if not any(len(p) >= 3 and (point_in_poly(q[0], q[1], p) or edge_dist(q[0], q[1], p) < gap) for p in quads):
+                return q
+    return None
+
+
+def pulled(path: Sequence[Pt], clear: Any) -> list[Pt]:
+    """`path` string-pulled: from each kept point, on to the farthest later point a straight leg reaches where `clear(a, b)`
+    says it may - the first and last points kept, every jog a clear chord can cut taken out."""
+    pts = list(path)
+    if len(pts) < 3:
+        return pts
+    out, k = [pts[0]], 0
+    while k < len(pts) - 1:
+        nxt = next((j for j in range(len(pts) - 1, k, -1) if j == k + 1 or clear(pts[k], pts[j])), k + 1)
+        out.append(pts[nxt])
+        k = nxt
+    return out
+
+
+def to_first_arrival(path: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]], touch: float, clear: Any = None) -> list[Pt]:
+    """A door path ended where it first arrives within `touch` of its way (`segs`) - square onto it, at the way's nearest point
+    to the leg's start - so it never runs on beside the street it joins (feature 291 on 287: a door path is a tree lane the settle does not cut, and
+    one of Kashikawa's routed along its street before meeting it, a doubled tail and a sliver of grass the settle refused)."""
+    pts = list(path)
+    for k in range(1, len(pts)):
+        a, b = pts[k - 1], pts[k]
+        n = max(1, int(math.dist(a, b) // 2.0))
+        for j in range(1, n + 1):
+            q = (a[0] + (b[0] - a[0]) * j / n, a[1] + (b[1] - a[1]) * j / n)
+            best = min(segs, key=lambda sg: seg_dist(q[0], q[1], sg[0], sg[1]), default=None)
+            if best is not None and seg_dist(q[0], q[1], best[0], best[1]) <= touch:
+                # ...SQUARE ONTO IT: the last leg runs from the vertex before the arrival to the way's nearest point to that
+                # vertex, where the clear chord allows it - a leg arriving at a shallow slant ran on beside the street, and the
+                # doubled-tail sweep cut it to a jog the law read as a kink (cohort seed 904)
+                a0 = pts[k - 1]
+                foot = min((seg_closest(a0[0], a0[1], u, v) for u, v in segs), key=lambda f: math.dist(f, a0))
+                # ...where that square leg is clear (`clear`); else at the arrival itself, as the path came (cohort seeds 12 and
+                # 901: a square leg across a neighbor's grove corner left three farms with no path at all)
+                if clear is not None and not clear(a0, foot):
+                    foot = seg_closest(q[0], q[1], best[0], best[1])
+                return [*pts[:k], foot]
+    return pts
+
+
+DOOR_REACH_FT = 40.0
+"""How far a grove farm's front door may stand from the lane network before a footpath is laid to it (feature 291; the
+settlement-review of Kashikawa: a farm whose only lane stopped against the outside of its east band, 89 ft from the door).
+The front is the side the grove leaves open for the way in (research/homesteads/715), so the path arrives there; 40 ft
+- about a yard's depth past the door - is a GUESS at 'at the door'."""
+
+
+def own_street(h: Mapping[str, Any], streets: Sequence[Sequence[tuple[Pt, Pt]]]) -> int | None:
+    """The index of the street a row farm's way ends on - the nearest to its FRONT DOOR (its house where it has none) - or
+    None where no street is laid. By the door, not the house: a farm between two streets faces the one its door is on
+    (cohort seed 903: a door 36 ft from one street, its house nearer the other)."""
+    if not streets:
+        return None
+    hx, hy = front_door(h, FOOTPATH_FABRIC_GAP + 4.0) or (float(h["x"]), float(h["y"]))
+    return min(range(len(streets)), key=lambda k: min((seg_dist(hx, hy, a, b) for a, b in streets[k]), default=float("inf")))
+
+
+def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], reach: float = DOOR_REACH_FT) -> int:
+    """A footpath from each grove farm's front door (`front_door`) to the ways, where the door stands more than `reach`
+    from them: to the connected lane network, or - for a row farm (feature 291 plan D17) - to its OWN street (the nearest
+    street laid, `own_street`), routed round the farm's grove when the street lies on its windward side. Each path records
+    the farm it serves (`serves`); the nearest few points are tried, nearest first. Returns the paths drawn."""
+    from .checks import served_network  # local: checks sits above serve in this package's layers
+    from .law import fixture_quads  # local: the law sits above serve too
+    from .settle import Lawful  # local: the settle sits above serve too
+
+    # ...EACH AS LAWFUL AS A TREE LANE (feature 291 on 287): a door path is one (`corridors.is_tree`), which no settle repair
+    # cuts, so a path the law refuses - a kink round a grove's corner (cohort seed 904), a needle onto a join (seed 23) - is
+    # passed over for the next target rather than drawn and the web refused
+    lawful = Lawful(s, tree=True)
+
+    # ...ROUND EVERY FARMSTEAD FIXTURE (feature 291 on feature 287): a grove farm's fixtures are laid in its bundle and drawn
+    # before the web, and the lane law cuts a way over one (`over_fixtures`) - Kashikawa's far-row paths each crossed their
+    # own farm's wood shed or privy on their first leg, the settle cut them, and the farms were left unreached
+    quads = fixture_quads(s.M)
+    # ...AND EVERY GROVE BAND, the farm's own too: a ring's door stands in the way in through its front band, and a straight
+    # step to the street ran off through the band's other half (cohort seed 901, `grove_rules.groves_crossed_by_lanes`)
+    # - grown by a door path's half-tread and half a foot, since the rule strokes the tread, not the centerline
+    grow = 2.0 * (1.5 + 0.5)
+    bands = [
+        rot_rect(float(g["x"]), float(g["y"]), float(g["w"]) + grow, float(g["h"]) + grow, float(g.get("rot") or 0.0)) for g in s.M.get("groves") or () if all(k in g for k in ("x", "y", "w", "h"))
+    ]
+    walls = [*walls, *quads, *bands]
+    n = 0
+    for h in list(s.M.get("houses", [])):
+        door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
+        if door is not None:
+            # ...clear of everything the router keeps off, not the fixtures alone: stepped toward its own well, a door stood in
+            # the router's gap off the wellhead and no route left it (Mizuguchi, three farms)
+            door = door_off_fixtures(door, (float(h["x"]), float(h["y"])), [*walls, *hard], FOOTPATH_FABRIC_GAP + 1.0)
+        streets = [
+            [(tuple(a), tuple(b)) for a, b in zip(ln["pts"], ln["pts"][1:], strict=False)] for ln in s.M.get("lanes") or [] if ln.get("street") and ln.get("street_index") is not None
+        ]  # a row's own street, not a join
+        k = own_street(h, streets)  # type: ignore[arg-type]
+        segs = streets[k] if k is not None else served_network(s.M.get("lanes") or [])
+        if door is None or not segs or min(seg_dist(door[0], door[1], a, b) for a, b in segs) <= reach:  # type: ignore[arg-type]
+            continue
+        # ...FROM THE FRONT DOOR, ELSE A FLANK OF THE DOORYARD (`access.doors_of`, the corridors' own doors): a far-row farm
+        # fronts its holding, away from its street, and with its grove on the street's side the front had no way round it
+        # the law would keep (cohort seed 904: two farms left unreached)
+        doors = [door, *(door_off_fixtures(d, (float(h["x"]), float(h["y"])), [*walls, *hard], FOOTPATH_FABRIC_GAP + 1.0) for d in flank_doors(h))]
+        # A FLANK ONLY AS THE FALLBACK (FR-019's exception, spec-fidelity FAITHFUL 2026-09-30, amendment 8): the front first;
+        # a flank facing no band of the farm's own grove, with open ground between it and the front door, only where no
+        # lawful path leaves the front - recorded on the lane (`from_flank`) and on the map (`meta.door_flanks`)
+        for k, d in enumerate(doors):
+            if d is None or (k > 0 and not front_to_flank_open(door, d, h)):
+                continue
+            path = door_path(s, d, segs, hard, walls, water, quads, lawful)  # type: ignore[arg-type]
+            if path is not None and _draw_web(s, path, 3, houses=[(float(h["x"]), float(h["y"]))], joins=True):
+                s.M["lanes"][-1]["serves"] = [float(h["x"]), float(h["y"])]
+                if k > 0:
+                    s.M["lanes"][-1]["from_flank"] = True
+                    s.M["meta"].setdefault("door_flanks", []).append([round(float(h["x"]), 1), round(float(h["y"]), 1)])
+                n += 1
+                break
+    return n
+
+
+def flank_doors(h: Mapping[str, Any]) -> list[Pt]:
+    """A farm's dooryard flanks that face NO BAND of its own grove (`rolling.access.doors_of`, beside the yard carried past
+    the gable) - on the grove's open side, so in practice a two-sided grove's (spec-fidelity's condition on FR-019's
+    exception, 2026-09-30) - or none without a yard of its own."""
+    from l7r.diagram.settlement.rolling.access import doors_of
+
+    g = h.get("geom") or {}
+    if g.get("yard") is None or g.get("house") is None:
+        return []
+    yx, yy = float(g["yard"][0]), float(g["yard"][1])
+    faces = [(float(f[0]), float(f[1])) for f, _depth in g.get("grove_faces") or ()]
+
+    def open_side(d: Pt) -> bool:
+        vx, vy = d[0] - yx, d[1] - yy
+        n = math.hypot(vx, vy) or 1.0
+        return not any((vx * fx + vy * fy) / n > 0.7 for fx, fy in faces)
+
+    return [d for d in doors_of(g, 3.0)[2:] if open_side(d)]
+
+
+def front_to_flank_open(front: Pt, flank: Pt, h: Mapping[str, Any]) -> bool:
+    """Is the ground between a farm's front door and a flank door open - no building (its house) and no band of its grove
+    across it (spec-fidelity's condition on FR-019's exception: open yard between the path's end and the front door)?"""
+    g = h.get("geom") or {}
+    boxes = [g.get("house"), *(g.get("groves") or ())]
+    rings = [[(b[0] - b[2] / 2, b[1] - b[3] / 2), (b[0] + b[2] / 2, b[1] - b[3] / 2), (b[0] + b[2] / 2, b[1] + b[3] / 2), (b[0] - b[2] / 2, b[1] + b[3] / 2)] for b in boxes if b]
+    return not _crosses_fabric([front, flank], rings, 0.0)
+
+
+def door_path(s: Settlement, door: Pt, segs: Sequence[tuple[Pt, Pt]], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], quads: Sequence[Poly], lawful: Any) -> list[Pt] | None:
+    """The door path from `door` to its way (`segs`) the law keeps, trying the way's six nearest points, nearest first: the
+    straight step where it is clear (the router plans on a lattice and refused doors whose every neighboring cell stood in
+    its gap of the yard, the well or a trunk - three Mizuguchi doors 35 ft from their street), else the routed way,
+    string-pulled (the lattice's few-foot jogs are kinks to the law, cohort seed 904); ended square on the way at its first
+    arrival (`to_first_arrival`); squared where it crosses water (`settle.square_run`, as the settle squares every lane
+    first); and kept only where it crosses no wall and no fixture and the law would keep it as a tree lane (`lawful`)."""
+    from l7r.diagram.overlap.registry import forbidden_segment
+
+    from .law import over_a_fixture
+    from .settle import square_run
+
+    def ok(a: Pt, b: Pt) -> bool:
+        # ...and clear of a fixture at the tread's half-width and the law's pad, and of what the overlap matrix forbids a way
+        # on - what the law asks of the finished path: at a bare zero gap, cohort seed 23's straight steps skimmed a privy
+        return (
+            not _crosses_fabric([a, b], walls, 0.0)
+            and not _crosses_fabric([a, b], hard, 0.0)
+            and not any(segments_cross(a, b, c, d) for c, d in water)
+            and over_a_fixture([a, b], 3.0, quads) is None
+            and forbidden_segment(s.M, "lanes", [a, b], 3.0) is None
+        )
+
+    for q in sorted((seg_closest(door[0], door[1], a, b) for a, b in segs), key=lambda q: math.dist(q, door))[:6]:
+        path = [door, q] if ok(door, q) else pulled(door_unhooked(_route(door, q, hard, walls, water, gap=FOOTPATH_FABRIC_GAP), ok), ok)
+        path = to_first_arrival(path, segs, _TOUCH_GAP, ok)
+        path = square_run(s.M, path) if len(path) >= 2 else path
+        if len(path) >= 2 and not _crosses_fabric(path, walls, 0.0) and over_a_fixture(path, 3.0, quads) is None and lawful(path, 3.0):
+            return path
+    return None

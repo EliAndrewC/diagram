@@ -140,12 +140,10 @@ def test_the_form_roll_is_deterministic_and_covers_all_three_forms() -> None:
         again = hg.plan_site(hg.HamletSpec(name=f"Roll-{seed}", seed=seed, households=12))
         assert plan.settlement_form == again.settlement_form, f"seed {seed} rolled two different forms"
         forms[plan.settlement_form] = forms.get(plan.settlement_form, 0) + 1
-    # PINNED TO NUCLEATED for now - the knob is live and every other part of it is tested, but the
-    # per-house grove path the other two forms need has four unfixed defects (see SETTLEMENT_FORMS
-    # in hamletgen/consts.py for the measurements and the sketch). This asserts the CURRENT contract
-    # rather than the intended one, so that turning the forms back on fails here loudly and the test
-    # is updated deliberately instead of drifting.
-    assert set(forms) == {"nucleated"}, f"forms are pinned to nucleated; got {forms}"
+    # ALL THREE FORMS ROLL AGAIN (feature 291): the per-house grove's four defects fixed at the seat, the forms back at
+    # feature 126's 5 : 3 : 2. Every form must come up within these 48 seeds, and nucleated stays the commonest.
+    assert set(forms) == {"nucleated", "dispersed", "linear"}, f"every form rolls; got {forms}"
+    assert forms["nucleated"] > max(forms["dispersed"], forms["linear"]), forms
 
 
 def test_an_explicit_form_on_the_spec_beats_the_roll() -> None:
@@ -277,3 +275,81 @@ def test_the_late_pass_leaves_a_connector_that_starts_on_the_exit_strip() -> Non
     s.M["access_exit"] = [[0.0, -300.0], [0.0, 0.0]]
     hg.ways.tidy_lane_ends(s, [(200.0, 0.0), (600.0, 0.0), (600.0, 400.0), (200.0, 400.0)])
     assert s.M["lanes"][0]["pts"][0] == [0.0, 0.0] or tuple(s.M["lanes"][0]["pts"][0]) == (0.0, 0.0)
+
+
+def test_a_door_on_a_fixture_steps_along_the_front_until_clear() -> None:
+    """`door_off_fixtures` (feature 291 on 287): a door clear stays; one on a trunk steps along the front (across the line
+    from the house through it), nearest first; one boxed in along the whole front is None."""
+    from l7r.diagram.hamletgen.ways.serve import door_off_fixtures
+
+    house = (0.0, 0.0)
+    trunk = [(-2.0, 48.0), (2.0, 48.0), (2.0, 52.0), (-2.0, 52.0)]
+    assert door_off_fixtures((30.0, 50.0), house, [trunk], 5.0) == (30.0, 50.0)
+    moved = door_off_fixtures((0.0, 50.0), house, [trunk], 5.0)
+    assert moved is not None and abs(moved[1] - 50.0) < 1e-9 and abs(moved[0]) >= 7.0, "along the front, clear of the trunk"
+    wall = [(-100.0, 45.0), (100.0, 45.0), (100.0, 55.0), (-100.0, 55.0)]
+    assert door_off_fixtures((0.0, 50.0), house, [wall], 5.0) is None
+
+
+def test_a_door_path_ends_where_it_first_arrives_at_its_way() -> None:
+    """`to_first_arrival` (feature 291 on 287): the path is ended at the nearest point of the way where it first comes within
+    the touch gap, so it never runs on beside it; a path that never arrives is as it was."""
+    from l7r.diagram.hamletgen.ways.serve import to_first_arrival
+
+    way = [((0.0, 0.0), (300.0, 0.0))]
+    path = [(100.0, 60.0), (100.0, 3.0), (200.0, 3.0), (200.0, 0.0)]
+    out = to_first_arrival(path, way, 4.0)
+    assert out[0] == (100.0, 60.0) and out[-1][1] == 0.0 and 99.0 <= out[-1][0] <= 101.0 and len(out) == 2
+    assert to_first_arrival([(0.0, 50.0), (10.0, 50.0)], way, 4.0) == [(0.0, 50.0), (10.0, 50.0)]
+
+
+def test_a_routed_door_path_is_string_pulled_where_a_chord_is_clear() -> None:
+    """`pulled` (feature 291 on 287): every jog a clear chord can cut is taken out; the ends are kept; a path of two points
+    is as it was."""
+    from l7r.diagram.hamletgen.ways.serve import pulled
+
+    path = [(0.0, 0.0), (10.0, 1.0), (20.0, -1.0), (30.0, 0.0), (30.0, 40.0)]
+    assert pulled(path, lambda a, b: True) == [(0.0, 0.0), (30.0, 40.0)]
+    assert pulled(path, lambda a, b: abs(a[0] - b[0]) < 1e-9 or abs(a[1] - b[1]) < 2.0) == [(0.0, 0.0), (30.0, 0.0), (30.0, 40.0)]
+    assert pulled(path[:2], lambda a, b: True) == path[:2]
+
+
+def test_a_flank_door_faces_no_band_and_is_open_to_the_front() -> None:
+    """`flank_doors` / `front_to_flank_open` (FR-019's exception, amendment 8): only a flank facing no band of the farm's own
+    grove is offered; none without a yard; the ground from the front door to it is open unless the house or a band stands
+    across it."""
+    from l7r.diagram.hamletgen.ways.serve import flank_doors, front_to_flank_open
+
+    geom = {"house": (0.0, 0.0, 40.0, 30.0), "yard": (0.0, 35.0, 30.0, 20.0), "grove_faces": [((0, -1), "deep"), ((-1, 0), "deep")], "groves": [(0.0, -60.0, 200.0, 40.0), (-80.0, 0.0, 40.0, 100.0)]}
+    doors = flank_doors({"geom": geom})
+    assert len(doors) == 1 and doors[0][0] > 0.0, "the east flank only: the west one faces the deep west band"
+    assert flank_doors({"geom": {"house": (0.0, 0.0, 1.0, 1.0)}}) == []
+    assert front_to_flank_open((0.0, 58.0), (30.0, 35.0), {"geom": geom})
+    assert not front_to_flank_open((0.0, 58.0), (0.0, -30.0), {"geom": geom}), "across the house"
+
+
+def test_a_farm_is_reached_from_a_flank_only_where_the_front_has_no_lawful_path(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`lay_door_paths` (FR-019's exception, amendment 8): the front door first; where it has no lawful path, an open flank's
+    path is drawn and recorded (`from_flank`, `meta.door_flanks`); a flank the house or a band walls off the front is not
+    offered."""
+    from l7r.diagram.hamletgen.ways import serve
+    from l7r.diagram.settlement import Settlement
+
+    def farm_and_street(open_front: bool):  # type: ignore[no-untyped-def]
+        s = Settlement(600, 600, seed=1)
+        s.meta(name="T", scale="hamlet", ftpx=1)
+        s.lane([(0.0, 100.0), (600.0, 100.0)], width=6)
+        s.M["lanes"][-1].update({"street": True, "street_index": 0})
+        s.M["houses"].append({"x": 300.0, "y": 300.0, "w": 46.0, "h": 28.0, "geom": {}})
+        monkeypatch.setattr(serve, "front_door", lambda h, clear: (300.0, 350.0))
+        monkeypatch.setattr(serve, "flank_doors", lambda h: [(340.0, 320.0)])
+        monkeypatch.setattr(serve, "door_off_fixtures", lambda d, house, quads, gap: d)
+        monkeypatch.setattr(serve, "front_to_flank_open", lambda front, flank, h: open_front)
+        monkeypatch.setattr(serve, "door_path", lambda s_, d, segs, *a: None if d == (300.0, 350.0) else [d, (340.0, 100.0)])
+        return s
+
+    s = farm_and_street(True)
+    assert serve.lay_door_paths(s, [], [], []) == 1
+    assert s.M["lanes"][-1].get("from_flank") and s.M["meta"]["door_flanks"] == [[300.0, 300.0]]
+    s = farm_and_street(False)
+    assert serve.lay_door_paths(s, [], [], []) == 0, "the flank walled off the front is not offered"

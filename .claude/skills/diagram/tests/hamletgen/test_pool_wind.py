@@ -34,6 +34,16 @@ def _manifest(gen: str) -> dict:
         return json.load(fh)
 
 
+def _belted(gen: str) -> dict:
+    """The manifest of a map that draws a village belt: a nucleated one. Where every farm carries its own grove - the
+    dispersed and linear forms (feature 291) - the grove IS the shelter and no village belt is drawn (research/vegetation/020,
+    "The per-farmstead belt is the DISPERSED settlement's answer"; `hinterland/belt.belt_polygon`)."""
+    m = _manifest(gen)
+    if m["meta"].get("settlement_form", "nucleated") != "nucleated":
+        pytest.skip(f"a {m['meta']['settlement_form']} map: its farms carry their own groves, no village belt")
+    return m
+
+
 def test_the_pool_has_scripted_hamlets_to_judge() -> None:
     assert len(GENS) >= 5, "non-vacuity: the five scripted hamlets"
 

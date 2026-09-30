@@ -403,3 +403,16 @@ def test_a_lane_through_a_yard_persimmons_trunk_is_named_and_one_under_its_crown
     assert law.lanes_over_fixtures(M) == [(0, 0)], "the trunk on the tread"
     assert trunk_on_tread(100.0, 0.0, M["lanes"][:1]) and not trunk_on_tread(100.0, 0.0, M["lanes"][1:])
     assert law.over_a_fixture([(0.0, 9.0), (200.0, 9.0)], 3.0, law.fixture_quads(M)) is None, "under the crown, clear of the trunk"
+
+
+def test_a_short_lane_that_holds_another_lanes_end_earns_its_place() -> None:
+    """Feature 291 on 287: a short door path whose removal would leave its street's end reaching nothing is no fragment -
+    the street's end stands 70 ft from its house, served only by the path meeting it there."""
+    conn = _lane((0.0, 0.0), (-500.0, 0.0), connector=True)
+    street = _lane((0.0, 0.0), (400.0, 0.0), w=6)
+    path = _lane((400.0, 0.0), (400.0, 20.0))  # 20 ft, to a door; the house stands 70 ft off the street's end
+    M = {"lanes": [conn, street, path], "houses": [_house(400.0, 70.0)], "meta": {"generated_by": "hamletgen"}}
+    assert law.short_fragments(M) == [], "dropped, the street's end would dangle"
+    beside = _lane((200.0, 0.0), (200.0, 20.0))  # the same, mid-street: holds no end
+    M2 = {"lanes": [conn, street, path, beside], "houses": [_house(400.0, 70.0), _house(200.0, 70.0)], "meta": {"generated_by": "hamletgen"}}
+    assert law.short_fragments(M2) == [3]
