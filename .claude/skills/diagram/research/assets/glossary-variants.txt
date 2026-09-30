@@ -1014,6 +1014,7 @@ gejo	degawari
 genan	degawari
 genba	genba
 genba-oke	genba
+genbun	Genbun
 genji	Genji
 genkan	genkan
 genkan-no-ma	genkan-no-ma
@@ -2278,6 +2279,8 @@ ottelia	Ottelia
 ou	Ou
 ouchi	Ouchi
 out-to-out	out-to-out
+outcaste	outcaste
+outcastes	outcaste
 oute	ote-mon
 outer daimyo	tozama
 outer daimyos	tozama

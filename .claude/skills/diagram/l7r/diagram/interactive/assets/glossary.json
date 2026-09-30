@@ -13413,5 +13413,18 @@
   "variants": [
    "yarai"
   ]
+ },
+ "outcaste": {
+  "def": "A member of the hereditary groups ranked below the commoners in Edo-period Japan, such as the hinin and the kawata.",
+  "variants": [
+   "outcaste",
+   "outcastes"
+  ]
+ },
+ "Genbun": {
+  "def": "The Genbun era, 1736-1741, in the middle of the Edo period.",
+  "variants": [
+   "genbun"
+  ]
  }
 }
