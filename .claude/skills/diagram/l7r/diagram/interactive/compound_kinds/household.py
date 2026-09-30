@@ -111,8 +111,9 @@ class AncestralAlcove(Kind):
 
 class KarosHouse(Kind):
     """
-    What: The house of the karo, the house elder - the magistrate's chief retainer - standing as a small house of
-    its own inside the compound.
+    What: The quarters of the karo, the house elder - the magistrate's chief retainer - inside the compound: on the
+    county-town plan a bay of the senior retainers' long-house with a door of its own, on the hand-drawn magistracy
+    plans a small house of its own in the residence court.
 
     Why: In the setting a county magistrate's samurai include the magistrate's karo. At a shogunal intendancy,
     the kind of office these postings follow, the staff lived inside the compound, in small houses and
@@ -120,15 +121,16 @@ class KarosHouse(Kind):
     daimyo's scale, and belongs to a castle town. So the karo lives inside the walls, at the intendancy's scale.
 
     Note: The karo is the setting's own, and staff housed inside an intendancy's compound in small houses or
-    long-houses is recorded. That the karo's quarters are a small house of their own, rather than a bay of the
-    staff long-house, is a guess: no source sets the head of the staff apart from the rest, and a chief
-    retainer's house inside the lord's own compound was not found. Its size and seat are a guess too.
+    long-houses is recorded, so the county-town plan's long-house bay follows the record. That the hand-drawn plans
+    give the karo a small house of their own, rather than a bay of the staff long-house, is a guess: no source sets
+    the head of the staff apart from the rest, and a chief retainer's own house inside the lord's compound was not
+    found. Their sizes, and where each stands, are a guess on both kinds of plan.
 
     Name: karo's house
     Covers: the karo's house and its label with the "house elder" gloss
     Label: guess
     Sources: l7r-budgets, bukeyashiki-wiki, aizu-saigo-karo, jinya-kotobank, daikan-tetsuki-jawiki, mapple-takayama-jinya
-    Entry: research/buildings.html - 'The chief retainer's house (karō yashiki)'; research/rendering/buildings.html - 'How our maps house the chief retainer'
+    Entry: research/buildings.html - 'The chief retainer's house (karō yashiki)'; research/rendering/buildings.html - 'How our maps draw the chief retainer's house (karō yashiki)'
     """
 
     key = "karo's house"
@@ -443,7 +445,7 @@ class Storehouse(Kind):
     Covers: the household storehouse and its label
     Label: accurate
     Sources: matsushiro-bukeyashiki, takayama-jinya-gifu, matsushiro-kankou-higuchi, kojodan-higuchi, bunka-yokota-dozo, suumo-kura-size
-    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'Vegetable gardens at a samurai residence (saien)', 'Fire, and the fireproof storehouses (dozō)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'Vegetable gardens at samurai houses and government offices (saien)', 'Fire, and the fireproof storehouses (dozō)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)'
     """
 
     key = "storehouse"
@@ -540,7 +542,7 @@ class WritingPavilion(Kind):
     Covers: the pavilion and its label
     Label: guess
     Sources: shosai-kotobank, kyoto-ga-sanshisuimeisho, chinesepen-shuzhai
-    Entry: research/buildings.html - 'Detached studies (shosai)'; research/rendering/buildings.html - 'How our maps draw a detached study'
+    Entry: research/buildings.html - 'Studies and detached studies (shosai)'; research/rendering/buildings.html - 'How our maps draw a detached study (shosai)'
     """
 
     key = "writing pavilion"

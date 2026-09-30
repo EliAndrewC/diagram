@@ -2038,6 +2038,7 @@ mortise	mortise and tenon
 mortise and tenon	mortise and tenon
 moso	moso
 moto-kiba	Eitaijima
+motojime	motojime
 mozi	Mozi
 mu	mu
 muen	muenzuka

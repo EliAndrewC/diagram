@@ -257,31 +257,38 @@ class VegetableGarden(Kind):
 
     Why: Samurai grew their own vegetables, on anything from a kitchen plot to half their grounds. The
     Boso-no-mura house of a middle-rank samurai family, as the museum reconstructs it, has a soup-greens plot of
-    about 1,070 sq ft, planted mainly with leafy greens, on the west side of the house; at Matsushiro a 150-koku
-    retainer's house keeps about half its grounds in vegetable field today, and the Higuchi house's field lay south
-    of its pond, where its formal garden is now. A jin'ya had a vegetable garden inside its grounds, a daikan's
-    office a field of its own, and a Chinese county office listed its plot behind the residence gate after the
-    kitchen and the stable. A bed of vegetables that want full sun needs about six hours of direct sun a day.
+    about 1,076 sq ft (100 m²), planted mainly with leafy greens, on the west side of the house; at Matsushiro a
+    150-koku retainer's house keeps about half its grounds in vegetable field today, and the Higuchi house's field
+    lay south of its pond, where its formal garden is now. A jin'ya had a vegetable garden inside its grounds, a
+    daikan's office a field entered apart from its residence lot, and a Chinese county office listed its plot behind
+    the residence gate after the kitchen and the stable. A bed of vegetables that want full sun needs about six hours
+    of direct sun a day.
 
     Note: At a residence or a walled compound its size is one of two attested forms, a soup-greens plot or a field
-    over about half the grounds, and each sheet takes its own; its seat is one of four attested ones - west of the
-    house, south beside the formal garden, the rear service ground, or a parcel of its own ("How our maps place
-    the vegetable garden in the sun"). The sun rules out a seat where the bed gets under
+    over about half the grounds, and each sheet takes its own; its site is one of four - west of the house, south
+    beside the formal garden, or a parcel of its own, each recorded in Japan, and the rear service ground, recorded
+    only at a Chinese county office ("How our maps draw vegetable gardens at samurai houses and government offices
+    (saien)"). The sun rules out a site where the bed gets under
     its six hours in the autumn - the six hours is modern growing advice, and counting them in autumn, with an hour
     counted when half the bed is lit, is a guess ("Sunlight and shade on the farm"; a sheet may declare a
     half-shade bed, which needs three). Where the west and the rear lie in the shade of the house and the kitchen, the
     bed stands in the inner court beside the formal garden; at a country shrine it is the resident keeper's plot, near
-    the dwelling on whatever open ground gets its sun. That a household chose its seat by the sun is a guess, and so are
-    a country shrine keeper's plot's place and size: no source read places or measures one.
+    the dwelling on whatever open ground gets its sun. A plot beside the formal garden is drawn in rows with no fence
+    or hedge between them, beyond the formal garden where the court has room, and no bed is fenced on its own. That a
+    plot beside the formal garden stands unscreened and beyond it, that no single bed is fenced, and that a household
+    chose its site by the sun are guesses, and so are a country shrine keeper's plot's place and size: no source read
+    names a screen or a fence round a single plot, gives a household's reason, or places or measures a keeper's plot.
 
-    Caveat: That a household chose its seat by the sun is a guess, and so are a country shrine keeper's plot's place and
-    size: no source read places or measures one.
+    Caveat: That a plot beside the formal garden stands unscreened and beyond it, that no single bed is fenced, and
+    that a household chose its site by the sun are guesses, and so are a country shrine keeper's plot's place and
+    size: no source read names a screen or a fence round a single plot, gives a household's reason, or places or
+    measures a keeper's plot.
 
     Name: vegetable garden
     Covers: the kitchen garden's beds and label
     Label: accurate
     Sources: boso-no-mura-takei, matsushiro-bukeyashiki, sanada-higuchi, kasama-iwama-jinya, kotobank-kisaku-daikansho, gujin-xie-yamen, atariya-nisho
-    Entry: research/buildings.html - 'Vegetable gardens at a samurai residence (saien)'; research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/buildings.html - 'How our maps place the vegetable garden in the sun'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'
+    Entry: research/buildings.html - 'Vegetable gardens at samurai houses and government offices (saien)'; research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/buildings.html - 'How our maps draw vegetable gardens at samurai houses and government offices (saien)'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'
     """
 
     key = "vegetable garden"
