@@ -3674,6 +3674,7 @@ yoshimune	Yoshimune
 yoshiwara	Yoshiwara
 yoshizu	yoshizu
 yosui	yosui
+yosuiro	yosui
 yotsu	yotsu
 youfang	aburaya
 young men's association	young men's association

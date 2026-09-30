@@ -53,12 +53,14 @@ class IrrigationDitch(Kind):
     stood high enough, the intake was nothing more than an entrance cut for it; the gates and slotted boards
     read at canal mouths and weirs all stand on great works, and none is recorded at a village intake.
 
-    Note: Topology and taper are read (Tabayashi, the Minuma-dai record), and so is the paddy-to-paddy form
+    Note: Topology and taper are read (Tabayashi, the Minuma-dai record) - the split of supply from drain
+    cleanly only at the trunk canals, a study of the district adding that not everything was neatly
+    separated - and so is the paddy-to-paddy form
     (Bungotakada); how few ditches that form left is this record's own reading, since no page read counts
     ditches: the pages on it describe water passing from paddy to paddy, the one village page giving its merit
     as saving water, not saving digging, and keeping many weirs; prefectural and ministry papers a search
     showed saying such districts have hardly any channels could not be read. That a ditch beside every paddy is a Meiji anachronism is likewise the record's reading of that contrast: the Ishikawa method of 1887 put each squared parcel on a channel, and the 1899 law set out to build irrigation and drainage works, not in so many words a ditch to every paddy. The widths are drawn at true size on a ladder whose rungs are each dated before modern times: the head race's 6 ft matches the central canal of an excavated early paddy and a channel fixed by rule in 1537, and every drawn width but the drain's outfall has a width from before modern times beside it.
-    The third of a meter is a modern design MINIMUM rather than a measured ditch, though the Rites of Zhou already name a finest field channel of about a foot, and the right-angle rule is carried by the classical commentary on the Rites of Zhou, the Song polders of the Lake Tai plain and the jori grid, so the rule is premodern and not a modern standard's invention. The national standard the record once leaned on for both is readable nowhere and is
+    The third of a meter is a modern design MINIMUM rather than a measured ditch, though the Rites of Zhou already name a finest field channel of about a foot, and the right-angle rule is carried by the classical commentary on the Rites of Zhou, the Song polders of the Lake Tai plain and the jori grid, so the rule is premodern and not a modern standard's invention, though all three show it as an ideal or at the scale of district waterways and the grid's 109 m squares, and none shows how closely a village's own ditches kept to it. The national standard the record once leaned on for both is readable nowhere and is
     not cited. And the Kishu attribution is the layout's, not the name's: the school is attested for river
     channelization rather than for a field plan. Nor is the shape of this one drawn from a survey: the head
     race's length from the intake to the fork follows the fan's geometry, the record giving no distance. The
@@ -187,7 +189,7 @@ class Pond(Kind):
     it lies: above the fields and feeding them, it is the reservoir their water is drawn from; at the field's
     low foot, fed by the drainage ditch, it is where the water leaving the paddies is gathered.
 
-    Why: The reservoir is the Japanese tameike - built by dividing off a valley mouth with a dike, at an
+    Why: The reservoir is the Japanese tameike - some made by closing a valley mouth with an earthen dike, each set at an
     elevation above the paddies it serves, with ONE outlet: an inclined intake feeding a bottom conduit through
     the dam. The spillway is for floods, never for distribution. A pond at the foot of the field keeps the water
     that has passed through the plots, because before modern consolidation that water was used again below
