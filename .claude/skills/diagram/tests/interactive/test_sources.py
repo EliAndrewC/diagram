@@ -33,9 +33,9 @@ def test_an_entry_may_name_a_research_file_one_directory_down() -> None:
     file pattern could not match `research/cities/fabric.html`, so such an entry resolved to no sources and
     no questions with nothing said; the question URL is built from the same match, so the silent miss would
     have become a silent broken link when the town and city vocabulary arrives."""
-    entry = "research/cities/fabric.html - 'Urban commoners built in continuous street walls'"
+    entry = "research/cities/fabric.html - 'The city's street front: continuous rows of shophouses (machiya)'"
     qs = research_questions(entry)
-    assert len(qs) == 1 and qs[0]["url"] == RESEARCH_PAGES + "cities/fabric.html#urban-commoners-built-in-continuous-street-walls", qs
+    assert len(qs) == 1 and qs[0]["url"] == RESEARCH_PAGES + "cities/fabric.html#the-citys-street-front-continuous-rows-of-shophouses-machiya", qs
     assert research_sources(entry), "and its sources resolve too"
 
 
