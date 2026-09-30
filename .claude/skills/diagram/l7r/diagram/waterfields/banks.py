@@ -347,7 +347,8 @@ _GATE_MIN_APEX = 15.0
 # half a meter square - two rice stalks - with the local anecdote that a paddy once reported missing
 # turned up under a straw raincoat. Our smallest scripted-hamlet basin is 240 sq ft (~22 m2), which
 # is LARGER than a typical Senmaida paddy. Any floor stated in acres would therefore condemn the
-# most famous paddies in Japan, so the absolute floor was priced and DECLINED (research/fields.html).
+# most famous paddies in Japan, so the absolute floor was priced and DECLINED (research/rendering/fields.html
+# 'How our maps draw paddy plots').
 #
 # WHAT IS REAL IS A RATIO, AND THE REASON IS THE AZE. On a terrace the wall a basin needs already
 # exists: the riser is a structural retaining wall the slope demands whether or not anyone

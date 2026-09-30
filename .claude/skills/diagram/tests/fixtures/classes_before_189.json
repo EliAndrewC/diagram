@@ -109,7 +109,7 @@
   "bund beans": {
     "caveat": "",
     "covers": "the bead run along the bunds (`bund_beans`)",
-    "entry": "research/fields.html - 'Paddy plots - irregular patchwork'; 'Bunds are SHARED, and the fabric is continuous'; 'What a bund bean actually looks like'; waterfields/palette.py BEAN_GREEN (the color decision)",
+    "entry": "research/fields.html - 'Rice paddies and their plots (suiden)'; 'Bunds are SHARED, and the fabric is continuous'; 'What a bund bean actually looks like'; waterfields/palette.py BEAN_GREEN (the color decision)",
     "key": "bund beans",
     "label": "convention",
     "label_note": "we have rendered the bund beans as round beads about 3 ft across in a deep pine green, darker than the plant, in order to make them visible on the map at this scale against the pale rice. A soybean is an erect, bushy annual 50 to 125 cm tall (roughly 2 to 4 ft) with medium-green leaflets, sown in a row along the bund after transplanting and harvested with the rice; how wide one plant stands on the bund was not found, so the bead's width is not compared to it. The practice is attested.",
@@ -609,7 +609,7 @@
   "paddy": {
     "caveat": "the field is shown flooded, which is one moment of a cycle that runs from flooded to cracked and back; the depths behind that choice are modern extension figures, and no pre-modern record of either the depths or the drying stages was found.",
     "covers": "the wet plots of every `fields[kind=paddy]` - the flooded basins",
-    "entry": "research/fields.html - 'Paddy plots - irregular patchwork', 'Nitrogen - a flooded paddy makes its own', 'Plot sizes', 'How deep the water actually stands', 'Was a paddy drained in midsummer before modern times?'; research/archetypes.html - 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'",
+    "entry": "research/fields.html - 'Rice paddies and their plots (suiden)', 'Plot sizes', 'How deep the water actually stands', 'Was a paddy drained in midsummer before modern times?'; research/rendering/fields.html - 'How our maps draw paddy plots'; research/archetypes.html - 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'",
     "key": "paddy",
     "label": "accurate",
     "label_note": "Plot form and the irregular patchwork are read; plot sizes are calibrated from the record. the field is shown flooded, which is one moment of a cycle that runs from flooded to cracked and back; the depths behind that choice are modern extension figures, and no pre-modern record of either the depths or the drying stages was found.",

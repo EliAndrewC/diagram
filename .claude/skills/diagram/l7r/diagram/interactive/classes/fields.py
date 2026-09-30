@@ -46,7 +46,7 @@ class Paddy(Kind):
     Covers: the wet plots of every `fields[kind=paddy]` - the flooded basins
     Label: accurate
     Sources: maff-suitou-mizu, zennoh-mizukanri, horikawa-2011-nakaboshi, doyoboshi-jawiki, qimin-yaoshu-juan2, chenfu-nongshu-juanshang, guangdong-xinyu-20, pwsannong-zhusanjiao-nongyeshi
-    Entry: research/fields.html - 'Paddy plots - irregular patchwork', 'Nitrogen - a flooded paddy makes its own', 'Plot sizes', 'How deep the water actually stands', 'Was a paddy drained in midsummer before modern times?'; research/archetypes.html - 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'
+    Entry: research/fields.html - 'Rice paddies and their plots (suiden)', 'Plot sizes', 'How deep the water actually stands', 'Was a paddy drained in midsummer before modern times?'; research/rendering/fields.html - 'How our maps draw paddy plots'; research/archetypes.html - 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'
     """
 
     key = 'paddy'
@@ -139,7 +139,7 @@ class BundBeans(Kind):
     Covers: the bead run along the bunds (`bund_beans`)
     Label: convention
     Sources: nabunken-azemame, wikipedia-soybean, cropfarming-soybeans
-    Entry: research/fields.html - 'Paddy plots - irregular patchwork'; 'Bunds are SHARED, and the fabric is continuous'; 'What a bund bean actually looks like'; waterfields/palette.py BEAN_GREEN (the color decision)
+    Entry: research/fields.html - 'Rice paddies and their plots (suiden)'; 'Bunds are SHARED, and the fabric is continuous'; 'What a bund bean actually looks like'; waterfields/palette.py BEAN_GREEN (the color decision)
     """
 
     key = 'bund beans'
