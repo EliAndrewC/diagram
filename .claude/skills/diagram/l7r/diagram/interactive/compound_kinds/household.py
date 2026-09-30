@@ -258,7 +258,7 @@ class Kitchen(Kind):
     Covers: the kitchen and pantries building and its label
     Label: accurate
     Sources: boso-no-mura-takei, liq-takayasu-daidokoro, kotobank-katteguchi, kotobank-uchigenkan, matsue-bukeyashiki, matsue-bukeyashiki-about, matsushiro-bukeyashiki, tfd-hongou-fire-history, thepaper-taipinggang, edo-no-kaji-jawiki, machibikeshi-jawiki
-    Entry: research/buildings.html - 'What fire did a residence's kitchen cook on - a kamado range, or a sunken hearth?', 'How many doors does a residence's kitchen have, and who comes in by them?', 'How big was a samurai's house, and what rank is a 67-tsubo house?', 'The size of a compound and the rank of its buildings', 'Fire-water is distributed to the halls', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps route a guest from the gate to the entrance'
+    Entry: research/buildings.html - 'What fire did a residence's kitchen cook on - a kamado range, or a sunken hearth?', 'How many doors does a residence's kitchen have, and who comes in by them?', 'How big was a samurai's house, and what rank is a 67-tsubo house?', 'The size of a compound and the rank of its buildings', 'Fire, and the fireproof storehouses (dozō)', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps route a guest from the gate to the entrance', 'How our maps place fire-water tubs and storehouses'
     """
 
     key = "kitchen"
@@ -434,7 +434,7 @@ class Storehouse(Kind):
     Covers: the household storehouse and its label
     Label: accurate
     Sources: matsushiro-bukeyashiki, takayama-jinya-gifu, matsushiro-kankou-higuchi, kojodan-higuchi, bunka-yokota-dozo, suumo-kura-size
-    Entry: research/buildings.html - 'The shady rear is the service strip', 'Where did a residence keep its vegetable garden, and how big was it?', 'Fire discipline: halls burn, kura endure'
+    Entry: research/buildings.html - 'The shady rear is the service strip', 'Where did a residence keep its vegetable garden, and how big was it?', 'Fire, and the fireproof storehouses (dozō)'
     """
 
     key = "storehouse"
@@ -464,7 +464,7 @@ class FireWaterTubs(Kind):
     Covers: every fire-water tub glyph and the "fire-water tubs" label
     Label: accurate
     Sources: tfd-hongou-fire-history, thepaper-taipinggang, edo-no-kaji-jawiki, machibikeshi-jawiki, sado-bugyosho-fires, tensuioke-jawiki, dozo-jawiki
-    Entry: research/buildings.html - 'Fire-water is distributed to the halls', 'Fire discipline: halls burn, kura endure'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'
+    Entry: research/buildings.html - 'Fire, and the fireproof storehouses (dozō)'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'; research/rendering/buildings.html - 'How our maps place fire-water tubs and storehouses'
     """
 
     key = "fire-water tubs"
@@ -559,7 +559,7 @@ class Hearth(Kind):
     Covers: the fire glyph in each kitchen
     Label: accurate
     Sources: boso-no-mura-takei, liq-takayasu-daidokoro, matsue-bukeyashiki, irori-jawiki, tfd-hongou-fire-history, edo-no-kaji-jawiki, machibikeshi-jawiki, thepaper-taipinggang
-    Entry: research/buildings.html - 'What fire did a residence's kitchen cook on - a kamado range, or a sunken hearth?', 'Fire-water is distributed to the halls, not the kura'
+    Entry: research/buildings.html - 'What fire did a residence's kitchen cook on - a kamado range, or a sunken hearth?', 'Fire, and the fireproof storehouses (dozō)'; research/rendering/buildings.html - 'How our maps place fire-water tubs and storehouses'
     """
 
     key = "hearth"
