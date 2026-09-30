@@ -9,4 +9,6 @@ specified from request.md when it is taken up.
 
 Fix the four tooling problems feature 291's landing hit (request.md): the finished-run hook's false alarm on a covered
 chained run; the review-round hook routing an exception check into a later review round; a headless page session that
-never wakes for its own background agents' results; and the missing watchdog outside the session.
+never wakes for its own background agents' results; the missing watchdog outside the session; and (item 5, added at
+the GM's request from feature 292's session) a periodic report kept as a backgrounded one-shot watcher, which loses its
+schedule across a usage-limit window - to be steered to `CronCreate`, by a hook if one can.

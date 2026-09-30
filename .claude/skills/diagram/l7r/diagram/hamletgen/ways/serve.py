@@ -319,7 +319,7 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
         # fronts its holding, away from its street, and with its grove on the street's side the front had no way round it
         # the law would keep (cohort seed 904: two farms left unreached)
         doors = [door, *(door_off_fixtures(d, (float(h["x"]), float(h["y"])), [*walls, *hard], FOOTPATH_FABRIC_GAP + 1.0) for d in flank_doors(h))]
-        # A FLANK ONLY AS THE FALLBACK (FR-019's exception, spec-fidelity FAITHFUL 2026-09-30, amendment 8): the front first;
+        # A FLANK ONLY AS THE FALLBACK (amendment 8; since amendment 9 a preference, FR-019's door clause dropped): the front first;
         # a flank facing no band of the farm's own grove, with open ground between it and the front door, only where no
         # lawful path leaves the front - recorded on the lane (`from_flank`) and on the map (`meta.door_flanks`)
         for k, d in enumerate(doors):
@@ -358,7 +358,7 @@ def flank_doors(h: Mapping[str, Any]) -> list[Pt]:
 
 def front_to_flank_open(front: Pt, flank: Pt, h: Mapping[str, Any]) -> bool:
     """Is the ground between a farm's front door and a flank door open - no building (its house) and no band of its grove
-    across it (spec-fidelity's condition on FR-019's exception: open yard between the path's end and the front door)?"""
+    across it (amendment 8's condition: open yard between the path's end and the front door)?"""
     g = h.get("geom") or {}
     boxes = [g.get("house"), *(g.get("groves") or ())]
     rings = [[(b[0] - b[2] / 2, b[1] - b[3] / 2), (b[0] + b[2] / 2, b[1] - b[3] / 2), (b[0] + b[2] / 2, b[1] + b[3] / 2), (b[0] - b[2] / 2, b[1] + b[3] / 2)] for b in boxes if b]

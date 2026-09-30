@@ -36,7 +36,7 @@ if HERE not in sys.path:
     sys.path.insert(0, HERE)
 
 from l7r.diagram import hamletgen as hg  # noqa: E402
-from l7r.diagram.hamletgen.homesteads.row_rules import bamboo_mismatch, doors_unreached, row_rules, water_rules  # noqa: E402
+from l7r.diagram.hamletgen.homesteads.row_rules import bamboo_mismatch, row_rules, water_rules  # noqa: E402
 from l7r.diagram.overlap import matrix_violations  # noqa: E402
 from l7r.diagram.settlement.homestead_parts.grove_rules import fixtures_on_groves, gardens_east_shaded, grove_sides_missing, groves_crossed_by_lanes, groves_off_windward  # noqa: E402
 
@@ -140,7 +140,6 @@ def roll_one(spec: tuple[int, int] | tuple[int, int, dict[str, str]]) -> tuple[s
         ("fixtures_on_groves", fixtures_on_groves(_M)),
         ("row_rules", row_rules(_M)),
         ("water_rules", water_rules(_M)),
-        ("doors_unreached", doors_unreached(_M)),
         ("bamboo_mismatch", bamboo_mismatch(_M)),
     ):
         if found:
