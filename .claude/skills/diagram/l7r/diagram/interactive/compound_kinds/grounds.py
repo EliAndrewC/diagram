@@ -123,12 +123,14 @@ class HearingCourt(Kind):
     history. The one that survives at an intendant's office, Takayama's, is paved with river cobbles, because
     its province had not enough white sand, and was made inside the building because an open court would be
     buried in winter snow; Takayama keeps two such courts, one for suits and petitions and one for criminal
-    cases. The courtroom was a room of the office hall, not a stage of its own, so the hearing court lies against
+    cases. Takayama rebuilt its examination room in 1816 as one part of the office, with its entrance hall,
+    working office and great hall, which we read as one block, so the hearing court lies against
     the front of the hall where the magistrate sits. In Rokugan, where torture is unusual, a magistracy keeps no
     room built for interrogation, so questioning happens here or in the day office like any other business.
 
     Note: What covers the floor is one of two attested forms, white gravel or cobbles from the local riverbed
-    where white sand is scarce, and each sheet takes one. That a jin'ya was laid out around the hearing court and
+    where white sand is scarce, and each sheet takes one. The posts along the court's open side stand two ken
+    apart, a spacing that is this project's own guess. That a jin'ya was laid out around the hearing court and
     the forecourt as open features is this project's reading of plans, which no readable source measures. No
     roofed court's size was found, so the size each sheet draws is a guess.
 

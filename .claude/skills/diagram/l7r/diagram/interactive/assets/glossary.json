@@ -13206,5 +13206,29 @@
   "variants": [
    "koya"
   ]
+ },
+ "kujiba": {
+  "def": "The raised tatami room of a magistracy's hall, the top tier of a hearing court, where the magistrate and the other officials sat to hear a case.",
+  "variants": [
+   "kujiba"
+  ]
+ },
+ "jarijiki": {
+  "def": "A gravel floor; at a hearing court, the lowest tier, where plaintiffs and defendants sat on straw mats spread on the gravel.",
+  "variants": [
+   "jarijiki"
+  ]
+ },
+ "uwadori": {
+  "def": "At some magistracies, a raised room set apart below the magistrate's room in the hall of a hearing court, where the examiners and the scribes sat.",
+  "variants": [
+   "uwadori"
+  ]
+ },
+ "imidas": {
+  "def": "A Japanese encyclopedia of current words and terms, published by Shueisha, whose entries can be read online.",
+  "variants": [
+   "imidas"
+  ]
  }
 }

@@ -1348,6 +1348,7 @@ ikkō-shū	Jodo Shinshu
 ima	ima
 imado ware	Imado ware
 imado-yaki	Imado ware
+imidas	imidas
 imperial magistrate	Imperial Magistrate
 imperial magistrate's	Imperial Magistrate
 imperial magistrates	Imperial Magistrate
@@ -1436,6 +1437,7 @@ jail-god temple	jail-god
 japanese zelkova	keyaki
 jar burial	jar burial
 jar burials	jar burial
+jarijiki	jarijiki
 jehol	Jehol
 jehol diary	Jehol
 jetties	jetty
@@ -1733,6 +1735,7 @@ kuchiei	kuchiei
 kuchiireya	hitoyado
 kuchimai	kuchimai
 kui	kui
+kujiba	kujiba
 kumi	kumi
 kumi-chi	kumi-chi
 kumi-yashiki	kumi-yashiki
@@ -3313,6 +3316,7 @@ ushi-waku	ushi-waku
 ushiwaku	ushi-waku
 ussuriland	Ussuriland
 usufruct	usufruct
+uwadori	uwadori
 uzumimon	umon
 vaiśravaṇa	Bishamon
 valley fan	valley fan

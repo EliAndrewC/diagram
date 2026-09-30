@@ -20,7 +20,7 @@ class OfficeHall(Kind):
     official study, each its own feature.
 
     Why: At Takayama, the surviving intendant's office, the office block - entrance hall, great hall, office and
-    examination room, rebuilt together in 1816 - was built with great formality to show the office's rank, and the room where hearings were held is one part of that block. The
+    examination room, rebuilt in 1816, parts this project reads as one block - was built with great formality to show the office's rank, and the room where hearings were held is one part of that block. The
     magistrate and staff need somewhere to do the daily paperwork, and the residence's private study is on
     the wrong side of the line between state and home for it, so the hall is deep, and it may be the largest
     hall in the compound, out-measuring the residence as Takayama's did, being the institution's working core
@@ -67,12 +67,12 @@ class MagistratesDais(Kind):
     where the parties knelt. So the dais is not a pavilion of its own but the front of a deeper office hall,
     and the magistrate hears cases in the same building where the day's paperwork is done.
 
-    Note: The raised seat over the court, and its place at the front of the office hall, follow the record. The
-    clerks sat in the tier between the magistrate's room and the court; these sheets set their seats beside the
-    dais instead, and how large their place was is not recorded, so the size drawn is a guess.
+    Note: The raised seat over the court, and its place at the front of the office hall, follow the record.
+    At Edo the clerk sat in a room between the magistrate's room and the court; these sheets set their
+    seats beside the dais instead, and how large their place was is not recorded, so the size drawn is a guess.
 
-    Caveat: The clerks sat in the tier between the magistrate's room and the court; these sheets set their seats
-    beside the dais instead, and how large their place was is not recorded, so the size drawn is a guess.
+    Caveat: At Edo the clerk sat in a room between the magistrate's room and the court; these sheets set their
+    seats beside the dais instead, and how large their place was is not recorded, so the size drawn is a guess.
 
     Name: magistrate's dais
     Covers: the dais band on the office hall's court face, and its label
@@ -388,17 +388,18 @@ class DayOffice(Kind):
     is done - petitions received, orders written, accounts kept.
 
     Why: The dais band is the front of a deeper hall, not a stage of its own: at Takayama the office wing holds the
-    entrance hall, examination room, office and great hall as one block, so the day office and official study belong behind the court face. With no room built for interrogation, a questioning
+    entrance hall, examination room, office and great hall, which we read as one block, and so we set the day office and official study behind the court face. With no room built for interrogation, a questioning
     happens in the day office or the hearing court like any other business.
 
-    Note: The day office as a room of the office hall, behind the dais, follows the record. That no room is built
+    Note: The dais as the front of the office hall follows the record; the day office behind it is our own guess
+    at what the block must hold, since no page we read names the room. That no room is built
     for interrogation is a setting decision (GM, 2026-07), not the record: Takayama had an examination room
     (ginmisho) beside its roofed court, and its torture was done in the jail in the town.
 
 
     Name: day office
     Covers: the day office's floor and its label
-    Label: accurate
+    Label: guess
     Sources: takayama-jinya-jawiki, takayama-jinya-city
     Entry: research/buildings.html - 'The hearing court (shirasu)', 'No interrogation room'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)'
     """
@@ -415,17 +416,14 @@ class OfficialStudy(Kind):
     study in the residence is the wrong side of that line for official business, so the office hall keeps a
     study of its own behind the dais.
 
-    Note: The official study is this project's reading: the Takayama office block is recorded with its
-    entrance hall, examination room, office and great hall, and a study behind the dais is inferred from
-    where the office's paperwork must be done, since no page read names one.
-
-    Caveat: The official study is this project's reading: the Takayama office block is recorded with its
-    entrance hall, examination room, office and great hall, and a study behind the dais is inferred from
-    where the office's paperwork must be done, since no page read names one.
+    Note: The official study is this project's own guess: the Takayama office was rebuilt in 1816 in parts
+    including its entrance hall, examination room, working office and great hall, which we read as one block,
+    and a study behind the dais is inferred from where the office's paperwork must be done, since no page read
+    names one.
 
     Name: official study
     Covers: the official study's floor and its label
-    Label: accurate
+    Label: guess
     Sources: takayama-jinya-jawiki, takayama-jinya-city
     Entry: research/buildings.html - 'The hearing court (shirasu)'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)'
     """
@@ -441,19 +439,16 @@ class ClerksSeats(Kind):
     Why: A hearing is a matter of record: what the parties say and what the magistrate rules is taken down on the
     spot by the office's clerks. At the Edo town magistracy the court was a hall in tiers, and the
     clerk sat with the examining officer in the room between the magistrate's innermost room and the court;
-    some magistrates' courts set an upper tier apart for the examiners and the scribes. The clerks sit in the hall,
-    never on the court itself.
+    some magistrates' courts set a further upper room apart for the examiners and the scribes. The clerks sit in the
+    hall, never on the court itself.
 
-    Note: The clerks' place in the hall, between the magistrate and the court and never on the court, follows
-    the record. How large that place was is not recorded, so the seats' size is a guess, and the plans set the
-    clerks to either side of the dais in one band rather than in a room of their own below it.
-
-    Caveat: How large that place was is not recorded, so the seats' size is a guess, and the plans set the
-    clerks to either side of the dais in one band rather than in a room of their own below it.
+    Note: The clerks' place in the hall, above the court and never on it, follows the record. Setting them to
+    either side of the dais, level with it, rather than in a room of their own below it, is a deliberate
+    deviation for simplicity. How large that place was is not recorded, so the seats' size is a guess.
 
     Name: clerks' seats
     Covers: the two seats flanking the dais and their labels
-    Label: accurate
+    Label: deviation
     Sources: oshirasu-jawiki, shirasu-kotobank
     Entry: research/buildings.html - 'The hearing court (shirasu)'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)'
     """
