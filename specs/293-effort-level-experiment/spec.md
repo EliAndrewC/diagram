@@ -114,9 +114,11 @@ and is opened only after both grades are recorded.
    before the replacement's first run (see the edge case) - and never edited afterwards; a later wish to grade something else is noted in the report as an observation, not scored.
 2. **Given** two outputs of a task, **When** they are prepared for grading, **Then** anything naming the effort level or the run (session
    names, clone paths, the prompt's arm line, commit trailers) is stripped, and the outputs are labeled A and B in a random order.
-3. **Given** the blinded outputs, **When** they are graded, **Then** a fixed grader agent (one agent file, its model and effort pinned)
-   scores both against the rubric, and the GM grades them too; for research the GM's judgment is final, and for implementation the
-   GM's judgment breaks a tie or a disagreement with the grader.
+3. **Given** the blinded research outputs, **When** they are graded, **Then** two runs of the fixed grader agent (one agent file, its
+   model and effort pinned) each score both against the rubric and answer the GM's two questions - is either entry deficient; is one
+   strongly better in a concrete way a reader would care about - and their agreement is what tells how reliable the result is; the GM's
+   own, non-blind reading is recorded beside them, not as the final grade (amendment of 2026-09-30). The implementation pair is not
+   blind-graded: the GM's ruling stands for it.
 4. **Given** the grades are recorded, **When** the key is opened, **Then** the report records both graders' scores per arm and says how
    the outputs differ (depth, correctness, missed items, a better approach found), not only which one won.
 
@@ -144,8 +146,9 @@ each task closes are closed.
 3. **Given** main has moved since the starting commit (other features touch the hamlet generator), **When** the implementation
    winner lands, **Then** it is merged onto current main by the session that lands it, and the post-merge result, not the run's, is what the
    gate passes; the extra work of that merge is recorded in the report and not counted against either arm.
-4. **Given** neither output of a task meets its rubric's pass line, **When** grading ends, **Then** neither lands, the report says so, and the
-   task stays open in future-work with what both runs found.
+4. **Given** neither research output meets its rubric's pass line, **When** grading ends, **Then** neither lands, the report says so, and the
+   task stays open in future-work with what both runs found. The implementation lands as the version the GM chose (`xhigh`'s), ported onto
+   current main.
 
 ---
 
@@ -223,14 +226,17 @@ says how to add an arm (`high`) or a second run per cell.
   gate, the moved-map reviews, and any later review before the report closes - are recorded in the report as their own section, not re-scored.
 - **FR-009 Blinding**: a step the grader does not read strips arm-identifying text from each output, labels the two outputs of a task A and B in a random
   order, and writes the key to a file opened only after both grades are recorded.
-- **FR-010 Grading**: one grader agent file, model and effort pinned, which does not inherit the project's instructions (as every defined agent here), grades
-  both outputs of a task against its rubric; the GM grades them too. The GM's grade is final for research; for implementation it breaks a tie or a
-  disagreement.
+- **FR-010 Grading**: one grader agent file, model and effort pinned, which does not inherit the project's instructions (as every defined agent here). For
+  research, two runs of it grade both outputs against the rubric and answer the GM's two questions (deficient? strongly better?); the GM's non-blind
+  reading is recorded. For implementation, the GM's ruling after reading both outputs stands, and no blind grading is made (amendment of 2026-09-30).
 - **FR-011 Decision rule** (fixed now, before any run; applied per task type):
   - **Adopt `xhigh`** if its blind quality is clearly better - both graders prefer it, or the GM does with a stated reason on a rubric criterion - OR if
     quality is not worse and BOTH its total tokens and its wall-clock are at most 1.25x `medium`'s (rework having paid for the extra thinking).
   - **Keep `medium`** if `xhigh`'s quality is worse, or if quality is the same and `xhigh` costs more than 1.25x in total tokens or in wall-clock.
   - **Inconclusive** otherwise - the two graders disagree and the GM declines to decide.
+  - **Under the amendment of 2026-09-30**, research quality is "clearly better" when both grader runs prefer the same entry, each by at least 6 of
+    40 points or by 2 or more on the answer or citation criteria (the bar the GM approved with the review, request.md); otherwise quality is "the
+    same" and the rule's cost tests decide. For implementation, the GM's ruling after reading both outputs is the quality judgment.
   - **Expand** (add `high`, or a second run per cell) when the graders find a clear quality difference in EITHER direction, or when total tokens or
     wall-clock differ by more than 2x between arms in either direction - the GM's "if there is a big difference between medium and xhigh". The expansion
     is proposed to the GM, not started.
@@ -261,9 +267,11 @@ says how to add an arm (`high`) or a second run per cell.
   counted by hand.
 - **SC-002** (FR-004, FR-008) each task's rubric is committed before that task's first run starts (a replaced task's before the replacement's
   first run), and neither changes after it.
-- **SC-003** (FR-009, FR-010) the grader agent grades each pair without access to the key; the key is opened after both grades per task are recorded.
+- **SC-003** (FR-009, FR-010) the grader agent's two runs grade the research pair without access to the key, and the key is opened after both are
+  recorded; the implementation pair carries the GM's ruling instead of a blind grade.
 - **SC-004** (FR-011, FR-012, FR-013) the report states an outcome under FR-011 for research and for implementation, and the arithmetic can be re-done from its table.
-- **SC-005** (FR-014) the better output of each task that meets its pass line is on main; the other is discarded; the future-work entries they close are closed.
+- **SC-005** (FR-014) the research output the review found better (meeting its pass line) and the implementation the GM chose, ported onto current
+  main, are on main; the other outputs are discarded; the future-work entries they close are closed.
 - **SC-006** (FR-005) no run was killed by the memory limit and left counted; no two runs overlapped in time; every run's record shows the
   container's memory under the headroom threshold at its launch; no measurement, grading or gate of the experiment overlapped a live run.
 

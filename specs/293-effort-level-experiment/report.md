@@ -8,7 +8,7 @@ reduced version when either changes significantly.
 
 | task type | quality | cost (`xhigh` / `medium`) | FR-011 outcome | the GM's ruling |
 |---|---|---|---|---|
-| research | no meaningful difference (blind: both graders prefer `xhigh`, by 1 and 5 of 40 - under the bar of 6 fixed before the key was opened; the GM, not blind: no noticeable difference) | output tokens 2.4x, API time 2.2x, wall-clock 3.0x | **keep `medium`** (quality the same, cost over 1.25x) | keep `medium` - "I don't really find either of the research pages to be particularly noticeably better than the other" |
+| research | the same, under the bar fixed before the key was opened (blind: both grader runs prefer `xhigh`, by 1 and 5 of 40, under the bar of 6; they DISAGREE on whether it is strongly better - run 1 no, run 2 yes; the GM, not blind: no noticeable difference) | total tokens 2.1x (output 2.4x), API time 2.2x, wall-clock 3.0x | **keep `medium`** (quality the same, cost over 1.25x) | no setting ruling: "I don't really find either of the research pages to be particularly noticeably better than the other" - a blind check asked for |
 | implementation | `xhigh` better (the GM, not blind) | output tokens 2.3x, API time 3.0x, wall-clock 2.9x | **adopt `xhigh`** on quality (the GM prefers it, with its reason) | **keep `medium` as the default**; go higher "in cases where I believe that it will be necessary for the session to really go deep and take the initiative to do research and find semi-related bugs and fix them" |
 
 **Recommendation:** keep `medium`, Opus 5.5's own default, as this repository's default effort for both task types. No setting
@@ -57,13 +57,16 @@ entries to the same floor; the difference effort made was one source found, whic
 
 **Research (blind, two `effort-grader` runs on Opus `high`; the key opened after both):** A = e2 (`xhigh`), B = e3 (`medium`).
 
-| grader run | A (`xhigh`) | B (`medium`) | preference |
-|---|---|---|---|
-| 1 | 33 / 40 | 32 / 40 | A, "better but not strongly" |
-| 2 | 35 / 40 | 30 / 40 | A, "moderately" |
+| grader run | A (`xhigh`) | B (`medium`) | deficient? | strongly better? |
+|---|---|---|---|---|
+| 1 | 33 / 40 | 32 / 40 | no, neither | no - A better, "but not strongly" |
+| 2 | 35 / 40 | 30 / 40 | no, neither | **yes, A** - "the difference changes what gets drawn"; how much: "moderately" |
 
-The two runs agree on the direction (the GM: whether two runs match is what tells how reliable the result is), and both pass both entries,
-neither deficient. **What made the `xhigh` entry better:** it found a source the other missed - a surviving Kanazawa gate range whose
+The GM's two questions, answered by two runs (the GM: whether two runs match is what tells how reliable the result is): **they agree**
+that neither entry is deficient and that A is the better one; **they disagree** on whether A is strongly better - run 1 no, run 2 yes. So
+the result is not reliable on that point. Under the bar the GM approved before the key was opened (both runs prefer one entry, each by 6
+of 40 or by 2 on the answer or citation criteria - here margins of 1 and 5, and gaps of 0 and 1 on those criteria), it is "no meaningful
+difference". **What made the `xhigh` entry better:** it found a source the other missed - a surviving Kanazawa gate range whose
 servants' room is two six-mat rooms behind one sliding door - and so concluded that Ubame's four-bays-one-door sheet is accurate as drawn
 (the common-room form), where the `medium` entry would give every bay its own door, turning "a door per household" into "a door per bay"
 against its own sources (households two or three bays wide). It also read the one scholarly paper (1790s domain plans), which the other

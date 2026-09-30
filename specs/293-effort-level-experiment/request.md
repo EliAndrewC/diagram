@@ -28,6 +28,10 @@ The GM's answers to the session's questions, 2026-09-29, verbatim:
   version of the implementation task and doing this blind review and merging in whichever version of the research task results it deems to
   be better along with giving me an analysis of what makes the better one better and how much better it seems to be. I think at that point,
   the entire feature is mergeable back into main."
+- The session's proposal the GM approved (2026-09-30), its bar verbatim: "**The bar, fixed before the key is opened:** **Strongly better:**
+  all three runs prefer the same entry, and each by at least 6 points of 40, or by 2 or more on the answer or citation criteria. **Otherwise:** 'no
+  meaningful difference'. The higher average total still lands, but the report will say the difference doesn't justify the extra time and tokens."
+  (The GM then made it two runs instead of three.)
 - And on the proposed review: "Let's do two runs instead of three for the effort grader. Because frankly, just knowing whether or not two
   runs match or not is good enough for telling me how reliable the results are. ... Other than that, yes, please go ahead on that basis. Do
   all of this and then land the feature in main."
