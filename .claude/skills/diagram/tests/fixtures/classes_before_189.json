@@ -609,7 +609,7 @@
   "paddy": {
     "caveat": "the field is shown flooded, which is one moment of a cycle that runs from flooded to cracked and back; the depths behind that choice are modern extension figures, and no pre-modern record of either the depths or the drying stages was found.",
     "covers": "the wet plots of every `fields[kind=paddy]` - the flooded basins",
-    "entry": "research/fields.html - 'Rice paddies and their plots (suiden)', 'Plot sizes', 'How deep the water actually stands', 'Was a paddy drained in midsummer before modern times?'; research/rendering/fields.html - 'How our maps draw rice paddies and their plots (suiden)'; research/archetypes.html - 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'",
+    "entry": "research/fields.html - 'Rice paddies and their plots (suiden)', 'Plot sizes', 'The paddy through the rice year: flooding, draining, transplanting and after the harvest'; research/rendering/fields.html - 'How our maps draw rice paddies and their plots (suiden)', 'How our maps show the paddy through the rice year'; research/archetypes.html - 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'",
     "key": "paddy",
     "label": "accurate",
     "label_note": "Plot form and the irregular patchwork are read; plot sizes are calibrated from the record. the field is shown flooded, which is one moment of a cycle that runs from flooded to cracked and back; the depths behind that choice are modern extension figures, and no pre-modern record of either the depths or the drying stages was found.",

@@ -164,7 +164,7 @@ class PaddyMixin:
             cy = sum(q[1] for q in poly) / len(poly)
             # CROP MIX: an irrigated valley exists to grow RICE (~85% of the watered common). Dry upland crops
             # (barley/veg, soy) cluster on the MARGINS - the higher, harder-to-water rim - while the well-watered
-            # interior is all paddy. So dry/soy probability rises toward the field edge. See research/fields.html 'Why is every rice plot the same green?' ('Crop mix'.
+            # interior is all paddy. So dry/soy probability rises toward the field edge. See research/rendering/fields.html 'How our maps show the paddy through the rice year' ('Crop mix'.
             edge = max(0.0, 1.0 - edge_dist(cx, cy, smoothed) / (2.4 * plot))  # 1 at the rim, 0 deep interior
             r = random.random()
             dry_p, soy_p = 0.05 + 0.24 * edge, 0.03 + 0.11 * edge
@@ -172,7 +172,7 @@ class PaddyMixin:
             if crop == 'rice':
                 # a village transplants TOGETHER (shared water, exchanged labor), so its paddies are largely
                 # ONE stage - here high-summer green - with only minor spread (early/late rice varieties, the odd
-                # low flooded plot); NOT a rainbow of stages. See research/fields.html 'Why is every rice plot the same green?'.
+                # low flooded plot); NOT a rainbow of stages. See research/rendering/fields.html 'How our maps show the paddy through the rice year'.
                 st = random.random()
                 if st < 0.06:
                     fill, flooded = random.choice(FLOODED_SHADES), True
@@ -292,7 +292,7 @@ class PaddyMixin:
         """A WET paddy: a flooded, mottled sheet (irregular hand-transplanted shoots, plus a faint water sheen
         for a freshly-flooded plot) - NOT ruled rows. Premodern rice was transplanted irregularly; crisp
         checkrow planting (seijoue) is a Meiji improvement, so ruled rows on a paddy read as modern (the same
-        era-tell as the consolidation grid). See research/fields.html 'Why is every rice plot the same green?'.
+        era-tell as the consolidation grid). See research/rendering/fields.html 'How our maps show the paddy through the rice year'.
 
         Two mottle modes. Default (pitch=None): the sparse random scatter every comb map has always drawn
         (byte-stable). `pitch` (GM 2026-07-23, the polder-leftover repaint): a JITTERED GRID - dot centers
