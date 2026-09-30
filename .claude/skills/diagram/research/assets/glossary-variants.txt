@@ -2777,6 +2777,8 @@ shophouse	machiya
 shophouses	machiya
 shoro	shoro
 short-range spotting	spotting
+shotoku	Shotoku era
+shotoku era	Shotoku era
 shoucheng lu	Shoucheng Lu
 shoulder month	shoulder month
 showa	Showa
@@ -2796,6 +2798,8 @@ shumon aratame cho	shumon aratame cho
 shunde	Shunde
 shungiku	shungiku
 shunzhi	Shunzhi
+shōtoku	Shotoku era
+shōtoku era	Shotoku era
 shōwa	Showa
 shōya	shoya
 si	SI

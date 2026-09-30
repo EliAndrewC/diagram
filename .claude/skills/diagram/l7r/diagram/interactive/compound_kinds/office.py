@@ -228,8 +228,7 @@ class Cell(Kind):
 class Gatehouse(Kind):
     """
     What: The watch's guardroom at the main gate, where the door is kept: either a small gatehouse of its own
-    just inside the gate and to one side, or a room of the long gate range the gate passes through - never
-    across the opening.
+    beside the gate, or a room of the long gate range the gate passes through - never across the opening.
 
     Why: The main gate is the compound's one door for visitors on business, and a guard lodged beside it
     controls it without closing the way. Both forms are attested. At the Kashiwara domain's seat the
@@ -239,19 +238,19 @@ class Gatehouse(Kind):
     gates had their guardrooms too.
 
     Note: Both forms follow the record, and each sheet takes one; a depth of about 12 ft is attested for
-    both. The size of Takayama's gatehouse was not found: the one freestanding guardroom measured is about 18
-    by 12 ft, and a freestanding gatehouse drawn much longer, around 40 ft, is a guess at the gate range's
-    scale.
+    both. The size of Takayama's gatehouse, and where it stood, were not found: the one gatehouse of its own
+    measured, a temple gate's guardroom at Kita-in that now stands against the gate, is about 18 by 12 ft, and
+    a gatehouse of its own drawn much longer, around 40 ft, is a guess at the gate range's scale.
 
-    Caveat: The size of Takayama's gatehouse was not found: the one freestanding guardroom measured is about
-    18 by 12 ft, and a freestanding gatehouse drawn much longer, around 40 ft, is a guess at the gate range's
-    scale.
+    Caveat: The size of Takayama's gatehouse, and where it stood, were not found: the one gatehouse of its own
+    measured, a temple gate's guardroom at Kita-in that now stands against the gate, is about 18 by 12 ft, and
+    a gatehouse of its own drawn much longer, around 40 ft, is a guess at the gate range's scale.
 
     Name: gatehouse
     Covers: the guard post beside the main gate, or the guardroom in the gate range, and its label
     Label: accurate
     Sources: tamba-kashiwara-jinya, matsue-bukeyashiki, takayama-jinya-city, takayama-jinya-jawiki, bansho-jawiki, kitain-bansho
-    Entry: research/buildings.html - 'The main gate and its gatekeepers (nagaya-mon)'; research/rendering/buildings.html - 'How our maps draw the main gate and gatehouse'
+    Entry: research/buildings.html - 'The main gate and its gatekeepers (nagaya-mon)'; research/rendering/buildings.html - 'How our maps draw the main gate and its gatekeepers (nagaya-mon)'
     """
 
     key = "gatehouse"
