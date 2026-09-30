@@ -179,3 +179,32 @@ def test_the_junctions_filed_water_is_every_water_segment() -> None:
             wet += want
             assert near_water(index, q) is want
     assert 50 < wet < 2300, "the sample holds junctions on the water and off it"
+
+
+def test_a_house_box_refused_on_growing_grounds_refuses_every_box_that_holds_it() -> None:
+    """`_house_box_refused` (the nucleated placer's first question): past the canvas margin, over a reserved corridor, on two
+    placed homesteads - each refuses every box holding the house's box (`_envelope_blocked` returns True, never the one box
+    a move is made from); one placed homestead alone does not refuse it (the placer's move may clear it)."""
+    from l7r.diagram.settlement import Settlement
+    from l7r.diagram.settlement.rolling.access import start_tree
+
+    s = Settlement(1400, 1400, seed=3)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=True)
+    s._nucleated = True
+    hw, hh = 46.0, 28.0
+    box = s._house_box(700.0, 700.0, hw, hh)
+    assert box[:2] == (700.0, 700.0) and box[2] >= hw - 1e-9
+    assert not s._house_box_refused(box)
+    assert s._house_box_refused(s._house_box(20.0, 700.0, hw, hh)), "past the canvas margin"
+    s.placed.append((720.0, 700.0, 40.0, 40.0))
+    assert not s._house_box_refused(box), "one placed homestead: the move may clear it"
+    s.placed.append((680.0, 700.0, 40.0, 40.0))
+    assert s._house_box_refused(box), "two placed homesteads"
+    rng = random.Random(2878)
+    for _ in range(50):  # every box holding a refused house box is refused by the envelope test
+        grown = (box[0] + rng.uniform(-5, 5), box[1] + rng.uniform(-5, 5), box[2] + rng.uniform(10, 80), box[3] + rng.uniform(10, 80))
+        assert s._envelope_blocked(grown) is True
+    t = Settlement(1400, 1400, seed=3)
+    t.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=True)
+    start_tree(t, (700.0, 600.0), (0.0, 1.0), 300.0)
+    assert t._house_box_refused(t._house_box(700.0, 700.0, hw, hh)), "over a reserved corridor"

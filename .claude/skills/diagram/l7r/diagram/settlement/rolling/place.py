@@ -216,6 +216,13 @@ class PlacerMixin:
         # at its moved position. A box the static ground refuses is one `_envelope_blocked` refuses (True, before any
         # placed box is read), so asking it first changes no verdict and never removes a move.
         _fg = getattr(self, "_free_ground", None)
+        # THE HOUSE'S OWN BOX FIRST, BEFORE ANY LAYOUT (feature 287 perf): every configuration's box, and the union, holds the
+        # house's box as drawn (`_house_box`), so a refusal of the house's box that only grows with the box - past the canvas
+        # margin, over a reserved corridor, on two placed homesteads - refuses every one of them before the placed-box move
+        # is ever offered (`_envelope_blocked` returns True, not the one box, on any of the three). The four layouts, each
+        # laying the household's fixtures, were built for nothing on a third of the exhaustive pass's offers.
+        if self._house_box_refused(self._house_box(x, y, hw, hh)):
+            return None
         # THE FOUR CONFIGURATIONS BUILT ONCE (dev/performance.md): the envelope is their union, and the loop below judges
         # each at this seat - it built all four again (seed 17: 25,000 bundles, half of them rebuilt)
         _at = {side: self._bundle_geom(x, y, hw, hh, side, shed) for side in self._NUC_SIDES}
@@ -262,6 +269,30 @@ class PlacerMixin:
         if best is None:
             return None
         return best[1], best[2], best[3]
+
+    def _house_box(self: Settlement, x: float, y: float, hw: float, hh: float) -> tuple[float, float, float, float]:  # type: ignore[misc]
+        """The house's box as `_bundle_geom` records it at (x, y) (`boxes["house"]`): its rect, turned by the seat's rake."""
+        _th = math.radians(self._turn_at(x, y))
+        _c, _s = abs(math.cos(_th)), abs(math.sin(_th))
+        w, h = float(hw), float(hh)
+        return (float(x), float(y), w * _c + h * _s, w * _s + h * _c)
+
+    def _house_box_refused(self: Settlement, box: tuple[float, float, float, float]) -> bool:  # type: ignore[misc]
+        """Is a box refused on the grounds that only grow with it - the canvas margin, a reserved corridor, two or more placed
+        boxes (`_envelope_blocked`'s own tests and margins)? Then so is every box that holds it."""
+        cx, cy, w, h = box
+        if cx - w / 2 < 6 or cx + w / 2 > self.W - 6 or cy - h / 2 < 6 or cy + h / 2 > self.H - 6:
+            return True
+        tree = getattr(self, "_access", None)
+        if tree is not None and tree.covers_box(box):
+            return True
+        seen: set[int] = set()
+        for it in self._reach_index(self.placed, "placed_reach").near(cx, cy, max(w, h) / 2 + 2):
+            if id(it) not in seen and abs(cx - it[0]) < (w + it[2]) / 2 + 2 and abs(cy - it[1]) < (h + it[3]) / 2 + 2:
+                seen.add(id(it))
+                if len(seen) >= 2:
+                    return True
+        return False
 
     def _solve_homestead(self: Settlement, rec: Any) -> Any:  # type: ignore[misc]
         """Find the best position for a farmhouse so its WHOLE homestead fits - threshing yard + dooryard

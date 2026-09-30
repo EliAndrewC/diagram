@@ -506,7 +506,12 @@ cost of a roll and of a gate (the full record: `specs/287-placer-guarantees/rese
   2026-09-30, method: `make perf LABEL=adhoc` alternated over detached worktrees of the feature's head and of main, load
   4.6-6.4). **What is left is the guarantees' own work**: the exhaustive seat pass offers hundreds of seats
   for the last few households (seed 4: 523 offered, 9 taken) and each pays four bundle layouts and a corridor search;
-  its counts are the manifest's `seat_search`, so pruning offers changes the record, and was not done here.
+  the one exact refusal found ahead of the layouts is the house's own box on the grounds that only grow with a box
+  (`_house_box_refused`: the canvas margin, a reserved corridor, two placed homesteads - about a third of the offers,
+  0.1 s a seed; only `seat_search`'s counts moved). Offering the full-pitch lattice first would cut the pass's offers
+  from 523 / 282 / 378 to 71 / 66 / 87 on seeds 4 / 25 / 47, but the clusters it seats spread 12-27% further from their
+  seat and up to 28% taller - a change of form, not of speed, and not taken (observed 2026-09-30, method: the reference
+  spec's seating in the clone, the grid reordered, against the unmodified engine).
 - **The bookends**: `287-start` total 20.9 s, median 5.2 s, worst 5.8 s (observed 2026-09-29, method: `make perf
   LABEL=287-start` before any engine change, load 1.3); the `287-end` comparison is the feature's T89, recorded in its
   plan.

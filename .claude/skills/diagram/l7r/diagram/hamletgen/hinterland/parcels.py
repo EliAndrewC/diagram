@@ -280,8 +280,12 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
     # `woodland_commons_on_dry_ground` gates the result.
     marshes: list[Poly] = marsh_ground(s.M)  # the drawn marsh (feature 287, M7)
 
+    # ...each marsh's y-span taken once (feature 287 perf): a ray test counts an edge only where `(yi > py) != (yj > py)`, so a
+    # sample outside a ring's [lowest, highest) y is outside it without the walk - the same verdict
+    _marsh_spans = [(min(q[1] for q in mp), max(q[1] for q in mp), mp) for mp in marshes if mp]
+
     def _wet(x: float, y: float, half_: float) -> bool:
-        return any(point_in_poly(x + ddx * half_, y + ddy * half_, mp) for mp in marshes for ddx in (-1.0, 0.0, 1.0) for ddy in (-1.0, 0.0, 1.0))
+        return any(y0 <= y + ddy * half_ < y1 and point_in_poly(x + ddx * half_, y + ddy * half_, mp) for y0, y1, mp in _marsh_spans for ddx in (-1.0, 0.0, 1.0) for ddy in (-1.0, 0.0, 1.0))
 
     crops: list[Poly] = [list(plan.envelope)] + [[(float(v[0]), float(v[1])) for v in d["poly"]] for d in s.M.get("dry_plots", [])]
     crop_idx = [RingIndex(c) for c in crops]  # each crop's edges indexed once (feature 218); the rung below boxes them by its own set-back
