@@ -2673,6 +2673,8 @@ sakutoku landlord	sakutoku
 sakutoku landlords	sakutoku
 sally gate	sally port
 sally port	sally port
+sally ports	sally port
+sallying	sortie
 sallyport	sally port
 salt road	Salt Road
 salvage excavation	salvage excavation
@@ -2942,6 +2944,8 @@ song yingxing	Song Yingxing
 song-dynasty	Song dynasty
 sonsha	sonsha
 soroban	soroban
+sortie	sortie
+sorties	sortie
 soto	Sōtō
 soto zen	Sōtō
 soto-machi	outer town
