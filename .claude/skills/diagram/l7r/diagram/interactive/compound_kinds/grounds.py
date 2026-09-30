@@ -22,7 +22,8 @@ class OuterCourt(Kind):
     them: Chinese regulation required it of a county office, and Japanese offices likewise kept the chief's
     household inside the working compound, though no source read sets it behind the office. So
     whoever comes on business - a petitioner, a taxpayer, a prisoner - is dealt with here, near the gate,
-    and goes no deeper. Its open ground is not wasted space: a real jin'ya left most of its site open, and
+    and goes no deeper. Its open ground is not wasted space: a jin'ya, on this project's reading of plans,
+    left most of its site open - at Takayama the plaza in front alone is about an eighth of the site - and
     its forecourt and hearing court were features of the plan in their own right.
 
     Note: The two-court split follows the Chinese record, and the open forecourt follows the record; no

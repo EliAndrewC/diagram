@@ -39,19 +39,22 @@ class Residence(Kind):
     samurai's main house ran about 49 tsubo (about 1,740 sq ft) for a 150-koku district magistrate in 1794, and a house
     of about 1,000 koku before 1868 about 41 to 74 tsubo by two official measures that disagree; the 67-tsubo house once
     cited measures a house restored to its Meiji plan and is no longer a measure; the hand sheets' wings, about 180 to
-    200 ft long, are larger than either, a guess. Both massings are attested and each sheet takes one: one block is the ordinary posting's form, and a
+    200 ft long, are larger than either, a guess; the one intendant's residence measured, Takayama's (a 1990s
+    restoration), is about 6,400 sq ft. Both massings are attested and each sheet takes one: one block is the ordinary posting's form, and a
     residence drawn in echelon reads as one its holders have added to. That a corridor joins each hall to the last
     is this project's reading; no source read says how Katsura's echelon halls are joined. Of the service strip on
     the shady rear only its storehouse, behind the house, is read (the Higuchi house); the rest is reasoned from the
-    sun rule, and that the residence out-measures
-    every other domestic building is this project's own reading of the compound; no page a reader can open ranks
-    the footprints. A garden standing where the court would be, between the gate and the entrance, is a guess.
+    sun rule. That the residence out-measures the staff's rowhouse is read at Takayama, where the office hall
+    out-measures the residence; that it out-measures a kitchen, bath or shrine hall is this project's own reading
+    of the compound; beyond Takayama's measures, no page a reader can open ranks the footprints. A garden standing where the court would be, between the gate and the entrance, is a guess.
     Each labeled room is a suite of several rooms compressed to one label, a schematic convenience.
 
     Caveat: That a corridor joins each hall to the last is this project's reading; no source read says how
     Katsura's echelon halls are joined. Of the service strip on the shady rear only its storehouse, behind the
-    house, is read (the Higuchi house); the rest is reasoned from the sun rule, and that the residence out-measures every other domestic building is this project's own
-    reading of the compound; no page a reader can open ranks the footprints. A garden standing where the court
+    house, is read (the Higuchi house); the rest is reasoned from the sun rule. That the residence out-measures the
+    staff's rowhouse is read at Takayama, where the office hall out-measures the residence; that it out-measures a
+    kitchen, bath or shrine hall is this project's own reading of the compound; beyond Takayama's measures, no page
+    a reader can open ranks the footprints. A garden standing where the court
     would be, between the gate and the entrance, is a guess. Each labeled room is a suite of several rooms
     compressed to one label, a schematic convenience.
 
@@ -367,13 +370,13 @@ class Stables(Kind):
     Note: The freestanding stable a few bays long, its stalls one bay wide on board floors, and the watering at a
     well are recorded findings, and the program classes the stable as accurate: drawn smaller than the barracks,
     checked against the size audit. A stall's depth, and so its area, is a guess, and so is the number of horses:
-    no page read gives either for a county post. The stable's rank below the barracks is the record's own
-    reading - no readable source ranks a compound's footprints - and its watering finding was written for city
+    no page read gives either for a county post. The stable's rank below the barracks is a guess, this project's own
+    reading - no page read says where a stable ranked among an office's buildings - and its watering finding was written for city
     stable yards.
 
     Caveat: A stall's depth, and so its area, is a guess, and so is the number of horses: no page read gives
-    either for a county post. The stable's rank below the barracks is the record's own reading - no readable
-    source ranks a compound's footprints - and its watering finding was written for city stable yards.
+    either for a county post. The stable's rank below the barracks is a guess, this project's own reading - no page
+    read says where a stable ranked among an office's buildings - and its watering finding was written for city stable yards.
 
     Name: stables
     Covers: the stable building, its stall divisions and its label
@@ -485,7 +488,8 @@ class CompoundShrine(Kind):
     Note: A modest shrine inside the walls of a post of any size is a recorded finding, read on the 1869 drawing
     of the Jōge post and on a Chinese yamen's three shrines, and a second kami in a small shrine of its own is one
     of three attested forms; the program classes the shrine as accurate, with a hall-shrine ceiling of about 36
-    by 30 ft subordinate to the residence. Making it Inari's by default is a guess resting on that one post, whose
+    by 30 ft subordinate to the residence, a ceiling that is this project's guess, since no page read measures a
+    worship hall. Making it Inari's by default is a guess resting on that one post, whose
     shrines are known from the drawing alone: the excavation found the post's walls, steps and foundation stones,
     not its shrines. The ranking below the residence, and the small worship hall it rests on, are the record's
     own reading, no page read giving a worship hall's size or ranking a compound's buildings.

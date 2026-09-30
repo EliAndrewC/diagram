@@ -23,21 +23,25 @@ class OfficeHall(Kind):
     examination room, rebuilt together in 1816 - was built with great formality to show the office's rank, and the room where hearings were held is one part of that block. The
     magistrate and staff need somewhere to do the daily paperwork, and the residence's private study is on
     the wrong side of the line between state and home for it, so the hall is deep, and it may be the largest
-    building in the compound, being the institution's working core rather than a dwelling. A wooden hall
+    hall in the compound, out-measuring the residence as Takayama's did, being the institution's working core
+    rather than a dwelling; only a store for a wide territory's rice may be larger. A wooden hall
     could burn, and many did (the Sado magistracy was rebuilt five times, though Takayama's never burned),
     which, this project judges, is why the documents and the tax grain are kept in storehouses of their own.
 
     Note: The hall's form and its place follow the record. The day office and official study behind the dais
-    are this project's reading of what the block must hold, since no page read names them. That it may out-size the residence is a guess, the Takayama pages giving no floor area for any
-    building, and no readable source ranks a compound's footprints, and why the papers and grain went to storehouses is this project's guess, as no page read
-    says. Its size, about 80 to 150 ft long and 20 to 45 ft deep, is a guess: it is the plan vocabulary's
-    working block, with no measured office wing of a jin'ya behind it.
+    are this project's reading of what the block must hold, since no page read names them. That it out-sizes the
+    residence follows Takayama, the one office measured building by building (about 8,100 sq ft against 6,400); no
+    second office gives an area for any building, and why the papers and grain went to storehouses is this
+    project's guess, as no page read says. Its size, about 80 to 150 ft long and 20 to 45 ft deep, is a guess: it
+    is the plan vocabulary's working block, and it is smaller than the one office measured, Takayama's at about
+    8,100 sq ft.
 
     Caveat: The day office and official study behind the dais are this project's reading of what the block
-    must hold, since no page read names them. That it may out-size the residence is a guess, the Takayama pages giving no floor area for any
-    building, and no readable source ranks a compound's footprints, and why the papers and grain went to storehouses
-    is this project's guess, as no page read says. Its size, about 80 to 150 ft long and 20 to 45 ft deep, is a guess: it is the
-    plan vocabulary's working block, with no measured office wing of a jin'ya behind it.
+    must hold, since no page read names them. That it out-sizes the residence follows Takayama, the one office
+    measured building by building (about 8,100 sq ft against 6,400); no second office gives an area for any
+    building, and why the papers and grain went to storehouses is this project's guess, as no page read says. Its
+    size, about 80 to 150 ft long and 20 to 45 ft deep, is a guess: it is the plan vocabulary's working block, and
+    it is smaller than the one office measured, Takayama's at about 8,100 sq ft.
 
     Name: office hall
     Covers: the office hall's block, its outline and its front band
@@ -265,14 +269,17 @@ class Barracks(Kind):
     Note: On-grounds housing for the staff is a reconstruction: a small domain's jin'ya kept its retainers'
     residences inside its walls, and the Takayama intendancy kept a rowhouse for its storehouse keepers, but no source read says the rest of a rural intendant's staff lived on the grounds; for a
     city magistrate's office, the separate constables' district and the magistrate's own residence inside the office are attested. That the barracks outranks the stable is
-    this project's own reading, since no readable source ranks a compound's buildings by footprint. The
-    building's size, about 20 to 70 ft by 10 to 40 ft, is a guess taken from the plan vocabulary's range, and
+    this project's own reading, since no page read says where a stable ranked among an office's buildings; that the
+    staff's rowhouse stands below the office hall and the residence is read, from Takayama's measured floor areas.
+    The building's size, about 20 to 70 ft by 10 to 40 ft, is a guess taken from the plan vocabulary's range (the
+    one staff rowhouse measured, Takayama's restored one, is about 3,700 sq ft, larger than that range allows), and
     how many live in it follows how the posting houses its staff. A warrior's rowhouse divided into dwellings is read
     (an Edo duty rowhouse of 1860, three retainers to a unit); no page read puts a bed or bunk in one before modern
     times, the first barracks with beds found being the Meiji army's of 1873.
 
     Caveat: The building's size, about 20 to 70 ft by 10 to 40 ft, is a guess taken from the plan vocabulary's
-    range, and how many live in it follows how the posting houses its staff.
+    range (the one staff rowhouse measured, Takayama's restored one, is about 3,700 sq ft, larger than that range
+    allows), and how many live in it follows how the posting houses its staff.
 
     Name: barracks
     Covers: the barracks building and its label
