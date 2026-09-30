@@ -1789,7 +1789,8 @@
    "hata",
    "upland field",
    "upland fields",
-   "upland-field"
+   "upland-field",
+   "dry-field"
   ]
  },
  "hatamoto": {
@@ -5264,7 +5265,8 @@
   "def": "The temple name of the founding emperor of the Ming dynasty, the Hongwu Emperor.",
   "variants": [
    "Taizu",
-   "Ming Taizu"
+   "Ming Taizu",
+   "zhu yuanzhang"
   ]
  },
  "Caishen": {
@@ -13420,6 +13422,40 @@
   "def": "The Genbun era, 1736-1741, in the middle of the Edo period.",
   "variants": [
    "genbun"
+  ]
+ },
+ "shecang": {
+  "def": "A Chinese village relief granary run by the villagers themselves: local households gave grain, which was stored in ordinary times and given out in a disaster. Zhu Xi's version was the model for Japan's shasō.",
+  "variants": [
+   "shecang",
+   "xiangcang"
+  ]
+ },
+ "barnyard millet": {
+  "def": "A hardy millet kept as a famine grain. Kurobane domain's village stores held it, and each household laid up about 2 sho of it a year.",
+  "variants": [
+   "barnyard millet",
+   "barnyard millets"
+  ]
+ },
+ "Nihon kyoikushi shiryo": {
+  "def": "A Meiji-era published collection of source material on the history of Japanese education. Its survey of writing schools gives Japan's national count of terakoya, and it missed many regions.",
+  "variants": [
+   "Nihon kyoikushi shiryo"
+  ]
+ },
+ "braced frame": {
+  "def": "A light timber frame stiffened with diagonal braces instead of heavy walls, the build of a fire watch tower: tall and open, not solid like a masonry platform.",
+  "variants": [
+   "braced frame",
+   "braced-frame",
+   "braced frames"
+  ]
+ },
+ "Jikata hanreiroku": {
+  "def": "A manual for rural officials, dated 1794, on how a village's affairs were to be run; it says where a village's storehouse (gogura) should be built.",
+  "variants": [
+   "Jikata hanreiroku"
   ]
  }
 }

@@ -156,6 +156,8 @@ bare red hill	bald hill
 baren	baren
 bargeboard	bargeboard
 bargeboards	bargeboard
+barnyard millet	barnyard millet
+barnyard millets	barnyard millet
 barrel coffin	barrel coffin
 barrel coffins	barrel coffin
 barrier station	sekisho
@@ -226,6 +228,9 @@ borrowed-scenery	borrowed scenery
 boubana	bobana
 boundary post	bojikui
 boundary posts	bojikui
+braced frame	braced frame
+braced frames	braced frame
+braced-frame	braced frame
 branch house	branch house
 branch household	branch household
 branch households	branch household
@@ -678,6 +683,7 @@ dry landscapes	karesansui
 dry paddy	kanden
 dry run	wet run
 dry runs	wet run
+dry-field	hatake
 dry-field conditions	kanden
 dry-field conversion	kanden
 ds/m	dS/m
@@ -1471,6 +1477,7 @@ jiaqing	Jiaqing
 jiaxing	Huzhou-Jiaxing
 jiegao	jiegao
 jiguchi-sen	jiguchi-sen
+jikata hanreiroku	Jikata hanreiroku
 jin	jin
 jin dynasty	Jin dynasty
 jin'ya	jin'ya
@@ -2168,6 +2175,7 @@ night-soil	night soil
 nightsoil	night soil
 nihon dai-hyakka zensho	Nihon Dai-hyakka Zensho
 nihon kokugo daijiten	Nihon Kokugo Daijiten
+nihon kyoikushi shiryo	Nihon kyoikushi shiryo
 nihon rekishi chimei taikei	Nihon Rekishi Chimei Taikei
 nihonbashi	Nihonbashi
 nihonmatsu	Nihonmatsu
@@ -2748,6 +2756,7 @@ shasō	shasō
 shatian	shatian
 sheath	sheath
 sheaths	sheath
+shecang	shecang
 shed people	shed people
 sheer boom	boom
 sheet pile	sheet pile
@@ -3524,6 +3533,7 @@ xiang	xiang
 xiang river	Xiang River
 xiang seven, li three	Lingqu
 xiang-gan	Xiang-Gan
+xiangcang	shecang
 xu	xu
 xu tan	Xu Tan
 xuanhu	Xuanhu
@@ -3639,6 +3649,7 @@ zhou	department
 zhou dynasty	Zhou dynasty
 zhou-dynasty	Zhou dynasty
 zhouli	Zhouli
+zhu yuanzhang	Taizu
 zhuque dajie	Suzaku-oji
 zicheng	zicheng
 zokibayashi	zokibayashi
