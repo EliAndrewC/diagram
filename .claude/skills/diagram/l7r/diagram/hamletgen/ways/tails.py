@@ -22,6 +22,12 @@ _DOUBLED_DEG = 15.0  # deg: a finished tail this near parallel is one tread doub
 _CROSS_BACK_FT = 40.0  # ft: a crossing this close before the cut is the junction the doubled tail overran (Sawada's was 24)
 
 
+def _parallel(u: Pt, v: Pt, deg: float) -> bool:
+    """Whether two directions lie within `deg` of parallel, either way along; a zero-length one counts as parallel."""
+    nu, nv = math.hypot(*u), math.hypot(*v)
+    return not (nu and nv) or math.degrees(math.acos(min(1.0, abs(u[0] * v[0] + u[1] * v[1]) / (nu * nv)))) <= deg
+
+
 def along_tail(pts: Sequence[Pt], other: Sequence[Pt], step: float = 4.0, deg: float = _ALONG_DEG) -> int | None:
     """The index in `pts`' samples where its END starts running alongside `other` - within `_ALONG_FT` of it, nearly
     parallel (within `deg`), for at least `_ALONG_MIN_FT` - or None. Samples every `step` along `pts` from its end inward."""
@@ -36,13 +42,12 @@ def along_tail(pts: Sequence[Pt], other: Sequence[Pt], step: float = 4.0, deg: f
     k = len(samples) - 1
     while k > 0:
         q = samples[k]
-        a, b = min(segs, key=lambda ab: seg_dist(q[0], q[1], ab[0], ab[1]))
-        if seg_dist(q[0], q[1], a, b) > _ALONG_FT:
-            break
         u = (samples[k][0] - samples[k - 1][0], samples[k][1] - samples[k - 1][1])
-        v = (b[0] - a[0], b[1] - a[1])
-        nu, nv = math.hypot(*u), math.hypot(*v)
-        if nu and nv and math.degrees(math.acos(min(1.0, abs(u[0] * v[0] + u[1] * v[1]) / (nu * nv)))) > deg:
+        # ALONGSIDE ANY REACH OF THE WAY WITHIN `_ALONG_FT`, NOT ONLY THE NEAREST (feature 293 I, Inashiro re-packed): a tail
+        # that runs back along a way to that way's own vertex is nearest, at the vertex, to the OTHER reach meeting there - a
+        # tie at zero - and was judged against that one, 27 degrees off, so a straggler's 95 ft retrace of lane 2 never counted
+        near = [(a, b) for a, b in segs if seg_dist(q[0], q[1], a, b) <= _ALONG_FT]
+        if not near or not any(_parallel(u, (b[0] - a[0], b[1] - a[1]), deg) for a, b in near):
             break
         k -= 1
     if polyline_len(samples[k:]) < _ALONG_MIN_FT:

@@ -135,3 +135,63 @@ def test_a_house_beyond_the_reach_of_every_lane_has_no_way_out() -> None:
     }
     routes = departure_routes(m)
     assert len(routes) == 1 and routes[0][0][0] == 200.0, "the near house walks out; the far one is not routed"
+
+
+def _sampled(p: list[tuple[float, float]], step: float = 4.0) -> list[tuple[float, float]]:
+    """A way's points every `step` ft - the spacing `clear_runs` gives a web run before `_lay_web_lane` judges it."""
+    out: list[tuple[float, float]] = []
+    for a, b in zip(p, p[1:], strict=False):
+        n = max(1, int(math.dist(a, b) // step))
+        out += [(a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n) for k in range(n)]
+    return [*out, p[-1]]
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_no_two_ways_run_side_by_side_past_a_pitch(gen: str) -> None:
+    """`WEB_SHADOW_FT` on the FINISHED web, way against way (feature 293, settlement-review of Sawada): two ways within 30
+    ft of each other for more than a bundle pitch read as one way drawn twice. `_lay_web_lane` asks it of a web run as it is
+    laid; the skeleton, the joins and the stragglers are never asked, and a re-packed Sawada shipped two lanes side by side
+    for 244 ft. Way against way, not against the whole network: at a junction a lane runs within 30 ft of the ways it meets,
+    and the shipped maps measure up to 124 ft that way with no way doubled."""
+    from l7r.diagram.hamletgen.consts import BUNDLE_PITCH
+    from l7r.diagram.hamletgen.ways.serve import shadow_measure
+
+    m = _manifest(gen)
+    lanes = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in m["lanes"]]
+    assert sum(len(p) >= 2 for p in lanes) >= 5, "non-vacuity: a web to measure"
+    for i, p in enumerate(lanes):
+        if len(p) < 2 or m["lanes"][i].get("connector"):
+            continue
+        run = _sampled(p)
+        for j, o in enumerate(lanes):
+            if j != i and len(o) >= 2:
+                stretch = shadow_measure(run, list(zip(o, o[1:], strict=False)))[1]
+                assert stretch <= BUNDLE_PITCH, f"lane {i} runs within 30 ft of lane {j} for {stretch:.0f} ft"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_no_zigzag_straddles_a_joint(gen: str) -> None:
+    """Two records meeting end to end are one way to the walker (joints.py, GM 2026-09-26), so the bend rule
+    `lanes_bend_like_paths` asks of a record - no hairpin, no two 50-degree turns inside 40 ft - is asked of the two read
+    as one (feature 293, settlement-reviews of Inashiro and Sawada: a Z with one turn each side of the joint passed every
+    record-at-a-time check). The engine's own predicate and joint reading, not a restatement."""
+    from l7r.diagram.hamletgen.ways.clearance import _bends_badly
+    from l7r.diagram.hamletgen.ways.joints import joints, oriented
+
+    lanes = _manifest(gen)["lanes"]
+    for i, ei, j, ej in joints(lanes):
+        x, y = oriented(lanes, i, ei, j, ej)
+        assert _bends_badly(x) or _bends_badly(y) or not _bends_badly([*x, *y[1:]]), f"lanes {i} and {j} zigzag across their joint at {x[-1]}"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_every_bamboo_stand_is_on_the_sheet(gen: str) -> None:
+    """A bamboo stand is drawn where a reader can see it (feature 293 round 3, settlement-review of Kashikawa: the thicket
+    stood wholly above the view, every culm clipped, while the page offered its class)."""
+    m = _manifest(gen)
+    x, y, w, h = m["meta"]["view"]
+    stands = [st for st in m.get("bamboo_stands", []) if st.get("poly") or st.get("outline")]
+    assert bool(stands) == (m["meta"].get("bamboo") in ("thicket", "both")), "non-vacuity: a hamlet whose knob asks for a thicket has one, and no other"
+    for st in stands:
+        ring = st.get("poly") or st.get("outline")
+        assert all(x <= q[0] <= x + w and y <= q[1] <= y + h for q in ring), f"a {st.get('role')} stand runs off the sheet"

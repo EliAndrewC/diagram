@@ -1,9 +1,23 @@
 """Split from test_ways.py by feature 173 - see this directory's CLAUDE.md."""
 
+import pytest
+
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.hamletgen.ways import serve as _serve
 
 from ._builders import _StubSettlement
+
+
+def test_the_shadow_measure_counts_the_near_points_and_the_longest_unbroken_stretch() -> None:
+    """`shadow_measure` (lifted from `_lay_web_lane` by feature 293 so the pool's finished-map test reads the same
+    measure): a way 18 ft beside another for 240 ft, then turning away, shadows it for 252 ft - the side-by-side pair a
+    re-packed Sawada shipped - and one that leaves it square is near it only for its first 30 ft."""
+    road = [((0.0, 0.0), (400.0, 0.0))]
+    beside = [(float(x), 18.0) for x in range(0, 244, 4)] + [(240.0, 18.0 + d) for d in range(4, 64, 4)]  # every step 4 ft
+    near, stretch = _serve.shadow_measure(beside, road)
+    assert near == 63 and stretch == pytest.approx(252.0), "the 61 points at 18 ft and the first two of the turn, at 22 and 26"
+    away = [(100.0, float(y)) for y in range(0, 200, 4)]
+    assert _serve.shadow_measure(away, road) == (8, pytest.approx(32.0))
 
 
 def test_a_web_lane_may_not_run_the_length_of_a_shelter_belt() -> None:

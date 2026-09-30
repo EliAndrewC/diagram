@@ -164,6 +164,7 @@ def test_no_thicket_is_seated_on_a_lane() -> None:
     s = Settlement(plan.W, plan.H, seed=plan.spec.seed)
     s.meta(name="B", scale="hamlet", ftpx=1, down_deg=90)
     s.M["houses"] = [{"x": 700.0, "y": 300.0, "w": 40.0, "h": 30.0}, {"x": 760.0, "y": 300.0, "w": 40.0, "h": 30.0}, {"x": 820.0, "y": 300.0, "w": 40.0, "h": 30.0}]
+    s.M["gardens"] = [{"x": 760.0, "y": 40.0, "w": 10.0, "h": 10.0}]  # crop content north of the row: the page reaches behind it (feature 293)
     plan.bamboo = "thicket"
     seats = bamboo_seats(s, plan)
     assert seats, "non-vacuity: the thicket seats"
@@ -185,6 +186,7 @@ def test_the_thicket_gives_way_to_every_reserved_copse_seat() -> None:
     s = Settlement(plan.W, plan.H, seed=plan.spec.seed)
     s.meta(name="B", scale="hamlet", ftpx=1, down_deg=90)
     s.M["houses"] = [{"x": 700.0 + 60.0 * k, "y": 300.0, "w": 40.0, "h": 30.0} for k in range(3)]
+    s.M["gardens"] = [{"x": 760.0, "y": 40.0, "w": 10.0, "h": 10.0}]  # crop content north of the row: the page reaches behind it (feature 293)
     plan.bamboo = "thicket"
     (ring,) = bamboo_seats(s, plan)
     cx, cy = sum(q[0] for q in ring) / len(ring), sum(q[1] for q in ring) / len(ring)

@@ -546,6 +546,11 @@ def test_a_tail_run_alongside_another_way_is_cut_where_it_came_alongside() -> No
     assert along_tail([(100.0, 200.0), (100.0, 10.0)], way) is None, "an approach that meets the way square is no tail"
     assert along_tail([(0.0, 50.0), (300.0, 50.0)], way) is None, "a lane 50 ft off is not alongside"
     assert along_tail(lane, [(5.0, 5.0)]) is None
+    # feature 293 (Inashiro in the earlier 293 pass): a tail that runs back along a way to that way's own VERTEX is nearest
+    # there to the other reach meeting at it; judged against that reach alone it was no tail, and a 95 ft retrace shipped
+    bent = [(0.0, 100.0), (100.0, 0.0), (300.0, 0.0)]  # the way turns at (100, 0)
+    retrace = [(300.0, 150.0), (300.0, 6.0), (100.0, 0.0)]  # comes down to it, then runs back along it to the vertex
+    assert along_tail(retrace, bent) is not None
 
 
 def test_brook_crossings_counts_a_polyline_over_the_drawn_course() -> None:
@@ -667,3 +672,19 @@ def test_a_cut_that_strands_a_lane_does_not_keep_the_network() -> None:
     s.admits = lambda *a, **k: False  # type: ignore[method-assign]
     assert _sweep_doubled_tails(s) == 0
     assert s.M["lanes"][2]["pts"][-1] == [8.0, 90.0] and s.M["lanes"][1]["pts"] == [[100.0, 200.0], [6.0, 150.0], [6.0, 60.0]]
+
+
+def test_a_join_lane_the_split_made_redundant_is_swept_after_the_split() -> None:
+    """Feature 293 (Sawada in the earlier 293 pass): a join lane laid to a lane that CROSSES
+    the web mid-run is the only tread between them at the ink tolerance - a crossing is not a touch - so both doubled-ink
+    sweeps keep it; `split_at_crossings` then records the crossing as a junction, and the join lane is doubled ink that
+    `stage_web` sweeps once more after the split. This pins the two halves: kept before, dropped after."""
+    from l7r.diagram.hamletgen.ways.joints import split_at_crossings
+
+    crossing = [(150.0, -100.0), (150.0, 100.0)]  # crosses the web lane at (150, 0), both its ends far off it
+    join = [(150.0, 6.0), (200.0, 0.0)]  # on the crossing lane at one end, on the web lane at the other, 6 ft beside it
+    s = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], [(0.0, 0.0), (300.0, 0.0)], crossing, join])
+    assert hg.ways._sweep_doubled_remnants(s) == 0, "before the split the join lane is the only tread onto the crossing lane"
+    assert split_at_crossings(s) == 1
+    assert hg.ways._sweep_doubled_remnants(s) == 1, "after it, the crossing is a junction and the join lane is doubled ink"
+    assert [(150.0, 6.0), (200.0, 0.0)] not in [[tuple(q) for q in ln["pts"]] for ln in s.M["lanes"]]

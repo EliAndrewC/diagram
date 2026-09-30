@@ -19,13 +19,13 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, point_in_poly, segments_cross
+from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross
 from l7r.diagram.settlement.land.wet import marsh_ground
 
 from ..consts import FOOTPATH_FABRIC_GAP, LANE_CLEARANCE, WAY_END_REACH_FT, Poly, Pt
 from .checks import drawn_water_segs
 from .fabric import _crosses_fabric, _hits_a_steading, _homestead_polys
-from .geom import BUND_REACH_FT, WorkedGround, end_serves, memo_ground, steading_footprints, worked_ground
+from .geom import _TOUCH_GAP, BUND_REACH_FT, WorkedGround, end_serves, memo_ground, steading_footprints, worked_ground
 
 # The tip stops this far outside the worked ground's edge past its own half-tread, so the tread's rounded cap lies on the
 # bund line rather than on the rice (a map drawing convention; inside `BUND_REACH_FT` for every lane width drawn here).
@@ -206,6 +206,12 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
             s.reink_lane(i)
             return "run_on"
     for i, e, q in sorted(ends, key=lambda t: paddy.dist(t[2])):
+        # ...BUT NOT AN END THAT IS A JUNCTION (feature 293; Sawada in the earlier 293 pass): an end standing on another way's
+        # tread carried on past it turns the T into a crossing, a crossing is not a join at the ink tolerance, and the hamlet's
+        # ways came out two networks - the rule `run_lanes_on_to_the_bund` already keeps by moving only ends that reach
+        # nothing. A free end is carried on, or the field path branches off the lanes below.
+        if any(seg_dist(q[0], q[1], a, b) <= _TOUCH_GAP for a, b in _segs_of(lanes, i)):
+            continue
         tgt = run_on_target(q, paddy, float(lanes[i].get("w") or 3) / 2.0, reach=float("inf"))
         prev = (float(lanes[i]["pts"][-2 if e == -1 else 1][0]), float(lanes[i]["pts"][-2 if e == -1 else 1][1]))
         if tgt is not None and not turns_back(prev, q, tgt) and blocks.clear(q, tgt, float(lanes[i].get("w") or 3)):

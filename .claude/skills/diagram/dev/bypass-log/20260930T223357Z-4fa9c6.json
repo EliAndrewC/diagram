@@ -1,0 +1,6 @@
+{
+  "utc": "20260930T223357Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "headless port session: the gate settles the maps first, then one settlement-review per moved map in the foreground"
+}

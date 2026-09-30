@@ -72,6 +72,23 @@ def _stub(**M) -> _StubSettlement:
     return s
 
 
+def test_a_junction_end_is_not_carried_on_through_the_way_it_stands_on() -> None:
+    """Feature 293 (Sawada in the earlier 293 pass): the lane end nearest the paddy stood on another way's tread, and carried on past it
+    to the bund the T became a crossing - no join at the ink tolerance - and the hamlet's ways came out two networks. The
+    junction end is left a T; with no free end to carry, the field path branches off the lanes, and the ways stay one."""
+    from l7r.diagram.hamletgen.ways.geom import _TOUCH_GAP, _components
+
+    tee = _stub()
+    tee.M["lanes"] += [
+        {"pts": [[250.0, 20.0], [300.0, 100.0], [250.0, 180.0]], "w": 3},  # a chevron whose ends turn away from the paddy
+        {"pts": [[100.0, 100.0], [300.0, 100.0]], "w": 3},  # ends ON the chevron's vertex, pointing at the paddy
+    ]
+    assert B.a_way_onto_the_bund(tee) == "branch"
+    assert tee.M["lanes"][2]["pts"] == [[100.0, 100.0], [300.0, 100.0]], "the T stays a T"
+    ways = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in tee.M["lanes"][1:]]
+    assert len(set(_components(ways, _TOUCH_GAP))) == 1, "one network, the branch joined to it"
+
+
 def test_a_run_on_crosses_no_water_no_marsh_and_no_steading() -> None:
     assert B.RunOnBlocks(_stub()).clear((300.0, 100.0), (396.0, 100.0), 3.0)
     brook = {"streams": [{"poly": [[350.0, 0.0], [350.0, 200.0]], "w": 6}]}

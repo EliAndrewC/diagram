@@ -23,7 +23,7 @@ Not `python3 tools/why_placed.py`. A package module run as a loose script puts `
 | Is drawn ground cover standing somewhere the engine's keep-outs should have stopped it? | `scatter_audit` |
 | Does using the generation cache ever change what a map looks like? | `cache_audit` |
 | I fixed one hamlet - does the fix generalize across a cohort, and what exactly collides? | `cohort_audit` |
-| I want to look closely at one spot on a rendered map, in manifest coordinates | `crop_map` |
+| I want to look closely at one spot on a rendered map, in manifest coordinates | nothing: `crop_map` was retired by feature 193, unreplaced (`dev/diagnostics.md`) |
 | How long does this loop actually take, and where does the time go? | `timings` |
 | Does a paddy bund step sideways and carry on parallel to itself anywhere on this map? | `jogs` |
 | Which modules are on the HAMLET PATH and owe 100% coverage? (derived from the scripted rolls' records; the full run enforces it) | `hamlet_floor` - a phase of `make test-full`, with no make route of its own |
