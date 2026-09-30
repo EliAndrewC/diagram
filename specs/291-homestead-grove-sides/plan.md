@@ -98,11 +98,11 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
 
 - **D14 - the row's line** (FR-013). A new module `hamletgen/homesteads/rows.py`. `row_line(plan)` is the site's or
   the roll's: `flood_ground` gives `edge`; otherwise `knob_rng(seed, "row_line")` at even odds between `street` and
-  `edge`, or `HamletSpec.row_line` pinned; recorded `meta.row_line`. A line is a polyline: `edge` - the field
-  envelope buffered outward (shapely) to the street's offset, its exterior ring cut to an arc centered on the seat's
-  projection (the row curves with the margin); `street` - a straight segment through that same projection along the
-  arc's chord, a surveyed road. The row's length along the line is what its farms need, `n_side x frame`, centered on
-  the seat, clipped to the canvas less the frame. A linear hamlet's canvas is 1.5 times `canvas_for`'s (`LINEAR_CANVAS`,
+  `edge`, or `HamletSpec.row_line` pinned; recorded `meta.row_line`. A line is a polyline: `edge` - the hard ground
+  (below) grown outward (shapely) to the street's offset, its exterior ring cut to an arc centered on the chosen point
+  (below) (the row curves with the margin); `street` - a straight line fitted to that same stretch of the ring (its
+  principal axis) and set out until the whole stretch lies behind it, a surveyed road. The row's length along the line is
+  what its farms need, `n_side x frame` and one frame more, with two frames of slack beyond, clipped to the sheet. A linear hamlet's canvas is 1.5 times `canvas_for`'s (`LINEAR_CANVAS`,
   a drawing convention - the unused ground is cropped): sized for a cluster, the canvas ran each street off the sheet
   after a few lots and cohort seed 12 seated 13 of 17 on six streets.
   WHERE THE FIRST STREET GOES: not simply at the seat - of the lines centered on the seat's point of the hard ground's
