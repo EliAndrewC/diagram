@@ -17,14 +17,15 @@ class Stream(Kind):
     watercourse on the map declares which way it flows, because downstream is a real constraint on what may
     stand beside it.
 
-    Note: we have drawn the stream's width by its RANK in the water hierarchy rather than by its real width, in
+    Note: we have drawn the stream's width by its RANK in the water hierarchy rather than by the water it carries, in
     order to keep brook, head race and ditch readable at every zoom - so junctions do not conserve width
     (the GM's ruling of 2026-08-16). The two rulings behind this modal do not quite agree, and the record
     has not reconciled them: the width ladder (the GM's ruling of 2026-07-21) draws a stream feeding a moat
     as wide as the moat, because the water that enters has to be carried, while the later ruling sizes
     every stroke by its own rank with no coordination across a junction. The stream's type and place are read. The 2 m is not: no page read gives a village
-    creek a width, and the 0.3 m it is measured against is a modern design MINIMUM - the narrowest a canal of
-    any grade may be built to - rather than a ditch anyone measured.
+    creek a width, and the 0.3 m it is measured against is the Rites of Zhou's finest channel, one chi - an
+    ideal, not a survey - matched by a 1657 village intake of about 21 cm and by a modern design MINIMUM, the
+    narrowest a canal of any grade may be built to; none of the three is a ditch anyone measured.
 
     Name: stream
     Covers: `streams` - the brook
@@ -130,7 +131,9 @@ class DrainageDitch(Kind):
 
     Note: The collector's form and its separation from the supply net are read, as an Edo layout (Minuma, 1728), and so is a drain letting its water go into a river or a natural watercourse, in a modern
     design standard and in a Saitama drain, which its article does not date, that carried the spent water of a district its canals watered in the
-    Edo period; whether it widens along its run follows the field it drains; it is drawn for every hamlet,
+    Edo period; whether it widens along its run follows the field it drains, and the full width it is drawn
+    at where it leaves the field is wider than the one old drain read (0.5-1 m, at the Hattori site), resting
+    on a reading of what a drain must carry, not a period figure; it is drawn for every hamlet,
     a deliberate trade over the older field-to-field and combined forms the record also holds, so a reader
     has a ditch between the plots to hover, and the sink its run reaches is the map's declared water sink. A
     drain that ends in a pond of its own is a guess, no page read describing one; and the angle at which the

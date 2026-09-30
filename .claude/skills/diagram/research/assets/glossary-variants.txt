@@ -72,6 +72,7 @@ ares	are
 arresting tools	three arresting tools
 arrow bamboo	yadake
 artesian	artesian
+asakura period	Asakura period
 ashigaru	ashigaru
 ashigaru nagaya	ashigaru-nagaya
 ashigaru-nagaya	ashigaru-nagaya
