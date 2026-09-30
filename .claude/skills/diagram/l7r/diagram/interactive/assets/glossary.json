@@ -13376,5 +13376,11 @@
    "water-and-land hall",
    "water-and-land halls"
   ]
+ },
+ "shake-machi": {
+  "def": "A quarter of a Japanese town where the houses of a shrine's hereditary priest families gathered near the shrine they served, as at Kamigamo in Kyoto and Takabatake in Nara.",
+  "variants": [
+   "shake-machi"
+  ]
  }
 }

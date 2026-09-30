@@ -2732,6 +2732,7 @@ shadoof	jiegao
 shahi	shahi
 shaka	Shaka Nyorai
 shaka nyorai	Shaka Nyorai
+shake-machi	shake-machi
 shaku	shaku
 shakuhachi	shakuhachi
 shakyamuni	Shakyamuni
