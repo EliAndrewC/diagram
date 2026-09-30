@@ -877,3 +877,7 @@ every row, water, door, bamboo, grove and overlap rule clean; attempt 1.
 Feature 287 (placer guarantees) landed on main while 291 was open, and 291 was rebuilt on it (amendments 7 and 8): every
 household seated or the site refused; a grove farm's well pocket and fixtures laid in its bundle at seating; a row's
 streets and door paths held to the lane law as tree lanes. Measured on this roll (2026-09-30, from the manifest): 12 houses on 2 streets, every farm with its own well (12, drawn at the pocket its seating laid) and 9 door paths (the rest stand on their street); 14 lanes, the web settled in 4 rounds; bath rooms 3 of 3, wood sheds 5, privies 11, coops 10, manure heaps 8, shrine 1 - every rolled fixture laid in its farm's bundle; seated on the first margin.
+
+## 2026-09-30 (feature 293, on 291's roll): the storehouses go to the largest farmhouses
+
+The storehouse annex is now dealt to the largest farmhouses by the main house's footprint (research homesteads/120) and its length held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (`kura_rect`). Measured against main's manifest (the row-village roll above): the two storehouses stood on the 1st and 11th of 12 farmhouses and now stand on the 1st and 2nd, drawn 20.6 x 11.4 and 24.0 x 13.3 ft. Every house center, well, the notice board at (803.7, 2607.5) and the take-yabu at about (2168, 1426), wholly on the sheet, are main's; the fixture counts are main's.

@@ -802,3 +802,11 @@ hamlet keeps no farm grove of its own and no row, and its wells are the shared o
 Feature 287 (placer guarantees) landed on main while 291 was open, and 291 was rebuilt on it (amendments 7 and 8): every
 household seated or the site refused; a grove farm's well pocket and fixtures laid in its bundle at seating; a row's
 streets and door paths held to the lane law as tree lanes. Measured on this roll (2026-09-30, from the manifest): 16 houses, nucleated; 15 lanes, the web settled in 4 rounds; 3 shared wells; bath rooms 2, wood sheds 6, privies 11, coops 11, manure heaps 5; seated on the first margin.
+
+## 2026-09-30 (feature 293, on 291's roll): the storehouses go to the largest farmhouses - the layout moved
+
+The storehouse annex is now dealt to the largest farmhouses by the main house's footprint (research homesteads/120) and its length held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (`kura_rect`). Measured against main's manifest (the 291 roll above): the two storehouses stood on the 9th and 16th (the smallest) of 16 farmhouses and now stand on the 1st and 2nd, drawn 24.0 x 13.3 and 23.1 x 12.8 ft. The re-pack kept 5 of the 16 house centers.
+
+What else the re-pack moved: the notice board stands 72 ft from main's seat, at (3444.1, 1679.4); two of the three shared wells moved with their houses, to (3545, 1656) and (3765, 1590); 12 lanes where main drew 15, the web settled in 6 rounds, and main's 66 ft skeleton stub is gone. The fixture counts are main's: bath rooms 2, wood sheds 6, privies 11, coops 11, manure heaps 5.
+
+The annex's size is a deliberate deviation (research homesteads/120 and 430): the storehouses the record reads were about 15 by 18 ft, free-standing; the map draws them against the back wall, in the farm sheds' band.

@@ -1870,3 +1870,9 @@ hamlet keeps no farm grove of its own and no row, and its wells are the shared o
 Feature 287 (placer guarantees) landed on main while 291 was open, and 291 was rebuilt on it (amendments 7 and 8): every
 household seated or the site refused; a grove farm's well pocket and fixtures laid in its bundle at seating; a row's
 streets and door paths held to the lane law as tree lanes. Measured on this roll (2026-09-30, from the manifest): 15 houses, nucleated as pinned; 13 lanes, the web settled in 4 rounds; 2 shared wells; bath rooms 4, wood sheds 6, privies 13, coops 13, manure heaps 8, shrine 1; seated on the first margin.
+
+## 2026-09-30 (feature 293, on 291's roll): the storehouses go to the largest farmhouses - the layout moved
+
+The storehouse annex is now dealt to the largest farmhouses by the main house's footprint (research homesteads/120; the lots' quota, `settlement/rolling/lot.py`), and its length is held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (`kura_rect`). Measured against main's manifest (the 291 roll above): the two storehouses stood on the 8th and 12th largest of 15 farmhouses and now stand on the 1st and 2nd, drawn 23.0 x 12.8 and 24.7 x 13.8 ft. The re-pack kept 10 of the 15 house centers. No thicket (the bamboo knob is homestead).
+
+What else the re-pack moved: the notice board stands 36 ft east of main's seat, at (2294.5, 1640.9), still at the entrance every household passes; the second public well moved about 270 ft, from (2472, 1943) to (2316, 2166), with the houses it serves; 15 lanes where main drew 13, the web settled in 4 rounds; the woodland commons 8 stands where main drew 7. The fixture counts are main's: bath rooms 4, wood sheds 6, privies 13, coops 13, manure heaps 8, shrine 1.
