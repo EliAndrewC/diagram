@@ -1951,6 +1951,7 @@ machi-hanare	machi-hanare
 machi-kaisho	machi-kaisho
 machi-kido	kido
 machidoshiyori	toshiyori
+machiwari	machiwari
 machiya	machiya
 madake	madake
 made ground	made ground

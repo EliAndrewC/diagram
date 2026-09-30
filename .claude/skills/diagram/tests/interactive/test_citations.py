@@ -44,8 +44,8 @@ def test_the_record_s_pages_are_found_and_the_registry_and_citations_pages_are_n
     assert "SOURCES.html" not in pages and not any(p.startswith("citations/") for p in pages)
     # 15 pages until feature 229 added settlements, ways, presentation and cities/sizing; 20 with rendering/homesteads,
     # 21 with rendering/buildings, 22 with rendering/religion-and-death, 23 with rendering/cities/capitals,
-    # 24 with rendering/cities/defenses (feature 292)
-    assert len(pages) == 24, pages
+    # 24 with rendering/cities/defenses, 25 with rendering/cities/fabric (feature 292)
+    assert len(pages) == 25, pages
 
 
 def test_the_paths_beside_a_research_page() -> None:
