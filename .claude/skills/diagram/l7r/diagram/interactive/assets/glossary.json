@@ -4391,7 +4391,10 @@
   "def": "A daimyo's domain under the Tokugawa shogunate: the territory, and the lord's house and government that held it.",
   "variants": [
    "han",
-   "han's"
+   "han's",
+   "domain",
+   "domains",
+   "domain's"
   ],
   "cased": true
  },
@@ -13514,6 +13517,18 @@
    "Rank 9",
    "Rank 11",
    "Rank 12"
+  ]
+ },
+ "Yongzheng": {
+  "def": "The reign of the Qing emperor Yongzheng, 1723-1735. A year \"of Yongzheng\" is counted from the start of the reign, so Yongzheng 11 is 1733.",
+  "variants": [
+   "Yongzheng"
+  ]
+ },
+ "toki": {
+  "def": "One of the twelve hours into which the Edo period divided the day and night, about two hours long; a time bell was struck once each toki, twelve times a day.",
+  "variants": [
+   "toki"
   ]
  }
 }

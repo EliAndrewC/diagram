@@ -650,9 +650,12 @@ doi	horinouchi
 dojo	dojo
 dojos	dojo
 doma	doma
+domain	han
 domain era	domain era
 domain kiln	domain kiln
 domain kilns	domain kiln
+domain's	han
+domains	han
 donggusup	donggusup
 dongjing meng hua lu	Dongjing Meng Hua Lu
 dooryard	dooryard
@@ -3243,6 +3246,7 @@ toiya	ton'ya
 toiyaba	toiyaba
 tokai	Tokai
 tokaido	Tokaido
+toki	toki
 toki no kane	toki no kane
 tokonoma	tokonoma
 tokorobarai	tokorobarai
@@ -3617,6 +3621,7 @@ yokocho	yokocho
 yokogi	yokogi
 yokogi-uchi	yokogi
 yomadori	four-room type
+yongzheng	Yongzheng
 yonin	yonin
 yonnomaru	yonnomaru
 yoriai	yoriai
