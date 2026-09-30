@@ -394,5 +394,16 @@
   "observed": "2026-09-30",
   "source": ".claude/skills/diagram/l7r/diagram/interactive/classes/fields.py Holding",
   "method": "the modal now says the map draws the lot and the field, the woodland beyond not drawn"
+ },
+ "mizuguchi-r5-f1": {
+  "verifies": "F1",
+  "subject": "mizuguchi",
+  "answers": "8732a33e04ea",
+  "quantity": "the brook's head inside the canvas, and a row street's sharpest turn over two legs",
+  "value": 0,
+  "unit": "heads inside (the head at x -40); the sharpest two-leg turn 64 degrees",
+  "observed": "2026-09-30",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json streams[0].poly and lanes[street]",
+  "method": "the brook carried on from its approach's head up its bearing past the canvas edge (water/brook.off_the_sheet); the first street's heading change across every two consecutive legs, the double-back the per-vertex rule could not see: 64 degrees at most (it was about 175 round the false head)"
  }
 }
