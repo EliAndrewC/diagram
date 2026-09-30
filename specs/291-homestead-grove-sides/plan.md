@@ -103,7 +103,7 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   (below) (the row curves with the margin); `street` - a straight line fitted to that same stretch of the ring (its
   principal axis) and set out until the whole stretch lies behind it, a surveyed road. The row's length along the line is
   what its farms need, `n_side x frame` and one frame more, with two frames of slack beyond, clipped to the sheet. A linear or dispersed hamlet's canvas is 1.5 times `canvas_for`'s (`LINEAR_CANVAS`; the dispersed form's too since the
-  pinned Audit-905 seated 16 of 20 grove farms on the smaller sheet,
+  pinned Audit-905 seated 16 of 20 grove farms on the smaller sheet - measured 2026-09-30 by `make hamlet`, with a well and with a channel -
   a drawing convention - the unused ground is cropped): sized for a cluster, the canvas ran each street off the sheet
   after a few lots and cohort seed 12 seated 13 of 17 on six streets.
   WHERE THE FIRST STREET GOES: not simply at the seat - of the lines centered on the seat's point of the hard ground's
@@ -150,13 +150,13 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   - the road the row stands on.
 - **D18 - water** (FR-018). A dispersed hamlet rolls `farm_water` (`FARM_WATERS` = `channel`/`well`, even odds, pinnable as
   `HamletSpec.farm_water`, recorded `meta.farm_water`; amendment 5). `channel` (`homesteads/farm_water.farm_channels`):
-  for each grove farm, its dooryard end is the edge of its threshing yard nearest the water, a step out; the source is the
+  for each grove farm, its dooryard end is a step off a side of its threshing yard (the side the shortest route reaches); the source is the
   nearest point of a drawn supply ditch (`field_ditches` main or branch, never a drain) or the brook, the candidates
   tried; the course is `_route`d on an 8 ft lattice round every building, yard, garden and other farm's grove, the crop
   (as a wall at the channel's own 2 ft gap - at a lane's margin no cell beside a ditch between plots is free), the lanes
   and all other water, and may cross the farm's own grove band (the channel is led INTO the grounds); the shortest route
   over six sources (60 ft apart at least) and every side of the yard is drawn. The farms are taken NEAREST THE WATER
-  FIRST, and a later channel may be led off one already drawn (a convention: still the irrigation water, carried on) -
+  FIRST, and a later channel may be led off one already drawn (FR-018 amendment 6, a GUESS: Audit-19 drew 1 channel in 11 without it, 11 with it) -
   taken in the order given, long channels walled the near farms off their water. Drawn by
   `field_channel` in the supply hue at the field channel's 2.5 ft (the legibility floor, a convention), class `farm
   channel`, recorded under `farm_channels` (`of`, `pts`) and kept clear by the later placers as a corridor. A farm no

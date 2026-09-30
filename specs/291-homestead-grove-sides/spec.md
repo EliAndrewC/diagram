@@ -156,7 +156,8 @@ per-house groves pass every check a grove answers to.
 
 - **FR-018**: A DISPERSED farm MUST draw its own water (homesteads/200: a dispersed farm carries its own water; a shared
   well within reach is the nucleated arrangement), in the form a per-settlement knob sets - pinnable, rolled at even odds
-  and recorded: a small channel led off the irrigation water (the nearest drawn ditch or the brook) into the farm's own
+  and recorded: a small channel led off the irrigation water (the nearest drawn ditch or the brook, or a channel already
+  led off it to another farm - amendment 6, a GUESS) into the farm's own
   lot, ending in its dooryard (homesteads/200, the Tonami museum: "in many areas a small channel was led into the house's
   grounds"), or its own well in its dooryard, off its way in (the other areas, this record's reading, a GUESS); the odds
   a GUESS (amendment 5). A LINEAR row's water MUST be a
@@ -234,6 +235,10 @@ per-house groves pass every check a grove answers to.
   behind on a street laid first (the borrowed planned form; dry field and depth a GUESS), compact near the house on the
   dry edge (homesteads/156: accurate for a dike row; a levee or fan-foot row this project's reading).
 - **Row water** (FR-018): the record rules on the dispersed farm only; a row's water is a knob, even odds, a GUESS.
+- **A channel led off another farm's channel** (FR-018, amendment 6): a farm's channel MAY be led off a channel already
+  drawn to another farm - the irrigation water carried on - a GUESS: no page read says whether neighbors shared a channel.
+  Measured 2026-09-30 by rolling Audit-19 (11 farms, the only irrigation water the field's head) with the farms taken
+  nearest the water first: without it 1 of 11 farms drew a channel, with it 11 of 11; Audit-905 drew 20 of 20 either way.
 - **A dispersed farm's water** (FR-018, amendment 5): the channel into the lot is ACCURATE (homesteads/200, the Tonami
   museum, "in many areas"); that the other areas dug a well is this record's reading, a GUESS, so the two are a knob at
   even odds (a GUESS). The channel is drawn from the nearest drawn supply ditch, or the brook where it is nearer (the
@@ -294,3 +299,8 @@ and the brook to be labeled, plan D18/D19 and T16 to carry the knob, and homeste
 task. **Round 2**: CHANGES - the brook standing for the irrigation water labeled a GUESS. **Round 3**: FAITHFUL.
 Amendment 5 is accepted. The reviewer's aside for the GM: the source ties the channel to the fan's deep water table, so
 if the generator ever knows its ground, the ground could set the value rather than an even roll.
+
+**Amendment 6** (2026-09-30, the plan review's finding): FR-018 - a farm's channel may be led off another farm's channel.
+The plan review of D18 ruled the branching outside FR-018 (its water is "the nearest drawn ditch or the brook") and asked
+for the measurement: without it, Audit-19's farms drew 1 channel in 11, the first walling the field's head off from the
+rest; with it, 11 in 11. Labeled a GUESS - whether neighbors shared a channel no page read says.

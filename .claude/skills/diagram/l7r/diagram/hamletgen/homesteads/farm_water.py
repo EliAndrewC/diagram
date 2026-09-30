@@ -11,7 +11,7 @@ ditches are fed from, a GUESS) - to the farm's dooryard, a step off the edge of 
 (where in the dooryard no page read says: a GUESS). It ends there: where it left the lot again no page read says, so the
 return is not drawn (a deliberate deviation). It is routed round every building, yard and garden, every OTHER farm's
 grove, the crop, the lanes and all other water, and may cross the farm's own grove band - it is led INTO the
-grounds, through the wood that surrounds them.
+grounds, through the wood that surrounds them. A later farm's channel may be led off one already drawn (amendment 6, a GUESS).
 """
 
 from __future__ import annotations
@@ -171,9 +171,10 @@ def farm_channels(s: Settlement, houses: Sequence[Mapping[str, Any]]) -> list[Ma
     """A channel into each grove farm's grounds (`farm_channel`); returns the farms no course reached, which the caller
     gives a well of their own - never left dry, and reported by `row_rules.water_rules`.
 
-    NEAREST THE WATER FIRST, and A LATER CHANNEL MAY BE LED OFF AN EARLIER ONE (a map drawing convention - it is still the
-    irrigation water, carried on): taken in the order given, the long channels to the far farms walled the near farms off
-    their water, and three of Audit-905's sixteen fell back to a well."""
+    NEAREST THE WATER FIRST: taken in the order given, the long channels to the far farms walled the near farms off their
+    water, and three of Audit-905's sixteen fell back to a well. And A LATER CHANNEL MAY BE LED OFF AN EARLIER ONE (FR-018
+    amendment 6, a GUESS - whether neighbors shared a channel no page read says): measured 2026-09-30, Audit-19's farms,
+    whose only irrigation water is the field's head, drew 1 channel in 11 without it and 11 in 11 with it."""
     from ..ways.checks import drawn_water_segs  # local: the ways are a later stage
 
     courses = supply_courses(s.M)
