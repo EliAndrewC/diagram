@@ -13585,5 +13585,17 @@
    "sorties",
    "sallying"
   ]
+ },
+ "chenghe": {
+  "def": "A Chinese city moat: the ditch, usually filled with water, dug round a walled city outside its wall.",
+  "variants": [
+   "chenghe"
+  ]
+ },
+ "hori": {
+  "def": "A Japanese moat or ditch, dug round a castle, a town or a settlement.",
+  "variants": [
+   "hori"
+  ]
  }
 }

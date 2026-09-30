@@ -349,6 +349,7 @@ charity grounds	charity graveyard
 chen fu	Chen Fu
 cheng-zhu	Cheng-Zhu Neo-Confucianism
 cheng-zhu neo-confucianism	Cheng-Zhu Neo-Confucianism
+chenghe	chenghe
 chenghua	Chenghua
 chenghuang miao	chenghuangmiao
 chenghuangmiao	chenghuangmiao
@@ -1315,6 +1316,7 @@ honzan	Honzan
 honzan line	Honzan
 hoonoki	hoonoki
 horeki	Horeki
+hori	hori
 horiage-den	horita
 horinouchi	horinouchi
 horinouchi's	horinouchi
