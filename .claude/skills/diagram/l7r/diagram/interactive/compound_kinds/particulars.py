@@ -164,10 +164,10 @@ class ParleyRoom(Kind):
     Note: a room built across a clan border is part of its map's story, made by the GM's ruling that the door
     which receives the Kitsune is the border - a departure with no historical room behind it, since no page
     read describes a room built across a border or two parties meeting on the line itself. Where two powers
-    dealt regularly across a border, each kept its own ground: a post on each side of the line, facing each
-    other across it, as Russia and Qing China built at Kyakhta, or a compound one side set aside for the
-    other's officers with a reception hall beside it, as at the Japan House at Choryang, where Tsushima traded
-    with Korea. The drawn border line the room stands on is the attested part.
+    dealt regularly across a border, the forms recorded are a post on each side of the line, facing each
+    other across it, as Russia and Qing China built at Kyakhta, or a compound on one side's ground where the
+    other side's officers worked, with the host's banquet hall beside it, as at the Japan House at Choryang,
+    where Tsushima traded with Korea. The drawn border line the room stands on is the attested part.
 
     Name: parley room
     Covers: the room in the border wall and its label
@@ -444,9 +444,9 @@ class ParleyMats(Kind):
     kneels on its own ground, the line between them.
 
     Note: the mats belong to the same departure as the parley room, the map's own design: no page read seats two
-    parties across a border line in one room, and where two powers dealt regularly across a border each kept its
-    own ground, in a post on each side of the line or in a compound one side set aside for the other's officers.
-    The mats' 3 ft size is this project's own figure.
+    parties across a border line in one room, and where two powers dealt regularly across a border the forms
+    recorded are a post on each side of the line or a compound on one side's ground where the other side's
+    officers worked. The mats' 3 ft size, and their count of two a side, are this project's own choice.
 
     Name: parley mats
     Covers: the four kneeling mats in the parley room

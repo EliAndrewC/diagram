@@ -1451,6 +1451,7 @@ jagama	jagama
 jail god	jail-god
 jail-god	jail-god
 jail-god temple	jail-god
+japan house	Japan House
 japanese zelkova	keyaki
 jar burial	jar burial
 jar burials	jar burial
@@ -3395,6 +3396,7 @@ waju	waju
 wakadoshiyori	wakadoshiyori
 wakamiya	Wakamiya
 wakamono-gumi	young men's association
+wakan	Japan House
 wakasa	Wakasa
 wakato	wakato
 waki-honjin	waki-honjin

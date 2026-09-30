@@ -703,14 +703,16 @@ class Door(Kind):
     as its room. A drawn door's width is a drawing convention, not a measurement: the working doors are drawn two
     to three times the width of an ordinary door so that they read at the sheet's scale. A real ordinary door was
     about 3 ft wide (half a ken, this project's reading of how the big door was defined), a farmhouse's one-ken
-    main sliding door about 6 ft with a low wicket in it, and each of a storehouse's paired leaves about 3.5 ft.
+    main sliding door about 6 ft with a low wicket in it; a storehouse's paired leaves are attested at the end of
+    the Edo period, but the only width found for a leaf, about 3.5 ft, is today's standard.
 
     Caveat: The kitchen door's place on its earth floor, a second outside door on a kitchen, and the route by which food reached the rooms, are a guess, and a
     door of a room that the setting or a map's story made is as much the drawing's own as its room. A drawn
     door's width is a drawing convention, not a measurement: the working doors are drawn two to three times the
     width of an ordinary door so that they read at the sheet's scale. A real ordinary door was about 3 ft wide
     (half a ken, this project's reading of how the big door was defined), a farmhouse's one-ken main sliding door
-    about 6 ft with a low wicket in it, and each of a storehouse's paired leaves about 3.5 ft.
+    about 6 ft with a low wicket in it; a storehouse's paired leaves are attested at the end of the Edo period, but
+    the only width found for a leaf, about 3.5 ft, is today's standard.
 
     Name: door
     Covers: every small door glyph on a building's wall
