@@ -647,6 +647,7 @@ dohyo	dohyō
 dohyō	dohyō
 doi	horinouchi
 dojo	dojo
+dojos	dojo
 doma	doma
 domain era	domain era
 domain kiln	domain kiln
@@ -1162,6 +1163,8 @@ han dynasty	Han dynasty
 han's	han
 han-dynasty	Han dynasty
 hanchiku	rammed earth
+hancho	hancho
+hanchō	hancho
 hane-tsurube	hanetsurube
 hanebashi	hanebashi
 hanetsurube	hanetsurube

@@ -1257,7 +1257,8 @@
  "dojo": {
   "def": "A martial-arts training hall - a city institution; in the country, samurai trained in a yard or a cleared hall.",
   "variants": [
-   "dojo"
+   "dojo",
+   "dojos"
   ]
  },
  "doma": {
@@ -13493,6 +13494,13 @@
   "def": "Short for jokamachi: the castle town, laid out around a daimyo's castle with the samurai nearest it and the townspeople beyond.",
   "variants": [
    "joka"
+  ]
+ },
+ "hancho": {
+  "def": "A domain's government office: set in the castle where the daimyo held one, and in a mansion in the territory where the daimyo was not permitted a castle.",
+  "variants": [
+   "hancho",
+   "hanchō"
   ]
  }
 }
