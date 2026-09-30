@@ -440,6 +440,7 @@ concave banks	concave bank
 concave-bank	concave bank
 confluence	confluence
 confluences	confluence
+confraternities	kō
 conservation headland	conservation headland
 conservation headlands	conservation headland
 consolidated paddies	kochi seiri
@@ -583,6 +584,8 @@ dejima	Dejima
 delivery ditch	delivery ditch
 delivery ditches	delivery ditch
 dem	DEM
+denbo-in	Denboin
+denboin	Denboin
 department	department
 department capital	department capital
 department capitals	department capital
@@ -1579,6 +1582,7 @@ kami	kami
 kami-yashiki	kami-yashiki
 kamidana	kamidana
 kamigata	Kamigata
+kaminarimon	Kaminarimon
 kamiza	kamiza
 kan	kan
 kan'ei	Kan'ei
@@ -2180,6 +2184,8 @@ ninjobon	ninjōbon
 ninjōbon	ninjōbon
 ninomaru	ninomaru
 ninsokusashi	ninsokusashi
+nio gate	Niomon
+niomon	Niomon
 nippo jisho	Nippo Jisho
 nipponica	Nipponica
 niwa	niwa
@@ -2357,6 +2363,8 @@ pigsty-privies	pigsty-privy
 pigsty-privy	pigsty-privy
 pile	pile
 piles	pile
+pilgrimage confraternities	kō
+pilgrimage confraternity	kō
 pilings	pile
 piloted ignition	piloted ignition
 piloted-ignition	piloted ignition
@@ -2513,6 +2521,9 @@ rennyo	Rennyo
 rent bursary	rent bursary
 rent-collection bursaries	rent bursary
 rent-collection bursary	rent bursary
+republican	Republican era
+republican era	Republican era
+republican-era	Republican era
 ressen	ressen
 rest stop	tateba
 rest stops	tateba
@@ -3524,6 +3535,7 @@ yadake	yadake
 yagura	yagura
 yaguramon	yaguramon
 yaita	yaita
+yakudana	yakudana
 yakuimon	yakuimon
 yakushi	Yakushi
 yam	yam

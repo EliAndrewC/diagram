@@ -9102,11 +9102,14 @@
   ]
  },
  "kō": {
-  "def": "A lay devotional society of a settlement's households, which could own a shared facility such as a cremation ground its members built themselves.",
+  "def": "A lay devotional society of a settlement's households, such as a pilgrimage confraternity that sent its members to a distant temple or shrine, which could own a shared facility such as a cremation ground its members built themselves.",
   "variants": [
    "kō",
    "kō group",
-   "ko"
+   "ko",
+   "pilgrimage confraternities",
+   "pilgrimage confraternity",
+   "confraternities"
   ]
  },
  "two-grave": {
@@ -13381,6 +13384,40 @@
   "def": "A quarter of a Japanese town where the houses of a shrine's hereditary priest families gathered near the shrine they served, as at Kamigamo in Kyoto and Takabatake in Nara.",
   "variants": [
    "shake-machi"
+  ]
+ },
+ "yakudana": {
+  "def": "In the Edo period, the shops on Sensoji's approach nearest the temple, from the Denboin to the Niomon. They were held by local residents whose right to trade there came with the duty of cleaning the temple's precinct and approach.",
+  "variants": [
+   "yakudana"
+  ]
+ },
+ "Kaminarimon": {
+  "def": "The \"Thunder Gate,\" the outer gate of Sensoji in Edo, where its shop-lined approach begins.",
+  "variants": [
+   "Kaminarimon"
+  ]
+ },
+ "Niomon": {
+  "def": "A temple's inner gate, guarded by two fierce guardian statues (Nio). At Sensoji it stands at the temple end of the shop-lined approach.",
+  "variants": [
+   "Niomon",
+   "Nio gate"
+  ]
+ },
+ "Denboin": {
+  "def": "The head priest's residence at Sensoji, beside the approach near the Niomon.",
+  "variants": [
+   "Denboin",
+   "Denbo-in"
+  ]
+ },
+ "Republican era": {
+  "def": "China under the Republic, from the fall of the Qing dynasty in 1912 to 1949.",
+  "variants": [
+   "Republican era",
+   "Republican-era",
+   "Republican"
   ]
  }
 }
