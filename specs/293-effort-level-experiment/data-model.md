@@ -50,9 +50,9 @@ rubric files changed since the commit recorded as their freeze.
 - The key: `.git/effort-keys/<task>.json` in the implementing session's clone (untracked; `{A: run-id, B: run-id, seed}`), copied to
   `keys/<task>.json` in this directory only after both grades are recorded.
 
-## Grade - `grades/<task>-<grader>.json`
+## Grade - `grades/<task>-<grader>[-<n>].json`
 
-`grader` is `effort-grader` or `gm`; per label, per criterion: score and one-line reason; a preference (`A` / `B` / `tie`) with the criterion
+`grader` is `effort-grader` (numbered runs, `-1`, `-2`: the research review is two runs, amendment of 2026-09-30) or `gm`; per label, per criterion: score and one-line reason; a preference (`A` / `B` / `tie`) with the criterion
 it rests on; free notes on how the two differ.
 
 ## Report - `report.md`

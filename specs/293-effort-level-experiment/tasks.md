@@ -69,12 +69,12 @@ T15 = e6 (I, xhigh), both from the one start commit with task I's re-frozen prom
 
 ## Phase 5 - grading and the report
 
-- [ ] T16 [US3] Blind and grade task R: `make effort-blind TASK=R`; `effort-grader` on the bundle; the GM's grade on the same bundle; both recorded, THEN the key opened and committed
+- [ ] T16 [US3] Blind and grade task R (amendment of 2026-09-30): `make effort-blind TASK=R`; two `effort-grader` runs on the bundle, each answering the GM's two questions (deficient? strongly better?); the GM's non-blind reading recorded (request.md); both runs recorded, THEN the key opened and committed
       research: rendering
-      verify: `grades/R-effort-grader.json` and `grades/R-gm.json` committed before `keys/R.json`
-- [ ] T17 [US3] Blind and grade task I, as T16, after T16's grading has ended (one grading at a time)
+      verify: `grades/R-effort-grader-1.json` and `grades/R-effort-grader-2.json` committed before `keys/R.json`
+- [ ] T17 [US3] Task I's quality (amendment of 2026-09-30): no blind grading - the GM's ruling after reading both outputs is recorded (request.md) and carried into the report
       research: rendering
-      verify: as T16
+      verify: request.md quotes the ruling; report.md's implementation row gives it
 - [ ] T18 [US1] `report.md`: the per-task table, the differences, the tiers that ran and any control unmet, the interventions, the FR-011 outcome per task type with its arithmetic, whether to expand, the caveats; the recommended `.claude/settings.local.json` setting if a default changes; through `escalation-check` before it reaches the GM
       research: rendering
       verify: every number in the table traced to a `measurements/` or `grades/` file; the escalation-check verdict applied
@@ -89,7 +89,7 @@ T15 = e6 (I, xhigh), both from the one start commit with task I's re-frozen prom
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
       verify: the run's own check verdicts re-read for the landed entry; `make record` clean; `entry-drift` on any modal the entry feeds
-- [ ] T20 [US4] Land task I's winner if it meets its pass line: merged onto current main, `make done` and the moved maps' `settlement-review`s there, the merge work recorded apart, defects found added to the report's later-defects section; the future-work item closed
+- [ ] T20 [US4] Land `xhigh`'s implementation (e7, the GM's choice), ported onto current main: merged onto current main, `make done` and the moved maps' `settlement-review`s there, the merge work recorded apart, defects found added to the report's later-defects section; the future-work item closed
       research: physical
       - [ ] research pass
       - [ ] source-reader confirmed

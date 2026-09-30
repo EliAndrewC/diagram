@@ -15,10 +15,12 @@ at the recorded start commit (`effort-run`'s default origin), and everything lan
    logged and retried later, never forced; while a run is live, do nothing memory-heavy (no gate, tests, measurement or grading): `make effort-run TASK=... RUN=e1 ARM=... COMMIT=$START`; wait for its
    completion notification (never poll); `make effort-measure RUN=e1`. A question from a run: answer it, log it, give the other run of that
    task the identical answer at the same point. A void run is re-launched as the next id.
-4. **Blind and grade**, one grading at a time, after the last run has ended. `make effort-blind TASK=R SEED=...`; dispatch `effort-grader` on the bundle; the GM grades the same bundle (A/B only).
-   Record both grades, then open the key. Same for I.
+4. **Blind and grade research** (amendment of 2026-09-30), after the last run has ended: `make effort-blind TASK=R SEED=...`; two
+   `effort-grader` runs on the bundle, each answering the GM's two questions; record both, then open the key. The GM's own reading is
+   recorded beside them. Implementation is not blind-graded: the GM's ruling after reading both outputs stands.
 5. **Report.** Fill `report.md` from the measurements and grades; apply FR-011; send the outcome through `escalation-check` before it
    reaches the GM.
-6. **Land the winners** (spec US4): R's entry through its checks (already passed in the run) onto main; I's diff merged onto current main,
+6. **Land** (spec US4): the research entry the review found better, through its checks (already passed in the run), onto main; the
+   implementation the GM chose (`xhigh`'s), ported onto current main,
    `make done` and the moved-map reviews run there, defects found recorded in the report. Delete the losing clones; close the future-work
    entries the winners close; append the winning R run's ledger lines to the real ledger.
