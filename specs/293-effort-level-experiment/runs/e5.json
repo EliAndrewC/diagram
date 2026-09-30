@@ -7,7 +7,7 @@
  "start_commit": "ec99356cf081c1ac44ae227723edfdcf5675e6f7",
  "clone": "/diagram/.clones/diagram-exp-e5",
  "started": "2026-09-30T04:13:27Z",
- "ended": null,
+ "ended": "2026-09-30T10:06:29Z",
  "pauses": [
   [
    "2026-09-30T05:27:23.179Z",
@@ -51,7 +51,9 @@
    "293 | task R (buildings new 910, the servants' rowhouse doors + 3 keys) written, committed in clone diagram-exp-e3, checks owed | 2026-09-30",
    "293 | task R checked, committed in clone | 2026-09-30",
    "293 | run e3 ended - claim released | 2026-09-30"
-  ]
+  ],
+  "ledger_lines_appended": 0,
+  "prefixes_reserved": []
  },
  "sessions": [
   {
@@ -97,5 +99,7 @@
    "message": "The detached run you were waiting for has ended - nothing will notify you of it in this headless session. Read its output and continue the task.",
    "result": "/diagram/.clones/.runs-293/e5/session/result-2.json"
   }
- ]
+ ],
+ "status": "valid",
+ "void_reason": ""
 }

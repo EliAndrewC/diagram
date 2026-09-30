@@ -1,0 +1,126 @@
+{
+ "run_id": "e5",
+ "tokens": {
+  "main": {
+   "input_tokens": 552,
+   "output_tokens": 181285,
+   "cache_read_input_tokens": 84279962,
+   "cache_creation_input_tokens": 1478171
+  },
+  "subagents": {
+   "input_tokens": 698,
+   "output_tokens": 297243,
+   "cache_read_input_tokens": 16742236,
+   "cache_creation_input_tokens": 956845
+  },
+  "total": {
+   "input_tokens": 1250,
+   "output_tokens": 478528,
+   "cache_read_input_tokens": 101022198,
+   "cache_creation_input_tokens": 2435016
+  }
+ },
+ "wall_clock_s": 6404,
+ "sessions": [
+  "127623c2-6323-4da2-92ee-b0e2b2225f86"
+ ],
+ "tool_calls": {
+  "main": {
+   "Bash": 226,
+   "Write": 6,
+   "Edit": 37,
+   "Read": 5,
+   "Agent": 30,
+   "ToolSearch": 1,
+   "Monitor": 8
+  },
+  "subagents": {
+   "Bash": 302,
+   "Read": 102,
+   "Grep": 1
+  }
+ },
+ "dispatches": {
+  "quote-check@inherit": 1,
+  "record-format@inherit": 1,
+  "settlement-review@inherit": 24,
+  "perf-audit@inherit": 3,
+  "escalation-check@inherit": 1
+ },
+ "effort": {
+  "main": {
+   "medium": 270,
+   "unrecorded": 3
+  },
+  "subagents": {
+   "perf-audit": {
+    "high": 33
+   },
+   "settlement-review": {
+    "high": 307
+   },
+   "record-format": {
+    "medium": 3
+   },
+   "escalation-check": {
+    "medium": 4
+   },
+   "quote-check": {
+    "medium": 2
+   }
+  }
+ },
+ "adhoc_dispatches": [],
+ "adhoc_judging_at_session_effort": 0,
+ "rework": {
+  "guard": {
+   "finished-run:reminded:finished-not-running": 5,
+   "check-bundle:permitted:bundle-named": 2,
+   "agent-model:permitted:pinned-type": 30,
+   "no-poll:rewrote:proof-of-life": 1,
+   "finished-run:permitted:tracked-run": 3,
+   "batching:reminded:serial-recon-notice": 1,
+   "pair:blocked:half-open-pairing": 1,
+   "pair:blocked:review-prerequisites-unmet": 11,
+   "no-poll:rewrote:self-match": 1,
+   "escalation:armed:review-dispatched": 19,
+   "pair:permitted:review-dispatched": 13,
+   "pair:permitted:reviews-parallel": 2,
+   "escalation:blocked:findings-unfiltered": 3,
+   "finished-run:permitted:waiter-armed": 6,
+   "discard:escaped:discard-ok": 1,
+   "finished-run:blocked:run-still-going": 1,
+   "shell-check:blocked:commit-dash-m": 1,
+   "pair:escaped:review-prereq-ok": 8,
+   "escalation:permitted:filter-ran": 1,
+   "pair:escaped:pair-ok-gate": 1
+  },
+  "verdicts": {
+   "perf-audit": {
+    "unclear": 3
+   },
+   "settlement-review": {
+    "unclear": 13
+   },
+   "record-format": {
+    "unclear": 1
+   },
+   "escalation-check": {
+    "pass": 1
+   },
+   "quote-check": {
+    "pass": 1
+   }
+  },
+  "failed_make_runs": [
+   "make quick 2>&1 | tail -25",
+   "make test-file FILE=tests/hamletgen/test_pool_261.py 2>&1 | grep -E \"Error|assert|FAILED|passed|failed\" | head -20; grep -n \"snapshot\" tests/interactive/test_cl",
+   "timeout 900 make map GEN=pool/hamlets/mizuguchi/mizuguchi.gen.py 2>&1 | grep -E \"REGEN|FAIL|rror\"; python3 /tmp/ka.py 2>&1 | cut -c1-200; make test-file FILE=te",
+   "sed -i '596s/It stands 7.7 ft clear of the drawn canopy now,/It stands about 5 ft clear of the drawn canopy now (the plank'\"'\"'s half-diagonal from the nearest ",
+   "grep -n \"def _manifest\" -A8 tests/hamletgen/test_pool_261.py; make test-file FILE=tests/hamletgen/test_pool_261.py 2>&1 | grep -E \"FAILED|passed|failed\"",
+   "sed -i 's/^_LINK_BESIDE_MAX_FT = 60.0 /_LINK_BESIDE_MAX_FT = 1e9 /' l7r/diagram/hamletgen/ways/tails.py && grep -n \"^_LINK_BESIDE_MAX_FT\" l7r/diagram/hamletgen/"
+  ],
+  "fix_commits": [],
+  "escalations": 1
+ }
+}
