@@ -66,6 +66,9 @@ PINNED_ROWS: tuple[dict[str, str], ...] = (
     {"row_line": "street", "row_sides": "both", "row_water": "shared"},
     {"row_line": "edge", "row_sides": "one", "row_water": "shared"},
     {"row_line": "edge", "row_sides": "both", "row_water": "own"},
+    # ...AND THE DISPERSED FARM'S WATER (amendment 5; SC-008): the dispersed form one in ten, so a pinned hamlet per value
+    {"settlement_form": "dispersed", "farm_water": "channel"},
+    {"settlement_form": "dispersed", "farm_water": "well"},
 )
 PINNED_FIRST_SEED = 901
 
@@ -78,7 +81,7 @@ def roll_one(spec: tuple[int, int] | tuple[int, int, dict[str, str]]) -> tuple[s
     parallelism can only change the wall clock, never a verdict."""
     seed, households = spec[0], spec[1]
     pins: dict[str, str] = dict(spec[2]) if len(spec) > 2 else {}  # type: ignore[misc]
-    hspec = hg.HamletSpec(name=f"Audit-{seed:02d}", seed=seed, households=households, **({"settlement_form": "linear", **pins} if pins else {}))  # type: ignore[arg-type]
+    hspec = hg.HamletSpec(name=f"Audit-{seed:02d}", seed=seed, households=households, **({"settlement_form": "linear", **pins} if pins else {}))  # type: ignore[arg-type]  # a pin's own form wins
     # THROUGH `generate`, NOT `build` - the audit must measure the path that SHIPS. It called `build`
     # directly, which skips everything `generate` does around the stages: it finishes into a scratch
     # directory, gates in-process, and re-rolls a map whose finished manifest strands a farmhouse. So
@@ -134,6 +137,8 @@ def roll_one(spec: tuple[int, int] | tuple[int, int, dict[str, str]]) -> tuple[s
     header = f"--- Audit-{seed:02d}  seed={seed} households={households} form={getattr(plan, 'settlement_form', '?')} sides={getattr(plan, 'grove_sides', '?')} fall={int(plan.down_deg)} sink={plan.water_sink} shape={plan.cluster_shape} lanes={plan.lane_skeleton}"
     if getattr(plan, "settlement_form", None) == "linear":
         header += f" row={getattr(plan, 'row_line', '?')}/{getattr(plan, 'row_sides', '?')}/{getattr(plan, 'row_water', '?')}"
+    if getattr(plan, "settlement_form", None) == "dispersed":
+        header += f" water={getattr(plan, 'farm_water', '?')}"
     if _meta.get("seat_offwind"):
         header += " seat=OFFWIND"
     return header, report.failures, report.fail_lines
@@ -180,6 +185,8 @@ def audit(count: int, first_seed: int, only: str | None = None, jobs: int | None
         for v in space
         if v not in {r[i] for r in rows}
     ]
+    waters = {h.split(" water=")[1].split()[0] for h, _f, _l in results if " water=" in h}
+    missing += [f"farm_water={v}" for v in ("channel", "well") if v not in waters]
     print(f"row villages: {len(rows)}; knob values never rolled: {', '.join(missing) or 'none'}")
     if missing and not only:
         failing += 1

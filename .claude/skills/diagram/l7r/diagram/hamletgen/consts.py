@@ -931,6 +931,10 @@ ROW_SIDES = ("one", "both")
 # farm (homesteads/200: its own water); the one row it knows (Santome, few deep shared wells on a water-poor upland)
 # does not transfer to a paddy row - even odds, a GUESS.
 ROW_WATERS = ("own", "shared")
+# A DISPERSED farm's own water (feature 291 amendment 5; homesteads/200): a small channel led off the irrigation water into
+# its grounds - the Tonami museum: "in many areas a small channel was led into the house's grounds", the fan's water table
+# too deep for a well (ACCURATE) - or its own well, the other areas as this record reads them (a GUESS). Even odds, a GUESS.
+FARM_WATERS = ("channel", "well")
 
 # Where the hamlet's bamboo stands (feature 133 T47; the `bamboo` knob's roll table). Weighted so a
 # temperate lowland hamlet usually has one - the research puts bamboo below the frost line as a

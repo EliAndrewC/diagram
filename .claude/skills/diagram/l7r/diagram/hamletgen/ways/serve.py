@@ -24,7 +24,7 @@ from ..plan import SitePlan
 from .checks import stream_segs
 from .clearance import _bends_badly, _clear_link, clear_runs
 from .fabric import _LANE_JOIN_FT, _crosses_fabric, _draw_web, _hits_a_steading, _net_segs
-from .geom import _TOUCH_GAP, _drop_collinear, door_unhooked, _net_reach, _reach, _trim_to_service, polyline_len, steading_footprints
+from .geom import _TOUCH_GAP, _drop_collinear, _net_reach, _reach, _trim_to_service, door_unhooked, polyline_len, steading_footprints
 from .route import _route, _unjog
 from .sweeps import _FINE_CELL, _LINK_DIRECTNESS, _PATH_DIRECTNESS
 

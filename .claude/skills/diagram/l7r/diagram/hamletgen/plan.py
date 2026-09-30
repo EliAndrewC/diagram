@@ -24,6 +24,7 @@ from .consts import (
     DIKE_CROPS,
     FALL_BEARINGS,
     FAN_ASPECTS,
+    FARM_WATERS,
     FIELD_ARCHETYPES,
     FRY_FORMS,
     GRAIN_DRIFTS,
@@ -97,6 +98,7 @@ class HamletSpec:
     row_line: str | None = None  # a linear row's line, street | edge (feature 291; `ROW_LINES`); None rolls it (flood ground: edge)
     row_sides: str | None = None  # one | both sides of the row's street (feature 291; `ROW_SIDES`)
     row_water: str | None = None  # own | shared wells along a row (feature 291; `ROW_WATERS`)
+    farm_water: str | None = None  # a dispersed farm's own water, channel | well (feature 291 amendment 5; `FARM_WATERS`)
     field_archetype: str | None = None
     pond_layout: str | None = None  # a dike-pond's arrangement, grid | mosaic (feature 150; `POND_LAYOUTS`)
     manure_form: str | None = None  # the manure fixture's form, heap | pit (feature 150; `MANURE_FORMS`)
@@ -139,7 +141,12 @@ class HamletSpec:
             raise ValueError(f"brook_side {self.brook_side!r} must be one of {sorted(BROOK_FLANKS)} - the two flanks the brook may pass the fan on")
         if self.byre_form is not None and self.byre_form not in KNOBS["byre_form"].value_space:
             raise ValueError(f"byre_form {self.byre_form!r} must be one of {KNOBS['byre_form'].value_space}")
-        for _name, _val, _space in (("row_line", self.row_line, ROW_LINES), ("row_sides", self.row_sides, ROW_SIDES), ("row_water", self.row_water, ROW_WATERS)):
+        for _name, _val, _space in (
+            ("row_line", self.row_line, ROW_LINES),
+            ("row_sides", self.row_sides, ROW_SIDES),
+            ("row_water", self.row_water, ROW_WATERS),
+            ("farm_water", self.farm_water, FARM_WATERS),
+        ):
             if _val is not None and _val not in _space:
                 raise ValueError(f"{_name} {_val!r} must be one of {sorted(set(_space))}")
         if self.water_sink is not None and self.water_sink not in ("pond", "offmap"):
@@ -230,6 +237,7 @@ class SitePlan:
     row_line: str = "edge"
     row_sides: str = "one"
     row_water: str = "own"
+    farm_water: str = "well"  # ...and a DISPERSED farm's own water (amendment 5; `FARM_WATERS`), drawn only where the form is dispersed
     fry_form: str = "none"  # none | fry_village (feature 280 M60, `FRY_FORMS`): a dike-pond hamlet's nursery, read by `stage_polder`
 
     @property
@@ -355,6 +363,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         row_line=spec.row_line or ("edge" if _flood else str(_roll(spec.seed, "row_line", ROW_LINES))),
         row_sides=spec.row_sides or str(_roll(spec.seed, "row_sides", ROW_SIDES)),
         row_water=spec.row_water or str(_roll(spec.seed, "row_water", ROW_WATERS)),
+        farm_water=spec.farm_water or str(_roll(spec.seed, "farm_water", FARM_WATERS)),
         field_archetype=_archetype,
         pond_layout=_pond_layout,
         manure_form=spec.manure_form or str(_roll(spec.seed, "manure_form", MANURE_FORMS)),

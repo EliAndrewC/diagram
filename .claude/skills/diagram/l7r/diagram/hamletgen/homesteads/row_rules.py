@@ -5,7 +5,8 @@ SC-008). Pure functions of the manifest, each returning what breaks its rule - e
 - `row_rules`: a linear map's farms stand within a frame depth of a street, none behind another on its side of its
   street, each street drawn as one continuous way, every far-row farm with its holding drawn behind it, every row farm's
   way ending on its own street (FR-013 to FR-017);
-- `water_rules`: a dispersed farm's own well in its dooryard, off its way in; a linear map's `row_water` drawn - own wells,
+- `water_rules`: a dispersed farm's own water as `farm_water` says - a channel into its frame, or its own well in its
+  dooryard, off its way in; a linear map's `row_water` drawn - own wells,
   or every farm within reach of a shared one (FR-018);
 - `doors_unreached`: every grove farm's front door within the door reach of a way (FR-019);
 - `bamboo_mismatch`: the farms drawing grove bamboo exactly the farms that rolled a household bamboo stand (FR-019).
@@ -137,9 +138,10 @@ def row_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
 
 
 def water_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
-    """Each (rule, subject) a non-nucleated map's water breaks (FR-018): a dispersed farm - or a linear farm under `own` -
-    without a private well inside its frame and off its way in; a linear farm under `shared` farther than the watering
-    reach from every well."""
+    """Each (rule, subject) a non-nucleated map's water breaks (FR-018): a dispersed farm under `farm_water` channel without
+    a channel ending inside its frame (amendment 5); a dispersed farm under `well` - or a linear farm under `own` - without a
+    private well inside its frame and off its way in; a linear farm under `shared` farther than the watering reach from
+    every well."""
     meta = M.get("meta") or {}
     form = meta.get("settlement_form")
     if form not in ("dispersed", "linear"):
@@ -147,6 +149,8 @@ def water_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
     wells = [(float(w["x"]), float(w["y"]), bool(w.get("private"))) for w in M.get("wells") or []]
     out: list[tuple[str, Any]] = []
     shared = form == "linear" and meta.get("row_water") == "shared"
+    channel = form == "dispersed" and meta.get("farm_water") == "channel"
+    ends = {_key(c["of"]): c["pts"][-1] for c in M.get("farm_channels") or [] if c.get("of") and c.get("pts")}
     for h in M.get("houses") or []:
         if not (h.get("geom") or {}).get("groves"):
             continue
@@ -156,6 +160,11 @@ def water_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
                 out.append(("farm_beyond_a_shared_well", _key(c)))
             continue
         fr = _frame(h)
+        if channel:
+            e = ends.get(_key(c))
+            if e is None or not fr or abs(float(e[0]) - fr[0]) > fr[2] / 2 or abs(float(e[1]) - fr[1]) > fr[3] / 2:
+                out.append(("farm_without_its_channel", _key(c)))
+            continue
         mine = [(x, y) for x, y, p in wells if p and fr and abs(x - fr[0]) <= fr[2] / 2 and abs(y - fr[1]) <= fr[3] / 2]
         if not mine:
             out.append(("farm_without_its_well", _key(c)))
