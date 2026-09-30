@@ -1142,6 +1142,10 @@ effort-init: ## [project] feature 293: record what every run of the effort exper
 effort-refreeze: ## [project] feature 293: freeze again the prompt and rubric of a task the GM replaced (its runs keep the one start commit)   TASK=R|I
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_run.py refreeze-task --task "$(TASK)"
 
+# GUARD_EDIT_OK: feature 293 adds an operation - effort-resume, a stalled headless task-I session resumed with one neutral message; nothing a guard decides changes.
+effort-resume: ## [project] feature 293: resume a task-I run left waiting on a detached run nothing can wake it for - one fixed message, the wait a pause   RUN=<id>
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_run.py resume --run "$(RUN)"
+
 effort-run: ## [project] feature 293: launch ONE run, detached, in its own clone - refused while another run is live or memory is short   TASK=R|I RUN=<id> ARM=medium|xhigh ORDER=<n>
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_run.py run --task "$(TASK)" --run "$(RUN)" --arm "$(ARM)" --order "$(ORDER)"
 

@@ -272,6 +272,45 @@ def launch(args: argparse.Namespace, repo: pathlib.Path, now: float) -> dict:
     return record
 
 
+RESUME_MESSAGE = ("The detached run you were waiting for has ended - nothing will notify you of it in this headless session. "
+                  "Read its output and continue the task.")
+
+
+def last_event(transcript: pathlib.Path) -> str:
+    stamps = [json.loads(ln).get("timestamp") for ln in transcript.read_text(errors="replace").splitlines() if ln.strip()]
+    return max(t for t in stamps if t)
+
+
+def resume(repo: pathlib.Path, run_id: str, now: float, kill: bool = True) -> dict:
+    """Spec edge case: a headless task-I session left waiting on a detached run nothing can wake it for is resumed with ONE
+    fixed, arm-neutral message (the same for every run it happens to); the wait, from its last event to now, is a pause and
+    is excluded from its wall-clock; the idle process is stopped first, so two processes never write one session."""
+    feature_dir = repo / "specs" / FEATURE
+    path = feature_dir / "runs" / f"{run_id}.json"
+    run = json.loads(path.read_text())
+    if run["task"] != "I":
+        raise Refused("only a task I session is resumed this way; a page session is resumed by its runner")
+    sess = run["sessions"][0]
+    if kill:
+        for pid in subprocess.run(["pgrep", "-f", f"--session-id {sess['sid']}"], capture_output=True, text=True).stdout.split():
+            subprocess.run(["kill", pid], check=False)
+    clone = pathlib.Path(run["clone"])
+    appended_file = clone / APPEND_PROMPT
+    appended = appended_file.read_text(encoding="utf-8").strip() if appended_file.is_file() else ""
+    cmd = full_session_cmd(RESUME_MESSAGE, clone.name, sess["sid"], run["arm"], appended)
+    cmd[cmd.index("--session-id")] = "--resume"
+    env = run_env(dict(os.environ), pathlib.Path(run["env"]["L7R_SOURCES_HOME"]))
+    log = pathlib.Path(sess["log"])
+    n = len(run.get("resumes", []))
+    with open(log / f"result-{n}.json", "w") as out_f, open(log / f"stderr-{n}.txt", "w") as err_f:
+        subprocess.Popen(cmd, cwd=clone, env=env, stdin=subprocess.DEVNULL, stdout=out_f, stderr=err_f,
+                         start_new_session=True, close_fds=True)
+    run.setdefault("pauses", []).append([last_event(pathlib.Path(sess["transcript"])), iso(now)])
+    run.setdefault("resumes", []).append({"at": iso(now), "message": RESUME_MESSAGE, "result": str(log / f"result-{n}.json")})
+    path.write_text(json.dumps(run, indent=1) + "\n", encoding="utf-8")
+    return run
+
+
 def claims_at_start(claims: str) -> dict:
     """R6 D6: the claims file as the run found it - its hash, and the lines naming the servants' quarters question."""
     p = pathlib.Path(claims)
@@ -342,6 +381,8 @@ def main(argv: list[str]) -> int:
     i.add_argument("--snapshot", required=True)
     f = sub.add_parser("refreeze-task")
     f.add_argument("--task", required=True, choices=TASKS)
+    rs = sub.add_parser("resume")
+    rs.add_argument("--run", required=True)
     r = sub.add_parser("run")
     r.add_argument("--task", required=True, choices=TASKS)
     r.add_argument("--run", required=True)
@@ -360,7 +401,10 @@ def main(argv: list[str]) -> int:
     repo = pathlib.Path(subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True,
                                        check=True).stdout.strip())
     try:
-        if args.cmd == "refreeze-task":
+        if args.cmd == "resume":
+            run = resume(repo, args.run, time.time())
+            print(f"effort-run: {args.run} resumed; paused {run['pauses'][-1][0]} - {run['pauses'][-1][1]}")
+        elif args.cmd == "refreeze-task":
             refreeze_task(repo, args.task, time.time())
             print(f"effort-run: task {args.task}'s prompt and rubric re-frozen; its runs start from the experiment's start commit")
         elif args.cmd == "init":

@@ -223,3 +223,20 @@ def test_the_session_can_void_a_run_for_an_environment_reason(tmp_path: pathlib.
                     "--claims", str(tmp_path / "c.md"), "--void", "the launcher leaked the arm"]) == 0
     run = json.loads((repo / FEATURE / "runs" / "e1.json").read_text())
     assert run["status"] == "void" and "leaked the arm" in run["void_reason"]
+
+
+def test_a_resumed_session_is_finished_by_its_newest_result(tmp_path: pathlib.Path) -> None:
+    import os
+    import time as _t
+
+    log = tmp_path / "log"
+    log.mkdir()
+    (log / "result.json").write_text("")
+    assert not em.finished(log)
+    (log / "result-0.json").write_text('{"type": "result"}')
+    later = _t.time() + 5
+    os.utime(log / "result-0.json", (later, later))
+    assert em.finished(log) and em.latest(log, "result", ".json").name == "result-0.json"
+    (log / "stderr-0.txt").write_text("Killed\n")
+    os.utime(log / "stderr-0.txt", (later, later))
+    assert "137" in em.void_reason(log)

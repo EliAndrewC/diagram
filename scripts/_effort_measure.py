@@ -157,10 +157,22 @@ def guard_firings(log_dir: pathlib.Path, sids: set[str], clone: str) -> Counter[
     return c
 
 
+def latest(log: pathlib.Path, stem: str, suffix: str) -> pathlib.Path:
+    """The session's newest `result`/`stderr` file: a resumed session (the launcher's `resume`) writes `<stem>-N<suffix>`."""
+    found = sorted(log.glob(f"{stem}*{suffix}"), key=lambda p: (p.stat().st_mtime, p.name))
+    return found[-1] if found else log / f"{stem}{suffix}"
+
+
+def finished(log: pathlib.Path) -> bool:
+    res = latest(log, "result", ".json")
+    return res.is_file() and res.stat().st_size > 0
+
+
 def void_reason(log: pathlib.Path) -> str:
     """Why a session's run is void (the environment killed it), or ''."""
-    err = (log / "stderr.txt").read_text(errors="replace") if (log / "stderr.txt").is_file() else ""
-    res = (log / "result.json").read_text(errors="replace") if (log / "result.json").is_file() else ""
+    err_f, res_f = latest(log, "stderr", ".txt"), latest(log, "result", ".json")
+    err = err_f.read_text(errors="replace") if err_f.is_file() else ""
+    res = res_f.read_text(errors="replace") if res_f.is_file() else ""
     if "Killed" in err or "exit 137" in err or "137" in res[:40]:
         return "killed by the memory limit (exit 137)"
     return ""
@@ -264,7 +276,7 @@ def main(argv: list[str]) -> int:
     run = json.loads(rec_path.read_text())
     logs = session_logs(run)
     expected = 1 if run["task"] == "I" else 2
-    if len(logs) < expected or not all((p / "result.json").is_file() and (p / "result.json").stat().st_size for p in logs):
+    if len(logs) < expected or not all(finished(p) for p in logs):
         voids = [v for p in logs if (v := void_reason(p))]
         if not voids:
             print(f"effort-measure: {args.run} is still running ({len(logs)} of {expected} sessions started) - measure it on its notification",

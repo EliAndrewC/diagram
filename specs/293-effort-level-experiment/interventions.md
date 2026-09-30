@@ -38,3 +38,11 @@ given, identically, to the other.
 - 2026-09-30T03:53:40Z | - | clone | from e5 on, a run clone is a fresh repository holding the start commit alone (git fetch of that commit), the feature directory left out of its tree and main as its origin - nothing later is reachable, reflog included (amendment review round 2); earlier run clones (e1-e4) were full clones whose reflog named the session's tip: the transcripts of e2 and e3 show no git history or feature-directory access
 - 2026-09-30T03:57:10Z | - | push hold | nothing of feature 293 is pushed until the last run has ended: run clones fetch origin/main, and a pushed interventions.md would name the arms to later runs (amendment review round 3's aside)
 - 2026-09-30T03:58:59Z | e5 | wait | launch refused: shared working set 6.41 GB over 4.5 GB; waiting (R5 D7)
+- 2026-09-30T04:28:46Z | e5 | memwatch | warning at 04:28 UTC during the run (8.7 GB raw); the run continues
+- 2026-09-30T04:32:24Z | e5 | memwatch | warning at 04:31 UTC during the run (9.0 GB raw)
+- 2026-09-30T04:36:17Z | e5 | memwatch | warning at 04:35 UTC during the run (8.1 GB raw); the run continues
+- 2026-09-30T04:41:36Z | e5 | memwatch | warning at 04:40 UTC during the run (8.7 GB raw); the run continues
+- 2026-09-30T05:03:49Z | e5 | memwatch | warning at 05:03 UTC during the run (8.0 GB raw); the run continues
+- 2026-09-30T05:09:22Z | e5 | memwatch | warning at 05:08 UTC during the run (8.5 GB raw; a python3 at 1.3 GB)
+- 2026-09-30T05:18:46Z | e5 | memwatch | warning at 05:17 UTC during the run (8.1 GB raw); the run continues
+- 2026-09-30T07:15:38Z | e5 | resume | the session launched a detached make map at 05:26, said it was waiting, and sat idle ~2 h (a headless session has nothing to wake it; the project's stop hook told it so). A harness stall, not the arm's: resumed with the one fixed message (_effort_run.RESUME_MESSAGE); the wait is a pause excluded from its wall-clock. The same message goes to any run that stalls the same way.

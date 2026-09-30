@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 98 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 99 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -122,6 +122,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make effort-init</td><td class=a>OFFSET SEED SNAPSHOT SOURCES_HOME START</td><td>feature 293: record what every run of the effort experiment shares, once</td></tr>
 <tr><td class=n>make effort-measure</td><td class=a>RUN VOID</td><td>feature 293: measure a finished run from its transcripts, the guard log and its clone</td></tr>
 <tr><td class=n>make effort-refreeze</td><td class=a>TASK</td><td>feature 293: freeze again the prompt and rubric of a task the GM replaced (its runs keep the one start commit)</td></tr>
+<tr><td class=n>make effort-resume</td><td class=a>RUN</td><td>feature 293: resume a task-I run left waiting on a detached run nothing can wake it for - one fixed message, the wait a pause</td></tr>
 <tr><td class=n>make effort-run</td><td class=a>ARM ORDER RUN TASK</td><td>feature 293: launch ONE run, detached, in its own clone - refused while another run is live or memory is short</td></tr>
 <tr><td class=n>make engine-key</td><td class=a><div class=ad><span class=an>REF=&lt;commit&gt;</span><span class=aw>which commit to key (default: HEAD)</span></div></td><td>the content hash the gate and the push key on</td></tr>
 <tr><td class=n>make figures</td><td class=a>SPEC</td><td>re-run every recorded measurement and report what moved   [SPEC=specs/NNN-slug; default every spec with a measurements.json]</td></tr>

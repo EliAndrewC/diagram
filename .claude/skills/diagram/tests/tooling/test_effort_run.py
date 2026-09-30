@@ -351,3 +351,31 @@ def test_a_replaced_task_is_refrozen_and_still_starts_from_the_one_start_commit(
             break
         time.sleep(0.05)
     assert "# a replaced task" in (world["out"] / "claude.argv").read_text(), "the frozen prompt, from the session's repository"
+
+
+def test_a_stalled_task_i_session_is_resumed_with_the_one_neutral_message(world: dict, monkeypatch: pytest.MonkeyPatch,
+                                                                         capsys: pytest.CaptureFixture[str]) -> None:
+    _init(world)
+    rec = er.launch(_run_args(world, "I", run="e9", arm="medium"), world["origin"], time.time())
+    transcript = pathlib.Path(rec["sessions"][0]["transcript"])
+    transcript.parent.mkdir(parents=True, exist_ok=True)
+    transcript.write_text(json.dumps({"timestamp": "2026-09-30T05:27:23Z"}) + "\n" + json.dumps({"type": "x"}) + "\n")
+    with pytest.raises(er.Refused, match="only a task I"):
+        (world["fdir"] / "runs" / "r1.json").write_text(json.dumps({"task": "R"}))
+        er.resume(world["origin"], "r1", 0.0, kill=False)
+    for _ in range(100):
+        if (world["out"] / "claude.argv").exists() and (world["out"] / "claude.argv").read_text():
+            break
+        time.sleep(0.05)
+    (world["out"] / "claude.argv").write_text("")
+    monkeypatch.chdir(world["origin"])
+    assert er.main(["resume", "--run", "e9"]) == 0 and "e9 resumed; paused 2026-09-30T05:27:23Z" in capsys.readouterr().out
+    for _ in range(100):
+        if (world["out"] / "claude.argv").read_text():
+            break
+        time.sleep(0.05)
+    argv = (world["out"] / "claude.argv").read_text().split("\n")
+    assert argv[argv.index("--resume") + 1] == rec["sessions"][0]["sid"] and "--session-id" not in argv
+    assert argv[argv.index("-p") + 1] == er.RESUME_MESSAGE and argv[argv.index("--effort") + 1] == "medium"
+    run = json.loads((world["fdir"] / "runs" / "e9.json").read_text())
+    assert run["pauses"][-1][0] == "2026-09-30T05:27:23Z" and run["resumes"][0]["message"] == er.RESUME_MESSAGE
