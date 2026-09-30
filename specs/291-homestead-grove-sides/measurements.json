@@ -119,5 +119,49 @@
   "observed": "2026-09-29",
   "source": "pool/hamlets/mizuguchi/mizuguchi.json lanes (the lane recorded street: true) against houses",
   "method": "a 3,762 ft street laid door to door along the row (ways/web.py _lay_street); house-to-street 43-66 ft for 11 farms, 170 ft for the twelfth; the last review measured 1 of 12 fronting the connector"
+ },
+ "kashikawa-r2-wells": {
+  "verifies": "F1",
+  "subject": "kashikawa",
+  "answers": "d78ccd0d3284",
+  "quantity": "households farther than the watering reach (760 ft) from any well",
+  "value": 0,
+  "unit": "households of 20",
+  "observed": "2026-09-30",
+  "source": "pool/hamlets/kashikawa/kashikawa.json wells against houses (homesteads/row_rules.water_rules)",
+  "method": "the row's water rolled shared: 2 wells beside the street, every farm within 760 ft of one (water_rules clean); a dispersed or own-water farm draws its own well in its dooryard (homesteads/200)"
+ },
+ "kashikawa-r2-bamboo": {
+  "verifies": "F2",
+  "subject": "kashikawa",
+  "answers": "d78ccd0d3284",
+  "quantity": "farms whose grove draws bamboo but rolled no household stand, or the reverse",
+  "value": 0,
+  "unit": "farms",
+  "observed": "2026-09-30",
+  "source": "pool/hamlets/kashikawa/kashikawa.json groves[bamboo] against meta.household_bamboo_in_grove_farms (row_rules.bamboo_mismatch)",
+  "method": "the grove drawer makes the bamboo pass's own positional roll (`_farm_rolls_bamboo`): 7 farms roll a stand and exactly those 7 draw grove bamboo"
+ },
+ "kashikawa-r2-doors": {
+  "verifies": "F3",
+  "subject": "kashikawa",
+  "answers": "d78ccd0d3284",
+  "quantity": "grove farms whose front door stands farther than the door reach (40 ft) from a way",
+  "value": 0,
+  "unit": "farms of 20",
+  "observed": "2026-09-30",
+  "source": "pool/hamlets/kashikawa/kashikawa.json lanes against each farm's front door (row_rules.doors_unreached, row_rules farm_not_on_its_street)",
+  "method": "a footpath from each door to the street its door faces (lay_door_paths, laid last in the web); a row seat whose door stands on hard ground is refused"
+ },
+ "kashikawa-r2-street": {
+  "verifies": "F4",
+  "subject": "kashikawa",
+  "answers": "d78ccd0d3284",
+  "quantity": "streets drawn broken, or not as one lane",
+  "value": 0,
+  "unit": "streets of 1",
+  "observed": "2026-09-30",
+  "source": "pool/hamlets/kashikawa/kashikawa.json lanes[street] against row_street_plans (row_rules street_broken / street_not_drawn)",
+  "method": "the row's one street laid whole along its planned line (street.lay_row_streets), 6 ft (the connector's tread, the web's lanes 3-5), exempt from the web's trims, run on out of the map as the connector; 20 farms stand along it on both sides"
  }
 }
