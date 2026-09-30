@@ -256,6 +256,39 @@ def test_the_reservation_is_offered_behind_its_house_before_its_flanks() -> None
     assert seat_rank(d, 0.0, *turned, d) == 0.0
 
 
+def test_a_homestead_over_a_reserved_seat_or_out_of_the_sun_is_refused_before_its_corridor_is_sought(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """The perf-audit's owed lever (287): the wood's cover and the sun, a few lookups, refuse before the corridor search -
+    the same verdict, without the search. The open seat still asks it (non-vacuity)."""
+    from l7r.diagram.settlement.rolling import fit
+
+    s = _open()
+    wood = install_wood_shares(s, FLOOR, REACH, 7.0)
+    start_tree(s, (720.0, 300.0), (0.0, -1.0), 100.0)
+    first = s._bundle_geom(700.0, 700.0, 46.0, 28.0, "SE", rot=0.0)
+    seats = wood.share(first, 0.0, [])
+    assert seats is not None and wood.commit(first, seats) >= FLOOR
+    searched: list[object] = []
+    real = fit.access_corridor
+
+    def corridor(s_, geom):  # type: ignore[no-untyped-def]
+        searched.append(geom["house"])
+        return real(s_, geom)
+
+    monkeypatch.setattr(fit, "access_corridor", corridor)
+    sx, sy = seats[0]
+    assert not s._parts_fit(s._bundle_geom(sx, sy, 46.0, 28.0, "SE", rot=0.0)), "over a reserved seat"
+    assert searched == [], "refused by the wood's cover before the corridor was sought"
+    s.sun_corridor(39)
+    shade = s._bundle_geom(1100.0, 700.0, 46.0, 28.0, "SE", rot=0.0)
+    yx, yy, _yw, yh = shade["yard"]
+    s.M["houses"].append({"x": yx, "y": yy + yh / 2 + 30.0, "w": 46.0, "h": 28.0})  # a standing house 30 px south of the yard
+    assert not s._sun_corridor_ok(shade)
+    assert not s._parts_fit(shade), "its yard in a standing house's shadow"
+    assert searched == [], "refused by the sun before the corridor was sought"
+    s.M["houses"].clear()
+    assert s._parts_fit(s._bundle_geom(720.0, 520.0, 46.0, 28.0, "SE", rot=0.0)) and searched, "open ground: the corridor is sought"
+
+
 def test_a_corridor_admitted_over_the_households_own_seats_sends_its_share_to_be_sought_again(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     """The share is asked before the dearer corridor; where the corridor then runs over one of the seats, the share is
     sought again with it standing - kept clear of every leg, or the homestead refused where it no longer fits."""

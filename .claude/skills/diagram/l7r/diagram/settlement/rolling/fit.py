@@ -409,10 +409,24 @@ class BundleFitMixin:
             return False
         if not self._candidate_watered(geom):
             return False
+        # THE FEW LOOKUPS THAT REFUSE MOST OF WHAT THE CORRIDOR WOULD BE ASKED, FIRST (the perf-audit's owed lever, 287
+        # 2026-09-30): a part over a seat another household's wood reserved, a yard or bed out of the sun. Each only refuses
+        # and reads neither the corridor nor anything its search writes, so the order changes no verdict. Measured per rule
+        # on the reference seeds 4 / 25 / 47 (every rule asked alone of each of the 1,142 / 288 / 557 offers the parts reach):
+        # the wood's cover or the sun refused 510 / 177 / 230 of them for 0.06 / 0.02 / 0.03 s of lookups, where the
+        # corridor searches cost 0.9 / 0.5 / 0.7 s; the other rules (the stream, the beds on water, the registry's admits, the
+        # tread) refuse a few dozen at most and cost more asked of every offer than the searches they would spare. The
+        # reference bookend's homesteads stage went 6.03 -> 5.11 s and its total 26.85 -> 26.0 s (four alternated `make perf`
+        # rounds each, load 3-5, 2026-09-30), and the pool and cohort 1-20 came out byte-identical, `seat_search` included.
+        wood = self._wood
+        if wood is not None and wood.covers_a_seat(geom):
+            return False
+        if not self._sun_corridor_ok(geom) or self._yard_sun_conflict(geom) or not self._gardens_sun_ok(geom):
+            return False
         # ...AND A CLEAR CORRIDOR FROM ITS DOOR TO THE ACCESS TREE (feature 287, plan M3's seat half): a house the tree
         # cannot reach from its door is refused here, before it stands, instead of being found stranded on the finished
-        # map. The corridor rides on the geometry and is reserved when the house is placed (`_try_place_bundle`). ASKED
-        # FIRST, before every other rule of the parts and the share: each rule here only refuses, and the corridor reads no
+        # map. The corridor rides on the geometry and is reserved when the house is placed (`_try_place_bundle`). Asked
+        # before the other rules of the parts and the share: each rule here only refuses, and the corridor reads no
         # part but the house, the yard and the fixtures, and no seat of this household's own - so the order changes no
         # verdict. It is the question a margin that cannot seat everyone fails (seed 44: 12,104 of 13,244 seats refused for
         # want of a corridor, each after every other rule was asked for nothing), and the four garden sides of one seat
@@ -453,17 +467,10 @@ class BundleFitMixin:
             return False
         if self._house_on_a_tread(house) or self._house_too_near_a_neighbor(house) or self._house_unreachable(house):
             return False
-        if not self._sun_corridor_ok(geom) or self._yard_sun_conflict(geom):
-            return False
-        if not self._gardens_sun_ok(geom):
-            return False
         # ...AND ITS SHARE OF THE WOOD FLOOR, RESERVED (feature 287, woods W25 and plan D9): a household is admitted only
         # where it can reserve copse seats whose crowns cover the floor within reach of its house, and never where one of
         # its parts would stand over a seat another household reserved (`homestead_parts/wood_share.py`) - that last, a few
-        # lookups, asked first.
-        wood = self._wood
-        if wood is not None and wood.covers_a_seat(geom):
-            return False
+        # lookups, asked above, before the corridor.
         if wood is not None:
             seats = wood.share(geom, turn, tree.segs if tree is not None else ())
             # a corridor that runs over one of the seats sends the share to be sought again with the corridor standing
