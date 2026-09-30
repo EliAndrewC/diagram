@@ -670,6 +670,8 @@ drum tower	drum tower
 drum towers	drum tower
 dry edge	dry edge
 dry edges	dry edge
+dry landscape	karesansui
+dry landscapes	karesansui
 dry paddy	kanden
 dry run	wet run
 dry runs	wet run
