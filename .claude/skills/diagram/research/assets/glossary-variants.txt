@@ -1104,6 +1104,8 @@ groins	groyne
 gross-up	gross-up
 gross-ups	gross-up
 ground mulberry	root-cut
+group quarter	kumi-yashiki
+group quarters	kumi-yashiki
 group-residence	kumi-yashiki
 group-residences	kumi-yashiki
 grow-out	grow-out pond
@@ -2501,6 +2503,11 @@ rammed-earth	rammed earth
 rampart	rampart
 ramparts	rampart
 randori	randori
+rank 1-4	rank
+rank 11	rank
+rank 12	rank
+rank 5	rank
+rank 9	rank
 raozhou	Raozhou
 rape	rape
 rapeseed	rape

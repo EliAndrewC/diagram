@@ -2490,7 +2490,9 @@
   "variants": [
    "kumi-yashiki",
    "group-residences",
-   "group-residence"
+   "group-residence",
+   "group quarter",
+   "group quarters"
   ]
  },
  "kumigashira": {
@@ -13502,6 +13504,16 @@
   "variants": [
    "hancho",
    "hanchō"
+  ]
+ },
+ "rank": {
+  "def": "The setting's scale of samurai standing, from Rank 1 at the bottom to Rank 12, the daimyo; the domain's lineage chancellors are Rank 11, and a samurai's rank follows birth family and post.",
+  "variants": [
+   "Rank 1-4",
+   "Rank 5",
+   "Rank 9",
+   "Rank 11",
+   "Rank 12"
   ]
  }
 }
