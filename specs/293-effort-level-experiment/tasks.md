@@ -54,41 +54,41 @@ Run ids as made (interventions.md): e1 void (the launcher leaked make's variable
 task I's first pick, found its premise gone (280 M68) and is set aside; the GM replaced task I (2026-09-30), so T14 = e5 (I, medium) and
 T15 = e6 (I, xhigh), both from the one start commit with task I's re-frozen prompt and rubric.
 
-- [ ] T12 [US2] Run 1 (`e1`): `make effort-run` in the drawn order, under the headroom check (R5 D7); nothing else of the experiment while it is live; on its completion notification `make effort-measure RUN=e1`
+- [x] T12 [US2] Run 1 (`e1`): `make effort-run` in the drawn order, under the headroom check (R5 D7); nothing else of the experiment while it is live; on its completion notification `make effort-measure RUN=e1`
       research: rendering
-      verify: `runs/e1.json` complete, `measurements/e1.json` written, status valid (or void and re-run as the next id, logged)
-- [ ] T13 [US2] Run 2 (`e2`), as T12
+      verify: DONE. run e2 (task R, xhigh; e1 void - the launcher leaked make's variables): runs/e2.json complete, measurements/e2.json, valid
+- [x] T13 [US2] Run 2 (`e2`), as T12
       research: rendering
-      verify: as T12; no overlap with e1
-- [ ] T14 [US2] Run 3 (`e3`), as T12
+      verify: DONE. run e3 (task R, medium): runs/e3.json complete, measurements/e3.json, valid; no overlap with e2
+- [x] T14 [US2] Run 3 (`e3`), as T12
       research: rendering
-      verify: as T12
-- [ ] T15 [US2] Run 4 (`e4`), as T12
+      verify: DONE. run e5 (task I, medium; e4 ran the replaced task, set aside): measurements/e5.json, valid; 3 stalls resumed, the waits pauses
+- [x] T15 [US2] Run 4 (`e4`), as T12
       research: rendering
-      verify: as T12; SC-006 (no overlaps, no counted void, every launch under the threshold, nothing of the experiment beside a live run)
+      verify: DONE. run e7 (task I, xhigh; e6 void - failed at launch): measurements/e7.json, valid; 5 stalls resumed; SC-006: no overlaps, every launch under the threshold, nothing beside a live run
 
 ## Phase 5 - grading and the report
 
-- [ ] T16 [US3] Blind and grade task R (amendment of 2026-09-30): `make effort-blind TASK=R`; two `effort-grader` runs on the bundle, each answering the GM's two questions (deficient? strongly better?); the GM's non-blind reading recorded (request.md); both runs recorded, THEN the key opened and committed
+- [x] T16 [US3] Blind and grade task R (amendment of 2026-09-30): `make effort-blind TASK=R`; two `effort-grader` runs on the bundle, each answering the GM's two questions (deficient? strongly better?); the GM's non-blind reading recorded (request.md); both runs recorded, THEN the key opened and committed
       research: rendering
-      verify: `grades/R-effort-grader-1.json` and `grades/R-effort-grader-2.json` committed before `keys/R.json`
-- [ ] T17 [US3] Task I's quality (amendment of 2026-09-30): no blind grading - the GM's ruling after reading both outputs is recorded (request.md) and carried into the report
+      verify: DONE. two effort-grader runs (headless, the agent's contract and tier; the agent file lands with the feature): grades/R-effort-grader-1.json and -2.json committed before keys/R.json (A = e2)
+- [x] T17 [US3] Task I's quality (amendment of 2026-09-30): no blind grading - the GM's ruling after reading both outputs is recorded (request.md) and carried into the report
       research: rendering
-      verify: request.md quotes the ruling; report.md's implementation row gives it
+      verify: DONE. the GM's ruling after reading both implementation outputs, verbatim in request.md; report.md's implementation row gives it
 - [ ] T18 [US1] `report.md`: the per-task table, the differences, the tiers that ran and any control unmet, the interventions, the FR-011 outcome per task type with its arithmetic, whether to expand, the caveats; the recommended `.claude/settings.local.json` setting if a default changes; through `escalation-check` before it reaches the GM
       research: rendering
       verify: every number in the table traced to a `measurements/` or `grades/` file; the escalation-check verdict applied
 
 ## Phase 6 - landing the winners (spec US4)
 
-- [ ] T19 [US4] Land task R's winner if it meets its pass line: its fragment, notes, sources and glossary files onto main; its ledger lines appended to the real ledger; the Ubame sheet untouched; the future-work item closed (or left open with both runs' findings if neither passed)
+- [x] T19 [US4] Land task R's winner if it meets its pass line: its fragment, notes, sources and glossary files onto main; its ledger lines appended to the real ledger; the Ubame sheet untouched; the future-work item closed (or left open with both runs' findings if neither passed)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify: the run's own check verdicts re-read for the landed entry; `make record` clean; `entry-drift` on any modal the entry feeds
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. e2's buildings/910 landed with its 4 sources and 3 glossary terms (its write and check sessions' research pass, source-reader, quote-check, record-format, source-applicability); the graders' two flaws fixed and re-checked clean; make record clean, 258 record tests green; ledger lines appended; the future-work item closed into closed.md, a narrower sheet check left open
 - [ ] T20 [US4] Land `xhigh`'s implementation (e7, the GM's choice), ported onto current main: `make done` and the moved maps' `settlement-review`s there, the merge work recorded apart, defects found added to the report's later-defects section; the future-work item closed
       research: physical
       - [ ] research pass

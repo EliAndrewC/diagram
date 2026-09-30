@@ -27,8 +27,9 @@ to work, the research ones first:
 - **Hayakawa**: the family's way out of the inner garden (research: a wicket, kido or shiorido, between a buke inner
   garden and its service ground?); the working well at the middle gate's mouth beside the guests' first stone
   (research: was a draw-well ever on the roji's line?); the 33 x 12 ft rear pocket kept for caption seats.
-- **Ubame**: the servants' quarters have one door for four bays (research: one dormitory behind sliding partitions, or
-  a door a household?).
+- **Ubame**: the servants' quarters' four bays under one door are the common-room form, accurate as drawn PROVIDED the
+  bay divisions read as sliding partitions (research buildings 910, feature 293). Owed: look at the sheet's divisions and
+  redraw them as sliding partitions if they read as walls.
 - **Every sheet's bed**: whether it stood beyond the ornamental ground, before the rooms, or within the garden, and
   whether it was screened (research buildings 405 records all three as searched and not found).
 - **The shrine**: whether a keeper's plot ever stood in a precinct's front ground (research 405's absence note).
