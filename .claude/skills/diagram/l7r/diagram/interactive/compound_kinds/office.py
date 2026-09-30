@@ -43,7 +43,7 @@ class OfficeHall(Kind):
     Covers: the office hall's block, its outline and its front band
     Label: accurate
     Sources: takayama-jinya-jawiki, takayama-jinya-city, sado-bugyosho-fires
-    Entry: research/buildings.html - 'The courtroom is a room of the office hall, not a freestanding stage', 'Administrative culture is JAPAN-first for compound interiors', 'The compound has a size HIERARCHY, not just individual sizes', 'Fire discipline: halls burn, kura endure'
+    Entry: research/buildings.html - 'The courtroom is a room of the office hall, not a freestanding stage', 'Administrative culture is JAPAN-first for compound interiors', 'The size of a compound and the rank of its buildings', 'Fire discipline: halls burn, kura endure'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
     """
 
     key = "office hall"
@@ -278,7 +278,7 @@ class Barracks(Kind):
     Covers: the barracks building and its label
     Label: accurate
     Sources: hatchobori-jawiki, takayama-jinya-jawiki, jinya-jawiki
-    Entry: research/buildings.html - 'Staff housing spans a real spectrum', 'The compound has a size HIERARCHY, not just individual sizes'
+    Entry: research/buildings.html - 'Staff housing spans a real spectrum', 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
     """
 
     key = "barracks"

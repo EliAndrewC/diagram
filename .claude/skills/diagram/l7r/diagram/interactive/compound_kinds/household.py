@@ -59,7 +59,7 @@ class Residence(Kind):
     Covers: the lord's residence blocks' fill and outlines, their room dividers, and the RESIDENCE band label
     Label: accurate
     Sources: watariroka-kotobank, irikawa-kotobank, katsura-rikyu-jawiki, touken-world-buke-madori, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, neixiang-yamen-zhwiki, takayama-jinya-city, takayama-jinya-jawiki, machi-bugyo-jawiki, jinya-jawiki, yamen-enwiki, neixiang-xianya-zhwiki, kotobank-katteguchi, shoinzukuri-jawiki
-    Entry: research/buildings.html - 'Were a residence's wings joined by corridors and set in echelon, like geese in flight?', 'How did a guest of rank arrive, from the gate to the entrance?', 'Office in front, residence behind', 'Guest doors feed courts, not flanks', 'The shady rear is the service strip', 'The compound has a size HIERARCHY', 'How big was a samurai's house, and what rank is a 67-tsubo house?'
+    Entry: research/buildings.html - 'Were a residence's wings joined by corridors and set in echelon, like geese in flight?', 'How did a guest of rank arrive, from the gate to the entrance?', 'Office in front, residence behind', 'Guest doors feed courts, not flanks', 'The shady rear is the service strip', 'The size of a compound and the rank of its buildings', 'How big was a samurai's house, and what rank is a 67-tsubo house?'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
     """
 
     key = "residence"
@@ -255,7 +255,7 @@ class Kitchen(Kind):
     Covers: the kitchen and pantries building and its label
     Label: accurate
     Sources: boso-no-mura-takei, liq-takayasu-daidokoro, kotobank-katteguchi, kotobank-uchigenkan, matsue-bukeyashiki, matsue-bukeyashiki-about, matsushiro-bukeyashiki, tfd-hongou-fire-history, thepaper-taipinggang, edo-no-kaji-jawiki, machibikeshi-jawiki
-    Entry: research/buildings.html - 'What fire did a residence's kitchen cook on - a kamado range, or a sunken hearth?', 'How many doors does a residence's kitchen have, and who comes in by them?', 'How big was a samurai's house, and what rank is a 67-tsubo house?', 'The compound has a size HIERARCHY', 'Fire-water is distributed to the halls', 'Guest doors feed courts, not flanks'
+    Entry: research/buildings.html - 'What fire did a residence's kitchen cook on - a kamado range, or a sunken hearth?', 'How many doors does a residence's kitchen have, and who comes in by them?', 'How big was a samurai's house, and what rank is a 67-tsubo house?', 'The size of a compound and the rank of its buildings', 'Fire-water is distributed to the halls', 'Guest doors feed courts, not flanks'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
     """
 
     key = "kitchen"
@@ -379,7 +379,7 @@ class Stables(Kind):
     Covers: the stable building, its stall divisions and its label
     Label: accurate
     Sources: kotobank-umaya, jaanus-umaya, qingming-shanghe-tu, caravanserai-enwiki, equine-nutrition-enwiki
-    Entry: research/buildings.html - 'What was a samurai's stable like, and how big was a stall?', 'The compound has a size HIERARCHY'; research/urban-features.html - 'Stable yards'
+    Entry: research/buildings.html - 'What was a samurai's stable like, and how big was a stall?', 'The size of a compound and the rank of its buildings'; research/urban-features.html - 'Stable yards'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
     """
 
     key = "stables"
@@ -499,7 +499,7 @@ class CompoundShrine(Kind):
     Covers: the shrine hall or halls, their edging and dividing rail, and the shrine labels
     Label: accurate
     Sources: fuchu-joge-pamphlet, neixiang-yamen-zhwiki, henan-neixiang, jawiki-saijin, jawiki-goshi, kotobank-aidono, hokora-jawiki, nara-nagao-jinja
-    Entry: research/buildings.html - 'What did the smallest branch office hold inside its walls?', 'Every administrative compound keeps a shrine', 'The compound has a size HIERARCHY'; research/religion-and-death.html - 'When one shrine hall serves several kami, does each have its own altar?'
+    Entry: research/buildings.html - 'What did the smallest branch office hold inside its walls?', 'Every administrative compound keeps a shrine', 'The size of a compound and the rank of its buildings'; research/religion-and-death.html - 'When one shrine hall serves several kami, does each have its own altar?'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
     """
 
     key = "compound shrine"

@@ -41,7 +41,7 @@ class OuterCourt(Kind):
     Covers: the outer court's ground and its labels, the forecourt among them
     Label: accurate
     Sources: neixiang-yamen-zhwiki, takayama-jinya-jawiki, takayama-jinya-city, machi-bugyo-jawiki, jinya-jawiki, yamen-enwiki, neixiang-xianya-zhwiki
-    Entry: research/buildings.html - 'Office in front, residence behind - the two-court split is universal', 'Packing: a jin'ya is mostly open'
+    Entry: research/buildings.html - 'Office in front, residence behind - the two-court split is universal', 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
     """
 
     key = "outer court"
@@ -138,7 +138,7 @@ class HearingCourt(Kind):
     Covers: the roofed court before the dais and its label
     Label: accurate
     Sources: oshirasu-jawiki, takayama-jinya-city, takayama-gh-shirasu, shirasu-imidas, takayama-jinya-official, takayama-jinya-jawiki
-    Entry: research/buildings.html - 'Was the hearing court open white sand, or roofed?', 'The courtroom is a room of the office hall, not a freestanding stage', 'No interrogation room', 'Packing: a jin'ya is mostly open'
+    Entry: research/buildings.html - 'Was the hearing court open white sand, or roofed?', 'The courtroom is a room of the office hall, not a freestanding stage', 'No interrogation room', 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
     """
 
     key = "hearing court"
@@ -483,7 +483,7 @@ class CartYard(Kind):
     Covers: the loading apron inside the cart gate
     Label: deviation
     Sources: kotobank-daihachiguruma, mlit-kinsei-michi, l7r-wagons, fao-charcoal-safety, tonya-enwiki
-    Entry: research/ways.html - 'Could a cart use the roads here, and where would it go?', 'What vehicle used a village lane, and where could the lane run?'; research/urban-features.html - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'; research/buildings.html - 'Packing: a jin'ya is mostly open'
+    Entry: research/ways.html - 'Could a cart use the roads here, and where would it go?', 'What vehicle used a village lane, and where could the lane run?'; research/urban-features.html - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'; research/buildings.html - 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
     """
 
     key = "cart yard"
