@@ -179,7 +179,7 @@ class BuildingSpec:
     # heart"; buildings.md "Office hall (with dais band)"). (0, 0): none.
     dais: tuple[float, float] = (0.0, 0.0)
     # Stand this many feet further off its wall than the wall's ink requires: the residence's rear alley (research
-    # rendering/buildings 'How our maps lay out the residence': the north band narrowed to a ~6-10 ft cart/servant alley).
+    # rendering/buildings 'How our maps lay out samurai residences and their rooms (buke yashiki)': the north band narrowed to a ~6-10 ft cart/servant alley).
     inset_ft: float = 0.0
     # A VERANDA (engawa) along the building's court face, this deep, drawn inside its footprint as a part of it
     # (feature 267 R01: the veranda runs along the garden face; 3-6 ft). 0: none.

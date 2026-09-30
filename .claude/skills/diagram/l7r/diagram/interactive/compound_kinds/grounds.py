@@ -77,7 +77,7 @@ class InnerCourt(Kind):
     Covers: the inner court's ground and its label
     Label: accurate
     Sources: neixiang-yamen-zhwiki, takayama-jinya-jawiki, machi-bugyo-jawiki, jinya-jawiki, yamen-enwiki, shoinzukuri-jawiki
-    Entry: research/buildings.html - 'Magistrates' compounds (jin'ya and yamen)', 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound', 'How our maps lay out the residence'
+    Entry: research/buildings.html - 'Magistrates' compounds (jin'ya and yamen)', 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound', 'How our maps lay out samurai residences and their rooms (buke yashiki)'
     """
 
     key = "inner court"
@@ -226,7 +226,7 @@ class CompoundGarden(Kind):
     Covers: the inner garden, a garden path, a shrine garden and a guest garden, and their labels
     Label: accurate
     Sources: oniwa-takayama-jinya, kotobank-teien, okutono-jinya-garden, chiran-bukeyashiki-gardens, genkan-jawiki, shirobito-1717-takayama, shiroishi-koseki, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, kotobank-yashikigami, jawiki-yashikigami, shoinzukuri-jawiki
-    Entry: research/buildings.html - 'Did the private rooms of an ordinary posting have a garden of their own?', 'Did a residence garden have a pond, and did a county post keep one?', 'The formal entrance and a guest's arrival (genkan)', 'Shrines kept inside government offices and houses (yashikigami)', 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps route a guest from the gate to the entrance', 'How our maps draw shrines kept inside government offices', 'How our maps lay out the residence'
+    Entry: research/buildings.html - 'Did the private rooms of an ordinary posting have a garden of their own?', 'Did a residence garden have a pond, and did a county post keep one?', 'The formal entrance and a guest's arrival (genkan)', 'Shrines kept inside government offices and houses (yashikigami)', 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps route a guest from the gate to the entrance', 'How our maps draw shrines kept inside government offices', 'How our maps lay out samurai residences and their rooms (buke yashiki)'
     """
 
     key = "garden"
@@ -245,7 +245,7 @@ class RearYard(Kind):
     Covers: the rear yard and its label
     Label: accurate
     Sources: kojodan-higuchi, matsushiro-kankou-higuchi
-    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps lay out the residence'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)'
     """
 
     key = "rear yard"

@@ -510,7 +510,7 @@ def county_magistracy_program() -> CompoundProgram:
     env = Envelope(w_ft=270.0, h_ft=200.0, divider_ft=90.0, gate_w_ft=8.0, posterns=(("W", 50.0, 6.0), ("S", 244.0, 6.0)))
     spine = (
         # THE GARDEN LIES BEFORE THE HOUSE (research buildings 380 'Samurai residences and their rooms (buke yashiki)' and
-        # rendering 'How our maps lay out the residence': the garden faces the reception rooms). Pass 7 (building-review round 6: ~62 x 66 ft of bare inner court east of a garden sized to
+        # rendering 'How our maps lay out samurai residences and their rooms (buke yashiki)': the garden faces the reception rooms). Pass 7 (building-review round 6: ~62 x 66 ft of bare inner court east of a garden sized to
         # the house alone) runs it on to the guest house, x 104-226, so the one garden faces the reception and the guest
         # house both - guests were received in the garden-facing rooms (research buildings 380); the servants' row it once
         # faced is on the kitchen yard since pass 6. From the house's veranda (y 36) 46 ft deep to y 82, an 8 ft walk

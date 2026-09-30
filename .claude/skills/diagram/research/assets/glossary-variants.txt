@@ -688,6 +688,7 @@ earth-god	tudi miao
 earth-god shrine	tudi miao
 eastern han	Han dynasty
 eave soffit	soffit
+echelon	echelon
 echigo	Echigo
 echigo province	Echigo
 echinochloa	Echinochloa crus-galli
@@ -1069,6 +1070,7 @@ grave good	grave goods
 grave goods	grave goods
 grave island	grave island
 grave islands	grave island
+great oku	ooku
 green manure	green manure
 groin	groyne
 groins	groyne
@@ -1954,6 +1956,8 @@ micro-highs	micro-high
 mid-cut	mid-trunk
 mid-trunk	mid-trunk
 midaidokoro	midaidokoro
+middle gate	nakamon
+middle gates	nakamon
 middle moat	middle moat
 middle moats	middle moat
 middle rowhouse	middle rowhouse
@@ -2185,6 +2189,7 @@ nuriya	nuriya
 nursery pond	nursery pond
 nursery ponds	nursery pond
 o-aza	ō-aza
+o-zashiki	o-zashiki
 oaza	ō-aza
 oblique weir	oblique weir
 oblique weirs	oblique weir
@@ -2220,10 +2225,12 @@ omoteya	omoteya-zukuri
 omoteya-zukuri	omoteya-zukuri
 omoya	omoya
 onari-goten	onari-goten
+onari-mon	onari-mon
 one-bay	bay
 onin war	Onin war
 onkura	kura
 onmyodo	onmyodo
+ooku	ooku
 open-ended dike	open-ended dike
 open-ended dikes	open-ended dike
 ordination platform	ordination platform

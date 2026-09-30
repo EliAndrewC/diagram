@@ -4924,7 +4924,9 @@
  "nakamon": {
   "def": "The middle gate: the inner gate of a compound, opening from its outer court into its inner one.",
   "variants": [
-   "nakamon"
+   "nakamon",
+   "middle gate",
+   "middle gates"
   ]
  },
  "patrol strip": {
@@ -13243,6 +13245,31 @@
   "variants": [
    "rōya",
    "roya"
+  ]
+ },
+ "o-zashiki": {
+  "def": "The grand zashiki: the formal guest rooms of a house of rank; at the Yakage honjin, the rooms with the jodan-no-ma where a traveling lord was received.",
+  "variants": [
+   "o-zashiki"
+  ]
+ },
+ "onari-mon": {
+  "def": "A gate kept for the arrival of a lord or other guest of rank, as at the Yakage honjin.",
+  "variants": [
+   "onari-mon"
+  ]
+ },
+ "ooku": {
+  "def": "The great oku: the private rear of the shogun's palace at Edo, where the shogun's wife and consorts lived, walled off from the naka-oku and joined to it only by one corridor.",
+  "variants": [
+   "ooku",
+   "great oku"
+  ]
+ },
+ "echelon": {
+  "def": "An arrangement of buildings set one behind the next, each stepped back and to one side, like the halls of Katsura's villa, which were built one after another over about half a century.",
+  "variants": [
+   "echelon"
   ]
  }
 }
