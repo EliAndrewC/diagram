@@ -1149,3 +1149,10 @@ check, the settled lane web, the belt and woodland lots, and seed 25's field, wh
 fans on their carved channels at three aspects (13 carves against main's 5, each no dearer) - and 287's own exact
 speedups give back about 8.2 s (the straggler route memo, the board siting, the windbreak): a net +1.7 s. perf-audit,
 2026-09-30: the explanation consistent, the increase justified; band 3 owes the GM's `make perf-signoff`.
+
+**The GM's review of the decisions** (2026-09-30, the GM in chat after landing: "I approve those 5 decisions"): D11 (a
+village's woodland no parcel fits recorded off the sheet with its bearing), D6 (bare ground counts every recorded
+footprint and tread as covered; it moves no map), water W39 (the paddy-cell band a village/city calibration, dropped on
+the hamlet path), woods W26 (a coppice lot's line follows the brook, lane or field edge it comes near, on
+research/vegetation/140's labeled GUESS) and water W36's winter-crop knob narrowed to the forms a site can feed - each
+APPROVED by the GM. D12 stays open for the GM (no map reaches it).
