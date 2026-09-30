@@ -1725,7 +1725,8 @@
  "gundai": {
   "def": "A senior intendant governing a large tract of the shogunate's land.",
   "variants": [
-   "gundai"
+   "gundai",
+   "gun-dai"
   ]
  },
  "hachure": {
@@ -10539,6 +10540,7 @@
   "def": "The yearly religious-investigation register of an Edo-period village, listing every household and its members with their ages and relations; historians read household sizes from it. Where a domain kept the head count apart from the religious check, the same kind of register was called the ninbetsu aratame cho, the population-investigation register.",
   "variants": [
    "shumon aratame cho",
+   "shumon aratame-cho",
    "shumon aratame",
    "ninbetsu aratame cho"
   ]
@@ -13516,6 +13518,47 @@
    "sedans",
    "sedan chair",
    "sedan chairs"
+  ]
+ },
+ "administrative village": {
+  "def": "In Edo-period Japan, the village as a unit of tax and office: it answered jointly for its land tax, and could be one settlement (a natural village) or take in several, more of them in the mountains than on the plain.",
+  "variants": [
+   "administrative village",
+   "administrative villages"
+  ]
+ },
+ "Hantei": {
+  "def": "The line of Emperors of Rokugan; each Emperor takes the name and a number in the line, as in \"Hantei the Tenth\".",
+  "variants": [
+   "Hantei"
+  ]
+ },
+ "Great Clan": {
+  "def": "One of the major clans of Rokugan, each holding its domains under the Emperor. A clan's cities each keep a temple to its two patron Fortunes.",
+  "variants": [
+   "Great Clan",
+   "Great Clans"
+  ]
+ },
+ "nuisance trade": {
+  "def": "A craft that fouls the air or water around it, such as tanning or dyeing. Our maps place these trades downstream of the drinking water and away from it.",
+  "variants": [
+   "nuisance trade",
+   "nuisance trades"
+  ]
+ },
+ "domain": {
+  "def": "The lands one daimyo holds and governs from a capital, divided into provinces, counties and village districts.",
+  "variants": [
+   "domain",
+   "domains"
+  ]
+ },
+ "branch hamlet": {
+  "def": "A hamlet settled from an older parent village and belonging to it; in Edo-period Japan it usually paid its tax through the parent and had no headman of its own.",
+  "variants": [
+   "branch hamlet",
+   "branch hamlets"
   ]
  }
 }

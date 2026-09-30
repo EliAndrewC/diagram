@@ -14,6 +14,8 @@ across the beams	ridge span
 adept	adept
 adepts	adept
 adlittoral	adlittoral
+administrative village	administrative village
+administrative villages	administrative village
 admonition arch	admonition arch
 admonition arches	admonition arch
 admonition pavilion	admonition pavilion
@@ -228,6 +230,8 @@ borrowed-scenery	borrowed scenery
 boubana	bobana
 boundary post	bojikui
 boundary posts	bojikui
+branch hamlet	branch hamlet
+branch hamlets	branch hamlet
 branch house	branch house
 branch household	branch household
 branch households	branch household
@@ -648,9 +652,11 @@ dohyō	dohyō
 doi	horinouchi
 dojo	dojo
 doma	doma
+domain	domain
 domain era	domain era
 domain kiln	domain kiln
 domain kilns	domain kiln
+domains	domain
 donggusup	donggusup
 dongjing meng hua lu	Dongjing Meng Hua Lu
 dooryard	dooryard
@@ -1098,6 +1104,8 @@ grave good	grave goods
 grave goods	grave goods
 grave island	grave island
 grave islands	grave island
+great clan	Great Clan
+great clans	Great Clan
 green manure	green manure
 groin	groyne
 groins	groyne
@@ -1127,6 +1135,7 @@ guardian dogs	lion-dog
 gulou	gulou
 gun bugyo	gun-bugyo
 gun-bugyo	gun-bugyo
+gun-dai	gundai
 gundai	gundai
 gyosho	Gyosho
 gyosho edition	Gyosho
@@ -1171,6 +1180,7 @@ hangtu	rammed earth
 hanko	hanko
 hansho	hansho
 hanshō	hansho
+hantei	Hantei
 harakata	harakata-shu
 harakata-shu	harakata-shu
 hardiness zone	hardiness zone
@@ -2232,6 +2242,8 @@ nucleated	nucleated
 nucleation	nucleated
 nuclei	nucleated
 nucleus	nucleated
+nuisance trade	nuisance trade
+nuisance trades	nuisance trade
 nukimon	nukimon
 numajiro	numajiro
 nunosarashi	nunosarashi
@@ -2882,6 +2894,7 @@ shukuba	shukuba
 shukuson taigaicho	Nakasendo Shukuson Taigaicho
 shumon aratame	shumon aratame cho
 shumon aratame cho	shumon aratame cho
+shumon aratame-cho	shumon aratame cho
 shunde	Shunde
 shungiku	shungiku
 shunzhi	Shunzhi
