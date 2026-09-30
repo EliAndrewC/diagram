@@ -10,8 +10,10 @@ to every session the runner starts (after `--model`, if any). Unset, the command
 1. Refuses if another effort run is live (a run record with no `ended`), if the SHARED cgroup's working set (read through host-diag; research R5 D7 revised) - or, when the host cannot be read, this container's working set plus the measured offset - is above the 4.5 GB threshold or a
    memwatch warning is under 15 minutes old ON THE FALLBACK only - a warning is the raw figure the shared working set corrects (both GUESS thresholds, research R5 D7; the figure and the reading go in the refusal and the run record), if the rubrics changed since their freeze commit, or if the prompt
    files differ from the hashes recorded for this task's earlier run.
-2. `git clone /diagram /diagram/.clones/diagram-exp-<run-id>`, checks out `COMMIT` detached-free (a fresh `main` reset to it in the new
-   clone), and copies the sources snapshot to `<clone>/.git/effort-sources/` (R6 D4).
+2. Builds `/diagram/.clones/diagram-exp-<run-id>` as a new repository that fetches the start commit alone from the session's
+   repository, leaves `specs/293-effort-level-experiment/` out of its tree (sparse checkout), resets `main` to the start commit, then adds
+   the mirror (`/diagram`, main) as `origin` and fetches it - so nothing later than the start is reachable (FR-003). It copies the sources
+   snapshot to `/diagram/.clones/.runs-293/<run-id>/sources` (R6 D4).
 3. Starts the run detached: task R through the page-session runner with the two briefs, `--effort <arm>` and the same `--agents` JSON; task I as one
    `claude -p <prompts/I.md> -n diagram-exp-<run-id> --session-id <uuid> --effort <arm> --permission-mode bypassPermissions
    --agents <json> --output-format json`, the appended system prompt the same as an interactive session's. `CLAUDE_CODE_EFFORT_LEVEL` is

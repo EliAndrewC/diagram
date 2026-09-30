@@ -8,7 +8,9 @@ at the recorded start commit (`effort-run`'s default origin), and everything lan
    draws no burial-ground way. Run the three R1 measurements and the R6 claims-file check. Snapshot the sources ledger and cache. Draw
    `SEED`; the first task's arm order follows from it and the second task's is the other order (spec US2 AS6). Record all of it in
    `interventions.md` as the first lines.
-2. **Freeze.** Commit the rubrics and prompts; the commit time is before the first run's start.
+2. **Freeze.** Commit each task's rubric and prompts before that task's first run starts - a replaced task's before the
+   replacement's first run (FR-008, SC-002; `make effort-refreeze`). Push nothing of this feature until the last run has ended:
+   a pushed `interventions.md` would reach later run clones through `origin/main`.
 3. **Run, strictly one at a time** (the GM, 2026-09-29, for memory), when the host is otherwise quiet; a launch the headroom check refuses is
    logged and retried later, never forced; while a run is live, do nothing memory-heavy (no gate, tests, measurement or grading): `make effort-run TASK=... RUN=e1 ARM=... COMMIT=$START`; wait for its
    completion notification (never poll); `make effort-measure RUN=e1`. A question from a run: answer it, log it, give the other run of that

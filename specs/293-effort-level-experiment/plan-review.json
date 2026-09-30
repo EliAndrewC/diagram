@@ -1,7 +1,7 @@
 {
  "feature": "293-effort-level-experiment",
- "plan_sha256": "9aca3337b97c29151a511ded1708133c81730095102be7894bf20aa6c70cbb53",
- "reviewed": "2026-09-29",
+ "plan_sha256": "5b8c97b4b1839e0bacc4b75ef5833a17615b06a0ad21d7bcd9fc010a25a15e19",
+ "reviewed": "2026-09-30",
  "declared": "spec-fidelity",
  "decisions": [
   {
@@ -79,9 +79,9 @@
   },
   {
    "id": "launcher",
-   "summary": "effort-run: fresh clone at START under a neutral id, sequential, refuses on changed rubrics or prompts, task I as one full claude -p, session ids chosen up front, release line after R",
+   "summary": "effort-run: a fresh run repository at the ONE start commit under a neutral id (the start commit fetched alone, the feature directory left out of the tree, main as origin), sequential, refuses on changed rubrics or prompts, the frozen files supplied by the launcher, task I as one full claude -p, session ids chosen up front, release line after R",
    "class": "within",
-   "why": "FR-003, FR-005, US2 AS5, the neutral-id edge case."
+   "why": "FR-003 (no record linking a run id or position to an arm in the run's clone), FR-005 (one start commit), US2 AS5, the neutral-id edge case; confirmed 2026-09-30 in f1fb290fe and its test (a later commit not reachable, no 'clone: from' reflog)."
   },
   {
    "id": "void-rerun",
@@ -109,9 +109,9 @@
   },
   {
    "id": "rubric-freeze",
-   "summary": "Rubrics frozen before the first run; the launcher refuses if they changed",
+   "summary": "Each task's rubric and prompts frozen by commit before that task's first run (a replaced task's before the replacement's first run); the launcher refuses if they changed",
    "class": "within",
-   "why": "FR-008, SC-002."
+   "why": "FR-008, SC-002 as amended 2026-09-30; plan.md lines 27 and 112 now say the same (f1fb290fe)."
   },
   {
    "id": "prompt-content",
