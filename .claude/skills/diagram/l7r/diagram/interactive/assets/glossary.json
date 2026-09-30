@@ -13655,5 +13655,12 @@
    "Kofu",
    "Kofu basin"
   ]
+ },
+ "rapeseed cake": {
+  "def": "The pressed residue left after the oil is squeezed from rapeseed, sold to farmers as a fertilizer.",
+  "variants": [
+   "rapeseed cake",
+   "rapeseed cakes"
+  ]
  }
 }

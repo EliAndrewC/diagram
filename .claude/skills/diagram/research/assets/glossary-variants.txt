@@ -2540,6 +2540,8 @@ randori	randori
 raozhou	Raozhou
 rape	rape
 rapeseed	rape
+rapeseed cake	rapeseed cake
+rapeseed cakes	rapeseed cake
 rat-guard	nezumi-gaeshi
 rat-guards	nezumi-gaeshi
 reach	reach
