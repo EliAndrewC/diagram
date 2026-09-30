@@ -420,10 +420,10 @@ def skeleton_layout(kind: str, cx: float, cy: float, ex: float, ey: float) -> di
 TORII_WEIGHTS = {
     # TORII COUNT DISTRIBUTIONS (GM 2026-07-21): counts are NUMEROLOGICAL - 1, 3, or 7 only (7 is even
     # more potent in Rokugan than in the real world). Weights per settlement tier; the richer the tier,
-    # the deeper the accumulated patronage (torii are DONATED votive gates - see research/religion-and-death.html 'Torii are votive donations - the count records patronage'
+    # the deeper the accumulated patronage (torii are DONATED votive gates - see research/religion-and-death.html 'Shrine gateways and the approach to the hall (torii, sando)'
     # for the historical grounding and the deliberate Rokugan liberties). "capital" is recorded ahead of
     # need - no capital-city maps exist yet. A row of arches at an ordinary shrine is a DELIBERATE DEVIATION
-    # (GM 2026-09-29; research/religion-and-death.html 'Did a village shrine have an avenue of arches before modern times?').
+    # (GM 2026-09-29; research/rendering/religion-and-death.html 'How our maps draw torii and the shrine approach').
     "village": ((1, 0.60), (3, 0.30), (7, 0.10)),
     "town": ((1, 0.30), (3, 0.60), (7, 0.10)),
     "city": ((1, 0.30), (3, 0.40), (7, 0.30)),
