@@ -16,11 +16,21 @@
  "sources_snapshot_sha256": "8b2c60bbc18d59d20f68516400de28734969a44c5679c1d1d49607bf58cec2a6",
  "hashes": {
   "rubrics/research.md": "0c0ba2192daac4a3be7489a0a54a3ffdb15b25623d7cdd7c38350658f13fa0b7",
-  "rubrics/implementation.md": "99e0bee54d715022a9cae9bc22b895c88d60e93391a4ff7877384a5a639aceaf",
+  "rubrics/implementation.md": "1dc95b3e95328c20b767ce23d0295616a7331651644acd025a9a131c91ae0e77",
   "prompts/R-write.md": "6dd186908dd224e9131161df0d96daff039a7a1fe01fd5dc29515ebfeeea105d",
   "prompts/R-check.md": "bb63a71b8603ed9b83e43d624d4b6b557e59f12adb40cfc7a65c016600217bb7",
-  "prompts/I.md": "1c395ed8f4b8c46b5794603ac991b81dbbf221fb7967bea2f84c0fd1e1e642cf"
+  "prompts/I.md": "b1d57c71360de6256bb9829bb001781017dffb8581891c346a9d0e9450eb4cb8"
  },
  "agents_sha256": "24263244a3376b800ab3b9caba5c50be0adf746e32a3332b9a08f98683f5cafd",
- "recorded": "2026-09-29T21:53:15Z"
+ "recorded": "2026-09-29T21:53:15Z",
+ "starts": {
+  "I": "46bfff9cfbb4667360269a079997177ba1e33b66"
+ },
+ "refrozen": [
+  {
+   "task": "I",
+   "start": "46bfff9cfbb4667360269a079997177ba1e33b66",
+   "at": "2026-09-30T03:43:12Z"
+  }
+ ]
 }
