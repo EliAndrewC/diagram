@@ -103,7 +103,7 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   (below) (the row curves with the margin); `street` - a straight line fitted to that same stretch of the ring (its
   principal axis) and set out until the whole stretch lies behind it, a surveyed road. The row's length along the line is
   what its farms need, `n_side x frame` and one frame more, with two frames of slack beyond, clipped to the sheet. A linear or dispersed hamlet's canvas is 1.5 times `canvas_for`'s (`LINEAR_CANVAS`; the dispersed form's too since the
-  pinned Audit-905 seated 16 of 20 grove farms on the smaller sheet,
+  pinned Audit-905 seated 16 of 20 grove farms on the smaller sheet - measured 2026-09-30 by `make hamlet`, with a well and with a channel -
   a drawing convention - the unused ground is cropped): sized for a cluster, the canvas ran each street off the sheet
   after a few lots and cohort seed 12 seated 13 of 17 on six streets.
   WHERE THE FIRST STREET GOES: not simply at the seat - of the lines centered on the seat's point of the hard ground's
