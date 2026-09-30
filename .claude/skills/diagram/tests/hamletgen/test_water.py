@@ -521,3 +521,23 @@ def test_an_exit_bend_sits_at_the_legs_middle_to_one_side_and_is_capped() -> Non
     assert exit_bend((0.0, 0.0), (1.0, 0.0), 100.0, 1.0) == pytest.approx((50.0, 12.0))
     assert exit_bend((0.0, 0.0), (1.0, 0.0), 100.0, -1.0) == pytest.approx((50.0, -12.0))
     assert exit_bend((0.0, 0.0), (0.0, 1.0), 1000.0, 1.0) == pytest.approx((-EXIT_BEND_MAX_FT, 500.0))
+
+
+def test_the_brook_comes_on_from_off_the_sheet_to_its_approach() -> None:
+    """`off_the_sheet` (settlement-review of Mizuguchi, 2026-09-30): from the approach's head on up its bearing past the
+    canvas edge, a bend about every 140 ft, the far end off the sheet; nothing where the head is already off it."""
+    import math
+    import random
+
+    from l7r.diagram.hamletgen.water.brook import off_the_sheet
+
+    pts = off_the_sheet((500.0, 400.0), math.pi, 1000.0, 1000.0, random.Random(1))  # upslope due west
+    assert pts[0][0] == -40.0 and abs(pts[0][1] - 400.0) < 1e-9, "starts 40 ft past the west edge"
+    assert len(pts) == 3 and all(p[0] < 500.0 for p in pts), "bends every ~140 ft, all upslope of the head"
+    north = off_the_sheet((500.0, 400.0), -math.pi / 2, 1000.0, 1000.0, random.Random(1))
+    assert abs(north[0][1] + 40.0) < 1e-9
+    east = off_the_sheet((900.0, 400.0), 0.0, 1000.0, 1000.0, random.Random(1))
+    assert east == [(1040.0, 400.0)]
+    south = off_the_sheet((500.0, 950.0), math.pi / 2, 1000.0, 1000.0, random.Random(1))
+    assert abs(south[0][1] - 1040.0) < 1e-9
+    assert off_the_sheet((-5.0, 400.0), math.pi, 1000.0, 1000.0, random.Random(1)) == []

@@ -463,12 +463,11 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
         # the map past its notice board (settlement-review, 2026-09-30)
         line = inside_the_sheet(planned[offsets.index(off)], (fd / 2, fd / 2, float(s.W) - fd / 2, float(s.H) - fd / 2))
         took = 0
-        for (fx, fy), side, t, nrm in row_seats(line, frame, sides, gap):
+        seats = [q for q in row_seats(line, frame, sides, gap) if seat_allowed(q[0][0] - hx_off, q[0][1] - hy_off, float(s.W), float(s.H), allowed)]
+        for (fx, fy), side, t, nrm in seats:
             if placed >= want:
                 break
             hx, hy = fx - hx_off, fy - hy_off
-            if not seat_allowed(hx, hy, float(s.W), float(s.H), allowed):
-                continue
             # A FAR-ROW FARM IS SEATED ONLY WITH ITS HOLDING (plan D16): behind its lot, away from the street, clear of the
             # hard ground and every reserved box - else not seated here, as a farm whose grove has no room is not.
             if frame_refused((fx, fy, float(frame[2]), float(frame[3])), front, lane_pad, hard, door_room, all_streets, [hq for hq, *_r in holdings]):
