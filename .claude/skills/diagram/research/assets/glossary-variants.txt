@@ -179,7 +179,6 @@ bed shear stress	bed shear stress
 bedload	bedload
 beishan mianshui	beishan mianshui
 beitang	beitang
-beiyang government	Beiyang government
 bell-and-drum tower	gulou
 benjo	kawaya
 benten	Benten

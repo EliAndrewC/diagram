@@ -854,7 +854,7 @@ class HousesMixin:
         SIZED IN REAL FEET at ftpx >= 2 (GM 2026-07-22): for a village or provincial city each `plot_size`
         picks a real-feet CELL-AREA target (acres) and an aspect, and `waterfields.paddy_grain` converts that to
         px at THIS map's `ftpx` - so the paddy grain is the same real size at every scale (see
-        waterfields.PADDY_CELL_ACRES / research/fields.html 'Plot sizes, pond sizing and acreage from population'). The targets bracket the calibrated
+        waterfields.PADDY_CELL_ACRES / research/rendering/fields.html 'How our maps draw rice paddies and their plots (suiden)'). The targets bracket the calibrated
         norm: `small_irregular` below it, `medium` at it, `large_block` above, `strip` at the norm's area but
         long-and-narrow (aspect > 1). The ft/px=1 HAMLETS (the only maps that reach this at that scale, via
         roll_village) stay on the LEGACY px grain: they already render in-band (~0.02-0.06 acre) and the GM
