@@ -2676,6 +2676,7 @@ seki	Seki
 seki-juku	Seki
 sekisho	sekisho
 self-watch house	jishinban
+sen	sen
 senba-koki	senbakoki
 senbakoki	senbakoki
 senbon torii	Senbon Torii
@@ -3216,6 +3217,8 @@ towpath	towpath
 towpaths	towpath
 tozama	tozama
 tozama daimyo	tozama
+training retreat	training retreat
+training retreats	training retreat
 transect	transect
 transects	transect
 tread	tread

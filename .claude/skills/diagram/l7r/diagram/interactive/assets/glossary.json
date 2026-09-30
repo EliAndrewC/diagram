@@ -13295,5 +13295,18 @@
    "Honzan",
    "Honzan line"
   ]
+ },
+ "sen": {
+  "def": "A hundredth of a yen, the Meiji money unit between the yen and the rin; a land value in the Saitama temple register is given in yen, sen and rin.",
+  "variants": [
+   "sen"
+  ]
+ },
+ "training retreat": {
+  "def": "A set season of concentrated practice for monks in training, which the Sōtō school required its ranked temples to hold; such a temple had to keep a full set of buildings for it - main hall, kuri, meditation hall, dormitory and gate.",
+  "variants": [
+   "training retreat",
+   "training retreats"
+  ]
  }
 }
