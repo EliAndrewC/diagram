@@ -1833,3 +1833,5 @@ The review rounds re-laid three things here. The windbreak now ends at the colum
 ## 2026-09-30 (feature 293): the storehouses go to the largest farmhouses
 
 The storehouse annex is now dealt to the largest farmhouses by the main house's footprint (research homesteads/120; the lots' quota, `settlement/rolling/lot.py`), and its length is held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (`kura_rect`). Measured against main's manifest: the two storehouses stood on the 8th and 12th largest of 15 farmhouses and now stand on the 1st and 2nd, drawn 23.0 x 12.8 and 24.7 x 13.8 ft. The re-pack kept 10 of the 15 house centers. No thicket (the bamboo knob is homestead).
+
+What else the re-pack moved: the notice board stands 36 ft east of main's seat, at (2294.5, 1640.9), still at the entrance every household passes; the second public well moved about 270 ft, from (2472, 1943) to (2316, 2166), with the houses it serves; and a 32 ft skeleton stub the re-pack left at the entrance is gone (the lane law now counts a way as reached only where the lane's end came toward it).

@@ -2419,7 +2419,7 @@ or square the crossing before rejoining; measure seats offered and refused on th
 
 ## OPEN 2026-09-30 (feature 293, settlement-review of Sawada): a shared byre's pocket can end up out of every household's borrowing reach
 
-**Measured** (the manifests, nearest farmhouse to each shared shed on the two `detached_commons` maps): Sawada 66, 124, 92
+**Measured** (the manifests, from each shared shed's center to the nearest farmhouse's center - the basis `draft_byres` compares against `_BORROW_REACH` - on the two `detached_commons` maps): Sawada 66, 124, 92
 and 174 ft on feature 293's roll against 66, 47, 92 and 129 on main - two of four past `_BORROW_REACH` (120 ft) where main
 had one; Inashiro 138, 74 and 87 on both (its pockets and houses near them did not move). Mizuguchi, Kashikawa and Kuwabata
 keep household byres.
@@ -2435,3 +2435,10 @@ seated, lay the next pocket on the free ground nearest the group just seated (th
 corridors already known), so each shed has its borrowers by construction; a pool test that every shared shed has a
 household within `_BORROW_REACH`. Deferred because it reorders 287's seating loop (`_seat_households`), which the port that
 found it did not own; put to the GM in specs/293-effort-level-experiment/outputs/I-port-handoff.md.
+
+## OPEN 2026-09-30 (feature 293, settlement-review of Kuwabata, round 2): the notes census does not count the storehouse annexes
+
+`make notes-census` derives each map's fixture counts from its manifest but leaves out `farm_sheds`, so a map's storehouse
+count lives only in hand-typed dated entries - the kind of line that went stale on Kuwabata (round 1, F1). Sketch: one
+`storehouses: **n** of **m** farmhouses` line in the census block, read from `farm_sheds` and the plain houses, beside the
+fixture line.
