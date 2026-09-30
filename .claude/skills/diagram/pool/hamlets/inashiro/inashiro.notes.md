@@ -1856,3 +1856,10 @@ The GM's ruling of 2026-09-28 - "We should eliminate anything which is only mode
   re-packed houses moved the frame the stands must fit, and the stand count is rolled from the ground, not set.
 
 Measured on this roll (2026-09-29): 15 houses; bath rooms 4 (by seat: floored_rooms 1, stable_end 3; the hamlet's seat stable_end), wood sheds 6, privies 13 (5 on the sun side), storehouses 2, bamboo stands 8, woodland stands 1; house turns -12 to 6 degrees; every declared fixture seated.
+
+## 2026-09-30 (feature 291): the settlement's new knobs recorded, not drawn
+
+Feature 291 rolls every hamlet's farmstead-grove sides, its row village's line, sides and water, and a dispersed farm's own
+water, and records them all in the manifest (grove sides 2, flank 1, flood ground no; row line street, sides both, water shared; farm water channel). This map is **nucleated**, so none of them is drawn: a nucleated
+hamlet keeps no farm grove of its own and no row, and its wells are the shared ones (`interactive/place.py`
+`homestead_grove_default` puts no grove text on its page). The picture is unchanged (the render byte-identical to the roll before).

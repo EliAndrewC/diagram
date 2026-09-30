@@ -311,12 +311,12 @@ class VillageLane(Kind):
     paddies the way is the bund itself, the path a farmer walks to weed and manure, so the path to the fields
     runs on to the paddy's outer bund and joins it, and where a hamlet stands so close to its paddy that no
     path is left between them, its nearest lane runs on to the bund. In a row village the farms stand along a street
-    instead - a street laid out first, or one along the dry edge the ground gives - drawn a rank wider than the
-    lanes off it and running on out of the map as the road, with a path from each farm's door to it.
+    instead - a street laid out first, or one along the dry edge the ground gives - running on out of the map as
+    the road, with a path from each farm's door to it.
 
     Note: That every house is reached by a way is read from a surveyed village's own lane hierarchy; of the two
     forms, the planned back lane is read and the alleys off the spine are on no publicly readable page, as is
-    the access passage this record paraphrases; the drawn WIDTHS (3, 5 and 6 ft) are a GUESS, laddered from a footpath to a
+    the access passage this record paraphrases; the drawn WIDTHS (3, 5 and 6 ft, a row village's street at the 6 ft, a rank wider than the lanes off it) are a GUESS, laddered from a footpath to a
     wheelbarrow's width, with the connector kept under the 9 ft of the one cart road the record does measure.
     The record now carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to
     13 ft, reaching the house lots of a surveyed village - and the map deliberately draws below that band,
@@ -327,7 +327,7 @@ class VillageLane(Kind):
     counts as serving a house (within 12 ft of its house, yard or beds, or beside it within 60 ft) is a guess
     too, as is the point where the field path joins its bund, the one nearest the hamlet.
 
-    Caveat: the drawn WIDTHS (3, 5 and 6 ft) are a GUESS, laddered from a footpath to a wheelbarrow's width,
+    Caveat: the drawn WIDTHS (3, 5 and 6 ft, a row village's street at the 6 ft, a rank wider than the lanes off it) are a GUESS, laddered from a footpath to a wheelbarrow's width,
     with the connector kept under the 9 ft of the one cart road the record does measure. The record now
     carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to 13 ft,
     reaching the house lots of a surveyed village - and the map deliberately draws below that band, because

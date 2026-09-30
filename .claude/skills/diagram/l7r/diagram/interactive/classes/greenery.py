@@ -31,7 +31,7 @@ class HomesteadBamboo(Kind):
     Japan's modern topographic legend uses, a symbol of the national survey's maps of about 1910 that no page read traces to a map before 1868; older maps drew the growth itself. Presence below the frost line, the stand's two places (the
     household's plot, the village's own thicket, kept before modern times round its houses, on dry ground) and the three sides
     of the plot are read; the weights among the sides
-    (behind the house and the windward side the likeliest), the share of farmsteads keeping one (about three in five)
+    (behind the house and beside the shed the likeliest, the windward side less often), the share of farmsteads keeping one (about three in five)
     and the 22 by 16 ft strip are guesses, no page giving a share or a size.
 
     Name: homestead bamboo

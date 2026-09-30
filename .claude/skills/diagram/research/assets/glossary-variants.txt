@@ -2529,8 +2529,6 @@ root-cut	root-cut
 root-cutting	root-cut
 roson	roson
 rotation period	rotation period
-row village	roson
-row villages	roson
 rowhouse gate	nagayamon
 rowhouse gates	nagayamon
 runners	yayi
