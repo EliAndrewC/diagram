@@ -34,7 +34,7 @@ class HallAndDwelling(Kind):
     Covers: the one-roof building, its outline, its roof and its caption
     Label: accurate
     Sources: kuri-jawiki, jinguji-enwiki, bettoji-jawiki, sakai-kaieji, ehime-pref-honden-56, saitama-kannonji-kannondo
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)', 'How big was the country monk's dwelling, and did it share the hall's roof?', 'Does the country monk live at the shrine?'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)', 'The country monk who keeps a village shrine, and their dwelling (kuri)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)', 'How our maps draw the country monk's dwelling and writing room'
     """
 
     key = "hall and dwelling"
@@ -82,7 +82,7 @@ class MonksRooms(Kind):
     Covers: the dwelling end's rooms
     Label: guess
     Sources: kuri-jawiki, kawasaki-chonenji-kuri, bunka-tokuunji-kuri
-    Entry: research/religion-and-death.html - 'How big was the country monk's dwelling, and did it share the hall's roof?', 'Does the country monk live at the shrine?'
+    Entry: research/religion-and-death.html - 'The country monk who keeps a village shrine, and their dwelling (kuri)'; research/rendering/religion-and-death.html - 'How our maps draw the country monk's dwelling and writing room'
     """
 
     key = "the monk's rooms"
@@ -106,7 +106,7 @@ class WritingRoom(Kind):
     Covers: the writing room in the dwelling
     Label: accurate
     Sources: terauke-seido-jawiki, shumon-ninbetsu-jawiki, jaanus-shamusho
-    Entry: research/religion-and-death.html - 'Where does the country monk keep the district's registers?'
+    Entry: research/religion-and-death.html - 'The country monk who keeps a village shrine, and their dwelling (kuri)'; research/rendering/religion-and-death.html - 'How our maps draw the country monk's dwelling and writing room'
     """
 
     key = "writing room"
