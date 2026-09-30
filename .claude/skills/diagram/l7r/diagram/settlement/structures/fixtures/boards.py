@@ -60,11 +60,11 @@ class BoardsMixin:
         institution fails while the siting checks stay green (that is exactly how Nagahara's
         third board shipped, GM 2026-07-27). Hand placements must pass the fronted route's
         bearing; `place_kosatsuba` derives it. Held by `kosatsuba_faces_the_road`. Records M['kosatsuba'] (an overlap-checked
-        struct). WHY: research/urban-features.html 'The notice board (kosatsuba) - siting is a traffic decision'. Place LAST, on a clear verge
+        struct). WHY: research/rendering/urban-features.html 'How our maps place and draw notice boards (kosatsuba)'. Place LAST, on a clear verge
         beside the road, like the fire tower.
 
         The DRAWN glyph is a LOCATION MARKER at the coarse tiers (GM call 2026-07-24, taking the
-        escape research/urban-features.html 'The notice board (kosatsuba)' documents): the true 12x5 ft frame draws 6x2.5 px at village grain
+        escape research/rendering/urban-features.html 'How our maps place and draw notice boards (kosatsuba)' documents): the true 12x5 ft frame draws 6x2.5 px at village grain
         and 4x1.7 px at city grain - at city scale, rotated upright, that is a 1.7 px sliver that
         reads as gate hardware, not a feature (Nagahara: two of its three boards were invisible
         until the GM went looking, and the one that read did so only by its label). So the glyph

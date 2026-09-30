@@ -443,7 +443,7 @@ class NoticeBoard(Kind):
     Covers: `kosatsuba`, with its label
     Label: accurate
     Sources: fuchu-kosatsuba, ogose-kosatsuba, kosatsu-jawiki, adachi-kosatsu
-    Entry: research/urban-features.html - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'
+    Entry: research/urban-features.html - 'Notice boards (kosatsuba)'; research/rendering/urban-features.html - 'How our maps place and draw notice boards (kosatsuba)'
     """
 
     key = 'notice board'

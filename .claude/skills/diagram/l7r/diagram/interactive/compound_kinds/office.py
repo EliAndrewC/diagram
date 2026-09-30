@@ -325,7 +325,7 @@ class BenchNoticeBoard(Kind):
     Covers: the board outside the main gate and its label
     Label: accurate
     Sources: kosatsu-jawiki, ogose-kosatsuba, adachi-kosatsu, kosatsu-enwiki, shoya-jawiki
-    Entry: research/buildings.html - 'Did the magistrate post notices at the office's own gate, or on the town's notice board?'; research/urban-features.html - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'
+    Entry: research/urban-features.html - 'Notice boards (kosatsuba)'; research/rendering/urban-features.html - 'How our maps place and draw notice boards (kosatsuba)'
     """
 
     key = "notice board"
