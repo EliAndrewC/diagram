@@ -126,6 +126,19 @@ def test_an_end_served_only_by_the_way_it_left_dangles() -> None:
     assert law.dangling_ends(M) == [(50, 40)]
 
 
+def test_an_end_that_walked_away_from_its_junction_dangles() -> None:
+    """Feature 293 (settlement-review of Inashiro): a stub leaves the connector at a junction and ends 58 ft from another
+    way's end at that SAME junction - inside the 60 ft reach, but the lane walked away from it. A way the end came toward
+    still serves it."""
+    conn = _lane((2289.5, 1649.0), (2011.5, 1476.7), connector=True)
+    strip = _lane((2704.8, 1906.5), (2289.5, 1649.0))
+    stub = _lane((2264.8, 1596.6), (2248.2, 1623.4))
+    M = {"lanes": [conn, stub, strip], "houses": []}
+    assert (2265, 1597) in law.dangling_ends(M), "the stub walked away from the junction it left"
+    toward = _lane((2240.0, 1560.0), (2400.0, 1560.0))  # a way 37 ft on past the stub's end, across its line
+    assert (2265, 1597) not in law.dangling_ends({**M, "lanes": [conn, stub, strip, toward]}), "a way the end came toward serves it"
+
+
 def test_a_farmhouse_discharges_two_lane_ends_not_three() -> None:
     three = [_lane((20.0, 0.0), (300.0, 0.0)), _lane((0.0, 20.0), (0.0, 300.0)), _lane((-20.0, 0.0), (-300.0, 0.0))]
     M = {"lanes": three, "houses": [_house(0.0, 0.0)]}

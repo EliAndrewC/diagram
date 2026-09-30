@@ -171,7 +171,7 @@ class FarmsteadFlushMixin:
         ca, sa = math.cos(th), math.sin(th)
         # the two kura footprints, in the house's local frame - `kura_rect`, the table house() draws from (feature 280 M18's
         # 1.67-to-one north annex reached the drawing and the bundle but not this copy; the table is one now)
-        sides = {"W": kura_rect(w, h, "W"), "N": kura_rect(w, h, "N")}
+        sides = {"W": kura_rect(w, h, "W", self.px(1.0)), "N": kura_rect(w, h, "N", self.px(1.0))}
         # every DRAWN appurtenance of every farmstead, this one's included: the check does not care
         # whose garden a kura laps, and a house's own bed is as much a collision as a neighbor's
         near = [o for k in ("gardens", "threshing_yards", "farm_sheds", "byres") for o in (self.M.get(k) or []) if abs(o["x"] - rec["x"]) < 3 * w and abs(o["y"] - rec["y"]) < 3 * w]

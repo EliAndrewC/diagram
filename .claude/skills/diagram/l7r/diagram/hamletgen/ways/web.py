@@ -691,6 +691,11 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     split_at_crossings(s)  # a crossing is a junction: recorded as one before the trim judges what each end serves (the 269 landing)
     tidy_lane_ends(s, list(plan.envelope))
     meet_end_to_end(s, walls)  # ...and two ends the trims left facing each other across a hand's width are joined
+    # ...AND DOUBLED INK IS SWEPT ONCE MORE, AFTER THE SPLIT (feature 293; Sawada in the earlier 293 pass): a join lane laid
+    # to an "orphan" that in fact crossed the web mid-run is the only link at the ink tolerance until `split_at_crossings`
+    # records that crossing as a junction - and from then it is a tread doubled beside another, which both doubled-ink
+    # sweeps above had kept as a link. The same sweep, with the same stranding and one-network refusals.
+    _sweep_doubled_remnants(s)
     # ...AND THE PADDY IS REACHED (269 B04, research/fields/290): where no lane end stands on its bund - the spur swept, or
     # never drawn - the nearest lane runs on to it, or a field path is drawn off the nearest lane; recorded either way
     s.M["meta"]["field_path"] = a_way_onto_the_bund(s)

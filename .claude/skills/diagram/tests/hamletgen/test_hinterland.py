@@ -3,6 +3,8 @@
 Split from test_hamletgen.py by feature 111; test bodies verbatim. See hamletgen/CLAUDE.md.
 """
 
+import math
+
 import pytest
 
 from l7r.diagram import hamletgen as hg
@@ -783,3 +785,108 @@ def test_the_scan_refuses_a_ring_the_wet_share_fails_and_takes_the_next_seat(mon
     got = _scan()
     assert asked[0] not in got, "the wet ring is not drawn"
     assert got, "the scan went on to the next seat"
+
+
+def test_a_thicket_keeps_off_the_wells_and_stands_behind_the_back_row() -> None:
+    """Feature 293 I (settlement-review of Kashikawa): a well record is x, y, r, so the keep-out that named the wells never
+    held one, and the thicket was drawn over a public well; and the search walked into the cluster when the ground behind
+    it was taken. A well is kept by its radius and 14 ft; a seat's south edge stands no further south than the northernmost
+    house; where nothing fits behind the back row, no thicket is drawn."""
+    from l7r.diagram.settlement import Settlement, point_in_poly
+
+    from ._builders import a_plan
+
+    def _hamlet(wet_north: bool) -> tuple[Settlement, object]:
+        plan = a_plan()
+        plan.bamboo = "thicket"
+        s = Settlement(plan.W, plan.H, seed=plan.spec.seed)
+        s.meta(name="B", scale="hamlet", ftpx=1, down_deg=90)
+        s.M["houses"] = [{"x": x, "y": 800.0, "w": 46.0, "h": 28.0, "rot": 0.0} for x in (600.0, 700.0, 800.0)]
+        s.M["gardens"] = [{"x": 300.0, "y": 300.0, "w": 10.0, "h": 10.0}]  # crop content, so the sheet reaches behind the houses
+        s.M["wells"] = [{"x": 700.0, "y": 740.0, "r": 4.0}]  # on the thicket's target, 40 ft north of the back row
+        if wet_north:
+            s.M["marshes"] = [{"poly": [[0.0, 0.0], [float(plan.W), 0.0], [float(plan.W), 780.0], [0.0, 780.0]], "role": "toe"}]
+        return s, plan
+
+    s, plan = _hamlet(False)
+    seats = hg.hinterland.bamboo_seats(s, plan)  # type: ignore[arg-type]
+    assert seats, "non-vacuity: the thicket is seated"
+    for poly in seats:
+        assert max(q[1] for q in poly) <= 800.0, "behind the back row"
+        assert not point_in_poly(700.0, 740.0, poly) and min(math.dist((700.0, 740.0), q) for q in poly) > 4.0, "off the well"
+    s, plan = _hamlet(True)
+    assert hg.hinterland.bamboo_seats(s, plan) == [], "no ground behind the houses: no thicket, rather than one among them"  # type: ignore[arg-type]
+
+
+def test_a_thicket_stands_on_the_sheet() -> None:
+    """Feature 293 I round 3 (settlement-review of Kashikawa): a thicket is not crop content, and behind the back row the
+    nearest fitting seat stood 187 ft past its target and wholly above the view - the page offered a thicket nothing on the
+    sheet answered. A seat stands inside the page as it stands (`frame_bounds`); where none fits there, none is drawn."""
+    from l7r.diagram.hamletgen.hinterland.frame import frame_bounds
+    from l7r.diagram.settlement import Settlement
+
+    from ._builders import a_plan
+
+    def _hamlet(reach_north: bool) -> tuple[Settlement, object]:
+        plan = a_plan()
+        plan.bamboo = "thicket"
+        s = Settlement(plan.W, plan.H, seed=plan.spec.seed)
+        s.meta(name="B", scale="hamlet", ftpx=1, down_deg=90)
+        s.M["houses"] = [{"x": x, "y": 800.0, "w": 46.0, "h": 28.0, "rot": 0.0} for x in (600.0, 700.0, 800.0)]
+        if reach_north:
+            s.M["gardens"] = [{"x": 700.0, "y": 600.0, "w": 10.0, "h": 10.0}]  # content 200 ft north: the sheet reaches behind the row
+        return s, plan
+
+    s, plan = _hamlet(False)
+    assert hg.hinterland.bamboo_seats(s, plan) == [], "the sheet ends 62 ft behind the houses, and no thicket fits there"  # type: ignore[arg-type]
+    s, plan = _hamlet(True)
+    seats = hg.hinterland.bamboo_seats(s, plan)  # type: ignore[arg-type]
+    assert seats, "non-vacuity: with the sheet reaching behind the row, the thicket is seated"
+    x0, y0, x1, y1 = frame_bounds(s, plan)  # type: ignore[arg-type]
+    assert all(x0 <= q[0] <= x1 and y0 <= q[1] <= y1 for poly in seats for q in poly), "wholly on the sheet"
+
+
+def test_nearest_fitting_keeps_to_its_box() -> None:
+    """`nearest_fitting`'s `box` (feature 293): the walk keeps to the part of the square inside it, on a lattice centered
+    there, and finds the nearest fit; a band narrower than one step still has its row, where a lattice stepped from the
+    square's corner can miss it whole (settlement-review of Kashikawa, round 5). Without a box, the whole square is walked
+    as before."""
+    from l7r.diagram.hamletgen.hinterland.bamboo import nearest_fitting
+
+    seen: list[tuple[float, float]] = []
+
+    def fits(x: float, y: float) -> bool:
+        seen.append((x, y))
+        return x >= 30.0
+
+    best = nearest_fitting((0.0, 0.0), 50.0, 10.0, fits, box=(20.0, -20.0, 45.0, 5.0))
+    assert best is not None and (best[1], best[2]) == (32.5, 2.5), "the 25-wide box's lattice is centered: 22.5, 32.5, 42.5"
+    assert seen and all(20.0 <= x <= 45.0 and -20.0 <= y <= 5.0 for x, y in seen), "no point outside the box is tried"
+    band = nearest_fitting((0.0, 0.0), 50.0, 16.0, lambda x, y: True, box=(-10.0, 31.0, 10.0, 45.0))
+    assert band is not None and band[2] == 38.0, "a 14-tall band on a 16 step still has its row, centered in it"
+    assert nearest_fitting((0.0, 0.0), 50.0, 16.0, lambda x, y: 31.0 <= y <= 45.0) is None, "the square's own rows (30, 46) miss it"
+    assert nearest_fitting((0.0, 0.0), 50.0, 10.0, lambda x, y: x >= 30.0) == (30.0, 30.0, 0.0), "no box: the whole square"
+    assert nearest_fitting((0.0, 0.0), 50.0, 10.0, lambda x, y: True, box=(60.0, 0.0, 70.0, 10.0)) is None, "a box off the square"
+
+
+def test_a_thicket_is_sought_past_its_reach_when_none_fits_within_it() -> None:
+    """Feature 293 I round 4 (settlement-review of Kashikawa): held behind the back row and on the sheet, nothing fitted
+    within `THICKET_REACH_FT` of the target, and the hamlet drew no thicket while an open seat stood farther along the back
+    row. Past the reach, the whole sheet behind the back row is searched; nearer seats still win where there are any."""
+    from l7r.diagram.hamletgen.hinterland.bamboo import THICKET_REACH_FT
+    from l7r.diagram.settlement import Settlement
+
+    from ._builders import a_plan
+
+    plan = a_plan()
+    plan.bamboo = "thicket"
+    plan.W = max(plan.W, 1800)
+    s = Settlement(plan.W, plan.H, seed=plan.spec.seed)
+    s.meta(name="B", scale="hamlet", ftpx=1, down_deg=90)
+    s.M["houses"] = [{"x": x, "y": 800.0, "w": 46.0, "h": 28.0, "rot": 0.0} for x in (600.0, 700.0, 800.0, 1500.0)]
+    s.M["gardens"] = [{"x": 700.0, "y": 500.0, "w": 10.0, "h": 10.0}]  # crop content: the sheet reaches behind the row
+    s.M["marshes"] = [{"poly": [[0.0, 0.0], [1100.0, 0.0], [1100.0, 790.0], [0.0, 790.0]], "role": "toe"}]  # wet behind the near houses
+    seats = hg.hinterland.bamboo_seats(s, plan)  # type: ignore[arg-type]
+    assert len(seats) == 1, "the thicket is seated past its reach"
+    cx = sum(q[0] for q in seats[0]) / len(seats[0])
+    assert cx - 700.0 > THICKET_REACH_FT and max(q[1] for q in seats[0]) <= 800.0, "along the back row, behind it"

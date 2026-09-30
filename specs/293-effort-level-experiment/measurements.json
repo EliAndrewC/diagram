@@ -1,0 +1,46 @@
+{
+  "inashiro-r1-F1-stub": {
+    "verifies": "F1",
+    "subject": "inashiro",
+    "answers": "4905881c72e7",
+    "quantity": "skeleton lanes left in the manifest after the lane law's dangling-end fix (the round-1 stub was lanes[1], a 32 ft two-point skeleton arm off the connector at the entrance)",
+    "value": 0,
+    "unit": "lanes",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json lanes, read with jq: `[.lanes[] | select(.role==\"skeleton\")]` is empty; the only two-point lane within 60 ft of the stub's old seat is the exit strip (2705,1907)-(2290,1649)",
+    "method": "hamletgen/ways/law.py `dangling_lane_ends` counts a way as reached only where its nearest point is nearer the lane's end than its far end (`_walked_to`); the settle then cut the stub; make map regenerated Inashiro, and no other pool manifest moved"
+  },
+  "kuwabata-r1-F1-count-line": {
+    "verifies": "F1",
+    "subject": "kuwabata",
+    "answers": "4905881c72e7",
+    "quantity": "hand-typed 'Measured on this roll (2026-09-29)' count lines left in the rules section of kuwabata.notes.md",
+    "value": 0,
+    "unit": "lines",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md: the line now reads 'The counts on the shipped roll are the census block's (`make notes-census`), never typed here'",
+    "method": "grep over the notes file"
+  },
+  "kuwabata-r1-F3-deviation": {
+    "verifies": "F3",
+    "subject": "kuwabata",
+    "answers": "4905881c72e7",
+    "quantity": "sentences in the feature 293 entry of kuwabata.notes.md naming the annex size as a deliberate deviation from the record's 15 by 18 ft free-standing kura",
+    "value": 1,
+    "unit": "sentences",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md, the last paragraph: 'The annex's size is a deliberate deviation (research homesteads/120 and 430)'",
+    "method": "grep over the notes file"
+  },
+  "mizuguchi-r1-F1-notes": {
+    "verifies": "F1",
+    "subject": "mizuguchi",
+    "answers": "4905881c72e7",
+    "quantity": "the three moves the review named (the board 121 ft out along the connector, the placard off the south-west corner, the woodland stand now on the sheet) recorded in the feature 293 entry",
+    "value": 3,
+    "unit": "moves recorded",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md, the last paragraph; the board's move measured on the manifests: (1480.9, 2030.1) on main to (1390.2, 1949.4), 121.4 ft; the woodland stand at (1404, 2882) in `commons`, main's `meta.woodland_offsheet` W, 4 parcels",
+    "method": "jq over main's and the clone's manifests, then the notes edited"
+  }
+}

@@ -26,6 +26,20 @@ from .fabric import _LANE_JOIN_FT, _draw_web, _net_segs
 from .geom import _net_reach, _reach, _trim_to_service, polyline_len, steading_footprints
 
 
+def shadow_measure(run: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]]) -> tuple[int, float]:
+    """How much of `run` (points along a way) shadows the ways `segs`: the points within `WEB_SHADOW_FT` of them, and the
+    longest unbroken stretch of such points in feet. `_lay_web_lane` refuses a run on it against the whole network as the
+    run is laid; the pool's finished-map test reads it way against way (feature 293: a re-packed Sawada roll of the earlier
+    293 pass shipped two lanes 244 ft side by side that no pass laying them had asked about)."""
+    near_flags = [min(seg_dist(q[0], q[1], a, b) for a, b in segs) < WEB_SHADOW_FT for q in run]
+    step_ft = polyline_len(list(run)) / max(len(run) - 1, 1)
+    worst = cur = 0
+    for f in near_flags:
+        cur = cur + 1 if f else 0
+        worst = max(worst, cur)
+    return sum(near_flags), worst * step_ft
+
+
 def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly], water: list[tuple[Pt, Pt]], belts: Sequence[Poly] = (), houses: Sequence[Pt] = ()) -> bool:
     """Draw one web lane - but ONLY if it joins the way network, and TOUCHING it where it joins.
 
@@ -78,17 +92,12 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
         # run or four fifths of it, so the longest UNBROKEN shadowed stretch is capped at one bundle
         # pitch as well. Both clauses are needed - the fraction catches a short lane laid alongside
         # another for all of its length, the absolute catches a long one that eventually diverges.
-        near_flags = [min(seg_dist(q[0], q[1], a, b) for a, b in segs) < WEB_SHADOW_FT for q in run]
-        _step_ft = polyline_len(run) / max(len(run) - 1, 1)
-        _worst = _cur = 0
-        for _f in near_flags:
-            _cur = _cur + 1 if _f else 0
-            _worst = max(_worst, _cur)
+        _near, _worst_ft = shadow_measure(run, segs)
         # ONE REFUSAL, BOTH CLAUSES: the fraction catches a short lane laid alongside another for all of its
         # length, the unbroken stretch a long one that eventually diverges. Written as one test because they are
         # one rule - a lane that shadows another is a doubled band - and because a separate line for the second
         # is a line only a particular map shape ever reaches.
-        if sum(near_flags) > 0.6 * len(run) or _worst * _step_ft > BUNDLE_PITCH:
+        if _near > 0.6 * len(run) or _worst_ft > BUNDLE_PITCH:
             return False
         # ...AND A LANE DOES NOT RUN THE LENGTH OF A SHELTER BELT. Crossing one costs the belt a
         # lane's width of wall, which is a fair price for a way that has somewhere to be; running

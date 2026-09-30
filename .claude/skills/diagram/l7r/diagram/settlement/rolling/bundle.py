@@ -276,7 +276,7 @@ class BundleGeomMixin:
             base["gardens"] = beds  # 1 bed normally; 2 (flanking / stacked / side-by-side) when fragmented
             base["garden"] = beds[0]  # primary bed (kept for the shading score + back-compat)
             if shed:  # a north-wall kura, reserved so a neighbor never lands on it
-                _kx, _ky, _kw, _kh = kura_rect(hw, hh, "N")  # the drawn annex (`house`, feature 280 M18: 1.67 to one)
+                _kx, _ky, _kw, _kh = kura_rect(hw, hh, "N", self.px(1.0))  # the drawn annex (`house`), its length held in its band (feature 293)
                 base["shed"] = (hx + _kx, hy + _ky, _kw, _kh)
             # THE HOUSEHOLD'S BEAST, a part of its homestead (feature 287, homes H06): a keeper's byre - the inner stable's
             # arm or the outer stable's shed, on the flank away from the garden - is laid in the bundle, so the envelope

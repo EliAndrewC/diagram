@@ -224,7 +224,7 @@
     "name": "farmhouse",
     "siblings": {
       "byre": "A farmhouse shelters the household; a byre shelters its draft animal. Where the stall is inside the house, in a corner of its earth-floored work space, the map draws the byre against the farmhouse; where it is a stable of its own, a small shed nearby. The attached stable wing of the cold horse-breeding districts (magariya) is not drawn.",
-      "storage shed": "The farmhouse is the dwelling; a storage shed is a roofed outbuilding for grain, straw, tools and fuel - Sugiura's 1972 survey counted 4.4 outbuildings per household, and the sheds drawn here stand for that inventory, not for a second house."
+      "storage shed": "The farmhouse is the dwelling; the storage shed drawn against its back wall is its storehouse, a store for grain, straw and tools that the larger farms have - about one in eight - not a second house."
     },
     "sources": [
       "sakamoto-tsubaki-1985-omoya-muki",
@@ -858,7 +858,7 @@
     "name": "storage shed",
     "siblings": {
       "byre": "A storage shed holds things; a byre holds an ox or a water buffalo. The GM's own line: a storage shed attached to a farmhouse is different from the animal sheds where the animals are kept - so the two never highlight together.",
-      "farmhouse": "The farmhouse is the dwelling; a storage shed is a roofed outbuilding for grain, straw, tools and fuel - Sugiura's 1972 survey counted 4.4 outbuildings per household, and the sheds drawn here stand for that inventory, not for a second house."
+      "farmhouse": "The farmhouse is the dwelling; the storage shed drawn against its back wall is its storehouse, a store for grain, straw and tools that the larger farms have - about one in eight - not a second house."
     },
     "sources": [
       "oamishirasato-choshi-kaoku",

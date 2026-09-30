@@ -165,12 +165,12 @@ def clears(r: Rect, taken: Sequence[Rect], gap: float) -> bool:
     return True
 
 
-def steading_rects(hw: float, hh: float, kura_side: str | None) -> list[Rect]:
+def steading_rects(hw: float, hh: float, kura_side: str | None, ppf: float) -> list[Rect]:
     """The walls of a steading's buildings in the house's unturned frame: the house, and its kura where it keeps one
     (north, or the west end - `kura_rect`, the table `Settlement.house` draws from)."""
     rects = [(0.0, 0.0, hw, hh)]
     if kura_side is not None:
-        rects.append(kura_rect(hw, hh, kura_side))
+        rects.append(kura_rect(hw, hh, kura_side, ppf))
     return rects
 
 
@@ -252,7 +252,7 @@ def lay_fixtures(
         if kind == "persimmon":
             seat = _persimmon(hw, hh, yard, taken, built, u < forms.persimmon_front, px)
         elif kind == "woodpile":
-            walls = steading_rects(hw, hh, "N" if kura else None) + ([annex] if annex is not None else []) + ([laid["retirement"]] if "retirement" in laid else [])
+            walls = steading_rects(hw, hh, "N" if kura else None, px(1.0)) + ([annex] if annex is not None else []) + ([laid["retirement"]] if "retirement" in laid else [])
             seat = _wood_shed(hw, hh, w, d, g, walls, taken, px)
         elif kind == "bath":
             named = bath_room_seats(forms.bath_seat, hw, hh, w, d, (yard[0], yard[2] / 2) if yard is not None else None)

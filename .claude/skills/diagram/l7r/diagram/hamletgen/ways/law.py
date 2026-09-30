@@ -436,6 +436,13 @@ def unreached_targets(M: Mapping[str, Any]) -> list[Pt]:
     return [t for t in targets if not any(seg_dist(t[0], t[1], a, b) <= TARGET_REACH_FT for a, b in segs)]
 
 
+def _walked_to(end: Pt, far: Pt, sg: tuple[Pt, Pt]) -> bool:
+    """Is the way segment `sg`'s nearest point to a lane's `end` nearer that end than the lane's `far` end - so the lane,
+    walked from its far end, came toward it (`dangling_lane_ends`)?"""
+    c = seg_closest(end[0], end[1], sg[0], sg[1])
+    return math.dist(c, end) < math.dist(c, far)
+
+
 def dangling_lane_ends(M: Mapping[str, Any], ground: WorkedGround | None = None) -> list[tuple[int, int]]:
     """(lane index, end) for every internal lane end that reaches nothing (`end_serves`) other than the way its own far
     end stands on: the other ways' segments are asked, less those within `_TOUCH_GAP` of the lane's far end. `ground` is the
@@ -452,7 +459,12 @@ def dangling_lane_ends(M: Mapping[str, Any], ground: WorkedGround | None = None)
             continue
         others = [sg for k, o in enumerate(ways) if k != i and len(o) >= 2 for sg in zip(o, o[1:], strict=False)]
         for e, end, far in ((-1, p[-1], p[0]), (0, p[0], p[-1])):
-            segs = [sg for sg in others if seg_dist(far[0], far[1], sg[0], sg[1]) > _TOUCH_GAP]
+            # ...AND A WAY IS REACHED ONLY WHERE THE END GOT NEARER TO IT THAN THE LANE'S FAR END ALREADY STOOD (feature 293,
+            # settlement-review of Inashiro): a 32 ft skeleton stub left the connector at the entrance and ended in the
+            # windbreak, 58 ft from the exit strip's end at that same junction - inside `WAY_END_REACH_FT`, so it "reached" the
+            # junction it had left. The nearest point of each other way is asked: nearer the far end than the end, the lane
+            # walked away from it, not to it.
+            segs = [sg for sg in others if seg_dist(far[0], far[1], sg[0], sg[1]) > _TOUCH_GAP and _walked_to(end, far, sg)]
             if not end_serves(end, segs, centers, ground, steadings):
                 out.append((i, e))
     return out
