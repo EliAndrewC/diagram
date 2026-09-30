@@ -65,7 +65,7 @@ CORRIDOR_W_FT: float = 6.0
 # house is held to research buildings 380's 49-tsubo house, ~1,740 sq ft; it was 15 x 12, then 12 x 10) - below the
 # doctrine's 12-15 ft guess, a GUESS.
 BATH_W_FT, BATH_H_FT = 10.0, 8.0
-# The gates' posts (feature 267 R26, research buildings 480 'How wide was the main gate?'). Each post is drawn over the
+# The gates' posts (feature 267 R26, research buildings 480 'The main gate and its gatekeepers (nagaya-mon)'). Each post is drawn over the
 # cut end of the wall it closes, so the wall's opening IS the passage the audit measures between the posts
 # (`pack_audit.main_gate_passage_ft`). 4 x 14 px (1.33 x 4.67 ft) is a MAP DRAWING CONVENTION: the post block stands
 # for the gate's pillar with the wall end it caps, drawn proud of the 3 ft wall so it reads as a post, not a true-size

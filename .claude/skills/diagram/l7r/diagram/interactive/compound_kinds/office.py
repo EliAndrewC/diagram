@@ -251,7 +251,7 @@ class Gatehouse(Kind):
     Covers: the guard post beside the main gate, or the guardroom in the gate range, and its label
     Label: accurate
     Sources: tamba-kashiwara-jinya, matsue-bukeyashiki, takayama-jinya-city, takayama-jinya-jawiki, bansho-jawiki, kitain-bansho
-    Entry: research/buildings.html - 'Where did the gatekeepers sit - in the gate range, or a gatehouse beside it?'
+    Entry: research/buildings.html - 'The main gate and its gatekeepers (nagaya-mon)'; research/rendering/buildings.html - 'How our maps draw the main gate and gatehouse'
     """
 
     key = "gatehouse"

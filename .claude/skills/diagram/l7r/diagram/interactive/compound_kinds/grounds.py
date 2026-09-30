@@ -368,7 +368,7 @@ class MainGate(Kind):
     Covers: the posts flanking the main opening
     Label: accurate
     Sources: nagayamon-jawiki, tamba-kashiwara-jinya, bunka-saito-nagayamon, bunka-adachi-yakuimon, bunka-omi-yakuimon, bunka-fujioka-yakuimon, sohu-yamen-gate, bjd-qing-yamen, neixiang-xianya-zhwiki, kotobank-shikidai, kominkai-genkan
-    Entry: research/buildings.html - 'How wide was the main gate of a magistrate's post?', 'How did a guest of rank arrive, from the gate to the entrance?', 'Guest doors feed courts, not flanks'; research/towns.html - 'Where does a magistrate's manor stand, and which way does its gate face?'; research/religion-and-death.html - 'How large are the gates, walls and funerary features drawn?'
+    Entry: research/buildings.html - 'The main gate and its gatekeepers (nagaya-mon)', 'How did a guest of rank arrive, from the gate to the entrance?', 'Guest doors feed courts, not flanks'; research/towns.html - 'Where does a magistrate's manor stand, and which way does its gate face?'; research/rendering/buildings.html - 'How our maps draw the main gate and gatehouse', 'How our maps draw compound walls (neribei and tsuijibei)'
     """
 
     key = "main gate"
