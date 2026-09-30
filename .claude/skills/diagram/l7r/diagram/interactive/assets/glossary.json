@@ -8721,6 +8721,7 @@
   "def": "The Japanese era name for the years 1573 to 1592; \"Tensho 20\" is 1592, the year the filling of Edo's Hibiya inlet began.",
   "variants": [
    "Tensho",
+   "Tenshō",
    "Tensho-era"
   ]
  },
@@ -13273,6 +13274,26 @@
   "variants": [
    "soja",
    "sōja"
+  ]
+ },
+ "hall-hermitage": {
+  "def": "A small Buddhist hall, served by a monk or by religionists from the village, without a temple's standing; in the seventeenth century many were raised to temples when their villages became their parishioners.",
+  "variants": [
+   "hall-hermitage",
+   "hall-hermitages"
+  ]
+ },
+ "Dazaifu": {
+  "def": "The old seat of the imperial government's headquarters for Kyushu, near present-day Fukuoka; \"the lands under the Dazaifu\" are the provinces of Kyushu.",
+  "variants": [
+   "Dazaifu"
+  ]
+ },
+ "Honzan": {
+  "def": "A line of shugen (mountain asceticism), headed by the temple Shōgoin in Kyoto; a shugen hall \"of the Honzan line\" was under Shōgoin.",
+  "variants": [
+   "Honzan",
+   "Honzan line"
   ]
  }
 }

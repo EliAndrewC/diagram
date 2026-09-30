@@ -558,6 +558,7 @@ daqing gate	Daqing gate
 daqingmen	Daqing gate
 dashigeta	dashigeta
 daxiangguo	Daxiangguo
+dazaifu	Dazaifu
 db	dBA
 dba	dBA
 dbh	DBH
@@ -1135,6 +1136,8 @@ half-story	half-story
 hall of the heavenly kings	hall of the Heavenly Kings
 hall-and-wing house	weilongwu
 hall-and-wing houses	weilongwu
+hall-hermitage	hall-hermitage
+hall-hermitages	hall-hermitage
 han	han
 han china	Han dynasty
 han dynasty	Han dynasty
@@ -1276,6 +1279,8 @@ honjo	Honjo
 honmaru	honmaru
 honmune-zukuri	honmune-zukuri
 honshu	Honshu
+honzan	Honzan
+honzan line	Honzan
 hoonoki	hoonoki
 horeki	Horeki
 horiage-den	horita
@@ -3095,6 +3100,7 @@ tenpō era	Tenpo era
 tensho	Tensho
 tensho-era	Tensho
 tenshu	tenshu
+tenshō	Tensho
 tensuioke	tensuioke
 tera-machi	teramachi
 terakoya	terakoya
