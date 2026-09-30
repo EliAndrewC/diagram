@@ -79,3 +79,5 @@ given, identically, to the other.
 - 2026-09-30T18:16:05Z | e7 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
 - 2026-09-30T19:04:19Z | e7 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
 - 2026-09-30T19:53:12Z | e7 | sync | e7 reports the clone-sync prompt hook began a sync with origin/main in its clone mid-run and left a conflicted half-merge, which it aborted; checked: no merge commit and no commit but its own in ec99356cf..HEAD (e5 likewise clean)
+- 2026-09-30T20:29:46Z | - | blind | task R blinded with seed 65693; the key under .git/effort-keys/R.json, unopened
+- 2026-09-30T20:30:26Z | - | grading | the session cannot dispatch effort-grader (it loads agents from the /diagram mirror, where the file lands only with the feature); each grader run is a headless claude -p in the bundle directory (outside any repository, so no CLAUDE.md) with the agent file's contract as its system prompt, --model claude-opus-5-5 --effort high, tools Read and Grep - the agent's pinned tier and contract

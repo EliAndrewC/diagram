@@ -15,6 +15,22 @@ The GM's answers to the session's questions, 2026-09-29, verbatim:
   2026-09-28, OWED: no way reaches a burial ground, at any size of settlement").
 - Replication: "Pilot: 1 per arm per task".
 - Arms: "medium vs xhigh to start with, and we can test more if there is a big difference between medium and xhigh"
+- The GM's judgment after the runs, 2026-09-30, verbatim: "I understand that what I have just done in my own review is not blind. And
+  therefore, I might be biased But to be honest, I don't really find either of the research pages to be particularly noticeably better than
+  the other. So I think that what that speaks to is the efficiency of the subagent checks that we already have to ensure a certain minimum
+  level of quality. Now, as for the medium versus X high, work. It does seem that the X high work did a better job, Though to be frank, I
+  don't think that the betterness is worth taking three times as long and twice as many tokens. So I think that when it comes to
+  implementation tasks, it does seem like I want to keep medium as the default and then switch to a higher level in cases where I believe
+  that it will be necessary for the session to really go deep and take the initiative to do research and find semi-related bugs and fix
+  them above and beyond what will turn up naturally in unit testing, etc." ... "because I am not an expert there, it might be worth doing
+  some kind of blind analysis of it" ... "see whether either one is deficient or if one of them seems really strongly better than the other
+  in a concrete way that we would care about" ... "Can you have this feature which we are working on include merging in the X-high effort
+  version of the implementation task and doing this blind review and merging in whichever version of the research task results it deems to
+  be better along with giving me an analysis of what makes the better one better and how much better it seems to be. I think at that point,
+  the entire feature is mergeable back into main."
+- And on the proposed review: "Let's do two runs instead of three for the effort grader. Because frankly, just knowing whether or not two
+  runs match or not is good enough for telling me how reliable the results are. ... Other than that, yes, please go ahead on that basis. Do
+  all of this and then land the feature in main."
 - Amendment, 2026-09-30 (task I's first run found its premise gone: feature 280 M68 had removed the hamlet's own burial ground). Asked
   "How should the experiment continue?": "Replace the task (Recommended)"; asked "If replacing, which hamlet task?": "Storehouse by house size".
 - Amendment, 2026-09-29: "Please change the plan so that you will instead run these tests sequentially rather than in parallel for memory reasons. Because I don't want too many things running to be a problem for the container. do not actually begin the implementation, just update the spec kit spec to account for this. Thanks."
