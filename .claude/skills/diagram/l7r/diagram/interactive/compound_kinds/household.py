@@ -385,16 +385,17 @@ class Stables(Kind):
     ceremonial ground, and the animals are led to water at a well rather than watered where they stand.
 
     Note: The freestanding stable a few bays long, its stalls one bay wide on board floors (a bay taken as one ken,
-    about 6 ft, by our own convention), and the watering at a
-    well are recorded findings, and the program classes the stable as accurate: drawn smaller than the barracks,
+    about 6 ft, by our own convention) are recorded findings,
+    and the watering at a well is this project's reading of a caravanserai's courtyard well (no premodern trough beside
+    a well was found); the program classes the stable as accurate: drawn smaller than the barracks,
     checked against the size audit. A stall's depth, and so its area, is a guess, and so is the number of horses:
     no page read gives either for a county post. The stable's rank below the barracks is a guess, this project's own
-    reading - no page read says where a stable ranked among an office's buildings - and its watering finding was written for city
-    stable yards.
+    reading - no page read says where a stable ranked among an office's buildings - and its watering at a well, itself a
+    reading, was written for city stable yards.
 
     Caveat: A stall's depth, and so its area, is a guess, and so is the number of horses: no page read gives
     either for a county post. The stable's rank below the barracks is a guess, this project's own reading - no page
-    read says where a stable ranked among an office's buildings - and its watering finding was written for city stable yards.
+    read says where a stable ranked among an office's buildings - and its watering at a well, itself a reading, was written for city stable yards.
 
     Name: stables
     Covers: the stable building, its stall divisions and its label

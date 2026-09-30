@@ -301,6 +301,8 @@ canopy trees	canopy-tree
 canton	Canton
 cao wei	Three Kingdoms
 caoshi	caoshi
+caravan ground	caravan ground
+caravan grounds	caravan ground
 caravanserai	caravanserai
 caravanserais	caravanserai
 carex	Carex
@@ -422,6 +424,9 @@ clothier	clothier
 clothier's	clothier
 clothiers	clothier
 cluster's spine	cluster's spine
+coaching inn	coaching inn
+coaching inns	coaching inn
+coaching-inn	coaching inn
 coefficient of variation	coefficient of variation
 coke	coke
 collective farm	collective farm
@@ -564,6 +569,7 @@ daimyōs	daimyo
 daizu	daizu
 dajokan	Daijokan
 dakyu	dakyu
+dali	Dali
 danka	danna-dera
 danna-ba	kusaba
 danna-dera	danna-dera
@@ -1009,6 +1015,8 @@ gate range	nagayamon
 gate ranges	nagayamon
 gate rowhouse	nagayamon
 gate rowhouses	nagayamon
+gate stable	gate stables
+gate stables	gate stables
 gate throat	gate throat
 gate town	monzen
 gate towns	monzen
@@ -1043,6 +1051,7 @@ geostrophic	geostrophic
 geshunin	geshunin
 geta	geta
 ghat	ghat
+ghusl	ghusl
 ginmisho	ginmisho
 girder	girder
 girders	girder
@@ -1252,6 +1261,10 @@ hirokoji	hirokoji
 hiroma	hiroma
 hiroshige	Hiroshige
 hiroshige's	Hiroshige
+hitch rail	hitching rail
+hitch rails	hitching rail
+hitching rail	hitching rail
+hitching rails	hitching rail
 hitoyado	hitoyado
 hiyokechi	hiyokechi
 hiyoza	hiyoza
@@ -2330,6 +2343,8 @@ ox-shoeing frame	ox-shoeing frame
 ox-shoeing frames	ox-shoeing frame
 oyaike	oyaike
 pacific high	Pacific High
+paddock	paddock
+paddocks	paddock
 paddy seams	seam
 pagoda tree	pagoda tree
 pagoda trees	pagoda tree
@@ -3555,6 +3570,7 @@ worship hall	haiden
 worship halls	haiden
 wrought iron	wrought iron
 wubei zhi	Wubei Zhi
+wudu	wudu
 wujing zongyao	Wujing Zongyao
 xiang	xiang
 xiang river	Xiang River

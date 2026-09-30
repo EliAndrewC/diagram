@@ -13549,5 +13549,61 @@
    "high-loom",
    "high looms"
   ]
+ },
+ "Dali": {
+  "def": "A city and district in Yunnan, in China's far southwest, with old villages whose wells the record read about.",
+  "variants": [
+   "Dali"
+  ]
+ },
+ "coaching inn": {
+  "def": "An inn on a highway where travelers' coaches and wagons stopped, with a yard where the teams were rested, watered and changed.",
+  "variants": [
+   "coaching inn",
+   "coaching inns",
+   "coaching-inn"
+  ]
+ },
+ "paddock": {
+  "def": "A small fenced enclosure where horses or other stock are turned out or held.",
+  "variants": [
+   "paddock",
+   "paddocks"
+  ]
+ },
+ "hitching rail": {
+  "def": "A horizontal bar on posts to which draft and pack animals are tied while they stand in a yard.",
+  "variants": [
+   "hitching rail",
+   "hitching rails",
+   "hitch rail",
+   "hitch rails"
+  ]
+ },
+ "caravan ground": {
+  "def": "An open yard by a town gate where a wagon train or pack-animal caravan halts, with rails to tie the animals, troughs and a well; larger than a plain gate stables.",
+  "variants": [
+   "caravan ground",
+   "caravan grounds"
+  ]
+ },
+ "gate stables": {
+  "def": "The stables and working yard just inside a town gate, fronting the road, where wagons and pack animals are held overnight.",
+  "variants": [
+   "gate stables",
+   "gate stable"
+  ]
+ },
+ "wudu": {
+  "def": "The Islamic washing of face, hands, arms and feet before prayer.",
+  "variants": [
+   "wudu"
+  ]
+ },
+ "ghusl": {
+  "def": "The Islamic washing of the whole body, owed after certain states of ritual impurity.",
+  "variants": [
+   "ghusl"
+  ]
  }
 }
