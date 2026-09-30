@@ -1182,6 +1182,9 @@ hanebashi	hanebashi
 hanetsurube	hanetsurube
 hangtu	rammed earth
 hanko	hanko
+hanori	hanori
+hanori type	hanori
+hanori-gata	hanori
 hansho	hansho
 hanshō	hansho
 hantei	Hantei
@@ -2139,6 +2142,9 @@ myōjin	Myojin
 myōken	Myōken
 myōshu	myoshu
 naca	NACA
+nagachi	nagachi
+nagachi type	nagachi
+nagachi-gata	nagachi
 nagare-style	Nagare-style
 nagare-zukuri	nagare-zukuri
 nagarezukuri	nagare-zukuri

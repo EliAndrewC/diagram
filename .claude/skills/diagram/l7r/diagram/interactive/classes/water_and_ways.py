@@ -328,7 +328,9 @@ class VillageLane(Kind):
     and a lane end that reaches nothing is pulled back to the last house it serves - is its own, and how close
     counts as serving a house (within 12 ft of its house, yard or beds, or beside it within 60 ft) is a guess
     too, as is the point where the field path joins its bund, the one nearest the hamlet. A row village's street running
-    on as the road the row stands on, and a path from each farm's door to it, are map drawing conventions.
+    on as the road the row stands on, and a path from each farm's door to it, are map drawing conventions. The
+    one width read for a way out to the fields is the one-ken (about 6 ft) farm road of a paddy replanned in
+    1869 - a planned layout, not an old way measured.
 
     Caveat: the drawn WIDTHS (3, 5 and 6 ft, a row village's street at the 6 ft, a rank wider than the lanes off it) are a GUESS, laddered from a footpath to a wheelbarrow's width,
     with the connector kept under the 9 ft of the one cart road the record does measure. The record now

@@ -13595,5 +13595,21 @@
    "haori",
    "half-fold type"
   ]
+ },
+ "nagachi": {
+  "def": "The long-strip way of dividing a jori grid's square unit (tsubo) into its ten tan: ten long, narrow strips, each running the full length of the square.",
+  "variants": [
+   "nagachi",
+   "nagachi type",
+   "nagachi-gata"
+  ]
+ },
+ "hanori": {
+  "def": "The half-fold way of dividing a jori grid's square unit (tsubo) into its ten tan: the square is cut in half, and each half is cut into five strips.",
+  "variants": [
+   "hanori",
+   "hanori type",
+   "hanori-gata"
+  ]
  }
 }

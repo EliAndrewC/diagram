@@ -98,14 +98,14 @@ class Bund(Kind):
     foot high. Each late spring, before
     transplanting, its face was stripped of weeds and plastered with kneaded mud by the hoe (azenuri), so each
     paddy holds its water. A wider walking bund ran between the plots, two to five feet across. Where bunds cross,
-    the earth is piled into a lumpy node - the most-worked point in a field.
+    the earth is piled into a lumpy node - by this project's guess, the most-worked point in a field.
 
     Why: A bund is the wall BETWEEN two basins and is built once, so the fabric is one connected network meeting
     at T-junctions - never two parallel ridges with idle ground between. The bund was the path of farm work
     (azemichi) and the boundary of a holding; the footplanks over the ditches serve that walking.
 
     Note: Construction, the spring plastering and the dividing bund's width are read - the shogunate's survey reckoned a
-    bund at one shaku in 1726, and the small bunds of an early Yayoi paddy ran 20 to 60 cm wide and 5 to 20 cm high -
+    bund at one shaku (the word's earliest example is a shogunate order of 1726), and the small bunds of an early Yayoi paddy ran 20 to 60 cm wide and 5 to 20 cm high -
     and it is drawn about a foot and a half wide, at true size; no height from the Edo period was found; the
     shared-wall finding is this record's derivation from how the bund is built and kept. The walking bund's two to
     five feet is a GUESS: no page read gives its width, so it is held between the two-shaku bund and the one-ken
@@ -129,7 +129,8 @@ class BundBeans(Kind):
     What: Soybeans planted along the tops of the paddy bunds - azemame - drawn as dark green beads.
 
     Why: The beans were a food crop of their own, sown along the bund tops after transplanting and harvested with
-    the rice; they took a second crop from the same ground without touching the paddy. A share of the bunds is planted, rolled per map.
+    the rice. Once grown across Japan, most disappeared with land consolidation, herbicide and damage by
+    animals. A share of the bunds is planted, rolled per map.
 
     Note: we have rendered the bund beans as round beads about 3 ft across in a deep pine green, darker than the
     plant, in order to make them visible on the map at this scale against the pale rice, and any stretch of
