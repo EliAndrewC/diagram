@@ -4784,7 +4784,10 @@
  "jochi": {
   "def": "Land the Edo authorities exempted from the annual tax - temple and shrine precincts and holdings with a document of exemption - outside the vermilion- and black-seal grants.",
   "variants": [
-   "jochi"
+   "jochi",
+   "exempt land",
+   "exempt lands",
+   "exempt-land"
   ]
  },
  "shuinchi": {
@@ -13188,6 +13191,18 @@
   "variants": [
    "principal shrine",
    "principal shrines"
+  ]
+ },
+ "Amaterasu": {
+  "def": "The sun goddess of Shinto, the chief of its deities, held to be the ancestor of the imperial house; many village shrines enshrine her beside their own god.",
+  "variants": [
+   "Amaterasu"
+  ]
+ },
+ "Dairokuten": {
+  "def": "A Buddhist deity, the lord of the sixth heaven of the world of desire, enshrined in many small village shrines of the Kanto region in the Edo period.",
+  "variants": [
+   "Dairokuten"
   ]
  }
 }

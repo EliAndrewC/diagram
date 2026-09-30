@@ -43,6 +43,7 @@ along the contour	contour
 along the ridge	ridge span
 alternate attendance	alternate attendance
 amado	amado
+amaterasu	Amaterasu
 amida	Amida
 amida buddha	Amida
 amoy	Amoy
@@ -541,6 +542,7 @@ daimyô	daimyo
 daimyō	daimyo
 daimyōjin	Daimyōjin
 daimyōs	daimyo
+dairokuten	Dairokuten
 daizu	daizu
 dajokan	Daijokan
 dakyu	dakyu
@@ -744,6 +746,9 @@ evariste huc	Huc
 ever-normal granaries	ever-normal granary
 ever-normal granary	ever-normal granary
 evocation	evocation
+exempt land	jochi
+exempt lands	jochi
+exempt-land	jochi
 exposure burial	exposure burial
 extension	extension advice
 extension advice	extension advice
