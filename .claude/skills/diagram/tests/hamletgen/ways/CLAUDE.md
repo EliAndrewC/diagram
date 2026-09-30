@@ -26,7 +26,7 @@ Runs in the quick tier, unchanged: the tier is decided by the top-level tree (`t
 | `test_joints.py` | two lanes meeting end to end - the fold that becomes a T, the jog pulled straight across a chain of joints, the hook taken off a lane end, and the guards (`keeps_the_web`) that refuse a rewrite losing a junction, splitting the web or stranding a farmhouse |
 | `test_law.py` | THE LANE LAW (`ways/law.py`, feature 287 M1): each lane-rule predicate on a constructed lane that keeps the rule and one that breaks it, and the `violations` registry |
 | `test_route.py` (94) | the router: `_route` going round hard ground, `_unjog`, and the pad multiplier that lets a link take the long way |
-| `test_serve.py` (154) | getting a way to a house that has none - `_lay_web_lane` and the straggler search |
+| `test_serve.py` (265) | `_lay_web_lane` - one web lane joins the network or is refused - and the web's late passes (`tidy_lane_ends`, `cut_the_overruns`) |
 | `test_sweeps.py` (247) | the passes that REMOVE or REPAIR - doubled remnants, steading fouls, end nubs, collinear breaks, orphaned pieces |
 | `test_touch.py` (39) | how a lane end meets the network - `_touch_junctions` and the piece-joining it falls back on |
 | `test_track.py` (19) | STAGE `stage_track` and `connector_track` - the way out of the frame and through the fabric |

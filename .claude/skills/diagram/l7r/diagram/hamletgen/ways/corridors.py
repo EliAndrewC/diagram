@@ -266,7 +266,7 @@ FORD_LANDING_FT = 22.0
 def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:
     """The web's router (`route._route`) as a field way threads it: walled by the steadings' built ground (not the commons
     or the groves - a path crosses ground cover), hard against the field, the dry hem and the marsh, and kept off the brook
-    but at its fords (the straggler footpath's own terms, `serve._serve_stragglers`)."""
+    but at its fords (the terms the straggler footpaths kept until feature 287 dropped them)."""
     M = s.M
     hard = [[(float(a), float(b)) for a, b in f["outline"]] for f in M.get("fields") or [] if f.get("outline")]
     hard += [[(float(a), float(b)) for a, b in d["poly"]] for d in M.get("dry_plots") or [] if d.get("poly")]

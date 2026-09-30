@@ -32,7 +32,7 @@ from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _homestead_polys, _margin_frame,
 from .geom import _components, _trim_to_service, polyline_len, steading_footprints
 from .joints import center_lane_ends, fold_the_connector_hairpin, meet_end_to_end, split_at_crossings, straighten_joints
 from .route import _route
-from .serve import _lay_web_lane, _serve_stragglers
+from .serve import _lay_web_lane
 from .settle import settle_the_web
 from .smooth import _STUB_REACH_FT, _smooth_web
 from .sweeps import (
@@ -40,7 +40,6 @@ from .sweeps import (
     _drop_end_nubs,
     _join_orphan_ways,
     _keep_the_route_wide,
-    _link_home_bank,
     _sweep_dangling_ends,
     _sweep_debris,
     _sweep_doubled_remnants,
@@ -182,8 +181,8 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
             # `_trim_to_service` pulls the ends back to the last point that reaches a way or a house,
             # and `_WEB_MIN_FT` drops what is left if it is no longer a way at all - the same pair of
             # rules every web lane already passes through. An arm that serves nobody is not a
-            # shortened arm, it is debris, and the houses it would have served are the straggler
-            # pass's business.
+            # shortened arm, it is debris, and the houses it would have served are the settle's
+            # business (their reserved corridors, `settle.settle_the_web`).
             #
             # SERVICE IS JUDGED AGAINST THE HOUSES, NOT AGAINST THE WAYS. `_lay_skeleton` runs BEFORE
             # the web cuts, on purpose - the web reads the skeleton as existing network to thread
@@ -258,7 +257,7 @@ def cut_the_overruns(s: Settlement) -> None:
 
 
 def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
-    """THE LAST PASS OVER EVERY LANE END, after the stragglers: pull back anything that still reaches nothing.
+    """THE LAST PASS OVER EVERY LANE END, after the joins: pull back anything that still reaches nothing.
 
     LIFTED TO MODULE LEVEL (feature 227, the GM's 2026-08-28 ruling on inner functions and testability). It was the
     tail of `stage_web`, and its shortening branch had no reader but the shipped rolls - so the moment the end rule
@@ -385,7 +384,6 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.ways.serve._lay_web_lane
         l7r.diagram.hamletgen.ways.sweeps._join_orphan_ways
         l7r.diagram.hamletgen.ways.sweeps._bridge_collinear_breaks
-        l7r.diagram.hamletgen.ways.serve._serve_stragglers
         l7r.diagram.hamletgen.ways.touch._touch_junctions
         l7r.diagram.hamletgen.ways.smooth._smooth_web
         l7r.diagram.hamletgen.ways.web._drop_collapsed
@@ -521,7 +519,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # ...AND THE HOUSEHOLDS' RESERVED WOOD SEATS ARE FABRIC TO THE WEB (feature 287 M8): the registry refuses a lane within
     # the copse's lane buffer of a seat, so every pass clips and routes round them - sized so the web's own fabric margin
     # (`WEB_FABRIC_GAP`) plus a footpath's half-tread lands on the buffer - rather than laying a cut the registry then
-    # refuses and leaving its houses to the straggler search (seed 39: 60 routes against 7)
+    # refuses and leaving its houses unreached (seed 39: 60 routes against 7, when a straggler search still served them)
     fabric = _homestead_polys(s) + [(w, None, "wood seat") for w in s.standing.reserved.seat_walls(reach=seat_wall_reach(s))]
     # WHAT A LANE MAY NOT BE DRAWN THROUGH, now that lanes come LAST (feature 126).
     #
@@ -535,7 +533,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # Seed 7's second failure even quotes the old doctrine back - "lay lanes BEFORE the houses" -
     # which is precisely the assumption this feature removes.
     #
-    # Ground cover is NOT fabric, for the same reason `_serve_stragglers` excludes it: a footpath may
+    # Ground cover is NOT fabric, for the same reason the straggler footpaths excluded it: a footpath may
     # cross grazing scrub and run along a tree belt, because those are what the ground IS rather than
     # things built on it. Counting them walls a steading in behind its own commons.
     _solid = [poly for poly, _own, kind in fabric if kind not in ("commons", "village_groves")]
@@ -573,21 +571,17 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # is right to call that a tread that serves nobody. The engine already owns this trim; the web
     # simply has to ask for it after adding to the network.
     s.trim_lane_stubs()
-    # STRAGGLERS COME AFTER THE TRIM, NEVER BEFORE IT. `trim_lane_stubs` drops any lane under its
-    # 71 ft minimum, and a footpath from a door to the nearest way is about 65 ft by construction -
-    # so run the other way round, every spur this pass drew was silently deleted again and the eight
-    # unreached houses stayed exactly eight. A door path is short on purpose; it is not a stub.
-    # ONE NETWORK FIRST, then the houses that it still does not reach. Order matters: a footpath
-    # that joins an orphaned component is worth nothing while the component itself is an island.
+    # ONE NETWORK FIRST: a lane that joins an orphaned component is worth nothing while the component itself is an island.
+    # A HOUSE THE WEB STILL LEAVES UNREACHED IS THE SETTLE'S (feature 287, GM 2026-09-30): the straggler footpath pass that
+    # stood here - a door path routed to every house the web left more than 90 ft from a way - was dropped once the seating
+    # reserved every house's corridor (`tree.admits`) and the settle drew it for any house left unreached (`settle_the_web`,
+    # `last_resort.refuse_unreached`). Measured with it off: the reference snapshot 26.85 s -> 23.85 s, lanes 380 -> 347
+    # (`specs/287-placer-guarantees/measurements.json`, `straggler-footpaths-off`).
     _pass("join-orphans")
     _join_orphan_ways(s, hard_built, walls, list(plan.watercourses) + drawn_water)
-    # ...and close any break where one way was drawn as two. Before the stragglers: a house beside
-    # the hole is served by the bridged street, and drawing it a footpath of its own first would be
-    # curing the symptom.
+    # ...and close any break where one way was drawn as two.
     _pass("bridge-breaks")
     _bridge_collinear_breaks(s, hard_built, walls, list(plan.watercourses) + drawn_water)
-    _pass("straggler")
-    _serve_stragglers(s, plan, hard, fabric, list(plan.watercourses) + drawn_water)
     _pass("touch")
     _touch_junctions(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     # ...AND JOIN ORPHANS AGAIN, LAST. The first pass runs before the bridges and the footpaths, so
@@ -597,7 +591,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # because the lane serving them was not on the network the connector is on. A repair pass that
     # runs before the things it repairs is not a repair pass.
     # ...and CLOSE BREAKS again before joining, for the same reason the join runs twice: the
-    # footpath pass draws lanes, and a lane drawn after the bridge pass can leave a hole the bridge
+    # touch pass draws lanes, and a lane drawn after the bridge pass can leave a hole the bridge
     # pass never saw. On cohort seed 48 the bridge found ZERO candidates and the finished map still
     # had a 78 ft hole in a street, because the hole did not exist yet when it looked.
     _pass("bridge-breaks")
@@ -619,8 +613,8 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # floor is dropped, because a way that serves nothing is not a short way, it is not a way.
     #
     # NOT `trim_lane_stubs`: that is a different, harsher rule (71 ft floor) meant for a skeleton arm
-    # laid before the houses, and running it here eats the footpaths the straggler pass just drew -
-    # measured once at 43/48 -> 9/48.
+    # laid before the houses, and running it here ate the short door paths the web draws - measured
+    # once at 43/48 -> 9/48, when a straggler pass still drew them.
     tidy_lane_ends(s, list(plan.envelope))
     # LAST: read every lane as a shape and take out what feet would never wear (T32) - after the
     # trim, because the trim is the last pass that changes a record; then touch once more, because
@@ -662,10 +656,9 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     _sweep_doubled_remnants(s)  # ...and a bridge can itself be doubled ink
     _sweep_dangling_ends(s)  # LAST: an end the passes above left in open ground is pulled back to something, or dropped
     _sweep_debris(s)  # a fragment the passes above whittled below the floor and left standing alone
-    # A WAY OUT THAT CROSSES THE BROOK AND BACK GETS A WAY ON ITS OWN BANK (feature 261) - before the passes that read the
-    # finished joints, so the path it draws is straightened, de-hooked and cut back like every other
-    _pass("home-bank")
-    _link_home_bank(s, plan, hard, fabric, list(plan.watercourses) + drawn_water)
+    # A WAY OUT OVER THE BROOK AND BACK is the settle's to mend (`law.way_out_carriers`, `settle_the_web`): the home-bank
+    # re-serve that stood here (feature 261) routed a straggler footpath on the house's own bank, and went with that pass
+    # (feature 287, GM 2026-09-30)
     _keep_the_route_wide(s, hard_built, walls, list(plan.watercourses) + drawn_water)  # ...and a cart route may not neck to a footpath
     # AND READ THE JOINTS AS ONE WAY (GM 2026-09-26): two records meeting end to end are one lane to the walker;
     # a fold there becomes a T and a jog is pulled straight. Last, because every pass above can lay a joint.

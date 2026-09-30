@@ -6,7 +6,7 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any, cast
 
-from l7r.diagram.settlement import PointGrid, point_in_poly, rot_rect, seg_closest, seg_dist, seg_intersect, segments_cross
+from l7r.diagram.settlement import point_in_poly, rot_rect, seg_closest, seg_dist, seg_intersect, segments_cross
 from l7r.diagram.settlement.water_ways._helpers import BUND_REACH_FT
 from l7r.diagram.sitegen.geom import centroid, unit
 
@@ -221,25 +221,6 @@ def _turn_deg(a: Pt, b: Pt, c: Pt) -> float:
     return math.degrees(math.acos(max(-1.0, min(1.0, (v1[0] * v2[0] + v1[1] * v2[1]) / (n1 * n2)))))
 
 
-def _drop_collinear(pts: Poly, eps: float = 1e-6) -> Poly:
-    """Remove interior points that lie on the straight line between their neighbors.
-
-    Geometry-preserving by construction: a point dropped here is one the drawn stroke passes through
-    anyway. It exists because `clear_runs` returns a polyline of SAMPLES, and a record of samples
-    misleads every consumer that reads a lane as a sequence of bends - see the note at its caller."""
-    if len(pts) < 3:
-        return list(pts)
-    out = [pts[0]]
-    for k in range(1, len(pts) - 1):
-        ax, ay = out[-1]
-        bx, by = pts[k]
-        cx, cy = pts[k + 1]
-        if abs((bx - ax) * (cy - ay) - (by - ay) * (cx - ax)) > eps * max(1.0, math.hypot(cx - ax, cy - ay)):
-            out.append(pts[k])
-    out.append(pts[-1])
-    return out
-
-
 def _plen(pts: Poly) -> float:
     return sum(math.dist(pts[k], pts[k + 1]) for k in range(len(pts) - 1))
 
@@ -289,8 +270,7 @@ def steading_footprints(M: Mapping[str, object]) -> list[Poly]:
     `lanes_do_not_break_mid_run` already treats as solid - and the steading's plots as their recorded
     rings: the threshing yard and the kitchen garden, which are the dooryard a path is worn to.
 
-    GROUND COVER IS NOT A DESTINATION, and the distinction is the one `_serve_stragglers` already
-    draws in prose: the grazing commons and the homestead groves are what the ground IS, not things
+    GROUND COVER IS NOT A DESTINATION, and the distinction is the one the straggler footpaths drew in prose until feature 287 dropped them: the grazing commons and the homestead groves are what the ground IS, not things
     built on it, and a lane crosses them. A tread that stops 29 ft into the commons has stopped in a
     field, which is what this rule exists to catch, so they are not in this set.
 
@@ -456,7 +436,7 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
     the comments rather than the code, 2026-09-12.
 
     The ends that are NOT traded for the bar are named instead of excepted: `keep` carries the houses no
-    other way comes within `WEB_REACH_FT` of, because the late pass runs after `_serve_stragglers` and
+    other way comes within `WEB_REACH_FT` of, because the late pass runs after the web's joins and
     trimming to the bar alone there took back the tail that was an outlying steading's only way (cohort
     seed 39 stranded a farmhouse the moment both passes were tightened together).
 
@@ -612,33 +592,3 @@ def push_out_of(poly: Poly, p: Pt, margin: float) -> Pt:
 
 def polyline_len(pts: Poly) -> float:
     return sum(math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]) for i in range(len(pts) - 1))
-
-
-# A COURSE'S SEGMENTS, FILED ONCE, FOR THE CROSSING TESTS OF MANY ROUTES (feature 281, FR-005). `_link_home_bank` asked every
-# brook segment of every route segment - 531,766 `segments_cross` on Kashikawa. Two segments cross only where their boxes
-# meet, so the brook segments whose box meets a route segment's box are every one it can cross, and `segments_cross`
-# decides as before. Module level so the crossings can be compared with the scan without a settlement.
-
-
-def brook_segment_index(segs: Sequence[tuple[Pt, Pt]]) -> PointGrid:
-    """`(k, a, b, x0, y0, x1, y1)` for the k-th segment, filed by its box."""
-    grid = PointGrid()
-    grid.extend((k, a, b, min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])) for k, (a, b) in enumerate(segs))
-    return grid
-
-
-def _crossed(p: Pt, q: Pt, idx: PointGrid) -> set[int]:
-    """The indices of the filed segments that `p -> q` crosses."""
-    x0, y0, x1, y1 = min(p[0], q[0]), min(p[1], q[1]), max(p[0], q[0]), max(p[1], q[1])
-    cx, cy, pad = (x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0) / 2
-    return {k for k, a, b, bx0, by0, bx1, by1 in idx.near(cx, cy, pad) if bx0 <= x1 and x0 <= bx1 and by0 <= y1 and y0 <= by1 and segments_cross(p, q, a, b)}
-
-
-def crossing_hits(route: Sequence[Pt], idx: PointGrid) -> list[int]:
-    """The indices m of the route's segments that cross the filed course - `[m for m in ... if any(segments_cross(...))]`."""
-    return [m for m in range(len(route) - 1) if _crossed(route[m], route[m + 1], idx)]
-
-
-def crossings_parity(c: Pt, mid: Pt, idx: PointGrid) -> int:
-    """How many filed segments `c -> mid` crosses, mod 2 - the home-bank test's `sum(...) % 2`."""
-    return len(_crossed(c, mid, idx)) % 2

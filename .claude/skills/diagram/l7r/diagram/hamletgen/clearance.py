@@ -41,7 +41,7 @@ def bounds(poly: Sequence[Pt]) -> tuple[float, float, float, float]:
 
 
 # A BUILT INDEX IS REUSED WHILE ITS INPUTS ARE THE SAME OBJECTS (feature 138, second round of the profile):
-# `_clear_link` and `_clear_touch` build one index per call, and the straggler and smoothing passes call
+# `_clear_link` and `_clear_touch` build one index per call, and the web's repair and smoothing passes call
 # them thousands of times with the SAME `hard` / `walls` / `water` lists - 4,969 builds, 26 s profiled, on
 # the polder once the per-cell scan was gone. The key is every polygon's identity, length and end points
 # plus the margins; a list rebuilt, extended, or a polygon replaced misses and rebuilds. A polygon mutated

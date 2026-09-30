@@ -3,10 +3,9 @@
 from __future__ import annotations
 
 import math
-from collections.abc import Mapping, Sequence
-from typing import Any
+from collections.abc import Sequence
 
-from l7r.diagram.settlement import PointGrid, Settlement, edge_dist, point_in_poly, seg_closest, seg_dist, segments_cross
+from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, seg_closest, seg_dist, segments_cross
 
 from ..consts import (
     STEADING_ARRIVAL_FT,
@@ -25,9 +24,6 @@ from .geom import (
     _components,
     _net_reach,
     _reach,
-    brook_segment_index,
-    crossing_hits,
-    crossings_parity,
     end_serves,
     memo_ground,
     polyline_len,
@@ -298,7 +294,7 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
             # separated by the PADDY, not by a wall, so no clearance helps), and it put treads on
             # houses - `make map` came back with features_do_not_overlap and houses_clear_of_lanes
             # on the reference hamlet. Do not re-add it: an orphan across a field is honestly
-            # unlinkable, and the fix for those houses is the straggler pass, not a narrower lane.
+            # unlinkable, and the fix for those houses is their reserved corridor (the settle), not a narrower lane.
             if _try and polyline_len(_try) <= _LINK_DIRECTNESS * max(cand[0], 1.0):
                 # ...AND NEVER OVER THE BROOK AND BACK (settlement-review of Mizuguchi, feature 261): a link from one bank to
                 # the same bank that crosses twice - out at one ford, home at the next - reads as two planks for nothing. It
@@ -327,75 +323,6 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
         _draw_web(s, link, int(_w))
         made += 1
     return made  # pragma: no cover - six links is far more than any hamlet needs
-
-
-_HOME_BANK_JOIN_FT = 10.0  # ft: a way's sample this near a crossing-free route counts as on it (routes are sampled every 10 ft)
-
-
-def _link_home_bank(s: Settlement, plan: Any, hard: list[Poly], fabric: list[tuple[Poly, Pt | None, str]], water: list[tuple[Pt, Pt]]) -> int:
-    """A household whose way out crosses the brook and comes back to its own bank gets a way on that bank.
-
-    Settlement-review of Mizuguchi (feature 261): two north-bank farmsteads were joined to the web only through the
-    south bank, so their way out crossed the brook on one plank and back on another - 1,010 ft along the lanes to reach
-    a lane 284 ft away on their own side. Counting crossings per lane record could not see it; a WAY is what the walker
-    takes, so the question is asked of each household's route (`departure_routes`). Such a house is served again by the
-    straggler pass - its door, its router, its clipping - counting as its network only the ways on its own bank that
-    reach the connector without crossing the brook (every route's run after its last crossing), with the whole brook as
-    water. Routing from a point of the way before the plank was tried first and failed: that stub stood hemmed between
-    two steadings and a garden hard by the brook, and the door is where there is room to start."""
-    from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
-
-    from .serve import _serve_stragglers
-
-    brook = [[(float(x), float(y)) for x, y in (f.get("poly") or [])] for f in s.M.get("streams") or []]
-    segs = [(c, d) for br in brook for c, d in zip(br, br[1:], strict=False)]
-    if not segs:
-        return 0
-    houses = [h for h in s.M.get("houses") or [] if isinstance(h, dict)]
-    good: list[Pt] = []
-    excursions: list[Mapping[str, Any]] = []
-    brook_idx = brook_segment_index(segs)  # filed once for every route and every chord below (feature 281, FR-005)
-    for r in departure_routes(s.M):
-        hits = crossing_hits(r, brook_idx)
-        good += r[hits[-1] + 1 :] if hits else r
-        if len(hits) >= 2 and houses:
-            excursions.append(min(houses, key=lambda h: math.dist((float(h["x"]), float(h["y"])), r[0])))
-    if not excursions:
-        return 0
-    before = len(s.M.get("lanes") or [])
-    grid = PointGrid(_HOME_BANK_JOIN_FT)
-    grid.extend([(q, q[0], q[1], q[0], q[1]) for q in good])
-
-    def home(c: Pt, g: tuple[Pt, Pt]) -> bool:
-        mid = ((g[0][0] + g[1][0]) / 2, (g[0][1] + g[1][1]) / 2)
-        on_way = any(math.dist(mid, it[0]) <= _HOME_BANK_JOIN_FT for it in grid.near(mid[0], mid[1], _HOME_BANK_JOIN_FT))
-        return on_way and crossings_parity(c, mid, brook_idx) == 0
-
-    _serve_stragglers(s, plan, hard, fabric, [*water, *segs], only=excursions, seg_ok=home)
-    laid = len(s.M.get("lanes") or []) - before
-    if laid:
-        # ...AND THE PLANKS IT NO LONGER NEEDS GO (Kashikawa, feature 261): the new way on the home bank stood 39 ft from the
-        # door and so did the old lane over the brook, and the walker took the old one. A lane that ends by a re-served
-        # house and crosses the brook is dropped where every house it serves is served by the rest.
-        s.drop_lanes(excursion_lanes(s.M.get("lanes") or [], [(float(h["x"]), float(h["y"])) for h in excursions], [(float(h["x"]), float(h["y"])) for h in houses], segs))
-    return laid
-
-
-def excursion_lanes(lanes: Sequence[Mapping[str, Any]], served: Sequence[Pt], houses: Sequence[Pt], brook: Sequence[tuple[Pt, Pt]]) -> list[int]:
-    """The lanes to drop after a home-bank re-serve (`_link_home_bank`): not the connector, an end within `_REACH_FT` of a
-    re-served house, crossing the brook, and serving no house (within `_SERVE_FT`) that the other lanes do not serve."""
-    ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
-    drop: list[int] = []
-    for i, (ln, w) in enumerate(zip(lanes, ways, strict=True)):
-        if ln.get("connector") or len(w) < 2 or not any(math.dist(e, h) <= _REACH_FT for e in (w[0], w[-1]) for h in served):
-            continue
-        if not any(segments_cross(a, b, c, d) for a, b in zip(w, w[1:], strict=False) for c, d in brook):
-            continue
-        rest = [sg for j, o in enumerate(ways) if j != i and j not in drop for sg in zip(o, o[1:], strict=False)]
-        mine = [h for h in houses if min(seg_dist(h[0], h[1], a, b) for a, b in zip(w, w[1:], strict=False)) <= _SERVE_FT]
-        if all(min((seg_dist(h[0], h[1], a, b) for a, b in rest), default=1e9) <= _SERVE_FT for h in mine):
-            drop.append(i)
-    return drop
 
 
 _FREE_STUB_FT = 20.0  # ft: a free end's last leg this short, past a kink, is a stub the lane does not need

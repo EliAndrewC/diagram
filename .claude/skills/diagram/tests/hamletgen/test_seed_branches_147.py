@@ -40,31 +40,3 @@ def test_a_wellhead_may_not_be_sunk_in_the_reed_toe_below_the_crop() -> None:
 # the fit at an unreachable 500-acre target and asserted a fan came back - the closest miss `fit_field` no longer keeps. Such
 # a site is refused (`FieldRefused`) after every aspect is searched in full: tests/hamletgen/test_fit_flanks.py, on stand-in
 # carves; the best aspect's full re-search is `tests/hamletgen/test_water.py::test_fit_field_probes_saturation_and_rerolls_the_best_aspect_in_full`.
-
-
-def test_a_house_the_pass_already_failed_is_not_re_tried_against_the_same_ways() -> None:
-    """The straggler pass runs up to four times, because a path drawn for one house can bring another within
-    reach. A house that failed and whose candidate ways have NOT changed since would fail identically, so it
-    is skipped - the memo keys on the exact target list, and any new lane near it changes that list and
-    retries it in full. The wrong-memo direction costs the speedup, never a path."""
-    from l7r.diagram import hamletgen as hg
-    from l7r.diagram.hamletgen.ways import _serve_stragglers
-
-    from ._builders import a_plan
-
-    plan = a_plan()
-    plan.seat = hg.seat_cluster(plan)
-    s = _hamlet()
-    # one lane on dry ground with a house beside it (servable), and one lane running down a brook with a
-    # house beside THAT (never servable - a junction may not sit on the water)
-    s.M["lanes"] = [
-        {"pts": [[500.0, 300.0], [900.0, 300.0]], "w": 4},
-        {"pts": [[100.0, 1100.0], [400.0, 1100.0]], "w": 4},
-    ]
-    s.M["houses"] = [
-        {"x": 700.0, "y": 420.0, "w": 46.0, "h": 28.0, "rot": 0.0, "kind": "plain"},
-        {"x": 250.0, "y": 1220.0, "w": 46.0, "h": 28.0, "rot": 0.0, "kind": "plain"},
-    ]
-    water = [((100.0, 1100.0), (400.0, 1100.0))]
-    _serve_stragglers(s, plan, [], [], water)
-    assert len(s.M["lanes"]) >= 2

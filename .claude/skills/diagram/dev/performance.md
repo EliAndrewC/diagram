@@ -526,6 +526,17 @@ cost of a roll and of a gate (the full record: `specs/287-placer-guarantees/rese
 - **Measured and declined - the straggler footpaths dropped**: -3.0 s (-11.2%, all in the web), but every map's lanes
   move (380 -> 347 lanes, -4.9% length) and it exposed a settle gap (cohort 14's doubled tail on the connector), now
   closed by the settle's exit check; reverted as the GM's call (`straggler-footpaths-off`).
+- **The straggler footpaths dropped, on the GM's call** (2026-09-30: *"Yes, go ahead and drop the straggler footpath
+  logic."*): the pass is deleted, not disabled - `_serve_stragglers` with its route memo and its four passes, the
+  home-bank re-serve (`_link_home_bank`, `excursion_lanes`, the brook-crossing index it alone read) and the helpers only
+  they used - because the access tree now guarantees reach by construction (the corridor reserved at seating, drawn by
+  the settle for any house left unreached, refused by `last_resort` otherwise). The reference snapshot went from 28.27 s
+  to 24.30 s, -14.0%, all in the web (observed 2026-09-30, method: `make perf LABEL=adhoc` alternated with a detached
+  worktree at 7174f9d54, three valid rounds at load 7-15 after a cold first round; the host was never under 4). Lanes
+  over the pool and cohort 1-20 fell 380 -> 347 and 4.9% shorter, 22 of 25 maps moving, the same figures the
+  scratch-off measured; the acceptance sweep held R13's bar and better (plain 53/53 clean, the cohort-34 belt reading
+  gone; probes 52/52 produced maps clean plus plan D2's cohort-18 refusal), and `make cohort N=60` passed 60/60
+  (`straggler-footpaths-dropped`).
 
 ## Memory: the spike is C buffers, not Python objects, and it lands where nothing reads it (feature 208, 2026-09-07)
 

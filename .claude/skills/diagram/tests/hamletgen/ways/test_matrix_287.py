@@ -135,27 +135,6 @@ def test_the_field_router_walls_what_the_matrix_forbids_and_leaves_its_own_doory
     assert route((200.0, 75.0), (200.0, 300.0)), "...and one from a step off its own front wall"
 
 
-def test_a_straggler_door_path_starts_where_it_leaves_its_own_dooryard() -> None:
-    """`off_its_own_parts`: a footpath from a step off the wall ran across its own bed, which the registry refuses a way on;
-    its door end is taken back until the path is admitted, and kept only where it still reaches the dooryard."""
-    from l7r.diagram.hamletgen.ways.serve import _from_arc, off_its_own_parts
-
-    s = Registered()
-    house = {"x": 200.0, "y": 60.0, "w": 40.0, "h": 24.0, "rot": 0.0, "geom": {"gardens": [[200.0, 100.0, 20.0, 20.0]]}}
-    s.M["gardens"] = [dict(BED)]
-    path = [(200.0, 80.0), (200.0, 300.0)]
-    got = off_its_own_parts(s, path, house)
-    assert got[-1] == (200.0, 300.0) and 110.0 < got[0][1] <= 125.0, "it starts past the bed, within the dooryard's reach"
-    clear = [(260.0, 80.0), (260.0, 300.0)]
-    assert off_its_own_parts(s, clear, house) == clear
-    far = {**house, "geom": {"gardens": [[500.0, 500.0, 5.0, 5.0]]}, "y": -200.0}
-    assert off_its_own_parts(s, path, far) == path, "cut back out of its dooryard's reach: left for the web to refuse"
-    s.M["gardens"].append({"x": 200.0, "y": 290.0, "w": 20.0, "h": 40.0, "rot": 0.0})
-    assert off_its_own_parts(s, path, house) == path, "no end of it the registry admits"
-    assert _from_arc([(0.0, 0.0), (10.0, 0.0), (20.0, 0.0)], 0.0) == [(0.0, 0.0), (10.0, 0.0), (20.0, 0.0)]
-    assert _from_arc([(0.0, 0.0), (10.0, 0.0), (20.0, 0.0)], 15.0) == [(15.0, 0.0), (20.0, 0.0)]
-
-
 def test_the_web_walls_a_reserved_seat_at_the_buffer_less_its_own_margin() -> None:
     from l7r.diagram.hamletgen.consts import WEB_FABRIC_GAP
     from l7r.diagram.hamletgen.ways.web import seat_wall_reach
