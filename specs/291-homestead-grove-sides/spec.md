@@ -264,3 +264,7 @@ row. As written they held every grove farm, and the first cohort with the check 
 a dispersed hamlet lays no lanes at all, by homesteads/150's finding ("a dispersed hamlet has no interconnected lane
 network to be reached by. The rule in the entry above is a rule about nucleated settlements"). The row farm's door
 remains held (FR-017, FR-019).
+
+**Amendment 4, round 1** (spec-fidelity-verify, MODE 3, 2026-09-29): the narrowing FAITHFUL - the GM never asked for the
+door clause, and homesteads/150 says a dispersed hamlet has no network to be reached by; one plan line (D19) to bring into
+line, done. Amendment 4 is accepted.

@@ -102,6 +102,7 @@ def _row_map(**over) -> dict:  # type: ignore[no-untyped-def]
 def test_row_rules_hold_on_a_good_row_and_name_each_break() -> None:
     assert row_rules(_row_map()) == []
     assert row_rules({"meta": {"settlement_form": "nucleated"}}) == []
+    assert row_rules({"meta": {"settlement_form": "linear"}, "houses": [{}]}) == [("no_row_street", 1)], "a linear map in no row fails"
     far = _row_map(houses=[{**_row_map()["houses"][0], "y": 400.0}])
     assert ("farm_off_its_street", (100.0, 400.0)) in row_rules(far)
     assert ("street_not_drawn", 0) in row_rules(_row_map(lanes=[]))
