@@ -323,3 +323,4 @@ every change to a map is; the report links them.
   clones carried records naming the arms; four passages still froze the rubrics before the FIRST run of either task; the new premise check
   was unrecorded. All four applied: one start commit, the frozen files supplied by the launcher, the feature directory left out of every
   run clone (sparse checkout), the rubric passages per task, the premise check in interventions.md.
+- Amendment review rounds 2-4 (2026-09-30): round 2 CHANGES REQUIRED (a git clone kept later commits reachable; four restatements of the old rubric rule) - run clones now fetch the start commit alone; round 3 CHANGES REQUIRED (quickstart and the contract still said the old thing) - reworded, the push hold recorded; round 4 FAITHFUL.
