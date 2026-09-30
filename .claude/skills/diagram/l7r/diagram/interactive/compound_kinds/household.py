@@ -400,7 +400,7 @@ class Stables(Kind):
     Covers: the stable building, its stall divisions and its label
     Label: accurate
     Sources: kotobank-umaya, jaanus-umaya, qingming-shanghe-tu, caravanserai-enwiki, equine-nutrition-enwiki
-    Entry: research/buildings.html - 'Stables (umaya)', 'The size of a compound and the rank of its buildings'; research/urban-features.html - 'Stable yards'; research/rendering/buildings.html - 'How our maps draw stables (umaya)', 'How our maps size a compound and its buildings'
+    Entry: research/buildings.html - 'Stables (umaya)', 'The size of a compound and the rank of its buildings'; research/urban-features.html - 'Stable yards and watering troughs'; research/rendering/buildings.html - 'How our maps draw stables (umaya)', 'How our maps size a compound and its buildings'; research/rendering/urban-features.html - 'How our maps draw stable yards and their troughs'
     """
 
     key = "stables"
