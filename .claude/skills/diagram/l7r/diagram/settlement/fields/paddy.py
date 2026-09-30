@@ -170,7 +170,7 @@ class PaddyMixin:
             dry_p, soy_p = 0.05 + 0.24 * edge, 0.03 + 0.11 * edge
             crop = 'dry' if r < dry_p else ('soy' if r < dry_p + soy_p else 'rice')
             if crop == 'rice':
-                # a village transplants TOGETHER (shared water, exchanged labor), so its paddies are largely
+                # a district transplants within a short window set by the crop before the rice, so its paddies are largely
                 # ONE stage - here high-summer green - with only minor spread (early/late rice varieties, the odd
                 # low flooded plot); NOT a rainbow of stages. See research/rendering/fields.html 'How our maps show the paddy through the rice year'.
                 st = random.random()
