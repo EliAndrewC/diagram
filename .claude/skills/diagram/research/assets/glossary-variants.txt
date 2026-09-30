@@ -354,6 +354,7 @@ charity graveyard	charity graveyard
 charity graveyards	charity graveyard
 charity ground	charity graveyard
 charity grounds	charity graveyard
+chaya	chaya
 chen fu	Chen Fu
 cheng-zhu	Cheng-Zhu Neo-Confucianism
 cheng-zhu neo-confucianism	Cheng-Zhu Neo-Confucianism
