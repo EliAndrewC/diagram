@@ -68,7 +68,9 @@ def own_wells(s: Settlement, houses: Sequence[Mapping[str, Any]]) -> int:
     for h in houses:
         hx, hy = float(h["x"]), float(h["y"])
         frame = homestead_box(s.placed, hx, hy)
-        boxes: list[tuple[float, float, float, float]] = [(float(p[0]), float(p[1]), float(p[2]), float(p[3])) for p in s.placed if (float(p[0]), float(p[1]), float(p[2]), float(p[3])) != frame] + bands
+        boxes: list[tuple[float, float, float, float]] = [
+            (float(p[0]), float(p[1]), float(p[2]), float(p[3])) for p in s.placed if (float(p[0]), float(p[1]), float(p[2]), float(p[3])) != frame
+        ] + bands
         # ...THE DOORYARD SIDE FIRST: the seats nearest the farm's work yard, so the well stands in the dooryard and leaves the
         # service strip behind the house to the wood shed (a first cut ringed from the east and took 4 of Mizuguchi's 5)
         yard = yards.get((round(hx, 1), round(hy, 1)), (hx, hy + 1.0))

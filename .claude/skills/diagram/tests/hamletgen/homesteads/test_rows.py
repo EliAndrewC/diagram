@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-
 import pytest
 from shapely.geometry import Point
 
@@ -84,7 +83,13 @@ def test_largest_ring_takes_a_multipolygon_s_biggest_part() -> None:
 
 
 def _row_map(**over) -> dict:  # type: ignore[no-untyped-def]
-    house = {"x": 100.0, "y": 60.0, "w": 46.0, "h": 28.0, "geom": {"bbox": (100.0, 60.0, 200.0, 120.0), "groves": [(0, 0, 1, 1)], "grove_faces": [((0, -1), "deep")], "yard": (100.0, 90.0, 40.0, 20.0)}}
+    house = {
+        "x": 100.0,
+        "y": 60.0,
+        "w": 46.0,
+        "h": 28.0,
+        "geom": {"bbox": (100.0, 60.0, 200.0, 120.0), "groves": [(0, 0, 1, 1)], "grove_faces": [((0, -1), "deep")], "yard": (100.0, 90.0, 40.0, 20.0)},
+    }
     M = {
         "meta": {"settlement_form": "linear", "row_water": "own"},
         "row_street_plans": [[[0.0, 0.0], [1000.0, 0.0]]],

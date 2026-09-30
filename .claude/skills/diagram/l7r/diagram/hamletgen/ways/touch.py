@@ -381,7 +381,7 @@ def _touch_junctions(
                 # with no way off the map, and the reach check, which reads whatever network is left, passed. Kept, it is
                 # the broken piece the reach check names, and the roll's re-roll seats the houses where a way can reach
                 # them. `trim_lane_stubs` has always exempted it for the same reason.
-                if (lanes[i].get("connector") or lanes[i].get("street")):
+                if lanes[i].get("connector") or lanes[i].get("street"):
                     continue
                 _mine = list(zip(ways[i], ways[i][1:], strict=False))
                 _served = [h for h in _houses if _near(h, _mine) <= _SERVE_FT]

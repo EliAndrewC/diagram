@@ -11,7 +11,7 @@ from l7r.diagram import hamletgen as hg
 from l7r.diagram.hamletgen.homesteads.fixtures import nearer_own_house
 from l7r.diagram.settlement import Settlement
 
-from ._builders import SQUARE, a_plan
+from ._builders import a_plan
 
 
 @pytest.mark.parametrize(("households", "wells"), [(10, 2), (12, 2), (15, 2), (20, 3)])

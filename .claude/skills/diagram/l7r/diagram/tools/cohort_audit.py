@@ -36,8 +36,8 @@ if HERE not in sys.path:
     sys.path.insert(0, HERE)
 
 from l7r.diagram import hamletgen as hg  # noqa: E402
-from l7r.diagram.overlap import matrix_violations  # noqa: E402
 from l7r.diagram.hamletgen.homesteads.row_rules import bamboo_mismatch, doors_unreached, row_rules, water_rules  # noqa: E402
+from l7r.diagram.overlap import matrix_violations  # noqa: E402
 from l7r.diagram.settlement.homestead_parts.grove_rules import fixtures_on_groves, gardens_east_shaded, grove_sides_missing, groves_crossed_by_lanes, groves_off_windward  # noqa: E402
 
 _PART_KEYS = ("gardens", "threshing_yards", "farm_fixtures", "byres", "farm_sheds", "retirement_houses", "persimmons", "bamboo_stands")
@@ -174,7 +174,12 @@ def audit(count: int, first_seed: int, only: str | None = None, jobs: int | None
     sides = collections.Counter(h.split(" sides=")[1].split()[0] for h, _f, _l in results if " sides=" in h and " form=nucleated" not in h)
     print(f"grove sides among the farms that carry a grove: {', '.join(f'{k} sides {v}' for k, v in sorted(sides.items()))}")
     rows = [h.split(" row=")[1].split()[0].split("/") for h, _f, _l in results if " row=" in h]
-    missing = [f"{knob}={v}" for i, (knob, space) in enumerate((("row_line", ("street", "edge")), ("row_sides", ("one", "both")), ("row_water", ("own", "shared")))) for v in space if v not in {r[i] for r in rows}]
+    missing = [
+        f"{knob}={v}"
+        for i, (knob, space) in enumerate((("row_line", ("street", "edge")), ("row_sides", ("one", "both")), ("row_water", ("own", "shared"))))
+        for v in space
+        if v not in {r[i] for r in rows}
+    ]
     print(f"row villages: {len(rows)}; knob values never rolled: {', '.join(missing) or 'none'}")
     if missing and not only:
         failing += 1

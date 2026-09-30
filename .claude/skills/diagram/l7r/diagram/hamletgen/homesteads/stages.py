@@ -393,7 +393,9 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         front_cap = placed
         _rows_seated = True  # NEVER IN RANKS (FR-013, plan D15): whatever its streets could not hold is reported unseated, even all of it
     for _rung in (0,):
-        for (fx, fy), _n in front_row(plan, plan.spec.households if _linear else min(plan.spec.households, 12), standoff=None, chains=s._site_chains, house=_house_max, envelope=_reach, with_normals=True, **_row_kw):
+        for (fx, fy), _n in front_row(
+            plan, plan.spec.households if _linear else min(plan.spec.households, 12), standoff=None, chains=s._site_chains, house=_house_max, envelope=_reach, with_normals=True, **_row_kw
+        ):
             if placed >= front_cap:
                 break
             # THE ONE COMPUTED MOVE AGAINST THE GROUND (feature 227 FR-002, the GM's "measuring the distance ... and then

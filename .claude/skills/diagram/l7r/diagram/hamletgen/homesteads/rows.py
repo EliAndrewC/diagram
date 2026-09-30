@@ -21,7 +21,6 @@ from collections.abc import Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement
-
 from l7r.diagram.settlement.homestead_parts.grove_sides import grove_faces
 from l7r.diagram.settlement.rolling.dispersed import LANE_ROOM_FT
 
@@ -278,7 +277,9 @@ def parallel(line: Sequence[tuple[Pt, Pt]], d: float) -> list[tuple[Pt, Pt]]:
     return [((p[0] + n[0] * d, p[1] + n[1] * d), n) for p, n in line]
 
 
-def clear_frames(line: Sequence[tuple[Pt, Pt]], frame: Sequence[float], sides: str, gap: float, hard: Any, bounds: tuple[float, float, float, float], front: Sequence[float], pad: float, room: float) -> int:
+def clear_frames(
+    line: Sequence[tuple[Pt, Pt]], frame: Sequence[float], sides: str, gap: float, hard: Any, bounds: tuple[float, float, float, float], front: Sequence[float], pad: float, room: float
+) -> int:
     """How many of a line's row seats hold a frame clear of the hard ground, inside `bounds`, with room at its door - the
     measure `best_row_line` ranks a stretch by (the placer still decides each seat)."""
     from shapely.geometry import box
@@ -292,7 +293,22 @@ def clear_frames(line: Sequence[tuple[Pt, Pt]], frame: Sequence[float], sides: s
     return n
 
 
-def best_row_line(hard: Any, anchor: Pt, offset: float, length: float, form: str, slack: float, frame: Sequence[float], sides: str, gap: float, bounds: tuple[float, float, float, float], front: Sequence[float], pad: float, room: float, samples: int = 16) -> list[tuple[Pt, Pt]]:
+def best_row_line(
+    hard: Any,
+    anchor: Pt,
+    offset: float,
+    length: float,
+    form: str,
+    slack: float,
+    frame: Sequence[float],
+    sides: str,
+    gap: float,
+    bounds: tuple[float, float, float, float],
+    front: Sequence[float],
+    pad: float,
+    room: float,
+    samples: int = 16,
+) -> list[tuple[Pt, Pt]]:
     """The first street of a row village: of the lines centered on the planned seat's point of the hard ground's grown edge
     and on `samples` points of that edge within a row's length either way of it, the one holding the most clear frames
     (`clear_frames`), the nearest the seat among equals. [] where there is no hard ground."""
