@@ -34,6 +34,7 @@ from .settle import (
     settle_network,
     settle_reach,
     settle_widths,
+    unsettled,
 )
 from .tree import prune_the_tree, settle_defer, tree_faults, tree_records
 
@@ -114,7 +115,7 @@ def last_resort(s: Any) -> int:
         for step in (settle_joins, settle_reach, settle_defer, settle_network, settle_fragments, prune_the_tree, settle_widths, settle_husks):
             step(s)
         carriers = ordinary_carriers(s.M)
-        if not carriers and not lane_violators(s):
+        if not carriers and not lane_violators(s) and not unsettled(s.M, memo_ground(s, "worked", worked_ground)):
             break
         s.drop_lanes(carriers)
         dropped += len(carriers)
@@ -139,6 +140,10 @@ def refuse_unmended(s: Any) -> None:
         why.append(f"lanes {_named(lanes, left)} still break a rule of the lane law")
     if carriers := {i for i, _k, _y in law.way_out_carriers(M)}:
         why.append(f"a household's way out crosses the brook and back on lanes {_named(lanes, carriers)}")
+    if broken := unsettled(M, memo_ground(s, "worked", worked_ground)):
+        # ...AND THE WHOLE LAW IS ASKED, as the settle's exit asks it: a rule no lane above is named for (a split network, a
+        # width step) still refuses, by the rule's name
+        why.append(f"the web still breaks {', '.join(sorted(broken))}")
     if why:
         raise WebRefused("the web's last resort cannot mend it without dropping a tree lane: " + "; ".join(why))
 

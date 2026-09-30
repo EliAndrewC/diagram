@@ -135,3 +135,40 @@ def test_the_reserved_field_left_unreached_is_refused_and_an_unreserved_one_is_n
     lr.refuse_unreached(M)
     with pytest.raises(lr.WebRefused, match="the field its reserved corridor runs to is reached by no way"):
         lr.refuse_unreached({**M, "access_corridors": [{"pts": [[195.0, 150.0], [0.0, 150.0]], "field": True}]})
+
+
+# ---- the settle's exit is a guarantee: a still round is asked the whole law ------------------------------------------
+
+
+def _strip_doubled_on_the_connector() -> _S:
+    """Cohort seed 14 with the straggler footpaths off, in small: the connector's start carried 41 ft off the strip, its first
+    leg back through the strip's foot, and the exit strip drawn on along that leg to the start - a doubled tail and a needle
+    join between two TREE lanes, which no repair cuts, so a round changes nothing with both standing."""
+    s = _S([_c((1.0, -41.0), (0.0, 0.0), (-1000.0, 0.0))], meta=dict(_GEN))
+    s.M["lanes"].append({"pts": [[300.0, 0.0], [1.0, 0.0], [1.0, -41.0]], "w": 3, "worn": True, "role": co.STRIP_ROLE})
+    return s
+
+
+def test_a_web_gone_still_with_a_rule_only_the_tree_breaks_is_refused_by_name_never_shipped(monkeypatch: pytest.MonkeyPatch) -> None:
+    s = _strip_doubled_on_the_connector()
+    assert {"doubled_tails", "needle_joins"} <= set(settle.unsettled(s.M)), "the violating case, the whole law asked"
+    with pytest.raises(lr.WebRefused, match="lanes 1 \\(exit strip\\) still break a rule.*the web still breaks .*doubled_tails, needle_joins"):
+        settle.settle_the_web(s)
+    assert [ln.get("role") for ln in s.M["lanes"]] == [None, co.STRIP_ROLE], "no tree lane dropped"
+    # ...and without the exit's question the still round shipped it: the hole this closes
+    shipped = _strip_doubled_on_the_connector()
+    monkeypatch.setattr(settle, "unsettled", lambda M, ground=None: {})
+    got = settle.settle_the_web(shipped)
+    assert got["rounds"] == 1 and got["changed"] == 0 and law.doubled_tails(shipped.M) == [1]
+
+
+def test_a_web_gone_still_with_an_ordinary_lane_breaking_a_rule_against_the_tree_is_repaired(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The ordinary lane's needle on the connector, with every repair step idle so the first round changes nothing: the
+    exit asks the law, the last resort drops the ordinary lane, and what ships keeps it."""
+    needle = [(-50.0, 150.0), (-120.0, 10.0), (-153.6, 0.4)]
+    s = _S([CONN, needle])
+    assert law.needle_joins(s.M["lanes"]), "the violating case"
+    monkeypatch.setattr(settle, "STEPS", (settle.settle_husks,))
+    got = settle.settle_the_web(s)
+    assert got["rounds"] == 1 and got["changed"] == 0 and got["dropped"] == 1
+    assert settle.unsettled(s.M) == {} and len(s.M["lanes"]) == 1 and s.M["lanes"][0]["connector"]

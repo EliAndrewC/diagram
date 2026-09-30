@@ -2,6 +2,7 @@
 seating (`admits`, the violating case of every clause among them), drawn where the web owes it (`settle_tree`), the
 ordinary lanes deferring to it (`tree_faults`, `settle_defer`), and pruned where the map no longer needs it."""
 
+import math
 import types
 
 from l7r.diagram.hamletgen.ways import law, settle, tree
@@ -92,9 +93,28 @@ def test_the_strip_runs_from_its_innermost_attachment_to_the_connector_or_its_en
     near = {**M, "lanes": [{"pts": [[0.0, 3.0], [-1000.0, 3.0]], "w": 6, "connector": True}]}
     assert tree.strip_run(near, recs, host, [0]) == [(300.0, 0.0), (0.0, 3.0)], "a start a few feet off: the last leg turned onto it, no hook"
     assert tree.strip_run(M, recs, host, [0], drawn=False) == [(300.0, 0.0), (0.0, 0.0)], "as seated: to the strip's end"
+    assert tree.connector_foot({"lanes": []}, (0.0, 0.0)) is None, "no connector drawn"
     lanes = tree.lanes_of(M, recs, host, [0, 1])
     assert [ln["role"] for ln in lanes] == [STRIP_ROLE, ACCESS_ROLE, ACCESS_ROLE] and lanes[1]["of"] == [300.0, 100.0]
     assert tree.lanes_chain(recs, host, lanes, 1) == [(200.0, 180.0), (300.0, 50.0), (300.0, 0.0), (0.0, 0.0)]
+
+
+def test_the_strip_ends_on_the_connectors_tread_where_it_passes_the_foot_not_doubled_along_it_to_the_start() -> None:
+    """Cohort seed 14 with the straggler footpaths off (feature 287): the web carried the connector's free start 41 ft off
+    the strip onto a lane, its first leg running back through the strip's foot; the strip's leg on to the start then ran
+    beside that leg - a doubled tail and a needle join between two TREE lanes, which no settle repair may cut. The strip
+    ends on the connector's tread where it passes the foot."""
+    M = _tree(lanes=[{"pts": [[1.0, -41.0], [0.0, 0.0], [-1000.0, 0.0]], "w": 6, "connector": True}])
+    recs = tree.tree_records(M)
+    host = tree.hosts(recs, ((400.0, 0.0), (0.0, 0.0)))
+    old = [(300.0, 0.0), (1.0, 0.0), (1.0, -41.0)]  # the start's foot on the strip, and the leg on to it, as drawn before
+    was = [M["lanes"][0], {"pts": [list(q) for q in old], "w": 3, "role": STRIP_ROLE}]
+    assert 1 in law.doubled_tails({"lanes": was}) and law.needle_ends(was), "the violating case: the leg on to the start"
+    run = tree.strip_run(M, recs, host, [0])
+    assert run is not None and len(run) == 2 and run[0] == (300.0, 0.0), run
+    assert math.dist(run[-1], (0.0, 0.0)) < 0.1, "on the connector's tread by the foot, not on to its start"
+    now = [M["lanes"][0], {"pts": [list(q) for q in run], "w": 3, "role": STRIP_ROLE}]
+    assert law.doubled_tails({"lanes": now}) == [] and law.needle_ends(now) == [] and law.lane_networks({"lanes": now}) == 1
 
 
 # ---- the seating's question -------------------------------------------------------------------------------------------

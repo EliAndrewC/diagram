@@ -2407,3 +2407,12 @@ line in feature 280 (`specs/280-modern-only-sweep/outcomes.md`, one row per item
 - **Mizuguchi's two east houses walk about four times the straight distance to the way out** (1,176 and 1,207 ft of lane for
   290-300 ft; 2.27 at worst on main) - the lane web leads them south-east first. Measured by the round-5 review, 2026-09-29; the
   same routing question as Kashikawa's detours above.
+
+## OPEN 2026-09-30 (feature 287): a tree run crossing water more than ~18 deg off square is refused, not straightened
+
+`hamletgen/ways/tree.py:rejoined` pads a run 4 ft (`REJOIN_PAD_FT`) either side of a water crossing before the
+crossing is squared, which leaves two elbows of about 70 deg some 21 ft apart on any run crossing more than about 18 deg
+off square; the lane law's `bends` then refuses it. On rolled maps the seating's `tree.admits` refuses such corridors
+before any is drawn, so nothing ships kinked (0 `bends` over the pool and cohort 1-20) - but the seating may be turning
+down seats a straighter rejoin would keep. Sketch: size the pad from the crossing angle (the squared leg's own length),
+or square the crossing before rejoining; measure seats offered and refused on the cohort before and after. Moves maps.

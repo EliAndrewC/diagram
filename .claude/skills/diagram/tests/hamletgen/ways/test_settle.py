@@ -7,6 +7,7 @@ import pytest
 
 from l7r.diagram.hamletgen.ways import corridors as co
 from l7r.diagram.hamletgen.ways import law, settle
+from l7r.diagram.hamletgen.ways.last_resort import WebRefused
 from l7r.diagram.settlement import segments_cross
 
 from ._builders import AdmitsAll
@@ -575,25 +576,45 @@ def test_a_lane_through_a_yard_persimmons_trunk_is_cut_and_no_tree_lane_is_laid_
     assert not settle.Lawful(s)([(-200.0, 100.0), (-50.0, 100.0)], 3.0)
 
 
-def test_seed_8_a_corridor_over_the_brook_at_its_ford_is_squared_and_drawn() -> None:
-    """Cohort seed 8 (the coarse-grain knob reseated the cluster): the exit strip ran from the houses over the brook to the
-    connector's start 38 degrees off square at a ford, the corridor was judged unsquared, refused, and three houses were
-    stranded. The web squares a tree lane at its crossings (`square_run`) before it asks the law, as it squares every lane."""
+def _strip_over_the_brook(start_y: float, ford_y: float) -> _S:
+    """An exit strip from the houses at (300, 80) west over the brook at x = 100 to the connector's start (0, `start_y`), a
+    ford where it crosses; one house's corridor down to the strip."""
     brook = {"poly": [[100.0, -500.0], [100.0, 500.0]], "w": 7.0}
     s = _S(
-        [_c((0.0, -150.0), (-1000.0, -150.0))],
+        [_c((0.0, start_y), (-1000.0, start_y))],
         houses=[(300.0, 200.0)],
-        meta={**_GEN, "brook_fords": [[100.0, -73.3]]},
+        meta={**_GEN, "brook_fords": [[100.0, ford_y]]},
         streams=[brook],
-        access_exit=[[300.0, 80.0], [0.0, -150.0]],
+        access_exit=[[300.0, 80.0], [0.0, start_y]],
         access_corridors=[{"pts": [[300.0, 180.0], [300.0, 80.0]], "of": [300.0, 200.0]}],
     )
     s.M["houses"][0]["rot"] = 180.0
-    assert not settle.Lawful(s).on_lawful_ground([(300.0, 80.0), (0.0, -150.0)], 3.0), "unsquared, the strip crosses 38 degrees off"
-    assert settle.corridor_on_lawful_ground(s.M, [(300.0, 80.0), (0.0, -150.0)]), "squared, the seating's own question admits it"
+    return s
+
+
+def test_seed_8_a_corridor_over_the_brook_at_its_ford_is_squared_and_drawn() -> None:
+    """Cohort seed 8 (the coarse-grain knob reseated the cluster): the exit strip ran from the houses over the brook to the
+    connector's start off square at a ford, the corridor was judged unsquared, refused, and three houses were stranded. The
+    web squares a tree lane at its crossings (`square_run`) before it asks the law, as it squares every lane. Here 15
+    degrees off: seed 8's own 38 is the case below, which the law refuses once the strip is drawn."""
+    s = _strip_over_the_brook(0.0, 26.7)
+    assert not settle.Lawful(s).on_lawful_ground([(300.0, 80.0), (0.0, 0.0)], 3.0), "unsquared, the strip crosses 15 degrees off"
+    assert settle.corridor_on_lawful_ground(s.M, [(300.0, 80.0), (0.0, 0.0)]), "squared, the seating's own question admits it"
     settle.settle_the_web(s)
     assert law.unreached_houses(s.M) == [] and law.oblique_crossings(s.M) == [] and law.off_ford_crossings(s.M) == []
     assert [ln["role"] for ln in s.M["lanes"] if ln.get("role")] == ["exit strip", "access"]
+    assert settle.unsettled(s.M) == {}
+
+
+def test_a_strip_that_kinks_where_it_is_squared_and_rejoined_is_refused_not_shipped() -> None:
+    """The same strip 38 degrees off square, as seed 8 drew it: the web draws it rejoined either side of the crossing and
+    squared (`tree.rejoined`, `tree.lanes_of`), and the square leg's two elbows - 70 degrees each, 21 ft apart - are a kink
+    (`law.kinks`). Before the settle's exit asked the whole law this shipped: every step left the tree lane alone and a
+    round changed nothing. On a rolled map the seating judges the rejoined run (`tree.admits`) and never seats it."""
+    s = _strip_over_the_brook(-150.0, -73.3)
+    assert settle.corridor_on_lawful_ground(s.M, [(300.0, 80.0), (0.0, -150.0)]), "squared without the rejoin, it keeps the law"
+    with pytest.raises(WebRefused, match="exit strip.*the web still breaks bends"):
+        settle.settle_the_web(s)
 
 
 def _reference_lawful_ground(ok: settle.Lawful, run, width) -> bool:

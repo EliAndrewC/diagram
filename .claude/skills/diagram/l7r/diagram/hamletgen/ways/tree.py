@@ -128,7 +128,7 @@ def hosts(recs: Sequence[Mapping[str, Any]], strip: tuple[Pt, Pt] | None) -> lis
 def strip_run(M: Mapping[str, Any], recs: Sequence[Mapping[str, Any]], host: Sequence[int | None], chosen: Sequence[int], drawn: bool = True) -> Poly | None:
     """The exit strip as a lane for the runs `chosen`: from the innermost of their attachments to it (never inward of the
     strip's own start) out to where the connector starts - its foot on the strip, and on to the start where it stands off
-    it (`corridors.connector_start`) - or, as the seating judges it (`drawn` False: the connector is drawn after the houses),
+    it (`corridors.connector_start`), unless the connector's tread already passes that foot (`connector_foot`) - or, as the seating judges it (`drawn` False: the connector is drawn after the houses),
     to the strip's outer end. None where none of them hangs from the strip, or there is no strip."""
     from .corridors import connector_start
 
@@ -145,9 +145,27 @@ def strip_run(M: Mapping[str, Any], recs: Sequence[Mapping[str, Any]], host: Seq
         # the two ends missed by a hair (seed 20) - and one farther off by a leg on to it
         if math.dist(run[-1], start) <= CARRY_FT and run[-1] != run[0]:
             run[-1] = start
+        elif (meet := connector_foot(M, run[-1])) is not None:
+            # ...BUT WHERE THE CONNECTOR'S OWN TREAD PASSES THE FOOT, THE STRIP ENDS ON IT THERE: a leg on to the start would
+            # run back beside the connector's first leg - a doubled tail and a needle join between two TREE lanes, which no
+            # settle repair may cut and the seating could not judge (it seats with a stand-in connector, `STUB_FT`). Cohort
+            # seed 14 with the straggler footpaths off: `_touch_junctions` carried the connector's free start 41 ft onto a
+            # skeleton lane, and the strip's leg on to it doubled that leg (feature 287; the settle then went still with both
+            # rules broken)
+            run[-1] = meet
         else:
             run.append(start)
     return _dedup(run)
+
+
+def connector_foot(M: Mapping[str, Any], q: Pt) -> Pt | None:
+    """The point of the connector's tread nearest `q`, where that tread passes within `law.JOIN_TOL` of it (the ink's join
+    tolerance: the two already meet there) - else None."""
+    con = next((law.lane_pts(ln) for ln in M.get("lanes") or [] if ln.get("connector") and len(ln.get("pts") or []) >= 2), None)
+    if con is None:
+        return None
+    foot = min((seg_closest(q[0], q[1], a, b) for a, b in zip(con, con[1:], strict=False)), key=lambda f: math.dist(q, f))
+    return foot if math.dist(q, foot) <= law.JOIN_TOL else None
 
 
 def chain_of(recs: Sequence[Mapping[str, Any]], host: Sequence[int | None], i: int) -> list[int]:
