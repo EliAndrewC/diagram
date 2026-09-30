@@ -483,7 +483,7 @@ def roll_merchant_estate_count(scale: str, rng: random.Random) -> int:
 # runs the sparser Xi'an spacing. Each tier maps to (effective arrow range in FEET, minimum towers that
 # must cover every wall point within that range). The historical grounding (侧射 flanking fire; Shen Kuo's
 # 11th-c. 矢石相及; Xi'an 120 m / Pingyao ~55 m mamian spacing at a ~60 m aimed-lethal bowshot) is in
-# research/cities/defenses.html 'Wall towers - the mamian system and bowshot ranges'. Once gated by city_wall_tower_coverage; used to set the mural-tower spacing in city_wall.
+# research/cities/defenses.html 'Towers along the city wall (mamian)' and research/rendering/cities/defenses.html 'How our maps space and draw wall towers'. Once gated by city_wall_tower_coverage; used to set the mural-tower spacing in city_wall.
 WALL_DEFENSE = {
     # tier          (arrow_range_ft, min_towers)  placement spacing = range if min==2 else 2*range
     "siege": (197.0, 2),  # border / besieged city: aimed-lethal bowshot (60 m), >=2 towers EVERYWHERE (Pingyao-dense)
