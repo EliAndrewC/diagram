@@ -258,7 +258,7 @@ class Kitchen(Kind):
     Covers: the kitchen and pantries building and its label
     Label: accurate
     Sources: boso-no-mura-takei, liq-takayasu-daidokoro, kotobank-katteguchi, kotobank-uchigenkan, matsue-bukeyashiki, matsue-bukeyashiki-about, matsushiro-bukeyashiki, tfd-hongou-fire-history, thepaper-taipinggang, edo-no-kaji-jawiki, machibikeshi-jawiki
-    Entry: research/buildings.html - 'What fire did a residence's kitchen cook on - a kamado range, or a sunken hearth?', 'How many doors does a residence's kitchen have, and who comes in by them?', 'How big was a samurai's house, and what rank is a 67-tsubo house?', 'The size of a compound and the rank of its buildings', 'Fire, and the fireproof storehouses (dozō)', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps route a guest from the gate to the entrance', 'How our maps place fire-water tubs and storehouses'
+    Entry: research/buildings.html - 'What fire did a residence's kitchen cook on - a kamado range, or a sunken hearth?', 'How many doors does a residence's kitchen have, and who comes in by them?', 'How big was a samurai's house, and what rank is a 67-tsubo house?', 'The size of a compound and the rank of its buildings', 'Fire, and the fireproof storehouses (dozō)', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps route a guest from the gate to the entrance', 'How our maps draw fire water and the fireproof storehouses (dozō)'
     """
 
     key = "kitchen"
@@ -443,28 +443,28 @@ class Storehouse(Kind):
 class FireWaterTubs(Kind):
     """
     What: Standing tubs of rainwater - tensuioke, "heaven-water tubs" - kept against fire, one at the eaves
-    corner of each major wooden building and two at the kitchen, fed by the roof's runoff.
+    corner of each major wooden building and two at the kitchen, holding rain.
 
-    Why: The halls of an administrative compound were ordinary wooden buildings and often burned (the Sado magistracy five times, though Takayama's office never did),
+    Why: The halls of an administrative compound were ordinary wooden buildings and could burn (the Sado magistracy five times, though Takayama's office never did),
     so standing water was kept at the point of risk: at the wooden buildings, weighted to the kitchen and its
     open fire. The plastered storehouses carry none - a thick earthen kura is the one building made not to
-    burn. Each tub stands against its building's wall, under the eaves, because the gutter fills it.
+    burn.
 
-    Note: Townspeople's habit of keeping water ready at the front entrance and on the roof, and per-hall water
-    vats in the Forbidden City, are recorded findings, and the program classes the tubs as accurate:
-    gutter-fed tensuioke at the wooden buildings. A tub at every wooden building, as a rule rather than a
-    townspeople's custom, is the record's reading. The tub's 2.5 ft size is the record's estimate on no page
+    Note: Townspeople's habit of keeping water ready at the front entrance and on the roof, an Edo town order
+    that tubs of water be kept ready, and per-hall water vats in the Forbidden City, are recorded findings,
+    and the program classes the tubs as accurate: rainwater tensuioke at the wooden buildings. A tub at every
+    wooden building, as a rule rather than the townspeople's habit or a town order, is the record's reading. The tub's 2.5 ft size is the record's estimate on no page
     read, and the weighting toward the kitchen is the record's reasoning rather than a page's words.
 
-    Caveat: A tub at every wooden building, as a rule rather than a townspeople's custom, is the record's
-    reading. The tub's 2.5 ft size is the record's estimate on no page read, and the weighting toward the
+    Caveat: A tub at every wooden building, as a rule rather than the townspeople's habit or a town order,
+    is the record's reading. The tub's 2.5 ft size is the record's estimate on no page read, and the weighting toward the
     kitchen is the record's reasoning rather than a page's words.
 
     Name: fire-water tubs
     Covers: every fire-water tub glyph and the "fire-water tubs" label
     Label: accurate
     Sources: tfd-hongou-fire-history, thepaper-taipinggang, edo-no-kaji-jawiki, machibikeshi-jawiki, sado-bugyosho-fires, tensuioke-jawiki, dozo-jawiki
-    Entry: research/buildings.html - 'Fire, and the fireproof storehouses (dozō)'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'; research/rendering/buildings.html - 'How our maps place fire-water tubs and storehouses'
+    Entry: research/buildings.html - 'Fire, and the fireproof storehouses (dozō)'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'; research/rendering/buildings.html - 'How our maps draw fire water and the fireproof storehouses (dozō)'
     """
 
     key = "fire-water tubs"
@@ -559,7 +559,7 @@ class Hearth(Kind):
     Covers: the fire glyph in each kitchen
     Label: accurate
     Sources: boso-no-mura-takei, liq-takayasu-daidokoro, matsue-bukeyashiki, irori-jawiki, tfd-hongou-fire-history, edo-no-kaji-jawiki, machibikeshi-jawiki, thepaper-taipinggang
-    Entry: research/buildings.html - 'What fire did a residence's kitchen cook on - a kamado range, or a sunken hearth?', 'Fire, and the fireproof storehouses (dozō)'; research/rendering/buildings.html - 'How our maps place fire-water tubs and storehouses'
+    Entry: research/buildings.html - 'What fire did a residence's kitchen cook on - a kamado range, or a sunken hearth?', 'Fire, and the fireproof storehouses (dozō)'; research/rendering/buildings.html - 'How our maps draw fire water and the fireproof storehouses (dozō)'
     """
 
     key = "hearth"

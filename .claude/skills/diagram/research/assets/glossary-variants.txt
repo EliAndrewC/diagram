@@ -2999,6 +2999,8 @@ taimenjo	taimenjo
 taiping	Taiping
 taiping heavenly kingdom	Taiping
 taiping rebellion	Taiping
+taiping vat	taiping-gang
+taiping vats	taiping-gang
 taiping-gang	taiping-gang
 tairo	tairo
 tairō	tairo
