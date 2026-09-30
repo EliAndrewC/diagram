@@ -5318,7 +5318,9 @@
   "def": "The old province that Edo stood in; the Musashi gazetteer is its Edo-period local history.",
   "variants": [
    "Musashi",
-   "Musashi province"
+   "Musashi province",
+   "Bushū",
+   "Bushu"
   ]
  },
  "Edo": {
@@ -13367,6 +13369,13 @@
   "def": "A dog house. The word is recorded for the shelters the shogunate built for sick and ownerless dogs at the end of the seventeenth century; no source read describes a warrior household's own hunting kennel.",
   "variants": [
    "inugoya"
+  ]
+ },
+ "Tsunayoshi": {
+  "def": "Tokugawa Tsunayoshi, the fifth Tokugawa shogun (in office 1680-1709), in whose reign the shogunate built its houses for sick and ownerless dogs.",
+  "variants": [
+   "Tsunayoshi",
+   "Tokugawa Tsunayoshi"
   ]
  }
 }

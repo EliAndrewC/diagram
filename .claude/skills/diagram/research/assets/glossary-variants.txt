@@ -269,6 +269,8 @@ burial graves	burial grave
 bursaries	rent bursary
 bursary	rent bursary
 bushi	bushi
+bushu	Musashi
+bushū	Musashi
 butsudan	butsuma
 butsuma	butsuma
 buyi	Buyi
@@ -3191,6 +3193,7 @@ tokonoma	tokonoma
 tokorobarai	tokorobarai
 tokugawa	Tokugawa
 tokugawa ieyasu	Ieyasu
+tokugawa tsunayoshi	Tsunayoshi
 tokugawa yoshimune	Yoshimune
 ton'ya	ton'ya
 tonami	Tonami plain
@@ -3268,6 +3271,7 @@ tsumago	Tsumago
 tsumairi	tsumairi
 tsumairi-type	tsumairi
 tsunaba	tsunaba
+tsunayoshi	Tsunayoshi
 tsunoya	tsunoya
 tsurube	tsurube
 tsushi nikai	half-story
