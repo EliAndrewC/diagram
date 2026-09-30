@@ -1,6 +1,6 @@
 {
  "feature": "291-homestead-grove-sides",
- "plan_sha256": "0d5df9f45559b4c2401b5752f5112a4f71fb1f8d65afe918bb016b26080e7900",
+ "plan_sha256": "953f0a44deb3ad3c1abf62e216ff6c94eea39c7b8511bae279d16b2939175b2b",
  "reviewed": "2026-09-30",
  "declared": "spec-fidelity",
  "decisions": [
@@ -85,9 +85,9 @@
   },
   {
    "id": "D14",
-   "summary": "row_line: flood_ground takes edge, else an even-odds street/edge knob, pinnable, meta.row_line; edge = the hard ground grown to the street's offset and cut to an arc; street = the principal-axis straight line of that stretch set out past it; the first street chosen by best_row_line among the seat's point and 16 points of the grown edge within a row's length, by clear frames, the seat breaking ties; hard ground = field, site no-build outline, water at clearance, toe marsh and drawn marshes; LINEAR_CANVAS 1.5 (a drawing convention)",
+   "summary": "row_line knob and first-street choice as accepted at round 4; NEW: the dispersed hamlet's canvas grown by LINEAR_CANVAS 1.5 as the row's (a drawing convention, unused ground cropped), on the pinned Audit-905 seating 16 of 20 grove farms on the smaller sheet",
    "class": "within",
-   "why": "FR-013: both attested lines drawn, the dike line on flood ground, even odds otherwise, pinnable and recorded; the street straight as surveyed, the edge curving with the margin. WHERE along the margin the row stands, what ground it may not stand on, and the sheet's size are left open by the spec; choosing the stretch that holds the row seats the row the GM asked for and narrows nothing. Round-3 item 2 is answered (code: rows.py best_row_line, hard_ground)."
+   "why": "The row-line content is unchanged from round 4. The dispersed canvas is a sheet size, labeled a drawing convention, whose only effect is to let FR-010's every-household-seated hold for a dispersed hamlet of grove frames; it moves no rule and narrows nothing."
   },
   {
    "id": "D15",
@@ -110,16 +110,23 @@
   },
   {
    "id": "D18",
-   "summary": "A dispersed farm's own well seated in its dooryard by own_wells (a ring round the house out to the frame, nearest the work yard first, never on the way in); the layout-reserved well seat was built, measured to cost a household (cohort seed 19) and not used; water_rules fails any dispersed farm without its own well on every cohort roll and the gate's grove maps; linear row_water own/shared knob (even odds, pinnable, meta.row_water), shared wells spaced from WATER_REACH_FT so every farm is within reach",
+   "summary": "farm_water knob (channel/well, even odds, pinnable as HamletSpec.farm_water, meta.farm_water); channel from the nearest supply ditch (never a drain) or the brook, shortest route over up to six candidate sources and every yard side, routed on an 8 ft lattice round buildings, yards, gardens, other groves, lanes, other water and the crop (as a wall), crossing its own grove into the grounds, ending a step off the threshing yard; drawn 2.5 ft in the supply hue (convention), recorded as farm_channels, kept clear; farms taken nearest the water first; an unreached farm draws a well and fails the check; well value by own_wells; row_water as accepted",
    "class": "within",
-   "why": "FR-018 exactly: own well in the dooryard, off the way in, for the dispersed farm; the row's water a pinnable, recorded, even-odds knob with shared wells within reach. Moving from a reserved seat to a seated search changes the mechanism, not the requirement, and the check makes a farm without its well a failure rather than an accepted gap."
+   "why": "FR-018 and the spec's amendment-5 Decisions: the knob as specified; source the nearest ditch or brook (the nearest a convention, the brook a GUESS, both the spec's labels; nearest by route is a reading of that convention); the end in the dooryard (where in it a GUESS, the spec's). The routing lattice, obstacle set, source budget and processing order are mechanism, not scope. The fallback well is not an accepted gap because water_rules fails it (D19). The branching clause is ruled separately as D18-branch."
+  },
+  {
+   "id": "D18-branch",
+   "summary": "A later farm's channel may be led off a channel already drawn to another farm (courses.append in farm_channels), labeled a map drawing convention ('still the irrigation water, carried on')",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-018 names the water a channel is led off - 'the irrigation water (the nearest drawn ditch or the brook)' - and the spec labels each part; another household's house channel is neither, so this departs from the accepted spec. The one measurement offered (in the given order, long channels walled the near farms off, three of Audit-905's sixteen fell back to a well) justifies the nearest-first ORDER, not branching: one argument stretched over two changes, and no run shows nearest-first alone leaves a farm dry. Its class is also wrong: whether a household's water was led off a neighbor's channel is a physical claim, not a way of drawing, so at most a GUESS. Cure: measure the dispersed channel cohort with nearest-first and no branching; if every farm is reached, drop branching; if not, carry it to a spec amendment of FR-018 with that measurement and a GUESS label, reviewed before it lands."
   },
   {
    "id": "D19",
-   "summary": "row_rules (houses within a frame depth of a street, none behind another, each street one lane, far farms' holdings behind, every row farm joined to its own street, no_row_street on a streetless linear map), water_rules, doors_unreached (linear row farms only, amendment 4), bamboo_mismatch; the cohort runs them every roll plus pinned linear specs covering both values of row_line, row_sides and row_water; the gate test on the linear pool maps",
+   "summary": "row_rules, water_rules, doors_unreached (linear only), bamboo_mismatch as accepted; NEW: water_rules reads meta.farm_water - a channel ending inside the farm's frame under channel, its own well inside the frame off its way in under well; the cohort adds a pinned dispersed spec for each farm_water value",
    "class": "within",
-   "why": "Enforcement of SC-007 and SC-008 clause by clause, the door check scoped as accepted amendment 4 scopes it. Delete the requested behavior and these checks have nothing left to check (GM 2026-09-20)."
+   "why": "Enforcement of SC-008's dispersed clause word for word (the knob's value drawn on every farm, both values present) and of its linear and door clauses as already accepted; delete the requested behavior and these checks have nothing left to check (GM 2026-09-20)."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }
