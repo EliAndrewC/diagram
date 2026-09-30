@@ -403,7 +403,7 @@ class Well(Kind):
     found, and stand as this record's estimate; so does the well-house roof on every well, since the
     dictionaries define the well house but do not say how common it was. A dispersed farm's own well is a
     guess: on the Tonami plain, where the water table lay deep and a well was hard to dig, the farms in many
-    areas led a small channel into their grounds instead, and the map does not draw that channel. The map draws more wells than that count - a hamlet one or two, a village of 60 households six to nine, a town about sixteen - as a disclosed liberty, and the distances that keep a well among the houses and every household within reach of a well or a channel are calibrations against the drawn maps, not figures from a record.
+    areas led a small channel into their grounds instead, and a dispersed settlement draws that channel or a well of its own, rolled at even odds (a guess). The map draws more wells than that count - a hamlet one or two, a village of 60 households six to nine, a town about sixteen - as a disclosed liberty, and the distances that keep a well among the houses and every household within reach of a well or a channel are calibrations against the drawn maps, not figures from a record.
 
     Name: well
     Covers: `wells` - the wellheads

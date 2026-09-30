@@ -385,7 +385,7 @@ class Holding(Kind):
     them, and a row village on paddy ground may borrow the form though not its size. Where the row follows a dike, a
     levee or a fan's foot, a farm's holding lies near the house and fairly compact. So a row with farms on both sides
     of its street draws the far farms' holdings behind them - a long strip on a street laid first, a compact plot on
-    the dry edge - while the near farms stand between the street and the rice field, with the field at their backs.
+    the dry edge - while the near farms stand between the street and the ground the row keeps off - the rice field, or the marsh or water beside it - with that ground at their backs. The map draws the lot and the field; the woodland beyond is not drawn.
 
     Note: The order back from the road and the compact holding on a dike are read; the strip's depth here, three lots,
     is a GUESS (Santome's strip was a dry-field colony's and ran far deeper), and so are its crop, dry field, and the

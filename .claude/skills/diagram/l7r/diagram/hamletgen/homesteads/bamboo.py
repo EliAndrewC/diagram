@@ -23,7 +23,8 @@ from ..plan import SitePlan
 # plain bamboo was often mixed into the grove from the west round to the north of the house, and the Sendai igune's
 # bamboo filled its low part against the wind. So the SIDE is rolled per farmstead, weighted toward the back, the
 # wind side and the shed's side, never fixed. The weights are a GUESS - no page gives a share per side; `wind` was
-# raised from .15 to .30 when the wind side was read, from `back` and `shed`, which stay the likeliest two together.
+# raised from .15 to .30 when the wind side was read, taken from `back` and `shed`: `back` stays the likeliest, then
+# `wind`, then `shed`, then the other flank.
 # The PRESENCE rate is a GUESS - no source gives a share; "one of several secondary
 # species" says common but not universal - set like the shed's, and labeled. Sizes are a working strip.
 # HOUSEHOLD_BAMBOO_PREVALENCE lives with the grove drawer (settlement/homestead_parts/groves.py) since feature 291: a

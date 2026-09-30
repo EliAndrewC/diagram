@@ -236,6 +236,12 @@ def frame_on_holdings(frame: tuple[float, float, float, float], holdings: Sequen
     return any(fb.intersects(Polygon(q)) for q in holdings)
 
 
+def seat_allowed(hx: float, hy: float, w: float, h: float, allowed: Any) -> bool:
+    """May a row farm's house stand at (`hx`, `hy`): on the `w` x `h` sheet, and where the stage's `allowed` says it may
+    (lifted from `seat_rows`, feature 291: no pool roll reaches the refusal once the streets keep inside the sheet)."""
+    return 0 < hx < w and 0 < hy < h and (allowed is None or bool(allowed(hx, hy)))
+
+
 def frame_refused(fr: tuple[float, float, float, float], front: Sequence[float], lane_pad: float, hard: Any, door_room: float, all_streets: Any, holdings: Sequence[Sequence[Pt]]) -> bool:
     """Is a row seat's frame refused (lifted from `seat_rows`, feature 291)? Its door has no room (`door_clear`); or the
     frame reaches across ANY of the row's streets where a line bends - square to its own line at its seat, it stood on a
@@ -461,7 +467,7 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
             if placed >= want:
                 break
             hx, hy = fx - hx_off, fy - hy_off
-            if not (0 < hx < s.W and 0 < hy < s.H) or (allowed is not None and not allowed(hx, hy)):
+            if not seat_allowed(hx, hy, float(s.W), float(s.H), allowed):
                 continue
             # A FAR-ROW FARM IS SEATED ONLY WITH ITS HOLDING (plan D16): behind its lot, away from the street, clear of the
             # hard ground and every reserved box - else not seated here, as a farm whose grove has no room is not.

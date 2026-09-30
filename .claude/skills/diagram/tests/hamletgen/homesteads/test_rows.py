@@ -235,3 +235,12 @@ def test_a_street_keeps_its_longest_stretch_inside_the_sheet() -> None:
     line = [((x, 50.0), n) for x in (5.0, 20.0, 40.0, 60.0, 95.0, 40.0)] + [((50.0, 50.0), n)]
     assert inside_the_sheet(line, (10.0, 10.0, 90.0, 90.0)) == [((20.0, 50.0), n), ((40.0, 50.0), n), ((60.0, 50.0), n)]
     assert inside_the_sheet(line[:1], (10.0, 10.0, 90.0, 90.0)) == []
+
+
+def test_a_row_seat_is_on_the_sheet_and_where_the_stage_allows() -> None:
+    from l7r.diagram.hamletgen.homesteads.rows import seat_allowed
+
+    assert seat_allowed(10.0, 10.0, 100.0, 100.0, None)
+    assert not seat_allowed(-1.0, 10.0, 100.0, 100.0, None) and not seat_allowed(10.0, 100.0, 100.0, 100.0, None)
+    assert not seat_allowed(10.0, 10.0, 100.0, 100.0, lambda x, y: False)
+    assert seat_allowed(10.0, 10.0, 100.0, 100.0, lambda x, y: True)
