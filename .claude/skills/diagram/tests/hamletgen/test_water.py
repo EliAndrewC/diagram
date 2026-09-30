@@ -171,7 +171,8 @@ def test_fit_field_probes_saturation_and_rerolls_the_best_aspect_in_full(monkeyp
         k = float(kw["field_fall"]) / w.REF_FIELD_FALL  # type: ignore[arg-type]
         aspect = float(kw["canal_a_len"][0]) / (w.REF_CANAL_A[0] * k)  # type: ignore[index]
         carves.append((round(aspect, 2), round(k, 3)))
-        return SimpleNamespace(net={"k": k, "aspect": aspect}, planted_area=lambda k=k: min(9.0 * k**2, 10.0) * SQ_FT_PER_ACRE)  # saturates at 10 acres (ftpx 1)
+        acres = min(9.0 * k**2, 10.0)  # saturates at 10 acres (ftpx 1)
+        return SimpleNamespace(net={"k": k, "aspect": aspect, "acres": acres}, planted_area=lambda acres=acres: acres * SQ_FT_PER_ACRE)
 
     def fake_finish(carve: SimpleNamespace) -> dict[str, object]:
         finishes.append(carve)
@@ -181,8 +182,11 @@ def test_fit_field_probes_saturation_and_rerolls_the_best_aspect_in_full(monkeyp
     monkeypatch.setattr(w, "finish_comb", fake_finish)  # type: ignore[attr-defined]  # feature 220: the search carves, the winner alone is finished
     monkeypatch.setattr(w, "tail_dangles", lambda net: False)  # type: ignore[attr-defined]
     monkeypatch.setattr(w, "net_bends_acutely", lambda net: False)  # type: ignore[attr-defined]
+    monkeypatch.setattr(w, "net_acres", lambda net, ftpx: net["acres"])  # type: ignore[attr-defined]
+    # 11 acres against a 10-acre ceiling: no aspect lands the 6% the search aims at, and the best lands inside the 15% band
+    # (feature 287) - past it the site is refused, `tests/hamletgen/test_fit_flanks.py`
     plan = SimpleNamespace(
-        W=1000.0, H=1000.0, down_deg=90.0, offtakes_a=(), offtakes_b=(), grain_drift=0.0, fan_aspect=w.FAN_ASPECTS[0], target_acres=16.0, ftpx=1.0, head_deg=55.0, head_lead=105.0, brook_side=1
+        W=1000.0, H=1000.0, down_deg=90.0, offtakes_a=(), offtakes_b=(), grain_drift=0.0, fan_aspect=w.FAN_ASPECTS[0], target_acres=11.0, ftpx=1.0, head_deg=55.0, head_lead=105.0, brook_side=1
     )
     net = w.fit_field(plan, (0.0, 0.0), 1, 20.0, (30.0, 40.0))  # type: ignore[arg-type]
     per_aspect = {}
@@ -207,7 +211,7 @@ def test_a_saturated_aspect_stops_after_the_probe_instead_of_bisecting_a_fan_it_
 
     plan = a_plan()
     plan.target_acres = 500.0  # far past anything this envelope can hold: every aspect saturates
-    # ...on a COARSE plot grid, for the reason recorded at `test_the_fit_gives_a_saturated_best_aspect`
+    # ...on a COARSE plot grid, for the reason recorded at the retired `test_the_fit_gives_a_saturated_best_aspect` (test_seed_branches_147.py)
     # (feature 158): the probe's decision is about the TARGET being unreachable, not about how many
     # plots a carve lays, and the plot count is all this test's seconds were.
     (bad, err), carve = _fit_at_aspect(plan, (700.0, 300.0), 3, 138.0, (78.0, 90.0), 1.0, 0.06, 9, probe=True)
@@ -241,7 +245,28 @@ def test_the_reservoir_walks_uphill_until_its_rim_clears_the_crop_and_stays_put_
     assert not any(point_in_poly(x, y, square) for x, y in rim_in)
     clear = (50.0, -40.0, 10.0, 6.0)
     assert water.walk_pond_uphill(clear, square, 0.0, -1.0) == clear, "already clear: the first test stops the walk"
-    assert water.walk_pond_uphill((50.0, 50.0, 10.0, 6.0), square, 0.0, -1.0, limit=1)[1] == 38.0, "the walk is bounded"
+
+
+def test_the_reservoir_is_seated_clear_of_a_spike_and_above_the_field_however_far_it_must_go() -> None:
+    """Feature 287, water W46: the seat is SOLVED, not walked a bounded number of steps. An envelope spike between two of
+    the old sixteen rim samples is caught by the polygon test, and an envelope that needs more than the old 60 steps is
+    cleared all the same; both predicates hold at the seat."""
+    from l7r.diagram.hamletgen.water.polder import reservoir_clear_of_crop, reservoir_uphill_of_field, walk_pond_uphill
+
+    spiked = [(0.0, 0.0), (57.0, 0.0), (57.5, -5.5), (58.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
+    pond = (50.0, -8.0, 10.0, 6.0)  # clear of the square, but the spike's tip stands inside the rim between two samples
+    rim = [(pond[0] + 10.0 * math.cos(a), pond[1] + 6.0 * math.sin(a)) for a in (k * math.pi / 8 for k in range(16))]
+    assert not any(hg.point_in_poly(x, y, spiked) for x, y in rim), "sixteen samples miss the spike"
+    assert not reservoir_clear_of_crop(pond, spiked)
+    seat = walk_pond_uphill(pond, spiked, 0.0, -1.0)
+    assert reservoir_clear_of_crop(seat, spiked) and reservoir_uphill_of_field(seat, spiked, (0.0, 1.0)) and seat[1] < pond[1]
+    tall = [(0.0, 0.0), (100.0, 0.0), (100.0, 1000.0), (0.0, 1000.0)]
+    deep = walk_pond_uphill((50.0, 990.0, 10.0, 6.0), tall, 0.0, -1.0)  # 83 steps of 12 ft to clear
+    assert reservoir_clear_of_crop(deep, tall) and reservoir_uphill_of_field(deep, tall, (0.0, 1.0))
+    beside = (150.0, 50.0, 10.0, 6.0)  # clear of the crop but beside it, level with its middle: not above it
+    assert reservoir_clear_of_crop(beside, tall) and not reservoir_uphill_of_field(beside, tall, (0.0, 1.0))
+    moved = walk_pond_uphill(beside, tall, 0.0, -1.0)
+    assert reservoir_uphill_of_field(moved, tall, (0.0, 1.0)) and moved[1] < 0.0
 
 
 def test_the_dike_is_gapped_where_a_channel_crosses_it_and_not_twice_within_thirty_feet() -> None:
@@ -279,6 +304,85 @@ def test_fit_polder_stops_the_bisection_the_moment_the_acreage_lands_inside_tole
     net = water.fit_polder(plan, 12)
     assert built == [25], "one candidate, within tolerance: the bisection stops there"
     assert net["rows"] == 25
+
+
+def test_fit_polder_lands_inside_the_band_where_the_bisection_stalls(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 287, water W47: rows with their tied columns step the acreage coarsely, and a target between two steps left
+    the bisection 15% short and kept the miss. The (rows, cols) search goes on until a block lands inside the tolerance,
+    and the drawn block is inside the band the rule reads (`polder_acres_in_band`). Stood in: acres = 0.1 per module."""
+    from l7r.diagram import hamletgen as hg
+    from l7r.diagram.hamletgen import water
+    from l7r.diagram.hamletgen.water.polder import polder_acres_in_band
+
+    plan = hg.plan_site(hg.HamletSpec(name="Polder", seed=12, households=16, field_archetype="polder_grid", down_deg=0))
+    plan.target_acres = 10.2  # the bisection's blocks: 13x7 = 9.1 and 14x8 = 11.2, both over 6% off - it stalls between them
+
+    def fake_build(W, H, origin, seed, **kw):  # type: ignore[no-untyped-def]
+        return {"envelope": [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)], "rows": kw["rows"], "cols": kw["cols"]}
+
+    monkeypatch.setattr(water.polder, "build_polder", fake_build)
+    monkeypatch.setattr(water.polder, "net_acres", lambda net, ftpx: 0.1 * net["rows"] * net["cols"])
+    monkeypatch.setattr(water.polder, "clean_polder_parcels", lambda net: net)
+    net = water.fit_polder(plan, 12)
+    assert polder_acres_in_band(0.1 * net["rows"] * net["cols"], plan.target_acres, 0.06)
+    assert not polder_acres_in_band(9.9, 11.3) and polder_acres_in_band(10.5, 11.3)
+
+
+def test_fit_polder_carries_the_cleanup_s_trim_into_its_next_choice_and_refuses_a_site_it_cannot_honor(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """W47's second half: the cleanup trims the winner after it is chosen; a trim that takes it out of the band sends the
+    search to a block predicted with the trim carried, and a site no block can honor is refused, never drawn short."""
+    from l7r.diagram import hamletgen as hg
+    from l7r.diagram.hamletgen import water
+
+    plan = hg.plan_site(hg.HamletSpec(name="Polder", seed=12, households=16, field_archetype="polder_grid", down_deg=0))
+    plan.target_acres = 20.0
+
+    def fake_build(W, H, origin, seed, **kw):  # type: ignore[no-untyped-def]
+        return {"envelope": [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)], "rows": kw["rows"], "cols": kw["cols"], "k": 0.1}
+
+    def clean(net):  # type: ignore[no-untyped-def]
+        net["k"] = 0.08  # the cleanup takes a fifth of every block
+        return net
+
+    monkeypatch.setattr(water.polder, "build_polder", fake_build)
+    monkeypatch.setattr(water.polder, "net_acres", lambda net, ftpx: net["k"] * net["rows"] * net["cols"])
+    monkeypatch.setattr(water.polder, "clean_polder_parcels", clean)
+    net = water.fit_polder(plan, 12)
+    assert abs(0.08 * net["rows"] * net["cols"] - 20.0) / 20.0 <= 0.12
+    plan.target_acres = 400.0  # more than a 44-row block can hold
+    with pytest.raises(ValueError, match="no polder grid"):
+        water.fit_polder(plan, 12)
+
+
+def test_the_inlet_reaches_the_rim_and_never_drags_the_ring_off_its_corner() -> None:
+    """Feature 287, water W44: the feeder's inlet stub ends on the reservoir's rim - its END moved there; but where the
+    stub was trimmed away and the last point is a ring vertex inside the crop, that vertex stays (a toe is snapped to it)
+    and the run to the rim is added after it."""
+    from l7r.diagram.hamletgen.water.polder import inlet_to_rim
+
+    env = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
+    pond = (50.0, -80.0, 20.0, 10.0)
+    stub = inlet_to_rim([(50.0, 50.0), (50.0, 5.0), (50.0, -30.0)], pond, env)  # the stub's end, outside the crop, moves
+    assert stub[:2] == [(50.0, 50.0), (50.0, 5.0)] and len(stub) == 3 and abs(stub[2][1] - (-80.0 + 10.0 - 2.0)) < 0.2
+    kept = inlet_to_rim([(50.0, 50.0), (50.0, 5.0)], pond, env)  # no stub: the ring's own vertex stays
+    assert kept[:2] == [(50.0, 50.0), (50.0, 5.0)] and len(kept) == 3 and abs(kept[2][1] - (-72.0)) < 0.2
+
+
+def test_every_course_on_the_crest_is_gapped() -> None:
+    """Feature 287, water W42: a course that runs over the dike's crest away from every gap - the inlet hairline the ring
+    test never saw - is given a gap where it crosses, and the rule (`course_breaches`) then finds nothing."""
+    from l7r.diagram.hamletgen.water.polder import gaps_for_courses
+    from l7r.diagram.settlement.land.dikes import course_breaches, dike_band, dike_crest
+
+    ring = [(200.0, 200.0), (700.0, 200.0), (700.0, 700.0), (200.0, 700.0)]
+    crest = dike_crest(*dike_band(ring, 7)[1:3])
+    hairline = [(450.0 + k * 0.05, 120.0 + 4.0 * k) for k in range(36)]  # crosses the north crest 250 ft from the sluice, in 4 ft steps
+    sluices = [(200.0, 450.0)]
+    assert course_breaches(hairline, crest, sluices)
+    gaps = gaps_for_courses(sluices, [hairline], crest)
+    assert len(gaps) > 1 and gaps[0] == sluices[0]
+    assert not course_breaches(hairline, crest, gaps)
+    assert gaps_for_courses(sluices, [[(300.0, 300.0), (400.0, 400.0)]], crest) == sluices, "a course inside the ring needs none"
 
 
 # ---- the intake, and the brook that runs on past it (feature 230) --------------------------------
@@ -523,21 +627,66 @@ def test_an_exit_bend_sits_at_the_legs_middle_to_one_side_and_is_capped() -> Non
     assert exit_bend((0.0, 0.0), (0.0, 1.0), 1000.0, 1.0) == pytest.approx((-EXIT_BEND_MAX_FT, 500.0))
 
 
-def test_the_brook_comes_on_from_off_the_sheet_to_its_approach() -> None:
-    """`off_the_sheet` (settlement-review of Mizuguchi, 2026-09-30): from the approach's head on up its bearing past the
-    canvas edge, a bend about every 140 ft, the far end off the sheet; nothing where the head is already off it."""
-    import math
-    import random
+def test_the_finished_course_rounds_the_bends_and_holds_the_tap() -> None:
+    """`finished_course` (feature 287, M2): a course in, the drawn course out - every free corner rounded at
+    `BROOK_BEND_WIDTHS` of the width, the vertex at the tap kept, the ends kept; a tap more than a foot off every vertex,
+    or at an end, holds nothing; a two-point course has no corner."""
+    from l7r.diagram.hamletgen.consts import BROOK_BEND_WIDTHS
+    from l7r.diagram.hamletgen.water.brook import finished_course
+    from l7r.diagram.settlement._geom import fillet_polyline
 
-    from l7r.diagram.hamletgen.water.brook import off_the_sheet
+    course = [(0.0, 0.0), (300.0, 0.0), (300.0, 300.0), (600.0, 300.0)]
+    held = finished_course(course, 8.0, [(300.4, 300.3)])
+    assert held[0] == (0.0, 0.0) and held[-1] == (600.0, 300.0) and (300.0, 300.0) in held, "the ends and the tap stay"
+    assert (300.0, 0.0) not in held and len(held) > 4, "the free corner is rounded"
+    assert held == [*fillet_polyline(course[:3], BROOK_BEND_WIDTHS * 8.0), *fillet_polyline(course[2:], BROOK_BEND_WIDTHS * 8.0)[1:]]
+    free = finished_course(course, 8.0, [(300.0, 302.0), (0.0, 0.0)])
+    assert free == fillet_polyline(course, BROOK_BEND_WIDTHS * 8.0) and (300.0, 300.0) not in free, "no tap within a foot: both corners round"
+    assert finished_course([(0, 0), (5, 5)], 8.0) == [(0.0, 0.0), (5.0, 5.0)]
 
-    pts = off_the_sheet((500.0, 400.0), math.pi, 1000.0, 1000.0, random.Random(1))  # upslope due west
-    assert pts[0][0] == -40.0 and abs(pts[0][1] - 400.0) < 1e-9, "starts 40 ft past the west edge"
-    assert len(pts) == 3 and all(p[0] < 500.0 for p in pts), "bends every ~140 ft, all upslope of the head"
-    north = off_the_sheet((500.0, 400.0), -math.pi / 2, 1000.0, 1000.0, random.Random(1))
-    assert abs(north[0][1] + 40.0) < 1e-9
-    east = off_the_sheet((900.0, 400.0), 0.0, 1000.0, 1000.0, random.Random(1))
-    assert east == [(1040.0, 400.0)]
-    south = off_the_sheet((500.0, 950.0), math.pi / 2, 1000.0, 1000.0, random.Random(1))
-    assert abs(south[0][1] - 1040.0) < 1e-9
-    assert off_the_sheet((-5.0, 400.0), math.pi, 1000.0, 1000.0, random.Random(1)) == []
+
+def test_round_the_brooks_draws_each_brook_at_its_finished_course() -> None:
+    """`round_the_brooks` + `Settlement.round_stream` (feature 287, M2): the drawn brook IS `finished_course` of the course
+    as first drawn, its width and the head race's tap; the first course is kept as `stations`, the no-build corridor
+    follows the drawn course, a second pass draws the same course, and a two-point stream is left alone."""
+    from l7r.diagram.hamletgen.water.brook import finished_course, round_the_brooks
+
+    s = Settlement(800, 800, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    first = [(100.0, 100.0), (400.0, 100.0), (400.0, 400.0), (700.0, 400.0)]
+    s.stream(first, width=9)
+    s.stream([(10.0, 10.0), (20.0, 700.0)], width=7)
+    s.M["channels"].append({"poly": [[400.0, 400.0], [460.0, 520.0]], "frm": {"kind": "stream"}, "to": {"kind": "field"}, "w": 6})
+    s.M["channels"].append({"poly": [], "frm": {"kind": "stream"}})
+    rec, short = s.M["streams"][-2], s.M["streams"][-1]
+    round_the_brooks(s)  # type: ignore[arg-type]
+    want = finished_course(first, 9.0, [(400.0, 400.0)])
+    assert [tuple(p) for p in rec["poly"]] == want, "round_stream applies finished_course"
+    assert (400.0, 400.0) in want and (400.0, 100.0) not in want
+    assert rec["stations"] == [list(p) for p in first], "the course as first drawn is kept"
+    assert any(list(c[0]) == want for c in s.corridors) and not any(list(c[0]) == first for c in s.corridors), "the corridor follows"
+    round_the_brooks(s)  # type: ignore[arg-type]
+    assert [tuple(p) for p in rec["poly"]] == want, "a second pass rounds the first course again, not the rounded one"
+    assert "stations" not in short and short["poly"] == [[10.0, 10.0], [20.0, 700.0]]
+
+
+def test_the_sink_stage_finishes_the_water_after_the_sink(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 287, M2: the brook is rounded as `stage_sink`'s last step - after the drain is laid, before the seat."""
+    calls: list[str] = []
+    monkeypatch.setattr(hg.sink, "lay_sink", lambda s_, plan_: calls.append("sink"))
+    monkeypatch.setattr(hg.sink, "round_the_brooks", lambda s_: calls.append("round"))
+    hg.sink.stage_sink(None, None)  # type: ignore[arg-type]
+    assert calls == ["sink", "round"]
+    names = [st.__name__ for st in hg.driver.STAGES]
+    assert names.index("stage_sink") + 1 == names.index("stage_seat"), "nothing reads the water between the sink and the seat"
+
+
+def test_the_ways_route_against_the_course_as_first_drawn() -> None:
+    """`stream_segs` (feature 287, M2): the router's brook is the `stations` - the course before rounding - so rounding
+    the brook early does not move the ways; a stream never rounded is read from its poly."""
+    from l7r.diagram.hamletgen.ways.checks import stream_segs
+
+    class _S:
+        M = {"streams": [{"poly": [[0, 0], [5, 3], [10, 0]], "stations": [[0, 0], [10, 0]]}, {"poly": [[0, 50], [0, 90]]}, {"poly": []}]}
+
+    assert stream_segs(_S()) == [((0.0, 0.0), (10.0, 0.0)), ((0.0, 50.0), (0.0, 90.0))]  # type: ignore[arg-type]

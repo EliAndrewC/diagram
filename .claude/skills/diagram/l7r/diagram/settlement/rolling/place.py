@@ -18,6 +18,10 @@ class PlacerMixin:
         # `w`, `h` are in FEET (drawn at the map's ftpx, px(92) = 46px at 2 ft/px). A nanushi/shoya house is
         # the grandest in the village but still a house - ~92x56 ft, clearly larger than a plain 46x28 ft
         # farmhouse without the old fortress-sized 216x136 ft. headman_is_largest holds.
+        # ...AND NEVER ON A HAMLET (feature 287, homes H18): a hamlet has no headman of its own - it answers to its
+        # village's (research/settlements) - so the one producer of the role refuses a hamlet-scale map outright.
+        if self.M["meta"].get("scale") == "hamlet":
+            raise ValueError("a hamlet has no headman of its own - the headman is a village's (homes H18)")
         if self._toscale():
             # the headman is just a LARGER PLAIN farmhouse - placed through the standard collision-checked
             # bundle path with a tunable SIZE, so it gets its yard + garden and cannot overlap a neighbor.
@@ -209,7 +213,6 @@ class PlacerMixin:
         that neighbor, and tested once more (the GM: *"measuring the distance to the neighbor and then moving
         however much the correct amount is"*). Anything else is refused and the proposer offers the next seat."""
         self._seat_search["placer_calls"] += 1
-        _avoid = getattr(self, "_avoid_seats", None)
         # THE UNION FIRST, ONE RECTANGLE: the box around every configuration (`_bundle_envelope`). Where it fits - the
         # open ground of most seats - every configuration's box fits inside it and no other rectangle is tested; the
         # parts alone decide the side. Where the union is refused, each configuration's OWN box is tried in turn (the
@@ -222,12 +225,22 @@ class PlacerMixin:
         # at its moved position. A box the static ground refuses is one `_envelope_blocked` refuses (True, before any
         # placed box is read), so asking it first changes no verdict and never removes a move.
         _fg = getattr(self, "_free_ground", None)
-        _env = self._bundle_envelope(x, y, hw, hh, shed)
+        # THE HOUSE'S OWN BOX FIRST, BEFORE ANY LAYOUT (feature 287 perf): every configuration's box, and the union, holds the
+        # house's box as drawn (`_house_box`), so a refusal of the house's box that only grows with the box - past the canvas
+        # margin, over a reserved corridor, on two placed homesteads - refuses every one of them before the placed-box move
+        # is ever offered (`_envelope_blocked` returns True, not the one box, on any of the three). The four layouts, each
+        # laying the household's fixtures, were built for nothing on a third of the exhaustive pass's offers.
+        if self._house_box_refused(self._house_box(x, y, hw, hh)):
+            return None
+        # THE FOUR CONFIGURATIONS BUILT ONCE (dev/performance.md): the envelope is their union, and the loop below judges
+        # each at this seat - it built all four again (seed 17: 25,000 bundles, half of them rebuilt)
+        _at = {side: self._bundle_geom(x, y, hw, hh, side, shed) for side in self._NUC_SIDES}
+        _env = self._bbox_of([g["bbox"] for g in _at.values()])
         _union_clear = not (_fg is not None and _fg.rect_refused(_env)) and self._envelope_blocked(_env) is None
         best: Any = None
         for rank, side in enumerate(self._NUC_SIDES):
             cx, cy = x, y
-            geom = self._bundle_geom(cx, cy, hw, hh, side, shed)
+            geom = _at[side]
             hit = None
             if not _union_clear:
                 self._seat_search["positions"] += 1
@@ -248,8 +261,6 @@ class PlacerMixin:
                 hit = True if _fg is not None and _fg.rect_refused(geom["bbox"]) else self._envelope_blocked(geom["bbox"])
             if hit is not None:
                 continue
-            if _avoid and any(math.hypot(cx - _ax, cy - _ay) <= 50.0 for _ax, _ay in _avoid):
-                continue
             self._seat_search["parts"] = self._seat_search.get("parts", 0) + 1
             if not self._parts_fit(geom):
                 continue
@@ -267,6 +278,30 @@ class PlacerMixin:
         if best is None:
             return None
         return best[1], best[2], best[3]
+
+    def _house_box(self: Settlement, x: float, y: float, hw: float, hh: float) -> tuple[float, float, float, float]:  # type: ignore[misc]
+        """The house's box as `_bundle_geom` records it at (x, y) (`boxes["house"]`): its rect, turned by the seat's rake."""
+        _th = math.radians(self._turn_at(x, y))
+        _c, _s = abs(math.cos(_th)), abs(math.sin(_th))
+        w, h = float(hw), float(hh)
+        return (float(x), float(y), w * _c + h * _s, w * _s + h * _c)
+
+    def _house_box_refused(self: Settlement, box: tuple[float, float, float, float]) -> bool:  # type: ignore[misc]
+        """Is a box refused on the grounds that only grow with it - the canvas margin, a reserved corridor, two or more placed
+        boxes (`_envelope_blocked`'s own tests and margins)? Then so is every box that holds it."""
+        cx, cy, w, h = box
+        if cx - w / 2 < 6 or cx + w / 2 > self.W - 6 or cy - h / 2 < 6 or cy + h / 2 > self.H - 6:
+            return True
+        tree = getattr(self, "_access", None)
+        if tree is not None and tree.covers_box(box):
+            return True
+        seen: set[int] = set()
+        for it in self._reach_index(self.placed, "placed_reach").near(cx, cy, max(w, h) / 2 + 2):
+            if id(it) not in seen and abs(cx - it[0]) < (w + it[2]) / 2 + 2 and abs(cy - it[1]) < (h + it[3]) / 2 + 2:
+                seen.add(id(it))
+                if len(seen) >= 2:
+                    return True
+        return False
 
     def _solve_homestead(self: Settlement, rec: Any) -> Any:  # type: ignore[misc]
         """Find the best position for a farmhouse so its WHOLE homestead fits - threshing yard + dooryard

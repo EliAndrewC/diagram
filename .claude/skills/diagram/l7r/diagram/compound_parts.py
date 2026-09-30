@@ -6,8 +6,9 @@ down, clear of every one of them and of what was seated before it.
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 
+from .buildings.types import by_tier
 from .compound_model import (
     BATH_H_FT,
     BATH_W_FT,
@@ -22,11 +23,13 @@ from .compound_model import (
     GATE_POST_W_FT,
     KINDS,
     LATRINE_WELL_FT,
+    NOTICE_BOARD_MAX_FT,
     PRIVY_FT,
     ROOF_POST_BAY_FT,
     ROOF_POST_FT,
     ROOFED_ZONES,
     STONE_STEP_FT,
+    TUB_MAX_GAP_FT,
     WALL_INK_FT,
     BuildingSpec,
     CompoundProgram,
@@ -333,6 +336,50 @@ def _roomiest(points: list[tuple[float, float]], boxes: list[Box]) -> tuple[floa
     return max(points, key=room)
 
 
+def requires(program: CompoundProgram, kind: str) -> bool:
+    """Does the program's declared type (`CompoundProgram.tier`) require an item of `kind` that is not optional? False for
+    a program of no declared type."""
+    btype = by_tier(program.tier) if program.tier is not None else None
+    return btype is not None and any(r.kind == kind and not r.optional for r in btype.required)
+
+
+WELL_HALF_FT = 3.65
+"""Half a well curb's side: the draft draws every well as a 7.3 ft square (`_point_features`)."""
+
+
+def garden_well(env: Envelope, garden: CourtZone, taken: Sequence[Box]) -> tuple[float, float] | None:
+    """The garden well's center: the first seat, from the garden's north-east corner westward along its north edge and
+    then down its east edge, whose curb stands inside the garden and clear of everything already seated (`_is_clear`'s
+    1 ft margin) - None where the garden holds no such seat (feature 287 wave 6, homes H29b: the well was stamped at the
+    corner whether or not the corner was free)."""
+    lo, hi = garden.x_ft + WELL_HALF_FT + 1.35, garden.x2 - WELL_HALF_FT - 1.35
+    top, bot = garden.y_ft + WELL_HALF_FT + 1.35, garden.y2 - WELL_HALF_FT - 1.35
+    seats = [(hi - k, top) for k in range(int(hi - lo) + 1)] + [(hi, top + k) for k in range(1, int(bot - top) + 1)]
+    side = 2 * WELL_HALF_FT
+    return next(((cx, cy) for cx, cy in seats if _is_clear(env, list(taken), cx - WELL_HALF_FT, cy - WELL_HALF_FT, side, side)), None)
+
+
+def tub_by_its_eaves(tub: tuple[float, float], host: Box) -> bool:
+    """THE ONE PREDICATE of `fire_water_adrift` (feature 287, homes H29b), in feet: a fire-water tub's CENTER stands within
+    `TUB_MAX_GAP_FT` of the building whose gutter feeds it. The draft's tub seat asserts it of every seat it offers, and
+    the pack audit (`tools/pack_audit/checks.py:fire_water_adrift`) calls it on every tub of every sheet, generated or hand
+    drawn - one rule, one measure. (Until wave 4a this measured the drawn circle's EDGE, 1.27 ft looser than the audit's
+    center measure, so a seat 3.5-4.8 ft off its eaves passed the placer and failed the audit.)"""
+    return _gap((tub[0], tub[1], tub[0], tub[1]), host) <= TUB_MAX_GAP_FT
+
+
+def board_by_a_gate(board: Box, openings: Sequence[tuple[float, float]]) -> bool:
+    """THE ONE PREDICATE of `notice_board_adrift` (feature 287, homes H29b), in feet: a notice board is read where people
+    pass, so the nearest edge of its box stands within `NOTICE_BOARD_MAX_FT` of the middle of a gate opening. The pack
+    audit calls it with every opening it reads off a sheet's ink; the draft (`board_by_the_gate`) with its main gate."""
+    return any(_gap((ox, oy, ox, oy), board) <= NOTICE_BOARD_MAX_FT for ox, oy in openings)
+
+
+def board_by_the_gate(env: Envelope, board: Box) -> bool:
+    """`board_by_a_gate` at the draft's main gate, whose opening is centered on the south wall (`_gate_interval`)."""
+    return board_by_a_gate(board, [(env.w_ft / 2, env.h_ft)])
+
+
 def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callable[..., str], caption: Callable[..., str], ox: float, oy: float) -> list[str]:
     """The program's point features, seated by the composition (feature 254): fire-water tubs at every
     wooden building's court face (two at the kitchen), a well at the kitchen, the garden and the stables,
@@ -352,7 +399,15 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     taken.append((0.0, env.divider_ft - DIVIDER_INK_FT / 2, env.w_ft, env.divider_ft + DIVIDER_INK_FT / 2))
     by_name = {p.spec.name: p for p in result.placed}
 
-    def seat(p: Placed, size: float, fracs: tuple[float, ...], offs: tuple[float, ...], side: str = "", avoid: tuple[Box, ...] = (), block: tuple[Box, ...] = ()) -> tuple[float, float] | None:
+    def seat(
+        p: Placed,
+        size: float,
+        fracs: tuple[float, ...],
+        offs: tuple[float, ...],
+        side: str = "",
+        avoid: tuple[Box, ...] = (),
+        block: tuple[Box, ...] = (),
+    ) -> tuple[float, float] | None:
         """The center of a `size`-square feature against a side of `p` (its court face unless `side` names another):
         the first clear (frac, off) - clear of `block` too - and at least LATRINE_WELL_FT off every `avoid` box."""
         nx, ny, fx, fy, length = _face(p, side or _court_side(p))
@@ -395,11 +450,16 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
         if p.spec.feature in ("kitchen", "stables") and (w := seat(p, 7.3, (0.2, 0.8, 0.3, 0.7, 0.5), (9.0, 12.0, 15.0, 20.0, 6.0))):
             wells.append(w)
     for z in program.spine:
-        if z.name == "garden":
-            # the garden well stands at the garden's EAST end, where the bath stood before it joined the house: at the
-            # west end it stood 8 ft from the kitchen well seated past the bath, and read as its duplicate
-            wells.append((z.x2 - 5.0, z.y_ft + 5.0))
-            taken.append((z.x2 - 8.65, z.y_ft + 1.35, z.x2 - 1.35, z.y_ft + 8.65))
+        # the garden well stands at the garden's EAST end, where the bath stood before it joined the house: at the west
+        # end it stood 8 ft from the kitchen well seated past the bath, and read as its duplicate. ASKED, NOT STAMPED
+        # (feature 287 wave 6, homes H29b): it was set at the corner unconditionally, over whatever stood there
+        if z.name == "garden" and (gw := garden_well(env, z, taken)):
+            wells.append(gw)
+            taken.append((gw[0] - WELL_HALF_FT, gw[1] - WELL_HALF_FT, gw[0] + WELL_HALF_FT, gw[1] + WELL_HALF_FT))
+    if not wells and requires(program, "well"):
+        # THE PROGRAM'S WELL IS DRAWN OR THE DRAFT IS REFUSED (homes H29b; plan D7): a magistracy's program requires one
+        # (`buildings/types.json`), and a draft with none fails `program_complete` - never a sheet drawn without it
+        raise ValueError(f"{program.title}: no seat for a well - the kitchen's and the stables' faces and the garden are all taken; change the program")
     # THE PRIVIES (feature 267, research buildings 220 'Privies attach to the house; night-soil drives their placement':
     # "privy count scales with occupancy (~1 per functional zone, ~3-4 at a county manor), the residence privy attaches
     # to the house with its cesspit to the rear/service wall, and servants'/outer privies line service walls near a
@@ -472,6 +532,9 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
             # (the west or north end before the east or south: the example's kitchen's east end faces the closed slot
             # north of its corridor to the house, its west end the servants' yard)
             tub = tub or seat(p, 2.6, toward_court, (2.5,), ends[1]) or seat(p, 2.6, toward_court, (2.5,), ends[0])
+            # EVERY SEAT OFFERED STANDS BY ITS EAVES (feature 287, homes H29b): 2.5 ft off the face is inside the gutter's
+            # reach by construction - held here by the rule's one predicate, the number the pack audit registers
+            assert tub is None or tub_by_its_eaves(tub, (p.x_ft, p.y_ft, p.x2, p.y2)), "a tub seated past its eaves"
             if tub:
                 tubs.append(tub)
     _roji_parts(program, result, taken, rect, parts, ox, oy)
@@ -496,6 +559,7 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
         tx, ty = _roomiest(tubs, taken)
         caption("point", tx - 1.27, ty - 1.27, 2.54, 2.54, "fire-water tubs", 7, True, "#3A5060", "fire-water tubs")
     gl, _gr = _gate_interval(env)
+    assert board_by_the_gate(env, (gl - 14.0, env.h_ft + 3.0, gl - 8.0, env.h_ft + 4.5)), "the board stands 8 ft west of the gate, by construction"
     parts.append(rect(gl - 14.0, env.h_ft + 3.0, 6.0, 1.5, "#4A3318", "#2D2A24", 0.6, "", "notice board"))
     caption("point", gl - 14.0, env.h_ft + 3.0, 6.0, 1.5, "notice board", 7, True, "#3A2E1C", "notice board")
     return parts

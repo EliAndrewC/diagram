@@ -184,10 +184,14 @@ def doors_unreached(M: Mapping[str, Any], reach: float = DOOR_REACH_FT) -> list[
     segs = [s for ln in M.get("lanes") or [] for s in _segs(ln.get("pts") or [])]
     if not segs:
         return []
+    # ...OR REACHED AT AN OPEN FLANK OF ITS DOORYARD (FR-019's exception, amendment 8): its own door path from a flank facing
+    # no band of its grove, drawn only where no lawful path left the front and the ground to the front door is open
+    # (`serve.lay_door_paths`, which records the lane `from_flank`)
+    flanked = {_key(ln["serves"]) for ln in M.get("lanes") or [] if ln.get("from_flank") and ln.get("serves")}
     out = []
     for h in M.get("houses") or []:
         door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
-        if door is not None and _dist(door, segs) > reach:
+        if door is not None and _dist(door, segs) > reach and _key((h["x"], h["y"])) not in flanked:
             out.append(_key((h["x"], h["y"])))
     return out
 

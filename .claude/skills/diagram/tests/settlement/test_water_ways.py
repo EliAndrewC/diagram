@@ -527,21 +527,15 @@ def test_ward_fails_loudly_on_a_commoner_already_inside():
         s.ward("samurai", [(400, 795), (400, 400), (795, 400)], gates=[])
 
 
-def test_the_lane_key_is_the_spine_not_the_last_way_drawn():
-    """`M["lane"]` is read by five consumers as "the village street" - two gate checks among them -
-    so it has to BE the street. It was assigned on every `lane()` call, i.e. it held whichever way
-    happened to be drawn last: a settlement-review measured Sawada shipping a 45 ft floating fragment
-    in that key while the spine ran 354 ft, so `structures_clear_of_streets` and the grove-shading
-    rule were adjudicating against a 45 ft orphan. They ran, they passed, and they tested the wrong
-    geometry - the input was wrong, not the rule."""
+def test_no_stale_single_lane_record_is_written():
+    """`M["lane"]` held "the spine", kept by `lane()` alone, so a later rewrite of that lane left it a copy of a lane no longer
+    on the map (cohort seeds 25 and 42: none of `M["lanes"]`). Nothing on a generated map reads it - `street_runs` reads
+    `M["lanes"]` - so it is no longer written at all."""
     s = Settlement(2000, 2000, seed=1)
     s.meta(name="H", scale="hamlet")
-    s.lane([(100.0, 100.0), (900.0, 100.0)])  # the spine, 800 ft
-    s.lane([(400.0, 120.0), (400.0, 180.0)])  # a 60 ft back lane, drawn after it
-    assert s.M["lane"] == [[100.0, 100.0], [900.0, 100.0]]
-    # ...and the road OUT is not the street, however long it runs
+    s.lane([(100.0, 100.0), (900.0, 100.0)])
     s.lane([(900.0, 100.0), (1900.0, 900.0)], connector=True)
-    assert s.M["lane"] == [[100.0, 100.0], [900.0, 100.0]]
+    assert "lane" not in s.M and len(s.M["lanes"]) == 2
 
 
 def test_angle_between_calls_a_degenerate_vector_square() -> None:
@@ -846,17 +840,17 @@ def test_dropping_the_field_spur_is_always_recorded_and_a_passes_own_reason_is_k
     assert s.M["meta"]["field_spur_swept"] == "isolated - the pass's own words", "a pass that said why keeps its own reason"
 
 
-def test_a_drawn_stream_is_rounded_in_place_with_its_held_vertices_kept():
-    """`round_stream` (settlement-review of Sawada, feature 261): a stream already drawn has its corners filleted - the record
-    and the deferred bed and sheen together - and a held vertex stays on the course, each stretch rounded between its ends."""
+def test_a_drawn_stream_is_redrawn_on_the_rounded_course_it_is_handed():
+    """`round_stream` (settlement-review of Sawada, feature 261; feature 287): a stream already drawn is redrawn on the rounded
+    course it is handed - the record, the deferred bed and sheen, and its corridor together - and keeps its first course."""
     s = Settlement(800, 800, seed=1)
     s.meta(name="T", scale="hamlet", ftpx=1)
     s.stream([(100.0, 100.0), (400.0, 100.0), (400.0, 400.0), (700.0, 400.0)], width=9)
     rec = s.M["streams"][-1]
-    s.round_stream(rec, 22.5, hold=(2,))
-    poly = [tuple(p) for p in rec["poly"]]
-    assert poly[0] == (100.0, 100.0) and poly[-1] == (700.0, 400.0) and (400.0, 400.0) in poly, "the ends and the held vertex stay"
-    assert (400.0, 100.0) not in poly and len(poly) > 4, "the free corner is rounded"
+    rounded = [(100.0, 100.0), (380.0, 100.0), (400.0, 120.0), (400.0, 400.0), (700.0, 400.0)]
+    s.round_stream(rec, rounded)
+    assert [tuple(p) for p in rec["poly"]] == rounded, "the record is the course handed in"
+    assert any(list(c[0]) == rounded for c in s.corridors), "and so is the stream's no-build corridor"
     assert rec["stations"] == [[100.0, 100.0], [400.0, 100.0], [400.0, 400.0], [700.0, 400.0]], "the course as first drawn is kept"
     entry = next(e for e in s.water if e["rec"] is rec)
     assert "400.0,100.0" not in entry["bed"] and "400.0,100.0" not in entry["sheen"], "the ink follows the record"
@@ -868,6 +862,46 @@ def test_a_rounded_stream_also_redraws_a_late_or_clipped_entry():
     s.meta(name="T", scale="hamlet", ftpx=1)
     rec = {"poly": [[100.0, 100.0], [400.0, 100.0], [400.0, 400.0]], "w": 9}
     s.late_water.append({"bed": '<path d="M100,100 L400,100 L400,400"/>', "sheen": None, "rec": rec, "clip": {"pts": []}})
-    s.round_stream(rec, 22.5)
+    s.round_stream(rec, [(100.0, 100.0), (380.0, 100.0), (400.0, 120.0), (400.0, 400.0)])
     entry = s.late_water[-1]
     assert "L400,100 " not in entry["bed"] and entry["sheen"] is None and entry["clip"]["pts"] and entry["clip"]["pts"][0] == (100.0, 100.0)
+
+
+def test_a_lane_ending_behind_a_house_is_not_at_its_dooryard() -> None:
+    """Feature 287, water W57: a lane end 11 ft behind a farmhouse's back wall does not reach it - the dooryard is the
+    yard and the front, never 12 ft of any wall (Kuwabata's lane 5) - so the trim pulls that end back; the same end in
+    front of the house, or in its yard, has arrived."""
+    from l7r.diagram.settlement.water_ways.lanes import behind_house, reaches_dooryard
+
+    house = {"x": 500.0, "y": 500.0, "w": 46.0, "h": 28.0, "rot": 0.0, "geom": {"yard": (500.0, 537.0, 40.0, 30.0), "gardens": [(540.0, 500.0, 12.0, 20.0)]}}
+    back = (500.0, 500.0 - 14.0 - 11.0)
+    assert behind_house(house, back) and not reaches_dooryard(house, back)
+    assert reaches_dooryard(house, (500.0, 525.0)) and reaches_dooryard(house, (500.0, 560.0)) and reaches_dooryard(house, (552.0, 500.0))
+    assert not behind_house(house, (500.0, 525.0))
+    turned = dict(house, rot=180.0, geom={})  # turned about: its front now faces north, and a bare house has no yard
+    assert reaches_dooryard(turned, back) and not behind_house(turned, back)
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    s.M["houses"] = [house, {"x": 530.0, "y": 300.0, "w": 46.0, "h": 28.0, "rot": 0.0}]  # a second house the lane passes on its way
+    s.lane([(500.0, 100.0), (500.0, 475.0)], width=4)  # runs down to the back wall and stops 11 ft behind it
+    s.lane([(100.0, 100.0), (900.0, 100.0)], width=4)
+    s.trim_lane_stubs()
+    end = s.M["lanes"][0]["pts"][-1]
+    assert 280.0 <= end[1] <= 330.0, f"the end behind the house is pulled back to the last house it serves: {end}"
+
+
+def test_a_lane_is_asked_of_the_registry_before_it_is_recorded_or_inked() -> None:
+    """Feature 287, water W53: `lane()` asks the overlap matrix before it records or inks the lane (`refuse_unadmitted`) - a
+    Kuwabata lane was the last record the census found written unasked. A lane the matrix forbids is refused by name, and
+    nothing of it is left behind."""
+    from l7r.diagram.overlap.registry import OverlapRefused
+
+    s = Settlement(1000, 1000, seed=3)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90)
+    s.standing.strict = True
+    s.M["wells"].append({"x": 500.0, "y": 500.0, "r": 8, "vr": 12.0})
+    s.lane([(100.0, 100.0), (300.0, 100.0)], width=3, worn=True)
+    ink = len(s._lane_ink)
+    with pytest.raises(OverlapRefused):
+        s.lane([(400.0, 500.0), (600.0, 500.0)], width=3, worn=True)
+    assert len(s.M["lanes"]) == 1 and len(s._lane_ink) == ink, "nothing recorded, nothing inked"

@@ -53,22 +53,33 @@ def seg_dist(px: float, py: float, a: Pt, b: Pt) -> float:
     return math.hypot(px - cx, py - cy)
 
 
-def seg_in_ellipse_core(a: Pt, b: Pt, cx: float, cy: float, rx: float, ry: float, inset: float = 4.0) -> bool:
-    """Does segment a-b pass through the CORE of this ellipse - the water inside its rim?
+def ring_meets_ellipse(ring: Sequence[Sequence[float]], cx: float, cy: float, rx: float, ry: float) -> bool:
+    """Does any edge of the closed `ring` cross this ellipse's rim or run inside it - a bund through a field pond?
 
-    The shared predicate of the feature-012 field pond's containment rule: `_plot_pond` (placement)
-    and `field_ponds_sunk_into_one_plot` (the verdict) both call this one function, so the siter and
-    the check cannot disagree - the same discipline as `paddy_wet_rings` in extents.py. The core is the
-    ellipse shrunk by `inset` px (rim stroke + reed fringe): a bund may TOUCH the shore - the host
-    plot's own ring does - but a bund running through open water means the pond spans plots.
-    Computed in the scaled space where the core is the unit circle, so one segment-to-center
-    distance answers it for any ellipse."""
-    crx, cry = max(1.0, rx - inset), max(1.0, ry - inset)
-    ax, ay = (float(a[0]) - cx) / crx, (float(a[1]) - cy) / cry
-    bx, by = (float(b[0]) - cx) / crx, (float(b[1]) - cy) / cry
-    dx, dy = bx - ax, by - ay
-    t = max(0.0, min(1.0, -(ax * dx + ay * dy) / max(1e-12, dx * dx + dy * dy)))
-    return math.hypot(ax + t * dx, ay + t * dy) < 1.0
+    THE ONE PREDICATE of the field pond's rule (feature 287, FR-003, water W29): `_plot_pond` shrinks a pond until no
+    ring meets it, and `waterfields/ring_rules.crosses_pond_rim` - the finished-map test's call - is this function.
+    They used to disagree: the placer asked `seg_in_ellipse_core`, a core shrunk 3 px inside the rim, while the test
+    failed any ring with one vertex inside the full ellipse and the next outside. So the placer could let a bund cut
+    the pond's outer 3 px and the test fail it, and the test could pass a bund chording the pond between two outside
+    vertices that the placer, reading the core, would have refused.
+
+    WHICH READING, AND WHY (the test's, as the water design W29 records). The research makes the pond "a low pocket"
+    among the flat, flooded fields (`research/fields.html`, "In-field features"); the rule drawn from it is that the
+    pocket is dug INTO one basin with the field tiling around it, because a bund running through open water reads as
+    a flood rather than a pocket (the rule's own statement, `test_a_field_pond_is_sunk_into_one_plot`). A bund meeting
+    the water at all - across the rim, chording it, or standing in it - is that flood, so the full ellipse is the
+    rule and the 3 px inset was a placement tolerance that let the placer pass what the rule forbids. Exact: each
+    edge's closest approach to the center, measured in the scaled space where the ellipse is the unit circle. A ring
+    that only TOUCHES the rim (closest approach exactly 1) does not meet it."""
+    n = len(ring)
+    for i in range(n):
+        ax, ay = (float(ring[i][0]) - cx) / rx, (float(ring[i][1]) - cy) / ry
+        bx, by = (float(ring[(i + 1) % n][0]) - cx) / rx, (float(ring[(i + 1) % n][1]) - cy) / ry
+        dx, dy = bx - ax, by - ay
+        t = max(0.0, min(1.0, -(ax * dx + ay * dy) / max(1e-12, dx * dx + dy * dy)))
+        if math.hypot(ax + t * dx, ay + t * dy) < 1.0:
+            return True
+    return False
 
 
 def ring_touches(cx: float, cy: float, r: float, ring: Poly) -> bool:
@@ -241,8 +252,16 @@ def keepout_ring(chain: Sequence[Pt], covered: Sequence[Pt], eps: float, filled:
     point of `covered` lies from those chords (measured, not assumed) plus `eps` - so the keep-out CONTAINS
     every covered point by construction. For a field, `chain` and `covered` are both the outline (the
     keep-out is the outline's chords plus the simplification tolerance); for a dike, `chain` is the crest and
-    `covered` the drawn band."""
-    chords = simplify_ring(chain, eps)
+    `covered` the drawn band.
+
+    AT MOST `KEEPOUT_CHORD_CAP` CHORDS (feature 287, homes H27; the GM's "a couple of dozen"): the simplification's
+    tolerance grows by half again until the chain takes no more - containment is untouched, because the push is the
+    MEASURED reach of every covered point from whatever chords result."""
+    tol = eps
+    chords = simplify_ring(chain, tol)
+    while not filled and len(chords) > KEEPOUT_CHORD_CAP:  # the dike's band; a field is held by its facing chains' cap
+        tol *= 1.5
+        chords = simplify_ring(chain, tol)
     n = len(chords)
     if n < 3:
         return list(chords), list(chords)
@@ -258,13 +277,49 @@ def keepout_ring(chain: Sequence[Pt], covered: Sequence[Pt], eps: float, filled:
         # (where the outer and inner rings join) is a zero-width slit that a chord vertex can land ON and be read as
         # outside; a filled ring has no seam.
         return ring_offset(chords, out_reach + eps, 0.0)[: len(chords)], chords
-    return ring_offset(chords, out_reach + eps, in_reach + eps * 3.0), chords  # the inner edge is un-mitered (see ring_offset), so it carries extra tolerance
+    # the inner edge is un-mitered (see ring_offset), so it starts with extra tolerance - AND IS THEN HELD TO CONTAIN THE BAND
+    # (feature 287, homes wave 5): the tolerance was a heuristic, so the ring is asked of every covered point
+    # (`point_in_poly`, the containment test's own reading) and the side a point escapes on is pushed a further `eps` until
+    # none escapes. Each push only moves that edge away from the chords, so a point once inside stays inside.
+    out_pad, in_pad = out_reach + eps, in_reach + eps * 3.0
+    for _ in range(KEEPOUT_GROWTHS):
+        keep = ring_offset(chords, out_pad, in_pad)
+        escaped = [p for p in covered if not point_in_poly(p[0], p[1], keep)]
+        if not escaped:
+            return keep, chords
+        inside = [point_in_poly(p[0], p[1], chords) for p in escaped]
+        in_pad += eps if any(inside) else 0.0
+        out_pad += eps if not all(inside) else 0.0
+    raise ValueError(f"no keep-out of {n} chords contains its band within {KEEPOUT_GROWTHS} pushes of {eps}")
+
+
+#: How many `eps` pushes `keepout_ring` gives a band's keep-out to contain it before refusing the band by name: far past what a
+#: drawn dike's band ever asked (a band `w` wide about its crest needs no more than `w / eps`).
+KEEPOUT_GROWTHS = 200
 
 
 Chord = tuple[Pt, Pt, Pt]  # (a, b, outward normal): a pushed-out chord of a field outline and the side the houses are on
 
 
+#: The most chords a dike's keep-out ring may have (homes H27): the GM's "a couple of dozen".
+KEEPOUT_CHORD_CAP = 24
+#: The most chords a field's facing chains may have (homes H27): half the ring's cap, since the chains are one side of it.
+FACING_CHORD_CAP = 12
+
+
 def facing_chains(outline: Sequence[Pt], seat: Pt, eps: float) -> list[list[Chord]]:
+    """`_facing_chains` held to `FACING_CHORD_CAP` chords (feature 287, homes H27): where the outline simplifies to more,
+    the tolerance - and with it the push that keeps the drawn outline behind every chord - grows by half again until
+    the chains take no more. A cap reached only by a triangle's chains always holds."""
+    tol = eps
+    chains = _facing_chains(outline, seat, tol)
+    while sum(len(c) for c in chains) > FACING_CHORD_CAP:
+        tol *= 1.5
+        chains = _facing_chains(outline, seat, tol)
+    return chains
+
+
+def _facing_chains(outline: Sequence[Pt], seat: Pt, eps: float) -> list[list[Chord]]:
     """THE OPEN CHAINS ON THE HOUSE SIDE (feature 140, GM 2026-08-28: *"just a few line segments on one side of
     the field that you are checking that you are on the correct side of ... not forming a closed shape"*):
     the outline simplified to chords, keeping only the runs of chords whose outward normal points toward

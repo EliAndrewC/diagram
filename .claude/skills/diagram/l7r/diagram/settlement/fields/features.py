@@ -8,11 +8,13 @@ import random
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.overlap.registry import refuse_unadmitted
+
 from .._geom import (
     Poly,
     Pt,
     point_in_poly,
-    seg_in_ellipse_core,
+    ring_meets_ellipse,
 )
 from .._knobs import CITY_TIER_SCALES, _centroid
 
@@ -70,6 +72,83 @@ def corner_seat(poly: Sequence[Pt], at: int) -> tuple[float, float]:
     return vx + (cx - vx) * step, vy + (cy - vy) * step
 
 
+GRAVE_BANK_PX = 1.0
+"""How far the basins stand back from a grave mound's reach, px: the mound's own stroke (1.2 px) and a bund's half-stroke
+meet there, so the paddy runs UP to the mound rather than under it (water W28)."""
+
+_CUT_SIDES = 64
+"""The polygon the mound's disc is cut with. A 64-gon's edges run inside its circle by up to cos(pi / 64) of the radius,
+so the cut is taken at the radius over that (plus the manifest's 0.1 px rounding) and no carved bund comes nearer the
+mound's center than the rule's radius."""
+
+
+def carve_around_grave(plots: list[dict[str, Any]], disc: tuple[float, float, float], corner: Pt | None, ctx: Any) -> None:
+    """Carve the paddy AROUND a grave in the field (water W28): no plot ring runs under the mound, in place.
+
+    The registry entry says "the flat paddy tiling around it", and until this the lattice was drawn straight through
+    (three rings and nine bund junctions under Kashikawa's mound, `future-work` 'Carve the paddy around an in-field grave
+    island'). Every ring the rule finds under the mound (`ring_rules.under_island`, the finished-map test's predicate) is
+    cut back to the ground outside it:
+
+    - AN ISLAND stands inside its host basin, and a basin with a hole in it is not a ring, so the host is first split in
+      two along its own long axis through the mound - the bund a farmer would run to the island - and each half bitten.
+    - A CORNER GRAVE stands against its host's bunds, so the bite is carried out to the corner (`corner`): the basin's
+      bund goes round the grave, which is the Japanese form the research names ("in a corner of a field").
+
+    Every piece is then judged by every ring rule in `ctx` - the grave among them - and one that fails goes the scrap
+    path (`seams.close.hold_ring_rules`): welded into a neighbor, or left bare under the fan floor."""
+    from shapely.geometry import LineString, Point, Polygon
+    from shapely.ops import split
+
+    from l7r.diagram.waterfields.ring_rules import under_island
+    from l7r.diagram.waterfields.seams.close import hold_ring_rules
+    from l7r.diagram.waterfields.seams.pockets import _parts, _ring
+
+    cx, cy, r = disc
+    cut = Point(cx, cy).buffer(r / math.cos(math.pi / _CUT_SIDES) + 0.2, quad_segs=_CUT_SIDES // 4)
+    if corner is not None:  # carried out PAST the corner, so the bite opens onto the bunds rather than touching them at a point
+        d = math.hypot(corner[0] - cx, corner[1] - cy) or 1.0
+        cut = cut.union(Point(corner[0] + (corner[0] - cx) / d * r, corner[1] + (corner[1] - cy) / d * r)).convex_hull
+    touched: list[int] = []
+    added: list[dict[str, Any]] = []
+    gone: list[int] = []
+    for k, p in enumerate(plots):
+        if len(p["poly"]) < 3 or not under_island(p["poly"], disc):
+            continue
+        ground = Polygon(p["poly"]).buffer(0)
+        if corner is None and ground.contains(cut):  # the island's host: halved along its long axis through the mound, so neither half holds it
+            box: Any = ground.minimum_rotated_rectangle
+            c = list(box.exterior.coords)
+            e = max(((c[i], c[i + 1]) for i in range(2)), key=lambda ab: math.dist(*ab))
+            reach = 2.0 * math.dist(*e) + 2.0 * r
+            ux, uy = (e[1][0] - e[0][0]) / math.dist(*e), (e[1][1] - e[0][1]) / math.dist(*e)
+            knife = LineString([(cx - reach * ux, cy - reach * uy), (cx + reach * ux, cy + reach * uy)])
+            ground = split(ground, knife)  # through an interior point, so always in two at least
+        pieces = [q for part in getattr(ground, "geoms", [ground]) for q in _parts(part.difference(cut)) if len(_ring(q)) >= 3]  # each half alone: a collection differences as its union
+        if not pieces:
+            gone.append(k)
+            continue
+        p["poly"] = _ring(pieces[0])
+        touched.append(k)
+        added += [{**p, "poly": _ring(q)} for q in pieces[1:]]
+    for k in reversed(gone):
+        del plots[k]
+        touched = [j - 1 if j > k else j for j in touched]
+    plots += added
+    hold_ring_rules(plots, ctx, only=[*touched, *range(len(plots) - len(added), len(plots))])
+
+
+def _mound_meets_pond(disc: tuple[float, float, float], ponds: Sequence[dict[str, Any]]) -> bool:
+    """Whether a grave's mound (its disc) would stand in a field pond: the disc's outline meets the pond's rim, or either
+    center lies inside the other - an island is dry ground, never drawn in open water."""
+    cx, cy, r = disc
+    ring = [(cx + r * math.cos(a * math.pi / 16), cy + r * math.sin(a * math.pi / 16)) for a in range(32)]
+    return any(
+        ring_meets_ellipse(ring, fp["x"], fp["y"], fp["rx"], fp["ry"]) or math.hypot(fp["x"] - cx, fp["y"] - cy) < r or ((cx - fp["x"]) / fp["rx"]) ** 2 + ((cy - fp["y"]) / fp["ry"]) ** 2 <= 1.0
+        for fp in ponds
+    )
+
+
 class FieldFeaturesMixin:
     def pond(self: Settlement, cx: float, cy: float, rx: float, ry: float, stream_curve: Any = None) -> None:  # type: ignore[misc]
         """A pond / irrigation reservoir. Routed through the WATER block (not drawn inline) so a stream or
@@ -77,7 +156,11 @@ class FieldFeaturesMixin:
         below every water bed (a feeder's bed covers it at the junction -> a clean gap), the FILL joins the
         shared bed group as the TOPMOST bed (`pond_fill=True`) - so it paints OVER any feeder's inside-the-rim
         overshoot (an irrigation channel's round end-cap bulging past the rim, whichever order it was drawn),
-        while the shore rim still shows and the mouths stay clean; the inner highlight is a sheen."""
+        while the shore rim still shows and the mouths stay clean; the inner highlight is a sheen.
+
+        ASKED BEFORE ANYTHING IS DRAWN (feature 287, water W53): its placer has walked its alternatives (the sink's pond
+        falls back to an off-map run, `hamletgen/sink.py`), so a pond the matrix still forbids is refused by name here."""
+        refuse_unadmitted(self.M, "pond", [cx, cy, rx, ry])
         if stream_curve:
             # the pond's feeder runs at the lateral/ditch tier - a thin line near the channel weight,
             # NOT the heftier natural-stream weight (see the water-width ladder in research/water.html).
@@ -109,7 +192,16 @@ class FieldFeaturesMixin:
     _PADDY_ROCK_KINDS = ("contour_terraces", "ribbon_valley")  # bedrock ground; alluvial valley/polder + delta dike-pond have none
     _PADDY_GRAVE_KINDS = ("valley_paddy", "contour_terraces", "ribbon_valley")
 
-    def _paddy_features(self: Settlement, net: dict[str, Any]) -> None:  # type: ignore[misc]
+    def _field_feature_ink(self: Settlement, ink: list[tuple[str, str]] | None, svg: str, cls: str) -> None:  # type: ignore[misc]
+        """Emit one in-field feature's ink now, or hold it in `ink` for the caller to emit later: `draw_comb_field` seats
+        the features BEFORE the paddies are drawn (a grave carves the rings the paddies are drawn from, water W28) and
+        draws their ink after the paddies, where it always was."""
+        if ink is None:
+            self.add(svg, cls=cls)
+        else:
+            ink.append((svg, cls))
+
+    def _paddy_features(self: Settlement, net: dict[str, Any], ink: list[tuple[str, str]] | None = None) -> None:  # type: ignore[misc]
         if self.M.get("meta", {}).get("scale") in ("town", *CITY_TIER_SCALES):
             # the in-field flourishes (low-pocket pond, rock outcrop, rare grave island) are VILLAGE-scale
             # features from the feature-012 archetype matrix. On a town/city map the combs are a SLICE of
@@ -147,19 +239,26 @@ class FieldFeaturesMixin:
         # own flourishes, nothing map-level. If it ever bites again, the refinement is one
         # sub-stream per sub-feature: random.Random(seed ^ 0x9AD1 ^ <per-feature salt>) for pond,
         # rock and grave each, at the cost of one more pool-wide flourish re-roll.
-        if arch in self._PADDY_POND_KINDS and low and rng.random() < 0.55:
+        if arch in self._PADDY_POND_KINDS and low:
             # the ring list the gate's check will scan: plot_rings is recorded from net["plots"]
             # and drain_hem is a SUBSET of those same polys, so this list is exactly the check's
             # coverage. Rings can OVERLAP each other at the fan/grid seams, so fitting against the
             # host plot alone is not enough (cohort seeds 5/19/21, 2026-08-16).
             rings: list[Poly] = [p["poly"] for p in net["plots"]]
-            for cand in rng.sample(low, len(low)):
-                if self._plot_pond(cand, rings):
+            # A ROLLED POND IS ALWAYS DRAWN (feature 287, plan D9, water W29): the knob is rolled only over a field where
+            # some low plot can hold a legible pond, so its value space is narrowed to what the site affords rather than a
+            # rolled pond silently not drawn. Where none can, the roll and the order are still DRAWN and discarded, so
+            # the rock and grave rolls after it sit on the stream they always did.
+            takes = any(self._pond_fit(p, rings) is not None for p in low)
+            rolled = rng.random() < 0.55
+            order = rng.sample(low, len(low)) if rolled else []
+            for cand in order if takes else []:
+                if self._plot_pond(cand, rings, ink):
                     break
         # ROCK: bedrock outcrops the risers/bunds wrap around (research D3) - terraces always, ribbon ~half.
         if arch == "contour_terraces" or (arch == "ribbon_valley" and rng.random() < 0.5):
             for _ in range(rng.randint(1, 3)):
-                self._plot_rock(rng.choice(plots), rng)
+                self._plot_rock(rng.choice(plots), rng, ink)
         # A GRAVE IN THE FIELD (research/fields.html 'Are there really graves out in the middle of the fields?', feature
         # 267): graves inside working fields are attested in China ("graves were in every field"), and every Japanese
         # placement read is BESIDE the plot - at the bund edge or in a field's corner. Two placements of one thing, so
@@ -167,11 +266,15 @@ class FieldFeaturesMixin:
         # bunds. The 0.3 is how often a map draws one at all - a degree chosen for the maps (calibrated liberty), since
         # no source gives a rate and the record argues they were common where the custom held, not rare. The form
         # comes from its OWN substream, so a map keeping the island draws it exactly as before.
+        # THE GRAVE IS SEATED ON DRY GROUND AND THE PADDY CARVED AROUND IT (feature 287, water W28): the chosen plot is the
+        # first candidate, and one whose mound would stand in a field pond is passed for the next in order - the placer's
+        # own candidate loop. Seating it carves the rings (`carve_around_grave`).
         if arch in self._PADDY_GRAVE_KINDS and rng.random() < 0.3:
-            if grave_form(self.seed) == "island":
-                self._plot_grave_island(rng.choice(plots), rng)
-            else:
-                self._plot_corner_grave(rng.choice(plots), rng)
+            start = plots.index(rng.choice(plots))
+            seat = self._plot_grave_island if grave_form(self.seed) == "island" else self._plot_corner_grave
+            for k in range(len(plots)):
+                if seat(plots[(start + k) % len(plots)], rng, net, ink):
+                    break
 
     @staticmethod
     def _plot_center_span(poly: Sequence[Pt]) -> tuple[float, float, float, float]:
@@ -179,11 +282,30 @@ class FieldFeaturesMixin:
         ys = [p[1] for p in poly]
         return (sum(xs) / len(xs), sum(ys) / len(ys), (max(xs) - min(xs)) / 2, (max(ys) - min(ys)) / 2)
 
-    def _plot_pond(self: Settlement, plot: dict[str, Any], rings: list[Poly]) -> bool:  # type: ignore[misc]
+    def _plot_pond(self: Settlement, plot: dict[str, Any], rings: list[Poly], ink: list[tuple[str, str]] | None = None) -> bool:  # type: ignore[misc]
         """A small OPEN-WATER pond sunk into one low plot - a low pocket / header tameike the paddy rings.
         Distinct from the reed/lotus BOG (blue-green, choked) and from the main village reservoir at the
         source. Drawn OVER the plot (so it carries no bund grid) with a reed fringe; recorded in
-        M['field_ponds']. Returns False - drawing and recording nothing - when no legible pond fits."""
+        M['field_ponds']. Returns False - drawing and recording nothing - when no legible pond fits (`_pond_fit`)."""
+        fit = self._pond_fit(plot, rings)
+        if fit is None:
+            return False
+        cx, cy, rx, ry = fit
+        self._field_feature_ink(
+            ink, f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="#9CB4C8" stroke="#5C7488" stroke-width="1.8"/>', "field pond"
+        )  # feature 134: its own class, beside `pond`
+        self._field_feature_ink(ink, f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{rx - 5:.1f}" ry="{ry - 4:.1f}" fill="none" stroke="#B6CAD8" stroke-width="0.9"/>', "field pond")
+        reeds = "".join(
+            f'<line x1="{cx + rx * math.cos(a):.1f}" y1="{cy + ry * math.sin(a):.1f}" x2="{cx + rx * math.cos(a):.1f}" y2="{cy + ry * math.sin(a) - 5:.1f}" stroke="#7C9A4E" stroke-width="1.1"/>'
+            for a in [i * math.pi / 4 for i in range(8)]
+        )
+        self._field_feature_ink(ink, f'<g opacity="0.8">{reeds}</g>', "field pond")
+        self.M.setdefault("field_ponds", []).append({"x": round(cx, 1), "y": round(cy, 1), "rx": round(rx, 1), "ry": round(ry, 1)})
+        return True
+
+    def _pond_fit(self: Settlement, plot: dict[str, Any], rings: list[Poly]) -> tuple[float, float, float, float] | None:  # type: ignore[misc]
+        """Where `_plot_pond` would sink a legible pond into `plot` - `(cx, cy, rx, ry)`, as recorded - or None where the
+        plot takes none. Asked alone by the pond's roll (plan D9), so a field rolls a pond only where one fits."""
         poly = [(float(x), float(y)) for x, y in plot["poly"]]
         _, _, hx, hy = self._plot_center_span(poly)
         cx, cy = _centroid(poly)
@@ -193,43 +315,35 @@ class FieldFeaturesMixin:
         # WEDGES whose bounding box is several times the wedge itself, so a bbox-sized ellipse
         # spilled across three neighboring plots and the drain hem, spoke bunds drawn straight
         # through open water. Center on the CENTROID (a wedge's bbox center can sit outside it) and
-        # shrink until every rim point sits inside the plot and NO ring in `rings` cuts the pond's
-        # core - `seg_in_ellipse_core` is the same predicate the gate's
-        # `field_ponds_sunk_into_one_plot` runs, and `rings` is every ring that check will scan
-        # (rings can OVERLAP at the fan/grid seams, so testing the host plot alone is not enough -
-        # cohort seeds 5/19/21). Placement tests a LARGER core (inset 3 vs the check's 4) so the
-        # manifest's 0.1 px rounding can never flip a verdict the siting cleared. Below the legible
-        # floor (10 x 7 px) the plot takes no pond and the caller tries another low plot.
+        # shrink until every rim point sits inside the plot and NO ring in `rings` meets the pond -
+        # `ring_meets_ellipse`, the ONE predicate the finished-map test (`crosses_pond_rim`) calls too
+        # (feature 287, FR-003: this used to ask a core 3 px inside the rim while the test read the full
+        # ellipse, so the two disagreed; the full rim is the rule - see the predicate). `rings` is every
+        # ring that test will scan (rings can OVERLAP at the fan/grid seams, so testing the host plot
+        # alone is not enough - cohort seeds 5/19/21). JUDGED AS RECORDED: the rings and the pond are
+        # rounded to the manifest's 0.1 px before they are asked, and the pond is drawn and recorded at
+        # the values that were judged, so the test reads exactly what the placer cleared. Below the
+        # legible floor (10 x 7 px) the plot takes no pond and the caller tries another low plot.
         rim = [(math.cos(a), math.sin(a)) for a in [i * math.pi / 12 for i in range(24)]]
-        boxed = [(min(q[0] for q in r), min(q[1] for q in r), max(q[0] for q in r), max(q[1] for q in r), r) for r in rings]
+        recorded = [[(round(float(q[0]), 1), round(float(q[1]), 1)) for q in r] for r in rings]
+        boxed = [(min(q[0] for q in r), min(q[1] for q in r), max(q[0] for q in r), max(q[1] for q in r), r) for r in recorded]
+        cx, cy = round(cx, 1), round(cy, 1)
         while rx >= 10.0 and ry >= 7.0:
+            rx, ry = round(rx, 1), round(ry, 1)
             ok = all(point_in_poly(cx + rx * ux, cy + ry * uy, poly) for ux, uy in rim)
             if ok:
                 for bx0, by0, bx1, by1, ring in boxed:
                     if bx1 < cx - rx or bx0 > cx + rx or by1 < cy - ry or by0 > cy + ry:
                         continue  # bbox prefilter only - the exact test below decides
-                    rn = len(ring)
-                    if any(seg_in_ellipse_core(ring[i], ring[(i + 1) % rn], cx, cy, rx, ry, inset=3.0) for i in range(rn)):
+                    if ring_meets_ellipse(ring, cx, cy, rx, ry):
                         ok = False
                         break
             if ok:
-                break
+                return cx, cy, rx, ry
             rx, ry = rx * 0.9, ry * 0.9
-        else:
-            return False
-        self.add(
-            f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="#9CB4C8" stroke="#5C7488" stroke-width="1.8"/>', cls="field pond"
-        )  # feature 134: its own class, beside `pond`
-        self.add(f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{rx - 5:.1f}" ry="{ry - 4:.1f}" fill="none" stroke="#B6CAD8" stroke-width="0.9"/>', cls="field pond")
-        reeds = "".join(
-            f'<line x1="{cx + rx * math.cos(a):.1f}" y1="{cy + ry * math.sin(a):.1f}" x2="{cx + rx * math.cos(a):.1f}" y2="{cy + ry * math.sin(a) - 5:.1f}" stroke="#7C9A4E" stroke-width="1.1"/>'
-            for a in [i * math.pi / 4 for i in range(8)]
-        )
-        self.add(f'<g opacity="0.8">{reeds}</g>', cls="field pond")
-        self.M.setdefault("field_ponds", []).append({"x": round(cx, 1), "y": round(cy, 1), "rx": round(rx, 1), "ry": round(ry, 1)})
-        return True
+        return None
 
-    def _plot_rock(self: Settlement, plot: dict[str, Any], rng: random.Random) -> None:  # type: ignore[misc]
+    def _plot_rock(self: Settlement, plot: dict[str, Any], rng: random.Random, ink: list[tuple[str, str]] | None = None) -> None:  # type: ignore[misc]
         """A bedrock OUTCROP the terrace risers wrap around - a cluster of gray boulders. Recorded in
         M['field_rocks']. Small (a few plot-fractions), off-center so it reads as a natural obstacle."""
         cx, cy, hx, hy = self._plot_center_span(plot["poly"])
@@ -241,43 +355,67 @@ class FieldFeaturesMixin:
             r = rng.uniform(3.5, 6.5)
             boulders += f'<circle cx="{bx:.1f}" cy="{by:.1f}" r="{r:.1f}" fill="#9C948A" stroke="#5C544A" stroke-width="1"/>'
             boulders += f'<path d="M{bx - r * 0.5:.1f},{by - r * 0.2:.1f} q{r * 0.4:.1f},{-r * 0.5:.1f} {r:.1f},{-r * 0.1:.1f}" fill="none" stroke="#C6BEB2" stroke-width="0.8"/>'  # a lit crown
-        self.add(f'<g>{boulders}</g>', cls="field rock")  # feature 134
+        self._field_feature_ink(ink, f'<g>{boulders}</g>', "field rock")  # feature 134
         self.M.setdefault("field_rocks", []).append({"x": round(cx, 1), "y": round(cy, 1)})
 
-    def _plot_corner_grave(self: Settlement, plot: dict[str, Any], rng: random.Random) -> None:  # type: ignore[misc]
+    def _grave_context(self: Settlement, net: dict[str, Any], disc: tuple[float, float, float]) -> Any:  # type: ignore[misc]
+        """The ring rules' context for carving round a grave: the fan's channels as recorded (its supply strokes only
+        where the carve hemmed onto them, `supply_banks`), the grain the gate reads (`2 / ftpx`), the design cell, the
+        field ponds already sunk, and the grave itself."""
+        from l7r.diagram.waterfields.ring_rules import fan_context
+
+        chans = [c for c in net.get("channels") or [] if net.get("supply_banks") or c.get("role") == "drain"]
+        ponds = [(fp["x"], fp["y"], fp["rx"], fp["ry"]) for fp in self.M.get("field_ponds") or []]
+        return fan_context(chans, 2.0 / float(self.ftpx), net.get("cell"), ponds=ponds, graves=[disc])
+
+    def _plot_corner_grave(self: Settlement, plot: dict[str, Any], rng: random.Random, net: dict[str, Any] | None = None, ink: list[tuple[str, str]] | None = None) -> bool:  # type: ignore[misc]
         """The Japanese form of the field grave: a small mound with one or two stones in a plot's CORNER, against its
         bunds (research/fields.html 'Are there really graves out in the middle of the fields?': "in a corner of a
         field", and beside the bunds). Set 12-16 px in from the corner toward the plot's middle (`corner_seat`) so it
         stays inside the plot, clear of the ditch or lane that may run along its edge. Recorded in M['field_graves'] with
-        its form. The grave is the last draw on `rng` in the pass, so its one extra draw shifts nothing after it."""
-        cx, cy = corner_seat(plot["poly"], rng.choice(turning_corners(plot["poly"])))
-        self.add(f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="6.5" ry="4.5" fill="#CFC6B4" stroke="#8C8470" stroke-width="1.1"/>', cls="grave island")
+        its form. The grave is the last draw on `rng` in the pass, so its one extra draw shifts nothing after it.
+
+        Given the comb's `net`, the basin is carved round it - its bund carried round the grave to the corner (water W28,
+        `carve_around_grave`) - and a corner whose mound would stand in a field pond is refused (False, nothing drawn)."""
+        at = rng.choice(turning_corners(plot["poly"]))
+        cx, cy = (round(v, 1) for v in corner_seat(plot["poly"], at))
+        disc = (cx, cy, 6.5 + GRAVE_BANK_PX)
+        if _mound_meets_pond(disc, self.M.get("field_ponds") or []):
+            return False
+        if net is not None:
+            carve_around_grave(net["plots"], disc, tuple(plot["poly"][at % len(plot["poly"])]), self._grave_context(net, disc))
+            net.setdefault("grave_discs", []).append(disc)
+        self._field_feature_ink(ink, f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="6.5" ry="4.5" fill="#CFC6B4" stroke="#8C8470" stroke-width="1.1"/>', "grave island")
         markers = ""
         # the second stone stands IN FRONT of the first, lower and to one side - two stones abreast read as a pair of
         # eyes (the island's rule, feature 230 pass 11)
         for i in range(rng.randint(1, 2)):
             sx, base, h = ((-2.2, -1.0, 6.5), (1.6, 2.2, 3.5))[i]
             markers += f'<rect x="{cx + sx:.1f}" y="{cy + base - h:.1f}" width="2.4" height="{h:.1f}" rx="1" fill="#9AA1A4" stroke="#5A584F" stroke-width="0.5"/>'
-        self.add(f'<g>{markers}</g>', cls="grave island")
-        self.M.setdefault("field_graves", []).append({"x": round(cx, 1), "y": round(cy, 1), "form": "corner"})
+        self._field_feature_ink(ink, f'<g>{markers}</g>', "grave island")
+        self.M.setdefault("field_graves", []).append({"x": cx, "y": cy, "form": "corner"})
+        return True
 
-    def _plot_grave_island(self: Settlement, plot: dict[str, Any], rng: random.Random) -> None:  # type: ignore[misc]
+    def _plot_grave_island(self: Settlement, plot: dict[str, Any], rng: random.Random, net: dict[str, Any] | None = None, ink: list[tuple[str, str]] | None = None) -> bool:  # type: ignore[misc]
         """An in-field grave island, the Chinese form of the field grave - a small raised earthen mound with a couple
         of stone markers. Recorded in M['field_graves'].
 
-        DRAWN OVER THE LATTICE, NOT CARVED OUT OF IT - a recorded map drawing convention (settlement-review, Kashikawa,
-        feature 145). The registry entry said "the flat paddy tiling around it" and the plots are NOT carved:
-        three plot rings and nine bund junctions lie inside Kashikawa's mound. At `opacity="0.9"` they ghosted
-        through and the mound read as a translucent decal pasted on the field - a bund arriving at the outline
-        and re-emerging beyond it. The mound is now OPAQUE, so what is drawn is a solid raised island the
-        basins run up to, which is what a grave island looks like. What it costs: the bunds still exist
-        underneath, so the manifest says tiled-through where the ink says tiled-around, and a check reading
-        plot rings will still find them inside the mound. The alternative - carving the plots around the grave
-        in the toe pass - is the honest fix and a field-engine change; it is future work
-        (`future-work/farming-communities.md`), deferred here with this measurement rather than half-done."""
+        CARVED OUT OF THE LATTICE, NOT DRAWN OVER IT (feature 287, water W28). The registry entry says "the flat paddy
+        tiling around it", and the plots used to be drawn through it - three plot rings and nine bund junctions inside
+        Kashikawa's mound, recorded then as a map drawing convention with the carve as its honest fix. Given the comb's
+        `net`, `carve_around_grave` now cuts every ring back off the mound (the host halved through it), so the basins
+        run up to the island and the manifest says what the ink shows. The mound stays OPAQUE, as the Kashikawa review
+        asked. A plot whose mound would stand in a field pond is refused (False, nothing drawn)."""
         cx, cy, hx, hy = self._plot_center_span(plot["poly"])
+        cx, cy = round(cx, 1), round(cy, 1)
         rx, ry = max(9.0, hx * 0.55), max(6.0, hy * 0.55)
-        self.add(f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="#CFC6B4" stroke="#8C8470" stroke-width="1.2"/>', cls="grave island")  # feature 134
+        disc = (cx, cy, max(rx, ry) + GRAVE_BANK_PX)
+        if _mound_meets_pond(disc, self.M.get("field_ponds") or []):
+            return False
+        if net is not None:
+            carve_around_grave(net["plots"], disc, None, self._grave_context(net, disc))
+            net.setdefault("grave_discs", []).append(disc)
+        self._field_feature_ink(ink, f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="#CFC6B4" stroke="#8C8470" stroke-width="1.2"/>', "grave island")  # feature 134
         markers = ""
         # THE STONES ARE STAGGERED AND UNEQUAL, NEVER A MATCHED PAIR (settlement-review, feature 230 pass 11). Two equal stones
         # side by side in the upper half of an egg-shaped mound read, at every zoom, as a pair of eyes - a face on Mizuguchi's
@@ -287,8 +425,9 @@ class FieldFeaturesMixin:
             mx = cx - 4.0 + i * 4.5
             h = (8.0, 5.0, 6.5)[i]
             markers += f'<rect x="{mx - 1.3:.1f}" y="{cy - 3.0 - i * 3.5 - h:.1f}" width="2.6" height="{h:.1f}" rx="1" fill="#9AA1A4" stroke="#5A584F" stroke-width="0.5"/>'
-        self.add(f'<g>{markers}</g>', cls="grave island")
-        self.M.setdefault("field_graves", []).append({"x": round(cx, 1), "y": round(cy, 1)})
+        self._field_feature_ink(ink, f'<g>{markers}</g>', "grave island")
+        self.M.setdefault("field_graves", []).append({"x": cx, "y": cy})
+        return True
 
     @staticmethod
     def _rounded_pond(poly: Sequence[Pt], inset: float, reach: float, rng: random.Random) -> tuple[str, Poly]:
@@ -372,4 +511,4 @@ class FieldFeaturesMixin:
         # LABELED (GM 2026-07-21): the pond is a culturally specific feature that does not read by
         # itself (the GM asked "what is that?" of an unlabeled one - the don't-label-the-obvious rule cuts the
         # OTHER way here). Placed off the arc side, away from the village (crescent_pond_labeled gates it).
-        self.label(cx - fx * (r + 16), cy - fy * (r + 16) + 4, "geomantic pond", 11, italic=True, color="#4C6478")
+        self.label(cx - fx * (r + 16), cy - fy * (r + 16) + 4, "geomantic pond", 11, italic=True, color="#4C6478", ref=(cx - r, cy - r, cx + r, cy + r))

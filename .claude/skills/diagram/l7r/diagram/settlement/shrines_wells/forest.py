@@ -27,4 +27,4 @@ class ForestMixin:
         self.M["forest_edge"] = [[round(x, 1), round(y, 1)] for x, y in west_edge]
         if label:
             lx, ly = label_xy if label_xy else (min(xs) + (self.W - min(xs)) / 2, (min(ys) + max(ys)) / 2)
-            self.label(lx, ly, label, 14, italic=True, weight="bold", color="#22301A")
+            self.label(lx, ly, label, 14, italic=True, weight="bold", color="#22301A", ref=(min(xs), min(ys), max(xs), max(ys)))

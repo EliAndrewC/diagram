@@ -619,3 +619,13 @@ def test_touch_junctions_never_drops_the_connector() -> None:
     _touch_junctions(s, [], [], [], only_orphans=False)  # type: ignore[arg-type]
     assert [ln.get("connector") for ln in s.M["lanes"]] == [None, True], "the connector stays, record and all"
     assert not s.M["meta"].get("lane_fragments_dropped")
+
+
+def test_a_turn_at_a_repeated_vertex_is_no_turn() -> None:
+    """`_turn_deg` on a run with a zero-length leg has no heading to change, so it reads straight on (0) rather than
+    dividing by nothing - once reached through the straggler footpaths' repeated junction points, dropped by feature 287."""
+    from l7r.diagram.hamletgen.ways import _turn_deg
+
+    assert _turn_deg((0.0, 0.0), (0.0, 0.0), (10.0, 0.0)) == 0.0
+    assert _turn_deg((0.0, 0.0), (10.0, 0.0), (10.0, 0.0)) == 0.0
+    assert _turn_deg((0.0, 0.0), (10.0, 0.0), (0.0, 0.0)) == pytest.approx(180.0), "control: a real reversal reads 180"

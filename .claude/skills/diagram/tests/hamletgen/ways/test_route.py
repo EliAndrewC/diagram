@@ -220,3 +220,31 @@ def test_the_lazy_router_returns_the_whole_box_routers_paths() -> None:
             assert [list(q) for q in got] == req["out"]
     finally:
         R._CROSSING.update(saved)
+
+
+def test_the_lattice_search_reads_the_verdicts_already_asked_and_finds_the_same_path() -> None:
+    """`lattice_search` reads the caller's memo of free cells and band cells before asking (feature 287 perf): with the memos
+    handed in, empty or filled, it settles every cell at the cost it settles it at without them, the toll included."""
+    from l7r.diagram.hamletgen.ways.route import lattice_search
+
+    blocked = {(x, y) for x in range(3, 9) for y in range(0, 8)} | {(5, 10)}  # the way round runs through the band
+    in_band = {(x, y) for x in range(10) for y in range(8, 10)}
+    asked: list[tuple[int, int]] = []
+
+    def is_free(x: int, y: int) -> bool:
+        asked.append((x, y))
+        return (x, y) not in blocked
+
+    def banded(x: int, y: int) -> bool:
+        return (x, y) in in_band
+
+    plain = lattice_search((0, 0), (9, 0), 10, 12, is_free, banded, 25.0, 10.0)
+    free: dict[tuple[int, int], bool] = {}
+    band: dict[tuple[int, int], bool] = {}
+    assert lattice_search((0, 0), (9, 0), 10, 12, is_free, banded, 25.0, 10.0, free, band) == plain
+    free = {(x, y): (x, y) not in blocked for x in range(10) for y in range(12)}
+    band = {(x, y): (x, y) in in_band for x in range(10) for y in range(12)}
+    asked.clear()
+    assert lattice_search((0, 0), (9, 0), 10, 12, is_free, banded, 25.0, 10.0, free, band) == plain and not asked
+    untolled = lattice_search((0, 0), (9, 0), 10, 12, is_free, banded, 0.0, 10.0)
+    assert round(plain[0][(9, 0)] - untolled[0][(9, 0)], 6) == 25.0, "the way round enters the band once and pays its toll"

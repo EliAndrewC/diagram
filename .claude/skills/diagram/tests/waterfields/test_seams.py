@@ -470,6 +470,33 @@ def test_the_hem_pass_leaves_a_bank_that_already_reaches_the_field_edge_alone() 
     assert len(deep) > 1, "a real gap is filled with hem plots"
 
 
+def test_the_hem_pass_leaves_a_gap_filled_by_a_supply_ditchs_banks_to_the_floor() -> None:
+    """`_hem_pass`, the fourth producer that honors the supply banks (Sawada ring 669, 2026-08-15): where a delivery
+    ditch runs down the whole gap between the field and the collector, no hem quad can clear its banks even with its
+    corners slid onto them, so that quad is dropped - the bare gap is left to the floor rather than a bund drawn over the
+    water - and every hem plot that IS laid clears the banks."""
+    import random
+
+    from l7r.diagram.waterfields.carve import _hem_pass, _quad_in_supply, _supply_index
+    from l7r.diagram.waterfields.frame import _Frame
+
+    F = _Frame(90.0)  # fall due south: u is x, f is y
+    drain = [F.to_xy(0.0, 500.0), F.to_xy(1000.0, 500.0)]
+    g = 4.0
+
+    def field_plot() -> dict[str, object]:
+        return {"poly": [F.to_xy(0.0, 430.0), F.to_xy(1000.0, 430.0), F.to_xy(1000.0, 440.0), F.to_xy(0.0, 440.0)]}
+
+    open_gap = [field_plot()]
+    _hem_pass(random.Random(1), F, drain, 1000.0, 1000.0, g, lambda u: 0.0, [], open_gap)
+    assert len(open_gap) > 1, "the case: without the ditch the 60 px gap is hemmed"
+    ditch = _supply_index([{"pts": [F.to_xy(-50.0, 470.0), F.to_xy(1050.0, 470.0)], "w": 100.0}], g)
+    filled = [field_plot()]
+    _hem_pass(random.Random(1), F, drain, 1000.0, 1000.0, g, lambda u: 0.0, ditch, filled)
+    assert not any(_quad_in_supply(p["poly"], ditch, g) for p in filled[1:]), "no hem plot is laid over the ditch's banks"
+    assert len(filled) < len(open_gap), "the quads that could not clear them were dropped, not laid"
+
+
 def test_a_tab_cut_needs_the_step_to_be_one_edge_of_the_ring() -> None:
     """`_tab_cut` (feature 220, the step-1 re-fit's coverage): the two step vertices must be CONSECUTIVE on the
     ring - a pair that are both on the ring but not adjacent is not a step of it, and there is no tab to cut."""
@@ -516,6 +543,28 @@ def test_a_map_whose_blue_sample_is_all_demoted_still_exhibits_one_flooded_basin
 
     kept = _close([{"poly": far, "fill": "#A6C398", "low": True}, {"poly": on, "fill": FLOODED, "low": True}])
     assert [min(q[1] for q in p["poly"]) > 1200 for p in kept if p["fill"] == FLOODED] == [True], "a surviving draw is left alone"
+
+
+def test_the_tint_pass_judges_the_flooded_needle_on_the_ring_the_test_reads() -> None:
+    """Feature 287 T04 (FR-003, water W20): the tint pass and the test read ONE predicate, `ring_rules.needle` on the
+    ring as recorded. The constructed case is where the two used to disagree: a basin with a hairline spur on its
+    bund - blunt on the 1.0 px deduplicated ring the pass alone used to read (at its stricter 25 deg), a needle under
+    15 deg on the raw ring the test reads. The pass's clause (`_needle`) now calls the test's predicate on that ring.
+
+    Asked of the clause and not through `close_seams` because a hand-built ring does not reach the tint judgment
+    unchanged: measured 2026-09-29, the pass's planting and welding re-lay a lone spurred basin on the grid (its ring
+    came back a 46 x 34 rectangle) before the tint loop reads it."""
+    from l7r.diagram.waterfields.banks import _TINT_MIN_APEX, pointed_ring
+    from l7r.diagram.waterfields.ring_rules import needle
+    from l7r.diagram.waterfields.seams.close import _needle
+
+    spur = [(600.0, 1266.0), (620.0, 1266.0), (620.05, 1265.1), (620.2, 1266.0), (640.0, 1266.0), (640.0, 1292.0), (600.0, 1292.0)]
+    assert needle(spur) and not pointed_ring(dedup_ring(spur, 1.0), _TINT_MIN_APEX), "the disagreement: a needle raw, blunt deduplicated"
+    assert _needle(spur), "the tint pass now sees the needle the test sees"
+    assert not _needle(_rect(600, 1266, 640, 1292))
+    # judged AS RECORDED: a spur the manifest's 0.1 px rounding flattens is no needle to the test, and none to the pass
+    flat = [(600.0, 1266.0), (620.0, 1266.0), (620.004, 1265.96), (620.008, 1266.0), (640.0, 1266.0), (640.0, 1292.0), (600.0, 1292.0)]
+    assert needle(flat) and not _needle(flat)
 
 
 def test_a_triangle_never_wears_the_water_tint() -> None:

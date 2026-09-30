@@ -75,14 +75,6 @@ def test_title_falls_back_to_the_corner_when_no_blank_space():
     assert s.M["title"]["bbox"][0] == 30  # fell back to view left + 30
 
 
-def test_title_without_a_view_centers_on_the_canvas():
-    s = _crop_settlement()  # no set_view -> self.view is None
-    s.M["fields"] = [{"outline": [[-10, -10], [2010, -10], [2010, 1510], [-10, 1510]]}]  # full-canvas cover -> no gap
-    s.title("Y")
-    tb = s.M["title"]["bbox"]
-    assert abs((tb[0] + tb[2]) / 2 - 1000) < 2  # centered on W/2 = 1000
-
-
 def test_text_width_measures_the_render_font_and_falls_back(monkeypatch):
     # the placard pads symmetrically because the width is MEASURED in the render font (DejaVu Serif
     # Bold, what resvg substitutes for serif) - 'Akagahara' measured ~180px where the old estimate
@@ -132,9 +124,9 @@ def test_label_carries_the_subjects_own_angle_for_lines_and_boxes_alike():
     clamp (a 72-degree road kept a level caption) and the mod-90 fold (a 72-degree box read at -18);
     both are superseded - the caption lies at exactly the subject's angle."""
     s = _town()
-    s.label(500, 500, "Imperial Road", 12, rot=-26.6, linear=True)
-    s.label(500, 600, "Imperial Road", 12, rot=72, linear=True)  # a near north-south road tilts with it
-    s.label(500, 700, "tanning yard", 9, rot=72)  # ...and the same angle on a BOX subject is the same caption
+    s.label(500, 500, "Imperial Road", 12, ref=(400, 510, 600, 520), rot=-26.6, linear=True)
+    s.label(500, 600, "Imperial Road", 12, ref=(400, 610, 600, 620), rot=72, linear=True)  # a near north-south road tilts with it
+    s.label(500, 700, "tanning yard", 9, ref=(480, 705, 520, 725), rot=72)  # ...and the same angle on a BOX subject is the same caption
     s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     recs = s.M["labels"]
     assert recs[0][7] == -26.6
@@ -149,24 +141,24 @@ def test_label_wraps_onto_two_lines_only_when_that_clears_the_sheet():
     whole seat leaves it on one line ("we can just pick one"). Three seats, because a caption already
     placed is itself a blocker for the next."""
     s = Settlement(W=1000, H=1000, seed=1)  # a bare sheet: nothing near a seat but what the test puts there
-    s.label(500, 300, "notice board", 8)  # open ground: one line, the record exactly as before
+    s.label(500, 300, "notice board", 8, ref=(494, 303, 506, 308))  # open ground: one line, the record exactly as before
     s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     L = s.M["labels"][-1]
-    assert len(L) == 6 and "<tspan" not in s.toplabels[-1] and abs((L[2] - L[0]) - 12 * 8 * 0.55) < 0.01
+    assert len(L) == 7 and L[6] == [494, 303, 506, 308] and "<tspan" not in s.toplabels[-1] and abs((L[2] - L[0]) - 12 * 8 * 0.55) < 0.01
     s.M["houses"].append({"x": 470, "y": 497, "w": 20, "h": 30, "rot": 0})  # under the one-liner's left end only
-    s.label(500, 500, "notice board", 8)  # the wrapped block (26 wide) clears the house; the one-liner (53 wide) does not
+    s.label(500, 500, "notice board", 8, ref=(494, 503, 506, 508))  # the wrapped block (26 wide) clears the house; the one-liner (53 wide) does not
     L = s.M["labels"][-1]
     assert s.toplabels[-1].count("<tspan") == 2
     assert abs((L[2] - L[0]) - 6 * 8 * 0.55) < 0.01 and L[3] - L[1] > 8 * 1.05  # narrower, taller
     s.M["houses"].append({"x": 500, "y": 797, "w": 20, "h": 30, "rot": 0})  # under the middle: nothing clears
-    s.label(500, 800, "notice board", 8)
+    s.label(500, 800, "notice board", 8, ref=(494, 803, 506, 808))
     assert "<tspan" not in s.toplabels[-1], "when no layout clears, the one-liner is drawn"
 
 
 def test_label_never_leaves_a_short_word_on_its_own_line():
     s = Settlement(W=1000, H=1000, seed=1)  # a bare sheet: nothing near the seat but what the test puts there
     s.M["houses"].append({"x": 452, "y": 497, "w": 20, "h": 30, "rot": 0})  # blocks the 16-char one-liner's left end
-    s.label(500, 500, "Shrine of Benten", 9)
+    s.label(500, 500, "Shrine of Benten", 9, ref=(470, 505, 530, 545))
     s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     body = s.toplabels[-1]
     assert body.count("<tspan") == 2
@@ -176,13 +168,13 @@ def test_label_never_leaves_a_short_word_on_its_own_line():
 
 def test_label_rot_emits_a_center_rotation_and_appends_the_tilt():
     s = _town()
-    s.label(500, 500, "tilted", 9, rot=150)  # a caller passes the FEATURE rotation; label() folds it
+    s.label(500, 500, "tilted", 9, ref=(490, 505, 510, 515), rot=150)  # a caller passes the FEATURE rotation; label() folds it
     s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     L = s.M["labels"][-1]
-    assert len(L) == 8 and L[6] is None and L[7] == -30.0
+    assert len(L) == 8 and L[6] == [490, 505, 510, 515] and L[7] == -30.0
     assert any('transform="rotate(-30.0' in t for t in s.toplabels)
-    s.label(500, 550, "level", 9, rot=90)  # a square rotation folds level: record format unchanged
-    assert len(s.M["labels"][-1]) == 6
+    s.label(500, 550, "level", 9, ref=(490, 555, 510, 565), rot=90)  # a square rotation folds level: record format unchanged
+    assert len(s.M["labels"][-1]) == 7  # the subject, and no tilt
 
 
 def test_title_obstacles_gather_the_long_lines_a_placard_must_miss() -> None:

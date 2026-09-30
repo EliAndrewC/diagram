@@ -8,7 +8,10 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross
 from l7r.diagram.settlement._geom import PointGrid, boxed_grid, boxed_ring_hit, boxed_rings, boxed_segs
+from l7r.diagram.settlement._geom.water_index import crosses_a_stream
+from l7r.diagram.settlement.homestead_parts.bamboo_keepout import stand_spares_seats
 from l7r.diagram.settlement.homestead_parts.groves import HOUSEHOLD_BAMBOO_PREVALENCE as HOUSEHOLD_BAMBOO_PREVALENCE
+from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.settlement.rolling.bearing import turned_box
 
 from ..consts import Poly, Pt
@@ -68,10 +71,11 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
     sw, sh = px(HOUSEHOLD_BAMBOO_FT[0]), px(HOUSEHOLD_BAMBOO_FT[1])
     wx, wy = plan.wind
     fields = [list(f) for f in s.field_polys]
-    marsh = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("poly")]
+    marsh = marsh_ground(s.M)
     pond = s.M.get("pond")
     lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(6.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
     footing = Footing(s, fields, marsh)  # the static ground, indexed once for every strip this pass tests (feature 218)
+    seats = [(float(p[0]), float(p[1])) for q in s.M.get("houses") or [] for p in (q.get("wood_share") or {}).get("seats") or ()]
     for h in houses:
         hx, hy, hw, hh = float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"])
         if s._hjit(hx, hy, 95.0) >= HOUSEHOLD_BAMBOO_PREVALENCE:
@@ -121,7 +125,15 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
                 cx, cy = hx + lx * ca - ly * sa, hy + lx * sa + ly * ca
                 if _strip_blocked(s, cx, cy, cw, ch, hx, hy, fields, marsh, pond, lanes, footing) or in_belt(plan.belt, cx, cy, cw, ch):
                     continue
+                # ...and off every household's reserved copse seats by the copse's bamboo keep-out (feature 280's copse off
+                # the bamboo, feature 287 woods W25's seats planted where reserved - `stand_spares_seats`); the strip is
+                # drawn axis-aligned in (cw, ch) at (cx, cy), the rect the predicate reads
+                if not stand_spares_seats(cx, cy, cw, ch, seats, s.bscale):
+                    continue
+                if crosses_a_stream((hx, hy), (cx, cy), s.M.get("streams", [])):
+                    continue  # the household's strip stands on its house's bank (feature 287, homes H01)
                 ring = [(cx - cw / 2, cy - ch / 2), (cx + cw / 2, cy - ch / 2), (cx + cw / 2, cy + ch / 2), (cx - cw / 2, cy + ch / 2)]
+                plan.bamboo_of[len(plan.bamboo_polys) + len(out)] = (hx, hy)  # its owner, for the stand's record (`of`)
                 out.append(ring)
                 plan.bamboo_roles.append("homestead")
                 s.placed.append((cx, cy, cw, ch))
@@ -194,7 +206,8 @@ def _strip_blocked(
             return True
     # EVERY OTHER FARMHOUSE, as drawn: a caller that passes the bundle boxes in `skip` excuses a neighbor's bundle, and on a
     # map whose houses carry no separate placed box that excused the neighbor's house as well - Kuwabata's woodpile landed
-    # on the next house's gable once the 269 landing's bearing fix moved the row (tests/gate/test_no_feature_overlaps.py).
+    # on the next house's gable once the 269 landing's bearing fix moved the row (the retired finished-map overlap test; since
+    # feature 287 M8 the registry of what stands refuses it at record time, `overlap/registry.py`).
     for o in s.M.get("houses", []):
         ox, oy = float(o["x"]), float(o["y"])
         if abs(ox - hx) < 0.5 and abs(oy - hy) < 0.5:

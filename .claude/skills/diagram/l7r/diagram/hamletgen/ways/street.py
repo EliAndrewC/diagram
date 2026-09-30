@@ -16,6 +16,8 @@ from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
 from ..consts import FOOTPATH_FABRIC_GAP, Poly, Pt
 from .fabric import _crosses_fabric, _draw_web
 from .route import _route
+from .serve import door_path
+from .settle import Lawful
 
 STREET_WIDTH = 6
 """The street's tread: the connector's, a rank wider than the web's 3-5 lanes (FR-017)."""
@@ -111,6 +113,9 @@ def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: li
         # met the connector at its head, 96 ft past the entrance board, and two of its farms left without passing the board
         # (settlement-review, 2026-09-30); only the first street takes the road
         laid = [ln for ln in s.M.get("lanes", []) if ln.get("street")]
+        if not laid:
+            road = next(([(float(x), float(y)) for x, y in ln["pts"]] for ln in s.M.get("lanes", []) if ln.get("connector")), [])
+            path = meet_the_road(path, road)
         net = [(tuple(a), tuple(b)) for ln in (laid or [ln for ln in s.M.get("lanes", []) if ln.get("connector")]) for a, b in zip(ln["pts"], ln["pts"][1:], strict=False)]
         joined = join_to(path, net, hard, walls, water)  # type: ignore[arg-type]
         if len(path) >= 2 and _draw_web(s, path, STREET_WIDTH, houses=centers):
@@ -120,11 +125,49 @@ def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: li
             # ...AND ITS JOIN TO THE NETWORK IS A WAY OF ITS OWN, the road's rank but no row's street (`street_index` None):
             # drawn as part of the street, a 600 ft link from a second street's end across the first row counted as that
             # street, and a first-row farm beside it was judged to stand behind the second row's farms (cohort seed 904)
-            leg = join_leg(path, joined)
+            # ...WITHOUT A HOOK AT EITHER END, and only where the law would keep it: the join is a tree lane no settle repair
+            # cuts, and one that left the street by a 7 ft leg turning back was a hook and a needle the web was refused for
+            # (feature 291 on 287, cohort seed 901)
+            leg = unhooked_both(join_leg(path, joined))
+            lawful = Lawful(s, tree=True)
+            if len(leg) < 2 or not lawful(leg, STREET_WIDTH):
+                # ...ELSE THE LAWFUL JOIN FROM EITHER END, searched as a door path is (`serve.door_path`): a second street of one
+                # farm whose nearest join the law refused was left unjoined and its farm unreached (cohort seed 904)
+                leg = next((j for e in (path[-1], path[0]) if (j := door_path(s, e, net, hard, walls, water, [], lawful)) is not None), [])  # type: ignore[arg-type]
             if len(leg) >= 2 and _draw_web(s, leg, STREET_WIDTH, houses=centers, joins=True):
                 s.M["lanes"][-1]["street"] = True
                 s.M["lanes"][-1]["street_index"] = None
     return n
+
+
+MEET_THE_ROAD_FT = 60.0
+"""How far short of the road's start a row's first street may end and be carried on to it rather than joined by a lane of its
+own (a map drawing convention: the road runs on from the street's end, `track.street_run_out`)."""
+
+
+def meet_the_road(street: Sequence[Pt], road: Sequence[Pt], reach: float = MEET_THE_ROAD_FT) -> list[Pt]:
+    """The row's first street carried on to the road's start where it ends within `reach` of it, so the two meet end to end as
+    one way - else as it is. Joined by a lane of its own, the gap's join lay back along the road once a later pass carried the
+    road's end onto it: the street ran on beside the road, a doubled tail no settle may cut, both being tree lanes (feature
+    291 on 287, Kashikawa)."""
+    if len(street) < 2 or len(road) < 2:
+        return list(street)
+    r0 = road[0]
+    d0, d1 = math.dist(street[0], r0), math.dist(street[-1], r0)
+    if min(d0, d1) < 1.0 or min(d0, d1) > reach:
+        return list(street)
+    return [r0, *street] if d0 < d1 else [*street, r0]
+
+
+def unhooked_both(leg: Sequence[Pt]) -> list[Pt]:
+    """`leg` with a hook taken off either end (`geom.door_unhooked`, asked of the leg and of it reversed)."""
+    from .geom import door_unhooked
+
+    def free(a: Pt, b: Pt) -> bool:
+        return True
+
+    out = door_unhooked(list(leg), free)
+    return door_unhooked(out[::-1], free)[::-1] if len(out) >= 2 else out
 
 
 def join_leg(path: Sequence[Pt], joined: Sequence[Pt]) -> list[Pt]:
@@ -134,3 +177,53 @@ def join_leg(path: Sequence[Pt], joined: Sequence[Pt]) -> list[Pt]:
     if list(joined[: len(path)]) == list(path):
         return list(joined[len(path) - 1 :])
     return list(joined[: len(joined) - len(path) + 1])
+
+
+def to_its_joints(street: Sequence[Pt], ends: Sequence[Pt], touch: float) -> list[Pt]:
+    """A street cut back to the stretch between its outermost joints - the points on it nearest each other lane end within
+    `touch` of it (a farm's door path, the join, the road run on from it) - or as it is where fewer than one joint stands on
+    it. Past its last farm's path a street serves nothing the lane law counts (`end_serves`: a farmhouse stands most of a
+    frame off its street), and the settle refuses a tree lane with a dangling end (feature 291 on 287, Mizuguchi)."""
+    arc = [0.0]
+    for a, b in zip(street, street[1:], strict=False):
+        arc.append(arc[-1] + math.dist(a, b))
+    at: list[float] = []
+    for e in ends:
+        best = min(((seg_dist(e[0], e[1], a, b), k) for k, (a, b) in enumerate(zip(street, street[1:], strict=False))), default=(math.inf, 0))
+        if best[0] <= touch:
+            a, b = street[best[1]], street[best[1] + 1]
+            q = seg_closest(e[0], e[1], a, b)
+            at.append(arc[best[1]] + math.dist(a, q))
+    if not at:
+        return list(street)
+    lo, hi = min(at), max(at)
+    return cut_between(street, arc, lo, hi)
+
+
+def cut_between(pts: Sequence[Pt], arc: Sequence[float], lo: float, hi: float) -> list[Pt]:
+    """The polyline `pts` (its cumulative lengths `arc`) from arc length `lo` to `hi`."""
+
+    def at(u: float) -> Pt:
+        k = max(0, min(len(pts) - 2, next((j for j in range(len(pts) - 1) if arc[j + 1] >= u), len(pts) - 2)))
+        seg = arc[k + 1] - arc[k] or 1.0
+        f = (u - arc[k]) / seg
+        return (pts[k][0] + (pts[k + 1][0] - pts[k][0]) * f, pts[k][1] + (pts[k + 1][1] - pts[k][1]) * f)
+
+    inner = [p for p, u in zip(pts, arc, strict=True) if lo < u < hi]
+    return [at(lo), *inner, at(hi)]
+
+
+def trim_streets(s: Settlement, touch: float) -> int:
+    """Every planned street of a row (`street_index` set) cut to its joints (`to_its_joints`); returns the streets cut."""
+    lanes = s.M.get("lanes") or []
+    n = 0
+    for i, ln in enumerate(lanes):
+        if ln.get("street_index") is None or len(ln.get("pts") or []) < 2:
+            continue
+        pts = [(float(x), float(y)) for x, y in ln["pts"]]
+        ends = [(float(o["pts"][e][0]), float(o["pts"][e][1])) for j, o in enumerate(lanes) if j != i and len(o.get("pts") or []) >= 2 for e in (0, -1)]
+        cut = to_its_joints(pts, ends, touch)
+        if len(cut) >= 2 and cut != pts and s.reshape_lane(ln, cut):
+            s.reink_lane(i)
+            n += 1
+    return n

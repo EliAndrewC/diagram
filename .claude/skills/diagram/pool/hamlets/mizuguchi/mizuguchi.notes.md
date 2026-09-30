@@ -607,8 +607,8 @@ correct the last one - so the numbers a reader can check now come from the artif
 - copse: **0** clumps drawn
 - farmhouses: **12**
 - family form: **retirement_house**, retirement houses **5**
-- farmstead fixtures: bath **2**, coop **10**, pit **8**, privy **11**, shrine **1**, woodpile **5**
-- notice board at the entrance, **(3370.9, 1299.8)**: **12** of 12 households' ways out pass it
+- farmstead fixtures: bath **3**, coop **10**, pit **8**, privy **11**, shrine **1**, woodpile **5**
+- notice board at the entrance, **(803.7, 2607.5)**: **12** of 12 households' ways out pass it
 <!-- /census -->
 
 ## 2026-09-09 - feature 220 (the field fitted once)

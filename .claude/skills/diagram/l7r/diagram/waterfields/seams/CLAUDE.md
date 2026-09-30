@@ -10,5 +10,5 @@ Its modules are LAYERS, emitted bottom-up: every cross-module reference points b
 |---|---|
 | `pockets.py` (416) | a pocket's geometry: despiking, rings, the water body, the outside-command band, and `_absorb` - the merge of a thin pocket into its neighbors |
 | `plots.py` (377) | what becomes of a pocket: `_plant` lays plots in it, `_tab_cut`/`_unjog` straighten their edges, `_trade` hands a corner to the neighbor that can use it |
-| `close.py` (262) | the driver - `close_seams`, which runs the pass end to end and is the only name the engine calls |
+| `close.py` (262) | the driver - `close_seams`, which runs the pass end to end and is the only name the engine calls - and its last word, `hold_ring_rules` (feature 287): every ring that still breaks a `ring_rules` rule is split (a staircase, cut on its hop), welded, or left bare |
 | `__init__.py` | the composed surface only - the re-exports that keep every existing importer working. Never add logic here |

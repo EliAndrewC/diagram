@@ -25,6 +25,7 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
 from .._geom import PointGrid, boxed_grid, boxed_ring_hit, boxed_rings, boxed_segs, point_in_poly, seg_dist
+from ..land.wet import marsh_ground
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -92,13 +93,17 @@ class EdgeGround:
         courses = [(pl, half + ditch_px) for pl, half in s._watercourse_segs(0.0)]
         self.water: PointGrid = boxed_grid(boxed_segs(streams + courses + [(pl, pad) for pl, pad in avoid]))
         rings = [f["outline"] for f in s.M.get("fields", []) if len(f.get("outline") or []) >= 3]
-        rings += [m["poly"] for m in s.M.get("marshes", []) if len(m.get("poly") or []) >= 3]
+        rings += marsh_ground(s.M)
         self.fields: PointGrid = boxed_grid(boxed_rings(rings, field_px))
         self.dry: PointGrid = boxed_grid(boxed_rings([d["poly"] for d in s.M.get("dry_plots", []) if len(d.get("poly") or []) >= 3], 3.0))
 
     def clear(self, s: Settlement, cx: float, cy: float, w: float, h: float) -> bool:
         """May a w x h ground stand at (cx, cy)? The engine's own fit, then the ground's distances."""
         if not (s._fits(cx, cy, w, h) and s._footprint_clear(cx, cy, w, h)):
+            return False
+        # ...and the registry of what stands admits it as `cemetery` records it (feature 287 M8: the overlap matrix and the
+        # seating's reservations - cohort 1-60 laid a burial ground on an access corridor three times)
+        if not s.admits("cemeteries", {"x": round(cx, 1), "y": round(cy, 1), "w": w, "h": h, "rot": 0.0}):
             return False
         if any(rect_gap((cx, cy, w, h), home) < self.clear_px for home in self.homes):
             return False

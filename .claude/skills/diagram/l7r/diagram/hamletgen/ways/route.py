@@ -80,6 +80,8 @@ def lattice_search(
     in_band: Callable[[int, int], bool],
     toll: float,
     cell: float,
+    free: dict[tuple[int, int], bool] | None = None,
+    band: dict[tuple[int, int], bool] | None = None,
 ) -> tuple[dict[tuple[int, int], float], dict[tuple[int, int], tuple[int, int]]]:
     """The router's search over its lattice: each cell's cost from `start` and the cell it was reached from, as far as the
     search went - to `goal`, or every reachable cell when there is no way. Dijkstra, in cost order.
@@ -93,26 +95,58 @@ def lattice_search(
     dist = {(sx, sy): 0.0}
     prev: dict[tuple[int, int], tuple[int, int]] = {}
     heap = [(0.0, sx, sy)]
+    # THE SAME SEARCH WITH ITS INVARIANTS HOISTED (feature 287 perf): each step's length is taken once rather than per
+    # neighbor (`math.hypot` of the same unit offsets, times the same cell - the same floats), the eight offsets are walked
+    # in the order the nested loops walked them, and the verdicts already asked (`free`, the caller's memo) are read before
+    # the caller is - so every cell is pushed with the same cost in the same order, and the path is the one it was
+    steps = [(dx2, dy2, math.hypot(dx2, dy2) * cell, bool(dx2 and dy2)) for dx2 in (-1, 0, 1) for dy2 in (-1, 0, 1) if dx2 or dy2]
+    pop, push, seen = heapq.heappop, heapq.heappush, dist.get
+    known = free.get if free is not None else {}.get
+    banded = band.get if band is not None else {}.get
+
     while heap:
-        d, ix, iy = heapq.heappop(heap)
-        if (ix, iy) == (gx, gy):
+        d, ix, iy = pop(heap)
+        if ix == gx and iy == gy:
             break
-        if d > dist.get((ix, iy), 1e18):
+        if d > seen((ix, iy), 1e18):
             continue
-        for dx2 in (-1, 0, 1):
-            for dy2 in (-1, 0, 1):
-                jx, jy = ix + dx2, iy + dy2
-                # A DIAGONAL MAY NOT CUT A BLOCKED CORNER. Cell centers can both be clear while the
-                # step between them clips the corner of a steading standing between them - so the
-                # planned route was not actually walkable and failed its own acceptance test a moment
-                # later, having been "found". Requiring both orthogonal neighbors makes the lattice
-                # tell the truth about what it can walk.
-                if (dx2 or dy2) and 0 <= jx < nx and 0 <= jy < ny and is_free(jx, jy) and (not (dx2 and dy2) or (is_free(jx, iy) and is_free(ix, jy))):
-                    nd = d + math.hypot(dx2, dy2) * cell + (toll if toll and in_band(jx, jy) and not in_band(ix, iy) else 0.0)
-                    if nd < dist.get((jx, jy), 1e18):
-                        dist[(jx, jy)] = nd
-                        prev[(jx, jy)] = (ix, iy)
-                        heapq.heappush(heap, (nd, jx, jy))
+        for dx2, dy2, step, diag in steps:
+            jx, jy = ix + dx2, iy + dy2
+            # A DIAGONAL MAY NOT CUT A BLOCKED CORNER. Cell centers can both be clear while the
+            # step between them clips the corner of a steading standing between them - so the
+            # planned route was not actually walkable and failed its own acceptance test a moment
+            # later, having been "found". Requiring both orthogonal neighbors makes the lattice
+            # tell the truth about what it can walk.
+            if not (0 <= jx < nx and 0 <= jy < ny):
+                continue
+            ok = known((jx, jy))
+            if ok is None:
+                ok = is_free(jx, jy)
+            if ok and diag:
+                ok = known((jx, iy))
+                if ok is None:
+                    ok = is_free(jx, iy)
+                if ok:
+                    ok = known((ix, jy))
+                    if ok is None:
+                        ok = is_free(ix, jy)
+            if ok:
+                extra = 0.0  # the toll for entering the band (`set_crossing`), each band verdict read from `band` first
+                if toll:
+                    into = banded((jx, jy))
+                    if into is None:
+                        into = in_band(jx, jy)
+                    if into:
+                        out_of = banded((ix, iy))
+                        if out_of is None:
+                            out_of = in_band(ix, iy)
+                        if not out_of:
+                            extra = toll
+                nd = d + step + extra
+                if nd < seen((jx, jy), 1e18):
+                    dist[(jx, jy)] = nd
+                    prev[(jx, jy)] = (ix, iy)
+                    push(heap, (nd, jx, jy))
     return dist, prev
 
 
@@ -200,7 +234,7 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
             v = band[(ix, iy)] = in_brook_band(to_pt(ix, iy))
         return v
 
-    dist, prev = lattice_search((sx, sy), (gx, gy), nx, ny, is_free, in_band, _toll, cell)
+    dist, prev = lattice_search((sx, sy), (gx, gy), nx, ny, is_free, in_band, _toll, cell, free, band)
     if (gx, gy) not in dist:
         return []
     path: Poly = []

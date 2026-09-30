@@ -51,6 +51,22 @@ FIXTURE_FT: dict[str, tuple[float, float]] = {
 PERSIMMON_CROWN_FT = 11.5
 
 FIXTURE_KINDS = tuple(FIXTURE_FT)
+
+#: THE STOREHOUSE ANNEX'S FOOTPRINT in its house's frame, as factors of the house's (w, h): (x, y, width, height). NORTH, a
+#: wide block on the shaded back wall - 0.46 of the house's length by 0.45 of its depth, 1.67 to one, the Edo-period sheds'
+#: proportion (feature 280 M18, research/homesteads/440), overlapping the back wall by 0.05 h so it reads as joined; WEST, a
+#: tall block on the west wall (the dispersed farms). THE ONE TABLE the drawing (`Settlement.house`), the bundle's
+#: reservation, the flush's side choice and the fixtures' wall list read: it was written out in four places, and feature
+#: 280's new proportion reached two of them.
+KURA_PARTS: dict[str, tuple[float, float, float, float]] = {"N": (0.0, -0.675, 0.46, 0.45), "W": (-0.64, 0.0, 0.32, 0.56)}
+
+
+def kura_rect(w: float, h: float, side: str | None) -> tuple[float, float, float, float]:
+    """The storehouse annex of a `w` x `h` house on `side` ("N", else the west), in the house's frame (`KURA_PARTS`)."""
+    fx, fy, fw, fh = KURA_PARTS["N" if side == "N" else "W"]
+    return (fx * w, fy * h, fw * w, fh * h)
+
+
 SHRINE_RED = "#A03020"  # the same vermilion as small_shrine's roof - the GM's "red marking" convention
 
 
@@ -161,7 +177,8 @@ class PondStockMixin:
             for o in self.M.get(key, []):
                 if "x" in o and math.hypot(float(o["x"]) - cx, float(o["y"]) - cy) < half + math.hypot(float(o.get("w", 6)), float(o.get("h", 6))) / 2:
                     return False
-        return True
+        # ...and the registry of what stands admits the sty as `pig_sty` will record it (feature 287, water W53)
+        return self.admits("pig_sties", {"x": round(cx, 1), "y": round(cy, 1), "w": round(w, 1), "h": round(h, 1), "rot": round(rot, 1)})
 
     def pig_sty(self: Settlement, cx: float, cy: float, rot: float = 0.0, pond: int | None = None) -> None:  # type: ignore[misc]
         """A pig shed on a pond dike: a small pitched shed with its pen rail, raked along the bank."""

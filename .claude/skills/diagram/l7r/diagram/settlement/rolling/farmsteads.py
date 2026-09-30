@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Any, cast
 from .._geom import Indexed
 from ..homestead_parts.groves import GROVE_BAMBOO_PATCH_FT, GROVE_CLUMP_CROWNS, GROVE_CROWN_AREA, HOUSEHOLD_BAMBOO_PREVALENCE, bamboo_patch, band_clumps
 from .fit import part_box
+from .lot import kura_rect
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -196,8 +197,9 @@ class FarmsteadFlushMixin:
         no room for its own storehouse."""
         th = math.radians(rec.get("rot", 0))
         ca, sa = math.cos(th), math.sin(th)
-        # the two kura footprints, in the house's local frame - MUST match house()'s _sox/_soy/_ssw/_ssh
-        sides = {"W": (-0.64 * w, 0.0, 0.32 * w, 0.56 * h), "N": (0.0, -0.60 * h, 0.46 * w, 0.30 * h)}
+        # the two kura footprints, in the house's local frame - `kura_rect`, the table house() draws from (feature 280 M18's
+        # 1.67-to-one north annex reached the drawing and the bundle but not this copy; the table is one now)
+        sides = {"W": kura_rect(w, h, "W"), "N": kura_rect(w, h, "N")}
         # every DRAWN appurtenance of every farmstead, this one's included: the check does not care
         # whose garden a kura laps, and a house's own bed is as much a collision as a neighbor's
         near = [o for k in ("gardens", "threshing_yards", "farm_sheds", "byres") for o in (self.M.get(k) or []) if abs(o["x"] - rec["x"]) < 3 * w and abs(o["y"] - rec["y"]) < 3 * w]

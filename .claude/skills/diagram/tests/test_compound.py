@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
+
 import pytest
 
 from l7r.diagram import compound as c
@@ -92,11 +94,26 @@ def test_place_skips_a_spine_court() -> None:
     assert placed["b"].x_ft >= 100.0
 
 
-def test_place_overflow_when_building_too_wide() -> None:
-    prog = c.CompoundProgram("t", _env(w=50.0), (), (_b("huge", 80, 10, "inner", "N"),))
-    res = c.place(prog)
-    assert res.placed == []
-    assert [s.name for s in res.overflow] == ["huge"]
+def test_a_building_off_its_wall_grows_the_compound_or_is_refused() -> None:
+    """Feature 287, homes H29a: no building is left in overflow. One that runs off its wall grows the compound along it by
+    its own length and a fire-gap, within the size the program states; past it - or with none stated - the program is
+    refused at composition, naming the building (plan D7)."""
+    tight = c.CompoundProgram("t", _env(w=50.0), (), (_b("huge", 80, 10, "inner", "N"),))
+    with pytest.raises(ValueError, match="'huge'"):
+        c.place(tight)
+    roomy = c.CompoundProgram("t", _env(w=50.0), (), (_b("huge", 80, 10, "inner", "N"),), max_w_ft=200.0)
+    res = c.place(roomy)
+    assert [p.spec.name for p in res.placed] == ["huge"] and res.overflow == []
+    assert res.envelope is not None and res.envelope.w_ft == pytest.approx(50.0 + 80.0 + c.FIRE_GAP_FT)
+    assert res.placed[0].x2 <= res.envelope.w_ft - c.WALL_MARGIN_FT, "on its wall, inside the grown compound"
+    svg = c.emit_svg(roomy, res)
+    assert f'viewBox="0 0 {(res.envelope.w_ft + 2 * 7.0) * c.FTPX:.0f} ' in svg, "the draft is drawn at the grown compound"
+    with pytest.raises(ValueError, match="'huge'"):
+        c.place(c.CompoundProgram("t", _env(w=50.0), (), (_b("huge", 80, 10, "inner", "N"),), max_w_ft=100.0))
+    tall = c.CompoundProgram("t", _env(h=40.0, div=20.0), (), (_b("long", 10, 60, "outer", "E"),), max_h_ft=200.0)
+    assert c.place(tall).envelope.h_ft > 40.0, "an E or W building grows the compound's depth"
+    with pytest.raises(ValueError, match="'long'"):
+        c.place(c.CompoundProgram("t", _env(h=40.0, div=20.0), (), (_b("long", 10, 60, "outer", "E"),)))
 
 
 def _rects_overlap(a: c.Placed, b: c.Placed) -> bool:
@@ -196,12 +213,14 @@ def test_main_default_path(tmp_path, monkeypatch) -> None:
     assert (tmp_path / "pool" / "magistracies" / "county-magistracy-example" / "county-magistracy-example.svg").exists()
 
 
-def test_main_reports_overflow(tmp_path, monkeypatch, capsys) -> None:
+def test_main_refuses_a_program_that_overflows(tmp_path, monkeypatch) -> None:
+    """Feature 287, homes H29a: the composer writes no draft with a building off its wall - it refuses the program."""
     env = c.Envelope(50, 50, 25, 13)
     prog = c.CompoundProgram("t", env, (), (c.BuildingSpec("huge", "service", 80, 10, "inner", "N"),))
     monkeypatch.setattr(c, "county_magistracy_program", lambda: prog)
-    c.main([str(tmp_path / "o.svg")])
-    assert "OVERFLOW" in capsys.readouterr().out
+    with pytest.raises(ValueError, match="'huge'"):
+        c.main([str(tmp_path / "o.svg")])
+    assert not (tmp_path / "o.svg").exists()
 
 
 # --- the point features the emitter seats (feature 254): wells, privies, tubs, a bath, the notice board ---
@@ -414,10 +433,10 @@ def test_a_gatehouse_stands_beside_the_gate_or_nowhere() -> None:
     gh = c.BuildingSpec("gatehouse", "dark", 18.0, 12.0, "outer", "S", order=8, feature="gatehouse", beside_gate=True)
     placed = c.place(c.CompoundProgram("t", env, (), (gh,))).placed[0]
     assert placed.x2 == pytest.approx(96.0 - c.GATE_POST_W_FT - c.OUTLINE_CLEAR_FT) and placed.y2 == 200.0 - c._wall_clearance_ft("S")
-    blocked = c.place(c.CompoundProgram("t", env, (c.CourtZone("forecourt", 70.0, 180.0, 30.0, 18.0),), (gh,)))
-    assert blocked.placed == [] and blocked.overflow == [gh]  # something holds the ground beside the gate
-    narrow = c.place(c.CompoundProgram("t", _env(30.0, 200.0, 100.0, 8.0), (), (gh,)))
-    assert narrow.overflow == [gh]  # no room west of the gate at all
+    with pytest.raises(ValueError, match="'gatehouse'"):  # something holds the ground beside the gate (feature 287: refused, never left out)
+        c.place(c.CompoundProgram("t", env, (c.CourtZone("forecourt", 70.0, 180.0, 30.0, 18.0),), (gh,), max_w_ft=500.0))
+    with pytest.raises(ValueError, match="'gatehouse'"):  # no room west of the gate at all
+        c.place(c.CompoundProgram("t", _env(30.0, 200.0, 100.0, 8.0), (), (gh,)))
 
 
 def test_the_middle_gate_opens_where_no_building_backs_the_divider() -> None:
@@ -481,7 +500,8 @@ def test_no_roji_without_a_middle_gate_or_a_reception_veranda() -> None:
     parts: list[str] = []
     bare = _prog(_b("hall", 40.0, 20.0, "outer", "divider", order=10))
     cp._roji_parts(bare, c.place(bare), [], lambda *a, **k: "R", parts, 0.0, 0.0)
-    gateless = c.CompoundProgram("t", c.Envelope(200.0, 200.0, 100.0, 13.0, middle_gate_w_ft=0.0), (), c.county_magistracy_program().buildings)
+    county = c.county_magistracy_program()
+    gateless = replace(county, envelope=replace(county.envelope, middle_gate_w_ft=0.0))
     cp._roji_parts(gateless, c.place(gateless), [], lambda *a, **k: "R", parts, 0.0, 0.0)
     assert parts == []
 
@@ -704,3 +724,166 @@ def test_the_rear_alley_runs_on_behind_the_kitchen_to_the_yard() -> None:
     kitchen, home, servants = by["kitchen"], by["residence"], by["servants' quarters"]
     assert kitchen.y_ft == home.y_ft >= 10.0  # the alley's full depth behind both
     assert kitchen.x_ft - servants.x2 >= c.FIRE_GAP_FT  # and the way down to the yard
+
+
+# --- feature 287: every caption and fixture on a generated sheet seated by its rule, or the program refused ---
+
+
+def test_a_stranded_draft_caption_is_freed_by_lifting_a_neighbor() -> None:
+    """Labels L15: a caption with no free seat - its only room taken by a neighbor's caption - is seated with that
+    neighbor lifted and re-seated after it; both stand free, neither on a feature it does not name."""
+    from l7r.diagram.compound import _seat_all
+    from l7r.diagram.labels import Obstacle, Subject
+    from l7r.diagram.labels.geom import rect
+
+    wide = Subject("area", tuple(rect(200.0, 100.0, 120.0, 20.0)))
+    narrow = Subject("area", tuple(rect(200.0, 100.0, 40.0, 8.0)))  # a room inside the wide one: a free seat only at its middle
+    walls = [Obstacle(tuple(rect(200.0, 100.0 + dy, 130.0, 1.0)), 1000.0) for dy in (-21.5, 21.5)]
+    requests = [("the long gallery", wide, 8.0, False, "#333", "gallery"), ("closet", narrow, 8.0, False, "#333", "closet")]
+    seats, stuck = _seat_all(requests, walls, (0.0, 0.0, 400.0, 400.0), {})
+    assert stuck is None and len(seats) == 2 and all(p.cost == 0.0 for p in seats)
+    assert abs(seats[1].x - 200.0) < 8.0, "the closet's name at its middle, the gallery's moved off it"
+
+
+def test_a_program_whose_caption_has_no_clean_seat_is_refused_naming_it() -> None:
+    """Labels L15, plan D7: a building walled in with no free seat for its name, even with a neighbor lifted and the
+    sheet grown - the composer refuses the program, naming the caption, before any sheet exists."""
+    from l7r.diagram.compound import _seat_captions
+    from l7r.diagram.labels import Obstacle, Subject
+    from l7r.diagram.labels.geom import rect
+
+    shed = Subject("point", tuple(rect(200.0, 200.0, 5.0, 5.0)))
+    everything = [Obstacle(tuple(rect(200.0, 200.0, 400.0, 400.0)), 1000.0)]
+    with pytest.raises(ValueError, match="'walled-in shed'"):
+        _seat_captions([("walled-in shed", shed, 8.0, False, "#333", "shed")], everything, (0.0, 0.0, 400.0, 400.0), None, "t")
+
+
+def test_a_draft_caption_the_foot_holds_is_seated_on_the_grown_sheet() -> None:
+    """Labels L15: a caption whose only free seat lies below the sheet's foot takes it once the foot grows."""
+    from l7r.diagram.compound import CAPTION_ROOM, _seat_captions
+    from l7r.diagram.labels import Obstacle, Subject
+    from l7r.diagram.labels.geom import rect
+
+    board = Subject("point", tuple(rect(200.0, 395.0, 6.0, 2.0)))
+    above = [Obstacle(tuple(rect(200.0, 200.0, 400.0, 190.0)), 1000.0)]
+    out, foot = _seat_captions([("notice board", board, 7.0, True, "#333", "notice board")], above, (0.0, 0.0, 400.0, 400.0), None, "t")
+    assert out and 400.0 < foot <= 400.0 + 3 * CAPTION_ROOM
+
+
+def test_the_generated_sheets_fixtures_stand_by_their_rules() -> None:
+    """Homes H29b: every tub the county draft seats stands within the gutter's reach of its building, and its notice
+    board within reach of the main gate - the numbers the pack audit registers, held equal to them."""
+    from l7r.diagram import compound_model as cm
+    from l7r.diagram.tools.pack_audit import NOTICE_BOARD_MAX_FT, TUB_MAX_GAP_FT
+
+    assert (cm.TUB_MAX_GAP_FT, cm.NOTICE_BOARD_MAX_FT) == (TUB_MAX_GAP_FT, NOTICE_BOARD_MAX_FT)
+    host = (0.0, 0.0, 30.0, 20.0)
+    assert cp.tub_by_its_eaves((15.0, 22.5), host) and not cp.tub_by_its_eaves((15.0, 26.0), host)
+    # the CENTER is measured, as the audit measures it: a tub 4 ft off its eaves (its circle's edge 2.7 ft off) is adrift
+    assert not cp.tub_by_its_eaves((15.0, 24.0), host)
+    env = _env()
+    gl, _gr = c._gate_interval(env)
+    assert cp.board_by_the_gate(env, (gl - 14.0, env.h_ft + 3.0, gl - 8.0, env.h_ft + 4.5))
+    assert not cp.board_by_the_gate(env, (gl - 40.0, env.h_ft + 3.0, gl - 34.0, env.h_ft + 4.5))
+
+
+def test_a_repair_skips_a_far_neighbor_and_one_whose_lifting_frees_nothing() -> None:
+    """Labels L15: `_repair` lifts only a neighbor near the stranded caption's subject, and moves nothing where lifting
+    it leaves the stranded caption still without a free seat."""
+    from l7r.diagram.compound import _repair
+    from l7r.diagram.labels import Obstacle, Placement, Subject
+    from l7r.diagram.labels.geom import rect
+
+    shed = Subject("point", tuple(rect(200.0, 200.0, 5.0, 5.0)))
+    box = [Obstacle(tuple(rect(200.0, 200.0, 190.0, 190.0)), 1000.0)]
+    far = Placement(380.0, 20.0, 0.0, ("far",), tuple(rect(380.0, 18.0, 8.0, 4.0)), 0, 0, "upper right", 0.0, None)
+    near = Placement(212.0, 212.0, 0.0, ("near",), tuple(rect(212.0, 210.0, 8.0, 4.0)), 0, 0, "upper right", 0.0, None)
+    requests = [
+        ("far", Subject("point", tuple(rect(370.0, 30.0, 2.0, 2.0))), 8.0, False, "#333", "x"),
+        ("near", Subject("point", tuple(rect(205.0, 215.0, 2.0, 2.0))), 8.0, False, "#333", "x"),
+        ("shed", shed, 8.0, False, "#333", "shed"),
+    ]
+    seats = [far, near]
+    assert _repair(2, requests, box, seats, {}, (0.0, 0.0, 400.0, 400.0)) is None and seats == [far, near]
+
+
+# ---- feature 287 wave 6, homes H29b: a generated sheet's sitings held where the draft is composed ----------------------
+
+
+def _ring(*placed: tuple[c.BuildingSpec, float, float], env: c.Envelope | None = None) -> c.PlaceResult:
+    """A constructed placement: the masses where the test puts them, in `env`."""
+    return c.PlaceResult(placed=[c.Placed(s, x, y) for s, x, y in placed], envelope=env or _env(100.0, 100.0, 50.0))
+
+
+def test_the_composition_is_asked_the_audits_own_bands() -> None:
+    """The one predicate (`composition_sitings`: the pack audit's registered `coverage_band` and `perimeter_hugging`, asked
+    of the placed masses): a ring of masses along the walls is in both bands; the same built area pulled into the middle
+    of its courts fails the hugging floor; too little built fails the coverage band; a check the type does not list is
+    not asked."""
+    row = _b("row", 94.0, 20.0, "inner", "N")
+    hall = _b("hall", 94.0, 20.0, "outer", "divider")
+    ring = _ring((row, 3.0, 3.0), (hall, 3.0, 52.0))
+    assert c.composition_sitings(ring) == []
+    block = _b("block", 60.0, 60.0, "inner", "N")
+    middle = _ring((block, 20.0, 20.0), env=_env(100.0, 100.0, 90.0))
+    found = c.composition_sitings(middle)
+    assert len(found) == 1 and "within 25 ft of a wall" in found[0], found
+    sparse = _ring((_b("hut", 20.0, 10.0, "inner", "N"), 3.0, 3.0))
+    assert any("building coverage" in f for f in c.composition_sitings(sparse))
+    assert c.composition_sitings(sparse, ("perimeter_hugging",)) == [], "the type lists no coverage band: not asked"
+    assert "coverage_band" in c._declared_checks("magistracies") and c._declared_checks("no-such-tier") == ()
+
+
+def test_a_grown_compound_that_falls_out_of_its_band_is_refused_naming_what_grew_it() -> None:
+    """Homes H29b, the violating case: growing the envelope for an overflowing building adds unbuilt ground. A composition
+    in band until its last building overflows the north wall, whose growth leaves it under the coverage floor, is refused
+    at composition naming that building (plan D7) - the same program of no declared type places as before."""
+    full = (
+        _b("row", 94.0, 20.0, "inner", "N", order=9),
+        _b("hall", 94.0, 20.0, "outer", "divider", order=9),
+        _b("late", 60.0, 10.0, "inner", "N", order=1),
+    )
+    free = c.CompoundProgram("t", _env(100.0, 100.0, 50.0), (), full, max_w_ft=400.0)
+    grown = c.place(free)
+    assert grown.envelope is not None and grown.envelope.w_ft > 100.0 and not grown.overflow, "the input holds the violation"
+    assert any("building coverage" in f for f in c.composition_sitings(grown))
+    with pytest.raises(ValueError, match=r"grown for 'late'.*building coverage"):
+        c.place(replace(free, tier="magistracies"))
+    in_band = c.CompoundProgram("t", _env(100.0, 100.0, 50.0), (), full[:2], tier="magistracies")
+    assert c.place(in_band).placed, "a composition in its bands is placed"
+
+
+def test_the_generated_drafts_are_composed_in_band_and_drawn_in_band() -> None:
+    """Both generated drafts declare their type, their compositions pass the bands, and the drawn sheet the audit reads
+    agrees: its coverage stands at or over the masses' (the point features only add built ground)."""
+    from l7r.diagram.tools import pack_audit as pa
+
+    prog, result, svg = _county()
+    assert prog.tier == "magistracies" and c.composition_sitings(result) == []
+    drawn = pa.parse_svg(svg)
+    assert pa.coverage_band(drawn) == [] and pa.perimeter_hugging(drawn) == []
+    assert pa.coverage(drawn) >= pa.coverage(c.composition_plan(result)) - 0.005
+
+
+def test_the_garden_well_is_seated_on_clear_ground_or_not_at_all() -> None:
+    """Homes H29b, the Mode A wells: the garden well takes the garden's north-east corner where it is free, the next clear
+    seat along the north edge where something already stands there, and none where the garden holds no clear seat."""
+    env = _env(200.0, 200.0, 100.0)
+    garden = c.CourtZone("garden", 60.0, 20.0, 80.0, 30.0)
+    assert cp.garden_well(env, garden, []) == pytest.approx((135.0, 25.0))
+    corner = [(125.0, 18.0, 142.0, 34.0)]
+    x, y = cp.garden_well(env, garden, corner)  # type: ignore[misc]
+    assert y == pytest.approx(25.0) and x + cp.WELL_HALF_FT + 1.0 <= 125.0, "clear of what stands at the corner"
+    assert cp.garden_well(env, garden, [(55.0, 15.0, 145.0, 55.0)]) is None
+
+
+def test_a_program_that_requires_a_well_and_has_no_seat_for_one_is_refused() -> None:
+    """Homes H29b; plan D7: the magistracy's declaration requires a well, so a draft with no seat for any is refused at
+    composition naming it - never a sheet drawn without its well. A program of no declared type is held to nothing."""
+    prog = c.CompoundProgram("t", _env(), (), (_b("hall", 40.0, 20.0, "outer", "divider", order=10, feature="office hall"),))
+    result = c.place(prog)
+    assert ">well<" not in "".join(c._point_features(prog, result, lambda *a: "R", lambda *a: "L", 0.0, 0.0))
+    typed = replace(prog, tier="magistracies")
+    with pytest.raises(ValueError, match="no seat for a well"):
+        c._point_features(typed, result, lambda *a: "R", lambda *a: "L", 0.0, 0.0)
+    assert cp.requires(typed, "well") and not cp.requires(prog, "well") and not cp.requires(typed, "unicorn stable")

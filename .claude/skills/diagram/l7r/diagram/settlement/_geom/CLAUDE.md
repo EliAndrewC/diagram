@@ -21,7 +21,7 @@ widely imported module in the engine (41 of the 47 files under `settlement/`, pl
 |---|---|
 | `__init__.py` | you need the re-export surface; never add logic here |
 | `base.py` | the `Pt` / `Poly` / `Manifest` aliases, the import-time main-tree guard, or the land/crop palette (`LAND`, `PADDY_SHADES`, `FLOODED_SHADES`, `RIPE_SHADES`, `RICE_GREENS`) |
-| `primitives.py` | plain coordinate math with no map vocabulary: `point_in_poly`, `seg_closest`, `seg_dist`, `edge_dist`, `segments_cross`, `seg_intersect`, `ring_touches`, `seg_in_ellipse_core`, `_signed_area` |
+| `primitives.py` | plain coordinate math with no map vocabulary: `point_in_poly`, `seg_closest`, `seg_dist`, `edge_dist`, `segments_cross`, `seg_intersect`, `ring_touches`, `ring_meets_ellipse`, `_signed_area` |
 | `overlap.py` | a footprint's corner ring, or whether two regions meet: `rot_rect` / `_rect_ring` (corners), `stroke_quads` (a polyline as polygons), `sat_overlap` / `rects_overlap`, `poly_gap` / `_aabb_gap` / `box_gap` (the three gap MEASURES - know which one your rule is entitled to), `region_blocked` / `quad_hits_poly` / `quad_hits_seg` / `point_quad_dist` (cell-region tests), `_union_area` |
 | `indexes.py` | a per-candidate scan is eating a gen: the `boxed_*` bbox prefilters, `PointGrid` (uniform grid, and its `_MAX_SPAN` clamp), `Indexed` (the registry that versions ITSELF rather than being fingerprinted), `indexed_grid`, `boxed_grid`. **Read the two staleness post-mortems here before adding any cache** |
 | `seatmemo.py` | `SeatMemo` - the refusal memo behind a dwelling top-up, its measured 64.6%-re-visit rationale, and the `sync()` invariant it ASSERTS instead of assuming. Also read it before wiring the memo into a new gen: below ~a third re-visits it is a pessimization |

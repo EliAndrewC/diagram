@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import heapq
 import math
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 
 from l7r.diagram.settlement import poly_gap, seg_closest, seg_intersect, segments_cross
 
@@ -35,8 +35,43 @@ def _clear_link(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: li
     # bridged - and the lane ink then crossed a house or a garden bed
     # (`features_do_not_overlap`, `houses_clear_of_lanes`). A link is walkable only if it survives
     # end to end.
-    runs = clear_runs([a, b], hard, WEB_HARD_GAP, step=3.0, lines=water, tight=walls, tight_margin=gap, floor=0.5, index=index)
-    return any(polyline_len(r) >= span - 3.0 for r in runs)
+    if not hard and not water and not walls:
+        return True  # `clear_runs` hands the link back whole
+    fouled = (index if index is not None else fabric_index(hard, WEB_HARD_GAP, walls, gap, water, 14.0)).fouled
+    return link_survives(a, b, fouled, span - 3.0)
+
+
+_LINK_STEP = 3.0  # ft: `_clear_link`'s sample pitch along the link
+_LINK_FLOOR = 0.5  # ft: the shortest run `_clear_link` counts (`clear_runs`' floor as it asks)
+_LINK_EPS = 1e-6  # ft: past any rounding between a run's summed legs and its chord
+
+
+def link_survives(a: Pt, b: Pt, fouled: Callable[[Pt], bool], need: float) -> bool:
+    """`any(polyline_len(r) >= need for r in clear_runs([a, b], ..., step=3.0, floor=0.5))` - the SAME samples asked the SAME
+    `fouled`, in order - but decided as soon as it is known (dev/performance.md, shape one): the string-pull of `_route` asks a
+    link from each vertex to every later one, longest first, and nearly every long one is fouled near its middle, so the walk
+    of its every sample was the router's second cost (cohort seed 44, 928 links). It answers True once a clear run in progress
+    is already longer than `need` (a run only grows), and False once a fouled sample leaves too little link after it for any
+    run to be; the length that decides is the run's own `polyline_len`, with a margin past rounding on each early answer."""
+    n = max(1, int(math.hypot(b[0] - a[0], b[1] - a[1]) / _LINK_STEP))
+    thr = max(need, _LINK_FLOOR)
+    run: Poly = []
+    done = 0.0  # the run's length so far, summed leg by leg (`polyline_len` sums the same legs)
+    for k in range(n + 1):
+        q = a if k == 0 else (a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n)
+        if fouled(q):
+            if len(run) >= 2 and (length := polyline_len(run)) >= _LINK_FLOOR and length >= need:
+                return True
+            if math.dist(q, b) + _LINK_EPS < thr:
+                return False  # every run after this sample lies within the rest of the link, shorter than asked
+            run, done = [], 0.0
+            continue
+        if run:
+            done += math.hypot(q[0] - run[-1][0], q[1] - run[-1][1])
+        run.append(q)
+        if len(run) >= 2 and done > thr + _LINK_EPS:
+            return True
+    return len(run) >= 2 and (length := polyline_len(run)) >= _LINK_FLOOR and length >= need
 
 
 def existing_walk(ways: Sequence[Poly], a: Pt, b: Pt, touch: float) -> float | None:
@@ -294,19 +329,41 @@ _ZIGZAG_RUN_FT = 40.0
 _ARM_FT = 40.0
 
 
+def kink_spans(pts: Sequence[Pt]) -> list[tuple[str, int, int]]:
+    """Where a run fails to bend like a path, as (kind, first vertex, last vertex): a turn of `_HAIRPIN_DEG` or more
+    ("doubles back", one vertex), or two turns of `_ZIGZAG_DEG` or more whose SUMMED path between them is `_ZIGZAG_RUN_FT`
+    or less ("kinks") - the whole run between the two turns, not one segment.
+
+    ONE BEND PREDICATE (feature 287, ways W18, FR-003). The web's passes asked a one-segment reading here - two big turns
+    separated by ONE short segment - while the finished-map tests summed the run between them, so a lattice step of two
+    short legs passed every pass and failed the test (seed 43). The test's reading is the rule; `law.kinks` and every pass
+    that asks `_bends_badly` now read this one body."""
+    p = list(pts)
+    bad: list[tuple[str, int, int]] = []
+    if len(p) < 3:
+        return bad
+    turns: list[int] = []
+    for k in range(1, len(p) - 1):
+        if math.dist(p[k - 1], p[k]) < 1e-6 or math.dist(p[k], p[k + 1]) < 1e-6:
+            continue
+        deg = _turn_deg(p[k - 1], p[k], p[k + 1])
+        if deg >= _HAIRPIN_DEG:
+            bad.append(("doubles back", k, k))
+        elif deg >= _ZIGZAG_DEG:
+            turns.append(k)
+    for ka, kb in zip(turns, turns[1:], strict=False):
+        if sum(math.dist(p[j], p[j + 1]) for j in range(ka, kb)) <= _ZIGZAG_RUN_FT:
+            bad.append(("kinks", ka, kb))
+    return bad
+
+
 def _bends_badly(pts: Sequence[Pt]) -> bool:
-    """The shape `lanes_bend_like_paths` refuses - a hairpin, or two 50 degree turns inside 40 ft.
+    """The shape `lanes_bend_like_paths` refuses (`kink_spans`) - a hairpin, or two 50 degree turns inside 40 ft of path.
 
     Stated here so a pass that is about to DRAW a run can ask before drawing, rather than leaving the
     gate to discover it. The thresholds are the check's own, deliberately: a repair that measures
     something other than what the check measures is the defect this file has now met three times."""
-    for k in range(1, len(pts) - 1):
-        if _turn_deg(pts[k - 1], pts[k], pts[k + 1]) >= _HAIRPIN_DEG:
-            return True
-    return any(
-        _turn_deg(pts[k - 1], pts[k], pts[k + 1]) >= _ZIGZAG_DEG and _turn_deg(pts[k], pts[k + 1], pts[k + 2]) >= _ZIGZAG_DEG and math.dist(pts[k], pts[k + 1]) <= _ZIGZAG_RUN_FT
-        for k in range(1, len(pts) - 2)
-    )
+    return bool(kink_spans(pts))
 
 
 def bowtie_cut(pts: Poly, k: int, x: Pt, arm_ft: float = _ARM_FT) -> Poly | None:
@@ -326,7 +383,7 @@ def bowtie_cut(pts: Poly, k: int, x: Pt, arm_ft: float = _ARM_FT) -> Poly | None
     return None
 
 
-def route_around(poly: Poly, path: Poly, margin: float, rounds: int = 6) -> Poly:
+def route_around(poly: Poly, path: Poly, margin: float, rounds: int | None = None) -> Poly | None:
     """Bend a drawn way OUT of `poly` by walking its outline round the obstruction.
 
     `connector_track` sweeps forty bearings and keeps the LEAST-BAD when none is clean, which is the
@@ -339,11 +396,16 @@ def route_around(poly: Poly, path: Poly, margin: float, rounds: int = 6) -> Poly
     An earlier version inserted ONE waypoint at the mean of the crossings and re-ran; it converged a
     few pixels per round and ran out of rounds still crossing, because a point pushed off the middle
     of a lobe lands right beside the leg it came from. Following the boundary is both the correct
-    detour and the one a farmer walks."""
+    detour and the one a farmer walks.
+
+    UNTIL NO LEG CROSSES, OR NONE (feature 287, ways W24, FR-005). Six rounds and then the result as it stood - a leg
+    still across the field shipped. The rounds are now bounded by the ring's own vertex count (each splice walks ring
+    edges, so a detour that needs more rounds than the ring has vertices is not converging), and a path that still crosses
+    after them comes back as None: the caller takes another way out, never this one."""
     ring = list(poly)
     n = len(ring)
     out = [push_out_of(poly, q, margin) for q in path]
-    for _ in range(rounds):
+    for _ in range(max(n, 1) if rounds is None else rounds):
         redo: Poly = []
         cut = False
         for i in range(len(out) - 1):
@@ -367,8 +429,8 @@ def route_around(poly: Poly, path: Poly, margin: float, rounds: int = 6) -> Poly
         redo.append(out[-1])
         out = redo
         if not cut:
-            break
-    return out
+            return out
+    return None if any(segments_cross(a, b, ring[k], ring[(k + 1) % n]) for a, b in zip(out, out[1:], strict=False) for k in range(n)) else out
 
 
 def clear_runs(

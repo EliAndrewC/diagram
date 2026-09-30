@@ -83,6 +83,12 @@ def web_rejoinable(lanes: Sequence[Mapping[str, Any]], hard: list[Poly], walls: 
     return True
 
 
+def admits_lane(s: Any) -> Callable[[Any, Any], bool]:
+    """The settlement's question of a lane rewrite (feature 287 M8): does the overlap matrix admit lane record `ln` along
+    `pts` on what stands, its own old extent aside?"""
+    return lambda ln, pts: bool(s.admits("lanes", {**ln, "pts": [[round(float(x), 1), round(float(y), 1)] for x, y in pts]}, ignore=ln))
+
+
 def commit_lane(
     lanes: list[dict[str, Any]],
     m: int,
@@ -91,8 +97,10 @@ def commit_lane(
     walls: Sequence[Poly],
     water: list[tuple[Pt, Pt]],
     reink: Callable[[int], None],
+    admit: Callable[[Any, Any], bool] = lambda _ln, _pts: True,
 ) -> bool:
-    """Rewrite lane `m` - and put it back if the rewrite BREAKS the web and the touch pass cannot mend it.
+    """Rewrite lane `m` - and put it back if the rewrite BREAKS the web and the touch pass cannot mend it. Not at all where
+    `admit` refuses the lane as it would become (feature 287 M8: the settlement's overlap-matrix question, `admits_lane`).
 
     LIFTED OUT OF `_smooth_web` (feature 146, GM 2026-08-28 on inner functions and testability). The
     revert arm is the whole reason the function exists (feature 137 T03: a hairpin cut took the short
@@ -100,6 +108,8 @@ def commit_lane(
     Sawada all came out failing `lanes_form_one_network`), and it is the arm a clean roll never enters -
     so it had no test until it could be called with four plain lists.
     """
+    if not admit(lanes[m], new_pts):
+        return False
     before, old = web_pieces(lanes), lanes[m]["pts"]
     lanes[m]["pts"] = new_pts
     if web_pieces(lanes) > before and not web_rejoinable(lanes, hard, walls, water):
@@ -107,6 +117,25 @@ def commit_lane(
         return False
     reink(m)
     return True
+
+
+def string_pull_chord_ok(pts: Poly, a: int, b: int, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float) -> bool:
+    """May `_smooth_web`'s string-pull replace `pts[a+1:b]` with the chord `pts[a]`-`pts[b]`? Yes at the web's own margins
+    (`_clear_link`); at this lane's own keep-out `gap` (`_clear_touch`) only when the chord is a SIMPLIFICATION - every
+    vertex it skips lies within `_JOG_FT` of it - because a new line across open ground owes the houses their corridor.
+
+    LIFTED OUT OF `_smooth_web` (tests/CLAUDE.md, the closure rule; feature 287, 2026-09-30): the straggler footpath pass
+    that was the only roll reaching the jog-bounded arm was deleted at the GM's instruction, so the arm is tested here
+    with plain points."""
+    if _clear_link(pts[a], pts[b], hard, walls, water):
+        return True
+    # A FOOTPATH CHORDED AT ITS OWN 4 ft MARGIN WAS TRIED AND ROTATED A BEND ONTO INASHIRO (feature 137
+    # T04, 2026-08-28): letting a straggler lane take any chord `_clear_touch` allows straightened seed
+    # 43's fold and put a new sharp bend on the reference hamlet's web. Not kept; the fold's real
+    # cause is the straggler router folding inside a pocket, and that is where the fix belongs.
+    if not _clear_touch(pts[a], pts[b], hard, walls, water, gap):
+        return False
+    return all(seg_dist(v[0], v[1], pts[a], pts[b]) <= _JOG_FT for v in pts[a + 1 : b])
 
 
 def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
@@ -150,7 +179,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
     # counts the pieces itself. Removed with it (feature 146).
 
     def _commit(m: int, new_pts: list[list[float]]) -> bool:
-        return commit_lane(lanes, m, new_pts, hard, walls, water, s.reink_lane)
+        return commit_lane(lanes, m, new_pts, hard, walls, water, s.reink_lane, admits_lane(s))
 
     def _others_segs(skip: int) -> list[tuple[Pt, Pt]]:
         return [
@@ -218,15 +247,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
         _lane_gap = max(_TOUCH_GAP, float(ln.get("w") or 5.0) / 2.0 + 2.0)
 
         def _shortcut_ok(a: int, b: int, pts: Poly = pts, _g: float = _lane_gap) -> bool:
-            if _clear_link(pts[a], pts[b], hard, walls, water):
-                return True
-            # A FOOTPATH CHORDED AT ITS OWN 4 ft MARGIN WAS TRIED AND ROTATED A BEND ONTO INASHIRO (feature 137
-            # T04, 2026-08-28): letting a straggler lane take any chord `_clear_touch` allows straightened seed
-            # 43's fold and put a new sharp bend on the reference hamlet's web. Not kept; the fold's real
-            # cause is the straggler router folding inside a pocket, and that is where the fix belongs.
-            if not _clear_touch(pts[a], pts[b], hard, walls, water, _g):
-                return False
-            return all(seg_dist(v[0], v[1], pts[a], pts[b]) <= _JOG_FT for v in pts[a + 1 : b])
+            return string_pull_chord_ok(pts, a, b, hard, walls, water, _g)  # the body is `string_pull_chord_ok`
 
         out = [pts[0]]
         a = 0

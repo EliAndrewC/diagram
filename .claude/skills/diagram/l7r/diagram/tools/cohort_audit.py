@@ -73,6 +73,13 @@ PINNED_ROWS: tuple[dict[str, str], ...] = (
 PINNED_FIRST_SEED = 901
 
 
+def refused_verdict(hspec: Any, refused: BaseException) -> tuple[str, list[str], list[str]]:
+    """The verdict of a roll that raised (`roll_one`): its header - the form its plan rolled - and the refusal by name."""
+    form = hg.plan_site(hspec).settlement_form
+    name = type(refused).__name__
+    return (f"{hspec.name} households={hspec.households} form={form} REFUSED", [f"refused:{name}"], [f"FAIL refused:{name} -> {str(refused)[:300]}"])
+
+
 def roll_one(spec: tuple[int, int] | tuple[int, int, dict[str, str]]) -> tuple[str, list[str], list[str]]:
     """Roll and gate ONE audit hamlet: (header line, sorted failures, the gate's own FAIL lines).
 
@@ -88,8 +95,14 @@ def roll_one(spec: tuple[int, int] | tuple[int, int, dict[str, str]]) -> tuple[s
     # a fix living in `generate` was invisible to the cohort - measured on seed 5, which passes
     # through `generate` and failed in the audit. A harness that exercises a different code path than
     # production reports on a map nobody will ever see.
-    with contextlib.redirect_stdout(io.StringIO()):
-        report = hg.generate(hspec, out_base=None, render=False)
+    # A REFUSED SITE IS ONE SEED'S VERDICT, NOT THE AUDIT'S END (feature 291 on 287): since feature 287 a roll that cannot keep
+    # its rules is refused by name (`SiteRefused`, `WebRefused`, `BrookRefused`, ...) rather than shipped, and the first one
+    # raised through the process pool ended the whole cohort with no report of the other 29 seeds
+    try:
+        with contextlib.redirect_stdout(io.StringIO()):
+            report = hg.generate(hspec, out_base=None, render=False)
+    except Exception as refused:  # noqa: BLE001 - every refusal is reported by its own name
+        return refused_verdict(hspec, refused)
     _breach = ((getattr(report, "manifest", None) or {}).get("meta") or {}).get("scatter_frame_breach")  # a test's stub report carries no manifest
     if _breach:  # feature 224: the scatter's predicted frame was too small - a strip inside the view may hold no scatter
         report.fail_lines.append(f"FAIL scatter_frame_breach -> the view reaches {_breach} px past the predicted scatter frame (left, top, right, bottom)")

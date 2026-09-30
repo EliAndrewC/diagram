@@ -34,7 +34,7 @@ from typing import TYPE_CHECKING, Any
 # lie outside the viewBox (specs/200 R2) and are culled there by the page's own `drop_offmap` rule before the merge,
 # so the file never carries them (`Settlement.flush_blade_groups`).
 from .._geom import CrownIndex, KeepoutGrid, Poly, RingIndex, convex_hull
-from ..land.wet import MARSH_FEATHER_BS
+from ..land.wet import MARSH_FEATHER_BS, marsh_ground
 
 WOOD_FRINGE_FT = 8.0
 """How far grass reaches in under a wood's edge before the kept-clear floor (GM 2026-09-27, Inashiro: highlighting the
@@ -72,7 +72,270 @@ def farmstead_keepouts(M: Any, margin: float) -> list[Any]:
     return rings
 
 
+WOODLAND_MIN_CROWNS = 5
+"""The fewest crowns a woodland commons may record (`test_a_woodland_commons_is_visibly_stocked`, feature 287 woods W13):
+a parcel claiming a wood draws one - under five crowns it reads as a few trees on grass, not a worked wood. A map drawing
+convention on legibility, the rule's own figure; the parcel's real stocking is `COMMONS_SPACING_FT`."""
+
+BARE_STEP = 25.0  # px between the samples `bare_cells` takes - the gate's own grid (`margins_form_continuous_ring`)
+BARE_SHARE_CAP = 0.35
+"""How much of the rendered view may be ground nothing covers (`margins_form_continuous_ring`). Above this the map has
+holes in it - the margins are meant to form a continuous ring of worked and unworked ground, not islands with gaps."""
+
+#: The manifest's TREADS - a way or a watercourse is a polyline with a width, not a ring: (key, points key, width key).
+BARE_TREADS = (("lanes", "pts", "w"), ("streams", "poly", "w"), ("channels", "poly", "w"), ("field_ditches", "poly", "w"), ("drawn_channels", "pts", "w0"))
+#: Keys that record no ground: the page's furniture, the render's bookkeeping, a lone connector's raw points.
+_BARE_SKIP = frozenset({"meta", "labels", "title", "scalebar", "ink_classes", "site_boundary", "comb_floors", "pond_layer", "tree_crowns", "wet_plots", "flooded_plots", "field_chains", "lane"})
+
+
+def ring_center(poly: Any) -> tuple[float, float]:
+    """The point a commons record carries as its `x`, `y`: the middle of its ring's bounding box, at the record's grain.
+    ONE body (feature 287, woods W04): `commons` records it and the woodland scan asks the row rule of it, so the point a
+    reader of the record finds in a row is the point the placer refused a row for."""
+    xs = [float(q[0]) for q in poly]
+    ys = [float(q[1]) for q in poly]
+    return (round((min(xs) + max(xs)) / 2, 1), round((min(ys) + max(ys)) / 2, 1))
+
+
+def _footprint(o: Any) -> Any:
+    """One manifest record as the shapely ground it covers, or None - a ring (`outline` / `poly`), a turned box (`x y w h rot`),
+    a disc (`x y r`) or an ellipse (`x y rx ry`); a bare list of points is a ring too (a pasture, a forest patch)."""
+    from shapely.geometry import Point, Polygon  # noqa: PLC0415 - shapely is loaded on first use (feature 237)
+
+    from .._geom import rot_rect  # noqa: PLC0415 - kept beside its one use
+
+    if isinstance(o, dict):
+        ring = o.get("outline") or o.get("poly")
+        if ring and len(ring) >= 3 and all(isinstance(q, (list, tuple)) and len(q) >= 2 for q in ring):
+            return Polygon([(float(q[0]), float(q[1])) for q in ring]).buffer(0)
+        if all(k in o for k in ("x", "y", "w", "h")):
+            return Polygon(rot_rect(float(o["x"]), float(o["y"]), float(o["w"]), float(o["h"]), float(o.get("rot") or 0.0))).buffer(0)
+        if all(k in o for k in ("x", "y", "r")):
+            return Point(float(o["x"]), float(o["y"])).buffer(max(float(o["r"]), 0.5))
+        if all(k in o for k in ("x", "y", "rx", "ry")):
+            return _ellipse_ground(float(o["x"]), float(o["y"]), float(o["rx"]), float(o["ry"]))
+        return None
+    if isinstance(o, (list, tuple)) and len(o) >= 3 and all(isinstance(q, (list, tuple)) and len(q) >= 2 for q in o):
+        return Polygon([(float(q[0]), float(q[1])) for q in o]).buffer(0)
+    return None
+
+
+def _ellipse_ground(cx: float, cy: float, rx: float, ry: float) -> Any:
+    """An axis-aligned ellipse as shapely ground."""
+    from shapely import affinity  # noqa: PLC0415 - shapely is loaded on first use (feature 237)
+    from shapely.geometry import Point  # noqa: PLC0415
+
+    return affinity.scale(Point(cx, cy).buffer(1.0), max(rx, 0.5), max(ry, 0.5))
+
+
+def covered_ground(M: Any) -> Any:
+    """Everything the manifest records as standing on the ground, as one shapely geometry: every footprint (cover,
+    fields, buildings, yards, wells, clearings, the burial ground, ponds - every ring, box, disc and ellipse a record
+    carries) and every tread (the ways and the watercourses at their drawn width).
+
+    THE FR-003 CORRECTION (feature 287, plan D6; woods W11): the rule's own grounding is that a hole in the cover is "the
+    map admitting it has not decided what is there", and a recorded lane, stream, well, clearing or burial ground is
+    DECIDED ground - "margin grass, scrub, a grazing common, a marsh, a wood, a yard" are the rule's examples, not its
+    list. The gate used to count those as bare, so a view that such features filled could fail however the cover lay."""
+    from shapely.geometry import LineString  # noqa: PLC0415 - shapely is loaded on first use (feature 237)
+    from shapely.ops import unary_union  # noqa: PLC0415
+
+    parts: list[Any] = []
+    treads = {k for k, _p, _w in BARE_TREADS}
+    for key, recs in M.items():
+        if key in _BARE_SKIP or key in treads or not isinstance(recs, list):
+            continue
+        parts += [g for g in (_footprint(o) for o in recs) if g is not None and not g.is_empty]
+    for key, pk, wk in BARE_TREADS:
+        for o in M.get(key) or []:
+            pts = [(float(q[0]), float(q[1])) for q in (o.get(pk) or [])]
+            if len(pts) >= 2:
+                parts.append(LineString(pts).buffer(max(float(o.get(wk) or 1.0), 1.0) / 2.0))
+    pond = M.get("pond")
+    if pond and len(pond) >= 4:
+        parts.append(_ellipse_ground(float(pond[0]), float(pond[1]), float(pond[2]), float(pond[3])))
+    return unary_union(parts) if parts else None
+
+
+def bare_cells(M: Any, view: Any, step: float = BARE_STEP) -> tuple[list[tuple[float, float]], int]:
+    """The sample points of `view` (x, y, w, h) that stand on ground nothing covers, and how many points were sampled.
+
+    ONE PREDICATE (feature 287, FR-003; woods W11): the grid is the gate's own - a point every `step` px from half a step
+    in - and "covered" is `covered_ground`, which counts every recorded footprint and tread. The share is
+    `len(bare) / total`; the rule holds it at `BARE_SHARE_CAP`."""
+    from shapely import intersects_xy  # noqa: PLC0415 - shapely is loaded on first use (feature 237)
+
+    vx0, vy0, vw, vh = (float(v) for v in view)
+    xs: list[float] = []
+    ys: list[float] = []
+    y = vy0 + step / 2
+    while y < vy0 + vh:
+        x = vx0 + step / 2
+        while x < vx0 + vw:
+            xs.append(x)
+            ys.append(y)
+            x += step
+        y += step
+    ground = covered_ground(M)
+    hit = intersects_xy(ground, xs, ys) if ground is not None else [False] * len(xs)
+    return [(x, y) for x, y, h in zip(xs, ys, hit, strict=True) if not h], len(xs)
+
+
+def map_window(M: Any) -> list[float]:
+    """The part of the sheet that is MAP, as (x, y, w, h): the view, or the neatline where the map's ink is clipped at one
+    (a title panel or a caption key outside it is sheet, not ground - `Settlement._title_band`). The window the bare-ground
+    rule is judged over (`margins_form_continuous_ring`, feature 287 woods W11)."""
+    meta = M.get("meta") or {}
+    return [float(v) for v in (meta.get("neatline") or meta["view"])]
+
+
+def bare_blocks(bare: list[tuple[float, float]], step: float = BARE_STEP) -> list[list[tuple[float, float]]]:
+    """The bare sample points grouped into connected blocks (4-neighbors on the `step` grid), largest first."""
+    if not bare:
+        return []
+    x0, y0 = min(p[0] for p in bare), min(p[1] for p in bare)
+    at = {(round((x - x0) / step), round((y - y0) / step)): (x, y) for x, y in bare}  # grid indices: the points were accumulated in floats
+    left = set(at)
+    out: list[list[tuple[float, float]]] = []
+    while left:
+        seed = min(left)
+        left.discard(seed)
+        block, todo = [seed], [seed]
+        while todo:
+            i, j = todo.pop()
+            for q in ((i + 1, j), (i - 1, j), (i, j + 1), (i, j - 1)):
+                if q in left:
+                    left.discard(q)
+                    block.append(q)
+                    todo.append(q)
+        out.append([at[k] for k in block])
+    return sorted(out, key=lambda b: (-len(b), min(b)))
+
+
+def block_ring(block: list[tuple[float, float]], step: float = BARE_STEP) -> list[tuple[float, float]]:
+    """A bare block as one ring: the outline of its cells (each sample point's `step` square), the largest piece's exterior
+    - which holds every one of its sample points, since a cell's square holds its center."""
+    from shapely.geometry import box
+    from shapely.ops import unary_union
+
+    h = step / 2.0
+    g = unary_union([box(x - h, y - h, x + h, y + h) for x, y in block])
+    part = max(getattr(g, "geoms", [g]), key=lambda p: p.area)
+    return [(float(x), float(y)) for x, y in part.exterior.coords[:-1]]
+
+
 class GroundCoverMixin:
+    def fill_the_holes(self: Settlement, view: Any, planned: Any = ()) -> int:  # type: ignore[misc]
+        """Lay rough grazing over the bare ground of `view` (x, y, w, h) until no more than `BARE_SHARE_CAP` of it is ground
+        nothing covers (feature 287, woods W11 - `margins_form_continuous_ring`: between the fields and the settlement
+        there is always something). `planned` is cover a later stage will record (the woodland parcels, the bamboo
+        stands), counted as cover. The bare sample points (`bare_cells`, the rule's one predicate) are grouped into
+        connected blocks and the largest are clothed first, each as one grazing commons over its cells - its record
+        covers every one of its points, so the share falls by exactly the block and the fill ends. Returns the commons laid.
+        Rough grazing is what the record puts on ground nothing else claims (research/vegetation.html, "Why is the hillside
+        past the grove open scrub rather than more forest?")."""
+        vars(self)["_fills_holes"] = True  # ...and the view the finish grows for the title is clothed the same way (`refill_the_view`)
+        probe = {**self.M, "_planned_cover": [[(float(q[0]), float(q[1])) for q in p] for p in planned]}
+        bare, total = bare_cells(probe, view)
+        laid = 0
+        for block in bare_blocks(bare):
+            if not total or len(bare) <= BARE_SHARE_CAP * total:
+                break
+            self.commons(block_ring(block), role="grazing")
+            gone = set(block)
+            bare = [p for p in bare if p not in gone]
+            laid += 1
+        return laid
+
+    def refill_the_view(self: Settlement) -> int:  # type: ignore[misc]
+        """THE VIEW AS IT ENDS, CLOTHED (feature 287, woods W11): the title's last rung grows the sheet a band past the view
+        the holes were filled over (`Settlement._title_band`), and the band shows the map's canvas - blank ground the rule
+        counts. So a map that filled its holes (`fill_the_holes`) has the final view filled again, over `map_window` - the
+        view, or the neatline where the band lies outside the map. Returns the commons laid; 0 for a map that never asked."""
+        if not vars(self).get("_fills_holes"):
+            return 0
+        return self.fill_the_holes(map_window(self.M))
+
+    def _commons_keep(self: Settlement, box: tuple[float, float, float, float], avoid: Any = ()) -> Any:  # type: ignore[misc]
+        """The commons' STATIC keep-outs over `box` (x0, y0, x1, y1), indexed once - lifted out of `commons` (feature 287, woods
+        W13) so the woodland scan asks the very keep-outs a parcel's crowns will be thrown against (`woodland_room`)."""
+        bs = self.bscale
+        halo_rects, halo_circles = self._urban_keepouts(box)  # the urban-clearance halo (see _urban_keepouts)
+        corridors = self._corridor_buffers(
+            4 * bs
+        )  # lanes AND town streets AND the road: every trodden/maintained tread stays bare (the old skip knew only lanes, so scrub drew on the Imperial Road bed - GM 2026-07-21, Hoshizora).
+        # FOUR, BECAUSE THAT IS THE FIGURE THE RULE READS (feature 230). `groves_clear_of_lanes` forbids a
+        # TRUNK within 4.0 ft of a lane's centerline, and this buffer was 3 - so a tree could be planted
+        # 3.1 ft from a 3 ft footpath, off the tread and inside the rule, and the gate was right to say
+        # so. A check and the code it checks must read the same number or they drift apart quietly; the
+        # cost is one more foot of bare verge along every tread, which is what a walked path has anyway.
+        # PRE-BOX every static keep-out ONCE (see boxed_hit): _sparse below runs per SCATTER POINT,
+        # and these lists do not change while a region scatters
+        # INDEXED (2026-08-04): boxing alone dropped the cost per keep-out but still VISITED every
+        # one per scatter point - 948k boxed_hit calls iterating 25M items on Kikuta, whose gen was
+        # still 81% ground cover. The grids narrow each point to its own cell; the exact tests below
+        # are the same ones, run on what `near` returns.
+        # CROP MARGIN (see _CROP_MARGIN_FT): the crop keep-out is every PADDY (field_polys) plus
+        # every DRY PLOT (dry_polys - block_polys also carries them, but reading the crop registry
+        # directly is what the grove/lane skips do, and it survives a gen that registers only one),
+        # padded by the margin. Boxes carry the WORST-CASE pad - margin plus the tallest glyph's
+        # drawn reach, a pine tip at 14*bs - because the bbox prefilter must never reject a point
+        # the exact edge test wants (boxed_hit's contract); the exact test gets the per-glyph lean.
+        crop_pad = self.px(self._CROP_MARGIN_FT)
+        # ONE GRID FOR EVERY STATIC KEEP-OUT (feature 218; `KeepoutGrid` carries the argument):
+        # the crop rings grow by the glyph's lean per query (slot 1, boxed for the tallest, a pine
+        # tip at 14*bs); a marsh recorded BEFORE this pass sits in block_polys as a no-build bog
+        # and is a SOFT keep-out below, so it is not filed here - or the feathered edge never
+        # happens; the irrigation channels carry the cut-bank margin (_BANK_MARGIN_FT), streams
+        # stay at drawn width so the brook's natural bank keeps its grass; the urban halo is the
+        # closed test it always was
+        keep = KeepoutGrid()
+        keep.rings(list(self.field_polys) + list(self.dry_polys), pad=crop_pad, slot=1, reach=14 * bs)
+        keep.rings([bp for bp in self.block_polys if not any(bp is mb for mb in self.marsh_blocks)])
+        keep.rings(self.clearings)
+        keep.rings(avoid)
+        keep.segs(corridors)
+        keep.segs(self._watercourse_segs(channel_margin=self.px(self._BANK_MARGIN_FT)))
+        keep.rects(halo_rects, closed=True)
+        keep.circles(halo_circles, closed=True)
+        return keep
+
+    def woodland_room(self: Settlement, poly: Any) -> list[tuple[float, float, float]]:  # type: ignore[misc]
+        """The crowns a woodland parcel `poly` is SURE of, as (x, y, r): a grid at the stocking spacing
+        (`COMMONS_SPACING_FT`) over the ring, each seat inside it, on dry ground (off every marsh), clear of every keep-out
+        the commons' crowns are thrown against at the largest crown's lean (`_commons_keep`), off the pond and the fengshui
+        pond, and under no crown already standing at the largest radius (feature 287, woods W13). Deterministic - no draw is
+        made - so the scan that offers a parcel and the commons that stocks it read one answer: a parcel whose room is
+        under `WOODLAND_MIN_CROWNS` is not offered, and a parcel whose throws seat fewer is stocked from its room."""
+        xs, ys = [float(q[0]) for q in poly], [float(q[1]) for q in poly]
+        x0, y0, x1, y1 = min(xs), min(ys), max(xs), max(ys)
+        keep = self._commons_keep((x0, y0, x1, y1))
+        ring = RingIndex(poly)
+        wet = [RingIndex(m) for m in marsh_ground(self.M)]
+        pond = self.M.get("pond")
+        crescents = self.M.get("crescent_ponds", [])
+        r = self.px(self.COMMONS_CROWN_R_FT[1])
+        seated = CrownIndex(self._crowns_near(x0, y0, x1, y1))
+        step = self.px(self.COMMONS_SPACING_FT)
+        out: list[tuple[float, float, float]] = []
+        y = y0 + step / 2
+        while y < y1:
+            x = x0 + step / 2
+            while x < x1:
+                if (
+                    ring.inside(x, y)
+                    and not keep.hit(x, y, (0.0, r))
+                    and not any(w.inside(x, y) for w in wet)
+                    and not (crescents and self._on_crescent_pond(x, y))
+                    and not (pond and ((x - pond[0]) / pond[2]) ** 2 + ((y - pond[1]) / pond[3]) ** 2 <= 1.0)
+                    and seated.clear(x, y, r)
+                ):
+                    seated.add(x, y, r)
+                    out.append((x, y, r))
+                x += step
+            y += step
+        return out
+
     def commons(self: Settlement, poly: Any, role: str = "commons", avoid: Any = (), render: str = "scrub", soft: Any = (), woods: Any = ()) -> None:  # type: ignore[misc]
         """FUEL-AND-FODDER COMMONS - the degraded open grazing/scrub on the far (upslope / windward) side,
         BEYOND the fengshui back-grove: coarse grass, low brush, and a FEW scattered SCRAGGLY pines, kept
@@ -97,7 +360,7 @@ class GroundCoverMixin:
         # ruled line and a ~40 ft bare strip on the toe's straight west edge. The scrub instead thins
         # INTO the marsh over that same band - kept with probability 1 at the edge, 0 at feather depth,
         # the complement of the reeds' ramp - so the two covers interleave into a wild edge.
-        soft = [*soft, *(m["poly"] for m in self.M.get("marshes", []) if m.get("poly"))]
+        soft = [*soft, *marsh_ground(self.M)]
         # SCOPED (2026-08-08): the tuft/brush scatter is decoration keyed to the common it fills.
         if render == "bare":
             # CLAIMED but UNDRAWN ground (GM 2026-08-10, on the capital's ring bands reading as
@@ -138,44 +401,7 @@ class GroundCoverMixin:
             feather = 42 * bs  # scrub THINS toward the boundary (a soft, ragged edge, not a hard line)
 
             pond = self.M.get("pond")
-            halo_rects, halo_circles = self._urban_keepouts((x0, y0, x1, y1))  # the urban-clearance halo (see _urban_keepouts)
-            corridors = self._corridor_buffers(
-                4 * bs
-            )  # lanes AND town streets AND the road: every trodden/maintained tread stays bare (the old skip knew only lanes, so scrub drew on the Imperial Road bed - GM 2026-07-21, Hoshizora).
-            # FOUR, BECAUSE THAT IS THE FIGURE THE RULE READS (feature 230). `groves_clear_of_lanes` forbids a
-            # TRUNK within 4.0 ft of a lane's centerline, and this buffer was 3 - so a tree could be planted
-            # 3.1 ft from a 3 ft footpath, off the tread and inside the rule, and the gate was right to say
-            # so. A check and the code it checks must read the same number or they drift apart quietly; the
-            # cost is one more foot of bare verge along every tread, which is what a walked path has anyway.
-            # PRE-BOX every static keep-out ONCE (see boxed_hit): _sparse below runs per SCATTER POINT,
-            # and these lists do not change while a region scatters
-            # INDEXED (2026-08-04): boxing alone dropped the cost per keep-out but still VISITED every
-            # one per scatter point - 948k boxed_hit calls iterating 25M items on Kikuta, whose gen was
-            # still 81% ground cover. The grids narrow each point to its own cell; the exact tests below
-            # are the same ones, run on what `near` returns.
-            # CROP MARGIN (see _CROP_MARGIN_FT): the crop keep-out is every PADDY (field_polys) plus
-            # every DRY PLOT (dry_polys - block_polys also carries them, but reading the crop registry
-            # directly is what the grove/lane skips do, and it survives a gen that registers only one),
-            # padded by the margin. Boxes carry the WORST-CASE pad - margin plus the tallest glyph's
-            # drawn reach, a pine tip at 14*bs - because the bbox prefilter must never reject a point
-            # the exact edge test wants (boxed_hit's contract); the exact test gets the per-glyph lean.
-            crop_pad = self.px(self._CROP_MARGIN_FT)
-            # ONE GRID FOR EVERY STATIC KEEP-OUT (feature 218; `KeepoutGrid` carries the argument):
-            # the crop rings grow by the glyph's lean per query (slot 1, boxed for the tallest, a pine
-            # tip at 14*bs); a marsh recorded BEFORE this pass sits in block_polys as a no-build bog
-            # and is a SOFT keep-out below, so it is not filed here - or the feathered edge never
-            # happens; the irrigation channels carry the cut-bank margin (_BANK_MARGIN_FT), streams
-            # stay at drawn width so the brook's natural bank keeps its grass; the urban halo is the
-            # closed test it always was
-            keep = KeepoutGrid()
-            keep.rings(list(self.field_polys) + list(self.dry_polys), pad=crop_pad, slot=1, reach=14 * bs)
-            keep.rings([bp for bp in self.block_polys if not any(bp is mb for mb in self.marsh_blocks)])
-            keep.rings(self.clearings)
-            keep.rings(avoid)
-            keep.segs(corridors)
-            keep.segs(self._watercourse_segs(channel_margin=self.px(self._BANK_MARGIN_FT)))
-            keep.rects(halo_rects, closed=True)
-            keep.circles(halo_circles, closed=True)
+            keep = self._commons_keep((x0, y0, x1, y1), avoid)  # every static keep-out, indexed once (the why is on the method)
             crescents = self.M.get("crescent_ponds", [])  # read once: the per-point test below costs a registry lookup per throw otherwise
             soft_polys = [[tuple(q) for q in sp] for sp in soft] + [[tuple(q) for q in wp] for wp in woods]
             # the marsh's own reed feather (wet.py), so the two ramps are complements - and a WOOD's much narrower one
@@ -259,6 +485,7 @@ class GroundCoverMixin:
                 # no crown under another's, this wood's or a neighbor's (GM 2026-08-28; woods._crown_seat_clear) -
                 # asked of an index, because a coppice at its real stocking seats hundreds of crowns (dev/performance.md)
                 _wd_seated = CrownIndex(self._crowns_near(min(q[0] for q in poly), min(q[1] for q in poly), max(q[0] for q in poly), max(q[1] for q in poly)))
+                _tc0, _g0 = len(self.M["tree_crowns"]), len(g)  # where this wood's crowns start, for the stocking below
                 for _ in range(_wd_target * 6):
                     if _wd_crowns >= _wd_target:
                         break
@@ -281,6 +508,18 @@ class GroundCoverMixin:
                     # the GM read as a second tree or a trunk, worse under the page's highlighting; color alone
                     # tells one kind of tree from another.
                     g.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="{col}" stroke="#4C6234" stroke-width="0.7"/>')
+                # ...AND NEVER UNDER-STOCKED (feature 287, woods W13): where the throws seat fewer than `WOODLAND_MIN_CROWNS` -
+                # a parcel mostly over the padded crop, most throws refused - they are taken back and the parcel is stocked
+                # from its room instead (`woodland_room`, the grid the scan asked before offering it), so a parcel the scan
+                # offered always records at least the floor it was offered at
+                if _wd_crowns < WOODLAND_MIN_CROWNS:
+                    del self.M["tree_crowns"][_tc0:]
+                    del g[_g0:]
+                    room = self.woodland_room(poly)[: max(_wd_target, WOODLAND_MIN_CROWNS)]
+                    for cx, cy, r in room:
+                        self.M["tree_crowns"] += [round(cx, 1), round(cy, 1), round(r, 1)]
+                        g.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="#7C9856" stroke="#4C6234" stroke-width="0.7"/>')
+                    _wd_crowns = len(room)
             else:
                 # A THROW OUTSIDE THE PREDICTED FRAME COSTS ITS TWO DRAWS AND NOTHING ELSE (feature 224): ~90% of a hamlet's
                 # throws land where the frame will clip them, and each used to pay the keep-out test and its marks' draws
@@ -351,10 +590,11 @@ class GroundCoverMixin:
                 # a structure under this canopy with nothing firing. Center-tested by _fits like
                 # every block poly.
                 self.block_polys.append([(float(px0), float(py0)) for px0, py0 in poly])
+            _rx, _ry = ring_center(poly)
             self.M["commons"].append(
                 {
-                    "x": round((x0 + x1) / 2, 1),
-                    "y": round((y0 + y1) / 2, 1),
+                    "x": _rx,
+                    "y": _ry,
                     "w": round(x1 - x0, 1),
                     "h": round(y1 - y0, 1),
                     "rot": 0,
@@ -558,6 +798,7 @@ class GroundCoverMixin:
 
         def record(poly: Poly) -> None:
             self.M.setdefault("clearings", []).append({"poly": [[round(px, 1), round(py, 1)] for px, py in poly], "seq": self._cover_n})
+            self._cull_cover_in(poly)
 
         for (ocx, ocy), opoly in zip(self._verge_centers, self.clearings, strict=True):
             if abs(ocx - x) <= 4 and abs(ocy - y) <= 4:  # the documented duplicate-registration pattern: reuse the reserved blob
@@ -586,6 +827,30 @@ class GroundCoverMixin:
         self.clearings.append(verge)
         self._verge_centers.append((x, y))
         record(verge)
+
+    def _cull_cover_in(self: Settlement, ring: Poly) -> None:  # type: ignore[misc]
+        """Take out of every scatter still waiting for the finish (`_blade_groups`, `_mark_groups`) each grass blade ROOTED
+        inside the swept clearing `ring`, and each brush dot or pine stroke whose extent's middle lies inside it (feature
+        287, woods W10). The scatter skips the clearings that exist when it runs; a clearing swept after it - a household
+        shrine seated after the scrub - was dotted over. Its marks are deferred to the finish, so the ground is cleared
+        here, where the clearing is made, and the order the two were placed in cannot matter. The clearing is bare, which
+        is what it is; no feature moves."""
+        xs, ys = [float(q[0]) for q in ring], [float(q[1]) for q in ring]
+        x0, y0, x1, y1 = min(xs), min(ys), max(xs), max(ys)
+        idx = RingIndex(ring)
+
+        def swept(px: float, py: float) -> bool:
+            return x0 <= px <= x1 and y0 <= py <= y1 and idx.inside(px, py)
+
+        for k, (z, color, blades) in enumerate(self._blade_groups):
+            kept = [ln for ln in blades if not swept(float(ln[0]), float(ln[1]))]
+            if len(kept) != len(blades):
+                self._blade_groups[k] = (z, color, kept)
+        for k, (z, marks) in enumerate(self._mark_groups):
+            left = [mk for mk in marks if not swept((mk[0] + mk[2]) / 2.0, (mk[1] + mk[3]) / 2.0)]
+            if len(left) != len(marks):
+                self._mark_groups[k] = (z, left)
+        self.shrink_marshes_off(ring)  # ...and a marsh's reeds culled here leave its record too (woods W08)
 
     def reserve_clearing(self: Settlement, x: float, y: float, w: float, h: float, extra: float = 46) -> None:  # type: ignore[misc]
         """Pre-register a swept-ground clearing for a sacred/funerary feature a gen draws LATER (e.g. a

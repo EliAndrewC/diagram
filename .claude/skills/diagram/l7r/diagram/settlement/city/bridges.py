@@ -120,6 +120,173 @@ def seat_deck(p: Pt, rot: float, span: float, rw: float, wpts: Any, need: float,
     return rot, span, False
 
 
+DECK_SPAN_DEFAULT_FT = 20.0
+"""A deck that records no span is read as this long when asking whether it covers a crossing."""
+
+
+def deck_covers(deck: Any, x: float, y: float) -> bool:
+    """Does this deck's own span reach the point (x, y)? ONE predicate (feature 287, ways W02): `bridges()` and `bridge()`
+    skip a crossing only when a standing deck covers it, and the lane law (`law.unbridged_crossings`) asks the same."""
+    return math.hypot(float(deck["x"]) - x, float(deck["y"]) - y) <= float(deck.get("span", DECK_SPAN_DEFAULT_FT))
+
+
+def flooded_ground(M: Any) -> list[list[Pt]]:
+    """The rice a deck may not land on: every field's drawn paddy plots (feature 287, ways W13). A carried deck runs
+    `LANDING_FT` onto dry ground past each bank; where the bank is a bund with flooded rice just beyond it, that landing ran
+    onto the paddy (R3: the field path's canal deck, its end 7 ft into the rice)."""
+    return [[(float(a), float(b)) for a, b in r] for f in (M.get("fields") or []) for r in (f.get("plot_rings") or []) if len(r) >= 3]
+
+
+def _lands_dry(p: Pt, rot: float, span: float, rw: float, wet: Any) -> bool:
+    """Does no corner of this deck stand inside a flooded plot (`flooded_ground`)?"""
+    if not wet:
+        return True
+    corners = _deck_quad(p[0], p[1], span, rw, rot)
+    for ring in wet:
+        x0, x1 = min(q[0] for q in ring), max(q[0] for q in ring)
+        y0, y1 = min(q[1] for q in ring), max(q[1] for q in ring)
+        if any(x0 <= cx <= x1 and y0 <= cy <= y1 and point_in_poly(cx, cy, ring) for cx, cy in corners):
+            return False
+    return True
+
+
+SUPPLY_ROLES = ("main", "branch", "lateral")
+"""The ditches a footplank is laid on: the ones that carry water OUT to the paddies - a comb's main and branches, and the
+laterals (a comb's field ditches, and a polder's inner ring canal and the field ditches off it, which the manifest records as
+`lateral`). The record's reason (research/ways/030, "What is a plank bridge, and what is it for?"): the plank is the board laid
+where a bund path meets an IRRIGATION ditch, with cultivated ground, the settlement or a walked dike on both banks; "the
+drainage toes and the diagonal edge-drains along a field's outer boundary" carry none. A polder's ring canal is its
+distribution canal, inside the dike with paddies beyond it (research/archetypes/110: "inner ring canal -> field ditches ->
+paddies"), so it is a supply ditch, not a drain. The collector, the drain and the feeder are not."""
+
+PLANK_DITCH_FT = 24.0
+"""A footplank this near a recorded field ditch is on that ditch; farther, it crosses no recorded ditch at all."""
+
+
+def plank_ditch(pt: Pt, ditches: Any) -> tuple[float, Any]:
+    """(distance, role) of the recorded field ditch nearest `pt` - infinity and None where there is none."""
+    best: tuple[float, Any] = (math.inf, None)
+    for d in ditches or []:
+        poly = [(float(q[0]), float(q[1])) for q in d.get("poly") or []]
+        if len(poly) < 2:
+            continue
+        dist = min(seg_dist(pt[0], pt[1], poly[i], poly[i + 1]) for i in range(len(poly) - 1))
+        if dist < best[0]:
+            best = (dist, d.get("role"))
+    return best
+
+
+def plank_on_supply(pt: Pt, ditches: Any) -> bool:
+    """Is a footplank at `pt` on a supply ditch (`SUPPLY_ROLES`) - its nearest recorded ditch within `PLANK_DITCH_FT` and a
+    main, a branch or a lateral? ONE predicate (feature 287, ways W14): `channel_footbridges` refuses a seat that fails it,
+    and the lane law's `plank_faults` reads it."""
+    dist, role = plank_ditch(pt, ditches)
+    return dist < PLANK_DITCH_FT and role in SUPPLY_ROLES
+
+
+class UndeckableCrossing(ValueError):
+    """A way reached `bridges()` crossing water where no deck seats. The web's last pass (`settle_the_web`) cuts every such
+    crossing out of the lanes it may cut (feature 287, ways W12), so reaching here is a defect in the engine, not a map."""
+
+
+def crossing_deck(ra: Pt, rb: Pt, rw: float, wa: Pt, wb: Pt, ww: float, wpts: Any, ftpx: float, wet: Any = ()) -> tuple[Pt, float, float, bool]:
+    """The deck `bridges()` lays where the way segment `ra`-`rb` (width `rw`) crosses the water segment `wa`-`wb` of the
+    course `wpts` (width `ww`): (crossing point, rotation, span, seated). The two segments are known to cross.
+
+    LIFTED OUT OF `bridges` (feature 287, M1) so the lane law (`hamletgen/ways/law.py:deck_seats`) asks the SAME question
+    the placer answers, rather than a restatement of it: one predicate per rule, read by the placer and by its test.
+
+    The span SOLVES the oblique crossing (GM 2026-08-09: the old flat +28px slack was eaten by obliquity and left deck
+    CORNERS at the water's edge). Along the deck the water is ww/sin wide, the deck's own width adds rw*|cos|/sin before a
+    corner clears the bank, and past that every corner runs LANDING_FT of real feet onto dry ground (see the constant for the
+    research). sin is clamped: segments_cross guarantees a genuine crossing, but a near-parallel graze would otherwise ask
+    for an absurd deck.
+
+    ...AND THE DECK IS GROWN UNTIL ITS CORNERS ACTUALLY CLEAR THE WATER (2026-08-12). The formula above solves the crossing
+    against the ONE segment the way cuts, and clamps sin at 0.25 so a near-parallel graze cannot ask for an absurd deck.
+    Both are reasonable and both under-size a deck where the watercourse BENDS near the crossing: the check
+    (`bridges_span_their_water`) measures every corner against the whole crossed POLYLINE, so a neighboring segment curving
+    back toward a corner is water the formula never saw. Rather than model that, ask the same question the check asks and
+    lengthen until the answer is yes (`seat_deck`).
+
+    ...AND IT LANDS DRY (feature 287, ways W13): a deck whose corner stands in a flooded plot (`wet`, `flooded_ground`) is
+    not seated as the carried form; the crossing is tried again in the footplank's form - the local width plus the short
+    `PLANK_ABUTMENT`, landing at the footplank's floor - which is what a farmer lays where a bund path meets a canal
+    (research/ways/030), and failing that it is not seated at all, so the web's last pass cuts the crossing."""
+    # segments_cross is True only for a genuine (non-parallel) crossing, so seg_intersect always returns a point here
+    p = cast(Pt, seg_intersect(ra, rb, wa, wb))
+    rot = math.degrees(math.atan2(rb[1] - ra[1], rb[0] - ra[0]))
+    _rl = math.hypot(rb[0] - ra[0], rb[1] - ra[1]) or 1.0
+    _wl = math.hypot(wb[0] - wa[0], wb[1] - wa[1]) or 1.0
+    _cs = ((rb[0] - ra[0]) * (wb[0] - wa[0]) + (rb[1] - ra[1]) * (wb[1] - wa[1])) / (_rl * _wl)
+    _sn = max(math.sqrt(max(0.0, 1.0 - _cs * _cs)), 0.25)
+    _span = (ww + rw * abs(_cs)) / _sn + 2 * LANDING_FT / ftpx
+    _need = ww / 2 + CARRIED_LANDING_FLOOR_FT / ftpx  # the check's own carried-way floor
+    rot_used, span, seated = seat_deck(p, rot, _span, rw, wpts, _need, (wa, wb))
+    if seated and not _lands_dry(p, rot_used, span, rw, wet):
+        _plank = (ww + rw * abs(_cs)) / _sn + PLANK_ABUTMENT
+        rot_used, span, seated = seat_deck(p, rot, _plank, rw, wpts, ww / 2 + 2.0 / ftpx, (wa, wb))
+        seated = seated and _lands_dry(p, rot_used, span, rw, wet)
+    return p, rot_used, span, seated
+
+
+def undeckable_at(pts: Any, width: float, waters: Any, ftpx: float = 1.0, wet: Any = (), M: Any = None) -> list[tuple[int, Pt]]:
+    """(segment index, crossing point) for every crossing of `waters` (`bridge_crossed_waters`) by a way along `pts` where
+    no deck seats (`crossing_deck`, the very solve `bridges()` makes) - or where the registry of what stands on `M` refuses
+    the deck as `bridge()` would record it (`deck_admitted`, feature 287 M8). THE ONE PREDICATE: the lane law asks it of a
+    finished web (`hamletgen/ways/law.py`), the web's last pass cuts what it names, and a settlement rolled without that
+    pass cuts its lanes by it before `bridges()` (`cut_undeckable_lanes`, feature 287)."""
+    out = []
+    for k, (ra, rb) in enumerate(zip(pts, pts[1:], strict=False)):
+        for wpts, ww in waters:
+            wp = [(float(q[0]), float(q[1])) for q in wpts]
+            for wa, wb in zip(wp, wp[1:], strict=False):
+                if segments_cross(ra, rb, wa, wb):
+                    p, rot, span, seated = crossing_deck(ra, rb, width, wa, wb, float(ww), wp, ftpx, wet)
+                    if not seated or not deck_admitted(M, p, rot, span, width):
+                        out.append((k, p))
+    return out
+
+
+def deck_admitted(M: Any, p: Pt, rot: float, span: float, width: float) -> bool:
+    """Does the registry of what stands on `M` admit a deck at `p` as `bridge()` records it (feature 287 M8)? Another deck
+    it would stand on is not asked here: `bridges()` merges a deck into the one standing there (`_reseat_to_cover`). True
+    where `M` carries no registry."""
+    st = getattr(M, "standing", None)
+    if st is None:
+        return True
+    rec = {"x": round(p[0], 1), "y": round(p[1], 1), "rot": round(rot, 1), "span": round(span, 1), "w": round(width, 1)}
+    return not [c for c in st.conflicts("bridges", rec) if c[1] != "bridges"]
+
+
+#: How far past the water's edge each piece of a lane cut at an undeckable crossing stops, in ft - the lane ends on the
+#: bank, not in the water (`settle_the_web`'s own `CROSSING_GAP_FT`).
+CUT_GAP_FT = 2.0
+
+
+def _sub_run(pts: list[Pt], s0: float, s1: float) -> list[Pt]:
+    """The part of the polyline `pts` between arc lengths `s0` and `s1`, clamped to it."""
+    out: list[Pt] = []
+    acc = 0.0
+    for a, b in zip(pts, pts[1:], strict=False):
+        d = math.dist(a, b)
+        if d > 0 and acc + d >= s0 and acc <= s1:
+            t0, t1 = max(0.0, (s0 - acc) / d), min(1.0, (s1 - acc) / d)
+            for t in (t0, t1) if not out else (t1,):
+                out.append((a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t))
+        acc += d
+    return out
+
+
+def cut_at(pts: list[Pt], k: int, p: Pt, gap: float) -> list[list[Pt]]:
+    """The way `pts` with the stretch within `gap` (along it) of `p`, a point on its segment `k`, taken out: the pieces
+    either side, each dropped if it keeps no length."""
+    at = sum(math.dist(u, v) for u, v in zip(pts[: k + 1], pts[1 : k + 1], strict=False)) + math.dist(pts[k], p)
+    total = sum(math.dist(u, v) for u, v in zip(pts, pts[1:], strict=False))
+    pieces = (_sub_run(pts, 0.0, at - gap) if at - gap > 0 else [], _sub_run(pts, at + gap, total) if at + gap < total else [])
+    return [q for q in pieces if len(q) >= 2 and sum(math.dist(u, v) for u, v in zip(q, q[1:], strict=False)) >= 1.0]
+
+
 # THE DITCH CROSSING'S FORM IS A KNOB (269 B21; research/water/290, "What crosses a farm ditch - a plank, a log, or earth
 # over logs?"). Three forms of crossing over small water are attested and the record cannot say which was laid over a
 # paddy ditch: a SINGLE LOG (or one board, the same object in the Chinese definition), LOGS UNDER TRODDEN EARTH (the
@@ -186,9 +353,11 @@ class BridgesMixin:
         # None of it was caught because bridges were invisible to the overlap matrix (FIXTURE was a
         # blanket permission); bridges x bridges is a violation now. Tolerance scales with the deck so
         # two genuinely distinct footplanks a few px apart still both draw.
+        # ...AND ONLY A DECK THAT COVERS THE CROSSING stands for it (feature 287, ways W02): a deck within the tolerance whose
+        # own span does not reach the point leaves the crossing unbridged (`deck_covers`, the lane law's reading).
         _btol = max(4.0, min(12.0, span * 0.5))
         for _b in self.M.get("bridges", []):
-            if math.hypot(_b["x"] - x, _b["y"] - y) <= _btol:
+            if math.hypot(_b["x"] - x, _b["y"] - y) <= _btol and deck_covers(_b, x, y):
                 return int(_b["z"])
         z = self.add_top(deck_glyph(x, y, rot, span, deck_w, form), cls="footbridge")  # every plank and deck over water is one class (feature 134)
         self.M.setdefault("bridges", []).append({"x": round(x, 1), "y": round(y, 1), "rot": round(rot, 1), "span": round(span, 1), "w": round(deck_w, 1), "z": z})
@@ -214,6 +383,7 @@ class BridgesMixin:
         crossing this pass genuinely cannot see, and expect the alignment check to test it."""
         carried = bridge_carried_ways(self.M)
         waters = bridge_crossed_waters(self.M)
+        wet = flooded_ground(self.M)
         n = 0
         for rpts, rw in carried:
             for i in range(len(rpts) - 1):
@@ -222,51 +392,71 @@ class BridgesMixin:
                     for j in range(len(wpts) - 1):
                         wa, wb = tuple(wpts[j]), tuple(wpts[j + 1])
                         if segments_cross(ra, rb, wa, wb):
-                            # segments_cross is True only for a genuine (non-parallel) crossing, so
-                            # seg_intersect always returns a point here
-                            p = cast(Pt, seg_intersect(ra, rb, wa, wb))
-                            rot = math.degrees(math.atan2(rb[1] - ra[1], rb[0] - ra[0]))
-                            # The span SOLVES the oblique crossing (GM 2026-08-09: the old flat
-                            # +28px slack was eaten by obliquity and left deck CORNERS at the
-                            # water's edge). Along the deck the water is ww/sin wide, the deck's
-                            # own width adds rw*|cos|/sin before a corner clears the bank, and
-                            # past that every corner runs LANDING_FT of real feet onto dry
-                            # ground (see the constant for the research). sin is clamped:
-                            # segments_cross guarantees a genuine crossing, but a near-parallel
-                            # graze would otherwise ask for an absurd deck.
-                            _rl = math.hypot(rb[0] - ra[0], rb[1] - ra[1]) or 1.0
-                            _wl = math.hypot(wb[0] - wa[0], wb[1] - wa[1]) or 1.0
-                            _cs = ((rb[0] - ra[0]) * (wb[0] - wa[0]) + (rb[1] - ra[1]) * (wb[1] - wa[1])) / (_rl * _wl)
-                            _sn = max(math.sqrt(max(0.0, 1.0 - _cs * _cs)), 0.25)
-                            _span = (ww + rw * abs(_cs)) / _sn + 2 * LANDING_FT / self.ftpx
-                            # ...AND THE DECK IS GROWN UNTIL ITS CORNERS ACTUALLY CLEAR THE WATER
-                            # (2026-08-12). The formula above solves the crossing against the ONE
-                            # segment the way cuts, and clamps sin at 0.25 so a near-parallel graze
-                            # cannot ask for an absurd deck. Both are reasonable and both under-size
-                            # a deck where the watercourse BENDS near the crossing: the check
-                            # (`bridges_span_their_water`) measures every corner against the whole
-                            # crossed POLYLINE, so a neighboring segment curving back toward a
-                            # corner is water the formula never saw. Rather than model that, ask the
-                            # same question the check asks and lengthen until the answer is yes.
-                            _need = ww / 2 + CARRIED_LANDING_FLOOR_FT / self.ftpx  # the check's own carried-way floor
-
-                            _rot_used, _span, _seated = seat_deck(p, rot, _span, rw, wpts, _need, (wa, wb))
-                            # ONE DECK PER CROSSING PLACE. Two ways that cross the same ditch a few
-                            # feet apart each ask for a bridge, and the two decks are then drawn on
-                            # top of one another - `features_do_not_overlap` reports it as
-                            # ('bridges','bridges'), which is what feature 126 shipped on four cohort
-                            # seeds once the lane work started drawing orphan links and rescue paths
-                            # alongside existing ways.
-                            #
-                            # A real crossing is a PLACE, not a per-way entitlement: two tracks
-                            # converging on the same plank use the plank. The radius is half the deck
-                            # it would build, so decks that would physically overlap collapse into
-                            # the one already there and decks that stand clear are untouched.
-                            if any(math.dist((p[0], p[1]), (float(b2["x"]), float(b2["y"]))) < _span * 0.5 for b2 in self.M.get("bridges", [])):
+                            # the crossing SOLVED, never eyeballed - lifted to `crossing_deck` (feature 287) so the lane law asks the same question
+                            p, _rot_used, _span, _seated = crossing_deck(ra, rb, rw, wa, wb, ww, wpts, self.ftpx, wet)
+                            # A CROSSING ALREADY DECKED IS NOT DECKED AGAIN - judged by whether a standing deck COVERS it
+                            # (`deck_covers`, feature 287 ways W02), not by whether it lies within half the NEW deck's span:
+                            # that radius skipped a plank crossing 12 ft along the brook from a 30 ft deck that did not reach
+                            # it, and the lane crossed unbridged.
+                            if any(deck_covers(b2, p[0], p[1]) for b2 in self.M.get("bridges", [])):
                                 continue
+                            # NO UNDERSIZED DECK IS DRAWN (feature 287, ways W12, FR-005). `seat_deck` hands back the
+                            # original span when nothing seats; this pass drew it and `bridges_span_their_water` named it.
+                            # The web's last pass now cuts every crossing no deck seats before any deck is laid, so a way
+                            # that reaches here unseated is an engine defect, raised rather than drawn.
+                            if not _seated or not deck_admitted(self.M, p, _rot_used, _span, rw):
+                                raise UndeckableCrossing(f"no deck seats where a way crosses water at ({p[0]:.0f}, {p[1]:.0f})")
+                            # ...AND A DECK THAT WOULD STAND ON ANOTHER is merged into it: the standing deck is re-seated
+                            # long enough to cover both crossings, rather than the second being skipped (and left
+                            # unbridged) or drawn on top of the first (`features_do_not_overlap`).
+                            near = [b2 for b2 in self.M.get("bridges", []) if not b2.get("foot") and math.dist((p[0], p[1]), (float(b2["x"]), float(b2["y"]))) < _span * 0.5]
+                            if near:
+                                self._reseat_to_cover(near[0], p)
+                                continue
+                            # ONE DECK PER CROSSING PLACE (feature 126: two decks drawn on top of one another on four
+                            # cohort seeds once orphan links ran alongside existing ways). A real crossing is a PLACE, not
+                            # a per-way entitlement: two tracks converging on the same plank use the plank - the covered
+                            # skip and the merge above are that rule, each now leaving no crossing undecked.
                             self.bridge(p[0], p[1], _rot_used, _span, rw)
                             n += 1
         return n
+
+    def cut_undeckable_lanes(self: Settlement) -> int:  # type: ignore[misc]
+        """Cut every lane at every crossing where no deck seats (`undeckable_at`, the predicate `bridges()` raises on), so a
+        settlement rolled without the web's last pass (`roll_village`) never hands `bridges()` a crossing it cannot deck
+        (feature 287, ways W12). Each cut takes the crossing and `CUT_GAP_FT` past each bank out of the lane - the pieces
+        either side kept, the first in place - so every cut strictly shortens the lane and the loop ends. Returns the cuts."""
+        waters, wet = bridge_crossed_waters(self.M), flooded_ground(self.M)
+        cuts = 0
+        i = 0
+        while i < len(self.M.get("lanes") or []):
+            ln = self.M["lanes"][i]
+            pts = [(float(x), float(y)) for x, y in ln.get("pts") or []]
+            bad = undeckable_at(pts, float(ln.get("w", 6)), waters, self.ftpx, wet, self.M)
+            if not bad:
+                i += 1
+                continue
+            k, p = bad[0]
+            near = max(
+                (float(ww) / 2 for wpts, ww in waters if any(seg_dist(p[0], p[1], (float(u[0]), float(u[1])), (float(v[0]), float(v[1]))) <= float(ww) for u, v in zip(wpts, wpts[1:], strict=False))),
+                default=3.0,
+            )
+            pieces = cut_at(pts, k, p, near + CUT_GAP_FT / self.ftpx)
+            cuts += 1
+            if not pieces:
+                self.drop_lanes([i])
+                continue
+            ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pieces[0]]
+            self.reink_lane(i)
+            for q in pieces[1:]:
+                self.lane(q, width=float(ln.get("w", 6)), clearance=float(ln.get("clearance", 22)), worn=bool(ln.get("worn")))
+        return cuts
+
+    def _reseat_to_cover(self: Settlement, deck: dict[str, Any], p: Pt) -> None:  # type: ignore[misc]
+        """Lengthen a standing deck along its own bearing until it reaches `p` - a second crossing close enough that its own
+        deck would stand on this one (feature 287, ways W02) - and redraw it, record and ink together."""
+        deck["span"] = round(max(float(deck["span"]), 2.0 * math.dist((float(deck["x"]), float(deck["y"])), p) + 2.0), 1)
+        self.top[int(deck["z"]) - self.TOPZ] = deck_glyph(float(deck["x"]), float(deck["y"]), float(deck["rot"]), float(deck["span"]), float(deck["w"]), str(deck.get("form", "plank")))
 
     def channel_footbridges(self: Settlement, spacing: float = 320, min_len: float = 140, plank_w: float = 2.0, seg_caps: Any = None) -> int:  # type: ignore[misc]
         """Standalone plank FOOTBRIDGES across the irrigation channels, where field-workers cross a ditch while
@@ -329,6 +519,8 @@ class BridgesMixin:
         other_water = [(rec.get("poly") or rec.get("pts"), float(rec.get("w") or DEFAULT_W[key])) for key in ("streams", "channels", "field_ditches") for rec in self.M.get(key, []) or []]
         _water_segs = water_segment_index(other_water)  # built once for every deck candidate below (feature 278, FR-003)
         for d in self.M.get("field_ditches", []):
+            if d.get("role") not in SUPPLY_ROLES:
+                continue  # a plank is laid on a supply ditch, never the collector, the drain or the feeder (ways W14, `SUPPLY_ROLES`)
             pts = d["poly"]
             seg = [math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]) for i in range(len(pts) - 1)]
             total = sum(seg)
@@ -383,15 +575,14 @@ class BridgesMixin:
                     _lw = taper_w(_w0, _w1, _a / _tot if _tot else 0.0)
                     return worth_planking(_lw, _lw, self.ftpx)
 
-                # PREFER wide water, but do not REFUSE the ditch over it. Sorting by
-                # (narrow-first-loses, distance-from-slot) puts every seat whose own taper earns a
-                # board ahead of every seat that does not, so a plank lands on real water wherever
-                # one legally can - while a ditch the GATE demands a crossing on still gets one at
-                # the best available spot. Making the width a hard `continue` instead was tried and
-                # is the classic placer/check split: it left cohort seeds 41 and 43 with a long
-                # ditch the gate required a plank on and the placer would not lay, because the
-                # placer's other constraints (houses, hem crop, other decks, oblique confluences)
-                # ruled out every wide seat and it had no way to say "then take the best one".
+                # ONLY WATER THAT EARNS A BOARD TAKES ONE (feature 287, ways W15, FR-005). This was a
+                # preference - seats whose own taper earns a board sorted first, the narrow ones kept last
+                # - because the gate once DEMANDED a plank on every long ditch (`long_ditches_have_a_
+                # footbridge`), and a hard filter left cohort seeds 41 and 43 with a ditch the gate
+                # required a plank on and the placer would not lay. That demand is retired (no rule asks
+                # for a plank per ditch), so the preference only ever laid a plank on water the record
+                # says is stepped across: the width is now a hard filter, and a ditch whose every wide
+                # seat is taken carries no plank.
                 # WHERE THIS LANDS ON A TAPERING BRANCH (accepted, settlement-review 2026-08-26,
                 # feature 133 T11): `n` counts the QUALIFYING run but `base` is still the midpoint of
                 # the WHOLE ditch, so on a branch whose head 30-50% qualifies, the nearest qualifying
@@ -401,7 +592,7 @@ class BridgesMixin:
                 # the review judged mid-field the better crossing. Left as is on purpose; the width
                 # under such a seat is `taper_w` (square-root taper), which is the authoritative
                 # measurement - a linear read of w -> w_tail understates it by ~0.05 ft.
-                for frac in sorted(_cands, key=lambda fr: (not _wide_enough(fr), abs(fr))):
+                for frac in sorted((fr for fr in _cands if _wide_enough(fr)), key=abs):
                     _arc = max(0.0, min(total, base + frac * total))
                     px, py, ang = _at_arc(pts, seg, _arc)
                     deck = ang + 90  # deck runs ACROSS the ditch (perpendicular)
@@ -458,6 +649,10 @@ class BridgesMixin:
                         continue
                     if not self._deck_clears_its_water(px, py, deck, span_here, plank_w):
                         continue
+                    if not plank_on_supply((px, py), self.M.get("field_ditches")):
+                        continue  # ...and a seat nearer a drain or collector than its own ditch (a junction) is refused (ways W14)
+                    if not self.admits("bridges", {"x": round(px, 1), "y": round(py, 1), "rot": round(deck, 1), "span": round(span_here, 1), "w": round(plank_w, 1)}):
+                        continue  # ...nor a plank the registry of what stands refuses: its ends on a dry plot or a fallow patch (M8)
                     self.bridge(px, py, deck, span_here, plank_w, form)
                     self.M["bridges"][-1]["foot"] = True  # a standalone footplank (checked by footbridges_reach_useful_ground)
                     self.M["bridges"][-1]["form"] = form

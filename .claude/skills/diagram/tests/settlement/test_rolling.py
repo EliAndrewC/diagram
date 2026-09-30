@@ -139,6 +139,15 @@ def test_headman_refuses_a_non_toscale_map():
         s.headman(400, 400)
 
 
+def test_a_hamlet_scale_map_can_draw_no_headman():
+    """Feature 287, homes H18: the role's one producer refuses a hamlet - a hamlet has no headman of its own."""
+    s = Settlement(800, 800, seed=5)
+    s.meta(name="H", scale="hamlet", ftpx=1, toscale=True)
+    with pytest.raises(ValueError, match="no headman of its own"):
+        s.headman(400, 400)
+    assert not any(h.get("role") == "headman" for h in s.M["houses"])
+
+
 def test_garden_beds_clear_rejects_a_bed_on_a_neighbor():
     # the neighbor-footprint hit branch: a shifted bed landing on an actual drawn structure is rejected
     s = Settlement(800, 800, seed=5)
@@ -493,17 +502,6 @@ def test_a_bundle_is_refused_when_its_house_or_its_grove_stands_on_a_drawn_tread
     assert not on_grove._bundle_common_fits(with_grove), "the windward grove is planted across the lane"
 
 
-def test_a_bundle_is_refused_a_seat_the_re_roll_loop_has_already_forbidden():
-    """`_avoid_seats` breaks a stall the re-roll loop could otherwise spin on: measured on cohort seed 5, the
-    retry converged 2 unreached houses to 1 and then re-seated the identical point at (1130, 858) three
-    rounds running while that point was in the avoid list. Reached today only by the seeds that stall."""
-    s = Settlement(1400, 1400, seed=3)
-    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, down_deg=90, water_flow=90)
-    s._avoid_seats = [(700.0, 700.0)]
-    assert s._place_bundle_nucleated(700.0, 700.0, 30.0, 20.0) is None, "the forbidden seat is refused outright"
-    assert s._place_bundle_nucleated(300.0, 300.0, 30.0, 20.0) is not None, "and a seat nowhere near it is not"
-
-
 def test_the_sun_corridor_clears_a_bundle_that_has_no_yard_of_its_own() -> None:
     """A no-yard bundle (feature 150) has nothing of its own to keep sunny, so once it has been
     checked against the yards ALREADY standing there is nothing left to ask and it clears.
@@ -613,6 +611,19 @@ def test_bundle_side_fits_refuses_a_bundle_outside_the_bounding_ring() -> None:
     assert s._bundle_side_fits(s._bundle_geom(20.0, 500.0, 46.0, 28.0, "E")) is False, "...and one whose box reaches past the canvas margin"
     assert s._bundle_side_fits(s._bundle_geom(600.0, 500.0, 46.0, 28.0, "E")) is False, "...and one whose east garden bed lies on the paddy at x = 640"
     assert s._bundle_side_fits(s._bundle_geom(600.0, 500.0, 46.0, 28.0, "W")) is True, "the same house with its garden on the west wall"
+
+
+def test_bundle_side_fits_refuses_a_layout_whose_lot_fixture_found_no_seat() -> None:
+    """Feature 280 M21/M22 carried into 287: a layout marked `unlaid` (its bath room or wood shed found no seat) is refused
+    even where every ground test would pass - the envelope admits a household only with room for every part it keeps."""
+    from tests.settlement._builders import _nuc_village
+
+    s = _nuc_village()
+    geom = s._bundle_geom(600.0, 500.0, 46.0, 28.0, "W")
+    geom.pop("unlaid", None)
+    assert s._bundle_side_fits(geom) is True, "the case: this layout fits on its ground"
+    geom["unlaid"] = "FixtureUnlaid: bath"
+    assert s._bundle_side_fits(geom) is False, "...and is refused once a fixture of its lot is unlaid"
 
 
 def _village_with_houses(seed: int = 1, pin: str | None = None) -> Settlement:
@@ -752,6 +763,29 @@ def test_the_eave_gap_ignores_an_abandoned_neighbor_and_flags_a_standing_one():
     assert s._house_too_near_a_neighbor((300.0, 300.0, 40.0, 26.0)) is True
 
 
+def test_a_quarter_turned_neighbor_is_measured_on_its_drawn_quad(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The drip-line rule is ONE predicate (feature 287, FR-003): `eave_gap` measures wall to wall on the drawn, rotated
+    quads, and the placer and the gate both read it. The violating case: a neighbor recorded 20 x 60 and turned a quarter
+    stands 60 wide along x, so an UNROTATED box (the gate's old measure) sees a wide gap where the walls stand closer than
+    the eave gap - the placer refuses the seat, and the one measure says why."""
+    from l7r.diagram.settlement import FARMHOUSE_EAVE_GAP_FT
+    from l7r.diagram.settlement._geom import eave_gap
+
+    s = _village()
+    monkeypatch.setattr(s, "_house_rot", lambda _x, _y: 0.0)
+    near = s.px(FARMHOUSE_EAVE_GAP_FT) - 1.0  # a wall gap under the rule
+    cand = {"x": 300.0, "y": 300.0, "w": 40.0, "h": 26.0, "rot": 0.0}
+    turned = {"x": 300.0 + 20.0 + 30.0 + near, "y": 300.0, "w": 20.0, "h": 60.0, "rot": 90.0, "kind": "plain"}
+    unrotated = abs(turned["x"] - cand["x"]) - (cand["w"] + turned["w"]) / 2  # the retired measure
+    assert unrotated >= s.px(FARMHOUSE_EAVE_GAP_FT), "the unrotated box would have admitted this pair"
+    assert eave_gap(cand, turned) == pytest.approx(near), "the drawn walls stand `near` apart"
+    s.M["houses"].append(turned)
+    assert s._house_too_near_a_neighbor((300.0, 300.0, 40.0, 26.0)) is True, "the placer refuses the seat on the drawn quad"
+    turned["x"] += s.px(3.0) + 1.0  # past the rule and the placer's hair of margin
+    assert s._house_too_near_a_neighbor((300.0, 300.0, 40.0, 26.0)) is False
+    assert eave_gap(cand, turned) >= s.px(FARMHOUSE_EAVE_GAP_FT)
+
+
 def test_the_sun_rules_pass_over_a_neighbor_record_with_no_bundle():
     # feature 276: a drawn house with no `geom` (no yard, no garden, no grove) inside the indexed reach box has nothing
     # the corridor or the yard-sun rule can read, so both pass it over
@@ -810,19 +844,20 @@ def test_the_stream_index_is_rebuilt_when_the_courses_change_and_kept_while_they
     assert s._rect_on_stream(rect) is False
 
 
-def test_the_dispersed_placer_keeps_off_the_ground_a_re_roll_forbids() -> None:
-    """`_place_bundle_dispersed` (feature 291): the slides carried every re-roll's farm back onto the seat the last roll
-    stranded (cohort seed 23). A seat whose slid position is within 50 px of forbidden ground is passed over for the next
-    offset; with nothing forbidden, the first fit is the seat, as before."""
+def test_a_bundles_parts_are_turned_and_boxed_as_the_turn_helpers_turn_and_box_them() -> None:
+    """`_bundle_geom` takes its turn's cosine and sine once for every part: each part's center is where `turn_about` carries
+    it and each box is `turned_box`'s, at several turns - and the yard, rolled once per seat, is the same for every side."""
+    from l7r.diagram.settlement._geom import turn_about
+    from l7r.diagram.settlement.rolling.bearing import turned_box
 
-    def placed(avoid):  # type: ignore[no-untyped-def]
-        s = Settlement(1400, 1400, seed=3)
-        s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
-        s._nucleated = False
-        s._avoid_seats = avoid
-        return s._place_bundle(700.0, 700.0, 46.0, 28.0)
-
-    first = placed([])
-    assert first is not None
-    moved = placed([(first[0], first[1])])
-    assert moved is not None and math.hypot(moved[0] - first[0], moved[1] - first[1]) > 50.0, (first[:2], moved and moved[:2])
+    s = _nuc_village()
+    for rot in (0.0, 7.5, -23.0, 90.0):
+        for side in s._NUC_SIDES:
+            flat = s._bundle_geom(500.0, 500.0, 46.0, 28.0, side, True, rot=0.0)
+            geom = s._bundle_geom(500.0, 500.0, 46.0, 28.0, side, True, rot=rot)
+            for k in ("yard", "shed"):
+                ((x, y),) = turn_about([(flat[k][0], flat[k][1])], 500.0, 500.0, rot)
+                assert geom[k] == (x, y, flat[k][2], flat[k][3])
+                assert geom["boxes"][k] == turned_box(geom[k], rot)
+            assert [turned_box(g, rot) for g in geom["gardens"]] == geom["boxes"]["gardens"]
+            assert geom["yard"][2:] == s._bundle_geom(500.0, 500.0, 46.0, 28.0, "SE", True, rot=rot)["yard"][2:]

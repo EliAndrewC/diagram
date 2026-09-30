@@ -39,6 +39,7 @@ from .frame import _Frame as _Frame
 from .frame import _miter_normals as _miter_normals
 from .frame import _seg_d as _seg_d
 from .furrows import *
+from .hem import *
 from .hill import *
 from .palette import *
 from .palette import _RICE_GREEN as _RICE_GREEN

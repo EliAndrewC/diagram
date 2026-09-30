@@ -111,6 +111,13 @@ def rest_plots(cands: Sequence[tuple[Sequence[Pt], float]], rng: random.Random, 
     return sorted(chosen)
 
 
+def rest_record(poly: Sequence[Pt], field: str = "") -> dict[str, Any]:
+    """A resting basin's `fallow_patches` record: its ring, its form and the FIELD it is a plot of (feature 287, water W53 -
+    the parent the overlap matrix lets that field's own ditches share ground with). The record `rest_basin` writes and
+    `resting_plots` asks the registry about."""
+    return {"outline": [[round(p[0], 1), round(p[1], 1)] for p in poly], "form": "rested_basin", **({"field": field} if field else {})}
+
+
 class PaddyMixin:
     def paddy_field(  # type: ignore[misc]
         self: Settlement, shape: Any, label: Any, name: str, amp: float = 52, taxfree: int = 0, label_xy: Any = None, plot: float = 46, kind: str = "paddy"
@@ -180,20 +187,20 @@ class PaddyMixin:
                     fill, flooded = random.choice(RIPE_SHADES), False
                 else:
                     fill, flooded = random.choice(PADDY_SHADES), False
-                self.add(f'<polygon points="{pts}" fill="{fill}" stroke="{AZE}" stroke-width="{bund:.1f}" stroke-linejoin="round"/>')
+                self.add_paddy(f'<polygon points="{pts}" fill="{fill}" stroke="{AZE}" stroke-width="{bund:.1f}" stroke-linejoin="round"/>')
                 self._paddy_surface(poly, pts, flooded)
                 if not flooded and point_in_poly(cx, cy, smoothed):
                     rice.append(poly)
             else:
                 fill = 'url(#drycrop)' if crop == 'dry' else '#9CB36A'
-                self.add(f'<polygon points="{pts}" fill="{fill}" stroke="{AZE}" stroke-width="{bund:.1f}" stroke-linejoin="round"/>')
+                self.add_paddy(f'<polygon points="{pts}" fill="{fill}" stroke="{AZE}" stroke-width="{bund:.1f}" stroke-linejoin="round"/>')
                 self._rows(poly, pts, crop)  # dryland crops ARE ridge/row-cultivated
             if point_in_poly(cx, cy, smoothed):
                 interior.append((poly, cx, cy))
         # A RESTING PLOT is painted over its basin whole (`PADDY_REST`), and is no tax-free holding's plot.
         rested = [rice[i] for i in sorted(self.resting_plots(name, [(poly, _uf_f(*_ring_center(poly))) for poly in rice]))]
         for poly in rested:
-            self.rest_basin(poly, bund)
+            self.rest_basin(poly, bund, name)
         if label and taxfree:
             self._taxfree_plots([t for t in interior if not any(t[0] is poly for poly in rested)], taxfree)
         self.add('</g>')
@@ -362,16 +369,21 @@ class PaddyMixin:
         self.M["meta"]["paddy_rest"] = form
         if form == "settled":
             return set()
+        # ...ONLY A BASIN THE REGISTRY ADMITS RESTS (feature 287, water W53): a resting basin is recorded as ground, so one
+        # water not its own field's already crosses - a brook, another field's ditch - is not offered; it stays a rice plot.
+        # The field's own ditches and feed are the matrix's to allow (`_MATRIX_SAME_PARENT_OK`).
+        ok = [i for i, (poly, _f) in enumerate(cands) if self.admits("fallow_patches", rest_record(poly, field))]
         rng = knob_rng(self.seed, f"paddy_rest:{field}")
-        return set(rest_plots(cands, rng, rng.randint(*REST_COUNT)))
+        return {ok[k] for k in rest_plots([cands[i] for i in ok], rng, rng.randint(*REST_COUNT))}
 
-    def rest_basin(self: Settlement, poly: Sequence[Pt], bund: float) -> None:  # type: ignore[misc]
+    def rest_basin(self: Settlement, poly: Sequence[Pt], bund: float, field: str = "") -> None:  # type: ignore[misc]
         """A resting paddy plot: the whole basin inside its own bunds, grass where the rice would be, a few tufts of the
-        grazing on it (`PADDY_REST`). Recorded in `fallow_patches` with its ring, and counted in `meta.paddy_rested`."""
+        grazing on it (`PADDY_REST`). Recorded in `fallow_patches` with its ring and its `field` (`rest_record`), and counted
+        in `meta.paddy_rested`. Only a basin `resting_plots` offered - one the registry admits - is rested."""
         from l7r.diagram.waterfields import AZE
 
         pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in poly)
-        self.add(f'<polygon points="{pts}" fill="{REST_GRASS}" stroke="{AZE}" stroke-width="{bund:.2f}" stroke-linejoin="round"/>', cls=Split("fallow", "bund"))
+        self.add_paddy(f'<polygon points="{pts}" fill="{REST_GRASS}" stroke="{AZE}" stroke-width="{bund:.2f}" stroke-linejoin="round"/>', cls=Split("fallow", "bund"))
         cx, cy = sum(p[0] for p in poly) / len(poly), sum(p[1] for p in poly) / len(poly)
         rng = random.Random(int(abs(cx) * 7 + abs(cy) * 13))  # positional: the tufts are decoration and move nothing else
         xs, ys = [p[0] for p in poly], [p[1] for p in poly]
@@ -381,7 +393,7 @@ class PaddyMixin:
             if point_in_poly(tx, ty, list(poly)):
                 tufts.append(f'<path d="M{tx - 3:.1f},{ty + 2:.1f} L{tx:.1f},{ty - 4:.1f} L{tx + 3:.1f},{ty + 2:.1f}" fill="none" stroke="{REST_TUFT}" stroke-width="0.8"/>')
         self.add("".join(tufts), cls="fallow")
-        self.M["fallow_patches"].append({"outline": [[round(p[0], 1), round(p[1], 1)] for p in poly], "form": "rested_basin"})
+        self.M["fallow_patches"].append(rest_record(poly, field))
         self.M["meta"]["paddy_rested"] = self.M["meta"].get("paddy_rested", 0) + 1
 
     def water_field(  # type: ignore[misc]
@@ -469,7 +481,7 @@ class PaddyMixin:
                 if un_irrig or edgef + random.uniform(-0.08, 0.08) > 0.6:
                     crop = 'dry' if random.random() < 0.62 else 'soy'
                     fill = 'url(#drycrop)' if crop == 'dry' else '#9CB36A'
-                    self.add(f'<polygon points="{pts}" fill="{fill}" stroke="{AZE}" stroke-width="{bund:.1f}" stroke-linejoin="round"/>')
+                    self.add_paddy(f'<polygon points="{pts}" fill="{fill}" stroke="{AZE}" stroke-width="{bund:.1f}" stroke-linejoin="round"/>')
                     self._rows(quad, pts, crop)
                     ndry += 1
                 else:
@@ -481,7 +493,7 @@ class PaddyMixin:
                         fill, flooded = random.choice(RIPE_SHADES), False
                     else:
                         fill, flooded = random.choice(RICE_GREENS), False
-                    self.add(f'<polygon points="{pts}" fill="{fill}" stroke="{AZE}" stroke-width="{bund:.1f}" stroke-linejoin="round"/>')
+                    self.add_paddy(f'<polygon points="{pts}" fill="{fill}" stroke="{AZE}" stroke-width="{bund:.1f}" stroke-linejoin="round"/>')
                     self._paddy_surface(quad, pts, flooded)
                     nrice += 1
                 if point_in_poly(cx, cy, smoothed):

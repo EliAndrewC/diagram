@@ -83,29 +83,43 @@ def test_the_streams_are_read_through_the_fords() -> None:
     assert len(stream_segs(_S())) == 2, "one stream, one ford, two pieces"
 
 
-def test_an_oblique_crossing_is_squared_and_a_square_or_short_one_is_left() -> None:
+def test_an_oblique_crossing_is_squared_and_a_square_one_is_left() -> None:
     """Feature 261: a way crossing the brook more than FORD_SQUARE_TOL_DEG off square gets a leg along the brook's
-    normal at the crossing (a shorter one where the segment cannot hold it); a square crossing is left as drawn."""
-    from l7r.diagram.hamletgen.ways.checks import square_crossings
+    normal at the crossing, reaching `SQUARE_LEG_PAD` past `half` each side; a square crossing is left as drawn."""
+    from l7r.diagram.hamletgen.ways.checks import SQUARE_LEG_PAD, square_crossings
 
     brook = [(0.0, 0.0), (0.0, 200.0)]  # a brook running south
     oblique = [(-100.0, 20.0), (100.0, 180.0)]  # crosses at (0, 100), about 39 deg off square
     got = square_crossings(oblique, brook, 10.0)
     assert got[0] == oblique[0] and got[-1] == oblique[-1] and len(got) == 4
     (x1, y1), (x2, y2) = got[1], got[2]
-    assert abs(y1 - y2) < 1e-9 and abs(x2 - x1 - 20.0) < 1e-9, "the new leg runs along the normal, west to east"
+    assert abs(y1 - y2) < 1e-9 and abs(x2 - x1 - 2 * (10.0 + SQUARE_LEG_PAD)) < 1e-9, "the new leg runs along the normal, west to east"
     back = square_crossings(list(reversed(oblique)), brook, 10.0)
     assert back[1][0] > back[2][0], "walked the other way, the leg runs east to west"
     square = [(-100.0, 100.0), (100.0, 101.0)]
     assert square_crossings(square, brook, 10.0) == square
-    short = [(-5.0, 90.0), (5.0, 110.0)]  # too short for the full 15 ft either side: a shorter square leg (feature 291)
-    got = square_crossings(short, brook, 15.0)
-    assert len(got) == 4 and abs(got[1][1] - got[2][1]) < 1e-9 and got[1][0] < 0.0 < got[2][0], "square across, within the segment"
-    near = [(-0.5, 99.0), (60.0, 180.0)]  # the crossing a step from the segment's start: no bend point there, no hook
-    got = square_crossings(near, brook, 10.0)
-    assert got[0] == near[0] and len(got) == 3 and abs(got[1][1] - near[0][1]) < 1.0
     assert square_crossings([], brook, 10.0) == []
     assert square_crossings(oblique, [(0.0, 0.0), (0.0, 0.0)], 10.0) == oblique
+    assert square_crossings(got, brook, 10.0) == got, "squaring a squared lane changes nothing (the leg stands clear of the elbow pass)"
+
+
+def test_the_squaring_is_total() -> None:
+    """Feature 287, ways W11: a crossing too near the lane's END to hold the leg is squared too - the end moves onto the
+    leg - where it used to be "left as drawn" oblique; and every crossing on one segment is squared, not the first alone."""
+    from l7r.diagram.hamletgen.ways.checks import FORD_SQUARE_TOL_DEG, square_crossings
+    from l7r.diagram.hamletgen.ways.law import off_square
+
+    brook = [(0.0, 0.0), (0.0, 200.0)]
+    short = [(-5.0, 90.0), (5.0, 110.0)]  # both ends inside the leg's reach
+    got = square_crossings(short, brook, 15.0)
+    assert len(got) == 2 and got != short, "both ends move onto the leg"
+    assert off_square(got[0], got[1], brook[0], brook[1]) <= FORD_SQUARE_TOL_DEG
+    zig = [(-50.0, 0.0), (50.0, 60.0)]
+    twice = [(-100.0, 20.0), (100.0, 180.0)]
+    s_brook = [(0.0, -10.0), (0.0, 200.0), (40.0, 200.0), (40.0, -10.0)]  # a course crossed twice by one segment
+    out = square_crossings(twice, s_brook, 5.0)
+    assert len(out) == 6, "two legs, one per crossing"
+    assert square_crossings(zig, brook, 5.0)[0] == zig[0]
 
 
 # ---- feature 276 FR-005: the PathChecker answers exactly what path_violations does ------------------------------

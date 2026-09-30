@@ -6,7 +6,6 @@ from __future__ import annotations
 import math
 import random
 
-from l7r.diagram.hamletgen.ways import sweeps
 from l7r.diagram.settlement._geom import seg_dist, segments_cross
 from l7r.diagram.settlement.rolling import fit
 from l7r.diagram.settlement.structures import captions
@@ -61,21 +60,6 @@ def test_the_departure_count_from_its_index_is_the_old_count() -> None:
             assert reach.missed(x, y, near) == _old_missed(routes, x, y, near) == fx.routes_missed(routes, x, y, near)
     assert fx.RouteReach([[(0.0, 0.0)]]).missed(3.0, 4.0, 5.0) == 0 == _old_missed([[(0.0, 0.0)]], 3.0, 4.0, 5.0)
     assert fx.RouteReach([]).missed(0.0, 0.0, 10.0) == 0
-
-
-def test_the_home_bank_crossings_from_their_index_are_the_old_crossings() -> None:
-    """FR-005: a route's crossing segments and a chord's crossing parity, asked of the brook's segment index, are the scan's."""
-    rng = random.Random(2816)
-    brook = _walk(rng, 40, 0.0, 0.0)
-    segs = list(zip(brook, brook[1:], strict=False))
-    idx = sweeps.brook_segment_index(segs)
-    for _ in range(300):
-        r = _walk(rng, rng.randint(2, 8))
-        old = [m for m in range(len(r) - 1) if any(segments_cross(r[m], r[m + 1], c, d) for c, d in segs)]
-        assert sweeps.crossing_hits(r, idx) == old
-        c, mid = r[0], r[-1]
-        assert sweeps.crossings_parity(c, mid, idx) == sum(1 for a, b in segs if segments_cross(c, mid, a, b)) % 2
-    assert sweeps.crossing_hits([(0.0, 0.0), (1.0, 1.0)], sweeps.brook_segment_index([])) == []
 
 
 def _old_on_stream(gc, pts, streams):

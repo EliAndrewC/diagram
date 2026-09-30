@@ -78,3 +78,12 @@ def test_a_channel_goes_round_another_farm_s_grove_and_frame() -> None:
     walls = fw._obstacles(s, h)[1]
     assert any(min(p[0] for p in w) < 160.0 for w in walls), "the other farm's grove is a wall"
     assert not any(min(p[1] for p in w) >= 219.0 and max(p[1] for p in w) <= 261.0 for w in walls), "its own grove is not"
+
+
+def test_a_straight_chord_is_taken_where_it_crosses_nothing_and_a_source_in_the_crop_is_known() -> None:
+    """`straight_or_routed` / `inside_the_crop` (feature 291 on 287)."""
+    crop = [[(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]]
+    assert fw.straight_or_routed((100.0, 50.0), (140.0, 50.0), crop, [], [], 8.0, 2.0) == [(100.0, 50.0), (140.0, 50.0)]
+    routed = fw.straight_or_routed((110.0, -20.0), (110.0, 120.0), [], [[(105.0, 40.0), (115.0, 40.0), (115.0, 60.0), (105.0, 60.0)]], [], 8.0, 2.0)
+    assert len(routed) >= 2 and routed != [(110.0, -20.0), (110.0, 120.0)], "routed round the wall"
+    assert fw.inside_the_crop((50.0, 50.0), crop) and not fw.inside_the_crop((100.0, 50.0), crop) and not fw.inside_the_crop((150.0, 50.0), crop)

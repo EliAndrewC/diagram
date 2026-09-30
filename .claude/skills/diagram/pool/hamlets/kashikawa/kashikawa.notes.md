@@ -113,7 +113,9 @@ so cannot move; the name can.*
 
 ### Features
 
-- **burial ground**: Kashikawa keeps none of its own: its dead lie in the main village's ground, by the shrine that is the setting's parish temple.
+- **burial ground**: Kashikawa keeps a burial ground of its own, northeast of the houses on open ground, well east of where
+  the windbreak ends; the windbreak stands northwest of them against the prevailing wind, and the grave in the paddy is one family's,
+  a separate thing.
 
 - **threshing yard**: This map's harvest weather is settled, the regional default, so no rack is drawn by the houses: its racks would be put up out on the paddies after the harvest, which is the seasonal map's business and not drawn here (settled weather keeping the racks off the houses is our reading of the survey, which records racks gathered by the houses only on a coast of changeable weather).
 - **grave island**: Kashikawa's field grave takes the Japanese form: a small mound with its stones in the corner of a rice plot, against its bunds, not an island in the plot's middle (each hamlet takes one form).
@@ -646,7 +648,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - farmhouses: **20**
 - family form: **one_roof**, retirement houses **0**
 - farmstead fixtures: bath **5**, coop **18**, pit **9**, privy **17**, shrine **1**, woodpile **7**
-- notice board at the entrance, **(1227.4, 4177.3)**: **20** of 20 households' ways out pass it
+- notice board at the entrance, **(3694.8, 1440.8)**: **20** of 20 households' ways out pass it
 <!-- /census -->
 
 ## 2026-08-29 - feature 154: an `entrance` board on the windward fringe ate the shelter belt (CLOSED)

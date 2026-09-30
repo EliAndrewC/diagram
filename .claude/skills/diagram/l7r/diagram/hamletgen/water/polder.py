@@ -11,7 +11,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, knob_rng, point_in_poly, seg_intersect, segments_cross
-from l7r.diagram.settlement.land.dikes import DIKE_GAP_HW
+from l7r.diagram.settlement.land.dikes import CREST_REACH, DIKE_GAP_HW, GAP_REACH, course_breaches, dike_band, dike_crest
 from l7r.diagram.sitegen.geom import net_acres, poly_area
 from l7r.diagram.waterfields import build_polder, clean_polder_parcels
 
@@ -25,20 +25,47 @@ from ..consts import (
     Pt,
 )
 from ..plan import SitePlan
+from ..pondstock import reserve_sty_seat
 
 
-def walk_pond_uphill(pond: tuple[float, float, float, float], envelope: list[Any], ux: float, uy: float, step: float = 12.0, limit: int = 60) -> tuple[float, float, float, float]:
-    """The header reservoir walked UPHILL (against the fall) until no point of its rim lies on the crop.
+def reservoir_clear_of_crop(pond: tuple[float, float, float, float], envelope: Sequence[Pt]) -> bool:
+    """THE RULE (feature 287, water W46): no part of the reservoir's rim lies on the crop - its ellipse, as a polygon drawn
+    just OUTSIDE the true ellipse, shares no ground with the envelope. Sixteen rim samples let a spike of the envelope
+    through between two of them; a polygon does not. The seat below and its test read this one predicate."""
+    from shapely.geometry import Polygon
+
+    n = 96
+    grow = 1.0 / math.cos(math.pi / n)  # the polygon's edges run outside the ellipse, so it covers every rim point
+    ring = [(pond[0] + pond[2] * grow * math.cos(math.tau * k / n), pond[1] + pond[3] * grow * math.sin(math.tau * k / n)) for k in range(n)]
+    return not Polygon(ring).intersects(Polygon([(float(p[0]), float(p[1])) for p in envelope]).buffer(0))
+
+
+def reservoir_uphill_of_field(pond: tuple[float, float, float, float], envelope: Sequence[Pt], fall: Pt) -> bool:
+    """THE RULE (feature 287, water W46): the source sits ABOVE what it waters - the reservoir's center is further up the
+    fall than the field's highest point (research/archetypes polder siting; the soak test's own reading)."""
+    return pond[0] * fall[0] + pond[1] * fall[1] < min(float(p[0]) * fall[0] + float(p[1]) * fall[1] for p in envelope)
+
+
+def walk_pond_uphill(pond: tuple[float, float, float, float], envelope: list[Any], ux: float, uy: float, step: float = 12.0) -> tuple[float, float, float, float]:
+    """The header reservoir SEATED uphill (against the fall) at the first step where it is clear of the crop AND above it.
 
     Lifted out of `stage_polder` by feature 219 so the walk is a unit test on a rectangle rather than a roll of a
-    polder that needs it (seed 12 did; seeds 3, 8, 19 and 22 cleared first try). `pond` is (cx, cy, rx, ry); the
-    walk is bounded so a rim that can never clear cannot loop forever."""
-    for _ in range(limit):
-        rim = [(pond[0] + pond[2] * math.cos(a), pond[1] + pond[3] * math.sin(a)) for a in (k * math.pi / 8 for k in range(16))]
-        if not any(point_in_poly(q[0], q[1], envelope) for q in rim):
-            break
-        pond = (pond[0] + ux * step, pond[1] + uy * step, pond[2], pond[3])
-    return pond
+    polder that needs it (seed 12 did; seeds 3, 8, 19 and 22 cleared first try). `pond` is (cx, cy, rx, ry).
+
+    A SOLVED SEAT, NOT A BOUNDED WALK (feature 287, water W46). The walk used to stop after 60 steps with whatever it had,
+    which on an envelope that needed more left the rim on the crop; and it tested 16 rim points, which a spike between
+    two of them slipped through. Both predicates are asked at each step, and the steps are bounded by geometry rather
+    than a count: once the rim's LOWEST point stands above the field's HIGHEST, the ellipse cannot meet the envelope and
+    the center is uphill of it, so the seat is found at or before that step. `(ux, uy)` is the unit uphill direction."""
+    fall = (-ux, -uy)
+    top = min(float(p[0]) * fall[0] + float(p[1]) * fall[1] for p in envelope)
+    reach = math.hypot(pond[2] * fall[0], pond[3] * fall[1])  # the ellipse's half extent along the fall
+    last = max(0, math.ceil((pond[0] * fall[0] + pond[1] * fall[1] + reach - top) / step) + 1)
+    for k in range(last + 1):
+        seat = (pond[0] + ux * step * k, pond[1] + uy * step * k, pond[2], pond[3])
+        if reservoir_clear_of_crop(seat, envelope) and reservoir_uphill_of_field(seat, envelope, fall):
+            return seat
+    raise AssertionError("unreachable: the last step stands the whole rim above the field")  # pragma: no cover - `last` is past the geometric bound
 
 
 def dike_gaps_at_channels(ring: list[Any], channels: Any, sluices: Any) -> list[Any]:
@@ -57,6 +84,40 @@ def dike_gaps_at_channels(ring: list[Any], channels: Any, sluices: Any) -> list[
                     if hit is not None and not any(math.hypot(hit[0] - g[0], hit[1] - g[1]) < 30 for g in gaps):
                         gaps.append(hit)
     return gaps
+
+
+def inlet_to_rim(pts: list[Any], pond: tuple[float, float, float, float], envelope: Sequence[Pt]) -> list[Any]:
+    """The feeder's points with its inlet ended ON the reservoir's rim, 2 ft inside it (feature 150 T51 - see `stage_polder`).
+
+    ONLY THE STUB'S END MOVES (feature 287, water W44). Where `_polder_close` trimmed the stub away as an acute tail (a
+    warped corner), the feeder's last point is a RING vertex inside the crop - and moving it to the rim dragged the ring
+    off the corner the west toe had been snapped onto (Polder 12: the toe's end left 15.5 ft from any trunk). A last
+    point inside the crop is kept, and the run to the rim is added after it."""
+    sx, sy = float(pts[-1][0]), float(pts[-1][1])
+    vx, vy = pond[0] - sx, pond[1] - sy
+    lo, hi = 0.0, 1.0
+    for _ in range(30):
+        m = (lo + hi) / 2
+        qx, qy = sx + vx * m, sy + vy * m
+        if ((qx - pond[0]) / pond[2]) ** 2 + ((qy - pond[1]) / pond[3]) ** 2 > 1.0:
+            lo = m
+        else:
+            hi = m
+    vl = math.hypot(vx, vy) or 1.0
+    rim = (round(sx + vx * hi + vx / vl * 2.0, 1), round(sy + vy * hi + vy / vl * 2.0, 1))
+    return [*pts, rim] if point_in_poly(sx, sy, list(envelope)) else [*pts[:-1], rim]
+
+
+def gaps_for_courses(gaps: Sequence[Any], courses: Sequence[Sequence[Pt]], crest: Sequence[Pt]) -> list[Any]:
+    """`gaps` with one more wherever a course still breaches the crest (`course_breaches`) - each at the breach itself, and
+    the course asked again until it breaches nowhere, so every course recorded when the dike is drawn crosses it only at
+    a gap (feature 287, water W42). Asked half a foot stricter on both reaches than the rule, since the dike records its
+    crest and gaps rounded to 0.1 px."""
+    out = list(gaps)
+    for course in courses:
+        while hits := course_breaches(list(course), list(crest), [(float(g[0]), float(g[1])) for g in out], CREST_REACH + 0.5, GAP_REACH - 0.5):
+            out.append(hits[0])
+    return out
 
 
 def stage_polder(s: Settlement, plan: SitePlan) -> None:
@@ -147,18 +208,7 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
     # moved onto the rim, 2 ft inside it, so `_clip_to_pond` snaps the drawn bed onto the rim and its bed
     # covers the rim stroke at the mouth: one continuous water.
     if main is not None:
-        _sx, _sy = float(main["pts"][-1][0]), float(main["pts"][-1][1])
-        _vx, _vy = pond[0] - _sx, pond[1] - _sy
-        _lo, _hi = 0.0, 1.0
-        for _ in range(30):
-            _m = (_lo + _hi) / 2
-            _qx, _qy = _sx + _vx * _m, _sy + _vy * _m
-            if ((_qx - pond[0]) / pond[2]) ** 2 + ((_qy - pond[1]) / pond[3]) ** 2 > 1.0:
-                _lo = _m
-            else:
-                _hi = _m
-        _vl = math.hypot(_vx, _vy) or 1.0
-        main["pts"][-1] = (round(_sx + _vx * _hi + _vx / _vl * 2.0, 1), round(_sy + _vy * _hi + _vy / _vl * 2.0, 1))
+        main["pts"] = inlet_to_rim(main["pts"], pond, env)
     # `join_head=True`: a polder's ring canal ENDS on the block's corner, outside the planted
     # extent, so the inlet must visibly meet it or the ring reads as dangling
     # (`watercourse_ends_reach_water`). A comb's head-race ends among its own plots and needs no
@@ -193,6 +243,15 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
     # drawn straight over a running channel (`polder_dike_gapped_at_sluices`).
     ring = list(plan.envelope)
     gaps = dike_gaps_at_channels(ring, net.get("channels", []), net.get("dike_sluices") or [])
+    # ...AND WHEREVER ANY RECORDED COURSE RUNS ON THE CREST (feature 287, water W42). The ring test above sees only the
+    # net's own channels crossing the INNER face; the inlet hairline and the topology channel `draw_comb_field` records
+    # in `M["channels"]` cross the band too, and a course can lie on the crest without crossing the inner face at all.
+    # The band is a pure function of the ring and the seed (`dike_band`), so its crest is known before it is drawn, and
+    # every course is gapped where it breaches it - the rule's own predicate, `course_breaches`.
+    _dseed = plan.spec.seed ^ 0x6D
+    _crest = dike_crest(*dike_band(ring, _dseed)[1:3])
+    courses = [[(float(v[0]), float(v[1])) for v in d["poly"]] for d in list(s.M.get("field_ditches", [])) + list(s.M.get("channels", [])) if d.get("poly")]
+    gaps = gaps_for_courses(gaps, courses, _crest)
     # ...and UNLABELED on this tier. `perimeter_dike` captions itself 8 px above the band it picks,
     # and the band is not in the crop's hard set (`_CROP_HARD`), so on some bearings that caption
     # lands outside the frame (`labels_within_image`, seen at down_deg=270). Adding `dikes` to the
@@ -200,7 +259,7 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
     # fails `crop_hugs_content` instead, and Enokida and Kuwabata both move. A perimeter dike is not
     # a feature a reader needs named - it is the most legible thing on a polder sheet - so the
     # scripted tier draws it without a caption rather than framing slack around a word.
-    s.perimeter_dike(ring, seed=plan.spec.seed ^ 0x6D, gaps=gaps, label="")
+    s.perimeter_dike(ring, seed=_dseed, gaps=gaps, label="")
     # ...and the ditch runs OUTSIDE the crop become no-build corridors, exactly as on the valley
     # path. `field_channel` registers none of its own because inside the envelope the crop already
     # blocks building - but a polder's RING CANAL hugs the envelope's edge and its outer stretches
@@ -245,52 +304,24 @@ def fit_polder(plan: SitePlan, seed: int, tolerance: float = 0.06, rounds: int =
     # (bunds at y=-124, the drain outfall at y=-407, water running visibly backwards). Centring the
     # block and stepping back half its extent along each axis puts it on the canvas at any bearing,
     # and it has to be recomputed per candidate because the bisection changes the extent.
-    dx, dy = plan.fall
-    ux, uy = -dy, dx  # across the fall
     fab = fabric if fabric is not None else POLDER_FABRIC["polder_grid"]
     cellpx = float(fab["cell"]) / plan.ftpx
+    tried: dict[tuple[int, int], tuple[float, dict[str, Any]]] = {}
+
+    def grid(rows: int, cols: int) -> tuple[float, dict[str, Any]]:
+        if (rows, cols) not in tried:
+            net = _polder_candidate(plan, seed, rows, cols, cellpx, fab, mosaic)
+            tried[(rows, cols)] = (net_acres(net, plan.ftpx), net)
+        return tried[(rows, cols)]
+
+    def miss(acres: float) -> float:
+        return abs(acres - plan.target_acres) / plan.target_acres
+
     lo, hi = 6, 44
-    best: dict[str, Any] | None = None
     for _ in range(rounds):
         rows = (lo + hi) // 2
-        cols = max(4, int(round(rows * 0.55)))
-        along, across = rows * cellpx, cols * cellpx
-        cx, cy = plan.W / 2.0, plan.H / 2.0
-        origin = (cx - dx * along / 2 - ux * across / 2, cy - dy * along / 2 - uy * across / 2)
-        # EDGE WANDER IS FITTED TO THE BLOCK, not fixed at Enokida's 0.5. `polder_fills_its_bbox`
-        # wants the outline to cover >= 82% of its bbox - the archetype's teeth, since a polder
-        # reads as a SURVEYED rectangle rather than an organic field - and the wander's wobble is a
-        # fixed size in cells, so on a small block it eats a much larger share of the bbox: measured,
-        # a 9x5 grid fills 79% at wander 0.5 where Enokida's 15x8 clears the bar comfortably. So the
-        # wander is walked down until the block reads as surveyed, keeping as much of the
-        # hand-piled, fish-scale irregularity as the archetype can carry at that size.
-        net = None
-        for wander in (0.5, 0.4, 0.3, 0.2, 0.12):
-            net = build_polder(
-                plan.W,
-                plan.H,
-                origin,
-                seed,
-                down_deg=plan.down_deg,
-                rows=rows,
-                cols=cols,
-                cell=cellpx,
-                parcel_mix=tuple(fab["parcel_mix"]),
-                gap=tuple(fab["gap"]),
-                edge_wander=wander,
-                mosaic=mosaic,
-                clean_parcels=False,
-            )
-            _env = [(float(a), float(b)) for a, b in net["envelope"]]
-            _xs = [q[0] for q in _env]
-            _ys = [q[1] for q in _env]
-            _bb = max(1.0, (max(_xs) - min(_xs)) * (max(_ys) - min(_ys)))
-            if poly_area(_env) / _bb >= 0.86:  # 0.82 is the rule; the margin absorbs the drawn outline's rounding
-                break
-        assert net is not None
-        got = net_acres(net, plan.ftpx)
-        best = net
-        if abs(got - plan.target_acres) / plan.target_acres <= tolerance:
+        got, _net = grid(rows, max(4, int(round(rows * 0.55))))
+        if miss(got) <= tolerance:
             break
         if got < plan.target_acres:
             lo = rows + 1
@@ -298,9 +329,93 @@ def fit_polder(plan: SitePlan, seed: int, tolerance: float = 0.06, rounds: int =
             hi = rows - 1
         if lo > hi:
             break
-    assert best is not None
-    clean_polder_parcels(best)  # the parcel/channel cleanup runs on the WINNER only (feature 150 T55) - see clean_polder_parcels for the 15 s -> 41 s it costs on all 45 candidates
-    return best
+    # THE ACREAGE IS SOLVED, NOT THE CLOSEST MISS KEPT (feature 287, water W47). The bisection walks ROWS with the columns
+    # tied to them, so its candidates jump in coarse steps (a row and a half-column at once) and it used to keep whatever
+    # it ended on - on some targets 15% short. When it misses, the search goes on over the (rows, cols) pairs of the
+    # archetype's aspect band, each predicted from the acres per module cell measured so far, until one lands inside
+    # the tolerance; the drawn block is the tried candidate nearest the target.
+    for _ in range(PAIR_ROUNDS):
+        if min(miss(a) for a, _n in tried.values()) <= tolerance:
+            break
+        grid(*_nearest_pair(tried, sum(a / (r * c) for (r, c), (a, _n) in tried.items()) / len(tried), miss))
+    # THE BAND IS MEASURED ON THE BLOCK AS DRAWN. The parcel cleanup runs on the WINNER only (feature 150 T55 - see
+    # `clean_polder_parcels` for the 15 s -> 41 s it costs on all 45 candidates), and it and the apex pass trim ground
+    # after the choice; so the winner is cleaned and measured, and while the trim has taken it out of the band the next
+    # candidate is chosen with the trim's measured share carried into its prediction.
+    kept = 1.0
+    cleaned: set[tuple[int, int]] = set()
+    for _ in range(PAIR_ROUNDS):
+        (r, c), (_raw, best) = min(((rc, an) for rc, an in tried.items() if rc not in cleaned), key=lambda t: miss(t[1][0] * kept))
+        raw = net_acres(best, plan.ftpx)
+        clean_polder_parcels(best)
+        cleaned.add((r, c))
+        final = net_acres(best, plan.ftpx)
+        if polder_acres_in_band(final, plan.target_acres):
+            return best
+        kept = final / raw if raw > 0 else 1.0
+        grid(*_nearest_pair(tried, raw / (r * c) * kept, miss))
+    # a site no grid of the archetype's module can honor is refused naming it, never drawn short (FR-005)
+    raise ValueError(f"no polder grid of {cellpx:.0f} px modules lands {plan.target_acres:.1f} acres within {POLDER_ACRE_BAND:.0%}")
+
+
+PAIR_ROUNDS = 12  # the (rows, cols) refinement's builds after the bisection: each lands on the pair its measured acres per cell predicts nearest the target, and the pairs of a 1.5-2.2:1 block are dense enough that measured cohorts land in two or three
+POLDER_ACRE_BAND = 0.12  # a polder's drawn acreage is within this fraction of the households' target (feature 287, water W47): the soak's clause, with the fit's own 6% tolerance inside it
+
+
+def _nearest_pair(tried: Mapping[tuple[int, int], Any], per_cell: float, miss: Any) -> tuple[int, int]:
+    """The untried (rows, cols) block of the archetype's aspect band (cols 0.45-0.65 of rows, Enokida's 15x8 at 0.53)
+    whose acreage `per_cell` predicts nearest the target, the nearer to the 0.55 aspect on a tie."""
+    return min(
+        ((r, c) for r in range(6, 45) for c in range(max(4, round(r * 0.45)), max(4, round(r * 0.65)) + 1) if (r, c) not in tried),
+        key=lambda rc: (round(miss(per_cell * rc[0] * rc[1]), 3), abs(rc[1] / rc[0] - 0.55)),
+    )
+
+
+def polder_acres_in_band(acres: float, target: float, band: float = POLDER_ACRE_BAND) -> bool:
+    """THE RULE (feature 287, water W47): the polder's drawn acreage lands within `band` of its target. The fit and its
+    test read this one predicate."""
+    return abs(acres - target) / target < band
+
+
+def _polder_candidate(plan: SitePlan, seed: int, rows: int, cols: int, cellpx: float, fab: Mapping[str, Any], mosaic: float) -> dict[str, Any]:
+    """One candidate block of `rows` x `cols` modules, centered on the canvas, its edge wander walked down until it reads
+    as surveyed (see `fit_polder`)."""
+    dx, dy = plan.fall
+    ux, uy = -dy, dx  # across the fall
+    along, across = rows * cellpx, cols * cellpx
+    cx, cy = plan.W / 2.0, plan.H / 2.0
+    origin = (cx - dx * along / 2 - ux * across / 2, cy - dy * along / 2 - uy * across / 2)
+    # EDGE WANDER IS FITTED TO THE BLOCK, not fixed at Enokida's 0.5. `polder_fills_its_bbox`
+    # wants the outline to cover >= 82% of its bbox - the archetype's teeth, since a polder
+    # reads as a SURVEYED rectangle rather than an organic field - and the wander's wobble is a
+    # fixed size in cells, so on a small block it eats a much larger share of the bbox: measured,
+    # a 9x5 grid fills 79% at wander 0.5 where Enokida's 15x8 clears the bar comfortably. So the
+    # wander is walked down until the block reads as surveyed, keeping as much of the
+    # hand-piled, fish-scale irregularity as the archetype can carry at that size.
+    net: dict[str, Any] = {}
+    for wander in (0.5, 0.4, 0.3, 0.2, 0.12):
+        net = build_polder(
+            plan.W,
+            plan.H,
+            origin,
+            seed,
+            down_deg=plan.down_deg,
+            rows=rows,
+            cols=cols,
+            cell=cellpx,
+            parcel_mix=tuple(fab["parcel_mix"]),
+            gap=tuple(fab["gap"]),
+            edge_wander=wander,
+            mosaic=mosaic,
+            clean_parcels=False,
+        )
+        _env = [(float(a), float(b)) for a, b in net["envelope"]]
+        _xs = [q[0] for q in _env]
+        _ys = [q[1] for q in _env]
+        _bb = max(1.0, (max(_xs) - min(_xs)) * (max(_ys) - min(_ys)))
+        if poly_area(_env) / _bb >= 0.86:  # 0.82 is the rule; the margin absorbs the drawn outline's rounding
+            break
+    return net
 
 
 # ---- the polder's flanks (feature 150) --------------------------------------------------------------
@@ -434,6 +549,7 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.water.polder.waterward_flanks
         l7r.diagram.hamletgen.water.polder.dike_face
         l7r.diagram.settlement.Settlement.marsh
+        l7r.diagram.hamletgen.pondstock.reserve_sty_seat
     """
     if plan.field_archetype not in POLDER_ARCHETYPES or not s.M.get("dikes"):
         return
@@ -468,6 +584,10 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
     for q in flanks:
         s.marsh(strips[q], role="waterside")
     s.meta(waterward=flanks)
+    # ...AND THE STY'S SEAT, the other ground a dike-pond hamlet decides once the flank is known and before the houses stand
+    # (feature 287, water W50). A re-seat by `seat_every_household` keeps to this flank (`margin_ladder`), so neither the
+    # strips, their declaration nor this reservation has to be redrawn for it (`waterward_flanks` reads the flank alone).
+    reserve_sty_seat(s, plan)
 
 
 def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:
@@ -491,4 +611,8 @@ def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:
     # rests on - people cross where they LIVE - applies to whichever collector that is.
     if f["cluster"] == f["head"]:
         return {"feeder": 3, "drain": 0, "e_toe": 1, "w_toe": 1, "lateral": 1}
-    return {"feeder": 0, "drain": 3, "e_toe": 1, "w_toe": 1, "lateral": 1}
+    # ...EXCEPT THAT A DRAIN TAKES NO PLANK (feature 287, ways W14 and the WAYS law's `plank_on_supply`: a footplank stands on
+    # a supply ditch - research ways/030, archetypes/110). The village at the FOOT abuts the drain, which the law refuses a
+    # plank, so its crossings go on the supply ditches that reach it - the two toe collectors (role `lateral`) run down to
+    # the foot, two a side - and none is asked of the drain that `channel_footbridges` would refuse.
+    return {"feeder": 0, "drain": 0, "e_toe": 2, "w_toe": 2, "lateral": 1}

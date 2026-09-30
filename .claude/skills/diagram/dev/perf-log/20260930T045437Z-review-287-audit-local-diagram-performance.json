@@ -1,0 +1,38 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "41d2d2cde",
+    "label": "287-start",
+    "utc": "20260929T031041Z"
+  },
+  "binding": "368459bd5ddce445299b393ac705d04c6f4c06a6c161ed7f4efe1e8c6d3be1dd",
+  "criteria": {
+    "commensurate": "Yes. Gross +7.1 to +8.7 s over the four seeds against main (+28-35% of main's 24.95 s control); net -1.0 to -2.5 s: the end ran 23.2-24.5 s warm against main's 25.8-26.2 s in the same alternated rounds, and the 23.3 s bookend is below the 24.95 s control, so 287 is faster than main in total. Against 287-start the total is +2.4 s (+11.5%). Seed 25's +36.2% (4.7 -> 6.4 s) is field +1.19, homesteads +0.54 and hinterland +0.44 s: the seed whose fan the legality rule moves to three aspects. What it buys is a correctness guarantee on every map, not a cosmetic change: each map built once instead of re-rolled, the placer's rules guaranteed rather than seed-lucky, and an unreached house or an illegal field refused by name rather than shipped.",
+    "necessary": "Yes. The GM asked that every rule be guaranteed by the placement algorithm rather than happen to work on particular seeds (request.md; spec FR-001, FR-002, FR-005). Against main, by reviewer runs (three alternated rounds, 80af74aef vs 702900456), the growth sits in the stages that now do that work: homesteads +0.34 to +1.12 s a seed (the access corridor judged for each candidate seat), hinterland +0.46 to +0.63 s (the belt settled whole, woodland lots cut to their bounds, the registry asked by every writer), field +0.27 s on seed 4 and +1.35 s on seed 25 (the W32 legality: 13 carves at 3 aspects against main's 5 at 1). The web residue is +0.14/+0.21 s on seeds 4/25, the settle's reach guarantee. The straggler footpath pass was deleted at the GM's instruction (2026-09-30), and the recorded sweep shows the guarantees reach without it (straggler-footpaths-dropped: plain 53/53, probes 52/52, 0 unreached, 0 WebRefused, cohort 60/60).",
+    "no_way_around": "None found. From 2e0e4d8a4 to 702900456 the engine changed only in the ways package (the straggler deletion). Homesteads, hinterland and field moved by +0.12 s a seed or less between the two bookends, so the last audit's profiles still describe them. Seed 4 homesteads: 612 corridor searches once the cheaper refusals were moved ahead (c247f3628, byte-identical), with no single scan of unchanging geometry dominating. Seed 25 field: 13 whole carves at 0.235 s each against main's 0.273 s; these are candidate fans the legality rule refuses on their carved channels, and nothing cheaper can refuse them before the carve. The one large lever, the straggler pass, has now been taken: -3.12 s in the web between the bookends, and -3.97 s A/B in straggler-footpaths-dropped. Full-pitch-first seat offers were measured and declined as a change of form (clusters 12-27% further from their seat, up to 28% taller)."
+  },
+  "end": {
+    "commit": "702900456",
+    "label": "287-end",
+    "utc": "20260930T044507Z"
+  },
+  "environment": "local",
+  "feature": "287-placer-guarantees",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "f70424b3-a8eb-45cf-8472-6eb804c5e7c2",
+    "utc": "20260930T045437Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "seeds": {
+      "25": 36.2,
+      "39": 4.3,
+      "4": 10.3,
+      "47": -1.7
+    },
+    "total_pct": 11.5
+  },
+  "note": "",
+  "verdict": "justified"
+}

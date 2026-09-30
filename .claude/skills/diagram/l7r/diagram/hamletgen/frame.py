@@ -6,127 +6,18 @@ Split from hamletgen.py by feature 111; bodies verbatim. See hamletgen/CLAUDE.md
 from __future__ import annotations
 
 import math
-from collections.abc import Mapping, Sequence
+from collections.abc import Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, nearest_way_bearing, seg_dist
-from l7r.diagram.settlement.structures.fixtures import (
-    KOSATSUBA_ANCHOR_BAND_FT,
-    KOSATSUBA_HANDOVER_BAND_FT,
-    KOSATSUBA_MARKER_MIN_PX,
-    KOSATSUBA_VERGE_FT,
-    RouteReach,
-    canopy_index,
-    departure_routes,
-    kosatsuba_anchor,
-    kosatsuba_handover,
-    under_canopy,
-)
-from l7r.diagram.settlement.structures.fixtures.siting import BOARD_ALONG_STEP_PX
+from l7r.diagram.settlement import Settlement
 
-from .consts import BROOK_BEND_WIDTHS, POLDER_ARCHETYPES, Pt
-from .hinterland import CROP_MARGIN, brook_beside_the_field, title_pocket
+from .consts import POLDER_ARCHETYPES
+from .hinterland import title_pocket
+from .hinterland.frame import frame_for
 from .plan import SitePlan
-from .sink import BROOK_JOIN_TRUNK
 from .water import polder_crossing_caps
-from .ways.checks import square_crossings
-from .ways.fabric import _crosses_fabric, _homestead_polys
-from .ways.geom import _TOUCH_GAP
-
-# THE RE-SEAT PROBE MUST MEASURE THE BOARD THAT IS DRAWN (feature 134 T50, 2026-08-29). This was pinned
-# at 14 x 8 while `Settlement.kosatsuba` draws the researched 12 x 5 - not even the same aspect - and the
-# probe offsets the seat by HALF THE DEPTH, so every re-seated board stood (8 - 5) / 2 = 1.5 ft further
-# from its lane than the verge rule intends. On a 5 ft lane that is 12.5 ft from the centerline where the
-# rule asks 11.0, and `kosatsuba_by_the_road` measures against 12.0: gate seed 44 failed by half a foot
-# for a board the placer believed it had put exactly on the verge. Derived from the same expression the
-# drawing uses, so the two cannot drift again - this engine's standing rule is DERIVE, NEVER PIN.
-_BOARD_FT_W, _BOARD_FT_H = 12.0, 5.0  # the researched plank; see `Settlement.kosatsuba`
-
-
-def _board_footprint(s: Settlement) -> tuple[float, float]:
-    """The board's drawn footprint, exactly as `place_kosatsuba` computes it.
-
-    The frame test drives this path with a stub that has no scale, so `px` is optional; without it the
-    true feet ARE the pixels, which is the hamlet grain this re-seat exists for."""
-    _px = getattr(s, "px", None)
-    _w = max(_px(_BOARD_FT_W), KOSATSUBA_MARKER_MIN_PX) if _px else _BOARD_FT_W
-    return _w, _w * _BOARD_FT_H / _BOARD_FT_W
-
 
 # ---- STAGE 8: crossings, the board, and the frame ------------------------------------------------
-
-
-def round_the_brooks(s: Settlement) -> None:
-    """Every brook's bends rounded at `BROOK_BEND_WIDTHS` of its drawn width, once the ways that were routed against it are
-    laid and before the crossings are squared and decked against it (settlement-review of Sawada, feature 261: corners of
-    27-47 degrees on a natural brook). The tap - the vertex the head race leaves from - is held, so the race still leaves
-    the course where the offtake angle is measured."""
-    heads = [(float(c["poly"][0][0]), float(c["poly"][0][1])) for c in s.M.get("channels") or [] if (c.get("frm") or {}).get("kind") == "stream" and c.get("poly")]
-    for rec in s.M.get("streams") or []:
-        pts = [(float(x), float(y)) for x, y in rec.get("poly") or []]
-        if len(pts) < 3:
-            continue
-        taps = {min(range(len(pts)), key=lambda k, h=h: math.dist(pts[k], h)) for h in heads if min(math.dist(p, h) for p in pts) <= 1.0}
-        s.round_stream(rec, BROOK_BEND_WIDTHS * float(rec.get("w") or 7.0), hold=taps)
-
-
-RESEAT_END_FT = 30.0
-"""How far another lane's end may be carried to meet a lane squared at a crossing (a map drawing convention: a step, not a
-re-route)."""
-
-
-def reseat_ends(lanes: Sequence[Mapping[str, Any]], i: int, old: Sequence[Pt], new: Sequence[Pt], reach: float = RESEAT_END_FT) -> list[tuple[int, int, Pt]] | None:
-    """The moves that keep every other lane's end meeting lane `i` once it is re-laid from `old` to `new`: (lane, end index,
-    point on `new`) for each end that met `old` and misses `new` - None where one of them stands farther than `reach`."""
-    from l7r.diagram.settlement import seg_closest
-
-    on_new = list(zip(new, new[1:], strict=False))
-    moves: list[tuple[int, int, Pt]] = []
-    if keeps_the_ends(lanes, i, old, new):
-        return moves
-    for k, ln in enumerate(lanes):
-        p = ln.get("pts") or []
-        if k == i or len(p) < 2:
-            continue
-        for end_i in (0, len(p) - 1):
-            x, y = float(p[end_i][0]), float(p[end_i][1])
-            if not any(seg_dist(x, y, a, b) <= _TOUCH_GAP for a, b in zip(old, old[1:], strict=False)) or any(seg_dist(x, y, a, b) <= _TOUCH_GAP for a, b in on_new):
-                continue  # it did not meet the lane, or meets it still
-            q = min((seg_closest(x, y, a, b) for a, b in on_new), key=lambda c: math.dist(c, (x, y)))
-            if math.dist(q, (x, y)) > reach:
-                return None
-            moves.append((k, end_i, q))
-    return moves
-
-
-def relay_squared(s: Settlement, i: int, old: Sequence[Pt], new: Sequence[Pt]) -> bool:
-    """Re-lay lane `i` from `old` to `new` (squared at a crossing), carrying every other lane's end that met it onto it
-    (`reseat_ends`); False, and nothing changed, where one of them stands too far to carry."""
-    moved = reseat_ends(s.M.get("lanes", []), i, old, new)
-    if moved is None:
-        return False
-    for k, end_i, q in moved:
-        s.M["lanes"][k]["pts"][end_i] = [round(q[0], 1), round(q[1], 1)]
-        s.reink_lane(k)
-    s.M["lanes"][i]["pts"] = [[x, y] for x, y in new]
-    s.reink_lane(i)
-    return True
-
-
-def keeps_the_ends(lanes: Sequence[Mapping[str, Any]], i: int, old: Sequence[Pt], new: Sequence[Pt]) -> bool:
-    """Does lane `i`, re-laid from `old` to `new`, still meet every other lane end that met it - within the 4 ft the web's
-    one-network rule joins at (`_TOUCH_GAP`)?"""
-    on_old = list(zip(old, old[1:], strict=False))
-    on_new = list(zip(new, new[1:], strict=False))
-    for k, ln in enumerate(lanes):
-        p = ln.get("pts") or []
-        if k == i or len(p) < 2:
-            continue
-        for e in (p[0], p[-1]):
-            x, y = float(e[0]), float(e[1])
-            if any(seg_dist(x, y, a, b) <= _TOUCH_GAP for a, b in on_old) and not any(seg_dist(x, y, a, b) <= _TOUCH_GAP for a, b in on_new):
-                return False
-    return True
 
 
 def stage_crossings(s: Settlement, plan: SitePlan) -> None:
@@ -141,35 +32,15 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
     the engine's own `bridges()` docstring says so and the `roads_bridge_water` check enforces it.
 
     Steps:
-        l7r.diagram.hamletgen.frame.round_the_brooks
         l7r.diagram.settlement.Settlement.bridges
         l7r.diagram.settlement.Settlement.channel_footbridges
         l7r.diagram.settlement.Settlement.dike_gates
         l7r.diagram.hamletgen.water.polder_crossing_caps
-        l7r.diagram.hamletgen.ways.checks.square_crossings
     """
-    round_the_brooks(s)
-    # EVERY WAY CROSSES THE BROOK SQUARE, and so does its deck (feature 261): the lane is squared at the crossing first,
-    # its record and its ink together, because `bridges` lays the plank along the way it carries.
-    # ...AND EVERY DRAWN CHANNEL (settlement-review of Mizuguchi, feature 261): a lane over the head-race beside the weir lay
-    # 44 degrees off square, because only the brook was squared - and the record says a plank "crosses its ditch square
-    # rather than obliquely" (research ways/030)
-    waters = [(f["poly"], float(f.get("w", 8.0)) / 2 + s.px(6.0)) for f in s.M.get("streams", []) if len(f.get("poly") or ()) >= 2]
-    waters += [(c["pts"], float(c.get("w0", 4.0)) / 2 + s.px(6.0)) for c in s.M.get("drawn_channels", []) if len(c.get("pts") or ()) >= 2]
-    _fabric_now = [poly for poly, _owner, kind in _homestead_polys(s) if kind == "groves"]  # the farm grove bands (feature 291)
-    for brook, half in waters:
-        for i, ln in enumerate(s.M.get("lanes", [])):
-            pts = [(float(x), float(y)) for x, y in ln["pts"]]
-            squared = square_crossings(pts, [(float(x), float(y)) for x, y in brook], half)
-            # ...NOT WHERE THE NEW CHORD RUNS ACROSS THE FABRIC (feature 291): squaring drops the vertices near the brook, and
-            # on cohort seed 22 the dropped one was a detour round five farm grove bands, so the chord cut across them all
-            # ...NOR WHERE IT LEAVES ANOTHER LANE'S END IN THE AIR (feature 291): Mizuguchi's street was squared at a crossing
-            # and the door path that met it where it had bent to the ford was left 87 ft off it, the web in two pieces
-            if len(squared) != len(pts) and not _crosses_fabric(squared, _fabric_now, 0.0):
-                # ...AND ANOTHER LANE'S END THAT MET IT MEETS IT STILL: carried to the squared line where it stands near, else
-                # the squaring is refused (Mizuguchi: a door path left 87 ft off its street). Refused outright, a field path
-                # whose head a join lane met was left crossing the brook 45 degrees off square (Kashikawa, 2026-09-30).
-                relay_squared(s, i, pts, squared)
+    # THE LANES ARE ALREADY SQUARE (feature 287, M4c): every way crosses the brook and every drawn channel square, and so
+    # does its deck (features 261, research ways/030) - squared as the first step of `settle_the_web`, the web's last pass
+    # (`ways/settle.py:square_every_crossing`), so every rule of the lane law is judged on the squared lane and no stage
+    # after the web rewrites one. This stage only decks what the web drew. (The brook is round since `stage_sink`, M2.)
     s.bridges()
     if s.M.get("field_ditches"):
         if plan.field_archetype in POLDER_ARCHETYPES:
@@ -225,240 +96,19 @@ def stage_notice(s: Settlement, plan: SitePlan) -> None:
     driven in beside a way does neither, so it is the one feature that should see the whole map first -
     and nothing is placed after it for it to displace.
 
+    ONE SITER (feature 287, labels L2): `place_kosatsuba` applies every board rule once - inside the view, off the title
+    placard, beside its way and facing it, where every way out passes an `entrance` board, and only where the one placer
+    seats its caption clean - and hands the caption's proved seat to the label phase. The re-seat that stood here, a
+    second siter restating those rules because the first sampled seats outside the view, is deleted with its `loose`
+    fallback: its own comments recorded four drifts from the siter (features 154, 227, 230, 261).
+
     Steps:
         l7r.diagram.settlement.structures.fixtures._helpers.kosatsuba_anchor
-        l7r.diagram.hamletgen.frame._board_footprint
-        l7r.diagram.hamletgen.frame._nearest_way_bearing
         l7r.diagram.settlement.Settlement.fixture_clear_of_water
         l7r.diagram.settlement.Settlement.place_kosatsuba
         l7r.diagram.settlement.Settlement.kosatsuba
     """
-    spot = s.place_kosatsuba()
-    # ...AND IT MUST STAND WHERE THE FRAME WILL KEEP IT. `place_kosatsuba` maximizes passing traffic
-    # (dwellings within ~260 px) along the whole way network, and a lane ARM that runs past the
-    # cluster still sees the whole cluster from its far end - so on a held-out cohort hamlet the
-    # board landed 87 px north of the northernmost farmhouse, on a stretch of lane serving nobody.
-    # `crop_to_content` frames the HARD features and deliberately ignores linear runners like lanes,
-    # so the board and its caption fell outside the sheet (`labels_within_image`). Adding the board
-    # to the crop's hard set was tried and is worse: it then holds the frame open by itself, which is
-    # what `crop_not_held_open_by_one_feature` exists to stop. The board belongs among the houses it
-    # is read by, so if the engine's traffic score sends it outside them, re-seat it on the nearest
-    # verge that is inside the cloud.
-    # THE GUARD NOW TESTS THE FRAME ITSELF, because the frame exists (GM 2026-08-29). This stage runs
-    # after `stage_frame`, so `meta.view` is already decided - and the requirement was always
-    # `labels_within_image`, never "among the houses". The house-cloud bbox was standing in for the
-    # crop because the crop had not been computed yet, and standing in badly: it refused every seat
-    # outside the built ground, which is exactly where an `entrance` board belongs, so it threw away
-    # the placement the knob had rolled on two of three maps and put the board back at the busiest
-    # node while the manifest went on claiming `entrance`.
-    hs = s.M.get("houses", [])
-    _view = (s.M.get("meta") or {}).get("view")
-    if spot is not None and (_view or hs):
-        if _view:
-            _vx, _vy, _vw, _vh = (float(_q) for _q in _view)
-            hx0, hy0, hx1, hy1 = _vx, _vy, _vx + _vw, _vy + _vh
-        else:  # no crop recorded (the frame test drives this stage with a stub) - fall back to the cloud
-            hx0, hx1 = min(h["x"] for h in hs), max(h["x"] for h in hs)
-            hy0, hy1 = min(h["y"] for h in hs), max(h["y"] for h in hs)
-        # THE FOOTPRINT, NOT THE CENTER WITHIN 30 PX OF THE FRAME (settlement-review, feature 227). The slop
-        # admitted a board whose whole glyph is off the sheet: Sawada's stood 21 px above the view's top edge and
-        # was never re-seated, so the map shipped with no board and no caption drawn at all. A board is 12 x 5 ft
-        # and its caption reaches further, so the test insets by the footprint's own half-diagonal.
-        _fw, _fh = _board_footprint(s)
-        _inset = math.hypot(_fw, _fh) / 2
-        if not (hx0 + _inset <= spot[0] <= hx1 - _inset and hy0 + _inset <= spot[1] <= hy1 - _inset):
-            board = s.M["kosatsuba"].pop()
-            # ...AND ITS INK (feature 133 T48). Popping the record and the caption left the first
-            # board's GLYPH in the top layer, so a map whose engine seat fell outside the cloud
-            # shipped two boards with one record - found the day the household bamboo strips moved
-            # the engine's seat. `kosatsuba` records its `add_top` z; blank that entry.
-            _top = getattr(s, "top", None)
-            _zi = int(board.get("z", -1)) - int(getattr(s, "TOPZ", 0))
-            if _top is not None and 0 <= _zi < len(_top):
-                _top[_zi] = ""
-            # ...and its CAPTION with it - which since feature 157 is one line, because the caption has
-            # not been drawn yet. This block used to hunt the finished "notice board" label out of
-            # `M['labels']` BY ITS TEXT, pop it, and blank its ink in the label layer, and the reason it
-            # had to was that `kosatsuba` drew the caption at placement time: pop only the board and an
-            # orphan caption stayed behind, still failing `labels_within_image` after the board itself
-            # had moved (feature 133 T48). With captions queued for the LABEL PHASE there is nothing
-            # drawn to hunt - the request is dropped and the re-seated board queues its own. The phase
-            # paying for itself: that bug could not now exist.
-            s.discard_queued_label("kosatsuba")
-            # THE RE-SEAT MUST OBEY THE SAME TWO RULES THE SITER DOES, and it obeyed neither
-            # (settlement-review, feature 154). It ran after `place_kosatsuba` and ranked purely by
-            # traffic over every non-connector lane, so on Sawada and Kashikawa it silently threw away
-            # the `entrance` seat the knob had rolled and put the board back at the interior busiest
-            # node - the map RECORDED a placement it had not drawn, and the interactive page told a
-            # clicking reader so. It also seated on a 3 ft `web` straggler, which is exactly what
-            # `place_kosatsuba`'s own comment forbids: "A SERVICE LANE IS NOT A PLACE TO POST THE
-            # STATE'S NOTICE ... a side lane's busiest node is still a side lane, so scoring must never
-            # see it."
-            #
-            # So: MAIN WAYS FIRST, web lanes only if nothing else takes a board; and where the map
-            # declares an anchored placement, rank by nearness to that anchor rather than by traffic.
-            _seat = str((s.M.get("meta") or {}).get("kosatsuba_seat") or "center")
-            _anchor = kosatsuba_anchor(s.M, _seat)
-            _seats: list[tuple[float, float, float, float]] = []  # (distance to the anchor, x, y, rot); the traffic is counted after the band narrows
-            _on_approach: set[tuple[float, float, float, float]] = set()  # the seats on the connector itself (below)
-            _pxb = getattr(s, "px", None)
-            _canopy = canopy_index(s.M)  # once for the whole re-seat probe, not per verge
-            _lanes = [ln for ln in s.M.get("lanes", []) if not ln.get("connector")]
-            _ranked = [ln for ln in _lanes if not ln.get("web")] or _lanes
-            # ...BUT AN ANCHORED BOARD STANDS ON WHATEVER WAY MEETS ITS ANCHOR (feature 261, settlement-review of Inashiro,
-            # Mizuguchi and Sawada). The lane the approach meets at the settlement's mouth is often a web lane, so the
-            # main-ways-first ranking skipped it and the `entrance` board went to a main-lane stub 669-711 ft inside the
-            # cluster, where half the households never pass it. The side-lane rule keeps a board off a straggler in the
-            # middle of the fabric; a web lane that passes the anchor itself is the entrance, and is offered.
-            if _anchor is not None:
-                _reach = (_pxb(KOSATSUBA_ANCHOR_BAND_FT) if _pxb else KOSATSUBA_ANCHOR_BAND_FT) * 2.0
-                _ranked = _ranked + [ln for ln in _lanes if ln not in _ranked and any(math.dist((float(p[0]), float(p[1])), _anchor) <= _reach for p in ln["pts"])]
-                if _seat == "entrance" and kosatsuba_handover(s.M) is not None:
-                    _ranked = _ranked + [ln for ln in s.M.get("lanes", []) if ln.get("connector")]  # the approach every departure walks
-            best: tuple[float, float, float, float] | None = None
-            # ...AND A SEAT TO FALL BACK ON THAT STILL FACES ITS WAY (feature 230). Every verge candidate can be
-            # refused by the 15-degree rule above - a hamlet whose web lays a straggler across every main-lane
-            # verge leaves nothing that fronts one way alone - and the old fallback re-posted the engine's own
-            # seat unturned, so the reference hamlet shipped a board 72 degrees side-on to the lane 9.5 ft from
-            # it. The rule the gate applies is that a board faces its NEAREST way, so the fallback takes that
-            # bearing: the seat is the best-ranked verge, and the board is turned to the way a reader sees it by.
-            loose: tuple[float, float, float] | None = None
-            for lane in _ranked:
-                pts = lane["pts"]
-                for i in range(len(pts) - 1):
-                    (ax, ay), (bx, by) = pts[i], pts[i + 1]
-                    seg = math.hypot(bx - ax, by - ay) or 1.0
-                    ux, uy = -(by - ay) / seg, (bx - ax) / seg
-                    rot = math.degrees(math.atan2(by - ay, bx - ax))
-                    for t in range(int(seg // BOARD_ALONG_STEP_PX) + 1):  # the board's lattice step (feature 284)
-                        mx, my = ax + (bx - ax) * (t * BOARD_ALONG_STEP_PX / seg), ay + (by - ay) * (t * BOARD_ALONG_STEP_PX / seg)
-                        # ROADSIDE, per T13's verge (feature 133 T48): the old 16 px offset stood the
-                        # board outside `kosatsuba_by_the_road`'s band the first time this path ran
-                        # on the reference hamlet. Tread half-width + the verge + the board's half depth.
-                        _pxf = getattr(s, "px", None)  # the frame test drives this with a stub that has no scale
-                        _bw, _bh = _board_footprint(s)
-                        _off = float(lane.get("w", 3)) / 2 + (_pxf(KOSATSUBA_VERGE_FT) if _pxf else KOSATSUBA_VERGE_FT) + _bh / 2
-                        for side in (1.0, -1.0):
-                            cx2, cy2 = mx + ux * _off * side, my + uy * _off * side
-                            if not (hx0 + _inset <= cx2 <= hx1 - _inset and hy0 + _inset <= cy2 <= hy1 - _inset):
-                                continue
-                            # THE WAY IT FRONTS IS THE WAY IT IS NEAREST (T48): at a junction a verge
-                            # of lane A can lie nearer lane B, and `kosatsuba_faces_the_road` measures
-                            # the board against its NEAREST way - so a board aligned to A read 90
-                            # degrees off B. Refuse a seat whose nearest way runs across this one.
-                            _nb = _nearest_way_bearing(s, cx2, cy2)
-                            # ...AND NOT UNDER THE VILLAGE'S OWN TREES (settlement-review, feature 230 pass 12). The same
-                            # rule `place_kosatsuba` now applies, in the same shape and for the same reason: a board in a
-                            # wood is a notice nobody reads, and this re-seat probes exactly the verges the belt covers.
-                            # A shaded seat is kept as a LOOSE candidate rather than refused, so a hamlet whose every
-                            # verge lies under its belt still gets a board.
-                            _off_way = (_nb is not None and min(abs((_nb - rot) % 180.0), 180.0 - abs((_nb - rot) % 180.0)) > 15.0) or under_canopy(_canopy, cx2, cy2, math.hypot(_bw, _bh) / 2)
-                            if not s._fits(cx2, cy2, _bw, _bh, corridors=False):
-                                continue
-                            # ...AND NOT IN THE WATER. `_fits(corridors=False)` is required here - the
-                            # corridor test is a HOUSE setback from the tread and would refuse every
-                            # verge - but it also switches off the watercourse clearance bundled into
-                            # the same call, so this probe would seat a plank board in a stream.
-                            # ONE predicate, shared with `place_kosatsuba`, which had the identical
-                            # hole and shipped it on cohort seed 13.
-                            if not s.fixture_clear_of_water(cx2, cy2, math.hypot(_bw, _bh) / 2):
-                                continue
-                            # nearest the declared placement where there is one, else the busiest node
-                            _rank = math.hypot(cx2 - _anchor[0], cy2 - _anchor[1]) if _anchor is not None else 0.0
-                            if _off_way:
-                                if loose is None or _rank < loose[0]:
-                                    loose = (_rank, cx2, cy2)  # kept only for the fallback, and turned to its own nearest way
-                                continue
-                            _seats.append((_rank, cx2, cy2, rot))
-                            if lane.get("connector"):
-                                _on_approach.add(_seats[-1])
-            # AN ANCHORED PLACEMENT CHOOSES THE GROUND, THE TRAFFIC CHOOSES THE SEAT ON IT - the rule
-            # `place_kosatsuba` states and applies, read here from the same constant rather than restated
-            # (settlement-review, feature 227). This loop ranked an anchored seat by its distance to the anchor
-            # ALONE, so as the clusters loosened the board walked out to whatever verge lay nearest the entrance
-            # and served nobody: four of five pool boards lost half their passing households, Sawada's ending
-            # 424 px past the cluster with two of nineteen within 250 ft.
-            #
-            # THE TWO RULES COMPOSE, and the order is what makes them safe (the 227/230 merge): feature 230's
-            # off-way and under-canopy test decides which verges are ELIGIBLE at all - a board facing across its
-            # own lane, or standing in the belt, is no seat - and only then does the band-and-traffic ranking
-            # below choose among what is left. Neither rule can override the other: an eligible seat is never
-            # picked for traffic it does not have, and a shaded verge never wins on traffic.
-            if _seats:
-                if _anchor is not None:
-                    _near = min(q[0] for q in _seats)
-                    _bft = KOSATSUBA_ANCHOR_BAND_FT
-                    if _seat == "entrance" and kosatsuba_handover(s.M) is not None:
-                        # where every departure passes, then beside the handover - the rule `place_kosatsuba` applies
-                        _routes = departure_routes(s.M)
-                        _pass = _pxb(KOSATSUBA_HANDOVER_BAND_FT) if _pxb else KOSATSUBA_HANDOVER_BAND_FT
-                        _reach = RouteReach(_routes)  # the routes filed once for every seat (feature 281, FR-004)
-                        _missed = [_reach.missed(q[1], q[2], _pass) for q in _seats]
-                        _seats = [q for q, k in zip(_seats, _missed, strict=True) if k == min(_missed)]
-                        # ...ON THE APPROACH ITSELF where it offers one (settlement-review of Inashiro, feature 261): the board
-                        # is squared to the way it stands on, and the kosatsuba stands broadside to the one way out
-                        # (research/urban-features.html). A web lane passing the anchor was offered for the lane the approach
-                        # meets the settlement by, but where the outermost join is a one-farmstead straggler its verge won,
-                        # and Inashiro's board stood 87.7 degrees off the track every household walks out by.
-                        _seats = [q for q in _seats if q in _on_approach] or _seats
-                        _near = min(q[0] for q in _seats)
-                        _bft = KOSATSUBA_HANDOVER_BAND_FT
-                    # ...AND WHERE ITS CAPTION FITS, before the band, as the siter ranks it (feature 261: Sawada's re-seated board put
-                    # its caption on a crown, the band having left only seats whose caption lay on one) - the placer's own
-                    # answer, best level first, before the traffic decides among them. Where no seat the departures pass
-                    # offers a clear caption (Sawada still), the best level wins and `kosatsuba_caption_level` records it
-                    _lv = _caption_levels(s, _seats, str(board.get("label") or ""), (hx0, hy0, hx1, hy1) if _view else None, _fw, _fh, _canopy)
-                    _seats = [q for q in _seats if _lv[q] == max(_lv.values())]
-                    _near = min(q[0] for q in _seats)
-                    _band = _pxb(_bft) if _pxb else _bft
-                    _seats = [q for q in _seats if q[0] <= _near + _band] or _seats
-                else:
-                    _lv = _caption_levels(s, _seats, str(board.get("label") or ""), (hx0, hy0, hx1, hy1) if _view else None, _fw, _fh, _canopy)
-                    _seats = [q for q in _seats if _lv[q] == max(_lv.values())]
-                # the traffic is counted only over the seats the band kept: a count per candidate cost seed 4's notice
-                # stage 1.1 s, and the engine's own order is the band first and the traffic second
-                _pick = max(_seats, key=lambda q: (sum(1 for h in hs if math.hypot(q[1] - h["x"], q[2] - h["y"]) < 260), -q[0]))
-                s.M.setdefault("meta", {})["kosatsuba_caption_level"] = _lv.get(_pick, 2)  # the re-seat's own answer
-                best = (0.0, _pick[1], _pick[2], _pick[3])
-            # ...and a hamlet whose every verge lies under its own belt still gets a board (feature 230)
-            if best is None and loose is not None:
-                _lb = _nearest_way_bearing(s, loose[1], loose[2])
-                best = (loose[0], loose[1], loose[2], _lb if _lb is not None else 0.0)
-            if best is not None:
-                s.kosatsuba(best[1], best[2], rot=best[3])
-                record_board_well(s.M, best[1], best[2])  # the board drawn, not the engine's first seat
-            else:
-                s.M["kosatsuba"].append(
-                    board
-                )  # pragma: no cover - no verge inside the cloud takes a board; keep the engine's seat rather than none [174: KEPT, not deletable - an else branch that binds the seat this method returns]
-
-
-def record_board_well(M: dict[str, Any], x: float, y: float) -> None:
-    """`meta.kosatsuba_well_ft` for the board where it is DRAWN (settlement-review of Sawada, feature 261): `place_kosatsuba`
-    records it for its own seat, and a board this stage re-seats kept the first seat's figure - Sawada's said 353.5 ft of a
-    board 173.3 ft from its nearest well. The field exists to record what was drawn (`siting.py`), so it follows the board."""
-    wells = [(float(w["x"]), float(w["y"])) for w in M.get("wells") or [] if "x" in w]
-    if wells:
-        M.setdefault("meta", {})["kosatsuba_well_ft"] = round(min(math.hypot(x - wx, y - wy) for wx, wy in wells) * float(M.get("meta", {}).get("ftpx") or 1), 1)
-
-
-def _caption_levels(s: Settlement, seats: list[tuple[float, float, float, float]], label: str, frame: Any, fw: float, fh: float, canopy: Any) -> dict[tuple[float, float, float, float], int]:
-    """Each re-seat candidate's caption level (`board_caption_level`: 2 fits clear of the crowns, 1 over one, 0 not at
-    all), against the one placer's obstacles indexed once."""
-    level = getattr(s, "board_caption_level", None)  # the frame test drives this stage with a stub that places no caption
-    if level is None:
-        return dict.fromkeys(seats, 2)
-    index = s.label_obstacles() if label else None
-    return {q: level(q[1], q[2], fw / 2, fh / 2, q[3], label, index, frame, canopy) for q in seats}
-
-
-def _nearest_way_bearing(s: Settlement, x: float, y: float) -> float | None:
-    """The bearing (degrees) of the nearest lane segment to (x, y), or None with no lanes.
-
-    A thin reader over the engine's own `nearest_way_bearing`, which carries the tie-break a corner
-    seat needs: this used to be a third hand-rolled scan of the same segments, and the re-seat, the
-    siter and the check are the three readings of one question that must not be able to differ."""
-    return nearest_way_bearing(s.M, x, y)
+    s.place_kosatsuba()
 
 
 def stage_frame(s: Settlement, plan: SitePlan) -> None:
@@ -472,10 +122,17 @@ def stage_frame(s: Settlement, plan: SitePlan) -> None:
     In that order: the title searches the FRAMED window for blank space to sit in, so the frame has
     to exist first.
 
+    THE VIEW WAS DECIDED EARLIER, at the end of `stage_hinterland`'s seating (feature 287, M6): the crop takes exactly
+    `plan.view`, so every rule that reads the picture - the bare ground, the woodland in the view, the belt's record against
+    its ink, the scatter's frame - was placed against the page it is judged on. Should anything placed since have moved
+    the frame the crop would take, the difference is recorded as `meta.view_drift` (left, top, right, bottom) and the
+    view is still the decided one; the pool test holds that no map records one.
+
     Steps:
         l7r.diagram.hamletgen.hinterland.frame.title_pocket
-        l7r.diagram.settlement.Settlement.crop_to_content
+        l7r.diagram.settlement.Settlement.crop_to_view
         l7r.diagram.settlement.Settlement.title
+        l7r.diagram.hamletgen.frame.waterward_to_the_frame
     """
     # The margin leaves the TITLE somewhere to stand: `title()` scans the framed window for a box
     # that clears every feature and falls back to a corner overlap when the map is too full, which
@@ -484,21 +141,101 @@ def stage_frame(s: Settlement, plan: SitePlan) -> None:
     # only extra is open ground is wasted image. 64 was tried and fails all twelve. 48 is the most
     # air the frame will give the title.
     _pocket = title_pocket(s, plan)  # the pocket the belt was dented around (feature 150) - reserved once, see hinterland.title_pocket
-    _extra = [_pocket] if plan.title_pocket_outside else []  # an OUTSIDE reservation is content the crop must take in; an inside one changes nothing
-    # ...AND THE CONFLUENCE, WITH A LENGTH OF ITS TRUNK (feature 230, settlement-review passes 6 and 7). Where the
-    # drain meets the passing brook, that junction is a FEATURE - the thing the third sink exists to show - and the
-    # crop ignores watercourses because they are runners that trail off the edge. So Sawada's was drawn 7.4 ft
-    # outside the sheet with none of its 359 ft of trunk in view. Predicting the frame back in `stage_sink` was
-    # tried twice and cannot work (the frame is decided here, not there); reserving the junction and a trunk's
-    # length around it is the engine's own mechanism for exactly this, the one the title pocket uses.
-    if plan.confluence is not None:
-        _cx, _cy = plan.confluence
-        _t = BROOK_JOIN_TRUNK * 0.5  # half the trunk each way: the junction, and enough brook below it to read as one
-        _extra.append((_cx - _t, _cy - _t, _cx + _t, _cy + _t))
-    _extra += brook_beside_the_field(s)  # ...and the brook's reach beside the field, which is picture, not a runner off the edge
-    s.crop_to_content(margin=CROP_MARGIN, extra=_extra)
+    # The extras the frame reserves as content - an outside pocket, the confluence with its trunk, the brook beside the
+    # field - are `frame_extras`, and the view carrying them was decided in `stage_hinterland` (`frame_for`). Predicting
+    # the confluence back in `stage_sink` was tried twice and cannot work; reserving it where the view is decided can.
+    assert plan.view is not None, "stage_frame runs after stage_hinterland, which decides the view"
+    _now = frame_for(s, plan)
+    if _now != plan.view:
+        _v, _n = plan.view, _now
+        s.M["meta"]["view_drift"] = [_v[0] - _n[0], _v[1] - _n[1], (_n[0] + _n[2]) - (_v[0] + _v[2]), (_n[1] + _n[3]) - (_v[1] + _v[3])]
+    s.crop_to_view(plan.view)
     s.M["meta"]["title_pocket"] = [round(v, 1) for v in _pocket]  # recorded so a placard that fell back can be read against the reservation
     s.title(plan.spec.name, prefer=_pocket)
+    waterward_to_the_frame(s)  # after the title: a sheet with no room for its name grows a band on the north, and the strip reads the final view
+
+
+def strip_reaches_view(strip: Sequence[Sequence[float]], view: Sequence[float], faces: Sequence[str]) -> bool:
+    """Does a waterward reed strip reach the view's edge on one of the water-facing `faces` - the bunds test's `reach`,
+    lifted (feature 287, water:W43)."""
+    vx0, vy0, vw, vh = (float(v) for v in view)
+    xs, ys = [float(q[0]) for q in strip], [float(q[1]) for q in strip]
+    reach = {"W": min(xs) <= vx0, "E": max(xs) >= vx0 + vw, "N": min(ys) <= vy0, "S": max(ys) >= vy0 + vh}
+    return any(reach[f] for f in faces if f in reach)
+
+
+def strip_face(strip: Sequence[Sequence[float]], dikes: tuple[float, float, float, float]) -> str:
+    """Which flank of the dike's (x0, y0, x1, y1) box a waterward strip lies off - the side its center stands furthest
+    outside."""
+    xs, ys = [float(q[0]) for q in strip], [float(q[1]) for q in strip]
+    cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
+    return max((("W", dikes[0] - cx), ("E", cx - dikes[2]), ("N", dikes[1] - cy), ("S", cy - dikes[3])), key=lambda t: t[1])[0]
+
+
+def band_to_edge(strip: Sequence[Sequence[float]], face: str, view: Sequence[float], past: float = 20.0) -> list[tuple[float, float]]:
+    """The wild ground between a strip's outer edge on `face` and the view's edge there, `past` beyond it, over the strip's
+    own extent along the flank - lapping the strip by two feet so the two are one ground."""
+    vx0, vy0, vw, vh = (float(v) for v in view)
+    xs, ys = [float(q[0]) for q in strip], [float(q[1]) for q in strip]
+    if face in ("W", "E"):
+        a, b = (vx0 - past, min(xs) + 2.0) if face == "W" else (max(xs) - 2.0, vx0 + vw + past)
+        return [(a, min(ys)), (b, min(ys)), (b, max(ys)), (a, max(ys))]
+    a, b = (vy0 - past, min(ys) + 2.0) if face == "N" else (max(ys) - 2.0, vy0 + vh + past)
+    return [(min(xs), a), (max(xs), a), (max(xs), b), (min(xs), b)]
+
+
+def waterward_to_the_frame(s: Settlement) -> None:
+    """A WATERWARD REED STRIP RUNS OFF THE FRAME (feature 287, water:W43; GM 2026-08-28, feature 150 T55): where the view
+    reaches past the strip's `WATERWARD_DEPTH` on a water-facing flank, the wild ground between the strip and the view's
+    edge is scattered too (`marsh`, with every keep-out it honors) and joined to the strip's record, so the reed fringe
+    runs off the picture rather than stopping in it - a lake with a ruled edge. Here, because the strip is laid at the
+    seat and the view is not final until the title has grown its band; the band depth stays as feature 150 T55 set it,
+    and only the ground a view actually shows is added. A strip already reaching the edge is untouched; the extension is
+    one ground with its strip (`unary_union`), or its own record where the two cannot join."""
+    from shapely.geometry import Polygon  # noqa: PLC0415 - bound on first use
+    from shapely.ops import unary_union  # noqa: PLC0415
+
+    meta = s.M.get("meta") or {}
+    faces, view = meta.get("waterward") or [], meta.get("view")
+    pts = [p for dk in s.M.get("dikes") or [] for p in dk.get("outline") or []]
+    if not faces or not view or not pts:
+        return
+    box = (min(float(p[0]) for p in pts), min(float(p[1]) for p in pts), max(float(p[0]) for p in pts), max(float(p[1]) for p in pts))
+    for rec in [m for m in s.M.get("marshes") or [] if m.get("role") == "waterside" and m.get("poly")]:
+        face = strip_face(rec["poly"], box)
+        if strip_reaches_view(rec["poly"], view, faces) or face not in faces:
+            continue
+        n = len(s.M["marshes"])
+        s.marsh(band_to_edge(rec["poly"], face, view), role="waterside")
+        if len(s.M["marshes"]) == n:
+            continue  # nothing open to scatter on: the wild ground there is all keep-out
+        # ...AND THE STRIP IS ONE RECORD WITH ITS EXTENSION, always (feature 287, homes wave 5): the two grounds as one ring -
+        # a hole keyholed, a keep-out between them (a lane) bridged by a zero-width seam - so the record is exactly the ground
+        # the reeds are drawn on and the strip it names runs to the view's edge. The extension used to stay its own record
+        # where the two could not join, which left the strip's record stopping inside the frame.
+        joined = unary_union([Polygon(rec["poly"]).buffer(0), Polygon(s.M["marshes"][-1]["poly"]).buffer(0)])
+        s.M["marshes"].pop()
+        ring = [[round(float(x), 1), round(float(y), 1)] for x, y in one_ring(joined)]
+        xs, ys = [q[0] for q in ring], [q[1] for q in ring]
+        rec.update(poly=ring, x=round((min(xs) + max(xs)) / 2, 1), y=round((min(ys) + max(ys)) / 2, 1), w=round(max(xs) - min(xs), 1), h=round(max(ys) - min(ys), 1))
+
+
+def one_ring(g: Any) -> list[tuple[float, float]]:
+    """A polygon or a multipolygon as ONE ring whose inside is exactly its ground: each hole keyholed (`wet._keyholed`) and
+    each further piece spliced in along a zero-width seam from the ring's nearest vertex, walked the same way round - so an
+    even-odd reader counts the seam twice and the ground between the pieces stays outside."""
+    from l7r.diagram.settlement.land.wet import _keyholed, _signed_area  # noqa: PLC0415
+
+    pieces = sorted((p for p in getattr(g, "geoms", [g]) if p.geom_type == "Polygon" and not p.is_empty), key=lambda p: -p.area)
+    ring: list[tuple[float, float]] = list(_keyholed(pieces[0]))
+    for p in pieces[1:]:
+        loop: list[tuple[float, float]] = list(_keyholed(p))
+        i, j = min(((a, b) for a in range(len(ring)) for b in range(len(loop))), key=lambda ab: math.dist(ring[ab[0]], loop[ab[1]]))
+        loop = loop[j:] + loop[:j]
+        if _signed_area(loop) * _signed_area(ring) < 0:
+            loop = [loop[0], *reversed(loop[1:])]  # ...the same way round as the ring, so the piece adds
+        ring = ring[: i + 1] + loop + [loop[0], ring[i]] + ring[i + 1 :]
+    return ring
 
 
 def stage_labels(s: Settlement, plan: SitePlan) -> None:

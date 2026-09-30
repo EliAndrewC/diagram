@@ -223,7 +223,8 @@ investigation.
 **The shape.** The first unlocked `make done` in two days sat 25 minutes with ONE xdist worker at
 100% and seven idle. Not a hang: `test_a_rolled_cohort_passes_the_whole_gate` rolled four seeds
 SERIALLY (a coverage reason that only matters under the coverage floors), each seed with the driver's
-re-roll ladder (up to five rolls of ~80 s when a farmhouse is stranded), while the rest of the suite
+re-roll ladder (up to five rolls of ~80 s when a farmhouse is stranded; the ladder is gone since feature 287, which
+guarantees the reach where the web settles and builds every map once), while the rest of the suite
 finished. Per-test durations (`make durations MARK=rolls_map N=40`) named it in one run - 1,329 s
 against the next-slowest at 101 s. Reach for `durations` BEFORE bisecting seeds: the seed hunt
 (24 seeds at 90 s each) burned 20 minutes to learn only that rolls take 65-101 s.

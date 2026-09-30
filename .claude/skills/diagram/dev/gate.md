@@ -36,7 +36,7 @@ Four destinations, and the choice is usually obvious once the question is asked 
 | the rule is about | it belongs in | example |
 |---|---|---|
 | a clearance, spacing or seat a placer decides | a UNIT TEST of that placer, on plain inputs | `tests/hamletgen/test_unreached_houses.py` |
-| a property of a FINISHED map that no single placement owns | a SEED test in `tests/gate/`, on a cached roll | `tests/gate/test_paddy_fabric.py` |
+| a property of a FINISHED map that no single placement owns | a SEED test in `tests/gate/`, on a cached roll | `tests/gate/test_scatter_frame.py` (feature 287 moved the rest into their placers - the overlap matrix into the registry of what stands, M8) |
 | a fact about the CODE rather than about a map | a static test | the operations registry; `all_ink_is_ruled_on` |
 | a feature no scripted generator produces | a RECORDED DROP, with its grounding kept | `pond_fed_from_edge`, and the urban vocabulary |
 
@@ -44,6 +44,43 @@ The 142 rules the battery held were migrated one at a time under feature 166, an
 [`specs/166-retire-the-check-battery/migration-record.md`](../../../../specs/166-retire-the-check-battery/migration-record.md)
 is the ledger: one row per rule, naming its destination and the mutation that proved the replacement
 carries it. A drop names what was measured and why nothing on any live map can exercise the rule.
+
+## Feature 287: a finished-map rule is a guarantee of its placer (2026-09-29)
+
+Feature 166 left one kind of rule outside the placers: a SEED test that rolls or reads a finished map and checks it. Such
+a rule holds on the seeds the gate rolls and nothing stops the next seed - feature 284's speed levers moved the pool
+within every tolerance and five of them broke. The GM: *"make it so that it is impossible for those things to happen ...
+guaranteed by the placement algorithm rather than just happening to work on particular seeds"*, and the tests no longer
+needed afterwards retired. What changed in what the gate tests:
+
+- **No re-roll.** `generate` builds a map once. The re-roll on a stranded farmhouse (a check of the finished map and a
+  retry, which is not a guarantee) is gone with its tests; the reach is guaranteed by the access corridors the seating
+  reserves and the web's settle draws (`ways/settle.py`). `meta.roll_failures`, the roll's report on itself, is deleted
+  with its writer: the settle's last resort drops only ordinary lanes and refuses by name (`ways/last_resort.py:WebRefused`)
+  a web only the tree could mend or one that leaves a farmhouse or the reserved field unreached (research R9, R12).
+- **One predicate per rule, in the engine.** A rule's test body was lifted into an engine predicate that its placer
+  calls and its test calls: every lane rule in `hamletgen/ways/law.py` (`LAW`, by name), every paddy-ring rule in
+  `waterfields/ring_rules.py` (`ring_violations`), the overlap matrix in `overlap/registry.py` (`element_extents` +
+  `pair_forbidden`, which `matrix_violations` also reads). The placer and its test cannot drift because they are one
+  function.
+- **The registry of what stands (M8).** Every footprint is recorded through one indexed registry that answers "may this
+  kind lie on what is already here" by the matrix; every placer the matrix could refuse asks `Settlement.admits` first,
+  and on a hamlet a record the matrix forbids raises `OverlapRefused` by name rather than landing on the map.
+- **The settle.** The web's last pass (`settle_the_web`) repairs until every lane-law predicate passes, cutting only
+  ordinary lanes or drawing reserved corridors, and the crossing-squaring moved into it, so no stage after the web
+  rewrites a lane.
+- **The retirements.** 84 finished-map tests and their helpers left the gate and quick trees, each with the placer that
+  now decides its rule and the unit test that drives that placer on the violating case (research R8 is the ledger, with
+  each test's cost). A finished-map test is KEPT for exactly one reason, named beside it in R8: a property no single
+  placer owns (a stage contract, the pool's declared content, determinism), or a rule not yet guaranteed whose reason
+  is recorded (the board caption at plan D12's terminal, the GM's question).
+- **The end-to-end proof is not a gate test.** The acceptance sweep (`specs/287-placer-guarantees/sweep/harness.py`, run
+  by `make spec-harness`) rolls the pool and cohort 1-48, plain and under feature 284's two levers as probes, and asks
+  every predicate above - and each retired test's body as the baseline ran it - of every finished map. Run it again when
+  a change could move many maps at once.
+
+So the second row of the table above now holds only what no placer owns; a new rule about how something is placed goes
+to the placer that places it, with a unit test on the input that would have violated it.
 
 **MODE A IS DIFFERENT, AND DELIBERATELY SO** (GM 2026-08-30):
 
@@ -181,7 +218,10 @@ lint, the type check, the unit tree, the `tests/gate/` tree (real rolls of repre
 served from the roll cache while nothing they execute has changed) and the coverage floors. What it
 no longer does is put every map through a validator, and the pool sweep in `tests/full/` no longer
 gates the manifests it produces: it proves every shipped generator RUNS, inside its time budget, and
-emits a manifest - which was always the half the battery did not cover.
+emits a manifest - which was always the half the battery did not cover. Since feature 287 the `tests/gate/` tree
+holds only the finished-map tests no placer unit test can replace (each named with its reason in
+`specs/287-placer-guarantees/research.md` R8's "Kept" table); every other rule about a map is proved by its placer's
+unit test on constructed input, and no roll re-rolls.
 
 **And since feature 207 (GM 2026-09-07) it is INCREMENTAL by default.** A run that does happen re-runs
 only the tests the change can reach - selected from the last full green run's per-test and per-fixture

@@ -304,3 +304,27 @@ if the generator ever knows its ground, the ground could set the value rather th
 The plan review of D18 ruled the branching outside FR-018 (its water is "the nearest drawn ditch or the brook") and asked
 for the measurement: without it, Audit-19's farms drew 1 channel in 11, the first walling the field's head off from the
 rest; with it, 11 in 11. Labeled a GUESS - whether neighbors shared a channel no page read says.
+
+**Amendment 7** (2026-09-30, the GM's decision): feature 287 ("placer guarantees") landed on main while this feature was
+open, and its seating, access tree, lane law and web settle were built for the nucleated form alone - the form main
+rolled - while this feature's row villages, dispersed farms, farm water and door paths were built on the code 287
+replaced. Asked how to land this feature ("Port all of 291", "Land in two parts", "Keep 291's unseated rule"), the GM
+chose **"Port all of 291 (Recommended)"**: *"Rebuild row villages and dispersed farms on 287's machinery in this feature,
+taking 287's rule: every household seated or the site refused. Then regenerate, gate, review all five maps and run the
+cohort."* So FR-013 and FR-016 hold as written - a row, then another street, never ranks - and a row village whose
+streets cannot hold every farm on any margin of the ladder is REFUSED by name (`SiteRefused`, 287 plan D2), never
+shipped with a farm unseated (the remainder this feature's plan D15 reported is retired). Every requirement of this spec
+is otherwise unchanged; what moves is where each is implemented, recorded in the plan (D20).
+
+**Amendment 8** (2026-09-30, an exception put to `spec-fidelity` under constitution XVI - FAITHFUL, on conditions): FR-019
+and SC-008. FR-019's front door is "the open side of its grove"; under amendment 7 a door path is a tree lane the settle
+never cuts, so it must keep the whole lane law as drawn, and on cohort seeds 11, 23 and 904 (measured 2026-09-30) a
+far-row farm - fronting its own holding, its grove's deep bands between house and street (research homesteads/159) - had
+no lawful path from the front-door point, which stood more than the 40 ft door reach from any way. FR-019 is kept by a way
+reaching the farm's dooryard on an OPEN side of its grove: the front door, or - only where no lawful way leaves the front -
+a flank of the dooryard facing no band of the farm's own grove (so a two-sided grove's; a three- or four-sided grove's farm
+still needs its front, and a site where none is lawful is refused), with open ground between that flank and the front
+door. Each such farm is recorded (`meta.door_flanks`, the lane's `from_flank`), and SC-008's door check counts a farm so
+reached. Alternatives priced and refused: the flank path begun at the front door (doubles back; the law refuses it);
+refusing such sites (most both-sides rows); turning far-row farms to face their street (against homesteads/159). To be
+raised with the GM once the implementation works.

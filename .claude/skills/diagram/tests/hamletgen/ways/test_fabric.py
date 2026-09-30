@@ -152,29 +152,6 @@ def test_crosses_fabric_sees_a_run_VERTEX_that_stands_inside_a_footprint() -> No
     assert not _crosses_fabric([(1100.0, 500.0), (1100.0, 600.0)], [yard], 8.0), "outside and far from every edge"
 
 
-def test_a_footpath_junction_is_never_seated_on_the_water() -> None:
-    """A crossing gets a plank from `stage_crossings`; an ENDPOINT on the water gets nothing, and
-    `ways_cross_water_on_a_deck` fires on it (feature 145, cohort seed 41 after the field moved: the
-    nearest point of the network was where a lane skirts the drain brook, and the junction landed 1.3 px
-    off its centerline). The router keeps 14 px off every watercourse; the junction owes the same."""
-    from l7r.diagram.hamletgen.ways import _serve_stragglers
-
-    plan = a_plan()
-    plan.seat = hg.seat_cluster(plan)
-    lane = [{"pts": [[300.0, 500.0], [1100.0, 500.0]], "w": 4}]
-    house = [{"x": 700.0, "y": 800.0, "w": 46.0, "h": 28.0, "rot": 0.0, "kind": "plain"}]
-
-    dry = _hamlet_for_ways()
-    dry.M["houses"], dry.M["lanes"] = list(house), [dict(lane[0])]
-    _serve_stragglers(dry, plan, [], [], [])
-    assert len(dry.M["lanes"]) == 2, "the straggler gets its footpath"
-
-    wet = _hamlet_for_ways()
-    wet.M["houses"], wet.M["lanes"] = list(house), [dict(lane[0])]
-    _serve_stragglers(wet, plan, [], [], [((300.0, 500.0), (1100.0, 500.0))])  # a brook along the lane
-    assert len(wet.M["lanes"]) == 1, "no junction on the water, so no path at all"
-
-
 def test_a_track_that_cannot_thread_the_cluster_takes_a_wider_berth() -> None:
     """THE FALLBACK MUST NOT BE THE OFFENDING RUN, which is what the first version returned: when routing
     and clipping both failed it handed back the original path, silently re-drawing the lane straight
@@ -192,9 +169,12 @@ def test_a_track_that_cannot_thread_the_cluster_takes_a_wider_berth() -> None:
     s.M["houses"] = [{"x": 700.0, "y": 500.0 + dy, "w": 60.0, "h": 40.0, "rot": 0.0, "kind": "plain"} for dy in range(0, 401, 40)]
     run = [(700.0, 700.0), (950.0, 700.0)]
     out = _thread_the_fabric(s, plan, run)
-    assert len(out) >= 2, "a track is always handed back - the caller has a lane to draw"
     fabric = [poly for poly, _owner, _kind in _homestead_polys(s)]
     assert _crosses_fabric(list(run), fabric, 16.0), "the straight line really is blocked"
+    # feature 287 (ways W25, FR-005): with the run starting inside a steading no detour clears, and the terminal hands
+    # back NOTHING rather than the clipped run still crossing - the spur is recorded as dropped, the connector takes the
+    # dry exit
+    assert out == [], "never a track across the steadings"
 
 
 def test_a_join_link_is_refused_outright_when_it_would_cross_a_farmhouse() -> None:

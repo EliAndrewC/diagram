@@ -285,9 +285,9 @@ def draw_holdings(s: Settlement) -> int:
             s.add(f'<polygon points="{pts}" fill="{fill}" stroke="#A98C58" stroke-width="1.4" stroke-linejoin="round"/>', cls="farm holding")
             theta = math.atan2(nrm[1], nrm[0]) % math.pi  # the furrows run down the strip, across the street
             s._draw_furrows(cell, fur, theta, cls="farm holding")
-            # `homestead`: a farm's own holding, not the field's hem - the reed toe is measured below the FIELD'S lowest crop
+            # `holding`: a farm's own holding, not the field's hem - the reed toe is measured below the FIELD'S lowest crop
             # (`toe_band`), and read as field crop a holding moved the toe 220 ft onto three Kashikawa farms' doors
-            s.M["dry_plots"].append({"poly": [[round(x, 1), round(y, 1)] for x, y in cell], "crop": crop, "theta": round(theta, 3), "holding": k, "homestead": True})
+            s.M["dry_plots"].append({"poly": [[round(x, 1), round(y, 1)] for x, y in cell], "crop": crop, "theta": round(theta, 3), "holding": k})
             s.dry_polys.append(cell)
             n += 1
     return n

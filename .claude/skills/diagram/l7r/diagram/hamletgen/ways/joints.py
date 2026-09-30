@@ -36,7 +36,7 @@ from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
 from ..consts import WEB_CLEARANCE, Poly, Pt
 from .clearance import _HAIRPIN_DEG, _clear_link, _clear_touch
 from .geom import _HOOK_DEG, _HOOK_FT, _TOUCH_GAP, _seg_cross, _turn_deg
-from .smooth import _JOG_FT, commit_lane, web_pieces
+from .smooth import _JOG_FT, admits_lane, commit_lane, web_pieces
 from .sweeps import _SERVE_FT
 
 _JOINT_FT = 1.0  # two lane ends this close are one point: the knot pass and the touch passes put them on the same vertex
@@ -192,7 +192,7 @@ def _one_hook(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt], 
             if new is None:
                 continue
             new = new[::-1] if back else new
-            if keeps_the_web(lanes, {i}, p, new, houses) and commit_lane(lanes, i, _rounded(new), hard, walls, water, s.reink_lane):
+            if keeps_the_web(lanes, {i}, p, new, houses) and commit_lane(lanes, i, _rounded(new), hard, walls, water, s.reink_lane, admits_lane(s)):
                 return True
     return False
 
@@ -207,7 +207,7 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
             tees = [(m, t) for m, t in ((i, tee(x, y, hard, walls, water)), (j, tee(y[::-1], x[::-1], hard, walls, water))) if t is not None]
             for m, t in sorted(tees, key=lambda mt: math.dist(mt[1][-2], mt[1][-1])):
                 other = y if m == i else x[::-1]
-                if keeps_the_web(lanes, {i, j}, old, [*t, *other], houses) and commit_lane(lanes, m, _rounded(t), hard, walls, water, s.reink_lane):
+                if keeps_the_web(lanes, {i, j}, old, [*t, *other], houses) and commit_lane(lanes, m, _rounded(t), hard, walls, water, s.reink_lane, admits_lane(s)):
                     return True
             continue
         if lanes[i].get("w") != lanes[j].get("w") or bool(lanes[i].get("web")) != bool(lanes[j].get("web")):
@@ -222,7 +222,7 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
         new = pulled(old, ok)
         if len(new) == len(old) or not keeps_the_web(lanes, {i, j}, old, new, houses):
             continue
-        if commit_lane(lanes, i, _rounded(new), hard, walls, water, s.reink_lane):
+        if commit_lane(lanes, i, _rounded(new), hard, walls, water, s.reink_lane, admits_lane(s)):
             commit_lane(lanes, j, [], hard, walls, water, s.reink_lane)
             return True
     return False
@@ -290,8 +290,7 @@ def center_lane_ends(s: Settlement) -> int:
             if to is not None:
                 p[k] = to
                 moved += 1
-        if p != _pts(ln):
-            ln["pts"] = _rounded(p)
+        if p != _pts(ln) and s.reshape_lane(ln, p):  # asked of the overlap matrix (feature 287 M8)
             s.reink_lane(i)
     return moved
 
@@ -329,9 +328,8 @@ def meet_end_to_end(s: Settlement, fabric: Sequence[Poly] = ()) -> int:
             _d, to = min(near)
             new = list(p)
             new[k] = to
-            if may_write(p, new, float(ln.get("w") or 3.0), fabric):
+            if may_write(p, new, float(ln.get("w") or 3.0), fabric) and s.reshape_lane(ln, new):  # ...and the matrix (M8)
                 p = new
-                ln["pts"] = _rounded(p)
                 s.reink_lane(i)
                 closed += 1
     return closed
@@ -372,7 +370,7 @@ def split_at_crossings(s: Settlement) -> int:
             continue
         k, x = cut
         head, tail = [*p[: k + 1], x], [x, *p[k + 1 :]]
-        ln["pts"] = _rounded(head)
+        ln["pts"] = _rounded(head)  # a cut: the lane on less of the ground it was admitted on (its `Kept` record asks all the same)
         s.reink_lane(i)
         s.lane(tail, width=float(ln.get("w") or 3.0), clearance=WEB_CLEARANCE, worn=bool(ln.get("worn", True)))
         lanes[-1].update({key: ln[key] for key in ("role", "web") if key in ln})
@@ -403,9 +401,13 @@ def fold_the_connector_hairpin(s: Settlement, fabric: Sequence[Poly] = ()) -> in
     connector is started at the lane's vertex before that leg instead - a T - and the leg dropped, record and ink
     together, when the moved connector may be written (`may_write`). Returns the folds made."""
     from .clearance import may_write
+    from .law import breaks_through, solid_boxes  # the law sits above this layer (it reads `hairpin_over_a_short_leg`)
 
     lanes: list[dict[str, Any]] = s.M.get("lanes") or []
-    conn = [(k, o) for k, o in enumerate(lanes) if o.get("connector") and len(o.get("pts") or []) >= 2]
+    # ...NOT WHERE THE CONNECTOR STARTS ON THE EXIT STRIP (feature 287 wave 6): the strip is drawn up to that start as a tree
+    # lane (`tree.strip_run`), and moved off it the strip ended in a hook (cohort seed 37); the settle re-aims the lane's end
+    # instead (`law.connector_hairpin_ends`)
+    conn = [] if s.M.get("access_exit") else [(k, o) for k, o in enumerate(lanes) if o.get("connector") and len(o.get("pts") or []) >= 2]
     folds = 0
     for ci, co in conn:
         cp = _pts(co)
@@ -418,9 +420,11 @@ def fold_the_connector_hairpin(s: Settlement, fabric: Sequence[Poly] = ()) -> in
                 if math.dist(j, cp[0]) > 1.5 or not hairpin_over_a_short_leg(a, b, j, cp[1]):
                     continue
                 new_c = [b, *cp[1:]]
-                if not may_write(cp, new_c, float(co.get("w") or 5.0), fabric):
-                    continue
+                if not may_write(cp, new_c, float(co.get("w") or 5.0), fabric) or breaks_through(new_c, solid_boxes(s.M)):
+                    continue  # ...nor a connector started so that its new first leg runs through a building (the lane law's reading)
                 kept = seq[:-1]
+                if not (admits_lane(s)(ln, kept) and admits_lane(s)(co, new_c)):
+                    continue  # ...nor where the overlap matrix refuses either as it would become (feature 287 M8)
                 ln["pts"] = _rounded(kept[::-1] if back else kept)
                 co["pts"] = _rounded(new_c)
                 s.reink_lane(i)

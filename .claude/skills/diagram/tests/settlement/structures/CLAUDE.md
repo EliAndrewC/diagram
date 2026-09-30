@@ -22,6 +22,7 @@ under `tests/settlement/` is selected exactly as the flat file was.
 | `test_captions.py` | a caption's seat on a structure - the label ladder's clear-seat probes |
 | `test_compounds.py` | a walled compound: its wall's clearance of water, the street net and the watch's tower |
 | `test_fixtures.py` | the mounted fixtures - notice boards, their anchors and their seats (`fixtures/`) |
+| `test_board_seat.py` | the notice board's one siter and its rules' predicates (`fixtures/board_seat.py`, feature 287) |
 | `test_ground.py` | open ground drawn under structures - pastures and their captions |
 | `test_packing.py` | the multi-building placers, their row cadence and their shortfall bookkeeping |
 | `test_servants.py` | servant ranges: the ward fence, the neighbor closer than the host, a doorway |

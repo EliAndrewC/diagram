@@ -195,6 +195,44 @@ def test_perimeter_dike_draws_an_irregular_earthwork_band():
     assert s3.M["dikes"] and not any(len(lbl) > 5 and lbl[5] == "perimeter dike" for lbl in s3.M.get("labels", []))
 
 
+def test_a_flat_dike_profile_is_stretched_until_it_reads_hand_piled():
+    """Feature 287, water W40: the placer's stretch and the rule are one predicate, and a flattened profile - the case
+    three sines can cancel into - comes out irregular; an irregular one comes out unchanged."""
+    from l7r.diagram.settlement.land.dikes import DIKE_IRREGULARITY, dike_irregular, hand_piled_widths
+
+    flat = [26.0 + 0.4 * math.sin(i / 3.0) for i in range(60)]  # 1.03x: a ruled band
+    assert not dike_irregular(min(flat), max(flat))
+    out = hand_piled_widths(flat, (14.0, 40.0))
+    assert dike_irregular(round(min(out), 1), round(max(out), 1)) and all(14.0 <= w <= 40.0 for w in out)
+    assert out.index(max(out)) == flat.index(max(flat))  # the profile keeps its shape: it bulges where it bulged
+    level = hand_piled_widths([20.0] * 40, (14.0, 40.0))  # no shape at all: one swell round the loop
+    assert dike_irregular(min(level), max(level))
+    shifted = hand_piled_widths([39.0, 39.5] * 10, (14.0, 40.0))  # a mean near the top is shifted inside the range
+    assert max(shifted) <= 40.0 + 1e-9 and dike_irregular(min(shifted), max(shifted))
+    rough = [14.0, 30.0, 22.0]
+    assert hand_piled_widths(rough, (14.0, 40.0)) == rough
+    with pytest.raises(ValueError):
+        hand_piled_widths(flat, (20.0, 26.0))  # a range narrower than the rule is a caller's error
+    assert DIKE_IRREGULARITY == 1.4
+    for seed in range(12):  # and the drawn dike, on every seed, records a band the rule accepts
+        s = Settlement(900, 900, seed=1)
+        s.perimeter_dike([(200, 200), (700, 200), (700, 700), (200, 700)], seed=seed, label="")
+        dk = s.M["dikes"][0]
+        assert dike_irregular(dk["w_min"], dk["w_max"])
+
+
+def test_a_homestead_is_refused_inside_the_dike_keep_out():
+    """Feature 287, water W41: the dike's keep-out is recorded before any homestead, and the seat tests refuse a
+    candidate standing in it - the house's point test and the bundle's rect test alike."""
+    s = Settlement(900, 900, seed=1)
+    s.perimeter_dike([(200, 200), (700, 200), (700, 700), (200, 700)], seed=4, label="")
+    crest = s.M["dikes"][0]["crest"]
+    cx, cy = crest[len(crest) // 3]
+    assert s._in_blocked(cx, cy)
+    assert s._rect_blocked((cx, cy, 20.0, 14.0), True)
+    assert not s._in_blocked(80.0, 80.0)  # and ground off the dike is not blocked by it
+
+
 def test_village_grove_skips_the_dike_bank():
     # a windbreak belt laid ACROSS the perimeter dike must place NO clump on the earthwork bank
     # (GM 2026-07-22: the dike carries only its own soil-binding trees).
@@ -429,7 +467,7 @@ def test_marsh_waterside_role():
 def test_a_lane_is_walked_back_off_the_reeds_and_dropped_if_the_whole_leg_is_wet():
     """THE RULE (GM 2026-08-12): "paths don't pass through marshland". A way laid AFTER its water
     stops on the dry side of the reeds - and a leg that is wet along its whole length is dropped
-    rather than shortened to a stub, except where dropping it would leave no way at all.
+    rather than shortened to a stub, and a way with no dry leg left is dropped whole.
 
     Both directions matter: a two-point skeleton arm has no vertex to drop, which is exactly the
     case the first version of this silently did nothing for."""
@@ -442,9 +480,19 @@ def test_a_lane_is_walked_back_off_the_reeds_and_dropped_if_the_whole_leg_is_wet
     # a THREE-point way whose last leg lies wholly in the marsh loses that leg outright
     dropped = s.trim_off_marsh([(200.0, 600.0), (500.0, 600.0), (900.0, 600.0), (920.0, 600.0)])
     assert all(q[0] < 700.0 for q in dropped), f"every surviving point must be dry, got {dropped}"
-    # ...and a way with nowhere dry to retreat to still returns something drawable
-    assert len(s.trim_off_marsh([(800.0, 600.0), (900.0, 600.0)])) >= 2
+    # ...and a way wholly in the reeds is no way (feature 287, woods W09): never the soaked end shipped
+    assert s.trim_off_marsh([(800.0, 600.0), (900.0, 600.0)]) == []
     assert s.trim_off_marsh([(200.0, 600.0)]) == [(200.0, 600.0)], "a stub shorter than a segment is returned untouched"
+
+
+def test_a_wet_leg_longer_than_sixty_steps_is_still_walked_back_to_dry_ground():
+    """Woods W09, the violating case: a way whose last leg runs 2,000 px into a reed bed - past the ~1,440 px sixty 24 px
+    steps covered, which shipped the end still in the reeds. The walk goes on until the end is dry."""
+    s = Settlement(3000, 1200, seed=3)
+    s.meta(name="Reeds", scale="hamlet", ftpx=1, toscale=True, households=12)
+    s.M["marshes"].append({"x": 1600, "y": 600, "w": 2400, "h": 400, "rot": 0, "role": "toe", "seq": 1, "poly": [[400.0, 400.0], [2800.0, 400.0], [2800.0, 800.0], [400.0, 800.0]]})
+    trimmed = s.trim_off_marsh([(100.0, 600.0), (2500.0, 600.0)])
+    assert trimmed[0] == (100.0, 600.0) and trimmed[-1][0] < 400.0, f"the wet end must reach dry ground, got {trimmed[-1]}"
 
 
 def test_a_map_with_no_field_has_no_wet_toe_to_ask_about():

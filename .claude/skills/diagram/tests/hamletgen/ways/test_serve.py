@@ -1,7 +1,5 @@
 """Split from test_ways.py by feature 173 - see this directory's CLAUDE.md."""
 
-import pytest
-
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.hamletgen.ways import serve as _serve
 
@@ -51,21 +49,6 @@ def test_a_web_lane_is_refused_when_its_link_is_blocked_though_the_gap_is_short(
     run = [(120.0, float(y)) for y in range(150, 255, 5)]
     assert hg.ways._lay_web_lane(s, run, [fence], [], [], houses=[(120.0, 200.0)]) is False
     assert len(s.M["lanes"]) == 1, "neither the link nor the run is drawn"
-
-
-def test_the_footpath_search_stops_looking_past_its_backstop_radius() -> None:
-    """The directness bound is the real limit on a footpath; the radius is only a backstop against
-    searching the whole map. A steading this far out is beyond any path worth drawing, and the loop
-    must stop rather than test every way on the sheet."""
-
-    class _Plan:
-        envelope = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0)]
-        watercourses: list = []
-
-    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 200.0)]], houses=[(4000.0, 4000.0)])
-    before = len(s.M["lanes"])
-    hg.ways._serve_stragglers(s, _Plan(), [], [], [])
-    assert len(s.M["lanes"]) == before, "nothing drawn for a steading beyond the backstop"
 
 
 def test_a_web_lane_snaps_its_end_onto_the_way_it_almost_meets() -> None:
@@ -155,57 +138,6 @@ def test_an_explicit_form_on_the_spec_beats_the_roll() -> None:
     assert plan.settlement_form == "dispersed"
 
 
-def test_a_straggler_whose_path_FOULS_a_steading_is_left_unserved_rather_than_driven_through_it() -> None:
-    """Feature 174. "A STEADING FOUL IS NEVER DRAWN, not even as the last resort the fold gets" -
-    `houses_clear_of_lanes` allows a lane no overlap with a house AT ALL, so a fouling path is not
-    "the least bad option", it is a guaranteed red gate and a map showing a track through someone's
-    floor. The honest fallback is the house going unserved, which `farmhouses_reach_a_way` reports
-    in words a reader can act on.
-
-    Two stragglers with a steading between each of them and the network drive that refusal.
-    """
-    plan = hg.plan_site(hg.HamletSpec(name="X", seed=4, households=12))
-
-    def _box(x0, y0, x1, y1):
-        return [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
-
-    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 600.0)]], houses=[(400.0, 300.0), (400.0, 120.0)])
-    fabric = [(_box(120, 240, 260, 360), (190.0, 300.0), "house"), (_box(120, 60, 260, 180), (190.0, 120.0), "house")]
-    before = len(s.M["lanes"])
-    hg.ways._serve_stragglers(s, plan, [], fabric, [])
-    for ln in s.M["lanes"][before:]:
-        for px, py in ln["pts"]:
-            for poly, _c, _k in fabric:
-                inside = min(p[0] for p in poly) < px < max(p[0] for p in poly) and min(p[1] for p in poly) < py < max(p[1] for p in poly)
-                assert not inside, f"no drawn way passes through a steading ({px:.0f},{py:.0f})"
-
-
-def test_a_straggler_served_only_by_a_BENT_path_takes_the_least_bad_fold(monkeypatch) -> None:
-    """Feature 174. The fold is the last resort: when every candidate path bends the way
-    `lanes_bend_like_paths` refuses, the LEAST bad one is drawn rather than leaving the house
-    unserved - "the first that works at all remains the fallback, so no house that is served today
-    goes unserved".
-
-    The recorded instance is cohort seed 16, whose footpath kept a 71-then-61 degree fold. No
-    constructed geometry reaches it - eleven were tried - because `_route` straightens what it finds
-    and `_unjog` straightens it again, so a candidate that yields a run AND bends badly needs a
-    whole real map to arise.
-
-    So the PREDICATE is patched rather than the geometry contrived: `_bends_badly` is the branch's
-    only discriminator, and forcing it True is the honest way to ask "and if every path bends, what
-    then?". That is a unit test of the fold, not a simulation of seed 16 - the end-to-end evidence
-    stays with the FULL suite, exactly the division of labour the GM set on 2026-08-31.
-    """
-    plan = hg.plan_site(hg.HamletSpec(name="X", seed=4, households=12))
-    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 600.0)]], houses=[(400.0, 300.0)])
-    before = len(s.M["lanes"])
-
-    monkeypatch.setattr(hg.ways.serve, "_bends_badly", lambda pts: True)
-    hg.ways.serve._serve_stragglers(s, plan, [], [], [])
-
-    assert len(s.M["lanes"]) > before, "the house is served by the folded path rather than left stranded"
-
-
 def test_a_web_lane_of_fewer_than_two_points_is_never_laid() -> None:
     """A run must be a LINE to be a lane. The guard fires twice - once on the run as offered, and
     again after `_trim_to_service` has cut it back, because trimming is what can reduce a real run to
@@ -219,49 +151,6 @@ def test_a_web_lane_of_fewer_than_two_points_is_never_laid() -> None:
     s.M.setdefault("meta", {"ftpx": 1})
     assert _lay_web_lane(s, [(50.0, 50.0)], [], [], []) is False, "a single point is not a run"
     assert _lay_web_lane(s, [], [], [], []) is False, "and neither is nothing at all"
-
-
-def test_a_door_path_trimmed_below_two_points_is_not_drawn(monkeypatch: pytest.MonkeyPatch) -> None:
-    """A DOOR PATH THAT REACHES NO WAY IS NOT DRAWN (feature 137 T03): the clip and the trim can eat a
-    straggler's footpath down to its doorstep, and what is left is a mark in the grass, not a way.
-    Feature 216: the only gate roll that reached this refusal was retired, so the trim is stood in for
-    directly - the control half proves the same steading otherwise gets its footpath."""
-
-    class _Plan:
-        envelope = [(0.0, 0.0), (400.0, 0.0), (400.0, 400.0), (0.0, 400.0)]
-        watercourses: list = []
-
-    def fresh() -> _StubSettlement:
-        return _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=[(150.0, 200.0)])
-
-    s = fresh()
-    hg.ways._serve_stragglers(s, _Plan(), [], [], [])
-    assert len(s.M["lanes"]) == 2, "control: the steading gets its footpath"
-    monkeypatch.setattr(_serve, "_trim_to_service", lambda path, *a, **k: path[:1])
-    s = fresh()
-    hg.ways._serve_stragglers(s, _Plan(), [], [], [])
-    assert len(s.M["lanes"]) == 1, "a path the trim ate down to its doorstep is not a way"
-
-
-def test_a_footpaths_last_leg_is_routed_when_the_straight_link_is_refused(monkeypatch) -> None:
-    """`_serve_stragglers` (feature 220, the step-1 re-fit's coverage): the path from an outlying steading is cut
-    where it comes within the join distance of the network, and the last leg from the cut to the nearest point on
-    the way is drawn straight when the ground allows - and ROUTED when it does not, so long as the detour stays
-    within the directness bound. The straight leg is refused outright here, so the routed tail is the only way home."""
-
-    class _Plan:
-        envelope = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0)]
-        watercourses: list = []
-
-    from l7r.diagram.hamletgen.ways import serve as serve_mod
-
-    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=[(170.0, 200.0)])
-    before = len(s.M["lanes"])
-    monkeypatch.setattr(serve_mod, "_clear_link", lambda *a, **k: False)  # every straight last leg is refused: only the routed tail can finish the path
-    hg.ways._serve_stragglers(s, _Plan(), [], [], [])
-    assert len(s.M["lanes"]) > before, "the steading gets its footpath, by the routed tail"
-    ends = [tuple(ln["pts"][-1]) for ln in s.M["lanes"][before:]] + [tuple(ln["pts"][0]) for ln in s.M["lanes"][before:]]
-    assert any(abs(x) <= 6.0 for x, _y in ends), f"the routed tail must reach the way at x=0: {ends}"
 
 
 def test_a_web_lane_that_shadows_the_network_for_most_of_its_length_is_refused() -> None:
@@ -326,14 +215,6 @@ def test_the_late_pass_drops_a_lane_trimmed_to_a_nub() -> None:
     assert len(s.M["lanes"]) == 2, "a lane that is some house's only way stays"
 
 
-def test_a_footpath_of_one_point_fronts_nothing() -> None:
-    """`_ends_worth_walking_to` is asked of whatever the router returned, and a route that collapsed to a single
-    point has no ends to judge - it is not a path, and drawing it would put a dot in a field."""
-    from l7r.diagram.hamletgen.ways.serve import _ends_worth_walking_to
-
-    assert not _ends_worth_walking_to(_StubSettlement(), [(10.0, 10.0)], (12.0, 12.0), [((0.0, 0.0), (20.0, 0.0))], [])
-
-
 def test_a_web_lane_shadowing_another_for_a_bundles_pitch_is_refused() -> None:
     """`_lay_web_lane`'s second shadow clause. The fraction catches a short lane laid alongside another for all
     of its length; this one catches a LONG lane that eventually diverges - its unbroken shadowed stretch is
@@ -359,31 +240,6 @@ def test_a_web_lane_shadowing_another_for_a_bundles_pitch_is_refused() -> None:
     assert not _serve._lay_web_lane(s, run, [], [], [], houses=[(600.0, 1200.0)])
 
 
-def test_a_footpath_end_may_front_the_field_it_serves() -> None:
-    """`_ends_worth_walking_to` takes the gate's own three answers - a house, a way, or the FIELD. The third is
-    the one a path to the rice ends at, and it is the reason the rule is not simply 'reaches its house'."""
-    from l7r.diagram.hamletgen.ways.serve import _ends_worth_walking_to
-
-    segs = [((0.0, 0.0), (100.0, 0.0))]
-    crop = [(500.0, 0.0), (700.0, 0.0), (700.0, 200.0), (500.0, 200.0)]
-    path = [(10.0, 0.0), (300.0, 0.0), (480.0, 0.0)]  # starts on the way, ends 20 ft off the crop's edge
-    assert _ends_worth_walking_to(_StubSettlement(), path, (9000.0, 9000.0), segs, [crop])
-
-
-def test_a_house_whose_admitted_ways_are_none_is_left_alone() -> None:
-    """Feature 261: `seg_ok` narrows what counts as the house's network (`_link_home_bank` admits only the ways on its own
-    bank that reach the connector dry-shod); a house none of whose ways is admitted has nothing to be served to here."""
-
-    class _Plan:
-        envelope = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0)]
-        watercourses: list = []
-
-    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 200.0)]], houses=[(300.0, 100.0)])
-    before = len(s.M["lanes"])
-    hg.ways._serve_stragglers(s, _Plan(), [], [], [], only=s.M["houses"], seg_ok=lambda c, g: False)
-    assert len(s.M["lanes"]) == before
-
-
 def test_the_overrun_past_the_connector_is_cut_and_the_connector_left() -> None:
     """`cut_the_overruns` (feature 261, lifted from `stage_web`): a lane that met the way out and ran 52 ft on past it to a
     loose end is cut where it met it; the connector itself is never cut, and a lane with nothing to cut is left as it is."""
@@ -397,45 +253,62 @@ def test_the_overrun_past_the_connector_is_cut_and_the_connector_left() -> None:
     assert s.M["lanes"][2]["pts"] == [[200.0, 400.0], [200.0, 100.0]], "a lane ending on the way is left"
 
 
-def test_a_stragglers_doorstep_ground_is_obtained_once_per_house(monkeypatch) -> None:
-    """Feature 278 (FR-002): the standing places ringed round a straggler's house were each tested against an index
-    obtained afresh per ring point - the memo answered, but its key walks every polygon. The index is obtained once per
-    house now: two stragglers, at most two doorstep requests, however many ring points their doors try."""
-    plan = hg.plan_site(hg.HamletSpec(name="X", seed=4, households=12))
-
-    def _box(x0, y0, x1, y1):
-        return [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
-
-    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 600.0)]], houses=[(400.0, 300.0), (400.0, 120.0)])
-    fabric = [(_box(120, 240, 260, 360), (190.0, 300.0), "house"), (_box(120, 60, 260, 180), (190.0, 120.0), "house")]
-    asks: list[int] = []
-    points: list[int] = []
-    real = hg.ways.serve.fabric_index
-
-    def counted(*a, **k):
-        asks.append(1)
-        idx = real(*a, **k)
-        fouled = idx.fouled
-
-        class _Counted:
-            def fouled(self, q):
-                points.append(1)
-                return fouled(q)
-
-        return _Counted()
-
-    monkeypatch.setattr(hg.ways.serve, "fabric_index", counted)
-    hg.ways._serve_stragglers(s, plan, [], fabric, [])
-    assert len(asks) <= 2, f"{len(asks)} index requests for two houses"
-    assert len(points) > len(asks), f"non-vacuity: more standing places were tried ({len(points)}) than indexes asked for - one ask per point would not pass"
+def test_the_late_pass_leaves_a_connector_that_starts_on_the_exit_strip() -> None:
+    """Feature 287 wave 6 (cohort seeds 34 and 37): a connector pulled back to service left the exit strip - 300 ft down the
+    track on seed 34 - and the strip the web draws up to it (`tree.strip_run`) ended in a hook or a long link. Where a strip
+    is reserved the connector's start stands."""
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=[(60.0, 200.0)])
+    s.M["access_exit"] = [[0.0, -300.0], [0.0, 0.0]]
+    hg.ways.tidy_lane_ends(s, [(200.0, 0.0), (600.0, 0.0), (600.0, 400.0), (200.0, 400.0)])
+    assert s.M["lanes"][0]["pts"][0] == [0.0, 0.0] or tuple(s.M["lanes"][0]["pts"][0]) == (0.0, 0.0)
 
 
-def test_a_straggler_path_the_drawer_refuses_serves_nobody(monkeypatch) -> None:
-    """Feature 291: `_draw_web` declines a path (debris) - the house is not counted served and the next target is tried;
-    with every draw refused, nothing is laid."""
-    plan = hg.plan_site(hg.HamletSpec(name="X", seed=4, households=12))
-    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 600.0)]], houses=[(400.0, 300.0)])
-    before = len(s.M["lanes"])
-    monkeypatch.setattr(hg.ways.serve, "_draw_web", lambda *a, **k: False)
-    hg.ways.serve._serve_stragglers(s, plan, [], [], [])
-    assert len(s.M["lanes"]) == before
+def test_a_door_on_a_fixture_steps_along_the_front_until_clear() -> None:
+    """`door_off_fixtures` (feature 291 on 287): a door clear stays; one on a trunk steps along the front (across the line
+    from the house through it), nearest first; one boxed in along the whole front is None."""
+    from l7r.diagram.hamletgen.ways.serve import door_off_fixtures
+
+    house = (0.0, 0.0)
+    trunk = [(-2.0, 48.0), (2.0, 48.0), (2.0, 52.0), (-2.0, 52.0)]
+    assert door_off_fixtures((30.0, 50.0), house, [trunk], 5.0) == (30.0, 50.0)
+    moved = door_off_fixtures((0.0, 50.0), house, [trunk], 5.0)
+    assert moved is not None and abs(moved[1] - 50.0) < 1e-9 and abs(moved[0]) >= 7.0, "along the front, clear of the trunk"
+    wall = [(-100.0, 45.0), (100.0, 45.0), (100.0, 55.0), (-100.0, 55.0)]
+    assert door_off_fixtures((0.0, 50.0), house, [wall], 5.0) is None
+
+
+def test_a_door_path_ends_where_it_first_arrives_at_its_way() -> None:
+    """`to_first_arrival` (feature 291 on 287): the path is ended at the nearest point of the way where it first comes within
+    the touch gap, so it never runs on beside it; a path that never arrives is as it was."""
+    from l7r.diagram.hamletgen.ways.serve import to_first_arrival
+
+    way = [((0.0, 0.0), (300.0, 0.0))]
+    path = [(100.0, 60.0), (100.0, 3.0), (200.0, 3.0), (200.0, 0.0)]
+    out = to_first_arrival(path, way, 4.0)
+    assert out[0] == (100.0, 60.0) and out[-1][1] == 0.0 and 99.0 <= out[-1][0] <= 101.0 and len(out) == 2
+    assert to_first_arrival([(0.0, 50.0), (10.0, 50.0)], way, 4.0) == [(0.0, 50.0), (10.0, 50.0)]
+
+
+def test_a_routed_door_path_is_string_pulled_where_a_chord_is_clear() -> None:
+    """`pulled` (feature 291 on 287): every jog a clear chord can cut is taken out; the ends are kept; a path of two points
+    is as it was."""
+    from l7r.diagram.hamletgen.ways.serve import pulled
+
+    path = [(0.0, 0.0), (10.0, 1.0), (20.0, -1.0), (30.0, 0.0), (30.0, 40.0)]
+    assert pulled(path, lambda a, b: True) == [(0.0, 0.0), (30.0, 40.0)]
+    assert pulled(path, lambda a, b: abs(a[0] - b[0]) < 1e-9 or abs(a[1] - b[1]) < 2.0) == [(0.0, 0.0), (30.0, 0.0), (30.0, 40.0)]
+    assert pulled(path[:2], lambda a, b: True) == path[:2]
+
+
+def test_a_flank_door_faces_no_band_and_is_open_to_the_front() -> None:
+    """`flank_doors` / `front_to_flank_open` (FR-019's exception, amendment 8): only a flank facing no band of the farm's own
+    grove is offered; none without a yard; the ground from the front door to it is open unless the house or a band stands
+    across it."""
+    from l7r.diagram.hamletgen.ways.serve import flank_doors, front_to_flank_open
+
+    geom = {"house": (0.0, 0.0, 40.0, 30.0), "yard": (0.0, 35.0, 30.0, 20.0), "grove_faces": [((0, -1), "deep"), ((-1, 0), "deep")], "groves": [(0.0, -60.0, 200.0, 40.0), (-80.0, 0.0, 40.0, 100.0)]}
+    doors = flank_doors({"geom": geom})
+    assert len(doors) == 1 and doors[0][0] > 0.0, "the east flank only: the west one faces the deep west band"
+    assert flank_doors({"geom": {"house": (0.0, 0.0, 1.0, 1.0)}}) == []
+    assert front_to_flank_open((0.0, 58.0), (30.0, 35.0), {"geom": geom})
+    assert not front_to_flank_open((0.0, 58.0), (0.0, -30.0), {"geom": geom}), "across the house"

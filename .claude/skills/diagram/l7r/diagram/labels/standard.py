@@ -46,16 +46,33 @@ PREFERRED_OFFSET_EM = 0.5
 # NEARER FIRST (QGIS's default, "Prefer closer labels"): every position at the preferred offset is tried before any
 # seat further out, then ring by ring outward. The step and the reach are CALIBRATIONS (plan P2): half an em a ring,
 # out to eight ems - 64 ft for a hamlet board's 8 pt caption, past the 53 px the old standoff ladder reached and well
-# inside the gate's hug cap. Past the reach the least-cost seat inside it is taken; a caption is never dropped (the
-# GM, 2026-09-27: "we'll treat labels as mandatory").
+# inside the gate's hug cap. A caption is never dropped (the GM, 2026-09-27: "we'll treat labels as mandatory"), and
+# it never overlaps (feature 287, D10): past the reach it takes a leader to a free seat out to the hug, and failing
+# that it goes in the sheet's key. The least-cost overlapping seat is retired.
 RING_STEP_EM = 0.5
 REACH_EM = 8.0
+
+# THE HUG: a caption never stands more than this far, box to box, from the feature it names (`label_hugs_its_referent`,
+# the gate's 120 px since feature 133). Past it the reader has to guess which feature a name belongs to, so it bounds
+# every seat the placer offers - the standard's rings, the fallback slides, the leader rings past the reach and the
+# nudge (feature 287, labels L10). A CALIBRATION carried from the gate test, where it was stated first.
+HUG_PX = 120.0
+
+# A CAPTION WITH NO SEAT ON THE SHEET GOES IN THE SHEET'S KEY (feature 287, D10): a numbered mark at the feature and
+# the words in a key beside the map - a map drawing convention. It costs more than any seat on the sheet, so a caller
+# comparing seats, or a repair lifting a neighbor, takes any seat that is drawn before the key.
+WEIGHT_KEY = 1_000_000.0
 
 # THE WEIGHTS, on Esri's scale: "A feature weight of 0 indicates that the feature should be treated as available
 # space, while a weight of 1,000 indicates that the feature is considered an obstacle" (esri-weight-labels-features).
 # Free space first; when none is left, the least total weight. Which families are obstacles, which are free, and the
 # 500 a way crossed costs (so crossing one beats crossing two - "they only cross one road instead of several",
 # esri-prevent-label-overlap - and two ways cost as much as one obstacle) are our CALIBRATION (spec D4).
+#
+# WHAT IS AN OVERLAP (feature 287, D10): every weight on a generated map is one - a caption on a roof or across a lane
+# breaks a caption rule. A hand-drawn sheet also weighs ink a caption may be set on when nothing is free (light roofs,
+# nested ground, a road); such an obstacle is `soft`, and only the rest - another caption, ink painted over one, dark
+# ink - is an overlap the placer never draws.
 WEIGHT_OBSTACLE = 1000.0
 WEIGHT_WAY = 500.0
 WEIGHT_FREE = 0.0

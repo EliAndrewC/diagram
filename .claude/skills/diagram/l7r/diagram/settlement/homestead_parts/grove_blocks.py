@@ -26,6 +26,7 @@ expressions on a synthetic layout without rolling a settlement.
 
 from __future__ import annotations
 
+import math
 from typing import Any
 
 from .._geom import PointGrid, RingIndex, boxed_circles, boxed_grid, boxed_rects, boxed_ring_hit, boxed_rings, boxed_seg_hit, boxed_segs, circle_hit, rect_hit
@@ -42,7 +43,7 @@ class GroveBlocks:
     re-seats. `displaced` is the other grove's canopy alone, the one blocker a SPARSE grove re-seats
     for. `inside` and `rim_within` are the grove's own outline."""
 
-    __slots__ = ("_clear", "_fams", "_inside", "_last", "crop_pad", "displacers", "dry_pad", "ring", "static")
+    __slots__ = ("_clear", "_fams", "_inside", "_last", "crop_pad", "dike_pad", "displacers", "dry_pad", "ring", "static")
 
     def __init__(
         self,
@@ -58,9 +59,14 @@ class GroveBlocks:
         circles: Any,
         displacers: Any,
         rects: Any,
+        dike_pad: float = 0.0,
     ) -> None:
         self.ring = RingIndex(outline)
         self.crop_pad, self.dry_pad = crop_pad, dry_pad
+        # the dike and marsh outlines refuse a point inside them; `dike_pad` also refuses one within it of their edge - a
+        # placer held a hair stricter than the planting (the reserved seats, `wood_share.BAR_MARGIN_PX`: a seat left on the
+        # toe marsh's rounded edge, feature 287 M8)
+        self.dike_pad = dike_pad
         # ONE GRID FOR EVERY STATIC FAMILY (feature 278, FR-010; 218's "one grid per scatter, not one per family", never
         # applied to the grove). The seven families were seven grids and a candidate asked up to seven of them - 1.09
         # million `near` calls on Kashikawa's belts. Filed together, tagged by family, in cells of the same size, a point's
@@ -70,7 +76,7 @@ class GroveBlocks:
         families = (
             boxed_rings(crops, crop_pad),
             boxed_rings(dry, dry_pad),
-            boxed_rings(dikes),
+            boxed_rings(dikes, dike_pad),
             boxed_segs(water),  # (polyline, reach) pairs, the reach already including the clump's radius
             boxed_segs(corridors),  # (polyline, buffer) pairs from `_corridor_buffers`
             boxed_circles(circles),
@@ -96,7 +102,7 @@ class GroveBlocks:
     def hard(self, x: float, y: float) -> bool:
         """The crop, open water, the dike bank: reasons moving a few feet does not change."""
         crop, dry, dikes, water, _corr, _circles, _rects = self._at(x, y)
-        return boxed_ring_hit(x, y, crop, self.crop_pad) or boxed_ring_hit(x, y, dry, self.dry_pad) or boxed_ring_hit(x, y, dikes) or boxed_seg_hit(x, y, water)
+        return boxed_ring_hit(x, y, crop, self.crop_pad) or boxed_ring_hit(x, y, dry, self.dry_pad) or boxed_ring_hit(x, y, dikes, self.dike_pad) or boxed_seg_hit(x, y, water)
 
     def lane(self, x: float, y: float) -> bool:
         return boxed_seg_hit(x, y, self._at(x, y)[4])
@@ -156,3 +162,42 @@ class Seats:
     def too_near(self, x: float, y: float) -> bool:
         r2 = self.r2
         return any((x - sx) ** 2 + (y - sy) ** 2 < r2 for sx, sy, _x0, _y0, _x1, _y1 in self.grid.near(x, y))
+
+
+class BankNear:
+    """`near`'s index when the points have a BANK (feature 261, settlement-review of Kashikawa): a clump is near a point
+    only within `reach` of it AND on its side of `barriers` - three dooryard-copse clumps stood 79-86 ft from a house as
+    the crow flies, across the brook from every farmhouse, where the copse is the trees "in the gaps between the houses".
+    Asked per clump like `Seats.too_near`."""
+
+    def __init__(self, points: Any, reach: float, barriers: Any) -> None:
+        from .._geom import PointGrid
+
+        self.reach = reach
+        self.points = PointGrid(max(reach, 1.0))
+        self.points.extend([((float(p[0]), float(p[1])), float(p[0]), float(p[1]), float(p[0]), float(p[1])) for p in points])
+        self.barriers = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for a, b in barriers]
+        # ...each barrier filed once by its box (feature 287 perf: every clump walked every brook segment for every point near
+        # it, 381,637 crossing tests on the reference seed 4's belt). EXACT: two segments `segments_cross` finds crossing
+        # meet, so their boxes meet; a barrier whose box misses the line's by more than `_BOX_EPS` cannot cross it, and
+        # `any` does not care about order.
+        self.bars = PointGrid(max(reach, 1.0))
+        self.bars.extend([(a, b, min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])) for a, b in self.barriers])
+
+    _BOX_EPS = 1e-6  # px: far beyond the rounding of a crossing test on this canvas, far below anything drawn
+
+    def too_near(self, x: float, y: float) -> bool:
+        from .._geom import segments_cross
+
+        e = self._BOX_EPS
+        bars = None
+        for it in self.points.near(x, y, self.reach):
+            if math.dist((x, y), it[0]) > self.reach:
+                continue
+            if bars is None:
+                bars = self.bars.near(x, y, self.reach + e)  # every barrier whose box comes within reach: a superset for each line
+            px, py = it[0]
+            lx0, ly0, lx1, ly1 = min(x, px) - e, min(y, py) - e, max(x, px) + e, max(y, py) + e
+            if not any(bx1 >= lx0 and bx0 <= lx1 and by1 >= ly0 and by0 <= ly1 and segments_cross((x, y), it[0], a, b) for a, b, bx0, by0, bx1, by1 in bars):
+                return True
+        return False

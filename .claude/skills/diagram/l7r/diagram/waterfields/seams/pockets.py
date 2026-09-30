@@ -22,6 +22,7 @@ from ..banks import (
     polyline_cum,
 )
 from ..frame import BANK_MARGIN, Poly, _f_at_u, _Frame, taper_w
+from ..ring_rules import arrowhead, staircase
 from .geoms import GeomTree
 
 _SHAPELY_LOADED = False
@@ -288,7 +289,7 @@ def _weld_apex(ring: Poly) -> float:
     """How sharp a weld's recorded ring is, read the way the gate reads it - which is TWO ways.
 
     The deduped ring is the measurement `paddy_plots_are_workable_basins` makes, and the weld is held to a stricter
-    THRESHOLD on it (`_WELD_MIN_APEX`, 18 against 15). But the shipped-hamlet test
+    THRESHOLD on it (`_WELD_MIN_APEX`, 18 against 15). But the shipped-hamlet test (retired by feature 287)
     (`tests/gate/test_paddy_fabric.py::test_no_shipped_hamlet_has_a_basin_tapering_to_a_point`) reads the ring AS
     RECORDED, the rule `_is_a_needle` already applies to every repair in `_unjog`. This guard read only the deduped ring
     (it used to say that one was the gate's only reading), so a weld recording a hairline spur - a vertex 0.5 px out and
@@ -440,7 +441,11 @@ def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, 
         # refused outright, so the scrap still finds a host when no clean one exists.
         _sol = candidate.area / (candidate.convex_hull.area or 1.0)
         if is_chevron(_cring):
-            if _chev is None or _sol > _chev[0]:
+            # ...AND REMEMBERED ONLY IF IT CLEARS THE GATE LINE (feature 287, water W25): caught at 40 / 0.90, the chevron
+            # is still an arrowhead to the rule at 35 / 0.85 (`ring_rules.arrowhead`), and a fallback that welds one in
+            # emits the very shape it exists to avoid - so such a host is not remembered, as the needle fallback is held to
+            # the gate line below. With no other host the scrap stays bare: the odd corner left unpaddied.
+            if not arrowhead(_cring) and (_chev is None or _sol > _chev[0]):
                 _chev = (_sol, j, candidate)
             continue
         if _sol < _WELD_MIN_SOLIDITY:
@@ -460,7 +465,11 @@ def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, 
         # from taking in the scrap beside it because of a step that was there first.
         _jog = jog_steps(_cring, g) - jog_steps(_ring(into[j]), g)
         if _jog > 0:
-            if _jogged is None or _jog < _jogged[0]:
+            # ...REMEMBERED ONLY IF IT STAYS A NUDGE (feature 287, water W23): the fallback below takes the least-jogged
+            # weld, and it used to take one even when the host came out with three steps - the staircase the GM reported
+            # on Inashiro. A weld leaving the host a flight of steps (`ring_rules.staircase`, the gate's own predicate)
+            # is no fallback at all; the runner-up, the lump, or bare ground takes the scrap instead.
+            if not staircase(_cring, g) and (_jogged is None or _jog < _jogged[0]):
                 _jogged = (_jog, j, candidate)
             continue
         into[j] = candidate
@@ -487,7 +496,8 @@ def _absorb(pocket: Polygon, into: list[Polygon], grown: set[int], thin: float, 
         tree.replaced(j)
         grown.add(j)
         return True
-    # ...then the least-bad ARROWHEAD, behind the lump. A chevron is the worse read of the two - a
+    # ...then the least-bad CHEVRON, behind the lump - one the placer's 40 / 0.90 line catches and the gate's 35 / 0.85
+    # line passes, since no other is remembered (feature 287, W25). A chevron is the worse read of the two - a
     # lump is an awkward basin, an arrowhead does not read as a basin at all - so it is the last
     # shape the ladder will accept, and only when no other host will take the scrap. (Merged
     # 2026-08-18: this tier and the jog tier above were added independently by two sessions to the

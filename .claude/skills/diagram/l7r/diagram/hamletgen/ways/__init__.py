@@ -71,7 +71,6 @@ from .route import _ease_corner as _ease_corner
 from .route import _route as _route
 from .route import _unjog as _unjog
 from .serve import _lay_web_lane as _lay_web_lane
-from .serve import _serve_stragglers as _serve_stragglers
 from .smooth import _STUB_REACH_FT as _STUB_REACH_FT
 from .smooth import _smooth_web as _smooth_web
 from .smooth import commit_lane as commit_lane

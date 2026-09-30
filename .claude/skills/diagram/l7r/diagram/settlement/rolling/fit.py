@@ -6,9 +6,12 @@ Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.
 import math
 from typing import TYPE_CHECKING, Any, cast
 
-from .._geom import FARMHOUSE_EAVE_GAP_FT, Indexed, PointGrid, Pt, edge_dist, point_in_poly, poly_gap, rot_rect, seg_dist, segments_cross
+from .._geom import FARMHOUSE_EAVE_GAP_FT, Indexed, PointGrid, Pt, eave_gap, edge_dist, point_in_poly, seg_dist, segments_cross
 from .._geom.indexes import indexed_grid
 from .._geom.primitives import FIELD_KEEPOUT_EPS, chain_distance, chain_violated, facing_chains, keepout_ring
+from .._geom.water_index import crosses_a_stream
+from .access import access_corridor, legs
+from .lot import bundle_admitted, watered
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -32,7 +35,7 @@ def house_extent(rec: Any) -> tuple[float, float, float, float]:
     r = math.hypot(rec["w"], rec["h"]) / 2
     x0, y0, x1, y1 = rec["x"] - r, rec["y"] - r, rec["x"] + r, rec["y"] + r
     g = rec.get("geom") or {}
-    for part in [part_box(g, key) for key in ("yard", "shed")] + list(g.get("groves") or ()):
+    for part in [part_box(g, key) for key in ("yard", "shed", "byre", "well")] + list(g.get("groves") or ()):
         if part is not None:
             x0, y0 = min(x0, part[0] - part[2] / 2), min(y0, part[1] - part[3] / 2)
             x1, y1 = max(x1, part[0] + part[2] / 2), max(y1, part[1] + part[3] / 2)
@@ -111,7 +114,53 @@ def rect_touches_stream(gc: Any, pts: Any, streams: Any, index: PointGrid | None
     return False
 
 
+def near_reaches(index: PointGrid, a: Pt, b: Pt) -> list[dict[str, Any]]:
+    """The stream reaches of `index` (`stream_segment_index`) whose widened boxes meet the box of the line a-b, as stream
+    records of one reach each - every reach the line can cross, for `crosses_a_stream` to decide on."""
+    x0, y0, x1, y1 = min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])
+    out: dict[int, dict[str, Any]] = {}
+    for it in index.near((x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0) / 2):
+        if not (it[5] < x0 or it[3] > x1 or it[6] < y0 or it[4] > y1):
+            out.setdefault(id(it), {"poly": [it[0], it[1]]})
+    return list(out.values())
+
+
+#: How far a farmhouse may stand from the field it works, in feet (feature 287, homes H03). The record gives a 6 ft MINIMUM
+#: and no maximum; it gives as a TOLERANCE a back-row house about 700 ft from the crops as "the honest back of a compact
+#: village" (research/homesteads.html, "How close does a farmhouse stand to the paddy?"). 700 is therefore the reach every
+#: seat is held to while a hamlet's site boundary is installed, and the exhaustive seat pass scans: a map drawing
+#: convention whose figure is the record's own tolerance, not a pick.
+FIELD_REACH_FT = 700.0
+
+
+def within_field_reach(s: Any, x: float, y: float) -> bool:
+    """Is a house at (x, y) within `FIELD_REACH_FT` of its field (homes H03)? The ONE predicate the seat test
+    (`_parts_fit`), the exhaustive seat pass and the finished-map test read. The field is its facing chains - the paddy's
+    outline as the seat sees it; where none is installed (the legacy village roll, every placer after the homestead
+    stage), nothing is held."""
+    chains = getattr(s, "_site_chains", None)
+    if not chains:
+        return True
+    return bool(chain_distance(x, y, chains) <= s.px(FIELD_REACH_FT))
+
+
 class BundleFitMixin:
+    # WHAT A HAMLET'S SEATING INSTALLS for the fit test (feature 287, plan M3 and M5), None outside it: the access tree
+    # (`rolling/access.py`), the well pockets laid so far, the households' lots and the byre form their bundles reserve a
+    # stall for (`rolling/lot.py`), and - for the one household being sought a seat - which of those parts its bundle carries
+    _access: Any = None
+    _pockets: Any = None
+    _lots: Any = None
+    _byre_form: str | None = None
+    _household_byre: str | None = None
+    _household_well: bool = False
+    _household_watered: bool = False  # the household being sought is held to `lot.watered` (homes wave 5)
+    _byre_pockets: Any = None  # the shared sheds' pockets the seating reserved (`detached_commons`, homes H06)
+    _household_fixtures: Any = ()  # the fixture kinds the household being sought a seat keeps (homes H32)
+    _fixture_forms: Any = None  # the hamlet's rolled fixture forms, set by the seating (`FixtureForms`)
+    _corridor_ground: Any = None  # the ways' test of a corridor's ground, installed by a hamlet's seating (`access.lawful_ground`)
+    _wood: Any = None  # the households' shares of the wood floor (`homestead_parts/wood_share.py`, woods W25)
+
     def _field_adjacent(self: Settlement, x: float, y: float) -> bool:  # type: ignore[misc]
         """A RAIL, NOT A NORM: a nudge may not drift a farmhouse off the map's farmland entirely.
 
@@ -301,7 +350,9 @@ class BundleFitMixin:
         x0, y0, x1, y1 = cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2
         pts = ((x0, y0), (x1, y0), (x1, y1), (x0, y1), (cx, y0), (x1, cy), (cx, y1), (x0, cy), (cx, cy))
         chains, corr = self._site_chains, self._site_corridors
-        if any(chain_violated(px, py, chains, 0.0) for px, py in pts):
+        # a point in a cell the site's raster knows clear passes the chains (`FreeGround`, built from the same chains)
+        fg = self._free_ground
+        if any(chain_violated(px, py, chains, 0.0) for px, py in (pts if fg is None else [p for p in pts if not fg.point_clear(p[0], p[1])])):
             return True
         return bool(corr.hit_points(pts) or corr.hit_center(cx, cy))
 
@@ -320,6 +371,10 @@ class BundleFitMixin:
         if self.bound and any(not point_in_poly(vx, vy, self.bound) for vx, vy in self._rect_corners(env)):
             return True
         if self._rect_blocked(env, fields=True):
+            return True
+        # NO HOMESTEAD ON A RESERVED CORRIDOR (feature 287, plan M3): a house admitted earlier keeps the strip to its door
+        tree = getattr(self, "_access", None)
+        if tree is not None and tree.covers_box(env):
             return True
         # FROM THE PLACED INDEX (feature 276), deduplicated (an item spanning cells comes back once per cell) and in the
         # registry's order, so "the ONE box" is the box it always was.
@@ -345,15 +400,85 @@ class BundleFitMixin:
         (feature 227): the house's wall rule against the paddy, its tread, the eave gap to the nearest house, the
         yard's and the gardens' sun. No ground test - every part lies inside the envelope."""
         house = geom["house"]
-        if self._wall_on_the_bund(house[0], house[1], house[2], house[3], self._house_rot(house[0], house[1])):
+        # the four garden sides of a seat stand one house: its reach to the field is asked once (`_reach_memo`)
+        _rm = self.__dict__.get("_reach_memo")
+        if _rm is None or _rm[0] != house[0] or _rm[1] != house[1] or _rm[2] is not self._site_chains:
+            _rm = self.__dict__["_reach_memo"] = (house[0], house[1], self._site_chains, within_field_reach(self, house[0], house[1]))
+        if not _rm[3]:
+            return False
+        if not self._candidate_watered(geom):
+            return False
+        # THE FEW LOOKUPS THAT REFUSE MOST OF WHAT THE CORRIDOR WOULD BE ASKED, FIRST (the perf-audit's owed lever, 287
+        # 2026-09-30): a part over a seat another household's wood reserved, a yard or bed out of the sun. Each only refuses
+        # and reads neither the corridor nor anything its search writes, so the order changes no verdict. Measured per rule
+        # on the reference seeds 4 / 25 / 47 (every rule asked alone of each of the 1,142 / 288 / 557 offers the parts reach):
+        # the wood's cover or the sun refused 510 / 177 / 230 of them for 0.06 / 0.02 / 0.03 s of lookups, where the
+        # corridor searches cost 0.9 / 0.5 / 0.7 s; the other rules (the stream, the beds on water, the registry's admits, the
+        # tread) refuse a few dozen at most and cost more asked of every offer than the searches they would spare. The
+        # reference bookend's homesteads stage went 6.03 -> 5.11 s and its total 26.85 -> 26.0 s (four alternated `make perf`
+        # rounds each, load 3-5, 2026-09-30), and the pool and cohort 1-20 came out byte-identical, `seat_search` included.
+        wood = self._wood
+        if wood is not None and wood.covers_a_seat(geom):
+            return False
+        if not self._sun_corridor_ok(geom) or self._yard_sun_conflict(geom) or not self._gardens_sun_ok(geom):
+            return False
+        # ...AND A CLEAR CORRIDOR FROM ITS DOOR TO THE ACCESS TREE (feature 287, plan M3's seat half): a house the tree
+        # cannot reach from its door is refused here, before it stands, instead of being found stranded on the finished
+        # map. The corridor rides on the geometry and is reserved when the house is placed (`_try_place_bundle`). Asked
+        # before the other rules of the parts and the share: each rule here only refuses, and the corridor reads no
+        # part but the house, the yard and the fixtures, and no seat of this household's own - so the order changes no
+        # verdict. It is the question a margin that cannot seat everyone fails (seed 44: 12,104 of 13,244 seats refused for
+        # want of a corridor, each after every other rule was asked for nothing), and the four garden sides of one seat
+        # share its search (`access_corridor`).
+        tree = getattr(self, "_access", None)
+        corridor = None
+        if tree is not None:
+            corridor = access_corridor(self, geom)
+            if corridor is None:
+                return False
+            geom["access"] = corridor
+        turn = self._turn_at(house[0], house[1])
+        if self._wall_on_the_bund(house[0], house[1], house[2], house[3], turn):
             return False
         if self._parts_across_stream(geom):
             return False
+        # NO THRESHING YARD ON A PADDY (feature 287, homes H44): the envelope is asked at nine points against the paddy's
+        # chords, and a field corner can reach in between them (seed 31's yard lapped a paddy). The yard as drawn - its
+        # jittered quad, turned with the house, inscribed in the turned rect whose box this is - is held off every field
+        # polygon exactly, by overlap.
+        yard = part_box(geom, "yard")
+        if yard is not None and self.field_polys and self._rect_hits(yard, self.field_polys):
+            return False
+        # ...NOR A FARMSTEAD FIXTURE (feature 287, homes H32): a privy or a coop is small enough to stand between the
+        # envelope's nine points on a paddy's corner; each is held off every field polygon as the yard is - a persimmon by
+        # its trunk, its crown free to overhang
+        fixtures = (geom.get("boxes") or {}).get("fixtures") or {}
+        if self.field_polys and any(self._rect_hits(b if k != "persimmon" else (b[0], b[1], self.px(4.0), self.px(4.0)), self.field_polys) for k, b in fixtures.items()):
+            return False
+        # NO GARDEN BED ON ANY DITCH (feature 287, water W56): the envelope's nine points pass a ditch narrower than their
+        # spacing, so each bed is held off every irrigation line - channel, in-field ditch, drain, stream - at the corridor
+        # `_rect_on_water` keeps, the test the solid rects of the legacy path take.
+        if any(self._rect_on_water(g) for g in part_box(geom, "gardens") or ()):
+            return False
+        # ...AND EVERY PART IT LAYS ASKS THE REGISTRY OF WHAT STANDS (feature 287, water W53): the field's ditches, the
+        # streams, what is recorded and what the seating reserved - the one question the hold at the seating's end asks again
+        if not bundle_admitted(self, geom):
+            return False
         if self._house_on_a_tread(house) or self._house_too_near_a_neighbor(house) or self._house_unreachable(house):
             return False
-        if not self._sun_corridor_ok(geom) or self._yard_sun_conflict(geom):
-            return False
-        return bool(self._gardens_sun_ok(geom))
+        # ...AND ITS SHARE OF THE WOOD FLOOR, RESERVED (feature 287, woods W25 and plan D9): a household is admitted only
+        # where it can reserve copse seats whose crowns cover the floor within reach of its house, and never where one of
+        # its parts would stand over a seat another household reserved (`homestead_parts/wood_share.py`) - that last, a few
+        # lookups, asked above, before the corridor.
+        if wood is not None:
+            seats = wood.share(geom, turn, tree.segs if tree is not None else ())
+            # a corridor that runs over one of the seats sends the share to be sought again with the corridor standing
+            if seats is not None and tree is not None and corridor is not None and any(wood.seats_on(seats, leg) for leg in legs(corridor)):
+                seats = wood.share(geom, turn, [*tree.segs, *legs(corridor)])
+            if seats is None:
+                return False
+            geom["wood"] = seats
+        return True
 
     def _parts_across_stream(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """Does a stream run between the house and any part of its homestead - the yard, a garden bed, the kura?
@@ -365,18 +490,29 @@ class BundleFitMixin:
         far bank. That the parts share the house's bank is a GUESS - no page read places a garden across a channel from
         its house, and none says it never was (research/homesteads, the farmstead's layout) - kept because a plot
         split by running water reads as two holdings. Exact: the straight line from the house's center to each part's
-        crosses no reach of any stream."""
-        streams = [f["poly"] for f in self.M.get("streams", []) if len(f.get("poly", ())) >= 2]
-        if not streams:
+        crosses no reach of any stream - `crosses_a_stream`, the one predicate the farm fixtures and the finished-map
+        test read too (feature 287, FR-003)."""
+        streams = self.M.get("streams", [])
+        if not any(len(f.get("poly") or ()) >= 2 for f in streams):
             return False
         hx, hy = geom["house"][0], geom["house"][1]
-        parts = [part_box(geom, "yard"), *(part_box(geom, "gardens") or ()), part_box(geom, "shed")]
+        parts = [
+            part_box(geom, "yard"),
+            *(part_box(geom, "gardens") or ()),
+            part_box(geom, "shed"),
+            part_box(geom, "byre"),
+            part_box(geom, "well"),
+            *((geom.get("boxes") or {}).get("fixtures") or {}).values(),
+        ]
         # ...AND NO PART STANDS ON THE WATER ITSELF (settlement-review of Mizuguchi, feature 261): the envelope's nine-point
         # ground test let a farmhouse's wall stand on the brook's centerline, its roof drawn over the water. Each solid part
         # is held off every stream at the stream's half-width plus the corridor `_rect_on_water` keeps.
         if any(self._rect_on_stream(r) for r in [part_box(geom, "house"), *parts] if r is not None):
             return True
-        return any(segments_cross((hx, hy), (r[0], r[1]), poly[k], poly[k + 1]) for r in parts if r is not None for poly in streams for k in range(len(poly) - 1))
+        # ...ASKED OF THE REACHES NEAR THE LINE ALONE, from the stream index `_rect_on_stream` just kept fresh: a reach the
+        # house-to-part line crosses has a box meeting the line's (seed 17: 60,000 lines each walked every reach)
+        index = self._stream_idx_cache[2]
+        return any(crosses_a_stream((hx, hy), (r[0], r[1]), near_reaches(index, (hx, hy), (r[0], r[1]))) for r in parts if r is not None)
 
     def _rect_blocked(self: Settlement, rect: Any, fields: bool) -> bool:  # type: ignore[misc]
         """Whether a bundle sub-rect lands on forbidden ground: no-build blocks, lanes, hill/pond ellipses,
@@ -451,13 +587,13 @@ class BundleFitMixin:
         fractions of a pixel. Two feet of margin costs nothing in packing and puts the disagreement
         where it cannot bite.
 
-        GAP VERDICT family: real rotated corners via `poly_gap`, never centers, never a
+        GAP VERDICT family: real rotated corners via `eave_gap`, never centers, never a
         circumscribed radius (dev/placement.md, "CENTER vs FOOTPRINT"). The center-distance test in
         front of it is a PREFILTER - it over-states both extents, so it can only admit a pair the
         exact test then rejects."""
         lim = self.px(FARMHOUSE_EAVE_GAP_FT + 2.0)
         cx, cy, w, h = rect
-        quad = rot_rect(cx, cy, w, h, self._house_rot(cx, cy))
+        cand = {"x": cx, "y": cy, "w": w, "h": h, "rot": self._house_rot(cx, cy)}  # the candidate as `eave_gap` reads a record
         reach = lim + math.hypot(w, h) / 2
         # FROM THE INDEX (feature 276): a record the prefilter below admits has its center within `reach` plus its own
         # half-diagonal, so its extent meets this box - the index returns every record the scan could have flagged.
@@ -467,7 +603,7 @@ class BundleFitMixin:
             ow, oh = rec["w"], rec["h"]
             if math.hypot(cx - rec["x"], cy - rec["y"]) > reach + math.hypot(ow, oh) / 2:
                 continue  # prefilter: prunes, never decides
-            if poly_gap(quad, rot_rect(rec["x"], rec["y"], ow, oh, rec.get("rot", 0.0))) < lim:
+            if eave_gap(cand, rec) < lim:  # the one drip-line measure, the gate's too (feature 287, FR-003)
                 return True
         return False
 
@@ -480,7 +616,36 @@ class BundleFitMixin:
         every garden side at a position) and a side-DEPENDENT half (the garden bed + the bbox it grows), so
         the nucleated placer can test the common half ONCE across all four sides (see `_fits_any_side`). The
         conjunction is order-independent, so the result is unchanged from the old single test."""
-        return self._bundle_common_fits(geom, grove_off_field) and self._bundle_side_fits(geom)
+        return self._bundle_common_fits(geom, grove_off_field) and self._bundle_side_fits(geom) and not self._on_the_access(geom) and not self._fixtures_in_bands(geom) and bundle_admitted(self, geom)
+
+    def _fixtures_in_bands(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
+        """Does a fixture this bundle laid, AS TURNED with its house (`boxes`), stand in a grove band - its own farm's or a
+        neighbor's (`grove_rules.fixtures_on_groves`, the same boxes)? The fixtures are laid clear of the bands in the house's
+        unturned frame (`_lay_fixtures`), and the house's turn carried a privy or a manure heap into its own deep band on
+        three cohort seeds (feature 291 on 287)."""
+        fixtures = list(((geom.get("boxes") or {}).get("fixtures") or {}).values())
+        if not fixtures:
+            return False
+        bands = list(geom.get("groves") or ())
+        cx, cy, bw, bh = geom["bbox"]
+        for rec in houses_meeting(self.M["houses"], (cx - bw / 2, cy - bh / 2, cx + bw / 2, cy + bh / 2)):
+            g = rec.get("geom")
+            if g and g is not geom:
+                bands += list(g.get("groves") or ())
+        return any(abs(f[0] - b[0]) < (f[2] + b[2]) / 2 and abs(f[1] - b[1]) < (f[3] + b[3]) / 2 for f in fixtures for b in bands)
+
+    def _on_the_access(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
+        """Does any part of this bundle - its house, yard, beds, well pocket, fixtures or grove bands - stand on a corridor of
+        the access tree (`rolling.access.AccessTree.covers_box`)? The nucleated placer asks it of the whole envelope
+        (`_envelope_blocked`, plan M3: no later placement covers a corridor); a grove farm, seated by this path, never
+        asked, and Mizuguchi's first roll on feature 287 laid a farm's fixture across the exit strip, which the registry
+        then refused at record time (feature 291 on 287)."""
+        tree = getattr(self, "_access", None)
+        if tree is None:
+            return False
+        boxes = geom.get("boxes") or {}
+        parts = [boxes.get(k) for k in ("house", "yard", "well")] + list(boxes.get("gardens") or ()) + list((boxes.get("fixtures") or {}).values()) + list(geom.get("groves") or ())
+        return any(tree.covers_box(b) for b in parts if b is not None)
 
     def _sun_corridor_ok(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """Does this homestead leave every threshing yard - its own and the neighbors' - its sun?
@@ -581,14 +746,24 @@ class BundleFitMixin:
         garden's sun, and how far the windbreak shades"."""
         self._west_sun_ft = float(feet)
 
+    def _candidate_watered(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
+        """Does the household being seated reach water from this candidate's house (`lot.watered`)? Asked only while a
+        household is sought (`_household_watered`, set by `household_parts`)."""
+        if not getattr(self, "_household_watered", False):
+            return True
+        return watered(self, geom["house"][0], geom["house"][1], geom.get("well") is not None)
+
     def _bundle_common_fits(self: Settlement, geom: Any, grove_off_field: bool = True) -> bool:  # type: ignore[misc]
         """The fit checks that do NOT depend on which side the garden is on - the house, the south threshing
         yard, a north kura, the windward grove (dispersed only), and the yard sun-corridor. Same for every
         garden side at a given position, so it is tested once per position."""
+        if not self._candidate_watered(geom):
+            return False
         if (
             self._rect_blocked(part_box(geom, "house"), fields=True)
             or (geom.get("yard") is not None and self._rect_blocked(part_box(geom, "yard"), fields=True))
             or ("shed" in geom and self._rect_blocked(part_box(geom, "shed"), fields=True))
+            or (geom.get("well") is not None and self._rect_blocked(part_box(geom, "well"), fields=True))
         ):
             return False
         # THE WALL HOLDS ITS OWN FLOOR OFF THE PADDY (feature 133 T41). `_rect_blocked` refuses a house
@@ -655,7 +830,10 @@ class BundleFitMixin:
     def _bundle_side_fits(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """The fit checks that DO move with the garden side (via the bundle bbox): in-bounds, inside any
         bounding ring, the garden bed(s) clear of every paddy/block/lane, and the whole bbox clear of every
-        placed homestead."""
+        placed homestead. A layout whose lot's bath room or wood shed found no seat (`unlaid`, `FixtureUnlaid`, feature 280
+        M21/M22 carried into feature 287) is refused: the envelope admits a household only with room for every part it keeps."""
+        if geom.get("unlaid"):
+            return False
         cx, cy, W, H = geom["bbox"]
         if cx - W / 2 < 6 or cx + W / 2 > self.W - 6 or cy - H / 2 < 6 or cy + H / 2 > self.H - 6:
             return False

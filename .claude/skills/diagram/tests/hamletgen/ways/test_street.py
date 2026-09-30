@@ -96,3 +96,40 @@ def test_a_further_street_joins_the_row_s_streets_not_the_road() -> None:
     end = joins[-1]["pts"][-1] if joins[-1]["pts"][0] in [ln["pts"][-1] for ln in s.M["lanes"] if ln.get("street_index") == 1] else joins[-1]["pts"][0]
     assert abs(end[1] - 500.0) < 2.0 and end[0] < 1299.0, f"on the first street, not the road: {end}"
     assert first["street_index"] == 0
+
+
+def test_a_street_is_cut_to_its_outermost_joints() -> None:
+    """`to_its_joints` / `cut_between` (feature 291 on 287): the stretch between the outermost lane ends standing on it;
+    unchanged with no joint on it; `trim_streets` re-lays a row's street so and leaves every other lane."""
+    from l7r.diagram.hamletgen.ways.street import cut_between, to_its_joints, trim_streets
+
+    street = [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0), (300.0, 0.0)]
+    assert to_its_joints(street, [(50.0, 2.0), (250.0, -3.0), (150.0, 90.0)], 4.0) == [(50.0, 0.0), (100.0, 0.0), (200.0, 0.0), (250.0, 0.0)]
+    assert to_its_joints(street, [(150.0, 90.0)], 4.0) == street, "no joint on it: as it is"
+    assert cut_between(street, [0.0, 100.0, 200.0, 300.0], 0.0, 300.0) == street
+    s = Settlement(400, 200, seed=1)
+    s.meta(name="V", scale="hamlet", ftpx=1)
+    for pts, w, extra in (
+        (street, 6, {"street": True, "street_index": 0}),
+        ([(50.0, 2.0), (50.0, 60.0)], 3, {"serves": [50.0, 90.0]}),
+        ([(250.0, -3.0), (250.0, -60.0)], 3, {"serves": [250.0, -90.0]}),
+        ([(0.0, 150.0), (300.0, 150.0)], 3, {}),
+    ):
+        s.lane(list(pts), width=w)
+        s.M["lanes"][-1].update(extra)
+    assert trim_streets(s, 4.0) == 1
+    assert s.M["lanes"][0]["pts"][0][0] == 50.0 and s.M["lanes"][0]["pts"][-1][0] == 250.0
+    assert trim_streets(s, 4.0) == 0, "cut already"
+
+
+def test_the_first_street_is_carried_on_to_the_road_it_nearly_meets() -> None:
+    """`meet_the_road` (feature 291 on 287): a street ending within the reach of the road's start is carried on to it, from
+    whichever end is nearer; one that meets it, or stands beyond the reach, is left; a degenerate street or road too."""
+    from l7r.diagram.hamletgen.ways.street import meet_the_road
+
+    street = [(0.0, 0.0), (100.0, 0.0)]
+    assert meet_the_road(street, [(116.0, 0.0), (400.0, -200.0)]) == [*street, (116.0, 0.0)]
+    assert meet_the_road(street, [(-20.0, 0.0), (-300.0, 0.0)]) == [(-20.0, 0.0), *street]
+    assert meet_the_road(street, [(100.2, 0.0), (400.0, 0.0)]) == street, "already meets"
+    assert meet_the_road(street, [(400.0, 0.0), (800.0, 0.0)]) == street, "beyond the reach"
+    assert meet_the_road(street[:1], [(1.0, 0.0), (2.0, 0.0)]) == street[:1]
