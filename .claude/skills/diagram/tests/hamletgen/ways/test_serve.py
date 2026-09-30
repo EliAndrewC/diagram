@@ -428,3 +428,14 @@ def test_a_stragglers_doorstep_ground_is_obtained_once_per_house(monkeypatch) ->
     hg.ways._serve_stragglers(s, plan, [], fabric, [])
     assert len(asks) <= 2, f"{len(asks)} index requests for two houses"
     assert len(points) > len(asks), f"non-vacuity: more standing places were tried ({len(points)}) than indexes asked for - one ask per point would not pass"
+
+
+def test_a_straggler_path_the_drawer_refuses_serves_nobody(monkeypatch) -> None:
+    """Feature 291: `_draw_web` declines a path (debris) - the house is not counted served and the next target is tried;
+    with every draw refused, nothing is laid."""
+    plan = hg.plan_site(hg.HamletSpec(name="X", seed=4, households=12))
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 600.0)]], houses=[(400.0, 300.0)])
+    before = len(s.M["lanes"])
+    monkeypatch.setattr(hg.ways.serve, "_draw_web", lambda *a, **k: False)
+    hg.ways.serve._serve_stragglers(s, plan, [], [], [])
+    assert len(s.M["lanes"]) == before

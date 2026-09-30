@@ -58,3 +58,14 @@ def test_street_run_out_leaves_the_sheet_from_the_nearer_end() -> None:
     assert run[0] == (40.0, 500.0) and run[1][0] < 0.0
     vertical = street_run_out([(500.0, 40.0), (500.0, 600.0)], 1000.0, 1000.0)
     assert vertical[1][1] < 0.0
+
+
+def test_thread_routes_a_leg_still_grazing_once_more_a_foot_wider(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`thread`: a detour whose tread still meets a steading is routed again at a wider gap (cohort seed 23)."""
+    from l7r.diagram.hamletgen.ways import street
+
+    gaps: list[float] = []
+    monkeypatch.setattr(street, "_crosses_fabric", lambda pts, walls, half: len(pts) == 2 and pts[0] != pts[1] or len(pts) > 2)
+    monkeypatch.setattr(street, "_route", lambda a, b, hard, walls, water, gap: gaps.append(gap) or [a, ((a[0] + b[0]) / 2, a[1] + 50.0), b])
+    out = thread([(0.0, 0.0), (100.0, 0.0)], [[(1.0, 1.0)]], [], [], half=4.0)
+    assert gaps == [5.0, 7.0] and out[0] == (0.0, 0.0) and out[-1] == (100.0, 0.0)

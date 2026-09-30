@@ -295,3 +295,12 @@ def test_band_clumps_cuts_a_band_into_pieces_no_larger_than_the_cap() -> None:
     assert len(wide) == 2 and all(h == 20.0 for *_r, h in wide) and wide[0][0] < wide[1][0]
     assert band_clumps(5.0, 6.0, 10.0, 10.0, 1400.0) == [(5.0, 6.0, 10.0, 10.0)]
     assert band_clumps(5.0, 6.0, 10.0, 10.0, 0.0) == [(5.0, 6.0, 10.0, 10.0)]
+
+
+def test_a_lane_through_a_farm_s_grove_band_is_found_once() -> None:
+    """`groves_crossed_by_lanes` (feature 291): each (lane, band) whose stroked tread overlaps, once each."""
+    from l7r.diagram.settlement.homestead_parts.grove_rules import groves_crossed_by_lanes
+
+    g = {"x": 100.0, "y": 100.0, "w": 40.0, "h": 20.0}
+    M = {"groves": [g, {"x": 5.0}], "lanes": [{"pts": [[0.0, 100.0], [90.0, 100.0], [200.0, 100.0]], "w": 3}, {"pts": [[0.0, 300.0], [200.0, 300.0]]}]}
+    assert groves_crossed_by_lanes(M) == [(0, g)]

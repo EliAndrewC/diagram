@@ -41,6 +41,32 @@ def lee_face(clumps: Sequence[tuple[float, float]], wind: tuple[float, float]) -
     return [c for band in bands.values() for u, c in band if u <= min(v for v, _ in band) + LEE_DEPTH_FT]
 
 
+def against_the_belt(dented: Sequence[tuple[float, float]], groves: Sequence[Any], wind: tuple[float, float], half: float) -> tuple[list[tuple[float, float]], list[tuple[float, float]]]:
+    """The against-the-belt copse's box and anchors (lifted from `stage_hinterland`, feature 291: no pool map rolls the
+    siting once Mizuguchi rolls linear, so its lines are tested here with plain inputs).
+
+    The box is the belt's own footprint (`dented`), stood off the houses so the two stands read as one wood at its back.
+    The anchors are on its LEE side of that face: the reach is centered `half` of it leeward of each lee crown, so a copse
+    crown stands 0 to `COPSE_BELT_REACH_FT` leeward and never windward of the face - at the belt's thin end a band's one or
+    two crowns are its lee face, and a copse anchored round them stood beyond its windward side (Mizuguchi, two crowns)."""
+    bx = [q[0] for q in dented]
+    by = [q[1] for q in dented]
+    box = [(min(bx), min(by)), (max(bx), min(by)), (max(bx), max(by)), (min(bx), max(by))]
+    belt = [(float(c[0]), float(c[1])) for g in groves if g.get("role") == "windbreak" for c in g.get("clumps") or []]
+    return box, [(x - wind[0] * half, y - wind[1] * half) for x, y in lee_face(belt, wind)]
+
+
+def copse_seat(
+    siting: str, dented: Sequence[tuple[float, float]], groves: Sequence[Any], wind: tuple[float, float], half: float, box: Any, near: tuple[Any, ...], brook: Any
+) -> tuple[Any, tuple[Any, ...]]:
+    """The copse's box and its reach: the dooryard copse's as given, or - sited against the belt, where it has one - the
+    belt's box and its lee anchors at `half` (`against_the_belt`). Lifted from `stage_hinterland` (feature 291)."""
+    if siting == "against_the_belt" and dented:
+        box, anchors = against_the_belt(dented, groves, wind, half)
+        return box, (anchors, half, brook)
+    return box, near
+
+
 def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     """The marsh, then scrub and rough grazing.
 
@@ -277,17 +303,7 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # very edge can read as beyond it - Kashikawa's clump at (1069.3, 1011.6) stood 89.99 ft from its house as placed and
     # 90.01 as recorded. The same placement-side margin `CANOPY_PAD` keeps for a crown against a wall.
     _copse_near: tuple[Any, ...] = ([(float(x), float(y)) for x, y in zip(xs, ys, strict=False)], s.px(COPSE_HOUSE_REACH_FT) - 0.1, _brook)
-    if plan.copse_siting == "against_the_belt" and _dented:
-        # the belt's own footprint, stood off the houses so the two stands read as one wood at its back
-        _bx = [q[0] for q in _dented]
-        _by = [q[1] for q in _dented]
-        _box = [(min(_bx), min(_by)), (max(_bx), min(_by)), (max(_bx), max(_by)), (min(_bx), max(_by))]
-        _belt = [(float(c[0]), float(c[1])) for g in s.M.get("village_groves") or [] if g.get("role") == "windbreak" for c in g.get("clumps") or []]
-        # ...and on its LEE side of that face: the reach is centered half of it leeward of each lee crown, so a copse crown
-        # stands 0 to `COPSE_BELT_REACH_FT` leeward and never windward of the face - at the belt's thin end a band's one or
-        # two crowns are its lee face, and a copse anchored round them stood beyond its windward side (Mizuguchi, two crowns)
-        _half = s.px(COPSE_BELT_REACH_FT) / 2.0
-        _copse_near = ([(x - plan.wind[0] * _half, y - plan.wind[1] * _half) for x, y in lee_face(_belt, plan.wind)], _half, _brook)
+    _box, _copse_near = copse_seat(plan.copse_siting, _dented, s.M.get("village_groves") or [], plan.wind, s.px(COPSE_BELT_REACH_FT) / 2.0, _box, _copse_near, _brook)
     # THE COPSE IS THE HOMESTEADS' WOODS, SIZED BY THEM (269 B26; research/vegetation/210): each homestead's wood - its
     # windward grove and its share of the copse together, which the record knows as one - is rolled within the 1684
     # register's range, and the copse is filled to what the belt leaves of their sum. It used to be whatever one grid's

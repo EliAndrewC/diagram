@@ -693,3 +693,27 @@ def test_a_belt_end_that_recedes_along_the_wind_is_trimmed() -> None:
     assert trim_receding_ends([(-313.0, -105.0), (-226.0, 661.0), (-140.0, 647.0), (-53.0, 697.0), (33.0, 400.0), (120.0, 90.0)], 100.0) == [(-226.0, 661.0), (-140.0, 647.0), (-53.0, 697.0)]
     assert trim_receding_ends([(0.0, 10.0), (90.0, 20.0), (180.0, 5.0)], 100.0) == [(0.0, 10.0), (90.0, 20.0), (180.0, 5.0)]
     assert trim_receding_ends([(0.0, -500.0), (90.0, 20.0)], 100.0) == [(0.0, -500.0), (90.0, 20.0)]
+
+
+def test_the_copse_against_the_belt_takes_the_belt_s_box_and_anchors_leeward_of_its_lee_face() -> None:
+    """`against_the_belt` (lifted from `stage_hinterland`, feature 291): the box is the belt footprint's extent; each anchor
+    stands `half` leeward of a lee crown - the wind (0, -1) comes from the north, so leeward is +y."""
+    from l7r.diagram.hamletgen.hinterland.stages import against_the_belt
+
+    dented = [(0.0, 0.0), (300.0, 0.0), (300.0, 100.0), (0.0, 100.0)]
+    groves = [{"role": "windbreak", "clumps": [[50.0, 20.0], [50.0, 90.0]]}, {"role": "copse", "clumps": [[999.0, 999.0]]}]
+    box, anchors = against_the_belt(dented, groves, (0.0, -1.0), 30.0)
+    assert box == [(0.0, 0.0), (300.0, 0.0), (300.0, 100.0), (0.0, 100.0)]
+    assert anchors == [(50.0, 120.0)], "the lee crown only, 30 ft leeward"
+
+
+def test_the_copse_seat_is_the_dooryard_s_unless_it_stands_against_a_belt() -> None:
+    from l7r.diagram.hamletgen.hinterland.stages import copse_seat
+
+    near = ([(1.0, 1.0)], 90.0, [])
+    dented = [(0.0, 0.0), (300.0, 0.0), (300.0, 100.0)]
+    groves = [{"role": "windbreak", "clumps": [[50.0, 20.0]]}]
+    assert copse_seat("dooryard", dented, groves, (0.0, -1.0), 30.0, "box", near, []) == ("box", near)
+    assert copse_seat("against_the_belt", [], groves, (0.0, -1.0), 30.0, "box", near, []) == ("box", near), "no belt footprint"
+    box, (anchors, half, _b) = copse_seat("against_the_belt", dented, groves, (0.0, -1.0), 30.0, "box", near, [])
+    assert box[0] == (0.0, 0.0) and anchors == [(50.0, 50.0)] and half == 30.0

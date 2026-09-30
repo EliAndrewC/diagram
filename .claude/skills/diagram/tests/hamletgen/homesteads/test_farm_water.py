@@ -50,6 +50,8 @@ def _farm_settlement(with_yard: bool = True) -> tuple[Settlement, dict]:
 
 def test_a_farm_takes_a_channel_from_the_nearest_ditch_into_its_dooryard() -> None:
     s, h = _farm_settlement()
+    s.M["lanes"] = [{"pts": [[50.0, 50.0], [60.0, 50.0]], "w": 3}]  # a lane is a wall the channel goes round
+    s.M["drawn_channels"] = [{"pts": [[750.0, 100.0], [790.0, 100.0]]}]  # other water it must not cross
     dry = fw.farm_channels(s, [h])
     assert dry == []
     rec = s.M["farm_channels"][0]

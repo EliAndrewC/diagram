@@ -68,3 +68,27 @@ def test_shared_row_wells_put_every_farm_within_reach() -> None:
     assert shared_row_wells(s, [], [line]) == 0 and shared_row_wells(s, houses, []) == 0
     assert shared_row_wells(s, [{"x": 5000.0, "y": 5000.0, "geom": {}}], [line]) == 0, "no farm near the street"
     assert shared_row_wells(s, houses, [line[:1]]) == 0
+
+
+def test_a_well_seat_in_the_scrub_or_on_blocked_ground_is_refused(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    s = _s()
+    assert own_well_clear(s, 700.0, 700.0, 8.0, [])
+    monkeypatch.setattr(s, "_in_blocked", lambda x, y: True)
+    assert not own_well_clear(s, 700.0, 700.0, 8.0, [])
+
+
+def test_a_dispersed_hamlet_under_channel_leads_its_water_in_and_wells_only_the_dry(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`place_wells` on a dispersed map rolled `channel`: the channels first, then an own well for each farm no course
+    reached (feature 291 amendment 5), and the knob recorded as drawn."""
+    from types import SimpleNamespace
+
+    from l7r.diagram.hamletgen.homesteads import farm_water, wells
+
+    s = _s()
+    h = {"x": 700.0, "y": 700.0, "geom": {"groves": [[0, 0, 1, 1]]}}
+    got: list = []
+    monkeypatch.setattr(farm_water, "farm_channels", lambda s_, hs: list(hs))
+    monkeypatch.setattr(wells, "own_wells", lambda s_, hs: got.append(list(hs)) or 0)
+    plan = SimpleNamespace(settlement_form="dispersed", farm_water="channel", row_water="own")
+    wells.place_wells(s, plan, [h])  # type: ignore[arg-type]
+    assert got == [[h]] and s.M["meta"]["farm_water_drawn"] == "channel" and s.M["meta"]["row_water_drawn"] is None

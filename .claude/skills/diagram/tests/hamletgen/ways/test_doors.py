@@ -77,3 +77,12 @@ def test_a_door_path_loses_the_hook_at_its_door() -> None:
     straight = [(0.0, 0.0), (0.0, 30.0), (0.0, 60.0)]
     assert door_unhooked(straight, lambda a, b: True) == straight
     assert door_unhooked(hooked[:2], lambda a, b: True) == hooked[:2]
+
+
+def test_a_ring_s_east_or_west_front_takes_its_gap_across_y_and_a_yard_on_the_house_has_no_door() -> None:
+    """`front_door`: a ring whose front band is split top and bottom (an east or west front) puts the door in the gap
+    along y; a yard centered on the house gives no direction out, so no door."""
+    h = {"x": 0.0, "y": 0.0, "geom": {"yard": [60.0, 0.0, 40.0, 30.0], "groves": [[120.0, -60.0, 20.0, 80.0], [120.0, 60.0, 20.0, 80.0]], "grove_faces": [[1, 0], [1, 0]]}}
+    door = front_door(h, 8.0)
+    assert door is not None and door[1] == 0.0 and door[0] > 80.0, "between the two halves, past the yard"
+    assert front_door({"x": 5.0, "y": 5.0, "geom": {"yard": [5.0, 5.0, 40.0, 30.0], "groves": [[0, 0, 1, 1]]}}, 8.0) is None

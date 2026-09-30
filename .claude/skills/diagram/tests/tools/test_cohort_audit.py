@@ -210,3 +210,19 @@ def test_roll_one_reports_the_matrix_and_the_grove_rules(monkeypatch: pytest.Mon
     _header, failures, lines = ca.roll_one((9, 12))
     assert failures == ["features_do_not_overlap", "gardens_east_shaded"], failures
     assert any("1 forbidden overlap" in ln for ln in lines)
+
+
+@pytest.mark.parametrize(("form", "want"), [("linear", "row=street/both/shared"), ("dispersed", "water=channel")])
+def test_roll_one_s_header_names_the_row_or_the_farm_water_knob(monkeypatch: pytest.MonkeyPatch, form: str, want: str) -> None:
+    """Feature 291: a linear roll's header carries its row knobs, a dispersed roll's its farm water - what the "knob values
+    never rolled" line reads."""
+
+    def generate(spec: Any, out_base: Any, render: bool) -> Any:
+        r = _report([])
+        for k, v in {"settlement_form": form, "grove_sides": 2, "row_line": "street", "row_sides": "both", "row_water": "shared", "farm_water": "channel"}.items():
+            setattr(r.plan, k, v)
+        return r
+
+    monkeypatch.setattr(hg, "generate", generate)
+    header, _f, _l = ca.roll_one((7, 13))
+    assert f"form={form}" in header and want in header

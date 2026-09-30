@@ -145,3 +145,43 @@ def test_doors_and_bamboo() -> None:
     M = {"meta": {"household_bamboo_in_grove_farms": [[1.0, 2.0]]}, "groves": [{"of": [3.0, 4.0], "bamboo": True}, {"of": [1.0, 2.0], "bamboo": True}]}
     assert bamboo_mismatch(M) == [("draws_unrolled", (3.0, 4.0))]
     assert bamboo_mismatch({"meta": {"household_bamboo_in_grove_farms": [[1.0, 2.0]]}, "groves": []}) == [("rolled_undrawn", (1.0, 2.0))]
+
+
+def test_a_row_seat_s_frame_is_refused_for_its_door_a_street_or_a_holding() -> None:
+    """`frame_refused` (lifted from `seat_rows`): a door with no room, a frame across a street, a frame on a holding."""
+    from shapely.geometry import LineString, MultiLineString
+
+    from l7r.diagram.hamletgen.homesteads.rows import frame_refused
+
+    fr = (700.0, 200.0, 200.0, 150.0)
+    hard = hard_ground(FIELD)
+    assert not frame_refused(fr, (0, -1), 16.0, hard, 16.0, None, [])
+    assert frame_refused((700.0, 330.0, 200.0, 150.0), (0, 1), 16.0, hard, 16.0, None, []), "the door on the field"
+    across = MultiLineString([LineString([(600.0, 200.0), (800.0, 200.0)])])
+    assert frame_refused(fr, (0, -1), 16.0, hard, 16.0, across, []), "a street through the frame"
+    assert frame_refused(fr, (0, -1), 16.0, hard, 16.0, None, [holding_quad((700.0, 200.0), (1.0, 0.0), (0.0, 1.0), 40.0, 40.0)])
+
+
+def test_the_best_row_line_is_none_without_hard_ground() -> None:
+    from l7r.diagram.hamletgen.homesteads.rows import best_row_line
+
+    assert best_row_line(None, (0.0, 0.0), 24.0, 900.0, "edge", 480.0, (0, 0, 240, 200), "one", 15.0, (0, 0, 2000, 2000), (0, 1), 16.0, 16.0) == []
+
+
+def test_a_holding_cell_on_a_lane_is_left_undrawn() -> None:
+    from l7r.diagram.hamletgen.homesteads.rows import draw_holdings
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(1400, 1400, seed=3)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
+    quad = holding_quad((700.0, 700.0), (1.0, 0.0), (0.0, 1.0), 200.0, 450.0)
+    s._row_holdings = [(quad, (1.0, 0.0), (0.0, 1.0), 450.0)]  # type: ignore[attr-defined]
+    s.M["lanes"] = [{"pts": [[500.0, 700.0], [900.0, 700.0]], "w": 3}]  # across the middle cell
+    n = draw_holdings(s)
+    assert n == 2, "three cells of 150 ft, the middle one on the lane"
+
+
+def test_row_rules_pass_over_a_farm_with_no_front_door() -> None:
+    """A farm with no grove of its own has no front door (`front_door` None): the door rule has nothing to judge."""
+    M = {"meta": {"settlement_form": "linear"}, "row_street_plans": [[[0.0, 0.0], [1000.0, 0.0]]], "houses": [{"x": 500.0, "y": 50.0}], "lanes": []}
+    assert not [r for r, _s in row_rules(M) if r == "farm_not_on_its_street"]

@@ -236,6 +236,21 @@ def frame_on_holdings(frame: tuple[float, float, float, float], holdings: Sequen
     return any(fb.intersects(Polygon(q)) for q in holdings)
 
 
+def frame_refused(fr: tuple[float, float, float, float], front: Sequence[float], lane_pad: float, hard: Any, door_room: float, all_streets: Any, holdings: Sequence[Sequence[Pt]]) -> bool:
+    """Is a row seat's frame refused (lifted from `seat_rows`, feature 291)? Its door has no room (`door_clear`); or the
+    frame reaches across ANY of the row's streets where a line bends - square to its own line at its seat, it stood on a
+    street at the bend, and no route round its yard and grove existed (cohort seed 23); or it stands on a holding already
+    reserved (cohort seeds 3 and 4: houses, yards and gardens on dry plots)."""
+    from shapely.geometry import box
+
+    if not door_clear(fr, front, lane_pad, hard, door_room):
+        return True
+    fx, fy, fw, fh = fr
+    if all_streets is not None and box(fx - fw / 2, fy - fh / 2, fx + fw / 2, fy + fh / 2).intersects(all_streets):
+        return True
+    return bool(holdings) and frame_on_holdings(fr, holdings)
+
+
 def draw_holdings(s: Settlement) -> int:
     """Draw each reserved holding (`s._row_holdings`) as dry-field plots cut across its depth at `HOLDING_CELL_FT`, furrowed,
     recorded in `dry_plots` and registered in `dry_polys` (feature 291 plan D16). A cell on water or a lane is left undrawn;
@@ -373,7 +388,7 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
     depth_n = max((frame_extent(frame, n) for _p, n in first), default=fd)
     offsets = row_offsets(depth_n, sides, MAX_STREETS, s.px(FIELD_KEEP_FT), gap, depth_n * HOLDING_DEPTH_FRAMES.get(plan.row_line, 1.0) + gap)
     offsets = [first_off + (o - offsets[0]) for o in offsets]
-    from shapely.geometry import LineString, MultiLineString, box
+    from shapely.geometry import LineString, MultiLineString
 
     planned = [parallel(first, o - offsets[0]) for o in offsets]
     all_streets = MultiLineString([LineString([p for p, _n in ln]) for ln in planned if len(ln) >= 2]) if first else None
@@ -393,14 +408,7 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
                 continue
             # A FAR-ROW FARM IS SEATED ONLY WITH ITS HOLDING (plan D16): behind its lot, away from the street, clear of the
             # hard ground and every reserved box - else not seated here, as a farm whose grove has no room is not.
-            if not door_clear((fx, fy, float(frame[2]), float(frame[3])), front, lane_pad, hard, door_room):
-                continue
-            # ...and a frame that reaches across ANY of the row's streets where a line bends is refused: square to its own line
-            # at its seat, it stood on a street at the bend, and no route round its yard and grove existed (cohort seed 23)
-            if all_streets is not None and box(fx - float(frame[2]) / 2, fy - float(frame[3]) / 2, fx + float(frame[2]) / 2, fy + float(frame[3]) / 2).intersects(all_streets):
-                continue
-            # ...and no farm stands on a holding already reserved (cohort seeds 3 and 4: houses, yards and gardens on dry plots)
-            if holdings and frame_on_holdings((fx, fy, float(frame[2]), float(frame[3])), [hq for hq, *_r in holdings]):
+            if frame_refused((fx, fy, float(frame[2]), float(frame[3])), front, lane_pad, hard, door_room, all_streets, [hq for hq, *_r in holdings]):
                 continue
             hold = None
             if sides == "both" and side > 0:
