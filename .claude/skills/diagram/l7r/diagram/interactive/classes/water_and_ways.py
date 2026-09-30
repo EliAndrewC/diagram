@@ -73,7 +73,7 @@ class IrrigationDitch(Kind):
     Covers: `field_ditches` whose role is not `drain` (except on a dike-pond field, whose canals are the pond canal), and `channels` not leaving a drain - the head race, the supply canals, the delivery ditches, a source-to-field feed
     Label: accurate
     Sources: tabayashi-1987, jsidre-minumadai, jsslkx-002-2021, nougyoudoboku-matsutan, bungotakada-tagoshi, suido-ishizue-iseki, people-zhishui-2025, pwsannong-gudai-shuili, thepaper-guangai
-    Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'Irrigation canals and how they are laid out (yosuiro)', 'Where does the brook stop being a brook and become the ditch', 'Where on the brook's bank is the intake', 'What does the intake mouth look like'; research/rendering/water.html - 'How our maps lay out irrigation canals'
+    Entry: research/water.html - 'The comb net is drawn at TRUE SIZE', 'Where the drawn net STOPS', 'Irrigation canals and how they are laid out (yosuiro)', 'Where the ditch leaves the brook: the intake and its weir (toshuko and seki)'; research/rendering/water.html - 'How our maps lay out irrigation canals', 'How our maps draw the intake and its weir'
     """
 
     key = "irrigation ditch"
@@ -177,7 +177,7 @@ class Weir(Kind):
     Covers: `weirs` - the bar across the brook at a weir hamlet's intake
     Label: convention
     Sources: maff-toshuko-history, jsidre-miwa-2023, jawiki-seki, japanriver-koborebanashi-21, wangzhen-nongshu-18, suido-ishizue-iseki, kotobank-shigarami, hrr-agagawa-dento, kotobank-jakago, people-zhishui-2025, pwsannong-quxi
-    Entry: research/water.html - 'Is there a weir at the intake', 'What was a village weir built of', 'What does the intake mouth look like', 'Where does the brook stop being a brook and become the ditch'
+    Entry: research/water.html - 'Where the ditch leaves the brook: the intake and its weir (toshuko and seki)'; research/rendering/water.html - 'How our maps draw the intake and its weir'
     """
 
     key = "weir"

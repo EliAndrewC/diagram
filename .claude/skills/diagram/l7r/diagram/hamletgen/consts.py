@@ -537,11 +537,11 @@ REF_CANAL_B = (680.0, 800.0)
 FAN_ASPECTS = (0.88, 0.95, 1.0, 1.08, 1.16)
 
 # THE INTAKE, AND THE BROOK THAT RUNS ON PAST IT (feature 230, GM 2026-09-12; researched -
-# research/water.html "Where does the brook stop being a brook and become the ditch"). A brook does not
+# research/water.html "Where the ditch leaves the brook: the intake and its weir (toshuko and seki)"). A brook does not
 # turn into a ditch: it is TAPPED at an intake on one bank and keeps its own course below it, so the
 # hamlet's brook now passes the fan's head and runs on down one flank to the frame.
 #
-# THE INTAKE'S FORM IS A KNOB (research/water.html "Is there a weir at the intake?") because the record
+# THE INTAKE'S FORM IS A KNOB (research/rendering/water.html "How our maps draw the intake and its weir") because the record
 # attests two and prefers neither: in old Japan "in many cases no intake weir was built at all - water was taken naturally", and where the level would not serve
 # a weir was built, of timber frames packed with stone, gabions and brushwood. The record gives no
 # proportion between them, so the roll is EVEN and that evenness is a GUESS (labeled in the entry).
@@ -616,10 +616,10 @@ BROOK_TAP_RUN = 70.0
 # intake mouth as the old ones did. Half-length in feet. The full closure is a MAP DRAWING CONVENTION - half-river
 # closures were the common old form and at a 7 ft brook a half-bar is a pixel or two.
 WEIR_HALF_FT = 7.0
-# WHAT THE WEIR IS BUILT OF, AND SO HOW THICK IT IS DRAWN, in feet, by form (269 B22; research/water/300, "What was a
-# village weir built of, and how thick was it?"). The weir on small water was built of what lay to hand, and four forms
+# WHAT THE WEIR IS BUILT OF, AND SO HOW THICK IT IS DRAWN, in feet, by form (269 B22; research/rendering/water.html
+# "How our maps draw the intake and its weir"). The weir on small water was built of what lay to hand, and four forms
 # are read, so the form is a knob (`WEIR_FORM`, water/brook.py) rolled per weir hamlet, each at its own thickness:
-# - `fence`, stakes with reed woven between them (the grass weir): a fence is as thick as its row of stakes; 1.5 ft is
+# - `fence`, stakes with brushwood woven between them (the grass weir): a fence is as thick as its row of stakes; 1.5 ft is
 #   WIDER than that so it can be seen at all - a MAP DRAWING CONVENTION;
 # - `gabion`, a course of stone-filled baskets: one basket "about 40-60 cm in diameter", read as about 2 ft - the
 #   basket's read size; the gabion course as a BROOK weir at all is a GUESS (the source gives gabions on rivers);
