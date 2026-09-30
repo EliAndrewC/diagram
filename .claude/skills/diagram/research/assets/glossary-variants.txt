@@ -736,6 +736,8 @@ enokida	Enokida
 enpo	Enpo era
 enpo era	Enpo era
 eta	eta
+etchu	Etchu
+etchu's	Etchu
 eunis	EUNIS
 europe pmc	Europe PMC
 eutrophic	eutrophication
