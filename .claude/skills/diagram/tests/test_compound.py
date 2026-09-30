@@ -646,7 +646,7 @@ def _home(court: str, wall: str, **kw: object) -> c.Placed:
 
 
 def test_the_family_privy_is_attached_to_the_house_at_its_rear_corner() -> None:
-    """Pass 7 (research buildings 220: "in a corner of the corridor"): the family's privy is a part of the house, at the
+    """Pass 7 (research buildings 'Privies (setchin)': "in a corner of the corridor"): the family's privy is a part of the house, at the
     rear corner by the family's rooms - not flush to the wall across the alley, ~140 ft outdoors round the house."""
     _prog_, result, svg = _county()
     home = next(p for p in result.placed if p.spec.name == "residence")

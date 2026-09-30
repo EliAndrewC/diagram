@@ -153,7 +153,7 @@ def _rear_band(p: Placed) -> tuple[float, float, float, float]:
 def _hatch(env: Envelope, box: Box) -> Box | None:
     """The collection hatch through the compound wall behind a privy standing against it (within 2.5 ft of the wall's
     inner face): a 2 ft opening across the wall's ink, level with the privy's middle, the night-soil carter's way
-    in from outside (the kumitori-guchi form - research buildings 220 has the pits emptied by outside carters toward a
+    in from outside (the kumitori-guchi form - research buildings 'Privies (setchin)' has the pits emptied by outside carters toward a
     service wall; the hatch itself is a GUESS). None where the privy stands off every wall."""
     x, y, x2, y2 = box
     cx, cy, half = (x + x2) / 2, (y + y2) / 2, WALL_INK_FT / 2
@@ -191,7 +191,7 @@ def _mats(z: CourtZone) -> list[Box]:
 
 def _guest_privy(env: Envelope, home: Placed, boxes: list[Box]) -> Box | None:
     """A privy attached to the house's rear face behind its reception room, centered on the room (research buildings
-    220: "at the rear of the guest parlor"); None without a reception room or where the ground there is taken."""
+    'Privies (setchin)': "at the rear of the guest parlor"); None without a reception room or where the ground there is taken."""
     room = next((r for r in home.spec.rooms if r[0] == "reception room"), None)
     if room is None:
         return None
@@ -390,7 +390,7 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     # wells next. A well stands BESIDE a door, never before it (pass 6, building-review round 5: the stables' well stood
     # 5 ft in front of the stable door and wider than it) - the fracs off the middle first, the middle last - and 9 ft
     # out before 6: a kitchen well may stand as far as 20 ft out, past the bath that abuts the kitchen, serving both,
-    # as the Takayama residence's bath stood with its well and kitchen (research buildings 320)
+    # as the Takayama residence's bath stood with its well and kitchen (research buildings 'Baths (furo)')
     for p in result.placed:
         if p.spec.feature in ("kitchen", "stables") and (w := seat(p, 7.3, (0.2, 0.8, 0.3, 0.7, 0.5), (9.0, 12.0, 15.0, 20.0, 6.0))):
             wells.append(w)
@@ -400,7 +400,7 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
             # west end it stood 8 ft from the kitchen well seated past the bath, and read as its duplicate
             wells.append((z.x2 - 5.0, z.y_ft + 5.0))
             taken.append((z.x2 - 8.65, z.y_ft + 1.35, z.x2 - 1.35, z.y_ft + 8.65))
-    # THE PRIVIES (feature 267, research buildings 220 'Privies attach to the house; night-soil drives their placement':
+    # THE PRIVIES (feature 267, research buildings 'Privies (setchin)' and rendering/buildings 'How our maps place privies (setchin)':
     # "privy count scales with occupancy (~1 per functional zone, ~3-4 at a county manor), the residence privy attaches
     # to the house with its cesspit to the rear/service wall, and servants'/outer privies line service walls near a
     # gate"; a well-appointed house had a guests' privy at the rear of the guest parlor besides). Never on a spine
@@ -410,7 +410,7 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     if "residence" in by_name:
         home = by_name["residence"]
         others = [t for t in taken if t != (home.x_ft, home.y_ft, home.x2, home.y2)]
-        # the family's: IN THE HOUSE, attached at its rear corner by the family's rooms (research buildings 220: "within
+        # the family's: IN THE HOUSE, attached at its rear corner by the family's rooms (research buildings 'Privies (setchin)': "within
         # the residence the privy came to be built in a corner of the corridor"), its cesspit toward the rear wall. Pass
         # 7 (building-review round 6): pass 6 had stood it flush to the rear wall for a hatch, ~140 ft outdoors round
         # the house from the inner entrance; the hatch was a guess and is dropped for it - the 10 ft alley keeps 5 ft.
@@ -418,8 +418,8 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
         if fam := _attach(env, home, rear, PRIVY_FT, PRIVY_FT, others + zones, well_boxes):
             taken.append((fam[0], fam[1], fam[0] + PRIVY_FT, fam[1] + PRIVY_FT))
             privies.append((fam[0] + PRIVY_FT / 2, fam[1] + PRIVY_FT / 2, "residence"))
-        # the guests': attached to the house behind the reception room (pass 6; research 220's "at the rear of the guest
-        # parlor")
+        # the guests': attached to the house behind the reception room (pass 6; research 'Privies (setchin)': "at the
+        # rear of the guest parlor")
         if guest := _guest_privy(env, home, taken + zones):
             taken.append(guest)
             privies.append(((guest[0] + guest[2]) / 2, (guest[1] + guest[3]) / 2, "residence"))

@@ -60,7 +60,7 @@ ROOF_POST_FT: float = 1.0
 # "Kitchen + pantries"). Its width, one ken (~6 ft), is a GUESS; it is drawn only across a gap no wider than a
 # fire-gap - a longer run would be a gallery, not the short corridor the research describes.
 CORRIDOR_W_FT: float = 6.0
-# The bath (feature 267 R09, research buildings 320: a room of the residence or a small addition to it on its
+# The bath (feature 267 R09, research buildings 'Baths (furo)': a room of the residence or a small addition to it on its
 # service side, by the kitchen and its well - no bath as a building of its own was found). 10 x 8 ft (pass 6: the whole
 # house is held to research buildings 380's 49-tsubo house, ~1,740 sq ft; it was 15 x 12, then 12 x 10) - below the
 # doctrine's 12-15 ft guess, a GUESS.

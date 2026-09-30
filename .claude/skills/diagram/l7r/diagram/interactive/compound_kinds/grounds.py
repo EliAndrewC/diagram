@@ -405,7 +405,7 @@ class SideGate(Kind):
     Covers: the posts of the posterns, service gates, landing gate, cart gate and guests' door
     Label: accurate
     Sources: kotobank-katteguchi, tajima-2007-night-soil, guernica-night-soil, kotobank-benjo, kotobank-shikidai, kominkai-genkan, kotobank-daihachiguruma, l7r-wagons
-    Entry: research/ways.html - 'Could a cart use the roads here, and where would it go?'; research/buildings.html - 'The formal entrance and a guest's arrival (genkan)', 'Privies attach to the house; night-soil drives their placement'; research/rendering/buildings.html - 'How our maps route a guest from the gate to the entrance'
+    Entry: research/ways.html - 'Could a cart use the roads here, and where would it go?'; research/buildings.html - 'The formal entrance and a guest's arrival (genkan)', 'Privies (setchin)'; research/rendering/buildings.html - 'How our maps route a guest from the gate to the entrance', 'How our maps place privies (setchin)'
     """
 
     key = "side gate"

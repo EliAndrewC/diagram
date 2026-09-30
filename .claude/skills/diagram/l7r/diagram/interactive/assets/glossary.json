@@ -2287,7 +2287,7 @@
   ]
  },
  "kawaya": {
-  "def": "The privy: on a farm a single small building apart from the house, its pit the household's manure store.",
+  "def": "The privy: in a samurai residence built into the house, and on a farm a single small building apart from the house, its pit the household's manure store.",
   "variants": [
    "kawaya",
    "benjo",
@@ -13277,6 +13277,12 @@
   "def": "The kitchen door: the doorway leading from outside into a house's kitchen. The word was already in use in 1666.",
   "variants": [
    "katteguchi"
+  ]
+ },
+ "furo": {
+  "def": "A bath: in the Edo period a house's own bath was a luxury of upper-rank samurai, since it meant digging a well and buying fuel, and most people washed from a tub or went to the public bath.",
+  "variants": [
+   "furo"
   ]
  }
 }

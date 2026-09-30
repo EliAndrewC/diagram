@@ -294,7 +294,7 @@ class Bath(Kind):
     Covers: the bath, its steam mark and its label
     Label: accurate
     Sources: furo-kotobank, yokushitsu-kotobank, shirobito-1717-takayama, kanagawa-hatamoto-kaso, sayama-jinya-uematsu
-    Entry: research/buildings.html - 'Did a residence have its own bath, and was it a building apart?'
+    Entry: research/buildings.html - 'Baths (furo)'; research/rendering/buildings.html - 'How our maps draw the bath (furo)'
     """
 
     key = "bath"
@@ -355,7 +355,7 @@ class Latrine(Kind):
     Covers: every privy building and its label
     Label: accurate
     Sources: sayama-jinya-uematsu, kotobank-benjo, tajima-2007-night-soil, guernica-night-soil, sinyoken-madori, shoinzukuri-jawiki
-    Entry: research/buildings.html - 'Where does a residence put its guests' privy?', 'Privies attach to the house', 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)'
+    Entry: research/buildings.html - 'Privies (setchin)', 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps place privies (setchin)', 'How our maps lay out samurai residences and their rooms (buke yashiki)'
     """
 
     key = "latrine"
