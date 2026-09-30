@@ -120,7 +120,7 @@ def test_a_wall_running_ALONG_a_ward_fence_is_re_stamped_over_it() -> None:
 
 
 def test_a_burial_ground_DERIVES_its_shape_from_whether_it_is_a_parish_plot() -> None:
-    """Researched 2026-07-23, written up in research/religion-and-death.html 'Burial ground shape - Japan organic, China surveyed' ('shape of the common ground'.
+    """Researched 2026-07-23, written up in research/religion-and-death.html 'Village burial grounds (bochi)' ('shape of the common ground'.
 
     Japan's commoner burial grounds - Kyoto's burial fields, village sanmai, Edo's packed temple
     yards - were unplotted and TERRAIN-FOLLOWING, never surveyed. Song China's state pauper

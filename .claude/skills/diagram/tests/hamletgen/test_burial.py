@@ -71,7 +71,7 @@ def test_the_edge_seat_turns_aside_where_the_fall_line_is_a_paddy() -> None:
 
 
 def test_the_edge_seat_keeps_off_the_water_by_its_bank_margin_only() -> None:
-    """Feature 280 M75 (research/religion-and-death/180): no set-back that scales with a watercourse is attested; a ground
+    """Feature 280 M75 (research/religion-and-death/160): no set-back that scales with a watercourse is attested; a ground
     only keeps out of the water, by the bank margin - 20 px off a stream's bank is clear, a ground over the bank is not."""
     s = _hamlet()
     s.M["streams"] = [{"poly": [(100.0, 1100.0), (1300.0, 1100.0)], "w": 7}]

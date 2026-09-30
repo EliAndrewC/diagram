@@ -57,7 +57,7 @@ class FuneraryGroundsMixin:
         attached to a temple, e.g. one serving an in-wall farm quarter) - exempt from the temple-precinct
         rule. organic=True draws an IRREGULAR earthen plot; organic=None (the default) DERIVES it from
         parish: every non-parish COMMON ground is organic, parish precinct plots stay ruled rectangles.
-        Historical grounding (researched 2026-07-23, written up in research/religion-and-death.html 'Burial ground shape - Japan organic, China surveyed' ('shape of the common
+        Historical grounding (researched 2026-07-23, written up in research/religion-and-death.html 'Village burial grounds (bochi)' ('shape of the common
         ground'): Japan's commoner burial grounds - Kyoto's burial fields, village sanmai, Edo's packed
         temple yards - were unplotted and terrain-following, never surveyed; Song China's state pauper
         cemeteries (louzeyuan, 1104 on) WERE surveyed walled compounds with numbered rowed plots, so a
@@ -237,7 +237,7 @@ class FuneraryGroundsMixin:
         rec: dict[str, Any] = {"x": round(cx, 1), "y": round(cy, 1), "w": round(2 * crx, 1), "h": round(2 * cry, 1), "rot": 0, "roofed": roofed}
         if jizo:
             # SIX STONE JIZO in a row on the ground's upper rim - the entrance of the burial ground this cremation ground
-            # stands beside (research religion-and-death 700, feature 280 M71: dated at graveyards, 1678-1797; at a
+            # stands beside (research religion-and-death 160 'Village burial grounds (bochi)', feature 280 M71: dated at graveyards, 1678-1797; at a
             # cremation ground on its own only one undated modern page puts them). A stone jizo is about 2 ft; drawn at least 2.4 x 3.2 px - a map drawing convention, so
             # they can be seen (the hand-drawn Hoshigaoka ground's size, feature 272).
             jw, jh = max(self.px(2.0), 2.4), max(self.px(2.7), 3.2)

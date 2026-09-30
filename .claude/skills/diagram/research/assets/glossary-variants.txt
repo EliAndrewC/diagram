@@ -210,6 +210,7 @@ board feet	board foot
 board foot	board foot
 board-clapper	clapper-board
 bobana	bobana
+bochi	bochi
 bodaiji	bodaiji
 boji	boji
 bojikui	bojikui
