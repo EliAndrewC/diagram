@@ -503,7 +503,7 @@ class CompoundShrine(Kind):
     Covers: the shrine hall or halls, their edging and dividing rail, and the shrine labels
     Label: accurate
     Sources: fuchu-joge-pamphlet, neixiang-yamen-zhwiki, henan-neixiang, jawiki-saijin, jawiki-goshi, kotobank-aidono, hokora-jawiki, nara-nagao-jinja
-    Entry: research/buildings.html - 'Magistrates' compounds (jin'ya and yamen)', 'Every administrative compound keeps a shrine', 'The size of a compound and the rank of its buildings'; research/religion-and-death.html - 'When one shrine hall serves several kami, does each have its own altar?'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps draw a magistrate's compound'
+    Entry: research/buildings.html - 'Magistrates' compounds (jin'ya and yamen)', 'The compound's own shrine (yashikigami)', 'The size of a compound and the rank of its buildings'; research/religion-and-death.html - 'When one shrine hall serves several kami, does each have its own altar?'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps draw the compound's shrine'
     """
 
     key = "compound shrine"
@@ -821,7 +821,7 @@ class ShrineAltar(Kind):
     Covers: each altar glyph inside a shrine hall, with its name and sublabels
     Label: accurate
     Sources: kotobank-aidono, jawiki-saijin, genbu-honden-styles, jawiki-goshi, tokyo-jinjacho-kamidana
-    Entry: research/religion-and-death.html - 'When one shrine hall serves several kami, does each have its own altar?'; research/buildings.html - 'Every administrative compound keeps a shrine'
+    Entry: research/religion-and-death.html - 'When one shrine hall serves several kami, does each have its own altar?'; research/buildings.html - 'The compound's own shrine (yashikigami)'; research/rendering/buildings.html - 'How our maps draw the compound's shrine'
     """
 
     key = "shrine altar"
