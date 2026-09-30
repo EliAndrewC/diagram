@@ -236,7 +236,9 @@ per-house groves pass every check a grove answers to.
 - **Row water** (FR-018): the record rules on the dispersed farm only; a row's water is a knob, even odds, a GUESS.
 - **A dispersed farm's water** (FR-018, amendment 5): the channel into the lot is ACCURATE (homesteads/200, the Tonami
   museum, "in many areas"); that the other areas dug a well is this record's reading, a GUESS, so the two are a knob at
-  even odds (a GUESS). The channel is drawn from the nearest irrigation water to the dooryard and ends there - its
+  even odds (a GUESS). The channel is drawn from the nearest drawn supply ditch, or the brook where it is nearer (the
+  nearest a map drawing convention; the brook standing for the irrigation water this project's reading - a brook is
+  the water the ditches are fed from), to the dooryard and ends there - its
   return to the field is not drawn (a deliberate deviation: no page read says where it left the lot); where in the
   dooryard it ends is a GUESS.
 

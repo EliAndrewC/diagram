@@ -147,24 +147,34 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   serves. The door-to-door street it replaces goes. A street is exempt from the web's trims as the connector is (it is
   laid whole), and the connector runs on from the first street's end nearer the sheet's edge, straight out along its line
   - the road the row stands on.
-- **D18 - water** (FR-018). A dispersed farm's own well is seated in its dooryard by `own_wells`: a ring round the house
+- **D18 - water** (FR-018). A dispersed hamlet rolls `farm_water` (`FARM_WATERS` = `channel`/`well`, even odds, pinnable as
+  `HamletSpec.farm_water`, recorded `meta.farm_water`; amendment 5). `channel` (`homesteads/farm_water.farm_channels`):
+  for each grove farm, its dooryard end is the edge of its threshing yard nearest the water, a step out; the source is the
+  nearest point of a drawn supply ditch (`field_ditches` main or branch, never a drain) or the brook, the candidates
+  tried nearest first; the course is `_route`d round every building, yard, garden and other farm's frame and grove, the
+  lanes and all other water, and may cross the farm's own grove band (the channel is led INTO the grounds). Drawn by
+  `field_channel` in the supply hue at the field channel's 2.5 ft (the legibility floor, a convention), class `farm
+  channel`, recorded under `farm_channels` (`of`, `pts`) and kept clear by the later placers as a corridor. A farm no
+  course reaches draws its own well instead and is reported by the check - never silently dry. `well`: the own well below.
+  A dispersed farm's own well is seated in its dooryard by `own_wells`: a ring round the house
   out to the frame, nearest the work yard first, tested by footprint against every reserved box, never on the way in
   (the line from the house through its yard). A well seat reserved in the bundle's layout was built and MEASURED: every
   seat beside the yard widened the turned frames, and cohort seed 19 seated 10 of 11 households against 11 without it
   (FR-010 forbids that), so it is not used. The guarantee is the check: `water_rules` fails any dispersed farm without
-  its own well, on every cohort roll and the gate's grove maps - a farm is never silently left dry. A linear hamlet
+  its own water in the form its knob drew, on every cohort roll and the gate's grove maps - a farm is never silently left dry. A linear hamlet
   rolls `row_water` (`own`/`shared`, even odds, pinnable, `meta.row_water`): `own` the same; `shared` seats wells beside
   each street, in the lane's room between two lots, SPACED FROM THE REACH - one at least every `floor(reach / frame)`
   farms along the street, the reach the watering rule's (`WATER_REACH_FT`) - so every farm of every row and street, near
   and far, stands within reach of one.
 - **D19 - the checks** (SC-007, SC-008). `grove_rules` gains `row_rules(M)` (every house within a frame depth of a
   street; no house behind another on its side; each street one lane; every far row farm with its holding behind it; every
-  row farm joined by a way to its own street) and `water_rules(M)` (every dispersed farm with its own well, not in its
-  way in; a linear map's `row_water` drawn - own wells, or every farm within reach of a shared well), and the door and
+  row farm joined by a way to its own street) and `water_rules(M)` (every dispersed farm with its own water as
+  `meta.farm_water` says - a channel ending inside its frame, or its own well not in its way in; a linear map's `row_water` drawn - own wells, or every farm within reach of a shared well), and the door and
   bamboo predicates (`doors_unreached`: every LINEAR row farm's front door within the door reach of a way (a dispersed farm needs none, homesteads/150); `row_rules` also fails a linear map with no seated street; `bamboo_mismatch`:
   the farms drawing grove bamboo exactly the farms that rolled it). The cohort audit runs all of them on every roll and,
   beside its 24 seeds, rolls a PINNED linear spec for each value of `row_line`, `row_sides` and `row_water` (four
-  line-by-sides specs, water alternating), so both values of each knob are asserted to appear, not left to the roll; the
+  line-by-sides specs, water alternating) and a PINNED dispersed spec for each value of `farm_water`, so both values of
+  each knob are asserted to appear, not left to the roll; the
   gate test runs them on the linear pool maps.
 
 ## Indexing
