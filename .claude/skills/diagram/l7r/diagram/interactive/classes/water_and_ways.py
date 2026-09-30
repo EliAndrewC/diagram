@@ -311,8 +311,7 @@ class VillageLane(Kind):
     paddies the way is the bund itself, the path a farmer walks to weed and manure, so the path to the fields
     runs on to the paddy's outer bund and joins it, and where a hamlet stands so close to its paddy that no
     path is left between them, its nearest lane runs on to the bund. In a row village the farms stand along a street
-    instead - a street laid out first, or one along the dry edge the ground gives - that runs on as the road the row
-    stands on, with a path from each farm's door to it.
+    instead - a street laid out first, or one along the dry edge the ground gives.
 
     Note: That every house is reached by a way is read from a surveyed village's own lane hierarchy; of the two
     forms, the planned back lane is read and the alleys off the spine are on no publicly readable page, as is
@@ -325,7 +324,8 @@ class VillageLane(Kind):
     lane stopped at the dooryard or ran on, so the map's rule - end at the dooryard or reach something seen,
     and a lane end that reaches nothing is pulled back to the last house it serves - is its own, and how close
     counts as serving a house (within 12 ft of its house, yard or beds, or beside it within 60 ft) is a guess
-    too, as is the point where the field path joins its bund, the one nearest the hamlet.
+    too, as is the point where the field path joins its bund, the one nearest the hamlet. A row village's street running
+    on as the road the row stands on, and a path from each farm's door to it, are map drawing conventions.
 
     Caveat: the drawn WIDTHS (3, 5 and 6 ft, a row village's street at the 6 ft, a rank wider than the lanes off it) are a GUESS, laddered from a footpath to a wheelbarrow's width,
     with the connector kept under the 9 ft of the one cart road the record does measure. The record now
