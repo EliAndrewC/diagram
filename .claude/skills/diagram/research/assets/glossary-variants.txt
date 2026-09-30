@@ -164,6 +164,8 @@ bastion	bastion
 bastions	bastion
 battalion cities	guard city
 battalion city	guard city
+batten ceiling	batten ceiling
+batten ceilings	batten ceiling
 batter	batter
 battered	batter
 baulk	baulk
@@ -2003,6 +2005,7 @@ mulberry-dike fishpond	dike-pond
 multiple cities	multiple city
 multiple city	multiple city
 mumun	Mumun
+munafuda	ridge tag
 munamon	munamon
 mune-wari	ridge-divided nagaya
 mura	mura
@@ -2132,6 +2135,8 @@ nongzheng quanshu	Nongzheng Quanshu
 noria	noria
 norias	noria
 normal depth	normal depth
+north range	south range
+north ranges	south range
 northern and southern courts	Northern and Southern Courts
 northern kanto	Kanto
 northern song	Song dynasty
@@ -2468,6 +2473,8 @@ rick	rick
 ricks	rick
 ridge culture	ridge culture
 ridge span	ridge span
+ridge tag	ridge tag
+ridge tags	ridge tag
 ridge-divided	ridge-divided nagaya
 ridge-divided nagaya	ridge-divided nagaya
 riffle	riffle
@@ -2813,6 +2820,8 @@ soto zen	Sōtō
 soto-machi	outer town
 sotobori	sotobori
 sotomachi	outer town
+south range	south range
+south ranges	south range
 south town magistrate	town magistrate
 southern song	Song dynasty
 sovereign temple	sovereign temple
