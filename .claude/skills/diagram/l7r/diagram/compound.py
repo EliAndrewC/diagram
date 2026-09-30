@@ -559,8 +559,8 @@ def county_magistracy_program() -> CompoundProgram:
         # Its rooms take the palace order's lesser form - the reception at the east END, the full depth, nearest the
         # middle gate; the master's rooms beside it on the garden row; the family's beyond, with the inner rooms behind
         # (R03). The veranda runs along the garden face alone, 4 ft (R01's first form, research rendering/buildings
-        # 'How our maps draw verandas and shuttered wings': 3-6 ft). Its inner entrance opens on its west face, toward the
-        # kitchen (research rendering/buildings 'How our maps draw the kitchen').
+        # 'How our maps draw verandas and storm shutters (engawa and amado)': 3-6 ft). Its inner entrance opens on its west face, toward the
+        # kitchen (research rendering/buildings 'How our maps draw kitchens (daidokoro)').
         # It stands 10 ft off the north wall: the rear band narrowed to a cart/servant alley (research buildings 380),
         # the family privy flush to the wall in it.
         # THE HOUSE'S SIZE is research buildings 380's: the Yokota house of a 150-koku district magistrate (gun-bugyo, the

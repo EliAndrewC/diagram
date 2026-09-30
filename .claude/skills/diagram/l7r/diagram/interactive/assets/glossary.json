@@ -12862,7 +12862,8 @@
   "variants": [
    "jin",
    "catty"
-  ]
+  ],
+  "cased": true
  },
  "integrated fish farming": {
   "def": "Raising fish in the same farm as livestock or crops, so that the animals' manure and the farm's wastes go into the ponds and feed the fish, usually with pig sheds built on the pond dikes. The name and the manuals that teach it are modern.",
@@ -13270,6 +13271,12 @@
   "def": "An arrangement of buildings set one behind the next, each stepped back and to one side, like the halls of Katsura's villa, which were built one after another over about half a century.",
   "variants": [
    "echelon"
+  ]
+ },
+ "katteguchi": {
+  "def": "The kitchen door: the doorway leading from outside into a house's kitchen. The word was already in use in 1666.",
+  "variants": [
+   "katteguchi"
   ]
  }
 }

@@ -681,21 +681,21 @@ class Door(Kind):
     of a plastered storehouse, and the entry of a guest house or a room where visitors are received.
 
     Why: Every building has a way in. A senior samurai house had three (a middle-rank one could do without the first, bringing its guest in through a garden): the formal entrance for its head and honored guests, an inner
-    entrance for the family and the household to come and go by, and the kitchen door, the one way in from
-    outside to the kitchen, by its earth floor - a door the dictionaries date from 1666; who came in by it is told only
+    entrance for the family and the household to come and go by, and the kitchen door, the way in from
+    outside to the kitchen - a word the dictionaries date from 1666; who came in by it is told only
     by pages of today, so the map says nothing of it. A guest's arrival
     comes across open ground to its door; a servants' row turns its doors inward, into the compound; and a
     plastered storehouse keeps outer doors faced in earth and plaster so that fire cannot get in.
 
     Note: The kitchen door, the inward-facing doors of a servants' row, the plastered storehouse doors and a
-    guest's door onto open ground follow the record; a guest's door drawn opening into a garden instead of a court is a guess. A second outside door on a kitchen, and the route by which food reached the
+    guest's door onto open ground follow the record; a guest's door drawn opening into a garden instead of a court is a guess. The kitchen door's place on its earth floor, a second outside door on a kitchen, and the route by which food reached the
     rooms, are a guess, and a door of a room that the setting or a map's story made is as much the drawing's own
     as its room. A drawn door's width is a drawing convention, not a measurement: the working doors are drawn two
     to three times the width of an ordinary door so that they read at the sheet's scale. A real ordinary door was
     about 3 ft wide (half a ken, this project's reading of how the big door was defined), a farmhouse's one-ken
     main sliding door about 6 ft with a low wicket in it, and each of a storehouse's paired leaves about 3.5 ft.
 
-    Caveat: A second outside door on a kitchen, and the route by which food reached the rooms, are a guess, and a
+    Caveat: The kitchen door's place on its earth floor, a second outside door on a kitchen, and the route by which food reached the rooms, are a guess, and a
     door of a room that the setting or a map's story made is as much the drawing's own as its room. A drawn
     door's width is a drawing convention, not a measurement: the working doors are drawn two to three times the
     width of an ordinary door so that they read at the sheet's scale. A real ordinary door was about 3 ft wide
@@ -706,7 +706,7 @@ class Door(Kind):
     Covers: every small door glyph on a building's wall
     Label: accurate
     Sources: madoken-odoguchi, hongofuji-koiwai, s-kent-kuratomae, kotobank-katteguchi, kotobank-uchigenkan, matsue-bukeyashiki, homes-jin-bukeyashiki, dozo-jawiki, gogura-jawiki, nagayamon-jawiki, jta-nagayamon
-    Entry: research/buildings.html - 'How wide was a real doorway, and how wide are the drawn doors?', 'Kitchens (daidokoro)', 'The formal entrance and a guest's arrival (genkan)'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound', 'How our maps draw the kitchen','How our maps route a guest from the gate to the entrance'
+    Entry: research/buildings.html - 'How wide was a real doorway, and how wide are the drawn doors?', 'Kitchens (daidokoro)', 'The formal entrance and a guest's arrival (genkan)'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound', 'How our maps draw kitchens (daidokoro)','How our maps route a guest from the gate to the entrance'
     """
 
     key = "door"

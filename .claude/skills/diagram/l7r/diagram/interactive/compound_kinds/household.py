@@ -237,14 +237,15 @@ class Kitchen(Kind):
     own feature.
 
     Why: A samurai house's rooms were nearly all matted, but its kitchen was board-floored, and its doma was
-    smaller than a farmhouse's. The kitchen had one door to the outside, the katteguchi, the service entrance;
+    smaller than a farmhouse's. The kitchen had its own door from outside, the katteguchi, the service entrance;
     at a house of standing the family came and went by a separate inner entrance and guests by the formal one, though a middle-rank house could have no genkan with a shikidai, its kitchen entrance serving as its front entrance. So the kitchen stands at
     the edge of the inner court, its door opening into work space, the deliberate opposite of a guest's arrival.
     It is large, but a fraction of the living quarters, and with open fire burning all day it is the compound's
     worst fire risk, so it keeps two water tubs where every other hall keeps one.
 
-    Note: The board-floored kitchen with its small doma, its one outside door, and the household's separate
-    inner entrance at a house of standing are recorded findings; that the kitchen door opens into work space, the reverse of a guest's door, is this project's reading. A second outside door on the kitchen, and the route by which food
+    Note: The board-floored kitchen with its small doma, its own door from outside, and the household's separate
+    inner entrance at a house of standing are recorded findings; that the kitchen had only one outside door is a
+    guess, resting on no page showing two; that the kitchen door opens into work space, the reverse of a guest's door, is this project's reading. A second outside door on the kitchen, and the route by which food
     reached the rooms, are guesses wherever a plan draws them: nothing read draws either. The kitchen's own size
     is a guess, since only one house read gives its kitchen's share, and by only one of two measures that disagree; it is measured against a whole
     house of about 49 tsubo (some 1,740 sq ft) at middle rank, a house of 1794, and a kitchen that approaches it is too
@@ -263,7 +264,7 @@ class Kitchen(Kind):
     Covers: the kitchen and pantries building and its label
     Label: accurate
     Sources: boso-no-mura-takei, liq-takayasu-daidokoro, kotobank-katteguchi, kotobank-uchigenkan, matsue-bukeyashiki, matsue-bukeyashiki-about, matsushiro-bukeyashiki, tfd-hongou-fire-history, thepaper-taipinggang, edo-no-kaji-jawiki, machibikeshi-jawiki
-    Entry: research/buildings.html - 'Kitchens (daidokoro)', 'Samurai residences and their rooms (buke yashiki)', 'The size of a compound and the rank of its buildings', 'Fire, and the fireproof storehouses (dozō)', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps draw the kitchen', 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps size a compound and its buildings', 'How our maps route a guest from the gate to the entrance', 'How our maps draw fire water and the fireproof storehouses (dozō)'
+    Entry: research/buildings.html - 'Kitchens (daidokoro)', 'Samurai residences and their rooms (buke yashiki)', 'The size of a compound and the rank of its buildings', 'Fire, and the fireproof storehouses (dozō)', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps draw kitchens (daidokoro)', 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps size a compound and its buildings', 'How our maps route a guest from the gate to the entrance', 'How our maps draw fire water and the fireproof storehouses (dozō)'
     """
 
     key = "kitchen"
@@ -566,7 +567,7 @@ class Hearth(Kind):
     Covers: the fire glyph in each kitchen
     Label: accurate
     Sources: boso-no-mura-takei, liq-takayasu-daidokoro, matsue-bukeyashiki, irori-jawiki, tfd-hongou-fire-history, edo-no-kaji-jawiki, machibikeshi-jawiki, thepaper-taipinggang
-    Entry: research/buildings.html - 'Kitchens (daidokoro)', 'Fire, and the fireproof storehouses (dozō)'; research/rendering/buildings.html - 'How our maps draw the kitchen', 'How our maps draw fire water and the fireproof storehouses (dozō)'
+    Entry: research/buildings.html - 'Kitchens (daidokoro)', 'Fire, and the fireproof storehouses (dozō)'; research/rendering/buildings.html - 'How our maps draw kitchens (daidokoro)', 'How our maps draw fire water and the fireproof storehouses (dozō)'
     """
 
     key = "hearth"
@@ -629,7 +630,7 @@ class Engawa(Kind):
     Covers: the veranda strip along the residence's garden face
     Label: accurate
     Sources: engawa-kotobank, shoinzukuri-kotobank, irikawa-kotobank, katsura-rikyu-jawiki
-    Entry: research/buildings.html - 'Verandas and storm shutters (engawa and amado)'; research/rendering/buildings.html - 'How our maps draw verandas and shuttered wings'
+    Entry: research/buildings.html - 'Verandas and storm shutters (engawa and amado)'; research/rendering/buildings.html - 'How our maps draw verandas and storm shutters (engawa and amado)'
     """
 
     key = "engawa"
@@ -794,7 +795,7 @@ class ShutteredWing(Kind):
     Covers: the shuttered bay, its shutters and its labels
     Label: guess
     Sources: amado-kotobank
-    Entry: research/buildings.html - 'Verandas and storm shutters (engawa and amado)'; research/rendering/buildings.html - 'How our maps draw verandas and shuttered wings'
+    Entry: research/buildings.html - 'Verandas and storm shutters (engawa and amado)'; research/rendering/buildings.html - 'How our maps draw verandas and storm shutters (engawa and amado)'
     """
 
     key = "shuttered wing"

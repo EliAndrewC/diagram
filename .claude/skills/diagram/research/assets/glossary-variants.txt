@@ -1605,6 +1605,7 @@ katemeshi	katemeshi
 katsura	Katsura
 katsura imperial villa	Katsura
 katsura rikyu	Katsura
+katteguchi	katteguchi
 kawachi	Kawachi
 kawachi province	Kawachi
 kawado	kawado
