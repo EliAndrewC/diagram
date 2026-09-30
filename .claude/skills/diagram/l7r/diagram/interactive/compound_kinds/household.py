@@ -98,7 +98,7 @@ class AncestralAlcove(Kind):
     Covers: the alcove's tablets label at the residence's formal end (a lineage alcove where the tablets are a lineage's)
     Label: accurate
     Sources: butsuma-kotobank, sosen-saishi-kotobank, mingguanci-zhwiki
-    Entry: research/buildings.html - 'Where does the butsuma sit - by the zashiki, or among the private rooms?', 'Whose tablets does the alcove hold when a post passes to a cousin, not a son?', 'An ancestral alcove holding office-predecessor tablets'
+    Entry: research/buildings.html - 'Household altar rooms and ancestral tablets (butsuma and ihai)'; research/rendering/buildings.html - 'How our maps decide where an ancestral alcove is drawn'
     """
 
     key = "ancestral alcove"
@@ -737,7 +737,7 @@ class InnerRooms(Kind):
     Covers: the innermost bay of the residence, its floor and its label
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, butsuma-kotobank, aizu-bukeyashiki-jawiki
-    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'Where does the butsuma sit - by the zashiki, or among the private rooms?'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'Household altar rooms and ancestral tablets (butsuma and ihai)'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps decide where an ancestral alcove is drawn'
     """
 
     key = "inner rooms"
