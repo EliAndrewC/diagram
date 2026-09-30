@@ -796,6 +796,8 @@ festival's host house	festival lodging
 fetch	fetch
 field boat	field boat
 field boats	field boat
+field channel	field channel
+field channels	field channel
 field comb	comb
 field combs	comb
 field consolidation	kochi seiri
