@@ -353,7 +353,7 @@ class TallyOffice(Kind):
     Covers: the tally office or tally shed and its label
     Label: accurate
     Sources: nishimawari-koro-jawiki, wagner-ming-iron, tonya-enwiki, economy-song-enwiki
-    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/urban-features.html - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
+    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and their fire gap'
     """
 
     key = "tally office"
@@ -378,7 +378,7 @@ class WeighingFloor(Kind):
     Covers: the covered weighing floor, its posts and its label
     Label: accurate
     Sources: wagner-ming-iron, tonya-enwiki, fao-charcoal-safety, tawara-unit-jawiki
-    Entry: research/urban-features.html - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
+    Entry: research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and their fire gap'
     """
 
     key = "weighing floor"

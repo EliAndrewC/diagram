@@ -223,7 +223,7 @@ class CharcoalStore(Kind):
     Covers: the sealed charcoal kura and its labels
     Label: guess
     Sources: dozo-jawiki, kotobank-dozozukuri, wagner-ming-iron, fao-charcoal-safety
-    Entry: research/urban-features.html - "Does the charcoal yard's 30 ft fire gap apply to charcoal kept in a plastered storehouse?", 'Is a fire gap kept round a charcoal yard?', 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
+    Entry: research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and their fire gap'
     """
 
     key = "charcoal store"
@@ -404,7 +404,7 @@ class Steelyard(Kind):
     Covers: the steelyard on the weighing floor
     Label: accurate
     Sources: zhwiki-ganchen, zjnews-cixi-steelyard, osaka-keiryo-history, kanazawa-saobakari
-    Entry: research/urban-features.html - 'Was bulk charcoal weighed on a balance beam or a steelyard?', 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
+    Entry: research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and their fire gap'
     """
 
     key = "steelyard"
@@ -429,7 +429,7 @@ class CharcoalBales(Kind):
     Covers: the stacked bales on the weighing floor
     Label: convention
     Sources: tawara-jawiki, tawara-unit-jawiki, edo-tokyo-sumidawara
-    Entry: research/urban-features.html - 'How big is a bale of rice or charcoal?', 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
+    Entry: research/urban-features.html - 'How big is a bale of rice or charcoal?', 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and their fire gap'
     """
 
     key = "charcoal bales"

@@ -499,7 +499,7 @@ class CartYard(Kind):
     Covers: the loading apron inside the cart gate
     Label: deviation
     Sources: kotobank-daihachiguruma, mlit-kinsei-michi, l7r-wagons, fao-charcoal-safety, tonya-enwiki
-    Entry: research/ways.html - 'Could a cart use the roads here, and where would it go?', 'What vehicle used a village lane, and where could the lane run?'; research/urban-features.html - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'; research/buildings.html - 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
+    Entry: research/ways.html - 'Could a cart use the roads here, and where would it go?', 'What vehicle used a village lane, and where could the lane run?'; research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and their fire gap'; research/buildings.html - 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
     """
 
     key = "cart yard"
