@@ -324,3 +324,11 @@ every change to a map is; the report links them.
   was unrecorded. All four applied: one start commit, the frozen files supplied by the launcher, the feature directory left out of every
   run clone (sparse checkout), the rubric passages per task, the premise check in interventions.md.
 - Amendment review rounds 2-4 (2026-09-30): round 2 CHANGES REQUIRED (a git clone kept later commits reachable; four restatements of the old rubric rule) - run clones now fetch the start commit alone; round 3 CHANGES REQUIRED (quickstart and the contract still said the old thing) - reworded, the push hold recorded; round 4 FAITHFUL.
+- Amendment, 2026-09-30 (the GM's rulings after the runs, request.md): the GM read the research pair and the implementation pair knowing
+  the arms (not blind) and ruled - implementation: `xhigh` better but not worth the cost, keep `medium` as the default and go higher for
+  deep, initiative-taking work; research: no noticeable difference, a blind check wanted. The research blind review (FR-009/FR-010) is two
+  `effort-grader` runs (the GM: "just knowing whether or not two runs match or not is good enough"), each answering whether either entry is
+  deficient and whether one is strongly better, with the bar fixed before the key opens (both runs prefer one entry, each by 6 of 40 or 2
+  on the answer or citation criteria); the implementation pair is not blind-graded - the GM's ruling stands for it. The winner of the
+  research review lands; the implementation lands as `xhigh`'s version (the GM's choice), ported onto current main. The review counter
+  resets.
