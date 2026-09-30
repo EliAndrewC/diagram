@@ -78,8 +78,9 @@ class AncestralAlcove(Kind):
     of the zashiki or in a small room behind the zashiki or the inner room - in both, at the formal end of the
     house; no source read puts it among the family's private rooms. One of the two kinds of Japanese tablet veneration keeps, in principle, the tablets of a house's successive heads
     along its line of inheritance, so - this project's guess from that - the alcove follows the house, not the post: where one lineage holds the
-    magistracy across generations, the past magistrates are the present one's own forebears and the alcove is
-    literally ancestral, and at a posting filled by appointment it holds only the family's own tablets.
+    magistracy across generations, the past magistrates are the present one's kin - held father to son, its own
+    forebears - and the alcove is literally ancestral, and at a posting filled by appointment, whose past holders
+    are not the incumbent's kin, the map draws no ancestral alcove.
 
     Note: The butsuma at the formal end, by or behind the zashiki, is a recorded finding; the two places for it
     are both attested, and each sheet takes one. A house keeping the tablets of its own successive heads is
@@ -87,18 +88,22 @@ class AncestralAlcove(Kind):
     read says tablets of predecessors in office were kept at an office or its residence, in Japan or at a Chinese
     county seat; the state hall for meritorious local officials that the record quotes stood at the Confucian
     temple, not inside the office. So past holders stand in the alcove only if they were heads of the incumbent's
-    own house, and whether they were is a question of the setting.
+    own house, and whether they were is a question of the setting; the Ubame plan's lineage alcove, holding kin
+    who held the post cousin to cousin but were not the house's own forebears, is this project's deliberate
+    extension beyond the record.
 
     Caveat: Nothing read says tablets of predecessors in office were kept at an office or its residence, in Japan
     or at a Chinese county seat; the state hall for meritorious local officials that the record quotes stood at
     the Confucian temple, not inside the office. So past holders stand in the alcove only if they were heads of
-    the incumbent's own house, and whether they were is a question of the setting.
+    the incumbent's own house, and whether they were is a question of the setting; the Ubame plan's lineage
+    alcove, holding kin who held the post cousin to cousin but were not the house's own forebears, is this
+    project's deliberate extension beyond the record.
 
     Name: ancestral alcove
     Covers: the alcove's tablets label at the residence's formal end (a lineage alcove where the tablets are a lineage's)
     Label: accurate
     Sources: butsuma-kotobank, sosen-saishi-kotobank, mingguanci-zhwiki
-    Entry: research/buildings.html - 'Household altar rooms and ancestral tablets (butsuma and ihai)'; research/rendering/buildings.html - 'How our maps decide where an ancestral alcove is drawn'
+    Entry: research/buildings.html - 'Household altar rooms and ancestral tablets (butsuma and ihai)'; research/rendering/buildings.html - 'How our maps draw household altar rooms and ancestral tablets (butsuma and ihai)'
     """
 
     key = "ancestral alcove"
@@ -737,7 +742,7 @@ class InnerRooms(Kind):
     Covers: the innermost bay of the residence, its floor and its label
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, butsuma-kotobank, aizu-bukeyashiki-jawiki
-    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'Household altar rooms and ancestral tablets (butsuma and ihai)'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps decide where an ancestral alcove is drawn'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'Household altar rooms and ancestral tablets (butsuma and ihai)'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps draw household altar rooms and ancestral tablets (butsuma and ihai)'
     """
 
     key = "inner rooms"
