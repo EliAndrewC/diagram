@@ -1400,6 +1400,8 @@ interceptor channel	interceptor
 interlinear commentary	interlinear commentary
 interlinear note	interlinear commentary
 interment	inter
+internal-affairs squad	internal-affairs squad
+internal-affairs squads	internal-affairs squad
 internode	internode
 internodes	internode
 interred	inter
@@ -1766,6 +1768,7 @@ kure-mutsu	kure-mutsu
 kuri	kuri
 kuromatsu	kuromatsu
 kuruwa	kuruwa
+kusa-no-ma	kusa-no-ma
 kusaba	kusaba
 kusakariba	magusaba
 kusayama	kusayama
@@ -3221,6 +3224,7 @@ towpath	towpath
 towpaths	towpath
 tozama	tozama
 tozama daimyo	tozama
+tozamurai	tozamurai
 transect	transect
 transects	transect
 tread	tread
@@ -3286,6 +3290,7 @@ tōhoku	Tohoku
 tōkaidō	Tokaido
 tōshukō	toshuko
 tōya	miyaza
+tōzamurai	tozamurai
 ubame	Ubame
 ubame's	Ubame
 ubuko	ubuko

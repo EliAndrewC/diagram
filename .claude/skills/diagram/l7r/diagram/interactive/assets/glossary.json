@@ -13342,5 +13342,25 @@
   "variants": [
    "motojime"
   ]
+ },
+ "internal-affairs squad": {
+  "def": "In a modern Japanese army barracks, the squad of soldiers who lived together in one room, and that room; the rooms of the infantry barracks built at Nagoya in 1873 are shown today furnished with wooden beds.",
+  "variants": [
+   "internal-affairs squad",
+   "internal-affairs squads"
+  ]
+ },
+ "tozamurai": {
+  "def": "A suite of rooms floored with tatami mats in a warrior's stable, across the earth-floored passage from the stalls; the grooms and retainers had their quarters there, and senior members of the household used it when they came to view their horses.",
+  "variants": [
+   "tozamurai",
+   "tōzamurai"
+  ]
+ },
+ "kusa-no-ma": {
+  "def": "The earth-floored passage that ran the length of a warrior's stable in front of the stalls.",
+  "variants": [
+   "kusa-no-ma"
+  ]
  }
 }

@@ -150,14 +150,16 @@ class RetainersQuarters(Kind):
 
     Note: Retainers' official residences laid out inside a small domain's jin'ya are recorded, and the city
     magistracy's separate constables' district and ranked households in terraced ranges rest on recorded
-    findings. A source names a storehouse keepers' rowhouse on a rural office's grounds; that the rest of its staff lived there is the record's reconstruction, no source
-    naming those staff or their housing, and that their housing took the form of a rowhouse is the record's
-    own reading rather than a source's words; the record places ranks of small household dwellings at the
-    town's edge, outside an elite quarter, rather than inside its walls.
+    findings. A source counts the huts and rowhouses of a rural intendant's office's junior officials among its
+    parts on the grounds, and names a storehouse keepers' rowhouse there; that the rest of its staff lived there too
+    is the record's reconstruction, no source giving a count of the staff or saying who else lived inside; the
+    record places ranks of small household dwellings at the town's edge, outside an elite quarter, rather than
+    inside its walls.
 
-    Caveat: A source names a storehouse keepers' rowhouse on a rural office's grounds; that the rest of its staff lived there is the record's reconstruction, no source
-    naming those staff or their housing, and that their housing took the form of a rowhouse is the record's
-    own reading rather than a source's words; the record places ranks of small household dwellings at the
+    Caveat: A source counts the huts and rowhouses of a rural intendant's office's junior officials among its
+    parts on the grounds, and names a storehouse keepers' rowhouse there; that the rest of its staff lived there too
+    is the record's reconstruction, no source giving a count of the staff or saying who else lived inside; the
+    record places ranks of small household dwellings at the
     town's edge, outside an elite quarter, rather than inside its walls.
 
     Name: retainers' quarters
@@ -372,13 +374,15 @@ class Stables(Kind):
     few horses: the magistrate's mount and a couple of messengers' horses, with a well beside it for watering.
 
     Why: A warrior's stable was a freestanding building three, five or seven bays long, the most formal of them
-    three bays and entered at the gable end, with separate stalls one bay wide on board floors, a matted room for
-    the attendants and an earth-floored room for fodder; a lord's could be far larger. A county office is taken to keep only
+    three bays and entered at the gable end, with separate stalls one bay wide on board floors, an earth-floored
+    passage before them and a matted suite across it, where the grooms and retainers had their quarters; a lord's
+    could be far larger. A county office is taken to keep only
     a handful of horses, so its stable is small - a fraction of the watch's barracks, never larger. It stands in
     the outer court by a service gate, so the horses and their muck go in and out without crossing the
     ceremonial ground, and the animals are led to water at a well rather than watered where they stand.
 
-    Note: The freestanding stable a few bays long, its stalls one bay wide on board floors, and the watering at a
+    Note: The freestanding stable a few bays long, its stalls one bay wide on board floors (a bay taken as one ken,
+    about 6 ft, by our own convention), and the watering at a
     well are recorded findings, and the program classes the stable as accurate: drawn smaller than the barracks,
     checked against the size audit. A stall's depth, and so its area, is a guess, and so is the number of horses:
     no page read gives either for a county post. The stable's rank below the barracks is a guess, this project's own
