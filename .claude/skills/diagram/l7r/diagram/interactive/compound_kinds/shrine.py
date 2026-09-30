@@ -118,19 +118,19 @@ class ShrineApproach(Kind):
     step.
 
     Why: A shrine is entered along its approach, and the arch stands where the approach enters the shrine's ground; a
-    row of arches along it is a donors' row, each arch a gift - before modern times only at a great Inari site. This setting raises arches along any shrine's approach, a deliberate deviation from the historical norm. So the path runs straight up the axis, and the arches
+    row of arches along it is a donors' row, each arch a gift - before modern times only at a great Inari site. This setting raises arches along any shrine's approach, a deliberate deviation from the historical norm. So the path runs up to the hall along a line the map's author draws to fit the ground, and the arches
     stand over it.
 
-    Note: The approach and the arch at its entry are read; its running on the halls' axis is a map convention; a row of arches at an ordinary shrine is attested only in modern times, and drawn here as a deliberate deviation; its width is a guess, and the arches' number and pitch are
+    Note: The approach and the arch at its entry are read; its line is drawn to fit the ground, and its innermost arch standing 12 ft off the hall is a map convention; a row of arches at an ordinary shrine is attested only in modern times, and drawn here as a deliberate deviation; its width is a guess, and the arches' number and pitch are
     the GM's rulings, not the record's.
 
-    Caveat: its running on the halls' axis is a map convention; a row of arches at an ordinary shrine is attested only in modern times, and drawn here as a deliberate deviation; its width is a guess, and the arches' number and pitch are the GM's rulings, not the record's.
+    Caveat: its line is drawn to fit the ground, and its innermost arch standing 12 ft off the hall is a map convention; a row of arches at an ordinary shrine is attested only in modern times, and drawn here as a deliberate deviation; its width is a guess, and the arches' number and pitch are the GM's rulings, not the record's.
 
     Name: approach
     Covers: the path from the precinct's edge to the hall
     Label: accurate
     Sources: jinja-jawiki, kudamatsu-stone-torii, kato-kawataka-torii
-    Entry: research/religion-and-death.html - 'Shrine gateways and the approach to the hall (torii, sando)', 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw torii and the shrine approach', 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
+    Entry: research/religion-and-death.html - 'Shrine gateways and the approach to the hall (torii, sando)', 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw shrine gateways and the approach to the hall (torii, sando)', 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "approach"

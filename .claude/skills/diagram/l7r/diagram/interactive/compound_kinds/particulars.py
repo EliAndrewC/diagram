@@ -234,7 +234,7 @@ class WoodKamiAltar(Kind):
     What: A small altar to the kami of the wood, no bigger than a shed, with no torii before it, standing in the
     shrine grove beside the compound's proper shrine.
 
-    Why: Small altars below the rank of a shrine far outnumbered real shrines, and they stood without an arch;
+    Why: Small altars below the rank of a shrine far outnumbered real shrines, and most stood without an arch, or with only a very small one;
     this one stands in the shrine grove, among the trees it is kept for. It is kept up by a private hand,
     though anyone may pray at it.
 

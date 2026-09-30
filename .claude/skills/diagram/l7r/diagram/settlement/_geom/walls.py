@@ -17,7 +17,7 @@ from .overlap import _rect_ring
 from .primitives import seg_dist, segments_cross
 
 # TORII AVENUE PITCH (GM 2026-09-27, feature 268: "All maps, ~10-13 ft", after a research pass - see
-# research/rendering/religion-and-death.html 'How our maps draw torii and the shrine approach'). Donated arches stand close: a donation row's arches
+# research/rendering/religion-and-death.html 'How our maps draw shrine gateways and the approach to the hall (torii, sando)'). Donated arches stand close: a donation row's arches
 # stand about 10 cm apart, and the one small rural row whose pitch can be estimated works out at about
 # 3-4 m (this project's arithmetic on a walking time, on no page). Nothing supports the old ~20-30 ft.
 # 12 ft is the middle of the GM's band and two ken, the building module the record already uses - a

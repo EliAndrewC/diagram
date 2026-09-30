@@ -10838,7 +10838,9 @@
   "def": "A Japanese era, 1673 to 1681, the decade of the first count of Osaka's domain kurayashiki.",
   "variants": [
    "Enpo era",
-   "Enpo"
+   "Enpo",
+   "Enpō era",
+   "Enpō"
   ]
  },
  "domain kiln": {
@@ -13223,6 +13225,15 @@
   "variants": [
    "talisman",
    "talismans"
+  ]
+ },
+ "subsidiary shrine": {
+  "def": "A small shrine standing within a larger shrine's precinct beside its main hall, enshrining a kami connected with the main shrine's own kami or with the shrine itself; in Japanese, sessha and massha.",
+  "variants": [
+   "subsidiary shrine",
+   "subsidiary shrines",
+   "sessha",
+   "massha"
   ]
  }
 }

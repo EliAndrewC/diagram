@@ -736,6 +736,8 @@ enoki	enoki
 enokida	Enokida
 enpo	Enpo era
 enpo era	Enpo era
+enpō	Enpo era
+enpō era	Enpo era
 eta	eta
 eunis	EUNIS
 europe pmc	Europe PMC
@@ -1907,6 +1909,7 @@ mao commentary	Mao commentary
 maoqu	maoqu
 martial temple	Martial temple
 martial temples	Martial temple
+massha	subsidiary shrine
 massing	massing
 master mountain	master-mountain
 master xuanhu	Xuanhu
@@ -2682,6 +2685,7 @@ seri	seri
 sericulture	sericulture
 ses	SES
 sess	SES
+sessha	subsidiary shrine
 setchin	kawaya
 setouchi	Setouchi
 settlement core	settlement core
@@ -2931,6 +2935,8 @@ sub-temple	sub-temple
 sub-temple's	sub-temple
 sub-temples	sub-temple
 subgrade	subgrade
+subsidiary shrine	subsidiary shrine
+subsidiary shrines	subsidiary shrine
 substructure	substructure
 substructures	substructure
 subuta	Blyxa
