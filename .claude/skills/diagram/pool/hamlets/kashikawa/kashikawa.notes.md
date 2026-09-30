@@ -21,7 +21,7 @@ history rather than the map's current state; the reporting machinery is unchange
 re-roll that misses will say so again.
 
 **Known open**: Inashiro's two - the bare comb floor on the fan's shoulders (inherited from
-`build_comb`), and a windward quarter derived from the slope - CLOSED by feature 261: the wind is the regional northwest and the belt stands on the north and west. The map keeps seed 3; its field path crosses the brook at a ford (the 2026-09-27 entry below).
+`build_comb`), and a windward quarter derived from the slope - CLOSED by feature 261: the wind is the regional northwest and the belt stands on the north and west. The map keeps seed 3; its field path crosses the brook on a plank footbridge, every farmstead on the near bank (the 2026-09-27 entry below describes the roll it was written against).
 
 The woodland commons are
 DERIVED, not authored - their count and sizes move with the roll (this file went stale on the

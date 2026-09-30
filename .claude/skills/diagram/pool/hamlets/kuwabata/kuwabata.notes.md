@@ -777,7 +777,7 @@ The GM's ruling of 2026-09-28 - "We should eliminate anything which is only mode
 - **A pig sty stands within 320 ft of a farmhouse**, the farthest main drew: the fry village takes the smaller ponds, and the
   grow-out ponds it leaves lie out to the block's far end, so a household with none in reach keeps no sty.
 
-Measured on this roll (2026-09-29): 16 houses; bath rooms 5 (by seat: stable_end 5; the hamlet's seat main_door), wood sheds 7, privies 14 (4 on the sun side), storehouses 4, bamboo stands 5, woodland stands 0, pig sties 2 of 7 rolled (no sty beyond 320 ft of a farmhouse); house turns -3 to 18 degrees; every declared fixture seated.
+The counts on the shipped roll are the census block's (`make notes-census`), never typed here: a hand-typed line for the 2026-09-29 roll stood here and went stale when the roll moved (feature 293).
 
 And on the pond block:
 
@@ -793,3 +793,5 @@ And on the pond block:
 ## 2026-09-30 (feature 293): the storehouses go to the largest farmhouses
 
 The storehouse annex is now dealt to the largest farmhouses by the main house's footprint (research homesteads/120) and its length held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (`kura_rect`). Measured against main's manifest: the two storehouses stood on the 9th and 16th (the smallest) of 16 farmhouses and now stand on the 1st and 2nd, drawn 24.0 x 13.3 and 23.1 x 12.8 ft. The re-pack kept 5 of the 16 house centers.
+
+The annex's size is a deliberate deviation (research homesteads/120 and 430): the storehouses the record reads were about 15 by 18 ft, free-standing; the map draws them against the back wall, in the farm sheds' band.

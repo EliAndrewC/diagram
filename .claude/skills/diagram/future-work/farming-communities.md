@@ -2416,3 +2416,22 @@ off square; the lane law's `bends` then refuses it. On rolled maps the seating's
 before any is drawn, so nothing ships kinked (0 `bends` over the pool and cohort 1-20) - but the seating may be turning
 down seats a straighter rejoin would keep. Sketch: size the pad from the crossing angle (the squared leg's own length),
 or square the crossing before rejoining; measure seats offered and refused on the cohort before and after. Moves maps.
+
+## OPEN 2026-09-30 (feature 293, settlement-review of Sawada): a shared byre's pocket can end up out of every household's borrowing reach
+
+**Measured** (the manifests, nearest farmhouse to each shared shed on the two `detached_commons` maps): Sawada 66, 124, 92
+and 174 ft on feature 293's roll against 66, 47, 92 and 129 on main - two of four past `_BORROW_REACH` (120 ft) where main
+had one; Inashiro 138, 74 and 87 on both (its pockets and houses near them did not move). Mizuguchi, Kashikawa and Kuwabata
+keep household byres.
+
+**Mechanism.** Since feature 287 the pockets are laid in the seat band BEFORE any house (`reserve_commons_byres`, called
+from `stage_homesteads`), spread from each other and from the band's middle, so the houses pack round them - but where the
+houses will stand is not known then, and a re-pack that moves the houses (feature 293's storehouses moved 15 of Sawada's 19)
+leaves a pocket in open ground. `draft_byres`'s older doctrine ("SPREAD THE BYRES ACROSS THE SETTLEMENT", "A BORROWER IS A
+FLOOR") is not asked of the pocket path.
+
+**Sketch.** Lay the pockets DURING the seating rather than before it: after every `households / target` households are
+seated, lay the next pocket on the free ground nearest the group just seated (the `_commons_pocket_clear` test, the tree's
+corridors already known), so each shed has its borrowers by construction; a pool test that every shared shed has a
+household within `_BORROW_REACH`. Deferred because it reorders 287's seating loop (`_seat_households`), which the port that
+found it did not own; put to the GM in specs/293-effort-level-experiment/outputs/I-port-handoff.md.
