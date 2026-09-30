@@ -159,12 +159,12 @@ class Granary(Kind):
     damp; the rice storehouse of the Takayama intendancy is an earth-walled kura, its walls set with gaps for
     ventilation, and a kura guarded its grain against fire, damp and theft. Tax rice flowed from the village granaries through the magistrate's compound toward central stores,
     so the office kura holds grain in transit plus a local reserve; and since an intendant's seat was also where the year's tax was stored, a county seat's granary stands inside
-    the compound rather than in the town. Where water gives a county a way out, the grain moves on; a remote
-    county, where transport costs more, keeps a row of kura instead. The lord's kura held the paddy tax as brown rice in straw
+    the compound rather than in the town. Where water gives a county a way out, the grain waits in a row of storehouses at its river landing and moves on; a remote
+    county, where transport costs more, keeps it in the office's own storehouse instead. The lord's kura held the paddy tax as brown rice in straw
     bales, with a corner of unhulled rice kept against famine.
 
-    Note: The kura, its rice and its place inside the compound follow the record; that a county with water ships its grain on while a remote one keeps it in a row of kura is this map's reading, since no source says Takayama's rows held all of Hida's rice. The kura is drawn at about 43 to 50 by
-    25 to 27 ft and checked against real kura sizes, and its two forms follow the record, each sheet taking one. The
+    Note: The kura, its rice and its place inside the compound follow the record; that a county with water ships its grain on while a remote one keeps it in the office's storehouse is this map's reading, since no source describes storehouses at a county's landing or says Takayama's rows held all of Hida's rice. The kura is drawn at about 43 to 50 by
+    25 to 27 ft and set by guess, since no source gives a county office's storehouse size, between the 440 to 740 sq ft of a three-village store's storehouses and a tenth of Takayama's 11,222 sq ft; its two forms follow the record, each sheet taking one. The
     storehouse on posts is attested in Japan for the southern islands and the Ainu north rather than for an
     intendant's office, whose grain store on the Takayama model is the earth-walled kura. The staging - tax rice passing through the compound and
     held there in transit beside a local reserve - is this map's own reading, which no source states, and the
@@ -334,12 +334,12 @@ class TallyOffice(Kind):
     What: A small office on the route goods take through the compound, where they are counted or weighed, the
     seal is set and the tally written: the record of goods the office supervises but does not own.
 
-    Why: The magistracy's hold on moving goods is documentary. Tax rice moved on boats the shogunate hired directly, flying
+    Why: The magistracy's hold on moving goods is documentary. The shogunate's tax rice went by sea on ships it hired directly, flying
     an official pennant and inspected at the ports of call, the office owning no hulls - and a charcoal store
     was a supervised, tallied depot, its goods sealed there and never owned. So the post that writes the tally
     stands where the goods pass, between the store and the way out.
 
-    Note: That tax rice moved on hired hulls under an official pennant and port inspection is read; that the
+    Note: That the shogunate's tax rice went by sea on hired hulls under an official pennant and port inspection is read, and carrying that to a county's river is this project's own; that the
     office's hold on it was documentary is this project's reading. No source describes the tally office as a
     building of its own; the room where the seal and the tally are made is inferred from them.
 
@@ -495,8 +495,8 @@ class GranaryStilts(Kind):
 
     Why: The storehouse on posts, the takakura, kept its floor high to keep rats from the grain, with guards
     against them, and to let the air through against damp. Neither reason is a river's, so both hold for a
-    granary away from the water as well as for one beside it; at the great rice stores on the river at Edo, a
-    raised floor answered flood besides. Such storehouses were still built in Japan on Amami Oshima, on
+    granary away from the water as well as for one beside it.
+    Such storehouses were still built in Japan on Amami Oshima, on
     Hachijojima and among the Ainu into modern times.
 
     Note: The floor raised on posts follows the record as one of a granary's two forms, though it is attested for the southern islands and the Ainu north, not for an intendancy's store; the other, an

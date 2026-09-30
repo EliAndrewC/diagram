@@ -84,7 +84,7 @@ class River(Kind):
 
     Note: Freight by water is a recorded finding, and the village granary is recorded as a temporary store for
     shipment, but that a well-watered county's office granary is a staging node its tax rice passes through is
-    the research's own reading, and so is the contrast with an isolated county's rows of granaries, whose one example (Takayama holding rice for all of Hida) has no readable source; the rule that only the Lion build canals is the setting's canon. Edo-period river landings were set up
+    the research's own reading, and so is the contrast with an isolated county's rows of granaries, whose one example (Takayama holding rice for all of Hida) has no readable source; the hired hulls under an official pennant are recorded for the shogunate's rice going by sea, and carrying them onto a county's river is this project's own; the rule that only the Lion build canals is the setting's canon. Edo-period river landings were set up
     to carry the tax rice to Edo and Osaka. That Japan's tax rice went by water is recorded, but that its heavy
     freight in general did rests on general reading rather than a page a reader can open.
 
