@@ -408,6 +408,8 @@ clay hulling mills	clay mill
 clay mill	clay mill
 clay mills	clay mill
 clay-mill	clay mill
+clear width	clear width
+clear widths	clear width
 climbing kiln	noborigama
 climbing kilns	noborigama
 cloister	cloister
@@ -952,6 +954,7 @@ fry ponds	nursery pond
 fry-catching landings	fry landing
 fsw	FSW
 fsws	FSW
+ft clear	clear width
 fu	fu
 fubokuwakasho	Fubokuwakasho
 fubokuwakashō	Fubokuwakasho
