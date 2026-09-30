@@ -119,6 +119,25 @@ def commit_lane(
     return True
 
 
+def string_pull_chord_ok(pts: Poly, a: int, b: int, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float) -> bool:
+    """May `_smooth_web`'s string-pull replace `pts[a+1:b]` with the chord `pts[a]`-`pts[b]`? Yes at the web's own margins
+    (`_clear_link`); at this lane's own keep-out `gap` (`_clear_touch`) only when the chord is a SIMPLIFICATION - every
+    vertex it skips lies within `_JOG_FT` of it - because a new line across open ground owes the houses their corridor.
+
+    LIFTED OUT OF `_smooth_web` (tests/CLAUDE.md, the closure rule; feature 287, 2026-09-30): the straggler footpath pass
+    that was the only roll reaching the jog-bounded arm was deleted at the GM's instruction, so the arm is tested here
+    with plain points."""
+    if _clear_link(pts[a], pts[b], hard, walls, water):
+        return True
+    # A FOOTPATH CHORDED AT ITS OWN 4 ft MARGIN WAS TRIED AND ROTATED A BEND ONTO INASHIRO (feature 137
+    # T04, 2026-08-28): letting a straggler lane take any chord `_clear_touch` allows straightened seed
+    # 43's fold and put a new sharp bend on the reference hamlet's web. Not kept; the fold's real
+    # cause is the straggler router folding inside a pocket, and that is where the fix belongs.
+    if not _clear_touch(pts[a], pts[b], hard, walls, water, gap):
+        return False
+    return all(seg_dist(v[0], v[1], pts[a], pts[b]) <= _JOG_FT for v in pts[a + 1 : b])
+
+
 def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
     """The LAST pass over the web: take out what feet would never have worn.
 
@@ -228,15 +247,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
         _lane_gap = max(_TOUCH_GAP, float(ln.get("w") or 5.0) / 2.0 + 2.0)
 
         def _shortcut_ok(a: int, b: int, pts: Poly = pts, _g: float = _lane_gap) -> bool:
-            if _clear_link(pts[a], pts[b], hard, walls, water):
-                return True
-            # A FOOTPATH CHORDED AT ITS OWN 4 ft MARGIN WAS TRIED AND ROTATED A BEND ONTO INASHIRO (feature 137
-            # T04, 2026-08-28): letting a straggler lane take any chord `_clear_touch` allows straightened seed
-            # 43's fold and put a new sharp bend on the reference hamlet's web. Not kept; the fold's real
-            # cause is the straggler router folding inside a pocket, and that is where the fix belongs.
-            if not _clear_touch(pts[a], pts[b], hard, walls, water, _g):
-                return False
-            return all(seg_dist(v[0], v[1], pts[a], pts[b]) <= _JOG_FT for v in pts[a + 1 : b])
+            return string_pull_chord_ok(pts, a, b, hard, walls, water, _g)  # the body is `string_pull_chord_ok`
 
         out = [pts[0]]
         a = 0
