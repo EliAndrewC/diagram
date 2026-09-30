@@ -287,9 +287,44 @@ def draw_holdings(s: Settlement) -> int:
     return n
 
 
+def longest_part(geom: Any) -> list[Pt]:
+    """The coordinates of a line geometry's longest part - itself for a LineString; [] for an empty or zero-length one."""
+    if geom.geom_type == "MultiLineString":
+        geom = max(geom.geoms, key=lambda g: g.length)
+    if geom.is_empty or geom.length <= 0.0:
+        return []
+    return [(float(x), float(y)) for x, y in geom.coords]
+
+
 def parallel(line: Sequence[tuple[Pt, Pt]], d: float) -> list[tuple[Pt, Pt]]:
-    """`line` set out `d` along each sample's own outward normal (the next street of a row village, plan D15)."""
-    return [((p[0] + n[0] * d, p[1] + n[1] * d), n) for p, n in line]
+    """`line` set out `d` on its outward side (the next street of a row village, plan D15), as a TRUE parallel curve
+    (`offset_curve`, rounded at the joins) resampled at the line's own spacing, each sample carrying the outward normal
+    of the first street's sample nearest it. Set out sample by sample along each one's own normal, the samples on the
+    inside of a bend tighter than `d` crossed over each other and the street drawn through them doubled back: Mizuguchi's
+    second street, set out 400 ft beyond a first that curves with the brook's bank, was a 7,208 ft line with 17 turns past
+    140 degrees (settlement-review, 2026-09-30); dropping the samples that ran back still left two folds."""
+    if len(line) < 2 or d == 0.0:
+        return [((p[0] + n[0] * d, p[1] + n[1] * d), n) for p, n in line]
+    from shapely.geometry import LineString, Point
+
+    pts = [p for p, _n in line]
+    base = LineString(pts)
+    mid = len(line) // 2
+    probe = Point(pts[mid][0] + line[mid][1][0] * d, pts[mid][1] + line[mid][1][1] * d)
+    off = min((base.offset_curve(d, join_style="round"), base.offset_curve(-d, join_style="round")), key=lambda g: g.distance(probe))
+    coords = longest_part(off)
+    if len(coords) < 2:
+        return []
+    off = LineString(coords)  # in the first street's direction on either side: shapely 2 keeps an offset's direction
+    step = max(math.dist(pts[0], pts[1]), 1.0)
+    k = max(1, int(off.length // step))
+    out: list[tuple[Pt, Pt]] = []
+    for i in range(k + 1):
+        q = off.interpolate(off.length * i / k)
+        qp = (float(q.x), float(q.y))
+        n = min(line, key=lambda s: math.dist(s[0], qp))[1]
+        out.append((qp, n))
+    return out
 
 
 def clear_frames(

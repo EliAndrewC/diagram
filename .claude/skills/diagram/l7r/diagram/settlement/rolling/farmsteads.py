@@ -7,7 +7,7 @@ import math
 from typing import TYPE_CHECKING, Any, cast
 
 from .._geom import Indexed
-from ..homestead_parts.groves import GROVE_CLUMP_CROWNS, GROVE_CROWN_AREA, HOUSEHOLD_BAMBOO_PREVALENCE, band_clumps
+from ..homestead_parts.groves import GROVE_BAMBOO_PATCH_FT, GROVE_CLUMP_CROWNS, GROVE_CROWN_AREA, HOUSEHOLD_BAMBOO_PREVALENCE, bamboo_patch, band_clumps
 from .fit import part_box
 
 if TYPE_CHECKING:
@@ -87,8 +87,10 @@ class FarmsteadFlushMixin:
             fx, fy = (float(face[0]), float(face[1])) if face else (0.0, 0.0)
             cx, cy = cx + fx * _inset / 2, cy + fy * _inset / 2
             w, h = max(4.0, w - abs(fx) * _inset), max(4.0, h - abs(fy) * _inset)
+            # ...AND A FARM THAT ROLLED BAMBOO KEEPS A PATCH OF IT IN EACH WINDWARD BAND (`GROVE_BAMBOO_PATCH_FT`)
+            _patch = bamboo_patch(cx, cy, w, h, (fx, fy), self.px(GROVE_BAMBOO_PATCH_FT[0]), self.px(GROVE_BAMBOO_PATCH_FT[1])) if has_bamboo and depth == "deep" else None
             for px_, py_, pw, ph in band_clumps(cx, cy, w, h, _cap):
-                self._draw_grove(px_, py_, pw, ph, face, mix="windbreak" if depth == "deep" else "dooryard", cls="homestead grove", bamboo=has_bamboo)
+                self._draw_grove(px_, py_, pw, ph, face, mix="windbreak" if depth == "deep" else "dooryard", cls="homestead grove", bamboo=has_bamboo, bamboo_box=_patch)
         self.M["houses"] = Indexed(
             [h for h in self.M["houses"] if h.get("on_dike")] + survivors
         )  # dike-top houses (dike_top_houses) are not pending farmsteads - keep them; Indexed for the fit rules' index

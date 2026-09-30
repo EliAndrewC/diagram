@@ -185,3 +185,44 @@ def test_row_rules_pass_over_a_farm_with_no_front_door() -> None:
     """A farm with no grove of its own has no front door (`front_door` None): the door rule has nothing to judge."""
     M = {"meta": {"settlement_form": "linear"}, "row_street_plans": [[[0.0, 0.0], [1000.0, 0.0]]], "houses": [{"x": 500.0, "y": 50.0}], "lanes": []}
     assert not [r for r, _s in row_rules(M) if r == "farm_not_on_its_street"]
+
+
+def _hairpins(pts) -> int:  # type: ignore[no-untyped-def]
+    import math
+
+    n = 0
+    for a, b, c in zip(pts, pts[1:], pts[2:], strict=False):
+        v1, v2 = (b[0] - a[0], b[1] - a[1]), (c[0] - b[0], c[1] - b[1])
+        n1, n2 = math.hypot(*v1), math.hypot(*v2)
+        if n1 > 1e-6 and n2 > 1e-6 and (v1[0] * v2[0] + v1[1] * v2[1]) / (n1 * n2) < math.cos(math.radians(140)):
+            n += 1
+    return n
+
+
+def test_the_next_street_is_a_true_parallel_that_never_doubles_back() -> None:
+    """`parallel` (settlement-review of Mizuguchi, 2026-09-30): set out along each sample's own normal, a street beyond a
+    bend tighter than its offset crossed itself; as an offset curve it runs on, on the outward side, in the first's
+    direction."""
+    from l7r.diagram.hamletgen.homesteads.rows import parallel
+
+    straight = [((float(x), 0.0), (0.0, 1.0)) for x in range(0, 200, 8)]
+    out = parallel(straight, 100.0)
+    assert all(abs(p[1] - 100.0) < 1e-6 for p, _n in out) and out[0][0][0] < out[-1][0][0], "same side, same direction"
+    below = parallel([((float(x), 0.0), (0.0, -1.0)) for x in range(0, 200, 8)], 100.0)
+    assert all(abs(p[1] + 100.0) < 1e-6 for p, _n in below) and below[0][0][0] < below[-1][0][0]
+    # a U bend of radius 60, its normals pointing inward (toward the bend's center), set out 150: the inside of the bend
+    import math
+
+    u = [((60.0 * math.cos(t), 60.0 * math.sin(t)), (-math.cos(t), -math.sin(t))) for t in (math.pi * k / 30 for k in range(31))]
+    assert _hairpins([p for p, _n in parallel(u, 150.0)]) == 0
+    assert parallel(straight[:1], 50.0) == [((0.0, 50.0), (0.0, 1.0))] and parallel(straight, 0.0)[0][0] == (0.0, 0.0)
+    assert parallel([((5.0, 5.0), (0.0, 1.0)), ((5.0, 5.0), (0.0, 1.0))], 10.0) == [], "a line of no length has no offset"
+
+
+def test_the_longest_part_of_an_offset() -> None:
+    from shapely.geometry import LineString, MultiLineString
+
+    from l7r.diagram.hamletgen.homesteads.rows import longest_part
+
+    assert longest_part(MultiLineString([[(0, 0), (1, 0)], [(0, 5), (9, 5)]])) == [(0.0, 5.0), (9.0, 5.0)]
+    assert longest_part(LineString()) == []
