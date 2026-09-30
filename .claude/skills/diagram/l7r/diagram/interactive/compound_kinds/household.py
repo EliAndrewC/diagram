@@ -499,7 +499,7 @@ class CompoundShrine(Kind):
     Covers: the shrine hall or halls, their edging and dividing rail, and the shrine labels
     Label: accurate
     Sources: fuchu-joge-pamphlet, neixiang-yamen-zhwiki, henan-neixiang, jawiki-saijin, jawiki-goshi, kotobank-aidono, hokora-jawiki, nara-nagao-jinja
-    Entry: research/buildings.html - 'What did the smallest branch office hold inside its walls?', 'Every administrative compound keeps a shrine', 'The size of a compound and the rank of its buildings'; research/religion-and-death.html - 'When one shrine hall serves several kami, does each have its own altar?'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
+    Entry: research/buildings.html - 'What did the smallest branch office hold inside its walls?', 'Every administrative compound keeps a shrine', 'The size of a compound and the rank of its buildings'; research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's halls and furnishings'
     """
 
     key = "compound shrine"
@@ -817,7 +817,7 @@ class ShrineAltar(Kind):
     Covers: each altar glyph inside a shrine hall, with its name and sublabels
     Label: accurate
     Sources: kotobank-aidono, jawiki-saijin, genbu-honden-styles, jawiki-goshi, tokyo-jinjacho-kamidana
-    Entry: research/religion-and-death.html - 'When one shrine hall serves several kami, does each have its own altar?'; research/buildings.html - 'Every administrative compound keeps a shrine'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/buildings.html - 'Every administrative compound keeps a shrine'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's halls and furnishings'
     """
 
     key = "shrine altar"
@@ -848,7 +848,7 @@ class Torii(Kind):
     Covers: the approach torii before a compound shrine or a country shrine
     Label: accurate
     Sources: jinjahoncho-keidai, jawiki-torii, jawiki-yashikigami, torii-enwiki, fushimi-inari-jawiki, fushimi-inari-senbon, hokora-jawiki, nara-nagao-jinja, jinja-jawiki
-    Entry: research/religion-and-death.html - 'How far before a small shrine does its torii stand, and can two shrines share one?', 'Torii are VOTIVE DONATIONS', 'Torii spacing', 'Where do the first and the innermost arches stand, and where does the hall's label go?', 'How big is a country shrine, and what stands in its precinct?'
+    Entry: research/religion-and-death.html - 'How far before a small shrine does its torii stand, and can two shrines share one?', 'Torii are VOTIVE DONATIONS', 'Torii spacing', 'Where do the first and the innermost arches stand, and where does the hall's label go?', 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's halls and furnishings'
     """
 
     key = "torii"
