@@ -235,7 +235,7 @@
       "tubs_in_buildings",
       "tubs_on_wells"
     ],
-    "notes": "The country monk lives at the shrine: the hall is the villagers' rite-place and the monk's home in one building by default (the GM's words of 2026-09-19; attested at Kaie-ji and called rare there), or two buildings in the ordinary parish temple's form. The bands are the measured village halls, honden and kuri of the research pass (specs/254-country-shrine/research.md R3). The precinct is not enclosed - its arch and its wood mark it - and its size is the village-shrine registers as found (research 'How large was a village shrine's precinct', feature 268); the wood stands on the sides of the hall its ground gives it (research 'What shape is a village shrine's wood', feature 279).",
+    "notes": "The country monk lives at the shrine: the hall is the villagers' rite-place and the monk's home in one building by default (the GM's words of 2026-09-19; attested at Kaie-ji and called rare there), or two buildings in the ordinary parish temple's form. The bands are the measured village halls, honden and kuri of the research pass (specs/254-country-shrine/research.md R3). The precinct is not enclosed - its arch and its wood mark it - and its size is the village-shrine registers as found (research 'Village shrines: where they stand, and how big their grounds are', feature 268); the wood stands on the sides of the hall its ground gives it (research 'What shape is a village shrine's wood', feature 279).",
     "required": [
       {
         "id": "sanctuary",
