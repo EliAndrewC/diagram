@@ -320,7 +320,7 @@ is otherwise unchanged; what moves is where each is implemented, recorded in the
 and SC-008. FR-019's front door is "the open side of its grove"; under amendment 7 a door path is a tree lane the settle
 never cuts, so it must keep the whole lane law as drawn, and on cohort seeds 11, 23 and 904 (measured 2026-09-30) a
 far-row farm - fronting its own holding, its grove's deep bands between house and street (research homesteads/159) - had
-no lawful path from the front-door point, which stood more than the 40 ft door reach from any way. FR-019 is kept by a way
+no lawful path from the front-door point, which stood beyond the door reach (`DOOR_REACH_FT`) from any way. FR-019 is kept by a way
 reaching the farm's dooryard on an OPEN side of its grove: the front door, or - only where no lawful way leaves the front -
 a flank of the dooryard facing no band of the farm's own grove (so a two-sided grove's; a three- or four-sided grove's farm
 still needs its front, and a site where none is lawful is refused), with open ground between that flank and the front

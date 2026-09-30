@@ -32,7 +32,7 @@ from . import law
 from .bund import RunOnBlocks, tip_onto_the_bund
 from .checks import PathChecker, brook_fords, drawn_water_segs, ford_crossing, gap_segments, stream_segs
 from .clearance import _HAIRPIN_DEG, clip_to_clear, route_around
-from .dry_exit import EXIT_CELL_FT, dry_exit
+from .dry_exit import EXIT_CELL_FT, GROVE_EXIT_CELL_FT, clear_of_bands, dry_exit
 from .fabric import _crosses_fabric, _fabric_hits, _homestead_polys
 from .geom import _turn_deg, memo_ground, polyline_len, push_clear_of_fabric, push_out_of, worked_ground
 from .route import _route, set_crossing
@@ -953,24 +953,6 @@ def folds_on_the_strip(M: Mapping[str, Any], run: Poly) -> bool:
     u, v = (bx - ax, by - ay), (first[0] - run[0][0], first[1] - run[0][1])
     cos = (u[0] * v[0] + u[1] * v[1]) / ((math.hypot(*u) or 1.0) * (math.hypot(*v) or 1.0))
     return math.degrees(math.acos(max(-1.0, min(1.0, cos)))) >= law.DOUBLE_BACK_DEG
-
-
-def clear_of_bands(p: Pt, bands: Sequence[Poly], clear: float, tries: int = 4) -> Pt:
-    """`p` pushed out past `clear` of every grove band it stands in or within `clear` of (`push_out_of`, a few rounds, since a
-    push off one band can land near another)."""
-    for _ in range(tries):
-        near = next((b for b in bands if point_in_poly(p[0], p[1], b) or edge_dist(p[0], p[1], b) < clear), None)
-        if near is None:
-            break
-        p = push_out_of(near, p, clear)
-    return p
-
-
-GROVE_EXIT_CELL_FT = 7.0
-"""The dry exit's grid where farms carry their own groves (feature 291): a cell center stands clear when it is a band's
-footpath gap and the track's half-width (7 ft) plus 0.71 of a cell from each band, so a gap G between two bands is sure to
-hold one when G >= 14 + 2.41 x cell - for the 32 ft lane's room (`dispersed.LANE_ROOM_FT`), a cell of at most 7.4 ft. Only a
-connector no bearing clears is found so, so the finer grid is paid where it is needed."""
 
 
 class NoDryExit(ValueError):

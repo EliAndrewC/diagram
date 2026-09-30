@@ -1,0 +1,6 @@
+{
+  "utc": "20260930T202100Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: FR-004: the gate runs beside this review in the paired run (make verify started it for this engine key)"
+}

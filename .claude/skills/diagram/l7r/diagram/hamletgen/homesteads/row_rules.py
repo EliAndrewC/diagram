@@ -184,16 +184,40 @@ def doors_unreached(M: Mapping[str, Any], reach: float = DOOR_REACH_FT) -> list[
     segs = [s for ln in M.get("lanes") or [] for s in _segs(ln.get("pts") or [])]
     if not segs:
         return []
-    # ...OR REACHED AT AN OPEN FLANK OF ITS DOORYARD (FR-019's exception, amendment 8): its own door path from a flank facing
-    # no band of its grove, drawn only where no lawful path left the front and the ground to the front door is open
-    # (`serve.lay_door_paths`, which records the lane `from_flank`)
-    flanked = {_key(ln["serves"]) for ln in M.get("lanes") or [] if ln.get("from_flank") and ln.get("serves")}
+    # ...OR REACHED AT AN OPEN FLANK OF ITS DOORYARD (FR-019's exception, amendment 8), judged from the drawing, never from the
+    # placer's own flag (spec-fidelity's condition): a door path serving the farm that starts in its dooryard on a side no
+    # band of its grove faces, with open ground between that start and the front door (`reached_from_a_flank`)
+    paths: dict[tuple[float, float], list[Pt]] = {}
+    for ln in M.get("lanes") or []:
+        if ln.get("serves") and ln.get("pts"):
+            paths.setdefault(_key(ln["serves"]), []).append((float(ln["pts"][0][0]), float(ln["pts"][0][1])))
     out = []
     for h in M.get("houses") or []:
         door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
-        if door is not None and _dist(door, segs) > reach and _key((h["x"], h["y"])) not in flanked:
-            out.append(_key((h["x"], h["y"])))
+        k = _key((h["x"], h["y"]))
+        if door is not None and _dist(door, segs) > reach and not any(reached_from_a_flank(h, door, p0, reach) for p0 in paths.get(k, ())):
+            out.append(k)
     return out
+
+
+def reached_from_a_flank(h: Mapping[str, Any], front: Pt, start: Pt, reach: float = DOOR_REACH_FT) -> bool:
+    """Does a door path starting at `start` reach farm `h` at an open flank of its dooryard (amendment 8): within `reach` of
+    its yard, on a side of the yard no band of its own grove faces (the direction from the yard's center within 0.7 of a
+    band's face is that band's side), and with open ground - no house, no band - between it and the `front` door?"""
+    from ..ways.serve import front_to_flank_open  # local: the ways' door helpers, beside `front_door`
+
+    g = h.get("geom") or {}
+    yard = g.get("yard")
+    if yard is None:
+        return False
+    yx, yy, yw, yh = (float(v) for v in yard)
+    if max(abs(start[0] - yx) - yw / 2, abs(start[1] - yy) - yh / 2, 0.0) > reach:
+        return False
+    vx, vy = start[0] - yx, start[1] - yy
+    n = math.hypot(vx, vy) or 1.0
+    if any((vx * float(f[0]) + vy * float(f[1])) / n > 0.7 for f, _depth in g.get("grove_faces") or ()):
+        return False
+    return front_to_flank_open(front, start, h)
 
 
 def bamboo_mismatch(M: Mapping[str, Any]) -> list[tuple[str, tuple[float, float]]]:

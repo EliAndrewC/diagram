@@ -1,6 +1,6 @@
 {
  "feature": "291-homestead-grove-sides",
- "plan_sha256": "5d4436da9518c3ea120db6f2d7f4710a90bdb14bf0595254a4c7d8910d9ebf39",
+ "plan_sha256": "1e91d795836263064795343ed6880c415f3fe6e3b144d598e43eaae223755f9b",
  "reviewed": "2026-09-30",
  "declared": "spec-fidelity",
  "decisions": [
@@ -85,15 +85,15 @@
   },
   {
    "id": "D14",
-   "summary": "row_line knob and first-street choice as accepted at round 4; NEW: the dispersed hamlet's canvas grown by LINEAR_CANVAS 1.5 as the row's (a drawing convention, unused ground cropped), on the pinned Audit-905 seating 16 of 20 grove farms on the smaller sheet",
+   "summary": "row_line knob and first-street choice as accepted; the linear/dispersed canvas factor LINEAR_CANVAS now 1.0 (287's own canvas, D20), was 1.5 - a drawing convention, unused ground cropped",
    "class": "within",
-   "why": "The row-line content is unchanged from round 4. The dispersed canvas is a sheet size, labeled a drawing convention, whose only effect is to let FR-010's every-household-seated hold for a dispersed hamlet of grove frames; it moves no rule and narrows nothing."
+   "why": "The row-line content is unchanged. The canvas is a sheet size labeled a drawing convention; it moves no rule. Under amendment 7 a sheet that cannot seat every household is a refused site, which the cohort counts as a FAIL (cohort_audit.refused_verdict), so a smaller sheet cannot ship a farm unseated and FR-010 is not narrowed."
   },
   {
    "id": "D15",
-   "summary": "row_sides one/both knob; farms one frame apart, seats center-out through try_place; further streets are the first line set out parallel past the last row, holdings, lane room and field keep, the frame's depth along the normal; MAX_STREETS 6 (GUESS) with any farm past it reported unseated and failing the cohort, never ranked; a linear hamlet never takes the front-row, rank or rescue passes even with no street seated, and row_rules reports no_row_street; a seat is refused where its frame crosses any planned street, its door is within DOOR_ROOM_FT 16 ft (drawing convention) of hard ground, or it stands on a reserved holding; the placer nudges, never slides",
+   "summary": "row_sides knob; farms one frame apart, center-out through try_place; further streets set out parallel; MAX_STREETS 6 (GUESS); a farm six streets cannot hold is never put in a rank - since amendment 7 the margin is taken back and the next tried, and past the last the site is refused (SiteRefused); no rank/rescue passes for a linear hamlet; row_rules no_row_street; seat refusals (frame across a street, door within DOOR_ROOM_FT of hard ground, on a reserved holding); nudge, never slide",
    "class": "within",
-   "why": "FR-014, FR-015, FR-016 and FR-013's 'never in ranks behind the row'. Round-3 items 1, 3, 4 and 5 are answered and the code agrees (stages.py sets _rows_seated for every linear hamlet and both the front-row and rank/rescue loops stop on it; row_rules returns no_row_street). The street cap is not a carve-out: a farm the six streets cannot hold is not seated elsewhere or in a rank, it fails FR-010 / SC-005 in the cohort, so no map that breaks FR-016 can pass. The three seat refusals serve FR-017/FR-019 (a door a way can reach, a street the row can front) and FR-015 (the holding kept), and their only cost is a refused seat whose farm must still be seated for the cohort to pass."
+   "why": "FR-013/FR-016 (never ranks) and amendment 7 word for word: the GM chose 287's rule, every household seated or the site refused. The refusal replaces the retired 'reported unseated' remainder; a refused seed is a FAIL in the cohort (refused_verdict), so no map breaking FR-010 or FR-016 can pass. The seat refusals are unchanged from the previous CLEAR."
   },
   {
    "id": "D16",
@@ -122,9 +122,29 @@
   },
   {
    "id": "D19",
-   "summary": "row_rules, water_rules, doors_unreached (linear only), bamboo_mismatch as accepted; NEW: water_rules reads meta.farm_water - a channel ending inside the farm's frame under channel, its own well inside the frame off its way in under well; the cohort adds a pinned dispersed spec for each farm_water value",
+   "summary": "row_rules, water_rules, bamboo_mismatch as accepted; doors_unreached (linear only) now also counts a farm reached by its own door path from an open flank of its dooryard, judged from the drawing (reached_from_a_flank)",
    "class": "within",
-   "why": "Enforcement of SC-008's dispersed clause word for word (the knob's value drawn on every farm, both values present) and of its linear and door clauses as already accepted; delete the requested behavior and these checks have nothing left to check (GM 2026-09-20)."
+   "why": "Enforcement of SC-008 as amendment 8 amended it ('SC-008's door check counts a farm so reached'). Read literally, reached_from_a_flank requires the path to start within DOOR_REACH_FT of the yard, in a direction not within 0.7 of any band face of the farm's own grove, and open ground to the front door: on a four-sided ring every direction is within 0.7 of some face (cos 45 deg = 0.707), so it never passes; on a three-sided grove only the front cone passes - exactly amendment 8's 'a three- or four-sided grove's farm still needs its front'. The 'only where no lawful way leaves the front' precondition is the placer's order (D20 WAYS), not the check's."
+  },
+  {
+   "id": "D20",
+   "summary": "The port onto feature 287 (amendments 7, 8): seat_rows and seat_every_household taking a row margin back with its holdings and refusing the site where no margin holds every farm; grove farm's bundle lays its own well pocket and its fixtures clear of its bands; streets and door paths as tree lanes held to the lane law; track exit grid (convention); canvas 1.0; cohort 30/30, make done green",
+   "class": "within",
+   "why": "Amendment 7 (the GM: 'Rebuild row villages and dispersed farms on 287's machinery ... taking 287's rule: every household seated or the site refused') - every rule of the spec re-implemented at 287's placers, none dropped. The water fallback (sources off the crop, an end farther off the yard, the straight chord where it crosses no hard ground, wall or water) stays within FR-018: the channel still ends in the farm's lot and water_rules checks it; where in the dooryard it ends was already a GUESS. 'A grove farm's lot keeps no beast' preserves the grove farm's bundle as it was (no byre laid beside a grove farm's house before the port either) and FR-010 only constrains byres, it does not require one."
+  },
+  {
+   "id": "D20-flank",
+   "summary": "Where no lawful door path leaves the front, the path starts from a flank of the dooryard facing no band of the farm's own grove, with open ground to the front door; recorded from_flank and meta.door_flanks",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "This is amendment 8, already ruled FAITHFUL on conditions by an independent spec-fidelity check; the plan carries its conditions: only where no lawful way leaves the front, a flank facing no band (so two-sided groves only in practice, a three- or four-sided farm needing its front or the site refused), open ground to the front door (front_to_flank_open), each farm recorded. FR-019's purpose, the farm's open side reached by a way, survives: the flank is itself an open side of the grove. To be raised with the GM, as amendment 8 says."
+  },
+  {
+   "id": "D20-reviews",
+   "summary": "The settlement reviews of this landing SKIPPED (SC-006, D11)",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Implied by the GM's own words, recorded verbatim in specs/294-settlement-review-rethink/request.md (2026-09-30, during 291's landing): 'Instead of reviewing only Mizuguchi and Kashikawa this time, Go ahead and skip the review process entirely ... I would prefer to have this feature land prior to rethinking all of that, which means that we can just skip it for now.' Not a session carve-out; it is the GM relaxing their own requirement for this landing."
   }
  ],
  "verdict": "CLEAR"

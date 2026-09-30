@@ -706,3 +706,39 @@ def test_a_household_strip_keeps_out_of_the_windbreak_belt() -> None:
     belt = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
     assert in_belt(belt, 50.0, 50.0, 10.0, 10.0) and in_belt(belt, 104.0, 50.0, 10.0, 10.0), "inside, or a corner reaching in"
     assert not in_belt(belt, 200.0, 50.0, 10.0, 10.0) and not in_belt(None, 50.0, 50.0, 10.0, 10.0) and not in_belt([(0.0, 0.0)], 1, 1, 1, 1)
+
+
+def test_a_flexible_pit_keeps_off_every_grove_band(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`_flexible_clear` (feature 291 on 287): the field pit's seat is refused in any farm's grove band."""
+    from l7r.diagram.hamletgen.homesteads import fixtures
+
+    s = Settlement(800, 800, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    monkeypatch.setattr(fixtures, "_strip_blocked", lambda *a, **k: False)
+    monkeypatch.setattr(fixtures, "across_the_brook", lambda *a: False)
+    h = {"x": 400.0, "y": 400.0}
+    assert fixtures._flexible_clear(s, h, (420.0, 460.0), (8.0, 8.0), [], [], None, [], None)  # type: ignore[arg-type]
+    s.M["groves"] = [{"x": 420.0, "y": 460.0, "w": 100.0, "h": 30.0}]
+    assert not fixtures._flexible_clear(s, h, (420.0, 460.0), (8.0, 8.0), [], [], None, [], None)  # type: ignore[arg-type]
+
+
+def test_a_far_row_farm_whose_holding_finds_no_room_is_not_seated_there(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`seat_rows` (plan D16): on a row with farms on both sides, a far-row seat whose holding the hard ground, the sheet or a
+    placed box leaves no room for is passed over, as a farm whose grove has no room is."""
+    import contextlib
+
+    from l7r.diagram.hamletgen.homesteads import capacity, rows, stage_homesteads
+
+    plan = a_plan(households=10, settlement_form="linear")
+    plan.seat = {**hg.seat_cluster(plan), "ladder": []}
+    plan.row_sides = "both"
+    s = Settlement(plan.W, plan.H, seed=3)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=False)
+    s._nucleated = False
+    s.field_polys.append(list(plan.envelope))
+    offered: list[int] = []
+    monkeypatch.setattr(rows, "holding_clear", lambda *a: offered.append(1) and None)
+    with contextlib.suppress(capacity.SiteRefused):
+        stage_homesteads(s, plan)
+    assert offered, "the far row was offered"
+    assert not s.M.get("row_holdings"), "no holding, so no far-row farm"

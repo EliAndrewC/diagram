@@ -163,11 +163,8 @@ def unhooked_both(leg: Sequence[Pt]) -> list[Pt]:
     """`leg` with a hook taken off either end (`geom.door_unhooked`, asked of the leg and of it reversed)."""
     from .geom import door_unhooked
 
-    def free(a: Pt, b: Pt) -> bool:
-        return True
-
-    out = door_unhooked(list(leg), free)
-    return door_unhooked(out[::-1], free)[::-1] if len(out) >= 2 else out
+    out = door_unhooked(list(leg), lambda a, b: True)  # every straightened leg is the join's own ground: judged whole after
+    return door_unhooked(out[::-1], lambda a, b: True)[::-1] if len(out) >= 2 else out
 
 
 def join_leg(path: Sequence[Pt], joined: Sequence[Pt]) -> list[Pt]:

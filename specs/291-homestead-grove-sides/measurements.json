@@ -515,5 +515,38 @@
   "observed": "2026-09-30",
   "source": ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary (term fan foot)",
   "method": "the gloss now says settlements often sit along a fan's foot and at some fans line up in an arc"
+ },
+ "inashiro-r8-f1": {
+  "verifies": "F1",
+  "subject": "inashiro",
+  "answers": "1dde9894e487",
+  "quantity": "the research record's stale well sentence and the summary's fan's-foot line",
+  "value": 0,
+  "unit": "stale sentences",
+  "observed": "2026-09-30",
+  "source": ".claude/skills/diagram/research/homesteads.html",
+  "method": "grep: 'the record rules only on the dispersed farm' 0 hits; the summary under 'Along what a row ran' now reads 'on a natural levee or a dike the ground did and the houses followed its line. A fan's foot carries a row of villages' (R13, merged from the research clone)"
+ },
+ "kuwabata-r8-f1": {
+  "verifies": "F1",
+  "subject": "kuwabata",
+  "answers": "1dde9894e487",
+  "quantity": "the awkward 'at the 6 ft' in the lane card's width caveat",
+  "value": 0,
+  "unit": "occurrences",
+  "observed": "2026-09-30",
+  "source": ".claude/skills/diagram/l7r/diagram/interactive/classes/water_and_ways.py (VillageLane)",
+  "method": "the caveat now reads '(3, 5 and 6 ft; a row village's street takes the 6 ft, a rank wider than the lanes off it)'"
+ },
+ "kashikawa-r8-f2": {
+  "verifies": "F2",
+  "subject": "kashikawa",
+  "answers": "1dde9894e487",
+  "quantity": "the holding modal's 'with that ground at their backs'",
+  "value": 0,
+  "unit": "occurrences",
+  "observed": "2026-09-30",
+  "source": ".claude/skills/diagram/l7r/diagram/interactive/classes/fields.py (the holding class)",
+  "method": "the modal now reads 'their lots backing on that ground while their houses face it across their yards'"
  }
 }

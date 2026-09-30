@@ -261,3 +261,20 @@ def test_no_writer_of_a_household_grain_plot_is_left_in_the_engine() -> None:
     writers = [str(p) for p in root.rglob("*.py") if pat.search(p.read_text())]
     assert (root / "hamletgen" / "homesteads" / "stages.py").exists(), "the walk is over the engine"
     assert writers == []
+
+
+def test_a_rank_round_stops_offering_seats_once_the_quota_is_seated(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The rank rounds offer many seats; once every household has a house the rest of the round goes unoffered - with a
+    placer that seats every seat it is offered, the front row silent, the first round fills the quota part-way through."""
+    s, plan = _toy(10)
+    monkeypatch.setattr(stages, "front_row", lambda plan_, count, **kw: [])
+    offered: list[tuple[float, float]] = []
+
+    def seat(x: float, y: float, kind: str) -> bool:
+        offered.append((x, y))
+        s.M["houses"].append({"x": x, "y": y, "w": 46.0, "h": 28.0, "kind": kind, "geom": {}})
+        return True
+
+    monkeypatch.setattr(s, "try_place", seat)
+    placed, _cloud = stages._seat_households(s, plan)
+    assert placed == 10 and len(offered) == 10, "ten offered, ten seated, the rest of the round never asked"

@@ -23,6 +23,7 @@ from functools import lru_cache
 from l7r.diagram.settlement import edge_dist, point_in_poly, seg_dist
 
 from ..consts import Poly, Pt
+from .geom import push_out_of
 
 EXIT_CELL_FT = 20.0
 """The flood fill's grid - a map drawing convention: finer than any neck a track would use (a track is 6 ft; a neck under 20
@@ -130,3 +131,21 @@ def _pull(pts: Poly, blocked: Set[tuple[int, int]], x0: float, y0: float, cell: 
         out.append(pts[m])
         k = m
     return out
+
+
+def clear_of_bands(p: Pt, bands: Sequence[Poly], clear: float, tries: int = 4) -> Pt:
+    """`p` pushed out past `clear` of every grove band it stands in or within `clear` of (`push_out_of`, a few rounds, since a
+    push off one band can land near another)."""
+    for _ in range(tries):
+        near = next((b for b in bands if point_in_poly(p[0], p[1], b) or edge_dist(p[0], p[1], b) < clear), None)
+        if near is None:
+            break
+        p = push_out_of(near, p, clear)
+    return p
+
+
+GROVE_EXIT_CELL_FT = 7.0
+"""The dry exit's grid where farms carry their own groves (feature 291): a cell center stands clear when it is a band's
+footpath gap and the track's half-width (7 ft) plus 0.71 of a cell from each band, so a gap G between two bands is sure to
+hold one when G >= 14 + 2.41 x cell - for the 32 ft lane's room (`dispersed.LANE_ROOM_FT`), a cell of at most 7.4 ft. Only a
+connector no bearing clears is found so, so the finer grid is paid where it is needed."""

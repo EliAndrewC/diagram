@@ -871,3 +871,9 @@ Measured on this roll (2026-09-30): 12 houses on 2 streets, 12 grove farms; 24 b
 bath rooms 2 of 3 rolled (one unseated, recorded in meta.farm_fixtures_unseated), wood sheds 5, privies 11, coops 10,
 manure heaps 8, shrine 1; the brook on from off the sheet and a field path over it to the paddy; 10 lanes;
 every row, water, door, bamboo, grove and overlap rule clean; attempt 1.
+
+## 2026-09-30 (feature 291 on feature 287): the port - the layout moved
+
+Feature 287 (placer guarantees) landed on main while 291 was open, and 291 was rebuilt on it (amendments 7 and 8): every
+household seated or the site refused; a grove farm's well pocket and fixtures laid in its bundle at seating; a row's
+streets and door paths held to the lane law as tree lanes. Measured on this roll (2026-09-30, from the manifest): 12 houses on 2 streets, every farm with its own well (12, drawn at the pocket its seating laid) and 9 door paths (the rest stand on their street); 14 lanes, the web settled in 4 rounds; bath rooms 3 of 3, wood sheds 5, privies 11, coops 10, manure heaps 8, shrine 1 - every rolled fixture laid in its farm's bundle; seated on the first margin.

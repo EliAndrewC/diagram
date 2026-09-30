@@ -1864,3 +1864,9 @@ Feature 291 rolls every hamlet's farmstead-grove sides, its row village's line, 
 water, and records them all in the manifest (grove sides 2, flank 1, flood ground no; row line street, sides both, water shared; farm water channel). This map is **nucleated**, so none of them is drawn: a nucleated
 hamlet keeps no farm grove of its own and no row, and its wells are the shared ones (`interactive/place.py`
 `homestead_grove_default` puts no grove text on its page). The picture is unchanged (the render byte-identical to the roll before).
+
+## 2026-09-30 (feature 291 on feature 287): the port - the layout moved
+
+Feature 287 (placer guarantees) landed on main while 291 was open, and 291 was rebuilt on it (amendments 7 and 8): every
+household seated or the site refused; a grove farm's well pocket and fixtures laid in its bundle at seating; a row's
+streets and door paths held to the lane law as tree lanes. Measured on this roll (2026-09-30, from the manifest): 15 houses, nucleated as pinned; 13 lanes, the web settled in 4 rounds; 2 shared wells; bath rooms 4, wood sheds 6, privies 13, coops 13, manure heaps 8, shrine 1; seated on the first margin.

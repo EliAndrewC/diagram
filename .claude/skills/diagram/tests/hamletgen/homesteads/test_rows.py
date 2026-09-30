@@ -142,9 +142,18 @@ def test_doors_and_bamboo() -> None:
     assert doors_unreached(_row_map(lanes=[{"pts": [[0.0, -500.0], [1000.0, -500.0]]}])) == [(100.0, 60.0)]
     assert doors_unreached({"meta": {"settlement_form": "linear"}, "lanes": []}) == []
     assert doors_unreached({**_row_map(lanes=[{"pts": [[0.0, -500.0], [1000.0, -500.0]]}]), "meta": {"settlement_form": "dispersed"}}) == [], "no network to reach"
-    # FR-019's exception (amendment 8): a farm reached by its own door path from an open flank of its dooryard counts
-    flank = {"pts": [[0.0, -500.0], [1000.0, -500.0]]}, {"pts": [[130.0, 40.0], [130.0, -500.0]], "serves": [100.0, 60.0], "from_flank": True}
-    assert doors_unreached(_row_map(lanes=list(flank))) == []
+    # FR-019's exception (amendment 8), judged from the drawing: a farm reached by its own door path from an open flank of
+    # its dooryard counts (the yard at (100, 90), its grove facing north; the path starts east of the yard) ...
+    far = {"pts": [[0.0, -500.0], [1000.0, -500.0]]}
+    assert doors_unreached(_row_map(lanes=[far, {"pts": [[135.0, 95.0], [135.0, -500.0]], "serves": [100.0, 60.0]}])) == []
+    # ...but not from the side its grove faces, nor from beyond its dooryard, nor with no yard, nor across its house
+    assert doors_unreached(_row_map(lanes=[far, {"pts": [[100.0, 50.0], [100.0, -500.0]], "serves": [100.0, 60.0]}])) == [(100.0, 60.0)], "the grove's side"
+    assert doors_unreached(_row_map(lanes=[far, {"pts": [[400.0, 95.0], [400.0, -500.0]], "serves": [100.0, 60.0]}])) == [(100.0, 60.0)]
+    from l7r.diagram.hamletgen.homesteads.row_rules import reached_from_a_flank
+
+    assert not reached_from_a_flank({"geom": {}}, (0.0, 0.0), (1.0, 1.0))
+    walled = {"geom": {"yard": (100.0, 90.0, 40.0, 20.0), "house": (100.0, 60.0, 46.0, 28.0), "groves": [], "grove_faces": []}}
+    assert not reached_from_a_flank(walled, (100.0, 108.0), (100.0, 40.0)), "across the house"
     M = {"meta": {"household_bamboo_in_grove_farms": [[1.0, 2.0]]}, "groves": [{"of": [3.0, 4.0], "bamboo": True}, {"of": [1.0, 2.0], "bamboo": True}]}
     assert bamboo_mismatch(M) == [("draws_unrolled", (3.0, 4.0))]
     assert bamboo_mismatch({"meta": {"household_bamboo_in_grove_farms": [[1.0, 2.0]]}, "groves": []}) == [("rolled_undrawn", (1.0, 2.0))]

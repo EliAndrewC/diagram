@@ -236,3 +236,18 @@ def test_a_step_over_the_water_is_bent_onto_a_square_crossing() -> None:
     assert B.squared_step((-50.0, 0.0), (20.0, 0.0), water) == [(20.0, 0.0)], "already square"
     pre, post = B.squared_step((-40.0, -40.0), (20.0, 20.0), water)
     assert pre == (-B.SQUARE_APPROACH_FT, 0.0) and post == (20.0, 0.0), "the leg over the water runs along its normal"
+
+
+def test_a_carried_step_the_matrix_refuses_is_not_drawn(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`carry_on` (feature 287 M8): at a junction the step is a spur of its own, drawn only where the overlap matrix admits
+    it; refused, nothing is drawn and False is returned."""
+    from l7r.diagram.hamletgen.ways.bund import carry_on
+    from l7r.diagram.settlement import Settlement
+
+    s = Settlement(400, 400, seed=1)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    s.lane([(0.0, 100.0), (300.0, 100.0)], width=3)
+    s.lane([(150.0, 100.0), (150.0, 200.0)], width=3)
+    monkeypatch.setattr(s, "admits_lane", lambda pts, w: False)
+    n = len(s.M["lanes"])
+    assert carry_on(s, 1, 0, (150.0, 100.0), (150.0, 60.0)) is False and len(s.M["lanes"]) == n

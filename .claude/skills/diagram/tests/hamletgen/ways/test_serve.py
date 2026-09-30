@@ -312,3 +312,30 @@ def test_a_flank_door_faces_no_band_and_is_open_to_the_front() -> None:
     assert flank_doors({"geom": {"house": (0.0, 0.0, 1.0, 1.0)}}) == []
     assert front_to_flank_open((0.0, 58.0), (30.0, 35.0), {"geom": geom})
     assert not front_to_flank_open((0.0, 58.0), (0.0, -30.0), {"geom": geom}), "across the house"
+
+
+def test_a_farm_is_reached_from_a_flank_only_where_the_front_has_no_lawful_path(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """`lay_door_paths` (FR-019's exception, amendment 8): the front door first; where it has no lawful path, an open flank's
+    path is drawn and recorded (`from_flank`, `meta.door_flanks`); a flank the house or a band walls off the front is not
+    offered."""
+    from l7r.diagram.hamletgen.ways import serve
+    from l7r.diagram.settlement import Settlement
+
+    def farm_and_street(open_front: bool):  # type: ignore[no-untyped-def]
+        s = Settlement(600, 600, seed=1)
+        s.meta(name="T", scale="hamlet", ftpx=1)
+        s.lane([(0.0, 100.0), (600.0, 100.0)], width=6)
+        s.M["lanes"][-1].update({"street": True, "street_index": 0})
+        s.M["houses"].append({"x": 300.0, "y": 300.0, "w": 46.0, "h": 28.0, "geom": {}})
+        monkeypatch.setattr(serve, "front_door", lambda h, clear: (300.0, 350.0))
+        monkeypatch.setattr(serve, "flank_doors", lambda h: [(340.0, 320.0)])
+        monkeypatch.setattr(serve, "door_off_fixtures", lambda d, house, quads, gap: d)
+        monkeypatch.setattr(serve, "front_to_flank_open", lambda front, flank, h: open_front)
+        monkeypatch.setattr(serve, "door_path", lambda s_, d, segs, *a: None if d == (300.0, 350.0) else [d, (340.0, 100.0)])
+        return s
+
+    s = farm_and_street(True)
+    assert serve.lay_door_paths(s, [], [], []) == 1
+    assert s.M["lanes"][-1].get("from_flank") and s.M["meta"]["door_flanks"] == [[300.0, 300.0]]
+    s = farm_and_street(False)
+    assert serve.lay_door_paths(s, [], [], []) == 0, "the flank walled off the front is not offered"

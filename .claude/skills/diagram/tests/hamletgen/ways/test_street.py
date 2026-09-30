@@ -133,3 +133,12 @@ def test_the_first_street_is_carried_on_to_the_road_it_nearly_meets() -> None:
     assert meet_the_road(street, [(100.2, 0.0), (400.0, 0.0)]) == street, "already meets"
     assert meet_the_road(street, [(400.0, 0.0), (800.0, 0.0)]) == street, "beyond the reach"
     assert meet_the_road(street[:1], [(1.0, 0.0), (2.0, 0.0)]) == street[:1]
+
+
+def test_a_join_leg_loses_a_hook_at_either_end() -> None:
+    """`unhooked_both` (feature 291 on 287, cohort seed 901): a short first or last leg the leg turns back from goes."""
+    from l7r.diagram.hamletgen.ways.street import unhooked_both
+
+    assert unhooked_both([(0.0, 0.0), (5.0, 0.0), (5.0, -50.0)]) == [(0.0, 0.0), (5.0, -50.0)]
+    assert unhooked_both([(5.0, -50.0), (5.0, 0.0), (0.0, 0.0)]) == [(5.0, -50.0), (0.0, 0.0)]
+    assert unhooked_both([(0.0, 0.0), (80.0, 0.0)]) == [(0.0, 0.0), (80.0, 0.0)]

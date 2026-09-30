@@ -103,5 +103,6 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D13).
 - [x] T18 The row rules as manifest predicates, in the cohort and the gate test (D19; SC-007, SC-008)
       research: rendering
       verify: DONE. row_rules/water_rules/doors/bamboo in the cohort audit and tests/gate/test_farm_groves.py, green
-- [ ] T11 The pool regenerated, settlement-review on each moved map, make done, push (D11; FR-012; SC-006)
+- [x] T11 The pool regenerated, settlement-review on each moved map, make done, push (D11; FR-012; SC-006)
       research: rendering
+      verify: DONE. DONE 2026-09-30. The pool regenerated on the port (all five), make done green (100% coverage), cohort 30/30. The settlement reviews were SKIPPED at the GM's instruction (2026-09-30: Go ahead and skip the review process entirely; feature 294 rethinks the process).

@@ -165,7 +165,6 @@ class PlacerMixin:
             for k in range(12):
                 a = k * math.pi / 6
                 offsets.append((round(r * math.cos(a)), round(r * math.sin(a))))
-        _avoid = getattr(self, "_avoid_seats", None)
         for nx, ny in offsets:
             # THE FREE GROUND PROPOSES, THE FIT TEST DECIDES (feature 276, plan D9): an offset whose house the index
             # refuses is one `_bundle_fits` would refuse, so it is dropped without building its bundle.
@@ -178,11 +177,6 @@ class PlacerMixin:
             if not exact:
                 cx, cy = self._slide(cx, cy, hw, hh, self._nearest_field_point, grove_off_field=True)  # grove hugs the bund
                 cx, cy = self._slide(cx, cy, hw, hh, self._nearest_placed_point, grove_off_field=True)  # pack against neighbor
-            # THE RE-ROLL'S FORBIDDEN GROUND, AFTER THE SLIDES (feature 291): the nucleated placer refuses a seat within 50 px
-            # of ground a previous roll proved unservable, and this one never asked - so the slides carried every re-roll's
-            # farm back onto the same spot (cohort seed 23: four attempts, the same two farms stranded at the same seats)
-            if _avoid and any(math.hypot(cx - _ax, cy - _ay) <= 50.0 for _ax, _ay in _avoid):
-                continue
             return cx, cy, self._bundle_geom(cx, cy, hw, hh)
         return None
 
