@@ -610,8 +610,9 @@ def county_magistracy_program() -> CompoundProgram:
         b("guest house", "lord", 33.0, 32.0, "inner", "E", order=3, feature="guest quarters"),  # 33 x 32 (was 33 x 30; pass 6, the house's mass returned)
         # outer (administrative) court - office hall backs the divider (oshirasu in front)
         # The clerks' room is a ROOM of the office hall, at its west end on the rear (divider) side, 30 x 20 ft - the
-        # footprint the freestanding clerks' building had (feature 267 R20, research buildings 430: the clerks worked in
-        # rooms of the office; no page gives them a workroom building). Its size is a guess.
+        # footprint the freestanding clerks' building had (feature 267 R20, research buildings "The office hall and its
+        # clerks (goyakusho)": the clerks worked in rooms of the office; no page gives them a workroom building). Its size
+        # is a guess.
         # Its DAIS BAND (pass 4, building-review round 3): the magistrate's dais, 30 x 10 ft centered on its south face over
         # the hearing court (buildings.md "Office hall (with dais band)", the size Ochiba draws; a GUESS). Its door opens
         # on its east face, by the middle gate - the south face is the court's.

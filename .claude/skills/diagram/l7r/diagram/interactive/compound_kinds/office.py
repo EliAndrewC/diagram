@@ -112,7 +112,7 @@ class ClerksRoom(Kind):
     Covers: the clerks' room inside the office hall, its floor and its label
     Label: accurate
     Sources: mapple-takayama-jinya, edo-ashigaru-bugyosho, jinya-kotobank, tedai-jawiki, xuli-zhwiki
-    Entry: research/buildings.html - 'Where did the clerks work - in a room of the office hall, or a building of their own?', 'Clerks are few, local, and heimen'
+    Entry: research/buildings.html - 'The office hall and its clerks (goyakusho)'; research/rendering/buildings.html - 'How our maps draw the office hall and the clerks' rooms'
     """
 
     key = "clerks' room"
