@@ -1,6 +1,6 @@
 """Feature 287: the notice board sited by ONE siter that applies every board rule where it decides the seat
-(`settlement/structures/fixtures/board_seat.py`, `siting.place_kosatsuba`) - labels L1-L4, L7, L11, L12, L14 and the D12
-terminal - each on a constructed hamlet that includes the violating case."""
+(`settlement/structures/fixtures/board_seat.py`, `siting.place_kosatsuba`) - labels L1-L4, L7, L11, L12, L14 and plan D12's
+caption steps - each on a constructed hamlet that includes the violating case."""
 
 from __future__ import annotations
 
@@ -27,6 +27,7 @@ from l7r.diagram.settlement.structures.fixtures.board_seat import (
     entrance_seat_ok,
     off_parallel,
     resolve_seat,
+    site_board,
     terminal_caption,
     under_placard,
 )
@@ -150,7 +151,7 @@ def test_the_board_takes_the_verge_whose_caption_clears_every_roof() -> None:
     (cap,) = _drawn(s)
     box = [(cap[0], cap[1]), (cap[2], cap[1]), (cap[2], cap[3]), (cap[0], cap[3])]
     assert all(poly_gap(box, rect(h["x"], h["y"], h["w"] / 2, h["h"] / 2)) >= 0.5 * 8.0 - 1e-6 for h in s.M["houses"])
-    assert "kosatsuba_caption_level" not in s.M["meta"] and "kosatsuba_d12" not in s.M["meta"]
+    assert "kosatsuba_caption_level" not in s.M["meta"]
 
 
 def test_the_caption_the_siter_proved_is_the_caption_drawn() -> None:
@@ -386,14 +387,13 @@ def test_the_web_lanes_are_offered_when_no_main_way_takes_a_clean_caption() -> N
             _house(s, float(x), 300.0 + dy, 20.0, 16.0)
     spot = s.place_kosatsuba()
     assert spot is not None and abs(spot[0] - 500.0) < 40.0 and spot[1] > 385.0, spot
-    assert "kosatsuba_d12" not in s.M["meta"]
 
 
-def test_with_no_clean_caption_anywhere_the_question_stands_for_the_gm() -> None:
-    """Plan D12: where no verge takes a board with a clean caption, a board still stands and the map is marked, so the
-    maps reaching the GM's question can be counted - its caption on a leader or in the key (D10), never across a way
+def test_with_no_clean_caption_anywhere_the_caption_prefers_a_seat_off_the_ways() -> None:
+    """Plan D12's second step: where no verge takes a board with a clean caption, a board still stands, its caption on a
+    leader or in the key (D10), and a seat whose caption clears every way is preferred
     (`captions_clear_the_ways_they_stand_on`, feature 287 wave 5): the verge seats, whose key mark would lie on the
-    road, are refused (the violating case), and the board stands where the mark clears it."""
+    road, are passed over (the violating case), and the board stands where the mark clears it."""
     s = _hamlet(view=(0.0, 0.0, 400.0, 400.0))
     s.M["road"] = [[100.0, 200.0], [300.0, 200.0]]  # sited along at its 18 ft tread; captions keep off its 26 ft bed
     _house(s, 200.0, 260.0)
@@ -403,25 +403,81 @@ def test_with_no_clean_caption_anywhere_the_question_stands_for_the_gm() -> None
     verge = terminal_caption(s.M, 200.0, 200.0 - (9.0 + 2.5 + 4.0), 6.0, 2.5, 0.0, "notice board", everything, (0.0, 0.0, 400.0, 400.0))
     assert verge is None, "a board at the verge's edge would put its key mark on the road"
     spot = s.place_kosatsuba()
-    assert spot is not None and s.M["meta"]["kosatsuba_d12"] is True and abs(spot[1] - 200.0) > 15.5, spot
+    assert spot is not None and abs(spot[1] - 200.0) > 15.5, spot
     proved = s._label_queue[-1][1][6]
     assert isinstance(proved, Placement) and proved.keyed, "every seat covers ink: the caption goes in the key"
     assert caption_clears_ways(proved.block, [road]), "the mark the board carries clears the road"
 
 
-def test_where_every_seats_caption_would_lie_on_a_way_no_board_stands() -> None:
-    """D12's terminal, the case past it: every seat in the band carries its caption, key mark and all, onto a way - so
-    no board is posted, the siter's answer wherever no verge fits, and never one whose caption lies across a way."""
+def test_where_every_seats_caption_is_fouled_the_board_is_still_posted_by_its_way() -> None:
+    """Plan D12, answered by the GM (2026-09-30: *"it is okay for it to not sit clean"*): every roadside seat carries its
+    caption, key mark and all, onto a way - the case that used to post no board. The board is posted anyway, by its way
+    (`KOSATSUBA_WAY_REACH_FT`) and facing it (L12), and its caption is drawn where the one placer's fallback puts it."""
     s = _hamlet(view=(0.0, 0.0, 400.0, 400.0))
     s.M["road"] = [[100.0, 200.0], [300.0, 200.0]]
     _house(s, 200.0, 290.0)
-    flood = ObstacleIndex([Obstacle(tuple(rect(200.0, 200.0, 400.0, 400.0)), 1000.0)], [Way(((0.0, 200.0), (400.0, 200.0)), 150.0)])
+    flood_way = Way(((0.0, 200.0), (400.0, 200.0)), 150.0)
+    flood = ObstacleIndex([Obstacle(tuple(rect(200.0, 200.0, 400.0, 400.0)), 1000.0)], [flood_way])
     s.label_obstacles = lambda: flood  # type: ignore[method-assign]  # a way under every seat the band offers
-    assert s.place_kosatsuba() is None and not s.M["kosatsuba"]
+    spot = s.place_kosatsuba()
+    assert spot is not None and len(s.M["kosatsuba"]) == 1, "never no board over its caption"
+    assert seg_dist(spot[0], spot[1], (100.0, 200.0), (300.0, 200.0)) <= KOSATSUBA_WAY_REACH_FT, f"the board strays from its way: {spot}"
+    assert off_parallel(float(s.M["kosatsuba"][0]["rot"]), 0.0) <= FACING_DEG, "the board faces its way"
+    proved = s._label_queue[-1][1][6]
+    assert isinstance(proved, Placement) and not caption_clears_ways(proved.block, [flood_way]), "the violating case: a fouled caption"
+    s.place_labels()
+    assert proved.keyed and s.M["caption_key"] == [[1, "notice board"]], "the caption is drawn, in the key"
+    assert any(lb[5] == "1" and (lb[0] + lb[2]) / 2 == proved.x for lb in s.M["labels"] if len(lb) > 5), "its mark wherever it lands"
+
+
+def test_a_pinned_placement_is_posted_though_its_caption_is_fouled() -> None:
+    """Plan D12: a pinned `entrance` whose every seat hides its caption was refused as unsitable; the caption is no
+    longer a reason, so the board stands at the entrance, where every way out passes it."""
+    s = _entrance_hamlet(straggler=False)
+    s.M["meta"]["knobs"] = {"kosatsuba_seat": "entrance"}
+    base = s.label_obstacles()
+    base.add(Obstacle(tuple(rect(500.0, 500.0, 170.0, 170.0)), 1000.0))  # every caption seat round the handover
+    s.label_obstacles = lambda: base  # type: ignore[method-assign]
+    spot = s.place_kosatsuba()
+    assert spot is not None and s.M["meta"]["kosatsuba_seat"] == "entrance"
+    assert routes_missed(departure_routes(s.M), spot[0], spot[1], 20.0) == 0
+
+
+def test_site_board_asks_a_later_proof_only_where_the_earlier_sited_nothing() -> None:
+    """`site_board` on plain inputs: the cleaner proof first; a later one only for every placement when nothing was
+    sited, or for the pinned one; the web lanes (`widen`) only at the lane tiers."""
+    asked: list[tuple[str, str, bool]] = []
+    seat = _seat(0.0, 0.0)
+
+    def board_for(sites: set[tuple[str, str, bool]]) -> Any:
+        def ask(v: str, pf: Any, widen: bool) -> Any:
+            asked.append((v, pf.__name__, widen))
+            return (seat, None) if (v, pf.__name__, widen) in sites else None
+
+        return ask
+
+    def clean(c: BoardSeat) -> tuple[bool, Placement | None]:
+        return True, None
+
+    def lax(c: BoardSeat) -> tuple[bool, Placement | None]:
+        return True, None
+
+    proofs = [clean, lax]
+    got = site_board(["a", "b"], proofs, None, board_for({("a", "clean", True)}), True)
+    assert set(got) == {"a"} and ("b", "lax", False) not in asked, "a clean seat somewhere: no later proof is asked"
+    got = site_board(["a", "b"], proofs, None, board_for({("a", "clean", False), ("b", "clean", False)}), True)
+    assert set(got) == {"a", "b"}, "every placement is asked of the first proof, not only until one is sited"
+    asked.clear()
+    got = site_board(["a", "b"], proofs, "b", board_for({("a", "clean", False), ("b", "lax", False)}), True)
+    assert set(got) == {"a", "b"} and ("a", "lax", False) not in asked, "the pinned placement alone steps down"
+    asked.clear()
+    got = site_board(["a"], proofs, None, board_for({("a", "lax", False)}), False)
+    assert set(got) == {"a"} and all(not widen for *_n, widen in asked), "no web lanes off the lane tiers"
+    assert site_board(["a"], proofs, None, board_for(set()), True) == {}, "no roadside seat at all: nothing"
 
 
 def test_the_terminal_caption_clears_every_way_or_is_refused() -> None:
-    """Feature 287 wave 5, `terminal_caption` - the one predicate of the board's caption at D12's terminal: a board with
+    """Feature 287 wave 5, `terminal_caption` - the one predicate of the board caption's second step (plan D12): a board with
     open ground takes its caption beside it; one whose key mark would lie on a way is refused before any search; and one
     whose every caption seat crosses a way - here a soft way ringing the board, which the non-strict placer may cross -
     is refused on the caption it would draw, though its mark clears."""

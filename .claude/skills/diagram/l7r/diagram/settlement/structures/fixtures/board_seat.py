@@ -7,11 +7,13 @@ view (`board_in_view`), off the title placard (`under_placard`), turned square t
 way out passes it (`entrance_seat_ok`). The seat it proved rides to the label phase and is drawn as proved. The
 functions here are the rules' ONE predicates: the siter calls them and the tests call them (FR-003).
 
-THE TERMINAL IS THE GM'S QUESTION (plan D12): where no verge in the view takes a board whose caption clears roofs,
-lanes, crowns and neighbors, every option breaks one of the GM's own rulings - no board (against "every settlement
-carries the board", 2026-07-24), a board off the way (against `kosatsuba_by_the_road`), or a caption breaking a caption
-rule (against the caption rules). Until the GM answers, the siter keeps a board at the best-ranked seat with its caption
-on a leader or in the key (`D12_AWAITING_THE_GM`, `terminal_caption`).
+THE CLEAN CAPTION IS A PREFERENCE, NOT A CONDITION OF SITING (plan D12, answered by the GM 2026-09-30: *"The caption
+sitting clean is not a hard requirement. It should sit clean when possible but it is okay for it to not sit clean."*).
+The board is always posted by its way (every settlement carries it, GM 2026-07-24; `kosatsuba_by_the_road`), and its
+caption is sited in three steps, each asked only where the one before found no seat: a seat whose caption the one placer
+seats clean beside it (`board_caption_seat`); else a seat whose caption, on a leader or in the key (D10), clears every
+way (`terminal_caption`); else the best roadside seat by the other rules, its caption wherever the one placer's normal
+fallback puts it (`fallback_caption`) - never no board over its caption.
 """
 
 from __future__ import annotations
@@ -38,16 +40,6 @@ PLACARD_KEEP_FT = 4.0
 """How far a board stands off the title placard (feature 287, labels L14): the placard is drawn after the crop and the
 board after the placard, and nothing kept the plank from being posted under the card. Four feet is the reading gap
 every other "these two inked things are separate" rule on these maps uses (`CAPTION_FEATURE_GAP`)."""
-
-D12_AWAITING_THE_GM = True
-"""D12: awaiting the GM. With no board seat in the view whose caption the one placer seats clean, the siter keeps the
-board at the best-ranked seat whose caption clears every way (`terminal_caption`) and records `meta.kosatsuba_d12`, so
-the maps reaching the question can be counted. THE CAPTION IS D10's, NOT THE LEAST-COST SEAT'S (feature 287 wave 5,
-`captions_clear_the_ways_they_stand_on`): the terminal kept the least-cost seat D10 retired on every sheet, and that
-seat could lie across a lane. On a leader or in the key it overlaps nothing, which is the (c) the question already
-names - a caption breaking the board caption's own rules (beside the board, no leader) - so no option is decided here.
-(0 of 53 maps reached the terminal: research R5.)"""
-
 
 FACING_DEG = 45.0
 """How far off parallel to its way a board may stand and still face it (`kosatsuba_faces_the_road`, labels L12): past it the
@@ -187,23 +179,36 @@ def recorded_board(x: float, y: float, vw: float, vh: float, rot: float) -> list
     return rect(round(x, 1), round(y, 1), round(vw, 1) / 2, round(vh, 1) / 2, round(rot, 1))
 
 
+def board_at(M: Any, x: float, y: float, hw: float, hh: float, rot: float) -> Any:
+    """The caption subject of a board seated at (x, y), turned to its nearest way (`rot` where the map drew none)."""
+    nb = nearest_way_bearing(M, x, y)
+    return board_subject(x, y, nb if nb is not None else rot, 2 * hw, 2 * hh)
+
+
 def terminal_caption(M: Any, x: float, y: float, hw: float, hh: float, rot: float, label: str, index: ObstacleIndex, frame: Any) -> Placement | None:
-    """THE ONE PREDICATE of a board caption at plan D12's terminal (feature 287: `captions_clear_the_ways_they_stand_on`,
-    D10): the seat the one placer gives the caption of a board seated here when no seat is free beside it - on a leader,
-    or in the sheet's key with its numbered mark on the board, never overlapping (D10) - and only where that caption, and
-    the key mark it would take, clear every way `index` holds; else None.
+    """THE SECOND STEP of the board's caption (feature 287: `captions_clear_the_ways_they_stand_on`, D10; plan D12): the
+    seat the one placer gives the caption of a board seated here when no seat is free beside it - on a leader, or in the
+    sheet's key with its numbered mark on the board, never overlapping (D10) - and only where that caption, and the key
+    mark it would take, clear every way `index` holds; else None, and the siter goes on to `fallback_caption`.
 
     THE MARK IS ASKED FIRST, and it is what refuses a verge seat: a mark is set on the board, and a board posted at the
     verge's edge puts it on the tread. Asked before the search (it is the keyed seat's own geometry, `keyed`), it
     refuses such a seat without the full search that would find out whether the caption ends in the key; a seat whose
     mark clears keeps a caption that clears whatever the search decides, since every other seat the search can return
     covers no hard ink, and a way is hard. The drawn caption is asked again, so the predicate holds of what is drawn."""
-    nb = nearest_way_bearing(M, x, y)
-    subject = board_subject(x, y, nb if nb is not None else rot, 2 * hw, 2 * hh)
+    subject = board_at(M, x, y, hw, hh, rot)
     if not caption_clears_ways(keyed(label, BOARD_CAPTION_SIZE, subject, None, 0.0).block, index.ways):
         return None
     p = place(label, BOARD_CAPTION_SIZE, subject, index, frame)
     return p if caption_clears_ways(p.block, index.ways) else None
+
+
+def fallback_caption(M: Any, x: float, y: float, hw: float, hh: float, rot: float, label: str, index: ObstacleIndex, frame: Any) -> Placement:
+    """THE LAST STEP of the board's caption (plan D12, GM 2026-09-30: a caption that does not sit clean is allowed): the
+    seat the one placer's normal fallback gives the caption of a board seated here - the best free seat it finds, a
+    leader, or the key with its mark wherever it lands on the board, as for any caption. Never None, so a board with a
+    roadside seat is never dropped over its caption."""
+    return place(label, BOARD_CAPTION_SIZE, board_at(M, x, y, hw, hh, rot), index, frame)
 
 
 def entrance_seat_ok(seat: BoardSeat, anchor: tuple[float, float], reach: RouteReach | None, ftpx: float) -> bool:
@@ -238,16 +243,40 @@ def choose_board(seats: list[BoardSeat], proof: Proof) -> tuple[BoardSeat, Place
     return None
 
 
+BoardFor = Callable[[str, Proof, bool], "tuple[BoardSeat, Placement | None] | None"]
+"""The siter's seat for one placement under one caption proof, `widen` admitting the web lanes (`_board_for`)."""
+
+
+def site_board(values: Sequence[str], proofs: Sequence[Proof], want: Any, board_for: BoardFor, lane_tier: bool) -> dict[str, tuple[BoardSeat, Placement | None]]:
+    """Every placement in `values` the map can site, with its seat and caption - each asked of the caption `proofs` in
+    order, the cleaner first (plan D12, GM 2026-09-30: the clean caption is a preference). A later proof is asked only
+    where the earlier ones sited nothing - of every placement - or of the pinned placement `want` where they did not site
+    it, so a map where some placement takes a clean caption resolves the knob over exactly those, and a pinned placement
+    is never refused over its caption. Each proof tries the siting band, then (lane tiers) the band with the web lanes."""
+    chosen: dict[str, tuple[BoardSeat, Placement | None]] = {}
+    for pf in proofs:
+        todo = [v for v in values if v not in chosen and (not chosen or v == want)]  # judged once per proof, before it sites any
+        for v in todo:
+            got = board_for(v, pf, False)
+            if got is None and lane_tier:
+                got = board_for(v, pf, True)
+            if got is not None:
+                chosen[v] = got
+    return chosen
+
+
 def resolve_seat(seed: int, context: dict[str, Any], pinned: dict[str, Any], sitable: set[str]) -> str:
     """The `kosatsuba_seat` knob resolved over the placements this map can SITE (feature 287, labels L1: the knob's value
     space is constrained, the affordance mechanism it already uses for an approach or an official's house). The roll is the
     knob's own (`Knob.roll`: the same per-knob draw) over its typing-filtered values that are sitable, so a map that can site
     every placement rolls exactly as before. A PINNED placement the map cannot site is refused, naming it - declared input
-    the site cannot honor (plan D7's kind), never a board drawn against its rules."""
+    the site cannot honor (plan D7's kind), never a board drawn against its rules. Its caption is not a reason (plan D12,
+    GM 2026-09-30): the siter offers a pinned placement every caption step, so `sitable` lacks it only where no seat
+    there takes a board at all."""
     knob = KNOBS["kosatsuba_seat"]
     want = pinned.get("kosatsuba_seat")
     if want is not None:
         if want in knob.value_space and knob.typing_rule(want, context) and want not in sitable:
-            raise ValueError(f"knob 'kosatsuba_seat': pinned {want!r}, but no verge in the view takes a board there whose caption stands clear")
+            raise ValueError(f"knob 'kosatsuba_seat': pinned {want!r}, but no verge in the view takes a board there")
         return str(resolve_knob("kosatsuba_seat", seed, context, pinned))
     return str(Knob("kosatsuba_seat", [v for v in knob.value_space if v in sitable], knob.default, knob.typing_rule).roll(seed, context))
