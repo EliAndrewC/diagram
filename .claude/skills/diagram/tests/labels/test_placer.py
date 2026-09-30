@@ -87,7 +87,7 @@ def _collar(poly, width):
 def test_a_caption_is_never_dropped_and_never_overlaps() -> None:
     """Scenario 4 (feature 287, D10): a sheet with no free seat anywhere - the caption is not dropped and is not drawn
     overlapping: it goes in the sheet's key, its mark on the board. The retired least-cost seat has no caller left: the
-    board awaiting the GM (D12) takes this path too since feature 287's wave 5."""
+    board with no clean verge (D12) takes this path too."""
     everything = Obstacle(tuple(rect(500.0, 500.0, 900.0, 900.0)), WEIGHT_OBSTACLE)
     p = place("notice board", SIZE, BOARD, ObstacleIndex([everything]))
     assert p.keyed and p.lines == ("notice board",) and p.cost > WEIGHT_KEY and p.leader is None

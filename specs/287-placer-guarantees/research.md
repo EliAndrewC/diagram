@@ -1156,3 +1156,9 @@ footprint and tread as covered; it moves no map), water W39 (the paddy-cell band
 the hamlet path), woods W26 (a coppice lot's line follows the brook, lane or field edge it comes near, on
 research/vegetation/140's labeled GUESS) and water W36's winter-crop knob narrowed to the forms a site can feed - each
 APPROVED by the GM. D12 stays open for the GM (no map reaches it).
+
+**D12 answered by the GM** (2026-09-30, in chat): "The caption sitting clean is not a hard requirement. It should sit
+clean when possible but it is okay for it to not sit clean." So the board is always posted by its way (every settlement
+carries it; `kosatsuba_by_the_road`), its caption clean where a seat allows and placed by the one caption placer's
+fallback where none does - never no board over its caption. Applied as a follow-up tweak (the D12 terminal and its
+GM-question marker retired).

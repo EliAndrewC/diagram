@@ -417,7 +417,7 @@ def place(
 
     `strict=True` returns None instead of anything but a free seat (feature 287: the notice board's siter and the
     generated Mode A sheets ask it, and choose the SUBJECT or the program instead). The retired least-cost seat's last
-    caller, the board with no clean verge (D12), takes this non-strict path since feature 287's wave 5. `max_ring` keeps
+    caller, the board with no clean verge (D12, a preference since the GM's 2026-09-30 ruling), takes this non-strict path. `max_ring` keeps
     only the seats on rings up to it (0: directly beside the subject, no leader - the notice board's caption).
 
     `accept` is asked of every free candidate before it is returned, and of the strict search's nudged seat - a strict

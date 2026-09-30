@@ -15,7 +15,7 @@ from ..._geom import (
     street_runs,
     way_beds,
 )
-from ..._knobs import KNOBS, KOSATSUBA_MARKER_MIN_PX, PUNISHMENT_SPOT_FT, resolve_knob
+from ..._knobs import KNOBS, KOSATSUBA_MARKER_MIN_PX, PUNISHMENT_SPOT_FT
 from ..captions import tree_crown_discs
 from ._helpers import (
     KOSATSUBA_ANCHOR_BAND_FT,
@@ -28,7 +28,6 @@ from ._helpers import (
     kosatsuba_handover,
 )
 from .board_seat import (
-    D12_AWAITING_THE_GM,
     KOSATSUBA_WAY_REACH_FT,
     PLACARD_KEEP_FT,
     BoardSeat,
@@ -39,7 +38,9 @@ from .board_seat import (
     board_in_view,
     choose_board,
     entrance_seat_ok,
+    fallback_caption,
     resolve_seat,
+    site_board,
     terminal_caption,
     under_placard,
 )
@@ -146,7 +147,9 @@ class FixtureSitingMixin:
         `kosatsuba_seat` knob resolves over the placements the map can so site; and the caption's proved seat rides to
         the label phase and is drawn as proved. The frame stage's re-seat, a second siter restating these rules with
         four recorded drifts (features 154, 227, 230, 261), is deleted. Where no seat anywhere takes a board with a clean
-        caption, the GM's question stands (plan D12; `board_seat.D12_AWAITING_THE_GM`)."""
+        caption, the board is still posted by its way (plan D12, GM 2026-09-30: the clean caption is a preference): the
+        caption steps down to one on a leader or in the key that clears every way (`terminal_caption`), then to the one
+        placer's normal fallback (`fallback_caption`). The only map with no board is one with no roadside seat at all."""
         meta = self.M["meta"]
         if not meta.get("kosatsuba", True):
             return None
@@ -181,43 +184,33 @@ class FixtureSitingMixin:
         def sample(routes: list[tuple[list[Pt], float, bool]], verge_first: bool) -> list[BoardSeat]:
             return self._board_seats(routes, verge_first, w, h, ftpx, env, sampled)
 
+        # THE CAPTION'S LATER STEPS (plan D12, GM 2026-09-30: the clean caption is a preference, never a reason for no
+        # board): a caption on a leader or in the key that clears every way, then the one placer's normal fallback
+        terminal: dict[tuple[float, float, float], Placement | None] = {}
+
+        def lax(c: BoardSeat) -> tuple[bool, Placement | None]:
+            assert index is not None  # a board with no caption proves every seat, so only a captioned one gets here
+            if (c.x, c.y, c.rot) not in terminal:
+                terminal[c.x, c.y, c.rot] = terminal_caption(self.M, c.x, c.y, w / 2, h / 2, c.rot, label, index, frame)
+            return terminal[c.x, c.y, c.rot] is not None, terminal[c.x, c.y, c.rot]
+
+        def loose(c: BoardSeat) -> tuple[bool, Placement | None]:
+            assert index is not None
+            return True, fallback_caption(self.M, c.x, c.y, w / 2, h / 2, c.rot, label, index, frame)
+
         # EVERY PLACEMENT THE MAP AFFORDS, each asked whether it can be SITED - in the siting band first, then (1) the whole
         # band with the web lanes admitted - before the knob is committed (labels L1, L4 fallback steps 1-2)
         afford = kosatsuba_affordances(self.M)
         values = KNOBS["kosatsuba_seat"].allowed(afford) if lane_tier else ["center"]
-        chosen: dict[str, tuple[BoardSeat, Placement | None]] = {}
-        for v in values:
-            got = self._board_for(v, sample, proof, False, ftpx, lane_tier)
-            if got is None and lane_tier:
-                got = self._board_for(v, sample, proof, True, ftpx, lane_tier)
-            if got is not None:
-                chosen[v] = got
         pinned = meta.get("knobs") or {}
-        if chosen:
-            placement = resolve_seat(int(self.seed), dict(afford), pinned, set(chosen)) if lane_tier else "center"
-            unsitable = [v for v in values if v not in chosen]
-            if unsitable:
-                meta["kosatsuba_seat_unsitable"] = unsitable
-            seat, cap = chosen[placement]
-        else:
-            # D12: awaiting the GM - no seat in the view takes a board with a clean caption. The board stands at the best-ranked
-            # seat whose caption, on a leader or in the key (D10), clears every way (`terminal_caption`), and the map is marked
-            # for the count. Where no seat's does, there is no board - the siter's answer wherever no verge fits.
-            placement = str(resolve_knob("kosatsuba_seat", int(self.seed), afford, pinned)) if lane_tier else "center"
-
-            def lax(c: BoardSeat) -> tuple[bool, Placement | None]:
-                assert index is not None  # a board with no caption proves every seat, so only a captioned one gets here
-                if (c.x, c.y, c.rot) not in terminal:
-                    terminal[c.x, c.y, c.rot] = terminal_caption(self.M, c.x, c.y, w / 2, h / 2, c.rot, label, index, frame)
-                return terminal[c.x, c.y, c.rot] is not None, terminal[c.x, c.y, c.rot]
-
-            terminal: dict[tuple[float, float, float], Placement | None] = {}
-
-            got = self._board_for(placement, sample, lax, False, ftpx, lane_tier) or (self._board_for(placement, sample, lax, True, ftpx, lane_tier) if lane_tier else None)
-            if got is None:
-                return None
-            seat, cap = got
-            meta["kosatsuba_d12"] = D12_AWAITING_THE_GM
+        chosen = site_board(values, [proof, lax, loose] if label else [proof], pinned.get("kosatsuba_seat"), lambda v, pf, widen: self._board_for(v, sample, pf, widen, ftpx, lane_tier), lane_tier)
+        if not chosen:
+            return None  # no roadside seat at all: the siter's answer wherever no verge fits
+        placement = resolve_seat(int(self.seed), dict(afford), pinned, set(chosen)) if lane_tier else "center"
+        unsitable = [v for v in values if v not in chosen]
+        if unsitable:
+            meta["kosatsuba_seat_unsitable"] = unsitable
+        seat, cap = chosen[placement]
         meta["kosatsuba_seat"] = placement
         x, y = seat.x, seat.y
         # THE BOARD FACES THE WAY A READER SEES IT BY, which is the NEAREST one (`kosatsuba_faces_the_road`, labels L12): every

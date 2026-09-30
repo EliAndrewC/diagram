@@ -283,7 +283,7 @@ def test_an_anchored_board_with_no_handover_keeps_to_the_seats_nearest_its_ancho
 def test_a_board_under_one_wide_canopy_is_sited_without_measuring_a_seat_it_cannot_take(monkeypatch):
     # feature 287 wave 5: the retired canopy test's scene (216 s at 0e792a665, 305 s at 920c5ad9f) - a road under ONE
     # crown - shortened to a 200 px road. Every seat's caption lies on the crown, so the siter proves every seat strictly
-    # (all refused), then takes D12's terminal. INDEXED, EXACT: `ObstacleIndex.blocked` refuses a strict seat without
+    # (all refused), then takes the caption's second step (plan D12, `terminal_caption`). INDEXED, EXACT: `ObstacleIndex.blocked` refuses a strict seat without
     # measuring it where the crown holds it past a nudge's reach, and the terminal walk is lazy, so the only seats scored
     # are the ONE terminal search's - the same answer the scan gave, with none of its measuring
     import math
@@ -302,7 +302,7 @@ def test_a_board_under_one_wide_canopy_is_sited_without_measuring_a_seat_it_cann
     real = placer_mod._score
     monkeypatch.setattr(placer_mod, "_score", lambda *a: scored.append(1) or real(*a))
     spot = s.place_kosatsuba()
-    assert spot is not None and s.M["meta"]["kosatsuba_d12"] is True
+    assert spot is not None
     board = s.M["kosatsuba"][0]
     assert abs(board["y"] - 300.0) > 15.5, "the verge seats would put the key mark on the road's bed"
     proved = s._label_queue[-1][1][6]

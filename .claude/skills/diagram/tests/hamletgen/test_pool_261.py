@@ -25,8 +25,10 @@ with the pool's brook non-vacuity that served it: the seating reserves the field
 one on the margin (`homesteads/stages.py:reserve_field_corridor`), and the web draws it first where no way reaches the field
 (`ways/settle.py:settle_field`), on the violating cases in `tests/hamletgen/test_homesteads_287.py` and
 `tests/hamletgen/ways/test_settle.py`. What is left is KEPT because no placer guarantees it yet, and each test says why:
-- the board caption off the roofs, nearest its board and off the crowns: guaranteed except at plan D12's terminal, kept
-  for the GM (`meta.kosatsuba_d12`).
+- the board caption off the roofs, nearest its board and off the crowns: a PREFERENCE since the GM's ruling on plan D12
+  (2026-09-30: *"It should sit clean when possible but it is okay for it to not sit clean"*). The siter takes a clean
+  seat wherever one exists, and every pool map has one, so these hold of the pool; a map whose every roadside seat fouls
+  its caption may fail them legitimately, and is then excused here by name.
 """
 
 from __future__ import annotations
@@ -116,8 +118,8 @@ def test_the_board_caption_notches_no_crown(gen: str) -> None:
     assert labs, "non-vacuity: the board has its caption"
     on = quad_on_canopy(label_quad(labs[0]), canopy_index(m).near)
     # no excuse since feature 287 (FR-006): the level-1 seat is gone - the board is sited only where its caption proves clear
-    # of the crowns (`board_seat.py:board_caption_seat`). Plan D12's terminal (no verge takes a clean caption) is not
-    # excused either: it is the gap this test is kept for.
+    # of the crowns (`board_seat.py:board_caption_seat`) wherever a seat allows; where none does (plan D12, a preference
+    # since 2026-09-30) the map is excused by name, and no pool map is.
     assert not on, "the board's caption lies on a crown"
 
 
