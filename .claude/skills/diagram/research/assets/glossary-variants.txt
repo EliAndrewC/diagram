@@ -420,6 +420,7 @@ closed-canopy	closed-canopy
 cluster's spine	cluster's spine
 coefficient of variation	coefficient of variation
 coke	coke
+collateral kin	collateral kin
 collective farm	collective farm
 collective farms	collective farm
 collector	collector
@@ -1037,6 +1038,7 @@ gejo	degawari
 genan	degawari
 genba	genba
 genba-oke	genba
+genin	genin
 genji	Genji
 genkan	genkan
 genkan-no-ma	genkan-no-ma
@@ -1382,6 +1384,7 @@ ido-yakata	idoyakata
 idobata	idobata
 idowaku	igeta
 idoyakata	idoyakata
+ie	ie
 ieyasu	Ieyasu
 ieyasu hundred articles	hundred articles
 ieyasu's	Ieyasu
@@ -1417,6 +1420,7 @@ inekake	hazakake
 initiate	initiate
 initiates	initiate
 inkyo	inkyo
+inland sea	Setouchi
 inner moat	uchibori
 inner moats	uchibori
 inshu	Inshu
@@ -1543,6 +1547,7 @@ jodo shinshu	Jodo Shinshu
 jogyo hall	Jogyo hall
 jogyo-do	Jogyo hall
 joint household	joint household
+joint households	joint household
 jokamachi	jokamachi
 jokyo	Jokyo
 jomon	Jomon period

@@ -10411,7 +10411,8 @@
  "Setouchi": {
   "def": "The lands around the Seto Inland Sea, between western Honshu, Shikoku and northern Kyushu.",
   "variants": [
-   "Setouchi"
+   "Setouchi",
+   "Inland Sea"
   ]
  },
  "shitomi": {
@@ -10533,7 +10534,8 @@
  "joint household": {
   "def": "A household holding two or more married couples of the same generation - brothers and their wives, say - under one head.",
   "variants": [
-   "joint household"
+   "joint household",
+   "joint households"
   ]
  },
  "shumon aratame cho": {
@@ -13559,6 +13561,24 @@
   "variants": [
    "branch hamlet",
    "branch hamlets"
+  ]
+ },
+ "ie": {
+  "def": "The Japanese household as a continuing house: its family, dwelling, land and name, handed on each generation from the head to one married heir.",
+  "variants": [
+   "ie"
+  ]
+ },
+ "genin": {
+  "def": "A bound servant of a farm household in early Edo-period Japan, who worked the master's land and often lived on the master's house plot; over the period most became independent small farmers.",
+  "variants": [
+   "genin"
+  ]
+ },
+ "collateral kin": {
+  "def": "Relatives outside the direct line of descent, such as a head's brothers, their wives and children, or cousins, living in the head's household.",
+  "variants": [
+   "collateral kin"
   ]
  }
 }
