@@ -221,7 +221,7 @@ class Cell(Kind):
     Covers: the barred holding cell and its label
     Label: accurate
     Sources: agariya-jawiki, roya-kotobank, edo-ashigaru-bugyosho, tenmacho-jawiki, chuo-royashiki, neixiang-yamen-zhwiki, henan-neixiang, takayama-jinya-city
-    Entry: research/buildings.html - 'How big was a holding cell?', 'Cells are remand, not punishment', 'No interrogation room'
+    Entry: research/buildings.html - 'Holding cells (agariya and rōya)'; research/rendering/buildings.html - 'How our maps draw holding cells'
     """
 
     key = "cell"
@@ -401,7 +401,7 @@ class DayOffice(Kind):
     Covers: the day office's floor and its label
     Label: guess
     Sources: takayama-jinya-jawiki, takayama-jinya-city
-    Entry: research/buildings.html - 'The hearing court (shirasu)', 'No interrogation room'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)'
+    Entry: research/buildings.html - 'The hearing court (shirasu)', 'Holding cells (agariya and rōya)'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)', 'How our maps draw holding cells'
     """
 
     key = "day office"

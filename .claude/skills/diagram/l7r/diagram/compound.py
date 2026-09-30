@@ -663,7 +663,7 @@ def county_magistracy_program() -> CompoundProgram:
         # watch's range should out-foot the stable by a margin (buildings.md "Barracks": ~27-53 ft); pass 5. A GUESS.
         b("barracks", "service", 45.0, 34.0, "outer", "E", order=4, feature="barracks"),
         # 12 x 10 ft: the small end of the single cells read (Osaka's 6 mats, ~12 x 9 ft, to Tenmacho's 18); a county
-        # remand cell belongs there, its size a guess in the span (feature 267 R24, research buildings 460). It was
+        # remand cell belongs there, its size a guess in the span (feature 267 R24, research 'How our maps draw holding cells'). It was
         # 18 x 16 ft.
         b("cell", "cell", 12.0, 10.0, "outer", "E", order=1, feature="cell"),
         # The gatehouse stands BESIDE the gate, a building of its own (R19's Takayama form, research buildings 420),

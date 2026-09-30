@@ -2550,6 +2550,7 @@ roson	roson
 rotation period	rotation period
 rowhouse gate	nagayamon
 rowhouse gates	nagayamon
+roya	roya
 runners	yayi
 ryo	ryo
 ryobosei	ryobosei
@@ -2560,6 +2561,7 @@ ryukyu kingdom	Ryukyu kingdom
 ryukyus	Ryukyu kingdom
 rōjū	Roju
 rōnin	ronin
+rōya	roya
 sae no kami	sae no kami
 sagami	Sagami
 sagami province	Sagami
