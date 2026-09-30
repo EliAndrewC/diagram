@@ -1061,5 +1061,5 @@ forms (homesteads/155 and 156, feature 291 amendment 3); the reference (Inashiro
 
 Measured on this roll (2026-09-30): 20 houses, all on one street, 20 grove farms; 60 bands, 40 deep and 20 thin;
 11 far-row holdings in 33 plots; 2 shared wells; bath rooms 5, wood sheds 7, privies 17, coops 18, manure heaps 9,
-shrine 1 - every declared fixture seated; household bamboo in 15 groves; 23 lanes; every row, water, door, bamboo, grove
+shrine 1 - every declared fixture seated; household bamboo in 15 groves; 24 lanes; every row, water, door, bamboo, grove
 and overlap rule clean; attempt 1.

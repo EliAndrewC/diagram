@@ -316,7 +316,7 @@
   "unit": "turns, all lanes",
   "observed": "2026-09-30",
   "source": "pool/hamlets/mizuguchi/mizuguchi.json lanes",
-  "method": "every lane vertex's turn measured: none past 140 (the second street was 17); the next street set out as a true offset curve (rows.parallel), 1,890 ft"
+  "method": "every lane vertex's turn measured: none past 140 (the second street was 17); the next street set out as a true offset curve (rows.parallel), 1,557 ft, its join to the network a way of its own"
  },
  "mizuguchi-r3-f2": {
   "verifies": "F2",
