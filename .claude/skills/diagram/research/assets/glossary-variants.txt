@@ -1,4 +1,8 @@
+10-mat	tatami
 1868	1868
+3-mat	tatami
+6-mat	tatami
+8-mat	tatami
 abatis	abatis
 ablution well	ablution well
 ablution wells	ablution well
@@ -446,6 +450,7 @@ contours	contour
 convection column	convection column
 cooper	cooper
 cooperage	cooper
+coopered	cooper
 coopers	cooper
 coping	coping
 coppice	coppice
@@ -1592,6 +1597,7 @@ karō	karo
 kasasuge	kasasuge
 kashi	kashi
 kaso-dera	kaso-dera
+kaso-zu	kaso-zu
 kasoba	kasoba
 kasuga-style	Kasuga-style
 kasuga-zukuri	Kasuga-style
@@ -1862,6 +1868,8 @@ lower break	break of slope
 lower break of slope	break of slope
 lower mansion	lower mansion
 lower mansions	lower mansion
+lower privies	upper privy
+lower privy	upper privy
 lower residence	lower mansion
 lower residences	lower mansion
 lower yangtze	Lower Yangzi
@@ -1999,6 +2007,7 @@ mizujiri	shirimito
 mizuka	mizuya
 mizunara	mizunara
 mizunomi	mizunomi
+mizunoto-u	mizunoto-u
 mizuya	mizuya
 mlit	MLIT
 mochinoki	mochinoki
@@ -2014,6 +2023,7 @@ mon	mon
 mongol yam	yam
 monk outlet	monk outlet
 monk-style outlet	monk outlet
+monme	monme
 monospecific	monospecific
 montane	montane
 monto	monto
@@ -3322,6 +3332,8 @@ upper break	break of slope
 upper break of slope	break of slope
 upper estate	kami-yashiki
 upper estates	kami-yashiki
+upper privies	upper privy
+upper privy	upper privy
 upper residence	kami-yashiki
 upper residences	kami-yashiki
 ura-nagaya	ura-nagaya

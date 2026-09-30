@@ -294,7 +294,7 @@ class Bath(Kind):
     Covers: the bath, its steam mark and its label
     Label: accurate
     Sources: furo-kotobank, yokushitsu-kotobank, shirobito-1717-takayama, kanagawa-hatamoto-kaso, sayama-jinya-uematsu
-    Entry: research/buildings.html - 'Baths (furo)'; research/rendering/buildings.html - 'How our maps draw the bath (furo)'
+    Entry: research/buildings.html - 'Baths (furo)'; research/rendering/buildings.html - 'How our maps draw baths (furo)'
     """
 
     key = "bath"
@@ -341,15 +341,18 @@ class Latrine(Kind):
     Note: The privy built into the samurai house, the more than one privy of a well-appointed house, the privy at
     the rear of the guest parlor, the upper privies with board verandas at an official hall, and the carted
     night-soil trade are recorded findings, and the program classes the privies as accurate - one per functional
-    zone, about three or four. The guests' privy at the rear of the zashiki, reached along a board veranda, is
-    this project's reading of two sources together, neither of which shows the whole arrangement in one house.
-    That the family's privy sits at the shady rear is reasoning from the sun rule, not a read source. That no
-    collector should have to cross the inner court is this record's own rule rather than a finding.
+    zone, about three or four, though that count is this project's guess rather than a finding. The guests'
+    privy at the rear of the zashiki, reached along a board veranda, is this project's reading of two sources
+    together, neither of which shows the whole arrangement in one house. That the family's privy sits toward the
+    living rooms is a guess drawn from later and humbler houses, since no page we read places a family privy in
+    a samurai house before 1868. That no collector should have to cross the inner court is this record's own
+    rule rather than a finding.
 
     Caveat: The guests' privy at the rear of the zashiki, reached along a board veranda, is this project's
     reading of two sources together, neither of which shows the whole arrangement in one house. That the family's
-    privy sits at the shady rear is reasoning from the sun rule, not a read source. That no collector should have
-    to cross the inner court is this record's own rule rather than a finding.
+    privy sits toward the living rooms is a guess drawn from later and humbler houses, since no page we read
+    places a family privy in a samurai house before 1868. That no collector should have to cross the inner court
+    is this record's own rule rather than a finding.
 
     Name: latrine
     Covers: every privy building and its label

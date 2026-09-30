@@ -3846,7 +3846,11 @@
   "def": "A straw floor mat about 90 by 180 centimeters; a room's size is counted in them.",
   "variants": [
    "tatami",
-   "twelve-mat"
+   "twelve-mat",
+   "3-mat",
+   "6-mat",
+   "8-mat",
+   "10-mat"
   ]
  },
  "tatara": {
@@ -4655,7 +4659,8 @@
   "variants": [
    "cooper",
    "coopers",
-   "cooperage"
+   "cooperage",
+   "coopered"
   ]
  },
  "hot-shoeing": {
@@ -13283,6 +13288,33 @@
   "def": "A bath: in the Edo period a house's own bath was a luxury of upper-rank samurai, since it meant digging a well and buying fuel, and most people washed from a tub or went to the public bath.",
   "variants": [
    "furo"
+  ]
+ },
+ "monme": {
+  "def": "A unit of weight, a thousandth of a kan (about 3.75 grams), in which silver money was reckoned in Edo-period Japan.",
+  "variants": [
+   "monme"
+  ]
+ },
+ "kaso-zu": {
+  "def": "A drawn plan of a house and its grounds with the rooms named on it, like the 1843 plan of the hatamoto Okubo house in Edo.",
+  "variants": [
+   "kaso-zu"
+  ]
+ },
+ "mizunoto-u": {
+  "def": "The name of a year in the sixty-year cycle of the Chinese calendar, used alongside the era year in a date. Tenpo 14 (1843) was a mizunoto-u year.",
+  "variants": [
+   "mizunoto-u"
+  ]
+ },
+ "upper privy": {
+  "def": "In a samurai house, the privy kept for the head of the household and the men of the family; the women, even of the master's family, used the lower privy. \"Upper\" means rank, not a floor.",
+  "variants": [
+   "upper privy",
+   "upper privies",
+   "lower privy",
+   "lower privies"
   ]
  }
 }

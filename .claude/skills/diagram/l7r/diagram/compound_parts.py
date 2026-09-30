@@ -390,7 +390,7 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
     # wells next. A well stands BESIDE a door, never before it (pass 6, building-review round 5: the stables' well stood
     # 5 ft in front of the stable door and wider than it) - the fracs off the middle first, the middle last - and 9 ft
     # out before 6: a kitchen well may stand as far as 20 ft out, past the bath that abuts the kitchen, serving both,
-    # as the Takayama residence's bath stood with its well and kitchen (research buildings 'Baths (furo)')
+    # as the Takayama residence listed its bath with its well and kitchen (research buildings 'Baths (furo)')
     for p in result.placed:
         if p.spec.feature in ("kitchen", "stables") and (w := seat(p, 7.3, (0.2, 0.8, 0.3, 0.7, 0.5), (9.0, 12.0, 15.0, 20.0, 6.0))):
             wells.append(w)

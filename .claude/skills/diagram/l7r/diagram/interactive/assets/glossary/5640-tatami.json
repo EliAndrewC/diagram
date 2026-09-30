@@ -3,6 +3,10 @@
  "def": "A straw floor mat about 90 by 180 centimeters; a room's size is counted in them.",
  "variants": [
   "tatami",
-  "twelve-mat"
+  "twelve-mat",
+  "3-mat",
+  "6-mat",
+  "8-mat",
+  "10-mat"
  ]
 }
