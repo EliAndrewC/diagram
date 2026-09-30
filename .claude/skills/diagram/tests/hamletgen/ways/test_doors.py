@@ -21,6 +21,17 @@ def test_the_front_door_is_past_the_yard_on_the_open_side() -> None:
     assert front_door({"x": 0.0, "y": 0.0, "geom": {}}, 8.0) is None, "a farm with no grove of its own has no front door here"
 
 
+def test_a_slanted_front_takes_its_door_just_past_the_yard_edge() -> None:
+    """The door stands `clear` past where the house-to-yard ray leaves the yard box, not past its projected half-width,
+    which overshot on a slant (Kashikawa, 12.4 ft past the yard at ten degrees)."""
+    h = {"x": 2268.1, "y": 2143.9, "geom": {"groves": [[0.0, 0.0, 1.0, 1.0]], "yard": [2275.0, 2184.3, 64.8, 44.7]}}
+    door = front_door(h, 8.0)
+    assert door is not None
+    ey = 2184.3 + 44.7 / 2
+    assert abs(door[1] - ey - 8.0 * (door[1] - 2184.3) / ((door[0] - 2275.0) ** 2 + (door[1] - 2184.3) ** 2) ** 0.5) < 0.5, "clear past the bottom edge"
+    assert door[1] - ey < 8.0 + 1e-6
+
+
 def test_a_ring_s_door_lines_up_with_its_way_in() -> None:
     h = _farm(500.0, 400.0, sides=4)
     door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
@@ -53,3 +64,16 @@ def test_a_door_no_route_reaches_is_left_to_the_roll_s_report() -> None:
     wall = [(0.0, 560.0), (1400.0, 560.0), (1400.0, 600.0), (0.0, 600.0)]  # hard ground right across the way
     assert lay_door_paths(s, [wall], [], []) == 0
     assert len(s.M["lanes"]) == 1, "nothing drawn"
+
+
+def test_a_door_path_loses_the_hook_at_its_door() -> None:
+    """`door_unhooked`: a first leg of 12 ft or less turned back from by 90 degrees or more goes - straight from the door
+    where that is clear, else from the vertex after the door; a path with no hook is untouched."""
+    from l7r.diagram.hamletgen.ways.geom import door_unhooked
+
+    hooked = [(0.0, 0.0), (0.0, 6.0), (-110.0, 6.0), (-180.0, -100.0)]
+    assert door_unhooked(hooked, lambda a, b: True) == [(0.0, 0.0), (-110.0, 6.0), (-180.0, -100.0)]
+    assert door_unhooked(hooked, lambda a, b: False) == hooked[1:]
+    straight = [(0.0, 0.0), (0.0, 30.0), (0.0, 60.0)]
+    assert door_unhooked(straight, lambda a, b: True) == straight
+    assert door_unhooked(hooked[:2], lambda a, b: True) == hooked[:2]

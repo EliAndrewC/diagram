@@ -19,13 +19,13 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, point_in_poly, poly_gap, segments_cross
+from l7r.diagram.settlement import Settlement, point_in_poly, poly_gap, seg_dist, segments_cross
 from l7r.diagram.sitegen.geom import crop_polys
 
 from ..consts import FOOTPATH_FABRIC_GAP, LANE_CLEARANCE, WAY_END_REACH_FT, Poly, Pt
 from .checks import drawn_water_segs
 from .fabric import _crosses_fabric, _hits_a_steading, _homestead_polys
-from .geom import BUND_REACH_FT, WorkedGround, end_serves, memo_ground, steading_footprints, stroke_quad, worked_ground
+from .geom import _TOUCH_GAP, BUND_REACH_FT, WorkedGround, end_serves, memo_ground, steading_footprints, stroke_quad, worked_ground
 
 # The tip stops this far outside the worked ground's edge past its own half-tread, so the tread's rounded cap lies on the
 # bund line rather than on the rice (a map drawing convention; inside `BUND_REACH_FT` for every lane width drawn here).
@@ -207,19 +207,13 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
     for i, e, q, p in near:
         if p is not None:
             pts = [(float(x), float(y)) for x, y in lanes[i]["pts"]]
-            to = over_the_water(q, p, blocks.water)
-            pts = [*pts, to] if e == -1 else [to, *pts]
-            lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
-            s.reink_lane(i)
+            carry_on(s, i, e, q, over_the_water(q, p, blocks.water))
             return "run_on"
     for i, e, q in sorted(ends, key=lambda t: paddy.dist(t[2])):
         tgt = run_on_target(q, paddy, float(lanes[i].get("w") or 3) / 2.0, reach=float("inf"))
         prev = (float(lanes[i]["pts"][-2 if e == -1 else 1][0]), float(lanes[i]["pts"][-2 if e == -1 else 1][1]))
         if tgt is not None and not turns_back(prev, q, tgt) and blocks.clear(q, tgt, float(lanes[i].get("w") or 3)):
-            pts = [(float(x), float(y)) for x, y in lanes[i]["pts"]]
-            pts = [*pts, tgt] if e == -1 else [tgt, *pts]
-            lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
-            s.reink_lane(i)
+            carry_on(s, i, e, q, tgt)
             return "run_on"
     samples: list[Pt] = []
     for _i, ln in live:
@@ -233,6 +227,21 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
             s.lane([q, tgt], width=BRANCH_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)
             return "branch"
     return "none: every straight way from the lanes to the paddy crosses water, the marsh or a steading"
+
+
+def carry_on(s: Settlement, i: int, e: int, q: Pt, to: Pt) -> None:
+    """Carry lane `i`'s end `e` (at `q`) on to `to`: the lane is lengthened - unless that end is a JUNCTION, on another
+    lane's tread, when the step is drawn as a field path of its own from `q` (feature 291: Mizuguchi's door path met its
+    street there, was carried on over it to the bund, and the junction became a crossing - the web in two pieces at the
+    4 ft its one-network rule joins at)."""
+    lanes = s.M.get("lanes") or []
+    if any(seg_dist(q[0], q[1], a, b) <= _TOUCH_GAP for a, b in _segs_of(lanes, i)):
+        s.lane([q, to], width=BRANCH_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)
+        return
+    pts = [(float(x), float(y)) for x, y in lanes[i]["pts"]]
+    pts = [*pts, to] if e == -1 else [to, *pts]
+    lanes[i]["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
+    s.reink_lane(i)
 
 
 # ft past the centerline of the water crossed that a carried end stops, on the bund: a supply canal is ~4.5 ft wide and its

@@ -6,9 +6,10 @@ Split from hamletgen.py by feature 111; bodies verbatim. See hamletgen/CLAUDE.md
 from __future__ import annotations
 
 import math
+from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, nearest_way_bearing
+from l7r.diagram.settlement import Settlement, nearest_way_bearing, seg_dist
 from l7r.diagram.settlement.structures.fixtures import (
     KOSATSUBA_ANCHOR_BAND_FT,
     KOSATSUBA_HANDOVER_BAND_FT,
@@ -23,13 +24,14 @@ from l7r.diagram.settlement.structures.fixtures import (
 )
 from l7r.diagram.settlement.structures.fixtures.siting import BOARD_ALONG_STEP_PX
 
-from .consts import BROOK_BEND_WIDTHS, POLDER_ARCHETYPES
+from .consts import BROOK_BEND_WIDTHS, POLDER_ARCHETYPES, Pt
 from .hinterland import CROP_MARGIN, brook_beside_the_field, title_pocket
 from .plan import SitePlan
 from .sink import BROOK_JOIN_TRUNK
 from .water import polder_crossing_caps
 from .ways.checks import square_crossings
 from .ways.fabric import _crosses_fabric, _homestead_polys
+from .ways.geom import _TOUCH_GAP
 
 # THE RE-SEAT PROBE MUST MEASURE THE BOARD THAT IS DRAWN (feature 134 T50, 2026-08-29). This was pinned
 # at 14 x 8 while `Settlement.kosatsuba` draws the researched 12 x 5 - not even the same aspect - and the
@@ -68,6 +70,22 @@ def round_the_brooks(s: Settlement) -> None:
         s.round_stream(rec, BROOK_BEND_WIDTHS * float(rec.get("w") or 7.0), hold=taps)
 
 
+def keeps_the_ends(lanes: Sequence[Mapping[str, Any]], i: int, old: Sequence[Pt], new: Sequence[Pt]) -> bool:
+    """Does lane `i`, re-laid from `old` to `new`, still meet every other lane end that met it - within the 4 ft the web's
+    one-network rule joins at (`_TOUCH_GAP`)?"""
+    on_old = list(zip(old, old[1:], strict=False))
+    on_new = list(zip(new, new[1:], strict=False))
+    for k, ln in enumerate(lanes):
+        p = ln.get("pts") or []
+        if k == i or len(p) < 2:
+            continue
+        for e in (p[0], p[-1]):
+            x, y = float(e[0]), float(e[1])
+            if any(seg_dist(x, y, a, b) <= _TOUCH_GAP for a, b in on_old) and not any(seg_dist(x, y, a, b) <= _TOUCH_GAP for a, b in on_new):
+                return False
+    return True
+
+
 def stage_crossings(s: Settlement, plan: SitePlan) -> None:
     """Planks and decks.
 
@@ -102,7 +120,9 @@ def stage_crossings(s: Settlement, plan: SitePlan) -> None:
             squared = square_crossings(pts, [(float(x), float(y)) for x, y in brook], half)
             # ...NOT WHERE THE NEW CHORD RUNS ACROSS THE FABRIC (feature 291): squaring drops the vertices near the brook, and
             # on cohort seed 22 the dropped one was a detour round five farm grove bands, so the chord cut across them all
-            if len(squared) != len(pts) and not _crosses_fabric(squared, _fabric_now, 0.0):
+            # ...NOR WHERE IT LEAVES ANOTHER LANE'S END IN THE AIR (feature 291): Mizuguchi's street was squared at a crossing
+            # and the door path that met it where it had bent to the ford was left 87 ft off it, the web in two pieces
+            if len(squared) != len(pts) and not _crosses_fabric(squared, _fabric_now, 0.0) and keeps_the_ends(s.M.get("lanes", []), i, pts, squared):
                 ln["pts"] = [[x, y] for x, y in squared]
                 s.reink_lane(i)
     s.bridges()
