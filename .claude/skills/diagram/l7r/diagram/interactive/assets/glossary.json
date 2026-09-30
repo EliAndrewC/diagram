@@ -13128,5 +13128,12 @@
    "shirakashi",
    "white oak"
   ]
+ },
+ "dry edge": {
+  "def": "The line where the dry ground a village stands on meets the wet paddy below it. On the map it is the field's margin, standing for a levee, a dike or a fan's foot, and a row village strings its farms along it.",
+  "variants": [
+   "dry edge",
+   "dry edges"
+  ]
  }
 }
