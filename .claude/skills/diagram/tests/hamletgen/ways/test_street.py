@@ -44,9 +44,10 @@ def test_lay_row_streets_draws_each_planned_street_as_one_street_lane() -> None:
     s.M["lanes"] = [{"pts": [[1300.0, 300.0], [1300.0, 700.0]], "w": 6, "connector": True}]
     houses = [{"x": 300.0, "y": 560.0}, {"x": 700.0, "y": 440.0}, {"x": 1000.0, "y": 560.0}]
     assert lay_row_streets(s, houses, [], [], [], reach=150.0, pad=50.0) == 1
-    street = [ln for ln in s.M["lanes"] if ln.get("street")]
+    street = [ln for ln in s.M["lanes"] if ln.get("street") and ln.get("street_index") is not None]
+    joins = [ln for ln in s.M["lanes"] if ln.get("street") and ln.get("street_index") is None]
     assert len(street) == 1 and street[0]["street_index"] == 0 and street[0]["w"] == 6
-    assert street[0]["pts"][-1][0] >= 1299.0, "joined to the connector"
+    assert len(joins) == 1 and joins[0]["pts"][0] == street[0]["pts"][-1] and joins[0]["pts"][-1][0] >= 1299.0, "joined to the connector by a way of its own"
 
 
 def test_street_run_out_leaves_the_sheet_from_the_nearer_end() -> None:
@@ -69,3 +70,12 @@ def test_thread_routes_a_leg_still_grazing_once_more_a_foot_wider(monkeypatch) -
     monkeypatch.setattr(street, "_route", lambda a, b, hard, walls, water, gap: gaps.append(gap) or [a, ((a[0] + b[0]) / 2, a[1] + 50.0), b])
     out = thread([(0.0, 0.0), (100.0, 0.0)], [[(1.0, 1.0)]], [], [], half=4.0)
     assert gaps == [5.0, 7.0] and out[0] == (0.0, 0.0) and out[-1] == (100.0, 0.0)
+
+
+def test_the_join_leg_is_what_join_to_added_at_either_end() -> None:
+    from l7r.diagram.hamletgen.ways.street import join_leg
+
+    path = [(0.0, 0.0), (10.0, 0.0)]
+    assert join_leg(path, path) == []
+    assert join_leg(path, [*path, (10.0, 5.0), (10.0, 9.0)]) == [(10.0, 0.0), (10.0, 5.0), (10.0, 9.0)]
+    assert join_leg(path, [(-4.0, -3.0), *path]) == [(-4.0, -3.0), (0.0, 0.0)]

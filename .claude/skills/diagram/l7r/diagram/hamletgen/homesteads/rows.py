@@ -332,12 +332,17 @@ def parallel(line: Sequence[tuple[Pt, Pt]], d: float) -> list[tuple[Pt, Pt]]:
     off = LineString(coords)  # in the first street's direction on either side: shapely 2 keeps an offset's direction
     step = max(math.dist(pts[0], pts[1]), 1.0)
     k = max(1, int(off.length // step))
+    qs = [(float(q.x), float(q.y)) for q in (off.interpolate(off.length * i / k) for i in range(k + 1))]
     out: list[tuple[Pt, Pt]] = []
-    for i in range(k + 1):
-        q = off.interpolate(off.length * i / k)
-        qp = (float(q.x), float(q.y))
-        n = min(line, key=lambda s: math.dist(s[0], qp))[1]
-        out.append((qp, n))
+    for i, qp in enumerate(qs):
+        # THE NORMAL OF THE NEW STREET ITSELF, square to its own tangent on the first street's outward side: borrowed from the
+        # first street's nearest sample, every sample round a rounded corner took the corner's one normal, and the farms
+        # seated along the arc all faced one way and stood behind each other (cohort seed 904)
+        a, b = qs[max(0, i - 1)], qs[min(len(qs) - 1, i + 1)]
+        tl = math.dist(a, b) or 1.0
+        n0 = min(line, key=lambda s: math.dist(s[0], qp))[1]
+        nx, ny = -(b[1] - a[1]) / tl, (b[0] - a[0]) / tl
+        out.append((qp, (nx, ny) if nx * n0[0] + ny * n0[1] >= 0.0 else (-nx, -ny)))
     return out
 
 
