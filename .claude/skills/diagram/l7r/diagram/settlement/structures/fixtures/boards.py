@@ -21,9 +21,11 @@ class BoardsMixin:
         The watchman strikes the bell in a cadence that tells the town how near the fire is. Records
         M['fire_towers'] (an overlap-checked struct: it must stand clear of the wall, roads, and
         buildings) and reserves a small no-build block (it needs clear sightlines). Place it among the
-        laborer/merchant blocks. See the research/cities/fabric.html 'How did a dense wooden city watch for fire?' historical grounding."""
+        laborer/merchant blocks. The history is research/urban-features.html 'Fire watch towers and firefighting
+        gear (hinomi yagura)'; the rules are research/rendering/urban-features.html 'How our maps draw a town's
+        fire watch and fire gear'."""
         if tw is None:
-            tw = self.px(26)  # a real hinomi-yagura frame is ~26 ft square (town-calibrated glyph)
+            tw = self.px(26)  # ~26 ft square, a town-calibrated glyph: no tower's footprint is on any page read (convention)
         h = tw / 2
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
         g.append(f'<rect x="{-h - 2:.0f}" y="{-h - 5:.0f}" width="{tw + 4}" height="5" rx="1" fill="#7A5A30"/>')  # the little roof cap over the lookout platform

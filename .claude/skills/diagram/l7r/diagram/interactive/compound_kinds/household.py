@@ -482,7 +482,7 @@ class FireWaterTubs(Kind):
     Covers: every fire-water tub glyph and the "fire-water tubs" label
     Label: accurate
     Sources: tfd-hongou-fire-history, thepaper-taipinggang, edo-no-kaji-jawiki, machibikeshi-jawiki, sado-bugyosho-fires, tensuioke-jawiki, dozo-jawiki
-    Entry: research/buildings.html - 'Fire, and the fireproof storehouses (dozō)'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'; research/rendering/buildings.html - 'How our maps draw fire water and the fireproof storehouses (dozō)'
+    Entry: research/buildings.html - 'Fire, and the fireproof storehouses (dozō)'; research/rendering/buildings.html - 'How our maps draw fire water and the fireproof storehouses (dozō)'; research/urban-features.html - 'Fire watch towers and firefighting gear (hinomi yagura)'
     """
 
     key = "fire-water tubs"

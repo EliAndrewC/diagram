@@ -718,7 +718,7 @@ class Door(Kind):
     Covers: every small door glyph on a building's wall
     Label: accurate
     Sources: madoken-odoguchi, hongofuji-koiwai, s-kent-kuratomae, kotobank-katteguchi, kotobank-uchigenkan, matsue-bukeyashiki, homes-jin-bukeyashiki, dozo-jawiki, gogura-jawiki, nagayamon-jawiki, jta-nagayamon
-    Entry: research/buildings.html - 'Doorways and doors (to)', 'Kitchens (daidokoro)', 'The formal entrance and a guest's arrival (genkan)'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps draw doors', 'How our maps draw a magistrate's compound', 'How our maps draw kitchens (daidokoro)','How our maps route a guest from the gate to the entrance'
+    Entry: research/buildings.html - 'Doorways and doors (to)', 'Kitchens (daidokoro)', 'The formal entrance and a guest's arrival (genkan)'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps draw doors', 'How our maps draw a magistrate's compound', 'How our maps draw kitchens (daidokoro)','How our maps route a guest from the gate to the entrance'; research/urban-features.html - 'Fire watch towers and firefighting gear (hinomi yagura)'
     """
 
     key = "door"

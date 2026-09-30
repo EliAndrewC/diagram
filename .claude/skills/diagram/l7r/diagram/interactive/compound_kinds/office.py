@@ -144,7 +144,7 @@ class TaxArchive(Kind):
     Covers: the plastered archive kura and its label
     Label: accurate
     Sources: sado-bugyosho-fires, dozo-jawiki, tfd-hongou-fire-history
-    Entry: research/buildings.html - 'Fire, and the fireproof storehouses (dozō)', 'Magistrates' compounds (jin'ya and yamen)'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound', 'How our maps draw fire water and the fireproof storehouses (dozō)'
+    Entry: research/buildings.html - 'Fire, and the fireproof storehouses (dozō)', 'Magistrates' compounds (jin'ya and yamen)'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound', 'How our maps draw fire water and the fireproof storehouses (dozō)'; research/urban-features.html - 'Fire watch towers and firefighting gear (hinomi yagura)'
     """
 
     key = "tax archive"
