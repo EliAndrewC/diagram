@@ -46,7 +46,7 @@ COURT_FILL: dict[str, str] = {
     "practice ground": "url(#keiko-earth)",  # swept keiko earth (buildings.md "Practice ground")
 }
 # A court that is ROOFED is drawn with a building's solid outline (stroke, width) and posts along its open side
-# (feature 267 R22, research buildings 450 'Was the hearing court open white sand, or roofed?': a magistracy's court
+# (feature 267 R22, research buildings 'The hearing court (shirasu)': a magistracy's court
 # was roofed or an indoor gravel floor - the open-air white court is the period-drama image). Every other zone keeps
 # the thin open-ground edge.
 ROOFED_ZONES: dict[str, tuple[str, float]] = {"oshirasu": ("#5A3F1E", 2.0)}

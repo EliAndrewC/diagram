@@ -182,7 +182,7 @@ def _clerk_seats(dais: Box, side: str) -> list[Box]:
 
 
 def _mats(z: CourtZone) -> list[Box]:
-    """The straw mats on a hearing court's floor (research buildings 440 'Who sat where at a hearing, and on what?'):
+    """The straw mats on a hearing court's floor (research rendering/buildings 'How our maps draw the hearing court (shirasu)'):
     the accused's, ~6 x 3 ft, at the center a third of the way in from the dais; the plaintiff's behind to one side and
     the village officials' (12 ft, several kneeling) behind to the other - spacing a GUESS, as the hand sheets draw them."""
     cx, fy = z.x_ft + z.w_ft / 2, z.y_ft + z.h_ft / 3

@@ -683,7 +683,7 @@ class LordsQuarters(Kind):
     Covers: the lord's suite in the residence, its floor and its labels
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, shoinzukuri-kotobank, matsue-bukeyashiki, touken-world-buke-madori, takayama-jinya-jawiki, takayama-jinya-city, aizu-bukeyashiki-jawiki
-    Entry: research/buildings.html - 'In what order do a residence's rooms run - the reception, the master's rooms, the family's?', 'The courtroom is a room of the office hall, not a freestanding stage'; research/cities/government.html - 'Servant housing in the samurai ward'
+    Entry: research/buildings.html - 'In what order do a residence's rooms run - the reception, the master's rooms, the family's?', 'The hearing court (shirasu)'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)'; research/cities/government.html - 'Servant housing in the samurai ward'
     """
 
     key = "lord's quarters"

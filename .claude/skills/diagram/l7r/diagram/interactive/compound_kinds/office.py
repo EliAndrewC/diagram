@@ -49,7 +49,7 @@ class OfficeHall(Kind):
     Covers: the office hall's block, its outline and its front band
     Label: accurate
     Sources: takayama-jinya-jawiki, takayama-jinya-city, sado-bugyosho-fires
-    Entry: research/buildings.html - 'The courtroom is a room of the office hall, not a freestanding stage', 'Magistrates' compounds (jin'ya and yamen)', 'The size of a compound and the rank of its buildings', 'Fire discipline: halls burn, kura endure'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps draw a magistrate's compound'
+    Entry: research/buildings.html - 'The hearing court (shirasu)', 'Magistrates' compounds (jin'ya and yamen)', 'The size of a compound and the rank of its buildings', 'Fire discipline: halls burn, kura endure'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)', 'How our maps size a compound and its buildings', 'How our maps draw a magistrate's compound'
     """
 
     key = "office hall"
@@ -78,7 +78,7 @@ class MagistratesDais(Kind):
     Covers: the dais band on the office hall's court face, and its label
     Label: accurate
     Sources: oshirasu-jawiki, shirasu-kotobank, takayama-jinya-jawiki, takayama-jinya-city, neixiang-yamen-zhwiki
-    Entry: research/buildings.html - 'Who sat where at a hearing, and on what?', 'The courtroom is a room of the office hall, not a freestanding stage', 'Magistrates' compounds (jin'ya and yamen)'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound'
+    Entry: research/buildings.html - 'The hearing court (shirasu)', 'Magistrates' compounds (jin'ya and yamen)'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)', 'How our maps draw a magistrate's compound'
     """
 
     key = "magistrate's dais"
@@ -400,7 +400,7 @@ class DayOffice(Kind):
     Covers: the day office's floor and its label
     Label: accurate
     Sources: takayama-jinya-jawiki, takayama-jinya-city
-    Entry: research/buildings.html - 'The courtroom is a room of the office hall, not a freestanding stage', 'No interrogation room'
+    Entry: research/buildings.html - 'The hearing court (shirasu)', 'No interrogation room'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)'
     """
 
     key = "day office"
@@ -427,7 +427,7 @@ class OfficialStudy(Kind):
     Covers: the official study's floor and its label
     Label: accurate
     Sources: takayama-jinya-jawiki, takayama-jinya-city
-    Entry: research/buildings.html - 'The courtroom is a room of the office hall, not a freestanding stage'
+    Entry: research/buildings.html - 'The hearing court (shirasu)'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)'
     """
 
     key = "official study"
@@ -455,7 +455,7 @@ class ClerksSeats(Kind):
     Covers: the two seats flanking the dais and their labels
     Label: accurate
     Sources: oshirasu-jawiki, shirasu-kotobank
-    Entry: research/buildings.html - 'Who sat where at a hearing, and on what?'
+    Entry: research/buildings.html - 'The hearing court (shirasu)'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)'
     """
 
     key = "clerks' seats"
@@ -485,7 +485,7 @@ class KneelingPositions(Kind):
     Covers: the straw mats on the hearing court and their label
     Label: accurate
     Sources: oshirasu-jawiki, shirasu-kotobank, shirasu-imidas, henan-neixiang, neixiang-yamen-zhwiki
-    Entry: research/buildings.html - 'Who sat where at a hearing, and on what?', 'Magistrates' compounds (jin'ya and yamen)', 'The courtroom is a room of the office hall, not a freestanding stage'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound'
+    Entry: research/buildings.html - 'The hearing court (shirasu)', 'Magistrates' compounds (jin'ya and yamen)'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)', 'How our maps draw a magistrate's compound'
     """
 
     key = "kneeling positions"

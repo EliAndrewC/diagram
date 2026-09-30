@@ -523,7 +523,7 @@ def county_magistracy_program() -> CompoundProgram:
         # GUESS in its size, leaving a 7 ft way from the postern along the west wall and the yard's north strip.
         CourtZone("vegetable garden", 14.0, 36.0, 64.0, 48.0),
         # The hearing court is centered on the office hall (x 43-156 as placed: the tax archive's 34 ft and a
-        # fire-gap west of it) and no longer than it - R22, research buildings 450: under the office hall's roof or its
+        # fire-gap west of it) and no longer than it - R22, research buildings 090: under the office hall's roof or its
         # own, before the dais. 80 ft leaves each end of the hall's south face out from under the roof, where its tub
         # stands; 32 ft deep (36 until pass 5) keeps the cart slot to the stables and room for the stable well before
         # them (buildings.md "Hearing court"). It was 132 x 39 ft, longer than the hall and 34 ft off its center. Its
