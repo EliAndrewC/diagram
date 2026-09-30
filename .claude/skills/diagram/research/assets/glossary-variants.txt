@@ -1959,6 +1959,7 @@ ming dynasty	Ming dynasty
 ming taizu	Taizu
 ming-dynasty	Ming dynasty
 ming-qing	Qing dynasty
+ministry of rites	Ministry of Rites
 minka	minka
 mino	Mino
 minote-zeki	minote-zeki
@@ -2367,11 +2368,15 @@ principal axes	principal axis
 principal axis	principal axis
 principal image	principal image
 principal images	principal image
+principal shrine	principal shrine
+principal shrines	principal shrine
 prison god	jail-god
 program item	program item
 program items	program item
 proso	proso
 proso millet	proso
+provincial abbot	provincial abbot
+provincial abbots	provincial abbot
 provincial capital	provincial seat
 provincial capitals	provincial seat
 provincial seats	provincial seat
@@ -2870,6 +2875,8 @@ staking frame	staking frame
 staking frames	staking frame
 stand age	forest stand
 stand density	forest stand
+state cult	state cult
+state cult's	state cult
 state shinto	State Shinto
 steading	steading
 steadings	steading

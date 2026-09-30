@@ -13162,5 +13162,32 @@
   "variants": [
    "cluster's spine"
   ]
+ },
+ "provincial abbot": {
+  "def": "In this setting, the cleric that every provincial city keeps at least one of, serving in the city's subordinate temples under the Ministry of Rites. Above them, a domain capital keeps at least two grand abbots.",
+  "variants": [
+   "provincial abbot",
+   "provincial abbots"
+  ]
+ },
+ "Ministry of Rites": {
+  "def": "In this setting, the ministry that oversees the shrines and temples and their clergy: the country monks of the village districts, the preceptors of the county towns and the abbots of the cities.",
+  "variants": [
+   "Ministry of Rites"
+  ]
+ },
+ "state cult": {
+  "def": "The official worship the Chinese state required of every county seat and city, carried out at its altars, such as the altar to the gods of soil and grain, and at temples such as the City God's.",
+  "variants": [
+   "state cult",
+   "state cult's"
+  ]
+ },
+ "principal shrine": {
+  "def": "The chief shrine of a Japanese city or province, ranked above the other shrines there.",
+  "variants": [
+   "principal shrine",
+   "principal shrines"
+  ]
  }
 }
