@@ -315,7 +315,7 @@ class VillageLane(Kind):
 
     Note: That every house is reached by a way is read from a surveyed village's own lane hierarchy; of the two
     forms, the planned back lane is read and the alleys off the spine are on no publicly readable page, as is
-    the access passage this record paraphrases; the drawn WIDTHS (3, 5 and 6 ft, a row village's street at the 6 ft, a rank wider than the lanes off it) are a GUESS, laddered from a footpath to a
+    the access passage this record paraphrases; the drawn WIDTHS (3, 5 and 6 ft; a row village's street takes the 6 ft, a rank wider than the lanes off it) are a GUESS, laddered from a footpath to a
     wheelbarrow's width, with the connector kept under the 9 ft of the one cart road the record does measure.
     The record now carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to
     13 ft, reaching the house lots of a surveyed village - and the map deliberately draws below that band,
@@ -329,7 +329,7 @@ class VillageLane(Kind):
     a fan's foot most of all: the record reads a row of villages there, not how the houses lay); its running on as the
     road the row stands on, and a path from each farm's door to it, are map drawing conventions.
 
-    Caveat: the drawn WIDTHS (3, 5 and 6 ft, a row village's street at the 6 ft, a rank wider than the lanes off it) are a GUESS, laddered from a footpath to a wheelbarrow's width,
+    Caveat: the drawn WIDTHS (3, 5 and 6 ft; a row village's street takes the 6 ft, a rank wider than the lanes off it) are a GUESS, laddered from a footpath to a wheelbarrow's width,
     with the connector kept under the 9 ft of the one cart road the record does measure. The record now
     carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to 13 ft,
     reaching the house lots of a surveyed village - and the map deliberately draws below that band, because

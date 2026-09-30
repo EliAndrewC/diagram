@@ -2339,3 +2339,17 @@ line in feature 280 (`specs/280-modern-only-sweep/outcomes.md`, one row per item
 - **Mizuguchi's two east houses walk about four times the straight distance to the way out** (1,176 and 1,207 ft of lane for
   290-300 ft; 2.27 at worst on main) - the lane web leads them south-east first. Measured by the round-5 review, 2026-09-29; the
   same routing question as Kashikawa's detours above.
+
+## Found by feature 291's settlement-reviews (2026-09-30), measured and left
+
+- **A far-row farm's grove and its holding strip do not meet** (Kashikawa, nitpick F1 of the passing round). The grove is
+  square to the page (the house faces south) and the strip square to the street (-59 degrees), so a wedge of open scrub
+  26-56 ft wide at its nearest lies between them on all 11 far farms; at fit zoom the holdings read as one field block
+  behind the row rather than as the back of each lot. No norm sets a gap (homesteads/157: "house lot, then field").
+  Sketch: start the strip at the lot's back edge as drawn (the grove band's outer edge along the normal), or turn the
+  farm's frame to the street on a street laid first - the latter a question for the record first (does a planned row's
+  house face its street or the south?).
+- **A carried-on spur's end is written at full float precision** (Sawada, nitpick of the passing round):
+  `ways/bund.carry_on` draws `[q, *step]` unrounded where every other lane point is rounded to one decimal. Sketch: round
+  the step's points in `carry_on` as `commit_lane` does. An engine change, so it waits for the next feature that re-rolls
+  the pool rather than re-keying a reviewed one.
