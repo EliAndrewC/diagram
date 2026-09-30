@@ -1331,13 +1331,6 @@
    "edge castle"
   ]
  },
- "edge-runner mill": {
-  "def": "A mill whose heavy stone wheel is rolled on its edge around a circular track, crushing the seed under it; the oil presser's is turned by an ox.",
-  "variants": [
-   "edge-runner mill",
-   "edge-runner"
-  ]
- },
  "eiro": {
   "def": "The two Edo sentences that were actual imprisonment - life confinement and confinement in default - both imposed only exceptionally; the ordinary sentence was exile, flogging, a fine or death.",
   "variants": [
@@ -13471,6 +13464,20 @@
   "variants": [
    "relay town",
    "relay towns"
+  ]
+ },
+ "by-employment": {
+  "def": "Work a farm household or village took up beside its farming - a trade, a craft, a shop or a service such as a bathhouse - to earn cash; Edo-period surveys counted these village by village.",
+  "variants": [
+   "by-employment",
+   "by-employments"
+  ]
+ },
+ "press log": {
+  "def": "The heavy timber at the heart of an oil press: a slot cut in it holds the bags of roasted, ground seed, and wedges driven into the slot squeeze the oil out.",
+  "variants": [
+   "press log",
+   "press logs"
   ]
  }
 }

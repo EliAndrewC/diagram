@@ -279,6 +279,8 @@ bushū	Musashi
 butsudan	butsuma
 butsuma	butsuma
 buyi	Buyi
+by-employment	by-employment
+by-employments	by-employment
 byre	byre
 byres	byre
 cadastral map	cadastre
@@ -712,8 +714,6 @@ echinochloa crus-galli	Echinochloa crus-galli
 edago	hongo
 edauchi	edauchi
 edge castle	edge castle
-edge-runner	edge-runner mill
-edge-runner mill	edge-runner mill
 edo	Edo
 edo fabric	building fabric
 edo period	Edo period
@@ -2421,6 +2421,8 @@ prefectural cities	prefectural city
 prefectural city	prefectural city
 prefecture	prefectural city
 prefectures	prefectural city
+press log	press log
+press logs	press log
 principal axes	principal axis
 principal axis	principal axis
 principal image	principal image
