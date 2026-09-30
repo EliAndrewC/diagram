@@ -43,6 +43,12 @@ SOURCE_TRIES = 6
 SOURCE_STEP_FT = 20.0
 """The spacing of candidate points along each supply course."""
 
+ROUTE_CELL_FT = 8.0
+"""The router's lattice for a channel, finer than a lane's 12 ft, and the crop routed round as a WALL (at the channel's
+own 2 ft gap), not as hard ground (at a lane's wider one): a supply ditch runs between the plots with a few feet either
+side, and at a lane's margins no cell beside it was free - Audit-19's farm by the field's corner tried thirty routes off
+the main and every one was refused at its first step."""
+
 SOURCE_SPREAD_FT = 60.0
 """How far apart two tried sources stand at least - a different stretch of water, or a different course."""
 
@@ -146,7 +152,7 @@ def farm_channel(s: Settlement, h: Mapping[str, Any], courses: Sequence[Sequence
     for src in source_points(courses, (cx, cy), s.px(SOURCE_STEP_FT), SOURCE_TRIES, spread=s.px(SOURCE_SPREAD_FT)):
         mine = [(c, d) for c, d in water if _seg_d(src, c, d) > s.px(3.0)]  # the course it is led off, and its drawn twin
         ends = [dooryard_end(ring, src, step)] + [dooryard_end(ring, m, step) for m in sorted(sides, key=lambda m: math.dist(m, src))]
-        routes += [p for p in (_route(src, e, hard, walls, mine, gap=s.px(2.0)) for e in ends) if len(p) >= 2 and not crosses_other_water(p, water, s.px(6.0))]
+        routes += [p for p in (_route(src, e, [], [*hard, *walls], mine, cell=s.px(ROUTE_CELL_FT), gap=s.px(2.0)) for e in ends) if len(p) >= 2 and not crosses_other_water(p, water, s.px(6.0))]
     path = min(routes, key=lambda p: sum(math.dist(a, b) for a, b in zip(p, p[1:], strict=False)), default=[])
     if path:
         s.field_channel(path, SUPPLY_HUE, s.px(FARM_CHANNEL_W_FT), s.px(FARM_CHANNEL_W_FT), cls=FARM_CHANNEL)

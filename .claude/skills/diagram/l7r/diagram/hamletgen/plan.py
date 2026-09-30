@@ -278,8 +278,8 @@ def offtakes_for(households: int) -> tuple[tuple[float, ...], tuple[float, ...]]
 
 
 LINEAR_CANVAS = 1.5
-"""A linear hamlet's canvas over `canvas_for`'s: room for a row of grove farms (feature 291 plan D14) - a map drawing
-convention, sized so a twenty-farm row finds its streets on the sheet."""
+"""A linear or dispersed hamlet's canvas over `canvas_for`'s: room for grove farms (feature 291 plan D14) - a map drawing
+convention, sized so a twenty-farm row finds its streets on the sheet, and twenty dispersed farms their frames."""
 
 
 def canvas_for(target_acres: float, ftpx: float) -> tuple[int, int]:
@@ -340,10 +340,12 @@ def plan_site(spec: HamletSpec) -> SitePlan:
     target_acres = spec.households * GROSS_ACRES_PER_HOUSEHOLD
     a, b = offtakes_for(spec.households)
     W, H = canvas_for(target_acres, 1.0)
-    if _form == "linear":
+    if _form in ("linear", "dispersed"):
         # A ROW VILLAGE NEEDS ITS LENGTH (feature 291 plan D14): its farms stand one grove frame (some 240 ft) apart along
         # their streets, and a canvas sized for a clustered hamlet ran each street off the sheet after a few lots (cohort
         # seed 12: 13 of 17 seated on six streets). The unused ground is cropped away with the rest (`crop_to_content`).
+        # ...AND SO DOES A DISPERSED HAMLET OF GROVE FARMS, each farm the same frame: a twenty-farm one ran off the sheet's
+        # edge at sixteen (the pinned Audit-905, the same with a well or a channel)
         W, H = int(W * LINEAR_CANVAS), int(H * LINEAR_CANVAS)
     return SitePlan(
         spec=spec,
