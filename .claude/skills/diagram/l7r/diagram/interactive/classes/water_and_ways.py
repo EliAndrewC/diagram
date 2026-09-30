@@ -215,13 +215,13 @@ class Pond(Kind):
 class FieldPond(Kind):
     """
     What: A small pocket of open water inside one low paddy plot, reed-fringed - a low pocket where the ground
-    pools, or a header pond within the field.
+    pools and lies too deep for rice.
 
-    Why: Flat, flooded valley-bottom paddy, the most valuable and most worked ground, is reckoned to host non-rice obstacles LEAST - graves and
-    knolls go to the slope, rock outcrops are guessed to belong to terraces - and a small open-water pond, embanked and dug into low wet ground, is the one thing
+    Why: Flat, flooded valley-bottom paddy, the most valuable and most worked ground, is reckoned to host non-rice obstacles LEAST - a grave
+    stands in only some fields, feng shui having sent south China's to the hills, and knolls go to the slope, rock outcrops are guessed to belong to terraces - and a small open-water pond, embanked and dug into low wet ground, is the one thing
     that genuinely belongs in the wet middle. It is drawn sunk into a single low plot, never across a bund.
 
-    Note: That a plains pond is dug into low wet ground is read, as is feng shui setting graves on the hills; that flat paddy hosts obstacles least is this map's reasoning, and rocks as a terrace feature a guess; no source counts
+    Note: That a plains pond is dug into low wet ground is read, as are feng shui setting south China's graves on the hills and villagers of the Yangzi delta and parts of Japan burying theirs in or beside the fields; that flat paddy hosts obstacles least is this map's reasoning, and rocks as a terrace feature a guess; no source counts
     how often, so the rate is chosen - often enough that a reader meets the feature, rare enough that it
     does not litter the field.
 
@@ -242,13 +242,13 @@ class FieldRock(Kind):
     """
     What: A cluster of gray boulders inside a field plot - a bedrock outcrop the terrace risers wrap around.
 
-    Why: The maps treat rock outcrops as a TERRACE feature, bedrock the risers wrap around, absent on alluvial
-    valley, polder and delta ground; where the archetype allows one it stands off-center in its plot so it reads as
+    Why: The maps treat rock outcrops as a feature of TERRACES and narrow valley strips, bedrock the risers wrap
+    around, absent on broad alluvial valley, polder and delta ground; where the archetype allows one it stands off-center in its plot so it reads as
     a natural obstacle.
 
     Note: Which archetypes host an outcrop is this project's guess - no source found puts outcrops on terraces and
-    off valley, polder and delta ground - and no source counts how many, so a terraced field
-    gets one to three - enough that the reader meets the obstacle the terrace was cut around, few enough
+    off valley, polder and delta ground, and no page we read speaks of rocks kept in a paddy at all - nor does any
+    count how many, so a terraced field (and a narrow valley strip about half the time) gets one to three - enough that the reader meets the obstacle the terrace was cut around, few enough
     that the field still reads as worked ground.
 
     Name: field rock

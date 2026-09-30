@@ -64,12 +64,12 @@ class WetPaddy(Kind):
 
     Why: It lies at the foot of the field, on the drain. Water falls basin to basin down a gravity system, and in
     a traditional paddy no line can be drawn between irrigating and draining, so the plots at the bottom
-    take what the plots above shed and never come dry. That makes it the ground nobody wanted: the mud is
-    deep, the soil runs colder and shorter of oxygen than a kanden, no winter crop of wheat or barley can
-    follow the rice, and lodging and disease leave the yield unreliable. From Meiji the state drained wet
-    paddy into dry as a national undertaking, and more than two thirds of the country's fields were
-    converted - the measure of how much of it there was to convert, and the reason a map of these centuries
-    should carry some.
+    take what the plots above shed and never come dry. The dictionaries count what such ground cost: the mud is
+    deep, the soil runs colder in summer and shorter of oxygen than a kanden's, no winter crop of wheat or barley
+    can follow the rice, and lodging and disease leave the yield unreliable. From Meiji the state drained wet
+    paddy into dry as a national undertaking, and more than two thirds of the country's paddies are said to have
+    been converted - a program that size is, on our reading, the measure of how much there was, and the reason a
+    map of these centuries should carry some.
 
     Note: The shitsuden and kanden categories, the wetness that defines them and the penalties they carry come
     from the dictionaries, quoted in the entry. Which plots wear the tint is a drawing convention rather
@@ -356,15 +356,17 @@ class Fallow(Kind):
     to be worked were chosen anew from the cropped and the resting ground (kataarashi). The resting land was mixed
     in among the land under crop, not a block of its own, and while it rested it was not marked off but grazed in
     common by cattle and horses. The nucleated village on stable ground, and the early modern village after the
-    land surveys, cropped the same paddy every year, so most maps draw no resting plot.
+    land surveys, cropped the same paddy every year; the setting's canon holds that a paddy once made can be cropped
+    for centuries without tiring its soil, so most maps draw no resting plot.
 
     Note: Whether a settlement rests any paddy is rolled from the map's seed: settled, cropped every year, or
     unsettled, with a few basins resting. The two forms, the scattering and the grazing are read; that the settled
-    form is the commoner is this record's reading, and the weight between the two a GUESS; how many basins rest is
-    a liberty kept within the record's "a few"; that they favor the far end of the water's run is this record's
-    reading of short water, and a GUESS, since nothing read says which plots of a village's paddy were rested.
+    form is the commoner is this project's reading of the setting's nucleated villages and its canon, and the
+    weight between the two a GUESS; how many basins rest is a liberty kept within the record's "a few"; that they
+    favor the far end of the water's run is this record's reading of short water, and a GUESS, since nothing read
+    says which plots of a village's paddy were rested.
 
-    Caveat: that the settled form is the commoner is this record's reading, and the weight between the two a
+    Caveat: that the settled form is the commoner is this project's reading of the setting's nucleated villages and its canon, and the weight between the two a
     GUESS; how many basins rest is a liberty kept within the record's "a few"; that they favor the far end of the
     water's run is this record's reading of short water, and a GUESS, since nothing read says which plots of a
     village's paddy were rested.

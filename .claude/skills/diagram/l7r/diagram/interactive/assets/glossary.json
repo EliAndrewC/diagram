@@ -13612,5 +13612,31 @@
    "hanori type",
    "hanori-gata"
   ]
+ },
+ "extensive agriculture": {
+  "def": "Farming that spreads its work thinly over much land, leaving some ground to rest and choosing each year which plots to crop, as the early medieval estates did where water or soil could not carry every plot every year. The opposite of intensive farming.",
+  "variants": [
+   "extensive agriculture",
+   "extensive farming"
+  ]
+ },
+ "intensive farming": {
+  "def": "Farming that crops the same stable land every year and puts more labor into each plot, as the nucleated villages came to do. The opposite of extensive agriculture.",
+  "variants": [
+   "intensive farming",
+   "intensive agriculture"
+  ]
+ },
+ "Kagawa": {
+  "def": "A prefecture of Shikoku on the Seto Inland Sea, taking in the Sanuki plain. It has the most irrigation ponds for its area of any prefecture in Japan, and before its canal opened, ponds supplied most of its farm water.",
+  "variants": [
+   "Kagawa"
+  ]
+ },
+ "San'yo": {
+  "def": "The region along the Seto Inland Sea's northern shore, west of Kinki. It gets little rain, and like Shikoku it depends on irrigation ponds.",
+  "variants": [
+   "San'yo"
+  ]
  }
 }

@@ -786,6 +786,8 @@ extension document	extension advice
 extension guide	extension advice
 extension leaflet	extension advice
 extension manual	extension advice
+extensive agriculture	extensive agriculture
+extensive farming	extensive agriculture
 extramural	extramural
 fabric	building fabric
 fabric is later	building fabric
@@ -1444,6 +1446,8 @@ intendancies	daikan
 intendancy	daikan
 intendant	daikan
 intendants	daikan
+intensive agriculture	intensive farming
+intensive farming	intensive farming
 inter	inter
 interceptor	interceptor
 interceptor channel	interceptor
@@ -1594,6 +1598,7 @@ kabuki	kabuki
 kachi	doshin
 kadoya	kadoya
 kaei	Kaei
+kagawa	Kagawa
 kagura	kagura
 kaibori	kaibori
 kaie-ji	Kaie-ji
@@ -2689,6 +2694,7 @@ salvage excavation	salvage excavation
 samurai ground	buke-chi
 san no torii	ichi-no-torii
 san'in	San'in
+san'yo	San'yo
 san'yodo	Sanyodo
 san-in	San'in
 san-no-ma	ni-no-ma
