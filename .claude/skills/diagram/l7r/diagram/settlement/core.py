@@ -423,8 +423,8 @@ class Settlement(
 
     def meta(self: Settlement, **kw: Any) -> None:
         if "ftpx" in kw:
-            # The map's declared real scale in FEET PER PIXEL - the GM's ladder (research/settlements.html
-            # "How far is it across this map? The scale, tier by tier"): hamlet/town 1,
+            # The map's declared real scale in FEET PER PIXEL - the GM's ladder (research/rendering/settlements.html
+            # "How our maps draw and state each size of settlement"): hamlet/town 1,
             # village 2, provincial city 3 (the round numbers are deliberate; a human should be
             # able to read distances off the map). Buildings follow automatically via
             # bscale = 1/ftpx: the urban glyph library is calibrated at town scale (a 44x29px

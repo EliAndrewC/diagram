@@ -513,7 +513,7 @@ POND_SETBACK_LIMIT = 300.0
 # settlement-review) rather than an oversight - `build_comb`'s docstring carries the same account.
 GRAIN = 2.0
 
-# THE HAMLET BAND (research/settlements.html "What are the five kinds of settlement, and how big is each?"): 10-20 households, 50-100 inhabitants. Below
+# THE HAMLET BAND (research/settlements.html "The five sizes of settlement: hamlet, village, town, provincial city and capital"): 10-20 households, 50-100 inhabitants. Below
 # 10 the place is an outlying farmstead or two rather than a hamlet; above ~20 it is a small village
 # and grows the features a hamlet must not have (a headman, a shrine, tax-free plots).
 HOUSEHOLD_BAND = (10, 20)

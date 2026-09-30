@@ -34,7 +34,7 @@ HOUSEHOLD = 5.0  # humans per family - budgets.md convention used across the ski
 # (600 families at pop 3,000: servants 120 / laborers 240 / merchants 150 / burakumin 30 /
 # samurai 60; ZERO farmers - city farmland is worked from surrounding villages, unless an
 # agricultural district deliberately overrides that assumption). The canon and the caste-starvation
-# failure behind treating the mix as a rule: research/settlements.html "Who lives in a provincial city?".
+# failure behind treating the mix as a rule: research/rendering/settlements.html "How our maps draw and state each size of settlement".
 CASTE_FAMILY_FRAC: dict[str, float] = {"servants": 0.20, "laborers": 0.40, "merchants": 0.25, "burakumin": 0.05, "samurai": 0.10}
 PACKED_CASTES = ("servants", "laborers", "merchants", "burakumin")  # row-housing castes (party walls)
 
@@ -162,7 +162,7 @@ POP_MIN, POP_MAX = 2000, 4000
 #: ~360 relocated non-working samurai (the schooling-and-retirement cohort). The ~45 foreign
 #: Imperial samurai are NOT in this figure - they are housed inside the Imperial Magistrate's
 #: compound, which is a civic line rather than a housing line. The tier bands: research/settlements.html
-#: "What are the five kinds of settlement, and how big is each?".
+#: "The five sizes of settlement: hamlet, village, town, provincial city and capital".
 CAPITAL_POP = 12_360
 CAPITAL_POP_MIN, CAPITAL_POP_MAX = 9_000, 16_000
 
