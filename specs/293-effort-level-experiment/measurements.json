@@ -53,5 +53,60 @@
     "observed": "2026-09-30",
     "source": "specs/293-effort-level-experiment/outputs/I-port-handoff.md exists; future-work/farming-communities.md 'OPEN 2026-09-30 (feature 293, settlement-review of Sawada)' reads 'from each shared shed's center to the nearest farmhouse's center - the basis draft_byres compares against _BORROW_REACH'; re-measured on the merge with main (feature 291): Sawada 66, 124, 92, 174 ft against main's 66, 47, 92, 129, Inashiro 138, 74, 87 on both - the entry's figures stand",
     "method": "ls and grep over the files; the distances with python over main's and the clone's manifests"
+  },
+  "inashiro-r3-F1-woodland": {
+    "verifies": "F1",
+    "subject": "inashiro",
+    "answers": "cd09f76aa58c",
+    "quantity": "woodland stands in the feature 293 entry, counted by role woodland as the manifest draws them",
+    "value": 3,
+    "unit": "stands",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md, the 293 entry: 'the woodland commons 3 stands where main drew 2, 75,828 sq ft against 52,556'; the manifest's commons with role woodland: 23,483 + 40,935 + 11,410 sq ft, main's 29,170 + 23,386",
+    "method": "python over main's and the clone's manifests (shoelace area of each woodland poly), then the notes edited"
+  },
+  "kuwabata-r3-F1-direction": {
+    "verifies": "F1",
+    "subject": "kuwabata",
+    "answers": "cd09f76aa58c",
+    "quantity": "compass bearing of the connector track as it leaves the cluster, the district direction's stated source",
+    "value": 0.2,
+    "unit": "degrees",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md '### Place': district direction north; lanes[0] (connector) runs (3384.6, 1461.7) to (3391.5, -410.0); the regenerated page reads 'Aozawa, which lies north'",
+    "method": "atan2 over the manifest's connector, then the notes edited and the page regenerated (make map)"
+  },
+  "kuwabata-r3-F2-retirement": {
+    "verifies": "F2",
+    "subject": "kuwabata",
+    "answers": "cd09f76aa58c",
+    "quantity": "homesteads with a retirement house, as the page's bullet states and the manifest draws",
+    "value": 4,
+    "unit": "homesteads",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md '### Features': '4 of its 16 homesteads have one'; retirement_houses has 4 entries, meta.retirement_target 4; the regenerated page reads '4 of its 16 homesteads'",
+    "method": "len over the manifest, then the notes edited and the page regenerated"
+  },
+  "kuwabata-r3-F3-moves": {
+    "verifies": "F3",
+    "subject": "kuwabata",
+    "answers": "cd09f76aa58c",
+    "quantity": "the two omitted moves (cluster shape round to crescent, pond sties 1 to 2) named in the feature 293 entry",
+    "value": 2,
+    "unit": "moves recorded",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md, the 293 entry: 'the cluster now draws a crescent, 2.13 to one, where main's drew round at 1.88 ... and 2 pond sties stand where main drew 1'",
+    "method": "meta.cluster_shape, meta.cluster_aspect_drawn and pig_sties over both manifests"
+  },
+  "sawada-r3-F1-shape": {
+    "verifies": "F1",
+    "subject": "sawada",
+    "answers": "cd09f76aa58c",
+    "quantity": "the cluster-shape flip named in the feature 293 entry",
+    "value": 1,
+    "unit": "moves recorded",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md, the 293 entry: 'the cluster now draws round, 1.98 to one, where main's drew a crescent at 2.47'",
+    "method": "meta.cluster_shape and meta.cluster_aspect_drawn over both manifests"
   }
 }
