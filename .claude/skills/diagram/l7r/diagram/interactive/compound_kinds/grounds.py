@@ -301,7 +301,7 @@ class ShrineGrove(Kind):
     Covers: the grove's ground and its tree canopies
     Label: accurate
     Sources: chinju-no-mori-jawiki, fengshui-woodland-enwiki, jinja-jawiki, short-2012-sacred-groves, fujita-2007-shaso-slopes
-    Entry: research/religion-and-death.html - 'What shape is a village shrine's wood, and on which sides of the hall does it stand?', 'Is the ground around a shrine or a grave swept clear of scrub?', 'Village shrines: where they stand, and how big their grounds are', 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps site and size a village shrine', 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
+    Entry: research/religion-and-death.html - 'Shrine woods and fences (chinju no mori, tamagaki)', 'Is the ground around a shrine or a grave swept clear of scrub?', 'Village shrines: where they stand, and how big their grounds are', 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a shrine's wood and what bounds its precinct', 'How our maps site and size a village shrine', 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "shrine grove"
