@@ -446,7 +446,7 @@ class BurialGround(Kind):
     Covers: `cemeteries` - a village's burial ground
     Label: accurate
     Sources: kofukuroman-sanmai, bochi-jawiki, kotobank-ryobosei, haka-jawiki, danka-jawiki, takeuchi-2017-bochi-hosei, kaf2-kinsei-bo, tsuya-kurosu-tokugawa-mortality
-    Entry: research/religion-and-death.html - 'Where do a hamlet's dead lie?'; 'How much ground does a village burial ground need, and whose dead lie in it?'; 'How far from its houses does a village bury its dead, and on which side?'; 'Does a village bury in its temple's yard, in a ground of its own, or in its fields?'
+    Entry: research/religion-and-death.html - 'Where a village buries its dead: its own ground, the temple yard, the fields or the home plot'; 'How much ground does a village burial ground need, and whose dead lie in it?'; 'How far from its houses does a village bury its dead, and on which side?'; research/rendering/religion-and-death.html - 'How our maps choose where a village's and a hamlet's dead lie'
     """
 
     key = 'burial ground'

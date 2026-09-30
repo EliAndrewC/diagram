@@ -377,7 +377,7 @@ class ShrineBurialGround(Kind):
     Covers: the burial ground by the shrine, where the village has it there
     Label: accurate
     Sources: danka-terauke-encyclopedia, bunkotsu-jawiki
-    Entry: research/religion-and-death.html - 'Does a graveyard stand beside its temple or its shrine?'
+    Entry: research/religion-and-death.html - 'Where a village buries its dead: its own ground, the temple yard, the fields or the home plot'; research/rendering/religion-and-death.html - 'How our maps choose where a village's and a hamlet's dead lie'
     """
 
     key = "burial ground"

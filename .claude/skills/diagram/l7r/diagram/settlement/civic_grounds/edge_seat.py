@@ -6,7 +6,7 @@ the houses and wells by its own distance, out of the water by the caller's bank 
 set-backs from water once drawn are attested in no period), as near the houses as those allow and, among equally near
 seats, nearest the fall line - a drawing order among seats that clear, not a custom (the downstream side is attested in
 today's villages only, research/religion-and-death/270). The machinery is shared so the two cannot drift
-(the tiers' rule: MOVE, never copy). Research: research/religion-and-death.html "Where do a hamlet's dead lie?",
+(the tiers' rule: MOVE, never copy). Research: research/religion-and-death.html "Where a village buries its dead: its own ground, the temple yard, the fields or the home plot",
 "Does a village burn its own dead, and where is its cremation ground?", "How far from water does a burial ground lie?".
 
 NEAREST FIRST, NOT FALL LINE FIRST. A scan that followed the fall line out to its reach before turning put a hamlet's

@@ -283,7 +283,7 @@ class GraveIsland(Kind):
     Covers: `field_graves` - a grave mound inside a paddy plot or in its corner
     Label: accurate
     Sources: henriot-shanghai-graves, henan-grave-removal-enwiki, ryobosei-jawiki, yashikibaka-ibaraki-blog
-    Entry: research/fields.html - 'Are there really graves out in the middle of the fields?', 'In-field features - flat flooded paddy hosts obstacles least'
+    Entry: research/religion-and-death.html - 'Where a village buries its dead: its own ground, the temple yard, the fields or the home plot'; research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least'; research/rendering/religion-and-death.html - 'How our maps choose where a village's and a hamlet's dead lie'
     """
 
     key = 'grave island'

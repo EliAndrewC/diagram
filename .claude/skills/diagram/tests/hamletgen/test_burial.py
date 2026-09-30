@@ -1,4 +1,4 @@
-"""Where a hamlet's dead lie (feature 273; feature 280 M68, research/religion-and-death/155), and the shared EDGE SEAT the
+"""Where a hamlet's dead lie (feature 273; feature 280 M68, research/religion-and-death/280), and the shared EDGE SEAT the
 village's cremation ground stands on (`settlement/civic_grounds/edge_seat.py`).
 
 The edge seat is asked with hand-built settlements - a cluster of houses on an open canvas - so each rule is proved by the
