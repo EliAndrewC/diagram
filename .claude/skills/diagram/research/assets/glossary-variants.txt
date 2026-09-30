@@ -2887,6 +2887,7 @@ sluices	sluice
 snow-viewing lantern	yukimi
 so village	so village
 so villages	so village
+soba	soba
 sochinju	sōchinju
 sodegarami	sodegarami
 soffit	soffit

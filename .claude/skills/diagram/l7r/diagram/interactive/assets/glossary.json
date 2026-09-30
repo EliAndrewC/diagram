@@ -13445,5 +13445,11 @@
   "variants": [
    "Jikata hanreiroku"
   ]
+ },
+ "soba": {
+  "def": "Buckwheat noodles, sold by a noodle shop and among the goods of a village's cooked-food taverns.",
+  "variants": [
+   "soba"
+  ]
  }
 }
