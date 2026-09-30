@@ -7,7 +7,7 @@
  "start_commit": "ec99356cf081c1ac44ae227723edfdcf5675e6f7",
  "clone": "/diagram/.clones/diagram-exp-e4",
  "started": "2026-09-30T01:30:43Z",
- "ended": null,
+ "ended": "2026-09-30T02:49:36Z",
  "pauses": [],
  "memory_at_launch": {
   "source": "shared-slice",
@@ -38,7 +38,9 @@
    "293 | task R (buildings new 910, the servants' rowhouse doors + 3 keys) written, committed in clone diagram-exp-e3, checks owed | 2026-09-30",
    "293 | task R checked, committed in clone | 2026-09-30",
    "293 | run e3 ended - claim released | 2026-09-30"
-  ]
+  ],
+  "ledger_lines_appended": 0,
+  "prefixes_reserved": []
  },
  "sessions": [
   {
@@ -67,5 +69,7 @@
   "# Standing authorizations for the gm-assistant project\n\nThe GM (Eli) has given **standing authorization for this project's review subagents**. When a\nskill's documented workflow calls for `settlement-review`, `building-review`, `size-audit`, `source-reader`,\n`quote-check`, `record-format`, `source-applicability`, `entry-drift`, `spec-fidelity`, `spec-fidelity-verify` or `perf-audit` (defined in `.claude/agents/`), invoke it with the Agent tool\nwithout asking first. `perf-audit` (feature 129) is the ONLY agent that may pass `AS=perf-audit`\nto the review-record commands; the main session launches it whenever a performance band of 1 or\nmore is reported, and never writes those records itself. These are mandatory verification steps in `CLAUDE.md` and in the constitution's Principle I,\nnot optional extras: the author of a diagram, a page or a piece of prose is not a reliable reviewer\nof their own work, which is the entire reason those agents exist.\n\nThis authorization is deliberately **narrow**. It does not extend to broad multi-agent fan-out, the\nWorkflow tool, or deep research - those still need an explicit request from the GM in the\nconversation.\n\n## Why this file exists\n\nClaude Code's default system prompt carries a line telling the session not to call the Agent tool\nunless the user requested it. That is a reasonable default - it stops a session from spawning an\nexpensive fleet unprompted - but it sits ABOVE `CLAUDE.md` in the instruction hierarchy, so it\nsilently outranks this project's own mandate to run a review agent before declaring work done.\n\nOn 2026-07-27 that is exactly what happened: three provincial-city maps changed, the diagram\nskill's `CLAUDE.md` requires a `settlement-review` pass before a Mode B map ships, and the session\nskipped it because the system prompt said not to. Nothing was broken and nothing warned - the\nmandate simply lost to a higher-priority instruction.\n\n`--append-system-prompt` lands this text at the END of the system prompt, after that line, with the\nsame authority. That is why the fix lives here rather than in `CLAUDE.md`.\n\nLoaded by the `claude()` shell wrapper that `container-scripts/setup-dev-env.sh` installs into\n`~/.bashrc`. Edit the text here; the wrapper only reads it.",
   "--output-format",
   "json"
- ]
+ ],
+ "status": "valid",
+ "void_reason": ""
 }

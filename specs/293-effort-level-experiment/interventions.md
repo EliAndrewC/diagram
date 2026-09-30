@@ -25,3 +25,8 @@ given, identically, to the other.
 - 2026-09-30T00:57:35Z | e3 | wait | launch refused: shared working set 4.79 GB over 4.5 GB; waiting (R5 D7)
 - 2026-09-30T01:24:18Z | e3 | memwatch | warning at 01:23 UTC during the run (8.1 GB raw); the run continues
 - 2026-09-30T01:29:02Z | e3 | memwatch | warning at 01:27 UTC during the run (8.1 GB raw); the run continues
+- 2026-09-30T02:29:17Z | e4 | memwatch | warning at 02:28 UTC during the run (8.3 GB raw, diagram 8.1); the run continues
+- 2026-09-30T02:31:22Z | e4 | memwatch | warning at 02:30 UTC during the run (8.2 GB raw); the run continues
+- 2026-09-30T02:32:22Z | e4 | memwatch | warning at 02:31 UTC during the run (8.1 GB raw); the run continues
+- 2026-09-30T02:35:06Z | e4 | memwatch | warning at 02:34 UTC during the run (8.0 GB raw); the run continues
+- 2026-09-30T02:47:16Z | e4 | memwatch | warning at 02:46 UTC during the run (8.3 GB raw); the run continues
