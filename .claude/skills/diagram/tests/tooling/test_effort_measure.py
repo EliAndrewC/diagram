@@ -240,3 +240,16 @@ def test_a_resumed_session_is_finished_by_its_newest_result(tmp_path: pathlib.Pa
     (log / "stderr-0.txt").write_text("Killed\n")
     os.utime(log / "stderr-0.txt", (later, later))
     assert "137" in em.void_reason(log)
+
+
+def test_a_run_that_never_started_can_be_voided(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    w = _world(tmp_path)
+    log = tmp_path / "log"
+    log.mkdir()
+    (log / "result.json").write_text("")
+    (log / "stderr.txt").write_text("Error: No messages returned from query\n")
+    repo = _repo(tmp_path, w, "I", [log])
+    monkeypatch.chdir(repo)
+    assert em.main(["--run", "e1", "--projects", str(w["projects"]), "--guard-log", str(w["guard"]),
+                    "--claims", str(tmp_path / "c.md"), "--void", "it failed at launch"]) == 0
+    assert json.loads((repo / FEATURE / "runs" / "e1.json").read_text())["status"] == "void"

@@ -277,7 +277,7 @@ def main(argv: list[str]) -> int:
     logs = session_logs(run)
     expected = 1 if run["task"] == "I" else 2
     if len(logs) < expected or not all(finished(p) for p in logs):
-        voids = [v for p in logs if (v := void_reason(p))]
+        voids = [v for p in logs if (v := void_reason(p))] + ([args.void] if args.void else [])
         if not voids:
             print(f"effort-measure: {args.run} is still running ({len(logs)} of {expected} sessions started) - measure it on its notification",
                   file=sys.stderr)

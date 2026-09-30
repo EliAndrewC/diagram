@@ -53,3 +53,17 @@ given, identically, to the other.
 - 2026-09-30T09:14:43Z | e5 | resume | second stall: at 07:29 the session dispatched five settlement-reviews and a perf-audit in the background and ended its turn; all six finished by 07:35 and the headless session was never woken for them (idle ~1.7 h). Resumed with the same fixed message; the wait a pause.
 - 2026-09-30T09:14:53Z | e5 | resume | the first resumed process (pid 1832975, idle since 07:35) stopped by hand - resume's pgrep matched '--session-id' only; it now matches '--resume' too
 - 2026-09-30T10:00:49Z | e5 | resume | third stall: at 09:19 the session left a gate, three reviews and a perf-audit running and ended its turn; all finished by 09:22; not woken (idle ~40 min). Resumed with the same message.
+- 2026-09-30T10:06:40Z | e6 | wait | launch refused: shared working set 5.39 GB over 4.5 GB; waiting (R5 D7)
+- 2026-09-30T10:58:07Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:01:07Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:04:07Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:07:08Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:10:08Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:13:08Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:16:09Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:19:09Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:22:09Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:25:10Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:28:10Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:31:10Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:32:09Z | e6 | void | launched 10:58 UTC; claude -p exited at once with 'Error: No messages returned from query' and wrote no transcript (an API/harness failure). The three watchdog resume lines above found no session ('No conversation found'). e6 void; task I at xhigh re-runs as e7. The watchdog now reports a run whose session is gone with no result as DIED instead of resuming it.
