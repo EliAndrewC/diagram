@@ -199,7 +199,7 @@ class CompoundGarden(Kind):
     the private rooms look onto the one garden rather than a garden of their own. A garden was
     one of two kinds beside samurai rooms: a pond garden built around real water, or a dry garden of stones and
     white gravel standing for water. A guest reached the house in one of two ways: by a formal entrance on the
-    office, as at Takayama, or, at a middle-rank house with no such entrance, through a middle gate in a wall
+    office where office and residence share one compound, as at Takayama, and otherwise on the residence, or, at a middle-rank house with no such entrance, through a middle gate in a wall
     and along a walled garden path (roji) straight to the veranda of the reception room. The household's god
     was kept in a corner of the lot, in a small shrine or at an old tree beside it.
 
@@ -350,7 +350,7 @@ class MainGate(Kind):
     9 ft across its frontage in registered examples. A Chinese county office's gate was instead a roofed
     building, three bays wide by law. A magistrate's manor faces what it fronts - the town it governs or the road
     it stands beside - and its gate opens onto that way; where nothing else decides it, the gate faces south,
-    the formal orientation a Chinese county office took by regulation. Behind it, arrival is staged: the gate,
+    the formal orientation a Chinese county office took by regulation. Behind it, where the house has a formal entrance (a middle-rank house could do without one and lead its guest through a middle gate and along a walled garden path instead), a guest's arrival is staged: the gate,
     then open ground a palanquin can cross, then the step of the formal entrance, so no visitor steps from the
     road into a room.
 
@@ -390,7 +390,7 @@ class SideGate(Kind):
     use the roads between towns, so a compound that ships or receives bulk goods keeps a gate a cart can use.
 
     Note: The service doors follow the record, though the dictionary names only the kitchen door and that it
-    opens into work space is this record's reading. That a night-soil collector never has to cross the inner
+    opens into work space is this record's reading, and a guests' door opening into a garden rather than a court is a guess, since no page read puts a garden before an entrance. That a night-soil collector never has to cross the inner
     court is this record's own rule rather than a finding. A cart gate or landing gate that carts pass is the
     setting's own: carts were kept to the towns and off the highways in Edo Japan, and the GM's notes put
     wagons and carts on the roads.
@@ -511,12 +511,12 @@ class GardenPond(Kind):
     today, Takayama and Okutono, kept pond gardens, but both governed far more than a county, so a pond is the
     grander of the two forms for a small posting. The weight between the forms is a guess. No page read gives
     a residence pond's size: its form and size are a guess, drawn small enough to sit within sight of the rooms
-    that face the garden. A pond set on the line from the middle gate to the entrance rests on nothing found and
+    that face the garden. A pond set on the line from the gate to the entrance rests on nothing found and
     is a guess.
 
     Caveat: The weight between the forms is a guess. No page read gives a residence pond's size: its form and
     size are a guess, drawn small enough to sit within sight of the rooms that face the garden. A pond set on the
-    line from the middle gate to the entrance rests on nothing found and is a guess.
+    line from the gate to the entrance rests on nothing found and is a guess.
 
     Name: garden pond
     Covers: the pond, or the dry garden, in the inner garden
@@ -678,7 +678,7 @@ class Door(Kind):
     kitchen's earth floor, the doors of the lodgings and the servants' row, the karo's side door, the heavy doors
     of a plastered storehouse, and the entry of a guest house or a room where visitors are received.
 
-    Why: Every building has a way in. A samurai house had three: the formal entrance for guests, an inner
+    Why: Every building has a way in. A senior samurai house had three (a middle-rank one could do without the first, bringing its guest in through a garden): the formal entrance for its head and honored guests, an inner
     entrance for the family and the household to come and go by, and the kitchen door, the one way in from
     outside to the kitchen, by its earth floor - a door the dictionaries date from 1666; who came in by it is told only
     by pages of today, so the map says nothing of it. A guest's arrival
@@ -686,7 +686,7 @@ class Door(Kind):
     plastered storehouse keeps outer doors faced in earth and plaster so that fire cannot get in.
 
     Note: The kitchen door, the inward-facing doors of a servants' row, the plastered storehouse doors and a
-    guest's door follow the record. A second outside door on a kitchen, and the route by which food reached the
+    guest's door onto open ground follow the record; a guest's door drawn opening into a garden instead of a court is a guess. A second outside door on a kitchen, and the route by which food reached the
     rooms, are a guess, and a door of a room that the setting or a map's story made is as much the drawing's own
     as its room. A drawn door's width is a drawing convention, not a measurement: the working doors are drawn two
     to three times the width of an ordinary door so that they read at the sheet's scale. A real ordinary door was

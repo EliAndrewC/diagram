@@ -20,7 +20,7 @@ class Residence(Kind):
     """
     What: The magistrate's own house: the lord's family, their rooms and a formal reception room, drawn either as
     one block under one roof or as two or three halls stepped back one behind the next and joined by corridors. Its
-    rooms, the veranda along its garden face, any corridor between its halls and the formal entrance porch (genkan)
+    rooms, the veranda along its garden face, any corridor between its halls and, where the house stands alone rather than sharing a compound with the office, the formal entrance porch (genkan)
     are each their own feature, and light with the house. The band label names the whole wing.
 
     Why: The household living inside the working compound is the point of the institution - the office is a
@@ -204,7 +204,7 @@ class GuestQuarters(Kind):
     room where a visitor was announced, and the zashiki - within its one main house. A travelling lord or
     official lodged at a honjin, a post town's lodging house with its raised room of honor, not with the
     household. A guest of rank arrives across open ground to the entrance step, so a guest's door opens onto a
-    court, never against a building's flank.
+    court, never against a building's flank. Another middle-rank house had no genkan with a shikidai: its guest came through a middle gate and along a walled garden path straight to the veranda of the zashiki.
 
     Note: Guest rooms inside the residence and the staged arrival that leads to them are recorded findings. A
     guest house drawn as a building of its own is a guess: none was found at a samurai house, and the nearest
@@ -233,13 +233,13 @@ class Kitchen(Kind):
 
     Why: A samurai house's rooms were nearly all matted, but its kitchen was board-floored, and its doma was
     smaller than a farmhouse's. The kitchen had one door to the outside, the katteguchi, the service entrance;
-    the family came and went by a separate inner entrance and guests by the formal one. So the kitchen stands at
+    at a house of standing the family came and went by a separate inner entrance and guests by the formal one, though a middle-rank house could have no genkan with a shikidai, its kitchen entrance serving as its front entrance. So the kitchen stands at
     the edge of the inner court, its door opening into work space, the deliberate opposite of a guest's arrival.
     It is large, but a fraction of the living quarters, and with open fire burning all day it is the compound's
     worst fire risk, so it keeps two water tubs where every other hall keeps one.
 
     Note: The board-floored kitchen with its small doma, its one outside door, and the household's separate
-    inner entrance are recorded findings. A second outside door on the kitchen, and the route by which food
+    inner entrance at a house of standing are recorded findings; that the kitchen door opens into work space, the reverse of a guest's door, is this project's reading. A second outside door on the kitchen, and the route by which food
     reached the rooms, are guesses wherever a plan draws them: nothing read draws either. The kitchen's own size
     is a guess, since no page read gives a kitchen's share of its house; it is measured against a whole
     house of about 49 tsubo (some 1,740 sq ft) at middle rank, a house of 1794, and a kitchen that approaches it is too
@@ -580,7 +580,7 @@ class Genkan(Kind):
 
     Note: The genkan with its shikidai, the staged arrival that leads to it, and the genkan on the office where
     office and residence share a compound are recorded findings. Two approaches are attested and each sheet takes
-    one: the genkan, the senior house's form, or no genkan at all, where a middle gate and a walled garden path
+    one: the genkan, the senior house's form, or no genkan with a shikidai, where a middle gate and a walled garden path
     lead a guest to the zashiki's veranda, attested at a middle-rank house; a sheet that takes the second draws no
     genkan. The Takayama page describes a visitor's route, not how the office and the residence were laid out
     against each other.

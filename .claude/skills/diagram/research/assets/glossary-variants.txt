@@ -606,6 +606,8 @@ dispersed villages	dispersed settlement
 dissection	dissection
 distributaries	distributary
 distributary	distributary
+district intendant	gundai
+district intendants	gundai
 district magistrate	gun-bugyo
 ditai	mamian
 dituan	dituan
