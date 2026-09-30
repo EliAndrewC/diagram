@@ -422,7 +422,8 @@ class Persimmon(Kind):
 class BurialGround(Kind):
     """
     What: A village's burial ground - an irregular patch of earth set with low stone markers and a taller memorial stone
-    or two. A hamlet draws none: its dead lie in the village's ground.
+    or two, with six small stone jizo in a row at its entrance. A hamlet draws none: its dead lie in the village's
+    ground.
 
     Why: The district's cremation ground is the main village's, and its country monk performs the rites. A graveyard
     held by a settlement itself is found at the end of the Edo period, but as one form among an individual's, a
@@ -437,13 +438,15 @@ class BurialGround(Kind):
     shrine's yard is a deliberate deviation, since this setting's country monk keeps the shrine and performs the rites.
     Which form a village's ground takes, the shrine's yard or a ground of its own, is rolled at even odds, and those
     odds are a guess, as is the rule that a village whose shrine stands on a hill always takes a ground apart; its size
-    is this project's reckoning from the Edo death rates and a reuse period no page gives; that its dead lie downstream
-    of the houses, where the map draws a ground apart, is attested in today's villages only.
+    is this project's reckoning from the Edo death rates, a reuse period no page gives and an urn plot's footing no page
+    gives either; that its dead lie downstream of the houses, where the map draws a ground apart, is attested in today's
+    villages only.
 
     Caveat: Which form a village's ground takes, the shrine's yard or a ground of its own, is rolled at even odds, and
     those odds are a guess, as is the rule that a village whose shrine stands on a hill always takes a ground apart; its
-    size is this project's reckoning from the Edo death rates and a reuse period no page gives; that its dead lie
-    downstream of the houses, where the map draws a ground apart, is attested in today's villages only.
+    size is this project's reckoning from the Edo death rates, a reuse period no page gives and an urn plot's footing no
+    page gives either; that its dead lie downstream of the houses, where the map draws a ground apart, is attested in
+    today's villages only.
 
     Name: burial ground
     Covers: `cemeteries` - a village's burial ground

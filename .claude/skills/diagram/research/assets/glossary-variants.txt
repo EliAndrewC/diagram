@@ -1426,6 +1426,7 @@ interceptor channel	interceptor
 interlinear commentary	interlinear commentary
 interlinear note	interlinear commentary
 interment	inter
+interments	inter
 internode	internode
 internodes	internode
 interred	inter
