@@ -1918,6 +1918,8 @@ magistracies	magistracy
 magistracies'	magistracy
 magistracy	magistracy
 magusaba	magusaba
+mahavira hall	Mahavira hall
+mahavira halls	Mahavira hall
 main channel	main stem
 main stem	main stem
 major axis	major axis
@@ -2586,6 +2588,7 @@ roson	roson
 rotation period	rotation period
 rowhouse gate	nagayamon
 rowhouse gates	nagayamon
+ruiju sandai kyaku	Ruiju Sandai Kyaku
 runners	yayi
 ryo	ryo
 ryobosei	ryobosei
@@ -3378,6 +3381,7 @@ vermilion-seal lands	shuinchi
 vff	VFF
 village district	village district
 village grain	village grain
+vinaya	Vinaya
 visiting grave	visiting grave
 visiting graves	visiting grave
 volatile	volatiles
@@ -3443,6 +3447,8 @@ water tables	water table
 water tail	water-mouth
 water teahouse	water teahouse
 water teahouses	water teahouse
+water-and-land hall	water-and-land hall
+water-and-land halls	water-and-land hall
 water-head	water-head
 water-mouth	water-mouth
 water-tail	water-mouth
