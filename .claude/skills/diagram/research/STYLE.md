@@ -28,6 +28,10 @@ the GM's example, awaiting the GM's confirmation in the pilot).
   needs it - often early - and repeated material is said once. (GM: *"possibly reordering some things because that
   other section might have information that should come earlier in the combined section rather than just appending
   everything at the end."*)
+- **A topic can be a condition, not a feature.** Where several sections ask about one condition on different features -
+  the sun on a yard, on a kitchen bed, on a crop field - they fold into one section on the condition ("Sunlight and
+  shade on the farm"), and each feature's own section links to it. (GM, 2026-09-30: *"a section not specifically about
+  garden sun, but about shade in general"*)
 - **The inciting question appears nowhere** - neither the GM's words nor a paraphrase ("This question asks...").
   (GM: *"I instead do not want the inciting question to appear anywhere in the research write-up section, because I
   think it just confuses things by referring to a conversation whose context the reader will not have."*)
@@ -75,6 +79,11 @@ highlights into questions ... I think that we need to come up with a different n
   straightforward fact that we are attempting to convey. If there is, then we make it as a declarative statement. And
   if what we are expressing is complicated or we are explaining a level of uncertainty, and summarizing the conclusions
   that we have made based on our research, then it should be phrased as a question."*)
+- **A lead line states no more than its sources.** One source's rule of thumb is attributed, not stated as a fact of
+  nature ("A sixth-century Chinese farm manual says an elm's shade reaches as far as the tree is tall", not "A tree's
+  shade reaches as far as the tree is tall"); what a source says of one thing (the elm) is not said of all things (any
+  tree); and an "only" or a "never" that rests on a search that found nothing is a question ("Were the groves cut back
+  to a fixed height?") or says what is recorded ("the only ones recorded as..."). (inferred - the third pilot's checks)
 - **A lead line and its body stand on their own, for a reader who skims.** A reader whose eye lands on one bullet should
   follow it without the bullets before it. A year or a concept whose significance the bullet needs is explained in
   place, one of two ways: the lead line says it ("Were groves as large before Japan began to modernize in 1868?"), or

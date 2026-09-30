@@ -911,7 +911,7 @@
   "threshing yard": {
     "caveat": "the wet-rice CENTER is interpolated from the crop (rice is field-dried on racks first, so a paddy household needs less floor than the barley district the mat counts come from), and the sun corridor is derived from the read roof pitch.",
     "covers": "`threshing_yards` - the floor, its mats, and the rack by the house where the harvest weather is changeable",
-    "entry": "research/homesteads.html - 'Threshing and drying yards at farmhouses (niwa)'; 'Did a village put its drying racks by the houses by custom, or because of its weather?'; research/rendering/homesteads.html - 'How our maps draw threshing and drying yards (niwa)'",
+    "entry": "research/homesteads.html - 'Threshing and drying yards at farmhouses (niwa)'; 'Did a village put its drying racks by the houses by custom, or because of its weather?'; research/rendering/homesteads.html - 'How our maps draw threshing and drying yards (niwa)', 'How our maps keep yards and gardens in the sun'",
     "key": "threshing yard",
     "label": "convention",
     "label_note": "The size band and the spread's shape are read - Kitamoto's mat counts, and the lognormal that fits Kamikanai's 1771 house histogram; the wet-rice CENTER is interpolated from the crop (rice is field-dried on racks first, so a paddy household needs less floor than the barley district the mat counts come from), and the sun corridor is derived from the read roof pitch.",

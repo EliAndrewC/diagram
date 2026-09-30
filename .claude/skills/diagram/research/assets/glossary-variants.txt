@@ -1510,6 +1510,7 @@ kaibori	kaibori
 kaie-ji	Kaie-ji
 kaie-ji's	Kaie-ji
 kaigisho	kaigisho
+kaine	kainyo
 kainyo	kainyo
 kaisho	kaisho
 kaishochi	kaishochi

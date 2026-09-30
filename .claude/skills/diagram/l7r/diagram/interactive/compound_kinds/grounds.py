@@ -263,7 +263,8 @@ class VegetableGarden(Kind):
     over about half the grounds, and each sheet takes its own; its seat is one of four attested ones - west of the
     house, south beside the formal garden, the rear service ground, or a parcel of its own ("Where does a walled
     compound keep its vegetable garden, and does the sun decide it?"). The sun rules out a seat where the bed gets under
-    its six hours in the autumn ("Sunlight and shade on the farm"; a sheet may declare a
+    its six hours in the autumn - the six hours is modern growing advice, and counting them in autumn, with an hour
+    counted when half the bed is lit, is a guess ("Sunlight and shade on the farm"; a sheet may declare a
     half-shade bed, which needs three). Where the west and the rear lie in the shade of the house and the kitchen, the
     bed stands in the inner court beside the formal garden; at a country shrine it is the resident keeper's plot, near
     the dwelling on whatever open ground gets its sun. That a household chose its seat by the sun is a guess, and so are

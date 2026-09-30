@@ -159,8 +159,9 @@ class ThreshingYard(Kind):
     the yard.
 
     Why: Threshing and drying were done per household, in the yard (though some south-China villages shared one drying floor), and the yard needs sun: a thatched roof
-    pitched at 45 degrees puts a minka's ridge at 20-22 feet, so no yard is placed in the shadow band south
-    of a neighbor's wall, and a rack never stands in the yard's southern half. Unless a map allots every household the same yard, as the planned colony at Santome did in 1696, every yard on it is different:
+    pitched at 45 degrees would put a minka's ridge at about 20-22 feet (a reconstruction: no page gives the pitch or
+    the height), so no yard is placed in the 39 ft band of shadow south of a neighbor's wall over a drying day taken,
+    as a guess, to run from nine to three, and no windbreak tree stands within 50 ft to its west and southwest, and a rack never stands in the yard's southern half. Unless a map allots every household the same yard, as the planned colony at Santome did in 1696, every yard on it is different:
     each is rolled from a right-skewed spread about 25 tsubo, correlated with the household - the barley country's
     count and, in a rice district, a museum's count of about fifty mats a farm for drying the grain. Whether racks stand
     by the houses follows the weather of the country, not a village's taste: racks gathered by the house are recorded for
@@ -181,7 +182,7 @@ class ThreshingYard(Kind):
     Covers: `threshing_yards` - the floor, its mats, and the rack by the house where the harvest weather is changeable
     Label: convention
     Sources: kitamoto-inakoki-niwa, kitamoto-mushiro-niwa, tobunken-mushiro, nishimura-makino-1959
-    Entry: research/homesteads.html - 'Threshing and drying yards at farmhouses (niwa)'; 'Did a village put its drying racks by the houses by custom, or because of its weather?'; research/rendering/homesteads.html - 'How our maps draw threshing and drying yards (niwa)'
+    Entry: research/homesteads.html - 'Threshing and drying yards at farmhouses (niwa)'; 'Did a village put its drying racks by the houses by custom, or because of its weather?'; research/rendering/homesteads.html - 'How our maps draw threshing and drying yards (niwa)', 'How our maps keep yards and gardens in the sun'
     """
 
     key = 'threshing yard'
@@ -196,7 +197,8 @@ class Garden(Kind):
 
     Note: Presence is read; the sun rule is DERIVED from the geometry, and its east half is the GM's call, since the record finds no readable source for a bed's need of morning light - its season rests on daikon standing in
     the bed through autumn (the other autumn greens are this record's reading), and its west lane is sized to
-    a working belt of about 10 m, the low end of a band read from surveys of the 1980s on, whose measured trees reach 28 m - no grove height from before 1868 was found, so the 10 m is a modern figure kept for want of an older one; the record
+    a working belt of about 10 m, a guess at the height of a belt kept in use, set at the low end of a band read from surveys
+    of the 1980s on, whose measured trees reach 28 m, since no source says which surveyed groves were tended - no grove height from before 1868 was found, so the 10 m is a modern figure kept for want of an older one; the record
     fixes the bed's AREA and that it is hand-worked and irregular, but gives no proportion or row count, so
     those are drawn to read as a worked kitchen bed at this scale.
 
