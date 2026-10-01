@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-01T23:51:00Z",
+  "target": "entry-gate",
+  "commit": "5bf51aab8",
+  "why": "only code pointers inside HTML comments were re-aimed from close_seams and sector_rows to partition, settle and tint; no finding or visible prose changed"
+}
