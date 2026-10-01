@@ -31,6 +31,12 @@ if TYPE_CHECKING:
     from .core import Settlement
 
 
+
+#: How far a way's tread edge stands from a farmhouse wall, in feet (feature 294 B7): GUESS, anchored on the research's three-shaku
+#: (~3 ft) eaves strip before a townhouse (research/buildings) with a margin for the eaves themselves; the recorded defect was a
+#: tread 3.85 ft from a wall, and every pool map measured 4.9 ft or more when the rule was written (rules-recon.md item 8).
+TREAD_WALL_FT = 4.0
+
 class HousesMixin:
     # ---- houses
     def house(self: Settlement, cx: float, cy: float, w: float, h: float, kind: str = "plain", rot: float = 0, shed: bool = False, shed_side: str = "W") -> None:  # type: ignore[misc]
@@ -248,7 +254,8 @@ class HousesMixin:
         The two tests are kept SEPARATE on purpose. Footprint-testing the whole clearance was tried
         once for `block_polys` and reverted, because a clearance is slack that a footprint routinely
         overhangs by a few px; the TREAD is not slack. So the clearance keeps its center test and
-        the tread gets an exact one, with the same 2 px hair `houses_clear_of_lanes` allows.
+        the tread gets an exact one, its edge `TREAD_WALL_FT` clear of the wall (feature 294; it was the 2 px hair
+        `houses_clear_of_lanes` allows).
 
         `rot` IS THE FOOTPRINT (feature 121). This used to pass 0.0 unconditionally, which made the
         "exact" test axis-aligned - so it measured a square-on rect while the map drew a raked one,
@@ -260,7 +267,10 @@ class HousesMixin:
             return False
         quad = rot_rect(x, y, w, h, rot)
         corners = [*quad, (x, y)]
-        return any(not self._tread_skipped(orig, skip) and any(seg_dist(qx, qy, tp[i], tp[i + 1]) < half + 2.0 for qx, qy in corners for i in range(len(tp) - 1)) for tp, half, orig in self.treads)
+        # ...AND THE TREAD'S EDGE STANDS `TREAD_WALL_FT` CLEAR OF THE WALL (feature 294 B7, the review's "lane tread to house wall"
+        # class: one tread ran 3.85 ft from a wall under the 2 ft hair `houses_clear_of_lanes` allowed)
+        hair = self.px(TREAD_WALL_FT)
+        return any(not self._tread_skipped(orig, skip) and any(seg_dist(qx, qy, tp[i], tp[i + 1]) < half + hair for qx, qy in corners for i in range(len(tp) - 1)) for tp, half, orig in self.treads)
 
     def _tread_skipped(self: Settlement, poly: Any, skip: Any) -> bool:  # type: ignore[misc]
         """Is this tread the way the caller is FRONTING, and so exempt?

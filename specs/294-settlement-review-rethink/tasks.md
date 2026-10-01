@@ -13,6 +13,7 @@ This feature's own delta, declared under the rules it builds (plan D10). Lines a
 - none: B1 - the polder feed's channel record traces its drawn stub (settlement/fields/comb.py); nothing drawn moves, every element placed under rules already judged
 - none: B10 - the nucleated placer refuses a layout whose lot found no seat for a part (settlement/rolling/fit.py), the rule `_bundle_side_fits` already held; households re-seat under rules already judged, and a fixture kind new to a map is detected and owes its glyph check
 - placement-changed: copse - B9: the dooryard copse is filled to the ground's capacity and trimmed back to each homestead's wood, rolled within the part of the register's range the ground can hold (settlement/homestead_parts/wood_goal.py)
+- none: B7 - a farmhouse is seated with its wall `TREAD_WALL_FT` (4 ft) clear of a way's tread edge, where the hair was 2 ft (settlement/houses.py); a margin tuned, the seating rule otherwise the one already judged
 
 ## Setup
 
@@ -64,12 +65,14 @@ This feature's own delta, declared under the rules it builds (plan D10). Lines a
 
 ## The rules: Mode B (B1-B15)
 
-- [ ] T14 [US2] B1 record against ink (`tests/gate/`): channels on drawn water, gates and weirs on water, no house on a marsh; Kuwabata's supply run measured; red on a seeded fault first
+- [x] T14 [US2] B1 record against ink (`tests/gate/`): channels on drawn water, gates and weirs on water, no house on a marsh; Kuwabata's supply run measured; red on a seeded fault first
       research: rendering
+      verify: DONE. DONE. tests/gate/test_review_rules_294.py record_off_ink (channels within 3 ft of drawn water, sluice gates/weirs within 2 ft, no house on a marsh), seeded red (a 20 ft jog, a gate 7 ft off, a house on a marsh); Kuwabata's feed record ran 101 ft off its stub - fixed in comb.py (feed_stub, unit tests), 0 ft; green on the five
 - [ ] T15 [US2] B2 ruled and plumb edges on the visible marsh, grove and clearing edges, from the page's id map; red on the recorded case or a seeded fault
       research: rendering
-- [ ] T16 [US2] B3 wood shed seating: a placer assert and a gate test
+- [x] T16 [US2] B3 wood shed seating: a placer assert and a gate test
       research: rendering
+      verify: DONE. DONE. shed_faults: nearer another household's house than its own, or turned off its rake (a quarter turn the same); seeded red (a neighbor's gable, a 45 deg turn); green on the five (the end-on/off-wall forms retired with the eaves woodpile, feature 280)
 - [ ] T17 [US2] B4's research pass: the branch spacing of a comb (kushi) irrigation layout
       research: physical
       - [ ] research pass
@@ -85,12 +88,15 @@ This feature's own delta, declared under the rules it builds (plan D10). Lines a
       research: rendering
 - [ ] T21 [US2] B7 lane tread to wall, 4 ft: the tread rule and a gate test, red on the 3.85 ft case
       research: rendering
-- [ ] T22 [US2] B8 footbridges, B11 house bearings, B12 the brook in view, B13 the lane law on the shipped maps: gate tests, each red on a seeded fault
+- [x] T22 [US2] B8 footbridges, B11 house bearings, B12 the brook in view, B13 the lane law on the shipped maps: gate tests, each red on a seeded fault
       research: rendering
-- [ ] T23 [US2] B9 drawn against rolled (15% of the rolled value): whether the record makes the roll a ceiling read first; red on Sawada's wood; the placer fixed
+      verify: DONE. DONE. bridges_too_close (60 ft, STRtree), bearing_faults (+-33.75 deg, no pile of 3+ at the widest turn), brook_pieces_in_view (one piece), law.needle_ends/needle_loops/lanes_that_kink on the shipped lanes; each seeded red; green on the five
+- [x] T23 [US2] B9 drawn against rolled (15% of the rolled value): whether the record makes the roll a ceiling read first; red on Sawada's wood; the placer fixed
       research: rendering
-- [ ] T24 [US2] B10 declared forms drawn (fixture targets and minimums): red on Kuwabata; the fixture placer fixed on Kuwabata, then the pool
+      verify: DONE. DONE. research/vegetation/210 read: the register's RANGE is the rule, the per-homestead roll calibrated liberty, not a ceiling - so the placer was fixed: wood_goal.py rolls within the attainable part of the range, the copse filled to capacity and trimmed back; drawn/rolled Sawada 1.00, Inashiro 1.00, Kuwabata 1.001; drawn_off_roll gate rule (15%), seeded red on Sawada's 60%
+- [x] T24 [US2] B10 declared forms drawn (fixture targets and minimums): red on Kuwabata; the fixture placer fixed on Kuwabata, then the pool
       research: rendering
+      verify: DONE. DONE. undrawn_rolls (fixture targets and floors, byres, retirement houses, settlement form); Kuwabata red (3 households seated bare) - fixed in rolling/fit.py (_parts_fit refuses an unlaid layout), every target drawn on the five; unit test
 - [ ] T25 [US2] B14 notes counts outside the census block and the dated history (the 55 found triaged), B15 every map folder has a notes file
       research: rendering
 

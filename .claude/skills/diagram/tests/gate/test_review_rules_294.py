@@ -246,6 +246,38 @@ def test_a_size_drawn_off_its_roll_fires() -> None:
     assert drawn_off_roll({"homestead_wood_ft2": {"rolled": 10109, "drawn": 10106}, "view": [0, 0, 1, 1]}) == []
 
 
+# ---- B7: a lane's tread stands clear of a house wall ------------------------------------------------------
+
+
+def treads_near_walls(M: Mapping[str, Any], clear_ft: float) -> list[str]:
+    """Every lane whose tread EDGE comes within `clear_ft` of a farmhouse wall (the house's raked rectangle), found through one
+    STRtree over the houses."""
+    from l7r.diagram.settlement._geom import rot_rect
+
+    ftpx = _ftpx(M)
+    houses = [Polygon(rot_rect(h["x"], h["y"], h["w"], h["h"], float(h.get("rot") or 0.0))) for h in M.get("houses") or []]
+    tree = STRtree(houses)
+    out = []
+    for i, ln in enumerate(M.get("lanes") or []):
+        if len(ln.get("pts") or []) < 2:
+            continue
+        tread = LineString(ln["pts"])
+        half = float(ln.get("w") or 3.0) / 2.0
+        for j in tree.query(tread.buffer(half + clear_ft / ftpx)):
+            gap = (tread.distance(houses[int(j)]) - half) * ftpx
+            if gap < clear_ft:
+                out.append(f"lane {i}'s tread runs {gap:.2f} ft from a house wall")
+    return out
+
+
+def test_a_tread_beside_a_wall_fires() -> None:
+    """Seeded: the recorded case (feature 155), a tread 3.85 ft from a farmhouse wall."""
+    M = {"houses": [{"x": 0.0, "y": 0.0, "w": 40.0, "h": 20.0, "rot": 0.0}], "lanes": [{"pts": [[-50.0, 15.35], [50.0, 15.35]], "w": 3.0}]}
+    assert treads_near_walls(M, 4.0) == ["lane 0's tread runs 3.85 ft from a house wall"]
+    M["lanes"][0]["pts"] = [[-50.0, 20.0], [50.0, 20.0]]
+    assert treads_near_walls(M, 4.0) == []
+
+
 # ---- the shipped hamlets ----------------------------------------------------------------------------------
 
 
@@ -264,6 +296,9 @@ def test_the_shipped_hamlets_keep_the_rules_the_review_used_to_judge(gen: str) -
     assert record_off_ink(M) == [], "B1: a record off its ink"
     assert undrawn_rolls(M) == [], "B10: a roll drawn short"
     assert drawn_off_roll(meta) == [], "B9: a size drawn off its roll"
+    from l7r.diagram.settlement.houses import TREAD_WALL_FT
+
+    assert treads_near_walls(M, TREAD_WALL_FT) == [], "B7: a tread beside a wall"
     # B13: the lane law the placer guarantees, proved on what shipped
     assert law.needle_ends(M.get("lanes") or []) == [], "B13: a needle join"
     assert law.needle_loops(M) == [], "B13: a needle loop"
