@@ -80,3 +80,33 @@ on the layout it now gets.
 pass - WebRefused on Audit-05, -12, -22, -23, -905, NoDryExit on -08, a water rule on -19. With the field by construction: 23/30
 pass - WebRefused on Audit-04, -11, -22, -23, -903, NoDryExit on -16, the same water rule on -19. The rate is unchanged; which
 seeds fail moves with the geometry. Feature 297 recorded the cohort at 30/30, so the failures arrived with work merged since.
+
+## R4. The engine against main, and the lattice measured against the carve (observed 2026-10-01, method: `make spec-harness` with `HARNESS_WHICH=breakdown` in a detached worktree of main at 86395a70d and in the clone, interleaved three times, load 4.5 -> 2.3; the cell figures from the 10/20-household manifests, the old ones rolled on main the same morning)
+
+`fit_field`, fastest of three per input: main 5.723 s (run totals 5.79 / 5.95 / 5.72), the clone 3.050 s (3.11 / 3.05 / 3.07) - **1.88x**,
+the larger spread 0.23 s: SC-005 holds. Per input, main -> clone: Inashiro 0.966 -> 0.472, Kashikawa 1.024 -> 0.499, Mizuguchi
+0.540 -> 0.392, Sawada 1.590 -> 0.799, at 10 households 0.565 -> 0.274, at 20 1.038 -> 0.614. Less than the prototype's 2.72x: the
+lattice fixes below cut more rows, clip with a buffer, and re-cut oversized cells.
+
+**The cell comparison the plan review asked for (task T13b)** found the first engine cut leaving oversized cells - 19 over three
+design cells at 10 households (the carve: 3), 26 at 20 (the carve: 5). Measured causes, each fixed in `partition.py`:
+
+- A bund clipped EXACTLY to its sector's ground ended on the edge only to within floating error, so a row a hair short of the edge
+  was a dangle `polygonize` ignores: the edge column's cells were 3-5 basins tall. Clipped to the ground grown by `CROSS` (0.5 px).
+- One row spacing and one column count per sector, from its MEDIAN width, misread a sector whose thread rides its parent's path
+  for half its span: rows are kept by the cell each closes at the LOCAL width (`_rows_kept`), columns counted at the widest.
+- A short row across a ditch-side strip was dropped by the hug test (the sector's width is measured between thread centerlines,
+  inside the ditches): a short piece is kept where the strip is at least `MIN_ROW` plot widths across (`keep_rows`).
+- A backstop: a cell over `RECUT_OVER` (2.5) design cells is cut again on a plain lattice at the fan's grain (`recut`).
+
+After them, at 10 households: no cell over two design cells (the carve: 13), the largest 2,914 px^2 (5,428), the longest 4.8 to
+1 (7.9). At 20: 2 over two design cells (19), the largest 4,610 (5,474), the longest 4.9 to 1 (7.1).
+
+**Kashikawa, fixed** (constitution XIV; the GM, 2026-10-01: "We should definitely fix the pre-existing failure"): the row farm's
+boxed-in door (the router's start cell had no free neighbor) was fixed on main by the session diagram-reorg (`serve.route_from_door`,
+86395a70d), traced here first. A second failure surfaced after it: every meeting the drain's constructed route could make with the
+brook read "ruled" (water:W03), though the brook kept the rule without the join - a confluence held mid-leg adds a collinear vertex,
+which turned one straight leg (left alone by the rule's three-vertex chord test) into a counted run. `brook_violations` now judges
+the ruled rule on the drawn course less a straight join vertex (`_without_straight_joins`). An alternative-meeting search tried
+first was withdrawn: it met the brook on its corners, which `brook_join` refuses (labels L16: a held corner is a mitred bend), and
+without the corners found nothing - the rule's measurement, not the meeting, was the defect.

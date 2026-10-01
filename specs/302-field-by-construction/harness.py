@@ -44,6 +44,10 @@ STEPS = (
     ("l7r.diagram.waterfields.comb", "_comb_toe_and_hem"),
     ("l7r.diagram.waterfields.comb", "close_seams"),
     ("l7r.diagram.waterfields.comb", "_comb_dry_and_beans"),
+    ("l7r.diagram.waterfields.comb", "cut"),
+    ("l7r.diagram.waterfields.comb", "settle_cells"),
+    ("l7r.diagram.waterfields.comb", "planted_region"),
+    ("l7r.diagram.waterfields.comb", "judge_tint"),
 )
 
 
@@ -116,10 +120,13 @@ def timed_fit(call: tuple[tuple, dict], runs: int = 3) -> dict:
 
         for mod, attr in STEPS:
             m = importlib.import_module(mod)
+            if not hasattr(m, attr):  # a step one tree has and the other does not (feature 302 retired the carve's)
+                continue
             saved.append((m, attr, getattr(m, attr)))
             setattr(m, attr, wrap(attr, getattr(m, attr)))
-        pa = CombCarve.planted_area
-        CombCarve.planted_area = wrap("planted_area", pa)  # type: ignore[method-assign]
+        pa = getattr(CombCarve, "planted_area", None)
+        if pa is not None:
+            CombCarve.planted_area = wrap("planted_area", pa)  # type: ignore[method-assign]
         try:
             a, k = copy.deepcopy(call)
             t = time.perf_counter()
@@ -128,7 +135,8 @@ def timed_fit(call: tuple[tuple, dict], runs: int = 3) -> dict:
         finally:
             for m, attr, fn in saved:
                 setattr(m, attr, fn)
-            CombCarve.planted_area = pa  # type: ignore[method-assign]
+            if pa is not None:
+                CombCarve.planted_area = pa  # type: ignore[method-assign]
         plan = a[0]
         row = {
             "fit_s": round(total, 4),
