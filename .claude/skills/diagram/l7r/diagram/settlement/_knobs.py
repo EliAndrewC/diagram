@@ -516,7 +516,7 @@ CITY_TIER_SCALES = ("city", "capital")
 
 def execution_ground_ft(scale: str) -> tuple[float, float]:
     """Tier footprint of an execution ground in REAL FEET, scaled down from the Suzugamori anchor
-    (74 x 16.2 m serving Edo) by execution volume - see research/urban-features.html "The justice works - why a county seat executes, and why the ground is outside".
+    (74 x 16.2 m serving Edo) by execution volume - see research/rendering/urban-features.html "How our maps site and draw execution and punishment grounds".
 
     SHARED DATA, deliberately: Settlement.execution_ground draws from this, and site_justice.py
     sizes its trial placements from it, so a tool proposing a seat can never disagree with the
@@ -568,7 +568,7 @@ EXECUTION_GROUND_DEAD_CLEAR_FT = 400.0
 # which, at the coarsest grain we draw (3 ft/px, so 133 px), the two grounds are unmistakably two
 # places. The automated check proved internal consistency and the number was still wrong; only
 # looking at the artifact could show that.
-# WHY (full): research/urban-features.html "The justice works - why a county seat executes, and why the ground is outside".
+# WHY (full): research/rendering/urban-features.html "How our maps site and draw execution and punishment grounds".
 
 KIDO_TOWER_KEEPCLEAR = 62.0
 # px of rampart kept tower-free around a `tower_skip` spot - where a ward FENCE meets the city wall
