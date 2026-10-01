@@ -172,17 +172,17 @@ through a variable or naming the last file the chain writes. The turn ends quiet
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001**: the two item-1 shapes, replayed live, are judged watched; the unwatched shape is still refused.
-- **SC-002**: the 2026-09-30 exception dispatch's prompt, replayed through the judge, passes untouched.
-- **SC-003**: a fake headless session that goes silent is ended and resumed by the runner within the threshold plus
+- **SC-001** (FR-001, FR-002): the two item-1 shapes, replayed live, are judged watched; the unwatched shape is still refused.
+- **SC-002** (FR-003): the 2026-09-30 exception dispatch's prompt, replayed through the judge, passes untouched.
+- **SC-003** (FR-004): a fake headless session that goes silent is ended and resumed by the runner within the threshold plus
   one check interval.
-- **SC-004**: the watchdog, run once against fixtures, retitles, rings and nudges exactly the stalled fixtures (an
+- **SC-004** (FR-005): the watchdog, run once against fixtures, retitles, rings and nudges exactly the stalled fixtures (an
   interactive one in its own pane, which alone is nudged, and nudged once; a headless one marked on its dispatcher's tab;
   a `bg` one marked on the tab that parked it; and a paneless one with no host tab, for which nothing is written and one
   log line is recorded).
-- **SC-005**: the 292 watcher command, replayed, is refused with a `CronCreate` call; the 291 waiters pass.
-- **SC-006**: the reproduced item-6 command parses after the rewrite; the item-7 command passes.
-- **SC-007**: `make hooks-test` and `make done` green.
+- **SC-005** (FR-006): the 292 watcher command, replayed, is refused with a `CronCreate` call; the 291 waiters pass.
+- **SC-006** (FR-007, FR-008): the reproduced item-6 command parses after the rewrite; the item-7 command passes.
+- **SC-007** (FR-009): `make hooks-test` and `make done` green.
 
 ## Assumptions
 
@@ -195,7 +195,7 @@ through a variable or naming the last file the chain writes. The turn ends quiet
 
 ## Review history
 
-- First dispatch (2026-09-30, `spec-fidelity`, Opus): NOT-REVIEWABLE - research R3's "10 minutes" carried no label;
+- First dispatch (2026-09-30, `spec-fidelity`, Opus): NOT-REVIEWABLE - one figure in research R3 carried no label;
   labeled (observed, with its method), spec-lint clean. Not a round.
 - Round 1 (2026-09-30, `spec-fidelity`, Opus): CHANGES REQUIRED, one item - FR-005 narrowed item 4 to interactive
   sessions. Taken as option (a): every live session is judged, and FR-005c names where a paneless session's stall lands.
