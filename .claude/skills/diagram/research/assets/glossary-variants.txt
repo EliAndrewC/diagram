@@ -2276,6 +2276,7 @@ ochiba	ochiba
 odo	ōdo
 odoi	Odoi
 odoko	odoko
+oei	Oei
 offering hall	offering hall
 offtake	offtake
 offtakes	offtake
@@ -3721,6 +3722,7 @@ zushi-nikai	half-story
 ō-aza	ō-aza
 ōdo	ōdo
 ōdoko	odoko
+ōei	Oei
 ōgashoya	ogashoya
 ōiya	ōiya
 ōkaji	ōkaji

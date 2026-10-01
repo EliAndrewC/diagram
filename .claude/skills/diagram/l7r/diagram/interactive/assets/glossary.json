@@ -13653,5 +13653,12 @@
   "variants": [
    "kiba"
   ]
+ },
+ "Oei": {
+  "def": "A Japanese era name, 1394-1428. A year given as \"Oei 29\" is the twenty-ninth year of the era, 1422.",
+  "variants": [
+   "Oei",
+   "Ōei"
+  ]
  }
 }
