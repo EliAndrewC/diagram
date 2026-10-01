@@ -167,8 +167,7 @@ to the same form. The sweep converts every `Entry:` (R5 counts them).
 
 - **The form**: `research/<page dir>/NNN-<heading id>.html` for a question, `research/sources/NNN-<section>/NNNN-<key>.html`
   for a registry entry, and `research/<page dir>/` for a whole page.
-- **The sweep** (`scripts/_pointer_sweep.py`, one-time, kept with a test) - landed features' spec directories
-  (`specs/NNN-*` below 301) excepted, as the spec's amended edge case says (research R7): `research/<page>.html#<id>` maps through
+- **The sweep** (`scripts/_pointer_sweep.py`, one-time, kept with a test), landed features' specs included: `research/<page>.html#<id>` maps through
   the id index; `research/<page>.html` followed by one or more quoted headings maps each by the record's anchor rule
   (`github_anchor`, the prefix match `_names` already uses for Entry lines); a bare `research/<page>.html` becomes the
   page directory; `SOURCES.html#<key>` becomes the entry. A match that is not exact goes to the review list
@@ -177,11 +176,18 @@ to the same form. The sweep converts every `Entry:` (R5 counts them).
   what happened), and the Python that names built outputs functionally (each file listed in tasks, edited by hand).
 - **The check** (`scripts/check-research-pointers.py`, `--selftest`): every fragment-form pointer in tracked files
   resolves to a file or directory; no old-form pointer `research/<page>.html` remains outside an explicit allowlist
-  (the build code and its tests, which name outputs, the landed spec directories, and the exclusions above). Run at the gate (a test calls it)
+  (the build code and its tests, which name outputs, and the exclusions above). Run at the gate (a test calls it)
   and at the push (sync-with-main, beside `check-entry-headings.py` - a docs-only change takes the DIRECT route).
 - **`make fragment-move FROM=<fragment> TO=<fragment>`** (`scripts/_fragment_move.py`): moves the fragment with its
   `.notes.html` and `.originals.html`, rewrites every pointer to it in tracked files, and refuses a move whose
   target exists (FR-015). `research/CLAUDE.md` and `CLAUDE.md` name it as the way to rename.
+- **The lint judges what a push changes** (FR-027, the GM's answer of 2026-10-01): `spec-lint --delta`, for a spec
+  directory present at the merge base, lints that directory as it stood there (its files read with `git show` into a
+  temporary tree) and reports only the findings the push's version adds - compared with each message's `path:line:`
+  prefix dropped, as a multiset, so a pointer edit that moves lines adds nothing and a new unlabeled figure is still
+  caught. A new directory is linted whole, as today. Its selftest gains both cases. The review gate and the plan gate
+  are passed by the sweep through `REVIEW_GATE_OK` and `PLAN_REVIEW_OK` with the reason "mechanical pointer sweep,
+  feature 301", which their logs record; no guard is loosened for anything else.
 - **Docs** (FR-016): `CLAUDE.md` (the Research bullets), `research/CLAUDE.md`, `docs/research-doctrine.md`, the
   constitution's wording where it names a page as the pointer's target, the skill's `CLAUDE.md`.
 

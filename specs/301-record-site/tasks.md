@@ -41,6 +41,9 @@ Every task is tooling over the record: nothing a map draws or asserts changes, s
 - [ ] T13 [US4] The pointer check at the gate and the push; `make fragment-move` with its test; the docs say a pointer names a fragment (D5)
       research: rendering
       verify:
+- [ ] T17 [US4] `spec-lint --delta` judges a pre-existing spec directory by the findings the push adds (base vs head, prefix-free multiset), its selftest covering a pointer-only edit (passes) and a new finding (fails); the sweep pushed through the review and plan gates' escapes with the reason logged (FR-027)
+      research: rendering
+      verify:
 - [ ] T14 [US6] The user-level sudo hook, its self-test, `make hooks-test` running it, the guard rows; the GM's other containers checked for the mount (D6)
       research: rendering
       verify:
