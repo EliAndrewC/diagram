@@ -1,119 +1,156 @@
 {
  "feature": "301-record-site",
- "plan_sha256": "5a4b37b745c0a5f2f35d4fdb828145ca3f2f8f2154dce0d7803b61904d8ef35d",
+ "plan_sha256": "79a94c6f083ecb0720ea5a6ce370728a7c9b1a82ba0e33b6c9b17a6ba21fb02c",
  "reviewed": "2026-10-01",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "Every reader (modal machinery, citations derivation, scripts, tests) reads fragments through the in-memory assembly; pages enumerated from fragment directories",
+   "summary": "Every reader reads fragments through the in-memory assembly; pages enumerated from fragment directories",
    "class": "within",
-   "why": "Required for FR-009/US3 AS3: once built pages leave git, nothing but the GM may depend on a build having run. Adds no behavior the GM did not ask for."
+   "why": "Required for FR-009/US3 AS3 (nothing may depend on a build having run). Unchanged since the CLEAR review."
   },
   {
    "id": "D2-layout",
-   "summary": "research/site/: home index, one parent page per current page (its opening plus a linked list of its questions), one small page per question and per registry entry, all.html single page",
+   "summary": "research/site/: home, one parent page per current page, one small page per question and registry entry, all.html",
    "class": "within",
-   "why": "The GM's 'separate parent section ... each of our subsections ... individual pages ... linked on the left' and FR-001/FR-003. A parent page listing its questions is the literal reading of 'parent section' with subsections as their own pages."
+   "why": "The GM's parent sections with subsections as individual pages, and the single page; FR-001, FR-003."
+  },
+  {
+   "id": "D2-assets-selfcontained",
+   "summary": "The site carries its own assets/ (record.css, record.js, site.css, site.js copied, glossary.js derived); the build is written beside and swapped in whole; make glossary checks the committed glossary.json only",
+   "class": "within",
+   "why": "Implementation of FR-009/FR-011: every output, glossary.js included, sits under one gitignored directory; nothing is added or removed from what a reader sees."
+  },
+  {
+   "id": "D2-registry-count",
+   "summary": "Registry is 2,127 entries (R3), not 920",
+   "class": "within",
+   "why": "A corrected measured scope figure, re-checked on this round's own run (ls research/site/sources | wc -l = 2127); it changes no decision's class."
   },
   {
    "id": "D2-nav",
-   "summary": "Left navigation drawn from nav.js data by assets/site.js (every parent listed, current expanded and marked, single page linked); no-script fallback is a Contents link",
+   "summary": "Navigation as nav.js data plus assets/site.js; a part's list drawn when the part is opened (the current part expanded); no-script Contents link",
    "class": "within",
-   "why": "Implements FR-002 and the second message ('the one giant page should be accessible ... in the navigation section to the left'); data-plus-script is an implementation of the requested navigation, priced in R3."
+   "why": "FR-002 and the second message. Lazy drawing of non-current parts is how the tree is drawn, not a reduction of it; FR-002 still requires the current part expanded, which SC-001's nav walk must check on a registry page too."
   },
   {
-   "id": "D2-retire",
-   "summary": "The old per-page files, citations pages and SOURCES.html are no longer written",
+   "id": "D2-part-lead-lines",
+   "summary": "A parent page lists its questions each with the first sentence of its opening ('Not to be confused with' skipped); a registry part lists its sections and entries",
    "class": "within",
-   "why": "The GM asked that what is today separate files become items of one manual; citations move to each small page's foot (fifth message) and into the single page. Not a narrowing: everything they held is in both forms."
+   "why": "Presentation of the parent section the GM asked for; the lead line is drawn from the fragment's own text and adds no behavior or scope."
+  },
+  {
+   "id": "D2-single-page-no-glossary",
+   "summary": "all.html carries no glossary hover (data-no-glossary), on the grounds that it is about 14 MB and the hover wraps every term at load; recorded by the session as a deliberate choice",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Every record page carries the glossary hover today (record.js wrapGlossary; the standing rule 'glossary tooltips for terms', feature 209), the spec carries today's look over, and the GM asked for a single page with 'all of the research' - nothing in request.md removes a reading aid from either form. The reason is performance, and it is unmeasured: the plan states no load time, and its '14 MB' carries no measurement label (13,611,081 bytes on this round's run). A slow wrap is awkward, not impossible (the wrap can be deferred to what is on screen), so none of the three tests for an exception is met; a deliberate deviation the GM did not approve is the GM's to grant."
   },
   {
    "id": "D2-links-notes",
-   "summary": "One id index resolves every href per form, unresolved = build failure; small pages allocate notes from 1 with notes and works cited at the foot; single page allocates once with one Citations part; any id collision on the single page refused",
+   "summary": "One id index resolves every href per form; small pages number notes from 1 with notes and works cited at the foot; single page numbers once; id collisions refused",
    "class": "within",
-   "why": "FR-004 to FR-007 and the GM's accepted footnote recommendation; the extra collision refusal only enforces that the single page's anchors work."
+   "why": "FR-004 to FR-007 and the GM's fifth message."
   },
   {
    "id": "D2-check",
-   "summary": "make record CHECK=1 builds to a temp dir and exits 1 on any refusal; make citations kept as an alias of make record",
+   "summary": "make record CHECK=1 builds to a temp dir and exits 1 on refusal; make citations an alias",
    "class": "within",
-   "why": "FR-011; the alias keeps existing callers working and adds no behavior."
+   "why": "FR-011; the alias adds no behavior."
   },
   {
    "id": "D3",
-   "summary": "Modal research links go to research/site/<page>/<id>.html; Entry: lines name fragment paths, read by sources.py and the Entry tooling; 162 lines converted",
+   "summary": "Modal links to research/site/<page>/<id>.html; Entry: lines name fragment paths; 162 lines converted",
    "class": "within",
-   "why": "Second message ('link to the smaller pages') and fifth message (link to the source); FR-008, FR-012."
+   "why": "Second and fifth messages; FR-008, FR-012."
   },
   {
    "id": "D4-untrack",
-   "summary": ".gitignore and git rm --cached of every assembled output incl. glossary.js; push block's record check means 'builds cleanly'",
+   "summary": ".gitignore of the old output paths and research/site/; git rm --cached; push check means builds cleanly",
    "class": "within",
    "why": "Fourth message; FR-009, FR-011."
   },
   {
    "id": "D4-render-sync",
-   "summary": "render-sync builds the record in main behind a stamp hashed over tracked research/ files and the build code",
+   "summary": "render-sync builds the record in main behind a stamp over tracked research/ files and the build code",
    "class": "within",
-   "why": "Fourth message ('regenerate ... if they would change ... not otherwise'); FR-010. See note on the stamp's input list."
+   "why": "Fourth message; FR-010."
   },
   {
    "id": "D4-guards",
-   "summary": "record-edit-hooks re-aims an Edit on a site page too; sync-with-main refuses an unrelated-history clone, landed before the scrub",
+   "summary": "record-edit guard re-aims site-page edits; sync refuses an unrelated-history clone before the scrub",
    "class": "within",
-   "why": "The first keeps an existing guard doing its existing job on the new output paths; the second is FR-019."
+   "why": "Keeps an existing guard on the new paths; FR-019."
   },
   {
    "id": "D5-form-check-move",
-   "summary": "Pointer form is the fragment path; sweep script with a review list for inexact matches; resolve check at gate and push with an allowlist for build code that names outputs; make fragment-move moves a fragment and rewrites its pointers; docs updated",
+   "summary": "Fragment-path pointer form; sweep with review list; resolve check at gate and push; make fragment-move; docs",
    "class": "within",
-   "why": "Fifth message and the accepted 'pointers name the fragment; a gate check; renames rewrite them'; FR-012 to FR-016. No existing tool renames fragments (fragments.py numbering never renumbers), so the new command is the tooling FR-015 needs."
+   "why": "Fifth message; FR-012 to FR-016."
+  },
+  {
+   "id": "D5-sweep-landed-specs",
+   "summary": "The sweep includes landed features' specs (request.md files excepted)",
+   "class": "within",
+   "why": "The GM's twelfth message ('Sweep, narrow lint'); restores the accepted scope."
   },
   {
    "id": "D5-scope-gm-text",
    "summary": "Sweep skips specs/*/request.md, READMEs and SOURCE blocks",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Implied by the accepted spec's own edge case (the GM's request files left alone as quoted text) and by Principles IV/V: these are the GM's writing, which the session may not edit (source-block and README guards refuse it)."
+   "why": "Unchanged: the GM's own writing, which the session may not edit (Principles IV/V); implied by the accepted spec's edge case."
   },
   {
    "id": "D5-scope-records",
-   "summary": "Sweep skips dev/bypass-log/ and scripts/fixtures/ (recorded command corpora)",
+   "summary": "Sweep skips dev/bypass-log/ and scripts/fixtures/",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Checked separately from the GM-text exclusion. The four matching files are scripts/fixtures/*.json recorded command transcripts used as guard test inputs; a path inside a transcript of a past command is not a link to research, so it is outside the class the GM's rule ('everything linked to research') governs, and rewriting it would falsify a record and change test inputs. The purpose - that a reader following a research link reaches the canonical source - is untouched."
+   "why": "Unchanged: recorded command transcripts are not links to research; rewriting them falsifies a record. The rule's purpose is untouched."
+  },
+  {
+   "id": "D5-lint-delta",
+   "summary": "spec-lint --delta lints a pre-existing spec directory at the merge base (git show into a temp tree) and reports only findings the push adds, compared without the path:line: prefix as a multiset; a new directory linted whole; selftest both cases",
+   "class": "within",
+   "why": "FR-027 as the GM chose it. Mechanism follows the requirement literally. Note for T17: the withdrawn-text finding (spec-lint.py line 200) embeds a second '{where}:{n}' location in its message, so stripping only the leading prefix lets a line move there read as a new finding - an over-refusal, not a leak; strip embedded locations too."
+  },
+  {
+   "id": "D5-gate-escapes",
+   "summary": "The sweep passes the review and plan gates through REVIEW_GATE_OK and PLAN_REVIEW_OK with the reason logged; no guard loosened otherwise",
+   "class": "within",
+   "why": "FR-027's second sentence; existing escapes, reason recorded, only for the requested sweep."
   },
   {
    "id": "D6-hook",
-   "summary": "User-level hook on PostToolUse and PostToolUseFailure (Bash), container-detected, fires on every not-found output and every empty existence check incl. dpkg-query and python -m pip show; message tells the session to install rather than work around; self-test with an env override; hooks-test runs it when present",
+   "summary": "User-level hook on PostToolUse and PostToolUseFailure, container-detected, every miss, every existence-check form; self-test",
    "class": "within",
-   "why": "Seventh, ninth and eleventh messages; FR-022 to FR-026. The added forms are inside 'all of the different ways that you would check'."
+   "why": "Seventh, ninth, eleventh messages; FR-022 to FR-026. Unchanged."
   },
   {
    "id": "D6-mount",
-   "summary": "GM's other running containers listed through the host-diagnostics client and their ~/.claude mounts read; any without reported to the GM",
+   "summary": "Other running containers checked for the ~/.claude mount via host diagnostics; any without reported",
    "class": "within",
-   "why": "FR-024 as accepted."
+   "why": "FR-024."
   },
   {
    "id": "D7-land-repack",
-   "summary": "make done, push, render-sync build on /diagram, git gc --aggressive --prune=now under the sync lock with sizes",
+   "summary": "make done, push, render-sync build, git gc --aggressive --prune=now under the sync lock",
    "class": "within",
-   "why": "Seventh message ('I will have you do the Git GC command yourself'); FR-021."
+   "why": "Seventh message; FR-021."
   },
   {
    "id": "D7-scrub",
-   "summary": "After landing: filter-repo in a scratch mirror dropping assembled paths from 0fef1e6f3 on only, tree-for-tree verification, docs/history-rewrite-301.md commit map, live sessions told, GM force-pushes, /diagram reset and repacked, clones replaced with unpushed commits replayed",
+   "summary": "After landing: filter-repo from 0fef1e6f3 on, verified tree-for-tree, commit map, sessions told, GM force-pushes, clones replaced",
    "class": "within",
-   "why": "Sixth and tenth messages and the accepted history recommendation; FR-017 to FR-020. See note on ordering."
+   "why": "Sixth and tenth messages; FR-017 to FR-020."
   },
   {
    "id": "verification",
-   "summary": "Perf bookends, Inashiro then make maps over the pool, browser look at the site",
+   "summary": "Perf bookends, Inashiro then make maps, browser look",
    "class": "within",
-   "why": "Verification that the requested thing happened (SC-004 covers the pool's maps); no new behavior."
+   "why": "Verification of what was asked; no new behavior."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

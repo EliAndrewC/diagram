@@ -128,9 +128,11 @@ Layout under `research/site/`:
 - **What `make record` writes**: the site, built beside `research/site/` and swapped in whole, so no stale page
   lingers and a reader never meets a half-written site. The glossary script is written into the site's `assets/`;
   `make glossary` assembles and checks the committed `glossary.json` only.
-- **The single page carries no glossary hover**: it is about 14 MB, and the hover wraps every term in the visible
-  text at load; the footnote hover works there as everywhere. Recorded as a deliberate choice, the small pages
-  carrying the glossary.
+- **The single page keeps the glossary hover, wrapped as it is read** (research R8): wrapping all of its terms at load
+  measured 10.8 s against 6.7 s without, so on the single page (`data-lazy-glossary`) `record.js` wraps a heading's
+  run - and each note of the Citations part on its own - when it comes within a few screens of the view, the same
+  hover with no wait (measured: the page usable at about 3.2 s, the terms near the view wrapped). Every other page
+  wraps whole, as today.
 - **A part's page** lists its questions, each with the first sentence of its opening (the "Not to be confused
   with" box skipped); a registry part lists its sections, each with its entries. `CHECK=1` builds into a
   temporary directory, writes nothing, and exits 1 on any refusal - the "builds cleanly" check (FR-011). `make
@@ -185,7 +187,8 @@ to the same form. The sweep converts every `Entry:` (R5 counts them).
   directory present at the merge base, lints that directory as it stood there (its files read with `git show` into a
   temporary tree) and reports only the findings the push's version adds - compared with each message's `path:line:`
   prefix dropped, as a multiset, so a pointer edit that moves lines adds nothing and a new unlabeled figure is still
-  caught. A new directory is linted whole, as today. Its selftest gains both cases. The review gate and the plan gate
+  caught - and a location written INSIDE a message (the withdrawn-text check's `{where}:{n}`) is dropped too, so a
+  moved line is not a new finding. A new directory is linted whole, as today. Its selftest gains both cases. The review gate and the plan gate
   are passed by the sweep through `REVIEW_GATE_OK` and `PLAN_REVIEW_OK` with the reason "mechanical pointer sweep,
   feature 301", which their logs record; no guard is loosened for anything else.
 - **Docs** (FR-016): `CLAUDE.md` (the Research bullets), `research/CLAUDE.md`, `docs/research-doctrine.md`, the

@@ -59,3 +59,12 @@ with no escape, and also runs the review gate (a FAITHFUL verdict in `spec.md`) 
 plan hash) over them - so rewriting their pointers would mean re-writing fourteen landed specs to today's rules. The
 GM chose (2026-10-01) to sweep them and narrow the lint to what a push changes in a spec directory that existed before
 it (spec FR-027).
+
+## R8 - the glossary hover on the single page
+
+Observed 2026-10-01; method: Playwright (Chromium) opening `research/site/all.html` from disk, time to the load event
+(the deferred scripts run before it), then `document.querySelectorAll('span.gl').length`. The page as first built,
+without the glossary: 6.66 s, 0 terms wrapped. A copy with the glossary loaded and every term wrapped at load: 10.79 s,
+66,794 terms wrapped - 4.1 s more. With the wrap made lazy (a heading's run, and each note of the Citations part,
+wrapped when within 2,000 px of the view): 3.2-3.5 s to load (warm cache), 519 terms wrapped at the top, 15,970
+after jumping to the middle, 110 in the "Rice paddies and their plots (suiden)" question after scrolling to it.
