@@ -353,7 +353,11 @@ class WetGroundMixin:
         # to stop BUILDINGS standing on water (`pond_fringe_ring`'s note), and cut from the marsh it left a pale rectangle round
         # the oval pond; the marsh is cut by the water itself, the ellipse - its reed fringe stands round it
         _blocks = pond_cut(self.block_polys, self.M.get("pond"))
-        _ground = drawn_ground(poly, self.field_polys, _blocks, self.clearings, avoid)
+        # ...AND THE PADDY CUT AT ITS EDGE (GM 2026-10-01, after feature 300: the drains at the foot of the paddy "also appear to
+        # have a similar clearance ... fixed in the same way"): the 10 ft a thrown reed kept off a paddy's outline left a bare strip
+        # outside the collector drain that runs along it; the marsh meets the paddy, and the drain - a watercourse - is lined by
+        # the bank band (`flush_covers`) like any other
+        _ground = drawn_ground(poly, self.field_polys, _blocks, self.clearings, avoid, field_pad=0.0)
         if _ground is None:
             self.M["meta"].setdefault("marsh_dropped", []).append({"role": role, "why": "no open ground left"})
             return
@@ -401,7 +405,7 @@ class WetGroundMixin:
         # (a change it then withdrew, having bought no time: specs/281 Amendment 1).
         _banks = bank_rings(self.M.get("dikeponds", []), _near_box)
         keep = KeepoutGrid()
-        keep.rings(self.field_polys, pad=10.0)
+        keep.rings(self.field_polys, pad=0.0)  # at the paddy's edge (GM 2026-10-01; the note at `drawn_ground` above)
         keep.rings(_blocks)  # the pond as its ellipse, not its building box (`pond_cut`, feature 299)
         keep.rings(self.clearings)
         keep.rings(avoid)

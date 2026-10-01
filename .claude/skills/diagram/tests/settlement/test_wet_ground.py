@@ -263,7 +263,7 @@ def test_the_marsh_records_the_ground_its_reeds_are_drawn_on() -> None:
     s = _toe_over_a_house_and_a_field()
     ring = [(float(a), float(b)) for a, b in s.M["marshes"][0]["poly"]]
     assert not point_in_poly(450.0, 445.0, ring), "the house block is cut out of the record"
-    assert not point_in_poly(750.0, 250.0, ring) and not point_in_poly(695.0, 250.0, ring), "the paddy and its 10 px pad are cut out"
+    assert not point_in_poly(750.0, 250.0, ring) and point_in_poly(695.0, 250.0, ring), "the paddy is cut out at its edge, no pad (GM 2026-10-01)"
     assert not point_in_poly(275.0, 625.0, ring), "the clearing is cut out"
     assert point_in_poly(300.0, 300.0, ring), "the open toe is still marsh"
     assert s.wet_polys[-1] == ring and s.block_polys[-1] == ring, "the no-build keep-out is the same ring"
