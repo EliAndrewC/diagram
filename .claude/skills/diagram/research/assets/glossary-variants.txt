@@ -549,6 +549,8 @@ courtesy names	courtesy name
 covering house	ōiya
 cpc	CPC
 crab clan	Crab Clan
+crane	Crane Clan
+crane clan	Crane Clan
 crenel	crenel
 crenelated	crenellated
 crenellated	crenellated
@@ -2089,6 +2091,8 @@ lingnan	Lingnan
 lingqu	Lingqu
 lingxing gate	lingxing gate
 lingxing gates	lingxing gate
+lion	Lion Clan
+lion clan	Lion Clan
 lion-dog	lion-dog
 lion-dogs	lion-dog
 lishe	gongxiefang

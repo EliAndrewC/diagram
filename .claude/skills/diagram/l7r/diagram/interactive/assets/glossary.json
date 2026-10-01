@@ -14977,5 +14977,21 @@
   "variants": [
    "Tokaido Shukuson Taigaicho"
   ]
+ },
+ "Lion Clan": {
+  "def": "A Great Clan of the setting. Its canal from Toshi Ranbo to the Drowned Merchant River is the setting's typical canal: a domain's own work, dug where an inland river is worth canalizing.",
+  "variants": [
+   "Lion Clan",
+   "Lion"
+  ],
+  "cased": true
+ },
+ "Crane Clan": {
+  "def": "A Great Clan of the setting, a coastal one: it moves its goods by sea and carts them only the last few miles, so it has little need of canals.",
+  "variants": [
+   "Crane Clan",
+   "Crane"
+  ],
+  "cased": true
  }
 }
