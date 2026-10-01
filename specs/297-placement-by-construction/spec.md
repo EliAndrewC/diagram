@@ -138,7 +138,7 @@ back; every ratio is a floor with no projection behind it. Keys `m:...` are in `
 
 - The harness's "before" seconds were taken at load 6.4 -> 2.0 and the `make map` figure at 2.5 -> 6.1 (recorded per key); the
   after-run re-takes the base back to back, and the floors are judged on that pair.
-- **SC-001** (spec-wide; the session's expectation, "well under half", held as a floor - the GM gave no number): Inashiro's stages sum to at most half the base's (5.640 s, the sum of the per-stage keys `before-inashiro-stage-<stage>-s`), and its `make map`
+- **SC-001** (spec-wide) (the session's expectation, "well under half", held as a floor - the GM gave no number): Inashiro's stages sum to at most half the base's (5.640 s, the sum of the per-stage keys `before-inashiro-stage-<stage>-s`), and its `make map`
   regeneration (the child with its svg, png and page) is faster than the base's (8.0 s uncached, `m:before-inashiro-regen-s`, load 2.5 -> 6.1 - re-taken back to back with the clone at the end).
 - **SC-002** (FR-001, FR-002): on Inashiro the seats bucket asks at least `3x` fewer calls (2,640,745, `m:before-inashiro-b-seats-total`), the homestead layouts built
   (`_bundle_geom`) are at least `3x` fewer (2,716, `m:before-inashiro-bundle-geom`), and the homesteads stage is at least `2x` faster (1.114 s, `m:before-inashiro-stage-homesteads-s`).
@@ -154,7 +154,7 @@ back; every ratio is a floor with no projection behind it. Keys `m:...` are in `
 - **SC-007** (FR-007): the hem bucket asks at least `3x` fewer calls on Inashiro (759,058, `m:before-inashiro-b-hem-total`; 12,195 drain-bank clearances, `m:before-inashiro-b-hem-drain-bank-clearance`), every bund held off the drain.
 - **SC-008** (FR-008): every stage over half a second on Inashiro after the work, and the page write, has its entry in
   `dev/performance.md`, with the page's remaining parts timed (the picture's render and encode, the id map, the text passes).
-- **SC-010** (the GM's second count): the spatial-index lookups (`PointGrid.near`) beneath Inashiro's hinterland stage are at least
+- **SC-010** (FR-004, the GM's second count): the spatial-index lookups (`PointGrid.near`) beneath Inashiro's hinterland stage are at least
   `3x` fewer (102,164, `m:before-inashiro-b-hinterland-stage-pointgrid-near`).
 - **SC-009** (FR-009, the pool): every live pool map regenerates; `make done` is green at the `100%` floor and every gate rule
   passes; every pool map and `make cohort N=24` seat every declared household (no `SiteRefused` or `WebRefused` newly raised) and
