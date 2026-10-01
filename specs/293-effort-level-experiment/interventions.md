@@ -89,3 +89,4 @@ given, identically, to the other.
 - 2026-09-30T23:12:38Z | - | landing | waiting on the landing clone's merge of main
 - 2026-09-30T23:15:18Z | - | landing | waiting on the landing clone's merge of main
 - 2026-10-01T00:05:59Z | e7 | landing | the landing clone merged main (feature 291) green: make done 100%, five maps PASS after review round 4, cohort 51/54 = main's baseline; three engine defects 293's checks exposed in main's row villages fixed; one test loosened (a fixture at its capacity even on main) - an item for the GM in the handoff
+- 2026-10-01T00:07:34Z | - | cleanup | the run clones (e1-e7), the landing clone and the per-run sources copies deleted; every record the report cites is committed in this feature's directory
