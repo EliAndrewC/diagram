@@ -1,5 +1,0 @@
-Held by feature 292 (2026-09-30): main now carries feature 287's engine changes, which conflict with feature 291's
-unfinished engine work merged into this clone (about 40 files: hamletgen, settlement/rolling, the pool hamlets). The
-prompt hook's auto sync-in was leaving the queued page sessions on a conflicted tree. This untracked file keeps the
-clone "mid-task", so the hook skips the clone merge; main is merged by hand once 291 has reconciled with 287 (plan
-D10). Delete it then. Never commit it.
