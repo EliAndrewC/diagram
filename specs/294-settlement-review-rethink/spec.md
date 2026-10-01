@@ -36,7 +36,7 @@ This feature replaces "review every map that moved, for everything" with three t
 
 1. what a placer or a test can decide is decided there, and leaves every review;
 2. what needs judgment is split into **triggered checks**, each run only when the thing it judges is new or changed - the
-   glyph check (a glyph added, redrawn, or its placement rule substantially changed) is the first, and an audit of every
+   glyph check (an element added whatever its mark, a glyph redrawn, or an element's placement rule substantially changed) is the first, and an audit of every
    check we run decides which others follow the same logic;
 3. what remains as a whole-map review runs only on the occasion it exists for (a map new to the pool, or whatever the audit
    finds), never because an engine change moved a manifest.
@@ -71,8 +71,9 @@ table in research:
 1. **Can a placer or a test decide it?** Then it is CUT (an existing guarantee or test covers it, named) or MOVED (a new rule,
    User Story 2).
 2. **Was it struck by the GM?** Then STRUCK (User Story 5).
-3. **If it needs judgment, what is the occasion on which its answer can change?** The glyph check's answer changes only when a
-   glyph is added, redrawn, or placed by substantially different rules; at any other time it would re-judge the same thing. Each
+3. **If it needs judgment, what is the occasion on which its answer can change?** The glyph check's answer changes only when an
+   element new to the map is added (whatever its mark), a glyph is redrawn, or an element is placed by substantially different
+   rules; at any other time it would re-judge the same thing. Each
    judgment check names its occasion (a new element, a new form of an existing element, a new map, a new tier, a new caption
    type, a new compound sheet, ...) and becomes TRIGGERED on it - its own check, run then and never otherwise - or stays in a
    whole-map review only when its answer genuinely depends on the whole map changing (the twin detector, "does this read as a
@@ -290,3 +291,5 @@ change when it is built.
   1's "where the same question arises" narrowing its own acceptance; the contract's size unlabeled and stale (48k vs 49,960).
   Addressed: the example struck and a new or changed placement rule stated as an occasion; an element new to the map owes the
   glyph check whatever its mark (User Story 4, FR-007, SC-002 seeded); the phrase struck; the size measured and labeled.
+- Round 2 (spec-fidelity-verify, 2026-10-01): CHANGES REQUIRED, 1 item - the item-2 fix not carried into User Story 1's audit
+  question 3 and the Summary, which still said "a glyph added". Addressed: both now say an element added whatever its mark.
