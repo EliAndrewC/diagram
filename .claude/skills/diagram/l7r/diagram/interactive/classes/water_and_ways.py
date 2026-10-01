@@ -146,7 +146,7 @@ class DrainageDitch(Kind):
     Covers: `field_ditches` whose role is `drain`, and `channels` leaving a drain - the collector and its run to the pond, the brook or the frame
     Label: accurate
     Sources: tabayashi-1987, maff-nogyoyosui-suiden, jawiki-yosuiro, maff-drain-shape, shonairyo-akusuiro-jawiki, fao-drainage-systems, akusuiro-kotobank
-    Entry: research/water.html - 'Where does a field's drain let its water go?', 'Where does the water go once it has watered the paddies', 'How wide canals and ditches are: the ladder of channel widths'; research/fields.html - 'Why does the drain run across the slope instead of down it?'; research/rendering/water.html - 'How our maps draw channel widths', 'How our maps draw a channel narrowing along its run'
+    Entry: research/water.html - 'Field drains (akusuiro)', 'How wide canals and ditches are: the ladder of channel widths'; research/rendering/water.html - 'How our maps draw field drains', 'How our maps draw channel widths', 'How our maps draw a channel narrowing along its run'
     """
 
     key = "drainage ditch"

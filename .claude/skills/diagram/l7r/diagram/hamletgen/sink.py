@@ -74,8 +74,7 @@ def drain_run(s: Settlement, pts: Poly, to: str) -> None:
     the frame by `stream` at 8 px, so the same thing carried two classes and two record kinds on two
     maps ("the inconsistency you mentioned"). The research settled what it is: before modern field
     consolidation a village's drainage went field to field, or back into a shared channel, and returned
-    to the river to be taken up below (`research/water.html`, "Where does the water go once it has
-    watered the paddies") - a dug channel that reaches a watercourse, never a brook of its own. So every
+    to the river to be taken up below (`research/water.html`, "Field drains (akusuiro)") - a dug channel that reaches a watercourse, never a brook of its own. So every
     sink draws the same stroke: the collector's tail width, the drain's hue, the drainage-ditch class.
 
     WIDTH IS THE DRAIN'S OWN, NOT A LITERAL. This is the collector's last strides, so it carries everything
