@@ -16,7 +16,7 @@ class FishPond(Kind):
     the planted dike piled from its own spoil - one cell of the mulberry-dike fish-pond system (桑基魚塘).
 
     Why: A dike-pond is dug where the ground was low and flood-prone: the digging drains the hollow and the spoil
-    raises the dike, so the landscape was made cell by cell by the households that farmed it, over
+    raises the dike, so the landscape was made cell by cell - by the households that farmed it, this record guesses, no page saying who dug - over
     centuries, into a mosaic of ponds of varied size round the creeks rather than a surveyed chessboard - the uniform
     grid of ponds is today's aerial view. The ponds lie in the creeks and canals the polder's own sluice gates feed and
     drain, and each is drained two or three times a year to dredge the mud onto the dikes. The ponds here are about 4 mu
