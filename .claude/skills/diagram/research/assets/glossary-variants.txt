@@ -1199,6 +1199,7 @@ hasa	hazakake
 hata	hatake
 hata-ei	hata-ei
 hatago	hatago
+hatagoya	hatago
 hatake	hatake
 hatamoto	hatamoto
 hate-ike	hate-ike
