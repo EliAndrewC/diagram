@@ -121,8 +121,13 @@ at the foot, and can open the whole record as one page to read straight through 
 - A note cites a source several times on one small page: the source is listed once at the foot.
 - A heading id must be unique across the whole record (it is the single page's anchor and the small page's name); on
   2026-10-01 the 473 questions' ids collide nowhere, and the build refuses a collision.
-- A pointer in a spec of a LANDED feature is history: the sweep rewrites it all the same so the resolve check covers every
-  file, and the request files the GM wrote are left alone (SOURCE text, quoted).
+- A pointer in the spec directory of a LANDED feature (every `specs/NNN-*` numbered below 301) is a record of the
+  record as it stood when that feature landed, and is left as written; the old-form check skips those directories,
+  and the request files the GM wrote are left alone everywhere (SOURCE text, quoted). AMENDED 2026-10-01 after
+  measurement (research R7): 38 landed spec directories carry old-form pointers, and touching one puts it through
+  the push's `spec-lint`, which 14 of them fail today on rules added after they landed (about 250 findings),
+  besides its review and plan gates. A reader following such a pointer finds its question with one glob on the
+  heading's anchor, `research/<page>/*-<anchor>.html`, which the research CLAUDE.md states.
 - The single page is large: what it will hold - the research and rendering pages, the citations pages and the sources
   registry - sums to about 25 MB as assembled today (observed 2026-10-01; method: `du -cb` over those files under
   `research/`). It is built but never committed, and the small pages are what the maps link.
@@ -168,7 +173,8 @@ at the foot, and can open the whole record as one page to read straight through 
 **Pointers**
 
 - **FR-012**: Every pointer to the research in code, docs, specs, skill files, agent files and modal `Entry:` lines MUST
-  name a fragment path; the modal machinery MUST read the new form.
+  name a fragment path - the spec directories of landed features excepted, as the edge case above says; the modal
+  machinery MUST read the new form.
 - **FR-013**: The existing `research/<page>.html "Heading"` pointers MUST be swept to fragment paths; a pointer matching no
   fragment exactly MUST be listed for review, never guessed.
 - **FR-014**: The gate MUST fail on any fragment pointer that does not resolve, naming it.
@@ -223,22 +229,22 @@ at the foot, and can open the whole record as one page to read straight through 
 
 ### Measurable Outcomes
 
-- **SC-001** (FR-001-FR-003): after `make record`, one small page exists per question and per registry entry, one parent
+- **SC-001** (FR-001, FR-002, FR-003): after `make record`, one small page exists per question and per registry entry, one parent
   page per current page, and one single page; a test walks the navigation from every page.
 - **SC-002** (FR-004, FR-005): a test finds every small page's notes numbered 1..n with the foot listing exactly the cited
   notes and sources, and the single page's notes numbered 1..N across the record.
 - **SC-003** (FR-006, FR-007): a link check over both forms finds zero unresolved links; a seeded duplicate id fails the build.
 - **SC-004** (FR-008): every modal research link in the pool's rendered maps resolves to an existing small page.
-- **SC-005** (FR-009-FR-011): `git ls-files` lists no assembled output; render-sync rebuilds after a fragment change and after
+- **SC-005** (FR-009, FR-010, FR-011): `git ls-files` lists no assembled output; render-sync rebuilds after a fragment change and after
   a change to the record's build code, and skips after a change to nothing the record is built from (measured); the gate
   passes.
-- **SC-006** (FR-012-FR-016): zero pointers to an assembled page remain outside the record and quoted GM text; the resolve
+- **SC-006** (FR-012, FR-013, FR-014, FR-015, FR-016): zero pointers to an assembled page remain outside the record and quoted GM text; the resolve
   check fails on a seeded bad pointer; a rename test rewrites its pointer; the review list from the sweep is empty or
   resolved.
-- **SC-007** (FR-017-FR-021): the rewritten history verifies tree-for-tree; `.git` on the main checkout measured before and
+- **SC-007** (FR-017, FR-018, FR-019, FR-020, FR-021): the rewritten history verifies tree-for-tree; `.git` on the main checkout measured before and
   after (observed 2026-10-01; method: `du -sh` on the main checkout's `.git` and on a scratch mirror after
-  `git gc --aggressive` with and without a full scrub: 236, 102 and 85 MB - so expected about 85-90 MB after); every clone's root commit matches main's; a seeded unrelated-history clone is refused.
-- **SC-008** (FR-022-FR-026): the hook's self-test, fed both a `PostToolUse` and a `PostToolUseFailure` payload, fires on
+  `git gc --aggressive` with and without a full scrub, research R6: 236, 102 and 85 MB - so expected about 85-90 MB after); every clone's root commit matches main's; a seeded unrelated-history clone is refused.
+- **SC-008** (FR-022, FR-023, FR-024, FR-025, FR-026): the hook's self-test, fed both a `PostToolUse` and a `PostToolUseFailure` payload, fires on
   every listed form in a container, on every repetition, and stays silent on found
   programs, unrelated failures and every miss with the container markers absent; the hook is registered in
   `~/.claude/settings.json`, not in this repository's.

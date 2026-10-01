@@ -21,9 +21,10 @@ fragments (`_check_bundle.py`, `_sources.py`, `_translation_owed.py`, `_open_que
 
 ## R3 - why the navigation is data, not markup
 
-Observed 2026-10-01; method: arithmetic over the record's counts. The registry holds 920 entries; a sidebar
-expanding the registry on each of its 920 small pages at ~90 bytes a link is 920 x 920 x 90 B, about 76 MB of
-repeated markup per build. One `nav.js` holding the tree once is about 0.2 MB.
+Observed 2026-10-01; method: the first build's counts (`ls research/site/sources | wc -l`: 2,127 registry entries,
+not the 920 `record/fragments.py` names - that count dates from feature 258) and arithmetic. A sidebar expanding the
+registry on each of its 2,127 small pages at ~90 bytes a link is 2,127 x 2,127 x 90 B, about 400 MB of repeated
+markup per build. One `nav.js` holding the tree once measured 0.19 MB.
 
 ## R4 - a note can be written beside another question of its page
 
@@ -46,3 +47,13 @@ Observed 2026-10-01; method: `du -sh` on `/diagram/.git` (236 MB, 36 packs, 17 M
 assembled-output path from all history, then the same gc (85 MB, an upper bound - it also removed the pre-258
 versions, which were the hand-written source). Commits touching the assembled paths: 1,198 since `0fef1e6f3`
 (feature 258 stages 1-2), 155 before.
+
+## R7 - the landed specs' pointers
+
+Observed 2026-10-01; method: `git grep -lE "research/[a-zA-Z/-]+\.html|SOURCES\.html" -- specs/` less the request
+files, then `scripts/spec-lint.py` run on each directory found. 38 landed spec directories carry old-form pointers;
+14 of them fail `spec-lint` today (194, 195, 196, 202, 205, 209, 211, 227, 229, 230, 232, 233, 234, 254 - from 2 to
+62 findings each, about 250 in all), every finding a rule added after the feature landed (a figure with no
+measurement key, a requirement no success criterion names). The push lints every spec directory its delta touches,
+with no escape, and also runs the review gate (a FAITHFUL verdict in `spec.md`) and the plan gate (the recorded
+plan hash) over them - so rewriting their pointers would mean re-writing fourteen landed specs to today's rules.

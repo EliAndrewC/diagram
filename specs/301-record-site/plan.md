@@ -27,7 +27,8 @@ spec assumption).
 **Primary Dependencies**: none new for the site. `git-filter-repo` installed with sudo for the scrub only (not a
 project dependency; not added to the lockfiles).
 **Storage**: files. Sources tracked under `research/` (fragments, `assets/record.css`, `assets/record.js`, the new
-`assets/site.css` and `assets/site.js`); outputs under `research/site/` and `research/assets/glossary.js`, gitignored.
+`assets/site.css` and `assets/site.js`); every output under `research/site/` (its `assets/` a copy of those four and the
+derived glossary script), gitignored, as are the old outputs' paths.
 **Testing**: pytest through `make quick` / `make done`; `make hooks-test` for the guards; the user-level hook's
 self-test.
 **Target Platform**: the container and the GM's browser opening files from disk (`file://`) - which is why the
@@ -37,7 +38,7 @@ navigation data is a `<script src>` and never a fetch (the reason `citations/<na
 path under 0.5 s.
 **Constraints**: no engine path may read `research/site/`; the build refuses rather than guesses (an unresolved link,
 a duplicate id, an unknown fragment).
-**Scale/Scope**: 38 pages, 473 questions, 920 registry entries, ~3,500 notes; ~430 files carrying pointers.
+**Scale/Scope**: 38 pages, 473 questions, 2,127 registry entries (R3), ~3,500 notes; ~430 files carrying pointers.
 **Single-artifact target**: no generator changes what it draws. The one map whose modal links are proven by hand
 first is `pool/hamlets/inashiro` (the reference hamlet), then the pool through `make maps` (its pages re-render with
 the new link form).
@@ -97,9 +98,11 @@ Layout under `research/site/`:
 | `sources/<key>.html` | one registry entry |
 | `all.html` | the single page: a table of contents, every page's opening and questions in order, the citations (all notes, numbered once), the sources |
 | `nav.js` | the navigation tree as data, read by `assets/site.js` |
+| `assets/` | `record.css`, `record.js`, `site.css`, `site.js` copied from `research/assets/`, and `glossary.js` derived from the glossary - the site is self-contained under one directory |
 
 - **Navigation is data plus one script** (`nav.js` + `assets/site.js`), not HTML repeated per page: the registry's
-  920 entries in every page's sidebar would be ~80 MB of repeated markup (R3). Each page carries
+  2,127 entries in every registry page's sidebar would be ~400 MB of repeated markup (R3). A part's list is drawn
+  when the part is opened, so the registry's is not drawn on every page load. Each page carries
   `data-root`, `data-part` and `data-page` on `<body>`; the script draws the tree with every parent listed, the
   current one expanded, the current page marked, and the single page linked at the top. Without scripts a page
   shows a plain "Contents" link to `index.html`.
@@ -122,8 +125,14 @@ Layout under `research/site/`:
 - **Rendering/research cross-links, "not to be confused with", absence notes, originals, passages**: produced by the
   existing modules on the assembled page before the site splits it, so each is written once and resolved by the
   link resolver like any other link.
-- **What `make record` writes**: the site (stale files under `research/site/` removed), and
-  `research/assets/glossary.js` (the existing `make glossary` writer, called first). `CHECK=1` builds into a
+- **What `make record` writes**: the site, built beside `research/site/` and swapped in whole, so no stale page
+  lingers and a reader never meets a half-written site. The glossary script is written into the site's `assets/`;
+  `make glossary` assembles and checks the committed `glossary.json` only.
+- **The single page carries no glossary hover**: it is about 14 MB, and the hover wraps every term in the visible
+  text at load; the footnote hover works there as everywhere. Recorded as a deliberate choice, the small pages
+  carrying the glossary.
+- **A part's page** lists its questions, each with the first sentence of its opening (the "Not to be confused
+  with" box skipped); a registry part lists its sections, each with its entries. `CHECK=1` builds into a
   temporary directory, writes nothing, and exits 1 on any refusal - the "builds cleanly" check (FR-011). `make
   citations` stays as a name that runs `make record`, so the docs and habits that call it keep working.
 
@@ -158,7 +167,8 @@ to the same form. The sweep converts every `Entry:` (R5 counts them).
 
 - **The form**: `research/<page dir>/NNN-<heading id>.html` for a question, `research/sources/NNN-<section>/NNNN-<key>.html`
   for a registry entry, and `research/<page dir>/` for a whole page.
-- **The sweep** (`scripts/_pointer_sweep.py`, one-time, kept with a test): `research/<page>.html#<id>` maps through
+- **The sweep** (`scripts/_pointer_sweep.py`, one-time, kept with a test) - landed features' spec directories
+  (`specs/NNN-*` below 301) excepted, as the spec's amended edge case says (research R7): `research/<page>.html#<id>` maps through
   the id index; `research/<page>.html` followed by one or more quoted headings maps each by the record's anchor rule
   (`github_anchor`, the prefix match `_names` already uses for Entry lines); a bare `research/<page>.html` becomes the
   page directory; `SOURCES.html#<key>` becomes the entry. A match that is not exact goes to the review list
@@ -167,7 +177,7 @@ to the same form. The sweep converts every `Entry:` (R5 counts them).
   what happened), and the Python that names built outputs functionally (each file listed in tasks, edited by hand).
 - **The check** (`scripts/check-research-pointers.py`, `--selftest`): every fragment-form pointer in tracked files
   resolves to a file or directory; no old-form pointer `research/<page>.html` remains outside an explicit allowlist
-  (the build code and its tests, which name outputs, and the exclusions above). Run at the gate (a test calls it)
+  (the build code and its tests, which name outputs, the landed spec directories, and the exclusions above). Run at the gate (a test calls it)
   and at the push (sync-with-main, beside `check-entry-headings.py` - a docs-only change takes the DIRECT route).
 - **`make fragment-move FROM=<fragment> TO=<fragment>`** (`scripts/_fragment_move.py`): moves the fragment with its
   `.notes.html` and `.originals.html`, rewrites every pointer to it in tracked files, and refuses a move whose
