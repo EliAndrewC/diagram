@@ -201,3 +201,15 @@ On Q1 (open-questions.md), the samurai house inside a provincial city's wall:
 On the capital's magistrate's office size:
 
 > Okay, I have answered the one open question, and for what it's worth, I don't remember making a ruling about the size of the magistrate's office in the capital, so really whatever our research shows should be the driving force. Now, I suspect we will have to make some judgment calls simply based on the fact that we are merging Japanese and Chinese history here because this fictional setting is a mishmash of the two. But if we have actual evidence that says what the size should be based on either the offices of the six ministries in Imperial China or differences between smaller and larger cities in Edo period Japan, then we can use that.
+
+## The GM, 2026-10-01, on the modals' references (verbatim)
+
+> I'm really thrilled with the progress that we are making here. Now, refresh my memory. Did we include something in this task list for this feature to update the HTML modals and their references to point to the new sections as they now exist? I don't want to leave those links broken now that we have changed and remade these sections.
+>
+> The opening quote of
+>
+> > The questions we asked while working out this feature - each is answered in our research notes, with the sources it rests on:
+>
+> seems like it is no longer valid and should be rewritten to say something like
+>
+> > Topics we researched for this map feature:
