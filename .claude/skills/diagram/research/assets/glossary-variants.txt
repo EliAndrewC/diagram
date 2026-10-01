@@ -2179,6 +2179,7 @@ major axis	major axis
 makomo	makomo
 makusa	makusa
 mamian	mamian
+man'en	Man'en
 man'yoshu	Man'yoshu
 manji	Manji
 manji era	Manji
