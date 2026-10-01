@@ -28,7 +28,7 @@ gated as it lands; the lane law in four steps; then the measurement and the reco
 
 ## The region's uses (B1-B4)
 
-- [ ] T07 [US2] The seat region: built at the seating, painted as houses are seated, every round offering only where the core box is clear (B1)
+- [ ] T07 [US2] The seat region: built at the seating, painted as houses are seated, the buildable and reachable rasters, every round offering only where a side's envelope is clear and the door ground is reachable (B1)
       research: rendering
 - [ ] T08 [US3] The marsh as array throws read against one region (B2)
       research: rendering
@@ -36,7 +36,7 @@ gated as it lands; the lane law in four steps; then the measurement and the reco
       research: rendering
 - [ ] T10 [US3] The woodland search's squares admitted by the region's box query, one region per half (B4)
       research: rendering
-- [ ] T11 The moved pool regenerated and gated with T03-T10 in (`make done`), every failure fixed; Inashiro measured
+- [ ] T11 The moved pool regenerated and gated with T03-T10 in (`make done`), every failure fixed; Inashiro measured; each moved map's houses, paddies and ways before and after recorded in research (SC-009)
       research: rendering
 
 ## The lane law as laid (D)
@@ -45,11 +45,11 @@ gated as it lands; the lane law in four steps; then the measurement and the reco
       research: rendering
 - [ ] T13 [US4] The access tree's lanes laid at the start of `stage_web` (D2)
       research: rendering
-- [ ] T14 [US4] The settle, `unsettled` and the last resort read the keeper (D3)
+- [ ] T14 [US4] Every rule's repair applied at the write by the keeper's hook; a lane no repair can make lawful not laid (D3)
       research: rendering
-- [ ] T15 [US4] The writers apply their rule's repair at the write, until no pool map runs a repair round (D4)
+- [ ] T15 [US4] The settle's rounds, `unsettled` and the last resort retired; the stage's end reads the keeper and refuses a break by name (D4)
       research: rendering
-- [ ] T16 The moved pool regenerated and gated with T12-T15 in, every failure fixed; `make cohort N=24` against the base
+- [ ] T16 The moved pool regenerated and gated with T12-T15 in, every failure fixed; `make cohort N=24` against the base; each moved map's houses, paddies and ways before and after recorded in research (SC-009)
       research: rendering
 
 ## Measurement and record (F)

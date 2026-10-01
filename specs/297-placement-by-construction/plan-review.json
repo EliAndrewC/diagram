@@ -1,0 +1,136 @@
+{
+ "feature": "297-placement-by-construction",
+ "plan_sha256": "e9eafdb13a19c603f90fcb36b2ac5d1687863dc635bab4c44c4d41a61d72ab23",
+ "reviewed": "2026-09-30",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "A-conservative",
+   "summary": "Every painter grows its shape by one cell",
+   "class": "within",
+   "why": "The rules hold by construction; a placement lost at a margin is a map change the GM allowed (2026-09-30)."
+  },
+  {
+   "id": "A-window",
+   "summary": "Regions built per consumer window, never the canvas",
+   "class": "within",
+   "why": "A cost choice inside FR-001/FR-004; the region is still computed once per consumer."
+  },
+  {
+   "id": "B1-offer",
+   "summary": "The existing offerers (front row, lattice, rescue cloud, exhaustive pass) offer only seats clear in the region",
+   "class": "within",
+   "why": "FR-001: seats offered only from the region, every round, the exhaustive pass included."
+  },
+  {
+   "id": "B1-core",
+   "summary": "The seat region admits a seat by its CORE box (house plus yard, smallest house, unturned), not the homestead's envelope",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-001 names the region where a homestead's ENVELOPE can stand. A clear core box still offers the seats R6 found refused at the envelope (288 of 734 offers, after four layouts each) - the refusal-after-building the lever exists to remove. The smallest-house argument justifies the house size, not dropping the envelope; testing each garden side's own box at the smallest house is not impossible."
+  },
+  {
+   "id": "B1-reach",
+   "summary": "The seat region carries no reachability; reach to the access tree is a per-seat test in C instead",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The lever the GM approved is a precomputed REACHABLE and buildable region, and FR-001 says a door can reach the access tree on lawful ground. Moving reach to a per-seat question is refusing where it cannot stand rather than offering where it can (US2 title). A conservative reach region (free ground connected to the tree within corridor reach) is computable; no impossibility is argued."
+  },
+  {
+   "id": "B2-marsh",
+   "summary": "Marsh: array throws read against the KeepoutGrid union (hit_many) and the drawn-ground RingIndex, with the crescent ponds and the pond ellipse as separate array tests",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The KeepoutGrid's union built once is a region (not being a raster is not a departure). But the crescents and the pond ellipse are keep-outs tested in turn outside it, against FR-004 (every keep-out painted into one region) and US3 (not tested against each keep-out in turn). Folding them in as rings with slot extras is possible; consistency with grass_scatter is not a ground for the exception."
+  },
+  {
+   "id": "B2-random",
+   "summary": "Marsh marks land at different random places at the same densities",
+   "class": "within",
+   "why": "The GM allowed map changes (2026-09-30); densities held per FR-004."
+  },
+  {
+   "id": "B3-grove",
+   "summary": "Grove static keep-outs painted into a Region over the footprint, candidates via taken_many, spacing per survivor",
+   "class": "within",
+   "why": "FR-004 as written; spacing is the per-glyph exception FR-004 itself allows. Every path that calls static_clear (the windbreak gap fill as well as the jittered grid) must read the region - see the returned items."
+  },
+  {
+   "id": "B4-woodland",
+   "summary": "Woodland search: one Region per half, box_clear per square",
+   "class": "within",
+   "why": "FR-004 as written."
+  },
+  {
+   "id": "C-pretest",
+   "summary": "Seat pretest before layouts: field reach, house box, seat_reaches_tree - omits the water",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-002 names the reach to the field, the WATER and the corridor as the seat's questions. lot.watered reads the house position and whether a well exists - a seat question - and C leaves it per layout. Also seat_reaches_tree(s, geom0) must not need a built layout, or 'before any layout is built' fails."
+  },
+  {
+   "id": "C-template",
+   "summary": "The bundle template is keyed per household, not per offered seat",
+   "class": "within",
+   "why": "Serves FR-002 and SC-002's layouts count; the maps it moves are allowed."
+  },
+  {
+   "id": "D1-keeper",
+   "summary": "LaneLaw keeps per-lane and joint verdicts, re-judged on every write",
+   "class": "within",
+   "why": "FR-005: verdicts kept from the moment a lane is laid."
+  },
+  {
+   "id": "D1-network",
+   "summary": "Network-wide rules (networks count, fragments, reach, needle loops, way outs) kept on a version stamp and asked once per version",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "A fragment, an unreached house or the network count is a property of the finished web; every web is fragmentary mid-construction, so admitting each write against them is physically impossible. Holds only if a break found at the end is refused (WebRefused), not repaired by a round."
+  },
+  {
+   "id": "D2-tree-first",
+   "summary": "The access tree's lanes drawn at the start of stage_web",
+   "class": "within",
+   "why": "FR-005 lists the access tree's lanes among those admitted as laid; D1's keeper sees every write."
+  },
+  {
+   "id": "D3-settle-kept",
+   "summary": "The settle's round loop and the last resort are kept, reduced to the lanes the keeper names",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-005 RETIRES the settle's repair rounds and US4.1 requires the web to have nothing left to repair afterward. A targeted repair after the write is still checking afterward - the behavior the lever replaces. Its rules move to the writers (D4); a lane that cannot be laid lawfully is reshaped or not laid at its write; the end reads the keeper and raises WebRefused."
+  },
+  {
+   "id": "D4-escape",
+   "summary": "A rule that still needs a repair round on some map is recorded in dev/performance.md",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "An 'X except where Y' on FR-005 and SC-005 (no repair round on any pool map). FR-008 records what remains slow, not a license to keep a retired mechanism. A rule that truly cannot be held at the write goes back as a spec amendment through review, as the order of work already provides for a withdrawn lever."
+  },
+  {
+   "id": "E1-mats",
+   "summary": "Mats as a computed centered lattice per gap over the floor grid",
+   "class": "within",
+   "why": "FR-003 as written; the mat rules held."
+  },
+  {
+   "id": "E2-page",
+   "summary": "Hit regions, explanations and the blob computed while the picture and id map render",
+   "class": "within",
+   "why": "FR-006 as written."
+  },
+  {
+   "id": "E3-hem",
+   "summary": "The hem's box prefilter around the collector",
+   "class": "within",
+   "why": "FR-007 as written."
+  },
+  {
+   "id": "order-withdraw",
+   "summary": "A lever slower or failing the gate after fixes is withdrawn by a spec amendment",
+   "class": "within",
+   "why": "Routes through a reviewed amendment, so it narrows nothing without review."
+  }
+ ],
+ "verdict": "BLOCKED"
+}

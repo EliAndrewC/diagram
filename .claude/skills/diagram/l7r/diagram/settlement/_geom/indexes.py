@@ -2,9 +2,10 @@
 whole runtime of a gen.
 
 PREFILTER FAMILY, all of it - the box or the grid PRUNES, the caller's exact test still DECIDES,
-so a verdict is identical to a linear scan's and the pool regenerates byte-identical when a
-caller switches over. That property is what separates indexing from coarsening, which this engine
-does not do (skill CLAUDE.md, 'When a check is slow, INDEX it - do not coarsen it').
+so a verdict is identical to a linear scan's. That is what a CHECK that verifies a rule needs (skill
+CLAUDE.md, 'When a check is slow, INDEX it - do not coarsen it'). A PLACER is not held to it: it may
+decide by a coarser, faster form and move maps, held to the rules (constitution X clause 15, v2.27.0;
+the GM, 2026-09-30: maps "do NOT need to remain identical in output") - `region.py` is that form.
 
 Split from settlement/_geom.py by feature 117 - see settlement/_geom/CLAUDE.md for the index.
 """
