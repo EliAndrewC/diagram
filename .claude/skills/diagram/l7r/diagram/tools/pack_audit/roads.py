@@ -29,6 +29,9 @@ from .tagged import Mark, marks
 ROAD_KINDS: frozenset[str] = frozenset({"road", "footpath"})
 #: The kinds and ids an arch is drawn under (a shrine's way ends at its torii).
 ARCH_KINDS: frozenset[str] = frozenset({"torii"})
+#: The places a way inside a precinct is walked TO (drawing convention, feature 294 escalation-check 2026-10-01): B21's
+#: grounds are an approach stopping short of the frame; a household path from the clearing to the well arrives at both.
+DESTINATION_KINDS: frozenset[str] = frozenset({"well", "precinct clearing"})
 #: A road may be this much wider than the gate it feeds: a GUESS - the 3 px authoring grain (1 ft at 3 px = 1 ft), so a
 #: road drawn on the grid next to an opening measured off the ink is not refused for a pixel.
 ROAD_GATE_TOL_FT: float = 1.0
@@ -113,7 +116,7 @@ def _frame(svg: str) -> tuple[float, float, float, float] | None:
 
 
 def end_meets(end: tuple[float, float], road: Road, others: list[Road], svg: str, plan: ParsedPlan) -> str | None:
-    """What the road's end at `end` meets - 'the frame', 'a gate', 'a door', 'an arch', 'a road' - or None."""
+    """What the road's end at `end` meets - 'the frame', 'a gate', 'a door', 'an arch', 'a road', 'a well or clearing' - or None."""
     px, py = end
     frame = _frame(svg)
     if frame is not None:
@@ -129,6 +132,8 @@ def end_meets(end: tuple[float, float], road: Road, others: list[Road], svg: str
         return "an arch"
     if any(o.distance(px, py) <= o.half for o in others):
         return "a road"
+    if _meets_a_mark(end, road.half, [m for m in marks(svg) if m.kind in DESTINATION_KINDS]):
+        return "a well or clearing"
     return None
 
 
