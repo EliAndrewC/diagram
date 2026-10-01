@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-30
 
-**Status**: Draft (taken up 2026-09-30 by the Diagram tooling session, at the GM's word: *"Does feature 295 have all the
+**Status**: Accepted - spec-fidelity FAITHFUL at round 3, 2026-09-30 (taken up 2026-09-30 by the Diagram tooling session, at the GM's word: *"Does feature 295 have all the
 information you need to make the tooling fixes? If so then please do so, thanks."*)
 
 **Input**: the GM's request and the five problems, verbatim in [`request.md`](request.md); the GM's two answers on item 4
@@ -192,3 +192,14 @@ through a variable or naming the last file the chain writes. The turn ends quiet
 - "Waiting on the GM" is the registry's `waiting` status or a pending `AskUserQuestion`; an idle session whose last
   message ended in a prose question is not distinguishable and may be nudged - the nudge's text tells it to say so in
   one line and stop.
+
+## Review history
+
+- First dispatch (2026-09-30, `spec-fidelity`, Opus): NOT-REVIEWABLE - research R3's "10 minutes" carried no label;
+  labeled (observed, with its method), spec-lint clean. Not a round.
+- Round 1 (2026-09-30, `spec-fidelity`, Opus): CHANGES REQUIRED, one item - FR-005 narrowed item 4 to interactive
+  sessions. Taken as option (a): every live session is judged, and FR-005c names where a paneless session's stall lands.
+- Round 2 (2026-09-30, `spec-fidelity-verify`, Opus): CHANGES REQUIRED, two items, both applied - a paneless session is
+  marked on its host tab and never nudged (the GM approved typing into a stalled session's own pane only); SC-004 names
+  every branch.
+- Round 3 (2026-09-30, `spec-fidelity-verify`, Opus): FAITHFUL - both round-2 items resolved.
