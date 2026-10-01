@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-performance`)
 **Created**: 2026-10-01
-**Status**: Draft
+**Status**: Accepted - FAITHFUL at round 4 (2026-10-01)
 **Request**: [`request.md`](request.md) - the GM's words verbatim: the scrub-marsh boundary "is just a straight line which is
 not how that would actually look"; "the marshland on the top left side of the marsh just stopping at a sharp right angle ...
 It would be more like a rounded curve"; the two ways the GM offered ("make the boundary a more complicated shape", "boundary
@@ -125,3 +125,4 @@ pines and the ground cut out of it.
   larger than the new base (research R1), the Assumptions point at R1.
 - Round 3 (spec-fidelity-verify): CHANGES REQUIRED - plan.md C and D5 named one overlay repeat. Addressed: each overlay's repeat
   named.
+- Round 4 (spec-fidelity-verify): FAITHFUL.
