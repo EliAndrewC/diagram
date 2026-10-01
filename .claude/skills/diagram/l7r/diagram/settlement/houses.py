@@ -31,8 +31,6 @@ if TYPE_CHECKING:
     from .core import Settlement
 
 
-
-
 class HousesMixin:
     # ---- houses
     def house(self: Settlement, cx: float, cy: float, w: float, h: float, kind: str = "plain", rot: float = 0, shed: bool = False, shed_side: str = "W") -> None:  # type: ignore[misc]
