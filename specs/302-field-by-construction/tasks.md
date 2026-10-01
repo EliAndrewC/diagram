@@ -12,14 +12,18 @@ Order: Phase 0 measures and decides; Phase 1 (T10 onward) runs only on GO, its t
 - [x] T01 The `302-start` bookend on unmodified code, and the baseline harness (`harness.py` capture + `timed_fit`)
       research: rendering
       verify: DONE. 302-start: total 15.3 s, median 3.9 s, worst 4.4 s (dev/perf-log/20261001T201403Z-302-start-diagram-performance.json); harness baseline research R1, all six inputs
-- [ ] T02 [US1] `prototype.py`: the planted region per trial size (plan D2) and the size search on it (D8's form)
+- [x] T02 [US1] `prototype.py`: the planted region per trial size (plan D2) and the size search on it (D8's form)
       research: rendering
-- [ ] T03 [US1] `prototype.py`: the partition (D3) and the rules at construction (D4), the dry hem and beans after it (D5)
+      verify: DONE. prototype.py Trial: the skeleton as carve_comb lays it, region = envelope - _water - _outside_command; _search_aspect scores (fan_legal on the region's outline, acreage error)
+- [x] T03 [US1] `prototype.py`: the partition (D3) and the rules at construction (D4), the dry hem and beans after it (D5)
       research: rendering
-- [ ] T04 [US1] `harness.py`: the prototype timed beside the current fit, the validity checks of SC-003, the verdict of SC-001 (D6); SC-004's stubs named and priced
+      verify: DONE. prototype.py Sectors/cut (partition), settle (snap, split, merge, scraps left bare), tint, _comb_dry_and_beans, fan_admissible
+- [x] T04 [US1] `harness.py`: the prototype timed beside the current fit, the validity checks of SC-003, the verdict of SC-001 (D6); SC-004's stubs named and priced
       research: rendering
-- [ ] T05 [US1] [US3] The verdict and the 10/20 trend recorded in `research.md`; on NO-GO the feature stops here and the GM is told
+      verify: DONE. harness.py: capture, interleaved three runs, validity (band, bare, unshared, ring_violations), the verdict; nothing stubbed
+- [x] T05 [US1] [US3] The verdict and the 10/20 trend recorded in `research.md`; on NO-GO the feature stops here and the GM is told
       research: rendering
+      verify: DONE. research R2: GO, 6.558 -> 2.414 s (2.72x), spread 0.05 s; 10 hh 3.00x, 20 hh 2.48x; phase0-verdict.json
 
 ## Phase 1 - the engine (only on GO; refined by the plan's amendment)
 

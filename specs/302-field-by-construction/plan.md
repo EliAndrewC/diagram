@@ -39,16 +39,20 @@ march, drain) under 4%; the dry hem and beans 2-12%.
 - **D2 The planted region is the command area less its water.** Per trial size: the envelope `carve_comb` would build
   (`_comb_floor_and_winding`'s ring: the canal, the outer threads, the drain, the floor trim), less `_water(channels)`, less
   `_outside_command(...)` - the same three geometries `close_seams` and `planted_area` take as the ground to be planted. Its
-  area is the acreage (FR-007); no plots are cut during the search.
+  area is the acreage (FR-007); no plots are cut during the search. Each trial is scored as today on (illegal, acreage error):
+  its water's legality is `fan_legal` asked of the region's outline in place of the plots' (the two predicates that read the
+  plots, `tail_dangles` and `flanks_commanded`, read only their extent, which the region's outline carries) and the channels.
 - **D3 The partition.** On the winning size, the region is cut by the row and column bunds: per sector between adjacent
   threads, the row lines at the carve's row falls (row step rolled as today) and the column lines at the carve's `nsub`
   divisions, both with the carve's contour wobble and row wander, each line drawn across its sector and clipped to the region;
   the threads themselves bound the sectors. The cells are `polygonize` of the noded union of the region's boundary and the
   cut lines, kept where they lie in the region - every edge shared by construction.
-- **D4 Rules at construction.** Each cell is judged by `ring_violations` in `fan_context`'s context (the engine's own); a
-  violating cell is merged into the adjacent cell (shared edge) whose union holds the rules, the longest shared edge first;
-  what no merge can make legal is reported, not hidden. The toe discipline (`_TOE_MIN_THICKNESS`, `_TOE_MIN_APEX`) is applied
-  the same way: a sliver is merged, never left bare.
+- **D4 Rules at construction: merge or split, as the repair resolves them today.** Each cell is judged by `ring_violations`
+  in `fan_context`'s context (the engine's own) and by the toe discipline `_comb_toe_and_hem` drops by (thinness, area, apex,
+  chevron). A staircase is split on its hops by the repair's own `_split_steps` (`seams/close.py`); any other violating cell
+  is merged into the adjacent cell (shared bund) whose union holds the rules, the longest shared bund first, and a merged
+  cell that is left a staircase is split in turn. A cell that neither fixes is an SC-003 failure: the prototype is unfinished
+  and is completed before the verdict, never shipped with a reported leftover.
 - **D5 Everything after the plots runs as today.** The dry hem and the beans (`_comb_dry_and_beans`) and the net's assembly run
   on the prototype's plots, so their cost is in the prototype's time (SC-004).
 - **D6 The verdict is computed by the harness.** Both methods fastest of three, back to back per input; totals; each method's
@@ -61,7 +65,8 @@ march, drain) under 4%; the dry hem and beans 2-12%.
 - **D7** The partition replaces `_carve`'s plot cutting, `_comb_toe_and_hem`'s drop, `close_seams` and `planted_area` for
   comb fields; what of the seam machinery nothing else calls is deleted with its tests, each rule it held carried by a test of
   the construction (FR-011). Polder and hill engines unchanged.
-- **D8** The fit scores each trial size on its region (D2); `fan_admissible` judges the built net, as today.
+- **D8** The fit scores each trial size on its region - its acreage and its water's legality (D2) - and `fan_admissible`
+  judges the built net, as today.
 - **D9** The smaller levers: the union prediction is retired with what it predicted (FR-010: no longer applies); the number of
   trial sizes is re-measured once the region makes a trial cheap and kept or cut by that measurement.
 

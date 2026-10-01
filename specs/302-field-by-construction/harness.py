@@ -144,9 +144,134 @@ def timed_fit(call: tuple[tuple, dict], runs: int = 3) -> dict:
     return best
 
 
+def _prototype():  # type: ignore[no-untyped-def]
+    """`prototype.py`, loaded from the spec directory (the harness runs as a copied test node, so not by its own path)."""
+    import importlib.util
+
+    here = Path(__file__).resolve()
+    root = next(p for p in here.parents if (p / "specs").is_dir() and (p / ".git").exists())
+    spec = importlib.util.spec_from_file_location("prototype302", root / "specs" / "302-field-by-construction" / "prototype.py")
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def _run_current(call: tuple[tuple, dict]) -> float:
+    from l7r.diagram.hamletgen.water.fit import fit_field
+
+    a, k = copy.deepcopy(call)
+    t = time.perf_counter()
+    fit_field(*a, **k)
+    return time.perf_counter() - t
+
+
+def _run_prototype(proto, call: tuple[tuple, dict]) -> tuple[float, dict, dict, object]:  # type: ignore[no-untyped-def]
+    a, k = copy.deepcopy(call)
+    t = time.perf_counter()
+    net, info = proto.fit_by_construction(*a, **k)
+    return time.perf_counter() - t, net, info, a[0]
+
+
+def validity(proto, net: dict, info: dict, plan) -> dict:  # type: ignore[no-untyped-def]
+    """SC-003, measured outside the timing: the acreage band, bare ground, unshared bunds, rule-breaking plots."""
+    import shapely
+    from shapely.geometry import Polygon
+
+    from l7r.diagram.hamletgen.water.fit import field_acres_in_band
+    from l7r.diagram.sitegen.geom import net_acres
+    from l7r.diagram.waterfields.ring_rules import ring_violations
+
+    region = info["region"]
+    raw = [Polygon(p["poly"]) for p in net["plots"]]
+    invalid = sum(1 for q in raw if not q.is_valid)
+    polys = [q if q.is_valid else q.buffer(0) for q in raw]
+    planted = shapely.union_all(polys)
+    bare = region.difference(planted).area / region.area if region.area else 1.0
+    # an unshared bund: a stretch of a plot's outline that no other plot's outline and no region edge covers
+    bounds = [p.boundary for p in polys]
+    tree = shapely.STRtree(polys)
+    # a bund is covered by a neighbor's, by the region's edge, or by a scrap left bare (as the repair leaves it); 0.6 px is the
+    # slack the opening and simplification of a merged outline may move a vertex
+    edge = shapely.union_all([region.boundary.buffer(0.6)] + [s[4].boundary.buffer(0.6) for s in info["scraps"]])
+    unshared = 0.0
+    for i, b in enumerate(bounds):
+        near = [int(j) for j in tree.query(polys[i].buffer(0.5)) if int(j) != i]
+        cover = shapely.union_all([bounds[j].buffer(0.6) for j in near] + [edge])
+        unshared += b.difference(cover).length
+    acres = net_acres(net, plan.ftpx)
+    bad = [sorted(ring_violations(p["poly"], info["ctx"])) for p in net["plots"]]
+    toe = sum(1 for p in net["plots"] if "toe" in proto._verdict(Polygon(p["poly"]), info["ctx"], info["plot_across"], info["cell"]))
+    return {
+        "acres": round(acres, 2),
+        "target_acres": round(plan.target_acres, 2),
+        "in_band": field_acres_in_band(acres, plan.target_acres),
+        "bare_share": round(bare, 5),
+        "unshared_px": round(unshared, 1),
+        "rule_breaking_plots": sum(1 for b in bad if b),
+        "rules_broken": sorted({r for b in bad for r in b}),
+        "plots": len(net["plots"]),
+        "invalid_outlines": invalid,
+        "dry_plots": len(net["dry_plots"]),
+        "trials": info["trials"],
+        "stuck": info["stuck"],
+        "toe_only": toe,
+        "raw_cells": info["raw_cells"],
+        "admissible": info["admissible"],
+        "flooded": sum(1 for p in net["plots"] if p.get("fill") == "#93B7AC"), "low": sum(1 for p in net["plots"] if p.get("low")),
+        "scraps_left_bare": len(info["scraps"]),
+        "scrap_area_px": round(sum(s[1] for s in info["scraps"]), 1),
+        "scraps": [s[:3] for s in info["scraps"]],
+        "times": {k: round(v, 4) for k, v in info["times"].items()},
+        "breakers": [(b, [round(sum(x for x, _ in p["poly"]) / len(p["poly"])), round(sum(y for _, y in p["poly"]) / len(p["poly"]))], round(abs(Polygon(p["poly"]).area))) for b, p in zip(bad, net["plots"], strict=True) if b][:60],
+    }
+
+
+def _rings_of(region):  # type: ignore[no-untyped-def]
+    return [list(g.exterior.coords) for g in getattr(region, "geoms", [region]) if not g.is_empty]
+
+
 def test_harness() -> None:
-    report: dict = {"current": {}}
+    proto = _prototype()
+    which = os.environ.get("HARNESS_WHICH", "both")
+    report: dict = {"current": {}, "prototype": {}, "runs": {"current": [0.0] * int(os.environ.get("HARNESS_RUNS", "3")), "prototype": [0.0] * int(os.environ.get("HARNESS_RUNS", "3"))}}
+    only = os.environ.get("HARNESS_ONLY")
+    runs = int(os.environ.get("HARNESS_RUNS", "3"))
+    dump = os.environ.get("HARNESS_DUMP")
     for key, kw in inputs():
-        report["current"][key] = timed_fit(capture(kw))
+        if only and key not in only.split(","):
+            continue
+        call = capture(kw)
+        if which == "breakdown":
+            report["current"][key] = timed_fit(call)
+            continue
+        cur, pro = [], []
+        last = None
+        for r in range(runs):  # back to back, interleaved, so the host's load falls on both
+            cur.append(_run_current(call))
+            secs, net, info, plan = _run_prototype(proto, call)
+            pro.append(secs)
+            last = (net, info, plan)
+            report["runs"]["current"][r] += cur[-1]
+            report["runs"]["prototype"][r] += secs
+        assert last is not None
+        if dump:
+            Path(dump).mkdir(parents=True, exist_ok=True)
+            net, info, _plan = last
+            Path(dump, f"{key}.json").write_text(json.dumps({"plots": [p["poly"] for p in net["plots"]], "region": [list(r) for r in _rings_of(info["region"])], "channels": [c["pts"] for c in net["channels"]], "scraps": [list(s[4].exterior.coords) for s in info["scraps"]], "lines": proto.LAST_LINES, "pieces": proto.PIECES}))
+        report["current"][key] = {"best_s": round(min(cur), 4), "runs": [round(x, 4) for x in cur]}
+        report["prototype"][key] = {"best_s": round(min(pro), 4), "runs": [round(x, 4) for x in pro], **validity(proto, *last)}
+    if which != "breakdown":
+        cur_t = sum(v["best_s"] for v in report["current"].values())
+        pro_t = sum(v["best_s"] for v in report["prototype"].values())
+        spread = max(max(v) - min(v) for v in report["runs"].values())
+        report["verdict"] = {
+            "current_total_s": round(cur_t, 3),
+            "prototype_total_s": round(pro_t, 3),
+            "ratio": round(cur_t / pro_t, 2) if pro_t else None,
+            "spread_s": round(spread, 3),
+            "go": cur_t - pro_t > spread,
+            "stubbed": list(proto.STUBBED),
+        }
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(report, indent=1) + "\n")
+    OUT.write_text(json.dumps(report, indent=1, default=str) + "\n")
