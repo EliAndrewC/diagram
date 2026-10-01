@@ -191,3 +191,13 @@ note it has since been edited, and that their general points still hold):
 ## The GM, 2026-09-30, accepting the pilot and asking for the sweep (verbatim)
 
 > What you have done so far seems good enough to roll out to the rest of our research Sections. So please update the feature to mark my acceptance of our current process and checks and whatnot. And then proceed with reorganizing each and every research section, combining similar ones as appropriate, as we have been doing and then applying our new style guide etc so please update the current speckit feature to include whatever tasks are appropriate for this effort, and then just proceed with doing the complete edit pass.
+
+## The GM, 2026-10-01, on the open questions (verbatim)
+
+On Q1 (open-questions.md), the samurai house inside a provincial city's wall:
+
+> (b) the earlier ruling was never intended to be a deviation from historical norms, so when we eventually get to rendered city maps then we should render whatever our research shows was actually true based on historical Japan and China
+
+On the capital's magistrate's office size:
+
+> Okay, I have answered the one open question, and for what it's worth, I don't remember making a ruling about the size of the magistrate's office in the capital, so really whatever our research shows should be the driving force. Now, I suspect we will have to make some judgment calls simply based on the fact that we are merging Japanese and Chinese history here because this fictional setting is a mishmash of the two. But if we have actual evidence that says what the size should be based on either the offices of the six ministries in Imperial China or differences between smaller and larger cities in Edo period Japan, then we can use that.
