@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-performance`)
 **Created**: 2026-10-01
-**Status**: Draft
+**Status**: Accepted - FAITHFUL at round 2 (2026-10-01)
 **Request**: [`request.md`](request.md) - the GM's words verbatim: the field "does seem like it should be simpler than it is",
 the savings "will become more relevant as we make larger settlements that have more fields and larger fields"; then "I would
 much rather do the larger redesign if we think that that would make this appreciably better. So go ahead and do that", the
@@ -54,7 +54,7 @@ judged, once SC-003 and SC-004 say the comparison is like for like.
    households), **When** the prototype is run, **Then** it reports, for each, the current field's fit-and-finish time, the
    prototype's fit-and-build time, the ratio, and the prototype field's acreage, bare ground, unshared bunds and ring-rule
    violations.
-2. **Given** that report, **When** the go criteria are applied, **Then** the outcome is GO or NO-GO with the numbers that
+2. **Given** that report, **When** SC-001 is applied, **Then** the outcome is GO or NO-GO with the numbers that
    decided it, recorded in this feature's research before any engine file is changed.
 3. **Given** NO-GO, **Then** no engine or test file changes, the measurement and why are recorded, and the GM is told.
 
@@ -154,8 +154,8 @@ is why the savings matter, not a condition on going ahead: the trend is measured
 
 - **SC-001 (the verdict)**: GO when the prototype's fit-and-build, totaled over the recorded inputs (the comb hamlets of the
   pool and Inashiro's brief at 10 and 20 households), is faster than the current fit-and-finish by more than the measured
-  run-to-run spread of the two (each timed fastest of three, back to back; the spread is the largest difference between a
-  method's three runs). NO-GO when it is not. The ratio is reported either way; the GM's words are the bar ("if it is faster,
+  run-to-run spread (each timed fastest of three, back to back; a method's spread is the largest difference between its three
+  runs' totals, and the bar is the LARGER of the two methods' spreads). NO-GO when it is not. The ratio is reported either way; the GM's words are the bar ("if it is faster,
   then go ahead and complete the feature and land it on main").
 - **SC-002 (reported, not a condition)**: both methods' times at 10 and at 20 households and their two ratios (User Story 3).
 
@@ -193,3 +193,12 @@ hold the rules or the band, with the reason recorded:**
 - The recorded inputs are the four comb hamlets in the pool (Inashiro, Kashikawa, Mizuguchi, Sawada) and Inashiro's brief at
   10 and 20 households; Kuwabata is a polder and out of scope.
 - The hamlet generator's band is 10-20 households, so nothing larger can be rolled; SC-002 reads the trend inside that band.
+
+## Review history
+
+- Round 1 (spec-fidelity, 2026-10-01): CHANGES REQUIRED, 5 items - the 2x go bar stricter than the GM's "if it is faster"; SC-005
+  repeating it against User Story 2; the 10/20 trend made a go condition; the validity conditions able to stop a merely
+  unfinished prototype; two figures unsourced. Addressed: GO is "faster beyond the measured run-to-run spread", the trend is
+  reported, SC-003/SC-004 complete the prototype before the verdict, the repair-growth figure sourced (specs/220 R2), the 297 ratio gone with the 2x Decision.
+- Round 2 (spec-fidelity, 2026-10-01): FAITHFUL; two cosmetic notes applied (User Story 1 names SC-001; the spread is the larger
+  of the two methods').
