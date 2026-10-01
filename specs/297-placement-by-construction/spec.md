@@ -140,7 +140,7 @@ back; every ratio is a floor with no projection behind it. Keys `m:...` are in `
   after-run re-takes the base back to back, and the floors are judged on that pair.
 - **SC-001** (spec-wide) (the session's expectation, "well under half", held as a floor - the GM gave no number): Inashiro's stages sum to at most half the base's (5.640 s, the sum of the per-stage keys `before-inashiro-stage-<stage>-s`), and its `make map`
   regeneration (the child with its svg, png and page) is faster than the base's (6.1 s uncached, `m:before-inashiro-regen-s`, re-taken at load 1.0 -> 1.4 back to back with the clone; first read 8.0 s at
-  load 2.5 -> 6.1).
+  load 2.5 -> 6.1, observed 2026-09-30, `measure.py regen-before`; research R1).
 - **SC-002** (FR-001, FR-002): on Inashiro the seats bucket asks at least `3x` fewer calls (2,640,745, `m:before-inashiro-b-seats-total`), the homestead layouts built
   (`_bundle_geom`) are at least `3x` fewer (2,716, `m:before-inashiro-bundle-geom`), and the homesteads stage is at least `2x` faster (1.114 s, `m:before-inashiro-stage-homesteads-s`).
 - **SC-003** (FR-003): the mats bucket asks at least `3x` fewer calls on Inashiro (477,299, `m:before-inashiro-b-mats-total`), every
@@ -187,11 +187,12 @@ the accepted spec, each with its evidence:
   was built and measured slower on two of three maps (R12), and withdrawn: the rounds are as before.
   `WebRefused` is unchanged. **This is narrower than the GM's lever ("kept true as the lanes are laid, rather than checked
   afterward")**: the law is still asked, and the web still repaired, after it is laid. Plan D2-D4 were built and
-  measured over the five pool maps and cohort seeds 1-24 (R14): with D3 at each WRITE as the plan states it (all thirteen repairs to
-  a fixpoint after every lane write, the tree's lanes first, dangling ends judged at the end), 21 of 29 specs ended broken or with a
-  house unreached and one raised (repairs asked of a web still being built take away lanes a later pass would have joined to); at
-  the pass boundary, 10 of 23 webs were refused and the web stage was 1.38x slower - withdrawn under the plan's rule (it fails the
-  gate). **The GM is to be told.**
+  measured over the five pool maps and cohort seeds 1-24 (R14), three ways: at the pass boundary (10 of 23 webs refused, 1.38x
+  slower); at each write with every repair (21 of 29 broken or unreached, one raising - a harness bug, fixed); and at each OUTERMOST
+  write with the network-wide repairs held to the end as plan D1 and D4 state (16 of 22 webs broken or unreached, two raising
+  because the construction passes walk the lane list by index while a repair drops lanes from under them, and the web 1.72x slower).
+  Withdrawn under the plan's rule - slower and failing the gate after the fixable failure was fixed; making the web lawful at each
+  write means re-writing its construction passes, an overhaul. **The GM is to be told.**
 - **FR-002, the seat's own questions, reordered (R10).** The field's reach and the water are asked before any layout; the corridor
   - the costliest question - once per seat, after the four layouts are built and the envelope tested: asked first, it ran on every
   offered seat (325 searches against 166). So "a seat that fails them builds no layout" now holds for the field's reach and the
@@ -201,9 +202,9 @@ the accepted spec, each with its evidence:
 - **FR-001, the seat region, as built (plan Amendment 1 B1).** The static ground and the access tree's corridors are painted and
   kept current; the seated homesteads are NOT painted (the placer's one computed move rescues a seat lapping one neighbor - painted,
   Inashiro seated no one), so the region is not recomputed for each seated house's box, only for each new corridor.
-- **FR-004, the grove, as built (B3).** The fill's region answers "clear"; where it reads taken, the exact families are asked in turn
-  to say which (a hard edge drops the clump, a local obstacle re-seats it) - so User Story 3's "not tested against each keep-out in
-  turn" holds for the open ground only.
+- **FR-004, the grove, as built (B3, R16).** Three regions by family decide alone - which family holds a clump's ground says drop
+  (a hard edge) or re-seat (a lane, a local obstacle); no keep-out is asked in turn. Its cost, measured: a sixth of the belts' and
+  copses' crowns (their keep-outs' margins), for about 0.06 s a map.
 - **FR-004, the regions painted in C (R10).** Every region paints with PIL's own primitives and a two-cell margin; buffering each
   shape with shapely first was most of a region's cost and made the hinterland slower than the base. The marsh and the grass read
   their keep-out grid as one painted region (`KeepoutGrid.taken_many`).

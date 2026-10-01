@@ -204,3 +204,42 @@ dispersed draw none). Unreached houses return on eleven maps: the network and fr
 still being built, take away lanes - the tree's among them - that a later pass would have joined to. The web stage summed 15.29 s
 against the shipping settle's 14.30 s (120 to 136 writes and 266 to 784 repair-step runs a web). Withdrawn under the plan's rule:
 it fails the gate.
+
+## R15. The seat region with the seated homesteads painted, measured (observed 2026-10-01, method: a scratch toggle painting each seated homestead's box into the buildable raster; the five pool maps and cohort seeds 1-24 built through `stage_homesteads`, back to back)
+
+| (observed 2026-10-01, method: R15's toggle) | homesteads not painted (as built) | every seated homestead's box painted |
+|---|---|---|
+| households seated | 442 of 442, none refused | 442 of 442, none refused |
+| placer calls | 4,712 | 4,054 |
+| the homesteads stage, summed | 51.31 s | 56.01 s |
+
+Painted (observed 2026-10-01, method: R15's toggle), the region offers fewer seats the placer then refuses, but repainting the raster and rebuilding its table after every
+house costs more than those calls (9% slower). Not painted, under the plan's rule. (The first cut of the region seated no one on
+Inashiro for a different reason - FreeGround's cells painted grown on an offset grid over-refused the static ground - and that was
+fixed by painting them exactly on FreeGround's own grid; the spec's "painted, Inashiro seated no one" misattributed it.)
+
+**D3 at the write AS PLAN D1-D4 STATE IT** (observed 2026-10-01, the review's round 3; method: the same harness, the hook firing
+only at the OUTERMOST write - `drop_lanes` re-inks lanes inside its own loop, and mending there raised the first build's
+`IndexError`, a harness bug, fixed - running the lane-and-joint repairs (`square_every_crossing`, `settle_shapes`, `settle_ends`,
+`settle_street_ends`, `settle_shadows`, `settle_joins`, `settle_needles`, `settle_defer`, `settle_widths`, the husks) to a fixpoint
+after each write; the NETWORK-WIDE repairs (`settle_way_outs`, `settle_network`, `settle_fragments`, `prune_the_tree`) held to the
+end with the tree's owed lanes, as D1 and D4 state; dangling ends judged at the end; no rounds, no last resort, the law asked once):
+**16 of 22 webs ended broken or with houses unreached, 2 raised, 4 clean** (the six dispersed and one with no web draw none), and the
+web stage summed **24.59 s against 14.30 s** (1.72x slower). The two that raise are the construction passes themselves: they walk
+the lane list by index (`for i, ln in enumerate(lanes)` with edits behind them) while a repair at the write drops lanes from under
+them - not a harness bug, and making it go away means re-writing those passes, an overhaul. Withdrawn under the plan's rule: slower,
+and failing the gate after the one fixable failure (the harness's nested hook) was fixed.
+
+## R16. The grove decided by its regions alone (observed 2026-10-01, method: `stagemin.sh` best of three on Inashiro, a detached worktree of HEAD (the prefilter form) and the clone back to back; the pool's crowns read from the regenerated manifests)
+
+Plan B3 as the plan review asked: three regions by family (the hard edges, the lanes, the local obstacles) and NO exact family
+asked in turn - `taken_by` says which family holds a clump's ground, and that decides drop or re-seat.
+
+| (observed 2026-10-01, method: `stagemin.sh`) | the prefilter form (exact families where the region reads taken) | the regions alone |
+|---|---|---|
+| Inashiro's hinterland, windbreak | 0.87 s, 0.16 s | 0.83 s, 0.14 s |
+| grove crowns: Inashiro, Kuwabata, Sawada | 661, 632, 693 | 569, 522, 598 (-14% to -17%) |
+
+Faster by about 0.06 s a map (observed 2026-10-01, method: the table's runs), and the belts and copses lose a sixth of their crowns: the two-cell margin of every keep-out refuses
+the clumps that stood at its edge. Kept if the gate holds every grove rule on the moved pool (the belt deep and whole, the copse's
+stocking, a household's reserved wood share); withdrawn by its own measurement if not.

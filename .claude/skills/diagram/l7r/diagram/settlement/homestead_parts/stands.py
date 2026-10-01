@@ -631,11 +631,11 @@ class StandsMixin:
                 if reserved
                 else (lambda x, y: (_near is not None and not _near.too_near(x, y)) or (held is not None and held.too_near(x, y)))
             )
-            _open = blocks.static_clear(jx, jy)  # THE FILL'S ONE REGION FIRST (feature 297, plan B3): open ground asks no family
-            if (not _open and blocks.hard(jx, jy)) or _far(jx, jy):
+            _by = blocks.taken_by(jx, jy)  # THE FILL'S REGIONS DECIDE (feature 297, plan B3): which family holds the ground, if any
+            if _by == "hard" or _far(jx, jy):
                 return
-            if not _open and (blocks.local(jx, jy) or blocks.lane(jx, jy)):
-                _alt = _reseat(jx, jy, require_interior=not blocks.local(jx, jy), reach_of=_reach)
+            if _by is not None:
+                _alt = _reseat(jx, jy, require_interior=_by != "local", reach_of=_reach)
                 if _alt is None:
                     return
                 jx, jy = round(_alt[0], 1), round(_alt[1], 1)

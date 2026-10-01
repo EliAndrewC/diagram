@@ -1,136 +1,98 @@
 {
  "feature": "297-placement-by-construction",
- "plan_sha256": "ad9a951dda235ec8623acd11bc73a9e5e752c3f85c7288422ef9316c46ff53fb",
- "reviewed": "2026-09-30",
+ "plan_sha256": "2be01eb0445f31e00e1dc872cca17d9552a83721a36f6ee415e93d03fec4e03e",
+ "reviewed": "2026-10-01",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "A-conservative",
-   "summary": "Every painter grows its shape by one cell",
+   "id": "A-grow2",
+   "summary": "Region paints with PIL primitives and a two-cell margin (GROW = 2.0); regions per consumer window",
    "class": "within",
-   "why": "The rules hold by construction; a placement lost at a margin is a map change the GM allowed (2026-09-30)."
+   "why": "A calibration of the conservative region round 2 cleared; FR-001/FR-004 unaffected."
   },
   {
-   "id": "A-window",
-   "summary": "Regions built per consumer window, never the canvas",
+   "id": "B1-grid",
+   "summary": "Seat region's static ground on FreeGround's own grid, its taken cells painted exactly; reach as 4-connected components by run-length union-find; envelope tested shrunk by a cell",
    "class": "within",
-   "why": "A cost choice inside FR-001/FR-004; the region is still computed once per consumer."
+   "why": "Implementation and calibration of FR-001's buildable-and-reachable region; the placer still decides every seat."
   },
   {
-   "id": "B1-offer",
-   "summary": "Every offerer (front row, lattice, rescue cloud, exhaustive pass) offers only seats the region admits, computed per round's candidate list at once",
-   "class": "within",
-   "why": "FR-001: seats offered only from the region, every round, the exhaustive pass included."
+   "id": "B1-homesteads-unpainted",
+   "summary": "Seated homesteads NOT painted into the seat region; region recomputed only per new corridor, not per seated house",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-001 recomputes the region per change to what stands, naming each seated house. The withdrawal rests on 'painted, Inashiro seated no one', which no research section or measurement records, and the plan attributes that same outcome to the offset-grid over-refusal instead (plan Amendment B1 vs spec Amendment FR-001). Not shown physically impossible (painting neighbors shrunk by the move's reach was not priced) and not measured slower or failing the gate. hamletgen/homesteads/region.py's module docstring still says every seated homestead's box is painted."
   },
   {
-   "id": "B1-envelope",
-   "summary": "Buildable raster admits a seat where at least one garden side's envelope (smallest house, household-independent template, turn 0) is clear",
+   "id": "B2-marsh-grass",
+   "summary": "Marsh (and grass) read the KeepoutGrid as one painted region, crescents and ellipse filed in it",
    "class": "within",
-   "why": "Round 1 item 1 addressed: the test is now the envelope FR-001 names. The smallest house was accepted in round 1; testing at turn 0 is an approximation of where an envelope can stand inside the conservative margin, and the placer still decides the turned seat - a calibration of the region, not a carve-out of it."
+   "why": "FR-004 as written; grass is the GM's own named case."
   },
   {
-   "id": "B1-reach",
-   "summary": "Reachable raster: free buildable cells flood-filled from the tree, redone on each corridor or seated house; the door ground must touch it",
-   "class": "within",
-   "why": "Round 1 item 2 addressed: the region now carries reach to the access tree on free ground (FR-001, the GM's 'reachable and buildable'); the exact corridor stays the placer's (C)."
+   "id": "B3-region-then-families",
+   "summary": "static_clear reads the grove region first and, where it reads taken, asks hard/local/lane in turn and returns clear if they all pass; static_clear_many deleted, candidates not read as arrays",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-004 and US3: each candidate read against the region, not tested against each keep-out in turn. The stated reason (the families say WHICH, drop vs re-seat) covers only stands.py's jittered-grid branch; static_clear's own fallback rescues margin cells in every caller and serves no 'which'. Neither part was built region-only and measured slower or failing the gate, so it is not withdrawn under the plan's rule; nothing makes the literal impossible (a per-family label raster answers 'which'). The grove's calls fell only 1.13x (SC-004 missed)."
   },
   {
-   "id": "B2-marsh",
-   "summary": "Marsh array throws against one KeepoutGrid that now files the crescent ponds and the pond ellipse (with pad and blade tip), plus the drawn ground's RingIndex, read once for all points",
+   "id": "B4-3px",
+   "summary": "Woodland region one per size at 3 px",
    "class": "within",
-   "why": "Round 1 item 3 addressed: no keep-out is asked per point or in turn (FR-004, US3); the outline inside-test was accepted in round 1."
+   "why": "Calibration measured (8 px moved a parcel off its brook line)."
   },
   {
-   "id": "B2-random",
-   "summary": "Marsh marks land at different random places at the same densities",
-   "class": "within",
-   "why": "The GM allowed map changes (2026-09-30); densities held per FR-004."
-  },
-  {
-   "id": "B3-grove",
-   "summary": "Grove static keep-outs painted into a Region; candidates via taken_many; static_clear itself backed by the region for every caller (grid, windbreak gap fill, re-seat); spacing per survivor",
-   "class": "within",
-   "why": "Round 1 item 7 addressed; FR-004 as written, spacing being the per-glyph exception FR-004 allows."
-  },
-  {
-   "id": "B4-woodland",
-   "summary": "Woodland search: one Region per half, box_clear per square",
-   "class": "within",
-   "why": "FR-004 as written."
-  },
-  {
-   "id": "C-pretest",
-   "summary": "Before _bundle_geom is called: field reach, water (lot.watered), house box, seat_reaches_tree on the core geometry from the household template; the four layouts share the answers",
-   "class": "within",
-   "why": "Round 1 item 4 addressed: the water is among the seat's questions and the corridor test needs no built layout (FR-002). The per-household template is not a per-seat layout."
-  },
-  {
-   "id": "C-template",
-   "summary": "The bundle template is keyed per household, not per offered seat",
-   "class": "within",
-   "why": "Serves FR-002 and SC-002's layouts count; the maps it moves are allowed."
-  },
-  {
-   "id": "D1-keeper",
-   "summary": "LaneLaw keeps per-lane and joint verdicts, judged on every write",
-   "class": "within",
-   "why": "FR-005: verdicts kept from the moment a lane is laid."
-  },
-  {
-   "id": "D1-network",
-   "summary": "Network-wide rules (networks count, fragments, reach, needle loops, way outs) asked once at the end on a version stamp",
+   "id": "C-reorder",
+   "summary": "Field reach and water before any layout; corridor once per seat after the four layouts and the envelope",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Unchanged from round 1: a web is fragmentary while it is laid, so admitting each write against these is physically impossible. The condition holds: D4 now states a break found at the end raises WebRefused and nothing is repaired or dropped there."
+   "why": "Narrows FR-002's 'before any layout' for the corridor only. Withdrawn under the plan's rule: asked first it doubled the costliest search (325 vs 166, R10). The GM's own words, 'the lane test done once per seat rather than once per orientation', are still met."
   },
   {
-   "id": "D2-tree-first",
-   "summary": "The access tree's lanes drawn at the start of stage_web",
+   "id": "C-template-withdrawn",
+   "summary": "Per-household layout template withdrawn; template stays keyed on the seat offered",
    "class": "within",
-   "why": "FR-005 lists the access tree's lanes among those admitted as laid."
+   "why": "A plan addition no FR requires; withdrawn under the plan's rule (seed 3 seated 9 of 10, R9)."
   },
   {
-   "id": "D3-repair-at-write",
-   "summary": "Each rule's repair applied by the write hook to the lane named, its own writes judged at their write; a lane no repair makes lawful is not laid (never a tree lane)",
-   "class": "within",
-   "why": "Round 1 item 5 addressed: FR-005 says a lane that would break a rule is reshaped or not laid at that moment; no round follows."
+   "id": "D1-keeper-kept",
+   "summary": "Keeper as pure verdicts memoized per lane geometry, read by the kept settle, not judged on every write",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Follows from D3/D4's withdrawal: with the settle kept, a verdict at every write has no reader. Stated in spec Amendment 1."
   },
   {
-   "id": "D4-no-settle",
-   "summary": "The settle's rounds, unsettled and the last resort retired; stage end reads the keeper and refuses by name; an unworkable mechanism is withdrawn by reviewed amendment, never kept as an exception",
-   "class": "within",
-   "why": "Round 1 item 6 addressed: the 'recorded in dev/performance.md' escape is gone; FR-005 and SC-005 as written."
+   "id": "D2-D4-withdrawn",
+   "summary": "Tree lanes first, repairs at the write (and at the pass boundary), no settle - built and withdrawn; settle rounds stay",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Withdrawn under the plan's own rule, both clauses: at the write 21 of 29 specs broken or unreached, one raising, web 15.29 vs 14.30 s; at the pass boundary 10 of 23 refused, 1.38x slower; D2 alone slower (R10, R14). R11 shows the web is in pieces mid-construction by design, so lawfulness at each write needs every construction pass redesigned - an overhaul deferred with measurement, mechanism and sketch. The spec says it is narrower than the GM's lever 3 and that the GM is to be told; that must happen."
   },
   {
-   "id": "E1-mats",
-   "summary": "Mats as a computed centered lattice per gap over the floor grid",
+   "id": "D-targeted-rounds-withdrawn",
+   "summary": "Targeted settle rounds built and withdrawn",
    "class": "within",
-   "why": "FR-003 as written."
+   "why": "Slower on two of three maps and in sum (R12); withdrawn under the plan's rule; the rounds are as before."
   },
   {
-   "id": "E2-page",
-   "summary": "Hit regions, explanations and the blob computed while the picture and id map render",
+   "id": "D-settle-dangling-fix",
+   "summary": "settle_dangling drops a lane its trim cannot mend, as its docstring said",
    "class": "within",
-   "why": "FR-006 as written."
+   "why": "A defect fix (constitution XIV) inside FR-005's area; WebRefused unchanged."
   },
   {
-   "id": "E3-hem",
-   "summary": "The hem's box prefilter around the collector",
+   "id": "E3-rings",
+   "summary": "Comb hem asks every plot's corners at once (hem_rings_to_bank); the single-ring hem scalar",
    "class": "within",
-   "why": "FR-007 as written."
+   "why": "FR-007 as written (12,195 single clearances to 0)."
   },
   {
-   "id": "order-withdraw",
-   "summary": "A lever slower or failing the gate after fixes is withdrawn by a spec amendment; D3 and D4 land together",
+   "id": "E1-E2",
+   "summary": "Mats as a centered fill; page work overlapped with the picture",
    "class": "within",
-   "why": "Routes through a reviewed amendment, so it narrows nothing without review."
-  },
-  {
-   "id": "tasks-sc009",
-   "summary": "T11 and T16 record each moved map's houses, paddies and ways before and after; T16 runs the cohort",
-   "class": "within",
-   "why": "Round 1 tasks item addressed: SC-009's before/after record is a task."
+   "why": "FR-003, FR-006 as written; unchanged since round 2."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

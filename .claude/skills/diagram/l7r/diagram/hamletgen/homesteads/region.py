@@ -6,8 +6,10 @@ offered 734 seats for 15 houses, and 464 of them were refused by ground occupanc
 side's envelope - each after the placer had built the homestead's four layouts (research R6). The region asks that question
 of the whole candidate list at once, from two rasters kept current as houses are seated:
 
-- **buildable** - FreeGround's surely-taken ground, the access tree's corridors at their half-width, the reserved wood-floor
-  seats and every seated homestead's box, painted into one `Region` over the seat band's window;
+- **buildable** - FreeGround's surely-taken ground, the access tree's corridors at their half-width and the reserved wood-floor
+  seats, painted into one `Region` over the seat band's window. The seated homesteads are NOT painted: measured painted, every
+  household still seated but the stage ran 9% slower (repainting and re-tabling the raster per house costs more than the placer
+  calls it saves - specs/297 research R15), and the placer's own box test refuses a seat on a neighbor;
 - **reachable** - the buildable raster's free cells connected to the access tree (a flood fill from the tree's own cells): a
   door outside it has no way to the tree through free ground at all.
 

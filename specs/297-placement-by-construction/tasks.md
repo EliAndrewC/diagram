@@ -47,11 +47,14 @@ gated as it lands; the lane law in four steps; then the measurement and the reco
 
 - [ ] T12 [US4] `hamletgen/ways/keeper.py`: the per-lane and joint verdicts kept on every write (the writers routed through it), tested against `law.LAW` on the pool and cohort webs (D1)
       research: rendering
-- [ ] T13 [US4] The access tree's lanes laid at the start of `stage_web` (D2) - built and measured; withdrawn (R10, R14)
+- [x] T13 [US4] The access tree's lanes laid at the start of `stage_web` (D2) - built and measured; withdrawn (R10, R14)
+      verify: WITHDRAWN by measurement - slower alone (R10) and with D3-D4 (R14)
       research: rendering
-- [ ] T14 [US4] Every rule's repair applied at the write (each pass boundary); a lane no repair can make lawful not laid (D3) - built and measured; withdrawn (R14)
+- [x] T14 [US4] Every rule's repair applied at the write (each pass boundary); a lane no repair can make lawful not laid (D3) - built and measured; withdrawn (R14)
+      verify: WITHDRAWN by measurement - at the outermost write with the network-wide repairs at the end, 16 of 22 webs broken, 2 raising, 1.72x slower (R14)
       research: rendering
-- [ ] T15 [US4] The settle's rounds, `unsettled` and the last resort retired; the stage's end refuses a break by name (D4) - built and measured; withdrawn (R14); the measured fix (`settle_dangling`) and the targeted rounds (R12, withdrawn) in its place
+- [x] T15 [US4] The settle's rounds, `unsettled` and the last resort retired; the stage's end refuses a break by name (D4) - built and measured; withdrawn (R14); the measured fix (`settle_dangling`) and the targeted rounds (R12, withdrawn) in its place
+      verify: WITHDRAWN by measurement (R14); `settle_dangling`'s fix and the keeper kept (R11)
       research: rendering
 - [ ] T16 The moved pool regenerated and gated with T12-T15 in, every failure fixed; `make cohort N=24` against the base; each moved map's houses, paddies and ways before and after recorded in research (SC-009)
       research: rendering

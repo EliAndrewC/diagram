@@ -196,12 +196,13 @@ failures are fixed, is recorded with the measurement and withdrawn (spec amendme
   a cell (the placer samples nine points).
 - **B2.** Through the marsh's `KeepoutGrid` read as one painted region (`KeepoutGrid.taken_many`), the crescents and the pond's
   ellipse filed into it; the grass reads the same.
-- **B3.** `GroveBlocks.region()` paints the fill's seven static families once; `static_clear` reads it first and asks the families
-  only where it is taken (so the region decides "clear", the exact families decide "why not").
+- **B3.** `GroveBlocks.regions()` paints the fill's static families into three rasters by family (hard, lanes, local); `taken_by`
+  and `static_clear` read them alone - no family asked in turn (R16: a sixth fewer crowns, about 0.06 s faster a map).
 - **B4.** `open_ground_region`, one per size, at 3 px (at 8 px the margin moved a parcel off its brook line).
 - **C.** The field's reach and the water before any layout; the corridor once per seat after the envelope (R10); the per-household
   template withdrawn (R9).
-- **D.** D1 as `keeper.kept` (pure verdicts per lane geometry); D2-D4 built and withdrawn (R14: with D3 at each write, 21 of 29 specs
-  broken or unreached and one raising; at the pass boundary 10 of 23 webs refused and 1.38x slower); targeted rounds built and withdrawn (R12); the measured fix kept (R11):
+- **D.** D1 as `keeper.kept` (pure verdicts per lane geometry); D2-D4 built three ways and withdrawn under this plan's rule (R14: as
+  D1-D4 state it, the network-wide repairs at the end and the hook at the outermost write - 16 of 22 webs broken or unreached, two
+  raising from the passes' own index walks, 1.72x slower); targeted rounds built and withdrawn (R12); the measured fix kept (R11):
   `settle_dangling` drops what its trim cannot mend, so the last resort no longer runs on Inashiro.
 - **E3.** `hem_rings_to_bank` (every plot at once) for the comb; the single-ring hem scalar.
