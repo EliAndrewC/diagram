@@ -238,7 +238,11 @@ rolled maps. Marking is `@pytest.mark.rolls_map`, guarded by `tests/test_markers
 - Every slow gen ever profiled here was the same shape: *a per-candidate scan of geometry that does
   not change during the scan*. Hoist, prefilter, or index - and if a gen "hangs", suspect that shape
   and profile before bisecting.
-- When a check is slow, **INDEX it - do not coarsen it.** The index prunes; it never decides.
+- **Maps may change for speed** (GM 2026-09-30, feature 297: *"They do NOT need to remain identical in output"*): a
+  placer, fill or scatter may be rebuilt in a faster form that decides differently and moves maps, held to the RULES (the
+  gate on the regenerated pool), never to byte-identity.
+- When a CHECK that verifies a rule (a gate test) is slow, **INDEX it - do not coarsen it.** There the index prunes and never
+  decides; coarsening a check lets defects through.
 - **Build the blocked ground ONCE, then ask it per candidate** (constitution X clause 15, GM
   2026-09-08, feature 218): every keep-out that does not change during a fill or a scatter goes
   into a `PointGrid` / `RingIndex` / `KeepoutGrid` before the first candidate is tried, and no
