@@ -196,7 +196,8 @@ highlights into questions ... I think that we need to come up with a different n
   `:`; the page shows one bullet per passage, nested under the one that introduces them. (GM, 2026-09-29: *"anytime we
   are citing multiple things from a source instead of one thing, we should display this as a bulleted list within the
   footnote"*)
-- **A footnote's link to its source opens the citations page in a new tab.**
+- **A footnote's source key opens the work's entry at the foot of the page** - its citation line and what it is - which
+  links the source itself (feature 301: a question's page carries the works its notes cite).
 - **An absence note opens with one sentence, kept in one place.** The note is written `no publicly readable source`
   followed by an HTML comment holding the search - its date and its terms - and then, visibly, what the search found; the
   page shows "Our research of publicly-available sources couldn't find anything conclusive:" in place of the marker, from

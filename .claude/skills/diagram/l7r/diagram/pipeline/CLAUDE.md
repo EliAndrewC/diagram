@@ -18,6 +18,7 @@ Run these as modules, from the skill root:
 | `render_cache` | main's renders: a content-hash short-circuit so main regenerates its own renders from its own tip after the stop-work push | yes |
 | `poolmaps` | the SINGLE source of truth for WHICH MAPS EXIST, in which tree, of which kind - `bundles()` for the walk, `classify()` for the kind | yes |
 | `pool_index` | writes `pool/index.html`, the browsable index over the whole pool | yes |
+| `record_build` | the record's site on the main checkout (feature 301): render-sync builds `research/site/` only when its STAMP - the record's files, the glossary's JSON and the engine modules the build imports - differs | yes |
 
 ## The two engine-tree walks must stay in step
 

@@ -57,11 +57,13 @@ counts as a readable source, when a guess may be recorded, how a two-form findin
   the checker's anchor). The one exception is the GM's own campaign notes, canon rather than
   evidence (GM 2026-09-07: *"it is correct to make L7R setting notes an exception to the citation
   rule, so that should indeed be a documented exception"*).
-- **The record is HTML** (`research/*.html`, hand-authored), the footnotes on a CITATIONS PAGE
-  beside each research page (`research/citations/<name>.html`, the research page's hover reading a
-  derived `citations/<name>.js` that `make citations` writes), and the maps link to it locally.
+- **The record is HTML**, hand-authored as one fragment per question (`research/<page>/NNN-<heading id>.html`,
+  its notes beside it), and BUILT by `make record` into the site a reader opens (feature 301, GM 2026-10-01):
+  `research/site/`, a page per question with its notes numbered from 1 and the works it cites at its foot, and
+  the whole record on one page - never committed, built on main by render-sync. The maps link each question's
+  small page, and every pointer to the research names its fragment (`scripts/check-research-pointers.py`).
   Every cited work's registry entry says what it is and why it applies with its honest limits - two
-  write-ups, written once and derived into the works list at the top of every citations page that
+  write-ups, written once and derived into the works list at the foot of every page that
   cites the work - and a source is judged by the `source-applicability` agent when its write-ups
   land and BEFORE a session integrates its numbers into a map (GM 2026-09-07: *"whatever subagent
   check we create in order to justify whether a source is applicable to be used in the creation of
@@ -97,8 +99,8 @@ counts as a readable source, when a guess may be recorded, how a two-form findin
   never in the reader's face. A research heading is therefore written as the question a reader would
   ask from the map, and its anchor is stable.
 - **The entry itself is written for that reader** (GM 2026-09-07): a term they would not know is a
-  glossary tooltip exactly as on the map (one glossary, `interactive/glossary.py`, derived to
-  `research/assets/glossary.js` by `make glossary`); anything addressed to a session - `Grounds:`,
+  glossary tooltip exactly as on the map (one glossary, `interactive/glossary.py`, derived into the
+  site's `glossary.js` by `make record`); anything addressed to a session - `Grounds:`,
   `Evidence:`, a feature number, a task id, an engine identifier, a fetch verdict - is an HTML
   comment; and nothing in the entry says what it used to say or when it was corrected (*"we can look
   it up in our version control history"*). The `record-format` agent checks all three on every

@@ -655,6 +655,14 @@ hooks-test:     ## [tests] run every scripts/test-*-hooks.sh, and prove each gua
 	    fi; \
 	  done; \
 	fi; \
+	: "(GUARD_EDIT_OK: feature 301 FR-026 - the USER-LEVEL missing-program hook lives in ~/.claude/hooks/, outside every"; \
+	: " repository, so its self-test is run here when it is present: a session in a container is reminded of its sudo,"; \
+	: " a host session is not, and nothing else prints a note. Absent (another machine), there is nothing to run.)"; \
+	uh="$$HOME/.claude/hooks/test-missing-program-hook.sh"; \
+	if [ -f "$$uh" ]; then \
+	  if bash "$$uh" > "$$work/missing-program-hook.log" 2>&1; then n=$$((n+1)); \
+	  else printf '\n\033[1mHOOK TESTS FAILED: missing-program-hook (user-level, %s)\033[0m\n' "$$uh"; sed 's/^/  /' "$$work/missing-program-hook.log"; fail="$$fail missing-program-hook"; fi; \
+	fi; \
 	if [ -n "$$fail" ]; then printf '\n\033[1mhooks-test FAILED:%s\033[0m\n\n' "$$fail"; exit 1; fi; \
 	python3 "$$root/scripts/gate-stamp.py" --write hooks; \
 	printf 'hooks-test: %s guard suites green, %s unchanged since they last went green (hooks area stamped)\n' "$$n" "$$skipped"

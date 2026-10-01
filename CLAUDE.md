@@ -43,7 +43,7 @@ Enforced by `scripts/house-style-hooks.sh`, which corrects the text rather than 
 ### Research
 
 Constitution XII. The full record with the GM's rulings is `docs/research-doctrine.md`; the
-operative form of the citation rules (the footnote shape, the citations pages, the download list)
+operative form of the citation rules (the footnote shape, the notes and the works cited, the download list)
 is `.claude/skills/diagram/research/CLAUDE.md`, which auto-loads when a session edits the record.
 
 - A question about how a place was built, farmed, planted or lived in is a RESEARCH question. Run
@@ -66,12 +66,16 @@ is `.claude/skills/diagram/research/CLAUDE.md`, which auto-loads when a session 
 - The record is HTML under `research/`, each heading the question a reader would ask from the map,
   each entry written for a casual reader: glossary tooltips for terms, session notes in HTML
   comments, nothing about what the entry used to say. A modal's explanation is written from a research
-  section its `Entry:` names. It is written PER ENTRY and ASSEMBLED into the pages a reader opens
-  (feature 258): a question is `research/<page>/NNN-<heading id>.html`, its footnotes are the
-  `.notes.html` beside it, a source is `research/sources/NNNN-<key>.html`, and `make record` writes the
-  pages, `research/citations/<name>.html` among them. Find an entry with a glob on the key or a grep over
-  the page's directory - there is no index - and never edit an assembled page; footnote numbers are
-  allocated at assembly and are typed nowhere.
+  section its `Entry:` names. It is written PER ENTRY and BUILT into the site a reader opens
+  (features 258, 301): a question is `research/<page>/NNN-<heading id>.html`, its footnotes are the
+  `.notes.html` beside it, a source is `research/sources/NNNN-<key>.html`, and `make record` builds
+  `research/site/` - a page per question with its notes numbered from 1 at its foot, a page per part, and the
+  whole record on one page (`all.html`) - never committed, built on main by render-sync. A POINTER to the
+  research - a code comment, a doc, a spec, an `Entry:` - names the FRAGMENT (`research/<page>/NNN-<heading id>.html`,
+  or `research/<page>/` for a whole page), never a built page; `scripts/check-research-pointers.py` holds it at
+  the gate and the push, and `make fragment-move FROM= TO=` renames a fragment with every pointer to it. Find an
+  entry with a glob on the key or a grep over the page's directory - there is no index - and never edit a built
+  page; footnote numbers are allocated at build and are typed nowhere.
 - Reading and checking are dispatched to agents, in the background: `source-reader` (read what you
   cite), `quote-check`, `record-format`, `source-applicability` (judged BEFORE a source's numbers
   reach a map or a rule), `entry-drift`. What is mechanical runs FIRST, as a script, and its output goes
@@ -226,12 +230,13 @@ doctrine for writing a guard: `docs/guards.md`.
 | `check-bundle-hooks.sh` | a `quote-check`, `record-format`, `source-applicability`, `source-reader` or `entry-drift` dispatch that points into the repository instead of at a bundle is refused, with the `make check-bundle` command for the question it names | `CHECK_BUNDLE_OK` |
 | `canon-read-hooks.sh` | a direct read of the GM's setting canon (grep, sed, cat, Read, Grep on `setting/`) is refused with `make canon TERMS="a\|b\|c"`, which answers every term at once; a second `make canon` within three tool calls is refused unless it folds the earlier terms | `CANON_OK` |
 | `new-file-hooks.sh` | a new glossary file or registry entry written without a reserved prefix is refused with `make reserve KIND=glossary\|registry KEY=<k>`, which allocates under a host-wide lock so parallel queues never collide | `RESERVE_OK` |
-| `record-edit-hooks.sh` | an Edit aimed at an assembled record page is re-aimed at the one fragment holding its text; refused where none or several hold it, and a Write always | none - the guard hands you the edit |
+| `record-edit-hooks.sh` | an Edit aimed at a built record page (the site's, or an old assembled page) is re-aimed at the one fragment holding its text; refused where none or several hold it, and a Write always | none - the guard hands you the edit |
+| `~/.claude/hooks/missing-program-hook.sh` (USER-LEVEL, every project) | in a container, a Bash command that finds a program missing - `command not found`, an empty `which` / `command -v` / `type` / `hash` / `whereis`, a `dpkg` / `apt` / `pip` miss, a missing module - adds a note that the container has passwordless sudo to install it; silent on the host. Self-test beside it, run by `make hooks-test` | - |
 | `finished-run-hooks.sh` | a finished run is reported; a live `make` is not abandoned; a waiter on a dead producer is reported - each only for the session's own working tree | - |
 | `agent-stall-hooks.sh` | a stalled background agent is reported | - |
 | `stall-watchdog-hooks.sh` | one loop outside every session: a session silent an hour with unfinished work, not waiting on the GM, gets its tab marked and the bell, and a nudge typed when its own input line is empty (once per stall); a paneless one is marked on its host's tab, never nudged | - |
 | `idle-tests-hooks.sh` | an idle session runs `make idle-tests` | - |
-| at push, in `sync-with-main.sh` | `gate-stamp.py` (a green gate saw it), `review-gate.sh`, `plan-gate.sh`, `entry-gate.sh`, `check-file-scale.py`, `spec-lint.py`, `_hm_conflict.py --tracked`, `perf_review.py --check`, the open-task refusal | per script, each with a reason |
+| at push, in `sync-with-main.sh` | `gate-stamp.py` (a green gate saw it), `review-gate.sh`, `plan-gate.sh`, `entry-gate.sh`, `check-file-scale.py`, `spec-lint.py` (a spec directory that existed before the push is judged on what the push adds), `check-research-pointers.py`, `make record CHECK=1` (the record builds cleanly), `_hm_conflict.py --tracked`, `perf_review.py --check`, the open-task refusal; at push and sync-in, a clone whose history shares no commit with main's | per script, each with a reason |
 | the gate | the 100% floor, the 1,000-line bar, `_ratchet.py` (a target that gets slower fails), the perf bands, `test_agent_models.py` (the pinned tiers, and `omitClaudeMd` on every agent file but the one the test names) | `FILE_SIZE_OK` in the file |
 
 Every escape states a reason of two words or more, and every firing is recorded (`make audit`,

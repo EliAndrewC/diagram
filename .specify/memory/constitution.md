@@ -1617,14 +1617,16 @@ good and valid source for what we use it to look up, INCLUDING its honest limita
 from the year nineteen hundred ... we should still be honest that there were modern agricultural techniques which
 would have been employed in the year nineteen hundred, which would not have been employed in our fictional setting";
 "we use sources on Korea and Korean agriculture because we were not able to find publicly available sources that
-were more directly applicable"*). The write-ups are written ONCE, in the registry, and DERIVED into the works list at
-the top of every citations page that cites the work (*"we do not want to have multiple different write ups of a
-single paper"*); a cited key without them fails the gate. And the `source-applicability` agent
+were more directly applicable"*). The write-ups are written ONCE, in the registry, and DERIVED into the works list
+of every page that cites the work (*"we do not want to have multiple different write ups of a single paper"*); a
+cited key without them fails the gate. And the `source-applicability` agent
 (`.claude/agents/source-applicability.md`) judges the source - APPLICABLE, APPLICABLE-WITH-LIMITS with each limit
 named, or NOT-APPLICABLE - and whether the write-up's limits are honest, at two moments: when its write-ups are added
 or changed, and before a session integrates its numbers into a map or a rule, which is the fifth research box. The
-record's own notes live on a citations page beside each research page (`research/citations/<name>.html`), the
-research page's hover reading a derived script, so nothing is typed twice.
+record's own notes are written once, beside the question that first cites them, and the record is BUILT into the site
+a reader opens (feature 301): each question's page carries its notes and the works they cite at its foot, so nothing
+is typed twice. A pointer to the research names the question's fragment (`research/<page>/NNN-<heading id>.html`),
+never a built page.
 rigor: the consequences of a wrong bund width on a hobby map are small and the players have been
 told the level of rigor honestly - but the project still wants as much rigor as its time and
 tokens allow, and reading the source is the cheapest rigor there is.

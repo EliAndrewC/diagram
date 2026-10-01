@@ -53,7 +53,7 @@ when you have to make an edit, then you are opening a file which is relatively s
 | a question | `research/<page>/NNN-<heading id>.html` |
 | that question's footnotes | `research/<page>/NNN-<heading id>.notes.html`, beside it |
 | a `cities/` page | `research/cities/<page>/...`, the same shape one level down |
-| the page a reader opens | `research/<page>.html` - ASSEMBLED, never hand-edited |
+| the page a reader opens | `research/site/<page>/<heading id>.html`, and `research/site/all.html` for the whole record - BUILT by `make record`, never committed (feature 301) |
 
 **Finding one, without reading a page.** There is no index to consult and none to keep in step:
 
@@ -61,11 +61,11 @@ when you have to make an edit, then you are opening a file which is relatively s
     grep -rl "dike-pond" research/water/        a question, by something it says
     ls research/water/                          a page's questions, in order
 
-Do not `ls research/sources/` bare - it is 920 entries. Do not open `research/<page>.html` to edit it:
-the guard will re-aim an Edit at the one fragment holding its text, and refuse where none or several do.
+Do not `ls research/sources/` bare - it is 2,127 entries. Do not open a built page to edit it: the guard will
+re-aim an Edit at the one fragment holding its text, and refuse where none or several do.
 
-**Editing.** Open the fragment, edit it, run `make record` in `.claude/skills/diagram`. The gate and the
-push both refuse a committed page that no longer matches its fragments.
+**Editing.** Open the fragment, edit it, run `make record` in `.claude/skills/diagram`. The gate and the push
+both run `make record CHECK=1`, which builds the whole site in memory and refuses a record that does not build.
 
 **Adding a question**: a free prefix between its neighbors - they count by ten, so there are nine - and
 the file begins with its `<h2 id="...">`, which is the record's anchor.
@@ -137,7 +137,8 @@ level of curiosity:
 2. **"See references."** The references modal lists the questions we asked while working out that kind
    of feature - the headings of the research sections its explanation was written from, each a link.
 3. **The answer.** A question links to its section of the research PAGE, locally from the map
-   (`../../../research/<file>.html#<anchor>`; feature 194 - it was the GitHub rendering of the Markdown before),
+   (since feature 301 the question's own small page in the built site, `../../../research/site/<page>/<anchor>.html`;
+   from feature 194 the anchor on its research page, and before that the GitHub rendering of the Markdown),
    where the well-formatted markdown gives the finding, the decision it drove and any disclosed liberty.
 4. **The sources.** Every section ends in a `**Sources:**` line, and every key in [`SOURCES.html`](../.claude/skills/diagram/research/sources/)
    carries the URL where the work can be read (constitution v2.13.0), so a reader who truly wants to
@@ -390,7 +391,10 @@ the citations document. We should be careful to avoid duplicating content becaus
 the actual content."* So every research page `research/<name>.html` has a citations page
 `research/citations/<name>.html` (`citations/cities/<name>.html` for a `cities/` page), and three things follow:
 
-- **The notes are on the citations page, once.** Its `<section class="footnotes"><ol>` holds every `<li id="fn-n">` -
+- (Feature 301, 2026-10-01, retired the WRITTEN citations pages and their derived scripts: the site carries each
+  question's notes at its own foot, numbered from 1, with the works they cite - see "The record is a built site"
+  below. What follows is how the notes stood from feature 211 to 301; the write-ups' part still holds whole.)
+  **The notes are on the citations page, once.** Its `<section class="footnotes"><ol>` holds every `<li id="fn-n">` -
   the key link, the quoted passage, the gloss, exactly as before; a note may run to several paragraphs (`<p>` inside
   the `<li>`) when a quotation is lengthened or explanation added. The research page keeps the references
   (`<sup class="fn"><a id="fnref-n" href="citations/<name>.html#fn-n">n</a></sup>`; `../citations/cities/<name>.html#fn-n`
@@ -506,7 +510,35 @@ any modal.
 **And a renamed heading owes its inbound links** - the rule this file already stated, now checked:
 `scripts/check-entry-headings.py` fails the gate and the push when a class's `Entry:` resolves to no
 section. A section deliberately not written is written in the declared form
-`research/<file>.html (no dedicated entry - recorded as silent)`, which `make audit` enumerates.
+`research/<page>/ (no dedicated entry - recorded as silent)`, which `make audit` enumerates.
+
+## The record is a built site, and a pointer names a fragment (feature 301, GM 2026-10-01)
+
+The GM: *"what I probably want is a single HTML file that has a table of contents at the very top ... But then it also
+gets assembled into a page structure where anything that would be a top-level table of contents entry ... will be its
+own separate parent section and then maybe each of our subsections are themselves individual pages within the larger
+section, which are linked on the left."* So `make record` builds `research/site/` (`record/site.py`): the home page,
+a page per part (each page of the record), a page per question and per registry entry, and `all.html`, the whole
+record on one page under one table of contents - the navigation drawn on the left of every page from one `nav.js`. A
+small page numbers its notes from 1 and lists, at its foot, the notes and the works it cites (*"start the footnotes
+counting at one every time ... include the footnotes and reference sources at the bottom of each individual page by
+including only the ones that are relevant there"*); the single page numbers once through everything. The maps link
+the small pages (*"the links to our research from the interactive HTML maps should link to the smaller pages"*).
+
+**Built, never committed.** *"We should definitely stop checking the assembled files into source control"* - and
+*"I do want these files to end up on main"*: render-sync builds the site on the main checkout when a fragment, an
+asset or the build's code changed (`pipeline/record_build.py`'s stamp), the map renders' model. Nothing in the engine,
+the tools or the tests reads a built page: they read the record through the in-memory assembly
+(`sources.record_text`), so a fresh clone needs no build to work.
+
+**A pointer names the fragment.** *"The obvious solution is to not link to the generated HTML page, but to link to the
+source which is fed into and used to generate that HTML page, because that is the canonical location of the research"*.
+A code comment, a doc, a spec, a modal's `Entry:` names `research/<page>/NNN-<heading id>.html` (or `research/<page>/`
+for a whole page); `scripts/check-research-pointers.py` fails the gate and the push on one that does not resolve or
+that names a built page, and `make fragment-move` renames a fragment with every pointer to it - the reorder or retitle
+that would otherwise strand them. The landed specs were swept too, the GM choosing on 2026-10-01 that the push's spec
+check judge a landed spec on what a push CHANGES in it; a pointer there whose heading had since been retired names its
+page's directory, the old heading kept as written.
 
 ## A question has a size (feature 250 D14, GM 2026-09-26)
 
