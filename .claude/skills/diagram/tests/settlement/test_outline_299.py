@@ -141,3 +141,26 @@ def test_a_scrub_sliver_wholly_inside_the_fringe_is_drawn_as_fringe_alone() -> N
     s.flush_covers()
     scrub = _slot(s, ("grass", "scrub and rough grazing"))
     assert scrub.count("<path") == 1 and "cover-fringe" in scrub, "only the fringe: no base or overlay left"
+
+
+def test_the_reeds_reach_a_streams_edge_and_a_bank_band_lines_it() -> None:
+    """Feature 300 (SC-001): a stream across a marsh - the reed shapes reach the water's drawn edge, the bank band is drawn in
+    the marsh's slot, and a scrub zone the stream crosses keeps its grass to the bank as before (no band in its slot)."""
+    from shapely.geometry import Point
+
+    from tests.settlement._builders import _covered
+
+    s = Settlement(W=1200, H=1200, seed=2)
+    s.meta(name="T", scale="hamlet", ftpx=1)
+    s.M["streams"] = [{"poly": [[600.0, 0.0], [600.0, 1200.0]], "w": 8}]
+    s.marsh([(300.0, 600.0), (900.0, 600.0), (900.0, 1100.0), (300.0, 1100.0)], role="waterside")
+    reeded = _covered(s)
+    marsh = _slot(s, ("reed", "marsh"))
+    assert f"url(#{tiles.pattern_id('reed-bank', 1.0)})" in marsh, "the bank band is drawn in the marsh's slot"
+    assert reeded.contains(Point(605.0, 850.0)) and not reeded.contains(Point(601.0, 850.0)), "reeds to the drawn edge, not on the water"
+    t = Settlement(W=1200, H=1200, seed=2)
+    t.meta(name="T", scale="hamlet", ftpx=1)
+    t.M["streams"] = [{"poly": [[600.0, 0.0], [600.0, 1200.0]], "w": 8}]
+    t.commons([(300.0, 100.0), (900.0, 100.0), (900.0, 500.0), (300.0, 500.0)], role="pasture")
+    t.flush_covers()
+    assert "reed-bank" not in _slot(t, ("grass", None)), "no bank band in the scrub"
