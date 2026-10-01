@@ -82,7 +82,11 @@ def pytest_collection_modifyitems(config, items):  # type: ignore[no-untyped-def
     # AT THE GATE TOO (feature 135 T22): a green `make done` records the tooling hash only when it RAN the tooling
     # tests, so an unchanged hash means a gate already vouched for exactly this tooling - the same reasoning the
     # gate applies to `hooks-test` with its stamp. Never in the FULL run, where the ci package owes its 100%.
-    skip_tooling = _tooling_unchanged() and not FULL
+    # ...BUT NEVER A RUN THAT ASKS FOR THEM: `make tooling` (`-m tooling`) and `make test-file` on a tooling file collected
+    # ZERO tests while the hash stood unchanged - exit 5, the target failing - so a changed tool none of the hash's files
+    # covers (`tools/mapcheck.py`, 2026-10-01) could not have its own tests run at all
+    asked = "tooling" in (config.getoption("markexpr", "") or "") or any(str(a).split("::")[0].endswith(".py") for a in config.args)
+    skip_tooling = _tooling_unchanged() and not FULL and not asked
     keep, drop = [], []
     for item in items:
         if "/tests/tooling/" in str(item.fspath) and item.get_closest_marker("tooling") is None:

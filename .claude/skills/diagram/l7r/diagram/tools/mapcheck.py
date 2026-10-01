@@ -162,10 +162,18 @@ def _run(gens: list[str], stop_early: bool) -> tuple[bool, list[str]]:
                 if name and name not in failed:
                     failed.append(name)
         if proc.returncode != 0 and not failed:
-            failed.append(os.path.basename(batch[0]))
+            failed += unfinished(batch, out)
         if failed and stop_early:
             break
     return (not failed), failed
+
+
+def unfinished(batch: list[str], out: str) -> list[str]:
+    """The gens of a failed batch that printed no status line (CACHED, REGENERATED, FROZEN): the ones that did not finish.
+    Blaming the batch's first gen named Inashiro for Kashikawa's refusal and Kashikawa for Mizuguchi's (2026-10-01)."""
+    done = {w[1] for line in out.splitlines() if len(w := line.split()) >= 2 and w[0] in ("CACHED", "REGENERATED", "FROZEN")}
+    names = [os.path.basename(g) for g in batch]
+    return [n for n in names if n.removesuffix(".gen.py") not in done] or names[:1]
 
 
 def _tripwire() -> list[str]:
