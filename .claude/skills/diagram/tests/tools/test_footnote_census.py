@@ -13,7 +13,8 @@ import pathlib
 import re
 
 from l7r.diagram.interactive.citations import footnote_form
-from l7r.diagram.interactive.sources import RESEARCH_DIR, canon_keys
+from l7r.diagram.interactive.citations import research_pages
+from l7r.diagram.interactive.sources import canon_keys, record_text
 from l7r.diagram.tools import footnote_census as fc
 
 FNBACK = ' <a class="fnback" href="../x.html#fnref-1">back</a>'
@@ -42,14 +43,14 @@ def test_the_four_kinds_are_counted_and_a_settled_absence_is_not_a_backlog() -> 
 
 def test_every_citations_page_is_counted_exactly_once() -> None:
     pages = fc.citations_pages()
-    on_disk = sorted(str(p) for p in pathlib.Path(RESEARCH_DIR, "citations").rglob("*.html"))
-    assert pages == on_disk and pages, "the census walks every citations page in the record"
+    want = sorted(f"citations/{p}" for p in research_pages())
+    assert pages == want and pages, "the census walks every citations page in the record, once each"
 
 
 def test_the_census_numbers_are_the_numbers_in_the_files() -> None:
     """Counted a second way, from the raw files, so a classifier change cannot move the total quietly."""
     per = fc.census(real_form())
-    notes = sum(len(re.findall(r'<li id="fn-\d+">', pathlib.Path(p).read_text(encoding="utf-8"))) for p in fc.citations_pages())
+    notes = sum(len(re.findall(r'<li id="fn-\d+">', record_text(p))) for p in fc.citations_pages())
     total = per["TOTAL"]
     assert sum(total.values()) == notes, "every note on every citations page falls in exactly one column"
     assert not total["malformed"], f"{total['malformed']} note(s) match no form - the gate names them"

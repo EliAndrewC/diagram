@@ -4,7 +4,7 @@
 
 - SECTION=buildings/compound-walls-neribei-and-tsuijibei
 - RENDERING=rendering/buildings/how-our-maps-draw-compound-walls
-- OLD=research/buildings/070-a-compound-wall-is-a-building-not-a-boundary-line.html research/buildings/490-how-thick-was-a-compounds-earth-wall.html research/religion-and-death/200-how-large-are-the-gates-walls-and-funerary-features-drawn.html
+- OLD=research/buildings/ research/buildings/ research/religion-and-death/
 - MODALS=CompoundWall
 - BASE=02cb58c51
 

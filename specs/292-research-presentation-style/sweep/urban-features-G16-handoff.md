@@ -4,7 +4,7 @@
 
 - SECTION=urban-features/burakumin-quarters-and-caste-zoning
 - RENDERING=rendering/urban-features/how-our-maps-zone-the-castes
-- OLD=research/urban-features/130-caste-geography-and-status-zoning.html research/urban-features/370-how-many-households-does-a-burakumin-quarter-hold-and-what-stands-in-it-besides-the-houses.html research/urban-features/380-where-does-a-towns-burakumin-quarter-stand---at-the-edge-where-a-road-leaves-or-on-the-riverbank.html research/cities/fabric/060-does-the-burakumin-quarter-stand-inside-the-walls-or-outside-at-least-one-stands-inside.html
+- OLD=research/urban-features/ research/urban-features/ research/urban-features/ research/cities/fabric/
 - MODALS=
 - BASE=827769947
 

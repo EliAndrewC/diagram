@@ -213,7 +213,7 @@ research/sources/_front.html                     doctype, head, h1, intro - verb
                                                  groups (R1): a heading in a comment is not a section
 research/sources/010-works-cited.html            the section heading and its 213-byte intro
 research/sources/010-works-cited/0010-<key>.html one registry entry each, gapped by ten
-research/sources/020-attested-instances.html     one section: its <h2> and its prose
+research/sources/     one section: its <h2> and its prose
 research/sources/030-setting-canon.html          the same
 research/sources/_tail.html                      </main></body></html> - verbatim
 

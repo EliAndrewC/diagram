@@ -11,7 +11,7 @@
 # GUARD_EDIT_OK: feature 197 - `claim` joins the phony list (a new operation).
 # (GUARD_EDIT_OK: feature 204 - guard-log joins .PHONY beside audit; a target with a recipe and no
 # .PHONY entry is shadowed by any file of that name)
-.PHONY: done docs static format typecheck test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick claim audit guard-log perf-gate hooks-test explain citations \
+.PHONY: done docs static format typecheck test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick claim audit guard-log perf-gate hooks-test explain citations fragment-move \
 	 switches ci-off ci-on _switch \
 	 map cohort hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 why-placed   pack-audit     help \
@@ -554,17 +554,26 @@ glossary:       ## [docs] assemble interactive/assets/glossary.json from its per
 footnote-census: ## [docs] count the record's footnotes by kind - cited, grounds, ABSENT, settled. The ABSENT column is the backlog and the only one anybody has to act on (feature 235)
 	$(RUN).tools.footnote_census
 
-# GUARD_EDIT_OK: feature 211 - a new operation, `citations`: the citations pages' derived scripts and works sections.
-citations:      ## [docs] write each research page's citations script (research/citations/<name>.js) and the works section at the top of its citations page, from the page's notes and SOURCES.html (feature 211)   CHECK=1: exit 1 if stale or a cited key has no write-up
-	$(RUN).tools.citations_asset $(if $(CHECK),--check,)
+# GUARD_EDIT_OK: feature 301 - `citations` is now a name for `record`: the citations pages and their scripts are no
+# longer written (the site carries each question's notes at its foot), so there is nothing of its own left for it to
+# do; the name stays so the habit and the docs that call it keep working. Nothing is loosened.
+citations:      ## [docs] the same as `make record` (feature 301: the record's site carries the notes; kept as a name)   CHECK=1: as `make record CHECK=1`
+	@$(MAKE) --no-print-directory record $(if $(CHECK),CHECK=1,)
 
 # GUARD_EDIT_OK: feature 258 - a new operation, `record`: the record's pages assembled from their
-# per-entry fragments. No guard changes; the same shape as `citations` above, and for the same reason.
-record:         ## [docs] write the record's pages from their per-entry fragments under research/<page>/ (feature 258)   CHECK=1: exit 1 if a committed page differs from its assembly   PAGE=<name>: one page   SPLIT=<name>: the one-time split of a page that is still whole
-	$(RUN).tools.record_asset $(if $(CHECK),--check,) $(if $(PAGE),--page $(PAGE),) $(if $(SPLIT),--split $(SPLIT),)
+# per-entry fragments. Feature 301 changed WHAT it writes - the site under research/site/ (gitignored, built on the
+# main checkout by render-sync), not the committed pages - and what CHECK means: the record builds cleanly.
+record:         ## [docs] build the record's site, research/site/, from its per-entry fragments (features 258, 301) - a page per question, one per part, the whole record on one page   CHECK=1: build in memory and exit 1 on any refusal, writing nothing   SPLIT=<name>: the one-time split of a page that is still whole
+	$(RUN).tools.record_asset $(if $(CHECK),--check,) $(if $(SPLIT),--split $(SPLIT),)
 	@: "GUARD_EDIT_OK: feature 288 FR-005 - after assembling, a filled registry entry marks its URL cited on the sources-consulted ledger (not under CHECK=1, which writes nothing); a new step, nothing loosened"
 	$(if $(CHECK),,@python3 "$$(git rev-parse --show-toplevel)/scripts/_sources.py" mark-filled)
 
+
+# GUARD_EDIT_OK: feature 301 FR-015 - a new operation, `fragment-move`: a question's fragment renamed or moved with every
+# pointer to it, so a reorder or a retitle never leaves a pointer behind. Nothing loosened.
+fragment-move:  ## [docs] move or rename a question's fragment with its notes and originals, and rewrite every pointer to it - the record's own links, the Entry: lines, the code and docs (feature 301)   FROM=research/<page>/<prefix>-<id>.html TO=research/<page>/<prefix>-<id>.html
+	@test -n "$(FROM)" -a -n "$(TO)" || { echo "make fragment-move FROM=research/<page>/<prefix>-<id>.html TO=research/<page>/<prefix>-<id>.html" >&2; exit 2; }
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_fragment_move.py" "$(FROM)" "$(TO)" --root "$$(git rev-parse --show-toplevel)"
 
 
 

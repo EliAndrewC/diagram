@@ -171,7 +171,12 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     its area are guesses, and the rendering section's area band is the research's own guess), `storage shed` accurate to
     convention (rendering/homesteads 120 - the storehouse is drawn as an annex on a fixed wall at a farm shed's size,
     where the storehouses recorded stood free of the house and were smaller), and `byre`'s `sources` gained `koshigaya-shishi-noumin-jukyo` (Hasuda's 50
-    stables in 76 houses, against which the drawn share is now named a calibration)."""
+    stables in 76 houses, against which the drawn share is now named a calibration).
+
+    Feature 301 (2026-10-01) moved every `entry` under the same bar: an `Entry:` names the FRAGMENTS of the questions
+    it was written from (`research/<page>/<prefix>-<heading id>.html`) rather than a page and its quoted headings,
+    rewritten by `scripts/_pointer_sweep.py`; the snapshot's entries were re-recorded from the classes, the questions
+    they name unchanged (`test_entry_titles.py` holds that each one exists)."""
     before = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     added = {s for succ in SINCE_189.values() for s in succ} | set(ADDED_SINCE_189)
     assert set(SINCE_189) <= set(before) and not (added & set(before)), "the tables name snapshot keys and NEW keys only"

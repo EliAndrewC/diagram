@@ -4,14 +4,14 @@
 
 - SECTION=towns/gate-markets-outside-a-town-guanxiang
 - RENDERING=rendering/towns/how-our-maps-draw-a-towns-gate-market
-- OLD=research/towns/080-the-gate-market-exists-for-traffic-not-taxes.html research/towns/380-what-is-in-a-towns-gate-market-and-how-far-out-along-the-road-does-it-run.html
+- OLD=research/towns/ research/towns/
 - MODALS=
 
 ## Theater stages on shrine ground (miyaji shibai)
 
 - SECTION=towns/theater-stages-on-shrine-ground-miyaji-shibai
 - RENDERING=rendering/towns/how-our-maps-site-a-towns-theater-stage
-- OLD=research/towns/060-where-does-a-towns-theater-stage-stand-and-which-way-does-it-open.html
+- OLD=research/towns/
 - MODALS=
 
 - BASE=860b17c46

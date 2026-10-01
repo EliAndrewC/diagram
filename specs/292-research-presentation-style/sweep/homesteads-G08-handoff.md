@@ -4,14 +4,14 @@
 
 - SECTION=homesteads/bath-sheds-on-the-farm-furo
 - RENDERING=rendering/homesteads/how-our-maps-draw-bath-sheds-furo
-- OLD=research/homesteads/214-did-a-farmhouse-have-a-bath-shed-and-where-did-it-stand.html research/homesteads/740-before-1868-did-a-farm-have-a-bath-shed.html
+- OLD=research/homesteads/ research/homesteads/
 - MODALS=BathRoom
 
 ## Household shrines (yashikigami)
 
 - SECTION=homesteads/household-shrines-yashikigami
 - RENDERING=rendering/homesteads/how-our-maps-place-the-household-shrine-yashikigami
-- OLD=research/homesteads/216-which-farmsteads-had-a-household-shrine-and-in-which-corner.html
+- OLD=research/homesteads/
 - MODALS=HouseholdShrine WoodKamiAltar
 
 - BASE=96560b687

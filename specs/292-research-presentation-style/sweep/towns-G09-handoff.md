@@ -2,7 +2,7 @@
 
 - SECTION=towns/the-townsmens-own-office-and-guild-halls-machi-kaisho-huiguan
 - RENDERING=rendering/towns/how-our-maps-draw-the-townsmens-office-and-guild-halls-machi-kaisho-huiguan
-- OLD=research/towns/470-did-a-towns-commoners-keep-an-office-of-their-own-and-where-did-it-stand.html research/towns/470-did-a-towns-commoners-keep-an-office-of-their-own-and-where-did-it-stand.notes.html research/towns/470-did-a-towns-commoners-keep-an-office-of-their-own-and-where-did-it-stand.originals.html
+- OLD=research/towns/ research/towns/ research/towns/
 - MODALS=
 - BASE=60b2ab961
 

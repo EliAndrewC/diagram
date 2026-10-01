@@ -99,7 +99,10 @@ RANK_APART_FT = 26.0
 RANK_JITTER_FT = 3.0
 RANK_BIN_FT = 40.0  # the centerline's vertex spacing along the belt: two rows' width, fine enough to follow a crescent's bend (a GUESS)
 RANK_CONIFER_S = (1.0, 1.1)  # a planted row is even-aged: one size band (x CANOPY_R_FT x 1.15), not the emergent mix
-LESSER_BROADLEAF_S = (0.6, 0.85)  # "lesser broadleaf crowns among them" (research/rendering/vegetation/030-how-our-maps-draw-the-shelter-belt-its-sides-its-trees-and-why-it-runs-off-the-edge-of-the-map.html): smaller than the woods' crowns
+LESSER_BROADLEAF_S = (
+    0.6,
+    0.85,
+)  # "lesser broadleaf crowns among them" (research/rendering/vegetation/030-how-our-maps-draw-the-shelter-belt-its-sides-its-trees-and-why-it-runs-off-the-edge-of-the-map.html): smaller than the woods' crowns
 # ...and FEWER than the conifers: of a clump's usual rolls, this share is thrown for the broadleaf and the bamboo between the
 # rows, so the conifer stays the commonest crown (the entry's guess; the share itself a GUESS, measured against the maps'
 # `crowns` tallies, 269 B30). Measured on Inashiro's belt with the rows laid per clump: 0.3 drew 182 conifers to 330

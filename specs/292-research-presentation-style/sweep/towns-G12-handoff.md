@@ -2,7 +2,7 @@
 
 - SECTION=towns/inns-and-cheap-lodging-houses-how-many-and-where-the-caravan-inn-stands-hatagoya-kichin-yado-dian
 - RENDERING=rendering/towns/how-our-maps-place-a-towns-inns-and-lodging-houses
-- OLD=research/towns/320-how-many-inns-did-a-post-town-keep-and-how-big-was-one.html research/towns/050-where-does-a-caravan-inn-stand-and-what-does-it-need-beside-it.html research/towns/040-the-market-day-flophouse---who-actually-stays-over.html research/cities/fabric/120-how-many-cheap-lodging-houses-did-a-city-hold.html
+- OLD=research/towns/ research/towns/ research/towns/ research/cities/fabric/
 - MODALS=
 - BASE=84226d688
 

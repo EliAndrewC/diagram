@@ -38,9 +38,9 @@
   "claims_release_line": "293 | run e3 ended - claim released | 2026-09-30",
   "ledger_lines_appended": 26,
   "prefixes_reserved": [
-   ".claude/skills/diagram/research/sources/010-works-cited/20290-shimizuen-ashigaru-nagaya.html",
-   ".claude/skills/diagram/research/sources/010-works-cited/20300-chugen-kanazawa-jta.html",
-   ".claude/skills/diagram/research/sources/010-works-cited/20310-nagaya-kotobank.html"
+   ".claude/skills/diagram/research/sources/",
+   ".claude/skills/diagram/research/sources/",
+   ".claude/skills/diagram/research/sources/"
   ]
  },
  "sessions": [

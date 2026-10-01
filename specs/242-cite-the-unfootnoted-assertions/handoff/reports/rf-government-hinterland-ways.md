@@ -3,13 +3,13 @@
 Read as the reader meets them (comments and tags stripped). Nothing was edited. Line numbers are from the files as they stand.
 
 Paths read:
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/government.html`
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/hinterland.html`
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/ways.html`
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/citations/cities/government.html`
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/citations/cities/hinterland.html`
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/citations/ways.html`
-- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/SOURCES.html` (355 entries carrying `<!-- READ 2026-09-14 by a source-reader (feature 242) -->`, lines 411‑2184)
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/government/`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/hinterland/`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/ways/`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/government/`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/hinterland/`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/ways/`
+- `/diagram/.clones/diagram-research/.claude/skills/diagram/research/sources/` (355 entries carrying `<!-- READ 2026-09-14 by a source-reader (feature 242) -->`, lines 411‑2184)
 - glossary: `/diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/interactive/assets/glossary.json`
 
 **Standing note on the glossary.** It is now very complete for these pages: `kido`/`ward gate`, `nagaya`, `nagayamon`, `daozuofang`, `banfang`, `gongxiefang`, `yayi`, `houzhaofang`, `komono`, `chugen`, `degawari`, `kumi-yashiki`, `jokamachi`, `buke-chi`, `hanko`, `bugeijo`, `machi-dojo`, `koku`, `ken`, `shaku`, `kan`, `ryo`, `shi`, `mu`, `li`, `ri`, `tsubo`, `hari-ma` (梁間), `hem`, `toe`, `baulk`, `offtake`, `scour`, `sill`, `abutment`, `strip footing`, `riprap`, `gabion`, `glulam`, `itabashi`, `dobashi`, `jetty`, `tread`, `guanxiang`, `yakata`, `flophouse`, `sally gate`, `night soil`, `well-sweep`, `windlass`, `levee`, `natural levee`, `backswamp`, `alternate attendance`, `hatamoto`, `shoin`, `kawata`, `lifang`, `zicheng`, `luocheng`, `yacheng`, `kuru…`-family layout terms (`rinkaku`, `renkaku`, `teikaku`), `mitochigai`, `kurayashiki`, `monzen`, `teramachi`, `sogamae`, `towpath`/`qiandao`, `tulou`, `Qimin Yaoshu` (matching is whole-word and case‑insensitive, so "Qimin yaoshu" still gets its tooltip). What is below is what it does **not** cover.

@@ -2,7 +2,7 @@
 
 - SECTION=towns/the-towns-street-front-shophouse-widths-party-walls-and-roofs-machinami
 - RENDERING=rendering/towns/how-our-maps-draw-a-towns-street-front-from-above
-- OLD=research/towns/260-how-wide-is-a-merchants-shophouse-and-how-does-wealth-change-it.html research/towns/270-does-a-towns-street-front-stand-wall-to-wall-or-house-by-house.html research/towns/280-one-story-or-two-and-thatch-board-or-tile---what-does-a-towns-street-front-look-like-from-above.html
+- OLD=research/towns/ research/towns/ research/towns/
 - MODALS=
 - BASE=4b8326d77
 

@@ -4,7 +4,7 @@
 
 - SECTION=cities/capitals/rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi
 - RENDERING=rendering/cities/capitals/how-our-maps-draw-a-capitals-rice-storehouses-and-brokers-row-kura-fudasashi
-- OLD=research/cities/capitals/090-the-wharf-is-the-collecting-end-and-kurayashiki-is-the-wrong-word-for-it.html research/cities/capitals/120-the-emperors-granaries-are-separate-because-they-face-a-different-threat.html research/cities/capitals/110-the-brokers-row-is-merchant-and-the-ministrys-cut-is-narrower-than-it-looks.html
+- OLD=research/cities/capitals/ research/cities/capitals/ research/cities/capitals/
 - MODALS=
 
 - BASE=ca5ebb8cf

@@ -2,7 +2,7 @@
 
 - SECTION=towns/the-town-plan-a-street-town-or-a-grid-and-the-gate-to-yamen-axis-gaison
 - RENDERING=rendering/towns/how-our-maps-lay-out-a-towns-streets
-- OLD=research/towns/230-did-a-county-seat-string-out-along-its-road-or-lay-out-a-grid.html research/towns/010-chinese-towns-were-planned---the-gate-to-yamen-axis.html research/towns/090-a-street-is-access-infrastructure-for-the-buildings-it-serves.html
+- OLD=research/towns/ research/towns/ research/towns/
 - MODALS=ApproachRoad
 - BASE=48e27cfec
 

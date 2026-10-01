@@ -4,7 +4,7 @@
 
 - SECTION=cities/capitals/how-a-capital-differs-from-a-provincial-city-what-multiplies-what-changes-form-and-what-only-a-capital-has
 - RENDERING=rendering/cities/capitals/how-our-maps-scale-a-capitals-program-up-from-a-provincial-citys
-- OLD=research/cities/capitals/390-which-provincial-rules-turn-upside-down-in-a-capital-and-what-simply-multiplies.html research/cities/capitals/370-what-does-a-capital-have-that-a-provincial-city-has-no-version-of.html research/cities/capitals/330-do-a-capitals-trades-and-funerary-program-scale-from-a-provincial-citys.html research/cities/capitals/333-which-capital-features-grow-faster-than-the-city-and-which-stay-one-to-a-seat.html research/cities/capitals/336-which-capital-trades-change-their-form-rather-than-their-count-and-where-do-the-official-kilns-go.html
+- OLD=research/cities/capitals/ research/cities/capitals/ research/cities/capitals/ research/cities/capitals/ research/cities/capitals/
 - MODALS=
 - BASE=159730836
 

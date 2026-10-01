@@ -3,13 +3,13 @@
 ## Country estates of the gentry and samurai around a city
 - SECTION=cities/hinterland/country-estates-of-the-gentry-and-samurai-around-a-city
 - RENDERING=rendering/cities/hinterland/how-our-maps-place-country-estates-around-a-city
-- OLD=research/cities/hinterland/010-gentry-estates-are-dispersed-not-clustered-at-the-wall.html research/fields/140-where-do-the-samurai-estates-sit-when-the-paddy-has-the-near-ring.html research/cities/hinterland/015-how-many-country-estates-does-a-city-map-draw-and-which-way-do-their-gates-face.html
+- OLD=research/cities/hinterland/ research/fields/ research/cities/hinterland/
 - MODALS=
 
 ## A lord's retreat just outside town (shimoyashiki)
 - SECTION=cities/hinterland/a-lords-retreat-just-outside-town-shimoyashiki
 - RENDERING=none
-- OLD=research/cities/hinterland/060-did-a-citys-lords-keep-a-retreat-just-outside-town.html
+- OLD=research/cities/hinterland/
 - MODALS=
 
 - BASE=f16b00911

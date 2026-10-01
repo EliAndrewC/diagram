@@ -2,12 +2,12 @@
 
 - SECTION=fields/how-much-farmland-a-settlement-works-and-in-what-tracts
 - RENDERING=rendering/fields/how-our-maps-size-a-settlements-farmland
-- OLD=research/fields/110-plot-sizes-pond-sizing-and-acreage-from-population.html research/fields/120-tract-sizes---no-settlement-class-cap.html
+- OLD=research/fields/ research/fields/
 - MODALS=
 
 - SECTION=fields/farmland-around-towns-and-cities
 - RENDERING=rendering/fields/how-our-maps-draw-the-farmland-around-a-town-or-a-city
-- OLD=research/fields/130-what-is-the-farmland-around-a-town-or-a-city-made-of.html research/cities/hinterland/020-why-is-a-city-ringed-by-farmland-on-every-side.html
+- OLD=research/fields/ research/cities/hinterland/
 - MODALS=
 
 - BASE=b2856c5e0

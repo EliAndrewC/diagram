@@ -2,7 +2,7 @@
 
 - SECTION=buildings/samurai-residences-and-their-rooms-buke-yashiki
 - RENDERING=rendering/buildings/how-our-maps-lay-out-the-residence
-- OLD=research/buildings/380-how-big-was-a-samurais-house-and-what-rank-is-a-67-tsubo-house.html research/buildings/260-in-what-order-do-a-residences-rooms-run---the-reception-the-masters-rooms-the-familys.html research/buildings/250-were-a-residences-wings-joined-by-corridors-and-set-in-echelon.html research/buildings/330-did-a-guest-stay-in-the-house-or-in-a-guest-house-of-their-own.html research/buildings/230-the-shady-rear-is-the-service-strip.html
+- OLD=research/buildings/ research/buildings/ research/buildings/ research/buildings/ research/buildings/
 - MODALS=Residence ServantsQuarters GuestQuarters Kitchen Well Latrine Storehouse ResidenceCorridor LordsQuarters FamilyQuarters InnerRooms ReceptionRoom InnerCourt CompoundGarden RearYard
 - BASE=68cc19417
 

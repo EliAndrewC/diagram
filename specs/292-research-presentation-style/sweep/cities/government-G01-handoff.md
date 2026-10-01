@@ -2,7 +2,7 @@
 
 - SECTION=cities/government/the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen
 - RENDERING=rendering/cities/government/how-our-maps-place-and-draw-the-governors-compound
-- OLD=research/cities/government/010-where-does-a-provinces-government-stand-in-its-city.html research/urban-features/140-government-and-commerce-of-a-seat-of-administration.html research/cities/government/200-how-big-is-a-provincial-governors-compound.html research/cities/government/210-what-stands-inside-a-governors-compound-and-in-what-order.html research/cities/government/220-which-way-does-a-governors-compound-face-and-does-an-avenue-lead-to-its-gate.html
+- OLD=research/cities/government/ research/urban-features/ research/cities/government/ research/cities/government/ research/cities/government/
 - MODALS=
 - BASE=a6200c980
 

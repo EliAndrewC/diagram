@@ -3,7 +3,7 @@
 - SECTION=water/how-wide-canals-and-ditches-are-the-ladder-of-channel-widths
 - RENDERING=rendering/water/how-our-maps-draw-channel-widths
 - RENDERING=rendering/water/how-our-maps-draw-a-channel-narrowing-along-its-run
-- OLD=research/water/010-water-width-ladder---the-real-world-tiers.html research/water/020-a-channel-taper-is-a-square-root-not-a-straight-line.html research/water/620-were-the-ladders-channel-widths-in-use-before-modern-times-yes---every-rung-that-was-built.html research/water/050-the-comb-net-is-drawn-at-true-size.html research/water/070-what-drawing-at-true-size-left-open.html research/water/060-a-delivery-is-never-drawn-wider-than-the-canal-feeding-it.html research/water/230-drawn-width-is-rank-not-discharge---junctions-do-not-conserve-it.html
+- OLD=research/water/ research/water/ research/water/ research/water/ research/water/ research/water/ research/water/
 - MODALS=Stream IrrigationDitch DrainageDitch
 - BASE=205c95daf
 

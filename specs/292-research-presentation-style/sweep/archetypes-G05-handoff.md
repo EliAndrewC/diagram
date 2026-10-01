@@ -2,7 +2,7 @@
 
 - SECTION=archetypes/polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them
 - RENDERING=rendering/archetypes/how-our-maps-draw-a-polders-dike-and-its-trees
-- OLD=research/archetypes/330-how-high-and-how-broad-was-a-polders-dike.html research/archetypes/080-what-a-polders-dike-was-made-of-and-whether-it-followed-the-waters-edge.html research/archetypes/090-why-dikes-were-planted-and-what-the-row-spacing-rests-on.html research/archetypes/100-why-dike-willows-do-not-replace-the-village-windbreak.html
+- OLD=research/archetypes/ research/archetypes/ research/archetypes/ research/archetypes/
 - MODALS=MulberryDike PerimeterDike
 - BASE=f6ada12bc
 

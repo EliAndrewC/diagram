@@ -4,7 +4,7 @@
 
 - SECTION=urban-features/notice-boards-kosatsuba
 - RENDERING=rendering/urban-features/how-our-maps-place-and-draw-notice-boards-kosatsuba
-- OLD=research/urban-features/010-the-notice-board-kosatsuba---siting-is-a-traffic-decision.html research/urban-features/012-who-read-the-notice-board-to-a-village-that-could-not-read-and-why-does-even-a-hamlet-carry-one.html research/urban-features/250-how-big-is-a-notice-board-and-what-does-it-look-like-from-above.html research/urban-features/015-how-does-the-map-choose-the-notice-boards-seat-and-why-may-it-stand-under-a-tree.html research/buildings/470-did-the-magistrate-post-notices-at-the-offices-own-gate-or-on-the-towns-notice-board.html
+- OLD=research/urban-features/ research/urban-features/ research/urban-features/ research/urban-features/ research/buildings/
 - MODALS=NoticeBoard BenchNoticeBoard
 - BASE=cf0ad17a2
 

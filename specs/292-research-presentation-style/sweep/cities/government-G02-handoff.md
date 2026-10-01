@@ -4,14 +4,14 @@
 
 - SECTION=cities/government/offices-of-the-six-ministries-liubu
 - RENDERING=rendering/cities/government/how-our-maps-draw-the-offices-of-the-six-ministries-liubu
-- OLD=research/cities/government/230-how-big-is-a-ministry-office-and-what-is-inside-it.html research/cities/capitals/140-the-ministries-sit-outside-the-castle-flanking-the-approach-avenue.html research/cities/capitals/290-ministry-offices-six-equal-compounds-the-same-size-the-province-builds---on-purpose.html
+- OLD=research/cities/government/ research/cities/capitals/ research/cities/capitals/
 - MODALS=
 
 ## The town magistracy and its constables (machi-bugyo, doshin)
 
 - SECTION=cities/government/the-town-magistracy-and-its-constables-machi-bugyo-doshin
 - RENDERING=rendering/cities/government/how-our-maps-draw-the-town-magistracy-and-its-constables-machi-bugyo-doshin
-- OLD=research/cities/government/250-does-a-city-keep-its-own-town-magistracy-and-where-do-its-constables-live.html
+- OLD=research/cities/government/
 - MODALS=
 
 - BASE=e50f60b89

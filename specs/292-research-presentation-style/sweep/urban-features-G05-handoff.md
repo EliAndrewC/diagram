@@ -3,19 +3,19 @@
 ## The bell-and-drum tower (zhonggulou)
 - SECTION=urban-features/the-bell-and-drum-tower-zhonggulou
 - RENDERING=rendering/urban-features/how-our-maps-draw-the-bell-and-drum-tower-zhonggulou
-- OLD=research/urban-features/070-the-bell-and-drum-tower---one-per-walled-seat.html
+- OLD=research/urban-features/
 - MODALS=
 
 ## Village granaries (gogura)
 - SECTION=urban-features/village-granaries-gogura
 - RENDERING=rendering/urban-features/how-our-maps-draw-village-granaries-gogura
-- OLD=research/urban-features/460-does-a-village-keep-a-granary-of-its-own-and-where-does-it-stand.html
+- OLD=research/urban-features/
 - MODALS=
 
 ## Writing schools (terakoya)
 - SECTION=urban-features/writing-schools-terakoya
 - RENDERING=rendering/urban-features/how-our-maps-show-writing-schools-terakoya
-- OLD=research/urban-features/470-where-were-village-and-town-children-taught-to-read-and-was-the-school-a-building-of-its-own.html
+- OLD=research/urban-features/
 - MODALS=
 
 - BASE=e5528ce42

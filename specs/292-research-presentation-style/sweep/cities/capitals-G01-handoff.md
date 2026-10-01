@@ -4,7 +4,7 @@
 
 - SECTION=cities/capitals/domain-capitals-the-daimyos-castle-town-jokamachi
 - RENDERING=rendering/cities/capitals/how-our-maps-size-and-lay-out-a-domain-capital
-- OLD=research/cities/capitals/010-at-the-capital-tier-japan-leads-and-china-is-the-tiebreaker.html research/cities/capitals/050-our-capital-is-a-hikone-scale-market-town-carrying-a-quarter-of-hikones-samurai.html research/cities/capitals/380-does-a-scorpion-capital-look-different-from-a-crane-one.html research/cities/capitals/220-dimensional-audit-of-the-drawn-capital.html
+- OLD=research/cities/capitals/ research/cities/capitals/ research/cities/capitals/ research/cities/capitals/
 - MODALS=
 - BASE=6f7daef70
 

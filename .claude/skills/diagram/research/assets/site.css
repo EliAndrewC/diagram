@@ -1,0 +1,31 @@
+/* The record's site (feature 301): the navigation on the left, the page on the right - the manual's layout. The page's
+   own look is record.css; this is only the frame around it. Edit here, never in a built page. */
+body.site { margin: 0; }
+.layout { display: flex; align-items: flex-start; min-height: 100vh; }
+#sidebar { position: sticky; top: 0; flex: 0 0 19rem; height: 100vh; overflow-y: auto; box-sizing: border-box;
+  padding: .9rem .8rem 3rem; border-right: 1px solid var(--rule); background: var(--note);
+  font: 14px/1.4 system-ui, sans-serif; }
+#sidebar h2 { font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; opacity: .7; border: 0; margin: 1.1rem 0 .3rem; padding: 0; }
+#sidebar ul { list-style: none; margin: 0; padding: 0; }
+#sidebar ul.items { padding: .15rem 0 .4rem .9rem; border-left: 1px solid var(--rule); margin-left: .35rem; }
+#sidebar li { margin: .12rem 0; }
+#sidebar summary { cursor: pointer; }
+#sidebar a { display: inline; }
+#sidebar a[aria-current="page"] { font-weight: 700; color: var(--ink); }
+#sidebar .nav-top a { display: block; margin-bottom: .3rem; }
+#sidebar .nav-top a:first-child { font-weight: 700; font-size: 1.05em; }
+.layout > main { flex: 1 1 auto; min-width: 0; }
+p.crumbs { font: 13px/1.4 system-ui, sans-serif; opacity: .8; margin: 0 0 .5rem; }
+ul.questions { padding-left: 1.2em; }
+ul.questions li { margin: .45rem 0; }
+ul.questions .lead { display: block; font-size: .9em; opacity: .8; }
+nav.pager { display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem; padding-top: .8rem;
+  border-top: 1px solid var(--rule); font: 14px/1.4 system-ui, sans-serif; }
+nav.pager a[rel="next"] { text-align: right; margin-left: auto; }
+nav.toc ul { padding-left: 1.2em; }
+section.part > h1 { border-top: 3px double var(--rule); padding-top: 1rem; margin-top: 3rem; }
+section.works h3 { font-size: 1em; margin-bottom: .2rem; }
+@media (max-width: 52rem) {
+  .layout { display: block; }
+  #sidebar { position: static; height: auto; max-height: 45vh; border-right: 0; border-bottom: 1px solid var(--rule); }
+}

@@ -2,7 +2,7 @@
 
 - SECTION=water/flood-defenses-of-river-plain-villages-ring-dikes-and-refuge-mounds-waju-and-mizuka
 - RENDERING=rendering/water/how-our-maps-draw-flood-defenses-ring-dikes-and-refuge-mounds-waju-and-mizuka
-- OLD=research/water/440-what-did-a-river-plain-village-build-against-floods-and-where.html research/water/440-what-did-a-river-plain-village-build-against-floods-and-where.notes.html research/water/440-what-did-a-river-plain-village-build-against-floods-and-where.originals.html
+- OLD=research/water/ research/water/ research/water/
 - MODALS=
 - BASE=5710ad039
 

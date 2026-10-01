@@ -4,14 +4,14 @@
 
 - SECTION=cities/capitals/the-capitals-aqueduct-josui
 - RENDERING=rendering/cities/capitals/how-our-maps-draw-a-capitals-aqueduct-josui
-- OLD=research/cities/capitals/080-the-aqueduct-is-open-outside-the-wall-and-buried-inside-it---and-the-boundary-is-the-gate.html research/cities/capitals/180-the-aqueduct-supplies-the-city---the-moat-spill-was-a-drawing-artifact.html research/cities/capitals/230-how-a-josui-actually-ran.html
+- OLD=research/cities/capitals/ research/cities/capitals/ research/cities/capitals/
 - MODALS=
 
 ## Towpaths along a river (qiandao)
 
 - SECTION=cities/capitals/towpaths-along-a-river-qiandao
 - RENDERING=rendering/cities/capitals/how-our-maps-draw-a-towpath-along-a-river-qiandao
-- OLD=research/cities/capitals/130-a-river-gets-a-towpath-not-a-road---and-they-are-not-the-same-feature.html
+- OLD=research/cities/capitals/
 - MODALS=
 
 - BASE=b4403460a

@@ -4,14 +4,14 @@
 
 - SECTION=urban-features/fire-watch-towers-and-firefighting-gear-hinomi-yagura
 - RENDERING=rendering/urban-features/how-our-maps-draw-a-towns-fire-watch-and-fire-gear
-- OLD=research/urban-features/390-how-tall-is-a-fire-watch-tower-and-where-does-it-stand-in-a-town.html research/urban-features/400-what-did-a-town-keep-in-its-streets-against-fire-and-is-any-of-it-big-enough-to-draw.html research/urban-features/480-does-a-village-keep-a-fire-bell-a-fire-ladder-or-a-fire-pond.html research/towns/070-does-a-town-keep-a-fire-watch-tower.html research/cities/fabric/140-how-did-a-dense-wooden-city-watch-for-fire.html research/cities/fabric/143-why-does-an-unwalled-seat-draw-no-fire-tower.html research/cities/fabric/146-did-a-chinese-city-watch-for-fire-the-same-way.html
+- OLD=research/urban-features/ research/urban-features/ research/urban-features/ research/towns/ research/cities/fabric/ research/cities/fabric/ research/cities/fabric/
 - MODALS=l7r/diagram/interactive/compound_kinds/grounds.py l7r/diagram/interactive/compound_kinds/household.py l7r/diagram/interactive/compound_kinds/office.py
 
 ## Firebreaks (hiyokechi)
 
 - SECTION=urban-features/firebreaks-hiyokechi
 - RENDERING=rendering/urban-features/how-our-maps-leave-out-firebreaks-hiyokechi
-- OLD=research/cities/fabric/150-why-is-there-no-firebreak-on-these-maps.html
+- OLD=research/cities/fabric/
 - MODALS=
 
 - BASE=b4c91fae0

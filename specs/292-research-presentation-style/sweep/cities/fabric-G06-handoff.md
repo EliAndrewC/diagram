@@ -2,7 +2,7 @@
 
 - SECTION=cities/fabric/rich-merchants-walled-houses-and-their-fireproof-storehouses-kura
 - RENDERING=rendering/cities/fabric/how-our-maps-draw-a-merchants-walled-compound
-- OLD=research/cities/fabric/090-why-are-there-only-one-to-three-walled-merchant-compounds-in-a-city-of-three-thousand.html research/cities/fabric/220-how-big-is-a-rich-merchants-walled-house-and-how-is-it-laid-out.html research/cities/fabric/100-where-may-a-merchants-compound-wall-stand-on-dry-private-ground.html research/cities/fabric/230-how-many-fireproof-storehouses-stand-behind-a-street-and-where-on-the-lot.html
+- OLD=research/cities/fabric/ research/cities/fabric/ research/cities/fabric/ research/cities/fabric/
 - MODALS=
 - BASE=284803ee0
 

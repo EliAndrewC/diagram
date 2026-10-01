@@ -101,7 +101,7 @@ def test_a_heading_s_link_to_its_rendering_section_is_not_its_text():
 
 def test_the_prepass_reads_the_real_record():
     glossary = json.loads((REPO / rp.GLOSSARY).read_text(encoding="utf-8"))
-    listing = rp.prepass((SKILL / "research" / "ways.html").read_text(encoding="utf-8"), glossary)
+    listing = rp.prepass(rp.page_text(str(SKILL / "research"), "ways.html"), glossary)  # assembled in memory (feature 301)
     assert len(listing) >= 3 and any(s["items"] for s in listing), "non-vacuity: the real page yields sections and candidates"
 
 

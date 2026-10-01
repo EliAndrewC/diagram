@@ -4,7 +4,7 @@
 
 - SECTION=homesteads/farm-privies-and-their-night-soil-benjo
 - RENDERING=rendering/homesteads/how-our-maps-place-privies-benjo
-- OLD=research/homesteads/260-where-did-the-privy-stand-and-where-was-its-night-soil-kept.html research/homesteads/220-the-outhouse-faces-the-sun-not-away-from-the-wind---and-727-of-them-do.html research/homesteads/750-before-1868-was-a-farms-privy-a-building-of-its-own.html
+- OLD=research/homesteads/ research/homesteads/ research/homesteads/
 - MODALS=Privy ManureHeap ManurePit
 - BASE=b34c89387
 

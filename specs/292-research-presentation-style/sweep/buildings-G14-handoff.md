@@ -4,14 +4,14 @@
 
 - SECTION=buildings/verandas-and-storm-shutters-engawa-and-amado
 - RENDERING=rendering/buildings/how-our-maps-draw-verandas-and-shuttered-wings
-- OLD=research/buildings/240-which-faces-of-a-residence-carry-the-veranda-and-how-wide-is-it.html research/buildings/350-did-a-residence-keep-the-storm-shutters-shut-on-rooms-it-was-not-using.html
+- OLD=research/buildings/ research/buildings/
 - MODALS=Engawa ShutteredWing
 
 ## Kitchens (daidokoro)
 
 - SECTION=buildings/kitchens-daidokoro
 - RENDERING=rendering/buildings/how-our-maps-draw-the-kitchen
-- OLD=research/buildings/360-what-fire-did-a-residences-kitchen-cook-on---a-kamado-range-or-a-sunken-hearth.html research/buildings/370-how-many-doors-does-a-residences-kitchen-have-and-who-comes-in-by-them.html
+- OLD=research/buildings/ research/buildings/
 - MODALS=Kitchen Hearth Door
 
 - BASE=fec99b7dd

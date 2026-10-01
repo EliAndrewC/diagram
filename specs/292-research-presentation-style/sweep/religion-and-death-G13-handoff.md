@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/houses-and-shops-at-a-temples-gate-monzenmachi
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-the-houses-and-shops-at-a-temples-gate
-- OLD=research/religion-and-death/050-what-kind-of-shops-stand-at-a-temple-gate.html research/religion-and-death/310-how-many-houses-stand-at-a-temples-gate.html research/religion-and-death/320-does-a-temples-gate-have-shops-selling-its-amulets-and-incense.html research/religion-and-death/060-does-the-temple-forecourt-do-anything-the-map-cannot-show.html
+- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/
 - MODALS=
 - BASE=7e46e50da
 

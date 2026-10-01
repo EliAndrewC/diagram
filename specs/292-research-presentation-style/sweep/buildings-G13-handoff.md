@@ -2,7 +2,7 @@
 
 - SECTION=buildings/household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai
 - RENDERING=rendering/buildings/how-our-maps-decide-where-an-ancestral-alcove-is-drawn
-- OLD=research/buildings/270-where-does-the-butsuma-sit---by-the-zashiki-or-among-the-private-rooms.html research/buildings/130-an-ancestral-alcove-holding-office-predecessor-tablets-is-proper-only-at-a-lineage-held-posting.html research/buildings/280-whose-tablets-does-the-alcove-hold-when-a-post-passes-to-a-cousin.html
+- OLD=research/buildings/ research/buildings/ research/buildings/
 - MODALS=AncestralAlcove InnerRooms
 - BASE=738921c7f
 

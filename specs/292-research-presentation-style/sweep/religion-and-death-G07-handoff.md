@@ -4,14 +4,14 @@
 
 - SECTION=religion-and-death/wayside-shrines-and-stone-figures-dosojin-jizo
 - RENDERING=rendering/religion-and-death/how-our-maps-place-wayside-shrines
-- OLD=research/religion-and-death/520-how-many-wayside-shrines-does-a-village-or-a-towns-streets-carry-how-big-are-they-and-where-do-they-stand.html
+- OLD=research/religion-and-death/
 - MODALS=
 
 ## Shrines in towns and cities
 
 - SECTION=religion-and-death/shrines-in-towns-and-cities
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-a-towns-and-a-citys-shrines
-- OLD=research/religion-and-death/470-how-big-is-a-towns-own-shrine-and-does-a-city-keep-a-principal-shrine.html research/religion-and-death/595-how-big-is-a-small-shrine-in-a-town-and-what-stands-on-it.html
+- OLD=research/religion-and-death/ research/religion-and-death/
 - MODALS=
 
 - BASE=c32cafc21

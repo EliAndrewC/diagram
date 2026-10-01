@@ -5,8 +5,9 @@ WHY THIS IS GATED WHERE THE REPORT IS NOT. A modal that has drifted from its sec
 prose; a class pointing at a heading that no longer exists is not. It has no legitimate form, so it
 fires on exactly the thing it names, which is this project's bar for gating a rule at all.
 
-WHAT IT CATCHES. `interactive/sources.py` `research_questions()` matches an `Entry:` heading by prefix
-and returns `[]` when nothing matches - silently. The consequence is a "See references" list that goes
+WHAT IT CATCHES. `interactive/sources.py` `research_questions()` lists the questions an `Entry:` names - since feature
+301 by their FRAGMENT paths - and drops one that is not there, silently (before 301 it matched quoted headings by
+prefix, with the same silence). The consequence is a "See references" list that goes
 quietly empty on every map carrying that feature. `research/CLAUDE.md` already requires a rename to fix
 its inbound class entries; this is the mechanism that sentence never had.
 
@@ -15,7 +16,7 @@ declared silence. This enforces a rule with no current violation rather than fix
 later audit should not read it as a bug fix.
 
 THE ONE LEGITIMATE NON-MATCH is a section deliberately not written, in the form `fallow` already uses:
-`research/fields.html (no dedicated entry - recorded as silent)`. It is recognized EXPLICITLY, never by
+`research/fields/ (no dedicated entry - recorded as silent)`. It is recognized EXPLICITLY, never by
 the absence of a match, so a BROKEN heading and a DECLARED silence cannot be confused - and `make audit`
 enumerates every entry taking it, because a carve-out nobody can list is one nobody revisits.
 
@@ -53,9 +54,16 @@ def _load(root: Path):  # noqa: ANN202
     if skill not in sys.path:
         sys.path.insert(0, skill)
     from l7r.diagram.interactive.classes import CLASSES
-    from l7r.diagram.interactive.sources import research_questions
+    from l7r.diagram.interactive.sources import RESEARCH_DIR, entry_fragments
 
-    return CLASSES, research_questions
+    def unresolved(entry: str) -> list[str]:
+        """The fragments an entry names that the record does not hold - or the entry itself, when it names none."""
+        named = entry_fragments(entry)
+        if not named:
+            return [entry]
+        return [f"research/{d}/{n}" for d, n in named if not (Path(RESEARCH_DIR) / d / n).is_file()]
+
+    return CLASSES, unresolved
 
 
 def broken(root: Path) -> list[str]:
@@ -63,13 +71,14 @@ def broken(root: Path) -> list[str]:
     loaded = _load(root)
     if loaded is None:
         return []
-    classes, research_questions = loaded
+    classes, unresolved = loaded
     bad = []
     for key, fc in sorted(classes.items()):
         if SILENT.search(fc.entry):
             continue
-        if not research_questions(fc.entry):
-            bad.append(f"{key}: Entry: {fc.entry}")
+        missing = unresolved(fc.entry)
+        if missing:
+            bad.append(f"{key}: Entry names {', '.join(missing)}")
     return bad
 
 
@@ -78,19 +87,20 @@ def selftest() -> int:
     of its siblings at the push call site run one. Fires on a heading that does not exist; stays quiet on
     a real one; and does NOT let the declared-silence form swallow a broken heading."""
     root = Path(__file__).resolve().parent.parent
-    real = "research/archetypes.html - 'The dike-pond hamlet: its houses, boats and manure jars'"
+    real = "research/archetypes/170-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.html"
     # the FORM half always runs: telling a declared silence from a broken heading is this file's own
     # logic and owes nothing to the engine
-    assert SILENT.search("research/fields.html (no dedicated entry - recorded as silent)"), "the declared silence must be recognized"
+    assert SILENT.search("research/fields/ (no dedicated entry - recorded as silent)"), "the declared silence must be recognized"
     assert not SILENT.search(real), "a real entry must not read as a declared silence"
-    assert not SILENT.search("research/fields.html - 'A heading that does not exist at all'"), "a broken heading must not read as a declared silence"
+    assert not SILENT.search("research/fields/999-not-there.html"), "a broken pointer must not read as a declared silence"
     loaded = _load(root)
     if loaded is None:
         print("check-entry-headings selftest ok (form only - no diagram skill in this tree to resolve against)")
         return 0
-    _classes, research_questions = loaded
-    assert research_questions(real), "the checker cannot see a heading that exists - its matching surface is dead"
-    assert not research_questions("research/archetypes.html - 'A heading that does not exist at all'"), "a broken heading must resolve to nothing"
+    _classes, unresolved = loaded
+    assert not unresolved(real), "the checker cannot see a question that exists - its matching surface is dead"
+    assert unresolved("research/archetypes/999-a-question-that-does-not-exist.html"), "a broken pointer must be named"
+    assert unresolved("research/archetypes.html - 'a page and a heading, the form retired by feature 301'"), "an entry naming no fragment is broken"
     print("check-entry-headings selftest ok")
     return 0
 
@@ -101,10 +111,10 @@ def main(argv: list[str]) -> int:
     root = Path(argv[0] if argv else ".").resolve()
     bad = broken(root)
     if bad:
-        print("a class entry names a research heading that no longer resolves:", file=sys.stderr)
+        print("a class entry names a research question the record does not hold:", file=sys.stderr)
         for line in bad:
             print(f"  {line}", file=sys.stderr)
-        print("\nRename an anchor and you owe its inbound links - `research/CLAUDE.md` says so and this is what\nchecks it. Fix the `Entry:` tag, or restore the heading. A section deliberately not written is written\nas `research/<file>.html (no dedicated entry - recorded as silent)`.", file=sys.stderr)
+        print("\nRename an anchor and you owe its inbound links - `research/CLAUDE.md` says so and this is what\nchecks it. Fix the `Entry:` tag (`make fragment-move` rewrites it for you), or restore the question. A section deliberately not written is written\nas `research/<page>/ (no dedicated entry - recorded as silent)`.", file=sys.stderr)
         return 1
     return 0
 

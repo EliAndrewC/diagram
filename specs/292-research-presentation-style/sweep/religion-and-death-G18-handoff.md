@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-burial-grounds-in-towns-and-cities
-- OLD=research/religion-and-death/410-how-large-is-a-pauper-burial-ground-and-how-many-does-a-seat-keep.html research/religion-and-death/750-were-a-towns-and-a-citys-burial-grounds-that-size-before-modern-times.html research/religion-and-death/070-the-graveyard-ceiling-does-not-scale-with-temple-count.html research/cities/capitals/340-how-far-outside-the-wall-does-the-funerary-ground-sit.html
+- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/cities/capitals/
 - MODALS=
 - BASE=590cbd130
 

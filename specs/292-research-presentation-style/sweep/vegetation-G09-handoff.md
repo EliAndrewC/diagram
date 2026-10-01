@@ -4,7 +4,7 @@
 
 - SECTION=vegetation/sloping-ground-and-hillsides
 - RENDERING=rendering/vegetation/how-our-maps-show-that-the-ground-slopes
-- OLD=research/vegetation/160-how-does-a-flat-map-show-that-the-ground-slopes.html research/vegetation/160-how-does-a-flat-map-show-that-the-ground-slopes.notes.html
+- OLD=research/vegetation/ research/vegetation/
 - MODALS=
 - BASE=34da1bed7
 

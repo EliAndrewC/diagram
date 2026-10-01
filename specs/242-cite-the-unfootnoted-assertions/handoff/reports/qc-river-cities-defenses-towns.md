@@ -1,6 +1,6 @@
 # Quote check: `cities/river-cities.html`, `cities/defenses.html`, `towns.html` (feature 242 footnotes)
 
-Files read: `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/river-cities.html` + `/diagram/.clones/diagram-research/.claude/skills/diagram/research/citations/cities/river-cities.html`; `.../research/cities/defenses.html` + `.../research/citations/cities/defenses.html`; `.../research/towns.html` + `.../research/citations/towns.html`.
+Files read: `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/river-cities/` + `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/river-cities/`; `.../research/cities/defenses/` + `.../research/cities/defenses/`; `.../research/towns/` + `.../research/towns/`.
 
 Scope checked: river-cities fn-6, 17, 20-41; defenses fn-28-46; towns fn-27, 28, 29, 31, 32-45. 61 notes (51 citations, 10 absence notes). 54 distinct URLs, each fetched once by its own address. **No host refused.**
 

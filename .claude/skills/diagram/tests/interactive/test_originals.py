@@ -87,7 +87,12 @@ def test_a_placeholder_without_its_originals_file_or_its_entry_refuses_the_assem
 
 def test_the_record_tool_moves_originals_before_it_writes_and_its_check_reports_one_inline(tmp_path: pathlib.Path, capsys) -> None:  # noqa: ANN001
     rec = _page(tmp_path, '<li data-note="k">「A」 (translated from the Japanese by this project; original: 「甲」)</li>\n')
-    assert record_asset._check(str(rec)) == 1
-    assert "an original still inline" in capsys.readouterr().err
-    record_asset._write("", str(rec))
+    (rec / "p" / "_front.html").write_text('<main>\n<h1 id="p">P</h1>\n', encoding="utf-8")  # a part has its title (feature 301)
+    (rec / "p" / "_tail.html").write_text("</main>\n</body>\n</html>\n", encoding="utf-8")
+    (rec / "assets").mkdir()
+    for name in ("record.css", "record.js", "site.css", "site.js"):
+        (rec / "assets" / name).write_text("", encoding="utf-8")
+    assert record_asset._build(str(rec), str(rec / "site"), check=True) == 1
+    assert "an original is still inline" in capsys.readouterr().err
+    assert record_asset._build(str(rec), str(rec / "site"), check=False) == 0
     assert "moved the originals of 1 notes file(s)" in capsys.readouterr().out

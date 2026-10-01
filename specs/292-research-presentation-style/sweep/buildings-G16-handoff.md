@@ -4,7 +4,7 @@
 
 - SECTION=buildings/ornamental-gardens-ponds-and-stone-lanterns-teien
 - RENDERING=rendering/buildings/how-our-maps-draw-compound-gardens-ponds-and-lanterns
-- OLD=research/buildings/290-did-the-private-rooms-of-an-ordinary-posting-have-a-garden-of-their-own.html research/buildings/530-did-a-residence-garden-have-a-pond-and-did-a-county-post-keep-one.html research/buildings/540-where-did-a-stone-lantern-stand---in-the-garden-or-in-a-court-where-guests-were-received.html
+- OLD=research/buildings/ research/buildings/ research/buildings/
 - MODALS=CompoundGarden GardenPond StoneLantern
 
 - BASE=efcf420e6

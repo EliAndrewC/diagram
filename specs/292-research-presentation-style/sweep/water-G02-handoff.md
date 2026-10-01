@@ -4,7 +4,7 @@
 
 - SECTION=water/where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki
 - RENDERING=rendering/water/how-our-maps-draw-the-intake-and-its-weir
-- OLD=research/water/250-where-does-the-brook-stop-being-a-brook-and-become-the-ditch-at-an-intake-on-its-bank---and-the-brook-runs-on.html research/water/310-what-does-the-intake-mouth-look-like-and-what-decides-whether-a-weir-is-built.html research/water/253-is-there-a-weir-at-the-intake-some-hamlets-build-one-some-take-the-water-off-the-bare-bank.html research/water/256-where-on-the-brooks-bank-is-the-intake-and-how-far-is-it-to-the-fork.html research/water/300-what-was-a-village-weir-built-of-and-how-thick-was-it.html research/water/640-was-a-weir-of-stakes-and-woven-reed-only-a-modern-form-the-woven-stake-weir-is-ancient-its-reed-is-found-only-today.html
+- OLD=research/water/ research/water/ research/water/ research/water/ research/water/ research/water/
 - MODALS=IrrigationDitch Weir
 - BASE=484b7eb0c
 

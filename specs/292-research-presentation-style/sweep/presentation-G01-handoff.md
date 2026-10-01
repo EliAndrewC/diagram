@@ -2,7 +2,7 @@
 
 - SECTION=presentation/the-map-sheet-its-title-legend-frame-and-margins
 - RENDERING=none
-- OLD=research/presentation/010-why-is-there-no-legend-no-compass-and-no-caption-on-the-obvious.html research/presentation/020-how-is-the-map-framed-and-why-is-there-so-little-bare-ground-around-the-edge.html research/presentation/030-may-one-outlying-feature-make-the-whole-map-bigger.html
+- OLD=research/presentation/ research/presentation/ research/presentation/
 - MODALS=
 - BASE=bc2d135dd
 

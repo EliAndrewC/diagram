@@ -4,7 +4,7 @@
 
 - SECTION=homesteads/the-farmstead-and-what-stood-on-it-yashiki
 - RENDERING=rendering/homesteads/how-our-maps-choose-what-stands-on-a-farmstead
-- OLD=research/homesteads/140-what-stood-on-a-farmstead---the-inventory-with-numbers.html research/homesteads/145-what-else-stood-on-or-near-a-farmstead---wells-drying-racks-shrines-gates-and-stables.html research/homesteads/720-what-stood-on-a-farmstead-before-1868-and-how-many-farms-had-each-building.html research/homesteads/210-the-farmsteads-fixtures---privy-woodpile-manure-heap-bath-coop-household-shrine-persimmon.html research/homesteads/480-what-marked-the-edge-of-a-farmstead-a-hedge-a-wall-a-bank-or-its-own-buildings.html
+- OLD=research/homesteads/ research/homesteads/ research/homesteads/ research/homesteads/ research/homesteads/
 - MODALS=BathRoom Byre Farmhouse HenCoop HouseholdShrine ManureHeap Persimmon Privy StorageShed WoodShed
 - BASE=eef759c69
 

@@ -4,7 +4,7 @@
 
 - SECTION=buildings/the-formal-entrance-and-a-guests-arrival-genkan
 - RENDERING=rendering/buildings/how-our-maps-route-a-guest-from-the-gate-to-the-entrance
-- OLD=research/buildings/300-where-is-the-formal-entrance-and-how-does-a-guest-reach-it.html research/buildings/500-how-did-a-guest-of-rank-arrive-from-the-gate-to-the-entrance.html research/buildings/120-guest-doors-feed-courts-not-flanks.html
+- OLD=research/buildings/ research/buildings/ research/buildings/
 - MODALS=BorderCourt CompoundGarden Door GardenPond Genkan GuestQuarters Kitchen MainGate Residence SideGate
 - BASE=f3b30e41b
 

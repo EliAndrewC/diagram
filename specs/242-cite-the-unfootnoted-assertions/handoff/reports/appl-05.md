@@ -1,4 +1,4 @@
-All 17 sources opened and read; no host refused. Registry entries are at `/diagram/.clones/diagram-research/.claude/skills/diagram/research/SOURCES.html` lines 2100-2184 (the feature-242 block).
+All 17 sources opened and read; no host refused. Registry entries are at `/diagram/.clones/diagram-research/.claude/skills/diagram/research/sources/` lines 2100-2184 (the feature-242 block).
 
 ## NOT-APPLICABLE
 

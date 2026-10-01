@@ -25,6 +25,7 @@ printf '<h2 id="w">W</h2>\nthe ward wall stands\n' > "$R/cities/fabric/010-w.htm
 printf 'assembled\n' > "$R/ways.html"; printf 'assembled\n' > "$R/citations/ways.html"
 printf 'assembled\n' > "$R/cities/fabric.html"; printf 'assembled\n' > "$R/citations/cities/fabric.html"
 printf 'whole, not split yet\n' > "$R/towns.html"
+mkdir -p "$R/site/ways"; printf 'the deck lands ten feet past the bank\n' > "$R/site/ways/x.html"; cp "$R/site/ways/x.html" "$R/site/all.html"
 
 ok() { echo "  ok      $1"; PASS=$((PASS+1)); }
 no() { echo "  FAIL    $1 ${2:-}"; FAIL=$((FAIL+1)); }
@@ -52,6 +53,12 @@ edit Edit "$R/cities/fabric.html" "the ward wall stands"
 edit Edit "$R/citations/cities/fabric.html" "the ward wall stands"
 [ "$(rewrote_to)" = "$R/cities/fabric/010-w.html" ] && ok "a cities/ citations page resolves to the same directory" \
   || no "a cities/ citations page resolves to the same directory" "to=$(rewrote_to)"
+edit Edit "$R/site/ways/x.html" "ten feet past the bank"
+[ "$(rewrote_to)" = "$R/ways/010-x.html" ] && ok "a small page of the built site -> its question fragment (feature 301)" \
+  || no "a small page of the built site -> its question fragment" "to=$(rewrote_to)"
+edit Edit "$R/site/all.html" "ten feet past the bank"
+[ "$(rewrote_to)" = "$R/ways/010-x.html" ] && ok "the single page -> the one fragment holding it, the site itself never a holder" \
+  || no "the single page -> the one fragment holding it" "to=$(rewrote_to)"
 logged edit-moved-to-fragment && ok "the rewrite is recorded" || no "the rewrite is recorded"
 
 echo "2. what is refused, because a guard cannot make the choice"

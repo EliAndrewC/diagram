@@ -4,7 +4,7 @@
 
 - SECTION=ways/village-boundaries-and-their-markers-murazakai
 - RENDERING=rendering/ways/how-our-maps-mark-where-a-village-begins
-- OLD=research/ways/110-where-does-a-village-begin-and-what-marks-it-a-boundary-god-where-each-road-meets-the-houses.html research/ways/120-where-does-one-village-end-and-the-next-begin-a-line-on-the-survey-seldom-marked-on-the-ground.html research/vegetation/330-did-a-village-keep-a-great-old-tree-at-its-entrance-an-enoki-beside-the-boundary-shrine-and-one-on-each-highway-milestone-mound.html
+- OLD=research/ways/ research/ways/ research/vegetation/
 - MODALS=
 - BASE=768f4f8a8
 

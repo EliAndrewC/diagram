@@ -2,7 +2,7 @@
 
 - SECTION=archetypes/dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang
 - RENDERING=rendering/archetypes/how-our-maps-draw-a-dike-pond-block
-- OLD=research/archetypes/140-the-64-water-to-dike-ratio-and-coppiced-mulberry.html research/archetypes/610-was-a-dike-pond-blocks-split-of-water-and-dike-written-down-before-modern-times-not-as-a-ratio---one-townships-land-shares-only.html research/archetypes/150-a-dike-pond-is-fed-and-drained-through-sluice-gates.html
+- OLD=research/archetypes/ research/archetypes/ research/archetypes/
 - MODALS=FishPond MulberryDike PondCanal SluiceGate
 - BASE=5d56f0936
 

@@ -4,21 +4,21 @@
 
 - SECTION=buildings/vegetable-gardens-at-a-samurai-residence-saien
 - RENDERING=rendering/buildings/how-our-maps-place-the-vegetable-garden-in-the-sun
-- OLD=research/buildings/400-where-did-a-residence-keep-its-vegetable-garden-and-how-big-was-it.html research/buildings/405-where-does-a-walled-compound-keep-its-vegetable-garden-and-does-the-sun-decide-it.html
+- OLD=research/buildings/ research/buildings/
 - MODALS=VegetableGarden Storehouse
 
 ## Detached studies (shosai)
 
 - SECTION=buildings/detached-studies-shosai
 - RENDERING=rendering/buildings/how-our-maps-draw-a-detached-study
-- OLD=research/buildings/600-did-a-study-ever-stand-apart-in-the-garden-as-a-building-of-its-own.html
+- OLD=research/buildings/
 - MODALS=WritingPavilion
 
 ## The chief retainer's house (karō yashiki)
 
 - SECTION=buildings/the-chief-retainers-house-karo-yashiki
 - RENDERING=rendering/buildings/how-our-maps-house-the-chief-retainer
-- OLD=research/buildings/340-where-does-the-chief-retainer-live---inside-the-compound-or-in-a-house-of-their-own.html
+- OLD=research/buildings/
 - MODALS=KarosHouse
 
 - BASE=953f7d5ad

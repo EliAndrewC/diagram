@@ -93,6 +93,22 @@ __pycache__
 .claude/skills/diagram/dev/placement-stages/
 .claude/skills/diagram/pool/index.html
 
+# THE RESEARCH RECORD'S BUILT PAGES (feature 301, GM 2026-10-01: "we should definitely stop checking the assembled
+# files into source control"). The record is its fragments under research/<page>/; `make record` builds the site from
+# them into research/site/, and render-sync builds it on the main checkout as it does the map renders. The rest are the
+# paths the assembly wrote before 301 - the per-page files, the citations pages and their scripts, the glossary script -
+# ignored so a stale copy left in a working tree is never committed again. Only a page FILE beside the fragment
+# directories is ignored (research/<page>.html, one level down for a collection): the fragments themselves live INSIDE
+# those directories and stay tracked.
+.claude/skills/diagram/research/site/
+.claude/skills/diagram/research/.site-*/
+.claude/skills/diagram/research/*.html
+.claude/skills/diagram/research/cities/*.html
+.claude/skills/diagram/research/rendering/*.html
+.claude/skills/diagram/research/rendering/cities/*.html
+.claude/skills/diagram/research/citations/
+.claude/skills/diagram/research/assets/glossary.js
+
 # Spoiler-sensitive /dream scenes: the local tier is the GM's disk only, never committed.
 # The public tier (.claude/skills/dream/pool/) stays tracked; see that skill's SKILL.md.
 .claude/skills/dream/pool-local/

@@ -3,13 +3,13 @@
 ## The city jail (roya)
 - SECTION=cities/government/the-city-jail-roya
 - RENDERING=rendering/cities/government/how-our-maps-place-and-draw-the-city-jail-roya
-- OLD=research/cities/government/240-where-does-a-city-keep-its-jail.html
+- OLD=research/cities/government/
 - MODALS=
 
 ## The samurai quarter: where a city's samurai live, and how many (bukechi)
 - SECTION=cities/government/the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi
 - RENDERING=rendering/cities/government/how-our-maps-place-and-count-a-citys-samurai-households
-- OLD=research/cities/government/030-where-do-a-citys-samurai-live-and-how-many-of-them-are-drawn.html research/cities/sizing/030-how-many-of-a-citys-samurai-live-inside-its-wall.html research/cities/government/090-samurai-and-commoner-ground-were-zoned-apart-by-law.html
+- OLD=research/cities/government/ research/cities/sizing/ research/cities/government/
 - MODALS=
 
 - BASE=418be8111

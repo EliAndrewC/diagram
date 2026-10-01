@@ -112,4 +112,4 @@ All 25 sources were opened and read; no host refused.
 
 Hosts that refused: none. All 25 URLs were fetched and read on the first attempt (kotobank.jp x5, zh.wikipedia.org x7, ja.wikipedia.org x6, en.wikipedia.org x5, zh.wikisource.org x2).
 
-Registry read: `/diagram/.clones/diagram-research/.claude/skills/diagram/research/SOURCES.html` (entries at lines 1975-2099). Nothing was edited.
+Registry read: `/diagram/.clones/diagram-research/.claude/skills/diagram/research/sources/` (entries at lines 1975-2099). Nothing was edited.

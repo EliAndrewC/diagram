@@ -2,7 +2,7 @@
 
 - SECTION=cities/defenses/city-walls-a-closed-ring-with-few-gates-and-its-shape-chengqiang
 - RENDERING=rendering/cities/defenses/how-our-maps-draw-a-citys-wall-chengqiang
-- OLD=research/cities/defenses/010-does-the-city-wall-close-a-full-ring---and-why-so-few-gates.html research/cities/capitals/150-wall-geometry-rectangles-and-terrain-loops---the-circle-is-the-form-both-anchors-decline.html research/cities/capitals/155-why-do-east-asian-walls-keep-their-corners-and-where-were-the-round-ones.html
+- OLD=research/cities/defenses/ research/cities/capitals/ research/cities/capitals/
 - MODALS=
 - BASE=659ec490f
 

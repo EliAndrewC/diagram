@@ -9,7 +9,7 @@ import pathlib
 import pytest
 
 from l7r.diagram.interactive.record import store, xref
-from l7r.diagram.interactive.sources import COLLECTIONS, RESEARCH_DIR, collection_pages
+from l7r.diagram.interactive.sources import COLLECTIONS, RESEARCH_DIR, collection_pages, record_text
 
 
 def _record(tmp: pathlib.Path, about: str = "homesteads.html#groves") -> pathlib.Path:
@@ -68,12 +68,12 @@ def test_a_record_with_no_rendering_collection_has_no_pairs(tmp_path: pathlib.Pa
 def test_the_record_s_collections_are_listed_from_one_place(tmp_path: pathlib.Path) -> None:
     """`sources.COLLECTIONS` is the one list; every reader of the record takes its pages from it."""
     assert COLLECTIONS == ("cities", "rendering", "rendering/cities")
-    for c in COLLECTIONS:
-        (tmp_path / c).mkdir()
-    (tmp_path / "rendering" / "b.html").write_text("", encoding="utf-8")
-    (tmp_path / "rendering" / "cities" / "c.html").write_text("", encoding="utf-8")
-    (tmp_path / "cities" / "a.html").write_text("", encoding="utf-8")
-    (tmp_path / "cities" / "notes.txt").write_text("", encoding="utf-8")
+    # feature 301: a page is its fragment directory, marked by `_front.html` - never a `<name>.html` beside it
+    for d in ("cities/a", "rendering/b", "rendering/cities/c"):
+        (tmp_path / d).mkdir(parents=True)
+        (tmp_path / d / "_front.html").write_text("", encoding="utf-8")
+    (tmp_path / "cities" / "stale.html").write_text("", encoding="utf-8")
+    (tmp_path / "cities" / "empty").mkdir()
     assert collection_pages(str(tmp_path)) == ["cities/a.html", "rendering/b.html", "rendering/cities/c.html"]
     assert collection_pages(str(tmp_path / "no-record-here")) == []
     assert "rendering/homesteads.html" in store.record_pages(RESEARCH_DIR)
@@ -81,8 +81,8 @@ def test_the_record_s_collections_are_listed_from_one_place(tmp_path: pathlib.Pa
 
 def test_the_committed_grove_sections_link_each_other() -> None:
     """The pilot's pair, on the committed pages: the research section links its rendering section and back."""
-    research = pathlib.Path(RESEARCH_DIR, "homesteads.html").read_text(encoding="utf-8")
-    rendering = pathlib.Path(RESEARCH_DIR, "rendering", "homesteads.html").read_text(encoding="utf-8")
+    research = record_text("homesteads.html")
+    rendering = record_text("rendering/homesteads.html")
     assert 'href="rendering/homesteads.html#how-our-maps-draw-groves-of-trees-around-farmhouses-yashikirin">How it\'s drawn' in research
     assert 'href="../homesteads.html#groves-of-trees-around-farmhouses-yashikirin">The history behind it' in rendering
 

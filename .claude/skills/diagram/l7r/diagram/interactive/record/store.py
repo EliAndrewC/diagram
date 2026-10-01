@@ -19,7 +19,7 @@ from l7r.diagram.interactive.record import fragments as frag
 from l7r.diagram.interactive.record.assemble import assemble
 from l7r.diagram.interactive.record.notes import allocate, merge, notes_of, number_references
 from l7r.diagram.interactive.record.split import Entry, Page, Section, split
-from l7r.diagram.interactive.sources import RESEARCH_DIR, collection_pages
+from l7r.diagram.interactive.sources import RESEARCH_DIR, collection_pages, is_page_dir, page_rel_of
 
 #: The registry is the one page whose sections hold entries of their own - 920 of them.
 REGISTRY = "SOURCES.html"
@@ -31,10 +31,11 @@ class RecordError(Exception):
 
 
 def record_pages(record_dir: str = RESEARCH_DIR) -> list[str]:
-    """Every hand-authored page, as a path relative to the record: the registry, the research pages,
-    and the `cities/` ones. The citations pages are not here - they are assembled beside their
-    research page, from the same directory (stage 3)."""
-    top = sorted(f for f in os.listdir(record_dir) if f.endswith(".html"))
+    """Every page of the record, as a path relative to it: the registry, the research pages, and the collections'.
+    The citations pages are not here - they are assembled beside their research page, from the same directory
+    (stage 3). Feature 301: a page is found by its FRAGMENT DIRECTORY, because the assembled pages are no longer on
+    disk - they are built (`record/site.py`), never committed."""
+    top = sorted(page_rel_of(d) for d in os.listdir(record_dir) if is_page_dir(os.path.join(record_dir, d)))
     return top + collection_pages(record_dir)
 
 
@@ -90,25 +91,6 @@ def read_fragments(page_rel: str, record_dir: str = RESEARCH_DIR) -> Page:
             text = fh.read()
         sections.append(Section(id=_id_of(name), text=text, entries=_entries(where, root, name)))
     return Page(front=front, sections=tuple(sections), tail=tail)
-
-
-def check(record_dir: str = RESEARCH_DIR) -> list[str]:
-    """Every committed file whose bytes differ from what the fragments would make.
-
-    The citations page is compared carrying the works region it already has: that region is
-    `make citations`' to derive and `tests/interactive/test_citations.py`'s to hold equal to its
-    source, and re-deriving it here would mean writing a page to disk, which a check does not do.
-    """
-    stale = []
-    for page_rel in record_pages(record_dir):
-        if not os.path.isdir(os.path.join(record_dir, frag.page_dir(page_rel))):
-            continue  # not split yet - a stage that has not landed
-        research, citations = assemble_pages(page_rel, record_dir)
-        if _read(os.path.join(record_dir, page_rel)) != research:
-            stale.append(page_rel)
-        if citations is not None and _read(os.path.join(record_dir, cite.citations_rel(page_rel))) != citations:
-            stale.append(cite.citations_rel(page_rel))
-    return stale
 
 
 def _write(record_dir: str, where: str, name: str, text: str) -> str:
@@ -245,23 +227,26 @@ def read_notes(page_rel: str, record_dir: str = RESEARCH_DIR) -> dict[str, str]:
 
 
 def assemble_pages(page_rel: str, record_dir: str = RESEARCH_DIR) -> tuple[str, str | None]:
-    """(the research page, the citations page) as the fragments make them.
+    """(the research page, the citations page) as the fragments make them, entirely in memory.
 
-    The citations page carries the works region the committed page carries; `write_pages` is what
-    re-derives it, because the derivation reads a page from disk and this function writes nothing.
+    The citations page's works block is derived here from the assembled page and the registry (feature 301: nothing
+    is read back from disk, because nothing assembled is committed any more). The registry is itself a page of the
+    record, assembled the same way; it has no notes, so asking for it never asks for a citations page.
     """
+    from l7r.diagram.interactive.citations import fill_works  # noqa: PLC0415 - citations imports the sources module, as this does
+
     research = _cross_linked(assemble(read_fragments(page_rel, record_dir)), page_rel, record_dir)
     if not has_notes(page_rel, record_dir):
         return research, None
-    stripped, placed = allocate(research, read_notes(page_rel, record_dir), page_rel)
+    _stripped, placed = allocate(research, read_notes(page_rel, record_dir), page_rel)
     research = number_references(research, placed, cite.citations_href(page_rel))
     where = os.path.join(record_dir, frag.page_dir(page_rel))
     parts = []
     for name in (frag.CITATIONS_FRONT, frag.CITATIONS_MID, frag.CITATIONS_TAIL):
         with open(os.path.join(where, name), encoding="utf-8") as fh:
             parts.append(fh.read())
-    committed = _read(os.path.join(record_dir, cite.citations_rel(page_rel))) or ""
-    page = cite.assemble_citations(parts[0], cite.works_region(committed), parts[1], placed, parts[2], cite.page_href(page_rel))
+    page = cite.assemble_citations(parts[0], cite.works_region(""), parts[1], placed, parts[2], cite.page_href(page_rel))
+    page, _missing = fill_works(page_rel, page, record_dir)
     return research, page
 
 
@@ -284,26 +269,6 @@ def _confusables(page_html: str, page_rel: str, record_dir: str) -> str:
     if bad:
         raise RecordError(f"{confusables.DATA} names a section that does not exist:\n  " + "\n  ".join(bad))
     return confusables.write(page_html, page_rel, mine, record_dir)
-
-
-def write_pages(page_rel: str, record_dir: str = RESEARCH_DIR) -> int:
-    """Write both of a page's committed files, re-deriving the works block from the assembled page.
-
-    Two passes, in this order, so that `citations.py` reads a PAGE and never a fragment (FR-029):
-    the citations page goes to disk with the works region as it stands, `derive()` reads it there,
-    and the page is written again with the region filled - along with the hover script beside it.
-    """
-    from l7r.diagram.interactive.citations import derive, script_path  # noqa: PLC0415 - one call site
-
-    research, citations = assemble_pages(page_rel, record_dir)
-    written = _write_if_changed(os.path.join(record_dir, page_rel), research)
-    if citations is None:
-        return written
-    written += _write_if_changed(os.path.join(record_dir, cite.citations_rel(page_rel)), citations)
-    js, html, _ = derive(page_rel, record_dir)
-    written += _write_if_changed(os.path.join(record_dir, cite.citations_rel(page_rel)), html)
-    written += _write_if_changed(os.path.join(record_dir, script_path(page_rel)), js)
-    return written
 
 
 def _write_if_changed(path: str, text: str) -> int:

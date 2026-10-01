@@ -1,6 +1,6 @@
 # Research - feature 279
 
-The research itself is on the record: `research/religion-and-death/129-what-shape-is-a-village-shrines-wood-and-on-which-sides-of-the-hall-does-it-stand.html`
+The research itself is on the record: `research/religion-and-death/`
 (its sources, checks and reader reports as run 2026-09-28). This file holds only what the spec measures.
 
 ## R1 - the grove as drawn before this feature

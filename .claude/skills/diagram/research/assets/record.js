@@ -118,7 +118,28 @@
     });
   }
   collapseOriginals(document.body);
-  wrapGlossary(document.querySelector('main') || document.body, true);
+  // THE SINGLE PAGE WRAPS AS IT IS READ (feature 301): the whole record on one page holds tens of thousands of terms,
+  // and wrapping them all at load measured 4.1 s on top of a 6.7 s load (research R8). There each heading's run - the
+  // heading and its siblings up to the next heading - is wrapped when it comes within a few screens, so a reader meets
+  // the same hover with no wait. Every other page is wrapped whole, as before.
+  var main = document.querySelector('main') || document.body;
+  if (document.body.hasAttribute('data-lazy-glossary') && 'IntersectionObserver' in window) {
+    var isList = function (n) { return n.tagName === 'OL' && n.parentNode && n.parentNode.classList.contains('footnotes'); };
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) { return; }
+        io.unobserve(e.target);
+        var n = e.target;
+        if (n.tagName === 'LI') { wrapGlossary(n, true); return; }  // a note of the Citations part, one at a time
+        // a run ends at the next heading, or at an element holding headings of its own (a part's <section>, the
+        // contents); the Citations part's list is left to its notes, each observed on its own
+        do { if (!isList(n)) { wrapGlossary(n, true); } n = n.nextElementSibling; } while (n && !/^H[123]$/.test(n.tagName) && !n.querySelector('h1, h2, h3'));
+      });
+    }, { rootMargin: '2000px 0px' });
+    main.querySelectorAll('h1, h2, h3, section.footnotes > ol > li').forEach(function (h) { io.observe(h); });
+  } else {
+    wrapGlossary(main, true);
+  }
   tip.addEventListener('mouseenter', keep);
   tip.addEventListener('mouseleave', hideSoon);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { keep(); tip.hidden = true; } });

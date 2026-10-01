@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/village-shrines-where-they-stand-and-how-big-their-grounds-are
 - RENDERING=rendering/religion-and-death/how-our-maps-site-and-size-a-village-shrine
-- OLD=research/religion-and-death/100-where-does-a-village-put-its-shrine-and-how-big-is-it.html research/religion-and-death/124-how-large-was-a-village-shrines-precinct-and-how-much-of-it-was-built-on.html research/religion-and-death/125-do-the-shrine-registers-give-an-edo-precincts-size.html research/religion-and-death/760-was-a-village-shrines-precinct-that-size-before-modern-times.html research/archetypes/260-did-a-hamlet-have-a-shrine-of-its-own.html
+- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/archetypes/
 - MODALS=ShrineGrove
 - BASE=71e93bb5c
 

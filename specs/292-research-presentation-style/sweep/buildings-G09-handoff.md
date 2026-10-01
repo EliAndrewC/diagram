@@ -2,7 +2,7 @@
 
 - SECTION=buildings/the-granary-and-the-tax-rice-gokura
 - RENDERING=rendering/buildings/how-our-maps-draw-the-granary
-- OLD=research/buildings/080-the-granary-is-a-staging-node-not-the-terminal-store.html research/buildings/150-the-granary-holds-grain-not-just-rice.html research/buildings/410-did-a-granary-stand-on-posts-and-why-raise-its-floor-away-from-a-river.html research/buildings/730-how-big-was-an-offices-grain-storehouse-and-where-did-a-countys-tax-rice-wait.html research/buildings/740-where-did-a-provincial-city-keep-its-tax-rice-and-how-many-storehouses-did-it-take.html
+- OLD=research/buildings/ research/buildings/ research/buildings/ research/buildings/ research/buildings/
 - MODALS=Granary GranaryStilts River RiverLanding TallyOffice TaxBarge
 - BASE=645ff7235
 

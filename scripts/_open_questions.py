@@ -266,7 +266,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     root = args.root.resolve()
     classes, research_questions, question_text = _engine(root)
     qs = questions(root)
-    entries = {k: [q["url"].rsplit("#", 1)[1] for q in research_questions(fc.entry)] for k, fc in classes.items()}
+    # a question's link is its small page in the record's site, named for its anchor (feature 301)
+    entries = {k: [q["url"].rsplit("/", 1)[1].removesuffix(".html") for q in research_questions(fc.entry)] for k, fc in classes.items()}
     routes = class_routes(entries, qs)
     names = tracked(root)
     engine = {rel: (root / SKILL / rel).read_text(encoding="utf-8") for rel in names if rel.startswith("l7r/") and rel.endswith(".py")}

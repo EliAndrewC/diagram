@@ -4,7 +4,7 @@
 
 - SECTION=cities/defenses/towers-along-the-city-wall-mamian
 - RENDERING=rendering/cities/defenses/how-our-maps-space-and-draw-wall-towers
-- OLD=research/cities/defenses/060-wall-towers---the-mamian-system-and-bowshot-ranges.html research/cities/defenses/070-why-are-the-wall-towers-rectangular-and-never-round.html research/cities/defenses/120-how-far-does-an-archer-on-the-wall-reach.html research/cities/defenses/110-did-a-city-that-had-seen-war-carry-more-towers.html
+- OLD=research/cities/defenses/ research/cities/defenses/ research/cities/defenses/ research/cities/defenses/
 - MODALS=
 
 - BASE=327bb1ad6

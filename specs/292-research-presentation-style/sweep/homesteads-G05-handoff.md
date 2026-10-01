@@ -3,7 +3,7 @@
 ## Draft oxen and horses and their byres (umaya)
 - SECTION=homesteads/draft-oxen-and-horses-and-their-byres-umaya
 - RENDERING=rendering/homesteads/how-our-maps-draw-and-place-byres-umaya
-- OLD=research/homesteads/460-did-a-farm-plow-with-an-ox-or-a-horse-it-depended-on-the-region.html research/homesteads/070-how-big-is-a-draft-animal-byre-and-what-stands-in-it.html research/homesteads/300-where-did-a-villages-draft-ox-stand---in-a-shared-shed-on-the-commons-or-at-the-village-edge.html research/homesteads/060-may-a-byre-stand-beside-a-wellhead.html
+- OLD=research/homesteads/ research/homesteads/ research/homesteads/ research/homesteads/
 - MODALS=Byre
 
 - BASE=fff73f274

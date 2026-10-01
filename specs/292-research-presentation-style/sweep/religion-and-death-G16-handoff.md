@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/village-burial-grounds-bochi
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-village-burial-grounds
-- OLD=research/religion-and-death/160-how-much-ground-does-a-village-burial-ground-need-and-whose-dead-lie-in-it.html research/religion-and-death/270-how-far-from-its-houses-does-a-village-bury-its-dead-and-on-which-side.html research/religion-and-death/180-how-far-from-water-does-a-burial-ground-lie.html research/religion-and-death/206-how-much-ground-does-a-grave-take-and-how-large-is-a-burial-ground-drawn.html research/religion-and-death/150-burial-ground-shape---japan-organic-china-surveyed.html research/religion-and-death/700-did-six-stone-jizo-stand-at-a-graveyard-or-a-cremation-ground-before-modern-times.html
+- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/
 - MODALS=BurialGround
 - BASE=50fe3ef84
 

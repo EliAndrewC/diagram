@@ -252,6 +252,10 @@ push_cmd() {
   # the breakage as an inherited red on the next session's unrelated work. Selftest first, same reason.
   python3 "$ROOT/scripts/check-entry-headings.py" --selftest >/dev/null || die "check-entry-headings selftest failed - the guard itself is broken; fix scripts/check-entry-headings.py before pushing"
   python3 "$ROOT/scripts/check-entry-headings.py" "$ROOT" || die "a class entry names a research heading that no longer resolves (above) - a rename owes its inbound links, feature 234"
+  # GUARD_EDIT_OK: feature 301 FR-014 - every pointer to the research names a fragment that exists, and no pointer names a
+  # built page; here as well as at the gate because a docs-only or spec-only delta takes the DIRECT route. Selftest first.
+  python3 "$ROOT/scripts/check-research-pointers.py" --selftest >/dev/null || die "check-research-pointers selftest failed - the guard itself is broken; fix scripts/check-research-pointers.py before pushing"
+  python3 "$ROOT/scripts/check-research-pointers.py" "$ROOT" || die "a pointer to the research does not resolve, or names a built page (above) - feature 301; \`make fragment-move\` moves a fragment with its pointers"
   "$ROOT/scripts/entry-gate.sh" || exit 1
   # GUARD_EDIT_OK: feature 258 - the record's assembly check runs HERE as well as at the gate, and for
   # the reason entry-gate.sh is also in both places: a record-only change takes the DIRECT route, where
@@ -260,8 +264,11 @@ push_cmd() {
   # ...where there IS a record to check. A test fixture is a bare git tree with no skill in it, and a
   # check that fails on the absence of the thing it checks is a check that fails everywhere else.
   if [ -d "$ROOT/.claude/skills/diagram/research/sources" ]; then
+    # GUARD_EDIT_OK: feature 301 - the same call, a new meaning: nothing assembled is committed any more, so CHECK
+    # builds the whole site in memory and fails on a refusal (a link that lands nowhere, an id used twice, a note
+    # nothing cites, a cited work with no write-up). The record still owes it at the push for the reason above.
     ( cd "$ROOT/.claude/skills/diagram" && make --no-print-directory record CHECK=1 >/dev/null ) \
-      || die "a committed record page differs from what its fragments would assemble (run \`make record\` in .claude/skills/diagram, then commit) - feature 258, spec FR-004"
+      || die "the record does not build cleanly (above; \`make record CHECK=1\` in .claude/skills/diagram names each refusal) - features 258 and 301"
     # GUARD_EDIT_OK: feature 259 - the glossary is assembled from per-term files now, and takes the
     # DIRECT route for the same reason the record does: a definition edit touches no engine code.
     ( cd "$ROOT/.claude/skills/diagram" && make --no-print-directory glossary CHECK=1 >/dev/null ) \

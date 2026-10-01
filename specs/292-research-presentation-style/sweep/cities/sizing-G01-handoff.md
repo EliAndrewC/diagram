@@ -3,13 +3,13 @@
 ## How big a city's wall is for its population, and how many live outside it
 - SECTION=cities/sizing/how-big-a-citys-wall-is-for-its-population-and-how-many-live-outside-it
 - RENDERING=rendering/cities/sizing/how-our-maps-size-a-citys-wall-to-its-population
-- OLD=research/cities/sizing/010-how-big-is-a-citys-wall-for-the-population-inside-it.html research/cities/capitals/320-how-much-of-a-capital-lives-outside-the-walls.html
+- OLD=research/cities/sizing/ research/cities/capitals/
 - MODALS=
 
 ## How densely a city is built, and what counts as empty ground
 - SECTION=cities/sizing/how-densely-a-city-is-built-and-what-counts-as-empty-ground
 - RENDERING=rendering/cities/sizing/how-our-maps-fill-a-citys-quarters-and-leave-its-empty-ground
-- OLD=research/cities/sizing/020-how-densely-is-a-quarter-built-and-what-counts-as-empty-ground.html research/cities/fabric/030-a-county-seats-street-share-open-reserve-and-civic-share.html
+- OLD=research/cities/sizing/ research/cities/fabric/
 - MODALS=
 
 - BASE=4e4a7fc2d

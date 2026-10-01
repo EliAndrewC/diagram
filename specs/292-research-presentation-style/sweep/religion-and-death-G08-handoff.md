@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/village-temples-tera
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-a-village-temple
-- OLD=research/religion-and-death/500-does-a-village-keep-a-buddhist-temple-of-its-own.html research/religion-and-death/510-how-big-is-a-village-temples-precinct-what-stands-in-it-and-where-does-it-sit.html
+- OLD=research/religion-and-death/ research/religion-and-death/
 - MODALS=
 
 - BASE=fde4ed06c

@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/how-many-temples-a-city-keeps-and-its-temple-quarter-teramachi
 - RENDERING=rendering/religion-and-death/how-our-maps-place-a-citys-temples-and-its-temple-quarter
-- OLD=research/religion-and-death/020-many-modest-temples-per-walled-city-is-the-historical-norm.html research/religion-and-death/590-how-big-is-a-temple-in-a-temple-quarter-and-how-do-the-temples-line-the-street.html research/cities/capitals/200-why-the-temples-belt-the-wall-instead-of-clustering-in-a-temple-quarter.html research/cities/capitals/260-temple-approaches-face-their-street-and-the-modest-temples-have-patrons.html research/cities/government/020-what-stands-between-the-temples-in-a-temple-neighborhood.html
+- OLD=research/religion-and-death/ research/religion-and-death/ research/cities/capitals/ research/cities/capitals/ research/cities/government/
 - MODALS=
 - BASE=9d2b39242
 

@@ -2,7 +2,7 @@
 
 - SECTION=archetypes/polders-fields-diked-against-the-fluctuating-water-weitian-waju
 - RENDERING=rendering/archetypes/how-our-maps-draw-a-polder-and-its-water
-- OLD=research/archetypes/160-polder-siting---full-enclosure-fluctuating-water-and-where-the-village-sits.html research/archetypes/130-grid-vs-mosaic---the-arrangement-differed-by-system.html research/archetypes/110-the-ring-canal-runs-on-the-inner-toe---一河围田.html research/archetypes/340-how-did-a-polder-get-rid-of-its-water-and-what-shows-of-it.html
+- OLD=research/archetypes/ research/archetypes/ research/archetypes/ research/archetypes/
 - MODALS=PerimeterDike SluiceGate
 - BASE=28c428d04
 

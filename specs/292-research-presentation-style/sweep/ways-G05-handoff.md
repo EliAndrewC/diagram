@@ -4,7 +4,7 @@
 
 - SECTION=ways/highways-and-what-lines-them-kaido
 - RENDERING=rendering/ways/how-our-maps-draw-and-label-the-highway
-- OLD=research/ways/210-what-lines-the-road-into-a-town-an-avenue-of-trees-milestone-mounds.html research/ways/070-how-wide-is-the-road-at-a-compounds-gate.html research/ways/190-what-lines-the-imperial-road-through-a-town-and-is-it-labeled-there.html research/ways/130-what-does-a-village-on-a-highway-put-on-the-road-teahouses-at-the-ends-of-its-street-and-no-inn.html
+- OLD=research/ways/ research/ways/ research/ways/ research/ways/
 - MODALS=ApproachRoad
 - BASE=7c9123bbf
 

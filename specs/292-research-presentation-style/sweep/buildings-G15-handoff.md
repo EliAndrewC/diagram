@@ -4,14 +4,14 @@
 
 - SECTION=buildings/privies-setchin
 - RENDERING=rendering/buildings/how-our-maps-place-privies-setchin
-- OLD=research/buildings/220-privies-attach-to-the-house-night-soil-drives-their-placement.html research/buildings/310-where-does-a-residence-put-its-guests-privy.html
+- OLD=research/buildings/ research/buildings/
 - MODALS=Latrine SideGate
 
 ## Baths (furo)
 
 - SECTION=buildings/baths-furo
 - RENDERING=rendering/buildings/how-our-maps-draw-the-bath-furo
-- OLD=research/buildings/320-did-a-residence-have-its-own-bath-and-was-it-a-building-apart.html
+- OLD=research/buildings/
 - MODALS=Bath
 
 - BASE=8de57023a

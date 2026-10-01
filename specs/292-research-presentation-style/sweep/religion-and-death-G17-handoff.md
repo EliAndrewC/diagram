@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/cremation-grounds-and-bone-mounds-kasoba
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-cremation-grounds-and-bone-mounds
-- OLD=research/religion-and-death/530-does-a-village-burn-its-own-dead-and-where-is-its-cremation-ground.html research/religion-and-death/202-how-large-is-a-cremation-ground-and-what-was-its-fire-bed.html research/religion-and-death/190-where-do-the-crematory-the-ossuary-and-the-clan-mausoleum-stand.html research/religion-and-death/204-how-large-is-a-bone-mound-drawn.html research/cities/capitals/600-does-a-pyre-need-a-clear-distance-from-anything-that-burns.html
+- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/cities/capitals/
 - MODALS=
 - BASE=96af9572b
 

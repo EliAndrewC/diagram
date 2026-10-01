@@ -4,9 +4,9 @@ The GM: *"All of the citations at the end of a research file can be moved into t
 careful to avoid duplicating content ... move our citations into a third location that can be loaded by both of the
 different pages."* And of the works list at the top: *"we do not want to have multiple different write ups of a single
 paper ... drawing from a single data source."* What a test can hold: every research page has its citations page and
-loads its derived script; every committed script and every works section equals its derivation (so a note is typed
-once, on the citations page, and a write-up once, in the registry); every cited key's entry carries both write-ups;
-the reader and the derivation behave on plain strings. What only the `source-applicability` agent can hold - whether
+links it; its works section is derived from the registry (so a write-up is typed once, in the registry); every cited
+key's entry carries both write-ups; the reader and the derivation behave on plain strings. Since feature 301 the pages
+are assembled in memory and never committed, so they are read through `sources.record_text`. What only the `source-applicability` agent can hold - whether
 a write-up is honest about the work's era, place and kind - is its job, before a source lands."""
 
 from __future__ import annotations
@@ -20,22 +20,19 @@ from l7r.diagram.interactive.citations import (
     WORKS_OPEN,
     citations_page,
     cited_keys,
-    derive,
-    note_for_script,
+    fill_works,
     notes,
     rel_to_research,
     research_pages,
-    script_js,
-    script_path,
-    to_work_entries,
     with_works,
     works_html,
 )
-from l7r.diagram.interactive.sources import RESEARCH_DIR, WHAT_LABEL, WHY_LABEL, registry_entries
+from l7r.diagram.interactive.record.store import record_pages
+from l7r.diagram.interactive.sources import WHAT_LABEL, WHY_LABEL, record_text, registry_entries
 
 
 def _read(rel: str) -> str:
-    return pathlib.Path(RESEARCH_DIR, rel).read_text(encoding="utf-8")
+    return record_text(rel)
 
 
 def test_the_record_s_pages_are_found_and_the_registry_and_citations_pages_are_not() -> None:
@@ -54,28 +51,22 @@ def test_the_record_s_pages_are_found_and_the_registry_and_citations_pages_are_n
 def test_the_paths_beside_a_research_page() -> None:
     assert citations_page("homesteads.html") == "citations/homesteads.html"
     assert citations_page("cities/fabric.html") == "citations/cities/fabric.html"
-    assert script_path("cities/fabric.html") == "citations/cities/fabric.js"
     assert rel_to_research("citations/homesteads.html") == "../" and rel_to_research("citations/cities/fabric.html") == "../../"
 
 
 @pytest.mark.parametrize("page", research_pages())
-def test_every_research_page_has_a_citations_page_and_loads_its_derived_script(page: str) -> None:
+def test_every_research_page_has_a_citations_page_and_links_it(page: str) -> None:
     text = _read(page)
-    assert pathlib.Path(RESEARCH_DIR, citations_page(page)).exists(), f"{page}: no citations page"
+    assert _read(citations_page(page)), f"{page}: no citations page"
     down = "../" * page.count("/")
-    tag = f'<script src="{down}{script_path(page)}" defer></script>'
-    record = f'<script src="{down}assets/record.js" defer></script>'
-    assert 0 <= text.find(tag) < text.find(record), f"{page}: loads its citations script before record.js (both deferred, so document order is run order)"
     assert '<section class="footnotes">' not in text, f"{page}: the notes' bytes are on the citations page, not here"
     assert f'<a href="{down}{citations_page(page)}">' in text, f"{page}: links its citations page where the notes were"
 
 
 @pytest.mark.parametrize("page", research_pages())
-def test_the_committed_script_and_works_section_are_the_derivation(page: str) -> None:
-    """`make citations` writes both; a note or a write-up edited without the run fails here with the command."""
-    js, html, missing = derive(page)
-    assert _read(script_path(page)) == js, f"{script_path(page)} is stale against its citations page - run `make citations`"
-    assert _read(citations_page(page)) == html, f"{citations_page(page)}: the works section is stale against SOURCES.html - run `make citations`"
+def test_every_cited_work_has_both_write_ups(page: str) -> None:
+    """The works section is derived from the registry; a cited key whose entry lacks a write-up fails here."""
+    _html, missing = fill_works(page, _read(citations_page(page)))
     assert not missing, f"{page}: cited keys whose registry entry has no `{WHAT_LABEL}` / `{WHY_LABEL}` write-up (feature 211: a source is not cited without one): {missing}"
 
 
@@ -114,8 +105,8 @@ def test_a_work_cited_from_two_pages_has_one_write_up_and_both_pages_show_it() -
     for page in ("citations/homesteads.html", "citations/vegetation.html"):
         text = _read(page)
         assert what in text[text.find(WORKS_OPEN) : text.find(WORKS_CLOSE)], page
-    outside = [p for p in pathlib.Path(RESEARCH_DIR).glob("*.html") if what in p.read_text(encoding="utf-8")]
-    assert outside == [pathlib.Path(RESEARCH_DIR, "SOURCES.html")], "the write-up is typed in exactly one place outside research/citations/"
+    outside = [p for p in record_pages() if what in _read(p)]
+    assert outside == ["SOURCES.html"], "the write-up is typed in exactly one place outside the citations pages"
 
 
 # ---- the reader and the derivation, on plain strings --------------------------------------------------------------
@@ -128,30 +119,6 @@ def test_notes_are_read_in_order_and_keys_deduplicated_in_first_citation_order()
     assert [n for n, _b in ns] == ["1", "2", "3"]
     assert cited_keys(ns) == ["k-1", "canon"]
     assert notes("<p>no notes</p>") == [] and cited_keys([]) == []
-
-
-def test_a_note_for_the_script_loses_its_back_link_and_is_rebased_to_the_research_page() -> None:
-    body = notes(_NOTES)[1][1]
-    out = note_for_script(body)
-    assert "fnback" not in out and 'href="SOURCES.html#canon"' in out and 'href="water.html#x"' in out
-    assert "https://x.y/z" in note_for_script(notes(_NOTES)[0][1]), "an absolute link is untouched"
-    js = script_js("p.html", notes(_NOTES))
-    assert js.startswith("// DERIVED FILE") and "window.RECORD_CITATIONS = {" in js and '"fn-2": "<a href=\\"citations/p.html#work-canon\\" target=\\"_blank\\" rel=\\"noopener\\">' in js
-    assert "fnback" not in js and 'href=\\"water.html#x\\"' in js, "a link that is not a source key keeps its rebased target"
-
-
-def test_the_hover_links_a_source_key_to_its_work_entry_on_the_citations_page() -> None:
-    """Feature 292 FR-005 (GM 2026-09-29): the key link in a footnote's hover leads to the work's entry on the
-    citations page - which links the source - and not to the source itself. From a `cities/` page the citations page
-    is one directory further off. Only the hover's copy changes: the citations page keeps its links to the sources."""
-    body = '<a href="https://x.y/z"><code>k-1</code></a> - 「q」 and <a href="https://a.b/c"><code>k-2</code></a> - 「r」'
-    assert to_work_entries(body, "homesteads.html") == (
-        '<a href="citations/homesteads.html#work-k-1" target="_blank" rel="noopener"><code>k-1</code></a> - 「q」 and '
-        '<a href="citations/homesteads.html#work-k-2" target="_blank" rel="noopener"><code>k-2</code></a> - 「r」'
-    )
-    assert 'href="../citations/cities/fabric.html#work-k-1"' in to_work_entries(body, "cities/fabric.html")
-    assert "https://x.y/z" not in script_js("p.html", notes(_NOTES)), "the hover never links the source directly"
-    assert "https://x.y/z" in _NOTES, "the citations page's own note is untouched"
 
 
 def test_the_works_block_reports_a_key_with_no_write_up_and_links_a_key_as_feature_190_does() -> None:

@@ -3,19 +3,19 @@
 ## Kitchen gardens beside farmhouses (yashikibatake)
 - SECTION=homesteads/kitchen-gardens-beside-farmhouses-yashikibatake
 - RENDERING=rendering/homesteads/how-our-maps-size-kitchen-gardens
-- OLD=research/homesteads/050-how-big-was-a-dooryard-garden.html
+- OLD=research/homesteads/
 - MODALS=Garden
 
 ## Farm storehouses (kura)
 - SECTION=homesteads/farm-storehouses-kura
 - RENDERING=rendering/homesteads/how-our-maps-give-some-farms-a-storehouse
-- OLD=research/homesteads/120-which-farmhouses-have-a-storehouse.html research/homesteads/430-how-big-was-a-farm-storehouse-and-where-on-the-plot-did-it-stand.html
+- OLD=research/homesteads/ research/homesteads/
 - MODALS=StorageShed
 
 ## Farm sheds and barns (naya)
 - SECTION=homesteads/farm-sheds-and-barns-naya
 - RENDERING=none
-- OLD=research/homesteads/440-how-big-was-a-farm-shed-and-where-on-the-plot-did-it-stand.html
+- OLD=research/homesteads/
 - MODALS=StorageShed
 
 - BASE=8e0e5667a

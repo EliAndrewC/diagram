@@ -14,7 +14,7 @@ import pytest
 
 from l7r.diagram.interactive.record import assemble, split
 from l7r.diagram.interactive.record import fragments as frag
-from l7r.diagram.interactive.record.store import RecordError, check, read_page, write_fragments
+from l7r.diagram.interactive.record.store import RecordError, read_page, record_pages, write_fragments
 
 PAGE = (
     '<!DOCTYPE html>\n<html lang="en">\n<head><title>T</title></head>\n<body>\n<main>\n'
@@ -43,7 +43,7 @@ def test_a_page_splits_into_the_fragments_its_layout_names(record: pathlib.Path)
         frag.TAIL,
     ]
     assert read_page("ways.html", str(record)) == PAGE
-    assert check(str(record)) == []
+    assert record_pages(str(record)) == ["ways.html"], "a page is found by its fragment directory (feature 301)"
 
 
 def test_two_fragments_claiming_one_prefix_are_refused_rather_than_ordered(record: pathlib.Path) -> None:
@@ -111,18 +111,6 @@ def test_an_exhausted_gap_is_refused_rather_than_collided(record: pathlib.Path) 
     assert frag.free_prefix(10, 20) == "015"
     with pytest.raises(ValueError, match="re-space the directory"):
         frag.free_prefix(10, 11)
-
-
-def test_a_page_whose_committed_bytes_drift_from_its_fragments_is_reported(record: pathlib.Path) -> None:
-    """What the gate and the push run: FR-003, FR-004."""
-    (record / "ways.html").write_text(PAGE.replace("<p>one</p>", "<p>edited in the wrong file</p>"), encoding="utf-8")
-    assert check(str(record)) == ["ways.html"]
-
-
-def test_a_page_that_is_not_split_yet_is_not_reported_as_stale(record: pathlib.Path) -> None:
-    """A stage that has not landed is not a failure: stage 3's citations pages are whole until it does."""
-    (record / "towns.html").write_text(PAGE, encoding="utf-8")
-    assert check(str(record)) == []
 
 
 def test_the_assembly_adds_nothing_of_its_own(record: pathlib.Path) -> None:

@@ -4,7 +4,7 @@
 
 - SECTION=buildings/the-office-hall-and-its-clerks-goyakusho
 - RENDERING=rendering/buildings/how-our-maps-draw-the-office-hall-and-the-clerks-rooms
-- OLD=research/buildings/710-how-big-was-a-county-magistrates-office-hall.html research/buildings/050-clerks-are-few-local-and-heimen.html research/buildings/430-where-did-the-clerks-work---in-a-room-of-the-office-hall-or-a-building-of-their-own.html
+- OLD=research/buildings/ research/buildings/ research/buildings/
 - MODALS=ClerksRoom
 - BASE=b1b6a629f
 

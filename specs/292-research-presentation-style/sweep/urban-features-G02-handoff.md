@@ -4,7 +4,7 @@
 
 - SECTION=urban-features/communal-wells-ido
 - RENDERING=rendering/urban-features/how-our-maps-place-and-draw-wells-ido
-- OLD=research/urban-features/090-wells---the-research-and-the-deliberate-liberty.html research/urban-features/120-communal-wells-and-the-samurai-exception.html research/urban-features/260-where-does-a-villages-communal-well-stand---by-the-lane-or-among-the-houses-it-serves.html research/urban-features/270-what-does-a-communal-well-look-like-from-above---curb-sweep-or-pulley-roof.html research/urban-features/700-were-a-wells-sweep-pulley-frame-and-roof-in-use-before-modern-times.html research/urban-features/180-wells-in-crop-fields-two-different-objects-and-only-one-of-them-is-ours.html
+- OLD=research/urban-features/ research/urban-features/ research/urban-features/ research/urban-features/ research/urban-features/ research/urban-features/
 - MODALS=Well household.Well
 - BASE=a58ae93fd
 

@@ -524,7 +524,7 @@
   "value": 0,
   "unit": "stale sentences",
   "observed": "2026-09-30",
-  "source": ".claude/skills/diagram/research/homesteads.html",
+  "source": ".claude/skills/diagram/research/homesteads/",
   "method": "grep: 'the record rules only on the dispersed farm' 0 hits; the summary under 'Along what a row ran' now reads 'on a natural levee or a dike the ground did and the houses followed its line. A fan's foot carries a row of villages' (R13, merged from the research clone)"
  },
  "kuwabata-r8-f1": {

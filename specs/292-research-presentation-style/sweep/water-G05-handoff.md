@@ -2,7 +2,7 @@
 
 - SECTION=water/which-way-water-flows-and-how-channels-bend-and-join
 - RENDERING=rendering/water/how-our-maps-draw-bends-junctions-and-the-run-of-the-water
-- OLD=research/water/190-canal-junction-angles---an-offtake-leaves-pointing-downstream.html research/water/210-why-does-every-ditch-turn-on-a-curve.html research/water/200-where-two-watercourses-meet-how-is-the-junction-drawn.html research/water/080-which-way-does-the-water-run-and-how-does-a-map-say-so.html research/archetypes/120-wet-rice-hydrology-has-no-crossings-to-draw.html research/cities/river-cities/020-which-way-does-an-offtake-leave-a-river-and-why.html research/cities/river-cities/600-before-modern-engineering-did-anyone-set-the-angle-at-which-a-channel-leaves-a-river.html
+- OLD=research/water/ research/water/ research/water/ research/water/ research/archetypes/ research/cities/river-cities/ research/cities/river-cities/
 - MODALS=
 - BASE=4470bc01a
 

@@ -1,4 +1,4 @@
-"""Feature 209: `make glossary` writes research/assets/glossary.js from interactive/glossary.py; `--check` tells a stale one."""
+"""Features 209 and 301: `make glossary` assembles the glossary; the record's script is derived from it on request."""
 
 from __future__ import annotations
 
@@ -8,14 +8,13 @@ from l7r.diagram.interactive.glossary import GLOSSARY, record_glossary_js
 from l7r.diagram.tools import glossary_asset
 
 
-def test_write_then_check_is_in_sync_and_an_edit_or_an_absence_is_stale(tmp_path: pathlib.Path, capsys: object) -> None:
+def test_the_script_is_written_where_it_is_told_and_the_check_reads_only_the_json(tmp_path: pathlib.Path) -> None:
+    """Feature 301: the script is built into the site, never committed - so `--check` holds the committed JSON alone,
+    and `--path` writes the script on request."""
     target = tmp_path / "glossary.js"
-    assert glossary_asset.main(["--check", "--path", str(target)]) == 1, "no file yet: stale"
+    assert glossary_asset.main(["--check"]) == 0, "the committed JSON is in sync"
     assert glossary_asset.main(["--path", str(target)]) == 0
     assert target.read_text(encoding="utf-8") == record_glossary_js()
-    assert glossary_asset.main(["--check", "--path", str(target)]) == 0
-    target.write_text(target.read_text(encoding="utf-8") + "\n// a hand edit", encoding="utf-8")
-    assert glossary_asset.main(["--check", "--path", str(target)]) == 1
 
 
 def test_the_derivation_carries_every_term_with_its_variants_longest_first() -> None:

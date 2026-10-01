@@ -4,14 +4,14 @@
 
 - SECTION=urban-features/dyers-weavers-and-papermakers-konya
 - RENDERING=rendering/urban-features/how-our-maps-draw-dyers-weavers-and-papermakers-konya
-- OLD=research/urban-features/530-does-a-town-keep-a-dyer-and-where-does-it-rinse-and-dry-its-cloth.html research/urban-features/550-did-a-town-weave-cloth-or-make-paper-and-in-what-premises.html
+- OLD=research/urban-features/ research/urban-features/
 - MODALS=
 
 ## Teahouses, eating houses and drinking houses (chaya)
 
 - SECTION=urban-features/teahouses-eating-houses-and-drinking-houses-chaya
 - RENDERING=rendering/urban-features/how-our-maps-draw-teahouses-eating-houses-and-drinking-houses-chaya
-- OLD=research/urban-features/560-which-eating-and-drinking-houses-did-a-town-keep-and-where-did-they-gather.html
+- OLD=research/urban-features/
 - MODALS=
 
 - BASE=b8458daf9

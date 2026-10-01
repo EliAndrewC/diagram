@@ -4,7 +4,7 @@
 
 - SECTION=cities/government/samurai-house-lots-and-houses-by-rank-bukeyashiki
 - RENDERING=rendering/cities/government/how-our-maps-draw-a-samurais-lot-and-house-bukeyashiki
-- OLD=research/cities/government/280-how-big-is-a-samurais-house-lot-and-house-by-rank.html research/cities/government/600-why-are-some-towns-samurai-lots-roomier-than-others.html research/cities/government/290-what-does-a-samurais-house-look-like-from-above.html research/cities/government/300-does-a-samurais-house-have-its-own-well.html
+- OLD=research/cities/government/ research/cities/government/ research/cities/government/ research/cities/government/
 - MODALS=
 - BASE=d4fcc6fa1
 

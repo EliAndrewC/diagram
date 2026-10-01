@@ -4,14 +4,14 @@
 
 - SECTION=ways/road-bridges-over-rivers-and-canals-hashi
 - RENDERING=rendering/ways/how-our-maps-place-and-draw-road-bridges-hashi
-- OLD=research/ways/200-what-bridges-does-a-town-put-over-its-river-how-many-of-what-kind-how-big.html research/ways/010-how-far-past-the-bank-does-a-bridge-land.html research/ways/050-is-the-bridge-where-the-road-actually-crosses-the-water.html
+- OLD=research/ways/ research/ways/ research/ways/
 - MODALS=
 
 ## Ferries and fords (watashi)
 
 - SECTION=ways/ferries-and-fords-watashi
 - RENDERING=rendering/ways/how-our-maps-draw-ferries-and-fords-watashi
-- OLD=research/ways/140-where-a-road-meets-a-river-with-no-bridge-how-was-it-crossed-and-what-stood-at-the-ferry-landing.html
+- OLD=research/ways/
 - MODALS=
 
 - BASE=14c62b4fe

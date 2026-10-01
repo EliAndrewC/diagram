@@ -2,7 +2,7 @@
 
 - SECTION=fields/where-a-farming-hamlet-grew-its-coarse-grain
 - RENDERING=rendering/fields/how-our-maps-draw-dry-fields-and-their-crops-hatake
-- OLD=research/fields/165-where-did-a-hamlet-at-a-fans-toe-grow-its-coarse-grain-while-the-fans-middle-was-still-wild.html research/fields/165-where-did-a-hamlet-at-a-fans-toe-grow-its-coarse-grain-while-the-fans-middle-was-still-wild.notes.html research/fields/165-where-did-a-hamlet-at-a-fans-toe-grow-its-coarse-grain-while-the-fans-middle-was-still-wild.originals.html
+- OLD=research/fields/ research/fields/ research/fields/
 - MODALS=
 - ALSO CHANGED: fields/dry-fields-and-their-crops-hatake (one pointer sentence at the end of its alluvial-fan bullet); rendering/fields/how-our-maps-show-the-paddy-through-the-rice-year (the winter-crop bullet, feature 291's change carried)
 - BASE=be345c9f9

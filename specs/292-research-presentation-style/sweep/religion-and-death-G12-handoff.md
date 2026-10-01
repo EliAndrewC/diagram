@@ -2,7 +2,7 @@
 
 - SECTION=religion-and-death/temple-clergy-their-families-and-how-a-temple-earned-its-keep
 - RENDERING=rendering/religion-and-death/how-our-maps-house-a-temples-clergy
-- OLD=research/religion-and-death/030-temples-as-economic-institutions-with-hereditary-householder-clergy.html research/religion-and-death/040-who-lives-inside-a-city-temples-walls-and-who-lives-outside-them.html
+- OLD=research/religion-and-death/ research/religion-and-death/
 - MODALS=
 - BASE=61fac50cd
 

@@ -4,14 +4,14 @@
 
 - SECTION=fields/temple-fields-jochi
 - RENDERING=rendering/fields/how-our-maps-mark-temple-fields
-- OLD=research/fields/150-which-plots-belong-to-the-temple---the-tax-free-glebe.html
+- OLD=research/fields/
 - MODALS=
 
 ## Flower fields: the Imperial chrysanthemum field (kiku)
 
 - SECTION=fields/flower-fields-the-imperial-chrysanthemum-field-kiku
 - RENDERING=rendering/fields/how-our-maps-draw-the-chrysanthemum-field
-- OLD=research/fields/410-what-is-the-imperial-chrysanthemum-field-and-did-a-town-grow-flowers-for-the-market-or-the-shrine.html
+- OLD=research/fields/
 - MODALS=
 
 - BASE=349f3ee5c

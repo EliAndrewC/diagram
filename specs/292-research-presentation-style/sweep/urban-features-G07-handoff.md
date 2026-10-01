@@ -4,7 +4,7 @@
 
 - SECTION=urban-features/smiths-and-farriers-kajiya
 - RENDERING=rendering/urban-features/how-our-maps-draw-smithies-and-farriers
-- OLD=research/urban-features/430-does-a-village-keep-a-smith-of-its-own-and-what-is-a-smithy-like.html research/urban-features/440-how-many-smiths-does-a-town-or-a-city-keep-and-where-do-they-stand.html research/urban-features/032-why-does-this-setting-shoe-its-horses-where-edo-japan-did-not-and-what-does-a-farrier-draw-on-the-map.html
+- OLD=research/urban-features/ research/urban-features/ research/urban-features/
 - MODALS=
 - BASE=57cd206e6
 

@@ -20,7 +20,8 @@ import re
 import pytest
 
 from l7r.diagram.interactive.glossary import GLOSSARY, record_glossary_js
-from l7r.diagram.interactive.sources import RESEARCH_DIR, collection_pages
+from l7r.diagram.interactive.sources import RESEARCH_DIR
+from tests._record_pages import all_pages
 
 _COMMENT = re.compile(r"<!--.*?-->", re.S)
 _TAG = re.compile(r"<[^>]+>")
@@ -29,15 +30,9 @@ _NOT_FINDINGS = {"SOURCES.html"}
 
 
 def _all_pages() -> list[pathlib.Path]:
-    root = pathlib.Path(RESEARCH_DIR)
-    # the citations pages (feature 211) are record pages a reader meets: the works write-ups and the notes are under
-    # every rule here except the Grounds/Evidence one (they are not findings)
-    return (
-        sorted(root.glob("*.html"))
-        + [root / c for c in collection_pages(str(root))]
-        + sorted((root / "citations").glob("*.html"))
-        + [root / "citations" / c for c in collection_pages(str(root / "citations"))]
-    )
+    """Every page, in memory (feature 301) - the citations pages (feature 211) too: they are record pages a reader meets,
+    the works write-ups and the notes under every rule here except the Grounds/Evidence one (they are not findings)."""
+    return list(all_pages())
 
 
 def _finding_files() -> list[pathlib.Path]:
@@ -85,13 +80,12 @@ def test_every_record_page_loads_the_glossary_before_the_record_script(page: pat
     assert 0 <= g < r, f"{page.name}: the glossary asset is loaded, and before record.js (both deferred, so document order is run order)"
 
 
-def test_the_committed_glossary_asset_is_the_derivation() -> None:
-    """`make glossary` writes it from `glossary.py`; the file is committed because the pages are static. A term
-    added to the table without the run fails here, with the command that fixes it."""
-    committed = pathlib.Path(RESEARCH_DIR, "assets", "glossary.js").read_text(encoding="utf-8")
-    assert committed == record_glossary_js(), "research/assets/glossary.js is stale against interactive/glossary.py - run `make glossary`"
-    assert committed.startswith("// DERIVED FILE") and "window.RECORD_GLOSSARY = [" in committed
-    assert all(term in committed for term in ("yashikirin", "kainyo", "sugi")), "the record's own vocabulary is in it (non-vacuity)"
+def test_the_glossary_asset_is_derived_from_the_glossary() -> None:
+    """The record's glossary script is written into the site by `make record` from `glossary.py` (feature 301: built,
+    never committed, so there is no copy to fall stale - what is held is that the derivation carries the vocabulary)."""
+    derived = record_glossary_js()
+    assert derived.startswith("// DERIVED FILE") and "window.RECORD_GLOSSARY = [" in derived
+    assert all(term in derived for term in ("yashikirin", "kainyo", "sugi")), "the record's own vocabulary is in it (non-vacuity)"
 
 
 def _bounded_in(variant: str, text: str) -> bool:

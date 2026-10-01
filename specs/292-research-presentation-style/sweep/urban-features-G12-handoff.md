@@ -4,7 +4,7 @@
 
 - SECTION=urban-features/charcoal-yards-and-charcoal-stores
 - RENDERING=rendering/urban-features/how-our-maps-draw-charcoal-yards-and-their-fire-gap
-- OLD=research/urban-features/150-charcoal-yards-a-tallied-depot-a-cooling-ground-and-a-weighing-floor.html research/urban-features/152-is-a-fire-gap-kept-round-a-charcoal-yard.html research/urban-features/200-was-bulk-charcoal-weighed-on-a-balance-beam-or-a-steelyard.html research/urban-features/210-does-the-charcoal-yards-30-ft-fire-gap-apply-to-charcoal-kept-in-a-plastered-storehouse.html
+- OLD=research/urban-features/ research/urban-features/ research/urban-features/ research/urban-features/
 - MODALS=CartYard CharcoalBales CharcoalStore Steelyard TallyOffice WeighingFloor
 - BASE=f5e67de4e
 

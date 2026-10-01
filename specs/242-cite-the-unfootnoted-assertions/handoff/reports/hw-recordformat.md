@@ -1,6 +1,6 @@
 ## Scope read
 
-`/diagram/.clones/diagram-research/.claude/skills/diagram/research/homesteads.html` (1,046 lines, 23 `<h2>` + 3 `<h3>`), `research/water/` (1,088 lines, 28 `<h2>`), `research/homesteads/` (fn-94 to fn-153), `research/water/` (fn-131 to fn-185), and the 47 `<!-- READ 2026-09-14 by a source-reader (feature 242) -->` registry entries in `research/sources/` (lines 1340-1599, plus `osaka-castle-jawiki` L2851 and `dozo-jawiki` L3832, which are older entries and carry both write-ups in the older phrasing). Glossary read: `l7r/diagram/interactive/assets/glossary.json` (all keys and variants).
+`/diagram/.clones/diagram-research/.claude/skills/diagram/research/homesteads/` (1,046 lines, 23 `<h2>` + 3 `<h3>`), `research/water/` (1,088 lines, 28 `<h2>`), `research/homesteads/` (fn-94 to fn-153), `research/water/` (fn-131 to fn-185), and the 47 `<!-- READ 2026-09-14 by a source-reader (feature 242) -->` registry entries in `research/sources/` (lines 1340-1599, plus `osaka-castle-jawiki` L2851 and `dozo-jawiki` L3832, which are older entries and carry both write-ups in the older phrasing). Glossary read: `l7r/diagram/interactive/assets/glossary.json` (all keys and variants).
 
 Sections not named below came back with nothing in any class.
 

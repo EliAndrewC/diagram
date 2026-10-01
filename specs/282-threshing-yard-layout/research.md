@@ -1,7 +1,7 @@
 # Research - feature 282
 
-The research itself is on the record: `research/homesteads/025-what-lay-in-the-work-yard-at-harvest---straw-mats-over-the-whole-floor.html`
-and `research/homesteads/505-did-a-village-put-its-drying-racks-by-the-houses-by-custom-or-because-of-its-weather.html`
+The research itself is on the record: `research/homesteads/`
+and `research/homesteads/`
 (their sources, checks and reader reports as run 2026-09-28). This file holds only what the spec measures.
 
 ## R1 - the yard glyph as drawn before this feature

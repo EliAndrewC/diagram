@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-a-village-shrines-halls-and-furnishings
-- OLD=research/religion-and-death/120-how-big-is-a-country-shrine-and-what-stands-in-its-precinct.html research/religion-and-death/126-what-else-stood-in-a-village-shrines-precinct.html research/religion-and-death/127-what-did-a-parish-give-its-shrine-as-it-grew-richer.html research/religion-and-death/770-did-a-village-shrines-basin-stand-in-the-open-before-modern-times.html research/religion-and-death/220-when-one-shrine-hall-serves-several-kami-does-each-have-its-own-altar.html
+- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/
 - MODALS=HallAndDwelling Sanctuary ShrineApproach ShrineBasin SacredTree GuardianFigures StoneLanterns StrengthStones FarmersStage SumoRing BellTower CompoundShrine ShrineAltar Torii ShrineGrove
 - BASE=6d7a0bf6b
 

@@ -19,7 +19,8 @@ import pytest
 
 from l7r.diagram.interactive.citations import GROUNDS_REASONS, citations_page, footnote_form, grounds_reasons, is_settled, notes
 from l7r.diagram.interactive.record import absence
-from l7r.diagram.interactive.sources import RESEARCH_DIR, canon_keys, collection_pages, registry_keys
+from l7r.diagram.interactive.sources import RESEARCH_DIR, canon_keys, registry_keys
+from tests._record_pages import citations_of, page, research_pages
 
 #: a second reference to the same note carries no id (ids are unique; the back-link returns to the first); the href
 #: names the citations page (feature 211) - `_REF_TARGET` checks WHICH page below
@@ -40,17 +41,14 @@ _NOT_FINDINGS = {"SOURCES.html"}
 
 
 def _finding_files() -> list[pathlib.Path]:
-    root = pathlib.Path(RESEARCH_DIR)
-    return [p for p in sorted(root.glob("*.html")) + [root / c for c in collection_pages(str(root))] if p.name not in _NOT_FINDINGS]
+    """The research pages, read through the in-memory assembly (feature 301: the pages are built, not committed)."""
+    return [p for p in research_pages() if p.name not in _NOT_FINDINGS]
 
 
 def _rel(path: pathlib.Path) -> str:
     return str(path.relative_to(RESEARCH_DIR)).replace(os.sep, "/")
 
 
-def citations_of(path: pathlib.Path) -> pathlib.Path:
-    """The citations page of a research page (feature 211)."""
-    return pathlib.Path(RESEARCH_DIR, citations_page(_rel(path)))
 
 
 def footnotes(text: str, citations: str) -> tuple[list[str], dict[str, str]]:
@@ -272,7 +270,7 @@ def unmarked_foreign_quotes(text: str) -> list[str]:
     return bad
 
 
-@pytest.mark.parametrize("path", _finding_files() + [citations_of(p) for p in _finding_files()] + [pathlib.Path(RESEARCH_DIR, "SOURCES.html")], ids=lambda p: str(p.relative_to(RESEARCH_DIR)))
+@pytest.mark.parametrize("path", _finding_files() + [citations_of(p) for p in _finding_files()] + [page("SOURCES.html")], ids=lambda p: str(p.relative_to(RESEARCH_DIR)))
 def test_a_foreign_language_quote_is_a_marked_translation(path: pathlib.Path) -> None:
     bad = unmarked_foreign_quotes(path.read_text(encoding="utf-8"))
     assert not bad, f"{path.name}: {len(bad)} foreign-language quote(s) with no translation note (feature 202):\n" + "\n".join(bad[:8])

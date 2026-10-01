@@ -4,7 +4,7 @@
 
 - SECTION=vegetation/how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns
 - RENDERING=rendering/vegetation/how-our-maps-stock-woods-and-size-crowns
-- OLD=research/vegetation/060-forest-density-and-crown-size.html research/vegetation/230-how-thickly-was-a-worked-coppice-stocked-and-how-wide-were-its-crowns.html research/vegetation/650-how-thickly-were-woods-stocked-before-modern-times-timber-was-planted-about-one-to-the-tsubo-thicker-where-thinnings-sold-but-no-old-record-counts-a-grown-woods-trees-or-its-crowns-width.html research/vegetation/070-the-belts-crowns-are-the-same-real-size-as-the-woods.html research/vegetation/080-no-canopy-tree-stands-under-anothers-crown.html
+- OLD=research/vegetation/ research/vegetation/ research/vegetation/ research/vegetation/ research/vegetation/
 - MODALS=WoodlandCommons
 - BASE=463926bcf
 

@@ -5,37 +5,35 @@ Every research page `research/<name>.html` has a citations page `research/citati
 note's key link, quoted passage and gloss. The GM: *"All of the citations at the end of a research file can be moved
 into the citations document. We should be careful to avoid duplicating content because currently the tooltips ...
 display the actual content ... we probably need to do something like move our citations into a third location that
-can be loaded by both of the different pages."* Two things are DERIVED from that one store by `make citations`
-(`tools/citations_asset.py`), committed, and pinned by `tests/interactive/test_citations.py`:
+can be loaded by both of the different pages."* What is DERIVED from that one store:
 
-- **the page's script**, `citations/<name>.js` - `window.RECORD_CITATIONS = {"fn-n": "<the note's HTML>"}` - which
-  the research page loads so `record.js` can show a note on hover without the note's bytes being in the page. It is
-  a script rather than a fetch because the pages are opened from disk, where a browser refuses a script's fetch of
-  a sibling file (spec 211 D1).
-- **the works section** at the top of the citations page - for each work the page's footnotes cite, in order of
-  first citation: its citation line, and the two write-ups its registry entry carries (what it is; why it applies,
-  and its limits). Written once per work in `SOURCES.html` (spec D2: *"we do not want to have multiple different
-  write ups of a single paper"*), derived here between two markers, so a reader without scripts still sees it and
-  the visible-text tests read it.
+- **the works section** of the citations page - for each work the page's footnotes cite, in order of first citation:
+  its citation line, and the two write-ups its registry entry carries (what it is; why it applies, and its limits).
+  Written once per work in `SOURCES.html` (spec D2: *"we do not want to have multiple different write ups of a single
+  paper"*), derived here between two markers.
 
-Nothing is typed twice: the notes live on the citations page, the write-ups in the registry, and everything else
-is a derivation a test holds equal to its source.
+Since feature 301 the citations page is assembled IN MEMORY (`record/store.assemble_pages`, through `fill_works`) and
+never written: the record's reader opens the site `make record` builds (`record/site.py`), where each small page
+carries its own notes and the works they cite at its foot, and the single page carries every note. The derived hover
+script `citations/<name>.js` of feature 211 is retired with the pages it served - a note on a small page is IN the
+page, which is where `record.js` looks first.
+
+Nothing is typed twice: the notes live beside their questions, the write-ups in the registry, and everything else is
+a derivation.
 """
 
 from __future__ import annotations
 
-import json
 import os
 import re
 
 from l7r.diagram.interactive.record import absence
-from l7r.diagram.interactive.sources import RESEARCH_DIR, WHAT_LABEL, WHY_LABEL, collection_pages, link_target, registry_entries
+from l7r.diagram.interactive.sources import RESEARCH_DIR, WHAT_LABEL, WHY_LABEL, collection_pages, is_page_dir, link_target, page_rel_of, registry_entries
 
 #: A note on a citations page: its number and its inner HTML.
 NOTE = re.compile(r'<li id="fn-(\d+)">(.*?)</li>', re.S)
 _KEY_LINK = re.compile(r'<a href="[^"]*"><code>([a-z0-9][a-z0-9-]*)</code></a>')
 _BACK = re.compile(r'\s*<a class="fnback" href="[^"]*">back</a>')
-_REL_HREF = re.compile(r'href="\.\./')
 #: The markers the works section is derived between. Everything between them is `make citations`' output;
 #: the test fails while it differs, and the message says which page.
 WORKS_OPEN = "<!-- works-cited: DERIVED by `make citations` from SOURCES.html - change a work's write-up in its registry entry, never here -->"
@@ -46,18 +44,13 @@ _WORKS = re.compile(re.escape(WORKS_OPEN) + r".*?" + re.escape(WORKS_CLOSE), re.
 def research_pages(research_dir: str = RESEARCH_DIR) -> list[str]:
     """The research pages, as paths relative to `research/` - `homesteads.html`, `cities/fabric.html` - in sorted
     order. The registry and the citations pages are not research pages."""
-    top = sorted(f for f in os.listdir(research_dir) if f.endswith(".html") and f != "SOURCES.html")
+    top = sorted(page_rel_of(d) for d in os.listdir(research_dir) if d != "sources" and is_page_dir(os.path.join(research_dir, d)))
     return top + collection_pages(research_dir)
 
 
 def citations_page(page_rel: str) -> str:
     """`homesteads.html` -> `citations/homesteads.html`; `cities/fabric.html` -> `citations/cities/fabric.html`."""
     return f"citations/{page_rel}"
-
-
-def script_path(page_rel: str) -> str:
-    """The derived script beside the citations page: `citations/homesteads.html` -> `citations/homesteads.js`."""
-    return citations_page(page_rel)[:-5] + ".js"
 
 
 def rel_to_research(citations_rel: str) -> str:
@@ -80,34 +73,6 @@ def cited_keys(page_notes: list[tuple[str, str]]) -> list[str]:
             if k not in keys:
                 keys.append(k)
     return keys
-
-
-def note_for_script(body: str) -> str:
-    """A note as the research page's hover shows it: the back link dropped (the box hides it anyway, and its target
-    is the page itself), and every relative link rebased one directory up - a citations page sits one level below
-    its research page, so `../SOURCES.html#key` there is `SOURCES.html#key` here."""
-    return _REL_HREF.sub('href="', _BACK.sub("", body)).strip()
-
-
-def to_work_entries(body: str, page_rel: str) -> str:
-    """A note as the HOVER shows it: each source key links to that work's entry on the page's citations page, which
-    itself links the source (feature 292, GM 2026-09-29: the link in the tooltip *"should instead take us to
-    citations/homesteads.html#work-kashima-kainyo-1987 which itself opens with a `kashima-kainyo-1987` link to the
-    actual source"*). The path is relative to the research page - `citations/x.html` from `research/`,
-    `../citations/cities/x.html` from `research/cities/`. The citations page itself keeps the source links. The link opens
-    in a new tab (GM 2026-09-29: *"links to citations should open in a new tab"*), so the reader keeps their place."""
-    target = os.path.relpath(citations_page(page_rel), os.path.dirname(page_rel) or ".")
-    return _KEY_LINK.sub(lambda m: f'<a href="{target}#work-{m.group(1)}" target="_blank" rel="noopener"><code>{m.group(1)}</code></a>', body)
-
-
-def script_js(page_rel: str, page_notes: list[tuple[str, str]]) -> str:
-    """The derived script for a research page: one object, note id -> note HTML as the hover shows it."""
-    table = {f"fn-{n}": to_work_entries(note_for_script(body), page_rel) for n, body in page_notes}
-    return (
-        f"// DERIVED FILE - written by `make citations` from research/{citations_page(page_rel)} (feature 211). Never\n"
-        "// edit here: change the note on the citations page and run `make citations`; the gate fails while the two differ.\n"
-        "window.RECORD_CITATIONS = " + json.dumps(table, ensure_ascii=False, indent=1) + ";\n"
-    )
 
 
 def works_html(keys: list[str], entries: dict[str, dict[str, str]], rel: str) -> tuple[str, list[str]]:
@@ -137,15 +102,12 @@ def with_works(citations_html: str, block: str) -> str:
     return _WORKS.sub(lambda _m: block, citations_html, count=1)
 
 
-def derive(page_rel: str, research_dir: str = RESEARCH_DIR) -> tuple[str, str, list[str]]:
-    """For one research page: (the derived script, the citations page with its works section derived, the keys
-    with no write-up). Reads the citations page and the registry; writes nothing."""
-    crel = citations_page(page_rel)
-    with open(os.path.join(research_dir, crel), encoding="utf-8") as fh:
-        page = fh.read()
-    page_notes = notes(page)
-    block, missing = works_html(cited_keys(page_notes), registry_entries(research_dir), rel_to_research(crel))
-    return script_js(page_rel, page_notes), with_works(page, block), missing
+def fill_works(page_rel: str, citations_html: str, research_dir: str = RESEARCH_DIR) -> tuple[str, list[str]]:
+    """For one research page: (its citations page with the works section derived, the keys with no write-up). Reads
+    the registry through the record's in-memory assembly; reads and writes no file of its own (feature 301 - the
+    citations page is assembled in memory and never committed)."""
+    block, missing = works_html(cited_keys(notes(citations_html)), registry_entries(research_dir), rel_to_research(citations_page(page_rel)))
+    return with_works(citations_html, block), missing
 
 
 # ---------------------------------------------------------------------------------------------

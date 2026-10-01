@@ -4,7 +4,7 @@
 
 - SECTION=archetypes/cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows
 - RENDERING=rendering/archetypes/how-our-maps-lay-cash-crops-over-a-villages-rice-land
-- OLD=research/archetypes/030-the-three-overlays-a-village-may-carry---the-mulberry-fishpond-the-lotus-field-and-the-tea-fringe.html research/archetypes/310-how-much-of-a-village-did-a-cash-crop-take---a-row-a-patch-or-the-whole-landscape.html research/archetypes/600-did-villages-grow-lotus-before-the-modern-market---yes-in-china-from-the-sixth-century-and-in-japan-by-the-late-edo-period.html research/archetypes/020-overlay-extent---a-calibrated-liberty-disclosed.html
+- OLD=research/archetypes/ research/archetypes/ research/archetypes/ research/archetypes/
 - MODALS=FishPond
 - BASE=76f9aaab8
 

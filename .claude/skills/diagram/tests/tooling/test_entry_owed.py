@@ -134,22 +134,28 @@ def test_the_agent_pins_opus_like_every_subagent_check():
     assert "\nmodel: opus\n" in text, "entry-drift must pin model: opus"
 
 
-def test_a_renumbered_footnote_is_not_a_moved_section():
-    """Feature 271: a note added to an earlier question renumbers a later section's footnotes on the assembled page;
-    only the numbers moved, so the section is not moved - but a change of the prose around the marker still is."""
-    a = 'Farms kept one.<sup class="fn"><a id="fnref-3" href="citations/homesteads.html#fn-3">3</a></sup> Done.'
-    b = 'Farms kept one.<sup class="fn"><a id="fnref-7" href="citations/homesteads.html#fn-7">7</a></sup> Done.'
-    c = 'Most farms kept one.<sup class="fn"><a id="fnref-7" href="citations/homesteads.html#fn-7">7</a></sup> Done.'
-    assert eo.unnumbered(a) == eo.unnumbered(b)
-    assert eo.unnumbered(a) != eo.unnumbered(c)
-    assert eo.unnumbered(None) is None
+def _git(root, *args):  # noqa: ANN001, ANN202
+    subprocess.run(["git", "-C", str(root), *args], check=True, capture_output=True)
 
 
-def test_a_repeated_note_and_the_page_trailer_are_not_moves():
-    """Feature 271 batch 2: a note's second use (`fnref-84-2`) renumbered, and the citations trailer that rides on a
-    page's last section, left behind when a question was added after it - neither moves the section."""
-    a = 'Tubs.<sup class="fn"><a id="fnref-84-2" href="citations/buildings.html#fn-84">84</a></sup>'
-    b = 'Tubs.<sup class="fn"><a id="fnref-90-2" href="citations/buildings.html#fn-90">90</a></sup>'
-    assert eo.unnumbered(a) == eo.unnumbered(b)
-    last = 'The scope note.</p>\n<section class="citations"><p>The notes behind this page ...</p></section>'
-    assert eo.unnumbered(last) == eo.unnumbered("The scope note.</p>")
+def test_a_question_moves_when_its_fragment_changes_and_not_when_only_its_notes_or_prefix_do(tmp_path):  # noqa: ANN001
+    """Feature 301: the pages are built, never committed, so a moved question is read off its FRAGMENT - its prose
+    changed; a note edited beside it is not a moved body (a note's text was never in the body), and a fragment
+    renamed to a new prefix (`make fragment-move`) is compared with the one it was."""
+    rec = tmp_path / eo.RESEARCH / "water"
+    rec.mkdir(parents=True)
+    (rec / "_front.html").write_text("x", encoding="utf-8")
+    (rec / "010-ponds.html").write_text('<h2 id="ponds">Ponds</h2><p>Dug.</p>', encoding="utf-8")
+    (rec / "020-ditches.html").write_text('<h2 id="ditches">Ditches</h2><p>Cut.</p>', encoding="utf-8")
+    (rec / "030-weirs.html").write_text('<h2 id="weirs">Weirs</h2><p>Built.</p>', encoding="utf-8")
+    (rec / "030-weirs.notes.html").write_text('<li data-note="k">a note</li>', encoding="utf-8")
+    _git(tmp_path, "init", "-q")
+    _git(tmp_path, "-c", "user.email=t@t", "-c", "user.name=t", "add", "-A")
+    _git(tmp_path, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "base")
+    base = subprocess.run(["git", "-C", str(tmp_path), "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
+    (rec / "010-ponds.html").write_text('<h2 id="ponds">Ponds</h2><p>Dug and lined.</p>', encoding="utf-8")
+    (rec / "020-ditches.html").rename(rec / "025-ditches.html")
+    (rec / "030-weirs.notes.html").write_text('<li data-note="k">a note, edited</li>', encoding="utf-8")
+    (rec / "040-new.html").write_text('<h2 id="new">New</h2>', encoding="utf-8")
+    _git(tmp_path, "add", "-A")
+    assert eo.moved_anchors(tmp_path, base, None) == {"water/ponds"}

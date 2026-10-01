@@ -251,8 +251,7 @@ def test_the_command_checks_assembles_and_splits(tmp_path: pathlib.Path, monkeyp
     out = tmp_path / "glossary.js"
     assert glossary_asset.main(["--path", str(out)]) == 0, "it writes the asset where it is told"
     assert out.read_text(encoding="utf-8").startswith("// DERIVED FILE")
-    assert glossary_asset.main(["--check", "--path", str(tmp_path / "missing.js")]) == 1
-    assert "glossary.js: STALE" in capsys.readouterr().err
+    assert glossary_asset.main([]) == 0 and "assembled" in capsys.readouterr().out, "without a path it assembles only"
 
     split_calls = []
     monkeypatch.setattr(gs, "write_term_files", lambda *a, **k: split_calls.append(1) or ["one", "two"])

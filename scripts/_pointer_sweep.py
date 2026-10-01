@@ -175,7 +175,9 @@ def _plain(s: str) -> str:
 
 _PAGE = r"(?:(?:cities|rendering|rendering/cities)/)?[A-Za-z][A-Za-z-]*\.html"
 #: research/<page>.html, or citations/, then an optional #anchor
-_POINTER = re.compile(r"(?<![\w/.-])((?:\.\./)*)research/(citations/)?(" + _PAGE + r")(#[^\s\"'`)\]<>,;|]+)?")
+_POINTER = re.compile(r"(?<![\w.-])((?:\.\./)*)research/(citations/)?(" + _PAGE + r")(#[^\s\"'`)\]<>,;|]+)?")
+#: A pointer already in the fragment form (what the check holds): `research/<page dir>/<prefix>-<heading id>.html`.
+_FRAGMENT = re.compile(r"research/((?:[a-z][a-z-]*/)+)(\d{3,5}-[^\s\"'`)\]<>,;|#*]+?\.html)(?![\w.-])")
 _BARE_SOURCES = re.compile(r"(?<![\w/.-])SOURCES\.html#([a-z0-9][a-z0-9-]*)")
 #: Quoted headings after a page: separators, then 'x' or "x" repeated with , / and / ; between
 #: A line break inside a quoted heading, with whatever continues a comment or a docstring on the next line.
@@ -246,7 +248,18 @@ def rewrite(text: str, rec: Record, *, history: bool = False) -> tuple[str, list
             return m.group(0)
         return hit
 
-    return _BARE_SOURCES.sub(bare, text), review
+    text = _BARE_SOURCES.sub(bare, text)
+
+    def stale(m: re.Match[str]) -> str:
+        """A pointer already in the fragment form that names a fragment no longer there (renamed or merged since)."""
+        if m.group(1).startswith(("site/", "assets/", "citations/")) or (rec.record / m.group(1) / m.group(2)).is_file():
+            return m.group(0)
+        if history and (rec.record / m.group(1)).is_dir():
+            return f"research/{m.group(1)}"
+        review.append(f"`{m.group(0)}` - no such fragment")
+        return m.group(0)
+
+    return _FRAGMENT.sub(stale, text), review
 
 
 def _quoted_after(text: str, at: int) -> tuple[list[str], int]:
@@ -338,6 +351,9 @@ def selftest() -> None:
             "# see research/water.html 'Reservoir\n    # ponds (tameike)' for it": "# see research/water/120-reservoir-ponds-tameike.html for it",
             "../../research/water.html#reservoir-ponds-tameike": "../../research/water/120-reservoir-ponds-tameike.html",
             "research/nowhere.html": "research/nowhere.html",
+            "read `/x/.claude/skills/diagram/research/water.html`": "read `/x/.claude/skills/diagram/research/water/`",
+            "[w](../.claude/skills/diagram/research/water.html#reservoir-ponds-tameike)": "[w](../.claude/skills/diagram/research/water/120-reservoir-ponds-tameike.html)",
+            "the 229-rule-files-into-research/plan.md": "the 229-rule-files-into-research/plan.md",
         }
         for before, after in cases.items():
             got, review = rewrite(before, rec)
@@ -348,6 +364,8 @@ def selftest() -> None:
         got, review = rewrite("research/water.html 'No such heading'", rec, history=True)
         assert got == "research/water/ 'No such heading'" and not review, "in a landed spec, the page directory and the words kept"
         assert rewrite("research/water.html#gone", rec, history=True) == ("research/water/", [])
+        assert rewrite("research/water/090-merged-away.html", rec, history=True) == ("research/water/", []), "a stale fragment in a landed spec"
+        assert rewrite("research/water/090-merged-away.html", rec)[1], "...and listed for review anywhere else"
         got, review = rewrite("research/water.html#missing", rec)
         assert got == "research/water.html#missing" and review
         block = "<!-- SOURCE: GM NOTES - DO NOT MODIFY -->research/water.html<!-- /SOURCE -->"

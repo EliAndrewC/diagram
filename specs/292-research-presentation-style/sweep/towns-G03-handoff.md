@@ -2,7 +2,7 @@
 
 - SECTION=towns/a-towns-built-core-how-long-how-deep-how-dense-and-where-it-ends
 - RENDERING=rendering/towns/how-our-maps-size-a-towns-built-core-and-its-ragged-ends
-- OLD=research/towns/210-how-long-and-how-deep-is-a-towns-built-core.html research/towns/220-how-densely-is-a-towns-built-core-packed.html research/towns/390-where-does-a-towns-built-edge-stop-and-does-a-ribbon-of-houses-run-on-along-the-road.html
+- OLD=research/towns/ research/towns/ research/towns/
 - MODALS=
 - BASE=fd61a44f7
 

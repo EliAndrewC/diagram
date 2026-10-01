@@ -4,7 +4,7 @@
 
 - SECTION=homesteads/farmhouses-minka
 - RENDERING=rendering/homesteads/how-our-maps-draw-farmhouses---size-plan-roof-bearing-and-setback
-- OLD=research/homesteads/400-how-big-was-an-ordinary-farmhouse-and-how-much-bigger-was-a-well-off-one.html research/homesteads/130-why-is-a-farmhouse-longer-than-it-is-deep.html research/homesteads/420-was-a-farmhouse-one-straight-block-an-l-or-built-around-a-court.html research/homesteads/410-what-did-a-farmhouse-roof-look-like-from-above.html research/homesteads/240-why-do-a-villages-farmhouses-face-different-ways-and-why-does-each-yard-turn-with-its-house.html research/homesteads/780-before-1868-did-a-villages-farmhouses-face-different-ways.html research/homesteads/100-how-close-does-a-farmhouse-stand-to-the-paddy-up-against-it---but-never-on-the-bund.html
+- OLD=research/homesteads/ research/homesteads/ research/homesteads/ research/homesteads/ research/homesteads/ research/homesteads/ research/homesteads/
 - MODALS=Farmhouse
 - BASE=5d812b0b9
 

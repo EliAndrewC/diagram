@@ -4,7 +4,7 @@
 
 - SECTION=settlements/households-how-many-live-in-a-house-and-under-how-many-roofs-ie
 - RENDERING=rendering/settlements/how-our-maps-count-and-draw-households
-- OLD=research/settlements/035-how-many-lived-in-one-farmhouse-and-under-how-many-roofs.html research/settlements/020-how-many-inhabitants-does-a-maps-house-count-stand-for.html research/settlements/030-is-every-household-in-a-hamlet-actually-drawn.html
+- OLD=research/settlements/ research/settlements/ research/settlements/
 - MODALS=RetirementHouse
 
 - BASE=fe55805e3

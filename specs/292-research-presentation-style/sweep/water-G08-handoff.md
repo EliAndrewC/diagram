@@ -4,21 +4,21 @@
 
 - SECTION=water/sharing-water-between-villages-bunsui
 - RENDERING=rendering/water/how-our-maps-draw-a-water-split-between-villages-bunsui
-- OLD=research/water/400-how-was-a-ditchs-water-split-between-villages-and-what-shows-at-the-split.html research/fields/210-free-lore-hooks-and-the-sources.html
+- OLD=research/water/ research/fields/
 - MODALS=
 
 ## Lifting water onto fields: treadle wheels and chain pumps (fumiguruma)
 
 - SECTION=water/lifting-water-onto-fields-treadle-wheels-and-chain-pumps-fumiguruma
 - RENDERING=rendering/water/how-our-maps-draw-treadle-wheels-and-chain-pumps-fumiguruma
-- OLD=research/water/410-did-a-village-lift-water-onto-its-fields---and-with-what.html
+- OLD=research/water/
 - MODALS=
 
 ## Water mills (suisha)
 
 - SECTION=water/water-mills-suisha
 - RENDERING=rendering/water/how-our-maps-draw-water-mills-suisha
-- OLD=research/water/420-did-a-village-have-a-water-mill---and-where-was-a-towns-grain-milled.html
+- OLD=research/water/
 - MODALS=
 
 - BASE=0c21c7aff

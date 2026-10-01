@@ -4,7 +4,7 @@
 
 - SECTION=vegetation/scrub-and-rough-grass-at-the-edges-of-fields-and-channels
 - RENDERING=rendering/vegetation/how-our-maps-keep-scrub-off-fields-channels-and-open-water
-- OLD=research/vegetation/090-the-crop-margin---scrub-stands-6-ft-off-every-field-edge.html research/vegetation/110-the-cut-bank---scrub-stands-6-ft-off-every-irrigation-channels-drawn-edge.html research/vegetation/630-was-the-grass-beside-a-field-kept-cut-before-modern-times-yes---for-green-manure-though-how-often-is-known-only-today.html research/vegetation/100-scrub-stays-off-open-water---including-the-comb-laterals-drawn-width.html
+- OLD=research/vegetation/ research/vegetation/ research/vegetation/ research/vegetation/
 - MODALS=ScrubAndRoughGrazing
 - BASE=24a5f0a13
 

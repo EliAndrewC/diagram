@@ -4,7 +4,7 @@
 
 - SECTION=archetypes/mulberry-and-other-crops-on-pond-dikes-sangji-guoji
 - RENDERING=rendering/archetypes/how-our-maps-draw-the-planted-pond-dikes
-- OLD=research/archetypes/220-how-thickly-was-dike-mulberry-planted-and-how-wide-did-a-bush-grow.html research/archetypes/173-what-else-was-planted-on-a-pond-dike-besides-mulberry.html research/archetypes/230-were-fruit-cane-or-banana-dikes-older-than-the-mulberry-dike-fruit-was---lychee-above-all.html
+- OLD=research/archetypes/ research/archetypes/ research/archetypes/
 - MODALS=MulberryDike FruitDike TeaDike
 - BASE=07e27b320
 

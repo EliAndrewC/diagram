@@ -2,7 +2,7 @@
 
 - SECTION=cities/fabric/shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana
 - RENDERING=rendering/cities/fabric/how-our-maps-zone-a-citys-lots
-- OLD=research/cities/fabric/080-where-do-the-shops-stand-and-where-does-the-poor-housing-go.html research/cities/fabric/110-which-way-does-a-city-houses-door-face-and-how-deep-do-the-rows-stack.html research/cities/fabric/160-what-was-a-back-alley-like-underfoot.html
+- OLD=research/cities/fabric/ research/cities/fabric/ research/cities/fabric/
 - MODALS=
 - BASE=5ffa7434d
 

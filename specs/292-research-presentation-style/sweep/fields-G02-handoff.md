@@ -4,7 +4,7 @@
 
 - SECTION=fields/bunds-between-the-paddies-aze
 - RENDERING=rendering/fields/how-our-maps-draw-bunds-between-the-paddies-aze
-- OLD=research/fields/260-how-wide-is-a-bund-and-how-wide-is-the-one-a-farmer-walks-on.html research/fields/630-how-wide-and-how-high-was-a-bund-before-modern-times-as-wide-as-the-map-draws-it-and-lower-than-todays-foot.html research/fields/021-bunds-are-shared-and-the-fabric-is-continuous.html research/fields/022-a-bund-runs-on-or-it-turns-for-a-reason---it-does-not-step-sideways-and-carry-on.html research/fields/026-why-the-bund-shows-at-all-in-high-summer-and-why-it-is-drawn-dark-red-brown.html research/fields/290-where-does-the-path-to-the-fields-end-on-a-bund-which-carries-it-on.html research/fields/200-what-a-bund-bean-actually-looks-like---the-soybean-plant-against-the-bead-we-draw.html research/archetypes/070-why-is-a-hand-piled-bund-never-straight---and-never-square-at-the-corners.html
+- OLD=research/fields/ research/fields/ research/fields/ research/fields/ research/fields/ research/fields/ research/fields/ research/archetypes/
 - MODALS=Bund BundBeans VillageLane
 - BASE=4fe903465
 

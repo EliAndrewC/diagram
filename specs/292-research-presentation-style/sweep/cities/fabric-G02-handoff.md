@@ -2,7 +2,7 @@
 
 - SECTION=cities/fabric/the-citys-street-front-continuous-rows-of-shophouses-machiya
 - RENDERING=rendering/cities/fabric/how-our-maps-draw-a-citys-street-front
-- OLD=research/cities/fabric/010-urban-commoners-built-in-continuous-street-walls.html research/cities/fabric/020-machiya-row-density-a-commercial-street-is-a-continuous-built-edge.html
+- OLD=research/cities/fabric/ research/cities/fabric/
 - MODALS=
 - BASE=50f1af527
 

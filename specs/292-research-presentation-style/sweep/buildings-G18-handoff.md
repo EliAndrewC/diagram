@@ -4,14 +4,14 @@
 
 - SECTION=buildings/staff-rowhouses-and-barracks-nagaya
 - RENDERING=rendering/buildings/how-our-maps-draw-staff-rowhouses-and-barracks-nagaya
-- OLD=research/buildings/060-staff-housing-spans-a-real-spectrum.html research/buildings/750-how-big-was-the-rowhouse-a-magistrates-staff-lived-in.html research/buildings/900-how-were-the-rooms-of-a-compounds-barracks-divided.html
+- OLD=research/buildings/ research/buildings/ research/buildings/
 - MODALS=Barracks RetainersQuarters
 
 ## Stables (umaya)
 
 - SECTION=buildings/stables-umaya
 - RENDERING=rendering/buildings/how-our-maps-draw-stables-umaya
-- OLD=research/buildings/390-what-was-a-samurais-stable-like-and-how-big-was-a-stall.html
+- OLD=research/buildings/
 - MODALS=Stables
 
 - BASE=6b6c58b61

@@ -4,7 +4,7 @@
 
 - SECTION=buildings/magistrates-compounds-jinya-and-yamen
 - RENDERING=rendering/buildings/how-our-maps-draw-a-magistrates-compound
-- OLD=research/buildings/010-administrative-culture-is-japan-first-for-compound-interiors.html research/buildings/020-office-in-front-residence-behind---the-two-court-split-is-universal.html research/buildings/510-what-did-the-smallest-branch-office-hold-inside-its-walls.html research/buildings/110-poverty-texture-is-historically-genuine.html research/buildings/140-the-mode-a-scale-is-3-px--1-ft.html research/buildings/200-rendering--layout-is-checked-automatically-because-it-is-geometry-not-judgment.html
+- OLD=research/buildings/ research/buildings/ research/buildings/ research/buildings/ research/buildings/ research/buildings/
 - MODALS=CompoundShrine CompoundWall CourtDivider Door FamilyQuarters InnerCourt KneelingPositions MagistratesDais Nakamon OfficeHall OuterCourt Residence TaxArchive
 - BASE=8647266f1
 

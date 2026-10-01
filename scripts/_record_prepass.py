@@ -156,6 +156,17 @@ def defined_words(record_dir: str) -> set[str]:
         return set()
 
 
+def page_text(record_dir: str, rel: str) -> str:
+    """A page of the record as its fragments assemble it (feature 301: the pages are built, never committed), through the
+    engine's own reader; a record with no fragments (a test's whole-page fixture) is read from its file."""
+    skill = pathlib.Path(record_dir).resolve().parent
+    if str(skill) not in sys.path:
+        sys.path.insert(0, str(skill))
+    from l7r.diagram.interactive.sources import record_text  # noqa: PLC0415 - the engine, from the skill the record is in
+
+    return record_text(rel, record_dir)
+
+
 @functools.cache
 def registry_keys(record_dir: str) -> set[str]:
     """The source keys of `SOURCES.html` - identifiers, not words a reader is asked to know.
@@ -164,11 +175,7 @@ def registry_keys(record_dir: str) -> set[str]:
     cutoff and the word regex already keep every key off every list, so this removes nothing now. It is
     here for the key rare enough to survive the cutoff.
     """
-    try:
-        with open(os.path.join(record_dir, "SOURCES.html"), encoding="utf-8") as fh:
-            return {m.group(1) for m in re.finditer(r'<h3 id="([a-z0-9][a-z0-9-]*)"', fh.read())}
-    except OSError:
-        return set()
+    return {m.group(1) for m in re.finditer(r'<h3 id="([a-z0-9][a-z0-9-]*)"', page_text(record_dir, "SOURCES.html"))}
 
 
 @functools.cache
@@ -180,8 +187,9 @@ def corpus_frequency(record_dir: str) -> dict[str, int]:
     """
     freq: dict[str, int] = {}
     for base, _dirs, names in os.walk(record_dir):
-        if "citations" in base or base.endswith("assets") or base == record_dir:
-            continue
+        rel = os.path.relpath(base, record_dir).replace(os.sep, "/")
+        if "citations" in base or base.endswith("assets") or base == record_dir or rel.split("/")[0] in ("site",) or rel.startswith(".site-"):
+            continue  # the built site (feature 301) is the record again, page by page - counting it would count every word twice
         for name in names:
             if not name.endswith(".html") or name.startswith("_"):
                 continue
@@ -332,9 +340,10 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     root = pathlib.Path(args.root)
     name = args.page.removesuffix(".html")
-    path = root / RESEARCH / f"{name}.html"
-    if not path.is_file():
-        print(f"record-prepass: no such page - wanted {path}", file=sys.stderr)
+    rel = "SOURCES.html" if name in ("sources", "SOURCES") else f"{name}.html"
+    page = page_text(str(root / RESEARCH), rel)
+    if not page:
+        print(f"record-prepass: no such page - wanted {name} under {root / RESEARCH}", file=sys.stderr)
         return 2
     gloss_path = root / GLOSSARY
     glossary = json.loads(gloss_path.read_text(encoding="utf-8")) if gloss_path.is_file() else {}
@@ -348,7 +357,7 @@ def main(argv: list[str] | None = None) -> int:
     # fragment's `<h3>` subsections have no file of their own, so a name could never have found them.
     wanted = {_bare(h) for f in fragments if not f.endswith(".notes.html")
               for h in re.findall(r"(?s)<h[23][^>]*>(.*?)</h[23]>", (root / f).read_text(encoding="utf-8"))}
-    listing = [s for s in prepass(path.read_text(encoding="utf-8"), glossary, str(root / RESEARCH))
+    listing = [s for s in prepass(page, glossary, str(root / RESEARCH))
                if not args.section or args.section.casefold() in s["section"].casefold() or _bare(s["section"]) in wanted]
     if args.section and not listing:
         print(f"record-prepass: SECTION={args.section!r} matched no section of {name} - nothing was checked", file=sys.stderr)

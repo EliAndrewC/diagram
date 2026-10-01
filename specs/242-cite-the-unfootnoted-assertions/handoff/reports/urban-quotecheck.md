@@ -131,4 +131,4 @@ Skipped throughout: the project's own measurements of its drawn maps, drawing co
 | Grounds notes carrying a prohibited claim | **1** (fn-176) |
 | Hosts that refused | **none** |
 
-Files read: `/diagram/.clones/diagram-research/.claude/skills/diagram/research/urban-features.html`, `/diagram/.clones/diagram-research/.claude/skills/diagram/research/citations/urban-features.html`, `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/capitals.html`, `/diagram/.clones/diagram-research/.claude/skills/diagram/research/citations/cities/capitals.html`. Nothing was edited.
+Files read: `/diagram/.clones/diagram-research/.claude/skills/diagram/research/urban-features/`, `/diagram/.clones/diagram-research/.claude/skills/diagram/research/urban-features/`, `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/capitals/`, `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/capitals/`. Nothing was edited.

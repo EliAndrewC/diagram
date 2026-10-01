@@ -4,14 +4,14 @@
 
 - SECTION=urban-features/sake-breweries-sakagura
 - RENDERING=rendering/urban-features/how-our-maps-draw-sake-breweries-sakagura
-- OLD=research/urban-features/510-does-a-county-town-keep-a-sake-brewery-and-where-does-it-stand.html research/urban-features/710-how-big-was-a-brewerys-vat-hall-before-modern-times.html
+- OLD=research/urban-features/ research/urban-features/
 - MODALS=
 
 ## Rice hulling and polishing (tsukigomeya)
 
 - SECTION=urban-features/rice-hulling-and-polishing-tsukigomeya
 - RENDERING=rendering/urban-features/how-our-maps-draw-rice-hulling-and-polishing-tsukigomeya
-- OLD=research/urban-features/520-where-was-a-towns-rice-hulled-and-polished-and-by-whom.html
+- OLD=research/urban-features/
 - MODALS=
 
 - BASE=b25a80071

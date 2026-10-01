@@ -4,7 +4,7 @@
 
 - SECTION=vegetation/a-villages-groves-the-back-grove-the-water-mouth-grove-and-the-dooryard-copse-fengshui-lin
 - RENDERING=rendering/vegetation/how-our-maps-draw-a-villages-groves-and-why-their-size-is-honest
-- OLD=research/vegetation/020-what-are-the-villages-three-groves---the-windbreak-belt-the-water-mouth-cluster-and-the-dooryard-copse.html research/vegetation/010-the-fengshui-forest---real-scale-and-why-ours-is-honest.html research/vegetation/290-how-big-is-a-water-mouth-grove-no-chinese-one-has-been-measured.html research/vegetation/600-how-big-were-a-villages-groves-before-modern-times-no-old-record-measures-one---the-sizes-are-todays-taken-on-groves-centuries-old.html
+- OLD=research/vegetation/ research/vegetation/ research/vegetation/ research/vegetation/
 - MODALS=Windbreak Copse
 - BASE=efbd6eb95
 

@@ -4,7 +4,7 @@
 
 - SECTION=towns/hayfields-and-hay-barns-at-a-towns-edge
 - RENDERING=rendering/towns/how-our-maps-draw-a-towns-hayfield-stacks-not-bales
-- OLD=research/towns/410-what-are-the-barns-in-a-towns-hayfield-and-how-big-are-they.html research/towns/600-does-a-towns-hayfield-hold-hay-bales-and-a-fence-or-haystacks.html research/vegetation/320-what-hayfield-and-grazing-ground-surrounds-a-town-for-its-horses-a-common-where-fodder-was-cut-and-carried-to-the-stable.html
+- OLD=research/towns/ research/towns/ research/vegetation/
 - MODALS=
 - BASE=4a7e3a097
 

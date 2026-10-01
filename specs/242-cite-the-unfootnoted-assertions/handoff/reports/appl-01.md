@@ -87,4 +87,4 @@ I opened all 25 sources; no host refused. Entries are `SOURCES.html` lines 1600-
 
 **Hosts that refused: none.** All 25 URLs returned content on the first attempt (en.wikipedia.org, ja.wikipedia.org, zh.wikipedia.org, kotobank.jp); `kokumori-jawiki` and `hongwu-emperor-enwiki` were each asked a second question of the same cached page to pin one detail down.
 
-Files read: `/diagram/.clones/diagram-research/.claude/skills/diagram/research/SOURCES.html` (entries at lines 1600-1724) and `/tmp/claude-1000/-diagram/881af52a-eb5f-4d37-a25e-340a1806dd15/scratchpad/242/appl-batch-01.md`.
+Files read: `/diagram/.clones/diagram-research/.claude/skills/diagram/research/sources/` (entries at lines 1600-1724) and `/tmp/claude-1000/-diagram/881af52a-eb5f-4d37-a25e-340a1806dd15/scratchpad/242/appl-batch-01.md`.

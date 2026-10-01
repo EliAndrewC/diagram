@@ -4,7 +4,7 @@
 
 - SECTION=buildings/hunting-dogs-and-kennels-inugoya
 - RENDERING=rendering/buildings/how-our-maps-draw-a-kennel
-- OLD=research/buildings/590-did-a-samurai-household-keep-hunting-dogs-and-where-were-they-kept.html research/buildings/590-did-a-samurai-household-keep-hunting-dogs-and-where-were-they-kept.notes.html research/buildings/590-did-a-samurai-household-keep-hunting-dogs-and-where-were-they-kept.originals.html
+- OLD=research/buildings/ research/buildings/ research/buildings/
 - MODALS=Kennel
 - BASE=ec3512d2a
 

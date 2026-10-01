@@ -4,7 +4,7 @@
 
 - SECTION=buildings/the-compounds-own-shrine-yashikigami
 - RENDERING=rendering/buildings/how-our-maps-draw-the-compounds-shrine
-- OLD=research/buildings/030-every-administrative-compound-keeps-a-shrine.html research/buildings/550-what-grew-around-the-compounds-own-shrine.html
+- OLD=research/buildings/ research/buildings/
 - MODALS=CompoundShrine ShrineAltar CompoundGarden
 - BASE=1c31f6885
 

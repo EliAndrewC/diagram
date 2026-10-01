@@ -4,7 +4,7 @@
 
 - SECTION=cities/defenses/city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen
 - RENDERING=rendering/cities/defenses/how-our-maps-draw-a-citys-gates-chengmen
-- OLD=research/cities/defenses/040-gate-structures---real-footprints.html research/cities/defenses/030-how-wide-is-the-opening-a-road-passes-through.html research/cities/defenses/210-what-stands-at-a-walled-towns-gate-and-how-wide-is-its-opening.html research/cities/defenses/230-how-does-a-road-cross-the-moat-at-a-gate.html
+- OLD=research/cities/defenses/ research/cities/defenses/ research/cities/defenses/ research/cities/defenses/
 - MODALS=
 - BASE=b13a28443
 

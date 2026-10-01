@@ -2,7 +2,7 @@
 
 - SECTION=archetypes/parcels-and-bunds-inside-a-polder-aze
 - RENDERING=rendering/archetypes/how-our-maps-draw-a-polders-parcels-and-the-bunds-between-them
-- OLD=research/archetypes/050-polder-parcels-were-a-private-tenure-patchwork.html research/archetypes/060-what-lies-between-two-parcels-and-how-wide-is-it.html research/archetypes/320-does-who-held-or-rented-a-plot-show-in-the-field-pattern.html
+- OLD=research/archetypes/ research/archetypes/ research/archetypes/
 - MODALS=
 - BASE=dc0631edd
 

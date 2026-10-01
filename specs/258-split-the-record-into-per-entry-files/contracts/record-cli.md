@@ -36,8 +36,8 @@ record: in sync (19 pages, 1 registry, 1,850 notes)
 A refusal names the file and the thing, never a count alone:
 
 ```
-record: research/water/040-what-does-a-weir-look-like.html references `mineta-2007-tameike-4`,
-        which no note in research/water/040-what-does-a-weir-look-like.notes.html defines
+record: research/water/ references `mineta-2007-tameike-4`,
+        which no note in research/water/ defines
 ```
 
 ## Where it is enforced

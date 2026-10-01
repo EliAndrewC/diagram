@@ -139,7 +139,7 @@ level of curiosity:
 3. **The answer.** A question links to its section of the research PAGE, locally from the map
    (`../../../research/<file>.html#<anchor>`; feature 194 - it was the GitHub rendering of the Markdown before),
    where the well-formatted markdown gives the finding, the decision it drove and any disclosed liberty.
-4. **The sources.** Every section ends in a `**Sources:**` line, and every key in [`SOURCES.html`](../.claude/skills/diagram/research/SOURCES.html)
+4. **The sources.** Every section ends in a `**Sources:**` line, and every key in [`SOURCES.html`](../.claude/skills/diagram/research/sources/)
    carries the URL where the work can be read (constitution v2.13.0), so a reader who truly wants to
    check can - *"which both demonstrates that this was based on actual research and also gives them the
    ability to go read Wikipedia or whatever other public source we have linked to."*
@@ -201,7 +201,7 @@ research file is never bare. Write it as a link, and the target follows from the
 - a document we READ - the citation line carries a URL and no not-read marker - links to that URL, the FIRST
   one on the line: `` [`wang-ochiai-2022`](https://doi.org/10.1080/13467581.2021.1972810) ``;
 - a document we did NOT read - the line says `SUMMARY-ONLY` or `URL: none`, or records its URL as `unfetched`
-  with no `READ` beside it - links to its registry entry, `` [`ma-2024-desire-paths`](../.claude/skills/diagram/research/SOURCES.html#ma-2024-desire-paths) ``
+  with no `READ` beside it - links to its registry entry, `` [`ma-2024-desire-paths`](../.claude/skills/diagram/research/sources/010-works-cited/6140-ma-2024-desire-paths.html) ``
   (`../SOURCES.md#...` from `cities/`), because the entry is where "we could not read it" is said, and a link
   to the page would present an unread source as a read one.
 

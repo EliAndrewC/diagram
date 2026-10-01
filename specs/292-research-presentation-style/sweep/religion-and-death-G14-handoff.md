@@ -2,7 +2,7 @@
 
 - SECTION=religion-and-death/temples-of-the-state-cult-the-city-god-and-confucius-chenghuang-miao-wenmiao
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-the-state-cults-altars-and-temples
-- OLD=research/religion-and-death/550-does-a-county-seat-or-a-city-carry-the-state-cults-altars-and-temples-and-how-big-are-they.html
+- OLD=research/religion-and-death/
 - MODALS=
 - BASE=49b93c926
 

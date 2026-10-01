@@ -1,6 +1,6 @@
 # Source applicability - feature 242, batch 3 of 25 keys
 
-Registry read: `/diagram/.clones/diagram-research/.claude/skills/diagram/research/SOURCES.html` (entries at lines 1850-1974). All 25 URLs were opened and read on 2026-09-14; **no host refused**. Every one of the 25 is a tertiary work (an encyclopedia article or a reproduced dictionary/encyclopedia entry), so "tertiary summary" is a limit common to all and is noted once per block rather than argued each time.
+Registry read: `/diagram/.clones/diagram-research/.claude/skills/diagram/research/sources/` (entries at lines 1850-1974). All 25 URLs were opened and read on 2026-09-14; **no host refused**. Every one of the 25 is a tertiary work (an encyclopedia article or a reproduced dictionary/encyclopedia entry), so "tertiary summary" is a limit common to all and is noted once per block rather than argued each time.
 
 ## NOT-APPLICABLE
 

@@ -5,8 +5,9 @@
 #
 # A local `git pull` from `.clones/<this clone>-<n>` - never a push. The pages this feature regenerates are then
 # REBUILT, always, never merged by hand (plan review): a conflict in one of them takes this side and is rebuilt; a
-# conflict anywhere else stops here for a person; and whether or not the merge was clean, `make glossary`, `make
-# record` and `make citations` run after it and whatever they change is committed.
+# conflict anywhere else stops here for a person; and whether or not the merge was clean, `make glossary` and `make
+# record` run after it and whatever they change is committed (since feature 301 `make record` builds the site, which is
+# never committed, and `make citations` is only another name for it).
 set -euo pipefail
 
 N=${1:-}
@@ -39,9 +40,9 @@ if ! git -C "$ROOT" pull -q --no-rebase --no-edit "$Q" HEAD; then
   fi
   git -C "$ROOT" commit -q --no-edit
 fi
-# PULL_QUEUE_REBUILD replaces the three targets in the tests, which have no Makefile
+# PULL_QUEUE_REBUILD replaces the two targets in the tests, which have no Makefile
 if [ -n "${PULL_QUEUE_REBUILD:-}" ]; then ( cd "$ROOT" && eval "$PULL_QUEUE_REBUILD" ); else
-  ( cd "$ROOT/.claude/skills/diagram" && make glossary >/dev/null && make record >/dev/null && make citations >/dev/null ); fi
+  ( cd "$ROOT/.claude/skills/diagram" && make glossary >/dev/null && make record >/dev/null ); fi
 if [ -n "$(git -C "$ROOT" status --porcelain)" ]; then
   git -C "$ROOT" add -A && git -C "$ROOT" commit -q -m "queue $N pulled back: the generated pages rebuilt"
 fi

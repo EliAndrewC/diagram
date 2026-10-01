@@ -2,7 +2,7 @@
 
 - SECTION=towns/the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen
 - RENDERING=rendering/towns/how-our-maps-draw-the-magistrates-manor-on-a-town-map
-- OLD=research/towns/120-where-does-a-magistrates-manor-stand-and-which-way-does-its-gate-face.html research/towns/110-why-is-the-magistrates-manor-drawn-as-a-plain-walled-box.html
+- OLD=research/towns/ research/towns/
 - MODALS=ApproachRoad MainGate Granary
 - BASE=50c2ad03a
 

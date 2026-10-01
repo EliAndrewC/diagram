@@ -4,7 +4,7 @@
 
 - SECTION=homesteads/clustered-and-scattered-villages-shuson-sanson
 - RENDERING=rendering/homesteads/how-our-maps-choose-and-draw-a-villages-form
-- OLD=research/homesteads/150-does-a-hamlet-have-to-be-nucleated-at-all.html research/archetypes/250-were-most-villages-clustered-or-scattered-and-how-common-was-each-form.html research/homesteads/160-why-does-one-village-look-nothing-like-the-next.html research/homesteads/170-how-tightly-does-a-nucleated-village-pack.html research/homesteads/200-does-a-dispersed-hamlets-outlying-farm-have-its-own-well-yes---and-the-question-was-never-the-gms.html
+- OLD=research/homesteads/ research/archetypes/ research/homesteads/ research/homesteads/ research/homesteads/
 - MODALS=FarmChannel Well
 - BASE=6c59ddb1f
 

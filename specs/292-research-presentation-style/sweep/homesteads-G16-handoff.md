@@ -2,7 +2,7 @@
 
 - SECTION=homesteads/pigs-and-ducks-in-south-china-rice-villages
 - RENDERING=rendering/homesteads/how-our-maps-draw-pigs-and-ducks-in-south-china-rice-villages
-- OLD=research/homesteads/470-did-an-ordinary-rice-village-in-south-china-keep-pigs-and-ducks-pigs-on-most-farms-ducks-out-in-the-fields.html research/homesteads/470-did-an-ordinary-rice-village-in-south-china-keep-pigs-and-ducks-pigs-on-most-farms-ducks-out-in-the-fields.notes.html research/homesteads/470-did-an-ordinary-rice-village-in-south-china-keep-pigs-and-ducks-pigs-on-most-farms-ducks-out-in-the-fields.originals.html
+- OLD=research/homesteads/ research/homesteads/ research/homesteads/
 - MODALS=
 - BASE=8ef009bda
 

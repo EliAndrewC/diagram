@@ -4,14 +4,14 @@
 
 - SECTION=vegetation/reed-beds-and-the-marshs-edge-yoshihara
 - RENDERING=rendering/vegetation/how-our-maps-draw-the-marshs-edge
-- OLD=research/vegetation/120-the-marsh-margin-reed--gt-sedgegrass--gt-dry-ground-woody-at-a-reed-edge-is-alder-or-willow-never-pine---accurate.html research/vegetation/280-were-the-reed-beds-cut-yes---every-winter-for-thatch-and-the-cutting-kept-the-marsh-edge-open.html research/vegetation/125-where-does-the-scrub-stop-at-a-marsh-grass-grades-into-the-reeds-brush-and-pines-stop-at-the-edge.html
+- OLD=research/vegetation/ research/vegetation/ research/vegetation/
 - MODALS=Alder Marsh
 
 ## Pines in residence gardens (kuromatsu)
 
 - SECTION=vegetation/pines-in-residence-gardens-kuromatsu
 - RENDERING=rendering/vegetation/how-our-maps-draw-garden-pines
-- OLD=research/vegetation/170-how-big-were-the-pines-in-a-residence-garden.html
+- OLD=research/vegetation/
 - MODALS=GardenPines
 
 - BASE=e594aa323

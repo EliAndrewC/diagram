@@ -1,7 +1,7 @@
 # Feature 242 research pass - ways.html - batch 1 of 1
 
 You are a `source-reader` on a RESEARCH PASS (constitution XII: read what you cite, quote what you cite).
-The research page is `/diagram/.clones/diagram-research/.claude/skills/diagram/research/ways.html`; each item
+The research page is `/diagram/.clones/diagram-research/.claude/skills/diagram/research/ways/`; each item
 names the line its sentence stands on - `Read` the page around that line when the sentence needs its
 context. The items below are assertions about how a place was built, farmed, governed or lived in that
 carry NO footnote. Your job, per item:

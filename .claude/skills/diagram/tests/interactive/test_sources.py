@@ -7,20 +7,20 @@ just not the right one - and they hold on the page form too."""
 from __future__ import annotations
 
 import html
-import os
 import pathlib
 import re
 
 from l7r.diagram.interactive.citations import citations_page
 from l7r.diagram.interactive.citations import research_pages as _record_pages
 from l7r.diagram.interactive.sources import (
-    RESEARCH_DIR,
-    RESEARCH_PAGES,
-    _sections,
+    SITE_PAGES,
     citation_lines,
+    entry_fragments,
     footnote_sources,
     link_target,
     not_read,
+    parse_sections,
+    record_text,
     registry_entries,
     research_questions,
     research_sources,
@@ -28,36 +28,29 @@ from l7r.diagram.interactive.sources import (
 )
 
 
-def test_an_entry_may_name_a_research_file_one_directory_down() -> None:
-    """Feature 180, spec FR-012a - a latent defect the spec review noticed, fixed under Principle XIV. The
-    file pattern could not match `research/cities/fabric.html`, so such an entry resolved to no sources and
-    no questions with nothing said; the question URL is built from the same match, so the silent miss would
-    have become a silent broken link when the town and city vocabulary arrives."""
-    entry = "research/cities/fabric.html - 'The city's street front: continuous rows of shophouses (machiya)'"
+def test_an_entry_may_name_a_question_one_directory_down() -> None:
+    """Feature 180, spec FR-012a - a latent defect the spec review noticed, fixed under Principle XIV: an entry naming a
+    `cities/` page resolved to nothing, silently. Since feature 301 an entry names the question's FRAGMENT, and its link
+    is the question's small page in the record's site."""
+    entry = "research/cities/fabric/010-the-citys-street-front-continuous-rows-of-shophouses-machiya.html"
     qs = research_questions(entry)
-    assert len(qs) == 1 and qs[0]["url"] == RESEARCH_PAGES + "cities/fabric.html#the-citys-street-front-continuous-rows-of-shophouses-machiya", qs
+    assert len(qs) == 1 and qs[0]["url"] == SITE_PAGES + "cities/fabric/the-citys-street-front-continuous-rows-of-shophouses-machiya.html", qs
     assert research_sources(entry), "and its sources resolve too"
 
 
-def test_a_heading_inside_a_code_sample_is_escaped_text_not_a_section(tmp_path: pathlib.Path) -> None:
+def test_a_heading_inside_a_code_sample_is_escaped_text_not_a_section() -> None:
     """On the Markdown record a heading inside a fence had to be skipped explicitly; on a page a heading shown
     as a sample is escaped (`&lt;h2&gt;`), so only a real `<h2>`/`<h3>` opens a section - and a `<h4>` does not."""
-    page = tmp_path / "p.html"
-    page.write_text('<h2 id="real">Real</h2><p>a</p><pre><code>&lt;h2 id="fake"&gt;Fake&lt;/h2&gt;</code></pre><h4 id="sub">Sub</h4><h3 id="also">Also</h3>', encoding="utf-8")
-    assert [h for h, _b in _sections(str(page))] == ["Real", "Also"]
+    page = '<h2 id="real">Real</h2><p>a</p><pre><code>&lt;h2 id="fake"&gt;Fake&lt;/h2&gt;</code></pre><h4 id="sub">Sub</h4><h3 id="also">Also</h3>'
+    assert [h for h, _b, _i in parse_sections(page)] == ["Real", "Also"]
 
 
-def test_a_double_quoted_research_heading_is_read_like_a_single_quoted_one() -> None:
-    """A registry entry quotes a heading 'like this' - and "like this" when the heading itself carries
-    an apostrophe, which the single-quote form cannot hold. Both must resolve to the same section.
-
-    The defect this pins shipped: the marsh class names research/water.html's "A reservoir's shore is
-    reeded, and its EMBANKMENT is mown", and with only the single-quote form the run of characters
-    BETWEEN the two double quotes matched as one giant heading that no section is named, so the entry
-    contributed nothing and swallowed the one after it. That section was folded into 'Reservoir ponds
-    (tameike)' by feature 292, so the pin now reads another heading with an apostrophe."""
-    entry = "research/water.html - \"Washing places at the water's edge\""
-    assert "gujo-jsce-2017" in research_sources(entry)
+def test_an_entry_names_its_questions_in_order_once_each_however_they_are_joined() -> None:
+    """Feature 301: an `Entry:` is a list of fragment paths, joined by `, ` or `; ` (one research page's questions,
+    then its rendering page's), read in the author's order - the primary question first (spec 180 D4) - once each."""
+    entry = "research/water/430-a.html, research/water/280-b.html; research/rendering/water/430-c.html, research/water/430-a.html"
+    assert entry_fragments(entry) == [("water", "430-a.html"), ("water", "280-b.html"), ("rendering/water", "430-c.html")]
+    assert entry_fragments("research/water/ (the page)") == [], "a page directory names no question"
 
 
 def test_a_sources_roster_is_read_whole_and_deduplicated() -> None:
@@ -81,20 +74,21 @@ _BARE = re.compile(r'(?<!">)<code>([a-z0-9][a-z0-9-]*)</code>')
 
 
 def research_pages() -> list[tuple[str, str]]:
-    """(path, the prefix that reaches research/ from it) for every page a key may be cited on: the research pages and,
-    since feature 211, their citations pages - where the footnotes are, and the derived works section."""
+    """(page, the prefix that reaches research/ from it) for every page a key may be cited on: the research pages and,
+    since feature 211, their citations pages - where the footnotes are, and the derived works section. Read in memory
+    (feature 301)."""
     out = []
     for rel in _record_pages():
-        out.append((os.path.join(RESEARCH_DIR, rel), "../" * rel.count("/")))
+        out.append((rel, "../" * rel.count("/")))
         crel = citations_page(rel)
-        out.append((os.path.join(RESEARCH_DIR, crel), "../" * crel.count("/")))
+        out.append((crel, "../" * crel.count("/")))
     return out
 
 
 def test_the_registry_has_one_entry_per_key() -> None:
     """D6: two keys had two headings each, which gives one anchor two bodies and a citation two citation lines
     to choose from. Merged by feature 190; this keeps it so."""
-    heads = re.findall(r'<h3 id="([a-z0-9][a-z0-9-]*)">', pathlib.Path(RESEARCH_DIR, "SOURCES.html").read_text(encoding="utf-8"))
+    heads = re.findall(r'<h3 id="([a-z0-9][a-z0-9-]*)">', record_text("SOURCES.html"))
     dupes = sorted({h for h in heads if heads.count(h) > 1})
     assert not dupes, dupes
 
@@ -105,13 +99,12 @@ def test_every_registry_key_cited_in_a_research_page_is_a_link_to_the_right_targ
     document"). Every registry key in every research page - in a Sources roster, a footnote or a finding's
     prose - is inside a link, and the link goes where the classifier says. A new entry written with a bare
     key fails here; so does a link to the registry for a document that was read."""
-    cites = citation_lines(pathlib.Path(RESEARCH_DIR, "SOURCES.html").read_text(encoding="utf-8"))
+    cites = citation_lines(record_text("SOURCES.html"))
     assert len(cites) > 300, "the registry parsed"
     bare, wrong = [], []
     checked = 0
-    for path, rel in research_pages():
-        text = pathlib.Path(path).read_text(encoding="utf-8")
-        name = os.path.relpath(path, RESEARCH_DIR)
+    for name, rel in research_pages():
+        text = record_text(name)
         for m in _BARE.finditer(text):
             if m.group(1) in cites:
                 bare.append(f"{name}: <code>{m.group(1)}</code>")
@@ -173,20 +166,20 @@ def test_the_marker_case_rule_fires() -> None:
 def test_a_section_with_no_roster_takes_its_sources_from_its_footnotes(tmp_path: pathlib.Path) -> None:
     """Feature 292 FR-004: a restyled section carries no `Sources:` roster, so the references behind a modal are read
     from the keys its footnotes cite - in order of first citation, once each, a key-less (absence) note contributing
-    nothing - and a section that still has a roster is read from the roster, as before."""
-    (tmp_path / "citations").mkdir()
-    (tmp_path / "citations" / "p.html").write_text(
-        '<li id="fn-1"><a href="https://x"><code>b-2</code></a> - 「q」</li>\n<li id="fn-2">no publicly readable source (searched 2026-09-29: x)</li>\n'
-        '<li id="fn-3"><a href="https://y"><code>a-1</code></a> - 「r」; <a href="https://x"><code>b-2</code></a> - 「s」</li>',
+    nothing - and a section that still has a roster is read from the roster, as before. A note may be written beside
+    another question of its page (where it was first cited), so it is looked up in the page's notes."""
+    page = tmp_path / "p"
+    page.mkdir()
+    (page / "_front.html").write_text("<main>", encoding="utf-8")
+    ref = '<sup class="fn" data-note="{0}"></sup>'
+    (page / "010-t.html").write_text(f'<h2 id="t">Topic</h2>\n<p>one{ref.format("b-2")} two{ref.format("absent")} three{ref.format("a-1")}</p>\n', encoding="utf-8")
+    (page / "010-t.notes.html").write_text(
+        '<li data-note="b-2"><a href="https://x"><code>b-2</code></a> - 「q」</li>\n<li data-note="absent">no publicly readable source<!-- searched 2026-09-29: x --> nothing</li>\n'
+        '<li data-note="a-1"><a href="https://y"><code>a-1</code></a> - 「r」; <a href="https://x"><code>b-2</code></a> - 「s」</li>\n',
         encoding="utf-8",
     )
-    ref = '<sup class="fn"><a id="fnref-{0}" href="citations/p.html#fn-{0}">{0}</a></sup>'
-    (tmp_path / "p.html").write_text(
-        f'<h2 id="t">Topic</h2>\n<p>one{ref.format(1)} two{ref.format(2)} three{ref.format(3)}</p>\n'
-        f'<h2 id="r">Rostered</h2>\n<p><strong>Sources:</strong> <a href="https://z"><code>c-3</code></a></p><p>x{ref.format(1)}</p>\n',
-        encoding="utf-8",
-    )
-    assert research_sources("research/p.html - 'Topic'", str(tmp_path)) == ["b-2", "a-1"]
-    assert research_sources("research/p.html - 'Rostered'", str(tmp_path)) == ["c-3"]
-    assert footnote_sources("<p>no references</p>", str(tmp_path / "p.html")) == []
-    assert footnote_sources(ref.format(1), str(tmp_path / "missing" / "p.html")) == [], "an unreadable citations page yields nothing"
+    (page / "020-r.html").write_text(f'<h2 id="r">Rostered</h2>\n<p><strong>Sources:</strong> <a href="https://z"><code>c-3</code></a></p><p>x{ref.format("b-2")}</p>\n', encoding="utf-8")
+    assert research_sources("research/p/010-t.html", str(tmp_path)) == ["b-2", "a-1"]
+    assert research_sources("research/p/020-r.html", str(tmp_path)) == ["c-3"]
+    assert footnote_sources("<p>no references</p>", "p.html", str(tmp_path)) == []
+    assert research_sources("research/p/030-gone.html", str(tmp_path)) == [], "a question that is not there yields nothing"

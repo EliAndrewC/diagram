@@ -38,7 +38,10 @@ RESEARCH_DIR = os.path.normpath(os.path.join(_HERE, "..", "..", "..", "research"
 #: and `research/` is one level under it. Feature 180's GitHub URL (`RESEARCH_URL`) is retired with the
 #: Markdown; a renamed heading still breaks an anchor on a page rendered before the rename (spec 180 D1),
 #: and every pool page re-renders at each landing.
-RESEARCH_PAGES = "../../../research/"
+#: Since feature 301 (GM 2026-10-01: *"the links to our research from the interactive HTML maps should link to the
+#: smaller pages, not link to the one giant page"*) a question links its own small page in the record's site,
+#: `research/site/<page dir>/<heading id>.html`, which `make record` builds (`record/site.py`).
+SITE_PAGES = "../../../research/site/"
 
 #: The record's SUB-COLLECTIONS - pages one directory down, `research/<collection>/<name>.html`, each with its fragments
 #: at `research/<collection>/<name>/` and its citations page at `research/citations/<collection>/<name>.html`. `cities`
@@ -51,28 +54,67 @@ RESEARCH_PAGES = "../../../research/"
 COLLECTIONS = ("cities", "rendering", "rendering/cities")
 
 
+#: A page's fragment directory is marked by its front matter (`record/fragments.py`).
+_FRONT = "_front.html"
+
+
+def is_page_dir(path: str) -> bool:
+    """Does this directory hold a page's fragments? Feature 301: the pages are no longer on disk, so a page is
+    found by its fragment directory - the one with `_front.html` - never by a `<name>.html` file beside it."""
+    return os.path.isfile(os.path.join(path, _FRONT))
+
+
 def collection_pages(research_dir: str = RESEARCH_DIR) -> list[str]:
     """Every page of every sub-collection, as `<collection>/<name>.html`, sorted within each collection."""
     out: list[str] = []
     for c in COLLECTIONS:
         d = os.path.join(research_dir, c)
-        out += sorted(f"{c}/{f}" for f in os.listdir(d) if f.endswith(".html")) if os.path.isdir(d) else []
+        if os.path.isdir(d):
+            out += sorted(f"{c}/{f}.html" for f in os.listdir(d) if is_page_dir(os.path.join(d, f)))
     return out
 
 
+def record_text(rel: str, research_dir: str = RESEARCH_DIR) -> str:
+    """A page of the record as a reader would open it, read through the in-memory assembly (feature 301).
+
+    `rel` is `fields.html`, `cities/fabric.html`, `SOURCES.html`, or a citations page `citations/fields.html`. The
+    pages are built, never committed, so nothing in the engine, the tools or the tests may depend on one being on
+    disk: every reader asks here, and the fragments answer. A page with no fragment directory is read from its file,
+    which is what a test's fixture record is; one that is neither is empty."""
+    return _record_text(os.path.normpath(research_dir), rel)
+
+
+@cache
+def _record_text(research_dir: str, rel: str) -> str:
+    from l7r.diagram.interactive.record import fragments as frag  # noqa: PLC0415 - the record imports this module
+    from l7r.diagram.interactive.record.store import assemble_pages  # noqa: PLC0415
+
+    citations = rel.startswith("citations/")
+    page_rel = rel[len("citations/") :] if citations else rel
+    if is_page_dir(os.path.join(research_dir, frag.page_dir(page_rel))):
+        research, cites = assemble_pages(page_rel, research_dir)
+        return (cites or "") if citations else research
+    try:
+        with open(os.path.join(research_dir, rel), encoding="utf-8") as fh:
+            return fh.read()
+    except OSError:
+        return ""
+
+
+def clear_caches() -> None:
+    """Forget every page read so far - what a build calls first, so a fragment edited since the last read in this
+    process is read again (a long-lived process, or a test that edits and builds twice)."""
+    for f in (_record_text, _page_notes, registry, registry_entries):
+        f.cache_clear()
+
+
 _KEY = re.compile(r"`([a-z0-9][a-z0-9-]*)`")
-#: A research page the entry names - `research/water.html`, or one level down, `research/cities/fabric.html`.
-#: The one-level form was added in feature 180 (spec FR-012a): the pattern could not match a
-#: subdirectory, so an entry naming a `cities/` file would have resolved to no sources and no questions,
-#: silently. No class did that on the day it was fixed; the URL above is built from this same match, so
-#: the silent miss would have become a silent broken link. Two levels (feature 292): `research/rendering/cities/capitals.html`.
-_ENTRY_FILE = re.compile(r"research/((?:[a-z-]+/){0,2}[a-z-]+\.html)")
-# A heading is quoted 'like this', and "like this" when the heading itself contains an apostrophe -
-# the single-quote form cannot carry "A reservoir's shore is reeded". Both are read (settlement-review
-# 2026-08-29): with only the first form the marsh entry lost `mineta-2007-tameike` from the modal AND
-# swallowed the heading after it, because the run of characters between the two double quotes matched
-# as one giant "heading" that no section is named.
-_ENTRY_HEADING = re.compile(r"'((?:[^']|'(?=[A-Za-z]))+)'|\"([^\"]+)\"")
+#: A research question an entry names: its FRAGMENT (feature 301, GM 2026-10-01: a pointer names *"the source which
+#: is fed into and used to generate that HTML page, because that is the canonical location of the research"*) -
+#: `research/<page dir>/<prefix>-<heading id>.html`, the page directory one to three levels deep
+#: (`fields`, `cities/sizing`, `rendering/cities/sizing`). Before 301 an entry named a page and quoted headings, and
+#: matched them by prefix; a path either names a fragment or does not.
+ENTRY_FRAGMENT = re.compile(r"research/((?:[a-z-]+/)+)(\d{3}-[^\s/,;)\"'`<>]+\.html)")
 #: A heading in a research PAGE (feature 194): its level, its id (the record's anchor) and its inner HTML.
 _HEADING_TAG = re.compile(r"<h([1-6])(?:\s+id=\"([^\"]*)\")?[^>]*>(.*?)</h\1>", re.S)
 _TAG = re.compile(r"<[^>]+>")
@@ -135,17 +177,11 @@ def question_text(heading: str) -> str:
     return _DATED_TAIL.sub("", heading_text(heading)).strip()
 
 
-@cache
-def _parsed(path: str) -> list[tuple[str, str, str]]:
-    """(heading text, body html, id) for every `<h2>`/`<h3>` section of a research PAGE, in page order (feature
+def parse_sections(page: str) -> list[tuple[str, str, str]]:
+    """(heading text, body html, id) for every `<h2>`/`<h3>` section of a research page's HTML, in page order (feature
     191: the record is HTML). The id is the page's own - `tests/interactive/test_record.py` proves it equals
     `github_anchor` of the text; a `<code>` span in a heading (the registry's keys) reads as its text, as GitHub's
     slugger read the backticks. A body runs to the next heading of ANY level; a `####` opens no section."""
-    try:
-        with open(path, encoding="utf-8") as fh:
-            page = fh.read()
-    except OSError:
-        return []
     out: list[tuple[str, str, str]] = []
     heads = list(_HEADING_TAG.finditer(page))
     for i, m in enumerate(heads):
@@ -154,25 +190,6 @@ def _parsed(path: str) -> list[tuple[str, str, str]]:
         end = heads[i + 1].start() if i + 1 < len(heads) else len(page)
         out.append((page_text(m.group(3)), page[m.end() : end], m.group(2) or ""))
     return out
-
-
-def _sections(path: str) -> list[tuple[str, str]]:
-    """(heading text, body html) for every `<h2>`/`<h3>` section of a research page."""
-    return [(h, b) for h, b, _a in _parsed(path)]
-
-
-def _names(heading: str, quoted: str) -> bool:
-    """Does a quoted heading from an entry name this section? The registry quotes headings shortened at
-    a dash, so a match is a prefix either way."""
-    return heading.startswith(quoted) or quoted.startswith(heading)
-
-
-def _entry_headings(entry: str) -> list[str]:
-    # a heading is the OUTERMOST quoted text of each "; "-separated segment - a title may itself
-    # carry an apostrophe ("The garden's sun"), so a simple quote-to-quote match cuts it short
-    # a quoted heading; a quote followed by a letter is an apostrophe INSIDE a title ("The garden's
-    # sun"), any other quote closes it
-    return [m.group(1) or m.group(2) for m in _ENTRY_HEADING.finditer(entry)]
 
 
 def section_sources(body: str) -> list[str]:
@@ -189,65 +206,83 @@ def section_sources(body: str) -> list[str]:
     return keys
 
 
-_FN_REF = re.compile(r'<sup class="fn"><a [^>]*href="([^"#]+)#fn-(\d+)"')
-_NOTE_LI = re.compile(r'<li id="fn-(\d+)">(.*?)</li>', re.S)
+_REFERENCE = re.compile(r'<sup class="fn" data-note="([^"]*)"></sup>')
 _NOTE_KEY = re.compile(r'<a href="[^"]*"><code>([a-z0-9][a-z0-9-]*)</code></a>')
 
 
+def page_rel_of(page_dir: str) -> str:
+    """A page's name from its fragment directory: `fields` -> `fields.html`, `sources` -> `SOURCES.html`."""
+    return "SOURCES.html" if page_dir == "sources" else f"{page_dir}.html"
+
+
 @cache
-def _page_notes(path: str) -> dict[str, str]:
-    """note number -> note HTML, for one citations page (empty when it cannot be read)."""
-    try:
-        with open(path, encoding="utf-8") as fh:
-            return dict(_NOTE_LI.findall(fh.read()))
-    except OSError:
-        return {}
+def _page_notes(research_dir: str, page_rel: str) -> dict[str, str]:
+    """note key -> note HTML for one page, gathered from its questions' notes files (`record/store.read_notes`)."""
+    from l7r.diagram.interactive.record.store import read_notes  # noqa: PLC0415 - the record imports this module
+
+    return read_notes(page_rel, research_dir)
 
 
-def footnote_sources(body: str, page_path: str) -> list[str]:
-    """The keys a section's FOOTNOTES cite, in order of first citation, once each - the section's sources once it
+def footnote_sources(fragment: str, page_rel: str, research_dir: str = RESEARCH_DIR) -> list[str]:
+    """The keys a question's FOOTNOTES cite, in order of first citation, once each - the question's sources once it
     carries no `Sources:` roster (feature 292: the roster is retired from a restyled section, and every key it named
-    had to be quoted by one of these footnotes anyway). `page_path` is the assembled research page the body is from;
-    each reference names the citations page its note is on, relative to it."""
+    had to be quoted by one of these footnotes anyway). A reference names its note by key; the note may be written
+    beside another question of the page, where it was first cited, so it is looked up in the page's notes."""
+    notes = _page_notes(os.path.normpath(research_dir), page_rel)
     keys: list[str] = []
-    for href, n in _FN_REF.findall(body):
-        note = _page_notes(os.path.normpath(os.path.join(os.path.dirname(page_path), href))).get(n, "")
-        for k in _NOTE_KEY.findall(note):
+    for ref in _REFERENCE.findall(fragment):
+        for k in _NOTE_KEY.findall(notes.get(ref, "")):
             if k not in keys:
                 keys.append(k)
     return keys
 
 
+def entry_fragments(entry: str) -> list[tuple[str, str]]:
+    """(page dir, fragment file name) for every question an entry names, in the order it names them (spec 180 D4: the
+    class author puts the primary question first), once each."""
+    out: list[tuple[str, str]] = []
+    for m in ENTRY_FRAGMENT.finditer(entry):
+        found = (m.group(1).rstrip("/"), m.group(2))
+        if found not in out:
+            out.append(found)
+    return out
+
+
+def _fragment(research_dir: str, page_dir: str, name: str) -> str | None:
+    try:
+        with open(os.path.join(research_dir, page_dir, name), encoding="utf-8") as fh:
+            return fh.read()
+    except OSError:
+        return None
+
+
 def research_sources(entry: str, research_dir: str = RESEARCH_DIR) -> list[str]:
-    """Every key the research entries named in `entry` cite, in file order: a section's roster where it has one,
+    """Every key the research questions named in `entry` cite, in entry order: a section's roster where it has one,
     else the keys its footnotes cite."""
-    headings = _entry_headings(entry)
     keys: list[str] = []
-    for fname in _ENTRY_FILE.findall(entry):
-        path = os.path.join(research_dir, fname)
-        for heading, body in _sections(path):
-            if any(_names(heading, h) for h in headings):
-                for k in section_sources(body) or footnote_sources(body, path):
-                    if k not in keys:
-                        keys.append(k)
+    for page_dir, name in entry_fragments(entry):
+        text = _fragment(research_dir, page_dir, name)
+        if text is None:
+            continue
+        for k in section_sources(text) or footnote_sources(text, page_rel_of(page_dir), research_dir):
+            if k not in keys:
+                keys.append(k)
     return keys
 
 
 def research_questions(entry: str, research_dir: str = RESEARCH_DIR) -> list[dict[str, str]]:
-    """The QUESTIONS behind a modal (feature 180): `{"text", "url"}` for every research section the
-    entry names, in the order the ENTRY quotes them rather than file order (spec D4 - the class author
-    put the primary question first), deduplicated. `text` is the heading less its dated bookkeeping;
-    `url` is the section's anchor on the public GitHub rendering of the file."""
-    files = _ENTRY_FILE.findall(entry)
+    """The QUESTIONS behind a modal (feature 180): `{"text", "url"}` for every research question the entry names, in
+    the order the ENTRY names them. `text` is the heading less its dated bookkeeping; `url` is the question's small
+    page in the record's site (feature 301). A path that names no fragment yields nothing - which
+    `scripts/check-entry-headings.py` refuses at the push."""
     out: list[dict[str, str]] = []
-    urls: set[str] = set()
-    for quoted in _entry_headings(entry):
-        for fname in files:
-            for heading, _body, anchor in _parsed(os.path.join(research_dir, fname)):
-                url = f"{RESEARCH_PAGES}{fname}#{anchor}"
-                if _names(heading, quoted) and url not in urls:
-                    urls.add(url)
-                    out.append({"text": question_text(heading), "url": url})
+    for page_dir, name in entry_fragments(entry):
+        text = _fragment(research_dir, page_dir, name)
+        m = _HEADING_TAG.search(text or "")
+        if m is None:
+            continue
+        heading_id = m.group(2) or name.split("-", 1)[1][: -len(".html")]
+        out.append({"text": question_text(page_text(m.group(3))), "url": f"{SITE_PAGES}{page_dir}/{heading_id}.html"})
     return out
 
 
@@ -255,7 +290,7 @@ def research_questions(entry: str, research_dir: str = RESEARCH_DIR) -> list[dic
 def registry(research_dir: str = RESEARCH_DIR) -> dict[str, str]:
     """key -> the SOURCES.html entry text (the citation line and its 'Used for' line, as text)."""
     out: dict[str, str] = {}
-    for heading, body, _id in _parsed(os.path.join(research_dir, "SOURCES.html")):
+    for heading, body, _id in parse_sections(record_text("SOURCES.html", research_dir)):
         m = re.fullmatch(r"[a-z0-9][a-z0-9-]*", heading.strip())
         if not m:
             continue
@@ -328,11 +363,7 @@ def registry_entries(research_dir: str = RESEARCH_DIR) -> dict[str, dict[str, st
     """key -> the parts of its SOURCES.html entry (feature 211): `cite` (the citation line's inner HTML, comments
     dropped - the reader's line, naming the work and its authors), `line` (the same as text WITH comment text, the
     classifier's input), `what` and `why` (the two write-ups' inner HTML, '' when not yet written), `used`."""
-    try:
-        with open(os.path.join(research_dir, "SOURCES.html"), encoding="utf-8") as fh:
-            src = fh.read()
-    except OSError:
-        return {}
+    src = record_text("SOURCES.html", research_dir)
     out: dict[str, dict[str, str]] = {}
     for m in _ENTRY_BLOCK.finditer(src):
         body = m.group(2)
@@ -359,14 +390,12 @@ _CANON_FILE = re.compile(r"\bl7r\.md\b|\bbudgets\.md\b")
 
 def registry_keys(research_dir: str = RESEARCH_DIR) -> set[str]:
     """Every key the registry defines."""
-    with open(os.path.join(research_dir, "SOURCES.html"), encoding="utf-8") as fh:
-        return set(re.findall(r'<h3 id="([a-z0-9][a-z0-9-]*)"', fh.read()))
+    return set(re.findall(r'<h3 id="([a-z0-9][a-z0-9-]*)"', record_text("SOURCES.html", research_dir)))
 
 
 def canon_keys(research_dir: str = RESEARCH_DIR) -> set[str]:
     """The keys whose source is the GM's own campaign notes."""
-    with open(os.path.join(research_dir, "SOURCES.html"), encoding="utf-8") as fh:
-        src = fh.read()
+    src = record_text("SOURCES.html", research_dir)
     return {m.group(1) for m in _ENTRY_HEAD.finditer(src) if _CANON_FILE.search(m.group(2))}
 
 

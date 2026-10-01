@@ -2,7 +2,7 @@
 
 - SECTION=water/where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi
 - RENDERING=rendering/water/how-our-maps-draw-where-a-field-meets-its-ditch
-- OLD=research/water/030-where-the-drawn-net-stops---the-tier-below-the-last-ditch-we-can-draw.html research/water/040-the-bund-runs-along-the-channel-bank-and-the-mizuguchi-is-too-small-to-draw.html research/water/630-is-the-bank-left-beside-a-supply-canal-only-a-modern-rule-no---an-early-yayoi-paddy-had-one.html research/fields/100-does-the-lowest-bund-of-a-paddy-run-with-the-drain-or-across-it.html
+- OLD=research/water/ research/water/ research/water/ research/fields/
 - MODALS=IrrigationDitch Bund
 - BASE=b6bde8556
 

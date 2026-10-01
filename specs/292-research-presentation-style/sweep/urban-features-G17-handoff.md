@@ -4,7 +4,7 @@
 
 - SECTION=urban-features/execution-and-punishment-grounds-keijo
 - RENDERING=rendering/urban-features/how-our-maps-site-and-draw-execution-and-punishment-grounds
-- OLD=research/urban-features/020-the-justice-works---why-a-county-seat-executes-and-why-the-ground-is-outside.html research/urban-features/022-where-does-the-execution-ground-stand---by-the-road-on-the-outcast-side-clear-of-the-graves-and-past-the-boundary-stone.html research/urban-features/024-how-big-is-an-execution-ground-and-why-is-a-county-seats-drawn-empty.html research/urban-features/026-what-stands-on-the-punishment-ground-in-town-and-why-is-the-beating-not-done-there.html
+- OLD=research/urban-features/ research/urban-features/ research/urban-features/ research/urban-features/
 - MODALS=
 - BASE=053eee1db
 

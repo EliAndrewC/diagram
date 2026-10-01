@@ -4,7 +4,7 @@
 
 - SECTION=homesteads/row-villages-resson
 - RENDERING=rendering/homesteads/how-our-maps-draw-a-row-village-resson
-- OLD=research/homesteads/155-how-was-a-row-village-laid-out.html research/homesteads/156-how-wide-was-a-farm-in-a-row-how-long-was-the-row-and-where-did-its-field-and-grove-lie.html research/homesteads/157-what-does-the-map-draw-for-a-row-village.html research/homesteads/158-how-much-dry-field-did-a-row-farm-hold-beside-its-paddy.html research/homesteads/159-which-way-did-a-row-farms-grove-face-its-road.html
+- OLD=research/homesteads/ research/homesteads/ research/homesteads/ research/homesteads/ research/homesteads/
 - MODALS=Holding VillageLane
 - BASE=ed21ea1d8
 

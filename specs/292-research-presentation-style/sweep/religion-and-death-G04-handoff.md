@@ -2,7 +2,7 @@
 
 - SECTION=religion-and-death/shrine-gateways-and-the-approach-to-the-hall-torii-sando
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-torii-and-the-shrine-approach
-- OLD=research/religion-and-death/080-torii-are-votive-donations---the-count-records-patronage.html research/religion-and-death/090-torii-spacing---two-regimes-and-nothing-in-between.html research/religion-and-death/092-where-do-the-first-and-the-innermost-arches-stand-and-where-does-the-halls-label-go.html research/religion-and-death/230-how-far-before-a-small-shrine-does-its-torii-stand-and-can-two-shrines-share-one.html research/religion-and-death/710-did-a-village-shrine-have-an-avenue-of-arches-before-modern-times.html
+- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/
 - MODALS=ShrineApproach Torii WoodKamiAltar
 - BASE=637788a7a
 

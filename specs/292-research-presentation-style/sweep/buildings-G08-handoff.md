@@ -2,7 +2,7 @@
 
 - SECTION=buildings/holding-cells-agariya-and-roya
 - RENDERING=rendering/buildings/how-our-maps-draw-holding-cells
-- OLD=research/buildings/040-cells-are-remand-not-punishment.html research/buildings/460-how-big-was-a-holding-cell.html research/buildings/100-no-interrogation-room.html
+- OLD=research/buildings/ research/buildings/ research/buildings/
 - MODALS=Cell DayOffice HearingCourt
 - BASE=457bba8dc
 

@@ -4,7 +4,7 @@
 
 - SECTION=vegetation/bamboo-groves-chikurin
 - RENDERING=rendering/vegetation/how-our-maps-draw-bamboo-when-one-culm-is-too-small-to-see
-- OLD=research/vegetation/150-bamboo-how-common-where-it-stood-and-how-to-show-it.html research/vegetation/154-did-every-farmstead-keep-its-own-bamboo-and-on-which-side.html research/vegetation/260-did-a-farmsteads-grove-carry-bamboo-yes---mixed-in-low-under-the-tall-trees-on-its-windward-side.html research/vegetation/640-did-a-village-keep-a-bamboo-thicket-before-modern-times-yes---round-its-houses-on-dry-ground.html research/vegetation/152-how-is-bamboo-drawn-when-one-culm-is-too-small-to-see.html
+- OLD=research/vegetation/ research/vegetation/ research/vegetation/ research/vegetation/ research/vegetation/
 - MODALS=HomesteadBamboo SharedBambooGrove Windbreak
 - BASE=d49d68eb3
 

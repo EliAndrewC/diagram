@@ -4,7 +4,7 @@
 
 - SECTION=urban-features/timber-yards-and-log-booms-kiba
 - RENDERING=rendering/urban-features/how-our-maps-draw-timber-yards-and-log-booms
-- OLD=research/urban-features/540-does-a-town-keep-a-timber-yard-and-does-it-need-a-river.html research/urban-features/040-the-log-boom---a-shore-fast-holding-pen-not-sticks-in-the-stream.html research/urban-features/720-did-premodern-east-asia-hold-its-timber-with-a-floating-log-boom.html
+- OLD=research/urban-features/ research/urban-features/ research/urban-features/
 - MODALS=
 
 - BASE=04853d27c

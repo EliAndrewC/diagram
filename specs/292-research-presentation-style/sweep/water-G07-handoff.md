@@ -4,7 +4,7 @@
 
 - SECTION=water/field-drains-akusuiro
 - RENDERING=rendering/water/how-our-maps-draw-field-drains
-- OLD=research/water/260-where-does-the-water-go-once-it-has-watered-the-paddies-back-to-the-river---by-the-next-field-a-shared-channel-or-a-drain-that-reaches-it.html research/fields/090-why-does-the-drain-run-across-the-slope-instead-of-down-it.html research/fields/080-how-wide-is-a-drain-where-it-starts---as-narrow-as-the-ditches-that-feed-it.html research/water/090-where-does-a-fields-drain-let-its-water-go.html
+- OLD=research/water/ research/fields/ research/fields/ research/water/
 - MODALS=DrainageDitch
 - BASE=0f92beb3e
 

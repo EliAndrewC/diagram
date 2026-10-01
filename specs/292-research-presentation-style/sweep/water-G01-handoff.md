@@ -3,7 +3,7 @@
 ## Irrigation canals and how they are laid out (yosuiro)
 - SECTION=water/irrigation-canals-and-how-they-are-laid-out-yosuiro
 - RENDERING=rendering/water/how-our-maps-lay-out-irrigation-canals
-- OLD=research/fields/070-where-does-a-fields-water-come-from-and-how-is-it-shared-out.html research/water/240-the-head-race-forks---supply-commands-both-flanks.html research/fields/075-when-would-a-fields-canals-fan-out-or-run-on-a-grid-instead-of-a-comb.html research/fields/600-is-each-grade-of-canal-at-right-angles-to-the-next-only-a-modern-rule-no---a-classical-one-and-japans-ancient-grid.html research/water/610-are-the-supply-canals-above-and-the-one-drain-below-a-modern-layout-no---an-edo-one-all-but-a-ditch-to-every-plot.html
+- OLD=research/fields/ research/water/ research/fields/ research/fields/ research/water/
 - MODALS=IrrigationDitch Pond
 - BASE=2be5ab4e6
 

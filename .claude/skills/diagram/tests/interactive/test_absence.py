@@ -8,7 +8,7 @@ import pathlib
 
 from l7r.diagram.interactive.citations import ABSENCE, footnote_form
 from l7r.diagram.interactive.record import absence
-from l7r.diagram.interactive.sources import RESEARCH_DIR
+from l7r.diagram.interactive.sources import RESEARCH_DIR, record_text
 
 
 def test_the_marker_is_shown_as_the_lead_and_a_reader_of_markup_gets_it_back() -> None:
@@ -34,5 +34,5 @@ def test_the_lead_is_written_once_and_every_rendered_note_carries_it() -> None:
     record = pathlib.Path(RESEARCH_DIR)
     hand = [p for p in record.rglob("[0-9]*.html") if "citations" not in p.parts and absence.LEAD in p.read_text(encoding="utf-8")]
     assert hand == [], hand
-    page = (record / "citations" / "homesteads.html").read_text(encoding="utf-8")
+    page = record_text("citations/homesteads.html")
     assert page.count(absence.LEAD) == page.count('<span class="sep">no publicly readable source</span>') > 0

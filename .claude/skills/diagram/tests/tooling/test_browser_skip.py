@@ -62,7 +62,7 @@ def test_the_browser_area_is_what_the_synthetic_tests_read() -> None:
         "l7r/diagram/interactive/classes/homestead.py",
         f"{PACKAGE}/test_synthetic.py",
         f"{PACKAGE}/conftest.py",
-        "research/fields.html",
+        "research/fields/010-ponds-rocks-and-graves-in-the-middle-of-the-fields.html",  # a question's fragment (feature 301)
     ):
         assert base + want in files, want
     assert not [f for f in files if f.startswith(base + "l7r/diagram/settlement/")], "no engine module outside interactive/"

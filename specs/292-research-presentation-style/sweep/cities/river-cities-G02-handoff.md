@@ -4,7 +4,7 @@
 
 - SECTION=cities/river-cities/water-gates-and-sluices-shuimen
 - RENDERING=rendering/cities/river-cities/how-our-maps-draw-water-gates-and-sluices-shuimen
-- OLD=research/cities/river-cities/110-where-a-canal-passes-the-city-wall-what-is-the-water-gate-and-how-many-does-a-city-have.html research/cities/capitals/310-how-often-is-a-sluice-open-the-duty-cycle-and-why-one-glyph-suffices.html research/cities/capitals/280-the-sluices-lifting-frame-the-quay-side-kura-and-the-boat-length-jetty.html
+- OLD=research/cities/river-cities/ research/cities/capitals/ research/cities/capitals/
 - MODALS=GranaryStilts RiverLanding Revetment
 
 - BASE=875bb35d2

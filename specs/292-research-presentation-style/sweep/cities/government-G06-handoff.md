@@ -4,14 +4,14 @@
 
 - SECTION=cities/government/a-citys-garrison-foot-soldiers-houses-barracks-and-the-armory
 - RENDERING=rendering/cities/government/how-our-maps-house-a-citys-garrison
-- OLD=research/cities/government/310-where-does-a-citys-garrison-live-and-where-are-its-weapons-kept.html research/cities/government/085-where-do-a-castle-towns-foot-soldiers-live---in-ranked-small-houses-at-the-towns-edge-never-in-the-samurai-ward.html
+- OLD=research/cities/government/ research/cities/government/
 - MODALS=
 
 ## Drill grounds, archery ranges and riding grounds (jiaochang, yaba, baba)
 
 - SECTION=cities/government/drill-grounds-archery-ranges-and-riding-grounds-jiaochang-yaba-baba
 - RENDERING=rendering/cities/government/how-our-maps-size-and-place-a-citys-drill-ground-and-riding-ground
-- OLD=research/cities/government/320-how-large-is-a-citys-drill-ground-and-where-does-it-lie.html research/cities/government/330-where-are-a-castle-towns-archery-range-and-riding-ground-and-how-long-are-they.html
+- OLD=research/cities/government/ research/cities/government/
 - MODALS=
 
 - BASE=b30fa45bf

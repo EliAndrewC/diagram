@@ -3,19 +3,19 @@
 ## Public bathhouses (sento)
 - SECTION=urban-features/public-bathhouses-sento
 - RENDERING=rendering/urban-features/how-our-maps-draw-public-bathhouses-sento
-- OLD=research/urban-features/350-how-many-bathhouses-does-a-place-keep-and-does-a-county-town-have-one.html research/urban-features/360-how-big-is-a-bathhouse-and-why-does-it-keep-a-fuel-yard.html
+- OLD=research/urban-features/ research/urban-features/
 - MODALS=
 
 ## Pawnshops (shichiya)
 - SECTION=urban-features/pawnshops-shichiya
 - RENDERING=rendering/urban-features/how-our-maps-draw-pawnshops-shichiya
-- OLD=research/urban-features/340-does-a-town-keep-a-pawnshop-and-what-gives-it-away-on-the-map.html
+- OLD=research/urban-features/
 - MODALS=
 
 ## Oil pressers (aburaya)
 - SECTION=urban-features/oil-pressers-aburaya
 - RENDERING=rendering/urban-features/how-our-maps-draw-oil-pressers-aburaya
-- OLD=research/urban-features/330-does-a-town-keep-an-oil-press-and-what-does-the-press-need.html
+- OLD=research/urban-features/
 - MODALS=
 
 - BASE=6f189c8e9

@@ -4,7 +4,7 @@
 
 - SECTION=archetypes/fish-fry-and-nursery-ponds-yumiao
 - RENDERING=rendering/archetypes/how-our-maps-draw-a-dike-pond-villages-fry-ponds
-- OLD=research/archetypes/172-were-fish-fry-a-trade-and-which-ponds-were-the-nursery-ponds.html research/archetypes/200-did-a-dike-pond-village-rear-its-own-fish-fry-or-buy-them-most-bought-them---the-nursery-ponds-were-one-townships-trade.html
+- OLD=research/archetypes/ research/archetypes/
 - MODALS=FishPond FryPond
 - BASE=7c5651efa
 

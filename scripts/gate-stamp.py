@@ -80,8 +80,9 @@ AREAS: dict[str, tuple[str, tuple[str, ...]]] = {
     # or test edit owes no gate at push (feature 132 FR-024), and this key would otherwise invent that obligation.
     "browser": (
         ".claude/skills/diagram",
-        # GUARD_EDIT_OK: feature 211 - the citations pages' derived scripts (research/citations/*.js) join the browser key
-        ("l7r/diagram/interactive/*.py", "l7r/diagram/interactive/assets/*", "tests/full/interactive/page_browser/*.py", "research/*.html", "research/citations/*.js"),
+        # GUARD_EDIT_OK: feature 301 - the record's pages are built, not committed, so the key hashes its FRAGMENTS:
+        # `research/*.html` already reaches them (fnmatch's `*` crosses `/`), and the retired citations scripts leave it
+        ("l7r/diagram/interactive/*.py", "l7r/diagram/interactive/assets/*", "tests/full/interactive/page_browser/*.py", "research/*.html"),
     ),
 }
 #: Areas whose files are hashed by their BYTES rather than the semantic id - the one place a docstring

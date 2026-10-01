@@ -4,7 +4,7 @@
 
 - SECTION=ways/village-lanes
 - RENDERING=rendering/ways/how-our-maps-draw-village-lanes
-- OLD=research/ways/020-what-vehicle-used-a-village-lane-and-how-wide-was-it.html research/ways/100-what-was-a-village-lane-surfaced-with-and-does-it-show-bare-trodden-earth.html research/ways/025-where-could-a-village-lane-run.html research/homesteads/080-is-every-farmhouse-reached-by-a-lane-and-in-what-form.html research/homesteads/090-how-does-a-village-lane-bend.html research/homesteads/310-how-far-does-a-village-lane-run-past-its-last-farmhouse.html
+- OLD=research/ways/ research/ways/ research/ways/ research/homesteads/ research/homesteads/ research/homesteads/
 - MODALS=VillageLane Farmhouse ApproachRoad CartYard
 - BASE=efbd6eb95
 

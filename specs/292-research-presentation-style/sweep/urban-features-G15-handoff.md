@@ -4,7 +4,7 @@
 
 - SECTION=urban-features/tanning-yards
 - RENDERING=rendering/urban-features/how-our-maps-site-tanning-yards
-- OLD=research/urban-features/060-tanning-yards---hides-come-from-fallen-draft-stock-and-water-is-the-gate.html research/urban-features/062-why-must-tannery-effluent-never-reach-a-paddy-intake---it-is-the-salt-not-the-rot.html research/urban-features/064-may-a-tanning-yard-sit-on-a-field-drain---yes-it-is-the-castes-natural-water-and-it-costs-the-method.html research/urban-features/066-does-a-tanning-yard-need-its-quarter-close-by-and-did-the-tanners-sleep-at-the-works.html research/urban-features/068-which-way-out-of-town-does-a-tanning-yard-stand---kegare-has-a-direction-not-a-radius.html
+- OLD=research/urban-features/ research/urban-features/ research/urban-features/ research/urban-features/ research/urban-features/
 - MODALS=
 
 - BASE=533e28b67

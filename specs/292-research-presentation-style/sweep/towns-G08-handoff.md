@@ -2,17 +2,17 @@
 
 - SECTION=towns/laborers-housing-back-lot-tenements-and-the-master-laborers-house-uradana
 - RENDERING=rendering/towns/how-our-maps-house-a-towns-laborers
-- OLD=research/towns/290-where-does-a-laborer-live-and-how-big-is-a-laborers-house.html research/towns/300-what-is-the-large-laborers-house-and-how-big-was-it.html
+- OLD=research/towns/ research/towns/
 - MODALS=
 
 - SECTION=towns/gardens-behind-a-town-house-tsubo-niwa
 - RENDERING=rendering/towns/how-our-maps-draw-gardens-behind-a-town-house-tsubo-niwa
-- OLD=research/towns/490-did-a-town-house-keep-a-garden-and-how-big-was-it.html
+- OLD=research/towns/
 - MODALS=
 
 - SECTION=towns/privies-in-a-town-house-and-who-carries-off-the-night-soil-setchin-shimogoe
 - RENDERING=rendering/towns/how-our-maps-draw-a-towns-privies-setchin
-- OLD=research/towns/480-where-is-a-town-houses-privy-and-who-carries-off-the-night-soil.html
+- OLD=research/towns/
 - MODALS=
 
 - BASE=d05527a8f

@@ -4,7 +4,7 @@
 
 - SECTION=buildings/the-size-of-a-compound-and-the-rank-of-its-buildings
 - RENDERING=rendering/buildings/how-our-maps-size-a-compound-and-its-buildings
-- OLD=research/buildings/180-the-compound-has-a-size-hierarchy-not-just-individual-sizes.html research/buildings/700-which-is-the-biggest-building-in-a-magistrates-compound.html research/buildings/190-packing-a-jinya-is-mostly-open-and-the-fix-for-too-much-empty-space-is-consolidation-not-a-smaller-envelope.html
+- OLD=research/buildings/ research/buildings/ research/buildings/
 - MODALS=Residence Kitchen Stables CompoundShrine OfficeHall Barracks OuterCourt HearingCourt CartYard
 - BASE=533407c0e
 

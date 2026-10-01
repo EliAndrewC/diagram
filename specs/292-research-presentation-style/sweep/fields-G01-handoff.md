@@ -2,7 +2,7 @@
 
 - SECTION=fields/rice-paddies-and-their-plots-suiden
 - RENDERING=rendering/fields/how-our-maps-draw-paddy-plots
-- OLD=research/fields/020-paddy-plots---irregular-patchwork-and-why-the-grid-is-anachronistic.html research/fields/040-nitrogen---a-flooded-paddy-makes-its-own.html research/fields/610-was-an-edo-new-field-a-grid-of-big-paddies-it-was-planned-in-equal-strips---but-no-paddy-grid-is-found-and-parcels-of-a-few-se-were-ordinary.html research/fields/024-minimum-basin-size---there-is-no-absolute-floor-and-the-real-floor-is-a-ratio.html research/fields/023-a-basin-never-tapers-to-a-point---the-fan-toe-truncates.html research/fields/025-the-arrowhead-a-chevron-is-pointed-and-notched-and-neither-half-alone-can-see-one.html research/towns/150-how-big-is-a-towns-paddy-plot.html
+- OLD=research/fields/ research/fields/ research/fields/ research/fields/ research/fields/ research/fields/ research/towns/
 - MODALS=Paddy BundBeans
 - BASE=27b066abc
 

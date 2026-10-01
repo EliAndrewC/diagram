@@ -4,14 +4,14 @@
 
 - SECTION=vegetation/charcoal-kilns-in-the-hills-sumigama
 - RENDERING=rendering/vegetation/how-our-maps-draw-a-charcoal-kiln
-- OLD=research/vegetation/340-did-a-village-burn-charcoal-in-its-hills-and-would-a-kiln-show-on-the-map-yes-in-the-slack-season---a-kiln-dug-into-a-slope-about-10-by-7-ft-inside.html
+- OLD=research/vegetation/
 - MODALS=
 
 ## Grass hills and fodder meadows (kusayama, magusaba)
 
 - SECTION=vegetation/grass-hills-and-fodder-meadows-kusayama-magusaba
 - RENDERING=rendering/vegetation/how-our-maps-draw-the-open-hills-past-the-grove
-- OLD=research/vegetation/310-did-a-village-keep-a-meadow-for-fodder-and-green-manure-yes---common-grass-ground-more-than-ten-times-its-fields-on-the-hills-and-riverbeds-beyond-them.html research/vegetation/050-why-is-the-hillside-past-the-grove-open-scrub-rather-than-more-forest.html
+- OLD=research/vegetation/ research/vegetation/
 - MODALS=
 
 - BASE=8e422eeda

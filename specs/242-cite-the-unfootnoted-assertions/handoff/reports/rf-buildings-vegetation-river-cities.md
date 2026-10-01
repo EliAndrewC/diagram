@@ -1,6 +1,6 @@
 # `record-format` report
 
-**Read:** `/diagram/.clones/diagram-research/.claude/skills/diagram/research/buildings.html` (158 ll.), `research/vegetation/` (564 ll.), `research/cities/river-cities/` (98 ll.); their citations pages `research/buildings/` (295 ll.), `research/vegetation/`, `research/cities/river-cities/` (170 ll.); the glossary `/diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/interactive/assets/glossary.json` (476 terms); and the `<!-- READ 2026-09-14 by a source-reader (feature 242) -->` band of `research/sources/` (250 entries, ll. 411-1656, sampled + pattern-scanned end to end).
+**Read:** `/diagram/.clones/diagram-research/.claude/skills/diagram/research/buildings/` (158 ll.), `research/vegetation/` (564 ll.), `research/cities/river-cities/` (98 ll.); their citations pages `research/buildings/` (295 ll.), `research/vegetation/`, `research/cities/river-cities/` (170 ll.); the glossary `/diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/interactive/assets/glossary.json` (476 terms); and the `<!-- READ 2026-09-14 by a source-reader (feature 242) -->` band of `research/sources/` (250 entries, ll. 411-1656, sampled + pattern-scanned end to end).
 
 Two structural notes before the sections. (1) The 2026-09-14 READ markers are themselves already HTML comments at the head of each citation line - nothing to report about them. (2) `research/assets/record.js` builds its glossary regex with flags `giu` (line 58), so **every match is case-insensitive**; that is load-bearing for one defect below.
 

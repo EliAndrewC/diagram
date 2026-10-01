@@ -4,7 +4,7 @@
 
 - SECTION=urban-features/clan-borders-and-their-markers
 - RENDERING=rendering/urban-features/how-our-maps-draw-a-clan-border
-- OLD=research/urban-features/170-drawing-a-clan-border.html research/urban-features/170-drawing-a-clan-border.notes.html research/urban-features/170-drawing-a-clan-border.originals.html
+- OLD=research/urban-features/ research/urban-features/ research/urban-features/
 - MODALS=FoxBorder BoundaryStones ParleyRoom ParleyMats
 
 - BASE=7ad63e6ad

@@ -4,14 +4,14 @@
 
 - SECTION=homesteads/chickens-and-chicken-coops
 - RENDERING=rendering/homesteads/how-our-maps-draw-chicken-coops
-- OLD=research/homesteads/215-did-a-farmstead-keep-chickens-and-in-what-kind-of-coop.html research/homesteads/760-before-1912-did-most-chinese-farms-keep-chickens.html
+- OLD=research/homesteads/ research/homesteads/
 - MODALS=HenCoop
 
 ## Rice-drying racks (hasa, hasagi)
 
 - SECTION=homesteads/rice-drying-racks-hasa-hasagi
 - RENDERING=rendering/homesteads/how-our-maps-draw-rice-drying-racks-hasa-hasagi
-- OLD=research/homesteads/500-where-were-the-rice-drying-racks-put-up-and-how-long-were-they.html research/homesteads/505-did-a-village-put-its-drying-racks-by-the-houses-by-custom-or-because-of-its-weather.html
+- OLD=research/homesteads/ research/homesteads/
 - MODALS=ThreshingYard
 
 - BASE=6ab2b77ba

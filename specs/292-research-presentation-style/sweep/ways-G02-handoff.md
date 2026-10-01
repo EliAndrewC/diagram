@@ -4,7 +4,7 @@
 
 - SECTION=ways/plank-bridges-over-farm-ditches-itabashi
 - RENDERING=rendering/ways/how-our-maps-draw-plank-bridges
-- OLD=research/ways/030-what-is-a-plank-bridge-and-what-is-it-for.html research/water/075-when-is-a-farm-ditch-worth-a-plank-when-its-water-is-2-ft-wide-or-more.html research/water/290-what-crosses-a-farm-ditch-a-plank-a-log-or-earth-over-logs.html
+- OLD=research/ways/ research/water/ research/water/
 - MODALS=Footbridge
 - BASE=2bf40ea30
 

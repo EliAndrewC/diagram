@@ -1,6 +1,6 @@
 # `record-format` report - feature 242 research pass, 2026-09-14
 
-Scope read: `/diagram/.clones/diagram-research/.claude/skills/diagram/research/urban-features.html` (all 384 lines, as a reader meets it), `.../research/citations/urban-features.html` (works section + notes fn-87 to fn-195), `.../research/SOURCES.html` (the feature-242 entries; **judged only on the two visible write-ups**, since `research/CLAUDE.md` holds the registry out of rules 2 and 3 but requires the write-ups themselves to be "written for the reader"), `.../research/cities/capitals.html` (the five named windows) and `.../research/citations/cities/capitals.html` fn-235 to fn-240. Glossary read: `/diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/interactive/assets/glossary.json` (every key and variant). Nothing was edited.
+Scope read: `/diagram/.clones/diagram-research/.claude/skills/diagram/research/urban-features/` (all 384 lines, as a reader meets it), `.../research/urban-features/` (works section + notes fn-87 to fn-195), `.../research/sources/` (the feature-242 entries; **judged only on the two visible write-ups**, since `research/CLAUDE.md` holds the registry out of rules 2 and 3 but requires the write-ups themselves to be "written for the reader"), `.../research/cities/capitals/` (the five named windows) and `.../research/cities/capitals/` fn-235 to fn-240. Glossary read: `/diagram/.clones/diagram-research/.claude/skills/diagram/l7r/diagram/interactive/assets/glossary.json` (every key and variant). Nothing was edited.
 
 ---
 

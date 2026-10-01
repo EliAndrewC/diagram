@@ -4,7 +4,7 @@
 
 - SECTION=cities/government/servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin
 - RENDERING=rendering/cities/government/how-our-maps-draw-servants-quarters-in-the-samurai-ward
-- OLD=research/cities/government/080-servant-housing-in-the-samurai-ward---servants-are-drawn-as-walls-not-as-houses.html research/cities/government/110-where-do-a-samurai-households-servants-sleep-when-the-house-has-no-gate-range.html research/cities/government/081-how-was-a-samurai-households-live-in-staff-hired.html research/cities/government/082-does-china-house-a-households-servants-the-same-way.html
+- OLD=research/cities/government/ research/cities/government/ research/cities/government/ research/cities/government/
 - MODALS=Door FamilyQuarters InnerRooms LordsQuarters ReceptionRoom RetainersQuarters ServantsQuarters
 - BASE=08d1a0e19
 

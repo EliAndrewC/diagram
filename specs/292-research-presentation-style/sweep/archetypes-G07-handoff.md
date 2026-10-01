@@ -4,7 +4,7 @@
 
 - SECTION=archetypes/the-dike-pond-hamlet-what-stands-there-that-a-rice-hamlet-lacks
 - RENDERING=rendering/archetypes/how-our-maps-furnish-a-dike-pond-hamlet
-- OLD=research/archetypes/170-what-stands-on-a-dike-pond-hamlet-that-a-paddy-hamlet-lacks.html research/archetypes/620-were-manure-jars-sunk-in-the-ground-by-paths-and-roads-before-modern-times-yes---a-1797-account-of-china-saw-them.html
+- OLD=research/archetypes/ research/archetypes/
 - MODALS=FruitDike FryPond ManurePit PigSty
 - BASE=f164fa1db
 

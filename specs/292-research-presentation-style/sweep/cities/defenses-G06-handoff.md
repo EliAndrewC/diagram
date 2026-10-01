@@ -4,7 +4,7 @@
 
 - SECTION=cities/defenses/the-street-along-the-inside-of-a-city-wall-shunchengjie
 - RENDERING=rendering/cities/defenses/how-our-maps-keep-the-strip-inside-the-wall-clear
-- OLD=research/cities/defenses/080-how-far-inside-the-wall-does-the-patrol-road-run-and-what-may-stand-on-it.html research/cities/defenses/090-where-does-a-neighborhood-fence-stop-when-it-reaches-the-rampart.html
+- OLD=research/cities/defenses/ research/cities/defenses/
 - MODALS=
 
 - BASE=7e47c317e

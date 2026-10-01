@@ -2,12 +2,12 @@
 
 - SECTION=presentation/labels-on-maps-cartographic-label-placement
 - RENDERING=none
-- OLD=research/presentation/040-where-does-a-caption-sit-and-why-is-it-never-left-floating-in-bare-ground.html research/presentation/050-why-does-a-caption-tilt-with-the-thing-it-names.html research/presentation/060-why-does-a-caption-sometimes-break-across-two-lines.html
+- OLD=research/presentation/ research/presentation/ research/presentation/
 - MODALS=
 
 - SECTION=presentation/what-a-label-may-cover-on-town-and-city-maps
 - RENDERING=none
-- OLD=research/presentation/070-what-does-a-town-or-a-city-map-label-and-what-may-a-label-cover.html
+- OLD=research/presentation/
 - MODALS=
 
 - BASE=e414d1590

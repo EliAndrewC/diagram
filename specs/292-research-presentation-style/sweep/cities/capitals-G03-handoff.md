@@ -4,7 +4,7 @@
 
 - SECTION=cities/capitals/the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro
 - RENDERING=rendering/cities/capitals/how-our-maps-draw-the-castle
-- OLD=research/cities/capitals/020-both-traditions-nest-a-walled-citadel-in-the-seat-so-a-centered-castle-is-the-median-form.html research/cities/capitals/030-the-edge-castle-is-real-and-it-comes-with-water.html research/cities/capitals/040-a-median-castle-is-85-of-an-entire-provincial-city.html research/cities/capitals/480-how-big-were-a-castles-keep-its-inner-baileys-and-their-stone-walls.html research/cities/capitals/240-a-castle-has-two-gates.html research/cities/capitals/350-why-is-the-castle-drawn-blank-inside.html
+- OLD=research/cities/capitals/ research/cities/capitals/ research/cities/capitals/ research/cities/capitals/ research/cities/capitals/ research/cities/capitals/
 - MODALS=
 - BASE=2c07f4ac0
 

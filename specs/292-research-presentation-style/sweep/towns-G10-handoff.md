@@ -4,7 +4,7 @@
 
 - SECTION=towns/market-days-and-the-market-ground-ichi
 - RENDERING=rendering/towns/how-our-maps-mark-a-towns-market-ground
-- OLD=research/towns/440-how-often-did-a-county-town-hold-its-market-and-how-far-did-its-customers-walk.html research/towns/450-where-was-a-towns-market-held-and-what-does-it-leave-on-the-ground-between-market-days.html research/towns/460-what-does-a-town-keep-for-the-market-crowd-and-the-festival.html research/cities/fabric/130-what-does-a-city-keep-for-the-caravans-the-market-crowd-and-the-festival.html
+- OLD=research/towns/ research/towns/ research/towns/ research/cities/fabric/
 - MODALS=
 - BASE=c42525701
 

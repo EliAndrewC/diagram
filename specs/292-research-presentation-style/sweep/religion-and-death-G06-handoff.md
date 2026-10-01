@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-the-country-monks-dwelling-and-writing-room
-- OLD=research/religion-and-death/110-does-the-country-monk-live-at-the-shrine.html research/religion-and-death/121-how-big-was-the-country-monks-dwelling-and-did-it-share-the-halls-roof.html research/religion-and-death/112-where-does-the-country-monk-keep-the-districts-registers.html research/religion-and-death/128-whose-land-does-a-country-shrine-stand-on-and-who-pays-for-it.html research/religion-and-death/114-who-kept-a-chinese-village-temple.html
+- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/
 - MODALS=HallAndDwelling MonksRooms WritingRoom
 - BASE=6f264eaa7
 

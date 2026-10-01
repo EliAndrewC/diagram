@@ -4,14 +4,14 @@
 
 - SECTION=religion-and-death/ground-swept-clear-around-shrines-and-graves
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-the-swept-ground-around-shrines-and-graves
-- OLD=research/religion-and-death/130-is-the-ground-around-a-shrine-or-a-grave-swept-clear-of-scrub.html research/religion-and-death/720-were-graves-weeded-and-the-ground-around-them-kept-clear-before-modern-times.html research/religion-and-death/140-why-does-that-swept-ground-have-a-ragged-edge.html
+- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/
 - MODALS=SweptClearing ShrineGrove
 
 ## Salt heaps at doorways (morijio)
 
 - SECTION=religion-and-death/salt-heaps-at-doorways-morijio
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-salt-heaps-at-doorways-morijio
-- OLD=research/religion-and-death/240-were-cones-of-salt-set-at-the-doors-of-an-officials-compound.html
+- OLD=research/religion-and-death/
 - MODALS=
 
 - BASE=0bfdb1aba

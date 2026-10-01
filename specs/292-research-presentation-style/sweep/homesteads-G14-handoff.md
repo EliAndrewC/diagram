@@ -4,7 +4,7 @@
 
 - SECTION=homesteads/the-headmans-house-and-the-rich-farmers-homestead-shoya-gono
 - RENDERING=rendering/homesteads/how-our-maps-draw-the-headmans-house
-- OLD=research/homesteads/110-what-makes-the-headmans-house-different.html research/homesteads/520-what-did-a-headmans-homestead-have-that-an-ordinary-farm-did-not.html research/homesteads/530-where-in-the-village-did-the-headman-live.html research/homesteads/550-how-did-a-rich-farmers-homestead-differ-from-a-plain-one.html research/homesteads/560-where-did-the-village-meet.html
+- OLD=research/homesteads/ research/homesteads/ research/homesteads/ research/homesteads/ research/homesteads/
 - MODALS=
 - BASE=e24c8eea5
 

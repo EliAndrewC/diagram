@@ -4,14 +4,14 @@
 
 - SECTION=cities/defenses/barbicans-wengcheng-masugata
 - RENDERING=rendering/cities/defenses/how-our-maps-draw-a-barbican-wengcheng-masugata
-- OLD=research/cities/defenses/220-did-a-town-or-city-gate-have-a-barbican-and-how-large-was-it.html research/cities/defenses/050-gate-furniture-at-the-throat---barbican-and-tax-barrier-practice.html
+- OLD=research/cities/defenses/ research/cities/defenses/
 - MODALS=
 
 ## Barriers and inspection posts at a town's entrance (bansho)
 
 - SECTION=cities/defenses/barriers-and-inspection-posts-at-a-towns-entrance-bansho
 - RENDERING=none
-- OLD=research/cities/defenses/250-did-a-town-on-a-road-keep-a-barrier-or-inspection-post.html research/cities/defenses/050-gate-furniture-at-the-throat---barbican-and-tax-barrier-practice.html
+- OLD=research/cities/defenses/ research/cities/defenses/
 - MODALS=
 
 - BASE=1b98f7612

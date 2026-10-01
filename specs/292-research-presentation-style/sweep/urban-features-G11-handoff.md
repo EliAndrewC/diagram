@@ -4,7 +4,7 @@
 
 - SECTION=urban-features/stable-yards-and-watering-troughs
 - RENDERING=rendering/urban-features/how-our-maps-draw-stable-yards-and-their-troughs
-- OLD=research/urban-features/080-stable-yards---beaten-earth-hitching-rails-and-watering-by-relay.html research/urban-features/082-how-does-a-stable-yard-water-its-animals---troughs-beside-a-well-filled-by-relay.html research/urban-features/084-why-are-two-or-three-troughs-enough-for-several-dozen-oxen.html
+- OLD=research/urban-features/ research/urban-features/ research/urban-features/
 - MODALS=stables
 - BASE=02bd38e9d
 

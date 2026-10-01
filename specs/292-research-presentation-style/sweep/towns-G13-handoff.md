@@ -2,12 +2,12 @@
 
 - SECTION=towns/lodgings-for-lords-and-officials-on-the-road-honjin
 - RENDERING=rendering/towns/how-our-maps-draw-lodgings-for-lords-and-officials-on-the-road-honjin
-- OLD=research/towns/360-where-did-lords-and-officials-lodge-on-the-road-and-how-big-was-it.html
+- OLD=research/towns/
 - MODALS=
 
 - SECTION=towns/relay-stations-the-imperial-waystation-the-relay-office-and-their-stables-umaya-toiyaba
 - RENDERING=rendering/towns/how-our-maps-draw-and-place-the-waystation-and-its-stable
-- OLD=research/towns/330-what-was-the-imperial-waystation-on-the-ground-and-where-does-it-stand.html research/towns/340-what-did-a-post-station-keep-for-its-relay-horses-and-porters-and-does-a-city-keep-the-same.html research/towns/350-how-big-is-a-stable-and-what-is-its-yard-like.html
+- OLD=research/towns/ research/towns/ research/towns/
 - MODALS=
 
 - BASE=8d98c8016

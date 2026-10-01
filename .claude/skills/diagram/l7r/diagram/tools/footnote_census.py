@@ -29,8 +29,8 @@ import os
 import sys
 from collections.abc import Callable
 
-from l7r.diagram.interactive.citations import NOTE, footnote_form, is_settled
-from l7r.diagram.interactive.sources import RESEARCH_DIR, canon_keys
+from l7r.diagram.interactive.citations import NOTE, citations_page, footnote_form, is_settled, research_pages
+from l7r.diagram.interactive.sources import RESEARCH_DIR, canon_keys, record_text
 
 KINDS = ("citation", "grounds", "absence", "settled")
 #: What the census needs of a classifier: a note's body in, its form out. Passed in rather than reached for, so a
@@ -39,12 +39,9 @@ Classifier = Callable[[str], str | None]
 
 
 def citations_pages() -> list[str]:
-    """Every citations page in the record, in a stable order."""
-    root = os.path.join(RESEARCH_DIR, "citations")
-    out = []
-    for dirpath, _dirs, files in os.walk(root):
-        out += [os.path.join(dirpath, f) for f in files if f.endswith(".html")]
-    return sorted(out)
+    """Every citations page in the record, as `citations/<page>.html`, in a stable order - read through the in-memory
+    assembly (feature 301: the pages are built, never committed)."""
+    return sorted(citations_page(p) for p in research_pages(RESEARCH_DIR))
 
 
 def kinds_on(text: str, form: Classifier) -> collections.Counter[str]:
@@ -62,10 +59,9 @@ def census(form: Classifier) -> dict[str, collections.Counter[str]]:
     """Per page, and under the key `TOTAL`, how many footnotes of each kind the record carries."""
     per: dict[str, collections.Counter[str]] = {}
     total: collections.Counter[str] = collections.Counter()
-    for path in citations_pages():
-        with open(path, encoding="utf-8") as fh:
-            counted = kinds_on(fh.read(), form)
-        per[os.path.relpath(path, os.path.join(RESEARCH_DIR, "citations"))] = counted
+    for rel in citations_pages():
+        counted = kinds_on(record_text(rel), form)
+        per[rel[len("citations/") :]] = counted
         total.update(counted)
     per["TOTAL"] = total
     return per

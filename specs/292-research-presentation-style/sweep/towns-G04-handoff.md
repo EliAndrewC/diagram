@@ -4,7 +4,7 @@
 
 - SECTION=towns/town-walls-and-which-county-seats-had-one-chengqiang
 - RENDERING=rendering/towns/how-our-maps-draw-a-towns-wall
-- OLD=research/towns/240-was-a-county-seat-walled.html research/towns/100-a-ramparts-cost-scales-with-its-length.html research/cities/defenses/200-how-high-and-thick-is-a-towns-rampart-and-what-of-it-shows-from-above.html
+- OLD=research/towns/ research/towns/ research/cities/defenses/
 - MODALS=
 - BASE=33d498f71
 

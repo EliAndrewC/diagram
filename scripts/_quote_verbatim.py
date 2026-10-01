@@ -467,6 +467,16 @@ def cached_pages():  # noqa: ANN201
     return src.CachedPages(Pages(), src.home(), refresh=src.refresh_wanted(), exact=True)
 
 
+def record_text(research: pathlib.Path, rel: str) -> str:
+    """A page of the record, assembled in memory by the engine's own reader (feature 301)."""
+    skill = str(research.resolve().parent)
+    if skill not in sys.path:
+        sys.path.insert(0, skill)
+    from l7r.diagram.interactive.sources import record_text as assembled  # noqa: PLC0415 - the skill the record is in
+
+    return assembled(rel, str(research))
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("page", help="a research page name: hamlets, cities/tango")
@@ -479,9 +489,10 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     research = pathlib.Path(args.root) / ".claude/skills/diagram/research"
     name = args.page.removesuffix(".html")
-    page_file, cite_file = research / f"{name}.html", research / "citations" / f"{name}.html"
-    if not page_file.is_file() or not cite_file.is_file():
-        print(f"quote-verbatim: no such page - wanted {page_file} and {cite_file}", file=sys.stderr)
+    # the page and its citations page as their fragments assemble them (feature 301: built, never committed)
+    page_text, cite_text = record_text(research, f"{name}.html"), record_text(research, f"citations/{name}.html")
+    if not page_text or not cite_text:
+        print(f"quote-verbatim: no such page - wanted {name} and its citations page under {research}", file=sys.stderr)
         return 2
     pages = Pages(pathlib.Path(args.offline)) if args.offline else cached_pages()
     only = wanted(args.notes)
@@ -494,7 +505,7 @@ def main(argv: list[str] | None = None) -> int:
         from _hm_record import fragments_for  # noqa: PLC0415
 
         fragments = fragments_for(name, args.section, str(pathlib.Path(args.root).resolve()))
-        body = page_file.read_text(encoding="utf-8")
+        body = page_text
         chosen = [f for f in fragments if not f.endswith(".notes.html")]
         wanted_ids: set[str] = set()   # `fn-26`, the form `footnotes()` and `wanted()` both use
         for fragment in chosen:
@@ -510,8 +521,8 @@ def main(argv: list[str] | None = None) -> int:
             print(f"quote-verbatim: SECTION={args.section!r} matched no question of {name} - nothing was checked", file=sys.stderr)
             return 2
         only = wanted_ids if only is None else (only & wanted_ids)
-    notes = [n for n in footnotes(cite_file.read_text(encoding="utf-8")) if only is None or n["id"] in only]
-    entries = report(notes, assertions(page_file.read_text(encoding="utf-8")), pages)
+    notes = [n for n in footnotes(cite_text) if only is None or n["id"] in only]
+    entries = report(notes, assertions(page_text), pages)
     print(render(name, entries, pages.refused))
     out = pathlib.Path(args.json) if args.json else pathlib.Path(args.root) / ".git" / "quote-verbatim" / (name.replace("/", "-") + ".json")
     out.parent.mkdir(parents=True, exist_ok=True)

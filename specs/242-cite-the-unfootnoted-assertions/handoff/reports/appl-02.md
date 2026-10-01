@@ -1,4 +1,4 @@
-All 25 sources opened; no host refused. Read from `/diagram/.clones/diagram-research/.claude/skills/diagram/research/SOURCES.html` (entries at lines 1725-1849).
+All 25 sources opened; no host refused. Read from `/diagram/.clones/diagram-research/.claude/skills/diagram/research/sources/` (entries at lines 1725-1849).
 
 ## NOT-APPLICABLE
 

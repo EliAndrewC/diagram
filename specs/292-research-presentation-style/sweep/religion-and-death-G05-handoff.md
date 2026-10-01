@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/shrine-woods-and-fences-chinju-no-mori-tamagaki
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-a-shrines-wood-and-what-bounds-its-precinct
-- OLD=research/religion-and-death/129-what-shape-is-a-village-shrines-wood-and-on-which-sides-of-the-hall-does-it-stand.html research/religion-and-death/122-was-a-village-shrine-walled-or-fenced.html research/religion-and-death/730-did-a-village-shrine-have-a-fence-round-its-sanctuary-before-modern-times.html
+- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/
 - MODALS=ShrineGrove
 - BASE=ce382a2c1
 

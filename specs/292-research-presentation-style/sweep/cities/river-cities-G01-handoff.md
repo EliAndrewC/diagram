@@ -3,13 +3,13 @@
 ## Cities on rivers
 - SECTION=cities/river-cities/cities-on-rivers
 - RENDERING=rendering/cities/river-cities/how-our-maps-set-a-city-on-its-river
-- OLD=research/cities/river-cities/010-most-provincial-cities-sit-on-a-river.html
+- OLD=research/cities/river-cities/
 - MODALS=
 
 ## City canals: how wide, what lines their banks, and where they meet the river (horikawa)
 - SECTION=cities/river-cities/city-canals-how-wide-what-lines-their-banks-and-where-they-meet-the-river-horikawa
 - RENDERING=rendering/cities/river-cities/how-our-maps-draw-a-city-canal
-- OLD=research/cities/river-cities/100-how-wide-is-a-city-canal-what-faces-its-banks-and-what-stands-along-them.html research/cities/river-cities/030-does-a-citys-canal-open-its-own-mouth-on-the-river.html
+- OLD=research/cities/river-cities/ research/cities/river-cities/
 - MODALS=
 - BASE=fc3646b54
 

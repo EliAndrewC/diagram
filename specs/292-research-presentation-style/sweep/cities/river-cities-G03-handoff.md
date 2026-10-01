@@ -2,7 +2,7 @@
 
 - SECTION=cities/river-cities/wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi
 - RENDERING=rendering/cities/river-cities/how-our-maps-draw-a-citys-wharf-and-landings
-- OLD=research/cities/river-cities/040-the-wharfs-working-face-piers-quays-and-stepped-landings.html research/cities/capitals/300-the-internal-dock-and-the-bank-quay-the-water-decides-which-a-city-gets.html research/cities/river-cities/070-does-an-officials-compound-have-its-own-stepped-landing-or-a-pier.html research/cities/river-cities/120-does-a-town-on-a-river-keep-a-landing-and-what-is-it-like.html
+- OLD=research/cities/river-cities/ research/cities/capitals/ research/cities/river-cities/ research/cities/river-cities/
 - MODALS=Dock Revetment RiverLanding TaxBarge
 - BASE=e1d65b689
 

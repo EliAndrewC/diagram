@@ -31,13 +31,13 @@
   "prefixes_reserved": [
    ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary/18670-side range.json",
    ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary/18680-ridge tablet.json",
-   ".claude/skills/diagram/research/sources/010-works-cited/20170-hoppou-shibata-ashigaru-nagaya.html",
-   ".claude/skills/diagram/research/sources/010-works-cited/20180-uematsu-2000-kochi-yashiki.html",
-   ".claude/skills/diagram/research/sources/010-works-cited/20190-tanaka-kaga-hongo-nagaya.html",
-   ".claude/skills/diagram/research/sources/010-works-cited/20200-kotobank-nagaya.html",
-   ".claude/skills/diagram/research/sources/010-works-cited/20210-kotobank-heya.html",
-   ".claude/skills/diagram/research/sources/010-works-cited/20220-yamaguchi-asa-mori-nagaya.html",
-   ".claude/skills/diagram/research/sources/010-works-cited/20230-tynews-jinshang-dayuan.html"
+   ".claude/skills/diagram/research/sources/",
+   ".claude/skills/diagram/research/sources/",
+   ".claude/skills/diagram/research/sources/",
+   ".claude/skills/diagram/research/sources/",
+   ".claude/skills/diagram/research/sources/",
+   ".claude/skills/diagram/research/sources/",
+   ".claude/skills/diagram/research/sources/"
   ]
  },
  "sessions": [

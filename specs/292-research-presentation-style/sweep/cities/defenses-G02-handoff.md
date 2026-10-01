@@ -4,7 +4,7 @@
 
 - SECTION=cities/defenses/city-moats-how-wide-and-deep-and-whether-they-ring-the-wall-hori-chenghe
 - RENDERING=rendering/cities/defenses/how-our-maps-draw-a-citys-moat-hori-chenghe
-- OLD=research/cities/defenses/100-how-wide-and-deep-is-a-citys-moat.html research/cities/defenses/240-did-a-walled-county-town-have-a-moat-and-how-wide-was-it.html research/cities/capitals/250-the-moat-ring-and-the-river-flank-moat-are-both-real---and-the-walls-distance-to-the-bank-decides.html
+- OLD=research/cities/defenses/ research/cities/defenses/ research/cities/capitals/
 - MODALS=
 - BASE=a2efb59c6
 

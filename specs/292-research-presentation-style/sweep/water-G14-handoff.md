@@ -4,7 +4,7 @@
 
 - SECTION=water/river-names-one-river-many-names
 - RENDERING=rendering/water/how-our-maps-name-rivers
-- OLD=research/water/130-one-name-per-river---and-why-that-is-anti-historical.html research/water/130-one-name-per-river---and-why-that-is-anti-historical.notes.html research/water/130-one-name-per-river---and-why-that-is-anti-historical.originals.html
+- OLD=research/water/ research/water/ research/water/
 - MODALS=
 - BASE=70ba2ad07
 

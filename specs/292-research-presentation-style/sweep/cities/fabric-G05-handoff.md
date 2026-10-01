@@ -4,7 +4,7 @@
 
 - SECTION=cities/fabric/the-imperial-road-through-a-city-and-the-shops-that-line-it
 - RENDERING=rendering/cities/fabric/how-our-maps-route-and-label-the-imperial-road-through-a-city
-- OLD=research/cities/fabric/040-where-does-the-imperial-road-run-through-a-city-and-where-is-it-labeled.html research/cities/fabric/050-what-lines-the-imperial-road-where-it-runs-through-the-city-a-ribbon-of-shops.html
+- OLD=research/cities/fabric/ research/cities/fabric/
 - MODALS=
 
 - BASE=42195d973

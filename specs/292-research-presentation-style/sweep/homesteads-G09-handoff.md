@@ -4,7 +4,7 @@
 
 - SECTION=homesteads/fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki
 - RENDERING=rendering/homesteads/how-our-maps-draw-farmyard-fruit-trees-kaki
-- OLD=research/homesteads/218-why-does-a-persimmon-stand-beside-so-many-farmhouses.html research/homesteads/770-before-1868-how-big-did-a-farmhouse-persimmon-grow.html research/vegetation/300-which-fruit-trees-stood-on-a-farmstead-persimmon-chestnut-and-plum-in-the-yard-tea-on-the-field-bunds---how-many-is-a-guess.html
+- OLD=research/homesteads/ research/homesteads/ research/vegetation/
 - MODALS=Persimmon
 
 - BASE=fc090bf03

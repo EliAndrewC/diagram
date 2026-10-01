@@ -32,7 +32,7 @@ from l7r.diagram.interactive.page import (
     wrap,
 )
 from l7r.diagram.interactive.sources import (
-    RESEARCH_PAGES,
+    SITE_PAGES,
     github_anchor,
     question_text,
     registry,
@@ -147,7 +147,7 @@ def test_explanations_hold_only_present_classes_and_present_siblings() -> None:
     # the references are QUESTIONS (feature 180): the sections the entry names, linked to the local page; the
     # cited keys, the citation text and the entry pointer no longer ride on the page at all
     assert data["windbreak"]["questions"] == research_questions(CLASSES["windbreak"].entry)
-    assert any(q["text"].startswith("Groves around a southern Chinese village") and q["url"].startswith(RESEARCH_PAGES + "vegetation.html#") for q in data["windbreak"]["questions"])
+    assert any(q["text"].startswith("Groves around a southern Chinese village") and q["url"].startswith(SITE_PAGES + "vegetation/") for q in data["windbreak"]["questions"])
     assert not {"sources", "refs", "entry"} & set(data["windbreak"]), "dropped from the page data (spec FR-011)"
 
 
@@ -191,9 +191,10 @@ def test_the_questions_come_in_the_entry_s_order_and_every_class_that_names_a_se
     fields/250, so now every class names a findable section."""
     qs = research_questions(CLASSES["farmhouse"].entry)
     assert [q["text"][:30] for q in qs] == ["Farmhouses (minka)", "The farmstead and what stood o", "Village lanes", "How our maps draw farmhouses (", "How our maps draw the farmstea"], qs
-    assert all(q["url"].startswith(RESEARCH_PAGES + "homesteads.html#") for q in qs[:2])
-    assert qs[2]["url"] == RESEARCH_PAGES + "ways.html#village-lanes"
-    assert qs[0]["url"].endswith("#farmhouses-minka")
+    # feature 301: a question links its own small page in the record's site
+    assert all(q["url"].startswith(SITE_PAGES + "homesteads/") for q in qs[:2])
+    assert qs[2]["url"] == SITE_PAGES + "ways/village-lanes.html"
+    assert qs[0]["url"].endswith("/farmhouses-minka.html")
     # file order would put the farmstead topic before the farmhouse topic; the entry's order wins (the lane entry moved to the ways page in the feature 292 sweep)
     assert [q["url"] for q in research_questions(CLASSES["farmhouse"].entry)] == [q["url"] for q in qs], "deterministic"
     unresolved = sorted(k for k, fc in CLASSES.items() if not research_questions(fc.entry))
@@ -201,7 +202,7 @@ def test_the_questions_come_in_the_entry_s_order_and_every_class_that_names_a_se
     assert research_questions("nothing here") == []
     for k, fc in CLASSES.items():
         for q in research_questions(fc.entry):
-            assert q["url"].startswith(RESEARCH_PAGES) and "#" in q["url"] and q["text"], (k, q)
+            assert q["url"].startswith(SITE_PAGES) and q["url"].endswith(".html") and "#" not in q["url"] and q["text"], (k, q)
             assert "researched 20" not in q["text"] and "*" not in q["text"], (k, q)
 
 
@@ -381,7 +382,7 @@ def test_the_scrub_region_is_the_shape_its_tile_fills_not_its_polygon() -> None:
 
 def test_the_citations_come_from_the_research_entries() -> None:
     """GM 2026-08-28: the references behind a modal are the entry's own Sources line, read from the record."""
-    keys = research_sources("research/homesteads.html - 'The farmstead and what stood on it'")
+    keys = research_sources("research/homesteads/140-the-farmstead-and-what-stood-on-it-yashiki.html")
     assert "sugiura-1973-fuzoku" in keys
     reg = registry()
     assert len(reg) > 200 and "sugiura-1973-fuzoku" in reg and "Used for:" in reg["sugiura-1973-fuzoku"]
@@ -445,11 +446,10 @@ def test_merge_primitives_folds_a_run_of_unfilled_circles() -> None:
 
 
 def test_research_sections_of_a_missing_file_are_empty_not_an_error() -> None:
-    """Feature 146: a research pointer naming a file that is not there yields no sections - the interactive
-    page loses that entry's citations rather than failing to build."""
-    from l7r.diagram.interactive.sources import _sections
-
-    assert _sections("research/no-such-file-at-all.md") == []
+    """Feature 146: a research pointer naming a file that is not there yields nothing - the interactive page loses that
+    entry's references rather than failing to build (`scripts/check-entry-headings.py` refuses it at the push)."""
+    assert research_questions("research/homesteads/999-no-such-question.html") == []
+    assert research_sources("research/homesteads/999-no-such-question.html") == []
 
 
 # ---- feature 148: the merge gathers what is SEPARATED, without moving the picture ----------------

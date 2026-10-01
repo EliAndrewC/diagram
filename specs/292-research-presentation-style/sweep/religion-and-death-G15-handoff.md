@@ -2,7 +2,7 @@
 
 - SECTION=religion-and-death/where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot
 - RENDERING=rendering/religion-and-death/how-our-maps-choose-where-a-villages-and-a-hamlets-dead-lie
-- OLD=research/religion-and-death/280-does-a-village-bury-in-its-temples-yard-in-a-ground-of-its-own-or-in-its-fields.html research/religion-and-death/155-did-every-village-bury-its-dead-in-a-ground-of-its-own-in-japan-often---in-china-the-graves-stood-in-the-fields.html research/religion-and-death/170-does-a-graveyard-stand-beside-its-temple-or-its-shrine.html research/religion-and-death/400-does-a-farm-household-bury-its-dead-on-its-own-plot-and-where-on-it.html research/religion-and-death/540-where-do-a-hamlets-dead-lie.html research/fields/220-are-there-really-graves-out-in-the-middle-of-the-fields.html
+- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/fields/
 - MODALS=BurialGround ShrineBurialGround GraveIsland
 - BASE=3a1d4cb97
 

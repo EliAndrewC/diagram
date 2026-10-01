@@ -4,7 +4,7 @@
 
 - SECTION=ways/town-streets-side-lanes-and-back-alleys-roji
 - RENDERING=rendering/ways/how-our-maps-draw-town-streets-and-alleys
-- OLD=research/ways/160-how-wide-is-a-towns-street-its-side-lane-and-its-back-alley.html research/ways/170-what-is-a-town-street-made-of-and-does-it-carry-a-drain.html research/ways/180-how-many-cross-streets-does-a-town-have-and-how-does-its-road-come-in.html research/urban-features/110-how-do-you-get-through-a-packed-commoner-quarter---and-why-is-the-path-not-a-street.html
+- OLD=research/ways/ research/ways/ research/ways/ research/urban-features/
 - MODALS=
 - BASE=0f150be22
 

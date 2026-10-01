@@ -2,7 +2,7 @@
 
 - SECTION=towns/how-a-town-is-zoned-shops-on-the-street-housing-behind
 - RENDERING=rendering/towns/how-our-maps-zone-a-towns-lots
-- OLD=research/towns/030-how-is-a-town-zoned---what-fronts-the-street-and-what-sits-behind-it.html research/urban-features/100-commercial-frontage-and-wealth-stratified-housing.html research/towns/310-which-way-does-a-town-houses-door-face-and-how-deep-do-the-rows-stack.html
+- OLD=research/towns/ research/urban-features/ research/towns/
 - MODALS=
 - BASE=bb2afe84f
 

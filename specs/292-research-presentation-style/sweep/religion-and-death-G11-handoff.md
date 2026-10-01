@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan
 - RENDERING=rendering/religion-and-death/how-our-maps-size-and-draw-a-citys-temples
-- OLD=research/religion-and-death/560-what-does-a-temple-precinct-hold-and-how-big-are-its-halls.html research/religion-and-death/580-how-big-is-a-great-city-temple-and-how-are-its-buildings-laid-out.html research/religion-and-death/570-does-a-city-temple-keep-its-own-bell-tower-and-a-pagoda-and-how-tall-are-they.html research/religion-and-death/010-city-temple-size---the-deliberate-l7r-liberty.html
+- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/ research/religion-and-death/
 - MODALS=
 - BASE=c312aa887
 

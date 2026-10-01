@@ -2,7 +2,7 @@
 
 - SECTION=ways/moving-goods-carts-packhorses-and-river-landings-kashi
 - RENDERING=rendering/ways/how-our-maps-draw-moving-goods-cart-lanes-and-boat-landings-kashi
-- OLD=research/ways/060-could-a-cart-use-the-roads-here-and-where-would-it-go.html research/ways/040-where-does-a-villages-freight-go-onto-the-water---but-not-onto-a-canal.html
+- OLD=research/ways/ research/ways/
 - MODALS=SideGate ApproachRoad CartYard River RiverLanding
 - BASE=3f405c116
 

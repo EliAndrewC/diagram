@@ -4,7 +4,7 @@
 
 - SECTION=settlements/the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital
 - RENDERING=rendering/settlements/how-our-maps-draw-and-state-each-size-of-settlement
-- OLD=research/settlements/010-what-are-the-five-kinds-of-settlement-and-how-big-is-each.html research/settlements/090-who-lives-in-a-provincial-city.html research/settlements/040-what-does-the-page-beside-a-map-say-about-its-size.html research/settlements/050-which-district-and-county-does-this-settlement-belong-to.html research/settlements/060-how-far-is-it-across-this-map-the-scale-tier-by-tier.html research/settlements/070-what-must-a-map-be-told-that-its-own-ground-cannot-settle.html research/settlements/080-when-is-a-settlement-allowed-to-break-a-rule.html research/archetypes/190-what-a-settlement-is-and-what-the-place-card-may-say-about-it.html
+- OLD=research/settlements/ research/settlements/ research/settlements/ research/settlements/ research/settlements/ research/settlements/ research/settlements/ research/archetypes/
 - MODALS=
 - BASE=0a655a7f7
 

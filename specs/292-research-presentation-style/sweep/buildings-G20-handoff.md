@@ -4,7 +4,7 @@
 
 - SECTION=buildings/martial-training-grounds-and-dojo
 - RENDERING=rendering/buildings/how-our-maps-draw-practice-grounds-and-dojo
-- OLD=research/buildings/210-a-dojo-is-a-city-institution-county-training-is-courtyard-keiko.html research/buildings/780-how-big-was-a-dojo-and-what-does-it-look-like-from-above.html research/buildings/560-what-did-a-practice-grounds-striking-posts-and-weapon-rack-look-like.html research/cities/government/070-martial-training-is-an-urban-institution.html research/cities/government/100-does-china-put-martial-training-in-the-towns-too.html
+- OLD=research/buildings/ research/buildings/ research/buildings/ research/cities/government/ research/cities/government/
 - MODALS=PracticeGround StrikingPosts WeaponRack
 
 - BASE=3bc521397

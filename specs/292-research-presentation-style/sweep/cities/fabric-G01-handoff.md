@@ -2,7 +2,7 @@
 
 - SECTION=cities/fabric/city-streets-and-blocks-the-grid-the-block-and-how-wide-the-streets-are-machiwari
 - RENDERING=rendering/cities/fabric/how-our-maps-lay-out-a-citys-streets-and-blocks
-- OLD=research/cities/fabric/070-how-do-a-citys-streets-make-a-grid.html research/cities/fabric/200-how-big-is-a-city-block-and-how-many-house-lots-does-it-hold.html research/cities/capitals/210-street-widths-the-ote-suji-is-a-grand-street-not-an-imperial-boulevard.html
+- OLD=research/cities/fabric/ research/cities/fabric/ research/cities/capitals/
 - MODALS=
 - BASE=a477b87c7
 

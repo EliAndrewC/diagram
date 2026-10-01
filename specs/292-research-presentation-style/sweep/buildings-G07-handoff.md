@@ -4,7 +4,7 @@
 
 - SECTION=buildings/the-hearing-court-shirasu
 - RENDERING=rendering/buildings/how-our-maps-draw-the-hearing-court-shirasu
-- OLD=research/buildings/090-the-courtroom-is-a-room-of-the-office-hall-not-a-freestanding-stage.html research/buildings/440-who-sat-where-at-a-hearing-and-on-what.html research/buildings/450-was-the-hearing-court-open-white-sand-or-roofed.html
+- OLD=research/buildings/ research/buildings/ research/buildings/
 - MODALS=ClerksSeats DayOffice HearingCourt KneelingPositions LordsQuarters MagistratesDais OfficeHall OfficialStudy
 - BASE=9c5659018
 

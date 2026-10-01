@@ -4,14 +4,14 @@
 
 - SECTION=cities/capitals/domain-schools-hanko
 - RENDERING=rendering/cities/capitals/how-our-maps-draw-a-domain-school-hanko
-- OLD=research/cities/capitals/190-the-domain-school-is-the-hanko-a-school-of-letters-with-the-martial-wing.html research/cities/capitals/460-how-big-is-a-domain-schools-ground-and-what-stands-on-it.html research/religion-and-death/555-did-a-provincial-city-keep-a-confucian-school-or-academy-and-how-big-was-it.html
+- OLD=research/cities/capitals/ research/cities/capitals/ research/religion-and-death/
 - MODALS=
 
 ## Time bells (toki no kane)
 
 - SECTION=cities/capitals/time-bells-in-castle-towns-and-capitals-toki-no-kane
 - RENDERING=rendering/cities/capitals/how-our-maps-hang-a-capitals-time-bells-toki-no-kane
-- OLD=research/cities/capitals/470-how-many-time-bells-does-a-capital-keep-and-where-do-they-hang.html
+- OLD=research/cities/capitals/
 - MODALS=
 
 - BASE=572f77e7b

@@ -4,7 +4,7 @@
 
 - SECTION=vegetation/shelter-belts-on-a-villages-windward-side-bofurin
 - RENDERING=rendering/vegetation/how-our-maps-draw-the-shelter-belt-its-sides-its-trees-and-why-it-runs-off-the-edge-of-the-map
-- OLD=research/vegetation/030-does-a-shelter-belt-wrap-the-settlement-no---it-stands-on-one-or-two-windward-sides.html research/towns/140-which-way-does-a-shelter-belt-lie-and-does-its-compass-bearing-matter.html research/vegetation/270-was-a-windbreak-one-kind-of-tree-in-a-row-mostly-not---one-tall-tree-led-a-mixed-planting.html research/vegetation/620-how-did-a-lane-get-through-a-belt-no-old-record-says---the-old-entrances-stood-on-the-groves-open-side.html research/vegetation/040-why-does-the-belt-run-off-the-edge-of-the-sheet-and-why-is-the-bare-stretch-there-not-a-hole.html
+- OLD=research/vegetation/ research/towns/ research/vegetation/ research/vegetation/ research/vegetation/
 - MODALS=Windbreak
 - BASE=c1435b2c1
 

@@ -2,7 +2,7 @@
 
 - SECTION=archetypes/terraced-and-valley-paddies-tanada-yachida
 - RENDERING=rendering/archetypes/how-our-maps-draw-rice-land-on-a-slope
-- OLD=research/archetypes/040-what-does-rice-land-look-like-where-there-is-no-valley-floor-to-spread-across.html research/archetypes/300-how-tall-is-a-terrace-wall-and-how-big-is-a-paddy-on-a-slope.html
+- OLD=research/archetypes/ research/archetypes/
 - MODALS=
 - BASE=9d698048e
 

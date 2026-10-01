@@ -4,37 +4,33 @@ A relative link cannot hide from this; the literal check beside it catches prose
 from __future__ import annotations
 
 import functools
+import os
 import pathlib
 import re
 import subprocess
 
 import pytest
 
-from l7r.diagram.interactive.sources import RESEARCH_DIR, collection_pages
+from l7r.diagram.interactive.sources import RESEARCH_DIR
+from tests._record_pages import RecordPath, all_pages
 
 _HREF = re.compile(r'href="([^"]+)"')
 _ID = re.compile(r'\sid="([^"]+)"')
 
 
 def _pages() -> list[pathlib.Path]:
-    root = pathlib.Path(RESEARCH_DIR)
-    # the citations pages (feature 211) are record pages: their notes link out and back, and their works sections link keys
-    return (
-        sorted(root.glob("*.html"))
-        + [root / c for c in collection_pages(str(root))]
-        + sorted((root / "citations").glob("*.html"))
-        + [root / "citations" / c for c in collection_pages(str(root / "citations"))]
-    )
+    """Every page of the record as its fragments assemble it (feature 301: read in memory, never from a built file) -
+    the citations pages too (feature 211): their notes link out and back, and their works sections link keys."""
+    return list(all_pages())
 
 
-_IDS: dict[tuple[str, int, int], set[str]] = {}
+_IDS: dict[str, set[str]] = {}
 
 
 def _ids_of(path: pathlib.Path) -> set[str]:
-    """The ids a page declares, read ONCE per content (feature 276, FR-002): the link test used to re-read and re-scan
-    the target page for every link into it - 544 scans for one page - and a page's ids do not change between links."""
-    st = path.stat()
-    key = (str(path), st.st_mtime_ns, st.st_size)
+    """The ids a page declares, read ONCE (feature 276, FR-002): the link test used to re-read and re-scan the target
+    page for every link into it - 544 scans for one page - and a page's ids do not change within a run."""
+    key = str(path)
     if key not in _IDS:
         _IDS[key] = set(_ID.findall(path.read_text(encoding="utf-8")))
     return _IDS[key]
@@ -49,7 +45,7 @@ def broken_links(page: pathlib.Path) -> list[str]:
             continue
         target, _, frag = href.partition("#")
         if target:
-            path = (page.parent / target).resolve()
+            path = RecordPath(os.path.normpath(page.parent / target))
             if not path.exists():
                 bad.append(f"{href}: no such file")
                 continue

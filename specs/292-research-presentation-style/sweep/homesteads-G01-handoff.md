@@ -4,7 +4,7 @@
 
 - SECTION=homesteads/groves-of-trees-around-farmhouses-yashikirin
 - RENDERING=rendering/homesteads/how-our-maps-draw-the-groves-around-farmhouses
-- OLD=research/vegetation/210-how-big-was-the-villages-dooryard-copse-it-was-the-homesteads-own-woods---about-6000-to-28000-sq-ft-each-in-a-1684-register.html
+- OLD=research/vegetation/
 - MODALS=Copse
 - BASE=efbd6eb95
 

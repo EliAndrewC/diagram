@@ -4,7 +4,7 @@
 
 - SECTION=water/ground-too-wet-to-build-on
 - RENDERING=rendering/water/how-our-maps-keep-buildings-off-wet-ground
-- OLD=research/water/160-what-ground-is-too-wet-to-build-on.html research/water/660-was-wet-ground-kept-free-of-graves-houses-and-wells-before-modern-times-graves-and-houses-yes-the-well-has-no-premodern-rule.html
+- OLD=research/water/ research/water/
 - MODALS=
 - BASE=951c8a590
 

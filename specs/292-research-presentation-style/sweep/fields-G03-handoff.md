@@ -4,7 +4,7 @@
 
 - SECTION=fields/the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest
 - RENDERING=rendering/fields/how-our-maps-show-the-paddy-through-the-rice-year
-- OLD=research/fields/030-how-deep-the-water-actually-stands-and-why-a-single-number-is-the-wrong-shape.html research/fields/270-was-a-paddy-drained-in-midsummer-before-modern-times---in-some-places-where-water-was-plentiful.html research/fields/640-was-a-paddy-drained-and-flooded-again-through-the-season-before-modern-times-yes-in-chinas-farming-manuals-from-the-sixth-century---but-the-depths-are-modern.html research/fields/060-why-is-every-rice-plot-the-same-green.html research/fields/300-did-a-paddy-grow-a-second-crop-over-the-winter-where-it-drained-and-manure-could-be-had.html research/fields/310-where-did-the-straw-rick-stand-after-the-harvest-and-for-how-long.html research/archetypes/010-why-is-there-no-yellow-rape-flower-beside-the-rice.html
+- OLD=research/fields/ research/fields/ research/fields/ research/fields/ research/fields/ research/fields/ research/archetypes/
 - MODALS=Paddy
 - BASE=98f913f8e
 

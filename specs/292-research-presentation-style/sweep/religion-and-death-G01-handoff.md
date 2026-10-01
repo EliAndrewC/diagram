@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/shrines-temples-and-graves-in-each-size-of-settlement
 - RENDERING=rendering/religion-and-death/which-religious-and-funerary-features-our-maps-place-in-each-size-of-settlement
-- OLD=research/religion-and-death/210-what-religious-and-funerary-features-does-each-size-of-settlement-carry.html research/religion-and-death/210-what-religious-and-funerary-features-does-each-size-of-settlement-carry.notes.html research/religion-and-death/210-what-religious-and-funerary-features-does-each-size-of-settlement-carry.originals.html
+- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/
 - MODALS=
 - BASE=410388abb
 

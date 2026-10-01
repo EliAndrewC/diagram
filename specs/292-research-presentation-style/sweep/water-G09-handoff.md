@@ -4,14 +4,14 @@
 
 - SECTION=water/washing-places-at-the-waters-edge
 - RENDERING=rendering/water/how-our-maps-draw-washing-places-at-the-waters-edge
-- OLD=research/water/430-where-did-a-village-wash-its-vegetables-and-clothes-and-where-did-a-town-get-water-besides-its-wells.html
+- OLD=research/water/
 - MODALS=
 
 ## Villages beside their stream: one bank or both
 
 - SECTION=water/villages-beside-their-stream-one-bank-or-both
 - RENDERING=rendering/water/how-our-maps-place-a-hamlet-on-its-stream
-- OLD=research/water/270-does-a-hamlet-stand-on-one-bank-of-its-stream-or-around-it-it-depends-on-the-size-of-the-water.html research/water/275-does-siting-doctrine-say-whether-a-village-may-straddle-its-water-no---it-puts-the-water-on-one-side-and-says-nothing-of-a-site-the-water-divides.html research/homesteads/250-does-a-farmstead-stand-whole-on-one-bank-of-the-brook.html
+- OLD=research/water/ research/water/ research/homesteads/
 - MODALS=
 
 - BASE=6fccdf4b1

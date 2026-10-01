@@ -210,7 +210,7 @@ entry, and compare both what it read and what it found.
 past the bank does a bridge land?" it reported VOCABULARY on **girder** and on **footing**.
 
 **The scoped run** (2026-09-20, this feature): the same agent, handed
-`research/ways/010-how-far-past-the-bank-does-a-bridge-land.html` and its `.notes.html`.
+`research/ways/` and its `.notes.html`.
 
 | | recorded, whole page | scoped |
 |---|---:|---:|

@@ -4,7 +4,7 @@
 
 - SECTION=cities/hinterland/fields-and-gardens-inside-a-citys-wall
 - RENDERING=rendering/cities/hinterland/how-our-maps-draw-farmland-inside-a-citys-wall
-- OLD=research/cities/hinterland/050-does-a-city-farm-inside-its-walls.html research/cities/hinterland/600-did-a-city-farm-inside-its-wall-before-modern-times.html research/cities/fabric/240-who-works-the-fields-inside-a-citys-wall-and-where-do-they-live.html
+- OLD=research/cities/hinterland/ research/cities/hinterland/ research/cities/fabric/
 - MODALS=
 - BASE=784b83148
 

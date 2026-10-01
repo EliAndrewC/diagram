@@ -4,7 +4,7 @@ Six files read as the reader meets them (visible text only; HTML comments ignore
 
 ---
 
-## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/defenses.html`
+## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/defenses/`
 
 ### "Gate structures - real footprints" (line 43)
 
@@ -44,7 +44,7 @@ Six files read as the reader meets them (visible text only; HTML comments ignore
 
 ---
 
-## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/towns.html`
+## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/towns/`
 
 ### "Chinese towns were PLANNED - the gate-to-yamen axis" (line 20)
 
@@ -95,7 +95,7 @@ Six files read as the reader meets them (visible text only; HTML comments ignore
 
 ---
 
-## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/fabric.html`
+## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/fabric/`
 
 ### "Urban commoners built in continuous street walls" (line 19)
 
@@ -129,7 +129,7 @@ Six files read as the reader meets them (visible text only; HTML comments ignore
 
 ---
 
-## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/citations/cities/defenses.html`
+## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/defenses/`
 
 ### The works section (lines 15-119)
 
@@ -154,7 +154,7 @@ Six files read as the reader meets them (visible text only; HTML comments ignore
 
 ---
 
-## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/citations/towns.html`
+## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/towns/`
 
 ### The works section (lines 15-146)
 
@@ -175,7 +175,7 @@ Six files read as the reader meets them (visible text only; HTML comments ignore
 
 ---
 
-## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/citations/cities/fabric.html`
+## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/cities/fabric/`
 
 ### The notes (lines 157-235)
 
@@ -191,7 +191,7 @@ Six files read as the reader meets them (visible text only; HTML comments ignore
 
 ---
 
-## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/SOURCES.html` - the `READ 2026-09-14 by a source-reader (feature 242)` entries
+## `/diagram/.clones/diagram-research/.claude/skills/diagram/research/sources/` - the `READ 2026-09-14 by a source-reader (feature 242)` entries
 
 243 entries carry that marker (355 occurrences of the marker text in the file).
 

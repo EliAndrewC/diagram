@@ -4,7 +4,7 @@
 
 - SECTION=religion-and-death/town-monasteries
 - RENDERING=rendering/religion-and-death/how-our-maps-draw-a-town-monastery
-- OLD=research/religion-and-death/450-how-many-monasteries-does-a-county-town-keep-and-who-lives-in-one.html research/religion-and-death/460-how-big-is-a-town-monastery-what-stands-in-its-precinct-and-where-in-the-town-does-it-stand.html research/religion-and-death/740-were-a-town-monasterys-precinct-and-main-hall-that-size-before-modern-times.html
+- OLD=research/religion-and-death/ research/religion-and-death/ research/religion-and-death/
 - MODALS=
 - BASE=38968d43e
 

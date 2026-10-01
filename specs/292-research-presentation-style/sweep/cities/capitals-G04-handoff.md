@@ -4,7 +4,7 @@
 
 - SECTION=cities/capitals/inside-the-castle-the-lords-palace-the-council-and-the-baileys-goten-honmaru
 - RENDERING=rendering/cities/capitals/how-our-maps-draw-the-inside-of-the-castle-the-palace-the-council-and-the-baileys
-- OLD=research/cities/capitals/360-what-stands-inside-the-castle-and-what-must-stand-outside-it.html research/cities/capitals/490-what-was-inside-the-daimyos-palace-room-by-room.html research/cities/capitals/160-the-chancellery-meets-in-the-castle---executive-out-council-in.html
+- OLD=research/cities/capitals/ research/cities/capitals/ research/cities/capitals/
 - MODALS=
 - BASE=e3fa991f8
 

@@ -2,7 +2,7 @@
 
 - SECTION=archetypes/pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike
 - RENDERING=rendering/archetypes/how-our-maps-place-the-pig-sty-at-the-pond
-- OLD=research/archetypes/210-which-animals-did-a-dike-pond-village-keep-at-its-ponds-pigs---the-ducks-were-herded-in-the-rice-fields.html research/archetypes/171-does-a-dike-pond-hamlet-keep-pigs-and-ducks-on-its-pond-dikes.html research/archetypes/180-does-a-pig-sty-have-to-stand-back-from-the-water-or-from-the-ponds-sluice.html
+- OLD=research/archetypes/ research/archetypes/ research/archetypes/
 - MODALS=PigSty FishPond Paddy
 - BASE=d34212219
 

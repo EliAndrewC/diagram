@@ -2,7 +2,7 @@
 
 - SECTION=buildings/staff-rowhouses-and-barracks-nagaya
 - RENDERING=rendering/buildings/how-our-maps-draw-staff-rowhouses-and-barracks-nagaya
-- OLD=research/buildings/910-did-the-servants-rowhouse-have-one-door-or-a-door-for-each-household.html
+- OLD=research/buildings/
 - MODALS=
 - BASE=78aa78b79
 

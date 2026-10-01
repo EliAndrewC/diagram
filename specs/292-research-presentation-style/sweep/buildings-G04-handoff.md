@@ -4,7 +4,7 @@
 
 - SECTION=buildings/the-main-gate-and-its-gatekeepers-nagaya-mon
 - RENDERING=rendering/buildings/how-our-maps-draw-the-main-gate-and-gatehouse
-- OLD=research/buildings/480-how-wide-was-the-main-gate-of-a-magistrates-post.html research/buildings/420-where-did-the-gatekeepers-sit---in-the-gate-range-or-a-gatehouse-beside-it.html
+- OLD=research/buildings/ research/buildings/
 - MODALS=MainGate Gatehouse
 - BASE=5d99461aa
 

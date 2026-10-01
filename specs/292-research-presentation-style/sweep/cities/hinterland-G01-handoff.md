@@ -2,7 +2,7 @@
 
 - SECTION=cities/hinterland/what-stands-outside-a-city-gate-the-gate-suburb-its-kilns-and-the-villages-it-swallowed-guanxiang
 - RENDERING=rendering/cities/hinterland/how-our-maps-draw-the-ground-outside-a-city-gate
-- OLD=research/cities/hinterland/040-what-stands-outside-a-city-gate.html research/towns/430-what-else-stood-just-outside-a-city-kilns-lime-works-and-the-villages-it-swallowed.html
+- OLD=research/cities/hinterland/ research/towns/
 - MODALS=
 - BASE=c01de86d5
 

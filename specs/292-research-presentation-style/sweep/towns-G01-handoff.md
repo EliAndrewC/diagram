@@ -2,7 +2,7 @@
 
 - SECTION=towns/towns-the-county-seat-and-the-post-town-and-who-lives-in-them-machi
 - RENDERING=rendering/towns/how-our-maps-populate-and-furnish-each-kind-of-town
-- OLD=research/towns/200-what-makes-a-post-town-different-from-a-market-county-seat.html research/towns/250-how-does-a-japanese-county-town-differ-on-the-ground-from-a-chinese-one.html research/towns/020-who-lives-in-a-town-and-in-how-many-houses.html
+- OLD=research/towns/ research/towns/ research/towns/
 - MODALS=
 - BASE=536c859c1
 

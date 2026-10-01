@@ -4,7 +4,7 @@
 
 - SECTION=vegetation/village-fuel-woods-and-their-coppice-satoyama
 - RENDERING=rendering/vegetation/how-our-maps-bound-and-draw-the-coppice-woods
-- OLD=research/vegetation/220-where-did-a-village-keep-its-fuel-wood-beyond-its-fields-on-the-hill-ground-around-it---not-below-the-houses.html research/vegetation/140-how-is-a-coppice-lot-bounded-by-ridge-stream-and-path---never-by-a-page-axis.html research/vegetation/130-does-scrub-stand-under-a-village-wood-no---the-floor-was-worked-clear-grass-fringes-the-edge.html
+- OLD=research/vegetation/ research/vegetation/ research/vegetation/
 - MODALS=WoodlandCommons
 - BASE=fcea787ec
 

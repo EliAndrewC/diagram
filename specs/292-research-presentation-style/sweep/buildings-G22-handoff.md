@@ -3,19 +3,19 @@
 ## Merchants' townhouses (machiya)
 - SECTION=buildings/merchants-townhouses-machiya
 - RENDERING=rendering/buildings/how-our-maps-draw-a-merchants-townhouse
-- OLD=research/buildings/790-what-does-a-merchants-house-hold-from-the-shop-front-to-the-back-of-the-lot.html
+- OLD=research/buildings/
 - MODALS=
 
 ## Chinese courtyard houses (siheyuan)
 - SECTION=buildings/chinese-courtyard-houses-siheyuan
 - RENDERING=rendering/buildings/how-our-maps-choose-between-the-courtyard-house-and-the-japanese-house
-- OLD=research/buildings/760-when-does-a-house-take-the-chinese-courtyard-form-rather-than-the-japanese-one.html
+- OLD=research/buildings/
 - MODALS=
 
 ## Inns (hatago and carters' inns)
 - SECTION=buildings/inns-hatago-and-carters-inns
 - RENDERING=rendering/buildings/how-our-maps-draw-an-inn
-- OLD=research/buildings/800-what-does-an-inn-hold-and-how-does-a-chinese-inn-differ-from-a-japanese-one.html
+- OLD=research/buildings/
 - MODALS=
 
 - BASE=6b744fcaa

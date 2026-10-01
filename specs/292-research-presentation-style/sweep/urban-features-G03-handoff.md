@@ -4,7 +4,7 @@
 
 - SECTION=urban-features/night-watch-and-ward-gates-kidoban
 - RENDERING=rendering/urban-features/how-our-maps-draw-the-night-watch-and-ward-gates-kidoban
-- OLD=research/urban-features/410-did-a-town-bar-its-street-at-night-and-who-kept-the-watch.html research/urban-features/420-how-many-watch-houses-and-guard-boxes-did-a-city-keep.html research/urban-features/490-does-a-village-keep-a-watchman-and-where-is-his-hut.html
+- OLD=research/urban-features/ research/urban-features/ research/urban-features/
 - MODALS=
 - BASE=2bcef5016
 

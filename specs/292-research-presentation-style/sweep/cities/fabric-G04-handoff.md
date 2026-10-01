@@ -2,7 +2,7 @@
 
 - SECTION=cities/fabric/city-wards-and-the-gates-that-shut-them-at-night-machi-kido
 - RENDERING=rendering/cities/fabric/how-our-maps-draw-ward-walls-and-ward-gates
-- OLD=research/cities/fabric/210-what-is-a-ward-who-runs-it-and-how-many-does-a-city-have.html research/cities/capitals/060-neither-tradition-walls-its-wards-the-answer-is-a-mesh-of-night-barred-gates.html research/cities/capitals/270-which-districts-get-internal-walls---and-the-fang-ward-as-the-lion-variant.html research/cities/government/040-is-the-samurai-quarter-walled-or-only-gated.html research/cities/government/050-which-way-does-a-ward-gate-face.html research/cities/government/060-where-does-the-gate-watch-stand.html
+- OLD=research/cities/fabric/ research/cities/capitals/ research/cities/capitals/ research/cities/government/ research/cities/government/ research/cities/government/
 - MODALS=
 - BASE=10a91fbb1
 

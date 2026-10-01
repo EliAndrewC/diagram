@@ -2,7 +2,7 @@
 
 - SECTION=water/reservoir-ponds-tameike
 - RENDERING=rendering/water/how-our-maps-draw-reservoir-ponds-their-reeds-and-their-embankments
-- OLD=research/water/280-a-reservoirs-shore-is-reeded-and-its-embankment-is-mown---the-two-are-different-ground.html research/water/285-why-is-a-reservoirs-embankment-bare-of-reeds-it-is-kept-dry-and-firm-for-its-strength.html research/water/650-were-a-ponds-reeded-shore-and-reed-free-bank-only-modern-no---a-chinese-classic-puts-the-cattails-inside-the-bank-not-on-it.html research/water/340-was-the-reed-at-a-reservoirs-margin-cut-as-a-crop.html research/water/220-irrigation-topology---one-pond-outlet-that-branches.html research/fields/650-how-big-a-pond-did-a-field-need-before-modern-times-two-or-three-mu-in-every-ten-in-a-song-dynasty-farming-manual.html
+- OLD=research/water/ research/water/ research/water/ research/water/ research/water/ research/fields/
 - MODALS=Marsh Pond
 - BASE=754bbfdb1
 

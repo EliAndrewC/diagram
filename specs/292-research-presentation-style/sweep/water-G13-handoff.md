@@ -4,7 +4,7 @@
 
 - SECTION=water/moats-where-their-water-comes-from-and-where-it-goes-hori
 - RENDERING=rendering/water/how-our-maps-draw-moat-water
-- OLD=research/water/100-does-a-moat-have-a-current.html research/water/110-a-fed-closed-moat-must-drain---the-physics-and-the-precedent.html research/water/120-the-diverted-stream-moat-is-a-historical-type.html research/cities/capitals/170-moat-water-drawn-connections-outside-standing-water-inside---and-yes-it-scums.html research/cities/defenses/020-what-keeps-the-moat-full.html research/cities/hinterland/030-does-the-moat-feed-the-fields-or-do-the-fields-drain-into-it.html
+- OLD=research/water/ research/water/ research/water/ research/cities/capitals/ research/cities/defenses/ research/cities/hinterland/
 - MODALS=
 - BASE=1092c4eb7
 

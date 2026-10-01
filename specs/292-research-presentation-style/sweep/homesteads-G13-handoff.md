@@ -4,7 +4,7 @@
 
 - SECTION=homesteads/village-names-that-describe-the-site-chimei
 - RENDERING=rendering/homesteads/how-our-maps-read-a-villages-name-before-seating-it
-- OLD=research/homesteads/190-does-the-villages-name-say-where-it-stands.html research/homesteads/190-does-the-villages-name-say-where-it-stands.notes.html research/homesteads/190-does-the-villages-name-say-where-it-stands.originals.html
+- OLD=research/homesteads/ research/homesteads/ research/homesteads/
 - MODALS=
 
 - BASE=937a4caf7

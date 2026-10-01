@@ -32,6 +32,8 @@ GLOSSARY = os.path.join(".claude", "skills", "diagram", "l7r", "diagram", "inter
 #: Where a page's fragments live. The citations page's notes live in the RESEARCH page's directory -
 #: one question's prose and its notes are siblings, which is the whole of stage 3.
 _REGISTRY = "SOURCES.html"
+#: The built site (feature 301): never edited, never searched for a fragment - it is the record again, page by page.
+_SITE = "site"
 
 
 def page_dir_for(rel: str) -> str | None:
@@ -48,6 +50,13 @@ def page_dir_for(rel: str) -> str | None:
         return None
     inside = rel.split(RECORD.replace(os.sep, "/") + "/", 1)[1]
     root = rel[: len(rel) - len(inside)]
+    # GUARD_EDIT_OK: feature 301 - the pages a session can open now are the SITE's (research/site/), built and never
+    # committed: a small page or a part's page is re-aimed at its part's fragments, the single page and the home page
+    # at the whole record. A widening of what is caught; nothing loosened.
+    if inside.startswith(_SITE + "/"):
+        built = inside[len(_SITE) + 1 :]
+        part = os.path.dirname(built)
+        return root.rstrip("/") if not part else root + part
     if inside == _REGISTRY:
         return root + "sources"
     if inside.startswith("citations/"):
@@ -62,7 +71,8 @@ def fragments_holding(page_dir: str, needle: str, root: str) -> list[str]:
     """Every fragment of this page whose text contains `needle`, as repository-relative paths."""
     here = os.path.join(root, page_dir)
     out = []
-    for base, _dirs, names in os.walk(here):
+    for base, dirs, names in os.walk(here):
+        dirs[:] = [d for d in dirs if d != _SITE and not d.startswith(".site-")]  # the build, not the record
         for name in sorted(names):
             path = os.path.join(base, name)
             try:
@@ -165,8 +175,8 @@ def main() -> int:
             "additionalContext": (
                 f"{verdict['page']} is assembled from {os.path.dirname(verdict['fragment'])}/ and is "
                 f"never hand-edited, so this edit was re-aimed at the one fragment holding that text: "
-                f"{verdict['fragment']}. Run `make record` in .claude/skills/diagram afterwards - the "
-                f"gate and the push both refuse a page that no longer matches its fragments."),
+                f"{verdict['fragment']}. Run `make record` in .claude/skills/diagram afterwards to rebuild "
+                f"the site (research/site/) from it."),
         }}
     print(json.dumps(verdict))
     return 0
@@ -181,6 +191,10 @@ def selftest() -> int:
     assert page_dir_for(f"{RECORD}/citations/cities/fabric.html") == f"{RECORD}/cities/fabric"
     assert page_dir_for(f"{RECORD}/SOURCES.html") == f"{RECORD}/sources"
     assert page_dir_for(f"{RECORD}/ways/010-x.html") is None, "a fragment is not an assembled page"
+    assert page_dir_for(f"{RECORD}/site/ways/x.html") == f"{RECORD}/ways", "a small page of the site (feature 301)"
+    assert page_dir_for(f"{RECORD}/site/cities/fabric/index.html") == f"{RECORD}/cities/fabric"
+    assert page_dir_for(f"{RECORD}/site/sources/fei-1939.html") == f"{RECORD}/sources"
+    assert page_dir_for(f"{RECORD}/site/all.html") == RECORD, "the single page is the whole record"
     assert page_dir_for(f"{RECORD}/assets/record.js") is None
     assert page_dir_for("docs/guards.md") is None
     with tempfile.TemporaryDirectory() as root:
@@ -195,6 +209,13 @@ def selftest() -> int:
         page = os.path.join(root, RECORD, "ways.html")
         one = decide("Edit", page, {"old_string": "ten feet past the bank"}, root)
         assert one["verdict"] == "rewrite" and one["fragment"].endswith("010-x.html"), one
+        os.makedirs(os.path.join(root, RECORD, "site", "ways"))
+        with open(os.path.join(root, RECORD, "site", "ways", "x.html"), "w", encoding="utf-8") as fh:
+            fh.write("the deck lands ten feet past the bank\n")
+        small = decide("Edit", os.path.join(root, RECORD, "site", "ways", "x.html"), {"old_string": "ten feet past the bank"}, root)
+        assert small["verdict"] == "rewrite" and small["fragment"].endswith("ways/010-x.html"), small
+        whole = decide("Edit", os.path.join(root, RECORD, "site", "all.html"), {"old_string": "ten feet past the bank"}, root)
+        assert whole["verdict"] == "rewrite" and whole["fragment"].endswith("ways/010-x.html"), "the site itself is never a holder"
         assert decide("Edit", page, {"old_string": "shared sentence"}, root)["rule"] == "text-in-several-fragments"
         assert decide("Edit", page, {"old_string": "nowhere at all"}, root)["rule"] == "text-in-no-fragment"
         assert decide("Write", page, {"content": "x"}, root)["rule"] == "write-to-assembled-page"
