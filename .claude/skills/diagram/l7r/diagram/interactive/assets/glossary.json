@@ -2732,7 +2732,8 @@
  "meander": {
   "def": "A loop a channel cuts in its own floodplain; how tight it turns scales with the channel's width.",
   "variants": [
-   "meander"
+   "meander",
+   "meandering"
   ]
  },
  "meibutsu": {
@@ -13690,6 +13691,20 @@
   "def": "The century, about 1471 to 1573, when the Asakura warrior house ruled Echizen province from its castle town at Ichijodani.",
   "variants": [
    "Asakura period"
+  ]
+ },
+ "land fall": {
+  "def": "The direction a map's ground slopes downhill, which every map declares because no contour lines draw it; given in degrees turning clockwise from east, so 90 is south.",
+  "variants": [
+   "land fall",
+   "land's fall"
+  ]
+ },
+ "drainage bearing": {
+  "def": "The direction a map's water leaves it, declared beside the land fall and given in the same degrees, turning clockwise from east.",
+  "variants": [
+   "drainage bearing",
+   "water's bearing"
   ]
  }
 }

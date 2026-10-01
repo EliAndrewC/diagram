@@ -681,6 +681,7 @@ dragon-bone water wheel	chain pump
 dragon-bone water wheels	chain pump
 dragon-bone wheel	chain pump
 dragon-bone wheels	chain pump
+drainage bearing	drainage bearing
 drainage ditch	drainage ditch
 drainage ditches	drainage ditch
 draw-basin	draw-basin
@@ -1862,9 +1863,11 @@ lake tai	Lower Yangzi
 land class	land class
 land classes	land class
 land consolidation	kochi seiri
+land fall	land fall
 land readjustment	kochi seiri
 land survey	cadastre
 land surveys	cadastre
+land's fall	land fall
 land-readjustment	kochi seiri
 landrace	landrace
 landraces	landrace
@@ -2001,6 +2004,7 @@ matou	gangi
 matsu	matsu
 mayasaki	mayasaki
 meander	meander
+meandering	meander
 meibutsu	meibutsu
 meiji	Meiji
 meiji restoration	Restoration
@@ -3541,6 +3545,7 @@ water tables	water table
 water tail	water-mouth
 water teahouse	water teahouse
 water teahouses	water teahouse
+water's bearing	drainage bearing
 water-and-land hall	water-and-land hall
 water-and-land halls	water-and-land hall
 water-head	water-head
