@@ -479,7 +479,7 @@
   "manure heap": {
     "caveat": "",
     "covers": "`farm_fixtures[kind=manure]`",
-    "entry": "research/homesteads.html - 'Where did the manure heap stand, and what went into it?'; 'Farm privies and their night soil (benjo)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps place privies (benjo)'; 'How our maps draw the farmstead and what stands on it (yashiki)'",
+    "entry": "research/homesteads.html - 'Manure heaps and compost (kyuhi)'; 'Farm privies and their night soil (benjo)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps place manure heaps (kyuhi)'; 'How our maps place privies (benjo)'; 'How our maps draw the farmstead and what stands on it (yashiki)'",
     "key": "manure heap",
     "label": "guess",
     "label_note": "The practice is read (jawiki, the Art Institute's Han model); the heap's PLACE on the farm and its size are guesses - the pages describe the pit, not where it stood.",
@@ -1064,7 +1064,7 @@
   "woodpile": {
     "caveat": "",
     "covers": "`farm_fixtures[kind=woodpile]` - the wood shed",
-    "entry": "research/homesteads.html - 'Where was the firewood stacked, and how big was the pile?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'",
+    "entry": "research/homesteads.html - 'Firewood stacks and sheds (kigoya)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw firewood sheds (kigoya)'; 'How our maps draw the farmstead and what stands on it (yashiki)'",
     "key": "woodpile",
     "label": "accurate",
     "label_note": "The firewood SHED is read (Boso-no-Mura); where the open STACK stood relative to the house was found nowhere - the back wall or the shed's outer wall is a guess, and the stack's height is modern practice.",

@@ -289,7 +289,7 @@ class WoodShed(Kind):
     Covers: `farm_fixtures[kind=woodpile]` - the wood shed
     Label: accurate
     Sources: boso-no-mura-kigoya, koshigaya-shishi-noumin-jukyo, oamishirasato-choshi-kaoku
-    Entry: research/homesteads.html - 'Where was the firewood stacked, and how big was the pile?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads.html - 'Firewood stacks and sheds (kigoya)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw firewood sheds (kigoya)'; 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'wood shed'
@@ -317,7 +317,7 @@ class ManureHeap(Kind):
     Covers: `farm_fixtures[kind=manure]`
     Label: guess
     Sources: jawiki-koedame, artic-pigsty-latrine, kyuhi-jawiki, suzuki-1959-noson-benjo
-    Entry: research/homesteads.html - 'Where did the manure heap stand, and what went into it?'; 'Farm privies and their night soil (benjo)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps place privies (benjo)'; 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads.html - 'Manure heaps and compost (kyuhi)'; 'Farm privies and their night soil (benjo)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps place manure heaps (kyuhi)'; 'How our maps place privies (benjo)'; 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'manure heap'
