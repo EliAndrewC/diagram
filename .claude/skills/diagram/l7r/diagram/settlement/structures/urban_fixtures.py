@@ -72,7 +72,7 @@ class UrbanFixturesMixin:
         fire watch was a SEPARATE institution in both reference cultures (Song Kaifeng ran
         dedicated fire-lookout towers; Edo split the licensed toki-no-kane time bell from the
         hinomi-yagura). Drawn as a heavy masonry platform (~36 ft square at the city tier, ~30 ft at
-        a town - the record's 30-45 ft band, research/urban-features.html "The bell-and-drum tower (zhonggulou)") carrying
+        a town - the record's 30-45 ft band, research/urban-features/070-the-bell-and-drum-tower-zhonggulou.html) carrying
         a timber pavilion with the drum and the bell - visibly heavier-built than the skeletal
         braced-frame fire towers. Stands at the main street crossing, near (not inside) the yamen.
         Records M['drum_towers'] (an overlap-checked struct) and reserves a no-build block."""

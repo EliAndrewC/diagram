@@ -23,7 +23,7 @@ Shares: F ~42%, D ~33%, C ~13%, E ~10%, B ~4%, A 0%.
 
 ## cities/sizing.md (22.3 KB, NO research counterpart)
 
-Grounding: partly `research/cities/fabric.html#a-county-seats-street-share-open-reserve-and-civic-share`; the budget model, density calibration and tolerances only in `specs/009-city-area-budget/research.md` (pre-HTML, no footnotes). `citybudget.py:109` points back at `sizing.md`.
+Grounding: partly `research/cities/fabric/`; the budget model, density calibration and tolerances only in `specs/009-city-area-budget/research.md` (pre-HTML, no footnotes). `citybudget.py:109` points back at `sizing.md`.
 
 | Section | Class | Engine |
 |---|---|---|

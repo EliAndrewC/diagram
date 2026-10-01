@@ -4,13 +4,13 @@
 `hamletgen` declaration. The earlier notes (reconstructed 2026-08-08 from the old generator's
 comments) are in git history with that script; what they recorded that still holds is carried here.*
 
-**Decision recorded (GM 2026-08-28, feature 143):** the dike-pond parcels are drawn at **6 parts water to 4 parts dike** as a *disclosed regional reading* - the classic prescription survives in both orders (基六塘四 on the page read; 六分为塘、四分为基 elsewhere; 7:3 in some districts). Kept as drawn; the interactive map's modal for this map's ponds and banks carries that sentence. Full record: `research/archetypes.html` "The 6:4 water-to-dike ratio, and coppiced mulberry".
+**Decision recorded (GM 2026-08-28, feature 143):** the dike-pond parcels are drawn at **6 parts water to 4 parts dike** as a *disclosed regional reading* - the classic prescription survives in both orders (基六塘四 on the page read; 六分为塘、四分为基 elsewhere; 7:3 in some districts). Kept as drawn; the interactive map's modal for this map's ponds and banks carries that sentence. Full record: `research/archetypes/140-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html`.
 
 **Subject**: 16 households on polder geometry carried to the dike-pond system's rare
 **wholesale-conversion end state** - 桑基魚塘, the `mulberry_dike_fishpond` archetype: (almost)
 every former paddy cell dug into a fish pond and the spoil piled into a mulberry-planted dike
 around it. The END STATE is deliberately the exception; the scattered overlay is the norm
-(research/archetypes.html "The three overlays a village may carry"). Reading this map as typical would be the
+(research/rendering/archetypes/030-how-our-maps-lay-cash-crops-over-a-villages-rice-land.html). Reading this map as typical would be the
 mistake it is here to make visible.
 
 ## Map notes
@@ -74,7 +74,7 @@ the windbreak, the plank crossings clustered on the settlement side (`polder_cro
 
 ## What the GM's audit added (feature 150 T40-T48, 2026-08-28)
 
-See `research/archetypes.html` "The scripted dike-pond hamlet - the rules" and
+See `research/rendering/archetypes/170-how-our-maps-furnish-a-dike-pond-hamlet.html` and
 `specs/150-kuwabata-dike-pond-hamlet/audit.md`. On THIS map, seed 21: no threshing floors
 (forecourts recorded, no ink); manure form rolled PIT; three fry ponds (the smallest parcels,
 same ink); a sluice gate at each of the two dike cuts; duck pens and pig sties on the ponds
@@ -233,8 +233,7 @@ none is drawn. Drawn at 1 ft/px.
   empty bin, and a notch bin holds 14 outline points (the ring's cut ends fill it), so it fired 0 times
   on all four flanks. The lesson is the standing one - a rule that cannot fire looks exactly like a
   rule that passes - and the guard is now a unit test that steps a notch whose bin is FULL.
-- **PARTLY ANSWERED 2026-08-29 by a `source-reader` pass on the tameike record** (research/water.html
-  "A reservoir's shore is reeded, and its EMBANKMENT is mown"). The half that is settled: the
+- **PARTLY ANSWERED 2026-08-29 by a `source-reader` pass on the tameike record** (research/water/280-reservoir-ponds-tameike.html). The half that is settled: the
   reviewer's "berm on a diked margin" read is CORRECT for the embankment itself and for the reason
   the reviewer guessed - a tameike's 堤 is mown and burned and may not be cultivated, **to keep the
   bank strong**, and the plants recorded on it are dry-grassland herbs. That is an independent
@@ -580,7 +579,7 @@ a plot, a house, a yard, a lane or bog. Every drawn string is byte-identical; th
   parcel with the pond painted over it; on the vector page the pond hid the disk, but raster mode (the opening
   view) draws the lit class as a wash over the image, so the lit disk tinted all 26 dike groups' ponds gold.
   The bank is now the ring between its outer edge and the water's outline, under the even-odd rule - the
-  perimeter dike's own band form (research/archetypes.html "The 6:4 water-to-dike ratio and coppiced mulberry" 'The bank is a ring'). Nothing placed moves: the
+  perimeter dike's own band form (research/archetypes/140-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, research/rendering/archetypes/140-how-our-maps-draw-dike-ponds-sangji-yutang.html). Nothing placed moves: the
   manifest is byte-identical (the two outlines come from the same draws in the same order), the crowns and the
   earth mottle still clip to the bank outline, so the few that lean over the water's rim still light with the
   dike, and the ring's inner stroke lies under the pond's own wider stroke. Measured on the page in raster mode

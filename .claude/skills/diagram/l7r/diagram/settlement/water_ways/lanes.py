@@ -75,7 +75,7 @@ class LanesMixin:
         lane (the dispersed pool maps until they are rebuilt). `clearance` is the no-build corridor
         half-width (keep houses off the tread). `connector=True` marks the trodden path that LEAVES the
         village for the wider world - it MUST run off the map edge (checked), never stop mid-landscape.
-        See research/ways.html 'Village lanes'."""
+        See research/ways/020-village-lanes.html."""
         # a lane KEEPS ITSELF RECORDED (feature 287 M8): the web reshapes lanes in place, and each reshape is asked of the
         # registry of what stands at the write (`Kept`) - so a repair cannot lay a lane on what the overlap matrix forbids
         # ...AND IT IS ASKED BEFORE IT IS RECORDED OR INKED (feature 287, water W53): every placer that lays a lane chose it among

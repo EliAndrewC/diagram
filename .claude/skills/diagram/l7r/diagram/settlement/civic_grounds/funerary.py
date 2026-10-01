@@ -57,7 +57,7 @@ class FuneraryGroundsMixin:
         attached to a temple, e.g. one serving an in-wall farm quarter) - exempt from the temple-precinct
         rule. organic=True draws an IRREGULAR earthen plot; organic=None (the default) DERIVES it from
         parish: every non-parish COMMON ground is organic, parish precinct plots stay ruled rectangles.
-        Historical grounding (researched 2026-07-23, written up in research/religion-and-death.html 'Village burial grounds (bochi)' ('shape of the common
+        Historical grounding (researched 2026-07-23, written up in research/religion-and-death/160-village-burial-grounds-bochi.html ('shape of the common
         ground'): Japan's commoner burial grounds - Kyoto's burial fields, village sanmai, Edo's packed
         temple yards - were unplotted and terrain-following, never surveyed; Song China's state pauper
         cemeteries (louzeyuan, 1104 on) WERE surveyed walled compounds with numbered rowed plots, so a
@@ -106,7 +106,7 @@ class FuneraryGroundsMixin:
         self.placed.append((cx, cy, w, h))
         bm = 8
         self.block_polys.append([(cx - w / 2 - bm, cy - h / 2 - bm), (cx + w / 2 + bm, cy - h / 2 - bm), (cx + w / 2 + bm, cy + h / 2 + bm), (cx - w / 2 - bm, cy + h / 2 + bm)])
-        # THE GROUND CLEARS ONLY ITSELF (feature 280 M66, research/religion-and-death.html, 'Ground swept clear around shrines and graves'): the grave itself was weeded and
+        # THE GROUND CLEARS ONLY ITSELF (feature 280 M66, research/religion-and-death/130-ground-swept-clear-around-shrines-and-graves.html): the grave itself was weeded and
         # topped up at Qingming in 1630s Beijing, but no cleared band round a graveyard is attested in any period - the
         # 30 px collar it had is gone, and the waste around it stays scrubby to its edge
         self._clear_ground(cx, cy, w, h, 0)
@@ -208,7 +208,7 @@ class FuneraryGroundsMixin:
         pyre platform or officiants' hut is drawn: neither is attested. A roof stands on four posts a few feet out from the
         bed, about 11 ft square. SIX JIZO (`jizo`) stand at a BURIAL ground's entrance (feature 280 M71, 700): a caller
         passes them only for a cremation ground beside a burial ground; one standing on its own has none."""
-        # TO SCALE (GM 2026-07-19; anchors in research/rendering/religion-and-death.html 'How our maps draw cremation grounds and bone mounds (kasoba)'): a sanmai's cleared working core is
+        # TO SCALE (GM 2026-07-19; anchors in research/rendering/religion-and-death/530-how-our-maps-draw-cremation-grounds-and-bone-mounds.html): a sanmai's cleared working core is
         # 30-80 real ft for a village/town (a GUESS: the only sizes are 1922 and later - 202), ~80-160 ft for a provincial
         # city (Edo's Yoyogi crematory, 900 tsubo, ~180 ft square, the one premodern extent); the fire bed ~12x8 ft. The old
         # glyph was FIXED-PIXEL (116x80px) and silently tripled at city scale.

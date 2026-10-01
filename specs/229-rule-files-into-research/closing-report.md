@@ -22,7 +22,7 @@ carry across on its own. A human drawing a compound needs an operative document 
 What is worth the GM's eye is that `buildings.md` carries four of their own rulings as RULES, and the
 research page carries at most the reasoning behind three of them:
 
-| ruling | in `buildings.md` | on `research/buildings.html` |
+| ruling | in `buildings.md` | on `research/buildings/` |
 |---|---|---|
 | the 2x point-glyph doctrine retired, everything with a real footprint draws at true size (2026-07-21) | the rule | mentioned |
 | structures ABUT a wall, they never stand in it (2026-07-24) | the rule, with its check | the subject is discussed |
@@ -30,7 +30,7 @@ research page carries at most the reasoning behind three of them:
 | the threshold stone is a PAIR flanking the road outside the opening, never in the passage (2026-07-25) | the rule, with the two defects that forced it | absent entirely |
 
 So the question is narrow: does Mode A follow the settlement tiers - the rulings and their
-specifications onto `research/buildings.html`, `buildings.md` left as the vocabulary a session draws
+specifications onto `research/buildings/`, `buildings.md` left as the vocabulary a session draws
 from - or does a mode a person draws by hand keep one operative document on purpose? This feature did
 not decide it, because the GM did not ask about Mode A.
 

@@ -42,7 +42,7 @@ class FishPond(Kind):
     Covers: the dug water of every `dikeponds[]` parcel - the pond inset inside its mulberry dike
     Label: accurate
     Sources: isis-dykepond, ruddle-zhong-1988, gmrb-2024-sangji, guangdong-xinyu-22, pwsannong-zhusanjiao-nongyeshi, nongzheng-quanshu-41, minle-dou-people
-    Entry: research/archetypes.html - 'Cash crops on rice land: dike-ponds, lotus fields and tea rows', 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Fish fry and nursery ponds (yumiao)', 'Pigs and ducks at a dike-pond: the sty on the pond dike'; research/rendering/archetypes.html - "How our maps lay cash crops over a village's rice land", 'How our maps draw dike-ponds (sangji yutang)'
+    Entry: research/archetypes/030-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html, research/archetypes/140-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, research/archetypes/172-fish-fry-and-nursery-ponds-yumiao.html, research/archetypes/210-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html; research/rendering/archetypes/030-how-our-maps-lay-cash-crops-over-a-villages-rice-land.html, research/rendering/archetypes/140-how-our-maps-draw-dike-ponds-sangji-yutang.html
     """
 
     key = 'fish pond'
@@ -82,7 +82,7 @@ class MulberryDike(Kind):
     Covers: the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it
     Label: accurate
     Sources: gd-gazetteer-sangji, fao-ac241e, isis-dykepond, ruddle-zhong-1988, pwsannong-gudai-zaisang, pwsannong-sangji-yutang, kotobank-souen, kotobank-negari
-    Entry: research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Polder dikes: what they were made of, how big, and what grew on them', 'Mulberry and other crops on pond dikes (sangji, guoji)'; research/rendering/archetypes.html - 'How our maps draw dike-ponds (sangji yutang)', 'How our maps draw mulberry and other crops on pond dikes (sangji, guoji)'
+    Entry: research/archetypes/140-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, research/archetypes/330-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.html, research/archetypes/220-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html; research/rendering/archetypes/140-how-our-maps-draw-dike-ponds-sangji-yutang.html, research/rendering/archetypes/220-how-our-maps-draw-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html
     """
 
     key = 'mulberry dike'
@@ -110,7 +110,7 @@ class PondCanal(Kind):
     Covers: `field_ditches` whose role is not `drain` on a dike-pond field - the main from the reservoir and the laterals between the ponds
     Label: accurate
     Sources: minle-dou-people, cssn-sangyuanwei, cssn-jiangnan-weitian
-    Entry: research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)'; research/rendering/archetypes.html - 'How our maps draw dike-ponds (sangji yutang)'
+    Entry: research/archetypes/140-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html; research/rendering/archetypes/140-how-our-maps-draw-dike-ponds-sangji-yutang.html
     """
 
     key = 'pond canal'
@@ -147,7 +147,7 @@ class FruitDike(Kind):
     Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is fruit, and its trees
     Label: accurate
     Sources: guangdong-xinyu-22, guangdong-xinyu-25, pwsannong-zhusanjiao-nongyeshi, gd-gazetteer-sangji
-    Entry: research/archetypes.html - 'Mulberry and other crops on pond dikes (sangji, guoji)', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps draw mulberry and other crops on pond dikes (sangji, guoji)', 'How our maps furnish a dike-pond hamlet'
+    Entry: research/archetypes/220-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html, research/archetypes/170-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.html; research/rendering/archetypes/220-how-our-maps-draw-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html, research/rendering/archetypes/170-how-our-maps-furnish-a-dike-pond-hamlet.html
     """
 
     key = 'fruit dike'
@@ -175,7 +175,7 @@ class TeaDike(Kind):
     Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is tea, and its bushes
     Label: accurate
     Sources: guangdong-xinyu-22
-    Entry: research/archetypes.html - 'Mulberry and other crops on pond dikes (sangji, guoji)'; research/rendering/archetypes.html - 'How our maps draw mulberry and other crops on pond dikes (sangji, guoji)'
+    Entry: research/archetypes/220-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html; research/rendering/archetypes/220-how-our-maps-draw-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html
     """
 
     key = 'tea dike'
@@ -212,7 +212,7 @@ class PigSty(Kind):
     Covers: every `pig_sties[]` record - a shed with its railed pen on a pond bank
     Label: accurate
     Sources: qimin-yaoshu-yangzhu, isis-dykepond, pwsannong-zhusanjiao-nongyeshi, nongzheng-quanshu-41, fao-ac264e
-    Entry: research/archetypes.html - 'Pigs and ducks at a dike-pond: the sty on the pond dike', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps draw pigs and ducks at a dike-pond: sties on the pond dikes', 'How our maps furnish a dike-pond hamlet'
+    Entry: research/archetypes/210-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html, research/archetypes/170-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.html; research/rendering/archetypes/210-how-our-maps-draw-pigs-and-ducks-at-a-dike-pond-sties-on-the-pond-dikes.html, research/rendering/archetypes/170-how-our-maps-furnish-a-dike-pond-hamlet.html
     """
 
     key = 'pig sty'
@@ -242,7 +242,7 @@ class FryPond(Kind):
     Covers: the dug water of a `dikeponds[]` parcel recorded `kind: fry` - a fry village's smallest ponds
     Label: accurate
     Sources: cssn-sangyuanwei, guangdong-xinyu-22, pwsannong-zhusanjiao-nongyeshi
-    Entry: research/archetypes.html - 'Fish fry and nursery ponds (yumiao)', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps draw fish fry and nursery ponds (yumiao)'
+    Entry: research/archetypes/172-fish-fry-and-nursery-ponds-yumiao.html, research/archetypes/170-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.html; research/rendering/archetypes/172-how-our-maps-draw-fish-fry-and-nursery-ponds-yumiao.html
     """
 
     key = 'fry pond'
@@ -277,7 +277,7 @@ class ManurePit(Kind):
     Covers: a `farm_fixtures[]` record of kind `manure` with `form: pit` - the alternative to the heap
     Label: accurate
     Sources: fei-1939, sugiura-1973-fuzoku, suzuki-1959-noson-benjo
-    Entry: research/archetypes.html - 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps furnish a dike-pond hamlet'; research/homesteads.html - 'Farm privies and their night soil (benjo)'; research/rendering/homesteads.html - 'How our maps place privies (benjo)'
+    Entry: research/archetypes/170-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.html; research/rendering/archetypes/170-how-our-maps-furnish-a-dike-pond-hamlet.html; research/homesteads/260-farm-privies-and-their-night-soil-benjo.html; research/rendering/homesteads/260-how-our-maps-place-privies-benjo.html
     """
 
     key = 'manure pit'
@@ -301,7 +301,7 @@ class SluiceGate(Kind):
     Covers: the board bar of every `sluice_gates[]` record - the gate in each cut of the perimeter dike
     Label: accurate
     Sources: fao-x6708e, cssn-sangyuanwei, shen-kuo, ishizue-waju, wajyu-nogyo
-    Entry: research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Polders: fields diked against the fluctuating water (weitian, waju)'; research/rendering/archetypes.html - 'How our maps draw polders (weitian, waju)', 'How our maps draw dike-ponds (sangji yutang)'
+    Entry: research/archetypes/140-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, research/archetypes/160-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html; research/rendering/archetypes/160-how-our-maps-draw-polders-weitian-waju.html, research/rendering/archetypes/140-how-our-maps-draw-dike-ponds-sangji-yutang.html
     """
 
     key = 'sluice gate'
@@ -326,7 +326,7 @@ class PerimeterDike(Kind):
     Covers: the earthwork band of `dikes[]` - the polder's enclosing dike, gapped at its sluices
     Label: accurate
     Sources: shen-kuo, isis-dykepond, ruddle-zhong-1988, ishizue-waju, wajyu-nogyo
-    Entry: research/archetypes.html - 'Polders: fields diked against the fluctuating water (weitian, waju)', 'Polder dikes: what they were made of, how big, and what grew on them'; research/rendering/archetypes.html - 'How our maps draw polders (weitian, waju)', "How our maps draw a polder's dike and its trees"
+    Entry: research/archetypes/160-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html, research/archetypes/330-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.html; research/rendering/archetypes/160-how-our-maps-draw-polders-weitian-waju.html, research/rendering/archetypes/330-how-our-maps-draw-a-polders-dike-and-its-trees.html
     """
 
     key = 'perimeter dike'

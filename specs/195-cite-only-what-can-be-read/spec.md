@@ -121,7 +121,7 @@ source" and what was searched and when. Constitution XII: an unlabeled guess is 
 ### Key Entities
 
 - **Footnote**: `<li id="fn-n">` in `<section class="footnotes">`; CITATION or ABSENCE form (FR-002).
-- **Registry entry**: `<h3 id="key">` in `research/SOURCES.html`; may be labeled SUMMARY-ONLY (a search record, never
+- **Registry entry**: `<h3 id="key">` in `research/sources/`; may be labeled SUMMARY-ONLY (a search record, never
   a citation) or "not cited (no publicly readable text)".
 - **Absence note**: the footnote text for an assertion with no readable source.
 

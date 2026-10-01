@@ -109,7 +109,7 @@ WEB_CLEARANCE = 28.0
 # gap is at least this wide, so a lane is placed where one can actually be walked rather than driven
 # through a wall and left to the clipper to sort out. Three feet of tread plus a hand's breadth on
 # each side, doubled for the two neighbors: a person with a carrying pole, which is the traffic these
-# lanes were for (see research/ways.html - the vehicle to picture is the wheelbarrow and the
+# lanes were for (see research/ways/ - the vehicle to picture is the wheelbarrow and the
 # shoulder-pole porter, never a cart).
 #
 # NOTE ON WEB_CLEARANCE ABOVE, because the number moved twice and the reason changed with it. While
@@ -199,7 +199,7 @@ MIN_WEB_GAP = 2.0 * WEB_FABRIC_GAP + 4.0  # 18 ft: both neighbors' clearance, pl
 # space by the adjoining house". The same number sets the web's lane spacing, so the requirement and
 # the geometry that satisfies it cannot drift apart.
 #
-# Grounding: research/ways.html, "Village lanes", and research/rendering/ways.html, "How our maps draw village lanes" - the
+# Grounding: research/ways/020-village-lanes.html, and research/rendering/ways/020-how-our-maps-draw-village-lanes.html - the
 # record is decisive that a house in a nucleated cluster IS reached by a way. The previous 90 ft in
 # `lanes_reach_something` was flagged in future-work/ as a number nobody had justified; this one is
 # derived from a researched constant instead of chosen to make today's maps pass.
@@ -299,7 +299,7 @@ SUN_CORRIDOR_FT = 39.0
 # the attested band, not a choice between forms. THE FRAME QUESTION WAS THEN SETTLED SEPARATELY
 # (GM 2026-08-26): the belt's inner face now sets the frame (`windbreak_face`), so a taller belt
 # would no longer be cropped away - 10 m stays because it is the record's measured working height,
-# not because the frame forces it. research/homesteads.html, "The garden's sun".
+# not because the frame forces it. research/rendering/homesteads/040-how-our-maps-keep-yards-and-gardens-in-the-sun.html.
 WEST_SUN_FT = 50.0
 
 # THE FIELD ARCHETYPES this generator can draw, and why there are two rather than five. The pool's
@@ -313,7 +313,7 @@ WEST_SUN_FT = 50.0
 # `mulberry_dike_fishpond` IS declared as a third archetype (feature 150, Kuwabata) because a pool
 # entry names it and the gate reads it (`dikepond_is_ponds_in_a_block` keys off
 # `meta.field_archetype`) - but it is BUILT as the polder carried to the wholesale-conversion
-# overlay, which is what it is historically too (research/archetypes.html "The three overlays a village may carry":
+# overlay, which is what it is historically too (research/rendering/archetypes/030-how-our-maps-lay-cash-crops-over-a-villages-rice-land.html:
 # the wall-to-wall dike-pond landscape is the rare END STATE of the scattered overlay, ~300 years
 # of 挖塘培基 plot by plot). So `POLDER_ARCHETYPES` is the set the polder stage serves, and the
 # dike-pond differs from the rice polder only in its PARCEL FABRIC (`POLDER_FABRIC`), the overlay
@@ -350,7 +350,7 @@ POLDER_FABRIC: dict[str, dict[str, Any]] = {
 # of Digang - so a dike-pond block is drawn as the mosaic and the pond grid is no longer rolled. The GM ruled the knob in on
 # 2026-08-18 on the reading that both were attested ponds; that reading is withdrawn at pond scale and the reversal
 # reported. What follows is the knob's original note (constitution XII,
-# GM 2026-08-18). research/archetypes.html "Grid vs mosaic": the lower-Yangtze wei-tian was a SURVEYED
+# GM 2026-08-18). research/rendering/archetypes/050-how-our-maps-draw-parcels-and-bunds-inside-a-polder-aze.html: the lower-Yangtze wei-tian was a SURVEYED
 # rectilinear grid (the Song tangpu lattice) while the Pearl-delta dike-pond accreted household by
 # household into a MOSAIC - rectangles of varied size at varied local orientation around winding
 # creeks. Both systems carried dike-ponds (Lake Tai mulberry sat on the tang banks inside the
@@ -373,7 +373,7 @@ FRY_FORMS = ("none", "none", "none", "fry_village")
 # 2026-08-28 choosing audit A2). Sugiura 1973 counts the manure shed/heap on Tohoku farmsteads; Fei 1939 has
 # the Lake Tai silk village keeping its manure "in the pits made of earthenware, half buried in the ground at
 # the back of the building", lined along the road. Neither source gives a share of villages using each, so
-# the roll is even. research/archetypes.html "What stands on a dike-pond hamlet that a paddy hamlet lacks?".
+# the roll is even. research/archetypes/170-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.html.
 MANURE_FORMS = ("heap", "pit")
 
 # THE HARVEST WEATHER - an ENVIRONMENT FACT the spec declares, never a roll (feature 282, FR-005). Racks gathered by
@@ -382,7 +382,7 @@ MANURE_FORMS = ("heap", "pit")
 # regions, not a village's choice - so a free roll per hamlet would let two neighbors in one climate differ, which is
 # what the GM asked us not to do (2026-09-28). `changeable` draws a rack by every house; `settled` (the default: the
 # gathered racks are one region's form - this project's decision, as the regional wind is) draws none at the house.
-# research/homesteads.html 'Rice-drying racks (hasa, hasagi)'; the rule at research/rendering/homesteads.html 'How our maps draw rice-drying racks (hasa, hasagi)'.
+# research/homesteads/500-rice-drying-racks-hasa-hasagi.html; the rule at research/rendering/homesteads/500-how-our-maps-draw-rice-drying-racks-hasa-hasagi.html.
 HARVEST_WEATHERS = ("settled", "changeable")
 DEFAULT_HARVEST_WEATHER = "settled"
 # TWO SUPPORTABLE ANSWERS BECOME A KNOB (constitution XII), not a picked one. Both were named by a
@@ -418,8 +418,7 @@ POND_LAYOUT_MOSAIC = 0.5
 # THE SHARE OF THE BLOCK THAT CONVERTED in the end state. `apply_land_use(fraction=)` is the ECONOMIC
 # term over the ELIGIBLE set, and the archetype opts out of the topographic filter by name
 # (`eligible="all"`); 0.9 is the hand-authored Kuwabata's figure - "(almost) every former paddy cell"
-# - so a few leftover parcels still read as standing rice among the ponds (research/archetypes.html 'Polder
-# fourth pass': leftovers of a wholesale conversion are repainted as paddy, not left as outlines).
+# - so a few leftover parcels still read as standing rice among the ponds (research/rendering/archetypes/050-how-our-maps-draw-parcels-and-bunds-inside-a-polder-aze.html: leftovers of a wholesale conversion are repainted as paddy, not left as outlines).
 # The exact share is a DEGREE along the attested continuum (Shunde: rice under one-tenth of the land
 # by c. 1900), a calibrated liberty rather than a measured number - recorded as such.
 DIKEPOND_CONVERSION = 0.9
@@ -461,7 +460,7 @@ POLDER_CELL_FT = 110.0
 # kayabuki thatch must be pitched 45 deg or steeper to shed rain, putting the ridge ~20 ft up, and
 # at 38N in the 10th month that throws 39 ft of shadow by 9am. Lowering the asked pitch would put
 # houses inside each other's drying shadow - a defect against the rule, arriving disguised as a
-# density win. (research/homesteads.html, "The threshing yard's sun"; specs/121 research.md D2.)
+# density win. (research/rendering/homesteads/040-how-our-maps-keep-yards-and-gardens-in-the-sun.html; specs/121 research.md D2.)
 #
 # THE HONEST WAY TO GET MORE DENSITY HERE is what real yashiki lots did: STAGGER east-west rather
 # than space rows further apart.
@@ -524,7 +523,7 @@ POND_SETBACK_LIMIT = 300.0
 # settlement-review) rather than an oversight - `build_comb`'s docstring carries the same account.
 GRAIN = 2.0
 
-# THE HAMLET BAND (research/settlements.html "What are the five kinds of settlement, and how big is each?"): 10-20 households, 50-100 inhabitants. Below
+# THE HAMLET BAND (research/settlements/010-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html): 10-20 households, 50-100 inhabitants. Below
 # 10 the place is an outlying farmstead or two rather than a hamlet; above ~20 it is a small village
 # and grows the features a hamlet must not have (a headman, a shrine, tax-free plots).
 HOUSEHOLD_BAND = (10, 20)
@@ -548,11 +547,11 @@ REF_CANAL_B = (680.0, 800.0)
 FAN_ASPECTS = (0.88, 0.95, 1.0, 1.08, 1.16)
 
 # THE INTAKE, AND THE BROOK THAT RUNS ON PAST IT (feature 230, GM 2026-09-12; researched -
-# research/water.html "Where does the brook stop being a brook and become the ditch"). A brook does not
+# research/water/250-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html). A brook does not
 # turn into a ditch: it is TAPPED at an intake on one bank and keeps its own course below it, so the
 # hamlet's brook now passes the fan's head and runs on down one flank to the frame.
 #
-# THE INTAKE'S FORM IS A KNOB (research/water.html "Is there a weir at the intake?") because the record
+# THE INTAKE'S FORM IS A KNOB (research/water/250-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html) because the record
 # attests two and prefers neither: in old Japan "in many cases no intake weir was built at all - water was taken naturally", and where the level would not serve
 # a weir was built, of timber frames packed with stone, gabions and brushwood. The record gives no
 # proportion between them, so the roll is EVEN and that evenness is a GUESS (labeled in the entry).
@@ -654,7 +653,7 @@ WEIR_SKEW_DEG = 30.0
 # one dangling collector. A last offtake at ~0.88 - which is also `build_comb`'s own default - keeps
 # the tail short and inside the rice.
 # ...AND EVERY ROW DRAWS CANAL B (GM caught Inashiro's bare west margin 2026-08-16; researched -
-# research/water.html "The head-race forks - supply commands both flanks"). A gravity canal commands
+# research/rendering/water/005-how-our-maps-lay-out-irrigation-canals-yosuiro.html). A gravity canal commands
 # only the ground BELOW it, and the carve plants paddy on BOTH sides of the bunsuiguchi fork - so
 # the hamlet rows' old offtakes_b=() (copied from Ikegami's authored choice, now a frozen exhibit)
 # left the whole canal-B flank carved as watered ground with no drawn water: the modeled net and
@@ -737,7 +736,7 @@ BROOK_MAX_TURN_DEG = 100.0
 
 # A BROOK TURNS ON A CURVE (feature 261, settlement-review of Sawada): every corner of the drawn course is filleted at this
 # many widths of its drawn bed, the ratio the ditches have been drawn at since 2026-07-25 (`fillet_polyline`,
-# research/water.html "Why does every ditch turn on a curve?": sharp corners belong to stone-lined channels, and nothing
+# research/rendering/water/190-how-our-maps-draw-bends-junctions-and-the-run-of-the-water.html: sharp corners belong to stone-lined channels, and nothing
 # on these maps shows one) - Sawada's brook drew mitred corners of 27-47 degrees. Rounded at the end of the water stages
 # (`round_the_brooks` in `stage_sink`, feature 287; the crossings stage until then) by `finished_course`, and held at
 # the tap the head race leaves from. A map drawing convention on an accurate rule.
@@ -868,7 +867,7 @@ LANE_WEBS = ("alleys", "back_lane")
 # Three forms, and the roll is DELIBERATELY flatter than real-world frequency would be. Read that
 # sentence twice before re-weighting this tuple, because the departure is the decision.
 #
-# What the research supports (research/homesteads.html, "Clustered and scattered villages (shūson, sanson)"):
+# What the research supports (research/homesteads/150-clustered-and-scattered-villages-shuson-sanson.html):
 #   - nucleated  - the default across wet-rice East Asia, because paddy is too valuable to build on,
 #                  so households cluster on whatever ground will not grow rice. The access rule
 #                  (`farmhouses_reach_a_way`) is decisive for THIS form and no other.
@@ -897,8 +896,7 @@ LANE_WEBS = ("alleys", "back_lane")
 #
 # THE RESEARCH, which is still the operative thing: a Tonami farmstead stands in the MIDDLE of its own
 # holding and a row village's fields lie directly behind each house, so neither form has a back rank to
-# excuse - where a nucleated cluster legitimately does (`research/homesteads.html`, "How close does a
-# farmhouse stand to the paddy?", which gives a 6 ft MINIMUM and no maximum at all).
+# excuse - where a nucleated cluster legitimately does (`research/homesteads/150-clustered-and-scattered-villages-shuson-sanson.html`, which gives a 6 ft MINIMUM and no maximum at all).
 #
 # THE MEASUREMENT, for whoever switches the non-nucleated forms on: left to the cloud pass, dispersed
 # and linear maps put houses a median 164 and 208 px from the field against a nucleated baseline's 144

@@ -30,8 +30,7 @@ DIKE_CROP_CLASS = {"mulberry": "mulberry dike", "fruit": "fruit dike", "tea": "t
 # oldest there are; every ratio written as a number is modern. It was 11 ft, which left 80%, wetter than any figure read.
 DIKEPOND_WATER_INSET = 23.0
 
-# A FRY VILLAGE'S NURSERY SHARE (feature 280 M60, research/rendering/archetypes.html "How our maps draw fish fry and
-# nursery ponds (yumiao)"): Qu Dajun (1678) has seven parts in ten of the pond water at Jiujiang raising fry. Read as a share of the block's pond AREA - the record's reading, the smallest ponds first.
+# A FRY VILLAGE'S NURSERY SHARE (feature 280 M60, research/rendering/archetypes/172-how-our-maps-draw-fish-fry-and-nursery-ponds-yumiao.html): Qu Dajun (1678) has seven parts in ten of the pond water at Jiujiang raising fry. Read as a share of the block's pond AREA - the record's reading, the smallest ponds first.
 FRY_VILLAGE_SHARE = 0.7
 
 
@@ -191,7 +190,7 @@ class LandUseMixin:
         take = min(len(elig), max(2, round(len(elig) * fraction)))
         chosen = self._pick_overlay_plots(elig, take, clustered=(overlay == "mulberry_fishpond" and eligible != "all"), rng=rng)
         # LEFTOVERS of a WHOLESALE conversion read as STANDING RICE, not as bare outlines (GM 2026-07-23;
-        # research/rendering/archetypes.html 'How our maps draw dike-ponds (sangji yutang)'). Under eligible="all" the base polder drew every parcel as a
+        # research/rendering/archetypes/140-how-our-maps-draw-dike-ponds-sangji-yutang.html). Under eligible="all" the base polder drew every parcel as a
         # flat bund-outlined rectangle, so the few unconverted plots floated as tan outlines around ground
         # indistinguishable from the floor green (and a FLOODED leftover read as "a pond with no dike").
         # Repaint them as textured paddy - the transplant mottle is what distinguishes crop from floor -
@@ -220,7 +219,7 @@ class LandUseMixin:
             cpp = ch["pts"]
             chansegs += [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for a, b in zip(cpp, cpp[1:], strict=False)]
 
-        # FRY NURSERY PONDS (feature 150, GM 2026-08-28 choosing audit A5; feature 280 M60; research/rendering/archetypes.html
+        # FRY NURSERY PONDS (feature 150, GM 2026-08-28 choosing audit A5; feature 280 M60; research/rendering/archetypes/
         # "How our maps draw fish fry and nursery ponds (yumiao)"): the ordinary delta hamlet BOUGHT its fry and kept no nursery
         # ponds; the fry village of Jiujiang raised fry in seven parts of ten of its pond water (Qu Dajun, 1678) - the
         # hamlet's `fry_form` (hamletgen `FRY_FORMS`). On a fry village the smallest ponds are the fry ponds, up to that
@@ -361,11 +360,11 @@ class LandUseMixin:
             # 桑基魚塘: a raised MULBERRY DIKE (基, planted) surrounds an inset fish POND (塘, water) whose
             # dug corners are ROUNDED - an earthen pond erodes to a rounded outline, never the poured-
             # concrete right angle a premodern village had no way to make (GM 2026-07-22, issues 3 + 5).
-            # Fourth pass (GM 2026-07-23, research/rendering/archetypes.html 'How our maps draw dike-ponds (sangji yutang)'): the dike draws as PLANTED
+            # Fourth pass (GM 2026-07-23, research/rendering/archetypes/140-how-our-maps-draw-dike-ponds-sangji-yutang.html): the dike draws as PLANTED
             # GROUND, not a flat green band - the perimeter dike's own treatment (mottled earthen bank)
             # carrying two planted ROWS of coppiced mulberry crowns (_mulberry_rows). Its corners ease
             # with small erosion fillets but the dike KEEPS its rectangular character - straight dikes
-            # are attested (see research/archetypes.html 'Polder mosaic'). The bank sits at the TRUE parcel line
+            # are attested (see research/rendering/archetypes/050-how-our-maps-draw-parcels-and-bunds-inside-a-polder-aze.html). The bank sits at the TRUE parcel line
             # (inset 0), because the canal at its toe bounds it: an early +5 px expansion put banks over
             # the wavering laterals in 72 places on Kuwabata (mulberry_banks_clear_of_channels caught
             # it). The base parcel's tan bund stroke is erased by a floor-color UNDERLAY instead - the
@@ -377,7 +376,7 @@ class LandUseMixin:
             _sc = 1.0 + 2.5 / max(1.0, _dm)
             cover = " ".join(f"{cx + (x - cx) * _sc:.1f},{cy + (y - cy) * _sc:.1f}" for x, y in p["poly"])
             self.add(f'<polygon points="{cover}" fill="#A6C398"/>', cls="paddy")  # the bund-erasing cover is field floor
-            # THE CANAL AT THE TOE BOUNDS THE BANK (research/rendering/archetypes.html 'How our maps draw dike-ponds (sangji yutang)' ('A bush's center always stands on the bank' - formerly 'Mulberry bushes keep clear of the
+            # THE CANAL AT THE TOE BOUNDS THE BANK (research/rendering/archetypes/140-how-our-maps-draw-dike-ponds-sangji-yutang.html ('A bush's center always stands on the bank' - formerly 'Mulberry bushes keep clear of the
             # canals'): where a mosaic-bent lateral rides INSIDE the parcel line (Kuwabata: two west-edge
             # ponds, up to 3.6 px), the whole pond unit is DUG BACK - shrunk about its centroid until the
             # bank clears the canal by >= 1 px - rather than drawing bank earth over open water. The
@@ -408,14 +407,13 @@ class LandUseMixin:
             # then the water outline under the even-odd rule, so the fill stops at the pond's edge as the perimeter
             # dike's band stops at the polder. On the vector page the pond painted over a filled disk hid the
             # difference; raster mode draws the lit class as a wash OVER the image (page.css, feature 201), and the
-            # lit disk tinted every pond gold. Map drawing convention (research/rendering/archetypes.html 'How our maps draw dike-ponds (sangji yutang)' 'The bank is a
-            # ring'). The two outlines come from the same draws in the same order as before, the crowns AND the
+            # lit disk tinted every pond gold. Map drawing convention (research/rendering/archetypes/140-how-our-maps-draw-dike-ponds-sangji-yutang.html). The two outlines come from the same draws in the same order as before, the crowns AND the
             # earth mottle still clip to `bd` ALONE (a bush or a patch may lean over the water - do not hand them
             # the ring; measured on Kuwabata, 6% of the water area at the rim still lights), the ring's inner stroke
             # lies under the pond's own wider, later stroke, and the `dikeponds` records do not move.
             self.add(f'<path d="{bd} {wd}" fill-rule="evenodd" fill="#C2A772" stroke="#9C8558" stroke-width="1.2" stroke-linejoin="round" opacity="0.95"/>', cls=DIKE_CROP_CLASS[dike_crop])
             # A FRY POND IS DRAWN TURBID (settlement-review of Kuwabata, feature 280): Qu Dajun (1678) - fry water is turbid,
-            # grown-fish water clear, and the color of the water tells what it holds (research/archetypes.html 'Fish fry and nursery ponds (yumiao)') - so a fry
+            # grown-fish water clear, and the color of the water tells what it holds (research/archetypes/172-fish-fry-and-nursery-ponds-yumiao.html) - so a fry
             # village reads as one without a hover
             self.add(f'<path d="{wd}" fill="{FRY_WATER if fry else colors[overlay]}" stroke="#6C9CBE" stroke-width="1.4"/>', cls="fry pond" if fry else "fish pond")
             crown_q.append((qpoly, bd, cx, cy))  # crowns drawn after the late-water anchor (see below)
@@ -436,7 +434,7 @@ class LandUseMixin:
     def _mulberry_rows(self: Settlement, poly: Sequence[Pt], bank_d: str, cx: float, cy: float, rng: random.Random, channels: Sequence[tuple[Pt, Pt]] | None = None, crop: str = "mulberry") -> None:  # type: ignore[misc]
         """The 桑基 (mulberry-dike) half of a dike-pond unit rendered as what it is: PLANTED ground. Sparse
         earth mottle (patch-repairs, the perimeter dike's look) under two planted ROWS of coppiced mulberry
-        crowns. TRUE SCALE (research/rendering/archetypes.html 'How our maps draw dike-ponds (sangji yutang)'): silkworm mulberry was coppiced into low
+        crowns. TRUE SCALE (research/rendering/archetypes/140-how-our-maps-draw-dike-ponds-sangji-yutang.html): silkworm mulberry was coppiced into low
         bushes with ~4-6 ft crowns in dense rows (~1 bush per 10-20 sq ft - hundreds per pond), so at
         1 px = 1 ft honest "actual trees" ARE a packed dot band; the crowns here are r 2.2-3.6 px at ~6 px
         in-row spacing (the loose end of the attested 3-5 ft, for pixel separation), never inflated glyphs.

@@ -42,7 +42,7 @@ class OuterCourt(Kind):
     Covers: the outer court's ground and its labels, the forecourt among them
     Label: accurate
     Sources: neixiang-yamen-zhwiki, takayama-jinya-jawiki, takayama-jinya-city, takayama-jinya-gifu, machi-bugyo-jawiki, jinya-jawiki, yamen-enwiki, neixiang-xianya-zhwiki
-    Entry: research/buildings.html - "Magistrates' compounds (jin'ya and yamen)", 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps draw a magistrate's compound'
+    Entry: research/buildings/010-magistrates-compounds-jinya-and-yamen.html, research/buildings/180-the-size-of-a-compound-and-the-rank-of-its-buildings.html; research/rendering/buildings/180-how-our-maps-size-a-compound-and-its-buildings.html, research/rendering/buildings/010-how-our-maps-draw-a-magistrates-compound.html
     """
 
     key = "outer court"
@@ -77,7 +77,7 @@ class InnerCourt(Kind):
     Covers: the inner court's ground and its label
     Label: accurate
     Sources: neixiang-yamen-zhwiki, takayama-jinya-jawiki, machi-bugyo-jawiki, jinya-jawiki, yamen-enwiki, shoinzukuri-jawiki
-    Entry: research/buildings.html - "Magistrates' compounds (jin'ya and yamen)", 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps draw a magistrate's compound', 'How our maps lay out samurai residences and their rooms (buke yashiki)'
+    Entry: research/buildings/010-magistrates-compounds-jinya-and-yamen.html, research/buildings/380-samurai-residences-and-their-rooms-buke-yashiki.html; research/rendering/buildings/010-how-our-maps-draw-a-magistrates-compound.html, research/rendering/buildings/380-how-our-maps-lay-out-the-residence.html
     """
 
     key = "inner court"
@@ -106,7 +106,7 @@ class BorderCourt(Kind):
     Covers: the receiving court behind a border posting's parley door, and its label
     Label: deviation
     Sources: kotobank-bansho, bunka-nuruyu-bansho, bansho-jawiki, kotobank-shikidai, kominkai-genkan
-    Entry: research/buildings.html - 'Border posts and their crossing court (kuchidome bansho)', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps draw a border crossing court', 'How our maps draw the formal entrance and a guest's arrival (genkan)'
+    Entry: research/buildings/570-border-posts-and-their-crossing-court-kuchidome-bansho.html, research/buildings/300-the-formal-entrance-and-a-guests-arrival-genkan.html; research/rendering/buildings/570-how-our-maps-draw-a-border-crossing-court.html, research/rendering/buildings/300-how-our-maps-draw-the-formal-entrance-and-a-guests-arrival-genkan.html
     """
 
     key = "border court"
@@ -142,7 +142,7 @@ class HearingCourt(Kind):
     Covers: the roofed court before the dais and its label
     Label: accurate
     Sources: oshirasu-jawiki, takayama-jinya-city, takayama-gh-shirasu, shirasu-imidas, takayama-jinya-official, takayama-jinya-jawiki
-    Entry: research/buildings.html - 'The hearing court (shirasu)', 'Holding cells (agariya and rōya)', 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)', 'How our maps draw holding cells (agariya and rōya)', 'How our maps size a compound and its buildings'
+    Entry: research/buildings/090-the-hearing-court-shirasu.html, research/buildings/040-holding-cells-agariya-and-roya.html, research/buildings/180-the-size-of-a-compound-and-the-rank-of-its-buildings.html; research/rendering/buildings/090-how-our-maps-draw-the-hearing-court-shirasu.html, research/rendering/buildings/040-how-our-maps-draw-holding-cells.html, research/rendering/buildings/180-how-our-maps-size-a-compound-and-its-buildings.html
     """
 
     key = "hearing court"
@@ -186,7 +186,7 @@ class PracticeGround(Kind):
     Covers: the keiko patch and its label
     Label: accurate
     Sources: hanko-jawiki, hagi-meirinkan-guide, kodokan-mito-jawiki, edo-three-dojos-jawiki, jinya-jawiki, dojo-jawiki, genbukan-jawiki, kotobank-machidojo
-    Entry: research/buildings.html - 'Martial training grounds and dojo'; research/rendering/buildings.html - 'How our maps draw practice grounds and dojo'
+    Entry: research/buildings/210-martial-training-grounds-and-dojo.html; research/rendering/buildings/210-how-our-maps-draw-practice-grounds-and-dojo.html
     """
 
     key = "practice ground"
@@ -229,7 +229,7 @@ class CompoundGarden(Kind):
     Covers: the inner garden, a garden path, a shrine garden and a guest garden, and their labels
     Label: accurate
     Sources: oniwa-takayama-jinya, kotobank-teien, okutono-jinya-garden, chiran-bukeyashiki-gardens, genkan-jawiki, shirobito-1717-takayama, shiroishi-koseki, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, kotobank-yashikigami, jawiki-yashikigami, shoinzukuri-jawiki
-    Entry: research/buildings.html - 'Ornamental gardens, ponds and stone lanterns (teien)', 'The formal entrance and a guest's arrival (genkan)', 'Shrines kept inside government offices and houses (yashikigami)', 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps draw ornamental gardens, ponds and stone lanterns (teien)', 'How our maps draw the formal entrance and a guest's arrival (genkan)', 'How our maps draw shrines kept inside government offices', 'How our maps lay out samurai residences and their rooms (buke yashiki)'
+    Entry: research/buildings/290-ornamental-gardens-ponds-and-stone-lanterns-teien.html, research/buildings/300-the-formal-entrance-and-a-guests-arrival-genkan.html, research/buildings/030-the-compounds-own-shrine-yashikigami.html, research/buildings/380-samurai-residences-and-their-rooms-buke-yashiki.html; research/rendering/buildings/290-how-our-maps-draw-compound-gardens-ponds-and-lanterns.html, research/rendering/buildings/300-how-our-maps-draw-the-formal-entrance-and-a-guests-arrival-genkan.html, research/rendering/buildings/030-how-our-maps-draw-the-compounds-shrine.html, research/rendering/buildings/380-how-our-maps-lay-out-the-residence.html
     """
 
     key = "garden"
@@ -248,7 +248,7 @@ class RearYard(Kind):
     Covers: the rear yard and its label
     Label: accurate
     Sources: kojodan-higuchi, matsushiro-kankou-higuchi
-    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)'
+    Entry: research/buildings/380-samurai-residences-and-their-rooms-buke-yashiki.html; research/rendering/buildings/380-how-our-maps-lay-out-the-residence.html
     """
 
     key = "rear yard"
@@ -291,7 +291,7 @@ class VegetableGarden(Kind):
     Covers: the kitchen garden's beds and label
     Label: accurate
     Sources: boso-no-mura-takei, matsushiro-bukeyashiki, sanada-higuchi, kasama-iwama-jinya, kotobank-kisaku-daikansho, gujin-xie-yamen, atariya-nisho
-    Entry: research/buildings.html - 'Vegetable gardens at samurai houses and government offices (saien)'; research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/buildings.html - 'How our maps draw vegetable gardens at samurai houses and government offices (saien)'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'
+    Entry: research/buildings/400-vegetable-gardens-at-a-samurai-residence-saien.html; research/homesteads/040-sunlight-and-shade-on-the-farm.html; research/rendering/buildings/400-how-our-maps-place-the-vegetable-garden-in-the-sun.html; research/rendering/homesteads/040-how-our-maps-keep-yards-and-gardens-in-the-sun.html
     """
 
     key = "vegetable garden"
@@ -315,7 +315,7 @@ class ShrineGrove(Kind):
     Covers: the grove's ground and its tree canopies
     Label: accurate
     Sources: chinju-no-mori-jawiki, fengshui-woodland-enwiki, jinja-jawiki, short-2012-sacred-groves, fujita-2007-shaso-slopes
-    Entry: research/religion-and-death.html - 'Shrine woods and fences (chinju no mori, tamagaki)', 'Ground swept clear around shrines and graves', 'Village shrines: where they stand, and how big their grounds are', 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw shrine woods and fences (chinju no mori, tamagaki)', 'How our maps site and size a village shrine', 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)', 'How our maps draw the swept ground around shrines and graves'
+    Entry: research/religion-and-death/122-shrine-woods-and-fences-chinju-no-mori-tamagaki.html, research/religion-and-death/130-ground-swept-clear-around-shrines-and-graves.html, research/religion-and-death/100-village-shrines-where-they-stand-and-how-big-their-grounds-are.html, research/religion-and-death/120-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/rendering/religion-and-death/122-how-our-maps-draw-shrine-woods-and-fences-chinju-no-mori-tamagaki.html, research/rendering/religion-and-death/100-how-our-maps-site-and-size-a-village-shrine.html, research/rendering/religion-and-death/120-how-our-maps-draw-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html, research/rendering/religion-and-death/130-how-our-maps-draw-the-swept-ground-around-shrines-and-graves.html
     """
 
     key = "shrine grove"
@@ -345,7 +345,7 @@ class CompoundWall(Kind):
     Covers: the outer wall's strokes
     Label: convention
     Sources: kunishitei-toyonaga-neribei, kojodan-dobei, hei-jokaku-jawiki, mlit-kanazawa-dobei, tsuijibei-jawiki
-    Entry: research/buildings.html - 'Compound walls (neribei and tsuijibei)', "Magistrates' compounds (jin'ya and yamen)"; research/rendering/buildings.html - 'How our maps draw compound walls (neribei and tsuijibei)', 'How our maps draw a magistrate's compound'
+    Entry: research/buildings/070-compound-walls-neribei-and-tsuijibei.html, research/buildings/010-magistrates-compounds-jinya-and-yamen.html; research/rendering/buildings/070-how-our-maps-draw-compound-walls.html, research/rendering/buildings/010-how-our-maps-draw-a-magistrates-compound.html
     """
 
     key = "compound wall"
@@ -383,7 +383,7 @@ class MainGate(Kind):
     Covers: the posts flanking the main opening
     Label: accurate
     Sources: nagayamon-jawiki, tamba-kashiwara-jinya, bunka-saito-nagayamon, bunka-adachi-yakuimon, bunka-omi-yakuimon, bunka-fujioka-yakuimon, sohu-yamen-gate, bjd-qing-yamen, neixiang-xianya-zhwiki, kotobank-shikidai, kominkai-genkan
-    Entry: research/buildings.html - 'The main gate and its gatekeepers (nagaya-mon)', 'The formal entrance and a guest's arrival (genkan)'; research/towns.html - 'The magistrate's manor in a town: where it stands and which way it faces (jin'ya and yamen)'; research/rendering/buildings.html - 'How our maps draw the main gate and its gatekeepers (nagaya-mon)', 'How our maps draw compound walls (neribei and tsuijibei)', 'How our maps draw the formal entrance and a guest's arrival (genkan)'; research/rendering/towns.html - 'How our maps draw the magistrate's manor on a town map'
+    Entry: research/buildings/480-the-main-gate-and-its-gatekeepers-nagaya-mon.html, research/buildings/300-the-formal-entrance-and-a-guests-arrival-genkan.html; research/towns/120-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html; research/rendering/buildings/480-how-our-maps-draw-the-main-gate-and-gatehouse.html, research/rendering/buildings/070-how-our-maps-draw-compound-walls.html, research/rendering/buildings/300-how-our-maps-draw-the-formal-entrance-and-a-guests-arrival-genkan.html; research/rendering/towns/120-how-our-maps-draw-the-magistrates-manor-on-a-town-map.html
     """
 
     key = "main gate"
@@ -416,7 +416,7 @@ class SideGate(Kind):
     Covers: the posts of the posterns, service gates, landing gate, cart gate and guests' door
     Label: accurate
     Sources: kotobank-katteguchi, tajima-2007-night-soil, guernica-night-soil, kotobank-benjo, kotobank-shikidai, kominkai-genkan, kotobank-daihachiguruma, l7r-wagons
-    Entry: research/ways.html - 'Moving goods: carts, packhorses and river landings (kashi)'; research/rendering/ways.html - 'How our maps draw moving goods: cart lanes and boat landings (kashi)'; research/buildings.html - 'The formal entrance and a guest's arrival (genkan)', 'Privies (setchin)'; research/rendering/buildings.html - 'How our maps draw the formal entrance and a guest's arrival (genkan)', 'How our maps place privies (setchin)'
+    Entry: research/ways/060-moving-goods-carts-packhorses-and-river-landings-kashi.html; research/rendering/ways/060-how-our-maps-draw-moving-goods-cart-lanes-and-boat-landings-kashi.html; research/buildings/300-the-formal-entrance-and-a-guests-arrival-genkan.html, research/buildings/220-privies-setchin.html; research/rendering/buildings/300-how-our-maps-draw-the-formal-entrance-and-a-guests-arrival-genkan.html, research/rendering/buildings/220-how-our-maps-place-privies-setchin.html
     """
 
     key = "side gate"
@@ -439,7 +439,7 @@ class CourtDivider(Kind):
     Covers: the internal wall's strokes
     Label: accurate
     Sources: neixiang-yamen-zhwiki, machi-bugyo-jawiki, yamen-enwiki
-    Entry: research/buildings.html - "Magistrates' compounds (jin'ya and yamen)"; research/rendering/buildings.html - 'How our maps draw a magistrate's compound'
+    Entry: research/buildings/010-magistrates-compounds-jinya-and-yamen.html; research/rendering/buildings/010-how-our-maps-draw-a-magistrates-compound.html
     """
 
     key = "court divider"
@@ -473,7 +473,7 @@ class ApproachRoad(Kind):
     Covers: the approach road or town street, the lanes to the lesser doors, and a road across a border
     Label: deviation
     Sources: ctie-michi-nazenaze, hiroshima-saigoku-kaido, mlit-kinsei-michi, kotobank-daihachiguruma, l7r-wagons, neixiang-xianya-zhwiki, song-architecture-enwiki, jokamachi-jawiki, lowtech-chinese-wheelbarrow, toyama-1988-road-undevelopment, jinya-jawiki, tamba-kashiwara-jinya, sina-neixiang-xianya, bjd-qing-yamen
-    Entry: research/ways.html - 'Highways and what lines them (kaido)', 'Moving goods: carts, packhorses and river landings (kashi)', 'Village lanes'; research/rendering/ways.html - 'How our maps draw and label the highway', 'How our maps draw moving goods: cart lanes and boat landings (kashi)'; research/towns.html - 'The magistrate's manor in a town: where it stands and which way it faces (jin'ya and yamen)', 'Town plans: the street town (gaison), the planned grid and the castle town'; research/rendering/towns.html - 'How our maps lay out a town's streets', 'How our maps draw the magistrate's manor on a town map'
+    Entry: research/ways/210-highways-and-what-lines-them-kaido.html, research/ways/060-moving-goods-carts-packhorses-and-river-landings-kashi.html, research/ways/020-village-lanes.html; research/rendering/ways/210-how-our-maps-draw-and-label-the-highway.html, research/rendering/ways/060-how-our-maps-draw-moving-goods-cart-lanes-and-boat-landings-kashi.html; research/towns/120-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html, research/towns/230-town-plans-the-street-town-gaison-the-planned-grid-and-the-castle-town.html; research/rendering/towns/230-how-our-maps-lay-out-a-towns-streets.html, research/rendering/towns/120-how-our-maps-draw-the-magistrates-manor-on-a-town-map.html
     """
 
     key = "road"
@@ -501,7 +501,7 @@ class CartYard(Kind):
     Covers: the loading apron inside the cart gate
     Label: deviation
     Sources: kotobank-daihachiguruma, mlit-kinsei-michi, l7r-wagons, fao-charcoal-safety, tonya-enwiki
-    Entry: research/ways.html - 'Moving goods: carts, packhorses and river landings (kashi)', 'Village lanes'; research/rendering/ways.html - 'How our maps draw moving goods: cart lanes and boat landings (kashi)'; research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and charcoal stores'; research/buildings.html - 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
+    Entry: research/ways/060-moving-goods-carts-packhorses-and-river-landings-kashi.html, research/ways/020-village-lanes.html; research/rendering/ways/060-how-our-maps-draw-moving-goods-cart-lanes-and-boat-landings-kashi.html; research/urban-features/150-charcoal-yards-and-charcoal-stores.html; research/rendering/urban-features/150-how-our-maps-draw-charcoal-yards-and-charcoal-stores.html; research/buildings/180-the-size-of-a-compound-and-the-rank-of-its-buildings.html; research/rendering/buildings/180-how-our-maps-size-a-compound-and-its-buildings.html
     """
 
     key = "cart yard"
@@ -536,7 +536,7 @@ class GardenPond(Kind):
     Covers: the pond, or the dry garden, in the inner garden
     Label: accurate
     Sources: kotobank-teien, oniwa-takayama-jinya, okutono-jinya-garden, chiran-bukeyashiki-gardens, shiroishi-koseki
-    Entry: research/buildings.html - 'Ornamental gardens, ponds and stone lanterns (teien)', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps draw ornamental gardens, ponds and stone lanterns (teien)', 'How our maps draw the formal entrance and a guest's arrival (genkan)'
+    Entry: research/buildings/290-ornamental-gardens-ponds-and-stone-lanterns-teien.html, research/buildings/300-the-formal-entrance-and-a-guests-arrival-genkan.html; research/rendering/buildings/290-how-our-maps-draw-compound-gardens-ponds-and-lanterns.html, research/rendering/buildings/300-how-our-maps-draw-the-formal-entrance-and-a-guests-arrival-genkan.html
     """
 
     key = "garden pond"
@@ -568,7 +568,7 @@ class StoneLantern(Kind):
     Covers: each stone-lantern glyph in a garden or the border court
     Label: accurate
     Sources: kotobank-ishidoro, kotobank-teien
-    Entry: research/buildings.html - 'Ornamental gardens, ponds and stone lanterns (teien)'; research/rendering/buildings.html - 'How our maps draw ornamental gardens, ponds and stone lanterns (teien)'
+    Entry: research/buildings/290-ornamental-gardens-ponds-and-stone-lanterns-teien.html; research/rendering/buildings/290-how-our-maps-draw-compound-gardens-ponds-and-lanterns.html
     """
 
     key = "stone lantern"
@@ -598,7 +598,7 @@ class GardenPines(Kind):
     Covers: the old pines' canopies and their label
     Label: accurate
     Sources: uekipedia-kuromatsu, kotobank-mikoshi-no-matsu
-    Entry: research/vegetation.html - 'Black pines in Japanese gardens (kuromatsu)'; research/rendering/vegetation.html - 'How our maps draw black pines in Japanese gardens'
+    Entry: research/vegetation/170-black-pines-in-japanese-gardens-kuromatsu.html; research/rendering/vegetation/170-how-our-maps-draw-black-pines-in-japanese-gardens.html
     """
 
     key = "garden pines"
@@ -625,7 +625,7 @@ class StrikingPosts(Kind):
     Covers: the standing posts on the practice ground and their label
     Label: convention
     Sources: jigen-ryu-jawiki, kotobank-tategi-uchi, nodachi-jigen-ryu, bujutsukarate-tategi, jinya-jawiki, dojo-jawiki
-    Entry: research/buildings.html - 'Martial training grounds and dojo'; research/rendering/buildings.html - 'How our maps draw practice grounds and dojo'
+    Entry: research/buildings/210-martial-training-grounds-and-dojo.html; research/rendering/buildings/210-how-our-maps-draw-practice-grounds-and-dojo.html
     """
 
     key = "striking posts"
@@ -651,7 +651,7 @@ class WeaponRack(Kind):
     Covers: the rack at the practice ground's edge and its label
     Label: guess
     Sources: kotobank-katanakake, kotobank-mitsu-dogu
-    Entry: research/buildings.html - 'Martial training grounds and dojo'; research/rendering/buildings.html - 'How our maps draw practice grounds and dojo'
+    Entry: research/buildings/210-martial-training-grounds-and-dojo.html; research/rendering/buildings/210-how-our-maps-draw-practice-grounds-and-dojo.html
     """
 
     key = "weapon rack"
@@ -680,7 +680,7 @@ class Nakamon(Kind):
     Covers: the posts of the household door in the court divider
     Label: accurate
     Sources: neixiang-yamen-zhwiki, machi-bugyo-jawiki, yamen-enwiki
-    Entry: research/buildings.html - "Magistrates' compounds (jin'ya and yamen)"; research/rendering/buildings.html - 'How our maps draw a magistrate's compound'
+    Entry: research/buildings/010-magistrates-compounds-jinya-and-yamen.html; research/rendering/buildings/010-how-our-maps-draw-a-magistrates-compound.html
     """
 
     key = "nakamon"
@@ -721,7 +721,7 @@ class Door(Kind):
     Covers: every small door glyph on a building's wall
     Label: accurate
     Sources: madoken-odoguchi, hongofuji-koiwai, s-kent-kuratomae, kotobank-katteguchi, kotobank-uchigenkan, matsue-bukeyashiki, homes-jin-bukeyashiki, dozo-jawiki, gogura-jawiki, nagayamon-jawiki, jta-nagayamon
-    Entry: research/buildings.html - 'Doorways and doors (to)', 'Kitchens (daidokoro)', 'The formal entrance and a guest's arrival (genkan)'; research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'; research/rendering/buildings.html - 'How our maps draw doors', 'How our maps draw a magistrate's compound', 'How our maps draw kitchens (daidokoro)','How our maps draw the formal entrance and a guest's arrival (genkan)'; research/urban-features.html - 'Fire watch towers and firefighting gear (hinomi yagura)'; research/urban-features.html - 'Fire watch towers and firefighting gear (hinomi yagura)'
+    Entry: research/buildings/620-doorways-and-doors-to.html, research/buildings/360-kitchens-daidokoro.html, research/buildings/300-the-formal-entrance-and-a-guests-arrival-genkan.html; research/cities/government/080-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html; research/rendering/buildings/620-how-our-maps-draw-doors.html, research/rendering/buildings/010-how-our-maps-draw-a-magistrates-compound.html, research/rendering/buildings/360-how-our-maps-draw-the-kitchen.html, research/rendering/buildings/300-how-our-maps-draw-the-formal-entrance-and-a-guests-arrival-genkan.html; research/urban-features/390-fire-watch-towers-and-firefighting-gear-hinomi-yagura.html; research/urban-features/390-fire-watch-towers-and-firefighting-gear-hinomi-yagura.html
     """
 
     key = "door"

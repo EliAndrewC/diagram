@@ -61,7 +61,7 @@ The GM ruled on 2026-09-12:
 
 Two halves. The first is unconditional: the caravan inn is not a deliberate deviation, so its drawn form
 may not be recorded as one. The second is conditional on the attested analogue, and **the record already
-answers that condition**, with a citation rather than an absence note. `research/towns.html`:
+answers that condition**, with a citation rather than an absence note. `research/towns/`:
 
 > The second story is the one part of the drawn inn the record does not bear out: the same account says
 > the buildings in the yard were uniformly single-story, mud brick and reed thatch.

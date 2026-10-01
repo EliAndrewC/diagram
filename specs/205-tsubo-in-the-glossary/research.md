@@ -4,7 +4,7 @@ PHYSICAL research answered by the record already; nothing new was searched.
 
 ## R1. What a tsubo is, in the record's own words
 
-`research/homesteads.html`, "How big was the work yard, and how did the sizes spread?":
+`research/homesteads/`, "How big was the work yard, and how did the sizes spread?":
 
 - footnote 12 (`kitamoto-mushiro-niwa`, READ): "two mushiro come to one tsubo" - the yard was counted
   in straw mats, two to the tsubo.

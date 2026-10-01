@@ -56,9 +56,9 @@ the record's bytes as they are, including its trailing spaces and its blank line
 **Scale/Scope**: 19 research pages (288 questions between them, 2 to 39 each), 19 citations pages, 1,850
 notes, 1,860 references, 920 registry entries (R1, R4, R5).
 
-**Single-artifact target**: **`research/ways.html`** and its citations page - the smallest complete case
+**Single-artifact target**: **`research/ways/`** and its citations page - the smallest complete case
 (5 questions, 26 notes, a `cities/`-style relative link absent, so stage 2's second artifact is
-`research/cities/defenses.html`, which has them). Round trip on `ways.html` is sub-second; it is the
+`research/cities/defenses/`, which has them). Round trip on `ways.html` is sub-second; it is the
 page every stage is proven on before the sweep.
 
 **Every step is two steps.** Each stage below is written as: prove it on the one page, then run the

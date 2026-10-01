@@ -17,5 +17,5 @@ M125 MODERN-ONLY undated-custom - 060 now says the boatmen's water-god shrine (t
 Open:
 - The Edo meisho zue's entry on the Sumida water-god shrine (1834) and the Saitama museum's survey of the Tone river's water-god faith might date boatmen's worship before Meiji, and could not be read here; if either does, M125 becomes PREMODERN-ATTESTED. Worth a TO-DOWNLOAD entry only if the GM wants the arm back.
 - Found in passing, for 070's guess that an official's compound had its own landing: domain warehouse compounds (蔵屋敷) in Edo-period Osaka, Hiroshima's and Saga's among them, had their own boat basins (船入) cut from the river (per Osaka University and the Osaka Museum of History pages in the search results, not read here). Not this group's item; left for whoever next works 070.
-- `research/SOURCES.html` was rebuilt by `make record` but not committed: the working tree carries other groups' uncommitted registry changes, which it includes. The next `make record` in a clean tree regenerates it.
+- `research/sources/` was rebuilt by `make record` but not committed: the working tree carries other groups' uncommitted registry changes, which it includes. The next `make record` in a clean tree regenerates it.
 - The `towns.html` footnote tests fail on a note outside this group (towns [^99], a grounds note with an unlisted reason); untouched here.

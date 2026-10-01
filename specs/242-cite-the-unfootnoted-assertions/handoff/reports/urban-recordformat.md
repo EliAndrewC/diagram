@@ -4,7 +4,7 @@ Scope read: `/diagram/.clones/diagram-research/.claude/skills/diagram/research/u
 
 ---
 
-# FILE 1 - `research/urban-features.html`
+# FILE 1 - `research/urban-features/`
 
 ## Page head (lines 14-19)
 
@@ -222,7 +222,7 @@ A statement of the record's authoring format, addressed to whoever writes an ent
 
 ---
 
-# FILE 2 - `research/citations/urban-features.html`
+# FILE 2 - `research/urban-features/`
 
 The works section at the top (lines 15 onward) is derived from `SOURCES.html`; it is judged under File 3.
 
@@ -259,7 +259,7 @@ These are the next session's reading list - the material feature 242 itself rout
 
 ---
 
-# FILE 3 - `research/SOURCES.html` (the feature-242 entries)
+# FILE 3 - `research/sources/` (the feature-242 entries)
 
 Judged on the two visible write-ups per entry (`What it is:` / `Why it applies, and its limits:`), which feature 211 derives into every citations page's works list; the citation line, the `Used for:` line and the `<!-- READ ... -->` marker are the registry's own record and out of scope by spec 209 D6.
 
@@ -278,7 +278,7 @@ Judged on the two visible write-ups per entry (`What it is:` / `Why it applies, 
 
 ---
 
-# FILE 4 - `research/cities/capitals.html` (the five named windows) and its citations
+# FILE 4 - `research/cities/capitals/` (the five named windows) and its citations
 
 ## Lines 205-215 (the capital's ground costs)
 
@@ -348,11 +348,11 @@ USEFUL: that the figure is unsupported. HISTORY that goes: *"carried before the 
 
 | file | sections read | VOCABULARY | SESSION NOTE | HISTORY | DEFECT |
 |---|---|---|---|---|---|
-| `research/urban-features.html` | 18 `<h2>` + head | 17 | 15 | 10 | 13 |
-| `research/citations/urban-features.html` | works + notes fn-87 to fn-195 | 9 | 3 classes (20 + ~15 + 1 notes) | none | 1 |
-| `research/SOURCES.html` (73 feature-242 write-ups) | all entries listed | 6 | none | none | none |
-| `research/cities/capitals.html` (5 windows) | 5 | 2 | 1 | 2 | 1 |
-| `research/citations/cities/capitals.html` fn-235 to fn-240 | 6 notes | none | 1 | 1 | 1 (2 notes) |
+| `research/urban-features/` | 18 `<h2>` + head | 17 | 15 | 10 | 13 |
+| `research/urban-features/` | works + notes fn-87 to fn-195 | 9 | 3 classes (20 + ~15 + 1 notes) | none | 1 |
+| `research/sources/` (73 feature-242 write-ups) | all entries listed | 6 | none | none | none |
+| `research/cities/capitals/` (5 windows) | 5 | 2 | 1 | 2 | 1 |
+| `research/cities/capitals/` fn-235 to fn-240 | 6 notes | none | 1 | 1 | 1 (2 notes) |
 
 ## Glossary terms to add (`l7r/diagram/interactive/assets/glossary.json`)
 

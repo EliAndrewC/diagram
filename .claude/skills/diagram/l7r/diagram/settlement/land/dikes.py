@@ -27,7 +27,7 @@ from .._geom import Poly, Pt, point_in_poly, seg_dist, smooth_closed, smooth_poi
 DIKE_GAP_HW = 15.0  # half the width the band is CUT by at a sluice notch or a crossing; exported because the waterward reed strip steps into exactly that opening (feature 150 T54, hamletgen/water/polder.py `dike_face`) and a drifted copy would leave the wet ground short of the cut or lapping the band
 DIKE_KEEPOUT_EPS = 8.0  # px: a chord may stray this far from the crest; the keep-out is pushed out by it (feature 140)
 
-DIKE_IRREGULARITY = 1.4  # a hand-piled dike's widest stretch is at least this many times its narrowest (feature 287, water W40): research/archetypes.html 'The perimeter dike followed the natural water edge' - built by basket and repaired where the water took most, never a ruled uniform band
+DIKE_IRREGULARITY = 1.4  # a hand-piled dike's widest stretch is at least this many times its narrowest (feature 287, water W40): research/archetypes/160-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html - built by basket and repaired where the water took most, never a ruled uniform band
 _IRREGULARITY_AIM = 1.42  # what the stretch aims at: the record rounds each width to 0.1 px, and the placer stays stricter than the rule it is held to
 
 
@@ -161,7 +161,7 @@ if TYPE_CHECKING:
 class DikeMixin:
     def perimeter_dike(self: Settlement, inner_env: Any, seed: int = 0, label: str = "perimeter dike", width: tuple[float, float] = (14.0, 40.0), gaps: Any = ()) -> None:  # type: ignore[misc]
         """A reclaimed-polder PERIMETER DIKE, drawn as an irregular hand-piled EARTHWORK BAND (not a ruled
-        tan line). China-first grounding (research 2026-07-22, recorded in research/archetypes.html 'Polder dikes: what they were made of, how big, and what grew on them'; the map rules at research/rendering/archetypes.html "How our maps draw a polder's dike and its trees"):
+        tan line). China-first grounding (research 2026-07-22, recorded in research/archetypes/330-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.html; the map rules at research/rendering/archetypes/330-how-our-maps-draw-a-polders-dike-and-its-trees.html):
         a wei-tian 圩田 / dike-pond dike was dredged pond-mud heaped and packed (the 挖塘培基 dig-and-pile
         cycle that also made the ponds), trapezoidal in section, PLANTED with mulberry/willow to bind the
         soil, walked and lived on, and constantly breached-and-repaired. The SURVEYED interior grid stays
@@ -174,8 +174,7 @@ class DikeMixin:
         dike width was read; the one bound is the Echizen river dikes' ~18 ft foot, which a village dike stood
         below. The (14, 40) ft band runs past it by a map drawing CONVENTION, so the ring reads as the greater
         bank beside the 23 ft crop dikes round the fish ponds (the old "~6-10 m+" figure was the pond dikes'
-        modern width, not a polder ring's): research/rendering/archetypes.html "How our maps draw a polder's
-        dike and its trees". Records M['dikes']; labeled (a polder
+        modern width, not a polder ring's): research/rendering/archetypes/330-how-our-maps-draw-a-polders-dike-and-its-trees.html. Records M['dikes']; labeled (a polder
         dike is NOT an "obvious" feature - the GM asked for it named)."""
         from l7r.diagram.waterfields import BUND
 
@@ -212,7 +211,7 @@ class DikeMixin:
             run_paths = [d]
         for rp in run_paths:
             self.add(f'<path d="{rp}" fill="{BUND}" stroke="#9C8558" stroke-width="1.2" stroke-linejoin="round" opacity="0.95"/>', cls="perimeter dike")
-        # MOTTLE + PLANTED ROWS (reworked GM 2026-07-24 - accuracy pass; research/rendering/archetypes.html "How our maps draw a polder's dike and its trees"):
+        # MOTTLE + PLANTED ROWS (reworked GM 2026-07-24 - accuracy pass; research/rendering/archetypes/330-how-our-maps-draw-a-polders-dike-and-its-trees.html):
         # the old render scattered crowns at random over the band, but dike planting was ROW planting along
         # the alignment - a WILLOW row on the water face (wave-wash armor + withy supply; the Qing Willow
         # Palisade statute of one whip per 5 chi ~ 5.5 ft is the closest attested in-row figure) and a MULBERRY row on the
@@ -235,7 +234,7 @@ class DikeMixin:
         # the two planted rows follow each band RUN (so they skip the sluice notches with the earthwork).
         # In-row spacings are drawn at the loose end (willow 8.5 px vs the attested ~5.5 ft; mulberry 4.4 px
         # at the loose end of 3-5 ft) so crowns read as touching runs, not a fused hedge - the same
-        # legibility precedent as the pond banks (research/rendering/archetypes.html 'How our maps draw dike-ponds (sangji yutang)', quantified departure).
+        # legibility precedent as the pond banks (research/rendering/archetypes/140-how-our-maps-draw-dike-ponds-sangji-yutang.html, quantified departure).
         veg_runs = runs if gap_pts else [list(range(n))]
 
         def _row_walk(frac: float, step: float) -> list[Pt]:
@@ -309,8 +308,7 @@ class DikeMixin:
         """A sluice gate at every cut of every perimeter dike (feature 150, GM 2026-08-28 choosing audit A7).
 
         Water crosses a polder dike only through a gated sluice - "a protected opening in the pond dike that
-        can be easily closed with wooden boards" (FAO; research/archetypes.html 'A dike-pond is fed and drained
-        through sluice gates'). Drawn with the engine's own gate glyph (posts + lifted board, `city/moat.py`),
+        can be easily closed with wooden boards" (FAO; research/archetypes/140-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html). Drawn with the engine's own gate glyph (posts + lifted board, `city/moat.py`),
         turned to lie along the crest, i.e. across the water, and SNAPPED onto the recorded watercourse the
         gate checks measure against (streams + canals, `segments_06b` `sc_waters`) when one runs within 20 ft
         of the cut - which is why this is a separate step, called from the crossings stage after every
@@ -350,7 +348,7 @@ class DikeMixin:
     def dike_top_houses(self: Settlement, count: int, seed: int = 0, dike: int = 0, span: tuple[float, float] = (0.0, 1.0), size: tuple[float, float] = (46.0, 28.0), gap_clear: float = 34.0) -> int:  # type: ignore[misc]
         """A DIKE-TOP VILLAGE: farmhouses in SINGLE FILE ON the perimeter dike crest (settlement_form
         'dike_top') - the settlement form for an ISLET polder with water on every flank and no landward
-        shore to build on. Historical grounding (researched 2026-07-24, research/archetypes.html 'Polders: fields diked against the fluctuating water (weitian, waju)' + research/rendering/archetypes.html 'How our maps draw polders (weitian, waju)'):
+        shore to build on. Historical grounding (researched 2026-07-24, research/archetypes/160-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html + research/rendering/archetypes/160-how-our-maps-draw-polders-weitian-waju.html):
         where a polder abuts the natural shore the village sits on the landward dry ground (the Enokida/
         Kuwabata configuration), but in the DEEP-water landscape the only dry ground is the polder's own
         raised earth, and settlement went up onto it - linear dike/canal-bank villages "taking advantage of

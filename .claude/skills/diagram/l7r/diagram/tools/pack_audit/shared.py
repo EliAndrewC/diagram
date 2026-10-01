@@ -23,7 +23,7 @@ from .parse import COURT_FLOORS, WALL_STROKE, ParsedPlan, Rect
 # neither rect inside the other. Tuned on the five pool sheets (2026-09-19): the largest legitimate
 # lap on them is a joining corridor's end.
 OVERLAP_SHARE: float = 0.30
-# The coverage band: the record's "~37-42%" (research/buildings.html, the packing entry) is the page's
+# The coverage band: the record's "~37-42%" (research/buildings/, the packing entry) is the page's
 # own measurement of jin'ya plans with no readable source, and the same entry gives Takayama at ~33%
 # built (1,000 of 3,000 tsubo) as a figure that rests on no page read. Both are the page's own; the
 # FLOOR is that 33 and the ceiling the page's 42 with two points for a rule written with a tilde. Hayakawa ships at 35% with every building at its
@@ -359,8 +359,7 @@ def well_clear_of_arch(plan: ParsedPlan) -> list[str]:
 
 
 def no_precinct_enclosure(text: str, plan: ParsedPlan) -> list[str]:
-    """A village shrine's precinct is NOT enclosed (feature 268; research/religion-and-death.html 'Shrine
-    woods and fences (chinju no mori, tamagaki)'): its ground is marked by its arch and its wood. Every dated fence
+    """A village shrine's precinct is NOT enclosed (feature 268; research/religion-and-death/122-shrine-woods-and-fences-chinju-no-mori-tamagaki.html): its ground is marked by its arch and its wood. Every dated fence
     the research found rings the sanctuary alone (a Taisho/Showa donation) or lines the approach, and a
     wall is a temple's rank mark. So a fence group whose extent takes in the hall - a precinct fence - is
     reported, as is a compound wall stroke at the sheet's edge; a fence around the sanctuary alone (a

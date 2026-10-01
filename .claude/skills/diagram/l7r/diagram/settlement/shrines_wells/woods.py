@@ -140,8 +140,7 @@ class TreeStandsMixin:
         another's circle - a suppressed understory stem, which the canopy layer this map draws does not
         show. Measured before the rule on Inashiro: 298 of 1,728 crowns entirely inside another
         (17%), 950 with their center more than halfway in; the 13 ft grid's +-42% jitter put two grid
-        neighbors 2-3 ft apart and a 6 ft crown vanished under a 12 ft one. research/rendering/vegetation.html
-        "How our maps stock woods and size crowns"; gated by `tree_crowns_not_subsumed`."""
+        neighbors 2-3 ft apart and a 6 ft crown vanished under a 12 ft one. research/rendering/vegetation/060-how-our-maps-stock-woods-and-size-crowns.html; gated by `tree_crowns_not_subsumed`."""
         return all((x - cx) ** 2 + (y - cy) ** 2 >= max(r, cr) ** 2 for cx, cy, cr in crowns)
 
     def _crowns_near(self: Settlement, x0: float, y0: float, x1: float, y1: float) -> list[tuple[float, float, float]]:  # type: ignore[misc]

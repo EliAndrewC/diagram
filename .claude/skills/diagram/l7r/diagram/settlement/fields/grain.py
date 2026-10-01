@@ -1,5 +1,4 @@
-"""Where a hamlet's coarse grain grows (feature 287, water W36; research/fields.html 'Where a farming
-hamlet grew its coarse grain', fields/165; its map rules at research/rendering/fields.html fields/160).
+"""Where a hamlet's coarse grain grows (feature 287, water W36; research/fields/165-where-a-farming-hamlet-grew-its-coarse-grain.html, fields/165; its map rules at research/rendering/fields/ fields/160).
 
 The paddy is sized for the rice two-thirds of the diet (fields/110, the sizing rule), so the coarse third has to grow
 somewhere. The record attests two places, and which one a hamlet used is the WINTER CROP knob of fields/030 ("The
@@ -28,7 +27,7 @@ from typing import Any
 from .._knobs import Knob, register_knob
 
 
-# THE WINTER CROP (research/rendering/fields.html fields/030): "Two forms are attested, so this is a knob, rolled per settlement: one
+# THE WINTER CROP (research/rendering/fields/ fields/030): "Two forms are attested, so this is a knob, rolled per settlement: one
 # whose paddies carry a winter crop, and one whose paddies lie bare over the winter." An even weight is a GUESS.
 #
 # NARROWED TO WHAT THE SITE ALLOWS (feature 287, W36; as plan D4 narrowed the cluster shape): a form is offered only where

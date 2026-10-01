@@ -11,8 +11,7 @@ INTERIOR_FILL = "url(#court-earth)"
 BUILDING_FILLS: frozenset[str] = frozenset({"#DDB87A", "#C9A57A", "#E8D2A8", "#F2EFE4", "#C9876C", "#B89868", "#8C6F3E", "#6B4030"})
 BUILDING_PATTERNS: frozenset[str] = frozenset({"url(#granary-slats)", "url(#colonnade-hatch)"})
 KURA_FILLS: frozenset[str] = frozenset({"#F2EFE4"})  # fireproof plaster kura: a fire-gap IS correct
-#: The hearing court's floor, either form the record allows (feature 267 R22, research/buildings.html 'Was the
-#: hearing court open white sand, or roofed?'): white gravel, or the river cobbles Hayakawa's court is laid with.
+#: The hearing court's floor, either form the record allows (feature 267 R22, research/buildings/090-the-hearing-court-shirasu.html): white gravel, or the river cobbles Hayakawa's court is laid with.
 COURT_FLOORS: frozenset[str] = frozenset({"url(#oshirasu-sand)", "url(#court-cobbles)"})
 #: A hearing court drawn ROOFED: its floor carries a building's solid outline in this ink (feature 267 R22 - the
 #: placer's `ROOFED_ZONES` and all three hand sheets draw it so). Under that roof stands no fire-water tub: a tub is

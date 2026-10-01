@@ -43,7 +43,7 @@ as one at map scale. The resolved form is written to `M["meta"]["caravan_inn_for
 apart without re-reading the SVG.
 
 **FR-003 - the roll is stated on the research page as the rule the map follows.** The caravan-inn
-section of `research/towns.html` carries a `<p class="spec">` opening *The rule the map follows:*
+section of `research/towns/` carries a `<p class="spec">` opening *The rule the map follows:*
 saying a town's inn takes one of the two forms, rolled from the map's own seed with no bias between
 them, and that a map may pin one. It names no engine identifier in visible text; the knob's name is in
 a comment beside it.

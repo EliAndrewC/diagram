@@ -5,8 +5,8 @@ Sugiura 1973 counted 4.4 roofed outbuildings per Tōhoku farm household and the 
 kura) - the T52 pass listed the rest, and the GM chose these. Every one is drawn at TRUE size
 (feedback: to-scale modes never inflate); the only legibility liberty is a bold stroke, and the
 persimmon's fruit dots and the shrine's vermilion are RENDERING conventions, recorded as such in
-research/rendering/homesteads.html "How our maps draw the farmstead and what stands on it (yashiki)". Research and sources:
-research/homesteads.html "The farmstead and what stood on it (yashiki)" and each fixture's own section. The PLACER is the scripted generator's (hamletgen/homesteads.py
+research/rendering/homesteads/140-how-our-maps-draw-the-farmstead-and-what-stands-on-it-yashiki.html. Research and sources:
+research/homesteads/140-the-farmstead-and-what-stood-on-it-yashiki.html and each fixture's own section. The PLACER is the scripted generator's (hamletgen/homesteads.py
 `farmstead_fixtures`); this mixin only draws and records.
 """
 
@@ -26,7 +26,7 @@ if TYPE_CHECKING:
 # bath shed standing on its own is found only in the twentieth century); the placer passes its length. coop: a ground-level enclosure (Qimin Yaoshu 養雞), square in the
 # Ming find (size GUESS). shrine: the one measured hokora is a 40 cm stone (READ); at 3 ft the GM could
 # not tell what it was, so it is DRAWN at the small-shed size - vermilion, a torii mark in front - as a
-# glyph rendering convention (GM 2026-08-27, T62; recorded as a map drawing convention in research/homesteads.html).
+# glyph rendering convention (GM 2026-08-27, T62; recorded as a map drawing convention in research/homesteads/).
 # The interactive map's feature class per fixture kind (feature 134, spec FR-007) - the vocabulary
 # is the `interactive/classes/` package; a kind missing here is a KeyError at draw time, never silent ink.
 FIXTURE_CLASS = {"privy": "privy", "woodpile": "wood shed", "manure": "manure heap", "bath": "bath room", "coop": "hen coop", "shrine": "household shrine"}

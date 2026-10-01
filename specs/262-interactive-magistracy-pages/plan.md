@@ -134,7 +134,7 @@ into the note (a size the item calls a guess or a convention becomes the kind's 
 the setting's canon or the map's story with no historical counterpart the record covers -> `deviation`
 (`Sources: not recorded`); a glyph drawn larger where the record says so -> `convention`; a kind no
 finding classifies -> `guess`, its note saying the record has no entry on it. A kind no research section
-covers says `Entry: research/buildings.html (no dedicated entry - recorded as silent)` and so lists no
+covers says `Entry: research/buildings/ (no dedicated entry - recorded as silent)` and so lists no
 questions - the gap the GM can see. The closing report lists both sets (User Story 4).
 
 Two program items cover a room in one sheet and a building in another (`clerks`: a room of the office hall

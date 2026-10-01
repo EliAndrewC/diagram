@@ -37,7 +37,7 @@ class HallAndDwelling(Kind):
     Covers: the one-roof building, its outline, its roof and its caption
     Label: accurate
     Sources: kuri-jawiki, jinguji-enwiki, bettoji-jawiki, sakai-kaieji, ehime-pref-honden-56, saitama-kannonji-kannondo
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)', 'Keeping a village shrine or temple: its monk, the monk's dwelling (kuri), its records and its land'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)', 'How our maps draw a village shrine's monk, the monk's dwelling (kuri), its records and its land'
+    Entry: research/religion-and-death/120-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html, research/religion-and-death/110-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html; research/rendering/religion-and-death/120-how-our-maps-draw-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html, research/rendering/religion-and-death/110-how-our-maps-draw-the-country-monks-dwelling-and-writing-room.html
     """
 
     key = "hall and dwelling"
@@ -63,7 +63,7 @@ class Sanctuary(Kind):
     Covers: the sanctuary behind the hall
     Label: accurate
     Sources: jaanus-honden, jaanus-haiden, nagarezukuri-jawiki, kotobank-nagarezukuri, ehime-pref-honden-56
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
+    Entry: research/religion-and-death/120-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/rendering/religion-and-death/120-how-our-maps-draw-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html
     """
 
     key = "sanctuary"
@@ -86,7 +86,7 @@ class MonksRooms(Kind):
     Covers: the dwelling end's rooms
     Label: guess
     Sources: kuri-jawiki, kawasaki-chonenji-kuri, bunka-tokuunji-kuri
-    Entry: research/religion-and-death.html - 'Keeping a village shrine or temple: its monk, the monk's dwelling (kuri), its records and its land'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's monk, the monk's dwelling (kuri), its records and its land'
+    Entry: research/religion-and-death/110-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html; research/rendering/religion-and-death/110-how-our-maps-draw-the-country-monks-dwelling-and-writing-room.html
     """
 
     key = "the monk's rooms"
@@ -114,7 +114,7 @@ class WritingRoom(Kind):
     Covers: the writing room in the dwelling
     Label: accurate
     Sources: terauke-seido-jawiki, shumon-ninbetsu-jawiki, jaanus-shamusho
-    Entry: research/religion-and-death.html - 'Keeping a village shrine or temple: its monk, the monk's dwelling (kuri), its records and its land'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's monk, the monk's dwelling (kuri), its records and its land'
+    Entry: research/religion-and-death/110-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html; research/rendering/religion-and-death/110-how-our-maps-draw-the-country-monks-dwelling-and-writing-room.html
     """
 
     key = "writing room"
@@ -139,7 +139,7 @@ class ShrineApproach(Kind):
     Covers: the path from the precinct's edge to the hall
     Label: accurate
     Sources: jinja-jawiki, kudamatsu-stone-torii, kato-kawataka-torii
-    Entry: research/religion-and-death.html - 'Shrine gateways and the approach to the hall (torii, sando)', 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw shrine gateways and the approach to the hall (torii, sando)', 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
+    Entry: research/religion-and-death/080-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html, research/religion-and-death/120-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/rendering/religion-and-death/080-how-our-maps-draw-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html, research/rendering/religion-and-death/120-how-our-maps-draw-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html
     """
 
     key = "approach"
@@ -164,7 +164,7 @@ class ShrineBasin(Kind):
     Covers: the stone basin by the approach
     Label: accurate
     Sources: jinja-jawiki, liga-temizuya, kawasaki-nagao-chozubachi, ubusuna-jinja-ameblo
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
+    Entry: research/religion-and-death/120-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/rendering/religion-and-death/120-how-our-maps-draw-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html
     """
 
     key = "basin"
@@ -188,7 +188,7 @@ class SacredTree(Kind):
     Covers: the sacred tree and its rope
     Label: accurate
     Sources: kotobank-shinboku, shinboku-jawiki
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
+    Entry: research/religion-and-death/120-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/rendering/religion-and-death/120-how-our-maps-draw-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html
     """
 
     key = "sacred tree"
@@ -214,7 +214,7 @@ class SweptClearing(Kind):
     Covers: the open ground and the forecourt about the building
     Label: accurate
     Sources: chinju-no-mori-jawiki, sando-jawiki
-    Entry: research/religion-and-death.html - 'Ground swept clear around shrines and graves'; research/rendering/religion-and-death.html - 'How our maps draw the swept ground around shrines and graves'
+    Entry: research/religion-and-death/130-ground-swept-clear-around-shrines-and-graves.html; research/rendering/religion-and-death/130-how-our-maps-draw-the-swept-ground-around-shrines-and-graves.html
     """
 
     key = "precinct clearing"
@@ -233,7 +233,7 @@ class Footpath(Kind):
     Covers: the path from the clearing to the well
     Label: guess
     Sources: not recorded
-    Entry: research/religion-and-death.html (no dedicated entry - recorded as silent)
+    Entry: research/religion-and-death/ (no dedicated entry - recorded as silent)
     """
 
     key = "footpath"
@@ -255,7 +255,7 @@ class GuardianFigures(Kind):
     Covers: the guardian pair beside the approach
     Label: accurate
     Sources: komainu-jawiki, gltjp-zenkokuji, darumamuseum-bishamonten
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
+    Entry: research/religion-and-death/120-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/rendering/religion-and-death/120-how-our-maps-draw-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html
     """
 
     key = "guardian figures"
@@ -276,7 +276,7 @@ class StoneLanterns(Kind):
     Covers: the stone lanterns along the approach
     Label: accurate
     Sources: niiza-ishigami-lantern
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
+    Entry: research/religion-and-death/120-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/rendering/religion-and-death/120-how-our-maps-draw-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html
     """
 
     key = "lanterns"
@@ -297,7 +297,7 @@ class StrengthStones(Kind):
     Covers: the strength stones beside the approach
     Label: accurate
     Sources: nerima-hikawa-chikaraishi
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
+    Entry: research/religion-and-death/120-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/rendering/religion-and-death/120-how-our-maps-draw-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html
     """
 
     key = "strength stones"
@@ -318,7 +318,7 @@ class FarmersStage(Kind):
     Covers: the farmers' stage
     Label: accurate
     Sources: noson-kabuki-butai-jawiki
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
+    Entry: research/religion-and-death/120-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/rendering/religion-and-death/120-how-our-maps-draw-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html
     """
 
     key = "stage"
@@ -339,7 +339,7 @@ class SumoRing(Kind):
     Covers: the sumo ring
     Label: accurate
     Sources: kokugakuin-dohyo
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
+    Entry: research/religion-and-death/120-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/rendering/religion-and-death/120-how-our-maps-draw-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html
     """
 
     key = "sumo ring"
@@ -359,7 +359,7 @@ class BellTower(Kind):
     Covers: the bell tower
     Label: guess
     Sources: homemate-shichido-garan
-    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
+    Entry: research/religion-and-death/120-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/rendering/religion-and-death/120-how-our-maps-draw-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html
     """
 
     key = "bell tower"
@@ -379,7 +379,7 @@ class ShrineBurialGround(Kind):
     Covers: the burial ground by the shrine, where the village has it there
     Label: deviation
     Sources: danka-terauke-encyclopedia, bunkotsu-jawiki
-    Entry: research/religion-and-death.html - 'Where a village buries its dead: its own ground, the temple yard, the fields or the home plot'; research/rendering/religion-and-death.html - 'How our maps choose where a village's and a hamlet's dead lie'
+    Entry: research/religion-and-death/280-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html; research/rendering/religion-and-death/280-how-our-maps-choose-where-a-villages-and-a-hamlets-dead-lie.html
     """
 
     key = "burial ground"

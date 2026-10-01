@@ -2,7 +2,7 @@
 
 - `/diagram/.clones/diagram-research/.claude/skills/diagram/research/citations/homesteads.html` — notes `fn-100`…`fn-153` (54 notes: 37 citations, 17 absence, 0 grounds)
 - `/diagram/.clones/diagram-research/.claude/skills/diagram/research/citations/water.html` — notes `fn-132`…`fn-185` (54 notes: 34 citations, 19 absence, 1 grounds)
-- Assertions read on `research/homesteads.html` and `research/water.html`. 61 distinct URLs fetched, one attempt per URL.
+- Assertions read on `research/homesteads/` and `research/water/`. 61 distinct URLs fetched, one attempt per URL.
 
 ---
 

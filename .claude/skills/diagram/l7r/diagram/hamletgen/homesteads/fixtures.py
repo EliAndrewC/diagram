@@ -57,8 +57,7 @@ from .bamboo import Footing, _strip_blocked
 from .holds import release_held
 from .retirement import RETIREMENT_FT, RETIREMENT_GAP_FT
 
-# FARMSTEAD FIXTURES (feature 133 T53-T59, GM 2026-08-27; research/homesteads.html "The farmstead's
-# fixtures"). Each row: the kind, the per-hamlet PREVALENCE BAND (rolled once per map from the seed -
+# FARMSTEAD FIXTURES (feature 133 T53-T59, GM 2026-08-27; research/homesteads/215-chickens-and-chicken-coops.html). Each row: the kind, the per-hamlet PREVALENCE BAND (rolled once per map from the seed -
 # two hamlets differ honestly where the record gives a range), and the seats tried in the house's
 # local frame (+y = the sunny front where the yard is, -y = the back wall, -x = the kura side). The
 # first seat is rolled where the record shows two forms; the rest are fallbacks. Every number is
@@ -407,7 +406,7 @@ def across_the_brook(s: Settlement, house: Pt, seat: Pt) -> bool:
 
 def across_a_lane(lanes: Sequence[tuple[Poly, float]], house: Pt, seat: Pt) -> bool:
     """Would a lane run between this fixture and the house it serves (settlement-review of Mizuguchi, feature 261)? A
-    shrine stands "in a corner of the house plot" and a coop in the yard (research/homesteads.html), and a shared lane
+    shrine stands "in a corner of the house plot" and a coop in the yard (research/homesteads/), and a shared lane
     between the house and the seat puts the seat outside the plot. The same line test as `across_the_brook`, against the
     lanes' centerlines - the predicate the web asks of a run between a house and its own fixtures (homes H32)."""
     return any(segments_cross(house, seat, pts[k], pts[k + 1]) for pts, _half in lanes for k in range(len(pts) - 1))

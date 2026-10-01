@@ -12,7 +12,7 @@ drawn where it was laid (`hamletgen/homesteads/fixtures.py`). The retirement hou
 is laid the same way and first, on the settlements that keep the form (`hamletgen/homesteads/retirement.py`): searched
 for after the fixtures, 7 of cohort seed 54's 9 found room.
 
-Every seat table is the one the late placer read (research/homesteads.html, each fixture's own section - the privy's at "Farm privies and their night soil (benjo)" - the attested seats
+Every seat table is the one the late placer read (research/homesteads/, each fixture's own section - the privy's at "Farm privies and their night soil (benjo)" - the attested seats
 labeled there), in the house's unturned frame: +y the sunny front where the yard is, -y the back wall, the kura on the
 north wall. A seat is taken when its box clears every part laid before it by the wall gap; failing every recorded seat, a
 fixture is offered the same seats stepped outward a pace at a time - still its own plot, where the ground past the parts

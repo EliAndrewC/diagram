@@ -32,7 +32,7 @@ intake on its bank and runs on past the field, and this map draws a weir there.
   file's stale `cross`/round claim and a gen docstring copied from Inashiro's - both fixed.
 
 - 2026-08-16 (the fork draws both arms - engine change, this map re-rolled): the GM's Inashiro
-  question settled in research/water.html "The head-race forks - supply commands both flanks";
+  question settled in research/rendering/water/005-how-our-maps-lay-out-irrigation-canals-yosuiro.html;
   every `OFFTAKE_LADDER` row now draws canal B, gated by `comb_supply_commands_both_flanks`.
   This map re-rolled three times as review fallout was fixed at the engine (canal-B thread
   tails via interpolated piece boundaries, minimax worst-served well placement, the notice
@@ -257,7 +257,7 @@ SKETCH (check before fix, per the project rule): add a gap verdict using the exi
 confirm it fires on mizuguchi and on nothing else in the pool, then require the same clearance in
 `_bundle_common_fits` against every placed house's raked quad (the sun-corridor rule already reads
 neighbors' geometry off `M["houses"]`, so the precedent and the plumbing both exist). Ground the
-number in "two thatched roofs must shed separately" - the principle research/buildings.html already
+number in "two thatched roofs must shed separately" - the principle research/buildings/ already
 records for a building against a compound wall.
 
 DEFERRED DELIBERATELY: this is a NEW rule, not a regression (no check fires, and the gate is 22/24
@@ -281,7 +281,7 @@ So a comb basin under **0.25 of the fan's own design cell** is dropped by the to
 by `close_seams`; the gate `paddy_basins_are_worth_their_bund` fires under 0.20. The triangularity
 was the symptom - a fragment clipped off the lattice at the fan boundary comes out triangular - and
 the size was the cause. Full findings, both declined alternatives, the two derivations of 0.25 and
-why the gate could not sit at 0.15: `research/fields.html`, "Minimum basin SIZE".
+why the gate could not sit at 0.15: `research/rendering/fields/020-how-our-maps-draw-rice-paddies-and-their-plots-suiden.html`.
 
 **On this map, measured on the SHIPPED manifest against main's tip.** 519 -> 511 basins; smallest
 surviving basin 407 sq ft = 0.273 of the design cell, and **zero** basins under 0.25; acreage
@@ -326,7 +326,7 @@ Recorded once here and referenced from all four hamlet notes, because the mistak
 
 A review asked for a belt whose clumps were "touching the frame" to be contained. The fix inset the
 allowed window by a canopy reach, which required the WHOLE crown to be inside - and that is
-backwards. `research/presentation.html` (GM 2026-07-20) says the belt CLIPS at the view edge and
+backwards. `research/presentation/` (GM 2026-07-20) says the belt CLIPS at the view edge and
 "a partially visible belt reads as 'the wood continues'"; `hard_features_within_frame` demands
 partial visibility of a village grove rather than containment. Only a clump with **no visible ink**
 is waste.
@@ -499,8 +499,7 @@ thickest: reeds stood **7.66 ft** off the waterline and the density profile out 
 the water was the mark's isotropic reach, while a tuft's blades are drawn near-VERTICAL (~7 ft up, at
 most ~1.4 ft sideways). The pad is split now: lateral reach for the tuft's own point, blade TOP tested
 separately. After: nearest base **1.52 ft**, rim band **21.2**, profile 21.2 / 29.3 / 35.9 / 21.8 /
-22.5, and 0 blades in the water. Grounded in this feature's own research pass (`research/water.html`,
-"A reservoir's shore is reeded, and its EMBANKMENT is mown"), not in a preference.
+22.5, and 0 blades in the water. Grounded in this feature's own research pass (`research/water/280-reservoir-ponds-tameike.html`), not in a preference.
 
 **Confirmed**: every recorded footprint corner tested against both marsh polygons - 0 on marsh. The
 2026-08-28 bamboo defect stayed fixed and did not return (the take-yabu is 87.4 ft clear of the nearest
@@ -772,8 +771,7 @@ houses' middle, over a 125-degree arc. The farmsteads moved (median 1,393 ft). T
 aspect of 1.51. The copse is the against-the-belt form, every crown within 60 ft of the belt's lee face, on the houses' side, and the weir at the
 intake the map is named for is drawn. The connector leaves northeast (59 degrees on its first long leg) from the canvas's top, and the
 entrance board stands 40 ft out along it from where it meets the lanes - the nearest seat every way out passes whose caption stands clear -, passed by all 12 households' ways out. The plot a household works by its own house is its kitchen garden; no grain plot is laid beside a house (a research
-pass, 2026-09-28, found the house-side plot of the record is the kitchen bed, research/fields.html "Where dry
-(hatake) crops go"), so the dry crops stand in the hem along the supply canal. No household fixture stands across a lane from its house, and none goes unseated.
+pass, 2026-09-28, found the house-side plot of the record is the kitchen bed, research/fields/160-dry-fields-and-their-crops-hatake.html), so the dry crops stand in the hem along the supply canal. No household fixture stands across a lane from its house, and none goes unseated.
 Known open (settlement-review, 2026-09-28): the houses reach their rice by the one plank at (986, 743), about 390 ft
 west of them - a south-row house walks about 1,000 ft to a bund 130 ft away - and the ford the engine opened at
 (1515, 738) carries no way. Whether a hamlet across a stream from its paddies kept one crossing or one per reach of

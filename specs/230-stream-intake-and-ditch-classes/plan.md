@@ -71,10 +71,10 @@ half is filled in when the pass (research R2) lands.
 - Two background readers (Japan-first, China-first), one attempt per host, dispatched 2026-09-12; the stall
   watcher armed (`agent-stall-hooks.sh watch`).
 - From their quotes: R2 in `research.md` (what was searched, each verdict, the passages); every new work a
-  registry entry in `research/SOURCES.html` with its citation line and both write-ups; `source-applicability`
-  over the new keys BEFORE any number reaches the engine; the new section of `research/water.html` (heading as
+  registry entry in `research/sources/` with its citation line and both write-ups; `source-applicability`
+  over the new keys BEFORE any number reaches the engine; the new section of `research/water/` (heading as
   the reader's question; `<!-- researched 2026-09-12, feature 230 T02 -->`; Grounds and Evidence as comments;
-  the `Sources:` roster; a footnote per assertion on `research/citations/water.html`; `make citations`); the
+  the `Sources:` roster; a footnote per assertion on `research/water/`; `make citations`); the
   glossary for any new term (`weir`, `head race`, `bunsuiguchi`, `collector` already exist); `quote-check` and
   `record-format` in the same turn over the new section and the drain entries the drainage class cites; the
   rule line in `settlements/water.md`; the pointers at the three points of change.

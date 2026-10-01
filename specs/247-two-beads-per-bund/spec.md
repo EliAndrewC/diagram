@@ -38,8 +38,7 @@ the rule from what it already records.
   on the same call: the bead count per edge and the drop rule are computed after the shuffle and the
   edge-count draw, and the drops run after all draws, as today. Nothing on a map moves but the beads.
 - **FR-004 The record says the convention, and states no finding.** The research page's paragraph that
-  states the bead convention for the reader (`research/fields.html`, "What a bund bean actually looks
-  like") and the bund-beans modal's Note say that a beaded segment is drawn with at least two beads and
+  states the bead convention for the reader (`research/fields/260-bunds-between-the-paddies-aze.html`) and the bund-beans modal's Note say that a beaded segment is drawn with at least two beads and
   why (one bead does not read as a run). Neither adds a finding, a source or a citation, and the
   research section's findings are untouched; the modal's prose is rewritten in the same delta, so no
   entry-drift pair is left open.

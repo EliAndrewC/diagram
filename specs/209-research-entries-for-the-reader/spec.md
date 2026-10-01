@@ -11,7 +11,7 @@ that a heading's bookkeeping goes in an HTML comment (`research/CLAUDE.md`, "Who
 
 ## Summary
 
-The GM read the first entry of `research/homesteads.html` as a reader would and named four things wrong with
+The GM read the first entry of `research/homesteads/` as a reader would and named four things wrong with
 it, each *"not only a change to this one specific section, but a general rule for how these research sections
 should look"*: a Japanese word with no definition where the map would have given one; bookkeeping written for
 a session (`Grounds:`, spec-kit features, task ids) shown to a human; commentary on how the document came to
@@ -115,7 +115,7 @@ citation. The registry has no `Grounds:`/`Evidence:` fields; every other rule ho
 
 ## Success criteria
 
-- **SC-001** Opening `research/homesteads.html#homestead-groves-yashikirin---the-real-scale-and-prevalence` in a
+- **SC-001** Opening `research/homesteads/` in a
   browser shows the heading's `yashikirin` dotted, its definition on hover; no `Grounds:` or `Evidence:` line;
   no "Corrected 2026-09-07" note; the `Sources:` roster's first item reads as the survey's figures and nothing
   about a pointer's history.

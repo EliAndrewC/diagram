@@ -12,7 +12,7 @@ from .rolling.bearing import house_rot
 from .rolling.lot import FARMHOUSE_MAX_ASPECT, KURA_SHARE, household_parts, kura_rect, record_parts, seat_parts_done
 
 # HOW FAR A FARMHOUSE WALL STANDS OFF THE PADDY (researched 2026-08-27, feature 133 T41; the record
-# in research/rendering/homesteads.html "How our maps draw farmhouses (minka)"). The paddy's margin is
+# in research/rendering/homesteads/400-how-our-maps-draw-farmhouses-minka.html). The paddy's margin is
 # a bund (aze) about 1.5 ft wide (a search-summary figure the session could not read - UNVERIFIED;
 # the read source gives ~10 cm high) that is ALSO the working footpath: levees are "constructed and
 # maintained to retain water ... and to allow the passage of people and transportation of tools"
@@ -658,7 +658,7 @@ class HousesMixin:
         # its ~6:1 room (the fix for groves never reaching target under end-reconciliation). Dimensions are in
         # FEET, drawn at this map's ftpx (village 2 ft/px, hamlet 1): the plain house is the 46x28 ft 8:5 minka
         # (px(46) = 23px at 2 ft/px). A modest, position-seeded wealth tier scales the whole bundle. See
-        # research/homesteads.html 'Homestead groves (yashikirin) - the real scale and prevalence' ('How far is it across this map? The scale, tier by tier'.
+        # research/homesteads/010-groves-of-trees-around-farmhouses-yashikirin.html ('How far is it across this map? The scale, tier by tier'.
         # THE HOUSEHOLD'S PARTS (feature 287, plan M5): its lot - the k-th plain household seated takes lot k, its size
         # rung, its kura and its beast - and its well pocket, whatever seat it lands on (`rolling/lot.py`)
         _lot, _byre_form, _well = household_parts(self, x, y, kind, role)
@@ -788,7 +788,7 @@ class HousesMixin:
                 # The old form spread wide (x1.15 lateral) with the horns curved hard back, so the placer -
                 # which pulls every house to hug the paddy and packs ALONG it - strung them into a wide, hollow
                 # arc that stranded the horns far from the crops (Kikuta: 55 houses over a hull filled ~20%, NE
-                # horn ~400px from any field; see village_cluster_compact / research/rendering/homesteads.html 'How our maps pack a clustered village's houses').
+                # horn ~400px from any field; see village_cluster_compact / research/rendering/homesteads/152-how-our-maps-pack-a-clustered-villages-houses.html).
                 # WIDTH is what the placer amplifies, so keep the lateral reach narrow (a nucleated village is a
                 # deep blob, not a wide ribbon) and let the depth carry the frontage, with a gentle concave bow.
                 t = rng.uniform(-1.0, 1.0)
@@ -870,7 +870,7 @@ class HousesMixin:
         SIZED IN REAL FEET at ftpx >= 2 (GM 2026-07-22): for a village or provincial city each `plot_size`
         picks a real-feet CELL-AREA target (acres) and an aspect, and `waterfields.paddy_grain` converts that to
         px at THIS map's `ftpx` - so the paddy grain is the same real size at every scale (see
-        waterfields.PADDY_CELL_ACRES / research/fields.html 'Plot sizes, pond sizing and acreage from population'). The targets bracket the calibrated
+        waterfields.PADDY_CELL_ACRES / research/fields/110-how-much-farmland-a-settlement-works-and-in-what-tracts.html). The targets bracket the calibrated
         norm: `small_irregular` below it, `medium` at it, `large_block` above, `strip` at the norm's area but
         long-and-narrow (aspect > 1). The ft/px=1 HAMLETS (the only maps that reach this at that scale, via
         roll_village) stay on the LEGACY px grain: they already render in-band (~0.02-0.06 acre) and the GM

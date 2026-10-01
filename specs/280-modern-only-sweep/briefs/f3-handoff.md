@@ -20,6 +20,6 @@ M08 PREMODERN-ATTESTED - new fields/610 says survey registers measured parcels o
 ## Left open, and why
 
 - fields/050 was treated as NOT held: `git log origin/main..HEAD` in diagram-supplemental names only the 269 merge-from-main commit 0b2a4566f for it, and the file is byte-identical in both clones, so 269 has not rewritten it. A check session that reads the rule literally may disagree.
-- The assembled pages (research/fields.html, research/citations/fields.html and fields.js) were rebuilt by `make record` / `make citations` but NOT committed, because they also carry another session's uncommitted F1 check-a edits to fields 070 and 600; SOURCES.html was committed. The check session should run `make record && make citations` after F1 check-a commits.
+- The assembled pages (research/fields/, research/fields/ and fields.js) were rebuilt by `make record` / `make citations` but NOT committed, because they also carry another session's uncommitted F1 check-a edits to fields 070 and 600; SOURCES.html was committed. The check session should run `make record && make citations` after F1 check-a commits.
 - Ma Yilong's 農說 and the 中国稻作史 chapter (TO-DOWNLOAD 281, 282) would give a premodern hill density if the GM fetches them.
 - Record checks (quote-check, record-format, source-applicability on the 6 new keys) are owed.

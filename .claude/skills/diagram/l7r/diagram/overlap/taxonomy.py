@@ -89,11 +89,11 @@ _OVERLAP_STRUCTS = (
     "byres",
     "retirement_houses",  # the retirement house (inkyoya), a second roof of its farmhouse's family in the same yard (269 B42)
     "kosatsuba",
-    # the justice works (research/urban-features.html "Execution and punishment grounds (keijo)")
+    # the justice works (research/urban-features/020-execution-and-punishment-grounds-keijo.html)
     "punishment_spots",
     "execution_grounds",
     "boundary_markers",
-    # the trade works (GM 2026-07-24, research/rendering/urban-features.html "How our maps draw shops, and the trades that outgrow the shop glyph")
+    # the trade works (GM 2026-07-24, research/rendering/urban-features/310-how-our-maps-draw-shops-and-trades-in-towns-and-villages.html)
     "breweries",
     "dye_yards",
     "lumber_yards",
@@ -528,7 +528,7 @@ _MATRIX_ALLOWED_PAIRS: dict[frozenset[str], str] = {
 _MATRIX_ALLOWED_KEYS: dict[frozenset[str], str] = {
     frozenset(
         {"quays", "jetties"}
-    ): "a jetty SPRINGS FROM the quay face - the faced bank is the working surface the stage projects out of, so they meet by construction (research/cities/river-cities.html: the pier exists for REACH where the bank shelves too gently, and it starts at the revetment)",
+    ): "a jetty SPRINGS FROM the quay face - the faced bank is the working surface the stage projects out of, so they meet by construction (research/cities/river-cities/: the pier exists for REACH where the bank shelves too gently, and it starts at the revetment)",
     **{
         frozenset(
             {"wall", w}
@@ -560,7 +560,7 @@ _MATRIX_ALLOWED_KEYS: dict[frozenset[str], str] = {
     ): "a supply canal hugs the fan's HIGH DRY MARGIN by design (the comb doctrine), and the dry hem IS that margin - a plot may be crossed by the irrigation that serves it. A NATURAL watercourse is a different matter and stays forbidden: dry_plots x streams is the defect this whole feature was opened for",
     frozenset(
         {"kosatsuba", "lanes"}
-    ): "the notice board hugs the roadside BY DESIGN - place_kosatsuba deliberately bypasses the lane corridor's no-build clearance, which is a house setback, because a board that everyone passes is the whole institution (research/urban-features.html, 'Notice board')",
+    ): "the notice board hugs the roadside BY DESIGN - place_kosatsuba deliberately bypasses the lane corridor's no-build clearance, which is a house setback, because a board that everyone passes is the whole institution (research/urban-features/010-notice-boards-kosatsuba.html)",
     frozenset({"buildings", "merchant_estates"}): "a merchant estate is a walled COURT drawn around an inner building that is itself a checked struct",
     frozenset(
         {"wall", "flower_fields"}
@@ -719,7 +719,7 @@ def seg_dist(px: float, py: float, a: Pt, b: Pt) -> float:
 
 # the 2 patron fortunes of each Great Clan - a town defaults to one monastery for each
 # The recognized justifications for a city carrying MORE than two major temples
-# (research/religion-and-death.html). A fixed vocabulary rather than free text: the doctrine
+# (research/religion-and-death/). A fixed vocabulary rather than free text: the doctrine
 # enumerates the exceptions, so an unrecognized reason must FAIL rather than pass by virtue of
 # being non-empty - otherwise the declaration stops meaning anything and becomes a rubber stamp.
 #   large         - an especially large city
@@ -727,7 +727,7 @@ def seg_dist(px: float, py: float, a: Pt, b: Pt) -> float:
 #   changed_hands - kept the old ruler's temple after passing between clans (Tango)
 #   fox_structure - the Fox seven-temple structure: many modest precincts, each an economic house
 #                   holding forest usufruct, rather than two great complexes (Minami; l7r.md
-#                   "Fox Temples", research/religion-and-death.html)
+#                   "Fox Temples", research/religion-and-death/)
 TEMPLE_EXCEPTIONS = {"large", "pious", "changed_hands", "fox_structure"}
 
 CLAN_FORTUNES = {

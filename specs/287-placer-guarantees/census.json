@@ -54,7 +54,7 @@
   "guaranteed": "no",
   "owner": "l7r/diagram/settlement/structures/fixtures/siting.py:SitingMixin.place_kosatsuba",
   "mechanism": null,
-  "sketch": "Make routes_missed == 0 and dist(anchor) <= ENTRANCE_REACH + ANCHOR_BAND hard filters on the candidate set. Where no verge passes them, open a verge on the approach inside the handover band (the connector is every departure's way). Give stage_notice's re-seat the same filters. FR-015 / SC-011; research/urban-features.html (the kosatsu at the village entrance, broadside to the way out).",
+  "sketch": "Make routes_missed == 0 and dist(anchor) <= ENTRANCE_REACH + ANCHOR_BAND hard filters on the candidate set. Where no verge passes them, open a verge on the approach inside the handover band (the connector is every departure's way). Give stage_notice's re-seat the same filters. FR-015 / SC-011; research/urban-features/ (the kosatsu at the village entrance, broadside to the way out).",
   "later_stage_risk": "hamletgen/frame.py:stage_notice re-seats a board that falls outside the view. It uses the same 'fewest missed' ranking and a band relative to the nearest seat.",
   "notes": "siting.py:451-453 keeps the seats with the FEWEST missed departures (min, not zero). The handover band (530) is relative to the nearest surviving seat (_hnear + 20 ft), not absolute. So a map whose best seat misses a household, or stands far off, still ships. departure_routes also drops houses beyond 150 ft of a lane.",
   "group": 1
@@ -212,7 +212,7 @@
   "mechanism": "For role == 'copse', every marsh polygon of 3+ points is added to GroveBlocks' dikes (stands.py ~269). GroveBlocks.hard (grove_blocks.py:96-99) refuses a point inside it, and hard() is asked on every copse seat path: _seat (398) and _reseat (381). The gap fill is windbreak-only.",
   "sketch": null,
   "later_stage_risk": null,
-  "notes": "The placer tests unrounded seats and the record rounds to 0.1 px, so a seat within 0.05 px of a marsh edge could read inside. No marsh is drawn after stage_windbreak. research/vegetation.html (woody cover on the dry ground above the marsh).",
+  "notes": "The placer tests unrounded seats and the record rounds to 0.1 px, so a seat within 0.05 px of a marsh edge could read inside. No marsh is drawn after stage_windbreak. research/vegetation/ (woody cover on the dry ground above the marsh).",
   "group": 1
  },
  {
@@ -260,7 +260,7 @@
   "mechanism": "No code path in l7r/ writes `homestead` on a dry plot or meta.homestead_fields (grep for homestead_fields, '\"homestead\": True' and 'homestead=True' returns nothing). The map cannot carry one.",
   "sketch": null,
   "later_stage_risk": null,
-  "notes": "This is a regression guard against re-adding a retired form (the GM, 2026-09-28; research/homesteads.html and research/fields.html). It could move to a static test of the engine rather than a rolled map.",
+  "notes": "This is a regression guard against re-adding a retired form (the GM, 2026-09-28; research/homesteads/ and research/fields/). It could move to a static test of the engine rather than a rolled map.",
   "group": 1
  },
  {
@@ -270,7 +270,7 @@
   "guaranteed": "partial",
   "owner": "l7r/diagram/settlement/homestead_parts/stands.py:StandsMixin.village_grove (the count) / settlement/core.py:_partition_grove_clumps",
   "mechanism": "The drawing is by construction: stands.py:638-641 draws every seated clump inside a toe or waterside marsh with mix='alder' and counts it.",
-  "sketch": "Recount `alder` over the on-page clumps when set_view partitions them (core.py:_partition_grove_clumps), or record alder and alder_offpage separately. Test the rounded record points the same way. research/vegetation.html (the marsh margin: alder or willow, never pine).",
+  "sketch": "Recount `alder` over the on-page clumps when set_view partitions them (core.py:_partition_grove_clumps), or record alder and alder_offpage separately. Test the rounded record points the same way. research/vegetation/ (the marsh margin: alder or willow, never pine).",
   "later_stage_risk": "settlement/core.py:_partition_grove_clumps (from set_view in stage_frame) moves clumps between clumps and clumps_offpage after `alder` was counted over every seated clump.",
   "notes": "The count covers all `seated` (on and off page), while the test counts only g['clumps'] (on page after the partition). An off-page wet clump makes them differ. The unrounded seat and the rounded record can also disagree at a marsh edge.",
   "group": 1
@@ -822,7 +822,7 @@
   "guaranteed": "partial",
   "owner": "l7r/diagram/hamletgen/homesteads/stages.py:stage_homesteads",
   "mechanism": "The front row is seated along the field outline at standoffs out to ~150 px (homesteads/seats.py:front_row, stages.py front-row passes); rescue rounds (attempt >= 4) refuse seats outside in_band (bound = FORM_BOUND * hypot(lat, dep) around the seat center, stages.py in_band / 'if not in_band(...) and attempt >= 4'). The seat itself is on a field margin (cluster.py:seat_cluster).",
-  "sketch": "Assert field adjacency on the PLACED position: refuse (or re-rank) any homestead seat whose distance to the field outline exceeds the band's depth, in every round including the lattice ranks; the record gives a 6 ft minimum and a ~700 ft tolerance (research/homesteads.html, 'How close does a farmhouse stand to the paddy?').",
+  "sketch": "Assert field adjacency on the PLACED position: refuse (or re-rank) any homestead seat whose distance to the field outline exceeds the band's depth, in every round including the lattice ranks; the record gives a 6 ft minimum and a ~700 ft tolerance (research/homesteads/150-clustered-and-scattered-villages-shuson-sanson.html).",
   "later_stage_risk": "none (houses are not moved after stage_homesteads)",
   "notes": "Lattice ranks for attempt < 4 are NOT held to in_band; their depth is bounded only by _row_out + _rank_step*(attempt+1). The _pretest docstring records this as an OPEN DEFECT: 'the fix ... is to assert field adjacency on the PLACED position'. The 700 px bar is a rail, so the risk is small, but nothing measures it.",
   "group": 3
@@ -1254,7 +1254,7 @@
   "guaranteed": "partial",
   "owner": "l7r/diagram/settlement/fields/comb.py:draw_comb_field (channel z-order) and the comb carve's plot_across calibration in l7r/diagram/hamletgen/water/fit.py:fit_field (cell size)",
   "mechanism": "Channel z-order: comb.py:448 routes the comb's main channels through field_channel(..., late=True), whose late water block is spliced after the plots (settlement/core.py:390, settlement/finish.py:706-753). Not every channel: comb.py:467 (the seam/run ditches) and hamletgen/sink.py:96 (the outfall drain) call field_channel without late=True, so their z-order rests on draw order alone. Cell size: nothing in the carve or finish refuses a plot grid whose typical cell leaves the band; it holds because plot_across/row_step are calibrated constants.",
-  "sketch": "Make every field_channel on a comb map late (or have field_channel default to the late block once one exists), so no channel can precede a plot. For cell size, have fit_field/carve_comb assert the median interior cell area inside the band (research/fields.html 'Plot sizes, pond sizing and acreage from population') and adjust plot_across when a carve leaves it.",
+  "sketch": "Make every field_channel on a comb map late (or have field_channel default to the late block once one exists), so no channel can precede a plot. For cell size, have fit_field/carve_comb assert the median interior cell area inside the band (research/fields/110-how-much-farmland-a-settlement-works-and-in-what-tracts.html) and adjust plot_across when a carve leaves it.",
   "later_stage_risk": "finish() splices the water blocks; any later stage that emits plot polygons after the late-water anchor would bury channels.",
   "notes": "_regen_and_gate no longer runs a check battery (feature 166): it only proves the gen runs within budget and emits a manifest. The two map properties are measured on the SVG. Polder/dike-pond maps are exempt from the cell-size band.",
   "group": 4
@@ -1374,7 +1374,7 @@
   "guaranteed": "partial",
   "owner": "l7r/diagram/hamletgen/ways/serve.py:_serve_stragglers (the footpath router, last placer that emits a folded path); the web's later sweeps (ways/sweeps.py, ways/smooth.py) share it",
   "mechanism": "ways/clearance.py:222 (may_write) refuses a rewrite that makes a lane newly bend badly; serve.py:556 and 622 rank candidates by (_fouls, _bends_badly). But serve.py:632-635 DRAWS the least-bad folded path as a last resort when no clean candidate exists, and may_write only forbids making it worse. Also _bends_badly (clearance.py:273-285) tests two 50-degree turns separated by ONE segment <= 40 ft, whereas the test sums a run across several segments - so a kink spread over three short legs passes the placer's predicate and fails the rule.",
-  "sketch": "Align _bends_badly with the rule's run-sum predicate, and make the folded fallback a repair (chord or knee the fold) or a refusal that leaves the house to the reach re-roll, never an emitted kink. Rule: research/homesteads.html 'How does a village lane bend?'.",
+  "sketch": "Align _bends_badly with the rule's run-sum predicate, and make the folded fallback a repair (chord or knee the fold) or a refusal that leaves the house to the reach re-roll, never an emitted kink. Rule: research/ways/020-village-lanes.html.",
   "later_stage_risk": "Later web sweeps (trim_free_stub, _smooth_web, joints) rewrite lanes; may_write keeps them no worse but does not require them good.",
   "notes": "Seed 43 is the standing counterexample (tests/soak/test_seed_43_kink.py strict xfail).",
   "group": 4
@@ -1398,7 +1398,7 @@
   "guaranteed": "no",
   "owner": "l7r/diagram/hamletgen/homesteads/stages.py:stage_homesteads",
   "mechanism": null,
-  "sketch": "stage_homesteads runs a front row, four lattice rounds and three rescue rounds (stages.py:452-557) and then records whatever it got (plan.placed = s.farmsteads(), 641); the docstring says the shortfall is recorded rather than re-rolled. Guarantee it by continuing the rescue (wider band, more guesses) until the quota is met, or by having generate() re-roll a short roll the way it re-rolls a stranding one and refuse to ship under the floor. Research: research/settlements.html 'Is every household in a hamlet actually drawn?'.",
+  "sketch": "stage_homesteads runs a front row, four lattice rounds and three rescue rounds (stages.py:452-557) and then records whatever it got (plan.placed = s.farmsteads(), 641); the docstring says the shortfall is recorded rather than re-rolled. Guarantee it by continuing the rescue (wider band, more guesses) until the quota is met, or by having generate() re-roll a short roll the way it re-rolls a stranding one and refuse to ship under the floor. Research: research/rendering/settlements/010-how-our-maps-draw-and-state-each-size-of-settlement.html.",
   "later_stage_risk": "Settlement.farmsteads (_farmsteads_bundle) filters 'survivors' when drawing, so a seated house can be dropped there too.",
   "notes": "The driver's re-roll only forbids a re-roll seating FEWER (driver.py:484); nothing enforces the 0.85 floor.",
   "group": 4

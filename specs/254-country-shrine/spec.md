@@ -251,7 +251,7 @@ under its tier with its program type.
 
 **C. The record**
 
-- **FR-012 - two new sections** on `research/religion-and-death.html`: "Does the country monk live at
+- **FR-012 - two new sections** on `research/religion-and-death/`: "Does the country monk live at
   the shrine?" and "How big is a country shrine, and what stands in its precinct?", each with its
   `Sources:` line, every assertion footnoted on the citations page with the passage verbatim (English
   translation marked as one, the original kept), glossary tooltips for kuri, honden, haiden, bettō,
@@ -319,7 +319,7 @@ under its tier with its program type.
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| the country monk lives at the shrine; the dwelling stands on the precinct | accurate (Japan, the jingūji / bettō-ji, "common for over a millennium", and the parish temple's kuri; China, the resident keeper the Mianning temples "generally" engaged; the RPG's "most had at least one resident monk"), with the disclosure that a pure Shinto village shrine had no resident, that some rural temples were unstaffed, and that no page counts how many village shrines had a temple of their own (source-reader, 2026-09-19) | the GM's ruling and the sources coincide; no knob | `research/religion-and-death.html`, "Does the country monk live at the shrine?"; `buildings/programs.md`, the shrine program; the exemplar's notes |
+| the country monk lives at the shrine; the dwelling stands on the precinct | accurate (Japan, the jingūji / bettō-ji, "common for over a millennium", and the parish temple's kuri; China, the resident keeper the Mianning temples "generally" engaged; the RPG's "most had at least one resident monk"), with the disclosure that a pure Shinto village shrine had no resident, that some rural temples were unstaffed, and that no page counts how many village shrines had a temple of their own (source-reader, 2026-09-19) | the GM's ruling and the sources coincide; no knob | `research/religion-and-death/`, "Does the country monk live at the shrine?"; `buildings/programs.md`, the shrine program; the exemplar's notes |
 | sanctuary about 6 ft square, one bay | accurate | the ikkensha honden is the commonest form; a 1789 example measures 1.98 by 1.82 m (`research.md` R3) | the same section; the size band in the declaration |
 | hall 20 to 35 ft on a side | accurate as a band | three measured Edo halls and one haiden span it (`research.md` R3); the one-roof band's single example, Kaie-ji, is an urban Zen temple's hall-and-kuri, said so on the page and in the entry | the same |
 | dwelling at the farmhouse's 46 by 28 ft | form accurate, size guess | the kuri "resembles the farmhouse of its region"; no small kuri measured (`research.md` R3) | the same; the declaration |

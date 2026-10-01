@@ -142,7 +142,7 @@ the five hamlets' manifests and notes, and the assembled homesteads pages.
   junction-end skip, which sits beside 291's `carry_on` unchanged).
 - `tests/hamletgen/test_hinterland.py`: both features' tests kept.
 - The manifests took main's side and were regenerated (Inashiro first); each notes file kept main's text, with 293's entry
-  rewritten as measured on the regenerated map against main's 291 roll. `research/homesteads.html` and
+  rewritten as measured on the regenerated map against main's 291 roll. `research/homesteads/` and
   `research/citations/homesteads.*` were re-assembled by `make record` and `make citations` (both then `CHECK=1` in sync).
 
 **What the merge broke, measured, and fixed.** After the merge the gate failed three tests and the cohort fell to 50/54

@@ -1,4 +1,4 @@
-# Audit: `settlements/homesteads.md` (138 lines, 65.9 KB) against `research/homesteads.html`
+# Audit: `settlements/homesteads.md` (138 lines, 65.9 KB) against `research/homesteads/`
 
 Independent Opus reader, 2026-09-12. Classes: A restated on the page; B rule-only (engine site given where
 encoded); C hand-procedure; D decision record the page lacks; E unscripted tier; F stale.
@@ -98,7 +98,7 @@ Also prose-only: the typing-rule rationales for `cluster_position` / `cluster_sh
 
 ## Inbound references
 
-Real ones: `settlements.md:15,38`; `research/README.md:18`; `research/homesteads.html:15` (visible link), `:225` (comment); `farm_fixtures.py:8,31` (page has equivalents); `shrines_wells/byres.py:224,255` (borrow-or-hire rule - page's byre entry is about wells, not sharing); `dev/pool.md:97` (sun rule - page has it); `future-work/farming-communities.md:1324,1655` (byre share - prose only); `kashikawa.notes.md:267,567`; `.claude/agents/settlement-review.md:49`; `inashiro.notes.md:1129` (BROKEN today: text says html, target says md). False positives: `wip/*.html`, `dev/placement-stages/*.html` (rendered pages with a stale `research/homesteads.md` string), `scripts/fixtures/main-tree-refusals-2026-09.json`.
+Real ones: `settlements.md:15,38`; `research/README.md:18`; `research/homesteads/:15` (visible link), `:225` (comment); `farm_fixtures.py:8,31` (page has equivalents); `shrines_wells/byres.py:224,255` (borrow-or-hire rule - page's byre entry is about wells, not sharing); `dev/pool.md:97` (sun rule - page has it); `future-work/farming-communities.md:1324,1655` (byre share - prose only); `kashikawa.notes.md:267,567`; `.claude/agents/settlement-review.md:49`; `inashiro.notes.md:1129` (BROKEN today: text says html, target says md). False positives: `wip/*.html`, `dev/placement-stages/*.html` (rendered pages with a stale `research/homesteads.md` string), `scripts/fixtures/main-tree-refusals-2026-09.json`.
 
 ## Disagreements
 
@@ -111,4 +111,4 @@ Real ones: `settlements.md:15,38`; `research/README.md:18`; `research/homesteads
 
 ## Verdict
 
-Delete it and almost nothing operative is lost for the hamlet tier. Lost: the twelve D items (name-informed siting above all), five prose-only B rules (one of them un-migrated uncited research), the village-tier knob catalog and compactness calibration, the twin-detector's calibration reasoning. Smallest restructuring: D items into `research/homesteads.html` as Decision paragraphs (name-informed siting needs a new question; shading exemption under the threshing-yard sun entry; crescent pond under a geomancy heading or water); the five prose-only rules into the code they govern with the Knapp material through the research pass; the village content parked with the village tier; F units deleted; four inbound links re-pointed; the Inashiro dead link fixed.
+Delete it and almost nothing operative is lost for the hamlet tier. Lost: the twelve D items (name-informed siting above all), five prose-only B rules (one of them un-migrated uncited research), the village-tier knob catalog and compactness calibration, the twin-detector's calibration reasoning. Smallest restructuring: D items into `research/homesteads/` as Decision paragraphs (name-informed siting needs a new question; shading exemption under the threshing-yard sun entry; crescent pond under a geomancy heading or water); the five prose-only rules into the code they govern with the Knapp material through the research pass; the village content parked with the village tier; F units deleted; four inbound links re-pointed; the Inashiro dead link fixed.

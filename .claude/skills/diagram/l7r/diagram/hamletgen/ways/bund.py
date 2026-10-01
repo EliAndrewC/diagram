@@ -1,9 +1,9 @@
 """A way that makes for the field runs on to the bund (269 B04 and B17).
 
-research/rendering/fields.html ("How our maps draw bunds between the paddies (aze)"): the field path runs from the
+research/rendering/fields/260-how-our-maps-draw-bunds-between-the-paddies-aze.html: the field path runs from the
 hamlet to the paddy's outer bund and joins it, however short that leaves the path; it never ends in open ground short of
 the bund and never passes through a gap in it; where no path is left to draw, the hamlet's nearest lane runs on to the bund.
-research/rendering/ways.html ("How our maps draw village lanes"): a lane ends at a dooryard, or runs on
+research/rendering/ways/020-how-our-maps-draw-village-lanes.html: a lane ends at a dooryard, or runs on
 to something a reader can see - a field path, a bund, another way. That the path joins the bund at the point nearest the
 hamlet is the record's GUESS.
 

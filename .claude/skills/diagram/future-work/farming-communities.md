@@ -1089,7 +1089,7 @@ its area):
 
 ## Review residue from the canal-B fork re-roll (settlement-review + cohort, 2026-08-16)
 
-The fork feature (research/water.html "The head-race forks - supply commands both flanks") re-rolled
+The fork feature (research/rendering/water/005-how-our-maps-lay-out-irrigation-canals-yosuiro.html) re-rolled
 the four live hamlets three times; the review rounds' errors are fixed (thread tails, minimax
 wells, the board's clump keep-out, the lane-crossing guards).
 
@@ -1097,7 +1097,7 @@ wells, the board's clump keep-out, the lane-crossing guards).
 
 - **DONE 2026-08-16: the in/out width ladder at junctions - RULED, keep the convention.** The GM
   weighed keep / intake-stilling-pool / conserve-at-fork and ruled that drawn width depicts rank,
-  not discharge (full reasoning recorded in research/water.html "Drawn width is RANK"); the
+  not discharge (full reasoning recorded in research/rendering/water/010-how-our-maps-draw-channel-widths.html); the
   settlement-review doctrine now says junction conservation is not a finding, so reviewers stop
   re-flagging it. No ink changes.
 - **DONE 2026-08-16 (second ledger round): collector-junction wedge plots in the water-gray
@@ -1142,7 +1142,7 @@ wells, the board's clump keep-out, the lane-crossing guards).
 
 Both items are the CARVE's fan-toe geometry, not the seam pass that surfaced them, and both are
 measured rather than impressionistic. Full context in `pool/hamlets/inashiro/inashiro.notes.md` (2026-08-17)
-and `research/fields.html` "Bunds are shared, and the fabric is continuous".
+and `research/fields/260-bunds-between-the-paddies-aze.html`.
 
 ### OPEN, each with its measurement: four things the 2026-08-18 review round raised and left
 
@@ -1259,7 +1259,7 @@ tint. Measured on Inashiro: the demoted #456 converges at 19.2 deg with a 3.4 ft
 keeps its tint at 18.5 deg with a 10.4 ft end - **the sharper taper is the one that stays blue**, and
 only truncation depth separates them.
 
-That is intended (`research/fields.html`: a basin never tapers to a point, and the fan toe TRUNCATES;
+That is intended (`research/fields/`: a basin never tapers to a point, and the fan toe TRUNCATES;
 10.4 ft less two aze leaves ~7.4 ft of standing water, a workable basin, and it reads as a wedge with
 a flat end at fit zoom). **The trigger to revisit** is a roll that produces a 5-8 ft end which still
 reads as a point on the sheet - the band is empty on today's maps, so the rule is untested there.
@@ -1316,7 +1316,7 @@ Recorded here because feature 121 declined the obvious move and the reasoning sh
 houses in each other's drying shadow. The honest way to pack a nucleus tighter is what real
 *yashiki* lots did - **STAGGER the rows east-west** rather than space them further apart, which
 costs no sunlight at all. The placer is free to; nothing asks it to yet. That belongs to the village
-tier's own work. (`research/homesteads.html` "The threshing yard's sun";
+tier's own work. (`research/rendering/homesteads/040-how-our-maps-keep-yards-and-gardens-in-the-sun.html`;
 `specs/121-placer-drawn-footprint/research.md` D2.)
 
 ## OPEN, from the 2026-08-18 settlement-review round (four maps, four independent agents)
@@ -1615,7 +1615,7 @@ pool: 9 for 66 farmhouses - inashiro 3/15 (20.0%), sawada 5/19 (26.3%), kashikaw
      position that decided is not the position recorded. Nothing in the artifact can reproduce it.
 
 **THE FIX, verified and then reverted.** Add an avalanche integer hash and key the roll on the household
-COUNT (which `research/homesteads.html` already names as the alternative, and which makes the decision
+COUNT (which `research/homesteads/` already names as the alternative, and which makes the decision
 reproducible from the manifest):
 
     @staticmethod
@@ -1709,7 +1709,7 @@ this file.
 
 FIX DIRECTION (from the reviewer): add a minimum working width - `area / longest side` - to the toe pass
 AND to the gate, derived rather than picked; a basin must be wide enough to stand in and puddle, which
-puts it somewhere in the 12-16 ft band. `research/fields.html` "Minimum basin SIZE" already holds the
+puts it somewhere in the 12-16 ft band. `research/rendering/fields/020-how-our-maps-draw-rice-paddies-and-their-plots-suiden.html` already holds the
 reasoning frame, including the point that the alternative to a scrap is making its neighbour bigger.
 **Owner: `waterfields/`** - same subsystem as the FLOODED tint (the `hem_block_len` knob it once named was settled as hem TRACTS, 269 B06), and the toe pass is
 where all three meet.
@@ -2233,7 +2233,7 @@ builder's corner, which every polder map draws.
 82 (22%) - Kashikawa 6 of 20 to 1 of 20, Mizuguchi 4 of 12 to 0 of 12. Every house is `kind: plain`, so the drawing
 condition did not change: the positional roll simply re-rolled when the houses moved.
 
-**Already recorded, and what is new**: `research/homesteads.html` ("Which farmhouses have a storehouse?") records the
+**Already recorded, and what is new**: `research/homesteads/120-farm-storehouses-kura.html` records the
 positional roll, its p=0.2993, the realized 28.4% over 1,208 farmhouses, and the precedent that "one re-pack took a
 hamlet from 25% to 15% in a single roll". The magnitude is what is new - 5% and 0% are past that precedent, and the
 entry itself describes the kura as a wealth marker that reads only because most farms lack one.
@@ -2290,7 +2290,7 @@ from a median 178 ft to 827 ft (nearest 90 -> 312 ft, farthest 565 -> 1,455 ft),
 The research pass the sketch below asked for ran on 2026-09-28 (feature 261 plan D24, at the GM's instruction): no page
 read puts a household's grain beside its house - the plot there is the yashikibatake, its kitchen bed - and the pages
 place dry fields on the ground just above the paddy water (a levee ridge shared with the settlement) or upslope on a
-fan. research/fields.html "Where dry (hatake) crops go" now says so. What stays open is the settlement's own raised
+fan. research/fields/160-dry-fields-and-their-crops-hatake.html now says so. What stays open is the settlement's own raised
 ground as a dry-field position on LEVEE terrain, where the settlement and its dry fields share the ridge.
 
 SKETCH: a `hem_siting` knob - `field_edge` (today's band along the paddy) or `on_the_ridge` (dry plots on the raised
@@ -2467,8 +2467,7 @@ first leg from (2290, 1649) to a bend at (2012, 1477) just off the sheet, so the
 north-west apex, about 13 degrees off the north-west wind; main's left south-west through the belt's west arm. The
 planting resumes on both sides (35, 22 and 50 ft of open ground between canopy edges over the first 75 ft).
 **Mechanism**: the connector's dry-exit search (`ways/track.py`, `connector_through`, `dry_exit.py`) scores bearings by dry,
-clear ground and has no preference for the belt's open side. research/vegetation.html ("How did a lane get through a
-belt?") records the lane's crossing as a GUESS and the old entrances found as standing on the grove's open side (Tonami;
+clear ground and has no preference for the belt's open side. research/rendering/vegetation/030-how-our-maps-draw-the-shelter-belt-its-sides-its-trees-and-why-it-runs-off-the-edge-of-the-map.html records the lane's crossing as a GUESS and the old entrances found as standing on the grove's open side (Tonami;
 the Huizhou water mouths). **Sketch**: among the dry bearings the sweep admits, prefer the one that leaves through the
 belt's lee or flank arc (`plan.windward`), and fall back to the windward arc only where no other is dry - asked of the
 whole cohort, since it moves every map whose connector currently leaves windward.

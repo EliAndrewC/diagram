@@ -119,14 +119,14 @@ fixtures move a short distance rather than disappearing, and the wet run costs n
 
 **FR-005** The research record MUST carry findings 1 to 7 above, each as an assertion with a footnote
 quoting the passage it rests on, linked to a public page where the quote can be read, the notes living
-on `research/citations/archetypes.html` beside the page. The foreign-language passages (finding 3's
+on `research/archetypes/` beside the page. The foreign-language passages (finding 3's
 齊民要術, and any Japanese passage) are quoted in English translation, marked as translations, with the
 original following as the checker's anchor. Where finding 1's pond figure (4.0 mu / 0.27 ha) is written
 on a reader-facing page it MUST carry its honest limit - the same ponds sit below the ISIS 0.4-0.6 ha
 band - the obligation being repeated here from "Out of scope" because this is the requirement whose
 implementer actually writes that number down.
 
-They land on **`research/archetypes.html`**, the one page in the record covering this archetype and the
+They land on **`research/archetypes/`**, the one page in the record covering this archetype and the
 page `PigSty.Entry:` already names. Findings 1, 2, 5 and 7 extend the EXISTING section 'What stands on a
 dike-pond hamlet that a paddy hamlet lacks?' (see FR-011, which that section needs anyway). Findings 3,
 4 and 6 - the treatise, the hazard, and the silence - open a NEW section, because they answer a question
@@ -385,7 +385,7 @@ passage against `archetypes.html:141`.
 **Round 1** (`spec-fidelity`, 2026-09-12): verdict CHANGES REQUIRED, three of them, all taken.
 (1) FR-002 required a margin the spec never stated, making SC-001 unverifiable - the value is now 6 ft
 with its reason, its GUESS label and the three places it is stated. (2) FR-005 said only "the citations
-page beside the research page" - it now names `research/archetypes.html`, which findings extend the
+page beside the research page" - it now names `research/archetypes/`, which findings extend the
 existing section, which open a new one, and the new heading's text. (3) The reviewer found, outside
 anything the session had looked at, that the section `PigSty.Entry:` points at ENDS with "neither is
 drawn" and an unresolved CANDIDATE comment, while the map has drawn both since feature 150 - the record

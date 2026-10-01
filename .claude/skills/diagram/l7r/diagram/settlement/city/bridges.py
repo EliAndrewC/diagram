@@ -287,7 +287,7 @@ def cut_at(pts: list[Pt], k: int, p: Pt, gap: float) -> list[list[Pt]]:
     return [q for q in pieces if len(q) >= 2 and sum(math.dist(u, v) for u, v in zip(q, q[1:], strict=False)) >= 1.0]
 
 
-# THE DITCH CROSSING'S FORM IS A KNOB (269 B21; research/rendering/ways.html, "How our maps draw plank bridges over farm ditches (itabashi)", and research/ways/030, "Plank bridges over farm ditches
+# THE DITCH CROSSING'S FORM IS A KNOB (269 B21; research/rendering/ways/030-how-our-maps-draw-plank-bridges.html, and research/ways/030, "Plank bridges over farm ditches
 # (itabashi)"). Three forms of crossing over small water are attested and the record cannot say which was laid over a
 # paddy ditch: a SINGLE LOG (or one board, the same object in the Chinese definition), LOGS UNDER TRODDEN EARTH (the
 # earthen bridge, the common bridge of pre-Edo Japan), and a PLANKED DECK. So a settlement lays all its ditch crossings

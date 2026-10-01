@@ -51,7 +51,7 @@ class Paddy(Kind):
     Covers: the wet plots of every `fields[kind=paddy]` - the flooded basins
     Label: accurate
     Sources: maff-suitou-mizu, zennoh-mizukanri, horikawa-2011-nakaboshi, doyoboshi-jawiki, qimin-yaoshu-juan2, chenfu-nongshu-juanshang, guangdong-xinyu-20, pwsannong-zhusanjiao-nongyeshi
-    Entry: research/fields.html - 'Rice paddies and their plots (suiden)', 'The paddy through the rice year: flooding, draining, transplanting and after the harvest'; research/rendering/fields.html - 'How our maps draw rice paddies and their plots (suiden)', 'How our maps show the paddy through the rice year'; research/archetypes.html - 'Pigs and ducks at a dike-pond: the sty on the pond dike'
+    Entry: research/fields/020-rice-paddies-and-their-plots-suiden.html, research/fields/030-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.html; research/rendering/fields/020-how-our-maps-draw-rice-paddies-and-their-plots-suiden.html, research/rendering/fields/030-how-our-maps-show-the-paddy-through-the-rice-year.html; research/archetypes/210-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html
     """
 
     key = 'paddy'
@@ -87,7 +87,7 @@ class WetPaddy(Kind):
     Covers: the plots of a `fields[kind=paddy]` drawn with open water showing - the wettest ground the field has
     Label: accurate
     Sources: kotobank-shitsuden, kotobank-kanden, kotobank-yatsuda, kotobank-fukada, fao-rice-water
-    Entry: research/fields.html - 'Wet paddies that never drain (shitsuden)'; research/rendering/fields.html - 'How our maps draw wet paddies (shitsuden)'
+    Entry: research/fields/190-wet-paddies-that-never-drain-shitsuden.html; research/rendering/fields/190-how-our-maps-draw-wet-paddies-shitsuden.html
     """
 
     key = 'wet paddy'
@@ -124,7 +124,7 @@ class Bund(Kind):
     Covers: the stroke of every paddy plot and the piled junctions between them
     Label: accurate
     Sources: kotobank-azebiki, hattori-site-yayoiken, kato-1999-ittanbu-kukaku, kotobank-aze-sekai-daihyakka, kigosai-azenuri, kubota-azenuri-kuwa, aze-standard
-    Entry: research/fields.html - 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; research/water.html - 'Where a field meets its ditch: the bank, the bund and the inlet (mizuguchi)'; research/rendering/water.html - 'How our maps draw where a field meets its ditch'
+    Entry: research/fields/260-bunds-between-the-paddies-aze.html; research/rendering/fields/260-how-our-maps-draw-bunds-between-the-paddies-aze.html; research/water/030-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.html; research/rendering/water/030-how-our-maps-draw-where-a-field-meets-its-ditch.html
     """
 
     key = 'bund'
@@ -149,7 +149,7 @@ class BundBeans(Kind):
     Covers: the bead run along the bunds (`bund_beans`)
     Label: convention
     Sources: nabunken-azemame, wikipedia-soybean, cropfarming-soybeans
-    Entry: research/fields.html - 'Rice paddies and their plots (suiden)', 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; waterfields/palette.py BEAN_GREEN (the color decision)
+    Entry: research/fields/020-rice-paddies-and-their-plots-suiden.html, research/fields/260-bunds-between-the-paddies-aze.html; research/rendering/fields/260-how-our-maps-draw-bunds-between-the-paddies-aze.html; waterfields/palette.py BEAN_GREEN (the color decision)
     """
 
     key = 'bund beans'
@@ -196,7 +196,7 @@ class Millet(Kind):
     Covers: `dry_plots[crop=millet]` and their furrows
     Label: accurate
     Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo, nogyo-zensho-joun-sera
-    Entry: research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their crops (hatake)'
+    Entry: research/fields/160-dry-fields-and-their-crops-hatake.html; research/rendering/fields/160-how-our-maps-draw-dry-fields-and-their-crops-hatake.html
     """
 
     key = 'millet'
@@ -246,7 +246,7 @@ class Buckwheat(Kind):
     Covers: `dry_plots[crop=buckwheat]` and their furrows
     Label: accurate
     Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo, nogyo-zensho-joun-sera
-    Entry: research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their crops (hatake)'
+    Entry: research/fields/160-dry-fields-and-their-crops-hatake.html; research/rendering/fields/160-how-our-maps-draw-dry-fields-and-their-crops-hatake.html
     """
 
     key = 'buckwheat'
@@ -299,7 +299,7 @@ class Barley(Kind):
     Covers: `dry_plots[crop=barley]` and their furrows
     Label: accurate
     Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo, nogyo-zensho-joun-sera
-    Entry: research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their crops (hatake)'
+    Entry: research/fields/160-dry-fields-and-their-crops-hatake.html; research/rendering/fields/160-how-our-maps-draw-dry-fields-and-their-crops-hatake.html
     """
 
     key = 'barley'
@@ -350,7 +350,7 @@ class Soy(Kind):
     Covers: `dry_plots[crop=soy]` and their furrows
     Label: accurate
     Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo, nogyo-zensho-joun-sera
-    Entry: research/fields.html - 'Dry fields and their crops (hatake)'; research/rendering/fields.html - 'How our maps draw dry fields and their crops (hatake)'
+    Entry: research/fields/160-dry-fields-and-their-crops-hatake.html; research/rendering/fields/160-how-our-maps-draw-dry-fields-and-their-crops-hatake.html
     """
 
     key = 'soy'
@@ -385,7 +385,7 @@ class Fallow(Kind):
     Covers: `fallow_patches`
     Label: accurate
     Sources: nishitani-2023-chusei-nogyo, kotobank-kataarashi-yamakawa, kotobank-kataarashi-nipponica, mizkan-2005-sato-kyuko
-    Entry: research/fields.html - 'Paddies left to rest (kataarashi)'; research/rendering/fields.html - 'How our maps place paddies left to rest (kataarashi)'
+    Entry: research/fields/250-paddies-left-to-rest-kataarashi.html; research/rendering/fields/250-how-our-maps-place-paddies-left-to-rest-kataarashi.html
     """
 
     key = 'fallow'
@@ -418,7 +418,7 @@ class Holding(Kind):
     Covers: `dry_plots[holding]` and their furrows
     Label: accurate
     Sources: kotobank-santome-shinden, kawashima-1986-santome, saitama-santome-history
-    Entry: research/homesteads.html - 'Row villages (resson)'; research/rendering/homesteads.html - 'How our maps draw a row village (resson)'
+    Entry: research/homesteads/155-row-villages-resson.html; research/rendering/homesteads/155-how-our-maps-draw-a-row-village-resson.html
     """
 
     key = 'farm holding'

@@ -281,7 +281,7 @@ class RollVillageMixin:
         # ground. 92 ft is the bundle plus the circles' waste and no more.
         #
         # CONVERTED THROUGH `ftpx`, NOT `bscale`. They are the same number everywhere except the
-        # village tier, which declares ftpx=2 but pins bscale=1.0 for legacy reasons (research/rendering/settlements.html 'How our maps draw and state each size of settlement')
+        # village tier, which declares ftpx=2 but pins bscale=1.0 for legacy reasons (research/rendering/settlements/010-how-our-maps-draw-and-state-each-size-of-settlement.html)
         # - and a village bundle really is drawn at half a hamlet's pixel size (measured: house 25x14
         # px against 53x27). Sizing off bscale therefore asked a village band for twice the ground
         # its bundles occupy, which strung its cluster thin over a hollow hull and tripped
@@ -333,7 +333,7 @@ class RollVillageMixin:
         # longer list only APPENDS candidates - the leading ones are unchanged, and any map that fills
         # its quota breaks out below and is byte-identical. The old 3x+18 left no headroom: Honda seated
         # exactly 15 houses for 18 households, the floor of the households_consistent band, so the small
-        # geometry shift from the per-line bund wander (research/archetypes.html 'Polder fifth pass', sixth) cost
+        # geometry shift from the per-line bund wander (research/rendering/archetypes/050-how-our-maps-draw-parcels-and-bunds-inside-a-polder-aze.html, sixth) cost
         # it one house and failed the gate. A map should not sit one rejected candidate from failing.
         for lx, ly in self.cluster_seeds(cluster_shape, 0.0, 0.0, f.lat, f.dep, int(households * 6.0) + 30, rng):
             if placed >= households:

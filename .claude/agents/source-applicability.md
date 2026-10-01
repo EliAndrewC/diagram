@@ -32,7 +32,7 @@ without them. Everything you need is in the bundle or on the web.
 **If your dispatch names no bundle**, say so on the first line of your report and read the fragment
 paths it names instead - a question's `research/<page>/NNN-<heading id>.html` and the `.notes.html`
 beside it - and never an assembled page (`research/<page>.html`, `research/citations/<page>.html`,
-`research/SOURCES.html`), each of which is thirty entries read to check one. A missing bundle is the
+`research/sources/`), each of which is thirty entries read to check one. A missing bundle is the
 dispatcher's mistake, and guessing which file was meant is worse than the cost.
 
 ## Your report: the counts first, then only what the session must act on (feature 250)
@@ -102,7 +102,7 @@ definition.
 
 ## Input
 
-Either (a) one or more REGISTRY KEYS with their `research/SOURCES.html` entries - the citation line, the two
+Either (a) one or more REGISTRY KEYS with their `research/sources/` entries - the citation line, the two
 write-ups, the `Used for:` line - and, when given, the research pages and footnotes that cite each (what we use it to
 look up); or (b) a NEW source not yet registered: its citation, its URL, and the claim, number or detail a session
 is about to take from it. Two moments, one procedure.

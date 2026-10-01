@@ -2,7 +2,7 @@
 
 `_comb_dry_and_beans` lays the hem of dry fields above the supply canal and the bund beans; `fan_toe_hem` keeps a wild
 fan's hem on the toe; `middle_reserve` offers the whole wild middle, cleared deep and nearest the toe first, for the
-coarse-grain top-up the draw makes (`settlement/fields/grain.py`, research/fields.html fields/165).
+coarse-grain top-up the draw makes (`settlement/fields/grain.py`, research/fields/ fields/165).
 """
 
 import math
@@ -34,7 +34,7 @@ def _comb_dry_and_beans(
     fork: Pt,
 ) -> tuple[list[dict[str, Any]], float, list[Poly], list[dict[str, Any]]]:
     """DRY FIELDS (hatake) on the uncommanded upslope margin above the supply canal, and
-    BUND BEANS (azemame) beaded along a fraction of the paddy bunds - see research/fields.html 'What a bund bean actually looks like'."""
+    BUND BEANS (azemame) beaded along a fraction of the paddy bunds - see research/fields/260-bunds-between-the-paddies-aze.html."""
     # The hem's stand-off is derived from the SUPPLY strokes' drawn banks (`CANAL_BERM_FT`), so the
     # drawn channels have to be in hand - they are, because this pass runs after `_comb_canal_pieces`
     # and after `round_channel_joints`, i.e. against the geometry that will actually be painted.
@@ -83,7 +83,7 @@ def _comb_dry_and_beans(
     return dry_plots, dry_acres, _bund_beans(R, plots, bean_frac, channels=channels), reserve
 
 
-# WHERE A FAN'S DRY BAND LIES (269 B07; research/fields.html 'Where dry (hatake) crops go - the topographic catena',
+# WHERE A FAN'S DRY BAND LIES (269 B07; research/fields/160-dry-fields-and-their-crops-hatake.html,
 # fields/160). On an alluvial fan the middle, where the river sinks underground, is too short of water for paddy and was
 # often left as coppice or wild ground until late in the early modern period, while the spring-fed toe was settled early
 # with paddy beside it. The record calls that a tendency, not a rule - in old heartlands fans were cleared from early

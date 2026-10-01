@@ -35,9 +35,9 @@ establish whether a passage can be read, not to settle a physical question.
 
 | class | label | entry | what it rested on | why it is uncited now |
 |---|---|---|---|---|
-| `copse` | accurate | research/vegetation.html - 'The fengshui forest' | `forests-2020`, `hu-2011-fengshui-patches` (MDPI) | mdpi.com refuses every fetch from this container (403 / bot wall); the papers are open access, but nobody here has read them, and the quotes came from a search summary |
-| `windbreak` | accurate | research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest' | `forests-2020` (MDPI) | same |
-| `stream` | convention | research/water.html - 'Water-width ladder - the real-world tiers' | `gb50288` (Chinese design standard, never read) | no public page carries the sections the record quoted; `toro-site` remains cited elsewhere |
+| `copse` | accurate | research/vegetation/020-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html | `forests-2020`, `hu-2011-fengshui-patches` (MDPI) | mdpi.com refuses every fetch from this container (403 / bot wall); the papers are open access, but nobody here has read them, and the quotes came from a search summary |
+| `windbreak` | accurate | research/vegetation/ - 'The fengshui forest - real scale, and why ours is honest' | `forests-2020` (MDPI) | same |
+| `stream` | convention | research/water/010-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html | `gb50288` (Chinese design standard, never read) | no public page carries the sections the record quoted; `toro-site` remains cited elsewhere |
 
 ## A1 - the carve-out, reported (FR-008)
 

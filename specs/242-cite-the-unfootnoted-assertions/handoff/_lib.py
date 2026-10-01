@@ -1,5 +1,5 @@
 import re,json,pathlib,urllib.parse
-S=open("research/SOURCES.html").read()
+S=open("research/sources/").read()
 def regurl(key):
     m=re.search(rf'<h3 id="{re.escape(key)}"><code>{re.escape(key)}</code></h3>\n<p>(.*?)</p>',S,re.S)
     if not m: return None

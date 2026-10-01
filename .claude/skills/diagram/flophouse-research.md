@@ -1,6 +1,6 @@
 # Flophouse / cheap-lodging research findings (2026-07-22)
 
-**Sources (feature 143, 2026-08-28):** this study cites its own sources in "Sources & reliability" below and inline (SCMP, encyclopedia.com, zh.wikipedia, ryokan.or.jp, japanesewiki; Baidu Baike as a weak reference); its settled findings are re-recorded with keys in `research/towns.html` ("The market-day flophouse", `kichinyado-jawiki`, `kichinyado-kotobank`) and `research/urban-features.html` ("Caste geography"). The re-sourcing queue in `research/SOURCES.html` tracks what still rests on a summary.
+**Sources (feature 143, 2026-08-28):** this study cites its own sources in "Sources & reliability" below and inline (SCMP, encyclopedia.com, zh.wikipedia, ryokan.or.jp, japanesewiki; Baidu Baike as a weak reference); its settled findings are re-recorded with keys in `research/towns/320-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.html`, `kichinyado-jawiki`, `kichinyado-kotobank`) and `research/urban-features/130-burakumin-quarters-and-caste-zoning.html`. The re-sourcing queue in `research/sources/` tracks what still rests on a summary.
 
 
 Research pass evaluating the map convention for cheap traveler/peasant lodging ("flophouses")

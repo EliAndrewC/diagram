@@ -13,7 +13,7 @@ into an absence note. The form is held by static tests; the readability by the a
 ## Technical Context
 
 - Record: `.claude/skills/diagram/research/**/*.html`, hand-authored HTML (feature 194); footnotes `<li id="fn-n">`.
-- Registry: `research/SOURCES.html`; classifier for link targets in `tests/interactive/test_sources.py` (test-side).
+- Registry: `research/sources/`; classifier for link targets in `tests/interactive/test_sources.py` (test-side).
 - No engine Python changes expected; `l7r/diagram/interactive/sources.py` reads rosters and citation lines, not
   footnotes. If it turns out to need a change the route is GATED and `make done` runs on the merged tree.
 - Readers: Sonnet `general-purpose` agents with a written brief (scratchpad `cite195/brief.md`), one fetch per host

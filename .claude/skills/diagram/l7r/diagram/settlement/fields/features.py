@@ -28,8 +28,7 @@ _GRAVE_FORM_SALT = 0x6A5E
 
 
 def grave_form(seed: int) -> str:
-    """The field grave's form on this hamlet - the knob research/fields.html 'Are there really graves out in the
-    middle of the fields?' records: "island" (inside a plot, the Chinese form) or "corner" (in a plot's corner
+    """The field grave's form on this hamlet - the knob research/fields/010-ponds-rocks-and-graves-in-the-middle-of-the-fields.html records: "island" (inside a plot, the Chinese form) or "corner" (in a plot's corner
     against its bunds, the Japanese form), even odds, since no source weighs one against the other."""
     return "island" if random.Random((seed ^ _GRAVE_FORM_SALT) & 0xFFFFFFFF).random() < 0.5 else "corner"
 
@@ -163,7 +162,7 @@ class FieldFeaturesMixin:
         refuse_unadmitted(self.M, "pond", [cx, cy, rx, ry])
         if stream_curve:
             # the pond's feeder runs at the lateral/ditch tier - a thin line near the channel weight,
-            # NOT the heftier natural-stream weight (see the water-width ladder in research/water.html).
+            # NOT the heftier natural-stream weight (see the water-width ladder in research/water/).
             self._water(
                 f'<path d="{stream_curve}" fill="none" stroke="#9CB4C8" stroke-width="5"/>', {}, cls="irrigation ditch"
             )  # no record behind it: the feed INTO a reservoir is supply (spec 230 FR-001, the third clause)
@@ -259,7 +258,7 @@ class FieldFeaturesMixin:
         if arch == "contour_terraces" or (arch == "ribbon_valley" and rng.random() < 0.5):
             for _ in range(rng.randint(1, 3)):
                 self._plot_rock(rng.choice(plots), rng, ink)
-        # A GRAVE IN THE FIELD (research/fields.html 'Are there really graves out in the middle of the fields?', feature
+        # A GRAVE IN THE FIELD (research/fields/010-ponds-rocks-and-graves-in-the-middle-of-the-fields.html, feature
         # 267): graves inside working fields are attested in China ("graves were in every field"), and every Japanese
         # placement read is BESIDE the plot - at the bund edge or in a field's corner. Two placements of one thing, so
         # the FORM is a knob rolled per hamlet: an island inside a plot, or a grave in a plot's corner against its
@@ -370,7 +369,7 @@ class FieldFeaturesMixin:
 
     def _plot_corner_grave(self: Settlement, plot: dict[str, Any], rng: random.Random, net: dict[str, Any] | None = None, ink: list[tuple[str, str]] | None = None) -> bool:  # type: ignore[misc]
         """The Japanese form of the field grave: a small mound with one or two stones in a plot's CORNER, against its
-        bunds (research/fields.html 'Are there really graves out in the middle of the fields?': "in a corner of a
+        bunds (research/fields/010-ponds-rocks-and-graves-in-the-middle-of-the-fields.html: "in a corner of a
         field", and beside the bunds). Set 12-16 px in from the corner toward the plot's middle (`corner_seat`) so it
         stays inside the plot, clear of the ditch or lane that may run along its edge. Recorded in M['field_graves'] with
         its form. The grave is the last draw on `rng` in the pass, so its one extra draw shifts nothing after it.

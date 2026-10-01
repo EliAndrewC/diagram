@@ -29,7 +29,7 @@ form to `M["meta"]["caravan_inn_form"]` and the building record. Tests in
 the refusal, two unpinned seeds resolving differently; and the knob's row in `tests/settlement/test_knobs.py`
 if that file enumerates knobs.
 
-**Phase 2 - the record.** `research/towns.html`, the caravan-inn section: the ruling replaces the
+**Phase 2 - the record.** `research/towns/`, the caravan-inn section: the ruling replaces the
 open-question sentence and the Evidence comment's line; both forms stated accurate to their analogues;
 the umayado leg at the strength R1 bears, footnoted fn-30 from a new registry key `kotobank-umayado`
 (Seisenban Nihon Kokugo Daijiten, s.v. 馬宿, at kotobank; both write-ups); the form rule as a

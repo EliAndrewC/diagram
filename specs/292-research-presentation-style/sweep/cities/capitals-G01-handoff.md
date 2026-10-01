@@ -12,7 +12,7 @@ All four sections were folded; no claim held them (269 X1B's 380 claim is marked
 `cities/` page, and the record could not hold a rendering page two directories down, so the tooling learned it: `sources.COLLECTIONS`
 and `scripts/_hm_record.py` gain `rendering/cities`, `record/xref.py` finds fragments in `rendering/cities/<page>/`, the modal
 `Entry:` pattern accepts two levels, a test in `test_xref.py` covers it, and the page count in `test_citations.py` is 23. Later
-cities groups reuse `research/rendering/cities/capitals.html` and its scaffold, and a new `rendering/cities/<page>` needs its
+cities groups reuse `research/rendering/cities/capitals/` and its scaffold, and a new `rendering/cities/<page>` needs its
 `_front`/`_tail`/`_citations-*` fragments, an empty `rendering/cities/<page>.html` and `citations/rendering/cities/` to exist
 before the first `make record`. Note keys: on the research page the old keys `jokamachi-jawiki-6`/`-7` are kept (`-2`/`-3` are
 taken by other capitals sections), and the new canon note is `l7r-budgets-5`, quoting the budget notes' by-size table row

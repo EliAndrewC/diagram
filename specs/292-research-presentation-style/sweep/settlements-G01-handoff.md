@@ -9,7 +9,7 @@
 - BASE=0a655a7f7
 
 Nothing was left out: no claim held any of the eight sections in progress. The rendering section is the first on a new
-page, `research/rendering/settlements.html` (its `_front`, `_tail` and `_citations-*` fragments copied from
+page, `research/rendering/settlements/` (its `_front`, `_tail` and `_citations-*` fragments copied from
 rendering/religion-and-death; `tests/interactive/test_citations.py` now counts 23 pages). No class's `Entry:` named a
 folded section, but the place card's `"entry"` in `l7r/diagram/interactive/assets/place.json` named archetypes 190 and
 now names both new titles - the card is written from it, so an `entry-drift`-style look at the card's `basis` sentence

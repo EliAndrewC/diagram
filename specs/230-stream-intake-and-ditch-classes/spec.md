@@ -13,7 +13,7 @@ profile behind it is `dev/perf-log/20260913T030717Z-profile-adhoc-seed4-web.txt`
 before the pass, R2 the pass itself (what was searched, what was found, the verdicts), R3 the maps before and
 after. **Predecessors**: 134 (the class vocabulary), 159 (a class decided at one emit site from the fill about to
 be drawn - the precedent for FR-001's rule), 143/194/195/211 (the research record's form), the water-width
-ladder and the fork (research/water.html, "Drawn width is RANK" and "The head-race forks").
+ladder and the fork (research/water/, "Drawn width is RANK" and "The head-race forks").
 
 ## Summary
 
@@ -109,9 +109,9 @@ ending at the intake, the settlement is seated clear of it (FR-006).
   refutes it, or is silent, since that is what the GM was looking at when they asked.
   The reading is dispatched to background readers (one attempt per host, verbatim passages, translations
   marked); every new source gets a registry entry with both write-ups and is judged by `source-applicability`
-  BEFORE its numbers or forms reach the engine; the finding is written as a new section of `research/water.html`
+  BEFORE its numbers or forms reach the engine; the finding is written as a new section of `research/water/`
   headed as the question a reader would ask from the map, every assertion footnoted on
-  `research/citations/water.html` (`make citations`), `quote-check` and `record-format` run over it, the rule
+  `research/water/` (`make citations`), `quote-check` and `record-format` run over it, the rule
   line in `settlements/water.md` that today says the brook "BECOMES the irrigation channel - it hands off to
   the comb and stops" rewritten to say what the record says, and a pointer at each point of change
   (`waterfields/comb.py` `_comb_skeleton`, `hamletgen/water.py` `feed_brook`, `hamletgen/sink.py`).

@@ -81,7 +81,7 @@ def ring_meets_ellipse(ring: Sequence[Sequence[float]], cx: float, cy: float, rx
     vertices that the placer, reading the core, would have refused.
 
     WHICH READING, AND WHY (the test's, as the water design W29 records). The research makes the pond "a low pocket"
-    among the flat, flooded fields (`research/fields.html`, "In-field features"); the rule drawn from it is that the
+    among the flat, flooded fields (`research/fields/010-ponds-rocks-and-graves-in-the-middle-of-the-fields.html`); the rule drawn from it is that the
     pocket is dug INTO one basin with the field tiling around it, because a bund running through open water reads as
     a flood rather than a pocket (the rule's own statement, `test_a_field_pond_is_sunk_into_one_plot`). A bund meeting
     the water at all - across the rim, chording it, or standing in it - is that flood, so the full ellipse is the

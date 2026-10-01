@@ -148,7 +148,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     rectangles, part layouts, the front row's share and the rounds - so the search is measured, never assumed.
 
     `households_consistent` wants the occupied farmhouses within 0.85-1.05x the declared households - a to-scale map
-    depicts essentially every household (research/settlements.html "Is every household in a hamlet actually drawn?") -
+    depicts essentially every household (research/rendering/settlements/010-how-our-maps-draw-and-state-each-size-of-settlement.html) -
     and the stage aims at one apiece: EVERY declared household is seated, or the site is refused (feature 287, homes
     H14 and plan D2; `seat_every_household`) - the exhaustive pass over the ground within reach, then the next margin,
     never a shortfall shipped and never a whole-map re-roll.
@@ -175,8 +175,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.Settlement.cluster_seeds
         l7r.diagram.settlement.Settlement.farmsteads
     """
-    # A YARD KEEPS ITS SUN (GM 2026-08-13; researched in research/homesteads.html, "The threshing
-    # yard's sun"). 39 ft is the 9-to-3 drying window at 38N in the 10th month for a minka's ~20 ft
+    # A YARD KEEPS ITS SUN (GM 2026-08-13; researched in research/rendering/homesteads/040-how-our-maps-keep-yards-and-gardens-in-the-sun.html). 39 ft is the 9-to-3 drying window at 38N in the 10th month for a minka's ~20 ft
     # ridge; the noon figure is 21. The engine's rule is opt-in and this is where the scripted tier
     # opts in - the hand-authored maps keep their packing until they are converted.
     s.sun_corridor(SUN_CORRIDOR_FT)

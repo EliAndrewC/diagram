@@ -22,7 +22,7 @@ Spec: [`spec.md`](spec.md). Request: [`request.md`](request.md). The measurement
   run count and rough weight are stated in the session's report BEFORE it is launched. The recorded cases are
   251's: `source-applicability` has none prepared yet - two are picked from its 26 recorded runs by
   `seeded.py catalog`, one with a NOT-APPLICABLE or MISSING verdict and one clean.
-- **P1 `scripts/_source_entries.py`, `make source-entries KEYS=a,b`** (FR-002): parses `research/SOURCES.html` for
+- **P1 `scripts/_source_entries.py`, `make source-entries KEYS=a,b`** (FR-002): parses `research/sources/` for
   the entry whose anchor or `<code>` key matches, prints its citation line, write-ups and `Used for:` line, then
   every footnote on `research/citations/**/*.html` whose key matches, with its assertion (reusing
   `_quote_verbatim.footnotes` and `assertions` by import). Contract: a "step 0" in `source-applicability.md`.

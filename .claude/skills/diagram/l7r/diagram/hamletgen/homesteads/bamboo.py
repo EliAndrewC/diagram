@@ -17,12 +17,12 @@ from l7r.diagram.settlement.rolling.bearing import turned_box
 from ..consts import Poly, Pt
 from ..plan import SitePlan
 
-# HOUSEHOLD BAMBOO (feature 133 T48, GM 2026-08-27; research/vegetation.html "Bamboo groves (chikurin)",
+# HOUSEHOLD BAMBOO (feature 133 T48, GM 2026-08-27; research/vegetation/150-bamboo-groves-chikurin.html,
 # the T48 pass). READ: on the Tonami plain every farmstead stood in its own
 # grove (kainyo) and bamboo was one of its named species beside a dominant cedar, valued as "important
 # daily-life material"; the bamboo stood WITH the storehouses on the plot's south side there, and at a
 # plot's wet edge for its roots elsewhere; the grove as a whole faces the local wind (N+W, W, or S+W by
-# region). THE WIND SIDE IS READ NOW, not summary-only (269 B29; research/vegetation.html "Bamboo groves (chikurin)"): on the Tonami
+# region). THE WIND SIDE IS READ NOW, not summary-only (269 B29; research/vegetation/150-bamboo-groves-chikurin.html): on the Tonami
 # plain bamboo was often mixed into the grove from the west round to the north of the house, and the Sendai igune's
 # bamboo filled its low part against the wind. So the SIDE is rolled per farmstead, weighted toward the back, the
 # wind side and the shed's side, never fixed. The weights are a GUESS - no page gives a share per side; `wind` was
@@ -80,7 +80,7 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
         hx, hy, hw, hh = float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"])
         if s._hjit(hx, hy, 95.0) >= HOUSEHOLD_BAMBOO_PREVALENCE:
             continue
-        # A FARM WITH ITS OWN GROVE KEEPS ITS BAMBOO IN THAT GROVE (feature 291; research/vegetation.html
+        # A FARM WITH ITS OWN GROVE KEEPS ITS BAMBOO IN THAT GROVE (feature 291; research/vegetation/
         # "Bamboo groves (chikurin)"). Its deep windward bands draw
         # the windbreak mix, which carries the bamboo; a separate strip would stand exactly where the grove already does -
         # and did not: once the dispersed and linear forms rolled again, every seat (back, shed, side, wind) lay in the

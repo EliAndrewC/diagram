@@ -87,7 +87,7 @@ def drain_run(s: Settlement, pts: Poly, to: str) -> None:
     the frame by `stream` at 8 px, so the same thing carried two classes and two record kinds on two
     maps ("the inconsistency you mentioned"). The research settled what it is: before modern field
     consolidation a village's drainage went field to field, or back into a shared channel, and returned
-    to the river to be taken up below (`research/water.html`, "Field drains (akusuiro)") - a dug channel that reaches a watercourse, never a brook of its own. So every
+    to the river to be taken up below (`research/water/260-field-drains-akusuiro.html`) - a dug channel that reaches a watercourse, never a brook of its own. So every
     sink draws the same stroke: the collector's tail width, the drain's hue, the drainage-ditch class.
 
     WIDTH IS THE DRAIN'S OWN, NOT A LITERAL. This is the collector's last strides, so it carries everything
@@ -660,7 +660,7 @@ def lay_sink(s: Settlement, plan: SitePlan) -> None:
     # Sized to the settlement: a tameike serving ~15 households reads at roughly Ikegami's 116x74 px
     # (~230 x 150 ft), and the radius scales with the square root of the households it waters, since
     # a reservoir's job is a VOLUME and its depth does not grow with the hamlet. By AREA (feature 280 M12,
-    # research/water.html, "Reservoir ponds (tameike)"): a pond that is its fields' only water took two or three
+    # research/water/280-reservoir-ponds-tameike.html): a pond that is its fields' only water took two or three
     # tenths of the land in a Song
     # manual of 1149; this one gathers the fan's drainage below a stream-fed field, so it is held well below that
     # measure - a GUESS, since no page gives how much a feeding stream saves. No storage per hectare is used: the

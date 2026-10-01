@@ -33,7 +33,7 @@ class Stream(Kind):
     Covers: `streams` - the brook
     Label: convention
     Sources: jsslkx-002-2021, toro-site
-    Entry: research/water.html - 'How wide canals and ditches are: the ladder of channel widths'; research/rendering/water.html - 'How our maps draw channel widths'
+    Entry: research/water/010-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html; research/rendering/water/010-how-our-maps-draw-channel-widths.html
     """
 
     key = 'stream'
@@ -80,7 +80,7 @@ class IrrigationDitch(Kind):
     Covers: `field_ditches` whose role is not `drain` (except on a dike-pond field, whose canals are the pond canal), and `channels` not leaving a drain - the head race, the supply canals, the delivery ditches, a source-to-field feed
     Label: accurate
     Sources: tabayashi-1987, jsidre-minumadai, jsslkx-002-2021, nougyoudoboku-matsutan, bungotakada-tagoshi, suido-ishizue-iseki, people-zhishui-2025, pwsannong-gudai-shuili, thepaper-guangai
-    Entry: research/water.html - 'How wide canals and ditches are: the ladder of channel widths', 'Where a field meets its ditch: the bank, the bund and the inlet (mizuguchi)', 'Irrigation canals and how they are laid out (yosuiro)', 'Where the ditch leaves the brook: the intake and its weir (toshuko and seki)'; research/rendering/water.html - 'How our maps draw channel widths', 'How our maps draw a channel narrowing along its run', 'How our maps lay out irrigation canals', 'How our maps draw the intake and its weir (toshuko and seki)', 'How our maps draw where a field meets its ditch'
+    Entry: research/water/010-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html, research/water/030-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.html, research/water/005-irrigation-canals-and-how-they-are-laid-out-yosuiro.html, research/water/250-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html; research/rendering/water/010-how-our-maps-draw-channel-widths.html, research/rendering/water/015-how-our-maps-draw-a-channel-narrowing-along-its-run.html, research/rendering/water/005-how-our-maps-lay-out-irrigation-canals-yosuiro.html, research/rendering/water/250-how-our-maps-draw-the-intake-and-its-weir-toshuko-and-seki.html, research/rendering/water/030-how-our-maps-draw-where-a-field-meets-its-ditch.html
     """
 
     key = "irrigation ditch"
@@ -109,7 +109,7 @@ class FarmChannel(Kind):
     Covers: `farm_channels` - the channel led into a dispersed farm's grounds (feature 291), drawn with its record in `drawn_channels`
     Label: accurate
     Sources: tonami-sankyoson-museum
-    Entry: research/homesteads.html - 'Clustered and scattered villages (shūson, sanson)'; research/rendering/homesteads.html - 'How our maps choose and draw clustered and scattered villages (shūson, sanson)'
+    Entry: research/homesteads/150-clustered-and-scattered-villages-shuson-sanson.html; research/rendering/homesteads/150-how-our-maps-choose-and-draw-clustered-and-scattered-villages-shuson-sanson.html
     """
 
     key = "farm channel"
@@ -151,7 +151,7 @@ class DrainageDitch(Kind):
     Covers: `field_ditches` whose role is `drain`, and `channels` leaving a drain - the collector and its run to the pond, the brook or the frame
     Label: accurate
     Sources: tabayashi-1987, maff-nogyoyosui-suiden, jawiki-yosuiro, maff-drain-shape, shonairyo-akusuiro-jawiki, fao-drainage-systems, akusuiro-kotobank
-    Entry: research/water.html - 'Field drains (akusuiro)', 'How wide canals and ditches are: the ladder of channel widths'; research/rendering/water.html - 'How our maps draw field drains', 'How our maps draw channel widths', 'How our maps draw a channel narrowing along its run'
+    Entry: research/water/260-field-drains-akusuiro.html, research/water/010-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html; research/rendering/water/260-how-our-maps-draw-field-drains-akusuiro.html, research/rendering/water/010-how-our-maps-draw-channel-widths.html, research/rendering/water/015-how-our-maps-draw-a-channel-narrowing-along-its-run.html
     """
 
     key = "drainage ditch"
@@ -189,7 +189,7 @@ class Weir(Kind):
     Covers: `weirs` - the bar across the brook at a weir hamlet's intake
     Label: convention
     Sources: maff-toshuko-history, jsidre-miwa-2023, jawiki-seki, japanriver-koborebanashi-21, wangzhen-nongshu-18, suido-ishizue-iseki, kotobank-shigarami, hrr-agagawa-dento, kotobank-jakago, people-zhishui-2025, pwsannong-quxi
-    Entry: research/water.html - 'Where the ditch leaves the brook: the intake and its weir (toshuko and seki)'; research/rendering/water.html - 'How our maps draw the intake and its weir (toshuko and seki)'
+    Entry: research/water/250-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html; research/rendering/water/250-how-our-maps-draw-the-intake-and-its-weir-toshuko-and-seki.html
     """
 
     key = "weir"
@@ -223,7 +223,7 @@ class Pond(Kind):
     Covers: `pond` - the tameike
     Label: accurate
     Sources: tabayashi-1987, kagawa-tameike, chenfu-nongshu-juanshang
-    Entry: research/water.html - 'Irrigation canals and how they are laid out (yosuiro)', 'Reservoir ponds (tameike)'; research/rendering/water.html - 'How our maps lay out irrigation canals', 'How our maps draw reservoir ponds (tameike), their reeds and their embankments'
+    Entry: research/water/005-irrigation-canals-and-how-they-are-laid-out-yosuiro.html, research/water/280-reservoir-ponds-tameike.html; research/rendering/water/005-how-our-maps-lay-out-irrigation-canals-yosuiro.html, research/rendering/water/280-how-our-maps-draw-reservoir-ponds-tameike-their-reeds-and-their-embankments.html
     """
 
     key = 'pond'
@@ -249,7 +249,7 @@ class FieldPond(Kind):
     Covers: `field_ponds` - the in-field pond sunk into one low paddy
     Label: accurate
     Sources: not recorded
-    Entry: research/fields.html - 'Ponds, rocks and graves in the middle of the fields'; research/rendering/fields.html - 'How our maps place ponds, rocks and graves in the fields'
+    Entry: research/fields/010-ponds-rocks-and-graves-in-the-middle-of-the-fields.html; research/rendering/fields/010-how-our-maps-place-ponds-rocks-and-graves-in-the-fields.html
     """
 
     key = 'field pond'
@@ -272,7 +272,7 @@ class FieldRock(Kind):
     Covers: `field_rocks` - a bedrock outcrop inside a plot
     Label: guess
     Sources: not recorded
-    Entry: research/fields.html - 'Ponds, rocks and graves in the middle of the fields'; research/rendering/fields.html - 'How our maps place ponds, rocks and graves in the fields'
+    Entry: research/fields/010-ponds-rocks-and-graves-in-the-middle-of-the-fields.html; research/rendering/fields/010-how-our-maps-place-ponds-rocks-and-graves-in-the-fields.html
     """
 
     key = 'field rock'
@@ -303,7 +303,7 @@ class GraveIsland(Kind):
     Covers: `field_graves` - a grave mound inside a paddy plot or in its corner
     Label: accurate
     Sources: henriot-shanghai-graves, henan-grave-removal-enwiki, ryobosei-jawiki, yashikibaka-ibaraki-blog
-    Entry: research/religion-and-death.html - 'Where a village buries its dead: its own ground, the temple yard, the fields or the home plot'; research/fields.html - 'Ponds, rocks and graves in the middle of the fields'; research/rendering/fields.html - 'How our maps place ponds, rocks and graves in the fields'; research/rendering/religion-and-death.html - 'How our maps choose where a village's and a hamlet's dead lie'
+    Entry: research/religion-and-death/280-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html; research/fields/010-ponds-rocks-and-graves-in-the-middle-of-the-fields.html; research/rendering/fields/010-how-our-maps-place-ponds-rocks-and-graves-in-the-fields.html; research/rendering/religion-and-death/280-how-our-maps-choose-where-a-villages-and-a-hamlets-dead-lie.html
     """
 
     key = 'grave island'
@@ -374,7 +374,7 @@ class VillageLane(Kind):
     Covers: `lanes` - every lane on the map: the web, the internal skeleton, a row village's streets, the connector to the off-map road and the field spur
     Label: accurate
     Sources: kotobank-nodo, kotobank-aze-sekai-daihyakka, aze-jawiki, kotobank-keihan, kotobank-nawate, sonraku-jawiki
-    Entry: research/homesteads.html - 'Row villages (resson)'; research/rendering/homesteads.html - 'How our maps draw a row village (resson)'; research/ways.html - 'Village lanes'; research/rendering/ways.html - 'How our maps draw village lanes'; research/fields.html - 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; research/SOURCES.html re-sourcing queue (lane width)
+    Entry: research/homesteads/155-row-villages-resson.html; research/rendering/homesteads/155-how-our-maps-draw-a-row-village-resson.html; research/ways/020-village-lanes.html; research/rendering/ways/020-how-our-maps-draw-village-lanes.html; research/fields/260-bunds-between-the-paddies-aze.html; research/rendering/fields/260-how-our-maps-draw-bunds-between-the-paddies-aze.html; research/sources/ re-sourcing queue (lane width)
     """
 
     key = 'village lane'
@@ -407,7 +407,7 @@ class Footbridge(Kind):
     Covers: `bridges[foot]` - every plank and deck over water
     Label: accurate
     Sources: kotobank-marukibashi, kotobank-ipponbashi, zhwiki-dumuqiao, dobashi-jawiki, xinhua-jiahou-muqiao, itabashi-kotobank, aze-jawiki
-    Entry: research/ways.html - 'Plank bridges over farm ditches (itabashi)'; research/rendering/ways.html - 'How our maps draw plank bridges over farm ditches (itabashi)' (channel_footbridges)
+    Entry: research/ways/030-plank-bridges-over-farm-ditches-itabashi.html; research/rendering/ways/030-how-our-maps-draw-plank-bridges.html (channel_footbridges)
     """
 
     key = 'footbridge'
@@ -445,7 +445,7 @@ class Well(Kind):
     Covers: `wells` - the wellheads
     Label: convention
     Sources: qq-2024-beijing-wells, saijo-mizu-rekishikan, kotobank-idoyakata
-    Entry: research/urban-features.html - 'Communal wells (ido)'; research/rendering/urban-features.html - 'How our maps place and draw wells (ido)'; research/homesteads.html - 'Clustered and scattered villages (shūson, sanson)'; research/rendering/homesteads.html - 'How our maps choose and draw clustered and scattered villages (shūson, sanson)'
+    Entry: research/urban-features/090-communal-wells-ido.html; research/rendering/urban-features/090-how-our-maps-place-and-draw-wells-ido.html; research/homesteads/150-clustered-and-scattered-villages-shuson-sanson.html; research/rendering/homesteads/150-how-our-maps-choose-and-draw-clustered-and-scattered-villages-shuson-sanson.html
     """
 
     key = 'well'
@@ -478,7 +478,7 @@ class NoticeBoard(Kind):
     Covers: `kosatsuba`, with its label
     Label: accurate
     Sources: fuchu-kosatsuba, ogose-kosatsuba, kosatsu-jawiki, adachi-kosatsu
-    Entry: research/urban-features.html - 'Notice boards (kosatsuba)'; research/rendering/urban-features.html - 'How our maps place and draw notice boards (kosatsuba)'
+    Entry: research/urban-features/010-notice-boards-kosatsuba.html; research/rendering/urban-features/010-how-our-maps-place-and-draw-notice-boards-kosatsuba.html
     """
 
     key = 'notice board'

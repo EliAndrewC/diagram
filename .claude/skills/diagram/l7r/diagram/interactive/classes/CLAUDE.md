@@ -36,7 +36,7 @@ class HenCoop(Kind):
     Covers: `farm_fixtures[kind=coop]`
     Label: guess
     Sources: cambridge-poultry, qimin-yaoshu
-    Entry: research/homesteads.html - 'The farmstead's fixtures'
+    Entry: research/homesteads/215-chickens-and-chicken-coops.html
     """
 
     key = "hen coop"
@@ -52,7 +52,7 @@ class HenCoop(Kind):
   relabeling a class or repointing its research entry was an ENGINE change that cost the whole gate):
   `Name:` (the modal's heading), `Covers:` (which manifest features the class draws - documentation for
   the next reader), `Label:` (`accurate` / `deviation` / `convention` / `guess` - constitution XII,
-  four-way since feature 183), `Sources:` (keys in `research/SOURCES.html`, comma-separated, or
+  four-way since feature 183), `Sources:` (keys in `research/sources/`, comma-separated, or
   `not recorded`), `Entry:` (the research section the text was written FROM, in the form `sources.py`
   parses - it is what puts the questions on the references modal). All five are required of a `Kind`;
   a missing one fails at import naming the class.

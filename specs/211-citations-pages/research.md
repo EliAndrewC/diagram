@@ -85,7 +85,7 @@ in place rather than the source re-found (a re-sourcing is a research pass of it
 - `archetypes.html`: Shunde's 4.6% (our arithmetic over a denominator on no readable page); fn 69's comment on
   the Hayami page corrected (the "trend toward smaller households" sentence IS on the page).
 - `fields.html`: "many run about 1 m2" (our reading; the page gives the average and the smallest).
-- `research/SOURCES.html`: `dongjing-menghualu-rujia`'s citation line (the quoted words are Yuan Jiong's
+- `research/sources/`: `dongjing-menghualu-rujia`'s citation line (the quoted words are Yuan Jiong's
   recollection, which the article quotes; 東京夢華錄 it paraphrases); `nagoya-castle`'s line (the AI-generated
   encyclopedia struck - the linked page is Wikipedia's); `ide-japanese-experience`'s `Used for:` (a quoted phrase
   not on the page, already flagged on the research page).

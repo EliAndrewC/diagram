@@ -625,7 +625,7 @@
   },
   {
    "id": "W39",
-   "rule": "A shipped scripted map's typical paddy cell stays in the 0.030-0.072 acre band (polder and dike-pond maps exempt by rule). Stated: tests/full/test_villages.py::test_village_passes_gate; research/fields.html 'Plot sizes, pond sizing and acreage from population'.",
+   "rule": "A shipped scripted map's typical paddy cell stays in the 0.030-0.072 acre band (polder and dike-pond maps exempt by rule). Stated: tests/full/test_villages.py::test_village_passes_gate; research/fields/110-how-much-farmland-a-settlement-works-and-in-what-tracts.html.",
    "rows": [
     "R1 tests/full/test_villages.py::test_village_passes_gate (cell-size part)"
    ],

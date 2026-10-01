@@ -1,4 +1,4 @@
-# Audit: `settlements/fields.md` (68.5 KB) against `research/fields.html`; `settlements/archetypes.md` (54.9 KB) against `research/archetypes.html`
+# Audit: `settlements/fields.md` (68.5 KB) against `research/fields/`; `settlements/archetypes.md` (54.9 KB) against `research/archetypes/`
 
 Independent Opus reader, 2026-09-12. Classes as in `homesteads.md`.
 

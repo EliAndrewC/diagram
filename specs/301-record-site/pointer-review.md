@@ -74,6 +74,40 @@ question. The sweep reads this table (`--map`); a row's target is a fragment pat
 | cities/capitals.html | How a josui actually ran | research/cities/capitals/080- | the capital's aqueduct (josui) |
 | cities/capitals.html | Placements that change | research/rendering/cities/capitals/390- | how the maps draw a capital differently from a provincial city |
 | cities/capitals.html | a different program, not a scaled precinct | research/rendering/cities/capitals/390- | the same |
+| buildings.html | Cells are remand, not punishment | research/buildings/040- | holding cells |
+| vegetation.html | Scrub stays off open water | research/rendering/vegetation/090- | how the maps keep scrub off fields, channels and open water |
+| vegetation.html | The cut bank | research/vegetation/090- | scrub and rough grass at the edges of fields and channels - the cut bank among them |
+| vegetation.html | How did a lane get through a belt? | research/rendering/vegetation/030- | how the maps draw the shelter belt, where the lanes cross it |
+| rendering/vegetation.html | Village windbreak | research/rendering/vegetation/030- | the same |
+| towns.html | The market-day flophouse | research/towns/320- | travelers' inns and cheap lodging houses |
+| urban-features.html | Caste geography | research/urban-features/130- | burakumin quarters and caste zoning |
+| fields.html | Bunds are shared, and the fabric is continuous | research/fields/260- | bunds between the paddies |
+| fields.html | Minimum basin SIZE | research/rendering/fields/020- | how the maps draw paddies and their plots, the smallest basin among it |
+| fields.html | A basin never tapers to a point - the fan toe truncates | research/rendering/fields/190- | how the maps draw the wet plots at the fan's toe |
+| fields.html | A basin never tapers to a point | research/rendering/fields/190- | the same |
+| fields.html | The wettest plots are their own kind of ground | research/fields/190- | wet paddies that never drain (shitsuden) |
+| fields.html | In-field features | research/fields/010- | ponds, rocks and graves in the middle of the fields |
+| rendering/fields.html | How our maps draw dry fields and their furrows | research/rendering/fields/160- | how the maps draw dry fields and their crops |
+| homesteads.html | Which farmhouses have a storehouse? | research/homesteads/120- | farm storehouses (kura) |
+| homesteads.html | Was the homestead grove there before 1868, and what size and shape was it? | research/homesteads/010- | groves of trees around farmhouses |
+| homesteads.html | Which side of the house did the windbreak stand on | research/homesteads/010- | the same - the grove's sides |
+| homesteads.html | How does a village lane bend? | research/ways/020- | village lanes |
+| cities/capitals.html | How much of a capital lives OUTSIDE the walls | research/rendering/cities/capitals/010- | how the maps size and lay out a domain capital |
+| cities/capitals.html | The sluice's lifting frame, the quay-side kura, and the boat-length jetty | research/cities/capitals/090- | rice storehouses and the brokers' row on the water |
+| cities/capitals.html | The government ward | research/rendering/cities/capitals/010- | how the maps size and lay out a domain capital, its wards among it |
+| cities/fabric.html | Machiya row density | research/cities/fabric/010- | the street front's continuous rows of shophouses |
+| cities/defenses.html | Historical grounding | research/cities/defenses/250- | the guardhouse and inspection hall it sizes: barriers and inspection posts at a town's entrance |
+| archetypes.html | Polder fourth pass | research/rendering/archetypes/050- | how the maps draw parcels and bunds inside a polder |
+| archetypes.html | Why is a hand-piled bund never straight - and never square at the corners? | research/archetypes/050- | parcels and bunds inside a polder |
+| archetypes.html | A dike-pond is fed and drained through sluice gates | research/archetypes/140- | dike-ponds: fish ponds ringed by mulberry dikes |
+| archetypes.html | The 6:4 water-to-dike ratio, and coppiced mulberry | research/archetypes/140- | the same |
+| archetypes.html | The three overlay values | research/rendering/archetypes/030- | how the maps lay cash crops over a village's rice land |
+| archetypes.html | The scripted dike-pond hamlet - the rules | research/rendering/archetypes/170- | how the maps furnish a dike-pond hamlet |
+| water.html | The wet toe is as wide as the fan, not as wide as the valley | research/rendering/water/140- | how the maps draw the marsh at the fan's toe |
+| water.html | What drawing at TRUE SIZE left open | research/rendering/water/010- | the true-size width limitation, with the drawn widths |
+| water.html | a plank is laid only over water you cannot stride across | research/ways/030- | plank bridges over farm ditches |
+| ways.html | How far past the bank does a bridge land? | research/rendering/ways/200- | how the maps place and draw road bridges |
+| settlements.html | ASK THESE THREE BEFORE DRAWING ANYTHING | research/settlements/010- | the five sizes of settlement |
 
 Edited by hand rather than swept: `.specify/templates/spec-template.md` (its example pointer `research/water.html#...`
 becomes the fragment form).

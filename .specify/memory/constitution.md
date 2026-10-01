@@ -1491,7 +1491,7 @@ until v2.17.0, when the GM split the second into two - see below):
    finding. (Today's example: "a bog's margin is sedge grading into reed, and
    woody cover stands on the dry ground above it" was the reasoning behind
    letting grass alone grade into the marsh - it is plausible and it is
-   unsourced, and `research/vegetation.html` says so.)
+   unsourced, and `research/vegetation/` says so.)
 
 Where it lives: the finding and its classification in the skill's `research/`
 file for that feature family (the interactive map will read from there); the
@@ -1520,7 +1520,7 @@ and is only caught if a human happens to ask about it.
 **EVERY RESEARCH FINDING CITES ITS SOURCES, AND A SOURCE IS SOMETHING A READER CAN CHECK**
 (GM 2026-08-27, feature 133 T43). A research entry - in `research/`, a feature's `research.md`,
 or wherever a finding is first written down - ends with a `**Sources:**` line naming what was
-consulted, registered by key in `research/SOURCES.html` with what each source was used FOR. This
+consulted, registered by key in `research/sources/` with what each source was used FOR. This
 is not for the session that wrote it; it is for the interactive map the project is building
 toward, where a reader clicks a feature and is owed the source behind the claim - and it is what
 lets a later reader tell an over-stretched citation from a finding. Source quality, in order:
@@ -1530,10 +1530,10 @@ references over the article itself); never an AI-generated encyclopedia or summa
 source (Grokipedia included): its content is machine-rewritten from other sources with no
 editorial community and no provenance a reader can follow, so citing it hands the reader a dead
 end. A web-search summary is a pointer to sources, never a source. Findings recorded before this
-rule without sources are re-sourced when next revisited (`research/SOURCES.html` keeps the queue),
+rule without sources are re-sourced when next revisited (`research/sources/` keeps the queue),
 not rewritten wholesale.
 
-**A SOURCE CARRIES ITS LINK** (GM 2026-08-28, feature 134). Every key in `research/SOURCES.html`
+**A SOURCE CARRIES ITS LINK** (GM 2026-08-28, feature 134). Every key in `research/sources/`
 records the URL at which the source can be read - by a later session or by a human - alongside
 the citation: the DOI or J-STAGE landing page for a paper, the article URL for an encyclopedia,
 the institution's own page for a museum, ministry or prefecture document. The interactive map's

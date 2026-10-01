@@ -9,7 +9,7 @@ tools: WebFetch, WebSearch, Read, Grep
 
 ## When to dispatch this agent
 
-Reads the sources a research entry cites and reports, per claim, whether the text actually says it - READ with a verbatim quote, SUMMARY-ONLY when the page cannot be fetched, or CONTRADICTED when it says otherwise. Use during every research pass (constitution Principle XII, "read what you cite", v2.11.x) and to work the summary-only queue in research/SOURCES.html. Verification, not judgment - Opus at high effort (tier table, GM 2026-09-19: Sonnet was tried on recorded runs and under-called what Opus found); it never decides a rule, it reports what a page says.
+Reads the sources a research entry cites and reports, per claim, whether the text actually says it - READ with a verbatim quote, SUMMARY-ONLY when the page cannot be fetched, or CONTRADICTED when it says otherwise. Use during every research pass (constitution Principle XII, "read what you cite", v2.11.x) and to work the summary-only queue in research/sources/. Verification, not judgment - Opus at high effort (tier table, GM 2026-09-19: Sonnet was tried on recorded runs and under-called what Opus found); it never decides a rule, it reports what a page says.
 
 <!-- The frontmatter description is one sentence: the harness shows every agent's description to every session on every turn (feature 250, research R4, recommendation 3); the full statement of when to dispatch is this section. -->
 
@@ -42,7 +42,7 @@ without them. Everything you need is in the bundle or on the web.
 **If your dispatch names no bundle**, say so on the first line of your report and read the fragment
 paths it names instead - a question's `research/<page>/NNN-<heading id>.html` and the `.notes.html`
 beside it - and never an assembled page (`research/<page>.html`, `research/citations/<page>.html`,
-`research/SOURCES.html`), each of which is thirty entries read to check one. A missing bundle is the
+`research/sources/`), each of which is thirty entries read to check one. A missing bundle is the
 dispatcher's mistake, and guessing which file was meant is worse than the cost.
 
 ## Your report: the counts first, then only what the session must act on (feature 250)
@@ -71,7 +71,7 @@ output format.
 ## Input
 
 A list of items, each: **the claim as written in the entry** (verbatim), **the source pointer(s)**
-(URL, title, or a `research/SOURCES.html` key), and optionally the entry's file and line so you can
+(URL, title, or a `research/sources/` key), and optionally the entry's file and line so you can
 `Read` the surrounding context.
 
 ## Procedure, per item

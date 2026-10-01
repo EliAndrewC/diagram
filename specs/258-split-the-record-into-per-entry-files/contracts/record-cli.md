@@ -23,8 +23,8 @@ Stale, the common case - the message names what to run, as every guard in this r
 
 ```
 record: STALE - run `make record`:
-  research/water.html
-  research/citations/water.html
+  research/water/
+  research/water/
 ```
 
 In sync:

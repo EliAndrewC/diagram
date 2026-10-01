@@ -260,7 +260,7 @@ Measured before and after in research R10.
 - No third woodland parcel stands in a ruled row with two others: an in-row seat is stepped sideways where the ground
   allows and refused where it does not - the count is a target the scan meets only where there is ground (Inashiro keeps
   two). A preference that fell back to the row was tried first and kept the chain.
-- No copse clump is based in the marsh (research/vegetation.html: woody cover "stands on the dry ground above it"). The
+- No copse clump is based in the marsh (research/vegetation/: woody cover "stands on the dry ground above it"). The
   keep-out is the copse's alone: applied to every grove it took Sawada's windward belt from 179 crowns to 104, and 20-34
   of the 68 refused crowns stood on ground drawn dry - the toe marsh's recorded outline runs under the settlement's
   cleared ground there. Recorded in `future-work/farming-communities.md` with the measurement and a sketch.
@@ -298,7 +298,7 @@ Measured before and after in research R10.
   10 ft, so the frame and the skirt it is sized to are untouched), and an exit leg still on the page bends at its middle
   (`exit_bend`): Sawada's middle reach ran 872 ft within 3.1 ft of a line, 70% of its course on the page.
 - (RETIRED 2026-09-28 by D24) A household's own dry plot is laid against its homestead (`stage_homestead_fields`, after the ways): the levee model -
-  the old settlement and its dry fields on the same raised ground, the paddy behind (research/fields.html, the catena;
+  the old settlement and its dry fields on the same raised ground, the paddy behind (research/fields/, the catena;
   `shizen-teibo-jawiki`, `kohai-shicchi-jawiki`) - beside the canal hem, which stays as the second position. The toe
   band and the cover's cultivated extent leave these plots out, so neither moves after the seat and the router were
   handed it (a homestead plot moved Sawada's toe marsh over its handover). The plot's size is a GUESS.
@@ -330,7 +330,7 @@ Measured before and after in research R10.
   (`_trim_to_service`): a Mizuguchi lane left the connector, ran 61 ft past its house and counted as arriving at the
   connector it had left.
 - A belt crown seated in a toe marsh is drawn as alder (the `alder` mix and class): the record's woody stage at a reed
-  edge is alder or willow, never pine (research/vegetation.html, the marsh margin). Sawada's windward belt stands on
+  edge is alder or willow, never pine (research/vegetation/, the marsh margin). Sawada's windward belt stands on
   its toe's reed edge (70 of 201 clumps in the marsh in that round; 201 alder clumps of the belt's 1,233 crowns on
   the pool main's feature 276 re-laid, `m:sawada-r17-alder`); holding the belt off the reeds took the windward belt away and
   failed its depth test, and a belt that stops at the marsh does the same. The carr along the rest of the toe - the
@@ -341,12 +341,12 @@ Measured before and after in research R10.
 - An `entrance` board at a handover stands on the approach itself where a seat there passes every departure: among the
   seats every way out passes, the connector's win, in the siter and the frame stage's re-seat alike. A board is squared
   to the way it stands on, and Inashiro's outermost join is a one-farmstead web straggler whose verge won, so the board
-  stood 87.7 degrees off the track every household walks (research/urban-features.html: broadside to the one way out).
+  stood 87.7 degrees off the track every household walks (research/urban-features/: broadside to the one way out).
 - (RETIRED 2026-09-28 by D24) The homestead field is a grain plot, so an archetype that buys its grain in lays none (`GRAIN_BOUGHT_IN`: the
-  mulberry dike-fishpond, which 「abandoned rice to plant mulberry」 - research/archetypes.html; Kuwabata's GM-confirmed
+  mulberry dike-fishpond, which 「abandoned rice to plant mulberry」 - research/archetypes/; Kuwabata's GM-confirmed
   economy). Kuwabata had drawn six barley, millet and buckwheat plots.
 - A farmstead fixture is refused a seat whose line to its house crosses a lane (`across_a_lane`, the brook's line test):
-  a shrine stands in a corner of the house plot and a coop in the yard (research/homesteads.html), and Mizuguchi drew a
+  a shrine stands in a corner of the house plot and a coop in the yard (research/homesteads/), and Mizuguchi drew a
   coop, a woodpile and its one shrine beyond the lane behind their house. The rule's cost was measured, not assumed:
   against the commit before it, seven more fixtures went unseated on four maps (Inashiro a heap; Kashikawa two coops and
   a bath; Sawada a second heap; Mizuguchi a coop and a woodpile - observed 2026-09-27: `meta.farm_fixtures_unseated` in each pool manifest at commit 6b6031073, against 6f75efe4a's one Sawada heap) and two maps lost their only shrine (observed 2026-09-27 on a roll with the lane rule and without the shrine pass, not committed: Kashikawa and Mizuguchi). The placement was
@@ -357,7 +357,7 @@ Measured before and after in research R10.
     fit; the ring is a GUESS, labeled at the point of change (the record places each fixture at a wall, not at which
     one when that one is taken).
   - a shrine with no seat passes to the next house with room, and the miss is recorded only if none takes it. The
-    record gives the shrine's COUNT (3-8% of homesteads, never exceeding the share, research/homesteads.html) and not
+    record gives the shrine's COUNT (3-8% of homesteads, never exceeding the share, research/homesteads/) and not
     its household; the engine chooses the household by a positional roll, and the pass re-rolls that choice to a house
     with room, keeping the count.
   - the ring is not refused by a homestead BUNDLE box: `_try_place_bundle` reserves a rectangle round each whole
@@ -381,7 +381,7 @@ Measured before and after in research R10.
   across the wind counts by `depth * sqrt(1 - (d / depth)^2)` of its lead. The far face used to be the near face moved
   along the wind, which is the belt's depth only where the fringe lies square to it; where the fringe runs along the wind
   the band thinned to a sliver, and Kashikawa's westernmost steading's garden and sun lane emptied it - a hole in the
-  windward face (settlement-review, round 97c20bc9; research/vegetation.html: a belt "reads as a wall of trees only at"
+  windward face (settlement-review, round 97c20bc9; research/vegetation/: a belt "reads as a wall of trees only at"
   80-120 ft of depth, and a windbreak with a hole funnels the wind). The band's thinnest depth across itself went from 20.7 ft
   to 97.2 on Kashikawa (`m:belt-r16-depth`). On the 105 ft band every pool belt was at least 95.0 ft deep and its median 103-107
   ft wherever the canvas edge does not cut it, at most 9% of a face over 120 ft (at its bends) - the record's 80-120;
@@ -407,7 +407,7 @@ Measured before and after in research R10.
   blocks at commits 881679390 and 02aa89eae): Inashiro 241 to 312 clumps, Kashikawa 277 to 504, Kuwabata 125 to 191,
   Mizuguchi 237 to 252, Sawada 201 to 539.
 - A brook turns on a curve: its corners are filleted at `BROOK_BEND_WIDTHS` (2.5) of its drawn width, the ratio the
-  ditches are drawn at (research/water.html "Why does every ditch turn on a curve?"), and the tap the head race leaves
+  ditches are drawn at (research/rendering/water/190-how-our-maps-draw-bends-junctions-and-the-run-of-the-water.html), and the tap the head race leaves
   from is held (`round_the_brooks`, `Settlement.round_stream`). Sawada drew corners of 27-47 degrees
   (`m:brook-r16-turn`). It is done LATE, at the start of the crossings stage, rounding the drawn course and its record in
   place. Rounding it where the brook is first drawn was tried and reverted (observed 2026-09-27 on rolls not committed):

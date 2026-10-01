@@ -22,16 +22,16 @@ character is three bytes: counting characters understates the registry alone by 
 
 | file | bytes |
 |---|---:|
-| `research/SOURCES.html` | 1,150,367 |
-| `research/citations/cities/capitals.html` | 376,566 |
-| `research/citations/urban-features.html` | 294,925 |
-| `research/citations/religion-and-death.html` | 266,322 |
-| `research/citations/water.html` | 257,601 |
-| `research/citations/homesteads.html` | 212,221 |
-| `research/cities/capitals.html` | 180,046 |
-| `research/citations/fields.html` | 163,877 |
-| `research/water.html` | 163,008 |
-| `research/urban-features.html` | 161,945 |
+| `research/sources/` | 1,150,367 |
+| `research/cities/capitals/` | 376,566 |
+| `research/urban-features/` | 294,925 |
+| `research/religion-and-death/` | 266,322 |
+| `research/water/` | 257,601 |
+| `research/homesteads/` | 212,221 |
+| `research/cities/capitals/` | 180,046 |
+| `research/fields/` | 163,877 |
+| `research/water/` | 163,008 |
+| `research/urban-features/` | 161,945 |
 
 Against that, ONE entry is small:
 
@@ -205,7 +205,7 @@ built.
 entry, and compare both what it read and what it found.
 
 **The recorded run** (`seeded-format-clean`, feature 255): `record-format` over the whole of
-`research/ways.html` - 93,076 bytes under `research/`, 88% of everything that entered its context
+`research/ways/` - 93,076 bytes under `research/`, 88% of everything that entered its context
 (observed 2026-09-20; method: `measure.py R3` over that run's kept transcript). On the question "How far
 past the bank does a bridge land?" it reported VOCABULARY on **girder** and on **footing**.
 

@@ -16,10 +16,9 @@ from ..plan import SitePlan
 from .frame import frame_bounds, title_pocket
 from .parcels import _parcel_outline
 
-# THE BAMBOO STANDS (feature 133 T47/T48, GM 2026-08-27; research/vegetation.html "Bamboo groves
-# (chikurin)"; research/rendering/vegetation.html "How our maps draw bamboo, when one culm is too small to see"). Two attested forms, the `bamboo` knob's values: the THICKET (take-yabu),
+# THE BAMBOO STANDS (feature 133 T47/T48, GM 2026-08-27; research/vegetation/150-bamboo-groves-chikurin.html; research/rendering/vegetation/150-how-our-maps-draw-bamboo-when-one-culm-is-too-small-to-see.html). Two attested forms, the `bamboo` knob's values: the THICKET (take-yabu),
 # ONE stand at the settlement's edge, seated here on dry ground just beyond the cluster's back (north) row - not at
-# the field margin: feature 280 M49 (research/vegetation.html "Bamboo groves (chikurin)") finds a bamboo thicket round the settlement before modern
+# the field margin: feature 280 M49 (research/vegetation/150-bamboo-groves-chikurin.html) finds a bamboo thicket round the settlement before modern
 # times (an early-Edo screen, the Nagaokakyo bamboo villages, the Qimin yaoshu's high dry ground), while the field
 # margin's shady end rested on a present-day page; which side of the cluster, and that the stand is held in common,
 # are GUESSES; and HOUSEHOLD bamboo, a small strip on each farmstead that keeps one
@@ -186,7 +185,7 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     lanes = [([(float(a), float(b)) for a, b in ln["pts"]], float(ln.get("w", 3)) / 2 + px(10.0)) for ln in s.M.get("lanes", []) if len(ln.get("pts") or []) >= 2]
     # ...AND THE WATER (settlement-review of Mizuguchi, feature 261): nothing refused a watercourse, and when the houses moved
     # north of the brook the thicket's target on the field edge fell on it - 13 culms on the 7 ft ribbon, read as reeds in
-    # the stream. A take-yabu stands on dry ground (research/vegetation.html, bamboo); the water is kept by its half-width
+    # the stream. A take-yabu stands on dry ground (research/vegetation/, bamboo); the water is kept by its half-width
     # and 3 ft, so a stand may still line the bank
     lanes += [
         ([(float(a), float(b)) for a, b in (st.get("poly") or st.get("pts") or [])], float(st.get("w") or 6) / 2 + px(3.0))

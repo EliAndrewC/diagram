@@ -17,7 +17,7 @@ from .overlap import _rect_ring
 from .primitives import seg_dist, segments_cross
 
 # TORII AVENUE PITCH (GM 2026-09-27, feature 268: "All maps, ~10-13 ft", after a research pass - see
-# research/rendering/religion-and-death.html 'How our maps draw shrine gateways and the approach to the hall (torii, sando)'). Donated arches stand close: a donation row's arches
+# research/rendering/religion-and-death/080-how-our-maps-draw-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html). Donated arches stand close: a donation row's arches
 # stand about 10 cm apart, and the one small rural row whose pitch can be estimated works out at about
 # 3-4 m (this project's arithmetic on a walking time, on no page). Nothing supports the old ~20-30 ft.
 # 12 ft is the middle of the GM's band and two ken, the building module the record already uses - a
@@ -61,7 +61,7 @@ def torii_halfbox(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, flo
 # them on purpose. So is monk_house: a temple may legitimately stand inside the ward (Tango's
 # Bishamon precinct - the warrior fortune beside the garrison quarter) and its clergy row belongs
 # with its temple, held to it by the temple-neighborhood checks. The zoning rule this encodes:
-# research/rendering/cities/government.html "How our maps place and count a city's samurai households".
+# research/rendering/cities/government/030-how-our-maps-draw-the-samurai-quarter-and-count-its-households-bukechi.html.
 WARD_BARRED_KINDS = frozenset({"laborer", "laborer_large", "merchant", "merchant_house", "merchant_large", "burakumin", "shop", "inn"})
 
 

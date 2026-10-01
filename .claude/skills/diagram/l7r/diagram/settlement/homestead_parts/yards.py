@@ -528,7 +528,7 @@ class ThreshingYardsMixin:
         return True
 
     # THE WORK YARD IS ROLLED FROM A LOGNORMAL, CORRELATED WITH THE HOUSEHOLD (GM 2026-08-28, feature
-    # 134 T49; research/homesteads.html "Threshing and drying yards at farmhouses (niwa)").
+    # 134 T49; research/homesteads/020-threshing-and-drying-yards-at-farmhouses-niwa.html).
     #
     # The record, in one line: Kitamoto's households stated their yard in straw mats - 40-60 mats
     # usually, over 100 for a few, two mats to the tsubo - so 20-30 tsubo (66-99 sq m) ordinarily and
@@ -559,7 +559,7 @@ class ThreshingYardsMixin:
     YARD_MEDIAN_TSUBO = 25.0  # wet rice as the dry field: the Okayama ~50 mats; the map's `yard_sizes` knob may name the dry-field figure instead
     YARD_SIGMA_LN = 0.40  # Kamikanai 0.46; Kitamoto's band-and-tail 0.35-0.45
     YARD_MEDIAN_TSUBO_DRYFIELD = 25.0  # Kitamoto's 50 mats - a barley/wheat household spreads the whole crop
-    YARD_MIN_TSUBO = 8.0  # nobody is yardless - this project's choice, so every farm can thresh; no source gives the smallest yard (research/rendering/homesteads.html, 'How our maps draw threshing and drying yards (niwa)'; the old reason, "by Genroku every peasant held a homestead", rests on no source read)
+    YARD_MIN_TSUBO = 8.0  # nobody is yardless - this project's choice, so every farm can thresh; no source gives the smallest yard (research/rendering/homesteads/020-how-our-maps-draw-threshing-and-drying-yards-niwa.html; the old reason, "by Genroku every peasant held a homestead", rests on no source read)
     YARD_HOUSE_BETA = 2.2  # how much of the household's own deviation the yard inherits (the drawn house varies only ~+-15% about the ordinary minka, so the household needs this much amplification to dominate the roll - measured on Inashiro: r = 0.17 at 0.55, r = 0.6-0.7 here, which is the GM's "overwhelmingly likely" without making it a rigid ratio)
     YARD_ASPECT = 1.45  # a work apron is near-square, a little wider than deep (the drawn ratio, unchanged)
     TSUBO_FT2 = 35.583  # 1 tsubo = 3.306 sq m

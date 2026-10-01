@@ -28,7 +28,7 @@ governed or lived in.
 
 ## Your input
 
-A batch file of registry entries copied verbatim from `research/SOURCES.html`. Each entry is:
+A batch file of registry entries copied verbatim from `research/sources/`. Each entry is:
 
     <h3 id="key"><code>key</code></h3>
     <!-- cited by: which research pages cite it, and which footnote numbers -->

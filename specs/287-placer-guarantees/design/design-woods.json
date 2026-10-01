@@ -50,7 +50,7 @@
   },
   {
    "id": "W03",
-   "rule": "No copse clump's center stands inside a marsh. test_pool_261.py::test_no_copse_clump_is_based_in_the_marsh; research/vegetation.html (woody cover on the dry ground above the marsh).",
+   "rule": "No copse clump's center stands inside a marsh. test_pool_261.py::test_no_copse_clump_is_based_in_the_marsh; research/vegetation/ (woody cover on the dry ground above the marsh).",
    "rows": ["R1 test_no_copse_clump_is_based_in_the_marsh"],
    "owner": "l7r/diagram/settlement/homestead_parts/stands.py:village_grove (GroveBlocks dikes, stands.py:263-264) / grove_blocks.py:GroveBlocks.hard. Census owner correct.",
    "mechanism": "Every marsh ring is a `dikes` ring for role == 'copse', so hard() refuses a seat inside it on every copse seat path (_seat 398, _reseat 379). Two tightenings: decide on the rounded seat (the record's grain; the census notes a seat within 0.05 px of the edge can read inside), and read the marsh through marsh_ground(M) (S3/W08) so the placer and the test read one outline.",
@@ -74,7 +74,7 @@
   },
   {
    "id": "W05",
-   "rule": "Every windbreak clump inside a toe or waterside marsh is drawn as alder, and the grove's recorded alder count equals its ON-PAGE clumps in the marsh. test_pool_261.py::test_a_belt_tree_in_the_marsh_is_alder; research/vegetation.html (the marsh margin: alder or willow).",
+   "rule": "Every windbreak clump inside a toe or waterside marsh is drawn as alder, and the grove's recorded alder count equals its ON-PAGE clumps in the marsh. test_pool_261.py::test_a_belt_tree_in_the_marsh_is_alder; research/vegetation/ (the marsh margin: alder or willow).",
    "rows": ["R1 test_a_belt_tree_in_the_marsh_is_alder"],
    "owner": "l7r/diagram/settlement/homestead_parts/stands.py:village_grove (the draw, 621-643) and settlement/core.py:_partition_grove_clumps (the count). Census owner correct.",
    "mechanism": "The drawing is by construction (every seated clump in a wet ring is inked alder). The count breaks at set_view: `alder` counts every seated clump, the partition then moves off-page ones out of `clumps`. Record the alder clumps themselves (`alder_clumps`: the rounded seats drawn as alder) and have _partition_grove_clumps recompute g['alder'] = number of on-page clumps in alder_clumps. Decide wetness on the rounded seat so the record and the ink agree at a marsh edge. One predicate in_reed_margin(x, y, M) (role toe/waterside over marsh_ground(M), W08) read by the draw and the test.",
@@ -86,7 +86,7 @@
   },
   {
    "id": "W06",
-   "rule": "No belt, copse or parcel crown is based in the marsh beyond its margin: woody cover stands on the dry ground above the marsh, the reed margin carries alder (research/vegetation.html, the marsh margin).",
+   "rule": "No belt, copse or parcel crown is based in the marsh beyond its margin: woody cover stands on the dry ground above the marsh, the reed margin carries alder (research/vegetation/, the marsh margin).",
    "rows": ["R3 future-work/farming-communities.md 'The toe marsh's recorded outline is not the drawn marsh' (68 of 179 Sawada belt crowns inside it) - its second half, 'give the belt the copse's keep-out'"],
    "owner": "l7r/diagram/settlement/homestead_parts/stands.py:village_grove (GroveBlocks built with the marsh for every role, not only copse) and hamletgen/hinterland/belt.py:belt_polygon (_in_marsh, which already moves a column's band back out of the marsh only when past_the_lanes pushed it).",
    "mechanism": "Once W08 makes the recorded ring the drawn marsh, GroveBlocks takes, for every role, the marsh ring INSET by the margin band (MARSH_FEATHER_BS * bscale, the reeds' own feather in wet.py) as a hard ring: a clump based deeper than the margin is refused; one in the margin is seated and drawn alder (W05). The copse keeps the whole ring (W03). belt_polygon's `fouled` also counts a band vertex deeper than the margin, so the ladder stands the band back off the marsh as it does off the crop.",

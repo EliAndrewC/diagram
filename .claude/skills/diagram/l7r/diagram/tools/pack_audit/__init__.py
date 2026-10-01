@@ -4,8 +4,7 @@ Read-only. Parses a hand-authored compound SVG and reports the numbers that make
 "is there too much empty space?" objective, WITHOUT the misleading ones:
 
   - building-COVERAGE % of the walled interior (the historical anchor; a jin'ya
-    runs ~37-42% built, the rest intentional courtyard - see research/rendering/buildings.html
-    "How our maps size a compound and its buildings"). Coverage, NOT "total empty
+    runs ~37-42% built, the rest intentional courtyard - see research/rendering/buildings/180-how-our-maps-size-a-compound-and-its-buildings.html). Coverage, NOT "total empty
     %", is the realism signal: a courtyard compound is SUPPOSED to be mostly open.
   - the TOP-N genuinely-vacant rectangles (+ orientation + location): the real
     "a whole region sits empty" signal. Reporting only the single largest hid a

@@ -2,7 +2,7 @@ I read all six pages plus the marked registry block. Report follows; everything 
 
 ---
 
-# `research/fields.html` (32 sections)
+# `research/fields/` (32 sections)
 
 ## In-field features - flat flooded paddy hosts obstacles least
 
@@ -202,7 +202,7 @@ Note the FIRST bullet of this same entry (line 727) is in the correct feature-20
 
 ---
 
-# `research/religion-and-death.html` (19 sections)
+# `research/religion-and-death/` (19 sections)
 
 ## City temple size - the deliberate L7R liberty
 
@@ -277,7 +277,7 @@ Note the FIRST bullet of this same entry (line 727) is in the correct feature-20
 
 ---
 
-# `research/archetypes.html` (19 sections)
+# `research/archetypes/` (19 sections)
 
 ## Why is there no yellow rape flower beside the rice?
 
@@ -395,7 +395,7 @@ Note the FIRST bullet of this same entry (line 727) is in the correct feature-20
 
 ---
 
-# `research/citations/fields.html` (works section + 134 notes)
+# `research/fields/` (works section + 134 notes)
 
 ## Works section (derived from the registry)
 
@@ -434,7 +434,7 @@ Note the FIRST bullet of this same entry (line 727) is in the correct feature-20
 
 ---
 
-# `research/citations/archetypes.html` (works section + 144 notes)
+# `research/archetypes/` (works section + 144 notes)
 
 ## Works section
 
@@ -460,7 +460,7 @@ Note the FIRST bullet of this same entry (line 727) is in the correct feature-20
 
 ---
 
-# `research/citations/religion-and-death.html` (works section + 141 notes)
+# `research/religion-and-death/` (works section + 141 notes)
 
 ## Works section
 
@@ -487,7 +487,7 @@ Note the FIRST bullet of this same entry (line 727) is in the correct feature-20
 
 ---
 
-# `research/SOURCES.html` - the 355 entries marked `READ 2026-09-14 by a source-reader (feature 242)`
+# `research/sources/` - the 355 entries marked `READ 2026-09-14 by a source-reader (feature 242)`
 
 Read in full (lines 411-2184). These entries are in very good shape: every specialist term is glossed in the entry that uses it (`yamen`, `zicheng`/`luocheng`/`yacheng`, `lifang`, `kurayashiki`, `kido`, `zhalan`, `banfang`, `xuli`, `jianghu`, `dageng`, `qiaolou`, `karausu`, `kakoimai`, `kureki`, `gokura`, `bansui`), and none of them carries a `Grounds:`/`Evidence:` field, an engine identifier, a spec number or a task id in visible text.
 
@@ -512,13 +512,13 @@ Read in full (lines 411-2184). These entries are in very good shape: every speci
 
 | file | sections read | VOCABULARY | SESSION NOTE | HISTORY | DEFECTS |
 |---|---|---|---|---|---|
-| `research/fields.html` | 32 (21 h2, 5 h3, 6 h4) | 5 (`lodging`, `oyaike`/`koike`, `yui`, `tauchiguruma`/田打車, `Dujiangyan`) + 2 defined inline | 1 (the mekongwatch fetch verdict) | 3 (the "now" in the jog entry; the hem/set-back before-and-after; the two rejected near-ring fillers) + 4 borderline (bund color, dry-plot frame, first fix, first furrow version) | 9 quoted-Japanese passages missing the feature-202 form (one with no English at all); 5 `., ` roster artifacts; 2 misplaced footnote marks; 1 bare kanji; 1 tilde-chain figure |
-| `research/religion-and-death.html` | 19 | 2 (`L7R`, `ft/px`) + 1 defined inline | none | 1 (the lobed draft and "moved nothing else on any map") + 2 borderline (three approach measurements, the fire-tower caption) | 1 (Sources paragraph unterminated) |
-| `research/archetypes.html` | 19 | 1 (`seed`) + 6 defined inline | 1 ("becomes checkable only if...") | 3 borderline (the split-bay "was taking", the first rounding pass, the polder tip delta) | 4 (unmatched `</strong>`; duplicated clause; three unmarked paragraphs inside one `<li>`; garbled "uses a hand-piled mulberry dike did not serve") + 1 untranslated Chinese phrase |
-| `research/citations/fields.html` | works + 134 notes | 1 (`WOCAT`) | 2 (fn-48 VERBATIM verdict; registry "not been able to read" - keep) | none | 11 (truncated `cropfarming-soybeans` write-up; "square metres"; 7 dangling-punctuation notes; fn-16's untranslated original + unmatched `)`; fn-45's unclosed paren + backticked bare key) |
-| `research/citations/archetypes.html` | works + 144 notes | 1 (`adlittoral`) | 1 (fn-79 read-date + TLS verdict) | none | 3 classes (fn-5 "n/a" gloss; 3 backticked bare keys; 9 OCR garbles in visible quotations, only 3 repaired) |
-| `research/citations/religion-and-death.html` | works + 141 notes | 1 (`muen` as a variant) | 3 (fn-38, fn-43, fn-63 next-step instructions) | none | 2 (raw `&` in the works-section href; mixed curly/straight apostrophes) |
-| `research/SOURCES.html`, the 355 `READ 2026-09-14` entries | 355 entries | none | 1 (`japanknowledge-jishibai`) | 4 ("corrects this page's ..." x3, "this page now states") - registry exempt by spec-209 D6 | 2 (garbled `manzello-2019-firebrand` sentence; the key names an author the entry does not) |
+| `research/fields/` | 32 (21 h2, 5 h3, 6 h4) | 5 (`lodging`, `oyaike`/`koike`, `yui`, `tauchiguruma`/田打車, `Dujiangyan`) + 2 defined inline | 1 (the mekongwatch fetch verdict) | 3 (the "now" in the jog entry; the hem/set-back before-and-after; the two rejected near-ring fillers) + 4 borderline (bund color, dry-plot frame, first fix, first furrow version) | 9 quoted-Japanese passages missing the feature-202 form (one with no English at all); 5 `., ` roster artifacts; 2 misplaced footnote marks; 1 bare kanji; 1 tilde-chain figure |
+| `research/religion-and-death/` | 19 | 2 (`L7R`, `ft/px`) + 1 defined inline | none | 1 (the lobed draft and "moved nothing else on any map") + 2 borderline (three approach measurements, the fire-tower caption) | 1 (Sources paragraph unterminated) |
+| `research/archetypes/` | 19 | 1 (`seed`) + 6 defined inline | 1 ("becomes checkable only if...") | 3 borderline (the split-bay "was taking", the first rounding pass, the polder tip delta) | 4 (unmatched `</strong>`; duplicated clause; three unmarked paragraphs inside one `<li>`; garbled "uses a hand-piled mulberry dike did not serve") + 1 untranslated Chinese phrase |
+| `research/fields/` | works + 134 notes | 1 (`WOCAT`) | 2 (fn-48 VERBATIM verdict; registry "not been able to read" - keep) | none | 11 (truncated `cropfarming-soybeans` write-up; "square metres"; 7 dangling-punctuation notes; fn-16's untranslated original + unmatched `)`; fn-45's unclosed paren + backticked bare key) |
+| `research/archetypes/` | works + 144 notes | 1 (`adlittoral`) | 1 (fn-79 read-date + TLS verdict) | none | 3 classes (fn-5 "n/a" gloss; 3 backticked bare keys; 9 OCR garbles in visible quotations, only 3 repaired) |
+| `research/religion-and-death/` | works + 141 notes | 1 (`muen` as a variant) | 3 (fn-38, fn-43, fn-63 next-step instructions) | none | 2 (raw `&` in the works-section href; mixed curly/straight apostrophes) |
+| `research/sources/`, the 355 `READ 2026-09-14` entries | 355 entries | none | 1 (`japanknowledge-jishibai`) | 4 ("corrects this page's ..." x3, "this page now states") - registry exempt by spec-209 D6 | 2 (garbled `manzello-2019-firebrand` sentence; the key names an author the entry does not) |
 
 ## Glossary terms I would add (`interactive/assets/glossary.json`)
 

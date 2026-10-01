@@ -49,7 +49,7 @@ class OfficeHall(Kind):
     Covers: the office hall's block, its outline and its front band
     Label: accurate
     Sources: takayama-jinya-jawiki, takayama-jinya-city, sado-bugyosho-fires
-    Entry: research/buildings.html - 'The hearing court (shirasu)', "Magistrates' compounds (jin'ya and yamen)", 'The size of a compound and the rank of its buildings', 'Fire, and the fireproof storehouses (dozō)'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)', 'How our maps size a compound and its buildings', 'How our maps draw a magistrate's compound'
+    Entry: research/buildings/090-the-hearing-court-shirasu.html, research/buildings/010-magistrates-compounds-jinya-and-yamen.html, research/buildings/180-the-size-of-a-compound-and-the-rank-of-its-buildings.html, research/buildings/160-fire-and-the-fireproof-storehouses-dozo.html; research/rendering/buildings/090-how-our-maps-draw-the-hearing-court-shirasu.html, research/rendering/buildings/180-how-our-maps-size-a-compound-and-its-buildings.html, research/rendering/buildings/010-how-our-maps-draw-a-magistrates-compound.html
     """
 
     key = "office hall"
@@ -78,7 +78,7 @@ class MagistratesDais(Kind):
     Covers: the dais band on the office hall's court face, and its label
     Label: accurate
     Sources: oshirasu-jawiki, shirasu-kotobank, takayama-jinya-jawiki, takayama-jinya-city, neixiang-yamen-zhwiki
-    Entry: research/buildings.html - 'The hearing court (shirasu)', "Magistrates' compounds (jin'ya and yamen)"; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)', 'How our maps draw a magistrate's compound'
+    Entry: research/buildings/090-the-hearing-court-shirasu.html, research/buildings/010-magistrates-compounds-jinya-and-yamen.html; research/rendering/buildings/090-how-our-maps-draw-the-hearing-court-shirasu.html, research/rendering/buildings/010-how-our-maps-draw-a-magistrates-compound.html
     """
 
     key = "magistrate's dais"
@@ -114,7 +114,7 @@ class ClerksRoom(Kind):
     Covers: the clerks' room inside the office hall, its floor and its label
     Label: accurate
     Sources: mapple-takayama-jinya, edo-ashigaru-bugyosho, jinya-kotobank, tedai-jawiki, xuli-zhwiki
-    Entry: research/buildings.html - 'The office hall and its clerks (goyakusho)'; research/rendering/buildings.html - 'How our maps draw the office hall and its clerks (goyakusho)'
+    Entry: research/buildings/710-the-office-hall-and-its-clerks-goyakusho.html; research/rendering/buildings/710-how-our-maps-draw-the-office-hall-and-its-clerks-goyakusho.html
     """
 
     key = "clerks' room"
@@ -144,7 +144,7 @@ class TaxArchive(Kind):
     Covers: the plastered archive kura and its label
     Label: accurate
     Sources: sado-bugyosho-fires, dozo-jawiki, tfd-hongou-fire-history
-    Entry: research/buildings.html - 'Fire, and the fireproof storehouses (dozō)', "Magistrates' compounds (jin'ya and yamen)"; research/rendering/buildings.html - 'How our maps draw a magistrate's compound', 'How our maps draw fire water and the fireproof storehouses (dozō)'; research/urban-features.html - 'Fire watch towers and firefighting gear (hinomi yagura)'
+    Entry: research/buildings/160-fire-and-the-fireproof-storehouses-dozo.html, research/buildings/010-magistrates-compounds-jinya-and-yamen.html; research/rendering/buildings/010-how-our-maps-draw-a-magistrates-compound.html, research/rendering/buildings/160-how-our-maps-draw-fire-water-and-the-fireproof-storehouses-dozo.html; research/urban-features/390-fire-watch-towers-and-firefighting-gear-hinomi-yagura.html
     """
 
     key = "tax archive"
@@ -186,7 +186,7 @@ class Granary(Kind):
     Covers: the granary, on posts or earth-walled, and its label
     Label: accurate
     Sources: takayukashiki-jawiki, takayama-onkura-heritage, dozo-jawiki, takayama-jinya-city, takayama-jinya-jawiki, nishimawari-koro-jawiki, gokura-jawiki, hatakata-men-jawiki, kuramai-jawiki, kakoimai-jawiki
-    Entry: research/buildings.html - 'Storehouses for the tax rice'; research/rendering/buildings.html - 'How our maps draw storehouses for the tax rice'; research/towns.html - 'The magistrate's manor in a town: where it stands and which way it faces (jin'ya and yamen)'; research/rendering/towns.html - 'How our maps draw the magistrate's manor on a town map'
+    Entry: research/buildings/080-storehouses-for-the-tax-rice.html; research/rendering/buildings/080-how-our-maps-draw-storehouses-for-the-tax-rice.html; research/towns/120-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html; research/rendering/towns/120-how-our-maps-draw-the-magistrates-manor-on-a-town-map.html
     """
 
     key = "granary"
@@ -224,7 +224,7 @@ class Cell(Kind):
     Covers: the barred holding cell and its label
     Label: accurate
     Sources: agariya-jawiki, roya-kotobank, edo-ashigaru-bugyosho, tenmacho-jawiki, chuo-royashiki, neixiang-yamen-zhwiki, henan-neixiang, takayama-jinya-city
-    Entry: research/buildings.html - 'Holding cells (agariya and rōya)'; research/rendering/buildings.html - 'How our maps draw holding cells (agariya and rōya)'
+    Entry: research/buildings/040-holding-cells-agariya-and-roya.html; research/rendering/buildings/040-how-our-maps-draw-holding-cells.html
     """
 
     key = "cell"
@@ -255,7 +255,7 @@ class Gatehouse(Kind):
     Covers: the guard post beside the main gate, or the guardroom in the gate range, and its label
     Label: accurate
     Sources: tamba-kashiwara-jinya, matsue-bukeyashiki, takayama-jinya-city, takayama-jinya-jawiki, bansho-jawiki, kitain-bansho
-    Entry: research/buildings.html - 'The main gate and its gatekeepers (nagaya-mon)'; research/rendering/buildings.html - 'How our maps draw the main gate and its gatekeepers (nagaya-mon)'
+    Entry: research/buildings/480-the-main-gate-and-its-gatekeepers-nagaya-mon.html; research/rendering/buildings/480-how-our-maps-draw-the-main-gate-and-gatehouse.html
     """
 
     key = "gatehouse"
@@ -292,7 +292,7 @@ class Barracks(Kind):
     Covers: the barracks building and its label
     Label: accurate
     Sources: hatchobori-jawiki, takayama-jinya-jawiki, jinya-jawiki
-    Entry: research/buildings.html - 'Staff rowhouses and barracks (nagaya)', 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps draw staff rowhouses and barracks (nagaya)', 'How our maps size a compound and its buildings'
+    Entry: research/buildings/060-staff-rowhouses-and-barracks-nagaya.html, research/buildings/180-the-size-of-a-compound-and-the-rank-of-its-buildings.html; research/rendering/buildings/060-how-our-maps-draw-staff-rowhouses-and-barracks-nagaya.html, research/rendering/buildings/180-how-our-maps-size-a-compound-and-its-buildings.html
     """
 
     key = "barracks"
@@ -323,7 +323,7 @@ class BenchNoticeBoard(Kind):
     Covers: the board outside the main gate and its label
     Label: guess
     Sources: kosatsu-jawiki, ogose-kosatsuba, adachi-kosatsu, kosatsu-enwiki, shoya-jawiki
-    Entry: research/urban-features.html - 'Notice boards (kosatsuba)'; research/rendering/urban-features.html - 'How our maps place and draw notice boards (kosatsuba)'
+    Entry: research/urban-features/010-notice-boards-kosatsuba.html; research/rendering/urban-features/010-how-our-maps-place-and-draw-notice-boards-kosatsuba.html
     """
 
     key = "notice board"
@@ -350,7 +350,7 @@ class TallyOffice(Kind):
     Covers: the tally office or tally shed and its label
     Label: accurate
     Sources: nishimawari-koro-jawiki, wagner-ming-iron, tonya-enwiki, economy-song-enwiki
-    Entry: research/buildings.html - 'Storehouses for the tax rice'; research/rendering/buildings.html - 'How our maps draw storehouses for the tax rice'; research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and charcoal stores'
+    Entry: research/buildings/080-storehouses-for-the-tax-rice.html; research/rendering/buildings/080-how-our-maps-draw-storehouses-for-the-tax-rice.html; research/urban-features/150-charcoal-yards-and-charcoal-stores.html; research/rendering/urban-features/150-how-our-maps-draw-charcoal-yards-and-charcoal-stores.html
     """
 
     key = "tally office"
@@ -375,7 +375,7 @@ class WeighingFloor(Kind):
     Covers: the covered weighing floor, its posts and its label
     Label: guess
     Sources: wagner-ming-iron, tonya-enwiki, fao-charcoal-safety, tawara-unit-jawiki
-    Entry: research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and charcoal stores'
+    Entry: research/urban-features/150-charcoal-yards-and-charcoal-stores.html; research/rendering/urban-features/150-how-our-maps-draw-charcoal-yards-and-charcoal-stores.html
     """
 
     key = "weighing floor"
@@ -403,7 +403,7 @@ class DayOffice(Kind):
     Covers: the day office's floor and its label
     Label: guess
     Sources: takayama-jinya-jawiki, takayama-jinya-city
-    Entry: research/buildings.html - 'The office hall and its clerks (goyakusho)', 'The hearing court (shirasu)', 'Holding cells (agariya and rōya)'; research/rendering/buildings.html - 'How our maps draw the office hall and its clerks (goyakusho)', 'How our maps draw the hearing court (shirasu)', 'How our maps draw holding cells (agariya and rōya)'
+    Entry: research/buildings/710-the-office-hall-and-its-clerks-goyakusho.html, research/buildings/090-the-hearing-court-shirasu.html, research/buildings/040-holding-cells-agariya-and-roya.html; research/rendering/buildings/710-how-our-maps-draw-the-office-hall-and-its-clerks-goyakusho.html, research/rendering/buildings/090-how-our-maps-draw-the-hearing-court-shirasu.html, research/rendering/buildings/040-how-our-maps-draw-holding-cells.html
     """
 
     key = "day office"
@@ -427,7 +427,7 @@ class OfficialStudy(Kind):
     Covers: the official study's floor and its label
     Label: guess
     Sources: takayama-jinya-jawiki, takayama-jinya-city
-    Entry: research/buildings.html - 'The office hall and its clerks (goyakusho)', 'The hearing court (shirasu)'; research/rendering/buildings.html - 'How our maps draw the office hall and its clerks (goyakusho)', 'How our maps draw the hearing court (shirasu)'
+    Entry: research/buildings/710-the-office-hall-and-its-clerks-goyakusho.html, research/buildings/090-the-hearing-court-shirasu.html; research/rendering/buildings/710-how-our-maps-draw-the-office-hall-and-its-clerks-goyakusho.html, research/rendering/buildings/090-how-our-maps-draw-the-hearing-court-shirasu.html
     """
 
     key = "official study"
@@ -452,7 +452,7 @@ class ClerksSeats(Kind):
     Covers: the two seats flanking the dais and their labels
     Label: deviation
     Sources: oshirasu-jawiki, shirasu-kotobank
-    Entry: research/buildings.html - 'The hearing court (shirasu)'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)'
+    Entry: research/buildings/090-the-hearing-court-shirasu.html; research/rendering/buildings/090-how-our-maps-draw-the-hearing-court-shirasu.html
     """
 
     key = "clerks' seats"
@@ -482,7 +482,7 @@ class KneelingPositions(Kind):
     Covers: the straw mats on the hearing court and their label
     Label: accurate
     Sources: oshirasu-jawiki, shirasu-kotobank, shirasu-imidas, henan-neixiang, neixiang-yamen-zhwiki
-    Entry: research/buildings.html - 'The hearing court (shirasu)', "Magistrates' compounds (jin'ya and yamen)"; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)', 'How our maps draw a magistrate's compound'
+    Entry: research/buildings/090-the-hearing-court-shirasu.html, research/buildings/010-magistrates-compounds-jinya-and-yamen.html; research/rendering/buildings/090-how-our-maps-draw-the-hearing-court-shirasu.html, research/rendering/buildings/010-how-our-maps-draw-a-magistrates-compound.html
     """
 
     key = "kneeling positions"
@@ -511,7 +511,7 @@ class GranaryStilts(Kind):
     Covers: the posts at the granary's foot
     Label: accurate
     Sources: takayukashiki-jawiki, takayama-onkura-heritage, kuramae-jawiki, wheatbaku-asakusa-okura
-    Entry: research/buildings.html - 'Storehouses for the tax rice'; research/rendering/buildings.html - 'How our maps draw storehouses for the tax rice'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'
+    Entry: research/buildings/080-storehouses-for-the-tax-rice.html; research/rendering/buildings/080-how-our-maps-draw-storehouses-for-the-tax-rice.html; research/cities/capitals/090-rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi.html
     """
 
     key = "granary stilts"

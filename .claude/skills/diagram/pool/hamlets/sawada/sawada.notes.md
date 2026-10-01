@@ -29,7 +29,7 @@ the low side where the gate requires it.
   review flagged got its well via the coverage-greedy well sort.
 
 - 2026-08-16 (the fork draws both arms - engine change, this map re-rolled): the GM's Inashiro
-  question settled in research/water.html "The head-race forks - supply commands both flanks";
+  question settled in research/rendering/water/005-how-our-maps-lay-out-irrigation-canals-yosuiro.html;
   every `OFFTAKE_LADDER` row now draws canal B, gated by `comb_supply_commands_both_flanks`.
   This map re-rolled three times as review fallout was fixed at the engine (canal-B thread
   tails via interpolated piece boundaries, minimax worst-served well placement, the notice
@@ -91,8 +91,7 @@ DIRECTION is not invented: it is the bearing of this map's own connector track w
 
 ## 2026-08-17 - the fan-toe needle fix, and the tint threshold it collided with
 
-The fan-toe SUNBURST ruling (full research in `research/fields.html`, "A basin never tapers to a
-point"; engine changes in `_comb_toe_and_hem`, `close_seams` and `_absorb`). Sawada carried 7 rings
+The fan-toe SUNBURST ruling (full research in `research/rendering/fields/190-how-our-maps-draw-wet-paddies-shitsuden.html`; engine changes in `_comb_toe_and_hem`, `close_seams` and `_absorb`). Sawada carried 7 rings
 under the 15 deg gate line and now carries none, at a cost of **-0.27% cultivated area** - the
 sunburst was bought out almost for free, because the needles were removed by re-subdividing and
 absorbing rather than by deleting paddy.
@@ -318,7 +317,7 @@ So a comb basin under **0.25 of the fan's own design cell** is dropped by the to
 by `close_seams`; the gate `paddy_basins_are_worth_their_bund` fires under 0.20. The triangularity
 was the symptom - a fragment clipped off the lattice at the fan boundary comes out triangular - and
 the size was the cause. Full findings, both declined alternatives, the two derivations of 0.25 and
-why the gate could not sit at 0.15: `research/fields.html`, "Minimum basin SIZE".
+why the gate could not sit at 0.15: `research/rendering/fields/020-how-our-maps-draw-rice-paddies-and-their-plots-suiden.html`.
 
 **On this map, measured on the SHIPPED manifest against main's tip.** 843 -> 818 basins (the largest
 share in the pool); smallest surviving basin 379 sq ft against a 372 sq ft floor; total plot area
@@ -363,7 +362,7 @@ Recorded once here and referenced from all four hamlet notes, because the mistak
 
 A review asked for a belt whose clumps were "touching the frame" to be contained. The fix inset the
 allowed window by a canopy reach, which required the WHOLE crown to be inside - and that is
-backwards. `research/presentation.html` (GM 2026-07-20) says the belt CLIPS at the view edge and
+backwards. `research/presentation/` (GM 2026-07-20) says the belt CLIPS at the view edge and
 "a partially visible belt reads as 'the wood continues'"; `hard_features_within_frame` demands
 partial visibility of a village grove rather than containment. Only a clump with **no visible ink**
 is waste.
@@ -470,7 +469,7 @@ after `crop_to_content` (a draw-order change - the belt is drawn early on purpos
 clumps once the frame settles. Both are ordering changes in the stage that this feature explicitly did not
 touch, which is why it is deferred rather than half-done here.
 
-Also recorded, not raised: the midden-beside-the-wellhead class is settled research (`research/homesteads.html`,
+Also recorded, not raised: the midden-beside-the-wellhead class is settled research (`research/homesteads/`,
 2026-08-18); two of four scripted hamlets now roll ZERO woodland commons, so three woodland checks pass
 vacuously - a question for feature 146's check census.
 
@@ -587,7 +586,7 @@ priced trade-off whose price has risen on this roll, not a siting bug.
 **Why this is not fixed here - and it is NOT for want of research (GM 2026-08-29).** An earlier version
 of this entry called it a research question. The GM pushed back - *"I thought that our notice board
 already was well researched? I would be really surprised if our existing research was insufficient to
-that task"* - and they were right. `research/urban-features.html` already carries the answer, READ and
+that task"* - and they were right. `research/urban-features/` already carries the answer, READ and
 cited in feature 133 T13 from four sources: the bakufu set kosatsuba *"at points of heavy passage:
 barriers and ports, the foot of large bridges, and the entrances and centers of towns and villages"*;
 in farming villages *"at the village center, the shrine precinct, or the place where villagers
@@ -943,8 +942,7 @@ farmhouse off the way network, so the map keeps its second. The water story is r
 the drain leaves by the west edge, the brook by the top. The copse keeps within 90 ft of a farmhouse (median 62 ft).
 The rolled `elongated` shape is not what this seat draws - a drawn aspect of 1.92, inside the round form's ceiling of 2 -
 and the manifest records it as unhonored rather than claiming it. The plot a household works by its own house is its kitchen garden; no grain plot is laid beside a house (a research
-pass, 2026-09-28, found the house-side plot of the record is the kitchen bed, research/fields.html "Where dry
-(hatake) crops go"), so the dry crops stand in the hem along the supply canal; the ranks of this accretion-form hamlet (`lane_web: alleys`) stand off their exact lines by up to an eighth of a pitch either way (`RANK_DEPTH_JITTER`).
+pass, 2026-09-28, found the house-side plot of the record is the kitchen bed, research/fields/160-dry-fields-and-their-crops-hatake.html), so the dry crops stand in the hem along the supply canal; the ranks of this accretion-form hamlet (`lane_web: alleys`) stand off their exact lines by up to an eighth of a pitch either way (`RANK_DEPTH_JITTER`).
 Known open (settlement-review, 2026-09-28): four or five of the eight homestead bamboo stands (by crown circle or by area) are inked over a copse crown, so
 at fit zoom their culms read as grass under a tree - a draw-order question, since bamboo among the homestead's trees is
 the attested yashiki-rin form; and lane 11 stops

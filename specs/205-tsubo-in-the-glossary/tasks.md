@@ -8,7 +8,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md).
 - [x] T02 the `tsubo` entry in `glossary.py` (FR-001, FR-003), its definition from the record (D1)
       research: physical
       verify: DONE. `GLOSSARY["tsubo"]`, one variant, the definition from homesteads.html fn 12 and 15 with the pointer beside it; nothing else in the file changed
-      - [x] research pass - the record already answers it: `research/homesteads.html`, "How big was the work yard, and how did the sizes spread?", footnotes 12 (two mats to the tsubo) and 15 (the mat is 3 x 6 shaku, 90 x 180 cm); research.md R1
+      - [x] research pass - the record already answers it: `research/homesteads/`, "How big was the work yard, and how did the sizes spread?", footnotes 12 (two mats to the tsubo) and 15 (the mat is 3 x 6 shaku, 90 x 180 cm); research.md R1
       - [x] source-reader confirmed - both footnotes are READ quotes in the record (feature 143's pass; the translation marked per feature 202)
       - [x] recorded and cited - the definition's grounds in spec.md D1 and research.md R1, pointing at the entry's footnotes
       - [x] quote-check confirmed - the footnotes it rests on passed feature 195's sweep of `homesteads.html`; no new footnote was written

@@ -208,7 +208,7 @@ There is no gate to be exempt from, so there are no waivers. What survives is th
 which is a project rule rather than a mechanism: **an exception is written down with its reason and
 its cost, or it is not an exception.** That is the root CLAUDE.md's "record a decision to ACCEPT a
 limitation" clause, and the worked example it points at
-([`research/water.html`](../research/water.html#what-drawing-at-true-size-left-open), "What drawing at true size left open") is
+([`research/water/`](../research/rendering/water/010-how-our-maps-draw-channel-widths.html), "What drawing at true size left open") is
 unaffected by any of this.
 
 ## What `make done` means now

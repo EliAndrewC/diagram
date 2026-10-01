@@ -10,7 +10,7 @@
 
 No section was held by another feature (267's line in the claims file is its finished G2 work on 180, and 280's buildings groups did not touch these three). Here is what is still open:
 
-- **The first rendering page for buildings.** This is the first rendering section on the buildings page, so the session created `research/rendering/buildings.html` from new `_front`/`_tail`/`_citations-*` templates copied from the homesteads ones, and raised the page count in `tests/interactive/test_citations.py` from 20 to 21.
+- **The first rendering page for buildings.** This is the first rendering section on the buildings page, so the session created `research/rendering/buildings/` from new `_front`/`_tail`/`_citations-*` templates copied from the homesteads ones, and raised the page count in `tests/interactive/test_citations.py` from 20 to 21.
 - **Modals.** The brief named only Barracks and OfficeHall, but seven more modals named the folded headings. All nine now name the new research title and the rendering title. The fixture `classes_before_189.json` held none of them.
 - **Claims cut** (each in the section's REMOVED comment):
   - 190's 3,000-tsubo site / 1,000-tsubo built figure. It came from a search summary, and its primary, the Takayama site report, is item 143 on the download list and has not been read.

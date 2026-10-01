@@ -6,9 +6,8 @@ the houses and wells by its own distance, out of the water by the caller's bank 
 set-backs from water once drawn are attested in no period), as near the houses as those allow and, among equally near
 seats, nearest the fall line - a drawing order among seats that clear, not a custom (the downstream side is attested in
 today's villages only, research/religion-and-death/160). The machinery is shared so the two cannot drift
-(the tiers' rule: MOVE, never copy). Research: research/religion-and-death.html "Where a village buries its dead: its own ground, the temple yard, the fields or the home plot",
-"Cremation grounds and bone mounds (kasoba)", "Village burial grounds (bochi)"; the map's rules at
-research/rendering/religion-and-death.html "How our maps draw village burial grounds (bochi)", "How our maps draw cremation grounds and bone mounds (kasoba)".
+(the tiers' rule: MOVE, never copy). Research: research/religion-and-death/280-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html, research/religion-and-death/530-cremation-grounds-and-bone-mounds-kasoba.html, research/religion-and-death/160-village-burial-grounds-bochi.html; the map's rules at
+research/rendering/religion-and-death/160-how-our-maps-draw-village-burial-grounds.html, research/rendering/religion-and-death/530-how-our-maps-draw-cremation-grounds-and-bone-mounds.html.
 
 NEAREST FIRST, NOT FALL LINE FIRST. A scan that followed the fall line out to its reach before turning put a hamlet's
 ground across its paddies from its houses, 700 ft off, where a side bearing had room 200 ft away (found by the

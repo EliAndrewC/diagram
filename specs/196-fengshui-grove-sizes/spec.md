@@ -67,7 +67,7 @@ copy when it arrives.
   English-language surveys of fengshui forest area by type and tree counts; Hong Kong's fung shui wood surveys;
   Korean and Japanese village-grove analogues reported separately. Every candidate paper returned with URL, whether
   its text was readable, and verbatim passages carrying figures.
-- **FR-002**: the findings written into `research/vegetation.html`'s fengshui-forest section under feature 195's
+- **FR-002**: the findings written into `research/vegetation/`'s fengshui-forest section under feature 195's
   citation rule: quoted footnotes to public pages (or to the GM's copies, saying so), registry entries for each new
   source, the GUESS labels removed only where a readable source now gives the figure.
 - **FR-003**: `quote-check` (Opus) over every new or changed footnote before the landing.

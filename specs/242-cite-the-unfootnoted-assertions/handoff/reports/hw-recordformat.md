@@ -1,12 +1,12 @@
 ## Scope read
 
-`/diagram/.clones/diagram-research/.claude/skills/diagram/research/homesteads.html` (1,046 lines, 23 `<h2>` + 3 `<h3>`), `research/water.html` (1,088 lines, 28 `<h2>`), `research/citations/homesteads.html` (fn-94 to fn-153), `research/citations/water.html` (fn-131 to fn-185), and the 47 `<!-- READ 2026-09-14 by a source-reader (feature 242) -->` registry entries in `research/SOURCES.html` (lines 1340-1599, plus `osaka-castle-jawiki` L2851 and `dozo-jawiki` L3832, which are older entries and carry both write-ups in the older phrasing). Glossary read: `l7r/diagram/interactive/assets/glossary.json` (all keys and variants).
+`/diagram/.clones/diagram-research/.claude/skills/diagram/research/homesteads.html` (1,046 lines, 23 `<h2>` + 3 `<h3>`), `research/water/` (1,088 lines, 28 `<h2>`), `research/homesteads/` (fn-94 to fn-153), `research/water/` (fn-131 to fn-185), and the 47 `<!-- READ 2026-09-14 by a source-reader (feature 242) -->` registry entries in `research/sources/` (lines 1340-1599, plus `osaka-castle-jawiki` L2851 and `dozo-jawiki` L3832, which are older entries and carry both write-ups in the older phrasing). Glossary read: `l7r/diagram/interactive/assets/glossary.json` (all keys and variants).
 
 Sections not named below came back with nothing in any class.
 
 ---
 
-# A. `research/homesteads.html`
+# A. `research/homesteads/`
 
 ## Homestead groves (yashikirin) - the real scale and prevalence
 
@@ -22,7 +22,7 @@ Sections not named below came back with nothing in any class.
 
 **DEFECT (sentence does not read, L88)** - "it is why a minka carries such a large loft (dark is this page's word; the gassho houses worked theirs for silkworms)". The word "dark" appears nowhere in the sentence the parenthetical annotates.
 
-**VOCABULARY - `gassho`** (L88, same sentence). Not in the glossary under any variant. DEFINITION DRAFTED FROM THE RECORD (`SOURCES.html#gassho-jawiki`, this page's own registry entry): "Gassho-zukuri: the steep thatched farmhouse roof of the Sho river valleys, which yields a king-post-free loft of two to four levels - used for silkworms as well as against snow."
+**VOCABULARY - `gassho`** (L88, same sentence). Not in the glossary under any variant. DEFINITION DRAFTED FROM THE RECORD (`research/sources/010-works-cited/2870-gassho-jawiki.html`, this page's own registry entry): "Gassho-zukuri: the steep thatched farmhouse roof of the Sho river valleys, which yields a king-post-free loft of two to four levels - used for silkworms as well as against snow."
 
 **VOCABULARY - `king post`** (in the quoted note this sentence rests on, `citations/homesteads.html` fn-148: "Building in the gassho manner produces a broad space in the roof loft free of king posts"). DEFINITION: "King post: the upright timber running from the tie beam to the ridge; a roof framed without one leaves its loft clear."
 
@@ -112,7 +112,7 @@ Sections not named below came back with nothing in any class.
 
 ---
 
-# B. `research/water.html`
+# B. `research/water/`
 
 ## Water-width ladder - the real-world tiers
 
@@ -198,7 +198,7 @@ Nothing beyond the floor-value defect above (L211).
 
 ---
 
-# C. `research/citations/homesteads.html` (fn-94 to fn-153)
+# C. `research/homesteads/` (fn-94 to fn-153)
 
 **DEFECT (duplicated search date, 15 notes)** - "no publicly readable source (**searched 2026-09-14: searched 2026-09-14:** …)" in fn-101, 102, 106, 110, 112, 123, 130, 132, 138, 141, 142, 144, 146, 150, 153. (The derived `citations/homesteads.js` carries the same 15.)
 
@@ -214,7 +214,7 @@ Nothing beyond the floor-value defect above (L211).
 
 ---
 
-# D. `research/citations/water.html` (fn-131 to fn-185)
+# D. `research/water/` (fn-131 to fn-185)
 
 **DEFECT (duplicate id, L484 and L541)** - two different notes both carry `<li id="fn-75">`: the `maff-toshuko-history` half-river-closure passage and the `conghua-2026-design` canal-width table. The research page references `fn-75` from the water-width ladder (L38, the ~1 m distribution lateral) and from the brook entry (L1007, L1012), so at least one reference shows the wrong note on hover and in the page anchor.
 
@@ -252,10 +252,10 @@ No HISTORY and no other session-speak in the new entries; the registry is exempt
 
 | file | sections read | VOCABULARY | SESSION NOTE | HISTORY | DEFECT |
 |---|---|---|---|---|---|
-| `research/homesteads.html` | 23 `<h2>` + 3 `<h3>` | 5 (gassho, king post, 農業全書, the frame, clump) | 8 | 2 | 16 |
-| `research/water.html` | 28 `<h2>` | 3 (fit zoom, 圩田/围田 reading, backwater) | 8 | 5 | 7 |
-| `research/citations/homesteads.html` (fn-94→153) | 1 notes list | 1 (burgage plot) | 4 families (15 + 2 + 1 + 11 notes) | none | 15 |
-| `research/citations/water.html` (fn-131→185) | 1 notes list | 3 (superelevates, normal depth, backwater) | 3 families (19 + 2 + 8 notes) | none | 21 (incl. the duplicate `fn-75` id and its ordering) |
+| `research/homesteads/` | 23 `<h2>` + 3 `<h3>` | 5 (gassho, king post, 農業全書, the frame, clump) | 8 | 2 | 16 |
+| `research/water/` | 28 `<h2>` | 3 (fit zoom, 圩田/围田 reading, backwater) | 8 | 5 | 7 |
+| `research/homesteads/` (fn-94→153) | 1 notes list | 1 (burgage plot) | 4 families (15 + 2 + 1 + 11 notes) | none | 15 |
+| `research/water/` (fn-131→185) | 1 notes list | 3 (superelevates, normal depth, backwater) | 3 families (19 + 2 + 8 notes) | none | 21 (incl. the duplicate `fn-75` id and its ordering) |
 | `SOURCES.html` (47 new entries) | 47 entries | 2 (abreuvoir, Khitan) | 1 | none | none |
 
 ## Glossary terms to add (`l7r/diagram/interactive/assets/glossary.json`)

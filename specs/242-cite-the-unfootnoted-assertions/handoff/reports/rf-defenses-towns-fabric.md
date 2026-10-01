@@ -206,13 +206,13 @@ Six files read as the reader meets them (visible text only; HTML comments ignore
 
 | file | sections read | VOCABULARY | SESSION NOTE | HISTORY | DEFECTS |
 |---|---|---|---|---|---|
-| `research/cities/defenses.html` | 9 | 4 (`bastion`, `menbansho`, `mukaibansho`, `round cap`) | 3 | 1 | 6 |
-| `research/towns.html` | 15 | 1 (`master's rank`) | 4 | 3 | 5 |
-| `research/cities/fabric.html` | 15 | 2 (`myoji-taito`, `gogura` - both inline) | 2 | 1 | 4 |
-| `research/citations/cities/defenses.html` | works + 46 notes | 3 (`juan`, `Wubei Zhi`, `Taiping`) + `ditai` variant | 2 | none | 6 |
-| `research/citations/towns.html` | works + 45 notes | none new (all inline) | 2 | none | 6 |
-| `research/citations/cities/fabric.html` | works + 77 notes | 4 (`Wanshu zaji`, `yokocho`, `kirisute-gomen`, `keibodan`/`shobodan`) | 1 | none | none |
-| `research/SOURCES.html` (243 marked entries) | 243 | 11 out-of-scope terms noted | none | none | 1 (aggregate: untranslated titles) |
+| `research/cities/defenses/` | 9 | 4 (`bastion`, `menbansho`, `mukaibansho`, `round cap`) | 3 | 1 | 6 |
+| `research/towns/` | 15 | 1 (`master's rank`) | 4 | 3 | 5 |
+| `research/cities/fabric/` | 15 | 2 (`myoji-taito`, `gogura` - both inline) | 2 | 1 | 4 |
+| `research/cities/defenses/` | works + 46 notes | 3 (`juan`, `Wubei Zhi`, `Taiping`) + `ditai` variant | 2 | none | 6 |
+| `research/towns/` | works + 45 notes | none new (all inline) | 2 | none | 6 |
+| `research/cities/fabric/` | works + 77 notes | 4 (`Wanshu zaji`, `yokocho`, `kirisute-gomen`, `keibodan`/`shobodan`) | 1 | none | none |
+| `research/sources/` (243 marked entries) | 243 | 11 out-of-scope terms noted | none | none | 1 (aggregate: untranslated titles) |
 
 ### Glossary terms to add (`assets/glossary.json`)
 

@@ -40,7 +40,7 @@ class HomesteadBamboo(Kind):
     Covers: `bamboo_stands[role=homestead]`
     Label: convention
     Sources: yashikirin-jawiki, tonami-yashikirin-haichi, sendai-igune-modelplan, tsuijimatsu, visit-toyama-sankyoson, chikurin-jawiki, phyllostachys-enwiki
-    Entry: research/vegetation.html - 'Bamboo groves (chikurin)'; research/rendering/vegetation.html - 'How our maps draw bamboo, when one culm is too small to see'
+    Entry: research/vegetation/150-bamboo-groves-chikurin.html; research/rendering/vegetation/150-how-our-maps-draw-bamboo-when-one-culm-is-too-small-to-see.html
     """
 
     key = 'homestead bamboo'
@@ -70,7 +70,7 @@ class SharedBambooGrove(Kind):
     Covers: `bamboo_stands` with any role other than homestead - the take-yabu at the settlement's edge
     Label: convention
     Sources: chikurin-jawiki, take-jawiki, nagaokakyo-take-nishiyama, nagaokakyo-take-takenoko, qimin-yaoshu-zhongzhu, phyllostachys-enwiki
-    Entry: research/vegetation.html - 'Bamboo groves (chikurin)'; research/rendering/vegetation.html - 'How our maps draw bamboo, when one culm is too small to see'
+    Entry: research/vegetation/150-bamboo-groves-chikurin.html; research/rendering/vegetation/150-how-our-maps-draw-bamboo-when-one-culm-is-too-small-to-see.html
     """
 
     key = 'shared bamboo grove'
@@ -127,7 +127,7 @@ class Windbreak(Kind):
     Covers: `village_groves[role=windbreak]`
     Label: accurate
     Sources: forests-2020, hu-2011-fengshui-patches, coggins-minor-2018, takehara-2004-yashikirin, tonami-yashikirin-haichi, sendai-igune-modelplan
-    Entry: research/vegetation.html - "Groves around a southern Chinese village: the fengshui woods (fengshuilin) and the dooryard copse"; research/rendering/vegetation.html - "How our maps draw a village's groves: the back grove, the water-mouth grove and the dooryard copse"; research/vegetation.html - "Shelter belts on a village's windward side (bofurin)"; research/rendering/vegetation.html - "How our maps draw the shelter belt: its sides, its trees, and why it runs off the edge of the map"; research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'; research/vegetation.html - 'Bamboo groves (chikurin)'; research/rendering/vegetation.html - 'How our maps draw bamboo, when one culm is too small to see'
+    Entry: research/vegetation/020-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html; research/rendering/vegetation/020-how-our-maps-draw-a-villages-groves-the-back-grove-the-water-mouth-grove-and-the-dooryard-copse.html; research/vegetation/030-shelter-belts-on-a-villages-windward-side-bofurin.html; research/rendering/vegetation/030-how-our-maps-draw-the-shelter-belt-its-sides-its-trees-and-why-it-runs-off-the-edge-of-the-map.html; research/homesteads/040-sunlight-and-shade-on-the-farm.html; research/rendering/homesteads/040-how-our-maps-keep-yards-and-gardens-in-the-sun.html; research/vegetation/150-bamboo-groves-chikurin.html; research/rendering/vegetation/150-how-our-maps-draw-bamboo-when-one-culm-is-too-small-to-see.html
     """
 
     key = 'windbreak'
@@ -164,7 +164,7 @@ class HomesteadGrove(Kind):
     Covers: `groves`
     Label: accurate
     Sources: miura-2014-kainyo, irie-2020-igune, kashima-kainyo-1987, tonami-yashikirin-haichi, yashikirin-jawiki
-    Entry: research/homesteads.html - 'Groves of trees around farmhouses (yashikirin)'; research/rendering/homesteads.html - 'How our maps draw groves of trees around farmhouses (yashikirin)'
+    Entry: research/homesteads/010-groves-of-trees-around-farmhouses-yashikirin.html; research/rendering/homesteads/010-how-our-maps-draw-groves-of-trees-around-farmhouses-yashikirin.html
     """
 
     key = 'homestead grove'
@@ -193,7 +193,7 @@ class Alder(Kind):
     Covers: `village_groves[role=windbreak]` crowns standing in the marsh
     Label: accurate
     Sources: haneishi-2011-kushiro-alder
-    Entry: research/vegetation.html - "Reed beds and the marsh's edge (yoshihara)"; research/rendering/vegetation.html - "How our maps draw the marsh's edge"
+    Entry: research/vegetation/120-reed-beds-and-the-marshs-edge-yoshihara.html; research/rendering/vegetation/120-how-our-maps-draw-the-marshs-edge.html
     """
 
     key = 'alder'
@@ -233,7 +233,7 @@ class Copse(Kind):
     Covers: `village_groves[role=copse]`
     Label: accurate
     Sources: forests-2020, yashikirin-jawiki, miura-2019-yashikiyama, kotobank-yashikirin-heibonsha, takehara-2004-yashikirin
-    Entry: research/vegetation.html - "Groves around a southern Chinese village: the fengshui woods (fengshuilin) and the dooryard copse"; research/rendering/vegetation.html - "How our maps draw a village's groves: the back grove, the water-mouth grove and the dooryard copse"; research/homesteads.html - 'Groves of trees around farmhouses (yashikirin)'; research/rendering/homesteads.html - 'How our maps draw groves of trees around farmhouses (yashikirin)'
+    Entry: research/vegetation/020-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html; research/rendering/vegetation/020-how-our-maps-draw-a-villages-groves-the-back-grove-the-water-mouth-grove-and-the-dooryard-copse.html; research/homesteads/010-groves-of-trees-around-farmhouses-yashikirin.html; research/rendering/homesteads/010-how-our-maps-draw-groves-of-trees-around-farmhouses-yashikirin.html
     """
 
     key = 'copse'
@@ -273,7 +273,7 @@ class WoodlandCommons(Kind):
     Covers: `commons[role=woodland]` - the coppice patches
     Label: accurate
     Sources: ijc-yamaguni, satoyama-enwiki, satoyama-jawiki, kotobank-murazakai, iriaichi-jawiki, miura-2019-yashikiyama, rinya-satoyama-junkan, katakura-1989-konara-coppice, migita-chiba-konara-canopy
-    Entry: research/vegetation.html - 'Village fuel woods and their coppice (satoyama)', 'How thickly trees stood in a wood, and how wide their crowns'; research/rendering/vegetation.html - 'How our maps bound and draw the coppice woods', 'How our maps stock woods and size crowns'
+    Entry: research/vegetation/220-village-fuel-woods-and-their-coppice-satoyama.html, research/vegetation/060-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html; research/rendering/vegetation/220-how-our-maps-bound-and-draw-the-coppice-woods.html, research/rendering/vegetation/060-how-our-maps-stock-woods-and-size-crowns.html
     """
 
     key = 'woodland commons'
@@ -306,7 +306,7 @@ class ScrubAndRoughGrazing(Kind):
     Covers: `commons[role=grazing]`
     Label: accurate
     Sources: pmc7538448-levee, meadow-enwiki, nonoichi-keihanritsu, hiroshima-keihan-manual
-    Entry: research/vegetation.html - 'Scrub and rough grass at the edges of fields and channels'; research/rendering/vegetation.html - 'How our maps keep scrub off fields, channels and open water'
+    Entry: research/vegetation/090-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.html; research/rendering/vegetation/090-how-our-maps-keep-scrub-off-fields-channels-and-open-water.html
     """
 
     key = 'scrub and rough grazing'
@@ -361,7 +361,7 @@ class Marsh(Kind):
     Covers: `marshes` - every marsh patch, whatever its role
     Label: accurate
     Sources: aas-rice-technology, mineta-2007-tameike, tameike-jawiki, kagawa-tameike-structure, maff-tameike-shizen, nies-tameike, inamino-tameike-museum, kayabun-kayabuki, ohmi-yoshi, biwako-visitors-yoshi-hiire, opal-biwa-yoshi-hara
-    Entry: research/water.html - 'Marshes and wetlands (shitchi)', 'Reservoir ponds (tameike)'; research/rendering/water.html - 'How our maps draw marshes and wetlands (shitchi)', 'How our maps draw reservoir ponds (tameike), their reeds and their embankments'; research/vegetation.html - "Reed beds and the marsh's edge (yoshihara)"; research/rendering/vegetation.html - "How our maps draw the marsh's edge"
+    Entry: research/water/140-marshes-and-wetlands-shitchi.html, research/water/280-reservoir-ponds-tameike.html; research/rendering/water/140-how-our-maps-draw-marshes-and-wetlands-shitchi.html, research/rendering/water/280-how-our-maps-draw-reservoir-ponds-tameike-their-reeds-and-their-embankments.html; research/vegetation/120-reed-beds-and-the-marshs-edge-yoshihara.html; research/rendering/vegetation/120-how-our-maps-draw-the-marshs-edge.html
     """
 
     key = 'marsh'

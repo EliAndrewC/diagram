@@ -1,6 +1,6 @@
 # Quote check — feature 242 footnotes
 
-Scope: `research/buildings.html` fn-81–93 and fn-95–113 (notes on `research/citations/buildings.html`); `research/vegetation.html` fn-98–107 and fn-109–126 (notes on `research/citations/vegetation.html`). 60 notes: 37 citations, 23 absence notes. Every footnote URL fetched once by address.
+Scope: `research/buildings/` fn-81–93 and fn-95–113 (notes on `research/buildings/`); `research/vegetation/` fn-98–107 and fn-109–126 (notes on `research/vegetation/`). 60 notes: 37 citations, 23 absence notes. Every footnote URL fetched once by address.
 
 ## NOT-READABLE
 

@@ -26,7 +26,7 @@ every footnote and every evidence class keeps its text, which stages 1 and 2 pro
 ## Phase 1 - the registry, one file per source (FR-007 to FR-010; D1, D2)
 
 - [x] T03 RED: `tests/interactive/test_record_assembly.py` asserts `assemble(split(page)) == page` over
-      `research/SOURCES.html` and fails for want of `l7r.diagram.interactive.record`
+      `research/sources/` and fails for want of `l7r.diagram.interactive.record`
       research: rendering
       verify: DONE. the test asserts assemble(split(page)) == page over the real record and failed with ModuleNotFoundError before the module existed
 - [x] T04 `interactive/record/fragments.py` - the layout as `data-model.md` states it: what a fragment is
@@ -46,7 +46,7 @@ every footnote and every evidence class keeps its text, which stages 1 and 2 pro
       verify: DONE. tools/record_asset.py and make record with CHECK=1, PAGE=, SPLIT=, message shapes as contracts/record-cli.md states
 - [x] T07 **The registry is split**: `research/sources/` - front (with the commented-out block), the three
       section files, 920 entries under `010-works-cited/`, tail. `make record CHECK=1` reports in sync and `git diff --stat
-      research/SOURCES.html` is empty (FR-009, SC-003)
+      research/sources/` is empty (FR-009, SC-003)
       research: rendering
       measure: the byte diff of the assembled registry against the file it replaced
       verify: DONE. research/sources/ - 925 fragments, three visible sections, 920 entries under 010-works-cited/; SOURCES.html byte-identical, git diff empty
@@ -63,12 +63,12 @@ every footnote and every evidence class keeps its text, which stages 1 and 2 pro
 
 ## Phase 2 - the questions (FR-011 to FR-015; D2, D3)
 
-- [x] T09 **`research/ways.html` is split** (the reference artifact): `_front`, 5 questions, `_tail`.
+- [x] T09 **`research/ways/` is split** (the reference artifact): `_front`, 5 questions, `_tail`.
       Byte-identical, proven by an empty diff
       research: rendering
-      measure: `git diff --stat research/ways.html`
+      measure: `git diff --stat research/ways/`
       verify: DONE. research/ways/ - 7 fragments, ways.html byte-identical
-- [x] T10 **`research/cities/defenses.html` is split** - the one-level-down case, whose references carry
+- [x] T10 **`research/cities/defenses/` is split** - the one-level-down case, whose references carry
       `../citations/cities/...`. Byte-identical
       research: rendering
       verify: DONE. research/cities/defenses/ - 11 fragments, byte-identical, the one-level-down case
@@ -105,7 +105,7 @@ every footnote and every evidence class keeps its text, which stages 1 and 2 pro
       reads a committed one today
       research: rendering
       verify: DONE. citations_side.py derives the 1,850 keys by R5's rule and moves each note beside the question that first cites it; citations.py is NOT changed as a reader - the assembly writes the page, derive() reads it from disk, the page is written again with the works region filled (FR-029)
-- [x] T17 **`ways` notes split** (the reference artifact again): the diff of `research/citations/ways.html`
+- [x] T17 **`ways` notes split** (the reference artifact again): the diff of `research/ways/`
       is inspected line by line and declared - the numbers, the ids that carry them, and the note ORDER
       (`ways` cites 12, 13, 1, 14 ... so its notes move), and nothing else
       research: rendering
@@ -126,7 +126,7 @@ every footnote and every evidence class keeps its text, which stages 1 and 2 pro
       one of them edited to accommodate this feature. An edit to any of them is a finding, and the reason
       goes here
       research: rendering
-      verify: DONE. two tests edited, both recorded as findings rather than accommodations - test_record.py resolves a fragment's relative token as the PAGE reads it (a ../x.md written for research/buildings.html is one level up from research/buildings/), and test_footnotes.py accepts the fnref-N-2 ordinal, a form its pattern predated - it matched neither the duplicated ids nor water.html's hand-made fnref-75b, so those references were invisible to every check in the file
+      verify: DONE. two tests edited, both recorded as findings rather than accommodations - test_record.py resolves a fragment's relative token as the PAGE reads it (a ../x.md written for research/buildings/ is one level up from research/buildings/), and test_footnotes.py accepts the fnref-N-2 ordinal, a form its pattern predated - it matched neither the duplicated ids nor water.html's hand-made fnref-75b, so those references were invisible to every check in the file
 
 ## Phase 4 - collecting the saving (FR-023 to FR-026; D8)
 

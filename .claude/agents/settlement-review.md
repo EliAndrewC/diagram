@@ -230,7 +230,7 @@ through an agent type the guard does not key on - say so in your output and revi
    classify the ground under it by PIXEL COLOR (Y's own fill/tint, not Y's recorded polygon), and
    count - of the glyph FAMILIES the complaint names (the GM said "small pine trees and such": pines,
    brush; a family the recorded doctrine explicitly admits, such as grass grading into reeds per
-   `research/vegetation.html`, is counted separately and reported, not charged). Any count above a
+   `research/vegetation/`, is counted separately and reported, not charged). Any count above a
    handful is needs-work. There is no audit verdict to weigh against it any more (feature 193): the
    adjudicator encoded the AUTHOR'S allowances - a feather band, a keep-out inset - and the author's
    allowance is precisely what is under review, which is why it was retired rather than consulted.
@@ -273,7 +273,7 @@ containment or count - never form. For each such feature, state the intended for
 - A quarter, warren or district should read as **fabric with a grain** (rows, lanes, frontage), not a
   scatter of identical boxes.
 - **Channel widths depict RANK, not discharge - never audit conservation at a junction** (GM
-  ruling 2026-08-16, research/water.html "Drawn width is RANK"): a 7 px brook feeding a 14 px
+  ruling 2026-08-16, research/rendering/water/010-how-our-maps-draw-channel-widths.html): a 7 px brook feeding a 14 px
   head-race that forks into arms summing wider than itself is the sanctioned convention (and the
   intake jump is real engineering - a sluice-fed head-race is wider and slower than its feeder).
   Judge each stroke's own head-to-tail taper and the trunk > branch > delivery hierarchy read;
@@ -286,7 +286,7 @@ containment or count - never form. For each such feature, state the intended for
   compass ANGLE is not a rule: measured across the whole pool (2026-07-27), the approved belts run
   33-49 degrees off the ideal across-wind axis, and the belt once reported as wrong-facing (Ubame)
   was 31 degrees off - better aligned than every approved map but two. A belt follows the cluster's
-  windward fringe; the wind chooses the side, not the bearing. See `research/towns.html`.
+  windward fringe; the wind chooses the side, not the bearing. See `research/towns/`.
 
 ### Agreement with a Mode A sheet of the same place
 
@@ -445,7 +445,7 @@ counterpart. Hyphens only - no em-dashes or en-dashes. Read EVERY drawn string.
 "People" means samurai: a count of humans is inhabitants or population. "Domain", never "demesne". A generic office-holder is they / their / them.
 
 A glyph deliberately drawn off scale or off color so that it reads at map scale is a map drawing CONVENTION, not a
-defect (`research/presentation.html` records them): the four labels a rendering decision can carry are accurate,
+defect (`research/presentation/` records them): the four labels a rendering decision can carry are accurate,
 deviation, map drawing convention and guess.
 
 ## What to ignore

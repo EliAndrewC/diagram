@@ -74,7 +74,7 @@ Do NOT move:
   the four labels, in the record's words: **accurate** (the record says so), **deviation** (the setting differs
   from the history it is based on), **a map drawing convention** (a glyph scaled or colored for the eye), or
   **guess** (the record is silent). The reader must never be told a guess or a calibration is a finding.
-- **Sources roster**: only keys the registry (`research/SOURCES.html`) already has, each written as a link
+- **Sources roster**: only keys the registry (`research/sources/`) already has, each written as a link
   exactly as the page already writes it. When an entry rests on no work - a GM ruling, a project measurement -
   the roster says so: `<p><strong>Sources:</strong> the GM's ruling of 2026-08-29; this project's measurement of the
   five scripted hamlets</p>`. **Never write a bare key, never coin a key, never write a URL you did not fetch,
@@ -122,11 +122,11 @@ and reword or delete every comment that names `settlements/<topic>.md` or `settl
 ## A new page
 
 `ways.html`, `presentation.html`, `settlements.html` and `cities/sizing.html` do not exist. A new page copies
-`research/towns.html`'s `<head>` exactly (charset, viewport, title, `assets/record.css`, `assets/glossary.js`,
+`research/towns/`'s `<head>` exactly (charset, viewport, title, `assets/record.css`, `assets/glossary.js`,
 `citations/<name>.js`, `assets/record.js`; from `cities/` the asset paths start `../`), one `<main>` with an
 `<h1>` whose id is the anchor of its text, the opening line above, an `<hr>`, the entries, and the closing
 `<section class="citations">` line linking to its citations page. Its citations page copies
-`research/citations/towns.html`'s head and `<h1>`, the intro paragraph, an EMPTY works section between the two
+`research/towns/`'s head and `<h1>`, the intro paragraph, an EMPTY works section between the two
 markers exactly as they appear in that file (`<!-- works-cited: DERIVED by ... -->` and `<!-- /works-cited -->`),
 and an empty `<section class="footnotes"><ol></ol></section>`. The session runs `make citations`, which writes the
 `.js`; you do not.

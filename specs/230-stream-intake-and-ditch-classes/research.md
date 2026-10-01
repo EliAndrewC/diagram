@@ -15,9 +15,8 @@ What the engine draws at the head of a comb field today, read from the code and 
 
 Neither constant carries a comment or a research entry. `settlements/water.md` line 12 (the Ikegami rule) says the brook
 "reaches the sluice, and there BECOMES the irrigation channel - it hands off to the comb and stops", a rule that came
-from the GM's catch of two overlapping water lines on the first Ikegami draft, not from research. `research/water.html`
-"Drawn width is RANK" mentions "ponding above the weir" in passing as the physical reading of the width step, and
-`research/fields.html` "The communal-system floor" lists "weir, head-race, canal fork" as the communal works, with no
+from the GM's catch of two overlapping water lines on the first Ikegami draft, not from research. `research/rendering/water/010-how-our-maps-draw-channel-widths.html` mentions "ponding above the weir" in passing as the physical reading of the width step, and
+`research/fields/` "The communal-system floor" lists "weir, head-race, canal fork" as the communal works, with no
 footnote on the weir. No section of the record asks where a stream becomes a ditch.
 
 At the foot: the collector (`role: drain`) ends at its outfall; with `water_sink="pond"` the run to the tameike is drawn
@@ -416,7 +415,7 @@ out to have a different cause from the one proposed.
 - **Mizuguchi's 111.6 degree drain hairpin** - the pond, correctly stepped across the fall by the brook, lay behind
   the collector's heading. `pond_run` leads a run to a pond more than 100 degrees off round a cubic (sharpest bend 37).
   A 60 degree threshold was tried first and bent every ordinary cross-fall outfall, moving Inashiro's lane web.
-- **Kuwabata's canals classed irrigation** - not an open question: research/archetypes.html already records them as
+- **Kuwabata's canals classed irrigation** - not an open question: research/archetypes/ already records them as
   the conveyance-and-drainage network the ponds exchange water with. A `pond canal` class on that archetype.
 - **The Pond modal contradicting its map** - rewritten to name both parts a pond plays.
 - **Paddy rings below 15 degrees on Kashikawa** - not reproducible by the gate's own predicate on either the recorded

@@ -81,8 +81,8 @@ and the style guide before you write.
      under `.claude/skills/diagram/l7r/` and `.claude/skills/diagram/tests/fixtures/classes_before_189.json`. A link
      goes to the new research section, or to the rendering section where it pointed at a map rule (from another page:
      `rendering/buildings.html#<rid>`; from a rendering page: `../buildings.html#<id>`). A modal's `Entry:` names the new
-     titles - the research title under `research/buildings.html - '<title>'` and the rendering title under
-     `research/rendering/buildings.html - '<title>'` - and the fixture's `"entry"` for that class is changed to the same
+     titles - the research title under `research/buildings/ - '<title>'` and the rendering title under
+     `research/rendering/buildings/ - '<title>'` - and the fixture's `"entry"` for that class is changed to the same
      string. A code comment that named an old heading names the new one.
    - **Confusable pairs** you meet (two things a reader could mistake for each other): `make append
      FILE=/diagram/.clones/diagram-reorg/specs/292-research-presentation-style/confusables.md LINE="- <title> / <title>: <the difference>"`.

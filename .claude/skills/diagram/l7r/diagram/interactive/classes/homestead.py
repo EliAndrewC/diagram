@@ -48,7 +48,7 @@ class Farmhouse(Kind):
     Covers: `houses` - the dwelling of each household
     Label: accurate
     Sources: sakamoto-tsubaki-1985-omoya-muki, yamamoto-2014-koshijo-shuraku, oamishirasato-choshi-kaoku
-    Entry: research/homesteads.html - 'Farmhouses (minka)', 'The farmstead and what stood on it (yashiki)'; research/ways.html - 'Village lanes'; research/rendering/homesteads.html - 'How our maps draw farmhouses (minka)', 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads/400-farmhouses-minka.html, research/homesteads/140-the-farmstead-and-what-stood-on-it-yashiki.html; research/ways/020-village-lanes.html; research/rendering/homesteads/400-how-our-maps-draw-farmhouses-minka.html, research/rendering/homesteads/140-how-our-maps-draw-the-farmstead-and-what-stands-on-it-yashiki.html
     """
 
     key = 'farmhouse'
@@ -82,7 +82,7 @@ class StorageShed(Kind):
     Covers: `houses[].shed` (the storehouse against a farmhouse) and `farm_sheds` (its record)
     Label: convention
     Sources: oamishirasato-choshi-kaoku, koshigaya-shishi-noumin-jukyo, bunka-minami-naya, nerima-mitome-naya
-    Entry: research/homesteads.html - 'The farmstead and what stood on it (yashiki)', 'Farm storehouses (kura)', 'Farm sheds and barns (naya)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)', 'How our maps draw farm storehouses (kura)'
+    Entry: research/homesteads/140-the-farmstead-and-what-stood-on-it-yashiki.html, research/homesteads/120-farm-storehouses-kura.html, research/homesteads/440-farm-sheds-and-barns-naya.html; research/rendering/homesteads/140-how-our-maps-draw-the-farmstead-and-what-stands-on-it-yashiki.html, research/rendering/homesteads/120-how-our-maps-draw-farm-storehouses-kura.html
     """
 
     key = 'storage shed'
@@ -128,7 +128,7 @@ class Byre(Kind):
     Covers: `byres` - the draft-animal sheds
     Label: accurate
     Sources: cambridge-animals-china, okayama-chikusanshi-shiyo, agrinews-2023-tajima-maya, ndl-crd-shakkogyu, kotobank-umaya, magariya-jawiki, koshigaya-shishi-noumin-jukyo
-    Entry: research/homesteads.html - 'Draft oxen and horses and their byres (umaya)', 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw and place byres (umaya)', 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads/460-draft-oxen-and-horses-and-their-byres-umaya.html, research/homesteads/140-the-farmstead-and-what-stood-on-it-yashiki.html; research/rendering/homesteads/460-how-our-maps-draw-and-place-byres-umaya.html, research/rendering/homesteads/140-how-our-maps-draw-the-farmstead-and-what-stands-on-it-yashiki.html
     """
 
     key = 'byre'
@@ -161,7 +161,7 @@ class RetirementHouse(Kind):
     Covers: `retirement_houses` - the retired couple's own roof in the homestead
     Label: accurate
     Sources: kotobank-inkyo, kotobank-inkyoya
-    Entry: research/settlements.html - 'Households: how many live in a house, and under how many roofs (ie)'; research/rendering/settlements.html - 'How our maps count and draw households (ie)'
+    Entry: research/settlements/035-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html; research/rendering/settlements/035-how-our-maps-count-and-draw-households.html
     """
 
     key = 'retirement house'
@@ -200,7 +200,7 @@ class ThreshingYard(Kind):
     Covers: `threshing_yards` - the floor, its mats, and the rack by the house where the harvest weather is changeable
     Label: convention
     Sources: kitamoto-inakoki-niwa, kitamoto-mushiro-niwa, tobunken-mushiro, nishimura-makino-1959
-    Entry: research/homesteads.html - 'Threshing and drying yards at farmhouses (niwa)'; 'Rice-drying racks (hasa, hasagi)'; research/rendering/homesteads.html - 'How our maps draw threshing and drying yards (niwa)', 'How our maps keep yards and gardens in the sun', 'How our maps draw rice-drying racks (hasa, hasagi)'
+    Entry: research/homesteads/020-threshing-and-drying-yards-at-farmhouses-niwa.html, research/homesteads/500-rice-drying-racks-hasa-hasagi.html; research/rendering/homesteads/020-how-our-maps-draw-threshing-and-drying-yards-niwa.html, research/rendering/homesteads/040-how-our-maps-keep-yards-and-gardens-in-the-sun.html, research/rendering/homesteads/500-how-our-maps-draw-rice-drying-racks-hasa-hasagi.html
     """
 
     key = 'threshing yard'
@@ -226,7 +226,7 @@ class Garden(Kind):
     Covers: `gardens`
     Label: guess
     Sources: not recorded
-    Entry: research/homesteads.html - 'Sunlight and shade on the farm', 'Kitchen gardens beside farmhouses (yashikibatake)'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun', 'How our maps size kitchen gardens (yashikibatake)'
+    Entry: research/homesteads/040-sunlight-and-shade-on-the-farm.html, research/homesteads/050-kitchen-gardens-beside-farmhouses-yashikibatake.html; research/rendering/homesteads/040-how-our-maps-keep-yards-and-gardens-in-the-sun.html, research/rendering/homesteads/050-how-our-maps-size-kitchen-gardens-yashikibatake.html
     """
 
     key = 'garden'
@@ -264,7 +264,7 @@ class Privy(Kind):
     Covers: `farm_fixtures[kind=privy]`
     Label: accurate
     Sources: koshigaya-shishi-noumin-jukyo, oamishirasato-choshi-kaoku, suzuki-1959-noson-benjo, sugiura-1977-tohoku, sinyoken-madori, wang-ochiai-2022
-    Entry: research/homesteads.html - 'Farm privies and their night soil (benjo)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps place privies (benjo)'; 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads/260-farm-privies-and-their-night-soil-benjo.html, research/homesteads/140-the-farmstead-and-what-stood-on-it-yashiki.html; research/rendering/homesteads/260-how-our-maps-place-privies-benjo.html, research/rendering/homesteads/140-how-our-maps-draw-the-farmstead-and-what-stands-on-it-yashiki.html
     """
 
     key = 'privy'
@@ -295,7 +295,7 @@ class WoodShed(Kind):
     Covers: `farm_fixtures[kind=woodpile]` - the wood shed
     Label: accurate
     Sources: boso-no-mura-kigoya, koshigaya-shishi-noumin-jukyo, oamishirasato-choshi-kaoku
-    Entry: research/homesteads.html - 'Firewood stacks and sheds (kigoya)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw firewood sheds (kigoya)'; 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads/212-firewood-stacks-and-sheds-kigoya.html, research/homesteads/140-the-farmstead-and-what-stood-on-it-yashiki.html; research/rendering/homesteads/212-how-our-maps-draw-firewood-sheds-kigoya.html, research/rendering/homesteads/140-how-our-maps-draw-the-farmstead-and-what-stands-on-it-yashiki.html
     """
 
     key = 'wood shed'
@@ -323,7 +323,7 @@ class ManureHeap(Kind):
     Covers: `farm_fixtures[kind=manure]`
     Label: guess
     Sources: jawiki-koedame, artic-pigsty-latrine, kyuhi-jawiki, suzuki-1959-noson-benjo
-    Entry: research/homesteads.html - 'Manure heaps and compost (kyuhi)'; 'Farm privies and their night soil (benjo)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps place manure heaps (kyuhi)'; 'How our maps place privies (benjo)'; 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads/211-manure-heaps-and-compost-kyuhi.html, research/homesteads/260-farm-privies-and-their-night-soil-benjo.html, research/homesteads/140-the-farmstead-and-what-stood-on-it-yashiki.html; research/rendering/homesteads/211-how-our-maps-place-manure-heaps-kyuhi.html, research/rendering/homesteads/260-how-our-maps-place-privies-benjo.html, research/rendering/homesteads/140-how-our-maps-draw-the-farmstead-and-what-stands-on-it-yashiki.html
     """
 
     key = 'manure heap'
@@ -352,7 +352,7 @@ class BathRoom(Kind):
     Covers: `farm_fixtures[kind=bath]` - the bath room joined to the house
     Label: accurate
     Sources: tsuda-1991-nikko-shasan-minka, mizumaki-goemonburo
-    Entry: research/homesteads.html - 'Baths on the farm (furo)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw farm baths (furo)'; 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads/214-baths-on-the-farm-furo.html, research/homesteads/140-the-farmstead-and-what-stood-on-it-yashiki.html; research/rendering/homesteads/214-how-our-maps-draw-farm-baths-furo.html, research/rendering/homesteads/140-how-our-maps-draw-the-farmstead-and-what-stands-on-it-yashiki.html
     """
 
     key = 'bath room'
@@ -383,7 +383,7 @@ class HenCoop(Kind):
     Covers: `farm_fixtures[kind=coop]`
     Label: accurate
     Sources: cambridge-animals-china, qimin-yaoshu-yangji, pitt-zhengzhou-coop, buck-1930-farm-economy
-    Entry: research/homesteads.html - 'Chickens and chicken coops'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw chicken coops', 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads/215-chickens-and-chicken-coops.html, research/homesteads/140-the-farmstead-and-what-stood-on-it-yashiki.html; research/rendering/homesteads/215-how-our-maps-draw-chicken-coops.html, research/rendering/homesteads/140-how-our-maps-draw-the-farmstead-and-what-stands-on-it-yashiki.html
     """
 
     key = 'hen coop'
@@ -410,7 +410,7 @@ class HouseholdShrine(Kind):
     Covers: `farm_fixtures[kind=shrine]` - the hokora
     Label: convention
     Sources: tokushima-yashikigami, jawiki-yashikigami, kameyama-yashikigami, sugiura-1973-fuzoku
-    Entry: research/homesteads.html - 'Household shrines (yashikigami)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps place household shrines (yashikigami)'; 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads/216-household-shrines-yashikigami.html, research/homesteads/140-the-farmstead-and-what-stood-on-it-yashiki.html; research/rendering/homesteads/216-how-our-maps-place-household-shrines-yashikigami.html, research/rendering/homesteads/140-how-our-maps-draw-the-farmstead-and-what-stands-on-it-yashiki.html
     """
 
     key = 'household shrine'
@@ -440,7 +440,7 @@ class Persimmon(Kind):
     Covers: `persimmons` - the dooryard persimmon tree
     Label: accurate
     Sources: toyoko-kaki, uekipedia-kaki, jataff-fuyu-kaki, sato-1962-haichi, pfaf-kaki
-    Entry: research/homesteads.html - 'Fruit trees in the farmyard: persimmon, chestnut and plum (kaki)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw farmyard fruit trees (kaki)'; 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads/218-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html, research/homesteads/140-the-farmstead-and-what-stood-on-it-yashiki.html; research/rendering/homesteads/218-how-our-maps-draw-farmyard-fruit-trees-kaki.html, research/rendering/homesteads/140-how-our-maps-draw-the-farmstead-and-what-stands-on-it-yashiki.html
     """
 
     key = 'persimmon'
@@ -479,7 +479,7 @@ class BurialGround(Kind):
     Covers: `cemeteries` - a village's burial ground
     Label: accurate
     Sources: kofukuroman-sanmai, bochi-jawiki, kotobank-ryobosei, haka-jawiki, danka-jawiki, takeuchi-2017-bochi-hosei, kaf2-kinsei-bo, tsuya-kurosu-tokugawa-mortality
-    Entry: research/religion-and-death.html - 'Where a village buries its dead: its own ground, the temple yard, the fields or the home plot'; 'Village burial grounds (bochi)'; research/rendering/religion-and-death.html - 'How our maps choose where a village's and a hamlet's dead lie'; 'How our maps draw village burial grounds'
+    Entry: research/religion-and-death/280-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html, research/religion-and-death/160-village-burial-grounds-bochi.html; research/rendering/religion-and-death/280-how-our-maps-choose-where-a-villages-and-a-hamlets-dead-lie.html, research/rendering/religion-and-death/160-how-our-maps-draw-village-burial-grounds.html
     """
 
     key = 'burial ground'

@@ -174,8 +174,7 @@ class CombMixin:
         self.M.setdefault("comb_floors", {})[name] = [[round(x, 1), round(y, 1)] for x, y in env]
 
     def bund_junctions(self: Settlement, plots: Sequence[Mapping[str, Any]], name: str) -> None:  # type: ignore[misc]
-        """Pile earth into every bund CROSSING (GM 2026-07-25; research/archetypes.html "Why is a hand-piled
-        bund never straight - and never square at the corners?"). Same rule as the polder's organic parcels -
+        """Pile earth into every bund CROSSING (GM 2026-07-25; research/archetypes/050-parcels-and-bunds-inside-a-polder-aze.html). Same rule as the polder's organic parcels -
         hand-piled mud has no sharp corners - but a SHARED-BARRIER field needs the opposite operation to
         express it. A polder's parcels are separate polygons with a real gap between them, so rounding is
         SUBTRACTIVE: each parcel gives up its corners and the bund, being the space between, just widens.
@@ -410,7 +409,7 @@ class CombMixin:
 
     def _coarse_grain_top_up(self: Settlement, net: dict[str, Any], drawn_px2: float, refused: Callable[[Poly], bool]) -> list[dict[str, Any]]:  # type: ignore[misc]
         """The reserve plots a wild fan middle adds to the drawn strip so it holds the coarse-grain need (feature 287, W36;
-        `grain.py`, research/fields.html fields/165): none where the hamlet grows its barley on its drained paddy over the
+        `grain.py`, research/fields/ fields/165): none where the hamlet grows its barley on its drained paddy over the
         winter and that covers the need, the middle's plots nearest the toe first where it does not. The winter crop is
         rolled only among the forms this ground can feed (`WINTER_CROP`'s typing rule), so the band returned holds the
         need by construction. A generated comb hamlet only - it alone rolls `fan_middle`; the form and the acreage go in the meta."""

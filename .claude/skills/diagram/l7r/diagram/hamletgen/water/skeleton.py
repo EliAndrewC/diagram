@@ -51,8 +51,7 @@ def stage_water_frame(s: Settlement, plan: SitePlan) -> None:
         wind_source="declared" if plan.spec.windward else "regional",
         # THE FORM IS ROLLED, NOT ASSUMED (feature 126). This tier hardcoded `nucleated=True` from
         # the day it was written, which meant every hamlet the generator has ever produced was the
-        # same KIND of settlement. The research supports three (research/homesteads.html, "Clustered
-        # and scattered villages (shūson, sanson)"), so per Principle XII the form is a seeded knob.
+        # same KIND of settlement. The research supports three (research/homesteads/150-clustered-and-scattered-villages-shuson-sanson.html), so per Principle XII the form is a seeded knob.
         #
         # `nucleated` is DERIVED from `settlement_form` rather than set beside it. They were two
         # independent facts that happened to agree; making one a function of the other means they

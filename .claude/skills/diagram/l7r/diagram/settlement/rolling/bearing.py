@@ -1,12 +1,12 @@
 """Which way a farmhouse faces (269 B18): the village's common bearing and the spread about it, following its lane.
 
-research/homesteads.html "Farmhouses (minka)" (its map rules at research/rendering/homesteads.html "How our maps draw farmhouses (minka)"): a survey of 27 villages found each
+research/homesteads/400-farmhouses-minka.html (its map rules at research/rendering/homesteads/400-how-our-maps-draw-farmhouses-minka.html): a survey of 27 villages found each
 village's main houses spread over its commonest compass point and the point either side of it - three of sixteen, some
 67 degrees - the neighboring bearings arising where the roads curve; 87% faced within that spread and 11% were turned to
 the right. The rule the map follows: each farmhouse is turned from its village's common bearing, south or near it, by up
 to about 30 degrees either way, most by much less and following the lane it stands on where the lane curves, and its yard
 and garden beds turn with it (the GM's ruling of 2026-09-26). THE QUARTER-TURNED TENTH IS NOT DRAWN (feature 280 M26,
-research/homesteads.html "Farmhouses (minka)"): the survey's right-turned 11% is a count of 1974-1984 with no count before 1868 beside it, while
+research/homesteads/400-farmhouses-minka.html): the survey's right-turned 11% is a count of 1974-1984 with no count before 1868 beside it, while
 the cause the survey gives for the smaller turns - streets curving along the slope - is attested in an Okinawan village laid
 out in 1736, so the turn follows the lane and no house is turned a quarter away.
 

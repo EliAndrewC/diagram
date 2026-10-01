@@ -72,8 +72,8 @@ dropped stale content, by rule file, with reasons.
 
 ### Phase 1 - FR-001 on the pages that already exist
 
-The session edits: `research/water.html` (head-race 6.0 ft, the sentence at the width ladder);
-`research/urban-features.html` (the drum tower's decision figures 36 ft / 30 ft); `research/cities/river-cities.html`
+The session edits: `research/water/` (head-race 6.0 ft, the sentence at the width ladder);
+`research/urban-features/` (the drum tower's decision figures 36 ft / 30 ft); `research/cities/river-cities/`
 (receives the junction hydrology in Phase 2; noted here). The other FR-001 items are applied by the writers as
 they move content (the rulebook says so) and the writers report them. `make page-check` after.
 

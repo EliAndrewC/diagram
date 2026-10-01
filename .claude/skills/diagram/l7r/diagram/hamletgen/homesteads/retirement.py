@@ -1,12 +1,11 @@
 """The retirement house (inkyoya) - a second, smaller roof of one family in its own homestead (269 B42).
 
-research/settlements.html "Households: how many live in a house, and under how many roofs (ie)": a farm family took one
+research/settlements/035-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html: a farm family took one
 of two attested forms - the generations under one roof, or a farmhouse with a small retirement house in the same yard, with an
 entrance of its own. A choice between forms, so the `family_form` knob rolls it per settlement from the map's seed and
 declares it as `meta.family_form`. A retirement house belongs to its farmhouse's household - one family living as two
 households - so it is recorded under its own key, `retirement_houses`, never in `houses`: it counts neither toward the
-households nor against the band of occupied farmhouses (research/rendering/settlements.html "How our maps count and
-draw households").
+households nor against the band of occupied farmhouses (research/rendering/settlements/035-how-our-maps-count-and-draw-households.html).
 """
 
 from __future__ import annotations

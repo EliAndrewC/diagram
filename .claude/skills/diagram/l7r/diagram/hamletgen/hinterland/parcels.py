@@ -41,7 +41,7 @@ rotating a footprint must never buy ground the square could not have had."""
 _COMMONS_FLOOR_FT = 120.0
 """The smallest square a woodland COMMONS may be drawn as, in feet.
 
-Not a historical minimum - `research/fields.html` is clear that coppice lots were "whatever odd corner
+Not a historical minimum - `research/fields/` is clear that coppice lots were "whatever odd corner
 the village spared", and there is no attested floor. This is a LEGIBILITY floor, and it exists
 because the size-variance machinery above can compound its way under one: a per-map ladder scale
 times a per-parcel band multiplier took Kashikawa to 103 ft. The number is our own recorded
@@ -523,8 +523,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 jy = y + (s._hjit(x, y, 72.0) - 0.5) * step
                 # ...and the size roll is wider than it was, for the reason recorded at `_ladder`:
                 # +/-15% of a shared rung left two maps' stands 1.8% apart. This is a DEGREE on a
-                # continuum (calibrated liberty), not a knob - `research/vegetation.html` ("Village fuel
-                # woods and their coppice") treats a lot's size as whatever ground the village spared, not
+                # continuum (calibrated liberty), not a knob - `research/vegetation/220-village-fuel-woods-and-their-coppice-satoyama.html` treats a lot's size as whatever ground the village spared, not
                 # a surveyed figure, so a narrow roll was narrower than our own doctrine.
                 # TRY THE MIRRORED SIZE BEFORE FALLING BACK TO THE RUNG. Widening the roll upward
                 # made it WORSE at first, in a way only the artifact showed: a grown parcel often
@@ -712,8 +711,7 @@ def _parcel_outline(s: Settlement, x: float, y: float, hw: float, hh: float, bc:
     ground the square could not have had. The radius runs 0.80-1.00 of the ellipse's, on two low
     harmonics seeded from the parcel's own position (`_hjit`), so the ring is smooth rather than
     spiky - a wood's edge wanders, it does not serrate - and the AREA comes out at ~85% of the
-    ellipse's: the size rules above still bound it, from above. Recorded in research/vegetation.html
-    "Village fuel woods and their coppice", with the one form deliberately NOT drawn here: the strip
+    ellipse's: the size rules above still bound it, from above. Recorded in research/vegetation/220-village-fuel-woods-and-their-coppice-satoyama.html, with the one form deliberately NOT drawn here: the strip
     holdings of a shinden dry-upland village, which are a settlement form, not a woodlot knob."""
     p1, p2 = 2 * math.pi * s._hjit(x, y, 79.0), 2 * math.pi * s._hjit(x, y, 80.0)
     ring: Poly = []
