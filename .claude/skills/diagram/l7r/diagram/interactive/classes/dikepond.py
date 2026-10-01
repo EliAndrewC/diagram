@@ -57,10 +57,10 @@ class MulberryDike(Kind):
     Why: The dike is the silk side of the loop: mulberry leaf feeds the silkworms, the silkworm waste feeds the
     fish, the dredged pond mud re-fertilizes the dike. The prescription was six parts water to four parts
     dike (the Guangdong gazetteer's water-to-dike split of three-seven to four-six, read in the order it names, leans the other way) because the dike's mulberry had to yield enough
-    feed and fertilizer for the fish in the water beside it. A bare dike of heaped mud gullies and slumps, so every dike was planted; in
-    sericulture districts that planting was mulberry.
+    feed and fertilizer for the fish in the water beside it. Every dike on record was planted, a bare bank of heaped mud being
+    apt, in this project's reasoning, to gully and slump; in sericulture districts that planting was mulberry.
 
-    Note: The ratio and the planting are read, though every page that writes the ratio as a number is modern - the oldest figure found, one township's share of fish water in 1678, is not a ratio. The traditional width is a dike of six to ten meters, and the water drawn stands about seven meters in from each parcel's edge, though a canal runs between two parcels, so two ponds' banks are not one bank. The traditional figure also reaches us only at second hand. The ratio's ORDER is
+    Note: The ratio and the planting are read, though every page that writes the ratio as a number is modern - the oldest figure found, one township's share of fish water in 1678, is not a ratio. The traditional width is a dike of six to ten meters (one modern study has dikes once twenty meters wide worn to under four as the ponds were enlarged), and the water drawn stands about seven meters in from each parcel's edge, though a canal runs between two parcels, so two ponds' banks are not one bank. The traditional figure also reaches us only at second hand. The ratio's ORDER is
     contested - the classic prescription survives as six parts dike to four parts pond as well as the reverse,
     and seven to three is recorded where the fish had feed from beyond the dike - so the water-heavy reading drawn here is a regional one, disclosed
     rather than the only one; measured on the map that draws them, water is 62% of the parcel ground and the planted bank 38%, and less across the whole block once the canal corridors between the parcels count. How
@@ -307,12 +307,11 @@ class PerimeterDike(Kind):
     Why: A polder is wetland enclosed by dikes so it can be drained; its floor sits at or below the flood stage
     outside, so the enclosure is complete - any gap re-floods the block. The dike was dredged pond mud
     heaped and packed, breached and repaired for centuries, so it reads as a mottled vegetated band of
-    varying width rather than a ruled line; the dead-straight rectangle is a post-1949 industrial shape.
+    varying width rather than a ruled line; the dead-straight rectangle is a modern industrial shape, from after China's 1978 reform.
 
-    Note: Full enclosure, the organic outline and the planting are read, though that any gap re-floods the block is this project's reasoning from the general polder; the inlet high and outfall low are read, but a large polder had many openings, drains outnumbering intakes, and drawing a village polder with just two is a calibrated liberty and a guess; the drawn width band (14-40 ft) is a
-    drawing calibration inside the attested 6-10 m dike widths.
+    Note: Full enclosure and the planting are read, though that any gap re-floods the block is this project's reasoning from the general polder; that the outer dike follows the water's edge in curves is a guess, since no page read describes a polder's outer dike; the inlet high and outfall low are read, but a large polder had many openings, drains outnumbering intakes, and drawing a village polder with just two is a calibrated liberty and a guess; the drawn width band (14-40 ft) is a calibrated liberty: no village polder's own dike width was read, and the band's broadest stretches are wider than the 18 ft base of the Echizen river dikes, which a village dike stood below.
 
-    Caveat: the drawn width band (14-40 ft) is a drawing calibration inside the attested 6-10 m dike widths.
+    Caveat: the drawn width band (14-40 ft) is a calibrated liberty: no village polder's own dike width was read, and the band's broadest stretches are wider than the 18 ft base of the Echizen river dikes, which a village dike stood below.
 
     Name: perimeter dike
     Covers: the earthwork band of `dikes[]` - the polder's enclosing dike, gapped at its sluices
