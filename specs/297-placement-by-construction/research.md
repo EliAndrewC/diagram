@@ -78,3 +78,16 @@ each a question about WHERE the seat is, not about the homestead's parts.
 So almost all of the settle's edits are the access tree's lanes, which were lawful when the seating admitted them, plus a
 handful of repairs to lanes laid earlier in the stage; yet every round asks all sixteen steps of the whole web, and the exit
 asks the whole lane law again (`unsettled`), and a still round with one rule broken runs the whole last resort.
+
+## R8. `make perf` failed on main, and the defect beneath it (observed 2026-10-01, method: `make perf` and `make hamlet` in `/tmp/base297`)
+
+`make perf LABEL=297-start` raised `WebRefused` ("lanes 1 (skeleton) still break a rule of the lane law; the web still breaks
+bends") on its first seed. The tool's `REFERENCE` spec says it is "Inashiro's own spec", but it had kept the unpinned spec after the
+GM pinned Inashiro nucleated with its shrine (feature 291); its last green run (293-end, `cfd76e764`) predates feature 287's landing.
+Fixed here: `REFERENCE` carries the gen's pins, and the bookend runs (297-start: 16.1 s total, median 4.2 s, worst 4.5 s).
+
+The defect beneath it stands on main: the UNPINNED Inashiro spec at seed 4 is refused - by the web (`WebRefused`, bends on a
+skeleton lane) through the perf tool, and at the wells (`OverlapRefused`: a well recorded on a house) through `make hamlet` (whose
+spec differs by the CLI's defaults). The cohort's own seeds pass (30/30, `cohort-base.log`). Both refusals are in code this feature
+rebuilds (the lane law, D; the seating, B1/C); each is re-rolled after its lever lands, and fixed here if it still refuses
+(constitution XIV).
