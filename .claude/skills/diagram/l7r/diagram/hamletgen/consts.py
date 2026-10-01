@@ -930,7 +930,7 @@ from l7r.diagram.settlement.homestead_parts.grove_sides import GROVE_FLANKS as G
 from l7r.diagram.settlement.homestead_parts.grove_sides import GROVE_SIDES as GROVE_SIDES  # noqa: E402,F401
 from l7r.diagram.settlement.homestead_parts.grove_sides import GROVE_SIDES_FLOOD as GROVE_SIDES_FLOOD  # noqa: E402,F401
 
-# THE ROW VILLAGE (feature 291 amendment 3; research/homesteads/155 and 156). A linear hamlet's farms stand in a row
+# THE ROW VILLAGE (feature 291 amendment 3; research/homesteads/155). A linear hamlet's farms stand in a row
 # along ONE LINE - a street laid first (the planned row's form, which a paddy row may borrow; drawn straight, as a
 # surveyed road is) or the dry edge the ground gives (a levee, a dike, a fan's foot; the field's margin stands for it,
 # this project's reading; the row curves with it). Flood-prone ground takes the dike, the edge; otherwise the two at

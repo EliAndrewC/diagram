@@ -956,7 +956,7 @@
   "village lane": {
     "caveat": "the drawn WIDTHS (3, 5 and 6 ft) are a GUESS - no source gives a figure for an ordinary hamlet lane - laddered from a footpath to a wheelbarrow's width, with the connector kept under the 9 ft of the one cart road the record does measure.",
     "covers": "`lanes` - every lane on the map: the web, the internal skeleton, a row village's streets, the connector to the off-map road and the field spur",
-    "entry": "research/homesteads.html - 'How was a row village laid out?'; research/ways.html - 'Village lanes'; research/rendering/ways.html - 'How our maps draw village lanes'; research/fields.html - 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; research/SOURCES.html re-sourcing queue (lane width)",
+    "entry": "research/homesteads.html - 'Row villages (resson)'; research/rendering/homesteads.html - 'How our maps draw a row village (resson)'; research/ways.html - 'Village lanes'; research/rendering/ways.html - 'How our maps draw village lanes'; research/fields.html - 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; research/SOURCES.html re-sourcing queue (lane width)",
     "key": "village lane",
     "label": "accurate",
     "label_note": "Access and form are read; the drawn WIDTHS (3, 5 and 6 ft) are a GUESS - no source gives a figure for an ordinary hamlet lane - laddered from a footpath to a wheelbarrow's width, with the connector kept under the 9 ft of the one cart road the record does measure.",

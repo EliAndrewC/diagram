@@ -413,7 +413,7 @@ class Holding(Kind):
     Covers: `dry_plots[holding]` and their furrows
     Label: accurate
     Sources: kotobank-santome-shinden, kawashima-1986-santome, saitama-santome-history
-    Entry: research/homesteads.html - 'How wide was a farm in a row, how long was the row, and where did its field and grove lie?', 'How was a row village laid out?'
+    Entry: research/homesteads.html - 'Row villages (resson)'; research/rendering/homesteads.html - 'How our maps draw a row village (resson)'
     """
 
     key = 'farm holding'

@@ -1,4 +1,4 @@
-"""THE ROW VILLAGE (feature 291 amendment 3; research/homesteads/155 and 156) - a linear hamlet's farms in rows along
+"""THE ROW VILLAGE (feature 291 amendment 3; research/homesteads/155) - a linear hamlet's farms in rows along
 their streets, never in ranks behind a row.
 
 The record gives a row two lines, and both are drawn (`ROW_LINES`): a STREET LAID FIRST, straight as a surveyed road -
@@ -7,7 +7,7 @@ for which the field's margin stands here (this project's reading), the row curvi
 of the street, the field across it, or on BOTH (`ROW_SIDES`), one FRAME apart - the grove farm's own ground and grove
 and the lane's room between two groves (homesteads/715), a physical necessity, since a grove farm cannot stand on a
 narrower lot. A row the line cannot hold grows another street parallel to the first, one row set further out, as a
-planned colony grew more roads (homesteads/156) - how many farms a line holds before the next street is the ground's.
+planned colony grew more roads (homesteads/155) - how many farms a line holds before the next street is the ground's.
 
 This module is pure geometry and one seating loop: `row_streets` gives the lines, `row_seats` the frame centers along
 them, `seat_rows` asks the placer for each. The streets it planned are kept on the settlement for the web
@@ -157,9 +157,9 @@ def row_seats(line: Sequence[tuple[Pt, Pt]], frame: Sequence[float], sides: str,
 
 HOLDING_DEPTH_FRAMES = {"street": 3.0, "edge": 1.0}
 """A far-row farm's holding behind its lot, in frame depths (feature 291 plan D16): on a street laid first a STRIP (the
-planned row's order, house lot then field then woodland, homesteads/156 - its depth there 375 ken, a dry-field colony's;
+planned row's order, house lot then field then woodland, homesteads/155 - its depth there 375 ken, a dry-field colony's;
 three frames here is a GUESS, a paddy row borrowing the form, not the size); on the dry edge one frame, compact and near
-the house (a dike row's holding, homesteads/156, accurate for a dike row, carried to a levee or fan foot as this
+the house (a dike row's holding, homesteads/155, accurate for a dike row, carried to a levee or fan foot as this
 project's reading)."""
 
 HOLDING_CELL_FT = 150.0
