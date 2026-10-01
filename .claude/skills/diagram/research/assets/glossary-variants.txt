@@ -2548,6 +2548,7 @@ omoteya-zukuri	omoteya-zukuri
 omoya	omoya
 onari-goten	onari-goten
 onari-mon	onari-mon
+onbashira	onbashira
 one-and-a-half-mat	tatami
 one-bay	bay
 onin war	Onin war

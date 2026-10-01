@@ -46,7 +46,7 @@ class Farmhouse(Kind):
     Covers: `houses` - the dwelling of each household
     Label: accurate
     Sources: sakamoto-tsubaki-1985-omoya-muki, yamamoto-2014-koshijo-shuraku, oamishirasato-choshi-kaoku
-    Entry: research/homesteads.html - 'The farmstead and what stood on it (yashiki)', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane', 'Why do a village's farmhouses face different ways'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'
+    Entry: research/homesteads.html - 'The farmstead and what stood on it (yashiki)', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane', 'Why do a village's farmhouses face different ways'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'farmhouse'
@@ -58,7 +58,7 @@ class StorageShed(Kind):
 
     Why: Before modern times a farmstead carried far fewer outbuildings than the twentieth century's counts: a village
     count of 1885, which its historian reads back to the last years of the shogunate, gives about one and a half
-    besides the privy, with a storehouse on only two farms in sixteen, both powerful households. So a storehouse
+    besides the privy and the retirement house, with a storehouse on only two farms in sixteen, both powerful households. So a storehouse
     stands against about one farmhouse in eight, and a village headman's always. Its size follows the two storage sheds dated to
     the end of the Edo period, about 18 to 27 ft long and one and a half to nearly twice as long as deep.
 
@@ -73,7 +73,7 @@ class StorageShed(Kind):
     Covers: `houses[].shed` (the storehouse against a farmhouse) and `farm_sheds` (its record)
     Label: accurate
     Sources: oamishirasato-choshi-kaoku, koshigaya-shishi-noumin-jukyo, bunka-minami-naya, nerima-mitome-naya
-    Entry: research/homesteads.html - 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'
+    Entry: research/homesteads.html - 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'storage shed'
@@ -99,7 +99,9 @@ class Byre(Kind):
     on the ground the homesteads share, reached by several households - is a guess, found on no page read and kept
     only until the record finds it or rules it out; the attached stable wing (magariya) belongs to Tohoku's
     horse-breeding districts, its stable warmed from the kitchen hearth, and is deliberately not drawn - that the
-    cold made the form is this record's own reading. The animal's nearness to the house is read; its nearness to
+    cold made the form is this record's own reading, though one village near Edo in 1824 also had most of its
+    stables as an L-shaped wing off the earth floor, and that is not drawn either. The animal's nearness to the
+    house is read; its nearness to
     the wellhead is not on any page read.
 
     Caveat: The inner stable is drawn against the farmhouse because a stall under the house's own roof cannot be
@@ -113,7 +115,7 @@ class Byre(Kind):
     Covers: `byres` - the draft-animal sheds
     Label: accurate
     Sources: cambridge-animals-china, okayama-chikusanshi-shiyo, agrinews-2023-tajima-maya, ndl-crd-shakkogyu, kotobank-umaya, magariya-jawiki
-    Entry: research/homesteads.html - 'Where did a village's draft ox stand', 'May a byre stand beside a wellhead?', 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'
+    Entry: research/homesteads.html - 'Where did a village's draft ox stand', 'May a byre stand beside a wellhead?', 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'byre'
@@ -246,7 +248,7 @@ class Privy(Kind):
     Covers: `farm_fixtures[kind=privy]`
     Label: accurate
     Sources: koshigaya-shishi-noumin-jukyo, oamishirasato-choshi-kaoku, suzuki-1959-noson-benjo, sugiura-1977-tohoku, sinyoken-madori
-    Entry: research/homesteads.html - 'Where did the privy stand, and where was its night soil kept?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'
+    Entry: research/homesteads.html - 'Where did the privy stand, and where was its night soil kept?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'privy'
@@ -258,9 +260,9 @@ class WoodShed(Kind):
     showing the log ends.
 
     Why: Firewood was the fuel, and before modern times it was kept in a shed: in one village's house-by-house record
-    of 1824 many houses had a firewood shed standing apart from the main house, and in another village's count, which
-    its historian reads back to the last years of the shogunate, six households of sixteen had one, most of them 4 by 2
-    ken. So a wood shed stands on about four farmsteads in ten, the larger houses first, 24 by 12 ft. An open stack
+    of 1824 many houses had a firewood shed or a storage shed standing apart from the main house, and in another
+    village's count, which its historian reads back to the last years of the shogunate, six households of sixteen had
+    one, seven sheds in all, three of them 4 by 2 ken. So a wood shed stands on about four farmsteads in ten, the larger houses first, 24 by 12 ft. An open stack
     against the house wall is found only on a present-day page, and the stack along the windbreak only in descriptions
     of today and of farms of the past with no date, so neither is drawn.
 
@@ -275,7 +277,7 @@ class WoodShed(Kind):
     Covers: `farm_fixtures[kind=woodpile]` - the wood shed
     Label: accurate
     Sources: boso-no-mura-kigoya, koshigaya-shishi-noumin-jukyo, oamishirasato-choshi-kaoku
-    Entry: research/homesteads.html - 'Where was the firewood stacked, and how big was the pile?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'
+    Entry: research/homesteads.html - 'Where was the firewood stacked, and how big was the pile?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'wood shed'
@@ -302,7 +304,7 @@ class ManureHeap(Kind):
     Covers: `farm_fixtures[kind=manure]`
     Label: guess
     Sources: jawiki-koedame, artic-pigsty-latrine, kyuhi-jawiki, suzuki-1959-noson-benjo
-    Entry: research/homesteads.html - 'Where did the manure heap stand, and what went into it?'; 'Where did the privy stand, and where was its night soil kept?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'
+    Entry: research/homesteads.html - 'Where did the manure heap stand, and what went into it?'; 'Where did the privy stand, and where was its night soil kept?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'manure heap'
@@ -331,7 +333,7 @@ class BathRoom(Kind):
     Covers: `farm_fixtures[kind=bath]` - the bath room joined to the house
     Label: accurate
     Sources: tsuda-1991-nikko-shasan-minka, mizumaki-goemonburo
-    Entry: research/homesteads.html - 'Did a farmhouse have a bath shed, and where did it stand?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'
+    Entry: research/homesteads.html - 'Did a farmhouse have a bath shed, and where did it stand?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'bath room'
@@ -360,7 +362,7 @@ class HenCoop(Kind):
     Covers: `farm_fixtures[kind=coop]`
     Label: accurate
     Sources: cambridge-animals-china, qimin-yaoshu-yangji, pitt-zhengzhou-coop, buck-1930-farm-economy
-    Entry: research/homesteads.html - 'Did a farmstead keep chickens, and in what kind of coop?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'
+    Entry: research/homesteads.html - 'Did a farmstead keep chickens, and in what kind of coop?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'hen coop'
@@ -385,7 +387,7 @@ class HouseholdShrine(Kind):
     Covers: `farm_fixtures[kind=shrine]` - the hokora
     Label: convention
     Sources: tokushima-yashikigami, jawiki-yashikigami, kameyama-yashikigami, sugiura-1973-fuzoku
-    Entry: research/homesteads.html - 'Which farmsteads had a household shrine, and in which corner?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'
+    Entry: research/homesteads.html - 'Which farmsteads had a household shrine, and in which corner?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'household shrine'
@@ -415,7 +417,7 @@ class Persimmon(Kind):
     Covers: `persimmons` - the dooryard persimmon tree
     Label: accurate
     Sources: toyoko-kaki, uekipedia-kaki, jataff-fuyu-kaki, sato-1962-haichi, pfaf-kaki
-    Entry: research/homesteads.html - 'Why does a persimmon stand beside so many farmhouses?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps choose what stands on a farmstead'
+    Entry: research/homesteads.html - 'Why does a persimmon stand beside so many farmhouses?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'persimmon'
