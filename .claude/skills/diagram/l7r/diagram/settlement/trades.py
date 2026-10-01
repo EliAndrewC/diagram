@@ -696,7 +696,7 @@ class TradesMixin:
         strands the far end of the rank inland. `tanning_yard_square_to_its_water` holds this to
         within 15 deg of any course whose bank lies inside the ~20 ft on-water reach.
 
-        Historical grounding (the "why" - see research/urban-features.html "Tanning yards - hides come from fallen draft stock, and water is the gate"):
+        Historical grounding (the "why" - see research/urban-features.html "Tanning yards", and research/rendering/urban-features.html "How our maps site tanning yards"):
           - Hides come from FALLEN DRAFT STOCK, not butchery: the kawata held carcass rights over a
             defined territory (danna-ba), so a county town's burakumin work the whole county's dead
             oxen and horses. l7r.md agrees - daimyo push surplus horses onto farms as draft animals,
@@ -706,9 +706,9 @@ class TradesMixin:
             year (~4 pits), a provincial city adds the daimyo's stable and the armor/saddle/drum/
             bellows demand of ~300 samurai (~12). This is a seasonal yard, never an industry.
           - WATER IS THE REAL GATE, not settlement size. Tanning is a water process - the Japanese
-            shironameshi method stakes raw hides in the river for 1-2 weeks before de-hairing - and
-            every archaeologically-known tannery sits on a watercourse at the settlement's edge.
-            The caste's own name for itself was kawaramono, "riverbed people". A settlement with no
+            shironameshi method steeps salted hides in the river for several days before de-hairing - and
+            the trade was ranked noxious and kept to the edge of town.
+            The medieval leather workers were called kawaramono, "those of the riverbed". A settlement with no
             running water keeps no tannery whatever its size.
           - Pit size is the excavated medieval figure: ~1.4 m (4.6 ft) across, ~0.4 m deep.
 
