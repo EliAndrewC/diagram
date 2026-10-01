@@ -418,7 +418,7 @@
   "hen coop": {
     "caveat": "",
     "covers": "`farm_fixtures[kind=coop]`",
-    "entry": "research/homesteads.html - 'Did a farmstead keep chickens, and in what kind of coop?'; 'The farmstead's fixtures'",
+    "entry": "research/homesteads.html - 'Chickens and chicken coops'; 'The farmstead's fixtures'; research/rendering/homesteads.html - 'How our maps draw chicken coops'",
     "key": "hen coop",
     "label": "accurate",
     "label_note": "The coop's existence and ground form are read (Cambridge, the Qimin Yaoshu, the Zhengzhou coop); the household proportion, the 5 x 5 ft size and the seat are guesses bounded by 'most regions'.",
@@ -920,7 +920,7 @@
   "threshing yard": {
     "caveat": "the wet-rice CENTER is interpolated from the crop (rice is field-dried on racks first, so a paddy household needs less floor than the barley district the mat counts come from), and the sun corridor is derived from the read roof pitch.",
     "covers": "`threshing_yards` - the floor, its mats, and the rack by the house where the harvest weather is changeable",
-    "entry": "research/homesteads.html - 'Threshing and drying yards at farmhouses (niwa)'; 'Did a village put its drying racks by the houses by custom, or because of its weather?'; research/rendering/homesteads.html - 'How our maps draw threshing and drying yards (niwa)', 'How our maps keep yards and gardens in the sun'",
+    "entry": "research/homesteads.html - 'Threshing and drying yards at farmhouses (niwa)'; 'Rice-drying racks (hasa, hasagi)'; research/rendering/homesteads.html - 'How our maps draw threshing and drying yards (niwa)', 'How our maps keep yards and gardens in the sun', 'How our maps draw rice-drying racks (hasa, hasagi)'",
     "key": "threshing yard",
     "label": "convention",
     "label_note": "The size band and the spread's shape are read - Kitamoto's mat counts, and the lognormal that fits Kamikanai's 1771 house histogram; the wet-rice CENTER is interpolated from the crop (rice is field-dried on racks first, so a paddy household needs less floor than the barley district the mat counts come from), and the sun corridor is derived from the read roof pitch.",

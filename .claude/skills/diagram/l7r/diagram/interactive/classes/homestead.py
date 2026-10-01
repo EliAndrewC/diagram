@@ -184,7 +184,7 @@ class ThreshingYard(Kind):
     Covers: `threshing_yards` - the floor, its mats, and the rack by the house where the harvest weather is changeable
     Label: convention
     Sources: kitamoto-inakoki-niwa, kitamoto-mushiro-niwa, tobunken-mushiro, nishimura-makino-1959
-    Entry: research/homesteads.html - 'Threshing and drying yards at farmhouses (niwa)'; 'Did a village put its drying racks by the houses by custom, or because of its weather?'; research/rendering/homesteads.html - 'How our maps draw threshing and drying yards (niwa)', 'How our maps keep yards and gardens in the sun'
+    Entry: research/homesteads.html - 'Threshing and drying yards at farmhouses (niwa)'; 'Rice-drying racks (hasa, hasagi)'; research/rendering/homesteads.html - 'How our maps draw threshing and drying yards (niwa)', 'How our maps keep yards and gardens in the sun', 'How our maps draw rice-drying racks (hasa, hasagi)'
     """
 
     key = 'threshing yard'
@@ -360,7 +360,7 @@ class HenCoop(Kind):
     Covers: `farm_fixtures[kind=coop]`
     Label: accurate
     Sources: cambridge-animals-china, qimin-yaoshu-yangji, pitt-zhengzhou-coop, buck-1930-farm-economy
-    Entry: research/homesteads.html - 'Did a farmstead keep chickens, and in what kind of coop?'; 'The farmstead's fixtures'
+    Entry: research/homesteads.html - 'Chickens and chicken coops'; 'The farmstead's fixtures'; research/rendering/homesteads.html - 'How our maps draw chicken coops'
     """
 
     key = 'hen coop'

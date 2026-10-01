@@ -382,7 +382,7 @@ MANURE_FORMS = ("heap", "pit")
 # regions, not a village's choice - so a free roll per hamlet would let two neighbors in one climate differ, which is
 # what the GM asked us not to do (2026-09-28). `changeable` draws a rack by every house; `settled` (the default: the
 # gathered racks are one region's form - this project's decision, as the regional wind is) draws none at the house.
-# research/homesteads.html 'Did a village put its drying racks by the houses by custom, or because of its weather?'.
+# research/homesteads.html 'Rice-drying racks (hasa, hasagi)'; the rule at research/rendering/homesteads.html 'How our maps draw rice-drying racks (hasa, hasagi)'.
 HARVEST_WEATHERS = ("settled", "changeable")
 DEFAULT_HARVEST_WEATHER = "settled"
 # TWO SUPPORTABLE ANSWERS BECOME A KNOB (constitution XII), not a picked one. Both were named by a

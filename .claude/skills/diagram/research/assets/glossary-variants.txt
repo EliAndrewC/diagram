@@ -1326,6 +1326,7 @@ harakata-shu	harakata-shu
 hardiness zone	hardiness zone
 hari-ma	hari-ma
 hasa	hazakake
+hasagi	hazakake
 hata	hatake
 hata-ei	hata-ei
 hatago	hatago
