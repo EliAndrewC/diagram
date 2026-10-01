@@ -14993,5 +14993,42 @@
    "Crane"
   ],
   "cased": true
+ },
+ "hashi": {
+  "def": "Japanese for a bridge; in this record, the bridge that carries a road, street or lane over a river, canal or ditch.",
+  "variants": [
+   "hashi"
+  ]
+ },
+ "watashi": {
+  "def": "A river crossing where no bridge was built: a ferry, where travelers crossed by boat between landings, or a ford, where they were taken through the shallows. On the Tokaido the great rivers were crossed this way, while the lesser ones were bridged.",
+  "variants": [
+   "watashi"
+  ]
+ },
+ "rendai": {
+  "def": "A platform carried on poles by porters, on which a traveler was carried across a river at a ford.",
+  "variants": [
+   "rendai"
+  ]
+ },
+ "hiratabune": {
+  "def": "A flat-bottomed river boat; at the Banyu ferry on the Tokaido the large ones were about 13 m (~43 ft) long and 2.7 m (~9 ft) wide.",
+  "variants": [
+   "hiratabune",
+   "hiratabune's"
+  ]
+ },
+ "Kyushu": {
+  "def": "The southernmost of Japan's four main islands.",
+  "variants": [
+   "Kyushu"
+  ]
+ },
+ "Kenmonshu": {
+  "def": "A book by Miura Joshin on the events and manners of early Edo, written in the 1630s or early 1640s.",
+  "variants": [
+   "Kenmonshu"
+  ]
  }
 }

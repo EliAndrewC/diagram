@@ -1327,6 +1327,7 @@ harakata-shu	harakata-shu
 hardiness zone	hardiness zone
 hari-ma	hari-ma
 hasa	hazakake
+hashi	hashi
 hata	hatake
 hata-ei	hata-ei
 hatago	hatago
@@ -1410,6 +1411,8 @@ hipposandal	hipposandal
 hipposandals	hipposandal
 hirairi	hirairi
 hirakata	hirakata
+hiratabune	hiratabune
+hiratabune's	hiratabune
 hiratsuka	Hiratsuka
 hirayamajiro	hill-and-plain castle
 hirazamurai	heishi
@@ -1881,6 +1884,7 @@ kenchi-cho	kenchicho
 kenchicho	kenchicho
 kengyo	kengyō
 kengyō	kengyō
+kenmonshu	Kenmonshu
 kera	kera
 kesa	kesa
 kesa cut	kesa
@@ -2023,6 +2027,7 @@ kyuden	kyuden
 kyuhi	kyuhi
 kyunin	kyunin
 kyunins	kyunin
+kyushu	Kyushu
 kyuyo	Kyuyo
 kyō-ma	Kyoto measure
 kyōgen	kyogen
@@ -2855,6 +2860,7 @@ relay towns	relay town
 remand	remand
 remanded	remand
 ren	ren
+rendai	rendai
 renge	renge
 renkaku	renkaku
 rennyo	Rennyo
@@ -3901,6 +3907,7 @@ washing weir	araizeki
 washing weirs	araizeki
 wasi	wazi
 watari-roka	watari-roka
+watashi	watashi
 watashiba	watashiba
 watch house	jishinban
 watch-house	jishinban
