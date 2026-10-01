@@ -30,7 +30,7 @@ class KeepoutsMixin:
         channels, and the comb laterals' drawn truth (M['drawn_channels'] - added 2026-08-16, GM,
         Inashiro: grass tufts stood ON the head-race, because the scatter knew only the hairline
         topology record in M['channels'], w 2.5, while the drawn lateral ran ~14 wide on its own
-        filleted post-clip polyline - the "same manifest source" trap, research/ways.html 'What is a plank bridge, and what is it for?' ('PLANK
+        filleted post-clip polyline - the "same manifest source" trap, research/rendering/ways.html 'How our maps draw plank bridges' ('PLANK
         BRIDGES'). A tapered lateral is split by `waterfields.taper_pieces` - ONE piece per SEGMENT
         at its arc-correct width, the very same call `field_channel` inks it with, so the corridor
         and the stroke it protects cannot disagree. Factored so the per-point test (_on_watercourse) and the

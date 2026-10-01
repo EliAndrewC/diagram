@@ -398,7 +398,7 @@ class Footbridge(Kind):
     Covers: `bridges[foot]` - every plank and deck over water
     Label: accurate
     Sources: kotobank-marukibashi, kotobank-ipponbashi, zhwiki-dumuqiao, dobashi-jawiki, xinhua-jiahou-muqiao, itabashi-kotobank, aze-jawiki
-    Entry: research/water.html - 'What crosses a farm ditch - a plank, a log, or earth over logs', 'When is a farm ditch worth a plank' (channel_footbridges); research/ways.html - 'What is a plank bridge, and what is it for?'
+    Entry: research/ways.html - 'Plank bridges over farm ditches (itabashi)'; research/rendering/ways.html - 'How our maps draw plank bridges' (channel_footbridges)
     """
 
     key = 'footbridge'
