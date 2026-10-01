@@ -34,7 +34,7 @@ if TYPE_CHECKING:
 class DikeMixin:
     def perimeter_dike(self: Settlement, inner_env: Any, seed: int = 0, label: str = "perimeter dike", width: tuple[float, float] = (14.0, 40.0), gaps: Any = ()) -> None:  # type: ignore[misc]
         """A reclaimed-polder PERIMETER DIKE, drawn as an irregular hand-piled EARTHWORK BAND (not a ruled
-        tan line). China-first grounding (research 2026-07-22, recorded in research/archetypes.html 'The perimeter dike followed the natural water edge'):
+        tan line). China-first grounding (research 2026-07-22, recorded in research/archetypes.html 'Polder dikes: what they were made of, how big, and what grew on them'; the map rules at research/rendering/archetypes.html "How our maps draw a polder's dike and its trees"):
         a wei-tian 圩田 / dike-pond dike was dredged pond-mud heaped and packed (the 挖塘培基 dig-and-pile
         cycle that also made the ponds), trapezoidal in section, PLANTED with mulberry/willow to bind the
         soil, walked and lived on, and constantly breached-and-repaired. The SURVEYED interior grid stays
@@ -118,11 +118,10 @@ class DikeMixin:
             run_paths = [d]
         for rp in run_paths:
             self.add(f'<path d="{rp}" fill="{BUND}" stroke="#9C8558" stroke-width="1.2" stroke-linejoin="round" opacity="0.95"/>', cls="perimeter dike")
-        # MOTTLE + PLANTED ROWS (reworked GM 2026-07-24 - accuracy pass; research/archetypes.html 'The perimeter dike followed the natural water edge'):
+        # MOTTLE + PLANTED ROWS (reworked GM 2026-07-24 - accuracy pass; research/rendering/archetypes.html "How our maps draw a polder's dike and its trees"):
         # the old render scattered crowns at random over the band, but dike planting was ROW planting along
         # the alignment - a WILLOW row on the water face (wave-wash armor + withy supply; the Qing Willow
-        # Palisade statute of one whip per 5 chi ~ 5.5 ft is the closest attested in-row figure, and willow-
-        # fascine rows on erosive soil run 1-1.5 m apart, the same soil mechanics) and a MULBERRY row on the
+        # Palisade statute of one whip per 5 chi ~ 5.5 ft is the closest attested in-row figure) and a MULBERRY row on the
         # inner face (the dike is prime sericulture ground - Lake Tai mulberry sat on the tang banks). Earth
         # mottle (patch-repairs of different ages) stays scattered - repairs, unlike planting, ARE haphazard.
         smoothed = smooth_points(band)

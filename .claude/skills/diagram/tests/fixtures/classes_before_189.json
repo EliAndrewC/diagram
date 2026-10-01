@@ -570,7 +570,7 @@
   "mulberry dike": {
     "caveat": "the coppice density the crowns are drawn at (one bush per ten to twenty square feet) was not re-found and stays on the re-sourcing queue.",
     "covers": "the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it",
-    "entry": "research/archetypes.html - 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'Why dikes were planted', 'How thickly was dike mulberry planted, and how wide did a bush grow?'",
+    "entry": "research/archetypes.html - 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'Polder dikes: what they were made of, how big, and what grew on them', 'How thickly was dike mulberry planted, and how wide did a bush grow?'",
     "key": "mulberry dike",
     "label": "accurate",
     "label_note": "The ratio, the dike width and the planting are read; the coppice density the crowns are drawn at (one bush per ten to twenty square feet) was not re-found and stays on the re-sourcing queue.",
@@ -644,7 +644,7 @@
   "perimeter dike": {
     "caveat": "the drawn width band (14-40 ft) is a drawing calibration inside the attested 6-10 m dike widths.",
     "covers": "the earthwork band of `dikes[]` - the polder's enclosing dike, gapped at its sluices",
-    "entry": "research/archetypes.html - 'Polders: fields diked against the fluctuating water (weitian, waju)', 'Why dikes were planted'; research/rendering/archetypes.html - 'How our maps draw polders (weitian, waju)'",
+    "entry": "research/archetypes.html - 'Polders: fields diked against the fluctuating water (weitian, waju)', 'Polder dikes: what they were made of, how big, and what grew on them'; research/rendering/archetypes.html - 'How our maps draw polders (weitian, waju)', \"How our maps draw a polder's dike and its trees\"",
     "key": "perimeter dike",
     "label": "accurate",
     "label_note": "Full enclosure, the organic outline and the planting are read; the drawn width band (14-40 ft) is a drawing calibration inside the attested 6-10 m dike widths.",

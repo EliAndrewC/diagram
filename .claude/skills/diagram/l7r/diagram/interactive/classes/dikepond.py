@@ -79,7 +79,7 @@ class MulberryDike(Kind):
     Covers: the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it
     Label: accurate
     Sources: gd-gazetteer-sangji, fao-ac241e, isis-dykepond, ruddle-zhong-1988, pwsannong-gudai-zaisang, pwsannong-sangji-yutang, kotobank-souen, kotobank-negari
-    Entry: research/archetypes.html - 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'Why dikes were planted', 'How thickly was dike mulberry planted, and how wide did a bush grow?'
+    Entry: research/archetypes.html - 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'Polder dikes: what they were made of, how big, and what grew on them', 'How thickly was dike mulberry planted, and how wide did a bush grow?'
     """
 
     key = 'mulberry dike'
@@ -318,7 +318,7 @@ class PerimeterDike(Kind):
     Covers: the earthwork band of `dikes[]` - the polder's enclosing dike, gapped at its sluices
     Label: accurate
     Sources: shen-kuo, isis-dykepond, ruddle-zhong-1988, ishizue-waju, wajyu-nogyo
-    Entry: research/archetypes.html - 'Polders: fields diked against the fluctuating water (weitian, waju)', 'Why dikes were planted'; research/rendering/archetypes.html - 'How our maps draw polders (weitian, waju)'
+    Entry: research/archetypes.html - 'Polders: fields diked against the fluctuating water (weitian, waju)', 'Polder dikes: what they were made of, how big, and what grew on them'; research/rendering/archetypes.html - 'How our maps draw polders (weitian, waju)', "How our maps draw a polder's dike and its trees"
     """
 
     key = 'perimeter dike'
