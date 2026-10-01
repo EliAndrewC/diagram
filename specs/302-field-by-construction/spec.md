@@ -152,30 +152,30 @@ is why the savings matter, not a condition on going ahead: the trend is measured
 
 **The go verdict (Phase 0):**
 
-- **SC-001 (the verdict)**: GO when the prototype's fit-and-build, totaled over the recorded inputs (the comb hamlets of the
+- **SC-001** (FR-001, FR-002, FR-004, FR-005; the verdict): GO when the prototype's fit-and-build, totaled over the recorded inputs (the comb hamlets of the
   pool and Inashiro's brief at 10 and 20 households), is faster than the current fit-and-finish by more than the measured
   run-to-run spread (each timed fastest of three, back to back; a method's spread is the largest difference between its three
   runs' totals, and the bar is the LARGER of the two methods' spreads). NO-GO when it is not. The ratio is reported either way; the GM's words are the bar ("if it is faster,
   then go ahead and complete the feature and land it on main").
-- **SC-002 (reported, not a condition)**: both methods' times at 10 and at 20 households and their two ratios (User Story 3).
+- **SC-002** (FR-004; reported, not a condition): both methods' times at 10 and at 20 households and their two ratios (User Story 3).
 
 **The validity conditions (Phase 0) - the comparison is like for like only when these hold; a prototype failing them is
 unfinished and is completed before SC-001 is computed. NO-GO on these grounds is reserved for a construction shown unable to
 hold the rules or the band, with the reason recorded:**
 
-- **SC-003**: Every prototype field lands its acreage band, leaves no bare ground in its planted region (under `0.5%` of its area,
-  the rounding of recorded rings), shares every bund, and has no plot with a `ring_violations` finding.
-- **SC-004**: The prototype builds every structure FR-009 names that the field stage's time covers, so the speed is not bought
+- **SC-003** (FR-003): Every prototype field lands its acreage band, leaves no bare ground in its planted region (under `0.5%` of its area,
+  the rounding of recorded rings - a bound chosen here, not measured; research.md R2 reports each field's), shares every bund, and has no plot with a `ring_violations` finding.
+- **SC-004** (FR-003, FR-009): The prototype builds every structure FR-009 names that the field stage's time covers, so the speed is not bought
   by leaving work out; any part the prototype stubs is named, and its current cost is added to the prototype's time.
 
 **The landed feature (Phase 1):**
 
-- **SC-005**: The field stage on the pool's comb hamlets is faster than at this feature's base beyond the measured run-to-run
+- **SC-005** (FR-006, FR-007, FR-010): The field stage on the pool's comb hamlets is faster than at this feature's base beyond the measured run-to-run
   spread, base and clone back to back, fastest of three; the achieved ratio is reported against the prototype's.
-- **SC-006**: Every pool map regenerates green: every gate rule, households, form, field kind and acreage band kept.
-- **SC-007**: No pass after the partition looks for bare ground in a comb field (a test holds it: a finished comb net has no
+- **SC-006** (FR-008, FR-009): Every pool map regenerates green: every gate rule, households, form, field kind and acreage band kept.
+- **SC-007** (FR-006, FR-011): No pass after the partition looks for bare ground in a comb field (a test holds it: a finished comb net has no
   bare ground and the seam repair is not called).
-- **SC-008**: `make done` green with the `100%` floor.
+- **SC-008** (FR-011): `make done` green with the `100%` floor (the gate's floor, research.md R1's harness runs under it).
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 

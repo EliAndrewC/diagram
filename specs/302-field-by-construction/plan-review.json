@@ -1,77 +1,75 @@
 {
  "feature": "302-field-by-construction",
- "plan_sha256": "31086a7c9164b7a920c41d86256bf610ef05418a0cb126af20539b56e8d2e54b",
+ "plan_sha256": "541d4c464d167931980d00351bfe6560da28fc869d089c4db76450e3fe353343",
  "reviewed": "2026-10-01",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "Inputs captured from fit_field's arguments, deep-copied per method; the prototype reuses the engine's skeleton steps (_comb_skeleton through round_channel_joints) as carve_comb calls them",
+   "summary": "Inputs captured from fit_field's arguments, deep-copied per method; the prototype reuses the engine's skeleton steps",
    "class": "within",
-   "why": "FR-002 asks for the same skeleton for each trial size and the spec's Assumptions name the skeleton builders as inputs, not the thing replaced; reusing them makes the comparison like for like. Their cost is in both methods' times."
+   "why": "FR-002 and the spec's Assumptions: the skeleton builders are the inputs, not the thing replaced."
   },
   {
    "id": "D2",
-   "summary": "Per trial size, the planted region = the carve's envelope less _water(channels) less _outside_command(...); its area is the acreage; no plots cut in the search",
+   "summary": "Per trial size the planted region = envelope less water less outside-command; its area is the acreage; each trial scored (illegal, acreage error) with fan_legal asked of the region's outline and the channels",
    "class": "within",
-   "why": "The spec's Planted region entity and FR-007 (acreage read from the region without cutting plots). The three geometries are the ones CombCarve.planted_area and close_seams already take as the ground to be planted (comb.py planted_area), so the region is the same ground the finished acreage is measured on. Legality is D8's question."
+   "why": "FR-007 (acreage AND water legality scored on the region, no plots cut). Verified: tail_dangles reads only the plots' bounding box and flanks_commanded only the plots' vertex offsets across the fall (fit.py), both extents the region's outline carries; net_bends_acutely reads channels only. Round-1 item 2 resolved."
   },
   {
    "id": "D3",
-   "summary": "Partition: per sector, row and column lines at the carve's falls and nsub divisions, wobble and wander kept, clipped to the region; cells = polygonize of the noded union",
+   "summary": "Partition by row and column bunds per sector, wobble and wander kept, cells = polygonize of the noded union",
    "class": "within",
-   "why": "FR-006 (region cut by row and column bunds, every bund shared as laid) and FR-009 (rows along the contour with wander, columns across each sector)."
+   "why": "FR-006 and FR-009."
   },
   {
    "id": "D4",
-   "summary": "A violating cell is merged into the neighbor whose union holds the rules; what no merge can make legal is reported, not hidden; toe slivers merged",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-008 and User Story 2 scenario 3 say merge OR SPLIT, naming the staircase, 'the way the repair resolves it today', and the repair today splits staircases (seams/close.py hold_ring_rules -> _split_steps). D4 removes split and lets a residue that no merge fixes stand as a reported violation: an exception to FR-008/SC-003 ('no plot with a ring_violations finding'). Not impossible (the prototype may import _split_steps), not implied by the GM, and it could also produce a NO-GO that the spec reserves for a construction shown unable to hold the rules, when only the split was left out. Fix: merge or split at construction, as the repair does; a cell neither resolves is an SC-003 failure that leaves the prototype unfinished, not a reported residue."
+   "summary": "Cells judged by ring_violations and the toe discipline; staircases split by the repair's own _split_steps; other violators merged across the longest shared bund whose union holds the rules, a merged staircase split in turn; a cell neither fixes is an SC-003 failure, never a reported leftover",
+   "class": "within",
+   "why": "FR-008 and US2 scenario 3 (merge or split, as the repair does today). Round-1 item 1 resolved: split restored, the reported residue removed. The final sentence is STRICTER than today's repair, whose third way (hold_ring_rules step 3) leaves an unfixable scrap bare, within SC-003's 0.5% bound; stricter is not a narrowing."
   },
   {
    "id": "D5",
    "summary": "Dry hem, beans and net assembly run on the prototype's plots, inside its timed cost",
    "class": "within",
-   "why": "SC-004: the speed is not bought by leaving work out; FR-009 keeps the dry hem and beans."
+   "why": "SC-004; FR-009."
   },
   {
    "id": "D6",
-   "summary": "Harness computes the verdict: fastest of three back to back, totals, each method's spread, GO when current - prototype > the larger spread; SC-003 checks printed per input",
+   "summary": "Harness computes the verdict: fastest of three back to back, totals, larger spread as the bar; SC-003 checks printed per input",
    "class": "within",
-   "why": "SC-001 and FR-004/FR-005 as written; the four validity checks are SC-003's four."
+   "why": "SC-001, FR-004, FR-005, SC-003 as written."
   },
   {
    "id": "D7",
-   "summary": "Phase 1: the partition replaces _carve's plot cutting, _comb_toe_and_hem's drop, close_seams and planted_area for comb fields; uncalled seam machinery deleted with its rules carried by construction tests; polder and hill unchanged",
+   "summary": "Phase 1: partition replaces _carve's plot cutting, _comb_toe_and_hem's drop, close_seams and planted_area for comb fields; uncalled seam machinery deleted with rules carried by construction tests; polder and hill unchanged",
    "class": "within",
-   "why": "FR-006, FR-007, FR-011 and the Edge Cases' polder/hill exclusion. Only the drop of _comb_toe_and_hem is replaced; FR-009's toe paddies and dry hem stay."
+   "why": "FR-006, FR-007, FR-011, Edge Cases."
   },
   {
    "id": "D8",
-   "summary": "Phase 1: the fit scores each trial size on its region (D2, its acreage); fan_admissible judges the built net, as today",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-007: trial sizes 'MUST be scored on the region (its acreage AND ITS WATER'S LEGALITY) without cutting plots'. Today every trial is scored (not fan_legal(net), err) (fit.py _fit_at_aspect) and _finish_first_admissible orders and filters on that flag; D2/D8 score acreage only and move legality to the built winner. The search then ranks illegal sizes as admissible, and in Phase 0 the prototype's search skips work the current search does (SC-004). fan_legal reads the plots' extent (tail_dangles, flanks_commanded), but the region gives that extent, so legality on the region is not impossible. Fix: each trial size's water legality scored on its region, fan_admissible still judging the built net."
+   "summary": "Phase 1: the fit scores each trial size on its region - acreage and water legality; fan_admissible judges the built net, as today",
+   "class": "within",
+   "why": "FR-007 verbatim. Round-1 item 2 resolved."
   },
   {
    "id": "D9",
-   "summary": "The union prediction retired with what it predicted (area-sum lever dropped: no longer applies); trial count re-measured once a trial is cheap and kept or cut by that measurement",
+   "summary": "Union prediction retired with what it predicted; trial count re-measured and kept or cut by measurement",
    "class": "within",
-   "why": "FR-010 as written: a lever kept where it still applies, dropped with its reason where the redesign removes what it acted on. The area-sum lever acted on planted_area's union, which FR-007 retires; the trial-count lever is decided by measurement."
+   "why": "FR-010 as written."
   },
   {
    "id": "Phase1-amendment",
-   "summary": "Phase 1's remaining design is amended into this plan after Phase 0 measures which parts survive",
+   "summary": "Phase 1's remaining design amended in after Phase 0 measures what survives",
    "class": "within",
-   "why": "FR-005 orders Phase 0's verdict before any engine change; an amendment changes plan.md's digest and so comes back to this review."
+   "why": "FR-005 orders the verdict first; an amendment changes the digest and returns here."
   },
   {
    "id": "Occasion",
-   "summary": "Constitution VI: a glyph-check of the paddy fabric on Inashiro declared as the delta's occasion",
+   "summary": "Glyph-check of the paddy fabric on Inashiro declared as the delta's occasion",
    "class": "within",
-   "why": "Verification of the changed placement rule the feature owes under standing review doctrine; not new scope."
+   "why": "Verification the standing review doctrine owes for a changed placement rule; not new scope."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

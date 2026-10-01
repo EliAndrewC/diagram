@@ -51,8 +51,8 @@ march, drain) under 4%; the dry hem and beans 2-12%.
   in `fan_context`'s context (the engine's own) and by the toe discipline `_comb_toe_and_hem` drops by (thinness, area, apex,
   chevron). A staircase is split on its hops by the repair's own `_split_steps` (`seams/close.py`); any other violating cell
   is merged into the adjacent cell (shared bund) whose union holds the rules, the longest shared bund first, and a merged
-  cell that is left a staircase is split in turn. A cell that neither fixes is an SC-003 failure: the prototype is unfinished
-  and is completed before the verdict, never shipped with a reported leftover.
+  cell that is left a staircase is split in turn. A cell that neither fixes is LEFT BARE, as the repair leaves it
+  today (`hold_ring_rules`' third way, "the odd corner left unpaddied"), held under SC-003's bare-ground bound.
 - **D5 Everything after the plots runs as today.** The dry hem and the beans (`_comb_dry_and_beans`) and the net's assembly run
   on the prototype's plots, so their cost is in the prototype's time (SC-004).
 - **D6 The verdict is computed by the harness.** Both methods fastest of three, back to back per input; totals; each method's
@@ -99,3 +99,42 @@ specs/302-field-by-construction/
 
 Phase 1 touches `l7r/diagram/waterfields/` (a new module for the partition; `comb.py`, `carve.py`, `seams/`) and
 `l7r/diagram/hamletgen/water/fit.py`, with their tests.
+
+## Amendment 1 (2026-10-01): Phase 1's design, after the GO (research R2)
+
+Phase 0 measured GO (6.558 -> 2.414 s over the six inputs, 2.72x, spread 0.05 s). The engine takes the prototype's method as
+R2 records it, every dead end R2 lists left out.
+
+- **D10 Three engine modules, each under the 1,000-line bar.** `waterfields/partition.py` - the planted region of a carve
+  (D2), the sectors and their pieces, each sector's lattice (rows with the wander, columns with the wobble, thinning where it
+  narrows, a narrow sector's rows spaced for it, the outer strip's lattice), the hug filter, and `cut` (the noded union and
+  `polygonize`). `waterfields/settle.py` - the rules at construction (D4): the snap to the recorded grid, `_split_steps` (moved
+  from `seams/close.py`, with `_cut_on_hop`), the merge (opened by 0.3 px; clusters grow), the scraps left bare.
+  `waterfields/tint.py` - the carve's `low` marking and FLOODED sample, and `close_seams`' tint judgment moved verbatim (its
+  six clauses, the promotion of the most basin-like low plot when the sample comes back empty).
+- **D11 The carve lays the skeleton and the region; the finish lays the plots.** `carve_comb` keeps its signature and body up
+  to `round_channel_joints`, then builds the envelope and the region and returns a `CombCarve` with `region` and no plots;
+  `CombCarve.net` hands the fit's scorers the region's outline in place of the plots (D2/D8); `finish_comb` partitions,
+  settles, tints, runs the dry hem and the beans, and assembles the net exactly as today. `build_comb` stays
+  `finish_comb(carve_comb(...))`, so the village roll (`settlement/rolling/roll.py`) builds its comb fields the same way.
+- **D12 The fit reads the region's area.** `_fit_at_aspect` scores each trial on `carve.region.area` (FR-007);
+  `CombCarve.planted_area` and its union are deleted (FR-010: the area-sum lever no longer applies - there is nothing left to
+  predict). The number of trial sizes is unchanged: a trial now costs the skeleton and three shape operations (0.02 s), so
+  fewer trials would buy little and the probe's record (feature 284) says cutting them moved maps out of the rules.
+- **D13 Retired, with the rule each held carried by a test of the construction (FR-011).** From `carve.py`: `_carve`,
+  `_carve_plots`, `_carve_sector`, `_hem_pass`, `_spills_drain`, `_bank_chord`, `_above_canal`, `_supply_index`,
+  `_clear_supply`, `_quad_in_supply`, `_edge_in_supply`, `_extend_span` (`_bnd` and `_root_f` stay - the partition's bounds);
+  `sector_rows.py` whole; from `comb.py`: `_comb_toe_and_hem` and the plot half of `_comb_floor_and_winding` (the envelope half
+  stays); from `seams/`: `close_seams` and every function only it reached (`pockets._absorb` and the pocket geometry,
+  `plots._plant`/`_tab_cut`/`_unjog`/`_trade`, `_visible_parts`, `_repair_crossing_rings`, `_shed_necks`) - `hold_ring_rules`
+  and `_weld_within_rules` stay, because `settlement/fields/features.py` re-holds the rules after a grave is cut from a plot,
+  with what they import. Each test of a deleted function is deleted with it; the rules they held are the ring rules
+  (`ring_rules.py`, unchanged, its tests unchanged), the toe discipline (now asked in `settle.py`, tested there), and the seam
+  sharing (a new test: a finished comb net leaves no bare ground in its region beyond its scraps and shares every bund - SC-007).
+- **D14 What the prototype left open is judged on the maps, not guessed.** A few cells came out larger and longer than the
+  carve's, and three inputs carry 10-30% fewer plots (R2). After Inashiro and the pool regenerate, the gate judges every rule,
+  the paddy glyph check (the Occasions line) judges the fabric on Inashiro, and a finding is fixed in the lattice before the
+  push (constitution XIV).
+- **D15 The red-green order.** Each new module lands with its unit tests first (plain inputs: a hand-built sector, a hand-built
+  cell list), then the switch in `comb.py` and `fit.py`, then the deletions, then the coverage floor; Inashiro is regenerated
+  first, then the pool.
