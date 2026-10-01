@@ -331,7 +331,8 @@ class VillageLane(Kind):
     Note: That every house is reached by a way is read from a surveyed village's own lane hierarchy; of the two
     forms, the planned back lane is read, and alleys off the streets are read only in that surveyed village, no
     general article describing side lanes to a back row; the drawn WIDTHS (3, 5 and 6 ft; a row village's street
-    takes the 6 ft, a rank wider than the lanes off it) are a map drawing CONVENTION: the footpath takes the 3
+    takes the 6 ft, a rank wider than the lanes off it, where Santome's planned roads were 6 ken, about 36 ft) are a
+    map drawing CONVENTION: the footpath takes the 3
     shaku given for a field road (a traditional figure of uncertain date, not a measured one), and the spine and
     spur are a rank wider because the whole hamlet walks them, with all three kept under the 9 ft of the one cart
     road the record does measure.
@@ -343,14 +344,16 @@ class VillageLane(Kind):
     and a lane end that reaches nothing is pulled back to the last house it serves - is its own, and how close
     counts as serving a house (within 12 ft of its house, yard or beds, or beside it within 60 ft) is a guess
     too, as is the point where the field path joins its bund, the one nearest the hamlet. A row village's street drawn along
-    the field's dry edge, standing for a natural levee, a dike or a fan's foot, is this record's reading (a row along
-    a fan's foot most of all: the record reads a row of villages there, not how the houses lay); its running on as the
-    road the row stands on, and a path from each farm's door to it, are map drawing conventions. The
+    the field's dry edge, standing for a natural levee, a dike or a fan's foot, is this project's reading, since the
+    map knows a field's margin and not a levee's line (a row along a fan's foot most of all: the record reads a row of
+    villages there, not how the houses lay); its running on as the road the row stands on, and a path from each
+    farm's door to it, are map drawing conventions, though where a farm with its street to the north had its gate was
+    not found, so its path round the grove is a guess. The
     one width read for a way out to the fields is the one-ken (about 6 ft) farm road of a paddy replanned in
     1869 - a planned layout, not an old way measured.
 
     Caveat: the drawn WIDTHS (3, 5 and 6 ft; a row village's street takes the 6 ft, a rank wider than the lanes
-    off it) are a map drawing CONVENTION: the footpath takes the 3 shaku given for a field road (a traditional
+    off it, where Santome's planned roads were 6 ken, about 36 ft) are a map drawing CONVENTION: the footpath takes the 3 shaku given for a field road (a traditional
     figure of uncertain date, not a measured one), and the spine and spur are a rank wider because the whole
     hamlet walks them, with all three kept under the 9 ft of the one cart road the record does measure. The record now
     carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to 13 ft,

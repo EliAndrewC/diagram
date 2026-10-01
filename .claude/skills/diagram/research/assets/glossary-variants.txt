@@ -87,7 +87,6 @@ assignation house	assignation house
 assignation houses	assignation house
 assize	assize
 association	plant association
-asuka	Asuka period
 asuka period	Asuka period
 asunaro	asunaro
 at grade	at grade
@@ -1454,6 +1453,8 @@ hokora	hokora
 hokuriku	Hokuriku
 holding jail	holding jail
 home ministry	Home Ministry
+homestead god	yashikigami
+homestead gods	yashikigami
 homestead grove	yashikirin
 homestead groves	yashikirin
 hon-byakusho	honbyakusho
