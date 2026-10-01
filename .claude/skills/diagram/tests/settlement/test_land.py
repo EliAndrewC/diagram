@@ -85,7 +85,7 @@ def test_hinterland_scrub_ring_and_marsh_downhill_each_cardinal():
         #
         # THE TOE SIDE CARRIES SCRUB TOO, since 2026-08-12. It used to be left bare because the reed toe
         # covered every inch below the crop - but the toe is now only as wide as the ground the fan waters
-        # (research/water.html, "The wet toe is as wide as the FAN"), so its lateral ends are dry footslope and
+        # (research/water.html, "Marshes and wetlands (shitchi)"), so its lateral ends are dry footslope and
         # were being covered by NOTHING: Ikegami shipped a ~267 x 193 ft corner of blank parchment with the
         # connector crossing it. The band is handed the marsh as a keep-out, which the reeds-vs-scrub
         # assertion below pins - a scrub tuft inside the reed flat would mean the two are fighting for the
@@ -411,7 +411,7 @@ def test_near_ring_paddy_places_off_edge_basins_recorded_as_paddy_fields():
 
 
 def test_dike_top_houses_seats_a_single_file_on_the_crest():
-    # GM 2026-07-24 (research/archetypes.html 'Polder siting - full enclosure, fluctuating water and where the village sits'): the ISLET-polder settlement form - houses in
+    # GM 2026-07-24 (research/archetypes.html 'Polders: fields diked against the fluctuating water (weitian, waju)'): the ISLET-polder settlement form - houses in
     # single file ON the dike crest, each on a widened-crest platform, tagged on_dike in the manifest.
 
     s = Settlement(1400, 1400, seed=5)
@@ -457,7 +457,7 @@ def test_farmsteads_keep_dike_top_houses():
 
 
 def test_marsh_waterside_role():
-    # the un-reclaimed wet wild outside a polder dike (research/archetypes.html 'Polder siting - full enclosure, fluctuating water and where the village sits'): a valid
+    # the un-reclaimed wet wild outside a polder dike (research/archetypes.html 'Polders: fields diked against the fluctuating water (weitian, waju)'): a valid
     # role, recorded like any marsh; an unknown role still raises.
     s = Settlement(1400, 1400, seed=5)
     s.meta(name="WS", scale="hamlet", ftpx=1, toscale=True)

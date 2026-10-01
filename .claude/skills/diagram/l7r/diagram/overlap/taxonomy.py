@@ -89,11 +89,11 @@ _OVERLAP_STRUCTS = (
     "byres",
     "retirement_houses",  # the retirement house (inkyoya), a second roof of its farmhouse's family in the same yard (269 B42)
     "kosatsuba",
-    # the justice works (research/urban-features.html "The justice works - why a county seat executes, and why the ground is outside")
+    # the justice works (research/urban-features.html "Execution and punishment grounds (keijo)")
     "punishment_spots",
     "execution_grounds",
     "boundary_markers",
-    # the trade works (GM 2026-07-24, research/urban-features.html "Trade works - which trades outgrow the shop glyph, and why")
+    # the trade works (GM 2026-07-24, research/rendering/urban-features.html "How our maps draw shops, and the trades that outgrow the shop glyph")
     "breweries",
     "dye_yards",
     "lumber_yards",

@@ -31,8 +31,8 @@ GROVE_SIDES_FLOOD = (2,) * 15 + (3,) * 9 + (4,) * 16
 # rolled per settlement, even odds - nothing says which.
 GROVE_FLANKS = (-1, 1)
 
-# A THIN BAND IS ONE TREE DEEP: two mean crown radii (`CANOPY_R_FT` = 8.5 ft, research/vegetation.html "Forest density and
-# crown size"). The sides of a grove away from the wind are a band of lesser trees (Tonami's east side: flowering trees,
+# A THIN BAND IS ONE TREE DEEP: two mean crown radii (`CANOPY_R_FT` = 8.5 ft, research/rendering/vegetation.html "How our
+# maps stock woods and size crowns"). The sides of a grove away from the wind are a band of lesser trees (Tonami's east side: flowering trees,
 # persimmon, fig; its west-to-north side hackberry and alder), far thinner than the windward stand (1.57 house depths -
 # 44 ft at the pool's median house); how deep it was is on no page read, so one tree is a GUESS.
 THIN_BAND_FT = 17.0

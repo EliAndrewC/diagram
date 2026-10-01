@@ -1,4 +1,4 @@
-"""269 E3 (B04, B17): a way that makes for the field runs on to the bund (research/fields/290, research/homesteads/310).
+"""269 E3 (B04, B17): a way that makes for the field runs on to the bund (research/fields/290, research/rendering/ways/020).
 
 `hamletgen/ways/bund.py`, `WorkedGround` in `ways/geom.py`, and `meet_end_to_end` in `ways/joints.py`.
 """

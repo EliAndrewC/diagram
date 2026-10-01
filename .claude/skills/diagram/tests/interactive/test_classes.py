@@ -132,11 +132,15 @@ def test_the_gm_s_line_between_deviation_and_convention() -> None:
     # because a half-river closure - the common old form - is a pixel or two at a 7 ft brook.
     # `threshing yard` joined them on 2026-09-28 (feature 282): about half the straw mats that covered a harvest yard are
     # drawn, so each reads as a mat rather than the floor as a texture.
+    # `storage shed` joined them on 2026-10-01 (feature 292, closing pass C3): the storehouse is drawn as an annex on a
+    # fixed wall at a farm shed's size, where the storehouses recorded stood free of the house and were smaller - the
+    # rendering section's own label for the annex (rendering/homesteads 120).
     assert sorted(k for k, fc in CLASSES.items() if fc.label == "convention") == [
         "bund beans",
         "homestead bamboo",
         "household shrine",
         "shared bamboo grove",
+        "storage shed",
         "stream",
         "threshing yard",
         "weir",
@@ -272,7 +276,7 @@ def test_every_accurate_class_without_a_caveat_is_deliberate() -> None:
     # the walking bund's two to five feet is now disclosed as a GUESS held between that and the one-ken farm road.
     # `windbreak` and `marsh` LEFT the list on 2026-09-28 (feature 269 K3): the windbreak discloses that its
     # conifer-led form is drawn at village scale from farmstead surveys and that the odds, the rows' spacing and the
-    # conifer's lead are guesses (vegetation/270); the marsh that a village's own cutting of its toe is carried across
+    # conifer's lead are guesses (rendering/vegetation, "How our maps draw the shelter belt"); the marsh that a village's own cutting of its toe is carried across
     # from thatch fields and Lake Biwa (vegetation/280), with the carr form left undrawn and sedge-for-fodder unsourced.
     assert bare == {"notice board"}
 

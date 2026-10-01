@@ -20,7 +20,7 @@ import re
 import pytest
 
 from l7r.diagram.interactive.glossary import GLOSSARY, record_glossary_js
-from l7r.diagram.interactive.sources import RESEARCH_DIR
+from l7r.diagram.interactive.sources import RESEARCH_DIR, collection_pages
 
 _COMMENT = re.compile(r"<!--.*?-->", re.S)
 _TAG = re.compile(r"<[^>]+>")
@@ -32,7 +32,12 @@ def _all_pages() -> list[pathlib.Path]:
     root = pathlib.Path(RESEARCH_DIR)
     # the citations pages (feature 211) are record pages a reader meets: the works write-ups and the notes are under
     # every rule here except the Grounds/Evidence one (they are not findings)
-    return sorted(root.glob("*.html")) + sorted((root / "cities").glob("*.html")) + sorted((root / "citations").glob("*.html")) + sorted((root / "citations" / "cities").glob("*.html"))
+    return (
+        sorted(root.glob("*.html"))
+        + [root / c for c in collection_pages(str(root))]
+        + sorted((root / "citations").glob("*.html"))
+        + [root / "citations" / c for c in collection_pages(str(root / "citations"))]
+    )
 
 
 def _finding_files() -> list[pathlib.Path]:
@@ -179,6 +184,150 @@ def test_bounded_in_reads_the_boundaries_as_the_pattern_did() -> None:
     assert _bounded_in("koku", "the koku of rice") and _bounded_in("koku", "koku")
     assert not _bounded_in("koku", "kokudaka") and not _bounded_in("koku", "o'koku") and not _bounded_in("koku", "xkoku")
     assert _bounded_in("koku", "kokudaka and koku.")
+
+
+#: The commonest English words - articles, pronouns, prepositions, conjunctions, forms of "to be" and "to have", the
+#: small numbers. A glossary variant that is one of them would wrap the English word wherever it stands, because the
+#: tooltips are matched mechanically (feature 292, GM 2026-09-29: the unit *are* wrapped "the maps are free to do it").
+_COMMON_ENGLISH = frozenset(
+    [
+        "a",
+        "about",
+        "above",
+        "after",
+        "again",
+        "against",
+        "all",
+        "am",
+        "an",
+        "and",
+        "any",
+        "are",
+        "as",
+        "at",
+        "be",
+        "because",
+        "been",
+        "before",
+        "being",
+        "below",
+        "between",
+        "both",
+        "but",
+        "by",
+        "can",
+        "could",
+        "did",
+        "do",
+        "does",
+        "doing",
+        "down",
+        "during",
+        "each",
+        "few",
+        "for",
+        "from",
+        "further",
+        "had",
+        "has",
+        "have",
+        "having",
+        "he",
+        "her",
+        "here",
+        "hers",
+        "him",
+        "his",
+        "how",
+        "i",
+        "if",
+        "in",
+        "into",
+        "is",
+        "it",
+        "its",
+        "just",
+        "may",
+        "me",
+        "might",
+        "more",
+        "most",
+        "must",
+        "my",
+        "no",
+        "nor",
+        "not",
+        "now",
+        "of",
+        "off",
+        "on",
+        "once",
+        "one",
+        "only",
+        "or",
+        "other",
+        "our",
+        "out",
+        "over",
+        "own",
+        "per",
+        "same",
+        "shall",
+        "she",
+        "should",
+        "so",
+        "some",
+        "such",
+        "than",
+        "that",
+        "the",
+        "their",
+        "them",
+        "then",
+        "there",
+        "these",
+        "they",
+        "this",
+        "those",
+        "through",
+        "to",
+        "too",
+        "two",
+        "under",
+        "until",
+        "up",
+        "upon",
+        "very",
+        "via",
+        "was",
+        "we",
+        "were",
+        "what",
+        "when",
+        "where",
+        "which",
+        "while",
+        "who",
+        "whom",
+        "why",
+        "will",
+        "with",
+        "would",
+        "yet",
+        "you",
+        "your",
+    ]
+)
+
+
+def test_no_glossary_variant_is_a_common_english_word() -> None:
+    """A variant must never be a word English uses on its own - "are" wrapped as the land unit in "the maps are free to
+    do it". A term whose name is such a word keeps only its unambiguous forms (the unit keeps "ares"), or is `cased`
+    and matched only as written."""
+    from l7r.diagram.interactive.glossary import CASED
+
+    clash = sorted((v, term) for term, (variants, _d) in GLOSSARY.items() if term not in CASED for v in variants if v.lower() in _COMMON_ENGLISH)
+    assert clash == [], f"glossary variants that are common English words (drop them, or make the term cased): {clash}"
 
 
 def test_every_glossary_term_is_used_by_a_modal_or_a_record_page() -> None:

@@ -47,6 +47,17 @@ Measurement: the town tier seats the magistrate's compound at the town's edge on
 (research/towns 120). Mechanism: one seat rule for both models. Sketch: the scripted town generator reads the
 settlement's model and seats the compound on the main avenue for the Chinese model, at the edge for the Japanese.
 
+## OWED AT CONVERSION (feature 292 closing pass C4, 2026-10-01): the T plan and the crank at a town's ends
+
+Measurement: a grep of `l7r/` (2026-10-01) finds no street-form knob and no bend in a town's road; the only masugata
+drawn is the castle's gate box (`settlement/castle_civic.py`). The record states both as the rule: the town plan is a
+knob of five forms, four street-town forms (both sides, one-sided, back streets, and the T of Zhouzhuang) and the walled
+town's planned avenue (research/rendering/towns 230), and the road bends twice at right angles at each end of the built
+street, as at a post town (research/rendering/ways 160). Mechanism: the town tier is unscripted, so nothing rolls either.
+Sketch: the scripted town generator rolls the plan from the seed (the T laying a second main street off the first at its
+middle), and lays the road through the town with a two-turn crank just outside each end of the built street before the
+lots are placed, so the street front follows the bent road.
+
 ## OWED AT CONVERSION: the frozen towns' modern-only forms (feature 280, the modern-only sweep, 2026-09-29)
 
 The GM's rule of 2026-09-28 eliminates anything attested only in modern times; the frozen maps are not redrawn, so each

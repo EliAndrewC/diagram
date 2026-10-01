@@ -20,7 +20,7 @@ class Residence(Kind):
     """
     What: The magistrate's own house: the lord's family, their rooms and a formal reception room, drawn either as
     one block under one roof or as two or three halls stepped back one behind the next and joined by corridors. Its
-    rooms, the veranda along its garden face, any corridor between its halls and the formal entrance porch (genkan)
+    rooms, the veranda along its garden face, any corridor between its halls and, where the house stands alone rather than sharing a compound with the office, the formal entrance porch (genkan)
     are each their own feature, and light with the house. The band label names the whole wing.
 
     Why: The household living inside the working compound is the point of the institution - the office is a
@@ -39,19 +39,22 @@ class Residence(Kind):
     samurai's main house ran about 49 tsubo (about 1,740 sq ft) for a 150-koku district magistrate in 1794, and a house
     of about 1,000 koku before 1868 about 41 to 74 tsubo by two official measures that disagree; the 67-tsubo house once
     cited measures a house restored to its Meiji plan and is no longer a measure; the hand sheets' wings, about 180 to
-    200 ft long, are larger than either, a guess. Both massings are attested and each sheet takes one: one block is the ordinary posting's form, and a
+    200 ft long, are larger than either, a guess; the one intendant's residence measured, Takayama's (a 1990s
+    restoration), is about 6,400 sq ft. Both massings are attested and each sheet takes one: one block is the ordinary posting's form, and a
     residence drawn in echelon reads as one its holders have added to. That a corridor joins each hall to the last
     is this project's reading; no source read says how Katsura's echelon halls are joined. Of the service strip on
     the shady rear only its storehouse, behind the house, is read (the Higuchi house); the rest is reasoned from the
-    sun rule, and that the residence out-measures
-    every other domestic building is this project's own reading of the compound; no page a reader can open ranks
-    the footprints. A garden standing where the court would be, between the gate and the entrance, is a guess.
+    sun rule. That the residence out-measures the staff's rowhouse is read at Takayama, where the office hall
+    out-measures the residence; that it out-measures a kitchen, bath or shrine hall is this project's own reading
+    of the compound; beyond Takayama's measures, no page a reader can open ranks the footprints. A garden standing where the court would be, between the gate and the entrance, is a guess.
     Each labeled room is a suite of several rooms compressed to one label, a schematic convenience.
 
     Caveat: That a corridor joins each hall to the last is this project's reading; no source read says how
     Katsura's echelon halls are joined. Of the service strip on the shady rear only its storehouse, behind the
-    house, is read (the Higuchi house); the rest is reasoned from the sun rule, and that the residence out-measures every other domestic building is this project's own
-    reading of the compound; no page a reader can open ranks the footprints. A garden standing where the court
+    house, is read (the Higuchi house); the rest is reasoned from the sun rule. That the residence out-measures the
+    staff's rowhouse is read at Takayama, where the office hall out-measures the residence; that it out-measures a
+    kitchen, bath or shrine hall is this project's own reading of the compound; beyond Takayama's measures, no page
+    a reader can open ranks the footprints. A garden standing where the court
     would be, between the gate and the entrance, is a guess. Each labeled room is a suite of several rooms
     compressed to one label, a schematic convenience.
 
@@ -59,7 +62,7 @@ class Residence(Kind):
     Covers: the lord's residence blocks' fill and outlines, their room dividers, and the RESIDENCE band label
     Label: accurate
     Sources: watariroka-kotobank, irikawa-kotobank, katsura-rikyu-jawiki, touken-world-buke-madori, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, neixiang-yamen-zhwiki, takayama-jinya-city, takayama-jinya-jawiki, machi-bugyo-jawiki, jinya-jawiki, yamen-enwiki, neixiang-xianya-zhwiki, kotobank-katteguchi, shoinzukuri-jawiki
-    Entry: research/buildings.html - 'Were a residence's wings joined by corridors and set in echelon, like geese in flight?', 'How did a guest of rank arrive, from the gate to the entrance?', 'Office in front, residence behind', 'Guest doors feed courts, not flanks', 'The shady rear is the service strip', 'The compound has a size HIERARCHY', 'How big was a samurai's house, and what rank is a 67-tsubo house?'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'The formal entrance and a guest's arrival (genkan)', "Magistrates' compounds (jin'ya and yamen)", 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps size a compound and its buildings', 'How our maps draw a magistrate's compound', 'How our maps draw the formal entrance and a guest's arrival (genkan)'
     """
 
     key = "residence"
@@ -75,8 +78,9 @@ class AncestralAlcove(Kind):
     of the zashiki or in a small room behind the zashiki or the inner room - in both, at the formal end of the
     house; no source read puts it among the family's private rooms. One of the two kinds of Japanese tablet veneration keeps, in principle, the tablets of a house's successive heads
     along its line of inheritance, so - this project's guess from that - the alcove follows the house, not the post: where one lineage holds the
-    magistracy across generations, the past magistrates are the present one's own forebears and the alcove is
-    literally ancestral, and at a posting filled by appointment it holds only the family's own tablets.
+    magistracy across generations, the past magistrates are the present one's kin - held father to son, its own
+    forebears - and the alcove is literally ancestral, and at a posting filled by appointment, whose past holders
+    are not the incumbent's kin, the map draws no ancestral alcove.
 
     Note: The butsuma at the formal end, by or behind the zashiki, is a recorded finding; the two places for it
     are both attested, and each sheet takes one. A house keeping the tablets of its own successive heads is
@@ -84,18 +88,22 @@ class AncestralAlcove(Kind):
     read says tablets of predecessors in office were kept at an office or its residence, in Japan or at a Chinese
     county seat; the state hall for meritorious local officials that the record quotes stood at the Confucian
     temple, not inside the office. So past holders stand in the alcove only if they were heads of the incumbent's
-    own house, and whether they were is a question of the setting.
+    own house, and whether they were is a question of the setting; the Ubame plan's lineage alcove, holding kin
+    who held the post cousin to cousin but were not the house's own forebears, is this project's deliberate
+    extension beyond the record.
 
     Caveat: Nothing read says tablets of predecessors in office were kept at an office or its residence, in Japan
     or at a Chinese county seat; the state hall for meritorious local officials that the record quotes stood at
     the Confucian temple, not inside the office. So past holders stand in the alcove only if they were heads of
-    the incumbent's own house, and whether they were is a question of the setting.
+    the incumbent's own house, and whether they were is a question of the setting; the Ubame plan's lineage
+    alcove, holding kin who held the post cousin to cousin but were not the house's own forebears, is this
+    project's deliberate extension beyond the record.
 
     Name: ancestral alcove
     Covers: the alcove's tablets label at the residence's formal end (a lineage alcove where the tablets are a lineage's)
     Label: accurate
     Sources: butsuma-kotobank, sosen-saishi-kotobank, mingguanci-zhwiki
-    Entry: research/buildings.html - 'Where does the butsuma sit - by the zashiki, or among the private rooms?', 'Whose tablets does the alcove hold when a post passes to a cousin, not a son?', 'An ancestral alcove holding office-predecessor tablets'
+    Entry: research/buildings.html - 'Household altar rooms and ancestral tablets (butsuma and ihai)'; research/rendering/buildings.html - 'How our maps draw household altar rooms and ancestral tablets (butsuma and ihai)'
     """
 
     key = "ancestral alcove"
@@ -103,24 +111,26 @@ class AncestralAlcove(Kind):
 
 class KarosHouse(Kind):
     """
-    What: The house of the karo, the house elder - the magistrate's chief retainer - standing as a small house of
-    its own inside the compound.
+    What: The quarters of the karo, the house elder - the magistrate's chief retainer - inside the compound: on the
+    county-town plan a bay of the senior retainers' long-house with a door of its own, on the hand-drawn magistracy
+    plans a small house of its own in the residence court.
 
     Why: In the setting a county magistrate's samurai include the magistrate's karo. At a shogunal intendancy,
     the kind of office these postings follow, the staff lived inside the compound, in small houses and
     long-houses; a mansion of the karo's own near the lord's residence or in the castle was the form at a
     daimyo's scale, and belongs to a castle town. So the karo lives inside the walls, at the intendancy's scale.
 
-    Note: The karo is the setting's own, and staff housed inside an intendancy's compound in small houses or
-    long-houses is recorded. That the karo's quarters are a small house of their own, rather than a bay of the
-    staff long-house, is a guess: no source sets the head of the staff apart from the rest, and a chief
-    retainer's house inside the lord's own compound was not found. Its size and seat are a guess too.
+    Note: The small house of their own the hand-drawn plans give the karo, rather than a bay of the staff long-house,
+    is a guess: no source sets the head of the staff apart from the rest, and a chief retainer's own house inside the
+    lord's compound was not found. The county-town plan's long-house bay is accurate: the karo is the setting's own,
+    and staff housed inside an intendancy's compound in small houses or long-houses is recorded. The sizes, and where
+    each stands, are a guess on both kinds of plan.
 
     Name: karo's house
     Covers: the karo's house and its label with the "house elder" gloss
     Label: guess
     Sources: l7r-budgets, bukeyashiki-wiki, aizu-saigo-karo, jinya-kotobank, daikan-tetsuki-jawiki, mapple-takayama-jinya
-    Entry: research/buildings.html - 'Where does the chief retainer live - inside the compound, or in a house of their own?'
+    Entry: research/buildings.html - 'The chief retainer's house (karō yashiki)'; research/rendering/buildings.html - 'How our maps draw the chief retainer's house (karō yashiki)'
     """
 
     key = "karo's house"
@@ -140,21 +150,23 @@ class RetainersQuarters(Kind):
 
     Note: Retainers' official residences laid out inside a small domain's jin'ya are recorded, and the city
     magistracy's separate constables' district and ranked households in terraced ranges rest on recorded
-    findings. A source names a storehouse keepers' rowhouse on a rural office's grounds; that the rest of its staff lived there is the record's reconstruction, no source
-    naming those staff or their housing, and that their housing took the form of a rowhouse is the record's
-    own reading rather than a source's words; the record places ranks of small household dwellings at the
-    town's edge, outside an elite quarter, rather than inside its walls.
+    findings. A source counts the huts and rowhouses of a rural intendant's office's junior officials among its
+    parts on the grounds, and names a storehouse keepers' rowhouse there; that the rest of its staff lived there too
+    is the record's reconstruction, no source giving a count of the staff or saying who else lived inside; the
+    record places ranks of small household dwellings at the town's edge, outside an elite quarter, rather than
+    inside its walls.
 
-    Caveat: A source names a storehouse keepers' rowhouse on a rural office's grounds; that the rest of its staff lived there is the record's reconstruction, no source
-    naming those staff or their housing, and that their housing took the form of a rowhouse is the record's
-    own reading rather than a source's words; the record places ranks of small household dwellings at the
+    Caveat: A source counts the huts and rowhouses of a rural intendant's office's junior officials among its
+    parts on the grounds, and names a storehouse keepers' rowhouse there; that the rest of its staff lived there too
+    is the record's reconstruction, no source giving a count of the staff or saying who else lived inside; the
+    record places ranks of small household dwellings at the
     town's edge, outside an elite quarter, rather than inside its walls.
 
     Name: retainers' quarters
     Covers: the senior retainers' quarters, a family rowhouse for married retainers, and their labels
     Label: accurate
     Sources: hatchobori-jawiki, jinya-jawiki, takayama-jinya-jawiki, shibata-ashigaru-nagaya, hikone-ashigaru, aizu-bukeyashiki-guide
-    Entry: research/buildings.html - 'Staff housing spans a real spectrum'; research/cities/government.html - 'Servant housing in the samurai ward', "Where do a samurai household's servants sleep when the house has no gate range?"
+    Entry: research/buildings.html - 'Staff rowhouses and barracks (nagaya)'; research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'; research/rendering/buildings.html - 'How our maps draw staff rowhouses and barracks (nagaya)'
     """
 
     key = "retainers' quarters"
@@ -163,29 +175,30 @@ class RetainersQuarters(Kind):
 class ServantsQuarters(Kind):
     """
     What: A long, narrow single-story range - a nagaya - where the household's domestic servants live: the
-    cooks, grooms and cleaners who keep the compound running, on annual contracts.
+    hired commoners who do the household's odd jobs, on contracts of a fixed term.
 
-    Why: A samurai household's servants lived inside their master's walls, never in houses of their own - in a
-    range along the boundary, in the rooms of the gate, or for a small household in rooms off the kitchen.
+    Why: A samurai household's servants lived inside their master's walls - no page read gives one a house of
+    their own - in a range along the boundary, in the rooms of the gate, or for a small household in rooms off
+    the kitchen.
     The shady north rear, behind the residence, is the compound's service strip, so the servants' range backs the
     rear wall there, beside the household's storehouses and the family privy; the vegetable plot stands wherever it
     gets its sun.
 
-    Note: Servants housed inside the walls, the range along the front boundary, and a smaller house with no range are recorded findings; where that smaller house's servants slept is a guess, on no page read. The
+    Note: Servants housed inside the walls, the range along the front boundary, and a smaller house with no range are recorded findings; where that smaller house's servants slept, and that servants never had a house of their own, are guesses, on no page read. The
     program classes the building's size as a guess: a nagaya for about ten servants, with no measured example
     behind the band. And its seat in the north rear is reasoned from the sun rather than read: the record puts
-    the servants' range at the front, on the street, and no page read puts one at the rear.
+    the servants in the gate range at the front, on the street, and no page read places a servants' range at the rear.
 
     Caveat: The
     program classes the building's size as a guess: a nagaya for about ten servants, with no measured example
     behind the band. And its seat in the north rear is reasoned from the sun rather than read: the record puts
-    the servants' range at the front, on the street, and no page read puts one at the rear.
+    the servants in the gate range at the front, on the street, and no page read places a servants' range at the rear.
 
     Name: servants' quarters
     Covers: the servants' nagaya and its label
     Label: accurate
     Sources: jta-nagayamon, fukui-bushi-jutaku, aizu-bukeyashiki-jawiki, kotobank-degawari, nagayamon-jawiki, nando-jawiki, daozuofang, shoinzukuri-jawiki, kotobank-bukeyashiki, kotobank-nagayamon
-    Entry: research/cities/government.html - 'Servant housing in the samurai ward', "Where do a samurai household's servants sleep when the house has no gate range?"; research/buildings.html - 'The shady rear is the service strip'
+    Entry: research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'; research/buildings.html - 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)'; research/rendering/cities/government.html - "How our maps draw servants' quarters in the samurai ward"
     """
 
     key = "servants' quarters"
@@ -201,7 +214,7 @@ class GuestQuarters(Kind):
     room where a visitor was announced, and the zashiki - within its one main house. A travelling lord or
     official lodged at a honjin, a post town's lodging house with its raised room of honor, not with the
     household. A guest of rank arrives across open ground to the entrance step, so a guest's door opens onto a
-    court, never against a building's flank.
+    court, never against a building's flank. Another middle-rank house had no genkan with a shikidai: its guest came through a middle gate and along a walled garden path straight to the veranda of the zashiki.
 
     Note: Guest rooms inside the residence and the staged arrival that leads to them are recorded findings. A
     guest house drawn as a building of its own is a guess: none was found at a samurai house, and the nearest
@@ -216,7 +229,7 @@ class GuestQuarters(Kind):
     Covers: the guest room of the residence with its floor and label, or a detached guest house and its label
     Label: accurate
     Sources: shirobito-1717-takayama, boso-no-mura-takei, honjin-jawiki, yakage-honjin, kotobank-shikidai, kominkai-genkan
-    Entry: research/buildings.html - 'Did a guest stay in the house, or in a guest house of their own?', 'How did a guest of rank arrive, from the gate to the entrance?', 'Guest doors feed courts, not flanks'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps draw the formal entrance and a guest's arrival (genkan)'
     """
 
     key = "guest quarters"
@@ -229,24 +242,25 @@ class Kitchen(Kind):
     own feature.
 
     Why: A samurai house's rooms were nearly all matted, but its kitchen was board-floored, and its doma was
-    smaller than a farmhouse's. The kitchen had one door to the outside, the katteguchi, the service entrance;
-    the family came and went by a separate inner entrance and guests by the formal one. So the kitchen stands at
+    smaller than a farmhouse's. The kitchen had its own door from outside, the katteguchi, the service entrance;
+    at a house of standing the family came and went by a separate inner entrance and guests by the formal one, though a middle-rank house could have no genkan with a shikidai, its kitchen entrance serving as its front entrance. So the kitchen stands at
     the edge of the inner court, its door opening into work space, the deliberate opposite of a guest's arrival.
     It is large, but a fraction of the living quarters, and with open fire burning all day it is the compound's
     worst fire risk, so it keeps two water tubs where every other hall keeps one.
 
-    Note: The board-floored kitchen with its small doma, its one outside door, and the household's separate
-    inner entrance are recorded findings. A second outside door on the kitchen, and the route by which food
+    Note: The board-floored kitchen with its small doma, its own door from outside, and the household's separate
+    inner entrance at a house of standing are recorded findings; that the kitchen had only one outside door is a
+    guess, resting on no page showing two; that the kitchen door opens into work space, the reverse of a guest's door, is this project's reading. A second outside door on the kitchen, and the route by which food
     reached the rooms, are guesses wherever a plan draws them: nothing read draws either. The kitchen's own size
-    is a guess, since no page read gives a kitchen's share of its house; it is measured against a whole
+    is a guess, since only one house read gives its kitchen's share, and by only one of two measures that disagree; it is measured against a whole
     house of about 49 tsubo (some 1,740 sq ft) at middle rank, a house of 1794, and a kitchen that approaches it is too
     big; at a higher rank one house's kitchen wing was about a sixth of the house. Its weighting as the compound's worst fire
     risk, with a second water tub, is this project's reading: no page read gives the kitchen extra water or sets
     one tub to a hall as a rule.
 
     Caveat: A second outside door on the kitchen, and the route by which food reached the rooms, are guesses
-    wherever a plan draws them: nothing read draws either. The kitchen's own size is a guess, since no page read
-    gives a kitchen's share of its house; it is measured against a whole
+    wherever a plan draws them: nothing read draws either. The kitchen's own size is a guess, since only one house read
+    gives its kitchen's share, and by only one of two measures that disagree; it is measured against a whole
     house of about 49 tsubo (some 1,740 sq ft) at middle rank, a house of 1794, and a kitchen that approaches it is too
     big; at a higher rank one house's kitchen wing was about a sixth of the house. Its weighting as the compound's worst fire risk, with a second water tub,
     is this project's reading: no page read gives the kitchen extra water or sets one tub to a hall as a rule.
@@ -255,7 +269,7 @@ class Kitchen(Kind):
     Covers: the kitchen and pantries building and its label
     Label: accurate
     Sources: boso-no-mura-takei, liq-takayasu-daidokoro, kotobank-katteguchi, kotobank-uchigenkan, matsue-bukeyashiki, matsue-bukeyashiki-about, matsushiro-bukeyashiki, tfd-hongou-fire-history, thepaper-taipinggang, edo-no-kaji-jawiki, machibikeshi-jawiki
-    Entry: research/buildings.html - 'What fire did a residence's kitchen cook on - a kamado range, or a sunken hearth?', 'How many doors does a residence's kitchen have, and who comes in by them?', 'How big was a samurai's house, and what rank is a 67-tsubo house?', 'The compound has a size HIERARCHY', 'Fire-water is distributed to the halls', 'Guest doors feed courts, not flanks'
+    Entry: research/buildings.html - 'Kitchens (daidokoro)', 'Samurai residences and their rooms (buke yashiki)', 'The size of a compound and the rank of its buildings', 'Fire, and the fireproof storehouses (dozō)', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps draw kitchens (daidokoro)', 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps size a compound and its buildings', 'How our maps draw the formal entrance and a guest's arrival (genkan)', 'How our maps draw fire water and the fireproof storehouses (dozō)'
     """
 
     key = "kitchen"
@@ -285,7 +299,7 @@ class Bath(Kind):
     Covers: the bath, its steam mark and its label
     Label: accurate
     Sources: furo-kotobank, yokushitsu-kotobank, shirobito-1717-takayama, kanagawa-hatamoto-kaso, sayama-jinya-uematsu
-    Entry: research/buildings.html - 'Did a residence have its own bath, and was it a building apart?'
+    Entry: research/buildings.html - 'Baths (furo)'; research/rendering/buildings.html - 'How our maps draw baths (furo)'
     """
 
     key = "bath"
@@ -297,21 +311,24 @@ class Well(Kind):
     dark mouth: one at or in the kitchen, one in the garden, one beside the stables, sometimes a fourth.
 
     Why: Samurai and government households drew their water from wells inside their own walled compounds,
-    not from the communal wells where commoners gathered. The kitchen well is the busiest; the stables well
+    not from the communal wells where commoners gathered, though in Edo, where the aqueduct served the samurai
+    districts first, the difference was one of priority as much as of a private well. The kitchen well is the busiest; the stables well
     waters the horses; the garden well serves the family. The kitchen well sits in the service ground rather
     than in a court meant for ceremony.
 
     Note: we have drawn each well as a stone-curb marker about 7 ft square, larger than the curb itself, in
     order to mark where the well stands without claiming that its pixels are the well's size. A hand-dug
-    well's shaft is about 1 m across; the one curb frame found measured, a bucket well recorded for a book of old
-    implements, is 118 cm (about 4 ft) square, and the 3 to 4 ft curb rests on it. That official households drew from wells inside their own walls is the record's
+    well's shaft is about 1 m across; the one curb frame found measured, a bucket well photographed for a modern
+    book of old implements, is 118 cm (about 4 ft) square, but the book does not date it and no page read
+    measures a premodern curb, so the 3 to 4 ft curb is fitted round the premodern shaft and its exact figure
+    is a guess. That official households drew from wells inside their own walls is the record's
     reading.
 
     Name: well
     Covers: every well curb glyph and its label
     Label: convention
     Sources: kanda-josui-jawiki, nagaya-jawiki, saijo-mizu-rekishikan, kotobank-idoyakata, ido-jawiki, shoinzukuri-jawiki
-    Entry: research/urban-features.html - 'Communal wells and the samurai exception', 'Wells - the research, and the deliberate liberty'; research/buildings.html - 'The shady rear is the service strip'
+    Entry: research/urban-features.html - 'Communal wells (ido)'; research/rendering/urban-features.html - 'How our maps place and draw wells (ido)'; research/buildings.html - 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)'
     """
 
     key = "well"
@@ -332,21 +349,24 @@ class Latrine(Kind):
     Note: The privy built into the samurai house, the more than one privy of a well-appointed house, the privy at
     the rear of the guest parlor, the upper privies with board verandas at an official hall, and the carted
     night-soil trade are recorded findings, and the program classes the privies as accurate - one per functional
-    zone, about three or four. The guests' privy at the rear of the zashiki, reached along a board veranda, is
-    this project's reading of two sources together, neither of which shows the whole arrangement in one house.
-    That the family's privy sits at the shady rear is reasoning from the sun rule, not a read source. That no
-    collector should have to cross the inner court is this record's own rule rather than a finding.
+    zone, about three or four, though that count is this project's guess rather than a finding. The guests'
+    privy at the rear of the zashiki, reached along a board veranda, is this project's reading of two sources
+    together, neither of which shows the whole arrangement in one house. That the family's privy sits toward the
+    living rooms is a guess drawn from later and humbler houses, since no page we read places a family privy in
+    a samurai house before 1868. That no collector should have to cross the inner court is this record's own
+    rule rather than a finding.
 
     Caveat: The guests' privy at the rear of the zashiki, reached along a board veranda, is this project's
     reading of two sources together, neither of which shows the whole arrangement in one house. That the family's
-    privy sits at the shady rear is reasoning from the sun rule, not a read source. That no collector should have
-    to cross the inner court is this record's own rule rather than a finding.
+    privy sits toward the living rooms is a guess drawn from later and humbler houses, since no page we read
+    places a family privy in a samurai house before 1868. That no collector should have to cross the inner court
+    is this record's own rule rather than a finding.
 
     Name: latrine
     Covers: every privy building and its label
     Label: accurate
     Sources: sayama-jinya-uematsu, kotobank-benjo, tajima-2007-night-soil, guernica-night-soil, sinyoken-madori, shoinzukuri-jawiki
-    Entry: research/buildings.html - 'Where does a residence put its guests' privy?', 'Privies attach to the house', 'The shady rear is the service strip'
+    Entry: research/buildings.html - 'Privies (setchin)', 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps place privies (setchin)', 'How our maps lay out samurai residences and their rooms (buke yashiki)'
     """
 
     key = "latrine"
@@ -358,28 +378,31 @@ class Stables(Kind):
     few horses: the magistrate's mount and a couple of messengers' horses, with a well beside it for watering.
 
     Why: A warrior's stable was a freestanding building three, five or seven bays long, the most formal of them
-    three bays and entered at the gable end, with separate stalls one bay wide on board floors, a matted room for
-    the attendants and an earth-floored room for fodder; a lord's could be far larger. A county office is taken to keep only
+    three bays and entered at the gable end, with separate stalls one bay wide on board floors, an earth-floored
+    passage before them and a matted suite across it, where the grooms and retainers had their quarters; a lord's
+    could be far larger. A county office is taken to keep only
     a handful of horses, so its stable is small - a fraction of the watch's barracks, never larger. It stands in
     the outer court by a service gate, so the horses and their muck go in and out without crossing the
     ceremonial ground, and the animals are led to water at a well rather than watered where they stand.
 
-    Note: The freestanding stable a few bays long, its stalls one bay wide on board floors, and the watering at a
-    well are recorded findings, and the program classes the stable as accurate: drawn smaller than the barracks,
+    Note: The freestanding stable a few bays long, its stalls one bay wide on board floors (a bay taken as one ken,
+    about 6 ft, by our own convention) are recorded findings,
+    and the watering at a well is this project's reading of a caravanserai's courtyard well (no premodern trough beside
+    a well was found); the program classes the stable as accurate: drawn smaller than the barracks,
     checked against the size audit. A stall's depth, and so its area, is a guess, and so is the number of horses:
-    no page read gives either for a county post. The stable's rank below the barracks is the record's own
-    reading - no readable source ranks a compound's footprints - and its watering finding was written for city
-    stable yards.
+    no page read gives either for a county post. The stable's rank below the barracks is a guess, this project's own
+    reading - no page read says where a stable ranked among an office's buildings - and its watering at a well, itself a
+    reading, was written for city stable yards.
 
     Caveat: A stall's depth, and so its area, is a guess, and so is the number of horses: no page read gives
-    either for a county post. The stable's rank below the barracks is the record's own reading - no readable
-    source ranks a compound's footprints - and its watering finding was written for city stable yards.
+    either for a county post. The stable's rank below the barracks is a guess, this project's own reading - no page
+    read says where a stable ranked among an office's buildings - and its watering at a well, itself a reading, was written for city stable yards.
 
     Name: stables
     Covers: the stable building, its stall divisions and its label
     Label: accurate
     Sources: kotobank-umaya, jaanus-umaya, qingming-shanghe-tu, caravanserai-enwiki, equine-nutrition-enwiki
-    Entry: research/buildings.html - 'What was a samurai's stable like, and how big was a stall?', 'The compound has a size HIERARCHY'; research/urban-features.html - 'Stable yards'
+    Entry: research/buildings.html - 'Stables (umaya)', 'The size of a compound and the rank of its buildings'; research/urban-features.html - 'Stable yards and watering troughs'; research/rendering/buildings.html - 'How our maps draw stables (umaya)', 'How our maps size a compound and its buildings'; research/rendering/urban-features.html - 'How our maps draw stable yards and their troughs'
     """
 
     key = "stables"
@@ -396,7 +419,7 @@ class Kennel(Kind):
     service yard, its well and the service gate, away from the ceremonial ground of the forecourt.
 
     Note: Hunting dogs kept by a samurai household are recorded, and dogs were once housed inside an official's
-    compound, at Kitami in 1693, though as dogs in care rather than a hunting pack. The kennel's form, its size of
+    compound, the chamberlain Kitami's, though as the shogunate's dogs in care rather than a hunting pack; by 1693 the site had passed to the shogunate itself. The kennel's form, its size of
     about 11 ft square and its seat beside the stables are a guess: no page read describes a household's hunting
     kennel, gives one a size or puts one with the stables.
 
@@ -404,7 +427,7 @@ class Kennel(Kind):
     Covers: the kennel building and its label
     Label: guess
     Sources: takagari-jawiki, kishuken-jawiki, inukai-kotobank, inugoya-jawiki
-    Entry: research/buildings.html - 'Did a samurai household keep hunting dogs, and where were they kept?'
+    Entry: research/buildings.html - 'Hunting dogs and kennels (inugoya)'; research/rendering/buildings.html - 'How our maps draw kennels (inugoya)'
     """
 
     key = "kennel"
@@ -418,7 +441,7 @@ class Storehouse(Kind):
     Why: A 150-koku retainer's house at Matsushiro keeps, with the house, a vegetable garden and two storehouses, and
     the Takayama intendancy kept a kitchen storehouse beside its rice store. At the Higuchi house, also at Matsushiro,
     the storehouse stands north with the main house and the rowhouse, beyond a yard behind the house, the garden
-    to the south. A household storehouse was small: the Yokota house's is 2.7 by 3.6 m, and the common size was about 2
+    to the south. A household storehouse was small: the Yokota house's two are 2.7 by 3.6 m and, of two stories, 5.5 by 4.5 m, and the common size was about 2
     by 3 ken, some 12 by 18 ft. A plastered storehouse is the one building made not to burn, so it keeps no
     fire-water tub.
 
@@ -431,7 +454,7 @@ class Storehouse(Kind):
     Covers: the household storehouse and its label
     Label: accurate
     Sources: matsushiro-bukeyashiki, takayama-jinya-gifu, matsushiro-kankou-higuchi, kojodan-higuchi, bunka-yokota-dozo, suumo-kura-size
-    Entry: research/buildings.html - 'The shady rear is the service strip', 'Where did a residence keep its vegetable garden, and how big was it?', 'Fire discipline: halls burn, kura endure'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'Vegetable gardens at samurai houses and government offices (saien)', 'Fire, and the fireproof storehouses (dozō)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)'
     """
 
     key = "storehouse"
@@ -440,28 +463,28 @@ class Storehouse(Kind):
 class FireWaterTubs(Kind):
     """
     What: Standing tubs of rainwater - tensuioke, "heaven-water tubs" - kept against fire, one at the eaves
-    corner of each major wooden building and two at the kitchen, fed by the roof's runoff.
+    corner of each major wooden building and two at the kitchen, holding rain.
 
-    Why: The halls of an administrative compound were ordinary wooden buildings and often burned (the Sado magistracy five times, though Takayama's office never did),
+    Why: The halls of an administrative compound were ordinary wooden buildings and could burn (the Sado magistracy five times, though Takayama's office never did),
     so standing water was kept at the point of risk: at the wooden buildings, weighted to the kitchen and its
     open fire. The plastered storehouses carry none - a thick earthen kura is the one building made not to
-    burn. Each tub stands against its building's wall, under the eaves, because the gutter fills it.
+    burn.
 
-    Note: Townspeople's habit of keeping water ready at the front entrance and on the roof, and per-hall water
-    vats in the Forbidden City, are recorded findings, and the program classes the tubs as accurate:
-    gutter-fed tensuioke at the wooden buildings. A tub at every wooden building, as a rule rather than a
-    townspeople's custom, is the record's reading. The tub's 2.5 ft size is the record's estimate on no page
+    Note: Townspeople's habit of keeping water ready at the front entrance and on the roof, an Edo town order
+    that tubs of water be kept ready, and per-hall water vats in the Forbidden City, are recorded findings,
+    and the program classes the tubs as accurate: rainwater tensuioke at the wooden buildings. A tub at every
+    wooden building, as a rule rather than the townspeople's habit or a town order, is the record's reading. The tub's 2.5 ft size is the record's estimate on no page
     read, and the weighting toward the kitchen is the record's reasoning rather than a page's words.
 
-    Caveat: A tub at every wooden building, as a rule rather than a townspeople's custom, is the record's
-    reading. The tub's 2.5 ft size is the record's estimate on no page read, and the weighting toward the
+    Caveat: A tub at every wooden building, as a rule rather than the townspeople's habit or a town order,
+    is the record's reading. The tub's 2.5 ft size is the record's estimate on no page read, and the weighting toward the
     kitchen is the record's reasoning rather than a page's words.
 
     Name: fire-water tubs
     Covers: every fire-water tub glyph and the "fire-water tubs" label
     Label: accurate
     Sources: tfd-hongou-fire-history, thepaper-taipinggang, edo-no-kaji-jawiki, machibikeshi-jawiki, sado-bugyosho-fires, tensuioke-jawiki, dozo-jawiki
-    Entry: research/buildings.html - 'Fire-water is distributed to the halls', 'Fire discipline: halls burn, kura endure'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'
+    Entry: research/buildings.html - 'Fire, and the fireproof storehouses (dozō)'; research/rendering/buildings.html - 'How our maps draw fire water and the fireproof storehouses (dozō)'; research/urban-features.html - 'Fire watch towers and firefighting gear (hinomi yagura)'
     """
 
     key = "fire-water tubs"
@@ -470,27 +493,31 @@ class FireWaterTubs(Kind):
 class CompoundShrine(Kind):
     """
     What: The shrine every administrative compound keeps inside its walls - a modest hall, Inari's by default,
-    with ground around it kept as garden or grove. Where a plan draws its altars, or a torii before a hall set in
+    standing in a corner of the compound's ground with a tree beside it. Where a plan draws its altars, or a torii before a hall set in
     its own grove, each is its own feature; where a compound serves a second kami, it may give that kami a small
     shrine of its own on the same ground.
 
     Why: Even the shogunate's post at Jōge, an outpost of three officials, had shrines inside its walls - an
     Inari shrine and a Tenjin shrine among them - and a full Chinese county yamen kept three, so a shrine is part
     of the equipment of any office, not a sign of a pious magistrate; what varies is its size and its
-    dedication. A shrine keeping more than one kami was the ordinary case, and a kami brought in from elsewhere
+    dedication. A shrine keeping more than one kami was the ordinary case, by the word of an encyclopedia article
+    that flags itself as short of sources, and a kami brought in from elsewhere
     could be kept in the main hall or given its own small shrine inside the precinct. The shrine stands in the
     inner court with the household and stays smaller than the residence - a worship hall is small even at a
     great shrine.
 
     Note: A modest shrine inside the walls of a post of any size is a recorded finding, read on the 1869 drawing
     of the Jōge post and on a Chinese yamen's three shrines, and a second kami in a small shrine of its own is one
-    of three attested forms; the program classes the shrine as accurate, with a hall-shrine ceiling of about 36
-    by 30 ft subordinate to the residence. Making it Inari's by default is a guess resting on that one post, whose
-    shrines are known from the drawing alone: the excavation found the post's walls, steps and foundation stones,
-    not its shrines. The ranking below the residence, and the small worship hall it rests on, are the record's
-    own reading, no page read giving a worship hall's size or ranking a compound's buildings.
+    of three forms the record found, two of them attested and the single altar in one hall a guess; the program classes the shrine as accurate, with a hall-shrine ceiling of about 36
+    by 30 ft subordinate to the residence, a ceiling that is this project's guess, since no page read measures a
+    worship hall. One shrine is drawn however many a real office kept - Jōge two, Neixiang shrines to three gods - and a
+    garden around it is a guess, no page read describing one. Making it Inari's by default is a guess resting on
+    that one post, whose shrines are known from the drawing alone: the excavation found the post's walls, steps
+    and foundation stones, not its shrines. The ranking below the residence, and the small worship hall it rests
+    on, are the record's own reading, no page read giving a worship hall's size or ranking a compound's buildings.
 
-    Caveat: Making it Inari's by default is a guess resting on that one post, whose shrines are known from the
+    Caveat: One shrine is drawn however many a real office kept - Jōge two, Neixiang shrines to three gods - and a garden
+    around it is a guess, no page read describing one. Making it Inari's by default is a guess resting on that one post, whose shrines are known from the
     drawing alone: the excavation found the post's walls, steps and foundation stones, not its shrines. The
     ranking below the residence, and the small worship hall it rests on, are the record's own reading, no page
     read giving a worship hall's size or ranking a compound's buildings.
@@ -499,7 +526,7 @@ class CompoundShrine(Kind):
     Covers: the shrine hall or halls, their edging and dividing rail, and the shrine labels
     Label: accurate
     Sources: fuchu-joge-pamphlet, neixiang-yamen-zhwiki, henan-neixiang, jawiki-saijin, jawiki-goshi, kotobank-aidono, hokora-jawiki, nara-nagao-jinja
-    Entry: research/buildings.html - 'What did the smallest branch office hold inside its walls?', 'Every administrative compound keeps a shrine', 'The compound has a size HIERARCHY'; research/religion-and-death.html - 'When one shrine hall serves several kami, does each have its own altar?'
+    Entry: research/buildings.html - "Magistrates' compounds (jin'ya and yamen)", 'Shrines kept inside government offices and houses (yashikigami)', 'The size of a compound and the rank of its buildings'; research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps draw shrines kept inside government offices'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "compound shrine"
@@ -512,12 +539,12 @@ class WritingPavilion(Kind):
 
     Why: A study could be a room or a building of its own. Rai San'yō, a scholar and poet of the late Edo period,
     built a detached study-cum-tea room on his Kyoto estate in 1828, its garden on its west side, and in China
-    the study drew apart from the living rooms into the quiet part of the compound, beside the rear garden. The
+    the study drew apart from the living rooms into a quiet part of the compound, beside the rear garden where there was one. The
     office hall is where the county's business is done and the residence is the family's; a pavilion set apart
     in the garden gives its owner a room that belongs to neither.
 
     Note: A study standing apart in the garden as a building of its own is a recorded form, at a scholar's
-    estate in Kyoto and in the Chinese compound. Giving one to a magistrate, in the inner garden of the posting,
+    estate in Kyoto; in the Chinese compound the study drew apart from the living rooms, beside the rear garden where there was one. Giving one to a magistrate, in the inner garden of the posting,
     is a guess by extension from those, and so is its size of about 18 by 14 ft: no page read describes a
     detached study at an official's compound or gives a detached study's size.
 
@@ -525,7 +552,7 @@ class WritingPavilion(Kind):
     Covers: the pavilion and its label
     Label: guess
     Sources: shosai-kotobank, kyoto-ga-sanshisuimeisho, chinesepen-shuzhai
-    Entry: research/buildings.html - 'Did a study ever stand apart in the garden, as a building of its own?'
+    Entry: research/buildings.html - 'Studies and detached studies (shosai)'; research/rendering/buildings.html - 'How our maps draw a detached study (shosai)'
     """
 
     key = "writing pavilion"
@@ -555,7 +582,7 @@ class Hearth(Kind):
     Covers: the fire glyph in each kitchen
     Label: accurate
     Sources: boso-no-mura-takei, liq-takayasu-daidokoro, matsue-bukeyashiki, irori-jawiki, tfd-hongou-fire-history, edo-no-kaji-jawiki, machibikeshi-jawiki, thepaper-taipinggang
-    Entry: research/buildings.html - 'What fire did a residence's kitchen cook on - a kamado range, or a sunken hearth?', 'Fire-water is distributed to the halls, not the kura'
+    Entry: research/buildings.html - 'Kitchens (daidokoro)', 'Fire, and the fireproof storehouses (dozō)'; research/rendering/buildings.html - 'How our maps draw kitchens (daidokoro)', 'How our maps draw fire water and the fireproof storehouses (dozō)'
     """
 
     key = "hearth"
@@ -576,7 +603,7 @@ class Genkan(Kind):
 
     Note: The genkan with its shikidai, the staged arrival that leads to it, and the genkan on the office where
     office and residence share a compound are recorded findings. Two approaches are attested and each sheet takes
-    one: the genkan, the senior house's form, or no genkan at all, where a middle gate and a walled garden path
+    one: the genkan, the senior house's form, or no genkan with a shikidai, where a middle gate and a walled garden path
     lead a guest to the zashiki's veranda, attested at a middle-rank house; a sheet that takes the second draws no
     genkan. The Takayama page describes a visitor's route, not how the office and the residence were laid out
     against each other.
@@ -588,7 +615,7 @@ class Genkan(Kind):
     Covers: the entry porch at the formal entrance
     Label: accurate
     Sources: genkan-jawiki, bukeyashiki-wiki, shirobito-1717-takayama, shiroishi-koseki, kotobank-shikidai, kominkai-genkan, jaanus-uchigenkan, fuchu-joge-pamphlet, takayama-jinya-jawiki, takayama-jinya-city
-    Entry: research/buildings.html - 'Where is the formal entrance, and how does a guest reach it?', 'How did a guest of rank arrive, from the gate to the entrance?', 'Guest doors feed courts, not flanks'
+    Entry: research/buildings.html - 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps draw the formal entrance and a guest's arrival (genkan)'
     """
 
     key = "genkan"
@@ -618,7 +645,7 @@ class Engawa(Kind):
     Covers: the veranda strip along the residence's garden face
     Label: accurate
     Sources: engawa-kotobank, shoinzukuri-kotobank, irikawa-kotobank, katsura-rikyu-jawiki
-    Entry: research/buildings.html - 'Which faces of a residence carry the veranda, and how wide is it?'
+    Entry: research/buildings.html - 'Verandas and storm shutters (engawa and amado)'; research/rendering/buildings.html - 'How our maps draw verandas and storm shutters (engawa and amado)'
     """
 
     key = "engawa"
@@ -647,7 +674,7 @@ class ResidenceCorridor(Kind):
     Covers: the corridor between the residence blocks
     Label: accurate
     Sources: watariroka-kotobank, irikawa-kotobank, katsura-rikyu-jawiki
-    Entry: research/buildings.html - 'Were a residence's wings joined by corridors and set in echelon, like geese in flight?'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)'
     """
 
     key = "residence corridor"
@@ -669,17 +696,17 @@ class LordsQuarters(Kind):
     the record, as does the private study on the far side of the line between office and home. Two room orders
     are attested: this palace order, and a small house's (one house, as this project reads its plan), with the formal zashiki deepest in and the living rooms
     between it and the entrance; in both the reception sits at one end, and these plans follow the palace order.
-    The suite's naming by its occupant is the GM's convention for these plans, and the name the lord's rooms go
+    The suite's naming by its occupant is this project's convention for these plans, and the name the lord's rooms go
     by today, the naka-oku, is a modern one.
 
-    Caveat: The suite's naming by its occupant is the GM's convention for these plans, and the name the lord's
+    Caveat: The suite's naming by its occupant is this project's convention for these plans, and the name the lord's
     rooms go by today, the naka-oku, is a modern one.
 
     Name: lord's quarters
     Covers: the lord's suite in the residence, its floor and its labels
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, shoinzukuri-kotobank, matsue-bukeyashiki, touken-world-buke-madori, takayama-jinya-jawiki, takayama-jinya-city, aizu-bukeyashiki-jawiki
-    Entry: research/buildings.html - 'In what order do a residence's rooms run - the reception, the master's rooms, the family's?', 'The courtroom is a room of the office hall, not a freestanding stage'; research/cities/government.html - 'Servant housing in the samurai ward'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'The hearing court (shirasu)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps draw the hearing court (shirasu)'; research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'
     """
 
     key = "lord's quarters"
@@ -690,7 +717,7 @@ class FamilyQuarters(Kind):
     What: The rooms of the magistrate's family, drawn as one labeled bay beyond the lord's own rooms, toward the
     private end of the residence.
 
-    Why: The household lives inside the working compound, and within the house the family's rooms lie farthest
+    Why: The household lives inside the working compound, and in the palace order these plans follow, the family's rooms lie farthest
     from the formal approach. A lord's palace ran from the omote in front, through the lord's own rooms, to the
     oku, which held the lord's private rooms and the quarters of the lord's wife, where coming and going was
     strictly limited; a middle-rank house at Matsue kept a family room and the wife's living room besides its
@@ -698,15 +725,15 @@ class FamilyQuarters(Kind):
 
     Note: The household living inside the working compound (behind the office by Chinese regulation; at Takayama
     the residence stood beside it, and no Japanese rule was found), and the family's rooms beyond the lord's in
-    the palace order, follow the record. Naming the bay by its occupants is the GM's convention for these plans.
+    the palace order, follow the record. Naming the bay by its occupants is this project's convention for these plans.
 
-    Caveat: Naming the bay by its occupants is the GM's convention for these plans.
+    Caveat: Naming the bay by its occupants is this project's convention for these plans.
 
     Name: family quarters
     Covers: the family's bay of the residence, its floor and its labels
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, shoinzukuri-kotobank, matsue-bukeyashiki, neixiang-yamen-zhwiki, aizu-bukeyashiki-jawiki, jinya-jawiki, takayama-jinya-jawiki
-    Entry: research/buildings.html - 'In what order do a residence's rooms run - the reception, the master's rooms, the family's?', 'Office in front, residence behind'; research/cities/government.html - 'Servant housing in the samurai ward'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', "Magistrates' compounds (jin'ya and yamen)"; research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps draw a magistrate's compound'
     """
 
     key = "family quarters"
@@ -722,7 +749,7 @@ class InnerRooms(Kind):
     memorial alcove is not among them: the butsuma was set at the formal end, by or behind the zashiki, and none
     was found among the family's private rooms.
 
-    Note: A residence grouping its private rooms at the far end from its formal ones follows the record. The bay's
+    Note: A lord's palace grouping its private rooms at the far end from its formal ones follows the record; the one smaller house whose order we read, the Kuchiba house at Hagi, runs the other way on this project's reading, its zashiki deepest in, so drawing a provincial residence in the palace's order is a choice. The bay's
     contents are the drawing's own.
 
     Caveat: The bay's contents are the drawing's own.
@@ -731,7 +758,7 @@ class InnerRooms(Kind):
     Covers: the innermost bay of the residence, its floor and its label
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, butsuma-kotobank, aizu-bukeyashiki-jawiki
-    Entry: research/buildings.html - 'In what order do a residence's rooms run - the reception, the master's rooms, the family's?', 'Where does the butsuma sit - by the zashiki, or among the private rooms?'; research/cities/government.html - 'Servant housing in the samurai ward'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'Household altar rooms and ancestral tablets (butsuma and ihai)'; research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps draw household altar rooms and ancestral tablets (butsuma and ihai)'
     """
 
     key = "inner rooms"
@@ -760,7 +787,7 @@ class ReceptionRoom(Kind):
     Covers: the reception bay of the residence, its floor and its labels
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, shoinzukuri-kotobank, touken-world-buke-madori, matsue-bukeyashiki, shoinzukuri-jawiki, aizu-bukeyashiki-jawiki
-    Entry: research/buildings.html - 'In what order do a residence's rooms run - the reception, the master's rooms, the family's?', 'The shady rear is the service strip'; research/cities/government.html - 'Servant housing in the samurai ward'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)'; research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)'
     """
 
     key = "reception room"
@@ -783,7 +810,7 @@ class ShutteredWing(Kind):
     Covers: the shuttered bay, its shutters and its labels
     Label: guess
     Sources: amado-kotobank
-    Entry: research/buildings.html - 'Did a residence keep the storm shutters shut on rooms it was not using?'
+    Entry: research/buildings.html - 'Verandas and storm shutters (engawa and amado)'; research/rendering/buildings.html - 'How our maps draw verandas and storm shutters (engawa and amado)'
     """
 
     key = "shuttered wing"
@@ -801,15 +828,17 @@ class ShrineAltar(Kind):
     one roof, the main kami in the middle as on a household's three-shrine shelf. Some kept the lesser kami (for a hall, a guess from the household shelf) behind
     the main one's altar, or gave a kami a small shrine of its own inside the precinct.
 
-    Note: Several kami in one hall, and their altars side by side, a bay to each, are recorded findings; which of
-    the three forms a compound takes is rolled per map, and each map's note says which. The single altar with the
-    others behind it is attested for a household shelf only, so for a hall it is a guess. What the pages
-    attest is a hall of two bays or small halls joined under one roof, not separate altars inside one undivided
+    Note: Several kami in one hall, and their altars side by side, a bay to each, are recorded findings at shrines, though no page read describes one kept inside an official's compound; which of
+    the three forms a compound takes is rolled per map, and each map's note says which. A compound's shrine
+    serving more than one kami is a deviation of ours, drawn at Ochiba alone because its magistrate is also a
+    priest; any other compound's shrine serves one. The single altar with the others behind it is attested for a
+    household shelf only, so for a hall it is a guess. What the pages attest is a hall of two bays or small halls joined under one roof, not separate altars inside one undivided
     hall, so drawing them in one undivided hall is a guess. What each altar serves is the setting's or the map's
     own, and each glyph is drawn as a marker, not the altar at its size.
 
-    Caveat: The single altar with the others behind it is attested for a household shelf only, so for a hall it is
-    a guess. What the pages attest is a hall of two bays or small halls joined under one roof, not separate altars
+    Caveat: A compound's shrine serving more than one kami is a deviation of ours, drawn at Ochiba alone because its
+    magistrate is also a priest; any other compound's shrine serves one. The single altar with the others behind
+    it is attested for a household shelf only, so for a hall it is a guess. What the pages attest is a hall of two bays or small halls joined under one roof, not separate altars
     inside one undivided hall, so drawing them in one undivided hall is a guess. What each altar serves is the
     setting's or the map's own, and each glyph is drawn as a marker, not the altar at its size.
 
@@ -817,12 +846,13 @@ class ShrineAltar(Kind):
     Covers: each altar glyph inside a shrine hall, with its name and sublabels
     Label: accurate
     Sources: kotobank-aidono, jawiki-saijin, genbu-honden-styles, jawiki-goshi, tokyo-jinjacho-kamidana
-    Entry: research/religion-and-death.html - 'When one shrine hall serves several kami, does each have its own altar?'; research/buildings.html - 'Every administrative compound keeps a shrine'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/buildings.html - 'Shrines kept inside government offices and houses (yashikigami)'; research/rendering/buildings.html - 'How our maps draw shrines kept inside government offices'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "shrine altar"
 
 
+# The GM's ruling of 2026-09-27: a village shrine's innermost arch stands 12 ft from its hall where there is room.
 class Torii(Kind):
     """
     What: A torii, the gateway arch over a shrine's approach - a compound's small shrine, or a village's - standing a
@@ -832,23 +862,27 @@ class Torii(Kind):
     hall is how deep the shrine's ground is in front of it, and a compound shrine's ground is small. An arch is a
     mark of care, not a fixture: a household shrine that is carefully kept "may even have" one, and a compound
     shrine may have none. Two shrines on one ground may share the arch at its entrance, since it marks everything
-    inside it, or each may have its own. Long avenues of arches are the gifts of rich patrons at great shrines,
-    not the rule.
+    inside it, or each may have its own. Rows of arches, each a worshipper's gift, belong to the Inari shrines, and
+    at an ordinary shrine are attested only in modern times - the exception, not the rule.
 
     Note: The arch at the boundary of the shrine's ground, and both a shared arch and one to each shrine, are
     recorded findings; each sheet takes one. How far the arch stands from its hall is a guess, kept short because
     a compound shrine's ground is small - about 5 ft where the plan is tight, up to the 12 ft at which a village shrine's
-    innermost arch stands where there is room (the GM's ruling of 2026-09-27): no page read gives a distance from any torii to its hall.
+    innermost arch stands where there is room (by this project's choice): no page read gives a distance from any torii to its hall.
+    Before a country shrine, a row of one, three or seven arches is a deliberate deviation: before 1868 an ordinary
+    shrine's arch was a single gate.
 
     Caveat: How far the arch stands from its hall is a guess, kept short because a compound shrine's ground is
     small - about 5 ft where the plan is tight, up to the 12 ft at which a village shrine's innermost arch stands where there is
-    room (the GM's ruling of 2026-09-27): no page read gives a distance from any torii to its hall.
+    room (by this project's choice): no page read gives a distance from any torii to its hall. Before a country
+    shrine, a row of one, three or seven arches is a deliberate deviation: before 1868 an ordinary shrine's arch was
+    a single gate.
 
     Name: torii
     Covers: the approach torii before a compound shrine or a country shrine
     Label: accurate
     Sources: jinjahoncho-keidai, jawiki-torii, jawiki-yashikigami, torii-enwiki, fushimi-inari-jawiki, fushimi-inari-senbon, hokora-jawiki, nara-nagao-jinja, jinja-jawiki
-    Entry: research/religion-and-death.html - 'How far before a small shrine does its torii stand, and can two shrines share one?', 'Torii are VOTIVE DONATIONS', 'Torii spacing', 'Where do the first and the innermost arches stand, and where does the hall's label go?', 'How big is a country shrine, and what stands in its precinct?'
+    Entry: research/religion-and-death.html - 'Shrine gateways and the approach to the hall (torii, sando)', 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw shrine gateways and the approach to the hall (torii, sando)', 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "torii"

@@ -92,6 +92,13 @@ def test_render_and_main_over_a_fixture_tree(tmp_path, capsys):
     assert rp.main(["absent", "--root", str(tmp_path)]) == 2
 
 
+def test_a_heading_s_link_to_its_rendering_section_is_not_its_text():
+    """Feature 292: the assembly writes the research <-> rendering link inside the heading; the prepass finds the
+    section by its heading, so the link is dropped before the heading is read."""
+    page = '<h2 id="x"><span class="xref"><a href="r.html#y">How it\'s drawn</a></span>Work yards</h2><p>a yard</p>'
+    assert [h for h, _b in rp.sections(page)] == ["Work yards"]
+
+
 def test_the_prepass_reads_the_real_record():
     glossary = json.loads((REPO / rp.GLOSSARY).read_text(encoding="utf-8"))
     listing = rp.prepass((SKILL / "research" / "ways.html").read_text(encoding="utf-8"), glossary)
@@ -225,8 +232,8 @@ def test_the_candidate_list_over_the_real_entry() -> None:
     record = SKILL / "research"
     text = rp.text_of(
         rp.strip_comments(
-            (record / "ways" / "010-how-far-past-the-bank-does-a-bridge-land.html").read_text(encoding="utf-8")
-            + (record / "ways" / "010-how-far-past-the-bank-does-a-bridge-land.notes.html").read_text(encoding="utf-8")
+            (record / "ways" / "200-road-bridges-over-rivers-and-canals-hashi.html").read_text(encoding="utf-8")
+            + (record / "ways" / "200-road-bridges-over-rivers-and-canals-hashi.notes.html").read_text(encoding="utf-8")
         )
     )
     # Against an EMPTY glossary, so the test does not go red the day the glossary does its job: feature 250
@@ -236,8 +243,10 @@ def test_the_candidate_list_over_the_real_entry() -> None:
     words = [w for w, _n in rp.rare_words(text, set(), frequency, keys=keys)]
     assert 20 <= len(words) <= 60, f"{len(words)} candidates - tens, not hundreds (R1, R2)"
     # at least two of the three: rarity is measured against a corpus that GROWS - feature 271's town bridges (ways 200)
-    # use "girder" enough that it stopped being rare, which is the list working, not failing
-    assert len({"girder", "obliquity", "stringers"} & set(words)) >= 2, words
+    # use "girder" enough that it stopped being rare, which is the list working, not failing. Feature 292 folded the
+    # entry feature 259 measured (ways 010) into ways 200, where "girder" and "stringers" are no longer rare and
+    # "obliquity" went to the rendering section; these three are the abutment words the folded entry brought with it
+    assert len({"backwall", "wingwalls", "embedment"} & set(words)) >= 2, words
     assert "and" not in words and "the" not in words
     defined = rp.defined_words(str(record))
     kept = [w for w, _n in rp.rare_words(text, defined, frequency, keys=keys)]

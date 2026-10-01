@@ -62,11 +62,25 @@ same findings"; a TIER downgrade is proved by seeded runs on known findings, thr
 
 ## A question has a size (feature 250 D14, GM 2026-09-26)
 
-A question with its notes stays under 20,000 bytes (`scripts/check-question-size.py`; `make quick` fails on one a
-change touched; `make question-sizes` lists all). One over it is split along its topics: a finding stays with the
+A question's PROSE stays under 20,000 bytes (`scripts/check-question-size.py`; `make quick` fails on one a
+change touched; `make question-sizes` lists all). Its notes and originals are not counted since feature 292: the notes
+are bounded where they are read - `make check-bundle ... FOR=quote-check` splits them into bundles of at most 12,000
+bytes, one agent each - and `record-style` and `entry-drift` are not handed them. One over it is split along its topics: a finding stays with the
 decision it drove; each part is its own question with its heading, `Sources:` line and notes; the joins POINT at each
 other, never restate each other's evidence. A split that would strip a finding of what it needs is not made - it is
 raised instead.
+
+## How a section reads: the style guide (GM 2026-09-29, feature 292 - PILOT)
+
+The record is being rewritten topic by topic under [`STYLE.md`](STYLE.md): a section is a TOPIC under a plain-English
+title, opening with a short account of what the thing was and why, then short bullets each led by a bold question or
+statement; no `Sources:` roster; the GM's inciting question nowhere. Until the GM signs the pilot off, only the
+sections feature 292 has rewritten follow it; everything else below holds for both forms. The **`record-style`**
+agent judges a restyled section against the guide, after `make style-prepass` (metric figures without feet, a visible
+"GM", paragraphs over 150 words, every lead line). How the maps DRAW a thing is its own collection,
+`research/rendering/<page>.html` (`sources.COLLECTIONS`); a rendering section declares the research section it is about
+in an `about:` comment and `make record` writes the links both ways (`record/xref.py`); its rule of the map may be a
+`<div class="spec">` holding a list.
 
 ## Who the record is for (GM 2026-09-05, feature 180)
 
@@ -105,12 +119,20 @@ whatever label surrounds it.
 A footnote per assertion - several a sentence when it asserts several things, two on a sentence resting on two
 sources - and every note quotes the
 passage it rests on, VERBATIM including the source's own spelling and dashes (the house-style guard exempts
-quoted spans). A foreign passage is quoted in English translation, marked: `「English」 (translated from the
-Japanese by this project; original: 「原文」)` - the translation follows house style, the original follows the note.
-The note names the language and the translator; a source's own English needs no note; the original is the
-checker's anchor, never a second quote. The same form holds in body prose and in a `SOURCES.html` entry. The section's
-`<p><strong>Sources:</strong> ...</p>` roster stays, every key on it is quoted by a footnote in that section, and a key
-with nothing to quote leaves the roster. Nothing is quoted from memory.
+quoted spans). A foreign passage is quoted in English translation, marked: `「English」 (translated; original: 「原文」)`
+- the translation follows house style, the original follows the note. English is presumed and this project is presumed
+the translator (feature 292, GM 2026-09-29: *"we should presume the source is in English unless ... stated otherwise ... we should presume that all translations are done by this project unless explicitly stated otherwise, which allows us to simply say 'translated'"*): an English passage carries no marker, and only a translation by
+someone else names them (`translated by <who>`), or one that says more than its language keeps its words; the original
+is the checker's anchor, never a second quote. A note quoting several passages joins them with `; ` (a passage that
+introduces others ends with `:` before them); the assembly shows them as a list, nested under the introducing one. **The original is stored apart** (feature 292, GM 2026-09-29): write the note
+the natural way, original inline, and `make record` moves each `original: 「...」` run into the question's
+`NNN-<id>.originals.html` beside its notes, leaving a placeholder; the assembly puts it back, and the page shows it
+collapsed behind a click. No check but `translation-check` reads an original (the quote-check meets one only where the
+script could not match it on the page), and `translation-check` runs only on the pairs `make translation-owed` names -
+a translation or an original new or changed since the merge base. The same form holds in body prose and in a `SOURCES.html` entry. A section's
+`<p><strong>Sources:</strong> ...</p>` roster, where it still has one, has every key quoted by a footnote in that section,
+and a key with nothing to quote leaves the roster; a section restyled under `STYLE.md` has none, and its sources are
+the keys its footnotes cite. Nothing is quoted from memory.
 
 ## A citation links to a page where its quote can be READ - or it is not a citation (GM 2026-09-06, feature 195)
 
@@ -120,7 +142,13 @@ A note is one of THREE forms:
   the passage can be read: the paper's public PDF, not its abstract; the full-text view, not a library landing page;
   the original-language page, not an English rendering that is on no page. Never a paywall, a login wall or a
   search summary.
-- **ABSENCE**: `no publicly readable source (searched YYYY-MM-DD: what was tried)` - no key, no URL; the
+- **ABSENCE**: `no publicly readable source<!-- searched YYYY-MM-DD: what was tried -->` then what the search found,
+  visible - a list of `<span class="pass">` items (`pass sub` nested) where it is several things (feature 292, GM
+  2026-09-29: the search log is for a session, so it is a comment; the reader sees the one opening sentence
+  `record/absence.py` keeps, which `make record` puts in place of the marker, and the findings). The old form, the
+  search in visible parentheses, still reads and is converted by the sweep. An absence note supports only a stated silence
+  or a GUESS of our own - never a claim of what a named page says that no one here could read (feature 292, GM
+  2026-09-30); such a claim is read and quoted, or removed. No key, no URL; the
   assertion stands, honestly labeled; the registry entry stays, marked *Not cited*. It may carry `settled DATE`
   only after two independent passes on different dates, the second using a tool the first lacked, and it re-opens
   on anything that changes what can be read. Settling is never obligatory.
@@ -151,7 +179,7 @@ every new or changed entry, its verdicts recorded in the task (`quote-check conf
    definition written from the record's own text; nothing is wrapped by hand. A term nothing uses fails the gate.
 2. **A note for a session is an HTML comment**: the `Grounds:` and `Evidence:` fields, a feature, a task, a spec,
    a test, a make target, an engine identifier, a fetch verdict. Visible: the `Sources:` roster (each key's
-   parenthetical says what the work contributed, never when or how it was read), a source key's link, a GM ruling and the alternatives it declined, the honest label on a claim (a GUESS, a dated search).
+   parenthetical says what the work contributed, never when or how it was read), a source key's link, a decision and the alternatives it declined - told as the project's choice, never as a GM ruling (feature 292, GM 2026-09-29: the ruling, its date and words go in an HTML comment beside it) - the honest label on a claim (a GUESS; that a search found nothing - its date and terms are a comment).
 3. **No history of the document in the document**: no "used to say", no correction dates, no "re-sourced by".
    A changed finding is REWRITTEN; git holds the old wording. An absence note's provenance ("the passage came from
    `key`") is an HTML comment inside its `<li>`.
@@ -181,8 +209,8 @@ are the anchors. `README.md` and this file stay Markdown. The page mechanics are
 
 ## The record is the ONE home per topic (GM 2026-09-12, feature 229)
 
-Per question a page holds the finding, the decision it drove (the ruling, its date and words, the alternatives
-declined), and - for a rule no generator yet encodes - the **specification**, `<p class="spec"><strong>The rule
+Per question a page holds the finding, the decision it drove (what was chosen and why, the alternatives declined - the GM's ruling, its date and words
+in an HTML comment, feature 292), and - for a rule no generator yet encodes - the **specification**, `<p class="spec"><strong>The rule
 the map follows:</strong> ...</p>`, in real feet at the tier's scale (the pixel figure in a comment beside it), naming no engine identifier or check in
 its visible text, and - where it rests on no finding - saying which it is: a convention, a calibration against the
 drawn exhibits, or a guess; it is retired once a generator encodes the rule with its reasoning. A rule the engine

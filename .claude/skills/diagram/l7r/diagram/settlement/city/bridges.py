@@ -153,9 +153,9 @@ def _lands_dry(p: Pt, rot: float, span: float, rw: float, wet: Any) -> bool:
 SUPPLY_ROLES = ("main", "branch", "lateral")
 """The ditches a footplank is laid on: the ones that carry water OUT to the paddies - a comb's main and branches, and the
 laterals (a comb's field ditches, and a polder's inner ring canal and the field ditches off it, which the manifest records as
-`lateral`). The record's reason (research/ways/030, "What is a plank bridge, and what is it for?"): the plank is the board laid
+`lateral`). The record's reason (research/ways/030, "Plank bridges over farm ditches (itabashi)", and its rendering, "How our maps draw plank bridges over farm ditches (itabashi)"): the plank is the board laid
 where a bund path meets an IRRIGATION ditch, with cultivated ground, the settlement or a walked dike on both banks; "the
-drainage toes and the diagonal edge-drains along a field's outer boundary" carry none. A polder's ring canal is its
+drainage ditches at a field's foot and the diagonal drains along its outer boundary" carry none. A polder's ring canal is its
 distribution canal, inside the dike with paddies beyond it (research/archetypes/110: "inner ring canal -> field ditches ->
 paddies"), so it is a supply ditch, not a drain. The collector, the drain and the feeder are not."""
 
@@ -287,8 +287,8 @@ def cut_at(pts: list[Pt], k: int, p: Pt, gap: float) -> list[list[Pt]]:
     return [q for q in pieces if len(q) >= 2 and sum(math.dist(u, v) for u, v in zip(q, q[1:], strict=False)) >= 1.0]
 
 
-# THE DITCH CROSSING'S FORM IS A KNOB (269 B21; research/water/290, "What crosses a farm ditch - a plank, a log, or earth
-# over logs?"). Three forms of crossing over small water are attested and the record cannot say which was laid over a
+# THE DITCH CROSSING'S FORM IS A KNOB (269 B21; research/rendering/ways.html, "How our maps draw plank bridges over farm ditches (itabashi)", and research/ways/030, "Plank bridges over farm ditches
+# (itabashi)"). Three forms of crossing over small water are attested and the record cannot say which was laid over a
 # paddy ditch: a SINGLE LOG (or one board, the same object in the Chinese definition), LOGS UNDER TRODDEN EARTH (the
 # earthen bridge, the common bridge of pre-Edo Japan), and a PLANKED DECK. So a settlement lays all its ditch crossings
 # in one form, rolled per map from its seed and declared as `meta.footbridge_form`. The EVEN chance is a GUESS: no

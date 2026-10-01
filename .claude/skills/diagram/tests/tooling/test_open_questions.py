@@ -155,10 +155,10 @@ def test_the_real_tree() -> None:
     t0 = time.monotonic()
     out = subprocess.run([sys.executable, str(REPO / "scripts/_open_questions.py"), "--root", str(REPO)], capture_output=True, text=True, check=True).stdout
     took = time.monotonic() - t0
-    rack = out[out.index("## Where were the rice-drying racks put up, and how long were they?") :]
+    rack = out[out.index("## How our maps draw rice-drying racks (hasa, hasagi)") :]
     rack = rack[: rack.index("\n## ")]
-    assert "threshing yard (through 'Did a village put its drying racks by the houses" in rack
-    assert "GUESS: The length of rack per household is a GUESS until the record finds a figure." in rack
+    assert "map features: threshing yard" in rack
+    assert "GUESS: A rack by the house runs from the yard's edge to its middle." in rack
     outside = out[out.index("GUESSES MARKED OUTSIDE THE RECORD") :]
     compound = outside[outside.index("\nl7r/diagram/compound.py\n") :].split("\n\n")[0]
     assert any("postern" in line and "GUESS" in line for line in compound.splitlines()), "the postern's GUESS, marked only in code (SC-004)"

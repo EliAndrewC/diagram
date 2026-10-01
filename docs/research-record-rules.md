@@ -232,9 +232,9 @@ point in including a reference if it is not being quoted."* So the citation form
 - on the page's CITATIONS PAGE (feature 211, below; it was the page's own foot until then), in `<section class="footnotes"><ol>`, `<li id="fn-n"><a href="url"><code>key</code></a> -
   「the quoted passage」 (one clause on what it bears on when that is not plain) <a class="fnback" href="../<name>.html#fnref-n">back</a></li>` -
   and when the passage is not English, **the quote is the English translation, marked as one** (GM 2026-09-07, feature
-  202: *"for foreign language things we want to quote the English translation rather than the original text but we also want to note that it is a translation"*): `「English translation」 (translated from the Japanese by this project; original: 「原文」)` - the note names the language
-  and the translator (this project; the GM's browser, a machine translation saved on a date; the source's own English
-  elsewhere on the page), and the original follows the note as the anchor a checker finds on the page, never as a
+  202: *"for foreign language things we want to quote the English translation rather than the original text but we also want to note that it is a translation"*): `「English translation」 (translated; original: 「原文」)` - since feature 292 (GM 2026-09-29) the language is the original's own and this
+  project is presumed the translator, so only another translator is named (the GM's browser, a machine translation saved
+  on a date), and English is presumed, so the source's own English carries no marker; the original follows the note as the anchor a checker finds on the page, never as a
   second quote; a translation is this project's own English and follows house style (the guard's 「」 exemption
   cannot tell it from an original - held by hand); a source's own English needs no note. The same form holds in body
   prose and in a `SOURCES.html` entry. The record's 472 foreign-language passages were converted on 2026-09-07
@@ -524,6 +524,15 @@ measurements, then perhaps you would be able to pick something sensible, and the
 a check reads in one turn; it sits at the record's 90th percentile, so it touches only the unusually large; and the
 first question split under it - `cities/government` 080, 38,500 bytes - came out as a 19,800-byte question that still
 holds its whole argument, which is the test of a sensible cap: the smallest coherent unit fits under it.
+
+**Since feature 292 the cap counts the prose only** (GM 2026-09-29, approving the session's proposal after asking
+*"can we make the size cap not count the notes? ... the whole point of the size cap is to conserve tokens"*). Every check
+and every editing session reads a question's prose whole; only the quote-check reads its notes whole, so the notes are
+bounded where that check reads them - in batches of at most 12,000 bytes (`_check_bundle.py`, `NOTES_BUDGET`: with its
+excerpt of the prose, a batch stays within what the old 20,000-byte cap on prose and notes let one check read) - and the
+checks that judge prose (`record-style`, `entry-drift`) are not handed the notes at all. Merged topics may therefore
+carry the notes their findings need. On 2026-09-29, with the notes uncounted, no question in the record was over the
+cap; the prose-only number is to be tuned from what the restyle produces.
 
 **Applied to what a change touches**, not to the whole record at once: a question over the cap is split by the
 session working its page, which has read it. **How to split without losing context** - the GM's concern, a reader

@@ -18,7 +18,8 @@ import re
 import pytest
 
 from l7r.diagram.interactive.citations import GROUNDS_REASONS, citations_page, footnote_form, grounds_reasons, is_settled, notes
-from l7r.diagram.interactive.sources import RESEARCH_DIR, canon_keys, registry_keys
+from l7r.diagram.interactive.record import absence
+from l7r.diagram.interactive.sources import RESEARCH_DIR, canon_keys, collection_pages, registry_keys
 
 #: a second reference to the same note carries no id (ids are unique; the back-link returns to the first); the href
 #: names the citations page (feature 211) - `_REF_TARGET` checks WHICH page below
@@ -40,7 +41,7 @@ _NOT_FINDINGS = {"SOURCES.html"}
 
 def _finding_files() -> list[pathlib.Path]:
     root = pathlib.Path(RESEARCH_DIR)
-    return [p for p in sorted(root.glob("*.html")) + sorted((root / "cities").glob("*.html")) if p.name not in _NOT_FINDINGS]
+    return [p for p in sorted(root.glob("*.html")) + [root / c for c in collection_pages(str(root))] if p.name not in _NOT_FINDINGS]
 
 
 def _rel(path: pathlib.Path) -> str:
@@ -84,7 +85,7 @@ def test_every_footnote_resolves_and_every_definition_quotes_a_registered_source
         # gate rather than written down.
         if form in ("absence", "grounds"):
             continue
-        if body.lstrip().startswith(("no source is owed:", "no publicly readable source")):
+        if absence.unrender(body).lstrip().startswith(("no source is owed:", "no publicly readable source")):
             # a malformed note of either sourceless form is reported AS that form's defect: saying "no registry
             # key link" about a grounds note whose reason is misspelled sends the next reader to look for a key
             bad.append(f"[^{fid}]: {form}")
@@ -135,7 +136,7 @@ def sourceless_shape_faults(page_notes: dict[str, str]) -> list[str]:
     note carrying two DIFFERENT dated passes beside its marker."""
     faults = []
     for fid, body in page_notes.items():
-        stripped = re.sub(r'<a class="fnback" href="[^"]*">back</a>', "", body).strip()
+        stripped = absence.unrender(re.sub(r'<a class="fnback" href="[^"]*">back</a>', "", body)).strip()
         if sum(stripped.startswith(o) for o in _OPENERS) > 1:
             faults.append(f"[^{fid}]: opens as two kinds at once")
         if stripped.startswith("no source is owed:"):
@@ -190,7 +191,7 @@ def test_every_key_on_a_sources_roster_is_quoted_by_a_footnote_in_its_section(pa
     unquoted = []
     for i, (a, level) in enumerate(heads):
         # a section runs to the next heading of the SAME or a HIGHER level: an <h2>'s roster is quoted anywhere in
-        # its <h3> subsections too (the servant-housing entry of cities/government.html keeps its roster at the top)
+        # its <h3> subsections too (an entry with <h3> subsections keeps its roster at the top)
         b = next((s for s, lv in heads[i + 1 :] if lv <= level), len(body))
         section = body[a:b]
         roster = _ROSTER.search(section)
@@ -210,7 +211,7 @@ def test_every_key_on_a_sources_roster_is_quoted_by_a_footnote_in_its_section(pa
 #: as well as Japanese and Chinese. The limit, stated in the spec: a Latin-script foreign quote with no non-ASCII
 #: character reads as English here; the sweep and the quote-check carry those.
 _QUOTE_SPAN = re.compile(r"「([^」]+)」")
-_TRANSLATION_NOTE = re.compile(r"\((?:[^()]*;\s*)?(?:translated from the|machine translation|the source.s own English|translation:)", re.I)
+_TRANSLATION_NOTE = re.compile(r"\((?:[^()]*;\s*)?(?:(?:title\s+)?translated\b|machine translation|translation:)", re.I)
 _BLOCK = re.compile(r"<(p|li|h[2-4])\b[^>]*>(.*?)</\1>", re.S)
 #: English quotes carry macrons (daimyō), curly quotes and the source's own dashes, so "not ASCII" is not "foreign".
 #: Foreign is a NON-LATIN script (CJK, kana, hangul, Cyrillic, Greek...) or, for a Latin-script language, a run of its
@@ -226,7 +227,13 @@ _GLOSS = re.compile(r"[(（][^()（）A-Za-z]*[)）]")
 
 
 def _looks_foreign(passage: str) -> bool:
-    return bool(_NON_LATIN.search(_GLOSS.sub("", passage))) or len(_GERMAN.findall(passage)) >= 2
+    """Since feature 292 (GM 2026-09-29: *"we should presume the source is in English unless ... stated otherwise"*) an
+    English quote carries no marker, so an English passage with a native-script gloss run into it ("the Senju 千住 area")
+    must read as English by itself: foreign is MOSTLY non-Latin - over 30% of its letters - or a run of German."""
+    text = _GLOSS.sub("", passage)
+    letters = [c for c in text if c.isalpha()]
+    non_latin = sum(1 for c in letters if _NON_LATIN.match(c))
+    return (bool(letters) and non_latin / len(letters) > 0.3) or len(_GERMAN.findall(passage)) >= 2
 
 
 def _anchor_spans(block: str) -> list[tuple[int, int]]:
@@ -269,6 +276,25 @@ def unmarked_foreign_quotes(text: str) -> list[str]:
 def test_a_foreign_language_quote_is_a_marked_translation(path: pathlib.Path) -> None:
     bad = unmarked_foreign_quotes(path.read_text(encoding="utf-8"))
     assert not bad, f"{path.name}: {len(bad)} foreign-language quote(s) with no translation note (feature 202):\n" + "\n".join(bad[:8])
+
+
+#: The forms feature 292 retired from the record (GM 2026-09-29): English is presumed, and so is this project as the
+#: translator - a translation by anyone else names them, and one that says more than the language keeps its words.
+_RETIRED = re.compile(r"the source(?:'|&#x27;|’)s own English|translated from the (?:[a-z]+ )?[A-Z][A-Za-z ()-]* by this project")
+
+
+@pytest.mark.parametrize("path", _finding_files() + [citations_of(p) for p in _finding_files()], ids=lambda p: str(p.relative_to(RESEARCH_DIR)))
+def test_no_note_says_the_source_s_own_english_or_by_this_project(path: pathlib.Path) -> None:
+    hits = [m.group(0) for m in _RETIRED.finditer(path.read_text(encoding="utf-8"))]
+    assert not hits, f"{path.name}: write `(translated; original: ...)` and leave English unmarked (feature 292): {hits[:3]}"
+
+
+def test_an_english_passage_with_a_gloss_is_english_and_a_japanese_one_is_not() -> None:
+    assert not _looks_foreign("cremation grounds clustered in the Senju 千住 area of Edo")
+    assert _looks_foreign("昭和６２年の砺波市鹿島での調査によると")
+    assert not _looks_foreign("")
+    assert _RETIRED.search("(the source's own English)") and _RETIRED.search("(translated from the classical Chinese by this project;")
+    assert not _RETIRED.search("(the paper's own English title; original: 「x」)"), "a paper's own English title says something"
 
 
 def test_the_translation_form_is_told_apart() -> None:

@@ -1,0 +1,8 @@
+{
+ "term": "land fall",
+ "def": "The direction a map's ground slopes downhill, which every map declares because no contour lines draw it; given in degrees turning clockwise from east, so 90 is south.",
+ "variants": [
+  "land fall",
+  "land's fall"
+ ]
+}

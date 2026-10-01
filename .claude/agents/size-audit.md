@@ -132,7 +132,9 @@ write every git call as `git -C <clone>`. Paths below are under the clone's `.cl
    sacred complex rival the whole residence.
 5. Run the **PACKING / WHITESPACE SWEEP** (its own mandatory output section): run
    `pack_audit.py` and INTERPRET the numbers.
-   - **COVERAGE** - building footprint should be ~37-42% of the walled interior
+   - **COVERAGE** - building footprint should be ~30-42% of the walled interior (the bottom is
+     Takayama's measured floor area against its site, ~31%; the top a guess - research/rendering/buildings
+     "How our maps size a compound and its buildings")
      for a jin'ya-type compound. A courtyard compound is SUPPOSED to be mostly
      open, so a high "bare open %" is NOT a defect; ~55% coverage is siheyuan-
      dense, <35% is genuinely sparse. **Coverage in-band means the ENVELOPE is
@@ -226,7 +228,7 @@ PROPORTION / HIERARCHY SWEEP (mandatory - enumerate the ORDERING, not just absol
   absolute tolerance - the ordering is the error.
 
 PACKING / WHITESPACE SWEEP (mandatory - run pack_audit.py, then interpret):
-- coverage: N% of interior -> in jin'ya band ~37-42% / sparse / cramped -> ENVELOPE verdict (keep - and if in-band, state explicitly that shrinking the walls is NOT the fix)
+- coverage: N% of interior -> in jin'ya band ~30-42% / sparse / cramped -> ENVELOPE verdict (keep - and if in-band, state explicitly that shrinking the walls is NOT the fix)
 - composition: perimeter-hugging N% (high = buildings ring the walls/divider; low = they float mid-court -> pull them to the edges); count of central vs perimeter vacancies -> central = courtyard (good, must be NAMED); perimeter = ring gap (tighten)
 - top-N vacant rectangles: for EACH, W x H ft [central|perimeter] at (loc) -> CENTRAL courtyard is a FEATURE (keep) but must be a NAMED court + carry a quantified reason ("warrants ~N ft because <function>": loading apron ~15-20 ft, forecourt/oshirasu sized for assembly); PERIMETER vacancy -> ring gap, tighten/consolidate. An unquantified "it's an apron/forecourt" and an UNNAMED central void are both findings.
 - BACKING VOIDS (mandatory sub-check of the perimeter vacancies): for EACH perimeter vacancy, state whether a BUILDING sits on its inner side with the wall on its outer side (building||void||wall). If so, that building FLOATS off the wall -> name it, give the gap in ft, verdict "push flush to the {wall} wall, the strip goes to the courtyard" (a subordinate hall/wing/residence BACKS the perimeter; >~10 ft of dead ground behind it is slack, not a rear lane. EXCEPTION: a KURA/storehouse/granary legitimately stands apart with a ~6-10 ft fire/access clearance - its stand-off is a feature, and its court-facing gap is often pinned by its loading apron - so do NOT flag a storehouse as a backing void). Enumerate ALL perimeter vacancies here even to say "not a backing void (it is the forecourt/apron/ring gap)" - the hugging % can look healthy while a building hangs a room's-width off its wall. VALIDATED (2026-07, red/green): on Ochiba this sweep caught the Inari shrine hall + cinnabar workshop floating ~23 ft off the EAST wall (a 23x99 ft dead NE strip) while perimeter-hugging read a healthy 48% - and correctly did NOT flag the south forecourt, the granary loading apron, or the residence's filled rear service strip. GM's own catch that seeded it; pack_audit reported the void in its vacant list but the headline masked it, and an earlier per-building geometric detector was reverted because it missed the shrine (it "backs" the neighboring residence + its own workshop) and false-flagged good composition - the feature/slack call is a REVIEW judgment, not a geometric one.
@@ -278,7 +280,7 @@ size ceiling.
 
 Validated example for the PACKING / WHITESPACE SWEEP (added 2026-07 after a GM
 question "is there too much empty space between the buildings?"): both manors
-measured 37% building coverage - which is IN the jin'ya band (~37-42%), so the
+measured 37% building coverage - which is IN the jin'ya band (~30-42%), so the
 correct verdict was "envelope is right, do NOT shrink the walls" even though the
 compound reads open (a courtyard compound is supposed to be ~60% open; the
 forecourt and oshirasu are features). The real defect was FRAGMENTATION - a west

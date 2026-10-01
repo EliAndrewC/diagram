@@ -4,5 +4,6 @@
  "variants": [
   "Seki",
   "Seki-juku"
- ]
+ ],
+ "cased": true
 }

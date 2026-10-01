@@ -51,7 +51,7 @@ def pages(record: pathlib.Path) -> list[str]:
     got = set()
     for f in record.rglob("[0-9][0-9][0-9]-*.html"):
         rel = f.parent.relative_to(record).as_posix()
-        if rel != "." and rel.split("/")[0] not in NOT_PAGES and not f.name.endswith(".notes.html"):
+        if rel != "." and rel.split("/")[0] not in NOT_PAGES and not f.name.endswith((".notes.html", ".originals.html")):
             got.add(rel)
     return sorted(got)
 
@@ -71,7 +71,7 @@ def _aliases(names: list[str]) -> dict[str, str]:
 def fragments(record: pathlib.Path, page: str, lo: int, hi: int) -> set[int]:
     """The page's question numbers in `lo..hi`, from its fragments on disk."""
     d = record / page
-    got = {int(m.group(1)) for f in d.glob("[0-9][0-9][0-9]-*.html") if (m := FRAGMENT.match(f.name)) and not f.name.endswith(".notes.html")}
+    got = {int(m.group(1)) for f in d.glob("[0-9][0-9][0-9]-*.html") if (m := FRAGMENT.match(f.name)) and not f.name.endswith((".notes.html", ".originals.html"))}
     return {n for n in got if lo <= n <= hi}
 
 

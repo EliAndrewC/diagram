@@ -199,7 +199,7 @@ MIN_WEB_GAP = 2.0 * WEB_FABRIC_GAP + 4.0  # 18 ft: both neighbors' clearance, pl
 # space by the adjoining house". The same number sets the web's lane spacing, so the requirement and
 # the geometry that satisfies it cannot drift apart.
 #
-# Grounding: research/homesteads.html, "Is every farmhouse reached by a lane, and in what FORM?" - the
+# Grounding: research/ways.html, "Village lanes", and research/rendering/ways.html, "How our maps draw village lanes" - the
 # record is decisive that a house in a nucleated cluster IS reached by a way. The previous 90 ft in
 # `lanes_reach_something` was flagged in future-work/ as a number nobody had justified; this one is
 # derived from a researched constant instead of chosen to make today's maps pass.
@@ -382,7 +382,7 @@ MANURE_FORMS = ("heap", "pit")
 # regions, not a village's choice - so a free roll per hamlet would let two neighbors in one climate differ, which is
 # what the GM asked us not to do (2026-09-28). `changeable` draws a rack by every house; `settled` (the default: the
 # gathered racks are one region's form - this project's decision, as the regional wind is) draws none at the house.
-# research/homesteads.html 'Did a village put its drying racks by the houses by custom, or because of its weather?'.
+# research/homesteads.html 'Rice-drying racks (hasa, hasagi)'; the rule at research/rendering/homesteads.html 'How our maps draw rice-drying racks (hasa, hasagi)'.
 HARVEST_WEATHERS = ("settled", "changeable")
 DEFAULT_HARVEST_WEATHER = "settled"
 # TWO SUPPORTABLE ANSWERS BECOME A KNOB (constitution XII), not a picked one. Both were named by a
@@ -722,8 +722,8 @@ FORD_SPACING = 160.0
 FORD_BEND_DEG = 20.0
 
 # THE COPSE STANDS AMONG WHAT IT IS NAMED FOR (feature 261). The record gives the dooryard copse as "a loose copse of
-# bamboo and fruit trees in the gaps between the houses" and no distance (research/vegetation, 'What are the village's
-# three groves'); 90 ft is the bar the feature-230 settlement-review itself used to call a copse a wood (86% of clumps
+# bamboo and fruit trees in the gaps between the houses" and no distance (research/rendering/vegetation, 'How our maps draw a
+# village's groves'); 90 ft is the bar the feature-230 settlement-review itself used to call a copse a wood (86% of clumps
 # more than 90 ft from any house), and the pool's copses before the reseats sat at a median 77-81 ft. A map drawing
 # convention on the record's words, not a finding. The against-the-belt copse reads as one wood with the belt when its
 # crowns stand within a crown or two of the belt's: 60 ft, the same kind of convention.
@@ -868,7 +868,7 @@ LANE_WEBS = ("alleys", "back_lane")
 # Three forms, and the roll is DELIBERATELY flatter than real-world frequency would be. Read that
 # sentence twice before re-weighting this tuple, because the departure is the decision.
 #
-# What the research supports (research/homesteads.html, "Does a hamlet have to be NUCLEATED at all?"):
+# What the research supports (research/homesteads.html, "Clustered and scattered villages (shūson, sanson)"):
 #   - nucleated  - the default across wet-rice East Asia, because paddy is too valuable to build on,
 #                  so households cluster on whatever ground will not grow rice. The access rule
 #                  (`farmhouses_reach_a_way`) is decisive for THIS form and no other.
@@ -930,7 +930,7 @@ from l7r.diagram.settlement.homestead_parts.grove_sides import GROVE_FLANKS as G
 from l7r.diagram.settlement.homestead_parts.grove_sides import GROVE_SIDES as GROVE_SIDES  # noqa: E402,F401
 from l7r.diagram.settlement.homestead_parts.grove_sides import GROVE_SIDES_FLOOD as GROVE_SIDES_FLOOD  # noqa: E402,F401
 
-# THE ROW VILLAGE (feature 291 amendment 3; research/homesteads/155 and 156). A linear hamlet's farms stand in a row
+# THE ROW VILLAGE (feature 291 amendment 3; research/homesteads/155). A linear hamlet's farms stand in a row
 # along ONE LINE - a street laid first (the planned row's form, which a paddy row may borrow; drawn straight, as a
 # surveyed road is) or the dry edge the ground gives (a levee, a dike, a fan's foot; the field's margin stands for it,
 # this project's reading; the row curves with it). Flood-prone ground takes the dike, the edge; otherwise the two at

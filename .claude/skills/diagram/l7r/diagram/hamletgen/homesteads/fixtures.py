@@ -66,7 +66,7 @@ from .retirement import RETIREMENT_FT, RETIREMENT_GAP_FT
 #   privy    READ  an independent outbuilding was "普通" (Nipponica) - near-universal; FOUR attested seats
 #                  (research/homesteads/260, 269 B10): under the eaves by the stable, a separate outhouse in
 #                  the yard, the front yard, inside the barn - rolled per house, the weights per hamlet; its size
-#                  one of the Kakimochi table's sixteen (research/homesteads/750, feature 280)
+#                  one of the Kakimochi table's sixteen (research/homesteads/260, feature 280)
 #   woodpile READ  a WOOD SHED of its own (research/homesteads/212 and 720, feature 280 M21): Hasuda 1824 ("many"
 #                  houses), Kakimochi 6 of 16 households, commonly 4 x 2 ken - so about four farmsteads in ten, the
 #                  larger houses first, 24 x 12 ft. The open stack under the eaves (a present-day page only) and the
@@ -111,7 +111,7 @@ FIXTURE_BANDS: dict[str, tuple[float, float]] = {
     "shrine": (0.03, 0.08),
     "persimmon": (0.80, 0.95),
 }
-# THE FOUR ATTESTED PRIVY SEATS (269 B10, research/homesteads/260 "Where did the privy stand"): under the eaves by the
+# THE FOUR ATTESTED PRIVY SEATS (269 B10, research/homesteads/260 "Farm privies and their night soil (benjo)"): under the eaves by the
 # stable beside the entrance (sinyoken), a separate outhouse in the yard (sinyoken), the front yard (Sugiura 1977, northern
 # Miyagi, "usually"), and inside the barn (Suzuki 1959, "several farms"). The record says how often each is drawn is a
 # GUESS, so these base weights are one, and each hamlet re-weights them (`privy_seat_weights`) - a degree along a

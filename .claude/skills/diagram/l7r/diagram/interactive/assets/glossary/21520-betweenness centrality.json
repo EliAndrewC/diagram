@@ -1,0 +1,7 @@
+{
+ "term": "betweenness centrality",
+ "def": "A measure from the study of street networks, also called \"choice\": how often a street segment lies on the routes between other points in the network. In the London study, walkers' movement followed it closely when routes were weighted by their turns.",
+ "variants": [
+  "betweenness centrality"
+ ]
+}

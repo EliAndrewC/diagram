@@ -78,7 +78,7 @@ def selftest() -> int:
     of its siblings at the push call site run one. Fires on a heading that does not exist; stays quiet on
     a real one; and does NOT let the declared-silence form swallow a broken heading."""
     root = Path(__file__).resolve().parent.parent
-    real = "research/archetypes.html - 'What stands on a dike-pond hamlet that a paddy hamlet lacks?'"
+    real = "research/archetypes.html - 'The dike-pond hamlet: its houses, boats and manure jars'"
     # the FORM half always runs: telling a declared silence from a broken heading is this file's own
     # logic and owes nothing to the engine
     assert SILENT.search("research/fields.html (no dedicated entry - recorded as silent)"), "the declared silence must be recognized"

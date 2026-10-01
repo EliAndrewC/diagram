@@ -22,7 +22,7 @@ research. The GM asked where both halves came from. Neither survived:
   with nothing behind it. Under the record-the-why rule that makes it not a finding at all.
 
 The research the GM then asked for settled it in the opposite direction from the code, and the fix
-is now in `research/water.html` ("The wet toe is as wide as the FAN"): an alluvial fan's spring line
+is now in `research/water.html` ("Marshes and wetlands (shitchi)"): an alluvial fan's spring line
 follows the FAN's toe, and a floodplain's backswamp is bounded by its natural levees - wet ground is
 FEATURE-bounded in both landforms. `toe_band` derives its width from the ground the fan waters.
 

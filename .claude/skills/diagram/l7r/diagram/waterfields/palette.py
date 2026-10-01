@@ -24,7 +24,7 @@ from .frame import Poly, Pt
 # villages (~0.13 ac, over Bray's ceiling) and cities (~0.08 ac, at it) ran large and are pulled down.
 # The population/household invariant is untouched: this subdivides the SAME field envelope into more,
 # smaller cells - total paddy area, farmhouse rings, and the household count are all unchanged. See
-# research/fields.html 'Plot sizes, pond sizing and acreage from population'.
+# research/rendering/fields.html 'How our maps draw rice paddies and their plots (suiden)'.
 PADDY_CELL_ACRES = 0.05
 
 
@@ -65,7 +65,7 @@ BUND = '#C2A772'
 # is deliberately mixed: the color is honest for SPRING (fresh azenuri mud); by high summer -
 # the season the paddy surfaces depict - real bunds green over with grass and azemame and all
 # but vanish, so a dark visible bund network is a stylization that keeps the field structure
-# readable. See research/fields.html 'Paddy plots - irregular patchwork and why the grid is anachronistic'.
+# readable. See research/fields.html 'Rice paddies and their plots (suiden)'.
 AZE = '#6E4520'
 AZE_FT = 1.5  # drawn aze width in real feet; convert at the map's ftpx, floored for raster visibility
 

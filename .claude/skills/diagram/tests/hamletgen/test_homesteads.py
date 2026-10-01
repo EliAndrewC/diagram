@@ -183,7 +183,7 @@ def test_strip_blocked_excuses_its_own_farmhouse_and_the_skipped_bundle_boxes_an
 
 
 def test_a_linear_hamlet_stands_in_rows_along_its_streets_and_never_in_ranks() -> None:
-    """Feature 291 amendment 3 (research homesteads/155 and 156): a linear hamlet's farms stand in rows along the streets
+    """Feature 291 amendment 3 (research homesteads/155): a linear hamlet's farms stand in rows along the streets
     its row planned - `seat_rows` - and it takes no rank round; a nucleated hamlet on the same ground is seated by its front
     row and ranks as before. The row seats every household (feature 287 plan D2). (The connector-frontage pass this test used
     to hold is retired: the connector does not exist when the homesteads are seated.)

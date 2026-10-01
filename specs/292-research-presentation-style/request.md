@@ -102,3 +102,217 @@ note it has since been edited, and that their general points still hold):
 > An example of something which didn't come up for This section, but which comes up in a lot of other sections, is that we previously had a rule that if I asked a question that kicked off the research, then my exact question would be transcribed verbatim into the section. However, I now think that I want to strike that as a rule, and I instead do not want the inciting question to appear anywhere in the research write-up section, because I think it just confuses things by referring to a conversation whose context the reader will not have. And so, therefore, we should just get rid of it completely, editing that out from all of the sections which have it once we get to the point where we are editing those other sections, which will not be right away.
 >
 > I think a good way to approach this would be to create a new spec kit feature now, where the The first few tasks of the feature are about what we are doing now, and the final unchecked task at the start is going to be my sign off on our checks being good enough. And then really what we are doing with the feature at the start is to iterate one section at a time on trying to write things in a sensible way, as I have laid out, and then when I give my sign off, then instead of this feature being complete and landing on main, that will be the point at which you will add another task or add new tasks or however it is that this is best represented in a spec kit feature to crawl the project and rewrite all of the rest of the research sections according to this style. And then I will be able to tell you to proceed with that all at once because we will already know that you have got it right and that we are ready to kind of rewrite everything. How does that sound? Does that seem like a good way to structure this? And in the meantime, I can inspect the HTML files within your clone rather than inspecting them from the main checkout the way that I normally do.
+
+## The GM's review of the first pilot section, 2026-09-29 (verbatim)
+
+> Okay, one new rule based on my initial review: links to citations should open in a new tab.  I expect this is a simple mechanical change since those links are presumably generated in an automated way, right?  As an example, footnote 1 reads
+>
+> > visit-toyama-sankyoson - "A dispersed settlement with over...
+>
+> and `visit-toyama-sankyoson` is a link, but I would like for that to open in a new tab when clicked.
+>
+> I am reviewing the section now and will make a decision about length before we move on to another section.  I will also review your STYLE.md inferred rules before we proceed with new sections.
+
+> Okay, I think from reading this, I do have some new style rules, which should probably become subagent checks or something.
+>
+> Here is the first one. The very first bullet point opens with this bolded question: "Was the grove there before 1868, in the Edo period?" Now here's the thing. This is a sensible question and someone who looked at all of the footnotes and understood the context of all of the sources that we are reading would understand why we asked it. But to someone just starting to read this document, reading the first section title, reading the first two paragraphs, and then hitting this question, they would have no idea whatsoever why the year 1868 is being mentioned, or why it would even occur to us to ask whether these groves existed before 1868. Now, I suspect I might have inadvertently biased you towards making these bolded highlights into questions in this forum by saying that this was a Q&A style list. I think that we need to come up with a different name for it because in this case, a good bolded sentence to begin this bullet point would be something like "Farming communities have had these groves for centuries." That is a good one sentence summary of what the paragraph can be. And then the paragraph goes into detail about how we know the top line sentence.
+>
+> Now, in some cases, I think that a question and answer format is very good.  For example:
+>
+> > How tall were they?
+> > 11 to 28 m, about 15 m on average.14
+>
+> That is perfect. A plus no notes. at least in terms of the format. I actually do have one note, which is that I think that it would be good if any time we expressed something in meters, then we also convert it to feet and then round to the nearest foot with a tilde to express approximation. For example, this would read
+>
+> > How tall were they?
+> > 11 to 28 m (~36-92 ft), about 15 m (~49 ft) on average.14
+>
+> Now, when I say that any time we express this, I, of course, do not mean when citing our sources. So, for example, the footnote for this reads
+>
+> > kashima-kainyo-1987 - 「Tree heights run from 11 meters to 28 meters, averaging about 15 meters.」 (translated from the Japanese by this project; original: 「樹高は１１メートルから２８メートルで平均１５メートルくらいである。」)
+>
+> And that should not change. And it should not have unit conversions injected into it or anything of the sort. In other words, this rule about units only applies to text that we ourselves write in these research summary sections.
+>
+> Now, overall, I think that the way that we determine whether or not a bullet point bolded opening sentence should be a question or a declarative statement depends on whether or not there is a straightforward fact that we are attempting to convey. If there is, then we make it as a declarative statement. And if what we are expressing is complicated or we are explaining a level of uncertainty, and summarizing the conclusions that we have made based on our research, then it should be phrased as a question. So, for example, the first item in the list should be a declarative statement because we are straightforwardly expressing that these windbreak trees existed and that we know that they existed in pre-modern eras. The bullet point on tree heights should be phrased as a question because the answer is a range of heights with an average. And so we are conveying an approximate truth.
+>
+> here are two more examples of how to apply this general rule:
+>
+> > Windbreak groves sit on different sides in different regions.
+>
+> is perfect as it is because it is making a simple declarative statement that conveys valuable information to the reader, which is then expounded upon in the bullet point underneath.
+>
+> > How large would these groves get?
+>
+> This is perfect as a question because the answer is just that we don't know. And so phrasing it as a question is actually preferable to making a declarative statement such as "We don't know how large these groves would be." Because saying that we don't know is also not quite right. I mean, what we have is an educated guess, and then we are citing our sources about what the educated guess is. And so that is what makes it appropriate for a question. Now, if there was a declarative statement about something that we had literally no evidence for and everything was just conjecture, then at that point, a declarative statement would be fine. But in general, we tend to have some sourcing, even when it is thin, for most or all of our points.
+
+## The GM, 2026-09-29, on number and on confusable features (verbatim)
+
+> I have just noticed another couple of style things which I think are probably my fault because I think you have done things this way based on the examples that I gave you. But that makes for a good general correction to the style guide, I think.
+>
+> First, we should be careful about our pluralization. there are some features on a map for which the map only has a single one. For example, a hamlet has only a single notice board. So when talking about a hamlet or a village's notice board, you would use the singular to refer to it to prevent confusion, e.g. "A settlement's notice board". However, when referring to a thing which a map will have many of, you would use the plural. For example, "A settlement's farmhouses".
+>
+> This is relevant in this write-up, since we are using the singular "grove" e.g. "Which way does a map's grove face?" But on maps that have these kinds of groves, then there will be one per farmhouse. Therefore, it would be "groves", plural.  Same with "Which way does a map's grove face?" which should use the pluralized form.
+>
+> I think that this also means that some sections which would be easily confused with other types of things should probably have a list of other similar things which should not be confused with the thing that we are talking about. for example, forest commons, and the windbreak common belt, and the local bamboo groves, and the copses of trees, which existed for lumber. These are all examples of things which are distinct from the homestead groves. Therefore, the very first part of the section, before even the opening paragraph of "Across the farming country of Japan..." should be a bulleted list that begins
+>
+> *Not to be confused with:*
+> - `Windbreak forests` - <definition>
+> - ...
+>
+> So the idea is that here, windbreak forests would link to the section on windbreak forests. And what we would put after that is the definition that we use for windbreak forests. You know, like the common forest belt for a collection of farmhouses rather than the individual grove protecting a single farmhouse. Now this, not to be confused with, section should probably be automated. By which I mean we probably would have some data structure somewhere where we have indicated which things should be linked to other things in this way. And these links are always two-way. So, for instance, I would expect for the Windbreak Forests section, whatever it ends up being called in the long run, to have its own, not to be confused with, section, which has an entry for "Groves of trees around farmhouses (yashikirin)". Now, as of right now, I don't know how much of this that we can actually implement. Because if we tried to implement this right now, while we are still in the process of doing this reorg, then it wouldn't really work. Because many of the things that we would be linking to are going to be renamed, and they are going to be collapsed into their own section. And so forth. So I suspect it might be best for you to defer this part of the feature to a later task which will occur after we have done the rest of the reorg and our sections actually exist in the final form, which then allows us to link to their actual section titles, such as "Groves of trees around farmhouses (yashikirin)", because right now the fact that I kept saying "Windbreak forests" as if that was actually a name of a section, when it is not, makes this impossible to actually implement right now.
+
+## The GM, 2026-09-29, on rendering decisions and paragraph length (verbatim)
+
+> Okay, so I think that it is worth separating out a section like "How our maps draw the grove" from the primary section on groves itself. And more generally, anything that is specifically about how we choose to render the grove or render a map element generally probably belongs in a separate place. In fact, I don't even mean a separate section within this research document, but there should probably just be a separate collection of files that have to do with our rendering decisions. Now, maybe this still goes within the research folder because these decisions still do cite research. So I think it is part of the same research apparatus as everything else, but I think that it is straightforwardly the case that this whole section and also the entire paragraph that begins with "The rule the map follows:" do not belong in this section specifically.
+>
+> Now, speaking of the section that begins "The rule the map follows", That paragraph is way too long. that looks like it should probably be its own bulleted list because many of the sentences are just like individual rules or rationales for how we draw things. Um, it is plausible that it should even be like a nested list. Depending on how that goes, I haven't really thought about it, but I think that in general that paragraph is too long. And that could probably be a mechanical check that we write. Um, I'm not really sure what the maximum paragraph length should be, but the two paragraphs that we have at the beginning of this section are both fine, and this one is too long. So something between those two numbers, I guess. And what's nice about that is that that can be a mechanical check and not a subagent check. So it can run very quickly as like a make command or a script or whatever as part of this without needing uh, an expensive subagent check.
+>
+> Now, when we split out this other section on rendering, we will certainly want to link to it from the section on research and vice versa. Like the two of them should definitely link to each other. And I think that linking should be automated rather than something that we write. this will be difficult to do in all cases while we are still sorting through our style guide and whatnot, but that is what the system should be. Maybe we have a link at the very bottom of each section, or maybe there's even in the section title, like a link that is floated to the very right hand side of the line where the section title is that says "Rendering Conventions" in small letters or something. or even a kebab icon that if you click on it will bring down a submenu and one of the menu options is a link to the rendering conventions and one is a link to the citations. One is a link to the footnotes or something like that. I'm not sure. These are just some ideas, but in general, we want all of our cross-referencing between different things of this nature to be automated is the main thing, rather than something that we assemble by hand, like the make target that assembles this research page should drop all of that into place automatically.
+
+## The GM's review of the work-yard topic, 2026-09-30 (verbatim)
+
+> That looks really good, and I have only a few pieces of feedback.
+>
+> First, there are a couple of places where we explicitly call out pages that we assert exist and that we further assert contain data, like specific answers, but which we are saying do not load. For example:
+> > A yard at Kodaira, a large Musashino holding's, is given as 70 tsubo (~2,490 sq ft), from a page we could not read.
+> and
+> > It comes from a city history whose page did not load.
+> and
+> > a statement we could not find on any page we could read.
+> So I am extremely unclear why it is that we believe this information is on this page or these pages in the first place if we cannot load the page. Like, are we sure this was not a hallucination from an earlier research pass from before we started doing subagent checks specifically to prevent this kind of hallucination? Or is this a thing where we have found other references to this which point at this page or these pages, but then we can't load the pages themselves? So we have reason to believe that this data is on those pages, even though we ourselves cannot confirm it? As of now, it looks very suspicious.
+>
+> Second, I am still seeing places where Japanese kanji are showing up untranslated into English. For example:
+> > > (無屋敷登録人, muyashiki torokunin)
+> I don't know what that means, and I presume that "muyashiki torokunin" is the transliteration, but that doesn't actually help me because a transliteration is not a translation.
+>
+> Those are the only issues I can see here, each of which deserves to be fixed both in the specific place and with some general rules. I think that the Japanese kanji showing up untranslated is something that could be addressed with a mechanical check rather than a subagent check. Because if we always... show a translation in the same format immediately following some kanji, then that would allow us to have a mechanical check that guarantees that what we have done is translated. And then I suppose the subagent check would exist for the fidelity of the translation, but then, like many subagent checks which only run when a specific bit changes, then the subagent check that validates the fidelity of the translation would only check if either the translated text or the original kanji were to be edited. At least I think that's how that works. I'm not totally sure. The first issue seems like it is a style guide issue that requires subagent checks, since I don't know that we could do a mechanical check for something like this.
+
+## The GM, 2026-09-30, on the "are" tooltip (verbatim; the message as recorded begins mid-sentence)
+
+>  is given a glossary tooltip for the Japanese unit "ares" And I see how this happened because our tooltips are applied mechanically. So to be honest, I'm not totally sure how to make this not happen without doing something very expensive that we don't want to do, like an expensive subagent check. But I don't know. Hopefully there's something clever that can happen. that allows us to keep the mechanical nature of the tooltips as it is, but without tagging a conjugation of the verb to be, which is going to happen a lot.
+
+## The GM, 2026-09-30, asking for the third pilot topic (verbatim)
+
+> Okay, I have reviewed the style guide and it looks good, but before we blaze ahead with more than a single section at a time, please continue and do one more section, which is to say, rewrite the "The garden's sun, and how far the windbreak shades" by first checking and seeing what other sections should fold into it and then combining all of them and then doing a rewrite as per our new style guide conventions. Offhand, this feels like it would be appropriate to be a section not specifically about garden sun, but about shade in general. because both our threshing yards and our gardens. Need to get sufficient sun. And the same thing is true of crop fields. Because, for instance, you will never find a ring of trees blocking the sunlight that a dry crop field, like a wheat field, would need. So basically, this is probably a good place to pull in any other sections which are specifically about the amount of sunlight per day that things get, and then this is where we would talk about the fact that being in the Northern Hemisphere means that the sun is on the south, side, etc. So I'm not sure which other sections we would pull in. To make this section into that, but that's what we should do. Let me know when you're done with that, and I will take a look to see whether I spot anything which seems like it should require another style guide update, etc. Thanks.
+
+## The GM, 2026-09-30, accepting the pilot and asking for the sweep (verbatim)
+
+> What you have done so far seems good enough to roll out to the rest of our research Sections. So please update the feature to mark my acceptance of our current process and checks and whatnot. And then proceed with reorganizing each and every research section, combining similar ones as appropriate, as we have been doing and then applying our new style guide etc so please update the current speckit feature to include whatever tasks are appropriate for this effort, and then just proceed with doing the complete edit pass.
+
+## The GM, 2026-10-01, on the open questions (verbatim)
+
+On Q1 (open-questions.md), the samurai house inside a provincial city's wall:
+
+> (b) the earlier ruling was never intended to be a deviation from historical norms, so when we eventually get to rendered city maps then we should render whatever our research shows was actually true based on historical Japan and China
+
+On the capital's magistrate's office size:
+
+> Okay, I have answered the one open question, and for what it's worth, I don't remember making a ruling about the size of the magistrate's office in the capital, so really whatever our research shows should be the driving force. Now, I suspect we will have to make some judgment calls simply based on the fact that we are merging Japanese and Chinese history here because this fictional setting is a mishmash of the two. But if we have actual evidence that says what the size should be based on either the offices of the six ministries in Imperial China or differences between smaller and larger cities in Edo period Japan, then we can use that.
+
+## The GM, 2026-10-01, on the modals' references (verbatim)
+
+> I'm really thrilled with the progress that we are making here. Now, refresh my memory. Did we include something in this task list for this feature to update the HTML modals and their references to point to the new sections as they now exist? I don't want to leave those links broken now that we have changed and remade these sections.
+>
+> The opening quote of
+>
+> > The questions we asked while working out this feature - each is answered in our research notes, with the sources it rests on:
+>
+> seems like it is no longer valid and should be rewritten to say something like
+>
+> > Topics we researched for this map feature:
+
+## The GM, 2026-09-29, on no visible GM ruling (verbatim, recorded at the sweep's close)
+
+> We should not have anything like this in our research writeup:
+>
+> > The GM ruled on 2026-09-29: because it does sound as if groves completely surrounding farmhouses was a thing, then that should indeed be a tunable knob. It seems like two sides is the minimum. Three sides would sometimes be the case, and all four sides would also sometimes be the case. Offered the split and the flood-ground rise below, the GM accepted both: Your suggestions sound great, so yes, please go with all of that. Both the percentage split and the flood ground adjustment.
+>
+> Now, to be clear, it is okay to capture my rulings in our checked-in repository for your own understanding when implementing later features. For example, this is the kind of thing that could go in code, or if it is useful for you to have this located in the same place as the research write-ups that are intended for humans to read, then you could keep it by having it be hidden. Like, this is in an HTML comment where you will see it when you read the write-up, but it will not be visible to a human or something. But in general, this is not how we want to present this information.
+>
+> Now with that being said, the fact that we have made this ruling probably does mean that there is something worth conveying here. And I think that the thing that is worth conveying is that we know of at least some settlements that had windbreak forests on all four sides. And we know of some settlements that had them on three sides. And we know of some settlements that had them on only two sides. And we know that people chopped down a lot of trees And so we have some good reason to believe, based on our research, that two-sided wind break forests were the most common. followed by three-sided ones, followed by four-sided ones. And so we have somewhat arbitrarily picked fifty percent and thirty percent and twenty percent respectively for those three possibilities. As a tunable knob. Now explaining that is a useful thing. And I think that that is what this bullet point from which I extracted the quotation that I said was unacceptable should be conveying. Now, when explaining this to a human reading this later, you should not refer to this as a GM ruling. Rather, you should describe it the way this project has chosen to render the variety of settlements that we know existed historically.
+>
+> I don't have a specific suggestion for how to incorporate this into your style guide and subagent checks, but I trust that as I give you feedback of this sort, as we work through this feature, that you will take the appropriate action in figuring out how to represent this in the style guide and the subagent checks and what have you.
+
+## The GM, 2026-09-29, on the size cap (verbatim, recorded at the sweep's close)
+
+> Oh, so can we make the size cap not count the nodes? I ask because the whole point of the size cap is to conserve tokens, but the nodes are themselves also split up, right? So I think that means that we can disregard them when it comes to calculating the size because the subagents and the editing sessions which are touching them just won't actually care because they will not be reading those notes when doing the editing, I don't think, or maybe they will? How does that affect things?
+
+## The GM, 2026-09-29, on storing originals apart and checking translations (verbatim, recorded at the sweep's close)
+
+> Okay. Yes, those suggestions sound good so please do that. And then when we include translated text, and then also include the original text in whatever language, like Japanese, or whatever, then can we store the original text separately as well? Because I think that it makes sense for there to be a subagent that checks that our translation is good when either the text being quoted has changed or the translation has changed. And then otherwise that check doesn't need to run. But other than that, I don't think that there is any reason for other subagent checks to read both the translation and the original text. I think they should only read the translation. In fact, I also think that when we see the original text and the translation in a footnote, I think that the translation should be visible, but the original text should be collapsed by default. And then you should have to click on it to see. The original text. Like, click on and expand link within the footnote. that pops up when you mouse over the footnote number. That kind of thing. So please implement that as well as part of your suggestions that you are implementing before we move on to the next section. And then I will look at what you have done and then offer more feedback before we decide whether to move forward with other stuff. Thanks.
+
+## The GM, 2026-09-29, on the heading link and the footnotes (verbatim, recorded at the sweep's close)
+
+> Okay, so just from a stylistic perspective, the "How our maps draw it" is on its own separate row from the "Groves of trees around farmhouses (yashikirin)" but should be floated to the right-hand side of the same row.  I think we can also replace "How our maps draw it" with "How it's drawn" for brevity.
+>
+> Second, we should presume the source is in English unless not stated otherwise, meaning that we should strike "(the source's own English)" from the end of the relevant footnotes.
+>
+> Third: we have improved the "1868" references such that by the time we get to "Were the groves as large before 1868?" then an earlier question's answer already included the phrase "before Japan began to modernize in 1868". However, it would be good if someone skimming this section were able to read an arbitrary answer that caught their eye without requiring all of the context that came before it. Therefore, when there is an easy way to explain a year or a concept then we should take it. In this case, I can see two different ways that that might happen, and each one would be acceptable, and depending on the circumstances, we might pick one or the other for different bullet point lead-ins. The first option is to reword the question to include the explanation. For example, instead of saying, ""Were the groves as large before 1868?" we could say "Were groves as large before Japan began to modernize in 1868?" This removes the need for any explanation of why the year 1868 is significant. The second option is to make the year 1868 a tooltip. And then if someone moves their mouse over it, then they will see an explanation that this was the year that Japan began to modernize, and therefore much of the landscape of Japan became drastically different after this occurred. And therefore, there is a great deal of before and after the year 1868 that will come up in research of what features the landscape had and what a farming settlement looked like, etc. Either one of these would be fine here, but I can imagine other situations in which one or the other would be good. And I think that our subagent checks, which evaluate bullet point lead-in sentences need to consider whether or not one of these approaches is called for in order for a bolded lead-in sentence to be self-explanatory.
+>
+> Fourth: instead of saying "translated from the Japanese by this project" every single time, we should presume that all translations are donme by this project unless explicitly stated otherwise, which allows us to simply say "translated", which improves legibility and makes the footnotes scan better.
+>
+> Fifth: as a "making the footnotes more legible matter, anytime we are citing multiple things from a source instead of one thing, we should display this as a bulleted list within the footnote.  For example, where we currently have this:
+>
+> > miura-2014-kainyo - 「after all, where it grows thick it also becomes 村立見隠 [a phrase the paper says it cannot interpret], and moreover it is kept thick for a firebreak and windbreak」 (translated from the Japanese by this project; original), from a 1750 document of the Kawai papers, which the paper glosses: 「the grove's windbreak and firebreak functions are stated plainly」 (translated from the Japanese by this project; original); 「the meaning of 村立見隠ニも罷成 is not known」 (translated from the Japanese by this project; original)
+>
+> we should instead have this:
+>
+> ```
+> miura-2014-kainyo
+> * 「after all, where it grows thick it also becomes 村立見隠 [a phrase the paper says it cannot interpret], and moreover it is kept thick for a firebreak and windbreak」 (translated; original), from a 1750 document of the Kawai papers, which the paper glosses:
+>     * 「the grove's windbreak and firebreak functions are stated plainly」 (translated; original)
+>     * 「the meaning of 村立見隠ニも罷成 is not known」 (translated; original)
+> ```
+>
+> Note that in this case, it would be a nested bulleted list. However, in some other cases, it would just be a normal bulleted list. For example:
+>
+> > 
+>
+> <pasted_content id="2215">
+> miura-2014-kainyo - 「...the term 垣根 for the homestead grove in early-modern documents of the Kanazawa and Toyama domains」 (translated from the Japanese by this project; original); 「a 1658 (Manji 1) document of Tonami district carries a notice restricting (by application and permit) the cutting of the domain-reserved trees and bamboo around homesteads and on field ridges」 (translated from the Japanese by this project; original) ; 「in the domain period, the timber trees and bamboo of the homestead groves, which were privately owned, were brought into the domain's forest administration, and the species of high resource value in particular were strictly controlled」 (translated from the Japanese by this project; original) ; 「the two examples that use kaine - a settlement deed from talks among villagers including a tomura [a headman over a group of villages], and a bill of sale a villager of the group gave the headman - are, so to speak, memoranda exchanged within the village: private documents」 (translated from the Japanese by this project; original) (the paper says the reading of 垣根 in the Kanazawa domain's official documents is unknown; the spelling kaine is from private village papers of 1701 and 1782)
+> </pasted_content id="2215">
+>
+>
+> would not be a nested bulleted list. It would be a bulleted list where everything is on the same level.
+
+## The GM, 2026-09-29, on absence notes (verbatim, recorded at the sweep's close)
+
+> Also, when we have no publicly available source that we have been able to find, we currently say something like this:
+>
+> > no publicly readable source (searched 2026-09-28: web searches in Japanese for 屋敷林 江戸時代 屋敷廻り 杉 本数 砺波 加賀藩, 立木改帳 屋敷, 竹木改帳 屋敷, 屋敷林 近世 村絵図 木数改帳, カイニョ 七木の制 加賀藩, 居久根 近世 文書 仙台藩 and 屋敷林 江戸時代 樹高; read Miura's 2014 paper quoting the Edo documents on the Tonami grove, the Tonami Kainyo Club page quoting the 1789 manual, a 2003 Toyama prefecture article on the dispersed villages, ja.wikipedia 屋敷林, the Izumo tsuijimatsu society's pages, and Saitama prefecture's and ja.wikipedia's pages on the Santome new fields of 1694-96; none counts the trees of a grove before 1868. A study of one Tonami village's late-Edo grove records, Shindo and Yasukawa 2011, is in the Tonami institute's bulletin no. 28 and on no page found)
+>
+> First: "and on no page found" looks like a typo or an error that we passed through into our prose or something.
+>
+> Second: Instead of "no publicly available source" our standard wording should be "Our research of publicly-available sources couldn't find anything conclusive:"
+>
+> Third: I don't want he human-readable bits to include "searched 2026-09-28: web searches in Japanese for 屋敷林 江戸時代 屋敷廻り 杉 本数 砺波 加賀藩, 立木改帳 屋敷, 竹木改帳 屋敷, 屋敷林 近世 村絵図 木数改帳, カイニョ 七木の制 加賀藩, 居久根 近世 文書 仙台藩 and 屋敷林 江戸時代 樹高" - if this is useful information for you then it can be present but hidden and not human readable like kept in an HTML comment or something.  But the date we searched and what the web searches were is not information the human reader needs to see; it is enough to let readers know that we searched for this and couldn't fiond anything.
+>
+> Fourth: This is another case where a bulleted list would be clearer and easier to read than a long paragraph, e.g. this one would read
+>
+> ```
+> Our research of publicly-available sources couldn't find anything conclusive:
+> * None of our sources count the trees of a grove prior of 1868, including:
+>     * Miura's 2014 paper quoting the Edo documents on the Tonami grove
+>     * the Tonami Kainyo Club page quoting the 1789 manual
+>     * a 2003 Toyama prefecture article on the dispersed villages
+>     * ja.wikipedia 屋敷林
+>     * the Izumo tsuijimatsu society's pages
+>     * Saitama prefecture's and ja.wikipedia's pages on the Santome new fields of 1694-96
+> * A study of one Tonami village's late-Edo grove records, Shindo and Yasukawa 2011, is in the Tonami institute's bulletin no. 28
+> ```
+>
+> Fifth: this still has some untranslated foreign words, i.e. "屋敷林" should get translated.
+>
+> Please make all of these fixes/adjustments with the appriate enforced style guide conventions when you're done with your current round of changes.  Also, in case it isn't clear: the replacement text for "no pubicly available source" should be stored in a single place so that if we update it later we are updating a single line of text rather than finding a replacing everywhere that it is located.
+
+## The GM, 2026-09-29, asking for the second pilot topic (verbatim, recorded at the sweep's close)
+
+> Okay, I'm pretty happy with the "Groves of trees around farmhouses (yashikirin)" section.  While I review the style guide, why don't you try to give the same treatment to another section, i.e. take the next section which is currently "How big was the work yard, and how did the sizes spread?" and figure out whether there are one or more other sections should should fold into this one and then reorganize the resulting content in the manner we've done for the first section, etc.
+
+## The GM, 2026-10-01, on the open questions file (verbatim, recorded at the sweep's close)
+
+> Good to know, thanks. As for the 26 open questions, then instead of bringing those to me here in the session when the time comes, please run the escalation check on them and then put them into an open questions file within the clone so that I can review them in line and then provide my answer to each of them in a space which has been allotted within the file. And then I can work on that while you continue with the rest of the feature. My response will be required before the feature can be completely closed out, but me responding to however many open questions remain after the escalation check filters out the ones that you are able to resolve for yourself, then you can continue working on the not to be confused with lists and such.
+
+## The GM, 2026-10-01, on removing the open questions file (verbatim, recorded at the sweep's close)
+
+> Does the open questions file even need to remain in the repository? I mean, once all of the questions have been answered, then I would have expected that to just be a temporary file that doesn't need to stick around.

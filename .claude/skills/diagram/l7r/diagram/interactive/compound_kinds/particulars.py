@@ -18,6 +18,8 @@ from __future__ import annotations
 from ..classes import Kind
 
 
+# The GM's rulings: a flanking pair of stones, one each side of the road, where canon sets one; and Ochiba's pair
+# drawn larger than canon's two-fist stones (about 3.3 by 4.7 ft), because Ochiba makes and paints them.
 class ThresholdStones(Kind):
     """
     What: A pair of river-stones painted with cinnabar fox-tracks, set one on each side of the road just outside
@@ -34,10 +36,10 @@ class ThresholdStones(Kind):
 
     Note: the threshold stones and the Pact-Bowl are the Fox Clan's road wardings, from the campaign's own
     canon, a departure made by the setting with no historical counterpart. Canon sets one stone at each
-    checkpoint; the flanking pair is the GM's ruling for this drawing, a stone on each side of the road so
+    checkpoint; the flanking pair is this project's choice for this drawing, a stone on each side of the road so
     that neither stands in it. And the pair is drawn larger than canon's stones on purpose - canon makes each
     stone a river-stone the size of two fists, and Ochiba's pair stands about 3.3 by 4.7 ft, because Ochiba is
-    where the threshold stones are made and painted (the GM's ruling).
+    where the threshold stones are made and painted (by this project's choice).
 
     Name: threshold stones
     Covers: the vermilion pair outside the main gate and their label with the "buried Pact-Bowl" sublabel
@@ -79,12 +81,12 @@ class River(Kind):
 
     Why: Where navigable natural water exists, it is the main freight route, and a county on it is a staging
     node: its tax grain moves on by boat - hired hulls flying an official pennant, inspected at each port of call, for the office owns none - toward the central stores rather than sitting in rows of granaries
-    at the office. In this setting only the Lion dig transport canals, so for any other county the river is
-    the way.
+    at the office. In this setting a canal is a domain's work, dug only where an inland river is worth
+    canalizing, as the Lion's is, so for most counties the river is the way.
 
     Note: Freight by water is a recorded finding, and the village granary is recorded as a temporary store for
     shipment, but that a well-watered county's office granary is a staging node its tax rice passes through is
-    the research's own reading, and so is the contrast with an isolated county's rows of granaries, whose one example (Takayama holding rice for all of Hida) has no readable source; the rule that only the Lion build canals is the setting's canon. Edo-period river landings were set up
+    the research's own reading, and the contrast with an isolated county's rows of granaries is its guess, its one example (Takayama holding rice for all of Hida) having no readable source; the hired hulls under an official pennant are recorded for the shogunate's rice going by sea, and carrying them onto a county's river, and that the office owned no boats of its own, are this project's own; that a domain digs canals only where an inland river is worth canalizing is the setting's canon, and drawing one only in Lion lands is this project's own rule. Edo-period river landings were set up
     to carry the tax rice to Edo and Osaka. That Japan's tax rice went by water is recorded, but that its heavy
     freight in general did rests on general reading rather than a page a reader can open.
 
@@ -95,7 +97,7 @@ class River(Kind):
     Covers: the river band and its labels
     Label: accurate
     Sources: gokura-jawiki, nishimawari-koro-jawiki, takayama-jinya-city, takayama-jinya-jawiki, chinaknowledge-caoyun, daba-jawiki, chuma-jawiki, kashi-jawiki
-    Entry: research/buildings.html - 'The granary is a staging node, not the terminal store'; research/ways.html - "Where does a village's freight go?"
+    Entry: research/buildings.html - 'Storehouses for the tax rice'; research/rendering/buildings.html - 'How our maps draw storehouses for the tax rice'; research/ways.html - 'Moving goods: carts, packhorses and river landings (kashi)'; research/rendering/ways.html - 'How our maps draw moving goods: cart lanes and boat landings (kashi)'
     """
 
     key = "river"
@@ -112,14 +114,15 @@ class RiverLanding(Kind):
     a navigable river keeps a landing of its own where the grain is loaded.
 
     Note: That the tax grain went on hired boats under an official pennant, inspected at the ports of call,
-    follows the record of the shogunate's rice shipped to Edo, and carrying it to a county is this project's own; that the magistracy's hold on it was documentary, a matter of counts and records, and that it passed through the compound and so was loaded at the compound's own landing,
-    is this project's reading.
+    follows the record of the shogunate's rice shipped to Edo, and carrying it to a county is this project's own; that the magistracy owned no hulls of its own and that its hold on the cargo was documentary, a matter of counts and records, and that it passed through the compound and so was loaded at the compound's own landing,
+    is this project's reading. No page read describes an official's compound with a landing of its own, so that
+    the landing is the compound's own is a guess.
 
     Name: river landing
     Covers: the landing label - its dock, revetment, barge, watch post and altar are each their own kind
     Label: accurate
     Sources: nishimawari-koro-jawiki, kashi-jawiki, gangi-kowan-jawiki, takasebune-jawiki, kotobank-takasebune, matou-zhwiki, kuramae-jawiki, chinaknowledge-caoyun
-    Entry: research/buildings.html - 'The granary is a staging node, not the terminal store'; research/cities/river-cities.html - "The wharf's working face"; research/cities/capitals.html - "The sluice's lifting frame"; research/ways.html - "Where does a village's freight go?"
+    Entry: research/buildings.html - 'Storehouses for the tax rice'; research/rendering/buildings.html - 'How our maps draw storehouses for the tax rice'; research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'; research/ways.html - 'Moving goods: carts, packhorses and river landings (kashi)'; research/rendering/ways.html - 'How our maps draw moving goods: cart lanes and boat landings (kashi)'; research/rendering/cities/river-cities.html - 'How our maps draw wharves and landings (kashi, gangi)'
     """
 
     key = "river landing"
@@ -132,11 +135,11 @@ class FoxBorder(Kind):
 
     Why: Agreed, marked borders between domains were real: two neighboring domains settled a boundary of about
     130 km in 1642 after half a century of dispute and marked it with a line of earth mounds, and every
-    province's map made in the Genroku revision drew its district boundaries clearly. A border exists where
+    province's map made in the Genroku revision drew its district boundaries clearly, though those were lines between districts, not between domains. A border exists where
     two authorities have agreed it, so the plan draws the agreed line itself, which nothing on the ground need
     stand clear of.
 
-    Note: The agreed, drawn border line is a recorded finding. The period's large border markers were earthen
+    Note: The agreed border line is a recorded finding; drawing it with no width is a convention, as the period's provincial maps drew their boundaries as lines, and leaving out the mounds that marked it is a deliberate deviation. The period's large border markers were earthen
     mounds, and the plan draws the line alone; a compound standing on the line is its map's story.
 
     Caveat: The period's large border markers were earthen mounds, and the plan draws the line alone; a compound
@@ -146,12 +149,13 @@ class FoxBorder(Kind):
     Covers: the border line, its labels and the border note box
     Label: accurate
     Sources: nanbu-date-mounds-enwiki, kuniezu-enwiki, kotobank-genroku-kuniezu, mukoyama-linear-borders
-    Entry: research/urban-features.html - 'Drawing a clan border'
+    Entry: research/urban-features.html - 'Clan borders and their markers'; research/rendering/urban-features.html - 'How our maps draw a clan border'
     """
 
     key = "fox border"
 
 
+# The GM's ruling: the door which receives the Kitsune is the border, so the parley room is built across it.
 class ParleyRoom(Kind):
     """
     What: A room built into the compound's border wall, the border running across its floor; its doors and its
@@ -161,19 +165,19 @@ class ParleyRoom(Kind):
     stepping onto the other's ground. Its inner door opens into a receiving court, never into the court where
     the accused kneel, because the room receives guests.
 
-    Note: a room built across a clan border is part of its map's story, made by the GM's ruling that the door
+    Note: a room built across a clan border is part of its map's story, made by this project's choice that the door
     which receives the Kitsune is the border - a departure with no historical room behind it, since no page
     read describes a room built across a border or two parties meeting on the line itself. Where two powers
-    dealt regularly across a border, each kept its own ground: a post on each side of the line, facing each
-    other across it, as Russia and Qing China built at Kyakhta, or a compound one side set aside for the
-    other's officers with a reception hall beside it, as at the Japan House at Choryang, where Tsushima traded
-    with Korea. The drawn border line the room stands on is the attested part.
+    dealt regularly across a border, the forms recorded are a post on each side of the line, facing each
+    other across it, as Russia and Qing China built at Kyakhta, or a compound on one side's ground where the
+    other side's officers worked, with the host's banquet hall beside it, as at the Japan House at Choryang,
+    where Tsushima traded with Korea. The border the room stands on is the attested part, since domains of the period agreed linear borders between them; drawing it as a line with no width is a convention, as the period's provincial maps drew their district boundaries.
 
     Name: parley room
     Covers: the room in the border wall and its label
     Label: deviation
     Sources: kyakhta-trade-enwiki, wakan-kotobank
-    Entry: research/buildings.html - 'Did two sides ever meet in a room built across their border?'; research/urban-features.html - 'Drawing a clan border'
+    Entry: research/buildings.html - 'Rooms for a parley across a border'; research/rendering/buildings.html - 'How our maps draw a parley room on a border'; research/urban-features.html - 'Clan borders and their markers'; research/rendering/urban-features.html - 'How our maps draw a clan border'
     """
 
     key = "parley room"
@@ -197,7 +201,7 @@ class BoundaryStones(Kind):
     Covers: the two border pillars and their label
     Label: convention
     Sources: nanbu-date-mounds-enwiki, kuniezu-enwiki, kotobank-genroku-kuniezu, mukoyama-linear-borders
-    Entry: research/urban-features.html - 'Drawing a clan border'
+    Entry: research/urban-features.html - 'Clan borders and their markers'; research/rendering/urban-features.html - 'How our maps draw a clan border'
     """
 
     key = "boundary stones"
@@ -223,7 +227,7 @@ class CharcoalStore(Kind):
     Covers: the sealed charcoal kura and its labels
     Label: guess
     Sources: dozo-jawiki, kotobank-dozozukuri, wagner-ming-iron, fao-charcoal-safety
-    Entry: research/urban-features.html - "Does the charcoal yard's 30 ft fire gap apply to charcoal kept in a plastered storehouse?", 'Is a fire gap kept round a charcoal yard?', 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
+    Entry: research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and charcoal stores'
     """
 
     key = "charcoal store"
@@ -234,19 +238,20 @@ class WoodKamiAltar(Kind):
     What: A small altar to the kami of the wood, no bigger than a shed, with no torii before it, standing in the
     shrine grove beside the compound's proper shrine.
 
-    Why: Small altars below the rank of a shrine far outnumbered real shrines, and they stood without an arch;
+    Why: Small altars below the rank of a shrine far outnumbered real shrines, and most stood without an arch, or with only a very small one;
     this one stands in the shrine grove, among the trees it is kept for. It is kept up by a private hand,
     though anyone may pray at it.
 
     Note: the altar's dedication to the kami of the wood, and its keeping by a private hand with no monk
     behind it, are its map's story, a departure made by the map's design. Its form - a small altar with
-    no torii, below the rank of a shrine - is the historical one, and it is drawn about 6 ft square.
+    no torii, below the rank of a shrine - is the historical one; its size is not: it is drawn about 6 ft square,
+    larger than life so that it can be seen, where the one measured stone shrine is about 40 cm (~16 in) a side.
 
     Name: wood-kami altar
     Covers: the altar and its label with the "personally maintained" sublabel
     Label: deviation
     Sources: hokora-jawiki, tokushima-yashikigami, jawiki-yashikigami
-    Entry: research/religion-and-death.html - 'Torii are VOTIVE DONATIONS'; research/homesteads.html - "Which farmsteads had a household shrine"
+    Entry: research/religion-and-death.html - 'Shrine gateways and the approach to the hall (torii, sando)'; research/homesteads.html - 'Household shrines (yashikigami)'
     """
 
     key = "wood-kami altar"
@@ -260,18 +265,20 @@ class Revetment(Kind):
     What: The stone facing of the riverbank at Hayakawa's landing, drawn as a gray band along the water's edge,
     with the landing's steps cut into it across the bank street from the compound's wall.
 
-    Why: A river's level moves by many feet through the year, so a working bank is faced with stone or timber
+    Why: A river's level rises and falls through the year, though no page read says by how much, so a working bank is faced with stone or timber
     cribbing to hold it; at the great rice stores on the river at Edo, the stone revetment was part of the answer
     to flood. Where samurai residences stood on a river, as on Hiroshima's, they were built back from the
     revetment and walled, which is why the compound's wall stands back behind the bank street.
 
-    Note: A faced bank at a river landing, and a residence's wall standing back from it, follow the record.
+    Note: A faced bank at a river landing, and a residence's wall standing back from it, follow the record. No
+    page read describes an official's compound with a landing of its own, so that these steps are the compound's
+    own rather than a public landing is a guess.
 
     Name: revetment
     Covers: the stone facing along the landing's bank
     Label: accurate
     Sources: gangi-hiroshima-jawiki, kashi-jawiki, gangi-kowan-jawiki, kuramae-jawiki
-    Entry: research/cities/river-cities.html - "Does an official's compound have its own stepped landing, or a pier?", "The wharf's working face"; research/cities/capitals.html - "The sluice's lifting frame"
+    Entry: research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/rendering/cities/river-cities.html - 'How our maps draw wharves and landings (kashi, gangi)'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'
     """
 
     key = "revetment"
@@ -283,8 +290,8 @@ class Dock(Kind):
     the compound's wall, reached from a gate in that wall, where barges come alongside to load.
 
     Why: A river's level rises and falls through the year, so the usual landing is steps cut into a faced bank,
-    which meet a moored hull at whatever height the water stands; a pier is the exception, for a bank that
-    shelves too gently. Where samurai residences stood on a river, as on Hiroshima's, they were built back from
+    which meet a moored hull at whatever height the water stands; a pier is the exception, by this project's guess,
+    for a bank that shelves too gently. Where samurai residences stood on a river, as on Hiroshima's, they were built back from
     the revetment and walled, and it is thought no gated landing opened from them onto the steps, so the compound reaches
     its steps from a gate in its wall, across the street. The early-modern stepped landings were built where boats
     berthed and goods came ashore, above all in the townsmen's quarters; a private landing, a merchant's back gate onto
@@ -302,7 +309,7 @@ class Dock(Kind):
     Covers: the landing steps in the faced bank
     Label: accurate
     Sources: gangi-hiroshima-jawiki, gangi-kowan-jawiki, pier-enwiki, matou-zhwiki
-    Entry: research/cities/river-cities.html - "Does an official's compound have its own stepped landing, or a pier?", "The wharf's working face"
+    Entry: research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/rendering/cities/river-cities.html - 'How our maps draw wharves and landings (kashi, gangi)'
     """
 
     key = "dock"
@@ -315,7 +322,7 @@ class TaxBarge(Kind):
     Why: Tax grain moves down the river to the city on hired boats flying an official pennant; the
     magistracy owns no hulls, and the barge at its dock is one taken on for the run.
 
-    Note: The barge's size, inside the record's range for such a boat, and the hiring of hulls for tax rice (read for the shogunate's sea shipments; a county's grain going downriver on them is this map's reading),
+    Note: The barge's size, inside the record's range for such a boat, and the hiring of hulls for tax rice (read for the shogunate's sea shipments; a county's grain going downriver on them, and its magistracy owning no boats of its own, are this map's reading),
     follow the record. The bales aboard are drawn about 4 ft long so that they read, where a rice bale of today's 60 kg size is about
     2.5 ft long and 1.5 ft across; no bale of the Edo period was found measured, and one scaled from what it held is guessed within a tenth of that size.
 
@@ -326,7 +333,7 @@ class TaxBarge(Kind):
     Covers: the moored barge, its lines, its bales and its label
     Label: accurate
     Sources: takasebune-jawiki, kotobank-takasebune, gokura-jawiki, takayama-jinya-city, tawara-unit-jawiki, nisira-komedawara
-    Entry: research/urban-features.html - 'How big is a bale of rice or charcoal?'; research/buildings.html - 'The granary is a staging node, not the terminal store'; research/cities/river-cities.html - "The wharf's working face"
+    Entry: research/urban-features.html - 'Straw bales of rice and charcoal (tawara)'; research/rendering/urban-features.html - 'How our maps draw straw bales of rice and charcoal (tawara)'; research/buildings.html - 'Storehouses for the tax rice'; research/rendering/buildings.html - 'How our maps draw storehouses for the tax rice'; research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/rendering/cities/river-cities.html - 'How our maps draw wharves and landings (kashi, gangi)'
     """
 
     key = "tax barge"
@@ -334,24 +341,24 @@ class TaxBarge(Kind):
 
 class BoatmensAltar(Kind):
     """
-    What: A small shrine beside the landing, kept by the boatmen who work the river.
+    What: A small shrine at the head of the landing, to the guardian spirit of the boats that work the river.
 
     Why: A boat's own guardian, the funadama, lives aboard, at the foot of the mast, and is sometimes given a shrine
     on land, and that shrine is the one drawn here. The water god's shrine that river boatmen are recorded keeping, a
-    Suitengu, is dated no earlier than the late 1920s by its one source, and nothing read places boatmen keeping one
-    before modern times, so it is not drawn.
+    Suitengu, is undated in its one source, a twentieth-century record that dates nothing before the late 1920s,
+    and nothing read places boatmen keeping one before modern times, so it is not drawn.
 
     Note: The boats' guardian and its shrine on land are read. The shrine is not recorded standing at a landing
-    itself, or with a size, so its place beside the landing and its size are a guess.
+    itself, or with a size, so its place at the head of the landing and its size are a guess.
 
-    Caveat: The shrine is not recorded standing at a landing itself, or with a size, so its place beside the
+    Caveat: The shrine is not recorded standing at a landing itself, or with a size, so its place at the head of the
     landing and its size are a guess.
 
     Name: boatmen's altar
     Covers: the altar on the bank and its label
     Label: accurate
     Sources: funadama-jawiki, kotobank-funadama, kotobank-suitengu
-    Entry: research/cities/river-cities.html - 'Did the boatmen keep a shrine at the landing?'
+    Entry: research/cities/river-cities.html - "The boatmen's shrine at the landing (funadama, suijin)"; research/rendering/cities/river-cities.html - "How our maps draw the boatmen's shrine at the landing (funadama)"
     """
 
     key = "boatmen's altar"
@@ -380,7 +387,7 @@ class RiverWatch(Kind):
     Covers: the guard post at the landing and its label
     Label: accurate
     Sources: funabansho-jawiki, koto-nakagawa-funabansho, l7r-tariffs
-    Entry: research/cities/river-cities.html - 'Who kept watch on the river at an official's landing, and what did the watch post look like?'
+    Entry: research/cities/river-cities.html - 'The river watch post at a landing (funabansho)'; research/rendering/cities/river-cities.html - 'How our maps draw the river watch post (funabansho)'
     """
 
     key = "river watch"
@@ -391,7 +398,7 @@ class Steelyard(Kind):
     What: The steelyard on Ubame's weighing floor where bales of charcoal are weighed before the tally is written: a
     wooden beam with a hook at one end for the bale and a weight on the other, slid along the beam until it balances.
 
-    Why: Charcoal was packed by grade rather than to one weight, in one district at least, so a bale is taken to be weighed at the point of sale, though no source read says a dealer weighed bales at sale, and
+    Why: A straw bale of charcoal had no standard size, so a bale is taken to be weighed at the point of sale, though no source read says a dealer weighed bales at sale, and where one undated district packed each grade to a set weight a count of bales could have served instead; and
     one account, naming no country or period, has the steelyard weighing food and everyday goods and the two-pan balance serving valuables. Japan used
     steelyards from the Edo period, in sizes that included one for a load of four of the best charcoal bales, and China's was its
     traditional market scale, built for heavy loads too.
@@ -404,7 +411,7 @@ class Steelyard(Kind):
     Covers: the steelyard on the weighing floor
     Label: accurate
     Sources: zhwiki-ganchen, zjnews-cixi-steelyard, osaka-keiryo-history, kanazawa-saobakari
-    Entry: research/urban-features.html - 'Was bulk charcoal weighed on a balance beam or a steelyard?', 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
+    Entry: research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and charcoal stores'
     """
 
     key = "steelyard"
@@ -414,10 +421,10 @@ class CharcoalBales(Kind):
     """
     What: Bales of charcoal stacked on Ubame's weighing floor, waiting to be weighed.
 
-    Why: Charcoal traveled in straw bales, woven into a cylinder like the rice bale, and a bale had no standard
+    Why: Charcoal traveled in straw bales, most woven into a cylinder like the rice bale (one great charcoal district shipped its charcoal in square ones), and a bale had no standard
     size before the modern period - not even for rice, whose bale held anything from 2 to 5 to by time and place.
-    Charcoal was packed at a weight set by its grade: in one charcoal district, 4 kan for the best and 8 or 10 for
-    the lower grades. A bale of no standard size cannot be traded by count, which is why every bale is weighed
+    Charcoal was packed at a weight set by its grade: in one charcoal district, at a date its source does not give, 4 kan for the best and 8 or 10 for
+    the lower grades. A bale of no standard size cannot be traded by count, which is why, in our reading (no page we read says a dealer weighed the bales at sale), every bale is weighed
     before it is tallied.
 
     Note: we have drawn each bale about 4 ft long, in order to make it read on the plan; a charcoal bale is about
@@ -429,7 +436,7 @@ class CharcoalBales(Kind):
     Covers: the stacked bales on the weighing floor
     Label: convention
     Sources: tawara-jawiki, tawara-unit-jawiki, edo-tokyo-sumidawara
-    Entry: research/urban-features.html - 'How big is a bale of rice or charcoal?', 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
+    Entry: research/urban-features.html - 'Straw bales of rice and charcoal (tawara)', 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw straw bales of rice and charcoal (tawara)', 'How our maps draw charcoal yards and charcoal stores'
     """
 
     key = "charcoal bales"
@@ -444,15 +451,15 @@ class ParleyMats(Kind):
     kneels on its own ground, the line between them.
 
     Note: the mats belong to the same departure as the parley room, the map's own design: no page read seats two
-    parties across a border line in one room, and where two powers dealt regularly across a border each kept its
-    own ground, in a post on each side of the line or in a compound one side set aside for the other's officers.
-    The mats' 3 ft size is this project's own figure.
+    parties across a border line in one room, and where two powers dealt regularly across a border the forms
+    recorded are a post on each side of the line or a compound on one side's ground where the other side's
+    officers worked. The mats' 3 ft size, and their count of two a side, are this project's own choice.
 
     Name: parley mats
     Covers: the four kneeling mats in the parley room
     Label: deviation
     Sources: kyakhta-trade-enwiki, wakan-kotobank
-    Entry: research/buildings.html - 'Did two sides ever meet in a room built across their border?'; research/urban-features.html - 'Drawing a clan border'
+    Entry: research/buildings.html - 'Rooms for a parley across a border'; research/rendering/buildings.html - 'How our maps draw a parley room on a border'; research/urban-features.html - 'Clan borders and their markers'; research/rendering/urban-features.html - 'How our maps draw a clan border'
     """
 
     key = "parley mats"

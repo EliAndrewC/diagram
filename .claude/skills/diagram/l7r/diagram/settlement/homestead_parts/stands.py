@@ -55,7 +55,7 @@ def belt_bearing_and_subtense(clumps: Any, houses: Any, wind: tuple[float, float
     """THE ONE PREDICATE of `test_every_pool_hamlet_has_its_belt_on_the_regional_northwest` (feature 287, woods W18), as
     (how far the belt's center bears off the wind's quarter, how many degrees its crowns subtend round the cluster), both
     seen from the houses' centroid. `wind` points toward where the wind comes from (the regional northwest on every pool
-    hamlet). research/vegetation, "Does a shelter belt wrap the settlement?": the record's shape is a hook on the windward
+    hamlet). research/vegetation, "Shelter belts on a village's windward side": the record's shape is a hook on the windward
     side, one or two sides of the houses, never round them."""
     cx = sum(float(h["x"]) for h in houses) / len(houses)
     cy = sum(float(h["y"]) for h in houses) / len(houses)
@@ -107,7 +107,7 @@ def _trim_ends(clumps: Sequence[tuple[float, float]], houses: Any, wind: tuple[f
 
 def deep_marsh(rings: Any, margin: float) -> list[list[tuple[float, float]]]:
     """The marsh deeper than its reed margin: each ring inset by `margin` (feature 287, woods W06). Woody cover stands on
-    the dry ground above the marsh and its reed MARGIN carries alder (research/vegetation.html, the marsh margin), so a
+    the dry ground above the marsh and its reed MARGIN carries alder (research/vegetation.html, Reed beds and the marsh's edge), so a
     grove clump may be based in the margin - drawn as alder - and never deeper. A ring the inset empties has no deep
     ground; a ring the inset splits gives each piece."""
     from shapely.geometry import Polygon
@@ -215,8 +215,8 @@ def record_box(g: dict[str, Any], box: Box) -> None:
 class StandsMixin:
     def bamboo_stand(self: Settlement, poly: Any, role: str = "homestead") -> int:  # type: ignore[misc]
         """A BAMBOO STAND - a take-yabu: a clonal thicket with a hard edge, drawn as a STAND-LEVEL glyph
-        (feature 133 T47, GM 2026-08-27; research/vegetation.html "Bamboo: how common, where it stood, and
-        how to show it").
+        (feature 133 T47, GM 2026-08-27; research/vegetation.html "Bamboo groves (chikurin)";
+        research/rendering/vegetation.html "How our maps draw bamboo, when one culm is too small to see").
 
         THE GLYPH IS A MAP DRAWING CONVENTION (feature 183's word; it read DEVIATION until the GM split the two), recorded like the oversized wellhead: a culm is
         inches across and cannot be drawn at 1 px = 1 ft, so the stand's POSITION and EXTENT (`poly`) are to
@@ -286,7 +286,7 @@ class StandsMixin:
         bamboo_rings: Sequence[Any] = (),
     ) -> int:
         """A COMMUNAL village grove - the Chinese *fengshui* forest (风水林). Unlike the per-house *yashikirin*,
-        a NUCLEATED village shelters behind ONE village-scale grove, in three roles (see research/vegetation.html 'What are the village's three groves' 'Village
+        a NUCLEATED village shelters behind ONE village-scale grove, in three roles (see research/rendering/vegetation.html 'How our maps draw a village's groves' 'Village
         windbreak'):
           - `windbreak` - the dense belt on the WINDWARD/high BACK edge (后龙林 back-village grove); the winter-
             monsoon wall and the LARGEST vegetation feature. Nestles against and EMBRACES the cluster.
@@ -379,8 +379,8 @@ class StandsMixin:
         # 9, 8, 6, 4, 6, 4, 11, 9, 26, 30 and 83 ft against a belt clump radius of 14 - **10 of 11
         # copse clumps inside the belt's own canopy**, spanning x 1096-1188 while the houses span
         # 1108-1331. So the dooryards east of the front rank got no greenery at all and a whole
-        # feature was invisible, while `research/vegetation.html` ("What are the village's three groves")
-        # says outright that "the copse, not the belt, fills the inner gaps".
+        # feature was invisible, while `research/rendering/vegetation.html` ("How our maps draw a village's groves")
+        # says outright that "the copse, not the back grove, fills the gaps between the houses".
         #
         # Sum of the two canopy reaches, so neither stand's ink laps the other. This also protects the
         # reverse order (a belt seated after a copse) without needing to know which ran first, and it
@@ -455,7 +455,7 @@ class StandsMixin:
             dry=self.dry_polys,
             dry_pad=12,
             # ...AND THE MARSH, INSIDE ONLY, as a dike bank is: woody cover "stands on the dry ground above it"
-            # (research/vegetation.html, the marsh margin), so no clump is BASED in the marsh - a Kashikawa copse clump
+            # (research/vegetation.html, Reed beds and the marsh's edge), so no clump is BASED in the marsh - a Kashikawa copse clump
             # stood 3-21 ft inside the toe (settlement-review, feature 261) - while a crown may reach over its edge.
             # The COPSE only: applied to every grove it took Sawada's windward belt from 179 crowns to 104, and 20-34 of the
             # 68 crowns it refused stood on ground DRAWN dry - the toe marsh's recorded outline runs under the settlement's
@@ -468,7 +468,7 @@ class StandsMixin:
             # thinning band) left to it: a belt clump based in the margin is drawn as alder, one deeper is not seated
             dikes=[dk["outline"] for dk in self.M.get("dikes", [])]
             + (marsh_ground(self.M) if role == "copse" else deep_marsh(marsh_ground(self.M), MARSH_FEATHER_BS * bs))
-            # ...AND OFF THE BAMBOO, grown by a crown: a take-yabu is a clonal near single-species stand (research/vegetation 150),
+            # ...AND OFF THE BAMBOO, grown by a crown: a take-yabu is a clonal near single-species stand (research/vegetation.html "Bamboo groves (chikurin)"),
             # and once feature 280 seated the thicket behind the back row the copse's crowns stood inside it (settlement-reviews
             # of Kashikawa and Mizuguchi: four crowns centered inside, culms drawn over them)
             # The rings come from the CALLER (`bamboo_rings`, the plan's seated stands): the stands are drawn by a later stage, so
@@ -717,7 +717,7 @@ class StandsMixin:
                     continue  # the copse has its homesteads' wood (269 B26): the rest of the grid stays open ground
                 _seat(jx, jy)
         # ...AND A COPSE IS FILLED TO THE HOMESTEADS' WOOD, not left at what one grid's gaps gave (269 B26;
-        # research/vegetation/210: each homestead that keeps a wood has ~6,000-28,000 sq ft of trees, its windward grove
+        # research/rendering/homesteads/010: each homestead that keeps a wood has ~6,000-28,000 sq ft of trees, its windward grove
         # and its share of the copse together). The grid above tries one seat a `step`; where it falls short of `area`,
         # the grid is offered again at its three half-step offsets, each seat asking every test the first pass asked.
         # Nothing is relaxed: a copse the ground cannot hold stays short, and the caller records by how much.
@@ -763,7 +763,7 @@ class StandsMixin:
                 _order = sorted(range(len(seated)), key=lambda _k: seated[_k][0] * _wv[0] + seated[_k][1] * _wv[1])
                 _added = 0
                 # A DEAD END, MEASURED AND REVERTED (2026-08-29, the acceptance re-check's ERROR 2; the
-                # record: research/vegetation.html "Why does the belt run off the edge of the sheet?").
+                # record: research/rendering/vegetation.html "How our maps draw the shelter belt").
                 # The review read Kuwabata's belt as stopping before its polygon did, and the obvious
                 # repair was to bracket this run by the polygon's own across-wind extent so the END
                 # stretches were offered seats like any interior gap. Implemented and rolled: it bought
@@ -900,13 +900,13 @@ class StandsMixin:
             seated = stocked_copse(seated, clump / 2 + 4.0, kept)
         clumps = [[x, y] for x, y in seated]  # the seats are at the record's grain (W01), so the record is the ink
         # A BELT CROWN IN THE MARSH IS ALDER (feature 261, Sawada's belt on its toe's reed edge): the record's woody stage at
-        # a reed margin is alder or willow (research/vegetation.html, the marsh margin), and alder is the tree of a
+        # a reed margin is alder or willow (research/vegetation.html, Reed beds and the marsh's edge), and alder is the tree of a
         # wetland's fertile edge, so where the windbreak's ground runs into the recorded marsh its trees are drawn as one
         _wet = marsh_ground(self.M, only=("toe", "waterside")) if role == "windbreak" else []
         alder = 0
         alder_clumps: list[list[float]] = []  # which seats are drawn as alder, so a recount after the page is known reads them (woods W05)
         bamboo = 0  # the bamboo marks inked low under the windbreak's crowns (269 B29, `_draw_grove`)
-        # THE VILLAGE BELT IS DRAWN IN ITS ROLLED FORM (269 B30, `windbreak_belt`; research/vegetation/270): conifer-led, its
+        # THE VILLAGE BELT IS DRAWN IN ITS ROLLED FORM (269 B30, `windbreak_belt`; research/rendering/vegetation.html "How our maps draw the shelter belt"): conifer-led, its
         # rows of conifers laid along the belt as drawn and seated before the clumps' lesser crowns, then painted over them
         # (`_belt_ranks`), or mixed broadleaf. The water-mouth grove keeps the older mix.
         form = self._windbreak_belt() if role == "windbreak" and seated else None

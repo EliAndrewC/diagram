@@ -21,9 +21,11 @@ class BoardsMixin:
         The watchman strikes the bell in a cadence that tells the town how near the fire is. Records
         M['fire_towers'] (an overlap-checked struct: it must stand clear of the wall, roads, and
         buildings) and reserves a small no-build block (it needs clear sightlines). Place it among the
-        laborer/merchant blocks. See the research/cities/fabric.html 'How did a dense wooden city watch for fire?' historical grounding."""
+        laborer/merchant blocks. The history is research/urban-features.html 'Fire watch towers and firefighting
+        gear (hinomi yagura)'; the rules are research/rendering/urban-features.html 'How our maps draw fire
+        watch towers and firefighting gear (hinomi yagura)'."""
         if tw is None:
-            tw = self.px(26)  # a real hinomi-yagura frame is ~26 ft square (town-calibrated glyph)
+            tw = self.px(26)  # ~26 ft square, a town-calibrated glyph: no tower's footprint is on any page read (convention)
         h = tw / 2
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
         g.append(f'<rect x="{-h - 2:.0f}" y="{-h - 5:.0f}" width="{tw + 4}" height="5" rx="1" fill="#7A5A30"/>')  # the little roof cap over the lookout platform
@@ -68,11 +70,11 @@ class BoardsMixin:
         institution fails while the siting checks stay green (that is exactly how Nagahara's
         third board shipped, GM 2026-07-27). Hand placements must pass the fronted route's
         bearing; `place_kosatsuba` derives it. Held by `kosatsuba_faces_the_road`. Records M['kosatsuba'] (an overlap-checked
-        struct). WHY: research/urban-features.html 'The notice board (kosatsuba) - siting is a traffic decision'. Place LAST, on a clear verge
+        struct). WHY: research/rendering/urban-features.html 'How our maps place and draw notice boards (kosatsuba)'. Place LAST, on a clear verge
         beside the road, like the fire tower.
 
         The DRAWN glyph is a LOCATION MARKER at the coarse tiers (GM call 2026-07-24, taking the
-        escape research/urban-features.html 'The notice board (kosatsuba)' documents): the true 12x5 ft frame draws 6x2.5 px at village grain
+        escape research/rendering/urban-features.html 'How our maps place and draw notice boards (kosatsuba)' documents): the true 12x5 ft frame draws 6x2.5 px at village grain
         and 4x1.7 px at city grain - at city scale, rotated upright, that is a 1.7 px sliver that
         reads as gate hardware, not a feature (Nagahara: two of its three boards were invisible
         until the GM went looking, and the one that read did so only by its label). So the glyph
@@ -115,7 +117,7 @@ class BoardsMixin:
         The board is a POINT subject: its drawn, rotated footprint and its angle. Everything else - the ranked side,
         the preferred gap off the board's edge, the angle (the board's own, upright; the GM's 2026-08-27 ruling), the
         line breaks, and a leader if the caption cannot stand directly beside it - is the cartographic standard's,
-        decided in `l7r.diagram.labels` (research/presentation, "Where does a caption sit"). The 560-line search that
+        decided in `l7r.diagram.labels` (research/presentation, "Labels on maps (cartographic label placement)"). The 560-line search that
         stood here, with its own annulus, ladder, lane target and half-way pull, is gone with the hand-built rules it
         encoded."""
         subject = board_subject(x, y, rot, vw, vh)

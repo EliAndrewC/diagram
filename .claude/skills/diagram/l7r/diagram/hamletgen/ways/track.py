@@ -599,7 +599,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     )
     _spur_pts = s.trim_off_marsh(clip_to_clear(spur, [*crops, *([toe_now] if toe_now else [])], 12.0))
     _spur_pts = _fork_spur(_spur_pts, _kept_arms)
-    # ...AND ITS TIP IS SET ON THE BUND (269 B04, research/fields/290: the path "runs from the hamlet to the paddy's outer bund
+    # ...AND ITS TIP IS SET ON THE BUND (269 B04, research/rendering/fields/260: the path "runs from the hamlet to the paddy's outer bund
     # and joins it ... it never ends in open ground short of the bund"). The clip leaves it 12 ft off the hem and the set-back
     # 17 ft off an outline vertex - short of the bund - and where the rice stands proud of the outline it could stop in the
     # rice (Sawada: 4 ft in). Carried on to the worked ground's edge, or pulled back out of it.
@@ -607,7 +607,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     _spur_ft = sum(math.dist(_spur_pts[k], _spur_pts[k + 1]) for k in range(len(_spur_pts) - 1)) if len(_spur_pts) >= 2 else 0.0
     # WHAT WAS LEFT OF THE SPUR IS RECORDED, drawn or not (feature 230): a spur that fails the floor below vanished in
     # silence, and a reviewer asking what the nearest way to the paddy was is how the reference hamlet turned out to have
-    # none. Where a field path ends was the open question this measured for; research/fields/290 answers it (on the bund).
+    # none. Where a field path ends was the open question this measured for; research/rendering/fields/260 answers it (on the bund).
     s.M["meta"]["field_spur_ft"] = round(_spur_ft, 1)
     # ...AND A SPUR THAT NO LONGER REACHES THE WEB IS NOT DRAWN. The clip takes the spur out of the crop and off
     # the marsh from BOTH ends, so what survives can be a length of path in the middle of open ground: on the
