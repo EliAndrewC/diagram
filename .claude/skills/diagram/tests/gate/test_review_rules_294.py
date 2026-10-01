@@ -398,6 +398,34 @@ def test_every_see_through_mark_is_declared(gen: str) -> None:
     assert undeclared_see_through(found, SEE_THROUGH) == [], "B5: a see-through mark nobody declared"
 
 
+# ---- B2: a marsh's visible free edge is not ruled ----------------------------------------------------------
+
+MARSH_AXIS_RUN_FT = 150.0  # GUESS (plan D11): a waved edge is level for a moment at each crest; the recorded ruled limits ran 450-590 ft
+
+
+@pytest.mark.renders
+@pytest.mark.parametrize("gen", _HAMLETS, ids=os.path.basename)
+def test_no_marsh_meets_open_ground_on_a_ruled_line(gen: str) -> None:
+    """B2: the brook's own straight-run rule (W03: `RULED_SHARE` of the visible edge once it is `RULED_MIN_LEN_FT`, at
+    `RULED_TOL_FT`) and an axis-aligned stretch under `MARSH_AXIS_RUN_FT`, over each marsh's VISIBLE free edge
+    (`tools/marsh_edges.py`; its unit tests carry the seeded ruled strip)."""
+    from l7r.diagram.hamletgen.water.brook_rules import AXIS_EPS_DEG, RULED_MIN_LEN_FT, RULED_SHARE, RULED_TOL_FT
+    from l7r.diagram.pipeline import gencache
+    from l7r.diagram.tools import hit_share, marsh_edges
+    from tests.gate import _pool
+
+    M = _manifest(gen)
+    rings = [m["poly"] for m in M.get("marshes") or [] if len(m.get("poly") or []) >= 3]
+    page = gencache.page_of(gen)
+    assert page and rings, "non-vacuity: every shipped hamlet draws a marsh, and its page is on disk or filed"
+    with open(page, encoding="utf-8") as fh:
+        runs = marsh_edges.free_runs(hit_share.page_svg(fh.read()) or "", rings, _ftpx(M))
+    if runs is None:
+        pytest.skip("no resvg on this host")
+    rules = {"tol": RULED_TOL_FT, "share": RULED_SHARE, "min_len": RULED_MIN_LEN_FT, "eps_deg": AXIS_EPS_DEG, "axis_run": MARSH_AXIS_RUN_FT}
+    assert [f for r in runs for f in marsh_edges.ruled_edges(r, _ftpx(M), rules)] == [], "B2: a marsh meets the open ground on a ruled line"
+
+
 # ---- B15: every map folder carries its notes --------------------------------------------------------------
 
 

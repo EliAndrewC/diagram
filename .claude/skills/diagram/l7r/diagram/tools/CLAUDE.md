@@ -32,6 +32,7 @@ Not `python3 tools/why_placed.py`. A package module run as a loose script puts `
 | Two renders of this map: how much differs, by how much, where, and on whose ink? | `picture_diff` (`make picture-diff`) |
 | Who answers the pointer over each class's visible ink - its own class, or another's hit box? | `hit_share` (feature 294 B6; the gate holds every shipped map to it) |
 | Which classes does a page draw see-through, and is a broadleaf crown painted over a conifer? | `see_through` (feature 294 B5, B5b; the declared table is `settlement/see_through.py`) |
+| Does a marsh meet the open ground on a ruled or plumb line, where a reader sees it? | `marsh_edges` (feature 294 B2; the visible free edge from the page's id map) |
 | What does a hand-drawn Mode A sheet look like with its captions placed? | `make sheet-render SHEET=<svg> OUT=<png>` - the placer itself is `labels/hand_sheet.py`, not a tool: each sheet's gen imports it (feature 286) |
 
 Each module's own docstring carries the WHY it exists, usually with the incident that produced it.
