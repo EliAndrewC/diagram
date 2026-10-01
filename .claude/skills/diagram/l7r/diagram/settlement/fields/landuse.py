@@ -30,8 +30,8 @@ DIKE_CROP_CLASS = {"mulberry": "mulberry dike", "fruit": "fruit dike", "tea": "t
 # oldest there are; every ratio written as a number is modern. It was 11 ft, which left 80%, wetter than any figure read.
 DIKEPOND_WATER_INSET = 23.0
 
-# A FRY VILLAGE'S NURSERY SHARE (feature 280 M60, research/rendering/archetypes.html "How our maps draw a dike-pond
-# village's fry ponds"): Qu Dajun (1678) has seven parts in ten of the pond water at Jiujiang raising fry. Read as a share of the block's pond AREA - the record's reading, the smallest ponds first.
+# A FRY VILLAGE'S NURSERY SHARE (feature 280 M60, research/rendering/archetypes.html "How our maps draw fish fry and
+# nursery ponds (yumiao)"): Qu Dajun (1678) has seven parts in ten of the pond water at Jiujiang raising fry. Read as a share of the block's pond AREA - the record's reading, the smallest ponds first.
 FRY_VILLAGE_SHARE = 0.7
 
 
@@ -221,7 +221,7 @@ class LandUseMixin:
             chansegs += [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for a, b in zip(cpp, cpp[1:], strict=False)]
 
         # FRY NURSERY PONDS (feature 150, GM 2026-08-28 choosing audit A5; feature 280 M60; research/rendering/archetypes.html
-        # "How our maps draw a dike-pond village's fry ponds"): the ordinary delta hamlet BOUGHT its fry and kept no nursery
+        # "How our maps draw fish fry and nursery ponds (yumiao)"): the ordinary delta hamlet BOUGHT its fry and kept no nursery
         # ponds; the fry village of Jiujiang raised fry in seven parts of ten of its pond water (Qu Dajun, 1678) - the
         # hamlet's `fry_form` (hamletgen `FRY_FORMS`). On a fry village the smallest ponds are the fry ponds, up to that
         # share of the block's pond area (the smallest first is a GUESS): drawn in the turbid FRY_WATER, with a record and a

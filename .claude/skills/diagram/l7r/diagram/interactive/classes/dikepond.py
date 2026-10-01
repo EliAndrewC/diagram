@@ -24,7 +24,7 @@ class FishPond(Kind):
     township's of 1678, give the fish half its land and the ponds eight tenths of it, and every ratio written as a number
     is modern. What lives in it is carp. The young carp were not bred here: they were netted wild in the West River by
     the fry households of one township, Jiujiang, and sold to the pond districts, so an ordinary hamlet bought its fry
-    and raised them to grown fish. A late-Ming farming compendium, written far to the north in Shanghai, names two carps
+    and raised them to grown fish. A late-Ming farming compendium, in a method from Jiangxi far from the delta, names two carps
     fed in a fish pond there, the grass carp and the silver carp; of the delta's own ponds the record says only that
     they raised the four domestic carps.
 
@@ -228,10 +228,10 @@ class FryPond(Kind):
     and each hamlet rolls one: most raise grown fish and buy their fry, with no nursery ponds at all; a few are fry
     villages of the Jiujiang kind, where the smallest ponds, up to seven tenths of the pond water, are nursery ponds. Fry water was turbid and grown-fish water clear, so the color of a pond told what it held, and the map draws it so.
 
-    Note: The fry trade, the township that held it and the two kinds of village are read; how many hamlets are fry
+    Note: The fry trade, the township that held it, the two kinds of village, Jiujiang's seven tenths and its turbid fry water are read, though drawing that share of the water as a share of the pond area is this project's reading and the exact shade is a convention; how many hamlets are fry
     villages is a guess, and so is taking the smallest ponds as the nursery ponds.
 
-    Caveat: how many hamlets are fry villages is a guess, and so is taking the smallest ponds as the nursery ponds.
+    Caveat: drawing that share of the water as a share of the pond area is this project's reading and the exact shade is a convention; how many hamlets are fry villages is a guess, and so is taking the smallest ponds as the nursery ponds.
 
 
     Name: fry pond
