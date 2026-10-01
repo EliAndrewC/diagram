@@ -113,13 +113,14 @@ class RiverLanding(Kind):
 
     Note: That the tax grain went on hired boats under an official pennant, inspected at the ports of call,
     follows the record of the shogunate's rice shipped to Edo, and carrying it to a county is this project's own; that the magistracy's hold on it was documentary, a matter of counts and records, and that it passed through the compound and so was loaded at the compound's own landing,
-    is this project's reading.
+    is this project's reading. No page read describes an official's compound with a landing of its own, so that
+    the landing is the compound's own is a guess.
 
     Name: river landing
     Covers: the landing label - its dock, revetment, barge, watch post and altar are each their own kind
     Label: accurate
     Sources: nishimawari-koro-jawiki, kashi-jawiki, gangi-kowan-jawiki, takasebune-jawiki, kotobank-takasebune, matou-zhwiki, kuramae-jawiki, chinaknowledge-caoyun
-    Entry: research/buildings.html - 'The granary is a staging node, not the terminal store'; research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/rendering/cities/river-cities.html - 'How our maps draw a city's wharf and landings'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'; research/ways.html - "Where does a village's freight go?"
+    Entry: research/buildings.html - 'The granary is a staging node, not the terminal store'; research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/rendering/cities/river-cities.html - 'How our maps draw wharves and landings (kashi, gangi)'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'; research/ways.html - "Where does a village's freight go?"
     """
 
     key = "river landing"
@@ -260,18 +261,20 @@ class Revetment(Kind):
     What: The stone facing of the riverbank at Hayakawa's landing, drawn as a gray band along the water's edge,
     with the landing's steps cut into it across the bank street from the compound's wall.
 
-    Why: A river's level moves by many feet through the year, so a working bank is faced with stone or timber
+    Why: A river's level rises and falls through the year, though no page read says by how much, so a working bank is faced with stone or timber
     cribbing to hold it; at the great rice stores on the river at Edo, the stone revetment was part of the answer
     to flood. Where samurai residences stood on a river, as on Hiroshima's, they were built back from the
     revetment and walled, which is why the compound's wall stands back behind the bank street.
 
-    Note: A faced bank at a river landing, and a residence's wall standing back from it, follow the record.
+    Note: A faced bank at a river landing, and a residence's wall standing back from it, follow the record. No
+    page read describes an official's compound with a landing of its own, so that these steps are the compound's
+    own rather than a public landing is a guess.
 
     Name: revetment
     Covers: the stone facing along the landing's bank
     Label: accurate
     Sources: gangi-hiroshima-jawiki, kashi-jawiki, gangi-kowan-jawiki, kuramae-jawiki
-    Entry: research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/rendering/cities/river-cities.html - 'How our maps draw a city's wharf and landings'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'
+    Entry: research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/rendering/cities/river-cities.html - 'How our maps draw wharves and landings (kashi, gangi)'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'
     """
 
     key = "revetment"
@@ -283,8 +286,8 @@ class Dock(Kind):
     the compound's wall, reached from a gate in that wall, where barges come alongside to load.
 
     Why: A river's level rises and falls through the year, so the usual landing is steps cut into a faced bank,
-    which meet a moored hull at whatever height the water stands; a pier is the exception, for a bank that
-    shelves too gently. Where samurai residences stood on a river, as on Hiroshima's, they were built back from
+    which meet a moored hull at whatever height the water stands; a pier is the exception, by this project's guess,
+    for a bank that shelves too gently. Where samurai residences stood on a river, as on Hiroshima's, they were built back from
     the revetment and walled, and it is thought no gated landing opened from them onto the steps, so the compound reaches
     its steps from a gate in its wall, across the street. The early-modern stepped landings were built where boats
     berthed and goods came ashore, above all in the townsmen's quarters; a private landing, a merchant's back gate onto
@@ -302,7 +305,7 @@ class Dock(Kind):
     Covers: the landing steps in the faced bank
     Label: accurate
     Sources: gangi-hiroshima-jawiki, gangi-kowan-jawiki, pier-enwiki, matou-zhwiki
-    Entry: research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/rendering/cities/river-cities.html - 'How our maps draw a city's wharf and landings'
+    Entry: research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/rendering/cities/river-cities.html - 'How our maps draw wharves and landings (kashi, gangi)'
     """
 
     key = "dock"
@@ -326,7 +329,7 @@ class TaxBarge(Kind):
     Covers: the moored barge, its lines, its bales and its label
     Label: accurate
     Sources: takasebune-jawiki, kotobank-takasebune, gokura-jawiki, takayama-jinya-city, tawara-unit-jawiki, nisira-komedawara
-    Entry: research/urban-features.html - 'How big is a bale of rice or charcoal?'; research/buildings.html - 'The granary is a staging node, not the terminal store'; research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/rendering/cities/river-cities.html - 'How our maps draw a city's wharf and landings'
+    Entry: research/urban-features.html - 'How big is a bale of rice or charcoal?'; research/buildings.html - 'The granary is a staging node, not the terminal store'; research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/rendering/cities/river-cities.html - 'How our maps draw wharves and landings (kashi, gangi)'
     """
 
     key = "tax barge"
