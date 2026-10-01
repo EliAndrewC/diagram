@@ -252,4 +252,4 @@ round 4; method: `stagemin.sh` best of three on Inashiro, the prefilter worktree
 gate's two W25 failures were both reserved seats, so the reserved seat and its re-seat are asked of the exact families
 (`GroveBlocks.exact_taken_by`) and every other clump reads the regions alone (`taken_by`). Inashiro's hinterland 0.84 s and
 windbreak 0.16 s in both forms - no faster, and no slower; the pool's crowns 624, 586 and 659 on Inashiro, Kuwabata and Sawada
-(661, 632, 693 in the prefilter form). Kept as the plan states B3, provided the gate holds every grove rule on the moved pool.
+(661, 632, 693 in the prefilter form). Kept as the plan states B3: the gate held every grove rule on the moved pool (green, 2026-10-01).

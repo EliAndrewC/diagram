@@ -32,7 +32,7 @@
     "quantity": "calls to TOTAL made beneath the commons entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 972835
+    "value": 971982
   },
   "after-inashiro-b-corridor-house-candidates": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
@@ -81,42 +81,42 @@
     "quantity": "calls to GroveBlocks.static_clear made beneath the grove entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 17047
+    "value": 15983
   },
   "after-inashiro-b-grove-pointgrid-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "calls to PointGrid.near made beneath the grove entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 34153
+    "value": 29439
   },
   "after-inashiro-b-grove-seats-too-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "calls to Seats.too_near made beneath the grove entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 28652
+    "value": 26460
   },
   "after-inashiro-b-grove-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "calls to TOTAL made beneath the grove entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 1950264
+    "value": 2067948
   },
   "after-inashiro-b-hinterland-stage-pointgrid-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "calls to PointGrid.near made beneath the hinterland_stage entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 48830
+    "value": 43856
   },
   "after-inashiro-b-hinterland-stage-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "calls to TOTAL made beneath the hinterland_stage entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 4042384
+    "value": 4167191
   },
   "after-inashiro-b-law-lanes-breaking": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
@@ -207,14 +207,14 @@
     "quantity": "calls to drop_offmap made beneath the page entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 1834
+    "value": 1822
   },
   "after-inashiro-b-page-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "calls to TOTAL made beneath the page entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 2439558
+    "value": 2414068
   },
   "after-inashiro-b-seams-absorb": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
@@ -295,11 +295,11 @@
   },
   "after-inashiro-full-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of inashiro writing its svg and page, unprofiled",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 4.565,
+    "value": 4.488,
     "varies": true
   },
   "after-inashiro-grove-static-clear": {
@@ -307,21 +307,21 @@
     "quantity": "grove_static_clear over one full generate() of inashiro, counted by cProfile (counts.py)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 17047
+    "value": 15983
   },
   "after-inashiro-grove-too-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "grove_too_near over one full generate() of inashiro, counted by cProfile (counts.py)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 28980
+    "value": 26788
   },
   "after-inashiro-index-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "index_near over one full generate() of inashiro, counted by cProfile (counts.py)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 107857
+    "value": 103101
   },
   "after-inashiro-lanes-breaking": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
@@ -362,11 +362,11 @@
   },
   "after-inashiro-roll-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of inashiro, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 4.358,
+    "value": 4.447,
     "varies": true
   },
   "after-inashiro-seg-dist": {
@@ -374,20 +374,20 @@
     "quantity": "seg_dist over one full generate() of inashiro, counted by cProfile (counts.py)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 657646
+    "value": 656928
   },
   "after-inashiro-stage-appurtenances-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.051,
+    "value": 0.053,
     "varies": true
   },
   "after-inashiro-stage-bamboo-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -396,7 +396,7 @@
   },
   "after-inashiro-stage-burial-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -405,25 +405,25 @@
   },
   "after-inashiro-stage-crossings-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.031,
+    "value": 0.032,
     "varies": true
   },
   "after-inashiro-stage-field-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 1.086,
+    "value": 1.082,
     "varies": true
   },
   "after-inashiro-stage-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -432,25 +432,25 @@
   },
   "after-inashiro-stage-hinterland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.798,
+    "value": 0.816,
     "varies": true
   },
   "after-inashiro-stage-homesteads-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.854,
+    "value": 0.882,
     "varies": true
   },
   "after-inashiro-stage-labels-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -459,16 +459,16 @@
   },
   "after-inashiro-stage-notice-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.116,
+    "value": 0.143,
     "varies": true
   },
   "after-inashiro-stage-pond-stock-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -477,7 +477,7 @@
   },
   "after-inashiro-stage-seat-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -486,25 +486,25 @@
   },
   "after-inashiro-stage-sink-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.012,
+    "value": 0.013,
     "varies": true
   },
   "after-inashiro-stage-track-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.102,
+    "value": 0.106,
     "varies": true
   },
   "after-inashiro-stage-water-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -513,7 +513,7 @@
   },
   "after-inashiro-stage-waterward-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -522,29 +522,29 @@
   },
   "after-inashiro-stage-web-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.387,
+    "value": 0.394,
     "varies": true
   },
   "after-inashiro-stage-windbreak-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.153,
+    "value": 0.154,
     "varies": true
   },
   "after-inashiro-stage-woodland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.09,
+    "value": 0.081,
     "varies": true
   },
   "after-inashiro-try-place": {
@@ -808,11 +808,11 @@
   },
   "after-kashikawa-full-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of kashikawa writing its svg and page, unprofiled",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 4.922,
+    "value": 8.736,
     "varies": true
   },
   "after-kashikawa-grove-static-clear": {
@@ -866,11 +866,11 @@
   },
   "after-kashikawa-roll-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of kashikawa, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 4.959,
+    "value": 5.324,
     "varies": true
   },
   "after-kashikawa-seg-dist": {
@@ -882,7 +882,7 @@
   },
   "after-kashikawa-stage-appurtenances-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -891,7 +891,7 @@
   },
   "after-kashikawa-stage-bamboo-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -900,7 +900,7 @@
   },
   "after-kashikawa-stage-burial-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -909,25 +909,25 @@
   },
   "after-kashikawa-stage-crossings-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.044,
+    "value": 0.047,
     "varies": true
   },
   "after-kashikawa-stage-field-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 1.336,
+    "value": 1.439,
     "varies": true
   },
   "after-kashikawa-stage-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -936,43 +936,43 @@
   },
   "after-kashikawa-stage-hinterland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.557,
+    "value": 0.667,
     "varies": true
   },
   "after-kashikawa-stage-homesteads-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.453,
+    "value": 0.475,
     "varies": true
   },
   "after-kashikawa-stage-labels-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.012,
+    "value": 0.016,
     "varies": true
   },
   "after-kashikawa-stage-notice-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.066,
+    "value": 0.064,
     "varies": true
   },
   "after-kashikawa-stage-pond-stock-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -981,34 +981,34 @@
   },
   "after-kashikawa-stage-seat-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.021,
+    "value": 0.022,
     "varies": true
   },
   "after-kashikawa-stage-sink-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.045,
+    "value": 0.047,
     "varies": true
   },
   "after-kashikawa-stage-track-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.133,
+    "value": 0.143,
     "varies": true
   },
   "after-kashikawa-stage-water-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1017,7 +1017,7 @@
   },
   "after-kashikawa-stage-waterward-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1026,16 +1026,16 @@
   },
   "after-kashikawa-stage-web-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 1.163,
+    "value": 1.158,
     "varies": true
   },
   "after-kashikawa-stage-windbreak-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1044,11 +1044,11 @@
   },
   "after-kashikawa-stage-woodland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.103,
+    "value": 0.12,
     "varies": true
   },
   "after-kashikawa-try-place": {
@@ -1126,28 +1126,28 @@
     "quantity": "calls to GroveBlocks.static_clear made beneath the grove entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 14358
+    "value": 11218
   },
   "after-kuwabata-b-grove-pointgrid-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "calls to PointGrid.near made beneath the grove entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 33921
+    "value": 28907
   },
   "after-kuwabata-b-grove-seats-too-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "calls to Seats.too_near made beneath the grove entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 22897
+    "value": 22289
   },
   "after-kuwabata-b-grove-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "calls to TOTAL made beneath the grove entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 2059289
+    "value": 2031238
   },
   "after-kuwabata-b-hem-drain-bank-clearance": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
@@ -1168,14 +1168,14 @@
     "quantity": "calls to PointGrid.near made beneath the hinterland_stage entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 21752
+    "value": 18817
   },
   "after-kuwabata-b-hinterland-stage-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "calls to TOTAL made beneath the hinterland_stage entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 2075738
+    "value": 2152929
   },
   "after-kuwabata-b-law-lanes-breaking": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
@@ -1252,14 +1252,14 @@
     "quantity": "calls to drop_offmap made beneath the page entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 1358
+    "value": 1313
   },
   "after-kuwabata-b-page-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "calls to TOTAL made beneath the page entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 3293487
+    "value": 3286851
   },
   "after-kuwabata-b-seats-housesmixin-try-place": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
@@ -1326,11 +1326,11 @@
   },
   "after-kuwabata-full-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of kuwabata writing its svg and page, unprofiled",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 3.538,
+    "value": 3.075,
     "varies": true
   },
   "after-kuwabata-grove-static-clear": {
@@ -1338,21 +1338,21 @@
     "quantity": "grove_static_clear over one full generate() of kuwabata, counted by cProfile (counts.py)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 14358
+    "value": 11218
   },
   "after-kuwabata-grove-too-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "grove_too_near over one full generate() of kuwabata, counted by cProfile (counts.py)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 25838
+    "value": 25313
   },
   "after-kuwabata-index-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "index_near over one full generate() of kuwabata, counted by cProfile (counts.py)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 92519
+    "value": 56742
   },
   "after-kuwabata-lanes-breaking": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
@@ -1384,11 +1384,11 @@
   },
   "after-kuwabata-roll-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of kuwabata, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 3.496,
+    "value": 2.968,
     "varies": true
   },
   "after-kuwabata-seg-dist": {
@@ -1396,11 +1396,11 @@
     "quantity": "seg_dist over one full generate() of kuwabata, counted by cProfile (counts.py)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 342063
+    "value": 318645
   },
   "after-kuwabata-stage-appurtenances-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1409,7 +1409,7 @@
   },
   "after-kuwabata-stage-bamboo-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1418,7 +1418,7 @@
   },
   "after-kuwabata-stage-burial-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1427,25 +1427,25 @@
   },
   "after-kuwabata-stage-crossings-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.006,
+    "value": 0.005,
     "varies": true
   },
   "after-kuwabata-stage-field-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.601,
+    "value": 0.617,
     "varies": true
   },
   "after-kuwabata-stage-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1454,25 +1454,25 @@
   },
   "after-kuwabata-stage-hinterland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.331,
+    "value": 0.325,
     "varies": true
   },
   "after-kuwabata-stage-homesteads-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.609,
+    "value": 0.617,
     "varies": true
   },
   "after-kuwabata-stage-labels-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1481,25 +1481,25 @@
   },
   "after-kuwabata-stage-notice-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.676,
+    "value": 0.132,
     "varies": true
   },
   "after-kuwabata-stage-pond-stock-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.015,
+    "value": 0.016,
     "varies": true
   },
   "after-kuwabata-stage-seat-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1508,7 +1508,7 @@
   },
   "after-kuwabata-stage-sink-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1517,16 +1517,16 @@
   },
   "after-kuwabata-stage-track-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.045,
+    "value": 0.046,
     "varies": true
   },
   "after-kuwabata-stage-water-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1535,34 +1535,34 @@
   },
   "after-kuwabata-stage-waterward-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.095,
+    "value": 0.097,
     "varies": true
   },
   "after-kuwabata-stage-web-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.223,
+    "value": 0.234,
     "varies": true
   },
   "after-kuwabata-stage-windbreak-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.202,
+    "value": 0.164,
     "varies": true
   },
   "after-kuwabata-stage-woodland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1830,11 +1830,11 @@
   },
   "after-mizuguchi-full-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of mizuguchi writing its svg and page, unprofiled",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 4.824,
+    "value": 4.557,
     "varies": true
   },
   "after-mizuguchi-grove-static-clear": {
@@ -1888,11 +1888,11 @@
   },
   "after-mizuguchi-roll-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of mizuguchi, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 4.213,
+    "value": 4.179,
     "varies": true
   },
   "after-mizuguchi-seg-dist": {
@@ -1904,7 +1904,7 @@
   },
   "after-mizuguchi-stage-appurtenances-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1913,7 +1913,7 @@
   },
   "after-mizuguchi-stage-bamboo-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1922,7 +1922,7 @@
   },
   "after-mizuguchi-stage-burial-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1931,25 +1931,25 @@
   },
   "after-mizuguchi-stage-crossings-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.037,
+    "value": 0.036,
     "varies": true
   },
   "after-mizuguchi-stage-field-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.7,
+    "value": 0.705,
     "varies": true
   },
   "after-mizuguchi-stage-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -1958,43 +1958,43 @@
   },
   "after-mizuguchi-stage-hinterland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.406,
+    "value": 0.374,
     "varies": true
   },
   "after-mizuguchi-stage-homesteads-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.709,
+    "value": 0.708,
     "varies": true
   },
   "after-mizuguchi-stage-labels-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.007,
+    "value": 0.018,
     "varies": true
   },
   "after-mizuguchi-stage-notice-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.074,
+    "value": 0.072,
     "varies": true
   },
   "after-mizuguchi-stage-pond-stock-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2003,7 +2003,7 @@
   },
   "after-mizuguchi-stage-seat-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2012,7 +2012,7 @@
   },
   "after-mizuguchi-stage-sink-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2021,16 +2021,16 @@
   },
   "after-mizuguchi-stage-track-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.148,
+    "value": 0.158,
     "varies": true
   },
   "after-mizuguchi-stage-water-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2039,7 +2039,7 @@
   },
   "after-mizuguchi-stage-waterward-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2048,16 +2048,16 @@
   },
   "after-mizuguchi-stage-web-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 1.45,
+    "value": 1.456,
     "varies": true
   },
   "after-mizuguchi-stage-windbreak-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2066,11 +2066,11 @@
   },
   "after-mizuguchi-stage-woodland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.049,
+    "value": 0.057,
     "varies": true
   },
   "after-mizuguchi-try-place": {
@@ -2089,11 +2089,11 @@
   },
   "after-pool-roll-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "the five pool hamlets' roll times summed",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 22.473,
+    "value": 22.288,
     "varies": true
   },
   "after-sawada-access-corridor": {
@@ -2129,7 +2129,7 @@
     "quantity": "calls to TOTAL made beneath the commons entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 504999
+    "value": 505230
   },
   "after-sawada-b-corridor-house-candidates": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
@@ -2178,42 +2178,42 @@
     "quantity": "calls to GroveBlocks.static_clear made beneath the grove entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 12329
+    "value": 7920
   },
   "after-sawada-b-grove-pointgrid-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "calls to PointGrid.near made beneath the grove entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 32108
+    "value": 26573
   },
   "after-sawada-b-grove-seats-too-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "calls to Seats.too_near made beneath the grove entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 18842
+    "value": 18551
   },
   "after-sawada-b-grove-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "calls to TOTAL made beneath the grove entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 1933264
+    "value": 1845573
   },
   "after-sawada-b-hinterland-stage-pointgrid-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "calls to PointGrid.near made beneath the hinterland_stage entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 25896
+    "value": 23707
   },
   "after-sawada-b-hinterland-stage-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "calls to TOTAL made beneath the hinterland_stage entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 2621429
+    "value": 2671598
   },
   "after-sawada-b-law-lanes-breaking": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
@@ -2304,14 +2304,14 @@
     "quantity": "calls to drop_offmap made beneath the page entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 2233
+    "value": 2190
   },
   "after-sawada-b-page-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "calls to TOTAL made beneath the page entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 1709537
+    "value": 1708486
   },
   "after-sawada-b-seams-absorb": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
@@ -2392,11 +2392,11 @@
   },
   "after-sawada-full-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of sawada writing its svg and page, unprofiled",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 5.565,
+    "value": 5.475,
     "varies": true
   },
   "after-sawada-grove-static-clear": {
@@ -2404,21 +2404,21 @@
     "quantity": "grove_static_clear over one full generate() of sawada, counted by cProfile (counts.py)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 12329
+    "value": 7920
   },
   "after-sawada-grove-too-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "grove_too_near over one full generate() of sawada, counted by cProfile (counts.py)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 22491
+    "value": 22285
   },
   "after-sawada-index-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
     "quantity": "index_near over one full generate() of sawada, counted by cProfile (counts.py)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 118985
+    "value": 113472
   },
   "after-sawada-lanes-breaking": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
@@ -2450,11 +2450,11 @@
   },
   "after-sawada-roll-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of sawada, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 5.447,
+    "value": 5.37,
     "varies": true
   },
   "after-sawada-seg-dist": {
@@ -2462,20 +2462,20 @@
     "quantity": "seg_dist over one full generate() of sawada, counted by cProfile (counts.py)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "calls",
-    "value": 511777
+    "value": 509624
   },
   "after-sawada-stage-appurtenances-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.084,
+    "value": 0.085,
     "varies": true
   },
   "after-sawada-stage-bamboo-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2484,7 +2484,7 @@
   },
   "after-sawada-stage-burial-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2493,7 +2493,7 @@
   },
   "after-sawada-stage-crossings-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2502,61 +2502,61 @@
   },
   "after-sawada-stage-field-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 1.864,
+    "value": 1.857,
     "varies": true
   },
   "after-sawada-stage-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.004,
+    "value": 0.005,
     "varies": true
   },
   "after-sawada-stage-hinterland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.621,
+    "value": 0.63,
     "varies": true
   },
   "after-sawada-stage-homesteads-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 1.096,
+    "value": 1.116,
     "varies": true
   },
   "after-sawada-stage-labels-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.01,
+    "value": 0.008,
     "varies": true
   },
   "after-sawada-stage-notice-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.14,
+    "value": 0.135,
     "varies": true
   },
   "after-sawada-stage-pond-stock-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2565,7 +2565,7 @@
   },
   "after-sawada-stage-seat-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2574,7 +2574,7 @@
   },
   "after-sawada-stage-sink-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2583,16 +2583,16 @@
   },
   "after-sawada-stage-track-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.062,
+    "value": 0.054,
     "varies": true
   },
   "after-sawada-stage-water-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2601,7 +2601,7 @@
   },
   "after-sawada-stage-waterward-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
@@ -2610,29 +2610,29 @@
   },
   "after-sawada-stage-web-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.71,
+    "value": 0.682,
     "varies": true
   },
   "after-sawada-stage-windbreak-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.239,
+    "value": 0.206,
     "varies": true
   },
   "after-sawada-stage-woodland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "1.8 -> 2.6 (1-minute load average at the run's start and end)",
+    "load": "2.7 -> 3.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the clone, run just after the base's",
     "unit": "s",
-    "value": 0.012,
+    "value": 0.013,
     "varies": true
   },
   "after-sawada-try-place": {
@@ -2959,11 +2959,11 @@
   },
   "base-rerun-inashiro-full-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of inashiro writing its svg and page, unprofiled",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 7.908,
+    "value": 5.016,
     "varies": true
   },
   "base-rerun-inashiro-grove-static-clear": {
@@ -3017,11 +3017,11 @@
   },
   "base-rerun-inashiro-roll-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of inashiro, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 5.125,
+    "value": 4.966,
     "varies": true
   },
   "base-rerun-inashiro-seg-dist": {
@@ -3033,16 +3033,16 @@
   },
   "base-rerun-inashiro-stage-appurtenances-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.053,
+    "value": 0.052,
     "varies": true
   },
   "base-rerun-inashiro-stage-bamboo-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -3051,7 +3051,7 @@
   },
   "base-rerun-inashiro-stage-burial-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -3060,7 +3060,7 @@
   },
   "base-rerun-inashiro-stage-crossings-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -3069,16 +3069,16 @@
   },
   "base-rerun-inashiro-stage-field-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 1.146,
+    "value": 1.1,
     "varies": true
   },
   "base-rerun-inashiro-stage-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -3087,25 +3087,25 @@
   },
   "base-rerun-inashiro-stage-hinterland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.944,
+    "value": 0.909,
     "varies": true
   },
   "base-rerun-inashiro-stage-homesteads-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.999,
+    "value": 0.946,
     "varies": true
   },
   "base-rerun-inashiro-stage-labels-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -3114,16 +3114,16 @@
   },
   "base-rerun-inashiro-stage-notice-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.131,
+    "value": 0.128,
     "varies": true
   },
   "base-rerun-inashiro-stage-pond-stock-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -3132,34 +3132,34 @@
   },
   "base-rerun-inashiro-stage-seat-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.038,
+    "value": 0.032,
     "varies": true
   },
   "base-rerun-inashiro-stage-sink-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.013,
+    "value": 0.019,
     "varies": true
   },
   "base-rerun-inashiro-stage-track-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.101,
+    "value": 0.097,
     "varies": true
   },
   "base-rerun-inashiro-stage-water-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -3168,7 +3168,7 @@
   },
   "base-rerun-inashiro-stage-waterward-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -3177,29 +3177,29 @@
   },
   "base-rerun-inashiro-stage-web-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.761,
+    "value": 0.773,
     "varies": true
   },
   "base-rerun-inashiro-stage-windbreak-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.158,
+    "value": 0.153,
     "varies": true
   },
   "base-rerun-inashiro-stage-woodland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.071,
+    "value": 0.069,
     "varies": true
   },
   "base-rerun-inashiro-try-place": {
@@ -3477,11 +3477,11 @@
   },
   "base-rerun-kashikawa-full-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of kashikawa writing its svg and page, unprofiled",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 5.844,
+    "value": 5.441,
     "varies": true
   },
   "base-rerun-kashikawa-grove-static-clear": {
@@ -3535,11 +3535,11 @@
   },
   "base-rerun-kashikawa-roll-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of kashikawa, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 5.762,
+    "value": 5.456,
     "varies": true
   },
   "base-rerun-kashikawa-seg-dist": {
@@ -3551,7 +3551,7 @@
   },
   "base-rerun-kashikawa-stage-appurtenances-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -3560,7 +3560,7 @@
   },
   "base-rerun-kashikawa-stage-bamboo-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -3569,7 +3569,7 @@
   },
   "base-rerun-kashikawa-stage-burial-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -3578,25 +3578,25 @@
   },
   "base-rerun-kashikawa-stage-crossings-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.041,
+    "value": 0.039,
     "varies": true
   },
   "base-rerun-kashikawa-stage-field-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 1.455,
+    "value": 1.339,
     "varies": true
   },
   "base-rerun-kashikawa-stage-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -3605,25 +3605,25 @@
   },
   "base-rerun-kashikawa-stage-hinterland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.765,
+    "value": 0.715,
     "varies": true
   },
   "base-rerun-kashikawa-stage-homesteads-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.598,
+    "value": 0.583,
     "varies": true
   },
   "base-rerun-kashikawa-stage-labels-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -3632,16 +3632,16 @@
   },
   "base-rerun-kashikawa-stage-notice-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.053,
+    "value": 0.055,
     "varies": true
   },
   "base-rerun-kashikawa-stage-pond-stock-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -3650,7 +3650,7 @@
   },
   "base-rerun-kashikawa-stage-seat-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -3659,25 +3659,25 @@
   },
   "base-rerun-kashikawa-stage-sink-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.047,
+    "value": 0.046,
     "varies": true
   },
   "base-rerun-kashikawa-stage-track-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.136,
+    "value": 0.133,
     "varies": true
   },
   "base-rerun-kashikawa-stage-water-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -3686,7 +3686,7 @@
   },
   "base-rerun-kashikawa-stage-waterward-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -3695,16 +3695,16 @@
   },
   "base-rerun-kashikawa-stage-web-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 1.45,
+    "value": 1.396,
     "varies": true
   },
   "base-rerun-kashikawa-stage-windbreak-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -3713,11 +3713,11 @@
   },
   "base-rerun-kashikawa-stage-woodland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.104,
+    "value": 0.089,
     "varies": true
   },
   "base-rerun-kashikawa-try-place": {
@@ -3995,11 +3995,11 @@
   },
   "base-rerun-kuwabata-full-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of kuwabata writing its svg and page, unprofiled",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 3.764,
+    "value": 3.889,
     "varies": true
   },
   "base-rerun-kuwabata-grove-static-clear": {
@@ -4053,11 +4053,11 @@
   },
   "base-rerun-kuwabata-roll-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of kuwabata, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 3.853,
+    "value": 3.787,
     "varies": true
   },
   "base-rerun-kuwabata-seg-dist": {
@@ -4069,7 +4069,7 @@
   },
   "base-rerun-kuwabata-stage-appurtenances-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4078,7 +4078,7 @@
   },
   "base-rerun-kuwabata-stage-bamboo-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4087,7 +4087,7 @@
   },
   "base-rerun-kuwabata-stage-burial-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4096,7 +4096,7 @@
   },
   "base-rerun-kuwabata-stage-crossings-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4105,16 +4105,16 @@
   },
   "base-rerun-kuwabata-stage-field-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.631,
+    "value": 0.61,
     "varies": true
   },
   "base-rerun-kuwabata-stage-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4123,25 +4123,25 @@
   },
   "base-rerun-kuwabata-stage-hinterland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.46,
+    "value": 0.481,
     "varies": true
   },
   "base-rerun-kuwabata-stage-homesteads-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.696,
+    "value": 0.675,
     "varies": true
   },
   "base-rerun-kuwabata-stage-labels-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4150,16 +4150,16 @@
   },
   "base-rerun-kuwabata-stage-notice-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.684,
+    "value": 0.68,
     "varies": true
   },
   "base-rerun-kuwabata-stage-pond-stock-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4168,7 +4168,7 @@
   },
   "base-rerun-kuwabata-stage-seat-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4177,7 +4177,7 @@
   },
   "base-rerun-kuwabata-stage-sink-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4186,16 +4186,16 @@
   },
   "base-rerun-kuwabata-stage-track-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.048,
+    "value": 0.045,
     "varies": true
   },
   "base-rerun-kuwabata-stage-water-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4204,34 +4204,34 @@
   },
   "base-rerun-kuwabata-stage-waterward-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.106,
+    "value": 0.107,
     "varies": true
   },
   "base-rerun-kuwabata-stage-web-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.278,
+    "value": 0.251,
     "varies": true
   },
   "base-rerun-kuwabata-stage-windbreak-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.188,
+    "value": 0.187,
     "varies": true
   },
   "base-rerun-kuwabata-stage-woodland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4513,11 +4513,11 @@
   },
   "base-rerun-mizuguchi-full-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of mizuguchi writing its svg and page, unprofiled",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 4.472,
+    "value": 4.517,
     "varies": true
   },
   "base-rerun-mizuguchi-grove-static-clear": {
@@ -4571,11 +4571,11 @@
   },
   "base-rerun-mizuguchi-roll-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of mizuguchi, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 4.475,
+    "value": 4.49,
     "varies": true
   },
   "base-rerun-mizuguchi-seg-dist": {
@@ -4587,7 +4587,7 @@
   },
   "base-rerun-mizuguchi-stage-appurtenances-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4596,7 +4596,7 @@
   },
   "base-rerun-mizuguchi-stage-bamboo-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4605,7 +4605,7 @@
   },
   "base-rerun-mizuguchi-stage-burial-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4614,7 +4614,7 @@
   },
   "base-rerun-mizuguchi-stage-crossings-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4623,16 +4623,16 @@
   },
   "base-rerun-mizuguchi-stage-field-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.697,
+    "value": 0.701,
     "varies": true
   },
   "base-rerun-mizuguchi-stage-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4641,25 +4641,25 @@
   },
   "base-rerun-mizuguchi-stage-hinterland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.482,
+    "value": 0.486,
     "varies": true
   },
   "base-rerun-mizuguchi-stage-homesteads-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.79,
+    "value": 0.789,
     "varies": true
   },
   "base-rerun-mizuguchi-stage-labels-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4668,7 +4668,7 @@
   },
   "base-rerun-mizuguchi-stage-notice-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4677,7 +4677,7 @@
   },
   "base-rerun-mizuguchi-stage-pond-stock-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4686,7 +4686,7 @@
   },
   "base-rerun-mizuguchi-stage-seat-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4695,25 +4695,25 @@
   },
   "base-rerun-mizuguchi-stage-sink-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.018,
+    "value": 0.017,
     "varies": true
   },
   "base-rerun-mizuguchi-stage-track-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.147,
+    "value": 0.151,
     "varies": true
   },
   "base-rerun-mizuguchi-stage-water-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4722,7 +4722,7 @@
   },
   "base-rerun-mizuguchi-stage-waterward-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4731,16 +4731,16 @@
   },
   "base-rerun-mizuguchi-stage-web-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 1.58,
+    "value": 1.585,
     "varies": true
   },
   "base-rerun-mizuguchi-stage-windbreak-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -4749,11 +4749,11 @@
   },
   "base-rerun-mizuguchi-stage-woodland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.048,
+    "value": 0.049,
     "varies": true
   },
   "base-rerun-mizuguchi-try-place": {
@@ -4772,11 +4772,11 @@
   },
   "base-rerun-pool-roll-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "the five pool hamlets' roll times summed",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 25.112,
+    "value": 24.522,
     "varies": true
   },
   "base-rerun-sawada-access-corridor": {
@@ -5089,11 +5089,11 @@
   },
   "base-rerun-sawada-full-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of sawada writing its svg and page, unprofiled",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 5.998,
+    "value": 5.917,
     "varies": true
   },
   "base-rerun-sawada-grove-static-clear": {
@@ -5147,11 +5147,11 @@
   },
   "base-rerun-sawada-roll-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of sawada, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 5.897,
+    "value": 5.823,
     "varies": true
   },
   "base-rerun-sawada-seg-dist": {
@@ -5163,7 +5163,7 @@
   },
   "base-rerun-sawada-stage-appurtenances-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -5172,7 +5172,7 @@
   },
   "base-rerun-sawada-stage-bamboo-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -5181,7 +5181,7 @@
   },
   "base-rerun-sawada-stage-burial-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -5190,7 +5190,7 @@
   },
   "base-rerun-sawada-stage-crossings-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -5199,16 +5199,16 @@
   },
   "base-rerun-sawada-stage-field-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 2.04,
+    "value": 1.891,
     "varies": true
   },
   "base-rerun-sawada-stage-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -5217,25 +5217,25 @@
   },
   "base-rerun-sawada-stage-hinterland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.745,
+    "value": 0.759,
     "varies": true
   },
   "base-rerun-sawada-stage-homesteads-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 1.254,
+    "value": 1.235,
     "varies": true
   },
   "base-rerun-sawada-stage-labels-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -5244,16 +5244,16 @@
   },
   "base-rerun-sawada-stage-notice-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.141,
+    "value": 0.146,
     "varies": true
   },
   "base-rerun-sawada-stage-pond-stock-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -5262,7 +5262,7 @@
   },
   "base-rerun-sawada-stage-seat-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -5271,25 +5271,25 @@
   },
   "base-rerun-sawada-stage-sink-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.013,
+    "value": 0.014,
     "varies": true
   },
   "base-rerun-sawada-stage-track-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.057,
+    "value": 0.053,
     "varies": true
   },
   "base-rerun-sawada-stage-water-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -5298,7 +5298,7 @@
   },
   "base-rerun-sawada-stage-waterward-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
@@ -5307,25 +5307,25 @@
   },
   "base-rerun-sawada-stage-web-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.753,
+    "value": 0.768,
     "varies": true
   },
   "base-rerun-sawada-stage-windbreak-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
-    "value": 0.221,
+    "value": 0.254,
     "varies": true
   },
   "base-rerun-sawada-stage-woodland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py after",
-    "load": "5.9 -> 1.8 (1-minute load average at the run's start and end)",
+    "load": "2.1 -> 2.7 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b, run just before the clone's",
     "unit": "s",
