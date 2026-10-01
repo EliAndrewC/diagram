@@ -2087,6 +2087,7 @@ mitsumata field	mitsumata
 mitsumata fields	mitsumata
 miyaza	miyaza
 mizu-oobako	Ottelia
+mizubune	mizubune
 mizugaki	mizugaki
 mizugashira	mizugashira
 mizuguchi	mizuguchi
@@ -2791,6 +2792,7 @@ seed drill	seed drill
 seed drills	seed drill
 seed's	seed
 seeds	seed
+segi-ita	segi-ita
 seigaiha	seigaiha
 seijoue	seijoue
 seisatsu	kosatsuba

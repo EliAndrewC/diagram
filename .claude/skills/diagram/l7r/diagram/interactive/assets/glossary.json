@@ -13760,5 +13760,17 @@
   "variants": [
    "suisha"
   ]
+ },
+ "mizubune": {
+  "def": "A spring-fed washing tank at Gujo Hachiman: water from a spring or a valley is piped into a tank of two or three tiers, the top for drinking, the middle for rinsing food, and the bottom for dirty things and the mud off vegetables.",
+  "variants": [
+   "mizubune"
+  ]
+ },
+ "segi-ita": {
+  "def": "A board slotted into a groove in a channel or small stream to hold the water back for a while: used most for daily washing, and also for sprinkling in summer, melting snow in winter, and splitting the flow.",
+  "variants": [
+   "segi-ita"
+  ]
  }
 }
