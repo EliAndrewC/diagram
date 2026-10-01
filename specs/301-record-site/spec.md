@@ -271,7 +271,7 @@ rendering decision is made.
   self-test feeds both payloads. (2) FR-022 and US6 AS1's "the package that likely provides the program" is unrequested -
   drop it. (3) FR-023's "at most once per session" and the matching edge case narrow the GM's "every time" - not
   legitimate; remove. (4) The edge case's "about 11 MB" measures the research pages only; the single page also carries the
-  citations (17.0 MB) and the registry (3.0 MB) - observed 2026-10-01 by `du -cb` on `research/`; restate. (5) SC-005's
+  citations (17.0 MB) and the registry (3.0 MB) - observed 2026-10-01; method: `du -cb` on `research/`; restate. (5) SC-005's
   "skips after an engine-only change" contradicts FR-010 when the change is to the record's own build code
   (`l7r/diagram/interactive/record/`) - the skip test uses a change to nothing the record is built from, and a builder
   change must rebuild. (6) FR-024's "which every container mounts" is an unmeasured premise deciding whether the hook
