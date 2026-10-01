@@ -313,7 +313,7 @@ WEST_SUN_FT = 50.0
 # `mulberry_dike_fishpond` IS declared as a third archetype (feature 150, Kuwabata) because a pool
 # entry names it and the gate reads it (`dikepond_is_ponds_in_a_block` keys off
 # `meta.field_archetype`) - but it is BUILT as the polder carried to the wholesale-conversion
-# overlay, which is what it is historically too (research/archetypes.html "The three overlays a village may carry":
+# overlay, which is what it is historically too (research/archetypes.html "Cash crops on rice land: dike-ponds, lotus fields and tea rows":
 # the wall-to-wall dike-pond landscape is the rare END STATE of the scattered overlay, ~300 years
 # of 挖塘培基 plot by plot). So `POLDER_ARCHETYPES` is the set the polder stage serves, and the
 # dike-pond differs from the rice polder only in its PARCEL FABRIC (`POLDER_FABRIC`), the overlay
