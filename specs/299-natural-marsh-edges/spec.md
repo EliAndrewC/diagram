@@ -72,9 +72,11 @@ pines and the ground cut out of it.
 - **FR-002**: The shaped outline MUST lie within the laid outline (shaping removes ground, never adds it).
 - **FR-003**: Where scrub meets marsh, a band straddling the boundary, half its width into each, MUST be drawn with a fringe tile
   of sparse reeds and grass, in each side's class, in place of the scrub and marsh tiles there; nowhere else.
-- **FR-004**: The marsh MUST carry a second tile over its reed tile - a larger, different repeat than the base's (its target and as-built figure in research
-  R1) with denser reed clumps and small open-water patches - and the scrub a second tile over its grass tile with denser
-  grass clumps; a departure from the target is recorded as FR-001's are.
+- **FR-004**: The marsh MUST carry a second tile over its reed tile - a larger, different repeat than the base's with denser reed
+  clumps and small open-water patches - and the scrub a second tile over its grass tile with denser grass clumps. The reed base
+  tile itself grows from feature 298's repeat to a larger one with an even wet haze, a recorded departure (research R1:
+  at feature 298's repeat its tint patches read as a lattice); the reed overlay's repeat is larger than that new base's. Targets, as-built
+  figures and departures are in research R1.
 - **FR-005**: The record (`M["marshes"][].poly`, the no-build ground, `marsh_ground`) MUST be the shaped outline, so every reader
   of the marsh reads what is drawn.
 - **FR-006**: The pool MUST regenerate and pass the gate; maps may move within the rules (the GM 2026-09-30).
@@ -110,11 +112,14 @@ pines and the ground cut out of it.
 
 ## Assumptions
 
-- The figures (the rounding, the wave's depth and length, the fringe's width, the overlay's repeat) are calibrated by eye on
-  Inashiro and recorded in the plan; they are drawing choices, not findings.
+- The figures' targets are the approved proposal's (`request.md`); they are calibrated by eye on Inashiro, and the as-built figures
+  and every material departure, with its reason, are in research R1. They are drawing choices, not findings.
 
 ## Review history
 
 - Round 1 (spec-fidelity, 2026-10-01): CHANGES REQUIRED - the wave must not leave straight runs and the GM's line must be
   measured; the approved figures stated as targets; (advised) the pond fringe's reason. Addressed: FR-001, FR-004, SC-001,
   User Story 1 scenario 3.
+- Round 2 (spec-fidelity-verify): CHANGES REQUIRED - the reed base tile grew past the overlay's repeat and no FR stated it; the
+  Assumptions still said "recorded in the plan". Addressed: FR-004 states the base change as a departure, the reed overlay is
+  larger than the new base (research R1), the Assumptions point at R1.
