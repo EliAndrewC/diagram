@@ -1265,6 +1265,7 @@ hip-roofed	hip roof
 hipped roof	hip roof
 hipposandal	hipposandal
 hipposandals	hipposandal
+hirairi	hirairi
 hirakata	hirakata
 hirayamajiro	hill-and-plain castle
 hirazamurai	heishi
