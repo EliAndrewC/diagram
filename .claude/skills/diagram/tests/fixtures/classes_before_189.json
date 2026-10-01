@@ -219,7 +219,7 @@
   "farmhouse": {
     "caveat": "the setback from the paddy is DERIVED - no source states it in feet - so it is set at the near end of what the read bounds allow, close enough that the household works its own ground.",
     "covers": "`houses` - the dwelling of each household",
-    "entry": "research/homesteads.html - 'What stood on a farmstead - the inventory', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane', 'Why do a village's farmhouses face different ways'",
+    "entry": "research/homesteads.html - 'What stood on a farmstead - the inventory', 'How close does a farmhouse stand to the paddy', 'Why do a village's farmhouses face different ways'; research/ways.html - 'Village lanes'",
     "key": "farmhouse",
     "label": "accurate",
     "label_note": "Placement and form follow the read record; the setback from the paddy is DERIVED - no source states it in feet - so it is set at the near end of what the read bounds allow, close enough that the household works its own ground.",
@@ -956,7 +956,7 @@
   "village lane": {
     "caveat": "the drawn WIDTHS (3, 5 and 6 ft) are a GUESS - no source gives a figure for an ordinary hamlet lane - laddered from a footpath to a wheelbarrow's width, with the connector kept under the 9 ft of the one cart road the record does measure.",
     "covers": "`lanes` - every lane on the map: the web, the internal skeleton, a row village's streets, the connector to the off-map road and the field spur",
-    "entry": "research/homesteads.html - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?', 'How far does a village lane run past its last farmhouse?', 'How was a row village laid out?'; research/fields.html - 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; research/SOURCES.html re-sourcing queue (lane width)",
+    "entry": "research/homesteads.html - 'How was a row village laid out?'; research/ways.html - 'Village lanes'; research/rendering/ways.html - 'How our maps draw village lanes'; research/fields.html - 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; research/SOURCES.html re-sourcing queue (lane width)",
     "key": "village lane",
     "label": "accurate",
     "label_note": "Access and form are read; the drawn WIDTHS (3, 5 and 6 ft) are a GUESS - no source gives a figure for an ordinary hamlet lane - laddered from a footpath to a wheelbarrow's width, with the connector kept under the 9 ft of the one cart road the record does measure.",

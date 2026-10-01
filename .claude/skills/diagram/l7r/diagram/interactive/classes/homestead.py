@@ -46,7 +46,7 @@ class Farmhouse(Kind):
     Covers: `houses` - the dwelling of each household
     Label: accurate
     Sources: sakamoto-tsubaki-1985-omoya-muki, yamamoto-2014-koshijo-shuraku, oamishirasato-choshi-kaoku
-    Entry: research/homesteads.html - 'What stood on a farmstead - the inventory', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane', 'Why do a village's farmhouses face different ways'
+    Entry: research/homesteads.html - 'What stood on a farmstead - the inventory', 'How close does a farmhouse stand to the paddy', 'Why do a village's farmhouses face different ways'; research/ways.html - 'Village lanes'
     """
 
     key = 'farmhouse'

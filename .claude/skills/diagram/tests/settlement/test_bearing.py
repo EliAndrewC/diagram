@@ -156,7 +156,7 @@ def _lanes_past_a_house(end_x: float) -> Settlement:
 
 
 def test_trim_lane_stubs_pulls_an_arm_back_to_the_last_house_it_serves() -> None:
-    """269 B17 (research/homesteads/310: "a lane end that reaches nothing is pulled back to the last house it serves"). The
+    """269 B17 (research/rendering/ways/020: "a lane end that reaches nothing is pulled back to the last house it serves"). The
     arm ran 90 ft past the house's center - inside the old 90 ft reach, so it stayed; now it walks back to the house."""
     s = _lanes_past_a_house(590.0)
     s.trim_lane_stubs()

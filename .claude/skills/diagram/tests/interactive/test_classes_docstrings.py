@@ -135,7 +135,7 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     crossings over small water (a single log or board, logs under trodden earth, a planked deck), which the engine now
     rolls per settlement; the evenness of the roll, the 2 ft line and the spacing stay disclosed guesses and rulings.
     Its entry gained ways/030 and its sources the keys 290 and 030 rest on. The same pass gave `village lane`
-    homesteads/310 (the run-out rule, its distances a guess) and fields/290 (the field path ends on the bund) with the
+    rendering/ways/020 (the run-out rule, its distances a guess) and fields/290 (the field path ends on the bund) with the
     keys 290 cites; re-pointed the irrigation ditch (water/310, the bare intake mouth), the drainage ditch (water/090 and
     fields/090 - where the drain lets its water go and why it runs across the fall; the retired 'Water-first v2'
     heading dropped) and the weir (300's four forms and 310's choice); and corrected two sibling texts the engine had

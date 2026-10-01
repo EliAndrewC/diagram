@@ -3,7 +3,7 @@
 research/rendering/fields.html ("How our maps draw bunds between the paddies (aze)"): the field path runs from the
 hamlet to the paddy's outer bund and joins it, however short that leaves the path; it never ends in open ground short of
 the bund and never passes through a gap in it; where no path is left to draw, the hamlet's nearest lane runs on to the bund.
-research/homesteads/310 ("How far does a village lane run past its last farmhouse?"): a lane ends at a dooryard, or runs on
+research/rendering/ways.html ("How our maps draw village lanes"): a lane ends at a dooryard, or runs on
 to something a reader can see - a field path, a bund, another way. That the path joins the bund at the point nearest the
 hamlet is the record's GUESS.
 
@@ -334,7 +334,7 @@ def cut_past_the_junction(s: Settlement, touch: float = 4.0) -> int:
     FOUND AT THE 269 LANDING (settlement-review of Mizuguchi, rounds 1 and 2): the field spur began on the brook bank and
     ran 28 ft to the junction where another lane met it, then turned over the bridge - a stub reaching nothing, which the
     end rule counted as served because it stood within reach of the very lane it had just met, and which
-    `trim_free_stub` misses because its corner is a single turn, not a kink (research/homesteads 310: a lane ends at the
+    `trim_free_stub` misses because its corner is a single turn, not a kink (research/rendering/ways/020: a lane ends at the
     last house it serves)."""
     lanes = s.M.get("lanes") or []
     houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]

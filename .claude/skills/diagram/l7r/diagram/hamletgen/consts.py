@@ -199,7 +199,7 @@ MIN_WEB_GAP = 2.0 * WEB_FABRIC_GAP + 4.0  # 18 ft: both neighbors' clearance, pl
 # space by the adjoining house". The same number sets the web's lane spacing, so the requirement and
 # the geometry that satisfies it cannot drift apart.
 #
-# Grounding: research/homesteads.html, "Is every farmhouse reached by a lane, and in what FORM?" - the
+# Grounding: research/ways.html, "Village lanes", and research/rendering/ways.html, "How our maps draw village lanes" - the
 # record is decisive that a house in a nucleated cluster IS reached by a way. The previous 90 ft in
 # `lanes_reach_something` was flagged in future-work/ as a number nobody had justified; this one is
 # derived from a researched constant instead of chosen to make today's maps pass.

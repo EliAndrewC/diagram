@@ -431,7 +431,7 @@ def end_serves(
     three (fixed earlier in feature 227 by `WAY_END_REACH_FT`), and then NEITHER of them could see a
     tread that had arrived at a garden fence - the steading clause, at `STEADING_ARRIVAL_FT`. An end served by a house
     alone is cut beside it, at its closest approach, by `_trim_to_service` (the GM's road to nowhere, 2026-09-27; 269 B17,
-    research/homesteads/310: "pulled back to the last house it serves").
+    research/rendering/ways/020: "pulled back to the last house it serves").
 
     THE FIELD IS REACHED ON ITS BUND (269 B04, research/rendering/fields/260: the path "never ends in open ground short of the
     bund"): within `BUND_REACH_FT` of the worked ground's edge, where it used to be anywhere within 60 ft of the field. An

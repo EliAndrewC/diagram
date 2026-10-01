@@ -515,7 +515,7 @@ def ends_behind(M: Mapping[str, Any], ground: WorkedGround | None = None) -> lis
     """(lane index, end, house index) for every free lane end (the connector's aside; an end within `JOIN_TOL` of another
     way is a junction) that stands within `WAY_END_REACH_FT` of a farmhouse, BEHIND the nearest such house - past its back
     wall, abreast of it (`behind_house`) - and at no house's dooryard (`reaches_dooryard`), nor on the bund (water W57; 269
-    B17, research/homesteads/310: a lane that serves a farmhouse ends at its dooryard, and a lane end behind a house's back
+    B17, research/rendering/ways/020: a lane that serves a farmhouse ends at its dooryard, and a lane end behind a house's back
     wall does not count as reaching it - Kuwabata's lane 5, 11 ft behind house 1 and 43 ft from its yard)."""
     ways = _ways(M)
     houses = M.get("houses") or []
