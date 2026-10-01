@@ -280,7 +280,7 @@ are the script's from here on.
 
 ## R5. What the feature costs a roll (the perf bookends, 2026-10-01)
 
-The first 294-end bookend ran 33% slower than 294-start (band 3): the twin-watercourse rule (B4) asked shapely for a distance, a
+The first 294-end bookend ran 33% slower than 294-start (band 3; observed 2026-10-01; method: `make perf-report AGAINST=294-start`): the twin-watercourse rule (B4) asked shapely for a distance, a
 projection and two interpolations at every five-foot sample of every pair of a comb's courses, 7.6 s of seed 25's 10.9 s field
 stage under cProfile. Measured in numpy with far pairs skipped (`waterfields/twins.py`), the bookend at bdd1dbbad is band 0
 (total 26% faster than 294-start, every seed faster). What remains, ACCEPTED (the session, from the perf-audit's five-leg
