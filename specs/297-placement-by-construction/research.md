@@ -266,3 +266,10 @@ woodland search's region 22%, the marsh 9%.
 Tried: the woodland search reading ONE region per pair of set-backs by its square's box (as plan B4 first wrote it) instead of one
 region per size by its center (observed 2026-10-01, method: `stagemin.sh`) - the stage 0.82 -> 0.81 s, and two tests failed (the square's corners stricter than the center's
 reach moved a parcel off the brook line its lot follows, and a parcel past its size band). Not kept.
+
+## R18. Kashikawa's one-run 8.7 s, re-measured (observed 2026-10-01, method: `stagemin.sh` best of three, base / clone / clone / base back to back, load 2.4-3.3)
+
+The `after-kashikawa-full-s` key (8.7 s, one unprofiled run at load 2.7 -> 3.7) read slower than the base's re-run (5.4 s) while
+every stage was as fast or faster. Re-taken: `make map` 7.8 / 7.7 s on the base against 7.2 / 7.1 s on the clone, stages 4.60 /
+4.55 s against 4.10 / 4.13 s (web 1.49 -> 1.26, hinterland 0.75 -> 0.61, homesteads 0.60 -> 0.48). No regression: the one run
+was noise.
