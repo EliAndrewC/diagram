@@ -43,5 +43,5 @@ def test_only_questions_count() -> None:
 def test_the_cap_admits_the_first_question_split_under_it() -> None:
     """The split of cities/government 080 is the cap's worked example: its argument whole, under the cap."""
     d = REPO / ".claude/skills/diagram/research/cities/government"
-    q = next(p for p in d.glob("080-servant-housing*.html") if not p.name.endswith(".notes.html"))
+    q = next(p for p in d.glob("080-servants-in-a-samurai-household*.html") if not p.name.endswith((".notes.html", ".originals.html")))
     assert qs.size(q) <= qs.CAP, qs.size(q)

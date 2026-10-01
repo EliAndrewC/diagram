@@ -700,7 +700,7 @@ class Door(Kind):
     Covers: every small door glyph on a building's wall
     Label: accurate
     Sources: madoken-odoguchi, hongofuji-koiwai, s-kent-kuratomae, kotobank-katteguchi, kotobank-uchigenkan, matsue-bukeyashiki, homes-jin-bukeyashiki, dozo-jawiki, gogura-jawiki, nagayamon-jawiki, jta-nagayamon
-    Entry: research/buildings.html - 'How wide was a real doorway, and how wide are the drawn doors?', 'How many doors does a residence's kitchen have, and who comes in by them?', 'Guest doors feed courts, not flanks', 'Rendering / layout is checked automatically'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'; research/cities/government.html - 'Servant housing in the samurai ward'
+    Entry: research/buildings.html - 'How wide was a real doorway, and how wide are the drawn doors?', 'How many doors does a residence's kitchen have, and who comes in by them?', 'Guest doors feed courts, not flanks', 'Rendering / layout is checked automatically'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'; research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'
     """
 
     key = "door"

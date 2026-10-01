@@ -154,7 +154,7 @@ class RetainersQuarters(Kind):
     Covers: the senior retainers' quarters, a family rowhouse for married retainers, and their labels
     Label: accurate
     Sources: hatchobori-jawiki, jinya-jawiki, takayama-jinya-jawiki, shibata-ashigaru-nagaya, hikone-ashigaru, aizu-bukeyashiki-guide
-    Entry: research/buildings.html - 'Staff housing spans a real spectrum'; research/cities/government.html - 'Servant housing in the samurai ward', "Where do a samurai household's servants sleep when the house has no gate range?"
+    Entry: research/buildings.html - 'Staff housing spans a real spectrum'; research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'
     """
 
     key = "retainers' quarters"
@@ -185,7 +185,7 @@ class ServantsQuarters(Kind):
     Covers: the servants' nagaya and its label
     Label: accurate
     Sources: jta-nagayamon, fukui-bushi-jutaku, aizu-bukeyashiki-jawiki, kotobank-degawari, nagayamon-jawiki, nando-jawiki, daozuofang, shoinzukuri-jawiki, kotobank-bukeyashiki, kotobank-nagayamon
-    Entry: research/cities/government.html - 'Servant housing in the samurai ward', "Where do a samurai household's servants sleep when the house has no gate range?"; research/buildings.html - 'The shady rear is the service strip'
+    Entry: research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'; research/rendering/cities/government.html - "How our maps draw servants' quarters in the samurai ward"; research/buildings.html - 'The shady rear is the service strip'
     """
 
     key = "servants' quarters"
@@ -680,7 +680,7 @@ class LordsQuarters(Kind):
     Covers: the lord's suite in the residence, its floor and its labels
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, shoinzukuri-kotobank, matsue-bukeyashiki, touken-world-buke-madori, takayama-jinya-jawiki, takayama-jinya-city, aizu-bukeyashiki-jawiki
-    Entry: research/buildings.html - 'In what order do a residence's rooms run - the reception, the master's rooms, the family's?', 'The courtroom is a room of the office hall, not a freestanding stage'; research/cities/government.html - 'Servant housing in the samurai ward'
+    Entry: research/buildings.html - 'In what order do a residence's rooms run - the reception, the master's rooms, the family's?', 'The courtroom is a room of the office hall, not a freestanding stage'; research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'
     """
 
     key = "lord's quarters"
@@ -707,7 +707,7 @@ class FamilyQuarters(Kind):
     Covers: the family's bay of the residence, its floor and its labels
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, shoinzukuri-kotobank, matsue-bukeyashiki, neixiang-yamen-zhwiki, aizu-bukeyashiki-jawiki, jinya-jawiki, takayama-jinya-jawiki
-    Entry: research/buildings.html - 'In what order do a residence's rooms run - the reception, the master's rooms, the family's?', 'Office in front, residence behind'; research/cities/government.html - 'Servant housing in the samurai ward'
+    Entry: research/buildings.html - 'In what order do a residence's rooms run - the reception, the master's rooms, the family's?', 'Office in front, residence behind'; research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'
     """
 
     key = "family quarters"
@@ -732,7 +732,7 @@ class InnerRooms(Kind):
     Covers: the innermost bay of the residence, its floor and its label
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, butsuma-kotobank, aizu-bukeyashiki-jawiki
-    Entry: research/buildings.html - 'In what order do a residence's rooms run - the reception, the master's rooms, the family's?', 'Where does the butsuma sit - by the zashiki, or among the private rooms?'; research/cities/government.html - 'Servant housing in the samurai ward'
+    Entry: research/buildings.html - 'In what order do a residence's rooms run - the reception, the master's rooms, the family's?', 'Where does the butsuma sit - by the zashiki, or among the private rooms?'; research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'
     """
 
     key = "inner rooms"
@@ -761,7 +761,7 @@ class ReceptionRoom(Kind):
     Covers: the reception bay of the residence, its floor and its labels
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, shoinzukuri-kotobank, touken-world-buke-madori, matsue-bukeyashiki, shoinzukuri-jawiki, aizu-bukeyashiki-jawiki
-    Entry: research/buildings.html - 'In what order do a residence's rooms run - the reception, the master's rooms, the family's?', 'The shady rear is the service strip'; research/cities/government.html - 'Servant housing in the samurai ward'
+    Entry: research/buildings.html - 'In what order do a residence's rooms run - the reception, the master's rooms, the family's?', 'The shady rear is the service strip'; research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'
     """
 
     key = "reception room"
