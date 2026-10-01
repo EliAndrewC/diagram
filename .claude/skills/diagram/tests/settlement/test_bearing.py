@@ -1,6 +1,6 @@
 """269 E3 (B18, B17): which way a farmhouse faces, the homestead turning as one piece, and where a lane end stops at a house.
 
-research/homesteads/240 and 310. `settlement/rolling/bearing.py`, the turned boxes of `_bundle_geom`, and the dooryard clause
+research/homesteads/400 and 310. `settlement/rolling/bearing.py`, the turned boxes of `_bundle_geom`, and the dooryard clause
 of `trim_lane_stubs`.
 """
 
@@ -52,7 +52,7 @@ def test_the_margin_bearing_reads_the_lane_line_a_house_stands_on() -> None:
 
 
 def test_the_house_turn_is_common_bearing_lane_and_spread_within_thirty_and_never_a_quarter_turn() -> None:
-    """Feature 280 M26 (research/homesteads/780): the quarter-turned tenth rests only on a modern count, so no draw turns a
+    """Feature 280 M26 (research/homesteads/400): the quarter-turned tenth rests only on a modern count, so no draw turns a
     house a quarter away - the widest draw is the spread's edge, held under thirty degrees."""
     mid = lambda x, y, salt: 0.5  # noqa: E731 - a draw at the middle: no spread
     low = lambda x, y, salt: 0.0  # noqa: E731 - the bottom of every draw: the widest spread
@@ -103,7 +103,7 @@ def test_the_bundle_boxes_are_the_drawn_parts_turned_and_the_parts_keep_their_tr
 
 
 def test_a_quarter_turned_homestead_draws_its_yard_beside_the_house_with_the_edge_toward_it_level() -> None:
-    """The GM's ruling of 2026-09-26 (homesteads/240): a yard and its beds always line up with their house. A village whose
+    """The GM's ruling of 2026-09-26 (homesteads/400): a yard and its beds always line up with their house. A village whose
     common bearing is a quarter turn carries the yard from the south front round to the west, and its edge toward the house
     stays straight - the level edge is chosen in the house's frame, not the map's."""
     s = _nuc_village()

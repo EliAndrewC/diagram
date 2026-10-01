@@ -102,7 +102,6 @@ azemame	azemame
 azemichi	azemichi
 azenuri	azenuri
 azezukuri	azezukuri
-azimuth	azimuth
 azolla	azolla
 azuchi	azuchi
 azuchi-momoyama	Azuchi-Momoyama period

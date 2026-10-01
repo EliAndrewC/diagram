@@ -46,7 +46,7 @@ class Farmhouse(Kind):
     Covers: `houses` - the dwelling of each household
     Label: accurate
     Sources: sakamoto-tsubaki-1985-omoya-muki, yamamoto-2014-koshijo-shuraku, oamishirasato-choshi-kaoku
-    Entry: research/homesteads.html - 'The farmstead and what stood on it (yashiki)', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane', 'Why do a village's farmhouses face different ways'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads.html - 'Farmhouses (minka)', 'The farmstead and what stood on it (yashiki)', 'Is every farmhouse reached by a lane'; research/rendering/homesteads.html - 'How our maps draw farmhouses - size, plan, roof, bearing and setback', 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'farmhouse'

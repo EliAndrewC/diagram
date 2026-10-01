@@ -127,7 +127,7 @@ def near_reaches(index: PointGrid, a: Pt, b: Pt) -> list[dict[str, Any]]:
 
 #: How far a farmhouse may stand from the field it works, in feet (feature 287, homes H03). The record gives a 6 ft MINIMUM
 #: and no maximum; it gives as a TOLERANCE a back-row house about 700 ft from the crops as "the honest back of a compact
-#: village" (research/homesteads.html, "How close does a farmhouse stand to the paddy?"). 700 is therefore the reach every
+#: village" (research/rendering/homesteads.html, "How our maps draw farmhouses - size, plan, roof, bearing and setback"). 700 is therefore the reach every
 #: seat is held to while a hamlet's site boundary is installed, and the exhaustive seat pass scans: a map drawing
 #: convention whose figure is the record's own tolerance, not a pick.
 FIELD_REACH_FT = 700.0
@@ -167,7 +167,7 @@ class BundleFitMixin:
         THE NUMBER IS ARBITRARY AND THAT IS ALL RIGHT, as long as nobody reads it as a historical claim
         (GM 2026-09-13, asking exactly that question of this line). The record gives a 6 ft MINIMUM - bund
         plus levee path plus eave overhang, below which a wall's drip line falls in the rice - and NO
-        MAXIMUM at all (`research/homesteads.html`, "How close does a farmhouse stand to the paddy?"; the
+        MAXIMUM at all (`research/rendering/homesteads.html`, "How our maps draw farmhouses - size, plan, roof, bearing and setback"; the
         retirement record in `hamletgen/consts.py` says the same). What the record does offer is a
         TOLERANCE in the other direction: a back-row house about 700 ft from the crops "reads as the honest
         back of a compact village", and a hamlet "is legitimately loose and is not held to" the village

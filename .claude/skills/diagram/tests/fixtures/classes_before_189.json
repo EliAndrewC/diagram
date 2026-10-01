@@ -219,7 +219,7 @@
   "farmhouse": {
     "caveat": "the setback from the paddy is DERIVED - no source states it in feet - so it is set at the near end of what the read bounds allow, close enough that the household works its own ground.",
     "covers": "`houses` - the dwelling of each household",
-    "entry": "research/homesteads.html - 'The farmstead and what stood on it (yashiki)', 'How close does a farmhouse stand to the paddy', 'Is every farmhouse reached by a lane', 'Why do a village's farmhouses face different ways'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'",
+    "entry": "research/homesteads.html - 'Farmhouses (minka)', 'The farmstead and what stood on it (yashiki)', 'Is every farmhouse reached by a lane'; research/rendering/homesteads.html - 'How our maps draw farmhouses - size, plan, roof, bearing and setback', 'How our maps draw the farmstead and what stands on it (yashiki)'",
     "key": "farmhouse",
     "label": "accurate",
     "label_note": "Placement and form follow the read record; the setback from the paddy is DERIVED - no source states it in feet - so it is set at the near end of what the read bounds allow, close enough that the household works its own ground.",

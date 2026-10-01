@@ -72,7 +72,7 @@ def water_push(water: Sequence[tuple[Pt, Pt, float]], center: Pt, n: Pt, half_la
 
 
 def face_the_houses(s: Settlement, plan: SitePlan) -> None:
-    """Which way this hamlet's farmhouses face (269 B18, research/homesteads/240), set before the first house is seated.
+    """Which way this hamlet's farmhouses face (269 B18, research/homesteads/400), set before the first house is seated.
 
     The COMMON BEARING is rolled per settlement from the map's seed within `COMMON_BEARING_DEG` of south (a degree
     along a continuum, so calibrated liberty rather than a knob) and recorded as `meta.house_bearing_deg`; each house
