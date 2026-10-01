@@ -166,9 +166,10 @@ class ThreshingYard(Kind):
     as a guess, to run from nine to three, and no windbreak tree stands within 50 ft to its west and southwest, and a rack never stands in the yard's southern half. Unless a map allots every household the same yard, as the planned colony at Santome did in 1696, every yard on it is different:
     each is rolled from a right-skewed spread about 25 tsubo, correlated with the household - the barley country's
     count and, in a rice district, a museum's count of about fifty mats a farm for drying the grain. Whether racks stand
-    by the houses follows the weather of the country, not a village's taste: racks gathered by the house are recorded for
+    by the houses follows the weather of the region, not a village's taste: racks gathered by the house are recorded for
     a coast of changeable autumn weather, so that the threshing could be done at home, and the drying method followed the
-    climate over whole regions - so every settlement in one climate draws the same.
+    climate over whole regions - so every settlement in one climate draws the same; a settlement whose harvest weather
+    is not stated is drawn as settled, with no rack at the house, which is this project's decision.
 
     Note: we have rendered between a third and two thirds of the straw mats that covered a yard (a yard whose
     outline or rack leaves no room for the last ones, a mat or two fewer), each with a little bare
@@ -177,7 +178,7 @@ class ThreshingYard(Kind):
     harvest was covered, 40 to 60 mats of about 3 by 6 feet each on an ordinary barley-country farm and 100 to 150 on a
     large one. The
     mats' size is read, and the yard's lopsided spread is read from registers of houses and homestead lots, since no survey counts yards; the yard's size rests on two undated records of remembered practice, a calibration and this project's choice; the rows the mats are laid in are a guess - no source read
-    says; and where a map draws racks by the houses, which side of the yard a rack takes is a guess too, and the rack is
+    says; and where a map draws racks by the houses, which side of the yard a rack takes and how far along it the rack runs are guesses too, and the rack is
     drawn wider than its poles so that it reads.
 
     Name: threshing yard
@@ -344,17 +345,19 @@ class HenCoop(Kind):
     Why: Chickens were the commonest livestock on a Chinese farm: a survey of 2,866 farms in seven provinces in
     1921-1925 found them on 82 per cent, and the Cambridge history reads farmers in most regions keeping a pig and
     some chickens in their yard. The Qimin Yaoshu says to build the roost as a ground enclosure with a perch,
-    because birds left to the trees sicken - so a coop, not a tree - and the one excavated late-Ming coop is square.
+    because birds left to the trees sicken - so a coop, not a tree - and an excavated late-Ming coop is square.
     Each hamlet rolls its share around the survey's 82%, between about seven and nine farmsteads in ten.
 
     Note: Presence, the ground form and the square plan are read (Buck, Cambridge, the Qimin Yaoshu, the Zhengzhou
     coop). The survey's count was made in the 1920s, and what was seen before 1912 agrees with it; the band's width
-    about it is calibrated liberty; the 5 x 5 ft size and the seat at the house's flank or back wall are guesses -
-    the record says only 'in their yard'.
+    about it is calibrated liberty; that every farm with chickens kept a coop is a guess - no account before 1912
+    says where the yard's chickens slept; the 5 x 5 ft size and the seat at the house's flank or back wall are
+    guesses - the record says only 'in their yard'.
 
     Caveat: The survey's count was made in the 1920s, and what was seen before 1912 agrees with it; the band's width
-    about it is calibrated liberty; the 5 x 5 ft size and the seat at the house's flank or back wall are guesses -
-    the record says only 'in their yard'.
+    about it is calibrated liberty; that every farm with chickens kept a coop is a guess - no account before 1912
+    says where the yard's chickens slept; the 5 x 5 ft size and the seat at the house's flank or back wall are
+    guesses - the record says only 'in their yard'.
 
     Name: hen coop
     Covers: `farm_fixtures[kind=coop]`
