@@ -136,7 +136,7 @@ lawful when it is laid. The page's own Python work runs while its picture render
 Every figure is the fastest of three with the load recorded, taken by `measure.py` from the base worktree and the clone back to
 back; every ratio is a floor with no projection behind it. Keys `m:...` are in `measurements.json`.
 
-- The harness's "before" seconds were taken at load 6.4 -> 2.0 and the `make map` figure re-taken at 1.0 -> 1.4 (recorded per key); the
+- The harness's "before" seconds were taken at load 6.4 -> 2.0 and the `make map` figure re-taken on the final engine at 0.8 -> 1.7 (recorded per key); the
   after-run re-takes the base back to back, and the floors are judged on that pair.
 - **SC-001** (spec-wide) (the session's expectation, "well under half", held as a floor - the GM gave no number): Inashiro's stages sum to at most half the base's (5.640 s, the sum of the per-stage keys `before-inashiro-stage-<stage>-s`), and its `make map`
   regeneration (the child with its svg, png and page) is faster than the base's (6.5 s uncached, `m:before-inashiro-regen-s`, re-taken on the final engine at load 0.8 -> 1.7 back to back with the clone; first read 8.0 s at
@@ -272,3 +272,4 @@ the accepted spec, each with its evidence:
 - Amendment 1, round 6 (spec-fidelity-verify): CHANGES REQUIRED - the cohort and the make-map figure predated the grove rebuild; a
   stale bookend in dev/performance.md. Addressed: both re-taken on the final engine (cohort 30/30; `make map` per `m:before-inashiro-regen-s` and `m:after-inashiro-regen-s`).
 - Amendment 1, round 7 (spec-fidelity-verify): CHANGES REQUIRED - two lines still cited the key at 6.1 s. Addressed.
+- Amendment 1, round 8 (spec-fidelity-verify): CHANGES REQUIRED - the success criteria's preamble still gave the old load. Addressed.
