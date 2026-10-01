@@ -591,7 +591,7 @@ class StandsMixin:
                         continue
                     if within is not None and (ax + clump * 0.9 < within[0] or ax - clump * 0.9 > within[2] or ay + clump * 0.9 < within[1] or ay - clump * 0.9 > within[3]):
                         continue
-                    if blocks.hard(ax, ay) or blocks.local(ax, ay) or blocks.lane(ax, ay):
+                    if not blocks.static_clear(ax, ay):  # the fill's one region (feature 297, plan B3)
                         continue
                     if near_clumps.too_near(ax, ay):
                         continue
@@ -631,14 +631,15 @@ class StandsMixin:
                 if reserved
                 else (lambda x, y: (_near is not None and not _near.too_near(x, y)) or (held is not None and held.too_near(x, y)))
             )
-            if blocks.hard(jx, jy) or _far(jx, jy):
+            _open = blocks.static_clear(jx, jy)  # THE FILL'S ONE REGION FIRST (feature 297, plan B3): open ground asks no family
+            if (not _open and blocks.hard(jx, jy)) or _far(jx, jy):
                 return
-            if blocks.local(jx, jy) or blocks.lane(jx, jy):
+            if not _open and (blocks.local(jx, jy) or blocks.lane(jx, jy)):
                 _alt = _reseat(jx, jy, require_interior=not blocks.local(jx, jy), reach_of=_reach)
                 if _alt is None:
                     return
                 jx, jy = round(_alt[0], 1), round(_alt[1], 1)
-                if blocks.hard(jx, jy) or blocks.local(jx, jy) or blocks.lane(jx, jy) or _far(jx, jy):
+                if not blocks.static_clear(jx, jy) or _far(jx, jy):
                     return  # the re-seat's point, at the record's grain, is asked again - a rounding can carry it over an edge
             seated.append((jx, jy))
             clumps.append([round(jx, 1), round(jy, 1)])

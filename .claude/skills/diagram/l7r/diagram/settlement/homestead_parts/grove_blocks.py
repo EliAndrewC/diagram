@@ -43,7 +43,7 @@ class GroveBlocks:
     re-seats. `displaced` is the other grove's canopy alone, the one blocker a SPARSE grove re-seats
     for. `inside` and `rim_within` are the grove's own outline."""
 
-    __slots__ = ("_clear", "_fams", "_inside", "_last", "crop_pad", "dike_pad", "displacers", "dry_pad", "ring", "static")
+    __slots__ = ("_clear", "_fams", "_inside", "_last", "_raw", "_region", "crop_pad", "dike_pad", "displacers", "dry_pad", "ring", "static")
 
     def __init__(
         self,
@@ -89,6 +89,8 @@ class GroveBlocks:
         self._fams: tuple[list[Any], ...] = ()
         self._inside: dict[tuple[float, float], bool] = {}
         self._clear: dict[tuple[float, float], bool] = {}
+        self._raw = (outline, crops, crop_pad, dry, dry_pad, dikes, dike_pad, water, corridors, circles, rects)
+        self._region: Any = None
 
     def _at(self, x: float, y: float) -> tuple[list[Any], ...]:
         """The static items in (x, y)'s cell, split by family: crops, dry, dikes, water, corridors, circles, rects."""
@@ -124,13 +126,46 @@ class GroveBlocks:
             hit = self._inside[(x, y)] = self.ring.inside(x, y)
         return hit
 
+    def region(self) -> Any:
+        """EVERY STATIC KEEP-OUT OF THE FILL PAINTED ONCE (feature 297, FR-004, plan B3 - the GM: "drawing a box and then filling it
+        in"): the crops and the dry plots grown by their pads, the dikes and the marsh, the watercourses and the corridors at their
+        reach, the occupancy circles and the sun rectangles, in one `Region` over the outline's box grown by the widest reach, at a
+        cell of two pixels. Conservative (every shape grown by `region.GROW` cells), so ground it calls clear is clear of every
+        family - a clump at a family's very margin may be lost, never one seated on a keep-out."""
+        if self._region is None:
+            from .._geom.region import Region
+
+            outline, crops, crop_pad, dry, dry_pad, dikes, dike_pad, water, corridors, circles, rects = self._raw
+            reach = max([crop_pad, dry_pad, dike_pad] + [float(r) for _pl, r in list(water) + list(corridors)] + [float(c[2]) for c in circles] + [0.0])
+            xs, ys = [float(q[0]) for q in outline], [float(q[1]) for q in outline]
+            region = Region((min(xs) - reach - 40.0, min(ys) - reach - 40.0, max(xs) + reach + 40.0, max(ys) + reach + 40.0), 2.0)
+            for ring_ in crops:
+                region.poly(ring_, crop_pad)
+            for ring_ in dry:
+                region.poly(ring_, dry_pad)
+            for ring_ in dikes:
+                region.poly(ring_, dike_pad)
+            for pl, r in list(water) + list(corridors):
+                region.line(pl, float(r))
+            for cx, cy, r in circles:
+                region.circle(float(cx), float(cy), float(r))
+            for x0, y0, x1, y1 in rects:
+                region.rect(float(x0), float(y0), float(x1), float(y1))
+            self._region = region
+        return self._region
+
     def static_clear(self, x: float, y: float) -> bool:
-        """`not (hard or local or lane)`, remembered per point (feature 281, FR-008): the windbreak's gap fill offers a gap
-        the same points on every round, and none of the three changes during the fill."""
+        """`not (hard or local or lane)`, read off the fill's one region (feature 297, plan B3): where the region holds the point
+        clear it is clear of all three; where it does not, the families decide, as before, remembered per point (feature 281)."""
         hit = self._clear.get((x, y))
         if hit is None:
-            hit = self._clear[(x, y)] = not (self.hard(x, y) or self.local(x, y) or self.lane(x, y))
+            hit = self._clear[(x, y)] = (not self.region().taken(x, y)) or not (self.hard(x, y) or self.local(x, y) or self.lane(x, y))
         return hit
+
+    def static_clear_many(self, xs: Any, ys: Any) -> Any:
+        """Which of the points the fill's region holds clear, at once (a boolean array): a True is clear of every static family;
+        a False is still to be asked of them (`hard`, `local`, `lane`)."""
+        return ~self.region().taken_many(xs, ys)
 
     def rim_within(self, x: float, y: float, limit: float) -> bool:
         """`edge_dist(x, y, outline) <= limit`, exactly: `edge_within` answers strictly-under, so the

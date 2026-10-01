@@ -45,7 +45,9 @@ def test_a_box_touches_reach_where_any_of_its_cells_is_reachable() -> None:
     r = Region((0.0, 0.0, 80.0, 80.0), 8.0)
     reach = np.zeros((10, 10), dtype=bool)
     reach[2, 3] = True
-    got = touches_many(reach, r, [20.0, 60.0], [10.0, 60.0], [30.0, 70.0], [20.0, 70.0])
+    sat = np.zeros((11, 11), dtype=np.int32)
+    sat[1:, 1:] = reach.astype(np.int32).cumsum(0).cumsum(1)
+    got = touches_many(sat, r, [20.0, 60.0], [10.0, 60.0], [30.0, 70.0], [20.0, 70.0])
     assert got.tolist() == [True, False]
 
 

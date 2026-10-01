@@ -231,14 +231,11 @@ class PlacerMixin:
         # laying the household's fixtures, were built for nothing on a third of the exhaustive pass's offers.
         if self._house_box_refused(self._house_box(x, y, hw, hh)):
             return None
-        # THE SEAT'S OWN QUESTIONS, ONCE, BEFORE ANY LAYOUT (feature 297, FR-002, plan C): the field's reach, the water and a
-        # corridor to the access tree depend only on where the house stands and its yard - common to all four garden sides
-        # (558 of 558 seats measured, research R6) - so they are asked of the house-and-yard core before a layout is built,
-        # and a seat failing one builds none. 348 of Inashiro's 477 corridor searches found no candidate at all, each after
-        # four layouts (research R2).
+        # THE SEAT'S OWN QUESTIONS, ONCE (feature 297, FR-002, plan C, amended by research R10): the field's reach and the water
+        # depend only on where the house stands - asked here, before any layout; the corridor to the access tree depends on the
+        # house and its yard, common to all four garden sides (558 of 558 seats measured, research R6) - asked ONCE per seat
+        # below, after the envelope (the cheaper refusal: asked first, it ran the costliest search on every offered seat, R10).
         if not within_field_reach(self, x, y) or (getattr(self, "_household_watered", False) and not watered(self, x, y, bool(getattr(self, "_household_well", False)))):
-            return None
-        if not seat_reaches_tree(self, self._core_geom(x, y, hw, hh, shed)):
             return None
         # THE FOUR CONFIGURATIONS BUILT ONCE (dev/performance.md): the envelope is their union, and the loop below judges
         # each at this seat - it built all four again (seed 17: 25,000 bundles, half of them rebuilt)
@@ -246,6 +243,7 @@ class PlacerMixin:
         _env = self._bbox_of([g["bbox"] for g in _at.values()])
         _union_clear = not (_fg is not None and _fg.rect_refused(_env)) and self._envelope_blocked(_env) is None
         best: Any = None
+        _reaches: bool | None = None
         for rank, side in enumerate(self._NUC_SIDES):
             cx, cy = x, y
             geom = _at[side]
@@ -269,6 +267,11 @@ class PlacerMixin:
                 hit = True if _fg is not None and _fg.rect_refused(geom["bbox"]) else self._envelope_blocked(geom["bbox"])
             if hit is not None:
                 continue
+            if (cx, cy) == (x, y):  # the seat's corridor, asked once for all its unmoved sides (a moved side is another seat)
+                if _reaches is None:
+                    _reaches = seat_reaches_tree(self, geom)
+                if not _reaches:
+                    continue
             self._seat_search["parts"] = self._seat_search.get("parts", 0) + 1
             if not self._parts_fit(geom):
                 continue

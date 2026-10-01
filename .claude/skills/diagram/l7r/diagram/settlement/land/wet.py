@@ -313,6 +313,26 @@ def throw_again(strip: Any, parcel: Any, throw: Any) -> None:
     random.setstate(st)
 
 
+def ellipse_ring(cx: float, cy: float, rx: float, ry: float, n: int = 32) -> list[tuple[float, float]]:
+    """An ellipse as an `n`-gon through its rim (feature 297): how a round keep-out - a crescent pond, the pond's water - is filed
+    into a `KeepoutGrid` as a ring, its pad the query's own."""
+    return [(cx + rx * math.cos(2 * math.pi * k / n), cy + ry * math.sin(2 * math.pi * k / n)) for k in range(n)]
+
+
+def feather_keeps(rim: Any, xs: Any, ys: Any, u: Any, feather: float, drop: float) -> Any:
+    """Which of the points survive the feather toward the outline `rim` (feature 297, the marsh's `_sparse` as arrays): a point
+    within `feather` of the outline is dropped where its draw `u` exceeds `(distance / feather) ** drop`, the rest kept."""
+    import numpy as np
+    import shapely
+    from shapely.geometry import LinearRing
+
+    if not len(xs):
+        return np.zeros(0, dtype=bool)
+    d = shapely.distance(LinearRing(rim), shapely.points(xs, ys))
+    near = d < feather
+    return ~(near & (u > (np.minimum(d, feather) / feather) ** drop))
+
+
 def bank_rings(dikeponds: Any, near: Any) -> list[list[tuple[float, float]]]:
     """Every fish pond's mulberry bank near the marsh, WHOLE - each ring as drawn, never thinned (feature 281; the reason is
     at the call in `marsh`). Lifted to module level so a test can hold the whole ring without a scatter to throw into it."""
@@ -436,38 +456,7 @@ class WetGroundMixin:
         crescents = self.M.get("crescent_ponds", [])  # read once (feature 218)  # base = the drawn half-width; the query adds 2 px + the mark's pad in the SAME association the linear scan used
         ring = RingIndex(drawn)  # the drawn ground, indexed once per marsh (feature 145; the why is on RingIndex): a mark is kept only in the record
         rim = RingIndex(poly)  # ...and the outline the feather thins from, as it always did (feature 287, M7: the ink moves only where the record does)
-
-        def _sparse(
-            px: float, py: float, drop: float, mound_pad: float = 0.0, blade_up: float = 0.0
-        ) -> bool:  # skip a point outside the poly, IN a paddy / ON the pond / on a corridor/building / in the urban halo / in a keep-out, or (probabilistically) near the edge
-            if (
-                not ring.inside(px, py)
-                or keep.hit(
-                    px, py, (0.0, mound_pad if mound_pad in _pads else None, mound_pad, 2.0 if role == "pond_fringe" else 2.0 + mound_pad)
-                )  # one cell read: the paddy, every footprint, the treads, the halo, the mounds, the banks, the water
-                or (crescents and self._on_crescent_pond(px, py, 2.0 if role == "pond_fringe" else 2.0 + mound_pad))  # ... and the fengshui pond's open water
-            ):  # ... and OUT of any keep-out
-                return True
-            # ...AND THE MARK'S OWN REACH KEEPS OFF THE WATER, not just its center (feature 150 T54,
-            # settlement-review): this read the CENTER while the mound test above reads the radius, so a 28 ft
-            # tint circle centered a foot outside the rim washed 27 ft of haze over open water - measured, 26%
-            # of Kuwabata's reservoir surface.
-            # A BLADE REACHES UP, NOT SIDEWAYS (settlement-review 2026-08-29, Mizuguchi). The pad against the
-            # water was the mark's own isotropic reach - 7 ft for a tuft - so reeds were held 7.7 ft off the
-            # waterline all round, and the density profile out from the rim ran 12.0 / 27.4 / 33.0 / 24.4 per
-            # 1,000 sq ft: THINNEST exactly where the record says reeds are thickest (research/water.html, "A
-            # reservoir's shore is reeded"; the emergent belt roots in the shallows). But a reed tuft's blades
-            # are drawn near-VERTICAL - `random.uniform(-0.2, 0.2)` radians off vertical, 4-7 ft long - so they
-            # reach ~7 ft UP the sheet and at most ~1.4 ft to the side. The pad is therefore split: the LATERAL
-            # reach keeps the tuft's own point off the water, and the blade TOP is tested separately, so a tuft
-            # standing south of the pond still keeps its full height back while one beside it stands at the rim.
-            _lat = mound_pad if not blade_up else min(mound_pad, 1.5)
-            if pond and ((px - pond[0]) / (pond[2] + _lat)) ** 2 + ((py - pond[1]) / (pond[3] + _lat)) ** 2 < 1.0:
-                return True  # reeds fringe the shore, they do not float on open water
-            if blade_up and pond and ((px - pond[0]) / pond[2]) ** 2 + ((py - blade_up - pond[1]) / pond[3]) ** 2 < 1.0:
-                return True  # ...and neither do the blade TIPS, which is the reach that actually crosses a rim
-            ed = rim.edge_within(px, py, feather)
-            return ed is not None and random.random() > (ed / feather) ** drop
+        rim_ring = [(float(q[0]), float(q[1])) for q in poly]
 
         g: list[str] = []
         marks: list[tuple[float, float, float, float, str]] = []  # (extent, string): the tint and the glints, culled to the frame at finish (feature 225)
@@ -487,32 +476,55 @@ class WetGroundMixin:
         # re-roll every marsh on every map, which is why the widest radius is used below.
         _tint_r = min(MARSH_TINT_R, max(6.0, _half * 0.6)) if role == "pond_fringe" else MARSH_TINT_R
 
+        # THE MARSH'S WHOLE REGION IN ONE KEEP-OUT GRID (feature 297, FR-004, plan B2): the crescent ponds and the pond's ellipse -
+        # asked point by point beside the grid until now - are filed into it as rings (slot 4 the crescents at the mark's pad,
+        # slot 5 the pond grown by the mark's lateral pad, slot 6 the pond moved up by a tuft's blade so no tip crosses its rim),
+        # so every throw is read against one region at once (`hit_many`)
+        if crescents:
+            keep.rings([ellipse_ring(cp["cx"], cp["cy"], cp["r"], cp["r"]) for cp in crescents], slot=4, reach=2.0 + max(_pads))
+        if pond:
+            keep.rings([ellipse_ring(pond[0], pond[1], pond[2], pond[3])], slot=5, reach=max(_pads))
+            keep.rings([ellipse_ring(pond[0], pond[1] + MARSH_TUFT_R * bs, pond[2], pond[3])], slot=6)
+
         def _throw(bx0: float, by0: float, bx1: float, by1: float, fr: Any) -> None:
-            """The tint, the tufts and the glints over the box, at the marsh's own density per area, a throw outside `fr`
-            skipped before the keep-out test (feature 224; the note in cover.py). The whole parcel's box at the first throw
-            (the counts are then the parcel's own, draw for draw); a strip of it on a re-throw (`throw_again`)."""
+            """The tint, the tufts and the glints over the box, at the marsh's own density per area, AS ARRAYS (feature 297): the
+            points drawn at once from a generator seeded off the marsh's stream, kept where the region holds them - in the drawn
+            ground, out of every keep-out the grid files - and thinned toward the outline by the feather. A throw outside `fr`
+            is skipped first (feature 224; the note in cover.py). The whole parcel's box at the first throw; a strip of it on a
+            re-throw (`throw_again`)."""
+            import numpy as np
+
             barea = (bx1 - bx0) * (by1 - by0)
-            for _ in range(int(barea / (360 * bs * bs))):  # faint WET TINT: soft translucent blue-green patches (feathered, no hard edge)
-                gx, gy = random.uniform(bx0, bx1), random.uniform(by0, by1)
-                if fr is not None and not (fr[0] <= gx <= fr[2] and fr[1] <= gy <= fr[3]):
+            rng = np.random.default_rng(random.getrandbits(64))
+            pond_pad = 2.0 if role == "pond_fringe" else None
+            for kind, n, pad in (("tint", int(barea / (360 * bs * bs)), _tint_r * bs), ("tuft", int(barea / (150 * bs * bs)), MARSH_TUFT_R * bs)):
+                if n <= 0:
                     continue
-                if _sparse(gx, gy, 0.9, _tint_r * bs):  # the WIDEST tint radius, not this circle's: the radius is drawn after the test, and drawing it first would re-roll every marsh on every map
+                gx, gy, u = rng.uniform(bx0, bx1, n), rng.uniform(by0, by1, n), rng.random(n)
+                idx = np.arange(n)
+                if fr is not None:
+                    idx = idx[(gx >= fr[0]) & (gx <= fr[2]) & (gy >= fr[1]) & (gy <= fr[3])]
+                idx = idx[ring.inside_many(gx[idx], gy[idx])]
+                lat = pad if kind == "tint" else min(pad, 1.5)
+                extra = (0.0, pad if pad in _pads else None, pad, (pond_pad if pond_pad is not None else 2.0 + pad), (pond_pad if pond_pad is not None else 2.0 + pad), lat, 0.0 if kind == "tuft" else None)
+                idx = idx[~keep.hit_many(gx[idx], gy[idx], extra)]
+                idx = idx[feather_keeps(rim_ring, gx[idx], gy[idx], u[idx], feather, 0.9 if kind == "tint" else 0.7)]
+                if kind == "tint":
+                    r = rng.uniform(min(15.0, _tint_r * 0.6), _tint_r, n) * bs
+                    for i in idx.tolist():
+                        px, py, rr = float(gx[i]), float(gy[i]), float(r[i])
+                        marks.append((px - rr, py - rr, px + rr, py + rr, f'<circle cx="{px:.1f}" cy="{py:.1f}" r="{rr:.1f}" fill="#9FBBAE" fill-opacity="0.14"/>'))
                     continue
-                _r = random.uniform(min(15.0, _tint_r * 0.6), _tint_r) * bs
-                marks.append((gx - _r, gy - _r, gx + _r, gy + _r, f'<circle cx="{gx:.1f}" cy="{gy:.1f}" r="{_r:.1f}" fill="#9FBBAE" fill-opacity="0.14"/>'))
-            for _ in range(int(barea / (150 * bs * bs))):  # SPARSE reed / sedge tufts + the odd standing-water glint (thin, not a solid reedbed)
-                gx, gy = random.uniform(bx0, bx1), random.uniform(by0, by1)
-                if fr is not None and not (fr[0] <= gx <= fr[2] and fr[1] <= gy <= fr[3]):
-                    continue
-                if _sparse(gx, gy, 0.7, MARSH_TUFT_R * bs, blade_up=MARSH_TUFT_R * bs):  # a tuft's blades reach this far UP; see `blade_up`
-                    continue
-                if random.random() < 0.12:  # a standing-water glint
-                    _rx, _ry = random.uniform(2.6, 4.6) * bs, random.uniform(1.2, 2.0) * bs
-                    marks.append((gx - _rx, gy - _ry, gx + _rx, gy + _ry, f'<ellipse cx="{gx:.1f}" cy="{gy:.1f}" rx="{_rx:.1f}" ry="{_ry:.1f}" fill="#C2D6CE" fill-opacity="0.85"/>'))
-                else:  # a reed tuft: a few fine near-VERTICAL blades, taller than dry grass
-                    for _ in range(4):
-                        a, bl = random.uniform(-0.2, 0.2), random.uniform(4.0, 7.0) * bs
-                        blades.append((f"{gx:.1f}", f"{gy:.1f}", f"{gx + math.sin(a) * bl:.1f}", f"{gy - math.cos(a) * bl:.1f}"))
+                glint = rng.random(n) < 0.12
+                rx, ry = rng.uniform(2.6, 4.6, n) * bs, rng.uniform(1.2, 2.0, n) * bs
+                ang, bl = rng.uniform(-0.2, 0.2, (n, 4)), rng.uniform(4.0, 7.0, (n, 4)) * bs
+                for i in idx.tolist():
+                    px, py = float(gx[i]), float(gy[i])
+                    if glint[i]:  # a standing-water glint
+                        marks.append((px - rx[i], py - ry[i], px + rx[i], py + ry[i], f'<ellipse cx="{px:.1f}" cy="{py:.1f}" rx="{rx[i]:.1f}" ry="{ry[i]:.1f}" fill="#C2D6CE" fill-opacity="0.85"/>'))
+                        continue
+                    for k in range(4):  # a reed tuft: a few fine near-VERTICAL blades, taller than dry grass
+                        blades.append((f"{px:.1f}", f"{py:.1f}", f"{px + math.sin(ang[i, k]) * bl[i, k]:.1f}", f"{py - math.cos(ang[i, k]) * bl[i, k]:.1f}"))
 
         _fr = self._scatter_frame
         _throw(x0, y0, x1, y1, _fr)

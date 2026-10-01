@@ -60,6 +60,9 @@ class SeatRegion:
         seats their households reserved - and drop the reachable raster, recomputed on its next read."""
         s = self.s
         tree = getattr(s, "_access", None)
+        nseg, nhouse = (len(tree.segs) if tree is not None else 0), len(s.M.get("houses") or ())
+        if (nseg, nhouse) == (self._tree_n, self._houses_n):
+            return  # nothing has come to stand since the last call
         segs = list(tree.segs) if tree is not None else []
         half = float(tree.half) if tree is not None else 0.0
         for a, b in segs[self._tree_n :]:
@@ -77,9 +80,18 @@ class SeatRegion:
 
     def reachable(self) -> Any:
         """The free cells connected to the access tree, as a boolean array (rows = y)."""
+        return self._reached()[0]
+
+    def _reached(self) -> tuple[Any, Any]:
+        """The reachable cells and their summed-area table, built together once per change to what stands."""
         if self._reach is None:
+            import numpy as np
+
             tree = getattr(self.s, "_access", None)
-            self._reach = flood_from(self.buildable, list(tree.segs) if tree is not None else [], float(tree.half) if tree is not None else 0.0)
+            reach = flood_from(self.buildable, list(tree.segs) if tree is not None else [], float(tree.half) if tree is not None else 0.0)
+            sat = np.zeros((reach.shape[0] + 1, reach.shape[1] + 1), dtype=np.int32)
+            sat[1:, 1:] = reach.astype(np.int32).cumsum(0).cumsum(1)
+            self._reach = (reach, sat)
         return self._reach
 
     def offer(self, pts: Sequence[Pt]) -> list[bool]:
@@ -98,7 +110,7 @@ class SeatRegion:
             ok |= self.buildable.box_clear_many(xs + x0 + m, ys + y0 + m, xs + x1 - m, ys + y1 - m)
         if self.yard is not None and getattr(self.s, "_access", None) is not None:
             y0_, y1_ = self.yard[1], self.yard[3]
-            ok &= touches_many(self.reachable(), self.buildable, xs + self.yard[0], ys + y0_, xs + self.yard[2], ys + y1_)
+            ok &= touches_many(self._reached()[1], self.buildable, xs + self.yard[0], ys + y0_, xs + self.yard[2], ys + y1_)
         return [bool(v) for v in ok]
 
 
@@ -187,12 +199,10 @@ def free_components(free: Any) -> Any:
     return labels
 
 
-def touches_many(reach: Any, region: Region, x0s: Any, y0s: Any, x1s: Any, y1s: Any) -> Any:
-    """Does each box touch a reachable cell?"""
+def touches_many(sat: Any, region: Region, x0s: Any, y0s: Any, x1s: Any, y1s: Any) -> Any:
+    """Does each box touch a reachable cell? `sat` is the reachable cells' summed-area table (`SeatRegion._reached`)."""
     import numpy as np
 
-    sat = np.zeros((reach.shape[0] + 1, reach.shape[1] + 1), dtype=np.int32)
-    sat[1:, 1:] = reach.astype(np.int32).cumsum(0).cumsum(1)
     i0 = np.clip(np.floor((np.asarray(x0s) - region.x0) / region.cell).astype(np.int64), 0, region.nx)
     j0 = np.clip(np.floor((np.asarray(y0s) - region.y0) / region.cell).astype(np.int64), 0, region.ny)
     i1 = np.clip(np.floor((np.asarray(x1s) - region.x0) / region.cell).astype(np.int64) + 1, 0, region.nx)
