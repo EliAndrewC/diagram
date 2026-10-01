@@ -1,7 +1,7 @@
 """THE caption placer (feature 266): one for every caption, in both modes and on a hand-drawn sheet.
 
 The GM, 2026-09-27: *"I also agree with one placer for all labels"*, adopting the cartographic standard
-(research/presentation.html, "Where does a caption sit"). `place()` takes what a caption NAMES - a point feature's
+(research/presentation.html, "Labels on maps (cartographic label placement)"). `place()` takes what a caption NAMES - a point feature's
 drawn footprint, a line, or an area - and returns where the words go, at what angle, on how many lines, and whether a
 leader line ties them back. The standard, in the order it decides:
 
