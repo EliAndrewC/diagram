@@ -15,7 +15,7 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D10). Research: [`res
       verify: DONE. test_page_session.py: StallWatch ends a silent fake claude, leaves a writing one, measures from the watch start; the loop resumes at once and caps at 8; the file 23 passed
 - [x] T04 Item 4: `stall-watchdog-hooks.sh` + `_stall_watchdog.py` and `test-stall-watchdog-hooks.sh`, every SC-004 fixture (D4-D6)
       research: rendering
-      verify: DONE. test-stall-watchdog-hooks 28 cases: every SC-004 fixture and FR-005a exemption with live stand-ins; each of 7 rules red with it removed; a dry pass on the real host judged correctly
+      verify: DONE. test-stall-watchdog-hooks 28 cases: every SC-004 fixture and every exemption FR-005 names with live stand-ins; each of 7 rules red with it removed; a dry pass on the real host judged correctly
 - [x] T05 Item 5: the periodic-report refusal in `no-poll-hooks.sh` / `_hm_shape.py periodic`, with cases (D7)
       research: rendering
       verify: DONE. test-no-poll-hooks feature-295 section: the 292 watcher refused with an hourly CronCreate, event waits (291, 293, while-true with break) pass; red against the old hook
