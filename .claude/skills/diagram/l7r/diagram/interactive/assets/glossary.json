@@ -14958,5 +14958,24 @@
    "Fujiwara no Tameie",
    "Tameie"
   ]
+ },
+ "Yamashiro": {
+  "def": "The old province around Kyoto, in the Kinki region; its southern part lies between Kyoto and Nara.",
+  "variants": [
+   "Yamashiro"
+  ]
+ },
+ "Hideyoshi": {
+  "def": "Toyotomi Hideyoshi, the warlord who unified Japan in the late 1500s and ordered the land surveys that fixed each village's fields; he died in 1598, and Tokugawa rule followed.",
+  "variants": [
+   "Hideyoshi",
+   "Toyotomi Hideyoshi"
+  ]
+ },
+ "Tokaido Shukuson Taigaicho": {
+  "def": "A survey of the Tokaido's post towns and the villages between them, made for the shogunate late in the Edo period, recording what each town held.",
+  "variants": [
+   "Tokaido Shukuson Taigaicho"
+  ]
  }
 }

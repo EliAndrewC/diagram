@@ -1380,6 +1380,7 @@ hereditary temples	hereditary temple
 hexi	Hexi Corridor
 hexi corridor	Hexi Corridor
 hidenin	hidenin
+hideyoshi	Hideyoshi
 high loom	high loom
 high looms	high loom
 high-loom	high loom
@@ -3637,6 +3638,7 @@ toiya	ton'ya
 toiyaba	toiyaba
 tokai	Tokai
 tokaido	Tokaido
+tokaido shukuson taigaicho	Tokaido Shukuson Taigaicho
 toki	toki
 toki no kane	toki no kane
 tokonoma	tokonoma
@@ -3680,6 +3682,7 @@ townhouse	machiya
 townhouses	machiya
 towpath	towpath
 towpaths	towpath
+toyotomi hideyoshi	Hideyoshi
 tozama	tozama
 tozama daimyo	tozama
 tozamurai	tozamurai
@@ -4011,6 +4014,7 @@ yamakawa entry	Yamakawa Nihonshi Shojiten
 yamakawa nihonshi shojiten	Yamakawa Nihonshi Shojiten
 yamanote	Yamanote
 yamanote loop	Yamanote
+yamashiro	Yamashiro
 yamen	yamen
 yamen god	yamen-god
 yamen-god	yamen-god
