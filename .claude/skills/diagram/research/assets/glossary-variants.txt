@@ -865,6 +865,8 @@ fire bed	fire bed
 fire beds	fire bed
 fire brigade's standard	fire brigade's standard
 fire brigade's standards	fire brigade's standard
+fire gable	horse-head wall
+fire gables	horse-head wall
 fire gap	fire gap
 fire gaps	fire gap
 fire standard	fire brigade's standard
@@ -3452,6 +3454,8 @@ unhaired	unhair
 unhairing	unhair
 unhairs	unhair
 unjo-gura	levy storehouse
+unno	Unno
+unno-juku	Unno
 unthinned stand	forest stand
 uogashi	uogashi
 upland field	hatake
