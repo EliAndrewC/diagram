@@ -3396,6 +3396,8 @@ subsidiary shrines	subsidiary shrine
 substructure	substructure
 substructures	substructure
 subuta	Blyxa
+sucker	sucker
+suckers	sucker
 sue ware	Sue ware
 sueki	Sue ware
 sugi	sugi

@@ -246,7 +246,7 @@ class WoodlandCommons(Kind):
     at the center, its fields around them and hill land beyond, and the nearest hill slope - the satoyama - carried the
     fuel wood; low ground by a river or marsh, below the houses, was the grass and riverbank commons', not the
     forest's. So the wood is seated beyond the fields, on ground higher than the field it adjoins - or, where
-    the map has no such ground, on the level past the fields - and never downslope of the houses. A worked wood stood as clumps of thin stems: konara stands near their cutting age held
+    the map has no such ground, on the level past the fields - and never downslope of the houses. A worked wood stood as clumps of thin stems: konara stands at the old end of their cutting cycle held
     about 1,700 stems a hectare, one to about 63 sq ft on centers near 8 ft - a thicket, denser than an old hill wood.
     A cut wood lets sun reach the floor, so herbs grow there, not brush.
 
@@ -255,7 +255,7 @@ class WoodlandCommons(Kind):
     upland, the Nagano and Tsukuba konara stands); reading "beyond the fields" as higher than the field a wood adjoins
     is this record's reading of "the slopes around the settlement". Every stem count read was taken in the twentieth century and no record before modern times counts a worked wood's stems, so the stocking is a modern calibration with no older figure beside it; the 1,700 a hectare is calibrated on a planted
     konara stand of 29 years and on Nagano woods of 26-31 that this record reads, the report not saying so, as fuel
-    woods left uncut - both a little past the age a wood was cut - so the wood may read a little more open than it
+    woods left uncut - both at or just past the old end of the cutting cycle - so the wood may read a little more open than it
     stood, and each crown's 8-9 ft width is a guess sized from the spacing, no
     page giving one. A boundary ruled at law was a drawn line, and it bent; no page read describes a hillside lot laid
     out as a surveyed square (the planned Musashino upland villages of the later 1600s did give each household a
