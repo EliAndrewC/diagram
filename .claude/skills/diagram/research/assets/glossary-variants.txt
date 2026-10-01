@@ -1343,6 +1343,8 @@ hayakawa	Hayakawa
 hayakawa's	Hayakawa
 hayaoke	barrel coffin
 hazakake	hazakake
+head house	head house
+head houses	head house
 head race	head race
 head works	head works
 head-race	head race
