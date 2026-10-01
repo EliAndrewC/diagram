@@ -153,5 +153,6 @@ This feature's own delta, declared under the rules it builds (plan D10). Lines a
 
 ## Landing
 
-- [ ] T35 `make done` green; the owed units this delta's occasions name, dispatched on green and recorded in the ledger's new table; `294-end` and `make perf-report AGAINST=294-start`; the five LEGITIMATE narrowings put to the GM through `escalation-check`; land
+- [x] T35 `make done` green; the owed units this delta's occasions name, dispatched on green and recorded in the ledger's new table; `294-end` and `make perf-report AGAINST=294-start`; the five LEGITIMATE narrowings put to the GM through `escalation-check`; land
       research: rendering
+      verify: DONE. make done green (94 s) at 5bd6ae1c5363; 294-end vs 294-start band 0 (total -26.3%, R5); the four owed glyph checks PASS at that key, in the ledger's measured table with this feature's 13 other review passes; the GM's hand-sheet ruling and the three narrowings put through escalation-check (D18); landing by sync-with-main.sh done
