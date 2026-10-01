@@ -124,7 +124,7 @@ at the foot, and can open the whole record as one page to read straight through 
   2026-10-01 the 473 questions' ids collide nowhere, and the build refuses a collision.
 - A pointer in a spec of a LANDED feature is history: the sweep rewrites it all the same so the resolve check covers every
   file, and the request files the GM wrote are left alone (SOURCE text, quoted).
-- The single page is large (about 11 MB summed across the assembled pages - a one-shot observation, 2026-10-01, `du` on `research/`); it is built but never committed, and the small pages are
+- The single page is large (about 11 MB summed across the assembled pages, observed 2026-10-01 by `du` on `research/`); it is built but never committed, and the small pages are
   what the maps link.
 - The scrub runs only after the feature's landing; a clone created between the landing and the force push is replaced with
   the rest.
@@ -230,7 +230,7 @@ at the foot, and can open the whole record as one page to read straight through 
   check fails on a seeded bad pointer; a rename test rewrites its pointer; the review list from the sweep is empty or
   resolved.
 - **SC-007** (FR-017-FR-021): the rewritten history verifies tree-for-tree; `.git` on the main checkout measured before and
-  after (a one-shot observation, 2026-10-01, `du -sh` on the main checkout's `.git` and on a scratch mirror after
+  after (observed 2026-10-01, `du -sh` on the main checkout's `.git` and on a scratch mirror after
   `git gc --aggressive` with and without a full scrub: 236, 102 and 85 MB - so expected about 85-90 MB after); every clone's root commit matches main's; a seeded unrelated-history clone is refused.
 - **SC-008** (FR-022-FR-026): the hook's self-test fires on every listed form in a container and stays silent on found
   programs, unrelated failures and every miss with the container markers absent; the hook is registered in

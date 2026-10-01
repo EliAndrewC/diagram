@@ -68,7 +68,7 @@ And for what it's worth, I think I do want to do the git history scrub to free u
   pages from the index; pre-258 versions of those paths were the hand-written source and are kept); the session builds
   and verifies the rewritten history, the GM force-pushes; every clone is replaced; a guard refuses to sync a clone
   whose history is unrelated to main's; an old-to-new hash map is recorded. `git gc --aggressive --prune=now` on
-  /diagram by the session. A one-shot observation, 2026-10-01 (`du -sh` of `.git` and of a scratch mirror after `git gc --aggressive`): 236 MB now, 102 MB after gc alone, 85 MB after gc plus a
+  /diagram by the session. Observed 2026-10-01 (`du -sh` of `.git` and of a scratch mirror after `git gc --aggressive`): 236 MB now, 102 MB after gc alone, 85 MB after gc plus a
   scrub of every version (an upper bound).
 
 ## 2026-10-01, eleventh message
