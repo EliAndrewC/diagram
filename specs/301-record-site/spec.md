@@ -106,8 +106,7 @@ at the foot, and can open the whole record as one page to read straight through 
 **Acceptance Scenarios**:
 
 1. **Given** a Bash command whose output says a program is not found (`command not found`, an executable's `No such file or
-   directory`), **When** it finishes, **Then** the session receives a short note that it has passwordless sudo here and the
-   likely package to install.
+   directory`), **When** it finishes, **Then** the session receives a short note that it has passwordless sudo here to install it.
 2. **Given** an existence check that comes up empty - `which`, `command -v`, `type`, `hash`, `whereis`, `dpkg -s`,
    `dpkg -l`, `apt list --installed`, `apt-cache policy`, `pip show`, `pip list | grep`, `python -c "import x"`,
    `test -x`/`[ -x ]` on a program path, `ls` of a binary path, `<program> --version` - **When** it finishes, **Then** the same
@@ -124,11 +123,13 @@ at the foot, and can open the whole record as one page to read straight through 
   2026-10-01 the 473 questions' ids collide nowhere, and the build refuses a collision.
 - A pointer in a spec of a LANDED feature is history: the sweep rewrites it all the same so the resolve check covers every
   file, and the request files the GM wrote are left alone (SOURCE text, quoted).
-- The single page is large (about 11 MB summed across the assembled pages, observed 2026-10-01 by `du` on `research/`); it is built but never committed, and the small pages are
-  what the maps link.
+- The single page is large: what it will hold - the research and rendering pages, the citations pages and the sources
+  registry - sums to about 25 MB as assembled today (observed 2026-10-01; method: `du -cb` over those files under
+  `research/`). It is built but never committed, and the small pages are what the maps link.
 - The scrub runs only after the feature's landing; a clone created between the landing and the force push is replaced with
   the rest.
-- The sudo note fires at most once per distinct program per session, so a loop of misses does not flood the context.
+- The sudo note fires every time a miss happens, as the GM asked (*"every time you run a command and then f get a message
+  about that command not being found"*) - no once-per-session limit.
 
 ## Requirements *(mandatory)*
 
@@ -190,15 +191,19 @@ at the foot, and can open the whole record as one page to read straight through 
 
 **The sudo reminder**
 
-- **FR-022**: A PostToolUse hook on Bash MUST add a short note - passwordless sudo is available here, and the package that
-  likely provides the program - whenever a command's output says a program was not found, or any program-existence check
+- **FR-022**: A hook on Bash, registered on BOTH `PostToolUse` and `PostToolUseFailure` (a missing command exits 127 and an
+  empty `which` exits 1, and Claude Code reports a non-zero exit as a failure - the user-level memwatch hook is registered
+  on both for the same reason), MUST add a short note - passwordless sudo is available here to install it - whenever a command's output says a program was not found, or any program-existence check
   (the forms in User Story 6) comes up empty.
-- **FR-023**: The hook MUST stay silent when the program is found or the failure is unrelated, and note a program at most
-  once per session.
+- **FR-023**: The hook MUST stay silent when the program is found or the failure is unrelated, and MUST fire every time a
+  miss happens.
 - **FR-024**: The hook MUST be USER-LEVEL, in every project the GM runs (GM, 2026-10-01: *"I do want this hook to apply to
   all of my projects. In many different directories, in many different containers"*): its script under `~/.claude/hooks/`
-  and its registration in `~/.claude/settings.json` - the host's own `~/.claude`, which every container mounts - not in
-  this repository's settings.
+  and its registration in `~/.claude/settings.json` - the host's own `~/.claude`, which every container started by gm-assistant's
+  `scripts/launch-container.sh` mounts unless launched with `--no-claude` (read in that script, 2026-10-01: *"~/.claude is
+  shared across all of these containers"*) - not in this repository's settings. The plan MUST check the GM's other
+  running containers for the mount, and a container found without it is reported to the GM with how it would get the hook (the launch script is
+  gm-assistant's, which this repository does not edit).
 - **FR-025**: The hook MUST fire only inside a container (GM: *"all containers have sudo access"*, and host sessions do
   not): it detects a container (podman's `/run/.containerenv`, docker's `/.dockerenv`, a container cgroup or `container`
   environment variable) and is silent on the host.
@@ -224,15 +229,17 @@ at the foot, and can open the whole record as one page to read straight through 
   notes and sources, and the single page's notes numbered 1..N across the record.
 - **SC-003** (FR-006, FR-007): a link check over both forms finds zero unresolved links; a seeded duplicate id fails the build.
 - **SC-004** (FR-008): every modal research link in the pool's rendered maps resolves to an existing small page.
-- **SC-005** (FR-009-FR-011): `git ls-files` lists no assembled output; render-sync rebuilds after a fragment change and
-  skips after an engine-only change (measured); the gate passes.
+- **SC-005** (FR-009-FR-011): `git ls-files` lists no assembled output; render-sync rebuilds after a fragment change and after
+  a change to the record's build code, and skips after a change to nothing the record is built from (measured); the gate
+  passes.
 - **SC-006** (FR-012-FR-016): zero pointers to an assembled page remain outside the record and quoted GM text; the resolve
   check fails on a seeded bad pointer; a rename test rewrites its pointer; the review list from the sweep is empty or
   resolved.
 - **SC-007** (FR-017-FR-021): the rewritten history verifies tree-for-tree; `.git` on the main checkout measured before and
   after (observed 2026-10-01; method: `du -sh` on the main checkout's `.git` and on a scratch mirror after
   `git gc --aggressive` with and without a full scrub: 236, 102 and 85 MB - so expected about 85-90 MB after); every clone's root commit matches main's; a seeded unrelated-history clone is refused.
-- **SC-008** (FR-022-FR-026): the hook's self-test fires on every listed form in a container and stays silent on found
+- **SC-008** (FR-022-FR-026): the hook's self-test, fed both a `PostToolUse` and a `PostToolUseFailure` payload, fires on
+  every listed form in a container, on every repetition, and stays silent on found
   programs, unrelated failures and every miss with the container markers absent; the hook is registered in
   `~/.claude/settings.json`, not in this repository's.
 
@@ -254,3 +261,18 @@ rendering decision is made.
 - The GM's force push is the only push this feature cannot make itself; everything before and after it is the session's.
 - Diagram review is the one other live session on 2026-10-01; the coordination covers whatever sessions are live at the time.
 - `git-filter-repo` is installed with sudo for the rewrite.
+
+## Review history
+
+- Round 1 (spec-fidelity, 2026-10-01): CHANGES REQUIRED - six items, all in the sudo hook and two figures/criteria; the
+  manual, footnotes, map links, out-of-git build, pointers and history scrub are faithful. (1) FR-022 registers on
+  PostToolUse only, but a not-found command (exit 127) and an empty `which` (exit 1) are tool FAILURES, delivered on
+  PostToolUseFailure (the user-level memwatch hook is registered on both for this reason) - register on both, and SC-008's
+  self-test feeds both payloads. (2) FR-022 and US6 AS1's "the package that likely provides the program" is unrequested -
+  drop it. (3) FR-023's "at most once per session" and the matching edge case narrow the GM's "every time" - not
+  legitimate; remove. (4) The edge case's "about 11 MB" measures the research pages only; the single page also carries the
+  citations (17.0 MB) and the registry (3.0 MB) - observed 2026-10-01 by `du -cb` on `research/`; restate. (5) SC-005's
+  "skips after an engine-only change" contradicts FR-010 when the change is to the record's own build code
+  (`l7r/diagram/interactive/record/`) - the skip test uses a change to nothing the record is built from, and a builder
+  change must rebuild. (6) FR-024's "which every container mounts" is an unmeasured premise deciding whether the hook
+  reaches every container - measure it in the plan, or require the install to reach any container that does not.
