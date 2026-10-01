@@ -31,12 +31,14 @@ This feature separates three things that the directories currently fuse:
 2. **Classification.** Each question carries tags from a controlled vocabulary in three facets - **subject** (the first
    one listed is primary), **setting** (countryside, town, city) and **level** (foundational, subtype, detail, counts and
    measurements). A drawing file inherits its research file's tags.
-3. **Presentation.** One table-of-contents file declares the sections, their order and their nesting, and which primary
-   subjects each takes. Within a section, questions order by level, then identity number. The research half and the
+3. **Presentation.** One table-of-contents file declares the sections, their order and their nesting, and a rule over
+   the tags saying which questions each takes - any facet, any position, not only the primary subject. Within a section, questions order by level, then identity number. The research half and the
    "how our maps draw it" half share the one structure. Every tag also gets its own built page.
 
 Regrouping the record later is an edit to the table-of-contents file (and, where a question's home should change, its
-primary subject) - nothing moves on disk and no URL changes.
+rule) - no question file is edited, nothing moves on disk and no URL changes. The first table of contents takes
+questions mostly by primary subject, but a later regrouping may select on any tag (the GM: *"instead of only treating
+the first tag as the primary one"*).
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -131,18 +133,24 @@ build places it. Forgetting the tags fails the build, naming the question.
 
 1. **Given** a new question with valid tags, **When** the record builds, **Then** it appears in the section its primary
    subject belongs to, at its level's position.
-2. **Given** a question with no tags, an unknown tag, or a primary subject no section takes, **When** the record builds,
+2. **Given** a question with no tags, an unknown tag, or tags no section's rule takes, **When** the record builds,
    **Then** the build refuses, naming the file and the problem.
 
 ### Edge Cases
 
-- **A drawing file with no research twin** (today: homesteads 152; the three Presentation questions, which are drawing
-  conventions): it is a stem whose only page is the drawing file, and it carries its own tags. Each such case is ruled on
-  once - fold into a twin, or stand alone - and the ruling recorded in `research.md`.
-- **A research question with no drawing twin** (today: homesteads 440): the stem has no drawing file; it appears only in
-  the research half.
-- **A question that fits two sections**: its home is the one section that takes its primary subject; its other subjects
-  and settings put it on those tag pages. The build refuses a primary subject taken by two sections.
+- **Research and drawing do not pair one to one.** Measured 2026-10-01 against the `<!-- about: -->` declaration each
+  drawing page carries (one each, 234): 231 drawing pages are about the research question of the same part and
+  number. Three are SECOND drawing pages of a research question - settlements 020 (about settlements 010), water 015
+  (about water 010), homesteads 152 (about homesteads 150). Six research questions have no drawing page - fields 170,
+  homesteads 440, towns 400, water 670, cities/defenses 250, cities/hinterland 060. So a stem holds a research page
+  and at most one drawing page; a further drawing page is its own stem that declares the research stem it is about and
+  inherits that stem's tags; a research question with no drawing page appears only in the research half. The plan
+  re-measures this exhaustively before migrating.
+- **Research questions that are drawing conventions.** The three Presentation questions are research-tree files that
+  are drawing conventions; they become drawing-only stems in Map conventions, carrying their own tags. Every other
+  research question is audited for the same thing (FR-008a).
+- **A question two sections' rules both match**: its home is the first matching section in table-of-contents order;
+  its other tags put it on those tag pages.
 - **A drawing file that states different tags from its twin**: refused - a drawing file states tags only when it has no
   twin.
 - **A part opening (the `_front.html` paragraph) that no longer matches any one section**: its reader-facing text moves
@@ -173,22 +181,28 @@ build places it. Forgetting the tags fails the build, naming the question.
 - **FR-005** A controlled vocabulary in one file defines every tag: its facet (subject, setting, level), its display name
   and a one-line description. Levels are, in order: foundational, subtype, detail, counts and measurements. Settings are
   countryside, town and city.
-- **FR-006** Each research page (and each drawing page with no research twin) carries its tags: one or more subjects (the
-  first primary), one or more settings, exactly one level. A drawing page with a twin inherits its twin's tags.
+- **FR-006** Each research page (and each drawing page about no research question) carries its tags: one or more
+  subjects (the first primary), one or more settings, exactly one level. A drawing page about a research question - the
+  one in its own stem, or the one its own stem declares it is about - inherits that question's tags.
 - **FR-007** The build refuses, naming the file: a question with no tags, a tag not in the vocabulary, a missing facet,
-  more than one level, or a drawing page stating tags when it has a twin.
+  more than one level, or a drawing page stating tags when it inherits them.
 - **FR-008** Every question migrated is tagged by this feature. The full tag table (stem, subjects, settings, level, home
   section) is written to the feature's directory for the GM to read, and each primary subject follows the rule: a
   question's home is the place a reader is looking at when they come to it from a map, unless a section that spans
   settings (Estates and other compounds, Trades and services, Religion and the dead) takes its subject.
 
+- **FR-008a** The tagging pass decides, for every research-half question, whether it is a drawing convention rather than
+  research; each that is moves to the drawing half (as a drawing-only stem, in the section its tags choose, or Map
+  conventions), and the tag table records the ruling for every question.
+
 **Presentation**
 
 - **FR-009** One table-of-contents file declares the sections: their order, their nesting, a title and description for
-  each, and the primary subjects each takes. It is the only place section order and grouping are stated; the builder
+  each, and the rule by which each takes questions - a rule over any of a question's tags (a primary subject, any
+  subject, a setting, a level, or a combination). It is the only place section order and grouping are stated; the builder
   contains no list of groups.
-- **FR-010** A question's home is the single section that takes its primary subject. The build refuses a primary subject
-  no section takes, or one taken by two sections.
+- **FR-010** A question's home is the first section, in table-of-contents order, whose rule matches it. The build
+  refuses a question no section's rule matches, and a section whose rule matches nothing in either half.
 - **FR-011** Within a section, questions are ordered by level (foundational first), then identity number. The order is
   total and two builds of the same tree are byte-identical.
 - **FR-012** The research half and the drawing half are built from the one table of contents: the same sections in the
@@ -226,7 +240,8 @@ build places it. Forgetting the tags fails the build, naming the question.
 
 - **Question**: one stem; identity number, slug, research page and/or drawing page, notes, originals, tags.
 - **Tag vocabulary**: every tag, its facet, display name and description.
-- **Table of contents**: ordered, nested sections; each with title, description, and the primary subjects it takes.
+- **Table of contents**: ordered, nested sections; each with title, description, and the tag rule that selects its
+  questions.
 - **Migration mapping**: old path and old page-local number to new stem, kept so late pointers are named, not redirected.
 
 ## Success Criteria *(mandatory)*
@@ -238,11 +253,13 @@ build places it. Forgetting the tags fails the build, naming the question.
 - **SC-003** (FR-001, FR-002, FR-003) The count of questions and the set of heading ids are the same before and after; no
   topic directory remains under the research place; every identity number is unique; every question body, with links,
   pointers and the tag marker normalized away, is identical to its pre-migration text.
-- **SC-004** (FR-006, FR-007, FR-008) Every question carries valid tags; the tag table is in the feature directory; each
-  refusal in FR-007 and FR-010 is proven by a test that feeds the build the bad case.
+- **SC-004** (FR-006, FR-007, FR-008, FR-008a) Every question carries valid tags; the tag table is in the feature directory; each
+  refusal in FR-007 and FR-010 is proven by a test that feeds the build the bad case; the tag table carries a
+  drawing-convention ruling for every research question.
 - **SC-005** (FR-014) For every tag, its page lists exactly the questions whose tags (inherited or stated) include it.
 - **SC-006** (FR-004, FR-009) Swapping two sections in the table-of-contents file and rebuilding changes the navigation
-  and changes no question page's URL; a test holds it.
+  and changes no question page's URL; changing a section's rule to select on a setting or a non-primary subject moves
+  the matching questions without editing any question file; tests hold both.
 - **SC-007** (FR-017, FR-018, FR-021) Zero references to old research paths or old page names remain outside the GM's
   verbatim words; the pointer check passes over the whole repository; a test shows it refuses an old path and names the
   new stem.
@@ -269,8 +286,8 @@ This feature draws nothing on a map and states nothing new about one; it reorgan
 
 ## Assumptions
 
-- The research and drawing trees pair by number within a part, with the exceptions listed in Edge Cases; the plan
-  measures this exhaustively before migrating.
+- The research and drawing trees pair as measured under Edge Cases; the plan's exhaustive re-measurement is the stated
+  source for the migration.
 - The existing fragment-move machinery is the basis of the pointer sweep; the plan decides how it is extended.
 - Tag assignment is judgment: the plan proposes it from each question's title and opening and reviews the whole table
   before the migration commits; the GM reads the table after landing and a regrouping is a later edit, not a blocker.
