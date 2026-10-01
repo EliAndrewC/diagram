@@ -194,3 +194,14 @@ def test_the_skill_root_is_put_on_sys_path_when_it_is_not_already_there(monkeypa
     monkeypatch.setattr(sys, "path", [p for p in sys.path if Path(p).resolve() != Path(mc.SKILL).resolve()])
     reloaded = importlib.reload(mc)
     assert Path(reloaded.SKILL).resolve() in [Path(p).resolve() for p in sys.path]
+
+
+def test_a_failed_batch_names_the_gens_that_did_not_finish() -> None:
+    """A regen that dies with no FAIL line is blamed on the gens that printed no status, not on the batch's first (it named
+    Inashiro for Kashikawa's refusal, 2026-10-01); with every gen reported, the first stands in."""
+    from l7r.diagram.tools.mapcheck import unfinished
+
+    batch = ["pool/hamlets/kashikawa/kashikawa.gen.py", "pool/hamlets/mizuguchi/mizuguchi.gen.py", "pool/hamlets/sawada/sawada.gen.py"]
+    out = "REGENERATED  kashikawa  7.4s\nCACHED       sawada   0.1s\nTraceback ...\nWebRefused: ..."
+    assert unfinished(batch, out) == ["mizuguchi.gen.py"]
+    assert unfinished(batch[:1], "REGENERATED  kashikawa  7.4s") == ["kashikawa.gen.py"]
