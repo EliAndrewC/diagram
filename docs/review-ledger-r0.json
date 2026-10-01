@@ -1,0 +1,2898 @@
+[
+ {
+  "line": 27,
+  "date": "2026-09-19",
+  "agent": "size-audit",
+  "subject": "Hoshigaoka country shrine (the first sheet of the country-sh",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 5,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 5,
+  "wall_min": null
+ },
+ {
+  "line": 28,
+  "date": "2026-09-19",
+  "agent": "building-review",
+  "subject": "Hoshigaoka country shrine (feature 254)",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 3,
+   "judgment": 5,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 10,
+  "wall_min": null
+ },
+ {
+  "line": 29,
+  "date": "2026-08-26",
+  "agent": "settlement-review",
+  "subject": "Inashiro T11 footplanks (2.9 min)",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 1
+  },
+  "author_missed_fixed": 0,
+  "wall_min": 2.9
+ },
+ {
+  "line": 30,
+  "date": "2026-08-26",
+  "agent": "settlement-review",
+  "subject": "Inashiro T11 footplanks",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 1
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 31,
+  "date": "2026-08-26",
+  "agent": "settlement-review",
+  "subject": "Inashiro T11 footplanks",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 1
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 32,
+  "date": "2026-08-26",
+  "agent": "settlement-review",
+  "subject": "Inashiro T12 round 1, hard marsh keep-out (2.1 min)",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": 2.1
+ },
+ {
+  "line": 33,
+  "date": "2026-08-26",
+  "agent": "settlement-review",
+  "subject": "Inashiro T12 round 2, soft keep-out for all families (2.4 mi",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 1
+  },
+  "author_missed_fixed": 0,
+  "wall_min": 2.4
+ },
+ {
+  "line": 34,
+  "date": "2026-08-26",
+  "agent": "settlement-review",
+  "subject": "Inashiro T12 round 2",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 1
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 35,
+  "date": "2026-08-26",
+  "agent": "settlement-review",
+  "subject": "Inashiro T12 round 3, woody hard / grass soft (5.0 min)",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 0,
+  "wall_min": 5.0
+ },
+ {
+  "line": 36,
+  "date": "2026-08-26",
+  "agent": "settlement-review",
+  "subject": "Inashiro T12 round-2 render, rule attempt 1 \"fit zoom first\"",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 1
+  },
+  "author_missed_fixed": 0,
+  "wall_min": 1.9
+ },
+ {
+  "line": 37,
+  "date": "2026-08-26",
+  "agent": "settlement-review",
+  "subject": "Inashiro T12 round-2 render, rule attempt 2 \"pixel count\" (3",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 1,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": 3.8
+ },
+ {
+  "line": 38,
+  "date": "2026-08-27",
+  "agent": "settlement-review",
+  "subject": "Inashiro FULL pass at the T99 acceptance (9.0 min, 32 tool u",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": 9.0
+ },
+ {
+  "line": 39,
+  "date": "2026-08-27",
+  "agent": "settlement-review",
+  "subject": "same pass",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 40,
+  "date": "2026-08-27",
+  "agent": "settlement-review",
+  "subject": "same pass",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 41,
+  "date": "2026-08-27",
+  "agent": "settlement-review",
+  "subject": "same pass",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 42,
+  "date": "2026-08-27",
+  "agent": "settlement-review",
+  "subject": "same pass",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 43,
+  "date": "2026-08-27",
+  "agent": "settlement-review",
+  "subject": "same pass",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 1,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 44,
+  "date": "2026-08-27",
+  "agent": "settlement-review",
+  "subject": "same pass",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 45,
+  "date": "2026-08-27",
+  "agent": "settlement-review",
+  "subject": "same pass",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 3,
+   "judgment": 1,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 46,
+  "date": "2026-08-27",
+  "agent": "settlement-review",
+  "subject": "same pass",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 1
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 49,
+  "date": "2026-08-28",
+  "agent": "settlement-review",
+  "subject": "Inashiro (reference), feature 137 delta",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 50,
+  "date": "2026-08-28",
+  "agent": "settlement-review",
+  "subject": "Inashiro (reference), feature 145 delta (the whole map re-ro",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 51,
+  "date": "2026-08-28",
+  "agent": "settlement-review",
+  "subject": "Mizuguchi (pool), feature 145 delta (whole map re-rolled)",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 4,
+   "judgment": 1,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 52,
+  "date": "2026-08-28",
+  "agent": "settlement-review",
+  "subject": "Kashikawa (pool), feature 145 delta (whole map re-rolled)",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 1,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 53,
+  "date": "2026-08-28",
+  "agent": "settlement-review",
+  "subject": "Sawada (pool), feature 145 delta (whole map re-rolled)",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 1,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 54,
+  "date": "2026-08-28",
+  "agent": "settlement-review",
+  "subject": "FULL, the scripted Kuwabata (feature 150)",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 3,
+   "judgment": 1,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 55,
+  "date": "2026-08-28",
+  "agent": "settlement-review",
+  "subject": "DELTA, Kuwabata after the GM's audit items (feature 150 T41-",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 3,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 4,
+  "wall_min": null
+ },
+ {
+  "line": 56,
+  "date": "2026-08-28",
+  "agent": "settlement-review",
+  "subject": "DELTA, Kuwabata after the GM's T50-T53 (marsh, inlet, ring c",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 3,
+   "judgment": 1,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 57,
+  "date": "2026-08-28",
+  "agent": "settlement-review",
+  "subject": "DELTA re-check, Kuwabata after the two residues were fixed",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 1
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 58,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "DELTA, Kuwabata after T54 (marsh off the mounds)",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 1,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 4,
+  "wall_min": null
+ },
+ {
+  "line": 59,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "DELTA re-check, Kuwabata after the T54 review fixes",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 60,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "DELTA, Kuwabata after T55 (a parcel stops at its ditch)",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 0,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 4,
+  "wall_min": null
+ },
+ {
+  "line": 61,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "DELTA, the fringe-ordering fix (feature 151's first find)",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 62,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "DELTA, Kuwabata re-rolled after the merge onto main (291 com",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 6,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 63,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "POOL SWEEP after the merge, 4 maps in parallel (Inashiro, Ka",
+  "runs": 4,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 7,
+   "judgment": 2,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 4,
+  "wall_min": null
+ },
+ {
+  "line": 64,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "POOL SWEEP round 2 - the same four maps read in full after t",
+  "runs": 4,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 10,
+   "judgment": 1,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 4,
+  "wall_min": null
+ },
+ {
+  "line": 66,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "DELTA, feature 153's five page-side highlighting changes on ",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 4,
+   "judgment": 1,
+   "paperwork": 5,
+   "nothing": 0
+  },
+  "author_missed_fixed": 6,
+  "wall_min": null
+ },
+ {
+  "line": 67,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "DELTA round 2, feature 153's fixes on Kuwabata (verification",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 0,
+   "paperwork": 4,
+   "nothing": 0
+  },
+  "author_missed_fixed": 6,
+  "wall_min": null
+ },
+ {
+  "line": 68,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "DELTA round 3, feature 153's keep-clear clip and four correc",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 0,
+   "paperwork": 4,
+   "nothing": 0
+  },
+  "author_missed_fixed": 6,
+  "wall_min": null
+ },
+ {
+  "line": 69,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "DELTA round 4, feature 153 - narrow pass on round 3's prescr",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 6,
+   "nothing": 0
+  },
+  "author_missed_fixed": 6,
+  "wall_min": null
+ },
+ {
+  "line": 70,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "DELTA re-review, Kashikawa after feature 155's four fixes",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 3,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 4,
+  "wall_min": null
+ },
+ {
+  "line": 71,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "DELTA re-review, Sawada after the same four fixes",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 4,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 72,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "DELTA re-review x2 (Kashikawa, Sawada in parallel), after fe",
+  "runs": 2,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 1,
+   "paperwork": 4,
+   "nothing": 0
+  },
+  "author_missed_fixed": 6,
+  "wall_min": null
+ },
+ {
+  "line": 73,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "DELTA, Mizuguchi under feature 155's lane-web changes (its o",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 4,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 75,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "DELTA, Inashiro's interactive PAGE under feature 156 (the dr",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 3,
+   "judgment": 0,
+   "paperwork": 16,
+   "nothing": 0
+  },
+  "author_missed_fixed": 8,
+  "wall_min": null
+ },
+ {
+  "line": 76,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "DELTA x2, Kashikawa and Sawada under feature 156 and the mer",
+  "runs": 2,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 2,
+   "paperwork": 3,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 77,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "DELTA rounds 3-5, feature 156's page: verification passes on",
+  "runs": 3,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 6,
+   "nothing": 0
+  },
+  "author_missed_fixed": 6,
+  "wall_min": null
+ },
+ {
+  "line": 78,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "DELTA round 6, commissioned as a READTHROUGH - \"read the pag",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 1,
+   "paperwork": 4,
+   "nothing": 0
+  },
+  "author_missed_fixed": 4,
+  "wall_min": null
+ },
+ {
+  "line": 79,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "DELTA round 7, narrow: did round 6's prescriptions fire?",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 3,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 81,
+  "date": "2026-08-29",
+  "agent": "settlement-review",
+  "subject": "DELTA, Kuwabata under feature 157 - the notice board's capti",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 0,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 88,
+  "date": "2026-08-30",
+  "agent": "settlement-review",
+  "subject": "Inashiro, feature 166 acceptance (BOUNDED scope)",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 91,
+  "date": "2026-08-31",
+  "agent": "settlement-review",
+  "subject": "DELTA, feature 173 - the ten file splits for the newly-gated",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 3,
+   "nothing": 0
+  },
+  "author_missed_fixed": 4,
+  "wall_min": null
+ },
+ {
+  "line": 100,
+  "date": "2026-09-11",
+  "agent": "settlement-review",
+  "subject": "feature 222's delta over the five pool hamlets: the renders ",
+  "runs": 5,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 103,
+  "date": "2026-09-11",
+  "agent": "settlement-review",
+  "subject": "feature 223's delta over the five pool hamlets (a snapshot o",
+  "runs": 5,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 105,
+  "date": "2026-09-11",
+  "agent": "settlement-review",
+  "subject": "feature 224's scatter re-roll over the five pool hamlets (th",
+  "runs": 5,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 106,
+  "date": "2026-09-11",
+  "agent": "settlement-review",
+  "subject": "feature 224's shipped pool on a pinned snapshot, five maps",
+  "runs": 5,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 108,
+  "date": "2026-09-11",
+  "agent": "settlement-review",
+  "subject": "feature 225's delta over the five pool hamlets (a snapshot b",
+  "runs": 5,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 110,
+  "date": "2026-09-12",
+  "agent": "settlement-review",
+  "subject": "feature 226's re-seated pool, five maps in one agent over a ",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 3,
+   "judgment": 0,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 4,
+  "wall_min": null
+ },
+ {
+  "line": 112,
+  "date": "2026-09-12",
+  "agent": "settlement-review",
+  "subject": "feature 226's pool after the three fixes, a new snapshot bes",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 114,
+  "date": "2026-09-12",
+  "agent": "settlement-review",
+  "subject": "Kuwabata after feature 228 (the crop dike's bank an even-odd",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 128,
+  "date": "2026-09-12",
+  "agent": "settlement-review",
+  "subject": "feature 230's delta over Inashiro (weir intake, pond sink) a",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 7,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 5,
+  "wall_min": null
+ },
+ {
+  "line": 129,
+  "date": "2026-09-12",
+  "agent": "settlement-review",
+  "subject": "feature 230 pass 2, one agent per map over a snapshot (Inash",
+  "runs": 2,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 6,
+   "judgment": 1,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 8,
+  "wall_min": null
+ },
+ {
+  "line": 130,
+  "date": "2026-09-12",
+  "agent": "settlement-review",
+  "subject": "feature 230 pass 3, two agents (Inashiro; Sawada + Kashikawa",
+  "runs": 2,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 8,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 8,
+  "wall_min": null
+ },
+ {
+  "line": 131,
+  "date": "2026-09-12",
+  "agent": "settlement-review",
+  "subject": "feature 230 pass 4, one agent over the pool",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 3,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 132,
+  "date": "2026-09-12",
+  "agent": "settlement-review",
+  "subject": "feature 230 pass 5, one agent over the pool",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 134,
+  "date": "2026-09-12",
+  "agent": "settlement-review",
+  "subject": "feature 230 pass 6, one agent over a five-map snapshot (the ",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 12,
+   "judgment": 3,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 137,
+  "date": "2026-09-12",
+  "agent": "settlement-review",
+  "subject": "feature 227's re-packed pool (the envelope-first placer), fi",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 3,
+   "judgment": 2,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 5,
+  "wall_min": null
+ },
+ {
+  "line": 138,
+  "date": "2026-09-12",
+  "agent": "settlement-review",
+  "subject": "feature 227's pool after the proposer fixes, a new snapshot ",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 4,
+   "judgment": 1,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 5,
+  "wall_min": null
+ },
+ {
+  "line": 141,
+  "date": "2026-09-12",
+  "agent": "settlement-review",
+  "subject": "feature 227 D11's re-roll of Inashiro (the lane-end rule rea",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 3,
+   "judgment": 0,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 142,
+  "date": "2026-09-12",
+  "agent": "settlement-review",
+  "subject": "feature 227 D11's Kashikawa - the map the defect was found o",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 144,
+  "date": "2026-09-12",
+  "agent": "settlement-review",
+  "subject": "feature 230 pass 7, one agent over a five-map snapshot, aske",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 145,
+  "date": "2026-09-12",
+  "agent": "settlement-review",
+  "subject": "feature 230 pass 8, one agent over a five-map snapshot, aske",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 146,
+  "date": "2026-09-12",
+  "agent": "settlement-review",
+  "subject": "feature 230 pass 9, one agent per map over a five-map snapsh",
+  "runs": 5,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 147,
+  "date": "2026-09-12",
+  "agent": "settlement-review",
+  "subject": "feature 230 pass 10, three agents over five maps (one per ma",
+  "runs": 3,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 8,
+   "judgment": 3,
+   "paperwork": 3,
+   "nothing": 0
+  },
+  "author_missed_fixed": 13,
+  "wall_min": null
+ },
+ {
+  "line": 148,
+  "date": "2026-09-12",
+  "agent": "settlement-review",
+  "subject": "feature 230 pass 11, three agents over five maps, each told ",
+  "runs": 3,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 4,
+   "judgment": 1,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 149,
+  "date": "2026-09-13",
+  "agent": "settlement-review",
+  "subject": "feature 230 pass 12, one agent per map over the gate's own s",
+  "runs": 5,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 14,
+   "judgment": 4,
+   "paperwork": 3,
+   "nothing": 0
+  },
+  "author_missed_fixed": 9,
+  "wall_min": null
+ },
+ {
+  "line": 150,
+  "date": "2026-09-13",
+  "agent": "settlement-review",
+  "subject": "feature 230 pass 13, three agents over the five maps, each t",
+  "runs": 3,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 5,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 151,
+  "date": "2026-09-13",
+  "agent": "settlement-review",
+  "subject": "feature 230 pass 14, one agent over the two maps whose board",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 153,
+  "date": "2026-09-13",
+  "agent": "settlement-review",
+  "subject": "features 227+237's pool before landing, one agent over all f",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 1,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 155,
+  "date": "2026-09-19",
+  "agent": "settlement-review",
+  "subject": "Kuwabata after feature 233 and Sawada + Mizuguchi at feature",
+  "runs": 2,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 1
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 156,
+  "date": "2026-09-20",
+  "agent": "size-audit",
+  "subject": "Hoshigaoka country shrine, redrawn to the village map (featu",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 3,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 4,
+  "wall_min": null
+ },
+ {
+  "line": 157,
+  "date": "2026-09-20",
+  "agent": "building-review",
+  "subject": "Hoshigaoka country shrine, redrawn to the village map (featu",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 4,
+   "judgment": 10,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 8,
+  "wall_min": null
+ },
+ {
+  "line": 158,
+  "date": "2026-09-26",
+  "agent": "size-audit",
+  "subject": "Hoshigaoka country shrine, the seven-arch avenue (GM 2026-09",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 1,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 159,
+  "date": "2026-09-26",
+  "agent": "building-review",
+  "subject": "Hoshigaoka country shrine, the seven-arch avenue (GM 2026-09",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 2,
+   "paperwork": 11,
+   "nothing": 1
+  },
+  "author_missed_fixed": 8,
+  "wall_min": null
+ },
+ {
+  "line": 160,
+  "date": "2026-09-26",
+  "agent": "building-review",
+  "subject": "Ochiba magistracy's interactive page, feature 262 (DELTA: th",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 2,
+   "paperwork": 10,
+   "nothing": 0
+  },
+  "author_missed_fixed": 8,
+  "wall_min": null
+ },
+ {
+  "line": 161,
+  "date": "2026-09-26",
+  "agent": "building-review",
+  "subject": "Ochiba magistracy, DELTA: the reception moved to face the in",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 5,
+   "paperwork": 6,
+   "nothing": 0
+  },
+  "author_missed_fixed": 8,
+  "wall_min": null
+ },
+ {
+  "line": 162,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Ochiba magistracy's interactive page, feature 264 (DELTA: ev",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 5,
+   "paperwork": 14,
+   "nothing": 0
+  },
+  "author_missed_fixed": 7,
+  "wall_min": null
+ },
+ {
+  "line": 163,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Hayakawa magistracy's interactive page, feature 264 (DELTA, ",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 6,
+   "paperwork": 13,
+   "nothing": 0
+  },
+  "author_missed_fixed": 8,
+  "wall_min": null
+ },
+ {
+  "line": 164,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Ubame magistracy's interactive page, feature 264 (DELTA, as ",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 5,
+   "paperwork": 14,
+   "nothing": 0
+  },
+  "author_missed_fixed": 8,
+  "wall_min": null
+ },
+ {
+  "line": 165,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "the three pages, feature 264, round 2 (verify)",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 3,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 166,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Hayakawa, DELTA: the reception to the east block facing the ",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 6,
+   "paperwork": 4,
+   "nothing": 0
+  },
+  "author_missed_fixed": 4,
+  "wall_min": null
+ },
+ {
+  "line": 167,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Ubame and Ochiba, DELTA: the kitchen doors, the wood-kami al",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 2,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 168,
+  "date": "2026-09-27",
+  "agent": "size-audit",
+  "subject": "Hoshigaoka country shrine, feature 268 (the grove, the arche",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 4,
+   "judgment": 1,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 4,
+  "wall_min": null
+ },
+ {
+  "line": 169,
+  "date": "2026-09-27",
+  "agent": "settlement-review",
+  "subject": "Hoshigaoka village map, DELTA: the shrine's grounds (feature",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 3,
+   "judgment": 1,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 4,
+  "wall_min": null
+ },
+ {
+  "line": 170,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Hoshigaoka country shrine, feature 268",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 3,
+   "judgment": 3,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 4,
+  "wall_min": null
+ },
+ {
+  "line": 171,
+  "date": "2026-09-27",
+  "agent": "settlement-review",
+  "subject": "Hoshigaoka village map, DELTA: the shrine's grounds, round 2",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 172,
+  "date": "2026-09-27",
+  "agent": "settlement-review",
+  "subject": "Hoshigaoka village map, DELTA: the shrine's grounds, round 3",
+  "runs": 1,
+  "not_reviewable_runs": 1,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 174,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Ochiba magistracy, feature 267 pass 1",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 4,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 5,
+  "wall_min": null
+ },
+ {
+  "line": 175,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Hayakawa magistracy, feature 267 pass 1",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 5,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 7,
+  "wall_min": null
+ },
+ {
+  "line": 176,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Ubame magistracy, feature 267 pass 1",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 3,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 6,
+  "wall_min": null
+ },
+ {
+  "line": 177,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Ochiba magistracy, feature 267 round 2",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 3,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 6,
+  "wall_min": null
+ },
+ {
+  "line": 178,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Hayakawa magistracy, feature 267 round 2",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 4,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 7,
+  "wall_min": null
+ },
+ {
+  "line": 179,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Ubame magistracy, feature 267 round 2",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 2,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 180,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "the county-magistracy program example, feature 267 round 2",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 5,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 8,
+  "wall_min": null
+ },
+ {
+  "line": 182,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Ochiba magistracy, feature 267 round 3",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 6,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 6,
+  "wall_min": null
+ },
+ {
+  "line": 183,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Hayakawa magistracy, feature 267 round 3",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 3,
+   "judgment": 2,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 5,
+  "wall_min": null
+ },
+ {
+  "line": 184,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Ubame magistracy, feature 267 round 3",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 4,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 5,
+  "wall_min": null
+ },
+ {
+  "line": 185,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "the county-magistracy program example, feature 267 round 3",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 4,
+   "judgment": 3,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 8,
+  "wall_min": null
+ },
+ {
+  "line": 187,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Ochiba magistracy, feature 267 round 4",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 4,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 4,
+  "wall_min": null
+ },
+ {
+  "line": 188,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Hayakawa magistracy, feature 267 round 4",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 2,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 4,
+  "wall_min": null
+ },
+ {
+  "line": 189,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Ubame magistracy, feature 267 round 4",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 3,
+   "judgment": 1,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 190,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "the county-magistracy program example, feature 267 round 4",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 2,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 5,
+  "wall_min": null
+ },
+ {
+  "line": 193,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Ochiba magistracy, feature 267 round 5",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 2,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 194,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Hayakawa magistracy, feature 267 round 5",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 1,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 195,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Ubame magistracy, feature 267 round 5",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 3,
+   "judgment": 2,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 5,
+  "wall_min": null
+ },
+ {
+  "line": 196,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "the county-magistracy program example, feature 267 round 5",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 3,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 6,
+  "wall_min": null
+ },
+ {
+  "line": 197,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Ochiba magistracy, feature 267 round 6 (verification, errors",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 1
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 198,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Hayakawa magistracy, feature 267 round 6 (verification, erro",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 199,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Ubame magistracy, feature 267 round 6 (verification, errors ",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 3,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 200,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "the county-magistracy program example, feature 267 round 6 (",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 1,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 4,
+  "wall_min": null
+ },
+ {
+  "line": 201,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "the county-magistracy program example, feature 267 round 7 (",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 203,
+  "date": "2026-09-27",
+  "agent": "settlement-review",
+  "subject": "Kashikawa, DELTA (feature 267: the field grave the corner fo",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 204,
+  "date": "2026-09-27",
+  "agent": "settlement-review",
+  "subject": "Kashikawa, DELTA round 2 (feature 267, the grave fix)",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 205,
+  "date": "2026-09-27",
+  "agent": "size-audit",
+  "subject": "Hoshigaoka country shrine, feature 270 (the hall from the re",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 0,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 4,
+  "wall_min": null
+ },
+ {
+  "line": 206,
+  "date": "2026-09-27",
+  "agent": "building-review",
+  "subject": "Hoshigaoka country shrine, feature 270",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 1,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 5,
+  "wall_min": null
+ },
+ {
+  "line": 207,
+  "date": "2026-09-27",
+  "agent": "settlement-review",
+  "subject": "Hoshigaoka village map, DELTA: the shrine glyph resized, the",
+  "runs": 1,
+  "not_reviewable_runs": 1,
+  "findings": {
+   "geometric": 3,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 4,
+  "wall_min": null
+ },
+ {
+  "line": 208,
+  "date": "2026-09-27",
+  "agent": "settlement-review",
+  "subject": "Hoshigaoka village map, DELTA, feature 270 round 2",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 209,
+  "date": "2026-09-27",
+  "agent": "settlement-review",
+  "subject": "Hoshigaoka village map, DELTA: the cremation ground and ways",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 1,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 210,
+  "date": "2026-09-27",
+  "agent": "settlement-review",
+  "subject": "Hoshigaoka village map, DELTA, feature 272 round 2",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 1
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 211,
+  "date": "2026-09-27",
+  "agent": "settlement-review",
+  "subject": "inashiro, DELTA: the hamlet's own burial ground (feature 273",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 212,
+  "date": "2026-09-27",
+  "agent": "settlement-review",
+  "subject": "kashikawa, DELTA: the hamlet's own burial ground (feature 27",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 3,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 213,
+  "date": "2026-09-27",
+  "agent": "settlement-review",
+  "subject": "kuwabata, DELTA: the hamlet's own burial ground (feature 273",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 214,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "inashiro, kashikawa, kuwabata, DELTA: feature 273 round 2",
+  "runs": 3,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 215,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "sawada, mizuguchi, DELTA: feature 273",
+  "runs": 2,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 1
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 216,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "inashiro, kashikawa, kuwabata, sawada, mizuguchi, DELTA: fea",
+  "runs": 5,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 217,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "inashiro, kashikawa, kuwabata, sawada, mizuguchi, DELTA: fea",
+  "runs": 5,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 1
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 218,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "inashiro, kashikawa, kuwabata, sawada, mizuguchi, DELTA: fea",
+  "runs": 5,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 4,
+   "judgment": 0,
+   "paperwork": 3,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 219,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "hoshigaoka, DELTA: feature 279, the shrine's wood redrawn (r",
+  "runs": 4,
+  "not_reviewable_runs": 1,
+  "findings": {
+   "geometric": 5,
+   "judgment": 2,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 8,
+  "wall_min": null
+ },
+ {
+  "line": 220,
+  "date": "2026-09-28",
+  "agent": "building-review",
+  "subject": "hoshigaoka-shrine, DELTA: feature 279 (rounds 1-4)",
+  "runs": 4,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 5,
+   "judgment": 3,
+   "paperwork": 3,
+   "nothing": 0
+  },
+  "author_missed_fixed": 9,
+  "wall_min": null
+ },
+ {
+  "line": 222,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "inashiro, kashikawa, kuwabata, sawada, mizuguchi, DELTA: fea",
+  "runs": 5,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 3,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 223,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "inashiro, DELTA: feature 269 B30 (windbreak_belt knob, conif",
+  "runs": 3,
+  "not_reviewable_runs": 3,
+  "findings": {
+   "geometric": 3,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 224,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "inashiro, DELTA: feature 269 B42 (family_form knob, retireme",
+  "runs": 1,
+  "not_reviewable_runs": 1,
+  "findings": {
+   "geometric": 1,
+   "judgment": 1,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 225,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "inashiro, DELTA: feature 269 landing, E1-E8 (replaces E2-E6'",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 3,
+   "judgment": 1,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 226,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "kashikawa, DELTA: feature 269 landing, E1-E8, round 1",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 2,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 227,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "kuwabata, DELTA: feature 269 landing, E1-E9, round 1",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 5,
+   "judgment": 3,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 228,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "sawada, DELTA: feature 269 landing, E1-E8, round 1",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 2,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 229,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "mizuguchi, DELTA: feature 269 landing, E1-E8, round 1",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 6,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 5,
+  "wall_min": null
+ },
+ {
+  "line": 230,
+  "date": "2026-09-28",
+  "agent": "building-review",
+  "subject": "hoshigaoka-shrine, DELTA: feature 283, the kitchen garden mo",
+  "runs": 4,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 1,
+   "paperwork": 5,
+   "nothing": 0
+  },
+  "author_missed_fixed": 6,
+  "wall_min": null
+ },
+ {
+  "line": 231,
+  "date": "2026-09-28",
+  "agent": "building-review",
+  "subject": "hayakawa-magistracy, DELTA: feature 283 (rounds 1-4)",
+  "runs": 4,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 5,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 5,
+  "wall_min": null
+ },
+ {
+  "line": 232,
+  "date": "2026-09-28",
+  "agent": "building-review",
+  "subject": "ochiba-magistracy, DELTA: feature 283 (rounds 1-4)",
+  "runs": 4,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 3,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 6,
+  "wall_min": null
+ },
+ {
+  "line": 233,
+  "date": "2026-09-28",
+  "agent": "building-review",
+  "subject": "ubame-magistracy, DELTA: feature 283 (rounds 1-4)",
+  "runs": 4,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 1,
+   "paperwork": 3,
+   "nothing": 0
+  },
+  "author_missed_fixed": 5,
+  "wall_min": null
+ },
+ {
+  "line": 234,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "inashiro, kashikawa, kuwabata, sawada, mizuguchi, DELTA: fea",
+  "runs": 65,
+  "not_reviewable_runs": 5,
+  "findings": {
+   "geometric": 4,
+   "judgment": 3,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 5,
+  "wall_min": null
+ },
+ {
+  "line": 236,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "inashiro, DELTA: feature 269 landing, round 2",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 2,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 237,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "kashikawa, DELTA: feature 269 landing, round 2",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 3,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 238,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "kuwabata, DELTA: feature 269 landing, round 2",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 3,
+   "judgment": 4,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 239,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "sawada, DELTA: feature 269 landing, round 2",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 2,
+   "judgment": 3,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 240,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "mizuguchi, DELTA: feature 269 landing, round 2",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 4,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 241,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "inashiro, DELTA: feature 269 landing, round 3",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 242,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "kashikawa, DELTA: feature 269 landing, round 3",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 243,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "kuwabata, DELTA: feature 269 landing, round 3",
+  "runs": 1,
+  "not_reviewable_runs": 1,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 244,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "sawada, DELTA: feature 269 landing, round 3",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 2,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 245,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "mizuguchi, DELTA: feature 269 landing, round 3",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 246,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "inashiro, DELTA: feature 269 landing, round 4",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 247,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "kashikawa, DELTA: feature 269 landing, round 4",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 1,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 248,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "kuwabata, DELTA: feature 269 landing, round 4",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 249,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "sawada, DELTA: feature 269 landing, round 4",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 250,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "mizuguchi, DELTA: feature 269 landing, round 4",
+  "runs": 1,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 251,
+  "date": "2026-09-28",
+  "agent": "settlement-review",
+  "subject": "inashiro, kashikawa, kuwabata, sawada, mizuguchi, DELTA: fea",
+  "runs": 5,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 252,
+  "date": "2026-09-29",
+  "agent": "building-review",
+  "subject": "hoshigaoka-shrine and ubame-magistracy sheets, feature 280 p",
+  "runs": 2,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 1,
+   "paperwork": 5,
+   "nothing": 0
+  },
+  "author_missed_fixed": 6,
+  "wall_min": null
+ },
+ {
+  "line": 254,
+  "date": "2026-09-29",
+  "agent": "settlement-review",
+  "subject": "inashiro, kashikawa, kuwabata, mizuguchi, sawada, DELTA: fea",
+  "runs": 5,
+  "not_reviewable_runs": 5,
+  "findings": {
+   "geometric": 6,
+   "judgment": 1,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 6,
+  "wall_min": null
+ },
+ {
+  "line": 255,
+  "date": "2026-09-29",
+  "agent": "settlement-review",
+  "subject": "the five, round 2 (key b7a3c2dd)",
+  "runs": 5,
+  "not_reviewable_runs": 5,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 1
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 256,
+  "date": "2026-09-29",
+  "agent": "settlement-review",
+  "subject": "the five, round 3 (key 3f291ffa)",
+  "runs": 5,
+  "not_reviewable_runs": 3,
+  "findings": {
+   "geometric": 1,
+   "judgment": 2,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 4,
+  "wall_min": null
+ },
+ {
+  "line": 257,
+  "date": "2026-09-29",
+  "agent": "settlement-review",
+  "subject": "the five, round 4 (key 01a5c189)",
+  "runs": 5,
+  "not_reviewable_runs": 5,
+  "findings": {
+   "geometric": 1,
+   "judgment": 1,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 258,
+  "date": "2026-09-29",
+  "agent": "settlement-review",
+  "subject": "the five, round 5 (key 7640430b)",
+  "runs": 5,
+  "not_reviewable_runs": 4,
+  "findings": {
+   "geometric": 1,
+   "judgment": 1,
+   "paperwork": 0,
+   "nothing": 0
+  },
+  "author_missed_fixed": 2,
+  "wall_min": null
+ },
+ {
+  "line": 259,
+  "date": "2026-09-29",
+  "agent": "settlement-review",
+  "subject": "the five, round 6 (key 098165c0)",
+  "runs": 5,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 1,
+   "paperwork": 1,
+   "nothing": 0
+  },
+  "author_missed_fixed": 1,
+  "wall_min": null
+ },
+ {
+  "line": 261,
+  "date": "2026-09-30",
+  "agent": "settlement-review",
+  "subject": "the five, feature 293 port round 1 (key 4905881c)",
+  "runs": 5,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 4,
+   "judgment": 1,
+   "paperwork": 4,
+   "nothing": 0
+  },
+  "author_missed_fixed": 5,
+  "wall_min": null
+ },
+ {
+  "line": 262,
+  "date": "2026-09-30",
+  "agent": "settlement-review",
+  "subject": "inashiro, kuwabata, sawada, feature 293 port round 2 (key 2d",
+  "runs": 3,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 4,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 264,
+  "date": "2026-09-30",
+  "agent": "settlement-review",
+  "subject": "the five, feature 293 merged with main (feature 291), round ",
+  "runs": 5,
+  "not_reviewable_runs": 5,
+  "findings": {
+   "geometric": 0,
+   "judgment": 0,
+   "paperwork": 0,
+   "nothing": 1
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ },
+ {
+  "line": 265,
+  "date": "2026-09-30",
+  "agent": "settlement-review",
+  "subject": "the five, feature 293 merged with main, round 2 (key cd09f76",
+  "runs": 5,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 5,
+   "nothing": 0
+  },
+  "author_missed_fixed": 5,
+  "wall_min": null
+ },
+ {
+  "line": 266,
+  "date": "2026-09-30",
+  "agent": "settlement-review",
+  "subject": "inashiro, kuwabata, feature 293 merged with main, round 3 (k",
+  "runs": 2,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 3,
+   "nothing": 0
+  },
+  "author_missed_fixed": 3,
+  "wall_min": null
+ },
+ {
+  "line": 267,
+  "date": "2026-09-30",
+  "agent": "settlement-review",
+  "subject": "inashiro, kuwabata, feature 293 merged with main, round 4 (k",
+  "runs": 2,
+  "not_reviewable_runs": 0,
+  "findings": {
+   "geometric": 1,
+   "judgment": 0,
+   "paperwork": 2,
+   "nothing": 0
+  },
+  "author_missed_fixed": 0,
+  "wall_min": null
+ }
+]

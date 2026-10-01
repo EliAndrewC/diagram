@@ -264,3 +264,16 @@ section carries the decisions; the pool fails today on B1 (to be measured: Kuwab
 regions), B10 (fixtures drawn short of their roll), B17 (`ochiba-roundtrip-test`), B23 (Ochiba's road), B24 (Ubame's missing
 `**On map**`). Covered already: reed gaps (feature 298), the sheen cap (`test_finish_287`), acute merges and hairpins (placer
 guarantees `NEEDLE_DEG`, `_HAIRPIN_DEG`, gate test to add). Broadleaf over conifer: the scout found no species on a crown record; plan B5b adds it and rules it.
+
+## R4 - the census by a script (FR-013, SC-006; observed 2026-10-01)
+
+Observed 2026-10-01; method: an Opus agent classified each of the ledger's 181 map-review rows once, as data
+(`docs/review-ledger-r0.json`: per row its runs, NOT-REVIEWABLE runs, findings by class, author-missed-and-fixed, wall time),
+and `make review-census` totals it with the measured table's rows. Settlement-review: 312 runs, 40 NOT-REVIEWABLE, findings
+270 geometric / 77 judgment / 174 paperwork / 14 nothing (535), 315 author-missed-and-fixed, 27 minutes of recorded wall time.
+
+Against R0 (the hand census): the COUNTS are higher because the data takes a cell's stated totals ("8 errors, 6 questions") as
+that many findings where R0 deduplicated by hand - 535 findings against ~360, 312 runs against ~260. The SHARES agree within
+R0's own error: geometric 50% (R0 44%), judgment 14% (R0 19%), paperwork 33% (R0 31%), nothing 3% (R0 6%); NOT-REVIEWABLE runs
+40 against ~36. SC-006 is read on the shares, which is what R0 was used for (the judgment-vs-geometric argument), and the counts
+are the script's from here on.
