@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Any, cast
 
 from ._geom import PointGrid, Pt, boxed_polys, drawn_extent, edge_dist, indexed_grid, point_in_poly, rot_rect, seg_dist
 from ._knobs import skeleton_layout
-from .rolling.access import reserve
+from .rolling.access import TREAD_WALL_FT, reserve
 from .rolling.bearing import house_rot
 from .rolling.lot import FARMHOUSE_MAX_ASPECT, KURA_SHARE, household_parts, kura_rect, record_parts, seat_parts_done
 
@@ -31,10 +31,6 @@ if TYPE_CHECKING:
     from .core import Settlement
 
 
-#: How far a way's tread edge stands from a farmhouse wall, in feet (feature 294 B7): GUESS, anchored on the research's three-shaku
-#: (~3 ft) eaves strip before a townhouse (research/buildings) with a margin for the eaves themselves; the recorded defect was a
-#: tread 3.85 ft from a wall, and every pool map measured 4.9 ft or more when the rule was written (rules-recon.md item 8).
-TREAD_WALL_FT = 4.0
 
 
 class HousesMixin:
