@@ -723,6 +723,8 @@ earth-god	tudi miao
 earth-god shrine	tudi miao
 eastern han	Han dynasty
 eave soffit	soffit
+eaves wall	eaves wall
+eaves walls	eaves wall
 echelon	echelon
 echigo	Echigo
 echigo province	Echigo
@@ -3038,6 +3040,8 @@ straw ricks	rick
 stream order	stream order
 stream orders	stream order
 street village	gaison
+street villages	gaison
+street-village	gaison
 stringer	stringer
 stringers	stringer
 strip footing	strip footing
