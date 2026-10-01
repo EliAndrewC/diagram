@@ -455,8 +455,8 @@ class ApproachRoad(Kind):
     the main gate. A planned Chinese capital was a grid of avenues keyed to its gates, and a county seat's
     streets linked its gates, but a main avenue running from the principal gate to the government office is a
     guess, found on no page read, and in neither Japan nor China was a country lane a wide road. The road at a compound's front gate is the road
-    the compound stands on, at that road's width: the great highways ran about 18 to 24 ft wide, and one through a
-    castle town about 15 ft.
+    the compound stands on, at that road's width: the great highways ran about 18 to 30 ft wide, set to about 30 ft by an
+    order of 1605, and one through a castle town about 15 ft.
 
     Note: the roads here carry carts and wagons, the setting's own departure from Edo Japan, where carts were
     kept to the towns and barred from the highways; the GM's notes put wagons and carts on the roads between
