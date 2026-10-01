@@ -159,6 +159,15 @@ class Reservations:
                     break
         return out
 
+    def corridors_mark(self) -> int:
+        """How many corridors stand reserved - a mark `release_corridors_to` drops back to."""
+        return len(self.corridors)
+
+    def release_corridors_to(self, mark: int) -> None:
+        """Release every corridor reserved since `mark` (`corridors_mark`): a reservation held only while one placer runs."""
+        self.corridors = self.corridors[:mark]
+        self._cbins = {cell: kept for cell, ns in self._cbins.items() if (kept := [n for n in ns if n < mark])}
+
     def release_corridors(self) -> None:
         """The web has drawn every way the corridors were held for (`settle_the_web`): the reservation ends with it."""
         self.corridors, self._cbins = [], {}

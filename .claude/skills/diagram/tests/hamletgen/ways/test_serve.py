@@ -316,6 +316,10 @@ def test_a_door_path_ends_where_it_first_arrives_at_its_way() -> None:
     out = to_first_arrival(path, way, 4.0)
     assert out[0] == (100.0, 60.0) and out[-1][1] == 0.0 and 99.0 <= out[-1][0] <= 101.0 and len(out) == 2
     assert to_first_arrival([(0.0, 50.0), (10.0, 50.0)], way, 4.0) == [(0.0, 50.0), (10.0, 50.0)]
+    slant = [(0.0, 60.0), (100.0, 0.0)]
+    assert to_first_arrival(slant, way, 4.0, lambda a, b: True)[-1] == (0.0, 0.0), "square onto the way where that leg is clear"
+    end = to_first_arrival(slant, way, 4.0, lambda a, b: False)[-1]
+    assert end[1] == 0.0 and 90.0 < end[0] < 100.0, "else at the arrival itself, as the path came"
 
 
 def test_a_routed_door_path_is_string_pulled_where_a_chord_is_clear() -> None:
@@ -368,3 +372,39 @@ def test_a_farm_is_reached_from_a_flank_only_where_the_front_has_no_lawful_path(
     assert s.M["lanes"][-1].get("from_flank") and s.M["meta"]["door_flanks"] == [[300.0, 300.0]]
     s = farm_and_street(False)
     assert serve.lay_door_paths(s, [], [], []) == 0, "the flank walled off the front is not offered"
+
+
+def test_a_boxed_in_door_routes_from_a_clear_step_out_of_it(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The router finds nothing from a door whose own cell has no free neighbor (Kashikawa under feature 302): the route is
+    taken from a step a cell or two out, toward the target first and only where the step is clear, the door put back at its
+    head; a door the router leaves is routed as it was, and one no step frees has no route."""
+    from l7r.diagram.hamletgen.ways import serve
+
+    door, q = (0.0, 0.0), (100.0, 0.0)
+    asked: list[tuple[float, float]] = []
+
+    def boxed(start, goal, *a, **k):  # type: ignore[no-untyped-def]
+        asked.append(start)
+        return [] if start == door else [start, goal]
+
+    monkeypatch.setattr(serve, "_route", boxed)
+    got = serve.route_from_door(door, q, [], [], [], lambda a, b: b[1] >= -1e-9)
+    assert got[0] == door and got[1] == pytest.approx((10.0, 0.0)) and got[-1] == q, "the step toward the target, first"
+    monkeypatch.setattr(serve, "_route", lambda start, goal, *a, **k: [start, goal])
+    assert serve.route_from_door(door, q, [], [], [], lambda a, b: True) == [door, q]
+    monkeypatch.setattr(serve, "_route", lambda *a, **k: [])
+    assert serve.route_from_door(door, q, [], [], [], lambda a, b: True) == []
+    assert serve.route_from_door(door, q, [], [], [], lambda a, b: False) == []
+
+
+def test_a_row_farm_takes_no_door_path_only_where_its_street_already_arrives() -> None:
+    """Off the network the reach alone is asked; on a row's own street, only where the street's point nearest the door is
+    an end the lane law counts as serving the farm (`end_serves`) - Mizuguchi's east-end farm, its door 11 ft off the
+    street but its house 77 ft and its yard 19, needed a path (2026-10-01)."""
+    farm = {"x": 0.0, "y": 0.0}
+    street = [((-100.0, 77.0), (100.0, 77.0))]
+    yard = [[(-20.0, 20.0), (20.0, 20.0), (20.0, 58.0), (-20.0, 58.0)]]
+    assert _serve.street_arrives(farm, (0.0, 66.0), street, None, yard), "off a row's street: the reach alone"
+    assert not _serve.street_arrives(farm, (0.0, 66.0), street, 0, yard), "the street 19 ft off the yard and 77 off the house"
+    near = [((-100.0, 66.0), (100.0, 66.0))]
+    assert _serve.street_arrives(farm, (0.0, 60.0), near, 0, yard), "8 ft off the yard: it arrives"

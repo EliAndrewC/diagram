@@ -737,9 +737,11 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # the seats step at the farmstead's own width rather than the nucleated pitch, and the row runs the field's whole edge
     _row_kw: dict[str, Any] = {}
     if _linear:
+        from .rows import ROW_FRONTAGE_MAX_FT
+
         _bb = _g0["bbox"]
         _reach = (_bb[0] - _bb[2] / 2, _bb[1] - _bb[3] / 2, _bb[0] + _bb[2] / 2, _bb[1] + _bb[3] / 2)
-        _row_kw = {"pitch": max(_bb[2], _bb[3]), "reach": float("inf")}
+        _row_kw = {"pitch": min(max(_bb[2], _bb[3]), s.px(ROW_FRONTAGE_MAX_FT)), "reach": float("inf")}  # never past a lot's frontage (`rows.py`)
     # A ROW VILLAGE'S FARMS STAND IN ROWS ALONG THEIR STREETS (feature 291 amendment 3, `rows.py`; research/homesteads/155
     # and 156): the row takes every household it can, and no front-row, frontage or rank pass takes the rest. Where its
     # streets cannot hold every farm, `seat_every_household` takes them back and seats the next margin, and past the last

@@ -649,9 +649,19 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # A ROW VILLAGE'S ROAD IS ITS STREET (feature 291 plan D17; research/homesteads/155: the road village's farms stand
     # along the road): the connector carries the first planned street on out of the frame along its own line, from
     # whichever end is nearer the sheet's edge. Laid from the gateway, it ran straight across the far row's holdings.
+    # ...FROM THE STREET AS IT WILL BE DRAWN, its farms' span (`street.drawn_span`), not the whole planned line: run out from
+    # the plan's end, the road stopped 481 ft short of a street the web lays only along its farms, no lawful join closed
+    # the gap, and the street was dropped from the network with all ten of its farms (cohort seed 22, 2026-10-01)
     _row = (getattr(s, "_row_streets", None) or [None])[0] if plan.settlement_form == "linear" else None
     if _row and len(_row) >= 2:
-        s.lane(_thread_the_fabric(s, plan, street_run_out(_row, s.W, s.H)), width=6, clearance=LANE_CLEARANCE, worn=True, connector=True)
+        from .street import drawn_span  # the street module reads the web's settle, laid after this stage
+
+        _span = drawn_span(s, 0, s.M.get("houses") or [])
+        _out = street_run_out(_span if len(_span) >= 2 else _row, s.W, s.H)
+        # ...AND OVER THE BROOK AT A FORD, as every other way crosses it (`ford_crossing`): run straight on along the street's
+        # line, the road crossed the brook 72 ft from the nearest ford (cohort seed 3, 2026-10-01)
+        _out = [_out[0], *ford_crossing(_out[0], _out[-1], plan.brook or [], getattr(s, "brook_fords", ())), _out[-1]]
+        s.lane(_thread_the_fabric(s, plan, _out), width=6, clearance=LANE_CLEARANCE, worn=True, connector=True)
         return
     _band_gate = to_screen((float(layout["gateway"][0]), float(layout["gateway"][1])))
     gate = gate_on_the_strip(s, plan.envelope, _cluster_gateway(s, seat, _band_gate))

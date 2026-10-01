@@ -318,3 +318,18 @@ def test_a_bamboo_patch_sits_mid_band_against_the_house_side() -> None:
     tiny = bamboo_patch(0.0, 0.0, 10.0, 8.0, (0.0, 1.0), 22.0, 16.0)
     assert tiny == (-5.0, -4.0, 5.0, 4.0), "clamped to the band"
     assert in_box(100.0, 60.0, north) and not in_box(100.0, 40.0, north) and not in_box(0.0, 0.0, None)
+
+
+def test_a_well_pocket_stands_clear_of_its_own_house_beside_a_shallow_yard() -> None:
+    """A grove farm's well pocket stands beside its yard, at the yard's middle - or clear of the house's front wall by the gap
+    where the yard is shallower than the pocket (Kashikawa, 2026-10-01: at the middle of a shallow yard the wellhead stood on
+    its own house, and the overlap matrix refused it)."""
+    deep = canonical_farmstead(50.0, 28.0, 3.0, (22.0, 24.0), (40.0, 30.0), sides=2, garden_by_yard=False, thin=17.0, sun_east=22.0, way_in=12.0, well=22.0)
+    assert deep["well"][1] == deep["yard"][1], "beside a deep yard, at its middle"
+    shallow = canonical_farmstead(50.0, 28.0, 3.0, (22.0, 24.0), (50.0, 12.0), sides=2, garden_by_yard=False, thin=17.0, sun_east=22.0, way_in=12.0, well=22.0)
+    assert shallow["well"][1] == shallow["yard"][1], "beside a yard as wide as the house it clears the end wall at any height"
+    narrow = canonical_farmstead(50.0, 28.0, 3.0, (22.0, 24.0), (30.0, 12.0), sides=2, garden_by_yard=False, thin=17.0, sun_east=22.0, way_in=12.0, well=22.0)
+    assert narrow["well"][1] - (narrow["well"][3] / 2 - 3.0) == pytest.approx(28.0 / 2 + 1.0), "under a house wider than its yard: its wellhead a foot off the front wall"
+    assert canonical_farmstead(50.0, 28.0, 3.0, (22.0, 24.0), (30.0, 30.0), sides=2, garden_by_yard=False, thin=17.0, sun_east=22.0, way_in=12.0, well=22.0)["well"][1] == 14.0 + 3.0 + 15.0, (
+        "beside a deep yard, at its middle, under the house or not"
+    )

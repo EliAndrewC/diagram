@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-01T22:14:11Z",
+  "target": "entry-gate",
+  "commit": "86395a70d",
+  "why": "entry-drift ran on both modals: farm holding and village lane IN-STEP, neither states the spacing"
+}
