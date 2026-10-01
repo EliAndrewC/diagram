@@ -155,7 +155,7 @@ for the rules still broken (`STEP_RULES`, `steps_for`), the exit reusing the las
 
 ## R12. The targeted settle rounds, measured and withdrawn (observed 2026-10-01, method: `stagemin.sh` best of three, the same engine but the settle loop, back to back, load 3.2-3.8)
 
-| web stage | full rounds (every step every round, the law asked once at the exit) | targeted (the law asked after each round, only its rules' steps run) |
+| web stage (observed 2026-10-01, method: `stagemin.sh`) | full rounds (every step every round, the law asked once at the exit) | targeted (the law asked after each round, only its rules' steps run) |
 |---|---|---|
 | Inashiro | 0.40 s | 0.45 s |
 | Sawada | 0.51 s | 0.60 s |
