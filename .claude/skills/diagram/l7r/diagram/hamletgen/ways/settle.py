@@ -63,6 +63,7 @@ from .corridors import (
 from .fabric import _crosses_fabric, _homestead_polys, house_hit
 from .geom import _TOUCH_GAP, _components, _trim_to_service, memo_ground, polyline_len, steading_footprints, worked_ground
 from .joints import joints
+from .serve import shadowed_by
 from .sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
 from .tree import prune_the_tree, settle_defer, settle_tree, tree_faults
 
@@ -435,10 +436,17 @@ def settle_ends(s: Any) -> int:
             claim({i, j}, both[0][1], [])
     for i in law.doubled_tails(M):
         p = _pts(lanes[i])
+        # ...at whichever end runs on beside the way (`doubled_tails` asks both): the first end is cut as the last end of the
+        # lane reversed, and turned back
         for j, o in enumerate(lanes):
             op = _pts(o)
-            if j != i and len(op) >= 2 and (k := along_tail(p, op, deg=_DOUBLED_DEG)) is not None:
-                claim({i, j}, i, [cut_at_tail(p, k, op)])
+            if j == i or len(op) < 2:
+                continue
+            hit = next(((q, k, back) for q, back in ((p, False), (p[::-1], True)) if (k := along_tail(q, op, deg=_DOUBLED_DEG)) is not None), None)
+            if hit is not None:
+                q, k, back = hit
+                cut = cut_at_tail(q, k, op)
+                claim({i, j}, i, [cut[::-1] if back else cut])
                 break
     houses = M.get("houses") or []
     for h, ends in law.fronting_ends(M).items():
@@ -517,6 +525,47 @@ def settle_dangling(s: Any) -> int:
             edits[i] = []
         elif trimmed != ways[i] and (i in bad or polyline_len(ways[i]) - polyline_len(trimmed) > TRIM_GRAIN_FT):
             edits[i] = [trimmed]
+    return apply_pieces(s, edits) if edits else 0
+
+
+def settle_shadows(s: Any) -> int:
+    """AN ORDINARY LANE RUNNING BESIDE ANOTHER WAY PAST A PITCH GOES (`shadowed_by`, `_lay_web_lane`'s own refusal - a lane
+    that shadows another is a doubled band): of the two, the shorter ordinary lane where the web keeps its networks without
+    it (`keeps_the_network`), one a round. Asked of the finished web because the join and touch passes lay lanes no shadow
+    test sees (feature 293 on 291: a touch lane of Kashikawa's ran 106 ft within 30 ft of a join-orphans remnant, the two
+    diverging at 22 degrees from one corner to one street)."""
+    ways = [_pts(ln) for ln in s.M.get("lanes") or []]
+    ordinary = set(_ordinary(s.M))
+    for i in range(len(ways)):  # ...a tree lane too, beside an ordinary one: a door path is tree, the lane it doubles not
+        if (j := shadowed_by(ways, i)) is not None:
+            for k in sorted({i, j} & ordinary, key=lambda n: polyline_len(ways[n])):
+                if keeps_the_network(s.M, k, []):
+                    return apply_pieces(s, {k: []})
+    return 0
+
+
+def settle_street_ends(s: Any) -> int:
+    """A ROW'S STREET, a tree lane no trim cuts, has an end the lane law calls dangling cut back to its last joint
+    (`end_to_its_joint`); returns the streets cut. The web cuts each street to its outermost joints before the settle
+    (`trim_streets`), and a repair or the last resort's drop can take the lane that stood at that joint (feature 293 on 291:
+    cohort seed 903's street ended in a knot of stubs 191 ft past its nearest farm, each counted as reaching the next until
+    the law stopped counting a way an end walked away from; the knot dropped, the street's end served nothing and the web
+    was refused)."""
+    from .street import end_to_its_joint  # street.py imports this module's `Lawful`; imported where it is used
+
+    M = s.M
+    lanes = M.get("lanes") or []
+    if not any(ln.get("street_index") is not None for ln in lanes):
+        return 0
+    ways = [_pts(ln) for ln in lanes]
+    edits: dict[int, list[Poly]] = {}
+    for i, e in law.dangling_lane_ends(M, memo_ground(s, "worked", worked_ground)):
+        if lanes[i].get("street_index") is None:
+            continue
+        run = edits[i][0] if i in edits else ways[i]
+        cut = end_to_its_joint(run, [o[k] for j, o in enumerate(ways) if j != i and len(o) >= 2 for k in (0, -1)], _TOUCH_GAP, e)
+        if len(cut) >= 2 and cut != run:
+            edits[i] = [cut]
     return apply_pieces(s, edits) if edits else 0
 
 
@@ -879,6 +928,8 @@ STEPS = (
     settle_shapes,
     settle_way_outs,
     settle_ends,
+    settle_street_ends,
+    settle_shadows,
     settle_joins,
     settle_needles,
     settle_reach,

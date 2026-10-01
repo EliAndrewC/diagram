@@ -55,8 +55,12 @@ lane round a small hamlet. Most are refused for meeting their lane at a needle's
 
 def is_tree(ln: Mapping[str, Any]) -> bool:
     """Is this lane part of the tree no settle repair cuts - the connector, the exit strip, a drawn access corridor, a spur
-    to a way target or the field way?"""
-    return bool(ln.get("connector")) or ln.get("role") in TREE_ROLES
+    to a way target or the field way? ...OR A ROW VILLAGE'S STREET, or the path from a grove farm's front door (`serves`):
+    a row's planned streets and each farm's own way to its street are its tree, laid for its farms as a nucleated seat's
+    corridors are (feature 291 on 287). Cut as ordinary lanes, a farm's short path read as a fragment the street reached
+    past, and the street's tail as a dangling end, so the settle trimmed Mizuguchi's street back farm by farm and left four
+    farms unreached."""
+    return bool(ln.get("connector")) or ln.get("role") in TREE_ROLES or bool(ln.get("street")) or bool(ln.get("serves"))
 
 
 def _pt(q: Sequence[float]) -> Pt:

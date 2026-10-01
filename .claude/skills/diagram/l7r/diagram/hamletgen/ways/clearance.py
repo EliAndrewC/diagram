@@ -6,7 +6,7 @@ import heapq
 import math
 from collections.abc import Callable, Sequence
 
-from l7r.diagram.settlement import seg_closest, seg_intersect, segments_cross
+from l7r.diagram.settlement import poly_gap, seg_closest, seg_intersect, segments_cross
 
 from ..clearance import FabricIndex, fabric_index
 from ..consts import (
@@ -15,7 +15,7 @@ from ..consts import (
     Poly,
     Pt,
 )
-from .geom import _TOUCH_GAP, _turn_deg, fabric_clearance, polyline_len, push_out_of
+from .geom import _TOUCH_GAP, _turn_deg, fabric_clearance, polyline_len, push_out_of, stroke_quad
 
 
 def link_index(hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float = WEB_FABRIC_GAP) -> FabricIndex:
@@ -254,7 +254,31 @@ def may_write(old_pts: Sequence[Pt], new_pts: Sequence[Pt], width: float, fabric
     bar = max(_TOUCH_GAP, float(width or 5.0) / 2.0 + 2.0)
     if fabric_clearance(new_pts, fabric) < min(fabric_clearance(old_pts, fabric), bar) - 1e-9:
         return False
+    # ...AND JUDGE THE DRAWN TREAD, NOT ONLY THE CENTERLINE (feature 291, found by the cohort's matrix on seed 20). A
+    # dropped nub left a lane's first leg starting 1.7 ft off a garden bed as before, but running along the bed at a
+    # shallow angle instead of leaving it square - and a square-ended stroke 5 ft wide swings its corner into the bed.
+    # `fabric_clearance` measured 13.9 ft before and 8.3 ft after (it reads the fabric's vertices against the lane, not
+    # its edges) and the centerline distance was 1.7 ft both times, so neither could see it; the stroke can.
+    if stroke_hits(new_pts, width, fabric) - stroke_hits(old_pts, width, fabric):
+        return False
     return not (_bends_badly(new_pts) and not _bends_badly(old_pts))
+
+
+def stroke_hits(pts: Sequence[Pt], width: float, fabric: Sequence[Poly]) -> set[int]:
+    """Which fabric polygons a lane's drawn tread overlaps: each segment stroked square-ended at half its width, as the
+    overlap matrix reads a lane, against each polygon (`poly_gap`, exact for the convex quads the fabric is made of)."""
+    half = float(width or 5.0) / 2.0
+    hits: set[int] = set()
+    for a, b in zip(pts, pts[1:], strict=False):
+        quad = stroke_quad(a, b, half)
+        x0, x1 = min(p[0] for p in quad), max(p[0] for p in quad)
+        y0, y1 = min(p[1] for p in quad), max(p[1] for p in quad)
+        for k, poly in enumerate(fabric):
+            if k in hits or max(p[0] for p in poly) < x0 or min(p[0] for p in poly) > x1 or max(p[1] for p in poly) < y0 or min(p[1] for p in poly) > y1:
+                continue
+            if poly_gap(quad, list(poly)) <= 0.0:
+                hits.add(k)
+    return hits
 
 
 def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float = _TOUCH_GAP) -> bool:

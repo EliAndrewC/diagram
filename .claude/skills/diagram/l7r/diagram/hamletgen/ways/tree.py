@@ -445,7 +445,14 @@ def prune_the_tree(s: Any) -> int:
     M = s.M
     lanes = M.get("lanes") or []
     order = sorted(
-        (i for i, ln in enumerate(lanes) if is_tree(ln) and not ln.get("connector") and ln.get("role") != STRIP_ROLE and len(ln.get("pts") or []) >= 2),
+        # ...never a row village's street or a grove farm's own door path (feature 291 FR-017 and FR-019): each is the way its
+        # farms are reached by, not a corridor another way stands in for - pruned as one, Mizuguchi's door paths went as
+        # redundant beside a street a frame's depth off, and the streets' ends were left dangling
+        (
+            i
+            for i, ln in enumerate(lanes)
+            if is_tree(ln) and not ln.get("connector") and not ln.get("street") and not ln.get("serves") and ln.get("role") != STRIP_ROLE and len(ln.get("pts") or []) >= 2
+        ),
         key=lambda i: -polyline_len(law.lane_pts(lanes[i])),
     )
     if not order:

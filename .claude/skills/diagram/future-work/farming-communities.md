@@ -2408,6 +2408,20 @@ line in feature 280 (`specs/280-modern-only-sweep/outcomes.md`, one row per item
   290-300 ft; 2.27 at worst on main) - the lane web leads them south-east first. Measured by the round-5 review, 2026-09-29; the
   same routing question as Kashikawa's detours above.
 
+## Found by feature 291's settlement-reviews (2026-09-30), measured and left
+
+- **A far-row farm's grove and its holding strip do not meet** (Kashikawa, nitpick F1 of the passing round). The grove is
+  square to the page (the house faces south) and the strip square to the street (-59 degrees), so a wedge of open scrub
+  26-56 ft wide at its nearest lies between them on all 11 far farms; at fit zoom the holdings read as one field block
+  behind the row rather than as the back of each lot. No norm sets a gap (homesteads/157: "house lot, then field").
+  Sketch: start the strip at the lot's back edge as drawn (the grove band's outer edge along the normal), or turn the
+  farm's frame to the street on a street laid first - the latter a question for the record first (does a planned row's
+  house face its street or the south?).
+- **A carried-on spur's end is written at full float precision** (Sawada, nitpick of the passing round):
+  `ways/bund.carry_on` draws `[q, *step]` unrounded where every other lane point is rounded to one decimal. Sketch: round
+  the step's points in `carry_on` as `commit_lane` does. An engine change, so it waits for the next feature that re-rolls
+  the pool rather than re-keying a reviewed one.
+
 ## OPEN 2026-09-30 (feature 287): a tree run crossing water more than ~18 deg off square is refused, not straightened
 
 `hamletgen/ways/tree.py:rejoined` pads a run 4 ft (`REJOIN_PAD_FT`) either side of a water crossing before the
@@ -2442,3 +2456,16 @@ found it did not own; put to the GM in specs/293-effort-level-experiment/outputs
 count lives only in hand-typed dated entries - the kind of line that went stale on Kuwabata (round 1, F1). Sketch: one
 `storehouses: **n** of **m** farmhouses` line in the census block, read from `farm_sheds` and the plain houses, beside the
 fixture line.
+
+## OPEN 2026-09-30 (feature 293 on 291, settlement-review of Inashiro): the connector may leave through the belt's windward corner
+
+**Measured** (the manifests): after the merge with feature 291, Inashiro's connector leaves the entrance north-west, a 327 ft
+first leg from (2290, 1649) to a bend at (2012, 1477) just off the sheet, so the road enters through the windbreak's
+north-west apex, about 13 degrees off the north-west wind; main's left south-west through the belt's west arm. The
+planting resumes on both sides (35, 22 and 50 ft of open ground between canopy edges over the first 75 ft).
+**Mechanism**: the connector's dry-exit search (`ways/track.py`, `connector_through`, `dry_exit.py`) scores bearings by dry,
+clear ground and has no preference for the belt's open side. research/vegetation.html ("How did a lane get through a
+belt?") records the lane's crossing as a GUESS and the old entrances found as standing on the grove's open side (Tonami;
+the Huizhou water mouths). **Sketch**: among the dry bearings the sweep admits, prefer the one that leaves through the
+belt's lee or flank arc (`plan.windward`), and fall back to the windward arc only where no other is dry - asked of the
+whole cohort, since it moves every map whose connector currently leaves windward.

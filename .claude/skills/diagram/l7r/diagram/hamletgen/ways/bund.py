@@ -19,13 +19,14 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross
+from l7r.diagram.settlement import Settlement, point_in_poly, poly_gap, seg_dist, segments_cross
 from l7r.diagram.settlement.land.wet import marsh_ground
+from l7r.diagram.sitegen.geom import crop_polys
 
 from ..consts import FOOTPATH_FABRIC_GAP, LANE_CLEARANCE, WAY_END_REACH_FT, Poly, Pt
 from .checks import drawn_water_segs
 from .fabric import _crosses_fabric, _hits_a_steading, _homestead_polys
-from .geom import _TOUCH_GAP, BUND_REACH_FT, WorkedGround, end_serves, memo_ground, steading_footprints, worked_ground
+from .geom import _TOUCH_GAP, BUND_REACH_FT, WorkedGround, end_serves, memo_ground, steading_footprints, stroke_quad, worked_ground
 
 # The tip stops this far outside the worked ground's edge past its own half-tread, so the tread's rounded cap lies on the
 # bund line rather than on the rice (a map drawing convention; inside `BUND_REACH_FT` for every lane width drawn here).
@@ -117,15 +118,24 @@ class RunOnBlocks:
         if toe:
             self.wet.append(list(toe))
         self.fabric = [poly for poly, _own, kind in _homestead_polys(s) if kind not in ("commons", "village_groves")]
+        # THE DRY PLOTS TOO (feature 291, found by the cohort's matrix on seed 17): a run-on aims at the PADDY
+        # (`paddy_ground`, which holds no dry plot) and `run_on_target` promises only that its segment meets nothing of
+        # that set - so a way carried ~150 ft to the paddy ran straight across a buckwheat plot between, and nothing here
+        # looked. A way runs on the baulk between plots, never through the crop (`lanes_clear_of_dry_plots`).
+        self.crops = crop_polys(s)
 
-    def clear(self, a: Pt, b: Pt, width: float) -> bool:
-        if any(segments_cross(a, b, c, d) for c, d in self.water):
+    def clear(self, a: Pt, b: Pt, width: float, over_water: int = 0) -> bool:
+        """Is the stretch a -> b clear - crossing no more than `over_water` water courses (a crossing the crossings stage
+        squares and planks), no marsh, crop or steading?"""
+        if sum(1 for c, d in self.water if segments_cross(a, b, c, d)) > over_water:
             return False
         for w in self.wet:
             if point_in_poly(b[0], b[1], w) or any(segments_cross(a, b, w[k], w[(k + 1) % len(w)]) for k in range(len(w))):
                 return False
         # the new stretch alone, from a step off the end it grows from (that end may stand at its own dooryard's gap)
         start = (a[0] + (b[0] - a[0]) * min(1.0, 2.0 / max(math.dist(a, b), 1e-9)), a[1] + (b[1] - a[1]) * min(1.0, 2.0 / max(math.dist(a, b), 1e-9)))
+        if self.crops and any(poly_gap(stroke_quad(start, b, width / 2.0), c) <= 0.0 for c in self.crops):
+            return False  # the drawn tread, as the matrix reads it, on a dry plot
         return not _crosses_fabric([start, b], self.fabric, FOOTPATH_FABRIC_GAP) and not _hits_a_steading(self.s, [start, b], int(width))
 
 
@@ -146,7 +156,7 @@ def run_lanes_on_to_the_bund(s: Settlement, ground: WorkedGround, blocks: RunOnB
     moved = 0
     for i, ln in enumerate(lanes):
         pts = [(float(x), float(y)) for x, y in ln.get("pts") or []]
-        if ln.get("connector") or len(pts) < 2:
+        if (ln.get("connector") or ln.get("street")) or len(pts) < 2:
             continue
         segs = _segs_of(lanes, i)
         changed = False
@@ -187,7 +197,7 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
     if paddy.edge is None:
         return "none: no paddy"
     lanes = s.M.get("lanes") or []
-    live = [(i, ln) for i, ln in enumerate(lanes) if not ln.get("connector") and len(ln.get("pts") or []) >= 2]
+    live = [(i, ln) for i, ln in enumerate(lanes) if not (ln.get("connector") or ln.get("street")) and len(ln.get("pts") or []) >= 2]
     ends = [(i, e, (float(ln["pts"][e][0]), float(ln["pts"][e][1]))) for i, ln in live for e in (0, -1)]
     blocks = blocks or RunOnBlocks(s)
     # AN END AT THE BUND WITH WATER BETWEEN HAS NOT JOINED IT (settlement-review of Mizuguchi at the 269 landing): the field
@@ -198,12 +208,8 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
         return "joined"
     for i, e, q, p in near:
         if p is not None:
-            pts = [(float(x), float(y)) for x, y in lanes[i]["pts"]]
-            to = over_the_water(q, p, blocks.water)
-            pts = [*pts, to] if e == -1 else [to, *pts]
-            if not s.reshape_lane(lanes[i], pts):  # ...where the overlap matrix admits the carried end (feature 287 M8)
+            if not carry_on(s, i, e, q, over_the_water(q, p, blocks.water)):  # ...where the overlap matrix admits it (feature 287 M8)
                 continue
-            s.reink_lane(i)
             return "run_on"
     for i, e, q in sorted(ends, key=lambda t: paddy.dist(t[2])):
         # ...BUT NOT AN END THAT IS A JUNCTION (feature 293; Sawada in the earlier 293 pass): an end standing on another way's
@@ -215,11 +221,8 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
         tgt = run_on_target(q, paddy, float(lanes[i].get("w") or 3) / 2.0, reach=float("inf"))
         prev = (float(lanes[i]["pts"][-2 if e == -1 else 1][0]), float(lanes[i]["pts"][-2 if e == -1 else 1][1]))
         if tgt is not None and not turns_back(prev, q, tgt) and blocks.clear(q, tgt, float(lanes[i].get("w") or 3)):
-            pts = [(float(x), float(y)) for x, y in lanes[i]["pts"]]
-            pts = [*pts, tgt] if e == -1 else [tgt, *pts]
-            if not s.reshape_lane(lanes[i], pts):  # ...where the overlap matrix admits the run on (feature 287 M8)
+            if not carry_on(s, i, e, q, tgt):  # ...where the overlap matrix admits the run on (feature 287 M8)
                 continue
-            s.reink_lane(i)
             return "run_on"
     samples: list[Pt] = []
     for _i, ln in live:
@@ -227,12 +230,65 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
         for a, b in zip(pts, pts[1:], strict=False):
             n = max(1, int(math.dist(a, b) // BRANCH_STEP_FT))
             samples.extend((a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n) for k in range(n))
-    for q in sorted(samples, key=paddy.dist):
-        tgt = run_on_target(q, paddy, BRANCH_WIDTH / 2.0, reach=float("inf"))
-        if tgt is not None and blocks.clear(q, tgt, BRANCH_WIDTH) and s.admits_lane([q, tgt], BRANCH_WIDTH):  # ...and the matrix (M8)
-            s.lane([q, tgt], width=BRANCH_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)
-            return "branch"
+    # ...AND WHERE THE WATER LIES BETWEEN, ACROSS IT ONCE: a row on the brook's far bank from its fields reaches them over a
+    # plank, which the crossings stage squares and lays (Mizuguchi, settlement-review 2026-09-30: once its brook came on from
+    # off the sheet no way reached the paddy, and the fallback refused every way across the water)
+    for over in (0, 1):
+        for q in sorted(samples, key=paddy.dist):
+            tgt = run_on_target(q, paddy, BRANCH_WIDTH / 2.0, reach=float("inf"))
+            if tgt is not None and blocks.clear(q, tgt, BRANCH_WIDTH, over_water=over) and s.admits_lane([q, tgt], BRANCH_WIDTH):  # ...and the matrix (M8)
+                s.lane([q, tgt], width=BRANCH_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)
+                return "branch"
     return "none: every straight way from the lanes to the paddy crosses water, the marsh or a steading"
+
+
+SQUARE_APPROACH_FT = 12.0
+"""How far before the water a step bends onto its square crossing (a map drawing convention: a few paces)."""
+
+
+def squared_step(q: Pt, to: Pt, water: Sequence[tuple[Pt, Pt]], tol_deg: float = 10.0) -> list[Pt]:
+    """The step from `q` to `to` (without `q`): straight where it crosses no water or crosses it within `tol_deg` of square;
+    else bent onto a square crossing - to a point `SQUARE_APPROACH_FT` before the water on its normal, then across to the
+    water's far side as far out as `to` stood (Kashikawa, settlement-review 2026-09-30: a field path's short step crossed
+    the brook 45 degrees off square, too near its end for the crossings stage to square it)."""
+    from l7r.diagram.settlement import seg_intersect
+
+    hit = next(((c, d) for c, d in water if segments_cross(q, to, c, d)), None)
+    if hit is None:
+        return [to]
+    c, d = hit
+    x = seg_intersect(q, to, c, d) or to
+    ln = math.dist(c, d) or 1.0
+    nx, ny = -(d[1] - c[1]) / ln, (d[0] - c[0]) / ln
+    if (to[0] - x[0]) * nx + (to[1] - x[1]) * ny < 0:
+        nx, ny = -nx, -ny
+    sx, sy = (to[0] - q[0]), (to[1] - q[1])
+    sl = math.hypot(sx, sy) or 1.0
+    if math.degrees(math.acos(min(1.0, abs(sx * nx + sy * ny) / sl))) <= tol_deg:
+        return [to]
+    beyond = max(3.5, (to[0] - x[0]) * nx + (to[1] - x[1]) * ny)
+    return [(x[0] - nx * SQUARE_APPROACH_FT, x[1] - ny * SQUARE_APPROACH_FT), (x[0] + nx * beyond, x[1] + ny * beyond)]
+
+
+def carry_on(s: Settlement, i: int, e: int, q: Pt, to: Pt) -> bool:
+    """Carry lane `i`'s end `e` (at `q`) on to `to`: the lane is lengthened - unless that end is a JUNCTION, on another
+    lane's tread, when the step is drawn as a field path of its own from `q` (feature 291: Mizuguchi's door path met its
+    street there, was carried on over it to the bund, and the junction became a crossing - the web in two pieces at the
+    4 ft its one-network rule joins at). Either way the overlap matrix is asked first (feature 287 M8): False, and
+    nothing is drawn, where it refuses."""
+    lanes = s.M.get("lanes") or []
+    step = squared_step(q, to, drawn_water_segs(s))
+    if any(seg_dist(q[0], q[1], a, b) <= _TOUCH_GAP for a, b in _segs_of(lanes, i)):
+        if not s.admits_lane([q, *step], BRANCH_WIDTH):
+            return False
+        s.lane([q, *step], width=BRANCH_WIDTH, clearance=LANE_CLEARANCE, worn=True, spur=True)
+        return True
+    pts = [(float(x), float(y)) for x, y in lanes[i]["pts"]]
+    pts = [*pts, *step] if e == -1 else [*step[::-1], *pts]
+    if not s.reshape_lane(lanes[i], pts):
+        return False
+    s.reink_lane(i)
+    return True
 
 
 # ft past the centerline of the water crossed that a carried end stops, on the bund: a supply canal is ~4.5 ft wide and its
@@ -286,7 +342,7 @@ def cut_past_the_junction(s: Settlement, touch: float = 4.0) -> int:
     cuts = 0
     for i, ln in enumerate(lanes):
         p = [(float(x), float(y)) for x, y in ln.get("pts") or []]
-        if ln.get("connector") or len(p) < 3:
+        if (ln.get("connector") or ln.get("street")) or len(p) < 3:
             continue
         others = _segs_of(lanes, i)
         q = cut_stub_ends(p, others, houses, ground, touch)

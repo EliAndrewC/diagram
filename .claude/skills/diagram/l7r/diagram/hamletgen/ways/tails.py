@@ -47,7 +47,11 @@ def along_tail(pts: Sequence[Pt], other: Sequence[Pt], step: float = 4.0, deg: f
         # that runs back along a way to that way's own vertex is nearest, at the vertex, to the OTHER reach meeting there - a
         # tie at zero - and was judged against that one, 27 degrees off, so a straggler's 95 ft retrace of lane 2 never counted
         near = [(a, b) for a, b in segs if seg_dist(q[0], q[1], a, b) <= _ALONG_FT]
-        if not near or not any(_parallel(u, (b[0] - a[0], b[1] - a[1]), deg) for a, b in near):
+        # ...WALKED THROUGH THE JUNCTION'S OWN APPROACH (feature 293 on 291): within `_ALONG_FT` of its end a lane still
+        # beside the way may meet it at an angle - Mizuguchi's field spur left its street 20 degrees off the reach there,
+        # then ran 10-12 ft beside it for 210 ft, and the tail was judged at its first sample alone. A T or a needle is
+        # no nearer parallel past that approach, so neither reads as a tail for it
+        if not near or not (any(_parallel(u, (b[0] - a[0], b[1] - a[1]), deg) for a, b in near) or polyline_len(samples[k - 1 :]) <= _ALONG_FT):
             break
         k -= 1
     if polyline_len(samples[k:]) < _ALONG_MIN_FT:
@@ -146,7 +150,7 @@ def _sweep_doubled_tails(s: Settlement) -> int:
     # is never cut back along a narrower one.
     for i in sorted(range(len(lanes)), key=lambda k: float(lanes[k].get("w") or 3)):
         ln = lanes[i]
-        if ln.get("connector") or ln.get("spur") or len(ln.get("pts") or []) < 2:
+        if (ln.get("connector") or ln.get("street")) or ln.get("spur") or len(ln.get("pts") or []) < 2:
             continue
         pts = [(float(x), float(y)) for x, y in ln["pts"]]
         changed = False

@@ -55,3 +55,23 @@ def test_the_raster_is_built_once_for_the_same_walls_and_lines_whatever_the_star
     assert (info.misses, info.hits) == (1, 1)
     x0, n = -2 * de.EXIT_CELL_FT, int((100.0 + 4 * de.EXIT_CELL_FT) // de.EXIT_CELL_FT) + 1
     assert de._blocked_memo(tuple((tuple(p), m) for p, m in wall), tuple(lines), x0, x0, n, n, de.EXIT_CELL_FT) == frozenset(de._blocked_cells(wall, lines, x0, x0, n, n, de.EXIT_CELL_FT))
+
+
+def test_the_connector_leaves_between_two_farms_groves_by_the_finer_grid() -> None:
+    """`connector_dry_exit` (feature 291 on 287): two grove bands a lane's room (32 ft) apart, the gateway between them - at a
+    track's gap on the 20 ft grid no way out; a band kept at a footpath's gap on the 10 ft grid leaves one."""
+    import types
+
+    import pytest as _pt
+
+    from l7r.diagram.hamletgen.ways.track import NoDryExit, connector_dry_exit
+
+    west = [(0.0, 400.0), (484.0, 400.0), (484.0, 600.0), (0.0, 600.0)]
+    east = [(516.0, 400.0), (1000.0, 400.0), (1000.0, 600.0), (516.0, 600.0)]
+    south = [(0.0, 600.0), (1000.0, 600.0), (1000.0, 1000.0), (0.0, 1000.0)]  # the field: the way out is north, between the bands
+    plan = types.SimpleNamespace(W=1000.0, H=1000.0, sink_pond=None, sink_brook=[], envelope=south, grove_bands=[])
+    with _pt.raises(NoDryExit):
+        connector_dry_exit(plan, (500.0, 590.0), [south], [], [], [west, east])  # type: ignore[arg-type]
+    plan.grove_bands = [west, east]
+    path = connector_dry_exit(plan, (500.0, 590.0), [south], [], [], [west, east])  # type: ignore[arg-type]
+    assert path[-1][1] < 0.0, "out of the frame to the north"

@@ -374,6 +374,13 @@ def _flexible_clear(s: Settlement, h: Mapping[str, Any], q: Pt, ext: tuple[float
     hx, hy = float(h["x"]), float(h["y"])
     if _strip_blocked(s, q[0], q[1], ext[0], ext[1], hx, hy, fields, marsh, pond, lanes, footing):
         return False
+    # ...nor in any farm's grove band (feature 291 on 287: `grove_rules.fixtures_on_groves`, the same boxes)
+    if any(
+        abs(q[0] - float(g["x"])) < (ext[0] + float(g["w"])) / 2 and abs(q[1] - float(g["y"])) < (ext[1] + float(g["h"])) / 2
+        for g in s.M.get("groves") or ()
+        if all(k in g for k in ("x", "y", "w", "h"))
+    ):
+        return False
     return not across_the_brook(s, (hx, hy), q)
 
 

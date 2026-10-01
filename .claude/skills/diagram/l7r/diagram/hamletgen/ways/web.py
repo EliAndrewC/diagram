@@ -17,6 +17,7 @@ from ..consts import (
     CLUSTER_SPAN_FACTOR,
     LANE_CLEARANCE,
     MIN_WEB_GAP,
+    STEADING_ARRIVAL_FT,
     WEB_FABRIC_GAP,
     WEB_HARD_GAP,
     WEB_REACH_FT,
@@ -29,12 +30,13 @@ from .bund import a_way_onto_the_bund, cut_past_the_junction, run_lanes_on_to_th
 from .checks import drawn_water_segs
 from .clearance import clear_runs, clip_to_clear
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _homestead_polys, _margin_frame, _net_segs, _pass, _pull_back_to_service
-from .geom import _components, _trim_to_service, polyline_len, steading_footprints
+from .geom import _TOUCH_GAP, _components, _trim_to_service, polyline_len, steading_footprints
 from .joints import center_lane_ends, fold_the_connector_hairpin, meet_end_to_end, split_at_crossings, straighten_joints
 from .route import _route
-from .serve import _lay_web_lane
+from .serve import DOOR_REACH_FT, _lay_web_lane, lay_door_paths
 from .settle import settle_the_web
 from .smooth import _STUB_REACH_FT, _smooth_web
+from .street import lay_row_streets, trim_streets
 from .sweeps import (
     _bridge_collinear_breaks,
     _drop_end_nubs,
@@ -225,7 +227,7 @@ def _drop_collapsed(s: Settlement) -> list[int]:
     collapsed: list[int] = []
     for i, ln in enumerate(s.M.get("lanes", [])):
         p = ln.get("pts") or []
-        if not ln.get("connector") and (len(p) < 2 or math.dist(p[0], p[-1]) < 1.0 and len(p) == 2):
+        if not (ln.get("connector") or ln.get("street")) and (len(p) < 2 or math.dist(p[0], p[-1]) < 1.0 and len(p) == 2):
             ln["pts"] = []
             s.reink_lane(i)
             collapsed.append(i)
@@ -248,7 +250,7 @@ def cut_the_overruns(s: Settlement) -> None:
         # ...and a lane that ran on past the connector to a loose end is cut where it met it (feature 261: `cut_past_connector`)
         _q = (
             trim_free_stub(cut_past_connector(_p, _conn, [sg for sg in _others if sg not in _conn], [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]), _others)
-            if not _ln.get("connector")
+            if not (_ln.get("connector") or _ln.get("street"))
             else _p
         )
         if _q != _p:
@@ -256,8 +258,12 @@ def cut_the_overruns(s: Settlement) -> None:
             s.reink_lane(_i)
 
 
-def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
+def tidy_lane_ends(s: Settlement, envelope: Poly, streets: bool = False) -> None:
     """THE LAST PASS OVER EVERY LANE END, after the joins: pull back anything that still reaches nothing.
+
+    A ROW'S STREETS ARE TRIMMED APART, with `streets=True`, once the door paths are laid (feature 291 plan D17): a row
+    farm stands a frame's depth off its street and is reached by its door path, laid after this pass, so trimmed with
+    the rest a street was cut back to the first farm near enough to count (Kashikawa's, from 2,800 ft to 1,400).
 
     LIFTED TO MODULE LEVEL (feature 227, the GM's 2026-08-28 ruling on inner functions and testability). It was the
     tail of `stage_web`, and its shortening branch had no reader but the shipped rolls - so the moment the end rule
@@ -294,6 +300,8 @@ def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
         # three separate passes have now had to learn this rule one at a time.
         if len(_ln.get("pts") or []) < 2:  # pragma: no cover - see above
             continue
+        if bool(_ln.get("street")) != streets:
+            continue
         _pts = [(float(x), float(y)) for x, y in _ln["pts"]]
         _others = [
             sg
@@ -323,7 +331,7 @@ def tidy_lane_ends(s: Settlement, envelope: Poly) -> None:
             # drawn lane longer than the checked one, which is the quietest kind of wrong there is.
             s.reink_lane(_i)
         elif (
-            not _ln.get("connector")
+            not (_ln.get("connector") or _ln.get("street"))
             and (
                 len(_kept) < 2
                 # trimmed to a nub too short to be a lane (Kashikawa's field spur kept 2 ft past the tread it stopped on) that is
@@ -460,8 +468,12 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # two stages earlier, before any house existed; now it is derived from where they actually went.
     # It runs before the web cuts so the web sees it as existing network to thread around and join,
     # which is what `_net_segs` reads.
+    # A ROW VILLAGE WITH PLANNED STREETS lays those, not a skeleton and cuts sized on the house cloud (feature 291 plan
+    # D17): the streets are laid below, once the steadings' fabric is known, and the stragglers and door paths still run.
+    _rows = plan.settlement_form == "linear" and bool(getattr(s, "_row_streets", None))
     _pass("skeleton")
-    _lay_skeleton(s, plan, frame, arcs, stands)
+    if not _rows:
+        _lay_skeleton(s, plan, frame, arcs, stands)
 
     pad = 30.0  # a lane runs a little past the last steading it serves, not up to its wall
 
@@ -477,7 +489,9 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         return (min(near_by) - pad, max(near_by) + pad)
 
     lines: list[Poly] = []
-    if plan.lane_web == "alleys":
+    if _rows:
+        pass  # no cuts: a row's farms are served by their street
+    elif plan.lane_web == "alleys":
         # A lateral spans the cluster's DEPTH at a cut along the margin. Straight in outline
         # coordinates, which is a gentle curve on the ground - it runs square out from the field
         # edge, which is the way a path between two plots actually leaves the paddy.
@@ -551,6 +565,9 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # The shelter belts, separately: a web lane may CROSS one but may not run its length.
     belts = [[(float(a), float(b)) for a, b in g["poly"]] for g in s.M.get("village_groves", []) if g.get("poly")]
     drawn_water = drawn_water_segs(s)  # channels AND streams - see the helper for why the streams were missing
+    if _rows:
+        _frame_w = max((max(float(b[2]), float(b[3])) for b in (((h.get("geom") or {}).get("bbox")) for h in houses) if b), default=BUNDLE_PITCH)
+        lay_row_streets(s, houses, hard_built, walls, list(plan.watercourses) + drawn_water, reach=1.5 * _frame_w, pad=_frame_w / 2)
     cands: list[Poly] = []
     for line in lines:
         # FINER SAMPLING AND A WIDER FABRIC MARGIN THAN THE DEFAULTS. A web lane runs among the
@@ -698,6 +715,21 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     _sweep_doubled_remnants(s)
     # ...AND THE PADDY IS REACHED (269 B04, research/fields/290): where no lane end stands on its bund - the spur swept, or
     # never drawn - the nearest lane runs on to it, or a field path is drawn off the nearest lane; recorded either way
+    # ...AND A GROVE FARM IS REACHED AT ITS FRONT DOOR (feature 291 FR-019), LAST: laid before the trims, a door path was cut
+    # back off its door by them (Mizuguchi: the farm at (232,1582) served, its door 60 ft from the path's trimmed end)
+    # ...EVERY ROW FARM, unless its door is on its street (feature 291 on feature 287's lane law): a row farm's house stands
+    # most of a frame off its street, so the street's end past the last farm served nothing the law counts (`end_serves`,
+    # 60 ft of a house center) and the settle trimmed it back farm by farm - Mizuguchi's east row, its doors 33-39 ft off the
+    # street and so given no path at the 40 ft reach, ended 200-1,090 ft off any way. Each farm's own path meets its street,
+    # as the seating's corridor meets the tree on a nucleated map, and the street's end then stands at a junction.
+    lay_door_paths(s, hard_built, walls, list(plan.watercourses) + drawn_water, reach=STEADING_ARRIVAL_FT if _rows else DOOR_REACH_FT)
+    if _rows:
+        # ...and a door path laid beside a lane that was there first meets it rather than doubling it (Kashikawa: a
+        # join-orphans lane ran on 64 ft beside the door path of the farm at (2299, 2724)) - the sweep that ran above,
+        # before any door path existed
+        _sweep_doubled_tails(s)
+        tidy_lane_ends(s, list(plan.envelope), streets=True)
+        trim_streets(s, _TOUCH_GAP)  # ...and each street ends at its outermost joint, not past its last farm's path
     s.M["meta"]["field_path"] = a_way_onto_the_bund(s)
     s.M["meta"]["lane_web"] = plan.lane_web
     # ...AND THE WEB SETTLES ITSELF, LAST (feature 287, M4): every rule of the lane law is asked of the web as it stands and

@@ -1,0 +1,6 @@
+{
+  "utc": "20260929T160556Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: snapshot named only for main side, the clone map is read from the pool folder which has its renders"
+}

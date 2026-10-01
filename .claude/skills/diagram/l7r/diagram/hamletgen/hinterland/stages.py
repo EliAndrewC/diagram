@@ -76,6 +76,32 @@ def woodland_on_the_sheet(s: Settlement, plan: SitePlan, polys: list[Any]) -> li
     return polys
 
 
+def against_the_belt(dented: Sequence[tuple[float, float]], groves: Sequence[Any], wind: tuple[float, float], half: float) -> tuple[list[tuple[float, float]], list[tuple[float, float]]]:
+    """The against-the-belt copse's box and anchors (lifted from `stage_hinterland`, feature 291: no pool map rolls the
+    siting once Mizuguchi rolls linear, so its lines are tested here with plain inputs).
+
+    The box is the belt's own footprint (`dented`), stood off the houses so the two stands read as one wood at its back.
+    The anchors are on its LEE side of that face: the reach is centered `half` of it leeward of each lee crown, so a copse
+    crown stands 0 to `COPSE_BELT_REACH_FT` leeward and never windward of the face - at the belt's thin end a band's one or
+    two crowns are its lee face, and a copse anchored round them stood beyond its windward side (Mizuguchi, two crowns)."""
+    bx = [q[0] for q in dented]
+    by = [q[1] for q in dented]
+    box = [(min(bx), min(by)), (max(bx), min(by)), (max(bx), max(by)), (min(bx), max(by))]
+    belt = [(float(c[0]), float(c[1])) for g in groves if g.get("role") == "windbreak" for c in g.get("clumps") or []]
+    return box, [(x - wind[0] * half, y - wind[1] * half) for x, y in lee_face(belt, wind)]
+
+
+def copse_seat(
+    siting: str, dented: Sequence[tuple[float, float]], groves: Sequence[Any], wind: tuple[float, float], half: float, box: Any, near: tuple[Any, ...], brook: Any
+) -> tuple[Any, tuple[Any, ...]]:
+    """The copse's box and its reach: the dooryard copse's as given, or - sited against the belt, where it has one - the
+    belt's box and its lee anchors at `half` (`against_the_belt`). Lifted from `stage_hinterland` (feature 291)."""
+    if siting == "against_the_belt" and dented:
+        box, anchors = against_the_belt(dented, groves, wind, half)
+        return box, (anchors, half, brook)
+    return box, near
+
+
 def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     """The marsh, then scrub and rough grazing.
 
@@ -390,17 +416,8 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # the manifest carries, and no margin stands in for the rounding.
     _copse_near: tuple[Any, ...] = ([(float(x), float(y)) for x, y in zip(xs, ys, strict=False)], s.px(COPSE_HOUSE_REACH_FT), _brook)
     _dooryard = _copse_near  # a household's reserved seat is its dooryard's on either siting (woods W25), asked of it as planted
-    if plan.copse_siting == "against_the_belt" and _dented:
-        # the belt's own footprint, stood off the houses so the two stands read as one wood at its back
-        _bx = [q[0] for q in _dented]
-        _by = [q[1] for q in _dented]
-        _box = [(min(_bx), min(_by)), (max(_bx), min(_by)), (max(_bx), max(_by)), (min(_bx), max(_by))]
-        _belt = [(float(c[0]), float(c[1])) for g in s.M.get("village_groves") or [] if g.get("role") == "windbreak" for c in g.get("clumps") or []]
-        # ...and on its LEE side of that face: the reach is centered half of it leeward of each lee crown, so a copse crown
-        # stands 0 to `COPSE_BELT_REACH_FT` leeward and never windward of the face - at the belt's thin end a band's one or
-        # two crowns are its lee face, and a copse anchored round them stood beyond its windward side (Mizuguchi, two crowns)
-        _half = s.px(COPSE_BELT_REACH_FT) / 2.0
-        _copse_near = ([(x - plan.wind[0] * _half, y - plan.wind[1] * _half) for x, y in lee_face(_belt, plan.wind)], _half, _brook)
+    # the belt's own footprint and its lee anchors, where the copse is sited against the belt (`copse_seat`)
+    _box, _copse_near = copse_seat(plan.copse_siting, _dented, s.M.get("village_groves") or [], plan.wind, s.px(COPSE_BELT_REACH_FT) / 2.0, _box, _copse_near, _brook)
     # THE COPSE IS THE HOMESTEADS' WOODS, SIZED BY THEM (269 B26; research/vegetation/210): each homestead's wood - its
     # windward grove and its share of the copse together, which the record knows as one - is rolled within the 1684
     # register's range, and the copse is filled to what the belt leaves of their sum. It used to be whatever one grid's
@@ -408,7 +425,10 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # than the register's smallest household.
     _wood_ft2 = sum(homestead_wood_ft2(s._hjit(float(h["x"]), float(h["y"]), 210.0)) for h in houses)
     _ft2 = s.px(1.0) ** 2  # px^2 per sq ft
-    _copse_goal = max(0.0, _wood_ft2 * _ft2 - wood_canopy(s, ("windbreak",)))
+    # ...AND WHAT EACH FARM'S OWN GROVE ALREADY HOLDS (feature 291): where the farms carry their own groves the record's one
+    # wood is that grove and its share of the copse, so the copse is filled to what the groves leave (settlement-review of
+    # Kashikawa: filled to the belt's remainder alone, the drawn wood ran ~17,400 sq ft a house against 14,872 rolled)
+    _copse_goal = max(0.0, _wood_ft2 * _ft2 - wood_canopy(s, ("windbreak",)) - farm_grove_area(s))
     # ...EVERY HOUSEHOLD'S RESERVED SHARE FIRST (feature 287, woods W25; plan D9): the seats the seating reserved for each
     # household's share of the floor (`wood_share`) are planted before any other clump, on either siting - each within its
     # own house's dooryard reach, not the siting's `near` - and the goal counts them, so the grid fills only the rest.
@@ -467,7 +487,12 @@ def wood_canopy(s: Settlement, roles: Sequence[str]) -> float:
 
 def homestead_wood_drawn(s: Settlement) -> float:
     """THE ONE PREDICATE of the homesteads' wood floor (feature 287, woods W25; research/vegetation/210): the wood each
-    homestead keeps, in sq ft - the belt and the copse together, shared among the houses - which the register puts at no
-    less than `HOMESTEAD_WOOD_FT2[0]`. `meta.homestead_wood_ft2.drawn` records it."""
+    homestead keeps, in sq ft - the belt, the copse and each farm's own grove (feature 291) together, shared among the
+    houses - which the register puts at no less than `HOMESTEAD_WOOD_FT2[0]`. `meta.homestead_wood_ft2.drawn` records it."""
     houses = s.M.get("houses") or []
-    return wood_canopy(s, ("windbreak", "copse")) / s.px(1.0) ** 2 / len(houses) if houses else 0.0
+    return (wood_canopy(s, ("windbreak", "copse")) + farm_grove_area(s)) / s.px(1.0) ** 2 / len(houses) if houses else 0.0
+
+
+def farm_grove_area(s: Settlement) -> float:
+    """The ground (px^2) the farms' own grove bands cover (feature 291): each band's box, as recorded."""
+    return sum(float(g["w"]) * float(g["h"]) for g in s.M.get("groves") or [] if g.get("w") and g.get("h"))

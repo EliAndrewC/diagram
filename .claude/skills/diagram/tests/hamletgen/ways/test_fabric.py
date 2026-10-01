@@ -147,7 +147,9 @@ def test_crosses_fabric_sees_a_run_VERTEX_that_stands_inside_a_footprint() -> No
     yard = [(0.0, 0.0), (1000.0, 0.0), (1000.0, 1000.0), (0.0, 1000.0)]
     inside_the_edge = [(5.0, 500.0), (5.0, 600.0)]  # deep inside the yard, 5 px off its west edge
     assert _crosses_fabric(inside_the_edge, [yard], 8.0)
-    assert not _crosses_fabric([(500.0, 500.0), (500.0, 600.0)], [yard], 8.0), "well inside and far from every edge"
+    # feature 291: a leg WHOLLY inside, far from every edge, crosses too - it lies on the footprint
+    assert _crosses_fabric([(500.0, 500.0), (500.0, 600.0)], [yard], 8.0), "well inside and far from every edge"
+    assert not _crosses_fabric([(1100.0, 500.0), (1100.0, 600.0)], [yard], 8.0), "outside and far from every edge"
 
 
 def test_a_track_that_cannot_thread_the_cluster_takes_a_wider_berth() -> None:

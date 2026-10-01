@@ -1830,8 +1830,49 @@ manifest diff is `mats` on each yard, `meta.harvest_weather`, and each yard's ou
 
 The review rounds re-laid three things here. The windbreak now ends at the column before one that falls back more than a belt's depth downwind (`hinterland/belt.py` `trim_receding_ends`), so the south-east tail that ran with the wind is gone (`village_groves[windbreak]`). A household shrine's corner is rolled by compass name and laid out in the world, and a seat nearer another farmhouse than its own is refused, so the shrine stands on its own plot (`farm_fixtures[kind=shrine]`). The title keeps clear of the homestead's own buildings and fixtures. The counts typed in the landing entry above, and in any dated correction before it, describe the rolls they were written against; the census block above is the count this map draws, and the manifest keys named here are the rest.
 
-## 2026-09-30 (feature 293): the storehouses go to the largest farmhouses
+## 2026-09-29 (feature 280): the modern-only forms taken off the map - the layout moved
 
-The storehouse annex is now dealt to the largest farmhouses by the main house's footprint (research homesteads/120; the lots' quota, `settlement/rolling/lot.py`), and its length is held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (`kura_rect`). Measured against main's manifest: the two storehouses stood on the 8th and 12th largest of 15 farmhouses and now stand on the 1st and 2nd, drawn 23.0 x 12.8 and 24.7 x 13.8 ft. The re-pack kept 10 of the 15 house centers. No thicket (the bamboo knob is homestead).
+The GM's ruling of 2026-09-28 - "We should eliminate anything which is only modern" - and feature 280's sweep of the record
+(specs/280-modern-only-sweep/outcomes.md) moved what this map draws on every farmstead:
 
-What else the re-pack moved: the notice board stands 36 ft east of main's seat, at (2294.5, 1640.9), still at the entrance every household passes; the second public well moved about 270 ft, from (2472, 1943) to (2316, 2166), with the houses it serves; and a 32 ft skeleton stub the re-pack left at the entrance is gone (the lane law now counts a way as reached only where the lane's end came toward it).
+- **The bath is a room joined to the house**, not a shed (M22, research homesteads/740: a bath of one or two tsubo in two or three
+  houses in ten by 1824-1842, beside the main door or at the far end of the stable wing; a bath standing on its own is found only in
+  the twentieth century). Drawn on 20-30% of homesteads, 6 ft out from the wall and 6-12 ft along it, abutting the wall; the hamlet's rolled
+  seat stable_end (tried first, then the stable end, then the floored rooms; the seat each bath took is in the measured line below).
+- **The firewood is a wood shed**, 24 x 12 ft, on about four farmsteads in ten, the larger houses first (M21, homesteads/212 and 720:
+  Hasuda 1824 and the Kakimochi count). The open stack under the eaves (a present-day page only) and the kizuma along the windbreak
+  (undated modern pages only) are no longer drawn.
+- **The privy's size** is one of the sixteen of the Kakimochi table (homesteads/750), rolled per homestead; it was a 6 x 6 ft guess.
+- **The storehouse against the farmhouse** on about one farm in eight, at the Edo sheds' proportion, about 1.67
+  to one (M18, M20: Kakimochi's 2 storehouses in 16 households; the ~30% it was drawn at was the 1972 count's).
+- **The work yard's median is 25 tsubo** (M16, homesteads/020: the 18-tsubo crop derivation rested on IRRI's modern 2.5 cm spreading
+  depth; 25 is the Okayama ~50 mats a farm and Kitamoto's band - two undated records of remembered practice, a calibration).
+- **No farmhouse is turned a quarter away** (M26, homesteads/780): the right-turned tenth rests only on the 1974-1984 count; each
+  house still turns a little with its lane, inside the survey's three compass points.
+- **Where the hamlet's dead lie** is recorded as the village's ground (`meta.hamlet_burial`), nothing drawn (M68, religion-and-death/155:
+  a hamlet's own ground rests only on twentieth-century records).
+- **The take-yabu thicket**, where the hamlet rolls one, stands at the settlement's edge behind its back row, on dry ground, not at the
+  field margin (M49, vegetation/640).
+- **The woodland commons** came to one stand on this roll, north of the field, where the pre-280 roll drew three across it: the
+  re-packed houses moved the frame the stands must fit, and the stand count is rolled from the ground, not set.
+
+Measured on this roll (2026-09-29): 15 houses; bath rooms 4 (by seat: floored_rooms 1, stable_end 3; the hamlet's seat stable_end), wood sheds 6, privies 13 (5 on the sun side), storehouses 2, bamboo stands 8, woodland stands 1; house turns -12 to 6 degrees; every declared fixture seated.
+
+## 2026-09-30 (feature 291): the settlement's new knobs recorded, not drawn
+
+Feature 291 rolls every hamlet's farmstead-grove sides, its row village's line, sides and water, and a dispersed farm's own
+water, and records them all in the manifest (grove sides 2, flank 1, flood ground no; row line street, sides both, water shared; farm water channel). This map is **nucleated**, so none of them is drawn: a nucleated
+hamlet keeps no farm grove of its own and no row, and its wells are the shared ones (`interactive/place.py`
+`homestead_grove_default` puts no grove text on its page). The picture is unchanged (the render byte-identical to the roll before).
+
+## 2026-09-30 (feature 291 on feature 287): the port - the layout moved
+
+Feature 287 (placer guarantees) landed on main while 291 was open, and 291 was rebuilt on it (amendments 7 and 8): every
+household seated or the site refused; a grove farm's well pocket and fixtures laid in its bundle at seating; a row's
+streets and door paths held to the lane law as tree lanes. Measured on this roll (2026-09-30, from the manifest): 15 houses, nucleated as pinned; 13 lanes, the web settled in 4 rounds; 2 shared wells; bath rooms 4, wood sheds 6, privies 13, coops 13, manure heaps 8, shrine 1; seated on the first margin.
+
+## 2026-09-30 (feature 293, on 291's roll): the storehouses go to the largest farmhouses - the layout moved
+
+The storehouse annex is now dealt to the largest farmhouses by the main house's footprint (research homesteads/120; the lots' quota, `settlement/rolling/lot.py`), and its length is held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (`kura_rect`). Measured against main's manifest (the roll the feature 291-on-287 entry above measured; the 2026-09-29 line under feature 280 is an earlier roll): the two storehouses stood on the 8th and 12th largest of 15 farmhouses and now stand on the 1st and 2nd, drawn 23.0 x 12.8 and 24.7 x 13.8 ft. The re-pack kept 10 of the 15 house centers. No thicket (the bamboo knob is homestead).
+
+What else the re-pack moved: the connector leaves to the north-west, 327 ft to a bend at (2012, 1477) just off the sheet's west edge, where main's ran straight south-west from the entrance, so the road now enters through the windbreak's north-west corner (the lane's crossing of the belt is a GUESS in research/vegetation.html); a north-row house went from (2338, 1581) to the far west at (2194, 1848), and the view widened 117 ft west to take it in; the notice board stands 36 ft east of main's seat, at (2294.5, 1640.9), still at the entrance every household passes; the second public well moved about 270 ft, from (2472, 1943) to (2316, 2166), with the houses it serves; 15 lanes where main drew 13, the web settled in 4 rounds; the woodland commons 3 stands where main drew 2, 75,828 sq ft against 52,556 (counted by `role` woodland; the other five commons are grazing). The homestead wood is drawn at 14,367 sq ft a homestead against the 12,136 rolled, 18% over, where main drew 15,009 against 14,992 - inside `HOMESTEAD_WOOD_FT2`'s band either way. The fixture counts are main's: bath rooms 4, wood sheds 6, privies 13, coops 13, manure heaps 8, shrine 1.

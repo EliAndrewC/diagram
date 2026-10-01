@@ -25,17 +25,17 @@ mistake it is here to make visible.
 ### Place
 
 - **district**: Aozawa
-- **district direction**: west
+- **district direction**: north
 
 *Aozawa (青沢, "green marsh stream") is INVENTED for this map - drawn from gm-assistant's
 `place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
-DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster - compass 274 deg, west (measured 2026-09-27).*
+DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster - compass 0 deg, north (measured 2026-09-30; it ran west, 274 deg, on the roll of 2026-09-27, before feature 287 re-laid the track).*
 
 
 ### Features
 
 - **burial ground**: Kuwabata keeps none of its own: its dead lie in the main village's ground, by the shrine that is the setting's parish temple.
-- **retirement house**: Kuwabata keeps the custom of the separate retirement house: 7 of its 16 homesteads have one, a small roof of its own a ken or two off the farmhouse's back wall or flank, its door facing away.
+- **retirement house**: Kuwabata keeps the custom of the separate retirement house: 4 of its 16 homesteads have one, a small roof of its own a ken or two off the farmhouse's back wall or flank, its door facing away.
 
 ## The declaration
 
@@ -196,8 +196,8 @@ household works its leaf, cocoons and nets on that ground. `meta.work_yards: fal
 ## What makes it a hamlet, not a village
 
 No headsman of its own, no shrine, no tax-free plots, no cremation ground - its dead are burned at the
-main village's. It keeps a burial ground of its own (its rolled `hamlet_burial` is own_ground, feature
-273), beyond its houses at the hamlet's edge, holding the urns brought home. Drawn at 1 ft/px.
+main village's. Its dead lie in the main village's ground (`meta.hamlet_burial` is village_ground, feature 280 M68), and
+none is drawn. Drawn at 1 ft/px.
 
 ## Known open
 
@@ -790,8 +790,23 @@ And on the pond block:
 - **The fry form rolled `fry_village`** (M60, archetypes/200): a fry village of the Jiujiang kind, its smallest ponds nursery water up to
   seven tenths of the pond area - 22 fry ponds, 0.63 of the water. The one parcel in ten drawn before is on no page read.
 
-## 2026-09-30 (feature 293): the storehouses go to the largest farmhouses
+## 2026-09-30 (feature 291): the settlement's new knobs recorded, not drawn
 
-The storehouse annex is now dealt to the largest farmhouses by the main house's footprint (research homesteads/120) and its length held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (`kura_rect`). Measured against main's manifest: the two storehouses stood on the 9th and 16th (the smallest) of 16 farmhouses and now stand on the 1st and 2nd, drawn 24.0 x 13.3 and 23.1 x 12.8 ft. The re-pack kept 5 of the 16 house centers.
+Feature 291 rolls every hamlet's farmstead-grove sides, its row village's line, sides and water, and a dispersed farm's own
+water, and records them all in the manifest (grove sides 2, flank -1, flood ground yes; row line edge, sides one, water shared; farm water channel). This map is **nucleated**, so none of them is drawn: a nucleated
+hamlet keeps no farm grove of its own and no row, and its wells are the shared ones (`interactive/place.py`
+`homestead_grove_default` puts no grove text on its page). The picture is unchanged (the render byte-identical to the roll before).
+
+## 2026-09-30 (feature 291 on feature 287): the port - the layout moved
+
+Feature 287 (placer guarantees) landed on main while 291 was open, and 291 was rebuilt on it (amendments 7 and 8): every
+household seated or the site refused; a grove farm's well pocket and fixtures laid in its bundle at seating; a row's
+streets and door paths held to the lane law as tree lanes. Measured on this roll (2026-09-30, from the manifest): 16 houses, nucleated; 15 lanes, the web settled in 4 rounds; 3 shared wells; bath rooms 2, wood sheds 6, privies 11, coops 11, manure heaps 5; seated on the first margin.
+
+## 2026-09-30 (feature 293, on 291's roll): the storehouses go to the largest farmhouses - the layout moved
+
+The storehouse annex is now dealt to the largest farmhouses by the main house's footprint (research homesteads/120) and its length held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (`kura_rect`). Measured against main's manifest (the 291 roll above): the two storehouses stood on the 9th and 16th (the smallest) of 16 farmhouses and now stand on the 1st and 2nd, drawn 24.0 x 13.3 and 23.1 x 12.8 ft. The re-pack kept 5 of the 16 house centers.
+
+What else the re-pack moved: the notice board stands 72 ft from main's seat, at (3444.1, 1679.4); two of the three shared wells moved with their houses, to (3545, 1656) and (3765, 1590); 12 lanes where main drew 15, the web settled in 6 rounds, and main's 66 ft skeleton stub is gone; the cluster now draws a crescent, 2.13 to one, where main's drew round at 1.88 (`declare_cluster_shape`), and 2 pond sties stand where main drew 1. The fixture counts are main's: bath rooms 2, wood sheds 6, privies 11, coops 11, manure heaps 5.
 
 The annex's size is a deliberate deviation (research homesteads/120 and 430): the storehouses the record reads were about 15 by 18 ft, free-standing; the map draws them against the back wall, in the farm sheds' band.

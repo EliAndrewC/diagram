@@ -216,3 +216,19 @@ def test_a_way_whose_first_stretch_has_no_length_carries_no_nub() -> None:
     ways = [[(0.0, 0.0), (0.0, 0.0), (10.0, 0.0)]]
     assert hg.ways.drop_end_nubs(ways) == []
     assert ways[0] == [(0.0, 0.0), (0.0, 0.0), (10.0, 0.0)]
+
+
+def test_a_rewrite_may_not_swing_the_drawn_tread_onto_fabric_it_cleared() -> None:
+    """Feature 291, cohort seed 20: dropping a 6.9 ft nub left the lane's first leg starting where it did, 1.7 ft off a
+    garden bed, but running along the bed - and the 5 ft stroke's square corner swung into it. The centerline distance
+    was the same before and after, and the vertex-read clearance above the bar both times; the stroke is what moved."""
+    from l7r.diagram.hamletgen.ways.clearance import may_write, stroke_hits
+
+    bed = [(2214.1, 2592.3), (2223.5, 2586.2), (2240.8, 2611.0), (2232.1, 2617.1)]
+    old = [(2233.0, 2596.0), (2238.0, 2592.0), (2258.0, 2612.0), (2178.0, 2682.0)]
+    new = [(2233.0, 2596.0), (2258.0, 2612.0), (2178.0, 2682.0)]
+    assert stroke_hits(old, 5.0, [bed]) == set() and stroke_hits(new, 5.0, [bed]) == {0}
+    assert not may_write(old, new, 5.0, [bed])
+    assert may_write(new, new, 5.0, [bed]), "no worse than it was: a lane already on it is not made to fix itself here"
+    far = [(2400.0, 2400.0), (2410.0, 2400.0)]
+    assert stroke_hits(new, 5.0, [far]) == set(), "a polygon nowhere near the stroke is not tested"

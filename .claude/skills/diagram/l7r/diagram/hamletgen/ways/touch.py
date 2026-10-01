@@ -151,7 +151,7 @@ def _touch_junctions(
             _seed = next((k for k, ln in enumerate(lanes) if ln.get("connector")), 0)
             _skip = {k for k in range(len(lanes)) if _comp and _comp[k] == _comp[_seed]}
         for i, ln in enumerate(lanes):
-            if ln.get("connector") or len(ln.get("pts") or []) < 2 or i in _skip:
+            if (ln.get("connector") or ln.get("street")) or len(ln.get("pts") or []) < 2 or i in _skip:
                 continue
             pts = [(float(x), float(y)) for x, y in ln["pts"]]
             # ONLY WAYS THIS LANE DOES NOT ALREADY MEET (T32). Linking a free end to a way the lane
@@ -204,7 +204,7 @@ def _touch_junctions(
                 # a link from tread to tread drew an 8 ft jog that read as a loop (T32). The other
                 # lane's end is moved onto `q` when its last stretch stays legal.
                 _oe = 0 if math.dist(foot, _op[0]) <= 4.0 else (-1 if math.dist(foot, _op[-1]) <= 4.0 else None)
-                if _oe is not None and len(_op) >= 2 and not lanes[k].get("connector"):
+                if _oe is not None and len(_op) >= 2 and not (lanes[k].get("connector") or lanes[k].get("street")):
                     _nb = _op[1] if _oe == 0 else _op[-2]
                     if _clear_touch(_nb, q, hard, walls, water, max(_TOUCH_GAP, float(lanes[k].get("w") or 5.0) / 2.0 + 2.0)) and math.dist(_nb, q) <= 2.0 * math.dist(_nb, _op[_oe]) + 4.0:
                         _np = list(_op)
@@ -383,7 +383,7 @@ def _touch_junctions(
                 # with no way off the map, and the reach check, which reads whatever network is left, passed. Kept, it is
                 # the broken piece the reach check names, and the roll's re-roll seats the houses where a way can reach
                 # them. `trim_lane_stubs` has always exempted it for the same reason.
-                if lanes[i].get("connector"):
+                if lanes[i].get("connector") or lanes[i].get("street"):
                     continue
                 _mine = list(zip(ways[i], ways[i][1:], strict=False))
                 _served = [h for h in _houses if _near(h, _mine) <= _SERVE_FT]

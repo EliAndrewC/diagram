@@ -27,6 +27,7 @@ import io
 import os
 import sys
 from collections.abc import Sequence
+from typing import Any
 
 HERE = os.path.abspath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..")
@@ -35,6 +36,9 @@ if HERE not in sys.path:
     sys.path.insert(0, HERE)
 
 from l7r.diagram import hamletgen as hg  # noqa: E402
+from l7r.diagram.hamletgen.homesteads.row_rules import bamboo_mismatch, doors_unreached, row_rules, water_rules  # noqa: E402
+from l7r.diagram.overlap import matrix_violations  # noqa: E402
+from l7r.diagram.settlement.homestead_parts.grove_rules import fixtures_on_groves, gardens_east_shaded, grove_sides_missing, groves_crossed_by_lanes, groves_off_windward  # noqa: E402
 
 _PART_KEYS = ("gardens", "threshing_yards", "farm_fixtures", "byres", "farm_sheds", "retirement_houses", "persimmons", "bamboo_stands")
 
@@ -54,22 +58,51 @@ def parts_across_brook(manifest: dict) -> int:
     return sum(1 for r in parts if any(_cross((r["x"], r["y"]), r["of"], b[i], b[i + 1]) for b in brooks for i in range(len(b) - 1)))
 
 
-def roll_one(spec: tuple[int, int]) -> tuple[str, list[str], list[str]]:
+# THE ROW VILLAGE'S KNOBS, EACH VALUE ROLLED FOR CERTAIN (feature 291 plan D19; SC-007, SC-008): with the linear form two
+# in ten and flood ground forcing the dry edge, 24 seeds do not promise every value of `row_line`, `row_sides` and
+# `row_water` - so the audit adds four PINNED linear hamlets, each line with each side count, the water alternating.
+PINNED_ROWS: tuple[dict[str, str], ...] = (
+    {"row_line": "street", "row_sides": "one", "row_water": "own"},
+    {"row_line": "street", "row_sides": "both", "row_water": "shared"},
+    {"row_line": "edge", "row_sides": "one", "row_water": "shared"},
+    {"row_line": "edge", "row_sides": "both", "row_water": "own"},
+    # ...AND THE DISPERSED FARM'S WATER (amendment 5; SC-008): the dispersed form one in ten, so a pinned hamlet per value
+    {"settlement_form": "dispersed", "farm_water": "channel"},
+    {"settlement_form": "dispersed", "farm_water": "well"},
+)
+PINNED_FIRST_SEED = 901
+
+
+def refused_verdict(hspec: Any, refused: BaseException) -> tuple[str, list[str], list[str]]:
+    """The verdict of a roll that raised (`roll_one`): its header - the form its plan rolled - and the refusal by name."""
+    form = hg.plan_site(hspec).settlement_form
+    name = type(refused).__name__
+    return (f"{hspec.name} households={hspec.households} form={form} REFUSED", [f"refused:{name}"], [f"FAIL refused:{name} -> {str(refused)[:300]}"])
+
+
+def roll_one(spec: tuple[int, int] | tuple[int, int, dict[str, str]]) -> tuple[str, list[str], list[str]]:
     """Roll and gate ONE audit hamlet: (header line, sorted failures, the gate's own FAIL lines).
 
     Runs in a worker process. Safe to fan out because a map is a pure function of its spec - the
     seed fixes every draw (see "RANDOMNESS IS POSITIONAL OR SCOPED" in this skill's CLAUDE.md), so
     parallelism can only change the wall clock, never a verdict."""
-    seed, households = spec
-    hspec = hg.HamletSpec(name=f"Audit-{seed:02d}", seed=seed, households=households)
+    seed, households = spec[0], spec[1]
+    pins: dict[str, str] = dict(spec[2]) if len(spec) > 2 else {}  # type: ignore[misc]
+    hspec = hg.HamletSpec(name=f"Audit-{seed:02d}", seed=seed, households=households, **({"settlement_form": "linear", **pins} if pins else {}))  # type: ignore[arg-type]  # a pin's own form wins
     # THROUGH `generate`, NOT `build` - the audit must measure the path that SHIPS. It called `build`
     # directly, which skips everything `generate` does around the stages: it finishes into a scratch
     # directory, gates in-process, and re-rolls a map whose finished manifest strands a farmhouse. So
     # a fix living in `generate` was invisible to the cohort - measured on seed 5, which passes
     # through `generate` and failed in the audit. A harness that exercises a different code path than
     # production reports on a map nobody will ever see.
-    with contextlib.redirect_stdout(io.StringIO()):
-        report = hg.generate(hspec, out_base=None, render=False)
+    # A REFUSED SITE IS ONE SEED'S VERDICT, NOT THE AUDIT'S END (feature 291 on 287): since feature 287 a roll that cannot keep
+    # its rules is refused by name (`SiteRefused`, `WebRefused`, `BrookRefused`, ...) rather than shipped, and the first one
+    # raised through the process pool ended the whole cohort with no report of the other 29 seeds
+    try:
+        with contextlib.redirect_stdout(io.StringIO()):
+            report = hg.generate(hspec, out_base=None, render=False)
+    except Exception as refused:  # noqa: BLE001 - every refusal is reported by its own name
+        return refused_verdict(hspec, refused)
     _breach = ((getattr(report, "manifest", None) or {}).get("meta") or {}).get("scatter_frame_breach")  # a test's stub report carries no manifest
     if _breach:  # feature 224: the scatter's predicted frame was too small - a strip inside the view may hold no scatter
         report.fail_lines.append(f"FAIL scatter_frame_breach -> the view reaches {_breach} px past the predicted scatter frame (left, top, right, bottom)")
@@ -86,8 +119,39 @@ def roll_one(spec: tuple[int, int]) -> tuple[str, list[str], list[str]]:
     if _across:
         report.fail_lines.append(f"FAIL farmstead_across_brook -> {_across} farmstead part(s) stand across the brook from their house")
         report.failures.append("farmstead_across_brook")
+    # THE MATRIX OVER EVERY COHORT ROLL (feature 291). `features_do_not_overlap` was a seed test over the POOL's rolls
+    # only (tests/gate/test_no_feature_overlaps.py), so a cohort seed whose grove lay on a lane or a crown on a byre read
+    # as a pass here - the 24/24 feature 291 first measured with the dispersed and linear forms back in the roll, while
+    # feature 126 had measured exactly those overlaps on the same forms.
+    _mx = matrix_violations(getattr(report, "manifest", None) or {}) if getattr(report, "manifest", None) else []
+    if _mx:
+        report.fail_lines.append(f"FAIL features_do_not_overlap -> {len(_mx)} forbidden overlap(s), e.g. {_mx[:3]}")
+        report.failures.append("features_do_not_overlap")
+    # ...AND THE GROVE'S OWN RULES (feature 291, `grove_rules`): every rolled side planted at every farm, the deep stand on
+    # the windward faces, no garden's morning sun cut off - the three feature 126 measured that the matrix cannot see - no
+    # lane across a band, and no fixture standing inside one (the matrix abstains on VEGETATION).
+    _M = getattr(report, "manifest", None) or {}
+    # ...AND THE ROW VILLAGE'S AND THE GROVE FARM'S (feature 291 amendment 3, `homesteads/row_rules.py`).
+    for name, found in (
+        ("grove_sides_missing", grove_sides_missing(_M)),
+        ("groves_off_windward", groves_off_windward(_M)),
+        ("gardens_east_shaded", gardens_east_shaded(_M)),
+        ("groves_crossed_by_lanes", groves_crossed_by_lanes(_M)),
+        ("fixtures_on_groves", fixtures_on_groves(_M)),
+        ("row_rules", row_rules(_M)),
+        ("water_rules", water_rules(_M)),
+        ("doors_unreached", doors_unreached(_M)),
+        ("bamboo_mismatch", bamboo_mismatch(_M)),
+    ):
+        if found:
+            report.fail_lines.append(f"FAIL {name} -> {len(found)}, e.g. {found[:2]}")
+            report.failures.append(name)
     plan = report.plan
-    header = f"--- Audit-{seed:02d}  seed={seed} households={households} fall={int(plan.down_deg)} sink={plan.water_sink} shape={plan.cluster_shape} lanes={plan.lane_skeleton}"
+    header = f"--- Audit-{seed:02d}  seed={seed} households={households} form={getattr(plan, 'settlement_form', '?')} sides={getattr(plan, 'grove_sides', '?')} fall={int(plan.down_deg)} sink={plan.water_sink} shape={plan.cluster_shape} lanes={plan.lane_skeleton}"
+    if getattr(plan, "settlement_form", None) == "linear":
+        header += f" row={getattr(plan, 'row_line', '?')}/{getattr(plan, 'row_sides', '?')}/{getattr(plan, 'row_water', '?')}"
+    if getattr(plan, "settlement_form", None) == "dispersed":
+        header += f" water={getattr(plan, 'farm_water', '?')}"
     if _meta.get("seat_offwind"):
         header += " seat=OFFWIND"
     return header, report.failures, report.fail_lines
@@ -100,7 +164,9 @@ def audit(count: int, first_seed: int, only: str | None = None, jobs: int | None
     the biggest available win: 24 maps x ~12 s on an idle 22-cpu box). Results are collected and
     printed in seed order, so the report reads identically to the serial one."""
     jobs = hg.default_jobs(count) if jobs is None else max(1, jobs)  # ONE courtesy rule, defined in the driver
-    specs = [(first_seed + i, 10 + ((first_seed + i) * 7) % 11) for i in range(count)]
+    specs: list[Any] = [(first_seed + i, 10 + ((first_seed + i) * 7) % 11) for i in range(count)]
+    specs += [(PINNED_FIRST_SEED + i, 10 + ((PINNED_FIRST_SEED + i) * 7) % 11, pins) for i, pins in enumerate(PINNED_ROWS)] if not only else []
+    count = len(specs)
     if jobs == 1:
         results = [roll_one(s) for s in specs]
     else:
@@ -120,6 +186,24 @@ def audit(count: int, first_seed: int, only: str | None = None, jobs: int | None
         for line in fail_lines:
             if not only or only in line:
                 print("   ", line)
+    # WHICH FORMS THE COHORT ROLLED (feature 291): a green cohort says nothing about a form none of its seeds drew
+    forms = collections.Counter(h.split(" form=")[1].split()[0] for h, _f, _l in results if " form=" in h)
+    print(f"\nforms rolled: {', '.join(f'{k} {v}' for k, v in sorted(forms.items()))}")
+    sides = collections.Counter(h.split(" sides=")[1].split()[0] for h, _f, _l in results if " sides=" in h and " form=nucleated" not in h)
+    print(f"grove sides among the farms that carry a grove: {', '.join(f'{k} sides {v}' for k, v in sorted(sides.items()))}")
+    rows = [h.split(" row=")[1].split()[0].split("/") for h, _f, _l in results if " row=" in h]
+    missing = [
+        f"{knob}={v}"
+        for i, (knob, space) in enumerate((("row_line", ("street", "edge")), ("row_sides", ("one", "both")), ("row_water", ("own", "shared"))))
+        for v in space
+        if v not in {r[i] for r in rows}
+    ]
+    waters = {h.split(" water=")[1].split()[0] for h, _f, _l in results if " water=" in h}
+    missing += [f"farm_water={v}" for v in ("channel", "well") if v not in waters]
+    print(f"row villages: {len(rows)}; knob values never rolled: {', '.join(missing) or 'none'}")
+    if missing and not only:
+        failing += 1
+        tally.update(["row_knob_value_never_rolled"])
     print(f"\n{count - failing}/{count} passed the whole gate")
     if tally:
         print("residue by check:")
@@ -133,7 +217,7 @@ def _reference_ok() -> list[str]:
 
     One map, about a minute. It is the cheapest question in the loop and it gates the most expensive
     answer, which is the whole point of the tier ladder (constitution VI)."""
-    rep = hg.generate(hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond"), out_base=None, render=False)
+    rep = hg.generate(hg.HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond", settlement_form="nucleated"), out_base=None, render=False)
     for f in rep.failures:
         print(f"  reference: {f}", flush=True)
     return list(rep.failures)

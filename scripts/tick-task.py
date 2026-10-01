@@ -31,10 +31,13 @@ from pathlib import Path
 #: cited` - and the roster has been FIVE since features 194 and 211 added `quote-check confirmed` and
 #: `source-applicability confirmed`. So the literal matched nothing, and `BOXES=1` reported a ticked
 #: task while ticking no box at all: silent, and the gate caught it only at the end, on seven tasks at
-#: once (`tests/test_task_research_boxes.py`). A boxes line is an INDENTED line carrying two or more
-#: checkboxes and no other structure, which stays true however many boxes the constitution grows.
+#: once (`tests/test_task_research_boxes.py`). A boxes line is an INDENTED line that is a checkbox - one box or
+#: several, which stays true however many boxes the constitution grows.
 def _is_boxes_line(line: str) -> bool:
-    return line[:1].isspace() and line.count("- [") >= 2 and line.lstrip().startswith("- [")
+    # ...AND ONE BOX A LINE, AS A TASK MAY BE WRITTEN (feature 291): its ten physical tasks listed the five boxes one per
+    # indented line, which `tests/test_task_research_boxes.py` accepts, and `BOXES=1` refused all ten as having none. An
+    # indented line that is a checkbox is a box: a task line itself starts at the margin.
+    return line[:1].isspace() and line.lstrip().startswith("- [")
 
 
 def _tick_boxes(line: str) -> str:

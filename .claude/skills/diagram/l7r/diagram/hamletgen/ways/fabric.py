@@ -6,7 +6,7 @@ import math
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, edge_dist, rot_rect, seg_closest, seg_dist, segments_cross
+from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, rot_rect, seg_closest, seg_dist, segments_cross
 from l7r.diagram.sitegen.geom import centroid, unit
 
 from ..consts import (
@@ -170,9 +170,18 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
     # what `groves_clear_of_lanes` says. It was missing from this list because it could not matter
     # while the lanes were laid FIRST and the groves grew around them; with the lanes drawn last,
     # every non-nucleated map cut treads through its own shelter belts.
+    # ...AND IT NEVER WAS, UNTIL FEATURE 291. A grove band is recorded as a box (x, y, w, h, unrotated), never a `poly`, so
+    # this loop - which read only `poly` - added nothing: feature 126's "adding `groves` to the lane fabric ... measured not
+    # to help" measured a no-op. With the dispersed and linear forms rolled again, the settlement-review found lanes run
+    # through 19 of Kashikawa's 40 windward bands and 14 of Mizuguchi's 24. A band is its own house's (`of`), so the path
+    # to that farmstead may still leave its own dooryard (the owner, as for a yard), but no other lane crosses it.
     for rec in s.M.get("groves", []):
+        own = rec.get("of")
+        owner2 = (float(own[0]), float(own[1])) if own else None
         if rec.get("poly"):
-            out.append(([(float(a2), float(b2)) for a2, b2 in rec["poly"]], None, "groves"))
+            out.append(([(float(a2), float(b2)) for a2, b2 in rec["poly"]], owner2, "groves"))
+        elif rec.get("w"):
+            out.append((rot_rect(float(rec["x"]), float(rec["y"]), float(rec["w"]), float(rec["h"]), float(rec.get("rot", 0.0))), owner2, "groves"))
     for key in ("village_groves", "commons"):
         out.extend(([(float(a), float(b)) for a, b in rec["poly"]], None, key) for rec in s.M.get(key, []) if rec.get("poly"))
     for w in s.M.get("wells", []):
@@ -462,5 +471,10 @@ def _crosses_fabric(run: Poly, fabric: Sequence[Poly], gap: float) -> bool:
                 if seg_dist(c[0], c[1], a, b) < gap:
                     return True
             if edge_dist(a[0], a[1], poly) < gap or edge_dist(b[0], b[1], poly) < gap:
+                return True
+            # ...AND A SEGMENT WHOLLY INSIDE (feature 291): with no edge crossed and nothing within `gap` of an edge, a leg
+            # lying inside the polygon passed - a spur or connector starting inside a farm's 44 ft grove band, its first leg
+            # still in it (cohort seeds 1, 5, 11, 15: the track drawn across a band after this said the run was clear)
+            if point_in_poly(a[0], a[1], poly) or point_in_poly(b[0], b[1], poly):
                 return True
     return False

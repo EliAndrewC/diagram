@@ -530,6 +530,8 @@ def test_an_end_that_reaches_nothing_is_carried_on_to_the_dooryard_of_the_house_
         assert edge_dist(q[0], q[1], wall) <= STEADING_ARRIVAL_FT, f"an end stands {edge_dist(q[0], q[1], wall):.1f} ft off the house, not at its dooryard"
     assert _sw.carry_to_dooryard((0.0, 0.0), [(500.0, 500.0)], [wall], 120.0) is None, "no house within the reach: nothing to carry to"
     assert _sw.carry_to_dooryard((500.0, 590.0), [(500.0, 500.0)], [], 120.0) is None, "a house with no built ground to arrive at"
+    band = [(480.0, 540.0), (520.0, 540.0), (520.0, 560.0), (480.0, 560.0)]
+    assert _sw.carry_to_dooryard((500.0, 590.0), [(500.0, 500.0)], [wall], 120.0, groves=[band]) is None, "a farm's grove band is in the way (feature 291)"
 
 
 def test_a_tail_run_alongside_another_way_is_cut_where_it_came_alongside() -> None:
@@ -551,6 +553,11 @@ def test_a_tail_run_alongside_another_way_is_cut_where_it_came_alongside() -> No
     bent = [(0.0, 100.0), (100.0, 0.0), (300.0, 0.0)]  # the way turns at (100, 0)
     retrace = [(300.0, 150.0), (300.0, 6.0), (100.0, 0.0)]  # comes down to it, then runs back along it to the vertex
     assert along_tail(retrace, bent) is not None
+    # feature 293 on 291 (Mizuguchi's field spur): a tail that meets its way at an angle for its last few feet - inside
+    # `_ALONG_FT` - and runs beside it before that is walked through the approach; a square T past it is still none
+    spur = [(420.0, 100.0), (400.0, 10.0), (160.0, 10.0), (153.0, 0.0)]  # 10 ft off the way, then 12 ft at 55 degrees onto it
+    assert along_tail(spur, way) is not None
+    assert along_tail([(150.0, 200.0), (150.0, 0.0)], way) is None, "a square T is no tail past its approach either"
 
 
 def test_brook_crossings_counts_a_polyline_over_the_drawn_course() -> None:

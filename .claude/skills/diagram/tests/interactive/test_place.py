@@ -32,6 +32,7 @@ from l7r.diagram.interactive.place import (
     WIND_NAMES,
     crop_sentence,
     dwellings_shown,
+    homestead_grove_default,
     join,
     lane_default,
     place_card,
@@ -422,3 +423,21 @@ def test_no_windbreak_sentence_where_the_map_does_not_record_its_wind(meta: dict
 
 def test_every_quarter_has_its_name() -> None:
     assert set(WIND_NAMES) == {"N", "NE", "E", "SE", "S", "SW", "W", "NW"}
+
+
+# --- the farmstead grove's sides and why (feature 291, FR-009) ---
+
+
+@pytest.mark.parametrize(("sides", "words"), [(2, "two sides"), (3, "open only at the front"), (4, "broken once at the front")])
+def test_the_farmstead_grove_says_how_many_sides_its_settlement_rolled(sides: int, words: str) -> None:
+    got = homestead_grove_default({"grove_sides": sides, "settlement_form": "dispersed"})
+    assert words in got and "one roll decides it for the whole settlement" in got and "flood" not in got
+
+
+def test_flood_ground_is_named_as_why_the_ring_comes_up_more_often() -> None:
+    assert "flood-prone ground" in homestead_grove_default({"grove_sides": 4, "settlement_form": "linear", "flood_ground": True})
+
+
+@pytest.mark.parametrize("meta", [{}, {"grove_sides": 3}, {"grove_sides": 3, "settlement_form": "nucleated"}, {"grove_sides": 5, "settlement_form": "dispersed"}])
+def test_no_grove_sentence_where_the_map_draws_no_farm_grove(meta: dict) -> None:
+    assert homestead_grove_default(meta) == ""

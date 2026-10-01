@@ -33,6 +33,7 @@ from .settle import (
     settle_joins,
     settle_network,
     settle_reach,
+    settle_street_ends,
     settle_widths,
     unsettled,
 )
@@ -112,7 +113,7 @@ def last_resort(s: Any) -> int:
             dropped += len(bad)
             settle_network(s)
             settle_husks(s)
-        for step in (settle_joins, settle_reach, settle_defer, settle_network, settle_fragments, prune_the_tree, settle_widths, settle_husks):
+        for step in (settle_street_ends, settle_joins, settle_reach, settle_defer, settle_network, settle_fragments, prune_the_tree, settle_widths, settle_husks):
             step(s)
         carriers = ordinary_carriers(s.M)
         if not carriers and not lane_violators(s) and not unsettled(s.M, memo_ground(s, "worked", worked_ground)):

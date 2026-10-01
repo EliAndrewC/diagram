@@ -135,6 +135,20 @@ def test_channel_footbridges_slides_a_plank_clear_of_a_farmhouse():
     assert not (365 <= b["x"] <= 435) and 190 < b["y"] < 410  # the plank slid ALONG the ditch, off the house footprint
 
 
+def test_channel_footbridges_slides_a_plank_off_a_garden_and_a_grove():
+    """Feature 291: a plank's landing on a kitchen garden's beds or in a farm's grove band is refused like one on a house;
+    the plank slides along the ditch, clear of both boxes as recorded."""
+    s = _crop_settlement()
+    s.M["fields"] = [{"outline": [[50, 220], [750, 220], [750, 380], [50, 380]]}]
+    s.M["field_ditches"] = [{"poly": [[100, 300], [700, 300]], "w": 5, "role": "main"}]
+    s.M["gardens"] = [{"x": 400, "y": 290, "w": 24, "h": 24, "rot": 0, "poly": [[388, 278], [412, 278], [412, 302], [388, 302]]}]
+    s.M["groves"] = [{"x": 440, "y": 310, "w": 40, "h": 24, "rot": 0}]
+    n = s.channel_footbridges(spacing=800)  # n=1, midway = (400,300): on the garden, and the grove beside it
+    assert n == 1
+    b = s.M["bridges"][0]
+    assert b["x"] + b["w"] / 2 < 387 or b["x"] - b["w"] / 2 > 461, b["x"]  # the garden box widened a foot is 387-413, the grove 419-461
+
+
 def test_channel_footbridges_skips_a_crossing_to_uncultivated_ground():
     s = _crop_settlement()
     s.M["fields"] = [{"outline": [[50, 120], [750, 120], [750, 297], [50, 297]]}]  # paddy only NORTH of the ditch; the S bank is marsh/scrub

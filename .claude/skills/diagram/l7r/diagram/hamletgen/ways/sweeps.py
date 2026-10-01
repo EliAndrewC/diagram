@@ -100,10 +100,10 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
         ways = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in s.M.get("lanes", [])]
         cands: list[tuple[float, Pt, Pt, float, float]] = []
         for i, li in enumerate(s.M.get("lanes", [])):
-            if li.get("connector") or len(ways[i]) < 2:
+            if (li.get("connector") or li.get("street")) or len(ways[i]) < 2:
                 continue
             for j, lj in enumerate(s.M.get("lanes", [])):
-                if j <= i or lj.get("connector") or len(ways[j]) < 2:
+                if j <= i or (lj.get("connector") or lj.get("street")) or len(ways[j]) < 2:
                     continue
                 for ta, pra in ((ways[i][0], ways[i][1]), (ways[i][-1], ways[i][-2])):
                     for tb, prb in ((ways[j][0], ways[j][1]), (ways[j][-1], ways[j][-2])):
@@ -423,7 +423,7 @@ def _sweep_doubled_remnants(s: Settlement) -> int:
     dropped = 0
     gone: list[int] = []
     for i, ln in enumerate(lanes):
-        if len(ways[i]) < 2 or ln.get("connector"):
+        if len(ways[i]) < 2 or (ln.get("connector") or ln.get("street")):
             continue
         others = [w if k != i else [] for k, w in enumerate(ways)]
         # EITHER SHAPE OF THE SAME DEFECT (feature 230 pass 11): a lane that leaves a way and returns to it, or one that
@@ -487,7 +487,7 @@ def _sweep_steading_fouls(s: Settlement) -> int:
     emptied: list[int] = []
     for i, ln in enumerate(lanes):
         pts = [(float(x), float(y)) for x, y in (ln.get("pts") or [])]
-        if len(pts) < 2 or ln.get("connector"):
+        if len(pts) < 2 or (ln.get("connector") or ln.get("street")):
             continue  # a connector's route is the track's own business and it never ends in the cluster
         width = int(float(ln.get("w", 3)))
         before = len(pts)
@@ -609,9 +609,15 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     # with it the 60 ft to the field the bund rule retired. `fields` stands in only where the manifest records no ground.
     ground = memo_ground(s, "worked", worked_ground) if worked_ground_rings(s.M) else WorkedGround([list(f) for f in fields])
     steadings = steading_footprints(s.M)
+    # the farm grove bands an end may not be carried across (feature 291; their boxes are unrotated)
+    _bands = [
+        [(g["x"] - g["w"] / 2, g["y"] - g["h"] / 2), (g["x"] + g["w"] / 2, g["y"] - g["h"] / 2), (g["x"] + g["w"] / 2, g["y"] + g["h"] / 2), (g["x"] - g["w"] / 2, g["y"] + g["h"] / 2)]
+        for g in s.M.get("groves") or []
+        if g.get("w")
+    ]
     fixed, emptied = 0, []
     for i, ln in enumerate(lanes):
-        if ln.get("connector"):
+        if ln.get("connector") or ln.get("street"):
             continue
         pts = [(float(x), float(y)) for x, y in (ln.get("pts") or [])]
         if len(pts) < 2:
@@ -671,7 +677,7 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
             for _e in (-1, 0):
                 if _reaches(pts[_e]):
                     continue
-                _q = carry_to_dooryard(pts[_e], houses, steadings, 2.0 * _REACH_FT)
+                _q = carry_to_dooryard(pts[_e], houses, steadings, 2.0 * _REACH_FT, groves=_bands)
                 if _q is not None:
                     pts = [*pts, _q] if _e == -1 else [_q, *pts]
             if [[round(x, 1), round(y, 1)] for x, y in pts] == ln["pts"] or not s.reshape_lane(ln, pts):  # ...admitted by the matrix (M8)
@@ -697,11 +703,13 @@ def held_at(a: Pt, b: Pt, tails: Sequence[Pt]) -> Pt | None:
     return (a[0] + dx * max(held), a[1] + dy * max(held)) if held else None
 
 
-def carry_to_dooryard(q: Pt, houses: Sequence[Pt], steadings: Sequence[Sequence[Pt]], reach: float, step: float = 2.0) -> Pt | None:
+def carry_to_dooryard(q: Pt, houses: Sequence[Pt], steadings: Sequence[Sequence[Pt]], reach: float, step: float = 2.0, groves: Sequence[Sequence[Pt]] = ()) -> Pt | None:
     """Where an end at `q` stops once carried straight toward the nearest farmhouse within `reach`: the first point of the
     walk (in `step` ft) inside `STEADING_ARRIVAL_FT` less a margin of any steading's built ground, so the tread arrives at
     the dooryard and stops short of the wall (a tread on the doorstep laps the farmhouse, `features_do_not_overlap`).
-    None where no house is within `reach`, or the walk reaches none of it (269 B17)."""
+    None where no house is within `reach`, or the walk reaches none of it (269 B17) - or it would enter one of `groves`, a
+    farm's grove band, which no lane crosses (feature 291: an end carried straight at a house on cohort seed 3 went across
+    the thin east band of the farm it served)."""
     near = [h for h in houses if 0.0 < math.dist(q, h) <= reach]
     if not near:
         return None
@@ -710,6 +718,8 @@ def carry_to_dooryard(q: Pt, houses: Sequence[Pt], steadings: Sequence[Sequence[
     stop = STEADING_ARRIVAL_FT - 4.0  # inside the arrival bar by the clip's own 4 ft step
     for k in range(1, int(d / step) + 1):
         p = (q[0] + (h[0] - q[0]) * k * step / d, q[1] + (h[1] - q[1]) * k * step / d)
+        if any(point_in_poly(p[0], p[1], list(g)) for g in groves):
+            return None
         if any(edge_dist(p[0], p[1], list(sp)) <= stop or point_in_poly(p[0], p[1], list(sp)) for sp in steadings):
             return p
     return None
@@ -756,7 +766,7 @@ def _sweep_debris(s: Settlement) -> int:
         # missing was the record: the length the clip left is on every map (`meta.field_spur_ft`) and a spur
         # swept here says so (`meta.field_spur_swept`), so a hamlet with no drawn way to its rice is a fact
         # the manifest states rather than one a reviewer has to notice.
-        if lanes[i].get("connector") or comp[i] not in alone or polyline_len(ways[i]) >= _WEB_MIN_FT:
+        if (lanes[i].get("connector") or lanes[i].get("street")) or comp[i] not in alone or polyline_len(ways[i]) >= _WEB_MIN_FT:
             continue
         mine = list(zip(ways[i], ways[i][1:], strict=False))
         others = [sg for j in live if j != i for sg in zip(ways[j], ways[j][1:], strict=False)]

@@ -504,9 +504,11 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
             cv = _v_within(cu, cfloor, max(cfloor, cv), (dx, dy), (px, py), box)
             cut.append((cu * dx + cv * px, cu * dy + cv * py))
     cut.append(mid[-1])
-    return unfold(
-        _off_the_axes([*cut, *keep_tail], (px, py), hold=1), BROOK_MAX_TURN_DEG
-    )  # the tap run: two cut points on the fall; the segment that leaves it is nudged off an axis like any other (feature 261: Sawada's drew exactly vertical below its tap)
+    # the tap run: two cut points on the fall; the segment that leaves it is nudged off an axis like any other (feature 261:
+    # Sawada's drew exactly vertical below its tap). ...AND AGAIN AFTER THE UNFOLD, which drops a vertex and makes a new
+    # chord of the two legs beside it - Kashikawa's, once the row village's canvas re-laid its brook, 90 ft at 1.3 degrees
+    # off the vertical (feature 291); the tilt is at most twice the detector's angle, far inside the unfold's turn bar
+    return _off_the_axes(unfold(_off_the_axes([*cut, *keep_tail], (px, py), hold=1), BROOK_MAX_TURN_DEG), (px, py), hold=1)
 
 
 def brook_violations(course: Sequence[Pt], plan: SitePlan, sluice: Pt, ditches: Sequence[Poly] = (), joins: Sequence[Pt] = ()) -> list[str]:

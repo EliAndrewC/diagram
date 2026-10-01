@@ -194,7 +194,8 @@ def record_parts(s: Any, rec: dict[str, Any], geom: Any, form: str | None) -> No
         rec["byre"] = {"x": bx, "y": by, "rot": rec["rot"] + turn, "box": list(geom["boxes"]["byre"])}
     if geom.get("well") is not None:
         rec["well_pocket"] = [geom["well"][0], geom["well"][1]]
-        s._pockets.append((geom["well"][0], geom["well"][1]))
+        if getattr(s, "_pockets", None) is not None:  # remembered only while a seating runs (a grove farm's bundle lays its own)
+            s._pockets.append((geom["well"][0], geom["well"][1]))
     boxes = (geom.get("boxes") or {}).get("fixtures") or {}
     if geom.get("fixtures"):  # the fixtures laid in the bundle (homes H32), drawn where they were laid (`farmstead_fixtures`)
         rec["fixtures"] = [{"kind": k, "x": r[0], "y": r[1], "w": r[2], "h": r[3], "box": list(boxes[k])} for k, r in geom["fixtures"].items()]

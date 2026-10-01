@@ -105,15 +105,27 @@ def compass(v: Sequence[float]) -> str:
     return ("E" if v[0] > 0 else "W") if abs(v[0]) >= abs(v[1]) else ("S" if v[1] > 0 else "N")
 
 
-def seating_mark(s: Settlement) -> tuple[int, int, int]:
-    """Where the registries a seating writes stand before it: houses, the placed boxes, the pending farmsteads."""
-    return len(s.M.get("houses", [])), len(s.placed), len(s._pending_farmsteads)
+def seating_mark(s: Settlement) -> tuple[int, ...]:
+    """Where the registries a seating writes stand before it: houses, the placed boxes, the pending farmsteads - and a row
+    village's far-row holdings, which `rows.seat_rows` records and blocks as it seats their farms (feature 291)."""
+    return (
+        len(s.M.get("houses", [])),
+        len(s.placed),
+        len(s._pending_farmsteads),
+        len(s.M.get("row_holdings") or []),
+        len(s.block_polys),
+        len(s.hard_polys),
+    )
 
 
-def unseat_to(s: Settlement, mark: tuple[int, int, int]) -> None:
+def unseat_to(s: Settlement, mark: tuple[int, ...]) -> None:
     """Take back every house seated since `mark` (a margin the ladder leaves). Each registry is cut in place - the
     `Indexed` lists bump their own version, so no index answers from the houses taken back."""
-    h, p, f = mark
+    h, p, f, rh, bp, hp = mark
     del s.M["houses"][h:]
     del s.placed[p:]
     del s._pending_farmsteads[f:]
+    if "row_holdings" in s.M:
+        del s.M["row_holdings"][rh:]
+    del s.block_polys[bp:]
+    del s.hard_polys[hp:]

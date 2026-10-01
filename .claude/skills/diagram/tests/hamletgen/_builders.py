@@ -14,7 +14,9 @@ def a_plan(households: int = 15, **kw: object) -> hg.SitePlan:
 
     `households` is a parameter because a test whose subject does not depend on the count should be
     allowed to ask for the cheapest hamlet the band permits (feature 158) - every household is a seat
-    search, and 10 is the floor `HamletSpec` accepts."""
+    search, and 10 is the floor `HamletSpec` accepts. Nucleated unless a test asks for another form: a grove-farm form grows
+    the canvas (`LINEAR_CANVAS`, feature 291), and the derivations tested here were measured on the nucleated one."""
+    kw.setdefault("settlement_form", "nucleated")
     spec = hg.HamletSpec(name="Test", seed=3, households=households, down_deg=90.0, windward="N", **kw)  # type: ignore[arg-type]
     plan = hg.plan_site(spec)
     plan.envelope = list(SQUARE)

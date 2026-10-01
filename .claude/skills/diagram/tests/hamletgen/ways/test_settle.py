@@ -271,6 +271,47 @@ def test_a_tail_run_on_beside_another_way_is_cut_where_it_came_alongside() -> No
     assert law.doubled_tails(s.M) == []
 
 
+def test_a_lane_whose_first_end_runs_on_beside_a_way_is_cut_there_too() -> None:
+    """Feature 293 on 291 (Mizuguchi's field spur): `doubled_tails` asks both ends, and the repair cuts the first end as the
+    lane reversed, turned back."""
+    s = _S([_c((100.0, 5.0), (300.0, 5.0), (1300.0, 5.0)), [(140.0, 2.0), (100.0, 0.0), (0.0, 60.0)]])
+    assert law.doubled_tails(s.M) == [1]
+    settle.settle_the_web(s)
+    assert law.doubled_tails(s.M) == []
+
+
+def test_a_street_s_dangling_end_is_cut_back_to_its_last_joint() -> None:
+    """`settle_street_ends` (feature 293 on 291, cohort seed 903): a row's street, a tree lane, has the end the law calls
+    dangling cut back to its last joint - the door path's; a map with no street, or a street no end dangles on, is left."""
+    street = ([(0.0, 0.0), (0.0, 200.0), (0.0, 600.0)], {"w": 6})
+    s = _S([CONN, street, [(0.0, 200.0), (80.0, 200.0)], [(-300.0, 0.0), (-300.0, 200.0)]], houses=[(100.0, 200.0)])
+    s.M["lanes"][1].update({"street": True, "street_index": 0})
+    assert {(1, -1), (3, -1)} <= set(law.dangling_lane_ends(s.M)), "the street's end, and an ordinary lane's"
+    assert settle.settle_street_ends(s) == 1
+    assert _pts(s, 3)[-1] == (-300.0, 200.0), "an ordinary lane is the other repairs' to trim"
+    assert _pts(s, 1)[-1] == (0.0, 200.0)
+    assert settle.settle_street_ends(s) == 0, "cut already"
+    assert settle.settle_street_ends(_S([CONN, [(0.0, 0.0), (0.0, 600.0)]])) == 0, "no street"
+    lone = _S([CONN, ([(500.0, 300.0), (500.0, 600.0)], {"w": 6})])
+    lone.M["lanes"][1].update({"street": True, "street_index": 0})
+    assert settle.settle_street_ends(lone) == 0, "no joint on it: as it is"
+
+
+def test_an_ordinary_lane_beside_another_way_past_a_pitch_goes_where_the_web_keeps() -> None:
+    """`settle_shadows` (feature 293 on 291, Kashikawa): of a pair side by side past a pitch, the shorter ordinary lane goes
+    where the network keeps without it - a tree lane beside it is asked too, and never goes; where every drop would strand a
+    house, nothing goes."""
+    s = _S([CONN, [(0.0, 0.0), (0.0, 300.0)], [(0.0, 0.0), (15.0, 20.0), (15.0, 250.0)]])
+    assert settle.settle_shadows(s) == 1 and len(s.M["lanes"]) == 2 and _pts(s, 1)[-1] == (0.0, 300.0)
+    assert settle.settle_shadows(s) == 0
+    tree = _S([CONN, [(0.0, 0.0), (0.0, 300.0)], [(0.0, 0.0), (15.0, 20.0), (15.0, 150.0)]])
+    tree.M["lanes"][1]["serves"] = [0.0, 320.0]  # a door path, the longer of the two: it shadows the ordinary lane
+    assert settle.settle_shadows(tree) == 1 and len(tree.M["lanes"]) == 2 and tree.M["lanes"][1].get("serves")
+    both = _S([CONN, [(0.0, 0.0), (0.0, 300.0)], [(0.0, 0.0), (15.0, 20.0), (15.0, 250.0), (200.0, 250.0)]], houses=[(-60.0, 360.0), (220.0, 250.0)])
+    both.M["meta"]["generated_by"] = "hamletgen"  # the reach rule is asked of a generated map (`unreached_houses`)
+    assert settle.settle_shadows(both) == 0, "each lane is a house's only way"
+
+
 def test_a_farmhouse_discharges_two_lane_ends_not_three() -> None:
     ends = [[(x, 300.0), (x, 80.0)] for x in (-40.0, 0.0, 40.0)]
     s = _S([CONN, *ends], houses=[(0.0, 50.0)])

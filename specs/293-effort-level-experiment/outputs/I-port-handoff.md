@@ -129,3 +129,62 @@ connector at the entrance and "reached" the exit strip's end at the same junctio
   notes did).
 - The regenerated maps carry renders; a gate files its rolls without them, so re-run `make map` on each before a review
   snapshot (the snapshot tool says which are missing).
+
+## The merge with main (feature 291, grove sides and row villages), 2026-09-30
+
+**What the merge resolved, and how.** `git merge origin/main` (143 commits of feature 291) conflicted in three engine files,
+the five hamlets' manifests and notes, and the assembled homesteads pages.
+
+- `hamletgen/hinterland/bamboo.py`: both keep-outs kept - 291's farm groves (`("groves", 4.0)`) in the rect list, 293's
+  wells entered by their radius below it; the list's dead `("wells", 14.0)` entry (a well record has no width) dropped, as
+  293 had.
+- `hamletgen/ways/bund.py`: both import sets (291's `poly_gap`, `crop_polys`, `stroke_quad` and `carry_on`; 293's
+  junction-end skip, which sits beside 291's `carry_on` unchanged).
+- `tests/hamletgen/test_hinterland.py`: both features' tests kept.
+- The manifests took main's side and were regenerated (Inashiro first); each notes file kept main's text, with 293's entry
+  rewritten as measured on the regenerated map against main's 291 roll. `research/homesteads.html` and
+  `research/citations/homesteads.*` were re-assembled by `make record` and `make citations` (both then `CHECK=1` in sync).
+
+**What the merge broke, measured, and fixed.** After the merge the gate failed three tests and the cohort fell to 50/54
+against main's 51/54 (taken in a detached worktree at `origin/main`):
+
+- *Audit-903 refused* (a row village): 293's `_walked_to` rule rightly stopped counting a 41 ft stub as reaching the
+  junction it left; the last resort dropped the stub and its join, and the street's end, 191 ft past its nearest farm,
+  then served nothing - a tree lane, so the web was refused. `settle_street_ends` now cuts a dangling street end back to
+  its last joint (`street.end_to_its_joint`), in the settle's rounds and again in the last resort.
+- *Mizuguchi's field spur* ran 10-12 ft beside its street for 210 ft (293's side-by-side guard, 237 ft): `doubled_tails`
+  asked only a lane's last end. It and its settle repair now ask both ends, and `along_tail` walks through a junction's
+  approach inside `_ALONG_FT`. The spur is 139 ft where it was 339; the field is still joined.
+- *Kashikawa's join remnant* ran within 30 ft of a door path for 106 ft: `settle_shadows` drops the shorter ordinary lane
+  of a pair side by side past a pitch (`serve.shadowed_by`, `_lay_web_lane`'s own refusal) where the network keeps.
+- *The row test's nucleated control* seated 9 of 10 on its synthetic one-margin field (the storehouse now on the largest
+  house, seated last); on main the same fixture seats 10/10, 10/11, 8/12, 6/13, so it is the fixture's edge. It now
+  asserts every household seated or the site refused by name (feature 287 plan D2), and no row planned.
+
+Cohort after: 51/54, main's three refusals (Audit-29, 33, 45). `make done` green, 100% coverage. Kashikawa's and Mizuguchi's
+manifests moved only by the fixes above and the annex band; Inashiro, Kuwabata and Sawada match the pre-merge port's
+figures (the same storehouse carriers and sizes, board, wells and lane counts).
+
+**The reviews.** Round 1 was refused at dispatch (gate red, keys moved). Round 2, all five on key `cd09f76a`: Kashikawa,
+Mizuguchi and Sawada pass; Inashiro and Kuwabata needs-work on notes text only - Inashiro's woodland count (grazing commons
+counted), and on Kuwabata two reader-facing errors that were on main too (the district said to lie west where the road
+leaves north; 7 retirement houses where 4 stand). Round 3: Inashiro's entry pointed at an earlier roll's measured line and
+did not name the connector's north-west move; Kuwabata kept a stale own-burial-ground line (main's too). Round 4: both pass.
+Every finding has a verifying record in `measurements.json` or a `make review-accept`; the connector's crossing of the
+belt's windward corner is in future-work (the record calls the crossing a GUESS and attests the open side). Every pass is a
+row in `docs/review-ledger.md`.
+
+**For the GM (filtered by `escalation-check`):**
+
+4. **The merge with main (feature 291).** The merge exposed three engine defects, now fixed: a row street's dangling end is
+   cut back to its last joint (cohort seed 903 had been refused, its street running 191 ft past its last farm); the
+   doubled-lane rule now checks both ends of a lane (Mizuguchi's field spur ran 10-12 ft beside its street for 210 ft; it is
+   now 139 ft, where it was 339); and where two ordinary lanes run within 30 ft of each other for more than 100 ft, the
+   shorter one is dropped (Kashikawa loses one 106 ft remnant beside a door path). The cohort is 51/54 on both main and the
+   merge, with the same three refusals. The row test's nucleated control sits at its fixture's capacity edge (9 of 10
+   seated after the merge, 10 of 10 on main), so it now asserts that every household is seated or the site is refused by
+   name, per feature 287 plan D2. On Kuwabata's page, three errors that were also on main are fixed: the district lies
+   north, not west; 4 homesteads keep a retirement house, not 7; and it uses the village's burial ground.
+
+Not pushed, and `scripts/sync-with-main.sh` not run, as the merge brief asked. The perf bookends were not re-taken after the
+merge (`make done FULL=1` was not run); the push's `perf_review.py --check` will ask for them.

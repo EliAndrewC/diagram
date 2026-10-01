@@ -193,6 +193,13 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
     houses = s.M.get("houses", [])
     if len(houses) < 3:
         return []
+    # NO VILLAGE BELT WHERE EVERY FARM CARRIES ITS OWN GROVE (feature 291; research/vegetation/020, "Why one communal grove
+    # and not a grove per house": "The per-farmstead belt is the DISPERSED settlement's answer; a nucleated cluster shelters
+    # itself ... so its windbreak is a single village-scale wood"). The two are one answer or the other, never both; once
+    # the dispersed and linear forms rolled again, Kashikawa drew 60 farm grove bands AND a 369-clump village belt behind
+    # them (settlement-review, 2026-09-29).
+    if not getattr(s, "_nucleated", True):
+        return []
     wx, wy = plan.wind
     px, py = -wy, wx  # across the wind
     ccx, ccy = sum(h["x"] for h in houses) / len(houses), sum(h["y"] for h in houses) / len(houses)

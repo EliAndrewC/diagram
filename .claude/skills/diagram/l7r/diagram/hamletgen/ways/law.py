@@ -268,12 +268,16 @@ def needle_joins(lanes: Lanes) -> list[tuple[int, int]]:
 
 
 def doubled_tails(M: Mapping[str, Any]) -> list[int]:
-    """The lanes (the connector aside) whose end runs on beside another way, at `_DOUBLED_DEG` (`along_tail`), whatever the
-    two ways' widths."""
+    """The lanes (the connector aside) whose end - EITHER end - runs on beside another way, at `_DOUBLED_DEG` (`along_tail`,
+    asked of the lane and of it reversed), whatever the two ways' widths. `along_tail` walks in from a lane's last point, and
+    asked only that way it never saw a first end doubled: Mizuguchi's field spur left its street and ran 10-12 ft beside it
+    for 210 ft before it turned for the field (feature 293 on 291, the pool's side-by-side test)."""
     ways = _ways(M)
     lanes = M.get("lanes") or []
     return [
-        i for i, p in enumerate(ways) if not lanes[i].get("connector") and len(p) >= 2 and any(j != i and len(o) >= 2 and along_tail(p, o, deg=_DOUBLED_DEG) is not None for j, o in enumerate(ways))
+        i
+        for i, p in enumerate(ways)
+        if not lanes[i].get("connector") and len(p) >= 2 and any(j != i and len(o) >= 2 and any(along_tail(q, o, deg=_DOUBLED_DEG) is not None for q in (p, p[::-1])) for j, o in enumerate(ways))
     ]
 
 
@@ -385,19 +389,24 @@ def short_fragments(M: Mapping[str, Any]) -> list[int]:
     """The lanes shorter than `FRAGMENT_FT` (the connector and the field spur aside) that earn nothing: taking one away
     leaves no farmhouse newly unreached (`unreached_houses`) and the web in as many networks (`lane_networks`) - a fragment
     the passes whittled down and nothing re-asked (homes H40; future-work 2c's 4 ft fragment). A short run that is some
-    house's way, or the link that joins two pieces, earns its place and is not one."""
+    house's way, or the link that joins two pieces, earns its place and is not one - and so does one whose removal leaves
+    ANOTHER lane's end reaching nothing (`dangling_lane_ends`): a row farm's short door path holds the end of its street
+    (feature 291 on 287; dropped, Mizuguchi's street ends dangled past their last farms and the settle refused the web)."""
     lanes = M.get("lanes") or []
     short = [i for i, ln in enumerate(lanes) if not ln.get("connector") and not ln.get("spur") and len(ln.get("pts") or []) >= 2 and polyline_len(lane_pts(ln)) < FRAGMENT_FT]
     if not short:
         return []
     reached, nets, targets, field = len(unreached_houses(M)), lane_networks(M), len(unreached_targets(M)), field_unreached(M)
+    dangling: int | None = None  # asked only of a lane that passes every other test
     out = []
     for i in short:
         without = {**M, "lanes": [ln for k, ln in enumerate(lanes) if k != i]}
         # ...nor a way target (a burial ground's edge) newly unreached, nor the field (feature 287: a short spur to the graves
         # or on to the bund earns its place as a house's door path does)
         if len(unreached_houses(without)) <= reached and lane_networks(without) <= nets and len(unreached_targets(without)) <= targets and field_unreached(without) <= field:
-            out.append(i)
+            dangling = len(dangling_lane_ends(M)) if dangling is None else dangling
+            if len(dangling_lane_ends(without)) <= dangling:  # ...nor another lane's end left reaching nothing
+                out.append(i)
     return out
 
 
