@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-01T23:43:24Z",
+  "target": "review-accept",
+  "commit": "e1f111d79",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--grave-island F2: nitpick: the stones are drawn larger than life by the recorded map drawing convention"
+}

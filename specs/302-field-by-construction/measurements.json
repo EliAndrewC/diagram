@@ -75,5 +75,16 @@
     "source": "pool/hamlets/inashiro/inashiro.svg, the grave island's ellipse and its stone rects",
     "command": "make -C .claude/skills/diagram test-file FILE=tests/settlement/test_field_guarantees.py",
     "round": "f1d34de85"
+  },
+  "grave-F2": {
+    "verifies": "F2",
+    "subject": "glyph-check--grave-island",
+    "answers": "95c7fdbe857e",
+    "value": 3,
+    "unit": "stones",
+    "quantity": "grave stones on Inashiro's island standing on the mound AND each further back than the last: bases at y 2554.4, 2552.2, 2550.1 (round 2 found the third 0.4 ft in front of the second under the per-stone clamp); the whole stagger is scaled to fit (stone_steps)",
+    "source": "pool/hamlets/inashiro/inashiro.svg, the grave island's ellipse and its stone rects",
+    "command": "make -C .claude/skills/diagram test-file FILE=tests/settlement/test_field_guarantees.py",
+    "round": "after f1d34de85"
   }
 }
