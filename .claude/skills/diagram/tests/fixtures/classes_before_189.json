@@ -770,7 +770,7 @@
   "scrub and rough grazing": {
     "caveat": "nothing describes how the clumps sit within them, so the scatter is drawn to read as rough grazing rather than as any surveyed pattern.",
     "covers": "`commons[role=grazing]`",
-    "entry": "research/vegetation.html - 'The crop margin', 'Scrub stays off open water', 'The cut bank'",
+    "entry": "research/vegetation.html - 'Scrub and rough grass at the edges of fields and channels'; research/rendering/vegetation.html - 'How our maps keep scrub off fields, channels and open water'",
     "key": "scrub and rough grazing",
     "label": "accurate",
     "label_note": "The margins are read; nothing describes how the clumps sit within them, so the scatter is drawn to read as rough grazing rather than as any surveyed pattern.",

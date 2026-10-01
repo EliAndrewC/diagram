@@ -301,7 +301,7 @@ class ScrubAndRoughGrazing(Kind):
     Covers: `commons[role=grazing]`
     Label: accurate
     Sources: pmc7538448-levee, meadow-enwiki, nonoichi-keihanritsu, hiroshima-keihan-manual
-    Entry: research/vegetation.html - 'The crop margin', 'Scrub stays off open water', 'The cut bank'
+    Entry: research/vegetation.html - 'Scrub and rough grass at the edges of fields and channels'; research/rendering/vegetation.html - 'How our maps keep scrub off fields, channels and open water'
     """
 
     key = 'scrub and rough grazing'

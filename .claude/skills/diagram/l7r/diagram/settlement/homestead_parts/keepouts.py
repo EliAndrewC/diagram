@@ -99,7 +99,7 @@ class KeepoutsMixin:
     # deliberate exception (settlement-review, 2026-08-16): a blade is 2.4-4.2*bs px, so at the
     # coarser tiers a tip can lean up to a few real feet over the margin line - accepted, because
     # grass leaning over a bund is real; bases and tall-glyph reach are what the rule enforces.
-    # Full grounding: research/vegetation.html "The crop margin - scrub stands 6 ft off every field edge".
+    # Full grounding: research/rendering/vegetation.html "How our maps keep scrub off fields, channels and open water".
     _BANK_MARGIN_FT = 6.0
     # CUT-BANK MARGIN (GM 2026-08-16, Inashiro second pass: tufts seeded in the 10-16 ft berm
     # strip between the dry hem plots and the supply channels - legal under the drawn-width water
@@ -112,7 +112,7 @@ class KeepoutsMixin:
     # (_CROP_MARGIN_FT above). STREAMS and the reed marsh deliberately take NO margin: a natural
     # bank is vegetated to the water's edge, and the 2026-08-16 settlement-review pass explicitly
     # praised the absence of a sterile halo on the brooks. Full grounding:
-    # research/vegetation.html "The cut bank".
+    # research/rendering/vegetation.html "How our maps keep scrub off fields, channels and open water".
     _HALO_STRUCT_FT = 30.0
     _HALO_WELL_FT = 20.0
     _HALO_PLOT_FT = 8.0
