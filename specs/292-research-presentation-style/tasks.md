@@ -9,13 +9,14 @@ Pilot phase. The sweep's tasks are added only after T09 is ticked (FR-011).
 - [x] T04 A roster-less section's sources are read from its footnotes, with its test (FR-004, SC-004). research: rendering
 - [x] T05 Glossary: `knob` redefined, `canopy-tree` added, `appurtenance` retired as unused (FR-007, SC-006). research: rendering
 - [x] T06 The `record-style` agent, its tier, its bundle part and its guard entry (FR-008). research: rendering
-- [ ] T07 The grove topic: 010 + 710 + 715 folded into one section, links and `Entry:` re-aimed, no citation lost (FR-002, FR-003, FR-009, FR-010, SC-002, SC-003). research: rendering
+- [x] T07 The grove topic: 010 + 710 + 715 folded into one section, links and `Entry:` re-aimed, no citation lost (FR-002, FR-003, FR-009, FR-010, SC-002, SC-003). research: rendering
   - [x] the section written and assembled
   - [x] record-style on the old section (seeded against the GM's objections - it named every one) and on the new, with the merge audit (LOST 0; 7 FAIL applied) (SC-007)
   - [x] quote-check (4 PARTIAL, 2 unfootnoted - all applied) and record-format (clean) on the new section
   - [x] entry-drift on the HomesteadGrove modal: IN-STEP; its pre-existing gap fixed (its Note called the count read; its Why kept the cut 'largest thing' and the unsourced early-Edo date)
   - [x] at the first `make done` (2026-10-01): not needed - with 291 landed and main merged, no pool manifest moved against main, so no settlement-review was owed and the gate ran alone; was `PAIR_OK="292 moves no map layout - the maps whose layout moved (inashiro, kashikawa, kuwabata, mizuguchi, sawada) moved in feature 291's merged work in progress, whose review 291's session owes"` - `_review_owed.py` names them against origin/main; nothing in 292 touches a generator
   - [x] at push: the copse modal's section (vegetation/210) moved only by a re-aimed link - `ENTRY_DRIFT_OK` with that reason
+      verify: DONE. the grove pilot; its gate item settled (no settlement-review owed once 291 landed) and its push item covered by the entry-drift run of 2026-10-01 on every modal whose section moved
 - [x] T07a The GM's review of the pilot (2026-09-29): lead-line bullets (statement or question, readable from what came before) and metric-to-feet - the guide, the check's contract, `make style-prepass` with its tests and its bundle part, and the grove section revised (FR-012, FR-013, SC-009, SC-010). research: rendering
   - [x] guide, contract, prepass, tests, section revised
   - [x] the updated check run on the section before (named the 1868 lead line, the lead lines in the wrong form, all four metric figures) and after the revision (5 FAIL, applied) (SC-009)
