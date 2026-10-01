@@ -32,8 +32,8 @@ pines and the ground cut out of it.
    corners on open ground is a sharp angle - each is a curve - and its open edges wave in and out rather than run straight.
 2. **Given** a marsh laid against a paddy, a pond or a dike, **When** it is drawn, **Then** it still stops at that feature's
    edge (the cut-outs happen after the outline is shaped).
-3. **Given** a pond's reed fringe (a narrow ring), **When** it is drawn, **Then** it keeps its ring (the shaping would break a
-   band that narrow; it is left as it is).
+3. **Given** a pond's reed fringe, **When** it is drawn, **Then** it keeps its ring: it is laid as an ellipse round the pond and
+   has no straight edge or right angle for the shaping to mend.
 
 ### User Story 2 - Scrub grades into marsh through a mixed fringe (Priority: P1)
 
@@ -64,13 +64,17 @@ pines and the ground cut out of it.
 ### Functional Requirements
 
 - **FR-001**: A toe, waterside or defense marsh's outline MUST be shaped before the fields, dikes, ponds, blocks and clearings
-  are cut out of it: its corners rounded and its edges given a slow irregular inward wave, rolled from the map's seed per marsh.
-  A pond's fringe is not shaped.
+  are cut out of it: its corners rounded and its edges given a slow irregular inward wave (the approved proposal's targets for both, and
+  the figures as built, are research R1's table), rolled from the map's seed per marsh, so the shaped open edge meets the
+  laid straight line at single points at most, never along a run. A pond's fringe is not shaped (it is laid as an ellipse). The
+  targets are the approved proposal's; calibration by eye may move them, and a material departure is recorded with its reason
+  (research R1).
 - **FR-002**: The shaped outline MUST lie within the laid outline (shaping removes ground, never adds it).
 - **FR-003**: Where scrub meets marsh, a band straddling the boundary, half its width into each, MUST be drawn with a fringe tile
   of sparse reeds and grass, in each side's class, in place of the scrub and marsh tiles there; nowhere else.
-- **FR-004**: The marsh MUST carry a second tile over its reed tile - a larger, different repeat with denser reed clumps and small
-  open-water patches - and the scrub a second tile over its grass tile with denser grass clumps.
+- **FR-004**: The marsh MUST carry a second tile over its reed tile - a larger, different repeat than the base's (its target and as-built figure in research
+  R1) with denser reed clumps and small open-water patches - and the scrub a second tile over its grass tile with denser
+  grass clumps; a departure from the target is recorded as FR-001's are.
 - **FR-005**: The record (`M["marshes"][].poly`, the no-build ground, `marsh_ground`) MUST be the shaped outline, so every reader
   of the marsh reads what is drawn.
 - **FR-006**: The pool MUST regenerate and pass the gate; maps may move within the rules (the GM 2026-09-30).
@@ -86,8 +90,10 @@ pines and the ground cut out of it.
 
 ### Measurable Outcomes
 
-- **SC-001** (FR-001, FR-002, FR-005): on the five pool hamlets, every shaped marsh's recorded outline lies within its laid outline
-  (a unit test of the shaping), and Inashiro's toe marsh has no corner sharper than 120 degrees on open ground.
+- **SC-001** (FR-001, FR-002, FR-005): every shaped outline lies within its laid outline and has no straight run along it longer
+  than a quarter of the wave's shortest length (a unit test of the shaping on a laid rectangle); on Inashiro, the toe marsh's
+  edge on the right (laid as a straight east-west line) and its top-left corner (laid as a right angle) are shaped - no corner
+  sharper than 120 degrees on open ground, and no straight run of the laid line (a test on the regenerated manifest).
 - **SC-002** (FR-003): on the pool hamlets with scrub and marsh, the fringe tile is drawn in both the scrub's and the marsh's slot;
   a unit test shows no fringe where the marsh meets anything but scrub.
 - **SC-003** (FR-004): every marsh and scrub cover path is drawn with its overlay tile.
@@ -108,3 +114,7 @@ pines and the ground cut out of it.
   Inashiro and recorded in the plan; they are drawing choices, not findings.
 
 ## Review history
+
+- Round 1 (spec-fidelity, 2026-10-01): CHANGES REQUIRED - the wave must not leave straight runs and the GM's line must be
+  measured; the approved figures stated as targets; (advised) the pond fringe's reason. Addressed: FR-001, FR-004, SC-001,
+  User Story 1 scenario 3.
