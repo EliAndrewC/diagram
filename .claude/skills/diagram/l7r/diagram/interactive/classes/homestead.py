@@ -88,15 +88,16 @@ class StorageShed(Kind):
 
 class Byre(Kind):
     """
-    What: The stall of a household's ox or water buffalo - a roof over a shaded stall, drawn against its owner's
-    farmhouse or standing as a small shed of its own in the owner's yard.
+    What: The stall of a household's ox, water buffalo or horse - a roof over a shaded stall, drawn against its
+    keeper's farmhouse or standing as a small shed of its own in the keeper's yard.
 
     Why: The beast lived with the household that kept it. Across much of the country the farmhouse stabled it
     inside, in a corner of the earth-floored work space - the inner stable - and elsewhere in a stable standing on
-    its own beside the house, the outer stable. Not every household had a beast: in Bizen from the early eighteenth
+    its own, the outer stable. Not every household had a beast: in Bizen from the early eighteenth
     century only about half the farm households kept an ox or a horse, and fewer as time went on, and a household
     without one borrowed or hired a beast, which then lived with whoever had it. So each settlement rolls one of the
-    two forms, and a byre stands in the homesteads of somewhat under half its households. The vernacular put the
+    two forms (or, rarely, a shed shared on common ground), and a byre stands in the homesteads of somewhat under
+    half its households. The vernacular put the
     animal close to the house, and the record finds no old rule that kept a beast away from the well it drank at.
 
     Note: The two forms, the beast living with its keeper and the share of households keeping one are read. The
@@ -106,8 +107,8 @@ class Byre(Kind):
     on the ground the homesteads share, reached by several households - is a guess, found on no page read and kept
     only until the record finds it or rules it out; the attached stable wing (magariya) belongs to Tohoku's
     horse-breeding districts, its stable warmed from the kitchen hearth, and is deliberately not drawn - that the
-    cold made the form is this record's own reading, though one village near Edo in 1824 also had most of its
-    stables as an L-shaped wing off the earth floor, and that is not drawn either. The animal's nearness to the
+    warmth shows what the horses were worth is this record's own reading, and the form was common among the
+    upper farm households, such as a headman's. The animal's nearness to the
     house is read; its nearness to
     the wellhead is not on any page read.
 
