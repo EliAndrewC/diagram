@@ -296,3 +296,4 @@ or a later pass found what this one should have).
 | 2026-10-01 | record-format | vegetation 125 (feature 300) | 0/0/0 | link added |
 | 2026-10-01 | record-format | rendering/vegetation 120 (feature 300) | 0/0/0 | - |
 | 2026-10-01 | record-style | rendering/vegetation 120 (feature 300) | 1 FAIL, 2 NOTE | bullet split; scrub bullet and rule reworded; footnotes not added (the cross-link kept) |
+| 2026-10-01 | record-format | rendering/vegetation 120 (the drain at the paddy foot) | 0/0/0 | - |
