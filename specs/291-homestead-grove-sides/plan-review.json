@@ -1,6 +1,6 @@
 {
  "feature": "291-homestead-grove-sides",
- "plan_sha256": "1e91d795836263064795343ed6880c415f3fe6e3b144d598e43eaae223755f9b",
+ "plan_sha256": "1f56a57e7bfa34c80f50d3c3400c3a949266387f12b2c7732689ecda586b77c1",
  "reviewed": "2026-09-30",
  "declared": "spec-fidelity",
  "decisions": [
@@ -122,22 +122,21 @@
   },
   {
    "id": "D19",
-   "summary": "row_rules, water_rules, bamboo_mismatch as accepted; doors_unreached (linear only) now also counts a farm reached by its own door path from an open flank of its dooryard, judged from the drawing (reached_from_a_flank)",
+   "summary": "row_rules (incl. every row farm joined by a way to its own street, and no seated street fails), water_rules, bamboo_mismatch as accepted; the door predicate doors_unreached and reached_from_a_flank removed with FR-019 door clause and SC-008 door check (amendment 9)",
    "class": "within",
-   "why": "Enforcement of SC-008 as amendment 8 amended it ('SC-008's door check counts a farm so reached'). Read literally, reached_from_a_flank requires the path to start within DOOR_REACH_FT of the yard, in a direction not within 0.7 of any band face of the farm's own grove, and open ground to the front door: on a four-sided ring every direction is within 0.7 of some face (cos 45 deg = 0.707), so it never passes; on a three-sided grove only the front cone passes - exactly amendment 8's 'a three- or four-sided grove's farm still needs its front'. The 'only where no lawful way leaves the front' precondition is the placer's order (D20 WAYS), not the check's."
+   "why": "Enforcement of SC-007 and SC-008 as they now stand, nothing more: each remaining predicate names the clause it checks (row_rules: FR-013 to FR-017, the way to its own street being FR-017 every farm of the row MUST reach it; water_rules: FR-018; bamboo_mismatch: FR-019 as amended). Removing doors_unreached follows the GM ruling verbatim (Yes, just drop the door clause because there is no actual reason to have that there); keeping it would enforce a requirement the GM withdrew. No row farm is left unchecked for access: FR-017 reach and the lane network reach remain."
   },
   {
    "id": "D20",
    "summary": "The port onto feature 287 (amendments 7, 8): seat_rows and seat_every_household taking a row margin back with its holdings and refusing the site where no margin holds every farm; grove farm's bundle lays its own well pocket and its fixtures clear of its bands; streets and door paths as tree lanes held to the lane law; track exit grid (convention); canvas 1.0; cohort 30/30, make done green",
    "class": "within",
-   "why": "Amendment 7 (the GM: 'Rebuild row villages and dispersed farms on 287's machinery ... taking 287's rule: every household seated or the site refused') - every rule of the spec re-implemented at 287's placers, none dropped. The water fallback (sources off the crop, an end farther off the yard, the straight chord where it crosses no hard ground, wall or water) stays within FR-018: the channel still ends in the farm's lot and water_rules checks it; where in the dooryard it ends was already a GUESS. 'A grove farm's lot keeps no beast' preserves the grove farm's bundle as it was (no byre laid beside a grove farm's house before the port either) and FR-010 only constrains byres, it does not require one."
+   "why": "Amendment 7 (the GM: 'Rebuild row villages and dispersed farms on 287's machinery ... taking 287's rule: every household seated or the site refused') - every rule of the spec re-implemented at 287's placers, none dropped. The water fallback (sources off the crop, an end farther off the yard, the straight chord where it crosses no hard ground, wall or water) stays within FR-018: the channel still ends in the farm's lot and water_rules checks it; where in the dooryard it ends was already a GUESS. 'A grove farm's lot keeps no beast' preserves the grove farm's bundle as it was (no byre laid beside a grove farm's house before the port either) and FR-010 only constrains byres, it does not require one. Amendment 9 leaves D20 within: with FR-019 door clause dropped, where a door path starts (the front door, else a flank of the dooryard facing no band) is mechanism for FR-017 (every farm of the row reaches its street), not a carve-out from any requirement."
   },
   {
    "id": "D20-flank",
-   "summary": "Where no lawful door path leaves the front, the path starts from a flank of the dooryard facing no band of the farm's own grove, with open ground to the front door; recorded from_flank and meta.door_flanks",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "This is amendment 8, already ruled FAITHFUL on conditions by an independent spec-fidelity check; the plan carries its conditions: only where no lawful way leaves the front, a flank facing no band (so two-sided groves only in practice, a three- or four-sided farm needing its front or the site refused), open ground to the front door (front_to_flank_open), each farm recorded. FR-019's purpose, the farm's open side reached by a way, survives: the flank is itself an open side of the grove. To be raised with the GM, as amendment 8 says."
+   "summary": "The flank of the dooryard kept in the door-path search as a preference after the front (flank_doors, from_flank, meta.door_flanks), no longer an exception",
+   "class": "within",
+   "why": "Judged afresh under amendment 9. The flank existed as a narrowing of FR-019 front-door clause; the GM dropped that clause, so there is no front-door requirement left for it to narrow. What stands is FR-017 (every farm reaches its own street) and 287 network reach, which a path from the front or from an open flank both satisfy. Search order is mechanism. No ruling needed."
   },
   {
    "id": "D20-reviews",

@@ -174,8 +174,8 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
 - **D19 - the checks** (SC-007, SC-008). `grove_rules` gains `row_rules(M)` (every house within a frame depth of a
   street; no house behind another on its side; each street one lane; every far row farm with its holding behind it; every
   row farm joined by a way to its own street) and `water_rules(M)` (every dispersed farm with its own water as
-  `meta.farm_water` says - a channel ending inside its frame, or its own well not in its way in; a linear map's `row_water` drawn - own wells, or every farm within reach of a shared well), and the door and
-  bamboo predicates (`doors_unreached`: every LINEAR row farm's front door within the door reach of a way, or - amendment 8 - the farm reached by its own door path from an open flank of its dooryard, judged from the drawing (`reached_from_a_flank`, D20) (a dispersed farm needs none, homesteads/150); `row_rules` also fails a linear map with no seated street; `bamboo_mismatch`:
+  `meta.farm_water` says - a channel ending inside its frame, or its own well not in its way in; a linear map's `row_water` drawn - own wells, or every farm within reach of a shared well), and the
+  bamboo predicate (the door predicate `doors_unreached` was dropped with FR-019's door clause, amendment 9); `row_rules` also fails a linear map with no seated street; `bamboo_mismatch`:
   the farms drawing grove bamboo exactly the farms that rolled it). The cohort audit runs all of them on every roll and,
   beside its 24 seeds, rolls a PINNED linear spec for each value of `row_line`, `row_sides` and `row_water` (four
   line-by-sides specs, water alternating) and a PINNED dispersed spec for each value of `farm_water`, so both values of
@@ -198,9 +198,8 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
     (`to_first_arrival`), squared at its crossings (`settle.square_run`), off every fixture and band, and held to
     `settle.Lawful(tree=True)`; where no lawful path leaves the front, a flank of the dooryard facing no band (amendment 8,
     `flank_doors`, with open ground between it and the front door, `front_to_flank_open`; recorded `from_flank` and
-    `meta.door_flanks`). SC-008's door check judges such a farm from the drawing, not the flag: a door path serving it that
-    starts within the door reach of its yard, on a side no band of its grove faces, with open ground to the front door
-    (`row_rules.reached_from_a_flank`). Every row farm gets its path unless its door is on its
+    `meta.door_flanks`). (Amendment 9 dropped FR-019's door clause and SC-008's door check, so the flank is a preference after the
+    front, not an exception.) Every row farm gets its path unless its door is on its
     street. A street is cut to its outermost joints (`street.trim_streets`) and carried on to the road's start
     (`meet_the_road`); a street's join is unhooked and searched lawful (`door_path` from either end). The lane law keeps a
     short lane whose removal leaves another lane's end dangling (`law.short_fragments`).

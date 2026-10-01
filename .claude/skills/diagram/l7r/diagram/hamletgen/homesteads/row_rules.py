@@ -8,7 +8,6 @@ SC-008). Pure functions of the manifest, each returning what breaks its rule - e
 - `water_rules`: a dispersed farm's own water as `farm_water` says - a channel into its frame, or its own well in its
   dooryard, off its way in; a linear map's `row_water` drawn - own wells,
   or every farm within reach of a shared one (FR-018);
-- `doors_unreached`: every grove farm's front door within the door reach of a way (FR-019);
 - `bamboo_mismatch`: the farms drawing grove bamboo exactly the farms that rolled a household bamboo stand (FR-019).
 
 Here, not beside `grove_rules` in the settlement engine, because the door is the ways' (`ways/serve.front_door`) and the
@@ -173,51 +172,6 @@ def water_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
         if door is not None and all(seg_dist(x, y, c, door) < 12.0 for x, y in mine):
             out.append(("well_in_the_way_in", _key(c)))
     return out
-
-
-def doors_unreached(M: Mapping[str, Any], reach: float = DOOR_REACH_FT) -> list[tuple[float, float]]:
-    """The grove farms whose front door stands farther than `reach` from every way (FR-019) - on a LINEAR map: a dispersed
-    hamlet has no lane network to be reached by (research/homesteads/150, "the rule ... is a rule about nucleated
-    settlements"; `ways.unreached_houses` skips it for the same reason), and its farm fronts its own fields."""
-    if (M.get("meta") or {}).get("settlement_form") != "linear":
-        return []
-    segs = [s for ln in M.get("lanes") or [] for s in _segs(ln.get("pts") or [])]
-    if not segs:
-        return []
-    # ...OR REACHED AT AN OPEN FLANK OF ITS DOORYARD (FR-019's exception, amendment 8), judged from the drawing, never from the
-    # placer's own flag (spec-fidelity's condition): a door path serving the farm that starts in its dooryard on a side no
-    # band of its grove faces, with open ground between that start and the front door (`reached_from_a_flank`)
-    paths: dict[tuple[float, float], list[Pt]] = {}
-    for ln in M.get("lanes") or []:
-        if ln.get("serves") and ln.get("pts"):
-            paths.setdefault(_key(ln["serves"]), []).append((float(ln["pts"][0][0]), float(ln["pts"][0][1])))
-    out = []
-    for h in M.get("houses") or []:
-        door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
-        k = _key((h["x"], h["y"]))
-        if door is not None and _dist(door, segs) > reach and not any(reached_from_a_flank(h, door, p0, reach) for p0 in paths.get(k, ())):
-            out.append(k)
-    return out
-
-
-def reached_from_a_flank(h: Mapping[str, Any], front: Pt, start: Pt, reach: float = DOOR_REACH_FT) -> bool:
-    """Does a door path starting at `start` reach farm `h` at an open flank of its dooryard (amendment 8): within `reach` of
-    its yard, on a side of the yard no band of its own grove faces (the direction from the yard's center within 0.7 of a
-    band's face is that band's side), and with open ground - no house, no band - between it and the `front` door?"""
-    from ..ways.serve import front_to_flank_open  # local: the ways' door helpers, beside `front_door`
-
-    g = h.get("geom") or {}
-    yard = g.get("yard")
-    if yard is None:
-        return False
-    yx, yy, yw, yh = (float(v) for v in yard)
-    if max(abs(start[0] - yx) - yw / 2, abs(start[1] - yy) - yh / 2, 0.0) > reach:
-        return False
-    vx, vy = start[0] - yx, start[1] - yy
-    n = math.hypot(vx, vy) or 1.0
-    if any((vx * float(f[0]) + vy * float(f[1])) / n > 0.7 for f, _depth in g.get("grove_faces") or ()):
-        return False
-    return front_to_flank_open(front, start, h)
 
 
 def bamboo_mismatch(M: Mapping[str, Any]) -> list[tuple[str, tuple[float, float]]]:
