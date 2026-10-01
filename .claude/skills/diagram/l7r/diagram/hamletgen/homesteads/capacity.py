@@ -75,7 +75,12 @@ def seat_the_rest(s: Settlement, plan: SitePlan, placed: int) -> int:
     if placed >= want:
         return placed
     offered = took = 0
-    for q in free_seats(s, (float(plan.seat["cx"]), float(plan.seat["cy"]))):
+    seats = free_seats(s, (float(plan.seat["cx"]), float(plan.seat["cy"])))
+    # ...FROM THE SEAT REGION (feature 297, FR-001, plan B1): the whole list offered at once, only what the region holds
+    region = getattr(s, "_seat_region", None)
+    if region is not None:
+        seats = [q for q, ok in zip(seats, region.offer(seats), strict=True) if ok]
+    for q in seats:
         if placed >= want:
             break
         if _near_a_house(s, q):

@@ -158,6 +158,7 @@ class BundleFitMixin:
     _byre_pockets: Any = None  # the shared sheds' pockets the seating reserved (`detached_commons`, homes H06)
     _household_fixtures: Any = ()  # the fixture kinds the household being sought a seat keeps (homes H32)
     _fixture_forms: Any = None  # the hamlet's rolled fixture forms, set by the seating (`FixtureForms`)
+    _seat_region: Any = None  # the seat region the hamlet's seating offers from (feature 297, `hamletgen/homesteads/region.py`)
     _corridor_ground: Any = None  # the ways' test of a corridor's ground, installed by a hamlet's seating (`access.lawful_ground`)
     _wood: Any = None  # the households' shares of the wood floor (`homestead_parts/wood_share.py`, woods W25)
 

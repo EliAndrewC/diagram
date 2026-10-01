@@ -90,9 +90,15 @@ class Region:
         self._fill((LineString(q) if len(q) >= 2 else Point(q[0])).buffer(max(half, 0.0), quad_segs=4))
 
     def cells(self, taken: Iterable[tuple[int, int]], cell: float, x0: float, y0: float) -> None:
-        """Another raster's taken cells (`(i, j)` of `cell` px from `(x0, y0)`, e.g. `FreeGround.taken`), each painted whole."""
+        """Another raster's taken cells (`(i, j)` of `cell` px from `(x0, y0)`, e.g. `FreeGround.taken`), each painted whole and
+        NOT grown - such a cell is already taken at every point. On the same grid (this region's cell and origin are that
+        raster's) each is exactly one cell here; otherwise every cell of this region it touches."""
         for i, j in taken:
-            self.rect(x0 + i * cell, y0 + j * cell, x0 + (i + 1) * cell, y0 + (j + 1) * cell)
+            ax, ay = x0 + i * cell, y0 + j * cell
+            i0, j0 = math.floor((ax - self.x0) / self.cell + 1e-9), math.floor((ay - self.y0) / self.cell + 1e-9)
+            i1, j1 = math.ceil((ax + cell - self.x0) / self.cell - 1e-9) - 1, math.ceil((ay + cell - self.y0) / self.cell - 1e-9) - 1
+            self._draw.rectangle([i0, j0, i1, j1], fill=1)
+        self._sat = None
 
     # ---- reading -------------------------------------------------------------------------------------------------------
 
