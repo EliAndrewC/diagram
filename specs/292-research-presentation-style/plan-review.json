@@ -1,6 +1,6 @@
 {
  "feature": "292-research-presentation-style",
- "plan_sha256": "13670e04f4399167679e0af6a2060e49c206ffe620bfe3404ba78ae4107d1e5b",
+ "plan_sha256": "dbb8871ccf2427ca5263238db561f2407b0f5abce959001f212ee308dc8a7b2b",
  "reviewed": "2026-10-01",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,67 +8,73 @@
    "id": "Approach 1-6",
    "summary": "guide in research/STYLE.md, record-style check via bundle, grove pilot fold, hover link to citations entry, sources from footnotes, glossary knob/canopy-tree",
    "class": "within",
-   "why": "Each carries a clause of the 2026-09-29 request (style guide, sub-agent check, fold the two grove sections, link to citations page, no Sources roster without losing a citation, knob and canopy-tree tooltips)."
+   "why": "Unchanged since round 1; each carries a clause of the 2026-09-29 request."
   },
   {
    "id": "D1",
-   "summary": "the guide reaches the check through its bundle, not copied into the contract",
+   "summary": "the guide reaches the check through its bundle",
    "class": "within",
-   "why": "How the check learns the guide; narrows nothing the GM asked."
+   "why": "Unchanged; how the check learns the guide."
   },
   {
    "id": "D2",
    "summary": "seeded run of the check on the grove section as quoted",
    "class": "within",
-   "why": "Verifies the check the GM asked for catches the GM's own objections."
+   "why": "Unchanged; verifies the requested check catches the GM's own objections."
   },
   {
    "id": "D3",
    "summary": "size cap raised with the GM, not worked around",
    "class": "within",
-   "why": "Puts the choice to the GM (T08 records it); nothing narrowed."
+   "why": "Unchanged; the choice is put to the GM."
   },
   {
    "id": "D4",
    "summary": "built on feature 291's work; nothing pushed until 291 lands and the pilot is signed off",
    "class": "within",
-   "why": "Sequencing; the GM asked that nothing land before sign-off."
+   "why": "Unchanged; sequencing."
   },
   {
    "id": "D5",
    "summary": "13 pool tests failing outside this feature ledgered before landing",
    "class": "within",
-   "why": "Regression bookkeeping; no part of the request touched."
+   "why": "Unchanged; regression bookkeeping."
   },
   {
    "id": "D6",
-   "summary": "a topic plan per page from a digest of every section's title, with cross-page folds and confusable pairs",
+   "summary": "a topic plan per page from a digest; the 21 plans (19 page plans and 2 additions plans) committed under sweep/",
    "class": "within",
-   "why": "Serves 'combining similar ones as appropriate' across the whole record, which a per-slice decision could not; every section of every page is in scope."
+   "why": "Serves 'combining similar ones as appropriate' across the whole record; the revision only records that the plans are committed (21 plan-*.md files are tracked)."
   },
   {
    "id": "D7",
-   "summary": "every group in two headless sessions, write then check-and-apply, with the pilot's checks (record-style with merge audit, quote-check, record-format, entry-drift, translation-check)",
+   "summary": "every group in two headless sessions with the pilot's checks; briefs generated from two templates by make_briefs.py",
    "class": "within",
-   "why": "'as we have been doing': the same procedure and the same checks the three pilot topics ran; no check dropped."
+   "why": "'as we have been doing': the pilot's procedure and checks, none dropped. The revision names the templates (committed)."
   },
   {
    "id": "D8",
-   "summary": "order: pages feature 291 is not editing first; vegetation, ways, homesteads last",
+   "summary": "order: pages feature 291 is not editing first",
    "class": "within",
    "why": "Order only; every page is still swept."
   },
   {
    "id": "D9",
-   "summary": "one queue at a time, the session supervising",
+   "summary": "three parallel queues in three clones, briefs handed between clones, merged back with sweep/tools (resolve, entry_union, relink); three mid-run brief fixes (foreground dispatch, large PDFs via curl/pdftotext, sync held until 291 lands)",
    "class": "within",
-   "why": "Concurrency and supervision; no section or check affected."
+   "why": "Concurrency, merge mechanics and procedure fixes; no section is left unswept, no check dropped, and the large-PDF fix keeps a source readable rather than deferring it. Nothing the GM did not ask for is decided."
+  },
+  {
+   "id": "D9a",
+   "summary": "the closing pass: the checks' 26 items for the GM put to escalation-check (24 the session's own, 2 merged into 1 question the GM answered), plus the deferred cross-topic moves, worked as T26 from sweep/closing briefs",
+   "class": "within",
+   "why": "Finishes 'each and every research section' under the style guide; the one GM question went to the GM and T26 applies the GM's 2026-10-01 answers as given (option b; the office size as research). escalation-check is the project's standing route for findings meant for the GM; nothing is narrowed."
   },
   {
    "id": "D10",
    "summary": "commits in the clone, lands after 291 with the full gate and every page restyled",
    "class": "within",
-   "why": "Landing; 'every page restyled' is the request's 'each and every research section'."
+   "why": "Unchanged; 'every page restyled' is the request's 'each and every research section'."
   }
  ],
  "verdict": "CLEAR"
