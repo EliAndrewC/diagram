@@ -54,6 +54,7 @@ from .brook_rules import (
     tap_index,
     to_edge,
     turn_deg,
+    without_straight_joins,
 )
 
 # THE WEIR'S FORM (269 B22; research/rendering/water/250-how-our-maps-draw-the-intake-and-its-weir-toshuko-and-seki.html): a fence of stakes woven with brushwood (feature 280 M36: the woven stake
@@ -518,7 +519,7 @@ def brook_violations(course: Sequence[Pt], plan: SitePlan, sluice: Pt, ditches: 
     fin = drawn_course(course, [sluice], joins)
     W, H = float(plan.W), float(plan.H)
     box = reserved_box(course, plan)
-    run, bound, _a, _b = ruled_excess(_without_straight_joins(fin, joins), W, H, box)
+    run, bound, _a, _b = ruled_excess(without_straight_joins(fin, joins, JOIN_ON_COURSE), W, H, box)
     checks = {
         "fold": max_turn_deg(fin) > BROOK_MAX_TURN_DEG,
         "level": bool(level_runs_any_view(fin, W, H, box)),
@@ -531,23 +532,6 @@ def brook_violations(course: Sequence[Pt], plan: SitePlan, sluice: Pt, ditches: 
         "climbs": not monotone_down(fin[tap_index(fin, [sluice]) :], plan.fall, slack=BEND_DIP_FT),
     }
     return [k for k, bad in checks.items() if bad]
-
-
-def _without_straight_joins(fin: Sequence[Pt], joins: Sequence[Pt], deg: float = 0.5) -> Poly:
-    """`fin` less each confluence vertex (`joins`) that lies on a straight line between its neighbors - what the ruled rule
-    (water:W03) reads. A confluence held mid-leg changes no stroke the map draws, but its vertex made a single straight leg,
-    which the rule's chord test leaves alone, a three-vertex run it counts: on Kashikawa (feature 302) every meeting the drain
-    could make with its brook read "ruled" while the brook itself, judged without the join, kept the rule."""
-    out = [fin[0]] if fin else []
-    for k in range(1, len(fin) - 1):
-        p = fin[k]
-        if any(math.dist(p, q) <= JOIN_ON_COURSE for q in joins):
-            (ax, ay), (bx, by) = fin[k - 1], fin[k + 1]
-            h1, h2 = math.atan2(p[1] - ay, p[0] - ax), math.atan2(by - p[1], bx - p[0])
-            if abs((math.degrees(h2 - h1) + 180.0) % 360.0 - 180.0) < deg:
-                continue
-        out.append(p)
-    return [*out, fin[-1]] if len(fin) >= 2 else list(fin)
 
 
 def _pinned(course: Sequence[Pt], sluice: Pt) -> tuple[int, set[int]]:

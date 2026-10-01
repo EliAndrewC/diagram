@@ -27,15 +27,18 @@ Order: Phase 0 measures and decides; Phase 1 (T10 onward) runs only on GO, its t
 
 ## Phase 1 - the engine (only on GO; refined by the plan's amendment)
 
-- [ ] T10 [US2] The partition, settle and tint modules in `waterfields/`, red-green from the prototype, with their unit tests - settle's assert that no cell it returns has a `ring_violations` finding (the plan review's round-3 note: what the deleted weld tests held)
+- [x] T10 [US2] The partition, settle and tint modules in `waterfields/`, red-green from the prototype, with their unit tests - settle's assert that no cell it returns has a `ring_violations` finding (the plan review's round-3 note: what the deleted weld tests held)
       research: rendering
-- [ ] T11 [US2] `carve_comb` / `finish_comb` / `fit_field` on the region and the partition; the seam repair and `planted_area` retired for comb fields, their tests moved or retired with each rule carried (FR-006, FR-007, FR-011)
+      verify: DONE. DONE. waterfields/partition.py, settle.py (settle_cells), tint.py; test_partition/test_settle/test_tint, each module 100% from its own tests; settle asserts no returned cell has a ring_violations finding
+- [x] T11 [US2] `carve_comb` / `finish_comb` / `fit_field` on the region and the partition; the seam repair and `planted_area` retired for comb fields, their tests moved or retired with each rule carried (FR-006, FR-007, FR-011)
       research: rendering
+      verify: DONE. DONE. carve_comb lays the skeleton + region, finish_comb partitions/settles/tints; fit scores region.area; carve plot cutting, sector_rows.py, close_seams and seams/plots.py deleted, PlotGeoms and planted_area gone; tests moved (tint) or retired, the rules held by test_settle/test_partition (tiling, shared bunds) and ring_rules' own
 - [ ] T12 [US2] Inashiro regenerated and gated; then the pool (`make maps`); every map green (SC-006)
       research: rendering
 - [ ] T13 [US2] Research pointers that name the retired machinery re-aimed; the glyph-check the Occasions owe
       research: rendering
-- [ ] T13b [US2] [US3] The 10- and 20-household fields compared cell by cell with the carve's (plot count, cell-size distribution, the longest cells) in the harness before the push - the plan review's round-3 note: the glyph check on Inashiro cannot see the narrow-sector and edge-strip cases R2 found there; a finding is fixed in the lattice
+- [x] T13b [US2] [US3] The 10- and 20-household fields compared cell by cell with the carve's (plot count, cell-size distribution, the longest cells) in the harness before the push - the plan review's round-3 note: the glyph check on Inashiro cannot see the narrow-sector and edge-strip cases R2 found there; a finding is fixed in the lattice
       research: rendering
+      verify: DONE. DONE. research R4: first cut 19/26 cells over 3 design cells at 10/20 hh (carve 3/5); four lattice causes measured and fixed (CROSS, _rows_kept, keep_rows, recut); after: 10 hh 0 over 2 cells (carve 13), 20 hh 2 (19), largest and longest below the carve's at both
 - [ ] T14 [US2] [US3] The `302-end` bookend, the harness against the base (SC-005), `make done` green (SC-008)
       research: rendering

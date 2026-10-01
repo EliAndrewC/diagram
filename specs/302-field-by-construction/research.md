@@ -63,11 +63,11 @@ predictions about 0.4 s), the partition 0.04 s, the rules 0.12 s, the tint 0.04 
 
 ## R3. Phase 1 first measurements, and the blocker (observed 2026-10-01, method: `make map PROFILE=1` per pool map, `make cohort N=24` in the clone and in a detached worktree of a94cabe5f)
 
-The engine now builds the comb field as Amendment 1 designs it (partition, settle, tint; the carve's plot cutting, `sector_rows.py`,
+The engine now builds the comb field as Amendment 1 designs it (observed 2026-10-01, method: `make test-file` and `make cov-file` on the touched suites) (partition, settle, tint; the carve's plot cutting, `sector_rows.py`,
 `close_seams` and every function only it reached, `PlotGeoms`, `planted_area` deleted). The touched suites pass (3,213 tests); the
 three new modules are at 100% coverage from their own tests.
 
-The field stage, one run each (base figures: the 2026-10-01 morning profile): Inashiro 1.23-1.51 -> 0.60 s; Mizuguchi 0.87 -> 0.49 s;
+The field stage, one run each (observed 2026-10-01, method: `make map PROFILE=1`; base figures: the 2026-10-01 morning profile): Inashiro 1.23-1.51 -> 0.60 s; Mizuguchi 0.87 -> 0.49 s;
 Sawada 2.05 -> 0.81 s; Kuwabata (a polder, not a comb) 0.70 -> 0.67 s.
 
 **Kashikawa no longer generates**: the web refuses it, one row farm (at 2473, 2937) off the network. Traced: its row's street is
@@ -83,7 +83,7 @@ seeds fail moves with the geometry. Feature 297 recorded the cohort at 30/30, so
 
 ## R4. The engine against main, and the lattice measured against the carve (observed 2026-10-01, method: `make spec-harness` with `HARNESS_WHICH=breakdown` in a detached worktree of main at 86395a70d and in the clone, interleaved three times, load 4.5 -> 2.3; the cell figures from the 10/20-household manifests, the old ones rolled on main the same morning)
 
-`fit_field`, fastest of three per input: main 5.723 s (run totals 5.79 / 5.95 / 5.72), the clone 3.050 s (3.11 / 3.05 / 3.07) - **1.88x**,
+`fit_field`, fastest of three per input (observed 2026-10-01, method: the R4 harness runs above): main 5.723 s (run totals 5.79 / 5.95 / 5.72), the clone 3.050 s (3.11 / 3.05 / 3.07) - **1.88x**,
 the larger spread 0.23 s: SC-005 holds. Per input, main -> clone: Inashiro 0.966 -> 0.472, Kashikawa 1.024 -> 0.499, Mizuguchi
 0.540 -> 0.392, Sawada 1.590 -> 0.799, at 10 households 0.565 -> 0.274, at 20 1.038 -> 0.614. Less than the prototype's 2.72x: the
 lattice fixes below cut more rows, clip with a buffer, and re-cut oversized cells.
@@ -91,7 +91,7 @@ lattice fixes below cut more rows, clip with a buffer, and re-cut oversized cell
 **The cell comparison the plan review asked for (task T13b)** found the first engine cut leaving oversized cells - 19 over three
 design cells at 10 households (the carve: 3), 26 at 20 (the carve: 5). Measured causes, each fixed in `partition.py`:
 
-- A bund clipped EXACTLY to its sector's ground ended on the edge only to within floating error, so a row a hair short of the edge
+- (observed 2026-10-01, method: the in-cut row record on the 10-household roll) A bund clipped EXACTLY to its sector's ground ended on the edge only to within floating error, so a row a hair short of the edge
   was a dangle `polygonize` ignores: the edge column's cells were 3-5 basins tall. Clipped to the ground grown by `CROSS` (0.5 px).
 - One row spacing and one column count per sector, from its MEDIAN width, misread a sector whose thread rides its parent's path
   for half its span: rows are kept by the cell each closes at the LOCAL width (`_rows_kept`), columns counted at the widest.
@@ -99,7 +99,7 @@ design cells at 10 households (the carve: 3), 26 at 20 (the carve: 5). Measured 
   inside the ditches): a short piece is kept where the strip is at least `MIN_ROW` plot widths across (`keep_rows`).
 - A backstop: a cell over `RECUT_OVER` (2.5) design cells is cut again on a plain lattice at the fan's grain (`recut`).
 
-After them, at 10 households: no cell over two design cells (the carve: 13), the largest 2,914 px^2 (5,428), the longest 4.8 to
+After them (observed 2026-10-01, method: the 10/20-household manifests' plot rings, regenerated): at 10 households, no cell over two design cells (the carve: 13), the largest 2,914 px^2 (5,428), the longest 4.8 to
 1 (7.9). At 20: 2 over two design cells (19), the largest 4,610 (5,474), the longest 4.9 to 1 (7.1).
 
 **Kashikawa, fixed** (constitution XIV; the GM, 2026-10-01: "We should definitely fix the pre-existing failure"): the row farm's

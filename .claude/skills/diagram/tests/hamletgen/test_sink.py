@@ -521,5 +521,3 @@ def test_a_drain_route_beside_the_brook_joins_it() -> None:
     assert to == "stream" and route[-1] == (0.0, route[-2][1]) and abs(route[-2][0] - 32.0) < 2.0
     away = [(100.0, 0.0), (100.0, 600.0)]
     assert join_beside(away, brook, 1.0) == (away, "offmap")
-
-

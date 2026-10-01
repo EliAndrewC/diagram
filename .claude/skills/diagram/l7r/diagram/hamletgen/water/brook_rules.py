@@ -250,3 +250,20 @@ def ditch_strokes(plan: SitePlan) -> list[Poly]:
     """Every ditch of the fitted net the brook must not cross mid-run (water:W08) - the head race included, whose mouth on
     the brook is its confluence and so exempt by the predicate itself."""
     return [[(float(x), float(y)) for x, y in c["pts"]] for c in (plan.net or {}).get("channels") or [] if len(c.get("pts") or ()) >= 2]
+
+
+def without_straight_joins(fin: Sequence[Pt], joins: Sequence[Pt], tol: float, deg: float = 0.5) -> Poly:
+    """`fin` less each confluence vertex (`joins`, matched within `tol`) that lies on a straight line between its neighbors - what the ruled rule
+    (water:W03) reads. A confluence held mid-leg changes no stroke the map draws, but its vertex made a single straight leg,
+    which the rule's chord test leaves alone, a three-vertex run it counts: on Kashikawa (feature 302) every meeting the drain
+    could make with its brook read "ruled" while the brook itself, judged without the join, kept the rule."""
+    out = [fin[0]] if fin else []
+    for k in range(1, len(fin) - 1):
+        p = fin[k]
+        if any(math.dist(p, q) <= tol for q in joins):
+            (ax, ay), (bx, by) = fin[k - 1], fin[k + 1]
+            h1, h2 = math.atan2(p[1] - ay, p[0] - ax), math.atan2(by - p[1], bx - p[0])
+            if abs((math.degrees(h2 - h1) + 180.0) % 360.0 - 180.0) < deg:
+                continue
+        out.append(p)
+    return [*out, fin[-1]] if len(fin) >= 2 else list(fin)
