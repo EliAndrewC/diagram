@@ -299,6 +299,10 @@ def test_the_shipped_hamlets_keep_the_rules_the_review_used_to_judge(gen: str) -
     from l7r.diagram.settlement.houses import TREAD_WALL_FT
 
     assert treads_near_walls(M, TREAD_WALL_FT) == [], "B7: a tread beside a wall"
+    from l7r.diagram.waterfields.twins import twins
+
+    courses = [d["pts"] for d in M.get("drawn_channels") or [] if len(d.get("pts") or []) >= 2] + [s["poly"] for s in M.get("streams") or [] if len(s.get("poly") or []) >= 2]
+    assert twins(courses, _ftpx(M)) == [], "B4: two watercourses side by side (the comb's own predicate, waterfields/twins.py)"
     # B13: the lane law the placer guarantees, proved on what shipped
     assert law.needle_ends(M.get("lanes") or []) == [], "B13: a needle join"
     assert law.needle_loops(M) == [], "B13: a needle loop"

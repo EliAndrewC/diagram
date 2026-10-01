@@ -41,6 +41,7 @@ from .ring_rules import simple_outline
 from .seams import close_seams
 from .seams.pockets import _outside_command, _water
 from .trunks import DRAIN_MIN_LEG, anchor_trunk_ends, drop_stub_pieces
+from .twins import drop_twin_deliveries
 
 _SHAPELY_LOADED = False
 
@@ -796,6 +797,7 @@ def _comb_canal_pieces(F: _Frame, threads: list[_Thread], bc: _Thread, a_pts: Po
     nothing and "slowly disappears" exactly like the delivery ditches - the old stepped 6.2 -> 4.0
     taper left the top channel reading near-constant beside the dwindling ditches. Each piece now
     carries w -> w_tail so the narrowing is continuous within pieces, not a stair of blunt steps."""
+    first = len(channels)
     cuts = [0.0] + list(offtakes_a) + [1.0]
     n_a = len(cuts) - 1
     for i in range(len(cuts) - 1):
@@ -858,6 +860,10 @@ def _comb_canal_pieces(F: _Frame, threads: list[_Thread], bc: _Thread, a_pts: Po
             # `head_ft` was capped against the parent's LOCAL width where this ditch takes off, so a
             # delivery can never be drawn wider than the canal feeding it (DELIVERY_PARENT_FRAC).
             channels.append({"pts": pre, "w": chan_px(t.head_ft, grain), "w_tail": chan_px(DELIVERY_FT[1], grain), "role": "branch"})
+    # ...AND NO DELIVERY RUNS BESIDE ANOTHER COURSE AS ITS TWIN (feature 294 B4, `twins.py`): a delivery taking off from the
+    # second canal ran down beside it 12-32 ft away for 190-310 ft on four of the five hamlets; its plots take their water over
+    # their bunds instead (tagoshi), as at the head fork above
+    drop_twin_deliveries(channels, first, 2.0 / grain)
 
 
 def _comb_floor_and_winding(plots: list[dict[str, Any]], threads: list[_Thread], a_pts: Poly, dpts: Poly, F: _Frame) -> Poly:

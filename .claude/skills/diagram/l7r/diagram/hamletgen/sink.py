@@ -14,6 +14,7 @@ from l7r.diagram.settlement import Settlement, point_in_poly, seg_closest
 from l7r.diagram.settlement.fields.comb import DOWNHILL_FRACTION as DOWNHILL_FRACTION
 from l7r.diagram.settlement.fields.comb import runs_downhill  # the channel rule, one predicate for every channel writer (water:W10)
 from l7r.diagram.settlement.land.dikes import breaches_any_dike
+from l7r.diagram.waterfields.twins import TWIN_HI_FT, TWIN_RUN_FT, twin_run_ft
 from l7r.diagram.settlement.land.wet import pond_fringe_ring
 from l7r.diagram.settlement.water_ways.water import DRAIN_HUE, DRAINAGE_DITCH
 from l7r.diagram.sitegen.geom import crosses_poly, unit
@@ -218,8 +219,8 @@ def route_refusals(plan: SitePlan, out: Pt, heading: Pt, anchored: bool, route: 
     """Why the drain's continuation `route` (from the outfall `out`) may not be drawn - empty where it may. One predicate
     per term (feature 287, water:W10-W12): the junction turn (`JUNCTION_TURN_MAX_DEG`), the rice (an interior vertex in the
     field, or a leg through it - the first leg exempt where the outfall stands inside the field, as the gate trims it),
-    downhill (`runs_downhill`), the drainage bearing (under 90 degrees off `water_flow`), the brook (`crosses_mid_run`) and
-    the dike (`breaches_any_dike` over the recorded `dikes`: a drain crosses a dike's crest only at one of its gaps, water
+    downhill (`runs_downhill`), the drainage bearing (under 90 degrees off `water_flow`), the brook (`crosses_mid_run`, and
+    `twin_run_ft`: not run beside it, feature 294) and the dike (`breaches_any_dike` over the recorded `dikes`: a drain crosses a dike's crest only at one of its gaps, water
     W42)."""
     lead = (route[1][0] - route[0][0], route[1][1] - route[0][1])
     ln = math.hypot(*lead) or 1.0
@@ -233,6 +234,9 @@ def route_refusals(plan: SitePlan, out: Pt, heading: Pt, anchored: bool, route: 
         "upstream": abs((bear - plan.water_flow + 180.0) % 360.0 - 180.0) >= 90.0,
         "brook": len(brook) >= 2 and crosses_mid_run(brook, route),
         "dike": breaches_any_dike(list(route), dikes),
+        # ...and it does not run down beside the brook as its twin (feature 294 B4, `waterfields/twins.py`): Kashikawa's outfall
+        # ran 12-32 ft off the brook for 130 ft to the frame's edge instead of joining it
+        "twin": len(brook) >= 2 and twin_run_ft(list(route), list(brook), plan.ftpx) > TWIN_RUN_FT,
     }
     return [k for k, bad in checks.items() if bad]
 
@@ -289,7 +293,26 @@ def hull_route(plan: SitePlan, out: Pt, heading: Pt, brook: Sequence[Pt], pad: f
                 m = min(((float(g.x), float(g.y)) for g in getattr(meet, "geoms", [meet]) if g.geom_type == "Point"), key=lambda p: math.dist(p, a), default=None)
                 if m is not None and math.dist(m, a) > 0.5:
                     return [*route[: i + 1], m], "stream"
+    if len(brook) >= 2:
+        return join_beside(route, brook, plan.ftpx)
     return route, "offmap"
+
+
+def join_beside(route: Poly, brook: Sequence[Pt], ftpx: float) -> tuple[Poly, str]:
+    """A drain route that would run down beside the brook as its twin (feature 294 B4, `waterfields/twins.py`) JOINS it
+    instead: cut where the route first comes within `TWIN_HI_FT` of the brook, and carried onto the brook's nearest point,
+    a confluence (to "stream"). A route that keeps its distance runs off the map (to "offmap")."""
+    from shapely.geometry import LineString, Point  # noqa: PLC0415 - bound on first use
+
+    if twin_run_ft(list(route), list(brook), ftpx) <= TWIN_RUN_FT:
+        return route, "offmap"
+    line, water = LineString(route), LineString(brook)
+    reach = TWIN_HI_FT / ftpx
+    s = next(k * 2.0 for k in range(int(line.length // 2.0) + 1) if water.distance(line.interpolate(k * 2.0)) <= reach)
+    head = [p for p in route if line.project(Point(p)) < s]
+    at = line.interpolate(s)
+    meet = water.interpolate(water.project(at))
+    return [*head, (float(at.x), float(at.y)), (float(meet.x), float(meet.y))], "stream"
 
 
 def _through_the_crop(plan: SitePlan, out: Pt, q: Pt) -> bool:

@@ -14,6 +14,8 @@ This feature's own delta, declared under the rules it builds (plan D10). Lines a
 - none: B10 - the nucleated placer refuses a layout whose lot found no seat for a part (settlement/rolling/fit.py), the rule `_bundle_side_fits` already held; households re-seat under rules already judged, and a fixture kind new to a map is detected and owes its glyph check
 - placement-changed: copse - B9: the dooryard copse is filled to the ground's capacity and trimmed back to each homestead's wood, rolled within the part of the register's range the ground can hold (settlement/homestead_parts/wood_goal.py)
 - none: B7 - a farmhouse is seated with its wall `TREAD_WALL_FT` (4 ft) clear of a way's tread edge, where the hair was 2 ft (settlement/houses.py); a margin tuned, the seating rule otherwise the one already judged
+- placement-changed: irrigation ditch - B4: a delivery that would run beside another watercourse as its twin is not drawn; its plots take their water over the bund (waterfields/twins.py, comb.py)
+- placement-changed: drainage ditch - B4: a field's drain that would run beside the brook as its twin joins it (hamletgen/sink.py)
 
 ## Setup
 
@@ -86,8 +88,9 @@ This feature's own delta, declared under the rules it builds (plan D10). Lines a
       research: rendering
 - [ ] T20 [US2] B6 page hit regions (each class wins 0.8 of its ink, declared overlaps apart); red today; the hit order fixed
       research: rendering
-- [ ] T21 [US2] B7 lane tread to wall, 4 ft: the tread rule and a gate test, red on the 3.85 ft case
+- [x] T21 [US2] B7 lane tread to wall, 4 ft: the tread rule and a gate test, red on the 3.85 ft case
       research: rendering
+      verify: DONE. DONE. settlement/houses.py TREAD_WALL_FT = 4.0 (GUESS, research's 3-shaku eaves strip plus eaves; recorded case 3.85 ft) in _house_on_a_tread; treads_near_walls gate rule (raked house rects, STRtree), seeded red on the 3.85 ft case; the five regenerated and green
 - [x] T22 [US2] B8 footbridges, B11 house bearings, B12 the brook in view, B13 the lane law on the shipped maps: gate tests, each red on a seeded fault
       research: rendering
       verify: DONE. DONE. bridges_too_close (60 ft, STRtree), bearing_faults (+-33.75 deg, no pile of 3+ at the widest turn), brook_pieces_in_view (one piece), law.needle_ends/needle_loops/lanes_that_kink on the shipped lanes; each seeded red; green on the five
