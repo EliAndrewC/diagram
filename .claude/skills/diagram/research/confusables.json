@@ -55,18 +55,18 @@
   "why": "Holding cells are a magistracy's small remand cell in its own compound; the city jail is a walled court of the governor's compound or a compound of its own."
  },
  {
-  "a": "buildings.html#the-granary-and-the-tax-rice-gokura",
+  "a": "buildings.html#storehouses-for-the-tax-rice",
   "b": "urban-features.html#village-granaries-gogura",
   "why": "The first is the chain of storehouses the tax rice passed through; the second is the village's own shared store and where it stood."
  },
  {
-  "a": "buildings.html#the-granary-and-the-tax-rice-gokura",
+  "a": "buildings.html#storehouses-for-the-tax-rice",
   "b": "cities/capitals.html#rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi",
   "why": "The first is the lord's and magistrate's storehouses for tax rice on its way out; the second is a capital's wharf granary, with the Emperor's separate granaries."
  },
  {
   "a": "buildings.html#fire-and-the-fireproof-storehouses-dozo",
-  "b": "buildings.html#the-granary-and-the-tax-rice-gokura",
+  "b": "buildings.html#storehouses-for-the-tax-rice",
   "why": "The first is the earth-walled storehouse as the answer to fire; the second is the chain of storehouses the tax rice passed through."
  },
  {
@@ -961,7 +961,7 @@
  },
  {
   "a": "homesteads.html#farm-storehouses-kura",
-  "b": "buildings.html#the-granary-and-the-tax-rice-gokura",
+  "b": "buildings.html#storehouses-for-the-tax-rice",
   "why": "The first is a farm household's own storehouse; the second is the chain of storehouses the tax rice passed through."
  },
  {

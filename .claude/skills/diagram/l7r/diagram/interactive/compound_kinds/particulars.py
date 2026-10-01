@@ -84,7 +84,7 @@ class River(Kind):
 
     Note: Freight by water is a recorded finding, and the village granary is recorded as a temporary store for
     shipment, but that a well-watered county's office granary is a staging node its tax rice passes through is
-    the research's own reading, and so is the contrast with an isolated county's rows of granaries, whose one example (Takayama holding rice for all of Hida) has no readable source; the hired hulls under an official pennant are recorded for the shogunate's rice going by sea, and carrying them onto a county's river is this project's own; that a domain digs canals only where an inland river is worth canalizing is the setting's canon, and drawing one only in Lion lands is this project's own rule. Edo-period river landings were set up
+    the research's own reading, and the contrast with an isolated county's rows of granaries is its guess, its one example (Takayama holding rice for all of Hida) having no readable source; the hired hulls under an official pennant are recorded for the shogunate's rice going by sea, and carrying them onto a county's river, and that the office owned no boats of its own, are this project's own; that a domain digs canals only where an inland river is worth canalizing is the setting's canon, and drawing one only in Lion lands is this project's own rule. Edo-period river landings were set up
     to carry the tax rice to Edo and Osaka. That Japan's tax rice went by water is recorded, but that its heavy
     freight in general did rests on general reading rather than a page a reader can open.
 
@@ -95,7 +95,7 @@ class River(Kind):
     Covers: the river band and its labels
     Label: accurate
     Sources: gokura-jawiki, nishimawari-koro-jawiki, takayama-jinya-city, takayama-jinya-jawiki, chinaknowledge-caoyun, daba-jawiki, chuma-jawiki, kashi-jawiki
-    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/ways.html - 'Moving goods: carts, packhorses and river landings (kashi)'; research/rendering/ways.html - 'How our maps draw moving goods: cart lanes and boat landings (kashi)'
+    Entry: research/buildings.html - 'Storehouses for the tax rice'; research/rendering/buildings.html - 'How our maps draw storehouses for the tax rice'; research/ways.html - 'Moving goods: carts, packhorses and river landings (kashi)'; research/rendering/ways.html - 'How our maps draw moving goods: cart lanes and boat landings (kashi)'
     """
 
     key = "river"
@@ -112,7 +112,7 @@ class RiverLanding(Kind):
     a navigable river keeps a landing of its own where the grain is loaded.
 
     Note: That the tax grain went on hired boats under an official pennant, inspected at the ports of call,
-    follows the record of the shogunate's rice shipped to Edo, and carrying it to a county is this project's own; that the magistracy's hold on it was documentary, a matter of counts and records, and that it passed through the compound and so was loaded at the compound's own landing,
+    follows the record of the shogunate's rice shipped to Edo, and carrying it to a county is this project's own; that the magistracy owned no hulls of its own and that its hold on the cargo was documentary, a matter of counts and records, and that it passed through the compound and so was loaded at the compound's own landing,
     is this project's reading. No page read describes an official's compound with a landing of its own, so that
     the landing is the compound's own is a guess.
 
@@ -120,7 +120,7 @@ class RiverLanding(Kind):
     Covers: the landing label - its dock, revetment, barge, watch post and altar are each their own kind
     Label: accurate
     Sources: nishimawari-koro-jawiki, kashi-jawiki, gangi-kowan-jawiki, takasebune-jawiki, kotobank-takasebune, matou-zhwiki, kuramae-jawiki, chinaknowledge-caoyun
-    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'; research/ways.html - 'Moving goods: carts, packhorses and river landings (kashi)'; research/rendering/ways.html - 'How our maps draw moving goods: cart lanes and boat landings (kashi)'; research/rendering/cities/river-cities.html - 'How our maps draw wharves and landings (kashi, gangi)'
+    Entry: research/buildings.html - 'Storehouses for the tax rice'; research/rendering/buildings.html - 'How our maps draw storehouses for the tax rice'; research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'; research/ways.html - 'Moving goods: carts, packhorses and river landings (kashi)'; research/rendering/ways.html - 'How our maps draw moving goods: cart lanes and boat landings (kashi)'; research/rendering/cities/river-cities.html - 'How our maps draw wharves and landings (kashi, gangi)'
     """
 
     key = "river landing"
@@ -319,7 +319,7 @@ class TaxBarge(Kind):
     Why: Tax grain moves down the river to the city on hired boats flying an official pennant; the
     magistracy owns no hulls, and the barge at its dock is one taken on for the run.
 
-    Note: The barge's size, inside the record's range for such a boat, and the hiring of hulls for tax rice (read for the shogunate's sea shipments; a county's grain going downriver on them is this map's reading),
+    Note: The barge's size, inside the record's range for such a boat, and the hiring of hulls for tax rice (read for the shogunate's sea shipments; a county's grain going downriver on them, and its magistracy owning no boats of its own, are this map's reading),
     follow the record. The bales aboard are drawn about 4 ft long so that they read, where a rice bale of today's 60 kg size is about
     2.5 ft long and 1.5 ft across; no bale of the Edo period was found measured, and one scaled from what it held is guessed within a tenth of that size.
 
@@ -330,7 +330,7 @@ class TaxBarge(Kind):
     Covers: the moored barge, its lines, its bales and its label
     Label: accurate
     Sources: takasebune-jawiki, kotobank-takasebune, gokura-jawiki, takayama-jinya-city, tawara-unit-jawiki, nisira-komedawara
-    Entry: research/urban-features.html - 'Straw bales of rice and charcoal (tawara)'; research/rendering/urban-features.html - 'How our maps draw straw bales of rice and charcoal (tawara)'; research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/rendering/cities/river-cities.html - 'How our maps draw wharves and landings (kashi, gangi)'
+    Entry: research/urban-features.html - 'Straw bales of rice and charcoal (tawara)'; research/rendering/urban-features.html - 'How our maps draw straw bales of rice and charcoal (tawara)'; research/buildings.html - 'Storehouses for the tax rice'; research/rendering/buildings.html - 'How our maps draw storehouses for the tax rice'; research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/rendering/cities/river-cities.html - 'How our maps draw wharves and landings (kashi, gangi)'
     """
 
     key = "tax barge"

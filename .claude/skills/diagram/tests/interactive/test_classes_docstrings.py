@@ -164,7 +164,14 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     house (homesteads/740); `storage shed`'s to the storehouse against the farmhouse (720, 440); `pig sty`'s to the pond
     bank (archetypes/171, 180 - no shed flushing into the pond); `shared bamboo grove`'s to the settlement's edge
     (vegetation/640). The same rewrites moved the `sources` of those six and of farmhouse, privy, fish pond, bund, paddy
-    and well to the keys their new prose rests on."""
+    and well to the keys their new prose rests on.
+
+    Feature 292's closing pass (C3, 2026-10-01) moved two labels and one `sources` under the same bar, each to match the
+    rendering section its rewritten prose is written from: `garden` accurate to guess (homesteads 050 - the bed's crops and
+    its area are guesses, and the rendering section's area band is the research's own guess), `storage shed` accurate to
+    convention (rendering/homesteads 120 - the storehouse is drawn as an annex on a fixed wall at a farm shed's size,
+    where the storehouses recorded stood free of the house and were smaller), and `byre`'s `sources` gained `koshigaya-shishi-noumin-jukyo` (Hasuda's 50
+    stables in 76 houses, against which the drawn share is now named a calibration)."""
     before = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     added = {s for succ in SINCE_189.values() for s in succ} | set(ADDED_SINCE_189)
     assert set(SINCE_189) <= set(before) and not (added & set(before)), "the tables name snapshot keys and NEW keys only"

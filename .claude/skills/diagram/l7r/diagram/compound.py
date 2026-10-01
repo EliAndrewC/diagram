@@ -658,7 +658,7 @@ def emit_svg(program: CompoundProgram, result: PlaceResult, margin_ft: float = D
 def county_magistracy_program() -> CompoundProgram:
     """A generic county magistracy declared entirely in feet (the placer composes it).
 
-    Building masses are sized to land in the ~37-42% jin'ya coverage band (real jin'ya
+    Building masses are sized to land in the ~30-42% jin'ya coverage band (real jin'ya
     consolidate into a few large masses); the spine (garden -> oshirasu -> forecourt, plus
     the practice ground beside the barracks) sits clear of the wall rows so the placer never
     has to overlap it.
