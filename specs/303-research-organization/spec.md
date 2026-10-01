@@ -131,8 +131,8 @@ build places it. Forgetting the tags fails the build, naming the question.
 
 **Acceptance Scenarios**:
 
-1. **Given** a new question with valid tags, **When** the record builds, **Then** it appears in the section its primary
-   subject belongs to, at its level's position.
+1. **Given** a new question with valid tags, **When** the record builds, **Then** it appears in the first section, in
+   table-of-contents order, whose rule matches its tags, at its level's position.
 2. **Given** a question with no tags, an unknown tag, or tags no section's rule takes, **When** the record builds,
    **Then** the build refuses, naming the file and the problem.
 
@@ -151,8 +151,8 @@ build places it. Forgetting the tags fails the build, naming the question.
   research question is audited for the same thing (FR-008a).
 - **A question two sections' rules both match**: its home is the first matching section in table-of-contents order;
   its other tags put it on those tag pages.
-- **A drawing file that states different tags from its twin**: refused - a drawing file states tags only when it has no
-  twin.
+- **A drawing page that inherits tags but states its own**: refused - a drawing page states tags only when it is about
+  no research question.
 - **A part opening (the `_front.html` paragraph) that no longer matches any one section**: its reader-facing text moves
   to the description of the section it introduced, or is listed as retired with the reason.
 - **In-flight peer work** on old paths (another clone mid-session): the old-to-new mapping is kept as a file the pointer
@@ -202,7 +202,8 @@ build places it. Forgetting the tags fails the build, naming the question.
   subject, a setting, a level, or a combination). It is the only place section order and grouping are stated; the builder
   contains no list of groups.
 - **FR-010** A question's home is the first section, in table-of-contents order, whose rule matches it. The build
-  refuses a question no section's rule matches, and a section whose rule matches nothing in either half.
+  refuses a question no section's rule matches, and a rule that matches no question at all (a typo, not a regrouping). A
+  section whose matching questions were all homed by earlier sections is empty and is omitted (FR-013), not refused.
 - **FR-011** Within a section, questions are ordered by level (foundational first), then identity number. The order is
   total and two builds of the same tree are byte-identical.
 - **FR-012** The research half and the drawing half are built from the one table of contents: the same sections in the
@@ -282,7 +283,7 @@ This feature draws nothing on a map and states nothing new about one; it reorgan
 | Home follows the place seen from the map, except spanning sections | session proposal, GM accepted (message 3) | resolves the farmhouse / country-estate question | FR-008 |
 | "Estates and other compounds" for the building-plan section | GM ruling (message 3) | clearer than "Buildings"; covers every compound kind | FR-013 |
 | No redirects | GM ruling (message 3) | nothing is bookmarked | FR-017 |
-| Drawing inherits its twin's tags | session proposal | the trees pair one to one; one decision per question, no drift | FR-006 |
+| A drawing page inherits the tags of the research question it is about (its stem's, or the one its `about:` names) | session proposal | 231 of 234 drawing pages share their research question's part and number and the other 3 declare theirs (Edge Cases, measured); one decision per question, no drift | FR-006 |
 
 ## Assumptions
 
