@@ -847,7 +847,6 @@ enpō era	Enpo era
 eta	eta
 etchu	Etchu
 etchu's	Etchu
-eunis	EUNIS
 eutrophic	eutrophication
 eutrophication	eutrophication
 evapotranspiration	evapotranspiration

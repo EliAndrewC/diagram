@@ -267,7 +267,7 @@ class WoodlandCommons(Kind):
     Covers: `commons[role=woodland]` - the coppice patches
     Label: accurate
     Sources: ijc-yamaguni, satoyama-enwiki, satoyama-jawiki, kotobank-murazakai, iriaichi-jawiki, miura-2019-yashikiyama, rinya-satoyama-junkan, katakura-1989-konara-coppice, migita-chiba-konara-canopy
-    Entry: research/vegetation.html - 'Where did a village keep its fuel wood', 'How thickly was a worked coppice stocked', 'How is a coppice lot bounded?', 'Does scrub stand under a village wood?'
+    Entry: research/vegetation.html - 'Village fuel woods and their coppice (satoyama)', 'How thickly was a worked coppice stocked'; research/rendering/vegetation.html - 'How our maps bound and draw the coppice woods'
     """
 
     key = 'woodland commons'

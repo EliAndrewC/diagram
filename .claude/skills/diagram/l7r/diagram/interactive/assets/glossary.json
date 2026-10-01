@@ -51,12 +51,6 @@
    "diameter at breast height"
   ]
  },
- "EUNIS": {
-  "def": "The European habitat classification, which names the layers of a woodland edge.",
-  "variants": [
-   "EUNIS"
-  ]
- },
  "Echinochloa crus-galli": {
   "def": "Barnyard grass: the coarse annual weed of wet ground, first to take an abandoned paddy.",
   "variants": [
