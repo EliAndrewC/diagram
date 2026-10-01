@@ -7,7 +7,7 @@ band perpendicular to the fall rather than an axis-aligned box - a rectangle is 
 contour at a 0/90/180/270 fall, and at a diagonal it slices across the slope. Its WIDTH comes from
 the ground the fan waters, never from the canvas: an alluvial fan's spring line follows the FAN's
 toe, and a floodplain's backswamp is bounded by its natural levees, so wet ground is FEATURE-bounded
-in both landforms (research/water.html, 'The wet toe is as wide as the FAN'). Both corrections are
+in both landforms (research/water.html, 'Marshes and wetlands (shitchi)'). Both corrections are
 argued at length in the members themselves; read them before changing either.
 
 `surface_water_dist` is module-level rather than a mixin method: it takes a MANIFEST, not a
@@ -244,7 +244,7 @@ class WetGroundMixin:
         WATERWARD flanks (the fluctuating lake/creek/marsh the dike holds back - exempt from the low-ground rule
         because a polder floor sits BELOW the outside water level, so the wet fringe surrounds it regardless of the
         fall direction; `polder_waterward_flanks_wet` owns its placement, driven by `meta.waterward`). WHY:
-        research/water.html 'What ground is too wet to build on?' + 'Defensive marshland - the engineered wet belt' + research/archetypes.html 'Polder siting - full enclosure, fluctuating water and where the village sits'. Recorded M['marshes']."""
+        research/water.html 'What ground is too wet to build on?' + 'Marshes and wetlands (shitchi)' + research/rendering/water.html "How our maps draw the marsh at the fields' foot" + research/archetypes.html 'Polder siting - full enclosure, fluctuating water and where the village sits'. Recorded M['marshes']."""
         if role not in ("toe", "pond_fringe", "defense", "waterside"):
             raise ValueError(f"unknown marsh role {role!r}; expected 'toe', 'pond_fringe', 'defense', or 'waterside'")
         # THE RECORD SAYS WHAT THE INK SAYS (feature 150 T54 residue, settlement-review 2026-08-29). The
@@ -489,8 +489,8 @@ class WetGroundMixin:
         corners = [(-bleed, -bleed), (self.W + bleed, -bleed), (self.W + bleed, self.H + bleed), (-bleed, self.H + bleed)]
         v_out = max(c[0] * dx + c[1] * dy for c in corners)  # far enough downhill to leave the canvas
         # THE BAND IS AS WIDE AS THE GROUND THE FAN WATERS, not as wide as the canvas (GM 2026-08-12;
-        # researched, see research/water.html 'The wet toe is as wide as the fan, not as wide as the
-        # valley'). The cross-slope extent used to come from the CANVAS CORNERS, which drew the
+        # researched, see research/water.html 'Marshes and wetlands (shitchi)', and the rule at
+        # research/rendering/water.html "How our maps draw the marsh at the fields' foot"). The cross-slope extent used to come from the CANVAS CORNERS, which drew the
         # valley wet from edge to edge - so a map falling toward its own frame had no dry exit
         # anywhere and every connector had to turn away over the settlement's back. That width was
         # never a rule; it arrived with the 2026-07 fix that made the toe a contour band so it would
@@ -506,7 +506,7 @@ class WetGroundMixin:
         cu = [c[0] * ux + c[1] * uy for c in corners]
         u0, u1 = max(min(cu), u_lo), min(max(cu), u_hi)
         # THE INNER EDGE FOLLOWS THE FAN'S TOE, NOT ONE CONTOUR (GM 2026-08-26, feature 133 T30; researched -
-        # research/water.html "the marsh follows the fan's toe"). It used to be a single contour through the
+        # research/water.html "Marshes and wetlands (shitchi)"). It used to be a single contour through the
         # crop's lowest point anywhere, so on Inashiro the collector, which descends ~20 deg across the
         # contours to reach its pond, left a 324 px wedge of dry ground below its upper reach while the
         # reeds climbed above its lower end - and the boundary ran dead parallel to the frame, which the
@@ -530,7 +530,7 @@ class WetGroundMixin:
         # marsh from the plot, straight through two ranks of farmhouses, to the real toe 1,800 ft
         # further down. Nothing drew it (the marsh is inked from the field's foot), but the router
         # walls a path off wet ground, so eight steadings east of the column could not be reached.
-        # The research this band encodes (research/water.html, "the wet toe is as wide as the fan")
+        # The research this band encodes (research/water.html, "Marshes and wetlands (shitchi)")
         # is about the FAN's spring line; a dry plot is not a fan and has no toe.
         fan = [p for poly in polys for p in poly]
         us_fan = [p[0] * ux + p[1] * uy for p in fan]

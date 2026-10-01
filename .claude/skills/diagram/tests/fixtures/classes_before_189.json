@@ -516,7 +516,7 @@
   "marsh": {
     "caveat": "",
     "covers": "`marshes` - every marsh patch, whatever its role",
-    "entry": "research/water.html - 'Marsh - wet rice is reclaimed FROM wetland', 'The wet toe is as wide as the FAN', 'Reservoir ponds (tameike)'; research/rendering/water.html - 'How our maps draw reservoir ponds (tameike), their reeds and their embankments'; research/vegetation.html - 'The marsh margin', 'Were the reed beds cut'",
+    "entry": "research/water.html - 'Marshes and wetlands (shitchi)', 'Reservoir ponds (tameike)'; research/rendering/water.html - \"How our maps draw the marsh at the fields' foot\", 'How our maps draw reservoir ponds (tameike), their reeds and their embankments'; research/vegetation.html - 'The marsh margin', 'Were the reed beds cut'",
     "key": "marsh",
     "label": "accurate",
     "label_note": "The reclaimed-from-marsh finding, the margin gradient, and the reeded-shore finding are all read; the embankment is mown in the record as it is bare on the map.",
