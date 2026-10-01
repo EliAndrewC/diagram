@@ -397,7 +397,7 @@ KOSATSUBA_SITINGS = ("frontage", "waterside")  # the notice board on the busiest
 # genuine two-answer question rather than a defect.
 
 # THE DIKE CROP - which dike-pond planting a hamlet is (feature 150, GM 2026-08-28 choosing audit A6; the
-# options re-read by 269 B34). research/archetypes/230: Qu Dajun (late 17th c.) has the villages' pond dikes
+# options re-read by 269 B34). research/archetypes 'Mulberry and other crops on pond dikes (sangji, guoji)': Qu Dajun (late 17th c.) has the villages' pond dikes
 # planted with fruit - lychee most, tea and mulberry next - and a modern history dates the fruit dike first
 # (mid-Ming) and the mulberry dike dominant through the Qing. So three premodern plantings: mulberry, fruit and
 # tea. The cane, banana and vegetable dikes are attested only in modern sources (one undated modern listing
@@ -410,7 +410,7 @@ DIKE_CROPS = ("mulberry", "mulberry", "mulberry", "fruit", "fruit", "tea")
 # WHAT THE LEFTOVER PARCELS OF A WHOLESALE CONVERSION READ AS (feature 150 B2): standing rice, or no leftover
 # at all (every parcel a pond); the roll is even. A third state, tilled vegetable ground, rested on Fei's 1930s
 # silk village and the modern vegetable dike, and is retired by the GM's ruling of 2026-09-28 that a form
-# attested only in modern sources is not drawn (269 E9; research/archetypes/230).
+# attested only in modern sources is not drawn (269 E9; research/archetypes 'Mulberry and other crops on pond dikes (sangji, guoji)').
 WATERWARD_DEPTH = 280.0  # px of wild water drawn outside a polder's dike face (feature 150 T55). Not "to the canvas edge": the crop keeps ~120 px past the content at most on this tier, so everything beyond was scattered, keep-out tested and thrown away - 18.4 s of a 40 s gen. 280 outlasts any hamlet crop measured (the tightest flank keeps 245 px of headroom), and `waterward_strips_run_off_the_frame` holds the line.
 LEFTOVER_FORMS = ("rice", "pond")
 POND_LAYOUT_MOSAIC = 0.5

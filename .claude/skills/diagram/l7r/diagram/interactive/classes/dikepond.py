@@ -80,7 +80,7 @@ class MulberryDike(Kind):
     Covers: the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it
     Label: accurate
     Sources: gd-gazetteer-sangji, fao-ac241e, isis-dykepond, ruddle-zhong-1988, pwsannong-gudai-zaisang, pwsannong-sangji-yutang, kotobank-souen, kotobank-negari
-    Entry: research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Polder dikes: what they were made of, how big, and what grew on them', 'How thickly was dike mulberry planted, and how wide did a bush grow?'; research/rendering/archetypes.html - 'How our maps draw dike-ponds (sangji yutang)'
+    Entry: research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Polder dikes: what they were made of, how big, and what grew on them', 'Mulberry and other crops on pond dikes (sangji, guoji)'; research/rendering/archetypes.html - 'How our maps draw dike-ponds (sangji yutang)', 'How our maps draw the planted pond dikes'
     """
 
     key = 'mulberry dike'
@@ -145,7 +145,7 @@ class FruitDike(Kind):
     Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is fruit, and its trees
     Label: accurate
     Sources: guangdong-xinyu-22, guangdong-xinyu-25, pwsannong-zhusanjiao-nongyeshi, gd-gazetteer-sangji
-    Entry: research/archetypes.html - 'Were fruit, cane or banana dikes older than the mulberry dike? Fruit was - lychee above all', 'What else was planted on a pond dike besides mulberry?', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps furnish a dike-pond hamlet'
+    Entry: research/archetypes.html - 'Mulberry and other crops on pond dikes (sangji, guoji)', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps draw the planted pond dikes', 'How our maps furnish a dike-pond hamlet'
     """
 
     key = 'fruit dike'
@@ -173,7 +173,7 @@ class TeaDike(Kind):
     Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is tea, and its bushes
     Label: accurate
     Sources: guangdong-xinyu-22
-    Entry: research/archetypes.html - 'Were fruit, cane or banana dikes older than the mulberry dike? Fruit was - lychee above all'
+    Entry: research/archetypes.html - 'Mulberry and other crops on pond dikes (sangji, guoji)'; research/rendering/archetypes.html - 'How our maps draw the planted pond dikes'
     """
 
     key = 'tea dike'
