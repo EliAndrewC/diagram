@@ -1,6 +1,6 @@
 {
  "feature": "294-settlement-review-rethink",
- "plan_sha256": "75e0477743ac1703dc4ede7eefc3649131285ddda7e422bd641accfb08e20c13",
+ "plan_sha256": "eb42674b237b8ff4d0fbdc3e3664d5c76b76f65a730aee6042dd410b86a4b969",
  "reviewed": "2026-10-01",
  "declared": "spec-fidelity",
  "decisions": [
@@ -53,14 +53,7 @@
    "id": "D6c",
    "summary": "B5b: broadleaf over conifer ruled - species on crown records, gate test refuses a broadleaf crown drawn after an overlapping conifer, red on 269 B30, renderer order fixed",
    "class": "within",
-   "why": "Round-1 required change made: FR-003 class 5 carried as a rule, proved red on the recorded case"
-  },
-  {
-   "id": "S1",
-   "summary": "Section C table still lists 'broadleaf-over-conifer' among glyph-check's carried rows; research.md R2.4 still says it 'goes to the glyph check' and R3 still says 'Not decidable: broadleaf over conifer'",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "B5b now rules the class, but the plan's own C table keeps it in a review and A1 makes R2's verdicts final once this review is CLEAR. Spec US2 acceptance: 'no review asks for any of them'; the request: fix the placer and THEN stop checking. Required: delete 'broadleaf-over-conifer' from glyph-check's row in plan C, and rewrite research.md R2.4 and R3's 'Not decidable' line to say B5b rules it."
+   "why": "Round-1 required change made; round-2 S1 resolved: broadleaf-over-conifer off glyph-check row in plan C, research R2.4 and R3 now say B5b rules it"
   },
   {
    "id": "D7a",
@@ -132,10 +125,9 @@
   },
   {
    "id": "D16b",
-   "summary": "B4's research branch: if a branch-canal spacing is FOUND that allows the pair, 'the class goes back through the audit as decided by research, with the citation'",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Round 1 required that a found spacing be recorded AND 'the sibling spacing then enforced by test'; the rewrite drops the enforcement. FR-003's escape is for a class research shows to be a JUDGMENT; an attested spacing is the opposite, a rule a placer can guarantee, and sending it back through the audit (D5's path is CUT) would leave twin courses at any spacing with neither test nor review - the request's 'fix the placement algorithm and then stop checking' turned into 'stop checking'. Required: if research finds a spacing, B4 enforces it by test (siblings at the attested spacing pass, any closer or non-sibling pair fails), with the citation; the audit route is only for a finding that the spacing is a matter of judgment."
+   "summary": "B4 research branch: an attested branch spacing is ENFORCED by B4 test with the citation (siblings at it pass, closer or non-sibling pairs fail) and the placer lays branches at it; the audit route only if research shows the spacing to be judgment",
+   "class": "within",
+   "why": "Round-2 required change made verbatim: a found spacing becomes an enforced rule, the audit route is FR-003 own judgment escape"
   },
   {
    "id": "D17",
@@ -162,5 +154,5 @@
    "why": "Unchanged from round 1"
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
