@@ -117,12 +117,15 @@ This feature's own delta, declared under the rules it builds (plan D10). Lines a
 - [x] T26 [US2] Registry checks B16 lodging entrances, B17 privies by zone (`compound.py` fixed for `ochiba-roundtrip-test`), B18 fire water, B19 size hierarchy, B20 sheet furniture - each with its red fixture and its tier entry
       research: rendering
       verify: DONE. DONE. B16 lodging_entrances, B17 privies_by_zone (compound_parts._family_privy fixed the round-trip: residence (W)/(E) had no family privy), B18 fire_water_distribution (TUB_KINDS recorded), B19 size_hierarchy (each pair labeled READ/GUESS), B20 sheet_furniture; each red on its fixture (tests/tools/test_sheet_rules_294.py), 6/6 pool sheets pass
-- [ ] T27 [US2] B21 roads leave the frame, B22 palette roles, B23 gate feeds its road; the hand-drawn sheets they fail put to the GM in one message through `escalation-check` (D8)
+- [x] T27 [US2] B21 roads leave the frame, B22 palette roles, B23 gate feeds its road; the hand-drawn sheets they fail put to the GM in one message through `escalation-check` (D8)
       research: rendering
-- [ ] T28 [US2] [US5] B24 `mapmatch`: gate side and width, roads under every key, the `**On map**` line required where a map records the sheet's subject
+      verify: DONE. DONE. B21 roads_leave_the_frame (DESTINATION_KINDS: a well or the precinct clearing, D19), B22 palette_roles (the round-trip's clerks' room to plain), B23 gate_feeds_its_road; each red on its fixture; hand sheets put to the GM through escalation-check in one message (2026-10-01): hand-drawn Mode B maps exempt, Mode A sheets held (D18); Ochiba's road 40 -> 24 px; 6/6 sheets pass; make done green
+- [x] T28 [US2] [US5] B24 `mapmatch`: gate side and width, roads under every key, the `**On map**` line required where a map records the sheet's subject
       research: rendering
-- [ ] T29 [US2] B15b a sheet's notes counts against its `data-kind` census; B15c the size table covers every tagged kind
+      verify: DONE. DONE. B24 mapmatch: gate side and width, roads sampled both ways, the On map line required where a map records the subject (TIER_KEYS from types.json map_keys); Ubame opts out of the hand-drawn town map's match (D18, owed at its conversion); make done green
+- [x] T29 [US2] B15b a sheet's notes counts against its `data-kind` census; B15c the size table covers every tagged kind
       research: rendering
+      verify: DONE. DONE. B15b notes counts against the data-kind census (dated history skipped); B15c size_marks lists every circle/path/line/polygon in feet and make size-table prints them; a caption-only kind owes no row (D19); make done green
 
 ## The ledger (G, A2)
 
@@ -144,8 +147,9 @@ This feature's own delta, declared under the rules it builds (plan D10). Lines a
 
 ## The tier (I)
 
-- [ ] T34 [US8] The seeded tier experiment per check, three runs a leg, Sonnet against Opus; the tier table changed only where every Sonnet run finds the seeded finding
+- [x] T34 [US8] The seeded tier experiment per check, three runs a leg, Sonnet against Opus; the tier table changed only where every Sonnet run finds the seeded finding
       research: rendering
+      verify: DONE. DONE. measure/T34-results.md: one seeded case per check, 1 Opus + 3 Sonnet runs at high: settlement-review and fix-check to Sonnet (Opus + 3/3), glyph-check stays Opus (Opus missed its seed, recorded), building-review (0/3) and size-audit (2/3) stay; tier table and agent files changed (D20)
 
 ## Landing
 
