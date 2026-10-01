@@ -193,11 +193,14 @@ def test_a_seating_drawn_past_every_shapes_band_is_taken_back_and_the_next_margi
         calls.append(1)
         string = len(calls) == 1 or len(plan_.seat["ladder"]) == 1
         for k in range(10):
-            s_.M["houses"].append({"x": 40.0 * k, "y": 1.0 * (k % 2), "kind": "plain"} if string else {"x": 40.0 * (k % 4), "y": 40.0 * (k // 4), "kind": "plain"})
+            s_.M["houses"].append({"x": 200.0 * k, "y": 1.0 * (k % 2), "kind": "plain"} if string else {"x": 40.0 * (k % 4), "y": 40.0 * (k // 4), "kind": "plain"})
         return 10, 0
 
     monkeypatch.setattr(stages, "_seat_households", seat_on)
-    assert not stages.in_a_shapes_band([{"x": 40.0 * k, "y": 1.0 * (k % 2)} for k in range(10)])
+    # a straight row reads one homestead deep, never zero (the GM, 2026-10-01, tripwire seed 33): 1,800 ft by 100 ft is 18:1
+    assert not stages.in_a_shapes_band([{"x": 200.0 * k, "y": 1.0 * (k % 2)} for k in range(10)])
+    assert stages.in_a_shapes_band([{"x": 40.0 * k, "y": 1.0 * (k % 2)} for k in range(10)]), "360 ft of row, one homestead deep: 3.6:1"
+    assert stages.in_a_shapes_band([{"x": 1.0 * k, "y": 0.0} for k in range(10)]), "smaller than one homestead each way: 1:1, round"
     assert stages.in_a_shapes_band([{"x": 40.0 * k, "y": 40.0 * (k % 2)} for k in range(10)]), "a string inside 12:1"
     assert stages.seat_every_household(s, plan) == (10, 0) and len(calls) == 2 and s.M["meta"]["seat_margin"] == 2
     assert stages.in_a_shapes_band(s.M["houses"]) and len(s.M["houses"]) == 10
@@ -205,6 +208,19 @@ def test_a_seating_drawn_past_every_shapes_band_is_taken_back_and_the_next_margi
     plan_t.seat["ladder"] = plan_t.seat["ladder"][:1]
     with pytest.raises(SiteRefused, match="inside a cluster shape's band"):
         stages.seat_every_household(t, plan_t)
+
+
+def test_a_row_village_is_a_row_not_a_cluster_and_takes_no_cluster_band(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The GM, 2026-10-01 (tripwire seed 33): a row village's farms stand one frontage apart along their street - 54 to
+    240 ft on the measured planned rows (research/homesteads/155-row-villages-resson.html) - so ten farms run 490 to 2,160
+    ft, 5:1 to 22:1 against one homestead's depth. The 12:1 ceiling is a CLUSTER's; the linear form's row is held by
+    `row_rules`, and its seating is kept however long it runs."""
+    s, plan = _toy(10)
+    plan.settlement_form = "linear"
+    plan.seat["ladder"] = plan.seat["ladder"][:1]
+    monkeypatch.setattr(stages, "_seat_households", lambda s_, p_: (s_.M["houses"].extend({"x": 260.0 * k, "y": 0.0, "kind": "plain"} for k in range(10)), (10, 0))[1])
+    assert not stages.in_a_shapes_band([{"x": 260.0 * k, "y": 0.0} for k in range(10)]), "past every cluster's band"
+    assert stages.seat_every_household(s, plan) == (10, 0) and s.M["meta"]["seat_margin"] == 1
 
 
 def test_the_chosen_margin_that_seats_everyone_is_kept_without_the_ladder(monkeypatch: pytest.MonkeyPatch) -> None:

@@ -175,4 +175,11 @@ def cluster_aspect(xs: list[float], ys: list[float]) -> float:
     _across = [-x * _s + y * _c for x, y in zip(xs, ys, strict=True)]
     _du = max(_along) - min(_along)
     _dv = max(_across) - min(_across)
-    return max(_du, _dv) / max(1.0, min(_du, _dv))
+    # A ROW IS ONE HOMESTEAD DEEP, NOT ZERO DEEP (the GM, 2026-10-01: tripwire seed 33 fixed). The extents are of the
+    # houses' CENTERS, so a perfectly straight single row - ten houses fronting one straight field margin - measured
+    # about 0.2 ft across and drew 2,345:1, past every shape's band, and `seat_every_household` refused every margin of
+    # the site. A reader's ruler laid across that row reads the homesteads' own depth, so the short side is floored
+    # at the ground one homestead takes (`BUNDLE_PITCH`, 100 ft): the row reads about n:1, a string. The floor reaches
+    # only a near-straight row - every exhibit the bands were calibrated on (`CLUSTER_DRAWN_ASPECT`) is far deeper. The
+    # long side takes the same floor, so a cloud smaller than one homestead each way reads 1:1, never under it.
+    return max(BUNDLE_PITCH, _du, _dv) / max(BUNDLE_PITCH, min(_du, _dv))
