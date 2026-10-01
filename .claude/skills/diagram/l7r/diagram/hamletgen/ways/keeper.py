@@ -46,35 +46,6 @@ def kept[T](fn: Callable[..., T]) -> Callable[..., T]:
     return keyed
 
 
-STEP_RULES: dict[str, tuple[str, ...]] = {
-    "settle_husks": ("husks",),
-    "square_every_crossing": ("off_ford", "oblique_brook", "oblique_channel"),
-    "settle_shapes": ("bends", "hooks", "over_fixtures", "breaks_mid_run", "off_ford", "oblique_brook", "oblique_channel"),
-    "settle_way_outs": ("way_outs", "over_and_back"),
-    "settle_ends": ("folded_joints", "connector_hairpins", "doubled_tails", "dangling_ends", "doorstep_ends", "ends_behind", "needle_joins"),
-    "settle_street_ends": ("dangling_ends",),
-    "settle_joins": ("joins_short", "networks"),
-    "settle_needles": ("needle_loops", "needle_joins"),
-    "settle_network": ("networks",),
-    "settle_fragments": ("fragments",),
-    "settle_widths": ("width_steps",),
-}
-"""Which rules of `law.LAW` each repair step mends (feature 297): a later round runs only the steps whose rules are broken. A
-step not here (the reach, the shadows, the deferral, the tree's pruning) is asked every round - its own test is its gate."""
-
-
-def steps_for(broken: Mapping[str, Any], steps: Sequence[Any] | None = None) -> tuple[Any, ...]:
-    """The steps of `STEPS`, in order, a round runs for the rules `broken` names: every step whose rules meet them and every step
-    `STEP_RULES` does not map; the whole of `STEPS` where a broken rule is mapped to no step."""
-    from .settle import STEPS
-
-    every = tuple(STEPS if steps is None else steps)
-    mapped = {r for rules in STEP_RULES.values() for r in rules}
-    if any(r not in mapped for r in broken):
-        return every
-    return tuple(st for st in every if st.__name__ not in STEP_RULES or set(STEP_RULES[st.__name__]) & set(broken))
-
-
 NOT_THE_SETTLES = ("unbridged", "short_decks", "planks", "unreached_houses", "field_unreached", "unreached_targets")
 """The rules of `law.LAW` the settle's exit does not ask (`unsettled`): the decks and planks, drawn after the web
 (`stage_crossings`), so every crossing is undecked when the settle ends - the finished map is asked them; a farmhouse or the

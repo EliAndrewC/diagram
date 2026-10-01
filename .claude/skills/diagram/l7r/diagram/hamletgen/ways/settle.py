@@ -63,7 +63,7 @@ from .corridors import (
 from .fabric import _crosses_fabric, _homestead_polys, house_hit
 from .geom import _TOUCH_GAP, _components, _trim_to_service, memo_ground, polyline_len, steading_footprints, worked_ground
 from .joints import joints
-from .keeper import NOT_THE_SETTLES, STEP_RULES, steps_for, unsettled  # noqa: F401 - re-exported: `settle.unsettled` is the exit question callers name
+from .keeper import NOT_THE_SETTLES, unsettled  # noqa: F401 - re-exported: `settle.unsettled` is the exit question callers name
 from .serve import shadowed_by
 from .sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
 from .tree import prune_the_tree, settle_defer, settle_tree, tree_faults
@@ -956,28 +956,14 @@ def settle_the_web(s: Any, rounds: int = SETTLE_ROUNDS) -> dict[str, Any]:
     before = len(unreached_houses(s.M))
     changed = dropped = done = 0
     settled = False
-    broken: dict[str, Any] | None = None
     while done < rounds and not settled:
         done += 1
-        # ONLY THE REPAIRS THE LAW CALLS FOR (feature 297, FR-005; research R11): the first round runs every step; a later one
-        # runs the steps whose rules the law names broken (`STEP_RULES`) and the steps no single rule names - every step of
-        # every round used to re-scan the whole web whatever was left to mend (Inashiro: four rounds of sixteen steps for one
-        # dangling end). A broken rule no step is mapped to runs the whole round, as before.
-        steps = STEPS if broken is None else steps_for(broken)
-        n = sum(step(s) for step in steps)
+        n = sum(step(s) for step in STEPS)
         changed += n
-        # the law is asked after any round that changed the web, and after a first round that did not (a still round proves
-        # only that no repair applied, not that the law holds - cohort seed 14); a later still round keeps the last answer
-        broken = unsettled(s.M, memo_ground(s, "worked", worked_ground)) if (n or broken is None) else broken
-        settled = not n  # a round that changed something is followed by another: a repair no rule names (the shadows, one a
-        # round) is not done until a round finds nothing for it (Kashikawa's doubled band, feature 297's gate)
-    if broken is None or broken:
-        # THE LAST RESORT (FR-005): the rounds ran out with a lane still breaking a rule - OR A ROUND CHANGED NOTHING WITH ONE
-        # STILL BROKEN, since a still round proves only that no repair applied, not that the law holds (cohort seed 14 with
-        # the straggler footpaths off went still in 5 rounds with the exit strip doubled along the connector: two tree lanes,
-        # which no repair cuts) - so every ORDINARY lane still breaking one goes whole - never kept as the least bad, and
-        # never a tree lane, which the seating admitted lawful (`tree.admits`); what only the tree could mend is refused by
-        # name (`last_resort.py`)
+        settled = not n
+    # (feature 297, research R12: later rounds asking the law and running only the steps for what it named broken were measured
+    # SLOWER on two of three pool maps - the law asked each round cost more than the steps it skipped - and were withdrawn)
+    if not settled or unsettled(s.M, memo_ground(s, "worked", worked_ground)):
         dropped = last_resort(s)
     # ...AND NO HOUSE OR RESERVED FIELD IS SHIPPED UNREACHED, whichever way the settle ended (ways W01, W03): refused here,
     # so the driver has no unreached house to record (`meta.roll_failures`, deleted with its writer)

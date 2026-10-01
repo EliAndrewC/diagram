@@ -172,6 +172,31 @@ back; every ratio is a floor with no projection behind it. Keys `m:...` are in `
 | Lanes admitted lawful as laid; a lane may take a different lawful shape than the repair loop gave it | map drawing convention (the same lane law) | FR-005 | point of change in `hamletgen/ways/` |
 | Any other output the levers touch (a seat judged once, the yard's mats as a fill, the hem's prefilter, the page's order of work) may differ where the rules allow | map drawing convention (the same rules; GM 2026-09-30: maps "do NOT need to remain identical in output") | FR-002, FR-003, FR-006, FR-007 | the points of change |
 
+## Amendment 1 (2026-10-01): what the measurements decided
+
+Each lever was built and measured by the wall clock (research R10: cProfile charges calls, and misled twice); what changed from
+the accepted spec, each with its evidence:
+
+- **FR-005, the lane law, built as measured (research R11).** The web cannot be lawful at each write: its construction passes lay
+  it in pieces and join it later, and ends dangle and are joined from pass to pass, so a lane judged at its write would be refused
+  before the pass that completes it; asking the law at every pass costs more than the settle. What was built: the law's pure
+  verdicts KEPT per lane (`ways/keeper.py` - a lane unchanged since its last ask is answered from the keeper) and a defect fixed
+  (`settle_dangling` never dropped a lane its trim could not shorten, though its docstring said it did; on Inashiro that one lane
+  ran the whole last resort, which no longer runs there). A later round asking the law and running only its broken rules' steps
+  was built and measured slower on two of three maps (R12), and withdrawn: the rounds are as before.
+  `WebRefused` is unchanged. **This is narrower than the GM's lever ("kept true as the lanes are laid, rather than checked
+  afterward")**: the law is still asked after the web is laid. Plan D2 (the access tree's lanes laid first) was built and
+  withdrawn - slower alone (R10).
+- **FR-002, the seat's own questions, reordered (R10).** The field's reach and the water are asked before any layout; the corridor
+  - the costliest question - once per seat after the envelope: asked first, it ran on every offered seat (325 searches against
+  166). Plan C's second half, the layout keyed per household, was withdrawn: the per-seat yard-size rolls were the seating's only
+  way to fit a large-yard household into a tight seat, and seed 3 lost a household (R9).
+- **FR-004, the regions painted in C (R10).** Every region paints with PIL's own primitives and a two-cell margin; buffering each
+  shape with shapely first was most of a region's cost and made the hinterland slower than the base. The marsh and the grass read
+  their keep-out grid as one painted region (`KeepoutGrid.taken_many`).
+- **FR-007 (R10)**: the comb's hem asks every plot's corners at once (`hem_rings_to_bank`); asked a ring at a time the array's fixed
+  cost made Sawada's field slower; the single-ring hem is the scalar walk again.
+
 ## Assumptions
 
 - The seconds are taken back to back against the base worktree, fastest of three, with the load recorded; the counts are

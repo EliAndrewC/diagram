@@ -152,3 +152,23 @@ Two findings:
 What was built in its place: the law's pure verdicts kept per lane (`ways/keeper.py`), a later round running only the repairs
 for the rules still broken (`STEP_RULES`, `steps_for`), the exit reusing the last answer when nothing changed, and the
 `settle_dangling` fix. Inashiro's web stage 0.72 -> 0.41 s, Sawada's about even (0.46 / 0.50) (observed 2026-10-01, method: `make map PROFILE=1` single runs and `stagemin.sh` best of three, R10).
+
+## R12. The targeted settle rounds, measured and withdrawn (observed 2026-10-01, method: `stagemin.sh` best of three, the same engine but the settle loop, back to back, load 3.2-3.8)
+
+| web stage | full rounds (every step every round, the law asked once at the exit) | targeted (the law asked after each round, only its rules' steps run) |
+|---|---|---|
+| Inashiro | 0.40 s | 0.45 s |
+| Sawada | 0.51 s | 0.60 s |
+| Kashikawa | 1.22 s | 1.14 s |
+
+Asking the whole law after every round costs more than the steps it lets a round skip: on Sawada the law bucket's calls rose
+from 456,889 to 1,521,541 (`m:base-rerun-sawada-b-law-total`, `m:after-sawada-b-law-total`). Withdrawn: the settle runs its rounds
+as before. What made Inashiro's web faster is the keeper (`keeper.kept`) and the `settle_dangling` fix that stops the last resort
+from running there (R11), both kept.
+
+## R13. The pool and the cohort after the levers (observed 2026-10-01)
+
+Each pool map's houses, field acreage, lanes (count and length), wells, grove crowns and marshes are the same as the base's on all
+five maps (method: the manifests of `/tmp/base297` HEAD against the clone's regenerated pool). What moved is the threshing yards'
+mats (the fill) and the scatter's marks (the marsh's array throws and the regions' margins). `make cohort N=24`: 30/30 passed the
+whole gate, as the base's (`cohort-base.log`).

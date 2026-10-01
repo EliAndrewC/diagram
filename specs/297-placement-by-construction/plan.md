@@ -184,3 +184,24 @@ failures are fixed, is recorded with the measurement and withdrawn (spec amendme
 | Every repair is applied at the write; a lane no repair makes lawful is not laid | map drawing convention (the same lane law) | FR-005: lawful as laid, no settle after the web |
 | The marsh's marks land at different random places at the same densities | map drawing convention | array throws draw a different stream, as the grass did in 278 |
 | The access tree's lanes are drawn first in the web | map drawing convention | they were admitted lawful at seating; drawing them last made the settle draw 15-19 lanes and repair around them (R7) |
+
+## Amendment 1 (2026-10-01): the designs as built, by measurement (spec Amendment 1; research R9-R11)
+
+- **A.** The region paints with PIL's own primitives and a two-cell margin (`GROW = 2.0`); shapely buffers were most of a region's
+  cost. `fill_many` paints many shapely geometries by kind. The property test (no painted point read clear) holds at cells 2-8.
+- **B1.** Built as planned with two measured changes: the static ground on FreeGround's own grid, its surely-taken cells painted
+  exactly (grown on an offset grid they over-refused - Inashiro seated no one); the seated homesteads NOT painted (the placer's one
+  computed move rescues a seat lapping one neighbor); the reach is the free cells' 4-connected components meeting the tree's strip
+  (a run-length union-find - PIL's flood fill is Python), its summed-area table kept with it. A side's envelope is tested shrunk by
+  a cell (the placer samples nine points).
+- **B2.** Through the marsh's `KeepoutGrid` read as one painted region (`KeepoutGrid.taken_many`), the crescents and the pond's
+  ellipse filed into it; the grass reads the same.
+- **B3.** `GroveBlocks.region()` paints the fill's seven static families once; `static_clear` reads it first and asks the families
+  only where it is taken (so the region decides "clear", the exact families decide "why not").
+- **B4.** `open_ground_region`, one per size, at 3 px (at 8 px the margin moved a parcel off its brook line).
+- **C.** The field's reach and the water before any layout; the corridor once per seat after the envelope (R10); the per-household
+  template withdrawn (R9).
+- **D.** D1 as `keeper.kept` (pure verdicts per lane geometry); D2 withdrawn (slower, R10); D3-D4 replaced by the measured fix
+  (R11): `settle_dangling` drops what its trim cannot mend, so the last resort no longer runs on Inashiro; targeted rounds built
+  and withdrawn (slower, R12).
+- **E3.** `hem_rings_to_bank` (every plot at once) for the comb; the single-ring hem scalar.
