@@ -13726,5 +13726,39 @@
    "lined canal",
    "lined canals"
   ]
+ },
+ "bunsui": {
+  "def": "Dividing one channel's water between two or more channels, areas or villages - by rules fixing each channel's width, its gate hours and the turns it took, or by a built work at the fork such as a graduated stake, a proportional flume or a round divider.",
+  "variants": [
+   "bunsui"
+  ]
+ },
+ "cylinder divider": {
+  "def": "A round concrete work that splits a canal's flow between channels in exact proportion. It is a modern device: the first was built in 1914, long after the period our maps are set in.",
+  "variants": [
+   "cylinder divider",
+   "cylinder dividers",
+   "circular divider",
+   "circular dividers",
+   "round divider",
+   "round dividers",
+   "round concrete divider"
+  ]
+ },
+ "division flume": {
+  "def": "A built work set across a fork in a ditch or canal that divides its water among the branches in fixed shares, as at Kuji in the mid-Edo period, where the shares followed the cultivated area each branch watered.",
+  "variants": [
+   "division flume",
+   "division flumes",
+   "proportional flume",
+   "proportional flumes",
+   "bunryo-hi"
+  ]
+ },
+ "suisha": {
+  "def": "A water wheel (水車), and the water mill it drove: in Edo-period Japan a wheel turned by a stream that worked pestles pounding rice in mortars, or millstones grinding grain. Most were owned by wealthy farmers or village officials.",
+  "variants": [
+   "suisha"
+  ]
  }
 }

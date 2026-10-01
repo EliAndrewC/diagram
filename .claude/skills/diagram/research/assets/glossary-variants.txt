@@ -261,7 +261,9 @@ bunka era	Bunka
 bunkyu	Bunkyu
 bunkyu era	Bunkyu
 bunkyū	Bunkyu
+bunryo-hi	division flume
 bunsei	Bunsei
+bunsui	bunsui
 bunsuiguchi	bunsuiguchi
 bunto house	bunto house
 bunto houses	bunto house
@@ -398,6 +400,8 @@ chōtsuke	chōtsuke
 chōzuya	temizuya
 circuit	wall circuit
 circuit's length	wall circuit
+circular divider	cylinder divider
+circular dividers	cylinder divider
 citang	ancestral hall
 city god	City God
 city gods	City God
@@ -537,6 +541,8 @@ cutbank	cutbank
 cutbanks	cutbank
 cyanobacteria	cyanobacterium
 cyanobacterium	cyanobacterium
+cylinder divider	cylinder divider
+cylinder dividers	cylinder divider
 dachedian	wagon inn
 dacheng gate	Dacheng gate
 dacheng hall	Dacheng Hall
@@ -636,6 +642,8 @@ district shrine	gōsha
 district shrines	gōsha
 ditai	mamian
 dituan	dituan
+division flume	division flume
+division flumes	division flume
 division point	bunsuiguchi
 division points	bunsuiguchi
 division works	bunsuiguchi
@@ -2497,6 +2505,8 @@ principal shrines	principal shrine
 prison god	jail-god
 program item	program item
 program items	program item
+proportional flume	division flume
+proportional flumes	division flume
 proso	proso
 proso millet	proso
 provincial abbot	provincial abbot
@@ -2677,6 +2687,9 @@ root-cut	root-cut
 root-cutting	root-cut
 roson	roson
 rotation period	rotation period
+round concrete divider	cylinder divider
+round divider	cylinder divider
+round dividers	cylinder divider
 rowhouse gate	nagayamon
 rowhouse gates	nagayamon
 ruiju sandai kyaku	Ruiju Sandai Kyaku
@@ -3086,6 +3099,7 @@ suiden	suiden
 suids	suid
 suimon	suimon
 suiren	Suiren
+suisha	suisha
 suitengu	Suitengu
 suji-bei	suji-bei
 sujibei	suji-bei
