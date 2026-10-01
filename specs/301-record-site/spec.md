@@ -230,7 +230,7 @@ at the foot, and can open the whole record as one page to read straight through 
   check fails on a seeded bad pointer; a rename test rewrites its pointer; the review list from the sweep is empty or
   resolved.
 - **SC-007** (FR-017-FR-021): the rewritten history verifies tree-for-tree; `.git` on the main checkout measured before and
-  after (observed 2026-10-01, `du -sh` on the main checkout's `.git` and on a scratch mirror after
+  after (observed 2026-10-01; method: `du -sh` on the main checkout's `.git` and on a scratch mirror after
   `git gc --aggressive` with and without a full scrub: 236, 102 and 85 MB - so expected about 85-90 MB after); every clone's root commit matches main's; a seeded unrelated-history clone is refused.
 - **SC-008** (FR-022-FR-026): the hook's self-test fires on every listed form in a container and stays silent on found
   programs, unrelated failures and every miss with the container markers absent; the hook is registered in
