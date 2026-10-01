@@ -13681,5 +13681,17 @@
   "variants": [
    "Low City"
   ]
+ },
+ "liubu": {
+  "def": "The six ministries of imperial Chinese government - Personnel, Revenue, Rites, War, Justice and Works. At the capital each had a compound of its own; in a local government office they were six rooms.",
+  "variants": [
+   "liubu"
+  ]
+ },
+ "machikata": {
+  "def": "The town quarters of a Japanese city - the streets where its commoners lived and worked - as against the samurai and temple quarters.",
+  "variants": [
+   "machikata"
+  ]
  }
 }

@@ -1901,6 +1901,7 @@ lishe	gongxiefang
 litchi	litchi
 litchis	litchi
 littoral	littoral
+liubu	liubu
 liuchu	liuchu
 loess	loess
 log boom	boom
@@ -1954,6 +1955,7 @@ machi-hanare	machi-hanare
 machi-kaisho	machi-kaisho
 machi-kido	kido
 machidoshiyori	toshiyori
+machikata	machikata
 machiwari	machiwari
 machiya	machiya
 madake	madake
