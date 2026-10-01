@@ -395,6 +395,7 @@ chicken-feather inn	chicken-feather inn
 chicken-feather inns	chicken-feather inn
 chigaidana	staggered shelves
 chikaraishi	chikaraishi
+chimei	chimei
 chinese toon	toon
 chinese-style gate	Chinese-style gate
 chinese-style gates	Chinese-style gate
