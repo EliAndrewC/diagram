@@ -905,7 +905,7 @@ def grass_scatter(
     if frame is not None:
         idx = idx[(gx >= frame[0]) & (gx <= frame[2]) & (gy >= frame[1]) & (gy <= frame[3])]
     idx = idx[ring.inside_many(gx[idx], gy[idx])]
-    idx = idx[~keep.hit_many(gx[idx], gy[idx], (0.0, 0.0))]
+    idx = idx[~keep.taken_many(gx[idx], gy[idx], (0.0, 0.0))]  # the scatter's one painted region (feature 297, FR-004)
     if on_crescent is not None and len(idx):
         idx = idx[~np.array([bool(on_crescent(float(gx[i]), float(gy[i]))) for i in idx], dtype=bool)]
     if pond:

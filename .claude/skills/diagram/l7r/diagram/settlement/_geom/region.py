@@ -22,10 +22,12 @@ from typing import Any
 
 from .base import Pt
 
-GROW = 1.5
+GROW = 2.0
 """How far every painted shape is grown, in cells. A cell is painted when PIL's fill covers its center; any point of the cell
-lies within 0.71 cells of that center, and PIL places a vertex to within half a cell - so 1.5 cells keeps every point of the
-true shape on painted ground (the property `tests/settlement/test_region.py` samples)."""
+lies within 0.71 cells of that center, and PIL places a wide line's edge to within a cell (measured: a pixel 5.85 cells from a
+segment drawn 14 cells wide came out unpainted) - so two cells keep every point of the true shape on painted ground (the
+property `tests/settlement/test_region.py` samples). Painted with PIL's own primitives, in C: buffering each shape with shapely
+first was most of a region's cost (feature 297, the hinterland's sample)."""
 
 
 class Region:
@@ -46,48 +48,76 @@ class Region:
 
     # ---- painting (every shape grown by GROW cells: conservative) ------------------------------------------------------
 
+    def _p(self, x: float, y: float) -> tuple[float, float]:
+        """A map point in raster units (pixel (i, j) covers [i, i+1) x [j, j+1) in them)."""
+        return ((x - self.x0) / self.cell, (y - self.y0) / self.cell)
+
     def _fill(self, geom: Any) -> None:
-        """Paint a shapely geometry, grown by `GROW` cells: its exterior rings filled (a hole filled too only takes more ground)."""
-        g = geom.buffer(GROW * self.cell, quad_segs=4)
-        for part in getattr(g, "geoms", [g]):
-            if part.is_empty:
+        """Paint a shapely geometry (a polygon or a multipart one, already grown as the caller wants), its exterior rings
+        filled and outlined by the margin (`GROW` cells)."""
+        for part in getattr(geom, "geoms", [geom]):
+            if part.is_empty or part.geom_type != "Polygon":
                 continue
             ring = [((x - self.x0) / self.cell, (y - self.y0) / self.cell) for x, y in part.exterior.coords]
             if len(ring) >= 3:
                 self._draw.polygon(ring, fill=1)
+                self._stroke(ring, 0.0)
         self._sat = None
+
+    def fill_many(self, geoms: Any, pads: Any) -> None:
+        """Many shapely geometries, each grown by its pad: points as discs, lines as strokes, polygons filled and stroked."""
+        for g, pad in zip(geoms, pads, strict=True):
+            for part in getattr(g, "geoms", [g]):
+                if part.is_empty:
+                    continue
+                kind = part.geom_type
+                if kind == "Point":
+                    self.circle(part.x, part.y, float(pad))
+                elif kind == "LineString":
+                    self.line(list(part.coords), float(pad))
+                elif kind == "Polygon":
+                    self.poly(list(part.exterior.coords)[:-1], float(pad))
+
+    def _stroke(self, pts: list[tuple[float, float]], r: float) -> None:
+        """A polyline in raster units, `r` cells either side and `GROW` cells more, round-capped and round-joined: PIL's wide
+        line, made conservative by the margin (its edge is placed to within a cell), with a disc at every vertex."""
+        rr = r + GROW
+        w = max(1, math.ceil(2 * rr))
+        if len(pts) >= 2:
+            self._draw.line(pts, fill=1, width=w)
+        for px, py in pts:
+            self._draw.ellipse([px - rr, py - rr, px + rr, py + rr], fill=1)
 
     def rect(self, x0: float, y0: float, x1: float, y1: float, pad: float = 0.0) -> None:
         """An axis-aligned box, grown by `pad`."""
-        from shapely.geometry import box
-
-        self._fill(box(min(x0, x1) - pad, min(y0, y1) - pad, max(x0, x1) + pad, max(y0, y1) + pad))
+        g = GROW
+        a = self._p(min(x0, x1) - pad, min(y0, y1) - pad)
+        b = self._p(max(x0, x1) + pad, max(y0, y1) + pad)
+        self._draw.rectangle([math.floor(a[0] - g), math.floor(a[1] - g), math.ceil(b[0] + g), math.ceil(b[1] + g)], fill=1)
+        self._sat = None
 
     def circle(self, x: float, y: float, r: float) -> None:
         """A disc of radius `r`."""
-        from shapely.geometry import Point
-
-        self._fill(Point(x, y).buffer(max(r, 0.0), quad_segs=8))
+        cx, cy = self._p(x, y)
+        rr = max(r, 0.0) / self.cell + GROW
+        self._draw.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], fill=1)
+        self._sat = None
 
     def poly(self, ring: Sequence[Pt], pad: float = 0.0) -> None:
-        """A filled polygon, grown by `pad`."""
-        from shapely.geometry import Polygon
-
+        """A filled polygon, grown by `pad`: the polygon filled and its outline stroked `pad` either side."""
         if len(ring) < 3:
             return
-        g = Polygon([(float(q[0]), float(q[1])) for q in ring])
-        if not g.is_valid:
-            g = g.buffer(0)
-        self._fill(g.buffer(pad, quad_segs=4) if pad > 0 else g)
+        pts = [self._p(float(q[0]), float(q[1])) for q in ring]
+        self._draw.polygon(pts, fill=1)
+        self._stroke(pts + [pts[0]], max(pad, 0.0) / self.cell)
+        self._sat = None
 
     def line(self, pts: Sequence[Pt], half: float) -> None:
         """A polyline of half-width `half`, round-capped and round-joined."""
-        from shapely.geometry import LineString, Point
-
         if not pts:
             return
-        q = [(float(p[0]), float(p[1])) for p in pts]
-        self._fill((LineString(q) if len(q) >= 2 else Point(q[0])).buffer(max(half, 0.0), quad_segs=4))
+        self._stroke([self._p(float(p[0]), float(p[1])) for p in pts], max(half, 0.0) / self.cell)
+        self._sat = None
 
     def cells(self, taken: Iterable[tuple[int, int]], cell: float, x0: float, y0: float) -> None:
         """Another raster's taken cells (`(i, j)` of `cell` px from `(x0, y0)`, e.g. `FreeGround.taken`), each painted whole and

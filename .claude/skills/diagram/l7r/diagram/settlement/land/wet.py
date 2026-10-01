@@ -455,8 +455,7 @@ class WetGroundMixin:
         keep.segs(self._watercourse_segs(0.0), slot=3, reach=max(_pads) + 2.0)
         crescents = self.M.get("crescent_ponds", [])  # read once (feature 218)  # base = the drawn half-width; the query adds 2 px + the mark's pad in the SAME association the linear scan used
         ring = RingIndex(drawn)  # the drawn ground, indexed once per marsh (feature 145; the why is on RingIndex): a mark is kept only in the record
-        rim = RingIndex(poly)  # ...and the outline the feather thins from, as it always did (feature 287, M7: the ink moves only where the record does)
-        rim_ring = [(float(q[0]), float(q[1])) for q in poly]
+        rim_ring = [(float(q[0]), float(q[1])) for q in poly]  # ...and the outline the feather thins from, as it always did (feature 287, M7)
 
         g: list[str] = []
         marks: list[tuple[float, float, float, float, str]] = []  # (extent, string): the tint and the glints, culled to the frame at finish (feature 225)
@@ -506,8 +505,16 @@ class WetGroundMixin:
                     idx = idx[(gx >= fr[0]) & (gx <= fr[2]) & (gy >= fr[1]) & (gy <= fr[3])]
                 idx = idx[ring.inside_many(gx[idx], gy[idx])]
                 lat = pad if kind == "tint" else min(pad, 1.5)
-                extra = (0.0, pad if pad in _pads else None, pad, (pond_pad if pond_pad is not None else 2.0 + pad), (pond_pad if pond_pad is not None else 2.0 + pad), lat, 0.0 if kind == "tuft" else None)
-                idx = idx[~keep.hit_many(gx[idx], gy[idx], extra)]
+                extra = (
+                    0.0,
+                    pad if pad in _pads else None,
+                    pad,
+                    (pond_pad if pond_pad is not None else 2.0 + pad),
+                    (pond_pad if pond_pad is not None else 2.0 + pad),
+                    lat,
+                    0.0 if kind == "tuft" else None,
+                )
+                idx = idx[~keep.taken_many(gx[idx], gy[idx], extra)]
                 idx = idx[feather_keeps(rim_ring, gx[idx], gy[idx], u[idx], feather, 0.9 if kind == "tint" else 0.7)]
                 if kind == "tint":
                     r = rng.uniform(min(15.0, _tint_r * 0.6), _tint_r, n) * bs
