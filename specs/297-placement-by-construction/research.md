@@ -84,7 +84,7 @@ asks the whole lane law again (`unsettled`), and a still round with one rule bro
 `make perf LABEL=297-start` raised `WebRefused` ("lanes 1 (skeleton) still break a rule of the lane law; the web still breaks
 bends") on its first seed. The tool's `REFERENCE` spec says it is "Inashiro's own spec", but it had kept the unpinned spec after the
 GM pinned Inashiro nucleated with its shrine (feature 291); its last green run (293-end, `cfd76e764`) predates feature 287's landing.
-Fixed here: `REFERENCE` carries the gen's pins, and the bookend runs (297-start: 16.1 s total, median 4.2 s, worst 4.5 s).
+Fixed here: `REFERENCE` carries the gen's pins, and the bookend runs (297-start: 16.1 s total, median 4.2 s, worst 4.5 s; observed 2026-10-01, method: `make perf` in `/tmp/base297`, `dev/perf-log/20261001T040022Z-297-start-base297.json`).
 
 The defect beneath it stands on main: the UNPINNED Inashiro spec at seed 4 is refused - by the web (`WebRefused`, bends on a
 skeleton lane) through the perf tool, and at the wells (`OverlapRefused`: a well recorded on a house) through `make hamlet` (whose
@@ -104,14 +104,14 @@ own questions (the first half of C) stand and do not depend on it.
 
 ## R10. Measuring by the wall clock, and what the first levers bought (observed 2026-10-01)
 
-**cProfile misleads here.** It charges every Python call, so it over-weights call-heavy code and under-weights the C work
+**cProfile misleads here** (observed 2026-10-01, method: cProfile and the sampler below on the same stage). It charges every Python call, so it over-weights call-heavy code and under-weights the C work
 (shapely, numpy, PIL) the regions are made of: a lever that cut calls 30% under cProfile left the homesteads stage's wall time
 unchanged. The stage times below are `make map PROFILE=1` best of three (`stagemin.sh` in the session's scratchpad), base
 (`/tmp/base297`) and clone back to back; the shares are a wall-clock SAMPLER (a thread reading the main thread's stack every
 millisecond, `sys.setswitchinterval(1e-4)` so plain Python is sampled fairly - at the default 5 ms the sample over-weights code
 that releases the GIL).
 
-- **The seat's corridor asked first ran the costliest search on every offered seat** (plan C as first written): the corridor
+- **The seat's corridor asked first ran the costliest search on every offered seat** (plan C as first written; observed 2026-10-01, method: `make perf-profile SEED=4 STAGE=homesteads` in both trees): the corridor
   search went from 166 distinct searches to 325 (`seat_reaches_tree` 0.48 s profiled against 0.35 s), because the cheap envelope
   test had been refusing most seats before it. Reordered: the field's reach and the water first, the envelope, then the corridor
   once per seat.
@@ -122,3 +122,33 @@ that releases the GIL).
 - **The access tree's lanes drawn first in the web (plan D2) made the web slower** on its own (Inashiro 0.72 -> 1.12 s,
   Kashikawa 0.6 -> 1.44 s, single runs): the web's thirty-odd passes then process the tree's lanes too, and the settle still
   runs its rounds. Reverted until the repairs move to the writes (D3).
+
+## R11. Can the lanes be lawful as they are laid? (observed 2026-10-01, method: scratch taps at each `_pass` of `stage_web` on Inashiro, asking the rules of `law.LAW` of the web as it stood; and a tap at `last_resort`)
+
+| after the pass | what the lane law finds broken |
+|---|---|
+| cut (the stage's start: the connector and the field spur) | one network short, 1 dangling end, 15 houses unreached |
+| skeleton | one network short, 1 dangling end, 15 unreached |
+| join-orphans | one network short, **2** dangling ends, 15 unreached |
+| bridge-breaks | one network short, 1 dangling end, 12 unreached |
+| touch | one network short, 1 dangling end, 12 unreached |
+| bridge-breaks, join-orphans, smooth | 12 unreached |
+| touch (the last construction pass) | 1 dangling end, 12 unreached |
+| settle (its start) | 1 dangling end, 12 unreached |
+
+Two findings:
+
+- **The web is unlawful mid-construction by design.** It is in pieces until the touch passes join it, and ends dangle and are
+  joined from pass to pass (2, then 1, then 0, then 1). A lane judged at its own write would be refused or reshaped before the
+  pass that completes it ran. So plan D3-D4 as written (every lane lawful at its write, no repair after the web) cannot be built
+  on the web's passes as they are; it would mean re-designing every construction pass to lay only complete, joined lanes.
+  Asking the law at every pass boundary instead costs more than the settle it would replace (the whole law asked ten times).
+- **What the settle actually mends on Inashiro is two things**: the 12 farmhouses whose access corridors (judged lawful at
+  seating) are drawn only by the settle, and one dangling two-point skeleton lane. Yet it spent four rounds of all sixteen steps,
+  the whole law re-asked at the exit, and the last resort (which dropped that lane): 0.5 s of the stage's 0.72 s (observed 2026-10-01, method: the R10 sampler on `stage_web`). The lane
+  dangled through every round because `settle_dangling` never dropped a lane its trim could not shorten - though its docstring
+  said "a lane the law still calls dangling after its trim goes whole". Fixed; the last resort no longer runs on Inashiro.
+
+What was built in its place: the law's pure verdicts kept per lane (`ways/keeper.py`), a later round running only the repairs
+for the rules still broken (`STEP_RULES`, `steps_for`), the exit reusing the last answer when nothing changed, and the
+`settle_dangling` fix. Inashiro's web stage 0.72 -> 0.41 s, Sawada's about even (0.46 / 0.50) (observed 2026-10-01, method: `make map PROFILE=1` single runs and `stagemin.sh` best of three, R10).
