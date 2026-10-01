@@ -566,8 +566,9 @@ citations:      ## [docs] the same as `make record` (feature 301: the record's s
 # GUARD_EDIT_OK: feature 258 - a new operation, `record`: the record's pages assembled from their
 # per-entry fragments. Feature 301 changed WHAT it writes - the site under research/site/ (gitignored, built on the
 # main checkout by render-sync), not the committed pages - and what CHECK means: the record builds cleanly.
-record:         ## [docs] build the record's site, research/site/, from its per-entry fragments (features 258, 301) - a page per question, one per part, the whole record on one page   CHECK=1: build in memory and exit 1 on any refusal, writing nothing   SPLIT=<name>: the one-time split of a page that is still whole
-	$(RUN).tools.record_asset $(if $(CHECK),--check,) $(if $(SPLIT),--split $(SPLIT),)
+# GUARD_EDIT_OK: feature 303 - `record` loses SPLIT= (the one-time split of a whole page; no page directory is left to split)
+record:         ## [docs] build the record's site, research/site/, from its questions (features 258, 301, 303) - a page per question, a page per section of each half and per tag, the whole record on one page   CHECK=1: build in memory and exit 1 on any refusal, writing nothing
+	$(RUN).tools.record_asset $(if $(CHECK),--check,)
 	@: "GUARD_EDIT_OK: feature 288 FR-005 - after assembling, a filled registry entry marks its URL cited on the sources-consulted ledger (not under CHECK=1, which writes nothing); a new step, nothing loosened"
 	$(if $(CHECK),,@python3 "$$(git rev-parse --show-toplevel)/scripts/_sources.py" mark-filled)
 

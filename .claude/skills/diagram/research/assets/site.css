@@ -8,6 +8,7 @@ body.site { margin: 0; }
 #sidebar h2 { font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; opacity: .7; border: 0; margin: 1.1rem 0 .3rem; padding: 0; }
 #sidebar ul { list-style: none; margin: 0; padding: 0; }
 #sidebar ul.items { padding: .15rem 0 .4rem .9rem; border-left: 1px solid var(--rule); margin-left: .35rem; }
+#sidebar details > ul.parts { padding-left: .9rem; margin: .1rem 0 .2rem .35rem; border-left: 1px solid var(--rule); }
 #sidebar li { margin: .12rem 0; }
 #sidebar summary { cursor: pointer; }
 #sidebar a { display: inline; }

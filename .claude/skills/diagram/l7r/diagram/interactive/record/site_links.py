@@ -1,30 +1,31 @@
-"""Where a link in the record goes once the record is a site (feature 301).
+"""Where a link in the record goes once the record is a site (features 301, 303).
 
-A fragment's links were written for the PAGE it assembled into: `water.html#reservoir-ponds-tameike` from
-`fields.html`, `../SOURCES.html#key` from a citations page, `assets/record.css`. The site splits every page into
-small pages and also joins them all into one, so the same `href` has to land in two places: the small page of the
-question that holds the anchor, and the anchor itself on the single page. Nothing is guessed: every `id` in the
-record is indexed once, an `href` is resolved against the page it was written for, and one that resolves to nothing
-is a refusal naming the fragment (spec FR-006). A link in a session note (an HTML comment) is not a link and is left
-alone.
+A question's fragment, notes and originals are written in `questions/` and link from there (spec 303, plan D4):
+another question's page as its file name (`0412-village-shrines.html#the-hall`, `0412-village-shrines.drawing.html`), an
+id on the same page as `#id`, the registry as `../SOURCES.html#<key>`, an asset as `../assets/...`. The registry's own
+fragments were written for `SOURCES.html` at the record's root. The site writes every page twice - its own small page,
+and its anchor on the single page - so each `href` is resolved once, against the page it was written in, and written
+for both. Nothing is guessed: every `id` is indexed, and a link that lands nowhere is a refusal naming the fragment
+(spec 301 FR-006). A link in a session note (an HTML comment) is not a link and is left alone.
 """
 
 from __future__ import annotations
 
-import os
 import posixpath
 import re
 from dataclasses import dataclass
 
-#: The registry's page and its fragment directory.
+#: The registry's page, as a link names it, and its site directory.
 REGISTRY = "SOURCES.html"
 REGISTRY_DIR = "sources"
+QUESTIONS = "questions"
+#: Where a question's small page is, in the site - flat, so a regrouping moves no URL (spec 303 FR-004).
+QUESTION_DIR = "q"
 #: An id anywhere in a fragment, and a link or an image source in its markup.
 _ID = re.compile(r'\bid="([^"]+)"')
 _ATTR = re.compile(r'(<(?:a|img)\b[^>]*?\s(?:href|src)=")([^"]*)(")', re.S)
 _COMMENT = re.compile(r"<!--.*?-->", re.S)
 _SCHEME = re.compile(r"^[a-z][a-z0-9+.-]*:", re.I)
-_FRAGMENT_NAME = re.compile(r"^\d{3,4}-(.+)\.html$")
 
 
 class LinkError(Exception):
@@ -33,10 +34,10 @@ class LinkError(Exception):
 
 @dataclass(frozen=True)
 class Loc:
-    """Where an anchor lives in the site: the part (a page's directory), the small page holding it (a question's or a
-    registry entry's id, or None for the part's own page), and the anchor itself (None for the top of the page)."""
+    """Where an anchor lives in the site: a question page (`kind` "q", `page` its heading id) or the registry (`kind`
+    "source", `page` an entry's key, or None for the registry's own page), and the anchor (None for the top)."""
 
-    part: str
+    kind: str
     page: str | None
     anchor: str | None = None
 
@@ -50,85 +51,71 @@ class Index:
     """Every id in the record, mapped to where it lives - built once, asked per link."""
 
     def __init__(self) -> None:
-        self.ids: dict[tuple[str, str], Loc] = {}
-        self.parts: dict[str, str] = {}  # page_rel -> part dir
-        self.pages: dict[tuple[str, str], str] = {}  # (part dir, small page id) -> its file name in the site
-        self.part_ids: dict[str, str] = {}  # part dir -> the id of its title (the single page's anchor for it)
+        self.files: dict[str, str] = {}  # question file name -> its page's heading id
+        self.ids: dict[str, set[str]] = {}  # question file name -> the ids on its page
+        self.registry: dict[str, str | None] = {}  # id on the registry -> the entry holding it (None: its own page)
 
-    def add_part(self, page_rel: str, part: str, title_id: str) -> None:
-        self.parts[page_rel] = part
-        self.part_ids[part] = title_id
-        self.ids[(page_rel, title_id)] = Loc(part, None)
+    def add_page(self, file: str, heading_id: str, html: str) -> None:
+        self.files[file] = heading_id
+        self.ids[file] = set(ids_in(html)) | {heading_id}
 
-    def add(self, page_rel: str, part: str, page: str | None, html: str) -> None:
-        """Index every id in `html` as living on `page` of `part` (None: on the part's own page)."""
+    def add_registry(self, entry: str | None, html: str) -> None:
         for found in ids_in(html):
-            self.ids.setdefault((page_rel, found), Loc(part, page, None if found == page else found))
-        if page is not None:
-            self.pages[(part, page)] = f"{page}.html"
+            self.registry.setdefault(found, entry)
+        if entry is not None:
+            self.registry[entry] = entry
 
-    def resolve(self, href: str, from_dir: str) -> Loc | str | None:
-        """What `href`, written in a page that sat in `from_dir` (relative to the record), points at: a `Loc` in the
-        record; a path relative to the record for a file that is not a page (an asset); or None for a link that leaves
-        the record untouched (a URL with a scheme, `//host`). Raises `LinkError` for a link into the record that lands
-        nowhere."""
+    def resolve(self, href: str, own: str | None) -> Loc | str | None:
+        """What `href` points at, written in the question page `own` (or, with `own` None, in the registry): a `Loc`; a
+        path relative to the record for a file that is not a page (an asset); or None for a link that leaves the record
+        (a URL with a scheme, `//host`). Raises `LinkError` for a link into the record that lands nowhere."""
         if not href or _SCHEME.match(href) or href.startswith("//"):
             return None
         path, _, anchor = href.partition("#")
         if not path:
-            raise LinkError(f"`{href}` - an in-page anchor, which the caller resolves against its own page")
-        target = posixpath.normpath(posixpath.join(from_dir, path))
-        if target.startswith("citations/"):
-            return self._citations(target[len("citations/") :], anchor, href)
-        if target in self.parts:
-            return self._on_page(target, anchor, href)
-        part = posixpath.dirname(target)
-        named = _FRAGMENT_NAME.match(posixpath.basename(target))
-        if named and part in self.part_ids:
-            return self._fragment(part, named.group(1), anchor, href)
+            return self._registry(anchor, href) if own is None else self._question(own, anchor, href)
+        target = posixpath.normpath(posixpath.join(QUESTIONS if own is not None else "", path))
+        if target == REGISTRY:
+            return self._registry(anchor, href)
+        if target.startswith(QUESTIONS + "/"):
+            return self._question(target[len(QUESTIONS) + 1 :], anchor, href)
+        if target.endswith(".html"):
+            raise LinkError(f"`{href}` - no such page in the record")
         return target + (f"#{anchor}" if anchor else "")
 
-    def anchor(self, page_rel: str, anchor: str, href: str) -> Loc:
-        """An in-page anchor (`#x`) written in `page_rel`."""
-        return self._on_page(page_rel, anchor, href)
+    def _question(self, file: str, anchor: str, href: str) -> Loc:
+        if file not in self.files:
+            raise LinkError(f"`{href}` - no question page {file}")
+        heading = self.files[file]
+        if anchor and anchor not in self.ids[file]:
+            raise LinkError(f"`{href}` - no id `{anchor}` on {file}")
+        return Loc("q", heading, anchor if anchor and anchor != heading else None)
 
-    def _on_page(self, page_rel: str, anchor: str, href: str) -> Loc:
+    def _registry(self, anchor: str, href: str) -> Loc:
         if not anchor:
-            return Loc(self.parts[page_rel], None)
-        loc = self.ids.get((page_rel, anchor))
-        if loc is None:
-            raise LinkError(f"`{href}` - no id `{anchor}` on {page_rel}")
-        return loc
+            return Loc("source", None)
+        if anchor not in self.registry:
+            raise LinkError(f"`{href}` - no id `{anchor}` on the registry")
+        entry = self.registry[anchor]
+        return Loc("source", entry, anchor if anchor != entry else None)
 
-    def _citations(self, page_rel: str, anchor: str, href: str) -> Loc:
-        """A citations page is not a page of the site: its works entries are the registry's entries, and the page
-        itself is its research page's part."""
-        if page_rel not in self.parts:
-            raise LinkError(f"`{href}` - no research page {page_rel} behind this citations page")
-        if anchor.startswith("work-"):
-            return self._on_page(REGISTRY, anchor[len("work-") :], href)
-        if anchor:
-            raise LinkError(f"`{href}` - a citations page's note is not addressable in the site; link its question")
-        return Loc(self.parts[page_rel], None)
 
-    def _fragment(self, part: str, page_id: str, anchor: str, href: str) -> Loc:
-        if (part, page_id) not in self.pages:
-            raise LinkError(f"`{href}` - no question `{page_id}` in {part}/")
-        return Loc(part, page_id, anchor or None)
+def site_file(loc: Loc) -> str:
+    """The site file a place in the record is on."""
+    if loc.kind == "q":
+        return f"{QUESTION_DIR}/{loc.page}.html"
+    return f"{REGISTRY_DIR}/{loc.page}.html" if loc.page is not None else f"{REGISTRY_DIR}/index.html"
 
 
 def site_href(loc: Loc, here: str) -> str:
     """The link from the site file `here` (relative to the site root) to `loc` on the multi-page site."""
-    file = f"{loc.part}/{loc.page}.html" if loc.page is not None else f"{loc.part}/index.html"
-    rel = posixpath.relpath(file, posixpath.dirname(here) or ".")
+    rel = posixpath.relpath(site_file(loc), posixpath.dirname(here) or ".")
     return rel + (f"#{loc.anchor}" if loc.anchor else "")
 
 
-def single_href(loc: Loc, index: Index) -> str:
+def single_href(loc: Loc, registry_title: str) -> str:
     """The same link on the single page, where every page is an anchor."""
-    if loc.anchor:
-        return f"#{loc.anchor}"
-    return f"#{loc.page}" if loc.page is not None else f"#{index.part_ids[loc.part]}"
+    return f"#{loc.anchor or loc.page or registry_title}"
 
 
 def asset_href(target: str, here: str, site_dir: str = "site") -> str:
@@ -138,38 +125,25 @@ def asset_href(target: str, here: str, site_dir: str = "site") -> str:
     return rel + (f"#{anchor}" if anchor else "")
 
 
-def rewrite(html: str, *, page_rel: str, from_dir: str, index: Index, here: str, single: bool, where: str) -> tuple[str, list[str]]:
+def rewrite(html: str, *, own: str | None, index: Index, here: str, single: bool, where: str, registry_title: str = "") -> tuple[str, list[str]]:
     """`html` with every link rewritten for one form: the small pages (`single=False`, `here` the file it is written
     to) or the single page. Returns the markup and the refusals, each naming `where` - the fragment the link is in.
-    `page_rel` is the page an in-page anchor (`#x`) belongs to; `from_dir` is the directory the markup was written
-    for (a citations page's notes were written one level down, in `citations/`)."""
+    `own` is the question page the markup belongs to (None: the registry)."""
     errors: list[str] = []
     hidden = [(m.start(), m.end()) for m in _COMMENT.finditer(html)]
 
     def one(m: re.Match[str]) -> str:
         if any(a <= m.start() < b for a, b in hidden):
             return m.group(0)
-        href = m.group(2)
         try:
-            target = index.anchor(page_rel, href[1:], href) if href.startswith("#") else index.resolve(href, from_dir)
+            target = index.resolve(m.group(2), own)
         except LinkError as e:
             errors.append(f"{where}: {e}")
             return m.group(0)
         if target is None:
             return m.group(0)
-        return m.group(1) + _href_for(target, index, here, single) + m.group(3)
+        if isinstance(target, str):
+            return m.group(1) + asset_href(target, "all.html" if single else here) + m.group(3)
+        return m.group(1) + (single_href(target, registry_title) if single else site_href(target, here)) + m.group(3)
 
     return _ATTR.sub(one, html), errors
-
-
-def _href_for(target: Loc | str, index: Index, here: str, single: bool) -> str:
-    """A resolved target as an `href` in one form: an asset is rebased; a place in the record is its small page, or its
-    anchor on the single page."""
-    if isinstance(target, str):
-        return asset_href(target, "all.html" if single else here)
-    return single_href(target, index) if single else site_href(target, here)
-
-
-def part_dir(page_rel: str) -> str:
-    """The site directory of a page - its fragment directory (`fields`, `cities/fabric`, `sources`)."""
-    return REGISTRY_DIR if page_rel == REGISTRY else os.path.splitext(page_rel)[0]

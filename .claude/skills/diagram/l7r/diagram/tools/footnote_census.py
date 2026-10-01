@@ -28,8 +28,9 @@ import collections
 import sys
 from collections.abc import Callable
 
-from l7r.diagram.interactive.citations import NOTE, citations_page, footnote_form, is_settled, research_pages
-from l7r.diagram.interactive.sources import RESEARCH_DIR, canon_keys, record_text
+from l7r.diagram.interactive.citations import footnote_form, is_settled
+from l7r.diagram.interactive.record import store
+from l7r.diagram.interactive.sources import RESEARCH_DIR, canon_keys
 
 KINDS = ("citation", "grounds", "absence", "settled")
 #: What the census needs of a classifier: a note's body in, its form out. Passed in rather than reached for, so a
@@ -37,16 +38,10 @@ KINDS = ("citation", "grounds", "absence", "settled")
 Classifier = Callable[[str], str | None]
 
 
-def citations_pages() -> list[str]:
-    """Every citations page in the record, as `citations/<page>.html`, in a stable order - read through the in-memory
-    assembly (feature 301: the pages are built, never committed)."""
-    return sorted(citations_page(p) for p in research_pages(RESEARCH_DIR))
-
-
-def kinds_on(text: str, form: Classifier) -> collections.Counter[str]:
-    """The kind of every footnote on one citations page. `form` is the gate's own classifier."""
+def kinds_of(bodies: list[str], form: Classifier) -> collections.Counter[str]:
+    """The kind of every footnote among `bodies`. `form` is the gate's own classifier."""
     counted: collections.Counter[str] = collections.Counter()
-    for _fid, body in NOTE.findall(text):
+    for body in bodies:
         kind = form(body)
         if kind == "absence" and is_settled(body):
             kind = "settled"
@@ -54,14 +49,20 @@ def kinds_on(text: str, form: Classifier) -> collections.Counter[str]:
     return counted
 
 
-def census(form: Classifier) -> dict[str, collections.Counter[str]]:
-    """Per page, and under the key `TOTAL`, how many footnotes of each kind the record carries."""
+def census(form: Classifier, research_dir: str = RESEARCH_DIR) -> dict[str, collections.Counter[str]]:
+    """Per section of each half (feature 303: the record's sections, `research/contents.json`), and under the key
+    `TOTAL`, how many footnotes of each kind the record carries."""
+    record = store.load(research_dir)
     per: dict[str, collections.Counter[str]] = {}
     total: collections.Counter[str] = collections.Counter()
-    for rel in citations_pages():
-        counted = kinds_on(record_text(rel), form)
-        per[rel[len("citations/") :]] = counted
+    for page in record.pages():
+        home = record.question_of(page).home
+        assert home is not None
+        row = f"{page.half}: " + " / ".join(s.title for s in home.path())
+        counted = kinds_of(list(store.page_notes(page.file, research_dir).values()), form)
+        per.setdefault(row, collections.Counter()).update(counted)
         total.update(counted)
+    per = dict(sorted(per.items()))
     per["TOTAL"] = total
     return per
 
@@ -70,7 +71,7 @@ def render(per: dict[str, collections.Counter[str]]) -> str:
     """The report, widest column first, with the backlog called what it is."""
     rows = [(name, c) for name, c in per.items() if name != "TOTAL"]
     width = max([len(n) for n, _ in rows] + [5])
-    head = f"{'page':<{width}}  {'cited':>6}{'grounds':>9}{'ABSENT':>8}{'settled':>9}"
+    head = f"{'section':<{width}}  {'cited':>6}{'grounds':>9}{'ABSENT':>8}{'settled':>9}"
     lines = [head, "-" * len(head)]
     for name, c in rows:
         lines.append(f"{name:<{width}}  {c['citation']:>6}{c['grounds']:>9}{c['absence']:>8}{c['settled']:>9}")

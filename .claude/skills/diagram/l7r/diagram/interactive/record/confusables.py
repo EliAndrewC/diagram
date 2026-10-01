@@ -4,7 +4,7 @@ The GM, 2026-09-29: a section whose subject a reader could confuse with another'
 with:* - each entry the other section's title, linked, and the record's definition of it - and the pairs are data,
 kept once and always two-way, written by `make record` and never by hand.
 
-So the pairs live in ONE file, `research/confusables.json` - a list of `{"a": "<page>#<id>", "b": "<page>#<id>",
+So the pairs live in ONE file, `research/confusables.json` - a list of `{"a": "NNNN-<slug>.html#<id>", "b": "...",
 "why": "<the difference>"}` - and a pair declared once puts an entry under BOTH sections. An entry is the other
 section's heading, linked, and its definition: the first sentence of that section's opening paragraph, read from its
 fragment at assembly, so it can never drift from what the section says. The `why` is for the next session (it says
@@ -21,9 +21,9 @@ import os
 import re
 from dataclasses import dataclass
 
-from l7r.diagram.interactive.record import fragments as frag
+from l7r.diagram.interactive.record import questions as qs
 
-#: The pairs, kept once, beside the pages they join.
+#: The pairs, kept once, beside the questions they join.
 DATA = "confusables.json"
 LABEL = "Not to be confused with:"
 _H2 = re.compile(r'<h2 id="([^"]+)">(.*?)</h2>', re.S)
@@ -36,7 +36,7 @@ _SENTENCE = re.compile(r"(.+?[.!?])(?:\s|$)", re.S)
 
 @dataclass(frozen=True)
 class Pair:
-    """Two sections a reader could mistake for each other: `page.html#id` each."""
+    """Two sections a reader could mistake for each other: `NNNN-<slug>[.drawing].html#<heading id>` each."""
 
     a: str
     b: str
@@ -56,19 +56,11 @@ def _split(ref: str) -> tuple[str, str]:
     return page, anchor
 
 
-def _section(record_dir: str, ref: str) -> str | None:
-    """The fragment text of the section `ref` names, or None."""
-    page, anchor = _split(ref)
-    where = os.path.join(record_dir, frag.page_dir(page))
-    if not os.path.isdir(where):
-        return None
-    for name in frag.ordered(os.listdir(where)):
-        with open(os.path.join(where, name), encoding="utf-8") as fh:
-            text = fh.read()
-        m = _H2.search(text)
-        if m and m.group(1) == anchor:
-            return text
-    return None
+def _section(record: qs.Record, ref: str) -> str | None:
+    """The text of the page `ref` names, when its heading is the anchor; else None."""
+    file, anchor = _split(ref)
+    page = record.by_file.get(file)
+    return page.text if page is not None and page.heading_id == anchor else None
 
 
 def _text(fragment_html: str) -> str:
@@ -92,41 +84,37 @@ def definition(section: str) -> str:
     return s.group(1) if s else text
 
 
-def unresolved(pairs: list[Pair], record_dir: str) -> list[str]:
+def unresolved(pairs: list[Pair], record: qs.Record) -> list[str]:
     """A message for each side of a pair that names no section, and for a pair joining a section to itself."""
     bad = []
     for p in pairs:
         if p.a == p.b:
             bad.append(f"`{p.a}` is paired with itself")
         for ref in (p.a, p.b):
-            if _section(record_dir, ref) is None:
+            if _section(record, ref) is None:
                 bad.append(f"`{ref}` (paired with `{p.b if ref == p.a else p.a}`) - no such section")
     return bad
 
 
-def _href(from_page: str, ref: str) -> str:
-    page, anchor = _split(ref)
-    return os.path.relpath(page, os.path.dirname(from_page) or ".").replace(os.sep, "/") + "#" + anchor
-
-
-def entries(page_rel: str, pairs: list[Pair], record_dir: str) -> dict[str, list[str]]:
-    """{section id on this page: [entry html]} - each pair adds an entry under both of its sections."""
+def entries(file: str, pairs: list[Pair], record: qs.Record) -> dict[str, list[str]]:
+    """{section id on this page: [entry html]} - each pair adds an entry under both of its sections. A link is written
+    as the other page's file name, which the site resolves like any link in the record."""
     out: dict[str, list[str]] = {}
     for p in pairs:
         for here, there in ((p.a, p.b), (p.b, p.a)):
             page, anchor = _split(here)
-            if page != page_rel:
+            if page != file:
                 continue
-            other = _section(record_dir, there) or ""
-            entry = f'<li><a href="{_href(page_rel, there)}">{html.escape(title(other), quote=False)}</a>'
+            other = _section(record, there) or ""
+            entry = f'<li><a href="{_split(there)[0]}">{html.escape(title(other), quote=False)}</a>'
             gloss = definition(other)
             out.setdefault(anchor, []).append(entry + (f" - {html.escape(gloss, quote=False)}</li>" if gloss else "</li>"))
     return out
 
 
-def write(page_html: str, page_rel: str, pairs: list[Pair], record_dir: str) -> str:
-    """The assembled page with the list written right after each paired section's heading."""
-    for anchor, items in entries(page_rel, pairs, record_dir).items():
+def write(page_html: str, file: str, pairs: list[Pair], record: qs.Record) -> str:
+    """The page with the list written right after each paired section's heading."""
+    for anchor, items in entries(file, pairs, record).items():
         m = re.search(rf'<h2 id="{re.escape(anchor)}">.*?</h2>', page_html, re.S)
         if m is None:
             continue  # `unresolved` has already refused a pair naming no section

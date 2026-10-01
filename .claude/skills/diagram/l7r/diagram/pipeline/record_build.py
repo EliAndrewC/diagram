@@ -23,19 +23,18 @@ from collections.abc import Callable, Iterable
 #: Where the stamp lives: inside the site, so a site deleted by hand takes its stamp with it and is rebuilt.
 STAMP = ".stamp"
 SITE = "site"
-#: The record's collections, whose page FILES (one level down) were built before feature 301 - `sources.COLLECTIONS`.
-_COLLECTIONS = ("cities", "rendering", "rendering/cities")
 _GLOSSARY = os.path.join("l7r", "diagram", "interactive", "assets", "glossary.json")
 
 
 def is_input(rel: str) -> bool:
     """Is this file under `research/` something the build reads? Not the site, not a page or citations page or glossary
-    script the assembly wrote before 301 (ignored, and perhaps still on disk in an old checkout), not prose."""
+    script the assembly wrote before 301 (ignored, and perhaps still on disk in an old checkout), not prose. Since
+    feature 303 every page the old assembly wrote sat at the record's root, so a root `.html` is never an input."""
     top, _, _rest = rel.partition("/")
     if top in (SITE, "citations") or top.startswith(".site-") or rel == "assets/glossary.js" or rel.endswith(".md"):
         return False
     directory, name = os.path.split(rel)
-    return not (name.endswith(".html") and (directory == "" or directory in _COLLECTIONS))
+    return not (name.endswith(".html") and directory == "")
 
 
 def record_files(research_dir: str) -> list[str]:

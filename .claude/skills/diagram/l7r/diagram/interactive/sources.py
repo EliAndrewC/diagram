@@ -39,61 +39,33 @@ RESEARCH_DIR = os.path.normpath(os.path.join(_HERE, "..", "..", "..", "research"
 #: Markdown; a renamed heading still breaks an anchor on a page rendered before the rename (spec 180 D1),
 #: and every pool page re-renders at each landing.
 #: Since feature 301 (GM 2026-10-01: *"the links to our research from the interactive HTML maps should link to the
-#: smaller pages, not link to the one giant page"*) a question links its own small page in the record's site,
-#: `research/site/<page dir>/<heading id>.html`, which `make record` builds (`record/site.py`).
+#: smaller pages, not link to the one giant page"*) a question links its own small page in the record's site, and since
+#: feature 303 that page is `research/site/q/<heading id>.html` whatever section the question sits in, so a regrouping of
+#: the record moves no map's link.
 SITE_PAGES = "../../../research/site/"
-
-#: The record's SUB-COLLECTIONS - pages one directory down, `research/<collection>/<name>.html`, each with its fragments
-#: at `research/<collection>/<name>/` and its citations page at `research/citations/<collection>/<name>.html`. `cities`
-#: holds the city research; `rendering` (feature 292, GM 2026-09-29: *"there should probably just be a separate
-#: collection of files that have to do with our rendering decisions"*) holds how the maps draw what the research
-#: pages describe, one rendering page beside each research page it covers. Every reader of the record takes its list
-#: from here; a collection named anywhere else is a defect. `rendering/cities` (feature 292 sweep, 2026-09-30) is the
-#: rendering page beside each `cities/` page - `rendering/cities/capitals.html` beside `cities/capitals.html` - two
-#: directories down, so it is a collection of its own rather than a page directory of `rendering`.
-COLLECTIONS = ("cities", "rendering", "rendering/cities")
-
-
-#: A page's fragment directory is marked by its front matter (`record/fragments.py`).
-_FRONT = "_front.html"
-
-
-def is_page_dir(path: str) -> bool:
-    """Does this directory hold a page's fragments? Feature 301: the pages are no longer on disk, so a page is
-    found by its fragment directory - the one with `_front.html` - never by a `<name>.html` file beside it."""
-    return os.path.isfile(os.path.join(path, _FRONT))
-
-
-def collection_pages(research_dir: str = RESEARCH_DIR) -> list[str]:
-    """Every page of every sub-collection, as `<collection>/<name>.html`, sorted within each collection."""
-    out: list[str] = []
-    for c in COLLECTIONS:
-        d = os.path.join(research_dir, c)
-        if os.path.isdir(d):
-            out += sorted(f"{c}/{f}.html" for f in os.listdir(d) if is_page_dir(os.path.join(d, f)))
-    return out
+#: Where a question's small page is, under `SITE_PAGES`.
+QUESTION_PAGES = "q/"
+#: Where the questions are, in the record (feature 303: one flat directory, one stem per question).
+QUESTIONS = "questions"
 
 
 def record_text(rel: str, research_dir: str = RESEARCH_DIR) -> str:
-    """A page of the record as a reader would open it, read through the in-memory assembly (feature 301).
-
-    `rel` is `fields.html`, `cities/fabric.html`, `SOURCES.html`, or a citations page `citations/fields.html`. The
-    pages are built, never committed, so nothing in the engine, the tools or the tests may depend on one being on
-    disk: every reader asks here, and the fragments answer. A page with no fragment directory is read from its file,
-    which is what a test's fixture record is; one that is neither is empty."""
+    """A page of the record as a reader would open it, read from its fragments (features 301, 303). `rel` is
+    `SOURCES.html` (the registry, assembled) or `questions/<file>` (a question page, with its cross-link and its
+    *Not to be confused with:* list written in). Nothing assembled is on disk, so every reader asks here. A name that is
+    neither is read from its file, which is what a test's fixture record is; one that is not there is empty."""
     return _record_text(os.path.normpath(research_dir), rel)
 
 
 @cache
 def _record_text(research_dir: str, rel: str) -> str:
-    from l7r.diagram.interactive.record import fragments as frag  # noqa: PLC0415 - the record imports this module
-    from l7r.diagram.interactive.record.store import assemble_pages  # noqa: PLC0415
+    from l7r.diagram.interactive.record import store  # noqa: PLC0415 - the record imports this module
 
-    citations = rel.startswith("citations/")
-    page_rel = rel[len("citations/") :] if citations else rel
-    if is_page_dir(os.path.join(research_dir, frag.page_dir(page_rel))):
-        research, cites = assemble_pages(page_rel, research_dir)
-        return (cites or "") if citations else research
+    if rel == "SOURCES.html" and os.path.isdir(os.path.join(research_dir, store.REGISTRY_DIR)):
+        return store.registry_html(research_dir)
+    if rel.startswith(QUESTIONS + "/") and os.path.isfile(os.path.join(research_dir, rel)):
+        record = store.load(research_dir)
+        return store.page_html(record, record.by_file[rel[len(QUESTIONS) + 1 :]], research_dir)
     try:
         with open(os.path.join(research_dir, rel), encoding="utf-8") as fh:
             return fh.read()
@@ -111,10 +83,9 @@ def clear_caches() -> None:
 _KEY = re.compile(r"`([a-z0-9][a-z0-9-]*)`")
 #: A research question an entry names: its FRAGMENT (feature 301, GM 2026-10-01: a pointer names *"the source which
 #: is fed into and used to generate that HTML page, because that is the canonical location of the research"*) -
-#: `research/<page dir>/<prefix>-<heading id>.html`, the page directory one to three levels deep
-#: (`fields`, `cities/sizing`, `rendering/cities/sizing`). Before 301 an entry named a page and quoted headings, and
-#: matched them by prefix; a path either names a fragment or does not.
-ENTRY_FRAGMENT = re.compile(r"research/((?:[a-z-]+/)+)(\d{3}-[^\s/,;)\"'`<>]+\.html)")
+#: since feature 303 `research/questions/NNNN-<slug>.html`, or `NNNN-<slug>.drawing.html` for how our maps draw it.
+#: A path either names a fragment or does not.
+ENTRY_FRAGMENT = re.compile(r"research/questions/(\d{4}-[^\s/,;)\"'`<>]+?(?:\.drawing)?\.html)")
 #: A heading in a research PAGE (feature 194): its level, its id (the record's anchor) and its inner HTML.
 _HEADING_TAG = re.compile(r"<h([1-6])(?:\s+id=\"([^\"]*)\")?[^>]*>(.*?)</h\1>", re.S)
 _TAG = re.compile(r"<[^>]+>")
@@ -210,25 +181,19 @@ _REFERENCE = re.compile(r'<sup class="fn" data-note="([^"]*)"></sup>')
 _NOTE_KEY = re.compile(r'<a href="[^"]*"><code>([a-z0-9][a-z0-9-]*)</code></a>')
 
 
-def page_rel_of(page_dir: str) -> str:
-    """A page's name from its fragment directory: `fields` -> `fields.html`, `sources` -> `SOURCES.html`."""
-    return "SOURCES.html" if page_dir == "sources" else f"{page_dir}.html"
-
-
 @cache
-def _page_notes(research_dir: str, page_rel: str) -> dict[str, str]:
-    """note key -> note HTML for one page, gathered from its questions' notes files (`record/store.read_notes`)."""
-    from l7r.diagram.interactive.record.store import read_notes  # noqa: PLC0415 - the record imports this module
+def _page_notes(research_dir: str, file: str) -> dict[str, str]:
+    """note key -> note HTML for one question page (`record/store.page_notes`)."""
+    from l7r.diagram.interactive.record.store import page_notes  # noqa: PLC0415 - the record imports this module
 
-    return read_notes(page_rel, research_dir)
+    return page_notes(file, research_dir)
 
 
-def footnote_sources(fragment: str, page_rel: str, research_dir: str = RESEARCH_DIR) -> list[str]:
-    """The keys a question's FOOTNOTES cite, in order of first citation, once each - the question's sources once it
+def footnote_sources(fragment: str, file: str, research_dir: str = RESEARCH_DIR) -> list[str]:
+    """The keys a question page's FOOTNOTES cite, in order of first citation, once each - the question's sources once it
     carries no `Sources:` roster (feature 292: the roster is retired from a restyled section, and every key it named
-    had to be quoted by one of these footnotes anyway). A reference names its note by key; the note may be written
-    beside another question of the page, where it was first cited, so it is looked up in the page's notes."""
-    notes = _page_notes(os.path.normpath(research_dir), page_rel)
+    had to be quoted by one of these footnotes anyway). A reference names its note by key, in the page's own notes."""
+    notes = _page_notes(os.path.normpath(research_dir), file)
     keys: list[str] = []
     for ref in _REFERENCE.findall(fragment):
         for k in _NOTE_KEY.findall(notes.get(ref, "")):
@@ -237,20 +202,19 @@ def footnote_sources(fragment: str, page_rel: str, research_dir: str = RESEARCH_
     return keys
 
 
-def entry_fragments(entry: str) -> list[tuple[str, str]]:
-    """(page dir, fragment file name) for every question an entry names, in the order it names them (spec 180 D4: the
-    class author puts the primary question first), once each."""
-    out: list[tuple[str, str]] = []
+def entry_fragments(entry: str) -> list[str]:
+    """The file name of every question page an entry names, in the order it names them (spec 180 D4: the class author
+    puts the primary question first), once each."""
+    out: list[str] = []
     for m in ENTRY_FRAGMENT.finditer(entry):
-        found = (m.group(1).rstrip("/"), m.group(2))
-        if found not in out:
-            out.append(found)
+        if m.group(1) not in out:
+            out.append(m.group(1))
     return out
 
 
-def _fragment(research_dir: str, page_dir: str, name: str) -> str | None:
+def _fragment(research_dir: str, file: str) -> str | None:
     try:
-        with open(os.path.join(research_dir, page_dir, name), encoding="utf-8") as fh:
+        with open(os.path.join(research_dir, QUESTIONS, file), encoding="utf-8") as fh:
             return fh.read()
     except OSError:
         return None
@@ -260,11 +224,11 @@ def research_sources(entry: str, research_dir: str = RESEARCH_DIR) -> list[str]:
     """Every key the research questions named in `entry` cite, in entry order: a section's roster where it has one,
     else the keys its footnotes cite."""
     keys: list[str] = []
-    for page_dir, name in entry_fragments(entry):
-        text = _fragment(research_dir, page_dir, name)
+    for file in entry_fragments(entry):
+        text = _fragment(research_dir, file)
         if text is None:
             continue
-        for k in section_sources(text) or footnote_sources(text, page_rel_of(page_dir), research_dir):
+        for k in section_sources(text) or footnote_sources(text, file, research_dir):
             if k not in keys:
                 keys.append(k)
     return keys
@@ -273,16 +237,16 @@ def research_sources(entry: str, research_dir: str = RESEARCH_DIR) -> list[str]:
 def research_questions(entry: str, research_dir: str = RESEARCH_DIR) -> list[dict[str, str]]:
     """The QUESTIONS behind a modal (feature 180): `{"text", "url"}` for every research question the entry names, in
     the order the ENTRY names them. `text` is the heading less its dated bookkeeping; `url` is the question's small
-    page in the record's site (feature 301). A path that names no fragment yields nothing - which
+    page in the record's site (features 301, 303). A path that names no fragment yields nothing - which
     `scripts/check-entry-headings.py` refuses at the push."""
     out: list[dict[str, str]] = []
-    for page_dir, name in entry_fragments(entry):
-        text = _fragment(research_dir, page_dir, name)
-        m = _HEADING_TAG.search(text or "")
+    for file in entry_fragments(entry):
+        text = _fragment(research_dir, file)
+        m = _HEADING_TAG.search(re.sub(r"<!--.*?-->", "", text or "", flags=re.S))
         if m is None:
             continue
-        heading_id = m.group(2) or name.split("-", 1)[1][: -len(".html")]
-        out.append({"text": question_text(page_text(m.group(3))), "url": f"{SITE_PAGES}{page_dir}/{heading_id}.html"})
+        heading_id = m.group(2) or ""
+        out.append({"text": question_text(page_text(m.group(3))), "url": f"{SITE_PAGES}{QUESTION_PAGES}{heading_id}.html"})
     return out
 
 
