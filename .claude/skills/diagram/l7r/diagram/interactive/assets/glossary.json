@@ -7862,7 +7862,9 @@
  "toiyaba": {
   "def": "The office at a Japanese post station where the relay of porters and horses was run - sometimes part of the station headman's own house, one or two to a station, at its middle or at its ends.",
   "variants": [
-   "toiyaba"
+   "toiyaba",
+   "relay office",
+   "relay offices"
   ]
  },
  "tenma-cho": {
@@ -13823,6 +13825,30 @@
   "variants": [
    "chicken-feather inn",
    "chicken-feather inns"
+  ]
+ },
+ "Kusatsu": {
+  "def": "A post station in Omi province (now Shiga Prefecture), where the Tokaido and Nakasendo highways met; its honjin is among the largest that survive.",
+  "variants": [
+   "Kusatsu"
+  ]
+ },
+ "Jimingyi": {
+  "def": "A walled post-station town of the Ming and Qing northwest of Beijing, in Hebei, whose official lodging court and station buildings survive.",
+  "variants": [
+   "Jimingyi"
+  ]
+ },
+ "Okazaki": {
+  "def": "A post station on the Tokaido, the shogunate's highway between Edo and Kyoto, which was also a castle town.",
+  "variants": [
+   "Okazaki"
+  ]
+ },
+ "Hikone": {
+  "def": "A castle town on Lake Biwa, in Omi province (now Shiga Prefecture). A stable inside its castle's second bailey, of about 1688-1703, is the only castle stable of its kind that survives.",
+  "variants": [
+   "Hikone"
   ]
  }
 }

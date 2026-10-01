@@ -1257,6 +1257,7 @@ hikae-no-ma	hikae-no-ma
 hikan	hikan
 hikioi	hikioi
 hikiri-ichi	hikiri-ichi
+hikone	Hikone
 hill-and-plain castle	hill-and-plain castle
 hill-style	tsukiyama
 hinin	hinin
@@ -1532,6 +1533,7 @@ jiaxing	Huzhou-Jiaxing
 jiegao	jiegao
 jiguchi-sen	jiguchi-sen
 jikata hanreiroku	Jikata hanreiroku
+jimingyi	Jimingyi
 jin	jin
 jin dynasty	Jin dynasty
 jin'ya	jin'ya
@@ -1841,6 +1843,7 @@ kuruwa	kuruwa
 kusa-no-ma	kusa-no-ma
 kusaba	kusaba
 kusakariba	magusaba
+kusatsu	Kusatsu
 kusayama	kusayama
 kuwabata	Kuwabata
 kwangtung	Kwangtung
@@ -2319,6 +2322,7 @@ ojoya	ogashoya
 okabasho	okabasho
 okaji	ōkaji
 okajiba	ōkaji
+okazaki	Okazaki
 oku	oku
 oku-agariya	agariya
 oku-muki	oku
@@ -2596,6 +2600,8 @@ regulator	regulator
 regulators	regulator
 rehe	Jehol
 reikurikata	reikurikata
+relay office	toiyaba
+relay offices	toiyaba
 relay town	relay town
 relay towns	relay town
 remand	remand
