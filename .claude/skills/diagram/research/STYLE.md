@@ -164,11 +164,14 @@ highlights into questions ... I think that we need to come up with a different n
   stays. (GM, 2026-09-29: *"there are some features on a map for which the map only has a single one ... you would use
   the singular to refer to it to prevent confusion ... when referring to a thing which a map will have many of, you
   would use the plural."*)
-- **Not to be confused with** (GM, 2026-09-29 - DEFERRED until the sweep has given every section its final title): a
-  section whose subject a reader could mistake for another's will open, before its opening paragraph, with a list
-  *Not to be confused with:* - each entry the other section's title, linked, and the definition the record uses for
-  it. The pairs are data, kept once and always two-way, and the list is written by `make record`, never by hand. Until
-  then a restyle records each confusable pair it meets in `specs/292-research-presentation-style/confusables.md`.
+- **Not to be confused with** (GM, 2026-09-29; built after the sweep, feature 292 T10): a section whose subject a
+  reader could mistake for another's opens, right under its heading, with a list *Not to be confused with:* - each entry
+  the other section's title, linked, and the first sentence of that section's opening, which is the record's definition
+  of it. The pairs are data, kept once in `research/confusables.json` (`{"a": "<page>#<id>", "b": "<page>#<id>",
+  "why": "<the difference>"}`) and always two-way: `make record` writes the list under both sections, and refuses a pair
+  naming a section that does not exist. A section that gains a confusable neighbor - a new topic, a renamed one - adds
+  its pair to the data file, never a list by hand. Because the list quotes the other section's first sentence, that
+  sentence says what the thing IS.
 
 ## 6. Units
 

@@ -118,6 +118,12 @@ that it contradicts one; if a rule seems to, say so as a NOTE, naming both.
 11. **Terms.** A term a newcomer would not know - grep the variant list first - that is explained neither by a tooltip
     nor in the text is a FAIL naming the term and a one-sentence definition. Project jargon ("arm", "belt",
     "appurtenance", "roll", "footprint", "tier") where a plain word exists is a FAIL with the plain word.
+12. **Not to be confused with.** The list under a heading is written by `make record` from `research/confusables.json`
+    (STYLE.md section 5); you never ask for one by hand. When the section's own text sets its subject against a
+    near-twin a reader could mistake it for - a similar name, the same native word for two things, the same look on a
+    map - and the section has no *Not to be confused with:* entry for it, that is a NOTE naming the other subject, so the
+    session adds the pair to the data. And the section's first sentence is what another section's list quotes as its
+    definition: an opening whose first sentence does not say what the thing IS is a FAIL of rule 3.
 
 ## The merge audit (only when `extra/` holds the old sections)
 

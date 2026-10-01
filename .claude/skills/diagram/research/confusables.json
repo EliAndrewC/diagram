@@ -1,0 +1,1122 @@
+[
+ {
+  "a": "homesteads.html#groves-of-trees-around-farmhouses-yashikirin",
+  "b": "vegetation.html#shelter-belts-on-a-villages-windward-side-bofurin",
+  "why": "A homestead grove is one farm's own wood; a shelter belt is shared by a settlement on one or two windward sides."
+ },
+ {
+  "a": "homesteads.html#groves-of-trees-around-farmhouses-yashikirin",
+  "b": "vegetation.html#village-fuel-woods-and-their-coppice-satoyama",
+  "why": "A homestead grove is one farm's wood; the woodland commons is the village's shared wood for fuel and litter, away from the houses."
+ },
+ {
+  "a": "homesteads.html#groves-of-trees-around-farmhouses-yashikirin",
+  "b": "vegetation.html#bamboo-groves-chikurin",
+  "why": "A homestead grove is one farm's wood; a shared bamboo grove is a stand of bamboo held in common."
+ },
+ {
+  "a": "homesteads.html#threshing-and-drying-yards-at-farmhouses-niwa",
+  "b": "homesteads.html#the-farmstead-and-what-stood-on-it-yashiki",
+  "why": "The lot is the whole plot the farm stood on (100-300 tsubo); the yard is the threshing floor in it (20-30 tsubo)."
+ },
+ {
+  "a": "buildings.html#the-size-of-a-compound-and-the-rank-of-its-buildings",
+  "b": "cities/sizing.html#how-densely-a-city-is-built-and-what-counts-as-empty-ground",
+  "why": "The first is how much of one walled compound its buildings cover; the second is how densely a whole city quarter is built."
+ },
+ {
+  "a": "buildings.html#magistrates-compounds-jinya-and-yamen",
+  "b": "cities/government.html#the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen",
+  "why": "A magistrate's compound is a county or intendant's office; a governor's is the provincial seat, drawn larger."
+ },
+ {
+  "a": "buildings.html#the-main-gate-and-its-gatekeepers-nagaya-mon",
+  "b": "buildings.html#staff-rowhouses-and-barracks-nagaya",
+  "why": "The nagaya-mon is a compound's front gate through a range of gatekeepers' rooms; a nagaya is a long lodging building of its own, not a gate."
+ },
+ {
+  "a": "buildings.html#the-main-gate-and-its-gatekeepers-nagaya-mon",
+  "b": "buildings.html#border-posts-and-their-crossing-court-kuchidome-bansho",
+  "why": "The gate's bansho is a compound's gatekeepers' guardroom; a border post is a checkpoint on a road at a domain's boundary."
+ },
+ {
+  "a": "buildings.html#the-formal-entrance-and-a-guests-arrival-genkan",
+  "b": "buildings.html#the-main-gate-and-its-gatekeepers-nagaya-mon",
+  "why": "The genkan is the stepped entrance of the house itself; the main gate is the opening in the compound's wall, across open ground from it."
+ },
+ {
+  "a": "buildings.html#the-office-hall-and-its-clerks-goyakusho",
+  "b": "buildings.html#the-hearing-court-shirasu",
+  "why": "The office hall is the whole working building and its staff; the hearing court is where hearings were held, against the front of that hall."
+ },
+ {
+  "a": "buildings.html#holding-cells-agariya-and-roya",
+  "b": "cities/government.html#the-city-jail-roya",
+  "why": "Holding cells are a magistracy's small remand cell in its own compound; the city jail is a walled court of the governor's compound or a compound of its own."
+ },
+ {
+  "a": "buildings.html#the-granary-and-the-tax-rice-gokura",
+  "b": "urban-features.html#village-granaries-gogura",
+  "why": "The first is the chain of storehouses the tax rice passed through; the second is the village's own shared store and where it stood."
+ },
+ {
+  "a": "buildings.html#the-granary-and-the-tax-rice-gokura",
+  "b": "cities/capitals.html#rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi",
+  "why": "The first is the lord's and magistrate's storehouses for tax rice on its way out; the second is a capital's wharf granary, with the Emperor's separate granaries."
+ },
+ {
+  "a": "buildings.html#fire-and-the-fireproof-storehouses-dozo",
+  "b": "buildings.html#the-granary-and-the-tax-rice-gokura",
+  "why": "The first is the earth-walled storehouse as the answer to fire; the second is the chain of storehouses the tax rice passed through."
+ },
+ {
+  "a": "buildings.html#the-compounds-own-shrine-yashikigami",
+  "b": "homesteads.html#household-shrines-yashikigami",
+  "why": "The first is the shrine inside a magistrate's office compound; the second is a farmstead's own household shrine."
+ },
+ {
+  "a": "buildings.html#samurai-residences-and-their-rooms-buke-yashiki",
+  "b": "cities/government.html#samurai-house-lots-and-houses-by-rank-bukeyashiki",
+  "why": "The first is the samurai house itself and its rooms; the second is a city samurai's lot, and the house's share of it, by rank."
+ },
+ {
+  "a": "buildings.html#household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai",
+  "b": "buildings.html#the-compounds-own-shrine-yashikigami",
+  "why": "The butsuma is a Buddhist room inside the house holding the tablets of its dead; a yashikigami is a Shinto god's small shrine in the grounds."
+ },
+ {
+  "a": "buildings.html#kitchens-daidokoro",
+  "b": "buildings.html#the-formal-entrance-and-a-guests-arrival-genkan",
+  "why": "The kitchen door is the kitchen's own service door; the genkan is the formal entrance for guests of rank."
+ },
+ {
+  "a": "buildings.html#baths-furo",
+  "b": "urban-features.html#public-bathhouses-sento",
+  "why": "The first is a samurai residence's own bath room; the sento is a town's commercial bathhouse open to anyone who pays."
+ },
+ {
+  "a": "buildings.html#baths-furo",
+  "b": "homesteads.html#baths-on-the-farm-furo",
+  "why": "The first is a samurai residence's bath; the second is a farm's bath, a room at the farmhouse or a shed in its yard."
+ },
+ {
+  "a": "buildings.html#privies-setchin",
+  "b": "homesteads.html#farm-privies-and-their-night-soil-benjo",
+  "why": "The first is a samurai residence's privies; the second is a farm's privy and its night-soil store."
+ },
+ {
+  "a": "buildings.html#privies-setchin",
+  "b": "towns.html#a-towns-privies-and-the-night-soil-trade-setchin-shimogoe",
+  "why": "The first is a samurai residence's privies; the second is a town house's and a tenement's shared privy, and the carters in town."
+ },
+ {
+  "a": "buildings.html#ornamental-gardens-ponds-and-stone-lanterns-teien",
+  "b": "buildings.html#vegetable-gardens-at-a-samurai-residence-saien",
+  "why": "The first is the ornamental garden looked at from the formal rooms; the second is the household's worked vegetable plot."
+ },
+ {
+  "a": "buildings.html#ornamental-gardens-ponds-and-stone-lanterns-teien",
+  "b": "religion-and-death.html#inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai",
+  "why": "The first covers the stone lantern in a residence's garden; the second the votive lanterns villagers gave to line a shrine's approach."
+ },
+ {
+  "a": "buildings.html#vegetable-gardens-at-a-samurai-residence-saien",
+  "b": "homesteads.html#kitchen-gardens-beside-farmhouses-yashikibatake",
+  "why": "The first is a plot inside a walled samurai or office compound; the second is a farmhouse's kitchen plot by its door."
+ },
+ {
+  "a": "buildings.html#the-chief-retainers-house-karo-yashiki",
+  "b": "buildings.html#staff-rowhouses-and-barracks-nagaya",
+  "why": "The first is where the one chief retainer lived; the second is how a compound's staff in general were housed."
+ },
+ {
+  "a": "buildings.html#stables-umaya",
+  "b": "towns.html#relay-stations-the-imperial-waystation-the-relay-office-and-their-stables-umaya-toiyaba",
+  "why": "A warrior's or official's own stable inside a compound, against a post town's stable for the relay horses of travelers."
+ },
+ {
+  "a": "buildings.html#staff-rowhouses-and-barracks-nagaya",
+  "b": "cities/government.html#servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin",
+  "why": "The rowhouse an official's staff lived in inside a government compound, against a samurai household's domestic servants inside their master's walls."
+ },
+ {
+  "a": "buildings.html#staff-rowhouses-and-barracks-nagaya",
+  "b": "cities/government.html#a-citys-garrison-foot-soldiers-houses-barracks-and-the-armory",
+  "why": "The staff rowhouse inside an office's compound, against the foot soldiers' ranked small houses at a castle town's edge."
+ },
+ {
+  "a": "buildings.html#martial-training-grounds-and-dojo",
+  "b": "cities/government.html#drill-grounds-archery-ranges-and-riding-grounds-jiaochang-yaba-baba",
+  "why": "The first is where samurai trained in halls and dojos; the second is a city's open drill, riding and archery grounds as a quarter of ground."
+ },
+ {
+  "a": "buildings.html#border-posts-and-their-crossing-court-kuchidome-bansho",
+  "b": "cities/defenses.html#barriers-and-inspection-posts-at-a-towns-entrance-bansho",
+  "why": "A domain's guard post where its road crosses into another territory, against a town's own gate or entry post; bansho names both."
+ },
+ {
+  "a": "buildings.html#rooms-for-a-parley-across-a-border",
+  "b": "urban-features.html#clan-borders-and-their-markers",
+  "why": "The first is where two sides met to deal across a border; the second is the border line itself and its markers."
+ },
+ {
+  "a": "buildings.html#border-posts-and-their-crossing-court-kuchidome-bansho",
+  "b": "buildings.html#rooms-for-a-parley-across-a-border",
+  "why": "The post that examined those crossing, against the place where two sides met to negotiate."
+ },
+ {
+  "a": "buildings.html#samurai-country-manors-bushi-yakata",
+  "b": "cities/hinterland.html#country-estates-of-the-gentry-and-samurai-around-a-city",
+  "why": "The first is one samurai family's manor among its fields; the second is where a city's gentry and samurai estates stand around it."
+ },
+ {
+  "a": "buildings.html#merchants-townhouses-machiya",
+  "b": "cities/fabric.html#rich-merchants-walled-houses-and-their-fireproof-storehouses-kura",
+  "why": "An ordinary merchant's shop-front townhouse on the street vs a rich merchant's walled compound with storehouses."
+ },
+ {
+  "a": "buildings.html#inns-hatago-and-carters-inns",
+  "b": "towns.html#lodgings-for-lords-and-officials-on-the-road-honjin",
+  "why": "A commercial inn for any paying traveler vs the official lodging kept for lords and officials."
+ },
+ {
+  "a": "buildings.html#inns-hatago-and-carters-inns",
+  "b": "towns.html#travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado",
+  "why": "The first is an inn's building and its plan; the second is how many inns and cheap lodging houses a place kept, and where."
+ },
+ {
+  "a": "urban-features.html#communal-wells-ido",
+  "b": "water.html#lifting-water-onto-fields-treadle-wheels-fumiguruma-and-chain-pumps",
+  "why": "A communal well is the households' draw-point among the houses; a field well lifts irrigation water onto a crop in the field."
+ },
+ {
+  "a": "urban-features.html#communal-wells-ido",
+  "b": "cities/government.html#samurai-house-lots-and-houses-by-rank-bukeyashiki",
+  "why": "A communal well is shared by commoner households; a samurai household's well is its own, inside its fence."
+ },
+ {
+  "a": "urban-features.html#fire-watch-towers-and-firefighting-gear-hinomi-yagura",
+  "b": "urban-features.html#night-watch-and-ward-gates-kido",
+  "why": "The first is the watch for fire - tower, alarm bell and gear; the second is the night watch against crime - ward gates, keepers' huts and watchmen."
+ },
+ {
+  "a": "urban-features.html#fire-watch-towers-and-firefighting-gear-hinomi-yagura",
+  "b": "buildings.html#fire-and-the-fireproof-storehouses-dozo",
+  "why": "The first is how a town watched for and fought fire in its streets; the second is how one owner kept goods from fire in a plastered storehouse."
+ },
+ {
+  "a": "urban-features.html#the-bell-and-drum-tower-zhonggulou",
+  "b": "urban-features.html#fire-watch-towers-and-firefighting-gear-hinomi-yagura",
+  "why": "The first is the civic tower that struck the hours; the second is the lookout that watched for fire and rang the alarm bell."
+ },
+ {
+  "a": "urban-features.html#writing-schools-terakoya",
+  "b": "cities/capitals.html#domain-schools-hanko",
+  "why": "The terakoya is the commoners' one-room writing school; the hanko is a domain's school for its retainers' sons, with buildings of its own."
+ },
+ {
+  "a": "urban-features.html#shops-and-trades-in-towns-and-villages",
+  "b": "towns.html#the-towns-street-front-shop-widths-how-close-the-houses-stood-stories-and-roofs-machinami",
+  "why": "The first is which trades a place keeps and the shop as its keeper's house; the second is how a street's frontage is divided among rich and poor."
+ },
+ {
+  "a": "urban-features.html#smiths-and-farriers-kajiya",
+  "b": "urban-features.html#shops-and-trades-in-towns-and-villages",
+  "why": "The first is the smith's own premises and the farrier's shed; the second counts the smith among a place's trades."
+ },
+ {
+  "a": "urban-features.html#sake-breweries-sakagura",
+  "b": "urban-features.html#shops-and-trades-in-towns-and-villages",
+  "why": "A brewery brewed sake in its own vat hall under license; the village sake shop only sold it."
+ },
+ {
+  "a": "urban-features.html#teahouses-eating-houses-and-drinking-houses-chaya",
+  "b": "ways.html#highways-and-what-lines-them-kaido",
+  "why": "The first is a town's and city's public eating and drinking houses; the second includes the teahouses a highway village sets at its street ends in place of an inn."
+ },
+ {
+  "a": "urban-features.html#dyers-weavers-and-papermakers-konya",
+  "b": "urban-features.html#shops-and-trades-in-towns-and-villages",
+  "why": "The first is the dyer's own premises, vats and drying ground; the second counts the dyer among a place's trades."
+ },
+ {
+  "a": "urban-features.html#stable-yards-and-watering-troughs",
+  "b": "buildings.html#stables-umaya",
+  "why": "The yard is the open working ground beside a stable where animals are tied and watered; the stable is the building with its stalls."
+ },
+ {
+  "a": "urban-features.html#charcoal-yards-and-charcoal-stores",
+  "b": "vegetation.html#charcoal-kilns-in-the-hills-sumigama",
+  "why": "The charcoal yard is a town's depot where baled charcoal is stored and sold; the kiln is where charcoal is burned, in the hill wood."
+ },
+ {
+  "a": "urban-features.html#iron-refining-forges-chao",
+  "b": "urban-features.html#smiths-and-farriers-kajiya",
+  "why": "A refining forge turns pig iron into wrought-iron bar on two hearths; a smith forges tools and shoes from bar iron at a single forge."
+ },
+ {
+  "a": "urban-features.html#tanning-yards",
+  "b": "urban-features.html#burakumin-quarters-and-caste-zoning",
+  "why": "The tanning yard is the riverside works where hides were soaked; the outcaste quarter is where the tanners lived."
+ },
+ {
+  "a": "urban-features.html#burakumin-quarters-and-caste-zoning",
+  "b": "cities/government.html#the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi",
+  "why": "The first is the outcaste quarter's site and buildings; the second is the legally zoned samurai ground of a city."
+ },
+ {
+  "a": "urban-features.html#execution-and-punishment-grounds-keijo",
+  "b": "cities/government.html#the-city-jail-roya",
+  "why": "The grounds are where a sentence is carried out or displayed; the jail holds the accused and condemned until then."
+ },
+ {
+  "a": "urban-features.html#roofed-playhouses-shibai-goya",
+  "b": "towns.html#theater-stages-on-shrine-ground-miyaji-shibai",
+  "why": "A roofed playhouse is a great city's permanent licensed theater; a town's stage is an open stage on shrine ground or a temporary hut."
+ },
+ {
+  "a": "urban-features.html#clan-borders-and-their-markers",
+  "b": "buildings.html#border-posts-and-their-crossing-court-kuchidome-bansho",
+  "why": "The agreed line between two domains and its markers, against the guarded post where a road crosses that line."
+ },
+ {
+  "a": "towns.html#towns-the-county-seat-and-the-post-town-and-who-lives-in-them-machi",
+  "b": "settlements.html#the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital",
+  "why": "The first is a county seat's or post town's census with its farmers; the second gives the walled provincial city's inhabitants, with no farmer households."
+ },
+ {
+  "a": "towns.html#town-plans-the-street-town-gaison-the-planned-grid-and-the-castle-town",
+  "b": "ways.html#town-streets-side-lanes-and-back-alleys-roji",
+  "why": "The first is the town's overall plan; the second is its street net, the count of cross streets and the cranked ends of its road."
+ },
+ {
+  "a": "towns.html#the-size-and-density-of-a-town-its-street-its-wall-and-its-ragged-ends",
+  "b": "cities/sizing.html#how-densely-a-city-is-built-and-what-counts-as-empty-ground",
+  "why": "The first is a town's strip along its road and its packed street front; the second is a walled city quarter's built share and open ground."
+ },
+ {
+  "a": "towns.html#town-walls-and-which-county-seats-had-one-chengqiang",
+  "b": "cities/defenses.html#city-walls-a-closed-ring-with-few-gates-and-its-shape-chengqiang",
+  "why": "The first is a county seat's wall or a town's earth bank; the second is a provincial city's ring wall and its gates."
+ },
+ {
+  "a": "towns.html#the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen",
+  "b": "buildings.html#magistrates-compounds-jinya-and-yamen",
+  "why": "The first is where the compound stands in its town and which way it faces; the second is what stood inside its walls."
+ },
+ {
+  "a": "towns.html#how-a-town-is-zoned-shops-on-the-street-housing-behind",
+  "b": "towns.html#the-towns-street-front-shop-widths-how-close-the-houses-stood-stories-and-roofs-machinami",
+  "why": "The first sorts a town's ground into bands back from the street; the second gives each wealth band's frontage width."
+ },
+ {
+  "a": "towns.html#how-a-town-is-zoned-shops-on-the-street-housing-behind",
+  "b": "cities/fabric.html#shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana",
+  "why": "The same sorting of shops and poor housing, in a town and in a city."
+ },
+ {
+  "a": "towns.html#the-towns-street-front-shop-widths-how-close-the-houses-stood-stories-and-roofs-machinami",
+  "b": "buildings.html#merchants-townhouses-machiya",
+  "why": "The first is the row of houses along a town's street; the second is one merchant's house from shop front to back of lot."
+ },
+ {
+  "a": "towns.html#the-towns-street-front-shop-widths-how-close-the-houses-stood-stories-and-roofs-machinami",
+  "b": "cities/fabric.html#the-citys-street-front-continuous-rows-of-shophouses-machiya",
+  "why": "The first is a town's street front, wall to wall only on a busy road; the second is the city's continuous street walls."
+ },
+ {
+  "a": "towns.html#laborers-housing-back-lot-tenements-uradana-and-the-master-laborers-house",
+  "b": "buildings.html#staff-rowhouses-and-barracks-nagaya",
+  "why": "The townsmen's rented back-lot tenements, against the rows a samurai residence or office builds for its own staff."
+ },
+ {
+  "a": "towns.html#gardens-behind-a-town-house-tsubo-niwa",
+  "b": "homesteads.html#kitchen-gardens-beside-farmhouses-yashikibatake",
+  "why": "A merchant's small court and back garden in a town, against a farmhouse's vegetable garden by its door."
+ },
+ {
+  "a": "towns.html#gardens-behind-a-town-house-tsubo-niwa",
+  "b": "buildings.html#ornamental-gardens-ponds-and-stone-lanterns-teien",
+  "why": "A commoner's court of one or two tsubo inside the house, against the ornamental garden of a samurai residence or government post."
+ },
+ {
+  "a": "towns.html#a-towns-privies-and-the-night-soil-trade-setchin-shimogoe",
+  "b": "homesteads.html#farm-privies-and-their-night-soil-benjo",
+  "why": "A town's privies and the dealers who carried the night soil off, against a farm's privy whose night soil stayed on the farm."
+ },
+ {
+  "a": "towns.html#the-townsmens-own-office-and-guild-halls-machi-kaisho-huiguan",
+  "b": "cities/fabric.html#city-wards-and-the-gates-that-shut-them-at-night-machi-kido",
+  "why": "The first is the office a ward's commoners kept; the second is the ward itself, its officers and how many a city has."
+ },
+ {
+  "a": "towns.html#the-townsmens-own-office-and-guild-halls-machi-kaisho-huiguan",
+  "b": "towns.html#the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen",
+  "why": "The first is the commoners' own office; the second is the lord's or the state's seat of government."
+ },
+ {
+  "a": "towns.html#market-days-and-the-market-ground-ichi",
+  "b": "towns.html#gate-markets-outside-a-town-guanxiang",
+  "why": "The periodic market villagers come in for on market day, vs the standing shops outside a walled town's gate that serve the road every day."
+ },
+ {
+  "a": "towns.html#gate-markets-outside-a-town-guanxiang",
+  "b": "cities/hinterland.html#the-ground-outside-a-city-gate-gate-suburbs-guanxiang-tile-kilns-and-the-built-up-land-a-city-took-in",
+  "why": "A county town's few shops strung along the road outside its gate, vs a city's larger gate suburb with its kilns and swallowed villages."
+ },
+ {
+  "a": "towns.html#travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado",
+  "b": "towns.html#lodgings-for-lords-and-officials-on-the-road-honjin",
+  "why": "The inns and cheap lodgings any paying traveler used vs the official lodging kept for lords and officials."
+ },
+ {
+  "a": "towns.html#travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado",
+  "b": "towns.html#gate-markets-outside-a-town-guanxiang",
+  "why": "The inns and lodging houses themselves, wherever they stood, vs the strip of shops and inns along the road outside a walled town's gate."
+ },
+ {
+  "a": "towns.html#lodgings-for-lords-and-officials-on-the-road-honjin",
+  "b": "towns.html#relay-stations-the-imperial-waystation-the-relay-office-and-their-stables-umaya-toiyaba",
+  "why": "The honjin lodged travelers of rank; the relay station kept and dispatched the horses and men that carried travelers on."
+ },
+ {
+  "a": "towns.html#relay-stations-the-imperial-waystation-the-relay-office-and-their-stables-umaya-toiyaba",
+  "b": "urban-features.html#stable-yards-and-watering-troughs",
+  "why": "The relay station, its office and stable building, vs the open working ground beside a stable where animals are tied and watered."
+ },
+ {
+  "a": "towns.html#vegetable-gardens-at-a-towns-edge-fed-by-its-night-soil",
+  "b": "towns.html#gardens-behind-a-town-house-tsubo-niwa",
+  "why": "Market vegetable plots in the fields at a town's edge, against a townsman's small garden behind the shop."
+ },
+ {
+  "a": "towns.html#woods-and-grass-at-a-towns-edge-zokibayashi",
+  "b": "homesteads.html#groves-of-trees-around-farmhouses-yashikirin",
+  "why": "A town's worked fuel wood and cut grass beyond its fields, against the grove planted around each farmhouse."
+ },
+ {
+  "a": "towns.html#farmsteads-at-a-town",
+  "b": "towns.html#gate-markets-outside-a-town-guanxiang",
+  "why": "The farming households around a town's paddies, against the suburb of shops and inns outside its gate."
+ },
+ {
+  "a": "towns.html#fodder-grounds-and-hay-stores-for-a-towns-horses-magusaba",
+  "b": "towns.html#woods-and-grass-at-a-towns-edge-zokibayashi",
+  "why": "The first is a road town's fodder meadow for its horses and its hay stores; the second is the common coppice and cut grass on a town's margin."
+ },
+ {
+  "a": "towns.html#fodder-grounds-and-hay-stores-for-a-towns-horses-magusaba",
+  "b": "vegetation.html#grass-hills-and-fodder-meadows-kusayama-magusaba",
+  "why": "The first is a road town's fodder ground for its post horses; the second is a farming village's common grass ground for fodder and green manure."
+ },
+ {
+  "a": "religion-and-death.html#inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai",
+  "b": "religion-and-death.html#village-shrines-where-they-stand-and-how-big-their-grounds-are",
+  "why": "The first is what stood inside a shrine's ground; the second is where the shrine stood and how large its ground was."
+ },
+ {
+  "a": "religion-and-death.html#inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai",
+  "b": "buildings.html#the-compounds-own-shrine-yashikigami",
+  "why": "The first is a village's own shrine and its furnishings; the second is the shrine inside a magistrate's or an office's walls."
+ },
+ {
+  "a": "religion-and-death.html#shrine-woods-and-fences-chinju-no-mori-tamagaki",
+  "b": "homesteads.html#groves-of-trees-around-farmhouses-yashikirin",
+  "why": "A shrine wood is sacred ground around a shrine, following the slope; a homestead grove is a farmhouse windbreak, following the wind."
+ },
+ {
+  "a": "religion-and-death.html#the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri",
+  "b": "religion-and-death.html#inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai",
+  "why": "The first is who kept the shrine and the dwelling they lived in (kuri); the second is the halls and precinct the villagers used."
+ },
+ {
+  "a": "religion-and-death.html#wayside-shrines-and-stone-figures-dosojin-jizo",
+  "b": "religion-and-death.html#shrines-in-towns-and-cities",
+  "why": "A street jizo or Inari is a wayside shrine; a town's own shrine is its district shrine or a small shrine on its own plot."
+ },
+ {
+  "a": "religion-and-death.html#wayside-shrines-and-stone-figures-dosojin-jizo",
+  "b": "ways.html#village-boundaries-and-their-markers-murazakai",
+  "why": "The first is the roadside stones and halls themselves; the second is where a village's boundary lies on each road that the boundary god marks."
+ },
+ {
+  "a": "religion-and-death.html#shrines-in-towns-and-cities",
+  "b": "religion-and-death.html#temples-of-the-state-cult-the-city-god-and-confucius-chenghuang-miao-wenmiao",
+  "why": "The first includes the City God temple as a Chinese seat's principal shrine; the second is the state cult's altars and official temples."
+ },
+ {
+  "a": "religion-and-death.html#village-temples-tera",
+  "b": "religion-and-death.html#village-shrines-where-they-stand-and-how-big-their-grounds-are",
+  "why": "A village temple is a Buddhist parish temple; a village shrine is the house of the local kami, which in the setting does the temple's work."
+ },
+ {
+  "a": "religion-and-death.html#town-monasteries",
+  "b": "religion-and-death.html#village-temples-tera",
+  "why": "A town monastery is an Order's preceptor's house in a county town; a village temple is a village's own parish temple, which the setting replaces with the shrine."
+ },
+ {
+  "a": "religion-and-death.html#how-many-temples-a-city-keeps-and-its-temple-quarter-teramachi",
+  "b": "religion-and-death.html#houses-and-shops-at-a-temples-gate-monzenmachi",
+  "why": "A temple quarter is a district where a lord gathered many temples; a gate-front town is the houses and shops along one temple's approach."
+ },
+ {
+  "a": "religion-and-death.html#city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan",
+  "b": "urban-features.html#the-bell-and-drum-tower-zhonggulou",
+  "why": "A temple's bell tower hangs its bell inside its precinct; the bell-and-drum tower is the civic tower of a walled seat, apart from any temple."
+ },
+ {
+  "a": "religion-and-death.html#city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan",
+  "b": "religion-and-death.html#how-many-temples-a-city-keeps-and-its-temple-quarter-teramachi",
+  "why": "The first is what one temple precinct holds and how big it is; the second is how many temples a city had and where they clustered."
+ },
+ {
+  "a": "religion-and-death.html#temple-clergy-their-families-and-how-a-temple-earned-its-keep",
+  "b": "religion-and-death.html#the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri",
+  "why": "The first is a city temple's clergy, celibate and married; the second is the one celibate country monk who keeps a village shrine or temple."
+ },
+ {
+  "a": "religion-and-death.html#temples-of-the-state-cult-the-city-god-and-confucius-chenghuang-miao-wenmiao",
+  "b": "cities/capitals.html#domain-schools-hanko",
+  "why": "The first is the Confucian temple where Confucius was worshipped by the state; the second is the school where students were taught."
+ },
+ {
+  "a": "religion-and-death.html#temples-of-the-state-cult-the-city-god-and-confucius-chenghuang-miao-wenmiao",
+  "b": "religion-and-death.html#town-monasteries",
+  "why": "The first is the Chinese state's temples and altars, which the setting lacks; the second is the Buddhist monastery our maps draw in their place."
+ },
+ {
+  "a": "religion-and-death.html#where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot",
+  "b": "religion-and-death.html#cremation-grounds-and-bone-mounds-kasoba",
+  "why": "The burial ground is where the dead or their urns lie; the cremation ground is where the body is burned first, a separate feature."
+ },
+ {
+  "a": "religion-and-death.html#village-burial-grounds-bochi",
+  "b": "religion-and-death.html#where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot",
+  "why": "The first is the burial ground itself - size, distance, shape; the second is which form of ground a village's dead lie in."
+ },
+ {
+  "a": "religion-and-death.html#village-burial-grounds-bochi",
+  "b": "religion-and-death.html#cremation-grounds-and-bone-mounds-kasoba",
+  "why": "The burial ground is where remains are interred; the cremation ground is where the body is burned; the one word sanmai named either."
+ },
+ {
+  "a": "religion-and-death.html#cremation-grounds-and-bone-mounds-kasoba",
+  "b": "religion-and-death.html#burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong",
+  "why": "A bone mound is one low mound over the gathered bones of the unclaimed dead; a pauper burial ground is a fenced field of separate graves."
+ },
+ {
+  "a": "religion-and-death.html#burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong",
+  "b": "religion-and-death.html#village-burial-grounds-bochi",
+  "why": "A town's or city's burial grounds and charity grounds, against a village's own communal ground."
+ },
+ {
+  "a": "cities/capitals.html#how-a-capital-differs-from-a-provincial-city-what-multiplies-what-changes-form-and-what-only-a-capital-has",
+  "b": "cities/capitals.html#where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki",
+  "why": "The first is every way a capital's program departs from a provincial city's; the second is only the mix of its samurai housing."
+ },
+ {
+  "a": "cities/capitals.html#the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro",
+  "b": "cities/defenses.html#city-moats-how-wide-and-deep-and-whether-they-ring-the-wall-hori-chenghe",
+  "why": "The castle's own moat rings its baileys inside the city; the city's moat rings the city's outer wall."
+ },
+ {
+  "a": "cities/capitals.html#inside-the-castle-the-lords-palace-the-council-and-the-baileys-goten-honmaru",
+  "b": "cities/capitals.html#the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro",
+  "why": "The first is what stood within the castle's walls; the second is the castle as a whole - its seat, area, walls, moats and gates."
+ },
+ {
+  "a": "cities/capitals.html#the-imperial-magistrates-compound-in-a-capital",
+  "b": "cities/government.html#the-town-magistracy-and-its-constables-machi-bugyo-doshin",
+  "why": "The first is the setting's Imperial office, one per domain at its capital; the second is a city's own police magistracy under its lord."
+ },
+ {
+  "a": "cities/capitals.html#where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki",
+  "b": "cities/government.html#samurai-house-lots-and-houses-by-rank-bukeyashiki",
+  "why": "The first is how a domain capital's senior-heavy samurai are housed; the second is a samurai's lot and house by rank in any castle town."
+ },
+ {
+  "a": "cities/capitals.html#time-bells-in-castle-towns-and-capitals-toki-no-kane",
+  "b": "urban-features.html#the-bell-and-drum-tower-zhonggulou",
+  "why": "The first is the castle town's domain time bell; the second is the combined bell-and-drum tower every walled seat keeps."
+ },
+ {
+  "a": "cities/capitals.html#domain-schools-hanko",
+  "b": "buildings.html#martial-training-grounds-and-dojo",
+  "why": "The first is the whole school of letters with its martial halls; the second is the martial halls and dojos where samurai trained."
+ },
+ {
+  "a": "cities/capitals.html#towpaths-along-a-river-qiandao",
+  "b": "ways.html#highways-and-what-lines-them-kaido",
+  "why": "A towpath is a narrow bank path for hauling boats upstream; a highway is a trunk road for overland travel."
+ },
+ {
+  "a": "cities/defenses.html#city-walls-a-closed-ring-with-few-gates-and-its-shape-chengqiang",
+  "b": "cities/capitals.html#the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro",
+  "why": "The city's own wall round the whole city, against the castle's walls round the lord's seat inside it."
+ },
+ {
+  "a": "cities/defenses.html#city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen",
+  "b": "cities/defenses.html#towers-along-the-city-wall-mamian",
+  "why": "A gate tower stands over a gate's passage; a mamian is a tower projecting from the wall's face between the gates."
+ },
+ {
+  "a": "cities/defenses.html#city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen",
+  "b": "cities/defenses.html#barriers-and-inspection-posts-at-a-towns-entrance-bansho",
+  "why": "A post town's mitsuke is a pair of open banks marking where the town begins; a barrier or guard post is a gate that is shut and kept."
+ },
+ {
+  "a": "cities/defenses.html#barbicans-wengcheng-masugata",
+  "b": "cities/defenses.html#city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen",
+  "why": "The walled court before a gate, with its own second gate, vs the gate's own passage, tower and moat crossing."
+ },
+ {
+  "a": "cities/defenses.html#barbicans-wengcheng-masugata",
+  "b": "cities/defenses.html#barriers-and-inspection-posts-at-a-towns-entrance-bansho",
+  "why": "A defensive court before a gate vs the posts that watched who came through; mitsuke named both a masugata gate and a post town's banks."
+ },
+ {
+  "a": "cities/fabric.html#city-streets-and-blocks-the-grid-the-block-and-how-wide-the-streets-are-machiwari",
+  "b": "cities/fabric.html#city-wards-and-the-gates-that-shut-them-at-night-machi-kido",
+  "why": "A block is the ground a grid of streets encloses; a ward (machi) was the two sides of one street, facing across it."
+ },
+ {
+  "a": "cities/fabric.html#shops-on-the-street-tenements-behind-how-a-city-is-zoned-omotedana-uradana",
+  "b": "cities/fabric.html#the-citys-street-front-continuous-rows-of-shophouses-machiya",
+  "why": "The first is who stands where on a block; the second is how the street front is built."
+ },
+ {
+  "a": "cities/fabric.html#city-wards-and-the-gates-that-shut-them-at-night-machi-kido",
+  "b": "urban-features.html#night-watch-and-ward-gates-kido",
+  "why": "The first is a city's wards and their night gates; the second is a town's night barring and the watchmen who kept it."
+ },
+ {
+  "a": "cities/fabric.html#the-imperial-road-through-a-city-and-the-shops-that-line-it",
+  "b": "ways.html#highways-and-what-lines-them-kaido",
+  "why": "The first is the Imperial road's stretch inside a city, lined with shops; the second is the trunk road across the country."
+ },
+ {
+  "a": "cities/fabric.html#the-imperial-road-through-a-city-and-the-shops-that-line-it",
+  "b": "cities/fabric.html#the-citys-street-front-continuous-rows-of-shophouses-machiya",
+  "why": "The first is the one through-road and its market street; the second is the row of shophouses fronting every city street."
+ },
+ {
+  "a": "cities/fabric.html#rich-merchants-walled-houses-and-their-fireproof-storehouses-kura",
+  "b": "buildings.html#fire-and-the-fireproof-storehouses-dozo",
+  "why": "The first is the earthen storehouses behind a merchant's lot; the second is fire discipline in an administrative compound."
+ },
+ {
+  "a": "cities/government.html#the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen",
+  "b": "towns.html#the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen",
+  "why": "The first is a governor's compound in a provincial city; the second is the county magistrate's smaller manor in a county town."
+ },
+ {
+  "a": "cities/government.html#offices-of-the-six-ministries-liubu",
+  "b": "cities/government.html#the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen",
+  "why": "The six ministries' own offices, against the governor's compound they stand around."
+ },
+ {
+  "a": "cities/government.html#offices-of-the-six-ministries-liubu",
+  "b": "cities/capitals.html#inside-the-castle-the-lords-palace-the-council-and-the-baileys-goten-honmaru",
+  "why": "The ministries stand outside the castle on a capital map; the council of senior retainers met inside it."
+ },
+ {
+  "a": "cities/government.html#the-city-jail-roya",
+  "b": "urban-features.html#night-watch-and-ward-gates-kido",
+  "why": "The jail holds prisoners for the Ministry of Justice; a watch house or guard box is a street post of the watch, with no cells."
+ },
+ {
+  "a": "cities/government.html#the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi",
+  "b": "cities/capitals.html#where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki",
+  "why": "The first is a provincial city's samurai district; the second is a domain capital's, with its lineage compounds and walled estates."
+ },
+ {
+  "a": "cities/government.html#the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi",
+  "b": "cities/fabric.html#city-wards-and-the-gates-that-shut-them-at-night-machi-kido",
+  "why": "The first is who lives in the samurai district and where; the second is the townsmen's ward and its gates."
+ },
+ {
+  "a": "cities/government.html#samurai-house-lots-and-houses-by-rank-bukeyashiki",
+  "b": "cities/government.html#the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi",
+  "why": "The first is one samurai's lot and house by rank; the second is the district all the city's samurai houses make up."
+ },
+ {
+  "a": "cities/government.html#a-citys-garrison-foot-soldiers-houses-barracks-and-the-armory",
+  "b": "cities/government.html#servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin",
+  "why": "The first is the soldiers a city kept under arms; the second is the hired servants who lived inside a samurai's own plot."
+ },
+ {
+  "a": "cities/hinterland.html#the-ground-outside-a-city-gate-gate-suburbs-guanxiang-tile-kilns-and-the-built-up-land-a-city-took-in",
+  "b": "urban-features.html#pottery-kilns-noborigama",
+  "why": "A city's tile kilns at its edge vs a potter's climbing-kiln works with its potters living at it."
+ },
+ {
+  "a": "cities/hinterland.html#fields-and-gardens-inside-a-citys-wall",
+  "b": "fields.html#farmland-around-towns-and-cities",
+  "why": "The first is ground farmed inside a city's wall by its own households; the second is the farmland outside it, worked by villagers."
+ },
+ {
+  "a": "cities/hinterland.html#fields-and-gardens-inside-a-citys-wall",
+  "b": "towns.html#vegetable-gardens-at-a-towns-edge-fed-by-its-night-soil",
+  "why": "The first is the gardens inside a city's wall; the second is the vegetable belt outside a town's last houses."
+ },
+ {
+  "a": "cities/hinterland.html#country-estates-of-the-gentry-and-samurai-around-a-city",
+  "b": "cities/hinterland.html#a-lords-retreat-just-outside-town-shimoyashiki",
+  "why": "The first is a landholding family's seat in the countryside by its fields; the second is a lord's suburban second house with gardens."
+ },
+ {
+  "a": "cities/river-cities.html#city-canals-horikawa",
+  "b": "cities/river-cities.html#water-gates-and-sluices-shuimen",
+  "why": "Where the canal opens on the river, against where it passes through the city's wall (the water gate)."
+ },
+ {
+  "a": "cities/river-cities.html#city-canals-horikawa",
+  "b": "cities/river-cities.html#wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi",
+  "why": "The small loading basins cut off a canal's side, against the larger boat-entry dock and quays a city keeps."
+ },
+ {
+  "a": "cities/river-cities.html#water-gates-and-sluices-shuimen",
+  "b": "cities/defenses.html#city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen",
+  "why": "A water gate is the passage through the wall for a canal and its boats; a city gate is the road's opening, tower and moat crossing."
+ },
+ {
+  "a": "cities/river-cities.html#water-gates-and-sluices-shuimen",
+  "b": "water.html#moats-where-their-water-comes-from-and-where-it-goes-hori",
+  "why": "The first is the gates on a moat's water and how they were worked; the second is where a moat's water comes from."
+ },
+ {
+  "a": "cities/river-cities.html#wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi",
+  "b": "cities/capitals.html#towpaths-along-a-river-qiandao",
+  "why": "The landing is where boats load and unload; the towpath is the route along the bank from which boats were hauled upstream."
+ },
+ {
+  "a": "cities/river-cities.html#wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi",
+  "b": "cities/capitals.html#rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi",
+  "why": "The landing is the bank where any cargo comes ashore; the rice storehouses are the capital's granary the rice wharf fills."
+ },
+ {
+  "a": "cities/river-cities.html#the-river-watch-post-at-a-landing-funabansho",
+  "b": "cities/river-cities.html#water-gates-and-sluices-shuimen",
+  "why": "The watch post is a hut where boats were inspected; a water gate is the gate in a wall or channel that lets boats or water through."
+ },
+ {
+  "a": "cities/river-cities.html#the-boatmens-shrine-at-the-landing-funadama-suijin",
+  "b": "religion-and-death.html#shrines-in-towns-and-cities",
+  "why": "The boatmen's shrine is the boatmen's water god kept by the landing; a town shrine is the quarter's or the city's own."
+ },
+ {
+  "a": "cities/river-cities.html#fish-and-produce-markets-at-the-landing-uoichiba",
+  "b": "towns.html#market-days-and-the-market-ground-ichi",
+  "why": "The landing market is a city's standing wholesale market; a town's market is periodic, held on set days in its street."
+ },
+ {
+  "a": "cities/sizing.html#how-big-a-citys-wall-is-for-its-population-and-how-many-live-outside-it",
+  "b": "cities/hinterland.html#the-ground-outside-a-city-gate-gate-suburbs-guanxiang-tile-kilns-and-the-built-up-land-a-city-took-in",
+  "why": "How many of a city's inhabitants live outside its wall, against what stands on the ground outside its gates."
+ },
+ {
+  "a": "cities/sizing.html#how-big-a-citys-wall-is-for-its-population-and-how-many-live-outside-it",
+  "b": "cities/government.html#the-samurai-quarter-where-a-citys-samurai-live-and-how-many-bukechi",
+  "why": "The whole population a wall is sized to hold, against the samurai's share of it and where they live."
+ },
+ {
+  "a": "cities/sizing.html#how-densely-a-city-is-built-and-what-counts-as-empty-ground",
+  "b": "cities/hinterland.html#fields-and-gardens-inside-a-citys-wall",
+  "why": "The share of a walled city's ground left unbuilt and how densely the rest is built, against the farmland and gardens on the unbuilt ground."
+ },
+ {
+  "a": "religion-and-death.html#ground-swept-clear-around-shrines-and-graves",
+  "b": "religion-and-death.html#shrine-woods-and-fences-chinju-no-mori-tamagaki",
+  "why": "The first is the open ground kept around a shrine's buildings and graves; the second is the preserved grove the precinct stands in."
+ },
+ {
+  "a": "religion-and-death.html#ground-swept-clear-around-shrines-and-graves",
+  "b": "religion-and-death.html#inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai",
+  "why": "The first is whether the ground round a shrine or grave was kept swept; the second is what stood within the precinct."
+ },
+ {
+  "a": "settlements.html#households-how-many-live-in-a-house-and-under-how-many-roofs-ie",
+  "b": "homesteads.html#landless-and-tenant-households-mizunomi-nago",
+  "why": "The first is the farm household and its roofs; the second is the dependents and tenants who lived in huts on another's plot."
+ },
+ {
+  "a": "fields.html#rice-paddies-and-their-plots-suiden",
+  "b": "fields.html#wet-paddies-that-never-drain-shitsuden",
+  "why": "Every paddy stands flooded while its rice grows; a wet paddy stays waterlogged even when no rice is growing."
+ },
+ {
+  "a": "fields.html#bunds-between-the-paddies-aze",
+  "b": "water.html#where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi",
+  "why": "A paddy bund is the shared wall between two paddy basins; the channel-bank bund edges a ditch or canal."
+ },
+ {
+  "a": "fields.html#bunds-between-the-paddies-aze",
+  "b": "ways.html#village-lanes",
+  "why": "The walking bund carries the way among the paddies; a village lane runs among the houses and across the dry fields."
+ },
+ {
+  "a": "fields.html#the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest",
+  "b": "fields.html#wet-paddies-that-never-drain-shitsuden",
+  "why": "The dry paddy drains to a field and can carry a winter crop; the wet paddy stays waterlogged all year and cannot."
+ },
+ {
+  "a": "fields.html#the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest",
+  "b": "homesteads.html#rice-drying-racks-hasa-hasagi",
+  "why": "The straw rick is threshed straw stacked on the reaped paddy; the drying rack holds unthreshed sheaves while they dry."
+ },
+ {
+  "a": "fields.html#wet-paddies-that-never-drain-shitsuden",
+  "b": "water.html#marshes-and-wetlands-shitchi",
+  "why": "A wet paddy is cropped rice land on ground that never drains; a marsh is wetland not made into paddy."
+ },
+ {
+  "a": "fields.html#ponds-rocks-and-graves-in-the-middle-of-the-fields",
+  "b": "water.html#reservoir-ponds-tameike",
+  "why": "An in-field pond is a small pocket of water inside one low paddy plot; a reservoir is the village's water store at the head of the system."
+ },
+ {
+  "a": "fields.html#dry-fields-and-their-crops-hatake",
+  "b": "fields.html#the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest",
+  "why": "A dry field is never flooded; a paddy drained after the rice and worked for a winter crop is still paddy."
+ },
+ {
+  "a": "fields.html#dry-fields-and-their-crops-hatake",
+  "b": "homesteads.html#kitchen-gardens-beside-farmhouses-yashikibatake",
+  "why": "A dry field is a grain or bean plot away from the house; the kitchen bed is the household's small plot of greens at its house."
+ },
+ {
+  "a": "fields.html#how-much-farmland-a-settlement-works-and-in-what-tracts",
+  "b": "fields.html#rice-paddies-and-their-plots-suiden",
+  "why": "A tract is the whole field system one work waters; a plot is one leveled cell within it."
+ },
+ {
+  "a": "fields.html#temple-fields-jochi",
+  "b": "religion-and-death.html#village-shrines-where-they-stand-and-how-big-their-grounds-are",
+  "why": "Temple fields are tax-free farmland out among the village's fields; a shrine's grounds are its precinct around the halls."
+ },
+ {
+  "a": "water.html#irrigation-canals-and-how-they-are-laid-out-yosuiro",
+  "b": "water.html#field-drains-akusuiro",
+  "why": "The canals bring water in along the high ground; the drain takes spent water out along the lowest line."
+ },
+ {
+  "a": "water.html#irrigation-canals-and-how-they-are-laid-out-yosuiro",
+  "b": "water.html#sharing-water-between-villages-bunsui",
+  "why": "The fork of a settlement's head race into its canals is layout; dividing a ditch's water between villages by rule and rotation is sharing."
+ },
+ {
+  "a": "water.html#where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki",
+  "b": "water.html#irrigation-canals-and-how-they-are-laid-out-yosuiro",
+  "why": "The first is the works where water is taken off the brook; the second is the dug network below it that delivers the water."
+ },
+ {
+  "a": "water.html#reservoir-ponds-tameike",
+  "b": "vegetation.html#reed-beds-and-the-marshs-edge-yoshihara",
+  "why": "A village's reed marsh was cut every winter; the reed fringing a reservoir pond's shore is not recorded as cut."
+ },
+ {
+  "a": "water.html#how-wide-canals-and-ditches-are-the-ladder-of-channel-widths",
+  "b": "cities/river-cities.html#city-canals-horikawa",
+  "why": "The widths of every channel from field ditch to castle moat, vs a city's boat canals, their banks and frontage."
+ },
+ {
+  "a": "water.html#which-way-water-flows-and-how-channels-bend-and-join",
+  "b": "water.html#where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki",
+  "why": "The first is the angle at which any channel leaves or joins another; the second is the intake and weir at a ditch's head."
+ },
+ {
+  "a": "water.html#which-way-water-flows-and-how-channels-bend-and-join",
+  "b": "water.html#moats-where-their-water-comes-from-and-where-it-goes-hori",
+  "why": "The first covers how a moat's river ends meet the river; the second is whether water moves through a moat and where it comes from."
+ },
+ {
+  "a": "water.html#where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi",
+  "b": "water.html#where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki",
+  "why": "The mizuguchi is a paddy's own small inlet in its bund; the toshuko is the village's intake where the head race leaves the brook."
+ },
+ {
+  "a": "water.html#lifting-water-onto-fields-treadle-wheels-fumiguruma-and-chain-pumps",
+  "b": "water.html#water-mills-suisha",
+  "why": "The first lifts water from a ditch onto a paddy by foot, hand or ox; the second uses a stream's fall to turn a wheel that pounds or grinds grain."
+ },
+ {
+  "a": "water.html#washing-places-at-the-waters-edge",
+  "b": "urban-features.html#communal-wells-ido",
+  "why": "A washing place is a footing on running water for washing vegetables and clothes; a communal well is the shared source of drinking water."
+ },
+ {
+  "a": "water.html#flood-defenses-of-river-plain-villages-ring-dikes-and-refuge-mounds-waju-and-mizuka",
+  "b": "archetypes.html#polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them",
+  "why": "A waju's ring dike encloses villages and fields already on the plain; a polder's dike encloses land reclaimed from marsh or lake."
+ },
+ {
+  "a": "water.html#marshes-and-wetlands-shitchi",
+  "b": "water.html#reservoir-ponds-tameike",
+  "why": "The marsh is wet ground left below the fields; a reservoir pond is open water held behind a dike above the fields."
+ },
+ {
+  "a": "water.html#ground-too-wet-to-build-on",
+  "b": "water.html#marshes-and-wetlands-shitchi",
+  "why": "The first is what was kept off wet ground and where it stood instead; the second is the wet ground itself."
+ },
+ {
+  "a": "water.html#moats-where-their-water-comes-from-and-where-it-goes-hori",
+  "b": "water.html#reservoir-ponds-tameike",
+  "why": "A moat is the defensive ditch ringing a wall or castle; a reservoir pond is water held behind a dike for irrigation alone."
+ },
+ {
+  "a": "archetypes.html#cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows",
+  "b": "archetypes.html#mulberry-and-other-crops-on-pond-dikes-sangji-guoji",
+  "why": "Tea planted as a row on the banks between paddies vs tea planted on the dike round a fish pond."
+ },
+ {
+  "a": "archetypes.html#cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows",
+  "b": "archetypes.html#polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them",
+  "why": "Mulberry as a cash crop on a polder's dike crest vs the trees planted to hold the dike."
+ },
+ {
+  "a": "archetypes.html#terraced-and-valley-paddies-tanada-yachida",
+  "b": "fields.html#rice-paddies-and-their-plots-suiden",
+  "why": "The first is rice land without a broad valley floor - hillside benches or narrow valley paddies; the second is the paddy in general."
+ },
+ {
+  "a": "archetypes.html#polders-fields-diked-against-the-fluctuating-water-weitian-waju",
+  "b": "water.html#flood-defenses-of-river-plain-villages-ring-dikes-and-refuge-mounds-waju-and-mizuka",
+  "why": "The first is the diked farmland and its water; the second is how a river-plain village defended itself against flood."
+ },
+ {
+  "a": "archetypes.html#polders-fields-diked-against-the-fluctuating-water-weitian-waju",
+  "b": "archetypes.html#dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang",
+  "why": "The first is the whole diked block, a great dike round many fields; the second is the fish ponds dug inside it, each ringed by a small dike."
+ },
+ {
+  "a": "archetypes.html#parcels-and-bunds-inside-a-polder-aze",
+  "b": "fields.html#bunds-between-the-paddies-aze",
+  "why": "The first is how a polder's land was cut into parcels and held; the second is the bund itself in any paddy."
+ },
+ {
+  "a": "archetypes.html#polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them",
+  "b": "vegetation.html#shelter-belts-on-a-villages-windward-side-bofurin",
+  "why": "The dike's trees are low, cut and bare in winter, planted to hold the bank; the shelter belt is a tall grove planted to break the wind."
+ },
+ {
+  "a": "archetypes.html#polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them",
+  "b": "archetypes.html#dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang",
+  "why": "The polder's ring dike encloses many fields; a dike-pond's bank rings a single fish pond, heaped from its own mud."
+ },
+ {
+  "a": "archetypes.html#the-dike-pond-hamlet-its-houses-boats-and-manure-jars",
+  "b": "homesteads.html#manure-heaps-and-compost-kyuhi",
+  "why": "The silk village's half-buried night-soil jar against the rice farm's muck heap in the yard."
+ },
+ {
+  "a": "archetypes.html#mulberry-and-other-crops-on-pond-dikes-sangji-guoji",
+  "b": "archetypes.html#polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them",
+  "why": "The crop field on the bank round each fish pond vs the willow and mulberry rows planted along a polder's outer dike to hold it."
+ },
+ {
+  "a": "archetypes.html#mulberry-and-other-crops-on-pond-dikes-sangji-guoji",
+  "b": "archetypes.html#dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang",
+  "why": "What grew on a pond's dike vs the pond-and-dike system itself, its sizes and sluices."
+ },
+ {
+  "a": "archetypes.html#fish-fry-and-nursery-ponds-yumiao",
+  "b": "archetypes.html#dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang",
+  "why": "The first is the young fish and the small ponds they were reared in; the second is the grow-out pond with its planted dike."
+ },
+ {
+  "a": "archetypes.html#pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike",
+  "b": "homesteads.html#pigs-and-ducks-in-south-china-rice-villages",
+  "why": "The first is the sty on a fish-pond bank; the second is the pigs and ducks of a plain rice village with no fish ponds."
+ },
+ {
+  "a": "presentation.html#labels-on-maps-cartographic-label-placement",
+  "b": "presentation.html#what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps",
+  "why": "The first is how every caption is placed by its feature; the second is which buildings a caption may cover on a crowded sheet, and district names."
+ },
+ {
+  "a": "homesteads.html#the-farmstead-and-what-stood-on-it-yashiki",
+  "b": "buildings.html#samurai-residences-and-their-rooms-buke-yashiki",
+  "why": "The first is a farming household's plot; the second is a samurai's house and rooms - yashiki names both."
+ },
+ {
+  "a": "homesteads.html#the-farmstead-and-what-stood-on-it-yashiki",
+  "b": "settlements.html#households-how-many-live-in-a-house-and-under-how-many-roofs-ie",
+  "why": "The first is the plot and the buildings on it; the second is the family that lived there and its second roof."
+ },
+ {
+  "a": "homesteads.html#farmhouses-minka",
+  "b": "homesteads.html#the-farmstead-and-what-stood-on-it-yashiki",
+  "why": "The dwelling itself against the whole plot and everything on it, the farmhouse being one building of several."
+ },
+ {
+  "a": "homesteads.html#farm-storehouses-kura",
+  "b": "homesteads.html#farm-sheds-and-barns-naya",
+  "why": "The first is a well-off farm's fireproof earth-walled storehouse; the second is the plain wooden shed or barn for crop and tools."
+ },
+ {
+  "a": "homesteads.html#farm-storehouses-kura",
+  "b": "urban-features.html#village-granaries-gogura",
+  "why": "The first is one well-off farm household's own storehouse; the second is the village's shared granary."
+ },
+ {
+  "a": "homesteads.html#farm-storehouses-kura",
+  "b": "buildings.html#the-granary-and-the-tax-rice-gokura",
+  "why": "The first is a farm household's own storehouse; the second is the chain of storehouses the tax rice passed through."
+ },
+ {
+  "a": "homesteads.html#draft-oxen-and-horses-and-their-byres-umaya",
+  "b": "buildings.html#stables-umaya",
+  "why": "Umaya names both: a farm's stall for its ox or horse, against a warrior's or office's stable for riding horses."
+ },
+ {
+  "a": "homesteads.html#farm-privies-and-their-night-soil-benjo",
+  "b": "homesteads.html#manure-heaps-and-compost-kyuhi",
+  "why": "The privy and its night-soil tank or pit, against the yard heap where night soil and byre litter were composted."
+ },
+ {
+  "a": "homesteads.html#baths-on-the-farm-furo",
+  "b": "urban-features.html#public-bathhouses-sento",
+  "why": "The first is a farm household's own bath; the second is a town's commercial bathhouse open to anyone who pays."
+ },
+ {
+  "a": "homesteads.html#fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki",
+  "b": "homesteads.html#groves-of-trees-around-farmhouses-yashikirin",
+  "why": "Fruit trees are single trees in the yard near the house; the grove is the farm's stand of windbreak and timber trees."
+ },
+ {
+  "a": "ways.html#village-lanes",
+  "b": "ways.html#town-streets-side-lanes-and-back-alleys-roji",
+  "why": "A trodden earth lane between farmhouses vs a town's streets and drained alleys."
+ },
+ {
+  "a": "ways.html#plank-bridges-over-farm-ditches-itabashi",
+  "b": "ways.html#road-bridges-over-rivers-and-canals-hashi",
+  "why": "A plank a household lays over a farm ditch, about 4 ft wide, against the road bridges a town builds over its river."
+ },
+ {
+  "a": "ways.html#moving-goods-carts-packhorses-and-river-landings-kashi",
+  "b": "cities/river-cities.html#wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi",
+  "why": "The first is how freight moved and why a landing is the main freight link; the second is the built landing - its piers, quays and stepped banks."
+ },
+ {
+  "a": "ways.html#town-streets-side-lanes-and-back-alleys-roji",
+  "b": "cities/fabric.html#city-streets-and-blocks-the-grid-the-block-and-how-wide-the-streets-are-machiwari",
+  "why": "The first is a town's one or two streets and back alleys; the second is a city's planned grid of blocks."
+ },
+ {
+  "a": "ways.html#town-streets-side-lanes-and-back-alleys-roji",
+  "b": "ways.html#highways-and-what-lines-them-kaido",
+  "why": "The first is the street a town's lots front; the second is the highway between towns."
+ },
+ {
+  "a": "ways.html#ferries-and-fords-watashi",
+  "b": "cities/river-cities.html#wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi",
+  "why": "A ferry landing is where a road meets an unbridged river; a wharf is where cargo boats load and unload."
+ },
+ {
+  "a": "fields.html#where-a-farming-hamlet-grew-its-coarse-grain",
+  "b": "fields.html#dry-fields-and-their-crops-hatake",
+  "why": "An island field is a dry plot raised inside the paddy from its own spoil; the dry fields lie on higher ground beyond the paddy water."
+ },
+ {
+  "a": "homesteads.html#row-villages-resson",
+  "b": "ways.html#village-lanes",
+  "why": "A row village's street is the one line its farms stand along; village lanes join a hamlet's houses to each other and its fields."
+ },
+ {
+  "a": "homesteads.html#village-names-that-describe-the-site-chimei",
+  "b": "water.html#river-names-one-river-many-names",
+  "why": "How a settlement's name was made from its ground, against how one river carried several names along its course."
+ },
+ {
+  "a": "homesteads.html#the-headmans-house-and-the-rich-farmers-homestead-shoya-gono",
+  "b": "homesteads.html#farmhouses-minka",
+  "why": "The first is the headman's homestead as a whole; the second measures houses, the headman's among them, against an ordinary farmhouse."
+ },
+ {
+  "a": "homesteads.html#landless-and-tenant-households-mizunomi-nago",
+  "b": "towns.html#laborers-housing-back-lot-tenements-uradana-and-the-master-laborers-house",
+  "why": "A village's landless farm households on a richer farmer's plot, against a town's renters in back-lot tenements."
+ },
+ {
+  "a": "homesteads.html#half-moon-ponds-before-southern-chinese-villages-banyuechi",
+  "b": "water.html#reservoir-ponds-tameike",
+  "why": "A half-moon pond is dug before a house or village for fengshui; a reservoir pond holds irrigation water behind a dike above the fields."
+ },
+ {
+  "a": "homesteads.html#half-moon-ponds-before-southern-chinese-villages-banyuechi",
+  "b": "archetypes.html#dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang",
+  "why": "The half-moon pond is one fengshui pond before a house or hall; a dike-pond is one of many grow-out fish ponds in the fields."
+ },
+ {
+  "a": "homesteads.html#ancestral-halls-in-south-china-villages-citang",
+  "b": "buildings.html#household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai",
+  "why": "The ancestral hall is a lineage's own building shared by every household; the butsuma is a room inside one house holding its own dead's tablets."
+ },
+ {
+  "a": "homesteads.html#pigs-and-ducks-in-south-china-rice-villages",
+  "b": "homesteads.html#chickens-and-chicken-coops",
+  "why": "Pigs and ducks of the paddy village against the chickens and their coop at the farmstead."
+ },
+ {
+  "a": "vegetation.html#groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse",
+  "b": "homesteads.html#groves-of-trees-around-farmhouses-yashikirin",
+  "why": "A clustered Chinese village's shared woods at chosen places, against the grove each Japanese farmstead keeps round its own house."
+ },
+ {
+  "a": "vegetation.html#groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse",
+  "b": "ways.html#village-boundaries-and-their-markers-murazakai",
+  "why": "The Chinese village's water-mouth grove of many old trees, against the Japanese village's single great tree at its entrance."
+ },
+ {
+  "a": "vegetation.html#shelter-belts-on-a-villages-windward-side-bofurin",
+  "b": "vegetation.html#groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse",
+  "why": "The shelter belt topic is the windbreak's sides, trees and lanes; the grove topic is the village's three groves, the back grove serving as its belt."
+ },
+ {
+  "a": "vegetation.html#village-fuel-woods-and-their-coppice-satoyama",
+  "b": "vegetation.html#groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse",
+  "why": "The coppice is a worked common wood cut for fuel; the fengshui woods are protected groves at the settlement, kept uncut."
+ },
+ {
+  "a": "vegetation.html#how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns",
+  "b": "vegetation.html#village-fuel-woods-and-their-coppice-satoyama",
+  "why": "The first is how densely any wood was stocked; the second is what the village coppice was and how it was worked."
+ },
+ {
+  "a": "vegetation.html#charcoal-kilns-in-the-hills-sumigama",
+  "b": "urban-features.html#pottery-kilns-noborigama",
+  "why": "A charcoal kiln is a single chamber dug into a slope to char wood; a pottery kiln is a climbing chain of firing chambers."
+ },
+ {
+  "a": "vegetation.html#scrub-and-rough-grass-at-the-edges-of-fields-and-channels",
+  "b": "fields.html#bunds-between-the-paddies-aze",
+  "why": "The first is the band of cut grass at a field's edge that kept scrub off; the second is the bund itself."
+ },
+ {
+  "a": "vegetation.html#scrub-and-rough-grass-at-the-edges-of-fields-and-channels",
+  "b": "water.html#where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi",
+  "why": "The first is the grass cut along a channel's bank; the second is how bank, bund and inlet meet where a ditch feeds a field."
+ },
+ {
+  "a": "vegetation.html#reed-beds-and-the-marshs-edge-yoshihara",
+  "b": "water.html#marshes-and-wetlands-shitchi",
+  "why": "The first is the plants of a marsh's margin and the reed cutting; the second is the marsh itself."
+ },
+ {
+  "a": "vegetation.html#black-pines-in-japanese-gardens-kuromatsu",
+  "b": "buildings.html#ornamental-gardens-ponds-and-stone-lanterns-teien",
+  "why": "The first is the garden's pines and their size; the second is the garden as a whole."
+ },
+ {
+  "a": "homesteads.html#rice-drying-racks-hasa-hasagi",
+  "b": "homesteads.html#threshing-and-drying-yards-at-farmhouses-niwa",
+  "why": "The rack hangs uncut sheaves to dry for weeks, mostly on the paddy; the yard is the floor by the house where they are threshed."
+ },
+ {
+  "a": "homesteads.html#clustered-and-scattered-villages-shuson-sanson",
+  "b": "homesteads.html#row-villages-resson",
+  "why": "A row village strings its farms in a line, a third form beside the clustered and the scattered village."
+ }
+]

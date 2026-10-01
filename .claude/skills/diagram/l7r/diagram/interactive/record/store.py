@@ -13,7 +13,7 @@ from __future__ import annotations
 import os
 import re
 
-from l7r.diagram.interactive.record import absence, originals, passages, xref
+from l7r.diagram.interactive.record import absence, confusables, originals, passages, xref
 from l7r.diagram.interactive.record import citations_side as cite
 from l7r.diagram.interactive.record import fragments as frag
 from l7r.diagram.interactive.record.assemble import assemble
@@ -273,7 +273,17 @@ def _cross_linked(page_html: str, page_rel: str, record_dir: str) -> str:
     bad = xref.unresolved(mine, record_dir)
     if bad:
         raise RecordError("a rendering section is declared about a section that does not exist:\n  " + "\n  ".join(bad))
-    return xref.link(page_html, page_rel, mine)
+    return _confusables(xref.link(page_html, page_rel, mine), page_rel, record_dir)
+
+
+def _confusables(page_html: str, page_rel: str, record_dir: str) -> str:
+    """The page with its *Not to be confused with:* lists written in (feature 292, `confusables.py`); a pair touching
+    this page that names a section which does not exist is a refusal, naming the pair."""
+    mine = [p for p in confusables.load(record_dir) if page_rel in (p.a.partition("#")[0], p.b.partition("#")[0])]
+    bad = confusables.unresolved(mine, record_dir)
+    if bad:
+        raise RecordError(f"{confusables.DATA} names a section that does not exist:\n  " + "\n  ".join(bad))
+    return confusables.write(page_html, page_rel, mine, record_dir)
 
 
 def write_pages(page_rel: str, record_dir: str = RESEARCH_DIR) -> int:
