@@ -245,13 +245,17 @@ wording where it says the same.
   per round).
 - **SC-002** (FR-006, FR-007): A feature that adds one glyph owes exactly the checks whose occasion that is, on one map, once; the same for a
   redraw, for a substantial re-placement (the tannery case, seeded), and for a new element that reuses an existing glyph
-  (seeded).
+  (seeded); and no what-moved report is built for any of them - a triggered check's dispatch carries only its unit and the map it stands on (FR-006).
 - **SC-003** (FR-003, FR-004): Every FR-003 class, and FR-004's count check, has a red-then-green test; no review asks for any of them.
-- **SC-004** (FR-001, FR-002, FR-008, FR-011, FR-012): Every check in the three agent files has an audit verdict; the settlement-review contract is at most half its
+- **SC-004** (FR-001, FR-002, FR-008): Every check in the three agent files has an audit verdict; the settlement-review contract is at most half its
   current 49,960 characters (observed 2026-10-01; method: `wc -c` on the agent file) (a target; a larger residue is accepted if every remaining item is whole-map judgment).
 - **SC-005** (FR-009): A dispatch that would have returned NOT-REVIEWABLE is refused before launch on the recorded 280 and 293 cases
   replayed.
 - **SC-006** (FR-010, FR-013): The ledger report reproduces R0 within the hand census's error and adds cost per feature and per check.
+- **SC-007** (FR-011): No document or guard User Story 9 names states an obligation this feature removed (`make stale-terms` over
+  the old trigger finds none).
+- **SC-008** (FR-012): Each check's tier experiment and its result are recorded (the feature's `measure/`, the tier table), and a
+  tier changes only where every Sonnet run finds what Opus finds.
 
 ## Decisions Recorded
 
@@ -295,3 +299,6 @@ change when it is built.
 - Round 2 (spec-fidelity-verify, 2026-10-01): CHANGES REQUIRED, 1 item - the item-2 fix not carried into User Story 1's audit
   question 3 and the Summary, which still said "a glyph added". Addressed: both now say an element added whatever its mark.
 - Round 3 (spec-fidelity-verify, 2026-10-01): FAITHFUL. Every passage stating the glyph check's occasion agrees.
+- Amendment pass, round 1 (spec-fidelity-verify, 2026-10-01): CHANGES REQUIRED, 2 items - the legacy-pool edge case faithful to
+  the GM's ruling; SC-004's labels FR-011 and FR-012, and SC-002's label FR-006, name requirements those criteria do not
+  measure. Addressed: FR-011 and FR-012 off SC-004, measured by new SC-007 and SC-008; SC-002 extended with FR-006's clause.
