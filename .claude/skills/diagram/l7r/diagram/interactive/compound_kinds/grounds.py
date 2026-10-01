@@ -415,7 +415,7 @@ class SideGate(Kind):
     Covers: the posts of the posterns, service gates, landing gate, cart gate and guests' door
     Label: accurate
     Sources: kotobank-katteguchi, tajima-2007-night-soil, guernica-night-soil, kotobank-benjo, kotobank-shikidai, kominkai-genkan, kotobank-daihachiguruma, l7r-wagons
-    Entry: research/ways.html - 'Could a cart use the roads here, and where would it go?'; research/buildings.html - 'The formal entrance and a guest's arrival (genkan)', 'Privies (setchin)'; research/rendering/buildings.html - 'How our maps route a guest from the gate to the entrance', 'How our maps place privies (setchin)'
+    Entry: research/ways.html - 'Moving goods: carts, packhorses and river landings (kashi)'; research/rendering/ways.html - 'How our maps draw moving goods: cart lanes and boat landings (kashi)'; research/buildings.html - 'The formal entrance and a guest's arrival (genkan)', 'Privies (setchin)'; research/rendering/buildings.html - 'How our maps route a guest from the gate to the entrance', 'How our maps place privies (setchin)'
     """
 
     key = "side gate"
@@ -471,7 +471,7 @@ class ApproachRoad(Kind):
     Covers: the approach road or town street, the lanes to the lesser doors, and a road across a border
     Label: deviation
     Sources: ctie-michi-nazenaze, hiroshima-saigoku-kaido, mlit-kinsei-michi, kotobank-daihachiguruma, l7r-wagons, neixiang-xianya-zhwiki, song-architecture-enwiki, jokamachi-jawiki, lowtech-chinese-wheelbarrow, toyama-1988-road-undevelopment, jinya-jawiki, tamba-kashiwara-jinya, sina-neixiang-xianya, bjd-qing-yamen
-    Entry: research/ways.html - 'How wide is the road at a compound's gate?', 'Could a cart use the roads here, and where would it go?', 'Village lanes'; research/towns.html - 'The magistrate's manor in a town: where it stands and which way it faces (jin'ya and yamen)', 'Town plans: the street town (gaison), the planned grid and the castle town'; research/rendering/towns.html - 'How our maps lay out a town's streets', 'How our maps draw the magistrate's manor on a town map'
+    Entry: research/ways.html - 'How wide is the road at a compound's gate?', 'Moving goods: carts, packhorses and river landings (kashi)', 'Village lanes'; research/rendering/ways.html - 'How our maps draw moving goods: cart lanes and boat landings (kashi)'; research/towns.html - 'The magistrate's manor in a town: where it stands and which way it faces (jin'ya and yamen)', 'Town plans: the street town (gaison), the planned grid and the castle town'; research/rendering/towns.html - 'How our maps lay out a town's streets', 'How our maps draw the magistrate's manor on a town map'
     """
 
     key = "road"
@@ -499,7 +499,7 @@ class CartYard(Kind):
     Covers: the loading apron inside the cart gate
     Label: deviation
     Sources: kotobank-daihachiguruma, mlit-kinsei-michi, l7r-wagons, fao-charcoal-safety, tonya-enwiki
-    Entry: research/ways.html - 'Could a cart use the roads here, and where would it go?', 'Village lanes'; research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and charcoal stores'; research/buildings.html - 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
+    Entry: research/ways.html - 'Moving goods: carts, packhorses and river landings (kashi)', 'Village lanes'; research/rendering/ways.html - 'How our maps draw moving goods: cart lanes and boat landings (kashi)'; research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and charcoal stores'; research/buildings.html - 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps size a compound and its buildings'
     """
 
     key = "cart yard"

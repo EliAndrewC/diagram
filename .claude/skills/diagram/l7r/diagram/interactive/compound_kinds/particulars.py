@@ -95,7 +95,7 @@ class River(Kind):
     Covers: the river band and its labels
     Label: accurate
     Sources: gokura-jawiki, nishimawari-koro-jawiki, takayama-jinya-city, takayama-jinya-jawiki, chinaknowledge-caoyun, daba-jawiki, chuma-jawiki, kashi-jawiki
-    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/ways.html - "Where does a village's freight go?"
+    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/ways.html - 'Moving goods: carts, packhorses and river landings (kashi)'; research/rendering/ways.html - 'How our maps draw moving goods: cart lanes and boat landings (kashi)'
     """
 
     key = "river"
@@ -120,7 +120,7 @@ class RiverLanding(Kind):
     Covers: the landing label - its dock, revetment, barge, watch post and altar are each their own kind
     Label: accurate
     Sources: nishimawari-koro-jawiki, kashi-jawiki, gangi-kowan-jawiki, takasebune-jawiki, kotobank-takasebune, matou-zhwiki, kuramae-jawiki, chinaknowledge-caoyun
-    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'; research/ways.html - "Where does a village's freight go?"; research/rendering/cities/river-cities.html - 'How our maps draw wharves and landings (kashi, gangi)'
+    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'; research/ways.html - 'Moving goods: carts, packhorses and river landings (kashi)'; research/rendering/ways.html - 'How our maps draw moving goods: cart lanes and boat landings (kashi)'; research/rendering/cities/river-cities.html - 'How our maps draw wharves and landings (kashi, gangi)'
     """
 
     key = "river landing"
