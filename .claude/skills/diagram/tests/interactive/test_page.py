@@ -216,7 +216,7 @@ def test_the_page_carries_the_questions_and_no_record_line() -> None:
     markup = html_text.split('<script id="classes"')[0]
     assert "x-entry" not in markup and "Record:" not in markup
     assert "x-entry" not in html_text.split("<script>")[1], "and the script touches no such element"
-    assert f'<p id="r-intro" class="intro">{REFERENCES_LEAD}</p>' in html_text and "questions we asked" in REFERENCES_LEAD
+    assert f'<p id="r-intro" class="intro">{REFERENCES_LEAD}</p>' in html_text and REFERENCES_LEAD == "Topics we researched for this map feature:"
     assert '<button id="r-close" type="button">Return to writeup</button>' in html_text
     blob = json.loads(re.search(r'<script id="classes" type="application/json">(.*?)</script>', html_text, re.S).group(1).replace("<\\/", "</"))
     farmhouse = blob["classes"]["farmhouse"]

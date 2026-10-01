@@ -62,7 +62,7 @@ class Residence(Kind):
     Covers: the lord's residence blocks' fill and outlines, their room dividers, and the RESIDENCE band label
     Label: accurate
     Sources: watariroka-kotobank, irikawa-kotobank, katsura-rikyu-jawiki, touken-world-buke-madori, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, neixiang-yamen-zhwiki, takayama-jinya-city, takayama-jinya-jawiki, machi-bugyo-jawiki, jinya-jawiki, yamen-enwiki, neixiang-xianya-zhwiki, kotobank-katteguchi, shoinzukuri-jawiki
-    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'The formal entrance and a guest's arrival (genkan)', 'Magistrates' compounds (jin'ya and yamen)', 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps size a compound and its buildings', 'How our maps draw a magistrate's compound', 'How our maps route a guest from the gate to the entrance'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'The formal entrance and a guest's arrival (genkan)', "Magistrates' compounds (jin'ya and yamen)", 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps size a compound and its buildings', 'How our maps draw a magistrate's compound', 'How our maps draw the formal entrance and a guest's arrival (genkan)'
     """
 
     key = "residence"
@@ -229,7 +229,7 @@ class GuestQuarters(Kind):
     Covers: the guest room of the residence with its floor and label, or a detached guest house and its label
     Label: accurate
     Sources: shirobito-1717-takayama, boso-no-mura-takei, honjin-jawiki, yakage-honjin, kotobank-shikidai, kominkai-genkan
-    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps route a guest from the gate to the entrance'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps draw the formal entrance and a guest's arrival (genkan)'
     """
 
     key = "guest quarters"
@@ -269,7 +269,7 @@ class Kitchen(Kind):
     Covers: the kitchen and pantries building and its label
     Label: accurate
     Sources: boso-no-mura-takei, liq-takayasu-daidokoro, kotobank-katteguchi, kotobank-uchigenkan, matsue-bukeyashiki, matsue-bukeyashiki-about, matsushiro-bukeyashiki, tfd-hongou-fire-history, thepaper-taipinggang, edo-no-kaji-jawiki, machibikeshi-jawiki
-    Entry: research/buildings.html - 'Kitchens (daidokoro)', 'Samurai residences and their rooms (buke yashiki)', 'The size of a compound and the rank of its buildings', 'Fire, and the fireproof storehouses (dozō)', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps draw kitchens (daidokoro)', 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps size a compound and its buildings', 'How our maps route a guest from the gate to the entrance', 'How our maps draw fire water and the fireproof storehouses (dozō)'
+    Entry: research/buildings.html - 'Kitchens (daidokoro)', 'Samurai residences and their rooms (buke yashiki)', 'The size of a compound and the rank of its buildings', 'Fire, and the fireproof storehouses (dozō)', 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps draw kitchens (daidokoro)', 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps size a compound and its buildings', 'How our maps draw the formal entrance and a guest's arrival (genkan)', 'How our maps draw fire water and the fireproof storehouses (dozō)'
     """
 
     key = "kitchen"
@@ -526,7 +526,7 @@ class CompoundShrine(Kind):
     Covers: the shrine hall or halls, their edging and dividing rail, and the shrine labels
     Label: accurate
     Sources: fuchu-joge-pamphlet, neixiang-yamen-zhwiki, henan-neixiang, jawiki-saijin, jawiki-goshi, kotobank-aidono, hokora-jawiki, nara-nagao-jinja
-    Entry: research/buildings.html - 'Magistrates' compounds (jin'ya and yamen)', 'Shrines kept inside government offices and houses (yashikigami)', 'The size of a compound and the rank of its buildings'; research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps draw shrines kept inside government offices'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
+    Entry: research/buildings.html - "Magistrates' compounds (jin'ya and yamen)", 'Shrines kept inside government offices and houses (yashikigami)', 'The size of a compound and the rank of its buildings'; research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps draw shrines kept inside government offices'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "compound shrine"
@@ -615,7 +615,7 @@ class Genkan(Kind):
     Covers: the entry porch at the formal entrance
     Label: accurate
     Sources: genkan-jawiki, bukeyashiki-wiki, shirobito-1717-takayama, shiroishi-koseki, kotobank-shikidai, kominkai-genkan, jaanus-uchigenkan, fuchu-joge-pamphlet, takayama-jinya-jawiki, takayama-jinya-city
-    Entry: research/buildings.html - 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps route a guest from the gate to the entrance'
+    Entry: research/buildings.html - 'The formal entrance and a guest's arrival (genkan)'; research/rendering/buildings.html - 'How our maps draw the formal entrance and a guest's arrival (genkan)'
     """
 
     key = "genkan"
@@ -733,7 +733,7 @@ class FamilyQuarters(Kind):
     Covers: the family's bay of the residence, its floor and its labels
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, shoinzukuri-kotobank, matsue-bukeyashiki, neixiang-yamen-zhwiki, aizu-bukeyashiki-jawiki, jinya-jawiki, takayama-jinya-jawiki
-    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'Magistrates' compounds (jin'ya and yamen)'; research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps draw a magistrate's compound'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', "Magistrates' compounds (jin'ya and yamen)"; research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps draw a magistrate's compound'
     """
 
     key = "family quarters"

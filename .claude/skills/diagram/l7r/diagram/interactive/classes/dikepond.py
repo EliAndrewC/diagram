@@ -241,7 +241,7 @@ class FryPond(Kind):
     Covers: the dug water of a `dikeponds[]` parcel recorded `kind: fry` - a fry village's smallest ponds
     Label: accurate
     Sources: cssn-sangyuanwei, guangdong-xinyu-22, pwsannong-zhusanjiao-nongyeshi
-    Entry: research/archetypes.html - 'Fish fry and nursery ponds (yumiao)', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - "How our maps draw a dike-pond village's fry ponds"
+    Entry: research/archetypes.html - 'Fish fry and nursery ponds (yumiao)', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps draw fish fry and nursery ponds (yumiao)'
     """
 
     key = 'fry pond'

@@ -359,7 +359,7 @@
   "fry pond": {
     "caveat": "",
     "covers": "the dug water of a `dikeponds[]` parcel recorded `kind: fry` - a fry village's smallest ponds",
-    "entry": "research/archetypes.html - 'Fish fry and nursery ponds (yumiao)', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - \"How our maps draw a dike-pond village's fry ponds\"",
+    "entry": "research/archetypes.html - 'Fish fry and nursery ponds (yumiao)', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps draw fish fry and nursery ponds (yumiao)'",
     "key": "fry pond",
     "label": "accurate",
     "label_note": "GUESS: the fry trade and the nursery stage are read, but nothing read gives how many fry ponds a hamlet kept or which parcels - the one-in-ten share and the choice of the smallest parcels are the generator's.",
@@ -516,7 +516,7 @@
   "marsh": {
     "caveat": "",
     "covers": "`marshes` - every marsh patch, whatever its role",
-    "entry": "research/water.html - 'Marshes and wetlands (shitchi)', 'Reservoir ponds (tameike)'; research/rendering/water.html - \"How our maps draw the marsh at the fields' foot\", 'How our maps draw reservoir ponds (tameike), their reeds and their embankments'; research/vegetation.html - \"Reed beds and the marsh's edge (yoshihara)\"; research/rendering/vegetation.html - \"How our maps draw the marsh's edge\"",
+    "entry": "research/water.html - 'Marshes and wetlands (shitchi)', 'Reservoir ponds (tameike)'; research/rendering/water.html - 'How our maps draw marshes and wetlands (shitchi)', 'How our maps draw reservoir ponds (tameike), their reeds and their embankments'; research/vegetation.html - \"Reed beds and the marsh's edge (yoshihara)\"; research/rendering/vegetation.html - \"How our maps draw the marsh's edge\"",
     "key": "marsh",
     "label": "accurate",
     "label_note": "The reclaimed-from-marsh finding, the margin gradient, and the reeded-shore finding are all read; the embankment is mown in the record as it is bare on the map.",
@@ -612,7 +612,7 @@
   "paddy": {
     "caveat": "the field is shown flooded, which is one moment of a cycle that runs from flooded to cracked and back; the depths behind that choice are modern extension figures, and no pre-modern record of either the depths or the drying stages was found.",
     "covers": "the wet plots of every `fields[kind=paddy]` - the flooded basins",
-    "entry": "research/fields.html - 'Rice paddies and their plots (suiden)', 'Plot sizes', 'The paddy through the rice year: flooding, draining, transplanting and after the harvest'; research/rendering/fields.html - 'How our maps draw rice paddies and their plots (suiden)', 'How our maps show the paddy through the rice year'; research/archetypes.html - 'Pigs and ducks at a dike-pond: the sty on the pond dike'",
+    "entry": "research/fields.html - 'Rice paddies and their plots (suiden)', 'The paddy through the rice year: flooding, draining, transplanting and after the harvest'; research/rendering/fields.html - 'How our maps draw rice paddies and their plots (suiden)', 'How our maps show the paddy through the rice year'; research/archetypes.html - 'Pigs and ducks at a dike-pond: the sty on the pond dike'",
     "key": "paddy",
     "label": "accurate",
     "label_note": "Plot form and the irregular patchwork are read; plot sizes are calibrated from the record. the field is shown flooded, which is one moment of a cycle that runs from flooded to cracked and back; the depths behind that choice are modern extension figures, and no pre-modern record of either the depths or the drying stages was found.",
