@@ -909,12 +909,13 @@ and on the hinterland's lookups, *"instead of drawing a box and then filling it 
 built the three levers it was asked for - the seats offered from a precomputed reachable-and-buildable region, the ground cover
 as region-then-fill, the lane law kept per lane - and measured each by the WALL CLOCK (specs/297 research R10-R13).
 
-**What it bought, base and clone back to back** (`specs/297-placement-by-construction/measure.py after`, load 4.1 -> 1.5):
-Inashiro's stages 4.41 -> 3.94 s (1.12x); the pool's five rolls 24.8 -> 22.5 s (1.10x); `make map` of Inashiro 6.1 -> 5.8 s; its
-page write 1.65 -> 1.46 s. Per stage on Inashiro: the web 0.77 -> 0.46 (the keeper and the `settle_dangling` fix), the
-homesteads 1.01 -> 0.90, the hinterland 0.90 -> 0.84, the field 1.13 -> 1.09. Every pool map keeps its houses, acreage, lanes,
-wells and crowns (R13); the cohort is 30/30, as the base's. The session had expected "well under half"; it was a guess, and the
-measurement says the levers' ceiling is about a tenth.
+**What it bought, base and clone back to back** (`specs/297-placement-by-construction/measure.py after`, loads 5.9 -> 1.8 and
+1.8 -> 2.6): Inashiro's stages 4.46 -> 3.73 s (1.20x); the pool's five rolls 25.1 -> 22.5 s (1.12x); every pool map's stages
+1.08-1.20x; `make map` of Inashiro 6.1 -> 5.8 s; its page write 1.65 -> 1.46 s; the reference bookend 16.1 -> 15.4 s (band 0).
+Per stage on Inashiro: the web 0.76 -> 0.39 (the keeper and the `settle_dangling` fix), the homesteads 1.00 -> 0.85, the
+hinterland 0.94 -> 0.80, the field 1.15 -> 1.09. Every pool map keeps its houses, acreage, lanes, wells and crowns (R13); the
+cohort is 30/30, as the base's. The session had expected "well under half"; it was a guess, and the measurement says these
+levers' ceiling is about a fifth.
 
 **Why so little, and the lessons worth carrying:**
 

@@ -196,6 +196,27 @@ the accepted spec, each with its evidence:
   their keep-out grid as one painted region (`KeepoutGrid.taken_many`).
 - **FR-007 (R10)**: the comb's hem asks every plot's corners at once (`hem_rings_to_bank`); asked a ring at a time the array's fixed
   cost made Sawada's field slower; the single-ring hem is the scalar walk again.
+- **What the measurements say of each success criterion** (`measure.py after` on the final engine, base `c5a631f9b` and the clone
+  back to back; `m:` keys in `measurements.json`):
+  - SC-001: Inashiro's stages 4.460 -> 3.730 s, 1.20x - MISSED (the floor was half); `make map` 6.1 -> 5.8 s (`m:before-inashiro-regen-s`,
+    `m:after-inashiro-regen-s`) - met. The pool 25.1 -> 22.5 s, 1.12x.
+  - SC-002: the seats bucket's calls ROSE, 2,640,745 -> 3,525,463 (the region's own painting and labeling are calls); the layouts
+    built 2,716 -> 1,479 (1.84x); the homesteads stage 0.999 -> 0.854 s (1.17x) - MISSED (3x, 3x, 2x).
+  - SC-003: the mats' calls 477,299 -> 215,696 (2.2x) - MISSED (3x); every mat rule holds (`test_every_pool_yard_lays_lawful_mats`).
+  - SC-004: the marsh on Sawada 2,039,897 -> 257,151 (7.9x) - met; the grove on Inashiro 2,212,731 -> 1,950,264 (1.13x) and the open
+    ground 1,712,847 -> 1,200,562 (1.43x) - MISSED; the hinterland stage 0.944 -> 0.798 s (1.18x) - MISSED (2x).
+  - SC-005: the law's calls on Inashiro 3,989,351 -> 281,486 (14.2x) - met; on Sawada 456,889 -> 271,242 (1.68x) - MISSED (5x); repair
+    rounds still run (the settle is kept, R11-R12) - MISSED; Inashiro's web stage 0.761 -> 0.387 s (1.97x) - just MISSED (2x).
+  - SC-006: the page write 1.648 -> 1.462 s, 0.19 s (observed 2026-10-01, method: a scratch timer round `write_html`, best of
+    three, both trees) - MISSED (0.25 s).
+  - SC-007: the drain-bank clearances asked one at a time on Inashiro 12,195 -> 0 (`m:after-inashiro-drain-bank-clearance`; every
+    plot's corners asked at once) - met; every bund held off the drain (the gate).
+  - SC-008: `dev/performance.md`, "Placement by construction, and what it bought" - met.
+  - SC-009: the gate green at 100%; every pool map regenerates with the same houses, acreage, lanes, wells and crowns (R13); `make
+    cohort N=24` 30/30 as the base's - met.
+  - SC-010: the hinterland's `PointGrid.near` 102,164 -> 48,830 (2.1x) - MISSED (3x).
+  The floors were set with no projection behind them (the spec says so); what each lever reaches is measured above, and what
+  is left of each stage is in `dev/performance.md`.
 
 ## Assumptions
 
