@@ -113,9 +113,9 @@ yard, where `core` is the house-and-yard geometry (`_core_geom`: the two rects o
 by the seat's rake, and the turn - the fields `doors_of` and the corridor search read) computed without the full layout. The memo
 entry `access_corridor` would create is the one peeked, so the corridor search continues from it. A seat failing them builds no
 layout; the four layouts of a seat that passes share the answers. A side moved by the one computed move is a different seat and
-is judged at its own position. Also: `_bundle_geom`'s template cache keys on the household's seat, so 2,261 of 2,716 layouts were
-rebuilt (research R2's profile): the template is keyed per household, not per offered seat, and the rolls it draws are the
-household's.
+is judged at its own position. Also (WITHDRAWN, R9): `_bundle_geom`'s template cache keys on the household's seat, so 2,261 of 2,716 layouts were
+rebuilt (research R2's profile); keyed per household instead, a large-yard household lost the per-seat yard rolls that let it fit a
+tight seat, and seed 3 seated 9 of 10. The template stays keyed on the seat offered.
 
 ### D. The lane law kept as lanes are laid (FR-005; `hamletgen/ways/keeper.py`, new; `settle.py`, `last_resort.py`, `web.py`; `settlement/water_ways/lanes.py`)
 
@@ -181,9 +181,9 @@ failures are fixed, is recorded with the measurement and withdrawn (spec amendme
 | Painters grow every shape by one cell (conservative region) | map drawing convention | a region may lose a seat or a glyph at a margin, never admit a forbidden one - the rules hold by construction |
 | Regions are built per consumer window, never the canvas | map drawing convention (a cost decision) | the summed-area table over the canvas costs 0.40 s (measured above) |
 | The seat region offers where a garden side's envelope at the smallest house is clear and the door ground is reachable | map drawing convention | the smallest house keeps every seat any household could take; reach is the cautious one (free ground connected to the tree) and the placer's corridor search still decides |
-| Every repair is applied at the write; a lane no repair makes lawful is not laid | map drawing convention (the same lane law) | FR-005: lawful as laid, no settle after the web |
+| ~~Every repair is applied at the write; a lane no repair makes lawful is not laid~~ - built and withdrawn (R14: 10 of 23 webs refused, the web 1.38x slower) | map drawing convention (the same lane law) | FR-005, Amendment 1 |
 | The marsh's marks land at different random places at the same densities | map drawing convention | array throws draw a different stream, as the grass did in 278 |
-| The access tree's lanes are drawn first in the web | map drawing convention | they were admitted lawful at seating; drawing them last made the settle draw 15-19 lanes and repair around them (R7) |
+| ~~The access tree's lanes are drawn first in the web~~ - withdrawn (R10, R14: slower, alone and with D3-D4) | map drawing convention | R7, Amendment 1 |
 
 ## Amendment 1 (2026-10-01): the designs as built, by measurement (spec Amendment 1; research R9-R11)
 
@@ -201,7 +201,7 @@ failures are fixed, is recorded with the measurement and withdrawn (spec amendme
 - **B4.** `open_ground_region`, one per size, at 3 px (at 8 px the margin moved a parcel off its brook line).
 - **C.** The field's reach and the water before any layout; the corridor once per seat after the envelope (R10); the per-household
   template withdrawn (R9).
-- **D.** D1 as `keeper.kept` (pure verdicts per lane geometry); D2 withdrawn (slower, R10); D3-D4 replaced by the measured fix
-  (R11): `settle_dangling` drops what its trim cannot mend, so the last resort no longer runs on Inashiro; targeted rounds built
-  and withdrawn (slower, R12).
+- **D.** D1 as `keeper.kept` (pure verdicts per lane geometry); D2-D4 built as specified and withdrawn (R14: 10 of 23 webs refused,
+  the web stage 19.73 s against 14.30 s over 29 specs); targeted rounds built and withdrawn (R12); the measured fix kept (R11):
+  `settle_dangling` drops what its trim cannot mend, so the last resort no longer runs on Inashiro.
 - **E3.** `hem_rings_to_bank` (every plot at once) for the comb; the single-ring hem scalar.

@@ -20,7 +20,7 @@ renders; the marks were reverted after. Load 1.8-4.0 on 22 cores (observed 2026-
 
 The harness (`measure.py before`, base `c5a631f9b`, render off as the gate's policy requires; load recorded per key in
 `measurements.json`) gives Inashiro's stages as 5.640 s summed, the fastest of three, and the pool's five rolls 26.705 s (`m:before-pool-roll-s`; a first run at load 1.2 read 4.281 s and 25.181 s - the keys hold the second, at load 6.4 -> 2.0, after the harness's callee names were corrected).
-`make map` uncached, fastest of three: 8.0 s (`m:before-inashiro-regen-s`, load 2.5 -> 6.1).
+`make map` uncached, fastest of three: 8.0 s at load 2.5 -> 6.1 when first taken (observed 2026-09-30, method: `measure.py regen-before`); re-taken back to back with the clone at 6.1 s (`m:before-inashiro-regen-s`).
 
 ## R2. The homestead seating's funnel (observed 2026-09-30)
 
@@ -162,7 +162,7 @@ for the rules still broken (`STEP_RULES`, `steps_for`), the exit reusing the las
 | Kashikawa | 1.22 s | 1.14 s |
 
 Asking the whole law after every round costs more than the steps it lets a round skip: on Sawada the law bucket's calls rose
-from 456,889 to 1,521,541 (`m:base-rerun-sawada-b-law-total`, `m:after-sawada-b-law-total`). Withdrawn: the settle runs its rounds
+from 456,889 to 1,521,541 (observed 2026-10-01, method: `measure.py after` on the targeted engine, since re-run on the final engine whose figure the `after-` key holds). Withdrawn: the settle runs its rounds
 as before. What made Inashiro's web faster is the keeper (`keeper.kept`) and the `settle_dangling` fix that stops the last resort
 from running there (R11), both kept.
 
@@ -172,3 +172,22 @@ Each pool map's houses, field acreage, lanes (count and length), wells, grove cr
 five maps (method: the manifests of `/tmp/base297` HEAD against the clone's regenerated pool). What moved is the threshing yards'
 mats (the fill) and the scatter's marks (the marsh's array throws and the regions' margins). `make cohort N=24`: 30/30 passed the
 whole gate, as the base's (`cohort-base.log`).
+
+## R14. Plan D2-D4 built as specified, and measured (observed 2026-10-01, method: scratch harnesses run as test nodes over the five pool maps and cohort seeds 1-24, `build` through `stage_web`, the same session and load 1.4-2.1)
+
+Built as an experiment on the shipping engine: **D2**, the access tree's lanes drawn before the skeleton; **D3**, every lane-and-joint
+repair (`settle_husks`, `square_every_crossing`, `settle_shapes`, `settle_ends` with the dangling trim, `settle_joins`,
+`settle_needles`, `settle_defer`, `settle_widths`) applied at each pass boundary of `stage_web` - the write unit at which the passes
+hand the web on - and once more after the last pass; **D4**, no settle rounds and no last resort: the tree's owed lanes drawn
+again where a repair cut one, then the whole law asked ONCE, and any break counted as a refusal (`WebRefused`), dangling ends in
+the class judged at the end as the review asked.
+
+| (observed 2026-10-01, method: the R14 harnesses) | the shipping settle | D2-D4 as built |
+|---|---|---|
+| webs refused (of the 23 that draw one; 6 dispersed draw none) | 0 | **10** - Inashiro and Sawada among them (needle joins 2-8, doubled tails 1-4, networks, fragments, dangling ends, one house unreached) |
+| the web stage, summed over the 29 specs | 14.30 s | 19.73 s |
+
+Without any repair (D4 alone, the tree's lanes drawn last) 20 of the 23 webs end broken - needle joins, doubled tails, width steps,
+needle loops, oblique crossings, fragments: per-lane and joint rules, not only the network-wide ones. With the repairs at each
+pass, the repairs themselves lay new breaks the next pass does not see (a needle cut opens a tail; a tree lane drawn first is met by
+the next pass's lanes as a needle). Withdrawn under the plan's own rule - both slower and failing the gate - and the settle stays.

@@ -19,7 +19,7 @@ gated as it lands; the lane law in four steps; then the measurement and the reco
 
 ## The small levers (C, E1-E3)
 
-- [ ] T03 [US2] A seat judged once before its layouts: the seat-level pretest in `settlement/rolling/place.py` (`seat_reaches_tree` in `access.py`), and the bundle template keyed per household (C)
+- [ ] T03 [US2] A seat judged once: the field's reach and the water before any layout, the corridor once per seat (`seat_reaches_tree` in `access.py`); the bundle template keyed per household built and withdrawn (C, R9, R10)
       research: rendering
 - [ ] T04 [P] [US2] The threshing-yard mats as a computed, centered lattice in `settlement/homestead_parts/yards.py` (E1)
       research: rendering
@@ -47,11 +47,11 @@ gated as it lands; the lane law in four steps; then the measurement and the reco
 
 - [ ] T12 [US4] `hamletgen/ways/keeper.py`: the per-lane and joint verdicts kept on every write (the writers routed through it), tested against `law.LAW` on the pool and cohort webs (D1)
       research: rendering
-- [ ] T13 [US4] The access tree's lanes laid at the start of `stage_web` (D2)
+- [ ] T13 [US4] The access tree's lanes laid at the start of `stage_web` (D2) - built and measured; withdrawn (R10, R14)
       research: rendering
-- [ ] T14 [US4] Every rule's repair applied at the write by the keeper's hook; a lane no repair can make lawful not laid (D3)
+- [ ] T14 [US4] Every rule's repair applied at the write (each pass boundary); a lane no repair can make lawful not laid (D3) - built and measured; withdrawn (R14)
       research: rendering
-- [ ] T15 [US4] The settle's rounds, `unsettled` and the last resort retired; the stage's end reads the keeper and refuses a break by name (D4)
+- [ ] T15 [US4] The settle's rounds, `unsettled` and the last resort retired; the stage's end refuses a break by name (D4) - built and measured; withdrawn (R14); the measured fix (`settle_dangling`) and the targeted rounds (R12, withdrawn) in its place
       research: rendering
 - [ ] T16 The moved pool regenerated and gated with T12-T15 in, every failure fixed; `make cohort N=24` against the base; each moved map's houses, paddies and ways before and after recorded in research (SC-009)
       research: rendering
