@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-reorg`)
 **Created**: 2026-10-01
-**Status**: Draft
+**Status**: Accepted - FAITHFUL at round 2 (2026-10-01)
 **Request**: [`request.md`](request.md) - the GM's words verbatim: the research assembled into *"a single page version ...
 with a linkable table of contents at the very top"* and *"a page structure where anything that would be a top-level table
 of contents entry ... will be its own separate parent section and then maybe each of our subsections are themselves
@@ -276,3 +276,10 @@ rendering decision is made.
   (`l7r/diagram/interactive/record/`) - the skip test uses a change to nothing the record is built from, and a builder
   change must rebuild. (6) FR-024's "which every container mounts" is an unmeasured premise deciding whether the hook
   reaches every container - measure it in the plan, or require the install to reach any container that does not.
+- Round 2 (spec-fidelity, 2026-10-01): FAITHFUL - all six round-1 items confirmed in the change (016bc6e5d): (1) FR-022
+  registers on PostToolUse and PostToolUseFailure, SC-008 feeds both payloads; (2) the package lookup is gone from FR-022
+  and US6 AS1; (3) FR-023 and the edge case fire every time; (4) the 25 MB re-run by `du -cb` over the pages, the
+  citations directory and SOURCES.html reproduces (25,092,231 bytes, about 5.9 MB of it the citations' `.js`); (5) SC-005
+  rebuilds on a build-code change and skips on a change to nothing the record is built from; (6) FR-024's mount premise is
+  now quoted from `launch-container.sh` (read: line 66 and `--no-claude`), with running containers checked in the plan and
+  any without the mount reported to the GM. The change adds nothing the GM did not ask for.
