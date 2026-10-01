@@ -47,7 +47,7 @@ RETIREMENT_FT = (18.0, 15.0)
 RETIREMENT_GAP_FT = (6.0, 12.0)
 
 # WHICH SIDE is a GUESS, rolled per homestead among the back wall and the two flanks. The record holds one lead
-# (research/homesteads/220, wang-ochiai-2022): in Arakawa village, Shiga, under the Hira windstorms from the west, "Among the
+# (research/homesteads/260, wang-ochiai-2022): in Arakawa village, Shiga, under the Hira windstorms from the west, "Among the
 # 11 retirement houses, 63.6% were located in a westerly direction", standing with the storage buildings as "wind fences"
 # for the ground before the entrance. TRIED AND REVERTED (269 E8, settlement-review F1, 2026-09-28): the windward side first
 # in 7 of 11 homesteads (the settlement's `SitePlan.wind`) seated 17 of 22 pool retirement houses to windward and every

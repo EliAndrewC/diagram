@@ -276,7 +276,7 @@ class ManurePit(Kind):
     Covers: a `farm_fixtures[]` record of kind `manure` with `form: pit` - the alternative to the heap
     Label: accurate
     Sources: fei-1939, sugiura-1973-fuzoku, suzuki-1959-noson-benjo
-    Entry: research/archetypes.html - 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps furnish a dike-pond hamlet'; research/homesteads.html - 'Where did the privy stand, and where was its night soil kept?'
+    Entry: research/archetypes.html - 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps furnish a dike-pond hamlet'; research/homesteads.html - 'Farm privies and their night soil (benjo)'; research/rendering/homesteads.html - 'How our maps place privies (benjo)'
     """
 
     key = 'manure pit'

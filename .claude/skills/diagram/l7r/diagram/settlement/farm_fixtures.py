@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from .core import Settlement
 
 # Real feet (w along the house wall, h out from it). privy: the one-ken default here; the placer rolls each homestead's from
-# the sixteen of the Kakimochi table (research/homesteads/750, feature 280) and passes it as `size_ft`. woodpile: the WOOD
+# the sixteen of the Kakimochi table (research/homesteads/260, feature 280) and passes it as `size_ft`. woodpile: the WOOD
 # SHED, 4 x 2 ken, the common size in the Kakimochi count (research/homesteads/212 and 720; the open stack under the eaves and
 # the kizuma along the windbreak are modern-only and not drawn - feature 280). manure: a heap by the privy/stable (size
 # GUESS). bath: a ROOM joined to the house, 6 ft out and 6-12 ft along it (research/homesteads/740, feature 280 M22 - the

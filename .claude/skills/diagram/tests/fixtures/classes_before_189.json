@@ -479,7 +479,7 @@
   "manure heap": {
     "caveat": "",
     "covers": "`farm_fixtures[kind=manure]`",
-    "entry": "research/homesteads.html - 'Where did the manure heap stand, and what went into it?'; 'Where did the privy stand, and where was its night soil kept?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'",
+    "entry": "research/homesteads.html - 'Where did the manure heap stand, and what went into it?'; 'Farm privies and their night soil (benjo)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps place privies (benjo)'; 'How our maps draw the farmstead and what stands on it (yashiki)'",
     "key": "manure heap",
     "label": "guess",
     "label_note": "The practice is read (jawiki, the Art Institute's Han model); the heap's PLACE on the farm and its size are guesses - the pages describe the pit, not where it stood.",
@@ -499,7 +499,7 @@
   "manure pit": {
     "caveat": "the drawn 3.5 ft mouth is a size the record does not give.",
     "covers": "a `farm_fixtures[]` record of kind `manure` with `form: pit` - the alternative to the heap",
-    "entry": "research/archetypes.html - 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps furnish a dike-pond hamlet'; research/homesteads.html - 'Where did the privy stand, and where was its night soil kept?'",
+    "entry": "research/archetypes.html - 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps furnish a dike-pond hamlet'; research/homesteads.html - 'Farm privies and their night soil (benjo)'; research/rendering/homesteads.html - 'How our maps place privies (benjo)'",
     "key": "manure pit",
     "label": "accurate",
     "label_note": "The form and its place behind the house are read (Fei 1939); the drawn 3.5 ft mouth is a size the record does not give.",
@@ -749,7 +749,7 @@
   "privy": {
     "caveat": "the 6 x 6 ft footprint is a GUESS - the one sizing page is dead.",
     "covers": "`farm_fixtures[kind=privy]`",
-    "entry": "research/homesteads.html - 'Where did the privy stand, and where was its night soil kept?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'",
+    "entry": "research/homesteads.html - 'Farm privies and their night soil (benjo)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps place privies (benjo)'; 'How our maps draw the farmstead and what stands on it (yashiki)'",
     "key": "privy",
     "label": "accurate",
     "label_note": "Presence and the three seats are read (kotobank, sinyoken); the 6 x 6 ft footprint is a GUESS - the one sizing page is dead.",

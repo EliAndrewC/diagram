@@ -12,7 +12,7 @@ drawn where it was laid (`hamletgen/homesteads/fixtures.py`). The retirement hou
 is laid the same way and first, on the settlements that keep the form (`hamletgen/homesteads/retirement.py`): searched
 for after the fixtures, 7 of cohort seed 54's 9 found room.
 
-Every seat table is the one the late placer read (research/homesteads.html, each fixture's own section - the privy's at "Where did the privy stand, and where was its night soil kept?" - the attested seats
+Every seat table is the one the late placer read (research/homesteads.html, each fixture's own section - the privy's at "Farm privies and their night soil (benjo)" - the attested seats
 labeled there), in the house's unturned frame: +y the sunny front where the yard is, -y the back wall, the kura on the
 north wall. A seat is taken when its box clears every part laid before it by the wall gap; failing every recorded seat, a
 fixture is offered the same seats stepped outward a pace at a time - still its own plot, where the ground past the parts
@@ -53,7 +53,7 @@ PRIVY_SUN_MIN_FT = 18.0  # the sun-side search's radii, 18 to 48 ft (`PRIVY_SUN_
 PRIVY_SUN_MAX_FT = 48.0
 PRIVY_SUNNY_SHARE = 0.727  # Wang & Ochiai 2022: 72.7% of outhouses SE to S (the GM, 2026-08-29: used literally)
 WOODSHED_STEP_FT = 6.0  # the wood shed a ken off the wall it serves, a building of its own (GUESS: where on the plot no page says)
-# THE PRIVY'S SIZE (feature 280, research/homesteads/750): each homestead's privy is one of the sixteen of the Kakimochi table
+# THE PRIVY'S SIZE (feature 280, research/homesteads/260): each homestead's privy is one of the sixteen of the Kakimochi table
 # (Meiji 18, read back to the last years of the shogunate), frontage by depth in feet at 6 ft to the ken - each as likely as
 # the next. A calibration against one village's table; the old 6 x 6 ft one-ken module was a GUESS.
 PRIVY_SIZES_FT: tuple[tuple[float, float], ...] = (
@@ -133,7 +133,7 @@ def privy_sun_reach_ft(w_ft: float, d_ft: float) -> float:
 def fixture_ft(kind: str, forms: FixtureForms, roll: Callable[[float], float] | None = None) -> tuple[float, float]:
     """A fixture's size in real feet, `(along its wall, out from it)`, in the form the hamlet rolled: the privy one of the
     Kakimochi table's sixteen and the bath room 6 ft out by 6-12 ft along, each rolled off the household's own position roll
-    `roll` (feature 280, research/homesteads/750 and 740; the kinds' one-ken default without one); every other kind its one
+    `roll` (feature 280, research/homesteads/260 and 740; the kinds' one-ken default without one); every other kind its one
     size (`FIXTURE_FT`), the pit's, the crown's or the retirement house's."""
     if kind == "privy" and roll is not None:
         return PRIVY_SIZES_FT[int(roll(101.3) * len(PRIVY_SIZES_FT)) % len(PRIVY_SIZES_FT)]

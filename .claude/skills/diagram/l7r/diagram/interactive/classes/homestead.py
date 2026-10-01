@@ -257,7 +257,7 @@ class Privy(Kind):
     Covers: `farm_fixtures[kind=privy]`
     Label: accurate
     Sources: koshigaya-shishi-noumin-jukyo, oamishirasato-choshi-kaoku, suzuki-1959-noson-benjo, sugiura-1977-tohoku, sinyoken-madori
-    Entry: research/homesteads.html - 'Where did the privy stand, and where was its night soil kept?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads.html - 'Farm privies and their night soil (benjo)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps place privies (benjo)'; 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'privy'
@@ -313,7 +313,7 @@ class ManureHeap(Kind):
     Covers: `farm_fixtures[kind=manure]`
     Label: guess
     Sources: jawiki-koedame, artic-pigsty-latrine, kyuhi-jawiki, suzuki-1959-noson-benjo
-    Entry: research/homesteads.html - 'Where did the manure heap stand, and what went into it?'; 'Where did the privy stand, and where was its night soil kept?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads.html - 'Where did the manure heap stand, and what went into it?'; 'Farm privies and their night soil (benjo)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps place privies (benjo)'; 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'manure heap'
