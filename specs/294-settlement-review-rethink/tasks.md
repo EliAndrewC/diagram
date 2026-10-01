@@ -135,8 +135,9 @@ This feature's own delta, declared under the rules it builds (plan D10). Lines a
 
 ## The documents (H)
 
-- [ ] T33 [US9] The root `CLAUDE.md`, `dev/reviews.md`, `docs/spec-kit-and-reviews.md`, `docs/guards.md`, the constitution's per-map lines, the plan template's VI line, `SKILL.md`, the memory note; `make stale-terms F=294` clean
+- [x] T33 [US9] The root `CLAUDE.md`, `dev/reviews.md`, `docs/spec-kit-and-reviews.md`, `docs/guards.md`, the constitution's per-map lines, the plan template's VI line, `SKILL.md`, the memory note; `make stale-terms F=294` clean
       research: rendering
+      verify: DONE. root CLAUDE.md bullet + pair-hooks row + ledger-hooks row; constitution 2.28.0 (Maps bullet, map review workflow, sync report); plan template VI; guards.md pair-hooks row rewritten (occasions, green gate, rounds, retired waivers); efficiency-tooling make verify; spec-kit-and-reviews; engine CLAUDE.md index/command map/Reviews; memory note; make stale-terms F=294: no candidate
 
 ## The tier (I)
 
