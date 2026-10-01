@@ -305,6 +305,13 @@ def test_the_shipped_hamlets_keep_the_rules_the_review_used_to_judge(gen: str) -
 
     courses = [d["pts"] for d in M.get("drawn_channels") or [] if len(d.get("pts") or []) >= 2] + [s["poly"] for s in M.get("streams") or [] if len(s.get("poly") or []) >= 2]
     assert twins(courses, _ftpx(M)) == [], "B4: two watercourses side by side (the comb's own predicate, waterfields/twins.py)"
+    from l7r.diagram.tools.see_through import broadleaf_over_conifer, crowns_in_paint_order
+    from tests.gate import _pool
+
+    with open(_pool.obtain(gen)[: -len(".json")] + ".svg", encoding="utf-8") as fh:
+        crowns = crowns_in_paint_order(fh.read())
+    assert crowns, "non-vacuity: the map's crowns were read off its ink"
+    assert broadleaf_over_conifer(crowns) == [], "B5b: a broadleaf crown painted over a conifer"
     # B13: the lane law the placer guarantees, proved on what shipped
     assert law.needle_ends(M.get("lanes") or []) == [], "B13: a needle join"
     assert law.needle_loops(M) == [], "B13: a needle loop"
@@ -348,6 +355,47 @@ def test_every_class_answers_the_pointer_over_its_own_ink(gen: str) -> None:
         pytest.skip("no resvg on this host")
     assert len(found) > 10, "non-vacuity: the classes on the map were measured"
     assert hit_thefts(found, frozenset(HIT_WIDEN)) == [], "B6: a class's ink answers as another"
+
+
+# ---- B5: a see-through mark is declared, with its reason --------------------------------------------------
+
+
+def undeclared_see_through(found: Mapping[str, float], table: Mapping[str, tuple[float, str]]) -> list[str]:
+    """Each class drawn see-through that `table` does not declare, or drawn fainter than the floor it declares."""
+    out = []
+    for key, faintest in sorted(found.items()):
+        if key not in table:
+            out.append(f"{key}: drawn at {faintest} and declared nowhere")
+        elif faintest < table[key][0] - 1e-6:
+            out.append(f"{key}: drawn at {faintest}, under its declared {table[key][0]}")
+    return out
+
+
+def test_an_undeclared_see_through_mark_fires() -> None:
+    """Seeded: the recorded cases - a field grave's mound at 0.9, the title placard at 0.94."""
+    from l7r.diagram.settlement.see_through import SEE_THROUGH
+
+    assert undeclared_see_through({"field grave": 0.9, "well": 0.55, "byre": 0.3}, SEE_THROUGH) == [
+        "byre: drawn at 0.3, under its declared 0.6",
+        "field grave: drawn at 0.9 and declared nowhere",
+    ]
+
+
+@pytest.mark.parametrize("gen", _HAMLETS, ids=os.path.basename)
+def test_every_see_through_mark_is_declared(gen: str) -> None:
+    from l7r.diagram.pipeline import gencache
+    from l7r.diagram.settlement.see_through import SEE_THROUGH
+    from l7r.diagram.tools import hit_share
+    from l7r.diagram.tools.see_through import translucent_marks
+    from tests.gate import _pool
+
+    _pool.obtain(gen)
+    page = gencache.page_of(gen)
+    assert page, "non-vacuity: the map's page is on disk or filed with its entry"
+    with open(page, encoding="utf-8") as fh:
+        found = translucent_marks(hit_share.page_svg(fh.read()) or "")
+    assert found, "non-vacuity: every map draws some mark see-through (the water's sheen at least)"
+    assert undeclared_see_through(found, SEE_THROUGH) == [], "B5: a see-through mark nobody declared"
 
 
 # ---- B15: every map folder carries its notes --------------------------------------------------------------

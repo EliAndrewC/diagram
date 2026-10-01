@@ -3,6 +3,7 @@
 import heapq
 import math
 import random
+from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
 from .._geom import CrownIndex, PointGrid, _union_area, point_in_poly, seg_dist
@@ -196,6 +197,19 @@ HOMESTEAD_WOOD_FT2 = (6000.0, 28000.0)
 """The trees one homestead keeps, its windward grove and its share of the copse together, in sq ft (269 B26;
 research/rendering/homesteads/010): a 1684 Mito register lists three homestead woods of about 6,100, 10,700 and 27,800 sq ft. A
 calibration against three households, not a survey; counting grove and copse as one wood is the entry's decision."""
+
+
+#: How far two crowns' discs may overlap before the later one is drawn OVER the earlier: their centers nearer than this share
+#: of their radii summed (feature 294 B5b; a GUESS - at 0.8 the overlap is a broad lens, not an edge touching).
+CROWN_OVER_SHARE = 0.8
+
+
+def over_a_conifer(x: float, y: float, r: float, conifers: Sequence[tuple[float, float, float]], slack: float = 0.2) -> bool:
+    """Would a crown at (x, y) of radius `r`, drawn now, lie OVER one of the `conifers` already drawn (feature 294 B5b, the
+    review's broadleaf-over-conifer case: a later clump's broadleaf inked over an earlier clump's cedar, 269 B30)? The conifer
+    is the taller and darker crown and reads on top: a lesser crown that would be painted over one is not drawn. `slack` (px) is the
+    ink's rounding: the SVG writes a crown to 0.1 px, so the placer asks a little wider than the test that reads the ink."""
+    return any((x - cx) ** 2 + (y - cy) ** 2 < (CROWN_OVER_SHARE * (r + cr) + slack) ** 2 for cx, cy, cr in conifers)
 
 
 def _boxes_meet(a: Any, b: Any) -> bool:
@@ -612,6 +626,11 @@ class GrovesMixin:
             krect, kcirc = self._canopy_keepouts((cx - w / 2 - _cpad, cy - h / 2 - _cpad, cx + w / 2 + _cpad, cy + h / 2 + _cpad))
             _near = self._crowns_near(cx - w / 2 - _cpad, cy - h / 2 - _cpad, cx + w / 2 + _cpad, cy + h / 2 + _cpad)  # the crowns of earlier clumps and stands (GM 2026-08-28)
             drawn: list[tuple[float, float, float]] = []
+            # THE CONIFERS ARE PAINTED LAST (feature 294 B5b): the clump's lesser crowns first, its conifers over them, and a
+            # lesser crown that would lie over an earlier clump's conifer is not drawn (`over_a_conifer`) - so no broadleaf is
+            # ever inked over a cedar (Kashikawa's and Mizuguchi's farm groves drew 199 and 108 when this was written)
+            _cones = [c for c in (getattr(self, "_conifer_crowns", None) or []) if cx - w / 2 - _cpad - c[2] <= c[0] <= cx + w / 2 + _cpad + c[2] and cy - h / 2 - _cpad - c[2] <= c[1] <= cy + h / 2 + _cpad + c[2]]  # a conifer whose DISC reaches the box
+            high: list[str] = []
             g = [f'<g transform="translate({cx:.0f},{cy:.0f})">']
             # Draw back-to-front so the stand layers with depth. Each CROWN is one tree at real size (~5-6 m; a few
             # emergents larger) - that is the to-scale reading, and it is unchanged. We deliberately DROP two kinds
@@ -646,12 +665,16 @@ class GrovesMixin:
                 # slower on three pool hamlets against main).
                 if not self._crown_seat_clear(cx + px, cy + py - lift, rr, _near) or not self._crown_seat_clear(cx + px, cy + py - lift, rr, drawn):
                     continue  # a crown centered under an already-drawn crown is an understory stem, not canopy (GM 2026-08-28; woods._crown_seat_clear)
+                if kind != "conifer" and over_a_conifer(cx + px, cy + py - lift, rr, _cones):
+                    continue
                 drawn.append((cx + px, cy + py - lift, rr))
                 # ONE DISC PER CROWN, conifer included (GM 2026-09-27). A conifer used to carry a second, darker
                 # disc at 40% of its radius (a "dense dark apex"); the GM read it as a trunk, which a plan view
                 # cannot show, and it was an unrecorded map convention. The darker fill and the 15% larger
                 # crown already tell a conifer from a broadleaf.
-                g.append(f'<circle cx="{px:.1f}" cy="{py - lift:.1f}" r="{rr:.1f}" fill="{col}" stroke="#3C5526" stroke-width="0.8"/>')
+                (high if kind == "conifer" else g).append(f'<circle cx="{px:.1f}" cy="{py - lift:.1f}" r="{rr:.1f}" fill="{col}" stroke="#3C5526" stroke-width="0.8"/>')
+                if kind == "conifer":
+                    self._conifer_crowns = [*(getattr(self, "_conifer_crowns", None) or []), (cx + px, cy + py - lift, rr)]
                 if tally is not None:
                     tally[kind] = tally.get(kind, 0) + 1
             # THE BAMBOO SHOWS IN THE GAPS AND ALONG THE EDGE (269 B29, research/vegetation.html "Bamboo groves (chikurin)"): a bamboo item under a drawn
@@ -670,6 +693,7 @@ class GrovesMixin:
                     continue
                 culms.append(bamboo_mark(px, py, bs, self._hjit(bx, by, 93.0), self._hjit(bx, by, 94.0)))
             g[1:1] = culms
+            g.extend(high)
             g.append('</g>')
             self.add(''.join(g), cls=cls)
             self._record_crowns(drawn)

@@ -16,6 +16,7 @@ This feature's own delta, declared under the rules it builds (plan D10). Lines a
 - none: B7 - a farmhouse is seated with its wall `TREAD_WALL_FT` (4 ft) clear of a way's tread edge, where the hair was 2 ft (settlement/houses.py); a margin tuned, the seating rule otherwise the one already judged
 - placement-changed: irrigation ditch - B4: a delivery that would run beside another watercourse as its twin is not drawn; its plots take their water over the bund (waterfields/twins.py, comb.py)
 - placement-changed: drainage ditch - B4: a field's drain that would run beside the brook as its twin joins it (hamletgen/sink.py)
+- glyph-redrawn: copse - B5b: a grove's conifers are painted over its lesser crowns, and a lesser crown that would lie over an earlier conifer is not drawn (settlement/homestead_parts/groves.py) - the farm groves of Kashikawa and Mizuguchi drew 307 broadleaf over conifers
 
 ## Setup
 
@@ -75,19 +76,22 @@ This feature's own delta, declared under the rules it builds (plan D10). Lines a
 - [x] T16 [US2] B3 wood shed seating: a placer assert and a gate test
       research: rendering
       verify: DONE. DONE. shed_faults: nearer another household's house than its own, or turned off its rake (a quarter turn the same); seeded red (a neighbor's gable, a 45 deg turn); green on the five (the end-on/off-wall forms retired with the eaves woodpile, feature 280)
-- [ ] T17 [US2] B4's research pass: the branch spacing of a comb (kushi) irrigation layout
+- [x] T17 [US2] B4's research pass: the branch spacing of a comb (kushi) irrigation layout
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-- [ ] T18 [US2] B4 the twin-watercourse rule, comb branches included (T17's spacing enforced if found); red on the recorded case; the placer fixed on Inashiro, then the pool
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. DONE. research pass: Japanese and English searches (an agent, 2026-10-01) - no premodern branch spacing; modern standards space by the block served; side-by-side supply/drain is Meiji-and-after; source-reader: no new source cited - the rule rests on water/030 and fields/070, already cited (tagoshi the old form); recorded: research/water/670 with its absence note and GUESS label; quote-check: no new footnote; source-applicability: no new or changed write-up; record-format: 0 vocabulary, 2 session notes applied
+- [x] T18 [US2] B4 the twin-watercourse rule, comb branches included (T17's spacing enforced if found); red on the recorded case; the placer fixed on Inashiro, then the pool
       research: rendering
+      verify: DONE. DONE. waterfields/twins.py (twin_run_ft, twins, drop_twin_deliveries) asked by comb._comb_canal_pieces and by sink.route_refusals/join_beside; unit tests red-first on a 20 ft twin; the four comb twins (190-310 ft) and Kashikawa's drain beside the brook (130 ft) gone; the gate rule green on the five
 - [ ] T19 [US2] B5 see-through marks with their declared reasons; B5b crown species on the record and the conifer drawn above a broadleaf it overlaps; red first; the renderer's order fixed
       research: rendering
-- [ ] T20 [US2] B6 page hit regions (each class wins 0.8 of its ink, declared overlaps apart); red today; the hit order fixed
+- [x] T20 [US2] B6 page hit regions (each class wins 0.8 of its ink, declared overlaps apart); red today; the hit order fixed
       research: rendering
+      verify: DONE. DONE. tools/hit_share.py (visible-ink map vs id map; 3 unit tests, seeded a region polygon over another class's ink: 40%, thief named); gencache files the skip-render vector page as <map>.vector.html (page_of; test_gencache 23 passed); hit_thefts gate rule (80%, HIT_WIDEN's boxes declared), green on the five - measured with the visible-ink form the scout's storage-shed and mulberry-dike cases do not recur (paddy/bund/wet paddy lose only to declared widened boxes)
 - [x] T21 [US2] B7 lane tread to wall, 4 ft: the tread rule and a gate test, red on the 3.85 ft case
       research: rendering
       verify: DONE. DONE. settlement/houses.py TREAD_WALL_FT = 4.0 (GUESS, research's 3-shaku eaves strip plus eaves; recorded case 3.85 ft) in _house_on_a_tread; treads_near_walls gate rule (raked house rects, STRtree), seeded red on the 3.85 ft case; the five regenerated and green

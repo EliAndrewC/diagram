@@ -30,6 +30,8 @@ Not `python3 tools/why_placed.py`. A package module run as a loose script puts `
 | What does the map look like after each placement stage, and why is that stage there? | `placement_stages` |
 | I lit one class on the page - which OTHER classes' pixels changed, and by how much of each? | `page_lit` (`make page-lit`; `VECTOR=1` zooms past the raster switch with the page's own key - the wheel scrolls, feature 245) |
 | Two renders of this map: how much differs, by how much, where, and on whose ink? | `picture_diff` (`make picture-diff`) |
+| Who answers the pointer over each class's visible ink - its own class, or another's hit box? | `hit_share` (feature 294 B6; the gate holds every shipped map to it) |
+| Which classes does a page draw see-through, and is a broadleaf crown painted over a conifer? | `see_through` (feature 294 B5, B5b; the declared table is `settlement/see_through.py`) |
 | What does a hand-drawn Mode A sheet look like with its captions placed? | `make sheet-render SHEET=<svg> OUT=<png>` - the placer itself is `labels/hand_sheet.py`, not a tool: each sheet's gen imports it (feature 286) |
 
 Each module's own docstring carries the WHY it exists, usually with the incident that produced it.
