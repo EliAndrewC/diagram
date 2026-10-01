@@ -759,6 +759,9 @@ emergent plant	emergent
 emergent plants	emergent
 emergents	emergent
 enceinte	enceinte
+endorheic	endorheic
+endorheic basin	endorheic
+endorheic lakes	endorheic
 enemy platform	mamian
 enemy platforms	mamian
 enemy tower	enemy tower
@@ -1641,7 +1644,6 @@ kamiza	kamiza
 kan	kan
 kan'ei	Kan'ei
 kan'ei period	Kan'ei
-kana	kana
 kanagashi	kanagashi
 kanbun	Kanbun
 kanden	kanden
