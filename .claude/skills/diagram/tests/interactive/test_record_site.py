@@ -119,18 +119,24 @@ def _record(tmp: pathlib.Path) -> pathlib.Path:
         '<h2 id="lanes">Lanes</h2>\n<div class="confusables"><p>Not to be confused with:</p></div>\n'
         '<p>A lane is narrow.<sup class="fn" data-note="alpha"></sup> See <a href="cities/fabric.html#rows">the rows</a>'
         ' and <a href="#bridges">bridges</a> and <a href="https://x.org">out</a>.<!-- <a href="nowhere.html">x</a> --></p>\n',
-        encoding="utf-8")
+        encoding="utf-8",
+    )
     (ways / "010-lanes.notes.html").write_text(
-        '<li data-note="alpha"><a href="https://a"><code>alpha</code></a> - 「q」</li>\n'
-        '<li data-note="beta"><a href="../SOURCES.html#beta"><code>beta</code></a> - 「r」</li>\n', encoding="utf-8")
+        '<li data-note="alpha"><a href="https://a"><code>alpha</code></a> - 「q」</li>\n<li data-note="beta"><a href="../SOURCES.html#beta"><code>beta</code></a> - 「r」</li>\n', encoding="utf-8"
+    )
     (ways / "020-bridges.html").write_text(
         '<h2 id="bridges">Bridges</h2>\n<p>One span.<sup class="fn" data-note="beta"></sup> Again.<sup class="fn" data-note="beta"></sup>'
-        ' <a href="ways.html">the page</a> <a href="SOURCES.html#alpha">a source</a> <img src="assets/x.png"></p>\n', encoding="utf-8")
+        ' <a href="ways.html">the page</a> <a href="SOURCES.html#alpha">a source</a> <img src="assets/x.png"></p>\n',
+        encoding="utf-8",
+    )
     fabric = tmp / "cities" / "fabric"
     fabric.mkdir(parents=True)
     (fabric / "_front.html").write_text(page.format("fabric", "Fabric"), encoding="utf-8")
     (fabric / "_tail.html").write_text(tail, encoding="utf-8")
-    (fabric / "010-rows.html").write_text('<h2 id="rows">Rows</h2>\n<p>Shops in a row. <a href="../citations/ways.html#work-alpha">w</a> <a href="../ways/020-bridges.html">b</a> <a href="../citations/ways.html">its notes</a></p>\n', encoding="utf-8")
+    (fabric / "010-rows.html").write_text(
+        '<h2 id="rows">Rows</h2>\n<p>Shops in a row. <a href="../citations/ways.html#work-alpha">w</a> <a href="../ways/020-bridges.html">b</a> <a href="../citations/ways.html">its notes</a></p>\n',
+        encoding="utf-8",
+    )
     src = tmp / "sources"
     (src / "010-works-cited").mkdir(parents=True)
     (src / "_front.html").write_text(page.format("sources", "Sources"), encoding="utf-8")
@@ -138,8 +144,9 @@ def _record(tmp: pathlib.Path) -> pathlib.Path:
     (src / "010-works-cited.html").write_text('<h2 id="works-cited">Works cited</h2>\n<p>Every work.</p>\n', encoding="utf-8")
     for n, key, url in ((10, "alpha", "https://a"), (20, "beta", "https://b; SUMMARY-ONLY")):
         (src / "010-works-cited" / f"00{n}-{key}.html").write_text(
-            f'<h3 id="{key}"><code>{key}</code></h3>\n<p>{key.title()}, a work ({url})</p>\n'
-            f"<p><em>What it is:</em> a work.</p>\n<p><em>Why it applies, and its limits:</em> it does.</p>\n", encoding="utf-8")
+            f'<h3 id="{key}"><code>{key}</code></h3>\n<p>{key.title()}, a work ({url})</p>\n<p><em>What it is:</em> a work.</p>\n<p><em>Why it applies, and its limits:</em> it does.</p>\n',
+            encoding="utf-8",
+        )
     (tmp / "assets").mkdir()
     for name in site.ASSETS:
         (tmp / "assets" / name).write_text(f"/* {name} */", encoding="utf-8")
@@ -170,7 +177,11 @@ def test_a_small_record_builds_both_forms(tmp_path: pathlib.Path) -> None:
 def test_the_build_refuses_what_lands_nowhere_and_names_it(tmp_path: pathlib.Path) -> None:
     rec = _record(tmp_path)
     q = rec / "ways" / "020-bridges.html"
-    q.write_text(q.read_text(encoding="utf-8") + '<p><a href="ways.html#gone">x</a> <a href="citations/ways.html#fn-3">n</a> <a href="citations/towns.html">t</a> <a href="cities/fabric/090-gone.html">g</a></p>\n', encoding="utf-8")
+    q.write_text(
+        q.read_text(encoding="utf-8")
+        + '<p><a href="ways.html#gone">x</a> <a href="citations/ways.html#fn-3">n</a> <a href="citations/towns.html">t</a> <a href="cities/fabric/090-gone.html">g</a></p>\n',
+        encoding="utf-8",
+    )
     with pytest.raises(RecordError) as e:
         site.build(str(rec))
     for words in ("no id `gone`", "not addressable", "no research page towns.html", "no question `gone`"):
