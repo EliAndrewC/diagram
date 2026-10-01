@@ -277,3 +277,16 @@ that many findings where R0 deduplicated by hand - 535 findings against ~360, 31
 R0's own error (observed 2026-10-01; method: `make review-census` over the ledger and `docs/review-ledger-r0.json`): geometric 50% (R0 44%), judgment 14% (R0 19%), paperwork 33% (R0 31%), nothing 3% (R0 6%); NOT-REVIEWABLE runs
 40 against ~36. SC-006 is read on the shares, which is what R0 was used for (the judgment-vs-geometric argument), and the counts
 are the script's from here on.
+
+## R5. What the feature costs a roll (the perf bookends, 2026-10-01)
+
+The first 294-end bookend ran 33% slower than 294-start (band 3): the twin-watercourse rule (B4) asked shapely for a distance, a
+projection and two interpolations at every five-foot sample of every pair of a comb's courses, 7.6 s of seed 25's 10.9 s field
+stage under cProfile. Measured in numpy with far pairs skipped (`waterfields/twins.py`), the bookend at bdd1dbbad is band 0
+(total 26% faster than 294-start, every seed faster). What remains, ACCEPTED (the session, from the perf-audit's five-leg
+counterfactual, 2026-10-01, `dev/perf-log/20261001T174035Z-review-294-confirmation-local-diagram-review.json`): B9's fill-and-trim
+of the dooryard copse (`settlement/homestead_parts/wood_goal.py`, `canopy_of` 0.16 s and `trim_to_goal` 0.14 s on seed 25; crown
+index adds 1,336 -> 4,973) costs the windbreak stage about 0.2 s a roll, and the access tree's shadow refusal (`tree_shadows`) up to
+0.09 s of seed 4's web; main's merges cost nothing measurable. The alternative priced was filling the copse straight to its rolled
+goal without the capacity pass, which is what drew it off its roll before (60%, 80% and 116%, B9's finding).
+
