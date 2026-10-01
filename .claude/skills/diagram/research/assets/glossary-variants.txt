@@ -757,6 +757,8 @@ draw-basins	draw-basin
 drawdown	drawdown
 dressed stone	dressed stone
 drill ground	drill ground
+drip line	drip line
+drip lines	drip line
 drum tower	drum tower
 drum towers	drum tower
 dry edge	dry edge
@@ -1300,6 +1302,7 @@ hall-hermitage	hall-hermitage
 hall-hermitages	hall-hermitage
 han	han
 han china	Han dynasty
+han chinese	Han Chinese
 han dynasty	Han dynasty
 han's	han
 han-dynasty	Han dynasty
@@ -1402,6 +1405,7 @@ hip-and-gable roof	hip-and-gable roof
 hip-and-gable roofs	hip-and-gable roof
 hip-roof	hip roof
 hip-roofed	hip roof
+hipped	hip roof
 hipped roof	hip roof
 hipposandal	hipposandal
 hipposandals	hipposandal
@@ -1762,6 +1766,8 @@ kachi	doshin
 kadoya	kadoya
 kaei	Kaei
 kagawa	Kagawa
+kai	Kai
+kai province	Kai
 kaibori	kaibori
 kaie-ji	Kaie-ji
 kaie-ji's	Kaie-ji
@@ -2042,6 +2048,7 @@ land survey	cadastre
 land surveys	cadastre
 land's fall	land fall
 land-readjustment	kochi seiri
+land-sharing system	warichi
 landrace	landrace
 landraces	landrace
 later hojo	Later Hojo
@@ -2448,6 +2455,7 @@ nihonbashi	Nihonbashi
 nihonmatsu	Nihonmatsu
 nihonshi shojiten	Yamakawa Nihonshi Shojiten
 nikko kaido	Nikko Kaido
+nikko toshogu	Toshogu
 nikko-kaido	Nikko Kaido
 nimosaku	nimosaku
 ninbetsu aratame cho	shumon aratame cho
@@ -3667,6 +3675,8 @@ torreya	torreya
 tortoise-shell	tortoise-shell
 tortoise-shell net	tortoise-shell
 toshiyori	toshiyori
+tosho-gu	Toshogu
+toshogu	Toshogu
 toshuko	toshuko
 total length and fall	fall
 town elder	toshiyori

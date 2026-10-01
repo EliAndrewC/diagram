@@ -1,6 +1,6 @@
 """Which way a farmhouse faces (269 B18): the village's common bearing and the spread about it, following its lane.
 
-research/homesteads.html "Farmhouses (minka)" (its map rules at research/rendering/homesteads.html "How our maps draw farmhouses - size, plan, roof, bearing and setback"): a survey of 27 villages found each
+research/homesteads.html "Farmhouses (minka)" (its map rules at research/rendering/homesteads.html "How our maps draw farmhouses (minka)"): a survey of 27 villages found each
 village's main houses spread over its commonest compass point and the point either side of it - three of sixteen, some
 67 degrees - the neighboring bearings arising where the roads curve; 87% faced within that spread and 11% were turned to
 the right. The rule the map follows: each farmhouse is turned from its village's common bearing, south or near it, by up

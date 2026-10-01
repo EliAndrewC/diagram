@@ -12,7 +12,7 @@ from .rolling.bearing import house_rot
 from .rolling.lot import FARMHOUSE_MAX_ASPECT, KURA_SHARE, household_parts, kura_rect, record_parts, seat_parts_done
 
 # HOW FAR A FARMHOUSE WALL STANDS OFF THE PADDY (researched 2026-08-27, feature 133 T41; the record
-# in research/rendering/homesteads.html "How our maps draw farmhouses - size, plan, roof, bearing and setback"). The paddy's margin is
+# in research/rendering/homesteads.html "How our maps draw farmhouses (minka)"). The paddy's margin is
 # a bund (aze) about 1.5 ft wide (a search-summary figure the session could not read - UNVERIFIED;
 # the read source gives ~10 cm high) that is ALSO the working footpath: levees are "constructed and
 # maintained to retain water ... and to allow the passage of people and transportation of tools"

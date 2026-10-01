@@ -21,7 +21,7 @@ class Farmhouse(Kind):
     this map rolls between the two forms per settlement and guarantees only that every farmhouse is served.
     No two farmhouses face exactly the same way. A survey of the houses of 27 Okinawan villages found most of them
     facing within three points of the compass about their village's commonest bearing, the smaller turns where the
-    streets curve along the slope - and streets curving along the contours are seen in a village laid out in 1736. So
+    streets curve - and curving streets, which its surveyors suppose follow the contours, are seen on the land-survey maps of a village moved to its site in 1736, though which of them were laid before 1868 the paper does not say. So
     each settlement rolls a common bearing near south, and each house turns a little with the lane and the field edge it
     stands on, never more than about 30 degrees; no house is turned a quarter away. Its work yard and garden beds turn
     with it: the GM ruled that they always line up with their house. About one farm in eight carries a storehouse
@@ -34,19 +34,19 @@ class Farmhouse(Kind):
     it is a soft threshold rather than a measured minimum - and the map draws 10 to 13 ft, well clear of it,
     close enough that the household works its own ground. No count of house bearings from before 1868 was found: the
     survey is one island region's houses in 1985, and the one tenth it found turned to the right is not drawn. How far a
-    house turns with its lane, and rolling the common bearing within about 11 degrees of due south, are guesses.
+    house turns with its lane, and rolling the common bearing within about 11 degrees of due south, are guesses, as is that the 1736 village's houses turned with its streets. The plain farmhouse is drawn 46 by 28 ft, the size of the well-off houses that survive and about twice the usual house of one village's count of 1885.
 
     Caveat: the 6 ft floor beneath it is a soft threshold rather than a measured minimum - and the map draws
     10 to 13 ft, well clear of it, close enough that the household works its own ground. No count of house bearings from
     before 1868 was found: the survey is one island region's houses in 1985, and the one tenth it found turned to the
     right is not drawn. How far a house turns with its lane, and rolling the common bearing within about 11 degrees of
-    due south, are guesses.
+    due south, are guesses, as is that the 1736 village's houses turned with its streets.
 
     Name: farmhouse
     Covers: `houses` - the dwelling of each household
     Label: accurate
     Sources: sakamoto-tsubaki-1985-omoya-muki, yamamoto-2014-koshijo-shuraku, oamishirasato-choshi-kaoku
-    Entry: research/homesteads.html - 'Farmhouses (minka)', 'The farmstead and what stood on it (yashiki)', 'Is every farmhouse reached by a lane'; research/rendering/homesteads.html - 'How our maps draw farmhouses - size, plan, roof, bearing and setback', 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads.html - 'Farmhouses (minka)', 'The farmstead and what stood on it (yashiki)', 'Is every farmhouse reached by a lane'; research/rendering/homesteads.html - 'How our maps draw farmhouses (minka)', 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'farmhouse'
