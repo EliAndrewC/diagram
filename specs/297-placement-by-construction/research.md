@@ -253,3 +253,16 @@ gate's two W25 failures were both reserved seats, so the reserved seat and its r
 (`GroveBlocks.exact_taken_by`) and every other clump reads the regions alone (`taken_by`). Inashiro's hinterland 0.84 s and
 windbreak 0.16 s in both forms - no faster, and no slower; the pool's crowns 624, 586 and 659 on Inashiro, Kuwabata and Sawada
 (661, 632, 693 in the prefilter form). Kept as the plan states B3: the gate held every grove rule on the moved pool (green, 2026-10-01).
+
+## R17. The hinterland's remaining 43,856 lookups (observed 2026-10-01, the GM: "Why do we still hvae 43,856 hinerland lookups? That still seems really high, doesn't it?"; method: the callers of `PointGrid.near` in `/tmp/m297/after/inashiro.prof`, and R10's sampler on `stage_hinterland`)
+
+What they are: ~26,000 are the village grove's crown spacing (`Seats.too_near`: each candidate crown against the crowns already
+planted - a question about the crowns placed so far, which no region painted beforehand can answer); ~13,000 the windbreak belt
+measuring its own band's edge (`belt.py`); ~4,000 the commons' brush dots (`cover._sparse`); ~2,000 the woodland search's field
+height. What they cost (observed 2026-10-01, method: R10's sampler): all of `PointGrid.near` is 3.7% of the stage's wall time, about 0.03 s of 0.86 s - each is an array read of
+a few microseconds. The stage's time is elsewhere: the grass scatter 23% (its throws and their strings), the village grove 24%, the
+woodland search's region 22%, the marsh 9%.
+
+Tried: the woodland search reading ONE region per pair of set-backs by its square's box (as plan B4 first wrote it) instead of one
+region per size by its center (observed 2026-10-01, method: `stagemin.sh`) - the stage 0.82 -> 0.81 s, and two tests failed (the square's corners stricter than the center's
+reach moved a parcel off the brook line its lot follows, and a parcel past its size band). Not kept.

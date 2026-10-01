@@ -39,3 +39,9 @@ To be clear, it is perfectly acceptable for maps to change as a result of these 
 And then, verbatim:
 
 Thanks; in general if anything in our project guidelines says that maps can't change when making optimzations then ew should strike it and say the opposite.
+
+The GM, on the end-of-feature report (2026-10-01), verbatim:
+
+Why do we still hvae 43,856 hinerland lookups?  That still seems really high, doesn't it?
+
+I do indeed waive the 5-round cap so you can keep going on the spec amendment review with more iterations as needed for this feature.

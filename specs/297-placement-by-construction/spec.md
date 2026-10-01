@@ -267,3 +267,5 @@ the accepted spec, each with its evidence:
   review required B3 as planned with exact families for reserved seats only - built, R16; plan CLEAR at its round 5.)
 - Amendment 1, round 5 (spec-fidelity-verify): CHANGES REQUIRED - the outcomes block stale after the grove rebuild (one mechanical
   item). Re-measured and restated on the final engine; the cap reached, so it goes to the GM with the decision to land.
+- The GM, 2026-10-01: "I do indeed waive the 5-round cap so you can keep going on the spec amendment review with more iterations as
+  needed for this feature." The amendment's review continues past round 5.
