@@ -2436,6 +2436,8 @@ piloted-ignition	piloted ignition
 pingjiang map	Pingjiang tu
 pingjiang tu	Pingjiang tu
 pingyao	Pingyao
+pit privies	pit privy
+pit privy	pit privy
 pit rank	pit rank
 pit ranks	pit rank
 placer	placer

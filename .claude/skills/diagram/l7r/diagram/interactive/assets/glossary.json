@@ -13762,5 +13762,12 @@
    "Sagami-no-kami",
    "Iwami-no-kami"
   ]
+ },
+ "pit privy": {
+  "def": "A toilet built over a pit that held the waste until it was emptied, and in Japanese cities the source of the night soil sold to farmers near the city.",
+  "variants": [
+   "pit privy",
+   "pit privies"
+  ]
  }
 }
