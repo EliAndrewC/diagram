@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-01T14:08:20Z",
+  "target": "entry-gate",
+  "commit": "cecd520dc",
+  "why": "section 120 changed only a link target id: the scrub-marsh question's heading was renamed, no finding moved"
+}
