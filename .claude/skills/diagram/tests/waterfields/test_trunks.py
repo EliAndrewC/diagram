@@ -94,17 +94,17 @@ def test_every_trunk_end_is_left_where_its_water_goes() -> None:
 
 
 def test_the_floor_stops_where_the_command_area_does() -> None:
-    """W31, by construction (`_comb_floor_and_winding`): an envelope whose outer thread runs 40 px down the fall past the
+    """W31, by construction (`_comb_envelope`): an envelope whose outer thread runs 40 px down the fall past the
     flat-extended collector line is pulled back onto it, so the floor overhangs the collector by no more than half a px
     (`banks.floor_overhang`, the finished-map test's own predicate)."""
     from l7r.diagram.waterfields.banks import floor_overhang
-    from l7r.diagram.waterfields.comb import _comb_floor_and_winding
+    from l7r.diagram.waterfields.comb import _comb_envelope
 
     dpts = [(100.0, 300.0), (400.0, 300.0)]
     threads = [SimpleNamespace(pts=[(100.0, 0.0), (60.0, 340.0)]), SimpleNamespace(pts=[(400.0, 0.0), (400.0, 300.0)])]
     raw = [(100.0, 0.0), (400.0, 0.0), (400.0, 0.0), (400.0, 300.0), (400.0, 300.0), (100.0, 300.0), (60.0, 340.0), (100.0, 0.0)]
     assert max(floor_overhang(raw, dpts, 90.0)) > 30.0, "the fixture's floor hangs past the collector"
-    env = _comb_floor_and_winding([], threads, [(100.0, 0.0), (400.0, 0.0)], dpts, _Frame(90.0))  # type: ignore[arg-type]
+    env = _comb_envelope(threads, [(100.0, 0.0), (400.0, 0.0)], dpts, _Frame(90.0))  # type: ignore[arg-type]
     assert max(floor_overhang(env, dpts, 90.0)) <= 0.5
 
 

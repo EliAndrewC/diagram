@@ -85,21 +85,19 @@ def test_the_collector_turns_with_the_map() -> None:
 # assertions still run at every fall, and a failure still names which one - and halves this file's cost.
 
 
-def test_a_carve_predicts_the_finished_planted_area_and_a_finished_carve_is_a_build(seed: int = 7) -> None:
-    """Feature 220: `fit_field` scores each guess on `CombCarve.planted_area` - the carved plots plus the
-    bare ground the seam pass will plant - and finishes only the winner. Two facts hold the design up:
-    the prediction is within a hair of what the finish actually plants (the first cut scored the bare
-    carve and overshot the target by 12%), and carve-then-finish IS `build_comb`, key for key."""
+def test_the_carves_region_is_what_the_finish_plants_and_a_finished_carve_is_a_build(seed: int = 7) -> None:
+    """Feature 302 (on 220): `fit_field` scores each guess on `CombCarve.region.area` - the ground the finish will tile - and
+    finishes only the winner. Two facts hold the design up: the finish plants the region, but for the scraps it leaves bare
+    (the bound: `0.5%` of it, specs/302 SC-003), and carve-then-finish IS `build_comb`, key for key."""
     from l7r.diagram.sitegen.geom import poly_area
     from l7r.diagram.waterfields import build_comb, carve_comb, finish_comb
 
     args = dict(W=1400, H=1400, sluice=(200.0, 200.0), seed=seed, down_deg=60.0, canal_a_len=(700.0, 800.0), canal_b_len=(400.0, 460.0))
     carve = carve_comb(**args)  # type: ignore[arg-type]
-    carved = sum(poly_area(p["poly"]) for p in carve.plots)  # BEFORE the finish, which reshapes this very list in place
-    predicted = carve.planted_area()
+    region = carve.region.area
+    assert carve.region.area > 0 and all(len(p["poly"]) >= 3 for p in carve.net["plots"]), "the carve's net stands the region's outline in for the plots"
     net = finish_comb(carve)
     planted = sum(poly_area(p["poly"]) for p in net["plots"])
-    assert planted > carved * 1.02, "the finish PLANTS the pockets - it does not conserve the carved area"
-    assert abs(predicted - planted) / planted < 0.01, (predicted, planted)
+    assert 0.995 * region <= planted <= region * 1.001, (region, planted)
     built = build_comb(**args)  # type: ignore[arg-type]
     assert built.keys() == net.keys() and built["plots"] == net["plots"] and built["channels"] == net["channels"] and built["acres"] == net["acres"]

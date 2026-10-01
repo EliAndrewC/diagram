@@ -252,10 +252,11 @@ def test_build_comb_supply_banks_hems_bunds_onto_the_channel_banks():
     net = build_comb(1300, 1700, (520, 220), full_or(2, 5), supply_banks=True, **kw)  # a 3-fan comb (T19: the 5-fan one cost 2.3 s and proved the same clearance)
     assert any(c.get("role") != "drain" for c in net["channels"])  # the comb drew supply strokes
     assert buried_corners(net, BANK_MARGIN - 0.15) == 0  # every corner clear of every bank (the gate's own line)
-    # ... and the legacy default really is the legacy carve: the same comb without the flag lays
-    # sector-boundary bunds ON the thread centerlines, i.e. inside the drawn water. If this half
-    # ever goes green, the fix has become the default and the flag (plus this guard) can retire.
-    assert buried_corners(build_comb(1300, 1700, (520, 220), full_or(2, 5), **kw), -0.15) > 0
+    # ... and since feature 302 the fix IS the default: the plots tile a region cut from the envelope less every stroke and its
+    # bank (`partition.planted_region`), so the same comb without the flag buries no corner either. (This half used to assert
+    # the legacy carve laid sector bunds on the thread centerlines, inside the drawn water - and said that the day it went
+    # green the fix had become the default. The flag stays: it still decides whether the stroke rule judges the bunds.)
+    assert buried_corners(build_comb(1300, 1700, (520, 220), full_or(2, 5), **kw), BANK_MARGIN - 0.15) == 0
 
 
 def test_paddy_grain_hits_the_real_feet_target():

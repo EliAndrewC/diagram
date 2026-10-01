@@ -1,19 +1,17 @@
 """Feature 287 (water W16-W25): the seam pass GUARANTEES every paddy-ring rule where it decides the rings.
 
-Each test drives the placer - `close_seams`, its last word `hold_ring_rules`, a seam step (`_shed_necks`) or the weld
-ladder (`_absorb`) - on constructed rings that include the violating case, and asks the finished rings the rule's ONE
+Each test drives the placer - `hold_ring_rules`, which a later cut (a grave island) re-holds the rules with, or the split it
+shares with `waterfields/settle.py` - on constructed rings that include the violating case (feature 302 retired the seam pass and
+its weld ladder; the construction's own guarantee is `tests/waterfields/test_settle.py`), and asks the finished rings the rule's ONE
 predicate in `waterfields/ring_rules.py`, the one the finished-map tests call. A staircase (W23) is one of the five rules
 the GM named (`test_a_bund_does_not_build_a_flight_of_steps`).
 """
 
 from __future__ import annotations
 
-import random
 from typing import Any
 
-from l7r.diagram.waterfields.frame import _Frame
 from l7r.diagram.waterfields.ring_rules import (
-    OVERCOUNT_CEILING,
     RingContext,
     arrowhead,
     as_recorded,
@@ -23,7 +21,6 @@ from l7r.diagram.waterfields.ring_rules import (
     overcount,
     ring_area,
     ring_violations,
-    self_crossing,
     staircase,
     supply_intrusions,
     too_small,
@@ -75,26 +72,6 @@ def _hold(rings: list[Any], ctx: RingContext) -> list[dict[str, Any]]:
     return plots
 
 
-def _close(rings: list[Any], envelope: list[tuple[float, float]], channels: list[dict[str, Any]] | None = None) -> list[dict[str, Any]]:
-    from l7r.diagram.waterfields.seams import close_seams
-
-    plots = [{"poly": list(r), "fill": "#A6C398"} for r in rings]
-    close_seams(
-        random.Random(1),
-        _Frame(90),
-        plots,
-        envelope,
-        G,
-        channels or [],
-        48.0,
-        (26.0, 36.0),
-        [(-4000.0, -4000.0), (4000.0, -4000.0)],
-        [(-4000.0, 4000.0), (4000.0, 4000.0)],
-        lambda _u: 2.0,
-    )
-    return plots
-
-
 def test_a_bund_does_not_build_a_flight_of_steps() -> None:
     """W23, one of the GM's five: a ring carrying two or more sideways steps is SPLIT along the line that continues the
     step's hop - the wall "continuing on and meeting at the four way intersection" - and no ring leaves the pass with more
@@ -110,13 +87,6 @@ def test_a_bund_does_not_build_a_flight_of_steps() -> None:
         assert overcount([p["poly"] for p in plots]) < 0.001, "and they do not lap"
     boxes = sorted((min(x for x, _y in p["poly"]), max(x for x, _y in p["poly"])) for p in _hold([TWO_STEPS], ctx))
     assert boxes == [(0.0, 40.0), (40.0, 120.0)], "the cut runs up the first hop's line, x = 40, across to the far bund"
-
-
-def test_the_whole_seam_pass_hands_back_no_staircase() -> None:
-    """W23 through `close_seams` itself: a stepped basin filling its envelope comes out with no ring over one step."""
-    env = [(0.0, 0.0), (150.0, 0.0), (150.0, 80.0), (0.0, 80.0)]
-    plots = _close([FOUR_STEPS], env)
-    assert plots and not [p for p in plots if staircase(p["poly"], G)]
 
 
 def test_a_part_of_a_staircase_too_small_to_stand_is_welded_or_left_bare() -> None:
@@ -176,20 +146,6 @@ def test_a_scrap_is_offered_only_to_the_neighbors_it_shares_a_bund_with() -> Non
     assert [p["poly"] for p in plots] == [apart, beyond]
 
 
-def test_a_neck_trade_that_would_shrink_the_giver_under_the_floor_is_refused() -> None:
-    """W21 at a seam step: `_shed_necks` hands a basin's thin tail to the neighbor it runs along - but not when what the
-    giver keeps would be under the area floor. The host here is 0.22 of the cell with its tail and 0.19 without it."""
-    from l7r.diagram.waterfields.seams.close import _shed_necks
-
-    host = [(0.0, 0.0), (160.0, 0.0), (160.0, 4.0), (60.0, 4.0), (60.0, 40.0), (0.0, 40.0)]
-    along = _rect(60, 4, 160, 44)
-    cell = ring_area(host) / 0.22
-    assert too_small(_rect(0, 0, 60, 40), cell) and not too_small(host, cell)
-    plots = [{"poly": list(host)}, {"poly": list(along)}]
-    _shed_necks(plots, 1.25 * G, 15.0 * G, RingContext(cell=cell, g=G))
-    assert plots[0]["poly"] == host and plots[1]["poly"] == along, "the trade is refused; both plots stand"
-
-
 def test_no_bund_is_left_down_the_middle_of_a_supply_channel() -> None:
     """W16: a ring whose bund stands inside a delivery ditch's stroke is not kept; the context is the recorded ditches."""
     ditch = {"pts": [(0.0, 50.0), (200.0, 50.0)], "w": 5.0, "role": "branch"}
@@ -211,57 +167,11 @@ def test_no_bund_is_left_across_the_collector() -> None:
     assert not [p for p in _hold([across], ctx) if collector_crossings(p["poly"], ctx.drains)]
 
 
-def test_lapping_carved_plots_come_out_counted_once() -> None:
-    """W22: two carved quads lapping by 30% leave the pass as a partition - the over-count under its 4% ceiling."""
-    env = [(0.0, 0.0), (68.0, 0.0), (68.0, 40.0), (0.0, 40.0)]
-    a, b = _rect(0.0, 0.0, 40.0, 40.0), _rect(28.0, 0.0, 68.0, 40.0)
-    assert overcount([a, b]) > OVERCOUNT_CEILING
-    plots = _close([a, b], env)
-    assert overcount([p["poly"] for p in plots]) < OVERCOUNT_CEILING
-
-
-def test_no_recorded_ring_crosses_itself() -> None:
-    """W24: a bow-tie, and a ring valid as carved that revisits a vertex once rounded to the manifest's 0.1 px, leave
-    the pass repaired or gone - never crossing."""
-    bowtie = [(0.0, 0.0), (60.0, 60.0), (60.0, 0.0), (0.0, 60.0)]
-    revisit = [(100.0, 0.0), (160.0, 0.0), (130.03, 30.0), (160.0, 60.0), (100.0, 60.0), (130.0, 30.0)]  # a 0.03 px waist
-    assert self_crossing(bowtie) and self_crossing(as_recorded(revisit)) and not self_crossing(revisit)
-    env = [(0.0, 0.0), (160.0, 0.0), (160.0, 60.0), (0.0, 60.0)]
-    plots = _close([bowtie, revisit], env)
-    assert not [p for p in plots if self_crossing(as_recorded(p["poly"]))]
-
-
 def test_an_arrowhead_is_left_bare_rather_than_kept() -> None:
     """W25 at the last word: a basin pointed and notched at the gate line is not kept whole."""
     arrow = [(0.0, 0.0), (100.0, -30.0), (60.0, 0.0), (100.0, 30.0)]
     assert arrowhead(arrow)
     assert not [p for p in _hold([arrow], RingContext()) if arrowhead(p["poly"])]
-
-
-def test_the_weld_ladder_never_falls_back_to_an_arrowhead() -> None:
-    """W25 at the weld (`_absorb`'s chevron tier, research R2's fallback): a scrap whose only host would come out a
-    33-degree, 0.6-solidity arrowhead is not welded at all - the fallback used to take it as the least-bad chevron."""
-    from l7r.diagram.waterfields.seams import _absorb
-
-    host = _poly([(0.0, 0.0), (100.0, -30.0), (60.0, 0.0)])
-    scrap = _poly([(0.0, 0.0), (60.0, 0.0), (100.0, 30.0)])
-    into = [host]
-    assert arrowhead(as_recorded(list(host.union(scrap).exterior.coords)[:-1]))
-    assert _absorb(scrap, into, set(), 3.0, G) is False
-    assert into[0] is host, "the host ring is unchanged"
-
-
-def test_the_weld_ladder_never_falls_back_to_a_staircase() -> None:
-    """W23 at the weld (`_absorb`'s jog tier): the least-jogged fallback used to take a host even when the weld left it a
-    flight of steps. A host already carrying one step, whose weld would add a second, is not taken."""
-    from l7r.diagram.waterfields.seams import _absorb
-
-    host = _poly([(0.0, 0.0), (40.0, 0.0), (40.0, 6.0), (120.0, 6.0), (120.0, 60.0), (0.0, 60.0)])
-    scrap = _poly(_rect(80.0, 0.0, 120.0, 6.0))
-    assert staircase(as_recorded(list(host.union(scrap).exterior.coords)[:-1]), G)
-    into = [host]
-    assert _absorb(scrap, into, set(), 3.0, G) is False
-    assert into[0] is host
 
 
 def test_a_hop_whose_continuations_both_leave_the_basin_is_not_cut() -> None:

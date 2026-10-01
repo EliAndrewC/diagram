@@ -172,7 +172,7 @@ def test_fit_field_probes_saturation_and_rerolls_the_best_aspect_in_full(monkeyp
         aspect = float(kw["canal_a_len"][0]) / (w.REF_CANAL_A[0] * k)  # type: ignore[index]
         carves.append((round(aspect, 2), round(k, 3)))
         acres = min(9.0 * k**2, 10.0)  # saturates at 10 acres (ftpx 1)
-        return SimpleNamespace(net={"k": k, "aspect": aspect, "acres": acres}, planted_area=lambda acres=acres: acres * SQ_FT_PER_ACRE)
+        return SimpleNamespace(net={"k": k, "aspect": aspect, "acres": acres}, region=SimpleNamespace(area=acres * SQ_FT_PER_ACRE))
 
     def fake_finish(carve: SimpleNamespace) -> dict[str, object]:
         finishes.append(carve)
@@ -216,7 +216,7 @@ def test_a_saturated_aspect_stops_after_the_probe_instead_of_bisecting_a_fan_it_
     # plots a carve lays, and the plot count is all this test's seconds were.
     (bad, err), carve = _fit_at_aspect(plan, (700.0, 300.0), 3, 138.0, (78.0, 90.0), 1.0, 0.06, 9, probe=True)
     assert not bad and err > 0.5, "the best legal fan is kept, and it is nowhere near the ask"
-    assert carve.plots, "and it is a real fan, not an empty one"  # a CARVE since feature 220: the search finishes only the winner
+    assert carve.region.area > 0, "and it is a real fan, not an empty one"  # a CARVE since feature 220: the search finishes only the winner; its ground since 302
 
 
 def test_a_fan_with_no_plots_counts_as_DANGLING() -> None:

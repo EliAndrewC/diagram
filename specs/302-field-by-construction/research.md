@@ -60,3 +60,23 @@ predictions about 0.4 s), the partition 0.04 s, the rules 0.12 s, the tint 0.04 
 - Open for Phase 1 (quality, not cost): a few cells come out larger and longer than the carve's (a narrow sector at 10
   households, an edge strip at 20), and the plot count is 10-30% lower on three inputs; the gate and the paddy glyph check
   judge it there.
+
+## R3. Phase 1 first measurements, and the blocker (observed 2026-10-01, method: `make map PROFILE=1` per pool map, `make cohort N=24` in the clone and in a detached worktree of a94cabe5f)
+
+The engine now builds the comb field as Amendment 1 designs it (partition, settle, tint; the carve's plot cutting, `sector_rows.py`,
+`close_seams` and every function only it reached, `PlotGeoms`, `planted_area` deleted). The touched suites pass (3,213 tests); the
+three new modules are at 100% coverage from their own tests.
+
+The field stage, one run each (base figures: the 2026-10-01 morning profile): Inashiro 1.23-1.51 -> 0.60 s; Mizuguchi 0.87 -> 0.49 s;
+Sawada 2.05 -> 0.81 s; Kuwabata (a polder, not a comb) 0.70 -> 0.67 s.
+
+**Kashikawa no longer generates**: the web refuses it, one row farm (at 2473, 2937) off the network. Traced: its row's street is
+planned past it, but its door path is refused - a farm fixture stands on the straight step from its door to the street, and every
+routed path round it fails the lane law (`lawful`) - so `trim_streets` cuts the street back to its last joint and the farm is
+stranded. Nothing of the field stands near it; the field moved the canvas and the row's frame, and the row-village lane code fails
+on the layout it now gets.
+
+**The failure class is pre-existing on main.** The cohort (24 seeds and the six named ones, 30 maps) at the feature's base: 23/30
+pass - WebRefused on Audit-05, -12, -22, -23, -905, NoDryExit on -08, a water rule on -19. With the field by construction: 23/30
+pass - WebRefused on Audit-04, -11, -22, -23, -903, NoDryExit on -16, the same water rule on -19. The rate is unchanged; which
+seeds fail moves with the geometry. Feature 297 recorded the cohort at 30/30, so the failures arrived with work merged since.
