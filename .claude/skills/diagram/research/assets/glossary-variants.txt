@@ -1598,7 +1598,6 @@ kabuki	kabuki
 kachi	doshin
 kadoya	kadoya
 kaei	Kaei
-kagura	kagura
 kaibori	kaibori
 kaie-ji	Kaie-ji
 kaie-ji's	Kaie-ji
@@ -3672,7 +3671,6 @@ yashikichi	yashikichi
 yashikigami	yashikigami
 yashikigami-sama	yashikigami
 yashikirin	yashikirin
-yasuki taka	Yasuki Taka
 yato	yato
 yatoda	yato
 yatsu	yato
