@@ -68,8 +68,11 @@ For every registry entry `~/.claude/sessions/<pid>.json` whose pid lives: the tr
 - the session's clone (from `/diagram/.clones/.session-clones/<sessionId>`, else the git toplevel of its cwd; the mirror
   `/diagram` itself never counts, as it is not a workspace) holds unfinished work: `git status --porcelain` non-empty,
   `git rev-list origin/main..HEAD` non-empty, or a live make there (`finished-run-hooks.sh live`);
-- the clone has no page-session run log whose last line is the runner's retry wait (`failed ... waiting ... then
-  resuming it`), which is the 292 watcher's misfire.
+- it is not one of a page-session queue's own sessions (a `started <sid>` line of a run log) while that queue is in its
+  usage-limit retry wait - the 292 watcher's misfire. A queue is in that wait only while BOTH hold: its runner lives (a
+  process whose arguments are `_page_session_runner.py --work ... <that run log>`), and the log's last line is the retry
+  line (`failed <sid> ... waiting <N> min ...`) written less than N minutes plus five ago. A stale retry line, or a dead
+  runner, exempts nothing (plan review round 1: three clones carried a stale one on 2026-09-30).
 
 ### D6 - Item 4: where it lands and what it types (FR-005b, FR-005c)
 
@@ -80,7 +83,9 @@ interactive session with a pane whose clone is the same; else none (logged only)
 stall lasts (the idle time moves), the bell once per stall. The nudge: only in the session's OWN pane, only when
 `tmux capture-pane` shows exactly one line between the last two rule lines (`────`) and it is `❯` with nothing after
 it, once per stall: `tmux send-keys -l` with the text, then Enter. A stall is identified by its last-activity time, kept
-in `~/.claude/stall-watchdog/<sessionId>.json`; activity after it starts a new stall. The text:
+in `~/.claude/stall-watchdog/<sessionId>.json`; activity after it starts a new stall. For a session with no pane of its
+own the log line carries the command that resumes it (`make page-session BRIEF="resume:<sid>:<brief>"`, the brief read
+from the clone's `.git/page-sessions/index.txt`; else `claude --resume <sid>` in its cwd). The nudge text:
 `watchdog (feature 295): this session has been idle <N> min with unfinished work in <clone> (<what>). If you are
 waiting on the GM, say so in one line and stop; otherwise check your background work and carry on.`
 
@@ -90,9 +95,14 @@ waiting on the GM, say so in one line and stop; otherwise check your background 
 `run_in_background` set and no `CRON_OK="<reason>"`, `_hm_shape.py periodic` judges the command periodic when its
 POLL_OK reason names a period or a report (hourly, every N minutes/hours, periodic, progress/status report, heartbeat),
 or a loop in it - inline, or in the script file it runs (`bash|sh <file>`, `./<file>`) - has a condition made only of
-elapsed-time tests (`$SECONDS`, `date +%s`) or is `while true`/`while :` with a `sleep` in it. The hook's own ceiling
-clause is set aside first, so an event-driven wait is never periodic. The period: the reason's words, else the elapsed
-limit in the condition, else the largest `sleep`, else an hour. The cron: under an hour, `*/m` with m the nearest
+elapsed-time tests (`$SECONDS`, `date +%s`), or is `while true`/`while :` with a `sleep` in it and no way out of its body
+(`break`, `exit`, `return`) except one guarded by an elapsed-time test - a `while true` that breaks on anything else (a
+line in a log, a file) is an event-driven wait and is never caught (plan review round 1). The hook's own ceiling clause
+is set aside first, so an event-driven wait is never periodic. The period: the reason's words, else the elapsed limit in
+the condition (a limit not written as a number there - `-ge "$N"` - is the largest number of 60 or more among the
+command's arguments), else for an endless loop its largest `sleep`, else an hour. A period that does not divide the
+hour is rounded to one that does, as a single cron expression cannot state it (ruled legitimate, plan review round 1).
+The cron: under an hour, `*/m` with m the nearest
 divisor of 60; an hour or more, the current minute (moved 7 off :00 and :30) every h hours. The refusal prints the
 `CronCreate` call with `recurring: true` and a prompt seeded from the reason.
 

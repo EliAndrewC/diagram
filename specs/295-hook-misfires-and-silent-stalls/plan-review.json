@@ -1,0 +1,84 @@
+{
+ "feature": "295-hook-misfires-and-silent-stalls",
+ "plan_sha256": "d28abc071f0adaf4fd1389d1f032a8efe11269b34de121d22bd85a4ff03bdcaf",
+ "reviewed": "2026-09-30",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "files_named expands simple assignments (three passes), resolves relative paths, keeps not-yet-existing non-directory non-executable paths; a run's files include every ancestor's stdout and named files",
+   "class": "within",
+   "why": "Implements FR-001/FR-002 as written; keeping not-yet-existing paths is what the chain shape of Story 1.2 needs (R1)."
+  },
+  {
+   "id": "D2",
+   "summary": "after the MODE 2/3 test, a line beginning MODE (case-sensitive) naming EXCEPTION or PLAN decides; else today's rules",
+   "class": "within",
+   "why": "FR-003 verbatim; case-sensitivity only defines 'a line beginning MODE'."
+  },
+  {
+   "id": "D3",
+   "summary": "StallWatch thread beside subprocess.run; silence from max(newest transcript/subagent mtime, watch start); 15 min threshold, SIGTERM via /proc args, resume at once, cap 8, check every 60 s",
+   "class": "within",
+   "why": "FR-004 and Story 3; the 15 min and 8 are the spec's own figures with R3's reason; measuring from the watch start keeps a resumed session's old transcript from tripping it at once."
+  },
+  {
+   "id": "D4",
+   "summary": "watchdog loop started detached by the UserPromptSubmit hook when its pid is dead, flock single instance, a fresh pass every 5 min, every action logged",
+   "class": "within",
+   "why": "FR-005 and Story 4.6; the 5-minute cadence is an implementation interval under the one-hour threshold."
+  },
+  {
+   "id": "D5",
+   "summary": "stall definition: every live registry entry; silent >= 60 min; not waiting (status, pending AskUserQuestion); unfinished work in its clone (mirror never counts); AND the clone has no page-session run log whose last line is a retry wait",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The spec exempts 'a page-session queue in its usage-limit retry wait'. The plan exempts every session in any clone holding ANY run log whose last line is a retry wait, with no check that the runner lives or that the wait is current. Measured 2026-09-30 (tail -1 of /diagram/.clones/*/.git/page-sessions/run-*.log): three clones carry such a stale line now - diagram-reorg and diagram-reorg-2 (written 02:36) and diagram-supplemental-2 (2026-09-28) - and the first two hold live sdk-cli (headless) sessions in the registry now. Under D5 those sessions could never be called stalled: the exemption guts item 4 for exactly the headless queues item 3/4 are about. The registry/liveness part of D5 and the mirror exclusion are within; only this clause is the narrowing."
+  },
+  {
+   "id": "D6",
+   "summary": "tab order own pane > L7R_DISPATCHER > parkedJobId > same-clone interactive > log only; title every pass, bell once per stall; nudge only in own pane when the input line reads empty, once per stall keyed by last-activity time",
+   "class": "within",
+   "why": "FR-005b/FR-005c and Story 4.1-4.5 in the spec's order; nudge only in the session's own pane as the GM approved."
+  },
+  {
+   "id": "D7a",
+   "summary": "periodic = POLL_OK reason naming a period or report (adds 'periodic', 'heartbeat') or a loop whose condition is only elapsed-time tests, inline or in the script run; checked before the POLL_OK escape; CRON_OK escapes; the hook's own ceiling set aside first",
+   "class": "within",
+   "why": "Story 5.1-5.3 and FR-006; placing it before POLL_OK is what the 292 shape (R5) requires."
+  },
+  {
+   "id": "D7b",
+   "summary": "a `while true`/`while :` loop with a sleep in it is periodic",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-006 says an event-driven wait is never caught, and Story 5.2 keeps it untouched. `while true; do grep -q DONE log && break; sleep 30; done` is an event-driven wait (it ends on a file), and D7b as written refuses it when backgrounded, narrowing the event-driven waits the request says 'stay background watchers'. A `while true` loop counts as periodic only when nothing in its body leaves it (no break/exit/return) except an elapsed-time test."
+  },
+  {
+   "id": "D7c",
+   "summary": "a sub-hour period that does not divide 60 is rounded to the nearest divisor (*/m); an hour or more becomes an off-minute every-h-hours cron",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Story 5.1 asks for the same period; a single cron expression physically cannot express a period that does not divide the hour (or the day), so the nearest expressible period is the only possible call. The spec's own wording already confines */N to periods that divide the hour."
+  },
+  {
+   "id": "D8",
+   "summary": "_quote_state finds the quoting at the insertion point; inside double quotes the clause's \" and $ are escaped; add_ceiling and proof_of_life both use it",
+   "class": "within",
+   "why": "FR-007 and Story 6.1."
+  },
+  {
+   "id": "D9",
+   "summary": "sleep_in_loop: the sleep must lie between a loop keyword and its matching done",
+   "class": "within",
+   "why": "FR-008 and Story 6.2."
+  },
+  {
+   "id": "D10",
+   "summary": "settings.json wiring on UserPromptSubmit; rows in CLAUDE.md and docs/guards.md",
+   "class": "within",
+   "why": "FR-009 and FR-005's prompt-hook start."
+  }
+ ],
+ "verdict": "BLOCKED"
+}
