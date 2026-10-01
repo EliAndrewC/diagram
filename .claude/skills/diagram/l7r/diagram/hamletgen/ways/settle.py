@@ -969,7 +969,8 @@ def settle_the_web(s: Any, rounds: int = SETTLE_ROUNDS) -> dict[str, Any]:
         # the law is asked after any round that changed the web, and after a first round that did not (a still round proves
         # only that no repair applied, not that the law holds - cohort seed 14); a later still round keeps the last answer
         broken = unsettled(s.M, memo_ground(s, "worked", worked_ground)) if (n or broken is None) else broken
-        settled = not n or not broken
+        settled = not n  # a round that changed something is followed by another: a repair no rule names (the shadows, one a
+        # round) is not done until a round finds nothing for it (Kashikawa's doubled band, feature 297's gate)
     if broken is None or broken:
         # THE LAST RESORT (FR-005): the rounds ran out with a lane still breaking a rule - OR A ROUND CHANGED NOTHING WITH ONE
         # STILL BROKEN, since a still round proves only that no repair applied, not that the law holds (cohort seed 14 with

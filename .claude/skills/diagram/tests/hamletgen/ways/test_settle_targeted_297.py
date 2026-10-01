@@ -30,7 +30,7 @@ def test_a_later_round_runs_only_the_steps_for_what_is_still_broken(monkeypatch:
 
     steps = (step("settle_shapes", [1, 0]), step("settle_widths", [0, 1, 0]), step("settle_shadows", []))
     monkeypatch.setattr(settle, "STEPS", steps)
-    answers = [{"width_steps": [1]}, {}]
+    answers = [{"width_steps": [1]}, {}, {}]
     monkeypatch.setattr(settle, "unsettled", lambda M, ground=None: answers.pop(0))
     monkeypatch.setattr(settle, "memo_ground", lambda s, k, f: None)
     monkeypatch.setattr(settle, "unreached_houses", lambda M: [])
@@ -41,7 +41,8 @@ def test_a_later_round_runs_only_the_steps_for_what_is_still_broken(monkeypatch:
     monkeypatch.setattr(lr, "refuse_unreached", lambda M: None)
     ran.append([])
     got = settle.settle_the_web(SimpleNamespace(M={"lanes": []}))
-    assert got["rounds"] == 2 and got["dropped"] == 0
+    assert got["rounds"] == 3 and got["dropped"] == 0, "the round after a change runs; a still round ends it"
     flat = ran[0]
     assert flat[:3] == ["settle_shapes", "settle_widths", "settle_shadows"], "the first round: every step"
-    assert flat[3:] == ["settle_widths", "settle_shadows"], "the second: the width rule's step and the unmapped one"
+    assert flat[3:5] == ["settle_widths", "settle_shadows"], "the second: the width rule's step and the unmapped one"
+    assert flat[5:] == ["settle_shadows"], "the third: the law clean, only the step no rule names"
