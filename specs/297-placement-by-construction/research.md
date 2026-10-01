@@ -55,3 +55,13 @@ the last resort drops 1 lane (`meta.web_settle`). The last resort's re-sweeps (`
 
 12,195 `drain_bank_clearance` calls (`m:before-inashiro-b-hem-drain-bank-clearance`) = every vertex of every plot over three carves, each against every drain segment; ~0.07 s
 real (observed 2026-09-30, method: cProfile's 0.184 s cumulative over its ~2.5x overhead). Not the field's cost (the three carves and `close_seams` are), but asked where no corner can be near the drain.
+
+## R6. Why each seat offer fails (observed 2026-09-30, method: scratch counters at each refusal in `_place_bundle_nucleated` and `_parts_fit`, reverted)
+
+Of Inashiro's 734 offers: 176 refused at the house's own box (`_house_box_refused`), 288 with every garden side's envelope
+blocked (after the four layouts were built), 255 with at least one side reaching the part rules and every side failing, 15
+seated. The part rules' refusals by rule, counted per side: the wood floor's seats covered (`wood.covers_a_seat`) 361, no corridor
+to the access tree 441 (166 distinct searches - the four sides of a seat share one house and one yard, 558 of 558 seats measured,
+so the corridor memo answers the other three), the sun rules 40, the field's reach 24, other rules 5. So 464 of the 734 offers are
+refused by ground occupancy alone (the house box and the envelope) and most of the rest by the wood seats and the corridor -
+each a question about WHERE the seat is, not about the homestead's parts.
