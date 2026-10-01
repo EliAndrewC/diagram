@@ -1,6 +1,6 @@
 {
  "feature": "292-research-presentation-style",
- "plan_sha256": "dbb8871ccf2427ca5263238db561f2407b0f5abce959001f212ee308dc8a7b2b",
+ "plan_sha256": "027f5a84462c7f4142e0d0093bde1b498ee40032f8ae3504dd3d8977a05d8976",
  "reviewed": "2026-10-01",
  "declared": "spec-fidelity",
  "decisions": [
@@ -44,13 +44,13 @@
    "id": "D6",
    "summary": "a topic plan per page from a digest; the 21 plans (19 page plans and 2 additions plans) committed under sweep/",
    "class": "within",
-   "why": "Serves 'combining similar ones as appropriate' across the whole record; the revision only records that the plans are committed (21 plan-*.md files are tracked)."
+   "why": "Serves 'combining similar ones as appropriate' across the whole record; round 3 states the count as 19 page plans plus 2 additions plans (21 plan-*.md tracked, 2 of them plan-additions)."
   },
   {
    "id": "D7",
-   "summary": "every group in two headless sessions with the pilot's checks; briefs generated from two templates by make_briefs.py",
+   "summary": "every group in two headless sessions with the pilot's checks; briefs generated from two templates by make_briefs.py, the first page's (buildings) committed as a sample",
    "class": "within",
-   "why": "'as we have been doing': the pilot's procedure and checks, none dropped. The revision names the templates (committed)."
+   "why": "'as we have been doing': the pilot's procedure and checks, none dropped. Round 3: wording only - which generated briefs are committed (40 buildings briefs tracked under sweep/briefs/)."
   },
   {
    "id": "D8",
@@ -62,13 +62,13 @@
    "id": "D9",
    "summary": "three parallel queues in three clones, briefs handed between clones, merged back with sweep/tools (resolve, entry_union, relink); three mid-run brief fixes (foreground dispatch, large PDFs via curl/pdftotext, sync held until 291 lands)",
    "class": "within",
-   "why": "Concurrency, merge mechanics and procedure fixes; no section is left unswept, no check dropped, and the large-PDF fix keeps a source readable rather than deferring it. Nothing the GM did not ask for is decided."
+   "why": "Concurrency, merge mechanics and procedure fixes; no section is left unswept, no check dropped, and the large-PDF fix keeps a source readable rather than deferring it. Nothing the GM did not ask for is decided. Round 3: the 90-hour projection and the 3.5-6 GB working set now carry their one-shot dates and methods; no decision changed."
   },
   {
    "id": "D9a",
    "summary": "the closing pass: the checks' 26 items for the GM put to escalation-check (24 the session's own, 2 merged into 1 question the GM answered), plus the deferred cross-topic moves, worked as T26 from sweep/closing briefs",
    "class": "within",
-   "why": "Finishes 'each and every research section' under the style guide; the one GM question went to the GM and T26 applies the GM's 2026-10-01 answers as given (option b; the office size as research). escalation-check is the project's standing route for findings meant for the GM; nothing is narrowed."
+   "why": "Finishes 'each and every research section' under the style guide; the one GM question went to the GM and T26 applies the GM's 2026-10-01 answers as given (option b; the office size as research). escalation-check is the project's standing route for findings meant for the GM; nothing is narrowed. Round 3: the plan's wording now matches (two items merged into one question)."
   },
   {
    "id": "D10",
