@@ -333,22 +333,22 @@ class BathRoom(Kind):
     Why: Before 1868 the bath was part of the house, not a shed: house-plan registers of villages on the shogun's road
     to Nikko show a bath of one or two tsubo in two or three houses in ten by 1824 and 1842, beside the main door or
     beyond the stable wing, and in a few - most of them headmen's - joined to the floored rooms. A bath standing as a
-    building of its own is found only in the twentieth century. So a bath room is drawn on two or three farms in ten,
+    building of its own is found only from the Meiji period on. So a bath room is drawn on two or three farms in ten,
     6 ft out from the wall and 6 to 12 ft along it; each hamlet rolls the main door or the stable wing's end, and a
     headman's bath is joined to his floored rooms.
 
-    Note: The share, the size and the three places are read (Tsuda's reading of the Nikko registers); the odds between
-    the places are a guess, and so is giving the floored-room seat to the headman; the tub drawn in it is the map's mark
-    for what the room is.
+    Note: The share, the size, the three places and the headmen's floored-room baths are read (Tsuda's reading of the
+    Nikko registers); the odds between the places are a guess, and so is that every headman's bath stood at the
+    floored rooms; the tub drawn in it is the map's mark for what the room is.
 
-    Caveat: the odds between the places are a guess, and so is giving the floored-room seat to the headman; the tub
-    drawn in it is the map's mark for what the room is.
+    Caveat: the odds between the places are a guess, and so is that every headman's bath stood at the floored rooms;
+    the tub drawn in it is the map's mark for what the room is.
 
     Name: bath room
     Covers: `farm_fixtures[kind=bath]` - the bath room joined to the house
     Label: accurate
     Sources: tsuda-1991-nikko-shasan-minka, mizumaki-goemonburo
-    Entry: research/homesteads.html - 'Bath sheds on the farm (furo)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw bath sheds (furo)'; 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads.html - 'Baths on the farm (furo)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw farm baths (furo)'; 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'bath room'
@@ -396,13 +396,13 @@ class HouseholdShrine(Kind):
     Note: we have drawn the household shrine at 6 x 6 ft - the small-shed module - in vermilion with a torii
     before it, in order to make it visible on the map at this scale. The one measured stone hokora is about
     40 cm (1.3 ft) on a side, a stone or wooden shrine that at true size would be a single pixel. Presence,
-    rarity and the three corners are read; how often each corner is drawn is a guess, from a survey count we could not read.
+    rarity and the three corners are read; how often each corner is drawn is a guess, ordered after the Japanese Wikipedia article's commonest corners, since no count we could read gives it.
 
     Name: household shrine
     Covers: `farm_fixtures[kind=shrine]` - the hokora
     Label: convention
     Sources: tokushima-yashikigami, jawiki-yashikigami, kameyama-yashikigami, sugiura-1973-fuzoku
-    Entry: research/homesteads.html - 'Household shrines (yashikigami)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps place the household shrine (yashikigami)'; 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads.html - 'Household shrines (yashikigami)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps place household shrines (yashikigami)'; 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'household shrine'

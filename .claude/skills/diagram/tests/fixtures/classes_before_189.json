@@ -46,7 +46,7 @@
   "bathhouse": {
     "caveat": "",
     "covers": "`farm_fixtures[kind=bath]` - the bath room joined to the house",
-    "entry": "research/homesteads.html - 'Bath sheds on the farm (furo)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw bath sheds (furo)'; 'How our maps draw the farmstead and what stands on it (yashiki)'",
+    "entry": "research/homesteads.html - 'Baths on the farm (furo)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw farm baths (furo)'; 'How our maps draw the farmstead and what stands on it (yashiki)'",
     "key": "bathhouse",
     "label": "accurate",
     "label_note": "Use is read (Mizumaki museum); where the shed stood was found nowhere - the back wall or a flank is a guess, and so is the 6 x 6 ft size.",
@@ -461,7 +461,7 @@
   "household shrine": {
     "caveat": "",
     "covers": "`farm_fixtures[kind=shrine]` - the hokora",
-    "entry": "research/homesteads.html - 'Household shrines (yashikigami)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps place the household shrine (yashikigami)'; 'How our maps draw the farmstead and what stands on it (yashiki)'",
+    "entry": "research/homesteads.html - 'Household shrines (yashikigami)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps place household shrines (yashikigami)'; 'How our maps draw the farmstead and what stands on it (yashiki)'",
     "key": "household shrine",
     "label": "convention",
     "label_note": "we have drawn the household shrine at 6 x 6 ft - the small-shed module - in vermilion with a torii before it, in order to make it visible on the map at this scale. The one measured stone hokora is about 40 cm (1.3 ft) on a side, a stone or wooden shrine that at true size would be a single pixel. Presence, rarity and corner are read.",

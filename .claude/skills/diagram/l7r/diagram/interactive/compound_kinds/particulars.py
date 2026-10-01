@@ -241,7 +241,8 @@ class WoodKamiAltar(Kind):
 
     Note: the altar's dedication to the kami of the wood, and its keeping by a private hand with no monk
     behind it, are its map's story, a departure made by the map's design. Its form - a small altar with
-    no torii, below the rank of a shrine - is the historical one, and it is drawn about 6 ft square.
+    no torii, below the rank of a shrine - is the historical one; its size is not: it is drawn about 6 ft square,
+    larger than life so that it can be seen, where the one measured stone shrine is about 40 cm (~16 in) a side.
 
     Name: wood-kami altar
     Covers: the altar and its label with the "personally maintained" sublabel
