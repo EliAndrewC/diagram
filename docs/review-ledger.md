@@ -278,3 +278,4 @@ or a later pass found what this one should have).
 | 2026-10-01 | spec-fidelity-verify | feature 297, Amendment 1, round 6 | CHANGES REQUIRED | the cohort and the make-map figure predated the grove rebuild; a stale bookend |
 | 2026-10-01 | spec-fidelity-verify | feature 297, Amendment 1, round 7 | CHANGES REQUIRED | two lines still cited the regen key at an intermediate value |
 | 2026-10-01 | spec-fidelity-verify | feature 297, Amendment 1, round 8 | CHANGES REQUIRED | the success criteria preamble still gave the old load |
+| 2026-10-01 | spec-fidelity-verify | feature 297, Amendment 1, round 9 | FAITHFUL | - |

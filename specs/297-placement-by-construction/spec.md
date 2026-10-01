@@ -273,3 +273,4 @@ the accepted spec, each with its evidence:
   stale bookend in dev/performance.md. Addressed: both re-taken on the final engine (cohort 30/30; `make map` per `m:before-inashiro-regen-s` and `m:after-inashiro-regen-s`).
 - Amendment 1, round 7 (spec-fidelity-verify): CHANGES REQUIRED - two lines still cited the key at 6.1 s. Addressed.
 - Amendment 1, round 8 (spec-fidelity-verify): CHANGES REQUIRED - the success criteria's preamble still gave the old load. Addressed.
+- Amendment 1, round 9 (spec-fidelity-verify): FAITHFUL.
