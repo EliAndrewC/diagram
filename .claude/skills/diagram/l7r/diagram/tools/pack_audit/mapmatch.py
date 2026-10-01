@@ -28,6 +28,8 @@ from dataclasses import dataclass
 from functools import lru_cache
 from typing import Any
 
+from l7r.diagram.buildings.types import load_types
+
 from .checks import _main_gate_passage, main_gate_passage_ft
 from .grids import FTPX
 from .onmap import OnMap
@@ -390,7 +392,7 @@ def site_classes(plan: ParsedPlan, text: str, on_map: OnMap | None) -> dict[str,
 
 
 #: Where a map records a subject of each Mode A tier: the top-level keys of a settlement manifest (feature 294 B24).
-TIER_KEYS: dict[str, tuple[str, ...]] = {"magistracies": ("manors",), "country-shrines": ("religious", "shrines")}
+TIER_KEYS: dict[str, tuple[str, ...]] = {t.tier: t.map_keys for t in load_types()}  # derived from types.json (map_keys)
 #: The trees a settlement manifest lives in, from the skill root.
 MAP_TREES: tuple[str, ...] = ("pool", "legacy-hand-authored-pool")
 

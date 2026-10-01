@@ -25,7 +25,7 @@ from .parse import ParsedPlan
 from .program_rules import ENTRANCE_KINDS, entrances
 from .tagged import Mark, marks
 
-#: The kinds a road is drawn under: the hand magistracies' `road`, the shrine's `footpath`.
+#: The kinds a road is drawn under: the hand manors' `road`, the shrine's `footpath`.
 ROAD_KINDS: frozenset[str] = frozenset({"road", "footpath"})
 #: The kinds and ids an arch is drawn under (a shrine's way ends at its torii).
 ARCH_KINDS: frozenset[str] = frozenset({"torii"})

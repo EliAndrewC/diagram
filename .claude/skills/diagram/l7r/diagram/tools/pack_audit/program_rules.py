@@ -230,7 +230,7 @@ _FURNITURE_ATTR = re.compile(r'\s(?:id|data-kind)="([^"]*(?:compass|rose|legend)
 def sheet_furniture(svg: str) -> list[str]:
     """SKILL.md 'Title block' and 'Orientation' (map drawing conventions): a title - the sheet's largest bold text,
     placed, its baseline above the precinct's top edge (its SIZE varies by sheet and is not held: 30 on the hand
-    magistracies, 18 on the shrine, 20 on the drafts); no compass rose (north-at-top is invariant, GM 2026-07); no key
+    manors, 18 on the shrine, 20 on the drafts); no compass rose (north-at-top is invariant, GM 2026-07); no key
     box."""
     ms = marks(svg)
     texts = [m for m in ms if m.tag == "text" and m.placed and m.text]

@@ -17,9 +17,10 @@ from __future__ import annotations
 
 import math
 from collections.abc import Sequence
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from shapely.geometry import LineString, Point
+if TYPE_CHECKING:  # shapely loads on first use, not at import (feature 237: 16 MiB per collecting worker)
+    from shapely.geometry import LineString
 
 TWIN_LO_FT = 12.0  # nearer than this the two are one course or a junction, not twins (the recorded band's floor)
 TWIN_HI_FT = 32.0  # the recorded band's ceiling
@@ -39,6 +40,8 @@ def twin_run_ft(a: Sequence[Sequence[float]], b: Sequence[Sequence[float]], ftpx
     """The longest stretch, in feet, along which course `a` runs beside course `b`: within `TWIN_LO_FT`-`TWIN_HI_FT` of it,
     within `TWIN_DEG` of its bearing, and more than `TWIN_JOIN_FT` from an end of `a` that stands on `b` (where `a` leaves or
     joins it). Sampled every five feet along `a`."""
+    from shapely.geometry import LineString, Point
+
     la, lb = LineString(a), LineString(b)
     if la.length == 0 or lb.length == 0:
         return 0.0
@@ -73,6 +76,8 @@ def twins(courses: Sequence[Sequence[Sequence[float]]], ftpx: float) -> list[tup
 
 def leaves_from(child: Sequence[Sequence[float]], parent: Sequence[Sequence[float]], ftpx: float) -> bool:
     """Does `child` take off from `parent` - its first point standing on it?"""
+    from shapely.geometry import LineString, Point
+
     return LineString(parent).distance(Point(child[0])) * ftpx < TWIN_LO_FT
 
 
@@ -80,6 +85,8 @@ def drop_twin_deliveries(channels: list[dict[str, Any]], first: int, ftpx: float
     """Take out of `channels[first:]` every delivery (`role` branch) that would run beside another course as a twin: the one
     that leaves the other, else the shorter of two deliveries. A supply canal (`role` main) is never taken out. Returns the
     deliveries taken out."""
+    from shapely.geometry import LineString
+
     mine = list(range(first, len(channels)))
     gone: set[int] = set()
     for i, j, _run in twins([channels[k]["pts"] for k in mine], ftpx):

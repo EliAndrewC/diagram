@@ -303,7 +303,22 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
                 return False
             if not way_out_once(M, [lanes_chain(recs, host, lanes, k)]):
                 return False
+            # ...NOR RUNS BESIDE ANOTHER TREE LANE PAST A PITCH, either way round (feature 294: a Sawada roll joined one access
+            # lane to its neighbor's at a shallow angle, 115 ft within 30 ft of it - the doubled band `_lay_web_lane` refuses
+            # of a web run, never asked of the tree; the pool test of feature 293 reads it on the finished map).
+            if tree_shadows([ln["pts"] for ln in lanes]):
+                return False
     return True
+
+
+def tree_shadows(ways: Sequence[Sequence[Pt]]) -> bool:
+    """Does the last way run beside another past a pitch, or another beside it (`serve.shadowed_by`, way against way)?"""
+    from .serve import shadowed_by  # serve reaches the web's draw; imported here, where the seating asks it
+
+    last = len(ways) - 1
+    if shadowed_by(ways, last) is not None:
+        return True
+    return any(shadowed_by([ways[i], ways[last]], 0) is not None for i in range(last))
 
 
 def lanes_chain(recs: Sequence[Mapping[str, Any]], host: Sequence[int | None], lanes: Sequence[Mapping[str, Any]], k: int) -> Poly:

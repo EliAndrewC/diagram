@@ -449,7 +449,7 @@ def test_the_tread_test_measures_the_RAKE_a_house_will_be_drawn_at():
     s = Settlement(1400, 1400, seed=3)
     s.meta(name="Rake", scale="hamlet", ftpx=1, toscale=True, households=12)
     s.lane([[200.0, 700.0], [1200.0, 700.0]], width=16, clearance=22)
-    x, y, w, h = 700.0, 726.5, 62.0, 30.0  # a LONG minka (the 1.35x length jitter), just clear square-on
+    x, y, w, h = 700.0, 728.5, 62.0, 30.0  # a LONG minka (the 1.35x length jitter), just clear square-on (of the 4 ft TREAD_WALL_FT, feature 294)
     assert not s._on_a_tread(x, y, w, h), "square-on, this seat clears the tread - so the rake is the only thing under test"
     assert not s._on_a_tread(x, y, w, h, rot=0.0), "an explicit zero rake must agree with the default"
     assert s._on_a_tread(x, y, w, h, rot=-5.0), "RAKED, the same seat puts a corner on the tread and must be refused"
