@@ -361,7 +361,7 @@ POLDER_FABRIC: dict[str, dict[str, Any]] = {
 # the grid, 0.5 the mosaic Kuwabata was drawn with (the GM saw and accepted that map's ponds).
 POND_LAYOUTS = ("mosaic",)
 
-# THE FRY FORM - which nursery a dike-pond hamlet keeps (feature 280 M60, research/archetypes/200 and 172): the ordinary
+# THE FRY FORM - which nursery a dike-pond hamlet keeps (feature 280 M60, research/archetypes.html 'Fish fry and nursery ponds (yumiao)'): the ordinary
 # delta hamlet raised grown fish and BOUGHT its fry, with no nursery ponds; the fry village of Jiujiang raised fry in seven
 # parts of ten of its pond water (Qu Dajun, 1678). The "one parcel in ten" once drawn is on no page read, premodern or
 # modern. Two attested forms, so a knob; the fry village rare (Qu Dajun: fry ponds only in Jiujiang) - the odds a GUESS.

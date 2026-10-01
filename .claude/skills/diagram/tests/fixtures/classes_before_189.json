@@ -297,7 +297,7 @@
   "fish pond": {
     "caveat": "the pond SIZES are from 20th-century surveys of the traditional landscape, not Ming or Qing documents, and the whole-block conversion drawn here is the rare end state of a normally scattered system.",
     "covers": "the dug water of every `dikeponds[]` parcel - the pond inset inside its mulberry dike",
-    "entry": "research/archetypes.html - 'Cash crops on rice land: dike-ponds, lotus fields and tea rows', 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', \"Did a dike-pond village rear its own fish fry, or buy them? Most bought them - the nursery ponds were one township's trade\", 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'; research/rendering/archetypes.html - \"How our maps lay cash crops over a village's rice land\", 'How our maps draw dike-ponds (sangji yutang)'",
+    "entry": "research/archetypes.html - 'Cash crops on rice land: dike-ponds, lotus fields and tea rows', 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Fish fry and nursery ponds (yumiao)', 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'; research/rendering/archetypes.html - \"How our maps lay cash crops over a village's rice land\", 'How our maps draw dike-ponds (sangji yutang)'",
     "key": "fish pond",
     "label": "accurate",
     "label_note": "The form and the loop are read; the pond SIZES are from 20th-century surveys of the traditional landscape, not Ming or Qing documents, and the whole-block conversion drawn here is the rare end state of a normally scattered system.",
@@ -359,7 +359,7 @@
   "fry pond": {
     "caveat": "",
     "covers": "the dug water of a `dikeponds[]` parcel recorded `kind: fry` - a fry village's smallest ponds",
-    "entry": "research/archetypes.html - \"Did a dike-pond village rear its own fish fry, or buy them? Most bought them - the nursery ponds were one township's trade\", 'Were fish fry a trade, and which ponds were the nursery ponds?', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps furnish a dike-pond hamlet'",
+    "entry": "research/archetypes.html - 'Fish fry and nursery ponds (yumiao)', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - \"How our maps draw a dike-pond village's fry ponds\"",
     "key": "fry pond",
     "label": "accurate",
     "label_note": "GUESS: the fry trade and the nursery stage are read, but nothing read gives how many fry ponds a hamlet kept or which parcels - the one-in-ten share and the choice of the smallest parcels are the generator's.",

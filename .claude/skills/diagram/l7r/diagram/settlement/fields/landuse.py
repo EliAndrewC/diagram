@@ -30,8 +30,8 @@ DIKE_CROP_CLASS = {"mulberry": "mulberry dike", "fruit": "fruit dike", "tea": "t
 # oldest there are; every ratio written as a number is modern. It was 11 ft, which left 80%, wetter than any figure read.
 DIKEPOND_WATER_INSET = 23.0
 
-# A FRY VILLAGE'S NURSERY SHARE (feature 280 M60, research/archetypes/200): Qu Dajun (1678) has seven parts in ten of the pond
-# water at Jiujiang raising fry. Read as a share of the block's pond AREA - the record's reading, the smallest ponds first.
+# A FRY VILLAGE'S NURSERY SHARE (feature 280 M60, research/rendering/archetypes.html "How our maps draw a dike-pond
+# village's fry ponds"): Qu Dajun (1678) has seven parts in ten of the pond water at Jiujiang raising fry. Read as a share of the block's pond AREA - the record's reading, the smallest ponds first.
 FRY_VILLAGE_SHARE = 0.7
 
 
@@ -220,12 +220,13 @@ class LandUseMixin:
             cpp = ch["pts"]
             chansegs += [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for a, b in zip(cpp, cpp[1:], strict=False)]
 
-        # FRY NURSERY PONDS (feature 150, GM 2026-08-28 choosing audit A5; feature 280 M60, research/archetypes/200): the
-        # ordinary delta hamlet BOUGHT its fry and kept no nursery ponds; the fry village of Jiujiang raised fry in seven
-        # parts of ten of its pond water (Qu Dajun, 1678) - the hamlet's `fry_form` (hamletgen `FRY_FORMS`). On a fry
-        # village the smallest ponds are the fry ponds, up to that share of the block's pond area (the smallest first is
-        # this record's assumption, 172): no new ink, a record and a class of their own for the interactive map. The one
-        # parcel in ten drawn before is on no page read, premodern or modern, and is gone.
+        # FRY NURSERY PONDS (feature 150, GM 2026-08-28 choosing audit A5; feature 280 M60; research/rendering/archetypes.html
+        # "How our maps draw a dike-pond village's fry ponds"): the ordinary delta hamlet BOUGHT its fry and kept no nursery
+        # ponds; the fry village of Jiujiang raised fry in seven parts of ten of its pond water (Qu Dajun, 1678) - the
+        # hamlet's `fry_form` (hamletgen `FRY_FORMS`). On a fry village the smallest ponds are the fry ponds, up to that
+        # share of the block's pond area (the smallest first is a GUESS): drawn in the turbid FRY_WATER, with a record and a
+        # class of their own for the interactive map. The one parcel in ten drawn before is on no page read, premodern or
+        # modern, and is gone.
         def _area(poly: Any) -> float:
             return float(abs(sum(poly[i][0] * poly[(i + 1) % len(poly)][1] - poly[(i + 1) % len(poly)][0] * poly[i][1] for i in range(len(poly))))) / 2
 
@@ -353,7 +354,7 @@ class LandUseMixin:
         dike_crop: str = "mulberry",
     ) -> None:
         """Draw ONE converted plot: a dike-pond unit (bank, water, deferred crowns, record) or a lotus field.
-        `fry` marks a fry nursery pond (feature 150): same ink, its own class and record kind.
+        `fry` marks a fry nursery pond (feature 150): drawn in FRY_WATER, its own class and record kind.
 
         `dikeponds` and `crown_q` are appended to in place - the caller needs both after the loop."""
         if overlay == "mulberry_fishpond":
@@ -414,7 +415,7 @@ class LandUseMixin:
             # lies under the pond's own wider, later stroke, and the `dikeponds` records do not move.
             self.add(f'<path d="{bd} {wd}" fill-rule="evenodd" fill="#C2A772" stroke="#9C8558" stroke-width="1.2" stroke-linejoin="round" opacity="0.95"/>', cls=DIKE_CROP_CLASS[dike_crop])
             # A FRY POND IS DRAWN TURBID (settlement-review of Kuwabata, feature 280): Qu Dajun (1678) - fry water is turbid,
-            # grown-fish water clear, and the color of the water tells what it holds (research/archetypes/200) - so a fry
+            # grown-fish water clear, and the color of the water tells what it holds (research/archetypes.html 'Fish fry and nursery ponds (yumiao)') - so a fry
             # village reads as one without a hover
             self.add(f'<path d="{wd}" fill="{FRY_WATER if fry else colors[overlay]}" stroke="#6C9CBE" stroke-width="1.4"/>', cls="fry pond" if fry else "fish pond")
             crown_q.append((qpoly, bd, cx, cy))  # crowns drawn after the late-water anchor (see below)
