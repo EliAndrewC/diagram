@@ -87,7 +87,8 @@ class Windbreak(Kind):
     the one large sample measured grove by grove, Hong Kong's survey of 115 village woods (Zhongshan's 66 groves
     average about four hectares, no grove's own size given), puts the grove behind the village at a median of about
     one hectare - half under a hectare, four in ten between one and two. A village's belt is drawn at one to two
-    hectares, in the upper half of that band; a hamlet's is drawn smaller, in step with the cluster it stands behind.
+    hectares, in the upper half of that band; a hamlet's follows the cluster it stands behind, the five hamlet maps
+    drawing theirs at 0.6 to 1.8 hectares, from well under that band up into it.
     It is kept off the west side of the gardens so the beds keep their afternoon sun.
     What it was made of was done two ways. The Japanese farmstead grove was led by one tall tree - in three of the four
     regions of a 2004 survey cedar grew at every homestead and was the dominant tree, in two of them planted in rows -
@@ -101,7 +102,9 @@ class Windbreak(Kind):
     size and the tree counts are guesses bracketed by Korean village-grove analogues; the belt's shape follows
     the terrain and the cluster, its ragged outline, its 80 to 120 ft depth and its place in the upper half of the
     measured band being map conventions and its wrapping the cluster's flanks this project's choice; one shared grove
-    as a clustered village's pattern is a guess. The side it stands on, never ringing the cluster, follows the Chinese village's separate grove patches (coggins-minor-2018) and the Sendai farmstead grove - the full ring being the Izumo plain's farmstead form alone, which the maps give only to a farmstead's own grove - kept on the north
+    as a clustered village's pattern is a guess; the 30 ft bare run at which the maps count a hole and fill it is a
+    convention, no source giving an opening's width, and the planting resuming on both sides of a lane that crosses
+    the belt is a guess, no old record saying how a lane passed through one. The side it stands on, never ringing the cluster, follows the Chinese village's separate grove patches (coggins-minor-2018) and the Sendai farmstead grove - the full ring being reported only of the Izumo plain's farmstead grove and of one island settlement's belt, Tarama's of 1742 in the Ryukyus, and given by the maps only to a farmstead's own grove - kept on the north
     and west against the northwesterly winter wind (irie-2020-igune, yashikirin-jawiki), and the GM's rulings
     that the maps show that regional wind unless a place declares its own. The two forms are read (the four-region
     survey, takehara-2004-yashikirin; the delta patches), and so is the bamboo, in the Japanese farmstead grove only

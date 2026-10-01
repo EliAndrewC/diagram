@@ -1765,6 +1765,7 @@ kaifeng	Kaifeng
 kaigisho	kaigisho
 kaine	kainyo
 kainyo	kainyo
+kainyu	kainyo
 kaisho	kaisho
 kaishochi	kaishochi
 kaison	kaison
