@@ -308,7 +308,7 @@ register_knob(Knob("grain_drift", [-12, -8, -4, 0, 4, 8, 12], default=0))  # deg
 # Rolled per settlement from the map's own seed like every other knob. `draft_byres` reads it;
 # `byres_stand_in_their_declared_form` gates the declaration and the courtyard form's geometry.
 #
-# RE-READ BY 269 B16 (research/homesteads/300, "Where did a village's draft ox stand"). The record found the
+# RE-READ BY 269 B16 (research/homesteads/460, "Draft oxen and horses and their byres (umaya)"). The record found the
 # beast living WITH ITS HOUSEHOLD - owned or on loan - and no page read describes a shed several households
 # kept in common, nor one at the village edge. It attests two household forms: the INNER stable, a corner of
 # the house's earth floor, "widespread across the country" (kotobank-umaya), and the OUTER stable, a shed of
@@ -317,7 +317,7 @@ register_knob(Knob("grain_drift", [-12, -8, -4, 0, 4, 8, 12], default=0))  # deg
 # a small shed standing on its own in the homestead near the house (269 B16, new); `detached_commons` stays
 # only as a RARE, labeled GUESS until the record finds it or rules it out. The default is the inner stable,
 # the form the record calls widespread. The weights: inner the more common roll, "how much more is calibrated
-# liberty, since no page read counts them" (homesteads/300) - 0.6 / 0.3 / 0.1 is that liberty, a GUESS.
+# liberty, since no page read counts them" (rendering/homesteads/460) - 0.6 / 0.3 / 0.1 is that liberty, a GUESS.
 register_knob(Knob("byre_form", ["courtyard", "yard_shed", "detached_commons"], default="courtyard", weights={"courtyard": 0.6, "yard_shed": 0.3, "detached_commons": 0.1}))
 
 # THE CARAVAN INN HAS TWO ATTESTED FORMS, OPPOSITE ON THE ONE QUESTION A MAP CAN SHOW - so it is a knob

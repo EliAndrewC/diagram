@@ -690,7 +690,7 @@ def test_a_shared_byre_widens_its_spread_tier_until_it_holds_a_borrower() -> Non
 
 
 def test_the_outer_stable_stands_on_its_own_in_its_owners_yard_on_about_half_the_households() -> None:
-    """269 B16 (research/homesteads/300): on a household form the beast lives with its household - the byre names its owner
+    """269 B16 (research/homesteads/460): on a household form the beast lives with its household - the byre names its owner
     (`of`), stands raked with that house a ken off one of its walls, and about half the households keep one (`byre_share`,
     rolled in `BYRE_KEEPER_SHARE`; the caller's `fraction` sizes only the shared form)."""
     from l7r.diagram.settlement.shrines_wells.byres import BYRE_KEEPER_SHARE

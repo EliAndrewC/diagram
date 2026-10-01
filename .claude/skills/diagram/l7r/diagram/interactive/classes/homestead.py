@@ -122,7 +122,7 @@ class Byre(Kind):
     Covers: `byres` - the draft-animal sheds
     Label: accurate
     Sources: cambridge-animals-china, okayama-chikusanshi-shiyo, agrinews-2023-tajima-maya, ndl-crd-shakkogyu, kotobank-umaya, magariya-jawiki
-    Entry: research/homesteads.html - 'Where did a village's draft ox stand', 'May a byre stand beside a wellhead?', 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads.html - 'Draft oxen and horses and their byres (umaya)', 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw and place byres (umaya)', 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'byre'
