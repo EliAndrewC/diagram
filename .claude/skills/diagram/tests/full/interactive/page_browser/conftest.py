@@ -15,6 +15,7 @@ repeatable test that runs at the gate or on a page edit (`l7r/diagram/interactiv
 from __future__ import annotations
 
 import os
+import shutil
 import tempfile
 from collections.abc import Iterator
 from typing import Any
@@ -108,9 +109,19 @@ RECORD_PAGE = """<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><tit
 @pytest.fixture(scope="module")
 def record(browser: Any) -> Iterator[Page]:
     with tempfile.TemporaryDirectory() as d:
+        # feature 301: the glossary script is BUILT into the site, never committed - so the fixture derives its own copy
+        # beside the hand-written assets it links, the stylesheet and the record script
+        from l7r.diagram.interactive.glossary import record_glossary_js
+
+        assets = os.path.join(d, "assets")
+        os.makedirs(assets)
+        for name in ("record.css", "record.js"):
+            shutil.copy(os.path.join(RESEARCH_DIR, "assets", name), assets)
+        with open(os.path.join(assets, "glossary.js"), "w", encoding="utf-8") as fh:
+            fh.write(record_glossary_js())
         path = os.path.join(d, "record.html")
         with open(path, "w", encoding="utf-8") as fh:
-            fh.write(RECORD_PAGE.format(assets=os.path.join(RESEARCH_DIR, "assets")))
+            fh.write(RECORD_PAGE.format(assets=assets))
         page = Page(browser, path)
         yield page
         page.close()
