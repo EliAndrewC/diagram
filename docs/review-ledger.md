@@ -294,3 +294,5 @@ or a later pass found what this one should have).
 | 2026-10-01 | spec-fidelity-verify | feature 300, round 2 | FAITHFUL | - |
 | 2026-10-01 | spec-fidelity | feature 300 plan decisions | CLEAR | 4 within |
 | 2026-10-01 | record-format | vegetation 125 (feature 300) | 0/0/0 | link added |
+| 2026-10-01 | record-format | rendering/vegetation 120 (feature 300) | 0/0/0 | - |
+| 2026-10-01 | record-style | rendering/vegetation 120 (feature 300) | 1 FAIL, 2 NOTE | bullet split; scrub bullet and rule reworded; footnotes not added (the cross-link kept) |
