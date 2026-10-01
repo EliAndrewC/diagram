@@ -134,6 +134,21 @@ print(json.dumps({"hookSpecificOutput": {
 SCAN=$(printf '%s' "$INPUT" | "$NP_HERE/_hm_shape.py" sanitize 2>/dev/null || printf '%s' "$CMD")
 [ -n "$SCAN" ] || SCAN="$CMD"
 
+# GUARD_EDIT_OK: feature 295 item 5, a new operation - A PERIODIC REPORT IS STEERED TO CronCreate, BEFORE the POLL_OK escape
+# (which is what let it through: `POLL_OK='hourly progress report ...' bash watch.sh 3600`). The decision and the cron are
+# `_hm_shape.py periodic`'s (research R5); a hook cannot create the cron, so it refuses with the exact call. An
+# event-driven wait is never caught. CRON_OK="<reason>" escapes it.
+# GUARD_EDIT_OK: feature 295 item 5 - no python start for a foreground call, which can never be periodic
+case "$INPUT" in *'"run_in_background": true'*|*'"run_in_background":true'*) NP_BGCALL=yes ;; *) NP_BGCALL=no ;; esac
+if [ "$NP_BGCALL" = yes ] && ! escape_or_refuse no-poll CRON_OK cron-ok "$NP_HERE"; then
+  NP_PERIODIC=$(printf '%s' "$INPUT" | "$NP_HERE/_hm_shape.py" periodic 2>/dev/null)
+  if [ -n "$NP_PERIODIC" ]; then
+    guard_log no-poll blocked "$(guard_cmd)" periodic-report
+    printf 'BLOCKED (no-poll): a periodic report kept as a backgrounded watcher loses its schedule when its exit lands while\nthe session cannot run (2026-09-30: twice across a usage-limit window, about two hours of reports each). A cron\nkeeps the schedule by itself:\n\n  CronCreate(cron="%s", recurring=true, prompt="%s")\n\nPut in the prompt what one report checks. (It fires while the session is idle and lasts 7 days.) A wait for an\nevent - a file, a finished queue - stays a backgrounded watcher. Escape: CRON_OK="<reason>".\n' "${NP_PERIODIC%%$'\t'*}" "${NP_PERIODIC#*$'\t'}" >&2
+    exit 2
+  fi
+fi
+
 # GUARD_EDIT_OK: feature 169 - the escape is an INVOCATION, not a mention (was `case *POLL_OK*`).
 # GUARD_EDIT_OK: feature 169 - $NP_HERE, not $HERE. This branch sits at line 60 and `HERE` is not
 # defined until line 72, so the path was empty and the escape silently stopped working - caught by
@@ -185,7 +200,10 @@ are waiting for in the command." >&2
 
 # ---- 2. a loop containing a sleep: a busy-wait ---------------------------------------------------
 SLEEP_RE='(^|[;&|(]|[[:space:]]|\bdo\b|\bthen\b)[\\]?((command|env|busybox)[[:space:]]+)?(/(bin|usr/bin)/)?sleep[[:space:]]+[0-9.]'
-if printf '%s' "$SCAN" | grep -Eq '(^|[;&|[:space:]])(while|until|for)[[:space:]]' && printf '%s' "$SCAN" | grep -Eq "$SLEEP_RE"; then
+# GUARD_EDIT_OK: feature 295 item 7, fixing a guard that fires on correct work - the two greps are the cheap prefilter; the
+# `sleep` must also be INSIDE a loop's span (`_hm_shape.py sleep-in-loop`, research R7)
+if printf '%s' "$SCAN" | grep -Eq '(^|[;&|[:space:]])(while|until|for)[[:space:]]' && printf '%s' "$SCAN" | grep -Eq "$SLEEP_RE" \
+   && [ "$("$NP_HERE/_hm_shape.py" sleep-in-loop "$SCAN" </dev/null 2>/dev/null)" = yes ]; then
   # GUARD_EDIT_OK: feature 165 - THE ONE WAIT THAT IS NOT A BUSY-WAIT, at the GM's ruling
   # (2026-08-30). A BACKGROUNDED loop watching a FILE is the harness's own documented shape for a
   # single completion notification, and the only way to wait on a run detached with `setsid --fork` -

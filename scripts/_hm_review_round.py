@@ -70,6 +70,7 @@ _FEATURE = re.compile(r"specs/(\d{3}-[a-z0-9][a-z0-9-]*)")
 _SPEC_MODE = re.compile(r"\bMODE\s*[23]\b", re.I)
 _PLAN_MODE = re.compile(r"\bMODE\s*4\b|\bPLAN REVIEW\b", re.I)
 _EXCEPTION_MODE = re.compile(r"\bMODE\s*1\b|\bEXCEPTION CHECK\b", re.I)
+_MODE_LINE = re.compile(r"^\s*MODE\b[\s:-]*(.*)$", re.M)  # GUARD_EDIT_OK: feature 295 item 2 - the dispatch's own mode line
 _VERDICTS = ("CHANGES REQUIRED", "FAITHFUL", "NOT-REVIEWABLE")
 _SNAP_SUFFIXES = {".md", ".json", ".txt", ".py", ".html", ".csv"}
 _SNAP_MAX_BYTES = 2_000_000
@@ -86,6 +87,17 @@ def classify_mode(prompt: str) -> str:
     """
     if _SPEC_MODE.search(prompt):
         return "spec"
+    # GUARD_EDIT_OK: feature 295 item 2 - THE SESSION'S OWN MODE LINE IS READ NEXT. On 2026-09-30 an exception check began
+    # `MODE: a proposed EXCEPTION during implementation (constitution XVI)`, matched neither heading form below, fell to the
+    # default and was routed to spec-fidelity-verify, which declined it (research R2). A line that BEGINS with `MODE` is the
+    # dispatch naming its mode, not a relayed sentence, so its words decide; MODE 2/3 above still wins over it.
+    line = _MODE_LINE.search(prompt)
+    if line:
+        words = line.group(1)
+        if re.search(r"\bEXCEPTION\b", words, re.I):
+            return "exception"
+        if re.search(r"\bPLAN\b", words, re.I):
+            return "plan"
     if _PLAN_MODE.search(prompt):
         return "plan"
     if _EXCEPTION_MODE.search(prompt):

@@ -10,6 +10,7 @@ cohesion the closure through these primitives dominates anyway (specs/172-hooks-
 from __future__ import annotations
 
 import json
+import os  # GUARD_EDIT_OK: feature 295 item 5 - periodic() reads the script file a command runs
 import re
 import sys
 
@@ -230,6 +231,7 @@ def proof_of_life(cmd: str, helper: str) -> str | None:
         # for a wait whose producer was gone - read as "the page is finished" when it was not.
         check = f'{helper} "{paths[-1]}" || exit 3'
         clause = f" || {{ {check}; false; }}" if m.group("kw") == "until" else f" && {{ {check}; }}"
+        clause = _fit(clause, _quote_state(cmd, m.end("cond")))   # GUARD_EDIT_OK: feature 295 item 6
         at = m.end("cond") + shift
         out, shift, added = out[:at] + clause + out[at:], shift + len(clause), True
     return out if added else None
@@ -357,6 +359,151 @@ _CEILING_CLAUSE = re.compile(r'\s(?:\|\||&&) \{ \[ "\$SECONDS" -(?:ge|lt) \d+ \]
 _TIMED_OUT = "WAIT TIMED OUT"
 
 
+# GUARD_EDIT_OK: feature 295 item 6, fixing a rewrite that broke correct commands - A CLAUSE IS WRITTEN FOR THE QUOTING
+# IT LANDS IN. A wait inside `bash -c "until grep -q X \$L; do ...; done"` got the ceiling's bare `"` and `$SECONDS`
+# inserted inside the outer double quotes, which closed them, and the command stopped parsing (research R6, 2026-09-30).
+# Inside double quotes a clause's `"` and `$` are escaped; inside single quotes nothing is needed, as no clause holds one.
+def _quote_state(cmd: str, pos: int) -> str:
+    """The quote open at `pos` in `cmd`: `'`, `"` or `""` for none."""
+    state, i = "", 0
+    while i < pos:
+        c = cmd[i]
+        if state == "'":
+            state = "" if c == "'" else state
+        elif c == "\\":
+            i += 2
+            continue
+        elif state == '"':
+            state = "" if c == '"' else state
+        elif c in "'\"":
+            state = c
+        i += 1
+    return state
+
+
+def _fit(clause: str, state: str) -> str:
+    return clause.replace('"', '\\"').replace("$", "\\$") if state == '"' else clause
+
+
+# GUARD_EDIT_OK: feature 295 item 7, fixing a guard that fires on correct work - THE SLEEP MUST BE IN THE LOOP. Rule 2 asked
+# for a loop keyword anywhere and a `sleep` anywhere, so `...; sleep 1; ...; for p in $(pgrep x); do echo $p; done` was
+# refused as a busy-wait (research R7). A loop's span runs from its keyword to its matching `done` at command position
+# (nested `do`/`done` counted), and only a `sleep` inside some span counts.
+_LOOP_KW = re.compile(r"(?:^|[;&|\s(])(?:while|until|for)\s")
+_DO_DONE = re.compile(r"(?:^|[;\n&])\s*(do|done)(?=[\s;&|)]|$)")
+_SLEEP_CALL = re.compile(r"(?:^|[;&|(\s])\\?(?:(?:command|env|busybox)\s+)?(?:/(?:usr/)?bin/)?sleep\s+[0-9.]")
+
+
+def sleep_in_loop(scan: str) -> bool:
+    """Does a `sleep` run inside a `while`/`until`/`for` loop of `scan` (a sanitized command)?"""
+    for m in _LOOP_KW.finditer(scan):
+        depth, end = 0, len(scan)
+        for d in _DO_DONE.finditer(scan, m.end()):
+            depth += 1 if d.group(1) == "do" else -1
+            if depth == 0:
+                end = d.end()
+                break
+        if _SLEEP_CALL.search(scan, m.start(), end):
+            return True
+    return False
+
+
+# GUARD_EDIT_OK: feature 295 item 5, a new operation - A PERIODIC REPORT IS A CRON, NOT A ONE-SHOT WATCHER. Feature 292's
+# hourly report was `POLL_OK='hourly progress report on ...' bash watch.sh 3600`, backgrounded: the harness wakes the
+# session at its exit and the session re-arms it - unless the exit lands while the account is over its usage limit,
+# when nothing re-arms it and the reports stop until the limit resets (twice on 2026-09-30, about two hours each; research
+# R5). A recurring CronCreate keeps its schedule by itself. So a backgrounded command is PERIODIC when its POLL_OK reason
+# names a period or a report, or a loop in it - inline, or in the script file it runs - ends on elapsed time alone or
+# never ends (`while true` with a sleep). The hook's own ceiling is set aside first, so an event-driven wait - a file, a
+# finished queue, a stall - is never periodic.
+_PERIOD_WORDS = re.compile(
+    r"\b(?:hourly|half-hourly|daily|periodic(?:ally)?|heartbeat|(?:progress|status)\s+(?:report|update)s?"
+    r"|every\s+(?:(?P<n>\d+)\s*(?P<unit>s|secs?|seconds?|m|mins?|minutes?|h|hrs?|hours?)\b|(?P<word>half[- ]hour|hour|minute)))",
+    re.I)
+_POLL_REASON = re.compile(r"""\bPOLL_OK=(?:"([^"]*)"|'([^']*)'|(\S+))""")
+_ELAPSED = re.compile(r"\$\{?SECONDS\}?|date\s+\+%s")
+_LIMIT = re.compile(r"-(?:ge|gt|lt|le)\s+(\d+)")
+_SLEEP_N = re.compile(r"\bsleep\s+(\d+)")
+_RUNS_FILE = re.compile(r"(?:^|[;&|\s])(?:(?:bash|sh)\s+(?:-\w+\s+)*([^\s;&|-][^\s;&|]*)|(\./[^\s;&|]+))")
+
+
+def _body_of(text: str, at: int) -> str:
+    """The body of the loop whose `do` ends at `at`: up to its matching `done`, nested loops counted."""
+    depth = 1
+    for d in _DO_DONE.finditer(text, at):
+        depth += 1 if d.group(1) == "do" else -1
+        if depth == 0:
+            return text[at : d.start()]
+    return text[at:]
+
+
+def _loop_period(text: str) -> int | None:
+    """Seconds between reports when `text` holds a time-only or endless loop, else None."""
+    for m in _LOOP_HEAD.finditer(text):
+        cond = _CEILING_CLAUSE.sub(" ", m.group("cond")).strip().rstrip(";").strip()
+        parts = [p.strip() for p in _JOIN.split(cond) if p.strip()]
+        sleeps = [int(n) for n in _SLEEP_N.findall(text[m.end():])]
+        if cond in ("true", ":") and m.group("kw") == "while" and sleeps:
+            # endless is periodic only when every way out of the body is a TIME test: `grep -q DONE log && break` is an
+            # event-driven wait and stays one (plan review round 1)
+            stmts = re.split(r"[;\n]", _body_of(text, m.end()))
+            # an exit is guarded by time when its own statement tests time (`[ $SECONDS -ge N ] && break`) or the one
+            # before it does (`if [ $SECONDS -ge N ]; then break; fi`)
+            if any(re.search(r"\b(?:break|exit|return)\b", s) and not _ELAPSED.search(s)
+                   and not (i and _ELAPSED.search(stmts[i - 1])) for i, s in enumerate(stmts)):
+                continue
+            limits = [int(n) for s in stmts if _ELAPSED.search(s) for n in _LIMIT.findall(s)]
+            return max(limits) if limits else max(sleeps)
+        if parts and all(_ELAPSED.search(p) for p in parts):
+            # the period is the time LIMIT, never the sleep (that is how often the loop looks); 0 = a limit not written
+            # as a number here (`-ge "$N"`), which the caller reads from the command's own arguments
+            limits = [int(n) for p in parts for n in _LIMIT.findall(p)]
+            return max(limits) if limits else 0
+    return None
+
+
+def periodic(payload: dict) -> int | None:
+    """The report period in seconds when a backgrounded command is a periodic report, else None."""
+    ti = payload.get("tool_input") or {}
+    if not ti.get("run_in_background"):
+        return None
+    cmd = str(ti.get("command") or "")
+    r = _POLL_REASON.search(cmd)
+    reason = next((g for g in r.groups() if g), "") if r else ""
+    w = _PERIOD_WORDS.search(reason)
+    if w:
+        if w.group("n"):
+            unit = w.group("unit").lower()[0]
+            return int(w.group("n")) * {"s": 1, "m": 60, "h": 3600}[unit]
+        word = (w.group("word") or w.group(0)).lower()
+        return 1800 if "half" in word else 60 if "minute" in word else 86400 if "daily" in word else 3600
+    texts = [cmd]
+    cwd = str(payload.get("cwd") or ".")
+    for a, b in _RUNS_FILE.findall(_strip_quotes(cmd)):
+        path = os.path.join(cwd, a or b)
+        if os.path.isfile(path) and os.path.getsize(path) < 200_000:
+            with open(path, encoding="utf-8", errors="replace") as fh:
+                texts.append(fh.read())
+    for text in texts:
+        period = _loop_period(text)
+        if period is not None:
+            args = [int(n) for n in re.findall(r"(?<![\w./=-])(\d+)(?![\w./])", _strip_quotes(cmd)) if int(n) >= 60]
+            return period or (max(args) if args else 3600)
+    return None
+
+
+def cron_for(period: int, minute: int) -> str:
+    """The recurring cron for a period: `*/m` under an hour (m a divisor of 60), else the given minute every h hours."""
+    mins = max(1, round(period / 60))
+    if mins < 60:
+        m = min((d for d in (1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30) if d <= mins), key=lambda d: mins - d)
+        return f"*/{m} * * * *"
+    if minute in (0, 30):
+        minute += 7  # off the :00 and :30 marks, as CronCreate asks
+    hours = max(1, round(mins / 60))
+    return f"{minute} * * * *" if hours == 1 else f"{minute} */{min(hours, 23)} * * *"
+
+
 def add_ceiling(cmd: str, seconds: int = WAIT_CEILING_S) -> str | None:
     """`cmd` with a deadline clause in every `until`/`while` loop head, or None when there is nothing to add (no loop, or
     the ceiling is there already). `$SECONDS` is the shell's own clock since the command started."""
@@ -369,6 +516,7 @@ def add_ceiling(cmd: str, seconds: int = WAIT_CEILING_S) -> str | None:
             clause = f' || {{ [ "$SECONDS" -ge {seconds} ] && {{ {note}; exit 4; }}; }}'
         else:
             clause = f' && {{ [ "$SECONDS" -lt {seconds} ] || {{ {note}; exit 4; }}; }}'
+        clause = _fit(clause, _quote_state(cmd, m.end("cond")))   # GUARD_EDIT_OK: feature 295 item 6
         at = m.end("cond") + shift
         out, shift = out[:at] + clause + out[at:], shift + len(clause)
     return out
@@ -420,6 +568,23 @@ if __name__ == "__main__":
         _c = add_ceiling(sys.argv[2] if len(sys.argv) > 2 else CMD)
         if _c:
             print(_c)
+    elif mode == "periodic":
+        # GUARD_EDIT_OK: feature 295 item 5 - prints `<cron>\t<prompt>` for a periodic report, nothing otherwise
+        try:
+            _whole = json.loads(RAW)
+        except Exception:
+            _whole = {}
+        _period = periodic(_whole)
+        if _period is not None:
+            import time as _time
+
+            _r = _POLL_REASON.search(CMD)
+            _why = next((g for g in _r.groups() if g), "") if _r else ""
+            print(f"{cron_for(_period, _time.localtime().tm_min)}\t{_why or 'the periodic report'}: check the state once and report it")
+    elif mode == "sleep-in-loop":
+        # GUARD_EDIT_OK: feature 295 item 7 - argument 2 is the SANITIZED command the hook already holds
+        if sleep_in_loop(sys.argv[2] if len(sys.argv) > 2 else CMD):
+            print("yes")
     elif mode == "file-wait":
         try:
             whole = json.loads(RAW)

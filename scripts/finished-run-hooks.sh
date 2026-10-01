@@ -172,18 +172,55 @@ for d in glob.glob("/proc/[0-9]*"):
         continue
     live[p] = next((a for a in argv[1:] if a and not a.startswith("-") and "=" not in a), "") or "make"
 
+def cwd_of(p):
+    try:
+        return os.readlink(f"/proc/{p}/cwd")
+    except OSError:
+        return "/"
+
+def cmdline(p):
+    try:
+        return open(f"/proc/{p}/cmdline").read().replace("\0", " ")
+    except OSError:
+        return ""
+
+# GUARD_EDIT_OK: feature 295 item 1 - WHAT A COMMAND LINE NAMES, AS FILES. A waiter used to count only when its command
+# line held the make's stdout path LITERALLY, and feature 291's landing wrote it two other ways (research R1): through a
+# variable (`S=<dir>; until grep -q X $S/maps.log`), and as the LAST file of a chain whose earlier make writes another
+# (`bash -c "make a > a.log; make b > b.log; echo DONE >> b.log"`, watched on b.log while `make a` runs). So a command
+# line's simple assignments are expanded into their uses, a relative path is resolved against the process's own cwd,
+# and only files count - a log, written or yet to be, never an executable (the helper script) or a directory (the clone).
+# (GUARD_EDIT_OK: feature 295 item 1, the comment matching the rule.)
+_ASSIGN = re.compile(r"(?:^|[\s;&|(])([A-Za-z_]\w*)=(\"[^\"]*\"|'[^']*'|[^\s;&|)]*)")
+_VAR = re.compile(r"\$\{([A-Za-z_]\w*)\}|\$([A-Za-z_]\w*)")
+
+def files_named(cmd, cwd):
+    env = {k: v.strip("\"'") for k, v in _ASSIGN.findall(cmd)}
+    for _ in range(3):  # S=/x; L=$S/a.log; ... $L
+        cmd = _VAR.sub(lambda m: env.get(m.group(1) or m.group(2), m.group(0)), cmd)
+        env = {k: _VAR.sub(lambda m: env.get(m.group(1) or m.group(2), m.group(0)), v) for k, v in env.items()}
+    out = set()
+    for tok in re.split(r"[\s;&|()<>\"'=]+", cmd):
+        if "/" not in tok or "$" in tok:
+            continue
+        path = os.path.realpath(os.path.join(cwd, tok))
+        # GUARD_EDIT_OK: feature 295 item 1, fixing a guard that fires on correct work - a chain's LAST log does not exist
+        # while its first make runs, so a file yet to be written counts too: a path both sides name is the same file
+        if os.path.isdir(path) or (os.path.isfile(path) and os.access(path, os.X_OK)):
+            continue
+        if os.path.isdir(os.path.dirname(path)):
+            out.add(path)
+    return out
+
 hook_tree = set(ancestors(mine)) | {mine}
-loops = []  # (pid, cmdline) of every file-watching loop that is not this hook's own tree
+loops = []  # (pid, cmdline, files it names) of every file-watching loop that is not this hook's own tree
 for d in glob.glob("/proc/[0-9]*"):
     p = int(d.rsplit("/", 1)[-1])
     if p in hook_tree:
         continue
-    try:
-        cmd = open(f"{d}/cmdline").read().replace("\0", " ")
-    except OSError:
-        continue
+    cmd = cmdline(p)
     if re.search(r"\b(until|while)\b.*\bgrep\b", cmd) and "sleep" in cmd:
-        loops.append((p, cmd))
+        loops.append((p, cmd, files_named(cmd, cwd_of(p))))
 
 for p, target in sorted(live.items()):
     anc = ancestors(p)
@@ -196,11 +233,20 @@ for p, target in sorted(live.items()):
         print(f"{p} {target} tracked {stdout_of(shell[0]) if shell else 'the harness'}")
         continue
     log = stdout_of(p)
-    if log.startswith("/") and os.path.isfile(log):
-        waiter = next((lp for lp, cmd in loops if log in cmd), None)
-        if waiter is not None:
-            print(f"{p} {target} watched {waiter} {log}")
-            continue
+    # GUARD_EDIT_OK: feature 295 item 1 - the run's files are its own stdout, and its chain's: each ancestor's stdout and
+    # every file each ancestor's command line names, up to the harness (a tracked run returned above)
+    mine_files = {os.path.realpath(log)} if log.startswith("/") and os.path.isfile(log) else set()
+    for a in anc:
+        if comm(a) == "claude":
+            break
+        s = stdout_of(a)
+        if s.startswith("/") and os.path.isfile(s):
+            mine_files.add(os.path.realpath(s))
+        mine_files |= files_named(cmdline(a), cwd_of(a))
+    hit = next(((lp, sorted(mine_files & named)[0]) for lp, cmd, named in loops if mine_files & named), None)
+    if hit is not None:
+        print(f"{p} {target} watched {hit[0]} {hit[1]}")
+        continue
     print(f"{p} {target} unwatched {log or '(no file)'}")
 PY
 }

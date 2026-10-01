@@ -347,6 +347,64 @@ alive "...unheld and long unwritten: the producer is gone" dead "$WA_DIR/fresh.l
   { echo "  FAIL    a process holding it open should read alive"; FAIL=$((FAIL+1)); }
 rm -rf "$WA_DIR"
 
+# GUARD_EDIT_OK: feature 295 items 5-7 - the periodic-report refusal, clauses fitted to their quoting, the sleep in the loop
+echo "--- feature 295: a periodic report is steered to CronCreate; an event-driven wait is not ---"
+P_DIR=$(mktemp -d)
+printf 'N=${1:-3600}\nuntil [ "$SECONDS" -ge "$N" ]; do sleep 60; done\necho report\n' > "$P_DIR/watch4.sh"
+run_bg() {  # a backgrounded command through the hook; stdout is the rewrite, stderr in $HOOK_ERR
+  python3 -c 'import json,sys; print(json.dumps({"session_id":"t1","tool_name":"Bash","cwd":"/","tool_input":{"command":sys.argv[1],"run_in_background":True}}))' "$1" \
+    | "$HOOK" pretool 2>"$HOOK_ERR"
+}
+bg_case() {  # label, expected (cron|pass), command
+  run_bg "$3" >/dev/null; local rc=$?
+  if { [ "$2" = cron ] && [ "$rc" -eq 2 ] && grep -q 'CronCreate(cron="' "$HOOK_ERR"; } || { [ "$2" = pass ] && [ "$rc" -eq 0 ]; }; then
+    echo "  ok      $1"; PASS=$((PASS+1))
+  else
+    echo "  FAIL    $1 (expected $2, rc=$rc)"; sed 's/^/          /' "$HOOK_ERR"; FAIL=$((FAIL+1))
+  fi
+}
+bg_case "the 292 watcher, replayed: POLL_OK names an hourly report" cron \
+  "POLL_OK='hourly progress report on three detached page-session queues' bash $P_DIR/watch4.sh 3600"
+grep -qE 'CronCreate\(cron="[0-9]+ \* \* \* \*", recurring=true, prompt="hourly progress report' "$HOOK_ERR" \
+  && { echo "  ok      ...the refusal is the exact hourly call, its prompt seeded from the reason"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    the hourly CronCreate call is not in the refusal"; FAIL=$((FAIL+1)); }
+bg_case "a script whose loop ends on elapsed time alone, no reason given" cron "bash $P_DIR/watch4.sh 3600"
+bg_case "an inline loop on \$SECONDS" cron 'until [ $SECONDS -ge 1800 ]; do sleep 60; done; echo report'
+grep -q 'cron="\*/30 \* \* \* \*"' "$HOOK_ERR" && { echo "  ok      ...a half-hour period is */30"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    the half-hour period was not */30"; FAIL=$((FAIL+1)); }
+bg_case "an endless report loop" cron 'while true; do date >> /tmp/r; sleep 900; done'
+bg_case "an endless loop that breaks on a log line is a wait, not a report" pass \
+  'POLL_OK="the detached run" while true; do grep -q DONE /tmp/x.log && break; sleep 30; done'
+bg_case "the 291 waiter, replayed: a file wait is untouched by this rule" pass \
+  'POLL_OK="the detached make maps run the harness does not track"; S=/tmp; until grep -q "^MAPS-EXIT" $S/maps.log; do sleep 20; done; tail -12 $S/maps.log'
+bg_case "the 293 stall watcher (a result file, or 20 min of silence) is event-driven" pass \
+  'POLL_OK="a detached headless claude session - finish or stall"; until [ -s /tmp/r.json ] || [ $(( $(date +%s) - $(stat -c %Y /tmp/t) )) -gt 1200 ]; do sleep 60; done'
+bg_case "CRON_OK with a reason lets a periodic report through" pass \
+  "CRON_OK='the GM asked for a watcher here' POLL_OK='hourly progress report' bash $P_DIR/watch4.sh 3600"
+run_bg "bash $P_DIR/watch4.sh 3600 # CRON_OK" >/dev/null
+[ $? -eq 2 ] && grep -q 'CRON_OK with no reason' "$HOOK_ERR" && { echo "  ok      a bare CRON_OK is refused for its missing reason"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    a bare CRON_OK was not refused for its missing reason"; FAIL=$((FAIL+1)); }
+rm -rf "$P_DIR"
+
+echo "--- feature 295: an inserted clause fits the quoting it lands in; a sleep outside every loop is no busy-wait ---"
+Q_CMD='setsid --fork bash -c "L=/tmp/q295.log; until grep -q X \$L; do sleep 5; done" </dev/null >/dev/null 2>&1'
+Q_OUT=$(run_bg "POLL_OK=\"feature 295 quoting case\" $Q_CMD" | python3 -c '
+import json, sys
+try: print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"])
+except Exception: pass')
+printf '%s' "$Q_OUT" | grep -q 'WAIT TIMED OUT' && bash -n <(printf '%s\n' "$Q_OUT") 2>/dev/null \
+  && { echo "  ok      a wait inside bash -c \"...\" gains its ceiling and still parses"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    the ceiling inside double quotes broke the command: $Q_OUT"; FAIL=$((FAIL+1)); }
+Q_LIT='setsid --fork bash -c "until grep -q X /tmp/q295.log; do sleep 5; done"'
+Q_PROOF=$("$HERE/_hm_shape.py" proof /h/_writer-alive.sh <<<"$(python3 -c 'import json,sys; print(json.dumps({"tool_input":{"command":sys.argv[1]}}))' "$Q_LIT")")
+bash -n <(printf '%s\n' "$Q_PROOF") 2>/dev/null && printf '%s' "$Q_PROOF" | grep -q '_writer-alive.sh \\"/tmp/q295.log\\"' \
+  && { echo "  ok      ...and so does its proof of life, escaped for the double quotes"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    the proof of life inside double quotes: $Q_PROOF"; FAIL=$((FAIL+1)); }
+check "the R7 command: a sleep before a for loop, none inside it" ok \
+  'pkill -f X ; sleep 1; cd /tmp; for p in $(pgrep -f Y); do echo "$p"; done'
+check "a sleep inside the loop's body still is one" blocked 'for p in 1 2; do echo "$p"; sleep 1; done'
+check "...and inside a nested loop, after a done that only echoes" blocked 'while x; do echo done; sleep 1; done'
+
 echo
 echo "no-poll-hooks: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]

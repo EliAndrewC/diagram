@@ -1,6 +1,6 @@
 {
  "feature": "295-hook-misfires-and-silent-stalls",
- "plan_sha256": "d28abc071f0adaf4fd1389d1f032a8efe11269b34de121d22bd85a4ff03bdcaf",
+ "plan_sha256": "8a98255282e91474d870a84b004d043d6a8096e16784a8d5e1b032cfdfad18aa",
  "reviewed": "2026-09-30",
  "declared": "spec-fidelity",
  "decisions": [
@@ -30,16 +30,15 @@
   },
   {
    "id": "D5",
-   "summary": "stall definition: every live registry entry; silent >= 60 min; not waiting (status, pending AskUserQuestion); unfinished work in its clone (mirror never counts); AND the clone has no page-session run log whose last line is a retry wait",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "The spec exempts 'a page-session queue in its usage-limit retry wait'. The plan exempts every session in any clone holding ANY run log whose last line is a retry wait, with no check that the runner lives or that the wait is current. Measured 2026-09-30 (tail -1 of /diagram/.clones/*/.git/page-sessions/run-*.log): three clones carry such a stale line now - diagram-reorg and diagram-reorg-2 (written 02:36) and diagram-supplemental-2 (2026-09-28) - and the first two hold live sdk-cli (headless) sessions in the registry now. Under D5 those sessions could never be called stalled: the exemption guts item 4 for exactly the headless queues item 3/4 are about. The registry/liveness part of D5 and the mirror exclusion are within; only this clause is the narrowing."
+   "summary": "stall definition: live registry entry; silent >= 60 min; not waiting on the GM; unfinished work in its clone (mirror never counts); not one of a page-session queue's own sessions while that queue is in its retry wait = runner process lives AND the log's last line is the retry line written less than N+5 min ago",
+   "class": "within",
+   "why": "Round 2: the exemption now covers exactly FR-005a's 'a page-session queue's retry wait' and Story 4.3 - a queue IN its wait - and nothing else; a stale retry line or a dead runner exempts nothing, so the headless sessions item 4 is about are judged. The five-minute grace only absorbs the runner's resume latency at the end of the stated wait."
   },
   {
    "id": "D6",
-   "summary": "tab order own pane > L7R_DISPATCHER > parkedJobId > same-clone interactive > log only; title every pass, bell once per stall; nudge only in own pane when the input line reads empty, once per stall keyed by last-activity time",
+   "summary": "tab order own pane > L7R_DISPATCHER > parkedJobId > same-clone interactive > log only; title every pass, bell once per stall; nudge only in own pane when its input line reads empty, once per stall; for a paneless session the log line carries the resume command (make page-session BRIEF=resume:<sid>:<brief>, else claude --resume <sid>)",
    "class": "within",
-   "why": "FR-005b/FR-005c and Story 4.1-4.5 in the spec's order; nudge only in the session's own pane as the GM approved."
+   "why": "FR-005b/FR-005c and Story 4.1-4.5; round 2 adds the resume command in the log line that Story 4.4 and FR-005c require and round 1 noted missing."
   },
   {
    "id": "D7a",
@@ -49,10 +48,9 @@
   },
   {
    "id": "D7b",
-   "summary": "a `while true`/`while :` loop with a sleep in it is periodic",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-006 says an event-driven wait is never caught, and Story 5.2 keeps it untouched. `while true; do grep -q DONE log && break; sleep 30; done` is an event-driven wait (it ends on a file), and D7b as written refuses it when backgrounded, narrowing the event-driven waits the request says 'stay background watchers'. A `while true` loop counts as periodic only when nothing in its body leaves it (no break/exit/return) except an elapsed-time test."
+   "summary": "a while true/while : loop with a sleep is periodic only when every exit from its body (break, exit, return) is guarded by an elapsed-time test; one that breaks on a log line or a file is an event-driven wait and never caught",
+   "class": "within",
+   "why": "Round 2: FR-006 and Story 5.2 (an event-driven wait is never caught) now hold for the endless-loop form; an endless loop that can only end on elapsed time is Story 5.1's 'exits on elapsed time alone'."
   },
   {
    "id": "D7c",
@@ -60,6 +58,12 @@
    "class": "narrowing",
    "ruling": "LEGITIMATE",
    "why": "Story 5.1 asks for the same period; a single cron expression physically cannot express a period that does not divide the hour (or the day), so the nearest expressible period is the only possible call. The spec's own wording already confines */N to periods that divide the hour."
+  },
+  {
+   "id": "D7d",
+   "summary": "period inference: the reason's words, else the elapsed limit in the condition (a non-literal limit = the largest number >= 60 among the command's arguments), else an endless loop's largest sleep, else an hour",
+   "class": "within",
+   "why": "Implements Story 5.1's 'the same period' for the forms D7 catches; how the number is found is mechanism, not scope."
   },
   {
    "id": "D8",
@@ -80,5 +84,5 @@
    "why": "FR-009 and FR-005's prompt-hook start."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

@@ -166,6 +166,25 @@ print(dict(collections.Counter((r['event'], r.get('rule')) for r in rows)))" 2>/
 check "the tracked pass records with its own rule" yes "$(has "$RULES3" "'permitted', 'tracked-run'")"
 check "the watched pass records with its own rule" yes "$(has "$RULES3" "'permitted', 'waiter-armed'")"
 
+# GUARD_EDIT_OK: feature 295 item 1 - the two shapes feature 291's landing was refused over (research R1), live
+echo "--- 6g. a waiter naming the log through a VARIABLE, and a chain watched on its LAST file, are watched ---"
+rm -f "$LV/.git/live-run.told"
+mkdir -p "$T/v"
+( setsid nohup bash -c "cd $LV && exec make sleeper" </dev/null > "$T/v/maps.log" 2>&1 & )
+setsid nohup bash -c "S=$T/v; until grep -q $NEVER \$S/maps.log; do sleep 3; done" </dev/null >/dev/null 2>&1 &
+sleep 1
+check "S=<dir>; ... \$S/maps.log: the judge sees the run as watched" yes "$(has "$("$HOOK" judge "$LV")" " sleeper watched ")"
+lstop; check "...and the turn closes" 0 "$?"
+pkill -f "$NEVER" 2>/dev/null; for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; sleep 1
+rm -f "$LV/.git/live-run.told" "$T/v/b.log"
+( setsid nohup bash -c "cd $LV && make sleeper > $T/v/a.log 2>&1; make sleeper > $T/v/b.log 2>&1; echo $NEVER-DONE >> $T/v/b.log" </dev/null >/dev/null 2>&1 & )
+setsid nohup bash -c "until grep -q $NEVER-DONE $T/v/b.log 2>/dev/null; do sleep 3; done" </dev/null >/dev/null 2>&1 &
+sleep 1
+check "a chain's first make, its waiter on the chain's last log (not there yet): watched" yes "$(has "$("$HOOK" judge "$LV")" " sleeper watched ")"
+lstop; check "...and the turn closes" 0 "$?"
+pkill -f "$NEVER" 2>/dev/null; for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; sleep 1
+rm -f "$LV/.git/live-run.told"
+
 # GUARD_EDIT_OK: 2026-09-26 - A RUN BELONGS TO ITS NEAREST WORKING TREE. Ownership was `cwd.startswith(clone)`, so a
 # session whose cwd was the mirror (/diagram) saw every run in every clone under /diagram/.clones/ as its own and was
 # refused over other sessions' gates; and `x` owned the runs of a sibling `x2`. Real processes again.
