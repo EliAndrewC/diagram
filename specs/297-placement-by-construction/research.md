@@ -247,3 +247,10 @@ stocking, a household's reserved wood share); withdrawn by its own measurement i
 - the margin round the belt's crowns covered a household's reserved seat the seating had proved clear, and the copse dropped it.
 The one fix - asking the exact families of a reserved seat - is the prefilter form again, which stands: the region answers "clear",
 the families say which where it reads taken.
+
+**The regions alone for every ordinary clump, the exact families for a reserved seat** (observed 2026-10-01, the plan review's
+round 4; method: `stagemin.sh` best of three on Inashiro, the prefilter worktree and the clone back to back, load 0.8 -> 1.0): the
+gate's two W25 failures were both reserved seats, so the reserved seat and its re-seat are asked of the exact families
+(`GroveBlocks.exact_taken_by`) and every other clump reads the regions alone (`taken_by`). Inashiro's hinterland 0.84 s and
+windbreak 0.16 s in both forms - no faster, and no slower; the pool's crowns 624, 586 and 659 on Inashiro, Kuwabata and Sawada
+(661, 632, 693 in the prefilter form). Kept as the plan states B3, provided the gate holds every grove rule on the moved pool.

@@ -630,3 +630,17 @@ def test_a_wood_draws_no_trunk_on_a_lane_through_it() -> None:
     trees = [(500.0, 500.0, 8.0, "broadleaf")]
     assert trees_off_the_treads(trees, far) == trees and trees_off_the_treads([], far) == []
     assert trees_off_the_treads(trees, [{"pts": [[400.0, 500.0], [600.0, 500.0]], "w": 6}]) == []
+
+
+def test_a_reserved_seats_re_seat_is_asked_again_at_the_records_grain_and_dropped_where_it_fails(monkeypatch) -> None:
+    """Feature 297 (R16): a household's reserved seat is asked of the exact families; where its re-seat clears unrounded and fails
+    at the record's 0.1 px grain, it is not planted."""
+    from l7r.diagram.settlement.homestead_parts.grove_blocks import GroveBlocks
+
+    seat = (600.0, 480.0)
+    monkeypatch.setattr(GroveBlocks, "exact_taken_by", lambda self, x, y: "local" if (x, y) == seat else None)
+    monkeypatch.setattr(GroveBlocks, "exact_clear", lambda self, x, y: (x, y) != (round(x, 1), round(y, 1)))
+    s = _hamlet()
+    s.M["houses"] = [{"x": 600.0, "y": 520.0, "w": 30.0, "h": 24.0, "rot": 0}]
+    s.village_grove([(500.0, 400.0), (700.0, 400.0), (700.0, 560.0), (500.0, 560.0)], role="copse", dense=True, near=([(100.0, 100.0)], 10.0), seats=[seat], seat_near=([(600.0, 520.0)], 400.0, []))  # dense: a local obstacle re-seats
+    assert not any(c == list(seat) for g in s.M.get("village_groves") or [] for c in g.get("clumps") or [])

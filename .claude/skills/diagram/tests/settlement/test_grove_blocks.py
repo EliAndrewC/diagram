@@ -125,3 +125,19 @@ def test_a_seat_the_stand_spares_is_outside_every_ring_it_could_grow() -> None:
             assert not point_in_poly(seat[0], seat[1], grown_ring(ring, reach)), (cx, cy, w, h, seat)
     assert 20 < spared < 300, "non-vacuity: seats spared and seats refused"
     assert not stand_spares_seats(0.0, 0.0, 10.0, 10.0, [(5.0 + reach, 0.0)], bs) and stand_spares_seats(0.0, 0.0, 10.0, 10.0, [(5.0 + reach + 1.0, 0.0)], bs)
+
+
+def test_the_exact_family_answer_is_the_linear_scans_and_the_regions_never_call_a_keep_out_clear() -> None:
+    """Feature 297 (R16): `exact_taken_by` names the first family the exact tests refuse, as `hard`/`local`/`lane` say; the
+    regions (`taken_by`) are conservative - wherever an exact family refuses, a region holds the ground too."""
+    b = _blocks()
+    seen = set()
+    for x, y in LATTICE:
+        got = b.exact_taken_by(x, y)
+        want = "hard" if _linear_hard(x, y) else "local" if _linear_local(x, y) else "lane" if _linear_lane(x, y) else None
+        assert got == want, (x, y)
+        assert b.exact_clear(x, y) == (want is None)
+        if want is not None:
+            assert b.taken_by(x, y) is not None, (x, y)
+        seen.add(got)
+    assert {"hard", "local", "lane", None} <= seen, "non-vacuity: every answer met"

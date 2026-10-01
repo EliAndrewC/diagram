@@ -195,8 +195,9 @@ failures are fixed, is recorded with the measurement and withdrawn (spec amendme
   a cell (the placer samples nine points).
 - **B2.** Through the marsh's `KeepoutGrid` read as one painted region (`KeepoutGrid.taken_many`), the crescents and the pond's
   ellipse filed into it; the grass reads the same.
-- **B3.** `GroveBlocks.region()` paints the fill's seven static families once; `static_clear` reads it first and asks the families
-  only where it is taken. The regions-alone form built and withdrawn (R16: fails woods W25 at the gate).
+- **B3.** `GroveBlocks.regions()` paints the fill's static families into three rasters by family; `taken_by` decides every ordinary
+  clump alone, and a household's reserved seat and its re-seat are asked of the exact families (`exact_taken_by`; R16: the regions'
+  margin refused one at the gate, woods W25). Measured no faster and no slower on Inashiro.
 - **B4.** `open_ground_region`, one per size, at 3 px (at 8 px the margin moved a parcel off its brook line).
 - **C.** The field's reach and the water before any layout; the corridor once per seat after the envelope (R10); the per-household
   template withdrawn (R9).
