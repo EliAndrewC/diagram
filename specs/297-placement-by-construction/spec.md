@@ -199,13 +199,14 @@ the accepted spec, each with its evidence:
   water only; a seat that fails the corridor has built its four layouts first. The GM's lever ("the lane test once per seat rather
   than once per orientation") is met. Plan C's second half, the layout keyed per household, was withdrawn: the per-seat yard-size rolls were the seating's only
   way to fit a large-yard household into a tight seat, and seed 3 lost a household (R9).
-- **FR-001, the seat region, as built (plan Amendment 1 B1).** The static ground and the access tree's corridors are painted and
-  kept current; the seated homesteads are NOT painted (the placer's one computed move rescues a seat lapping one neighbor - painted,
-  Inashiro seated no one), so the region is not recomputed for each seated house's box, only for each new corridor.
+- **FR-001, the seat region, as built (plan Amendment 1 B1, R15).** The static ground and the access tree's corridors are painted and
+  kept current; the seated homesteads are NOT painted, by measurement: painted, every household is still seated (442 of 442 over the
+  pool and cohort seeds 1-24), but repainting and re-tabling the raster after each house made the homesteads stage 9% slower. So the
+  region is not recomputed for each seated house's box, only for each new corridor.
 - **FR-004, the grove, as built (B3, R16).** The fill's region answers "clear"; where it reads taken, the exact families are asked in
   turn to say which (a hard edge drops the clump, a local obstacle re-seats it) - so User Story 3's "not tested against each keep-out
   in turn" holds for the open ground only. The regions-alone form (three rasters by family deciding) was built and withdrawn under
-  the plan's rule: it failed woods W25 at the gate (a reserved wood seat refused by a keep-out's margin), for 0.06 s a map.
+  the plan's rule: it failed woods W25 at the gate (a reserved wood seat refused by a keep-out's margin), for 0.06 s on Inashiro (R16).
 - **FR-004, the regions painted in C (R10).** Every region paints with PIL's own primitives and a two-cell margin; buffering each
   shape with shapely first was most of a region's cost and made the hinterland slower than the base. The marsh and the grass read
   their keep-out grid as one painted region (`KeepoutGrid.taken_many`).

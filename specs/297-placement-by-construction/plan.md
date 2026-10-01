@@ -190,8 +190,7 @@ failures are fixed, is recorded with the measurement and withdrawn (spec amendme
 - **A.** The region paints with PIL's own primitives and a two-cell margin (`GROW = 2.0`); shapely buffers were most of a region's
   cost. `fill_many` paints many shapely geometries by kind. The property test (no painted point read clear) holds at cells 2-8.
 - **B1.** Built as planned with two measured changes: the static ground on FreeGround's own grid, its surely-taken cells painted
-  exactly (grown on an offset grid they over-refused - Inashiro seated no one); the seated homesteads NOT painted (the placer's one
-  computed move rescues a seat lapping one neighbor); the reach is the free cells' 4-connected components meeting the tree's strip
+  exactly (grown on an offset grid they over-refused - Inashiro seated no one); the seated homesteads NOT painted (R15: painted, every household still seated but the stage 9% slower); the reach is the free cells' 4-connected components meeting the tree's strip
   (a run-length union-find - PIL's flood fill is Python), its summed-area table kept with it. A side's envelope is tested shrunk by
   a cell (the placer samples nine points).
 - **B2.** Through the marsh's `KeepoutGrid` read as one painted region (`KeepoutGrid.taken_many`), the crescents and the pond's
