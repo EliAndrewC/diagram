@@ -55,3 +55,9 @@ def test_no_renderer_no_answer(monkeypatch: pytest.MonkeyPatch) -> None:
 
     monkeypatch.setattr(raster, "id_map", lambda *_a, **_k: (None, {}))
     assert marsh_edges.free_runs(_page(RECT), [RECT], 1.0) is None
+
+
+def test_a_repeated_vertex_is_no_edge() -> None:
+    """A ring that repeats a vertex (a zero-length side) measures as the ring without it."""
+    doubled = [RECT[0], RECT[0], *RECT[1:]]
+    assert marsh_edges.free_runs(_page(doubled), [doubled], 1.0) == marsh_edges.free_runs(_page(RECT), [RECT], 1.0)

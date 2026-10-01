@@ -50,3 +50,11 @@ def test_the_delivery_that_leaves_is_the_one_not_drawn_and_a_canal_never_is() ->
     channels = [ch(PARENT, "branch"), ch(CHILD, "branch"), ch([(40.0, 150.0), (40.0, 380.0)], "branch")]
     drop_twin_deliveries(channels, 1, 1.0)  # only what this call appended is judged
     assert channels[0] == ch(PARENT, "branch") and len(channels) == 2
+
+
+def test_a_delivery_already_taken_out_is_not_judged_again() -> None:
+    """Three deliveries 20 ft apart: the middle one, shortest, goes with its first pair; its second pair is passed over."""
+    mid = {"pts": [(20.0, 0.0), (20.0, 300.0)], "role": "branch"}
+    channels = [{"pts": [(0.0, 0.0), (0.0, 400.0)], "role": "branch"}, mid, {"pts": [(40.0, 0.0), (40.0, 400.0)], "role": "branch"}]
+    gone = drop_twin_deliveries(channels, 0, 1.0)
+    assert gone == [mid] and len(channels) == 2

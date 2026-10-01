@@ -263,7 +263,7 @@ class CombMixin:
         if out:
             self.add(f'<g fill="{AZE}" stroke="none">{"".join(out)}</g>', cls="bund")
 
-    def draw_comb_field(self: Settlement, net: dict[str, Any], name: str, source: dict[str, Any], inwall_drain_moat_bias: Pt | None = None, join_head: bool = False) -> list[Pt]:  # type: ignore[misc]
+    def draw_comb_field(self: Settlement, net: dict[str, Any], name: str, source: dict[str, Any], inwall_drain_moat_bias: Pt | None = None) -> list[Pt]:  # type: ignore[misc]
         """Draw a `build_comb` net (dry hem + flooded paddies + bunds + channels) AND register the field's
         manifest + water topology, in one call - the ~50 lines every comb gen otherwise repeats inline. Feeds
         the roll-from-seed entrypoint (which cannot hand-place any of it) but is reusable by any comb gen.
@@ -314,7 +314,7 @@ class CombMixin:
         self._comb_draw_ditches(net)
         # ...AND THE HAIRLINE FEED IS RECORDED BEFORE THE BEADS ARE DROPPED (feature 287, water W33): it is water the bead
         # drop reads (`M["channels"]`), and recorded after the drop it could lay a bead under its own stroke.
-        self._comb_source_channel(net, name, source, sluice, pond_rec, join_head)
+        self._comb_source_channel(net, name, source, sluice, pond_rec)
         # ...AND THE DITCHES ARE RECORDED BEFORE THE FIELD IS (feature 230). The field record carries the bead
         # POINTS, so a bead dropped after it is dropped from the picture and not from the manifest - which is
         # the drift `bunds_and_dikes` exists to catch, and which is how a bead under a drain's wide tail came
@@ -757,7 +757,7 @@ class CombMixin:
             refuse_unadmitted(self.M, "field_ditches", rec)  # the skeleton, recorded before the ground that asks against it (W53)
             self.M["field_ditches"].append(rec)
 
-    def _comb_source_channel(self: Settlement, net: dict[str, Any], name: str, source: dict[str, Any], sluice: Any, pond_rec: Any, join_head: bool) -> None:  # type: ignore[misc]
+    def _comb_source_channel(self: Settlement, net: dict[str, Any], name: str, source: dict[str, Any], sluice: Any, pond_rec: Any) -> None:  # type: ignore[misc]
         """Record the hairline SOURCE -> field feed channel that carries the water topology.
 
         Keeps its own `kind != 'cascade'` guard: a cascade field is fed plot-to-plot from an
@@ -870,23 +870,11 @@ class CombMixin:
                 # five times). The pond's center, then the stub from the rim back down to the first point inside the crop - the
                 # ring's corner - where the drawn feed meets the field.
                 _ch_poly = [[round(start[0], 1), round(start[1], 1)], *[[round(float(q[0]), 1), round(float(q[1]), 1)] for q in reversed(feed_stub(hr, _env_in))]]
-            _fk = (float(fork[0]), float(fork[1]))
-            _fk_d = min(seg_dist(_fk[0], _fk[1], (_ch_poly[_i][0], _ch_poly[_i][1]), (_ch_poly[_i + 1][0], _ch_poly[_i + 1][1])) for _i in range(len(_ch_poly) - 1))
-            # `join_head` is passed by the POLDER path and by nothing else. Conditioning this on
-            # the check's own clauses was tried three times and each attempt missed one - distance
-            # alone moved Ubame and four others, "outside the envelope" moved Honda and Shimizu, and
-            # replicating the vis_bbox/edge/junction trio still moved them, because the check reads
-            # the CROP bounds and per-field bboxes that do not exist yet at draw time. Replicating a
-            # check inside the code it governs is the trap this skill's notes name repeatedly; an
-            # explicit flag from the one caller that needs it cannot drift.
-            if join_head and _fk_d > 10.0:
-                # ...AT ITS PLACE ALONG THE RUN (feature 150 T51): the head used to go in just before the mouth,
-                # which is right while it lies past the bow's midpoint. Once the feeder stub reaches the reservoir
-                # rim the head sits in the run's upper half, and inserting it after the midpoint folded the run
-                # back on itself (an acute hairpin, `water_channels_obtuse_turns`). Its slot is chosen by its
-                # projection along the source -> mouth chord.
-                _fk_t = ((_fk[0] - start[0]) * vx + (_fk[1] - start[1]) * vy) / (vl * vl)
-                _ch_poly.insert(1 if _fk_t < 0.5 else len(_ch_poly) - 1, [round(_fk[0], 1), round(_fk[1], 1)])
+            # THE RING HEAD IS TOUCHED BY CONSTRUCTION NOW (feature 294 B1). The head used to be INSERTED as a vertex when a
+            # polder's bowed record passed near the ring's corner without meeting it (2026-08-15, feature 150 T51: `join_head`,
+            # passed by the polder path alone). Both records now trace what is drawn - the race to its fork, the pond's stub to
+            # the ring's corner (`feed_stub`) - so the record ends on the head and the insertion never fired on the pool or the
+            # gate's cohort rolls; it was removed rather than kept as a repair with nothing to repair.
             # THE FEED RUNS DOWNHILL OR IS NOT RECORDED (feature 287, water:W10): from the sluice the race leaves at the offtake
             # angle (35 degrees off the fall, so its net travel runs 0.82 of its length down it) and a polder's reservoir
             # stands above the block's high corner, so by construction it always does; a feed that climbs is refused by
