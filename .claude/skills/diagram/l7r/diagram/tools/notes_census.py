@@ -16,6 +16,7 @@ from __future__ import annotations
 import json
 import math
 import os
+import re
 import sys
 from collections import Counter
 from typing import Any
@@ -95,3 +96,56 @@ def main(argv: list[str]) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main(sys.argv[1:]))
+
+
+# ---- feature 294 B14: a count typed into the notes' CURRENT prose agrees with the manifest -----------------------------
+
+#: a heading that dates its section, or names the feature or pass it records, is HISTORY: its counts were true when written
+_HISTORY = re.compile(r"\b(?:\d{4}-\d{2}-\d{2}|[Ff]eature \d{3}|pass \d+|round \d+)\b")
+_HEADING = re.compile(r"^#{1,6} .*$", re.M)
+_DATED = re.compile(r"\b\d{4}-\d{2}-\d{2}\b")
+_WORDS = {w: i for i, w in enumerate("zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty".split())}
+#: the kinds a typed count names, and how the manifest counts them
+COUNTED: dict[str, Any] = {
+    "farmhouses": lambda M: len(M.get("houses") or []),
+    "households": lambda M: len(M.get("houses") or []),
+    "homesteads": lambda M: len(M.get("houses") or []),
+    "retirement houses": lambda M: len(M.get("retirement_houses") or []),
+    "byres": lambda M: len(M.get("byres") or []),
+    "wells": lambda M: len(M.get("wells") or []),
+    "footbridges": lambda M: len(M.get("bridges") or []),
+    "persimmons": lambda M: len(M.get("persimmons") or []),
+    "privies": lambda M: sum(1 for f in M.get("farm_fixtures") or [] if f.get("kind") == "privy"),
+    "wood sheds": lambda M: sum(1 for f in M.get("farm_fixtures") or [] if f.get("kind") == "woodpile"),
+}
+_COUNT = re.compile(r"\b(\d+|" + "|".join(_WORDS) + r")\s+(" + "|".join(re.escape(k) for k in COUNTED) + r")\b", re.I)
+
+
+def current_prose(text: str) -> str:
+    """The notes' CURRENT description: every section whose heading is not history (`_HISTORY`), less the census block."""
+    i, j = text.find(BEGIN), text.find(END)
+    if 0 <= i < j:
+        text = text[:i] + text[j + len(END) :]
+    out, keep, last = [], True, 0
+    for m in _HEADING.finditer(text):
+        if keep:
+            out.append(text[last : m.start()])
+        keep, last = not _HISTORY.search(m.group(0)), m.start()
+    if keep:
+        out.append(text[last:])
+    # ...and a paragraph or a bullet that carries its own date is history too ("As first rolled (2026-08-11) ...", "- 2026-08-28 the
+    # GM's review ..."): split on blank lines and at each bullet, and drop every block with a date in it
+    blocks = re.split(r"\n\s*\n|\n(?=\s*- )", "".join(out))
+    return "\n\n".join(b for b in blocks if not _DATED.search(b))
+
+
+def stale_counts(text: str, M: dict[str, Any]) -> list[str]:
+    """Each count the notes' current prose types that the manifest does not ship - "15 farmhouses" on a map of 16."""
+    out = []
+    for m in _COUNT.finditer(current_prose(text)):
+        typed = int(m.group(1)) if m.group(1).isdigit() else _WORDS[m.group(1).lower()]
+        kind = m.group(2).lower()
+        shipped = COUNTED[kind](M)
+        if typed != shipped:
+            out.append(f"'{m.group(0)}' - the map ships {shipped} {kind}")
+    return out

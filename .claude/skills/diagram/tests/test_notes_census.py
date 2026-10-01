@@ -58,3 +58,33 @@ def test_the_pool_hamlets_all_carry_a_census_block() -> None:
     want = {"inashiro", "kashikawa", "kuwabata", "mizuguchi", "sawada"}
     have = {os.path.basename(p)[: -len(".notes.md")] for p in _with_blocks()}
     assert want <= have, f"missing a census block: {sorted(want - have)}"
+
+
+def test_a_count_typed_in_the_current_prose_must_be_the_manifest_s_and_history_is_left_alone() -> None:
+    """Feature 294 B14: seeded - the recorded case, a notes file stating last roll's count as the map's (paddy counts and
+    typed totals stale ~25 times in features 269 and 293)."""
+    from l7r.diagram.tools.notes_census import block, stale_counts
+
+    M = {"houses": [{"x": 0, "y": 0}] * 16, "wells": [{}] * 2, "farm_fixtures": [{"kind": "privy"}] * 3}
+    notes = (
+        "# Design notes\n\nThe hamlet has 15 farmhouses and two wells; three privies.\n\n"
+        "## 2026-08-29 - feature 152\n\n15 farmhouses then.\n\n"
+        "## Map notes\n\nAs first rolled (2026-08-11) it seated 14 farmhouses.\n\n- 2026-08-28 the review: nine wells\n"
+        f"\n{block(M)}\n"
+    )
+    assert stale_counts(notes, M) == ["'15 farmhouses' - the map ships 16 farmhouses"]
+    assert stale_counts(notes.replace("15 farmhouses and", "sixteen farmhouses and"), M) == []
+
+
+def test_the_pool_notes_state_no_stale_count_in_their_current_prose() -> None:
+    from l7r.diagram.tools.notes_census import stale_counts
+
+    checked = 0
+    for notes in sorted(glob.glob(os.path.join(_SKILL, "pool", "*", "*", "*.notes.md"))):
+        manifest = notes[: -len(".notes.md")] + ".json"
+        if not os.path.isfile(manifest):
+            continue  # a Mode A sheet: its notes are held to its data-kind census (B15b)
+        with open(notes, encoding="utf-8") as fh, open(manifest, encoding="utf-8") as mf:
+            assert stale_counts(fh.read(), json.load(mf)) == [], notes
+        checked += 1
+    assert checked >= 5, "non-vacuity: the hamlets' notes were read"
