@@ -4289,6 +4289,7 @@
   "def": "A worked scrub wood of mixed broadleaf trees regrowing from the stump and cut for fuel; on a new-field household's strip, the wood at its far end kept for that household's own fuel.",
   "variants": [
    "zokibayashi",
+   "zōkibayashi",
    "雑木林"
   ]
  },
@@ -13849,6 +13850,38 @@
   "def": "A castle town on Lake Biwa, in Omi province (now Shiga Prefecture). A stable inside its castle's second bailey, of about 1688-1703, is the only castle stable of its kind that survives.",
   "variants": [
    "Hikone"
+  ]
+ },
+ "Tarama": {
+  "def": "An island in the Ryukyus. The village belt of trees (hogo) made there in 1742 still runs about 1.8 km (~5,906 ft) around its settlement and shelters it and its farmland from typhoons and salt winds.",
+  "variants": [
+   "Tarama"
+  ]
+ },
+ "Suzhou": {
+  "def": "A Chinese walled city whose wall still enclosed large tracts of farmland in the twentieth century, an example of a Chinese city keeping fields inside its wall.",
+  "variants": [
+   "Suzhou"
+  ]
+ },
+ "Kaifeng": {
+  "def": "The capital of the Northern Song dynasty, in northern China; a memoir of its last years says gardens ringed it, with no idle land within a hundred li.",
+  "variants": [
+   "Kaifeng"
+  ]
+ },
+ "Zhizhai Shulu jieti": {
+  "def": "A catalogue of books, with a note on each, compiled in the Song dynasty by Chen Zhensun; it shows which works and editions existed in his day.",
+  "variants": [
+   "Zhizhai Shulu jieti",
+   "Shulu jieti"
+  ]
+ },
+ "Tamagawa aqueduct": {
+  "def": "The aqueduct opened in 1653 that carried water to Edo across the Musashino upland; farm production on the upland grew after it opened.",
+  "variants": [
+   "Tamagawa aqueduct",
+   "Tamagawa"
   ]
  }
 }

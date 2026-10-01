@@ -1609,6 +1609,7 @@ kaei	Kaei
 kaibori	kaibori
 kaie-ji	Kaie-ji
 kaie-ji's	Kaie-ji
+kaifeng	Kaifeng
 kaigisho	kaigisho
 kaine	kainyo
 kainyo	kainyo
@@ -2949,6 +2950,7 @@ shuinchi	shuinchi
 shuku	shukuba
 shukuba	shukuba
 shukuson taigaicho	Nakasendo Shukuson Taigaicho
+shulu jieti	Zhizhai Shulu jieti
 shumon aratame	shumon aratame cho
 shumon aratame cho	shumon aratame cho
 shunde	Shunde
@@ -3129,6 +3131,7 @@ suzaku street	Suzaku-oji
 suzaku ōji	Suzaku-oji
 suzaku-oji	Suzaku-oji
 suzaku-ōji	Suzaku-oji
+suzhou	Suzhou
 sward	sward
 sweep well	well-sweep
 sweep-type well	well-sweep
@@ -3172,6 +3175,8 @@ takeyabu	take-yabu
 tako-beya	tako-beya
 tale of the heike	Heike monogatari
 tamagaki	tamagaki
+tamagawa	Tamagawa aqueduct
+tamagawa aqueduct	Tamagawa aqueduct
 tamahagane	tamahagane
 tamajari	tamajari
 tameike	tameike
@@ -3191,6 +3196,7 @@ tanglao	tanglao
 tangpu	tangpu
 tani-ike	valley pond
 taper law	taper law
+tarama	Tarama
 tartary	Tartary
 tatami	tatami
 tatara	tatara
@@ -3758,6 +3764,7 @@ zhengde	Zhengde
 zhengtong	Zhengtong
 zhengyi	Zhengyi
 zhili	Zhili
+zhizhai shulu jieti	Zhizhai Shulu jieti
 zhonggulou	gulou
 zhonglou	gulou
 zhou	department
@@ -3778,6 +3785,7 @@ zuku	zuku
 zuo zhuan	Zuo Zhuan
 zushi nikai	half-story
 zushi-nikai	half-story
+zōkibayashi	zokibayashi
 ō-aza	ō-aza
 ōdo	ōdo
 ōdoko	odoko
