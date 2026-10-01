@@ -42,5 +42,38 @@
     "source": "pool/hamlets/inashiro/inashiro.json, as paddy-F1",
     "command": "make -C .claude/skills/diagram test-file FILE=tests/gate/test_field_302.py",
     "round": "0b2ab1553"
+  },
+  "bamboo-F1": {
+    "verifies": "F1",
+    "subject": "glyph-check--homestead-bamboo",
+    "answers": "74fa064b7bc3",
+    "value": 0,
+    "unit": "marks",
+    "quantity": "bamboo marks inked in the scrub grass's yellow-greens (#9AAE3C / #B9CC5A) on Sawada (was every one); 65 strokes now in the jade culm green BAMBOO_CULM, which no grass, reed or crown uses, the stand on a faint shade of it",
+    "source": "pool/hamlets/sawada/sawada.svg",
+    "command": "make -C .claude/skills/diagram test-file FILE=tests/settlement/test_tiles_298.py",
+    "round": "f1d34de85"
+  },
+  "bamboo-F2": {
+    "verifies": "F2",
+    "subject": "glyph-check--homestead-bamboo",
+    "answers": "74fa064b7bc3",
+    "value": 0,
+    "unit": "strips",
+    "quantity": "homestead strips with a lane centerline between the strip and its own house (was 1 of 2: the strip at (4571, 2920)); the placer asks across_a_lane beside the stream test, and that house now seats none",
+    "source": "pool/hamlets/sawada/sawada.json bamboo_stands[role=homestead].of against lanes",
+    "command": "make -C .claude/skills/diagram test-file FILE=tests/hamletgen/test_homesteads.py",
+    "round": "f1d34de85"
+  },
+  "grave-F1": {
+    "verifies": "F1",
+    "subject": "glyph-check--grave-island",
+    "answers": "74fa064b7bc3",
+    "value": 3,
+    "unit": "stones",
+    "quantity": "grave stones on Inashiro's island whose base stands inside the mound's ellipse: 3 of 3 (was 2 of 3); each step back held inside the ellipse at its x (stone_step)",
+    "source": "pool/hamlets/inashiro/inashiro.svg, the grave island's ellipse and its stone rects",
+    "command": "make -C .claude/skills/diagram test-file FILE=tests/settlement/test_field_guarantees.py",
+    "round": "f1d34de85"
   }
 }
