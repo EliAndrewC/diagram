@@ -1,0 +1,33 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "231598514",
+    "label": "294-start",
+    "utc": "20261001T151220Z"
+  },
+  "binding": "566401608ca3a55decac55252391aabc20b38001b6d28b382ea1bd9392f449b0",
+  "end": {
+    "commit": "a3ea47286",
+    "label": "294-end",
+    "utc": "20261001T173420Z"
+  },
+  "environment": "local",
+  "feature": "294-settlement-review-rethink",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "68560146-7086-4e5b-a430-f5b48028631d",
+    "utc": "20261001T174035Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "seeds": {
+      "25": 8.1,
+      "39": -27.9,
+      "4": 9.8,
+      "47": -39.7
+    },
+    "total_pct": -15.6
+  },
+  "note": "Counterfactual by the auditor (5 reps, seeds 4/25, all legs in detached worktrees): the windbreak doubling (seed 4 0.18->0.38 s, seed 25 0.17->0.38) is NOT over_a_conifer - forcing it False leaves 0.39/0.34, and reverting all of groves.py and ways/tree.py to 294-start leaves 0.38/0.39; a profile puts it in B9's wood_goal fill-and-trim (canopy_of 0.16 s + trim_to_goal 0.14 s, CrownIndex.add 1336->4973 calls; _draw_grove only 0.124->0.136 s). tree_shadows explains at most ~0.07-0.09 s of seed 4's web +0.29 s and none of seed 25's (full revert 0.81 = end 0.81); homesteads seed 25 +0.34 s is unexplained. Main's merges are not the cause: main tip b578736dd times at start's level on these stages (windbreak 0.19/0.16, web 0.46/0.66, homesteads 0.99/0.69). Also: the 294-end bookend is stamped a3ea47286 but measured the uncommitted twins.py vectorization (bdd1dbbad); at a3ea47286 field is 2.5/5.4 s, not 1.19/1.58.",
+  "verdict": "inconsistent"
+}
