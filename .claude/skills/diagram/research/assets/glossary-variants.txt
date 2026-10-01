@@ -1921,6 +1921,7 @@ loose-cluster villages	loose-cluster village
 loose-log drive	kanagashi
 loose-log driving	kanagashi
 louzeyuan	louzeyuan
+low city	Low City
 low stage	river stage
 low-trunk	low-trunk mulberry
 low-trunk mulberry	low-trunk mulberry
@@ -2928,6 +2929,7 @@ siege mining	siege mining
 siheyuan	siheyuan
 siku quanshu	Siku Quanshu
 sill	sill
+silla	Silla
 silver carp	silver carp
 simpson index	SI
 sishu	sishu
@@ -3566,6 +3568,7 @@ wengcheng	wengcheng
 wenmiao	wenmiao
 western han	Han dynasty
 western wei	Western Wei
+western xia	Western Xia
 wet paddies	shitsuden
 wet paddy	shitsuden
 wet run	wet run
@@ -3602,6 +3605,7 @@ xiang	xiang
 xiang river	Xiang River
 xiang seven, li three	Lingqu
 xiang-gan	Xiang-Gan
+xingqing	Western Xia
 xu	xu
 xu tan	Xu Tan
 xuanhu	Xuanhu

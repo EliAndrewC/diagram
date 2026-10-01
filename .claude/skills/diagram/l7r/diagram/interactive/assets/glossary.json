@@ -13662,5 +13662,24 @@
   "variants": [
    "machiwari"
   ]
+ },
+ "Silla": {
+  "def": "A kingdom of Korea whose royal capital was one of the capitals laid out on the Chinese ward system.",
+  "variants": [
+   "Silla"
+  ]
+ },
+ "Western Xia": {
+  "def": "A kingdom of the 11th to 13th centuries in northwest China; its capital, Xingqing, was one of the capitals laid out on the Chinese ward system.",
+  "variants": [
+   "Western Xia",
+   "Xingqing"
+  ]
+ },
+ "Low City": {
+  "def": "Edo's low-lying commoner districts, crowded with townsmen's wards, as against the High City of the walled samurai estates.",
+  "variants": [
+   "Low City"
+  ]
  }
 }
