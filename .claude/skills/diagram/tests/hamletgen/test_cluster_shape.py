@@ -56,7 +56,8 @@ def test_the_drawn_aspect_does_not_care_which_way_the_field_margin_points() -> N
 def test_a_perfectly_diagonal_string_is_not_recorded_as_round() -> None:
     """The defect itself, pinned. If this reads near 1.0, the page-axis bbox measure has been restored."""
     diag = [0.0, 70.7, 141.4, 212.1, 282.8]
-    assert hg.homesteads.cluster_aspect(diag, list(diag)) > 10.0, "a diagonal string must measure as extremely elongated"
+    # 400 ft of string, read one homestead (100 ft) deep since 2026-10-01 - a string, never a round clump
+    assert hg.homesteads.cluster_aspect(diag, list(diag)) > 3.9, "a diagonal string must measure as elongated"
 
 
 def test_a_cluster_of_fewer_than_two_houses_has_no_aspect() -> None:

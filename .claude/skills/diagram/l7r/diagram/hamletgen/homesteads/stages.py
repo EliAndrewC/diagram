@@ -298,6 +298,17 @@ def in_a_shapes_band(houses: Sequence[dict[str, Any]]) -> bool:
     return any(lo <= drawn <= hi for lo, hi in CLUSTER_DRAWN_ASPECT.values())
 
 
+def drawn_in_band(s: Settlement, plan: SitePlan) -> bool:
+    """Does this seating draw a shape's band - or is it a row village, which is no cluster and takes no band?
+
+    A ROW VILLAGE IS A ROW (the GM, 2026-10-01, tripwire seed 33): its farms stand one frontage apart along their street,
+    54 to 240 ft on the measured planned rows (research/homesteads/155-row-villages-resson.html), so ten farms run 490 to
+    2,160 ft - 5:1 to 22:1 against one homestead's depth - and the 12:1 ceiling, a CLUSTER's (`CLUSTER_DRAWN_ASPECT`),
+    refused every margin of a ten-farm row. The linear form's row is held by `row_rules` (each farm on its street, none
+    behind another); the band holds the forms that draw a cluster."""
+    return plan.settlement_form == "linear" or in_a_shapes_band(s.M.get("houses") or [])
+
+
 def declare_cluster_shape(houses: Sequence[dict[str, Any]], shape: str | None, seed: int) -> dict[str, Any]:
     """The cluster shape the manifest declares, and the plan keeps: the rolled shape wherever the houses draw it, and
     otherwise the knob RESOLVED OVER THE SHAPES THE DRAWING ADMITS (feature 287, homes H05, plan D4) - `shapes_drawn_at`,
@@ -334,9 +345,10 @@ def seat_every_household(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     tried = [placed]
     ladder = margin_ladder(plan, plan.field_archetype in POLDER_ARCHETYPES)
     toe: Any = None
+    banded = drawn_in_band(s, plan)
     # ...AND A SEATING WHOSE HOUSES DRAW NO SHAPE'S BAND IS NOT KEPT (feature 287, homes wave 5): past the longest band's
     # ceiling (`in_a_shapes_band`, a string past 12:1) the margin is taken back as one that seated too few is
-    for margin in ladder if placed < want or not in_a_shapes_band(s.M.get("houses") or []) else ():
+    for margin in ladder if placed < want or not banded else ():
         # A RUNG WITH NO DRY WAY OUT IS NOT SEATED (feature 287, ways W23): `seat_cluster` asked the head; each rung is
         # asked the same, lazily, before the houses on it are taken back
         toe = (s.toe_band() or None,) if toe is None else toe
@@ -348,11 +360,12 @@ def seat_every_household(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         s.M["meta"]["seat_offwind"] = bool(margin.get("offwind"))
         placed, cloud = _seat_households(s, plan)
         tried.append(placed)
-        if placed >= want and in_a_shapes_band(s.M.get("houses") or []):
+        banded = drawn_in_band(s, plan)
+        if placed >= want and banded:
             break
     if placed < want:
         raise SiteRefused(f"{plan.spec.name} (seed {plan.spec.seed}): no margin seats all {want} households - seated {tried} on the {len(tried)} margin(s) tried")
-    if not in_a_shapes_band(s.M.get("houses") or []):
+    if not banded:
         raise SiteRefused(f"{plan.spec.name} (seed {plan.spec.seed}): no margin seats its households inside a cluster shape's band")
     s.M["meta"]["seat_margin"] = len(tried)
     return placed, cloud
