@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-01T15:17:10Z",
+  "target": "entry-gate",
+  "commit": "2c9c77c64",
+  "why": "section 120 changed only a link target id back to the scrub-marsh question's original heading; no finding moved"
+}
