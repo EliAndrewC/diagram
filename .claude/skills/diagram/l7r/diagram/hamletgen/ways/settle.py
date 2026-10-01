@@ -63,6 +63,7 @@ from .corridors import (
 from .fabric import _crosses_fabric, _homestead_polys, house_hit
 from .geom import _TOUCH_GAP, _components, _trim_to_service, memo_ground, polyline_len, steading_footprints, worked_ground
 from .joints import joints
+from .keeper import NOT_THE_SETTLES, STEP_RULES, steps_for, unsettled  # noqa: F401 - re-exported: `settle.unsettled` is the exit question callers name
 from .serve import shadowed_by
 from .sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
 from .tree import prune_the_tree, settle_defer, settle_tree, tree_faults
@@ -941,48 +942,6 @@ STEPS = (
     settle_widths,
     settle_husks,
 )
-
-
-STEP_RULES: dict[str, tuple[str, ...]] = {
-    "settle_husks": ("husks",),
-    "square_every_crossing": ("off_ford", "oblique_brook", "oblique_channel"),
-    "settle_shapes": ("bends", "hooks", "over_fixtures", "breaks_mid_run", "off_ford", "oblique_brook", "oblique_channel"),
-    "settle_way_outs": ("way_outs", "over_and_back"),
-    "settle_ends": ("folded_joints", "connector_hairpins", "doubled_tails", "dangling_ends", "doorstep_ends", "ends_behind", "needle_joins"),
-    "settle_street_ends": ("dangling_ends",),
-    "settle_joins": ("joins_short", "networks"),
-    "settle_needles": ("needle_loops", "needle_joins"),
-    "settle_network": ("networks",),
-    "settle_fragments": ("fragments",),
-    "settle_widths": ("width_steps",),
-}
-"""Which rules of `law.LAW` each repair step mends (feature 297): a later round runs only the steps whose rules are broken. A
-step not here (the reach, the shadows, the deferral, the tree's pruning) is asked every round - its own test is its gate."""
-
-
-def steps_for(broken: Mapping[str, Any]) -> tuple[Any, ...]:
-    """The steps of `STEPS`, in order, a round runs for the rules `broken` names: every step whose rules meet them and every step
-    `STEP_RULES` does not map; the whole of `STEPS` where a broken rule is mapped to no step."""
-    mapped = {r for rules in STEP_RULES.values() for r in rules}
-    if any(r not in mapped for r in broken):
-        return STEPS
-    return tuple(st for st in STEPS if st.__name__ not in STEP_RULES or set(STEP_RULES[st.__name__]) & set(broken))
-
-
-NOT_THE_SETTLES = ("unbridged", "short_decks", "planks", "unreached_houses", "field_unreached", "unreached_targets")
-"""The rules of `law.LAW` the settle's exit does not ask (`unsettled`): the decks and planks, drawn after the web
-(`stage_crossings`), so every crossing is undecked when the settle ends - the finished map is asked them; a farmhouse or the
-reserved field left unreached, refused on its own (`last_resort.refuse_unreached`); and a way target no lawful spur reaches,
-which the settle reports rather than draws to least-bad (`settle_targets`, FR-005)."""
-
-
-def unsettled(M: Mapping[str, Any], ground: Any = None) -> dict[str, Any]:
-    """Every rule of the lane law (`law.LAW`, the predicates the acceptance sweep asks) the web as it stands breaks, but for
-    those `NOT_THE_SETTLES` - the settle's exit question, asked however the rounds ended. `ground`, the worked ground the
-    settle already holds (`memo_ground`), is handed to the two rules that read it: built afresh by each it was two thirds
-    of the question's cost (~120 of ~186 ms a map over the pool and cohort 1-20, 2026-09-30)."""
-    rules = {**law.LAW, "dangling_ends": lambda M: law.dangling_lane_ends(M, ground), "ends_behind": lambda M: law.ends_behind(M, ground)} if ground is not None else law.LAW
-    return {name: v for name, rule in rules.items() if name not in NOT_THE_SETTLES and (v := rule(M))}
 
 
 def settle_the_web(s: Any, rounds: int = SETTLE_ROUNDS) -> dict[str, Any]:
