@@ -19,8 +19,8 @@ class FishPond(Kind):
     raises the dike, so the landscape was made cell by cell - by the households that farmed it, this record guesses, no page saying who dug - over
     centuries, into a mosaic of ponds of varied size round the creeks rather than a surveyed chessboard - the uniform
     grid of ponds is today's aerial view. The ponds lie in the creeks and canals the polder's own sluice gates feed and
-    drain, and each is drained two or three times a year to dredge the mud onto the dikes. The ponds here are about 4 mu
-    of water each, a hamlet's own, and about six parts in ten of a pond's parcel is water: the oldest figures, a
+    drain, and each is drained two or three times a year to dredge the mud onto the dikes. The ponds here are a
+    hamlet's own, and about six parts in ten of a pond's parcel is water: the oldest figures, a
     township's of 1678, give the fish half its land and the ponds eight tenths of it, and every ratio written as a number
     is modern. What lives in it is carp. The young carp were not bred here: they were netted wild in the West River by
     the fry households of one township, Jiujiang, and sold to the pond districts, so an ordinary hamlet bought its fry
@@ -192,14 +192,17 @@ class PigSty(Kind):
     loop - fed from the pond, its dung and the pond mud manuring the mulberry. So the sty stands on the bank, near its
     pond. A shed built so its waste runs straight into the pond, and the reasoning that the manure raises the plankton,
     are found only in modern manuals, so nothing is drawn to carry the waste into the water. A pig penned on a pond bank
-    is a Chinese form. Japan kept pigs - their bones are excavated at the Satsuma domain's Edo residence, at Osaka castle,
+    is a Chinese form. Japan kept pigs - outside Okinawa, a recent survey says, seemingly loose in the forest, and their
+    bones are excavated at the Satsuma domain's Edo residence, at Osaka castle,
     at Hakata and at Nagasaki harbor - but nothing read links a Japanese pig to a pond at all, so the FORM belongs to
     this kind of hamlet and to no other on these maps.
 
     Note: The sty is read - the pig as the dike-pond village's animal and the pen on the pond bank. Nothing read gives
     how many households kept a sty: the quarter to half of the households drawn with one, rolled per hamlet, is a guess.
     The width a modern manual sets for a shed-carrying dike, five to ten meters, is modern and is not a rule the map
-    follows; no older width was found.
+    follows; no older width was found. Where a sty stands is this project's choice: one sty to a grow-out pond, the
+    ponds nearest the houses first, on the half of the bank facing them, and none more than 320 ft from a farmhouse -
+    each a guess.
 
     Caveat: Nothing read gives how many households kept a sty: the quarter to half of the households drawn with one,
     rolled per hamlet, is a guess.
@@ -208,7 +211,7 @@ class PigSty(Kind):
     Covers: every `pig_sties[]` record - a shed with its railed pen on a pond bank
     Label: accurate
     Sources: qimin-yaoshu-yangzhu, isis-dykepond, pwsannong-zhusanjiao-nongyeshi, nongzheng-quanshu-41, fao-ac264e
-    Entry: research/archetypes.html - 'Pigs and ducks at a dike-pond: the sty on the pond dike', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps place the pig sty at the pond', 'How our maps furnish a dike-pond hamlet'
+    Entry: research/archetypes.html - 'Pigs and ducks at a dike-pond: the sty on the pond dike', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps draw pigs and ducks at a dike-pond: sties on the pond dikes', 'How our maps furnish a dike-pond hamlet'
     """
 
     key = 'pig sty'

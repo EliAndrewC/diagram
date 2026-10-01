@@ -689,7 +689,7 @@
   "pig sty": {
     "caveat": "",
     "covers": "every `pig_sties[]` record - a shed with its railed pen on a pond bank",
-    "entry": "research/archetypes.html - 'Pigs and ducks at a dike-pond: the sty on the pond dike', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps place the pig sty at the pond', 'How our maps furnish a dike-pond hamlet'",
+    "entry": "research/archetypes.html - 'Pigs and ducks at a dike-pond: the sty on the pond dike', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps draw pigs and ducks at a dike-pond: sties on the pond dikes', 'How our maps furnish a dike-pond hamlet'",
     "key": "pig sty",
     "label": "accurate",
     "label_note": "GUESS: the practice is read (the 1980s survey and the FAO/NACA manual), but nothing read gives how many households kept a sty in Ming or Qing; the per-hamlet share band is the generator's.",

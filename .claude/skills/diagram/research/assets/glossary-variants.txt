@@ -714,6 +714,8 @@ dry runs	wet run
 dry-field conditions	kanden
 dry-field conversion	kanden
 ds/m	dS/m
+duck landing	duck landing
+duck landings	duck landing
 dujiangyan	Dujiangyan
 dunhuang	Dunhuang
 duty cycle	duty cycle
@@ -3812,6 +3814,7 @@ zushi-nikai	half-story
 四間取り	four-room type
 圃場整備	hojo seibi
 土地庙	tudi miao
+埠 (bu, "landing")	duck landing
 屋敷林	yashikirin
 御蔵	kura
 悲田院	hidenin

@@ -24,8 +24,8 @@ class Paddy(Kind):
     fern azolla was grown on the flooded paddy to take nitrogen from the air for the rice, and in Japan a
     winter vetch, renge, was sown in the paddy as a green manure. On the Chinese
     delta the rice fields were also where the ducks fed: Qu Dajun, writing of Guangdong in 1678, says the
-    coastal fields bred small crabs that ate the rice sprouts and only ducks could eat them, so the villages
-    kept many ducks, herded in the fields - on the crabs in spring and summer, on the gleaned rice in autumn.
+    coastal fields of Guangzhou bred small crabs that ate the rice sprouts and only ducks could eat them, so many in
+    the villages kept ducks, herded in the fields - on the crabs in spring and summer, on the gleaned rice in autumn.
 
     Note: Plot form and the irregular patchwork are read, and so is the scattering of a household's holding;
     that the bunds meet at T-junctions is a guess no page read states; drawing the patchwork on the western
