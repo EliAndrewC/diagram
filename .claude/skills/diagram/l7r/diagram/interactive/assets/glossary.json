@@ -15075,5 +15075,11 @@
    "hillshade",
    "shaded relief"
   ]
+ },
+ "relief": {
+  "def": "On a map, the rise and fall of the ground - hills, slopes and valleys - and the ways a map shows them, such as a hill drawn in profile, hachures, contours or shading.",
+  "variants": [
+   "relief"
+  ]
  }
 }
