@@ -68,13 +68,14 @@ rolls, unturned) is clear in the region. The placer still decides each seat it i
 
 ### B2. The marsh as array throws (FR-004; `settlement/land/wet.py`)
 
-`_throw`'s two loops become array throws, as `commons` became `grass_scatter` (feature 278): the tint and tuft points drawn
-as numpy arrays from a generator seeded off the marsh's own stream, the frame test vectorized, then ONE region read: a
-`Region` over the marsh's box painted with everything `_sparse` refuses - outside the ring (the ring's complement), the
-`KeepoutGrid`'s families (the paddy, footprints, treads, halo, mounds, banks, water) at the mark's pad, the crescent ponds and
-the pond's ellipse (grown by the lateral pad) - and the feathered edge's probability computed for the survivors by
-`shapely.distance` to the ring, as `grass_scatter` does. The blade-tip test (`blade_up`) is the pond ellipse moved by the tip.
-Marks at the same densities; they land at different random places.
+`_throw`'s two loops become array throws, as `commons` became `grass_scatter` (feature 278), through the region the marsh
+already builds once - its `KeepoutGrid` of every keep-out family and its `RingIndex` of the drawn ground - read for all points
+at once (`RingIndex.inside_many`, `KeepoutGrid.hit_many` with the mark's slot extras), the crescent ponds and the pond's ellipse
+(grown by the lateral pad, and moved by the blade tip for `blade_up`) as array tests, and the feathered edge's probability
+computed for the survivors by `shapely.distance` to the outline, as `grass_scatter` does. The points are drawn as numpy arrays
+from a generator seeded off the marsh's own stream. Marks at the same densities; they land at different random places. (The
+same region the grass reads - one mechanism for every scatter - rather than a raster: the marsh's keep-outs are already filed
+once; what costs is asking them one point at a time in Python, research R3.)
 
 ### B3. The village grove's crowns (FR-004; `settlement/homestead_parts/stands.py`, `grove_blocks.py`)
 

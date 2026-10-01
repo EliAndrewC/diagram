@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-performance`)
 **Created**: 2026-09-30
-**Status**: Draft
+**Status**: Accepted - FAITHFUL at round 3 (2026-09-30)
 **Request**: [`request.md`](request.md) - the GM's words verbatim: Inashiro's times are "much higher than I'd expect" (">1s is a
 lot to place 15 farmhouses ... it's hard to believe that's actually necessary"; "1.9s to generate the interactive HTML map
 seems like a lot"; "12,000 drain-bank clearance checks"; "roughly 100,000 spatial-index lookups for the hinterlands ...
@@ -190,3 +190,5 @@ back; every ratio is a floor with no projection behind it. Keys `m:...` are in `
 - Round 2 (spec-fidelity-verify, 2026-09-30): CHANGES REQUIRED, 3 one-line items - the GM's second statement missing from
   request.md, the Summary's funnel order, SC-001 naming `full_s` while citing the `make map` figure and a load bullet true of only
   one figure. Addressed.
+- Round 3 (spec-fidelity-verify, 2026-09-30): FAITHFUL. The GM's second statement's guideline edits were made as their own commit
+  (5594b7c54: constitution v2.27.0, `dev/performance.md`, `docs/efficiency-tooling.md`, the engine `CLAUDE.md`).
