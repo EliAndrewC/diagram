@@ -446,6 +446,8 @@ common graveyard	common cemetery
 common graveyards	common cemetery
 common hill	commons
 commons	commons
+commune	people's commune
+communes	people's commune
 commutation	commutation
 commute	commutation
 commuted	commutation
@@ -965,6 +967,7 @@ freeboard	freeboard
 frontage	frontage
 frost heave	frost heave
 frost-heave	frost heave
+fry	fry
 fry landing	fry landing
 fry landings	fry landing
 fry pond	nursery pond
@@ -2438,6 +2441,7 @@ pent roof	pent roof
 pent roofs	pent roof
 penthouse	penthouse
 penthouses	penthouse
+people's commune	people's commune
 perched	perched river
 perched river	perched river
 perched, silt-choked river	perched river

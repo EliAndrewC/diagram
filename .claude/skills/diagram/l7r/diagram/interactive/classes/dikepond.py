@@ -29,19 +29,20 @@ class FishPond(Kind):
     they raised the four domestic carps.
 
     Note: The form, the mosaic and the loop are read. Reading the township's two shares together as six parts water in
-    ten of a parcel is this record's arithmetic, a guess; the dike's width follows from it, no width before modern
-    times being found. The pond sizes drawn here are a hamlet's own, below the band 20th-century surveys report. And the
+    ten of a parcel is this record's arithmetic, a guess; the dike is drawn 23 ft, inside the modern 6 to 10 m, no width before modern
+    times being found. The water-heavy order is a regional reading, the reverse, six parts dike to four of pond, being
+    recorded too. The pond sizes drawn here are a hamlet's own, below the band 20th-century surveys report. And the
     whole-block conversion drawn here is the rare end state of a normally scattered system. A sluice through each pond's
     own dike is found only in a modern manual and is not drawn.
 
     Caveat: Reading the township's two shares together as six parts water in ten of a parcel is this record's
-    arithmetic, a guess; the dike's width follows from it, no width before modern times being found.
+    arithmetic, a guess; the dike is drawn 23 ft, inside the modern 6 to 10 m, no width before modern times being found.
 
     Name: fish pond
     Covers: the dug water of every `dikeponds[]` parcel - the pond inset inside its mulberry dike
     Label: accurate
     Sources: isis-dykepond, ruddle-zhong-1988, gmrb-2024-sangji, guangdong-xinyu-22, pwsannong-zhusanjiao-nongyeshi, nongzheng-quanshu-41, minle-dou-people
-    Entry: research/archetypes.html - 'Cash crops on rice land: dike-ponds, lotus fields and tea rows', 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', "Did a dike-pond village rear its own fish fry, or buy them? Most bought them - the nursery ponds were one township's trade", 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'; research/rendering/archetypes.html - "How our maps lay cash crops over a village's rice land", 'How our maps draw a dike-pond block'
+    Entry: research/archetypes.html - 'Cash crops on rice land: dike-ponds, lotus fields and tea rows', 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', "Did a dike-pond village rear its own fish fry, or buy them? Most bought them - the nursery ponds were one township's trade", 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'; research/rendering/archetypes.html - "How our maps lay cash crops over a village's rice land", 'How our maps draw dike-ponds (sangji yutang)'
     """
 
     key = 'fish pond'
@@ -60,26 +61,26 @@ class MulberryDike(Kind):
     feed and fertilizer for the fish in the water beside it. Every dike on record was planted, a bare bank of heaped mud being
     apt, in this project's reasoning, to gully and slump; in sericulture districts that planting was mulberry.
 
-    Note: The ratio and the planting are read, though every page that writes the ratio as a number is modern - the oldest figure found, one township's share of fish water in 1678, is not a ratio. The traditional width is a dike of six to ten meters (one modern study has dikes once twenty meters wide worn to under four as the ponds were enlarged), and the water drawn stands about seven meters in from each parcel's edge, though a canal runs between two parcels, so two ponds' banks are not one bank. The traditional figure also reaches us only at second hand. The ratio's ORDER is
+    Note: The ratio and the planting are read, though every page that writes the ratio as a number is modern - the oldest figures found, Qu Dajun's shares of one township's land in 1678, are not a ratio, and the six parts water in ten drawn here is this project's guess from reading his two shares together. The modern width is a dike of six to ten meters, no width being found from before modern times (one modern study has dikes once twenty meters wide worn to under four as the ponds were enlarged), and the water drawn stands about seven meters in from each parcel's edge, though a canal runs between two parcels, so two ponds' banks are not one bank. The modern figure also reaches us only at second hand. The ratio's ORDER is
     contested - the classic prescription survives as six parts dike to four parts pond as well as the reverse,
     and seven to three is recorded where the fish had feed from beyond the dike - so the water-heavy reading drawn here is a regional one, disclosed
-    rather than the only one; measured on the map that draws them, water is 62% of the parcel ground and the planted bank 38%, and less across the whole block once the canal corridors between the parcels count. How
+    rather than the only one; as drawn, water is about six parts in ten of each parcel and the planted bank the rest, and less across the whole block once the canal corridors between the parcels count. How
     thickly mulberry stood depended on how low it was cut, along one continuum: from about one bush to a
     square foot in the Pearl River delta's root-cut planting, a figure given as current practice with no date,
     to about 300 trees a mu - one to about 24 square feet - in the late-Qing Yangtze delta, the only figure
-    dated before the modern period; none was measured on a pond dike. The crowns are drawn at about one bush
-    per twenty-three square feet, the late-Qing figure, by the GM's ruling that the map keeps the premodern
+    dated before the modern period; only the delta's figure is given for pond dikes, said to be planted much as any flat-land mulberry field. The crowns are drawn at about one bush
+    per twenty-four square feet, the late-Qing figure, by the GM's ruling that the map keeps the premodern
     spacing. No page read gives how wide a bush grew, so the four and a half to seven feet drawn is this
     project's own figure. And the dike is drawn as a RING, the band between the parcel's outer edge and the
-    water's own outline, so hovering a dike lights its bank and not the pond inside it. So: the width of a bush's crown is this project's own.
+    water's own outline, so hovering a dike lights its bank and not the pond inside it. So: the width of a bush's crown is this project's own, and so is the six-in-ten split drawn from Qu Dajun's two shares.
 
-    Caveat: the width of a bush's crown is this project's own.
+    Caveat: the width of a bush's crown is this project's own, and so is the six-in-ten split drawn from Qu Dajun's two shares.
 
     Name: mulberry dike
     Covers: the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it
     Label: accurate
     Sources: gd-gazetteer-sangji, fao-ac241e, isis-dykepond, ruddle-zhong-1988, pwsannong-gudai-zaisang, pwsannong-sangji-yutang, kotobank-souen, kotobank-negari
-    Entry: research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Polder dikes: what they were made of, how big, and what grew on them', 'How thickly was dike mulberry planted, and how wide did a bush grow?'; research/rendering/archetypes.html - 'How our maps draw a dike-pond block'
+    Entry: research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Polder dikes: what they were made of, how big, and what grew on them', 'How thickly was dike mulberry planted, and how wide did a bush grow?'; research/rendering/archetypes.html - 'How our maps draw dike-ponds (sangji yutang)'
     """
 
     key = 'mulberry dike'
@@ -96,8 +97,8 @@ class PondCanal(Kind):
     drain around the block takes everything to the outfall.
 
     Note: The polder's gates and the creeks the ponds lie in are read. A sluice through each pond's own dike, and a pond
-    taking water in at its high side and out at its low side, are found only in a modern manual and a monograph this
-    project could not read, so neither is drawn. The ring drain around the block is this map's own layout, borrowed from
+    taking water in at its high side and out at its low side, are not found before 1912: the first only in a modern manual,
+    the second on no page this project read, so neither is drawn. The ring drain around the block is this map's own layout, borrowed from
     the rice polder's inner ring canal: no source the record cites describes a ring drain on a dike-pond.
 
     Caveat: The ring drain around the block is this map's own layout, borrowed from the rice polder's inner ring canal:
@@ -107,7 +108,7 @@ class PondCanal(Kind):
     Covers: `field_ditches` whose role is not `drain` on a dike-pond field - the main from the reservoir and the laterals between the ponds
     Label: accurate
     Sources: minle-dou-people, cssn-sangyuanwei, cssn-jiangnan-weitian
-    Entry: research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)'; research/rendering/archetypes.html - 'How our maps draw a dike-pond block'
+    Entry: research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)'; research/rendering/archetypes.html - 'How our maps draw dike-ponds (sangji yutang)'
     """
 
     key = 'pond canal'
@@ -292,7 +293,7 @@ class SluiceGate(Kind):
     Covers: the board bar of every `sluice_gates[]` record - the gate in each cut of the perimeter dike
     Label: accurate
     Sources: fao-x6708e, cssn-sangyuanwei, shen-kuo, ishizue-waju, wajyu-nogyo
-    Entry: research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Polders: fields diked against the fluctuating water (weitian, waju)'; research/rendering/archetypes.html - 'How our maps draw polders (weitian, waju)', 'How our maps draw a dike-pond block'
+    Entry: research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Polders: fields diked against the fluctuating water (weitian, waju)'; research/rendering/archetypes.html - 'How our maps draw polders (weitian, waju)', 'How our maps draw dike-ponds (sangji yutang)'
     """
 
     key = 'sluice gate'

@@ -297,7 +297,7 @@
   "fish pond": {
     "caveat": "the pond SIZES are from 20th-century surveys of the traditional landscape, not Ming or Qing documents, and the whole-block conversion drawn here is the rare end state of a normally scattered system.",
     "covers": "the dug water of every `dikeponds[]` parcel - the pond inset inside its mulberry dike",
-    "entry": "research/archetypes.html - 'Cash crops on rice land: dike-ponds, lotus fields and tea rows', 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', \"Did a dike-pond village rear its own fish fry, or buy them? Most bought them - the nursery ponds were one township's trade\", 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'; research/rendering/archetypes.html - \"How our maps lay cash crops over a village's rice land\", 'How our maps draw a dike-pond block'",
+    "entry": "research/archetypes.html - 'Cash crops on rice land: dike-ponds, lotus fields and tea rows', 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', \"Did a dike-pond village rear its own fish fry, or buy them? Most bought them - the nursery ponds were one township's trade\", 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'; research/rendering/archetypes.html - \"How our maps lay cash crops over a village's rice land\", 'How our maps draw dike-ponds (sangji yutang)'",
     "key": "fish pond",
     "label": "accurate",
     "label_note": "The form and the loop are read; the pond SIZES are from 20th-century surveys of the traditional landscape, not Ming or Qing documents, and the whole-block conversion drawn here is the rare end state of a normally scattered system.",
@@ -570,7 +570,7 @@
   "mulberry dike": {
     "caveat": "the coppice density the crowns are drawn at (one bush per ten to twenty square feet) was not re-found and stays on the re-sourcing queue.",
     "covers": "the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it",
-    "entry": "research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Polder dikes: what they were made of, how big, and what grew on them', 'How thickly was dike mulberry planted, and how wide did a bush grow?'; research/rendering/archetypes.html - 'How our maps draw a dike-pond block'",
+    "entry": "research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Polder dikes: what they were made of, how big, and what grew on them', 'How thickly was dike mulberry planted, and how wide did a bush grow?'; research/rendering/archetypes.html - 'How our maps draw dike-ponds (sangji yutang)'",
     "key": "mulberry dike",
     "label": "accurate",
     "label_note": "The ratio, the dike width and the planting are read; the coppice density the crowns are drawn at (one bush per ten to twenty square feet) was not re-found and stays on the re-sourcing queue.",
@@ -730,7 +730,7 @@
   "pond sluice": {
     "caveat": "its position on each pond is the engine's inlet-high, outlet-low rule from the record, not a surveyed plan.",
     "covers": "the short channel stubs of `dikepond_sluices` - where each pond's dike is cut to the canal",
-    "entry": "research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)'; research/rendering/archetypes.html - 'How our maps draw a dike-pond block'",
+    "entry": "research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)'; research/rendering/archetypes.html - 'How our maps draw dike-ponds (sangji yutang)'",
     "key": "pond sluice",
     "label": "accurate",
     "label_note": "The sluice's form is read from the FAO pond-construction manual; its position on each pond is the engine's inlet-high, outlet-low rule from the record, not a surveyed plan.",
@@ -812,7 +812,7 @@
   "sluice gate": {
     "caveat": "the 6 x 3 ft bar is drawn at the size of a board set, a glyph the record does not measure.",
     "covers": "the board bar of every `sluice_gates[]` record - the gate in each cut of the perimeter dike",
-    "entry": "research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Polders: fields diked against the fluctuating water (weitian, waju)'; research/rendering/archetypes.html - 'How our maps draw polders (weitian, waju)', 'How our maps draw a dike-pond block'",
+    "entry": "research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Polders: fields diked against the fluctuating water (weitian, waju)'; research/rendering/archetypes.html - 'How our maps draw polders (weitian, waju)', 'How our maps draw dike-ponds (sangji yutang)'",
     "key": "sluice gate",
     "label": "accurate",
     "label_note": "The form is read from the FAO pond-construction manual; the 6 x 3 ft bar is drawn at the size of a board set, a glyph the record does not measure.",
