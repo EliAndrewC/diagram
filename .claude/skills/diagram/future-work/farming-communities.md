@@ -2400,10 +2400,11 @@ line in feature 280 (`specs/280-modern-only-sweep/outcomes.md`, one row per item
 - **A bath room beside the main door is never drawn**: the work yard covers the front wall on every scripted house, so a hamlet
   whose seat is `main_door` (Kuwabata, Sawada) draws its bath rooms at the next seat, and `meta.bath_seats_drawn` says so.
   Sketch: let the bath lap the yard's corner under the eaves beside the door - the yard's keep-out is a guess, the seat is not.
-- **The storehouse annex is sized as shares of its house** (0.46 w x 0.45 h, `houses.py`): 1.67 to one on a 46 ft minka, 1.46 on
-  Sawada's 40 x 28 ft house. Which norm applies turns on what the annex is: the farm shed's 1.5-1.8 (homesteads/440) or the kura's
-  about 15 x 18 ft, which "as a rule" stands apart from the house (homesteads/430) - the same split as the `storage shed` class
-  above. Sketch: settle the class first, then size it in feet from its own section.
+- **The record classes the storehouse annex two ways** (updated by feature 293, 2026-09-30): feature 293 dealt the annex to the
+  largest houses and held its shape to feature 280's farm-shed band (18-27 ft, 1.5-1.8 to one; 280 M18, homesteads/440 - the naya),
+  while homesteads/120 and 430 read the annex as the kura (about 15 x 18 ft, which "as a rule" stands apart from the house) - the
+  same split as the `storage shed` class above. Owed: a research pass on which building the annex is; its size follows from that
+  section (a kura re-packs every scripted hamlet: a cohort run and a review per map).
 - **Mizuguchi's two east houses walk about four times the straight distance to the way out** (1,176 and 1,207 ft of lane for
   290-300 ft; 2.27 at worst on main) - the lane web leads them south-east first. Measured by the round-5 review, 2026-09-29; the
   same routing question as Kashikawa's detours above.
@@ -2448,7 +2449,9 @@ FLOOR") is not asked of the pocket path.
 seated, lay the next pocket on the free ground nearest the group just seated (the `_commons_pocket_clear` test, the tree's
 corridors already known), so each shed has its borrowers by construction; a pool test that every shared shed has a
 household within `_BORROW_REACH`. Deferred because it reorders 287's seating loop (`_seat_households`), which the port that
-found it did not own; put to the GM in specs/293-effort-level-experiment/outputs/I-port-handoff.md.
+found it did not own. See first the entry `OPEN 2026-09-28 (269 B16)` above: if the shared byre on the commons is retired as
+that entry sketches (it re-rolls Inashiro and Sawada), these sheds are gone and this fix is moot. `_BORROW_REACH` is a preference
+tier (`_borrowers` widens and falls back), not a bar any test holds.
 
 ## OPEN 2026-09-30 (feature 293, settlement-review of Kuwabata, round 2): the notes census does not count the storehouse annexes
 
