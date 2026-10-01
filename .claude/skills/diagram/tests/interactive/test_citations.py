@@ -42,7 +42,12 @@ def test_the_record_s_pages_are_found_and_the_registry_and_citations_pages_are_n
     pages = research_pages()
     assert "homesteads.html" in pages and "cities/fabric.html" in pages
     assert "SOURCES.html" not in pages and not any(p.startswith("citations/") for p in pages)
-    assert len(pages) == 23, pages  # 15 pages until feature 229 added settlements, ways, presentation and cities/sizing; 20 with rendering/homesteads, 21 with rendering/buildings, 22 with rendering/urban-features, 23 with rendering/towns (feature 292)
+    # 15 pages until feature 229 added settlements, ways, presentation and cities/sizing; 20 with rendering/homesteads,
+    # 21 with rendering/buildings, 22 with rendering/religion-and-death, 23 with rendering/cities/capitals,
+    # 24 with rendering/cities/defenses, 25 with rendering/cities/fabric, 26 with rendering/cities/government,
+    # 27 with rendering/cities/hinterland, 28 with rendering/cities/river-cities, 29 with rendering/cities/sizing,
+    # 30 with rendering/urban-features, 31 with rendering/towns (feature 292)
+    assert len(pages) == 31, pages
 
 
 def test_the_paths_beside_a_research_page() -> None:

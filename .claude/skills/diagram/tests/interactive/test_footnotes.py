@@ -191,7 +191,7 @@ def test_every_key_on_a_sources_roster_is_quoted_by_a_footnote_in_its_section(pa
     unquoted = []
     for i, (a, level) in enumerate(heads):
         # a section runs to the next heading of the SAME or a HIGHER level: an <h2>'s roster is quoted anywhere in
-        # its <h3> subsections too (the servant-housing entry of cities/government.html keeps its roster at the top)
+        # its <h3> subsections too (an entry with <h3> subsections keeps its roster at the top)
         b = next((s for s, lv in heads[i + 1 :] if lv <= level), len(body))
         section = body[a:b]
         roster = _ROSTER.search(section)

@@ -118,7 +118,8 @@ TEMPLE_PRECINCT_PX2 = 8_125.0
 
 #: Adept-monk households per precinct. The default 2.5 x 2 precincts = the 5 households the old
 #: hard-coded line carried. A FOX precinct runs much higher (research/religion-and-death.html
-#: "Temples as economic institutions with hereditary householder clergy"): only its three Bonds are celibate and the rest of its clergy are hereditary
+#: "Temple clergy, their families, and how a temple earned its keep"; its map rules at
+#: research/rendering/religion-and-death.html "How our maps house a temple's clergy"): only its three Bonds are celibate and the rest of its clergy are hereditary
 #: householders living out among the laity, so its families are drawn as ordinary houses around
 #: the compound rather than implied inside it.
 MONK_HOUSES_PER_PRECINCT = 2.5
@@ -465,7 +466,7 @@ def plan_city(program: CityProgram, canvas: tuple[float, float] | None = None) -
         if label == MINISTRIES_LABEL:
             lines.append(temple_line)
     # Adept-monk housing (GM 2026-07-24): each temple precinct keeps ordinary homes in its
-    # neighborhood for the married adepts among its monks (temple-density canon, research/religion-and-death.html 'Temples as economic institutions with hereditary householder clergy'
+    # neighborhood for the married adepts among its monks (temple-density canon, research/rendering/religion-and-death.html 'How our maps house a temple's clergy'
     # "City temples"). Clergy are not a lay caste, so these households ride OUTSIDE the caste
     # table's 600 families - a small civic-adjacent line at packed gross cost. The count scales
     # with the precinct count because a city's clergy housing is a property of its temples, not a

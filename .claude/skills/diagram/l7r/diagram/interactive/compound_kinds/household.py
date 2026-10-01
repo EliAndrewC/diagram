@@ -166,7 +166,7 @@ class RetainersQuarters(Kind):
     Covers: the senior retainers' quarters, a family rowhouse for married retainers, and their labels
     Label: accurate
     Sources: hatchobori-jawiki, jinya-jawiki, takayama-jinya-jawiki, shibata-ashigaru-nagaya, hikone-ashigaru, aizu-bukeyashiki-guide
-    Entry: research/buildings.html - 'Staff rowhouses and barracks (nagaya)'; research/cities/government.html - 'Servant housing in the samurai ward', "Where do a samurai household's servants sleep when the house has no gate range?"; research/rendering/buildings.html - 'How our maps draw staff rowhouses and barracks (nagaya)'
+    Entry: research/buildings.html - 'Staff rowhouses and barracks (nagaya)'; research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'; research/rendering/buildings.html - 'How our maps draw staff rowhouses and barracks (nagaya)'
     """
 
     key = "retainers' quarters"
@@ -175,15 +175,16 @@ class RetainersQuarters(Kind):
 class ServantsQuarters(Kind):
     """
     What: A long, narrow single-story range - a nagaya - where the household's domestic servants live: the
-    cooks, grooms and cleaners who keep the compound running, on annual contracts.
+    hired commoners who do the household's odd jobs, on contracts of a fixed term.
 
-    Why: A samurai household's servants lived inside their master's walls, never in houses of their own - in a
-    range along the boundary, in the rooms of the gate, or for a small household in rooms off the kitchen.
+    Why: A samurai household's servants lived inside their master's walls - no page read gives one a house of
+    their own - in a range along the boundary, in the rooms of the gate, or for a small household in rooms off
+    the kitchen.
     The shady north rear, behind the residence, is the compound's service strip, so the servants' range backs the
     rear wall there, beside the household's storehouses and the family privy; the vegetable plot stands wherever it
     gets its sun.
 
-    Note: Servants housed inside the walls, the range along the front boundary, and a smaller house with no range are recorded findings; where that smaller house's servants slept is a guess, on no page read. The
+    Note: Servants housed inside the walls, the range along the front boundary, and a smaller house with no range are recorded findings; where that smaller house's servants slept, and that servants never had a house of their own, are guesses, on no page read. The
     program classes the building's size as a guess: a nagaya for about ten servants, with no measured example
     behind the band. And its seat in the north rear is reasoned from the sun rather than read: the record puts
     the servants in the gate range at the front, on the street, and no page read places a servants' range at the rear.
@@ -197,7 +198,7 @@ class ServantsQuarters(Kind):
     Covers: the servants' nagaya and its label
     Label: accurate
     Sources: jta-nagayamon, fukui-bushi-jutaku, aizu-bukeyashiki-jawiki, kotobank-degawari, nagayamon-jawiki, nando-jawiki, daozuofang, shoinzukuri-jawiki, kotobank-bukeyashiki, kotobank-nagayamon
-    Entry: research/cities/government.html - 'Servant housing in the samurai ward', "Where do a samurai household's servants sleep when the house has no gate range?"; research/buildings.html - 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)'
+    Entry: research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'; research/buildings.html - 'Samurai residences and their rooms (buke yashiki)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)'; research/rendering/cities/government.html - "How our maps draw servants' quarters in the samurai ward"
     """
 
     key = "servants' quarters"
@@ -499,14 +500,15 @@ class CompoundShrine(Kind):
     Why: Even the shogunate's post at Jōge, an outpost of three officials, had shrines inside its walls - an
     Inari shrine and a Tenjin shrine among them - and a full Chinese county yamen kept three, so a shrine is part
     of the equipment of any office, not a sign of a pious magistrate; what varies is its size and its
-    dedication. A shrine keeping more than one kami was the ordinary case, and a kami brought in from elsewhere
+    dedication. A shrine keeping more than one kami was the ordinary case, by the word of an encyclopedia article
+    that flags itself as short of sources, and a kami brought in from elsewhere
     could be kept in the main hall or given its own small shrine inside the precinct. The shrine stands in the
     inner court with the household and stays smaller than the residence - a worship hall is small even at a
     great shrine.
 
     Note: A modest shrine inside the walls of a post of any size is a recorded finding, read on the 1869 drawing
     of the Jōge post and on a Chinese yamen's three shrines, and a second kami in a small shrine of its own is one
-    of three attested forms; the program classes the shrine as accurate, with a hall-shrine ceiling of about 36
+    of three forms the record found, two of them attested and the single altar in one hall a guess; the program classes the shrine as accurate, with a hall-shrine ceiling of about 36
     by 30 ft subordinate to the residence, a ceiling that is this project's guess, since no page read measures a
     worship hall. One shrine is drawn however many a real office kept - Jōge two, Neixiang shrines to three gods - and a
     garden around it is a guess, no page read describing one. Making it Inari's by default is a guess resting on
@@ -524,7 +526,7 @@ class CompoundShrine(Kind):
     Covers: the shrine hall or halls, their edging and dividing rail, and the shrine labels
     Label: accurate
     Sources: fuchu-joge-pamphlet, neixiang-yamen-zhwiki, henan-neixiang, jawiki-saijin, jawiki-goshi, kotobank-aidono, hokora-jawiki, nara-nagao-jinja
-    Entry: research/buildings.html - 'Magistrates' compounds (jin'ya and yamen)', 'Shrines kept inside government offices and houses (yashikigami)', 'The size of a compound and the rank of its buildings'; research/religion-and-death.html - 'When one shrine hall serves several kami, does each have its own altar?'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps draw shrines kept inside government offices'
+    Entry: research/buildings.html - 'Magistrates' compounds (jin'ya and yamen)', 'Shrines kept inside government offices and houses (yashikigami)', 'The size of a compound and the rank of its buildings'; research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps draw shrines kept inside government offices'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "compound shrine"
@@ -704,7 +706,7 @@ class LordsQuarters(Kind):
     Covers: the lord's suite in the residence, its floor and its labels
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, shoinzukuri-kotobank, matsue-bukeyashiki, touken-world-buke-madori, takayama-jinya-jawiki, takayama-jinya-city, aizu-bukeyashiki-jawiki
-    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'The hearing court (shirasu)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps draw the hearing court (shirasu)'; research/cities/government.html - 'Servant housing in the samurai ward'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'The hearing court (shirasu)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps draw the hearing court (shirasu)'; research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'
     """
 
     key = "lord's quarters"
@@ -731,7 +733,7 @@ class FamilyQuarters(Kind):
     Covers: the family's bay of the residence, its floor and its labels
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, shoinzukuri-kotobank, matsue-bukeyashiki, neixiang-yamen-zhwiki, aizu-bukeyashiki-jawiki, jinya-jawiki, takayama-jinya-jawiki
-    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'Magistrates' compounds (jin'ya and yamen)'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps draw a magistrate's compound'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'Magistrates' compounds (jin'ya and yamen)'; research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps draw a magistrate's compound'
     """
 
     key = "family quarters"
@@ -756,7 +758,7 @@ class InnerRooms(Kind):
     Covers: the innermost bay of the residence, its floor and its label
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, butsuma-kotobank, aizu-bukeyashiki-jawiki
-    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'Household altar rooms and ancestral tablets (butsuma and ihai)'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps draw household altar rooms and ancestral tablets (butsuma and ihai)'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)', 'Household altar rooms and ancestral tablets (butsuma and ihai)'; research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)', 'How our maps draw household altar rooms and ancestral tablets (butsuma and ihai)'
     """
 
     key = "inner rooms"
@@ -785,7 +787,7 @@ class ReceptionRoom(Kind):
     Covers: the reception bay of the residence, its floor and its labels
     Label: accurate
     Sources: shirobito-612-omote-oku, edojo-kotobank, shoinzukuri-kotobank, touken-world-buke-madori, matsue-bukeyashiki, shoinzukuri-jawiki, aizu-bukeyashiki-jawiki
-    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)'; research/cities/government.html - 'Servant housing in the samurai ward'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)'
+    Entry: research/buildings.html - 'Samurai residences and their rooms (buke yashiki)'; research/cities/government.html - 'Servants in a samurai household: where they sleep and how they were hired (hokonin)'; research/rendering/buildings.html - 'How our maps lay out samurai residences and their rooms (buke yashiki)'
     """
 
     key = "reception room"
@@ -826,7 +828,7 @@ class ShrineAltar(Kind):
     one roof, the main kami in the middle as on a household's three-shrine shelf. Some kept the lesser kami (for a hall, a guess from the household shelf) behind
     the main one's altar, or gave a kami a small shrine of its own inside the precinct.
 
-    Note: Several kami in one hall, and their altars side by side, a bay to each, are recorded findings; which of
+    Note: Several kami in one hall, and their altars side by side, a bay to each, are recorded findings at shrines, though no page read describes one kept inside an official's compound; which of
     the three forms a compound takes is rolled per map, and each map's note says which. A compound's shrine
     serving more than one kami is a deviation of ours, drawn at Ochiba alone because its magistrate is also a
     priest; any other compound's shrine serves one. The single altar with the others behind it is attested for a
@@ -844,7 +846,7 @@ class ShrineAltar(Kind):
     Covers: each altar glyph inside a shrine hall, with its name and sublabels
     Label: accurate
     Sources: kotobank-aidono, jawiki-saijin, genbu-honden-styles, jawiki-goshi, tokyo-jinjacho-kamidana
-    Entry: research/religion-and-death.html - 'When one shrine hall serves several kami, does each have its own altar?'; research/buildings.html - 'Shrines kept inside government offices and houses (yashikigami)'; research/rendering/buildings.html - 'How our maps draw shrines kept inside government offices'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/buildings.html - 'Shrines kept inside government offices and houses (yashikigami)'; research/rendering/buildings.html - 'How our maps draw shrines kept inside government offices'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "shrine altar"
@@ -859,23 +861,27 @@ class Torii(Kind):
     hall is how deep the shrine's ground is in front of it, and a compound shrine's ground is small. An arch is a
     mark of care, not a fixture: a household shrine that is carefully kept "may even have" one, and a compound
     shrine may have none. Two shrines on one ground may share the arch at its entrance, since it marks everything
-    inside it, or each may have its own. Long avenues of arches are the gifts of rich patrons at great shrines,
-    not the rule.
+    inside it, or each may have its own. Rows of arches, each a worshipper's gift, belong to the Inari shrines, and
+    at an ordinary shrine are attested only in modern times - the exception, not the rule.
 
     Note: The arch at the boundary of the shrine's ground, and both a shared arch and one to each shrine, are
     recorded findings; each sheet takes one. How far the arch stands from its hall is a guess, kept short because
     a compound shrine's ground is small - about 5 ft where the plan is tight, up to the 12 ft at which a village shrine's
     innermost arch stands where there is room (the GM's ruling of 2026-09-27): no page read gives a distance from any torii to its hall.
+    Before a country shrine, a row of one, three or seven arches is a deliberate deviation: before 1868 an ordinary
+    shrine's arch was a single gate.
 
     Caveat: How far the arch stands from its hall is a guess, kept short because a compound shrine's ground is
     small - about 5 ft where the plan is tight, up to the 12 ft at which a village shrine's innermost arch stands where there is
-    room (the GM's ruling of 2026-09-27): no page read gives a distance from any torii to its hall.
+    room (the GM's ruling of 2026-09-27): no page read gives a distance from any torii to its hall. Before a country
+    shrine, a row of one, three or seven arches is a deliberate deviation: before 1868 an ordinary shrine's arch was
+    a single gate.
 
     Name: torii
     Covers: the approach torii before a compound shrine or a country shrine
     Label: accurate
     Sources: jinjahoncho-keidai, jawiki-torii, jawiki-yashikigami, torii-enwiki, fushimi-inari-jawiki, fushimi-inari-senbon, hokora-jawiki, nara-nagao-jinja, jinja-jawiki
-    Entry: research/religion-and-death.html - 'How far before a small shrine does its torii stand, and can two shrines share one?', 'Torii are VOTIVE DONATIONS', 'Torii spacing', 'Where do the first and the innermost arches stand, and where does the hall's label go?', 'How big is a country shrine, and what stands in its precinct?'
+    Entry: research/religion-and-death.html - 'Shrine gateways and the approach to the hall (torii, sando)', 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw shrine gateways and the approach to the hall (torii, sando)', 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "torii"

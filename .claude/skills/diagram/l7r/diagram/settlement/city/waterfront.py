@@ -91,8 +91,8 @@ class WaterfrontMixin:
         """The capital's water-supply channel: intake works on the river, an OPEN cut at grade
         outside the wall, terminating at a city gate - and buried beyond it.
 
-        THE FORM IS SETTLED AND THE NEGATIVE IS EXPLICIT (GM 2026-08-08; research/cities/
-        research/cities/capitals.html, "The aqueduct is open outside the wall and buried inside it"). The East
+        THE FORM IS SETTLED AND THE NEGATIVE IS EXPLICIT (GM 2026-08-08; research/cities/capitals.html,
+        "The capital's aqueduct (josui)"; the map's rules at research/rendering/cities/capitals.html). The East
         Asian vocabulary is Edo's Kanda and Tamagawa josui and Odawara's sosui: a gravity canal
         in a plain earth cut (the Kanda ran 43 km at grade), a buried pipe inside the town, and -
         only where water must CROSS water - a kakehi flume carried over on a bridge (Edo's

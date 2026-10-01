@@ -45,8 +45,10 @@ RESEARCH_PAGES = "../../../research/"
 #: holds the city research; `rendering` (feature 292, GM 2026-09-29: *"there should probably just be a separate
 #: collection of files that have to do with our rendering decisions"*) holds how the maps draw what the research
 #: pages describe, one rendering page beside each research page it covers. Every reader of the record takes its list
-#: from here; a collection named anywhere else is a defect.
-COLLECTIONS = ("cities", "rendering")
+#: from here; a collection named anywhere else is a defect. `rendering/cities` (feature 292 sweep, 2026-09-30) is the
+#: rendering page beside each `cities/` page - `rendering/cities/capitals.html` beside `cities/capitals.html` - two
+#: directories down, so it is a collection of its own rather than a page directory of `rendering`.
+COLLECTIONS = ("cities", "rendering", "rendering/cities")
 
 
 def collection_pages(research_dir: str = RESEARCH_DIR) -> list[str]:
@@ -63,8 +65,8 @@ _KEY = re.compile(r"`([a-z0-9][a-z0-9-]*)`")
 #: The one-level form was added in feature 180 (spec FR-012a): the pattern could not match a
 #: subdirectory, so an entry naming a `cities/` file would have resolved to no sources and no questions,
 #: silently. No class did that on the day it was fixed; the URL above is built from this same match, so
-#: the silent miss would have become a silent broken link.
-_ENTRY_FILE = re.compile(r"research/((?:[a-z-]+/)?[a-z-]+\.html)")
+#: the silent miss would have become a silent broken link. Two levels (feature 292): `research/rendering/cities/capitals.html`.
+_ENTRY_FILE = re.compile(r"research/((?:[a-z-]+/){0,2}[a-z-]+\.html)")
 # A heading is quoted 'like this', and "like this" when the heading itself contains an apostrophe -
 # the single-quote form cannot carry "A reservoir's shore is reeded". Both are read (settlement-review
 # 2026-08-29): with only the first form the marsh entry lost `mineta-2007-tameike` from the modal AND

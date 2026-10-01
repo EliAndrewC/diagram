@@ -23,6 +23,7 @@ import re
 from dataclasses import dataclass
 
 from l7r.diagram.interactive.record import fragments as frag
+from l7r.diagram.interactive.sources import COLLECTIONS
 
 #: The rendering collection (`sources.COLLECTIONS`), whose sections carry the declarations.
 RENDERING = "rendering"
@@ -52,13 +53,26 @@ def pairs(record_dir: str) -> list[Pair]:
     out: list[Pair] = []
     if not os.path.isdir(root):
         return out
-    for page in sorted(d for d in os.listdir(root) if os.path.isdir(os.path.join(root, d))):
+    for page in _pages(root):
         where = os.path.join(root, page)
         for name in frag.ordered(os.listdir(where)):
             with open(os.path.join(where, name), encoding="utf-8") as fh:
                 text = fh.read()
             for m in ABOUT.finditer(text):
                 out.append(Pair(f"{RENDERING}/{page}.html", _heading_id(text), m.group(1), m.group(2)))
+    return out
+
+
+def _pages(root: str) -> list[str]:
+    """The rendering pages' fragment directories, relative to `rendering/`: `homesteads`, and for a page of the nested
+    collection `rendering/cities` (`sources.COLLECTIONS`, feature 292 sweep) `cities/capitals`."""
+    out: list[str] = []
+    for d in sorted(x for x in os.listdir(root) if os.path.isdir(os.path.join(root, x))):
+        if f"{RENDERING}/{d}" in COLLECTIONS:
+            nested = os.path.join(root, d)
+            out += [f"{d}/{p}" for p in sorted(os.listdir(nested)) if os.path.isdir(os.path.join(nested, p))]
+        else:
+            out.append(d)
     return out
 
 

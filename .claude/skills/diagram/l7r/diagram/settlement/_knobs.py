@@ -420,10 +420,10 @@ def skeleton_layout(kind: str, cx: float, cy: float, ex: float, ey: float) -> di
 TORII_WEIGHTS = {
     # TORII COUNT DISTRIBUTIONS (GM 2026-07-21): counts are NUMEROLOGICAL - 1, 3, or 7 only (7 is even
     # more potent in Rokugan than in the real world). Weights per settlement tier; the richer the tier,
-    # the deeper the accumulated patronage (torii are DONATED votive gates - see research/religion-and-death.html 'Torii are votive donations - the count records patronage'
+    # the deeper the accumulated patronage (torii are DONATED votive gates - see research/religion-and-death.html 'Shrine gateways and the approach to the hall (torii, sando)'
     # for the historical grounding and the deliberate Rokugan liberties). "capital" is recorded ahead of
     # need - no capital-city maps exist yet. A row of arches at an ordinary shrine is a DELIBERATE DEVIATION
-    # (GM 2026-09-29; research/religion-and-death.html 'Did a village shrine have an avenue of arches before modern times?').
+    # (GM 2026-09-29; research/rendering/religion-and-death.html 'How our maps draw shrine gateways and the approach to the hall (torii, sando)').
     "village": ((1, 0.60), (3, 0.30), (7, 0.10)),
     "town": ((1, 0.30), (3, 0.60), (7, 0.10)),
     "city": ((1, 0.30), (3, 0.40), (7, 0.30)),
@@ -483,7 +483,7 @@ def roll_merchant_estate_count(scale: str, rng: random.Random) -> int:
 # runs the sparser Xi'an spacing. Each tier maps to (effective arrow range in FEET, minimum towers that
 # must cover every wall point within that range). The historical grounding (侧射 flanking fire; Shen Kuo's
 # 11th-c. 矢石相及; Xi'an 120 m / Pingyao ~55 m mamian spacing at a ~60 m aimed-lethal bowshot) is in
-# research/cities/defenses.html 'Wall towers - the mamian system and bowshot ranges'. Once gated by city_wall_tower_coverage; used to set the mural-tower spacing in city_wall.
+# research/cities/defenses.html 'Towers along the city wall (mamian)' and research/rendering/cities/defenses.html 'How our maps space and draw wall towers'. Once gated by city_wall_tower_coverage; used to set the mural-tower spacing in city_wall.
 WALL_DEFENSE = {
     # tier          (arrow_range_ft, min_towers)  placement spacing = range if min==2 else 2*range
     "siege": (197.0, 2),  # border / besieged city: aimed-lethal bowshot (60 m), >=2 towers EVERYWHERE (Pingyao-dense)

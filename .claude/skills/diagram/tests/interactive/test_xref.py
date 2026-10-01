@@ -47,19 +47,34 @@ def test_a_declaration_naming_a_missing_section_is_named_and_refuses_the_build(t
     assert elsewhere == ["rendering/homesteads.html: `about: ways.html#x` - no section `x` on ways.html"], "a page with no fragments has no sections"
 
 
+def test_a_rendering_page_of_a_cities_page_declares_from_two_levels_down(tmp_path: pathlib.Path) -> None:
+    """`rendering/cities/capitals.html` beside `cities/capitals.html` (feature 292 sweep): its fragments are found, and
+    each link is relative to its own page."""
+    (tmp_path / "cities" / "capitals").mkdir(parents=True)
+    (tmp_path / "cities" / "capitals" / "010-seat.html").write_text('<h2 id="seat">Seat</h2>\n', encoding="utf-8")
+    (tmp_path / "rendering" / "cities" / "capitals").mkdir(parents=True)
+    (tmp_path / "rendering" / "cities" / "capitals" / "010-drawn.html").write_text('<h2 id="drawn">Drawn</h2>\n<!-- about: cities/capitals.html#seat -->\n', encoding="utf-8")
+    pairs = xref.pairs(str(tmp_path))
+    assert pairs == [xref.Pair("rendering/cities/capitals.html", "drawn", "cities/capitals.html", "seat")]
+    assert 'href="../rendering/cities/capitals.html#drawn"' in xref.link('<h2 id="seat">Seat</h2>\n', "cities/capitals.html", pairs)
+    assert 'href="../../cities/capitals.html#seat"' in xref.link('<h2 id="drawn">Drawn</h2>\n', "rendering/cities/capitals.html", pairs)
+    assert xref.unresolved(pairs, str(tmp_path)) == []
+
+
 def test_a_record_with_no_rendering_collection_has_no_pairs(tmp_path: pathlib.Path) -> None:
     assert xref.pairs(str(tmp_path)) == []
 
 
 def test_the_record_s_collections_are_listed_from_one_place(tmp_path: pathlib.Path) -> None:
     """`sources.COLLECTIONS` is the one list; every reader of the record takes its pages from it."""
-    assert COLLECTIONS == ("cities", "rendering")
+    assert COLLECTIONS == ("cities", "rendering", "rendering/cities")
     for c in COLLECTIONS:
         (tmp_path / c).mkdir()
     (tmp_path / "rendering" / "b.html").write_text("", encoding="utf-8")
+    (tmp_path / "rendering" / "cities" / "c.html").write_text("", encoding="utf-8")
     (tmp_path / "cities" / "a.html").write_text("", encoding="utf-8")
     (tmp_path / "cities" / "notes.txt").write_text("", encoding="utf-8")
-    assert collection_pages(str(tmp_path)) == ["cities/a.html", "rendering/b.html"]
+    assert collection_pages(str(tmp_path)) == ["cities/a.html", "rendering/b.html", "rendering/cities/c.html"]
     assert collection_pages(str(tmp_path / "no-record-here")) == []
     assert "rendering/homesteads.html" in store.record_pages(RESEARCH_DIR)
 

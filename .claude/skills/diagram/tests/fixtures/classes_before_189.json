@@ -395,7 +395,7 @@
   "grave island": {
     "caveat": "",
     "covers": "`field_graves` - a grave mound inside a paddy plot or in its corner",
-    "entry": "research/fields.html - 'Are there really graves out in the middle of the fields?', 'In-field features - flat flooded paddy hosts obstacles least'",
+    "entry": "research/religion-and-death.html - 'Where a village buries its dead: its own ground, the temple yard, the fields or the home plot'; research/fields.html - 'In-field features - flat flooded paddy hosts obstacles least'; research/rendering/religion-and-death.html - 'How our maps choose where a village's and a hamlet's dead lie'",
     "key": "grave island",
     "label": "accurate",
     "label_note": "A calibrated liberty, disclosed: the in-field grave is drawn where the rice-south record would put the dead on the slope, at a rate the GM approved.",

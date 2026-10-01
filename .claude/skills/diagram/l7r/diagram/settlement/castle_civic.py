@@ -53,7 +53,7 @@ class CastleCivicMixin:
         the match. The two would drift silently and the map would end up asserting something the
         compound plan contradicts. In the GM's words: "I'd rather nothing be shown than the WRONG
         thing be shown." An empty court asserts nothing and can never be wrong. The same doctrine
-        governs `manor` and `governor_mansion`; see research/cities/capitals.html, "Why is the castle drawn blank inside?".
+        governs `manor` and `governor_mansion`; see research/rendering/cities/capitals.html, "How our maps draw the castle in a capital".
 
         WHAT IS DRAWN, AND WHY THE KEEP IS NOT AMONG IT. A castle reads as a castle from its WORKS,
         never from its keep: at a capital's 3 ft/px a tenshu footprint is just another building box
@@ -180,10 +180,10 @@ class CastleCivicMixin:
             self.add_wall(f'<rect x="{_gx0:.1f}" y="{gate[1] - _pw / 2:.1f}" width="{gtw:.1f}" height="{_pw:.1f}" fill="#E3D6B2" stroke="{wall}" stroke-width="{ww * 0.5:.1f}"/>')
         self.M.setdefault("castle_towers", []).append({"x": round(gate[0], 1), "y": round(gate[1], 1), "w": round(gtw, 1), "h": round(gth, 1), "kind": "gate_tower"})
         # THE KARAMETE-MON (GM 2026-08-09, researched): the ote-mon/karamete-mon pair is the
-        # STANDARD gate program - main gate south by aspect divination, rear gate opposite - and
+        # STANDARD gate program - main gate on the front, usually south, rear gate opposite - and
         # the pairing is military doctrine: the garrison sorties from the rear gate to trap an
         # attacker held at the front. Its tower draws a size down from the ote-mon's, as a rear
-        # gate should. research/cities/capitals.html, "A castle has TWO gates".
+        # gate should. research/cities/capitals.html, "The castle in a capital: where it sits, how big it is, and its gates (shiro)".
         karamete: Pt | None = None
         if karamete_dir:
             karamete = {"north": (x, y - hh), "south": (x, y + hh), "west": (x - hw, y), "east": (x + hw, y)}[karamete_dir]

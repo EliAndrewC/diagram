@@ -113,13 +113,14 @@ class RiverLanding(Kind):
 
     Note: That the tax grain went on hired boats under an official pennant, inspected at the ports of call,
     follows the record of the shogunate's rice shipped to Edo, and carrying it to a county is this project's own; that the magistracy's hold on it was documentary, a matter of counts and records, and that it passed through the compound and so was loaded at the compound's own landing,
-    is this project's reading.
+    is this project's reading. No page read describes an official's compound with a landing of its own, so that
+    the landing is the compound's own is a guess.
 
     Name: river landing
     Covers: the landing label - its dock, revetment, barge, watch post and altar are each their own kind
     Label: accurate
     Sources: nishimawari-koro-jawiki, kashi-jawiki, gangi-kowan-jawiki, takasebune-jawiki, kotobank-takasebune, matou-zhwiki, kuramae-jawiki, chinaknowledge-caoyun
-    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/cities/river-cities.html - "The wharf's working face"; research/cities/capitals.html - "The sluice's lifting frame"; research/ways.html - "Where does a village's freight go?"
+    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'; research/ways.html - "Where does a village's freight go?"; research/rendering/cities/river-cities.html - 'How our maps draw wharves and landings (kashi, gangi)'
     """
 
     key = "river landing"
@@ -234,7 +235,7 @@ class WoodKamiAltar(Kind):
     What: A small altar to the kami of the wood, no bigger than a shed, with no torii before it, standing in the
     shrine grove beside the compound's proper shrine.
 
-    Why: Small altars below the rank of a shrine far outnumbered real shrines, and they stood without an arch;
+    Why: Small altars below the rank of a shrine far outnumbered real shrines, and most stood without an arch, or with only a very small one;
     this one stands in the shrine grove, among the trees it is kept for. It is kept up by a private hand,
     though anyone may pray at it.
 
@@ -246,7 +247,7 @@ class WoodKamiAltar(Kind):
     Covers: the altar and its label with the "personally maintained" sublabel
     Label: deviation
     Sources: hokora-jawiki, tokushima-yashikigami, jawiki-yashikigami
-    Entry: research/religion-and-death.html - 'Torii are VOTIVE DONATIONS'; research/homesteads.html - "Which farmsteads had a household shrine"
+    Entry: research/religion-and-death.html - 'Shrine gateways and the approach to the hall (torii, sando)'; research/homesteads.html - "Which farmsteads had a household shrine"
     """
 
     key = "wood-kami altar"
@@ -260,18 +261,20 @@ class Revetment(Kind):
     What: The stone facing of the riverbank at Hayakawa's landing, drawn as a gray band along the water's edge,
     with the landing's steps cut into it across the bank street from the compound's wall.
 
-    Why: A river's level moves by many feet through the year, so a working bank is faced with stone or timber
+    Why: A river's level rises and falls through the year, though no page read says by how much, so a working bank is faced with stone or timber
     cribbing to hold it; at the great rice stores on the river at Edo, the stone revetment was part of the answer
     to flood. Where samurai residences stood on a river, as on Hiroshima's, they were built back from the
     revetment and walled, which is why the compound's wall stands back behind the bank street.
 
-    Note: A faced bank at a river landing, and a residence's wall standing back from it, follow the record.
+    Note: A faced bank at a river landing, and a residence's wall standing back from it, follow the record. No
+    page read describes an official's compound with a landing of its own, so that these steps are the compound's
+    own rather than a public landing is a guess.
 
     Name: revetment
     Covers: the stone facing along the landing's bank
     Label: accurate
     Sources: gangi-hiroshima-jawiki, kashi-jawiki, gangi-kowan-jawiki, kuramae-jawiki
-    Entry: research/cities/river-cities.html - "Does an official's compound have its own stepped landing, or a pier?", "The wharf's working face"; research/cities/capitals.html - "The sluice's lifting frame"
+    Entry: research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/rendering/cities/river-cities.html - 'How our maps draw wharves and landings (kashi, gangi)'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'
     """
 
     key = "revetment"
@@ -283,8 +286,8 @@ class Dock(Kind):
     the compound's wall, reached from a gate in that wall, where barges come alongside to load.
 
     Why: A river's level rises and falls through the year, so the usual landing is steps cut into a faced bank,
-    which meet a moored hull at whatever height the water stands; a pier is the exception, for a bank that
-    shelves too gently. Where samurai residences stood on a river, as on Hiroshima's, they were built back from
+    which meet a moored hull at whatever height the water stands; a pier is the exception, by this project's guess,
+    for a bank that shelves too gently. Where samurai residences stood on a river, as on Hiroshima's, they were built back from
     the revetment and walled, and it is thought no gated landing opened from them onto the steps, so the compound reaches
     its steps from a gate in its wall, across the street. The early-modern stepped landings were built where boats
     berthed and goods came ashore, above all in the townsmen's quarters; a private landing, a merchant's back gate onto
@@ -302,7 +305,7 @@ class Dock(Kind):
     Covers: the landing steps in the faced bank
     Label: accurate
     Sources: gangi-hiroshima-jawiki, gangi-kowan-jawiki, pier-enwiki, matou-zhwiki
-    Entry: research/cities/river-cities.html - "Does an official's compound have its own stepped landing, or a pier?", "The wharf's working face"
+    Entry: research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/rendering/cities/river-cities.html - 'How our maps draw wharves and landings (kashi, gangi)'
     """
 
     key = "dock"
@@ -326,7 +329,7 @@ class TaxBarge(Kind):
     Covers: the moored barge, its lines, its bales and its label
     Label: accurate
     Sources: takasebune-jawiki, kotobank-takasebune, gokura-jawiki, takayama-jinya-city, tawara-unit-jawiki, nisira-komedawara
-    Entry: research/urban-features.html - 'Straw bales of rice and charcoal (tawara)'; research/rendering/urban-features.html - 'How our maps draw straw bales of rice and charcoal (tawara)'; research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/cities/river-cities.html - "The wharf's working face"
+    Entry: research/urban-features.html - 'Straw bales of rice and charcoal (tawara)'; research/rendering/urban-features.html - 'How our maps draw straw bales of rice and charcoal (tawara)'; research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/rendering/cities/river-cities.html - 'How our maps draw wharves and landings (kashi, gangi)'
     """
 
     key = "tax barge"
@@ -334,24 +337,24 @@ class TaxBarge(Kind):
 
 class BoatmensAltar(Kind):
     """
-    What: A small shrine beside the landing, kept by the boatmen who work the river.
+    What: A small shrine at the head of the landing, to the guardian spirit of the boats that work the river.
 
     Why: A boat's own guardian, the funadama, lives aboard, at the foot of the mast, and is sometimes given a shrine
     on land, and that shrine is the one drawn here. The water god's shrine that river boatmen are recorded keeping, a
-    Suitengu, is dated no earlier than the late 1920s by its one source, and nothing read places boatmen keeping one
-    before modern times, so it is not drawn.
+    Suitengu, is undated in its one source, a twentieth-century record that dates nothing before the late 1920s,
+    and nothing read places boatmen keeping one before modern times, so it is not drawn.
 
     Note: The boats' guardian and its shrine on land are read. The shrine is not recorded standing at a landing
-    itself, or with a size, so its place beside the landing and its size are a guess.
+    itself, or with a size, so its place at the head of the landing and its size are a guess.
 
-    Caveat: The shrine is not recorded standing at a landing itself, or with a size, so its place beside the
+    Caveat: The shrine is not recorded standing at a landing itself, or with a size, so its place at the head of the
     landing and its size are a guess.
 
     Name: boatmen's altar
     Covers: the altar on the bank and its label
     Label: accurate
     Sources: funadama-jawiki, kotobank-funadama, kotobank-suitengu
-    Entry: research/cities/river-cities.html - 'Did the boatmen keep a shrine at the landing?'
+    Entry: research/cities/river-cities.html - "The boatmen's shrine at the landing (funadama, suijin)"; research/rendering/cities/river-cities.html - "How our maps draw the boatmen's shrine at the landing (funadama)"
     """
 
     key = "boatmen's altar"
@@ -380,7 +383,7 @@ class RiverWatch(Kind):
     Covers: the guard post at the landing and its label
     Label: accurate
     Sources: funabansho-jawiki, koto-nakagawa-funabansho, l7r-tariffs
-    Entry: research/cities/river-cities.html - 'Who kept watch on the river at an official's landing, and what did the watch post look like?'
+    Entry: research/cities/river-cities.html - 'The river watch post at a landing (funabansho)'; research/rendering/cities/river-cities.html - 'How our maps draw the river watch post (funabansho)'
     """
 
     key = "river watch"

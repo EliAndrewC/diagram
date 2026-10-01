@@ -14,15 +14,17 @@ from ..classes import Kind
 class HallAndDwelling(Kind):
     """
     What: The shrine's one building under one roof: the villagers' hall at its center, the country monk's kitchen at
-    one end and his rooms at the other, the small sanctuary standing behind it on the approach's axis.
+    one end and their rooms at the other, the small sanctuary standing behind it on the approach's axis.
 
-    Why: A village shrine with a monk living at it was the ordinary form before 1868 - the shrine-temple kept by a
-    resident monk - and his dwelling was a farmhouse in form, earth-floored kitchen and matted rooms. One roof over
-    the hall and the dwelling is attested at one temple and is the GM's chosen form for the setting's country
-    shrines; so the building is a farmhouse with a hall at its heart, larger than a farmhouse because it contains one.
+    Why: A village shrine with a monk living at it was a common form before 1868, if an uncounted one - the
+    shrine-temple kept by a resident monk - and the monk's dwelling was a farmhouse in form, earth-floored kitchen and
+    matted rooms. One roof over the hall and the dwelling is attested at one temple and is the GM's chosen form for the
+    setting's country shrines; so the building is a farmhouse with a hall at its heart, larger than a farmhouse
+    because it contains one.
 
-    Note: The resident monk and his farmhouse-form dwelling are read; one roof over hall and dwelling is attested once
-    and is the GM's form for the setting. The building's size is set from the record's bands - a village hall about 20
+    Note: The resident monk and their farmhouse-form dwelling are read, though no source counts how many village
+    shrines had one; one roof over hall and dwelling is attested once, and called unusual there, and is the GM's form
+    for the setting. The building's size is set from the record's bands - a village hall about 20
     to 35 ft on a side, the one-roof building 2,100 to 3,600 sq ft, no deeper than the one attested example - and where
     in those bands it falls is a guess.
 
@@ -34,7 +36,7 @@ class HallAndDwelling(Kind):
     Covers: the one-roof building, its outline, its roof and its caption
     Label: accurate
     Sources: kuri-jawiki, jinguji-enwiki, bettoji-jawiki, sakai-kaieji, ehime-pref-honden-56, saitama-kannonji-kannondo
-    Entry: research/religion-and-death.html - 'How big is a country shrine, and what stands in its precinct?', 'How big was the country monk's dwelling, and did it share the hall's roof?', 'Does the country monk live at the shrine?'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)', 'Keeping a village shrine or temple: its monk, the monk's dwelling (kuri), its records and its land'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)', 'How our maps draw a village shrine's monk, the monk's dwelling (kuri), its records and its land'
     """
 
     key = "hall and dwelling"
@@ -46,18 +48,21 @@ class Sanctuary(Kind):
     axis - one bay wide under a sweeping front roof.
 
     Why: A shrine's buildings line up on one axis, the hall of worship before and the sanctuary at the rear, where the
-    deity is enshrined and nobody gathers. At a village shrine it is small: the commonest style is one bay wide, and a
-    measured village sanctuary runs a few feet to a side. So it is drawn behind the hall, on the approach's line, at
+    deity is enshrined and nobody gathers. At a village shrine it is small: the sanctuary was often one bay wide, and
+    a measured village sanctuary runs a few feet to a side. So it is drawn behind the hall, on the approach's line, at
     its true few feet.
 
-    Note: The axis, the sanctuary at the rear and its one-bay style are read; its drawn size is the measured village
+    Note: The halls' axis, the sanctuary at the rear and its one-bay form are read; the approach running on that axis
+    is a map convention, and its drawn size is the measured village sanctuary's, about 6 ft.
+
+    Caveat: the approach running on that axis is a map convention, and its drawn size is the measured village
     sanctuary's, about 6 ft.
 
     Name: sanctuary
     Covers: the sanctuary behind the hall
     Label: accurate
     Sources: jaanus-honden, jaanus-haiden, nagarezukuri-jawiki, kotobank-nagarezukuri, ehime-pref-honden-56
-    Entry: research/religion-and-death.html - 'How big is a country shrine, and what stands in its precinct?'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "sanctuary"
@@ -67,19 +72,20 @@ class MonksRooms(Kind):
     """
     What: The country monk's own rooms at the dwelling end of the building - matted living rooms, part of the one roof.
 
-    Why: The monk lives at the shrine, and his dwelling is a farmhouse in form: an earth-floored kitchen at one end and
-    matted rooms beyond it. An ordinary temple's priest's house was like a house of the district, not a great hall's
-    quarters.
+    Why: The monk lives at the shrine, and their dwelling is a farmhouse in form: an earth-floored kitchen at one end
+    and matted rooms beyond it. An ordinary temple's priest's house was like a house of the district, not a great
+    hall's quarters.
 
-    Note: The form is read - a priest's house like the farmhouse of its region. Its size is a guess: no small priest's
-    house has been measured, so the dwelling is sized from the village map's own farmhouse, 46 by 28 ft, and under one
-    roof it is no separate building but the hall's dwelling end.
+    Note: The form is read - a priest's house like the farmhouse of its region. Its size is a guess: no page we read
+    measures a small priest's house, so the dwelling is sized from the village map's own farmhouse, 46 by 28 ft, and
+    under one roof it is no separate building but the hall's dwelling end - a form attested once, at Kaie-ji, and
+    called unusual there; that a monk lived at a village shrine is read, but how common it was, no source counts.
 
     Name: the monk's rooms
     Covers: the dwelling end's rooms
     Label: guess
     Sources: kuri-jawiki, kawasaki-chonenji-kuri, bunka-tokuunji-kuri
-    Entry: research/religion-and-death.html - 'How big was the country monk's dwelling, and did it share the hall's roof?', 'Does the country monk live at the shrine?'
+    Entry: research/religion-and-death.html - 'Keeping a village shrine or temple: its monk, the monk's dwelling (kuri), its records and its land'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's monk, the monk's dwelling (kuri), its records and its land'
     """
 
     key = "the monk's rooms"
@@ -90,20 +96,24 @@ class WritingRoom(Kind):
     What: A small room along the dwelling's front where the district's registers are kept and written - a desk and a
     record chest, in the monk's own house.
 
-    Why: The monk registers the district's households, as a temple did under the Edo registration, and a small shrine
-    had no office of its own: the books lived in the dwelling, never in a separate hall. So the writing room is a room
-    of his house, near its entrance, where the villagers who come on business are met.
+    Why: The monk keeps the district's registers, as a temple certified its parishioners under the Edo registration,
+    and a small shrine often had no office of its own, its business done at the keeper's home: so the books live in
+    the dwelling, never in a separate hall. So the writing room is a room of the monk's house, near its entrance, where
+    the villagers who come on business are met.
 
-    Note: That the registers lived in the dwelling, with no office at a small shrine, is read; the room itself, its
-    size and its place along the front are a guess.
+    Note: That a small shrine often had no office of its own, its business done at the keeper's home, is read; the
+    yearly register itself was compiled by the village headmen, so that the monk's house holds the district's
+    registers is this project's choice; the room itself, its size and its place along the front are a guess.
 
-    Caveat: the room itself, its size and its place along the front are a guess.
+    Caveat: the yearly register itself was compiled by the village headmen, so that the monk's house holds the
+    district's registers is this project's choice; the room itself, its size and its place along the front are a
+    guess.
 
     Name: writing room
     Covers: the writing room in the dwelling
     Label: accurate
     Sources: terauke-seido-jawiki, shumon-ninbetsu-jawiki, jaanus-shamusho
-    Entry: research/religion-and-death.html - 'Where does the country monk keep the district's registers?'
+    Entry: research/religion-and-death.html - 'Keeping a village shrine or temple: its monk, the monk's dwelling (kuri), its records and its land'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's monk, the monk's dwelling (kuri), its records and its land'
     """
 
     key = "writing room"
@@ -115,19 +125,19 @@ class ShrineApproach(Kind):
     step.
 
     Why: A shrine is entered along its approach, and the arch stands where the approach enters the shrine's ground; a
-    row of arches along it is a donors' row, each arch a gift - before modern times only at a great Inari site. This setting raises arches along any shrine's approach, a deliberate deviation from the historical norm. So the path runs straight up the axis, and the arches
+    row of arches along it is a donors' row, each arch a gift - before modern times only at a great Inari site. This setting raises arches along any shrine's approach, a deliberate deviation from the historical norm. So the path runs up to the hall along a line the map's author draws to fit the ground, and the arches
     stand over it.
 
-    Note: The approach and the arch at its entry are read; a row of arches at an ordinary shrine is attested only in modern times, and drawn here as a deliberate deviation; its width is a guess, and the arches' number and pitch are
+    Note: The approach and the arch at its entry are read; its line is drawn to fit the ground, and its innermost arch standing 12 ft off the hall is a map convention; a row of arches at an ordinary shrine is attested only in modern times, and drawn here as a deliberate deviation; its width is a guess, and the arches' number and pitch are
     the GM's rulings, not the record's.
 
-    Caveat: a row of arches at an ordinary shrine is attested only in modern times, and drawn here as a deliberate deviation; its width is a guess, and the arches' number and pitch are the GM's rulings, not the record's.
+    Caveat: its line is drawn to fit the ground, and its innermost arch standing 12 ft off the hall is a map convention; a row of arches at an ordinary shrine is attested only in modern times, and drawn here as a deliberate deviation; its width is a guess, and the arches' number and pitch are the GM's rulings, not the record's.
 
     Name: approach
     Covers: the path from the precinct's edge to the hall
     Label: accurate
     Sources: jinja-jawiki, kudamatsu-stone-torii, kato-kawataka-torii
-    Entry: research/religion-and-death.html - 'Torii spacing', 'How big is a country shrine, and what stands in its precinct?'
+    Entry: research/religion-and-death.html - 'Shrine gateways and the approach to the hall (torii, sando)', 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw shrine gateways and the approach to the hall (torii, sando)', 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "approach"
@@ -139,19 +149,20 @@ class ShrineBasin(Kind):
     worship.
 
     Why: The basin stands beside the approach, and the rite is old; the roofed pavilion over it is the newer and the
-    richer form, and many small shrines keep the basin in the open. Parishes gave their shrines dated basins.
+    richer form - the one found dated before 1868 stands at a shrine whose following reached Edo - and no page says
+    whether a village shrine's basin then stood in the open. A parish gave its shrine a dated basin in 1828.
 
     Note: The basin beside the approach and the rite are read; the plain, unroofed basin at a village shrine is a
-    guess - the pavilion's absence is attested today, not dated.
+    guess - neither the open basin nor the roofed one is attested at a village shrine before 1868.
 
-    Caveat: the plain, unroofed basin at a village shrine is a guess - the pavilion's absence is attested today, not
-    dated.
+    Caveat: the plain, unroofed basin at a village shrine is a guess - neither the open basin nor the roofed one is
+    attested at a village shrine before 1868.
 
     Name: basin
     Covers: the stone basin by the approach
     Label: accurate
     Sources: jinja-jawiki, liga-temizuya, kawasaki-nagao-chozubachi, ubusuna-jinja-ameblo
-    Entry: research/religion-and-death.html - 'What else stood in a village shrine's precinct?'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "basin"
@@ -161,18 +172,21 @@ class SacredTree(Kind):
     """
     What: The sacred tree - the precinct's greatest tree, ringed at its trunk by a straw rope.
 
-    Why: A shrine keeps a sacred tree, marked as the deity's by the rope round it; many shrines were built where such
-    a tree already stood. So one great tree stands near the approach, roped.
+    Why: A shrine keeps a sacred tree, marked as the deity's by the rope round it; one encyclopedia article, itself
+    flagged as short of sources, says most shrines were built where such a tree already stood. So one great tree
+    stands near the approach, roped.
 
-    Note: The roped sacred tree is read; how common one was at a village shrine is a guess, no count having been found.
+    Note: The roped sacred tree is read; that shrines were built where such a tree stood rests on one article flagged
+    as short of sources, and how common one was at a village shrine is a guess, no count having been found.
 
-    Caveat: how common one was at a village shrine is a guess, no count having been found.
+    Caveat: that shrines were built where such a tree stood rests on one article flagged as short of sources, and how
+    common one was at a village shrine is a guess, no count having been found.
 
     Name: sacred tree
     Covers: the sacred tree and its rope
     Label: accurate
     Sources: kotobank-shinboku, shinboku-jawiki
-    Entry: research/religion-and-death.html - 'What else stood in a village shrine's precinct?'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "sacred tree"
@@ -239,7 +253,7 @@ class GuardianFigures(Kind):
     Covers: the guardian pair beside the approach
     Label: accurate
     Sources: komainu-jawiki, gltjp-zenkokuji, darumamuseum-bishamonten
-    Entry: research/religion-and-death.html - 'What did a parish give its shrine as it grew richer?'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "guardian figures"
@@ -260,7 +274,7 @@ class StoneLanterns(Kind):
     Covers: the stone lanterns along the approach
     Label: accurate
     Sources: niiza-ishigami-lantern
-    Entry: research/religion-and-death.html - 'What did a parish give its shrine as it grew richer?'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "lanterns"
@@ -281,7 +295,7 @@ class StrengthStones(Kind):
     Covers: the strength stones beside the approach
     Label: accurate
     Sources: nerima-hikawa-chikaraishi
-    Entry: research/religion-and-death.html - 'What did a parish give its shrine as it grew richer?'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "strength stones"
@@ -302,7 +316,7 @@ class FarmersStage(Kind):
     Covers: the farmers' stage
     Label: accurate
     Sources: noson-kabuki-butai-jawiki
-    Entry: research/religion-and-death.html - 'What else stood in a village shrine's precinct?'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "stage"
@@ -323,7 +337,7 @@ class SumoRing(Kind):
     Covers: the sumo ring
     Label: accurate
     Sources: kokugakuin-dohyo
-    Entry: research/religion-and-death.html - 'What else stood in a village shrine's precinct?'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "sumo ring"
@@ -343,7 +357,7 @@ class BellTower(Kind):
     Covers: the bell tower
     Label: guess
     Sources: homemate-shichido-garan
-    Entry: research/religion-and-death.html - 'How big is a country shrine, and what stands in its precinct?'
+    Entry: research/religion-and-death.html - 'Inside a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'; research/rendering/religion-and-death.html - 'How our maps draw a village shrine's precinct: halls, basin, sacred tree and offerings (keidai)'
     """
 
     key = "bell tower"
@@ -357,13 +371,13 @@ class ShrineBurialGround(Kind):
     Why: The graves lie by the monk-run building, and in the setting the country monk's shrine is the parish temple;
     so where a village buries in the shrine's yard, the burial ground stands by it.
 
-    Note: The graves at the monk-run building are the record's village rule for the setting, and it rests on the setting's own canon: real Shinto shuns death, and the two-grave villages surveyed keep the shrine at the upper end and the burial ground below the houses, so a ground in a shrine's own yard is this setting's and not history's.
+    Note: A ground in a shrine's own yard is a deliberate deviation, resting on the setting's own canon: real Shinto shuns death, and the two-grave villages surveyed keep the shrine at the upper end and the burial ground below the houses, so it is this setting's and not history's. Whether a village's one ground lies in the shrine's yard or apart from it is rolled per village at even odds, a guess, since no page counts the villages taking each form.
 
     Name: burial ground
     Covers: the burial ground by the shrine, where the village has it there
-    Label: accurate
+    Label: deviation
     Sources: danka-terauke-encyclopedia, bunkotsu-jawiki
-    Entry: research/religion-and-death.html - 'Does a graveyard stand beside its temple or its shrine?'
+    Entry: research/religion-and-death.html - 'Where a village buries its dead: its own ground, the temple yard, the fields or the home plot'; research/rendering/religion-and-death.html - 'How our maps choose where a village's and a hamlet's dead lie'
     """
 
     key = "burial ground"

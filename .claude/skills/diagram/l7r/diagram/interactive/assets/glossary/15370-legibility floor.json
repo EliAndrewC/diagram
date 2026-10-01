@@ -1,8 +1,0 @@
-{
- "term": "legibility floor",
- "def": "The smallest width a line is drawn at on the map so that it stays visible, even where the real thing is narrower; building footprints get no such allowance and are drawn at their real size.",
- "variants": [
-  "legibility floor",
-  "legibility floors"
- ]
-}
