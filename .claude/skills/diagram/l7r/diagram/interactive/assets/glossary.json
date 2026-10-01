@@ -9858,12 +9858,6 @@
    "spurs"
   ]
  },
- "declared fall": {
-  "def": "The direction a map's ground is set to slope downhill; every point's height is reckoned by how far along it the point lies.",
-  "variants": [
-   "declared fall"
-  ]
- },
  "Genji": {
   "def": "A Japanese era name, 1864-1865. The great fire of Genji burned much of Kyoto in the summer of 1864.",
   "variants": [
@@ -13792,6 +13786,21 @@
   "def": "Wild plants returning to ground that was cleared and then let go, one plant community giving way to the next with no one planting them; on an abandoned paddy, annual weeds come first, then knotweed, then sedge.",
   "variants": [
    "secondary succession"
+  ]
+ },
+ "Home Ministry": {
+  "def": "The ministry of Japan's Meiji government in charge of domestic affairs; in 1884 it issued the rules for siting new graveyards.",
+  "variants": [
+   "home ministry"
+  ]
+ },
+ "ox-bow lake": {
+  "def": "A curved lake left on a river plain where a bend of the river has been cut off from its channel.",
+  "variants": [
+   "ox-bow lake",
+   "ox-bow lakes",
+   "oxbow lake",
+   "oxbow lakes"
   ]
  }
 }

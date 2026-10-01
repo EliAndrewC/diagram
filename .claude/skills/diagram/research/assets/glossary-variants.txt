@@ -589,7 +589,6 @@ dba	dBA
 dbh	DBH
 dead ground	dead ground
 dead space	dead ground
-declared fall	declared fall
 deep paddies	shitsuden
 deep percolation	deep percolation
 deep percolation losses	deep percolation
@@ -1317,6 +1316,7 @@ hokke sect	Hokke
 hokora	hokora
 hokuriku	Hokuriku
 holding jail	holding jail
+home ministry	Home Ministry
 homestead grove	yashikirin
 homestead groves	yashikirin
 hon-byakusho	honbyakusho
@@ -2382,10 +2382,14 @@ overlay	overlay
 overlays	overlay
 owaiya	owaiya
 owari	Owari
+ox-bow lake	ox-bow lake
+ox-bow lakes	ox-bow lake
 ox-frame	ox-frame
 ox-frames	ox-frame
 ox-shoeing frame	ox-shoeing frame
 ox-shoeing frames	ox-shoeing frame
+oxbow lake	ox-bow lake
+oxbow lakes	ox-bow lake
 oyaike	oyaike
 pacific high	Pacific High
 paddy seams	seam
