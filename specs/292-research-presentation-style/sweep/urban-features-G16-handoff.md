@@ -1,0 +1,11 @@
+# 292 sweep urban-features G16 - handoff (session 1: write)
+
+## Burakumin quarters and caste zoning
+
+- SECTION=urban-features/burakumin-quarters-and-caste-zoning
+- RENDERING=rendering/urban-features/how-our-maps-zone-the-castes
+- OLD=research/urban-features/130-caste-geography-and-status-zoning.html research/urban-features/370-how-many-households-does-a-burakumin-quarter-hold-and-what-stands-in-it-besides-the-houses.html research/urban-features/380-where-does-a-towns-burakumin-quarter-stand---at-the-edge-where-a-road-leaves-or-on-the-riverbank.html research/cities/fabric/060-does-the-burakumin-quarter-stand-inside-the-walls-or-outside-at-least-one-stands-inside.html
+- MODALS=
+- BASE=827769947
+
+All four sections folded; none was held by another feature. cities/fabric 060 came across the page boundary, so its notes were re-keyed to avoid collisions on the urban-features page: burakumin-enwiki became burakumin-enwiki-3, and kotobank-hisabetsu-buraku became kotobank-hisabetsu-buraku-6. Its chori-jawiki note quoted a shorter piece of the passage 380's chori-jawiki quotes in full, so the two were merged into 380's, with a REMOVED comment. 130's "across its stream" step was cut, with a REMOVED comment. The chori-jawiki-2 gloss's bare kanji was given its (romaji, "meaning") form. The three absence notes were converted to the new form and re-keyed to the new ids, and are copied into the rendering notes under how-our-maps-zone-the-castes, -2 and -3. The setting's household counts (l7r-budgets-2/3/4) are cited only from the rendering section. The 60 ft collar and the intramural neighborhood stay as a `class="spec"` rule because no generator encodes them. Open: 370's "ordinary small-house glyph" turned out not to be accurate - the engine draws burakumin dwellings in their own color with a dashed outline (structures/urban.py) - so the rendering now says only that they are "drawn as small houses"; a check may want that stated exactly. The tanning-yards link (urban-features 060) was re-aimed to the new section and its re-aim comment removed. No modal or code comment named an old heading. Two confusable pairs were appended: this section beside Samurai and commoner ground were zoned apart by law, and beside Tanning yards.
