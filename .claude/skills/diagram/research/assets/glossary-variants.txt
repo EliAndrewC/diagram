@@ -1201,6 +1201,7 @@ hanko	hanko
 hankō	hanko
 hansho	hansho
 hanshō	hansho
+hantei	hantei
 harakata	harakata-shu
 harakata-shu	harakata-shu
 hardiness zone	hardiness zone
