@@ -66,5 +66,23 @@ Observed 2026-10-01; method: Playwright (Chromium) opening `research/site/all.ht
 (the deferred scripts run before it), then `document.querySelectorAll('span.gl').length`. The page as first built,
 without the glossary: 6.66 s, 0 terms wrapped. A copy with the glossary loaded and every term wrapped at load: 10.79 s,
 66,794 terms wrapped - 4.1 s more. With the wrap made lazy (a heading's run, and each note of the Citations part,
-wrapped when within 2,000 px of the view): 3.2-3.5 s to load (warm cache), 519 terms wrapped at the top, 15,970
+wrapped when within 2,000 px of the view): 3.2-3.5 s to load (warm cache; the 6.66 s and 10.79 s runs above were the session's first loads of the page, so part of that gap is the cold cache, and the eager wrap's own cost is the 4.1 s between the two runs taken under the same conditions), 519 terms wrapped at the top, 15,970
 after jumping to the middle, 110 in the "Rice paddies and their plots (suiden)" question after scrolling to it.
+
+## R9 - every container mounts the host's ~/.claude
+
+Observed 2026-10-01; method: the host-diagnostics client (`podman-diag ps`, then `podman-diag inspect <name>` for
+each running container's mount destinations). Four containers run - claude-diagram, claude-character-sheet,
+claude-gm-assistant, claude-bank - and every one mounts `/home/agent/.claude` and `/home/agent/.claude.json` from the
+host, so the user-level hook in `~/.claude/hooks/` and its registration in `~/.claude/settings.json` reach each of
+them (spec FR-024). gm-assistant's `launch-container.sh` mounts it unless `--no-claude` is given; none of the four was
+launched that way. The hook exits silently where `python3` is absent, so a container without it sees no hook error.
+
+## R10 - tripwire seed 33 fails on main as well (pre-existing, ledgered)
+
+Observed 2026-10-01; method: `make maps` in the clone (reference map clean, then the tripwire seeds), then the same
+`make maps` in a detached worktree at main's tip (`git worktree add --detach ... origin/main`, constitution XIII). Both
+stop at the same refusal: `Tripwire-33 (seed 33): no margin seats its households inside a cluster shape's band`
+(`hamletgen/homesteads/stages.py` `seat_every_household`). Feature 301 changes no placement code, and the failure is
+the same on main's tip, so it is pre-existing and ledgered here, not fixed under this feature. The pool itself was
+regenerated with `make maps SCOPE=all`.
