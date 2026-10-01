@@ -16,7 +16,7 @@ asked at its placer - this feature changes WHEN and HOW OFTEN those rules are as
 
 ## Summary
 
-Inashiro regenerates in about 7.5 s: the stages about 5.0 s, the finish about 1.9 s (research R1). The time is not spent placing
+Inashiro regenerates in about 7.5 s: the stages about 5.0 s, the finish about 1.9 s (research R1; observed 2026-09-30, method: `make map PROFILE=1` with scratch phase marks). The time is not spent placing
 what the map shows; it is spent building candidates in full and refusing them. The seating offered 734 seats for 15 houses,
 built 902 four-sided homestead layouts and asked 477 of them for a lane corridor, and 348 of those searches found no corridor
 candidate at all - a property of where the house stands, asked only after its four layouts were built (research R2). The
@@ -113,7 +113,7 @@ lawful when it is laid. The page's own Python work runs while its picture render
   hit regions, the explanations and their data) runs while the picture and the id map render; the page is byte-identical.
 - **FR-007 The drain-bank hem measures only the corners near the drain** (a box test first), with the same result - the GM's
   12,000 checks asked only where a corner can be within reach of the collector.
-- **FR-008 What is left is written down** in `dev/performance.md`: for each stage still over 0.5 s on Inashiro after this work,
+- **FR-008 What is left is written down** in `dev/performance.md`: for each stage still over half a second on Inashiro after this work,
   what its time is spent on and why no change of the allowed kind takes it further.
 - **FR-009 Every moved map keeps its invariants** (276's FR-006 condition, as 284 held it): SC-009.
 
@@ -133,7 +133,7 @@ lawful when it is laid. The page's own Python work runs while its picture render
 Every figure is the fastest of three with the load recorded, taken by `measure.py` from the base worktree and the clone back to
 back; every ratio is a floor with no projection behind it. Keys `m:...` are in `measurements.json`.
 
-- **SC-001** (spec-wide, the GM's number): Inashiro's stages sum to at most half the base's (4.281 s, the sum of `m:before-inashiro-stage-*-s`), and its full
+- **SC-001** (spec-wide, the GM's number): Inashiro's stages sum to at most half the base's (4.281 s, the sum of the per-stage keys `before-inashiro-stage-<stage>-s`), and its full
   regeneration (`full_s`: svg, png and page) is faster than the base's (8.0 s uncached, `m:before-inashiro-regen-s`, load 2.5 -> 6.1 - re-taken back to back with the clone at the end).
 - **SC-002** (FR-001, FR-002): on Inashiro the seats bucket asks at least `3x` fewer calls (2,640,745, `m:before-inashiro-b-seats-total`), the homestead layouts built
   (`_bundle_geom`) are at least `3x` fewer (2,716, `m:before-inashiro-bundle-geom`), and the homesteads stage is at least `2x` faster (0.954 s, `m:before-inashiro-stage-homesteads-s`).
@@ -147,7 +147,7 @@ back; every ratio is a floor with no projection behind it. Keys `m:...` are in `
   explanations' 0.207 s, research R1's phase marks), measured by the same marks, and every pool page is byte-identical to the one
   the same map's sequential write produces.
 - **SC-007** (FR-007): the hem bucket asks at least `3x` fewer calls on Inashiro (759,058, `m:before-inashiro-b-hem-total`; 12,195 drain-bank clearances, `m:before-inashiro-b-hem-drain-bank-clearance`), the plots identical.
-- **SC-008** (FR-008): every stage over 0.5 s on Inashiro after the work has its entry in `dev/performance.md`.
+- **SC-008** (FR-008): every stage over half a second on Inashiro after the work has its entry in `dev/performance.md`.
 - **SC-009** (FR-009, the pool): every live pool map regenerates; `make done` is green at the `100%` floor and every gate rule
   passes; every pool map and `make cohort N=24` seat every declared household (no `SiteRefused` or `WebRefused` newly raised) and
   keep their forms and house kinds; every comb field stays within its acreage tolerance; each moved map's houses, paddies and ways

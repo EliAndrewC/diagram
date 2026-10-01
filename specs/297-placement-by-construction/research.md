@@ -4,7 +4,7 @@
 
 Method: `make map GEN="--no-cache pool/hamlets/inashiro/inashiro.gen.py" PROFILE=1`, four runs, with scratch phase marks
 (`_phase.mark()` deltas to stderr) around `generate`, `Settlement.finish` and `render_page`, and spans inside the threaded
-renders; the marks were reverted after. Load 1.8-4.0 on 22 cores. Regeneration 7.0-8.5 s (child, as REGENERATED reports it).
+renders; the marks were reverted after. Load 1.8-4.0 on 22 cores (observed 2026-09-30, method: the marks above). Regeneration 7.0-8.5 s (child, as REGENERATED reports it).
 
 | part | seconds |
 |---|---|
@@ -14,7 +14,7 @@ renders; the marks were reverted after. Load 1.8-4.0 on 22 cores. Regeneration 7
 | page: drop_offmap 0.029, wrap 0.145, hit regions 0.115, svg join 0.005 | 0.294 |
 | page: picture (resvg zoom 2 in 2x2 tiles 0.691 + JPEG child 0.488) and id map (recolor 0.051 + resvg 0.251) in two threads | 1.197 |
 | page: explanations + json blob | 0.207 |
-| PNG (resvg 2600 px, a background thread joined at the end) | 0.462, hidden |
+| PNG (resvg at the map's PNG width, a background thread joined at the end) | 0.462, hidden |
 | json write, promote | 0.04 |
 | child start, imports, cache store | ~0.35 |
 
@@ -33,7 +33,7 @@ STAGE=homesteads` with the gen's full spec), and scratch counters in `access_cor
   target clears the house and the standing ground), 93 had candidates every one of which was refused, 4 candidates refused by
   the tree judge. The no-candidate verdict depends on the house's box and yard, the access tree and the standing ground - not on
   the garden side or the fixtures - and is asked after all four layouts are built.
-- Cost shares (cProfile, relative only): the corridor search 42% of the stage, the layouts 34%, the threshing-yard mats 12%
+- Cost shares (observed 2026-09-30, method: cProfile of the stage, relative only): the corridor search 42% of the stage, the layouts 34%, the threshing-yard mats 12%
   (15 yards), `seg_dist` 215k calls.
 
 ## R3. The hinterland's lookups (observed 2026-09-30, cProfile of the stage)
@@ -46,12 +46,12 @@ STAGE=homesteads` with the gen's full spec), and scratch counters in `access_cor
 
 ## R4. The web (observed 2026-09-30)
 
-`settle_the_web` is 73% of the stage under cProfile; on Inashiro 12 of 15 houses are unreached when the settle starts (their
+`settle_the_web` is 73% of the stage under cProfile (observed 2026-09-30, method: `make perf-profile SEED=4 STAGE=web`); on Inashiro 12 of 15 houses are unreached when the settle starts (their
 access corridors were reserved at seating and are drawn by `settle_reach`), the settle runs 4 rounds with 22 lane edits and
 the last resort drops 1 lane (`meta.web_settle`). The last resort's re-sweeps (`lanes_breaking`, 4 calls) and `unsettled` are
 39% of the stage profiled. Pool: rounds 3-6, changed 5-27, dropped 0-1.
 
 ## R5. The drain-bank hem (observed 2026-09-30)
 
-12,195 `drain_bank_clearance` calls = every vertex of every plot over three carves, each against every drain segment; ~0.07 s
-real. Not the field's cost (the three carves and `close_seams` are), but asked where no corner can be near the drain.
+12,195 `drain_bank_clearance` calls (`m:before-inashiro-b-hem-drain-bank-clearance`) = every vertex of every plot over three carves, each against every drain segment; ~0.07 s
+real (observed 2026-09-30, method: cProfile's 0.184 s cumulative over its ~2.5x overhead). Not the field's cost (the three carves and `close_seams` are), but asked where no corner can be near the drain.
