@@ -19,7 +19,7 @@ renders; the marks were reverted after. Load 1.8-4.0 on 22 cores (observed 2026-
 | child start, imports, cache store | ~0.35 |
 
 The harness (`measure.py before`, base `c5a631f9b`, render off as the gate's policy requires; load recorded per key in
-`measurements.json`) gives Inashiro's stages as 4.281 s summed, the fastest of three, and the pool's five rolls 25.181 s.
+`measurements.json`) gives Inashiro's stages as 5.640 s summed, the fastest of three, and the pool's five rolls 26.705 s (`m:before-pool-roll-s`; a first run at load 1.2 read 4.281 s and 25.181 s - the keys hold the second, at load 6.4, after the harness's callee names were corrected).
 `make map` uncached, fastest of three: 8.0 s (`m:before-inashiro-regen-s`, load 2.5 -> 6.1).
 
 ## R2. The homestead seating's funnel (observed 2026-09-30)
@@ -42,7 +42,7 @@ STAGE=homesteads` with the gen's full spec), and scratch counters in `access_cor
 - The marsh's `_throw` is per point in Python: 198,162 `random.uniform` draws on Inashiro, 19,408 `_sparse` tests.
 - The village grove offers 15,605 candidate crowns to `static_clear` and asks `too_near` 28,980 times (6,267 crowns drawn).
 - The open-ground search asks `_ok` 4,473 times, behind 10,819 crop-edge `edge_within` probes.
-- `RingIndex.near` 102,164 calls in the stage (273,450 over the roll).
+- `PointGrid.near` (indexes.py:264) 102,164 calls in the stage under cProfile (273,450 over the roll); the harness's whole-stage bucket counts it as `m:before-inashiro-b-hinterland-stage-pointgrid-near`.
 
 ## R4. The web (observed 2026-09-30)
 

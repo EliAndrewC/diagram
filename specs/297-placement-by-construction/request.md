@@ -31,3 +31,7 @@ explanations and hit regions) could still run alongside its picture.
 The GM's request, verbatim:
 
 Yes, please build and implement all of that as a spec-kit feature, working it from start to finish.
+
+The GM, during the spec's first review round (2026-09-30), verbatim:
+
+To be clear, it is perfectly acceptable for maps to change as a result of these optimizations.  They do NOT need to remain identical in output.

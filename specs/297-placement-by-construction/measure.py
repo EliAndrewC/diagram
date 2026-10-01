@@ -30,13 +30,13 @@ MAIN_WT = Path("/tmp/main297")
 ENGINE = Path(".claude/skills/diagram/l7r/diagram")
 # the named callee of each entry bucket (plan C's table); every bucket also records its TOTAL
 BUCKET_CALLEES: dict[str, tuple[str, ...]] = {
-    "seats": ("HousesMixin.try_place",),
-    "corridor": ("access_corridor",),
-    "bundle": ("BundleMixin._bundle_geom",),
+    "seats": ("HousesMixin.try_place", "PointGrid.near"),
+    "corridor": ("_house_candidates", "tree_admits"),
+    "bundle": ("BundleGeomMixin._bundle_layout",),
     "mats": ("point_in_poly",),
-    "marsh": ("random.uniform",),
-    "grove": ("GroveBlocks.static_clear", "GroveBlocks.too_near"),
-    "open_ground": ("RingIndex.near",),
+    "marsh": ("Random.uniform", "WetGroundMixin.marsh.<locals>._sparse", "PointGrid.near"),
+    "grove": ("GroveBlocks.static_clear", "Seats.too_near", "PointGrid.near"),
+    "open_ground": ("open_ground_patches.<locals>._ok", "PointGrid.near", "RingIndex.edge_within"),
     "commons": ("grass_scatter",),
     "web": ("seg_dist",),
     "law": ("lanes_breaking",),
@@ -44,6 +44,7 @@ BUCKET_CALLEES: dict[str, tuple[str, ...]] = {
     "hem": ("drain_bank_clearance",),
     "seams": ("_absorb",),
     "page": ("drop_offmap",),
+    "hinterland_stage": ("PointGrid.near",),
 }
 
 

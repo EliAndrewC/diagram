@@ -6,6 +6,13 @@
     "unit": "calls",
     "value": 477
   },
+  "before-inashiro-b-bundle-bundlegeommixin-bundle-layout": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to BundleGeomMixin._bundle_layout made beneath the bundle entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 2261
+  },
   "before-inashiro-b-bundle-bundlemixin-bundle-geom": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
     "quantity": "calls to BundleMixin._bundle_geom made beneath the bundle entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
@@ -41,12 +48,26 @@
     "unit": "calls",
     "value": 0
   },
+  "before-inashiro-b-corridor-house-candidates": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to _house_candidates made beneath the corridor entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 166
+  },
   "before-inashiro-b-corridor-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
     "quantity": "calls to TOTAL made beneath the corridor entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 2107796
+  },
+  "before-inashiro-b-corridor-tree-admits": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to tree_admits made beneath the corridor entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 40
   },
   "before-inashiro-b-field-carve-comb": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -83,6 +104,20 @@
     "unit": "calls",
     "value": 0
   },
+  "before-inashiro-b-grove-pointgrid-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to PointGrid.near made beneath the grove entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 46489
+  },
+  "before-inashiro-b-grove-seats-too-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to Seats.too_near made beneath the grove entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 28652
+  },
   "before-inashiro-b-grove-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
     "quantity": "calls to TOTAL made beneath the grove entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
@@ -104,6 +139,20 @@
     "unit": "calls",
     "value": 759058
   },
+  "before-inashiro-b-hinterland-stage-pointgrid-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to PointGrid.near made beneath the hinterland_stage entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 102164
+  },
+  "before-inashiro-b-hinterland-stage-total": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to TOTAL made beneath the hinterland_stage entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 5558485
+  },
   "before-inashiro-b-law-lanes-breaking": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
     "quantity": "calls to lanes_breaking made beneath the law entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
@@ -118,12 +167,19 @@
     "unit": "calls",
     "value": 3989351
   },
-  "before-inashiro-b-marsh-random-uniform": {
+  "before-inashiro-b-marsh-pointgrid-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "quantity": "calls to random.uniform made beneath the marsh entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
+    "quantity": "calls to PointGrid.near made beneath the marsh entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
-    "value": 0
+    "value": 20472
+  },
+  "before-inashiro-b-marsh-random-uniform": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to Random.uniform made beneath the marsh entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 179764
   },
   "before-inashiro-b-marsh-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -131,6 +187,13 @@
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 902148
+  },
+  "before-inashiro-b-marsh-wetgroundmixin-marsh-locals-sparse": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to WetGroundMixin.marsh.<locals>._sparse made beneath the marsh entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 17157
   },
   "before-inashiro-b-mats-point-in-poly": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -145,6 +208,27 @@
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 477299
+  },
+  "before-inashiro-b-open-ground-open-ground-patches-locals-ok": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to open_ground_patches.<locals>._ok made beneath the open_ground entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 4473
+  },
+  "before-inashiro-b-open-ground-pointgrid-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to PointGrid.near made beneath the open_ground entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 20063
+  },
+  "before-inashiro-b-open-ground-ringindex-edge-within": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to RingIndex.edge_within made beneath the open_ground entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 10819
   },
   "before-inashiro-b-open-ground-ringindex-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -194,6 +278,13 @@
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 734
+  },
+  "before-inashiro-b-seats-pointgrid-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to PointGrid.near made beneath the seats entries over one roll of inashiro (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 26149
   },
   "before-inashiro-b-seats-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -246,11 +337,11 @@
   },
   "before-inashiro-full-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of inashiro writing its svg and page, unprofiled",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 5.022,
+    "value": 6.502,
     "varies": true
   },
   "before-inashiro-grove-static-clear": {
@@ -313,11 +404,11 @@
   },
   "before-inashiro-roll-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of inashiro, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 4.929,
+    "value": 6.448,
     "varies": true
   },
   "before-inashiro-seg-dist": {
@@ -329,16 +420,16 @@
   },
   "before-inashiro-stage-appurtenances-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.05,
+    "value": 0.058,
     "varies": true
   },
   "before-inashiro-stage-bamboo-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -347,7 +438,7 @@
   },
   "before-inashiro-stage-burial-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -356,70 +447,70 @@
   },
   "before-inashiro-stage-crossings-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.031,
+    "value": 0.051,
     "varies": true
   },
   "before-inashiro-stage-field-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 1.098,
+    "value": 1.629,
     "varies": true
   },
   "before-inashiro-stage-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
-    "unit": "s",
-    "value": 0.005,
-    "varies": true
-  },
-  "before-inashiro-stage-hinterland-s": {
-    "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
-    "quantity": "stage_hinterland inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
-    "unit": "s",
-    "value": 0.886,
-    "varies": true
-  },
-  "before-inashiro-stage-homesteads-s": {
-    "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
-    "quantity": "stage_homesteads inside that roll of inashiro (summed over its builds)",
-    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
-    "unit": "s",
-    "value": 0.954,
-    "varies": true
-  },
-  "before-inashiro-stage-labels-s": {
-    "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
-    "quantity": "stage_labels inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
     "value": 0.008,
     "varies": true
   },
+  "before-inashiro-stage-hinterland-s": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
+    "quantity": "stage_hinterland inside that roll of inashiro (summed over its builds)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "s",
+    "value": 1.016,
+    "varies": true
+  },
+  "before-inashiro-stage-homesteads-s": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
+    "quantity": "stage_homesteads inside that roll of inashiro (summed over its builds)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "s",
+    "value": 1.114,
+    "varies": true
+  },
+  "before-inashiro-stage-labels-s": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
+    "quantity": "stage_labels inside that roll of inashiro (summed over its builds)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "s",
+    "value": 0.011,
+    "varies": true
+  },
   "before-inashiro-stage-notice-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.128,
+    "value": 0.189,
     "varies": true
   },
   "before-inashiro-stage-pond-stock-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -428,34 +519,34 @@
   },
   "before-inashiro-stage-seat-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.037,
+    "value": 0.039,
     "varies": true
   },
   "before-inashiro-stage-sink-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.012,
+    "value": 0.014,
     "varies": true
   },
   "before-inashiro-stage-track-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.096,
+    "value": 0.113,
     "varies": true
   },
   "before-inashiro-stage-water-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -464,7 +555,7 @@
   },
   "before-inashiro-stage-waterward-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -473,29 +564,29 @@
   },
   "before-inashiro-stage-web-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.755,
+    "value": 1.067,
     "varies": true
   },
   "before-inashiro-stage-windbreak-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.152,
+    "value": 0.255,
     "varies": true
   },
   "before-inashiro-stage-woodland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of inashiro (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.069,
+    "value": 0.076,
     "varies": true
   },
   "before-inashiro-try-place": {
@@ -518,6 +609,13 @@
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 0
+  },
+  "before-kashikawa-b-bundle-bundlegeommixin-bundle-layout": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to BundleGeomMixin._bundle_layout made beneath the bundle entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 25
   },
   "before-kashikawa-b-bundle-bundlemixin-bundle-geom": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -582,6 +680,20 @@
     "unit": "calls",
     "value": 443561
   },
+  "before-kashikawa-b-hinterland-stage-pointgrid-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to PointGrid.near made beneath the hinterland_stage entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 30622
+  },
+  "before-kashikawa-b-hinterland-stage-total": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to TOTAL made beneath the hinterland_stage entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 3122144
+  },
   "before-kashikawa-b-law-lanes-breaking": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
     "quantity": "calls to lanes_breaking made beneath the law entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
@@ -596,12 +708,19 @@
     "unit": "calls",
     "value": 1402094
   },
-  "before-kashikawa-b-marsh-random-uniform": {
+  "before-kashikawa-b-marsh-pointgrid-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "quantity": "calls to random.uniform made beneath the marsh entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
+    "quantity": "calls to PointGrid.near made beneath the marsh entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
-    "value": 0
+    "value": 18136
+  },
+  "before-kashikawa-b-marsh-random-uniform": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to Random.uniform made beneath the marsh entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 396385
   },
   "before-kashikawa-b-marsh-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -609,6 +728,13 @@
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 1385583
+  },
+  "before-kashikawa-b-marsh-wetgroundmixin-marsh-locals-sparse": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to WetGroundMixin.marsh.<locals>._sparse made beneath the marsh entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 24254
   },
   "before-kashikawa-b-mats-point-in-poly": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -623,6 +749,27 @@
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 835906
+  },
+  "before-kashikawa-b-open-ground-open-ground-patches-locals-ok": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to open_ground_patches.<locals>._ok made beneath the open_ground entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 1398
+  },
+  "before-kashikawa-b-open-ground-pointgrid-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to PointGrid.near made beneath the open_ground entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 8026
+  },
+  "before-kashikawa-b-open-ground-ringindex-edge-within": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to RingIndex.edge_within made beneath the open_ground entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 2234
   },
   "before-kashikawa-b-open-ground-ringindex-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -672,6 +819,13 @@
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 20
+  },
+  "before-kashikawa-b-seats-pointgrid-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to PointGrid.near made beneath the seats entries over one roll of kashikawa (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 1722
   },
   "before-kashikawa-b-seats-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -724,11 +878,11 @@
   },
   "before-kashikawa-full-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of kashikawa writing its svg and page, unprofiled",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 5.821,
+    "value": 5.449,
     "varies": true
   },
   "before-kashikawa-grove-static-clear": {
@@ -782,11 +936,11 @@
   },
   "before-kashikawa-roll-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of kashikawa, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 5.565,
+    "value": 5.509,
     "varies": true
   },
   "before-kashikawa-seg-dist": {
@@ -798,16 +952,16 @@
   },
   "before-kashikawa-stage-appurtenances-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.013,
+    "value": 0.012,
     "varies": true
   },
   "before-kashikawa-stage-bamboo-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -816,7 +970,7 @@
   },
   "before-kashikawa-stage-burial-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -825,25 +979,25 @@
   },
   "before-kashikawa-stage-crossings-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.04,
+    "value": 0.041,
     "varies": true
   },
   "before-kashikawa-stage-field-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 1.386,
+    "value": 1.326,
     "varies": true
   },
   "before-kashikawa-stage-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -852,43 +1006,43 @@
   },
   "before-kashikawa-stage-hinterland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.7,
+    "value": 0.739,
     "varies": true
   },
   "before-kashikawa-stage-homesteads-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.606,
+    "value": 0.581,
     "varies": true
   },
   "before-kashikawa-stage-labels-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.011,
+    "value": 0.012,
     "varies": true
   },
   "before-kashikawa-stage-notice-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.053,
+    "value": 0.054,
     "varies": true
   },
   "before-kashikawa-stage-pond-stock-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -897,16 +1051,16 @@
   },
   "before-kashikawa-stage-seat-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.022,
+    "value": 0.021,
     "varies": true
   },
   "before-kashikawa-stage-sink-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -915,7 +1069,7 @@
   },
   "before-kashikawa-stage-track-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -924,7 +1078,7 @@
   },
   "before-kashikawa-stage-water-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -933,7 +1087,7 @@
   },
   "before-kashikawa-stage-waterward-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -942,16 +1096,16 @@
   },
   "before-kashikawa-stage-web-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 1.428,
+    "value": 1.41,
     "varies": true
   },
   "before-kashikawa-stage-windbreak-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -960,11 +1114,11 @@
   },
   "before-kashikawa-stage-woodland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of kashikawa (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.105,
+    "value": 0.091,
     "varies": true
   },
   "before-kashikawa-try-place": {
@@ -987,6 +1141,13 @@
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 371
+  },
+  "before-kuwabata-b-bundle-bundlegeommixin-bundle-layout": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to BundleGeomMixin._bundle_layout made beneath the bundle entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 2277
   },
   "before-kuwabata-b-bundle-bundlemixin-bundle-geom": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -1023,12 +1184,26 @@
     "unit": "calls",
     "value": 0
   },
+  "before-kuwabata-b-corridor-house-candidates": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to _house_candidates made beneath the corridor entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 128
+  },
   "before-kuwabata-b-corridor-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
     "quantity": "calls to TOTAL made beneath the corridor entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 1794794
+  },
+  "before-kuwabata-b-corridor-tree-admits": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to tree_admits made beneath the corridor entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 59
   },
   "before-kuwabata-b-grove-groveblocks-static-clear": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -1043,6 +1218,20 @@
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 0
+  },
+  "before-kuwabata-b-grove-pointgrid-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to PointGrid.near made beneath the grove entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 42624
+  },
+  "before-kuwabata-b-grove-seats-too-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to Seats.too_near made beneath the grove entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 22897
   },
   "before-kuwabata-b-grove-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -1065,6 +1254,20 @@
     "unit": "calls",
     "value": 1329204
   },
+  "before-kuwabata-b-hinterland-stage-pointgrid-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to PointGrid.near made beneath the hinterland_stage entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 32391
+  },
+  "before-kuwabata-b-hinterland-stage-total": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to TOTAL made beneath the hinterland_stage entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 2412513
+  },
   "before-kuwabata-b-law-lanes-breaking": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
     "quantity": "calls to lanes_breaking made beneath the law entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
@@ -1079,12 +1282,19 @@
     "unit": "calls",
     "value": 112472
   },
-  "before-kuwabata-b-marsh-random-uniform": {
+  "before-kuwabata-b-marsh-pointgrid-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "quantity": "calls to random.uniform made beneath the marsh entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
+    "quantity": "calls to PointGrid.near made beneath the marsh entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
-    "value": 0
+    "value": 25806
+  },
+  "before-kuwabata-b-marsh-random-uniform": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to Random.uniform made beneath the marsh entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 171846
   },
   "before-kuwabata-b-marsh-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -1092,6 +1302,34 @@
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 1357728
+  },
+  "before-kuwabata-b-marsh-wetgroundmixin-marsh-locals-sparse": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to WetGroundMixin.marsh.<locals>._sparse made beneath the marsh entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 28569
+  },
+  "before-kuwabata-b-open-ground-open-ground-patches-locals-ok": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to open_ground_patches.<locals>._ok made beneath the open_ground entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 2466
+  },
+  "before-kuwabata-b-open-ground-pointgrid-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to PointGrid.near made beneath the open_ground entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 2291
+  },
+  "before-kuwabata-b-open-ground-ringindex-edge-within": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to RingIndex.edge_within made beneath the open_ground entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 535
   },
   "before-kuwabata-b-open-ground-ringindex-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -1127,6 +1365,13 @@
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 689
+  },
+  "before-kuwabata-b-seats-pointgrid-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to PointGrid.near made beneath the seats entries over one roll of kuwabata (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 17557
   },
   "before-kuwabata-b-seats-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -1179,11 +1424,11 @@
   },
   "before-kuwabata-full-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of kuwabata writing its svg and page, unprofiled",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 4.063,
+    "value": 3.835,
     "varies": true
   },
   "before-kuwabata-grove-static-clear": {
@@ -1237,11 +1482,11 @@
   },
   "before-kuwabata-roll-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of kuwabata, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 3.987,
+    "value": 3.854,
     "varies": true
   },
   "before-kuwabata-seg-dist": {
@@ -1253,16 +1498,16 @@
   },
   "before-kuwabata-stage-appurtenances-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.059,
+    "value": 0.061,
     "varies": true
   },
   "before-kuwabata-stage-bamboo-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -1271,7 +1516,7 @@
   },
   "before-kuwabata-stage-burial-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -1280,70 +1525,70 @@
   },
   "before-kuwabata-stage-crossings-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
-    "unit": "s",
-    "value": 0.006,
-    "varies": true
-  },
-  "before-kuwabata-stage-field-s": {
-    "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
-    "quantity": "stage_field inside that roll of kuwabata (summed over its builds)",
-    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
-    "unit": "s",
-    "value": 0.633,
-    "varies": true
-  },
-  "before-kuwabata-stage-frame-s": {
-    "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
-    "quantity": "stage_frame inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
     "value": 0.005,
     "varies": true
   },
+  "before-kuwabata-stage-field-s": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
+    "quantity": "stage_field inside that roll of kuwabata (summed over its builds)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "s",
+    "value": 0.637,
+    "varies": true
+  },
+  "before-kuwabata-stage-frame-s": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
+    "quantity": "stage_frame inside that roll of kuwabata (summed over its builds)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "s",
+    "value": 0.004,
+    "varies": true
+  },
   "before-kuwabata-stage-hinterland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.55,
+    "value": 0.462,
     "varies": true
   },
   "before-kuwabata-stage-homesteads-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.704,
+    "value": 0.705,
     "varies": true
   },
   "before-kuwabata-stage-labels-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.006,
+    "value": 0.009,
     "varies": true
   },
   "before-kuwabata-stage-notice-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.703,
+    "value": 0.689,
     "varies": true
   },
   "before-kuwabata-stage-pond-stock-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -1352,7 +1597,7 @@
   },
   "before-kuwabata-stage-seat-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -1361,7 +1606,7 @@
   },
   "before-kuwabata-stage-sink-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -1370,16 +1615,16 @@
   },
   "before-kuwabata-stage-track-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.047,
+    "value": 0.05,
     "varies": true
   },
   "before-kuwabata-stage-water-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -1388,7 +1633,7 @@
   },
   "before-kuwabata-stage-waterward-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -1397,25 +1642,25 @@
   },
   "before-kuwabata-stage-web-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.267,
+    "value": 0.261,
     "varies": true
   },
   "before-kuwabata-stage-windbreak-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.197,
+    "value": 0.191,
     "varies": true
   },
   "before-kuwabata-stage-woodland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of kuwabata (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -1442,6 +1687,13 @@
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 0
+  },
+  "before-mizuguchi-b-bundle-bundlegeommixin-bundle-layout": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to BundleGeomMixin._bundle_layout made beneath the bundle entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 22
   },
   "before-mizuguchi-b-bundle-bundlemixin-bundle-geom": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -1506,6 +1758,20 @@
     "unit": "calls",
     "value": 124738
   },
+  "before-mizuguchi-b-hinterland-stage-pointgrid-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to PointGrid.near made beneath the hinterland_stage entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 38167
+  },
+  "before-mizuguchi-b-hinterland-stage-total": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to TOTAL made beneath the hinterland_stage entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 2053614
+  },
   "before-mizuguchi-b-law-lanes-breaking": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
     "quantity": "calls to lanes_breaking made beneath the law entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
@@ -1520,12 +1786,19 @@
     "unit": "calls",
     "value": 1286150
   },
-  "before-mizuguchi-b-marsh-random-uniform": {
+  "before-mizuguchi-b-marsh-pointgrid-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "quantity": "calls to random.uniform made beneath the marsh entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
+    "quantity": "calls to PointGrid.near made beneath the marsh entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
-    "value": 0
+    "value": 26374
+  },
+  "before-mizuguchi-b-marsh-random-uniform": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to Random.uniform made beneath the marsh entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 138396
   },
   "before-mizuguchi-b-marsh-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -1533,6 +1806,13 @@
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 894835
+  },
+  "before-mizuguchi-b-marsh-wetgroundmixin-marsh-locals-sparse": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to WetGroundMixin.marsh.<locals>._sparse made beneath the marsh entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 17696
   },
   "before-mizuguchi-b-mats-point-in-poly": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -1547,6 +1827,27 @@
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 563363
+  },
+  "before-mizuguchi-b-open-ground-open-ground-patches-locals-ok": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to open_ground_patches.<locals>._ok made beneath the open_ground entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 5539
+  },
+  "before-mizuguchi-b-open-ground-pointgrid-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to PointGrid.near made beneath the open_ground entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 9627
+  },
+  "before-mizuguchi-b-open-ground-ringindex-edge-within": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to RingIndex.edge_within made beneath the open_ground entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 2028
   },
   "before-mizuguchi-b-open-ground-ringindex-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -1596,6 +1897,13 @@
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 17
+  },
+  "before-mizuguchi-b-seats-pointgrid-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to PointGrid.near made beneath the seats entries over one roll of mizuguchi (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 6986
   },
   "before-mizuguchi-b-seats-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -1648,11 +1956,11 @@
   },
   "before-mizuguchi-full-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of mizuguchi writing its svg and page, unprofiled",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 5.529,
+    "value": 5.125,
     "varies": true
   },
   "before-mizuguchi-grove-static-clear": {
@@ -1706,11 +2014,11 @@
   },
   "before-mizuguchi-roll-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of mizuguchi, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 4.628,
+    "value": 4.772,
     "varies": true
   },
   "before-mizuguchi-seg-dist": {
@@ -1722,25 +2030,25 @@
   },
   "before-mizuguchi-stage-appurtenances-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.003,
+    "value": 0.004,
     "varies": true
   },
   "before-mizuguchi-stage-bamboo-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.0,
+    "value": 0.001,
     "varies": true
   },
   "before-mizuguchi-stage-burial-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -1749,25 +2057,25 @@
   },
   "before-mizuguchi-stage-crossings-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.037,
+    "value": 0.043,
     "varies": true
   },
   "before-mizuguchi-stage-field-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.692,
+    "value": 0.732,
     "varies": true
   },
   "before-mizuguchi-stage-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -1776,25 +2084,25 @@
   },
   "before-mizuguchi-stage-hinterland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.497,
+    "value": 0.503,
     "varies": true
   },
   "before-mizuguchi-stage-homesteads-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.831,
+    "value": 0.828,
     "varies": true
   },
   "before-mizuguchi-stage-labels-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -1803,16 +2111,16 @@
   },
   "before-mizuguchi-stage-notice-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.072,
+    "value": 0.071,
     "varies": true
   },
   "before-mizuguchi-stage-pond-stock-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -1821,34 +2129,34 @@
   },
   "before-mizuguchi-stage-seat-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.017,
+    "value": 0.018,
     "varies": true
   },
   "before-mizuguchi-stage-sink-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.017,
+    "value": 0.019,
     "varies": true
   },
   "before-mizuguchi-stage-track-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.152,
+    "value": 0.181,
     "varies": true
   },
   "before-mizuguchi-stage-water-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -1857,7 +2165,7 @@
   },
   "before-mizuguchi-stage-waterward-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -1866,16 +2174,16 @@
   },
   "before-mizuguchi-stage-web-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 1.674,
+    "value": 1.699,
     "varies": true
   },
   "before-mizuguchi-stage-windbreak-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -1884,11 +2192,11 @@
   },
   "before-mizuguchi-stage-woodland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of mizuguchi (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.05,
+    "value": 0.054,
     "varies": true
   },
   "before-mizuguchi-try-place": {
@@ -1907,11 +2215,11 @@
   },
   "before-pool-roll-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "the five pool hamlets' roll times summed",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 25.181,
+    "value": 26.705,
     "varies": true
   },
   "before-sawada-access-corridor": {
@@ -1920,6 +2228,13 @@
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 316
+  },
+  "before-sawada-b-bundle-bundlegeommixin-bundle-layout": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to BundleGeomMixin._bundle_layout made beneath the bundle entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 2701
   },
   "before-sawada-b-bundle-bundlemixin-bundle-geom": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -1956,12 +2271,26 @@
     "unit": "calls",
     "value": 0
   },
+  "before-sawada-b-corridor-house-candidates": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to _house_candidates made beneath the corridor entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 122
+  },
   "before-sawada-b-corridor-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
     "quantity": "calls to TOTAL made beneath the corridor entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 3240750
+  },
+  "before-sawada-b-corridor-tree-admits": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to tree_admits made beneath the corridor entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 131
   },
   "before-sawada-b-field-carve-comb": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -1998,6 +2327,20 @@
     "unit": "calls",
     "value": 0
   },
+  "before-sawada-b-grove-pointgrid-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to PointGrid.near made beneath the grove entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 38775
+  },
+  "before-sawada-b-grove-seats-too-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to Seats.too_near made beneath the grove entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 18842
+  },
   "before-sawada-b-grove-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
     "quantity": "calls to TOTAL made beneath the grove entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
@@ -2019,6 +2362,20 @@
     "unit": "calls",
     "value": 941063
   },
+  "before-sawada-b-hinterland-stage-pointgrid-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to PointGrid.near made beneath the hinterland_stage entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 79684
+  },
+  "before-sawada-b-hinterland-stage-total": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to TOTAL made beneath the hinterland_stage entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 4700093
+  },
   "before-sawada-b-law-lanes-breaking": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
     "quantity": "calls to lanes_breaking made beneath the law entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
@@ -2033,12 +2390,19 @@
     "unit": "calls",
     "value": 456889
   },
-  "before-sawada-b-marsh-random-uniform": {
+  "before-sawada-b-marsh-pointgrid-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "quantity": "calls to random.uniform made beneath the marsh entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
+    "quantity": "calls to PointGrid.near made beneath the marsh entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
-    "value": 0
+    "value": 40971
+  },
+  "before-sawada-b-marsh-random-uniform": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to Random.uniform made beneath the marsh entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 498765
   },
   "before-sawada-b-marsh-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -2046,6 +2410,13 @@
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 2039897
+  },
+  "before-sawada-b-marsh-wetgroundmixin-marsh-locals-sparse": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to WetGroundMixin.marsh.<locals>._sparse made beneath the marsh entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 31831
   },
   "before-sawada-b-mats-point-in-poly": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -2060,6 +2431,27 @@
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 654854
+  },
+  "before-sawada-b-open-ground-open-ground-patches-locals-ok": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to open_ground_patches.<locals>._ok made beneath the open_ground entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 4976
+  },
+  "before-sawada-b-open-ground-pointgrid-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to PointGrid.near made beneath the open_ground entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 7560
+  },
+  "before-sawada-b-open-ground-ringindex-edge-within": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to RingIndex.edge_within made beneath the open_ground entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 2233
   },
   "before-sawada-b-open-ground-ringindex-near": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -2109,6 +2501,13 @@
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "calls",
     "value": 859
+  },
+  "before-sawada-b-seats-pointgrid-near": {
+    "command": "python3 specs/297-placement-by-construction/measure.py before",
+    "quantity": "calls to PointGrid.near made beneath the seats entries over one roll of sawada (render off), counted by sys.monitoring (harness.py, plan C)",
+    "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
+    "unit": "calls",
+    "value": 26791
   },
   "before-sawada-b-seats-total": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
@@ -2161,11 +2560,11 @@
   },
   "before-sawada-full-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of sawada writing its svg and page, unprofiled",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 6.878,
+    "value": 6.078,
     "varies": true
   },
   "before-sawada-grove-static-clear": {
@@ -2219,11 +2618,11 @@
   },
   "before-sawada-roll-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "one generate() of sawada, render off, the fastest of three unprofiled rolls",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 6.072,
+    "value": 6.122,
     "varies": true
   },
   "before-sawada-seg-dist": {
@@ -2235,7 +2634,7 @@
   },
   "before-sawada-stage-appurtenances-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_appurtenances inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -2244,7 +2643,7 @@
   },
   "before-sawada-stage-bamboo-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_bamboo inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -2253,7 +2652,7 @@
   },
   "before-sawada-stage-burial-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_burial inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -2262,70 +2661,70 @@
   },
   "before-sawada-stage-crossings-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_crossings inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.013,
+    "value": 0.014,
     "varies": true
   },
   "before-sawada-stage-field-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_field inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 2.017,
+    "value": 2.009,
     "varies": true
   },
   "before-sawada-stage-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_frame inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.004,
+    "value": 0.005,
     "varies": true
   },
   "before-sawada-stage-hinterland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_hinterland inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.783,
+    "value": 0.78,
     "varies": true
   },
   "before-sawada-stage-homesteads-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_homesteads inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 1.358,
+    "value": 1.37,
     "varies": true
   },
   "before-sawada-stage-labels-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_labels inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.007,
+    "value": 0.008,
     "varies": true
   },
   "before-sawada-stage-notice-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_notice inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.127,
+    "value": 0.145,
     "varies": true
   },
   "before-sawada-stage-pond-stock-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_pond_stock inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -2334,7 +2733,7 @@
   },
   "before-sawada-stage-seat-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_seat inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -2343,25 +2742,25 @@
   },
   "before-sawada-stage-sink-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_sink inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.014,
+    "value": 0.012,
     "varies": true
   },
   "before-sawada-stage-track-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_track inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.055,
+    "value": 0.067,
     "varies": true
   },
   "before-sawada-stage-water-frame-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_water_frame inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -2370,7 +2769,7 @@
   },
   "before-sawada-stage-waterward-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_waterward inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
@@ -2379,29 +2778,29 @@
   },
   "before-sawada-stage-web-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_web inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.797,
+    "value": 0.8,
     "varies": true
   },
   "before-sawada-stage-windbreak-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_windbreak inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.2,
+    "value": 0.236,
     "varies": true
   },
   "before-sawada-stage-woodland-s": {
     "command": "python3 specs/297-placement-by-construction/measure.py before",
-    "load": "1.2 -> 2.9 (1-minute load average at the run's start and end)",
+    "load": "6.4 -> 2.0 (1-minute load average at the run's start and end)",
     "quantity": "stage_woodland inside that roll of sawada (summed over its builds)",
     "source": "harness.py in the detached worktree of c5a631f9b (the unmodified engine)",
     "unit": "s",
-    "value": 0.011,
+    "value": 0.025,
     "varies": true
   },
   "before-sawada-try-place": {

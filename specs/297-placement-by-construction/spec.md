@@ -18,8 +18,9 @@ asked at its placer - this feature changes WHEN and HOW OFTEN those rules are as
 
 Inashiro regenerates in about 7.5 s: the stages about 5.0 s, the finish about 1.9 s (research R1; observed 2026-09-30, method: `make map PROFILE=1` with scratch phase marks). The time is not spent placing
 what the map shows; it is spent building candidates in full and refusing them. The seating offered 734 seats for 15 houses,
-built 902 four-sided homestead layouts and asked 477 of them for a lane corridor, and 348 of those searches found no corridor
-candidate at all - a property of where the house stands, asked only after its four layouts were built (research R2). The
+built 2,716 garden-side layouts behind 902 part-rule tests, and asked for a lane corridor 477 times, and 348 of those asks
+found no corridor candidate at all - a property of where the house stands, asked only after its four layouts were built
+(research R2, R6). The
 hinterland asks each marsh tuft, grove crown and woodland candidate of every keep-out one at a time; the web lays lanes, then
 re-asks the whole lane law of the whole web every round and drops what breaks it. This feature turns each into construction:
 the region a thing may occupy is computed once from what stands, candidates are proposed only from it, and what is laid is
@@ -73,9 +74,9 @@ lawful when it is laid. The page's own Python work runs while its picture render
 **Acceptance Scenarios**:
 
 1. **Given** a finished map, **When** its page is written, **Then** the page's Python work that its picture does not need
-   runs while the picture renders, and the page is byte-identical to the one written in sequence.
+   runs while the picture renders.
 2. **Given** a carved field, **When** its plots are held off the drain, **Then** only the plot corners near the drain are
-   measured against it, with the same result.
+   measured against it, and every bund still stands off the drain.
 
 ### Edge Cases
 
@@ -95,11 +96,12 @@ lawful when it is laid. The page's own Python work runs while its picture render
   corridor), the region where a homestead's envelope can stand on buildable ground and a door can reach the access tree on
   lawful ground, and offers the placer seats only from it - every round, the exhaustive pass included. The placer's own rules
   are unchanged and still decide each seat.
-- **FR-002 A seat is judged once before its layouts.** The questions that depend only on where a house stands - the reach to
+- **FR-002 A seat is judged once before its layouts** (the four layouts of a seat share one house and one yard, 558 of 558
+  seats measured, research R6, so the seat's own questions decide for all four). The questions that depend only on where a house stands - the reach to
   the field, the water, the corridor to the access tree's nearest points clear of the standing ground - are asked once per seat
   before any garden-side layout is built; a seat that fails them builds no layout, and the four layouts of a seat that passes
   share their answers.
-- **FR-003 The threshing-yard mats are a fill** of the yard's free cells, computed once per yard - the same mats.
+- **FR-003 The threshing-yard mats are a fill** of the yard's free cells, computed once per yard, under the same mat rules.
 - **FR-004 Region-then-fill for the ground cover.** The marsh (its tint, tufts and glints), the village grove (its crowns, in
   every role), and the open-ground search for managed woodland each compute the free region they may use once - every keep-out
   they read today, painted into one region - and fill or scan it from that region; per glyph or candidate, only what depends on
@@ -110,11 +112,12 @@ lawful when it is laid. The page's own Python work runs while its picture render
   settle's repair rounds and the last resort's whole-web re-sweeps are retired; the verdicts kept as lanes are laid are what the
   end of the stage reads, and a web that breaks the law is still refused by name (`WebRefused`), never shipped.
 - **FR-006 The page's Python work runs alongside its picture.** The page's work the picture and the id map do not need (the
-  hit regions, the explanations and their data) runs while the picture and the id map render; the page is byte-identical.
-- **FR-007 The drain-bank hem measures only the corners near the drain** (a box test first), with the same result - the GM's
-  12,000 checks asked only where a corner can be within reach of the collector.
+  hit regions, the explanations and their data) runs while the picture and the id map render.
+- **FR-007 The drain-bank hem measures only the corners near the drain** (a box test first) - the GM's 12,000 checks asked only
+  where a corner can be within reach of the collector, every bund still held off the drain.
 - **FR-008 What is left is written down** in `dev/performance.md`: for each stage still over half a second on Inashiro after this work,
-  what its time is spent on and why no change of the allowed kind takes it further.
+  and for the page write (the GM: "1.9s to generate the interactive HTML map seems like a lot" - its picture is 1.197 s of it,
+  research R1, observed 2026-09-30, method: the scratch phase marks), what its time is spent on and why no change of the allowed kind takes it further.
 - **FR-009 Every moved map keeps its invariants** (276's FR-006 condition, as 284 held it): SC-009.
 
 ### Key Entities
@@ -133,26 +136,32 @@ lawful when it is laid. The page's own Python work runs while its picture render
 Every figure is the fastest of three with the load recorded, taken by `measure.py` from the base worktree and the clone back to
 back; every ratio is a floor with no projection behind it. Keys `m:...` are in `measurements.json`.
 
-- **SC-001** (spec-wide, the GM's number): Inashiro's stages sum to at most half the base's (4.281 s, the sum of the per-stage keys `before-inashiro-stage-<stage>-s`), and its full
+- Every "before" second was taken at load 6.4 (recorded per key); the after-run re-takes the base back to back, and the
+  floors are judged on that pair.
+- **SC-001** (spec-wide; the session's expectation, "well under half", held as a floor - the GM gave no number): Inashiro's stages sum to at most half the base's (5.640 s, the sum of the per-stage keys `before-inashiro-stage-<stage>-s`), and its full
   regeneration (`full_s`: svg, png and page) is faster than the base's (8.0 s uncached, `m:before-inashiro-regen-s`, load 2.5 -> 6.1 - re-taken back to back with the clone at the end).
 - **SC-002** (FR-001, FR-002): on Inashiro the seats bucket asks at least `3x` fewer calls (2,640,745, `m:before-inashiro-b-seats-total`), the homestead layouts built
-  (`_bundle_geom`) are at least `3x` fewer (2,716, `m:before-inashiro-bundle-geom`), and the homesteads stage is at least `2x` faster (0.954 s, `m:before-inashiro-stage-homesteads-s`).
-- **SC-003** (FR-003): the mats bucket asks at least `3x` fewer calls on Inashiro (477,299, `m:before-inashiro-b-mats-total`), and the mats are the same.
+  (`_bundle_geom`) are at least `3x` fewer (2,716, `m:before-inashiro-bundle-geom`), and the homesteads stage is at least `2x` faster (1.114 s, `m:before-inashiro-stage-homesteads-s`).
+- **SC-003** (FR-003): the mats bucket asks at least `3x` fewer calls on Inashiro (477,299, `m:before-inashiro-b-mats-total`), every
+  mat rule still holding.
 - **SC-004** (FR-004): the marsh, grove and open-ground buckets each ask at least `3x` fewer calls on the map where each asks most
-  (marsh on Sawada 2,039,897, `m:before-sawada-b-marsh-total`; grove on Inashiro 2,212,731, `m:before-inashiro-b-grove-total`; open ground on Inashiro 1,712,847, `m:before-inashiro-b-open-ground-total`), and Inashiro's hinterland stage is at least `2x` faster (0.886 s, `m:before-inashiro-stage-hinterland-s`).
+  (marsh on Sawada 2,039,897, `m:before-sawada-b-marsh-total`; grove on Inashiro 2,212,731, `m:before-inashiro-b-grove-total`; open ground on Inashiro 1,712,847, `m:before-inashiro-b-open-ground-total`), and Inashiro's hinterland stage is at least `2x` faster (1.016 s, `m:before-inashiro-stage-hinterland-s`).
 - **SC-005** (FR-005): the law bucket (the last resort and the settle's exit question) asks at least `5x` fewer calls on Inashiro and
   Sawada (3,989,351 and 456,889, `m:before-inashiro-b-law-total`, `m:before-sawada-b-law-total`), no repair round runs on any pool map (`web_settle.rounds` reports none), and Inashiro's web stage is at least
-  `2x` faster (0.755 s, `m:before-inashiro-stage-web-s`).
+  `2x` faster (1.067 s, `m:before-inashiro-stage-web-s`).
 - **SC-006** (FR-006): Inashiro's page write is faster than the base's by at least `0.25 s` (the hit regions' 0.115 s and the
-  explanations' 0.207 s, research R1's phase marks), measured by the same marks, and every pool page is byte-identical to the one
-  the same map's sequential write produces.
-- **SC-007** (FR-007): the hem bucket asks at least `3x` fewer calls on Inashiro (759,058, `m:before-inashiro-b-hem-total`; 12,195 drain-bank clearances, `m:before-inashiro-b-hem-drain-bank-clearance`), the plots identical.
-- **SC-008** (FR-008): every stage over half a second on Inashiro after the work has its entry in `dev/performance.md`.
+  explanations' 0.207 s, research R1's phase marks), measured by the same marks.
+- **SC-007** (FR-007): the hem bucket asks at least `3x` fewer calls on Inashiro (759,058, `m:before-inashiro-b-hem-total`; 12,195 drain-bank clearances, `m:before-inashiro-b-hem-drain-bank-clearance`), every bund held off the drain.
+- **SC-008** (FR-008): every stage over half a second on Inashiro after the work, and the page write, has its entry in
+  `dev/performance.md`, with the page's remaining parts timed (the picture's render and encode, the id map, the text passes).
+- **SC-010** (the GM's second count): the spatial-index lookups (`PointGrid.near`) beneath Inashiro's hinterland stage are at least
+  `3x` fewer (102,164, `m:before-inashiro-b-hinterland-stage-pointgrid-near`).
 - **SC-009** (FR-009, the pool): every live pool map regenerates; `make done` is green at the `100%` floor and every gate rule
   passes; every pool map and `make cohort N=24` seat every declared household (no `SiteRefused` or `WebRefused` newly raised) and
   keep their forms and house kinds; every comb field stays within its acreage tolerance; each moved map's houses, paddies and ways
-  are given before and after in research, and a material change is a finding to fix, not a report; the exact changes (FR-003,
-  FR-006, FR-007) leave every output they touch byte-identical.
+  are given before and after in research, and a material change is a finding to fix, not a report. No output is held
+  byte-identical: the GM, 2026-09-30, "it is perfectly acceptable for maps to change as a result of these optimizations. They do
+  NOT need to remain identical in output."
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
@@ -161,6 +170,7 @@ back; every ratio is a floor with no projection behind it. Keys `m:...` are in `
 | Seats offered only from the computed seat region; a house may stand at a different seat of the same rules | map drawing convention (the same rules decide; the order of offering changes) | FR-001; the GM allows map changes for speed within the rules | point of change in `hamletgen/homesteads/` |
 | Marsh glyphs, grove crowns and woodland patches placed by region-then-fill may sit differently, at the same densities and keep-outs | map drawing convention | FR-004 | points of change in `settlement/land/wet.py`, `settlement/homestead_parts/stands.py`, `hamletgen/hinterland/parcels.py` |
 | Lanes admitted lawful as laid; a lane may take a different lawful shape than the repair loop gave it | map drawing convention (the same lane law) | FR-005 | point of change in `hamletgen/ways/` |
+| Any other output the levers touch (a seat judged once, the yard's mats as a fill, the hem's prefilter, the page's order of work) may differ where the rules allow | map drawing convention (the same rules; GM 2026-09-30: maps "do NOT need to remain identical in output") | FR-002, FR-003, FR-006, FR-007 | the points of change |
 
 ## Assumptions
 
@@ -170,4 +180,10 @@ back; every ratio is a floor with no projection behind it. Keys `m:...` are in `
 
 ## Review history
 
-(none yet)
+- Round 1 (spec-fidelity, 2026-09-30): CHANGES REQUIRED, 5 items - the GM's second count ("roughly 100,000 spatial-index lookups")
+  had no criterion and three per-call harness keys read 0 (wrong callee names); the Summary misstated R2's layouts and tests;
+  FR-002 was in neither the exact list nor the Decisions; the page's remaining picture time went unaccounted; SC-001 called the session's
+  guess "the GM's number". Addressed: the harness's callee names corrected and a whole-stage hinterland bucket added (SC-010), the
+  baseline re-taken; the Summary restated; FR-008/SC-008 take the page write; SC-001 relabeled. Between rounds the GM ruled that maps
+  need not stay identical (request.md), so every byte-identity requirement was replaced by the rules and invariants, and FR-002's
+  move is in the Decisions table.

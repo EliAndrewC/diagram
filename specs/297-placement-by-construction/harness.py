@@ -106,6 +106,11 @@ ENTRIES: tuple[tuple[str, str, str], ...] = (
 )
 
 
+# THE WHOLE HINTERLAND STAGE as one bucket, counted in a run of its own (the entries above would take its inner calls): the
+# GM's "roughly 100,000 spatial-index lookups for the hinterlands" is `PointGrid.near` beneath it (spec SC-010).
+STAGE_ENTRIES: tuple[tuple[str, str, str], ...] = (("hinterland_stage", "l7r.diagram.hamletgen.hinterland.stages", "stage_hinterland"),)
+
+
 def _callee(fn: object) -> str:
     import types
 
@@ -118,11 +123,11 @@ def _callee(fn: object) -> str:
     return str(name)
 
 
-def _entry_codes() -> dict[object, str]:
+def _entry_codes(entries: tuple[tuple[str, str, str], ...] = ENTRIES) -> dict[object, str]:
     import importlib
 
     codes: dict[object, str] = {}
-    for bucket, mod, path in ENTRIES:
+    for bucket, mod, path in entries:
         try:
             obj: object = importlib.import_module(mod)
             for part in path.split("."):
@@ -135,7 +140,7 @@ def _entry_codes() -> dict[object, str]:
     return codes
 
 
-def _buckets(spec) -> dict[str, dict[str, int]]:
+def _buckets(spec, entries: tuple[tuple[str, str, str], ...] = ENTRIES) -> dict[str, dict[str, int]]:
     import collections
     import sys
 
@@ -144,7 +149,7 @@ def _buckets(spec) -> dict[str, dict[str, int]]:
     mon = sys.monitoring
     ev = mon.events
     tool = 4
-    codes = _entry_codes()
+    codes = _entry_codes(entries)
     stack: list[str] = []
     counts: dict[str, collections.Counter[str]] = collections.defaultdict(collections.Counter)
 
@@ -199,5 +204,5 @@ def test_harness_297() -> None:
                 best = row
         result[key] = {**(best or {}), "full_s": _full(spec, key, profile=False)}
         _full(spec, key, profile=True)
-        result[key]["buckets"] = _buckets(spec)
+        result[key]["buckets"] = {**_buckets(spec), **_buckets(spec, STAGE_ENTRIES)}
     (OUT / "times.json").write_text(json.dumps(result, indent=2))
