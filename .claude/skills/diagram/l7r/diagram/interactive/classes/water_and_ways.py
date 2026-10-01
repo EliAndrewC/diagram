@@ -381,7 +381,7 @@ class Footbridge(Kind):
     Why: Farmers reach the plots by walking the bunds, and the long laterals cut across that walking; a
     crossing every so often is taken to keep the field passable, laid square across its ditch where both banks land on
     ground worth crossing to. All three forms are attested over small water: the one-log bridge laid across a
-    brook, the earthen bridge that was the common bridge of old Japan, and the plank deck that was the rarer
+    brook, the earthen bridge that was the common river bridge of old Japan, and the plank deck that was the rarer
     one; the record cannot say which crossed a paddy ditch, so each settlement rolls its own. Where a way
     crosses water, one deck - never two at the same point, and a lane's deck is always planked.
 
@@ -398,7 +398,7 @@ class Footbridge(Kind):
     Covers: `bridges[foot]` - every plank and deck over water
     Label: accurate
     Sources: kotobank-marukibashi, kotobank-ipponbashi, zhwiki-dumuqiao, dobashi-jawiki, xinhua-jiahou-muqiao, itabashi-kotobank, aze-jawiki
-    Entry: research/ways.html - 'Plank bridges over farm ditches (itabashi)'; research/rendering/ways.html - 'How our maps draw plank bridges' (channel_footbridges)
+    Entry: research/ways.html - 'Plank bridges over farm ditches (itabashi)'; research/rendering/ways.html - 'How our maps draw plank bridges over farm ditches (itabashi)' (channel_footbridges)
     """
 
     key = 'footbridge'

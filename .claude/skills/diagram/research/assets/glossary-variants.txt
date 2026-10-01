@@ -1071,6 +1071,7 @@ fudō	Fudo
 fudō myōō	Fudo
 fuel-and-fodder commons	commons
 fujiwara	Fujiwara-kyo
+fujiwara no tameie	Fujiwara no Tameie
 fujiwara-kyo	Fujiwara-kyo
 fujiwara-kyo's	Fujiwara-kyo
 fukada	fukada
@@ -3489,6 +3490,7 @@ tamagawa	Tamagawa aqueduct
 tamagawa aqueduct	Tamagawa aqueduct
 tamahagane	tamahagane
 tamajari	tamajari
+tameie	Fujiwara no Tameie
 tameike	tameike
 tamonten	Bishamon
 tan	tan

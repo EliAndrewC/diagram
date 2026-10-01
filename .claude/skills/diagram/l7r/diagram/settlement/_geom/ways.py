@@ -18,7 +18,7 @@ from .primitives import seg_dist
 # footbridges_reach_useful_ground test (tests/gate/test_crossings_and_cover.py reads these same values).
 # An itabashi footplank spans an ~8 ft ditch with a short landing each bank; it exists so
 # field-workers can cross to the FIELD, so both banks must reach ground worth crossing to. The record:
-# research/ways.html "Plank bridges over farm ditches (itabashi)", research/rendering/ways.html "How our maps draw plank bridges"
+# research/ways.html "Plank bridges over farm ditches (itabashi)", research/rendering/ways.html "How our maps draw plank bridges over farm ditches (itabashi)"
 # and research/ways.html "How far past the bank does a
 # bridge land?".
 PLANK_ABUTMENT = 6.0  # deck = local ditch width + this SHORT abutment (GM 2026-07-22: was 15, far too long for a footplank)

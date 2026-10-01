@@ -318,7 +318,7 @@
   "footbridge": {
     "caveat": "",
     "covers": "`bridges[foot]` - every plank and deck over water",
-    "entry": "research/ways.html - 'Plank bridges over farm ditches (itabashi)'; research/rendering/ways.html - 'How our maps draw plank bridges' (channel_footbridges)",
+    "entry": "research/ways.html - 'Plank bridges over farm ditches (itabashi)'; research/rendering/ways.html - 'How our maps draw plank bridges over farm ditches (itabashi)' (channel_footbridges)",
     "key": "footbridge",
     "label": "accurate",
     "label_note": "That ditches were planked is reasoned, not read: the record consulted says nothing about a plank over a two-foot ditch, so the plank and its spacing are a guess.",
