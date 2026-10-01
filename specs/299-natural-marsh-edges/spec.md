@@ -123,3 +123,5 @@ pines and the ground cut out of it.
 - Round 2 (spec-fidelity-verify): CHANGES REQUIRED - the reed base tile grew past the overlay's repeat and no FR stated it; the
   Assumptions still said "recorded in the plan". Addressed: FR-004 states the base change as a departure, the reed overlay is
   larger than the new base (research R1), the Assumptions point at R1.
+- Round 3 (spec-fidelity-verify): CHANGES REQUIRED - plan.md C and D5 named one overlay repeat. Addressed: each overlay's repeat
+  named.

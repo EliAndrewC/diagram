@@ -23,7 +23,8 @@ marsh gives up is scrub, and the two meet.
 
 `flush_covers` computes every cover's shape first; then for each scrub (marsh) shape the band within `FRINGE_FT / 2` of any marsh
 (scrub) shape is cut out and drawn with the `fringe` tile in the cover's own slot and class; the rest is drawn with its base tile
-and, over it, its overlay (`OVERLAYS`: grass -> `grass-clumps`, reed -> `reed-clumps`, at `OVERLAY_TILE_FT`). The reed base tile
+and, over it, its overlay (`OVERLAYS`: grass -> `grass-clumps` at `OVERLAY_TILE_FT` (97 ft), reed -> `reed-clumps` at
+`REED_OVERLAY_TILE_FT` (197 ft, larger than `REED_TILE_FT`)). The reed base tile
 grows to `REED_TILE_FT` with an even haze (research R1). `cover_path` writes one even-odd path.
 
 ### D. Record, tests, measurement
@@ -41,4 +42,4 @@ fringe untouched), the fringe (only where the two meet), the overlays (each base
 | D2 | The wave is inward-only, cut to the laid outline | within FR-002 |
 | D3 | The scrub reads the recorded marsh rather than the laid band once a marsh exists | mechanism for FR-003's meeting |
 | D4 | The reed base tile at 128 ft with an even haze | calibration (FR-004's varied look), research R1 |
-| D5 | The overlay in the base tiles' colors, 3 clumps a tile | calibration, research R1 |
+| D5 | The overlay in the base tiles' colors, 3 clumps per 97 ft tile, the same density per area on the reed overlay's 197 ft tile | calibration, research R1 |
