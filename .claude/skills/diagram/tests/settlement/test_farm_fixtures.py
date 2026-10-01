@@ -75,3 +75,23 @@ def test_a_privy_carries_its_jar_so_a_large_one_is_not_read_as_a_wood_shed():
     s.meta(name="T", scale="hamlet", ftpx=1)
     s.farm_fixture("privy", 100.0, 100.0, size_ft=(24.0, 12.0))
     assert s.top[-1].count("<circle") == 1 and "#3E2A12" in s.top[-1] and s.top_cls[-1] == "privy"
+
+
+def test_the_north_annex_is_held_inside_the_edo_sheds_band():
+    """Feature 293: dealt to the largest houses, the annex drawn as shares of its house ran past 27 ft and past 1.8 to one;
+    research/homesteads/440's band is 18-27 ft and 1.5-1.8 to one. The west annex is the shares alone."""
+    from l7r.diagram.settlement.farm_fixtures import kura_rect
+
+    assert kura_rect(46.0, 28.0, "N", 1.0) == pytest.approx((0.0, -0.675 * 28.0, 0.46 * 46.0, 0.45 * 28.0)), "an ordinary minka: inside the band, unchanged"
+    for w, h in ((62.0, 28.0), (55.4, 29.9), (40.0, 28.0), (36.0, 30.0), (62.0, 31.0), (70.0, 40.0)):
+        _x, y, length, depth = kura_rect(w, h, "N", 1.0)
+        assert 18.0 <= length <= 27.0 and 1.5 - 1e-9 <= length / depth <= 1.8 + 1e-9, (w, h)
+        assert (y, depth) == pytest.approx((-0.675 * h, 0.45 * h)), "the depth stays the house's share, lapping its back wall"
+        assert length <= w, "the length lies within the house's own width"
+    assert kura_rect(62.0, 28.0, "N", 1.0)[2] == pytest.approx(1.8 * 12.6), "a long house's annex stops at 1.8 to one"
+    assert kura_rect(40.0, 28.0, "N", 1.0)[2] == pytest.approx(1.5 * 12.6), "a short one's reaches 1.5 to one"
+    assert kura_rect(80.0, 40.0, "N", 1.0)[2] == pytest.approx(27.0), "and none runs past 27 ft"
+    assert kura_rect(23.0, 14.0, "N", 0.5) == pytest.approx((0.0, -0.675 * 14.0, 0.46 * 23.0, 0.45 * 14.0)), "the band is in feet: a village's 2 ft pixel"
+    assert kura_rect(31.0, 14.0, "N", 0.5)[2] == pytest.approx(1.8 * 6.3), "a 62 ft house at 2 ft to the pixel stops at 1.8 to one too"
+    assert kura_rect(40.0, 20.0, "N", 1.0)[2] == pytest.approx(1.8 * 9.0), "under ~22 ft deep the band cannot be met, and 1.8 to one wins"
+    assert kura_rect(62.0, 28.0, "W", 1.0) == pytest.approx((-0.64 * 62.0, 0.0, 0.32 * 62.0, 0.56 * 28.0)), "the west annex keeps its shares"

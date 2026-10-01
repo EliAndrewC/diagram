@@ -5,9 +5,13 @@ import re
 from collections.abc import Iterable
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.overlap.registry import refuse_unadmitted
+
 from .._geom import (
     Pt,
     edge_dist,
+    point_in_poly,
+    rot_rect,
     seg_dist,
 )
 from ..rolling.fit import houses_meeting
@@ -20,7 +24,6 @@ from ._helpers import (
     _angle_between,
     _lane_len,
     _pull_back,
-    dooryard_dist,
     fan_rival,
     junction_floor,
     vertex_behind,
@@ -29,6 +32,38 @@ from ._helpers import (
 
 if TYPE_CHECKING:
     from ..core import Settlement
+
+
+def _house_frame(house: Any, q: Pt) -> tuple[float, float]:
+    """`q` in the house's own frame: +x along the ridge, +y out through the FRONT face - the side the threshing yard is
+    laid on (`rolling/bundle.py`: the yard at `hy + hh / 2 + gap`, turned with the house by its rake)."""
+    th = math.radians(float(house.get("rot") or 0.0))
+    dx, dy = q[0] - float(house["x"]), q[1] - float(house["y"])
+    return (dx * math.cos(th) + dy * math.sin(th), -dx * math.sin(th) + dy * math.cos(th))
+
+
+def behind_house(house: Any, q: Pt) -> bool:
+    """Does `q` stand BEHIND the house - past its back wall, abreast of it (feature 287, water W57)?"""
+    lx, ly = _house_frame(house, q)
+    return ly < -float(house["h"]) / 2 and abs(lx) <= float(house["w"]) / 2 + float(house["h"])
+
+
+def reaches_dooryard(house: Any, q: Pt, reach: float = DOORYARD_REACH_FT) -> bool:
+    """THE RULE (feature 287, water W57; 269 B17, research/homesteads/310): a lane end reaches a farmhouse at its DOORYARD -
+    within `reach` of its threshing yard or its dooryard beds, or in the band `reach` deep in front of its front face.
+
+    Never by distance to the house itself: 12 ft of the drawn house counted a lane ending behind the BACK wall as
+    arrived (Kuwabata's lane 5, 11 ft behind house 1 and 43 ft from its yard - future-work, "A lane end behind a house
+    counts as its dooryard"). `trim_lane_stubs` judges its ends with this, and the test of it reads it."""
+    rot = float(house.get("rot") or 0.0)
+    g = house.get("geom") or {}
+    for r in [g[k] for k in ("yard",) if g.get(k) is not None] + list(g.get("gardens") or ()):
+        quad = rot_rect(float(r[0]), float(r[1]), float(r[2]), float(r[3]), rot)
+        if point_in_poly(q[0], q[1], quad) or edge_dist(q[0], q[1], quad) <= reach:
+            return True
+    lx, ly = _house_frame(house, q)
+    hh = float(house["h"]) / 2
+    return hh - 1e-6 <= ly <= hh + reach and abs(lx) <= float(house["w"]) / 2 + reach
 
 
 class LanesMixin:
@@ -41,30 +76,58 @@ class LanesMixin:
         half-width (keep houses off the tread). `connector=True` marks the trodden path that LEAVES the
         village for the wider world - it MUST run off the map edge (checked), never stop mid-landscape.
         See research/ways.html 'What vehicle used a village lane, and where could the lane run?'."""
-        rec = {"pts": [[x, y] for x, y in pts], "worn": worn, "w": width, "connector": connector, "spur": spur}
+        # a lane KEEPS ITSELF RECORDED (feature 287 M8): the web reshapes lanes in place, and each reshape is asked of the
+        # registry of what stands at the write (`Kept`) - so a repair cannot lay a lane on what the overlap matrix forbids
+        # ...AND IT IS ASKED BEFORE IT IS RECORDED OR INKED (feature 287, water W53): every placer that lays a lane chose it among
+        # what the registry admits (`admits_lane`, `admitted_runs`, the settle's `Lawful`, the connector's `connector_keeps_the_law`),
+        # so a refusal here names the engine defect by name before any of its ink is emitted, as the one-candidate writers do
+        # (`registry.refuse_unadmitted`; a Kuwabata lane was the last record the census found written unasked)
+        new = {"pts": [[x, y] for x, y in pts], "worn": worn, "w": width, "connector": connector, "spur": spur}
+        refuse_unadmitted(self.M, "lanes", new)
+        rec = self.standing.kept("lanes", new)
         self.M.setdefault("lanes", []).append(rec)
         self._lane_ink.append(self._lane_ink_at(pts, width, worn, rec))
-        # `M["lane"]` IS THE SPINE - the longest ordinary way on the map - not whichever lane was
-        # drawn last. It used to be assigned unconditionally here, so it held the final `lane()` call
-        # of the whole build, and five consumers read it as "the village street": two gate checks
-        # (`segments_03b` structures-vs-street, `segments_04c` grove shading), the kosatsuba's route
-        # list in `structures/fixtures.py`, and `_geom/ways.py`'s corridor runs. A settlement-review
-        # measured what that means in practice (Sawada 2026-08-19): the key held a 45 ft floating
-        # fragment in the NW, so two gate checks were adjudicating against a 45 ft orphan instead of
-        # the 354 ft spine - they ran, they passed, and they were testing the wrong geometry. That is
-        # the "a check that never runs looks exactly like a check that passes" family, one level down
-        # at the INPUT rather than at the rule.
-        #
-        # Longest-wins is monotone, so a mid-build consumer gets the best spine available when it
-        # asks rather than an arbitrary one; the connector is excluded because it is the road OUT,
-        # not the street. Derived from geometry already on the map, never pinned.
-        if not connector:
-            _prev = self.M.get("lane")
-            _prev_len = sum(math.dist(tuple(a), tuple(b)) for a, b in zip(_prev, _prev[1:], strict=False)) if _prev and len(_prev) > 1 else 0.0
-            if sum(math.dist(a, b) for a, b in zip(pts, pts[1:], strict=False)) > _prev_len:
-                self.M["lane"] = [[x, y] for x, y in pts]
+        # NO `M["lane"]` IS WRITTEN (feature 287 wave 6). It held "the spine" - the longest ordinary way drawn so far - kept by
+        # `lane()` alone, so every later rewrite of that lane (the web's passes, the settle's cuts and drops) left it standing
+        # as a copy of a lane no longer on the map: on cohort seeds 25 and 42 it was none of `M["lanes"]`. Every reader of a
+        # generated map reads `M["lanes"]` (`_geom/ways.street_runs`, `lane_runs`); `M["lane"]` is read only where a hand-built
+        # fixture carries it and no `lanes`.
         self.corridors.append((pts, clearance))
         self._record_tread(pts, width / 2)
+
+    def reshape_lane(self: Settlement, ln: Any, pts: Any) -> bool:  # type: ignore[misc]
+        """Rewrite lane record `ln` along `pts` (rounded to the record's 0.1 px) where the overlap matrix admits the lane as
+        it would become on what stands (feature 287 M8: the question every lane rewrite asks before it writes - `Kept`
+        refuses the write it did not ask). Returns whether it was written; a refused rewrite leaves the lane as it was,
+        and the pass that asked takes the lane unchanged (its ink is the caller's to redraw, `reink_lane`)."""
+        new = [[round(float(x), 1), round(float(y), 1)] for x, y in pts]
+        if not self.admits("lanes", {**ln, "pts": new}, ignore=ln):
+            return False
+        ln["pts"] = new
+        return True
+
+    def admits_lane(self: Settlement, pts: Any, width: float) -> bool:  # type: ignore[misc]
+        """May a new lane along `pts`, `width` wide, be recorded on what stands (the overlap matrix, feature 287 M8)? Asked as
+        `lane` would record it."""
+        return len(pts) < 2 or self.admits("lanes", {"pts": [[float(x), float(y)] for x, y in pts], "w": width})
+
+    def admitted_runs(self: Settlement, pts: Any, width: float) -> list[Any]:  # type: ignore[misc]
+        """The runs of `pts` a new lane `width` wide may be recorded along (`admits_lane`): the polyline with every segment
+        the overlap matrix forbids on what stands taken out, the pieces either side kept (feature 287 M8: the placer that
+        lays a draft way offers only what the registry admits, as the web's settle would cut it)."""
+        runs: list[Any] = []
+        cur: list[Any] = []
+        for a, b in zip(pts, pts[1:], strict=False):
+            if self.admits_lane([a, b], width):
+                cur = cur or [a]
+                cur.append(b)
+            else:
+                if len(cur) >= 2:
+                    runs.append(cur)
+                cur = []
+        if len(cur) >= 2:
+            runs.append(cur)
+        return runs
 
     def _lane_ink_at(self: Settlement, pts: Any, width: float, worn: bool, rec: Any) -> tuple[int]:  # type: ignore[misc]
         """Emit a lane's two strokes INTO THE GROUND BLOCK and return the ground entry's index.
@@ -233,7 +296,9 @@ class LanesMixin:
                     # only while the house still lies ahead of the end or level with it - an end that has walked on past
                     # its last house is pulled back to it, as `_trim_to_service` cuts one at its closest approach
                     _from = back if back is not None else (run[0] if run is not None else None)
-                    if dooryard_dist(h, q) > dooryard_reach and (_d > house_reach or (_from is not None and walked_past(_from, q, (h["x"], h["y"])))):
+                    # ...AND NEVER BEHIND IT (feature 287, water W57): the dooryard is the yard and the front, not 12 ft of
+                    # any wall, and an end abreast of the back wall is not "beside the house" either - it is behind it.
+                    if not reaches_dooryard(h, q, dooryard_reach) and (_d > house_reach or behind_house(h, q) or (_from is not None and walked_past(_from, q, (h["x"], h["y"])))):
                         continue
                     if _my is None or not _fan_rival(q, _my, (h["x"], h["y"]), _d, me):
                         return True
@@ -265,8 +330,8 @@ class LanesMixin:
                 continue
             if [list(p) for p in pts] == ln["pts"]:
                 continue
-            ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
-            self.reink_lane(i)
+            if self.reshape_lane(ln, pts):
+                self.reink_lane(i)
         if _drop:  # rebuild record and ink together so their indices stay aligned
             self.M["lanes"] = [ln for k, ln in enumerate(lanes) if k not in _drop]
             self._lane_ink = [z for k, z in enumerate(self._lane_ink) if k not in _drop]
@@ -293,4 +358,4 @@ class LanesMixin:
         )
         if label:
             mid = pts[len(pts) // 2]
-            self.label(mid[0] + 38, mid[1], label, 11, italic=True, color="#5A4326")
+            self.label(mid[0] + 38, mid[1], label, 11, italic=True, color="#5A4326", ref=(min(p[0] for p in pts), min(p[1] for p in pts), max(p[0] for p in pts), max(p[1] for p in pts)))

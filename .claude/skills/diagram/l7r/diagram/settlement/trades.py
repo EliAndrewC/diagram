@@ -59,7 +59,7 @@ class TradesMixin:
             lx_, ly_ = tilt_caption_seat(x, y, rot, tilt_, w / 2, h / 2, 11)
             ca_, sa_ = math.cos(math.radians(tilt_)), math.sin(math.radians(tilt_))
             self.block_polys.append([(lx_ + dx * ca_ - dy * sa_, ly_ + dx * sa_ + dy * ca_) for dx, dy in ((-bw_, -11.0), (bw_, -11.0), (bw_, 15.0), (-bw_, 15.0))])
-            self.label(lx_, ly_, label, 9, italic=True, color="#5A4326", rot=tilt_)
+            self.label(lx_, ly_, label, 9, italic=True, color="#5A4326", ref=(x - w / 2, y - h / 2, x + w / 2, y + h / 2), rot=tilt_)
         elif label:
             # the band anchors at the RAW footprint edge - the caption box starts ~edge+6, so
             # anchoring at the margin-inflated hh left its top half unguarded (the bathhouse
@@ -69,10 +69,10 @@ class TradesMixin:
             if label_xy is not None:
                 lx_, ly_ = label_xy
                 self.block_polys.append([(lx_ - bw_, ly_ - 11.0), (lx_ + bw_, ly_ - 11.0), (lx_ + bw_, ly_ + 15.0), (lx_ - bw_, ly_ + 15.0)])
-                self.label(lx_, ly_, label, 9, italic=True, color="#5A4326")
+                self.label(lx_, ly_, label, 9, italic=True, color="#5A4326", ref=(x - w / 2, y - h / 2, x + w / 2, y + h / 2))
             else:
                 self.block_polys.append([(x - bw_, y + eh_), (x + bw_, y + eh_), (x + bw_, y + eh_ + 26), (x - bw_, y + eh_ + 26)])
-                self.label(x, y + eh_ + 11, label, 9, italic=True, color="#5A4326")
+                self.label(x, y + eh_ + 11, label, 9, italic=True, color="#5A4326", ref=(x - w / 2, y - h / 2, x + w / 2, y + h / 2))
 
     def brewery(self: Settlement, x: float, y: float, rot: float = 0.0, label: str = "brewery") -> None:  # type: ignore[misc]
         """A SAKE/MISO/SOY BREWERY compound - the biggest trade premises in a provincial seat
@@ -646,7 +646,7 @@ class TradesMixin:
             # like a caption that is fine (CLAUDE.md, "a check that never RUNS looks exactly like a
             # check that passes"). self.label() also puts it in the top layer, so no ground feature
             # paints over it.
-            self.label(lx_, ly_, label, 12, italic=True, color="#6B2A18")
+            self.label(lx_, ly_, label, 12, italic=True, color="#6B2A18", ref=(min(p[0] for p in pts), min(p[1] for p in pts), max(p[0] for p in pts), max(p[1] for p in pts)))
         self.M.setdefault("borders", []).append({"poly": poly, "label": label})
 
     def _intake_reach(self: Settlement, x: float, y: float, rot: float, edge: float) -> float | None:  # type: ignore[misc]

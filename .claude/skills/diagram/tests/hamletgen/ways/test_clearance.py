@@ -25,6 +25,24 @@ def test_a_way_cutting_the_field_is_bent_ROUND_it_not_nibbled_at() -> None:
     assert not point_in_poly(stub[0][0], stub[0][1], square)
 
 
+def test_a_way_round_the_field_crosses_it_nowhere_or_is_refused() -> None:
+    """Feature 287, ways W24 (FR-005): six rounds and then the result as it stood let a leg across the field ship. The
+    rounds run until no leg crosses (bounded by the ring's vertices), and a path that still crosses comes back None."""
+    from l7r.diagram.settlement import segments_cross
+
+    comb = [(0.0, 0.0), (400.0, 0.0), (400.0, 100.0)]  # a deeply lobed field: eight teeth hanging from a spine
+    for k in range(8):
+        x = 400.0 - k * 50.0
+        comb += [(x, 300.0), (x - 25.0, 300.0), (x - 25.0, 100.0)]
+    comb += [(0.0, 100.0)]
+    path = [(-50.0, 200.0), (450.0, 200.0)]
+    bent = hg.route_around(comb, path, 4.0)
+    if bent is not None:
+        assert not any(segments_cross(a, b, comb[k], comb[(k + 1) % len(comb)]) for a, b in zip(bent, bent[1:], strict=False) for k in range(len(comb)))
+    square = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
+    assert hg.route_around(square, [(-50.0, 50.0), (150.0, 50.0)], 8.0, rounds=0) is None, "still across the field: refused"
+
+
 def test_a_way_is_clipped_where_the_crop_begins() -> None:
     """`clip_to_clear` truncates rather than dragging a vertex, and returns NOTHING when the
     surviving run is too short to be a lane - the arm is simply not drawn."""
@@ -87,6 +105,35 @@ def test_clear_link_requires_the_WHOLE_span_not_a_piece_of_it() -> None:
     assert hg.ways._clear_link((0.0, 0.0), (100.0, 0.0), [blocker], [], []) is False
     assert hg.ways._clear_link((0.0, 0.0), (30.0, 0.0), [blocker], [], []) is True
     assert hg.ways._clear_link((0.0, 0.0), (0.2, 0.0), [blocker], [], []) is True, "a zero-length link is trivially clear"
+    assert hg.ways._clear_link((0.0, 0.0), (100.0, 0.0), [], [], []) is True, "nothing to foul: the link is whole"
+
+
+class _Fouls:
+    """A stand-in index whose `fouled` answers from a set of sample x-coordinates (links along the x axis)."""
+
+    def __init__(self, xs: set[float]) -> None:
+        self.xs = xs
+
+    def fouled(self, q: tuple[float, float]) -> bool:
+        return round(q[0], 6) in self.xs
+
+
+def test_a_link_is_decided_as_soon_as_it_is_known_with_the_verdict_of_every_sample() -> None:
+    """`link_survives` asks the same samples as `clear_runs` in order and stops once the answer is known (feature 287 perf):
+    every pattern of fouled samples on links of 1 to 8 samples, and a range of asked lengths, give the verdict of the walk
+    over every sample - `any(polyline_len(r) >= need for r in clear_runs(...))` - including a clear run exactly the length
+    asked, which only its own `polyline_len` decides."""
+    from l7r.diagram.hamletgen.ways.clearance import clear_runs, link_survives, polyline_len
+
+    for n in range(1, 8):
+        b = (3.0 * n, 0.0)
+        samples = [round(3.0 * k, 6) for k in range(n + 1)]
+        for mask in range(1 << (n + 1)):
+            stub = _Fouls({x for k, x in enumerate(samples) if mask >> k & 1})
+            for need in (-2.0, 0.4, 3.0, 4.5, 6.0, 3.0 * n - 3.0, 3.0 * n):
+                runs = clear_runs([(0.0, 0.0), b], [[(0.0, 0.0)]], 1.0, step=3.0, floor=0.5, index=stub)  # type: ignore[arg-type]
+                want = any(polyline_len(r) >= need for r in runs)
+                assert link_survives((0.0, 0.0), b, stub.fouled, need) is want, (n, mask, need)
 
 
 def test_a_rewrite_may_leave_a_lane_no_worse_than_it_found_it() -> None:

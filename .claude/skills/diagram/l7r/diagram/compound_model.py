@@ -199,10 +199,29 @@ class BuildingSpec:
 
 @dataclass(frozen=True)
 class CompoundProgram:
+    """A compound's program. `max_w_ft` / `max_h_ft` state the compound size the program allows (feature 287, homes H29a):
+    a building that finds no seat on its wall grows the walled interior toward them, and a program that asks for more than
+    that much compound holds is refused at composition, naming the building. None allows no growth."""
+
     title: str
     envelope: Envelope
     spine: tuple[CourtZone, ...] = ()
     buildings: tuple[BuildingSpec, ...] = ()
+    max_w_ft: float | None = None
+    max_h_ft: float | None = None
+    tier: str | None = None
+    """The Mode A type the program draws (`buildings/types.json`): its declared composition checks - the coverage band
+    and perimeter hugging - are asked of the placement (feature 287 wave 6, homes H29b). None: a program of no declared
+    type (a unit test's), held to no type's bands."""
+
+
+TUB_MAX_GAP_FT: float = 3.5
+"""How far from its building a fire-water tub may stand (feature 287, homes H29b): the number `pack_audit`'s
+`fire_water_adrift` registers - a gutter-fed tub hugs its eaves - held equal to it by a test."""
+
+NOTICE_BOARD_MAX_FT: float = 20.0
+"""How far from the main gate's opening the compound's notice board may stand (feature 287, homes H29b): the number
+`pack_audit`'s `notice_board_adrift` registers, held equal to it by a test."""
 
 
 @dataclass(frozen=True)
@@ -225,7 +244,8 @@ class Placed:
 @dataclass
 class PlaceResult:
     placed: list[Placed] = field(default_factory=list)
-    overflow: list[BuildingSpec] = field(default_factory=list)  # did not fit the ring
+    overflow: list[BuildingSpec] = field(default_factory=list)  # did not fit the ring - empty in every result `place` returns (feature 287)
+    envelope: Envelope | None = None  # the walled interior the buildings were placed in, grown past the program's where one overflowed
 
 
 def _gate_interval(env: Envelope) -> tuple[float, float]:

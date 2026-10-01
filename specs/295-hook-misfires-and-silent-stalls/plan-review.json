@@ -1,0 +1,88 @@
+{
+ "feature": "295-hook-misfires-and-silent-stalls",
+ "plan_sha256": "8a98255282e91474d870a84b004d043d6a8096e16784a8d5e1b032cfdfad18aa",
+ "reviewed": "2026-09-30",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "files_named expands simple assignments (three passes), resolves relative paths, keeps not-yet-existing non-directory non-executable paths; a run's files include every ancestor's stdout and named files",
+   "class": "within",
+   "why": "Implements FR-001/FR-002 as written; keeping not-yet-existing paths is what the chain shape of Story 1.2 needs (R1)."
+  },
+  {
+   "id": "D2",
+   "summary": "after the MODE 2/3 test, a line beginning MODE (case-sensitive) naming EXCEPTION or PLAN decides; else today's rules",
+   "class": "within",
+   "why": "FR-003 verbatim; case-sensitivity only defines 'a line beginning MODE'."
+  },
+  {
+   "id": "D3",
+   "summary": "StallWatch thread beside subprocess.run; silence from max(newest transcript/subagent mtime, watch start); 15 min threshold, SIGTERM via /proc args, resume at once, cap 8, check every 60 s",
+   "class": "within",
+   "why": "FR-004 and Story 3; the 15 min and 8 are the spec's own figures with R3's reason; measuring from the watch start keeps a resumed session's old transcript from tripping it at once."
+  },
+  {
+   "id": "D4",
+   "summary": "watchdog loop started detached by the UserPromptSubmit hook when its pid is dead, flock single instance, a fresh pass every 5 min, every action logged",
+   "class": "within",
+   "why": "FR-005 and Story 4.6; the 5-minute cadence is an implementation interval under the one-hour threshold."
+  },
+  {
+   "id": "D5",
+   "summary": "stall definition: live registry entry; silent >= 60 min; not waiting on the GM; unfinished work in its clone (mirror never counts); not one of a page-session queue's own sessions while that queue is in its retry wait = runner process lives AND the log's last line is the retry line written less than N+5 min ago",
+   "class": "within",
+   "why": "Round 2: the exemption now covers exactly FR-005a's 'a page-session queue's retry wait' and Story 4.3 - a queue IN its wait - and nothing else; a stale retry line or a dead runner exempts nothing, so the headless sessions item 4 is about are judged. The five-minute grace only absorbs the runner's resume latency at the end of the stated wait."
+  },
+  {
+   "id": "D6",
+   "summary": "tab order own pane > L7R_DISPATCHER > parkedJobId > same-clone interactive > log only; title every pass, bell once per stall; nudge only in own pane when its input line reads empty, once per stall; for a paneless session the log line carries the resume command (make page-session BRIEF=resume:<sid>:<brief>, else claude --resume <sid>)",
+   "class": "within",
+   "why": "FR-005b/FR-005c and Story 4.1-4.5; round 2 adds the resume command in the log line that Story 4.4 and FR-005c require and round 1 noted missing."
+  },
+  {
+   "id": "D7a",
+   "summary": "periodic = POLL_OK reason naming a period or report (adds 'periodic', 'heartbeat') or a loop whose condition is only elapsed-time tests, inline or in the script run; checked before the POLL_OK escape; CRON_OK escapes; the hook's own ceiling set aside first",
+   "class": "within",
+   "why": "Story 5.1-5.3 and FR-006; placing it before POLL_OK is what the 292 shape (R5) requires."
+  },
+  {
+   "id": "D7b",
+   "summary": "a while true/while : loop with a sleep is periodic only when every exit from its body (break, exit, return) is guarded by an elapsed-time test; one that breaks on a log line or a file is an event-driven wait and never caught",
+   "class": "within",
+   "why": "Round 2: FR-006 and Story 5.2 (an event-driven wait is never caught) now hold for the endless-loop form; an endless loop that can only end on elapsed time is Story 5.1's 'exits on elapsed time alone'."
+  },
+  {
+   "id": "D7c",
+   "summary": "a sub-hour period that does not divide 60 is rounded to the nearest divisor (*/m); an hour or more becomes an off-minute every-h-hours cron",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Story 5.1 asks for the same period; a single cron expression physically cannot express a period that does not divide the hour (or the day), so the nearest expressible period is the only possible call. The spec's own wording already confines */N to periods that divide the hour."
+  },
+  {
+   "id": "D7d",
+   "summary": "period inference: the reason's words, else the elapsed limit in the condition (a non-literal limit = the largest number >= 60 among the command's arguments), else an endless loop's largest sleep, else an hour",
+   "class": "within",
+   "why": "Implements Story 5.1's 'the same period' for the forms D7 catches; how the number is found is mechanism, not scope."
+  },
+  {
+   "id": "D8",
+   "summary": "_quote_state finds the quoting at the insertion point; inside double quotes the clause's \" and $ are escaped; add_ceiling and proof_of_life both use it",
+   "class": "within",
+   "why": "FR-007 and Story 6.1."
+  },
+  {
+   "id": "D9",
+   "summary": "sleep_in_loop: the sleep must lie between a loop keyword and its matching done",
+   "class": "within",
+   "why": "FR-008 and Story 6.2."
+  },
+  {
+   "id": "D10",
+   "summary": "settings.json wiring on UserPromptSubmit; rows in CLAUDE.md and docs/guards.md",
+   "class": "within",
+   "why": "FR-009 and FR-005's prompt-hook start."
+  }
+ ],
+ "verdict": "CLEAR"
+}

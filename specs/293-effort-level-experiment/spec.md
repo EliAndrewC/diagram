@@ -20,13 +20,15 @@ on two real, wanted tasks:
 - **Research (R)**: the Ubame servants' quarters - was a servants' nagaya one dormitory behind sliding partitions, or did
   each household have a door of its own? (`future-work/compounds.md`, "Ubame: the servants' quarters have one door for four
   bays").
-- **Implementation (I)**: a footpath to the hamlet's own burial ground (`future-work/farming-communities.md`, "OPEN
-  2026-09-28, OWED: no way reaches a burial ground, at any size of settlement"), hamlets only - the GM ruled out every
-  settlement type not yet scripted.
+- **Implementation (I)**: the storehouse annex goes to the larger houses first (`future-work/farming-communities.md`, "Found by
+  feature 280's settlement-reviews": the annex is rolled per house by position, not by size, against homesteads/720), scripted
+  hamlets only - the GM ruled out every settlement type not yet scripted. (The GM's first pick, a footpath to the hamlet's own
+  burial ground, was found impossible by its first run: feature 280 M68 had removed the hamlet's own ground the day after the
+  future-work entry was written. The GM replaced it, 2026-09-30.)
 
 Each run is a separate top-level headless session at its arm's effort, in its own clone, from one starting commit, given
 a byte-identical prompt. The runs are measured (tokens including subagents, wall-clock, tool calls, rework), their
-outputs are graded blind against rubrics written before the first run, and a short report gives a recommendation per task
+outputs are graded blind against rubrics written before each task's first run, and a short report gives a recommendation per task
 type under a decision rule fixed in this spec. The better output of each task lands; the other is discarded.
 
 The working hypotheses the experiment tests (from the handoff, reasoning not measurement): (1) the project's checks catch
@@ -102,19 +104,21 @@ The grader cannot tell which arm produced which output, and the criteria it grad
 **Why this priority**: token counts alone cannot say whether the extra effort bought anything; an unblinded or post-hoc grade would
 be worthless.
 
-**Independent Test**: the rubrics are committed to the repository before the first run's start time (the commit's timestamp is the
-proof); the graded outputs carry only labels A and B; the key mapping labels to arms is written by a step the grader does not read
+**Independent Test**: each task's rubric is committed to the repository before that task's first run starts (the commit's timestamp is
+the proof; a replaced task's rubric before the replacement's first run); the graded outputs carry only labels A and B; the key mapping labels to arms is written by a step the grader does not read
 and is opened only after both grades are recorded.
 
 **Acceptance Scenarios**:
 
-1. **Given** the rubric for a task, **When** it is written, **Then** it is committed before the first run of either task and never edited
-   afterwards; a later wish to grade something else is noted in the report as an observation, not scored.
+1. **Given** the rubric for a task, **When** it is written, **Then** it is committed before that task's first run - a replaced task's rubric
+   before the replacement's first run (see the edge case) - and never edited afterwards; a later wish to grade something else is noted in the report as an observation, not scored.
 2. **Given** two outputs of a task, **When** they are prepared for grading, **Then** anything naming the effort level or the run (session
    names, clone paths, the prompt's arm line, commit trailers) is stripped, and the outputs are labeled A and B in a random order.
-3. **Given** the blinded outputs, **When** they are graded, **Then** a fixed grader agent (one agent file, its model and effort pinned)
-   scores both against the rubric, and the GM grades them too; for research the GM's judgment is final, and for implementation the
-   GM's judgment breaks a tie or a disagreement with the grader.
+3. **Given** the blinded research outputs, **When** they are graded, **Then** two runs of the fixed grader agent (one agent file, its
+   model and effort pinned) each score both against the rubric and answer the GM's two questions - is either entry deficient; is one
+   strongly better in a concrete way a reader would care about - and their agreement is what tells how reliable the result is; the GM's
+   own, non-blind reading is recorded beside them, not as the final grade (amendment of 2026-09-30). The implementation pair is not
+   blind-graded: the GM's ruling stands for it.
 4. **Given** the grades are recorded, **When** the key is opened, **Then** the report records both graders' scores per arm and says how
    the outputs differ (depth, correctness, missed items, a better approach found), not only which one won.
 
@@ -122,7 +126,7 @@ and is opened only after both grades are recorded.
 
 ### User Story 4 - The better output lands; the other is discarded (Priority: P2)
 
-The experiment's work is real work: the winning research entry and the winning footpath land on main by the project's own procedure.
+The experiment's work is real work: the winning research entry and the winning implementation land on main by the project's own procedure.
 
 **Why this priority**: the handoff asks that the tasks be genuinely wanted so the experiment is not waste; landing is how that value is
 kept.
@@ -136,14 +140,15 @@ each task closes are closed.
 1. **Given** the research winner, **When** it lands, **Then** its entry has passed the checks every research entry passes (source-reader,
    quote-check, record-format, source-applicability), and the Ubame sheet itself is NOT edited by this feature (the entry says what the
    record found; changing the sheet is a follow-up left in `future-work/compounds.md`).
-2. **Given** the implementation winner, **When** it lands, **Then** every scripted hamlet that rolls its own burial ground draws a footpath
-   that reaches the ground's edge, the tests say so, the moved maps are regenerated and reviewed as the project reviews a moved map, and the
+2. **Given** the implementation winner, **When** it lands, **Then** on every scripted hamlet the houses that carry the storehouse annex are
+   the largest ones, at the share the record supports, the tests say so, the moved maps are regenerated and reviewed as the project reviews a moved map, and the
    gate is green.
-3. **Given** main has moved since the starting commit (feature 287 touches `burial.py` and the lane predicates), **When** the implementation
+3. **Given** main has moved since the starting commit (other features touch the hamlet generator), **When** the implementation
    winner lands, **Then** it is merged onto current main by the session that lands it, and the post-merge result, not the run's, is what the
    gate passes; the extra work of that merge is recorded in the report and not counted against either arm.
-4. **Given** neither output of a task meets its rubric's pass line, **When** grading ends, **Then** neither lands, the report says so, and the
-   task stays open in future-work with what both runs found.
+4. **Given** neither research output meets its rubric's pass line, **When** grading ends, **Then** neither lands, the report says so, and the
+   task stays open in future-work with what both runs found. The implementation lands as the version the GM chose (`xhigh`'s), ported onto
+   current main.
 
 ---
 
@@ -169,8 +174,13 @@ says how to add an arm (`high`) or a second run per cell.
 - **A run fails outright** (does not finish, cannot pass its checks, exhausts a budget). It is scored as it stands - failure is data - and its
   counts stand in the table. It is re-run only if the failure was the environment (exit 137, a host outage, a network loss), which is recorded.
 - **Both outputs are equally good.** The rule below decides on cost; a tie in quality is a legitimate result.
-- **The task turns out already done or impossible at the starting commit** (e.g. feature 287 lands a burial-ground way first). Found before the
-  first run by the pre-flight check; the task is replaced after asking the GM, and the rubric is rewritten before any run.
+- **The task turns out already done or impossible at the starting commit** (e.g. another feature removes what the task
+  changes - as feature 280 M68 did to task I's first pick). Found by the pre-flight check, which confirms on the code or the maps that the
+  defect exists, not only that its future-work entry is open; the task is replaced after asking the GM, and its prompt and rubric are
+  rewritten and frozen again (their hashes recorded) before its next run, and its runs still start from the experiment's one start commit,
+  the launcher supplying the frozen files. A new start commit is allowed only when the replacement cannot be done at the original start,
+  measured and recorded; even then the run's clone holds no record linking a run id to an arm (FR-003). A run of the replaced task stays in
+  the record, set aside, and is not graded.
 - **The prompt names its arm by accident** (e.g. a clone path containing "xhigh"). The clone names and session names use neutral run ids; the arm
   is recorded only in the run log.
 - **Usage-limit exhaustion mid-run.** The run is paused, not voided; its wall-clock excludes the pause, which is logged.
@@ -185,11 +195,12 @@ says how to add an arm (`high`) or a second run per cell.
 - **FR-001 Arms and runs**: the pilot is four runs - task R and task I, each at `medium` and at `xhigh` - with Opus 5.5 (`claude-opus-5-5`) as the
   model in every run. Adding `high`, or a second run per cell, is the expansion the decision rule may call for, not part of this pilot.
 - **FR-002 Tasks**: task R is the Ubame servants' quarters question written as one research question on the record (at most one new question plus
-  the registry keys it needs, within the page-session write cap), carried through its check-and-apply session. Task I is the burial-ground footpath
-  in the hamlet generator, carried to a green local `make done` with the moved maps regenerated. Each run stops short of landing: it commits in its
+  the registry keys it needs, within the page-session write cap), carried through its check-and-apply session. Task I is the storehouse annex ranked
+  by size in the hamlet generator, carried to a green local `make done` with the moved maps regenerated. Each run stops short of landing: it commits in its
   own clone and does not push.
 - **FR-003 Launch**: each run is a top-level headless session started by one command that takes the task, the arm and the seed, creates a fresh clone
-  from the recorded starting commit under a neutral run id, sets the effort level for the whole session at launch, and logs the command line. Every
+  from the recorded starting commit under a neutral run id, leaves out of it every record linking a run id or position to an arm (the run
+  records, the order, the interventions), sets the effort level for the whole session at launch, and logs the command line. Every
   headless session the run itself starts (a research page's write and check-and-apply sessions included) runs at the run's arm effort, and
   the run log records each session's effort; the project's existing headless runner, which today passes a model and no effort, is extended
   to carry it, rather than a second runner being written.
@@ -206,23 +217,26 @@ says how to add an arm (`high`) or a second run per cell.
 - **FR-007 Rework signals**, per run, from what the project already logs: guard firings by guard and rule (refusals and corrections separately), check
   and review verdicts that were not a pass and the rounds each needed, test and gate runs that failed before the last green one, the number of commits
   that revert or fix the run's own earlier work, and escalations - `escalation-check` verdicts and any question the run put to the GM.
-- **FR-008 Rubrics before runs**: one rubric per task, each with scored criteria and a stated pass line, committed before the first run starts and not
-  edited afterwards. The research rubric scores at least: the answer to the question and whether the sources read support it; the breadth of the search
+- **FR-008 Rubrics before runs**: one rubric per task, each with scored criteria and a stated pass line, committed before that task's first run starts (a
+  replaced task's rubric before the replacement's first run) and not edited afterwards. The research rubric scores at least: the answer to the question and whether the sources read support it; the breadth of the search
   (languages, kinds of source) and whether an absence is stated as one; citation correctness as the checks judge it; and clarity for the casual reader.
-  The implementation rubric scores at least: the acceptance criteria met (every hamlet with its own ground has a path that reaches it; the path is a
-  footpath's width; no new failure elsewhere); the regression and gate results; the review findings on the moved maps; the size and shape of the diff;
+  The implementation rubric scores at least: the acceptance criteria met (on every scripted hamlet the annex sits on the largest
+  houses, at the record's share; no new failure elsewhere); the regression and gate results; the review findings on the moved maps; the size and shape of the diff;
   and the decisions recorded in the four classes. Defects found in the implementation winner AFTER grading - at the landing merge, the post-merge
   gate, the moved-map reviews, and any later review before the report closes - are recorded in the report as their own section, not re-scored.
 - **FR-009 Blinding**: a step the grader does not read strips arm-identifying text from each output, labels the two outputs of a task A and B in a random
   order, and writes the key to a file opened only after both grades are recorded.
-- **FR-010 Grading**: one grader agent file, model and effort pinned, which does not inherit the project's instructions (as every defined agent here), grades
-  both outputs of a task against its rubric; the GM grades them too. The GM's grade is final for research; for implementation it breaks a tie or a
-  disagreement.
+- **FR-010 Grading**: one grader agent file, model and effort pinned, which does not inherit the project's instructions (as every defined agent here). For
+  research, two runs of it grade both outputs against the rubric and answer the GM's two questions (deficient? strongly better?); the GM's non-blind
+  reading is recorded. For implementation, the GM's ruling after reading both outputs stands, and no blind grading is made (amendment of 2026-09-30).
 - **FR-011 Decision rule** (fixed now, before any run; applied per task type):
   - **Adopt `xhigh`** if its blind quality is clearly better - both graders prefer it, or the GM does with a stated reason on a rubric criterion - OR if
     quality is not worse and BOTH its total tokens and its wall-clock are at most 1.25x `medium`'s (rework having paid for the extra thinking).
   - **Keep `medium`** if `xhigh`'s quality is worse, or if quality is the same and `xhigh` costs more than 1.25x in total tokens or in wall-clock.
   - **Inconclusive** otherwise - the two graders disagree and the GM declines to decide.
+  - **Under the amendment of 2026-09-30**, research quality is "clearly better" when both grader runs prefer the same entry, each by at least 6 of
+    40 points or by 2 or more on the answer or citation criteria (the bar the GM approved with the review, request.md); otherwise quality is "the
+    same" and the rule's cost tests decide. For implementation, the GM's ruling after reading both outputs is the quality judgment.
   - **Expand** (add `high`, or a second run per cell) when the graders find a clear quality difference in EITHER direction, or when total tokens or
     wall-clock differ by more than 2x between arms in either direction - the GM's "if there is a big difference between medium and xhigh". The expansion
     is proposed to the GM, not started.
@@ -251,17 +265,20 @@ says how to add an arm (`high`) or a second run per cell.
 
 - **SC-001** (FR-001, FR-002, FR-003, FR-006, FR-007) all four runs complete (or fail on their own merits) with every count of FR-006 and FR-007 filled from the transcripts and logs, and none
   counted by hand.
-- **SC-002** (FR-004, FR-008) both rubrics are committed before the first run starts, and neither changes after it.
-- **SC-003** (FR-009, FR-010) the grader agent grades each pair without access to the key; the key is opened after both grades per task are recorded.
+- **SC-002** (FR-004, FR-008) each task's rubric is committed before that task's first run starts (a replaced task's before the replacement's
+  first run), and neither changes after it.
+- **SC-003** (FR-009, FR-010) the grader agent's two runs grade the research pair without access to the key, and the key is opened after both are
+  recorded; the implementation pair carries the GM's ruling instead of a blind grade.
 - **SC-004** (FR-011, FR-012, FR-013) the report states an outcome under FR-011 for research and for implementation, and the arithmetic can be re-done from its table.
-- **SC-005** (FR-014) the better output of each task that meets its pass line is on main; the other is discarded; the future-work entries they close are closed.
+- **SC-005** (FR-014) the research output the review found better (meeting its pass line) and the implementation the GM chose, ported onto current
+  main, are on main; the other outputs are discarded; the future-work entries they close are closed.
 - **SC-006** (FR-005) no run was killed by the memory limit and left counted; no two runs overlapped in time; every run's record shows the
   container's memory under the headroom threshold at its launch; no measurement, grading or gate of the experiment overlapped a live run.
 
 ## Decisions Recorded
 
-This feature is an experiment on process; it decides nothing about what a map draws. The rendering decisions of task I's footpath (its width, where it
-meets the ground, what the path is called on the page) and task R's findings are made and recorded by the winning run in its own work, in the four classes, as
+This feature is an experiment on process; it decides nothing about what a map draws. The rendering decisions of task I (how the houses are ranked, the tie
+rule, the share) and task R's findings are made and recorded by the winning run in its own work, in the four classes, as
 every change to a map is; the report links them.
 
 | Decision | Class | Why | Recorded at |
@@ -280,15 +297,15 @@ every change to a map is; the report links them.
 - The defined check agents already pin their own model and effort (twelve agent files: eight at `high`, four at `medium` today), so the checker control
   holds for them without change.
 - The runs are billed to the GM's subscription; the pilot's cost is roughly four sessions of 30-60 minutes plus grading, which the GM accepted by choosing the pilot.
-- Feature 287 is open and touches `burial.py` and the lane predicates; the implementation runs start from a fixed commit regardless, and the landing merges
-  onto whatever main is then (US4 AS3).
+- Other features may touch the hamlet generator while the runs are made; the implementation runs start from a fixed commit regardless, and the
+  landing merges onto whatever main is then (US4 AS3).
 - The runs are the implementing session's to launch; writing this spec, the plan and the tasks does not run them.
 
 ## Out of scope
 
 - A `high` arm, a second run per cell, other models, other task types - the expansion, proposed to the GM when the rule calls for it.
 - Changing the Ubame sheet from task R's finding.
-- The burial ground's way at any tier above the hamlet.
+- The storehouse annex at any tier above the hamlet.
 - Applying the recommended setting; the GM does that.
 
 ## Review history
@@ -306,3 +323,21 @@ every change to a map is; the report links them.
   `memory.current`, page cache included - now the working set); round 2 CHANGES REQUIRED (a quiet-host memwatch figure is never published
   - now an offset measured at a warning); round 3 FAITHFUL. Its two asides applied after: the offset re-derived with the gate's own
   subtraction (`inactive_file`, 0.9 GB - looser than the 1.5 GB it replaces, which had subtracted all page cache where the gate subtracts only the inactive part), and a leftover sentence reworded.
+- Amendment, 2026-09-30 (the GM, on task I's premise found gone): "Replace the task (Recommended)" and "Storehouse by house size". Task
+  I becomes the storehouse annex ranked by size; its prompt and rubric are rewritten and re-frozen at their own start; the edge case now
+  says the pre-flight confirms the defect on the code or the maps. The review counter resets.
+- Amendment review round 1 (spec-fidelity, 2026-09-30): CHANGES REQUIRED - the re-freeze gave task I its own start commit, which the
+  one-start-commit control does not allow when the task can be done at the original start (it could: the engine is the same at both); the
+  clones carried records naming the arms; four passages still froze the rubrics before the FIRST run of either task; the new premise check
+  was unrecorded. All four applied: one start commit, the frozen files supplied by the launcher, the feature directory left out of every
+  run clone (sparse checkout), the rubric passages per task, the premise check in interventions.md.
+- Amendment review rounds 2-4 (2026-09-30): round 2 CHANGES REQUIRED (a git clone kept later commits reachable; four restatements of the old rubric rule) - run clones now fetch the start commit alone; round 3 CHANGES REQUIRED (quickstart and the contract still said the old thing) - reworded, the push hold recorded; round 4 FAITHFUL.
+- Amendment, 2026-09-30 (the GM's rulings after the runs, request.md): the GM read the research pair and the implementation pair knowing
+  the arms (not blind) and ruled - implementation: `xhigh` better but not worth the cost, keep `medium` as the default and go higher for
+  deep, initiative-taking work; research: no noticeable difference, a blind check wanted. The research blind review (FR-009/FR-010) is two
+  `effort-grader` runs (the GM: "just knowing whether or not two runs match or not is good enough"), each answering whether either entry is
+  deficient and whether one is strongly better, with the bar fixed before the key opens (both runs prefer one entry, each by 6 of 40 or 2
+  on the answer or citation criteria); the implementation pair is not blind-graded - the GM's ruling stands for it. The winner of the
+  research review lands; the implementation lands as `xhigh`'s version (the GM's choice), ported onto current main. The review counter
+  resets.
+- Amendment review of 2026-09-30 (the GM's rulings): round 1 CHANGES REQUIRED (the operative sections, the bar's origin, the report's account of grader run 2); round 2 CHANGES REQUIRED (tasks, quickstart and data model); round 3 FAITHFUL.

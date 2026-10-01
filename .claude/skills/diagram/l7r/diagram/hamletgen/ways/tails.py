@@ -22,6 +22,12 @@ _DOUBLED_DEG = 15.0  # deg: a finished tail this near parallel is one tread doub
 _CROSS_BACK_FT = 40.0  # ft: a crossing this close before the cut is the junction the doubled tail overran (Sawada's was 24)
 
 
+def _parallel(u: Pt, v: Pt, deg: float) -> bool:
+    """Whether two directions lie within `deg` of parallel, either way along; a zero-length one counts as parallel."""
+    nu, nv = math.hypot(*u), math.hypot(*v)
+    return not (nu and nv) or math.degrees(math.acos(min(1.0, abs(u[0] * v[0] + u[1] * v[1]) / (nu * nv)))) <= deg
+
+
 def along_tail(pts: Sequence[Pt], other: Sequence[Pt], step: float = 4.0, deg: float = _ALONG_DEG) -> int | None:
     """The index in `pts`' samples where its END starts running alongside `other` - within `_ALONG_FT` of it, nearly
     parallel (within `deg`), for at least `_ALONG_MIN_FT` - or None. Samples every `step` along `pts` from its end inward."""
@@ -36,13 +42,16 @@ def along_tail(pts: Sequence[Pt], other: Sequence[Pt], step: float = 4.0, deg: f
     k = len(samples) - 1
     while k > 0:
         q = samples[k]
-        a, b = min(segs, key=lambda ab: seg_dist(q[0], q[1], ab[0], ab[1]))
-        if seg_dist(q[0], q[1], a, b) > _ALONG_FT:
-            break
         u = (samples[k][0] - samples[k - 1][0], samples[k][1] - samples[k - 1][1])
-        v = (b[0] - a[0], b[1] - a[1])
-        nu, nv = math.hypot(*u), math.hypot(*v)
-        if nu and nv and math.degrees(math.acos(min(1.0, abs(u[0] * v[0] + u[1] * v[1]) / (nu * nv)))) > deg:
+        # ALONGSIDE ANY REACH OF THE WAY WITHIN `_ALONG_FT`, NOT ONLY THE NEAREST (feature 293 I, Inashiro re-packed): a tail
+        # that runs back along a way to that way's own vertex is nearest, at the vertex, to the OTHER reach meeting there - a
+        # tie at zero - and was judged against that one, 27 degrees off, so a straggler's 95 ft retrace of lane 2 never counted
+        near = [(a, b) for a, b in segs if seg_dist(q[0], q[1], a, b) <= _ALONG_FT]
+        # ...WALKED THROUGH THE JUNCTION'S OWN APPROACH (feature 293 on 291): within `_ALONG_FT` of its end a lane still
+        # beside the way may meet it at an angle - Mizuguchi's field spur left its street 20 degrees off the reach there,
+        # then ran 10-12 ft beside it for 210 ft, and the tail was judged at its first sample alone. A T or a needle is
+        # no nearer parallel past that approach, so neither reads as a tail for it
+        if not near or not (any(_parallel(u, (b[0] - a[0], b[1] - a[1]), deg) for a, b in near) or polyline_len(samples[k - 1 :]) <= _ALONG_FT):
             break
         k -= 1
     if polyline_len(samples[k:]) < _ALONG_MIN_FT:
@@ -156,15 +165,17 @@ def _sweep_doubled_tails(s: Settlement) -> int:
                     moved = reseat_on_way(lanes, i, pts, cut, op)
                     if not cut_keeps_network([{"pts": moved.get(n, lx.get("pts") or [])} for n, lx in enumerate(lanes)], i, pts, cut):
                         continue  # the tail carries another lane's junction: cutting it would strand that lane
+                    # ...AND EVERY LANE CARRIED ONTO THE WAY IS ADMITTED BY THE OVERLAP MATRIX (feature 287 M8), all or none:
+                    # a carried end the matrix refuses would be left on the cut tail, stranded, so the tail is not cut
+                    if not all(s.admits("lanes", {**lanes[n], "pts": [[round(x, 1), round(y, 1)] for x, y in w]}, ignore=lanes[n]) for n, w in moved.items()):
+                        continue
                     for n, w in moved.items():
-                        lanes[n]["pts"] = [[round(x, 1), round(y, 1)] for x, y in w]
+                        s.reshape_lane(lanes[n], w)
                         s.reink_lane(n)
-
                     pts, changed = cut, True
                     fixed += 1
                     break
             pts.reverse()
-        if changed:
-            ln["pts"] = [[round(x, 1), round(y, 1)] for x, y in pts]
+        if changed and s.reshape_lane(ln, pts):  # asked of the overlap matrix (feature 287 M8)
             s.reink_lane(i)
     return fixed

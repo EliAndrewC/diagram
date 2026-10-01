@@ -1,0 +1,145 @@
+{
+  "inashiro-r1-F1-stub": {
+    "verifies": "F1",
+    "subject": "inashiro",
+    "answers": "4905881c72e7",
+    "quantity": "skeleton lanes left in the manifest after the lane law's dangling-end fix (the round-1 stub was lanes[1], a 32 ft two-point skeleton arm off the connector at the entrance)",
+    "value": 0,
+    "unit": "lanes",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json lanes, read with jq: `[.lanes[] | select(.role==\"skeleton\")]` is empty; the only two-point lane within 60 ft of the stub's old seat is the exit strip (2705,1907)-(2290,1649)",
+    "method": "hamletgen/ways/law.py `dangling_lane_ends` counts a way as reached only where its nearest point is nearer the lane's end than its far end (`_walked_to`); the settle then cut the stub; make map regenerated Inashiro, and no other pool manifest moved"
+  },
+  "kuwabata-r1-F1-count-line": {
+    "verifies": "F1",
+    "subject": "kuwabata",
+    "answers": "4905881c72e7",
+    "quantity": "hand-typed 'Measured on this roll (2026-09-29)' count lines left in the rules section of kuwabata.notes.md",
+    "value": 0,
+    "unit": "lines",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md: the line now reads 'The counts on the shipped roll are the census block's (`make notes-census`), never typed here'",
+    "method": "grep over the notes file"
+  },
+  "kuwabata-r1-F3-deviation": {
+    "verifies": "F3",
+    "subject": "kuwabata",
+    "answers": "4905881c72e7",
+    "quantity": "sentences in the feature 293 entry of kuwabata.notes.md naming the annex size as a deliberate deviation from the record's 15 by 18 ft free-standing kura",
+    "value": 1,
+    "unit": "sentences",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md, the last paragraph: 'The annex's size is a deliberate deviation (research homesteads/120 and 430)'",
+    "method": "grep over the notes file"
+  },
+  "mizuguchi-r1-F1-notes": {
+    "verifies": "F1",
+    "subject": "mizuguchi",
+    "answers": "4905881c72e7",
+    "quantity": "the three moves the review named (the board 121 ft out along the connector, the placard off the south-west corner, the woodland stand now on the sheet) recorded in the feature 293 entry",
+    "value": 3,
+    "unit": "moves recorded",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/mizuguchi/mizuguchi.notes.md, the last paragraph; the board's move measured on the manifests: (1480.9, 2030.1) on main to (1390.2, 1949.4), 121.4 ft; the woodland stand at (1404, 2882) in `commons`, main's `meta.woodland_offsheet` W, 4 parcels",
+    "method": "jq over main's and the clone's manifests, then the notes edited"
+  },
+  "sawada-r2-F1-handoff": {
+    "verifies": "F1",
+    "subject": "sawada",
+    "answers": "2dcb78c47692",
+    "quantity": "the round-2 record finding's two parts closed: the handoff the deferral names exists, and the deferral names its distance basis",
+    "value": 2,
+    "unit": "parts closed",
+    "observed": "2026-09-30",
+    "source": "specs/293-effort-level-experiment/outputs/I-port-handoff.md exists; future-work/farming-communities.md 'OPEN 2026-09-30 (feature 293, settlement-review of Sawada)' reads 'from each shared shed's center to the nearest farmhouse's center - the basis draft_byres compares against _BORROW_REACH'; re-measured on the merge with main (feature 291): Sawada 66, 124, 92, 174 ft against main's 66, 47, 92, 129, Inashiro 138, 74, 87 on both - the entry's figures stand",
+    "method": "ls and grep over the files; the distances with python over main's and the clone's manifests"
+  },
+  "inashiro-r3-F1-woodland": {
+    "verifies": "F1",
+    "subject": "inashiro",
+    "answers": "cd09f76aa58c",
+    "quantity": "woodland stands in the feature 293 entry, counted by role woodland as the manifest draws them",
+    "value": 3,
+    "unit": "stands",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md, the 293 entry: 'the woodland commons 3 stands where main drew 2, 75,828 sq ft against 52,556'; the manifest's commons with role woodland: 23,483 + 40,935 + 11,410 sq ft, main's 29,170 + 23,386",
+    "method": "python over main's and the clone's manifests (shoelace area of each woodland poly), then the notes edited"
+  },
+  "kuwabata-r3-F1-direction": {
+    "verifies": "F1",
+    "subject": "kuwabata",
+    "answers": "cd09f76aa58c",
+    "quantity": "compass bearing of the connector track as it leaves the cluster, the district direction's stated source",
+    "value": 0.2,
+    "unit": "degrees",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md '### Place': district direction north; lanes[0] (connector) runs (3384.6, 1461.7) to (3391.5, -410.0); the regenerated page reads 'Aozawa, which lies north'",
+    "method": "atan2 over the manifest's connector, then the notes edited and the page regenerated (make map)"
+  },
+  "kuwabata-r3-F2-retirement": {
+    "verifies": "F2",
+    "subject": "kuwabata",
+    "answers": "cd09f76aa58c",
+    "quantity": "homesteads with a retirement house, as the page's bullet states and the manifest draws",
+    "value": 4,
+    "unit": "homesteads",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md '### Features': '4 of its 16 homesteads have one'; retirement_houses has 4 entries, meta.retirement_target 4; the regenerated page reads '4 of its 16 homesteads'",
+    "method": "len over the manifest, then the notes edited and the page regenerated"
+  },
+  "kuwabata-r3-F3-moves": {
+    "verifies": "F3",
+    "subject": "kuwabata",
+    "answers": "cd09f76aa58c",
+    "quantity": "the two omitted moves (cluster shape round to crescent, pond sties 1 to 2) named in the feature 293 entry",
+    "value": 2,
+    "unit": "moves recorded",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md, the 293 entry: 'the cluster now draws a crescent, 2.13 to one, where main's drew round at 1.88 ... and 2 pond sties stand where main drew 1'",
+    "method": "meta.cluster_shape, meta.cluster_aspect_drawn and pig_sties over both manifests"
+  },
+  "sawada-r3-F1-shape": {
+    "verifies": "F1",
+    "subject": "sawada",
+    "answers": "cd09f76aa58c",
+    "quantity": "the cluster-shape flip named in the feature 293 entry",
+    "value": 1,
+    "unit": "moves recorded",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/sawada/sawada.notes.md, the 293 entry: 'the cluster now draws round, 1.98 to one, where main's drew a crescent at 2.47'",
+    "method": "meta.cluster_shape and meta.cluster_aspect_drawn over both manifests"
+  },
+  "inashiro-r4-F1-pointer": {
+    "verifies": "F1",
+    "subject": "inashiro",
+    "answers": "cd09f76aa58c",
+    "quantity": "pointers in the feature 293 entry to a measured line that describes a different roll than main's",
+    "value": 0,
+    "unit": "pointers",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md, the 293 entry: 'Measured against main's manifest (the roll the feature 291-on-287 entry above measured; the 2026-09-29 line under feature 280 is an earlier roll)'",
+    "method": "grep over the notes; the 291-on-287 entry's figures (15 houses, 13 lanes, 2 wells) checked against main's manifest"
+  },
+  "inashiro-r4-F2-connector": {
+    "verifies": "F2",
+    "subject": "inashiro",
+    "answers": "cd09f76aa58c",
+    "quantity": "the omitted moves (the connector's north-west first leg, the far-west house, the view widened west) named in the feature 293 entry",
+    "value": 3,
+    "unit": "moves recorded",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.notes.md, the 293 entry; the connector's first leg (2290, 1649) to (2012, 1477) against main's (2274, 1639) to (1786, 2170); meta.view x 2046 against 2163",
+    "method": "python over both manifests' connector and meta.view"
+  },
+  "kuwabata-r4-F1-burial": {
+    "verifies": "F1",
+    "subject": "kuwabata",
+    "answers": "cd09f76aa58c",
+    "quantity": "statements in kuwabata.notes.md that the hamlet keeps a burial ground of its own",
+    "value": 0,
+    "unit": "statements",
+    "observed": "2026-09-30",
+    "source": ".claude/skills/diagram/pool/hamlets/kuwabata/kuwabata.notes.md 'What makes it a hamlet': 'Its dead lie in the main village's ground (meta.hamlet_burial is village_ground, feature 280 M68)'; both manifests' meta.hamlet_burial is village_ground",
+    "method": "grep over the notes, the manifest's meta read"
+  }
+}

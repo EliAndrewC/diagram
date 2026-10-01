@@ -118,6 +118,7 @@ def test_draft_byres_scatters_shared_sheds_among_the_houses():
     s.pin_knob("byre_form", "detached_commons")  # the shared shed, the rare guess (269 B16) - the one form `fraction` sizes
     placed = s.draft_byres(fraction=0.6, gap=40)  # ~60% of 5 = 3 shared byres
     assert len(placed) == 3 and len(s.M["byres"]) == 3
+    assert s.M["meta"]["byre_form"] == "detached_commons", "a map that draws byres declares their form (`byre_form_declared`)"
     assert all(b["w"] > 0 and b["h"] > 0 for b in s.M["byres"])
     assert "<rect" in s.out[-1]  # a byre glyph was drawn
 
@@ -642,6 +643,52 @@ def test_courtyard_annex_span_and_a_house_with_neither_side_wall_free():
     assert s._courtyard_byre_seat(owner, 15.5, 10.5) is None
 
 
+@pytest.mark.parametrize(("rot", "yard_y", "toward"), [(0.0, 500.0, 1.0), (0.0, 100.0, -1.0), (180.0, 500.0, -1.0)])
+def test_courtyard_byre_reaches_along_its_side_wall_toward_its_owners_work_yard(rot: float, yard_y: float, toward: float) -> None:
+    """The courtyard arm frames the working court: offset along the side wall toward the owner's NEAREST threshing yard,
+    that side derived in the house's own frame (a house turned half round reaches the other way in local y) - so the arm
+    keeps framing the court when the yard moves, which pinning a compass side would not."""
+    s = _crop_settlement()
+    owner = {"x": 300.0, "y": 300.0, "w": 40.0, "h": 28.0, "kind": "plain", "rot": rot, "wealth": 1.0}
+    s.M["houses"] = [owner]
+    s.M["threshing_yards"] = [{"x": 300.0, "y": yard_y, "w": 30.0, "h": 30.0}, {"x": 1800.0, "y": 1400.0 - yard_y, "w": 30.0, "h": 30.0}]
+    seat = s._courtyard_byre_seat(owner, 15.5, 10.5)
+    assert seat is not None
+    lyc = toward * (28.0 / 2.0 - 15.5 / 2.0)  # reach toward the court: the wall's half-length past the byre's half-width
+    th = math.radians(rot)
+    lx = -(40.0 / 2.0 + 10.5 / 2.0 + 3.0)  # the first wall tried, a drip line off it
+    assert seat[:2] == pytest.approx((300.0 + lx * math.cos(th) - lyc * math.sin(th), 300.0 + lx * math.sin(th) + lyc * math.cos(th)))
+
+
+def test_a_shared_byre_widens_its_spread_tier_until_it_holds_a_borrower() -> None:
+    """Settlement-review, Kashikawa 2026-08-18: after the first shared shed, the spread tier (candidates near the farthest
+    from every shed) WIDENS until it holds an owner a neighbor can borrow from, and stops there. Here the farthest
+    homestead has no neighbor, so the near-best tier holds no borrower; the half tier takes in a pair of neighbors a little
+    over half as far, and the second shed goes to one of them rather than out of everyone's reach."""
+    from l7r.diagram.settlement.shrines_wells.byres import _BORROW_REACH
+
+    def house(x: float, y: float, wealth: float) -> dict:
+        return {"x": x, "y": y, "w": 40.0, "h": 28.0, "kind": "plain", "rot": 0, "wealth": wealth}
+
+    s = _crop_settlement()
+    hs = [
+        house(400.0, 400.0, 1.5),  # the first shed's owner...
+        house(400.0 + _BORROW_REACH - 20.0, 400.0, 1.0),  # ...with a neighbor, so it has a borrower
+        house(1400.0, 400.0, 1.1),  # a pair of neighbors about 0.58 of the farthest distance out
+        house(1400.0, 400.0 + _BORROW_REACH - 20.0, 1.1),
+        house(1800.0, 1400.0, 1.4),  # the farthest, and alone
+    ]
+    s.M["houses"] = hs
+    for h in hs:
+        s.placed.append((h["x"], h["y"], h["w"], h["h"]))
+    s.pin_knob("byre_form", "detached_commons")
+    placed = s.draft_byres(fraction=0.4, gap=40)
+    assert len(placed) == 2, "the target: two shared sheds for five households"
+    owner = [min(range(len(hs)), key=lambda i: math.hypot(hs[i]["x"] - x, hs[i]["y"] - y)) for x, y in placed]
+    assert owner[0] in (0, 1), f"the first shed stands by the wealthiest owner with a borrower (spiralled toward its neighbor): {owner}"
+    assert owner[1] in (2, 3), f"the second goes to the pair in the widened tier, not the isolated farthest house: {owner}"
+
+
 def test_the_outer_stable_stands_on_its_own_in_its_owners_yard_on_about_half_the_households() -> None:
     """269 B16 (research/homesteads/300): on a household form the beast lives with its household - the byre names its owner
     (`of`), stands raked with that house a ken off one of its walls, and about half the households keep one (`byre_share`,
@@ -693,3 +740,28 @@ def test_the_outer_stable_finds_no_seat_on_the_paddy() -> None:
     s.M["houses"] = [owner]
     s.field_polys.append([(200.0, 200.0), (400.0, 200.0), (400.0, 400.0), (200.0, 400.0)])
     assert s._yard_shed_seat(owner, 15.5, 10.5) is None
+
+
+def test_a_households_byre_is_never_stabled_across_the_brook_from_its_house(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 287, homes H01: a brook passing 10 px off the owner's back wall puts every back-wall seat on the far bank;
+    the arm, the outer stable and the spiral each refuse it and seat the beast on the house's bank - by the one
+    same-bank predicate, `crosses_a_stream`."""
+    from l7r.diagram.settlement._geom.water_index import crosses_a_stream
+
+    for form in ("courtyard", "yard_shed"):
+        s = _crop_settlement()
+        owner = {"x": 300.0, "y": 300.0, "w": 40.0, "h": 28.0, "kind": "plain", "rot": 0.0, "wealth": 1.0}
+        s.M["houses"] = [owner]
+        s.M["streams"] = [{"poly": [[100.0, 276.0], [500.0, 276.0]], "w": 3.0}]  # 10 px behind the north wall
+        s.pin_knob("byre_form", form)
+        s.draft_byres()
+        assert s.M["byres"], form
+        assert all(not crosses_a_stream((300.0, 300.0), (b["x"], b["y"]), s.M["streams"]) for b in s.M["byres"]), form
+    s = _crop_settlement()
+    s.M["houses"] = [{"x": 300.0, "y": 300.0, "w": 20.0, "h": 14.0, "kind": "plain", "rot": 0.0, "wealth": 1.0}]
+    s.placed.append((300.0, 300.0, 20.0, 14.0))
+    s.M["streams"] = [{"poly": [[100.0, 290.0], [500.0, 290.0]], "w": 1.0}]
+    s.pin_knob("byre_form", "yard_shed")
+    monkeypatch.setattr(Settlement, "_yard_shed_seat", lambda self, h, bw, bh: None)
+    s.draft_byres()
+    assert all(b["y"] > 290.0 for b in s.M["byres"]), "the spiral's seats north of the brook are refused"

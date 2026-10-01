@@ -1,0 +1,38 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "41d2d2cde",
+    "label": "287-start",
+    "utc": "20260929T031041Z"
+  },
+  "binding": "12549db294ff9b46c45586e2238fea6de765bd2e512b470f8e319800aa59f3a3",
+  "criteria": {
+    "commensurate": "Yes, at the number the rewritten explanation now states. Against main on the same host: gross +9.4 s over the four seeds (+39% of main's 24.2 s), net +1.4 to +1.7 s (+6-7%) after 287's own exact speedups (route memo -4.4 s, notice -2.2 s, windbreak -1.1 s). What that buys: every map built once instead of re-rolled (8 of 53 maps re-rolled, 11 extra builds), 84 finished-map tests retired (228.6 s off every full gate), 163 rules guaranteed rather than seed-lucky, and an unreached house or a field outside the rules refused by name instead of shipped. This is a correctness guarantee on every map, not a cosmetic change.",
+    "necessary": "Yes. The GM asked that every rule be guaranteed by the placement algorithm rather than just happening to work on particular seeds (request.md; spec FR-001, FR-002, FR-005). The growth is in the stages that now do that work: homesteads (seat_the_rest, _parts_fit, access_corridor: the reach corridor reserved for each candidate seat), web (settle_the_web to the whole lane law and the settle's exit, c293631cf), hinterland (the belt settled whole, W26 lots cut to their bounds, registry asks), and field (W32 legality moving seed 25's fan to 3 aspects and 13 carves).",
+    "no_way_around": "None found. Both levers the last audit said were owed have been measured. (1) Cheaper refusals before the corridor search (c247f3628): taken, byte-identical. Reviewer profile of seed 4 homesteads at 2e0e4d8a4: 612 access_corridor calls against 1,122 before; homesteads summed over the four seeds went from 6.14 to 4.99 s between the two 287-end bookends. No single scan of unchanging geometry dominates what is left (the corridor search is 1.12 of 4.0 profiled s). (2) Dropping the straggler footpaths: -3.0 s by the session's figure, which has no record in measurements.json. It moves every map's lanes, so it is a change of form, reverted as the GM's call. Full-pitch-first seat offers were likewise declined as a form change. Seed 25 field, profiled: 13 whole carves at 3 aspects against main's 5 at 1, at 0.235 s per carve against 0.273 s. The extra carves are candidate fans the legality rule refuses on their carved channels, and nothing cheaper can refuse them before the carve."
+  },
+  "end": {
+    "commit": "2e0e4d8a4",
+    "label": "287-end",
+    "utc": "20260930T030814Z"
+  },
+  "environment": "local",
+  "feature": "287-placer-guarantees",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "f70424b3-a8eb-45cf-8472-6eb804c5e7c2",
+    "utc": "20260930T031703Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "seeds": {
+      "25": 46.8,
+      "39": 15.2,
+      "4": 17.2,
+      "47": 15.5
+    },
+    "total_pct": 23.0
+  },
+  "note": "",
+  "verdict": "justified"
+}

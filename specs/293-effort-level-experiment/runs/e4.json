@@ -1,0 +1,75 @@
+{
+ "run_id": "e4",
+ "task": "I",
+ "arm": "medium",
+ "seed": 853050,
+ "order": 3,
+ "start_commit": "ec99356cf081c1ac44ae227723edfdcf5675e6f7",
+ "clone": "/diagram/.clones/diagram-exp-e4",
+ "started": "2026-09-30T01:30:43Z",
+ "ended": "2026-09-30T02:49:36Z",
+ "pauses": [],
+ "memory_at_launch": {
+  "source": "shared-slice",
+  "working_set_gb": 2.93,
+  "offset_gb": 0.0,
+  "threshold_gb": 4.5,
+  "fresh_warning": ""
+ },
+ "agents_json_sha256": "24263244a3376b800ab3b9caba5c50be0adf746e32a3332b9a08f98683f5cafd",
+ "env": {
+  "L7R_SOURCES_HOME": "/diagram/.clones/.runs-293/e4/sources",
+  "CLAUDE_CODE_EFFORT_LEVEL": "unset",
+  "SPECIFY_FEATURE": "unset"
+ },
+ "shared_state": {
+  "sources_snapshot_sha256": "8b2c60bbc18d59d20f68516400de28734969a44c5679c1d1d49607bf58cec2a6",
+  "claims_sha256_at_start": "52777530b644f41bf46a06cbdb0ce86e5028d8f19ecf9a0d527f7917a379b33e",
+  "claims_lines_at_start": [
+   "293 | task R in progress (buildings, servants' quarters) | 2026-09-29",
+   "293 | task R (buildings new 910, the servants' rowhouse doors + 7 keys) written, committed in clone, checks owed | 2026-09-29",
+   "293 | task R checked, committed in clone | 2026-09-29",
+   "293 | run e1 ended - claim released | 2026-09-29",
+   "293 | task R in progress (buildings, servants' quarters) | 2026-09-29",
+   "293 | task R (buildings new 910, the servants' rowhouse doors + 4 keys) written, committed in clone diagram-exp-e2, checks owed | 2026-09-30",
+   "293 | task R checked, committed in clone | 2026-09-30",
+   "293 | run e2 ended - claim released | 2026-09-30",
+   "293 | task R in progress (buildings, servants' quarters) | 2026-09-30",
+   "293 | task R (buildings new 910, the servants' rowhouse doors + 3 keys) written, committed in clone diagram-exp-e3, checks owed | 2026-09-30",
+   "293 | task R checked, committed in clone | 2026-09-30",
+   "293 | run e3 ended - claim released | 2026-09-30"
+  ],
+  "ledger_lines_appended": 0,
+  "prefixes_reserved": []
+ },
+ "sessions": [
+  {
+   "sid": "718d881e-5a32-468c-b085-8200a58c1170",
+   "prompt_sha256": "1c395ed8f4b8c46b5794603ac991b81dbbf221fb7967bea2f84c0fd1e1e642cf",
+   "effort": "medium",
+   "transcript": "/home/agent/.claude/projects/-diagram--clones-diagram-exp-e4/718d881e-5a32-468c-b085-8200a58c1170.jsonl",
+   "log": "/diagram/.clones/.runs-293/e4/session"
+  }
+ ],
+ "argv": [
+  "claude",
+  "-p",
+  "<prompts/I.md sha256 1c395ed8f4b8c46b5794603ac991b81dbbf221fb7967bea2f84c0fd1e1e642cf>",
+  "-n",
+  "diagram-exp-e4",
+  "--session-id",
+  "718d881e-5a32-468c-b085-8200a58c1170",
+  "--effort",
+  "medium",
+  "--agents",
+  "{\"adhoc-judge\": {\"description\": \"Any ad-hoc work that checks or judges (a verdict, a review, a comparison) that no defined agent covers.\", \"effort\": \"high\", \"model\": \"opus\", \"prompt\": \"You check or judge the work the dispatch describes and report a compact verdict: counts first, then only what to act on.\"}}",
+  "--permission-mode",
+  "bypassPermissions",
+  "--append-system-prompt",
+  "# Standing authorizations for the gm-assistant project\n\nThe GM (Eli) has given **standing authorization for this project's review subagents**. When a\nskill's documented workflow calls for `settlement-review`, `building-review`, `size-audit`, `source-reader`,\n`quote-check`, `record-format`, `source-applicability`, `entry-drift`, `spec-fidelity`, `spec-fidelity-verify` or `perf-audit` (defined in `.claude/agents/`), invoke it with the Agent tool\nwithout asking first. `perf-audit` (feature 129) is the ONLY agent that may pass `AS=perf-audit`\nto the review-record commands; the main session launches it whenever a performance band of 1 or\nmore is reported, and never writes those records itself. These are mandatory verification steps in `CLAUDE.md` and in the constitution's Principle I,\nnot optional extras: the author of a diagram, a page or a piece of prose is not a reliable reviewer\nof their own work, which is the entire reason those agents exist.\n\nThis authorization is deliberately **narrow**. It does not extend to broad multi-agent fan-out, the\nWorkflow tool, or deep research - those still need an explicit request from the GM in the\nconversation.\n\n## Why this file exists\n\nClaude Code's default system prompt carries a line telling the session not to call the Agent tool\nunless the user requested it. That is a reasonable default - it stops a session from spawning an\nexpensive fleet unprompted - but it sits ABOVE `CLAUDE.md` in the instruction hierarchy, so it\nsilently outranks this project's own mandate to run a review agent before declaring work done.\n\nOn 2026-07-27 that is exactly what happened: three provincial-city maps changed, the diagram\nskill's `CLAUDE.md` requires a `settlement-review` pass before a Mode B map ships, and the session\nskipped it because the system prompt said not to. Nothing was broken and nothing warned - the\nmandate simply lost to a higher-priority instruction.\n\n`--append-system-prompt` lands this text at the END of the system prompt, after that line, with the\nsame authority. That is why the fix lives here rather than in `CLAUDE.md`.\n\nLoaded by the `claude()` shell wrapper that `container-scripts/setup-dev-env.sh` installs into\n`~/.bashrc`. Edit the text here; the wrapper only reads it.",
+  "--output-format",
+  "json"
+ ],
+ "status": "void",
+ "void_reason": "voided by the session: task I's premise was gone at START (feature 280 M68 removed the hamlet's own burial ground); the GM replaced task I on 2026-09-30 - e4 is kept as a data point (it found the stale premise, corrected the docs, gated green) and is not graded"
+}

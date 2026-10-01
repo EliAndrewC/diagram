@@ -10,6 +10,8 @@ from l7r.diagram.settlement._geom import seg_closest
 from .banks import hem_to_bank, round_channel_joints
 from .frame import Poly, Pt, _poly_area
 from .palette import FLOODED, RICE_GREENS, organic_parcel
+from .ring_rules import NEEDLE_DEG as _NEEDLE_DEG
+from .ring_rules import needle as _needle
 
 _RING = 18.0  # the inner-toe ring-canal corridor width in (s, t) px (see _polder_lattice's RING note)
 
@@ -105,21 +107,24 @@ def build_polder(
             for _k in (0, -1):
                 _end = c["pts"][_k]
                 _best: Pt | None = None
+                _on: list[Pt] = []
                 for _tr in _trunks:
                     _q = _onto_poly(_end, _tr)
                     if _best is None or math.hypot(_q[0] - _end[0], _q[1] - _end[1]) < math.hypot(_best[0] - _end[0], _best[1] - _end[1]):
-                        _best = _q
+                        _best, _on = _q, _tr
                 if _best is not None:
-                    # ...and 3 ft PAST it, along the toe's own heading: two round-capped strokes whose ends meet
-                    # at a centerline only TOUCH, and the review (2026-08-28) found a 1 ft column of ground
-                    # between the west toe's cap and the trunk at the NW corner. Overlapping beds in the one
-                    # water block do not darken, so the overshoot hides under the trunk.
+                    # ...and 3 ft PAST it, ALONG THE TRUNK'S OWN CENTERLINE (feature 287, water W45): two round-capped
+                    # strokes whose ends meet at a centerline only TOUCH, and the review (2026-08-28) found a 1 ft column
+                    # of ground between the west toe's cap and the trunk at the NW corner, so the end runs on 3 ft. It
+                    # ran on along the TOE's heading, which at a corner leaves the trunk: the Kuwabata toes ended 2.5 ft
+                    # off the drain's centerline, a blue cap stuck on the side of a wider pipe (future-work, "Two ways
+                    # that meet where the material changes"). Walked along the trunk it hides under the trunk's bed
+                    # and the joint is a confluence ON the centerline, as the feeder/lateral junctions are.
                     _nb = c["pts"][1] if _k == 0 else c["pts"][-2]
-                    _hx, _hy = _best[0] - _nb[0], _best[1] - _nb[1]
-                    _hl = math.hypot(_hx, _hy) or 1.0
-                    c["pts"][_k] = (round(_best[0] + _hx / _hl * 3.0, 1), round(_best[1] + _hy / _hl * 3.0, 1))
+                    c["pts"][_k] = along_trunk(_on, _best, (_best[0] - _nb[0], _best[1] - _nb[1]), 3.0)
     if clean_parcels:  # after the channels are FINAL - the rounding and the toe snap both move them
         _plots_clear_of_channels(plots, channels)
+    unpoint_parcels(plots)  # the LAST ring writer (feature 287, water W19) - whether or not the channel cleanup ran
     acres = sum(_poly_area(p["poly"]) for p in plots) * 4 / 43560  # ...and after the parcels are, so the acreage is the ground actually cropped
     return {
         "channels": channels,
@@ -730,5 +735,86 @@ def clean_polder_parcels(net: dict[str, Any]) -> dict[str, Any]:  # noqa: D401
     is drawn, so the cleanup - which densifies every outline against every nearby channel - runs on the
     WINNER rather than on all 45: measured, 15 s of gen became 41 s when every candidate paid for it."""
     _plots_clear_of_channels(net["plots"], net["channels"])
+    unpoint_parcels(net["plots"])  # the cleanup moves outlines, so the apex pass runs again after it (feature 287, water W19)
     net["acres"] = sum(_poly_area(p["poly"]) for p in net["plots"]) * 4 / 43560
     return net
+
+
+def end_on_centerline(end: Pt, trunk: list[Pt], tol: float = 0.5) -> bool:
+    """THE RULE (feature 287, water W45): a watercourse joins the one it feeds ON ITS CENTERLINE - `end` lies within `tol`
+    of the trunk's polyline. The toe snap below and its test read this one predicate."""
+    q = _onto_poly(end, trunk)
+    return math.hypot(q[0] - end[0], q[1] - end[1]) <= tol
+
+
+def along_trunk(trunk: list[Pt], foot: Pt, heading: tuple[float, float], run: float) -> Pt:
+    """The point `run` px along `trunk`'s own polyline from `foot` (a point on it), in whichever direction along the trunk
+    carries on the way `heading` points - clamped at the trunk's ends, so the answer is always on the centerline.
+
+    Feature 287, water W45: a toe's end runs on past its junction to hide its cap under the trunk, and walking the trunk
+    rather than the toe's heading keeps the end on the centerline at a corner, where the two headings part."""
+    cum = [0.0]
+    for a, b in zip(trunk, trunk[1:], strict=False):
+        cum.append(cum[-1] + math.dist(a, b))
+    best_i, best_t, best_d = 0, 0.0, float("inf")
+    for i, (a, b) in enumerate(zip(trunk, trunk[1:], strict=False)):
+        ln = cum[i + 1] - cum[i]
+        t = 0.0 if ln == 0 else max(0.0, min(1.0, ((foot[0] - a[0]) * (b[0] - a[0]) + (foot[1] - a[1]) * (b[1] - a[1])) / (ln * ln)))
+        d = math.hypot(a[0] + t * (b[0] - a[0]) - foot[0], a[1] + t * (b[1] - a[1]) - foot[1])
+        if d < best_d:
+            best_i, best_t, best_d = i, t, d
+    s0 = cum[best_i] + best_t * (cum[best_i + 1] - cum[best_i])
+    a, b = trunk[best_i], trunk[best_i + 1]
+    fwd = (b[0] - a[0]) * heading[0] + (b[1] - a[1]) * heading[1] >= 0.0
+    s = max(0.0, min(cum[-1], s0 + (run if fwd else -run)))
+    k = next((j for j in range(len(trunk) - 1) if cum[j + 1] >= s), len(trunk) - 2)
+    seg = cum[k + 1] - cum[k]
+    f = 0.0 if seg == 0 else (s - cum[k]) / seg
+    p, q = trunk[k], trunk[k + 1]
+    return (round(p[0] + f * (q[0] - p[0]), 1), round(p[1] + f * (q[1] - p[1]), 1))
+
+
+def unpoint_parcels(plots: list[dict[str, Any]]) -> None:
+    """NO POLDER PARCEL TAPERS TO A POINT (feature 287, water W19; the rule `ring_rules.needle`, an interior angle under
+    15 degrees - "no real basin tapers to ZERO").
+
+    The polder's parcels are lattice quads clipped, bowed, hemmed to the collector and pushed off their ditches, and any of
+    those can leave a sliver corner. This is the terminal pass over them, run after the last of those writers: a pointed
+    ring is first re-hemmed without the vertex that makes the apex - only where that vertex is CONVEX, so the ring
+    shrinks inside the ground it already had and cannot reach back onto the water the cleanup pushed it off - and the
+    pass repeats while the ring is still pointed. A ring left pointed (a reflex notch, or too few vertices to be a basin)
+    is dropped from the crop and left as bank ground: the polder's own berm fill, never a pointed parcel.
+
+    THE RING IS JUDGED AS IT WILL BE RECORDED - rounded to 0.1 px, as `fields/comb.py` writes `plot_rings` - so the ring on
+    the map is the ring this pass judged (feature 287 wave 5): a corner at 15.0 degrees raw can round to 14.9 and a record
+    of the unrounded judgment would carry a needle the placer never saw. A parcel whose rounded ring passes keeps its
+    unrounded vertices (the record rounds them to the ring judged here); one re-hemmed is written rounded."""
+    kept: list[dict[str, Any]] = []
+    for p in plots:
+        ring = [(round(float(x), 1), round(float(y), 1)) for x, y in p["poly"]]
+        while len(ring) >= 4 and _needle(ring):
+            k = _apex(ring)
+            if k is None:
+                break
+            ring = ring[:k] + ring[k + 1 :]
+        if len(ring) >= 3 and not _needle(ring):
+            if len(ring) != len(p["poly"]):
+                p["poly"] = ring
+            kept.append(p)
+    plots[:] = kept
+
+
+def _apex(ring: list[Pt]) -> int | None:
+    """The index of the sharpest CONVEX vertex of `ring` under the needle angle, or None when every needle vertex is
+    reflex (a notch, which dropping its vertex would fill - back over whatever the notch was cut round)."""
+    area2 = sum(ring[i][0] * ring[(i + 1) % len(ring)][1] - ring[(i + 1) % len(ring)][0] * ring[i][1] for i in range(len(ring)))
+    best: tuple[float, int] | None = None
+    for i in range(len(ring)):
+        a, v, c = ring[i - 1], ring[i], ring[(i + 1) % len(ring)]
+        v1, v2 = (a[0] - v[0], a[1] - v[1]), (c[0] - v[0], c[1] - v[1])
+        d = (math.hypot(*v1) or 1.0) * (math.hypot(*v2) or 1.0)
+        ang = math.degrees(math.acos(max(-1.0, min(1.0, (v1[0] * v2[0] + v1[1] * v2[1]) / d))))
+        turn = (v[0] - a[0]) * (c[1] - v[1]) - (v[1] - a[1]) * (c[0] - v[0])
+        if ang < _NEEDLE_DEG and turn * area2 >= 0 and (best is None or ang < best[0]):
+            best = (ang, i)
+    return None if best is None else best[1]

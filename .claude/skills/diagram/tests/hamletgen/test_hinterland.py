@@ -3,6 +3,8 @@
 Split from test_hamletgen.py by feature 111; test bodies verbatim. See hamletgen/CLAUDE.md.
 """
 
+import math
+
 import pytest
 
 from l7r.diagram import hamletgen as hg
@@ -11,6 +13,7 @@ from l7r.diagram import hamletgen as hg
 # internals of this stage; pinning them on hamletgen's star-import surface to satisfy one test would
 # widen the package's public contract for a test's convenience (tests/hamletgen/test_surface.py).
 from l7r.diagram.hamletgen import hinterland
+from l7r.diagram.hamletgen.hinterland import stages
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._geom import RingIndex
 
@@ -111,7 +114,7 @@ def test_a_belt_vertex_in_the_title_pocket_is_pushed_out_of_it() -> None:
     tp = hinterland.title_pocket(s, plan)
     mid = ((tp[0] + tp[2]) / 2, (tp[1] + tp[3]) / 2)
     plan.belt = [(tp[0] - 80.0, tp[1] - 80.0), mid, (tp[2] + 80.0, tp[3] + 80.0), (tp[0] - 80.0, tp[3] + 80.0)]
-    hinterland.stage_windbreak(s, plan)
+    stages.plant_the_belt(s, plan)  # the belt is planted by `stage_hinterland` before the view is decided (feature 287, M6)
     belt = [g for g in s.M["village_groves"] if g.get("role") == "windbreak"]
     assert belt, "the windbreak was not recorded"
     inside = [q for q in belt[0]["poly"] if tp[0] <= q[0] <= tp[2] and tp[1] <= q[1] <= tp[3]]
@@ -407,7 +410,8 @@ def test_the_windbreak_stage_draws_nothing_when_the_plan_has_no_belt() -> None:
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
     before = dict(s.M.get("village_groves", [])) if isinstance(s.M.get("village_groves"), dict) else list(s.M.get("village_groves", []))
     hinterland.stage_windbreak(s, plan)
-    assert list(s.M.get("village_groves", [])) == list(before), "no belt, no windbreak"
+    stages.plant_the_belt(s, plan)
+    assert list(s.M.get("village_groves", [])) == list(before), "no belt, no windbreak and no copse"
 
 
 def test_bamboo_blocked_indexed_matches_bamboo_blocked_on_random_ground() -> None:
@@ -460,6 +464,30 @@ def test_scatter_frame_holds_the_crops_boxes_the_reserved_polygons_and_the_pad()
     from l7r.diagram.hamletgen.hinterland.frame import TITLE_BAND_ALLOWANCE
 
     assert (x0, y0) == (min(500.0, 600.0, 780.0) - grow, 700.0 - grow - TITLE_BAND_ALLOWANCE) and (x1, y1) == (1300.0 + grow, 1290.0 + grow)
+
+
+def test_scatter_frame_before_the_pocket_takes_in_the_band_below_when_no_seat_above_is_on_the_canvas() -> None:
+    """Feature 261, cohort seed 45: before the title pocket is reserved, content standing within the pocket's rise of the
+    canvas top sends the pocket BELOW the content, so the prediction grows its foot by `TITLE_POCKET_RISE`; content lower
+    down, or a pocket already reserved, grows nothing."""
+    from l7r.diagram.hamletgen.hinterland.frame import TITLE_POCKET_RISE, scatter_frame
+
+    def frame(house_y: float, pocket: tuple[float, float, float, float] | None) -> tuple[float, float, float, float]:
+        s = Settlement(W=2000, H=2000, seed=5)
+        s.M["houses"] = [{"x": 800.0, "y": house_y, "w": 40.0, "h": 30.0}]
+        plan = a_plan(households=10)
+        plan.belt, plan.woodland_polys, plan.bamboo_polys = [], [], []
+        plan.title_pocket = pocket
+        return scatter_frame(s, plan)
+
+    top = 40.0
+    assert top - 15.0 - TITLE_POCKET_RISE < 0.0, "the house stands within the pocket's rise of the canvas top"
+    inside = (790.0, top - 5.0, 810.0, top + 5.0)  # a pocket reserved inside the content adds no extent of its own
+    unreserved, reserved = frame(top, None), frame(top, inside)
+    assert unreserved[:3] == reserved[:3], "only the foot moves"
+    assert unreserved[3] == pytest.approx(reserved[3] + TITLE_POCKET_RISE), "the band below is taken in"
+    low = 1000.0
+    assert frame(low, None) == frame(low, (790.0, low - 5.0, 810.0, low + 5.0)), "room above: the pocket goes there, no band below"
 
 
 def test_finish_records_the_scatter_frame_and_a_breach_only_where_the_view_shows_kept_out_ground(tmp_path) -> None:
@@ -693,6 +721,185 @@ def test_a_belt_end_that_recedes_along_the_wind_is_trimmed() -> None:
     assert trim_receding_ends([(-313.0, -105.0), (-226.0, 661.0), (-140.0, 647.0), (-53.0, 697.0), (33.0, 400.0), (120.0, 90.0)], 100.0) == [(-226.0, 661.0), (-140.0, 647.0), (-53.0, 697.0)]
     assert trim_receding_ends([(0.0, 10.0), (90.0, 20.0), (180.0, 5.0)], 100.0) == [(0.0, 10.0), (90.0, 20.0), (180.0, 5.0)]
     assert trim_receding_ends([(0.0, -500.0), (90.0, 20.0)], 100.0) == [(0.0, -500.0), (90.0, 20.0)]
+
+
+# ---- feature 287: the view decided once (M6), the woodland on dry ground by one measure (woods W12) -------------------
+
+
+def test_after_the_view_is_decided_the_scatter_throws_within_it_and_the_placers_ask_it() -> None:
+    """M6: once `plan.view` is set, `scatter_frame` is that view grown by `SCATTER_PAD` (and the title band's allowance
+    above and below it) - no prediction - and `frame_bounds` is the view itself; before the decision `frame_bounds` is `frame_for` of
+    the map as it stands, the same body the crop reads, and a bare canvas is the whole page."""
+    from l7r.diagram.hamletgen.hinterland.frame import SCATTER_PAD, TITLE_BAND_ALLOWANCE, frame_bounds, frame_for, scatter_frame
+
+    plan = a_plan()
+    bare = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    plan.title_pocket, plan.title_pocket_outside = (0.0, 0.0, 0.0, 0.0), False
+    assert frame_bounds(bare, plan) == (0, 0, round(plan.W), round(plan.H)), "nothing sets a frame yet: the whole canvas"
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.M["houses"] = [{"x": 700.0, "y": 700.0, "w": 40.0, "h": 30.0, "rot": 0}]
+    vx, vy, vw, vh = frame_for(s, plan)
+    assert frame_bounds(s, plan) == (vx, vy, vx + vw, vy + vh)
+    plan.view = (100.0, 200.0, 800.0, 600.0)
+    assert frame_bounds(s, plan) == (100.0, 200.0, 900.0, 800.0), "the decided view, not a recomputation"
+    assert scatter_frame(s, plan) == (100.0 - SCATTER_PAD, 200.0 - SCATTER_PAD - TITLE_BAND_ALLOWANCE, 900.0 + SCATTER_PAD, 800.0 + SCATTER_PAD + TITLE_BAND_ALLOWANCE)
+
+
+def test_a_marsh_finger_between_the_probes_is_read_by_the_rules_own_grid() -> None:
+    """W12, the violating case: a marsh finger threading between the scan's 3 x 3 probes of the square can still put more
+    than half of the drawn ring's 5 x 5 sample grid in the wet. `parcel_wet_share` is the rule's own measure."""
+    from l7r.diagram.hamletgen.hinterland.parcels import WET_SHARE_CAP, parcel_wet_share
+    from l7r.diagram.settlement import point_in_poly
+
+    ring = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
+    # two fingers, joined past the ring's far edge, over the grid's columns x = 10, 30, 70, 90 - and clear of the 3 x 3
+    # probes, which stand at x = 0, 50, 100
+    finger = [(5.0, -5.0), (45.0, -5.0), (45.0, 102.0), (55.0, 102.0), (55.0, -5.0), (95.0, -5.0), (95.0, 105.0), (5.0, 105.0)]
+    probes = [(x, y) for x in (0.0, 50.0, 100.0) for y in (0.0, 50.0, 100.0)]
+    assert not any(point_in_poly(x, y, finger) for x, y in probes), "the square's probes all read dry"
+    assert parcel_wet_share(ring, [finger]) > WET_SHARE_CAP, "but the drawn ring stands mostly in the wet"
+    assert parcel_wet_share(ring, []) == 0.0 and parcel_wet_share(ring[:2], [finger]) == 0.0
+
+
+def test_the_scan_refuses_a_ring_the_wet_share_fails_and_takes_the_next_seat(monkeypatch: pytest.MonkeyPatch) -> None:
+    """W12 at the placer: the ring about to be drawn is asked `parcel_wet_share`, and a wet ring is refused - its seat is
+    not drawn, and the scan goes on to the next scored seat."""
+    plan = a_plan()
+
+    def _scan() -> list:
+        s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+        s.M["fields"] = []  # no houses and no crop: the setup `test_a_seat_whose_rotated_parcel...` proved seats parcels
+        plan.belt = []
+        plan.title_pocket = None
+        return hg.hinterland.open_ground_patches(s, plan, count=2)
+
+    dry = _scan()
+    assert dry, "the control scan seated nothing, so a refusal would prove nothing"
+    asked: list[list] = []
+
+    def _first_is_wet(ring, _marshes):  # type: ignore[no-untyped-def]
+        asked.append(ring)
+        return 1.0 if len(asked) == 1 else 0.0
+
+    monkeypatch.setattr(hinterland.parcels, "parcel_wet_share", _first_is_wet)
+    got = _scan()
+    assert asked[0] not in got, "the wet ring is not drawn"
+    assert got, "the scan went on to the next seat"
+
+
+def test_a_thicket_keeps_off_the_wells_and_stands_behind_the_back_row() -> None:
+    """Feature 293 I (settlement-review of Kashikawa): a well record is x, y, r, so the keep-out that named the wells never
+    held one, and the thicket was drawn over a public well; and the search walked into the cluster when the ground behind
+    it was taken. A well is kept by its radius and 14 ft; a seat's south edge stands no further south than the northernmost
+    house; where nothing fits behind the back row, no thicket is drawn."""
+    from l7r.diagram.settlement import Settlement, point_in_poly
+
+    from ._builders import a_plan
+
+    def _hamlet(wet_north: bool) -> tuple[Settlement, object]:
+        plan = a_plan()
+        plan.bamboo = "thicket"
+        s = Settlement(plan.W, plan.H, seed=plan.spec.seed)
+        s.meta(name="B", scale="hamlet", ftpx=1, down_deg=90)
+        s.M["houses"] = [{"x": x, "y": 800.0, "w": 46.0, "h": 28.0, "rot": 0.0} for x in (600.0, 700.0, 800.0)]
+        s.M["gardens"] = [{"x": 300.0, "y": 300.0, "w": 10.0, "h": 10.0}]  # crop content, so the sheet reaches behind the houses
+        s.M["wells"] = [{"x": 700.0, "y": 740.0, "r": 4.0}]  # on the thicket's target, 40 ft north of the back row
+        if wet_north:
+            s.M["marshes"] = [{"poly": [[0.0, 0.0], [float(plan.W), 0.0], [float(plan.W), 780.0], [0.0, 780.0]], "role": "toe"}]
+        return s, plan
+
+    s, plan = _hamlet(False)
+    seats = hg.hinterland.bamboo_seats(s, plan)  # type: ignore[arg-type]
+    assert seats, "non-vacuity: the thicket is seated"
+    for poly in seats:
+        assert max(q[1] for q in poly) <= 800.0, "behind the back row"
+        assert not point_in_poly(700.0, 740.0, poly) and min(math.dist((700.0, 740.0), q) for q in poly) > 4.0, "off the well"
+    s, plan = _hamlet(True)
+    assert hg.hinterland.bamboo_seats(s, plan) == [], "no ground behind the houses: no thicket, rather than one among them"  # type: ignore[arg-type]
+
+
+def test_a_thicket_stands_on_the_sheet() -> None:
+    """Feature 293 I round 3 (settlement-review of Kashikawa): a thicket is not crop content, and behind the back row the
+    nearest fitting seat stood 187 ft past its target and wholly above the view - the page offered a thicket nothing on the
+    sheet answered. A seat stands inside the page as it stands (`frame_bounds`); where none fits there, none is drawn."""
+    from l7r.diagram.hamletgen.hinterland.frame import frame_bounds
+    from l7r.diagram.settlement import Settlement
+
+    from ._builders import a_plan
+
+    def _hamlet(reach_north: bool) -> tuple[Settlement, object]:
+        plan = a_plan()
+        plan.bamboo = "thicket"
+        s = Settlement(plan.W, plan.H, seed=plan.spec.seed)
+        s.meta(name="B", scale="hamlet", ftpx=1, down_deg=90)
+        s.M["houses"] = [{"x": x, "y": 800.0, "w": 46.0, "h": 28.0, "rot": 0.0} for x in (600.0, 700.0, 800.0)]
+        if reach_north:
+            s.M["gardens"] = [{"x": 700.0, "y": 600.0, "w": 10.0, "h": 10.0}]  # content 200 ft north: the sheet reaches behind the row
+        return s, plan
+
+    s, plan = _hamlet(False)
+    assert hg.hinterland.bamboo_seats(s, plan) == [], "the sheet ends 62 ft behind the houses, and no thicket fits there"  # type: ignore[arg-type]
+    s, plan = _hamlet(True)
+    seats = hg.hinterland.bamboo_seats(s, plan)  # type: ignore[arg-type]
+    assert seats, "non-vacuity: with the sheet reaching behind the row, the thicket is seated"
+    x0, y0, x1, y1 = frame_bounds(s, plan)  # type: ignore[arg-type]
+    assert all(x0 <= q[0] <= x1 and y0 <= q[1] <= y1 for poly in seats for q in poly), "wholly on the sheet"
+
+
+def test_nearest_fitting_keeps_to_its_box() -> None:
+    """`nearest_fitting`'s `box` (feature 293): the walk keeps to the part of the square inside it, on a lattice centered
+    there, and finds the nearest fit; a band narrower than one step still has its row, where a lattice stepped from the
+    square's corner can miss it whole (settlement-review of Kashikawa, round 5). Without a box, the whole square is walked
+    as before."""
+    from l7r.diagram.hamletgen.hinterland.bamboo import nearest_fitting
+
+    seen: list[tuple[float, float]] = []
+
+    def fits(x: float, y: float) -> bool:
+        seen.append((x, y))
+        return x >= 30.0
+
+    best = nearest_fitting((0.0, 0.0), 50.0, 10.0, fits, box=(20.0, -20.0, 45.0, 5.0))
+    assert best is not None and (best[1], best[2]) == (32.5, 2.5), "the 25-wide box's lattice is centered: 22.5, 32.5, 42.5"
+    assert seen and all(20.0 <= x <= 45.0 and -20.0 <= y <= 5.0 for x, y in seen), "no point outside the box is tried"
+    band = nearest_fitting((0.0, 0.0), 50.0, 16.0, lambda x, y: True, box=(-10.0, 31.0, 10.0, 45.0))
+    assert band is not None and band[2] == 38.0, "a 14-tall band on a 16 step still has its row, centered in it"
+    assert nearest_fitting((0.0, 0.0), 50.0, 16.0, lambda x, y: 31.0 <= y <= 45.0) is None, "the square's own rows (30, 46) miss it"
+    assert nearest_fitting((0.0, 0.0), 50.0, 10.0, lambda x, y: x >= 30.0) == (30.0, 30.0, 0.0), "no box: the whole square"
+    assert nearest_fitting((0.0, 0.0), 50.0, 10.0, lambda x, y: True, box=(60.0, 0.0, 70.0, 10.0)) is None, "a box off the square"
+
+
+def test_a_thicket_is_sought_past_its_reach_when_none_fits_within_it() -> None:
+    """Feature 293 I round 4 (settlement-review of Kashikawa): held behind the back row and on the sheet, nothing fitted
+    within `THICKET_REACH_FT` of the target, and the hamlet drew no thicket while an open seat stood farther along the back
+    row. Past the reach, the whole sheet behind the back row is searched; nearer seats still win where there are any."""
+    from l7r.diagram.hamletgen.hinterland.bamboo import THICKET_REACH_FT
+    from l7r.diagram.settlement import Settlement
+
+    from ._builders import a_plan
+
+    plan = a_plan()
+    plan.bamboo = "thicket"
+    plan.W = max(plan.W, 1800)
+    s = Settlement(plan.W, plan.H, seed=plan.spec.seed)
+    s.meta(name="B", scale="hamlet", ftpx=1, down_deg=90)
+    s.M["houses"] = [{"x": x, "y": 800.0, "w": 46.0, "h": 28.0, "rot": 0.0} for x in (600.0, 700.0, 800.0, 1500.0)]
+    s.M["gardens"] = [{"x": 700.0, "y": 500.0, "w": 10.0, "h": 10.0}]  # crop content: the sheet reaches behind the row
+    s.M["marshes"] = [{"poly": [[0.0, 0.0], [1100.0, 0.0], [1100.0, 790.0], [0.0, 790.0]], "role": "toe"}]  # wet behind the near houses
+    seats = hg.hinterland.bamboo_seats(s, plan)  # type: ignore[arg-type]
+    assert len(seats) == 1, "the thicket is seated past its reach"
+    cx = sum(q[0] for q in seats[0]) / len(seats[0])
+    assert cx - 700.0 > THICKET_REACH_FT and max(q[1] for q in seats[0]) <= 800.0, "along the back row, behind it"
+
+
+def test_the_farm_groves_count_toward_the_homestead_wood() -> None:
+    """`farm_grove_area` (feature 291): the farms' own bands, as recorded; a record with no box counts nothing."""
+    from l7r.diagram.hamletgen.hinterland.stages import farm_grove_area
+
+    class _S:
+        M = {"groves": [{"w": 10.0, "h": 20.0}, {"w": 5.0, "h": 4.0}, {"x": 1.0}]}
+
+    assert farm_grove_area(_S()) == 220.0  # type: ignore[arg-type]
 
 
 def test_the_copse_against_the_belt_takes_the_belt_s_box_and_anchors_leeward_of_its_lee_face() -> None:

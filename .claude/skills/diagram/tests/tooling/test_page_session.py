@@ -318,3 +318,154 @@ def test_a_continuation_over_the_cap_stops_the_queue(tmp_path: pathlib.Path, mon
     ps.work(str(tmp_path), "n", [], [first, {"then": "/never/run"}], str(run_log))
     lines = run_log.read_text(encoding="utf-8").splitlines()
     assert lines[-2].startswith("STOPPED continue.md: it assigns 5") and lines[-1] == "ALL DONE", lines
+
+
+def _run_sh(tmp_path: pathlib.Path, *args: str) -> tuple[int, list[str], str]:
+    """page-session.sh with a fake `claude` and a fake `python3` on PATH: the fake python records the runner's argv."""
+    import subprocess
+
+    bin_ = tmp_path / "bin"
+    bin_.mkdir(parents=True)
+    (bin_ / "claude").write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
+    argv_file = tmp_path / "argv.json"
+    (bin_ / "python3").write_text(
+        f"#!/usr/bin/env -S {pathlib.Path(__import__('sys').executable)}\nimport json, sys\nopen({str(argv_file)!r}, 'w').write(json.dumps(sys.argv[1:]))\n", encoding="utf-8"
+    )
+    for f in bin_.iterdir():
+        f.chmod(0o755)
+    brief = tmp_path / "brief.md"
+    brief.write_text(BRIEF, encoding="utf-8")
+    env = {"PATH": f"{bin_}:/usr/bin:/bin", "HOME": str(tmp_path)}
+    r = subprocess.run(["bash", str(REPO / "scripts" / "page-session.sh"), str(brief), *args], cwd=REPO, env=env, capture_output=True, text=True, check=False)
+    argv = __import__("json").loads(argv_file.read_text()) if argv_file.exists() else []
+    return r.returncode, argv, r.stderr
+
+
+def test_effort_and_agents_reach_every_session_and_unset_they_change_nothing(tmp_path: pathlib.Path) -> None:
+    """Feature 293 (research R1 D2, FR-003): the effort experiment runs each page session at its arm's effort and with the
+    pinned ad-hoc judge; unset, the runner's argv is what it was."""
+    code, plain, _ = _run_sh(tmp_path / "a", "diagram-x", "opus")
+    assert code == 0 and "--effort" not in plain and "--agents" not in plain
+    extra = plain[plain.index("--model") : plain.index("--")]
+    assert extra == ["--model", "opus"], "unset EFFORT and AGENTS add nothing"
+    agents = tmp_path / "agents.json"
+    agents.write_text('{"adhoc-judge": {"model": "opus", "effort": "high"}}', encoding="utf-8")
+    code, argv, _ = _run_sh(tmp_path / "b", "diagram-x", "", "xhigh", str(agents))
+    extra = argv[4 : argv.index("--")]  # the runner script, root, name, projects, then the extra flags
+    assert code == 0 and extra == ["--effort", "xhigh", "--agents", agents.read_text()]
+
+
+def test_a_missing_agents_file_is_refused_before_anything_starts(tmp_path: pathlib.Path) -> None:
+    code, argv, err = _run_sh(tmp_path, "diagram-x", "", "medium", str(tmp_path / "nope.json"))
+    assert code == 2 and argv == [] and "no agents file" in err
+
+
+# ---- feature 295 item 3: a headless session that has gone quiet is resumed ------------------------------------------
+
+
+def test_a_session_s_last_activity_is_its_newest_transcript_or_subagent_write(tmp_path: pathlib.Path) -> None:
+    import os
+
+    assert ps.last_activity(str(tmp_path), "sid") is None, "nothing written yet"
+    (tmp_path / "sid.jsonl").write_text("{}", encoding="utf-8")
+    os.utime(tmp_path / "sid.jsonl", (1000, 1000))
+    assert ps.last_activity(str(tmp_path), "sid") == 1000
+    sub = tmp_path / "sid" / "subagents"
+    sub.mkdir(parents=True)
+    (sub / "agent-a.jsonl").write_text("{}", encoding="utf-8")
+    os.utime(sub / "agent-a.jsonl", (5000, 5000))
+    assert ps.last_activity(str(tmp_path), "sid") == 5000, "a subagent still writing is the session still working"
+
+
+def test_the_projects_directory_is_the_one_page_session_sh_names(monkeypatch) -> None:
+    monkeypatch.setenv("HOME", "/h")
+    assert ps.projects_dir("/diagram/.clones/diagram-x") == "/h/.claude/projects/-diagram--clones-diagram-x"
+
+
+def _fake_claude(tmp_path: pathlib.Path, sid: str):  # noqa: ANN202
+    """A live process whose argv is a session's: a copy of bash named `claude`, `--session-id <sid>` among its args."""
+    import shutil
+    import subprocess
+
+    exe = tmp_path / "claude"
+    shutil.copy(shutil.which("bash") or "/bin/bash", exe)
+    return subprocess.Popen([str(exe), "-c", "sleep 30; :", "--session-id", sid], stdin=subprocess.DEVNULL)
+
+
+def test_session_pids_finds_the_session_by_its_argument_and_nothing_else(tmp_path: pathlib.Path) -> None:
+    proc = _fake_claude(tmp_path, "sid-295")
+    try:
+        assert ps.session_pids("sid-295") == [proc.pid]
+        assert ps.session_pids("sid-other") == []
+    finally:
+        proc.kill()
+        proc.wait()
+
+
+def test_the_watch_ends_a_silent_session_and_leaves_a_writing_one(tmp_path: pathlib.Path) -> None:
+    """Silence past the threshold with the process alive ends it; a fresh write keeps it; no process, nothing to end."""
+    import os
+    import time
+
+    proc = _fake_claude(tmp_path, "sid-quiet")
+    try:
+        (tmp_path / "sid-quiet.jsonl").write_text("{}", encoding="utf-8")
+        os.utime(tmp_path / "sid-quiet.jsonl", (time.time() - 3600, time.time() - 3600))
+        busy = ps.StallWatch(str(tmp_path), "sid-quiet", check=0.05, after=5)
+        busy.start()
+        time.sleep(0.3)
+        busy.stop()
+        assert not busy.stalled, "silence is counted from the watch's start, never from before it (a resume's old transcript)"
+        watch = ps.StallWatch(str(tmp_path), "sid-quiet", check=0.05, after=0.2)
+        watch.start()
+        assert proc.wait(timeout=10) != 0, "the silent session's process was ended"
+        watch.join(timeout=5)
+        assert watch.stalled and watch.idle >= 0
+    finally:
+        proc.kill()
+        proc.wait()
+    gone = ps.StallWatch(str(tmp_path), "sid-none", check=0.05, after=0.0)
+    gone.start()
+    time.sleep(0.3)
+    gone.stop()
+    assert not gone.stalled, "no live process for the session: nothing is ended"
+
+
+def test_a_stalled_session_is_resumed_at_once_and_capped(tmp_path: pathlib.Path, monkeypatch) -> None:
+    """The R12 incident: a stall is resumed with no usage-limit wait; past STALL_RESUMES the queue moves on."""
+    (tmp_path / "a.md").write_text(BRIEF, encoding="utf-8")
+    (tmp_path / "b.md").write_text(BRIEF, encoding="utf-8")
+    queue = ps.plan(str(tmp_path), "n", "/p", [], [str(tmp_path / "a.md"), str(tmp_path / "b.md")])
+    first = queue[0]["sid"]
+    stalls = iter([True] * (ps.STALL_RESUMES + 1) + [False] * 5)
+
+    class FakeWatch:
+        def __init__(self, projects: str, sid: str) -> None:
+            self.sid, self.stalled, self.idle = sid, False, 0
+
+        def start(self) -> None:
+            self.stalled = self.sid == first and next(stalls)
+            self.idle = 1200 if self.stalled else 0
+
+        def stop(self) -> None:
+            pass
+
+    calls: list[list[str]] = []
+
+    def fake_run(cmd, **kw):  # noqa: ANN001, ANN003, ANN202
+        calls.append(cmd)
+        kw["stdout"].write('{"subtype": "success"}')
+        return ps.subprocess.CompletedProcess(cmd, 0)
+
+    slept: list[float] = []
+    monkeypatch.setattr(ps, "StallWatch", FakeWatch)
+    monkeypatch.setattr(ps.subprocess, "run", fake_run)
+    monkeypatch.setattr(ps.time, "sleep", slept.append)
+    run_log = tmp_path / "run.log"
+    ps.work(str(tmp_path), "n", [], queue, str(run_log))
+    lines = run_log.read_text(encoding="utf-8").splitlines()
+    assert slept == [], "a stall owes no usage-limit wait"
+    assert sum(ln.startswith("stalled ") and "resuming it" in ln for ln in lines) == ps.STALL_RESUMES
+    assert f"stalled {first} - idle 20 min, resumed {ps.STALL_RESUMES} times already; moving on" in lines
+    assert all("--resume" in c for c in calls[1 : ps.STALL_RESUMES + 1]), "each stall resumes the SAME session"
+    assert "--session-id" in calls[-1] and lines[-1] == "ALL DONE", "then the next brief runs"

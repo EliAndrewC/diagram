@@ -226,3 +226,20 @@ def test_roll_one_s_header_names_the_row_or_the_farm_water_knob(monkeypatch: pyt
     monkeypatch.setattr(hg, "generate", generate)
     header, _f, _l = ca.roll_one((7, 13))
     assert f"form={form}" in header and want in header
+
+
+def test_a_refused_roll_is_reported_by_name_not_raised(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 291 on 287: a roll that raises a refusal is that seed's verdict - its form and the refusal by name - and the
+    audit goes on to the other seeds."""
+    from l7r.diagram.tools import cohort_audit as ca
+
+    class Refused(ValueError):
+        pass
+
+    def refuse(*a, **k):  # type: ignore[no-untyped-def]
+        raise Refused("no margin seats all 12")
+
+    monkeypatch.setattr(ca.hg, "generate", refuse)
+    header, failures, lines = ca.roll_one((901, 12, {"row_line": "street"}))
+    assert header.startswith("Audit-901 households=12 form=linear") and header.endswith("REFUSED")
+    assert failures == ["refused:Refused"] and lines == ["FAIL refused:Refused -> no margin seats all 12"]

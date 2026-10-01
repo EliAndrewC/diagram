@@ -3,7 +3,7 @@
 homesteads/200, the Tonami dispersed-village museum (translated): "because in former times on the fan plain the water
 table was deep and wells were hard to dig, in many areas a small channel was led into the house's grounds and used for
 cooking, washing and drinking water" - ACCURATE. The `farm_water` knob (`FARM_WATERS`) rolls it against a well of the
-farm's own (`wells.own_wells`), the other areas as the record reads them, a GUESS.
+farm's own (drawn at its well pocket, `wells.grove_water`), the other areas as the record reads them, a GUESS.
 
 Each channel runs from the nearest point of the irrigation water - a drawn supply ditch (a main or a branch, never the
 drain), or the brook where that is nearer (the nearest a map drawing convention; the brook standing for the water the
@@ -20,7 +20,7 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, rot_rect, seg_closest, segments_cross
+from l7r.diagram.settlement import Settlement, point_in_poly, rot_rect, seg_closest, segments_cross
 from l7r.diagram.settlement.water_ways.water import SUPPLY_HUE
 from l7r.diagram.sitegen.geom import crop_polys
 
@@ -37,6 +37,9 @@ DOORYARD_STEP_FT = 6.0
 """How far off its threshing yard's edge the channel ends: a step, so the water stands in the dooryard beside the yard
 rather than on its floor (a map drawing convention)."""
 
+DOORYARD_STEPS = (1.0, 2.0, 3.5)
+"""The multiples of `DOORYARD_STEP_FT` a channel's end is offered at off each side of the yard, nearest first (feature 291 on
+287; where in the dooryard the channel ended no page read says - a GUESS, as the one step was)."""
 SOURCE_TRIES = 6
 """The nearest candidate points on the irrigation water tried per farm, nearest first (the router's own budget)."""
 
@@ -121,6 +124,15 @@ def _obstacles(s: Settlement, h: Mapping[str, Any]) -> tuple[list[Poly], list[Po
         of = g.get("of")
         if of and (round(float(of[0]), 1), round(float(of[1]), 1)) != me and all(k in g for k in ("x", "y", "w", "h")):
             walls.append(rot_rect(float(g["x"]), float(g["y"]), float(g["w"]), float(g["h"]), float(g.get("rot", 0.0))))
+    # ...and every OTHER farm's WELL POCKET (feature 287's seating laid one in each grove farm's dooryard): a farm the channels
+    # leave dry draws its well there, so no channel may run across one. Not the farm's own: its channel arriving is what
+    # releases it (`wells.grove_water`), and walled, it turned away the one approach a farm on cohort seed 19 had
+    vr = 2.0 * float(s._well_vr()) + s.px(6.0)
+    walls += [
+        rot_rect(float(q["well_pocket"][0]), float(q["well_pocket"][1]), vr, vr, 0.0)
+        for q in s.M.get("houses") or []
+        if q.get("well_pocket") and (round(float(q["x"]), 1), round(float(q["y"]), 1)) != me
+    ]
     # NOT the other farms' FRAMES: a frame holds the lane's room between two groves, which is exactly where a channel to a
     # farm behind them runs (Audit-905: with the frames walled, six of sixteen farms were cut off their water)
     for ln in s.M.get("lanes") or []:
@@ -148,11 +160,32 @@ def farm_channel(s: Settlement, h: Mapping[str, Any], courses: Sequence[Sequence
     sides = [((float(a[0]) + float(b[0])) / 2, (float(a[1]) + float(b[1])) / 2) for a, b in zip(ring, [*ring[1:], ring[0]], strict=False)]
     # ...THE SHORTEST OF THEM ALL, over every source and every end, not the first found: the nearest side can be reached only
     # the long way round the grove (Audit-905: a channel carried 360 ft round its own farm to the side facing its water)
+    # THE WAY THAT HAS ALWAYS SERVED FIRST, THE WIDER SEARCH ONLY WHERE IT FINDS NOTHING (cohort run 6): the nearest sources, a
+    # step off each side of the yard, routed. Offered as equals, the wider search's shorter chords took the early farms' water
+    # the straight way and walled the later farms off theirs (channels are laid nearest the water first, and each one drawn
+    # is water the next may not cross): three dispersed seeds that had passed each left two or three farms dry.
+    offered = source_points(courses, (cx, cy), s.px(SOURCE_STEP_FT), SOURCE_TRIES * 4, spread=s.px(SOURCE_SPREAD_FT) * 4)
+    near = source_points(courses, (cx, cy), s.px(SOURCE_STEP_FT), SOURCE_TRIES, spread=s.px(SOURCE_SPREAD_FT))
     routes: list[Poly] = []
-    for src in source_points(courses, (cx, cy), s.px(SOURCE_STEP_FT), SOURCE_TRIES, spread=s.px(SOURCE_SPREAD_FT)):
-        mine = [(c, d) for c, d in water if _seg_d(src, c, d) > s.px(3.0)]  # the course it is led off, and its drawn twin
-        ends = [dooryard_end(ring, src, step)] + [dooryard_end(ring, m, step) for m in sorted(sides, key=lambda m: math.dist(m, src))]
-        routes += [p for p in (_route(src, e, [], [*hard, *walls], mine, cell=s.px(ROUTE_CELL_FT), gap=s.px(2.0)) for e in ends) if len(p) >= 2 and not crosses_other_water(p, water, s.px(6.0))]
+    for srcs, steps, straight in (
+        (near, (1.0,), False),
+        # ...THEN THE WIDER SEARCH: the nearest sources off the crop beside them (a ditch inside the field can be walled by its
+        # paddies - cohort seed 19: all six of one farm's sources stood among them); ends farther off the yard (since feature
+        # 287 a farm's fixtures are laid round it, and a single step off each side stood boxed in by them); and the straight
+        # chord where it crosses nothing (a farm seated close by its field leaves a strip narrower than the router's clearance
+        # on both sides - seed 19: 90 routes refused for a channel 30 ft long)
+        ([*near, *[q for q in offered if q not in near and not inside_the_crop(q, hard)][:SOURCE_TRIES]], DOORYARD_STEPS, True),
+    ):
+        for src in srcs:
+            mine = [(c, d) for c, d in water if _seg_d(src, c, d) > s.px(3.0)]  # the course it is led off, and its drawn twin
+            ends = [dooryard_end(ring, t, step * k) for k in steps for t in (src, *sorted(sides, key=lambda m: math.dist(m, src)))]
+            found = (
+                straight_or_routed(src, e, hard, walls, mine, s.px(ROUTE_CELL_FT), s.px(2.0)) if straight else _route(src, e, [], [*hard, *walls], mine, cell=s.px(ROUTE_CELL_FT), gap=s.px(2.0))
+                for e in ends
+            )
+            routes += [p for p in found if len(p) >= 2 and not crosses_other_water(p, water, s.px(6.0))]
+        if routes:
+            break
     path = min(routes, key=lambda p: sum(math.dist(a, b) for a, b in zip(p, p[1:], strict=False)), default=[])
     if path:
         s.field_channel(path, SUPPLY_HUE, s.px(FARM_CHANNEL_W_FT), s.px(FARM_CHANNEL_W_FT), cls=FARM_CHANNEL)
@@ -160,6 +193,24 @@ def farm_channel(s: Settlement, h: Mapping[str, Any], courses: Sequence[Sequence
         s.M.setdefault("farm_channels", []).append({"of": [hx, hy], "pts": [[round(x, 1), round(y, 1)] for x, y in path], "w": s.px(FARM_CHANNEL_W_FT)})
         s.corridors.append((path, s.px(4.0)))
     return path
+
+
+def straight_or_routed(src: Pt, end: Pt, hard: Sequence[Poly], walls: Sequence[Poly], water: Sequence[tuple[Pt, Pt]], cell: float, gap: float) -> Poly:
+    """The straight chord from `src` to `end` where it crosses no hard ground, no wall and no water, else the routed way."""
+    from ..ways.fabric import _crosses_fabric
+    from ..ways.route import _route
+
+    if not _crosses_fabric([src, end], [*hard, *walls], 0.0) and not any(segments_cross(src, end, c, d) for c, d in water):
+        return [src, end]
+    return _route(src, end, [], [*hard, *walls], list(water), cell=cell, gap=gap)
+
+
+def inside_the_crop(q: Pt, hard: Sequence[Poly], edge: float = 1.0) -> bool:
+    """Is `q` strictly inside the crop (`hard`) - inside a ring and more than `edge` from its boundary - so no source for a
+    channel?"""
+    from l7r.diagram.settlement import edge_dist
+
+    return any(len(r) >= 3 and point_in_poly(q[0], q[1], r) and edge_dist(q[0], q[1], r) > edge for r in hard)
 
 
 def _seg_d(p: Pt, a: Pt, b: Pt) -> float:

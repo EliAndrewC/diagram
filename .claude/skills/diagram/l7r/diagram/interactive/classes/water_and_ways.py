@@ -326,11 +326,11 @@ class VillageLane(Kind):
     paddies the way is the bund itself, the path a farmer walks to weed and manure, so the path to the fields
     runs on to the paddy's outer bund and joins it, and where a hamlet stands so close to its paddy that no
     path is left between them, its nearest lane runs on to the bund. In a row village the farms stand along a street
-    instead - a street laid out first, or one along the dry edge the ground gives.
+    instead - a street laid out first, or the line the ground gives, a natural levee or a dike.
 
     Note: That every house is reached by a way is read from a surveyed village's own lane hierarchy; of the two
     forms, the planned back lane is read and the alleys off the spine are on no publicly readable page, as is
-    the access passage this record paraphrases; the drawn WIDTHS (3, 5 and 6 ft, a row village's street at the 6 ft, a rank wider than the lanes off it) are a GUESS, laddered from a footpath to a
+    the access passage this record paraphrases; the drawn WIDTHS (3, 5 and 6 ft; a row village's street takes the 6 ft, a rank wider than the lanes off it) are a GUESS, laddered from a footpath to a
     wheelbarrow's width, with the connector kept under the 9 ft of the one cart road the record does measure.
     The record now carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to
     13 ft, reaching the house lots of a surveyed village - and the map deliberately draws below that band,
@@ -339,12 +339,14 @@ class VillageLane(Kind):
     lane stopped at the dooryard or ran on, so the map's rule - end at the dooryard or reach something seen,
     and a lane end that reaches nothing is pulled back to the last house it serves - is its own, and how close
     counts as serving a house (within 12 ft of its house, yard or beds, or beside it within 60 ft) is a guess
-    too, as is the point where the field path joins its bund, the one nearest the hamlet. A row village's street running
-    on as the road the row stands on, and a path from each farm's door to it, are map drawing conventions. The
+    too, as is the point where the field path joins its bund, the one nearest the hamlet. A row village's street drawn along
+    the field's dry edge, standing for a natural levee, a dike or a fan's foot, is this record's reading (a row along
+    a fan's foot most of all: the record reads a row of villages there, not how the houses lay); its running on as the
+    road the row stands on, and a path from each farm's door to it, are map drawing conventions. The
     one width read for a way out to the fields is the one-ken (about 6 ft) farm road of a paddy replanned in
     1869 - a planned layout, not an old way measured.
 
-    Caveat: the drawn WIDTHS (3, 5 and 6 ft, a row village's street at the 6 ft, a rank wider than the lanes off it) are a GUESS, laddered from a footpath to a wheelbarrow's width,
+    Caveat: the drawn WIDTHS (3, 5 and 6 ft; a row village's street takes the 6 ft, a rank wider than the lanes off it) are a GUESS, laddered from a footpath to a wheelbarrow's width,
     with the connector kept under the 9 ft of the one cart road the record does measure. The record now
     carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to 13 ft,
     reaching the house lots of a surveyed village - and the map deliberately draws below that band, because

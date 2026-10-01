@@ -1,0 +1,135 @@
+{
+ "run_id": "e7",
+ "tokens": {
+  "main": {
+   "input_tokens": 1084,
+   "output_tokens": 598000,
+   "cache_read_input_tokens": 247155721,
+   "cache_creation_input_tokens": 2599455
+  },
+  "subagents": {
+   "input_tokens": 1088,
+   "output_tokens": 505032,
+   "cache_read_input_tokens": 24734251,
+   "cache_creation_input_tokens": 1680721
+  },
+  "total": {
+   "input_tokens": 2172,
+   "output_tokens": 1103032,
+   "cache_read_input_tokens": 271889972,
+   "cache_creation_input_tokens": 4280176
+  }
+ },
+ "wall_clock_s": 18434,
+ "sessions": [
+  "cebc1afe-d179-4a23-9f59-04d68ca7c31b"
+ ],
+ "tool_calls": {
+  "main": {
+   "Bash": 488,
+   "Read": 14,
+   "Edit": 124,
+   "Write": 15,
+   "Agent": 62,
+   "ToolSearch": 3,
+   "WebSearch": 2
+  },
+  "subagents": {
+   "Read": 133,
+   "WebFetch": 3,
+   "Bash": 432,
+   "Grep": 5
+  }
+ },
+ "dispatches": {
+  "settlement-review@inherit": 49,
+  "escalation-check@inherit": 2,
+  "quote-check@inherit": 6,
+  "record-format@inherit": 5
+ },
+ "effort": {
+  "main": {
+   "xhigh": 540,
+   "unrecorded": 4
+  },
+  "subagents": {
+   "quote-check": {
+    "medium": 23
+   },
+   "settlement-review": {
+    "high": 495
+   },
+   "record-format": {
+    "medium": 16
+   },
+   "escalation-check": {
+    "medium": 10
+   }
+  }
+ },
+ "adhoc_dispatches": [],
+ "adhoc_judging_at_session_effort": 0,
+ "rework": {
+  "guard": {
+   "finished-run:reminded:finished-not-running": 13,
+   "batching:reminded:serial-recon-notice": 24,
+   "agent-model:permitted:pinned-type": 62,
+   "escalation:armed:review-dispatched": 49,
+   "pair:blocked:review-prerequisites-unmet": 19,
+   "no-poll:blocked:busy-wait-loop": 1,
+   "no-poll:escaped:poll-ok": 11,
+   "pair:permitted:review-dispatched": 30,
+   "pair:permitted:reviews-parallel": 5,
+   "escalation:blocked:findings-unfiltered": 3,
+   "escalation:permitted:filter-ran": 2,
+   "check-bundle:permitted:bundle-named": 11,
+   "batching:blocked:serial-recon": 2,
+   "pair:blocked:half-open-pairing": 2,
+   "finished-run:permitted:tracked-run": 2,
+   "finished-run:blocked:run-still-going": 1,
+   "pair:escaped:pair-ok-gate": 6,
+   "clone-sync:blocked:stale-head": 1,
+   "discard:escaped:discard-ok": 1,
+   "no-poll:rewrote:self-match": 1,
+   "pair:permitted:reviews-serialized": 1,
+   "house-style:rewrote:corrected-command": 1
+  },
+  "verdicts": {
+   "quote-check": {
+    "unclear": 6
+   },
+   "settlement-review": {
+    "unclear": 18,
+    "pass": 12
+   },
+   "record-format": {
+    "unclear": 5
+   },
+   "escalation-check": {
+    "unclear": 1,
+    "pass": 1
+   }
+  },
+  "failed_make_runs": [
+   "grep -n \"^import\\|^from\" tests/settlement/test_houses.py | head; timeout 600 make test-file FILE=\"tests/hamletgen/homesteads/test_storehouses.py tests/hamletgen",
+   "timeout 900 make quick 2>&1 | tail -25",
+   "timeout 900 make test-file FILE=\"tests/hamletgen tests/test_notes_census.py\" 2>&1 | grep -E \"FAILED|passed|failed|Error\" | head -30",
+   "timeout 900 make test-file FILE=\"tests/hamletgen tests/settlement/test_houses.py tests/settlement/test_rolling.py tests/test_notes_census.py\" 2>&1 | grep -E \"^F",
+   "timeout 300 make notes-census 2>&1 | tail -1; timeout 900 make test-file FILE=\"tests/hamletgen tests/settlement/test_houses.py tests/settlement/test_rolling.py ",
+   "for m in inashiro kashikawa kuwabata mizuguchi sawada; do cp pool/hamlets/$m/$m.json /tmp/$m.r3.json; timeout 900 make map GEN=pool/hamlets/$m/$m.gen.py 2>&1 | ",
+   "rm -f tests/hamletgen/test_zz_probe_293i.py && for m in inashiro kashikawa kuwabata mizuguchi sawada; do cp pool/hamlets/$m/$m.json /tmp/$m.r4.json; timeout 900",
+   "timeout 300 make test-file FILE=\"tests/hamletgen/test_frame.py\" 2>&1 | grep -E \"^E |Error\" | head -12; grep -n \"def test_the_confluence_reserves_its_own_room_in",
+   "grep -n \"^import\\|^from\" tests/hamletgen/test_frame.py | head; timeout 300 make test-file FILE=\"tests/hamletgen/test_frame.py\" 2>&1 | grep -E \"^E |passed|failed",
+   "timeout 900 make quick 2>&1 | tail -4; timeout 900 make test-file FILE=\"tests/hamletgen tests/settlement tests/test_notes_census.py tests/interactive\" 2>&1 | gr",
+   "timeout 300 make record 2>&1 | tail -1; timeout 900 make test-file FILE=\"tests/interactive\" 2>&1 | grep -E \"^FAILED\" | head; grep -n \"siblings\" tests/interactiv",
+   "timeout 300 make notes-census 2>&1 | tail -1; timeout 1200 make test-file FILE=\"tests/hamletgen tests/settlement tests/test_notes_census.py tests/gate/test_lane",
+   "grep -n \"^import math\\|^import\" tests/hamletgen/test_hinterland.py | head -3; timeout 600 make test-file FILE=\"tests/hamletgen/test_hinterland.py\" K=\"thicket\" 2",
+   "f=l7r/diagram/hamletgen/hinterland/bamboo.py; cp $f /tmp/bamboo.keep; sed -i 's/lambda x, y, hw=hw, hh=hh: y + hh <= north and _fits(x, y, hw, hh)/lambda x, y, ",
+   "cd /diagram/.clones/diagram-exp-e7/.claude/skills/diagram/l7r/diagram/hamletgen && python3 - <<'EOF'\np=\"hinterland/bamboo.py\"; t=open(p).read()\ndef rep(a,b):\n  "
+  ],
+  "fix_commits": [
+   "293 I: the handoff, the review ledger, and round 6's wording fixes"
+  ],
+  "escalations": 2
+ }
+}

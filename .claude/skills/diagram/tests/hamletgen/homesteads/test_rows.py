@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 from shapely.geometry import Point
 
-from l7r.diagram.hamletgen.homesteads.row_rules import bamboo_mismatch, continuous, doors_unreached, row_rules, water_rules
+from l7r.diagram.hamletgen.homesteads.row_rules import bamboo_mismatch, continuous, row_rules, water_rules
 from l7r.diagram.hamletgen.homesteads.rows import (
     door_clear,
     frame_extent,
@@ -137,11 +137,7 @@ def test_water_rules_own_and_shared() -> None:
     assert water_rules(no_grove) == []
 
 
-def test_doors_and_bamboo() -> None:
-    assert doors_unreached(_row_map()) == []
-    assert doors_unreached(_row_map(lanes=[{"pts": [[0.0, -500.0], [1000.0, -500.0]]}])) == [(100.0, 60.0)]
-    assert doors_unreached({"meta": {"settlement_form": "linear"}, "lanes": []}) == []
-    assert doors_unreached({**_row_map(lanes=[{"pts": [[0.0, -500.0], [1000.0, -500.0]]}]), "meta": {"settlement_form": "dispersed"}}) == [], "no network to reach"
+def test_bamboo_mismatch() -> None:
     M = {"meta": {"household_bamboo_in_grove_farms": [[1.0, 2.0]]}, "groves": [{"of": [3.0, 4.0], "bamboo": True}, {"of": [1.0, 2.0], "bamboo": True}]}
     assert bamboo_mismatch(M) == [("draws_unrolled", (3.0, 4.0))]
     assert bamboo_mismatch({"meta": {"household_bamboo_in_grove_farms": [[1.0, 2.0]]}, "groves": []}) == [("rolled_undrawn", (1.0, 2.0))]

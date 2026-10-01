@@ -1,0 +1,7 @@
+{
+  "utc": "2026-09-30T23:08:59Z",
+  "target": "review-accept",
+  "commit": "716d4023f",
+  "outcome": "permitted",
+  "why": "review-accept kuwabata F1: tooling nitpick with no norm behind it: the notes census does not count farm_sheds, and the annex count is stated in the dated feature 293 entry, which matches the drawing"
+}

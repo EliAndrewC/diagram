@@ -112,12 +112,8 @@ instead of repeating the tier it just finished.
 buy a vacuously green build. `make soak` refuses on an empty suite for exactly that reason: this
 project's rule is that non-vacuity is asserted, never assumed.
 
-**`test_seatings.py` (feature 217, 2026-09-08)**: the three seating behavior tests - the `cluster_seeds` cloud alone,
-the lane frontage alone, the frontage stopping at one household - on copies of one partial roll in a child. Their one
-coverage line is `tests/hamletgen/homesteads/test_seats.py`; what they assert is behavior, which this tier is for.
-
-**`test_polder_fall_0.py` (feature 219, 2026-09-08)**: the polder-grid archetype on Polder seed 12 - the reservoir walk on
-the one seed that needs it, the grid solved to its acreage with every household seated and the dike gated, the keep-outs,
-the lanes bending like paths, the ratchet's seating and acreage. Its three engine lines are unit tests in
-`tests/hamletgen/test_water.py`; the pool ships no polder-grid map, so until this tier runs the archetype's behavior is
-proved by nothing (stated to the GM at the feature's landing).
+**`test_seatings.py` and `test_polder_fall_0.py` - retired by feature 287 (2026-09-29).** Both read finished rolls for
+behavior their placers now guarantee: the seating's cloud and frontage stop are unit tests of the seating on inputs that
+include the violating case (`tests/settlement/test_rolling.py`, `tests/hamletgen/homesteads/`), and the polder grid's
+reservoir, acreage, keep-outs and lanes are guaranteed where they are placed (`specs/287-placer-guarantees/research.md`
+R8 names each test and the placer test that took its place). `test_village_determinism.py` is what the tier still runs.

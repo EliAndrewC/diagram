@@ -406,7 +406,15 @@ def classify(
             obstacles.append(Obstacle(tuple(s.poly), WEIGHT_TEXT))
         else:
             obstacles.append(Obstacle(tuple(s.poly), WEIGHT_DARK if s.dark else WEIGHT_OBSTACLE))
-    return ObstacleIndex(obstacles, ways)
+    return soft_index(obstacles, ways)
+
+
+def soft_index(obstacles: list[Obstacle], ways: list[Way]) -> ObstacleIndex:
+    """A hand sheet's index with what a caption may be set on when nothing is free marked `soft` (feature 287, D10): light
+    ink, nested ground and the ways. What stays hard is what the sheet's own checks call an overlap - another caption or
+    ink painted over one (`WEIGHT_TEXT`: overlapping, occluded) and dark ink under dark words (`WEIGHT_DARK`) - which the
+    placer never draws: with no other seat, such a caption goes in the sheet's key."""
+    return ObstacleIndex([replace(o, soft=o.weight < WEIGHT_DARK) for o in obstacles], [replace(w, soft=True) for w in ways])
 
 
 def _same_box(a: Poly, b: Poly, tol: float = 1.0) -> bool:
@@ -510,7 +518,7 @@ def leader_blockers(shapes: list[Shape], skip: set[int], placed: list[tuple[list
         and not _box_within(s.poly, own)
         and not _box_within(own, s.poly)
     ]
-    return ObstacleIndex(out)
+    return soft_index(out, [])
 
 
 WALL_HALF_PX = 2.0
@@ -842,12 +850,24 @@ def placed(src: str) -> str:
     """The sheet with every caption written where the placer put it, and its leader drawn after it (feature 286, plan
     D5): what a sheet's picture and page are rendered from. The tracked sheet is the drawing and the declarations; this
     is a function of them alone."""
-    ground, _view = read_sheet(src)
+    ground, view = read_sheet(src)
     tags = start_tags(src)
     edits: list[tuple[int, int, str]] = []
+    key: list[str] = []
     for caps, p, per in seat(src):
         head = caps[0]
         fill = (head.element.get("fill") if head.element is not None else None) or DARK_INK
+        if p.keyed:
+            # NO SEAT ON THE SHEET (feature 287, D10): the caption's number is set on what it names and its words go in
+            # the sheet's key - its first text becomes the mark, its other texts are dropped
+            key.append(" ".join(ln for c in caps for ln in c.lines))
+            for k, cap in enumerate(caps):
+                a, b = tags[cap.at]
+                end = src.index("</text>", b) + len("</text>")
+                lx, ly = _apply(_inverse(cap.frame), (p.x, p.y))
+                mark = Placement(lx, ly, 0.0, (str(len(key)),), p.block, p.ring, p.rank, p.position, p.cost, None)
+                edits.append((a, end, caption_svg(mark, head.size, ' font-weight="bold"', DARK_INK, cap.kind if cap.element is not None and cap.element.get("data-kind") else "") if k == 0 else ""))
+            continue
         centers = _line_centers(p, [c.size for c in caps], [len(ls) for ls in per])
         news: list[tuple[int, int, str]] = []
         for cap, cap_lines, (cx, cy) in zip(caps, per, centers, strict=True):
@@ -876,7 +896,41 @@ def placed(src: str) -> str:
     out = src
     for a, end, new in sorted(edits, reverse=True):
         out = out[:a] + new + out[end:]
-    return out
+    return with_key(out, key, view) if key else out
+
+
+KEY_SIZE = 9.0
+"""The key's words, in px - a note's size on the sheets."""
+
+
+def with_key(src: str, rows: list[str], view: tuple[float, float, float, float]) -> str:
+    """The sheet with its KEY (feature 287, D10, a map drawing convention - a legend's numbered notes): a band grown under
+    the drawing, holding each caption the placer found no seat for after the number its mark carries. The band is sheet
+    furniture, outside the plan, so it covers nothing drawn."""
+    pitch, pad = KEY_SIZE * PITCH_EM, 8.0
+    band = len(rows) * pitch + 2 * pad
+    x0, _y0, x1, y1 = view
+    body = "".join(
+        f'\n  <text x="{x0 + pad:.1f}" y="{y1 + pad + (i + 0.8) * pitch:.1f}" font-size="{KEY_SIZE:g}" fill="{DARK_INK}" data-kind="-">{i + 1}  {_esc_text(r)}</text>' for i, r in enumerate(rows)
+    )
+    card = f'\n  <rect x="{x0:.1f}" y="{y1:.1f}" width="{x1 - x0:.1f}" height="{band:.1f}" fill="#F7F0DC" data-kind="-"/>{body}\n'
+
+    def grow(m: re.Match[str]) -> str:
+        vx, vy, vw, vh = (float(v) for v in re.split(r"[\s,]+", m.group(1).strip()))
+        return f'viewBox="{vx:g} {vy:g} {vw:g} {vh + band:g}"'
+
+    head_end = src.index(">", src.index("<svg")) + 1
+    root = re.sub(r'viewBox="([^"]*)"', grow, src[:head_end], count=1)
+    height = re.search(r'\sheight="([0-9.]+)"', root)
+    if height is not None:
+        root = root.replace(height.group(0), f' height="{float(height.group(1)) * (y1 - view[1] + band) / (y1 - view[1]):g}"', 1)
+    rest = src[head_end:]
+    at = rest.rindex("</svg>")
+    return root + rest[:at] + card + rest[at:]
+
+
+def _esc_text(s: str) -> str:
+    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
 def render(src: str, png: str) -> None:

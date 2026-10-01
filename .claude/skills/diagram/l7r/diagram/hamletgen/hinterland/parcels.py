@@ -8,10 +8,12 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross
 from l7r.diagram.settlement._geom import PointGrid, RingIndex, boxed_grid, seg_reach_index
+from l7r.diagram.settlement.land.cover import WOODLAND_MIN_CROWNS, ring_center
+from l7r.diagram.settlement.land.wet import marsh_ground
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
-from .frame import content_box, title_pocket
+from .frame import content_box, frame_bounds, title_pocket
 
 CROP_MARGIN = 48.0  # the one crop margin, shared by stage_frame's crop_to_content call and the
 # predicted-kept-window math in open_ground_patches - two hardcoded 48s would drift
@@ -75,6 +77,18 @@ def parcel_bbox_ok(x: float, y: float, hw: float, hh: float, bc: float, bs: floa
     return inside >= WOODLAND_BBOX_FLOOR * (2.0 * bw) * (2.0 * bh)
 
 
+def parcel_inside_share(ring: Sequence[Pt], frame: tuple[float, float, float, float]) -> float:
+    """The share of a parcel's DRAWN ring's bounding box inside `frame` (x0, y0, x1, y1) - the gate's own measure
+    (`test_a_woodland_commons_is_mostly_inside_the_picture`, over the view). ONE PREDICATE (feature 287, FR-003; woods
+    W14): `parcel_bbox_ok` measures the rotated RECTANGLE the ring is drawn inside, whose box is not the ring's, so the
+    scan asks this of the ring it is about to draw as well."""
+    xs = [float(p[0]) for p in ring]
+    ys = [float(p[1]) for p in ring]
+    box = max(1e-9, (max(xs) - min(xs)) * (max(ys) - min(ys)))
+    inter = max(0.0, min(max(xs), frame[2]) - max(min(xs), frame[0])) * max(0.0, min(max(ys), frame[3]) - max(min(ys), frame[1]))
+    return inter / box
+
+
 def fit_square_parcel(half: float, floor_half: float, fits: Any) -> float | None:
     """Shrink a square parcel down the ladder until it fits, or return None.
 
@@ -97,6 +111,33 @@ def fit_square_parcel(half: float, floor_half: float, fits: Any) -> float | None
         if fits(cand):
             return cand
     return None
+
+
+WET_SHARE_CAP = 0.5
+"""The most of a woodland parcel that may stand in marsh: half its sample grid (`woodland_commons_on_dry_ground`). A
+managed coppice is not a swamp forest - standing water rots the stools and the cut cannot be carried out."""
+
+
+def parcel_wet_share(ring: Sequence[Pt], marshes: Sequence[list[Pt]]) -> float:
+    """The share of a parcel's 5 x 5 sample grid, over its DRAWN ring's bounding box, that stands in a marsh ring.
+
+    ONE PREDICATE (feature 287, FR-003; woods W12), read by `open_ground_patches` on the ring it is about to draw and by
+    the gate's `test_a_woodland_commons_stands_on_dry_ground`. They used to disagree: the scan probed 3 x 3 points of the
+    circumscribing square while the gate sampled 5 x 5 over the drawn ring's box, so a marsh finger between the probes
+    could pass the scan and fail the rule. `marshes` is `marsh_ground(M)` - the drawn marsh (M7)."""
+    if not marshes or len(ring) < 3:
+        return 0.0
+    xs = [float(p[0]) for p in ring]
+    ys = [float(p[1]) for p in ring]
+    x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
+    soaked = 0
+    for i in range(5):
+        for j in range(5):
+            x = x0 + (x1 - x0) * (i + 0.5) / 5
+            y = y0 + (y1 - y0) * (j + 0.5) / 5
+            if any(point_in_poly(x, y, m) for m in marshes):
+                soaked += 1
+    return soaked / 25.0
 
 
 _EDGE_SAMPLE = 30.0  # px between the samples `crop_edge_points` takes along a field edge: a third of the scan's 90 px lattice
@@ -237,11 +278,14 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
     # wet seat renders as a claimed woodland with almost no trees). "Still open" is not "dry":
     # a candidate square must keep every sample point out of every recorded marsh poly.
     # `woodland_commons_on_dry_ground` gates the result.
-    marshes: list[Poly] = [[(float(v[0]), float(v[1])) for v in mp.get("poly") or []] for mp in s.M.get("marshes", [])]
-    marshes = [mp for mp in marshes if len(mp) >= 3]
+    marshes: list[Poly] = marsh_ground(s.M)  # the drawn marsh (feature 287, M7)
+
+    # ...each marsh's y-span taken once (feature 287 perf): a ray test counts an edge only where `(yi > py) != (yj > py)`, so a
+    # sample outside a ring's [lowest, highest) y is outside it without the walk - the same verdict
+    _marsh_spans = [(min(q[1] for q in mp), max(q[1] for q in mp), mp) for mp in marshes if mp]
 
     def _wet(x: float, y: float, half_: float) -> bool:
-        return any(point_in_poly(x + ddx * half_, y + ddy * half_, mp) for mp in marshes for ddx in (-1.0, 0.0, 1.0) for ddy in (-1.0, 0.0, 1.0))
+        return any(y0 <= y + ddy * half_ < y1 and point_in_poly(x + ddx * half_, y + ddy * half_, mp) for y0, y1, mp in _marsh_spans for ddx in (-1.0, 0.0, 1.0) for ddy in (-1.0, 0.0, 1.0))
 
     crops: list[Poly] = [list(plan.envelope)] + [[(float(v[0]), float(v[1])) for v in d["poly"]] for d in s.M.get("dry_plots", [])]
     crop_idx = [RingIndex(c) for c in crops]  # each crop's edges indexed once (feature 218); the rung below boxes them by its own set-back
@@ -272,11 +316,11 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
     # shared CROP_MARGIN), and at this stage it is final except for features that only GROW it -
     # so a parcel held inside it now is inside the kept view later.
     # `woodland_commons_within_the_frame` gates the result.
-    _cb = s._crop_boxes(city=False)
-    _cx = [v for b in _cb for v in (b[0], b[1])] or [0.0, plan.W]
-    _cy = [v for b in _cb for v in (b[2], b[3])] or [0.0, plan.H]
-    _fx0, _fy0 = max(0.0, min(_cx) - CROP_MARGIN), max(0.0, min(_cy) - CROP_MARGIN)
-    _fx1, _fy1 = min(plan.W, max(_cx) + CROP_MARGIN), min(plan.H, max(_cy) + CROP_MARGIN)
+    # SINCE FEATURE 287 (M6) the window IS the view function: `frame_bounds`, the crop's own body over the crop's boxes and
+    # the ground the frame reserves (an outside pocket, the confluence, the brook beside the field), which the view decided
+    # at the end of this stage contains - a frame only GROWS after the scan (the belt's face), and a parcel's share inside a
+    # larger frame is never smaller.
+    _fx0, _fy0, _fx1, _fy1 = frame_bounds(s, plan)
 
     chosen: list[Poly] = []
     centers: list[tuple[float, float, float]] = []  # (x, y, this parcel's OWN exclusion radius - see the stride roll)
@@ -366,6 +410,8 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # as before. A seat no crop's box reaches is clear of all of them - the answer the full
             # list would have given - unless there are no crops at all, when it was never offered.
             crop_g = boxed_grid([(idx, idx.x0 - _sb_s - half, idx.y0 - _sb_s - half, idx.x1 + _sb_s + half, idx.y1 + _sb_s + half) for idx in crop_idx])
+            # the lines a lot's outline may follow (woods W26): the lanes and brooks at their keep-outs, the fields at this rung's set-back
+            _lot_bounds = lot_bounds([ln for ln, _ in lanes], [st for st, _ in streams], crops, _sb_n)
 
             # THE QUALIFICATION IS ONE PREDICATE, so a seat can be re-asked after it is nudged. It
             # used to be an inline `if` that only the lattice scan could evaluate, which is why the
@@ -524,7 +570,8 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 # same AREA reaches sqrt(2.2) further along its long axis than the square did, so the
                 # candidate is tested at that reach and the rotation cannot buy ground.
                 for _cand in (max(half * _f, _COMMONS_FLOOR_FT / 2.0), max(half * 0.84, _COMMONS_FLOOR_FT / 2.0)):
-                    if _ok(jx, jy, _cand):
+                    # the jitter moves a seat off the row check it passed, so the moved seat is asked the row rule too (woods W04)
+                    if _ok(jx, jy, _cand) and not in_a_ruled_line((jx, jy), centers):
                         x, y, half_used = jx, jy, _cand
                         break
                     if _ok(x, y, _cand):
@@ -627,7 +674,40 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                     # little size variety on a map that just declined to seat a parcel anyway.
                     continue
                 _hw, _hh = half_used * math.sqrt(_asp), half_used / math.sqrt(_asp)
-                chosen.append(_parcel_outline(s, x, y, _hw, _hh, _bc, _bs))
+                _ring = _parcel_outline(s, x, y, _hw, _hh, _bc, _bs)
+                # ...AND ITS LINE FOLLOWS WHAT BOUNDS IT (feature 287, woods W26 - a GUESS, research/vegetation/140: no page
+                # read says a lot's line followed stream, path or field): within `LOT_BOUND_REACH` of a brook, a lane or the
+                # field edge the ring is cut to run parallel to it (`follow_the_bounds`, pulled in only, so every keep-out
+                # above still holds) and asked `lot_follows_its_bounds`; the rules below are then asked of the cut ring. A cut
+                # takes ground, so the cut ring is held to the legibility floor too (`_COMMONS_FLOOR_FT`, its widest extent):
+                # a lot the cut leaves under it is not drawn - FEWER, never smaller
+                _bounds = bounds_near(_lot_bounds, (x, y), _hw)
+                _ring = follow_the_bounds(_ring, (x, y), _bounds)
+                if not lot_follows_its_bounds(_ring, _bounds) or ring_span(_ring) < _COMMONS_FLOOR_FT:
+                    continue
+                # ...AND THE RING THAT IS DRAWN STANDS ON DRY GROUND, by the rule's own measure (feature 287, FR-003; woods
+                # W12): the 3x3 probe above samples the circumscribing SQUARE, and a marsh finger threading between its
+                # probes can still put most of the drawn ring in the wet - so the ring is asked `parcel_wet_share`, the one
+                # predicate the gate reads too, and a wet ring is refused for the next scored seat
+                if parcel_wet_share(_ring, marshes) > WET_SHARE_CAP:
+                    continue
+                # ...AND THE RING THAT IS DRAWN IS ON THE PAGE, by the rule's own measure (woods W14): the rotated rectangle's box
+                # passed above, and the ring inside it has a box of its own. The frame is the view as it stands (`frame_bounds`),
+                # which the decided view contains - only the belt's face is added after this - so the share can only grow
+                if parcel_inside_share(_ring, (_fx0, _fy0, _fx1, _fy1)) < WOODLAND_BBOX_FLOOR:
+                    continue
+                # ...AND IT HAS ROOM FOR A WOOD (woods W13): the crowns the ring is sure of on the commons' own keep-outs, as
+                # `commons` will stock it (`woodland_room`) - a ring mostly over the padded crop is not offered as a wood
+                if len(s.woodland_room(_ring)) < WOODLAND_MIN_CROWNS:
+                    continue
+                # ...AND THE POINT THE RECORD CARRIES STANDS IN NO ROW (feature 287, woods W04). The seat above was asked the row
+                # rule, but the commons record carries the drawn RING's box center (`ring_center`), which the ring's wander moves
+                # off the seat - a third point nobody had asked. So the rule is asked of exactly that point against the points
+                # the parcels already chosen will carry, in the order they are drawn and recorded; a ring in a row is refused
+                # for the next scored seat, and a map whose ground offers none draws fewer parcels (the count is a target).
+                if in_a_ruled_line(ring_center(_ring), [ring_center(c) for c in chosen]):
+                    continue
+                chosen.append(_ring)
                 centers.append((x, y, size * (1.15 + 1.35 * s._hjit(x, y, 74.0))))
     return chosen
 
@@ -664,6 +744,114 @@ def _parcel_outline(s: Settlement, x: float, y: float, hw: float, hh: float, bc:
         lx, ly = re * f * math.cos(t), re * f * math.sin(t)
         ring.append((x + lx * bc - ly * bs, y + lx * bs + ly * bc))
     return ring
+
+
+# ---- woods W26: a lot's line follows what bounds it on the ground ---------------------------------------------------
+# GUESS (research/vegetation/140, "How is a coppice lot bounded?"): a wood's edge was a line the villages agreed or were
+# given, and it bent; "whether it followed ridges, streams and paths is a GUESS: no page read says so." This builds that
+# working answer: where a lot's outline comes within a small reach of a brook, a lane or a field's edge, its line keeps off
+# that feature and runs parallel to it, rather than wandering near it or across it as a stamped disc would. The one form
+# the record does attest as rectilinear (the Musashino strip holdings) is a settlement form and is not drawn here.
+
+LANE_LOT_LINE = 70.0  # px from a lane's centerline: the scan's own lane keep-out (`open_ground_patches`), the lot's line along it
+STREAM_LOT_LINE = 60.0  # px from a brook's centerline: the scan's own stream keep-out, the lot's line along it
+LOT_BOUND_REACH = 45.0
+"""How near (px, 1 ft at the hamlet scale) a lot's outline must come to a feature's line before the line bounds it.
+
+GUESS, a calibrated degree (research/vegetation/140 is silent on any distance): half the scan's 90 px lattice step, so a
+seat the lattice put within one half-step of a keep-out has its facing side drawn along that keep-out, while a lot a whole
+step or more away keeps its free wandering edge. A larger reach would bound more lots and cut more of their ground."""
+
+Bound = tuple[list[tuple[Pt, Pt]], float, "Poly | None"]  # (segments, the lot's line distance, the ring when closed)
+
+
+def lot_bounds(lanes: Sequence[Sequence[Pt]], streams: Sequence[Sequence[Pt]], crops: Sequence[Poly], crop_setback: float) -> list[Bound]:
+    """The features a coppice lot's line may follow (woods W26): each lane and brook as its segments at the scan's keep-out,
+    each field ring as its closed edge at the set-back the scan seated the lot with (a point inside a field is on the wrong
+    side of its line)."""
+
+    def _segs(pts: Sequence[Pt], closed: bool) -> list[tuple[Pt, Pt]]:
+        ps = [(float(p[0]), float(p[1])) for p in pts]
+        return list(zip(ps, ps[1:] + ps[:1] if closed else ps[1:], strict=False))
+
+    return [
+        *((_segs(ln, False), LANE_LOT_LINE, None) for ln in lanes if len(ln) >= 2),
+        *((_segs(st, False), STREAM_LOT_LINE, None) for st in streams if len(st) >= 2),
+        *((_segs(c, True), crop_setback, [(float(p[0]), float(p[1])) for p in c]) for c in crops if len(c) >= 3),
+    ]
+
+
+def _bound_margin(p: Pt, bound: Bound) -> float:
+    """How far `p` stands off `bound`'s feature, signed: negative inside a field's ring."""
+    segs, _line, ring = bound
+    d = min(seg_dist(p[0], p[1], a, b) for a, b in segs)
+    return -d if ring is not None and point_in_poly(p[0], p[1], ring) else d
+
+
+def _follows(p: Pt, bounds: Sequence[Bound], reach: float, tol: float = 1.0) -> bool:
+    """One vertex of the lot's line: for every bound, either ON its line (within `tol`) or beyond `reach` of it."""
+    return all(abs((d := _bound_margin(p, b)) - b[1]) <= tol or d >= b[1] + reach - tol for b in bounds)
+
+
+def lot_follows_its_bounds(ring: Sequence[Pt], bounds: Sequence[Bound], reach: float = LOT_BOUND_REACH) -> bool:
+    """THE ONE PREDICATE (feature 287, woods W26 - GUESS, research/vegetation/140): does a coppice lot's line follow what
+    bounds it? Where a vertex comes within `reach` of a brook's, a lane's or a field's line it lies on that line or keeps
+    off it by the reach - a ragged wander near a feature, or a vertex over its line, is refused; and no edge of the lot
+    crosses a feature. `open_ground_patches` draws only rings this admits, cut by `follow_the_bounds`."""
+    edges = list(zip(ring, [*ring[1:], ring[0]], strict=False))
+    for b in bounds:
+        if any(segments_cross(a, c, s0, s1) for a, c in edges for s0, s1 in b[0]):
+            return False
+    return all(_follows(p, bounds, reach) for p in ring)
+
+
+def ring_span(ring: Sequence[Pt]) -> float:
+    """A ring's widest axis-aligned extent - the measure the commons floor is held on."""
+    xs, ys = [float(p[0]) for p in ring], [float(p[1]) for p in ring]
+    return max(max(xs) - min(xs), max(ys) - min(ys))
+
+
+def bounds_near(bounds: Sequence[Bound], center: Pt, radius: float) -> list[Bound]:
+    """Only the segments of each bound that could come within `radius` of `center` (a field ring keeps its whole ring for
+    the inside test) - a prefilter: a segment farther than that can bound no vertex of a lot of that radius."""
+    out: list[Bound] = []
+    for segs, line, ring in bounds:
+        near = [(a, b) for a, b in segs if seg_dist(center[0], center[1], a, b) < radius + line + LOT_BOUND_REACH]
+        if near:
+            out.append((near, line, ring))
+    return out
+
+
+def follow_the_bounds(ring: Sequence[Pt], center: Pt, bounds: Sequence[Bound], reach: float = LOT_BOUND_REACH) -> Poly:
+    """The lot's line cut to follow its bounds (woods W26 - GUESS, research/vegetation/140): each vertex that
+    `lot_follows_its_bounds` would refuse is pulled in along its ray toward the lot's own `center` until it keeps off
+    every bound by that bound's line plus the reach - so the lot's facing side runs parallel to the brook, lane or field
+    edge. Only ever pulled IN: the ring stays inside the reach the scan tested, so no keep-out can be crossed by the cut.
+    A vertex no point of its ray can clear (the center itself too near) is left, and the predicate refuses the ring."""
+    out: Poly = []
+    cx, cy = center
+    for p in ring:
+        if _follows(p, bounds, reach):
+            out.append(p)
+            continue
+
+        def _at(f: float, p: Pt = p) -> Pt:
+            return (cx + (p[0] - cx) * f, cy + (p[1] - cy) * f)
+
+        def _clear(f: float) -> bool:
+            q = _at(f)
+            return all(_bound_margin(q, b) >= b[1] + reach for b in bounds)
+
+        lo = next((k / 20.0 for k in range(19, -1, -1) if _clear(k / 20.0)), None)
+        if lo is None:
+            out.append(p)
+            continue
+        hi = lo + 0.05
+        for _ in range(20):
+            mid = (lo + hi) / 2.0
+            lo, hi = (mid, hi) if _clear(mid) else (lo, mid)
+        out.append(_at(lo))
+    return out
 
 
 def _crop_refuses(center: Pt, half: float, crop: RingIndex, normal: float = 80.0, sunny: float = 180.0) -> bool:

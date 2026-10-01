@@ -207,6 +207,19 @@ out=$(agent spec-fidelity "MODE 2: SPECIFICATION REVIEW of specs/302-fixture aga
 [ "$(state 302-fixture)" = "round=1 snapshot=yes" ] && ok "...still round 1" || no "a round was counted" "($(state 302-fixture))"
 logged first-reading-after-not-reviewable && ok "...recorded permitted/first-reading-after-not-reviewable" || no "the rule was not recorded"
 
+# GUARD_EDIT_OK: feature 295 item 2 - the session's own MODE line decides; the 2026-09-30 exception check, replayed
+echo "9. an exception check named on the dispatch's MODE line passes untouched, even with a snapshot (feature 295)"
+B9=$(state 301-fixture)
+out=$(agent spec-fidelity "MODE: a proposed EXCEPTION during implementation (constitution XVI), feature 301 (specs/301-fixture/). Rule on it: FAITHFUL or NOT FAITHFUL.")
+[ "$(rc)" -eq 0 ] && [ -z "$out" ] && ok "the 2026-09-30 exception shape passes untouched (not rewritten, not routed)" || no "the exception check was rewritten" "(out=${out:0:60})"
+[ "$(state 301-fixture)" = "$B9" ] && ok "...and the review's round and snapshot are unchanged" || no "the exception check moved the round" "($(state 301-fixture))"
+out=$(agent spec-fidelity "MODE - plan decisions for specs/301-fixture, read plan.md")
+[ "$(rc)" -eq 0 ] && [ -z "$out" ] && ok "a MODE line naming a plan review passes untouched" || no "the mode-line plan review was rewritten"
+OTHER9=$(grep -rl '"rule": *"other-mode"' "$GUARD_LOG_ROOT" 2>/dev/null | wc -l)
+out=$(agent spec-fidelity "MODE 3 round 2 of specs/301-fixture.
+MODE: the earlier exception was ruled FAITHFUL; confirm the items.")
+[ "$(grep -rl '"rule": *"other-mode"' "$GUARD_LOG_ROOT" 2>/dev/null | wc -l)" = "$OTHER9" ] && ok "MODE 2/3 anywhere still wins over a MODE line naming an exception" || no "MODE 3 lost to the mode line"
+
 echo
 echo "test-review-round-hooks: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]

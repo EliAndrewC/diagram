@@ -264,7 +264,7 @@ class CastleCivicMixin:
         self.placed.append((x, y, w + 2 * m, h + 2 * m))
         if label:
             lx, ly = label_xy if label_xy else (x, y)
-            self.label(lx, ly, label, GOVERNOR_CAPTION_FS + 2, weight="bold")
+            self.label(lx, ly, label, GOVERNOR_CAPTION_FS + 2, weight="bold", ref=(x - hw, y - hh, x + hw, y + hh))
         self.M.setdefault("castles", []).append(rec)
         return rec
 
@@ -290,14 +290,14 @@ class CastleCivicMixin:
             # legibility on the violet, per the GM.
             dept = name.removeprefix("Ministry of ").strip()
             if dept != name:
-                self.label(x, y - h * 0.10, "Ministry of", 6.5, italic=True, color="#2D2A24")
-                self.label(x, y + h * 0.18, dept, max(7.0, min(9.5, (w * 0.8) / (max(len(dept), 1) * 0.55))), weight="bold", color="#2D2A24")
+                self.label(x, y - h * 0.10, "Ministry of", 6.5, italic=True, color="#2D2A24", ref=(x - w / 2, y - h / 2, x + w / 2, y + h / 2))
+                self.label(x, y + h * 0.18, dept, max(7.0, min(9.5, (w * 0.8) / (max(len(dept), 1) * 0.55))), weight="bold", color="#2D2A24", ref=(x - w / 2, y - h / 2, x + w / 2, y + h / 2))
             else:
-                self.label(x, y + h * 0.05, name, max(6.5, min(9.0, (w * 0.8) / (max(len(name), 1) * 0.55))), weight="bold", color="#2D2A24")
+                self.label(x, y + h * 0.05, name, max(6.5, min(9.0, (w * 0.8) / (max(len(name), 1) * 0.55))), weight="bold", color="#2D2A24", ref=(x - w / 2, y - h / 2, x + w / 2, y + h / 2))
         else:
             if label_below is None:
                 label_below = self._label_hits(x, y - h / 2 - 9, name, 9) > self._label_hits(x, y + h / 2 + 11, name, 9)
-            self.label(x, y + h / 2 + 11 if label_below else y - h / 2 - 9, name, 9, italic=True, color="#463653")
+            self.label(x, y + h / 2 + 11 if label_below else y - h / 2 - 9, name, 9, italic=True, color="#463653", ref=(x - w / 2, y - h / 2, x + w / 2, y + h / 2))
 
     # ---- martial training: the state hall and the private dojos (GM 2026-07-25) ---------------
     # A DOJO IS A CITY INSTITUTION. The county tier draws a practice ground and no dojo at all
@@ -407,7 +407,7 @@ class CastleCivicMixin:
         bw_ = max(cw + bm, 2.9 * len(label) + 10)
         by_ = ly_ - 11 if label_xy else (y + ch if label_below else y - ch - 26)
         self.block_polys.append([(lx_ - bw_, by_), (lx_ + bw_, by_), (lx_ + bw_, by_ + 26), (lx_ - bw_, by_ + 26)])
-        self.label(lx_, ly_, label, 9, italic=True, color="#463653")
+        self.label(lx_, ly_, label, 9, italic=True, color="#463653", ref=(x - cw, y - ch, x + cw, y + ch))
 
     def hanko(  # type: ignore[misc]
         self: Settlement, x: float, y: float, rot: float = 0.0, label: str = "Domain School", label_below: bool | None = None, label_xy: Pt | None = None, w_ft: float = 400, h_ft: float = 260
@@ -458,10 +458,10 @@ class CastleCivicMixin:
         if len(_hw2) >= 2:
             _htop, _hbot = " ".join(_hw2[:-1]), _hw2[-1]
             _hfs = max(7.0, min(12.0, (cw * 2 * 0.8) / (max(len(_htop), len(_hbot), 1) * 0.55)))
-            self.label(x, y - ch * 0.22, _htop, _hfs, weight="bold", color="#463653")
-            self.label(x, y + ch * 0.30, _hbot, _hfs, weight="bold", color="#463653")
+            self.label(x, y - ch * 0.22, _htop, _hfs, weight="bold", color="#463653", ref=(x - cw, y - ch, x + cw, y + ch))
+            self.label(x, y + ch * 0.30, _hbot, _hfs, weight="bold", color="#463653", ref=(x - cw, y - ch, x + cw, y + ch))
         else:
-            self.label(x, y, label, 10, weight="bold", color="#463653")
+            self.label(x, y, label, 10, weight="bold", color="#463653", ref=(x - cw, y - ch, x + cw, y + ch))
 
     def dojo(self: Settlement, x: float, y: float, rot: float = 0.0, label: str = "dojo") -> None:  # type: ignore[misc]
         """A PRIVATE DOJO (machi-dojo) in the samurai quarter.
@@ -657,7 +657,7 @@ class CastleCivicMixin:
             self.M["forest_patches"].append([[round(x, 1), round(y, 1)] for x, y in sm])
             if label:
                 lx, ly = label_xy if label_xy else ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2)
-                self.label(lx, ly, label, 12, italic=True, weight="bold", color="#3E5631")
+                self.label(lx, ly, label, 12, italic=True, weight="bold", color="#3E5631", ref=(min(xs), min(ys), max(xs), max(ys)))
 
     def wall(self: Settlement, pts: Any, gate: Any = None, label: Any = None, guardtower: bool = True) -> None:  # type: ignore[misc]
         """An irregular town rampart (thick polyline; may be an open arc anchored to a
@@ -700,7 +700,7 @@ class CastleCivicMixin:
         # just its center) stays off the rampart stroke (half-diagonal of a 60x40 ~36)
         self.corridors.append(([(x, y) for x, y in pts], 46))
         if label:
-            self.label(pts[0][0], pts[0][1] - 16, label, 12, italic=True, weight="bold", color=wc)
+            self.label(pts[0][0], pts[0][1] - 16, label, 12, italic=True, weight="bold", color=wc, ref=(min(p[0] for p in pts), min(p[1] for p in pts), max(p[0] for p in pts), max(p[1] for p in pts)))
 
     def flower_field(self: Settlement, shape: Any, label: Any = None, amp: float = 30, label_xy: Any = None, kind: str = "chrysanthemum", flat_west: bool = False) -> None:  # type: ignore[misc]
         """An ornamental flower field (e.g. chrysanthemums - the Imperial flower).
@@ -738,4 +738,4 @@ class CastleCivicMixin:
         self.M["flower_fields"].append({"kind": kind, "outline": [[round(p[0], 1), round(p[1], 1)] for p in sm]})
         if label:
             lx, ly = label_xy if label_xy else ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2)
-            self.label(lx, ly, label, 11, italic=True, weight="bold", color="#7A6A1A")
+            self.label(lx, ly, label, 11, italic=True, weight="bold", color="#7A6A1A", ref=(min(xs), min(ys), max(xs), max(ys)))

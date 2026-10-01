@@ -73,3 +73,36 @@ def test_the_inexact_walk_answers_beyond_for_a_far_point_and_exactly_within_reac
             assert got == full
             within += 1
     assert beyond > 0 and within > 0
+
+
+def test_an_edge_the_stroke_stands_off_by_more_than_its_bank_has_no_sample_inside_it() -> None:
+    """`StrokeIndex.edge_beyond` lets `_edge_in_supply` skip an edge's walk (feature 287 perf): wherever it says the edge
+    stands off every segment by more than the half-width there plus the slack, no 3 px sample of the edge has a gap under
+    `halfw + slack` - asked of random strokes and edges, near and far, crossing and not, and it says so of some of them."""
+    import math
+
+    rng = random.Random(287)
+    beyond = inside = 0
+    for _ in range(10):
+        pts = _stroke(rng, rng.randint(2, 10))
+        w0, w1 = rng.uniform(4, 16), rng.uniform(2, 8)
+        slack = rng.uniform(0.5, 4.0)
+        cum = polyline_cum(pts)
+        idx = StrokeIndex(pts, w0, w1, cum, max(w0, w1) / 2 + slack + 2.5)
+        xs = [p[0] for p in pts]
+        ys = [p[1] for p in pts]
+        for _ in range(150):
+            a = (rng.uniform(min(xs) - 40, max(xs) + 40), rng.uniform(min(ys) - 40, max(ys) + 40))
+            b = (a[0] + rng.uniform(-60, 60), a[1] + rng.uniform(-60, 60))
+            n = max(1, int(math.dist(a, b) / 3.0))
+            hit = False
+            for k in range(n + 1):
+                q = (a[0] + k / n * (b[0] - a[0]), a[1] + k / n * (b[1] - a[1]))
+                gap, halfw, past, _foot, _nrm = idx.clearance(q, exact=False)
+                hit = hit or (not past and gap < halfw + slack)
+            if idx.edge_beyond(a, b, slack):
+                beyond += 1
+                assert not hit, (a, b, pts)
+            elif hit:
+                inside += 1
+    assert beyond > 0 and inside > 0  # both answers exercised

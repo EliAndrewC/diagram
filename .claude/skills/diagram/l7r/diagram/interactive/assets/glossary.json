@@ -542,7 +542,8 @@
    "fan's head",
    "fan head",
    "alluvial fans",
-   "alluvial fan"
+   "alluvial fan",
+   "fan plain"
   ]
  },
  "anaerobic": {
@@ -3349,7 +3350,9 @@
    "sankyoson",
    "sanson",
    "scattered farmstead",
-   "scattered-farmstead"
+   "scattered-farmstead",
+   "scattered village",
+   "scattered villages"
   ]
  },
  "sanmai": {
@@ -9274,13 +9277,9 @@
  "kaison": {
   "def": "A lump village: a Japanese settlement whose houses are gathered irregularly in a lump, typically at a hill's foot, on a river terrace, or at a highway crossing where water can be got.",
   "variants": [
-   "kaison"
-  ]
- },
- "retsuson": {
-  "def": "A line village: a Japanese village whose houses stand in a line along a natural levee or a spring line at a hill's foot.",
-  "variants": [
-   "retsuson"
+   "kaison",
+   "clustered village",
+   "clustered villages"
   ]
  },
  "Rinzai": {
@@ -13079,7 +13078,7 @@
   ]
  },
  "fan foot": {
-  "def": "The lower rim of an alluvial fan, where the water that sank into the fan's gravel rises again as springs; settlements often line up along it in an arc.",
+  "def": "The lower rim of an alluvial fan, where the water that sank into the fan's gravel rises again as springs; settlements often sit along it, and at some fans they line up in an arc.",
   "variants": [
    "fan foot",
    "fan's foot",
@@ -13094,9 +13093,11 @@
   ]
  },
  "ressen": {
-  "def": "列村: a settlement stretched long and thin in a line, its houses along a natural levee, the spring line at a hill's foot, a spring or a waterway, standing on one side of that line or on both. Japanese geography sets it beside the road village (roson), whose line is a road.",
+  "def": "列村 (resson, read れっそん; also written ressen or retsuson): a settlement stretched long and thin in a line, its houses along a natural levee, the spring line at a hill's foot, a spring or a waterway, standing on one side of that line or on both. Japanese geography sets it beside the road village (roson), whose line is a road.",
   "variants": [
+   "resson",
    "ressen",
+   "retsuson",
    "linear village",
    "linear villages"
   ]
@@ -13109,10 +13110,34 @@
   ]
  },
  "dry edge": {
-  "def": "The line where the dry ground a village stands on meets the wet paddy below it. On the map it is the field's margin, standing for a levee, a dike or a fan's foot, and a row village strings its farms along it.",
+  "def": "The line where the dry ground a village stands on meets the wet paddy below it. On the map it is the field's margin, standing for a levee, a dike or a fan's foot - this project's reading - and a row village strings its farms along it.",
   "variants": [
    "dry edge",
    "dry edges"
+  ]
+ },
+ "batten ceiling": {
+  "def": "A ceiling of thin boards laid across a row of slender, closely spaced wooden strips (battens).",
+  "variants": [
+   "batten ceiling",
+   "batten ceilings"
+  ]
+ },
+ "ridge tag": {
+  "def": "A wooden tag fixed to a building's ridge beam when it is raised, recording who built it and when; the Shibata rowhouse's is dated 1842.",
+  "variants": [
+   "ridge tag",
+   "ridge tags",
+   "munafuda"
+  ]
+ },
+ "south range": {
+  "def": "In a Chinese courtyard house, the row of rooms along one side of the courtyard, named for the side it stands on; the servants lived in the south range, the family in the north.",
+  "variants": [
+   "south range",
+   "south ranges",
+   "north range",
+   "north ranges"
   ]
  },
  "field channel": {
@@ -13201,6 +13226,13 @@
   "variants": [
    "screen gate",
    "screen gates"
+  ]
+ },
+ "fixed-rate": {
+  "def": "A land tax set at one rate for an agreed term of years, whatever the harvest, which a village asked its lord for and was granted.",
+  "variants": [
+   "fixed-rate",
+   "fixed rate"
   ]
  },
  "lath": {
@@ -13353,6 +13385,13 @@
    "training retreats"
   ]
  },
+ "Etchu": {
+  "def": "The old province on the Toyama plain, on the Sea of Japan coast, where the present Toyama prefecture is.",
+  "variants": [
+   "Etchu",
+   "Etchu's"
+  ]
+ },
  "o-zashiki": {
   "def": "The grand zashiki: the formal guest rooms of a house of rank; at the Yakage honjin, the rooms with the jodan-no-ma where a traveling lord was received.",
   "variants": [
@@ -13449,6 +13488,15 @@
   "variants": [
    "water-and-land hall",
    "water-and-land halls"
+  ]
+ },
+ "Santome": {
+  "def": "A new-field colony (shinden) on the water-poor Musashino plateau. It was laid out on roads 6 ken wide running lengthwise and crosswise, and each farm was a strip 40 ken wide and 375 ken deep, divided back from the road into house lot, field and woodland. At first its 11 wells were dug deep and shared.",
+  "variants": [
+   "Santome",
+   "Santome's",
+   "Santome Shinden",
+   "三富新田"
   ]
  },
  "furo": {

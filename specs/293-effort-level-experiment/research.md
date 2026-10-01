@@ -43,6 +43,20 @@ the individual invocation", undocumented elsewhere. `CLAUDE_CODE_EFFORT_LEVEL` b
   as D2, since steering the run's dispatch shape by effort would differ by arm. If (a) fails, apply D2a (the agent file) and re-measure; the spec's measured branch (ad-hoc judging counted per arm, the control
   listed as unmet) applies only if that too fails.
 
+**P0 MEASURED (T07, observed 2026-09-29, one-shot, method: one `claude -p --effort medium --agents <the launcher's JSON>` session in
+a scratch directory, `CLAUDE_CODE_EFFORT_LEVEL` unset, told to dispatch `adhoc-judge` and to list the Agent tool's parameters; cost
+$0.15):**
+- (a) `--agents` carries the pinned judge in `claude -p`: the dispatch ran, `meta.json` names `agentType: adhoc-judge`. **D2 is in
+  force; D2a's agent file is not needed.**
+- (b) Effort IS recorded: every assistant record carries an `effort` field (and `perTurnEffort`). The session's records read
+  `medium`; the judge's read `high` - the frontmatter pin beat the session's level, as the docs say. So `effort-measure` counts each
+  run's efforts per message for the main sessions and per subagent type: the arm and every checker's tier are MEASURED from the
+  transcripts, and a mismatch is visible in the report rather than assumed away.
+- (c) The Agent tool offers `description`, `isolation`, `model`, `prompt`, `run_in_background`, `subagent_type` - no per-dispatch
+  `effort`. Nothing to record or avoid.
+- (d) Under an `xhigh` session the pin holds too (observed 2026-09-29, one-shot, method: the same probe with `--effort xhigh`, cost
+  $0.12): the session's records read `xhigh`, the judge's `high`.
+
 **Alternatives priced**: a hook in the run clones rewriting ad-hoc opus dispatches - rejected, it changes the guard set between the
 experiment and normal work; a committed agent file - the FALLBACK (D2a), not the first choice only because `--agents` needs no landing
 and no retirement.
@@ -106,6 +120,20 @@ working session (the event's figure beside a working-set reading taken within it
 quiet-host memwatch figure is sought, since none is published. The working set alone IS readable on a quiet host, and T09 records it
 there: if that quiet reading plus the offset is above the threshold, the gate could never open, so the implementing session raises it
 with the GM before any run rather than changing the threshold on its own.
+**D7 REVISED at T09 (2026-09-29): read the shared cgroup itself.** The offset above was measured
+again at the next warning (observed 2026-09-29 21:34 UTC, one-shot, method: memwatch event 11 beside a working-set reading one
+second later): memwatch said 8.8 GB in all - diagram 6.4, gm-assistant 2.5 - while this container's working set read 4.5 GB. Two
+things follow. The diagram offset is 1.9 GB, not 0.9; and the cap is SHARED with other containers, whose memory this container
+cannot see, so no fixed offset converts one container's figure into the cap's. The cap is one host cgroup,
+`claude-containers.slice` (its `memory.max` is 9,663,676,416 bytes = 9.0 GiB), and the host-diag tool (read-only, no sudo for
+cgroup files; `reference_host_diagnostics`) reads it: its `memory.current` was 8.58 GB, of which `inactive_file` 4.39 GB, a
+working set of 4.2 GB (observed 2026-09-29 ~21:40 UTC, one-shot, method: `host-diag cat` of the slice's `memory.current` and
+`memory.stat`). So memwatch's figure is the slice's RAW memory, page cache included - the cache the kernel drops before it kills
+anything. The gate therefore reads the SHARED slice's working set directly, with no offset, against the same 4.5 GB threshold
+(a run's peak, about 4.5 GB, still fits under the 9.0 GB cap); and while that figure is readable a memwatch warning does not
+block, because the warning is the raw figure the working set corrects. Only when the host cannot be read does the gate fall back
+to this container's working set plus the offset - now 1.9 GB, the larger of the two measured - with the 15-minute warning rule.
+The launch record says which source it judged on.
 The refusal prints the figure and the wait is logged in `interventions.md`; the implementing session
 retries on its next turn rather than polling. While a run is live the implementing session runs nothing memory-heavy of its own: the
 measurement of the previous run, the blinding and the grading are done between runs, one at a time, and the tooling is built and gated
@@ -124,6 +152,11 @@ by `effort-measure` from its `result.json`/`stderr.txt`, and re-launched with th
   question as claimed. **D5**: the launcher appends a release line after each R run ends (`effort experiment run <id> ended - claim
   released`), which the page-session rules' reading of the file treats as the end of that claim. MEASURE in P0 that the rules read it
   so; if not, point the run at a per-run copy of the file by the same means as D4 (an env override added to the claims reader, tested).
+  **T08, checked 2026-09-29:** the page-session rules (`container-scripts/page-session-rules.md`) say only HOW the file is read
+  and written; what a claim blocks is the BRIEF's to say, and task R's write brief said "a section another feature holds" - which
+  a second run could read as covering the first run's feature-293 lines. So the write brief now says plainly that "Effort
+  experiment | 293" lines the run did not write are not claims on its work (identical in both arms). The release line stays, as a
+  record; no per-run copy of the file is needed.
 - **`make reserve`** allocates registry and glossary prefixes under a host-wide lock; both runs reserve, the loser's reservations are
   simply unused numbers. Accepted, no cost but a gap in numbering.
 - **The guard log** is shared but per-firing and tagged with session and cwd (R4); nothing to isolate.

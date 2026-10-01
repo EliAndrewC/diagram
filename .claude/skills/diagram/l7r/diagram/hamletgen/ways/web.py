@@ -6,7 +6,9 @@ import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
+from l7r.diagram.overlap.registry import PLACER_MARGIN_PX
 from l7r.diagram.settlement import Settlement, seg_dist, skeleton_layout, web_cuts
+from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import crop_polys
 
 from ..cluster import _arm_crossing_accidental
@@ -15,6 +17,7 @@ from ..consts import (
     CLUSTER_SPAN_FACTOR,
     LANE_CLEARANCE,
     MIN_WEB_GAP,
+    STEADING_ARRIVAL_FT,
     WEB_FABRIC_GAP,
     WEB_HARD_GAP,
     WEB_REACH_FT,
@@ -22,22 +25,23 @@ from ..consts import (
     Pt,
 )
 from ..plan import SitePlan
+from . import law
 from .bund import a_way_onto_the_bund, cut_past_the_junction, run_lanes_on_to_the_bund, worked_ground_of
 from .checks import drawn_water_segs
 from .clearance import clear_runs, clip_to_clear
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _homestead_polys, _margin_frame, _net_segs, _pass, _pull_back_to_service
-from .geom import _components, _trim_to_service, polyline_len, steading_footprints
+from .geom import _TOUCH_GAP, _components, _trim_to_service, polyline_len, steading_footprints
 from .joints import center_lane_ends, fold_the_connector_hairpin, meet_end_to_end, split_at_crossings, straighten_joints
 from .route import _route
-from .serve import _lay_web_lane, _serve_stragglers, lay_door_paths
+from .serve import DOOR_REACH_FT, _lay_web_lane, lay_door_paths
+from .settle import settle_the_web
 from .smooth import _STUB_REACH_FT, _smooth_web
-from .street import lay_row_streets
+from .street import lay_row_streets, trim_streets
 from .sweeps import (
     _bridge_collinear_breaks,
     _drop_end_nubs,
     _join_orphan_ways,
     _keep_the_route_wide,
-    _link_home_bank,
     _sweep_dangling_ends,
     _sweep_debris,
     _sweep_doubled_remnants,
@@ -89,7 +93,7 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
     # what is already standing: houses, yards, gardens, sheds - the arm must go round all of it
     fabric = [poly for poly, _owner, _kind in _homestead_polys(s)]
     toe_now = s.toe_band() or None
-    wet_now = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") != "defense" and m.get("poly")]
+    wet_now = marsh_ground(s.M, but=("defense",))
     drawn_water = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for rec in s.M.get("drawn_channels", []) for a, b in zip(rec["pts"], rec["pts"][1:], strict=False)]
     kept: list[tuple[Poly, Poly]] = []
     for ai in range(len(raw_arms)):
@@ -179,8 +183,8 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
             # `_trim_to_service` pulls the ends back to the last point that reaches a way or a house,
             # and `_WEB_MIN_FT` drops what is left if it is no longer a way at all - the same pair of
             # rules every web lane already passes through. An arm that serves nobody is not a
-            # shortened arm, it is debris, and the houses it would have served are the straggler
-            # pass's business.
+            # shortened arm, it is debris, and the houses it would have served are the settle's
+            # business (their reserved corridors, `settle.settle_the_web`).
             #
             # SERVICE IS JUDGED AGAINST THE HOUSES, NOT AGAINST THE WAYS. `_lay_skeleton` runs BEFORE
             # the web cuts, on purpose - the web reads the skeleton as existing network to thread
@@ -199,7 +203,11 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
             if _arm_crossing_accidental(arm, raw_arms[ai], kept):
                 continue
             kept.append((arm, raw_arms[ai]))
-            s.lane(arm, width=5, clearance=LANE_CLEARANCE, worn=True)
+            # ...laid only where the overlap matrix admits it (feature 287 M8): an arm across a byre or a house is cut there,
+            # as the settle would cut it, and a piece left too short to be a way is not laid
+            for piece in s.admitted_runs(arm, 5):
+                if polyline_len(piece) >= _WEB_MIN_FT:
+                    s.lane(piece, width=5, clearance=LANE_CLEARANCE, worn=True)
     s.M["meta"]["lane_skeleton"] = plan.lane_skeleton
     return kept
 
@@ -251,7 +259,7 @@ def cut_the_overruns(s: Settlement) -> None:
 
 
 def tidy_lane_ends(s: Settlement, envelope: Poly, streets: bool = False) -> None:
-    """THE LAST PASS OVER EVERY LANE END, after the stragglers: pull back anything that still reaches nothing.
+    """THE LAST PASS OVER EVERY LANE END, after the joins: pull back anything that still reaches nothing.
 
     A ROW'S STREETS ARE TRIMMED APART, with `streets=True`, once the door paths are laid (feature 291 plan D17): a row
     farm stands a frame's depth off its street and is reached by its door path, laid after this pass, so trimmed with
@@ -272,6 +280,7 @@ def tidy_lane_ends(s: Settlement, envelope: Poly, streets: bool = False) -> None
         return 0.0 <= q[0] <= _W and 0.0 <= q[1] <= _H
 
     _fabric_now = [poly for poly, _owner, _kind in _homestead_polys(s)]  # what the connector's end must stay clear of, as `_thread_the_fabric` left it
+    _solid_now = law.solid_boxes(s.M)  # ...and the buildings' boxes its legs may not run through (`law.breaks_through`)
     _nowhere: list[int] = []  # lanes that serve nothing at either end - dropped after the loop, back to front
     # THE FIELD AS DRAWN, not the plan's envelope (feature 261): an end serves the field where it reaches the paddy a reader
     # sees - the bar the pool's lane-end test holds - and the envelope stands well out from it on a polder, so a skeleton
@@ -306,8 +315,13 @@ def tidy_lane_ends(s: Settlement, envelope: Poly, streets: bool = False) -> None
         # straggler path at draw time shipped a dangling end anyway. The houses this lane is the ONLY way to
         # are named so the tidy-up cannot strand one (cohort seed 39's farmhouse, `_trim_to_service`).
         _keep = [_h for _h in _final_houses if all(seg_dist(_h[0], _h[1], _a, _b) > WEB_REACH_FT for _a, _b in _others)]
+        # ...BUT A CONNECTOR THAT STARTS ON THE EXIT STRIP STAYS THERE (feature 287 wave 6): the web draws the strip as a tree lane
+        # up to the connector's start where a house or the field is owed it (`tree.strip_run`), and pulled back to service the
+        # start left the strip 8 ft off on cohort seed 37 (the strip ended in a hook) and 300 ft down the track on seed 34
+        if _ln.get("connector") and s.M.get("access_exit"):
+            continue
         _kept = (
-            _pull_back_to_service(_pts, _others, _final_houses, _inside, _fabric_now)
+            kept_connector(_pts, _pull_back_to_service(_pts, _others, _final_houses, _inside, _fabric_now), _solid_now)
             if _ln.get("connector")
             else _trim_to_service(_pts, _others, _final_houses, _ground, keep=_keep, steadings=_final_steadings)
         )
@@ -378,7 +392,6 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.ways.serve._lay_web_lane
         l7r.diagram.hamletgen.ways.sweeps._join_orphan_ways
         l7r.diagram.hamletgen.ways.sweeps._bridge_collinear_breaks
-        l7r.diagram.hamletgen.ways.serve._serve_stragglers
         l7r.diagram.hamletgen.ways.touch._touch_junctions
         l7r.diagram.hamletgen.ways.smooth._smooth_web
         l7r.diagram.hamletgen.ways.web._drop_collapsed
@@ -393,6 +406,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.ways.bund.run_lanes_on_to_the_bund
         l7r.diagram.hamletgen.ways.joints.meet_end_to_end
         l7r.diagram.hamletgen.ways.bund.a_way_onto_the_bund
+        l7r.diagram.hamletgen.ways.settle.settle_the_web
     """
     _pass("cut")
     """STAGE 5b: the LANE WEB - the lanes that make every farmhouse reachable.
@@ -514,9 +528,13 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
 
     crops = crop_polys(s)
     toe = s.toe_band() or None
-    wet = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") != "defense" and m.get("poly")]
+    wet = marsh_ground(s.M, but=("defense",))
     hard = [list(plan.envelope), *crops, *([toe] if toe else []), *wet]
-    fabric = _homestead_polys(s)
+    # ...AND THE HOUSEHOLDS' RESERVED WOOD SEATS ARE FABRIC TO THE WEB (feature 287 M8): the registry refuses a lane within
+    # the copse's lane buffer of a seat, so every pass clips and routes round them - sized so the web's own fabric margin
+    # (`WEB_FABRIC_GAP`) plus a footpath's half-tread lands on the buffer - rather than laying a cut the registry then
+    # refuses and leaving its houses unreached (seed 39: 60 routes against 7, when a straggler search still served them)
+    fabric = _homestead_polys(s) + [(w, None, "wood seat") for w in s.standing.reserved.seat_walls(reach=seat_wall_reach(s))]
     # WHAT A LANE MAY NOT BE DRAWN THROUGH, now that lanes come LAST (feature 126).
     #
     # `hard` is ground: the field, the crop, the wet toe. It says nothing about what the settlement
@@ -529,7 +547,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # Seed 7's second failure even quotes the old doctrine back - "lay lanes BEFORE the houses" -
     # which is precisely the assumption this feature removes.
     #
-    # Ground cover is NOT fabric, for the same reason `_serve_stragglers` excludes it: a footpath may
+    # Ground cover is NOT fabric, for the same reason the straggler footpaths excluded it: a footpath may
     # cross grazing scrub and run along a tree belt, because those are what the ground IS rather than
     # things built on it. Counting them walls a steading in behind its own commons.
     _solid = [poly for poly, _own, kind in fabric if kind not in ("commons", "village_groves")]
@@ -570,25 +588,17 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # is right to call that a tread that serves nobody. The engine already owns this trim; the web
     # simply has to ask for it after adding to the network.
     s.trim_lane_stubs()
-    # STRAGGLERS COME AFTER THE TRIM, NEVER BEFORE IT. `trim_lane_stubs` drops any lane under its
-    # 71 ft minimum, and a footpath from a door to the nearest way is about 65 ft by construction -
-    # so run the other way round, every spur this pass drew was silently deleted again and the eight
-    # unreached houses stayed exactly eight. A door path is short on purpose; it is not a stub.
-    # ONE NETWORK FIRST, then the houses that it still does not reach. Order matters: a footpath
-    # that joins an orphaned component is worth nothing while the component itself is an island.
+    # ONE NETWORK FIRST: a lane that joins an orphaned component is worth nothing while the component itself is an island.
+    # A HOUSE THE WEB STILL LEAVES UNREACHED IS THE SETTLE'S (feature 287, GM 2026-09-30): the straggler footpath pass that
+    # stood here - a door path routed to every house the web left more than 90 ft from a way - was dropped once the seating
+    # reserved every house's corridor (`tree.admits`) and the settle drew it for any house left unreached (`settle_the_web`,
+    # `last_resort.refuse_unreached`). Measured with it off: the reference snapshot 26.85 s -> 23.85 s, lanes 380 -> 347
+    # (`specs/287-placer-guarantees/measurements.json`, `straggler-footpaths-off`).
     _pass("join-orphans")
     _join_orphan_ways(s, hard_built, walls, list(plan.watercourses) + drawn_water)
-    # ...and close any break where one way was drawn as two. Before the stragglers: a house beside
-    # the hole is served by the bridged street, and drawing it a footpath of its own first would be
-    # curing the symptom.
+    # ...and close any break where one way was drawn as two.
     _pass("bridge-breaks")
     _bridge_collinear_breaks(s, hard_built, walls, list(plan.watercourses) + drawn_water)
-    _pass("straggler")
-    # ...NOT ON A ROW VILLAGE (feature 291 plan D17): its farms are served at their front doors by `lay_door_paths`, last,
-    # each to its OWN street; run here as well, the stragglers drew every Kashikawa farm a second path from the same door
-    # to whatever way was nearest - two treads out of one gate, and a join-orphans lane to tie them in
-    if not _rows:
-        _serve_stragglers(s, plan, hard, fabric, list(plan.watercourses) + drawn_water)
     _pass("touch")
     _touch_junctions(s, hard_built, walls, list(plan.watercourses) + drawn_water)
     # ...AND JOIN ORPHANS AGAIN, LAST. The first pass runs before the bridges and the footpaths, so
@@ -598,7 +608,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # because the lane serving them was not on the network the connector is on. A repair pass that
     # runs before the things it repairs is not a repair pass.
     # ...and CLOSE BREAKS again before joining, for the same reason the join runs twice: the
-    # footpath pass draws lanes, and a lane drawn after the bridge pass can leave a hole the bridge
+    # touch pass draws lanes, and a lane drawn after the bridge pass can leave a hole the bridge
     # pass never saw. On cohort seed 48 the bridge found ZERO candidates and the finished map still
     # had a 78 ft hole in a street, because the hole did not exist yet when it looked.
     _pass("bridge-breaks")
@@ -620,8 +630,8 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # floor is dropped, because a way that serves nothing is not a short way, it is not a way.
     #
     # NOT `trim_lane_stubs`: that is a different, harsher rule (71 ft floor) meant for a skeleton arm
-    # laid before the houses, and running it here eats the footpaths the straggler pass just drew -
-    # measured once at 43/48 -> 9/48.
+    # laid before the houses, and running it here ate the short door paths the web draws - measured
+    # once at 43/48 -> 9/48, when a straggler pass still drew them.
     tidy_lane_ends(s, list(plan.envelope))
     # LAST: read every lane as a shape and take out what feet would never wear (T32) - after the
     # trim, because the trim is the last pass that changes a record; then touch once more, because
@@ -663,10 +673,9 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     _sweep_doubled_remnants(s)  # ...and a bridge can itself be doubled ink
     _sweep_dangling_ends(s)  # LAST: an end the passes above left in open ground is pulled back to something, or dropped
     _sweep_debris(s)  # a fragment the passes above whittled below the floor and left standing alone
-    # A WAY OUT THAT CROSSES THE BROOK AND BACK GETS A WAY ON ITS OWN BANK (feature 261) - before the passes that read the
-    # finished joints, so the path it draws is straightened, de-hooked and cut back like every other
-    _pass("home-bank")
-    _link_home_bank(s, plan, hard, fabric, list(plan.watercourses) + drawn_water)
+    # A WAY OUT OVER THE BROOK AND BACK is the settle's to mend (`law.way_out_carriers`, `settle_the_web`): the home-bank
+    # re-serve that stood here (feature 261) routed a straggler footpath on the house's own bank, and went with that pass
+    # (feature 287, GM 2026-09-30)
     _keep_the_route_wide(s, hard_built, walls, list(plan.watercourses) + drawn_water)  # ...and a cart route may not neck to a footpath
     # AND READ THE JOINTS AS ONE WAY (GM 2026-09-26): two records meeting end to end are one lane to the walker;
     # a fold there becomes a T and a jog is pulled straight. Last, because every pass above can lay a joint.
@@ -699,19 +708,55 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     split_at_crossings(s)  # a crossing is a junction: recorded as one before the trim judges what each end serves (the 269 landing)
     tidy_lane_ends(s, list(plan.envelope))
     meet_end_to_end(s, walls)  # ...and two ends the trims left facing each other across a hand's width are joined
-    # ...AND THE PADDY IS REACHED (269 B04, research/rendering/fields/260): where no lane end stands on its bund - the spur swept, or
+    # ...AND DOUBLED INK IS SWEPT ONCE MORE, AFTER THE SPLIT (feature 293; Sawada in the earlier 293 pass): a join lane laid
+    # to an "orphan" that in fact crossed the web mid-run is the only link at the ink tolerance until `split_at_crossings`
+    # records that crossing as a junction - and from then it is a tread doubled beside another, which both doubled-ink
+    # sweeps above had kept as a link. The same sweep, with the same stranding and one-network refusals.
+    _sweep_doubled_remnants(s)
+    # ...AND THE PADDY IS REACHED (269 B04, research/fields/290): where no lane end stands on its bund - the spur swept, or
     # never drawn - the nearest lane runs on to it, or a field path is drawn off the nearest lane; recorded either way
     # ...AND A GROVE FARM IS REACHED AT ITS FRONT DOOR (feature 291 FR-019), LAST: laid before the trims, a door path was cut
     # back off its door by them (Mizuguchi: the farm at (232,1582) served, its door 60 ft from the path's trimmed end)
-    lay_door_paths(s, hard_built, walls, list(plan.watercourses) + drawn_water)
+    # ...EVERY ROW FARM, unless its door is on its street (feature 291 on feature 287's lane law): a row farm's house stands
+    # most of a frame off its street, so the street's end past the last farm served nothing the law counts (`end_serves`,
+    # 60 ft of a house center) and the settle trimmed it back farm by farm - Mizuguchi's east row, its doors 33-39 ft off the
+    # street and so given no path at the 40 ft reach, ended 200-1,090 ft off any way. Each farm's own path meets its street,
+    # as the seating's corridor meets the tree on a nucleated map, and the street's end then stands at a junction.
+    lay_door_paths(s, hard_built, walls, list(plan.watercourses) + drawn_water, reach=STEADING_ARRIVAL_FT if _rows else DOOR_REACH_FT)
     if _rows:
         # ...and a door path laid beside a lane that was there first meets it rather than doubling it (Kashikawa: a
         # join-orphans lane ran on 64 ft beside the door path of the farm at (2299, 2724)) - the sweep that ran above,
         # before any door path existed
         _sweep_doubled_tails(s)
         tidy_lane_ends(s, list(plan.envelope), streets=True)
+        trim_streets(s, _TOUCH_GAP)  # ...and each street ends at its outermost joint, not past its last farm's path
     s.M["meta"]["field_path"] = a_way_onto_the_bund(s)
     s.M["meta"]["lane_web"] = plan.lane_web
+    # ...AND THE WEB SETTLES ITSELF, LAST (feature 287, M4): every rule of the lane law is asked of the web as it stands and
+    # what breaks one is cut away or re-laid (`settle_the_web`), the crossings squared first - so no stage after this one
+    # rewrites a lane. A cut can take a farmhouse's only way or the field path, so the settle draws what the web still owes -
+    # each stranded house's reserved corridor, a spur to each way target, the field way (M3's web half) - as lanes it never
+    # cuts; the straggler redraw that stood in for the corridor until it landed is gone with the driver's re-roll.
+    _pass("settle")
+    # ...and its wall-clock seconds stay out of the manifest: a timing written there rewrote all five pool maps on every
+    # regeneration with nothing on them moved (287, 2026-09-29); the rounds and the lane counts are the record.
+    s.M["meta"]["web_settle"] = {k: v for k, v in settle_the_web(s).items() if k != "seconds"}
+    # THE CORRIDORS HAVE SERVED (feature 287 M8): every way the seating held them for is drawn, so the registry's reservation
+    # of them ends here - the notice board may stand beside a way drawn along one, as beside any way
+    s.standing.reserved.release_corridors()
+
+
+def seat_wall_reach(s: Settlement) -> float:
+    """The radius a reserved seat is walled at for the web (`stage_web`): the copse's lane buffer about it, a footpath's
+    half-tread and the placer's margin, less the fabric margin every web pass keeps off a wall - never under a foot."""
+    return max(1.0, s.standing.reserved.lane_buffer + 1.5 + PLACER_MARGIN_PX - WEB_FABRIC_GAP)
+
+
+def kept_connector(pts: Poly, pulled: Poly, solid: Sequence[tuple[float, float, float, float]]) -> Poly:
+    """The connector as the late pass leaves it: `pulled` (its inner end walked on to the network, `_pull_back_to_service`)
+    unless a leg of that runs through a building (`law.breaks_through` over `solid`), where the connector stays as placed
+    (`pts`) - the pull-back is a tidy-up, and the connector's placer decided it runs through nothing (ways: break-mid-run)."""
+    return list(pts) if law.breaks_through(pulled, solid) else pulled
 
 
 def _reachable_runs(cands: Sequence[Poly], seed_segs: Sequence[tuple[Pt, Pt]]) -> list[Poly]:

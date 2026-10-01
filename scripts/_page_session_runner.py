@@ -29,12 +29,15 @@ brief left there is queued next - before the group's `then:` checks step, so the
 from __future__ import annotations
 
 import calendar
+import glob
 import json
 import os
 import pathlib
 import re
+import signal
 import subprocess
 import sys
+import threading
 import time
 import uuid
 
@@ -191,15 +194,29 @@ def work(root: str, name: str, extra: list[str], queue: list[dict], run_log: str
             fh.write(f"{item['sid']} {item['brief']}\n")
         runlog.write(f"started {item['sid']} {os.path.basename(item['brief'])}\n")
         cmd = item["cmd"]
-        for attempt in range(RETRIES + 1):
+        attempt = stalls = 0
+        while True:
+            watch = StallWatch(projects_dir(root), item["sid"])
+            watch.start()
             with open(item["log"] + "/result.json", "w") as out, open(item["log"] + "/stderr.txt", "w") as err:
                 rc = subprocess.run(cmd, cwd=root, env=session_env(env, item), stdin=subprocess.DEVNULL, stdout=out, stderr=err, check=False).returncode
+            watch.stop()
             text = _read(item["log"] + "/result.json") + _read(item["log"] + "/stderr.txt")
+            if watch.stalled:
+                # A STALL IS RESUMED AT ONCE (feature 295 item 3): it is not the usage limit, so no backoff is owed
+                if stalls == STALL_RESUMES:
+                    runlog.write(f"stalled {item['sid']} - idle {watch.idle // 60} min, resumed {STALL_RESUMES} times already; moving on\n")
+                    break
+                stalls += 1
+                runlog.write(f"stalled {item['sid']} - idle {watch.idle // 60} min, resuming it ({stalls} of {STALL_RESUMES})\n")
+                cmd = resume_command(item["cmd"], item["sid"])
+                continue
             if not failed(rc, text) or attempt == RETRIES:
                 break
             wait = wait_for(text, attempt, time.time())
             runlog.write(f"failed {item['sid']} rc={rc} - waiting {min(wait, RETRY_EVERY) // 60} min (reset in {wait // 60}), then resuming it ({first_line(text)})\n")
             time.sleep(min(wait, RETRY_EVERY))
+            attempt += 1
             cmd = resume_command(item["cmd"], item["sid"])
         runlog.write(f"ended {item['sid']} rc={rc}\n")
         cont = os.path.join(item["log"], "continue.md")
@@ -232,6 +249,83 @@ RETRIES = 44
 RETRY_EVERY = 15 * 60
 BACKOFF = (15 * 60, 30 * 60, 60 * 60)
 RESUME = "Continue the work of the brief you were given, from where you stopped - an error or the usage limit ended your last turn."
+
+
+# A HEADLESS SESSION THAT HAS GONE QUIET IS RESUMED (feature 295 item 3). `claude -p` is never re-invoked by background
+# work - a backgrounded Bash, a detached make, a background agent (feature 293's measurement) - so a session that ends
+# its turn to wait for its own check agents sits until somebody kills it: R12's check session idled about two and a half
+# hours on 2026-09-30 after all five of its re-checks had returned. Killing it and resuming the same session (`--resume`)
+# is what got it moving that day, and the runner already knows how to resume. So each session runs beside a watch that
+# reads its transcript and every subagent transcript of it; silence past STALL_AFTER, with the process alive, ends the
+# process, and the loop above resumes the session at once.
+#
+# STALL_AFTER IS 15 MINUTES because the longest silence a WORKING session shows is one foreground tool call, and the
+# Bash tool's own ceiling is 10 minutes (research R3); 15 is past any legitimate silence and costs at most 16 minutes
+# against the 2.5 hours measured. STALL_RESUMES caps the resumes so a session that stalls every time it is resumed does
+# not hold the queue for good: eight resumes is two hours of quiet at the outside.
+STALL_AFTER = 15 * 60
+STALL_CHECK = 60
+STALL_RESUMES = 8
+
+
+def projects_dir(root: str) -> str:
+    """Where Claude Code writes the transcripts of a session started in `root` - as `page-session.sh` computes it."""
+    return os.path.join(os.path.expanduser("~"), ".claude", "projects", re.sub(r"[/.]", "-", root))
+
+
+def last_activity(projects: str, sid: str) -> float | None:
+    """The newest write to the session's transcript or any of its subagents' transcripts, or None before the first."""
+    paths = [os.path.join(projects, f"{sid}.jsonl"), *glob.glob(os.path.join(projects, sid, "subagents", "*.jsonl"))]
+    times = [os.path.getmtime(p) for p in paths if os.path.exists(p)]
+    return max(times) if times else None
+
+
+def session_pids(sid: str, proc: str = "/proc") -> list[int]:
+    """The live `claude` processes running session `sid` - read from /proc by argument, never by a pattern search."""
+    out = []
+    for d in glob.glob(os.path.join(proc, "[0-9]*")):
+        try:
+            argv = pathlib.Path(d, "cmdline").read_bytes().split(b"\0")
+        except OSError:
+            continue
+        args = [a.decode(errors="replace") for a in argv]
+        if args and os.path.basename(args[0]) == "claude" and sid in args and ("--session-id" in args or "--resume" in args):
+            out.append(int(os.path.basename(d)))
+    return out
+
+
+class StallWatch(threading.Thread):
+    """Beside one session: every STALL_CHECK seconds, the silence since its last transcript write or since the watch
+    began, whichever is later; past STALL_AFTER it ends the session's process and records `stalled` and `idle`."""
+
+    def __init__(self, projects: str, sid: str, check: float = STALL_CHECK, after: float = STALL_AFTER) -> None:
+        super().__init__(daemon=True)
+        self.projects, self.sid, self.check, self.after = projects, sid, check, after
+        self.began = time.time()
+        self.halt = threading.Event()
+        self.stalled = False
+        self.idle = 0
+
+    def run(self) -> None:
+        while not self.halt.wait(self.check):
+            # never before the watch began: a RESUMED session's transcript is as old as the wait that preceded it
+            quiet = time.time() - max(last_activity(self.projects, self.sid) or 0.0, self.began)
+            if quiet < self.after:
+                continue
+            pids = session_pids(self.sid)
+            if not pids:
+                continue  # nothing to end: the session is between processes, or already gone
+            self.stalled, self.idle = True, int(quiet)
+            for pid in pids:
+                try:
+                    os.kill(pid, signal.SIGTERM)
+                except OSError:
+                    pass
+            return
+
+    def stop(self) -> None:
+        self.halt.set()
+        self.join()
 
 
 def _read(path: str) -> str:

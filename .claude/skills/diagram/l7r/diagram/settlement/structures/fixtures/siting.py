@@ -4,22 +4,19 @@ import math
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
-from ....labels import Subject, place
-from ....labels.geom import rect as label_rect
+from ....labels import Placement
 from ..._geom import (
     Manifest,
     PointGrid,
     Pt,
-    nearest_way_bearing,
     point_in_poly,
     seg_dist,
     seg_reach_index,
-    segments_cross,
     street_runs,
     way_beds,
 )
-from ..._knobs import KOSATSUBA_MARKER_MIN_PX, PUNISHMENT_SPOT_FT, resolve_knob
-from ..captions import lane_seat_index
+from ..._knobs import KNOBS, KOSATSUBA_MARKER_MIN_PX, PUNISHMENT_SPOT_FT
+from ..captions import tree_crown_discs
 from ._helpers import (
     KOSATSUBA_ANCHOR_BAND_FT,
     KOSATSUBA_HANDOVER_BAND_FT,
@@ -29,7 +26,23 @@ from ._helpers import (
     kosatsuba_affordances,
     kosatsuba_anchor,
     kosatsuba_handover,
-    quad_on_canopy,
+)
+from .board_seat import (
+    KOSATSUBA_WAY_REACH_FT,
+    PLACARD_KEEP_FT,
+    BoardSeat,
+    Proof,
+    SiteEnv,
+    WayFacing,
+    board_caption_seat,
+    board_in_view,
+    choose_board,
+    entrance_seat_ok,
+    fallback_caption,
+    resolve_seat,
+    site_board,
+    terminal_caption,
+    under_placard,
 )
 
 if TYPE_CHECKING:
@@ -52,12 +65,8 @@ def canopy_index(M: Manifest) -> PointGrid:
     tries thousands of seats. The grid prunes and the caller's own circle test decides, so the verdict is the
     linear scan's. The grove-clump fallback stays for a manifest with no crowns recorded - the six hand-built
     fixtures, and any caller asking before the groves are drawn."""
-    flat = M.get("tree_crowns") or []
-    items = [(float(flat[i]), float(flat[i + 1]), float(flat[i + 2])) for i in range(0, len(flat) - 2, 3)]
-    if not items:
-        items = [(float(c[0]), float(c[1]), float(g.get("r") or 0.0)) for g in (M.get("village_groves") or []) if isinstance(g, dict) for c in (g.get("clumps") or [])]
     grid = PointGrid()
-    grid.extend([(x, y, r, x - r, y - r, x + r, y + r) for x, y, r in items])
+    grid.extend([(x, y, r, x - r, y - r, x + r, y + r) for x, y, r in tree_crown_discs(M)])  # the one list the label index reads too
     return grid
 
 
@@ -82,63 +91,10 @@ BOARD_ALONG_STEP_PX = 12.0
 coarser lattice left no approach seat inside the 20 ft band every departure passes (`KOSATSUBA_HANDOVER_BAND_FT`), so an
 entrance board went up on the straggler lane, side-on to the track - the placement feature 261's settlement-review ruled out
 (`test_an_entrance_board_stands_on_the_approach_and_not_on_a_straggler_at_its_join`). The board's costliest question, its
-caption's level, is asked lazily instead (`board_choice`), which moves no seat."""
-
-BOARD_CAPTION_TOP = 2
-"""`board_caption_level`'s best answer: the caption clear of every crown."""
-
-
-def board_choice(seats: list[Any], level: Callable[[Any], int]) -> Any:
-    """The board's seat among `seats`: the caption that fits best, then open ground among those, then (a caption seat by the
-    defaults, the traffic score) - `max(open or fitting, key=(level, lab, score))`, the first maximal seat on a tie.
-
-    ASKED LAZILY (feature 284, FR-007): the caption's level is a placement of the caption against every obstacle, and it was
-    asked of every seat. The seats are walked in the order of the rest of the key (stably, so a tie keeps the first seat),
-    and the first open seat at the best level possible is the answer; a shaded one at that level is the fallback. Only
-    where no seat reaches the best level is every seat asked and the old expression applied. The same seat, always."""
-    order = sorted(seats, key=lambda c: (c[5] is not None, c[1]), reverse=True)  # stable: equal keys keep their order
-    asked: dict[int, int] = {}
-    first_top = None
-    for c in order:
-        lv = asked[id(c)] = level(c)
-        if lv == BOARD_CAPTION_TOP:
-            if not c[7]:
-                return c
-            if first_top is None:
-                first_top = c
-    if first_top is not None:
-        return first_top
-    best = max(asked.values())
-    fitting = [c for c in seats if asked[id(c)] == best]
-    in_the_open = [c for c in fitting if not c[7]] or fitting
-    return max(in_the_open, key=lambda c: (asked[id(c)], c[5] is not None, c[1]))
+caption, is proved lazily instead (`board_seat.choose_board`), which moves no seat."""
 
 
 class FixtureSitingMixin:
-    def board_caption_level(  # type: ignore[misc]
-        self: Settlement, x: float, y: float, hw: float, hh: float, rot: float, label: str, index: Any, frame: Any, canopy: PointGrid
-    ) -> int:
-        """Does a notice board's caption fit beside the board seated here - 2 when it does and stands clear of every crown,
-        1 when it fits over a crown, 0 when it does not fit? ASKED OF THE ONE PLACER (features 261 and 266): the board is
-        the point subject the label phase will hand it, at the angle it will be drawn at, and the caption FITS when the
-        placer seats it at the preferred ring with nothing under it and no leader. Every probe written here before
-        restated some older caption search, and each disagreed with it somewhere - Kashikawa's entrance seat was called
-        sitable while the caption then went onto a farmhouse roof; the placer is the one thing that knows. Read by the
-        siter and by the frame stage's re-seat, which moved Sawada's board to a seat whose caption lay on a crown."""
-        if not label:
-            return 1
-        # ...AT THE ANGLE THE BOARD WILL BE DRAWN AT: the seat's lane bearing is turned to the nearest way, and a half-turn
-        # flips which side the placer ranks first
-        _nb = nearest_way_bearing(self.M, x, y)
-        _rot = _nb if _nb is not None else rot
-        _p = place(label, 8.0, Subject("point", tuple(label_rect(x, y, hw, hh, _rot)), angle=_rot), index, frame)
-        if _p.cost > 0.0 or _p.leader is not None:
-            return 0
-        # ...AND CLEAR OF THE CANOPY RANKS ABOVE MERELY FITTING (settlement-review of Kuwabata, feature 261): a caption whose
-        # halo notches a crown is the defect feature 230 pass 13 recorded on that very map; the GM's 2026-08-29 ruling lets
-        # a BOARD stand under trees, not a caption's halo bite them
-        return 1 if quad_on_canopy(_p.block, canopy.near) else 2
-
     def fixture_clear_of_water(self: Settlement, x: float, y: float, half: float) -> bool:  # type: ignore[misc]
         """Does a point fixture of half-diagonal `half` stand clear of every watercourse?
 
@@ -151,9 +107,8 @@ class FixtureSitingMixin:
         verges were free: the board sat at (715, 517) on a 7 px stream, INSIDE the house cloud, so the
         hamlet tier's outside-the-cloud re-seat never even looked at it.
 
-        ONE predicate, two callers - `place_kosatsuba` here and `hamletgen.stage_notice`'s re-seat,
-        which faces the identical problem for the identical reason. Fixing only the caller that
-        happened to fail would have left the other seating boards in water on the next re-roll.
+        ONE predicate - `place_kosatsuba` is the one board siter since feature 287 deleted the frame
+        stage's re-seat, which had the identical hole for the identical reason.
 
         Reads the DRAWN courses (`drawn_channels`) as well as the recorded ones, because the filleted
         stroke is what a reader sees and what the overlap matrix measures.
@@ -165,47 +120,6 @@ class FixtureSitingMixin:
         from l7r.diagram.settlement._geom.water_index import water_index
 
         return water_index(self).clear(x, y, half)
-
-    def caption_lane_clearance(self: Settlement, qx: float, qy: float, chw: float, size: float = 8.0) -> float:  # type: ignore[misc]
-        """Least distance from a caption's BOX to any lane's tread EDGE (negative = standing on it).
-
-        Shared deliberately by the notice board's seat search and by `place_kosatsuba`'s siting
-        preference, so the two cannot drift: the siter must rank a board position by the same measure
-        the seat search will later optimize, and gate 0617 reads. Every time this quantity has been
-        re-derived at a second call site in this file it has come back subtly different - the
-        centerline instead of the edge, an axis-aligned box instead of the rotated quad - so it is a
-        method now rather than a third closure."""
-        # THE WHOLE BOX, NOT FIVE POINTS ON IT. Sampling four corners plus the center is exact against
-        # a STRAIGHT tread and quietly wrong against a curved one: a caption spanning a CONCAVE bend
-        # can have all five samples clear while the middle of its top or bottom EDGE crosses the arc.
-        # Predicted here when the lane skeleton gained curvature, then observed - cohort seed 37 on the
-        # architecture session's tree, a caption 2 ft from a tread that this method had scored clear.
-        # So the measure is now segment-to-RECTANGLE: zero if the tread enters the box at all, else the
-        # least distance between the tread and any of the box's four edges.
-        #
-        # AND THE BOX IS THE ONE THE TEXT ACTUALLY OCCUPIES. The old +/-5 was symmetric about the
-        # ANCHOR, but a caption's record runs from ascent (0.8 x size) ABOVE the anchor to descender
-        # (0.25 x size) below - so the old box under-reached the top by 1.4 px and over-reached the
-        # bottom by 3. Two different boxes for one caption is how this family of bug keeps arriving.
-        _y0, _y1 = qy - 0.80 * size, qy + 0.25 * size
-        _x0, _x1 = qx - chw, qx + chw
-        _edges = (((_x0, _y0), (_x1, _y0)), ((_x1, _y0), (_x1, _y1)), ((_x1, _y1), (_x0, _y1)), ((_x0, _y1), (_x0, _y0)))
-        _best = 1e9
-        for _lane in self.M.get("lanes") or []:
-            _pts = _lane.get("pts") or []
-            _lhalf = float(_lane.get("w") or 3) / 2.0
-            for _i in range(len(_pts) - 1):
-                _a, _b = _pts[_i], _pts[_i + 1]
-                if (_x0 <= _a[0] <= _x1 and _y0 <= _a[1] <= _y1) or (_x0 <= _b[0] <= _x1 and _y0 <= _b[1] <= _y1):
-                    return -_lhalf  # the tread's own centerline is inside the caption box
-                _d = 1e9
-                for _p, _q in _edges:
-                    if segments_cross(_a, _b, _p, _q):
-                        _d = 0.0
-                        break
-                    _d = min(_d, seg_dist(_p[0], _p[1], _a, _b), seg_dist(_q[0], _q[1], _a, _b), seg_dist(_a[0], _a[1], _p, _q), seg_dist(_b[0], _b[1], _p, _q))
-                _best = min(_best, _d - _lhalf)
-        return _best
 
     def place_kosatsuba(self: Settlement, label: str = "notice board") -> Pt | None:  # type: ignore[misc]
         """AUTO-SITE the settlement kosatsuba on a lane/road verge at the busiest clear node -
@@ -221,373 +135,257 @@ class FixtureSitingMixin:
         else the whole network (`M['lane']` + `M['lanes']` + `town_streets`), and probes
         candidate verge spots with `_fits`, scoring for the most dwellings within ~260 px
         (siting is a TRAFFIC decision - the state talks at everyone who passes) while
-        hugging the verge. Call LAST - after the crop, not before it (GM 2026-08-29). This said
-        "BEFORE the crop, so the frame contains the board", which inverted the dependency: the
-        board is sited against `meta.view` now, so the frame constrains the board rather than the
-        board holding the frame open (`crop_not_held_open_by_one_feature`). No-op under meta(kosatsuba=False); returns the spot, or
-        None when no verge inside the validator's ~60-real-ft siting band fits (the
-        settlement-tier check would then fire - place by hand or widen the lane network)."""
-        if not self.M["meta"].get("kosatsuba", True):
+        hugging the verge. Call LAST - after the crop, not before it (GM 2026-08-29): the
+        board is sited against `meta.view`, so the frame constrains the board rather than the
+        board holding the frame open (`crop_not_held_open_by_one_feature`). No-op under
+        meta(kosatsuba=False); returns the spot, or None when no verge inside the ~60-real-ft
+        siting band fits.
+
+        EVERY BOARD RULE IS APPLIED HERE, ONCE (feature 287, labels L1-L4, L7, L11, L12, L14 - `board_seat.py`). A
+        seat is a candidate only inside the view and off the title placard; it is kept only where the one placer seats
+        its caption clean beside it (`board_caption_seat`); an `entrance` board only where every way out passes it; the
+        `kosatsuba_seat` knob resolves over the placements the map can so site; and the caption's proved seat rides to
+        the label phase and is drawn as proved. The frame stage's re-seat, a second siter restating these rules with
+        four recorded drifts (features 154, 227, 230, 261), is deleted. Where no seat anywhere takes a board with a clean
+        caption, the board is still posted by its way (plan D12, GM 2026-09-30: the clean caption is a preference): the
+        caption steps down to one on a leader or in the key that clears every way (`terminal_caption`), then to the one
+        placer's normal fallback (`fallback_caption`). The only map with no board is one with no roadside seat at all."""
+        meta = self.M["meta"]
+        if not meta.get("kosatsuba", True):
             return None
-        ftpx = float(self.M["meta"].get("ftpx") or 1)
-        lim = 60.0 / ftpx  # kosatsuba_by_the_road: ~60 REAL feet from a route, in px
+        ftpx = float(meta.get("ftpx") or 1)
         # probe with the DRAWN marker box, not the true footprint (village grain floors the glyph
         # to ~11x4.6 px - see kosatsuba): the spot has to hold the pixels that get drawn there
         w = max(self.px(12), KOSATSUBA_MARKER_MIN_PX)
         h = w * 5 / 12
-        # (pts, tread width) per route; road/lane manifest fields carry no width, so assume
-        # a generous tread for the bed-avoidance test below.
-        # MAIN WAYS ONLY, where the map declares any (GM 2026-08-02, from Ubame: the siter put
-        # the board a legal 49 ft off a side lane while the high street ran 200 ft away - "it
-        # should be along the main road, in order to be more noticed"). The candidate tiers
-        # mirror kosatsuba_on_a_main_way exactly (the same-source doctrine): every road and
-        # every main: True town street is a MAIN way, and when the map has at least one, ONLY
-        # main-way verges are sampled - a side lane's busiest node is still a side lane, so
-        # scoring must never see it. A map with no declared hierarchy (village/hamlet lane
-        # webs, towns whose streets are all unflagged) falls back to the whole network, where
-        # the busiest-node scoring below stands in for "main". The fallback still needs TOWN
-        # STREETS TOO: this probe was written for the lane/lanes tiers, and the omission was
-        # invisible until Hirameki - no road, no lanes, all town_streets - gave it not one
-        # candidate seat and it returned None (GM 2026-07-27).
-        routes: list[tuple[list[Pt], float]] = []
-        if self.M.get("road"):
-            routes.append(([(p[0], p[1]) for p in self.M["road"]], 18.0))
-        routes.extend(([(p[0], p[1]) for p in r["pts"]], 18.0) for r in (self.M.get("roads") or [])[1:])
-        routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w", 18))) for st in self.M.get("town_streets") or [] if st.get("main"))
-        if not routes:
-            # A ROUTE CARRIES ITS OWN WIDTH, AND THIS BLOCK USED TO GIVE THEM ALL THE SAME ONE (feature
-            # 134 T50, 2026-08-29). `street_runs` returns EVERY drawn lane, and they were all added at a
-            # nominal 8 ft - so the seater measured the tread edge 4 ft from the centerline on a lane
-            # that is 3 or 5 ft wide, and placed the board `(8 - w) / 2` too far out while believing it
-            # had put it exactly on the verge. Gate seed 44's board landed at 12.5 ft from a 5 ft lane's
-            # centerline - which is 6 (the verge) + 4 (half of the imagined 8) + 2.5 (half the board),
-            # to the foot - and `kosatsuba_by_the_road` measures against 12.0 and refused it.
-            #
-            # It also quietly undid the rule the note below states. `_main` exists to keep the state's
-            # notice off a SERVICE lane, and this loop had already put every web lane into `routes`
-            # before that filter ran, so the filter decided nothing. The per-lane extend below covers
-            # exactly the same ways with their real widths, so this is now only the last-ditch case
-            # where the manifest has runs but no lane records to read a width from.
-            if not (self.M.get("lanes") or []):
-                for _st in street_runs(self.M):  # every lane; `M["lane"]` is only the last one drawn
-                    routes.append((_st, 8.0))
-            # A SERVICE LANE IS NOT A PLACE TO POST THE STATE'S NOTICE. The fallback takes the whole
-            # network when no way declares itself main, which a hamlet never does - so when the lane
-            # web arrived it put ~1,000 ft of 3 ft footpaths into the candidate list on equal footing
-            # with the 5 ft spine, and the board re-seated onto one: a settlement-review measured it
-            # 34.9 ft off the spine where it had been 9.0, now facing a way the engine itself calls
-            # SERVICE. This function's own docstring already states the rule it was breaking - "a
-            # side lane's busiest node is still a side lane, so scoring must never see it" - and
-            # `web` is exactly the hierarchy flag the hamlet tier lacked. Web lanes are used only if
-            # there is nothing else to stand beside.
-            _ways = self.M.get("lanes") or []
-            # TRIED AND REVERTED (feature 140, 2026-08-28): admitting every web lane as a route on a hamlet, to let the
-            # board reach the frontage. It moved nothing on Inashiro - the frontage has no verge seat that `_fits` a
-            # board after the re-seat (4 of 60 probes around the houses fit), so the choice of routes was never the
-            # constraint; the room is. Recorded so the lever is not pulled again (`research.md` R6).
-            # ...AND THE CONNECTOR IS NOT A MAIN WAY EITHER (2026-09-26). It carries no `web` flag, so a hamlet whose
-            # web declared no spine left the connector as the ONLY "main" route and the web lanes out: Kuwabata,
-            # re-packed when its homesteads began turning as one piece, found no verge on the connector that fit a
-            # board and shipped with none. The frame's re-seat already leaves the connector out; this now agrees.
-            _main = [ln for ln in _ways if not ln.get("web") and not ln.get("connector")] or _ways
-            # ...BUT AN ANCHORED BOARD IS OFFERED THE WAY THAT MEETS ITS ANCHOR, web or not (feature 261, settlement-review
-            # of Inashiro, Mizuguchi and Sawada): the lane the approach meets at the settlement's mouth is often a web lane,
-            # and main-ways-only put the `entrance` board on a stub hundreds of feet inside the cluster. Resolved the way
-            # the placement is below (the knob is positional, so the second read is the same value).
-            if str((self.M.get("meta") or {}).get("scale") or "") in ("hamlet", "village"):
-                _a0 = kosatsuba_anchor(self.M, str(resolve_knob("kosatsuba_seat", int(self.seed), kosatsuba_affordances(self.M), (self.M["meta"].get("knobs") or {}))))
-                if _a0 is not None:
-                    _reach0 = 2.0 * KOSATSUBA_ANCHOR_BAND_FT / ftpx
-                    # ...and at a HANDOVER the approach itself: the one way every departure walks (feature 261 FR-015)
-                    _hand0 = kosatsuba_handover(self.M) is not None
-                    # ...measured to the way's SEGMENTS, not its vertices: the handover is where the last way joins the approach
-                    # (feature 261), mid-leg on a connector whose nearest vertex can be hundreds of feet off (Inashiro's 700 ft leg)
-                    _main = _main + [
-                        ln
-                        for ln in _ways
-                        if ln not in _main
-                        and (_hand0 or not ln.get("connector"))
-                        and any(seg_dist(_a0[0], _a0[1], (float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) <= _reach0 for a, b in zip(ln["pts"], ln["pts"][1:], strict=False))
-                    ]
-            routes.extend(([(p[0], p[1]) for p in ln["pts"]], float(ln.get("w", 8))) for ln in _main)
-            routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w", 18))) for st in self.M.get("town_streets") or [])
-        spots = [(b["x"], b["y"]) for b in self.M["houses"]] + [(b["x"], b["y"]) for b in self.M["buildings"]]
+        lane_tier = str(meta.get("scale") or "") in ("hamlet", "village")
+        view = meta.get("view")
+        frame = (view[0], view[1], view[0] + view[2], view[1] + view[3]) if view else None
+        index = self.label_obstacles() if label else None  # the one placer's obstacles, indexed once for every candidate
+        sampled: dict[tuple[Any, ...], list[BoardSeat]] = {}
+        # everything a seat is tested against, built ONCE for the whole probe (constitution X clause 15; features 138, 278)
+        env = SiteEnv(
+            view,
+            bed_segment_index(way_beds(self.M), h / 2 + 3),
+            [(b["x"], b["y"]) for b in self.M["houses"]] + [(b["x"], b["y"]) for b in self.M["buildings"]],
+            str(meta.get("kosatsuba_siting") or "frontage"),
+            [(float(_w["x"]), float(_w["y"])) for _w in (self.M.get("wells") or []) if "x" in _w],
+            canopy_index(self.M),
+            WayFacing(self.M, KOSATSUBA_WAY_REACH_FT / ftpx + math.hypot(w, h)),
+        )
+        proved: dict[tuple[float, float, float], tuple[bool, Placement | None]] = {}
 
-        beds = way_beds(self.M)  # EVERY way bed, not just the routes candidates were sampled from
+        def proof(c: BoardSeat) -> tuple[bool, Placement | None]:
+            if (c.x, c.y, c.rot) not in proved:
+                p = board_caption_seat(self.M, c.x, c.y, w / 2, h / 2, c.rot, label, index, frame) if label and index is not None else None
+                proved[c.x, c.y, c.rot] = (not label or p is not None, p)
+            return proved[c.x, c.y, c.rot]
 
-        def off_every_bed(x: float, y: float) -> bool:
-            # the board hugs the verge, so the lane corridor's no-build clearance (a HOUSE
-            # setback: homesteads must not crowd the tread) is deliberately bypassed
-            # (_fits corridors=False) - but the board must still stand off the TREAD of
-            # every route, including ones it was not sampled from (a junction spot offset
-            # from lane A can land on lane B, or on a town street or alley this tier's
-            # candidate list does not carry at all - see way_beds)
-            # FROM AN INDEX OF THE BEDS' SEGMENTS (feature 278, FR-009): every segment of every way was measured per
-            # candidate. Each segment is filed by its box widened by its own refusal distance, so a segment whose widened
-            # box misses the point stands farther than that distance and cannot refuse it.
-            return all(seg_dist(x, y, a, b) >= reach for a, b, reach, _x0, _y0, _x1, _y1 in _bed_segs.near(x, y) if _x0 <= x <= _x1 and _y0 <= y <= _y1)
+        def sample(routes: list[tuple[list[Pt], float, bool]], verge_first: bool) -> list[BoardSeat]:
+            return self._board_seats(routes, verge_first, w, h, ftpx, env, sampled)
 
-        _bed_segs = bed_segment_index(beds, h / 2 + 3)
+        # THE CAPTION'S LATER STEPS (plan D12, GM 2026-09-30: the clean caption is a preference, never a reason for no
+        # board): a caption on a leader or in the key that clears every way, then the one placer's normal fallback
+        terminal: dict[tuple[float, float, float], Placement | None] = {}
 
-        tw_lab = self.label_caption_hw(label, 8.0) if label else 0.0  # the caption half-width the seat must also hold, as RECORDED
-        _label_index = self.label_obstacles() if label else None  # the one placer's obstacles, indexed once for every candidate
-        _view0 = (self.M.get("meta") or {}).get("view")
-        _frame = (_view0[0], _view0[1], _view0[0] + _view0[2], _view0[1] + _view0[3]) if _view0 else None
-        kb_boxes = self.label_blockers("kosatsuba")  # built once: the probe tests many seats against the same map
-        kb_lanes = lane_seat_index(self.M.get("lanes", []))  # ...and the lanes likewise (feature 281, FR-006)
-        _siting = str((self.M.get("meta") or {}).get("kosatsuba_siting") or "frontage")
-        _wells = [(float(_w["x"]), float(_w["y"])) for _w in (self.M.get("wells") or []) if "x" in _w]
-        _canopy = canopy_index(self.M)  # built ONCE for the whole probe, not per seat - see `canopy_index`
-        cands: list[tuple[int, float, float, float, float, int | None, float, bool]] = []  # (busy, score, x, y, rot, label_above|None, gap from tread edge to board edge, under the trees)
-        _approach_ways = [[(p[0], p[1]) for p in ln["pts"]] for ln in self.M.get("lanes") or [] if ln.get("connector")]
-        _along = BOARD_ALONG_STEP_PX
-        _on_approach: set[int] = set()  # id() of the candidates standing on the approach itself (the entrance rule below)
-        # ROADSIDE FIRST, BEFORE THE TESTS (feature 284, FR-007): at the lane tiers the roadside rule below keeps only the seats
-        # within `KOSATSUBA_VERGE_FT` of a tread whenever any exists, so the farther offsets were tested and then thrown away -
-        # most of the board's `_fits` calls. The verge band is sampled first; only when it holds no seat is the whole band
-        # sampled, from scratch, in the order it always was. The same candidates reach the rule, in the same order.
-        _scale0 = str((self.M.get("meta") or {}).get("scale") or "")
-        _verge = KOSATSUBA_VERGE_FT / ftpx + 1e-6
-        for _verge_only in (True, False) if VERGE_FIRST and _scale0 in ("hamlet", "village") else (False,):
-            if cands:
+        def lax(c: BoardSeat) -> tuple[bool, Placement | None]:
+            assert index is not None  # a board with no caption proves every seat, so only a captioned one gets here
+            if (c.x, c.y, c.rot) not in terminal:
+                terminal[c.x, c.y, c.rot] = terminal_caption(self.M, c.x, c.y, w / 2, h / 2, c.rot, label, index, frame)
+            return terminal[c.x, c.y, c.rot] is not None, terminal[c.x, c.y, c.rot]
+
+        def loose(c: BoardSeat) -> tuple[bool, Placement | None]:
+            assert index is not None
+            return True, fallback_caption(self.M, c.x, c.y, w / 2, h / 2, c.rot, label, index, frame)
+
+        # EVERY PLACEMENT THE MAP AFFORDS, each asked whether it can be SITED - in the siting band first, then (1) the whole
+        # band with the web lanes admitted - before the knob is committed (labels L1, L4 fallback steps 1-2)
+        afford = kosatsuba_affordances(self.M)
+        values = KNOBS["kosatsuba_seat"].allowed(afford) if lane_tier else ["center"]
+        pinned = meta.get("knobs") or {}
+        chosen = site_board(values, [proof, lax, loose] if label else [proof], pinned.get("kosatsuba_seat"), lambda v, pf, widen: self._board_for(v, sample, pf, widen, ftpx, lane_tier), lane_tier)
+        if not chosen:
+            return None  # no roadside seat at all: the siter's answer wherever no verge fits
+        placement = resolve_seat(int(self.seed), dict(afford), pinned, set(chosen)) if lane_tier else "center"
+        unsitable = [v for v in values if v not in chosen]
+        if unsitable:
+            meta["kosatsuba_seat_unsitable"] = unsitable
+        seat, cap = chosen[placement]
+        meta["kosatsuba_seat"] = placement
+        x, y = seat.x, seat.y
+        # THE BOARD FACES THE WAY A READER SEES IT BY, which is the NEAREST one (`kosatsuba_faces_the_road`, labels L12): every
+        # seat was turned to it as it was sampled (`WayFacing.turn`, the shared reading of "nearest") and a seat whose turned
+        # board could not face it was refused there, so the seat's turn is the drawn one. The caption was proved at this same
+        # turn (`board_caption_seat`).
+        rot = seat.rot
+        # RECORD WHAT WAS DRAWN, NOT ONLY WHAT WAS ROLLED (settlement-review, feature 154): `kosatsuba_siting` bids through
+        # the traffic score while `kosatsuba_seat` culls the ground, and where the anchor's ground holds no wellhead the siting
+        # knob decides nothing - so the achieved distance to the nearest well is stated beside the rolled knobs. A
+        # measurement, not a second label: a board 60 ft from a well did not choose the drawing-water place.
+        if env.wells:
+            meta["kosatsuba_well_ft"] = round(min(math.hypot(x - wx, y - wy) for wx, wy in env.wells) * ftpx, 1)
+        # THE PROVED SEAT RIDES TO THE LABEL PHASE only where the board is sited against the finished frame (the hamlet
+        # pipeline, after the crop): a gen that draws on after its board lets the phase seat the caption against what it drew
+        self.kosatsuba(x, y, rot, label=label, placement=cap if view else None)
+        return (x, y)
+
+    def _board_seats(  # type: ignore[misc]
+        self: Settlement, routes: list[tuple[list[Pt], float, bool]], verge_first: bool, w: float, h: float, ftpx: float, env: SiteEnv, cache: dict[tuple[Any, ...], list[BoardSeat]]
+    ) -> list[BoardSeat]:
+        """Every candidate board seat along `routes` ((pts, tread width, is the approach)), each within
+        `KOSATSUBA_WAY_REACH_FT` of its route (labels L11), off every way's bed, clear of water, fitting the ground (`_fits`),
+        inside the view (labels L2) and off the title placard (labels L14). ROADSIDE FIRST (feature 284): with `verge_first`
+        the verge band is sampled first, and only when it holds no seat is the whole band sampled, in the order it always
+        was. Each route's seats are sampled once per siting (`cache`), since every placement asks the same routes."""
+        out: list[BoardSeat] = []
+        for verge_only in (True, False) if verge_first else (False,):
+            if out:
                 break
-            for pts, _rw in routes:
-                for i in range(len(pts) - 1):
-                    (ax, ay), (bx, by) = pts[i], pts[i + 1]
-                    seg = math.hypot(bx - ax, by - ay)
-                    if not seg:
-                        continue
-                    ux, uy = -(by - ay) / seg, (bx - ax) / seg  # verge normal
-                    # long axis ALONG the route: the board's face is broadside to the traffic that
-                    # reads it, never edge-on (kosatsuba_faces_the_road; see kosatsuba's docstring)
-                    rot = math.degrees(math.atan2(by - ay, bx - ax))
-                    for t in range(int(seg // _along) + 1):
-                        f = t * _along / seg
-                        mx, my = ax + (bx - ax) * f, ay + (by - ay) * f
-                        for side in (1.0, -1.0):
-                            off = _rw / 2 + h / 2 + 4
-                            while off <= lim:
-                                if _verge_only and off - _rw / 2 - h / 2 > _verge:  # past the verge: the roadside rule below would drop it
-                                    break
-                                x, y = mx + ux * off * side, my + uy * off * side
-                                if (
-                                    off_every_bed(x, y) and self.fixture_clear_of_water(x, y, math.hypot(w, h) / 2) and self._fits(x, y, w, h, corridors=False, top=26.0)
-                                ):  # the canvas top as its bottom: no title band for a plank (feature 261)
-                                    # BUSY IS WHERE THE FEET ARE (feature 140's Inashiro review, 2026-08-28): counting dwellings within 260 px
-                                    # could not tell the frontage (11 within 150 ft) from the exit throat (5 within 150 ft) - both had ~16-21
-                                    # within 260 - and a re-roll sat the board at the throat. The near count is weighted double.
-                                    busy = sum(1 for sx, sy in spots if math.hypot(x - sx, y - sy) < 260) + 2 * sum(1 for sx, sy in spots if math.hypot(x - sx, y - sy) < 150)
-                                    # WHERE THE BOARD STANDS IS A KNOB (feature 152 T21, constitution XII).
-                                    # The takafuda stood at crossroads and bridgeheads AND at the village
-                                    # well - both attested, so this is two supportable answers rather than one
-                                    # right one, and picking either permanently throws away a way two hamlets
-                                    # can honestly differ. `frontage` is the busiest built ground, which is
-                                    # what this score has always measured. `waterside` is the drawing-water
-                                    # place: a settlement-review measured Mizuguchi's board at the wellhead,
-                                    # 7 of 12 households within 250 ft against 11 of 12 at the frontage
-                                    # optimum, and called it defensible - which it is, on the other answer.
-                                    if _siting == "waterside" and _wells:
-                                        _dw = min(math.hypot(x - wx2, y - wy2) for wx2, wy2 in _wells)
-                                        busy += 14 if _dw < 40.0 else (8 if _dw < 90.0 else 0)
-                                    # THE CAPTION IS PART OF THE SEAT (GM 2026-07-27). The glyph is 11 px
-                                    # and fits almost anywhere; its caption does not, and the busiest
-                                    # frontage is exactly where there is least room for one - so a siter
-                                    # that hunts for ground big enough to hold BOTH walks away from the
-                                    # traffic and out to the quiet end of the road, which is how Ubame's
-                                    # board came to stand across the bridge from its own town.
-                                    lab = (
-                                        0
-                                        if self.label_seat_clear(x, y + h / 2 + 11, tw_lab, 8.0, kb_boxes, lanes=kb_lanes)
-                                        else (1 if self.label_seat_clear(x, y - h / 2 - 11, tw_lab, 8.0, kb_boxes, lanes=kb_lanes) else None)
-                                    )
-                                    cands.append(
-                                        (busy, busy * 10 - off / 3, x, y, rot, lab, off - _rw / 2 - h / 2, under_canopy(_canopy, x, y, math.hypot(w, h) / 2))
-                                    )  # last two: the gap from tread edge to board edge, and whether trees stand over it
-                                    if pts in _approach_ways:
-                                        _on_approach.add(id(cands[-1]))
-                                off += 5.0
+            for pts, rw, approach in routes:
+                key = (tuple(pts), rw, approach, verge_only)
+                if key not in cache:
+                    cache[key] = self._route_seats(pts, rw, approach, verge_only, w, h, ftpx, env)
+                out += cache[key]
+        return out
+
+    def _route_seats(self: Settlement, pts: list[Pt], rw: float, approach: bool, verge_only: bool, w: float, h: float, ftpx: float, env: SiteEnv) -> list[BoardSeat]:  # type: ignore[misc]
+        """The candidate seats along one route (see `_board_seats`)."""
+        lim = KOSATSUBA_WAY_REACH_FT / ftpx
+        verge = KOSATSUBA_VERGE_FT / ftpx + 1e-6
+        half = math.hypot(w, h) / 2
+        out: list[BoardSeat] = []
+        for i in range(len(pts) - 1):
+            (ax, ay), (bx, by) = pts[i], pts[i + 1]
+            seg = math.hypot(bx - ax, by - ay)
+            if not seg:
+                continue
+            ux, uy = -(by - ay) / seg, (bx - ax) / seg  # verge normal
+            # long axis ALONG the route: the board's face is broadside to the traffic that reads it, never edge-on
+            # (kosatsuba_faces_the_road; see kosatsuba's docstring)
+            rot = math.degrees(math.atan2(by - ay, bx - ax))
+            for t in range(int(seg // BOARD_ALONG_STEP_PX) + 1):
+                f = t * BOARD_ALONG_STEP_PX / seg
+                mx, my = ax + (bx - ax) * f, ay + (by - ay) * f
+                for side in (1.0, -1.0):
+                    off = rw / 2 + h / 2 + 4
+                    while off <= lim:
+                        if verge_only and off - rw / 2 - h / 2 > verge:  # past the verge: the roadside rule would drop it
+                            break
+                        x, y = mx + ux * off * side, my + uy * off * side
+                        # the board hugs the verge, so the lane corridor's no-build clearance (a HOUSE setback) is bypassed
+                        # (_fits corridors=False) - but it still stands off the TREAD of every way (`way_beds`), out of the
+                        # water, inside the view and off the title placard; the canvas top is its bottom (feature 261)
+                        if (
+                            board_in_view(env.view, x, y, w, h)
+                            and not under_placard(self.M, x, y, w, h, PLACARD_KEEP_FT / ftpx)
+                            and all(seg_dist(x, y, a, b) >= reach for a, b, reach, _x0, _y0, _x1, _y1 in env.beds.near(x, y) if _x0 <= x <= _x1 and _y0 <= y <= _y1)
+                            and self.fixture_clear_of_water(x, y, half)
+                            and self._fits(x, y, w, h, corridors=False, top=26.0)
+                            # TURNED TO ITS NEAREST WAY, and refused where that board cannot face it (labels L12, feature 287
+                            # wave 6): beside a lane's corner both arms are as near, and a board turned to one stood 55 and 86
+                            # degrees off the other (cohort seeds 25 and 42) - asked last, of a seat every cheaper test kept
+                            and (turn := env.facing.turn(x, y, rot)) is not None
+                            # ...and the registry of what stands admits the board as `kosatsuba` will record it, turned
+                            # (feature 287, water W53): a seat on a field ditch or a stranger's yard is not offered
+                            and self.admits("kosatsuba", self.board_record(x, y, turn))
+                        ):
+                            # BUSY IS WHERE THE FEET ARE (feature 140's Inashiro review): the near count is weighted double
+                            busy = sum(1 for sx, sy in env.spots if math.hypot(x - sx, y - sy) < 260) + 2 * sum(1 for sx, sy in env.spots if math.hypot(x - sx, y - sy) < 150)
+                            # WHERE THE BOARD STANDS IS A KNOB (feature 152 T21): `frontage` is the busiest built ground,
+                            # `waterside` the drawing-water place - both attested
+                            if env.siting == "waterside" and env.wells:
+                                dw = min(math.hypot(x - wx, y - wy) for wx, wy in env.wells)
+                                busy += 14 if dw < 40.0 else (8 if dw < 90.0 else 0)
+                            out.append(BoardSeat(busy, busy * 10 - off / 3, x, y, turn, off - rw / 2 - h / 2, under_canopy(env.canopy, x, y, half), approach))
+                        off += 5.0
+        return out
+
+    def _board_routes(self: Settlement, anchor: Pt | None, placement: str, widen: bool, ftpx: float) -> list[tuple[list[Pt], float, bool]]:  # type: ignore[misc]
+        """The ways a board of this placement is sited along, as (pts, tread width, is the approach).
+
+        MAIN WAYS ONLY, where the map declares any (GM 2026-08-02, from Ubame: the siter put the board a legal 49 ft off a
+        side lane while the high street ran 200 ft away - "it should be along the main road, in order to be more noticed").
+        Every road and every main: True town street is a MAIN way, and when the map has at least one, ONLY main-way verges
+        are sampled. A map with no declared hierarchy falls back to the whole network, TOWN STREETS TOO (Hirameki - no road,
+        no lanes, all town_streets - GM 2026-07-27).
+
+        A ROUTE CARRIES ITS OWN WIDTH (feature 134 T50): every lane at a nominal 8 ft put the board `(8 - w) / 2` too far
+        out; the nominal width is reached only on a manifest with runs but no lane records (the frozen fixtures).
+
+        A SERVICE LANE IS NOT A PLACE TO POST THE STATE'S NOTICE: web lanes are used only where nothing else stands (a
+        hamlet never declares a main way), and the connector is not a main way either (Kuwabata, 2026-09-26) - BUT an
+        anchored board is offered the way that meets its anchor, web or not (feature 261: the lane the approach meets at
+        the mouth is often a web lane), and at a HANDOVER the approach itself, measured to the way's segments (Inashiro's
+        700 ft leg). `widen` (labels L4 fallback step 1) admits every web lane: the placement found no clean caption on
+        the main ways. TRIED AND REVERTED (feature 140): admitting every web lane unconditionally moved nothing on
+        Inashiro - the room was the constraint, not the routes (`research.md` R6)."""
+        routes: list[tuple[list[Pt], float, bool]] = []
+        if self.M.get("road"):
+            routes.append(([(p[0], p[1]) for p in self.M["road"]], 18.0, False))
+        routes.extend(([(p[0], p[1]) for p in r["pts"]], 18.0, False) for r in (self.M.get("roads") or [])[1:])
+        routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w", 18)), False) for st in self.M.get("town_streets") or [] if st.get("main"))
+        if routes:
+            return routes
+        if not (self.M.get("lanes") or []):
+            routes.extend((_st, 8.0, False) for _st in street_runs(self.M))  # every lane; `M["lane"]` is only the last one drawn
+        ways = self.M.get("lanes") or []
+        main = [ln for ln in ways if not ln.get("web") and not ln.get("connector")] or ways
+        if widen:
+            main = main + [ln for ln in ways if ln not in main and not ln.get("connector")]
+        if anchor is not None:
+            reach = 2.0 * KOSATSUBA_ANCHOR_BAND_FT / ftpx
+            hand = placement == "entrance" and kosatsuba_handover(self.M) is not None
+            main = main + [
+                ln
+                for ln in ways
+                if ln not in main
+                and (hand or not ln.get("connector"))
+                and any(seg_dist(anchor[0], anchor[1], (float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) <= reach for a, b in zip(ln["pts"], ln["pts"][1:], strict=False))
+            ]
+        routes.extend(([(p[0], p[1]) for p in ln["pts"]], float(ln.get("w", 8)), bool(ln.get("connector"))) for ln in main)
+        routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w", 18)), False) for st in self.M.get("town_streets") or [])
+        return routes
+
+    def _board_for(  # type: ignore[misc]
+        self: Settlement, placement: str, sample: Callable[..., list[BoardSeat]], proof: Proof, widen: bool, ftpx: float, lane_tier: bool
+    ) -> tuple[BoardSeat, Placement | None] | None:
+        """The board's seat under one placement, with its caption's proved seat - or None where the placement cannot be sited.
+
+        THE PLACEMENT IS A KNOB, NOT ONE OBJECTIVE (feature 154, GM 2026-08-29): `center` is the traffic objective itself;
+        an anchored placement (`entrance`, `frontage`) chooses the GROUND and the preferences below choose the seat on it.
+        ROADSIDE FIRST (GM 2026-08-26): at the lane tiers, if any seat stands within `KOSATSUBA_VERGE_FT` of a tread, only
+        those compete (`widen` lifts it - labels L4 fallback step 1). AN ENTRANCE BOARD STANDS WHERE EVERY DEPARTURE PASSES
+        (labels L1: `entrance_seat_ok`, hard) and ON THE APPROACH ITSELF where it offers one (feature 261, Inashiro); then
+        the seats whose caption fits, then the open, then the band beside the handover (Kashikawa, Mizuguchi). ON THE
+        TRAFFIC IS THE RULE (the Ubame failure): away from an anchor the busiest node sets a floor, 60% of the best count,
+        and the caption and the open ground choose among the seats on it (`choose_board`) - below it only where nothing
+        on it carries a clean caption."""
+        anchor = kosatsuba_anchor(self.M, placement) if lane_tier else None
+        cands = sample(self._board_routes(anchor, placement, widen, ftpx), VERGE_FIRST and lane_tier and not widen)
+        if lane_tier and not widen:
+            cands = [c for c in cands if c.gap <= KOSATSUBA_VERGE_FT / ftpx + 1e-6] or cands
+        hand: Pt | None = None
+        if anchor is not None and placement == "entrance":
+            handover = kosatsuba_handover(self.M)
+            reach = RouteReach(departure_routes(self.M)) if handover is not None else None  # the routes filed once (feature 281)
+            cands = [c for c in cands if entrance_seat_ok(c, anchor, reach, ftpx)]
+            if handover is not None:
+                cands = [c for c in cands if c.approach] or cands
+                hand = anchor
+        if anchor is not None and hand is None and cands:
+            near = min(math.hypot(c.x - anchor[0], c.y - anchor[1]) for c in cands)
+            cands = [c for c in cands if math.hypot(c.x - anchor[0], c.y - anchor[1]) <= near + KOSATSUBA_ANCHOR_BAND_FT / ftpx]
         if not cands:
             return None
-        # ROADSIDE FIRST (GM 2026-08-26): at the lane tiers, if any seat stands within KOSATSUBA_VERGE_FT
-        # of a tread, only those seats compete - the caption and traffic preferences below then choose
-        # AMONG roadside seats instead of trading the roadside away for a clearer caption.
-        _scale = str((self.M.get("meta") or {}).get("scale") or "")
-        if _scale in ("hamlet", "village"):
-            roadside = [c for c in cands if c[6] <= KOSATSUBA_VERGE_FT / ftpx + 1e-6]
-            if roadside:
-                cands = roadside
-
-        # THE PLACEMENT IS A KNOB, NOT ONE OBJECTIVE (feature 154, GM 2026-08-29). The record attests
-        # several sites for the board and this siter used to know one of them - the busiest node -
-        # so every hamlet answered the same way a question the record answers three ways, and Sawada's
-        # board ended up 9.0 ft off an 81.7 ft DEAD-END SPUR (7 of 19 dwellings within 250 ft against
-        # 13 at the busiest stretch). A cul-de-sac head is not a center, an entrance or an official's
-        # gate; it is outside what the record attests, not at one end of a supported range.
-        #
-        # Principle XII: where the record supports distinct FORMS, the rule is a knob rolled from the
-        # map's own seed. `_kosatsuba_seat_ok` carries the value space, the evidence and the reason two
-        # attested placements are withheld at these tiers.
-        #
-        # TIER-SCOPED (FR-009), and this is a requirement rather than an assumption because the code
-        # says so: `legacy-hand-authored-pool/towns/hirameki/hirameki.gen.py` calls `place_kosatsuba()`, so a TOWN comes through here.
-        # Towns and cities keep the traffic objective they were sited under.
-        placement = "center"
-        if _scale in ("hamlet", "village"):
-            placement = str(resolve_knob("kosatsuba_seat", int(self.seed), kosatsuba_affordances(self.M), (self.M["meta"].get("knobs") or {})))
-        self.M["meta"]["kosatsuba_seat"] = placement
-        anchor = kosatsuba_anchor(self.M, placement)
-        _hand: tuple[float, float] | None = None
-        if anchor is not None:
-            # AN ANCHORED PLACEMENT CHOOSES THE GROUND; the preferences below then choose among the
-            # seats on it. `center` returns no anchor on purpose - its objective IS the traffic count
-            # already computed, which measures where people ARE rather than where the middle is.
-            _near = min(math.hypot(c[2] - anchor[0], c[3] - anchor[1]) for c in cands)
-            _band = KOSATSUBA_ANCHOR_BAND_FT / ftpx
-            if placement == "entrance" and kosatsuba_handover(self.M) is not None:
-                # AN ENTRANCE BOARD AT A HANDOVER STANDS WHERE EVERY DEPARTURE PASSES (feature 261 FR-015): first the seats
-                # the fewest households' ways out miss, then the tight band beside the handover among those
-                _routes = departure_routes(self.M)
-                _reach = RouteReach(_routes)  # the routes filed once for every seat (feature 281, FR-004)
-                _miss = {id(c): _reach.missed(c[2], c[3], KOSATSUBA_HANDOVER_BAND_FT / ftpx) for c in cands}
-                _fewest = min(_miss.values())
-                cands = [c for c in cands if _miss[id(c)] == _fewest]
-                # ...ON THE APPROACH ITSELF where it offers one (settlement-review of Inashiro, feature 261): a board is squared to
-                # the way it stands on, and the kosatsuba stands broadside to the one way out (research/urban-features.html). The
-                # web lane at the outermost join was offered for the lane the approach meets the settlement by, but Inashiro's
-                # is a one-farmstead straggler, and its verge put the board 87.7 degrees off the track every household walks.
-                cands = [c for c in cands if id(c) in _on_approach] or cands
-                _hand = anchor  # the handover band is applied below, once `_sitable` can say whose caption fits
-            else:
-                cands = [c for c in cands if math.hypot(c[2] - anchor[0], c[3] - anchor[1]) <= _near + _band] or cands
-        # ON THE TRAFFIC IS THE RULE; A FITTING CAPTION IS ONLY THE PREFERENCE WITHIN IT. Scoring the
-        # caption as a flat bonus large enough to outrank traffic was tried first and re-committed the
-        # original sin at one remove: where no seat on a tight village frontage has a clear caption,
-        # EVERY caption-clear seat is out in the fields, so all three village boards walked off the
-        # frontage and their captions ran off the cropped frame. Open ground for a caption is abundant
-        # exactly where nobody is - the same trap as open verge for the board. So the busiest node
-        # sets a floor (60% of the best count available), and the caption chooses only among the seats
-        # that already stand on the traffic. A board with nowhere to put its caption is still placed,
-        # so labels_clear_of_other_buildings reports it rather than the siter hiding it.
-        # ...and the traffic floor applies only where traffic is the objective. Keeping it under an
-        # anchored placement would drag the board back toward the busy node the anchor just declined.
-        floor = 0.0 if anchor is not None else 0.6 * max(c[0] for c in cands)
-
-        # A BOARD POSITION IS ONLY AS GOOD AS THE CAPTION IT CAN CARRY (cohort seed 14, 2026-08-20).
-        # `lab` above asks only whether the two DEFAULT seats clear STRUCTURES. It never asks about
-        # lanes - so the siter happily chose a board that is hemmed: instrumented on seed 14, all
-        # eleven structure-clear seats of the forty-eight sit west and south where the lanes run
-        # (best clearance 1.0 ft against a 2 ft bar) while every seat with real clearance - 14.3,
-        # 14.2, 8.6, 5.8 ft - is blocked by a building. No seat search can fix that, because the
-        # board is in the wrong PLACE to be captioned, and nine attempts inside the search is what it
-        # cost to see that.
-        #
-        # So feasibility joins the ranking, ahead of the old structure-only term. The probe is the
-        # NEAR RING (four axes and four diagonals at zero standoff) rather than the full
-        # forty-eight, and that is sound because the full candidate set is a SUPERSET of the ring:
-        # near-ring-feasible implies search-feasible, which is exactly the one-way guarantee a
-        # PREFERENCE needs. It is 8 probes per board position against the 2 already spent, and it
-        # cannot promise a seat where the ring finds none - it only stops the siter preferring a
-        # position that demonstrably has one over a position that demonstrably does not.
-        def _sitable(_x: float, _y: float, _hw: float, _hh: float, _rot: float = 0.0) -> int:
-            return self.board_caption_level(_x, _y, _hw, _hh, _rot, label, _label_index, _frame, _canopy)
-
-        # ...AND IN THE OPEN, BUT ONLY AMONG SEATS THAT ALREADY STAND ON THE TRAFFIC (settlement-review, feature 230
-        # passes 12 and 13). The state's notice is the one fixture on a hamlet sheet that exists to be SEEN, and two of
-        # five pool maps posted it under the windbreak. Pass 12 wrote the preference as a filter ABOVE the traffic
-        # floor, and the floor is computed from whatever survives it - so the canopy quietly outranked the traffic and
-        # the board walked out along the verge to where the trees end: Mizuguchi went from 9 of 12 farmhouses within
-        # 250 ft to 3, which is the Ubame failure this siter exists to prevent, arriving through its own fix. The
-        # preference belongs BELOW the floor, among the seats that already carry the traffic, which is where every
-        # other preference in this method sits.
-        # THE CANOPY IS A FILTER OVER THE SEATS THAT PASS THE FLOOR, and the two other orderings were measured
-        # rather than argued (settlement-review, feature 230 passes 12 to 14). The state's notice is the one fixture
-        # on a hamlet sheet that exists to be SEEN, so a plank inside a crown is the worst outcome available; what
-        # the ordering decides is what it costs.
-        #   - canopy first, then the floor computed from what survives (pass 12): the count never gets a say, and on
-        #     Mizuguchi the board walked out along the verge to where the trees end - 3 of 12 farmhouses within
-        #     250 ft against a best of 10, which is the Ubame failure arriving through its own fix.
-        #   - the raw count first with the canopy as a tie-break (pass 14's ask): Mizuguchi takes 6 of 12 and the
-        #     plank lands 7.6 ft INSIDE a crown, because on that map every busiest seat is in the belt.
-        #   - the count within one dwelling of the best, then open ground: the same 6 and the same crown, because
-        #     the open seats on that map are further than one dwelling behind.
-        # So the filter stands, under the floor rather than over it - which is where every other preference in this
-        # method sits, and what keeps the anchored case honest (`floor` is 0.0 there on purpose). What it costs is
-        # recorded on the map itself: the census block states the board's own count, and `kosatsuba_seat` says
-        # which knob chose the ground.
-        if _hand is not None:
-            # ...THEN THE SEATS WHOSE CAPTION FITS, and only then the band beside the handover (settlement-review of Kashikawa,
-            # feature 261): every seat within the band had nowhere for its caption but a farmhouse roof, and the band ranked
-            # first chose one of them. Every seat here is already one every departure passes.
-            _fit = {id(c): _sitable(c[2], c[3], w / 2, h / 2, c[4]) for c in cands}
-            _best = max(_fit.values())
-            cands = [c for c in cands if _fit[id(c)] == _best]
-            # ...then in the open where the open allows (settlement-review of Mizuguchi: ranking the routes first put the
-            # board inside a crown). Below the caption, not above it: the GM's ruling (2026-08-29) is that a board under a
-            # canopy is fine "as long as there is a label attached to it and the label is visible" - so a caption that
-            # fits outranks open ground, and open ground outranks the band.
-            cands = [c for c in cands if not c[7]] or cands
-            _hnear = min(math.hypot(c[2] - _hand[0], c[3] - _hand[1]) for c in cands)
-            cands = [c for c in cands if math.hypot(c[2] - _hand[0], c[3] - _hand[1]) <= _hnear + KOSATSUBA_HANDOVER_BAND_FT / ftpx]
-        _above_floor = [c for c in cands if c[0] >= floor]
-        # ...THE CAPTION THAT FITS BEFORE THE OPEN GROUND, here as at the handover (settlement-review of Kuwabata, feature
-        # 261): open ground was filtered first, every seat with room for its caption stood under a crown, and the board
-        # went up where its caption could only name the byre beside it. The GM's ruling (2026-08-29) is that a board under
-        # a canopy is fine "as long as there is a label attached to it and the label is visible".
-        _b, _s, x, y, rot, lab, _gap, _shaded = board_choice(_above_floor, lambda c: _sitable(c[2], c[3], w / 2, h / 2, c[4]))
-        # THE BOARD FACES THE WAY A READER SEES IT BY, which is the NEAREST one (`kosatsuba_faces_the_road`, the
-        # gate's own measure). `rot` above is the bearing of the lane the seat was scored against, and at a
-        # junction - or where a later pass lays a footpath across the verge - another way can end up nearer:
-        # measured on the reference hamlet at 9.5 ft, a straggler running 72 degrees across the lane the board
-        # was posted on, so the board stood side-on to the only way beside it. Take the bearing from the way
-        # that is actually nearest the chosen seat; the seat itself, its traffic and its verge are unchanged.
-        # ...THROUGH THE SHARED READING OF "NEAREST" (feature 230). This computed its own, with a `min` over
-        # (distance, bearing) tuples, and at a lane's CORNER the two segments are exactly equidistant - so the
-        # siter broke that tie by the smaller bearing and the check broke it by manifest order, and the same
-        # board was square-on to its way and 64 degrees side-on to it depending on which one you asked. The
-        # tie-break belongs to the rule, so it lives with the rule: `_geom.ways.nearest_way_bearing`.
-        _nb = nearest_way_bearing(self.M, x, y)
-        if _nb is not None:
-            rot = _nb
-        # WHAT THE CAPTION COULD HAVE, ON THE RECORD (feature 261): 2 clear of every crown, 1 only over one, 0 not beside the
-        # board at all - so a caption lying on the canopy is a ground the seat offered, not a defect nobody saw (Sawada's
-        # entrance, squeezed between the frame and the belt, has no seat every departure passes whose caption is clear)
-        if label:
-            self.M["meta"]["kosatsuba_caption_level"] = self.board_caption_level(x, y, w / 2, h / 2, rot, label, _label_index, _frame, _canopy)
-        # `lab` NO LONGER DECIDES THE CAPTION'S SIDE, and that was the last thing keeping two cohort
-        # seeds notched. It is computed above by testing `label_seat_clear` at the DEFAULT distance
-        # only - `y +/- h/2 + 11` - so it reports "below is blocked" for a board whose below seat is
-        # blocked at 11 px and perfectly clear at 35. Passing that verdict on as `label_above` forced
-        # the caption to the far side and skipped the lane search entirely; instrumented on seed 14,
-        # the seat it forced had -1.2 ft of lane clearance while an outward below seat had 7.8.
-        #
-        # `kosatsuba` now asks the structure question itself, of every candidate in its outward walk,
-        # so the narrow precomputed verdict is strictly worse information. `lab` is still used ABOVE,
-        # to prefer a BOARD POSITION where some caption seat exists at all - that is a different
-        # question and a good one. The parameter stays on `kosatsuba` for external callers who know
-        # something the manifest does not (the gate-adjacent case its docstring describes).
-        # RECORD WHAT WAS DRAWN, NOT ONLY WHAT WAS ROLLED (settlement-review, feature 154). Two knobs
-        # decide this seat and they can disagree: `kosatsuba_siting` (feature 152 - frontage or the
-        # drawing-water place) bids through the `busy` score, while `kosatsuba_seat` (feature 154 -
-        # center, entrance or the official's gate) culls the candidates to the ground around its
-        # anchor. Where the anchor's ground holds no wellhead, every surviving candidate earns the
-        # waterside bonus of zero, so the siting knob decides nothing - and the manifest went on
-        # saying `waterside` anyway. Measured on Kashikawa: `kosatsuba_siting: waterside` on a board
-        # 276 ft from the nearest of three wells, which the interactive page would have told a
-        # clicking reader was the drawing-water place.
-        #
-        # That is this feature's own defect one field over - a placement recorded and not drawn - so
-        # the fix is the same: state the achieved fact beside the rolled one. Neither knob is
-        # overwritten; a reader can see what was asked for and what the ground allowed.
-        # A MEASUREMENT, NOT A SECOND LABEL. Recording a drawn "waterside"/"frontage" was tried and
-        # discarded in the same breath: a board that happens to land 60 ft from a well did not choose
-        # the drawing-water place, and labeling it `waterside` would assert an intent the seat never
-        # had - the same overstatement this field exists to catch. The distance claims nothing and
-        # settles the question either way: on the five scripted hamlets the rolled siting and the
-        # ground disagree on four, which is what says the two knobs are not composing.
-        if _wells:
-            self.M["meta"]["kosatsuba_well_ft"] = round(min(math.hypot(x - _wx3, y - _wy3) for _wx3, _wy3 in _wells) * float(self.M["meta"].get("ftpx") or 1), 1)
-        self.kosatsuba(x, y, rot, label=label)
-        return (x, y)
+        if hand is not None:
+            cands = [c for c in cands if proof(c)[0]]
+            if not cands:
+                return None
+            cands = [c for c in cands if not c.shaded] or cands
+            hnear = min(math.hypot(c.x - hand[0], c.y - hand[1]) for c in cands)
+            cands = [c for c in cands if math.hypot(c.x - hand[0], c.y - hand[1]) <= hnear + KOSATSUBA_HANDOVER_BAND_FT / ftpx]
+        floor = 0.0 if anchor is not None else 0.6 * max(c.busy for c in cands)
+        return choose_board([c for c in cands if c.busy >= floor], proof) or choose_board(cands, proof)
 
     def place_punishment_spot(self: Settlement, label: str | None = "punishment ground", label_xy: Pt | None = None) -> Pt | None:  # type: ignore[misc]
         """AUTO-SITE the punishment ground on a street verge at the busiest clear node - the notice

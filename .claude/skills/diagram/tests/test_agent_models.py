@@ -55,6 +55,7 @@ TIERS: dict[str, tuple[str, str]] = {
     "building-review": ("opus", "high"),
     "settlement-review": ("opus", "high"),
     "perf-audit": ("opus", "high"),
+    "effort-grader": ("opus", "high"),  # feature 293: one fixed grader for both tasks of the effort experiment (FR-010)
 }
 
 

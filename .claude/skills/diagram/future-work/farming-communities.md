@@ -105,7 +105,17 @@ west of the approach). Measure: the region's area and canopy share, and feature 
 edge crowns (no four within 2 ft of one line), against the hand-drawn Hoshigaoka grove (form `behind and sides`, feature 279), and the `LONG_RUN` bar (no
 stretch of edge 50 ft or longer within a crown's radius of one line).
 
-## OPEN 2026-09-28 (269 B26, PARTIAL): the homesteads' woods fall short of their rolled area on every map
+## CLOSED 2026-09-29 by feature 287 (the shortfall; the lane question stays open): the homesteads' woods fell short of their rolled area on every map
+
+**CLOSED (feature 287, woods W25).** Each household is seated only with copse seats covering its share of the wood floor
+(`wood_share`), planted first, and the registry of what stands keeps every later placer off them
+(`overlap/reserved.py`); `specs/287-placer-guarantees/research.md` R8 has the mechanism and its tests. The pool as
+regenerated: drawn wood 93-112% of the rolled area, against 49-85% below (observed 2026-09-29, method:
+`meta.homestead_wood_ft2` on the five committed manifests, research R6); the top-up passes fire on none of cohort 1-60.
+**Still open**: the research question the reviewer raised, whether a village lane ever ran between a house and its own
+grove - the reservation keeps lanes off a household's seats, it does not answer the question.
+
+(The entry as it stood:)
 
 The record gives the floor the old copse entry lacked: each homestead that keeps a wood keeps 6,000-28,000 sq ft of
 it (research/vegetation 210), and 269 E6 rolls it per homestead (log-uniform, a GUESS) and fills the copse to what the
@@ -155,7 +165,8 @@ engine fixes; the round-2 reviews re-measure them.
   edge to edge. Sketch: bound a lot by what research/vegetation 140 names (a path, a stream, the slope) and roughen it.
 - **The burial ground beside the title placard** (Kashikawa F2): the glyph stood 23 ft left of the placard on its center
   line and read as its ornament. Sketch: the title pocket treats feature glyphs and their clearings as keep-outs.
-- **A needle join** (Mizuguchi round 1 F4, round 2 F3): the orphan join lane runs back along the skeleton lane 35 ft at
+- **A needle join** (Mizuguchi round 1 F4, round 2 F3) - CLOSED by feature 287 (`settle_ends` relays a needle end as a
+  T, `law.needle_ends`; test_settle::test_mizuguchis_needle_join_is_relaid_square): the orphan join lane runs back along the skeleton lane 35 ft at
   16 degrees before meeting it, a ~250 sq ft needle of ground. Squaring the join (the foot of the vertex before it) was
   tried at the landing and REVERTED: the tidy then trimmed the skeleton's tail, a gable-end house's nearest way, and two
   households' ways out missed the entrance board (the failure is recorded in `ways/web.py` beside `center_lane_ends`).
@@ -169,7 +180,8 @@ engine fixes; the round-2 reviews re-measure them.
   7 ft onto the flooded field, and the check's carried-way floor (6 ft past the water's half-width) forbids a shorter one.
   Sketch: a field path crossing its own field canal takes the channel footbridge form (a short abutment each side, the
   settlement's rolled `footbridge_form`), and `roads_bridge_water` accepts a foot deck under a footpath.
-- **A lane and the connector doubling back** (Kuwabata rounds 2-3): lane 2 runs east to (2054, 40), turns 15 ft north to
+- **A lane and the connector doubling back** (Kuwabata rounds 2-3) - CLOSED by feature 287 (`settle_ends` meets them
+  as a T, `law.connector_hairpin_ends`; test_settle::test_kuwabatas_lane_and_connector_doubling_back_meet_as_a_tee): lane 2 runs east to (2054, 40), turns 15 ft north to
   the connector's start, and the connector runs back west 15-40 ft from it for 126 ft - 169 degrees over the short leg.
   `ways/joints.py` `fold_the_connector_hairpin` meets them as a T at the lane's vertex before the leg, but on Kuwabata
   `may_write` refuses it (the moved connector stands nearer the fabric). Sketch: start the connector at the lane's
@@ -305,7 +317,21 @@ which break a build down by stage. Note the separate and larger prize sitting ne
 (`place_kosatsuba`); `boxed_segs`/`boxed_seg_hit` is the existing fix and the verdict would be
 byte-identical. Neither is a map-correctness defect; both are pure iteration cost.
 
-## 2b. The packer must RESERVE ways, not merely avoid collisions - DEFERRED WITH MEASUREMENT
+## 2b. The packer must RESERVE ways, not merely avoid collisions - CLOSED by feature 287, with one fallback left open
+
+**CLOSED 2026-09-29 by feature 287 (M3; the re-roll removed).** What this entry asks for was built: at seating the first
+corridor is an exit strip from the cluster outward, and a house is admitted only with a clear corridor from its door to
+that tree, reserved against the fabric still to be laid (`settlement/rolling/access.py`, `homesteads/stages.py`); the web's
+last pass draws the corridor for any house its lanes do not reach (`ways/settle.py`, `ways/corridors.py`), and
+`generate`'s re-roll with the stranded ground forbidden (FOURTEEN AND FIFTEEN below) is deleted - a map is built once.
+The pool's five maps and every plain roll of cohort 1-48 reach every farmhouse (`specs/287-placer-guarantees/research.md`
+R9). **Left open** (R9, R10 ways W01): when the web's lawful-route test refuses the reserved run, the routed run and the
+dooryard route alike, `corridors.draw_corridors` records the house in `meta.access_refused` and the map ships with it
+unreached - cohort seeds 8 and 39 did so, one farmhouse each, under feature 284's probes (observed 2026-09-29, method: the
+acceptance sweep, research R9). Whether that last fallback becomes a refusal at seating or a site refusal is the next
+step.
+
+(The entry as it stood:)
 (2026-08-18, feature 125. Deferred under constitution Principle XIV's named exception - it is a
 stage-reordering / new-reservation-stage change - and this entry is the deliverable that deferral
 owes: the measurement, the mechanism, the sketch, and the alternatives already priced and declined.)
@@ -660,7 +686,12 @@ itself. Trimming after the repairs therefore eats the connections the repairs ex
 repair-laid tread needs cleaning up, it needs a targeted pull-back that knows the lane is a join, not
 the blanket trim.
 
-## 2b-i. THE SKELETON MUST FOLLOW THE MARGIN - a working partial, 2 of 3 seeds, NOT shipped
+## 2b-i. THE SKELETON MUST FOLLOW THE MARGIN - a working partial, 2 of 3 seeds, NOT shipped (SUPERSEDED for reach by feature 287)
+
+**The reach residue this chased is closed another way** (feature 287, M3): every door has an access corridor reserved
+at seating and drawn by the web's settle where no lane reaches it (see 2b's note). The skeleton's straight chord across
+a curved seat band is not changed by that; it stays here as a drawing question, no longer a reach one.
+
 (2026-08-20. This is the closest anything has come to the reach residue in eighteen attempts, and it
 came out of the GM's question about placement ORDER. It is written up in full because it WORKS and is
 held back only by two failures it exposes elsewhere - Principle XIII, no new regressions.)
@@ -874,7 +905,19 @@ a research question with a cheap answer.
 re-roll of the four live hamlets and a full cohort sweep, plus one `settlement-review` per pool map.
 Its own spec-kit feature.
 
-## 2c. The way-repair passes want ONE design, not three passes patching each other - DEFERRED
+## 2c. The way-repair passes want ONE design, not three passes patching each other - CLOSED by feature 287 (one residue)
+
+**CLOSED 2026-09-29 by feature 287 (ways M1, M4).** The sketch below is what was built: every lane rule is one
+predicate in `hamletgen/ways/law.py` read by the placer and its test alike (one join tolerance, `JOIN_TOL`, shared by
+both), and the web's last pass, `settle_the_web` (`ways/settle.py`), repairs against that one model until every
+predicate passes, cutting only ordinary lanes or drawing reserved corridors so it terminates: corner holes and one
+network (`settle_network`), the doubled way and the needle round nothing (`doubled_tails`, `needle_loops`,
+`settle_ends`), fragments (`settle_fragments`), width steps (`settle_widths`). **One residue**: `settle_fragments` skips
+the lanes of the tree (`corridors.is_tree`: the access corridors among them), so a reserved corridor shorter than
+`FRAGMENT_FT` that earns nothing stays drawn and `law.short_fragments` reports it - on the committed Kashikawa (lane 17,
+28.8 ft) and Mizuguchi (lane 11, 16.1 ft) (observed 2026-09-29, method: `law.violations` on the committed manifests;
+feature 287 research R9 counts it over the sweep).
+
 (2026-08-19, feature 125, from two `settlement-review` passes on Sawada and Kashikawa. Deferred under
 Principle XIV's architectural exception; four fixes were BUILT and MEASURED here before deferring, and
 every one is recorded below with what it cost, because each looked obviously right going in.)
@@ -2132,7 +2175,16 @@ tolerance could not see it. `pond_run`'s first handle now points along the bisec
 chord to the pond instead of along the heading alone: 7% detour, sharpest bend 14.9 degrees, and no stride of the run
 further from the pond than the outfall is. The pond's seat is unchanged, so the alternatives priced above stay priced.
 
-## A garden may be seated on an in-field ditch (feature 230 pass 12, 2026-09-13)
+## A garden may be seated on an in-field ditch (feature 230 pass 12, 2026-09-13) - CLOSED by feature 287
+
+**CLOSED 2026-09-29 (feature 287, water W56 and M8).** The bundle's fit refuses a garden bed on any in-field channel
+(`settlement/rolling/fit.py:_parts_fit`, `_rect_on_water` per bed; test_fit_287::test_a_garden_on_an_in_field_ditch_is_refused_without_a_corridor_stub),
+and every footprint is recorded through the registry of what stands, which refuses what the overlap matrix forbids
+(`overlap/registry.py`). The overlap matrix is asked by the placers now, not only by a test after the fact
+(`specs/287-placer-guarantees/research.md` R8). One hole the acceptance sweep found (R9, R10 water W53): a farmstead
+fixture laid in a bundle is not asked of the registry first, so under feature 284's probes Inashiro's hold raised
+`OverlapRefused` on a field ditch.
+
 
 **Measured**: cutting the supply canals at the fork and at each offtake leaves a remainder wherever a cut lands near a
 piece's own end, and the remainder is drawn and recorded like any other channel - Inashiro shipped a 3.2 ft stroke of
@@ -2245,7 +2297,15 @@ SKETCH: a `hem_siting` knob - `field_edge` (today's band along the paddy) or `on
 ground the settlement shares, for a levee archetype only, from the same acreage). Not for the valley and fan maps the
 pool draws; research first on what share of a levee hamlet's dry ground lay on its own ridge.
 
-## The toe marsh's recorded outline is not the drawn marsh (measured 2026-09-27, feature 261)
+## The toe marsh's recorded outline is not the drawn marsh (measured 2026-09-27, feature 261) - CLOSED by feature 287 (one residue)
+
+**CLOSED 2026-09-29 (feature 287, M7)** as the marsh is laid: its recorded outline is the ground its reeds are drawn on,
+and every "is this in the marsh" reads it (`drawn_ground`, `marsh_ground`; `specs/287-placer-guarantees/research.md` R8's
+marsh rows name the tests), so the belt and the copse are kept off the drawn marsh. **One residue** (feature 287 R10,
+woods W08): a household shrine's clearing swept AFTER the marsh (`farmstead_fixtures` after the hinterland) culls the
+reeds inside it (`cover.py:_cull_cover_in`) and leaves the marsh's record unshrunk. Sketch, from the design: reserve the
+clearings before the scatter, or subtract a late clearing from the cover record.
+
 
 MEASURED: on Sawada 68 of the windbreak's 179 crown bases lie inside `marshes[0].poly` (the toe), and sampled on the
 render with the belt removed, 20-34 of those 68 positions are ground drawn dry (the settlement's cleared ground, cream
@@ -2255,7 +2315,15 @@ the belt. MECHANISM: the marsh is drawn clipped by the settlement's clearing whi
 SKETCH: record the drawn extent (the ring after the clearing's cut) beside `poly`, as `drawn_poly`, and have every grove
 and the parcels test against it; then the belt gets the same keep-out as the copse.
 
-## Five finished-map rules no placer guarantees (found by feature 284, 2026-09-28)
+## Five finished-map rules no placer guarantees (found by feature 284, 2026-09-28) - CLOSED by feature 287
+
+**CLOSED 2026-09-29 (feature 287).** Each is now decided where it is placed, with a unit test on the violating case, and
+its finished-map test retired (`specs/287-placer-guarantees/research.md` R8): the stepped bund by the seam pass
+(`_split_steps`, `hold_ring_rules`), the ruled row by the parcel scan (`open_ground_patches`, the jittered seat asked
+again), the copse off its bank by the copse's reach (`BankNear`), the brook on a screen axis by `feed_brook` judging every
+candidate on its drawn course (`axis_segments`), the belt off the regional northwest by `stands.trim_to_the_wind`. The
+acceptance sweep re-ran feature 284's two levers as probes over the pool and cohort 1-48 (research R9).
+
 
 MEASUREMENT (`specs/284-fourth-hotspot-pass/research.md` R6): two speed levers that moved the pool's maps within every
 tolerance - A* in the router and the field search without its blind probe - left the regenerated pool failing five gate
@@ -2332,10 +2400,75 @@ line in feature 280 (`specs/280-modern-only-sweep/outcomes.md`, one row per item
 - **A bath room beside the main door is never drawn**: the work yard covers the front wall on every scripted house, so a hamlet
   whose seat is `main_door` (Kuwabata, Sawada) draws its bath rooms at the next seat, and `meta.bath_seats_drawn` says so.
   Sketch: let the bath lap the yard's corner under the eaves beside the door - the yard's keep-out is a guess, the seat is not.
-- **The storehouse annex is sized as shares of its house** (0.46 w x 0.45 h, `houses.py`): 1.67 to one on a 46 ft minka, 1.46 on
-  Sawada's 40 x 28 ft house. Which norm applies turns on what the annex is: the farm shed's 1.5-1.8 (homesteads/440) or the kura's
-  about 15 x 18 ft, which "as a rule" stands apart from the house (homesteads/430) - the same split as the `storage shed` class
-  above. Sketch: settle the class first, then size it in feet from its own section.
+- **The record classes the storehouse annex two ways** (updated by feature 293, 2026-09-30): feature 293 dealt the annex to the
+  largest houses and held its shape to feature 280's farm-shed band (18-27 ft, 1.5-1.8 to one; 280 M18, homesteads/440 - the naya),
+  while homesteads/120 and 430 read the annex as the kura (about 15 x 18 ft, which "as a rule" stands apart from the house) - the
+  same split as the `storage shed` class above. Owed: a research pass on which building the annex is; its size follows from that
+  section (a kura re-packs every scripted hamlet: a cohort run and a review per map).
 - **Mizuguchi's two east houses walk about four times the straight distance to the way out** (1,176 and 1,207 ft of lane for
   290-300 ft; 2.27 at worst on main) - the lane web leads them south-east first. Measured by the round-5 review, 2026-09-29; the
   same routing question as Kashikawa's detours above.
+
+## Found by feature 291's settlement-reviews (2026-09-30), measured and left
+
+- **A far-row farm's grove and its holding strip do not meet** (Kashikawa, nitpick F1 of the passing round). The grove is
+  square to the page (the house faces south) and the strip square to the street (-59 degrees), so a wedge of open scrub
+  26-56 ft wide at its nearest lies between them on all 11 far farms; at fit zoom the holdings read as one field block
+  behind the row rather than as the back of each lot. No norm sets a gap (homesteads/157: "house lot, then field").
+  Sketch: start the strip at the lot's back edge as drawn (the grove band's outer edge along the normal), or turn the
+  farm's frame to the street on a street laid first - the latter a question for the record first (does a planned row's
+  house face its street or the south?).
+- **A carried-on spur's end is written at full float precision** (Sawada, nitpick of the passing round):
+  `ways/bund.carry_on` draws `[q, *step]` unrounded where every other lane point is rounded to one decimal. Sketch: round
+  the step's points in `carry_on` as `commit_lane` does. An engine change, so it waits for the next feature that re-rolls
+  the pool rather than re-keying a reviewed one.
+
+## OPEN 2026-09-30 (feature 287): a tree run crossing water more than ~18 deg off square is refused, not straightened
+
+`hamletgen/ways/tree.py:rejoined` pads a run 4 ft (`REJOIN_PAD_FT`) either side of a water crossing before the
+crossing is squared, which leaves two elbows of about 70 deg some 21 ft apart on any run crossing more than about 18 deg
+off square; the lane law's `bends` then refuses it. On rolled maps the seating's `tree.admits` refuses such corridors
+before any is drawn, so nothing ships kinked (0 `bends` over the pool and cohort 1-20) - but the seating may be turning
+down seats a straighter rejoin would keep. Sketch: size the pad from the crossing angle (the squared leg's own length),
+or square the crossing before rejoining; measure seats offered and refused on the cohort before and after. Moves maps.
+
+## OPEN 2026-09-30 (feature 293, settlement-review of Sawada): a shared byre's pocket can end up out of every household's borrowing reach
+
+**Measured** (the manifests, from each shared shed's center to the nearest farmhouse's center - the basis `draft_byres` compares against `_BORROW_REACH` - on the two `detached_commons` maps): Sawada 66, 124, 92
+and 174 ft on feature 293's roll against 66, 47, 92 and 129 on main - two of four past `_BORROW_REACH` (120 ft) where main
+had one; Inashiro 138, 74 and 87 on both (its pockets and houses near them did not move). Mizuguchi, Kashikawa and Kuwabata
+keep household byres.
+
+**Mechanism.** Since feature 287 the pockets are laid in the seat band BEFORE any house (`reserve_commons_byres`, called
+from `stage_homesteads`), spread from each other and from the band's middle, so the houses pack round them - but where the
+houses will stand is not known then, and a re-pack that moves the houses (feature 293's storehouses moved 15 of Sawada's 19)
+leaves a pocket in open ground. `draft_byres`'s older doctrine ("SPREAD THE BYRES ACROSS THE SETTLEMENT", "A BORROWER IS A
+FLOOR") is not asked of the pocket path.
+
+**Sketch.** Lay the pockets DURING the seating rather than before it: after every `households / target` households are
+seated, lay the next pocket on the free ground nearest the group just seated (the `_commons_pocket_clear` test, the tree's
+corridors already known), so each shed has its borrowers by construction; a pool test that every shared shed has a
+household within `_BORROW_REACH`. Deferred because it reorders 287's seating loop (`_seat_households`), which the port that
+found it did not own. See first the entry `OPEN 2026-09-28 (269 B16)` above: if the shared byre on the commons is retired as
+that entry sketches (it re-rolls Inashiro and Sawada), these sheds are gone and this fix is moot. `_BORROW_REACH` is a preference
+tier (`_borrowers` widens and falls back), not a bar any test holds.
+
+## OPEN 2026-09-30 (feature 293, settlement-review of Kuwabata, round 2): the notes census does not count the storehouse annexes
+
+`make notes-census` derives each map's fixture counts from its manifest but leaves out `farm_sheds`, so a map's storehouse
+count lives only in hand-typed dated entries - the kind of line that went stale on Kuwabata (round 1, F1). Sketch: one
+`storehouses: **n** of **m** farmhouses` line in the census block, read from `farm_sheds` and the plain houses, beside the
+fixture line.
+
+## OPEN 2026-09-30 (feature 293 on 291, settlement-review of Inashiro): the connector may leave through the belt's windward corner
+
+**Measured** (the manifests): after the merge with feature 291, Inashiro's connector leaves the entrance north-west, a 327 ft
+first leg from (2290, 1649) to a bend at (2012, 1477) just off the sheet, so the road enters through the windbreak's
+north-west apex, about 13 degrees off the north-west wind; main's left south-west through the belt's west arm. The
+planting resumes on both sides (35, 22 and 50 ft of open ground between canopy edges over the first 75 ft).
+**Mechanism**: the connector's dry-exit search (`ways/track.py`, `connector_through`, `dry_exit.py`) scores bearings by dry,
+clear ground and has no preference for the belt's open side. research/vegetation.html ("How did a lane get through a
+belt?") records the lane's crossing as a GUESS and the old entrances found as standing on the grove's open side (Tonami;
+the Huizhou water mouths). **Sketch**: among the dry bearings the sweep admits, prefer the one that leaves through the
+belt's lee or flank arc (`plan.windward`), and fall back to the windward arc only where no other is dry - asked of the
+whole cohort, since it moves every map whose connector currently leaves windward.

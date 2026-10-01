@@ -4,17 +4,45 @@ Split from settlement/shrines_wells.py by feature 116 - see settlement/shrines_w
 """
 
 import math
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING, Any
 
 from .._geom import (
     Indexed,
     Pt,
     point_in_poly,
+    point_quad_dist,
+    rot_rect,
 )
 
 if TYPE_CHECKING:
     from ..core import Settlement
+
+
+WELL_AMONG_DWELLINGS_PX = 95.0
+"""How far a well may stand from the nearest dwelling's WALL - `wells_among_dwellings`' bar, the figure the retired
+finished-map test read, unchanged by feature 287, which lays each well pocket inside its household's envelope beside the
+yard and refuses a layout whose pocket would stand farther (`rolling/bundle.py:pocket_clear_of_beds`). Its origin is not
+recorded beside it; what the record gives is the reason for a bar at all - a well is dug among the doors it serves, the
+dooryard well of the idiom 井戸端会議 (idobata kaigi, "well-side meeting"), not out in the commons. MOVED here from
+`hamletgen/homesteads/wells.py` (feature 287, homes H09) so the bundle's pocket asks the same predicate the placer does;
+the hamlet module imports it back."""
+
+
+def well_gap_to_dwellings(houses: Sequence[Mapping[str, Any]], x: float, y: float) -> float:
+    """The gap from a well at (x, y) to the nearest dwelling's drawn wall - 0 inside one; abandoned houses are no dwelling.
+
+    THE ONE PREDICATE of the among-the-dwellings rule (feature 287, FR-003, homes H09): every seat `place_wells` offers
+    is held to `WELL_AMONG_DWELLINGS_PX` by it, every well pocket the bundle lays (`pocket_clear_of_beds`), and the
+    finished-map test reads it. The two used to disagree: the placer's lattice asked for a house CENTER within 105-112 px,
+    which admits a wall 99 px off beside a 26 px-deep house, while the test measured the gap to an unturned box. The
+    test's reading is the right one, turned: a gap verdict reads the footprint, never the center (`dev/placement.md`,
+    "CENTER vs FOOTPRINT"), and a well stands among the DOORS it serves, which are in the walls. Each house is measured on
+    its drawn quad (`rot_rect` at its `rot`)."""
+    return min(
+        (point_quad_dist(x, y, rot_rect(h["x"], h["y"], h["w"], h["h"], h.get("rot", 0.0))) for h in houses if h.get("kind") != "abandoned"),
+        default=float("inf"),
+    )
 
 
 class WellsMixin:
@@ -208,7 +236,10 @@ class WellsMixin:
         # error. LEFT AS IS deliberately - changing it re-seats wells on every map in the pool and
         # re-rolls the packs that flow around them, so it belongs with the item 2/item 3 pass and
         # its re-baseline, not in a drive-by. See `_place_wells`, which computes the same box.
-        if self._fits(x, y, 2 * r + 14, 2 * r + 14):
+        # ...AND THE REGISTRY OF WHAT STANDS ADMITS THE WELLHEAD AS IT WILL BE RECORDED (feature 287 M8): the overlap matrix (a
+        # bed, a lane, a yard) and the seating's reservations (an access corridor, a household's wood seat) - cohort 1-60 dug
+        # 44 wells on a corridor the web then had to draw round
+        if self.admits("wells", {"x": round(x, 1), "y": round(y, 1), "r": r, "vr": round(self._well_vr(), 1)}) and self._fits(x, y, 2 * r + 14, 2 * r + 14):
             self.well(x, y, r, shrine=shrine)
             return True
         return False

@@ -164,9 +164,8 @@ per-house groves pass every check a grove answers to.
   per-settlement knob, pinnable, rolled at even odds and recorded: each farm its own well in its dooryard, or wells
   shared along the street within reach of the farms they serve - the record rules only on the dispersed farm, and its
   one row's wells (Santome's, few, deep and shared on a water-poor upland) do not transfer; the odds a GUESS.
-- **FR-019**: Every grove farm of a LINEAR row MUST have its front door, the open side of its grove, reached by a way
-  (a dispersed farm needs none: homesteads/150, "a dispersed hamlet has no interconnected lane network to be reached
-  by"); and a farm's grove MUST draw bamboo only where that farm rolled a household bamboo stand.
+- **FR-019**: A farm's grove MUST draw bamboo only where that farm rolled a household bamboo stand. (Its door clause - "every
+  grove farm of a LINEAR row MUST have its front door ... reached by a way" - is dropped by amendment 9.)
 
 ### Key Entities
 
@@ -197,7 +196,7 @@ per-house groves pass every check a grove answers to.
 - **SC-008** (FR-018, FR-019): in every dispersed seed the farm-water knob's value is drawn - every farm a channel ending in
   its own lot, or a well of its own not in its way in - and both values appear among the dispersed seeds; in every linear
   seed the water knob's value is drawn (own wells, or every farm within reach of a shared well) and both values appear;
-  in every linear seed and pool map every front door is within the door reach of a way; and in every non-nucleated seed
+  and in every non-nucleated seed
   and pool map the farms drawing grove bamboo are exactly the farms that rolled it.
 - **SC-006** (FR-012): the pool is regenerated, `make done` is green, and every regenerated pool map whose layout moved
   gets its settlement-review.
@@ -304,3 +303,38 @@ if the generator ever knows its ground, the ground could set the value rather th
 The plan review of D18 ruled the branching outside FR-018 (its water is "the nearest drawn ditch or the brook") and asked
 for the measurement: without it, Audit-19's farms drew 1 channel in 11, the first walling the field's head off from the
 rest; with it, 11 in 11. Labeled a GUESS - whether neighbors shared a channel no page read says.
+
+**Amendment 7** (2026-09-30, the GM's decision): feature 287 ("placer guarantees") landed on main while this feature was
+open, and its seating, access tree, lane law and web settle were built for the nucleated form alone - the form main
+rolled - while this feature's row villages, dispersed farms, farm water and door paths were built on the code 287
+replaced. Asked how to land this feature ("Port all of 291", "Land in two parts", "Keep 291's unseated rule"), the GM
+chose **"Port all of 291 (Recommended)"**: *"Rebuild row villages and dispersed farms on 287's machinery in this feature,
+taking 287's rule: every household seated or the site refused. Then regenerate, gate, review all five maps and run the
+cohort."* So FR-013 and FR-016 hold as written - a row, then another street, never ranks - and a row village whose
+streets cannot hold every farm on any margin of the ladder is REFUSED by name (`SiteRefused`, 287 plan D2), never
+shipped with a farm unseated (the remainder this feature's plan D15 reported is retired). Every requirement of this spec
+is otherwise unchanged; what moves is where each is implemented, recorded in the plan (D20).
+
+**Amendment 8** (2026-09-30, an exception put to `spec-fidelity` under constitution XVI - FAITHFUL, on conditions): FR-019
+and SC-008. FR-019's front door is "the open side of its grove"; under amendment 7 a door path is a tree lane the settle
+never cuts, so it must keep the whole lane law as drawn, and on cohort seeds 11, 23 and 904 (measured 2026-09-30) a
+far-row farm - fronting its own holding, its grove's deep bands between house and street (research homesteads/159) - had
+no lawful path from the front-door point, which stood beyond the door reach (`DOOR_REACH_FT`) from any way. FR-019 is kept by a way
+reaching the farm's dooryard on an OPEN side of its grove: the front door, or - only where no lawful way leaves the front -
+a flank of the dooryard facing no band of the farm's own grove (so a two-sided grove's; a three- or four-sided grove's farm
+still needs its front, and a site where none is lawful is refused), with open ground between that flank and the front
+door. Each such farm is recorded (`meta.door_flanks`, the lane's `from_flank`), and SC-008's door check counts a farm so
+reached. Alternatives priced and refused: the flank path begun at the front door (doubles back; the law refuses it);
+refusing such sites (most both-sides rows); turning far-row farms to face their street (against homesteads/159). To be
+raised with the GM once the implementation works.
+
+**Amendment 9** (2026-09-30, the GM's ruling): FR-019's door clause and SC-008's door check are DROPPED. The clause came
+from a settlement-review finding written into the spec by amendment 3 (a Kashikawa farm whose only lane stopped short of
+its door), not from the record - homesteads/715 finds the grove leaving the front OPEN, a finding about the grove's
+shape, and nothing read says a way must arrive at the front door (amendment 4's review had already noted the GM never
+asked for it). The GM, asked: "Yes, just drop the door clause because there is no actual reason to have that there."
+A row farm is held to what stands without it: reached by the lane network (feature 287's rule, the settle's
+`unreached_houses`) and its way ending on its own street (FR-017, `row_rules`). Amendment 8's exception is moot; the flank
+of the dooryard stays in the door-path search as a preference after the front, and `row_rules.doors_unreached` and
+`reached_from_a_flank` are removed.
+

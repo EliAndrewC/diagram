@@ -177,6 +177,8 @@ bastion	bastion
 bastions	bastion
 battalion cities	guard city
 battalion city	guard city
+batten ceiling	batten ceiling
+batten ceilings	batten ceiling
 batter	batter
 battered	batter
 baulk	baulk
@@ -462,6 +464,8 @@ clothier	clothier
 clothier's	clothier
 clothiers	clothier
 cluster's spine	cluster's spine
+clustered village	kaison
+clustered villages	kaison
 coaching inn	coaching inn
 coaching inns	coaching inn
 coaching-inn	coaching inn
@@ -842,6 +846,8 @@ enpo era	Enpo era
 enpō	Enpo era
 enpō era	Enpo era
 eta	eta
+etchu	Etchu
+etchu's	Etchu
 eunis	EUNIS
 europe pmc	Europe PMC
 eutrophic	eutrophication
@@ -875,6 +881,7 @@ fan foot	fan foot
 fan head	alluvial fan
 fan palm	fan palm
 fan palms	fan palm
+fan plain	alluvial fan
 fan's foot	fan foot
 fan's head	alluvial fan
 fan-foot	fan foot
@@ -982,6 +989,8 @@ five-household group	five-household group
 five-household groups	five-household group
 five-ring pagoda	five-ring pagoda
 five-ring pagodas	five-ring pagoda
+fixed rate	fixed-rate
+fixed-rate	fixed-rate
 floating-leaf	floating-leaf plant
 floating-leaf plant	floating-leaf plant
 floating-leaf plants	floating-leaf plant
@@ -2319,6 +2328,7 @@ mulberry-dike fishpond	dike-pond
 multiple cities	multiple city
 multiple city	multiple city
 mumun	Mumun
+munafuda	ridge tag
 munamon	munamon
 mune-wari	ridge-divided nagaya
 mura	mura
@@ -2465,6 +2475,8 @@ nongzheng quanshu	Nongzheng Quanshu
 noria	noria
 norias	noria
 normal depth	normal depth
+north range	south range
+north ranges	south range
 northern and southern courts	Northern and Southern Courts
 northern kanto	Kanto
 northern song	Song dynasty
@@ -2846,6 +2858,7 @@ republican	Republican era
 republican era	Republican era
 republican-era	Republican era
 ressen	ressen
+resson	ressen
 rest stop	tateba
 rest stops	tateba
 restoration	Restoration
@@ -2855,7 +2868,7 @@ retirement house	inkyo
 retirement houses	inkyo
 retiring house	retiring house
 retiring houses	retiring house
-retsuson	retsuson
+retsuson	ressen
 return flow	return flow
 reverse-kesa	kesa
 revetment	revetment
@@ -2875,6 +2888,8 @@ rick	rick
 ricks	rick
 ridge culture	ridge culture
 ridge span	ridge span
+ridge tag	ridge tag
+ridge tags	ridge tag
 ridge-divided	ridge-divided nagaya
 ridge-divided nagaya	ridge-divided nagaya
 riffle	riffle
@@ -3000,6 +3015,9 @@ sanmon	sanmon
 sannomaru	sannomaru
 sanshaku-michi	sanshaku-michi
 sanson	sankyoson
+santome	Santome
+santome shinden	Santome
+santome's	Santome
 sanuki	Sanuki
 sanuki plain	Sanuki
 sanyo-do	Sanyodo
@@ -3016,6 +3034,8 @@ satetsu	satetsu
 satoyama	satoyama
 satsuma	Satsuma
 scattered farmstead	sankyoson
+scattered village	sankyoson
+scattered villages	sankyoson
 scattered-farmstead	sankyoson
 scour	scour
 screen gate	screen gate
@@ -3276,6 +3296,8 @@ soto zen	Sōtō
 soto-machi	outer town
 sotobori	sotobori
 sotomachi	outer town
+south range	south range
+south ranges	south range
 south town magistrate	town magistrate
 southern song	Song dynasty
 sovereign temple	sovereign temple
@@ -4123,6 +4145,7 @@ zōkibayashi	zokibayashi
 スブタ	Blyxa
 ホオノキ	hoonoki
 ミズオオバコ	Ottelia
+三富新田	Santome
 合掌造り	gassho
 四間取り	four-room type
 圃場整備	hojo seibi

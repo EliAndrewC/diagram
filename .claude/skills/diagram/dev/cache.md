@@ -19,8 +19,9 @@ demonstration, and every test there that asserts a HIT also regenerates and comp
 "gate never reads the cache" rule).** `tests/test_villages.py` obtains each live map via
 `gencache.gate_obtain`: a verified HIT - key match plus stored generation coverage - restores the
 artifacts, replays the entry's coverage data into the run (so the coverage floors stay honest),
-and skips GENERATION only. The full current check battery still runs against whatever manifest was
-served - checking is never cached. Any doubt at all - key moved, entry incomplete, no stored
+and skips GENERATION only. Every test that reads the map still runs against whatever manifest was
+served - checking is never cached (the check battery this sentence once named was retired by feature 166, and
+feature 287 moved most of the finished-map tests that replaced it into their placers' unit tests). Any doubt at all - key moved, entry incomplete, no stored
 coverage (an iteration-made entry), or `GATE_NO_CACHE=1` - regenerates in a coverage-recording
 subprocess exactly as a cold run would. Why this is safe to trust, one line each: generation is
 deterministic, so a sound key implies byte-identical output; the key covers the dependency surface

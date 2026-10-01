@@ -18,6 +18,25 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
+def trees_off_the_treads(trees: Sequence[tuple[float, float, float, str]], lanes: Sequence[Any]) -> list[tuple[float, float, float, str]]:
+    """The trees of a stand whose TRUNK stands on no lane's tread (feature 287, woods W21: `stands.trunk_on_tread`, the one
+    predicate of "no tree is planted in a path") - asked only of the lanes whose box comes within a half-width of the
+    stand's, so a wood no lane reaches asks nothing."""
+    from ..homestead_parts.stands import trunk_on_tread  # noqa: PLC0415 - kept beside its one use
+
+    if not trees:
+        return []
+    x0, x1 = min(t[0] for t in trees), max(t[0] for t in trees)
+    y0, y1 = min(t[1] for t in trees), max(t[1] for t in trees)
+    near = []
+    for ln in lanes:
+        pts = ln.get("pts") or []
+        h = float(ln.get("w", 6)) / 2.0
+        if len(pts) >= 2 and min(p[0] for p in pts) - h <= x1 and max(p[0] for p in pts) + h >= x0 and min(p[1] for p in pts) - h <= y1 and max(p[1] for p in pts) + h >= y0:
+            near.append(ln)
+    return [t for t in trees if not near or not trunk_on_tread(t[0], t[1], near)]
+
+
 class TreeStandsMixin:
     def _tree_stand(self: Settlement, poly: Poly, seed: int, floor: Poly | None = None, outliers: bool = True, cls: str | None = None) -> None:  # type: ignore[misc]
         """Fill `poly` with INDIVIDUAL TREES - the ONE way this engine draws a wood (GM 2026-07-25).
@@ -101,6 +120,9 @@ class TreeStandsMixin:
         # no crown is drawn on a roof or a wellhead - and by flush time that means EVERY one of them
         reach = rad * 1.4
         krect, kcirc = self._canopy_keepouts((min(xs) - reach, min(ys) - reach, max(xs) + reach, max(ys) + reach))
+        # ...and no trunk stands on a lane's tread (feature 287, woods W21 - `trunk_on_tread`, the rule's one predicate): the
+        # stand is drawn at crop time, after every way, so a lane through the wood is known and the trees keep off it
+        trees = trees_off_the_treads(trees, self.M.get("lanes") or [])
         seated = self._crowns_near(
             min(xs) - reach, min(ys) - reach, max(xs) + reach, max(ys) + reach
         )  # no crown's center under another's canopy, this stand's or any earlier one's - see _crown_seat_clear

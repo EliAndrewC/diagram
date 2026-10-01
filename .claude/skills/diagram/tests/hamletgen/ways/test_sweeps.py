@@ -548,6 +548,16 @@ def test_a_tail_run_alongside_another_way_is_cut_where_it_came_alongside() -> No
     assert along_tail([(100.0, 200.0), (100.0, 10.0)], way) is None, "an approach that meets the way square is no tail"
     assert along_tail([(0.0, 50.0), (300.0, 50.0)], way) is None, "a lane 50 ft off is not alongside"
     assert along_tail(lane, [(5.0, 5.0)]) is None
+    # feature 293 (Inashiro in the earlier 293 pass): a tail that runs back along a way to that way's own VERTEX is nearest
+    # there to the other reach meeting at it; judged against that reach alone it was no tail, and a 95 ft retrace shipped
+    bent = [(0.0, 100.0), (100.0, 0.0), (300.0, 0.0)]  # the way turns at (100, 0)
+    retrace = [(300.0, 150.0), (300.0, 6.0), (100.0, 0.0)]  # comes down to it, then runs back along it to the vertex
+    assert along_tail(retrace, bent) is not None
+    # feature 293 on 291 (Mizuguchi's field spur): a tail that meets its way at an angle for its last few feet - inside
+    # `_ALONG_FT` - and runs beside it before that is walked through the approach; a square T past it is still none
+    spur = [(420.0, 100.0), (400.0, 10.0), (160.0, 10.0), (153.0, 0.0)]  # 10 ft off the way, then 12 ft at 55 degrees onto it
+    assert along_tail(spur, way) is not None
+    assert along_tail([(150.0, 200.0), (150.0, 0.0)], way) is None, "a square T is no tail past its approach either"
 
 
 def test_brook_crossings_counts_a_polyline_over_the_drawn_course() -> None:
@@ -560,15 +570,16 @@ def test_brook_crossings_counts_a_polyline_over_the_drawn_course() -> None:
     assert brook_crossings([(100.0, 100.0), (150.0, 300.0)], s) == 0
 
 
-def test_join_orphan_ways_keeps_an_over_and_back_link_only_as_the_last_resort(monkeypatch) -> None:
-    """Feature 261: a link that crosses the brook out and home again is refused while another candidate will do - and
-    when none will, it is still drawn, because an orphan left unjoined is worse than two planks."""
+def test_join_orphan_ways_never_draws_an_over_and_back_link(monkeypatch) -> None:
+    """Feature 261 refused a link that crosses the brook out and home again while another candidate would do, and drew it
+    as the last resort when none would. Feature 287 (ways W06, FR-005): that fallback emitted the violation, so the link is
+    refused outright and the orphan is left to the web's last pass."""
     from l7r.diagram.hamletgen.ways import sweeps
 
     monkeypatch.setattr(sweeps, "brook_crossings", lambda pts, s: 2)
     s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 200.0)], [(120.0, 0.0), (120.0, 200.0)]])
-    assert hg.ways._join_orphan_ways(s, [], [], []) == 1
-    assert len(s.M["lanes"]) == 3
+    assert hg.ways._join_orphan_ways(s, [], [], []) == 0
+    assert len(s.M["lanes"]) == 2, "no link drawn"
 
 
 def test_a_doubled_tail_that_overran_the_way_ends_at_the_crossing() -> None:
@@ -599,46 +610,6 @@ def test_a_wider_lane_is_never_cut_back_along_a_narrower() -> None:
     assert s.M["lanes"][2]["pts"] != [[100.0, 200.0], [6.0, 150.0], [6.0, 60.0]], "the 3 ft lane beside a 3 ft way is cut"
 
 
-def test_link_home_bank_needs_a_brook_and_an_excursion(monkeypatch) -> None:
-    """Feature 261: no brook, or no way out that crosses it twice, is nothing to link."""
-    from l7r.diagram.hamletgen.ways import sweeps
-    from l7r.diagram.settlement.structures.fixtures import _helpers
-
-    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 200.0)]], houses=[(40.0, 100.0)])
-    assert sweeps._link_home_bank(s, None, [], [], []) == 0
-    s.M["streams"] = [{"poly": [[-500.0, 300.0], [500.0, 300.0]]}]
-    monkeypatch.setattr(_helpers, "departure_routes", lambda M: [[(0.0, 100.0), (0.0, 0.0)]])
-    assert sweeps._link_home_bank(s, None, [], [], []) == 0
-
-
-def test_link_home_bank_serves_the_house_to_a_dry_shod_way_on_its_own_bank(monkeypatch) -> None:
-    """Feature 261 (settlement-review of Mizuguchi): a way out over the brook and back is served again, counting as the
-    house's network only the ways on its own bank that reach the connector without crossing."""
-    from l7r.diagram.hamletgen.ways import serve, sweeps
-    from l7r.diagram.settlement.structures.fixtures import _helpers
-
-    brook_y = 300.0
-    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 250.0)], [(200.0, 250.0), (200.0, 400.0)]], houses=[(200.0, 200.0)])
-    s.M["streams"] = [{"poly": [[-500.0, brook_y], [500.0, brook_y]]}]
-    out_and_back = [(200.0, 250.0), (200.0, 350.0), (100.0, 350.0), (100.0, 250.0), (0.0, 250.0), (0.0, 0.0)]
-    monkeypatch.setattr(_helpers, "departure_routes", lambda M: [out_and_back, [(0.0, 100.0), (0.0, 0.0)]])
-    asked: dict = {}
-
-    def fake(s_, plan, hard, fabric, water, only=None, seg_ok=None):
-        asked["only"], asked["ok"] = only, seg_ok
-        s_.lane([(200.0, 200.0), (0.0, 200.0)])
-
-    monkeypatch.setattr(serve, "_serve_stragglers", fake)
-    assert sweeps._link_home_bank(s, None, [], [], []) == 1
-    assert asked["only"] == [s.M["houses"][0]]
-    kept = [[tuple(q) for q in ln["pts"]] for ln in s.M["lanes"]]
-    assert [(200.0, 250.0), (200.0, 400.0)] not in kept and [(0.0, 0.0), (0.0, 250.0)] in kept, "the plank it no longer needs is dropped"
-    ok = asked["ok"]
-    assert ok((200.0, 200.0), ((0.0, 100.0), (0.0, 120.0))), "the connector's own bank, reached dry-shod"
-    assert not ok((200.0, 200.0), ((200.0, 360.0), (200.0, 380.0))), "across the brook"
-    assert not ok((200.0, 200.0), ((600.0, 100.0), (600.0, 120.0))), "on no dry-shod way out"
-
-
 def test_a_free_ends_stub_past_a_kink_is_taken_off() -> None:
     """Feature 261: a free end's short last leg that makes the second of two sharp turns inside 40 ft is dropped; the
     same end on another lane, or a long last leg, stays."""
@@ -649,22 +620,6 @@ def test_a_free_ends_stub_past_a_kink_is_taken_off() -> None:
     assert trim_free_stub(lane, [((118.0, -40.0), (118.0, 40.0))]) == lane, "the end stands on a way: a junction, not a stub"
     long = [(0.0, 0.0), (100.0, 0.0), (100.0, -20.0), (160.0, -40.0)]
     assert trim_free_stub(long, []) == long
-
-
-def test_an_excursion_lane_is_dropped_only_where_the_rest_still_serves_its_houses() -> None:
-    """`excursion_lanes` (feature 261, Kashikawa): a lane ending by a re-served house and crossing the brook goes when every
-    house it serves is served by the other lanes; it stays when it is some house's only way, when it does not cross the
-    brook, when it ends by no re-served house, and when it is the connector."""
-    from l7r.diagram.hamletgen.ways.sweeps import excursion_lanes
-
-    brook = [((-500.0, 300.0), (500.0, 300.0))]
-    over = {"pts": [[200.0, 250.0], [200.0, 400.0]]}
-    home = {"pts": [[200.0, 200.0], [0.0, 200.0]]}
-    assert excursion_lanes([over, home], [(200.0, 200.0)], [(200.0, 200.0)], brook) == [0]
-    assert excursion_lanes([over, home], [(200.0, 200.0)], [(200.0, 200.0), (200.0, 450.0)], brook) == [], "the far-bank house has no other way"
-    assert excursion_lanes([{"pts": [[200.0, 250.0], [200.0, 280.0]]}, home], [(200.0, 200.0)], [(200.0, 200.0)], brook) == [], "no plank"
-    assert excursion_lanes([over, home], [(900.0, 900.0)], [(200.0, 200.0)], brook) == [], "by no re-served house"
-    assert excursion_lanes([{**over, "connector": True}, home], [(200.0, 200.0)], [(200.0, 200.0)], brook) == []
 
 
 def test_a_lane_that_runs_on_past_the_connector_to_a_loose_end_is_cut_where_it_met_it() -> None:
@@ -716,3 +671,27 @@ def test_a_cut_that_strands_a_lane_does_not_keep_the_network() -> None:
     assert _sweep_doubled_tails(s) == 1
     assert s.M["lanes"][2]["pts"][-1] == [0.0, 90.0], "the straggler meets the way"
     assert s.M["lanes"][1]["pts"] != [[100.0, 200.0], [6.0, 150.0], [6.0, 60.0]], "and the doubled tail is cut"
+    # ...BUT ONLY WHERE THE OVERLAP MATRIX ADMITS THE CARRIED END (feature 287 M8, merged with feature 280's carry): a carried
+    # end the matrix refuses would stay on the cut tail, stranded, so the tail is not cut and no lane is rewritten
+    s = _StubSettlement(lanes=[far[0], far[1], [(80.0, 90.0), (8.0, 90.0)], far[3]])
+    for ln in s.M["lanes"]:
+        ln["connector"], ln["w"] = False, 3
+    s.admits = lambda *a, **k: False  # type: ignore[method-assign]
+    assert _sweep_doubled_tails(s) == 0
+    assert s.M["lanes"][2]["pts"][-1] == [8.0, 90.0] and s.M["lanes"][1]["pts"] == [[100.0, 200.0], [6.0, 150.0], [6.0, 60.0]]
+
+
+def test_a_join_lane_the_split_made_redundant_is_swept_after_the_split() -> None:
+    """Feature 293 (Sawada in the earlier 293 pass): a join lane laid to a lane that CROSSES
+    the web mid-run is the only tread between them at the ink tolerance - a crossing is not a touch - so both doubled-ink
+    sweeps keep it; `split_at_crossings` then records the crossing as a junction, and the join lane is doubled ink that
+    `stage_web` sweeps once more after the split. This pins the two halves: kept before, dropped after."""
+    from l7r.diagram.hamletgen.ways.joints import split_at_crossings
+
+    crossing = [(150.0, -100.0), (150.0, 100.0)]  # crosses the web lane at (150, 0), both its ends far off it
+    join = [(150.0, 6.0), (200.0, 0.0)]  # on the crossing lane at one end, on the web lane at the other, 6 ft beside it
+    s = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], [(0.0, 0.0), (300.0, 0.0)], crossing, join])
+    assert hg.ways._sweep_doubled_remnants(s) == 0, "before the split the join lane is the only tread onto the crossing lane"
+    assert split_at_crossings(s) == 1
+    assert hg.ways._sweep_doubled_remnants(s) == 1, "after it, the crossing is a junction and the join lane is doubled ink"
+    assert [(150.0, 6.0), (200.0, 0.0)] not in [[tuple(q) for q in ln["pts"]] for ln in s.M["lanes"]]

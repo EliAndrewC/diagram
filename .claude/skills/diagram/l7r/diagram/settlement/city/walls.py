@@ -349,7 +349,18 @@ class WallsMixin:
                     break
             if not _clash:
                 break
-        self.label(_lx, _ly, _ltext, 9, italic=True, color="#5A4326")
+        _gs = [(f["x"], f["y"], f["w"] / 2, f["h"] / 2) for f in self.M["gate_structs"] if f.get("kind") in ("guardhouse", "inspection")][
+            -2:
+        ]  # the pair the caption names (_gate_flanking_buildings seats both before this)
+        self.label(
+            _lx,
+            _ly,
+            _ltext,
+            9,
+            italic=True,
+            color="#5A4326",
+            ref=(min(a - b for a, _, b, _ in _gs), min(a - b for _, a, _, b in _gs), max(a + b for a, _, b, _ in _gs), max(a + b for _, a, _, b in _gs)),
+        )
         # RESERVE the label's ground so no later pack lands a building under the text. city_wall runs
         # BEFORE the quarters pack, so the label cannot be auto-placed AROUND the buildings the way a
         # post-pack label is - it must claim its box up front (like the gate furniture above). Without

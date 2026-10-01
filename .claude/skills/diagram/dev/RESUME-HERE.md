@@ -64,7 +64,7 @@ no-build corridor the placer then refuses seats against, whatever the lane repre
 - **The cohort.** Seeds 8, 18, 23, 42, 47 fail, plus 12 and 39 which predate all of this. The GM's
   standing limit is the reference hamlet at one seed, so the cohort has not been the bar - but it is
   the obvious next question.
-- **The rescue passes.** `_serve_stragglers`, `_join_orphan_ways`, `_bridge_collinear_breaks` are
+- **The rescue passes.** `_serve_stragglers` (dropped by feature 287, 2026-09-30), `_join_orphan_ways`, `_bridge_collinear_breaks` are
   three repair passes stacked on the lane derivation. Three repairs on one derivation is a smell,
   and 128 deliberately did NOT touch them so that its own effect stayed measurable. Worth asking
   whether the derivation, done right, needs them at all.

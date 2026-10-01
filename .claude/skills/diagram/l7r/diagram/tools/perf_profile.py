@@ -70,7 +70,6 @@ def profile_stage(seed: int, stage: str, top: int = 25) -> tuple[str, str]:
 
     plan = plan_site(HamletSpec(seed=seed, **REFERENCE))
     s = Settlement(W=plan.W, H=plan.H, seed=seed)
-    s._avoid_seats = []  # type: ignore[attr-defined]
     names = [st.__name__.replace("stage_", "") for st in STAGES]
     if stage not in names:
         raise SystemExit(f"perf-profile: no stage {stage!r}; the stages are: {', '.join(names)}")

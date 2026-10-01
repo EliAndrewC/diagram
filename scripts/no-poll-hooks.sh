@@ -73,6 +73,29 @@ NP_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # hours on a gate that had finished in 7 s - the exact 2026-07-25 fault, let through by the token.
 # The escape decides whether the WAIT is permitted; it says nothing about whether the pattern is
 # correct, and the correction is mechanical, so it applies on both paths.
+# GUARD_EDIT_OK: 2026-09-30 (GM: "Yes, please go ahead") - refuse_self_match <command>: a process-match pattern that still
+# matches the command's OWN text after every correction (it launches what it waits for, or names the log it tails) finds
+# the waiting shell forever - four hours lost on 2026-09-30 (`_hm_shape.py self_matching`). Refused, not rewritten: the
+# right shape depends on what is being waited for, which only the session knows.
+refuse_self_match() {  # command
+  local hits
+  hits=$(python3 -c 'import json,sys; print(json.dumps({"tool_input":{"command":sys.argv[1]}}))' "$1" | "$NP_HERE/_hm_shape.py" self-match 2>/dev/null || true)
+  [ -n "$hits" ] || return 0
+  guard_log no-poll blocked "$(guard_cmd)" self-match-launch
+  echo "BLOCKED (no-poll): the process pattern $(printf '%s' "$hits" | head -1) matches this command's own text - it launches, or names, what it
+waits for - so the waiting shell finds itself and the wait never ends (2026-09-30: four hours past a finished roll).
+
+Wait on the launched process by its PID (\`cmd > log 2>&1 & pid=\$!; until ! kill -0 \$pid; do sleep 10; done\`), or on
+its log with run_in_background, or on a make run with \`scripts/_own-make.sh <target>\`." >&2
+  exit 2
+}
+
+# GUARD_EDIT_OK: 2026-09-30 (GM: "Yes, please go ahead") - with_ceiling <command>: the command with the wait ceiling in every
+# loop head (`_hm_shape.py add_ceiling`), or empty when it has one already or carries no loop.
+with_ceiling() {  # command
+  "$NP_HERE/_hm_shape.py" ceiling "$1" </dev/null 2>/dev/null || true
+}
+
 bracket_self_match() {  # rule, context
   printf '%s' "$SCAN" | grep -Eq '\b(pgrep|pkill)\b[^|;&]*[[:space:]]-[a-zA-Z]*f' || return 0
   local fixed
@@ -80,8 +103,15 @@ bracket_self_match() {  # rule, context
   # (`_own-make.sh`, header there): a bracketed pattern stopped the self-match but still matched other clones'
   # gates, and held a waiter six hours past its own failed gate. The rule slug gains `-scoped` when it fired.
   fixed=$(printf '%s' "$INPUT" | "$NP_HERE/_hm_shape.py" bracket "$NP_HERE/_own-make.sh" 2>/dev/null || true)
+  refuse_self_match "${fixed:-$CMD}"
   [ -n "$fixed" ] || return 0
   local rule="$1" context="$2"
+  # ...and a wait loop gets its ceiling in the same rewrite (2026-09-30)
+  local ceiled; ceiled=$(with_ceiling "$fixed")
+  if [ -n "$ceiled" ]; then
+    fixed="$ceiled"
+    context="$context A ceiling was added to the loop: past 90 minutes it prints WAIT TIMED OUT and exits 4, so a wait that can never end still wakes you."
+  fi
   case "$fixed" in
     *_own-make.sh*)
       rule="$1-scoped"
@@ -104,6 +134,21 @@ print(json.dumps({"hookSpecificOutput": {
 SCAN=$(printf '%s' "$INPUT" | "$NP_HERE/_hm_shape.py" sanitize 2>/dev/null || printf '%s' "$CMD")
 [ -n "$SCAN" ] || SCAN="$CMD"
 
+# GUARD_EDIT_OK: feature 295 item 5, a new operation - A PERIODIC REPORT IS STEERED TO CronCreate, BEFORE the POLL_OK escape
+# (which is what let it through: `POLL_OK='hourly progress report ...' bash watch.sh 3600`). The decision and the cron are
+# `_hm_shape.py periodic`'s (research R5); a hook cannot create the cron, so it refuses with the exact call. An
+# event-driven wait is never caught. CRON_OK="<reason>" escapes it.
+# GUARD_EDIT_OK: feature 295 item 5 - no python start for a foreground call, which can never be periodic
+case "$INPUT" in *'"run_in_background": true'*|*'"run_in_background":true'*) NP_BGCALL=yes ;; *) NP_BGCALL=no ;; esac
+if [ "$NP_BGCALL" = yes ] && ! escape_or_refuse no-poll CRON_OK cron-ok "$NP_HERE"; then
+  NP_PERIODIC=$(printf '%s' "$INPUT" | "$NP_HERE/_hm_shape.py" periodic 2>/dev/null)
+  if [ -n "$NP_PERIODIC" ]; then
+    guard_log no-poll blocked "$(guard_cmd)" periodic-report
+    printf 'BLOCKED (no-poll): a periodic report kept as a backgrounded watcher loses its schedule when its exit lands while\nthe session cannot run (2026-09-30: twice across a usage-limit window, about two hours of reports each). A cron\nkeeps the schedule by itself:\n\n  CronCreate(cron="%s", recurring=true, prompt="%s")\n\nPut in the prompt what one report checks. (It fires while the session is idle and lasts 7 days.) A wait for an\nevent - a file, a finished queue - stays a backgrounded watcher. Escape: CRON_OK="<reason>".\n' "${NP_PERIODIC%%$'\t'*}" "${NP_PERIODIC#*$'\t'}" >&2
+    exit 2
+  fi
+fi
+
 # GUARD_EDIT_OK: feature 169 - the escape is an INVOCATION, not a mention (was `case *POLL_OK*`).
 # GUARD_EDIT_OK: feature 169 - $NP_HERE, not $HERE. This branch sits at line 60 and `HERE` is not
 # defined until line 72, so the path was empty and the escape silently stopped working - caught by
@@ -111,6 +156,19 @@ SCAN=$(printf '%s' "$INPUT" | "$NP_HERE/_hm_shape.py" sanitize 2>/dev/null || pr
 if escape_or_refuse no-poll POLL_OK poll-ok "$NP_HERE"; then   # GUARD_EDIT_OK: feature 170
   bracket_self_match escaped-self-match \
     "POLL_OK permitted this wait, and its process-match pattern was bracketed for you: a literal pattern is an argument of the command line being searched, so it always finds the searching shell itself and the loop never ends (2026-09-08: an escaped waiter on a detached page-check looped for hours on a gate that finished in 7 s). The escape decides whether you may wait; it does not make the pattern correct."
+  NP_CEILED=$(with_ceiling "$CMD")
+  if [ -n "$NP_CEILED" ]; then
+    guard_log no-poll rewrote "$(guard_cmd)" escaped-ceiling
+    printf '%s' "$INPUT" | REWRITTEN="$NP_CEILED" python3 -c '
+import json, os, sys
+payload = json.load(sys.stdin).get("tool_input", {})
+payload["command"] = os.environ["REWRITTEN"]
+print(json.dumps({"hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "updatedInput": payload,
+    "additionalContext": "POLL_OK permitted this wait, and a ceiling was added to its loop: past 90 minutes it prints WAIT TIMED OUT and exits 4, so a wait that can never end still wakes you (2026-09-30: four hours lost to one that never ended).",
+}}))'
+  fi
   exit 0
 fi
 
@@ -142,7 +200,10 @@ are waiting for in the command." >&2
 
 # ---- 2. a loop containing a sleep: a busy-wait ---------------------------------------------------
 SLEEP_RE='(^|[;&|(]|[[:space:]]|\bdo\b|\bthen\b)[\\]?((command|env|busybox)[[:space:]]+)?(/(bin|usr/bin)/)?sleep[[:space:]]+[0-9.]'
-if printf '%s' "$SCAN" | grep -Eq '(^|[;&|[:space:]])(while|until|for)[[:space:]]' && printf '%s' "$SCAN" | grep -Eq "$SLEEP_RE"; then
+# GUARD_EDIT_OK: feature 295 item 7, fixing a guard that fires on correct work - the two greps are the cheap prefilter; the
+# `sleep` must also be INSIDE a loop's span (`_hm_shape.py sleep-in-loop`, research R7)
+if printf '%s' "$SCAN" | grep -Eq '(^|[;&|[:space:]])(while|until|for)[[:space:]]' && printf '%s' "$SCAN" | grep -Eq "$SLEEP_RE" \
+   && [ "$("$NP_HERE/_hm_shape.py" sleep-in-loop "$SCAN" </dev/null 2>/dev/null)" = yes ]; then
   # GUARD_EDIT_OK: feature 165 - THE ONE WAIT THAT IS NOT A BUSY-WAIT, at the GM's ruling
   # (2026-08-30). A BACKGROUNDED loop watching a FILE is the harness's own documented shape for a
   # single completion notification, and the only way to wait on a run detached with `setsid --fork` -
@@ -176,22 +237,27 @@ if printf '%s' "$SCAN" | grep -Eq '(^|[;&|[:space:]])(while|until|for)[[:space:]
   # permitted-and-already-complete wait is the only one that passes through silently.
   if [ "$(printf '%s' "$INPUT" | "$HERE/_hm_shape.py" file-wait-loop 2>/dev/null)" = "yes" ]; then
     NP_PROOF=$(printf '%s' "$INPUT" | "$HERE/_hm_shape.py" proof "$HERE/_writer-alive.sh" 2>/dev/null || true)
+    refuse_self_match "${NP_PROOF:-$CMD}"
+    # GUARD_EDIT_OK: 2026-09-30 (GM: "Yes, please go ahead") - and its ceiling (`with_ceiling`): a file that never gains its
+    # line, from a writer that never held it open, is a wait no proof of life ends
+    NP_CEIL=$(with_ceiling "${NP_PROOF:-$CMD}")
     # inside this branch the condition already qualifies, so `file-wait` answers exactly one question:
     # is it backgrounded?
     NP_BG=$(printf '%s' "$INPUT" | "$HERE/_hm_shape.py" file-wait 2>/dev/null)
-    if [ -z "$NP_PROOF" ] && [ "$NP_BG" = "yes" ]; then
+    if [ -z "$NP_PROOF" ] && [ -z "$NP_CEIL" ] && [ "$NP_BG" = "yes" ]; then
       guard_log no-poll permitted "$(guard_cmd)" detached-file-wait   # GUARD_EDIT_OK: feature 168, the rule slug
       exit 0
     fi
     NP_RULE=proof-of-life
+    [ -n "$NP_PROOF" ] || NP_RULE=wait-ceiling
     [ "$NP_BG" = "yes" ] || NP_RULE=backgrounded-file-wait
     guard_log no-poll rewrote "$(guard_cmd)" "$NP_RULE"
-    printf '%s' "$INPUT" | NP_PROOF="$NP_PROOF" NP_BG="$NP_BG" python3 -c '
+    printf '%s' "$INPUT" | NP_PROOF="$NP_PROOF" NP_CEIL="$NP_CEIL" NP_BG="$NP_BG" python3 -c '
 import json, os, sys
 payload = json.load(sys.stdin).get("tool_input", {})
-proof, bg = os.environ.get("NP_PROOF") or "", os.environ.get("NP_BG") == "yes"
-if proof:
-    payload["command"] = proof
+proof, bg, ceil = os.environ.get("NP_PROOF") or "", os.environ.get("NP_BG") == "yes", os.environ.get("NP_CEIL") or ""
+if ceil or proof:
+    payload["command"] = ceil or proof
 payload["run_in_background"] = True
 said = []
 if not bg:
@@ -207,6 +273,10 @@ if proof:
         "stops writing, the pattern never appears, and the loop runs until somebody notices. When the loop "
         "ends, read what the log DOES have: if the helper printed a line, the run is gone and the log is "
         "truncated, not finished.")
+if ceil:
+    said.append(
+        "A CEILING was added to the loop: past 90 minutes it prints WAIT TIMED OUT and exits 4, so a wait whose line never "
+        "comes still ends and wakes you (2026-09-30: four hours lost to a wait that could not end).")
 said.append("A wait on a process or a network call is still refused.")
 print(json.dumps({"hookSpecificOutput": {
     "hookEventName": "PreToolUse",

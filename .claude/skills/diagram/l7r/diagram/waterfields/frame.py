@@ -258,19 +258,25 @@ class _Thread:
 # for the length of one carve: keyed by the object, the entry keeping the object itself so no other list can take its id
 # while cached, and dropped when the carve ends. Outside a carve nothing is cached.
 _AT_F: dict[int, tuple[Poly, list[float]]] | None = None
+# ...AND THE CONTOUR COORDINATE OF EVERY VERTEX, FOR `_f_at_u` (feature 287 perf): the carve asks the drain's fall at a
+# vertex's contour coordinate once per plot vertex (`_spills_drain`, 15,462 calls on cohort seed 44), and each call
+# projected every vertex of the drain again. Held and keyed as `_AT_F` is, for the same block.
+_AT_U: dict[tuple[int, int], tuple[Any, Poly, list[float], list[float]]] | None = None
 
 
 class at_f_cache:
-    """`with at_f_cache():` - the fall values `_at_f` reads are projected once per polyline for the block's length."""
+    """`with at_f_cache():` - the fall values `_at_f` reads, and the contour coordinates and falls `_f_at_u` reads, are
+    projected once per polyline for the block's length."""
 
     def __enter__(self) -> None:
-        global _AT_F  # the cache is the module's, for `_at_f` to read without a parameter every caller would carry
-        self._outer = _AT_F
+        global _AT_F, _AT_U  # the caches are the module's, for `_at_f` and `_f_at_u` to read without a parameter every caller would carry
+        self._outer = (_AT_F, _AT_U)
         _AT_F = {} if _AT_F is None else _AT_F
+        _AT_U = {} if _AT_U is None else _AT_U
 
     def __exit__(self, *_exc: object) -> None:
-        global _AT_F  # restored, so a nested block leaves the outer one's cache in place
-        _AT_F = self._outer
+        global _AT_F, _AT_U  # restored, so a nested block leaves the outer one's caches in place
+        _AT_F, _AT_U = self._outer
 
 
 def _falls(F: _Frame, pts: Poly) -> list[float]:
@@ -298,19 +304,28 @@ def _at_f(F: _Frame, pts: Poly, f: float) -> Pt:
 
 def _f_at_u(F: _Frame, pts: Poly, u: float) -> float | None:
     """Fall of a u-monotone polyline at contour coordinate u (clamped; None outside range)."""
-    us = [F.to_uf(*p)[0] for p in pts]
+    cache = _AT_U
+    if cache is None:
+        uf = [F.to_uf(*p) for p in pts]
+        us, fs = [q[0] for q in uf], [q[1] for q in uf]
+    else:
+        key = (id(F), id(pts))
+        hit = cache.get(key)  # the entry holds `F` and `pts` themselves, so while it is cached no other object can carry these ids
+        if hit is None:
+            uf = [F.to_uf(*p) for p in pts]
+            hit = cache[key] = (F, pts, [q[0] for q in uf], [q[1] for q in uf])
+        us, fs = hit[2], hit[3]
     if not (min(us[0], us[-1]) - 20 <= u <= max(us[0], us[-1]) + 20):
         return None
     for i in range(len(pts) - 1):
         ua, ub = us[i], us[i + 1]
         if (ua <= u <= ub or ub <= u <= ua) and ub != ua:
             k = (u - ua) / (ub - ua)
-            fa, fb = F.to_uf(*pts[i])[1], F.to_uf(*pts[i + 1])[1]
+            fa, fb = fs[i], fs[i + 1]
             return fa + k * (fb - fa)
     # off either end (within the gate slack): clamp to the NEARER end - clamping to the far
     # end returned its fall for points near the START, falsely suppressing a mid-field band
-    near = pts[0] if abs(u - us[0]) <= abs(u - us[-1]) else pts[-1]
-    return F.to_uf(*near)[1]
+    return fs[0] if abs(u - us[0]) <= abs(u - us[-1]) else fs[-1]
 
 
 def _seg_x(a: Pt, b: Pt, c: Pt, d: Pt) -> Pt | None:

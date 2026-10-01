@@ -51,9 +51,9 @@ sequence one-to-one. Where the two disagree, `STAGES` wins for anything under `h
 | 9 | `stage_pond_stock` | a dike-pond hamlet's pig sties, on the banks of the ponds nearest the houses (feature 150 A3; the duck pen retired, 269 B32) |
 | 10 | `stage_burial` | the hamlet's own burial ground, on its knob (feature 273: a ground at its edge, or none, its dead in the village's): seated against the placed houses and wells, before the web because it reserves ground the web and the scrub work around |
 | 11 | `stage_web` | the lane web - last of the BUILT things, because it fills leftover ground where everything above reserves it |
-| 12 | `stage_hinterland` | marsh, the coppice scan, the farmstead FIXTURES (privy, heap, bath, coop, stack, hokora, persimmon - seated after the web so no lane is re-threaded, before the bamboo and the scrub, which keep off them; feature 133 T53-T59), the household bamboo, then scrub and rough grazing |
+| 12 | `stage_hinterland` | marsh, the coppice scan, the farmstead FIXTURES (privy, heap, bath, coop, stack, hokora, persimmon - seated after the web so no lane is re-threaded, before the bamboo and the scrub, which keep off them; feature 133 T53-T59), the household bamboo, then the SHELTER BELT planted and the VIEW DECIDED once (feature 287 M6: the belt's inner face is the last thing that sets the frame; `plan.view` is what `stage_frame` crops to), then scrub and rough grazing, thrown within that view |
 | 13 | `stage_woodland` | woodland commons |
-| 14 | `stage_windbreak` | the shelter belt |
+| 14 | `stage_windbreak` | the copse among the homes (the belt itself is planted in `stage_hinterland` since feature 287) |
 | 15 | `stage_bamboo` | the bamboo stands, on seats the hinterland stage scanned (feature 133 T47) |
 | 16 | `stage_crossings` | planks and decks over every way that crosses water; on a polder the ring-canal planks cluster on the settlement-side toe collector and skip the feeder, the far toe and the drain (`polder_crossing_caps`, feature 150) |
 | 17 | `stage_frame` | crop to content, title, scalebar |
@@ -348,8 +348,11 @@ reading eight keys nobody had updated. A check that never sees your feature look
 that passes, so this was invisible until the GM looked at a rendered map. The matrix closes that
 class: a pair the registry does not permit fails whichever feature is newer, with no list to forget.
 
-**The ratchet.** `tests/gate/test_no_feature_overlaps.py` asserts the matrix on the shipped maps, and
-`tests/settlement/test_homestead_parts.py` censuses the roster. A new feature with no class fails the
+**The ratchet.** Since feature 287 M8 the matrix is refused at RECORD time, not audited after: every footprint the
+settlement records goes through the registry of what stands (`overlap/registry.py`, a grid index filed as each record
+lands), a hamlet raises `OverlapRefused` on a record the matrix forbids on what stands, and every placer asks
+`Settlement.admits(key, record)` before it chooses (the finished-map test `test_no_feature_overlaps.py` is retired,
+research R8). `tests/settlement/test_homestead_parts.py` censuses the roster. A new feature with no class fails the
 classification guard before it ever reaches the matrix.
 Verified to have teeth: reverting `ring_road_kept_clear` to its old list fails it with 21 keys
 listed. **Adding a hazard row to `_HAZARDS` extends the contract to every existing feature at

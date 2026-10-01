@@ -71,12 +71,14 @@ def canonical_farmstead(
     way_in: float,
     yard_sun: float = YARD_SUN_STRIP,
     back: float = 0.0,
+    well: float = 0.0,
 ) -> dict[str, Any]:
     """The farmstead in the canonical frame, about a house of `cw` x `ch` centered on the origin: `yard`, `garden`, and
     `groves` as (rect, face, "deep" | "thin") - the deep north and west bands; with three sides a thin east band; with four
     a thin south band too, broken at the yard's middle for the way in. The corners close: the north and south bands run
     the whole width, the west and east bands between them. Each thin band stands clear of what the ground it closes needs
-    - the east band beyond the garden's morning-sun reach, the south band beyond the yard's drying strip."""
+    - the east band beyond the garden's morning-sun reach, the south band beyond the yard's drying strip. With `well` (the
+    pocket's side), `well`: the farm's OWN WELL POCKET beside the yard, on its west, away from the garden and off the way in."""
     gw, gh = garden
     yw, yh = yard
     yard_r = (0.0, ch / 2 + gap + yh / 2, yw, yh)
@@ -84,6 +86,13 @@ def canonical_farmstead(
     # wall, at its mid-height
     garden_r = (yw / 2 + gap + gw / 2, yard_r[1], gw, gh) if garden_by_yard else (cw / 2 + gap + gw / 2, 0.0, gw, gh)
     works = [(-cw / 2, -ch / 2, cw / 2, ch / 2), _edges(yard_r), _edges(garden_r)]
+    # A GROVE FARM CARRIES ITS OWN WATER FROM ITS SEATING (feature 291 FR-018 and FR-019 on feature 287's seating, homes H09):
+    # the pocket a wellhead needs, laid in the dooryard beside the yard - where on the plot the well stood no page read says
+    # (a GUESS, as it was for the ring search this replaces) - so the placer admits the farm only with room for its water
+    # (`lot.watered`). Drawn as its own well, or released where a channel or a row's shared well serves the farm instead.
+    well_r = (-(yw / 2 + gap + well / 2), yard_r[1], well, well) if well > 0 else None
+    if well_r is not None:
+        works.append(_edges(well_r))
     # `back`: the service strip (`SERVICE_STRIP_FT`) on BOTH windward sides - behind the house, and off its west end wall,
     # where the bath room is joined at the stable end and the wood shed takes a flank seat: hard against that wall, the
     # west band stood on every bath room Mizuguchi drew (3 of 3) and on its one wood shed
@@ -105,7 +114,7 @@ def canonical_farmstead(
         mid = yard_r[0]
         groves.append((_box(west_in - b, south_in, mid - way_in / 2, south_out), S, "thin"))
         groves.append((_box(mid + way_in / 2, south_in, east_out, south_out), S, "thin"))
-    return {"yard": yard_r, "garden": garden_r, "groves": groves}
+    return {"yard": yard_r, "garden": garden_r, "groves": groves, "well": well_r}
 
 
 def _carried(r: Rect, t: Turn, hx: float, hy: float) -> Rect:
@@ -132,20 +141,26 @@ def dispersed_layout(
     way_in: float,
     pad: float = 0.0,
     back: float = 0.0,
+    well: float = 0.0,
 ) -> dict[str, Any]:
     """The dispersed farmstead about a house at (hx, hy) of `hw` x `hh` (as drawn), carried from the canonical frame by
     `turn`: `house`, `yard`, `garden`, `gardens` (one bed), `groves` (rects), `grove_faces` ((face, depth) beside each,
-    the face as turned) and `_frame` (the box round the whole grove and ground, unraked). In every frame but the unchanged
+    the face as turned), `well` (the farm's own well pocket, with `well` its side) and `_frame` (the box round the whole
+    grove and ground, unraked). In every frame but the unchanged
     northwest one the garden goes beside the yard (plan D3): turned or mirrored, the east wall it stands against would be
     the house's north wall or its west, where the house takes its sun."""
     moved = turn != (1, 0, 0, 1)
     cw, ch = (hh, hw) if turns_axes(turn) else (hw, hh)
-    can = canonical_farmstead(cw, ch, gap, garden, yard, sides=sides, garden_by_yard=moved, thin=thin, sun_east=sun_east, way_in=way_in, back=back)
+    can = canonical_farmstead(cw, ch, gap, garden, yard, sides=sides, garden_by_yard=moved, thin=thin, sun_east=sun_east, way_in=way_in, back=back, well=well)
     yard_r = _carried(can["yard"], turn, hx, hy)
     garden_r = _carried(can["garden"], turn, hx, hy)
+    well_r = _carried(can["well"], turn, hx, hy) if can["well"] is not None else None
     groves = [_carried(r, turn, hx, hy) for r, _f, _d in can["groves"]]
     faces = [(turn_face(turn, f), d) for _r, f, d in can["groves"]]
-    edges = [_edges(r) for r in (*groves, yard_r, garden_r, (hx, hy, hw, hh))]
+    edges = [_edges(r) for r in (*groves, yard_r, garden_r, (hx, hy, hw, hh), *([well_r] if well_r else []))]
     # the frame the placer reserves, padded by `pad` (half the lane's room, `LANE_ROOM_FT`) so neighbors leave a lane between
     frame = _box(min(e[0] for e in edges) - pad, min(e[1] for e in edges) - pad, max(e[2] for e in edges) + pad, max(e[3] for e in edges) + pad)
-    return {"house": (hx, hy, hw, hh), "yard": yard_r, "garden": garden_r, "gardens": [garden_r], "groves": groves, "grove_faces": faces, "_frame": frame}
+    out = {"house": (hx, hy, hw, hh), "yard": yard_r, "garden": garden_r, "gardens": [garden_r], "groves": groves, "grove_faces": faces, "_frame": frame}
+    if well_r is not None:
+        out["well"] = well_r
+    return out

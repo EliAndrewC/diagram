@@ -79,7 +79,10 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     dredged mud" where the drawn collar measures 2.0 m, the same error the `MulberryDike` entry carried).
     A sibling text is reader-facing prose like an explanation, so a correction to it moves the snapshot
     exactly as a rewritten `What:` does. What still never moves is `label`, `name` and `covers`, and none
-    of the three is license for a fourth.
+    of the three is license for a fourth. Feature 293 moved one more sibling text under the same bar: the farmhouse /
+    storage shed pair told a reader the sheds "stand for" the 1972 survey's 4.4 outbuildings a household, a modern count the
+    GM's ruling of 2026-09-28 dropped and the class's own Note says is not drawn; it now says the shed is the storehouse the
+    larger farms have, about one in eight (research/homesteads/120).
 
     Feature 232 moved `sources` three more times, all under the same bar and all in the same direction -
     a key the record stopped being able to cite. `stream` and `field ditch` had been written from the

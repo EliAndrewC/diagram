@@ -113,7 +113,9 @@ so cannot move; the name can.*
 
 ### Features
 
-- **burial ground**: Kashikawa keeps none of its own: its dead lie in the main village's ground, by the shrine that is the setting's parish temple.
+- **burial ground**: Kashikawa keeps a burial ground of its own, northeast of the houses on open ground, well east of where
+  the windbreak ends; the windbreak stands northwest of them against the prevailing wind, and the grave in the paddy is one family's,
+  a separate thing.
 
 - **threshing yard**: This map's harvest weather is settled, the regional default, so no rack is drawn by the houses: its racks would be put up out on the paddies after the harvest, which is the seasonal map's business and not drawn here (settled weather keeping the racks off the houses is our reading of the survey, which records racks gathered by the houses only on a coast of changeable weather).
 - **grave island**: Kashikawa's field grave takes the Japanese form: a small mound with its stones in the corner of a rice plot, against its bunds, not an island in the plot's middle (each hamlet takes one form).
@@ -646,7 +648,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - farmhouses: **20**
 - family form: **one_roof**, retirement houses **0**
 - farmstead fixtures: bath **5**, coop **18**, pit **9**, privy **17**, shrine **1**, woodpile **7**
-- notice board at the entrance, **(1227.4, 4177.3)**: **20** of 20 households' ways out pass it
+- notice board at the entrance, **(3694.8, 1440.8)**: **20** of 20 households' ways out pass it
 <!-- /census -->
 
 ## 2026-08-29 - feature 154: an `entrance` board on the windward fringe ate the shelter belt (CLOSED)
@@ -1062,5 +1064,15 @@ forms (homesteads/155 and 156, feature 291 amendment 3); the reference (Inashiro
 
 Measured on this roll (2026-09-30): 20 houses, all on one street, 20 grove farms; 60 bands, 40 deep and 20 thin;
 11 far-row holdings in 33 plots; 2 shared wells; bath rooms 5, wood sheds 7, privies 17, coops 18, manure heaps 9,
-shrine 1 - every declared fixture seated; household bamboo in 15 groves; 24 lanes; every row, water, door, bamboo, grove
+shrine 1 - every declared fixture seated; household bamboo in 15 groves; 25 lanes; every row, water, door, bamboo, grove
 and overlap rule clean; attempt 1.
+
+## 2026-09-30 (feature 291 on feature 287): the port - the layout moved
+
+Feature 287 (placer guarantees) landed on main while 291 was open, and 291 was rebuilt on it (amendments 7 and 8): every
+household seated or the site refused; a grove farm's well pocket and fixtures laid in its bundle at seating; a row's
+streets and door paths held to the lane law as tree lanes. Measured on this roll (2026-09-30, from the manifest): 20 houses on 1 street, 11 far-row holdings, 3 shared street wells; 20 door paths, none from a flank; 26 lanes, the web settled in 2 rounds; bath rooms 5, wood sheds 7, privies 17, coops 18, manure heaps 9, shrine 1 - every rolled fixture laid in its farm's bundle; seated on the first margin.
+
+## 2026-09-30 (feature 293, on 291's roll): the storehouses held to the Edo sheds' band
+
+The storehouse annex is now dealt to the largest farmhouses by the main house's footprint (research homesteads/120) and its length held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (`kura_rect`). Kashikawa's three (20 farmhouses; the quota rounds a half up) already stood on its three largest houses on main's row-village roll, so only the band moved them: the annexes draw 24.2 x 13.4, 24.6 x 13.7 and 24.4 x 13.5 ft. One lane went: an 88 ft join-orphans remnant that started 8 ft off the door path of the farm at (3136, 2789) and ran 106 ft within 30 ft of it, the two diverging at 22 degrees from one corner toward one street - a doubled band the settle now takes away where the web keeps without it (`settle_shadows`); 25 lanes where main drew 26, the web settled in 3 rounds. Every house center, well, the notice board at (3694.8, 1440.8) and the take-yabu, wholly on the sheet at about (3416, 1583), are main's. Feature 293's thicket search (behind the back row, inside the page as it stands, wells kept by their radius) was written against the nucleated roll, where main's thicket stood 5 of 12 outline points off the sheet; on this roll it seats the same stand main did.

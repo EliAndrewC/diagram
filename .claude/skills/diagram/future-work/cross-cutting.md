@@ -498,3 +498,14 @@ sessions a median of 74 turns (mean turn 147 K, peak 237 K); about 60 M carried 
 files. **Expected**: write sessions under ~40 turns, the peak back inside 250's 102-171 K band, per-thing cost
 10-20% lower, and coordination reads near zero - and `grep continued .git/page-sessions/run-*.log` says how often the
 key cap split a session. A continuation brief sits at `.git/page-sessions/<sid>/continue.md`, which `collect.py`'s `specs/NNN-` match does not read: attribute it to its parent's group through the run log's `continued <sid> -> <sid>` line. Close this entry with the table and the verdict in 274's research.md as R3.
+
+## A headless session stalls on the no-poll guard (found by feature 293, 2026-09-30)
+
+**Pain.** A headless `claude -p` session is never woken for background work: nothing re-invokes it when a backgrounded Bash command, a
+detached `make` or a background agent finishes. `no-poll-hooks.sh` turns a foreground wait loop into a background one (and refuses a
+bare `sleep` loop), so a headless session that follows the guard ends its turn waiting and sits idle until someone resumes it.
+**Evidence.** Feature 293's runs e5 and e7 stalled eight times in all, each after backgrounding a gate, a cohort or review agents
+(`specs/293-effort-level-experiment/interventions.md`); page sessions (`make page-session`) have the same exposure. **Sketch.** Let
+the guard tell a headless session apart (the page-session runner sets `L7R_PAGE_SESSION`; a launcher can set a like flag) and, there,
+permit a bounded foreground wait instead of rewriting it to background; or have the runners resume a session whose last turn ended
+with background work pending, as feature 293's watchdog did (`_effort_run.py resume`).

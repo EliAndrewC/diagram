@@ -2,11 +2,12 @@
 
 import math
 import re
-from collections.abc import Collection
+from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.overlap.registry import refuse_unadmitted
+
 from .._geom import (
-    fillet_polyline,
     winding,
 )
 
@@ -28,7 +29,7 @@ SUPPLY_HUE = "#6C9CBE"
 #: against the tan hinterland and the brown bund it hems for its whole length it read as a second boundary line
 #: rather than as water. Kashikawa is where that cost something: its confluence is the pool's one map of a drain
 #: RETURNING to its brook, and the junction read as the field's edge touching a stream - which leaves the GM's own
-#: "water just flows" ruling (research/rendering/water.html, 'How our maps draw bends, junctions and the run of the water') intact
+#: "water just flows" ruling (research/water.html, 'Where two watercourses meet, how is the junction drawn?') intact
 #: in mechanism and gone in effect.
 #: So the separation the middle hue bought is KEPT on lightness and saturation and GIVEN BACK on hue: 203 degrees,
 #: value 0.53 against the supply's 0.75. It stands 76 RGB units from the supply (the rejected first hue stood 21),
@@ -107,6 +108,7 @@ class WaterBodiesMixin:
         # always recorded so the gate can check it (anchors optional - only some streams connect things)
         rec = {"poly": [[x, y] for x, y in pts], "frm": frm, "to": to, "w": width}
         self._flow_record(rec, pts, flow)
+        refuse_unadmitted(self.M, "streams", rec)  # asked before its ink (feature 287, water W53): the course is its fit's
         self.M["streams"].append(rec)
         bed_t = f'<path d="{{dd}}" fill="none" stroke="#9CB4C8" stroke-width="{width}" stroke-linejoin="round" stroke-linecap="round"/>'
         # lighter mid-current highlight (NOT a dashed lane line - this is water, not a road)
@@ -125,27 +127,35 @@ class WaterBodiesMixin:
         )
         self.corridors.append(([(x, y) for x, y in pts], max(30, width / 2 + 20)))  # no-build: keep houses off the stream
 
-    def round_stream(self: Settlement, rec: dict[str, Any], radius: float, hold: Collection[int] = ()) -> None:  # type: ignore[misc]
-        """Round the corners of a stream ALREADY drawn - its record and its deferred ink together - at `radius`, keeping the
-        vertices in `hold` where they are (settlement-review of Sawada, feature 261).
+    def round_stream(self: Settlement, rec: dict[str, Any], course: Sequence[tuple[float, float]]) -> None:  # type: ignore[misc]
+        """Redraw a stream ALREADY drawn on its rounded `course` - its record, its deferred ink and its no-build corridor
+        together (settlement-review of Sawada, feature 261). The rounding itself is the generator's: a hamlet's brook is
+        rounded by `hamletgen.water.brook.finished_course`, which the brook's placer and this redraw share (feature 287).
 
-        A stream turns on a curve like every earthen channel (`fillet_polyline`, research/rendering/water.html "How our maps
-        draw bends, junctions and the run of the water"), and a generator whose ways are routed against the course as first drawn rounds it once they are
-        laid: rounding it at `stream` moved every way the brook's corners had shaped, and each re-rolled web found a new
-        way to fail. The water block is not emitted until `finish`, so the bed and sheen are redrawn from the rounded course
-        here and nothing already on the map has to move. A held vertex splits the course: each stretch is rounded between
-        its own ends, so a tap the head race leaves from stays on the course. The course as first drawn is kept as
-        `stations`: the rounding adds vertices along its segments, and a reservation that read the vertices beside a field
-        would take in ground it had never been predicted to (Kashikawa's view reached 6 ft past its scatter frame)."""
+        A stream turns on a curve like every earthen channel (`fillet_polyline`, research/water.html "Why does every ditch
+        turn on a curve?"). ROUNDING IT AT `stream` MOVED EVERY WAY the brook's corners had shaped, and each re-rolled web
+        found a new way to fail; so the hamlet generator rounds it once the water is laid (the end of `stage_sink`, feature
+        287 - before that, in `stage_crossings`) and its ways keep routing against the course as first drawn
+        (`ways.checks.stream_segs` reads the `stations`). The water block is not emitted until `finish`, so the bed and sheen
+        are redrawn from the rounded course here and nothing already on the map has to move. The course as first drawn is
+        kept as `stations`: the rounding adds vertices along its segments, and a reservation that read the vertices beside a
+        field would take in ground it had never been predicted to (Kashikawa's view reached 6 ft past its scatter frame).
+        The corridor `stream` registered on the first course follows the rounded one, so a house is kept off the water the
+        map draws."""
         pts = [(float(x), float(y)) for x, y in rec["poly"]]
-        out: list[tuple[float, float]] = []
-        start = 0
-        for k in [*sorted(k for k in set(hold) if 0 < k < len(pts) - 1), len(pts) - 1]:
-            part = fillet_polyline(pts[start : k + 1], radius)
-            out += part[1:] if out else part
-            start = k
+        out = [(float(x), float(y)) for x, y in course]
+        # THE ROUNDED COURSE IS ASKED OF THE REGISTRY BEFORE IT IS WRITTEN, AND RECORDED AGAIN ONCE IT IS (feature 287, water
+        # W53): the reshape in place used to leave the index stale until the stage's end, where the backstop re-recorded it
+        # unasked (9 of 25 census brooks). The rounding is the brook's drawn course - there is no other - so a rounding the
+        # matrix forbids is refused by name, with nothing of it written.
+        refuse_unadmitted(self.M, "streams", {**rec, "poly": [[x, y] for x, y in out]}, ignore=rec)
         rec.setdefault("stations", [[x, y] for x, y in pts])  # the course as first drawn, which a frame that reserved its stations keeps reading
         rec["poly"] = [[x, y] for x, y in out]
+        if (st := getattr(self.M, "standing", None)) is not None and any(r is rec for r in self.M.get("streams") or []):
+            st.rerecord("streams", rec)
+        for i, (cpts, clr, *more) in enumerate(self.corridors):
+            if list(cpts) == pts:
+                self.corridors[i] = (list(out), clr, *more)
         dd = "M" + " L".join(f"{x},{y}" for x, y in out)
         for entry in [*self.water, *self.late_water]:
             if entry["rec"] is rec:
@@ -158,7 +168,7 @@ class WaterBodiesMixin:
     def river(self: Settlement, pts: Any, width: float | None = None, flow: str = "forward") -> float:  # type: ignore[misc]
         """A RIVER - the trunk waterway a river-bank city sits on (most provincial cities do;
         the moat taps it upstream and returns downstream, and the river itself serves as the
-        water defense on its flank - Xiangyang/Pingyao/Okayama pattern, see research/cities/river-cities.html 'Cities on rivers').
+        water defense on its flank - Xiangyang/Pingyao/Okayama pattern, see research/cities/river-cities.html 'Most provincial cities sit on a river').
         Drawn as a wide stream (off-map to off-map) and recorded in M['river'] so the checks
         that compare watercourse weights know this one legitimately outweighs the dug moat."""
         if width is None:

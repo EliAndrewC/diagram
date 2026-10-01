@@ -1,0 +1,43 @@
+{
+ "run_id": "e6",
+ "tokens": {
+  "main": {
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation_input_tokens": 0
+  },
+  "subagents": {
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation_input_tokens": 0
+  },
+  "total": {
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cache_read_input_tokens": 0,
+   "cache_creation_input_tokens": 0
+  }
+ },
+ "wall_clock_s": 0,
+ "sessions": [],
+ "tool_calls": {
+  "main": {},
+  "subagents": {}
+ },
+ "dispatches": {},
+ "effort": {
+  "main": {},
+  "subagents": {}
+ },
+ "adhoc_dispatches": [],
+ "adhoc_judging_at_session_effort": 0,
+ "rework": {
+  "guard": {},
+  "verdicts": {},
+  "failed_make_runs": [],
+  "fix_commits": [],
+  "escalations": 0
+ }
+}

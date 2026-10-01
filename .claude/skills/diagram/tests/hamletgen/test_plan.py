@@ -222,8 +222,8 @@ def test_the_waterward_flanks_are_the_ones_the_village_does_not_stand_on() -> No
     assert hg.polder_crossing_caps(plan)["w_toe"] == 3 and hg.polder_crossing_caps(plan)["e_toe"] == 0
     plan.seat = {"out": (0.0, -1.0)}  # seated at the HEAD: the feeder is the village's collector
     assert hg.polder_crossing_caps(plan) == {"feeder": 3, "drain": 0, "e_toe": 1, "w_toe": 1, "lateral": 1}
-    plan.seat = {"out": (0.0, 1.0)}  # at the foot: the drain
-    assert hg.polder_crossing_caps(plan)["drain"] == 3 and hg.polder_crossing_caps(plan)["feeder"] == 0
+    plan.seat = {"out": (0.0, 1.0)}  # at the foot: the drain abuts it, and takes no plank (feature 287, `plank_on_supply`)
+    assert hg.polder_crossing_caps(plan) == {"feeder": 0, "drain": 0, "e_toe": 2, "w_toe": 2, "lateral": 1}
     plan.seat = {}
     assert hg.polder_flanks(plan)["cluster"] == ""
 
@@ -248,10 +248,14 @@ def test_a_pond_whose_bank_cannot_hold_the_fixture_is_passed_over() -> None:
 
     s = Settlement(W=900, H=900, seed=1)
     s.meta(name="X", scale="hamlet")
-    s.M["houses"] = [{"x": 450.0, "y": 450.0, "w": 46.0, "h": 28.0} for _ in range(4)]
-    # one pond's bank seat lands on the houses themselves - `pond_fixture_fits` holds a fixture clear
-    # of every placed footprint, so that pond can take nothing and the walk moves on to the next
     s.M["dikeponds"] = [_pond(450.0, 500.0), _pond(450.0, 250.0), _pond(450.0, 700.0)]
+    # one pond's whole bank lies under the houses - `pond_fixture_fits` holds a fixture clear of every placed
+    # footprint, so that pond can take nothing and the walk moves on to the next (since feature 287 every seat
+    # along the bank is tried, not the edge midpoints alone, so a house stands on each of them)
+    from l7r.diagram.hamletgen.pondstock import _bank_seats
+
+    s.M["houses"] = [{"x": 450.0, "y": 450.0, "w": 46.0, "h": 28.0} for _ in range(4)]
+    s.M["houses"] += [{"x": q[0], "y": q[1], "w": 10.0, "h": 10.0} for q, _rot in _bank_seats(s.M["dikeponds"][0]["parcel"], (450.0, 450.0))]
     stage_pond_stock(s, plan)
 
     declared = s.M["meta"]["pond_stock"]
@@ -297,8 +301,10 @@ def test_a_byre_form_is_declarable_and_a_nonsense_one_refused() -> None:
 
 
 def test_a_sty_stands_within_a_household_s_reach_or_not_at_all() -> None:
-    """Feature 280 (settlement-review of Kuwabata): the grow-out ponds a fry village leaves lay far out, and sties followed."""
-    from l7r.diagram.hamletgen.pondstock import STY_HOUSE_REACH_FT, stage_pond_stock
+    """Feature 280 (settlement-review of Kuwabata): the grow-out ponds a fry village leaves lay far out, and sties followed.
+    No sty is drawn past every household's reach (`sty_in_reach`), and a hamlet left with none it owes is refused
+    (feature 287, water W50) rather than shipped without one."""
+    from l7r.diagram.hamletgen.pondstock import STY_HOUSE_REACH_FT, StyRefused, stage_pond_stock, sty_in_reach
     from l7r.diagram.settlement import Settlement
 
     plan = hg.plan_site(hg.HamletSpec(name="X", seed=3, households=16, field_archetype="mulberry_dike_fishpond"))
@@ -307,8 +313,10 @@ def test_a_sty_stands_within_a_household_s_reach_or_not_at_all() -> None:
     s.meta(name="X", scale="hamlet")
     s.M["houses"] = [{"x": 450.0, "y": 450.0, "w": 46.0, "h": 28.0} for _ in range(8)]
     s.M["dikeponds"] = [{"parcel": parcel, "water": parcel, "kind": "growout"}]
-    stage_pond_stock(s, plan)
+    with pytest.raises(StyRefused, match="within a household's reach"):
+        stage_pond_stock(s, plan)
     assert STY_HOUSE_REACH_FT < 1560.0 - 450.0 and not s.M.get("pig_sties") and s.M["meta"]["pond_stock"]["drawn"] == 0
+    assert sty_in_reach(s, (450.0, 450.0 + STY_HOUSE_REACH_FT), s.M["houses"]) and not sty_in_reach(s, (450.0, 451.0 + STY_HOUSE_REACH_FT), s.M["houses"])
 
 
 def test_the_sty_walk_stops_once_every_rolled_sty_is_drawn() -> None:

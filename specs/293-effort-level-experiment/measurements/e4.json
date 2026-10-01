@@ -1,0 +1,81 @@
+{
+ "run_id": "e4",
+ "tokens": {
+  "main": {
+   "input_tokens": 96,
+   "output_tokens": 19711,
+   "cache_read_input_tokens": 3531299,
+   "cache_creation_input_tokens": 180653
+  },
+  "subagents": {
+   "input_tokens": 10,
+   "output_tokens": 3269,
+   "cache_read_input_tokens": 43379,
+   "cache_creation_input_tokens": 43354
+  },
+  "total": {
+   "input_tokens": 106,
+   "output_tokens": 22980,
+   "cache_read_input_tokens": 3574678,
+   "cache_creation_input_tokens": 224007
+  }
+ },
+ "wall_clock_s": 4644,
+ "sessions": [
+  "718d881e-5a32-468c-b085-8200a58c1170"
+ ],
+ "tool_calls": {
+  "main": {
+   "Bash": 33,
+   "Agent": 2,
+   "Read": 4,
+   "Edit": 7,
+   "Write": 1
+  },
+  "subagents": {
+   "Bash": 3
+  }
+ },
+ "dispatches": {
+  "spec-fidelity@inherit": 1,
+  "escalation-check@inherit": 1
+ },
+ "effort": {
+  "main": {
+   "medium": 43
+  },
+  "subagents": {
+   "spec-fidelity": {
+    "high": 2
+   },
+   "escalation-check": {
+    "medium": 3
+   }
+  }
+ },
+ "adhoc_dispatches": [],
+ "adhoc_judging_at_session_effort": 0,
+ "rework": {
+  "guard": {
+   "finished-run:reminded:finished-not-running": 2,
+   "measure:reminded:reminded": 1,
+   "agent-model:permitted:pinned-type": 2,
+   "review-round:reminded:history-without-snapshot": 1,
+   "escalation:permitted:filter-ran": 1,
+   "pair:permitted:review-not-owed": 2,
+   "finished-run:permitted:tracked-run": 3,
+   "shell-check:blocked:commit-dash-m": 1
+  },
+  "verdicts": {
+   "spec-fidelity": {
+    "unclear": 1
+   },
+   "escalation-check": {
+    "pass": 1
+   }
+  },
+  "failed_make_runs": [],
+  "fix_commits": [],
+  "escalations": 1
+ }
+}

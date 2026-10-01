@@ -15,8 +15,6 @@ pass-rate ratchet without carrying the coverage on its back.
 
 from __future__ import annotations
 
-import pytest
-
 from l7r.diagram.settlement import Settlement
 
 
@@ -24,17 +22,6 @@ def _hamlet() -> Settlement:
     s = Settlement(1400, 1400, seed=3)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, down_deg=90, water_flow=90)
     return s
-
-
-def test_a_bamboo_trunk_may_not_stand_in_a_watercourse() -> None:
-    """`_trunk_blocked`'s water arm: a trunk whose CORNERS reach a drawn stroke. The centre test above it
-    catches a trunk on the middle of a brook; this catches one straddling a wide channel's bank."""
-    from l7r.diagram.hamletgen.homesteads import _trunk_blocked
-
-    s = _hamlet()
-    s.M["streams"] = [{"poly": [[100.0, 700.0], [1300.0, 700.0]], "w": 60}]
-    assert _trunk_blocked(s, 700.0, 700.0, 20.0, [], [], None, [])
-    assert not _trunk_blocked(s, 700.0, 200.0, 20.0, [], [], None, [])
 
 
 def test_a_wellhead_may_not_be_sunk_in_the_reed_toe_below_the_crop() -> None:
@@ -49,63 +36,7 @@ def test_a_wellhead_may_not_be_sunk_in_the_reed_toe_below_the_crop() -> None:
     assert not s._well_ground_clear(700.0, 850.0), "downslope of the collector, inside the toe: reed bog"
 
 
-@pytest.mark.rolls_map  # it PRODUCES under the FULL bypass (feature 166's caching): the marker guard is right
-def test_the_fit_gives_a_saturated_best_aspect_the_full_search_it_was_denied() -> None:
-    """The probe stops each saturated aspect after two carves, which leaves the WINNING aspect less refined
-    than the full search would - and that is the map whose acreage the household ratchet then judges. So the
-    best aspect is re-searched without the probe, and kept only if it actually scores better."""
-    from l7r.diagram.hamletgen.water import fit_field
-    from l7r.diagram.pipeline import rollcache
-
-    from ._builders import a_plan
-
-    plan = a_plan()
-    plan.target_acres = 500.0  # far past what this envelope holds at any aspect, so every aspect saturates
-
-    # A COARSE PLOT GRID, WHICH IS WHAT THIS TEST'S TIME WAS MADE OF (feature 158, 2026-08-29). The
-    # branch under test is `fit_field`'s: no aspect landed the target, so the best one is re-searched
-    # without the probe. Nothing in it depends on how many plots a carve lays - only on the target
-    # being unreachable - and the carve is where the seconds go: at `plot_across = 46` the largest fan
-    # is 1,985 plots and this test was 39 s, the single most expensive test in the whole suite and the
-    # critical path of `make quick`. At 138 it is 257 plots and ~11 s, with the acreage error
-    # unchanged at 0.891 and the same aspect winning. MEASURED, and the obvious lever measured FIRST
-    # and rejected: shrinking `plan.envelope` from 600 px through 400, 300, 200 and 150 changes
-    # nothing at all - same 1,985 plots, same 0.891 - because the envelope is not what clamps this
-    # fan (specs/158-hamlet-test-cost/research.md R3).
-    # CACHED (2026-08-30). Coarsening the grid took this from 39 s to 11 s and it was STILL the slowest
-    # test in the suite and its critical path on eight workers. `fit_field` is deterministic over plain
-    # numbers, so the answer can be served: the search is paid only when this test's source or the engine
-    # changes. `produce` returns plain data, never the net, which is what `keyed_to` requires.
-    def produce():  # type: ignore[no-untyped-def]
-        return bool(fit_field(plan, (700.0, 300.0), 3, 138.0, (78.0, 90.0))["plots"])
-
-    got = rollcache.keyed_to(test_the_fit_gives_a_saturated_best_aspect_the_full_search_it_was_denied, produce)[0]
-    assert got, "a fan still comes back"
-
-
-def test_a_house_the_pass_already_failed_is_not_re_tried_against_the_same_ways() -> None:
-    """The straggler pass runs up to four times, because a path drawn for one house can bring another within
-    reach. A house that failed and whose candidate ways have NOT changed since would fail identically, so it
-    is skipped - the memo keys on the exact target list, and any new lane near it changes that list and
-    retries it in full. The wrong-memo direction costs the speedup, never a path."""
-    from l7r.diagram import hamletgen as hg
-    from l7r.diagram.hamletgen.ways import _serve_stragglers
-
-    from ._builders import a_plan
-
-    plan = a_plan()
-    plan.seat = hg.seat_cluster(plan)
-    s = _hamlet()
-    # one lane on dry ground with a house beside it (servable), and one lane running down a brook with a
-    # house beside THAT (never servable - a junction may not sit on the water)
-    s.M["lanes"] = [
-        {"pts": [[500.0, 300.0], [900.0, 300.0]], "w": 4},
-        {"pts": [[100.0, 1100.0], [400.0, 1100.0]], "w": 4},
-    ]
-    s.M["houses"] = [
-        {"x": 700.0, "y": 420.0, "w": 46.0, "h": 28.0, "rot": 0.0, "kind": "plain"},
-        {"x": 250.0, "y": 1220.0, "w": 46.0, "h": 28.0, "rot": 0.0, "kind": "plain"},
-    ]
-    water = [((100.0, 1100.0), (400.0, 1100.0))]
-    _serve_stragglers(s, plan, [], [], water)
-    assert len(s.M["lanes"]) >= 2
+# RETIRED (feature 287 wave 5, FR-005/FR-007): `test_the_fit_gives_a_saturated_best_aspect_the_full_search_it_was_denied` rolled
+# the fit at an unreachable 500-acre target and asserted a fan came back - the closest miss `fit_field` no longer keeps. Such
+# a site is refused (`FieldRefused`) after every aspect is searched in full: tests/hamletgen/test_fit_flanks.py, on stand-in
+# carves; the best aspect's full re-search is `tests/hamletgen/test_water.py::test_fit_field_probes_saturation_and_rerolls_the_best_aspect_in_full`.

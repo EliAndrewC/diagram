@@ -448,3 +448,123 @@ def test_the_footbridge_widening_from_its_segment_index_equals_the_scan() -> Non
         assert s._widen_for_confluence(quad, deck, own, water, 20.0, 5.0) == want
         widened += want > 20.0
     assert 20 < widened < 580, "non-vacuity: decks both over and clear of other water"
+
+
+# ---- feature 287: the decks and planks guaranteed where they are laid (ways W02, W12-W15) -----------------------------
+
+
+def test_a_crossing_is_decked_unless_a_standing_deck_covers_it() -> None:
+    """Ways W02: `bridges()` skipped a crossing lying within half the NEW deck's span of a standing one, which left a
+    crossing 12 ft along the brook from a deck that did not reach it unbridged. The skip is `deck_covers` now, and a deck
+    that would stand on the first is merged into it (re-seated to reach both), so every crossing is covered."""
+    from l7r.diagram.settlement.city.bridges import deck_covers
+
+    s = _crop_settlement()
+    s.M["streams"] = [{"poly": [[100, 300], [900, 300]], "w": 10}]
+    s.bridge(500.0, 300.0, 90.0, 6.0, 6.0)  # a short deck already standing at x=500
+    s.M["lanes"] = [{"pts": [[512, 100], [512, 500]], "w": 6}]  # a crossing 12 ft along from it, beyond its 6 ft span
+    s.bridges()
+    assert any(deck_covers(b, 512.0, 300.0) for b in s.M["bridges"]), "the second crossing is decked"
+    assert deck_covers({"x": 0, "y": 0}, 19.0, 0.0) and not deck_covers({"x": 0, "y": 0, "span": 5}, 6.0, 0.0)
+    far = _crop_settlement()
+    far.M["streams"] = [{"poly": [[100, 300], [900, 300]], "w": 10}]
+    far.M["lanes"] = [{"pts": [[300, 100], [300, 500]], "w": 6}, {"pts": [[700, 100], [700, 500]], "w": 6}]
+    assert far.bridges() == 2, "two crossings far apart take a deck each"
+
+
+def test_a_deck_is_never_drawn_undersized() -> None:
+    """Ways W12 (FR-005): `seat_deck` hands back the original span when nothing seats, and `bridges()` drew it. The web's
+    last pass now cuts every such crossing first, so one reaching here is an engine defect - raised, never drawn."""
+    import pytest
+
+    from l7r.diagram.settlement.city.bridges import UndeckableCrossing
+
+    s = _crop_settlement()
+    s.M["field_ditches"] = [{"poly": [[0.0, 100.0], [400.0, 110.0]], "w": 4.0}]
+    s.M["lanes"] = [{"pts": [[0.0, 95.0], [400.0, 118.0]], "w": 3}]  # two degrees off the ditch's own line
+    with pytest.raises(UndeckableCrossing):
+        s.bridges()
+
+
+def test_a_carried_deck_lands_off_the_rice_or_takes_the_footplanks_form() -> None:
+    """Ways W13 (R3, the field path's canal deck 7 ft onto the paddy): a deck whose corner stands in a flooded plot is
+    tried again in the footplank's form (the local width and the short abutment); failing that it is not seated."""
+    from l7r.diagram.settlement import point_in_poly
+    from l7r.diagram.settlement.city.bridges import _deck_quad, crossing_deck, flooded_ground
+
+    ditch = [(0.0, 100.0), (400.0, 100.0)]
+    rice = [[-50.0, 106.0], [450.0, 106.0], [450.0, 400.0], [-50.0, 400.0]]  # the rice 6 ft past the ditch's line
+    wet = flooded_ground({"fields": [{"plot_rings": [rice], "outline": rice}, {"plot_rings": [[[0, 0], [1, 1]]]}]})
+    p, rot, span, seated = crossing_deck((200.0, 0.0), (200.0, 300.0), 3.0, ditch[0], ditch[1], 4.0, ditch, 1.0, wet)
+    assert seated and not any(point_in_poly(x, y, rice) for x, y in _deck_quad(p[0], p[1], span, 3.0, rot))
+    assert crossing_deck((200.0, 0.0), (200.0, 300.0), 3.0, ditch[0], ditch[1], 4.0, ditch, 1.0)[2] > span, "the carried form, where nothing is wet"
+    drowned = [[[-50.0, 101.0], [450.0, 101.0], [450.0, 400.0], [-50.0, 400.0]]]
+    assert not crossing_deck((200.0, 0.0), (200.0, 300.0), 3.0, ditch[0], ditch[1], 4.0, ditch, 1.0, drowned)[3], "no dry landing at all"
+
+
+def test_a_plank_is_laid_on_a_supply_ditch_only() -> None:
+    """Ways W14: a plank on the collector, the drain or the feeder is never laid (`SUPPLY_ROLES`: a main, a branch, a
+    lateral - research/ways/030 and archetypes/110), and a seat whose nearest ditch is a drain (a junction) is refused."""
+    from l7r.diagram.settlement.city.bridges import plank_ditch, plank_on_supply
+
+    s = _crop_settlement()
+    s.M["fields"] = [{"outline": [[50, 120], [850, 120], [850, 480], [50, 480]]}]
+    s.M["field_ditches"] = [
+        {"poly": [[100, 200], [800, 200]], "w": 5, "role": "drain"},
+        {"poly": [[100, 300], [800, 300]], "w": 5, "role": "lateral"},
+    ]
+    s.channel_footbridges(spacing=320)
+    assert s.M["bridges"] and all(290 < b["y"] < 310 for b in s.M["bridges"]), "the lateral takes planks; the drain none"
+    assert plank_on_supply((400.0, 300.0), s.M["field_ditches"]) and not plank_on_supply((400.0, 201.0), s.M["field_ditches"])
+    assert plank_ditch((0.0, 0.0), [{"poly": [[1, 1]]}]) == (math.inf, None)
+    junction = _crop_settlement()
+    junction.M["fields"] = [{"outline": [[50, 120], [850, 120], [850, 480], [50, 480]]}]
+    # the collector recorded first along the main's own line: every seat's nearest recorded ditch is the collector
+    junction.M["field_ditches"] = [{"poly": [[100, 300], [800, 300]], "w": 5, "role": "collector"}, {"poly": [[100, 300], [800, 300]], "w": 5, "role": "main"}]
+    junction.channel_footbridges(spacing=320)
+    assert not junction.M.get("bridges"), "no seat whose nearest ditch is the collector"
+
+
+def test_a_plank_stands_only_on_water_that_earns_one() -> None:
+    """Ways W15: the width was a PREFERENCE (narrow seats sorted last, still laid), kept because a retired gate demanded a
+    plank per long ditch; it is a hard filter now - a ditch whose wide seats are all blocked carries no plank."""
+    from l7r.diagram.waterfields import taper_w, worth_planking
+
+    s = _crop_settlement()
+    s.M["fields"] = [{"outline": [[50, 120], [850, 120], [850, 480], [50, 480]]}]
+    s.M["field_ditches"] = [{"poly": [[100, 300], [800, 300]], "w": 6.0, "w_tail": 0.5, "role": "branch"}]  # it tapers to nothing
+    s.M["houses"] = [{"x": 250, "y": 300, "w": 330, "h": 60, "rot": 0}]  # a house over the whole wide head
+    s.channel_footbridges(spacing=900)
+    for b in s.M.get("bridges") or []:
+        lw = taper_w(6.0, 0.5, (b["x"] - 100.0) / 700.0)
+        assert worth_planking(lw, lw, 1.0), "every plank stands on water that earns one"
+
+
+def test_a_merged_deck_is_redrawn_to_reach_both_crossings() -> None:
+    s = _crop_settlement()
+    s.bridge(500.0, 300.0, 90.0, 6.0, 6.0)
+    deck = s.M["bridges"][0]
+    s._reseat_to_cover(deck, (500.0, 320.0))
+    assert deck["span"] == 42.0 and 'width="42.0"' in s.top[int(deck["z"]) - s.TOPZ]
+
+
+def test_a_village_cuts_its_lanes_where_no_deck_seats_before_it_lays_its_decks() -> None:
+    """Feature 287 (ways W12): `roll_village` has no web settle, and `bridges()` raises on a crossing no deck seats. So the
+    village cuts its lanes by the same predicate first (`undeckable_at`): the crossing and a bank's width either side come
+    out, the pieces stand, a lane with nothing left goes, and `bridges()` then decks what remains."""
+    from l7r.diagram.settlement.city.bridges import cut_at, undeckable_at
+
+    s = _crop_settlement()
+    s.M["field_ditches"] = [{"poly": [[0.0, 100.0], [400.0, 110.0]], "w": 4.0}]
+    grazing = [[0.0, 95.0], [400.0, 118.0]]  # two degrees off the ditch's own line: no deck seats
+    square = [[200.0, 0.0], [200.0, 300.0]]  # square over it: a deck seats
+    for pts in (grazing, square, [[105.0, 102.55], [108.0, 102.72]]):  # the last is all crossing: nothing of it is left
+        s.lane(pts, width=3)
+    waters = [([[0.0, 100.0], [400.0, 110.0]], 4.0)]
+    assert undeckable_at([(0.0, 95.0), (400.0, 118.0)], 3.0, waters) and not undeckable_at([(200.0, 0.0), (200.0, 300.0)], 3.0, waters)
+    assert s.cut_undeckable_lanes() >= 1
+    assert all(not undeckable_at([(float(x), float(y)) for x, y in ln["pts"]], 3.0, waters) for ln in s.M["lanes"])
+    assert s.bridges() >= 1, "the square crossing is decked; nothing raises"
+    assert cut_at([(0.0, 0.0), (100.0, 0.0)], 0, (50.0, 0.0), 10.0) == [[(0.0, 0.0), (40.0, 0.0)], [(60.0, 0.0), (100.0, 0.0)]]
+    assert cut_at([(0.0, 0.0), (10.0, 0.0), (100.0, 0.0)], 0, (5.0, 0.0), 10.0) == [[(15.0, 0.0), (100.0, 0.0)]], "a head with no length goes; the cut runs on past a vertex"
+    assert cut_at([(0.0, 0.0), (0.0, 0.0)], 0, (0.0, 0.0), 1.0) == []

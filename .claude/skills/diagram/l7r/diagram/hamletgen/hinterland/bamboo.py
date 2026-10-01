@@ -8,10 +8,12 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
 from l7r.diagram.settlement._geom.indexes import BambooObstacles
+from l7r.diagram.settlement.homestead_parts.bamboo_keepout import stand_spares_seats
+from l7r.diagram.settlement.land.wet import marsh_ground
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
-from .frame import title_pocket
+from .frame import frame_bounds, title_pocket
 from .parcels import _parcel_outline
 
 # THE BAMBOO STANDS (feature 133 T47/T48, GM 2026-08-27; research/vegetation.html "Bamboo: how common, where
@@ -85,16 +87,27 @@ spec's 2x floor), so the spec's fallback is taken: a stand seats at the nearest 
 which can be a step or two from where the 8 ft lattice put it (18 and 24.5 ft on the pool's two thickets, specs/284 R6). The thicket is 84 by 58 ft (`BAMBOO_THICKET_FT`), so a stand on the coarser lattice is the same stand on the same ground."""
 
 
-def nearest_fitting(target: Pt, reach: float, step: float, fits: Callable[[float, float], bool]) -> tuple[float, float, float] | None:
+def nearest_fitting(target: Pt, reach: float, step: float, fits: Callable[[float, float], bool], box: tuple[float, float, float, float] | None = None) -> tuple[float, float, float] | None:
     """The fitting position nearest `target` on the `step` lattice of the square `reach` round it, as (distance, x, y) - or
     None - by walking OUTWARD and stopping at the first fit (feature 284, FR-008). The square was scanned whole, every
     position tested, the nearest fit kept (the first met in row order on a tie); the same positions, made by the same
-    accumulation so every coordinate is the same float, are tested nearest first, ties in the old row order."""
+    accumulation so every coordinate is the same float, are tested nearest first, ties in the old row order.
+
+    `box` (x0, y0, x1, y1), when given, keeps the walk to the part of the square inside it, on a lattice laid CENTERED in
+    that part (feature 293: a search over the whole sheet would otherwise list every point of a square round the target;
+    and a band narrower than one step - the thicket's seats behind the back row and on the page are such a band at full
+    size where the page's top is near the houses - still has its row, where a lattice stepped from the square's corner can
+    miss it whole)."""
     spots: list[tuple[float, int, float, float]] = []
-    y = target[1] - reach
-    while y <= target[1] + reach:
-        x = target[0] - reach
-        while x <= target[0] + reach:
+    x_lo, y_lo, x_hi, y_hi = target[0] - reach, target[1] - reach, target[0] + reach, target[1] + reach
+    if box is not None:
+        x_lo, y_lo, x_hi, y_hi = max(x_lo, box[0]), max(y_lo, box[1]), min(x_hi, box[2]), min(y_hi, box[3])
+        x_lo += ((x_hi - x_lo) % step) / 2 if x_hi >= x_lo else 0.0
+        y_lo += ((y_hi - y_lo) % step) / 2 if y_hi >= y_lo else 0.0
+    y = y_lo
+    while y <= y_hi:
+        x = x_lo
+        while x <= x_hi:
             spots.append((math.hypot(x - target[0], y - target[1]), len(spots), x, y))
             x += step
         y += step
@@ -105,13 +118,33 @@ def nearest_fitting(target: Pt, reach: float, step: float, fits: Callable[[float
     return None
 
 
+BAMBOO_SAMPLE_FT = 14.0
+"""How far apart a bamboo stand's samples stand across its rect (feature 287, woods W24). A way is refused within its
+half-width and 10 ft of a sample, so a tread anywhere in the rect lies within 14 / sqrt(2) = 9.9 ft of a sample and under
+that reach: a map drawing convention - the density is the geometry's, not a fact about bamboo."""
+
+
+def stand_samples(cx: float, cy: float, hw: float, hh: float, step: float) -> list[Pt]:
+    """The points a stand's rect (center, half-extents) is asked at: its corners and edges, and a grid through it no more
+    than `step` apart on either axis (feature 287, woods W24)."""
+    nx, ny = max(2, math.ceil(2.0 * hw / step)), max(2, math.ceil(2.0 * hh / step))
+    return [(cx - hw + 2.0 * hw * i / nx, cy - hh + 2.0 * hh * j / ny) for i in range(nx + 1) for j in range(ny + 1)]
+
+
+THICKET_REACH_FT = 220.0
+"""How far from its target the thicket's seat is looked for first, in feet (a GUESS, named by feature 293 - the literal
+predates it): the thicket marks the edge of the houses it stands behind, so a seat near them wins over any seat farther
+along the back row. Where none fits within it, the whole page behind the back row is searched (`bamboo_seats`)."""
+
+
 def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     """Where the hamlet's bamboo stands go, per the `bamboo` knob - SCANNED, like the coppice patches.
 
     A candidate is a rect on a `BAMBOO_SEAT_STEP_FT` lattice around its target, refused when any of its perimeter
     samples stands on a house, yard, garden, shed, byre, well, board, lane, paddy, marsh, pond, the belt,
     a coppice patch or the other stand (each with its own pad), and the surviving candidate nearest the
-    target wins; a stand that fits nowhere at full size is tried once at 70%, then dropped - a hamlet
+    target wins - behind the back row and on the page, within `THICKET_REACH_FT` of it at full size, then at 70%, and only
+    then anywhere on the page behind the back row, full size then 70%; a stand that fits nowhere is dropped - a hamlet
     with no room for bamboo draws none rather than a sliver. Outlines are irregular rings inside the
     tested rect (`_parcel_outline`), because a thicket has a hard but not a ruled edge."""
     forms = ["thicket"] if plan.bamboo in ("thicket", "both") else []
@@ -136,13 +169,16 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
         ("farm_sheds", 8.0),
         ("byres", 8.0),
         ("retirement_houses", 10.0),
-        ("wells", 14.0),
         ("kosatsuba", 12.0),
         ("groves", 4.0),
     ):
         for o in s.M.get(key, []):
             if all(isinstance(o.get(f), (int, float)) for f in ("x", "y", "w", "h")):
                 rects.append((float(o["x"]), float(o["y"]), float(o["w"]), float(o["h"]), px(pad)))
+    # ...AND THE WELLS, BY THEIR RADIUS (feature 293, settlement-review of Kashikawa in the earlier 293 pass): the list above
+    # named the wells, but a well record is x, y, r, so none of them ever entered it, and a re-packed Kashikawa drew its
+    # thicket over a public well
+    rects += [(float(o["x"]), float(o["y"]), 2.0 * float(o["r"]), 2.0 * float(o["r"]), px(14.0)) for o in s.M.get("wells", []) if all(isinstance(o.get(f), (int, float)) for f in ("x", "y", "r"))]
     # ...AND THE YARD PERSIMMONS, by their crowns: a take-yabu is a near single-species stand, and once feature 280 seated the
     # thicket behind the back row a dooryard persimmon stood inside it (settlement-review of Kashikawa, round 3)
     rects += [(float(o["x"]), float(o["y"]), 2.0 * float(o["r"]), 2.0 * float(o["r"]), px(2.0)) for o in s.M.get("persimmons", []) if all(isinstance(o.get(f), (int, float)) for f in ("x", "y", "r"))]
@@ -164,7 +200,7 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     # the one thing a farmer digs a trench to stop, so this is a placement error rather than a legibility one. The
     # gate could not catch it either: `bamboo_stands_clear_of_paddies` reads paddy outlines only (widened with this).
     polys += [([(float(a_), float(b_)) for a_, b_ in (o.get("poly") or [])], px(12.0)) for o in s.M.get("dry_plots", []) if len(o.get("poly") or []) >= 3]
-    polys += [([(float(a), float(b)) for a, b in m["poly"]], px(6.0)) for m in s.M.get("marshes", []) if m.get("poly")]
+    polys += [(ring, px(6.0)) for ring in marsh_ground(s.M)]
     polys += [(list(plan.belt), px(10.0))] if plan.belt else []
     polys += [(list(w), px(20.0)) for w in plan.woodland_polys]
     pond = s.M.get("pond")
@@ -178,11 +214,29 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     def _blocked(x: float, y: float) -> bool:
         return bamboo_blocked_indexed(x, y, (s.W, s.H), tp, index, pond, px(30.0))
 
+    # ...ASKED OVER THE WHOLE STAND, NOT ITS PERIMETER (feature 287, woods W24): a 5 x 3 grid 29 ft apart let a lane cross
+    # the stand between two rows. The samples stand `BAMBOO_SAMPLE_FT` apart, so every point of the rect lies within
+    # `BAMBOO_SAMPLE_FT / sqrt(2)` of one, under the lane's refusal reach (its half-width and 10 ft): a tread that enters the
+    # stand is always seen
+    _sample = px(BAMBOO_SAMPLE_FT)
+    # ...AND CLEAR OF EVERY HOUSEHOLD'S RESERVED COPSE SEATS by the copse's bamboo keep-out (`stand_spares_seats`; feature
+    # 280 keeps the copse two crowns off the bamboo, feature 287 plants every reserved seat): the stand gives way, not the seat
+    _seats = [(float(p[0]), float(p[1])) for h in s.M.get("houses") or [] for p in (h.get("wood_share") or {}).get("seats") or ()]
+
     def _fits(cx: float, cy: float, hw: float, hh: float) -> bool:
-        # nine by five: at five by three a yard persimmon's crown fitted between the samples of a 72 x 55 ft thicket
-        # (settlement-review of Kashikawa, feature 280)
-        samples = [(cx + dx * hw, cy + dy * hh) for dx in (-1.0, -0.75, -0.5, -0.25, 0.0, 0.25, 0.5, 0.75, 1.0) for dy in (-1.0, -0.5, 0.0, 0.5, 1.0)]
-        return not any(_blocked(x, y) for x, y in samples)
+        if not stand_spares_seats(cx, cy, 2.0 * hw, 2.0 * hh, _seats, s.bscale):
+            return False
+        # a yard persimmon's crown fitted between the samples of a 72 x 55 ft thicket at five by three (settlement-review of
+        # Kashikawa, feature 280, which went to nine by five); the `BAMBOO_SAMPLE_FT` grid is finer than a crown and its pad
+        # (`PERSIMMON_CROWN_FT`, 23 ft across) on either axis, so a crown anywhere over the stand is always seen
+        return not any(_blocked(x, y) for x, y in stand_samples(cx, cy, hw, hh, _sample))
+
+    # THE PAGE AS IT STANDS (`frame_bounds`, the one question every placer asks of where the page will be): the belt is planted
+    # after the bamboo and only grows the view, so ground inside this box is on the sheet
+    vx0, vy0, vx1, vy1 = frame_bounds(s, plan)
+
+    def on_sheet(cx: float, cy: float, hw: float, hh: float) -> bool:
+        return vx0 <= cx - hw and cx + hw <= vx1 and vy0 <= cy - hh and cy + hh <= vy1
 
     out: list[Poly] = []
     for _form in forms:
@@ -190,9 +244,25 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
         target = thicket_target
         step = px(BAMBOO_SEAT_STEP_FT)
         best: tuple[float, float, float] | None = None
-        for scale in (1.0, 0.7):
+        # ...AND OVER THE WHOLE PAGE BEHIND THE ROW, WHEN NOTHING FITS NEAR (feature 293; settlement-reviews of Kashikawa in the
+        # earlier 293 pass): with the seat held behind the back row and on the page, the near search can find no seat within
+        # its reach while open scrub lies farther along the row - "no room" was the search, not the ground. The second search
+        # walks the page behind the back row, on a lattice centered in the band a seat's center may use there.
+        far = max(math.dist(target, c) for c in ((vx0, vy0), (vx1, vy0), (vx0, vy1), (vx1, vy1)))
+        for scale, reach, bounded in ((1.0, px(THICKET_REACH_FT), False), (0.7, px(THICKET_REACH_FT), False), (1.0, far, True), (0.7, far, True)):
             hw, hh = px(wft) * scale / 2, px(hft) * scale / 2
-            best = nearest_fitting(target, px(220.0), step, lambda x, y, hw=hw, hh=hh: _fits(x, y, hw, hh))
+            # ...AND ONLY BEHIND THE BACK ROW, ON THE PAGE (feature 293): the search walked out from the target in every
+            # direction, so where the ground behind the houses was taken the stand walked into the cluster and round a well;
+            # and behind the row the nearest fitting seat could stand wholly off the page (main's Kashikawa drew 5 of its 12
+            # outline points off the sheet, and 12 of 12 once its storehouses went to its largest houses). A seat's south edge
+            # stands no further south than the northernmost house, and the stand inside the page; where none fits, none is drawn.
+            best = nearest_fitting(
+                target,
+                reach,
+                step,
+                lambda x, y, hw=hw, hh=hh: y + hh <= north and on_sheet(x, y, hw, hh) and _fits(x, y, hw, hh),
+                box=(vx0 + hw, vy0 + hh, vx1 - hw, north - hh) if bounded else None,
+            )
             if best is not None:
                 ring = _parcel_outline(s, best[1], best[2], hw, hh, 1.0, 0.0)
                 out.append(ring)

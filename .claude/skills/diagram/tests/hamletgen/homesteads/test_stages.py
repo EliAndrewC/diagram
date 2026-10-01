@@ -44,3 +44,29 @@ def test_a_front_row_seat_stands_off_by_its_turned_reach() -> None:
     moved = turn_the_seat(s, (100.0, 100.0), (0.0, -1.0), core)
     assert moved == pytest.approx((100.0, 100.0 - 15.0)), "30 ft of half-length against 15 of depth"
     assert math.dist(moved, (100.0, 100.0)) > 0.0
+
+
+def test_the_seating_admits_a_corridor_by_the_ways_own_ground_test_built_once_per_seating() -> None:
+    """Feature 287, ways: `corridor_ground` is `settle.corridor_on_lawful_ground`'s question over one `Lawful` per standing
+    seating - into the paddy refused, open ground admitted, and the law rebuilt only when a house has been seated."""
+    from l7r.diagram.hamletgen.homesteads.stages import corridor_ground
+    from l7r.diagram.hamletgen.ways.settle import corridor_on_lawful_ground
+    from tests.hamletgen.test_homesteads import _toy_hamlet
+
+    s, plan = _toy_hamlet(10)
+    ground = corridor_ground(s)
+    cx, cy = float(plan.seat["cx"]), float(plan.seat["cy"])
+    open_run = [(cx - 100.0, cy - 60.0), (cx - 100.0, cy - 160.0)]
+    assert ground(open_run) is corridor_on_lawful_ground(s.M, open_run) is True, "the ways' own verdict"
+    s.M["houses"].append({"x": cx - 100.0, "y": cy - 110.0, "w": 46.0, "h": 28.0, "rot": 0.0, "kind": "plain"})
+    assert not ground(open_run), "a house seated since: the law is rebuilt and the run now fouls it"
+    assert ground(open_run) is corridor_on_lawful_ground(s.M, open_run)
+
+
+def test_a_margin_with_no_lawful_way_out_seats_no_one(monkeypatch: pytest.MonkeyPatch) -> None:
+    from l7r.diagram.hamletgen.homesteads import stages as st
+    from tests.hamletgen.test_homesteads import _toy_hamlet
+
+    s, plan = _toy_hamlet(10)
+    monkeypatch.setattr(st, "exit_bearing", lambda *a: None)
+    assert st._seat_households(s, plan) == (0, 0) and not s.M["houses"]

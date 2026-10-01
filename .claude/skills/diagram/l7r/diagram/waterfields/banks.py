@@ -3,7 +3,7 @@
 import math
 from typing import Any
 
-from .frame import BANK_MARGIN, Poly, Pt, _f_at_u, _Frame, _pip, _seg_x, taper_w
+from .frame import BANK_MARGIN, Poly, Pt, _f_at_u, _Frame, _pip, _seg_d, _seg_x, taper_w
 
 _PAST_EPS = 0.25  # arc slack at a supply stroke's ends: covers the 0.1-px manifest rounding of vertex + stroke point together (see supply_bank_clearance)
 
@@ -211,6 +211,31 @@ class StrokeIndex:
                 return self.BEYOND
             nearest = _nearest_segment(q, self.pts, self.cum, range(len(self.pts) - 1))  # beyond the reach: the full walk, as before
         return _stroke_verdict(q, self.pts, self.w0, self.w1, self.cum, nearest)
+
+    def edge_beyond(self, a: Pt, b: Pt, slack: float) -> bool:
+        """Does every segment of the stroke lie farther from the edge a-b than its own drawn half-width plus `slack`, with
+        a hair past rounding? Where it does, no point of the edge has a gap under `halfw + slack` (`_edge_in_supply`'s
+        test) - a point's gap is its distance to its nearest segment, never under that segment's distance to the edge, and
+        the half-width at its foot is at most the larger of the two at that segment's ends (`taper_w` runs one way along
+        the stroke) - so the edge's walk sample by sample can be skipped (feature 287 perf). `slack` must keep the test
+        under the index's reach, where every segment it could concern is filed in a cell the edge's box so grown meets."""
+        c, r = self.cell, self.reach
+        near: set[int] = set()
+        for cx in range(int((min(a[0], b[0]) - r) // c), int((max(a[0], b[0]) + r) // c) + 1):
+            for cy in range(int((min(a[1], b[1]) - r) // c), int((max(a[1], b[1]) + r) // c) + 1):
+                hit = self.cells.get((cx, cy))
+                if hit:
+                    near.update(hit)
+        tot = self.cum[-1] or 1.0
+        for i in near:
+            p, q = self.pts[i], self.pts[i + 1]
+            thr = max(taper_w(self.w0, self.w1, self.cum[i] / tot), taper_w(self.w0, self.w1, self.cum[i + 1] / tot)) / 2 + slack + _EDGE_EPS
+            if _seg_x(a, b, p, q) is not None or min(_seg_d(a[0], a[1], p, q), _seg_d(b[0], b[1], p, q), _seg_d(p[0], p[1], a, b), _seg_d(q[0], q[1], a, b)) <= thr:
+                return False
+        return True
+
+
+_EDGE_EPS = 1e-6  # px: past any rounding between an edge's distance to a segment and its samples' gaps (`edge_beyond`)
 
 
 def floor_overhang(pts: Poly, dpts: Poly, down_deg: float) -> list[float]:

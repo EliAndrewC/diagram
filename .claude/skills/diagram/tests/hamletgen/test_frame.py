@@ -6,163 +6,63 @@ Split from test_hamletgen.py by feature 111; test bodies verbatim. See hamletgen
 from l7r.diagram import hamletgen as hg
 
 
-def test_stage_notice_reseats_a_board_the_frame_would_lose(monkeypatch):
-    """The board re-seat branch: place_kosatsuba maximizes traffic along the WHOLE way network, so
-    a lane arm running past the cluster can seat the board outside the house cloud - where
-    crop_to_content (which frames hard features only) would drop it off the sheet. stage_notice
-    must then pop the board AND its caption and re-seat it on a lane verge inside the cloud.
-    Exercised directly with a stub settlement: no rolled seed reaches this branch any more (the
-    2026-08-16 well/lane re-rolls un-covered it), and hunting seeds is fragile where a direct
-    call is exact."""
-
-    class _StubS:
-        def __init__(self):
-            self.M = {
-                "houses": [{"x": x, "y": y} for x in (440.0, 520.0, 600.0) for y in (440.0, 520.0, 600.0)],
-                "kosatsuba": [{"x": 900.0, "y": 100.0, "z": 2}],  # its ink is top[2] (feature 133 T48): popping the record blanks it
-                "labels": [[0, 0, 0, 0], [880.0, 90.0, 60.0, 12.0, 0.0, "notice board"]],
-                "lanes": [
-                    {"pts": [(-200.0, 0.0), (200.0, 0.0)], "connector": True},  # skipped: connector
-                    {"pts": [(300.0, 520.0), (700.0, 524.0)]},  # verge seats inside AND outside the cloud
-                    {"pts": [(560.0, 400.0), (560.0, 700.0)]},  # a way ACROSS the verge lane: a seat nearest to it fronts the wrong way (T48)
-                ],
-            }
-            self.top = ["", "", "the first board's glyph"]
-            self.TOPZ = 0
-            self.reseated: list[tuple[float, float, float]] = []
-
-        def place_kosatsuba(self):
-            return (900.0, 100.0)  # outside the cloud - the frame would lose it
-
-        def discard_queued_label(self, kind):
-            # feature 157: the caption is QUEUED, so withdrawing the board withdraws the request rather
-            # than hunting a drawn label out of M["labels"]. The stub carries a pre-drawn "notice board"
-            # record from the era when it was drawn inline; dropping it here keeps the assertion below
-            # measuring the same thing - that the re-seat leaves no orphan caption behind.
-            self.M["labels"] = [lb for lb in self.M["labels"] if not (len(lb) > 5 and lb[5] == "notice board")]
-
-        def place_labels(self):
-            pass  # the phase itself is exercised where it lives, in tests/settlement/test_structures.py
-
-        def _fits(self, x, y, w, h, corridors=False):
-            return x >= 500.0  # some verge candidates refused, so the refusal path runs too
-
-        def fixture_clear_of_water(self, x, y, half):
-            # a "stream" across the west half of the verge, so the re-seat's water REFUSAL runs too
-            # (the same reason `_fits` above refuses part of the range). The predicate's own behavior
-            # is covered where it lives, in settlement/structures/fixtures.py; what this pins is that
-            # the re-seat consults it at all - without the call a board lands in the water, which is
-            # exactly what cohort seed 13 shipped.
-            return x >= 540.0
-
-        def kosatsuba(self, x, y, rot=0.0):
-            self.reseated.append((x, y, rot))
-            self.M["kosatsuba"].append({"x": x, "y": y})
-
-    s = _StubS()
-    asked: list[tuple[float, float, float | None]] = []
-    real_bearing = hg.frame._nearest_way_bearing
-
-    def bearing(settlement, x, y):  # type: ignore[no-untyped-def]
-        b = real_bearing(settlement, x, y)
-        asked.append((x, y, b))
-        return b
-
-    monkeypatch.setattr(hg.frame, "_nearest_way_bearing", bearing)
-    hg.stage_notice(s, None)  # type: ignore[arg-type]
-    assert s.reseated, "the board was not re-seated"
-    assert s.top[2] == "", "the popped board's ink in the top layer must be blanked with its record (T48)"
-    # THE WAY IT FRONTS IS THE WAY IT IS NEAREST (T48; feature 214 asserts it directly - the cohort seeds that
-    # reached the refusal went): a verge seat of the east-west lane that stands nearer the north-south way was
-    # asked its nearest bearing and got the crossing way's (about 90 degrees against the lane's 0.6), so it was refused
-    across = [(x, y, b) for x, y, b in asked if b is not None and abs(y - 522.0) < 25.0 and abs(x - 560.0) < 8.0]
-    assert across and all(abs(abs(b) - 90.0) < 5.0 for _x, _y, b in across), across
-    assert not any(abs(bx - 560.0) < 8.0 and abs(by - 522.0) < 25.0 for bx, by, _r in s.reseated), "no board seated where its nearest way runs across it"
-    bx, by, _rot = s.reseated[0]
-    assert 440.0 <= bx <= 600.0 and 440.0 <= by <= 600.0, f"re-seated outside the cloud: {(bx, by)}"
-    assert bx >= 540.0, f"re-seated into the stub's water at {(bx, by)} - the re-seat must consult fixture_clear_of_water"
-    s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
-    assert not any(len(lb) > 5 and lb[5] == "notice board" for lb in s.M["labels"]), "orphan caption left behind"
-    assert len(s.M["kosatsuba"]) == 1, "old board not popped"
-
-
-def test_the_confluence_reserves_its_own_room_in_the_crop(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+def test_the_confluence_reserves_its_own_room_in_the_view() -> None:
     """Feature 230, settlement-review passes 6 and 7. Where the drain meets the passing brook, that junction is a
-    FEATURE - the thing the third sink exists to show - and the crop ignores watercourses because they are
-    runners that trail off the edge, so one was drawn 7.4 ft outside the sheet with none of its trunk in view.
-    Predicting the frame back in `stage_sink` cannot work: the frame is decided here. The junction reserves
-    itself instead, the way the title pocket does."""
-    from l7r.diagram.hamletgen import frame as fr
+    FEATURE - the thing the third sink exists to show - and the crop ignores watercourses because they are runners that
+    trail off the edge, so one was drawn 7.4 ft outside the sheet with none of its trunk in view. The junction reserves
+    itself as content, the way the title pocket does - in `frame_extras`, which the view is decided by (feature 287)."""
+    from l7r.diagram.hamletgen.hinterland.frame import frame_extras, frame_for
+    from l7r.diagram.hamletgen.sink import BROOK_JOIN_TRUNK
+    from l7r.diagram.settlement import Settlement
 
     from ._builders import a_plan
 
-    calls: list[list[tuple[float, float, float, float]]] = []
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.M["houses"] = [{"x": 600.0, "y": 600.0, "w": 40.0, "h": 30.0, "rot": 0}]
+    plan.title_pocket, plan.title_pocket_outside = (590.0, 590.0, 610.0, 610.0), False  # an inside pocket reserves nothing
+    plan.confluence = (1200.0, 900.0)
+    got = frame_extras(s, plan)
+    assert got, "the junction is reserved as content"
+    x0, y0, x1, y1 = got[0]
+    assert x0 < 1200.0 < x1 and y0 < 900.0 < y1, "and the reservation is centered on the junction"
+    assert (x1 - x0) >= BROOK_JOIN_TRUNK, "with a trunk's length of room around it"
+    vx, vy, vw, vh = frame_for(s, plan)
+    assert vx + vw >= x1 and vy + vh >= y1, "the view decided takes the junction in"
+    plan.title_pocket_outside = True
+    assert frame_extras(s, plan)[0] == plan.title_pocket, "an OUTSIDE pocket is content too"
 
-    class _Crop:
-        M = {"meta": {}, "houses": [], "lanes": [], "kosatsuba": []}
 
-        def crop_to_content(self, margin=30, extra=()):  # type: ignore[no-untyped-def]
-            calls.append(list(extra))
+def test_stage_frame_takes_exactly_the_view_decided_and_records_a_drift() -> None:
+    """Feature 287, M6: the view is decided ONCE, at the end of `stage_hinterland`, and `stage_frame` sets exactly that view
+    - never a second computation of it. The violating case: a frame-setting feature placed after the decision (here a
+    house far off the cluster) would have moved a recomputed crop; the view stays the decided one, and the difference is
+    recorded as `meta.view_drift` so the pool test can hold that no stage after the decision sets the frame."""
+    from l7r.diagram.hamletgen import frame as fr
+    from l7r.diagram.hamletgen.hinterland.frame import frame_for
+    from l7r.diagram.settlement import Settlement
 
-        def title(self, *_a, **_k):  # type: ignore[no-untyped-def]
-            pass
+    from ._builders import a_plan
 
     plan = a_plan()
-    plan.title_pocket_outside = False
-    plan.confluence = (1200.0, 900.0)
-    monkeypatch.setattr(fr, "title_pocket", lambda _s, _p: (0.0, 0.0, 10.0, 10.0))  # the pocket is exercised where it lives
-    fr.stage_frame(_Crop(), plan)  # type: ignore[arg-type]
-    assert calls and calls[0], "the junction is reserved as content"
-    x0, y0, x1, y1 = calls[0][0]
-    assert x0 < 1200.0 < x1 and y0 < 900.0 < y1, "and the reservation is centered on the junction"
-    assert (x1 - x0) >= fr.BROOK_JOIN_TRUNK, "with a trunk's length of room around it"
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.meta(name=plan.spec.name, scale="hamlet", ftpx=1, down_deg=90)
+    s.M["houses"] = [{"x": 600.0, "y": 600.0, "w": 40.0, "h": 30.0, "rot": 0}, {"x": 800.0, "y": 700.0, "w": 40.0, "h": 30.0, "rot": 0}]
+    plan.title_pocket, plan.title_pocket_outside = (620.0, 620.0, 700.0, 680.0), False
+    plan.view = frame_for(s, plan)
+    fr.stage_frame(s, plan)
+    assert tuple(s.M["meta"]["view"]) == plan.view, "the crop takes the decided view"
+    assert "view_drift" not in s.M["meta"], "nothing moved the frame after the decision"
 
-
-def test_a_board_with_no_compliant_verge_still_faces_the_way_a_reader_sees_it_by() -> None:
-    """Feature 230. Every verge candidate can be refused by the 15-degree rule - a web straggler laid across
-    a main lane's verge leaves no seat that fronts one way alone - and the board still has to go somewhere.
-    The fallback takes the best-ranked verge and turns the board to its NEAREST way, which is the bearing the
-    gate judges it by; the old fallback re-posted the engine's own seat unturned and shipped a board 72
-    degrees side-on to the lane 9.5 ft from it."""
-
-    class _StubS:
-        def __init__(self) -> None:
-            self.M = {
-                "houses": [{"x": x, "y": y} for x in (500.0, 560.0, 620.0) for y in (460.0, 520.0, 580.0)],
-                "kosatsuba": [{"x": 900.0, "y": 100.0, "z": 2}],
-                "labels": [],
-                "lanes": [
-                    {"pts": [(554.0, 520.0), (566.0, 520.0)]},  # the only main lane, and a short one
-                    {"pts": [(560.0, 400.0), (560.0, 700.0)], "web": True},  # the straggler across its every verge
-                ],
-            }
-            self.top = ["", "", "the first board's glyph"]
-            self.TOPZ = 0
-            self.reseated: list[tuple[float, float, float]] = []
-
-        def place_kosatsuba(self) -> tuple[float, float]:
-            return (900.0, 100.0)  # outside the house cloud, so the frame would lose it
-
-        def discard_queued_label(self, kind: str) -> None:
-            pass
-
-        def _fits(self, x: float, y: float, w: float, h: float, corridors: bool = False) -> bool:
-            return True
-
-        def fixture_clear_of_water(self, x: float, y: float, half: float) -> bool:
-            return True
-
-        def kosatsuba(self, x: float, y: float, rot: float = 0.0) -> None:
-            self.reseated.append((x, y, rot))
-            self.M["kosatsuba"].append({"x": x, "y": y})
-
-    s = _StubS()
-    hg.stage_notice(s, None)  # type: ignore[arg-type]
-    assert len(s.reseated) == 1, "the board must still be posted when no verge fronts one way alone"
-    bx, by, rot = s.reseated[0]
-    assert abs(abs(rot) - 90.0) < 1.0, f"the fallback board is turned to its nearest way, not left on the lane's bearing: {rot}"
-    assert hg.frame._nearest_way_bearing(s, bx, by) is not None
-    assert abs(by - 520.0) > 1.0, "it still stands on a verge rather than in the tread"
+    t = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    t.meta(name=plan.spec.name, scale="hamlet", ftpx=1, down_deg=90)
+    t.M["houses"] = [dict(h) for h in s.M["houses"]]
+    decided = frame_for(t, plan)
+    plan.view = decided
+    t.M["houses"].append({"x": 1100.0, "y": 700.0, "w": 40.0, "h": 30.0, "rot": 0})  # placed AFTER the decision
+    fr.stage_frame(t, plan)
+    assert tuple(t.M["meta"]["view"]) == decided, "the decided view, not a recomputed one"
+    assert t.M["meta"]["view_drift"][2] > 0 and t.M["meta"]["view_drift"][0] == 0, "the drift says the right edge would have moved"
 
 
 def test_the_brook_beside_the_field_is_reserved_and_the_reach_leaving_the_map_is_not() -> None:
@@ -193,215 +93,34 @@ def test_the_brook_beside_the_field_is_reserved_and_the_reach_leaving_the_map_is
     assert brook_beside_the_field(_Rounded()) == got  # type: ignore[arg-type]
 
 
-def test_stage_notice_narrows_an_anchored_board_to_the_band_then_takes_the_traffic(monkeypatch) -> None:  # type: ignore[no-untyped-def]
-    """Feature 227: an ANCHORED placement chooses the ground and the passing traffic chooses the seat on it - the rule
-    `place_kosatsuba` applies, which this stage had restated as distance-to-the-anchor alone, so the board walked out
-    to whatever verge lay nearest the entrance and served nobody. `frontage` anchors on the headman's house, which is
-    the cheapest anchored case to state; the seat nearest the anchor is deliberately NOT the seat most households
-    pass, so a loop that ranked by distance alone would fail this."""
-
-    class _StubS:
-        def __init__(self) -> None:
-            self.M = {
-                "meta": {"kosatsuba_seat": "frontage", "view": [0.0, 0.0, 820.0, 820.0]},  # the engine's seat falls outside it
-                # the headman anchors at (600, 300); the crowd is 60 px south of him, inside the 60 ft band
-                "houses": [{"x": 600.0, "y": 300.0, "role": "headman"}] + [{"x": x, "y": 360.0} for x in (560.0, 600.0, 640.0, 680.0)],
-                "kosatsuba": [{"x": 1000.0, "y": 1000.0, "z": 2}],
-                "labels": [],
-                "lanes": [{"pts": [(500.0, 330.0), (800.0, 330.0)]}],
-            }
-            self.top = ["", "", "the first board's glyph"]
-            self.TOPZ = 0
-            self.reseated: list[tuple[float, float, float]] = []
-
-        def place_kosatsuba(self):  # type: ignore[no-untyped-def]
-            return (1000.0, 1000.0)  # outside the view: the re-seat loop runs
-
-        def discard_queued_label(self, kind):  # type: ignore[no-untyped-def]
-            pass
-
-        def place_labels(self):  # type: ignore[no-untyped-def]
-            pass
-
-        def _fits(self, x, y, w, h, corridors=False):  # type: ignore[no-untyped-def]
-            return True
-
-        def fixture_clear_of_water(self, x, y, half):  # type: ignore[no-untyped-def]
-            return True
-
-        def kosatsuba(self, x, y, rot=0.0):  # type: ignore[no-untyped-def]
-            self.reseated.append((x, y, rot))
-
-    s = _StubS()
-    hg.stage_notice(s, None)  # type: ignore[arg-type]
-    assert len(s.reseated) == 1
-    bx, _by, _rot = s.reseated[0]
-    assert 560.0 <= bx <= 700.0, "inside the anchor's band and over the households, not at the band's near edge"
-
-
-def test_stage_notice_reseats_an_entrance_board_where_every_departure_passes(monkeypatch) -> None:  # type: ignore[no-untyped-def]
-    """Feature 261 FR-015: an `entrance` board re-seated at a HANDOVER takes the seat every household's way out passes -
-    the connector's inner end, where the two branches meet it - offered the connector itself, and not a verge down one
-    branch, which the other branch's household never walks past."""
-    import math
-
-    from l7r.diagram.settlement.structures.fixtures import departure_routes, routes_missed
-
-    class _StubS:
-        def __init__(self) -> None:
-            self.M = {
-                "meta": {"kosatsuba_seat": "entrance", "view": [0.0, 0.0, 820.0, 820.0]},
-                "houses": [{"x": 700.0, "y": 250.0}, {"x": 700.0, "y": 410.0}],
-                "kosatsuba": [{"x": 1000.0, "y": 1000.0, "z": 2}],
-                "labels": [],
-                "lanes": [
-                    {"connector": True, "pts": [(10.0, 330.0), (300.0, 330.0)]},
-                    {"pts": [(300.0, 330.0), (700.0, 270.0)]},
-                    {"pts": [(300.0, 330.0), (700.0, 390.0)]},
-                ],
-            }
-            self.top = ["", "", "the first board's glyph"]
-            self.TOPZ = 0
-            self.reseated: list[tuple[float, float, float]] = []
-
-        def place_kosatsuba(self):  # type: ignore[no-untyped-def]
-            return (1000.0, 1000.0)
-
-        def discard_queued_label(self, kind):  # type: ignore[no-untyped-def]
-            pass
-
-        def place_labels(self):  # type: ignore[no-untyped-def]
-            pass
-
-        def _fits(self, x, y, w, h, corridors=False):  # type: ignore[no-untyped-def]
-            return True
-
-        def fixture_clear_of_water(self, x, y, half):  # type: ignore[no-untyped-def]
-            return True
-
-        def kosatsuba(self, x, y, rot=0.0):  # type: ignore[no-untyped-def]
-            self.reseated.append((x, y, rot))
-
-    s = _StubS()
-    hg.stage_notice(s, None)  # type: ignore[arg-type]
-    assert len(s.reseated) == 1
-    bx, by, _rot = s.reseated[0]
-    assert routes_missed(departure_routes(s.M), bx, by, 20.0) == 0, "both households' ways out pass the board"
-    assert math.dist((bx, by), (300.0, 330.0)) <= 60.0, "beside the handover, not down a branch"
-
-
-def test_stage_notice_squares_an_entrance_board_to_the_approach_not_a_straggler_at_its_join(monkeypatch) -> None:  # type: ignore[no-untyped-def]
-    """Settlement-review of Inashiro (feature 261): where the outermost join is a one-farmstead web straggler, a verge of
-    that straggler passes every departure as well as the connector's does - and the board is squared to the way it
-    stands on, so it went side-on to the track. Among the seats every departure passes, the approach's own wins."""
-
-    class _StubS:
-        def __init__(self) -> None:
-            self.M = {
-                "meta": {"kosatsuba_seat": "entrance", "view": [0.0, 0.0, 820.0, 820.0]},
-                "houses": [{"x": 200.0, "y": 280.0}, {"x": 600.0, "y": 280.0}, {"x": 720.0, "y": 560.0}, {"x": 660.0, "y": 540.0}],  # the last house tips the traffic count to the straggler
-                "kosatsuba": [{"x": 1000.0, "y": 1000.0, "z": 2}],
-                "labels": [],
-                "lanes": [
-                    {"pts": [(200.0, 300.0), (600.0, 300.0)], "w": 5},
-                    {"pts": [(400.0, 300.0), (400.0, 500.0)], "w": 5},
-                    {"web": True, "pts": [(700.0, 560.0), (400.0, 620.0)], "w": 3},
-                    {"connector": True, "pts": [(400.0, 500.0), (400.0, 810.0)], "w": 6},
-                ],
-            }
-            self.top = ["", "", "the first board's glyph"]
-            self.TOPZ = 0
-            self.reseated: list[tuple[float, float, float]] = []
-
-        def place_kosatsuba(self):  # type: ignore[no-untyped-def]
-            return (1000.0, 1000.0)
-
-        def discard_queued_label(self, kind):  # type: ignore[no-untyped-def]
-            pass
-
-        def place_labels(self):  # type: ignore[no-untyped-def]
-            pass
-
-        def _fits(self, x, y, w, h, corridors=False):  # type: ignore[no-untyped-def]
-            return True
-
-        def fixture_clear_of_water(self, x, y, half):  # type: ignore[no-untyped-def]
-            return True
-
-        def kosatsuba(self, x, y, rot=0.0):  # type: ignore[no-untyped-def]
-            self.reseated.append((x, y, rot))
-
-    s = _StubS()
-    hg.stage_notice(s, None)  # type: ignore[arg-type]
-    assert len(s.reseated) == 1
-    _bx, _by, rot = s.reseated[0]
-    assert min(abs(rot - 90.0) % 180.0, 180.0 - abs(rot - 90.0) % 180.0) <= 15.0, f"squared to the connector (bearing 90), not the straggler: {rot}"
-
-
-def test_the_brooks_are_rounded_with_the_tap_held() -> None:
-    """`round_the_brooks` (settlement-review of Sawada, feature 261): each brook is rounded at `BROOK_BEND_WIDTHS` of its width,
-    holding the vertex the head race leaves from; a two-point course has no corner to round."""
-    from l7r.diagram.hamletgen.consts import BROOK_BEND_WIDTHS
-    from l7r.diagram.hamletgen.frame import round_the_brooks
+def test_stage_notice_is_the_one_siter() -> None:
+    """Feature 287, labels L2: the board is sited once, by `place_kosatsuba`, which applies every board rule inside the
+    view; the re-seat that followed it here - a second siter restating those rules with four recorded drifts - is
+    deleted, so the stage asks the siter and nothing else."""
+    calls: list[str] = []
 
     class _S:
-        def __init__(self) -> None:
-            self.M = {
-                "streams": [{"poly": [[0, 0], [100, 0], [200, 50], [300, 50]], "w": 8}, {"poly": [[0, 0], [9, 9]]}],
-                "channels": [{"poly": [[100.0, 0.0], [100.0, 60.0]], "frm": {"kind": "stream"}}, {"poly": [[5, 5]], "frm": {"kind": "pond"}}],
-            }
-            self.calls: list[tuple[float, set[int]]] = []
+        def place_kosatsuba(self) -> None:
+            calls.append("sited")
 
-        def round_stream(self, rec, radius, hold=()):  # type: ignore[no-untyped-def]
-            self.calls.append((radius, set(hold)))
-
-    s = _S()
-    round_the_brooks(s)  # type: ignore[arg-type]
-    assert s.calls == [(BROOK_BEND_WIDTHS * 8.0, {1})], "the tap at (100, 0) held; the two-point course skipped"
+    hg.stage_notice(_S(), None)  # type: ignore[arg-type]
+    assert calls == ["sited"]
 
 
-def test_the_board_records_its_well_distance_where_it_is_drawn() -> None:
-    """`record_board_well` (settlement-review of Sawada, feature 261): the distance to the nearest well from the board as
-    drawn, at the map's scale; no wells, no figure."""
-    from l7r.diagram.hamletgen.frame import record_board_well
+def test_stage_crossings_decks_the_web_and_rewrites_no_lane() -> None:
+    """Feature 287, M4c: the squaring `stage_crossings` did moved into the web's last pass (`settle_the_web`), so nothing
+    after the web rewrites a lane - an oblique lane over the brook reaches this stage as the web left it."""
+    import types
 
-    M: dict = {"meta": {"ftpx": 2.0, "kosatsuba_well_ft": 353.5}, "wells": [{"x": 30.0, "y": 40.0}, {"x": 500.0, "y": 0.0}]}
-    record_board_well(M, 0.0, 0.0)
-    assert M["meta"]["kosatsuba_well_ft"] == 100.0
-    bare: dict = {"meta": {}}
-    record_board_well(bare, 0.0, 0.0)
-    assert "kosatsuba_well_ft" not in bare["meta"]
+    from l7r.diagram.hamletgen.frame import stage_crossings
 
-
-def test_the_re_seat_asks_the_one_placer_for_each_seats_caption_level() -> None:
-    """`_caption_levels`: with a settlement that places captions, each candidate's level is the placer's answer at the
-    board's angle, against obstacles indexed once; with no label there is no index to build."""
-    from l7r.diagram.hamletgen.frame import _caption_levels
-
-    class _S:
-        def __init__(self) -> None:
-            self.indexed = 0
-
-        def label_obstacles(self):  # type: ignore[no-untyped-def]
-            self.indexed += 1
-            return "index"
-
-        def board_caption_level(self, x, y, hw, hh, rot, label, index, frame, canopy):  # type: ignore[no-untyped-def]
-            return 1 if index == "index" and x > 10 else 0
-
-    s = _S()
-    seats = [(0.0, 5.0, 5.0, 0.0), (0.0, 20.0, 5.0, 0.0)]
-    assert _caption_levels(s, seats, "notice board", None, 12.0, 5.0, None) == {seats[0]: 0, seats[1]: 1}  # type: ignore[arg-type]
-    assert s.indexed == 1
-    assert _caption_levels(s, seats, "", None, 12.0, 5.0, None) == {seats[0]: 0, seats[1]: 0}  # type: ignore[arg-type]
-
-
-def test_squaring_a_crossing_keeps_every_lane_end_that_met_the_lane() -> None:
-    """`keeps_the_ends` (feature 291): a lane re-laid square at a crossing must still meet every other lane's end that met
-    it - Mizuguchi's street, squared at a ford, left a door path's end 87 ft off it."""
-    from l7r.diagram.hamletgen.frame import keeps_the_ends
-
-    old = [(0.0, 0.0), (100.0, 50.0), (200.0, 0.0)]
-    lanes = [{"pts": [[0.0, 0.0], [100.0, 50.0], [200.0, 0.0]]}, {"pts": [[100.0, 150.0], [100.0, 50.0]]}, {"pts": [[1.0]]}]
-    assert not keeps_the_ends(lanes, 0, old, [(0.0, 0.0), (200.0, 0.0)]), "the door path met the bend the squaring removed"
-    assert keeps_the_ends(lanes, 0, old, [(0.0, 0.0), (100.0, 51.0), (200.0, 0.0)])
+    calls: list[str] = []
+    oblique = [[0.0, 0.0], [200.0, 150.0]]
+    s = types.SimpleNamespace(
+        M={"lanes": [{"pts": [list(q) for q in oblique], "w": 3}], "streams": [{"poly": [[100.0, -500.0], [100.0, 500.0]], "w": 6.0}]},
+        px=lambda ft: ft,
+        reink_lane=lambda i: calls.append(f"reink {i}"),
+        bridges=lambda: calls.append("bridges") or 0,
+    )
+    stage_crossings(s, types.SimpleNamespace(field_archetype="comb"))
+    assert calls == ["bridges"] and s.M["lanes"][0]["pts"] == oblique

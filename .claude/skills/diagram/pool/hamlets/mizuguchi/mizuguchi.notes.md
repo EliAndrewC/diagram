@@ -608,7 +608,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - farmhouses: **12**
 - family form: **retirement_house**, retirement houses **5**
 - farmstead fixtures: bath **3**, coop **10**, pit **8**, privy **11**, shrine **1**, woodpile **5**
-- notice board at the entrance, **(2300.1, 1363.2)**: **12** of 12 households' ways out pass it
+- notice board at the entrance, **(803.7, 2607.5)**: **12** of 12 households' ways out pass it
 <!-- /census -->
 
 ## 2026-09-09 - feature 220 (the field fitted once)
@@ -868,5 +868,16 @@ forms (homesteads/155 and 156, feature 291 amendment 3); the reference (Inashiro
 - **A service strip** stands between each house and its windward stand, for the wood shed and the bath room.
 
 Measured on this roll (2026-09-30): 12 houses on 2 streets, 12 grove farms; 24 bands, all deep; 12 private wells;
-bath rooms 3, wood sheds 5, privies 11, coops 10, manure heaps 8, shrine 1 - every declared fixture seated; 15 lanes;
+bath rooms 2 of 3 rolled (one unseated, recorded in meta.farm_fixtures_unseated), wood sheds 5, privies 11, coops 10,
+manure heaps 8, shrine 1; the brook on from off the sheet and a field path over it to the paddy; 10 lanes;
 every row, water, door, bamboo, grove and overlap rule clean; attempt 1.
+
+## 2026-09-30 (feature 291 on feature 287): the port - the layout moved
+
+Feature 287 (placer guarantees) landed on main while 291 was open, and 291 was rebuilt on it (amendments 7 and 8): every
+household seated or the site refused; a grove farm's well pocket and fixtures laid in its bundle at seating; a row's
+streets and door paths held to the lane law as tree lanes. Measured on this roll (2026-09-30, from the manifest): 12 houses on 2 streets, every farm with its own well (12, drawn at the pocket its seating laid) and 9 door paths (the rest stand on their street); 14 lanes, the web settled in 4 rounds; bath rooms 3 of 3, wood sheds 5, privies 11, coops 10, manure heaps 8, shrine 1 - every rolled fixture laid in its farm's bundle; seated on the first margin.
+
+## 2026-09-30 (feature 293, on 291's roll): the storehouses go to the largest farmhouses
+
+The storehouse annex is now dealt to the largest farmhouses by the main house's footprint (research homesteads/120) and its length held in the Edo sheds' band, 18-27 ft and 1.5-1.8 to one (`kura_rect`). Measured against main's manifest (the row-village roll above): the two storehouses stood on the 1st and 11th of 12 farmhouses and now stand on the 1st and 2nd, drawn 20.6 x 11.4 and 24.0 x 13.3 ft. The field spur no longer runs beside its street: main's left the street at (2328, 1950) and ran 10-12 ft beside it for about 210 ft before it turned for the paddy - a doubled tread the lane law's `doubled_tails` did not see, because it asked only a lane's last end; it now asks both, and the spur leaves the street at (2177, 2098), 139 ft to the paddy where it was 339, the field still joined. Every house center, well, the notice board at (803.7, 2607.5) and the take-yabu at about (2168, 1426), wholly on the sheet, are main's; the fixture counts are main's.

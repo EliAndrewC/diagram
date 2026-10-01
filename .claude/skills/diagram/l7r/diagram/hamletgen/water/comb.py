@@ -76,7 +76,9 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
     # and the brook is pushed out to the fan's shoulder for its whole length (measured: offsets of 400-600 ft
     # against a 34 ft skirt). The canals run inside the plots they water, so clearing the plots clears them.
     plan.brook = feed_brook(plan, sluice, [[(float(x), float(y)) for x, y in p["poly"]] for p in net["plots"] + net["dry_plots"]])
-    s.draw_comb_field(net, f"{plan.spec.name.lower()}-paddies", {"kind": "stream", "stream": plan.brook})
+    # the brook DECLARES both its ends off the map (feature 287 wave 5, water:W07): it comes down off the high ground and
+    # runs on past the fan to leave the sheet - `brook_violations` holds the source and the mouth off the canvas
+    s.draw_comb_field(net, f"{plan.spec.name.lower()}-paddies", {"kind": "stream", "stream": plan.brook, "to": {"kind": "offmap"}})
     open_race_mouth(s, sluice)  # the race opens out of the brook's bank, not onto the stream (269 B22)
     draw_intake(s, plan, sluice)
     # THE PARTS OF A DITCH THAT RUN OUTSIDE THE CROP become no-build corridors.

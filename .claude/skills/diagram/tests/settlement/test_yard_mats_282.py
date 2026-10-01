@@ -171,3 +171,53 @@ def test_a_lattice_that_fits_only_in_an_arm_of_an_l_the_rack_cuts_is_found() -> 
     # (spec-fidelity, amendment round 9, 2026-09-28): the region's centroid lies in the cut-out, and it drew none
     poly = [(-4.9, -3.4), (5.0, -3.4), (5.0, 3.5), (-4.9, 3.5)]
     assert len(mat_cells(10.0, 7.0, poly, 1.0, (2.2, 0.7, 5.0, 5.0))) == 1
+
+
+def test_the_smallest_yard_the_roll_makes_seats_four_mats_and_a_rack_at_every_turn() -> None:
+    """Feature 287, homes H19 and H20: the yard's roll is floored at `YARD_MIN_TSUBO` (8 tsubo - nobody is yardless), and
+    a yard of that size, its quad pulled in by the worst of the 0.10 jitter at a turn and the rack's keep-out cut from it,
+    still seats four mats; and a rack stands on it at every turn of the house (measured 2026-09-29 over 36 turns x 25
+    quads x both sides: never under 4). So no rolled yard draws fewer than four mats or, where the weather wants one,
+    no rack - by the floor, with no later stage to lose them."""
+    from l7r.diagram.settlement.homestead_parts.yards import ThreshingYardsMixin
+
+    s = _nuc_village()
+    s.meta(name="Y", scale="hamlet", ftpx=1, toscale=True)
+    area = ThreshingYardsMixin.YARD_MIN_TSUBO * ThreshingYardsMixin.TSUBO_FT2
+    h = math.sqrt(area / ThreshingYardsMixin.YARD_ASPECT)
+    w = h * ThreshingYardsMixin.YARD_ASPECT
+    # the roll's own floor (`max(tsubo, YARD_MIN_TSUBO)`), even for the smallest house at its worst draws
+    assert min(s._yard_area_ft2(x * 7.3, x * 3.1, 10.0, 8.0) for x in range(400)) >= area - 1e-6
+    for rot in range(0, 360):
+        assert rack_segment(w, h, float(rot), 1.0, 1) is not None and rack_segment(w, h, float(rot), 1.0, -1) is not None
+    for rot, k in ((0, 0), (37, 1), (90, 2), (135, 3), (210, 4), (300, 5)):
+        cx, cy = 100.0 + k * 13.7, 200.0 + k * 7.3
+        local = [(px - cx, py - cy) for px, py in s._quad(cx, cy, w, h, 0.10, 41.0, level="N")]
+        rack = rack_segment(w, h, float(rot), 1.0, 1)
+        assert rack is not None
+        keep = (rack[0] - rack[3] - 0.25, rack[1] - 0.25, rack[0] + rack[3] + 0.25, rack[2] + 0.25)
+        assert len(mat_cells(w, h, local, 1.0, keep, salt=k)) >= 4
+
+
+@pytest.mark.parametrize("rot", [-30.0, 0.0, 5.0, 90.0])
+@pytest.mark.parametrize("where", ["N", "E", "W", "S"])
+def test_the_edge_facing_the_house_runs_square_to_its_wall(rot: float, where: str) -> None:
+    """Feature 287, homes H07: for a yard on any side of a house at any turn, the edge `house_facing_edge` names is the
+    edge `_attach_yard` levels, and it runs within 0.3 degrees of the house's wall."""
+    from l7r.diagram.settlement._geom import turn_about
+    from l7r.diagram.settlement.homestead_parts.yards import house_facing_edge
+
+    s = _nuc_village()
+    s.meta(name="Y", scale="hamlet", ftpx=1, toscale=True)
+    hx, hy = 300.0, 300.0
+    lx, ly = {"S": (0.0, 40.0), "N": (0.0, -40.0), "E": (50.0, 0.0), "W": (-50.0, 0.0)}[where]
+    ((ox, oy),) = turn_about([(hx + lx, hy + ly)], hx, hy, rot)
+    s._attach_yard(hx, hy, (ox, oy, 30.0, 20.0), rot)
+    poly = s.M["threshing_yards"][-1]["poly"]
+    edge = house_facing_edge(ox, oy, hx, hy, rot)
+    assert edge == {"S": "N", "N": "S", "E": "W", "W": "E"}[where], "the yard's near edge is the one toward the house"
+    i, j = {"N": (0, 1), "S": (3, 2), "E": (1, 2), "W": (0, 3)}[edge]  # the quad's corners: NW, NE, SE, SW
+    ang = math.degrees(math.atan2(poly[j][1] - poly[i][1], poly[j][0] - poly[i][0]))
+    wall = rot if edge in ("N", "S") else rot + 90.0
+    off = (ang - wall + 90.0) % 180.0 - 90.0
+    assert abs(off) <= 0.3

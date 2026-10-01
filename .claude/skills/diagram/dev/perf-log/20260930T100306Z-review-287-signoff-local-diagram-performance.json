@@ -1,0 +1,33 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "41d2d2cde",
+    "label": "287-start",
+    "utc": "20260929T031041Z"
+  },
+  "binding": "368459bd5ddce445299b393ac705d04c6f4c06a6c161ed7f4efe1e8c6d3be1dd",
+  "end": {
+    "commit": "702900456",
+    "label": "287-end",
+    "utc": "20260930T044507Z"
+  },
+  "environment": "local",
+  "feature": "287-placer-guarantees",
+  "granted_by": {
+    "declared": "GM",
+    "session_id": "f70424b3-a8eb-45cf-8472-6eb804c5e7c2",
+    "utc": "20260930T100306Z"
+  },
+  "kind": "signoff",
+  "measurements": {
+    "seeds": {
+      "25": 36.2,
+      "39": 4.3,
+      "4": 10.3,
+      "47": -1.7
+    },
+    "total_pct": 11.5
+  },
+  "note": "Accepted: the placer now guarantees every rule; overall generation is faster than main, and seed 25's extra field work is the cost of the fit's legality guarantee. (Recorded by the session on the GM's written authorization in chat, 2026-09-30: 'I authorize you to run that on my behalf.')",
+  "verdict": "signed"
+}

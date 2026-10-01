@@ -8,7 +8,6 @@ SC-008). Pure functions of the manifest, each returning what breaks its rule - e
 - `water_rules`: a dispersed farm's own water as `farm_water` says - a channel into its frame, or its own well in its
   dooryard, off its way in; a linear map's `row_water` drawn - own wells,
   or every farm within reach of a shared one (FR-018);
-- `doors_unreached`: every grove farm's front door within the door reach of a way (FR-019);
 - `bamboo_mismatch`: the farms drawing grove bamboo exactly the farms that rolled a household bamboo stand (FR-019).
 
 Here, not beside `grove_rules` in the settlement engine, because the door is the ways' (`ways/serve.front_door`) and the
@@ -172,23 +171,6 @@ def water_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
         door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
         if door is not None and all(seg_dist(x, y, c, door) < 12.0 for x, y in mine):
             out.append(("well_in_the_way_in", _key(c)))
-    return out
-
-
-def doors_unreached(M: Mapping[str, Any], reach: float = DOOR_REACH_FT) -> list[tuple[float, float]]:
-    """The grove farms whose front door stands farther than `reach` from every way (FR-019) - on a LINEAR map: a dispersed
-    hamlet has no lane network to be reached by (research/homesteads/150, "the rule ... is a rule about nucleated
-    settlements"; `ways.unreached_houses` skips it for the same reason), and its farm fronts its own fields."""
-    if (M.get("meta") or {}).get("settlement_form") != "linear":
-        return []
-    segs = [s for ln in M.get("lanes") or [] for s in _segs(ln.get("pts") or [])]
-    if not segs:
-        return []
-    out = []
-    for h in M.get("houses") or []:
-        door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
-        if door is not None and _dist(door, segs) > reach:
-            out.append(_key((h["x"], h["y"])))
     return out
 
 

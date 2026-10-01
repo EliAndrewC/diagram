@@ -1,5 +1,11 @@
-"""Feature 224 FR-002: the scatter's predicted frame is verified on every shipped hamlet - a view that reached past
-the frame any scatter threw within would leave a strip with no scatter, so no pool manifest may record a breach."""
+"""Feature 224 FR-002 and feature 287 M6: the view is decided once, and nothing after it moves the frame.
+
+FEATURE 287 RETIRED THE BREACH TEST (specs/287-placer-guarantees/research.md R8): every scatter a hamlet throws is thrown
+within the DECIDED view's frame (`hamletgen/hinterland/frame.py:scatter_frame_for`, the marsh thrown before the decision
+thrown again into it), which carries the title band's allowance above and below the view - so the one thing that grows
+the view after the crop, the title's band, stays inside it by construction
+(`tests/settlement/test_finish_287.py::test_a_scatter_frame_of_the_decided_view_holds_the_title_band_on_either_side`).
+KEPT: the contract that no stage after the decision moves the frame, a property of every stage after it."""
 
 from __future__ import annotations
 
@@ -13,13 +19,14 @@ _POOL = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abs
 
 
 @pytest.mark.parametrize("gen", sorted(glob.glob(os.path.join(_POOL, "hamlets", "*", "*.gen.py"))), ids=os.path.basename)
-def test_no_shipped_hamlet_breaches_its_scatter_frame(gen: str) -> None:
-    # read THROUGH `_pool.obtain`, under the per-gen lock every reader of a shipped generator takes: straight off disk the
-    # gate's own roll of a map can be mid-write (feature 230 caught an empty manifest that way in the sibling check)
+def test_no_stage_after_the_view_is_decided_moves_the_frame(gen: str) -> None:
+    """Feature 287, M6: the view is decided once, at the end of `stage_hinterland`, and `stage_frame` sets exactly it. The
+    contract that makes that honest is that no later stage places a frame-setting feature; `stage_frame` records any
+    difference between the decided view and the crop the finished map would take as `meta.view_drift`, and no shipped
+    hamlet may carry one."""
     from tests.gate import _pool
 
     with open(_pool.obtain(gen), encoding="utf-8") as fh:
         meta = json.load(fh)["meta"]
-    assert "scatter_frame" in meta, "a hamlet's scatters throw within a predicted frame"
-    assert "scatter_frame_breach" not in meta, f"the view reaches past the predicted frame by {meta.get('scatter_frame_breach')} (left, top, right, bottom)"
-    assert max(meta["scatter_frame_overhang"]) < 0, "the view stays strictly inside the predicted frame"
+    assert meta.get("view"), "a hamlet records its view"
+    assert "view_drift" not in meta, f"a stage after the decision moved the frame by {meta.get('view_drift')} (left, top, right, bottom)"

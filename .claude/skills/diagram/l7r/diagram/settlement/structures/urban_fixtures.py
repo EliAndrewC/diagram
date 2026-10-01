@@ -103,6 +103,6 @@ class UrbanFixturesMixin:
         self.block_polys.append([(x - cb_, y + h), (x + cb_, y + h), (x + cb_, y + h + 40), (x - cb_, y + h + 40)])
         # the caption is TWO LINES, "drum/bell" over "tower" (GM 2026-07-24): the county tower is
         # genuinely the combined zhonggulou - both instruments in one building, and both are drawn
-        self.label(x, y + h + 12, "drum/bell", 9, italic=True, color="#4A3318")
-        self.label(x, y + h + 24, "tower", 9, italic=True, color="#4A3318")
+        self.label(x, y + h + 12, "drum/bell", 9, italic=True, color="#4A3318", ref=(x - h, y - h, x + h, y + h))
+        self.label(x, y + h + 24, "tower", 9, italic=True, color="#4A3318", ref=(x - h, y - h, x + h, y + h))
         return z

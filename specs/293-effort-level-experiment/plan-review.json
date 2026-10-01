@@ -1,38 +1,44 @@
 {
  "feature": "293-effort-level-experiment",
- "plan_sha256": "8d067087a9e73189bbf93df69241689143e5f7bcbe2aaba3fa0e92323d6bf2bb",
- "reviewed": "2026-09-29",
+ "plan_sha256": "5b8c97b4b1839e0bacc4b75ef5833a17615b06a0ad21d7bcd9fc010a25a15e19",
+ "reviewed": "2026-09-30",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "R1-D1",
    "summary": "The arm is set with --effort, never CLAUDE_CODE_EFFORT_LEVEL; the launcher unsets the variable and records that",
    "class": "within",
-   "why": "FR-005 pinned-checker control; unchanged since round 1."
+   "why": "FR-003/FR-005; unchanged."
   },
   {
    "id": "R1-D2",
-   "summary": "Every session of every run - task I's and both task R page sessions - launched with the same --agents JSON defining adhoc-judge (opus, high); the prompt and both R briefs route ad-hoc judging to it; per-session hash recorded and a differing hash refused (research R1 D2, contracts/cli.md page-session AGENTS= and effort-run step 3, plan.md, data-model agents_json_sha256)",
+   "summary": "Every session of every run launched with the same --agents JSON defining adhoc-judge (opus, high); prompts route ad-hoc judging to it",
    "class": "within",
-   "why": "Round-1 item 1 resolved: the fixed ad-hoc judging effort of US2 AS3 / FR-005 now reaches task R's page sessions as well as task I."
+   "why": "US2 AS3 / FR-005; now measured in force (R1 P0 (a), T07)."
+  },
+  {
+   "id": "R1-P0-measured",
+   "summary": "P0 measured 2026-09-29 (T07): --agents carries adhoc-judge under claude -p, so D2 stands and D2a's agent file is not built; transcripts carry effort per assistant message, so effort-measure records effort per message for the main sessions and per subagent type (data-model effort field); the Agent tool has no per-dispatch effort",
+   "class": "within",
+   "why": "The plan's own branch: (a) passing keeps D2, and D2a was only the fallback for (a) failing. The effort field MEASURES what US2 AS2, AS3 and AS4 ask; enforcement of the request, not scope. Round-1 aside taken up: research R1 P0 (d) records the pin holding under an xhigh session (observed 2026-09-29, one-shot, $0.12): session records xhigh, judge high."
   },
   {
    "id": "R1-D2a",
-   "summary": "If --agents cannot carry effort, a committed agent file .claude/agents/adhoc-judge.md (opus, high) lands on main before START, identical in every run clone, retired after the report; the unmet branch only if that too is measured not to pin the effort",
+   "summary": "Fallback committed agent file adhoc-judge.md - not needed after P0 (a) passed",
    "class": "within",
-   "why": "Round-1 item 2 resolved in D2a and in the Alternatives paragraph: the unmet branch of US2 AS3 is reserved for a MEASURED impossibility."
-  },
-  {
-   "id": "R1-P0-a-failure",
-   "summary": "research.md R1 P0, last sentence: if (a) fails, apply D2a (the agent file) and re-measure; the spec measured branch applies only if that too fails",
-   "class": "within",
-   "why": "Round-2 item resolved in d3fb605b1: the operative P0 step now agrees with D2a, so the unmet branch of US2 AS3 is reached only by a measured impossibility."
+   "why": "A fallback not taken; the unmet branch of US2 AS3 is still reserved for a measured impossibility."
   },
   {
    "id": "R1-D3",
-   "summary": "Ad-hoc dispatches not to a defined agent or adhoc-judge are counted per arm AND listed with model and description; those on opus or judging by their description reported as judging at session effort",
+   "summary": "Ad-hoc dispatches not to a defined agent or adhoc-judge counted per arm and listed with model and description; those on opus or judging reported as judging at session effort",
    "class": "within",
-   "why": "US2 AS3 / FR-012. The round-1 aside is taken up (data-model adhoc_dispatches)."
+   "why": "US2 AS3 / FR-012; unchanged."
+  },
+  {
+   "id": "R5-D7",
+   "summary": "Strictly sequential: no launch while another run is live; the headroom gate (4.5 GB) reads the SHARED claude-containers.slice working set (memory.current less inactive_file) through host-diag with no offset, and a memwatch warning does not block while that figure is readable; fallback when the host cannot be read: this container's working set + a 1.9 GB offset with the 15-minute warning rule; the launch record names its source; nothing of the experiment beside a live run (revised at T09, cb50ba8e3)",
+   "class": "within",
+   "why": "Within. What was asked: the GM's amendment ('sequentially rather than in parallel for memory reasons ... I don't want too many things running to be a problem for the container') and the accepted spec (US2 AS5, FR-005, SC-006: one run at a time, a launch only under a stated headroom threshold, a logged wait otherwise, nothing else of the experiment beside a live run, the record showing memory under the threshold at launch). All of that stands. The memwatch-warning wait was never in the GM's words or the spec; it was the plan's own proxy, needed because the launcher could not see the capped figure. The revision reads the capped figure itself - the cgroup whose memory.max is the 9.0 GiB cap - which is closer to the request's purpose (a problem for the container is an OOM kill under that cap), not further from it; the warning's figure is that same cgroup's raw memory.current, page cache included, which the kernel reclaims before it kills. So nothing the GM or the spec asked for is narrowed. Re-read independently 2026-09-29 by this reviewer via host-diag: memory.max 9663676416, memory.current 7.56 GB, inactive_file 3.00 GB (working set 4.55 GB) - the source is readable and is the cap. The drafting drift noted in the previous round (plan.md Constraints line; contracts/cli.md step 1) was corrected in 1cfb0e131: both now say the memwatch warning blocks only on the fallback, matching research R5 D7 revised (lines 132-135); confirmed by this reviewer 2026-09-29."
   },
   {
    "id": "R6-D4",
@@ -41,35 +47,41 @@
    "why": "US2 AS6 and the shared-resource edge case; unchanged."
   },
   {
-   "id": "R6-D5",
-   "summary": "Claims file: launcher appends a release line after each R run, or a per-run copy if the rules do not read it so",
+   "id": "R6-D5-T08",
+   "summary": "Claims file: the page-session rules say only how the file is read and written, so what blocks a run is the brief's to say; the write brief now says feature-293 lines the run did not write are not claims on its work (identical in both arms); the launcher's release line stays as a record; no per-run copy",
    "class": "within",
-   "why": "Same starting state for both arms; unchanged."
+   "why": "The purpose of D5 is that the second R run is not blocked by the first run's claim, so both arms start from the same effective state; an identical instruction in both briefs does that, D6 still records the claims file as each run found it (the shared-resource edge case), and the per-run copy was only the fallback for the rules not honoring a release. Its wording is now neutral (prompt-names-effort)."
+  },
+  {
+   "id": "prompt-names-effort",
+   "summary": "The prompts (R-write, R-check, I) say nothing about effort or the experiment: neutral claims label and T08 sentence, handoffs under handoffs/293/, R briefs copied to and run from a neutral path in the run clone, neutral release line",
+   "class": "within",
+   "why": "Resolved in c6a4e9e5a: grep of prompts/*.md for effort|experiment|specs/293|xhigh|set aside finds nothing; the claims labels read \"293 | ...\", the T08 sentence reads \"Lines for 293 that you did not write are not claims on your work\", handoffs go to handoffs/293/, the R briefs are copied byte for byte to <clone>/handoffs/293/ and run from there so the page runner's PROMPT (\"Read {brief} first\") names a neutral path (test_effort_run asserts the path and byte equality), and the release line reads \"293 | run <id> ended\". This now ENFORCES FR-004 (\"nothing about effort\") rather than departing from it. Aside for the GM: the run environment still carries SPECIFY_FEATURE=293-effort-level-experiment and L7R_SOURCES_HOME under <clones>/.effort-293/<run>/, identical in both arms; FR-004 governs the prompt, so this is not a finding, but a tool that echoes either path would put the word in front of the session."
   },
   {
    "id": "R6-reserve",
    "summary": "make reserve collisions accepted as numbering gaps",
    "class": "within",
-   "why": "A numbering gap does not affect the comparison, and D6 now lists the prefixes each run reserved."
+   "why": "Does not affect the comparison; unchanged."
   },
   {
    "id": "R6-D6",
-   "summary": "Run record shared_state {sources_snapshot_sha256, claims_sha256_at_start, claims_lines_at_start, ledger_lines_appended, claims_lines_written, claims_release_line, prefixes_reserved}; under the per-run-copy path, the copy hash",
+   "summary": "Run record shared_state: sources snapshot hash, claims file hash and lines at start, ledger lines appended, claims lines written, release line, prefixes reserved",
    "class": "within",
-   "why": "Round-2 item resolved in d3fb605b1 (research.md D6, data-model.md): the claims file state at start is now recorded alongside the sources snapshot, satisfying the shared-resource edge case (what each run found there at start) for all three named resources."
+   "why": "The shared-resource edge case; implemented in _effort_run.py claims_at_start."
   },
   {
    "id": "R7",
-   "summary": "Task R is two page sessions from two byte-identical briefs, launched by the runner at the arm effort, with no orchestrating top-level session",
+   "summary": "Task R is two page sessions from two byte-identical briefs, launched by the runner at the arm effort, no orchestrating top-level session",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Unchanged from round 1: FR-002/FR-003 put task R through write and check-and-apply sessions; the purpose of FR-004 (byte-identical, effort-free prompts) holds."
+   "why": "Unchanged: FR-002/FR-003 put task R through write and check-and-apply sessions; FR-003 requires every such session at the arm effort."
   },
   {
    "id": "launcher",
-   "summary": "effort-run: fresh clone at START under a neutral id, sequential, refuses on changed rubrics or prompts, task I as one full claude -p, session ids chosen up front, release line after R",
+   "summary": "effort-run: a fresh run repository at the ONE start commit under a neutral id (the start commit fetched alone, the feature directory left out of the tree, main as origin), sequential, refuses on changed rubrics or prompts, the frozen files supplied by the launcher, task I as one full claude -p, session ids chosen up front, release line after R",
    "class": "within",
-   "why": "FR-003, FR-005, US2 AS5, the neutral-id edge case."
+   "why": "FR-003 (no record linking a run id or position to an arm in the run's clone), FR-005 (one start commit), US2 AS5, the neutral-id edge case; confirmed 2026-09-30 in f1fb290fe and its test (a later commit not reachable, no 'clone: from' reflog)."
   },
   {
    "id": "void-rerun",
@@ -84,10 +96,10 @@
    "why": "FR-006, FR-007, SC-001."
   },
   {
-   "id": "blinding",
-   "summary": "effort-blind strips run identifiers and arm names, A/B from a seed, bundle outside the repo, key committed after grades",
+   "id": "blinding-strip-scope",
+   "summary": "contracts/cli.md effort-blind: strips what identifies the arm or the run - run id, clone path and name, session ids, commit trailers, the token xhigh, and an arm name where it names an effort setting; 'medium' in ordinary prose left (was: any occurrence of the arm names)",
    "class": "within",
-   "why": "FR-009, US3 AS2, SC-003."
+   "why": "FR-009 says \"strips arm-identifying text\" and US3 AS2 \"anything naming the effort level or the run\"; \"medium\" as an ordinary word names neither, and stripping it would itself mark the text. Round-1 implementation note resolved in c6a4e9e5a: EFFORT_SETTING now matches \"effort[ _-]?level X\" and \"X[ -]effort\" (replaced with \"<arm> effort\"), and test_effort_blind asserts \"at medium effort\" and \"effort level medium\" absent from the bundle. Aside: a quoted JSON form (\"effort\": \"medium\") is still not matched, since [:=]? admits no quote; xhigh is stripped everywhere regardless."
   },
   {
    "id": "grader",
@@ -97,9 +109,9 @@
   },
   {
    "id": "rubric-freeze",
-   "summary": "Rubrics frozen before the first run; the launcher refuses if they changed",
+   "summary": "Each task's rubric and prompts frozen by commit before that task's first run (a replaced task's before the replacement's first run); the launcher refuses if they changed",
    "class": "within",
-   "why": "FR-008, SC-002."
+   "why": "FR-008, SC-002 as amended 2026-09-30; plan.md lines 27 and 112 now say the same (f1fb290fe)."
   },
   {
    "id": "prompt-content",

@@ -102,7 +102,7 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   (below) grown outward (shapely) to the street's offset, its exterior ring cut to an arc centered on the chosen point
   (below) (the row curves with the margin); `street` - a straight line fitted to that same stretch of the ring (its
   principal axis) and set out until the whole stretch lies behind it, a surveyed road. The row's length along the line is
-  what its farms need, `n_side x frame` and one frame more, with two frames of slack beyond, clipped to the sheet. A linear or dispersed hamlet's canvas is 1.5 times `canvas_for`'s (`LINEAR_CANVAS`; the dispersed form's too since the
+  what its farms need, `n_side x frame` and one frame more, with two frames of slack beyond, clipped to the sheet. A linear or dispersed hamlet's canvas WAS 1.5 times `canvas_for`'s - since the port onto feature 287 it is 287's own canvas (`LINEAR_CANVAS` 1.0, D20) - (`LINEAR_CANVAS`; the dispersed form's too since the
   pinned Audit-905 seated 16 of 20 grove farms on the smaller sheet - measured 2026-09-30 by `make hamlet`, with a well and with a channel -
   a drawing convention - the unused ground is cropped): sized for a cluster, the canvas ran each street off the sheet
   after a few lots and cohort seed 12 seated 13 of 17 on six streets.
@@ -123,7 +123,7 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
   THE STREETS' SPACING: each next street is the FIRST line set out parallel (each sample along its own normal), past the
   last street's far row, its holdings (BOTH), the lane's room and the field keep - the frame's depth measured ALONG THE
   LINE'S NORMAL, not its shorter side (a diagonal street reaches deeper). AT MOST SIX STREETS (`MAX_STREETS`, a GUESS); a
-  farm six streets cannot hold is reported unseated and fails the cohort under FR-010 - never put in a rank. A LINEAR
+  farm six streets cannot hold is never put in a rank: since amendment 7 the margin is taken back and the next tried, and past the last the site is refused (`SiteRefused`, D20). A LINEAR
   HAMLET NEVER TAKES THE RANK OR RESCUE PASSES, even when its streets seat no farm, and `row_rules` reports a linear map
   with no seated street (`no_row_street`). A ROW SEAT IS REFUSED - the placer offered the next - when its frame crosses
   ANY planned street (square to its line at its seat, a frame reached across a street at a bend), when its front door
@@ -174,13 +174,44 @@ Spec: [`spec.md`](spec.md) (FAITHFUL, round 3). Request: [`request.md`](request.
 - **D19 - the checks** (SC-007, SC-008). `grove_rules` gains `row_rules(M)` (every house within a frame depth of a
   street; no house behind another on its side; each street one lane; every far row farm with its holding behind it; every
   row farm joined by a way to its own street) and `water_rules(M)` (every dispersed farm with its own water as
-  `meta.farm_water` says - a channel ending inside its frame, or its own well not in its way in; a linear map's `row_water` drawn - own wells, or every farm within reach of a shared well), and the door and
-  bamboo predicates (`doors_unreached`: every LINEAR row farm's front door within the door reach of a way (a dispersed farm needs none, homesteads/150); `row_rules` also fails a linear map with no seated street; `bamboo_mismatch`:
+  `meta.farm_water` says - a channel ending inside its frame, or its own well not in its way in; a linear map's `row_water` drawn - own wells, or every farm within reach of a shared well), and the
+  bamboo predicate (the door predicate `doors_unreached` was dropped with FR-019's door clause, amendment 9); `row_rules` also fails a linear map with no seated street; `bamboo_mismatch`:
   the farms drawing grove bamboo exactly the farms that rolled it). The cohort audit runs all of them on every roll and,
   beside its 24 seeds, rolls a PINNED linear spec for each value of `row_line`, `row_sides` and `row_water` (four
   line-by-sides specs, water alternating) and a PINNED dispersed spec for each value of `farm_water`, so both values of
   each knob are asserted to appear, not left to the roll; the
   gate test runs them on the linear pool maps.
+- **D20 - the port onto feature 287** (amendments 7 and 8). Every rule above held on 287's machinery, each at its placer:
+  - SEATING: `seat_rows` in place of the connector-frontage pass; `seat_every_household` takes a row village's margin back
+    with its far-row holdings (`capacity.seating_mark` counts the holdings, block and hard polygons) and refuses the site
+    where no margin's streets hold every farm (FR-013/FR-016 never in ranks; no `seat_the_rest` behind rows). A grove farm's
+    bundle lays its own well pocket in its dooryard (`dispersed.canonical_farmstead`, so `lot.watered` holds at seating) and
+    its fixtures clear of its bands (`_lay_fixtures` with `bands`); lots on every form, a grove farm's keeping no beast.
+    The grove-farm placer refuses a part on the access tree (`_on_the_access`) and a fixture in any band as turned
+    (`_fixtures_in_bands`). Only the nucleated form starts 287's access tree; a row's road runs on from its first street.
+  - WATER: `wells.grove_water` draws each farm's pocket as its own well, or releases it where a channel or a shared street
+    well serves the farm. A channel is searched as before first; only where that finds nothing, from sources off the crop,
+    ends farther off the yard, and the straight chord (`farm_water.straight_or_routed`). Other farms' pockets wall it.
+  - WAYS: a row's streets and its farms' door paths are TREE lanes (`corridors.is_tree`), never cut by the settle and
+    never pruned (`prune_the_tree`), so each is laid lawful: a door path from the front door stepped off any fixture
+    (`door_off_fixtures`), straight where clear else routed and string-pulled (`pulled`), ended square on its own street
+    (`to_first_arrival`), squared at its crossings (`settle.square_run`), off every fixture and band, and held to
+    `settle.Lawful(tree=True)`; where no lawful path leaves the front, a flank of the dooryard facing no band (amendment 8,
+    `flank_doors`, with open ground between it and the front door, `front_to_flank_open`; recorded `from_flank` and
+    `meta.door_flanks`). (Amendment 9 dropped FR-019's door clause and SC-008's door check, so the flank is a preference after the
+    front, not an exception.) Every row farm gets its path unless its door is on its
+    street. A street is cut to its outermost joints (`street.trim_streets`) and carried on to the road's start
+    (`meet_the_road`); a street's join is unhooked and searched lawful (`door_path` from either end). The lane law keeps a
+    short lane whose removal leaves another lane's end dangling (`law.short_fragments`).
+  - TRACK: the connector's dry exit keeps grove bands at a footpath's gap on a 7 ft grid (`GROVE_EXIT_CELL_FT`, a map drawing convention: the largest cell sure to
+    leave a center in a 32 ft lane's room between two bands, its derivation at the constant), from a
+    start pushed clear of any band (`dry_exit.clear_of_bands`).
+  - CANVAS: `LINEAR_CANVAS` is 1.0 - 287's canvas (the field and the seat's room on every side) holds the rows, and the
+    1.5 growth moved the water layer into a refused sink on Kashikawa.
+  - VERIFIED: the cohort 30/30 (cohort run 8, 2026-09-30) and the pool regenerated; the cohort reports a refused seed by
+    name and goes on (`cohort_audit.refused_verdict`); `make done` green, 100% coverage (2026-09-30). The settlement reviews
+    of this landing were SKIPPED at the GM's instruction (2026-09-30: "Go ahead and skip the review process entirely"; the
+    review process itself is feature 294's).
 
 ## Indexing
 

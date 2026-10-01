@@ -8,7 +8,7 @@ from l7r.diagram import hamletgen as hg
 from tests.gate import _pool
 
 # THE POLDER TESTS LEFT FOR THE SOAK TIER (feature 219): the gate rolls no spec of its own - Kuwabata below is the
-# POOL's map, read through `tests/gate/_pool.py`; the polder-grid assertions roll Polder 12 in tests/soak/test_polder_fall_0.py.
+# POOL's map, read through `tests/gate/_pool.py`; the polder-grid rules are guaranteed at their placers (feature 287).
 
 
 @pytest.mark.rolls_map
@@ -16,11 +16,17 @@ def test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks() -> None:
     """THE THIRD FIELD ARCHETYPE (feature 150, Kuwabata): the polder carried to the wholesale
     dike-pond conversion. Asserts what the archetype is responsible for beyond the polder: the
     overlay record, the dike-pond parcels, the declared arrangement, and the waterward fringe
-    (declared AND wet, so `polder_waterward_flanks_wet` has teeth rather than skipping)."""
+    (declared AND wet, so `polder_waterward_flanks_wet` has teeth rather than skipping).
+
+    KEPT through feature 287 (specs/287-placer-guarantees/research.md R8): no placer unit test holds the archetype's own
+    record (the overlay count, the fry ponds, no duck pen, a wet strip per waterward face, forecourt yards). Its household
+    clause was retired: every household is seated or the site refused. Its sty clause was retired in wave 5: a dike-pond
+    hamlet with a grow-out pond seats its sty or is refused (`pondstock.py`, `StyRefused` - at the reservation where no
+    seat fits, at `stage_pond_stock` where none is left on the near half), `tests/hamletgen/test_water_287.py`."""
     # THE KUWABATA SPEC, SHARED WITH THE THREE GATE FILES THAT ALREADY ROLL IT (2026-08-31). This test
     # was a spec of its own differing only in leaving `dike_crop` to roll (seed 21 once gave sugarcane, a planting 269 B34 retired), and
     # it asserts nothing about the crop. Measured: Kuwabata's map carries every assertion below.
-    plan, M = _pool.rolled_map(hg.HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry"))
+    _plan, M = _pool.rolled_map(hg.HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry"))
     m = M["meta"]
     assert m["field_archetype"] == "mulberry_dike_fishpond" and m["pond_layout"] == "mosaic"
     assert any(r["overlay"] == "mulberry_fishpond" and r["count"] >= 20 for r in M["land_use"])
@@ -34,9 +40,7 @@ def test_a_dike_pond_hamlet_is_ponds_in_a_diked_block_with_wet_flanks() -> None:
         assert fry and share <= 0.7 + 1e-9, f"a fry village's nursery water is at most seven tenths: {share:.2f}"
     else:
         assert not fry, "an ordinary dike-pond hamlet buys its fry and keeps no nursery ponds"
-    assert M.get("pig_sties"), "the stock on the ponds (feature 150 A3)"
     assert not M.get("duck_pens"), "no duck pen: a modern form, retired (269 B32)"
-    assert plan.placed == plan.spec.households
     assert set(m["waterward"]) and set(m["waterward"]) <= {"N", "E", "S", "W"}
     assert sum(1 for q in M["marshes"] if q.get("role") == "waterside") == len(m["waterward"])
     # no threshing yards on a no-rice hamlet (feature 150 T41, GM 2026-08-28) - declared and drawn so

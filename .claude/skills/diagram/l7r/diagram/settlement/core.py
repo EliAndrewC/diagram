@@ -149,6 +149,8 @@ class Settlement(
         # their output is byte-identical. Late ends are clipped to abut other water (never overlap), so
         # the two blocks cannot double-composite into a dark seam.
         #                           into a continuous confluence instead of stacking opacity (a dark seam).
+        self._paddy_z: list[int] = []  # the PADDY layer (feature 287, water W38): every plot's slot, lifted under the water block at finish
+        self._bead_slots: list[Any] = []  # each field's azemame ink slot, its runs, its record and its ponds (`settle_beads`, water W33)
         self.bscale = 1.0  # urban-building footprint scale (a large town packs at a finer grain)
         self.ftpx = 1.0  # declared REAL scale, feet per pixel - set via meta(ftpx=...); the
         #                           glyph library is calibrated at town scale (1 ft/px), so 1.0 = identity
@@ -225,12 +227,17 @@ class Settlement(
         #                                for _rect_on_water's irrigation lines (channels / ditches / streams)
         self._clip = 0
         self._nbig = 0
+        # THE REGISTRY OF WHAT STANDS (feature 287 M8). The manifest is a `StandingManifest`: every record set or appended
+        # under a key the overlap matrix tests is recorded in `self.standing` as it lands, and one the matrix forbids on
+        # what already stands raises `OverlapRefused` - the backstop. A placer asks `self.admits(key, record)` first.
+        from l7r.diagram.overlap.registry import Standing, StandingManifest
+
+        self.standing = Standing({}, W, H)
         self.M: Manifest = {
             "houses": Indexed(),  # versioned, so the fit rules' house index (rolling/fit.py) knows when it is stale
             "fields": [],
             "fallow_patches": [],
             "channels": [],
-            "lane": [],
             "taxfree": [],
             "torii": [],
             "shrines": [],
@@ -288,6 +295,8 @@ class Settlement(
             "quarters": [],
             "meta": {"W": W, "H": H},
         }
+        self.M = StandingManifest(self.standing, self.M)
+        self.standing.M = self.M  # the extractor reads the road's width and the scale from the live manifest
         self._header()
 
     # ---- low level
@@ -298,6 +307,11 @@ class Settlement(
     WALLZ = 1_000_000  # the WALL layer renders above every ground lane and building (which sit in
     #                          self.out, z < len(out)), below the TOP layer - so lanes pass UNDER walls
 
+    def admits(self: Settlement, key: str, rec: Any, ignore: Any = None) -> bool:
+        """May `rec` be recorded under `key` on what already stands (the overlap matrix, feature 287 M8)? Every placer
+        whose candidates the matrix can refuse asks this before it chooses one; `ignore` is the record `rec` replaces."""
+        return self.standing.admits(key, rec, ignore)
+
     def _tag(self: Settlement, cls: ClsTag) -> ClsTag:
         """The class an emit carries: an explicit `cls` wins, else the enclosing `feature()` scope's."""
         return cls if cls is not None else self._cls
@@ -306,6 +320,14 @@ class Settlement(
         z = len(self.out)
         self.out.append(s)
         self.out_cls.append(self._tag(cls))
+        return z
+
+    def add_paddy(self: Settlement, s: str, cls: ClsTag = None) -> int:
+        """Emit a field PLOT (or the field floor under it) into the paddy layer (feature 287, water W38): drawn where it is
+        called, and lifted to the front of the water block at `finish` wherever it was called after the block's anchor, so
+        no channel is ever painted under a plot, whatever order the stages draw in."""
+        z = self.add(s, cls)
+        self._paddy_z.append(z)
         return z
 
     def add_parts(self: Settlement, parts: Sequence[tuple[str | None, str]]) -> int:
@@ -534,7 +556,14 @@ class Settlement(
         The ink is not rewritten - a clump past the page is clipped by the render, which is what a
         communal grove is documented to do. Only the RECORD moves, so `clumps` means "canopy a reader
         can see" and `clumps_offpage` means "trees that stand, off the page" - which is what the two
-        keys have always claimed and, until now, only claimed."""
+        keys have always claimed and, until now, only claimed.
+
+        ...AND THE EXTENT IS RECORDED AGAIN (feature 287, woods W15): the grove's `w` x `h` is what its `clumps` stock, and
+        moving the off-page clumps out of `clumps` can leave a box they no longer stock - so the box is re-decided over the
+        clumps on the page by the placer's own rule (`stocked_box`): kept where they stock it, else the extent they are
+        drawn at on the page, else their main stand's."""
+        from .homestead_parts.stands import record_box, stocked_box  # noqa: PLC0415 - kept beside its one use
+
         for g in self.M.get("village_groves") or []:
             allc = list(g.get("clumps") or []) + list(g.get("clumps_offpage") or [])
             if not allc:
@@ -543,6 +572,15 @@ class Settlement(
             on = [c for c in allc if c[0] + r > ox and c[0] - r < ox + w and c[1] + r > oy and c[1] - r < oy + h]
             off = [c for c in allc if c not in on]
             g["clumps"], g["clumps_offpage"] = on, off
+            if all(k in g for k in ("x", "y", "w", "h")):
+                _hw, _hh = float(g["w"]) / 2.0, float(g["h"]) / 2.0
+                record_box(g, stocked_box(on, (float(g["x"]) - _hw, float(g["y"]) - _hh, float(g["x"]) + _hw, float(g["y"]) + _hh), r + 4.0))
+            # ...AND THE ALDER COUNT IS OF THE CLUMPS ON THE PAGE (feature 287, woods W05): `alder` counted every seated
+            # clump drawn as alder, and the partition moves the off-page ones out of `clumps`, so it is recounted here over
+            # the on-page clumps `village_grove` recorded as alder (`alder_clumps`)
+            if "alder_clumps" in g:
+                _al = {(float(c[0]), float(c[1])) for c in g["alder_clumps"]}
+                g["alder"] = sum(1 for c in on if (float(c[0]), float(c[1])) in _al)
 
     # solid HARD footprints the frame must fully contain (+ margin); the fields and pond are added specially.
     # Everything NOT listed here - the commons scrub, streams/channels/lanes - does not set the frame: it is
@@ -654,17 +692,29 @@ class Settlement(
         (We used to extend the frame to preserve 2/3 of a trailing commons, but the GM wants the frame tight to
         the real content - a graveyard, the pond - never held open by empty back-slope grazing, so the commons
         now clips like the marsh instead of dragging the frame out.)"""
+        self.crop_to_view(content_view(self._crop_boxes(city=False), extra, margin, self.W, self.H))
+
+    def crop_to_view(self: Settlement, view: tuple[float, float, float, float]) -> None:
+        """Frame the map to a view DECIDED EARLIER (feature 287, M6): the woods' canopy is flushed, seeing the complete
+        map, and the view is set exactly. `crop_to_content` is this with the view computed on the spot; a scripted hamlet
+        decides its view once, at the end of `stage_hinterland`, and hands that view here."""
         self.flush_tree_stands()  # the woods' canopy draws HERE, seeing the complete map (see flush_tree_stands)
-        _boxes = self._crop_boxes(city=False)
-        _boxes = [
-            *_boxes,
-            *[(b[0], b[2], b[1], b[3], "title-pocket") for b in extra],
-        ]  # `extra` (x0, y0, x1, y1): ground reserved as content - the title pocket a full sheet had to make room for (feature 150; `_crop_boxes` keys x0, x1, y0, y1)
-        hx = [v for b in _boxes for v in (b[0], b[1])]
-        hy = [v for b in _boxes for v in (b[2], b[3])]
-        # clamp the frame to the canvas: never open the view PAST the map edge (an EDGE feature like the forest
-        # fills to the canvas edge, so its side must be the frame edge with no margin gap - else it reads as
-        # "stopping short"). Content within the canvas is unaffected (villages crop tighter than this anyway).
-        x0, y0 = max(0, min(hx) - margin), max(0, min(hy) - margin)
-        x1, y1 = min(self.W, max(hx) + margin), min(self.H, max(hy) + margin)
-        self.set_view(round(x0), round(y0), round(x1 - x0), round(y1 - y0))
+        self.set_view(*view)
+
+
+def content_view(boxes: Sequence[tuple[float, float, float, float, str]], extra: Sequence[tuple[float, float, float, float]], margin: float, W: float, H: float) -> tuple[float, float, float, float]:
+    """The view `crop_to_content` frames: the frame-setting `boxes` (x0, x1, y0, y1, what - `crop_boxes`) and the `extra`
+    ground reserved as content (x0, y0, x1, y1 - the title pocket a full sheet had to make room for, feature 150), grown
+    by `margin`, clamped to the canvas and rounded. ONE body (feature 287, M6): `crop_to_content` and a hamlet's view
+    decision (`hamletgen.hinterland.frame.frame_for`) both read it, so the view decided early is the view the crop takes."""
+    _boxes = [*boxes, *[(b[0], b[2], b[1], b[3], "title-pocket") for b in extra]]
+    hx = [v for b in _boxes for v in (b[0], b[1])]
+    hy = [v for b in _boxes for v in (b[2], b[3])]
+    if not hx:  # nothing sets a frame yet (a bare canvas a placer asks early): the whole canvas is the page
+        return (0, 0, round(W), round(H))
+    # clamp the frame to the canvas: never open the view PAST the map edge (an EDGE feature like the forest
+    # fills to the canvas edge, so its side must be the frame edge with no margin gap - else it reads as
+    # "stopping short"). Content within the canvas is unaffected (villages crop tighter than this anyway).
+    x0, y0 = max(0, min(hx) - margin), max(0, min(hy) - margin)
+    x1, y1 = min(W, max(hx) + margin), min(H, max(hy) + margin)
+    return (round(x0), round(y0), round(x1 - x0), round(y1 - y0))

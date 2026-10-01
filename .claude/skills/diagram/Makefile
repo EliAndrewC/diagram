@@ -1144,9 +1144,32 @@ apply-edits: ## [project] apply a quote-check or record-format report's EDIT and
 
 # GUARD_EDIT_OK: feature 250 - a new operation (one page's work in a fresh headless session, started from a brief); no guard changes.
 # GUARD_EDIT_OK: feature 274 D2 - the runner refuses a write brief over four questions; WRITE_CAP_OK='<reason>' reaches it through make's exported environment.
-page-session: ## [project] start ONE page's work in a FRESH headless session, detached, from written briefs, one after another - absolute paths; a then:<script> step queues the briefs it prints (feature 250 D7, R3); a write brief over four questions is refused (feature 274)   BRIEF="<file> then:<script>" [NAME=<session name, default this clone's>] [MODEL=<model>] [WRITE_CAP_OK='<reason>']
+# GUARD_EDIT_OK: feature 293 adds operations - the effort experiment's four targets; nothing a guard decides changes.
+effort-init: ## [project] feature 293: record what every run of the effort experiment shares, once   START=<sha> SEED=<n> OFFSET=<GB> SOURCES_HOME=<dir> SNAPSHOT=<dir>
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_run.py init --start "$(START)" --seed "$(SEED)" --offset "$(OFFSET)" --sources-home "$(SOURCES_HOME)" --snapshot "$(SNAPSHOT)"
+
+# GUARD_EDIT_OK: feature 293 adds an operation - effort-refreeze, a replaced task's files frozen again (one start commit kept); nothing a guard decides changes.
+effort-refreeze: ## [project] feature 293: freeze again the prompt and rubric of a task the GM replaced (its runs keep the one start commit)   TASK=R|I
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_run.py refreeze-task --task "$(TASK)"
+
+# GUARD_EDIT_OK: feature 293 adds an operation - effort-resume, a stalled headless task-I session resumed with one neutral message; nothing a guard decides changes.
+effort-resume: ## [project] feature 293: resume a task-I run left waiting on a detached run nothing can wake it for - one fixed message, the wait a pause   RUN=<id>
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_run.py resume --run "$(RUN)"
+
+effort-run: ## [project] feature 293: launch ONE run, detached, in its own clone - refused while another run is live or memory is short   TASK=R|I RUN=<id> ARM=medium|xhigh ORDER=<n>
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_run.py run --task "$(TASK)" --run "$(RUN)" --arm "$(ARM)" --order "$(ORDER)"
+
+# GUARD_EDIT_OK: feature 293 adds an operation - VOID= passed to effort-measure (a run voided for an environment reason); nothing a guard decides changes.
+effort-measure: ## [project] feature 293: measure a finished run from its transcripts, the guard log and its clone   RUN=<id> [VOID="<environment reason>"]
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_measure.py --run "$(RUN)" --void "$(VOID)"
+
+effort-blind: ## [project] feature 293: export one task's two outputs, stripped and labeled A/B, to a bundle outside the repository   TASK=R|I SEED=<n>
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_blind.py --task "$(TASK)" --seed "$(SEED)"
+
+# GUARD_EDIT_OK: feature 293 adds an operation - EFFORT and AGENTS passed through to page-session.sh; nothing a guard decides changes.
+page-session: ## [project] start ONE page's work in a FRESH headless session, detached, from written briefs, one after another - absolute paths; a then:<script> step queues the briefs it prints (feature 250 D7, R3); a write brief over four questions is refused (feature 274)   BRIEF="<file> then:<script>" [NAME=<session name, default this clone's>] [MODEL=<model>] [EFFORT=<level>] [AGENTS=<agents.json>] [WRITE_CAP_OK='<reason>']
 	@if [ -z "$(BRIEF)" ]; then printf 'make page-session: BRIEF=<file> is required - e.g. make page-session BRIEF=specs/250-close-the-record-checks/briefs/homesteads.md\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && scripts/page-session.sh "$(BRIEF)" "$(NAME)" "$(MODEL)"
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/page-session.sh "$(BRIEF)" "$(NAME)" "$(MODEL)" "$(EFFORT)" "$(AGENTS)"
 
 # GUARD_EDIT_OK: feature 250 - a new operation (copy what one check reads out of the repository, so the harness attaches no CLAUDE.md to the agent); no guard changes.
 check-bundle: ## [project] the files ONE check agent reads, copied out of the repository with its prepass output - dispatch quote-check, record-format, source-applicability or source-reader with the MANIFEST it prints   PAGE=ways SECTION=010 | KEY=edo-enwiki

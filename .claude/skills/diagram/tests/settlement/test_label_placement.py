@@ -97,12 +97,29 @@ def test_a_queued_caption_carries_the_referent_it_must_hug() -> None:
     point and `M["labels"]` is still empty - which is exactly why a test of the PLACER has to look where
     the placer puts things rather than where the finished manifest does."""
     s = _hamlet()
-    s.label(400.0, 300.0, "the well", ref=(410.0, 305.0))
+    s.label(400.0, 300.0, "the well", ref=(405.0, 300.0, 415.0, 310.0))
     assert len(s._label_queue) == 1, "the caption was queued"
     kind, payload = s._label_queue[0]
     assert kind == "text"
     assert payload[0] == 400.0 and payload[1] == 300.0 and payload[2] == "the well"
-    assert payload[8] == (410.0, 305.0), "the referent survives into the queued record"
+    assert payload[8] == (405.0, 300.0, 415.0, 310.0), "the referent survives into the queued record"
+    s.place_labels()
+    assert s.M["labels"][-1][6] == [405.0, 300.0, 415.0, 310.0], "...and into the drawn record, element [6]"
+
+
+def test_a_caption_that_names_no_subject_is_refused() -> None:
+    """Feature 287, labels L9 (`caption_stands_beside_its_referent`): every caption names its subject. `ref` is a
+    REQUIRED keyword of `label()`, so a caption with none is a TypeError at its call site - the violating case the
+    gate's `test_every_caption_records_the_feature_it_names` used to find on a finished map - and an explicit None
+    or a box that is not four numbers is refused the same way. Nothing is queued for a refused caption."""
+    s = _hamlet()
+    with pytest.raises(TypeError):
+        s.label(400.0, 300.0, "the well")  # type: ignore[call-arg]
+    with pytest.raises(TypeError, match="must name its subject"):
+        s.label(400.0, 300.0, "the well", ref=None)  # type: ignore[arg-type]
+    with pytest.raises(TypeError, match="must name its subject"):
+        s.label(400.0, 300.0, "the well", ref=(410.0, 305.0))
+    assert s._label_queue == [], "a refused caption is never queued"
 
 
 # ---- labels stay inside the frame, and off each other ---------------------------------------------

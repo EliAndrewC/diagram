@@ -1,0 +1,123 @@
+{
+ "run_id": "e1",
+ "tokens": {
+  "main": {
+   "input_tokens": 376,
+   "output_tokens": 176491,
+   "cache_read_input_tokens": 24513172,
+   "cache_creation_input_tokens": 449559
+  },
+  "subagents": {
+   "input_tokens": 240,
+   "output_tokens": 148660,
+   "cache_read_input_tokens": 4021480,
+   "cache_creation_input_tokens": 537160
+  },
+  "total": {
+   "input_tokens": 616,
+   "output_tokens": 325151,
+   "cache_read_input_tokens": 28534652,
+   "cache_creation_input_tokens": 986719
+  }
+ },
+ "wall_clock_s": 5409,
+ "sessions": [
+  "7d89826a-dbb8-4100-ba24-90e576d96507",
+  "be70d50f-d73e-43ae-b2db-72c147e6f966"
+ ],
+ "tool_calls": {
+  "main": {
+   "Bash": 137,
+   "WebSearch": 29,
+   "WebFetch": 3,
+   "Agent": 15,
+   "Write": 18,
+   "Edit": 38,
+   "Read": 14,
+   "Grep": 5
+  },
+  "subagents": {
+   "Read": 134,
+   "Grep": 10,
+   "WebSearch": 7,
+   "WebFetch": 16,
+   "Bash": 10
+  }
+ },
+ "dispatches": {
+  "general-purpose@sonnet": 1,
+  "source-reader@inherit": 1,
+  "source-applicability@inherit": 8,
+  "quote-check@inherit": 3,
+  "record-format@inherit": 2
+ },
+ "effort": {
+  "main": {
+   "xhigh": 181
+  },
+  "subagents": {
+   "source-reader": {
+    "high": 14
+   },
+   "source-applicability": {
+    "high": 52
+   },
+   "general-purpose": {
+    "xhigh": 19
+   },
+   "record-format": {
+    "medium": 9
+   },
+   "quote-check": {
+    "medium": 26
+   }
+  }
+ },
+ "adhoc_dispatches": [
+  {
+   "type": "general-purpose",
+   "model": "sonnet",
+   "description": "Extract Kaga Hongo rowhouse PDF",
+   "judging": false
+  }
+ ],
+ "adhoc_judging_at_session_effort": 0,
+ "rework": {
+  "guard": {
+   "finished-run:reminded:finished-not-running": 1,
+   "no-poll:rewrote:self-match": 1,
+   "agent-model:permitted:model-named": 1,
+   "batching:reminded:serial-recon-notice": 13,
+   "no-poll:blocked:busy-wait-loop": 1,
+   "check-bundle:permitted:no-repo-path": 1,
+   "agent-model:permitted:pinned-type": 14,
+   "check-bundle:permitted:bundle-named": 13,
+   "house-style:rewrote:corrected-edit": 1,
+   "house-style:rewrote:corrected-command": 1
+  },
+  "verdicts": {
+   "source-reader": {
+    "not-pass": 1
+   },
+   "source-applicability": {
+    "unclear": 8
+   },
+   "general-purpose": {
+    "unclear": 1
+   },
+   "record-format": {
+    "unclear": 2
+   },
+   "quote-check": {
+    "pass": 1,
+    "unclear": 2
+   }
+  },
+  "failed_make_runs": [
+   "cd /diagram/.clones/diagram-exp-e1/.claude/skills/diagram && wc -c research/buildings/910-*; (make record && make citations) 2>&1 | tail -6; make test-file FILE",
+   "cd /diagram/.clones/diagram-exp-e1/.claude/skills/diagram && C=\"env -u MAKEFLAGS -u MAKELEVEL -u RUN -u TASK -u ARM -u ORDER\"; wc -c research/buildings/910-* | "
+  ],
+  "fix_commits": [],
+  "escalations": 0
+ }
+}

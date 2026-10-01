@@ -1,0 +1,33 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "41d2d2cde",
+    "label": "287-start",
+    "utc": "20260929T031041Z"
+  },
+  "binding": "04cdde45831516a1ddf15eba160986129ed7934292cf352bc0a632b075241b0d",
+  "end": {
+    "commit": "6e8322e3a",
+    "label": "287-end",
+    "utc": "20260930T020325Z"
+  },
+  "environment": "local",
+  "feature": "287-placer-guarantees",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "f70424b3-a8eb-45cf-8472-6eb804c5e7c2",
+    "utc": "20260930T021131Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "seeds": {
+      "25": 55.3,
+      "39": 21.7,
+      "4": 24.1,
+      "47": 31.0
+    },
+    "total_pct": 32.5
+  },
+  "note": "The per-stage data contradicts the half-main split. Main 80af74aef differs from 287-start in ONE stage of ONE seed: seed 39 web 0.82 -> 5.8-6.0 s (the straggler pass, 144 _route calls under _link_home_bank). Every other main stage on every seed is at or below start, and seeds 4 and 25 run faster than start (5.0/4.3 s vs 5.8/4.7 s). 287-end does not carry that cost (seed 39 web 1.33 s): feature 287's own route memo in ways/serve.py removed it. So feature 280's fixture forms and larger yards cost nothing measurable here (homesteads on main 0.57-0.64 s vs start 0.54-0.60 s), and essentially all of the +6.8 s is feature 287's. End minus main is +2.4/+3.1/+1.7 s on seeds 4/25/47 (15.15 -> 22.3 s, +47%), and the gross cost is about +8.4 s (+43%) once the memo's saving on seed 39 is set aside. The explanation's own named stages grew about 10.3 s over start (homesteads +3.9, web +2.7, hinterland +2.0, field +1.7) while it claims ~3.2 s. It is silent on the offsets that bring the net down: notice -2.1 s and windbreak -1.2 s (also feature 287's, since main matches start there) and the seed-39 memo saving. Reviewer runs: make perf LABEL=adhoc alternated in detached worktrees at 80af74aef and 6e8322e3a, load 8.0-3.9: main 25.0/24.5 s, end 29.5/26.9 s; profiles of main seed 39 web and end seed 4 homesteads and seed 47 web.",
+  "verdict": "inconsistent"
+}

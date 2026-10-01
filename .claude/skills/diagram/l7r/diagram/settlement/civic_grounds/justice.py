@@ -71,7 +71,7 @@ class JusticeGroundsMixin:
                 lx, ly = tilt_caption_seat(x, y, rot, _t, hw, hh, 9 if label_above else 11, above=label_above)
             else:
                 lx, ly = (x, y - hh - 9) if label_above else (x, y + hh + 11)
-            self.label(lx, ly, label, 9, italic=True, color="#6B5A3C", rot=_t)
+            self.label(lx, ly, label, 9, italic=True, color="#6B5A3C", ref=(x - hw, y - hh, x + hw, y + hh), rot=_t)
 
     def execution_ground(self: Settlement, cx: float, cy: float, rot: float = 0.0, screened: bool | None = None, label: str | None = "execution ground", label_above: bool = False) -> None:  # type: ignore[misc]
         """The EXECUTION GROUND (keijou) - bare waste ground on the road past the settlement's
@@ -157,7 +157,7 @@ class JusticeGroundsMixin:
             # (kiln, tanning yard), whose small glyphs the default below-label can land on
             _t = label_tilt(rot)
             _lx, _ly = tilt_caption_seat(cx, cy, rot, _t, hw, hh, 8 if label_above else 13, above=label_above) if _t else ((cx, cy - hh - 8) if label_above else (cx, cy + hh + 13))
-            self.label(_lx, _ly, label, 11, italic=True, color="#6B5A3C", rot=_t)
+            self.label(_lx, _ly, label, 11, italic=True, color="#6B5A3C", ref=(cx - hw, cy - hh, cx + hw, cy + hh), rot=_t)
 
     def boundary_marker(self: Settlement, x: float, y: float, rot: float = 0.0, label: str | None = "boundary stone", label_xy: Pt | None = None) -> None:  # type: ignore[misc]
         """A DOSOJIN (sae no kami) stone at the settlement's ritual boundary - where the road leaves
@@ -190,4 +190,4 @@ class JusticeGroundsMixin:
             # is the gate throat itself - label_xy hands it to open ground (Nagahara's east gate)
             _t = label_tilt(rot)
             _lx, _ly = label_xy if label_xy else (tilt_caption_seat(x, y, rot, _t, hw, hh, 10) if _t else (x, y + hh + 10))
-            self.label(_lx, _ly, label, 8, italic=True, color="#6B5A3C", rot=_t)
+            self.label(_lx, _ly, label, 8, italic=True, color="#6B5A3C", ref=(x - hw, y - hh, x + hw, y + hh), rot=_t)

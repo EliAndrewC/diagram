@@ -14,7 +14,7 @@ from __future__ import annotations
 from typing import Any
 
 from l7r.diagram.settlement._geom.base import Pt
-from l7r.diagram.settlement._geom.primitives import seg_dist
+from l7r.diagram.settlement._geom.primitives import seg_dist, segments_cross
 
 SLACK = 64.0
 _SOURCES = (("streams", 9.0), ("channels", 2.5), ("field_ditches", 4.2), ("drawn_channels", 2.5))
@@ -58,3 +58,20 @@ def water_index(s: Any) -> WaterIndex:
         cached = (key, WaterIndex(s.M))
         s._water_index_cache = cached
     return cached[1]
+
+
+def crosses_a_stream(house: Pt, part: Pt, streams: Any) -> bool:
+    """Does the straight line from a house to a part of its farmstead cross a reach of any stream - the part on the far bank?
+
+    THE ONE PREDICATE of the same-bank rule (feature 261 FR-013; feature 287, FR-003, homes H01). `streams` is the
+    manifest's stream records (`M["streams"]`); a record with fewer than two points has no reach. It was written twice -
+    `Settlement._parts_across_stream` for the homestead's yard, gardens and shed, and `across_the_brook` for the farm
+    fixtures and persimmons - and a third time by the finished-map test; all three now call this. The two engine
+    copies measured the same thing (a house-to-seat line against every stream segment), so no reading had to be chosen.
+    That the parts share the house's bank is a GUESS recorded in `research/homesteads` (the farmstead's layout)."""
+    for rec in streams:
+        poly = rec.get("poly") or ()
+        for k in range(len(poly) - 1):
+            if segments_cross(house, part, poly[k], poly[k + 1]):
+                return True
+    return False

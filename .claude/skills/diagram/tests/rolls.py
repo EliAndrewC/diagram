@@ -118,13 +118,12 @@ class PoolGen:
 # choice, 2026-09-29) once seed 4 began rolling linear, so this row pins it too; no roll is added or retired.
 REFERENCE = HamletSpec(name="Inashiro", seed=4, households=15, down_deg=90, water_sink="pond", settlement_form="nucleated", fixtures_min={"shrine": 1})  # THE POOL'S BRIEF (feature 215 D1)
 KUWABATA = HamletSpec(name="Kuwabata", seed=21, households=16, down_deg=90, field_archetype="mulberry_dike_fishpond", pond_layout="mosaic", dike_crop="mulberry")
-POLDER_FALL_0 = HamletSpec(name="Polder", seed=12, households=16, field_archetype="polder_grid", down_deg=0)
 COVERAGE: tuple[HamletSpec, ...] = (
     REFERENCE,
     KUWABATA,
-)  # the two shipped maps the gate reads; Polder 19 left at 216, Polder 12 at 219 (GUARD_EDIT_OK: feature 219 - POLDER_FALL_0 stays as the spec the soak tier rolls)
-# THE SEATINGS' PARTIAL ROLL left the gate in feature 217 (GUARD_EDIT_OK: feature 217 - its one unique line is a unit test,
-# tests/hamletgen/homesteads/test_seats.py, and the three seating behavior tests roll it in tests/soak/test_seatings.py).
+)  # the two shipped maps the gate reads; Polder 19 left at 216, Polder 12 at 219 (GUARD_EDIT_OK: feature 287 - POLDER_FALL_0 went with the soak test that rolled it, its behavior now guaranteed at its placers)
+# THE SEATINGS' PARTIAL ROLL left the gate in feature 217 and its soak tests in feature 287 (GUARD_EDIT_OK: feature 287 -
+# the seating's behavior is unit tests of the seating that include the violating case, R8).
 
 # GUARD_EDIT_OK: feature 219 (GM 2026-09-08) - NO ROLL OF THE GATE'S OWN. The reference's row was the immune experiment
 # (one extra random draw at meta() must not move the map, GM 2026-08-08) and the GM retired that requirement: *"I am
@@ -132,7 +131,7 @@ COVERAGE: tuple[HamletSpec, ...] = (
 # and `_perturbed_manifest` went with it. Polder 12's row went on the audit the GM asked for: its three engine lines are
 # unit tests (tests/hamletgen/test_water.py: the reservoir walk and the dike gaps lifted out of `stage_polder`,
 # `fit_polder`'s stop), its five machinery lines are stubs' (tests/pipeline/test_rollcache.py, tests/gate/test_pool.py),
-# and its behavior is the soak tier's (tests/soak/test_polder_fall_0.py). The seatings' row left in 217 the same way.
+# and its behavior is guaranteed at its placers (GUARD_EDIT_OK: feature 287 retired the soak test that rolled it). The seatings' row left in 217 the same way.
 # What the gate's coverage is now: the five shipped generators (rolled cold when their key moved, served warm with
 # their coverage replayed) and unit tests. A `Roll` added from here is judged by 217's rule like any other.
 ROLLS: tuple[Roll, ...] = ()

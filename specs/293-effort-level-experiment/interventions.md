@@ -1,0 +1,94 @@
+# Interventions - feature 293
+
+One line per event (UTC, run id, kind, text). Written by the implementing session; an answer given to one run of a task is
+given, identically, to the other.
+
+- 2026-09-29T21:44:01Z | - | preflight | START (superseded by the re-freeze below) 1044b0372c701fc6a27831f569777b67d47b4f64 (this clone's HEAD with the final rubrics and prompts); SEED 853050; order R: xhigh then medium, I: medium then xhigh - runs e1 R/xhigh, e2 R/medium, e3 I/medium, e4 I/xhigh
+- 2026-09-29T21:44:01Z | - | preflight | sources snapshot /diagram/.clones/.runs-293/sources-snapshot, ledger sha256 8b2c60bbc18d59d2...; fallback offset 1.9 GB (the larger measured, R5 D7)
+- 2026-09-29T21:44:01Z | - | preflight | memory: the shared cgroup's working set read 5.87 GB with other sessions active (a fully quiet host was not available; the gate opens at 4.5 GB, so it CAN open - it read 4.2-4.7 GB through the afternoon)
+- 2026-09-29T21:44:01Z | - | preflight | R8: both future-work entries open at START; main draws no burial-ground way (feature 287's tasks T03/T46 still open)
+- 2026-09-29T21:44:10Z | e1 | wait | launch refused: shared working set 6.09 GB over 4.5 GB; waiting (R5 D7)
+- 2026-09-29T21:53:15Z | e1 | refreeze | the page runner refused R-write.md (no '## Your items' for its write cap to count) before anything ran; the brief gained that section, the launcher now removes the clone on a refusal, and the experiment was re-frozen at a new START with the same SEED (no run had started)
+- 2026-09-29T21:53:16Z | - | preflight | re-freeze: START ec99356cf081c1ac44ae227723edfdcf5675e6f7, SEED 853050 (the same order), snapshot re-taken
+- 2026-09-29T22:03:31Z | e1 | memwatch | warning at 22:03 UTC during the run (8.1 GB raw: diagram 4.7, gm-assistant 3.4); the run continues (R5 D7)
+- 2026-09-29T22:16:18Z | e1 | memwatch | warning at 22:15 UTC during the run (8.5 GB raw: diagram 4.7, gm-assistant 3.8); the run continues
+- 2026-09-29T22:36:45Z | e1 | memwatch | warning at 22:35 UTC during the run (8.8 GB raw: diagram 5.0, gm-assistant 3.8); the run continues
+- 2026-09-29T22:49:49Z | e1 | memwatch | warning at 22:49 UTC during the run (8.1 GB raw: diagram 5.4, gm-assistant 2.3); the run continues
+- 2026-09-29T23:10:15Z | e1 | memwatch | warning at 23:09 UTC during the run (8.0 GB raw: diagram 7.2, gm-assistant 0.8); the run continues
+- 2026-09-29T23:17:44Z | e1 | memwatch | warning at 23:17 UTC during the run (8.0 GB raw: diagram 6.8, gm-assistant 1.2); the run continues
+- 2026-09-29T23:26:05Z | e1 | void | the launcher leaked make's variables (ARM=xhigh, MAKEFLAGS with TASK/RUN/ARM) into the run's environment: the arm was named to the run and two of its make calls failed until it unset them. A harness defect, not the arm's: e1 is void (kept for reference, not graded) and task R at xhigh re-runs as e2; the rest shift to e3 R/medium, e4 I/medium, e5 I/xhigh. The launcher now strips them (tested).
+- 2026-09-30T00:04:54Z | e2 | memwatch | warning at 00:04 UTC during the run (8.1 GB raw: diagram 7.1, gm-assistant 1.0); the run continues
+- 2026-09-30T00:10:01Z | e2 | memwatch | warning at 00:08 UTC during the run (8.2 GB raw); the run continues
+- 2026-09-30T00:10:18Z | e2 | memwatch | shared working set 7.94 GB at 00:09 UTC - another session's gate (diagram-readability, ~10 pytest workers) and a perf snapshot (/tmp/perfb), not the experiment's; e2 (~0.3 GB) continues
+- 2026-09-30T00:48:32Z | e2 | memwatch | warning at 00:47 UTC during the run (8.2 GB raw); the run continues
+- 2026-09-30T00:52:22Z | e2 | memwatch | warning at 00:51 UTC during the run (8.1 GB raw); the run continues
+- 2026-09-30T00:57:35Z | e3 | wait | launch refused: shared working set 4.79 GB over 4.5 GB; waiting (R5 D7)
+- 2026-09-30T01:24:18Z | e3 | memwatch | warning at 01:23 UTC during the run (8.1 GB raw); the run continues
+- 2026-09-30T01:29:02Z | e3 | memwatch | warning at 01:27 UTC during the run (8.1 GB raw); the run continues
+- 2026-09-30T02:29:17Z | e4 | memwatch | warning at 02:28 UTC during the run (8.3 GB raw, diagram 8.1); the run continues
+- 2026-09-30T02:31:22Z | e4 | memwatch | warning at 02:30 UTC during the run (8.2 GB raw); the run continues
+- 2026-09-30T02:32:22Z | e4 | memwatch | warning at 02:31 UTC during the run (8.1 GB raw); the run continues
+- 2026-09-30T02:35:06Z | e4 | memwatch | warning at 02:34 UTC during the run (8.0 GB raw); the run continues
+- 2026-09-30T02:47:16Z | e4 | memwatch | warning at 02:46 UTC during the run (8.3 GB raw); the run continues
+- 2026-09-30T03:43:12Z | e4 | replaced | task I's premise gone at START (280 M68); pre-flight R8 checked the future-work entry, not the engine - the check now confirms the defect on the code; the GM replaced task I with 'Storehouse by house size' (request.md); e4 set aside, not graded; task I re-frozen at its own start; runs e5 I/medium, e6 I/xhigh
+- 2026-09-30T03:43:12Z | - | refreeze | task I re-frozen at 46bfff9cfbb4667360269a079997177ba1e33b66 (its prompt and rubric); task R keeps ec99356cf
+- 2026-09-30T03:48:09Z | - | premise | task I's replacement checked on the code at the one start commit ec99356cf: settlement/houses.py:689 gives the annex by position - `_shed = kind == "plain" and (role == "headman" or self._hjit(x, y, 3.0) < KURA_SHARE)`, KURA_SHARE = 0.125 (houses.py:26); the defect exists, so the task can be done at the original start
+- 2026-09-30T03:48:09Z | - | leak check | START ec99356cf carries this feature directory, whose interventions.md named the runs' arms; e2 and e3 never referenced it (no path under specs/293-effort-level-experiment/ in any of their session or subagent transcripts); from e5 on, the launcher leaves the directory out of every run clone (sparse checkout)
+- 2026-09-30T03:48:09Z | - | refreeze | the separate task-I start (46bfff9cf) withdrawn after review: task I's prompt and rubric are re-frozen by hash and its runs start from ec99356cf, the launcher supplying the frozen files
+- 2026-09-30T03:53:40Z | - | clone | from e5 on, a run clone is a fresh repository holding the start commit alone (git fetch of that commit), the feature directory left out of its tree and main as its origin - nothing later is reachable, reflog included (amendment review round 2); earlier run clones (e1-e4) were full clones whose reflog named the session's tip: the transcripts of e2 and e3 show no git history or feature-directory access
+- 2026-09-30T03:57:10Z | - | push hold | nothing of feature 293 is pushed until the last run has ended: run clones fetch origin/main, and a pushed interventions.md would name the arms to later runs (amendment review round 3's aside)
+- 2026-09-30T03:58:59Z | e5 | wait | launch refused: shared working set 6.41 GB over 4.5 GB; waiting (R5 D7)
+- 2026-09-30T04:28:46Z | e5 | memwatch | warning at 04:28 UTC during the run (8.7 GB raw); the run continues
+- 2026-09-30T04:32:24Z | e5 | memwatch | warning at 04:31 UTC during the run (9.0 GB raw)
+- 2026-09-30T04:36:17Z | e5 | memwatch | warning at 04:35 UTC during the run (8.1 GB raw); the run continues
+- 2026-09-30T04:41:36Z | e5 | memwatch | warning at 04:40 UTC during the run (8.7 GB raw); the run continues
+- 2026-09-30T05:03:49Z | e5 | memwatch | warning at 05:03 UTC during the run (8.0 GB raw); the run continues
+- 2026-09-30T05:09:22Z | e5 | memwatch | warning at 05:08 UTC during the run (8.5 GB raw; a python3 at 1.3 GB)
+- 2026-09-30T05:18:46Z | e5 | memwatch | warning at 05:17 UTC during the run (8.1 GB raw); the run continues
+- 2026-09-30T07:15:38Z | e5 | resume | the session launched a detached make map at 05:26, said it was waiting, and sat idle ~2 h (a headless session has nothing to wake it; the project's stop hook told it so). A harness stall, not the arm's: resumed with the one fixed message (_effort_run.RESUME_MESSAGE); the wait is a pause excluded from its wall-clock. The same message goes to any run that stalls the same way.
+- 2026-09-30T07:16:04Z | e5 | resume | the idle original process (pid 444937) was stopped by hand: the launcher's pgrep read its '--session-id' pattern as an option (fixed: 'pgrep -f -- <pattern>'); it had written nothing since 05:27, so only the resumed process writes the session
+- 2026-09-30T07:18:17Z | e5 | memwatch | warning at 07:17 UTC during the run (8.3 GB raw); the run continues
+- 2026-09-30T07:22:48Z | e5 | memwatch | warning at 07:21 UTC during the run (8.6 GB raw); the run continues
+- 2026-09-30T07:24:52Z | e5 | memwatch | warning at 07:24 UTC during the run (8.1 GB raw); the run continues
+- 2026-09-30T09:14:43Z | e5 | resume | second stall: at 07:29 the session dispatched five settlement-reviews and a perf-audit in the background and ended its turn; all six finished by 07:35 and the headless session was never woken for them (idle ~1.7 h). Resumed with the same fixed message; the wait a pause.
+- 2026-09-30T09:14:53Z | e5 | resume | the first resumed process (pid 1832975, idle since 07:35) stopped by hand - resume's pgrep matched '--session-id' only; it now matches '--resume' too
+- 2026-09-30T10:00:49Z | e5 | resume | third stall: at 09:19 the session left a gate, three reviews and a perf-audit running and ended its turn; all finished by 09:22; not woken (idle ~40 min). Resumed with the same message.
+- 2026-09-30T10:06:40Z | e6 | wait | launch refused: shared working set 5.39 GB over 4.5 GB; waiting (R5 D7)
+- 2026-09-30T10:58:07Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:01:07Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:04:07Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:07:08Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:10:08Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:13:08Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:16:09Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:19:09Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:22:09Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:25:10Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:28:10Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:31:10Z | e6 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T11:32:09Z | e6 | void | launched 10:58 UTC; claude -p exited at once with 'Error: No messages returned from query' and wrote no transcript (an API/harness failure). The three watchdog resume lines above found no session ('No conversation found'). e6 void; task I at xhigh re-runs as e7. The watchdog now reports a run whose session is gone with no result as DIED instead of resuming it.
+- 2026-09-30T11:39:56Z | e7 | memwatch | warning at 11:39 UTC during the run (8.4 GB raw); the run continues
+- 2026-09-30T11:47:45Z | e7 | memwatch | warning at 11:47 UTC during the run (8.4 GB raw); the run continues
+- 2026-09-30T11:59:32Z | e7 | memwatch | warning at 11:59 UTC during the run (8.2 GB raw); the run continues
+- 2026-09-30T13:28:44Z | e7 | memwatch | warning at 13:28 UTC during the run (8.1 GB raw); the run continues
+- 2026-09-30T14:03:09Z | e7 | memwatch | warning at 14:02 UTC during the run (8.1 GB raw); the run continues
+- 2026-09-30T14:37:59Z | - | host | the GM raised the containers' memory cap and changed memwatch to leave out inactive page cache (its warnings were firing on reclaimable cache); no run is waiting to launch, so the 4.5 GB launch threshold (derived from the 9.0 GB cap) is left as recorded
+- 2026-09-30T15:32:03Z | e7 | resume | the session left a cohort run going at 14:57 and ended its turn; the cohort finished and the headless session was not woken (idle ~35 min). The watchdog missed it: the session's own tab-title helper (a sleep loop) counted as work in its clone - fixed. Resumed with the same message by hand.
+- 2026-09-30T17:31:47Z | e7 | resume | the session ended its turn at 15:34 with background work, which finished; not woken (idle ~2 h). The watchdog missed it twice over: its idle test used find -newermt, which this host's find (bfs) rejects, and the memwatch Stop hook's waiting process in the clone counted as work - both fixed. Resumed with the same message by hand.
+- 2026-09-30T17:51:58Z | e7 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T18:16:05Z | e7 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T19:04:19Z | e7 | resume | watchdog: session and everything it started quiet 15 min, nothing running in its clone; resumed with the same message
+- 2026-09-30T19:53:12Z | e7 | sync | e7 reports the clone-sync prompt hook began a sync with origin/main in its clone mid-run and left a conflicted half-merge, which it aborted; checked: no merge commit and no commit but its own in ec99356cf..HEAD (e5 likewise clean)
+- 2026-09-30T20:29:46Z | - | blind | task R blinded with seed 65693; the key under .git/effort-keys/R.json, unopened
+- 2026-09-30T20:30:26Z | - | grading | the session cannot dispatch effort-grader (it loads agents from the /diagram mirror, where the file lands only with the feature); each grader run is a headless claude -p in the bundle directory (outside any repository, so no CLAUDE.md) with the agent file's contract as its system prompt, --model claude-opus-5-5 --effort high, tools Read and Grep - the agent's pinned tier and contract
+- 2026-09-30T20:32:07Z | e7 | landing | main moved on 23 of e7's files (feature 287's 47 engine commits since ec99356cf: seating, lanes, woods, the registry; the straggler pass dropped); the merge conflicts. The landing is a port: a headless session at medium (the GM's default for implementation) in /diagram/.clones/diagram-effort-land, a fresh clone of main, ports e7's core change whole and re-checks each collateral fix against 287's engine; its work is counted apart from both arms (US4 AS3)
+- 2026-09-30T20:36:37Z | e2 | landing | task R's winner (e2, xhigh) landed in this clone: buildings/910 with its 4 source write-ups and 3 glossary terms (numbering free on main), the grader-noted flaws fixed (the sliding partitions labeled a guess; the trimmed translation given its ellipsis) within the 20,000-byte cap (a session comment shortened), the record regenerated, 258 record tests green; its sources-consulted lines appended to the real ledger
+- 2026-09-30T22:21:47Z | e7 | landing | the port session stopped at 20:42 UTC on the session usage limit, mid-work (17 files uncommitted); resumed after the reset with the same effort
+- 2026-09-30T23:04:12Z | e7 | landing | main moved again while the port ran (feature 291, 143 commits; conflicts in bamboo.py, bund.py, a test, the five maps and the assembled homesteads pages); a second headless session at medium merges current main into the landing clone, resolves, re-reviews and gates
+- 2026-09-30T23:09:02Z | - | landing | the research winner landed in this clone; the implementation's merge of current main runs in the landing clone; this clone merges main deliberately at the landing (the prompt hook's automatic sync-in conflicted twice on the engine files the landing clone is resolving)
+- 2026-09-30T23:12:38Z | - | landing | waiting on the landing clone's merge of main
+- 2026-09-30T23:15:18Z | - | landing | waiting on the landing clone's merge of main
+- 2026-10-01T00:05:59Z | e7 | landing | the landing clone merged main (feature 291) green: make done 100%, five maps PASS after review round 4, cohort 51/54 = main's baseline; three engine defects 293's checks exposed in main's row villages fixed; one test loosened (a fixture at its capacity even on main) - an item for the GM in the handoff
+- 2026-10-01T00:07:34Z | - | cleanup | the run clones (e1-e7), the landing clone and the per-run sources copies deleted; every record the report cites is committed in this feature's directory
+- 2026-10-01T00:11:43Z | - | gate | the final gate failed on one test: T20's research boxes unticked - ticked with their basis; the gate re-run
+- 2026-10-01T00:13:28Z | - | gate | make done green (86 s); the feature pushed

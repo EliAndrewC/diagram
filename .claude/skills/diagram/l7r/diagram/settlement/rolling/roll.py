@@ -94,6 +94,10 @@ class RollVillageMixin:
         self._roll_wells(hs)
         self._roll_windbreak(hs, dx, dy)
         self._roll_civic(sk, scale, civic_shrine, dx, dy)
+        # A ROLLED VILLAGE HAS NO WEB SETTLE (feature 287, ways W12): `bridges()` raises on a crossing no deck seats, which the
+        # hamlet's web never hands it because its last pass cuts every such crossing - so the village cuts its lanes by the
+        # SAME predicate first (`undeckable_at`), and an undeckable crossing cannot escape a village roll
+        self.cut_undeckable_lanes()
         self.bridges()  # carry the lanes over any water they cross
         if self.M.get("field_ditches"):  # planks over the long irrigation ditches
             self.channel_footbridges(spacing=300)

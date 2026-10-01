@@ -32,6 +32,7 @@ is given, identically, to the other.
 
 - `tokens`: `{main: {input, output, cache_read, cache_creation}, subagents: {...}, total: {...}}`, plus `result_json_total` and the gap (R3).
 - `wall_clock_s` (first to last event, minus pauses), `tool_calls` by tool, `dispatches` by agent type and model.
+- `effort`: per message, the `effort` each assistant record carries - `main` (the run's sessions) and `subagents` by agent type (R1 P0 (b)).
 - `adhoc_dispatches`: every ad-hoc dispatch not to a defined agent or `adhoc-judge`, with its model and description; `adhoc_judging_at_session_effort`: the count of those on `opus` or judging by their description (R1 D3).
 - `rework`: `guard` (by guard x event x rule), `verdicts` (by agent: pass / not-pass, rounds per subject), `failed_runs` (with the matched
   lines), `fix_commits` (with subjects), `escalations`.
@@ -40,7 +41,7 @@ is given, identically, to the other.
 ## Rubric - `rubrics/research.md`, `rubrics/implementation.md`
 
 Criteria, each with a 0-4 scale anchored in words, a weight, and a pass line (a weighted total and any criterion that must be at least 2).
-Frozen by commit before the first run (spec SC-002); the test `test_effort_rubrics_frozen` (in `test_effort_run.py`) refuses a launch if the
+Frozen by commit before that task's first run - a replaced task's before the replacement's first run (spec SC-002); the test `test_effort_rubrics_frozen` (in `test_effort_run.py`) refuses a launch if the
 rubric files changed since the commit recorded as their freeze.
 
 ## Blinded pair and key
@@ -49,13 +50,13 @@ rubric files changed since the commit recorded as their freeze.
 - The key: `.git/effort-keys/<task>.json` in the implementing session's clone (untracked; `{A: run-id, B: run-id, seed}`), copied to
   `keys/<task>.json` in this directory only after both grades are recorded.
 
-## Grade - `grades/<task>-<grader>.json`
+## Grade - `grades/<task>-<grader>[-<n>].json`
 
-`grader` is `effort-grader` or `gm`; per label, per criterion: score and one-line reason; a preference (`A` / `B` / `tie`) with the criterion
+`grader` is `effort-grader` (numbered runs, `-1`, `-2`: the research review is two runs, amendment of 2026-09-30) or `gm`; per label, per criterion: score and one-line reason; a preference (`A` / `B` / `tie`) with the criterion
 it rests on; free notes on how the two differ.
 
 ## Report - `report.md`
 
-The per-task table (run x: tokens by kind, main vs subagents, wall-clock, tool calls, the rework counts, both grades), the qualitative
+The per-task table (run x: tokens by kind, main vs subagents, wall-clock, tool calls, the rework counts, the research review's two grader runs and the GM's ruling on implementation), the qualitative
 differences, the later defects of the implementation winner, the FR-011 outcome per task type with its arithmetic, the tiers that ran and
 any control unmet, the interventions, the caveats.

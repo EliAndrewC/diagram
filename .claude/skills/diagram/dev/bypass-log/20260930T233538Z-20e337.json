@@ -1,0 +1,6 @@
+{
+  "utc": "20260930T233538Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "headless merge session: the settlement-reviews are dispatched right after this gate, in the foreground, because nothing wakes this session for background work"
+}

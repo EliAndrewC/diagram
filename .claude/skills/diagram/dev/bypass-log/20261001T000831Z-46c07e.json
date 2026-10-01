@@ -1,0 +1,6 @@
+{
+  "utc": "20261001T000831Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "the five hamlet maps are byte-identical to the ones reviewed in the landing clone (review round 4, all PASS, docs/review-ledger.md); no manifest moved since"
+}

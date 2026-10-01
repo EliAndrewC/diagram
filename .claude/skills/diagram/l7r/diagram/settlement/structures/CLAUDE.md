@@ -46,7 +46,7 @@ six call into it and it calls out to none of them:
 | `compounds.py` | `urban.py` | `merchant_estate` -> `building`, `_dims` |
 | `packing.py` | `urban.py` | `pack` -> `try_building`, `_dims`, `_face_street_rot`, `open_face_rot`; `rowpack` -> `building`, `_dims` |
 | `servants.py` | `urban.py` | `servant_ranges` -> `building` |
-| `fixtures.py` | `captions.py` | `place_kosatsuba` -> `label_blockers`, `label_caption_hw`, `label_seat_clear`; `place_punishment_spot` -> `clear_label_seat`, `_under_a_caption` |
+| `fixtures.py` | `captions.py` | `place_kosatsuba` -> `label_obstacles`, `tree_crown_discs` (its caption proved by the one placer, feature 287); `place_punishment_spot` -> `clear_label_seat`, `_under_a_caption` |
 
 ## Three placements you will want to "fix" - each is deliberate
 

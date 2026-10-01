@@ -1,7 +1,15 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.24.0 → 2.25.0
+Version change: 2.26.0 → 2.27.0
+
+Version 2.27.0 (amended 2026-09-30, feature 297): Principle X clause 15 no longer holds a PLACER to identical output - only a
+CHECK that verifies a rule keeps "the index prunes, the exact test decides"; a placer, fill or scatter may decide by a faster
+form and move maps, held to the rules. The GM: "if anything in our project guidelines says that maps can't change when making
+optimizations then we should strike it and say the opposite." MINOR.
+
+Version 2.26.0 (amended 2026-09-12, feature 235): the footnote forms are three - citation, absence, grounds (this entry
+written 2026-09-30; the amendment bumped the footer without one). MINOR.
 
 Version 2.25.0 (amended 2026-09-12, feature 226): Principle XVI's five-round cap is the spec's INITIAL acceptance;
 an amendment made after a FAITHFUL verdict - mid-implementation or later - is re-reviewed on a counter reset to
@@ -1197,8 +1205,18 @@ any single rule is reason enough to refuse "done" status.
     prefilter pattern (`settlement/_geom/indexes.py`): the geometry that
     does not change during the scan is built into an index ONCE - a
     bounding-box prefilter, a grid, a ring index, an outline of the
-    blocked ground - and each candidate asks the index; the index PRUNES
-    and the exact test still DECIDES, so nothing is coarsened. The GM's
+    blocked ground - and each candidate asks the index. In a CHECK that
+    verifies a rule (a gate test) the index PRUNES and the exact test
+    still DECIDES, so no check is coarsened. A PLACER, fill or scatter is
+    not held to that: it may decide by a faster form - a conservative
+    raster of the blocked ground, candidates proposed from a region, a
+    coarser lattice - and maps may move, held to the rules the gate
+    enforces, never to identical output (v2.27.0, GM 2026-09-30, feature
+    297: *"it is perfectly acceptable for maps to change as a result of
+    these optimizations. They do NOT need to remain identical in
+    output"*; *"if anything in our project guidelines says that maps
+    can't change when making optimizations then we should strike it and
+    say the opposite"*). The GM's
     words: *"We will need to take care to make sure that We do not have
     literally every item on the map checking for overlap with literally
     every other item. or anything silly like that"* - a rule that matters
@@ -2246,4 +2264,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.26.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-12
+**Version**: 2.27.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-30

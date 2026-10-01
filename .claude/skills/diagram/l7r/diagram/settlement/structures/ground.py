@@ -99,7 +99,7 @@ class GroundMixin:
             self.M.setdefault("pastures", []).append([[round(p[0], 1), round(p[1], 1)] for p in sm])
             if label:
                 lx, ly = label_xy if label_xy else ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2)
-                self.label(lx, ly, label, 12, italic=True, color="#5C6B3A")
+                self.label(lx, ly, label, 12, italic=True, color="#5C6B3A", ref=(min(xs), min(ys), max(xs), max(ys)))
 
     def _finish_road_label(self: Settlement) -> None:  # type: ignore[misc]
         """Seat and draw the Imperial road's caption in the label phase, by the ONE placer (feature 266): a LINE

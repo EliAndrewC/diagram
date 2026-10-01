@@ -388,9 +388,11 @@ def test_a_rolled_cluster_band_is_sized_in_REAL_FEET_at_the_map_s_grain():
 # were trusted - see specs/117-geom-package/tasks.md T014/T015 for the observed failure text.
 
 # The 89 module-level names of settlement/_geom.py as it stood at the split, by AST census. A
-# FROZEN literal, deliberately: its whole job is to remember a state that no longer exists. One name
-# has since been RETIRED on purpose, not dropped: TORII_PITCH_MAX_SPANS, with the cap-and-band pitch
-# rule it bounded (feature 268, the GM's "All maps, ~10-13 ft").
+# FROZEN literal, deliberately: its whole job is to remember a state that no longer exists. Two names
+# have since been RETIRED on purpose, not dropped: TORII_PITCH_MAX_SPANS, with the cap-and-band pitch
+# rule it bounded (feature 268, the GM's "All maps, ~10-13 ft"); and seg_in_ellipse_core, the field
+# pond's inset core, replaced by `ring_meets_ellipse` when the pond's placer and its test were made to read one
+# predicate on the full rim (feature 287, FR-003).
 _PRE_SPLIT_GEOM_SURFACE = (
     'BUNDLE_PITCH_FT', 'CARRIED_LANDING_FLOOR_FT', 'FLOODED_SHADES', 'GOVERNOR_CAPTION_FS', 'HALL_CAPTION_FS', 'Indexed', 'LABEL_AIR_CAP', 'LABEL_AIR_RINGS', 'LABEL_AIR_STEP', 'LABEL_MIN_AIR',
     'LAND', 'LANDING_FT', 'LANE_CROSSES_MIN_DEG', 'LANE_THROUGH_TOL', 'Manifest', 'PADDY_SHADES', 'PLANK_ABUTMENT', 'PLANK_BANK_REACH', 'PLANK_VILLAGE_REACH', 'PointGrid', 'Poly', 'Pt',
@@ -398,7 +400,7 @@ _PRE_SPLIT_GEOM_SURFACE = (
     '_box_hits_run', '_rect_ring', '_signed_area', '_union_area', 'boxed_grid', 'boxed_hit', 'boxed_polys', 'boxed_seg_hit', 'boxed_segs', 'edge_dist', 'fillet_polyline',
     'forest_frame_span', 'forest_reveal_x', 'indexed_grid', 'kido_bar_deg', 'label_aabb', 'label_quad', 'label_tilt', 'lane_runs', 'lane_through_gate', 'linear_tilt', 'linear_tilt_full',
     'organic_bbox', 'organic_poly', 'paddy_wet_rings', 'point_in_poly', 'point_quad_dist', 'poly_gap', 'quad_hits_poly', 'quad_hits_seg', 'rail_quad', 'rects_overlap', 'region_blocked',
-    'ring_touches', 'rot_rect', 'sat_overlap', 'seg_closest', 'seg_dist', 'seg_in_ellipse_core', 'seg_intersect', 'segments_cross', 'smooth_closed', 'smooth_points', 'stroke_quads',
+    'ring_touches', 'rot_rect', 'sat_overlap', 'seg_closest', 'seg_dist', 'seg_intersect', 'segments_cross', 'smooth_closed', 'smooth_points', 'stroke_quads',
     'tilt_caption_seat', 'torii_halfbox', 'torii_seat_on_wall', 'torii_wall_conflicts', 'tower_quad', 'trough_quad', 'village_population', 'wall_runs', 'ward_interior', 'way_beds',
     'wellhead_quad', 'winding'
 )  # fmt: skip
@@ -775,7 +777,7 @@ def test_nearest_way_bearing_breaks_a_corner_tie_by_manifest_order() -> None:
     equidistant from both segments meeting there, so "the nearest segment" is not unique, and the
     notice board was turned by one reading of that tie and judged against another - square-on by the
     siter's arithmetic, 64 degrees side-on by the check's. First in manifest order wins, both here
-    and in `tests/gate/test_captions_and_boards.py`, which is what makes the two agree."""
+    and in the siter that turns the board by it (labels L12), which is what makes the two agree."""
     from l7r.diagram.settlement import nearest_way_bearing
 
     assert nearest_way_bearing({}, 0.0, 0.0) is None, "no way drawn is None, not a crash"
@@ -856,6 +858,22 @@ def test_keepout_hit_many_equals_hit_point_for_point():
         assert wide.hit_many(*pts, extra).tolist() == [wide.hit(x, y, extra) for x, y in zip(*pts, strict=True)]
 
 
+def test_keepout_hit_many_refuses_the_pad_band_of_an_invalid_ring():
+    """Feature 278 (FR-008): a ring shapely reads as invalid (a bow-tie) is drawn as its even-odd region, and a PAD on
+    it is its own band round the ring's edges - so a point outside the region but within the pad of an edge is refused by
+    `hit_many` exactly as by `hit`, and one past the pad is not."""
+    from l7r.diagram.settlement._geom import KeepoutGrid
+
+    kg = KeepoutGrid()
+    kg.rings([[(300.0, 300.0), (400.0, 400.0), (400.0, 300.0), (300.0, 400.0)]], pad=6.0)  # a padded bow-tie
+    # The lobes are left and right, crossing at (350, 350). (296, 350) and (404, 350) stand 4 ft outside the lobes' outer
+    # edges, in the pad band; (290, 350) and (412, 350) past it; (395, 350) inside the right lobe; (350, 330) in the notch
+    # between the lobes, 14 ft from either diagonal.
+    xs, ys = [296.0, 404.0, 290.0, 412.0, 395.0, 350.0], [350.0, 350.0, 350.0, 350.0, 350.0, 330.0]
+    assert kg.hit_many(xs, ys, (0.0,)).tolist() == [True, True, False, False, True, False], "the band refuses, past it does not"
+    assert kg.hit_many(xs, ys, (0.0,)).tolist() == [kg.hit(x, y, (0.0,)) for x, y in zip(xs, ys, strict=True)]
+
+
 def test_ring_inside_many_equals_inside_point_for_point():
     """Feature 278 (FR-008): the vectorized ring test answers as `inside` - a valid ring, a bow-tie, points on edges and
     vertices."""
@@ -871,3 +889,31 @@ def test_ring_inside_many_equals_inside_point_for_point():
         xs = [rng.uniform(50, 450) for _ in range(5000)] + [p[0] for p in r] + [250.0, 400.0]
         ys = [rng.uniform(50, 450) for _ in range(5000)] + [p[1] for p in r] + [110.0, 350.0]
         assert idx.inside_many(xs, ys).tolist() == [idx.inside(x, y) for x, y in zip(xs, ys, strict=True)]
+
+
+def test_crosses_a_stream_is_the_one_same_bank_predicate() -> None:
+    """Feature 287 T04 (FR-003, homes H01): the same-bank rule written once - the homestead's parts
+    (`_parts_across_stream`), the farm fixtures (`across_the_brook`) and the finished-map test all call it. A part
+    across a brook from its house is across; one on the house's bank, or past the brook's end, is not; a stream record
+    of one point has no reach."""
+    from l7r.diagram.settlement._geom.water_index import crosses_a_stream
+
+    brook = [{"poly": [[100.0, 700.0], [1300.0, 700.0]], "w": 9}, {"poly": [[700.0, 650.0]], "w": 9}]
+    assert crosses_a_stream((700.0, 600.0), (700.0, 800.0), brook) is True
+    assert crosses_a_stream((700.0, 600.0), (760.0, 640.0), brook) is False  # the house's own bank
+    assert crosses_a_stream((1400.0, 600.0), (1400.0, 800.0), brook) is False  # past the brook's end
+    assert crosses_a_stream((700.0, 600.0), (700.0, 800.0), []) is False
+
+
+def test_ring_meets_ellipse_reads_the_full_rim() -> None:
+    """Feature 287 T04 (FR-003, water W29): the field pond's one predicate. A bund 1.5 px inside the rim meets the pond
+    (the retired 3 px inset core let it through); one chording the pond between two outside vertices meets it; one
+    standing wholly in the water meets it; a ring that only touches the rim, or stands clear, does not."""
+    from l7r.diagram.settlement._geom import ring_meets_ellipse
+
+    cx, cy, rx, ry = 50.0, 50.0, 20.0, 10.0
+    assert ring_meets_ellipse([[68.5, 40.0], [90.0, 40.0], [90.0, 60.0], [68.5, 60.0]], cx, cy, rx, ry)  # 1.5 px in
+    assert ring_meets_ellipse([[20.0, 45.0], [80.0, 45.0], [80.0, 30.0], [20.0, 30.0]], cx, cy, rx, ry)  # a chord
+    assert ring_meets_ellipse([[48.0, 48.0], [52.0, 48.0], [52.0, 52.0], [48.0, 52.0]], cx, cy, rx, ry)  # in the water
+    assert not ring_meets_ellipse([[70.0, 40.0], [90.0, 40.0], [90.0, 60.0], [70.0, 60.0]], cx, cy, rx, ry)  # touches
+    assert not ring_meets_ellipse([[0.0, 0.0], [100.0, 0.0], [100.0, 100.0], [0.0, 100.0]], cx, cy, rx, ry)  # the host

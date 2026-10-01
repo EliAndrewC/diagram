@@ -1,0 +1,43 @@
+diff --git a/.claude/skills/diagram/l7r/diagram/settlement/rolling/access.py b/.claude/skills/diagram/l7r/diagram/settlement/rolling/access.py
+index 3a53ad80e..33c6b62c2 100644
+--- a/.claude/skills/diagram/l7r/diagram/settlement/rolling/access.py
++++ b/.claude/skills/diagram/l7r/diagram/settlement/rolling/access.py
+@@ -375,6 +375,11 @@ def round_the_gable(geom: Any, door: Pt, half: float) -> Pt:
+     return (door[0] - ux * t, door[1] - uy * t)
+ 
+ 
++import collections as _co, atexit as _ae, os as _os, sys as _sys
++_C: Any = _co.Counter()
++_ae.register(lambda: _os.environ.get("L7R_STAGE_PROFILE") and print("ACCESS", dict(_C), file=_sys.stderr))
++
++
+ def access_corridor(s: Settlement, geom: Any) -> tuple[Pt, ...] | None:
+     """The corridor this homestead would be admitted with: from a dooryard door to the first of the tree's nearest points
+     that a clear strip reaches (`corridor_clear`) - straight, or, where the tree lies behind the house, from a flank door
+@@ -398,13 +403,16 @@ def access_corridor(s: Settlement, geom: Any) -> tuple[Pt, ...] | None:
+     seen: list[tuple[Pt, ...]] = found[0]
+     more: Iterator[tuple[Pt, ...]] = found[1]
+     k = 0
++    _C["calls"] += 1
+     while True:
+         if k == len(seen):
+             nxt = next(more, None)
+             if nxt is None:
++                _C["none_no_candidate" if k == 0 else "none_all_refused"] += 1
+                 return None
+             seen.append(nxt)
+         corridor = seen[k]
++        _C["cand_examined"] += 1
+         # the leg onto the tree passes unasked where it has no length, as the search passed it; every other leg is asked
+         last = len(corridor) - 2
+         # ...and the ways' ground test of each leg the search asked, after its own fixtures and beds (`standing_ground`)
+@@ -416,7 +424,9 @@ def access_corridor(s: Settlement, geom: Any) -> tuple[Pt, ...] | None:
+             # corridor the tree cannot take lawfully is refused now and the next tried, never found at the web's draw
+             drawn = drawn_corridor(s, corridor, geom)
+             if tree_admits(s, drawn, geom):
++                _C["found"] += 1
+                 return drawn
++            _C["cand_tree_refused"] += 1
+         k += 1
+ 
+ 

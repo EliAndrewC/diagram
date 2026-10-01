@@ -1,0 +1,71 @@
+{
+ "run_id": "e2",
+ "task": "R",
+ "arm": "xhigh",
+ "seed": 853050,
+ "order": 1,
+ "start_commit": "ec99356cf081c1ac44ae227723edfdcf5675e6f7",
+ "clone": "/diagram/.clones/diagram-exp-e2",
+ "started": "2026-09-29T23:26:10Z",
+ "ended": "2026-09-30T00:57:26Z",
+ "pauses": [],
+ "memory_at_launch": {
+  "source": "shared-slice",
+  "working_set_gb": 4.36,
+  "offset_gb": 0.0,
+  "threshold_gb": 4.5,
+  "fresh_warning": ""
+ },
+ "agents_json_sha256": "24263244a3376b800ab3b9caba5c50be0adf746e32a3332b9a08f98683f5cafd",
+ "env": {
+  "L7R_SOURCES_HOME": "/diagram/.clones/.runs-293/e2/sources",
+  "CLAUDE_CODE_EFFORT_LEVEL": "unset",
+  "SPECIFY_FEATURE": "unset"
+ },
+ "shared_state": {
+  "sources_snapshot_sha256": "8b2c60bbc18d59d20f68516400de28734969a44c5679c1d1d49607bf58cec2a6",
+  "claims_sha256_at_start": "80dab9afb5cb6a05eca16bdf4e4876c9f45a46aa719e752b7885cb302368e4ad",
+  "claims_lines_at_start": [
+   "293 | task R in progress (buildings, servants' quarters) | 2026-09-29",
+   "293 | task R (buildings new 910, the servants' rowhouse doors + 7 keys) written, committed in clone, checks owed | 2026-09-29",
+   "293 | task R checked, committed in clone | 2026-09-29",
+   "293 | run e1 ended - claim released | 2026-09-29"
+  ],
+  "claims_release_line": "293 | run e2 ended - claim released | 2026-09-30",
+  "ledger_lines_appended": 73,
+  "prefixes_reserved": [
+   ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary/18720-batten ceiling.json",
+   ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary/18730-ridge tag.json",
+   ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary/18740-south range.json",
+   ".claude/skills/diagram/research/sources/010-works-cited/20240-shinke-nagayamon-kanazawa.html",
+   ".claude/skills/diagram/research/sources/010-works-cited/20250-kochi-hantei-jstage.html",
+   ".claude/skills/diagram/research/sources/010-works-cited/20260-hoppou-shibata-ashigaru.html",
+   ".claude/skills/diagram/research/sources/010-works-cited/20270-qianggen-siheyuan-layout.html"
+  ]
+ },
+ "sessions": [
+  {
+   "brief": "/diagram/.clones/diagram-exp-e2/handoffs/293/R-write.md",
+   "prompt_sha256": "6dd186908dd224e9131161df0d96daff039a7a1fe01fd5dc29515ebfeeea105d",
+   "effort": "xhigh",
+   "log": null
+  },
+  {
+   "brief": "/diagram/.clones/diagram-exp-e2/handoffs/293/R-check.md",
+   "prompt_sha256": "bb63a71b8603ed9b83e43d624d4b6b557e59f12adb40cfc7a65c016600217bb7",
+   "effort": "xhigh",
+   "log": null
+  }
+ ],
+ "argv": [
+  "/diagram/.clones/diagram-exp-e2/scripts/page-session.sh",
+  "/diagram/.clones/diagram-exp-e2/handoffs/293/R-write.md /diagram/.clones/diagram-exp-e2/handoffs/293/R-check.md",
+  "diagram-exp-e2",
+  "",
+  "xhigh",
+  "/diagram/.clones/.runs-293/e2/agents.json"
+ ],
+ "runner_stdout": "page-session: R-write.md\n  session:    29b33302-2b4d-496d-8d1e-62cff1f1ec3d\n  transcript: /home/agent/.claude/projects/-diagram--clones-diagram-exp-e2/29b33302-2b4d-496d-8d1e-62cff1f1ec3d.jsonl\n  log:        /diagram/.clones/diagram-exp-e2/.git/page-sessions/29b33302-2b4d-496d-8d1e-62cff1f1ec3d\npage-session: R-check.md\n  session:    9cbdba2c-7be4-4e03-9858-9538e1eedaa1\n  transcript: /home/agent/.claude/projects/-diagram--clones-diagram-exp-e2/9cbdba2c-7be4-4e03-9858-9538e1eedaa1.jsonl\n  log:        /diagram/.clones/diagram-exp-e2/.git/page-sessions/9cbdba2c-7be4-4e03-9858-9538e1eedaa1\npage-session: started - each result.json is written when its session ends, and the next session begins\npage-session: to be told when the whole queue has ended, run this BACKGROUNDED (run_in_background):\n    until grep -q '^ALL DONE' /diagram/.clones/diagram-exp-e2/.git/page-sessions/run-13bb2de9.log; do sleep 60; done; tail -20 /diagram/.clones/diagram-exp-e2/.git/page-sessions/run-13bb2de9.log\n",
+ "status": "valid",
+ "void_reason": ""
+}

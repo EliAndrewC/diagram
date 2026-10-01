@@ -11,7 +11,7 @@ if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds
     from shapely.ops import unary_union
 
 from .banks import _TOE_MIN_APEX, _TOE_MIN_AREA, _TOE_MIN_THICKNESS, cell_area, dedup_ring, floor_overhang, hem_to_bank, is_chevron, pointed_ring, round_channel_joints
-from .carve import _bund_beans, _carve, _dry_fields
+from .carve import _carve
 from .frame import (
     CANAL_A_FT,
     CANAL_B_FT,
@@ -36,8 +36,11 @@ from .frame import (
     _Thread,
     chan_px,
 )
+from .hem import _comb_dry_and_beans  # the dry hem and the wild middle's reserve, split out at the 1,000-line bar (feature 287, W36)
+from .ring_rules import simple_outline
 from .seams import close_seams
 from .seams.pockets import _outside_command, _water
+from .trunks import DRAIN_MIN_LEG, anchor_trunk_ends, drop_stub_pieces
 
 _SHAPELY_LOADED = False
 
@@ -94,6 +97,7 @@ class CombCarve:
     grain_drift: float
     grain: float
     fan_middle: str = "cleared"  # 269 B07: see `fan_toe_hem`
+    supply_banks: bool = False  # the carve hemmed its bunds onto the supply strokes, so the seam pass holds them to the stroke rule
 
     @property
     def net(self) -> dict[str, Any]:
@@ -158,20 +162,12 @@ def carve_comb(
 
     drain_bank = _drain_bank(F, dpts, grain)  # the ditch's own edge, the one line the field may not cross
     _comb_clip_and_cap(R, F, threads, dpts, drain_bank)
+    _n0 = len(channels)
     _comb_canal_pieces(F, threads, bc, a_pts, offtakes_a, fork, grain, channels)
-    # A PIECE TOO SHORT TO BE A CHANNEL, AND WHY IT STAYS (settlement-review, feature 230 pass 12). Cutting the canals
-    # at the fork and at each offtake leaves a remainder wherever a cut lands near a piece's own end: Inashiro draws a
-    # 3.2 ft stroke of "main" with its own hover region and Mizuguchi a 21.9 ft one that stops under a blunt cap on
-    # the bare hem. Dropping them here - `channels[:] = [c for c in channels if run_length(dedup(c["pts"])) >= 8.0]` -
-    # is one line and was MEASURED, and it is not taken: the channel list feeds the no-build corridors, so removing a
-    # stub frees ground, the homestead packing takes it, and the reference hamlet came back with a garden seated ON a
-    # branch ditch at (2593, 1724) - `features_do_not_overlap`, a real defect in place of a cosmetic one.
-    # What that exposes is the actual bug, and it is a PLACER change rather than a channel one: a garden is tested
-    # against the ditch stretches that run OUTSIDE the field envelope (`hamletgen/water/comb.py` reserves those as
-    # corridors) and against nothing inside it, so any seat freed near an in-field branch is available to it. The fix
-    # is to give the homestead bundle the same in-field channel keep-out the houses already get, which moves every
-    # map's packing and belongs to a feature that can re-review all five. Recorded here so the cheap lever is not
-    # pulled again without the expensive half.
+    # A PIECE TOO SHORT TO BE A CHANNEL IS DROPPED (feature 287, water W56): the remainder a canal cut leaves near a piece's
+    # own end was kept only for the ground it held against a garden, which the bundle fit now keeps off every ditch itself.
+    _kept = {id(c) for c in drop_stub_pieces([c for c in channels[_n0:] if c["role"] == "main"])}
+    channels[_n0:] = [c for c in channels[_n0:] if c["role"] != "main" or id(c) in _kept]
     # SWEEP THE BENDS BEFORE ANYTHING CLEARS GROUND AGAINST THEM (2026-08-17). This used to run
     # after `_carve`, which meant the carve hemmed its bunds onto UN-SWEPT channel centerlines and
     # the sweep then moved the drawn water sideways underneath them - so a bund the carve had
@@ -206,6 +202,7 @@ def carve_comb(
     )
 
     envelope = _comb_floor_and_winding(plots, threads, a_pts, dpts, F)
+    anchor_trunk_ends(channels, envelope, W, H)  # no main or collector end left in bare ground (feature 287, water W15)
 
     _comb_toe_and_hem(plots, dpts, down_deg, plot_across, row_step, grain)
     return CombCarve(
@@ -233,6 +230,7 @@ def carve_comb(
         grain_drift=grain_drift,
         grain=grain,
         fan_middle=fan_middle,
+        supply_banks=supply_banks,
     )
 
 
@@ -262,10 +260,10 @@ def finish_comb(c: CombCarve) -> dict[str, Any]:
     # reconciling the fan before it would have its work undone. Ungated: the hand-authored pool is
     # FROZEN since 2026-08-16, so a new rule no longer needs a byte-stability escape (the retired
     # `grain != 1.0` gate on the old wedge filler was exactly that).
-    close_seams(R, F, plots, envelope, grain, channels, plot_across, row_step, a_pts, dpts, drain_bank)
+    close_seams(R, F, plots, envelope, grain, channels, plot_across, row_step, a_pts, dpts, drain_bank, supply_banks=c.supply_banks)
     acres = sum(_poly_area(p["poly"]) for p in plots) * 4 / 43560  # 1px=2ft -> 4 sq ft/px^2
 
-    dry_plots, dry_acres, bund_bean_runs = _comb_dry_and_beans(
+    dry_plots, dry_acres, bund_bean_runs, dry_reserve = _comb_dry_and_beans(
         R, F, a_pts, bc, plots, channels, W, H, dry_keepout, dry_band, bean_frac, grain, furrow_spread, grain_drift, fan_middle=c.fan_middle, fork=fork
     )
     # furrows_vary tells the checker whether to REQUIRE neighboring dry plots to differ in row direction: a
@@ -286,6 +284,7 @@ def finish_comb(c: CombCarve) -> dict[str, Any]:
         # computing `paddy_grain(ftpx)` for itself would hold a textured fan to a cell it never
         # aimed at.
         "cell": cell_area(plot_across, row_step),
+        "supply_banks": c.supply_banks,  # the rings hem onto the supply strokes, so a later carve holds them to the stroke rule
         "channels": channels,
         "plots": plots,
         "threads": threads,
@@ -295,6 +294,7 @@ def finish_comb(c: CombCarve) -> dict[str, Any]:
         "acres": acres,
         "dry_plots": dry_plots,
         "dry_acres": dry_acres,
+        "dry_reserve": dry_reserve,  # a wild middle's hem, nearest the toe first, for the draw's coarse-grain top-up (W36)
         # THE RUNS ARE THE ENGINE'S OWN STRUCTURE, NEVER RECORDED (feature 247): the draw site drops beads
         # under pond and recorded-ditch water per run and re-flattens; the manifest carries the flat list
         # and the plot rings, from which the gate derives the runs (spec D3).
@@ -625,7 +625,7 @@ def _comb_march(R: random.Random, F: _Frame, DOWN: float, threads: list[_Thread]
     # By default the field grows downhill until the threads leave the map (fills the frame to the low
     # corner, then spills off it). `field_fall` CAPS the downhill depth instead, so the field is sized
     # to the population and BOUNDED within the frame - leaving a low-side margin for the drain's outfall
-    # + brook to discharge into open land (see research/rendering/fields.html 'How our maps size a settlement's farmland'). None = the old fill-to-edge.
+    # + brook to discharge into open land (see research/fields.html 'What is the farmland around a town or a city made of?'). None = the old fill-to-edge.
     f_stop = max(F.to_uf(0, 0)[1], F.to_uf(W, 0)[1], F.to_uf(0, H)[1], F.to_uf(W, H)[1]) + 300
     if field_fall is not None:
         f_stop = min(f_stop, f + field_fall)
@@ -690,10 +690,16 @@ def _comb_drain(R: random.Random, F: _Frame, threads: list[_Thread], W: float, H
         yc = F.to_xy(uc, a_fit + b_fit * uc)[1]
         if yc > H - 40:
             a_fit -= (yc - (H - 40)) / max(0.35, abs(F.d[1]))
+    # THE HEAD ON THE FITTED LINE, NO SAMPLE WITHIN `DRAIN_MIN_LEG` OF THE OUTFALL (feature 287, W13/W14; why: `trunks.DRAIN_MIN_LEG`).
+    # Every draw is still taken, the unused ones discarded, so the random stream is unmoved.
     duf = []
     u = lo_u
     while u < hi_u:
-        duf.append((u, a_fit + b_fit * u + R.uniform(-6, 6)))
+        jitter = R.uniform(-6, 6)
+        if u == lo_u:
+            duf.append((u, a_fit + b_fit * u))
+        elif u < hi_u - DRAIN_MIN_LEG:
+            duf.append((u, a_fit + b_fit * u + jitter))
         u += R.uniform(120, 170)
     duf.append((hi_u, a_fit + b_fit * hi_u))  # the outfall point (drain's downhill end)
     duf.sort(key=lambda q: q[0])
@@ -873,7 +879,7 @@ def _comb_floor_and_winding(plots: list[dict[str, Any]], threads: list[_Thread],
     # ...then merge the near-duplicate vertices the clamp deposits where the cut meets the old
     # boundary (merged-roll review 2026-08-16, Kashikawa: ~12 points with reversals in a ~5 px
     # span at the trim corner) - data hygiene for every later consumer of the ring.
-    envelope = dedup_ring(envelope, 1.0)
+    envelope = simple_outline(dedup_ring(envelope, 1.0))  # ...which cannot merge a fold of points 1-3 px apart (feature 287)
 
     # A BASIN IS SIMPLE AND POSITIVELY WOUND (settlement-review, 2026-08-08). At the fan's corner
     # the outer thread has been clipped at the collector, so `bnd` hands the same clamped point back
@@ -897,88 +903,3 @@ def _comb_floor_and_winding(plots: list[dict[str, Any]], threads: list[_Thread],
             pl["poly"] = _merged
     plots[:] = [pl for pl in plots if _signed_area(pl["poly"]) > 0]
     return envelope
-
-
-def _comb_dry_and_beans(
-    R: random.Random,
-    F: _Frame,
-    a_pts: Poly,
-    bc: _Thread,
-    plots: list[dict[str, Any]],
-    channels: list[dict[str, Any]],
-    W: float,
-    H: float,
-    dry_keepout: Sequence[tuple[float, float, float]],
-    dry_band: tuple[float, float],
-    bean_frac: float,
-    grain: float,
-    furrow_spread: float,
-    grain_drift: float,
-    fan_middle: str,
-    fork: Pt,
-) -> tuple[list[dict[str, Any]], float, list[Poly]]:
-    """DRY FIELDS (hatake) on the uncommanded upslope margin above the supply canal, and
-    BUND BEANS (azemame) beaded along a fraction of the paddy bunds - see research/rendering/fields.html 'How our maps draw bunds between the paddies (aze)'."""
-    # The hem's stand-off is derived from the SUPPLY strokes' drawn banks (`CANAL_BERM_FT`), so the
-    # drawn channels have to be in hand - they are, because this pass runs after `_comb_canal_pieces`
-    # and after `round_channel_joints`, i.e. against the geometry that will actually be painted.
-    _supply_strokes = [c for c in channels if c.get("role") != "drain"]
-    dry_plots = _dry_fields(R, F, a_pts, W, H, dry_keepout, band=dry_band, g=grain, furrow_spread=furrow_spread, grain_drift=grain_drift, supply=_supply_strokes)
-    if fan_middle == "wild":
-        dry_plots = fan_toe_hem(dry_plots, F, fork, plots)
-    if grain != 1.0:
-        # the INTER-ARM FORK TRIANGLE (coarse grains only): the ground between the two supply
-        # canals just below the fork is commanded by neither (it sits upslope of canal B), and
-        # on a village map the scrub matrix textures it - a city map has no scrub, so it read
-        # as the blank wedge the GM circled at every fan head (2026-07-21). Historically it is
-        # prime dry-crop ground beside the head-race, so quilt it: a second hem band along
-        # canal B's SUPPLY stretch, whose upslope normal points INTO the triangle. Village
-        # maps skip this (byte-stability; their scrub already covers the same ground).
-        # ...and the band spans only the stretch that BORDERS the triangle: up to bc's first
-        # offtake, where the paddy bc itself commands begins. When canal B carries offtakes
-        # (every scripted row since 2026-08-16), running the band to ditch_f strings hem plots
-        # along ground that is now carved RICE - Cohort-41 dropped a soy plot square on the
-        # paddy and its delivery ditch that way. With no offtakes the two bounds coincide.
-        _bc_tri_f = min(list(getattr(bc, "offtake_fs", []) or []) + [bc.ditch_f])
-        _bc_supply = [p for p in bc.pts if F.to_uf(*p)[1] <= _bc_tri_f]
-        if len(_bc_supply) >= 2:
-            dry_plots += _dry_fields(
-                R,
-                F,
-                _bc_supply,
-                W,
-                H,
-                dry_keepout,
-                band=(dry_band[0] * 0.6, dry_band[1] * 0.6),
-                g=grain,
-                furrow_spread=furrow_spread,
-                grain_drift=grain_drift,
-                supply=_supply_strokes,
-                tract0=1 + max((p["tract"] for p in dry_plots), default=-1),
-            )  # thinner than the a-side hem: it only needs to cover the fork triangle, and a full-depth band crowds the farmhouse ring off the fan's visible edge
-    dry_acres = sum(_poly_area(p["poly"]) for p in dry_plots) * 4 / 43560
-    return dry_plots, dry_acres, _bund_beans(R, plots, bean_frac, channels=channels)
-
-
-# WHERE A FAN'S DRY BAND LIES (269 B07; research/fields.html 'Dry fields and their crops (hatake)',
-# fields/160). On an alluvial fan the middle, where the river sinks underground, is too short of water for paddy and was
-# often left as coppice or wild ground until late in the early modern period, while the spring-fed toe was settled early
-# with paddy beside it. The record calls that a tendency, not a rule - in old heartlands fans were cleared from early
-# times - so it is a KNOB, `fan_middle` (hamletgen/water/fit.py): "wild" keeps the hem only on the toe's stretch of the
-# fan's edge and leaves the middle to the scrub, "cleared" hems the whole canal as before. The comb IS the fan (its apex
-# is the division point, its toe the collector), so the stretch is read along the fall from the fork to the lowest
-# paddy. The fork-triangle band is the fan's HEAD, not its middle, and stays.
-#   FAN_TOE_FROM   where the toe begins, as a share of the fall from apex to toe. The record names the middle and the
-#                  toe and gives no proportions; equal thirds of head, middle and toe is a GUESS.
-FAN_TOE_FROM = 2.0 / 3.0
-
-
-def fan_toe_hem(dry_plots: list[dict[str, Any]], F: _Frame, fork: Pt, plots: Sequence[dict[str, Any]]) -> list[dict[str, Any]]:
-    """The hem plots that stand on the fan's toe: those whose center lies at least `FAN_TOE_FROM` of the way down the fall
-    from the fork to the lowest paddy vertex. A fan with no fall below its fork keeps its hem."""
-    f0 = F.to_uf(*fork)[1]
-    f1 = max((F.to_uf(float(v[0]), float(v[1]))[1] for p in plots for v in p["poly"]), default=f0)
-    if f1 - f0 <= 0:
-        return dry_plots
-    cut = f0 + (f1 - f0) * FAN_TOE_FROM
-    return [d for d in dry_plots if F.to_uf(sum(v[0] for v in d["poly"]) / len(d["poly"]), sum(v[1] for v in d["poly"]) / len(d["poly"]))[1] >= cut]

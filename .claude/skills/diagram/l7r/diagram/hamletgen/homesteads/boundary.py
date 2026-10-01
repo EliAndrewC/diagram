@@ -28,9 +28,11 @@ if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds
 
 from l7r.diagram.settlement._geom.indexes import PointGrid, RingIndex
 from l7r.diagram.settlement._geom.primitives import FIELD_KEEPOUT_EPS, facing_chains, seg_dist
+from l7r.diagram.settlement.land.wet import marsh_ground
+from l7r.diagram.settlement.rolling.fit import FIELD_REACH_FT
 from l7r.diagram.sitegen.geom import crop_polys
 
-from ..consts import WEB_HARD_GAP, WEB_REACH_FT
+from ..consts import BUNDLE_PITCH, WEB_HARD_GAP, WEB_REACH_FT
 
 if TYPE_CHECKING:
     from l7r.diagram.settlement import Settlement
@@ -77,6 +79,12 @@ def _ellipse_poly(cx: float, cy: float, rx: float, ry: float) -> list[tuple[floa
 
 
 Seg = tuple[tuple[float, float], tuple[float, float], float]
+
+
+def _prepare(geom: Any) -> None:
+    import shapely
+
+    shapely.prepare(geom)
 
 
 def site_boundary(s: Settlement, seat: tuple[float, float]) -> tuple[list[list[Any]], tuple[list[Seg], list[Seg]], tuple[list[list[tuple[float, float]]], list[list[tuple[float, float]]]]]:
@@ -145,12 +153,19 @@ def site_boundary(s: Settlement, seat: tuple[float, float]) -> tuple[list[list[A
     fields = [Polygon([(float(v[0]), float(v[1])) for v in poly]) for poly in s.field_polys if len(poly) >= 3]
     fields = [f if f.is_valid else f.buffer(0) for f in fields]
     covered = unary_union([*fields, *([blob] if blob is not None and not blob.is_empty else [])]) if fields or (blob is not None and not blob.is_empty) else None
+    # the cultivated ground grown by a clearance is built ONCE per clearance, prepared, and asked of every segment kept at
+    # it (seed 44: 6,702 buffers of the whole union, one per segment, for a handful of clearances)
+    grown: dict[float, Any] = {}
     for dest, courses in ((water, [(poly, float(hw)) for poly, hw, _bbox in s._water_obstacles()]), (registered, [(pts, float(clr)) for pts, clr, *_ in s.corridors if len(pts) >= 2])):
         for pts, clr in courses:
             for k in range(len(pts) - 1):
                 a, b = (float(pts[k][0]), float(pts[k][1])), (float(pts[k + 1][0]), float(pts[k + 1][1]))
-                if covered is not None and covered.buffer(clr).covers(LineString([a, b])):
-                    continue
+                if covered is not None:
+                    if clr not in grown:
+                        grown[clr] = covered.buffer(clr)
+                        _prepare(grown[clr])
+                    if grown[clr].covers(LineString([a, b])):
+                        continue
                 dest.append((a, b, clr))
     corridors = (water, registered)
     return chains, corridors, (rings, holes)
@@ -195,7 +210,10 @@ class SiteCorridors:
         # ONE LOOKUP FOR ALL THE POINTS (feature 276): every point lies in the points' own box, so the items the grid returns
         # for that box include every item near any one of them - nine lookups a rectangle were 320,469 on the rescue
         # scenario. The same distance and containment tests decide.
-        if any(seg_dist(x, y, a, b) < clr for a, b, clr, _x0, _y0, _x1, _y1 in self.full.near(cx_, cy_, pad) for x, y in pts):
+        # ...and a point outside an item's box, widened by its clearance, stands farther than the clearance: it is passed
+        # without the distance (feature 287 perf: 138,229 distances on the reference seed 4's seating, most of them points
+        # the box already answers for)
+        if any(x0 <= x <= x1 and y0 <= y <= y1 and seg_dist(x, y, a, b) < clr for a, b, clr, x0, y0, x1, y1 in self.full.near(cx_, cy_, pad) for x, y in pts):
             return True
         seen: set[int] = set()
         for ring, verts, bx0, by0, bx1, by1 in self.rings.near(cx_, cy_, pad):
@@ -217,6 +235,26 @@ def _vertex_grid(ring: Any) -> PointGrid:
     return grid
 
 
+#: The side of a block of `FreeGround` cells asked as one box before its cells are (`FreeGround.__init__`), in cells.
+_BLOCK_CELLS = 8
+
+
+class EdgeSamples:
+    """A line's samples the raster left to be asked (`FreeGround.lines_edge_points`), kept as arrays and turned into points
+    only when they are asked: most corridors are refused by something else first."""
+
+    __slots__ = ("xs", "ys")
+
+    def __init__(self, xs: Any, ys: Any) -> None:
+        self.xs, self.ys = xs, ys
+
+    def __iter__(self) -> Any:
+        return zip(self.xs.tolist(), self.ys.tolist(), strict=True)
+
+    def __len__(self) -> int:
+        return len(self.xs)
+
+
 class FreeGround:
     """The site's STATIC ground a homestead may not take, as a raster of SURELY TAKEN cells (feature 276, FR-003, plan D9).
 
@@ -230,7 +268,7 @@ class FreeGround:
 
     Where no site boundary is installed there is no FreeGround (the placer asks the placed-box index alone)."""
 
-    __slots__ = ("cell", "taken", "x0", "y0")
+    __slots__ = ("_state", "cell", "clear", "nx", "ny", "taken", "x0", "y0")
 
     def __init__(self, chains: Any, corridors: Any, outline: Any, bounds: tuple[float, float, float, float], cell: float = 8.0) -> None:
         _load_shapely()
@@ -254,26 +292,117 @@ class FreeGround:
         water, _registered = corridors
         parts += [LineString([a, b]).buffer(clr) for a, b, clr in water if clr > 0]
         self.taken: set[tuple[int, int]] = set()
-        if not parts:
-            return
-        region = unary_union(parts).buffer(-0.5)
-        if region.is_empty:
-            return
-        shapely.prepare(region)
         nx_, ny_ = int((x1 - x0) // cell) + 1, int((y1 - y0) // cell) + 1
-        keys = [(i, j) for i in range(nx_) for j in range(ny_)]
-        cells = shapely.box([x0 + i * cell for i, _ in keys], [y0 + j * cell for _, j in keys], [x0 + (i + 1) * cell for i, _ in keys], [y0 + (j + 1) * cell for _, j in keys])
-        inside = shapely.contains(region, cells)
-        self.taken = {k for k, t in zip(keys, inside.tolist(), strict=True) if t}
+        self.nx, self.ny = nx_, ny_
+        self._state: Any = None
+        # ...AND THE SURELY CLEAR CELLS (feature 287): a cell no point of which the same union, GROWN by half a pixel,
+        # reaches - every test of `_site_blocks_rect`'s points passes a point there. The seating's corridors are sampled
+        # every 8 px against the same tests (`access.on_site_ground`, seed 44: 6.7 million points), and a sample in a
+        # clear cell or a taken one needs no test; only a sample in a cell the union's edge crosses is asked.
+        self.clear: set[tuple[int, int]] = set()
+        if not parts:
+            self.clear = {(i, j) for i in range(nx_) for j in range(ny_)}
+            return
+        union = unary_union(parts)
+        grown = union.buffer(0.5)
+        shapely.prepare(grown)
+        region = union.buffer(-0.5)
+        if not region.is_empty:
+            shapely.prepare(region)
+        # BLOCKS OF CELLS FIRST (feature 287): a block the grown union misses holds only clear cells, and a block the
+        # shrunk union contains only taken ones - so only the cells of a block the union's edge crosses are asked one by
+        # one. The same two tests decide every cell; a block only answers for cells inside it (seed 44: four boundaries of
+        # 100,000-odd cells each, asked every cell twice).
+        blk = _BLOCK_CELLS
+        ni, nj = (nx_ + blk - 1) // blk, (ny_ + blk - 1) // blk
+        bkeys = [(bi, bj) for bi in range(ni) for bj in range(nj)]
+        bw = blk * cell
+        blocks = shapely.box([x0 + bi * bw for bi, _ in bkeys], [y0 + bj * bw for _, bj in bkeys], [x0 + (bi + 1) * bw for bi, _ in bkeys], [y0 + (bj + 1) * bw for _, bj in bkeys])
+        missed = shapely.disjoint(grown, blocks).tolist()
+        held = shapely.contains(region, blocks).tolist() if not region.is_empty else [False] * len(bkeys)
+        ask: list[tuple[int, int]] = []
+        for (bi, bj), m, h in zip(bkeys, missed, held, strict=True):
+            inner = [(i, j) for i in range(bi * blk, min(nx_, (bi + 1) * blk)) for j in range(bj * blk, min(ny_, (bj + 1) * blk))]
+            if m:
+                self.clear.update(inner)
+            elif h:
+                self.taken.update(inner)
+            else:
+                ask += inner
+        if not ask:
+            return
+        cells = shapely.box([x0 + i * cell for i, _ in ask], [y0 + j * cell for _, j in ask], [x0 + (i + 1) * cell for i, _ in ask], [y0 + (j + 1) * cell for _, j in ask])
+        self.clear.update(k for k, t in zip(ask, shapely.disjoint(grown, cells).tolist(), strict=True) if t)
+        if not region.is_empty:
+            self.taken.update(k for k, t in zip(ask, shapely.contains(region, cells).tolist(), strict=True) if t)
 
     def point_taken(self, x: float, y: float) -> bool:
         return (int((x - self.x0) // self.cell), int((y - self.y0) // self.cell)) in self.taken
+
+    def point_clear(self, x: float, y: float) -> bool:
+        """Does (x, y) stand in a cell every point of which the site's ground tests pass?"""
+        return (int((x - self.x0) // self.cell), int((y - self.y0) // self.cell)) in self.clear
+
+    def lines_edge_points(self, lines: Any) -> list[EdgeSamples | None]:
+        """For each line `(a, b, n)`, its `n + 1` points `a + (b - a) * k / n`: None where one stands in a surely taken
+        cell, else those standing in neither a taken nor a clear cell - the only ones the ground tests must still be asked
+        of. Every line asked of the raster in one array: the seating asks a homestead's whole corridor search at once
+        (seed 44: 130,000 lines of up to a hundred samples each, each asked alone)."""
+        import numpy as np
+
+        if self._state is None:
+            state = np.zeros((self.nx, self.ny), dtype=np.int8)  # 0: the edge's cells, and any outside the grid
+            for i, j in self.clear:
+                state[i, j] = 2
+            for i, j in self.taken:
+                state[i, j] = 1
+            self._state = state
+        if not lines:
+            return []
+        ax, ay, bx, by, nf0 = np.array([(a[0], a[1], b[0], b[1], n) for a, b, n in lines], dtype=np.float64).T
+        dx, dy, ns = bx - ax, by - ay, nf0.astype(np.int64)
+        # EVERY FOURTH SAMPLE FIRST: a refused corridor crosses taken ground for samples running, and the lines it refuses
+        # are left out of the whole count below (the samples are the same points, `a + (b - a) * k / n`)
+        line, xs, ys, st = self._samples(np, ax, ay, dx, dy, ns, np.arange(len(lines)), 4)
+        refused = np.bincount(line[st == 1], minlength=len(lines)) > 0
+        line, xs, ys, st = self._samples(np, ax, ay, dx, dy, ns, np.nonzero(~refused)[0], 1)
+        refused |= np.bincount(line[st == 1], minlength=len(lines)) > 0
+        edge = np.nonzero(st == 0)[0]
+        ex, ey = xs[edge], ys[edge]
+        cut = np.searchsorted(line[edge], np.arange(len(lines) + 1)).tolist()  # the samples are in line order
+        return [None if r else EdgeSamples(ex[cut[n] : cut[n + 1]], ey[cut[n] : cut[n + 1]]) for n, r in enumerate(refused.tolist())]
+
+    def _samples(self, np: Any, ax: Any, ay: Any, dx: Any, dy: Any, ns: Any, which: Any, step: int) -> tuple[Any, Any, Any, Any]:
+        """The samples `k = 0, step, 2 step, ...` (up to `n`) of the lines `which`: (their line, x, y, raster state)."""
+        counts = ns[which] // step + 1
+        line = np.repeat(which, counts)
+        k = ((np.arange(len(line)) - np.repeat(np.cumsum(counts) - counts, counts)) * step).astype(np.float64)
+        nf = ns.astype(np.float64)[line]
+        xs = ax[line] + dx[line] * k / nf
+        ys = ay[line] + dy[line] * k / nf
+        i = np.floor_divide(xs - self.x0, self.cell).astype(np.int64)
+        j = np.floor_divide(ys - self.y0, self.cell).astype(np.int64)
+        inside = (i >= 0) & (i < self.nx) & (j >= 0) & (j < self.ny)
+        st = np.zeros(len(line), dtype=np.int8)
+        st[inside] = self._state[i[inside], j[inside]]
+        return line, xs, ys, st
 
     def rect_refused(self, rect: Any) -> bool:
         """Is one of the nine points `_site_blocks_rect` asks of this (cx, cy, w, h) rectangle in a surely-taken cell?"""
         cx, cy, w, h = rect
         x0, y0, x1, y1 = cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2
         return any(self.point_taken(px, py) for px, py in ((x0, y0), (x1, y0), (x1, y1), (x0, y1), (cx, y0), (x1, cy), (cx, y1), (x0, cy), (cx, cy)))
+
+
+def free_ground_bounds(chains: Any, reach: float, W: float, H: float) -> tuple[float, float, float, float]:
+    """The box FreeGround's grid covers: the paddy chords' extent grown by `reach`, inside the canvas (feature 287, homes
+    H31). No seat is offered past the field's reach (`within_field_reach`), and a cell outside the grid is only never
+    PRUNED - the fit test still asks it - so the box bounds the cost, never the answer. The canvas grew for the seat's
+    room and the belt's; gridding all of it doubled the grid for ground no seat can reach."""
+    pts = [p for ch in chains or () for a, b, _n in ch for p in (a, b)]
+    if not pts:
+        return (0.0, 0.0, W, H)
+    return (max(0.0, min(p[0] for p in pts) - reach), max(0.0, min(p[1] for p in pts) - reach), min(W, max(p[0] for p in pts) + reach), min(H, max(p[1] for p in pts) + reach))
 
 
 class UnreachableGround:
@@ -318,7 +447,7 @@ def web_hard_ground(s: Settlement, plan: SitePlan) -> list[Any]:
     envelope, the crops, the toe band (asked before it is drawn), the wet ground. A marsh drawn later is simply absent,
     which only refuses less."""
     toe = [(float(a), float(b)) for a, b in (s.toe_band() or [])]
-    wet = [[(float(a), float(b)) for a, b in m["poly"]] for m in s.M.get("marshes", []) if m.get("role") != "defense" and m.get("poly")]
+    wet = marsh_ground(s.M, but=("defense",))
     env = list(getattr(plan, "envelope", None) or [])  # a plan with no field envelope contributes none
     return [*([env] if len(env) >= 3 else []), *crop_polys(s), *([toe] if len(toe) >= 3 else []), *wet]
 
@@ -340,7 +469,7 @@ def install_site_boundary(s: Settlement, plan: SitePlan) -> None:
     chains, corridors, outline = site_boundary(s, seat)
     s._site_chains = chains
     s._site_corridors = SiteCorridors(corridors, outline)
-    s._free_ground = FreeGround(chains, corridors, outline, (0.0, 0.0, float(s.W), float(s.H)))
+    s._free_ground = FreeGround(chains, corridors, outline, free_ground_bounds(chains, s.px(FIELD_REACH_FT) + 2.0 * BUNDLE_PITCH, float(s.W), float(s.H)))
     s._unreachable = UnreachableGround(web_hard_ground(s, plan))
     s.M["site_boundary"] = {
         "chords": [[[round(a[0], 1), round(a[1], 1)], [round(b[0], 1), round(b[1], 1)], [round(n[0], 4), round(n[1], 4)]] for ch in chains for a, b, n in ch],
