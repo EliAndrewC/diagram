@@ -642,5 +642,7 @@ def test_a_reserved_seats_re_seat_is_asked_again_at_the_records_grain_and_droppe
     monkeypatch.setattr(GroveBlocks, "exact_clear", lambda self, x, y: (x, y) != (round(x, 1), round(y, 1)))
     s = _hamlet()
     s.M["houses"] = [{"x": 600.0, "y": 520.0, "w": 30.0, "h": 24.0, "rot": 0}]
-    s.village_grove([(500.0, 400.0), (700.0, 400.0), (700.0, 560.0), (500.0, 560.0)], role="copse", dense=True, near=([(100.0, 100.0)], 10.0), seats=[seat], seat_near=([(600.0, 520.0)], 400.0, []))  # dense: a local obstacle re-seats
+    s.village_grove(
+        [(500.0, 400.0), (700.0, 400.0), (700.0, 560.0), (500.0, 560.0)], role="copse", dense=True, near=([(100.0, 100.0)], 10.0), seats=[seat], seat_near=([(600.0, 520.0)], 400.0, [])
+    )  # dense: a local obstacle re-seats
     assert not any(c == list(seat) for g in s.M.get("village_groves") or [] for c in g.get("clumps") or [])
