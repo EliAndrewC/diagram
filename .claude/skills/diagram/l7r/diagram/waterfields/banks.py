@@ -288,16 +288,50 @@ def hem_to_bank(ring: Poly, dpts: Poly, down_deg: float, w0: float, w1: float) -
     thin-plot drop. The move is along the FALL, so a lifted vertex slides up its own column and the
     parcel keeps its shape."""
     dv = (math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg)))
-    cum = polyline_cum(dpts)
+    if not ring or len(dpts) < 2:
+        return list(ring)
+    # EVERY VERTEX AT ONCE (feature 297, FR-007 - the GM's "12,000 drain-bank clearance checks"): the predicate
+    # `drain_bank_clearance` asks per vertex, as one array computation over the ring's vertices and the collector's segments
+    gap, need, lean, past = drain_bank_clearance_many(ring, dpts, dv, w0, w1, polyline_cum(dpts))
     out: Poly = []
-    for q in ring:
-        gap, need, lean, past = drain_bank_clearance(q, dpts, dv, w0, w1, cum)
-        if past or gap >= need or lean < 0.2:  # clear, off the collector's span, or a drain running WITH the fall
+    for k, q in enumerate(ring):
+        if past[k] or gap[k] >= need[k] or lean[k] < 0.2:  # clear, off the collector's span, or a drain running WITH the fall
             out.append(q)
             continue
-        shift = (need - gap) / lean
+        shift = (need[k] - gap[k]) / lean[k]
         out.append((round(q[0] - dv[0] * shift, 1), round(q[1] - dv[1] * shift, 1)))
     return out
+
+
+def drain_bank_clearance_many(qs: Poly, dpts: Poly, dv: Pt, w0: float, w1: float, cum: list[float]) -> tuple[list[float], list[float], list[float], list[bool]]:
+    """`drain_bank_clearance` for many points against one collector, as numpy arrays (feature 297): the same nearest segment
+    (the first of equals, as the loop's strict `<` kept), the same signed gap, need, lean and past, per point, as lists."""
+    import numpy as np
+
+    q = np.asarray([(float(p[0]), float(p[1])) for p in qs])
+    a = np.asarray([(float(p[0]), float(p[1])) for p in dpts[:-1]])
+    v = np.asarray([(float(dpts[i + 1][0]) - float(dpts[i][0]), float(dpts[i + 1][1]) - float(dpts[i][1])) for i in range(len(dpts) - 1)])
+    vv = (v * v).sum(1)
+    vv = np.where(vv == 0.0, 1.0, vv)
+    t = ((q[:, None, 0] - a[None, :, 0]) * v[None, :, 0] + (q[:, None, 1] - a[None, :, 1]) * v[None, :, 1]) / vv[None, :]
+    tc = np.clip(t, 0.0, 1.0)
+    sx, sy = a[None, :, 0] + tc * v[None, :, 0], a[None, :, 1] + tc * v[None, :, 1]
+    d = np.hypot(q[:, None, 0] - sx, q[:, None, 1] - sy)
+    i = d.argmin(1)  # the first minimum, as the loop's strict `<` kept the first
+    rows = np.arange(len(q))
+    seg_len = np.hypot(v[:, 0], v[:, 1])
+    arc = np.asarray(cum[:-1])[i] + tc[rows, i] * seg_len[i]
+    n = len(dpts) - 2
+    past = ((i == 0) & (t[rows, i] < 0.0)) | ((i == n) & (t[rows, i] > 1.0))
+    nl = np.where(seg_len == 0.0, 1.0, seg_len)
+    nx, ny = -v[:, 1] / nl, v[:, 0] / nl
+    flip = nx * dv[0] + ny * dv[1] < 0  # points UP-fall, off the ditch
+    nrx, nry = np.where(flip, nx, -nx)[i], np.where(flip, ny, -ny)[i]
+    gap = (q[:, 0] - sx[rows, i]) * nrx + (q[:, 1] - sy[rows, i]) * nry
+    total = cum[-1] or 1.0
+    need = [taper_w(w0, w1, float(s) / total) / 2 + BANK_MARGIN for s in arc]
+    lean = -(dv[0] * nrx + dv[1] * nry)
+    return gap.tolist(), need, lean.tolist(), past.tolist()
 
 
 # A paddy plot's minimum THICKNESS (inradius proxy 2A/P) as a fraction of `plot_across`.

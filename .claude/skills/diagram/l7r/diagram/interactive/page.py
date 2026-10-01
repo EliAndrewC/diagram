@@ -831,6 +831,12 @@ def render_page(
     wrapped = [wrap(s, t, premerged=i in blades) for i, (s, t) in enumerate(zip(strings, tags, strict=True))]
     if within is not None:
         wrapped = [part_of(w, ks) for w, ks in zip(wrapped, within, strict=True)]
+    # THE PICTURE STARTS NOW (feature 297, FR-006 - the GM: "could that be done in parallel"): it reads the drawn ink without
+    # its text, and the hit regions and the hit layer added below are invisible (`fill="none"`), so it is rendered from the
+    # wrapped strings as they stand while this thread builds the regions, the hit layer and the explanations; the id map, which
+    # reads the class groups the regions sit in, starts once they are in. `finish()` already runs the PNG beside both.
+    pool = ThreadPoolExecutor(max_workers=2) if raster_wanted(with_raster, vb) else None
+    f_pic = pool.submit(raster.picture, raster.without_text("\n".join(wrapped).replace("<svg ", '<svg id="map" ', 1))) if pool is not None else None
     # the hit regions go right after the SHEET (the first "-"-tagged string), under everything drawn
     sheet = next((i for i, t in enumerate(tags) if t == NOT_HIGHLIGHTED), 0)
     # THE MARKS' REGIONS GO FIRST, the recorded footprints ABOVE them (GM 2026-09-27: over the windbreak "if I hit a
@@ -871,22 +877,10 @@ def render_page(
     # the picture carries NO TEXT (feature 201): every <text> stays vector in both modes, so the scale and
     # the placard's name are the browser's font once, never resvg's under Chrome's - `raster.without_text`
     pic = None
-    if raster_wanted(with_raster, vb):
-        # THE PICTURE AND THE ID MAP RENDER AT THE SAME TIME (feature 222, GM 2026-09-11: "running the three renders
-        # concurrently instead of in sequence"): each is a resvg subprocess this process only waits on (the picture
-        # then its encode child), so two threads overlap them; the PNG is the third, started by `finish()` as soon
-        # as the .svg is written. Same inputs, same bytes, only the waiting overlaps.
-        with ThreadPoolExecutor(max_workers=2) as pool:
-            f_pic = pool.submit(raster.picture, raster.without_text(svg))
-            f_id = pool.submit(raster.id_map, svg, raster.class_keys(svg), within is not None)
-        pic = f_pic.result()
-        idpng, palette = f_id.result()
-    if pic is not None and vb is not None:
-        assert idpng is not None, "resvg rendered the picture and not the id map"
-        raster_payload = {"r": raster.RASTER_R, "step": raster.PALETTE_STEP, "palette": palette, "picture": raster.data_uri(raster.PICTURE_MIME, pic), "idmap": raster.data_uri("image/png", idpng)}
-        image = f'<g class="raster"><image id="raster" x="{vb[0]:g}" y="{vb[1]:g}" width="{vb[2]:g}" height="{vb[3]:g}" style="pointer-events: none"/></g>'
-        at = svg.find('<g class="f ')
-        svg = svg[:at] + image + svg[at:] if at != -1 else svg.replace("</svg>", image + "</svg>", 1)
+    # THE PICTURE AND THE ID MAP RENDER AT THE SAME TIME (feature 222, GM 2026-09-11: "running the three renders concurrently
+    # instead of in sequence"): each is a resvg subprocess this process only waits on, so two threads overlap them - and since
+    # feature 297 this thread's own work (the explanations, the place card, the defaults) runs while they render.
+    f_id = pool.submit(raster.id_map, svg, raster.class_keys(svg), within is not None) if pool is not None else None
     data = explanations(present, notes, registry, caveat_lead)
     # THE PLACE CARD rides in the same map, under the placard's own reserved key, so the page opens it
     # through the one modal every other feature uses (feature 156). None for a tier the vocabulary does
@@ -905,6 +899,18 @@ def render_page(
     # ...AND THE FARMSTEAD GROVE'S SIDES AND WHY (feature 291, FR-009): the settlement's own roll, read from the map.
     if HOMESTEAD_GROVE in data and not data[HOMESTEAD_GROVE]["on_this_map"]:
         data[HOMESTEAD_GROVE]["on_this_map"] = homestead_grove_default(meta or {})
+    if pool is not None and f_pic is not None and f_id is not None:
+        try:
+            pic = f_pic.result()
+            idpng, palette = f_id.result()
+        finally:
+            pool.shutdown()
+    if pic is not None and vb is not None:
+        assert idpng is not None, "resvg rendered the picture and not the id map"
+        raster_payload = {"r": raster.RASTER_R, "step": raster.PALETTE_STEP, "palette": palette, "picture": raster.data_uri(raster.PICTURE_MIME, pic), "idmap": raster.data_uri("image/png", idpng)}
+        image = f'<g class="raster"><image id="raster" x="{vb[0]:g}" y="{vb[1]:g}" width="{vb[2]:g}" height="{vb[3]:g}" style="pointer-events: none"/></g>'
+        at = svg.find('<g class="f ')
+        svg = svg[:at] + image + svg[at:] if at != -1 else svg.replace("</svg>", image + "</svg>", 1)
     blob = json.dumps({"classes": data, "glossary": glossary_for(data), "raster": raster_payload}, ensure_ascii=False).replace("</", "<\\/")
     title = html.escape(name)
     # NO HEADER ON THE PAGE (GM 2026-08-28: "we can get rid of the entire header") - the map already
