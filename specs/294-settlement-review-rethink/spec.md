@@ -306,3 +306,5 @@ change when it is built.
   faithful; SC-002's new clause dropped FR-006's "unless a check needs it as input" exception and named an undefined "unit";
   SC-008 narrowed User Story 8's cheaper tier to Sonnet and recorded outside the ledger. Addressed: both replaced with the
   reviewer's wording.
+- Amendment pass, round 3 (spec-fidelity-verify, 2026-10-01): FAITHFUL - SC-002's FR-006 clause keeps the as-input exception
+  and names "element"; SC-008 names both cheaper tiers and records in the ledger and the tier table. The amendment is accepted.
