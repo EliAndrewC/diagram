@@ -1,0 +1,13 @@
+{
+ "shrine-torii-bar-gap": {
+  "answers": "78951d5b64a0",
+  "note": "the round-1 error (one unbroken run 4.9-7.1, the bars merged) answered: the nuki moved to ty + 1.8 at 0.8 stroke, the posts to ty + 3.2",
+  "quantity": "the red runs down the torii's axis between its posts, in ft below the shrine's center",
+  "source": "the drawn ink: inashiro.svg's household-shrine group (translate 2142.4,2091.9), rendered at 12x by resvg and walked at the axis (red = r>130, g<90, b<80)",
+  "subject": "glyph-check--household-shrine",
+  "taken": "2026-10-01",
+  "unit": "ft",
+  "value": "two runs, 4.83-6.42 (the lintel) and 7.00-7.75 (the nuki), 0.58 ft of ground between; main's one run 4.9-6.4",
+  "verifies": "F1"
+ }
+}
