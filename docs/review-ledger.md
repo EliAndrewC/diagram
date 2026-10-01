@@ -269,3 +269,11 @@ or a later pass found what this one should have).
 | 2026-09-30 | spec-fidelity | feature 297's spec (placement by construction) against the GM's request, round 1 | CHANGES REQUIRED (5) | the GM's second count had no criterion and three harness keys read 0 (wrong callee names); the funnel misstated; FR-002 unlisted; the page's picture time unaccounted; the session's guess labeled the GM's number |
 | 2026-09-30 | spec-fidelity-verify | feature 297, round 2 | CHANGES REQUIRED (3) | the GM's second statement missing from request.md; the funnel's order; SC-001's measure and a load bullet |
 | 2026-09-30 | spec-fidelity-verify | feature 297, round 3 | FAITHFUL | asides applied: a pointer to the guideline commit, a stale load figure in research |
+| 2026-10-01 | spec-fidelity | feature 297, Amendment 1 (what the measurements decided), round 1 | CHANGES REQUIRED | lever 3's narrowing unjustified (D2-D4 never built), three narrowings unstated, stale rows and figures |
+| 2026-10-01 | spec-fidelity-verify | feature 297, Amendment 1, round 2 | CHANGES REQUIRED | D3 built at the pass boundary, not the write |
+| 2026-10-01 | spec-fidelity-verify | feature 297, Amendment 1, round 3 | CHANGES REQUIRED | the network-wide repairs ran per write; a harness IndexError unfixed |
+| 2026-10-01 | spec-fidelity-verify | feature 297, Amendment 1, round 4 | CHANGES REQUIRED | FR-001 on a refuted premise (research R15) |
+| 2026-10-01 | spec-fidelity | feature 297's plan decisions, rounds 1-5 | CLEAR at round 5 | B3 required as planned, with exact families for reserved seats only (R16) |
+| 2026-10-01 | spec-fidelity-verify | feature 297, Amendment 1, round 5 | CHANGES REQUIRED | the outcomes block stale after the grove rebuild; the GM waived the five-round cap |
+| 2026-10-01 | spec-fidelity-verify | feature 297, Amendment 1, round 6 | CHANGES REQUIRED | the cohort and the make-map figure predated the grove rebuild; a stale bookend |
+| 2026-10-01 | spec-fidelity-verify | feature 297, Amendment 1, round 7 | CHANGES REQUIRED | two lines still cited the regen key at an intermediate value |
