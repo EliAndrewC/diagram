@@ -2012,6 +2012,7 @@ kyogen	kyogen
 kyoho	Kyoho
 kyoma	Kyoto measure
 kyoto measure	Kyoto measure
+kyowa	Kyowa
 kyozo	sutra house
 kyuden	kyuden
 kyuhi	kyuhi
@@ -3971,6 +3972,7 @@ wood-fee lodgings	kichin-yado
 worship hall	haiden
 worship halls	haiden
 wrought iron	wrought iron
+wu ding	Wu Ding
 wubei zhi	Wubei Zhi
 wudu	wudu
 wujing zongyao	Wujing Zongyao

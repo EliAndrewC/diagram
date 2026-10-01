@@ -29,8 +29,9 @@ class HomesteadBamboo(Kind):
     show a stand that cannot be drawn at true scale: a culm is only inches across, madake at most about four inches,
     a fraction of a pixel at one foot per pixel. The stand's extent is to scale; the marks inside it are symbolic - the convention
     Japan's modern topographic legend uses, a symbol of the national survey's maps of about 1910 that no page read traces to a map before 1868; older maps drew the growth itself. Presence below the frost line, the stand's two places (the
-    household's plot, the village's own thicket, kept before modern times round its houses, on dry ground) and the three sides
-    of the plot are read; the weights among the sides
+    household's plot, the village's own thicket, painted ringing settlements near Kyoto before modern times and wanted on
+    high, dry ground by a sixth-century Chinese farm manual) and the three sides of the plot the sources give (with the
+    storehouses, at a wet edge, on the wind side) are read, the seat behind the house being one no page names; the weights among the sides
     (behind the house the likeliest, then the windward side, then beside the shed, the other flank the least), the share of farmsteads keeping one (about three in five)
     and the 22 by 16 ft strip are guesses, no page giving a share or a size.
 
@@ -49,9 +50,10 @@ class SharedBambooGrove(Kind):
     What: A bamboo thicket standing on its own at the settlement's edge, on dry ground behind its houses, cut in
     moderation and renewed from its shoots.
 
-    Why: The record gives bamboo two places: the household's own strip, and the take-yabu as a stand of its own
-    round the settlement - an early-Edo screen paints settlements ringed by bamboo groves, the villages of one Kyoto
-    district managed bamboo groves through the Edo period, and a sixth-century Chinese manual wants bamboo on high,
+    Why: The record gives bamboo two places: the household's own grove of trees, and the take-yabu as a stand of its own
+    round the settlement - an early-Edo screen paints settlements ringed by bamboo groves and the villages of one Kyoto
+    district managed their own bamboo groves from the start of the Edo period, both in one bamboo-rich region beside a
+    great city, and a sixth-century Chinese manual wants bamboo on high,
     dry ground. The record supports both, so whether a hamlet's
     bamboo stands in its farmsteads, in a thicket of its own, or both is rolled per settlement rather than the project
     picking one.
@@ -60,7 +62,7 @@ class SharedBambooGrove(Kind):
     strokes on a 7 ft grid - in order to show it at all: a culm is only inches across, madake at most about four
     inches, and cannot be drawn at one foot per pixel. The grove's extent is to scale; the marks are symbolic.
     Bamboo below the frost line and its two places are read; which side of the settlement the thicket takes, and
-    that it was held in common, are guesses; that it was cut like a coppice is this record's likeness, no page making
+    that it was held in common, and its size, 84 by 58 ft, are guesses; that it was cut like a coppice is this record's likeness, no page making
     it.
 
     Name: shared bamboo grove
