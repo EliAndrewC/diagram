@@ -1,12 +1,12 @@
 """The retirement house (inkyoya) - a second, smaller roof of one family in its own homestead (269 B42).
 
-research/settlements/035, "How many lived in one farmhouse, and under how many roofs?": a farm family took one of two
-attested forms - the generations under one roof, or a farmhouse with a small retirement house in the same yard, with an
+research/settlements.html "Households: how many live in a house, and under how many roofs (ie)": a farm family took one
+of two attested forms - the generations under one roof, or a farmhouse with a small retirement house in the same yard, with an
 entrance of its own. A choice between forms, so the `family_form` knob rolls it per settlement from the map's seed and
 declares it as `meta.family_form`. A retirement house belongs to its farmhouse's household - one family living as two
 households - so it is recorded under its own key, `retirement_houses`, never in `houses`: it counts neither toward the
-households nor against the band of occupied farmhouses (settlements/030 as amended, "Is every household in a hamlet
-actually drawn?").
+households nor against the band of occupied farmhouses (research/rendering/settlements.html "How our maps count and
+draw households").
 """
 
 from __future__ import annotations
@@ -47,7 +47,7 @@ RETIREMENT_FT = (18.0, 15.0)
 RETIREMENT_GAP_FT = (6.0, 12.0)
 
 # WHICH SIDE is a GUESS, rolled per homestead among the back wall and the two flanks. The record holds one lead
-# (research/homesteads/220, wang-ochiai-2022): in Arakawa village, Shiga, under the Hira windstorms from the west, "Among the
+# (research/homesteads/260, wang-ochiai-2022): in Arakawa village, Shiga, under the Hira windstorms from the west, "Among the
 # 11 retirement houses, 63.6% were located in a westerly direction", standing with the storage buildings as "wind fences"
 # for the ground before the entrance. TRIED AND REVERTED (269 E8, settlement-review F1, 2026-09-28): the windward side first
 # in 7 of 11 homesteads (the settlement's `SitePlan.wind`) seated 17 of 22 pool retirement houses to windward and every

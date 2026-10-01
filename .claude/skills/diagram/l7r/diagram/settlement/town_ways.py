@@ -65,7 +65,7 @@ class TownWaysMixin:
         the 4px linework floor, which is the doctrine: a roji is drawn at the minimum visible width,
         never to (invisible) true scale.
 
-        Surface (research/cities/fabric/160, "What was a back alley like underfoot?"): a line of drain
+        Surface (research/rendering/cities/fabric, "How our maps zone a city's lots"): a line of drain
         boards down the middle over a small ditch - HISTORICALLY ACCURATE, drawn as a dark center line of
         board-length dashes; the ground either side of the boards is read nowhere - a GUESS, drawn as
         plain beaten earth (the hamlet lane's tread color), no longer the gravel the maps once gave it."""

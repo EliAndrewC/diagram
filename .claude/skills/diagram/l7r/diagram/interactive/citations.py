@@ -28,7 +28,8 @@ import json
 import os
 import re
 
-from l7r.diagram.interactive.sources import RESEARCH_DIR, WHAT_LABEL, WHY_LABEL, link_target, registry_entries
+from l7r.diagram.interactive.record import absence
+from l7r.diagram.interactive.sources import RESEARCH_DIR, WHAT_LABEL, WHY_LABEL, collection_pages, link_target, registry_entries
 
 #: A note on a citations page: its number and its inner HTML.
 NOTE = re.compile(r'<li id="fn-(\d+)">(.*?)</li>', re.S)
@@ -46,9 +47,7 @@ def research_pages(research_dir: str = RESEARCH_DIR) -> list[str]:
     """The research pages, as paths relative to `research/` - `homesteads.html`, `cities/fabric.html` - in sorted
     order. The registry and the citations pages are not research pages."""
     top = sorted(f for f in os.listdir(research_dir) if f.endswith(".html") and f != "SOURCES.html")
-    cities = os.path.join(research_dir, "cities")
-    sub = sorted(f"cities/{f}" for f in os.listdir(cities) if f.endswith(".html")) if os.path.isdir(cities) else []
-    return top + sub
+    return top + collection_pages(research_dir)
 
 
 def citations_page(page_rel: str) -> str:
@@ -90,9 +89,20 @@ def note_for_script(body: str) -> str:
     return _REL_HREF.sub('href="', _BACK.sub("", body)).strip()
 
 
+def to_work_entries(body: str, page_rel: str) -> str:
+    """A note as the HOVER shows it: each source key links to that work's entry on the page's citations page, which
+    itself links the source (feature 292, GM 2026-09-29: the link in the tooltip *"should instead take us to
+    citations/homesteads.html#work-kashima-kainyo-1987 which itself opens with a `kashima-kainyo-1987` link to the
+    actual source"*). The path is relative to the research page - `citations/x.html` from `research/`,
+    `../citations/cities/x.html` from `research/cities/`. The citations page itself keeps the source links. The link opens
+    in a new tab (GM 2026-09-29: *"links to citations should open in a new tab"*), so the reader keeps their place."""
+    target = os.path.relpath(citations_page(page_rel), os.path.dirname(page_rel) or ".")
+    return _KEY_LINK.sub(lambda m: f'<a href="{target}#work-{m.group(1)}" target="_blank" rel="noopener"><code>{m.group(1)}</code></a>', body)
+
+
 def script_js(page_rel: str, page_notes: list[tuple[str, str]]) -> str:
-    """The derived script for a research page: one object, note id -> note HTML."""
-    table = {f"fn-{n}": note_for_script(body) for n, body in page_notes}
+    """The derived script for a research page: one object, note id -> note HTML as the hover shows it."""
+    table = {f"fn-{n}": to_work_entries(note_for_script(body), page_rel) for n, body in page_notes}
     return (
         f"// DERIVED FILE - written by `make citations` from research/{citations_page(page_rel)} (feature 211). Never\n"
         "// edit here: change the note on the citations page and run `make citations`; the gate fails while the two differ.\n"
@@ -149,7 +159,9 @@ def derive(page_rel: str, research_dir: str = RESEARCH_DIR) -> tuple[str, str, l
 # ---------------------------------------------------------------------------------------------
 
 #: An ABSENCE note: no key, no link, what was searched and when. THE BACKLOG - the only kind that owes work.
-ABSENCE = re.compile(r"^no publicly readable source \(searched \d{4}-\d{2}-\d{2}:")
+#: Since feature 292 the search may be an HTML comment after the marker - the reader is not shown what was searched or
+#: when (`record/absence.py`) - and a rendered page is read through `absence.unrender`.
+ABSENCE = re.compile(r"^no publicly readable source\s*(?:\(searched \d{4}-\d{2}-\d{2}:|<!--\s*searched \d{4}-\d{2}-\d{2}:)")
 #: An absence searched to exhaustion by two dated passes carries the marker beside its search (feature 235 FR-004).
 SETTLED = re.compile(r"settled \d{4}-\d{2}-\d{2}")
 #: THE SIX REASONS A GROUNDS NOTE MAY NAME (feature 235, GM 2026-09-12: *"if we're counting things that are not
@@ -202,7 +214,7 @@ def footnote_form(body: str, canon: set[str]) -> str | None:
         if not named:
             return "a grounds note names at least one of the six reasons"
         return "grounds"
-    if ABSENCE.match(body):
+    if ABSENCE.match(absence.unrender(body).lstrip()):
         if "<code>" in body or 'href="' in body:
             return "an absence note carries no key and no link"
         return "absence"

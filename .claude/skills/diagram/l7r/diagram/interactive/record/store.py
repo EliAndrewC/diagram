@@ -13,12 +13,13 @@ from __future__ import annotations
 import os
 import re
 
+from l7r.diagram.interactive.record import absence, confusables, originals, passages, xref
 from l7r.diagram.interactive.record import citations_side as cite
 from l7r.diagram.interactive.record import fragments as frag
 from l7r.diagram.interactive.record.assemble import assemble
 from l7r.diagram.interactive.record.notes import allocate, merge, notes_of, number_references
 from l7r.diagram.interactive.record.split import Entry, Page, Section, split
-from l7r.diagram.interactive.sources import RESEARCH_DIR
+from l7r.diagram.interactive.sources import RESEARCH_DIR, collection_pages
 
 #: The registry is the one page whose sections hold entries of their own - 920 of them.
 REGISTRY = "SOURCES.html"
@@ -34,9 +35,7 @@ def record_pages(record_dir: str = RESEARCH_DIR) -> list[str]:
     and the `cities/` ones. The citations pages are not here - they are assembled beside their
     research page, from the same directory (stage 3)."""
     top = sorted(f for f in os.listdir(record_dir) if f.endswith(".html"))
-    cities_dir = os.path.join(record_dir, "cities")
-    cities = sorted(f"cities/{f}" for f in os.listdir(cities_dir) if f.endswith(".html")) if os.path.isdir(cities_dir) else []
-    return top + cities
+    return top + collection_pages(record_dir)
 
 
 def entry_level(page_rel: str) -> int | None:
@@ -133,11 +132,13 @@ def _ordered_sections(where: str, names: list[str]) -> list[str]:
     known = {frag.FRONT, frag.TAIL, frag.CITATIONS_FRONT, frag.CITATIONS_MID, frag.CITATIONS_TAIL}
     ordered = frag.ordered(names)
     for name in names:
-        if name in known or name in ordered or name.endswith(frag.NOTES_SUFFIX):
+        if name in known or name in ordered or name.endswith((frag.NOTES_SUFFIX, frag.ORIGINALS_SUFFIX)):
             continue
         if os.path.isdir(os.path.join(where, name)) or not name.endswith(".html"):
             continue  # an entries directory, checked with its section
-        raise RecordError(f"{where}/{name}: not a fragment name. A page directory holds {frag.FRONT}, {frag.TAIL}, <prefix>-<heading id>.html and their .notes.html, and nothing else")
+        raise RecordError(
+            f"{where}/{name}: not a fragment name. A page directory holds {frag.FRONT}, {frag.TAIL}, <prefix>-<heading id>.html and their .notes.html and .originals.html, and nothing else"
+        )
     seen: dict[int, str] = {}
     for name in ordered:
         at = frag.position_of(name)
@@ -184,6 +185,33 @@ def _first_difference(want: str, got: str) -> str:
 # ---------------------------------------------------------------- stage 3: the notes
 
 
+_NOTE_BODY = re.compile(r'(<li data-note="[^"]+">)(.*?)(</li>)', re.S)
+
+
+def split_originals(record_dir: str = RESEARCH_DIR, *, write: bool = True) -> list[str]:
+    """Move every original still written inline in a question's notes into its `.originals.html` (feature 292,
+    `originals.py`); returns the notes files that had one. With `write=False` it only reports - the check."""
+    moved = []
+    for page_rel in record_pages(record_dir):
+        where = os.path.join(record_dir, frag.page_dir(page_rel))
+        if not os.path.isdir(where):
+            continue
+        for name in frag.ordered(os.listdir(where)):
+            notes_path = os.path.join(where, frag.notes_file(name))
+            if not os.path.isfile(notes_path):
+                continue
+            orig_path = os.path.join(where, frag.originals_file(name))
+            text, stored = _read(notes_path) or "", _read(orig_path) or ""
+            new_text, new_stored = originals.split(text, stored)
+            if new_text == text:
+                continue
+            moved.append(os.path.relpath(notes_path, record_dir))
+            if write:
+                _write_if_changed(notes_path, new_text)
+                _write_if_changed(orig_path, new_stored)
+    return moved
+
+
 def has_notes(page_rel: str, record_dir: str = RESEARCH_DIR) -> bool:
     """Has this page's citations side been moved into fragments yet? A stage that has not landed is
     not a failure, so every reader below asks first."""
@@ -200,7 +228,19 @@ def read_notes(page_rel: str, record_dir: str = RESEARCH_DIR) -> dict[str, str]:
         if not os.path.isfile(notes_path):
             continue
         with open(notes_path, encoding="utf-8") as fh:
-            per_question.append((f"{where}/{frag.notes_file(name)}", notes_of(fh.read(), f"{where}/{name}")))
+            text = fh.read()
+        orig_path = os.path.join(root, frag.originals_file(name))
+        if os.path.isfile(orig_path):  # feature 292: the originals are stored apart and put back, wrapped, here
+            with open(orig_path, encoding="utf-8") as fh:
+                try:
+                    text = originals.restore(text, fh.read())
+                except KeyError as e:
+                    raise RecordError(f"{where}/{frag.notes_file(name)}: {e.args[0]}") from None
+        elif originals.has_placeholder(text):
+            raise RecordError(f"{where}/{frag.notes_file(name)}: a note holds an original's placeholder and {frag.originals_file(name)} is missing")
+        text = passages.bulleted_notes(text)  # feature 292: a note quoting several passages is shown as a list
+        text = _NOTE_BODY.sub(lambda m: m.group(1) + absence.render(m.group(2)) + m.group(3), text)  # and an absence note's words
+        per_question.append((f"{where}/{frag.notes_file(name)}", notes_of(text, f"{where}/{name}")))
     return merge(per_question)
 
 
@@ -210,7 +250,7 @@ def assemble_pages(page_rel: str, record_dir: str = RESEARCH_DIR) -> tuple[str, 
     The citations page carries the works region the committed page carries; `write_pages` is what
     re-derives it, because the derivation reads a page from disk and this function writes nothing.
     """
-    research = assemble(read_fragments(page_rel, record_dir))
+    research = _cross_linked(assemble(read_fragments(page_rel, record_dir)), page_rel, record_dir)
     if not has_notes(page_rel, record_dir):
         return research, None
     stripped, placed = allocate(research, read_notes(page_rel, record_dir), page_rel)
@@ -223,6 +263,27 @@ def assemble_pages(page_rel: str, record_dir: str = RESEARCH_DIR) -> tuple[str, 
     committed = _read(os.path.join(record_dir, cite.citations_rel(page_rel))) or ""
     page = cite.assemble_citations(parts[0], cite.works_region(committed), parts[1], placed, parts[2], cite.page_href(page_rel))
     return research, page
+
+
+def _cross_linked(page_html: str, page_rel: str, record_dir: str) -> str:
+    """The page with its research <-> rendering links written in (feature 292, `xref.py`); a declaration touching this
+    page that names a section which does not exist is a refusal, naming the declaration."""
+    pairs = xref.pairs(record_dir)
+    mine = [p for p in pairs if page_rel in (p.research_page, p.rendering_page)]
+    bad = xref.unresolved(mine, record_dir)
+    if bad:
+        raise RecordError("a rendering section is declared about a section that does not exist:\n  " + "\n  ".join(bad))
+    return _confusables(xref.link(page_html, page_rel, mine), page_rel, record_dir)
+
+
+def _confusables(page_html: str, page_rel: str, record_dir: str) -> str:
+    """The page with its *Not to be confused with:* lists written in (feature 292, `confusables.py`); a pair touching
+    this page that names a section which does not exist is a refusal, naming the pair."""
+    mine = [p for p in confusables.load(record_dir) if page_rel in (p.a.partition("#")[0], p.b.partition("#")[0])]
+    bad = confusables.unresolved(mine, record_dir)
+    if bad:
+        raise RecordError(f"{confusables.DATA} names a section that does not exist:\n  " + "\n  ".join(bad))
+    return confusables.write(page_html, page_rel, mine, record_dir)
 
 
 def write_pages(page_rel: str, record_dir: str = RESEARCH_DIR) -> int:
@@ -317,9 +378,19 @@ def _refuse_a_move_that_changed_the_record(page_rel: str, research: str, citatio
     if _numberless(committed) != _numberless(research):
         raise RecordError(f"{page_rel}: the move changed more than the footnote numbers - with every number and reference id stripped, the page is not the page it was")
     if citations is not None:
-        was, now = sorted(notes.values()), sorted(cite.old_notes(citations).values())
+        was, now = sorted(map(_as_written, notes.values())), sorted(map(_as_written, cite.old_notes(citations).values()))
         if was != now:
             raise RecordError(f"{cite.citations_rel(page_rel)}: {len(was)} notes went in and {len(now)} came out, or their text changed - the move carries every note verbatim")
+
+
+_RENDERING = re.compile(r'<span class="(?:pass(?: sub)?|passages|sep|orig)">')
+
+
+def _as_written(body: str) -> str:
+    """A note with what the assembly adds for its reader taken away - the absence note's words (`absence.py`), the
+    passages' list (`passages.py`), the original's wrapper (`originals.py`) - so a move is judged on the note's own
+    text. Both sides of a comparison are read through it, so a span a session wrote cancels out."""
+    return _RENDERING.sub("", absence.unrender(body)).replace("</span>", "")
 
 
 def _numberless(page_html: str) -> str:

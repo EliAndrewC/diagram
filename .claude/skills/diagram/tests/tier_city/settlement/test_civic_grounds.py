@@ -120,7 +120,7 @@ def test_a_wall_running_ALONG_a_ward_fence_is_re_stamped_over_it() -> None:
 
 
 def test_a_burial_ground_DERIVES_its_shape_from_whether_it_is_a_parish_plot() -> None:
-    """Researched 2026-07-23, written up in research/religion-and-death.html 'Burial ground shape - Japan organic, China surveyed' ('shape of the common ground'.
+    """Researched 2026-07-23, written up in research/religion-and-death.html 'Village burial grounds (bochi)' ('shape of the common ground'.
 
     Japan's commoner burial grounds - Kyoto's burial fields, village sanmai, Edo's packed temple
     yards - were unplotted and TERRAIN-FOLLOWING, never surveyed. Song China's state pauper
@@ -200,7 +200,7 @@ def test_a_cremation_ground_draws_its_six_jizo_only_when_asked() -> None:
 
 
 def test_a_cremation_ground_is_open_air_on_most_seats_and_draws_no_pyre_platform_or_hut() -> None:
-    """Feature 280 M70 (research 202): most grounds were open-air to the end of Edo, a roof on four posts over the bed the
+    """Feature 280 M70 (research/religion-and-death/530 'Cremation grounds and bone mounds (kasoba)'): most grounds were open-air to the end of Edo, a roof on four posts over the bed the
     minority; no raised pyre platform or officiants' hut is attested, so neither is drawn."""
     from l7r.diagram.settlement.civic_grounds.funerary import ROOFED_SHARE
 

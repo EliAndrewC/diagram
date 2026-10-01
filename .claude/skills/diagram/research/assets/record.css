@@ -28,3 +28,24 @@ a.fnback { font-family: system-ui, sans-serif; margin-left: .35em; }
 /* the glossary (feature 209, GM 2026-09-07 - the map's rule, page.css): a dotted underline marks a defined term;
    hovering it shows the definition in the same box the footnotes use */
 .gl { border-bottom: 1px dotted var(--rule); cursor: help; }
+/* feature 292: the link between a research section and the rendering section about it, written by `make record`
+   at the start of the heading - floated small to the right of the heading's own line, a way out of the section (GM 2026-09-29) */
+.xref { float: right; margin: .35em 0 0 1em; font-size: .55em; font-weight: normal; }
+/* feature 292 (FR-016): "Not to be confused with:" under a section a reader could mistake for another, written by
+   `make record` from research/confusables.json - set apart from the section's own opening, small and quiet */
+.confusables { margin: .2em 0 1em; padding: .35em .8em; border-left: 3px solid var(--rule); font-size: .9em; }
+.confusables p { margin: 0 0 .2em; }
+.confusables ul { margin: 0; padding-left: 1.2em; }
+/* feature 292: a translated quotation's original, collapsed behind a toggle by record.js */
+button.orig-toggle { font: inherit; font-size: .85em; padding: 0; border: 0; background: none; color: inherit; cursor: pointer;
+  text-decoration: underline dotted; opacity: .75; }
+button.orig-toggle::after { content: " \25B8"; } button.orig-toggle[aria-expanded="true"]::after { content: " \25BE"; }
+/* feature 292: a note quoting several passages is a list - the key on its line, a bullet per passage, nested where a
+   passage introduces others; the joining `; ` is kept in the page, hidden, so the text is unchanged */
+.passages { display: block; margin: .15em 0 0; }
+.pass { display: list-item; list-style: disc outside; margin-left: 1.3em; }
+.pass.sub { margin-left: 2.6em; list-style-type: circle; }
+.sep { display: none; }
+/* feature 292: an absence note opens with the one sentence `record/absence.py` keeps; what was found is a list of
+   `.pass` items under it (the stylesheet's footnote list above), what was searched a comment the reader never sees */
+.absence-lead { font-style: italic; }

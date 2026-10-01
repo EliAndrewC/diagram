@@ -1,0 +1,33 @@
+{
+ "feature": "300-reeds-to-the-bank",
+ "plan_sha256": "4fe0e4730904ccc2a060ef21d9fc9ef456e3f9a366d5bf3b7a853d58cd5757e6",
+ "reviewed": "2026-10-01",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "The reeds' bare ground files the watercourses (keep-out slot 3) at their drawn width alone - the extra 2 + pad goes to 0; the pond's slots keep their margin",
+   "class": "within",
+   "why": "Proposal item (1) 'the reed tile runs to the water's drawn edge' and FR-001; the pond's embankment kept bare is the spec's edge case and FR-004 (the proposal changes only watercourses). Verified in the clone's wet.py diff: only slot 3 moves (pad -> 0.0), pond_pad unchanged."
+  },
+  {
+   "id": "D2",
+   "summary": "The bank band: 6 ft each side of the drawn water (BANK_FT), reed tufts at three times the marsh's density in a darker green, cut from each marsh shape and drawn in the marsh's own slot and class; every watercourse (streams, channels, drawn laterals) counts",
+   "class": "within",
+   "why": "Proposal item (2) ('about 6 ft each side, of a tighter, slightly darker reed tile') and FR-002 as written; three-times density and the shade are calibration recorded in research R1. Taking every watercourse carries the proposal's 'the same for the irrigation ditches where they cross a marsh'; cutting from the marsh shape gives the edge case's marsh-side-only band; drawing only for reed covers leaves the scrub unchanged (FR-004)."
+  },
+  {
+   "id": "D3",
+   "summary": "No thin dark outline added: the stream judged by eye on Inashiro to read clearly with the bank band",
+   "class": "within",
+   "why": "Proposal item (3) is conditional ('only if the stream still gets lost ... judged by eye after (2)') and FR-003 makes it so; the judgment is recorded in research R1 with its observation (make map of Inashiro, PNG read at full size). The GM's own look remains SC-002."
+  },
+  {
+   "id": "D-record-tests",
+   "summary": "Vegetation 125's drawing paragraph gains the bank, record-format on it; the SC-001 unit test in test_outline_299.py; existing marsh tests kept",
+   "class": "within",
+   "why": "FR-005 and SC-001; the unit test enforces the requested reeds-to-the-edge, band-in-the-marsh's-slot and no-change-in-scrub, so it serves the request."
+  }
+ ],
+ "verdict": "CLEAR"
+}

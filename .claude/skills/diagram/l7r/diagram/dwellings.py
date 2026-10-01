@@ -18,7 +18,7 @@ from __future__ import annotations
 #: a BUSINESS is a commercial frontage (the merchant's house+shop is BOTH - dual-use); everything
 #: else (civic, government, granary kura, barns, gate furniture) houses no one and fronts nothing.
 #: The population rule these kinds serve - five inhabitants to a drawn dwelling, and what counts per tier -
-#: is research/settlements.html "How many inhabitants does a map's house count stand for?".
+#: is research/rendering/settlements.html "How our maps count and draw households (ie)".
 DWELLING_KINDS = {
     "laborer",
     "laborer_large",

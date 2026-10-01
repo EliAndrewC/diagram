@@ -5,8 +5,8 @@ Sugiura 1973 counted 4.4 roofed outbuildings per Tōhoku farm household and the 
 kura) - the T52 pass listed the rest, and the GM chose these. Every one is drawn at TRUE size
 (feedback: to-scale modes never inflate); the only legibility liberty is a bold stroke, and the
 persimmon's fruit dots and the shrine's vermilion are RENDERING conventions, recorded as such in
-research/homesteads.html "Farmstead fixtures". Research and sources: research/homesteads.html
-"The farmstead's fixtures". The PLACER is the scripted generator's (hamletgen/homesteads.py
+research/rendering/homesteads.html "How our maps draw the farmstead and what stands on it (yashiki)". Research and sources:
+research/homesteads.html "The farmstead and what stood on it (yashiki)" and each fixture's own section. The PLACER is the scripted generator's (hamletgen/homesteads.py
 `farmstead_fixtures`); this mixin only draws and records.
 """
 
@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from .core import Settlement
 
 # Real feet (w along the house wall, h out from it). privy: the one-ken default here; the placer rolls each homestead's from
-# the sixteen of the Kakimochi table (research/homesteads/750, feature 280) and passes it as `size_ft`. woodpile: the WOOD
+# the sixteen of the Kakimochi table (research/homesteads/260, feature 280) and passes it as `size_ft`. woodpile: the WOOD
 # SHED, 4 x 2 ken, the common size in the Kakimochi count (research/homesteads/212 and 720; the open stack under the eaves and
 # the kizuma along the windbreak are modern-only and not drawn - feature 280). manure: a heap by the privy/stable (size
 # GUESS). bath: a ROOM joined to the house, 6 ft out and 6-12 ft along it (research/homesteads/740, feature 280 M22 - the
@@ -189,7 +189,7 @@ STY_FT = (8.0, 6.0)  # a simple pig shed on the dike, over the water's edge (FAO
 # NO DUCK PEN (269 B32, the GM 2026-09-28): the fenced dry and wet run is a modern fish-cum-duck form, read only
 # in the FAO/NACA manual, and a form attested only in modern sources is not drawn; premodern delta ducks were
 # herded in the rice fields, not penned at the fish ponds (research/archetypes/210).
-# NO PER-POND SLUICE (feature 280 M57, research/archetypes/150): a sluice through EACH pond's dike is defined only by the
+# NO PER-POND SLUICE (feature 280 M57, research/archetypes/140): a sluice through EACH pond's dike is defined only by the
 # FAO training manual, so it is not drawn - and the sty's keep-clear of it (feature 233) went with it. The polder's own
 # gates (the dou) stay.
 

@@ -45,10 +45,10 @@ def band_clumps(cx: float, cy: float, w: float, h: float, cap_area: float) -> li
     return [(cx, cy - h / 2 + h * (i + 0.5) / k, w, h / k) for i in range(k)]
 
 
-GROVE_BAMBOO_SHARE = 0.08  # of a windbreak clump's items, the bamboo under its crowns: a GUESS (269 B29, vegetation/260)
+GROVE_BAMBOO_SHARE = 0.08  # of a windbreak clump's items, the bamboo under its crowns: a GUESS (269 B29, research/vegetation.html "Bamboo groves (chikurin)")
 
 GROVE_BAMBOO_PATCH_FT = (22.0, 16.0)
-"""A farm's household bamboo, where it rolled a stand and keeps it in its own grove (feature 291, vegetation/154): a patch
+"""A farm's household bamboo, where it rolled a stand and keeps it in its own grove (feature 291, research/vegetation.html "Bamboo groves (chikurin)"): a patch
 this size - along the band, then across it - on the house side of each windward (deep) band, every item in it bamboo,
 so it is inked as culms rather than a crown. The size is the household strip's (`hamletgen/homesteads/bamboo.py`
 `HOUSEHOLD_BAMBOO_FT`, a GUESS); each windward band, because the Tonami grove held its bamboo "from the west round to the
@@ -74,8 +74,8 @@ def bamboo_patch(cx: float, cy: float, w: float, h: float, face: tuple[float, fl
     return (cx - pw / 2, y - ph / 2, cx + pw / 2, y + ph / 2)
 
 
-# THE VILLAGE BELT HAS TWO ATTESTED FORMS, SO IT IS A KNOB (269 B30; research/vegetation/270, "Was a windbreak one kind of
-# tree in a row?"). Neither is a line of one kind of tree. `conifer_led` is the Japanese farmstead grove drawn at village
+# THE VILLAGE BELT HAS TWO ATTESTED FORMS, SO IT IS A KNOB (269 B30; research/vegetation.html, "Shelter belts on a village's windward side",
+# on what a belt was planted with). Neither is a line of one kind of tree. `conifer_led` is the Japanese farmstead grove drawn at village
 # scale - planted in rows round one tall conifer (cedar at every homestead of three surveyed regions, the igune's four tall
 # trees), with many lesser kinds among it; the village scale is an interpolation the entry names, every survey being of one
 # farmstead's grove. `mixed_broadleaf` is the Chinese village fengshui wood - ~47 kinds a patch, measuring as evergreen
@@ -85,7 +85,7 @@ def bamboo_patch(cx: float, cy: float, w: float, h: float, face: tuple[float, fl
 WINDBREAK_BELT_FORMS = ("conifer_led", "mixed_broadleaf")
 register_knob(Knob("windbreak_belt", list(WINDBREAK_BELT_FORMS), default="conifer_led"))
 
-# THE RANKS OF A CONIFER-LED BELT (269 B30, vegetation/270): the conifers stand in rows laid ALONG THE BELT AS DRAWN - each
+# THE RANKS OF A CONIFER-LED BELT (269 B30, research/vegetation.html "Shelter belts on a village's windward side"): the conifers stand in rows laid ALONG THE BELT AS DRAWN - each
 # row an offset of the belt's own centerline (`belt_centerline`, `rank_points`), so on a bent belt the rows bend with it
 # (settlement-review 2026-09-28: one straight axis fitted to Inashiro's crescent set the east arm's rows ~76 deg across it).
 # They are laid once for the whole belt, seated before any lesser crown and painted over them all (`_belt_ranks`). The
@@ -99,7 +99,7 @@ RANK_APART_FT = 26.0
 RANK_JITTER_FT = 3.0
 RANK_BIN_FT = 40.0  # the centerline's vertex spacing along the belt: two rows' width, fine enough to follow a crescent's bend (a GUESS)
 RANK_CONIFER_S = (1.0, 1.1)  # a planted row is even-aged: one size band (x CANOPY_R_FT x 1.15), not the emergent mix
-LESSER_BROADLEAF_S = (0.6, 0.85)  # "lesser broadleaf crowns among them" (vegetation/270): smaller than the woods' crowns
+LESSER_BROADLEAF_S = (0.6, 0.85)  # "lesser broadleaf crowns among them" (research/rendering/vegetation.html "How our maps draw the shelter belt"): smaller than the woods' crowns
 # ...and FEWER than the conifers: of a clump's usual rolls, this share is thrown for the broadleaf and the bamboo between the
 # rows, so the conifer stays the commonest crown (the entry's guess; the share itself a GUESS, measured against the maps'
 # `crowns` tallies, 269 B30). Measured on Inashiro's belt with the rows laid per clump: 0.3 drew 182 conifers to 330
@@ -194,7 +194,7 @@ def rank_points(line: list[tuple[float, float]], half_depth: float, along: float
 
 HOMESTEAD_WOOD_FT2 = (6000.0, 28000.0)
 """The trees one homestead keeps, its windward grove and its share of the copse together, in sq ft (269 B26;
-research/vegetation/210): a 1684 Mito register lists three homestead woods of about 6,100, 10,700 and 27,800 sq ft. A
+research/rendering/homesteads/010): a 1684 Mito register lists three homestead woods of about 6,100, 10,700 and 27,800 sq ft. A
 calibration against three households, not a survey; counting grove and copse as one wood is the entry's decision."""
 
 
@@ -223,7 +223,7 @@ class GrovesMixin:
     # East Asian winter monsoon (the Siberian high) blows NW across China AND Japan, so N+W is windward and
     # the S/E is the sheltered, sunny side. A map keys it off its geography with meta(windward=...). Each
     # arm is (face, perp): `face` is the cardinal it sits on; `perp` is the sign the N/S arm extends along
-    # to wrap the corner (0 for a lone cardinal arm). See research/homesteads.html 'Homestead groves (yashikirin) - the real scale and prevalence'.
+    # to wrap the corner (0 for a lone cardinal arm). See research/homesteads.html 'Groves of trees around farmhouses (yashikirin)'.
     _GROVE_ARMS = {
         "NW": [((0, -1), -1), ((-1, 0), 0)],
         "NE": [((0, -1), 1), ((1, 0), 0)],
@@ -241,14 +241,14 @@ class GrovesMixin:
         return w if w in self._GROVE_ARMS else "NW"
 
     def _windbreak_belt(self: Settlement) -> str:  # type: ignore[misc]
-        """The village belt's form, `conifer_led` or `mixed_broadleaf` (269 B30, vegetation/270): pinned or rolled from the
+        """The village belt's form, `conifer_led` or `mixed_broadleaf` (269 B30, research/vegetation.html "Shelter belts on a village's windward side"): pinned or rolled from the
         map's seed, and declared as meta.windbreak_belt."""
         form = str(self.resolve("windbreak_belt"))
         self.M["meta"]["windbreak_belt"] = form
         return form
 
     def _belt_ranks(self: Settlement, seated: list[tuple[float, float]], clump: float, wet: list[Any]) -> tuple[list[tuple[float, float, float]], str]:  # type: ignore[misc]
-        """Seat a conifer-led belt's rows of conifers (269 B30, vegetation/270) over the whole belt at once, BEFORE its clumps
+        """Seat a conifer-led belt's rows of conifers (269 B30, research/vegetation.html "Shelter belts on a village's windward side") over the whole belt at once, BEFORE its clumps
         draw their lesser crowns, and return (the crowns, their ink). The caller paints the ink after every clump, so no lesser
         crown is inked over a conifer - painted per clump, a later clump's broadleaf lay over an earlier clump's conifers (the
         settlement-review of 2026-09-28 counted 29 of the 73 broadleaf on Inashiro's page). A row point is kept only on the
@@ -326,8 +326,8 @@ class GrovesMixin:
         N/S arm runs E-W as wide as the house plus `d` (extending `perp` toward the windward corner so the
         two arms wrap it); an E/W arm runs N-S as tall as the house. The depth `d` is how many trees deep the
         stand is - sized so the whole grove is the LARGEST homestead appurtenance (bigger than the house);
-        `lf` shortens the arm's run to slip a partial belt past a close neighbor. See research/homesteads.html 'Homestead groves (yashikirin) - the real scale and prevalence' ('Homestead
-        groves' (Historical scale)."""
+        `lf` shortens the arm's run to slip a partial belt past a close neighbor. See research/homesteads.html 'Groves of trees around farmhouses (yashikirin)' ('How deep is
+        the stand?')."""
         if fdy:  # N or S arm (runs E-W); wraps `perp` toward the windward corner
             return hx + perp * d / 2, hy + fdy * (hh / 2 + d / 2 + gap), (hw + d) * lf, d
         return hx + fdx * (hw / 2 + d / 2 + gap), hy, d, hh * lf  # E or W arm (runs N-S)
@@ -369,7 +369,7 @@ class GrovesMixin:
                 return False
         return True
 
-    GROVE_RATIO = 6.0  # target grove footprint as a multiple of the house (~6:1 - see research/homesteads.html 'Homestead groves (yashikirin) - the real scale and prevalence'; Historical scale)
+    GROVE_RATIO = 6.0  # target grove footprint as a multiple of the house (~6:1 - see research/homesteads.html 'Groves of trees around farmhouses (yashikirin)', 'How deep is the stand?')
 
     def _find_grove_arms(self: Settlement, hx: float, hy: float, hw: float, hh: float, reserve: Any = None, avoid: Any = ()) -> list[Any]:  # type: ignore[misc]
         """The windward grove's belt arms, AREA-TARGETED to ~GROVE_RATIO x the house footprint (the historical
@@ -385,7 +385,7 @@ class GrovesMixin:
         ladder ends on `reserve` - the least grove `_grove_reserve` held for this farm when it was seated, in the same
         face order - so a farm seated with room plants every face; a face with neither (a farm no seat search reserved
         for) is counted in `meta.grove_faces_unplanted`, never dropped unseen."""
-        # ...HELD INSIDE THE REGISTER'S RANGE (269 B26; research/vegetation/210): a homestead's own wood is ~6,000-28,000 sq
+        # ...HELD INSIDE THE REGISTER'S RANGE (269 B26; research/rendering/homesteads/010): a homestead's own wood is ~6,000-28,000 sq
         # ft, and a lone yashikirin is all the wood its homestead has, so the ~6:1 target never asks for less or more
         _lo, _hi = (self.px(1.0) ** 2 * v for v in HOMESTEAD_WOOD_FT2)
         target = min(_hi, max(_lo, self.GROVE_RATIO * hw * hh))
@@ -544,7 +544,7 @@ class GrovesMixin:
         `GROVE_BAMBOO_SHARE`). Returns the count of bamboo marks inked. `mix` picks the species blend: 'windbreak' is
         conifer-backed (the sheltering wall - the yashikirin and the fengshui back belt); 'dooryard' is bamboo
         + fruit broadleaf with NO conifer (the leafy bamboo/fruit greenery scattered among village houses).
-        The village belt draws one of the `windbreak_belt` knob's two forms (269 B30, vegetation/270): a 'conifer_led'
+        The village belt draws one of the `windbreak_belt` knob's two forms (269 B30, research/vegetation.html "Shelter belts on a village's windward side"): a 'conifer_led'
         clump draws only the lesser broadleaf and the bamboo between the belt's rows of conifers, which `_belt_ranks`
         seats for the whole belt first; 'mixed_broadleaf' is rounded broadleaf crowns in the woods' irregular size mix,
         no conifer. `tally`, when given, counts the crowns drawn by kind. `bamboo=False` draws no bamboo in any mix: a farm
@@ -564,8 +564,8 @@ class GrovesMixin:
             # thicket with a hard edge, not a seasoning through a cedar belt. Bamboo is now its own
             # feature (`bamboo_stand`, the `bamboo` knob). The windbreak is cedar-backed with broadleaf;
             # the dooryard copse is fruit broadleaf.
-            # ...AND CAME BACK LOW, UNDER THE TREES (269 B29; research/vegetation/260, "Did a farmstead's grove carry
-            # bamboo?"). The Tonami grove held many bamboo stands mixed with its cedar from the west round to the north,
+            # ...AND CAME BACK LOW, UNDER THE TREES (269 B29; research/vegetation.html "Bamboo groves
+            # (chikurin)"). The Tonami grove held many bamboo stands mixed with its cedar from the west round to the north,
             # and the Sendai igune's bamboo filled the bare lower part of the trees against the wind: bamboo was one of
             # the windbreak's own plants, low under its crowns. So the windbreak mix carries a small share of bamboo
             # items, and each is drawn only where a plan view would see it - in a gap between the crowns or past the
@@ -630,11 +630,12 @@ class GrovesMixin:
                 # a pixel radius calibrated at the village's 2 ft/px ("a ~5-6 m canopy") and never rescaled by ftpx:
                 # at the hamlet's 1 ft/px the belt drew 9 ft crowns beside the commons' 18 ft ones (measured on
                 # Inashiro: belt median r 4.5 ft, commons 9.0). Now the same CANOPY_R_FT the woods and the commons
-                # use, in real feet (research/vegetation.html 'Forest density and crown size'); a conifer 15% wider,
+                # use, in real feet (research/rendering/vegetation.html 'How our maps stock woods and size
+                # crowns'); a conifer 15% wider,
                 # the old ratio. A village (ftpx 2, bscale 1) gets 4.25 px, within a pixel of what it drew before.
                 rr = self.px(self.CANOPY_R_FT) * s * (1.15 if kind == "conifer" else 1.0)
                 # ALDER AT THE REED EDGE (feature 261): the woody stage of a marsh margin is alder or willow, never pine
-                # (research/vegetation.html, the marsh margin), so a belt crown standing in the marsh is drawn as one - a
+                # (research/vegetation.html, Reed beds and the marsh's edge), so a belt crown standing in the marsh is drawn as one - a
                 # blue-gray green set apart from the belt's own two greens and its cedar, a map drawing convention (the
                 # real foliage is a plain dark green; the tint is chosen so the wet stand reads apart)
                 col = random.choice(ALDER_GREENS) if mix == "alder" else ("#496733" if kind == "conifer" else random.choice(["#7C9A4E", "#6E8B43"]))
@@ -653,7 +654,7 @@ class GrovesMixin:
                 g.append(f'<circle cx="{px:.1f}" cy="{py - lift:.1f}" r="{rr:.1f}" fill="{col}" stroke="#3C5526" stroke-width="0.8"/>')
                 if tally is not None:
                     tally[kind] = tally.get(kind, 0) + 1
-            # THE BAMBOO SHOWS IN THE GAPS AND ALONG THE EDGE (269 B29, vegetation/260): a bamboo item under a drawn
+            # THE BAMBOO SHOWS IN THE GAPS AND ALONG THE EDGE (269 B29, research/vegetation.html "Bamboo groves (chikurin)"): a bamboo item under a drawn
             # crown, this clump's or an earlier one's, is hidden from above and not inked; one in the open, clear of
             # every building and wellhead, is the culm mark, painted UNDER the crowns (first in the group) because it
             # is the low layer.

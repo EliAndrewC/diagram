@@ -40,13 +40,33 @@ RESEARCH_DIR = os.path.normpath(os.path.join(_HERE, "..", "..", "..", "research"
 #: and every pool page re-renders at each landing.
 RESEARCH_PAGES = "../../../research/"
 
+#: The record's SUB-COLLECTIONS - pages one directory down, `research/<collection>/<name>.html`, each with its fragments
+#: at `research/<collection>/<name>/` and its citations page at `research/citations/<collection>/<name>.html`. `cities`
+#: holds the city research; `rendering` (feature 292, GM 2026-09-29: *"there should probably just be a separate
+#: collection of files that have to do with our rendering decisions"*) holds how the maps draw what the research
+#: pages describe, one rendering page beside each research page it covers. Every reader of the record takes its list
+#: from here; a collection named anywhere else is a defect. `rendering/cities` (feature 292 sweep, 2026-09-30) is the
+#: rendering page beside each `cities/` page - `rendering/cities/capitals.html` beside `cities/capitals.html` - two
+#: directories down, so it is a collection of its own rather than a page directory of `rendering`.
+COLLECTIONS = ("cities", "rendering", "rendering/cities")
+
+
+def collection_pages(research_dir: str = RESEARCH_DIR) -> list[str]:
+    """Every page of every sub-collection, as `<collection>/<name>.html`, sorted within each collection."""
+    out: list[str] = []
+    for c in COLLECTIONS:
+        d = os.path.join(research_dir, c)
+        out += sorted(f"{c}/{f}" for f in os.listdir(d) if f.endswith(".html")) if os.path.isdir(d) else []
+    return out
+
+
 _KEY = re.compile(r"`([a-z0-9][a-z0-9-]*)`")
 #: A research page the entry names - `research/water.html`, or one level down, `research/cities/fabric.html`.
 #: The one-level form was added in feature 180 (spec FR-012a): the pattern could not match a
 #: subdirectory, so an entry naming a `cities/` file would have resolved to no sources and no questions,
 #: silently. No class did that on the day it was fixed; the URL above is built from this same match, so
-#: the silent miss would have become a silent broken link.
-_ENTRY_FILE = re.compile(r"research/((?:[a-z-]+/)?[a-z-]+\.html)")
+#: the silent miss would have become a silent broken link. Two levels (feature 292): `research/rendering/cities/capitals.html`.
+_ENTRY_FILE = re.compile(r"research/((?:[a-z-]+/){0,2}[a-z-]+\.html)")
 # A heading is quoted 'like this', and "like this" when the heading itself contains an apostrophe -
 # the single-quote form cannot carry "A reservoir's shore is reeded". Both are read (settlement-review
 # 2026-08-29): with only the first form the marsh entry lost `mineta-2007-tameike` from the modal AND
@@ -67,14 +87,19 @@ _DATED_TAIL = re.compile(r"\s*\([^()]*\b\d{4}-\d{2}-\d{2}\b[^()]*\)\s*$")
 _MARKUP = re.compile(r"[*`]")
 
 
+#: The link the assembly writes into a heading to its research or rendering counterpart (feature 292, `record/xref.py`)
+#: - a way out of the section, not part of its title, so every reading of a heading's text drops it.
+_XREF = re.compile(r'<span class="xref">.*?</span>', re.S)
+
+
 def heading_text(heading: str) -> str:
     """The rendered text of a heading - what a reader sees and what the anchor rule slugs."""
-    return _MARKUP.sub("", heading).strip()
+    return _MARKUP.sub("", _XREF.sub("", heading)).strip()
 
 
 def page_text(fragment: str) -> str:
     """The text of an HTML fragment: tags dropped, entities decoded, whitespace collapsed."""
-    return re.sub(r"\s+", " ", html.unescape(_TAG.sub("", fragment))).strip()
+    return re.sub(r"\s+", " ", html.unescape(_TAG.sub("", _XREF.sub("", fragment)))).strip()
 
 
 def github_anchor(heading: str, seen: dict[str, int] | None = None) -> str:
@@ -164,14 +189,45 @@ def section_sources(body: str) -> list[str]:
     return keys
 
 
+_FN_REF = re.compile(r'<sup class="fn"><a [^>]*href="([^"#]+)#fn-(\d+)"')
+_NOTE_LI = re.compile(r'<li id="fn-(\d+)">(.*?)</li>', re.S)
+_NOTE_KEY = re.compile(r'<a href="[^"]*"><code>([a-z0-9][a-z0-9-]*)</code></a>')
+
+
+@cache
+def _page_notes(path: str) -> dict[str, str]:
+    """note number -> note HTML, for one citations page (empty when it cannot be read)."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            return dict(_NOTE_LI.findall(fh.read()))
+    except OSError:
+        return {}
+
+
+def footnote_sources(body: str, page_path: str) -> list[str]:
+    """The keys a section's FOOTNOTES cite, in order of first citation, once each - the section's sources once it
+    carries no `Sources:` roster (feature 292: the roster is retired from a restyled section, and every key it named
+    had to be quoted by one of these footnotes anyway). `page_path` is the assembled research page the body is from;
+    each reference names the citations page its note is on, relative to it."""
+    keys: list[str] = []
+    for href, n in _FN_REF.findall(body):
+        note = _page_notes(os.path.normpath(os.path.join(os.path.dirname(page_path), href))).get(n, "")
+        for k in _NOTE_KEY.findall(note):
+            if k not in keys:
+                keys.append(k)
+    return keys
+
+
 def research_sources(entry: str, research_dir: str = RESEARCH_DIR) -> list[str]:
-    """Every key the research entries named in `entry` cite, in file order."""
+    """Every key the research entries named in `entry` cite, in file order: a section's roster where it has one,
+    else the keys its footnotes cite."""
     headings = _entry_headings(entry)
     keys: list[str] = []
     for fname in _ENTRY_FILE.findall(entry):
-        for heading, body in _sections(os.path.join(research_dir, fname)):
+        path = os.path.join(research_dir, fname)
+        for heading, body in _sections(path):
             if any(_names(heading, h) for h in headings):
-                for k in section_sources(body):
+                for k in section_sources(body) or footnote_sources(body, path):
                     if k not in keys:
                         keys.append(k)
     return keys

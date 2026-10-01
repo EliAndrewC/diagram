@@ -20,30 +20,36 @@ class OfficeHall(Kind):
     official study, each its own feature.
 
     Why: At Takayama, the surviving intendant's office, the office block - entrance hall, great hall, office and
-    examination room, rebuilt together in 1816 - was built with great formality to show the office's rank, and the room where hearings were held is one part of that block. The
+    examination room, rebuilt in 1816, parts this project reads as one block - was built with great formality to show the office's rank, and the room where hearings were held is one part of that block. The
     magistrate and staff need somewhere to do the daily paperwork, and the residence's private study is on
     the wrong side of the line between state and home for it, so the hall is deep, and it may be the largest
-    building in the compound, being the institution's working core rather than a dwelling. A wooden hall
+    hall in the compound, out-measuring the residence as Takayama's did, being the institution's working core
+    rather than a dwelling; only a store for a wide territory's rice may be larger. A wooden hall
     could burn, and many did (the Sado magistracy was rebuilt five times, though Takayama's never burned),
     which, this project judges, is why the documents and the tax grain are kept in storehouses of their own.
 
-    Note: The hall's form and its place follow the record. The day office and official study behind the dais
-    are this project's reading of what the block must hold, since no page read names them. That it may out-size the residence is a guess, the Takayama pages giving no floor area for any
-    building, and no readable source ranks a compound's footprints, and why the papers and grain went to storehouses is this project's guess, as no page read
-    says. Its size, about 80 to 150 ft long and 20 to 45 ft deep, is a guess: it is the plan vocabulary's
-    working block, with no measured office wing of a jin'ya behind it.
+    Note: The hall's form follows the record; its place in the front court, with the residence behind, is the
+    Chinese yamen's order, and for the Japanese form a deliberate simplification, since at Takayama the residence
+    stood beside the office, not behind it. The day office and official study behind the dais
+    are this project's reading of what the block must hold, since no page read names them. That it out-sizes the
+    residence follows Takayama, the one office measured building by building (about 8,100 sq ft against 6,400); no
+    second office gives an area for any building, and why the papers and grain went to storehouses is this
+    project's guess, as no page read says. Its size, about 80 to 150 ft long and 20 to 45 ft deep, is a guess: it
+    is the plan vocabulary's working block, and it is smaller than the one office measured, Takayama's at about
+    8,100 sq ft.
 
     Caveat: The day office and official study behind the dais are this project's reading of what the block
-    must hold, since no page read names them. That it may out-size the residence is a guess, the Takayama pages giving no floor area for any
-    building, and no readable source ranks a compound's footprints, and why the papers and grain went to storehouses
-    is this project's guess, as no page read says. Its size, about 80 to 150 ft long and 20 to 45 ft deep, is a guess: it is the
-    plan vocabulary's working block, with no measured office wing of a jin'ya behind it.
+    must hold, since no page read names them. That it out-sizes the residence follows Takayama, the one office
+    measured building by building (about 8,100 sq ft against 6,400); no second office gives an area for any
+    building, and why the papers and grain went to storehouses is this project's guess, as no page read says. Its
+    size, about 80 to 150 ft long and 20 to 45 ft deep, is a guess: it is the plan vocabulary's working block, and
+    it is smaller than the one office measured, Takayama's at about 8,100 sq ft.
 
     Name: office hall
     Covers: the office hall's block, its outline and its front band
     Label: accurate
     Sources: takayama-jinya-jawiki, takayama-jinya-city, sado-bugyosho-fires
-    Entry: research/buildings.html - 'The courtroom is a room of the office hall, not a freestanding stage', 'Administrative culture is JAPAN-first for compound interiors', 'The compound has a size HIERARCHY, not just individual sizes', 'Fire discipline: halls burn, kura endure'
+    Entry: research/buildings.html - 'The hearing court (shirasu)', "Magistrates' compounds (jin'ya and yamen)", 'The size of a compound and the rank of its buildings', 'Fire, and the fireproof storehouses (dozō)'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)', 'How our maps size a compound and its buildings', 'How our maps draw a magistrate's compound'
     """
 
     key = "office hall"
@@ -61,18 +67,18 @@ class MagistratesDais(Kind):
     where the parties knelt. So the dais is not a pavilion of its own but the front of a deeper office hall,
     and the magistrate hears cases in the same building where the day's paperwork is done.
 
-    Note: The raised seat over the court, and its place at the front of the office hall, follow the record. The
-    clerks sat in the tier between the magistrate's room and the court; these sheets set their seats beside the
-    dais instead, and how large their place was is not recorded, so the size drawn is a guess.
+    Note: The raised seat over the court, and its place at the front of the office hall, follow the record.
+    At Edo the clerk sat in a room between the magistrate's room and the court; these sheets set their
+    seats beside the dais instead, and how large their place was is not recorded, so the size drawn is a guess.
 
-    Caveat: The clerks sat in the tier between the magistrate's room and the court; these sheets set their seats
-    beside the dais instead, and how large their place was is not recorded, so the size drawn is a guess.
+    Caveat: At Edo the clerk sat in a room between the magistrate's room and the court; these sheets set their
+    seats beside the dais instead, and how large their place was is not recorded, so the size drawn is a guess.
 
     Name: magistrate's dais
     Covers: the dais band on the office hall's court face, and its label
     Label: accurate
     Sources: oshirasu-jawiki, shirasu-kotobank, takayama-jinya-jawiki, takayama-jinya-city, neixiang-yamen-zhwiki
-    Entry: research/buildings.html - 'Who sat where at a hearing, and on what?', 'The courtroom is a room of the office hall, not a freestanding stage', 'Administrative culture is JAPAN-first for compound interiors'
+    Entry: research/buildings.html - 'The hearing court (shirasu)', "Magistrates' compounds (jin'ya and yamen)"; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)', 'How our maps draw a magistrate's compound'
     """
 
     key = "magistrate's dais"
@@ -88,11 +94,13 @@ class ClerksRoom(Kind):
     worked, and a room used only for writing, where the documents sent to the shogunate were drawn up, had a
     binding room beside it. At the Edo town magistracy, too, the duty rooms of two of its record sections
     stood in the quarter of the compound that held its court. What stood apart as buildings of their own were
-    the staff's houses; no page read gives the clerks a building of their own to work in. In both traditions the paperwork was run by locally hired
-    commoners under a tiny elite staff; in Japan the tedai were drawn from the peasants and townsmen who knew
-    the district. Scaled to a county of this setting, that is three or four clerks, scribes by caste
+    the staff's houses; no page read gives the clerks a building of their own to work in. In Japan the
+    paperwork was run by clerks, the tedai, chosen from the peasants and townsmen versed in rural
+    administration, under officials sent by the shogunate; a Chinese county kept its clerks in six chambers
+    of a few men each. Scaled to a county of this setting, that is three or four clerks, scribes by caste
     (heimen), who live in town and come in to the manor each day - and who, as permanent locals, are the
-    office's memory under one magistrate after another.
+    office's memory under one magistrate after another, this project's reading of the entrenched clerks of
+    China's offices.
 
     Note: The clerks' room as a room of the office hall follows the record. Their number of three or four is
     this project's scaling from a Chinese county population the record gives no source for, and the room's
@@ -106,7 +114,7 @@ class ClerksRoom(Kind):
     Covers: the clerks' room inside the office hall, its floor and its label
     Label: accurate
     Sources: mapple-takayama-jinya, edo-ashigaru-bugyosho, jinya-kotobank, tedai-jawiki, xuli-zhwiki
-    Entry: research/buildings.html - 'Where did the clerks work - in a room of the office hall, or a building of their own?', 'Clerks are few, local, and heimen'
+    Entry: research/buildings.html - 'The office hall and its clerks (goyakusho)'; research/rendering/buildings.html - 'How our maps draw the office hall and its clerks (goyakusho)'
     """
 
     key = "clerks' room"
@@ -118,15 +126,16 @@ class TaxArchive(Kind):
     ledgers - its tax base on paper - and serving as the strongroom for the coin and valuables the office
     holds.
 
-    Why: Administrative halls were timber buildings and often burned - the Sado magistracy burned and was
+    Why: Administrative halls were timber buildings and could burn - the Sado magistracy burned and was
     rebuilt five times, though Takayama's office never did - while an earthen kura was built to keep fire
-    out, its walls often a foot or more thick. That, this project judges, is why the documents got a
+    out, its walls thick with plaster. That, this project judges, is why the documents got a
     storehouse of their own instead of a room in the hall. The fire-water tubs stand at the wooden buildings
     and not here: this is the one building made not to burn.
 
     Note: The document storehouse follows the record, though why an office kept its papers there and not in
     the hall is this map's guess, as no page read says; it is drawn as a sealed kura of about 32 to 36 ft, the
-    plan vocabulary's size for a records store that doubles as the strongroom. An archive in the Chinese
+    plan vocabulary's size, larger than the one records store measured, Takayama's of about 450 sq ft, which
+    the record takes as the ceiling for a county office's; the record's proportions for it are a guess. An archive in the Chinese
     county office is not confirmed by any page read, and keeping the fire-water tubs away from it is this
     map's reasoning from its fireproofing: the pages read place tubs at the doorway and on the roof, and the
     Qing palace's vats by courtyard, but none gives a priority among buildings.
@@ -135,7 +144,7 @@ class TaxArchive(Kind):
     Covers: the plastered archive kura and its label
     Label: accurate
     Sources: sado-bugyosho-fires, dozo-jawiki, tfd-hongou-fire-history
-    Entry: research/buildings.html - 'Fire discipline: halls burn, kura endure', 'Fire-water is distributed to the halls, not the kura', 'Administrative culture is JAPAN-first for compound interiors'; research/cities/fabric.html - 'How did a dense wooden city watch for fire?'
+    Entry: research/buildings.html - 'Fire, and the fireproof storehouses (dozō)', "Magistrates' compounds (jin'ya and yamen)"; research/rendering/buildings.html - 'How our maps draw a magistrate's compound', 'How our maps draw fire water and the fireproof storehouses (dozō)'; research/urban-features.html - 'Fire watch towers and firefighting gear (hinomi yagura)'
     """
 
     key = "tax archive"
@@ -151,12 +160,12 @@ class Granary(Kind):
     damp; the rice storehouse of the Takayama intendancy is an earth-walled kura, its walls set with gaps for
     ventilation, and a kura guarded its grain against fire, damp and theft. Tax rice flowed from the village granaries through the magistrate's compound toward central stores,
     so the office kura holds grain in transit plus a local reserve; and since an intendant's seat was also where the year's tax was stored, a county seat's granary stands inside
-    the compound rather than in the town. Where water gives a county a way out, the grain moves on; a remote
-    county, where transport costs more, keeps a row of kura instead. The lord's kura held the paddy tax as brown rice in straw
+    the compound rather than in the town. Where water gives a county a way out, the grain waits in a row of storehouses at its river landing and moves on; a remote
+    county, where transport costs more, keeps it in the office's own storehouse instead. The lord's kura held the paddy tax as brown rice in straw
     bales, with a corner of unhulled rice kept against famine.
 
-    Note: The kura, its rice and its place inside the compound follow the record; that a county with water ships its grain on while a remote one keeps it in a row of kura is this map's reading, since no source says Takayama's rows held all of Hida's rice. The kura is drawn at about 43 to 50 by
-    25 to 27 ft and checked against real kura sizes, and its two forms follow the record, each sheet taking one. The
+    Note: The kura, its rice and its place inside the compound follow the record; that a county with water ships its grain on while a remote one keeps it in the office's storehouse is this map's reading and partly a guess: the storehouses at a county's landing are inferred from a great domain's store at the river port of Kawashiri, and no source says Takayama's rows held all of Hida's rice. The kura is drawn at about 43 to 50 by
+    25 to 27 ft and set by guess, since no source gives a county office's storehouse size, between the 440 to 740 sq ft of a three-village store's storehouses and a tenth of Takayama's 11,222 sq ft; its two forms follow the record, each sheet taking one. The
     storehouse on posts is attested in Japan for the southern islands and the Ainu north rather than for an
     intendant's office, whose grain store on the Takayama model is the earth-walled kura. The staging - tax rice passing through the compound and
     held there in transit beside a local reserve - is this map's own reading, which no source states, and the
@@ -177,7 +186,7 @@ class Granary(Kind):
     Covers: the granary, on posts or earth-walled, and its label
     Label: accurate
     Sources: takayukashiki-jawiki, takayama-onkura-heritage, dozo-jawiki, takayama-jinya-city, takayama-jinya-jawiki, nishimawari-koro-jawiki, gokura-jawiki, hatakata-men-jawiki, kuramai-jawiki, kakoimai-jawiki
-    Entry: research/buildings.html - 'Did a granary stand on posts, and why raise its floor away from a river?', 'The granary is a staging node, not the terminal store', 'The granary holds grain, not just rice'; research/towns.html - 'Why is the magistrate's manor drawn as a plain walled box?'
+    Entry: research/buildings.html - 'Storehouses for the tax rice'; research/rendering/buildings.html - 'How our maps draw storehouses for the tax rice'; research/towns.html - 'The magistrate's manor in a town: where it stands and which way it faces (jin'ya and yamen)'; research/rendering/towns.html - 'How our maps draw the magistrate's manor on a town map'
     """
 
     key = "granary"
@@ -190,13 +199,15 @@ class Cell(Kind):
 
     Why: Edo jails held the accused pending judgment; the sentences were exile, flogging, fines or death -
     not, in the ordinary case, time in prison - and light offenders were sent home to their villages.
-    Only the largest jail, Edo's Tenmachō, was a moated compound of its own; the others stood inside
+    The largest jail, Edo's Tenmachō, was a walled and moated compound of its own; most others stood at
     magistrates' and daikan offices, and a magistracy that judged cases kept a temporary cell inside its own
     compound for those called before its court. So a county magistracy keeps a cell or two for remand and no
     prison block - and in Rokugan, where torture is unusual, no room built for interrogation either.
 
-    Note: Small remand cells follow the record (though no page read names exile or fines as sentences, or
-    says light offenders were sent home), and so does a temporary cell inside the office's own compound. The
+    Note: Small remand cells follow the record, though holding only one or two is a guess (and no page read
+    names exile or fines as sentences, or says light offenders were sent home), and so does a temporary cell
+    inside the office's own compound. Drawing no room for interrogation is this setting's own departure
+    from Edo, whose jails had one. The
     size of such a cell was not found, so the drawn size is a guess within the span of the single cell rooms
     read, from Osaka's 6-mat cell (about 12 by 9 ft) to Tenmacho's 18-mat room (about 18 by 18 ft): about 12
     by 10 ft, at the small end, because a county cell holds only a few until their hearing. That a cell may
@@ -213,7 +224,7 @@ class Cell(Kind):
     Covers: the barred holding cell and its label
     Label: accurate
     Sources: agariya-jawiki, roya-kotobank, edo-ashigaru-bugyosho, tenmacho-jawiki, chuo-royashiki, neixiang-yamen-zhwiki, henan-neixiang, takayama-jinya-city
-    Entry: research/buildings.html - 'How big was a holding cell?', 'Cells are remand, not punishment', 'No interrogation room'
+    Entry: research/buildings.html - 'Holding cells (agariya and rōya)'; research/rendering/buildings.html - 'How our maps draw holding cells (agariya and rōya)'
     """
 
     key = "cell"
@@ -222,8 +233,7 @@ class Cell(Kind):
 class Gatehouse(Kind):
     """
     What: The watch's guardroom at the main gate, where the door is kept: either a small gatehouse of its own
-    just inside the gate and to one side, or a room of the long gate range the gate passes through - never
-    across the opening.
+    beside the gate, or a room of the long gate range the gate passes through - never across the opening.
 
     Why: The main gate is the compound's one door for visitors on business, and a guard lodged beside it
     controls it without closing the way. Both forms are attested. At the Kashiwara domain's seat the
@@ -233,19 +243,19 @@ class Gatehouse(Kind):
     gates had their guardrooms too.
 
     Note: Both forms follow the record, and each sheet takes one; a depth of about 12 ft is attested for
-    both. The size of Takayama's gatehouse was not found: the one freestanding guardroom measured is about 18
-    by 12 ft, and a freestanding gatehouse drawn much longer, around 40 ft, is a guess at the gate range's
-    scale.
+    both. The size of Takayama's gatehouse, and where it stood, were not found: the one gatehouse of its own
+    measured, a temple gate's guardroom at Kita-in that now stands against the gate, is about 18 by 12 ft, and
+    a gatehouse of its own drawn much longer, around 40 ft, is a guess at the gate range's scale.
 
-    Caveat: The size of Takayama's gatehouse was not found: the one freestanding guardroom measured is about
-    18 by 12 ft, and a freestanding gatehouse drawn much longer, around 40 ft, is a guess at the gate range's
-    scale.
+    Caveat: The size of Takayama's gatehouse, and where it stood, were not found: the one gatehouse of its own
+    measured, a temple gate's guardroom at Kita-in that now stands against the gate, is about 18 by 12 ft, and
+    a gatehouse of its own drawn much longer, around 40 ft, is a guess at the gate range's scale.
 
     Name: gatehouse
     Covers: the guard post beside the main gate, or the guardroom in the gate range, and its label
     Label: accurate
     Sources: tamba-kashiwara-jinya, matsue-bukeyashiki, takayama-jinya-city, takayama-jinya-jawiki, bansho-jawiki, kitain-bansho
-    Entry: research/buildings.html - 'Where did the gatekeepers sit - in the gate range, or a gatehouse beside it?'
+    Entry: research/buildings.html - 'The main gate and its gatekeepers (nagaya-mon)'; research/rendering/buildings.html - 'How our maps draw the main gate and its gatekeepers (nagaya-mon)'
     """
 
     key = "gatehouse"
@@ -256,29 +266,33 @@ class Barracks(Kind):
     What: A plain long rowhouse divided into dwellings, where the compound's working platoon and its duty
     watch lodge - a few unmarried men sharing a unit, the lowest servants in a common room; no bunks.
 
-    Why: Rural intendants' offices most likely housed their staff on the grounds - Takayama's kept a rowhouse for its storehouse keepers - though for the rest of the staff the record does not
+    Why: Rural intendants' offices kept the huts and rowhouses of their junior officials on the grounds - Takayama's kept a rowhouse for its storehouse keepers - though for the rest of the staff the record does not
     say so; it was the great city magistrate's offices that lodged their constables in a district of their
     own, while the magistrate's own residence stood inside the office. A county posting's staff is a working platoon, mostly
     without dependents, so by default it lives on the grounds. By this map's own ordering, the barracks
     outranks the stable in size: a stable for a few horses never out-foots the watch's quarters.
 
     Note: On-grounds housing for the staff is a reconstruction: a small domain's jin'ya kept its retainers'
-    residences inside its walls, and the Takayama intendancy kept a rowhouse for its storehouse keepers, but no source read says the rest of a rural intendant's staff lived on the grounds; for a
+    residences inside its walls, an intendant's office kept huts and rowhouses for its junior officials, and the Takayama intendancy kept a rowhouse for its storehouse keepers, but no source read says the rest of a rural intendant's staff lived on the grounds; for a
     city magistrate's office, the separate constables' district and the magistrate's own residence inside the office are attested. That the barracks outranks the stable is
-    this project's own reading, since no readable source ranks a compound's buildings by footprint. The
-    building's size, about 20 to 70 ft by 10 to 40 ft, is a guess taken from the plan vocabulary's range, and
-    how many live in it follows how the posting houses its staff. A warrior's rowhouse divided into dwellings is read
-    (an Edo duty rowhouse of 1860, three retainers to a unit); no page read puts a bed or bunk in one before modern
-    times, the first barracks with beds found being the Meiji army's of 1873.
+    this project's own reading, since no page read says where a stable ranked among an office's buildings; that the
+    staff's rowhouse stands below the office hall and the residence is read, from Takayama's measured floor areas.
+    The building's size as drawn, about 20 to 70 ft by 10 to 40 ft, is a guess taken from the plan vocabulary's
+    range: the five staff rowhouses measured run about 80 to 145 ft long and 12 to 24 ft deep, longer and narrower
+    than that range allows, and how many live in it follows how the posting houses its staff. A warrior's rowhouse
+    divided into dwellings is read (an Edo duty rowhouse of 1860, three retainers to a unit); no page read puts a bed
+    or bunk in one before modern times, and when beds first came into a Japanese barracks was not found (the army
+    barracks built at Nagoya in 1873 is shown with beds today, but that date is the building's, not the beds').
 
-    Caveat: The building's size, about 20 to 70 ft by 10 to 40 ft, is a guess taken from the plan vocabulary's
-    range, and how many live in it follows how the posting houses its staff.
+    Caveat: The building's size as drawn, about 20 to 70 ft by 10 to 40 ft, is a guess taken from the plan
+    vocabulary's range: the five staff rowhouses measured run about 80 to 145 ft long and 12 to 24 ft deep, longer
+    and narrower than that range allows, and how many live in it follows how the posting houses its staff.
 
     Name: barracks
     Covers: the barracks building and its label
     Label: accurate
     Sources: hatchobori-jawiki, takayama-jinya-jawiki, jinya-jawiki
-    Entry: research/buildings.html - 'Staff housing spans a real spectrum', 'The compound has a size HIERARCHY, not just individual sizes'
+    Entry: research/buildings.html - 'Staff rowhouses and barracks (nagaya)', 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps draw staff rowhouses and barracks (nagaya)', 'How our maps size a compound and its buildings'
     """
 
     key = "barracks"
@@ -294,24 +308,22 @@ class BenchNoticeBoard(Kind):
     before the gate of the village officials' houses. That board, where the town posts the state's standing
     law, is the attested one. Laws came to be posted at the gates of courts and offices only after the boards
     were abolished, in the Meiji period, and the likely counterpart of a court's own board, the posting walls
-    at a Chinese county office's gate, could not be read. A magistracy's board stands at its own gate, on the
+    at a Chinese county office's gate, carried edicts, the magistrate's own notices and bans, wanted notices
+    among them, and verdicts. A magistracy's board stands at its own gate, on the
     way everyone who has business with the court must come.
 
     Note: The board and its roadside seat follow the record, which sets it before the gate of village
-    officials' houses, though no page read puts a post town's board at its transport office; that every town and village kept one is a reading of the
-    sources, not their words. Notices at an office's own gate are read too, before modern times - a Ming and Qing county
-    office posted edicts, its own notices and bans on the splayed walls at its gate. A freestanding board at the gate,
+    officials' houses, though no page read puts a post town's board at its transport office; every village's board is attested, and that every town kept
+    one is a reading of the sources, not their words. Notices at an office's own gate are read too, in a modern popular
+    history whose dates are thin - a Chinese county office posted edicts, its own notices and bans on the splayed walls at its gate. A freestanding board at the gate,
     rather than the gate's walls, is a guess joined from the Chinese walls and the Japanese village officials' boards;
     no board at a Japanese intendant's office was found.
 
-    Caveat: A freestanding board at the gate, rather than the gate's walls, is a guess joined from the Chinese walls and
-    the Japanese village officials' boards; no board at a Japanese intendant's office was found.
-
     Name: notice board
     Covers: the board outside the main gate and its label
-    Label: accurate
+    Label: guess
     Sources: kosatsu-jawiki, ogose-kosatsuba, adachi-kosatsu, kosatsu-enwiki, shoya-jawiki
-    Entry: research/buildings.html - 'Did the magistrate post notices at the office's own gate, or on the town's notice board?'; research/urban-features.html - 'The notice board (kosatsuba) - siting is a TRAFFIC decision'
+    Entry: research/urban-features.html - 'Notice boards (kosatsuba)'; research/rendering/urban-features.html - 'How our maps place and draw notice boards (kosatsuba)'
     """
 
     key = "notice board"
@@ -322,13 +334,13 @@ class TallyOffice(Kind):
     What: A small office on the route goods take through the compound, where they are counted or weighed, the
     seal is set and the tally written: the record of goods the office supervises but does not own.
 
-    Why: The magistracy's hold on moving goods is documentary. Tax rice moved on boats the shogunate hired directly, flying
+    Why: The magistracy's hold on moving goods is documentary. The shogunate's tax rice went by sea on ships it hired directly, flying
     an official pennant and inspected at the ports of call, the office owning no hulls - and a charcoal store
-    was a supervised, tallied depot, its goods sealed there and never owned. So the post that writes the tally
+    is drawn on our maps as a supervised, tallied depot, its goods sealed there and never owned. So the post that writes the tally
     stands where the goods pass, between the store and the way out.
 
-    Note: That tax rice moved on hired hulls under an official pennant and port inspection is read; that the
-    office's hold on it was documentary is this project's reading. No source describes the tally office as a
+    Note: That the shogunate's tax rice went by sea on hired hulls under an official pennant and port inspection is read, and that the office owned no hulls of its own, and carrying that to a county's river, are this project's own; that the
+    office's hold on it was documentary is this project's reading, and drawing a charcoal store as a supervised, tallied depot is this project's decision, not a finding. No source describes the tally office as a
     building of its own; the room where the seal and the tally are made is inferred from them.
 
     Caveat: No source describes the tally office as a building of its own; the room where the seal and the
@@ -338,7 +350,7 @@ class TallyOffice(Kind):
     Covers: the tally office or tally shed and its label
     Label: accurate
     Sources: nishimawari-koro-jawiki, wagner-ming-iron, tonya-enwiki, economy-song-enwiki
-    Entry: research/buildings.html - 'The granary is a staging node, not the terminal store'; research/urban-features.html - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
+    Entry: research/buildings.html - 'Storehouses for the tax rice'; research/rendering/buildings.html - 'How our maps draw storehouses for the tax rice'; research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and charcoal stores'
     """
 
     key = "tally office"
@@ -350,20 +362,20 @@ class WeighingFloor(Kind):
     its balance and the bales on it are each their own feature.
 
     Why: The straw bale had no standard size in the traditional Japanese system, not even for rice, and charcoal
-    was packed at a weight set by its grade; a commodity with no standard bale cannot be traded by count: it must be weighed at the point of sale. That
+    was packed at a weight set by its grade in one undated district; in this project's reading a commodity with no standard bale cannot be traded by count and must be weighed at the point of sale, though where bales were packed to a set weight by grade a count of them would stand for a weight. That
     is what the weighing floor is for, and it is also why the office's hold on the trade is a written record
     rather than ownership.
 
-    Note: The weighing floor follows the record's reasoning - no source read says a charcoal dealer weighed the bales at sale - and its premise is read: the Japanese reference on the
+    Note: The weighing floor is a guess, this project's reading - no source read says a charcoal dealer weighed the bales at sale - and its premise is read: the Japanese reference on the
     bale says it had no fixed standard size, even for rice, and that in one charcoal district (Hokkaido's Iburi,
     undated) a bale's weight was set by the charcoal's grade - one district's practice, not a rule shown to hold
     everywhere.
 
     Name: weighing floor
     Covers: the covered weighing floor, its posts and its label
-    Label: accurate
+    Label: guess
     Sources: wagner-ming-iron, tonya-enwiki, fao-charcoal-safety, tawara-unit-jawiki
-    Entry: research/urban-features.html - 'Charcoal yards: a tallied depot, a cooling ground, and a weighing floor'
+    Entry: research/urban-features.html - 'Charcoal yards and charcoal stores'; research/rendering/urban-features.html - 'How our maps draw charcoal yards and charcoal stores'
     """
 
     key = "weighing floor"
@@ -378,19 +390,20 @@ class DayOffice(Kind):
     is done - petitions received, orders written, accounts kept.
 
     Why: The dais band is the front of a deeper hall, not a stage of its own: at Takayama the office wing holds the
-    entrance hall, examination room, office and great hall as one block, so the day office and official study belong behind the court face. With no room built for interrogation, a questioning
+    entrance hall, examination room, office and great hall, which we read as one block, and so we set the day office and official study behind the court face. With no room built for interrogation, a questioning
     happens in the day office or the hearing court like any other business.
 
-    Note: The day office as a room of the office hall, behind the dais, follows the record. That no room is built
-    for interrogation is a setting decision (GM, 2026-07), not the record: Takayama had an examination room
-    (ginmisho) beside its roofed court, and its torture was done in the jail in the town.
+    Note: The dais as the front of the office hall follows the record; the day office behind it is our own guess
+    at what the block must hold, since no page we read places it behind the court. That no room is built
+    for interrogation is this project's decision for the setting, not the record: Takayama had an examination room
+    (ginmisho) beside its roofed court, and its torture is reported to have been done in the jail in the town.
 
 
     Name: day office
     Covers: the day office's floor and its label
-    Label: accurate
+    Label: guess
     Sources: takayama-jinya-jawiki, takayama-jinya-city
-    Entry: research/buildings.html - 'The courtroom is a room of the office hall, not a freestanding stage', 'No interrogation room'
+    Entry: research/buildings.html - 'The office hall and its clerks (goyakusho)', 'The hearing court (shirasu)', 'Holding cells (agariya and rōya)'; research/rendering/buildings.html - 'How our maps draw the office hall and its clerks (goyakusho)', 'How our maps draw the hearing court (shirasu)', 'How our maps draw holding cells (agariya and rōya)'
     """
 
     key = "day office"
@@ -405,19 +418,16 @@ class OfficialStudy(Kind):
     study in the residence is the wrong side of that line for official business, so the office hall keeps a
     study of its own behind the dais.
 
-    Note: The official study is this project's reading: the Takayama office block is recorded with its
-    entrance hall, examination room, office and great hall, and a study behind the dais is inferred from
-    where the office's paperwork must be done, since no page read names one.
-
-    Caveat: The official study is this project's reading: the Takayama office block is recorded with its
-    entrance hall, examination room, office and great hall, and a study behind the dais is inferred from
-    where the office's paperwork must be done, since no page read names one.
+    Note: The official study is this project's own guess: the Takayama office was rebuilt in 1816 in parts
+    including its entrance hall, examination room, working office and great hall, which we read as one block,
+    and a study behind the dais is inferred from where the office's paperwork must be done, since no page read
+    places one behind the dais.
 
     Name: official study
     Covers: the official study's floor and its label
-    Label: accurate
+    Label: guess
     Sources: takayama-jinya-jawiki, takayama-jinya-city
-    Entry: research/buildings.html - 'The courtroom is a room of the office hall, not a freestanding stage'
+    Entry: research/buildings.html - 'The office hall and its clerks (goyakusho)', 'The hearing court (shirasu)'; research/rendering/buildings.html - 'How our maps draw the office hall and its clerks (goyakusho)', 'How our maps draw the hearing court (shirasu)'
     """
 
     key = "official study"
@@ -431,21 +441,18 @@ class ClerksSeats(Kind):
     Why: A hearing is a matter of record: what the parties say and what the magistrate rules is taken down on the
     spot by the office's clerks. At the Edo town magistracy the court was a hall in tiers, and the
     clerk sat with the examining officer in the room between the magistrate's innermost room and the court;
-    some magistrates' courts set an upper tier apart for the examiners and the scribes. The clerks sit in the hall,
-    never on the court itself.
+    some magistrates' courts set a further upper room apart for the examiners and the scribes. The clerks sit in the
+    hall, never on the court itself.
 
-    Note: The clerks' place in the hall, between the magistrate and the court and never on the court, follows
-    the record. How large that place was is not recorded, so the seats' size is a guess, and the plans set the
-    clerks to either side of the dais in one band rather than in a room of their own below it.
-
-    Caveat: How large that place was is not recorded, so the seats' size is a guess, and the plans set the
-    clerks to either side of the dais in one band rather than in a room of their own below it.
+    Note: The clerks' place in the hall, above the court and never on it, follows the record. Setting them to
+    either side of the dais, level with it, rather than in a room of their own below it, is a deliberate
+    deviation for simplicity. How large that place was is not recorded, so the seats' size is a guess.
 
     Name: clerks' seats
     Covers: the two seats flanking the dais and their labels
-    Label: accurate
+    Label: deviation
     Sources: oshirasu-jawiki, shirasu-kotobank
-    Entry: research/buildings.html - 'Who sat where at a hearing, and on what?'
+    Entry: research/buildings.html - 'The hearing court (shirasu)'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)'
     """
 
     key = "clerks' seats"
@@ -463,17 +470,19 @@ class KneelingPositions(Kind):
     and landlords behind on one side and the plaintiff behind on the other.
 
     Note: Commoners kneeling on straw mats below the raised hall follow the record. The arrangement of the
-    mats is attested only at Edo, so carrying it to a county court is a guess, and the mats' size is this
-    project's own figure.
+    mats is attested only at Edo; a Chinese county court at Neixiang marked only two places, kneeling stones
+    for the plaintiff to the east and the defendant, so carrying the Edo arrangement to a county court is a
+    guess, and the mats' size is this project's own figure.
 
-    Caveat: The arrangement of the mats is attested only at Edo, so carrying it to a county court is a guess,
-    and the mats' size is this project's own figure.
+    Caveat: The arrangement of the mats is attested only at Edo; a Chinese county court at Neixiang marked only
+    two places, kneeling stones for the plaintiff to the east and the defendant, so carrying the Edo arrangement
+    to a county court is a guess, and the mats' size is this project's own figure.
 
     Name: kneeling positions
     Covers: the straw mats on the hearing court and their label
     Label: accurate
     Sources: oshirasu-jawiki, shirasu-kotobank, shirasu-imidas, henan-neixiang, neixiang-yamen-zhwiki
-    Entry: research/buildings.html - 'Who sat where at a hearing, and on what?', 'Administrative culture is JAPAN-first for compound interiors', 'The courtroom is a room of the office hall, not a freestanding stage'
+    Entry: research/buildings.html - 'The hearing court (shirasu)', "Magistrates' compounds (jin'ya and yamen)"; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)', 'How our maps draw a magistrate's compound'
     """
 
     key = "kneeling positions"
@@ -486,8 +495,8 @@ class GranaryStilts(Kind):
 
     Why: The storehouse on posts, the takakura, kept its floor high to keep rats from the grain, with guards
     against them, and to let the air through against damp. Neither reason is a river's, so both hold for a
-    granary away from the water as well as for one beside it; at the great rice stores on the river at Edo, a
-    raised floor answered flood besides. Such storehouses were still built in Japan on Amami Oshima, on
+    granary away from the water as well as for one beside it.
+    Such storehouses were still built in Japan on Amami Oshima, on
     Hachijojima and among the Ainu into modern times.
 
     Note: The floor raised on posts follows the record as one of a granary's two forms, though it is attested for the southern islands and the Ainu north, not for an intendancy's store; the other, an
@@ -502,7 +511,7 @@ class GranaryStilts(Kind):
     Covers: the posts at the granary's foot
     Label: accurate
     Sources: takayukashiki-jawiki, takayama-onkura-heritage, kuramae-jawiki, wheatbaku-asakusa-okura
-    Entry: research/buildings.html - 'Did a granary stand on posts, and why raise its floor away from a river?'; research/cities/capitals.html - "The sluice's lifting frame"
+    Entry: research/buildings.html - 'Storehouses for the tax rice'; research/rendering/buildings.html - 'How our maps draw storehouses for the tax rice'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'
     """
 
     key = "granary stilts"

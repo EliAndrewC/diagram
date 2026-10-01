@@ -1,9 +1,9 @@
 """A way that makes for the field runs on to the bund (269 B04 and B17).
 
-research/fields/290 ("Where does the path to the fields end? On a bund, which carries it on"): the field path runs from the
+research/rendering/fields.html ("How our maps draw bunds between the paddies (aze)"): the field path runs from the
 hamlet to the paddy's outer bund and joins it, however short that leaves the path; it never ends in open ground short of
 the bund and never passes through a gap in it; where no path is left to draw, the hamlet's nearest lane runs on to the bund.
-research/homesteads/310 ("How far does a village lane run past its last farmhouse?"): a lane ends at a dooryard, or runs on
+research/rendering/ways.html ("How our maps draw village lanes"): a lane ends at a dooryard, or runs on
 to something a reader can see - a field path, a bund, another way. That the path joins the bund at the point nearest the
 hamlet is the record's GUESS.
 
@@ -189,7 +189,7 @@ def paddy_ground(s: Settlement) -> WorkedGround:
 
 
 def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str:
-    """Make sure some way JOINS the paddy's bund (269 B04, research/fields/290). Returns how it is reached, which the stage
+    """Make sure some way JOINS the paddy's bund (269 B04, research/rendering/fields/260). Returns how it is reached, which the stage
     records as `meta.field_path`: "joined" where a lane end already stands on it; "run_on" where the lane end nearest the
     paddy is carried on to it; "branch" where a field path is drawn off the nearest point of the lanes; "none: ..." where
     every way to it crosses water or the marsh - the reason a reader needs, stated rather than swallowed."""
@@ -334,7 +334,7 @@ def cut_past_the_junction(s: Settlement, touch: float = 4.0) -> int:
     FOUND AT THE 269 LANDING (settlement-review of Mizuguchi, rounds 1 and 2): the field spur began on the brook bank and
     ran 28 ft to the junction where another lane met it, then turned over the bridge - a stub reaching nothing, which the
     end rule counted as served because it stood within reach of the very lane it had just met, and which
-    `trim_free_stub` misses because its corner is a single turn, not a kink (research/homesteads 310: a lane ends at the
+    `trim_free_stub` misses because its corner is a single turn, not a kink (research/rendering/ways/020: a lane ends at the
     last house it serves)."""
     lanes = s.M.get("lanes") or []
     houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []]

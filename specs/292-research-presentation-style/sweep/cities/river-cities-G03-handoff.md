@@ -1,0 +1,9 @@
+# 292 sweep cities/river-cities G03 - handoff
+
+- SECTION=cities/river-cities/wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi
+- RENDERING=rendering/cities/river-cities/how-our-maps-draw-a-citys-wharf-and-landings
+- OLD=research/cities/river-cities/040-the-wharfs-working-face-piers-quays-and-stepped-landings.html research/cities/capitals/300-the-internal-dock-and-the-bank-quay-the-water-decides-which-a-city-gets.html research/cities/river-cities/070-does-an-officials-compound-have-its-own-stepped-landing-or-a-pier.html research/cities/river-cities/120-does-a-town-on-a-river-keep-a-landing-and-what-is-it-like.html
+- MODALS=Dock Revetment RiverLanding TaxBarge
+- BASE=e1d65b689
+
+Wharves and landings: no folded section was held IN PROGRESS by another feature (feature 280's C2 claim on river-cities 070 is DONE). The Entry of RiverLanding and TaxBarge also named "The wharf's working face" (the brief listed only Dock and Revetment), so all four were re-aimed; none of the four is in tests/fixtures/classes_before_189.json. Two notes were merged as one passage quoted twice: 070's gangi-hiroshima-jawiki-3 (the same passage as gangi-hiroshima-jawiki-2) and 120's kashi-jawiki-6 (the same passage as kashi-jawiki); 300's kashi-jawiki and kashi-jawiki-2 became kashi-jawiki-6 and -7, and its guidetokyo-edo-horiwari became -2 (100 holds that key). Cut, with a REMOVED comment: the inciting questions of 2026-08-09 and 2026-08-11 (kept in rendering comments), the unsourced "as few times handled as possible" reading, "a boardwalk is a promenade", and 300's reading of Pan Gate as opening the wall to the canal grid (the water gates' topic). The gangi-hiroshima-jawiki-7 note's heading name in kanji gained its gloss for the style prepass. The town landing's rule stays a `spec` block: no generator encodes it yet.

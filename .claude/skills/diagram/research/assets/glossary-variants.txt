@@ -1,3 +1,8 @@
+10-mat	tatami
+1868	1868
+3-mat	tatami
+6-mat	tatami
+8-mat	tatami
 abatis	abatis
 ablution well	ablution well
 ablution wells	ablution well
@@ -13,6 +18,8 @@ across the beams	ridge span
 adept	adept
 adepts	adept
 adlittoral	adlittoral
+administrative village	administrative village
+administrative villages	administrative village
 admonition arch	admonition arch
 admonition arches	admonition arch
 admonition pavilion	admonition pavilion
@@ -38,16 +45,18 @@ akusuiro	akusui
 alluvial	alluvial
 alluvial fan	alluvial fan
 alluvial fans	alluvial fan
+alnus	Alnus
 along the contour	contour
 along the ridge	ridge span
 alternate attendance	alternate attendance
 amado	amado
+amaterasu	Amaterasu
 amida	Amida
 amida buddha	Amida
 amoy	Amoy
 an'ei	An'ei
 anaerobic	anaerobic
-anagama	noborigama
+anagama	anagama
 ancestral hall	ancestral hall
 ancestral halls	ancestral hall
 anchor culture	anchor culture
@@ -56,8 +65,6 @@ animal unit	animal unit
 animal units	animal unit
 anjifang	anjifang
 anthropogenic	anthropogenic
-appurtenance	appurtenance
-appurtenances	appurtenance
 apron	apron
 aprons	apron
 aqueduct	aqueduct
@@ -65,19 +72,23 @@ aquifer	aquifer
 aquifers	aquifer
 aragaki	aragaki
 araiba	kawado
-are	are
+araizeki	araizeki
 ares	are
 arresting tools	three arresting tools
 arrow bamboo	yadake
 artesian	artesian
+asakura period	Asakura period
 ashigaru	ashigaru
 ashigaru nagaya	ashigaru-nagaya
 ashigaru-nagaya	ashigaru-nagaya
 ashina	Ashina
+assessed yield	kokudaka
+assessed yields	kokudaka
 assignation house	assignation house
 assignation houses	assignation house
 assize	assize
 association	plant association
+asuka period	Asuka period
 asunaro	asunaro
 at grade	at grade
 autumn assize	assize
@@ -91,7 +102,6 @@ azemame	azemame
 azemichi	azemichi
 azenuri	azenuri
 azezukuri	azezukuri
-azimuth	azimuth
 azolla	azolla
 azuchi	azuchi
 azuchi-momoyama	Azuchi-Momoyama period
@@ -154,6 +164,8 @@ bare red hill	bald hill
 baren	baren
 bargeboard	bargeboard
 bargeboards	bargeboard
+barnyard millet	barnyard millet
+barnyard millets	barnyard millet
 barrel coffin	barrel coffin
 barrel coffins	barrel coffin
 barrier station	sekisho
@@ -176,16 +188,20 @@ beam span	ridge span
 bed load	bedload
 bed shear stress	bed shear stress
 bedload	bedload
+before modern times	modern times
 beishan mianshui	beishan mianshui
 beitang	beitang
-beiyang government	Beiyang government
 bell-and-drum tower	gulou
 benjo	kawaya
+benten	Benten
+benten's	Benten
 berm	berm
 berms	berm
 betto	bettō
 bettō	bettō
 bettō-ji	bettō
+betula	Betula
+betweenness centrality	betweenness centrality
 bidens	Bidens tripartita
 bidens tripartita	Bidens tripartita
 big door	ōdo
@@ -196,6 +212,7 @@ bishamon	Bishamon
 bishamonten	Bishamon
 bitchu	Bitchu
 bituminous coke	coke
+biwa	Lake Biwa
 bizen	Bizen
 bizen province	Bizen
 black charcoal	black charcoal
@@ -203,12 +220,15 @@ black-charcoal	black charcoal
 black-seal	shuinchi
 black-seal land	shuinchi
 black-seal lands	shuinchi
+block village	kaison
+block villages	kaison
 blyxa	Blyxa
 bo	bo
 board feet	board foot
 board foot	board foot
 board-clapper	clapper-board
 bobana	bobana
+bochi	bochi
 bodaiji	bodaiji
 boji	boji
 bojikui	bojikui
@@ -226,6 +246,13 @@ borrowed-scenery	borrowed scenery
 boubana	bobana
 boundary post	bojikui
 boundary posts	bojikui
+braced frame	braced frame
+braced frames	braced frame
+braced-frame	braced frame
+branch hall	branch hall
+branch halls	branch hall
+branch hamlet	branch hamlet
+branch hamlets	branch hamlet
 branch house	branch house
 branch household	branch household
 branch households	branch household
@@ -239,11 +266,12 @@ brush cutter	brush cutter
 brush cutters	brush cutter
 bu	bu
 budget model	budget model
-bugeijo	bugeijo
 bugyosho	machi-bugyosho
 buke	bushi
 buke-chi	buke-chi
 buke-yashiki	buke-yashiki
+bukechi	buke-chi
+bukeyashiki	buke-yashiki
 bund	bund
 bund tea	keihan-cha
 bunded	bund
@@ -254,7 +282,9 @@ bunka era	Bunka
 bunkyu	Bunkyu
 bunkyu era	Bunkyu
 bunkyū	Bunkyu
+bunryo-hi	division flume
 bunsei	Bunsei
+bunsui	bunsui
 bunsuiguchi	bunsuiguchi
 bunto house	bunto house
 bunto houses	bunto house
@@ -269,9 +299,15 @@ burial graves	burial grave
 bursaries	rent bursary
 bursary	rent bursary
 bushi	bushi
+bushu	Musashi
+bushū	Musashi
 butsudan	butsuma
 butsuma	butsuma
+butt	butt
+butts	butt
 buyi	Buyi
+by-employment	by-employment
+by-employments	by-employment
 byre	byre
 byres	byre
 cadastral map	cadastre
@@ -287,9 +323,13 @@ calibrated liberty	calibrated liberty
 canal corridor	canal corridor
 canal corridors	canal corridor
 cangue	cangue
+canopy tree	canopy-tree
+canopy trees	canopy-tree
 canton	Canton
 cao wei	Three Kingdoms
 caoshi	caoshi
+caravan ground	caravan ground
+caravan grounds	caravan ground
 caravanserai	caravanserai
 caravanserais	caravanserai
 carex	Carex
@@ -297,6 +337,8 @@ carex lyngbyei	Carex
 carr	carr
 carried deck	carried deck
 carried decks	carried deck
+cart inn	wagon inn
+cart inns	wagon inn
 cascade	cascade
 cascade column	cascade
 cascade columns	cascade
@@ -321,6 +363,8 @@ censorate	Censorate
 center-pivot	center-pivot
 centipede lane	centipede lane
 centipede lanes	centipede lane
+centroid	centroid
+centroids	centroid
 ceremonial gate	ceremonial gate
 ceremonial gates	ceremonial gate
 cesspit	koedame
@@ -336,19 +380,29 @@ chancellor's	chancellor
 chancellors	chancellor
 chancellors'	chancellor
 chang'an	Chang'an
+chao	chao
 chaoguan	chaoguan
 charity graveyard	charity graveyard
 charity graveyards	charity graveyard
 charity ground	charity graveyard
 charity grounds	charity graveyard
+chaya	chaya
 chen fu	Chen Fu
 cheng-zhu	Cheng-Zhu Neo-Confucianism
 cheng-zhu neo-confucianism	Cheng-Zhu Neo-Confucianism
+chenghe	chenghe
 chenghua	Chenghua
+chenghuang miao	chenghuangmiao
 chenghuangmiao	chenghuangmiao
+chengmen	chengmen
+chengqiang	chengqiang
 chi	chi
+chicken-feather inn	chicken-feather inn
+chicken-feather inns	chicken-feather inn
 chigaidana	staggered shelves
+chigaya	chigaya
 chikaraishi	chikaraishi
+chimei	chimei
 chinese toon	toon
 chinese-style gate	Chinese-style gate
 chinese-style gates	Chinese-style gate
@@ -363,6 +417,10 @@ cho-hanare	machi-hanare
 chobu	cho
 chodaigamae	nando-gamae
 chome	chome
+chongsheng hall	Chongsheng shrine
+chongsheng halls	Chongsheng shrine
+chongsheng shrine	Chongsheng shrine
+chongsheng shrines	Chongsheng shrine
 chongzhen	Chongzhen era
 chongzhen era	Chongzhen era
 chonin	chonin
@@ -379,11 +437,15 @@ chugen	chugen
 chugoku	Chugoku
 chuma	chuma
 chumon-zukuri	chumon-zukuri
+chunyou	Chunyou
+chunyou era	Chunyou
 chō	cho
 chōtsuke	chōtsuke
 chōzuya	temizuya
 circuit	wall circuit
 circuit's length	wall circuit
+circular divider	cylinder divider
+circular dividers	cylinder divider
 citang	ancestral hall
 city god	City God
 city gods	City God
@@ -395,6 +457,9 @@ clay hulling mills	clay mill
 clay mill	clay mill
 clay mills	clay mill
 clay-mill	clay mill
+clear width	clear width
+clear widths	clear width
+climax type	climax type
 climbing kiln	noborigama
 climbing kilns	noborigama
 cloister	cloister
@@ -404,11 +469,20 @@ clone	clonal
 clones	clonal
 closed canopy	closed-canopy
 closed-canopy	closed-canopy
+clothier	clothier
+clothier's	clothier
+clothiers	clothier
 cluster's spine	cluster's spine
-clustered village	kaison
-clustered villages	kaison
+clustered village	shuson
+clustered villages	shuson
+coaching inn	coaching inn
+coaching inns	coaching inn
+coaching-inn	coaching inn
+coarse grain	coarse grain
+coarse grains	coarse grain
 coefficient of variation	coefficient of variation
 coke	coke
+collateral kin	collateral kin
 collective farm	collective farm
 collective farms	collective farm
 collector	collector
@@ -429,6 +503,8 @@ common graveyard	common cemetery
 common graveyards	common cemetery
 common hill	commons
 commons	commons
+commune	people's commune
+communes	people's commune
 commutation	commutation
 commute	commutation
 commuted	commutation
@@ -439,6 +515,7 @@ concave banks	concave bank
 concave-bank	concave bank
 confluence	confluence
 confluences	confluence
+confraternities	kō
 conservation headland	conservation headland
 conservation headlands	conservation headland
 consolidated paddies	kochi seiri
@@ -450,6 +527,7 @@ contours	contour
 convection column	convection column
 cooper	cooper
 cooperage	cooper
+coopered	cooper
 coopers	cooper
 coping	coping
 coppice	coppice
@@ -478,7 +556,11 @@ coursing line	coursing
 court of the imperial stud	Court of the Imperial Stud
 courtesy name	courtesy name
 courtesy names	courtesy name
+covering house	ōiya
 cpc	CPC
+crab clan	Crab Clan
+crane	Crane Clan
+crane clan	Crane Clan
 crenel	crenel
 crenelated	crenellated
 crenellated	crenellated
@@ -490,7 +572,6 @@ cribs	cribbing
 crop margin	crop margin
 crop margins	crop margin
 crop-margin	crop margin
-crossref	Crossref
 crown	crown
 crown fire	crown fire
 crown fires	crown fire
@@ -522,6 +603,8 @@ cutbank	cutbank
 cutbanks	cutbank
 cyanobacteria	cyanobacterium
 cyanobacterium	cyanobacterium
+cylinder divider	cylinder divider
+cylinder dividers	cylinder divider
 dachedian	wagon inn
 dacheng gate	Dacheng gate
 dacheng hall	Dacheng Hall
@@ -535,6 +618,8 @@ daijisen	Digital Daijisen
 daijokan	Daijokan
 daikan	daikan
 daikansho	daikansho
+daikoku	Daikoku
+daikoku's	Daikoku
 daikon	daikon
 daiku-machi	Daikumachi
 daikumachi	Daikumachi
@@ -545,9 +630,12 @@ daimyô	daimyo
 daimyō	daimyo
 daimyōjin	Daimyōjin
 daimyōs	daimyo
+dairokuten	Dairokuten
 daizu	daizu
 dajokan	Daijokan
+dake	dake
 dakyu	dakyu
+dali	Dali
 danka	danna-dera
 danna-ba	kusaba
 danna-dera	danna-dera
@@ -558,13 +646,14 @@ daozuofang	daozuofang
 daqing gate	Daqing gate
 daqingmen	Daqing gate
 dashigeta	dashigeta
+datang	great hall
 daxiangguo	Daxiangguo
+dazaifu	Dazaifu
 db	dBA
 dba	dBA
 dbh	DBH
 dead ground	dead ground
 dead space	dead ground
-declared fall	declared fall
 deep paddies	shitsuden
 deep percolation	deep percolation
 deep percolation losses	deep percolation
@@ -577,6 +666,8 @@ dejima	Dejima
 delivery ditch	delivery ditch
 delivery ditches	delivery ditch
 dem	DEM
+denbo-in	Denboin
+denboin	Denboin
 department	department
 department capital	department capital
 department capitals	department capital
@@ -589,15 +680,21 @@ desire paths	desire path
 desire-line	desire path
 detached territories	detached territory
 detached territory	detached territory
-detached village grain	village grain
 detritus	detritus
+dewa	Dewa
+dewa province	Dewa
 dharma hall	dharma hall
 dharma halls	dharma hall
 diameter at breast height	DBH
 digital daijisen	Digital Daijisen
 dike-pond	dike-pond
 dike-ponds	dike-pond
+dilou	dilou
+diluvial	diluvial upland
+diluvial upland	diluvial upland
+diluvial uplands	diluvial upland
 diospyros kaki	Diospyros kaki
+dipeng	dipeng
 discharge	discharge
 dish pond	sara-ike
 dish ponds	sara-ike
@@ -610,9 +707,15 @@ dispersed villages	dispersed settlement
 dissection	dissection
 distributaries	distributary
 distributary	distributary
+district intendant	gundai
+district intendants	gundai
 district magistrate	gun-bugyo
+district shrine	gōsha
+district shrines	gōsha
 ditai	mamian
 dituan	dituan
+division flume	division flume
+division flumes	division flume
 division point	bunsuiguchi
 division points	bunsuiguchi
 division works	bunsuiguchi
@@ -630,11 +733,15 @@ dohyo	dohyō
 dohyō	dohyō
 doi	horinouchi
 dojo	dojo
+dojos	dojo
 doma	doma
+domain	domain
 domain era	domain era
 domain kiln	domain kiln
 domain kilns	domain kiln
+domains	domain
 donggusup	donggusup
+dongjing	Dongjing
 dongjing meng hua lu	Dongjing Meng Hua Lu
 dooryard	dooryard
 doro-aze	doro-aze
@@ -656,6 +763,7 @@ dragon-bone water wheel	chain pump
 dragon-bone water wheels	chain pump
 dragon-bone wheel	chain pump
 dragon-bone wheels	chain pump
+drainage bearing	drainage bearing
 drainage ditch	drainage ditch
 drainage ditches	drainage ditch
 draw-basin	draw-basin
@@ -663,23 +771,30 @@ draw-basins	draw-basin
 drawdown	drawdown
 dressed stone	dressed stone
 drill ground	drill ground
+drip line	drip line
+drip lines	drip line
 drum tower	drum tower
 drum towers	drum tower
 dry edge	dry edge
 dry edges	dry edge
+dry landscape	karesansui
+dry landscapes	karesansui
+dry paddies	kanden
 dry paddy	kanden
 dry run	wet run
 dry runs	wet run
+dry-field	hatake
 dry-field conditions	kanden
 dry-field conversion	kanden
 ds/m	dS/m
+duck landing	duck landing
+duck landings	duck landing
 dujiangyan	Dujiangyan
 dunhuang	Dunhuang
-duty cycle	duty cycle
-duty cycles	duty cycle
 duty of water	water duty
 dwarf bamboo	sasa
 dōba	dōba
+dōsojin	dosojin
 ear mound	ear mound
 early modern	early modern period
 early modern period	early modern period
@@ -688,8 +803,13 @@ earth floors	doma
 earth god	tudi miao
 earth-god	tudi miao
 earth-god shrine	tudi miao
+eastern capital	Dongjing
 eastern han	Han dynasty
+eastern wei	Eastern Wei
 eave soffit	soffit
+eaves wall	eaves wall
+eaves walls	eaves wall
+echelon	echelon
 echigo	Echigo
 echigo province	Echigo
 echinochloa	Echinochloa crus-galli
@@ -697,8 +817,6 @@ echinochloa crus-galli	Echinochloa crus-galli
 edago	hongo
 edauchi	edauchi
 edge castle	edge castle
-edge-runner	edge-runner mill
-edge-runner mill	edge-runner mill
 edo	Edo
 edo fabric	building fabric
 edo period	Edo period
@@ -724,6 +842,11 @@ emergent plant	emergent
 emergent plants	emergent
 emergents	emergent
 enceinte	enceinte
+enclosed house	weilongwu
+enclosed houses	weilongwu
+endorheic	endorheic
+endorheic basin	endorheic
+endorheic lakes	endorheic
 enemy platform	mamian
 enemy platforms	mamian
 enemy tower	enemy tower
@@ -737,11 +860,11 @@ enoki	enoki
 enokida	Enokida
 enpo	Enpo era
 enpo era	Enpo era
+enpō	Enpo era
+enpō era	Enpo era
 eta	eta
 etchu	Etchu
 etchu's	Etchu
-eunis	EUNIS
-europe pmc	Europe PMC
 eutrophic	eutrophication
 eutrophication	eutrophication
 evapotranspiration	evapotranspiration
@@ -750,6 +873,11 @@ evariste huc	Huc
 ever-normal granaries	ever-normal granary
 ever-normal granary	ever-normal granary
 evocation	evocation
+examination hall	examination hall
+examination halls	examination hall
+exempt land	jochi
+exempt lands	jochi
+exempt-land	jochi
 exposure burial	exposure burial
 extension	extension advice
 extension advice	extension advice
@@ -757,6 +885,8 @@ extension document	extension advice
 extension guide	extension advice
 extension leaflet	extension advice
 extension manual	extension advice
+extensive agriculture	extensive agriculture
+extensive farming	extensive agriculture
 extramural	extramural
 fabric	building fabric
 fabric is later	building fabric
@@ -774,6 +904,8 @@ fan-palm	fan palm
 fan-palm-dike	fan palm
 fang	fang
 fao	FAO
+farmers' stage	farmers' stage
+farmers' stages	farmers' stage
 farrier	farrier
 farriers	farrier
 farriery	farrier
@@ -794,6 +926,8 @@ fengshui back grove	fengshui grove
 fengshui forest	fengshui grove
 fengshui grove	fengshui grove
 fengshuilin	fengshui grove
+fermenting store	fermenting store
+fermenting stores	fermenting store
 ferry landing	watashiba
 ferry landings	watashiba
 fertilizer boat	fertilizer boat
@@ -802,6 +936,8 @@ festival host house	festival lodging
 festival lodging	festival lodging
 festival's host house	festival lodging
 fetch	fetch
+fief	fief
+fiefs	fief
 field boat	field boat
 field boats	field boat
 field channel	field channel
@@ -832,6 +968,8 @@ fire bed	fire bed
 fire beds	fire bed
 fire brigade's standard	fire brigade's standard
 fire brigade's standards	fire brigade's standard
+fire gable	horse-head wall
+fire gables	horse-head wall
 fire gap	fire gap
 fire gaps	fire gap
 fire standard	fire brigade's standard
@@ -860,6 +998,7 @@ five classics	Four Books and Five Classics
 five dynasties	Five Dynasties
 five grains	five grains
 five highways	Five Highways
+five punishments	five-punishments
 five watches	night watch
 five-household group	five-household group
 five-household groups	five-household group
@@ -880,6 +1019,8 @@ flora	flora
 flowing-roof	nagare-zukuri
 flowing-roof style	nagare-zukuri
 flume	kakehi
+foehn	fohn
+fohn	fohn
 footing	footing
 footings	footing
 footplank	footplank
@@ -900,12 +1041,17 @@ four carps	four domestic carps
 four domestic carps	four domestic carps
 four gods	four gods
 four major carps	four domestic carps
+four stations	four stations of Edo
+four stations of edo	four stations of Edo
 four trees	four trees
 four trees and three grasses	four trees
+four-and-a-half-mat	tatami
 four-gods formulation	four gods
 four-room	four-room type
 four-room type	four-room type
 fourier	Fourier
+fox	Fox Clan
+fox clan	Fox Clan
 foxnut	foxnut
 foxnuts	foxnut
 foxtail millet	foxtail millet
@@ -917,6 +1063,7 @@ freeboard	freeboard
 frontage	frontage
 frost heave	frost heave
 frost-heave	frost heave
+fry	fry
 fry landing	fry landing
 fry landings	fry landing
 fry pond	nursery pond
@@ -924,6 +1071,7 @@ fry ponds	nursery pond
 fry-catching landings	fry landing
 fsw	FSW
 fsws	FSW
+ft clear	clear width
 fu	fu
 fubokuwakasho	Fubokuwakasho
 fubokuwakashō	Fubokuwakasho
@@ -939,7 +1087,9 @@ fudō	Fudo
 fudō myōō	Fudo
 fuel-and-fodder commons	commons
 fujiwara	Fujiwara-kyo
+fujiwara no tameie	Fujiwara no Tameie
 fujiwara-kyo	Fujiwara-kyo
+fujiwara-kyo's	Fujiwara-kyo
 fukada	fukada
 fuki	fuki
 fukugi	fukugi
@@ -955,11 +1105,13 @@ fung shui	fengshui grove
 fung shui wood	fengshui grove
 fung shui woods	fengshui grove
 furegaki	ofuregaki
+furo	furo
 fuse	fuse
 fusekoshi	inverted siphon
 fusuma	fusuma
 fuyu	Fuyu
 fuyu persimmon	Fuyu
+föhn	fohn
 gabion	gabion
 gabions	gabion
 gable end	gable end
@@ -983,6 +1135,7 @@ gassho-zukuri	gassho
 gasshozukuri	gassho
 gate field	gate paddy
 gate fields	gate paddy
+gate lands	gate-land
 gate market	gate market
 gate paddies	gate paddy
 gate paddy	gate paddy
@@ -990,6 +1143,8 @@ gate range	nagayamon
 gate ranges	nagayamon
 gate rowhouse	nagayamon
 gate rowhouses	nagayamon
+gate stable	gate stables
+gate stables	gate stables
 gate throat	gate throat
 gate town	monzen
 gate towns	monzen
@@ -1005,14 +1160,19 @@ gazetted	gazetted
 gazetteer	gazetteer
 gazetteers	gazetteer
 gejo	degawari
+gempukku	gempukku
+gempuku	gempukku
 genan	degawari
 genba	genba
 genba-oke	genba
+genbun	Genbun
+genin	genin
 genji	Genji
 genkan	genkan
 genkan-no-ma	genkan-no-ma
 genna	Genna
 genna era	Genna
+genpuku	gempukku
 genroku	Genroku
 gentry	gentry
 geomancer	geomancy
@@ -1022,13 +1182,12 @@ geomantic	geomancy
 geostrophic	geostrophic
 geshunin	geshunin
 geta	geta
-ghat	ghat
+ghusl	ghusl
 ginmisho	ginmisho
 girder	girder
 girders	girder
 gis	GIS
 glacis	glacis
-glebe	glebe
 glulam	glulam
 glyph	glyph
 glyphs	glyph
@@ -1046,6 +1205,7 @@ gogura	gogura
 gokaido	Five Highways
 gokenin	gokenin
 gokumon	gokumon
+gokura	gogura
 gold paper	gold paper
 gongxiefang	gongxiefang
 gonin-gumi	five-household group
@@ -1056,29 +1216,45 @@ goshi	gōshi
 goten	goten
 gou	gou
 goulan	goulan
+goura	gogura
 governor-general	governor-general
 governor-general's	governor-general
 governors-general	governor-general
+goyakusho	goyakusho
 goyo shonin	purveyor merchant
 goyoba	goyoba
 goyobeya	goyobeya
 goyōba	goyoba
 goza-no-ma	goza-no-ma
 grain of the paddy	field grain
+grand abbot	grand abbot
+grand abbots	grand abbot
+grand abbots'	grand abbot
 grand canal	Grand Canal
+grand coordinator	grand coordinator
+grand coordinators	grand coordinator
 grass carp	grass carp
 grass hill	kusayama
 grass hills	kusayama
+grass weir	grass weir
+grass weirs	grass weir
 grave good	grave goods
 grave goods	grave goods
 grave island	grave island
 grave islands	grave island
+great clan	Great Clan
+great clans	Great Clan
+great hall	great hall
+great halls	great hall
+great oku	ooku
 green manure	green manure
 groin	groyne
 groins	groyne
 gross-up	gross-up
 gross-ups	gross-up
 ground mulberry	root-cut
+group quarter	kumi-yashiki
+group quarters	kumi-yashiki
 group-residence	kumi-yashiki
 group-residences	kumi-yashiki
 grow-out	grow-out pond
@@ -1088,6 +1264,7 @@ groyne	groyne
 groynes	groyne
 gsi	GSI
 guan-xiang	guanxiang
+guangdong	Kwangtung
 guangdong xinyu	Guangdong xinyu
 guangfu	Guangfu
 guangxu	Guangxu
@@ -1097,9 +1274,12 @@ guanxiang	guanxiang
 guard cities	guard city
 guard city	guard city
 guardian deities	thirty guardian deities
+guardian dog	lion-dog
+guardian dogs	lion-dog
 gulou	gulou
 gun bugyo	gun-bugyo
 gun-bugyo	gun-bugyo
+gun-dai	gundai
 gundai	gundai
 gyosho	Gyosho
 gyosho edition	Gyosho
@@ -1115,12 +1295,19 @@ hachiman	Hachiman
 hachure	hachure
 hachures	hachure
 hageyama	bald hill
+hagi	Hagi
+haibutsu kishaku	haibutsu kishaku
 haiden	haiden
 haikai	haikai
 hakata	Hakata
 hakehi	hakehi
 hakka	Hakka
+hakka enclosed house	weilongwu
+hakka enclosed houses	weilongwu
 hakone barrier	Hakone barrier
+hakusan	hakusan
+half-fold	half-fold
+half-fold type	half-fold
 half-river closure	half-river closure
 half-river closures	half-river closure
 half-stories	half-story
@@ -1128,40 +1315,61 @@ half-story	half-story
 hall of the heavenly kings	hall of the Heavenly Kings
 hall-and-wing house	weilongwu
 hall-and-wing houses	weilongwu
+hall-hermitage	hall-hermitage
+hall-hermitages	hall-hermitage
 han	han
 han china	Han dynasty
+han chinese	Han Chinese
 han dynasty	Han dynasty
 han's	han
 han-dynasty	Han dynasty
+hanamichi	hanamichi
 hanchiku	rammed earth
+hancho	hancho
+hanchō	hancho
 hane-tsurube	hanetsurube
 hanebashi	hanebashi
 hanetsurube	hanetsurube
 hangtu	rammed earth
 hanko	hanko
+hankō	hanko
+hanori	hanori
+hanori type	hanori
+hanori-gata	hanori
 hansho	hansho
 hanshō	hansho
+hantei	Hantei
+haori	half-fold
 harakata	harakata-shu
 harakata-shu	harakata-shu
 hardiness zone	hardiness zone
 hari-ma	hari-ma
 hasa	hazakake
+hasagi	hazakake
+hashi	hashi
 hata	hatake
 hata-ei	hata-ei
 hatago	hatago
+hatagoya	hatago
 hatake	hatake
 hatamoto	hatamoto
 hate-ike	hate-ike
+hattori	Hattori site
+hattori site	Hattori site
 hayakawa	Hayakawa
 hayakawa's	Hayakawa
 hayaoke	barrel coffin
 hazakake	hazakake
+head house	head house
+head houses	head house
 head race	head race
 head works	head works
 head-race	head race
 head-works	head works
 header reservoir	header reservoir
 header reservoirs	header reservoir
+headland	headland
+headlands	headland
 headman	headman
 headmen	headman
 headworks	headworks
@@ -1196,13 +1404,20 @@ hereditary temples	hereditary temple
 hexi	Hexi Corridor
 hexi corridor	Hexi Corridor
 hidenin	hidenin
+hideyoshi	Hideyoshi
+high loom	high loom
+high looms	high loom
+high-loom	high loom
 high-volatile	volatiles
 hikae-no-ma	hikae-no-ma
 hikan	hikan
 hikioi	hikioi
 hikiri-ichi	hikiri-ichi
+hikone	Hikone
+hill spacing	hill spacing
 hill-and-plain castle	hill-and-plain castle
 hill-style	tsukiyama
+hillshade	hillshade
 hinin	hinin
 hinoe-inu	sexagenary year
 hinoki	hinoki
@@ -1213,10 +1428,15 @@ hip-and-gable roof	hip-and-gable roof
 hip-and-gable roofs	hip-and-gable roof
 hip-roof	hip roof
 hip-roofed	hip roof
+hipped	hip roof
 hipped roof	hip roof
 hipposandal	hipposandal
 hipposandals	hipposandal
+hirairi	hirairi
 hirakata	hirakata
+hiratabune	hiratabune
+hiratabune's	hiratabune
+hiratsuka	Hiratsuka
 hirayamajiro	hill-and-plain castle
 hirazamurai	heishi
 hiro	hiro
@@ -1225,6 +1445,10 @@ hirokoji	hirokoji
 hiroma	hiroma
 hiroshige	Hiroshige
 hiroshige's	Hiroshige
+hitch rail	hitching rail
+hitch rails	hitching rail
+hitching rail	hitching rail
+hitching rails	hitching rail
 hitoyado	hitoyado
 hiyokechi	hiyokechi
 hiyoza	hiyoza
@@ -1250,6 +1474,9 @@ hokke sect	Hokke
 hokora	hokora
 hokuriku	Hokuriku
 holding jail	holding jail
+home ministry	Home Ministry
+homestead god	yashikigami
+homestead gods	yashikigami
 homestead grove	yashikirin
 homestead groves	yashikirin
 hon-byakusho	honbyakusho
@@ -1269,9 +1496,13 @@ honjo	Honjo
 honmaru	honmaru
 honmune-zukuri	honmune-zukuri
 honshu	Honshu
+honzan	Honzan
+honzan line	Honzan
 hoonoki	hoonoki
 horeki	Horeki
+hori	hori
 horiage-den	horita
+horikawa	horikawa
 horinouchi	horinouchi
 horinouchi's	horinouchi
 horita	horita
@@ -1282,7 +1513,10 @@ horse-head gable walls	horse-head wall
 horse-head wall	horse-head wall
 horse-head walls	horse-head wall
 hot shoeing	hot-shoeing
+hot-shoe	hot-shoeing
 hot-shoeing	hot-shoeing
+hotei	Hotei
+hotei's	Hotei
 hotoke	hotoke
 hou ji	Hou Ji
 houlongshan	houlongshan
@@ -1296,6 +1530,7 @@ houseman	gokenin
 housemen	gokenin
 houzhaofang	houzhaofang
 hsien	hsien
+huanghuali	huanghuali
 huc	Huc
 hucheng he	hucheng he
 hui	hui
@@ -1305,6 +1540,10 @@ hui-style	Hui style
 huiguan	huiguan
 huizhou	Huizhou
 huizhou style	Hui style
+hulled	hulling
+huller	hulling
+hullers	hulling
+hulling	hulling
 hundred articles	hundred articles
 hutong	hutong
 hutongs	hutong
@@ -1338,6 +1577,7 @@ ido-yakata	idoyakata
 idobata	idobata
 idowaku	igeta
 idoyakata	idoyakata
+ie	ie
 ieyasu	Ieyasu
 ieyasu hundred articles	hundred articles
 ieyasu's	Ieyasu
@@ -1354,6 +1594,7 @@ ikkō-shū	Jodo Shinshu
 ima	ima
 imado ware	Imado ware
 imado-yaki	Imado ware
+imidas	imidas
 imperial magistrate	Imperial Magistrate
 imperial magistrate's	Imperial Magistrate
 imperial magistrates	Imperial Magistrate
@@ -1369,10 +1610,12 @@ in spate	spate
 in-field pocket pond	pocket pond
 inari	Inari
 inashiro	Inashiro
+inbatsuchi	inbatsuchi
 inekake	hazakake
 initiate	initiate
 initiates	initiate
 inkyo	inkyo
+inland sea	Setouchi
 inner moat	uchibori
 inner moats	uchibori
 inshu	Inshu
@@ -1387,18 +1630,24 @@ intendancies	daikan
 intendancy	daikan
 intendant	daikan
 intendants	daikan
+intensive agriculture	intensive farming
+intensive farming	intensive farming
 inter	inter
 interceptor	interceptor
 interceptor channel	interceptor
 interlinear commentary	interlinear commentary
 interlinear note	interlinear commentary
 interment	inter
+interments	inter
+internal-affairs squad	internal-affairs squad
+internal-affairs squads	internal-affairs squad
 internode	internode
 internodes	internode
 interred	inter
 inters	inter
 intramural	intramural
 inu-bashiri	inu-bashiri
+inugoya	inugoya
 inverted siphon	inverted siphon
 inverted siphons	inverted siphon
 iriai	iriai
@@ -1409,6 +1658,8 @@ irimoya-roofed	irimoya
 iroha	iroha companies
 iroha companies	iroha companies
 iroha-gumi	iroha-gumi
+iron office	Iron Office
+iron offices	Iron Office
 irori	irori
 irri	IRRI
 irrigation ditch	irrigation ditch
@@ -1422,12 +1673,15 @@ ishigaki	ishigaki
 ishiibi	Ishi-ibi
 ishikawa method	Ishikawa method
 ishikawa-method	Ishikawa method
+island field	island field
+island fields	island field
 isohyet	isohyet
 isohyets	isohyet
 isotherm	isohyet
 isotherms	isohyet
 ita-bune	ita-bune
 itabashi	itabashi
+iwami-no-kami	no-kami
 iyo	Iyo
 izumi	Izumi
 izumi province	Izumi
@@ -1439,9 +1693,11 @@ jagama	jagama
 jail god	jail-god
 jail-god	jail-god
 jail-god temple	jail-god
+japan house	Japan House
 japanese zelkova	keyaki
 jar burial	jar burial
 jar burials	jar burial
+jarijiki	jarijiki
 jehol	Jehol
 jehol diary	Jehol
 jetties	jetty
@@ -1455,6 +1711,8 @@ jiaqing	Jiaqing
 jiaxing	Huzhou-Jiaxing
 jiegao	jiegao
 jiguchi-sen	jiguchi-sen
+jikata hanreiroku	Jikata hanreiroku
+jimingyi	Jimingyi
 jin	jin
 jin dynasty	Jin dynasty
 jin'ya	jin'ya
@@ -1464,9 +1722,9 @@ jinan	Tsinan
 jinan's	Tsinan
 jingshi fangxiang zhi	Jingshi fangxiang zhi
 jingtai	Jingtai
-jingtian	jingtian
 jingu	Jingu
 jinguji	jingūji
+jinguji muka	Jinguji Muka
 jingū	Jingu
 jingū-ji	jingūji
 jingūji	jingūji
@@ -1481,7 +1739,10 @@ jittering	jitter
 jitō	jito
 jiwari	warichi
 jizo	jizo
+jizo-bon	Jizo-bon
+jizobon	Jizo-bon
 jizō	jizo
+jizō-bon	Jizo-bon
 jo	jo
 jobikeshi	jobikeshi
 jobo	jobo
@@ -1494,6 +1755,8 @@ jodo shinshu	Jodo Shinshu
 jogyo hall	Jogyo hall
 jogyo-do	Jogyo hall
 joint household	joint household
+joint households	joint household
+joka	joka
 jokamachi	jokamachi
 jokyo	Jokyo
 jomon	Jomon period
@@ -1504,6 +1767,7 @@ joruri	joruri
 josui	josui
 josui ido	josui-ido
 josui-ido	josui-ido
+jowa	Jowa
 jozabangai-seki	jozabangai-seki
 jsidre	JSIDRE
 ju-jutsu	jujutsu
@@ -1512,12 +1776,15 @@ jujutsu	jujutsu
 juku	shukuba
 junk	junk
 junks	junk
+jurojin	Jurojin
+jurojin's	Jurojin
 juyangyuan	juyangyuan
 jō	jo
 jōdo	Jodo
 jōdo shinshū	Jodo Shinshu
 jōgyō hall	Jogyo hall
 jōgōe-chi	jōgōe-chi
+jōkyō	Jokyo
 jōmon	Jomon period
 jōmon period	Jomon period
 jōruri	joruri
@@ -1528,19 +1795,27 @@ kabuki	kabuki
 kachi	doshin
 kadoya	kadoya
 kaei	Kaei
-kagura	kagura
+kagawa	Kagawa
+kai	Kai
+kai province	Kai
 kaibori	kaibori
 kaie-ji	Kaie-ji
 kaie-ji's	Kaie-ji
+kaifeng	Kaifeng
 kaigisho	kaigisho
+kaine	kainyo
 kainyo	kainyo
+kainyu	kainyo
 kaisho	kaisho
 kaishochi	kaishochi
 kaison	kaison
+kaiu wall	Kaiu Wall
 kaji-ya	kaji-ya
 kajimachi	kajimachi
+kajiya	kaji-ya
 kakaemoto	hitoyado
 kakehi	kakehi
+kaki	Diospyros kaki
 kakoigura	kakoigura
 kamado	kamado
 kamakura	Kamakura period
@@ -1550,11 +1825,11 @@ kami	kami
 kami-yashiki	kami-yashiki
 kamidana	kamidana
 kamigata	Kamigata
+kaminarimon	Kaminarimon
 kamiza	kamiza
 kan	kan
 kan'ei	Kan'ei
 kan'ei period	Kan'ei
-kana	kana
 kanagashi	kanagashi
 kanbun	Kanbun
 kanden	kanden
@@ -1584,12 +1859,16 @@ karahafu	karahafu
 karamete	karamete-mon
 karamete-mon	karamete-mon
 karamon	Chinese-style gate
+karesansui	karesansui
 karishiki	karishiki
+kariyasu	kariyasu
 karo	karo
 karō	karo
+kasagake	kasagake
 kasasuge	kasasuge
 kashi	kashi
 kaso-dera	kaso-dera
+kaso-zu	kaso-zu
 kasoba	kasoba
 kasuga-style	Kasuga-style
 kasuga-zukuri	Kasuga-style
@@ -1599,11 +1878,13 @@ kasō-dera	kaso-dera
 kata	kata
 kata-hōdōe-chi	jōgōe-chi
 katairo	eiro
+katakana	katakana
 katanagari	sword hunt
 katemeshi	katemeshi
 katsura	Katsura
 katsura imperial villa	Katsura
 katsura rikyu	Katsura
+katteguchi	katteguchi
 kawachi	Kawachi
 kawachi province	Kawachi
 kawado	kawado
@@ -1627,6 +1908,7 @@ keicho-era	Keicho
 keidai	keidai
 keihan	bund
 keihan-cha	keihan-cha
+keijo	keijo
 keiko	keiko
 keio	Keio
 keio era	Keio
@@ -1635,6 +1917,7 @@ kenchi-cho	kenchicho
 kenchicho	kenchicho
 kengyo	kengyō
 kengyō	kengyō
+kenmonshu	Kenmonshu
 kera	kera
 kesa	kesa
 kesa cut	kesa
@@ -1642,14 +1925,17 @@ kesa cuts	kesa
 keyaki	keyaki
 khitan	Khitan
 kiangsu	Kiangsu
+kiba	kiba
 kichin	kichin
 kichin charge	kichin
 kichin-yado	kichin-yado
 kido	kido
 kidoban	kidoban
 kidobans	kidoban
+kigoya	kigoya
 kikaijima	Kikaijima
 kikaijima's	Kikaijima
+kiku	kiku
 kiln house	kiln house
 kiln houses	kiln house
 kimoiri	shoya
@@ -1681,10 +1967,14 @@ kodera site	Kodera site
 koebune	fertilizer boat
 koedame	koedame
 koeki kokusanko	Koeki Kokusanko
+kofu	Kofu
+kofu basin	Kofu
 kofun	Kofun period
 kofun period	Kofun period
+kogein	kogein
 koguchi	koguchi
 koike	koike
+koishikawa yojosho	Yojosho
 koji	koji
 kojiki	Kojiki
 koke	koke
@@ -1703,6 +1993,7 @@ kokumori	kokumori
 kokuso	kokuso
 kokuzo	kokuso
 komae	komae
+komai	lath
 komainu	lion-dog
 komatsuna	komatsuna
 komo	komo
@@ -1725,6 +2016,7 @@ koshin towers	koshin tower
 kotai-yoriai	kotaiyoriai
 kotaiyoriai	kotaiyoriai
 kotobank	kotobank
+koya	koya
 kozashi	kozashi
 kuai	kuai
 kuchi-agariya	agariya
@@ -1736,6 +2028,7 @@ kuchiei	kuchiei
 kuchiireya	hitoyado
 kuchimai	kuchimai
 kui	kui
+kujiba	kujiba
 kumi	kumi
 kumi-chi	kumi-chi
 kumi-yashiki	kumi-yashiki
@@ -1751,20 +2044,25 @@ kure-mutsu	kure-mutsu
 kuri	kuri
 kuromatsu	kuromatsu
 kuruwa	kuruwa
+kusa-no-ma	kusa-no-ma
 kusaba	kusaba
 kusakariba	magusaba
+kusatsu	Kusatsu
 kusayama	kusayama
 kuwabata	Kuwabata
+kwangtung	Kwangtung
 kyo-machiya	machiya
 kyogen	kyogen
 kyoho	Kyoho
 kyoma	Kyoto measure
 kyoto measure	Kyoto measure
+kyowa	Kyowa
 kyozo	sutra house
 kyuden	kyuden
 kyuhi	kyuhi
 kyunin	kyunin
 kyunins	kyunin
+kyushu	Kyushu
 kyuyo	Kyuyo
 kyō-ma	Kyoto measure
 kyōgen	kyogen
@@ -1777,31 +2075,43 @@ kōsatsu	kosatsuba
 kōsatsu-ba	kosatsuba
 kōshin	Kōshin
 lacey	Lacey
+lake biwa	Lake Biwa
 lake tai	Lower Yangzi
 land class	land class
 land classes	land class
 land consolidation	kochi seiri
+land fall	land fall
 land readjustment	kochi seiri
 land survey	cadastre
 land surveys	cadastre
+land's fall	land fall
 land-readjustment	kochi seiri
+land-sharing system	warichi
 landrace	landrace
 landraces	landrace
+later hojo	Later Hojo
 lateral	lateral
 laterals	lateral
+lath	lath
+laths	lath
+laurel forest	laurel forest
+laurel forests	laurel forest
 leaf litter	forest litter
 leat	leat
 leats	leat
 legacy of ieyasu	hundred articles
-legibility floor	legibility floor
-legibility floors	legibility floor
 leping	Leping
 levee	levee
 levees	levee
+levy store	levy storehouse
 levy storehouse	levy storehouse
 levy storehouses	levy storehouse
+levy stores	levy storehouse
 li	li
 li river	Li River
+liao	Liao dynasty
+liao dynasty	Liao dynasty
+liao dynasty's	Liao dynasty
 liberties	liberty
 liberty	liberty
 licensed quarter	yukaku
@@ -1818,15 +2128,22 @@ lineage villages	lineage village
 lineages	lineage
 linear village	ressen
 linear villages	ressen
+lined canal	lined canal
+lined canals	lined canal
 ling canal	Lingqu
 lingnan	Lingnan
 lingqu	Lingqu
+lingxing gate	lingxing gate
+lingxing gates	lingxing gate
+lion	Lion Clan
+lion clan	Lion Clan
 lion-dog	lion-dog
 lion-dogs	lion-dog
 lishe	gongxiefang
 litchi	litchi
 litchis	litchi
 littoral	littoral
+liubu	liubu
 liuchu	liuchu
 loess	loess
 log boom	boom
@@ -1847,6 +2164,7 @@ loose-cluster villages	loose-cluster village
 loose-log drive	kanagashi
 loose-log driving	kanagashi
 louzeyuan	louzeyuan
+low city	Low City
 low stage	river stage
 low-trunk	low-trunk mulberry
 low-trunk mulberry	low-trunk mulberry
@@ -1854,6 +2172,8 @@ lower break	break of slope
 lower break of slope	break of slope
 lower mansion	lower mansion
 lower mansions	lower mansion
+lower privies	upper privy
+lower privy	upper privy
 lower residence	lower mansion
 lower residences	lower mansion
 lower yangtze	Lower Yangzi
@@ -1862,6 +2182,8 @@ lu guimeng	Lu Guimeng
 luban ruler	Luban ruler
 luban rulers	Luban ruler
 lulu	lulu
+lump village	kaison
+lump villages	kaison
 luocheng	luocheng
 lushi chunqiu	Lushi chunqiu
 lychee	litchi
@@ -1879,6 +2201,9 @@ machi-hanare	machi-hanare
 machi-kaisho	machi-kaisho
 machi-kido	kido
 machidoshiyori	toshiyori
+machikata	machikata
+machinami	machinami
+machiwari	machiwari
 machiya	machiya
 madake	madake
 made ground	made ground
@@ -1888,11 +2213,15 @@ magistracies	magistracy
 magistracies'	magistracy
 magistracy	magistracy
 magusaba	magusaba
+mahavira hall	Mahavira hall
+mahavira halls	Mahavira hall
 main channel	main stem
 main stem	main stem
 major axis	major axis
+makomo	makomo
 makusa	makusa
 mamian	mamian
+man'en	Man'en
 man'yoshu	Man'yoshu
 manji	Manji
 manji era	Manji
@@ -1902,19 +2231,24 @@ manyoshu	Man'yoshu
 mao	Mao commentary
 mao commentary	Mao commentary
 maoqu	maoqu
+market god	ichigami
+market-god	ichigami
 martial temple	Martial temple
 martial temples	Martial temple
+massha	subsidiary shrine
 massing	massing
 master mountain	master-mountain
 master xuanhu	Xuanhu
 master-mountain	master-mountain
 masugata	masugata
 matebajii	matebajii
+material index	material index
 matoi	matoi
 matou	gangi
 matsu	matsu
 mayasaki	mayasaki
 meander	meander
+meandering	meander
 meibutsu	meibutsu
 meiji	Meiji
 meiji restoration	Restoration
@@ -1934,6 +2268,8 @@ memorials	memorial
 men-hai	taiping-gang
 menbansho	menbansho
 mengxi bitan	Mengxi Bitan
+mere	mere
+meres	mere
 meshimori	meshimori
 meshimori onna	meshimori
 meshimori women	meshimori
@@ -1942,6 +2278,7 @@ meso scale	meso scale
 meso-scale	meso scale
 metamorphosis fengshui	metamorphosis fengshui
 metropolitan examination	military examination
+mi	material index
 miaohui	miaohui
 michikiri	michikiri
 micro-high	micro-high
@@ -1950,14 +2287,21 @@ micro-highs	micro-high
 mid-cut	mid-trunk
 mid-trunk	mid-trunk
 midaidokoro	midaidokoro
+middle gate	nakamon
+middle gates	nakamon
 middle moat	middle moat
 middle moats	middle moat
 middle rowhouse	middle rowhouse
 middle rowhouses	middle rowhouse
+midori-tsumi	midori-tsumi
 military commissioner	military commissioner
 military commissioners	military commissioner
 military examination	military examination
 military examinations	military examination
+military farm colonies	military farm colony
+military farm colony	military farm colony
+military farm-colonies	military farm colony
+military farm-colony	military farm colony
 mimasaka	Mimasaka
 mimasaka province	Mimasaka
 mimizuka	ear mound
@@ -1967,6 +2311,9 @@ ming dynasty	Ming dynasty
 ming taizu	Taizu
 ming-dynasty	Ming dynasty
 ming-qing	Qing dynasty
+minglun hall	Minglun hall
+minglun halls	Minglun hall
+ministry of rites	Ministry of Rites
 minka	minka
 mino	Mino
 minote-zeki	minote-zeki
@@ -1974,14 +2321,19 @@ mio-suji	thalweg
 mire	mire
 mirin	mirin
 mise	mise
+mishima	Mishima
 mitochigai	mitochigai
 mitsuba	mitsuba
 mitsuke	mitsuke
 mitsumata	mitsumata
 mitsumata field	mitsumata
 mitsumata fields	mitsumata
+miyaji shibai	miyaji shibai
+miyakodori	miyakodori
 miyaza	miyaza
 mizu-oobako	Ottelia
+mizubansho	mizubansho
+mizubune	mizubune
 mizugaki	mizugaki
 mizugashira	mizugashira
 mizuguchi	mizuguchi
@@ -1989,21 +2341,25 @@ mizujiri	shirimito
 mizuka	mizuya
 mizunara	mizunara
 mizunomi	mizunomi
+mizunoto-u	mizunoto-u
 mizuya	mizuya
 mlit	MLIT
 mochinoki	mochinoki
 modern consolidation	kochi seiri
+modern times	modern times
 module	module
 mogao	Mogao caves
 mogao caves	Mogao caves
 mokoshi	mokoshi
 momi	momi
+momiage	momiage
 momoyama	Momoyama
 momoyama period	Momoyama
 mon	mon
 mongol yam	yam
 monk outlet	monk outlet
 monk-style outlet	monk outlet
+monme	monme
 monospecific	monospecific
 montane	montane
 monto	monto
@@ -2015,13 +2371,13 @@ mortise	mortise and tenon
 mortise and tenon	mortise and tenon
 moso	moso
 moto-kiba	Eitaijima
+motojime	motojime
 mozi	Mozi
 mu	mu
 muen	muenzuka
 muen-zuka	muenzuka
 muenbotoke	muenzuka
 muenzuka	muenzuka
-mugi	mugi
 mukaibansho	mukaibansho
 mukakusha	mukakusha
 mulberry plot-fish ponds	dike-pond
@@ -2057,14 +2413,19 @@ myoden landlord	myoden
 myoden landlords	myoden
 myoga	myoga
 myoji-taito	myoji-taito
+myojin	Myojin
 myoken	Myōken
 myoshu	myoshu
 mypedia	Mypedia
 myōden	myoden
 myōga	myoga
+myōjin	Myojin
 myōken	Myōken
 myōshu	myoshu
 naca	NACA
+nagachi	nagachi
+nagachi type	nagachi
+nagachi-gata	nagachi
 nagare-style	Nagare-style
 nagare-zukuri	nagare-zukuri
 nagarezukuri	nagare-zukuri
@@ -2120,6 +2481,7 @@ neo-confucianism	Cheng-Zhu Neo-Confucianism
 neribei	neribei
 new field	shinden
 new fields	shinden
+new-field	shinden
 nezumi-gaeshi	nezumi-gaeshi
 ni no torii	ichi-no-torii
 ni-	ichi-no-torii
@@ -2135,23 +2497,37 @@ night watches	night watch
 night-soil	night soil
 nightsoil	night soil
 nihon dai-hyakka zensho	Nihon Dai-hyakka Zensho
+nihon daihyakka zensho	Nihon Dai-hyakka Zensho
 nihon kokugo daijiten	Nihon Kokugo Daijiten
+nihon kyoikushi shiryo	Nihon kyoikushi shiryo
 nihon rekishi chimei taikei	Nihon Rekishi Chimei Taikei
 nihonbashi	Nihonbashi
 nihonmatsu	Nihonmatsu
 nihonshi shojiten	Yamakawa Nihonshi Shojiten
+nikko kaido	Nikko Kaido
+nikko toshogu	Toshogu
+nikko-kaido	Nikko Kaido
 nimosaku	nimosaku
 ninbetsu aratame cho	shumon aratame cho
 ninjobon	ninjōbon
 ninjōbon	ninjōbon
 ninomaru	ninomaru
 ninsokusashi	ninsokusashi
+nio gate	Niomon
+niomon	Niomon
 nippo jisho	Nippo Jisho
 nipponica	Nipponica
+nishijin	Nishijin
+niter bed	nitre bed
+niter beds	nitre bed
+nitre bed	nitre bed
+nitre beds	nitre bed
+niwa	niwa
 noborigama	noborigama
 nodame	nodame
 nogu benriron	Nogu benriron
 nogyo zensho	Nogyo Zensho
+noh	noh
 nokaji	nokaji
 nong shu	Nongshu
 nongshu	Nongshu
@@ -2175,15 +2551,18 @@ nucleated	nucleated
 nucleation	nucleated
 nuclei	nucleated
 nucleus	nucleated
+nuisance trade	nuisance trade
+nuisance trades	nuisance trade
 nukimon	nukimon
 numajiro	numajiro
-nunosarashi	nunosarashi
 nuptiality	nuptiality
 nure-en	nure-en
 nuriya	nuriya
+nuriya-zukuri	nuriya
 nursery pond	nursery pond
 nursery ponds	nursery pond
 o-aza	ō-aza
+o-zashiki	o-zashiki
 oaza	ō-aza
 oblique weir	oblique weir
 oblique weirs	oblique weir
@@ -2192,6 +2571,7 @@ ochiba	ochiba
 odo	ōdo
 odoi	Odoi
 odoko	odoko
+oei	Oei
 offering hall	offering hall
 offtake	offtake
 offtakes	offtake
@@ -2200,16 +2580,22 @@ ofuregaki	ofuregaki
 ogashoya	ogashoya
 ohaguro dobu	ohaguro-dobu
 ohaguro-dobu	ohaguro-dobu
+ohkaji	ōkaji
 ojoya	ogashoya
 okabasho	okabasho
 okaji	ōkaji
 okajiba	ōkaji
+okazaki	Okazaki
+okido	Okido
+okidos	Okido
 oku	oku
 oku-agariya	agariya
 oku-muki	oku
 oku-no-ma	oku-no-ma
 oku-zashiki	zashiki
 okura	kura
+okuyama	okuyama
+older than modern times	modern times
 omamori	omamori
 omi	Omi
 omote	omote
@@ -2219,10 +2605,14 @@ omoteya	omoteya-zukuri
 omoteya-zukuri	omoteya-zukuri
 omoya	omoya
 onari-goten	onari-goten
+onari-mon	onari-mon
+onbashira	onbashira
+one-and-a-half-mat	tatami
 one-bay	bay
 onin war	Onin war
 onkura	kura
 onmyodo	onmyodo
+ooku	ooku
 open-ended dike	open-ended dike
 open-ended dikes	open-ended dike
 ordination platform	ordination platform
@@ -2231,6 +2621,7 @@ origake	origake
 oroshi	oroshi
 oshi	oshi
 oshirasu	oshirasu
+ossuaries	ossuary
 ossuary	ossuary
 osuzu	Osuzu corridor
 osuzu corridor	Osuzu corridor
@@ -2245,6 +2636,8 @@ ottelia	Ottelia
 ou	Ou
 ouchi	Ouchi
 out-to-out	out-to-out
+outcaste	outcaste
+outcastes	outcaste
 oute	ote-mon
 outer daimyo	tozama
 outer daimyos	tozama
@@ -2261,12 +2654,21 @@ overlay	overlay
 overlays	overlay
 owaiya	owaiya
 owari	Owari
+ox-bow lake	ox-bow lake
+ox-bow lakes	ox-bow lake
 ox-frame	ox-frame
 ox-frames	ox-frame
 ox-shoeing frame	ox-shoeing frame
 ox-shoeing frames	ox-shoeing frame
+oxbow lake	ox-bow lake
+oxbow lakes	ox-bow lake
 oyaike	oyaike
 pacific high	Pacific High
+pacification commission	Pacification Commission
+pacification commissioner	Pacification Commission
+pacification commissioners	Pacification Commission
+paddock	paddock
+paddocks	paddock
 paddy seams	seam
 pagoda tree	pagoda tree
 pagoda trees	pagoda tree
@@ -2285,9 +2687,14 @@ paper ingot	paper ingot
 paper ingots	paper ingot
 parapet	parapet
 parish	parish
+parish ground	parish
+parish grounds	parish
+parish plot	parish
+parish plots	parish
 parish temple	parish
 parish's	parish
 parishioners	parish
+park ji-won	Park Ji-won
 party wall	row house
 party walls	row house
 patrol strip	patrol strip
@@ -2302,9 +2709,11 @@ pent roof	pent roof
 pent roofs	pent roof
 penthouse	penthouse
 penthouses	penthouse
+people's commune	people's commune
 perched	perched river
 perched river	perched river
 perched, silt-choked river	perched river
+percolation	percolation
 periodic market	periodic market
 periodic markets	periodic market
 periodic-market	periodic market
@@ -2324,12 +2733,16 @@ pigsty-privies	pigsty-privy
 pigsty-privy	pigsty-privy
 pile	pile
 piles	pile
+pilgrimage confraternities	kō
+pilgrimage confraternity	kō
 pilings	pile
 piloted ignition	piloted ignition
 piloted-ignition	piloted ignition
 pingjiang map	Pingjiang tu
 pingjiang tu	Pingjiang tu
 pingyao	Pingyao
+pit privies	pit privy
+pit privy	pit privy
 pit rank	pit rank
 pit ranks	pit rank
 placer	placer
@@ -2364,6 +2777,7 @@ post-station	shukuba
 post-stations	shukuba
 postern	postern
 preceptor	preceptor
+preceptor's	preceptor
 preceptors	preceptor
 precinct	precinct
 precincts	precinct
@@ -2374,15 +2788,23 @@ prefectural cities	prefectural city
 prefectural city	prefectural city
 prefecture	prefectural city
 prefectures	prefectural city
+press log	press log
+press logs	press log
 principal axes	principal axis
 principal axis	principal axis
 principal image	principal image
 principal images	principal image
+principal shrine	principal shrine
+principal shrines	principal shrine
 prison god	jail-god
 program item	program item
 program items	program item
+proportional flume	division flume
+proportional flumes	division flume
 proso	proso
 proso millet	proso
+provincial abbot	provincial abbot
+provincial abbots	provincial abbot
 provincial capital	provincial seat
 provincial capitals	provincial seat
 provincial seats	provincial seat
@@ -2394,6 +2816,7 @@ puddled	puddling
 puddling	puddling
 purlin	purlin
 purlins	purlin
+purple robe	purple robe
 purveyor merchant	purveyor merchant
 purveyor merchants	purveyor merchant
 qi	qi
@@ -2410,12 +2833,17 @@ qing-dynasty	Qing dynasty
 qingming	Qingming
 qingming shanghe tu	Qingming Shanghe Tu
 qiu	qiu
+qu dajun	Qu Dajun
+qu dajun's	Qu Dajun
 quay	quay
 quays	quay
 quercus acutissima	kunugi
 quercus serrata	konara
 raft-mat	raft-mat
 raft-mats	raft-mat
+raised-bed river	raised-bed river
+raised-bed rivers	raised-bed river
+raising the tower	yagura
 raku	raku
 rakuchu rakugai	Rakuchu rakugai
 rakuchu rakugai screens	Rakuchu rakugai
@@ -2430,9 +2858,16 @@ rammed-earth	rammed earth
 rampart	rampart
 ramparts	rampart
 randori	randori
+rank 1-4	rank
+rank 11	rank
+rank 12	rank
+rank 5	rank
+rank 9	rank
 raozhou	Raozhou
 rape	rape
 rapeseed	rape
+rapeseed cake	rapeseed cake
+rapeseed cakes	rapeseed cake
 rat-guard	nezumi-gaeshi
 rat-guards	nezumi-gaeshi
 reach	reach
@@ -2451,6 +2886,7 @@ red pine woods	red pine
 reducing atmosphere	reducing firing
 reducing firing	reducing firing
 reel	reeling
+reeled	reeling
 reeling	reeling
 reeling machine	reeling
 reeling shed	reeling
@@ -2466,16 +2902,27 @@ registered tangible cultural property	Tangible Cultural Property
 regulator	regulator
 regulators	regulator
 rehe	Jehol
+reihendorf	Reihendorf
+reihendörfer	Reihendorf
 reikurikata	reikurikata
+relay office	toiyaba
+relay offices	toiyaba
+relay town	relay town
+relay towns	relay town
+relief	relief
 remand	remand
 remanded	remand
 ren	ren
+rendai	rendai
 renge	renge
 renkaku	renkaku
 rennyo	Rennyo
 rent bursary	rent bursary
 rent-collection bursaries	rent bursary
 rent-collection bursary	rent bursary
+republican	Republican era
+republican era	Republican era
+republican-era	Republican era
 ressen	ressen
 resson	ressen
 rest stop	tateba
@@ -2493,9 +2940,14 @@ reverse-kesa	kesa
 revetment	revetment
 revetments	revetment
 revetted	revetment
+review hall	review hall
+review halls	review hall
 rhizome	rhizome
 rhizomes	rhizome
 ri	ri
+ribbon valley	ribbon-valley
+ribbon-valley	ribbon-valley
+ribbon-valley paddy	ribbon-valley
 rice-transit town	rice-transit town
 rice-transit towns	rice-transit town
 rick	rick
@@ -2552,9 +3004,18 @@ root-cut	root-cut
 root-cutting	root-cut
 roson	roson
 rotation period	rotation period
+round concrete divider	cylinder divider
+round divider	cylinder divider
+round dividers	cylinder divider
+row-house	row house
+row-houses	row house
 rowhouse gate	nagayamon
 rowhouse gates	nagayamon
+roya	roya
+ruiju sandai kyaku	Ruiju Sandai Kyaku
 runners	yayi
+rural town	zaigomachi
+rural towns	zaigomachi
 ryo	ryo
 ryobosei	ryobosei
 ryobu	ryobu
@@ -2564,9 +3025,12 @@ ryukyu kingdom	Ryukyu kingdom
 ryukyus	Ryukyu kingdom
 rōjū	Roju
 rōnin	ronin
+rōya	roya
+sado-no-kami	no-kami
 sae no kami	sae no kami
 sagami	Sagami
 sagami province	Sagami
+sagami-no-kami	no-kami
 sagamino	Sagamino
 sageba	ōkaji
 sai on	Sai On
@@ -2579,14 +3043,18 @@ sakuba-michi	sakuba-michi
 sakutoku	sakutoku
 sakutoku landlord	sakutoku
 sakutoku landlords	sakutoku
+salix	Salix
 sally gate	sally port
 sally port	sally port
+sally ports	sally port
+sallying	sortie
 sallyport	sally port
 salt road	Salt Road
 salvage excavation	salvage excavation
 samurai ground	buke-chi
 san no torii	ichi-no-torii
 san'in	San'in
+san'yo	San'yo
 san'yodo	Sanyodo
 san-in	San'in
 san-no-ma	ni-no-ma
@@ -2623,6 +3091,8 @@ sanyo-do	Sanyodo
 sanyodo	Sanyodo
 sapeck	sapeck
 sapecks	sapeck
+sapper	sapper
+sappers	sapper
 sara-ike	sara-ike
 sarae	sarae
 sasa	sasa
@@ -2634,8 +3104,9 @@ scattered farmstead	sankyoson
 scattered village	sankyoson
 scattered villages	sankyoson
 scattered-farmstead	sankyoson
-schistosomiasis	schistosomiasis
 scour	scour
+screen gate	screen gate
+screen gates	screen gate
 screen wall	screen wall
 screen walls	screen wall
 se	se
@@ -2645,13 +3116,21 @@ seams	seam
 season word	season word
 season words	season word
 secondary forest	secondary forest
+secondary succession	secondary succession
 secondary woodland	secondary forest
 secondary woodlands	secondary forest
+sedan	sedan
+sedan chair	sedan
+sedan chairs	sedan
+sedans	sedan
+sedge	sedge
+sedges	sedge
 seed	seed
 seed drill	seed drill
 seed drills	seed drill
 seed's	seed
 seeds	seed
+segi-ita	segi-ita
 seigaiha	seigaiha
 seijoue	seijoue
 seisatsu	kosatsuba
@@ -2661,6 +3140,7 @@ seki	Seki
 seki-juku	Seki
 sekisho	sekisho
 self-watch house	jishinban
+sen	sen
 senba-koki	senbakoki
 senbakoki	senbakoki
 senbon torii	Senbon Torii
@@ -2681,12 +3161,17 @@ sentō	sento
 senzai	senzai
 separated flow	separation zone
 separation zone	separation zone
+seral	seral
+seral stage	seral
+seral stages	seral
 seri	seri
 sericulture	sericulture
 ses	SES
 sess	SES
+sessha	subsidiary shrine
 setchin	kawaya
 setouchi	Setouchi
+setta	setta
 settlement core	settlement core
 settling basin	settling basin
 settling basins	settling basin
@@ -2696,25 +3181,33 @@ seven-hall garan	garan
 sexagenary year	sexagenary year
 seyakuin	seyakuin
 shacho-sen'yokata	shacho-sen'yokata
+shaded relief	hillshade
 shadoof	jiegao
+shadowlands	Shadowlands
+shaduf	jiegao
 shahi	shahi
 shaka	Shaka Nyorai
 shaka nyorai	Shaka Nyorai
+shake-machi	shake-machi
 shaku	shaku
 shakuhachi	shakuhachi
 shakyamuni	Shakyamuni
 shakyamuni buddha	Shakyamuni
 shallow-water lotus	shallow-water lotus
+shandong	Shantung
 shanhai pass	Shanhaiguan
 shanhaiguan	Shanhaiguan
 shannon-wiener index	SWI
+shantung	Shantung
 shanxi merchant houses	Shanxi merchants
 shanxi merchants	Shanxi merchants
+shaoxing	Shaoxing
 shaso	shasō
 shasō	shasō
 shatian	shatian
 sheath	sheath
 sheaths	sheath
+shecang	shecang
 shed people	shed people
 sheer boom	boom
 sheet pile	sheet pile
@@ -2746,9 +3239,12 @@ shiki-dai	shikidai
 shikidai	shikidai
 shikoku	Shikoku
 shima	Shima
+shimabatake	island field
 shimazu	Shimazu
 shimenawa	shimenawa
 shimo-yashiki	lower mansion
+shimogoe	night soil
+shimoyashiki	lower mansion
 shin sect	Jodo Shinshu
 shinai	shinai
 shinano	Shinano
@@ -2765,8 +3261,11 @@ shirimito	shirimito
 shironameshi	shironameshi
 shiroyone senmaida	senmaida
 shiso	shiso
+shitchi	shitchi
 shitomi	shitomi
 shitomi shutters	shitomi
+shitomi-do	shitomi
+shitomido	shitomi
 shitsuden	shitsuden
 shizai	shizai
 shizuoka method	Shizuoka method
@@ -2791,8 +3290,10 @@ shophouse	machiya
 shophouses	machiya
 shoro	shoro
 short-range spotting	spotting
+shosai	shosai
+shotoku	Shotoku era
+shotoku era	Shotoku era
 shoucheng lu	Shoucheng Lu
-shoulder month	shoulder month
 showa	Showa
 shoya	shoya
 shubiki	shubiki
@@ -2805,20 +3306,27 @@ shuinchi	shuinchi
 shuku	shukuba
 shukuba	shukuba
 shukuson taigaicho	Nakasendo Shukuson Taigaicho
+shulu jieti	Zhizhai Shulu jieti
 shumon aratame	shumon aratame cho
 shumon aratame cho	shumon aratame cho
+shumon aratame-cho	shumon aratame cho
+shunchengjie	shunchengjie
 shunde	Shunde
 shungiku	shungiku
 shunzhi	Shunzhi
+shuson	shuson
+shōtoku	Shotoku era
+shōtoku era	Shotoku era
 shōwa	Showa
 shōya	shoya
+shūson	shuson
 si	SI
 siberian high	Siberian high
 siege mining	siege mining
-sigma	sigma
 siheyuan	siheyuan
 siku quanshu	Siku Quanshu
 sill	sill
+silla	Silla
 silver carp	silver carp
 simpson index	SI
 sishu	sishu
@@ -2836,22 +3344,29 @@ slope face	slope face
 slope faces	slope face
 slope-face	slope face
 sluice	sluice
+sluice share	sluice share
+sluice shares	sluice share
 sluices	sluice
 snow-viewing lantern	yukimi
 so village	so village
 so villages	so village
+soba	soba
 sochinju	sōchinju
 sodegarami	sodegarami
 soffit	soffit
 soffits	soffit
 sogamae	sogamae
+soja	soja
 sokohi	sokohi
 solidity	solidity
+son of heaven	Son of Heaven
 song dynasty	Song dynasty
 song yingxing	Song Yingxing
 song-dynasty	Song dynasty
 sonsha	sonsha
 soroban	soroban
+sortie	sortie
+sorties	sortie
 soto	Sōtō
 soto zen	Sōtō
 soto-machi	outer town
@@ -2874,10 +3389,16 @@ spillways	spillway
 spiraea	Spiraea
 spirit wall	screen wall
 spirit walls	screen wall
+splayed brick walls	splayed walls
+splayed gate walls	splayed walls
+splayed wall	splayed walls
+splayed walls	splayed walls
 spoil bank	spoil bank
 spoil banks	spoil bank
 spot fire	spotting
 spot fires	spotting
+spot height	spot height
+spot heights	spot height
 spotting	spotting
 spread footing	footing
 spring and autumn	Spring and Autumn
@@ -2892,6 +3413,10 @@ staking frame	staking frame
 staking frames	staking frame
 stand age	forest stand
 stand density	forest stand
+state altar	state altar
+state altars	state altar
+state cult	state cult
+state cult's	state cult
 state shinto	State Shinto
 steading	steading
 steadings	steading
@@ -2918,7 +3443,14 @@ straw rick	rick
 straw ricks	rick
 stream order	stream order
 stream orders	stream order
+street town	gaison
+street towns	gaison
 street village	gaison
+street villages	gaison
+street-town	gaison
+street-village	gaison
+strength stone	chikaraishi
+strength stones	chikaraishi
 stringer	stringer
 stringers	stringer
 strip footing	strip footing
@@ -2927,15 +3459,21 @@ stroke	stroke
 strokes	stroke
 stupa	stupa
 stupas	stupa
+sub-branch hall	branch hall
+sub-branch halls	branch hall
 sub-prefect	sub-prefect
 sub-prefects	sub-prefect
 sub-temple	sub-temple
 sub-temple's	sub-temple
 sub-temples	sub-temple
 subgrade	subgrade
+subsidiary shrine	subsidiary shrine
+subsidiary shrines	subsidiary shrine
 substructure	substructure
 substructures	substructure
 subuta	Blyxa
+sucker	sucker
+suckers	sucker
 sue ware	Sue ware
 sueki	Sue ware
 sugi	sugi
@@ -2948,21 +3486,24 @@ sui-dynasty	Sui dynasty
 suid	suid
 suiden	suiden
 suids	suid
+suijin	suijin
 suimon	suimon
 suiren	Suiren
+suisha	suisha
 suitengu	Suitengu
 suji-bei	suji-bei
 sujibei	suji-bei
 sukego	sukego
+sumigama	sumigama
 summer-green	summer-green
 summer-green broadleaf forest	summer-green
 summer-green forest	summer-green
-sun lane	sun lane
-sun lanes	sun lane
 superelevated	superelevation
 superelevates	superelevation
 superelevation	superelevation
 superstructure	superstructure
+surveillance commissioner	surveillance commissioner
+surveillance commissioners	surveillance commissioner
 survey register	kenchicho
 survey registers	kenchicho
 sus	Sus
@@ -2977,6 +3518,7 @@ suzaku street	Suzaku-oji
 suzaku ōji	Suzaku-oji
 suzaku-oji	Suzaku-oji
 suzaku-ōji	Suzaku-oji
+suzhou	Suzhou
 sward	sward
 sweep well	well-sweep
 sweep-type well	well-sweep
@@ -2986,6 +3528,7 @@ swi	SWI
 sword hunt	sword hunt
 sword hunts	sword hunt
 sōchinju	sōchinju
+sōja	soja
 sōtō	Sōtō
 sōzu	sōzu
 tabune	field boat
@@ -3002,6 +3545,8 @@ taimenjo	taimenjo
 taiping	Taiping
 taiping heavenly kingdom	Taiping
 taiping rebellion	Taiping
+taiping vat	taiping-gang
+taiping vats	taiping-gang
 taiping-gang	taiping-gang
 tairo	tairo
 tairō	tairo
@@ -3017,9 +3562,16 @@ take-yabu	take-yabu
 takeyabu	take-yabu
 tako-beya	tako-beya
 tale of the heike	Heike monogatari
+talisman	talisman
+talismans	talisman
+tallies	tally
+tally	tally
 tamagaki	tamagaki
+tamagawa	Tamagawa aqueduct
+tamagawa aqueduct	Tamagawa aqueduct
 tamahagane	tamahagane
 tamajari	tamajari
+tameie	Fujiwara no Tameie
 tameike	tameike
 tamonten	Bishamon
 tan	tan
@@ -3033,14 +3585,15 @@ tang-dynasty	Tang dynasty
 tang-song	Tang dynasty
 tangible cultural properties	Tangible Cultural Property
 tangible cultural property	Tangible Cultural Property
-tanglao	tanglao
 tangpu	tangpu
 tani-ike	valley pond
 taper law	taper law
+tarama	Tarama
 tartary	Tartary
 tatami	tatami
 tatara	tatara
 tateba	tateba
+tategi	tategi
 tatemachi	tatemachi
 tauchiguruma	tauchiguruma
 tawara	hyō
@@ -3052,19 +3605,26 @@ tayu	tayu
 tayū	tayu
 tazuke kusayama	kusayama
 tedai	tedai
+teien	teien
 teikaku	teikaku
 temizuya	temizuya
 temple bell tower	shoro
+temple fair	miaohui
+temple fairs	miaohui
 temple registration	temple registration
 temple-certification system	terauke
 ten-volume wamyosho	Wamyosho
 tendai	Tendai
 tenjin	Tenjin
 tenjin shrine	Tenjin
+tenjogawa	raised-bed river
 tenma-cho	tenma-cho
 tenmacho	Tenmacho
 tenmacho jail	Tenmacho
 tenmacho's	Tenmacho
+tenmachō	Tenmacho
+tenmachō jail	Tenmacho
+tenmachō's	Tenmacho
 tenmangu	Tenmangu
 tenmangū	Tenmangu
 tenmei	Tenmei
@@ -3079,6 +3639,7 @@ tenpō era	Tenpo era
 tensho	Tensho
 tensho-era	Tensho
 tenshu	tenshu
+tenshō	Tensho
 tensuioke	tensuioke
 tera-machi	teramachi
 terakoya	terakoya
@@ -3128,6 +3689,8 @@ threshing yards	threshing yard
 threshing-yard	threshing yard
 throat	throat
 throats	throat
+through passage	through-passage plan
+through-earth-floor	toriniwa
 through-lane	through-lane
 through-lanes	through-lane
 through-passage	through-passage plan
@@ -3155,11 +3718,14 @@ toiya	ton'ya
 toiyaba	toiyaba
 tokai	Tokai
 tokaido	Tokaido
+tokaido shukuson taigaicho	Tokaido Shukuson Taigaicho
+toki	toki
 toki no kane	toki no kane
 tokonoma	tokonoma
 tokorobarai	tokorobarai
 tokugawa	Tokugawa
 tokugawa ieyasu	Ieyasu
+tokugawa tsunayoshi	Tsunayoshi
 tokugawa yoshimune	Yoshimune
 ton'ya	ton'ya
 tonami	Tonami plain
@@ -3171,14 +3737,22 @@ toons	toon
 top-dress	top-dressing
 top-dressed	top-dressing
 top-dressing	top-dressing
+tori-niwa	toriniwa
 torii	torii
 toriimoto	Toriimoto
 torimono mitsu dogu	three arresting tools
+toriniwa	toriniwa
 toritsugi	yoritsuki
 toro	Toro
 toro site	Toro
 torreya	torreya
+tortoise-shell	tortoise-shell
+tortoise-shell net	tortoise-shell
+tosa	Tosa
+tosa province	Tosa
 toshiyori	toshiyori
+tosho-gu	Toshogu
+toshogu	Toshogu
 toshuko	toshuko
 total length and fall	fall
 town elder	toshiyori
@@ -3192,8 +3766,12 @@ townhouse	machiya
 townhouses	machiya
 towpath	towpath
 towpaths	towpath
+toyotomi hideyoshi	Hideyoshi
 tozama	tozama
 tozama daimyo	tozama
+tozamurai	tozamurai
+training retreat	training retreat
+training retreats	training retreat
 transect	transect
 transects	transect
 tread	tread
@@ -3226,8 +3804,10 @@ tsuijimatsu	tsuijimatsu
 tsujiban	tsujiban
 tsujido	tsujido
 tsujidos	tsujido
+tsujidō	tsujido
 tsuke-shoin	tsuke-shoin
 tsuke-tsubo	tsuke-tsubo
+tsukigomeya	tsukigomeya
 tsukiyama	tsukiyama
 tsukiyama-style	tsukiyama
 tsukubo	tsukubo
@@ -3235,7 +3815,9 @@ tsukubō	tsukubo
 tsumago	Tsumago
 tsumairi	tsumairi
 tsumairi-type	tsumairi
+tsume	Tsume
 tsunaba	tsunaba
+tsunayoshi	Tsunayoshi
 tsunoya	tsunoya
 tsurube	tsurube
 tsushi nikai	half-story
@@ -3259,6 +3841,7 @@ tōhoku	Tohoku
 tōkaidō	Tokaido
 tōshukō	toshuko
 tōya	miyaza
+tōzamurai	tozamurai
 ubame	Ubame
 ubame's	Ubame
 ubuko	ubuko
@@ -3268,6 +3851,7 @@ ubusunagami	ubusuna
 uchi-bori	uchibori
 uchibori	uchibori
 uchigenkan	uchigenkan
+uchiyama	uchiyama
 udatsu	udatsu
 udegi	udegi gate
 udegi gate	udegi gate
@@ -3302,8 +3886,11 @@ unhaired	unhair
 unhairing	unhair
 unhairs	unhair
 unjo-gura	levy storehouse
+unno	Unno
+unno-juku	Unno
 unthinned stand	forest stand
 uogashi	uogashi
+uoichiba	uoichiba
 upland field	hatake
 upland fields	hatake
 upland-field	hatake
@@ -3311,6 +3898,8 @@ upper break	break of slope
 upper break of slope	break of slope
 upper estate	kami-yashiki
 upper estates	kami-yashiki
+upper privies	upper privy
+upper privy	upper privy
 upper residence	kami-yashiki
 upper residences	kami-yashiki
 ura-nagaya	ura-nagaya
@@ -3323,6 +3912,7 @@ ushi-waku	ushi-waku
 ushiwaku	ushi-waku
 ussuriland	Ussuriland
 usufruct	usufruct
+uwadori	uwadori
 uzumimon	umon
 vaiśravaṇa	Bishamon
 valley fan	valley fan
@@ -3331,6 +3921,8 @@ valley pond	valley pond
 valley ponds	valley pond
 variety hall	variety hall
 variety halls	variety hall
+vat hall	vat hall
+vat halls	vat hall
 verge	verge
 verges	verge
 vermilion line	shubiki
@@ -3339,7 +3931,7 @@ vermilion-seal land	shuinchi
 vermilion-seal lands	shuinchi
 vff	VFF
 village district	village district
-village grain	village grain
+vinaya	Vinaya
 visiting grave	visiting grave
 visiting graves	visiting grave
 volatile	volatiles
@@ -3353,11 +3945,13 @@ waju	waju
 wakadoshiyori	wakadoshiyori
 wakamiya	Wakamiya
 wakamono-gumi	young men's association
+wakan	Japan House
 wakasa	Wakasa
 wakato	wakato
 waki-honjin	waki-honjin
 waku	waku
 walled ward	lifang
+walled wards	lifang
 wallow	wallow
 wallows	wallow
 wamyo ruijusho	Wamyosho
@@ -3384,13 +3978,17 @@ warrens	warren
 warring states	Warring States
 warring-states	Warring States
 washe	wazi
+washing weir	araizeki
+washing weirs	araizeki
 wasi	wazi
 watari-roka	watari-roka
+watashi	watashi
 watashiba	watashiba
 watch house	jishinban
 watch-house	jishinban
 water caltrop	water caltrop
 water caltrops	water caltrop
+water country	water country
 water duty	water duty
 water gate	water gate
 water gates	water gate
@@ -3405,9 +4003,17 @@ water tables	water table
 water tail	water-mouth
 water teahouse	water teahouse
 water teahouses	water teahouse
+water's bearing	drainage bearing
+water-and-land hall	water-and-land hall
+water-and-land halls	water-and-land hall
+water-country	water country
+water-guard station	mizubansho
+water-guard stations	mizubansho
 water-head	water-head
 water-mouth	water-mouth
 water-tail	water-mouth
+water-watch station	mizubansho
+water-watch stations	mizubansho
 wayside hall	tsujido
 wayside halls	tsujido
 wazi	wazi
@@ -3415,7 +4021,6 @@ weathering	weathering
 weblio	weblio
 wei-tian	weitian
 weilongwu	weilongwu
-weineihe	weineihe
 weir	weir
 weirs	weir
 weitian	weitian
@@ -3430,6 +4035,8 @@ wengcheng	wengcheng
 wenmiao	wenmiao
 western han	Han dynasty
 western wei	Western Wei
+western xia	Western Xia
+western zhou	Zhou dynasty
 wet paddies	shitsuden
 wet paddy	shitsuden
 wet run	wet run
@@ -3460,18 +4067,25 @@ wood-fee lodgings	kichin-yado
 worship hall	haiden
 worship halls	haiden
 wrought iron	wrought iron
+wu ding	Wu Ding
 wubei zhi	Wubei Zhi
+wudu	wudu
 wujing zongyao	Wujing Zongyao
 xiang	xiang
 xiang river	Xiang River
 xiang seven, li three	Lingqu
 xiang-gan	Xiang-Gan
+xiangcang	shecang
+xingqing	Western Xia
 xu	xu
 xu tan	Xu Tan
+xuande	Xuande
 xuanhu	Xuanhu
 xuanhua arch	memorial arch
 xun	xun
+xunfu	grand coordinator
 xunjiansi	xunjiansi
+yaba	yaba
 yabusame	yabusame
 yacheng	yacheng
 yachida	yato
@@ -3479,6 +4093,7 @@ yadake	yadake
 yagura	yagura
 yaguramon	yaguramon
 yaita	yaita
+yakudana	yakudana
 yakuimon	yakuimon
 yakushi	Yakushi
 yam	yam
@@ -3488,6 +4103,7 @@ yamakawa entry	Yamakawa Nihonshi Shojiten
 yamakawa nihonshi shojiten	Yamakawa Nihonshi Shojiten
 yamanote	Yamanote
 yamanote loop	Yamanote
+yamashiro	Yamashiro
 yamen	yamen
 yamen god	yamen-god
 yamen-god	yamen-god
@@ -3497,13 +4113,17 @@ yanagita	Yanagita Kunio
 yanagita kunio	Yanagita Kunio
 yangtze delta	Lower Yangzi
 yangtze-delta	Lower Yangzi
+yangzi delta	Lower Yangzi
 yanushi	yamori
+yarai	yarai
 yashiki	yashiki
+yashiki-baka	yashiki-baka
+yashikibaka	yashiki-baka
+yashikibatake	yashikibatake
 yashikichi	yashikichi
 yashikigami	yashikigami
 yashikigami-sama	yashikigami
 yashikirin	yashikirin
-yasuki taka	Yasuki Taka
 yato	yato
 yatoda	yato
 yatsu	yato
@@ -3512,14 +4132,15 @@ yayi	yayi
 yayoi	Yayoi period
 yayoi period	Yayoi period
 yi network	shukuba
-yicheng	yicheng
 yizhan	shukuba
 yizhong	yizhong
 yohaisui bunri	yohaisui bunri
+yojosho	Yojosho
 yokocho	yokocho
 yokogi	yokogi
 yokogi-uchi	yokogi
 yomadori	four-room type
+yongzheng	Yongzheng
 yonin	yonin
 yonnomaru	yonnomaru
 yoriai	yoriai
@@ -3534,18 +4155,23 @@ yose	variety hall
 yosemune	yosemune-zukuri
 yosemune-zukuri	yosemune-zukuri
 yoshi	Phragmites
+yoshihara	yoshihara
 yoshimune	Yoshimune
 yoshiwara	Yoshiwara
 yoshizu	yoshizu
 yosui	yosui
+yosuiro	yosui
 yotsu	yotsu
 youfang	aburaya
 young men's association	young men's association
 young men's associations	young men's association
+youyang zazu	Youyang Zazu
 yu	yu
 yuan	Yuan dynasty
 yuan dynasty	Yuan dynasty
 yuan rebuild	Yuan dynasty
+yuanhe	Yuanhe era
+yuanhe era	Yuanhe era
 yudono	yudono
 yuecheng	yuecheng
 yui	yui
@@ -3561,7 +4187,6 @@ zaigomachi	zaigomachi
 zaimachi	zaimachi
 zaimokuya	zaimokuya
 zama	Zama
-zaofang	zaofang
 zaojun	Zaojun
 zashiki	zashiki
 zelkova	keyaki
@@ -3570,35 +4195,46 @@ zennoh	Zennoh
 zhalan	zhalan
 zhalou	zhalou
 zhang	zhang
+zhen	zhen
 zhengde	Zhengde
+zhengguo canal	Zhengguo canal
 zhengtong	Zhengtong
 zhengyi	Zhengyi
 zhili	Zhili
+zhizhai shulu jieti	Zhizhai Shulu jieti
 zhonggulou	gulou
 zhonglou	gulou
 zhou	department
 zhou dynasty	Zhou dynasty
 zhou-dynasty	Zhou dynasty
 zhouli	Zhouli
+zhu yuanzhang	Taizu
 zhuque dajie	Suzaku-oji
 zicheng	zicheng
+zizania	makomo
 zokibayashi	zokibayashi
 zonation	zonation
 zone of separated flow	separation zone
 zongjia	zongjia
 zooplankton	zooplankton
+zori	zori
 zuiie-chi	jōgōe-chi
 zuku	zuku
+zunjing pavilion	Zunjing pavilion
+zunjing pavilions	Zunjing pavilion
 zuo zhuan	Zuo Zhuan
 zushi nikai	half-story
 zushi-nikai	half-story
+zōkibayashi	zokibayashi
 ō-aza	ō-aza
 ōdo	ōdo
 ōdoko	odoko
+ōei	Oei
 ōgashoya	ogashoya
 ōiya	ōiya
 ōkaji	ōkaji
 ōkajiba	ōkaji
+ōkido	Okido
 ōmi	Omi
 ōnin war	Onin war
 ōte	ote-mon
@@ -3614,7 +4250,8 @@ zushi-nikai	half-story
 四間取り	four-room type
 圃場整備	hojo seibi
 土地庙	tudi miao
-塘泺	tanglao
+埠 (bu, "landing")	duck landing
+宮地芝居	miyaji shibai
 屋敷林	yashikirin
 御蔵	kura
 悲田院	hidenin
@@ -3639,6 +4276,7 @@ zushi-nikai	half-story
 鈔關	chaoguan
 长藤结瓜	melon-on-the-vine
 雑木林	zokibayashi
+順城街	shunchengjie
 馬宿	umayado
 鲁班尺	Luban ruler
 동구숲	donggusup

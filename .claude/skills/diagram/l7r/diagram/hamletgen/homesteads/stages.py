@@ -74,7 +74,7 @@ def water_push(water: Sequence[tuple[Pt, Pt, float]], center: Pt, n: Pt, half_la
 
 
 def face_the_houses(s: Settlement, plan: SitePlan) -> None:
-    """Which way this hamlet's farmhouses face (269 B18, research/homesteads/240), set before the first house is seated.
+    """Which way this hamlet's farmhouses face (269 B18, research/homesteads/400), set before the first house is seated.
 
     The COMMON BEARING is rolled per settlement from the map's seed within `COMMON_BEARING_DEG` of south (a degree
     along a continuum, so calibrated liberty rather than a knob) and recorded as `meta.house_bearing_deg`; each house
@@ -794,7 +794,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # a future tightening belongs, since it is the pass now doing the seating.
     # THE CONNECTOR-FRONTAGE PASS IS RETIRED (feature 291 amendment 3): it seated a linear hamlet along the connector, which
     # does not exist when the homesteads are seated, so it placed nothing; a row village's farms now stand along the
-    # streets its row planned (`rows.py`, research/homesteads/155 and 156), and a linear hamlet takes no other pass.
+    # streets its row planned (`rows.py`, research/homesteads/155), and a linear hamlet takes no other pass.
     _cloud_placed = 0
     s._seat_search["front"] = placed  # the households the front row seated (R2 reads it beside the cap)
     _row: list[Pt] = [(h["x"], h["y"]) for h in s.M.get("houses", [])]  # the front row as it stands: the lattice's rank 0
@@ -911,7 +911,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
                 # (Outward only was tried first: the last rank stands against the band's outer edge, the placer's computed move
                 # pulled every jittered seat back to that one line, and Mizuguchi's back rank stood within 3 ft again.)
                 # ...ONLY WHERE THE VILLAGE GREW BY ACCRETION. The record gives two forms and rolls between them per map
-                # (research/homesteads "Is every farmhouse reached by a lane"): a back lane implies PLANNING - the framework laid
+                # (research/rendering/ways "How our maps draw village lanes"): a back lane implies PLANNING - the framework laid
                 # out at once and the plots regular - and alleys off a spine imply ACCRETION, each household cutting its own way,
                 # the result irregular. So the ranks of a `back_lane` hamlet stay regular and an `alleys` hamlet's are taken off
                 # the line. (Jittering every form was tried first: each amplitude re-laid all five maps into a new draw, and 0.15,

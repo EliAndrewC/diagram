@@ -15,6 +15,7 @@ import pytest
 
 from l7r.diagram.interactive.record import citations_side as cite
 from l7r.diagram.interactive.record import fragments as frag
+from l7r.diagram.interactive.record import store
 from l7r.diagram.interactive.record.notes import NoteError
 from l7r.diagram.interactive.record.split import split
 from l7r.diagram.interactive.record.store import (
@@ -108,7 +109,10 @@ def test_every_note_body_survives_the_move_verbatim(record: pathlib.Path) -> Non
     write_notes_fragments("ways.html", str(record))
     _research, citations = assemble_pages("ways.html", str(record))
     assert citations is not None
-    assert sorted(cite.old_notes(citations).values()) == sorted(before.values())
+    # feature 292: the assembly adds what its reader sees (an absence note's words, a list, a collapsed original);
+    # the note as WRITTEN is what must survive
+    assert sorted(map(store._as_written, cite.old_notes(citations).values())) == sorted(map(store._as_written, before.values()))
+    assert any("absence-lead" in body for body in cite.old_notes(citations).values()), "and the reader's form is written"
 
 
 def test_the_works_block_is_derived_from_the_assembled_page(record: pathlib.Path) -> None:

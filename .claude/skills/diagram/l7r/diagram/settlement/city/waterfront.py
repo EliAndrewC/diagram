@@ -91,8 +91,8 @@ class WaterfrontMixin:
         """The capital's water-supply channel: intake works on the river, an OPEN cut at grade
         outside the wall, terminating at a city gate - and buried beyond it.
 
-        THE FORM IS SETTLED AND THE NEGATIVE IS EXPLICIT (GM 2026-08-08; research/cities/
-        research/cities/capitals.html, "The aqueduct is open outside the wall and buried inside it"). The East
+        THE FORM IS SETTLED AND THE NEGATIVE IS EXPLICIT (GM 2026-08-08; research/cities/capitals.html,
+        "The capital's aqueduct (josui)"; the map's rules at research/rendering/cities/capitals.html). The East
         Asian vocabulary is Edo's Kanda and Tamagawa josui and Odawara's sosui: a gravity canal
         in a plain earth cut (the Kanda ran 43 km at grade), a buried pipe inside the town, and -
         only where water must CROSS water - a kakehi flume carried over on a bridge (Edo's
@@ -193,7 +193,9 @@ class WaterfrontMixin:
 
         WHY IT IS A PEN AGAINST THE BANK, NOT A LINE IN THE STREAM (GM 2026-08-02, "it just looks
         like a bunch of logs in the middle of the river"; the research is in
-        research/urban-features.html, "The log boom"). A boom is a floating FENCE - anchored to
+        research/urban-features.html, "Timber yards and log booms (kiba)",
+        and its map rules at research/rendering/urban-features.html, "How our maps draw timber yards
+        and log booms"). A boom is a floating FENCE - anchored to
         nothing it holds nothing. Attested booms anchor to fixed ground (bank abutments, stone-
         filled cribs, driven piles) and run ALONG a navigated river, the pen between chain and
         shore, with the fairway kept clear by law; only a loose-log CATCH boom on an unnavigated

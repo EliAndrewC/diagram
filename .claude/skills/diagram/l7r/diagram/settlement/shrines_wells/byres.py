@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 
 _BORROW_REACH = 120.0  # a neighbor this close can walk over and borrow the team (see draft_byres)
 
-# HOW MANY HOUSEHOLDS KEEP A BEAST, on the two household forms (269 B16, research/homesteads/300): "from the early
+# HOW MANY HOUSEHOLDS KEEP A BEAST, on the two household forms (269 B16, research/homesteads/460): "from the early
 # eighteenth century only about half the farm households of Bizen kept an ox or a horse at all - the same share as in
 # Mimasaka - and fewer as time went on". A degree along a continuum, so a band rolled per settlement: its top is the
 # half the record reads, its bottom the "fewer" after it (how many fewer no page gives - 0.35 is calibrated liberty).
@@ -316,7 +316,7 @@ class DraftByresMixin:
     def draft_byres(self: Settlement, fraction: float = 0.2, gap: float = 64) -> list[Pt]:  # type: ignore[misc]
         """DRAFT-ANIMAL BYRES (ox / water-buffalo sheds) among the homesteads, in the form the `byre_form` knob rolled.
 
-        The two household forms (269 B16, research/homesteads/300): the beast lived with the household that owned it
+        The two household forms (269 B16, research/homesteads/460): the beast lived with the household that owned it
         or had it on loan, and about half the households kept one (`BYRE_KEEPER_SHARE`, rolled per settlement; `fraction`
         is then unused) - the INNER stable drawn as the arm against the farmhouse (`courtyard`), or the OUTER stable,
         a shed of its own in the yard (`yard_shed`). The rare `detached_commons` form is the older reading, a labeled
@@ -344,7 +344,7 @@ class DraftByresMixin:
         # because a form nobody records is a form nothing can check.
         form = self.resolve("byre_form")
         self.M["meta"]["byre_form"] = form
-        # THE BEAST LIVES WITH ITS HOUSEHOLD (269 B16, research/homesteads/300): on both household forms the byre is its
+        # THE BEAST LIVES WITH ITS HOUSEHOLD (269 B16, research/homesteads/460): on both household forms the byre is its
         # owner's, taken down the wealth ranking and seated in the owner's own homestead, and it records its owner (`of`).
         # `detached_commons` - the shared shed below - is the rare labeled GUESS the record has not found.
         _courtyard = form in HOUSEHOLD_FORMS

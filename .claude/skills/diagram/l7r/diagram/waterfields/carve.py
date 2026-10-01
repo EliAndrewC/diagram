@@ -574,8 +574,8 @@ def _dry_fields(
         # only: the vetted village maps carry the same (milder, in-band) artifact byte-stably.
         bounds.insert(-1, (bounds[-1] + bounds[-2]) / 2)
 
-    # THE ROW DIRECTION IS SET TRACT BY TRACT (269 B06; research/fields.html 'Why do neighboring dry plots run their
-    # furrows different ways?', fields/180). The land set the direction: a run of neighboring plots on one lie of ground
+    # THE ROW DIRECTION IS SET TRACT BY TRACT (269 B06; research/rendering/fields.html 'How our maps draw dry fields and
+    # their furrows', rendering/fields/160). The land set the direction: a run of neighboring plots on one lie of ground
     # shares one row direction, turned a few degrees from plot to plot, and the direction changes at the seam between
     # tracts, by as much as a right angle - along the contour or down to the outfall, never straight down a steep slope.
     # The seams, not every plot boundary, are what read the family strips apart. This replaced a per-plot rule that

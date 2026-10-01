@@ -27,7 +27,7 @@ SINCE_189: dict[str, tuple[str, ...]] = {
     "banana dike": (),
     "vegetable ground": (),
     "duck pen": (),
-    # feature 280 M57 (research/archetypes/150): a sluice through each pond's dike is a modern manual's form - retired
+    # feature 280 M57 (research/archetypes/140): a sluice through each pond's dike is a modern manual's form - retired
     "pond sluice": (),
     # feature 280 (settlement-review of Inashiro): the heading named the form eliminated - the bath is a room joined to the
     # house (M22) and the firewood is kept in a wood shed (M21); renamed, the prose and data carried over unchanged
@@ -43,7 +43,7 @@ ADDED_SINCE_189: tuple[str, ...] = (
     "retirement house",  # 269 B42: the old couple's own roof in the homestead, on the family-form knob
     "tea dike",  # 269 E9 (B34): the attested tea dike, a third dike-crop form beside mulberry and fruit
     "homestead grove",  # feature 291: a farm's own grove, on the sides its settlement rolled - drawn once the forms rolled again
-    "farm holding",  # feature 291 amendment 3: a row village's far-row farm's holding behind its lot (research homesteads/156)
+    "farm holding",  # feature 291 amendment 3: a row village's far-row farm's holding behind its lot (research homesteads/155)
     "farm channel",  # feature 291 amendment 5: the channel led into a dispersed farm's grounds (research homesteads/200)
 )  # feature 230: what stands where the head race leaves the brook; and a dike-pond's two-way canals, which the irrigation ditch mislabeled (pass 10)
 
@@ -135,7 +135,7 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     crossings over small water (a single log or board, logs under trodden earth, a planked deck), which the engine now
     rolls per settlement; the evenness of the roll, the 2 ft line and the spacing stay disclosed guesses and rulings.
     Its entry gained ways/030 and its sources the keys 290 and 030 rest on. The same pass gave `village lane`
-    homesteads/310 (the run-out rule, its distances a guess) and fields/290 (the field path ends on the bund) with the
+    rendering/ways/020 (the run-out rule, its distances a guess) and fields/290 (the field path ends on the bund) with the
     keys 290 cites; re-pointed the irrigation ditch (water/310, the bare intake mouth), the drainage ditch (water/090 and
     fields/090 - where the drain lets its water go and why it runs across the fall; the retired 'Water-first v2'
     heading dropped) and the weir (300's four forms and 310's choice); and corrected two sibling texts the engine had
@@ -164,7 +164,14 @@ def test_the_registry_s_data_fields_equal_the_snapshot_and_its_prose_is_present(
     house (homesteads/740); `storage shed`'s to the storehouse against the farmhouse (720, 440); `pig sty`'s to the pond
     bank (archetypes/171, 180 - no shed flushing into the pond); `shared bamboo grove`'s to the settlement's edge
     (vegetation/640). The same rewrites moved the `sources` of those six and of farmhouse, privy, fish pond, bund, paddy
-    and well to the keys their new prose rests on."""
+    and well to the keys their new prose rests on.
+
+    Feature 292's closing pass (C3, 2026-10-01) moved two labels and one `sources` under the same bar, each to match the
+    rendering section its rewritten prose is written from: `garden` accurate to guess (homesteads 050 - the bed's crops and
+    its area are guesses, and the rendering section's area band is the research's own guess), `storage shed` accurate to
+    convention (rendering/homesteads 120 - the storehouse is drawn as an annex on a fixed wall at a farm shed's size,
+    where the storehouses recorded stood free of the house and were smaller), and `byre`'s `sources` gained `koshigaya-shishi-noumin-jukyo` (Hasuda's 50
+    stables in 76 houses, against which the drawn share is now named a calibration)."""
     before = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     added = {s for succ in SINCE_189.values() for s in succ} | set(ADDED_SINCE_189)
     assert set(SINCE_189) <= set(before) and not (added & set(before)), "the tables name snapshot keys and NEW keys only"

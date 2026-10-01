@@ -1,0 +1,12 @@
+# 292 sweep cities/capitals G07 - handoff (session 1: write)
+
+## Rice storehouses and the rice brokers in a capital (kura, fudasashi)
+
+- SECTION=cities/capitals/rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi
+- RENDERING=rendering/cities/capitals/how-our-maps-draw-a-capitals-rice-storehouses-and-brokers-row-kura-fudasashi
+- OLD=research/cities/capitals/090-the-wharf-is-the-collecting-end-and-kurayashiki-is-the-wrong-word-for-it.html research/cities/capitals/120-the-emperors-granaries-are-separate-because-they-face-a-different-threat.html research/cities/capitals/110-the-brokers-row-is-merchant-and-the-ministrys-cut-is-narrower-than-it-looks.html
+- MODALS=
+
+- BASE=ca5ebb8cf
+
+Rice storehouses: no section was held by another feature. The quay-side kura and boat-length jetty paragraphs of capitals 280 are told here (research and rendering), with 280's kuramae-jawiki-2 note copied as kuramae-jawiki-3 and its two old-form absence notes converted; 280 itself was NOT edited or deleted, since it folds to river-cities T3 for the sluice, so that group should cut those two paragraphs and their notes from 280 as told here. 280's claim that the storehouses' raised floor and stone revetment answered flood rested on no page read, so it is now a question with its absence note. The canon lines the old sections paraphrased from budgets.md without a footnote are now quoted (l7r-budgets-14 to -18 on the research page, l7r-budgets-7 on the rendering page; the -17 quote stops mid-word where the make canon line is cut). Duplicate notes were merged: fudasashi-jawiki-6 into fudasashi-jawiki, fudasashi-jawiki-7 into -3, asakusa-kuramae-4 into -2, asakusa-kuramae-5 into -3. Cut, with a REMOVED comment: the three Sources rosters; 090's unsourced "how much goes back out as stipends is a GUESS" (replaced by the canon's stipend figure); 120's framing sentence. 110's note on reading budgets.md ministry lines is kept as a comment. Both GM rulings of 2026-08-08 (the threat model and the merchant row) are in comments, with the visible text given as this project's reasoning or reading. Links in capitals 390 and rendering 400 were re-aimed (the 400 siting-knob link now goes to the new rendering section). No modal or fixture named the old sections. The wharf's working face links to river-cities 040's current anchor, which that group will need to re-aim when it is restyled. The confusable pair with buildings T9 (the granary, gokura) was recorded under its planned title.

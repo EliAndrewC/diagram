@@ -127,7 +127,7 @@ def near_reaches(index: PointGrid, a: Pt, b: Pt) -> list[dict[str, Any]]:
 
 #: How far a farmhouse may stand from the field it works, in feet (feature 287, homes H03). The record gives a 6 ft MINIMUM
 #: and no maximum; it gives as a TOLERANCE a back-row house about 700 ft from the crops as "the honest back of a compact
-#: village" (research/homesteads.html, "How close does a farmhouse stand to the paddy?"). 700 is therefore the reach every
+#: village" (research/rendering/homesteads.html, "How our maps draw farmhouses (minka)"). 700 is therefore the reach every
 #: seat is held to while a hamlet's site boundary is installed, and the exhaustive seat pass scans: a map drawing
 #: convention whose figure is the record's own tolerance, not a pick.
 FIELD_REACH_FT = 700.0
@@ -168,7 +168,7 @@ class BundleFitMixin:
         THE NUMBER IS ARBITRARY AND THAT IS ALL RIGHT, as long as nobody reads it as a historical claim
         (GM 2026-09-13, asking exactly that question of this line). The record gives a 6 ft MINIMUM - bund
         plus levee path plus eave overhang, below which a wall's drip line falls in the rice - and NO
-        MAXIMUM at all (`research/homesteads.html`, "How close does a farmhouse stand to the paddy?"; the
+        MAXIMUM at all (`research/rendering/homesteads.html`, "How our maps draw farmhouses (minka)"; the
         retirement record in `hamletgen/consts.py` says the same). What the record does offer is a
         TOLERANCE in the other direction: a back-row house about 700 ft from the crops "reads as the honest
         back of a compact village", and a hamlet "is legitimately loose and is not held to" the village
@@ -657,7 +657,7 @@ class BundleFitMixin:
     def _sun_corridor_ok(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """Does this homestead leave every threshing yard - its own and the neighbors' - its sun?
 
-        THE RULE (GM 2026-08-13, researched in research/homesteads.html, "The threshing yard's sun"):
+        THE RULE (GM 2026-08-13, researched in research/rendering/homesteads.html, "How our maps draw threshing and drying yards (niwa)"):
         rice is dried on the niwa, so a yard needs clear ground to its SOUTH. A thatched roof is
         pitched 45 deg or steeper, which puts our 46x28 ft minka's ridge ~20 ft up; at 38N in the
         10th month that throws 21 ft of shadow at noon and 39 ft by 9am. So a farmhouse standing
@@ -749,8 +749,7 @@ class BundleFitMixin:
         and SOUTHWEST of every threshing yard and garden bed - the afternoon sun. Off by default; a
         generator opts in, exactly as with `sun_corridor` (feature 133 T10, GM 2026-08-25: "the
         windbreak forest ... is so close to the gardens ... that I do not believe that those gardens
-        would get sufficient sunlight"). The number's derivation is in research/homesteads.html, "The
-        garden's sun, and how far the windbreak shades"."""
+        would get sufficient sunlight"). The number's derivation is in research/rendering/homesteads.html, "How our maps keep yards and gardens in the sun"."""
         self._west_sun_ft = float(feet)
 
     def _candidate_watered(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
@@ -803,8 +802,7 @@ class BundleFitMixin:
 
     def _garden_sun_conflict(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """A dooryard garden takes its MORNING sun from the east, so no grove band may stand hard against a garden's east
-        across its height - within the reach `_east_trees` reads (research/homesteads.html, "The garden's sun, and how
-        far the windbreak shades"). Tests the candidate's grove against every placed garden and the candidate's garden
+        across its height - within the reach `_east_trees` reads (research/rendering/homesteads.html, "How our maps keep yards and gardens in the sun"). Tests the candidate's grove against every placed garden and the candidate's garden
         against every placed grove, as `_yard_sun_conflict` does for the yard's southern strip.
 
         WHY AT THE SEAT (feature 291). The rule was `gardens_unshaded_from_east`, a check of the retired battery, and

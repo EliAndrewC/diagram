@@ -505,7 +505,7 @@ def test_a_lane_a_farmhouse_needs_keeps_an_end_that_nothing_lies_near() -> None:
 
 def test_an_end_that_reaches_nothing_is_carried_on_to_the_dooryard_of_the_house_it_serves() -> None:
     """`_sweep_dangling_ends`' rescue arm: the lane must stay because a farmhouse would lose its way, so its end is carried
-    to the house instead of left in grass - and stops AT THE DOORYARD (269 B17, research/homesteads/310: a lane that serves a
+    to the house instead of left in grass - and stops AT THE DOORYARD (269 B17, research/rendering/ways/020: a lane that serves a
     farmhouse ends at its dooryard), inside the arrival bar of the house's footprint and clear of its wall. It used to stop
     at nine tenths of the 60 ft reach of the house's center, 40 ft off the wall.
 

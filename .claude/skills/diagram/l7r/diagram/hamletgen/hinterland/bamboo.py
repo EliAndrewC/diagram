@@ -16,10 +16,10 @@ from ..plan import SitePlan
 from .frame import frame_bounds, title_pocket
 from .parcels import _parcel_outline
 
-# THE BAMBOO STANDS (feature 133 T47/T48, GM 2026-08-27; research/vegetation.html "Bamboo: how common, where
-# it stood, and how to show it"). Two attested forms, the `bamboo` knob's values: the THICKET (take-yabu),
+# THE BAMBOO STANDS (feature 133 T47/T48, GM 2026-08-27; research/vegetation.html "Bamboo groves
+# (chikurin)"; research/rendering/vegetation.html "How our maps draw bamboo, when one culm is too small to see"). Two attested forms, the `bamboo` knob's values: the THICKET (take-yabu),
 # ONE stand at the settlement's edge, seated here on dry ground just beyond the cluster's back (north) row - not at
-# the field margin: feature 280 M49 (research/vegetation/640) finds a bamboo thicket round the settlement before modern
+# the field margin: feature 280 M49 (research/vegetation.html "Bamboo groves (chikurin)") finds a bamboo thicket round the settlement before modern
 # times (an early-Edo screen, the Nagaokakyo bamboo villages, the Qimin yaoshu's high dry ground), while the field
 # margin's shady end rested on a present-day page; which side of the cluster, and that the stand is held in common,
 # are GUESSES; and HOUSEHOLD bamboo, a small strip on each farmstead that keeps one

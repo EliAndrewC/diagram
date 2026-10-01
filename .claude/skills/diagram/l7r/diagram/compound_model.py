@@ -46,7 +46,7 @@ COURT_FILL: dict[str, str] = {
     "practice ground": "url(#keiko-earth)",  # swept keiko earth (buildings.md "Practice ground")
 }
 # A court that is ROOFED is drawn with a building's solid outline (stroke, width) and posts along its open side
-# (feature 267 R22, research buildings 450 'Was the hearing court open white sand, or roofed?': a magistracy's court
+# (feature 267 R22, research buildings 'The hearing court (shirasu)': a magistracy's court
 # was roofed or an indoor gravel floor - the open-air white court is the period-drama image). Every other zone keeps
 # the thin open-ground edge.
 ROOFED_ZONES: dict[str, tuple[str, float]] = {"oshirasu": ("#5A3F1E", 2.0)}
@@ -55,17 +55,17 @@ ROOFED_ZONES: dict[str, tuple[str, float]] = {"oshirasu": ("#5A3F1E", 2.0)}
 # post-and-beam front. Each post is drawn 1 ft square, at true size.
 ROOF_POST_BAY_FT: float = 12.0
 ROOF_POST_FT: float = 1.0
-# The covered corridor joining the kitchen to the residence (feature 267, research buildings 360/370: the kitchen is
+# The covered corridor joining the kitchen to the residence (feature 267, research buildings 'Kitchens (daidokoro)': the kitchen is
 # part of the HOUSE, joined as an ell or by a short covered corridor, never a freestanding cookhouse; buildings.md
 # "Kitchen + pantries"). Its width, one ken (~6 ft), is a GUESS; it is drawn only across a gap no wider than a
 # fire-gap - a longer run would be a gallery, not the short corridor the research describes.
 CORRIDOR_W_FT: float = 6.0
-# The bath (feature 267 R09, research buildings 320: a room of the residence or a small addition to it on its
+# The bath (feature 267 R09, research buildings 'Baths (furo)': a room of the residence or a small addition to it on its
 # service side, by the kitchen and its well - no bath as a building of its own was found). 10 x 8 ft (pass 6: the whole
 # house is held to research buildings 380's 49-tsubo house, ~1,740 sq ft; it was 15 x 12, then 12 x 10) - below the
 # doctrine's 12-15 ft guess, a GUESS.
 BATH_W_FT, BATH_H_FT = 10.0, 8.0
-# The gates' posts (feature 267 R26, research buildings 480 'How wide was the main gate?'). Each post is drawn over the
+# The gates' posts (feature 267 R26, research buildings 480 'The main gate and its gatekeepers (nagaya-mon)'). Each post is drawn over the
 # cut end of the wall it closes, so the wall's opening IS the passage the audit measures between the posts
 # (`pack_audit.main_gate_passage_ft`). 4 x 14 px (1.33 x 4.67 ft) is a MAP DRAWING CONVENTION: the post block stands
 # for the gate's pillar with the wall end it caps, drawn proud of the 3 ft wall so it reads as a post, not a true-size
@@ -75,12 +75,12 @@ GATE_POST_W_FT, GATE_POST_D_FT = 4.0 / 3.0, 14.0 / 3.0
 NAKAMON_POST_D_FT = 10.0 / 3.0
 # An informal door on each lodging block (feature 267, buildings/programs.md: no sealed boxes): a small dark rect set
 # flush inside the building's face, as the hand sheets draw one (`floating_doors` holds it to the wall). 6 ft along the
-# face is a MAP DRAWING CONVENTION (research buildings 620 'How wide was a real doorway, and how wide are the drawn
-# doors?': an ordinary door is about half a ken, ~3 ft; drawn doors run two to three times that to read at 3 px/ft);
+# face is a MAP DRAWING CONVENTION (research rendering/buildings 'How our maps draw doors', from buildings 'Doorways and
+# doors (to)': an ordinary door is about half a ken, ~3 ft; drawn doors run two to three times that to read at 3 px/ft);
 # 1.33 ft deep is the ink the hand sheets give one.
 DOOR_W_FT, DOOR_D_FT = 6.0, 4.0 / 3.0
 # The kinds given a door. The kitchen's is its one outside door, the service entrance on its earth floor (research
-# buildings 370); the residence's is the household's inner entrance, apart from the kitchen's (370 again) - the guest's
+# rendering/buildings 'How our maps draw kitchens (daidokoro)'); the residence's is the household's inner entrance, apart from the kitchen's (the same) - the guest's
 # way is the middle gate and the roji to the reception's veranda (R07, research buildings 300), so the residence
 # carries no genkan. The stables, the kura and the shrine carry theirs too (pass 5, building-review round 4: a building
 # with no drawn door reads as sealed). `BuildingSpec.door_face` sets the face a door goes on; the court face otherwise.
@@ -179,16 +179,17 @@ class BuildingSpec:
     # heart"; buildings.md "Office hall (with dais band)"). (0, 0): none.
     dais: tuple[float, float] = (0.0, 0.0)
     # Stand this many feet further off its wall than the wall's ink requires: the residence's rear alley (research
-    # buildings 230 'The shady rear is the service strip': the north band narrowed to a ~6-10 ft cart/servant alley).
+    # rendering/buildings 'How our maps lay out samurai residences and their rooms (buke yashiki)': the north band narrowed to a ~6-10 ft cart/servant alley).
     inset_ft: float = 0.0
     # A VERANDA (engawa) along the building's court face, this deep, drawn inside its footprint as a part of it
-    # (feature 267 R01: the veranda runs along the garden face; 3-6 ft). 0: none.
+    # (feature 267 R01, research rendering/buildings 'How our maps draw verandas and storm shutters (engawa and amado)': the veranda runs
+    # along the garden face; 3-6 ft). 0: none.
     engawa_ft: float = 0.0
     # Stand BESIDE the main gate - flush west of its post on the south wall - rather than slide from the corner: the
     # freestanding gatehouse by the gate, Takayama's form (feature 267 R19, research buildings 420).
     beside_gate: bool = False
     # The face its door goes on ("N"|"S"|"E"|"W"), when not the court face: the residence's inner entrance opens on the
-    # kitchen side, off the garden its veranda faces (research buildings 370).
+    # kitchen side, off the garden its veranda faces (research rendering/buildings 'How our maps draw kitchens (daidokoro)').
     door_face: str = ""
     # More doors, on these faces (pass 6: the office hall's front room and its west end had none), and the fracs along
     # a face a door is tried at when not DOOR_FRACS

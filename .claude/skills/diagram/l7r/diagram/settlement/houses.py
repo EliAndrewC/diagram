@@ -12,7 +12,7 @@ from .rolling.bearing import house_rot
 from .rolling.lot import FARMHOUSE_MAX_ASPECT, KURA_SHARE, household_parts, kura_rect, record_parts, seat_parts_done
 
 # HOW FAR A FARMHOUSE WALL STANDS OFF THE PADDY (researched 2026-08-27, feature 133 T41; the record
-# in research/homesteads.html "How close does a farmhouse stand to the paddy?"). The paddy's margin is
+# in research/rendering/homesteads.html "How our maps draw farmhouses (minka)"). The paddy's margin is
 # a bund (aze) about 1.5 ft wide (a search-summary figure the session could not read - UNVERIFIED;
 # the read source gives ~10 cm high) that is ALSO the working footpath: levees are "constructed and
 # maintained to retain water ... and to allow the passage of people and transportation of tools"
@@ -597,7 +597,7 @@ class HousesMixin:
         cleared rect on Inashiro), which was the whole of the drawn-versus-placed divergence.
 
         POSITION-SEEDED: a pure function of the seat's coordinates (see `_hjit`), so the placer knows the exact quad
-        before it commits. A hamlet sets `_house_bearing` (269 B18, research/homesteads/240): the common bearing and the
+        before it commits. A hamlet sets `_house_bearing` (269 B18, research/homesteads/400): the common bearing and the
         lane's turn (`rolling/bearing.py`); elsewhere the old +/-5 degree rake stands."""
         if self._house_bearing is None:
             return self._hjit(cx, cy, 11.0) * 10.0 - 5.0
@@ -798,7 +798,7 @@ class HousesMixin:
                 # The old form spread wide (x1.15 lateral) with the horns curved hard back, so the placer -
                 # which pulls every house to hug the paddy and packs ALONG it - strung them into a wide, hollow
                 # arc that stranded the horns far from the crops (Kikuta: 55 houses over a hull filled ~20%, NE
-                # horn ~400px from any field; see village_cluster_compact / research/homesteads.html 'How tightly does a nucleated village pack?').
+                # horn ~400px from any field; see village_cluster_compact / research/rendering/homesteads.html 'How our maps pack a clustered village's houses').
                 # WIDTH is what the placer amplifies, so keep the lateral reach narrow (a nucleated village is a
                 # deep blob, not a wide ribbon) and let the depth carry the frontage, with a gentle concave bow.
                 t = rng.uniform(-1.0, 1.0)

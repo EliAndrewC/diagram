@@ -130,7 +130,7 @@ class RollVillageMixin:
         pinned value is honored. The village draws no burial ground yet (feature 273 T06), so "beside" has nothing to
         stand beside and seats as on its own, and the manifest says so. On its own it stands at the village's edge
         through the shared edge seat: 120 ft clear of houses and wells (the engine's pollution clearance), out of the water
-        by a bank's margin only (feature 280 M75, research/religion-and-death/180: no set-back from water is attested before
+        by a bank's margin only (feature 280 M75, research/religion-and-death/160 'Village burial grounds (bochi)': no set-back from water is attested before
         modern times, and the 90 ft cremation margin was a scaled guess), its fire bed off the shrine's approach, as near
         beyond the last houses as that allows - the scan's 650 ft is how far it looks, not a distance the record gives
         (feature 280 M77); six stone jizo at it (530, where the village has no burial ground for them to stand at)."""
@@ -147,7 +147,7 @@ class RollVillageMixin:
         if seat is None:
             self.M["meta"]["cremation_ground"] = "no seat"
             return
-        self.cremation_ground(seat[0], seat[1], jizo=False)  # on its own: the six jizo stand at a burial ground (700, M71)
+        self.cremation_ground(seat[0], seat[1], jizo=False)  # on its own: the six jizo stand at a burial ground (160, M71)
 
     def _roll_knobs(self: Settlement, down_deg: float, water_kind: str) -> dict[str, Any]:  # type: ignore[misc]
         """STAGE 1 - roll the knobs (pinned -> rolled -> default). Returns them keyed as `roll_village`
@@ -281,7 +281,7 @@ class RollVillageMixin:
         # ground. 92 ft is the bundle plus the circles' waste and no more.
         #
         # CONVERTED THROUGH `ftpx`, NOT `bscale`. They are the same number everywhere except the
-        # village tier, which declares ftpx=2 but pins bscale=1.0 for legacy reasons (research/settlements.html 'How far is it across this map? The scale, tier by tier')
+        # village tier, which declares ftpx=2 but pins bscale=1.0 for legacy reasons (research/rendering/settlements.html 'How our maps draw and state each size of settlement')
         # - and a village bundle really is drawn at half a hamlet's pixel size (measured: house 25x14
         # px against 53x27). Sizing off bscale therefore asked a village band for twice the ground
         # its bundles occupy, which strung its cluster thin over a hollow hull and tripped

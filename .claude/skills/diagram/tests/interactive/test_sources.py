@@ -13,7 +13,19 @@ import re
 
 from l7r.diagram.interactive.citations import citations_page
 from l7r.diagram.interactive.citations import research_pages as _record_pages
-from l7r.diagram.interactive.sources import RESEARCH_DIR, RESEARCH_PAGES, _sections, citation_lines, link_target, not_read, registry_entries, research_questions, research_sources, section_sources
+from l7r.diagram.interactive.sources import (
+    RESEARCH_DIR,
+    RESEARCH_PAGES,
+    _sections,
+    citation_lines,
+    footnote_sources,
+    link_target,
+    not_read,
+    registry_entries,
+    research_questions,
+    research_sources,
+    section_sources,
+)
 
 
 def test_an_entry_may_name_a_research_file_one_directory_down() -> None:
@@ -21,9 +33,9 @@ def test_an_entry_may_name_a_research_file_one_directory_down() -> None:
     file pattern could not match `research/cities/fabric.html`, so such an entry resolved to no sources and
     no questions with nothing said; the question URL is built from the same match, so the silent miss would
     have become a silent broken link when the town and city vocabulary arrives."""
-    entry = "research/cities/fabric.html - 'Urban commoners built in continuous street walls'"
+    entry = "research/cities/fabric.html - 'The city's street front: continuous rows of shophouses (machiya)'"
     qs = research_questions(entry)
-    assert len(qs) == 1 and qs[0]["url"] == RESEARCH_PAGES + "cities/fabric.html#urban-commoners-built-in-continuous-street-walls", qs
+    assert len(qs) == 1 and qs[0]["url"] == RESEARCH_PAGES + "cities/fabric.html#the-citys-street-front-continuous-rows-of-shophouses-machiya", qs
     assert research_sources(entry), "and its sources resolve too"
 
 
@@ -42,9 +54,10 @@ def test_a_double_quoted_research_heading_is_read_like_a_single_quoted_one() -> 
     The defect this pins shipped: the marsh class names research/water.html's "A reservoir's shore is
     reeded, and its EMBANKMENT is mown", and with only the single-quote form the run of characters
     BETWEEN the two double quotes matched as one giant heading that no section is named, so the entry
-    contributed nothing and swallowed the one after it."""
-    entry = "research/water.html - \"A reservoir's shore is reeded, and its EMBANKMENT is mown\""
-    assert "mineta-2007-tameike" in research_sources(entry)
+    contributed nothing and swallowed the one after it. That section was folded into 'Reservoir ponds
+    (tameike)' by feature 292, so the pin now reads another heading with an apostrophe."""
+    entry = "research/water.html - \"Washing places at the water's edge\""
+    assert "gujo-jsce-2017" in research_sources(entry)
 
 
 def test_a_sources_roster_is_read_whole_and_deduplicated() -> None:
@@ -155,3 +168,25 @@ def test_the_marker_case_rule_fires() -> None:
     assert marker_case_faults({"k": "a line, summary-only 2026-09-06, and another"}) == ["k: 'summary-only' - the classifier reads 'SUMMARY-ONLY'"]
     assert marker_case_faults({"k": "url: none - the work is a book"}) == ["k: 'url: none' - the classifier reads 'URL: none'"]
     assert marker_case_faults({"k": "SUMMARY-ONLY; URL: none"}) == []
+
+
+def test_a_section_with_no_roster_takes_its_sources_from_its_footnotes(tmp_path: pathlib.Path) -> None:
+    """Feature 292 FR-004: a restyled section carries no `Sources:` roster, so the references behind a modal are read
+    from the keys its footnotes cite - in order of first citation, once each, a key-less (absence) note contributing
+    nothing - and a section that still has a roster is read from the roster, as before."""
+    (tmp_path / "citations").mkdir()
+    (tmp_path / "citations" / "p.html").write_text(
+        '<li id="fn-1"><a href="https://x"><code>b-2</code></a> - 「q」</li>\n<li id="fn-2">no publicly readable source (searched 2026-09-29: x)</li>\n'
+        '<li id="fn-3"><a href="https://y"><code>a-1</code></a> - 「r」; <a href="https://x"><code>b-2</code></a> - 「s」</li>',
+        encoding="utf-8",
+    )
+    ref = '<sup class="fn"><a id="fnref-{0}" href="citations/p.html#fn-{0}">{0}</a></sup>'
+    (tmp_path / "p.html").write_text(
+        f'<h2 id="t">Topic</h2>\n<p>one{ref.format(1)} two{ref.format(2)} three{ref.format(3)}</p>\n'
+        f'<h2 id="r">Rostered</h2>\n<p><strong>Sources:</strong> <a href="https://z"><code>c-3</code></a></p><p>x{ref.format(1)}</p>\n',
+        encoding="utf-8",
+    )
+    assert research_sources("research/p.html - 'Topic'", str(tmp_path)) == ["b-2", "a-1"]
+    assert research_sources("research/p.html - 'Rostered'", str(tmp_path)) == ["c-3"]
+    assert footnote_sources("<p>no references</p>", str(tmp_path / "p.html")) == []
+    assert footnote_sources(ref.format(1), str(tmp_path / "missing" / "p.html")) == [], "an unreadable citations page yields nothing"

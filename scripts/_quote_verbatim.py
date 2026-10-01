@@ -16,7 +16,7 @@ WHAT IT READS. A research page (`research/<name>.html`) for the ASSERTIONS - the
 
     <li id="fn-3"><a href="URL"><code>key</code></a> - 「passage」 ... <a class="fnback" ...>back</a></li>
 
-A translated quotation (feature 202) is `「English」 (translated from the ... by this project; original:
+A translated quotation (feature 202) is `「English」 (translated; original:
 「source text」)`: the ORIGINAL is what is matched against the page, and the entry carries both so the
 agent can judge the translation. A note with no link reading `no publicly readable source (...)` is an
 ABSENCE note and `no source is owed: ...` a GROUNDS note; nothing is fetched for either.
@@ -61,7 +61,10 @@ NEAR = 0.85
 UA = "Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0"
 BLOCK = {"p", "div", "br", "li", "ul", "ol", "tr", "td", "th", "table", "h1", "h2", "h3", "h4", "h5", "h6", "section", "article", "blockquote", "dd", "dt", "pre", "figcaption"}
 PAIRS = {"「": "」", "“": "”", '"': '"', "『": "』"}
-TRANSLATED = re.compile(r"^\s*\((?:title\s+)?translated from ([^;()]*(?:\([^()]*\))?[^;()]*?) by this project;\s*original:\s*$")
+#: Since feature 292 (GM 2026-09-29) the plain form is `(translated; original:` - the project is the translator and the
+#: language is the original's own; the older `(translated from the <language> by this project; original:` still reads,
+#: and a translation by anyone else names them (`translated from ... by <who>`). Group 1 is the language when named.
+TRANSLATED = re.compile(r"^\s*\((?:title\s+)?translated(?: from ([^;()]*(?:\([^()]*\))?[^;()]*?) by [^;()]+)?;\s*original:\s*$")
 # Between two quotations of one run - `「Q1」 and 「Q2」 (translated ...; original: 「O1」 and original: 「O2」)` -
 # and between two originals of one parenthetical. Without the run, Q2 was paired with O1 and O2 never checked:
 # cities/fabric 143 (feature 250 T55) had two notes reported NOT-READABLE that were verbatim on their pages.
@@ -175,7 +178,7 @@ def translated_run(note_text: str, spans: list[tuple[int, int]], k: int) -> list
         return []
     if not all(JOINER.match(gap(j, j + 1)) for j in range(m + 1, m + n)):
         return []
-    language = squeeze(between.group(1))
+    language = squeeze(between.group(1) or "")
     return [
         {"quote": note_text[spans[k + i][0] + 1 : spans[k + i][1] - 1], "original": note_text[spans[m + 1 + i][0] + 1 : spans[m + 1 + i][1] - 1], "language": language}
         for i in range(n)
@@ -207,7 +210,7 @@ def passages(note_text: str) -> list[dict]:
             if between:
                 nxt = spans[k + 1]
                 entry["original"] = note_text[nxt[0] + 1 : nxt[1] - 1]
-                entry["language"] = squeeze(between.group(1))
+                entry["language"] = squeeze(between.group(1) or "")
                 k += 1
         found.append(entry)
         k += 1

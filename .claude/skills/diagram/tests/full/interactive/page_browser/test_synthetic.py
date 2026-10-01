@@ -504,4 +504,32 @@ def test_the_record_page_defines_its_terms_on_hover_in_the_footnote_box(record: 
     note = record.js("() => document.getElementById('fntip').textContent")
     assert "a derived note naming a tameike" in note, f"a note from window.RECORD_CITATIONS shows in the box ({record.errors})"
     assert record.js("() => document.querySelector('#fntip span.gl').getAttribute('title')").startswith("An irrigation reservoir")
+    # GM 2026-09-29: a note quoting several passages is a list in the box - a bullet each, the joining `; ` hidden
+    record.page.mouse.move(1, 1)
+    record.page.wait_for_timeout(300)
+    record.page.hover("sup.fn a[href$='#fn-2']")
+    record.page.wait_for_timeout(30)
+    shape = record.js("() => Array.from(document.querySelectorAll('#fntip .pass, #fntip .sep')).map(e => e.className + ':' + getComputedStyle(e).display)")
+    assert shape == ["sep:none", "pass:list-item", "sep:none", "pass sub:list-item"], shape  # the key's ` - ` is hidden too
+    # GM 2026-09-29: the link to the rendering section sits on its heading's own line, at the right
+    geo = record.js(
+        "() => { const h = document.querySelector('h2').getBoundingClientRect(), x = document.querySelector('h2 .xref').getBoundingClientRect(); return [h.top, h.bottom, h.right, x.top, x.bottom, x.right]; }"
+    )
+    assert geo[3] >= geo[0] and geo[4] <= geo[1] and abs(geo[2] - geo[5]) < 2, geo
+    # GM 2026-09-29: a translated quotation's original is collapsed - in the page and in the footnote box - and a click
+    # on its toggle shows it
+    assert record.js("() => document.querySelector('main span.orig').hidden") is True
+    record.page.mouse.move(1, 1)
+    record.page.wait_for_timeout(300)
+    record.page.hover("sup.fn a[href='#fn-1']")
+    record.page.wait_for_timeout(30)
+    assert record.js("() => document.querySelector('#fntip span.orig').hidden") is True, "collapsed in the box too"
+    assert "原文" not in record.js("() => document.getElementById('fntip').innerText"), "the original is not shown until asked for"
+    record.page.hover("#fntip button.orig-toggle")
+    record.page.click("#fntip button.orig-toggle")
+    assert record.js("() => document.querySelector('#fntip span.orig').hidden") is False, "a click shows it"
+    assert "原文の一節" in record.js("() => document.getElementById('fntip').innerText")
+    # GM 2026-09-29: a reference to the citations page opens it in a new tab; one to a note in the page does not
+    assert record.js("() => document.querySelector(\"sup.fn a[href$='#fn-2']\").target") == "_blank"
+    assert record.js("() => document.querySelector(\"sup.fn a[href='#fn-1']\").target") == ""
     assert record.errors == [] and record.requests == []

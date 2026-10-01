@@ -207,7 +207,7 @@ class Settlement(
         # graves were kept clear of wild scrub in reality (raked gravel precinct; the tomb-swept grave
         # collar); the surrounding waste stays scrubby. So this clears a small verge around each, while a
         # shrine's deliberate fengshui/chinju-no-mori grove (a separate feature) is left untouched. See
-        # research/religion-and-death.html (the swept-ground entry).
+        # research/religion-and-death.html, 'Ground swept clear around shrines and graves'.
         self.clearings: list[Any] = []
         self._verge_centers: list[tuple[float, float]] = []  # one (x, y) per clearings entry - _clear_ground's same-center dedupe key
         self._cover_n = 0  # ground-cover scatter ordinal (commons + marsh draws). Each cover entry and each
@@ -453,8 +453,8 @@ class Settlement(
 
     def meta(self: Settlement, **kw: Any) -> None:
         if "ftpx" in kw:
-            # The map's declared real scale in FEET PER PIXEL - the GM's ladder (research/settlements.html
-            # "How far is it across this map? The scale, tier by tier"): hamlet/town 1,
+            # The map's declared real scale in FEET PER PIXEL - the GM's ladder (research/rendering/settlements.html
+            # "How our maps draw and state each size of settlement"): hamlet/town 1,
             # village 2, provincial city 3 (the round numbers are deliberate; a human should be
             # able to read distances off the map). Buildings follow automatically via
             # bscale = 1/ftpx: the urban glyph library is calibrated at town scale (a 44x29px
@@ -602,8 +602,8 @@ class Settlement(
     # A WOOD is drawn as individual trees at true density (see _tree_stand for the research).
     CANOPY_SPACING_FT = 13.0  # ~600 canopy stems/ha - one tree per ~180 sq ft
     CANOPY_R_FT = 8.5  # mean crown radius; a real canopy crown is ~5-8 m across
-    # THE WOODLAND COMMONS IS STOCKED ON ITS OWN FIGURES (269 B28; research/vegetation/230, "How thickly was a worked
-    # coppice stocked"): a worked konara coppice stood as a thicket of thin stems, about 1,700 a hectare - one to ~63
+    # THE WOODLAND COMMONS IS STOCKED ON ITS OWN FIGURES (269 B28; research/rendering/vegetation.html, "How our maps
+    # stock woods and size crowns"): a worked konara coppice stood as a thicket of thin stems, about 1,700 a hectare - one to ~63
     # sq ft, centers near 8 ft - a calibration on overgrown stands (the planted Tsukuba stand at 29 years, inside the
     # 1,460-2,063 of woods left grown to 26-31), so probably thinner than a wood at its cut. The crown is drawn 8-9 ft
     # across so neighbors just meet: a GUESS sized from the spacing, because no crown width was found. The belt and the

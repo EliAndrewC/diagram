@@ -34,7 +34,7 @@ REED_SQFT_PER_TUFT = 150.0
 REED_GLINT_SHARE = 0.12
 
 #: A fixed seed per kind: the tile is the same on every map (the GM does not mind the repetition), so a re-roll moves nothing.
-_SEED = {"grass": 2981, "reed": 2982, "bamboo": 2983, "grass-clumps": 2991, "reed-clumps": 2992, "fringe": 2993}
+_SEED = {"grass": 2981, "reed": 2982, "bamboo": 2983, "grass-clumps": 2991, "reed-clumps": 2992, "fringe": 2993, "reed-bank": 2994}
 
 
 @dataclass
@@ -259,6 +259,27 @@ def fringe_tile(bs: float) -> str:
     )
 
 
+#: THE BANK BAND (feature 300, the GM 2026-10-01: the stream's banks through the marsh looked "cleared of marsh"): the reeds run
+#: to the water's drawn edge, and a band `BANK_FT` wide along each bank inside the marsh is drawn with a tighter, darker reed
+#: tile, so the stream stays framed where a bare strip framed it. A MAP DRAWING CONVENTION; the width is calibrated by eye.
+BANK_FT = 6.0
+
+
+def reed_bank_tile(bs: float) -> str:
+    """The bank band's tile: reed tufts at about three times the marsh's density, a shade darker, at the base repeat."""
+    import numpy as np
+
+    side = COVER_TILE_FT * bs
+    rng = np.random.default_rng(_SEED["reed-bank"])
+    n = round(3 * side * side / (REED_SQFT_PER_TUFT * bs * bs))
+    reeds = _tufts(side, rng.uniform(0, side, n), rng.uniform(0, side, n), rng.uniform(-0.2, 0.2, (n, 4)), rng.uniform(4.5, 7.5, (n, 4)) * bs)
+    return (
+        f'<pattern id="{pattern_id("reed-bank", bs)}" width="{side:g}" height="{side:g}" patternUnits="userSpaceOnUse">'
+        f'<rect width="{side:g}" height="{side:g}" fill="#9FBBAE" fill-opacity="0.16"/>'
+        f'<path d="{reeds}" stroke="#56785F" stroke-width="0.9" fill="none"/></pattern>'
+    )
+
+
 #: The overlay drawn over each base kind (feature 299); bamboo has none.
 OVERLAYS: dict[str, str] = {"grass": "grass-clumps", "reed": "reed-clumps"}
 
@@ -269,6 +290,7 @@ TILES: dict[str, Callable[[float], str]] = {
     "grass-clumps": grass_overlay_tile,
     "reed-clumps": reed_overlay_tile,
     "fringe": fringe_tile,
+    "reed-bank": reed_bank_tile,
 }
 
 

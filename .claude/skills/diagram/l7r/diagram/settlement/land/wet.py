@@ -432,7 +432,9 @@ class WetGroundMixin:
         pond_pad = 2.0 if role == "pond_fringe" else 2.0 + pad
         # (slot 6, the pond moved up a blade so no thrown tip crossed its rim, is a thrown reed's alone: a tile has none, and it left
         # a bare crescent under the pond)
-        bare = keep.shape((0.0, pad, pad, pond_pad, pond_pad, min(pad, 1.5), None), (x0, y0, x1, y1))
+        # (slot 3, the watercourses, at their drawn width alone - feature 300: the 2 ft and a tuft's reach a thrown reed kept
+        # off the water left a bare strip down both banks; the reeds stand at the water's edge, and the bank band lines it)
+        bare = keep.shape((0.0, pad, pad, 0.0, pond_pad, min(pad, 1.5), None), (x0, y0, x1, y1))
         self._covers.append(Cover("reed", "marsh", [(float(q[0]), float(q[1])) for q in drawn], [bare] if bare is not None else []))
         self._cover_n += 1
         dx0, dx1, dy0, dy1 = min(q[0] for q in drawn), max(q[0] for q in drawn), min(q[1] for q in drawn), max(q[1] for q in drawn)

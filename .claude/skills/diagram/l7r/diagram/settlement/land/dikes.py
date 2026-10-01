@@ -161,7 +161,7 @@ if TYPE_CHECKING:
 class DikeMixin:
     def perimeter_dike(self: Settlement, inner_env: Any, seed: int = 0, label: str = "perimeter dike", width: tuple[float, float] = (14.0, 40.0), gaps: Any = ()) -> None:  # type: ignore[misc]
         """A reclaimed-polder PERIMETER DIKE, drawn as an irregular hand-piled EARTHWORK BAND (not a ruled
-        tan line). China-first grounding (research 2026-07-22, recorded in research/archetypes.html 'The perimeter dike followed the natural water edge'):
+        tan line). China-first grounding (research 2026-07-22, recorded in research/archetypes.html 'Polder dikes: what they were made of, how big, and what grew on them'; the map rules at research/rendering/archetypes.html "How our maps draw a polder's dike and its trees"):
         a wei-tian 圩田 / dike-pond dike was dredged pond-mud heaped and packed (the 挖塘培基 dig-and-pile
         cycle that also made the ponds), trapezoidal in section, PLANTED with mulberry/willow to bind the
         soil, walked and lived on, and constantly breached-and-repaired. The SURVEYED interior grid stays
@@ -170,9 +170,12 @@ class DikeMixin:
         is a POST-1949 industrial shape. So `inner_env` (the rectilinear grid boundary) is the dike's INNER
         face, and this draws the OUTER face as an organic curve bulging outward by a VARYING amount (the dike
         width varies - thicker on the exposed water side / at pressure points, pinched where repaired), with
-        rounded non-square corners, filled as a mottled vegetated earthwork. TRUE SCALE: a perimeter dike ran
-        ~6-10 m+ wide (wider than the ~6.7 m inter-pond mulberry dikes it rings, not the old under-scale
-        4.4 px line), so the band is drawn to true width, not floored. Records M['dikes']; labeled (a polder
+        rounded non-square corners, filled as a mottled vegetated earthwork. WIDTH: no village polder's own
+        dike width was read; the one bound is the Echizen river dikes' ~18 ft foot, which a village dike stood
+        below. The (14, 40) ft band runs past it by a map drawing CONVENTION, so the ring reads as the greater
+        bank beside the 23 ft crop dikes round the fish ponds (the old "~6-10 m+" figure was the pond dikes'
+        modern width, not a polder ring's): research/rendering/archetypes.html "How our maps draw a polder's
+        dike and its trees". Records M['dikes']; labeled (a polder
         dike is NOT an "obvious" feature - the GM asked for it named)."""
         from l7r.diagram.waterfields import BUND
 
@@ -209,11 +212,10 @@ class DikeMixin:
             run_paths = [d]
         for rp in run_paths:
             self.add(f'<path d="{rp}" fill="{BUND}" stroke="#9C8558" stroke-width="1.2" stroke-linejoin="round" opacity="0.95"/>', cls="perimeter dike")
-        # MOTTLE + PLANTED ROWS (reworked GM 2026-07-24 - accuracy pass; research/archetypes.html 'The perimeter dike followed the natural water edge'):
+        # MOTTLE + PLANTED ROWS (reworked GM 2026-07-24 - accuracy pass; research/rendering/archetypes.html "How our maps draw a polder's dike and its trees"):
         # the old render scattered crowns at random over the band, but dike planting was ROW planting along
         # the alignment - a WILLOW row on the water face (wave-wash armor + withy supply; the Qing Willow
-        # Palisade statute of one whip per 5 chi ~ 5.5 ft is the closest attested in-row figure, and willow-
-        # fascine rows on erosive soil run 1-1.5 m apart, the same soil mechanics) and a MULBERRY row on the
+        # Palisade statute of one whip per 5 chi ~ 5.5 ft is the closest attested in-row figure) and a MULBERRY row on the
         # inner face (the dike is prime sericulture ground - Lake Tai mulberry sat on the tang banks). Earth
         # mottle (patch-repairs of different ages) stays scattered - repairs, unlike planting, ARE haphazard.
         smoothed = smooth_points(band)
@@ -233,7 +235,7 @@ class DikeMixin:
         # the two planted rows follow each band RUN (so they skip the sluice notches with the earthwork).
         # In-row spacings are drawn at the loose end (willow 8.5 px vs the attested ~5.5 ft; mulberry 4.4 px
         # at the loose end of 3-5 ft) so crowns read as touching runs, not a fused hedge - the same
-        # legibility precedent as the pond banks (research/archetypes.html 'The 6:4 water-to-dike ratio and coppiced mulberry', quantified departure).
+        # legibility precedent as the pond banks (research/rendering/archetypes.html 'How our maps draw dike-ponds (sangji yutang)', quantified departure).
         veg_runs = runs if gap_pts else [list(range(n))]
 
         def _row_walk(frac: float, step: float) -> list[Pt]:
@@ -348,7 +350,7 @@ class DikeMixin:
     def dike_top_houses(self: Settlement, count: int, seed: int = 0, dike: int = 0, span: tuple[float, float] = (0.0, 1.0), size: tuple[float, float] = (46.0, 28.0), gap_clear: float = 34.0) -> int:  # type: ignore[misc]
         """A DIKE-TOP VILLAGE: farmhouses in SINGLE FILE ON the perimeter dike crest (settlement_form
         'dike_top') - the settlement form for an ISLET polder with water on every flank and no landward
-        shore to build on. Historical grounding (researched 2026-07-24, research/archetypes.html 'Polder siting - full enclosure, fluctuating water and where the village sits'):
+        shore to build on. Historical grounding (researched 2026-07-24, research/archetypes.html 'Polders: fields diked against the fluctuating water (weitian, waju)' + research/rendering/archetypes.html 'How our maps draw polders (weitian, waju)'):
         where a polder abuts the natural shore the village sits on the landward dry ground (the Enokida/
         Kuwabata configuration), but in the DEEP-water landscape the only dry ground is the polder's own
         raised earth, and settlement went up onto it - linear dike/canal-bank villages "taking advantage of

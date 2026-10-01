@@ -1,0 +1,11 @@
+{
+  "utc": "2026-10-01T15:54:13Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 128,
+  "result": "green",
+  "commit": "1228c60fc",
+  "cache": "cold",
+  "mode": "full",
+  "selected": ""
+}

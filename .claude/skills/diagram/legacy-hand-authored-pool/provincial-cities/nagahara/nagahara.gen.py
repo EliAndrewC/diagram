@@ -9,7 +9,7 @@ city that let a river in was devastated seven times); instead the city stands ON
 river IS the water defense on its flank, and the dug moat covers the three landward faces,
 tapping the river upstream (NE) and returning downstream (SE) so the current flushes it; the
 junction feet tilt WITH the current (inlet near-square, outlet swept downstream - s.moat's
-default tilts; research/cities/river-cities.html "Which way does an offtake leave a river, and why?", GM 2026-07-24).
+default tilts; research/rendering/water.html "How our maps draw bends, junctions and the run of the water", GM 2026-07-24).
 
 NO IMPERIAL ROAD: the Imperial highway passes ~10 miles north. A NORTH ROAD leaves the north
 gate slanting slightly north-west to meet it (way off-map); the EAST ROAD crosses the Hayakawa

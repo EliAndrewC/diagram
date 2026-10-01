@@ -661,9 +661,9 @@ class FinishMixin:
         zone with nothing left draws nothing. A scrub zone's drawn shape is recorded on its commons record (`cover`) for the
         page's hit region, which takes the pointer at the bottom of the stack (the fill itself takes none). Idempotent."""
         import shapely
-        from shapely.geometry import Polygon, box
+        from shapely.geometry import LineString, Polygon, box
 
-        from .land.tiles import FRINGE_FT, OVERLAYS, cover_defs, cover_path, cover_rings
+        from .land.tiles import BANK_FT, FRINGE_FT, OVERLAYS, cover_defs, cover_path, cover_rings
 
         pending = self._covers
         self._covers = []
@@ -687,6 +687,8 @@ class FinishMixin:
         # with the fringe tile, in each side's own class and slot, in place of the two base tiles there
         half = FRINGE_FT * bs / 2.0
         reach = {kind: shapely.union_all([s for c, s in shapes if c.kind == kind]).buffer(half) for kind in ("grass", "reed")}
+        # THE BANK BAND (feature 300): along every watercourse, inside a marsh, a band BANK_FT wide each side of the drawn water
+        banks = shapely.union_all([LineString(pl).buffer(hw + BANK_FT * bs) for pl, hw in self._watercourse_segs(0.0) if len(pl) >= 2]) if any(c.kind == "reed" for c, _s in shapes) else None
         for cover, shape in shapes:
             z = self._cover_slots.get((cover.kind, cover.cls))
             if z is None:  # pragma: no cover - every kind and class a cover is recorded under has its slot (`_header`)
@@ -697,6 +699,12 @@ class FinishMixin:
                 shape = shape.difference(band)
                 self.out[z] += cover_path(band, "fringe", bs)
                 self._cover_kinds.add(("fringe", bs))
+            if cover.kind == "reed" and banks is not None and not banks.is_empty:
+                bank = shape.intersection(banks)
+                if bank.area >= 1.0:
+                    shape = shape.difference(bank)
+                    self.out[z] += cover_path(bank, "reed-bank", bs)
+                    self._cover_kinds.add(("reed-bank", bs))
             if shape.is_empty or shape.area < 1.0:
                 continue
             self.out[z] += cover_path(shape, cover.kind, bs)

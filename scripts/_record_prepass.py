@@ -72,7 +72,8 @@ def sections(markup: str) -> list[tuple[str, str]]:
     out, heading = [], "(top)"
     for part in parts:
         if re.match(r"<h[23]\b", part, re.I):
-            heading = text_of(part)
+            # the research <-> rendering link the assembly writes into a heading (feature 292) is not its text
+            heading = text_of(re.sub(r'<span class="xref">.*?</span>', "", part, flags=re.S))
         elif part.strip():
             out.append((heading, part))
     return out

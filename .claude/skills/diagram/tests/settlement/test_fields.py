@@ -459,7 +459,7 @@ def test_comb_base_fill_noops_on_an_empty_net():
 
 
 def test_a_fry_village_takes_the_smallest_ponds_up_to_its_share_and_no_pond_is_sluiced():
-    """Feature 280 M57/M60 (research/archetypes/150, 200): a fry village's fry ponds are its smallest, their area within
+    """Feature 280 M57/M60 (research/archetypes/140, 200): a fry village's fry ponds are its smallest, their area within
     seven tenths of the block's ponds; an ordinary hamlet has none; and no pond is cut by a sluice of its own."""
     from l7r.diagram.settlement.fields.landuse import FRY_VILLAGE_SHARE, fry_pond_ids
 
@@ -853,7 +853,7 @@ def test_the_patch_seeds_are_A_HANDFUL_not_everyone_at_once() -> None:
 
 
 def test_a_TEA_dike_is_drawn_as_clipped_hedgerows_not_as_crowns(monkeypatch: pytest.MonkeyPatch) -> None:
-    """269 B34: tea is the third premodern dike planting (research/archetypes/230). A clipped tea bush reads
+    """269 B34: tea is the third premodern dike planting (research/archetypes 'Mulberry and other crops on pond dikes (sangji, guoji)'). A clipped tea bush reads
     as a hedge, so its rows are runs of dark stroke, broken between bushes - a different SHAPE from the
     mulberry's scatter of round crowns, which is what lets a reader tell the two at fit zoom.
     """
@@ -871,7 +871,7 @@ def test_a_TEA_dike_is_drawn_as_clipped_hedgerows_not_as_crowns(monkeypatch: pyt
 
 
 def test_every_attested_DIKE_CROP_draws_a_form_that_tells_it_from_the_others(monkeypatch: pytest.MonkeyPatch) -> None:
-    """`DIKE_CROPS` holds three distinct premodern plantings (269 B34; research/archetypes/230) and each is a
+    """`DIKE_CROPS` holds three distinct premodern plantings (269 B34; research/archetypes 'Mulberry and other crops on pond dikes (sangji, guoji)') and each is a
     different SHAPE at fit zoom, which is the whole reason they are separate forms rather than colors:
 
       - mulberry: a scatter of coppiced crowns in two rows

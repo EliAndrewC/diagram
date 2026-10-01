@@ -359,8 +359,8 @@ def well_clear_of_arch(plan: ParsedPlan) -> list[str]:
 
 
 def no_precinct_enclosure(text: str, plan: ParsedPlan) -> list[str]:
-    """A village shrine's precinct is NOT enclosed (feature 268; research/religion-and-death.html 'Was a
-    village shrine walled or fenced?'): its ground is marked by its arch and its wood. Every dated fence
+    """A village shrine's precinct is NOT enclosed (feature 268; research/religion-and-death.html 'Shrine
+    woods and fences (chinju no mori, tamagaki)'): its ground is marked by its arch and its wood. Every dated fence
     the research found rings the sanctuary alone (a Taisho/Showa donation) or lines the approach, and a
     wall is a temple's rank mark. So a fence group whose extent takes in the hall - a precinct fence - is
     reported, as is a compound wall stroke at the sheet's edge; a fence around the sanctuary alone (a

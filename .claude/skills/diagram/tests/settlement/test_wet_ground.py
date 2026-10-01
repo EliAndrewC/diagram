@@ -74,7 +74,7 @@ def _reeded(s: Settlement) -> Any:
     for d in re.findall(r'<path d="([^"]+)" fill="url\(#cover-(?!\w+-clumps)', ink):
         for ring in re.findall(r"M([^Z]+)Z", d):
             pts = [tuple(map(float, q.split(","))) for q in ring.split("L")]
-            shape = shape.symmetric_difference(Polygon(pts))
+            shape = shape.symmetric_difference(Polygon(pts).buffer(0))
     return shape
 
 

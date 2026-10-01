@@ -1,0 +1,9 @@
+# Handoff - feature 292 sweep, towns group G12 (session 1: write)
+
+- SECTION=towns/inns-and-cheap-lodging-houses-how-many-and-where-the-caravan-inn-stands-hatagoya-kichin-yado-dian
+- RENDERING=rendering/towns/how-our-maps-place-a-towns-inns-and-lodging-houses
+- OLD=research/towns/320-how-many-inns-did-a-post-town-keep-and-how-big-was-one.html research/towns/050-where-does-a-caravan-inn-stand-and-what-does-it-need-beside-it.html research/towns/040-the-market-day-flophouse---who-actually-stays-over.html research/cities/fabric/120-how-many-cheap-lodging-houses-did-a-city-hold.html
+- MODALS=
+- BASE=84226d688
+
+Inns and cheap lodging houses: no section was held by another feature, and all four folded. cities/fabric/120 folded across pages, so its keys were renamed (kichinyado-jawiki to kichinyado-jawiki-5, kichinyado-kotobank to kichinyado-kotobank-3); 040's kichinyado-kotobank-2 quoted the same three passages as its kichinyado-kotobank and is now one note with it. No claim was cut except the Sources rosters, fabric 120's roster sentence about unchecked claims, a comment that pointed at a deleted file, and the pointer paragraphs (REMOVED comment). The rendering section adds no new finding, but it does put two existing rules side by side that may be worth a look: the town's caravan inn stands INSIDE a walled town's wall, on the main street (towns 050's rule, kept), while rendering/towns 080 draws an inn among the gate-market shops OUTSIDE a gate that opens onto a through road. In the kanji-gloss fix, dictionary names in the copied notes (日本大百科全書 and the like) were dropped where an English name already followed them, and 平房 got its gloss. The glossary's hatago term gained the variant "hatagoya" for the title. Links re-aimed: buildings 800 (research and rendering), towns 080, 350, 360 and 440, rendering towns 440, urban-features 130 (research and rendering). No modal or code comment named an old heading.

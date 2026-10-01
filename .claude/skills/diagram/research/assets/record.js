@@ -25,7 +25,7 @@
   function show(ref) {
     var html = noteHtml(ref);
     if (!html) { return; }
-    tip.innerHTML = html; wrapGlossary(tip, false); place(ref);
+    tip.innerHTML = html; wrapGlossary(tip, false); collapseOriginals(tip); place(ref);
   }
   function place(el) {
     tip.hidden = false;
@@ -36,6 +36,12 @@
     var y = r.bottom + 6; if (y + h + margin > vh) { y = r.top - h - 6; } if (y < margin) { y = margin; }
     tip.style.left = (window.scrollX + x) + 'px'; tip.style.top = (window.scrollY + y) + 'px';
   }
+  // A reference that leads to the CITATIONS PAGE opens it in a new tab (GM 2026-09-29: "links to citations should open
+  // in a new tab"), so the reader keeps their place; the hover's own links to a work's entry carry the same attribute
+  // from `make citations`. A note still in the page (`#fn-n`) is a jump within it and is left alone.
+  document.querySelectorAll('sup.fn a[href*="citations/"]').forEach(function (ref) {
+    ref.setAttribute('target', '_blank'); ref.setAttribute('rel', 'noopener');
+  });
   document.querySelectorAll('sup.fn a[href*="#fn-"]').forEach(function (ref) {
     ref.addEventListener('mouseenter', function () { keep(); show(ref); });
     ref.addEventListener('focus', function () { keep(); show(ref); });
@@ -91,6 +97,27 @@
       if (frag) { if (last < text.length) { frag.appendChild(document.createTextNode(text.slice(last))); } node.parentNode.replaceChild(frag, node); }
     });
   }
+  // ORIGINALS COLLAPSED (feature 292, GM 2026-09-29: "the translation should be visible, but the original text should be
+  // collapsed by default. And then you should have to click on it to see"): the assembly wraps each `original: 「...」`
+  // run in `<span class="orig">`; here it is hidden behind a small toggle - in the page and in the footnote box alike,
+  // since the box is filled from the same note. Without scripts the original simply shows, as it always did.
+  function collapseOriginals(root) {
+    // a note copied into the box from the page carries the page's toggles without their handlers: drop them first
+    root.querySelectorAll('button.orig-toggle').forEach(function (b) { b.remove(); });
+    root.querySelectorAll('span.orig').forEach(function (orig) {
+      var toggle = document.createElement('button');
+      toggle.type = 'button'; toggle.className = 'orig-toggle'; toggle.textContent = 'original';
+      toggle.setAttribute('aria-expanded', 'false');
+      orig.hidden = true;
+      toggle.addEventListener('click', function (ev) {
+        ev.preventDefault(); ev.stopPropagation();
+        orig.hidden = !orig.hidden; toggle.setAttribute('aria-expanded', String(!orig.hidden));
+        toggle.textContent = orig.hidden ? 'original' : 'hide original';
+      });
+      orig.parentNode.insertBefore(toggle, orig);
+    });
+  }
+  collapseOriginals(document.body);
   wrapGlossary(document.querySelector('main') || document.body, true);
   tip.addEventListener('mouseenter', keep);
   tip.addEventListener('mouseleave', hideSoon);
