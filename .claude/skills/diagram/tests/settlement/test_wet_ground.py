@@ -71,7 +71,7 @@ def _reeded(s: Settlement) -> Any:
     s.flush_covers()
     ink = s.out[s._cover_slots[("reed", "marsh")]]
     shape = Polygon()
-    for d in re.findall(r'<path d="([^"]+)"', ink):
+    for d in re.findall(r'<path d="([^"]+)" fill="url\(#cover-(?!\w+-clumps)', ink):
         for ring in re.findall(r"M([^Z]+)Z", d):
             pts = [tuple(map(float, q.split(","))) for q in ring.split("L")]
             shape = shape.symmetric_difference(Polygon(pts))

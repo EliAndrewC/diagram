@@ -57,7 +57,7 @@ def test_a_strip_that_stops_inside_the_view_is_carried_to_its_edge() -> None:
 def test_a_band_with_no_open_ground_adds_nothing_and_a_separate_ground_keeps_its_own_record() -> None:
     s = _polder([100.0, 100.0, 2000.0, 2000.0])
     s.marsh([(520.0, 770.0), (790.0, 770.0), (790.0, 1220.0), (520.0, 1220.0)], role="waterside")
-    s.block_polys.append([(0.0, 0.0), (523.0, 0.0), (523.0, 2400.0), (0.0, 2400.0)])  # the whole band is built ground
+    s.block_polys.append([(0.0, 0.0), (600.0, 0.0), (600.0, 2400.0), (0.0, 2400.0)])  # the whole band is built ground (to past the shaped strip's edge, feature 299)
     fr.waterward_to_the_frame(s)
     assert len(s.M["marshes"]) == 1
     t = _polder([100.0, 100.0, 2000.0, 2000.0])

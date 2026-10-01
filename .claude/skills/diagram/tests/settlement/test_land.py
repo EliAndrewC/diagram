@@ -15,8 +15,11 @@ from tests.settlement._builders import _city, _crop_settlement, _hamlet_with_fie
 def test_marsh_draws_wet_scatter_and_records_it():
     s = _crop_settlement()
     s.marsh([(100, 120), (600, 100), (350, 620)])  # a triangle -> also covers the point-in-poly skip
-    assert len(s.M["marshes"]) == 1 and len(s.M["marshes"][0]["poly"]) == 3
-    assert s.out  # drew reeds / wet tint
+    from shapely.geometry import Polygon
+
+    rec = Polygon(s.M["marshes"][0]["poly"])
+    assert len(s.M["marshes"]) == 1 and Polygon([(100, 120), (600, 100), (350, 620)]).buffer(0.5).contains(rec), "the record is the shaped outline, within the laid one (feature 299)"
+    assert s._covers and s._covers[-1].kind == "reed"  # the reeds are recorded for the finish
 
 
 def test_marsh_skips_points_on_a_paddy():
@@ -624,7 +627,10 @@ def test_commons_keeps_scrub_off_every_recorded_marsh():
     s.commons([(20, 250), (330, 250), (330, 720), (20, 720)])  # a scrub pass that straddles the marsh
     grass = _covered(s)
     assert grass.area > 1000.0, "scrub drawn around the marsh"
-    assert grass.intersection(Polygon(wet)).area < 1.0, "no grass in the marsh"
+    from l7r.diagram.settlement.land.tiles import FRINGE_FT
+
+    recorded = Polygon(s.M["marshes"][0]["poly"])
+    assert grass.intersection(recorded.buffer(-FRINGE_FT / 2 - 1.0)).area < 1.0, "no grass in the marsh past its mixed fringe (feature 299)"
 
 
 def test_reserve_clearing_registers_swept_ground_before_the_scatter_runs() -> None:

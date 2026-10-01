@@ -733,7 +733,10 @@ class GroundCoverMixin:
         # stand under the crowns and grass thins out inside the first few paces. The belt is drawn
         # two stages later, so without this the scrub could not see it: Inashiro carried 2,688
         # blades, 158 brush dots and 11 pines inside the belt polygon.
-        soft = [toe_poly] if toe_poly else []
+        # ...BUT ONCE A MARSH IS DRAWN, ITS OWN GROUND IS THE KEEP-OUT, NOT THE BAND IT WAS LAID IN (feature 299): the marsh's
+        # outline is shaped inside the band (`land.outline`), and the ground it gives up is dry ground the scrub fills -
+        # handed the laid band, the scrub left a bare strip between the two. `commons` reads every recorded marsh itself.
+        soft = [toe_poly] if toe_poly and not marsh_ground(self.M) else []
         woods = [[tuple(q) for q in sp] for sp in soft_extra]  # every wood: grass reaches only WOOD_FRINGE_FT under its edge
         if commons:
             for p in ring(0, max(W, H)):  # the cut-over SCRUB commons: the DOMINANT denuded-hill cover

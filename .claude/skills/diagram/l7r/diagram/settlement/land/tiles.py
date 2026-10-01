@@ -21,6 +21,9 @@ from typing import Any
 #: The grass and reed tile's side in feet (x the map's `bscale`): wide enough that a zone shows few repeats, small enough that
 #: the tile is a few hundred glyphs. The bamboo tile is the stand's own grid (`bamboo_tile`).
 COVER_TILE_FT = 64.0
+#: The reed tile's side (feature 299): its wide pale tint patches made a 64 ft lattice that read as a grid on Inashiro's toe at
+#: full size (2026-10-01); twice the side holds four times the glyphs, once, in the <defs>, and costs a map nothing else.
+REED_TILE_FT = 128.0
 
 #: One throw per this many square feet (x bscale^2) - the scatters' own densities: `commons` threw `area / 74` (14% of the kept
 #: throws brush dots, the rest three-bladed tufts), the marsh a tint per 360 and a tuft per 150 (12% of them glints).
@@ -31,7 +34,7 @@ REED_SQFT_PER_TUFT = 150.0
 REED_GLINT_SHARE = 0.12
 
 #: A fixed seed per kind: the tile is the same on every map (the GM does not mind the repetition), so a re-roll moves nothing.
-_SEED = {"grass": 2981, "reed": 2982, "bamboo": 2983}
+_SEED = {"grass": 2981, "reed": 2982, "bamboo": 2983, "grass-clumps": 2991, "reed-clumps": 2992, "fringe": 2993}
 
 
 @dataclass
@@ -98,7 +101,7 @@ def reed_tile(bs: float) -> str:
 
     from .wet import MARSH_TINT_R
 
-    side = COVER_TILE_FT * bs
+    side = REED_TILE_FT * bs
     rng = np.random.default_rng(_SEED["reed"])
     tints, glints, reeds = [], [], []
     n_tint = round(side * side / (REED_SQFT_PER_TINT * bs * bs))
@@ -119,7 +122,10 @@ def reed_tile(bs: float) -> str:
         reeds.append(_wrapped(side, side, lambda px, py, tips=tips: "".join(f"M{px:.1f},{py:.1f}l{tx:.1f},{ty:.1f}" for tx, ty in tips), x, y, 7.0 * bs))
     return (
         f'<pattern id="{pattern_id("reed", bs)}" width="{side:g}" height="{side:g}" patternUnits="userSpaceOnUse">'
-        f'<g fill="#9FBBAE" fill-opacity="0.14">{"".join(tints)}</g>'
+        # THE WET HAZE IS EVEN, ITS PATCHES FAINT (feature 299): the scatter's tint circles at 0.14 overlapped at random over
+        # a whole marsh, and repeated in a tile their gaps made a sawtooth of bare ground at fit zoom (Inashiro, 2026-10-01)
+        f'<rect width="{side:g}" height="{side:g}" fill="#9FBBAE" fill-opacity="0.12"/>'
+        f'<g fill="#9FBBAE" fill-opacity="0.06">{"".join(tints)}</g>'
         f'<g fill="#C2D6CE" fill-opacity="0.85">{"".join(glints)}</g>'
         f'<path d="{"".join(reeds)}" stroke="#6E9377" stroke-width="0.8" fill="none"/></pattern>'
     )
@@ -151,7 +157,119 @@ def bamboo_tile(bs: float) -> str:
     return f'<pattern id="{pattern_id("bamboo", bs)}" width="{w:g}" height="{h:g}" patternUnits="userSpaceOnUse">{"".join(marks)}</pattern>'
 
 
-TILES: dict[str, Callable[[float], str]] = {"grass": grass_tile, "reed": reed_tile, "bamboo": bamboo_tile}
+#: THE OVERLAY'S REPEAT (feature 299, the GM 2026-10-01 of the marsh: "Could you do the same thing" - the scrub's varied look):
+#: a second, sparse tile drawn over the base tile at a repeat that shares no small common multiple with the base's 64 ft, so the
+#: two together do not visibly repeat at either's period.
+OVERLAY_TILE_FT = 97.0
+#: ...and the reed overlay's, larger than the reed base tile's own 128 ft (`REED_TILE_FT`) and sharing no small multiple with
+#: it; it carries the clumps per area the 97 ft tile does.
+REED_OVERLAY_TILE_FT = 197.0
+#: Clumps per overlay tile, and the tufts in each, kept within `CLUMP_RADIUS_FT` of its center.
+OVERLAY_CLUMPS = 3
+CLUMP_TUFTS = (6, 10)
+CLUMP_RADIUS_FT = 6.0
+
+
+def _tufts(side: float, xs: Any, ys: Any, ang: Any, length: Any) -> str:
+    """Tufts of blades rooted at (xs[i], ys[i]), blade k at angle ang[i, k] off upright and length[i, k] long, as one path's `d`,
+    each tuft laid again past any edge it crosses (`_wrapped`)."""
+    out = []
+    for i in range(len(xs)):
+        tips = [(math.sin(float(ang[i, k])) * float(length[i, k]), -math.cos(float(ang[i, k])) * float(length[i, k])) for k in range(ang.shape[1])]
+        reach = max(float(v) for v in length[i])
+        out.append(_wrapped(side, side, lambda px, py, tips=tips: "".join(f"M{px:.1f},{py:.1f}l{tx:.1f},{ty:.1f}" for tx, ty in tips), float(xs[i]), float(ys[i]), reach))
+    return "".join(out)
+
+
+def _clump_centers(rng: Any, side: float, n: int, spread: float) -> tuple[Any, Any]:
+    """`n` clumps' tuft roots: clump centers anywhere on the tile, each with 8-14 roots within `spread` of it."""
+    import numpy as np
+
+    xs, ys = [], []
+    for cx, cy in zip(rng.uniform(0, side, n), rng.uniform(0, side, n), strict=True):
+        m = int(rng.integers(CLUMP_TUFTS[0], CLUMP_TUFTS[1] + 1))
+        r, a = spread * np.sqrt(rng.random(m)), rng.uniform(0.0, 2.0 * math.pi, m)
+        xs += (cx + r * np.cos(a)).tolist()
+        ys += (cy + r * np.sin(a)).tolist()
+    return np.array(xs) % side, np.array(ys) % side
+
+
+def reed_overlay_tile(bs: float) -> str:
+    """The marsh's overlay (feature 299): a few dense reed clumps and small open-water patches, sparse, at `REED_OVERLAY_TILE_FT`."""
+    import numpy as np
+
+    side = REED_OVERLAY_TILE_FT * bs
+    rng = np.random.default_rng(_SEED["reed-clumps"])
+    xs, ys = _clump_centers(rng, side, round(OVERLAY_CLUMPS * (REED_OVERLAY_TILE_FT / OVERLAY_TILE_FT) ** 2), CLUMP_RADIUS_FT * bs)
+    n = len(xs)
+    reeds = _tufts(side, xs, ys, rng.uniform(-0.2, 0.2, (n, 4)), rng.uniform(5.0, 8.0, (n, 4)) * bs)
+    pools = []
+    for x, y, a, b in zip(rng.uniform(0, side, 8), rng.uniform(0, side, 8), rng.uniform(6.0, 10.0, 8) * bs, rng.uniform(3.0, 4.5, 8) * bs, strict=True):
+        pools.append(_wrapped(side, side, lambda px, py, a=float(a), b=float(b): f'<ellipse cx="{px:.1f}" cy="{py:.1f}" rx="{a:.1f}" ry="{b:.1f}"/>', float(x), float(y), float(a)))
+    return (
+        f'<pattern id="{pattern_id("reed-clumps", bs)}" width="{side:g}" height="{side:g}" patternUnits="userSpaceOnUse">'
+        f'<g fill="#C2D6CE" fill-opacity="0.7">{"".join(pools)}</g>'
+        f'<path d="{reeds}" stroke="#6E9377" stroke-width="0.8" fill="none"/></pattern>'
+    )
+
+
+def grass_overlay_tile(bs: float) -> str:
+    """The scrub's overlay (feature 299): a few dense clumps of grass with a brush dot or two, sparse, at `OVERLAY_TILE_FT`."""
+    import numpy as np
+
+    side = OVERLAY_TILE_FT * bs
+    rng = np.random.default_rng(_SEED["grass-clumps"])
+    xs, ys = _clump_centers(rng, side, OVERLAY_CLUMPS, CLUMP_RADIUS_FT * bs)
+    n = len(xs)
+    blades = _tufts(side, xs, ys, rng.uniform(-0.45, 0.45, (n, 3)), rng.uniform(2.8, 4.6, (n, 3)) * bs)
+    dots = []
+    for x, y, r in zip(rng.uniform(0, side, 2), rng.uniform(0, side, 2), rng.uniform(1.8, 2.6, 2) * bs, strict=True):
+        dots.append(_wrapped(side, side, lambda px, py, r=float(r): f'<circle cx="{px:.1f}" cy="{py:.1f}" r="{r:.1f}"/>', float(x), float(y), float(r)))
+    return (
+        f'<pattern id="{pattern_id("grass-clumps", bs)}" width="{side:g}" height="{side:g}" patternUnits="userSpaceOnUse">'
+        f'<g fill="#94A063" fill-opacity="0.85">{"".join(dots)}</g>'
+        f'<path d="{blades}" stroke="#A7A860" stroke-width="0.8" fill="none"/></pattern>'
+    )
+
+
+#: THE FRINGE (feature 299, the GM 2026-10-01: "a more gradual transition ... between the two"): where scrub meets marsh, a band
+#: `FRINGE_FT` wide straddling the boundary is drawn with a tile of both - grass tufts and reed tufts at about half their own
+#: densities, with a little of the wet tint - so the change is a grading, as the margin itself grades (research/vegetation 120:
+#: reed, then sedge and grass, then dry ground). A MAP DRAWING CONVENTION; the width is calibrated by eye.
+FRINGE_FT = 30.0
+
+
+def fringe_tile(bs: float) -> str:
+    """The scrub-marsh fringe's tile: grass and reed tufts at half density each, a few pale tint patches, at the base repeat."""
+    import numpy as np
+
+    side = COVER_TILE_FT * bs
+    rng = np.random.default_rng(_SEED["fringe"])
+    ng, nr, nt = round(side * side / (2 * GRASS_SQFT_PER_THROW * bs * bs)), round(side * side / (2 * REED_SQFT_PER_TUFT * bs * bs)), 4
+    grass = _tufts(side, rng.uniform(0, side, ng), rng.uniform(0, side, ng), rng.uniform(-0.45, 0.45, (ng, 3)), rng.uniform(2.4, 4.2, (ng, 3)) * bs)
+    reeds = _tufts(side, rng.uniform(0, side, nr), rng.uniform(0, side, nr), rng.uniform(-0.2, 0.2, (nr, 4)), rng.uniform(4.0, 7.0, (nr, 4)) * bs)
+    tints = []
+    for x, y, r in zip(rng.uniform(0, side, nt), rng.uniform(0, side, nt), rng.uniform(10.0, 18.0, nt) * bs, strict=True):
+        tints.append(_wrapped(side, side, lambda px, py, r=float(r): f'<circle cx="{px:.1f}" cy="{py:.1f}" r="{r:.1f}"/>', float(x), float(y), float(r)))
+    return (
+        f'<pattern id="{pattern_id("fringe", bs)}" width="{side:g}" height="{side:g}" patternUnits="userSpaceOnUse">'
+        f'<g fill="#9FBBAE" fill-opacity="0.08">{"".join(tints)}</g>'
+        f'<path d="{grass}" stroke="#A7A860" stroke-width="0.8" fill="none"/>'
+        f'<path d="{reeds}" stroke="#6E9377" stroke-width="0.8" fill="none"/></pattern>'
+    )
+
+
+#: The overlay drawn over each base kind (feature 299); bamboo has none.
+OVERLAYS: dict[str, str] = {"grass": "grass-clumps", "reed": "reed-clumps"}
+
+TILES: dict[str, Callable[[float], str]] = {
+    "grass": grass_tile,
+    "reed": reed_tile,
+    "bamboo": bamboo_tile,
+    "grass-clumps": grass_overlay_tile,
+    "reed-clumps": reed_overlay_tile,
+    "fringe": fringe_tile,
+}
 
 
 def cover_defs(kinds: set[tuple[str, float]]) -> str:
@@ -176,3 +294,10 @@ def cover_rings(shape: Any, tolerance: float = 0.25) -> list[list[tuple[float, f
         elif hasattr(g, "geoms"):
             out += cover_rings(g, tolerance)
     return out
+
+
+def cover_path(shape: Any, kind: str, bs: float) -> str:
+    """One even-odd `<path>` of `shape`'s rings (`cover_rings`) filled with `kind`'s tile at scale `bs`, taking no pointer (the
+    page's hit regions take it, `interactive.page.hit_regions`)."""
+    d = "".join("M" + "L".join(f"{x},{y}" for x, y in r) + "Z" for r in cover_rings(shape))
+    return f'<path d="{d}" fill="url(#{pattern_id(kind, bs)})" fill-rule="evenodd" style="pointer-events: none"/>'

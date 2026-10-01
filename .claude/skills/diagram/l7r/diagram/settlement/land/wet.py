@@ -31,6 +31,8 @@ if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds
 # THE REEDS ARE A TILE (feature 298): the marsh's tint, glints and reed tufts, thrown one by one until then, are the reed tile
 # (`land.tiles`) filling the drawn ground less what the tufts were kept off (`Cover`, `Settlement.flush_covers`).
 from .._geom import KeepoutGrid, Pt, point_in_poly, seg_dist
+from .._knobs import scope_seed
+from .outline import natural_outline
 from .tiles import Cover
 
 _SHAPELY_LOADED = False
@@ -202,6 +204,34 @@ def _keyholed(g: Any) -> Any:
     return ring
 
 
+def pond_cut(blocks: Any, pond: Any, slack: float = 25.0) -> list[Any]:
+    """`blocks` with the pond's own no-build box - a block holding the pond's ellipse and reaching no more than `slack` past
+    its box on any side - replaced by the ellipse itself (feature 299): the box keeps buildings off the water, and a marsh
+    cut by it showed a rectangle round an oval pond. Every other block is kept as it is."""
+    if not pond:
+        return list(blocks)
+    cx, cy, rx, ry = (float(v) for v in pond[:4])
+    out: list[Any] = []
+    swapped = False
+    for b in blocks:
+        xs, ys = [float(q[0]) for q in b], [float(q[1]) for q in b]
+        if (
+            xs
+            and min(xs) <= cx - rx
+            and max(xs) >= cx + rx
+            and min(ys) <= cy - ry
+            and max(ys) >= cy + ry
+            and min(xs) >= cx - rx - slack
+            and max(xs) <= cx + rx + slack
+            and min(ys) >= cy - ry - slack
+            and max(ys) <= cy + ry + slack
+        ):
+            swapped = True
+            continue
+        out.append(b)
+    return [*out, ellipse_ring(cx, cy, rx, ry)] if swapped else out
+
+
 def drawn_ground(poly: Any, fields: Any = (), blocks: Any = (), clearings: Any = (), avoid: Any = (), field_pad: float = 10.0) -> list[Pt] | None:
     """The ground a marsh's reeds are ACTUALLY drawn on: its outline with the scatter's AREA keep-outs taken out, as one
     keyholed ring - or None where nothing is left (feature 287, M7; woods W08).
@@ -300,6 +330,11 @@ class WetGroundMixin:
         # is what makes the two agree, and it is done ONCE here so `wet_polys`, `M['marshes']` and the hit
         # polygon are all the same shape. Only the OUTSIDE roles are clipped: a `pond_fringe` is a shore and
         # a `defense` belt hugs its wall, and neither has a polder block to be outside of.
+        # ...SHAPED FIRST (feature 299): the laid strips' corners rounded and their edges waved, before the cut-outs below, so where
+        # the marsh meets a paddy, a dike or the pond it still follows that feature's edge; a pond's fringe is a narrow ring the
+        # shaping would break, and is left as laid. The shaping only takes ground away (`land.outline`).
+        if role != "pond_fringe" and len(poly) >= 3:
+            poly = natural_outline(poly, scope_seed(self.seed, "marsh_outline", (role, round(float(poly[0][0])), round(float(poly[0][1])))), self.bscale)
         _outside = role in ("toe", "waterside")
         poly = _clipped_to_open_ground(
             poly,
@@ -314,7 +349,11 @@ class WetGroundMixin:
         # below refuses - the padded paddies, the no-build blocks, the swept clearings, `avoid` - one ring (`drawn_ground`).
         # The reed tile fills this ring (feature 298), so the ink and the record are one shape. Nothing left: nothing is drawn
         # or recorded.
-        _ground = drawn_ground(poly, self.field_polys, self.block_polys, self.clearings, avoid)
+        # ...WITH THE POND CUT AS THE POND (feature 299, plan review): the pond's no-build block is a box round its ellipse, kept
+        # to stop BUILDINGS standing on water (`pond_fringe_ring`'s note), and cut from the marsh it left a pale rectangle round
+        # the oval pond; the marsh is cut by the water itself, the ellipse - its reed fringe stands round it
+        _blocks = pond_cut(self.block_polys, self.M.get("pond"))
+        _ground = drawn_ground(poly, self.field_polys, _blocks, self.clearings, avoid)
         if _ground is None:
             self.M["meta"].setdefault("marsh_dropped", []).append({"role": role, "why": "no open ground left"})
             return
@@ -363,7 +402,7 @@ class WetGroundMixin:
         _banks = bank_rings(self.M.get("dikeponds", []), _near_box)
         keep = KeepoutGrid()
         keep.rings(self.field_polys, pad=10.0)
-        keep.rings(self.block_polys)
+        keep.rings(_blocks)  # the pond as its ellipse, not its building box (`pond_cut`, feature 299)
         keep.rings(self.clearings)
         keep.rings(avoid)
         keep.segs(corridors)
@@ -391,7 +430,9 @@ class WetGroundMixin:
         # once the view is decided (the re-throw of feature 287, M6, is gone with the throw).
         pad = MARSH_TUFT_R * bs
         pond_pad = 2.0 if role == "pond_fringe" else 2.0 + pad
-        bare = keep.shape((0.0, pad, pad, pond_pad, pond_pad, min(pad, 1.5), 0.0), (x0, y0, x1, y1))
+        # (slot 6, the pond moved up a blade so no thrown tip crossed its rim, is a thrown reed's alone: a tile has none, and it left
+        # a bare crescent under the pond)
+        bare = keep.shape((0.0, pad, pad, pond_pad, pond_pad, min(pad, 1.5), None), (x0, y0, x1, y1))
         self._covers.append(Cover("reed", "marsh", [(float(q[0]), float(q[1])) for q in drawn], [bare] if bare is not None else []))
         self._cover_n += 1
         dx0, dx1, dy0, dy1 = min(q[0] for q in drawn), max(q[0] for q in drawn), min(q[1] for q in drawn), max(q[1] for q in drawn)

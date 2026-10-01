@@ -283,3 +283,10 @@ or a later pass found what this one should have).
 | 2026-10-01 | spec-fidelity-verify | feature 298, round 2 | CHANGES REQUIRED (1) | SC-002 second clause |
 | 2026-10-01 | spec-fidelity-verify | feature 298, round 3 | FAITHFUL | aside: pasture grass is tiled too |
 | 2026-10-01 | spec-fidelity | feature 298 plan decisions | CLEAR | 15 decisions, all within |
+| 2026-10-01 | spec-fidelity | feature 299 (natural marsh edges), round 1 | CHANGES REQUIRED (2+1) | straight runs unmeasured; approved figures not stated as targets; pond fringe reason |
+| 2026-10-01 | spec-fidelity-verify | feature 299, round 2 | CHANGES REQUIRED (2) | reed base tile past its overlay; Assumptions |
+| 2026-10-01 | spec-fidelity-verify | feature 299, round 3 | CHANGES REQUIRED (1) | plan named one overlay repeat |
+| 2026-10-01 | spec-fidelity-verify | feature 299, round 4 | FAITHFUL | - |
+| 2026-10-01 | spec-fidelity | feature 299 plan decisions, round 1 | BLOCKED | the pond box cut out of the marsh square |
+| 2026-10-01 | spec-fidelity | feature 299 plan decisions, round 2 | CLEAR | 12 decisions within |
+| 2026-10-01 | record-format | vegetation 125 (feature 299) | 0/0/0, 3 wording fixes | applied |

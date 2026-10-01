@@ -663,13 +663,14 @@ class FinishMixin:
         import shapely
         from shapely.geometry import Polygon, box
 
-        from .land.tiles import cover_defs, cover_rings, pattern_id
+        from .land.tiles import FRINGE_FT, OVERLAYS, cover_defs, cover_path, cover_rings
 
         pending = self._covers
         self._covers = []
         vx, vy, vw, vh = self.view if self.view else (0.0, 0.0, float(self.W), float(self.H))
         frame = box(vx - OFFMAP_MARGIN, vy - OFFMAP_MARGIN, vx + vw + OFFMAP_MARGIN, vy + vh + OFFMAP_MARGIN)
         bs = self.bscale
+        shapes = []
         for cover in pending:
             if len(cover.ring) < 3:
                 continue
@@ -679,15 +680,30 @@ class FinishMixin:
                 shape = shape.difference(shapely.union_all(bare))
             if shape.is_empty or shape.area < 1.0:
                 continue
-            rings = cover_rings(shape)
             if cover.rec is not None:
-                cover.rec["cover"] = rings
+                cover.rec["cover"] = cover_rings(shape)
+            shapes.append((cover, shape))
+        # THE FRINGE (feature 299): where the scrub's shape and a marsh's meet, a band FRINGE_FT wide - half in each - is drawn
+        # with the fringe tile, in each side's own class and slot, in place of the two base tiles there
+        half = FRINGE_FT * bs / 2.0
+        reach = {kind: shapely.union_all([s for c, s in shapes if c.kind == kind]).buffer(half) for kind in ("grass", "reed")}
+        for cover, shape in shapes:
             z = self._cover_slots.get((cover.kind, cover.cls))
             if z is None:  # pragma: no cover - every kind and class a cover is recorded under has its slot (`_header`)
                 raise KeyError((cover.kind, cover.cls))
+            other = {"grass": "reed", "reed": "grass"}.get(cover.kind)
+            band = shape.intersection(reach[other]) if other else None
+            if band is not None and band.area >= 1.0:
+                shape = shape.difference(band)
+                self.out[z] += cover_path(band, "fringe", bs)
+                self._cover_kinds.add(("fringe", bs))
+            if shape.is_empty or shape.area < 1.0:
+                continue
+            self.out[z] += cover_path(shape, cover.kind, bs)
             self._cover_kinds.add((cover.kind, bs))
-            d = "".join("M" + "L".join(f"{x},{y}" for x, y in r) + "Z" for r in rings)
-            self.out[z] += f'<path d="{d}" fill="url(#{pattern_id(cover.kind, bs)})" fill-rule="evenodd" style="pointer-events: none"/>'
+            if cover.kind in OVERLAYS:  # ...and the overlay over the base (feature 299: the varied look)
+                self.out[z] += cover_path(shape, OVERLAYS[cover.kind], bs)
+                self._cover_kinds.add((OVERLAYS[cover.kind], bs))
         if "defs" in self._cover_slots:
             self.out[self._cover_slots["defs"]] = cover_defs(self._cover_kinds)
 
