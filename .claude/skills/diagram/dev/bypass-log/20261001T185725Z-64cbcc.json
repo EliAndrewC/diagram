@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-01T18:57:25Z",
+  "target": "plan-gate push",
+  "commit": "262b6c4e6",
+  "why": "mechanical pointer sweep of feature 301 rewrote research pointers in landed plans, no decision changed"
+}

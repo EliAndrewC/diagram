@@ -63,4 +63,13 @@ the tip the mirror was built from (rebuilt if not); after it, `/diagram` reset a
 `.clones/` checked for unpushed commits (live or stale), those replayed or bundled before any clone is deleted or
 re-cloned. The outcome is recorded below when it is done.
 
-Outcome: (pending)
+Outcome (2026-10-01): DONE. Every live session pushed first (Diagram review, then closed by the GM); no clone held an
+unpushed commit, a stash or a tracked change. The rewrite was built from main's tip 262b6c4e6 in a scratch mirror by
+`git filter-branch --index-filter` over the 3,204 commits descending from 0fef1e6f3: verified 0 problems over all 6,972
+commits (each rewritten tree the original's less the built paths, every other tree unchanged, the tip's tree
+byte-identical). `docs/history-rewrite-301.md` (the old-to-new map) committed into it as ec99f54e9. The GM pushed it
+from the host with `--force-with-lease=main:262b6c4e6` (a bundle in ~/.claude, since removed). Then: /diagram reset to
+it and repacked under the sync lock - `.git` 247 MB -> 91 MB (observed 2026-10-01; method: `du -sh /diagram/.git`,
+one pack of 87 MB); all 35 clones under .clones/ reset to the new main (untracked files kept), their stale
+remote-tracking refs and dead worktree entries pruned and repacked, each now sharing main's history (a clone left on
+the old one would be refused by `refuse_unrelated_history`).
