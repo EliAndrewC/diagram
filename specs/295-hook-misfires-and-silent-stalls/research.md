@@ -38,7 +38,7 @@ used for usage-limit failures). A session's transcript is `<projects>/<sid>.json
 `<projects>/<sid>/subagents/agent-*.jsonl` (measured on this host).
 
 The longest silence a working session can show is one foreground tool call: the Bash tool's own ceiling is 10 minutes
-(600000 ms). A stall threshold of 15 minutes is therefore past any legitimate silence, and costs at most 15 minutes plus
+(600000 ms; observed 2026-09-30, method: the maximum `timeout` the Bash tool's own description states). A stall threshold of 15 minutes is therefore past any legitimate silence, and costs at most 15 minutes plus
 one check interval against the 2.5 hours measured.
 
 ## R4 - what the outside watchdog can read and write (item 4)
