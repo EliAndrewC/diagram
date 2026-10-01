@@ -43,7 +43,7 @@ class MoatMixin:
         `river_outlet_tilt` - see research/rendering/water.html "How our maps draw bends, junctions and the run of the water" for the
         hydrology (confluences merge at downstream angles; intakes stay near-square for sediment)."""
         if width is None:
-            width = self.px(66)  # a provincial-seat moat ~66 ft across (26px at the old 2.55 ft/px grain; research/cities/defenses.html "What keeps the moat full?")
+            width = self.px(66)  # a provincial-seat moat ~66 ft across (26px at the old 2.55 ft/px grain; research/rendering/water.html "How our maps draw moat water")
         cx = sum(p[0] for p in ring) / len(ring)
         cy = sum(p[1] for p in ring) / len(ring)
         mo: list[Pt] = []
