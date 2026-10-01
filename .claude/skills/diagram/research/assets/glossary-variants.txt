@@ -1108,6 +1108,8 @@ goyōba	goyoba
 goza-no-ma	goza-no-ma
 grain of the paddy	field grain
 grand canal	Grand Canal
+grand coordinator	grand coordinator
+grand coordinators	grand coordinator
 grass carp	grass carp
 grass hill	kusayama
 grass hills	kusayama
@@ -3581,6 +3583,7 @@ wengcheng	wengcheng
 wenmiao	wenmiao
 western han	Han dynasty
 western wei	Western Wei
+western zhou	Zhou dynasty
 wet paddies	shitsuden
 wet paddy	shitsuden
 wet run	wet run
@@ -3624,6 +3627,7 @@ xu tan	Xu Tan
 xuanhu	Xuanhu
 xuanhua arch	memorial arch
 xun	xun
+xunfu	grand coordinator
 xunjiansi	xunjiansi
 yabusame	yabusame
 yacheng	yacheng

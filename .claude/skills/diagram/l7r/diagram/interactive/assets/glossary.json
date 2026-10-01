@@ -9651,7 +9651,8 @@
   "variants": [
    "Zhou dynasty",
    "Zhou-dynasty",
-   "Northern Zhou"
+   "Northern Zhou",
+   "Western Zhou"
   ]
  },
  "Western Wei": {
@@ -13754,6 +13755,14 @@
   "variants": [
    "four stations of edo",
    "four stations"
+  ]
+ },
+ "grand coordinator": {
+  "def": "A high Ming and Qing official sent to oversee a province's civil and military affairs, above the prefects and county magistrates.",
+  "variants": [
+   "grand coordinator",
+   "grand coordinators",
+   "xunfu"
   ]
  }
 }
