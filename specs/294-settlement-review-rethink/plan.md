@@ -79,9 +79,10 @@ Mode B (gate tests in `tests/gate/`, template `test_covers_298.py`; a placer gua
 - **B4** parallel twin watercourses (class 4): no two courses - comb branches INCLUDED - run parallel (within 15 deg) 12-32 ft
   apart for more than 60 ft (GUESS). The recorded case (ledger 2026-08-28, "twin branch canals ~25 ft apart") is two comb
   branches, and so are the four maps that fail today. A research pass on the spacing of a comb's branch canals runs first
-  (constitution XII; the scout found no norm in `research/water`): if it FINDS an attested spacing that allows the pair, the
-  class goes back through the audit as decided by research, with the citation; otherwise the placer is fixed so branches are
-  not laid side by side.
+  (constitution XII; the scout found no norm in `research/water`): if it FINDS an attested branch spacing, B4's test
+  ENFORCES it with the citation - siblings at the attested spacing pass, a closer pair or a non-sibling pair fails - and the
+  placer lays branches at it; otherwise the placer is fixed so branches are not laid side by side. The class goes back through
+  the audit only if the research shows the spacing to be a matter of judgment.
 - **B5** see-through marks (class 5): every mark drawn below 0.95 opacity belongs to a class on a declared list, each with its
   reason (drawing convention); seeded red with the mound at 0.9. The sheen half is CUT (`test_finish_287`). **B5b** broadleaf
   over conifer (the recorded case: feature 269 B30, broadleaf inked over earlier clumps' conifers): the crown records carry
@@ -138,7 +139,7 @@ researched roll. Class 6 (reed gaps) is CUT by feature 298's tile (`test_covers_
 
 | check (agent) | occasion | carries (audit rows) |
 |---|---|---|
-| `glyph-check` (new) | an element new to a map or sheet, whatever its mark; a glyph redrawn; an element's placement rule substantially changed | C1, B29, C2a residual, C2c, C2e, C5, C6a, C6b funerary, C7, C9c; broadleaf-over-conifer |
+| `glyph-check` (new) | an element new to a map or sheet, whatever its mark; a glyph redrawn; an element's placement rule substantially changed | C1, B29, C2a residual, C2c, C2e, C5, C6a, C6b funerary, C7, C9c |
 | `fix-check` (new) | a feature closing a defect the GM reported by eye | S17, S7 adequacy, X1 (did the fix fire) |
 | `settlement-review` (cut) | a map new to the pool; a new settlement form; a new tier | C8 twin, C6d economy, "reads as a place"; C2b/C2d on a new tier |
 | `building-review` (cut) | a sheet new to the pool; a sheet's layout revised; a new building program | B12, B13 siting, B17 + Z10-Z13 (merged), B20, B23, B30 |

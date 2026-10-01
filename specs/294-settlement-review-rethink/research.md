@@ -248,8 +248,8 @@ WHOLE-SHEET on a new sheet: B30 coherence.
    the privy seat is a researched sun-side roll (`PRIVY_SUNNY_SHARE = 0.727`, `test_the_privy_seat_weights_are_rolled_per_hamlet_over_the_four_attested_seats`).
    A wind rule would contradict the record. Ruled: CUT (plan D5).
 4. **R0's never-fired list was incomplete** (spelling on a drawn sheet; caption alignment fired only falsely). Recorded here;
-   both are already CUT/STRUCK in R1. Broadleaf over conifer (FR-003 class 5's last case) is undecidable from the records (no
-   species on a crown) and goes to the glyph check.
+   both are already CUT/STRUCK in R1. Broadleaf over conifer (FR-003 class 5's last case) is ruled: the crown records carry their
+   species and a gate test refuses a broadleaf crown drawn over a conifer it overlaps (plan B5b).
 5. **No script owes `building-review` or `size-audit`.** Ruled: the occasion script covers Mode A sheets (plan D1), and the round
    cap applies to every check.
 6. **Page prose has no owner.** Ruled: a modal is written from a research section and `entry-drift` already judges the pair;
@@ -263,4 +263,4 @@ threshold and its source, the seeded fault and the pool's measurement, is [`rule
 section carries the decisions; the pool fails today on B1 (to be measured: Kuwabata's supply run), B4 (comb branches), B6 (hit
 regions), B10 (fixtures drawn short of their roll), B17 (`ochiba-roundtrip-test`), B23 (Ochiba's road), B24 (Ubame's missing
 `**On map**`). Covered already: reed gaps (feature 298), the sheen cap (`test_finish_287`), acute merges and hairpins (placer
-guarantees `NEEDLE_DEG`, `_HAIRPIN_DEG`, gate test to add). Not decidable: broadleaf over conifer.
+guarantees `NEEDLE_DEG`, `_HAIRPIN_DEG`, gate test to add). Broadleaf over conifer: the scout found no species on a crown record; plan B5b adds it and rules it.
