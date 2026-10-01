@@ -471,7 +471,7 @@ class ApproachRoad(Kind):
     Covers: the approach road or town street, the lanes to the lesser doors, and a road across a border
     Label: deviation
     Sources: ctie-michi-nazenaze, hiroshima-saigoku-kaido, mlit-kinsei-michi, kotobank-daihachiguruma, l7r-wagons, neixiang-xianya-zhwiki, song-architecture-enwiki, jokamachi-jawiki, lowtech-chinese-wheelbarrow, toyama-1988-road-undevelopment, jinya-jawiki, tamba-kashiwara-jinya, sina-neixiang-xianya, bjd-qing-yamen
-    Entry: research/ways.html - 'How wide is the road at a compound's gate?', 'Moving goods: carts, packhorses and river landings (kashi)', 'Village lanes'; research/rendering/ways.html - 'How our maps draw moving goods: cart lanes and boat landings (kashi)'; research/towns.html - 'The magistrate's manor in a town: where it stands and which way it faces (jin'ya and yamen)', 'Town plans: the street town (gaison), the planned grid and the castle town'; research/rendering/towns.html - 'How our maps lay out a town's streets', 'How our maps draw the magistrate's manor on a town map'
+    Entry: research/ways.html - 'Highways and what lines them (kaido)', 'Moving goods: carts, packhorses and river landings (kashi)', 'Village lanes'; research/rendering/ways.html - 'How our maps draw and label the highway', 'How our maps draw moving goods: cart lanes and boat landings (kashi)'; research/towns.html - 'The magistrate's manor in a town: where it stands and which way it faces (jin'ya and yamen)', 'Town plans: the street town (gaison), the planned grid and the castle town'; research/rendering/towns.html - 'How our maps lay out a town's streets', 'How our maps draw the magistrate's manor on a town map'
     """
 
     key = "road"
