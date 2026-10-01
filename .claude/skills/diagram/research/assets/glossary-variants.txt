@@ -1703,6 +1703,7 @@ kesa cuts	kesa
 keyaki	keyaki
 khitan	Khitan
 kiangsu	Kiangsu
+kiba	kiba
 kichin	kichin
 kichin charge	kichin
 kichin-yado	kichin-yado

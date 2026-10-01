@@ -193,7 +193,9 @@ class WaterfrontMixin:
 
         WHY IT IS A PEN AGAINST THE BANK, NOT A LINE IN THE STREAM (GM 2026-08-02, "it just looks
         like a bunch of logs in the middle of the river"; the research is in
-        research/urban-features.html, "The log boom"). A boom is a floating FENCE - anchored to
+        research/urban-features.html, "Timber yards and log booms (kiba)",
+        and its map rules at research/rendering/urban-features.html, "How our maps draw timber yards
+        and log booms"). A boom is a floating FENCE - anchored to
         nothing it holds nothing. Attested booms anchor to fixed ground (bank abutments, stone-
         filled cribs, driven piles) and run ALONG a navigated river, the pen between chain and
         shore, with the fairway kept clear by law; only a loose-log CATCH boom on an unnavigated
