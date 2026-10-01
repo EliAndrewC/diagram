@@ -13778,5 +13778,25 @@
    "Unno",
    "Unno-juku"
   ]
+ },
+ "Kwangtung": {
+  "def": "The province of southern China around the city of Canton, spelled Guangdong today.",
+  "variants": [
+   "Kwangtung",
+   "Guangdong"
+  ]
+ },
+ "miyaji shibai": {
+  "def": "An Edo-period play put on in a booth on the grounds of a shrine or temple under a temporary license, with no roof over anything but the stage.",
+  "variants": [
+   "miyaji shibai",
+   "宮地芝居"
+  ]
+ },
+ "hanamichi": {
+  "def": "In a kabuki theater, a raised walkway running from the stage through the audience, used for actors' entrances and exits; a shrine-ground play was forbidden one.",
+  "variants": [
+   "hanamichi"
+  ]
  }
 }

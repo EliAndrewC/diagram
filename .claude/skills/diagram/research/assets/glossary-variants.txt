@@ -1135,6 +1135,7 @@ groyne	groyne
 groynes	groyne
 gsi	GSI
 guan-xiang	guanxiang
+guangdong	Kwangtung
 guangdong xinyu	Guangdong xinyu
 guangfu	Guangfu
 guangxu	Guangxu
@@ -1181,6 +1182,7 @@ han china	Han dynasty
 han dynasty	Han dynasty
 han's	han
 han-dynasty	Han dynasty
+hanamichi	hanamichi
 hanchiku	rammed earth
 hane-tsurube	hanetsurube
 hanebashi	hanebashi
@@ -1837,6 +1839,7 @@ kusaba	kusaba
 kusakariba	magusaba
 kusayama	kusayama
 kuwabata	Kuwabata
+kwangtung	Kwangtung
 kyo-machiya	machiya
 kyogen	kyogen
 kyoho	Kyoho
@@ -2076,6 +2079,7 @@ mitsuke	mitsuke
 mitsumata	mitsumata
 mitsumata field	mitsumata
 mitsumata fields	mitsumata
+miyaji shibai	miyaji shibai
 miyaza	miyaza
 mizu-oobako	Ottelia
 mizugaki	mizugaki
@@ -3785,6 +3789,7 @@ zushi-nikai	half-story
 圃場整備	hojo seibi
 土地庙	tudi miao
 塘泺	tanglao
+宮地芝居	miyaji shibai
 屋敷林	yashikirin
 御蔵	kura
 悲田院	hidenin
