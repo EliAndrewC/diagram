@@ -1235,6 +1235,15 @@ review-paired-gate:  ## [project] the settlement-review's paired gate - green, r
 # verification record; running is a gate target live in this clone, by cwd.
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_review_prereq.py" gate-state --clone "$$(git rev-parse --show-toplevel)"
 
+review-cost:     ## [project] a finished review agent's wall time and tokens - the ledger's cost cells (feature 294)   AGENT=<agent id>
+##  AGENT=<id>  the agent id the Agent tool's result names
+	@: "GUARD_EDIT_OK: feature 294 FR-010, adding an operation - the ledger's measured table copies its cost from this, never from memory"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_review_cost.py" --agent "$(AGENT)"
+
+review-census:   ## [project] is each review check pulling its weight? the ledger's totals by check (feature 294)
+	@: "GUARD_EDIT_OK: feature 294 FR-013, adding an operation - the spec's R0 census re-taken by a script"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_review_census.py" --root "$$(git rev-parse --show-toplevel)"
+
 review-verdict:  ## [project] a review check's LAST act - write the unit's verdict record   UNIT=<unit> VERDICT=PASS|NEEDS-WORK|NOT-REVIEWABLE [FINDINGS=<json file>]
 ##  UNIT=<unit>        the owed unit reviewed (its prompt's UNIT: line; MAP= is the same field)
 ##  VERDICT=<v>        PASS, NEEDS-WORK or NOT-REVIEWABLE

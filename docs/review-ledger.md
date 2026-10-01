@@ -296,3 +296,15 @@ or a later pass found what this one should have).
 | 2026-10-01 | record-format | vegetation 125 (feature 300) | 0/0/0 | link added |
 | 2026-10-01 | record-format | rendering/vegetation 120 (feature 300) | 0/0/0 | - |
 | 2026-10-01 | record-style | rendering/vegetation 120 (feature 300) | 1 FAIL, 2 NOTE | bullet split; scrub bullet and rule reworded; footnotes not added (the cross-link kept) |
+
+## Review checks, measured (feature 294 on)
+
+From feature 294 on, a review pass is a row of THIS table, whose cells a script totals (`make review-census`): the CHECK that
+ran (`settlement-review`, `glyph-check`, `fix-check`, `building-review`, `size-audit`, or a record or plan check), one row per
+finding with its CLASS (`geometric` - a rule a placer or a test could hold, `judgment`, `paperwork`, `nothing`), whether the
+author had missed it (`yes`, `no`, `-`), and the run's WALL and TOKENS copied from `make review-cost AGENT=<id>`, never typed. A
+commit staging this file is refused while a row is short of a cell (`scripts/_ledger_lint.py`, `ledger-hooks.sh`). The rows
+above this heading are classified once, as data, in `docs/review-ledger-r0.json` (research R0).
+
+| date | check | subject | verdict | finding | class | author missed? | acted on | wall | tokens |
+|---|---|---|---|---|---|---|---|---|---|
