@@ -14934,5 +14934,42 @@
   "variants": [
    "Kyowa"
   ]
+ },
+ "uchiyama": {
+  "def": "In the Yoshino mountains of Nara, the band of hill land next beyond the satoyama: farther from the village and higher.",
+  "variants": [
+   "uchiyama"
+  ]
+ },
+ "okuyama": {
+  "def": "The \"inner mountains\": in the Yoshino mountains' division of the hills, the band beyond the uchiyama, farther from the village and higher still.",
+  "variants": [
+   "okuyama"
+  ]
+ },
+ "dake": {
+  "def": "A mountain peak; in the Yoshino mountains' division of the hills, the farthest and highest band, beyond the okuyama.",
+  "variants": [
+   "dake"
+  ]
+ },
+ "laurel forest": {
+  "def": "Dense, dark evergreen broadleaf forest, the forest of warm-temperate western Japan; an oak coppice grew back into it when it was no longer cut.",
+  "variants": [
+   "laurel forests",
+   "laurel forest"
+  ]
+ },
+ "climax type": {
+  "def": "The kind of forest that ground settles into when it is left uncut and unworked for a long time; in western Japan it is dense evergreen laurel forest.",
+  "variants": [
+   "climax type"
+  ]
+ },
+ "inbatsuchi": {
+  "def": "Open strips of forest land about 33 ft wide, kept along the borders of rice fields, mostly on their south side; litter and compost for the paddies were gathered from them.",
+  "variants": [
+   "inbatsuchi"
+  ]
  }
 }

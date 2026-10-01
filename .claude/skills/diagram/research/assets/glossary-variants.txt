@@ -451,6 +451,7 @@ clay mills	clay mill
 clay-mill	clay mill
 clear width	clear width
 clear widths	clear width
+climax type	climax type
 climbing kiln	noborigama
 climbing kilns	noborigama
 cloister	cloister
@@ -620,6 +621,7 @@ daimyōs	daimyo
 dairokuten	Dairokuten
 daizu	daizu
 dajokan	Daijokan
+dake	dake
 dakyu	dakyu
 dali	Dali
 danka	danna-dera
@@ -1574,6 +1576,7 @@ in spate	spate
 in-field pocket pond	pocket pond
 inari	Inari
 inashiro	Inashiro
+inbatsuchi	inbatsuchi
 inekake	hazakake
 initiate	initiate
 initiates	initiate
@@ -2046,6 +2049,8 @@ lateral	lateral
 laterals	lateral
 lath	lath
 laths	lath
+laurel forest	laurel forest
+laurel forests	laurel forest
 leaf litter	forest litter
 leat	leat
 leats	leat
@@ -2533,6 +2538,7 @@ oku-muki	oku
 oku-no-ma	oku-no-ma
 oku-zashiki	zashiki
 okura	kura
+okuyama	okuyama
 older than modern times	modern times
 omamori	omamori
 omi	Omi
@@ -3759,6 +3765,7 @@ ubusunagami	ubusuna
 uchi-bori	uchibori
 uchibori	uchibori
 uchigenkan	uchigenkan
+uchiyama	uchiyama
 udatsu	udatsu
 udegi	udegi gate
 udegi gate	udegi gate

@@ -241,11 +241,11 @@ class WoodlandCommons(Kind):
     floor raked clear of leaf litter.
 
     Why: The village woods were iriai commons - customary common land held by the village and governed by its own
-    rules on who might cut, when, and how much - cut and let regrow from the stump every fifteen to thirty years or
+    rules on who might cut, when, and how much - cut and let regrow from the stump every fifteen to forty years or
     so, for firewood, forage and the leaf litter that fertilized the paddies. The village of the record is its houses
     at the center, its fields around them and hill land beyond, and the nearest hill slope - the satoyama - carried the
-    fuel wood; the ground below the houses, where the fields run down to the flat, was the grass and riverbank commons',
-    not the forest's. So the wood is seated beyond the fields, on ground higher than the field it adjoins - or, where
+    fuel wood; low ground by a river or marsh, below the houses, was the grass and riverbank commons', not the
+    forest's. So the wood is seated beyond the fields, on ground higher than the field it adjoins - or, where
     the map has no such ground, on the level past the fields - and never downslope of the houses. A worked wood stood as clumps of thin stems: konara stands near their cutting age held
     about 1,700 stems a hectare, one to about 63 sq ft on centers near 8 ft - a thicket, denser than an old hill wood.
     A cut wood lets sun reach the floor, so herbs grow there, not brush.
@@ -257,9 +257,11 @@ class WoodlandCommons(Kind):
     konara stand of 29 years and on Nagano woods of 26-31 that this record reads, the report not saying so, as fuel
     woods left uncut - both a little past the age a wood was cut - so the wood may read a little more open than it
     stood, and each crown's 8-9 ft width is a guess sized from the spacing, no
-    page giving one. A lot's edge was a line the villages agreed or were given, bent to the ground, and was NOT laid out
-    as a surveyed square, so the patches are irregular; that it followed ridge, stream and path is a guess, no page
-    read saying so.
+    page giving one. A boundary ruled at law was a drawn line, and it bent; no page read describes a hillside lot laid
+    out as a surveyed square (the planned Musashino upland villages of the later 1600s did give each household a
+    straight-sided strip of wood behind its fields, a form of the whole settlement not drawn here), so the patches are
+    irregular, their smoothly wandering edge a drawing convention; that a lot's edge followed ridge, stream and path
+    is a guess, no page read saying so.
 
     Caveat: each crown's 8-9 ft width is a guess sized from the spacing, no page giving one.
 
