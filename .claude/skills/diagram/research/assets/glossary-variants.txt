@@ -668,6 +668,7 @@ domain kilns	domain kiln
 domain's	han
 domains	han
 donggusup	donggusup
+dongjing	Dongjing
 dongjing meng hua lu	Dongjing Meng Hua Lu
 dooryard	dooryard
 doro-aze	doro-aze
@@ -720,6 +721,7 @@ earth floors	doma
 earth god	tudi miao
 earth-god	tudi miao
 earth-god shrine	tudi miao
+eastern capital	Dongjing
 eastern han	Han dynasty
 eave soffit	soffit
 echigo	Echigo
@@ -782,6 +784,8 @@ evariste huc	Huc
 ever-normal granaries	ever-normal granary
 ever-normal granary	ever-normal granary
 evocation	evocation
+examination hall	examination hall
+examination halls	examination hall
 exempt land	jochi
 exempt lands	jochi
 exempt-land	jochi
@@ -2837,9 +2841,11 @@ shakuhachi	shakuhachi
 shakyamuni	Shakyamuni
 shakyamuni buddha	Shakyamuni
 shallow-water lotus	shallow-water lotus
+shandong	Shantung
 shanhai pass	Shanhaiguan
 shanhaiguan	Shanhaiguan
 shannon-wiener index	SWI
+shantung	Shantung
 shanxi merchant houses	Shanxi merchants
 shanxi merchants	Shanxi merchants
 shaso	shasō
