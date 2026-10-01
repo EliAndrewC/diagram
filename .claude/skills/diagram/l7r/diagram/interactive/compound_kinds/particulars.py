@@ -247,7 +247,7 @@ class WoodKamiAltar(Kind):
     Covers: the altar and its label with the "personally maintained" sublabel
     Label: deviation
     Sources: hokora-jawiki, tokushima-yashikigami, jawiki-yashikigami
-    Entry: research/religion-and-death.html - 'Shrine gateways and the approach to the hall (torii, sando)'; research/homesteads.html - "Which farmsteads had a household shrine"
+    Entry: research/religion-and-death.html - 'Shrine gateways and the approach to the hall (torii, sando)'; research/homesteads.html - 'Household shrines (yashikigami)'
     """
 
     key = "wood-kami altar"

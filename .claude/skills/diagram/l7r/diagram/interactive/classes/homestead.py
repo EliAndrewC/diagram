@@ -348,7 +348,7 @@ class BathRoom(Kind):
     Covers: `farm_fixtures[kind=bath]` - the bath room joined to the house
     Label: accurate
     Sources: tsuda-1991-nikko-shasan-minka, mizumaki-goemonburo
-    Entry: research/homesteads.html - 'Did a farmhouse have a bath shed, and where did it stand?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads.html - 'Bath sheds on the farm (furo)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw bath sheds (furo)'; 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'bath room'
@@ -402,7 +402,7 @@ class HouseholdShrine(Kind):
     Covers: `farm_fixtures[kind=shrine]` - the hokora
     Label: convention
     Sources: tokushima-yashikigami, jawiki-yashikigami, kameyama-yashikigami, sugiura-1973-fuzoku
-    Entry: research/homesteads.html - 'Which farmsteads had a household shrine, and in which corner?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads.html - 'Household shrines (yashikigami)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps place the household shrine (yashikigami)'; 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'household shrine'
