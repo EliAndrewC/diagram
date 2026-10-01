@@ -87,3 +87,5 @@ given, identically, to the other.
 - 2026-09-30T23:04:12Z | e7 | landing | main moved again while the port ran (feature 291, 143 commits; conflicts in bamboo.py, bund.py, a test, the five maps and the assembled homesteads pages); a second headless session at medium merges current main into the landing clone, resolves, re-reviews and gates
 - 2026-09-30T23:09:02Z | - | landing | the research winner landed in this clone; the implementation's merge of current main runs in the landing clone; this clone merges main deliberately at the landing (the prompt hook's automatic sync-in conflicted twice on the engine files the landing clone is resolving)
 - 2026-09-30T23:12:38Z | - | landing | waiting on the landing clone's merge of main
+- 2026-09-30T23:15:18Z | - | landing | waiting on the landing clone's merge of main
+- 2026-10-01T00:05:59Z | e7 | landing | the landing clone merged main (feature 291) green: make done 100%, five maps PASS after review round 4, cohort 51/54 = main's baseline; three engine defects 293's checks exposed in main's row villages fixed; one test loosened (a fixture at its capacity even on main) - an item for the GM in the handoff

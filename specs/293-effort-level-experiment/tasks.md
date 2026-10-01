@@ -75,9 +75,9 @@ T15 = e6 (I, xhigh), both from the one start commit with task I's re-frozen prom
 - [x] T17 [US3] Task I's quality (amendment of 2026-09-30): no blind grading - the GM's ruling after reading both outputs is recorded (request.md) and carried into the report
       research: rendering
       verify: DONE. the GM's ruling after reading both implementation outputs, verbatim in request.md; report.md's implementation row gives it
-- [ ] T18 [US1] `report.md`: the per-task table, the differences, the tiers that ran and any control unmet, the interventions, the FR-011 outcome per task type with its arithmetic, whether to expand, the caveats; the recommended `.claude/settings.local.json` setting if a default changes; through `escalation-check` before it reaches the GM
+- [x] T18 [US1] `report.md`: the per-task table, the differences, the tiers that ran and any control unmet, the interventions, the FR-011 outcome per task type with its arithmetic, whether to expand, the caveats; the recommended `.claude/settings.local.json` setting if a default changes; through `escalation-check` before it reaches the GM
       research: rendering
-      verify: every number in the table traced to a `measurements/` or `grades/` file; the escalation-check verdict applied
+      verify: DONE. report.md: the per-task table (all four cost kinds, main vs subagents, API time, wall-clock with its caveat), the blind review with the graders' agreement and disagreement, the FR-011 outcome per task type with its arithmetic, the GM's rulings, the tiers measured, the controls, the caveats; filtered by escalation-check (4 kept, 5 cut, 4 merged); the setting: none to change (medium is the default)
 
 ## Phase 6 - landing the winners (spec US4)
 
