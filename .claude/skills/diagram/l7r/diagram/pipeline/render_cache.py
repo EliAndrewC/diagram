@@ -39,7 +39,7 @@ import re
 import subprocess
 import sys
 
-from . import pool_index, poolmaps
+from . import pool_index, poolmaps, record_build
 
 SKILL_DIR = os.path.abspath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..")
@@ -350,6 +350,11 @@ def main(argv: list[str] | None = None) -> int:
     if os.path.isfile(os.path.join(args.skill_dir, "l7r", "diagram", "tools", "placement_stages.py")):  # a tree with the page tool (a test fixture has none)
         replated = replate_page(args.skill_dir, engine_fingerprint(args.skill_dir), allow_main=not args.no_allow_main)
         print(f"render-cache: placement page {'re-plated' if replated else 'fresh'} ({PAGE_DIR}/hamlet-placement.html)")
+    # THE RECORD'S SITE (feature 301, spec FR-010): built here on the main checkout, never committed, and only when a
+    # fragment, an asset or the build's own code moved - the map renders' model, with its own stamp.
+    if os.path.isfile(os.path.join(args.skill_dir, "research", "sources", "_front.html")):  # a tree with a record (a test fixture has none)
+        built = record_build.rebuild_if_stale(args.skill_dir)
+        print(f"render-cache: the record's site {'rebuilt' if built else 'fresh'} (research/site/index.html)")
     return 0
 
 

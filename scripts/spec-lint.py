@@ -30,6 +30,7 @@ push - so a lint that fired on them would refuse the protocol the project requir
 
 from __future__ import annotations
 
+import collections
 import pathlib
 import re
 import subprocess
@@ -258,6 +259,57 @@ def lint(spec_dir: pathlib.Path, specs_root: pathlib.Path | None = None,
     return bad
 
 
+#: A finding's locations - the leading `path:line:` and any `path:line` inside its message (the withdrawn-text check
+#: names the marker's `research.md:n`): dropped before two runs' findings are compared, so a line that only MOVED is
+#: not a new finding.
+_LOCATION = re.compile(r"\S+:\d+:?\s?")
+
+
+def _bare(finding: str) -> str:
+    return _LOCATION.sub("", finding).strip()
+
+
+def introduced(now: list[str], before: list[str]) -> list[str]:
+    """The findings in `now` that `before` does not account for, compared without their locations, as a multiset."""
+    left = collections.Counter(_bare(f) for f in before)
+    out = []
+    for finding in now:
+        key = _bare(finding)
+        if left[key] > 0:
+            left[key] -= 1
+        else:
+            out.append(finding)
+    return out
+
+
+def at_base(root: pathlib.Path, base: str, spec_dir: pathlib.Path) -> list[str] | None:
+    """The findings on a spec directory AS IT STOOD at `base`, or None when it did not exist there (feature 301 FR-027,
+    the GM 2026-10-01: *"Sweep, narrow lint"* - a push that only CHANGES a landed spec, its pointers rewritten, is
+    judged on what it introduces, not on the rules added after that spec landed)."""
+    rel = spec_dir.resolve().relative_to(root.resolve()).as_posix()
+    listing = subprocess.run(["git", "-C", str(root), "ls-tree", "-r", "--name-only", base, "--", rel],
+                             capture_output=True, text=True, timeout=20).stdout.split()
+    if not listing:
+        return None
+    import tempfile  # noqa: PLC0415
+
+    with tempfile.TemporaryDirectory() as td:
+        for name in listing:
+            blob = subprocess.run(["git", "-C", str(root), "show", f"{base}:{name}"], capture_output=True, timeout=20).stdout
+            dest = pathlib.Path(td) / name
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_bytes(blob)
+        return lint(pathlib.Path(td) / rel, tree_root=root)
+
+
+def merge_base(root: pathlib.Path) -> str:
+    try:
+        return subprocess.run(["git", "-C", str(root), "merge-base", "HEAD", "origin/main"],
+                              capture_output=True, text=True, timeout=20).stdout.strip()
+    except Exception:
+        return ""
+
+
 def touched_spec_dirs(root: pathlib.Path) -> list[pathlib.Path]:
     """Every `specs/NNN-*/` the delta against the merge base touches, plus untracked ones."""
     root = pathlib.Path(root).resolve()
@@ -349,6 +401,28 @@ def selftest() -> None:
         (d / "tasks.md").unlink()
         (d / "spec.md").write_text("# x\n\n## Summary\n\nIt took 91 min.\n\n## Functional requirements\n\n**FR-001** A thing.\n")
         assert lint14(d) == [], lint14(d)
+    # FR-027 (feature 301): a spec directory that existed before the push is judged on what the push INTRODUCES -
+    # its old findings, moved or not, are not the push's; a new one is
+    assert introduced(["a.md:3: FR-002 is named by no success criterion"], ["a.md:9: FR-002 is named by no success criterion"]) == []
+    assert introduced(["a.md:3: x at r.md:4 marks y", "a.md:5: new"], ["a.md:1: x at r.md:7 marks y"]) == ["a.md:5: new"]
+    assert introduced(["a.md:3: same", "a.md:4: same"], ["a.md:1: same"]) == ["a.md:4: same"], "a multiset: a second copy is new"
+    with tempfile.TemporaryDirectory() as td:
+        root = pathlib.Path(td)
+        d = root / "specs" / "200-landed"
+        d.mkdir(parents=True)
+        (d / "tasks.md").write_text("- [x] T01 do the thing (FR-001)\n")
+        (d / "spec.md").write_text("# x\n\n## Functional requirements\n\n**FR-001** A thing.\n\n**FR-002** Old, named by nothing; see research/water.html.\n")
+        git = ["git", "-C", td, "-c", "user.email=t@t", "-c", "user.name=t"]
+        subprocess.run(["git", "-C", td, "init", "-q"], check=True)
+        subprocess.run([*git, "add", "-A"], check=True)
+        subprocess.run([*git, "commit", "-qm", "landed"], check=True)
+        base = subprocess.run(["git", "-C", td, "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
+        (d / "spec.md").write_text((d / "spec.md").read_text().replace("research/water.html", "research/water/"))
+        before = at_base(root, base, d)
+        assert before and introduced(lint14(d), [x for x in before if not is_check5(x)]) == [], "a pointer-only edit adds nothing"
+        (d / "spec.md").write_text((d / "spec.md").read_text() + "\n**FR-003** New, named by nothing.\n")
+        assert any("FR-003" in x for x in introduced(lint14(d), [x for x in before if not is_check5(x)])), "a finding the push adds is the push's"
+        assert at_base(root, base, root / "specs" / "999-new") is None, "a directory new in the push is linted whole"
     print("spec-lint selftest ok")
 
 
@@ -357,16 +431,20 @@ def main(argv: list[str]) -> int:
         selftest()
         return 0
     args = [a for a in argv if not a.startswith("--")]
+    base = ""
     if "--delta" in argv:
         root = pathlib.Path(args[0] if args else ".")
         dirs = touched_spec_dirs(root)
+        base = merge_base(root)
     else:
         dirs = [pathlib.Path(a) for a in args]
     if not dirs:
         return 0
     bad: list[str] = []
     for d in dirs:
-        bad += lint(d, tree_root=pathlib.Path(dirs[0]).resolve().parents[1])
+        found = lint(d, tree_root=pathlib.Path(dirs[0]).resolve().parents[1])
+        before = at_base(root, base, d) if base and found else None
+        bad += found if before is None else introduced(found, before)
     if not bad:
         return 0
     print("\n".join(bad))

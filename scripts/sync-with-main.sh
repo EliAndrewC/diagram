@@ -184,8 +184,19 @@ seed_roll_cache() {
   done
 }
 
+# A CLONE WHOSE HISTORY SHARES NO COMMIT WITH MAIN'S IS REFUSED (feature 301 FR-019; GUARD_EDIT_OK: a new refusal of a
+# state that cannot occur until a history rewrite, nothing loosened). The scrub of 2026-10 rewrote main's history to drop
+# the built record pages; a clone still on the old history would MERGE the two unrelated histories on its next pull and
+# bring every dropped file back. The refusal names the re-clone that moves its work across.
+refuse_unrelated_history() {
+  git rev-parse -q --verify HEAD >/dev/null && git rev-parse -q --verify origin/main >/dev/null || return 0
+  git merge-base HEAD origin/main >/dev/null 2>&1 && return 0
+  die "this clone's history shares no commit with main's - main's history was rewritten (feature 301's scrub, docs/history-rewrite-301.md). A pull would merge the old history back in. Re-clone it: git clone $MAIN $ROOT.new, cherry-pick any unpushed commits (git log --oneline HEAD --not --remotes), then replace $ROOT"
+}
+
 sync_in() {
   git fetch -q origin || die "cannot fetch GitHub main from $GITHUB_URL"
+  refuse_unrelated_history
   mirror_refresh
   render_sync
   seed_roll_cache
@@ -225,6 +236,7 @@ clone_page_refresh() {
 
 push_cmd() {
   [ -z "$(git status --porcelain)" ] || die "uncommitted changes - commit first (the procedure never writes your commit for you)"
+  git fetch -q origin 2>/dev/null && refuse_unrelated_history
   # DUPLICATE-DEF GUARD (GM 2026-07-24): a cross-session merge gave test_settlement.py two
   # _city() helpers - the later silently shadowed the earlier and broke a seeded test - and ruff
   # F811 cannot see this class (pyflakes only flags UNUSED redefinitions; an early helper is

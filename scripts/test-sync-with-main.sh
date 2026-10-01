@@ -211,5 +211,15 @@ OUT=$(syncmain "$D2" sync-in)
   && { echo "FAIL  seeded from a sibling at a different commit"; FAIL=$((FAIL+1)); } \
   || { echo "  ok    a sibling at another commit is refused - the clone starts cold"; PASS=$((PASS+1)); }
 
+echo "11. a clone whose history shares no commit with main's is refused, never merged (feature 301 FR-019)"
+D=$(topology unrelated301)
+git init -q -b main "$D/rewritten"
+( cd "$D/rewritten" && mkdir -p scripts && echo base > f && echo '.clones/' > .gitignore && cp "$HERE"/*.sh "$HERE"/*.py scripts/ && git add -A \
+  && git -c user.email=t@t -c user.name=t commit -qm "the rewritten history" && git push -q -f "$D/github.git" HEAD:main )
+before=$(git -C "$D/main/.clones/c" rev-parse HEAD)
+OUT=$(syncmain "$D" sync-in); check "sync-in on an unrelated history" 1 $?
+expect_out "shares no commit with main"
+[ "$(git -C "$D/main/.clones/c" rev-parse HEAD)" = "$before" ] && PASS=$((PASS+1)) || { echo "FAIL  the clone merged the unrelated history"; FAIL=$((FAIL+1)); }
+
 echo "-----"
 if [ "$FAIL" -eq 0 ]; then echo "all sync-with-main tests passed ($PASS checks)"; exit 0; else echo "SOME TESTS FAILED ($FAIL)"; exit 1; fi
