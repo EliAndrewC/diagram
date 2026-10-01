@@ -13660,5 +13660,17 @@
    "Oei",
    "Ōei"
   ]
+ },
+ "zori": {
+  "def": "Flat sandals of woven straw with a thong between the toes, the everyday footwear of Edo-period Japan; making and selling them was one of the outcast caste's trades.",
+  "variants": [
+   "zori"
+  ]
+ },
+ "setta": {
+  "def": "Zori with a leather sole sewn under the straw, so they were waterproof and lasted longer; making and selling them was one of the outcast caste's trades.",
+  "variants": [
+   "setta"
+  ]
  }
 }

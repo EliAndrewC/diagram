@@ -2778,6 +2778,7 @@ ses	SES
 sess	SES
 setchin	kawaya
 setouchi	Setouchi
+setta	setta
 settlement core	settlement core
 settling basin	settling basin
 settling basins	settling basin
@@ -3714,6 +3715,7 @@ zonation	zonation
 zone of separated flow	separation zone
 zongjia	zongjia
 zooplankton	zooplankton
+zori	zori
 zuiie-chi	jōgōe-chi
 zuku	zuku
 zuo zhuan	Zuo Zhuan
