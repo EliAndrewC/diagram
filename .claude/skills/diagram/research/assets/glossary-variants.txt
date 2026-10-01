@@ -934,6 +934,7 @@ four gods	four gods
 four major carps	four domestic carps
 four trees	four trees
 four trees and three grasses	four trees
+four-and-a-half-mat	tatami
 four-gods formulation	four gods
 four-room	four-room type
 four-room type	four-room type
@@ -2303,6 +2304,7 @@ omoteya	omoteya-zukuri
 omoteya-zukuri	omoteya-zukuri
 omoya	omoya
 onari-goten	onari-goten
+one-and-a-half-mat	tatami
 one-bay	bay
 onin war	Onin war
 onkura	kura
