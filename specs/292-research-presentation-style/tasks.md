@@ -43,20 +43,34 @@ Pilot phase. The sweep's tasks are added only after T09 is ticked (FR-011).
 
 ## The sweep (plan D6-D10)
 
-- [ ] T11 The sweep's machinery: a topic plan for every page (`sweep/plan-<page>.md`, D6), reviewed by the session; the brief generator `sweep/make_briefs.py` and its two templates (D7); the plan's sweep decisions reviewed by `spec-fidelity`. research: rendering
-- [ ] T12 buildings: every section in a topic, each group written and checked (D7); the page's checks report. research: rendering
-- [ ] T13 religion-and-death, as T12. research: rendering
-- [ ] T14 urban-features, as T12. research: rendering
-- [ ] T15 towns, as T12. research: rendering
-- [ ] T16 archetypes, as T12. research: rendering
-- [ ] T17 fields, as T12. research: rendering
-- [ ] T18 water, as T12. research: rendering
-- [ ] T19 settlements, as T12. research: rendering
-- [ ] T20 presentation, as T12. research: rendering
-- [ ] T21 the cities collection, as T12. research: rendering
-- [ ] T22 vegetation, after feature 291's latest work is merged in (D8), as T12. research: rendering
-- [ ] T23 ways, as T22. research: rendering
-- [ ] T24 homesteads (beyond the three pilot topics), as T22. research: rendering
+- [x] T11 The sweep's machinery: a topic plan for every page (`sweep/plan-<page>.md`, D6), reviewed by the session; the brief generator `sweep/make_briefs.py` and its two templates (D7); the plan's sweep decisions reviewed by `spec-fidelity`. research: rendering
+      verify: DONE. the 19 page topic plans and 2 additions plans in sweep/, the brief templates and generator, the merge tools in sweep/tools/; the plan's sweep decisions reviewed by spec-fidelity, CLEAR at round 3 (2026-10-01)
+- [x] T12 buildings: every section in a topic, each group written and checked (D7); the page's checks report. research: rendering
+      verify: DONE. every group written and checked (record-style with the merge audit, quote-check, record-format, entry-drift, translation-check where owed); 54 section lines in the page's checks report; merged into this clone and the record tests green, 2026-10-01
+- [x] T13 religion-and-death, as T12. research: rendering
+      verify: DONE. every group written and checked (record-style with the merge audit, quote-check, record-format, entry-drift, translation-check where owed); 42 section lines in the page's checks report; merged into this clone and the record tests green, 2026-10-01
+- [x] T14 urban-features, as T12. research: rendering
+      verify: DONE. every group written and checked (record-style with the merge audit, quote-check, record-format, entry-drift, translation-check where owed); 51 section lines in the page's checks report; merged into this clone and the record tests green, 2026-10-01
+- [x] T15 towns, as T12. research: rendering
+      verify: DONE. every group written and checked (record-style with the merge audit, quote-check, record-format, entry-drift, translation-check where owed); 36 section lines in the page's checks report; merged into this clone and the record tests green, 2026-10-01
+- [x] T16 archetypes, as T12. research: rendering
+      verify: DONE. every group written and checked (record-style with the merge audit, quote-check, record-format, entry-drift, translation-check where owed); 21 section lines in the page's checks report; merged into this clone and the record tests green, 2026-10-01
+- [x] T17 fields, as T12. research: rendering
+      verify: DONE. every group written and checked (record-style with the merge audit, quote-check, record-format, entry-drift, translation-check where owed); 23 section lines in the page's checks report; merged into this clone and the record tests green, 2026-10-01
+- [x] T18 water, as T12. research: rendering
+      verify: DONE. every group written and checked (record-style with the merge audit, quote-check, record-format, entry-drift, translation-check where owed); 35 section lines in the page's checks report; merged into this clone and the record tests green, 2026-10-01
+- [x] T19 settlements, as T12. research: rendering
+      verify: DONE. every group written and checked (record-style with the merge audit, quote-check, record-format, entry-drift, translation-check where owed); 4 section lines in the page's checks report; merged into this clone and the record tests green, 2026-10-01
+- [x] T20 presentation, as T12. research: rendering
+      verify: DONE. every group written and checked (record-style with the merge audit, quote-check, record-format, entry-drift, translation-check where owed); 3 section lines in the page's checks report; merged into this clone and the record tests green, 2026-10-01
+- [x] T21 the cities collection, as T12. research: rendering
+      verify: DONE. every group written and checked (record-style with the merge audit, quote-check, record-format, entry-drift, translation-check where owed); 87 section lines in the page's checks report; merged into this clone and the record tests green, 2026-10-01
+- [x] T22 vegetation, after feature 291's latest work is merged in (D8), as T12. research: rendering
+      verify: DONE. every group written and checked (record-style with the merge audit, quote-check, record-format, entry-drift, translation-check where owed); 22 section lines in the page's checks report; merged into this clone and the record tests green, 2026-10-01
+- [x] T23 ways, as T22. research: rendering
+      verify: DONE. every group written and checked (record-style with the merge audit, quote-check, record-format, entry-drift, translation-check where owed); 16 section lines in the page's checks report; merged into this clone and the record tests green, 2026-10-01
+- [x] T24 homesteads (beyond the three pilot topics), as T22. research: rendering
+      verify: DONE. every group written and checked (record-style with the merge audit, quote-check, record-format, entry-drift, translation-check where owed); 38 section lines in the page's checks report; merged into this clone and the record tests green, 2026-10-01
 - [ ] T25 The record as a whole: a test that no section keeps a `Sources:` roster and every section's sources are its footnotes' (the sweep's completion, held); `make translation-owed` empty; `make done`; 291 landed, main merged, the feature landed (D10). research: rendering
   - [x] the three clones merged into this one and main merged (features 287 and 291 landed): 239 sections, every one carrying the sweep's mark; interactive tests 1555 passed (2026-10-01)
 - [ ] T26 The closing pass: what the sweep's checks left (the 26 items "for the GM" put to `escalation-check` on 2026-10-01 - 1 kept and answered, 24 cut as the session's own; the open-questions file that carried them is deleted, its content here and in request.md). research: rendering
