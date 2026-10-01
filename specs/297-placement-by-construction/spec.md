@@ -139,7 +139,7 @@ back; every ratio is a floor with no projection behind it. Keys `m:...` are in `
 - The harness's "before" seconds were taken at load 6.4 -> 2.0 and the `make map` figure re-taken at 1.0 -> 1.4 (recorded per key); the
   after-run re-takes the base back to back, and the floors are judged on that pair.
 - **SC-001** (spec-wide) (the session's expectation, "well under half", held as a floor - the GM gave no number): Inashiro's stages sum to at most half the base's (5.640 s, the sum of the per-stage keys `before-inashiro-stage-<stage>-s`), and its `make map`
-  regeneration (the child with its svg, png and page) is faster than the base's (6.1 s uncached, `m:before-inashiro-regen-s`, re-taken at load 1.0 -> 1.4 back to back with the clone; first read 8.0 s at
+  regeneration (the child with its svg, png and page) is faster than the base's (6.5 s uncached, `m:before-inashiro-regen-s`, re-taken on the final engine at load 0.8 -> 1.7 back to back with the clone; first read 8.0 s at
   load 2.5 -> 6.1, observed 2026-09-30, `measure.py regen-before`; research R1).
 - **SC-002** (FR-001, FR-002): on Inashiro the seats bucket asks at least `3x` fewer calls (2,640,745, `m:before-inashiro-b-seats-total`), the homestead layouts built
   (`_bundle_geom`) are at least `3x` fewer (2,716, `m:before-inashiro-bundle-geom`), and the homesteads stage is at least `2x` faster (1.114 s, `m:before-inashiro-stage-homesteads-s`).
@@ -269,3 +269,6 @@ the accepted spec, each with its evidence:
   item). Re-measured and restated on the final engine; the cap reached, so it goes to the GM with the decision to land.
 - The GM, 2026-10-01: "I do indeed waive the 5-round cap so you can keep going on the spec amendment review with more iterations as
   needed for this feature." The amendment's review continues past round 5.
+- Amendment 1, round 6 (spec-fidelity-verify): CHANGES REQUIRED - the cohort and the make-map figure predated the grove rebuild; a
+  stale bookend in dev/performance.md. Addressed: both re-taken on the final engine (cohort 30/30; `make map` per `m:before-inashiro-regen-s` and `m:after-inashiro-regen-s`).
+- Amendment 1, round 7 (spec-fidelity-verify): CHANGES REQUIRED - two lines still cited the key at 6.1 s. Addressed.

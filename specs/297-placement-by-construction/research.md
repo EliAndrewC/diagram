@@ -20,7 +20,7 @@ renders; the marks were reverted after. Load 1.8-4.0 on 22 cores (observed 2026-
 
 The harness (`measure.py before`, base `c5a631f9b`, render off as the gate's policy requires; load recorded per key in
 `measurements.json`) gives Inashiro's stages as 5.640 s summed, the fastest of three, and the pool's five rolls 26.705 s (`m:before-pool-roll-s`; a first run at load 1.2 read 4.281 s and 25.181 s - the keys hold the second, at load 6.4 -> 2.0, after the harness's callee names were corrected).
-`make map` uncached, fastest of three: 8.0 s at load 2.5 -> 6.1 when first taken (observed 2026-09-30, method: `measure.py regen-before`); re-taken back to back with the clone at 6.1 s (`m:before-inashiro-regen-s`).
+`make map` uncached, fastest of three: 8.0 s at load 2.5 -> 6.1 when first taken (observed 2026-09-30, method: `measure.py regen-before`); re-taken back to back with the clone on the final engine at 6.5 s, load 0.8 -> 1.7 (`m:before-inashiro-regen-s`); an intermediate re-take read 6.1 s at load 1.0 -> 1.4 (observed 2026-10-01, method: `measure.py regen-before`).
 
 ## R2. The homestead seating's funnel (observed 2026-09-30)
 
