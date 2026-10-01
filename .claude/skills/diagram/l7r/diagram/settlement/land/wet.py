@@ -478,7 +478,7 @@ class WetGroundMixin:
         # THE MARSH'S WHOLE REGION IN ONE KEEP-OUT GRID (feature 297, FR-004, plan B2): the crescent ponds and the pond's ellipse -
         # asked point by point beside the grid until now - are filed into it as rings (slot 4 the crescents at the mark's pad,
         # slot 5 the pond grown by the mark's lateral pad, slot 6 the pond moved up by a tuft's blade so no tip crosses its rim),
-        # so every throw is read against one region at once (`hit_many`)
+        # so every throw is read against one painted region at once (`KeepoutGrid.taken_many`)
         if crescents:
             keep.rings([ellipse_ring(cp["cx"], cp["cy"], cp["r"], cp["r"]) for cp in crescents], slot=4, reach=2.0 + max(_pads))
         if pond:

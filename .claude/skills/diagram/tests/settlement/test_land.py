@@ -811,3 +811,16 @@ def test_the_vectorized_grass_keeps_every_keep_out_the_point_test_kept():
     assert any(marsh.inside(x, y) for x, y in tufts), "grass grades into the soft ground"
     assert grass_scatter(12000, (0.0, 0.0, 620.0, 560.0), frame, ring, keep, None, pond, [marsh], [30.0], 42.0, 1.0, 278) == (blades, marks)
     assert grass_scatter(0, (0.0, 0.0, 1.0, 1.0), None, ring, keep, None, None, [], [], 42.0, 1.0, 1) == ([], [])
+
+
+def test_marsh_keeps_its_reeds_off_a_crescent_pond_and_a_sliver_draws_nothing():
+    """Feature 297 (plan B2): a crescent pond is filed into the marsh's one region, so no reed stands on its water; and a marsh
+    too small for a single throw draws no mark."""
+    s = _crop_settlement()
+    s.M["crescent_ponds"] = [{"cx": 300.0, "cy": 300.0, "r": 60.0}]
+    s.marsh([(150, 150), (450, 150), (450, 450), (150, 450)])
+    for x1, y1, x2, y2 in [b for _slot, _c, bl in s._blade_groups for b in bl]:
+        assert math.hypot(float(x1) - 300.0, float(y1) - 300.0) >= 60.0, "a reed on the crescent pond's water"
+    tiny = _crop_settlement()
+    tiny.marsh([(500, 500), (503, 500), (503, 503), (500, 503)])
+    assert not [b for _slot, _c, bl in tiny._blade_groups for b in bl]

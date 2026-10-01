@@ -52,18 +52,6 @@ class Region:
         """A map point in raster units (pixel (i, j) covers [i, i+1) x [j, j+1) in them)."""
         return ((x - self.x0) / self.cell, (y - self.y0) / self.cell)
 
-    def _fill(self, geom: Any) -> None:
-        """Paint a shapely geometry (a polygon or a multipart one, already grown as the caller wants), its exterior rings
-        filled and outlined by the margin (`GROW` cells)."""
-        for part in getattr(geom, "geoms", [geom]):
-            if part.is_empty or part.geom_type != "Polygon":
-                continue
-            ring = [((x - self.x0) / self.cell, (y - self.y0) / self.cell) for x, y in part.exterior.coords]
-            if len(ring) >= 3:
-                self._draw.polygon(ring, fill=1)
-                self._stroke(ring, 0.0)
-        self._sat = None
-
     def fill_many(self, geoms: Any, pads: Any) -> None:
         """Many shapely geometries, each grown by its pad: points as discs, lines as strokes, polygons filled and stroked."""
         for g, pad in zip(geoms, pads, strict=True):

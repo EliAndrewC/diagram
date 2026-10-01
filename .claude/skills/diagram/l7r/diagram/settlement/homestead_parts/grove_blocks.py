@@ -162,11 +162,6 @@ class GroveBlocks:
             hit = self._clear[(x, y)] = (not self.region().taken(x, y)) or not (self.hard(x, y) or self.local(x, y) or self.lane(x, y))
         return hit
 
-    def static_clear_many(self, xs: Any, ys: Any) -> Any:
-        """Which of the points the fill's region holds clear, at once (a boolean array): a True is clear of every static family;
-        a False is still to be asked of them (`hard`, `local`, `lane`)."""
-        return ~self.region().taken_many(xs, ys)
-
     def rim_within(self, x: float, y: float, limit: float) -> bool:
         """`edge_dist(x, y, outline) <= limit`, exactly: `edge_within` answers strictly-under, so the
         limit is nudged by an epsilon and the closed inequality re-asked on the distance it returns."""

@@ -78,10 +78,6 @@ class SeatRegion:
             self._reach = None
         self._tree_n, self._placed_n, self._houses_n = len(segs), len(placed), len(houses)
 
-    def reachable(self) -> Any:
-        """The free cells connected to the access tree, as a boolean array (rows = y)."""
-        return self._reached()[0]
-
     def _reached(self) -> tuple[Any, Any]:
         """The reachable cells and their summed-area table, built together once per change to what stands."""
         if self._reach is None:
