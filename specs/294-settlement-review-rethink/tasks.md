@@ -17,6 +17,7 @@ This feature's own delta, declared under the rules it builds (plan D10). Lines a
 - placement-changed: irrigation ditch - B4: a delivery that would run beside another watercourse as its twin is not drawn; its plots take their water over the bund (waterfields/twins.py, comb.py)
 - placement-changed: drainage ditch - B4: a field's drain that would run beside the brook as its twin joins it (hamletgen/sink.py)
 - glyph-redrawn: copse - B5b: a grove's conifers are painted over its lesser crowns, and a lesser crown that would lie over an earlier conifer is not drawn (settlement/homestead_parts/groves.py) - the farm groves of Kashikawa and Mizuguchi drew 307 broadleaf over conifers
+- none: the access tree - a corridor that would run beside another tree lane past a pitch is refused at seating (hamletgen/ways/tree.py tree_shadows), the doubled-band rule `_lay_web_lane` already holds of a web run; households re-seat under rules already judged
 - none: ochiba-magistracy - the hand sheet's road narrowed from 13.3 ft to its 8 ft gate (B23), the GM's approved fix (plan D18); no building or way moves
 
 ## Setup

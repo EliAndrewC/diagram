@@ -1,6 +1,6 @@
 {
  "feature": "294-settlement-review-rethink",
- "plan_sha256": "eb42674b237b8ff4d0fbdc3e3664d5c76b76f65a730aee6042dd410b86a4b969",
+ "plan_sha256": "5ef078c23149d481fac44ea2042be526cb19d957bc18b2c01024a26047da4080",
  "reviewed": "2026-10-01",
  "declared": "spec-fidelity",
  "decisions": [
@@ -152,6 +152,37 @@
    "summary": "B5 opacity allowlist with reasons; B6 exempts overlaps page.py declares",
    "class": "within",
    "why": "Unchanged from round 1"
+  },
+  {
+   "id": "D18",
+   "summary": "Round 4: a hand-drawn Mode B map (legacy tree; all 18 are hamlets/villages/towns/cities awaiting conversion) owes no review, detected or declared; a Mode A sheet keeps its review wherever it lives (_review_owed.exempt, two tests)",
+   "class": "within",
+   "why": "The GM's 2026-10-01 ruling verbatim: hand-drawn maps exempt because they will be converted; magistracies and shrines (sheets) still reviewed. It supersedes spec.md's edge case that a triggered check still looks at a legacy map that alone draws an element - that edge case should be amended to match"
+  },
+  {
+   "id": "D18b",
+   "summary": "Round 4: Ubame's sheet opts out of the hand-drawn town map's match (On map: none - why), the disagreement and the match owed at conversion recorded in its notes",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "A sheet's rule waived, but the failing side is the exempt map's own ink (roads, crowns); requiring agreement now means reviewing or editing a map the GM's own words exempt until conversion, and the debt is recorded"
+  },
+  {
+   "id": "D18c",
+   "summary": "Round 4: Ochiba's hand-drawn sheet road narrowed from 13.3 ft to its 8 ft gate to pass B23",
+   "class": "within",
+   "why": "Applies the rule to a magistracy sheet, which the GM's answer to the D8 escalation says keeps its review; no narrowing. The SVG comment above the road still says the road is 13.3 ft wide and is now stale"
+  },
+  {
+   "id": "D19",
+   "summary": "Round 4: B21 counts a way ending at a well or the precinct clearing as arrived (DESTINATION_KINDS); B15c owes no size row for a kind tagged only on captions",
+   "class": "within",
+   "why": "Each follows its rule's own purpose: a way that ends at a destination is not a stub, and a caption has no drawn extent to size. The code applies DESTINATION_KINDS to every road kind, not only footpaths as the plan words it - harmless, same purpose"
+  },
+  {
+   "id": "D20",
+   "summary": "Round 4: T34 - settlement-review and fix-check move to Sonnet (Opus found, 3/3 Sonnet found); glyph-check stays on Opus (Opus missed); building-review (0/3) and size-audit (2/3) stay",
+   "class": "within",
+   "why": "US8/FR-012 applied as written: a tier moves only where three Sonnet runs find what Opus finds, and every other check keeps its tier"
   }
  ],
  "verdict": "CLEAR"

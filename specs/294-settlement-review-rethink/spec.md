@@ -191,8 +191,9 @@ wording where it says the same.
   occasion, whatever its mark - a shared mark is exactly the confusability the check exists for).
 - A map new to the pool: the whole-map review, plus the triggered checks for any element new to the legend.
 - A minor tweak to an element (a color, a constant within its band): no occasion; the task's declaration says so.
-- The hand-authored legacy pool: owes nothing on an engine change; a triggered check looks at it only when it is the one map
-  where the element appears.
+- The hand-authored legacy pool: a hand-drawn Mode B map owes no review on any occasion, since it will be converted to
+  scripted generation; a hand-drawn Mode A sheet (a magistracy, a country shrine) keeps its review (the GM, 2026-10-01,
+  request.md; amended after acceptance).
 
 ## Requirements *(mandatory)*
 
