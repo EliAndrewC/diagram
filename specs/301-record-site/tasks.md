@@ -50,6 +50,17 @@ Every task is tooling over the record: nothing a map draws or asserts changes, s
 - [ ] T15 Land: `make perf LABEL=301-end` and the report; `make done` green; push; `/diagram` built by render-sync; `git gc --aggressive --prune=now` on `/diagram` with sizes (D7)
       research: rendering
       verify:
-- [ ] T16 [US5] The scrub, in this order (plan review items 1 and 2): every live session told to push and pause FIRST; then the rewrite built from main's tip in a scratch mirror and verified; `docs/history-rewrite-301.md` committed INTO the rewritten history as its last commit; immediately before the GM's force push, main's tip checked equal to the tip the mirror was built from (rebuilt if not); after it, `/diagram` reset and repacked; every clone under `.clones/` checked for unpushed commits (live or stale) and those replayed or bundled before any clone is deleted or re-cloned (D7)
-      research: rendering
-      verify:
+
+## After the landing (the scrub, FR-017, FR-018, FR-020 - plan D7)
+
+Not a checkbox, on purpose: the push refuses a feature with an open task, and the scrub can only follow the landing
+(its cut ends at the commit that drops the built pages from the index, and the GM force-pushes its result). The
+order, from the plan review's items 1 and 2: every live session told to push and pause FIRST; the rewrite built
+from main's tip in a scratch mirror and verified (every commit's tree equal to the original's less the dropped paths,
+the tip's tree byte-identical, sizes measured); `docs/history-rewrite-301.md` - the old-to-new commit map - committed
+INTO the rewritten history as its last commit; immediately before the GM's force push, main's tip checked equal to
+the tip the mirror was built from (rebuilt if not); after it, `/diagram` reset and repacked; every clone under
+`.clones/` checked for unpushed commits (live or stale), those replayed or bundled before any clone is deleted or
+re-cloned. The outcome is recorded below when it is done.
+
+Outcome: (pending)
