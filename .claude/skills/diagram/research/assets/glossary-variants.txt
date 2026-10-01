@@ -624,6 +624,9 @@ diameter at breast height	DBH
 digital daijisen	Digital Daijisen
 dike-pond	dike-pond
 dike-ponds	dike-pond
+diluvial	diluvial upland
+diluvial upland	diluvial upland
+diluvial uplands	diluvial upland
 diospyros kaki	Diospyros kaki
 discharge	discharge
 dish pond	sara-ike
