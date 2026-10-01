@@ -339,7 +339,7 @@
   "fruit dike": {
     "caveat": "the tree spacing is an orchard convention, not a measured dike.",
     "covers": "the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is fruit, and its trees",
-    "entry": "research/archetypes.html - 'Mulberry and other crops on pond dikes (sangji, guoji)', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps draw the planted pond dikes', 'How our maps furnish a dike-pond hamlet'",
+    "entry": "research/archetypes.html - 'Mulberry and other crops on pond dikes (sangji, guoji)', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps draw mulberry and other crops on pond dikes (sangji, guoji)', 'How our maps furnish a dike-pond hamlet'",
     "key": "fruit dike",
     "label": "accurate",
     "label_note": "The type is read; the tree spacing is an orchard convention, not a measured dike.",
@@ -570,7 +570,7 @@
   "mulberry dike": {
     "caveat": "the coppice density the crowns are drawn at (one bush per ten to twenty square feet) was not re-found and stays on the re-sourcing queue.",
     "covers": "the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it",
-    "entry": "research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Polder dikes: what they were made of, how big, and what grew on them', 'Mulberry and other crops on pond dikes (sangji, guoji)'; research/rendering/archetypes.html - 'How our maps draw dike-ponds (sangji yutang)', 'How our maps draw the planted pond dikes'",
+    "entry": "research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Polder dikes: what they were made of, how big, and what grew on them', 'Mulberry and other crops on pond dikes (sangji, guoji)'; research/rendering/archetypes.html - 'How our maps draw dike-ponds (sangji yutang)', 'How our maps draw mulberry and other crops on pond dikes (sangji, guoji)'",
     "key": "mulberry dike",
     "label": "accurate",
     "label_note": "The ratio, the dike width and the planting are read; the coppice density the crowns are drawn at (one bush per ten to twenty square feet) was not re-found and stays on the re-sourcing queue.",

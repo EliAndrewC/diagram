@@ -2563,6 +2563,8 @@ qing-dynasty	Qing dynasty
 qingming	Qingming
 qingming shanghe tu	Qingming Shanghe Tu
 qiu	qiu
+qu dajun	Qu Dajun
+qu dajun's	Qu Dajun
 quay	quay
 quays	quay
 quercus acutissima	kunugi

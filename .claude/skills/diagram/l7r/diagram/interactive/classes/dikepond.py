@@ -59,7 +59,8 @@ class MulberryDike(Kind):
     fish, the dredged pond mud re-fertilizes the dike. The prescription was six parts water to four parts
     dike (the Guangdong gazetteer's water-to-dike split of three-seven to four-six, read in the order it names, leans the other way) because the dike's mulberry had to yield enough
     feed and fertilizer for the fish in the water beside it. Every dike on record was planted, a bare bank of heaped mud being
-    apt, in this project's reasoning, to gully and slump; in sericulture districts that planting was mulberry.
+    apt, in this project's reasoning, to gully and slump; in the Pearl River delta that planting became mulberry in the
+    late Ming and early Qing, taking the place of the older fruit dike, and in 1678 lychee still stood on the dikes beside it.
 
     Note: The ratio and the planting are read, though every page that writes the ratio as a number is modern - the oldest figures found, Qu Dajun's shares of one township's land in 1678, are not a ratio, and the six parts water in ten drawn here is this project's guess from reading his two shares together. The modern width is a dike of six to ten meters, no width being found from before modern times (one modern study has dikes once twenty meters wide worn to under four as the ponds were enlarged), and the water drawn stands about seven meters in from each parcel's edge, though a canal runs between two parcels, so two ponds' banks are not one bank. The modern figure also reaches us only at second hand. The ratio's ORDER is
     contested - the classic prescription survives as six parts dike to four parts pond as well as the reverse,
@@ -70,7 +71,7 @@ class MulberryDike(Kind):
     to about 300 trees a mu - one to about 24 square feet - in the late-Qing Yangtze delta, the only figure
     dated before the modern period; only the delta's figure is given for pond dikes, said to be planted much as any flat-land mulberry field. The crowns are drawn at about one bush
     per twenty-four square feet, the late-Qing figure, by the GM's ruling that the map keeps the premodern
-    spacing. No page read gives how wide a bush grew, so the four and a half to seven feet drawn is this
+    spacing. No page read gives how wide a bush grew, so the 4.4 to 7 feet drawn is this
     project's own figure. And the dike is drawn as a RING, the band between the parcel's outer edge and the
     water's own outline, so hovering a dike lights its bank and not the pond inside it. So: the width of a bush's crown is this project's own, and so is the six-in-ten split drawn from Qu Dajun's two shares.
 
@@ -80,7 +81,7 @@ class MulberryDike(Kind):
     Covers: the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it
     Label: accurate
     Sources: gd-gazetteer-sangji, fao-ac241e, isis-dykepond, ruddle-zhong-1988, pwsannong-gudai-zaisang, pwsannong-sangji-yutang, kotobank-souen, kotobank-negari
-    Entry: research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Polder dikes: what they were made of, how big, and what grew on them', 'Mulberry and other crops on pond dikes (sangji, guoji)'; research/rendering/archetypes.html - 'How our maps draw dike-ponds (sangji yutang)', 'How our maps draw the planted pond dikes'
+    Entry: research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Polder dikes: what they were made of, how big, and what grew on them', 'Mulberry and other crops on pond dikes (sangji, guoji)'; research/rendering/archetypes.html - 'How our maps draw dike-ponds (sangji yutang)', 'How our maps draw mulberry and other crops on pond dikes (sangji, guoji)'
     """
 
     key = 'mulberry dike'
@@ -145,7 +146,7 @@ class FruitDike(Kind):
     Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is fruit, and its trees
     Label: accurate
     Sources: guangdong-xinyu-22, guangdong-xinyu-25, pwsannong-zhusanjiao-nongyeshi, gd-gazetteer-sangji
-    Entry: research/archetypes.html - 'Mulberry and other crops on pond dikes (sangji, guoji)', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps draw the planted pond dikes', 'How our maps furnish a dike-pond hamlet'
+    Entry: research/archetypes.html - 'Mulberry and other crops on pond dikes (sangji, guoji)', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps draw mulberry and other crops on pond dikes (sangji, guoji)', 'How our maps furnish a dike-pond hamlet'
     """
 
     key = 'fruit dike'
@@ -173,7 +174,7 @@ class TeaDike(Kind):
     Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is tea, and its bushes
     Label: accurate
     Sources: guangdong-xinyu-22
-    Entry: research/archetypes.html - 'Mulberry and other crops on pond dikes (sangji, guoji)'; research/rendering/archetypes.html - 'How our maps draw the planted pond dikes'
+    Entry: research/archetypes.html - 'Mulberry and other crops on pond dikes (sangji, guoji)'; research/rendering/archetypes.html - 'How our maps draw mulberry and other crops on pond dikes (sangji, guoji)'
     """
 
     key = 'tea dike'
