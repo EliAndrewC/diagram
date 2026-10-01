@@ -2,7 +2,7 @@
 # Brief - feature 292 (how a research section is presented), the sweep: {page} group {group}, session 2: check and apply
 
 You are a FRESH session for one part of feature 292. This brief is the whole of what you need; do not read the
-feature's spec, plan or tasks. Work in this clone (`/diagram/.clones/diagram-reorg`); the research record's
+feature's spec, plan or tasks. Work in this clone (`{clone}`); the research record's
 `CLAUDE.md` applies to you.
 
 **What the feature is for.** The research record is being reorganized into one section per TOPIC and rewritten under
@@ -13,11 +13,17 @@ them. Its handoff is `specs/292-research-presentation-style/sweep/{page}-{group}
 
 **Your topics:** {topic_titles}
 
+> **READ THIS FIRST - you are a headless session.** Every check agent you dispatch runs in the FOREGROUND: `Agent`
+> calls WITHOUT `run_in_background`, two in one message, and your turn waits for them. A background agent's result
+> never reaches a headless session: if you dispatch in the background, or end a turn saying you are "waiting", the
+> session hangs for good and is killed. There is nothing to wait for between turns - keep working until the report
+> is appended.
+
 ## The procedure (check, apply)
 
-1. **Claim:** `make append FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="Diagram reorg (diagram-reorg) | 292 | sweep {page} {group} check in progress | {date}"`.
+1. **Claim:** `make append FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="Diagram reorg ({clonename}) | 292 | sweep {page} {group} check in progress | {date}"`.
 2. **Bundles**, in `.claude/skills/diagram`, one per check (each prints the MANIFEST to hand its agent):
-   - the old sections, for the merge audit: for each path in `OLD=`, `git -C /diagram/.clones/diagram-reorg show
+   - the old sections, for the merge audit: for each path in `OLD=`, `git -C {clone} show
      <BASE>:.claude/skills/diagram/<path> > /tmp/l7r-old-{page}-{group}/<file name>` (the fragment only);
    - `record-style` on each research section, WITH the merge audit: `make check-bundle PAGE={page} SECTION=<id>
      FOR=record-style EXTRA="<the saved old fragments>" OUT=/tmp/l7r-check/{page}-{group}-<n>-rs`; and on each
@@ -30,12 +36,15 @@ them. Its handoff is `specs/292-research-presentation-style/sweep/{page}-{group}
      modal is judged against both sections together;
    - `translation-check`, only if `make translation-owed PAGE={page} SECTION=<id>` lists pairs (and the same for the
      rendering section): `make check-bundle PAGE={page} SECTION=<id> FOR=translation-check`.
-3. **Dispatch the checks in the background, at most THREE at a time** (the containers share a 9 GB memory cap):
-   each agent is named for its check (`record-style`, `quote-check`, `record-format`, `entry-drift`,
-   `translation-check`) and handed its MANIFEST and nothing under `/diagram`. Ask each for counts first, then only
-   what to act on, as EDIT blocks. Start the next as one finishes.
-4. **Apply**: each `quote-check` and `record-format` report with `make apply-edits FROM=<the output_file its dispatch
-   printed>` (`SKIP=<n,n>` for a block you disagree with); then BY HAND, in ONE message of parallel `Edit` calls per
+3. **Dispatch the checks in the FOREGROUND, TWO per message** - two `Agent` calls in one message, neither with
+   `run_in_background`, so they run side by side and your turn waits for both. NEVER end a turn, and never dispatch
+   in the background, to wait for a check: this is a headless session, and a background agent's result never reaches
+   one that has ended its turn - the first sweep check sessions stalled that way for over an hour. Two at a time
+   because the containers share a 9 GB memory cap and another queue runs beside yours. Each agent is named for its
+   check (`record-style`, `quote-check`, `record-format`, `entry-drift`, `translation-check`) and handed its MANIFEST
+   and nothing under `/diagram`; ask each for counts first, then only what to act on, as EDIT blocks. As each pair
+   returns, save each report's text with `Write` to `/tmp/l7r-check/{page}-{group}-<n>-<check>.reply.md`.
+4. **Apply**: each `quote-check` and `record-format` report with `make apply-edits FROM=<its saved .reply.md>` (`SKIP=<n,n>` for a block you disagree with); then BY HAND, in ONE message of parallel `Edit` calls per
    section, everything else: every `record-style` FAIL (its rule 5a lines are the lead lines to use), every item its
    merge audit calls LOST (restore it where it belongs, or keep it in an HTML comment if a style rule cut it), each
    `EDIT: none` finding, each `entry-drift` DRIFTED (rewrite the modal sentence from the sections; the class docstring
@@ -46,9 +55,13 @@ them. Its handoff is `specs/292-research-presentation-style/sweep/{page}-{group}
    from the clone root.
 6. **Re-check once, only what moved much**: a `quote-check` on notes you changed (`make check-bundle ... NOTES=<key,key>
    FOR=quote-check`). A PARTIAL left after it is labeled honestly and left.
+6a. **A large PDF is read, not skipped.** When a check reports a page unfetchable because the web fetch refuses
+   files over 10 MB, download it (`curl -sL -o <file> <url>`), extract it (`pdftotext <file> -`) and grep the quoted
+   passages yourself. A page is unreadable only when neither works; it never goes on the GM's download list for its
+   size alone.
 7. **Commit** only the files you changed (`git -C` with paths), message beginning `292 sweep {page} {group} check:`; do
-   not push. **Report**: `make append FILE=/diagram/.clones/diagram-reorg/specs/292-research-presentation-style/sweep/{page}-checks.md
+   not push. **Report**: `make append FILE={clone}/specs/292-research-presentation-style/sweep/{page}-checks.md
    LINE="- {group} <section id>: record-style F<n> N<n> LOST<n>; quote-check S<n> P<n> D<n>; record-format V<n> S<n> H<n>; entry-drift <class> <verdict> ...; translation <verdicts or none>; open: <anything left>"`
    - one line per section - and close the claim with `make append FILE=/diagram/.clones/RESEARCH-CLAIMS.md
-   LINE="Diagram reorg (diagram-reorg) | 292 | sweep {page} {group} checked, committed in clone | {date}"`. Your last
+   LINE="Diagram reorg ({clonename}) | 292 | sweep {page} {group} checked, committed in clone | {date}"`. Your last
    message is one paragraph.

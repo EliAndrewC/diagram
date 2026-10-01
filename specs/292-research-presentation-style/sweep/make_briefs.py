@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The sweep's briefs, generated from a page's topic plan (feature 292, plan D6-D7).
 
-    make_briefs.py <page> [<date>]     reads sweep/plan-<page>.md, writes sweep/briefs/<page>-<G>-write.md and
+    make_briefs.py <page> [<date> [<clone>]]   reads sweep/plan-<page>.md, writes sweep/briefs/<page>-<G>-write.md and
                                        -check.md per group, and prints the queue for `make page-session`
 
 WHY GENERATED. Every group of every page must get the same procedure - the one the three pilot topics ran - and a
@@ -71,7 +71,8 @@ def item(t: dict) -> str:
 def main(argv: list[str]) -> int:
     page = argv[1]
     date = argv[2] if len(argv) > 2 else datetime.date.today().isoformat()
-    plan = (HERE / f"plan-{page}.md").read_text(encoding="utf-8")
+    clone = argv[3] if len(argv) > 3 else "/diagram/.clones/diagram-reorg"
+    plan = (HERE / f"plan-{page.replace('/', '-')}.md").read_text(encoding="utf-8")
     write_t = (HERE / "write.template.md").read_text(encoding="utf-8")
     check_t = (HERE / "check.template.md").read_text(encoding="utf-8")
     out = HERE / "briefs"
@@ -81,7 +82,7 @@ def main(argv: list[str]) -> int:
     for i, g in enumerate(groups(topics(plan)), 1):
         gid = f"G{i:02d}"
         sections = " ".join(s.split("-")[0] for t in g for s in t["fold"])
-        subst = {"page": page, "group": gid, "date": date, "sections": sections,
+        subst = {"clone": clone, "clonename": clone.rstrip("/").split("/")[-1], "page": page, "group": gid, "date": date, "sections": sections,
                  "topics": "\n".join(item(t) for t in g),
                  "topic_titles": "; ".join(f"\"{t['title']}\"" for t in g)}
         w = out / f"{slug}-{gid}-write.md"

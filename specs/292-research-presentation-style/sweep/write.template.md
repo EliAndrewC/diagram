@@ -1,7 +1,7 @@
 # Brief - feature 292 (how a research section is presented), the sweep: {page} group {group}, session 1: write
 
 You are a FRESH session for one part of feature 292. This brief is the whole of what you need; do not read the
-feature's spec, plan or tasks. Work in this clone (`/diagram/.clones/diagram-reorg`); the research record's
+feature's spec, plan or tasks. Work in this clone (`{clone}`); the research record's
 `CLAUDE.md` applies to you (it auto-loads when you read a research file).
 
 **What the feature is for.** The research record grew one section per question a session asked, so one subject is
@@ -26,11 +26,11 @@ and the style guide before you write.
 
 1. **Claims first:** `make lines FILE=/diagram/.clones/RESEARCH-CLAIMS.md KEY="{page}"` (in `.claude/skills/diagram`);
    a section another feature holds IN PROGRESS today is not edited - leave it out of your fold, and say so in the
-   handoff. Then `make append FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="Diagram reorg (diagram-reorg) | 292 | sweep {page} {group} in progress ({sections}) | {date}"`.
+   handoff. Then `make append FILE=/diagram/.clones/RESEARCH-CLAIMS.md LINE="Diagram reorg ({clonename}) | 292 | sweep {page} {group} in progress ({sections}) | {date}"`.
 2. **Read, all in one message:** `research/STYLE.md`; the two model fragments named above; every fragment your
    topics fold and its `.notes.html` (not its `.originals.html` - the originals are stored apart and `make record`
    puts them back; you copy their lines, below, without needing to read them). Note the commit you start from
-   (`git -C /diagram/.clones/diagram-reorg rev-parse --short HEAD`) - the handoff names it as BASE.
+   (`git -C {clone} rev-parse --short HEAD`) - the handoff names it as BASE.
 3. **Write each topic** as a research fragment and, where the folded sections say anything about how our maps draw
    the thing, a rendering fragment:
    - **The research fragment** is `research/{page}/<NNN>-<id>.html`, `<NNN>` the lead folded section's prefix and
@@ -55,11 +55,14 @@ and the style guide before you write.
    - **The originals.** For each note you keep, copy its lines from the old `.originals.html` into the new one beside
      your notes: `grep 'data-orig="<old key>#' <old>.originals.html`. If you renamed a note's key, rename its
      `data-orig="<key>#n"` to match, and the placeholder `<span class="orig" data-orig="<key>#n"></span>` in the note.
+   - **A large PDF is read, not skipped.** The web fetch refuses files over 10 MB; download such a file with
+     `curl -sL -o <file> <url>` and read it with `pdftotext <file> -`. A page is unreadable only when neither works,
+     and never goes on the GM's download list for its size alone.
    - **Never lose a citation or a finding.** Every note key and every quoted passage of the folded sections is cited
      in the new research or rendering fragment, or its claim is cut under a rule of STYLE.md section 4 with a REMOVED
      comment. Every GUESS stays labeled where its claim stands. A decision is the project's choice, never "the GM
      ruled": the ruling, its date and words go in an HTML comment beside the sentence.
-   - **Delete the folded fragments** with their `.notes.html` and `.originals.html`: `git -C /diagram/.clones/diagram-reorg rm <paths>`.
+   - **Delete the folded fragments** with their `.notes.html` and `.originals.html`: `git -C {clone} rm <paths>`.
    - **Re-aim every link to an old anchor.** For each old id, grep the record's fragments
      (`grep -rl '<old id>' .claude/skills/diagram/research --include='*.html' | grep -v citations/`), the modal
      classes (`.claude/skills/diagram/l7r/diagram/interactive/classes/`, `.../compound_kinds/`), the code comments
@@ -70,7 +73,7 @@ and the style guide before you write.
      `research/rendering/{page}.html - '<title>'` - and the fixture's `"entry"` for that class is changed to the same
      string. A code comment that named an old heading names the new one.
    - **Confusable pairs** you meet (two things a reader could mistake for each other): `make append
-     FILE=/diagram/.clones/diagram-reorg/specs/292-research-presentation-style/confusables.md LINE="- <title> / <title>: <the difference>"`.
+     FILE={clone}/specs/292-research-presentation-style/confusables.md LINE="- <title> / <title>: <the difference>"`.
 4. **Build and test**, in `.claude/skills/diagram`: `make glossary` if you added or changed a glossary term (a new
    one takes its prefix from `make reserve KIND=glossary KEY=<term>`; never a common English word as a variant);
    `make record && make citations`; then for each research and rendering section `make style-prepass PAGE={page}

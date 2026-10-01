@@ -46,7 +46,7 @@ over 12 pages and the `cities/` collection.
 
 - **D6 - a topic plan per page, made from a digest.** An Opus planner reads a digest of its pages (each section's
   title, size, opening and the modals whose `Entry:` names it) and the titles of every section of the record, and
-  writes `sweep/plan-<page>.md`: the topics, each with the sections it folds, its rendering section, the modals to
+  writes `sweep/plan-<page>.md` (all 21 are committed there, with the two plans for the sections main added during the sweep, `plan-additions-*.md`): the topics, each with the sections it folds, its rendering section, the modals to
   re-aim and its size; the groups a writing session takes (at most four topics and 45,000 bytes of folded sections);
   the folds across pages; the confusable pairs. The session reviews each plan before a brief is written from it. The
   alternative - each writing session deciding its own folds from its slice of a page - cannot see a fold that crosses
@@ -56,16 +56,29 @@ over 12 pages and the `cities/` collection.
   tags, the prepass and the record tests) and a check-and-apply session (`record-style` with the merge audit,
   `quote-check` in its batches, `record-format` on both sections, `entry-drift` on every modal whose section moved,
   `translation-check` on the pairs `make translation-owed` names; each report applied, the record rebuilt and tested).
-  These are the checks the three pilot topics ran. The briefs are generated from the plan by `sweep/make_briefs.py`,
-  so every group gets the same procedure.
+  These are the checks the three pilot topics ran. The briefs are generated from the plan by `sweep/make_briefs.py` from the two templates beside it, so every group
+  gets the same procedure; the generated briefs are not committed (they are the templates filled from the plans).
 - **D8 - the order: pages feature 291 is not editing first.** Feature 291's session is still editing homesteads,
   vegetation and ways in its own clone; editing the same fragments here would make every merge of its work a
   conflict. So buildings, religion-and-death, urban-features, towns, archetypes, fields, water, settlements,
   presentation and the cities collection go first, and vegetation, ways and homesteads last, after 291's latest work
   is merged in again.
-- **D9 - one queue at a time.** The containers share a 9 GB memory cap, and each check-and-apply session dispatches
-  up to three check agents; two queues would run six or more Claude processes. This session supervises the queue:
-  it reads each handoff and checks report, reads a sample of the finished sections, and corrects the brief template
-  when it sees a defect repeat.
+- **D9 - parallel queues in separate clones, merged back.** First planned as one queue at a time; measured, one queue
+  would have taken some 90 hours, and the containers' working set stayed between 3.5 and 6 GB of the cap with two
+  and then three queues running, so the sweep ran in three clones (`diagram-reorg`, `-2`, `-3`), each on its own pages,
+  pages that fold into each other kept in one clone where they could be. A queue's remaining briefs were moved to an
+  idle clone by overwriting them, in place, with a `kind=handover` stub that ends at once (the runner reads a brief only
+  when its session starts). The clones were merged back into this one by `sweep/tools/`: `resolve.py` (a modal's
+  `Entry:` merged by the clone that owned each page; glossary variants unioned), `entry_union.py` (both clones swept
+  one page), `relink.py` (every link to an anchor a fold retired, re-aimed from the handoffs' `SECTION=`/`OLD=` record
+  of what each topic absorbed); a section one clone folded away won its modify/delete conflict. Three findings changed
+  the briefs mid-run: a headless check session that dispatched its agents in the background never heard back (the
+  check template now dispatches in the foreground, two at a time); a PDF over the fetch tool's 10 MB is read with
+  `curl` and `pdftotext`, never sent to the GM's download list for its size; and the prompt hook's automatic sync with
+  main conflicted with feature 291's work in progress, so an untracked `SYNC-HELD-292.txt` held each clone's merge
+  until 291 landed, and main was merged by hand.
+- **D9a - the closing pass.** What the checks left "for the GM" (26 items) went through `escalation-check` (1 kept
+  for the GM and answered, 24 the session's own), and what they deferred to a topic restyled later, are task T26,
+  worked in `sweep/closing/` briefs after the last merge.
 - **D10 - landing.** As D4: the sweep commits in this clone and nothing lands until feature 291 has landed; then main
   is merged, the full gate runs, and the feature lands with every page restyled.

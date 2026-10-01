@@ -1,0 +1,75 @@
+{
+ "feature": "292-research-presentation-style",
+ "plan_sha256": "13670e04f4399167679e0af6a2060e49c206ffe620bfe3404ba78ae4107d1e5b",
+ "reviewed": "2026-10-01",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "Approach 1-6",
+   "summary": "guide in research/STYLE.md, record-style check via bundle, grove pilot fold, hover link to citations entry, sources from footnotes, glossary knob/canopy-tree",
+   "class": "within",
+   "why": "Each carries a clause of the 2026-09-29 request (style guide, sub-agent check, fold the two grove sections, link to citations page, no Sources roster without losing a citation, knob and canopy-tree tooltips)."
+  },
+  {
+   "id": "D1",
+   "summary": "the guide reaches the check through its bundle, not copied into the contract",
+   "class": "within",
+   "why": "How the check learns the guide; narrows nothing the GM asked."
+  },
+  {
+   "id": "D2",
+   "summary": "seeded run of the check on the grove section as quoted",
+   "class": "within",
+   "why": "Verifies the check the GM asked for catches the GM's own objections."
+  },
+  {
+   "id": "D3",
+   "summary": "size cap raised with the GM, not worked around",
+   "class": "within",
+   "why": "Puts the choice to the GM (T08 records it); nothing narrowed."
+  },
+  {
+   "id": "D4",
+   "summary": "built on feature 291's work; nothing pushed until 291 lands and the pilot is signed off",
+   "class": "within",
+   "why": "Sequencing; the GM asked that nothing land before sign-off."
+  },
+  {
+   "id": "D5",
+   "summary": "13 pool tests failing outside this feature ledgered before landing",
+   "class": "within",
+   "why": "Regression bookkeeping; no part of the request touched."
+  },
+  {
+   "id": "D6",
+   "summary": "a topic plan per page from a digest of every section's title, with cross-page folds and confusable pairs",
+   "class": "within",
+   "why": "Serves 'combining similar ones as appropriate' across the whole record, which a per-slice decision could not; every section of every page is in scope."
+  },
+  {
+   "id": "D7",
+   "summary": "every group in two headless sessions, write then check-and-apply, with the pilot's checks (record-style with merge audit, quote-check, record-format, entry-drift, translation-check)",
+   "class": "within",
+   "why": "'as we have been doing': the same procedure and the same checks the three pilot topics ran; no check dropped."
+  },
+  {
+   "id": "D8",
+   "summary": "order: pages feature 291 is not editing first; vegetation, ways, homesteads last",
+   "class": "within",
+   "why": "Order only; every page is still swept."
+  },
+  {
+   "id": "D9",
+   "summary": "one queue at a time, the session supervising",
+   "class": "within",
+   "why": "Concurrency and supervision; no section or check affected."
+  },
+  {
+   "id": "D10",
+   "summary": "commits in the clone, lands after 291 with the full gate and every page restyled",
+   "class": "within",
+   "why": "Landing; 'every page restyled' is the request's 'each and every research section'."
+  }
+ ],
+ "verdict": "CLEAR"
+}

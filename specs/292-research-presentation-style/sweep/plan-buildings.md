@@ -18,10 +18,10 @@ buildings/_citations-front.html, buildings/_citations-mid.html, buildings/_citat
 - size: 13589
 
 ## T3 Compound walls (neribei and tsuijibei)
-- fold: buildings/070-a-compound-wall-is-a-building-not-a-boundary-line.html, buildings/490-how-thick-was-a-compounds-earth-wall.html
+- fold: buildings/070-a-compound-wall-is-a-building-not-a-boundary-line.html, buildings/490-how-thick-was-a-compounds-earth-wall.html, religion-and-death/200-how-large-are-the-gates-walls-and-funerary-features-drawn.html
 - rendering: How our maps draw compound walls
 - modals: CompoundWall
-- note: 070 and 490 overlap on thickness (both cite kojodan-dobei, hei-jokaku-jawiki) - one account; "a wall is a building, not a line" is the rendering rule.
+- note: 070 and 490 overlap on thickness (both cite kojodan-dobei, hei-jokaku-jawiki) - one account; "a wall is a building, not a line" is the rendering rule. Cross-page: religion-and-death/200 (the drawn size of gates, walls and funerary features) folds here; its funerary part goes to this topic's rendering section too, under its own bullets, and the religion-and-death burial topics link to it.
 - size: 7446
 
 ## T4 The main gate and its gatekeepers (nagaya-mon)
@@ -172,10 +172,10 @@ buildings/_citations-front.html, buildings/_citations-mid.html, buildings/_citat
 - size: 3990
 
 ## T25 Martial training grounds and dojo
-- fold: buildings/210-a-dojo-is-a-city-institution-county-training-is-courtyard-keiko.html, buildings/780-how-big-was-a-dojo-and-what-does-it-look-like-from-above.html, buildings/560-what-did-a-practice-grounds-striking-posts-and-weapon-rack-look-like.html
+- fold: buildings/210-a-dojo-is-a-city-institution-county-training-is-courtyard-keiko.html, buildings/780-how-big-was-a-dojo-and-what-does-it-look-like-from-above.html, buildings/560-what-did-a-practice-grounds-striking-posts-and-weapon-rack-look-like.html, cities/government/070-martial-training-is-an-urban-institution.html, cities/government/100-does-china-put-martial-training-in-the-towns-too.html
 - rendering: How our maps draw practice grounds and dojo
 - modals: PracticeGround, StrikingPosts, WeaponRack
-- note: 210's city-tier count (one state hall plus private dojo, GM 2026-07-25) and 780's "from above" are rendering; cities/government/070 and 100 (martial training as urban, and in China) and 320 (drill ground) overlap - their planner decides whether they fold here; 780 and 210 share hagi-meirinkan-guide and kodokan-mito-jawiki - one account.
+- note: 210's city-tier count (one state hall plus private dojo, GM 2026-07-25) and 780's "from above" are rendering; cities/government/070 and 100 (martial training as urban, and in China) and 320 (drill ground) overlap - their planner decides whether they fold here; 780 and 210 share hagi-meirinkan-guide and kodokan-mito-jawiki - one account. Cross-page from the cities collection: cities/government/070-martial-training folds here. Cross-page from the cities collection: cities/government/100-does-china folds here.
 - size: 19596
 
 ## T26 Border posts and their crossing court (kuchidome bansho)
