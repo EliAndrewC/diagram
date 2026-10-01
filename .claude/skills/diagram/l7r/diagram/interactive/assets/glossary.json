@@ -15099,5 +15099,12 @@
    "clustered village",
    "clustered villages"
   ]
+ },
+ "Reihendorf": {
+  "def": "German for a row village: one or two rows of houses or farmsteads along a village street, each dwelling's farmland lying next to it.",
+  "variants": [
+   "Reihendorf",
+   "Reihendörfer"
+  ]
  }
 }

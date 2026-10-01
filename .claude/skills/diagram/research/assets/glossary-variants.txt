@@ -2861,6 +2861,8 @@ registered tangible cultural property	Tangible Cultural Property
 regulator	regulator
 regulators	regulator
 rehe	Jehol
+reihendorf	Reihendorf
+reihendörfer	Reihendorf
 reikurikata	reikurikata
 relay office	toiyaba
 relay offices	toiyaba

@@ -446,7 +446,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # the connector out to the road, which `stage_track` has already drawn, and what joins them to
     # each other is the field baulks they walk on. Drawing a web here would erase the one thing that
     # makes the form legible at a glance. The two access checks are conditioned on the form to
-    # match - see `research/rendering/homesteads.html`, "How our maps choose and draw a village's form".
+    # match - see `research/rendering/homesteads.html`, "How our maps choose and draw clustered and scattered villages (shūson, sanson)".
     if plan.settlement_form == "dispersed":
         s.M["meta"]["lane_skeleton"] = "none"
         return

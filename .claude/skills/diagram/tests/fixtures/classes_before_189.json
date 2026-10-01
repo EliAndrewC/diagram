@@ -976,7 +976,7 @@
   "well": {
     "caveat": "",
     "covers": "`wells` - the wellheads",
-    "entry": "research/urban-features.html - 'Communal wells (ido)'; research/rendering/urban-features.html - 'How our maps place and draw wells (ido)'; research/homesteads.html - 'Clustered and scattered villages (shūson, sanson)'; research/rendering/homesteads.html - 'How our maps choose and draw a village's form'",
+    "entry": "research/urban-features.html - 'Communal wells (ido)'; research/rendering/urban-features.html - 'How our maps place and draw wells (ido)'; research/homesteads.html - 'Clustered and scattered villages (shūson, sanson)'; research/rendering/homesteads.html - 'How our maps choose and draw clustered and scattered villages (shūson, sanson)'",
     "key": "well",
     "label": "convention",
     "label_note": "we have drawn the wellhead about 19 ft across - a stone curb of 9.4 ft radius under a well-house roof - many times its true size, in order to make the well visible at map scale: the glyph marks where the well stands, not how much ground it takes. A hand-dug well's shaft is about 1 m across, big enough for a person to work in, under a well house that is posts and a roof and nothing more; the width of the curb frame itself was not found. Count and sharing are read (the Sphere/UNICEF figures, jawiki).",
