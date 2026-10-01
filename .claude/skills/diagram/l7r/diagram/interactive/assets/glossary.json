@@ -13748,5 +13748,19 @@
    "butt",
    "butts"
   ]
+ },
+ "miyakodori": {
+  "def": "The \"bird of the capital\": the old poetic name for the gull of the Sumida river at Edo, famous from classical poetry and long the river's emblem.",
+  "variants": [
+   "miyakodori"
+  ]
+ },
+ "no-kami": {
+  "def": "An honorary court title, \"governor of\" the named old province, which a samurai official carried as part of their name. By the Edo period it carried no duty in that province: Sado-no-kami is the governor of Sado in name only.",
+  "variants": [
+   "Sado-no-kami",
+   "Sagami-no-kami",
+   "Iwami-no-kami"
+  ]
  }
 }

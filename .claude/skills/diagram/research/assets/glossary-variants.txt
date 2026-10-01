@@ -1492,6 +1492,7 @@ isotherm	isohyet
 isotherms	isohyet
 ita-bune	ita-bune
 itabashi	itabashi
+iwami-no-kami	no-kami
 iyo	Iyo
 izumi	Izumi
 izumi province	Izumi
@@ -2072,6 +2073,7 @@ mitsuke	mitsuke
 mitsumata	mitsumata
 mitsumata field	mitsumata
 mitsumata fields	mitsumata
+miyakodori	miyakodori
 miyaza	miyaza
 mizu-oobako	Ottelia
 mizubansho	mizubansho
@@ -2684,9 +2686,11 @@ ryukyu kingdom	Ryukyu kingdom
 ryukyus	Ryukyu kingdom
 rōjū	Roju
 rōnin	ronin
+sado-no-kami	no-kami
 sae no kami	sae no kami
 sagami	Sagami
 sagami province	Sagami
+sagami-no-kami	no-kami
 sagamino	Sagamino
 sageba	ōkaji
 sai on	Sai On
