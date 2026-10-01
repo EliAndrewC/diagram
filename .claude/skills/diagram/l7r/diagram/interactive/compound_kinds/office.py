@@ -319,12 +319,9 @@ class BenchNoticeBoard(Kind):
     rather than the gate's walls, is a guess joined from the Chinese walls and the Japanese village officials' boards;
     no board at a Japanese intendant's office was found.
 
-    Caveat: A freestanding board at the gate, rather than the gate's walls, is a guess joined from the Chinese walls and
-    the Japanese village officials' boards; no board at a Japanese intendant's office was found.
-
     Name: notice board
     Covers: the board outside the main gate and its label
-    Label: accurate
+    Label: guess
     Sources: kosatsu-jawiki, ogose-kosatsuba, adachi-kosatsu, kosatsu-enwiki, shoya-jawiki
     Entry: research/urban-features.html - 'Notice boards (kosatsuba)'; research/rendering/urban-features.html - 'How our maps place and draw notice boards (kosatsuba)'
     """
@@ -397,8 +394,8 @@ class DayOffice(Kind):
     happens in the day office or the hearing court like any other business.
 
     Note: The dais as the front of the office hall follows the record; the day office behind it is our own guess
-    at what the block must hold, since no page we read names the room. That no room is built
-    for interrogation is a setting decision (GM, 2026-07), not the record: Takayama had an examination room
+    at what the block must hold, since no page we read places it behind the court. That no room is built
+    for interrogation is this project's decision for the setting, not the record: Takayama had an examination room
     (ginmisho) beside its roofed court, and its torture is reported to have been done in the jail in the town.
 
 
@@ -406,7 +403,7 @@ class DayOffice(Kind):
     Covers: the day office's floor and its label
     Label: guess
     Sources: takayama-jinya-jawiki, takayama-jinya-city
-    Entry: research/buildings.html - 'The hearing court (shirasu)', 'Holding cells (agariya and rōya)'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)', 'How our maps draw holding cells (agariya and rōya)'
+    Entry: research/buildings.html - 'The office hall and its clerks (goyakusho)', 'The hearing court (shirasu)', 'Holding cells (agariya and rōya)'; research/rendering/buildings.html - 'How our maps draw the office hall and its clerks (goyakusho)', 'How our maps draw the hearing court (shirasu)', 'How our maps draw holding cells (agariya and rōya)'
     """
 
     key = "day office"
@@ -424,13 +421,13 @@ class OfficialStudy(Kind):
     Note: The official study is this project's own guess: the Takayama office was rebuilt in 1816 in parts
     including its entrance hall, examination room, working office and great hall, which we read as one block,
     and a study behind the dais is inferred from where the office's paperwork must be done, since no page read
-    names one.
+    places one behind the dais.
 
     Name: official study
     Covers: the official study's floor and its label
     Label: guess
     Sources: takayama-jinya-jawiki, takayama-jinya-city
-    Entry: research/buildings.html - 'The hearing court (shirasu)'; research/rendering/buildings.html - 'How our maps draw the hearing court (shirasu)'
+    Entry: research/buildings.html - 'The office hall and its clerks (goyakusho)', 'The hearing court (shirasu)'; research/rendering/buildings.html - 'How our maps draw the office hall and its clerks (goyakusho)', 'How our maps draw the hearing court (shirasu)'
     """
 
     key = "official study"

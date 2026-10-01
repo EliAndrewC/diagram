@@ -60,26 +60,26 @@ class StorageShed(Kind):
 
     Why: Before modern times a farmstead carried far fewer outbuildings than the twentieth century's counts: a village
     count of 1885, which its historian reads back to the last years of the shogunate, gives about one and a half
-    besides the privy and the retirement house, with a storehouse on only two farms in sixteen, both powerful households. So a storehouse
-    stands against about one farmhouse in eight, the largest of them, and a village headman's always. It is drawn in the
-    size band of the two farm sheds measured from the end of the Edo period or just after, 18 to 27 ft long and 1.5 to
-    1.8 times as long as deep, though the storehouses recorded were smaller, about 12 to 15 by 18 ft.
+    besides the privy and the retirement house, and a storehouse on only two farms in sixteen, both in households the
+    historian places among the village's powerful ones, the second with a "probably". So on the hamlets our generator
+    lays out a storehouse stands against about one farmhouse in eight, the largest of them, and a village headman's
+    house always has one; the hand-drawn maps keep the higher share they were drawn with. It is drawn in the size band
+    of the two farm sheds measured from the end of the Edo period or just after, 18 to 27 ft long and 1.5 to 1.8 times
+    as long as deep, though the storehouses recorded were smaller, about 12 to 15 by 18 ft.
 
-    Note: The count and the Nerima shed's size are read; the Hannan shed's 18 ft is our arithmetic from its 3 by 2 ken,
-    and its registered area suggests it may have been somewhat larger; the count is one village's, so the share is a
-    calibration; giving the storehouses strictly to the largest houses is a deviation (Kakimochi's largest house had
-    none), and so is drawing them at the sheds' size; the storehouses recorded stood free of the house, so drawing one
-    as an annex on the house's west or north wall is a convention the record contradicts; the tile is read from two
-    examples. The larger barns of 1883-1926, and the 4.4 outbuildings a household of a 1972 survey, are not drawn.
-
-    Caveat: the count is one village's, so the share is a calibration; giving the storehouses strictly to the largest
-    houses is a deviation (Kakimochi's largest house had none), and so is drawing them at the sheds' size; the
-    storehouses recorded stood free of the house, so drawing one as an annex on the house's west or north wall is a
-    convention the record contradicts; the tile is read from two examples.
+    Note: we have drawn the storehouse as a tiled annex against the farmhouse's west or north wall, 18 to 27 ft long,
+    the size of a farm shed, in order to leave the sunny walls to the garden and every generated hamlet's houses where
+    they stand. The storehouses recorded stood free of the house, in front of it or behind, and were smaller, about 12
+    to 15 by 18 ft. Giving the storehouses strictly to the largest houses is this project's rule, stricter than the
+    record (Kakimochi's largest house had none), and which of two farmhouses of one size gets it is a guess; the count
+    is one village's, so the share is a calibration; that every
+    storehouse is tiled is this project's reading of two examples. The Hannan shed's 18 ft is our arithmetic from its
+    3 by 2 ken, and its registered area suggests it may have been somewhat larger. The larger barns built after 1868,
+    and the 4.4 outbuildings a household of a 1972 survey, are not drawn.
 
     Name: storage shed
     Covers: `houses[].shed` (the storehouse against a farmhouse) and `farm_sheds` (its record)
-    Label: accurate
+    Label: convention
     Sources: oamishirasato-choshi-kaoku, koshigaya-shishi-noumin-jukyo, bunka-minami-naya, nerima-mitome-naya
     Entry: research/homesteads.html - 'The farmstead and what stood on it (yashiki)', 'Farm storehouses (kura)', 'Farm sheds and barns (naya)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)', 'How our maps draw farm storehouses (kura)'
     """
@@ -104,18 +104,21 @@ class Byre(Kind):
     Note: The two forms, the beast living with its keeper and the share of households keeping one are read. The
     inner stable is drawn against the farmhouse because a stall under the house's own roof cannot be seen from
     above - a map drawing convention; how much commoner the inner roll is, and the share drawn (35 to 50 of every
-    100 households), are calibrated to the record's 'about half, and fewer later'; a third, rare roll - a shed out
+    100 households), are a calibration, not a count: the share follows one province's 'about half, and fewer later',
+    though one village of Saitama district had a stable at 50 of its 76 houses in 1824; a third, rare roll - a shed out
     on the ground the homesteads share, reached by several households - is a guess, found on no page read and kept
     only until the record finds it or rules it out; the attached stable wing (magariya) belongs to Tohoku's
     horse-breeding districts, its stable warmed from the kitchen hearth, and is deliberately not drawn - that the
     warmth shows what the horses were worth is this record's own reading, and the form was common among the
     upper farm households, such as a headman's. The animal's nearness to the
     house is read; its nearness to
-    the wellhead is not on any page read.
+    the wellhead is not on any page read, and that it drank at the household's well is a guess, as is the outer
+    stable's distance off the farmhouse wall, 6 to 12 ft.
 
     Caveat: The inner stable is drawn against the farmhouse because a stall under the house's own roof cannot be
     seen from above - a map drawing convention; how much commoner the inner roll is, and the share drawn (35 to 50
-    of every 100 households), are calibrated to the record's 'about half, and fewer later'; a third, rare roll - a
+    of every 100 households), are a calibration, not a count: the share follows one province's 'about half, and
+    fewer later', though one village of Saitama district had a stable at 50 of its 76 houses in 1824; a third, rare roll - a
     shed out on the ground the homesteads share, reached by several households - is a guess, found on no page read
     and kept only until the record finds it or rules it out; the attached stable wing (magariya) belongs to
     Tohoku's horse-breeding districts, its stable warmed from the kitchen hearth, and is deliberately not drawn
@@ -123,7 +126,7 @@ class Byre(Kind):
     Name: byre
     Covers: `byres` - the draft-animal sheds
     Label: accurate
-    Sources: cambridge-animals-china, okayama-chikusanshi-shiyo, agrinews-2023-tajima-maya, ndl-crd-shakkogyu, kotobank-umaya, magariya-jawiki
+    Sources: cambridge-animals-china, okayama-chikusanshi-shiyo, agrinews-2023-tajima-maya, ndl-crd-shakkogyu, kotobank-umaya, magariya-jawiki, koshigaya-shishi-noumin-jukyo
     Entry: research/homesteads.html - 'Draft oxen and horses and their byres (umaya)', 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw and place byres (umaya)', 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
@@ -209,20 +212,18 @@ class Garden(Kind):
     Why: A dooryard garden fed the household and, like the yard, wants light - beds are kept out of a neighbor's
     shadow to the south, clear of the windbreak's afternoon shade to the west, and, where open ground allows, nudged south out of a neighbor's grove that would take their morning sun from the east.
 
-    Note: Presence is read; the sun rule is DERIVED from the geometry, and its east half is the GM's call, since the record finds no readable source for a bed's need of morning light - its season rests on daikon standing in
-    the bed through autumn (what the bed grew - daikon, onions, beans and herbs - is this record's guess, since no page
-    read lists its crops), and its west lane is sized to
-    a working belt of about 10 m, a guess at the height of a belt kept in use, set at the low end of a band read from surveys
-    of the 1980s on, whose measured trees reach 28 m, since no source says which surveyed groves were tended - no grove height from before 1868 was found, so the 10 m is a modern figure kept for want of an older one; the record
-    gives the bed no area, proportion or row count - its area is held to a guessed range of 10 to 140 sq m (about
-    108 to 1,507 sq ft) - so those are drawn to read as a worked kitchen bed at this scale.
-
-    Caveat: the record gives the bed no area, proportion or row count - its area is held to a guessed range of 10 to
-    140 sq m (about 108 to 1,507 sq ft) - so those are drawn to read as a worked kitchen bed at this scale.
+    Note: The bed's size and its crops are guesses: no page read gives a kitchen bed's area or lists what it grew, so
+    its area is held to a guessed range of 10 to 140 sq m (about 108 to 1,507 sq ft) and its crops - daikon, onions,
+    beans and herbs - are this project's reading. That a farm household kept a bed of its own for its table is read.
+    The sun rule is worked out from the autumn sun's geometry: its season rests on daikon standing in the bed through
+    autumn, its west lane is sized to a windbreak drawn at a working height of 10 m (about 33 ft), a guess at the
+    height of a stand kept in use, and moving a bed out of a neighbor's grove's morning shade is this project's choice.
+    The record gives the bed no proportion or row count, so those are drawn to read as a worked kitchen bed at this
+    scale.
 
     Name: garden
     Covers: `gardens`
-    Label: accurate
+    Label: guess
     Sources: not recorded
     Entry: research/homesteads.html - 'Sunlight and shade on the farm', 'Kitchen gardens beside farmhouses (yashikibatake)'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun', 'How our maps size kitchen gardens (yashikibatake)'
     """

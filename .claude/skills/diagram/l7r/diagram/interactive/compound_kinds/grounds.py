@@ -22,26 +22,26 @@ class OuterCourt(Kind):
     them: Chinese regulation required it of a county office, and Japanese offices likewise kept the chief's
     household inside the working compound, though no source read sets it behind the office. So
     whoever comes on business - a petitioner, a taxpayer, a prisoner - is dealt with here, near the gate,
-    and goes no deeper. Its open ground is not wasted space: a jin'ya, on this project's reading of plans,
-    left most of its site open - at Takayama the plaza in front alone is about an eighth of the site - and
-    its forecourt and hearing court were features of the plan in their own right.
+    and goes no deeper. Its open ground is not wasted space: a jin'ya left most of its site open - at Takayama
+    the floors of all its buildings come to about three-tenths of the site, and the plaza in front alone is
+    about an eighth of it - and its forecourt and hearing court were features of the plan in their own right.
 
     Note: The two-court split follows the Chinese record, and the open forecourt follows the record; no
     codification of the split was found, and at Takayama the residence stood beside the office rather than
     behind it. No Japanese source read shows the residence behind the office; how much of a jin'ya's site stood
-    open is this project's own estimate from plans, no source read giving the figure. On these plans the
-    buildings stand somewhat further apart than in a real jin'ya, which joined its functions into a few long
-    connected ranges, so that each reads as its own labeled footprint.
+    open is read at Takayama alone, and the most our plans build on, about 42%, is this project's own estimate
+    from plans. On these plans the buildings stand somewhat further apart than in a real jin'ya, which joined its
+    functions into a few long connected ranges, so that each reads as its own labeled footprint.
 
     Caveat: No Japanese source read shows the residence behind the office; how much of a jin'ya's site stood
-    open is this project's own estimate from plans, no source read giving the figure. On these plans the
-    buildings stand somewhat further apart than in a real jin'ya, which joined its functions into a few long
-    connected ranges, so that each reads as its own labeled footprint.
+    open is read at Takayama alone, and the most our plans build on, about 42%, is this project's own estimate
+    from plans. On these plans the buildings stand somewhat further apart than in a real jin'ya, which joined its
+    functions into a few long connected ranges, so that each reads as its own labeled footprint.
 
     Name: outer court
     Covers: the outer court's ground and its labels, the forecourt among them
     Label: accurate
-    Sources: neixiang-yamen-zhwiki, takayama-jinya-jawiki, takayama-jinya-city, machi-bugyo-jawiki, jinya-jawiki, yamen-enwiki, neixiang-xianya-zhwiki
+    Sources: neixiang-yamen-zhwiki, takayama-jinya-jawiki, takayama-jinya-city, takayama-jinya-gifu, machi-bugyo-jawiki, jinya-jawiki, yamen-enwiki, neixiang-xianya-zhwiki
     Entry: research/buildings.html - 'Magistrates' compounds (jin'ya and yamen)', 'The size of a compound and the rank of its buildings'; research/rendering/buildings.html - 'How our maps size a compound and its buildings', 'How our maps draw a magistrate's compound'
     """
 
@@ -455,13 +455,14 @@ class ApproachRoad(Kind):
     the main gate. A planned Chinese capital was a grid of avenues keyed to its gates, and a county seat's
     streets linked its gates, but a main avenue running from the principal gate to the government office is a
     guess, found on no page read, and in neither Japan nor China was a country lane a wide road. The road at a compound's front gate is the road
-    the compound stands on, at that road's width: the great highways ran about 18 to 30 ft wide, set to about 30 ft by an
-    order of 1605, and one through a castle town about 15 ft.
+    the compound stands on, at that road's width: Japan's great highways ran about 18 to 30 ft wide, set to about 30 ft
+    by an order of 1605, and one through a castle town about 15 ft, so a compound on the Imperial road opens onto its
+    30 ft and one on a lesser highway onto 15 to 24 ft.
 
     Note: the roads here carry carts and wagons, the setting's own departure from Edo Japan, where carts were
-    kept to the towns and barred from the highways; the GM's notes put wagons and carts on the roads between
-    towns. The road at the gate is drawn at the width of the road the compound stands on, 15 to 24 ft where it is
-    a highway, as read; no page read gives the width of the road before an official's gate, so any wider ground
+    kept to the towns and barred from the highways; the setting's notes put wagons and carts on the roads between
+    towns. The road at the gate is drawn at the width of the road the compound stands on: 30 ft where it is the
+    Imperial road, as it is drawn everywhere, and 15 to 24 ft where it is a lesser highway, as read; no page read gives the width of the road before an official's gate, so any wider ground
     before the gate is a guess, and so is a lane to a side or cart gate, drawn at about 6 ft where carts use it.
     The record read sets a Japanese seat beside the settlement it administers, which this project reads as the town's edge, and a Chinese county yamen inside its town on the main street, and gives a south-facing gate for a Chinese county office; that the manor's gate faces what it fronts
     and opens onto the road it stands on is this project's own calibration, set against the drawn

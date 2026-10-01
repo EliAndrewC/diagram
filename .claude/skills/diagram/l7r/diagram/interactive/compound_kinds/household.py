@@ -120,11 +120,11 @@ class KarosHouse(Kind):
     long-houses; a mansion of the karo's own near the lord's residence or in the castle was the form at a
     daimyo's scale, and belongs to a castle town. So the karo lives inside the walls, at the intendancy's scale.
 
-    Note: The karo is the setting's own, and staff housed inside an intendancy's compound in small houses or
-    long-houses is recorded, so the county-town plan's long-house bay follows the record. That the hand-drawn plans
-    give the karo a small house of their own, rather than a bay of the staff long-house, is a guess: no source sets
-    the head of the staff apart from the rest, and a chief retainer's own house inside the lord's compound was not
-    found. Their sizes, and where each stands, are a guess on both kinds of plan.
+    Note: The small house of their own the hand-drawn plans give the karo, rather than a bay of the staff long-house,
+    is a guess: no source sets the head of the staff apart from the rest, and a chief retainer's own house inside the
+    lord's compound was not found. The county-town plan's long-house bay is accurate: the karo is the setting's own,
+    and staff housed inside an intendancy's compound in small houses or long-houses is recorded. The sizes, and where
+    each stands, are a guess on both kinds of plan.
 
     Name: karo's house
     Covers: the karo's house and its label with the "house elder" gloss

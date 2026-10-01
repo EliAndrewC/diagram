@@ -132,7 +132,9 @@ write every git call as `git -C <clone>`. Paths below are under the clone's `.cl
    sacred complex rival the whole residence.
 5. Run the **PACKING / WHITESPACE SWEEP** (its own mandatory output section): run
    `pack_audit.py` and INTERPRET the numbers.
-   - **COVERAGE** - building footprint should be ~37-42% of the walled interior
+   - **COVERAGE** - building footprint should be ~30-42% of the walled interior (the bottom is
+     Takayama's measured floor area against its site, ~31%; the top a guess - research/rendering/buildings
+     "How our maps size a compound and its buildings")
      for a jin'ya-type compound. A courtyard compound is SUPPOSED to be mostly
      open, so a high "bare open %" is NOT a defect; ~55% coverage is siheyuan-
      dense, <35% is genuinely sparse. **Coverage in-band means the ENVELOPE is

@@ -147,7 +147,8 @@
       "agrinews-2023-tajima-maya",
       "ndl-crd-shakkogyu",
       "kotobank-umaya",
-      "magariya-jawiki"
+      "magariya-jawiki",
+      "koshigaya-shishi-noumin-jukyo"
     ],
     "what": "An open-fronted shed for a household's ox or water buffalo - a roof carried on posts over a shaded stall, standing among the homesteads.",
     "why": "Most farmsteads kept a draft animal or two, and the vernacular put the animal far closer to the house and the well than a European barn would. Where a byre is shared it stands in a courtyard between the homesteads it serves."
@@ -378,7 +379,7 @@
     "covers": "`gardens`",
     "entry": "research/homesteads.html - 'Sunlight and shade on the farm', 'Kitchen gardens beside farmhouses (yashikibatake)'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun', 'How our maps size kitchen gardens (yashikibatake)'",
     "key": "garden",
-    "label": "accurate",
+    "label": "guess",
     "label_note": "Presence and the sun rule are read; the record fixes the bed's AREA and that it is hand-worked and irregular, but gives no proportion or row count, so those are drawn to read as a worked kitchen bed at this scale.",
     "name": "garden",
     "siblings": {
@@ -863,7 +864,7 @@
     "covers": "`houses[].shed` (the storehouse against a farmhouse) and `farm_sheds` (its record)",
     "entry": "research/homesteads.html - 'The farmstead and what stood on it (yashiki)', 'Farm storehouses (kura)', 'Farm sheds and barns (naya)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)', 'How our maps draw farm storehouses (kura)'",
     "key": "storage shed",
-    "label": "accurate",
+    "label": "convention",
     "label_note": "Presence and prevalence read (Sugiura 1973); the drawn count per household is deliberately set below the source's Tohoku figure, which is a colder and better-stocked district than this one.",
     "name": "storage shed",
     "siblings": {
