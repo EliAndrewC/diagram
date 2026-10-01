@@ -72,7 +72,7 @@ the pilot; the GM reads the pages in this feature's clone.
   (which forms existed, which the evidence suggests were commoner, how the maps render that variety, and which shares
   are arbitrary); the ruling, its date and words are kept for later sessions in an HTML comment beside it. The prepass
   MUST list every visible "GM", and the checks (`record-style`, `record-format`) MUST report it. The sweep carries this
-  to the 111 research sections and the modals (stream, footbridge) that show a ruling today.
+  to the 111 research sections and every map modal that shows one (19 modals when the sweep closed).
 - **FR-015** (GM 2026-09-29): number follows the map - a feature a map has one of is singular, one it has many of
   plural ("a map's groves"); the guide states it and `record-style` checks it.
 - **FR-016** (GM 2026-09-29, DEFERRED to after the sweep): a section a reader could mistake for another opens with
@@ -208,6 +208,9 @@ the pilot; the GM reads the pages in this feature's clone.
   SC-017 to name the browser test for the collapse; SC-016 to carry the no-notes clause; the GM's request on the
   modals' references made FR-029 and SC-026, and the out-of-scope line narrowed; the GM's messages of 2026-09-29 and
   10-01 that the criteria rest on added to request.md verbatim. All applied.
+- **Amendment, round 2** (spec-fidelity, 2026-10-01): items 1-4 RESOLVED; item 5 partly - the GM's work-yard review of
+  2026-09-30 had been recorded only to its first point, so FR-027's kanji-gloss words were missing (now recorded in
+  full); FR-014's "the modals (stream, footbridge) that show a ruling today" understated the 19 fixed (reworded).
 
 - **Round 1** (spec-fidelity, 2026-09-29): REVISE. Kept: the third grove section folded in, the cap raised with the
   GM, the two phases. Fixed: an aside with real content is promoted, not cut; only map-visible statements with no

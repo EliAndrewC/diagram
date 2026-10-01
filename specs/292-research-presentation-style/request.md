@@ -172,13 +172,20 @@ note it has since been edited, and that their general points still hold):
 ## The GM's review of the work-yard topic, 2026-09-30 (verbatim)
 
 > That looks really good, and I have only a few pieces of feedback.
-> 
+>
 > First, there are a couple of places where we explicitly call out pages that we assert exist and that we further assert contain data, like specific answers, but which we are saying do not load. For example:
 > > A yard at Kodaira, a large Musashino holding's, is given as 70 tsubo (~2,490 sq ft), from a page we could not read.
 > and
 > > It comes from a city history whose page did not load.
 > and
 > > a statement we could not find on any page we could read.
+> So I am extremely unclear why it is that we believe this information is on this page or these pages in the first place if we cannot load the page. Like, are we sure this was not a hallucination from an earlier research pass from before we started doing subagent checks specifically to prevent this kind of hallucination? Or is this a thing where we have found other references to this which point at this page or these pages, but then we can't load the pages themselves? So we have reason to believe that this data is on those pages, even though we ourselves cannot confirm it? As of now, it looks very suspicious.
+>
+> Second, I am still seeing places where Japanese kanji are showing up untranslated into English. For example:
+> > > (無屋敷登録人, muyashiki torokunin)
+> I don't know what that means, and I presume that "muyashiki torokunin" is the transliteration, but that doesn't actually help me because a transliteration is not a translation.
+>
+> Those are the only issues I can see here, each of which deserves to be fixed both in the specific place and with some general rules. I think that the Japanese kanji showing up untranslated is something that could be addressed with a mechanical check rather than a subagent check. Because if we always... show a translation in the same format immediately following some kanji, then that would allow us to have a mechanical check that guarantees that what we have done is translated. And then I suppose the subagent check would exist for the fidelity of the translation, but then, like many subagent checks which only run when a specific bit changes, then the subagent check that validates the fidelity of the translation would only check if either the translated text or the original kanji were to be edited. At least I think that's how that works. I'm not totally sure. The first issue seems like it is a style guide issue that requires subagent checks, since I don't know that we could do a mechanical check for something like this.
 
 ## The GM, 2026-09-30, on the "are" tooltip (verbatim; the message as recorded begins mid-sentence)
 
