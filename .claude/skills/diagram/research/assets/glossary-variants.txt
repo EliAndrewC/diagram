@@ -1004,6 +1004,8 @@ flora	flora
 flowing-roof	nagare-zukuri
 flowing-roof style	nagare-zukuri
 flume	kakehi
+foehn	fohn
+fohn	fohn
 footing	footing
 footings	footing
 footplank	footplank
@@ -1093,6 +1095,7 @@ fusekoshi	inverted siphon
 fusuma	fusuma
 fuyu	Fuyu
 fuyu persimmon	Fuyu
+föhn	fohn
 gabion	gabion
 gabions	gabion
 gable end	gable end

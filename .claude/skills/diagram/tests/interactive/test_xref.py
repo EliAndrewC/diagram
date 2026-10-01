@@ -83,7 +83,7 @@ def test_the_committed_grove_sections_link_each_other() -> None:
     """The pilot's pair, on the committed pages: the research section links its rendering section and back."""
     research = pathlib.Path(RESEARCH_DIR, "homesteads.html").read_text(encoding="utf-8")
     rendering = pathlib.Path(RESEARCH_DIR, "rendering", "homesteads.html").read_text(encoding="utf-8")
-    assert 'href="rendering/homesteads.html#how-our-maps-draw-the-groves-around-farmhouses">How it\'s drawn' in research
+    assert 'href="rendering/homesteads.html#how-our-maps-draw-groves-of-trees-around-farmhouses-yashikirin">How it\'s drawn' in research
     assert 'href="../homesteads.html#groves-of-trees-around-farmhouses-yashikirin">The history behind it' in rendering
 
 
