@@ -96,7 +96,7 @@ def _pond_stock_parts(M):
 
 
 def test_no_pond_is_cut_by_a_sluice_of_its_own(polder) -> None:
-    """Feature 280 M57 (research/archetypes/150): a sluice through each pond's dike is a modern manual's form, so the dike-pond
+    """Feature 280 M57 (research/archetypes/140): a sluice through each pond's dike is a modern manual's form, so the dike-pond
     block draws none - only the polder's own gates."""
     _plan, M = polder
     assert M.get("dikeponds") and "dikepond_sluices" not in M

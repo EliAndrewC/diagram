@@ -41,7 +41,7 @@ class FishPond(Kind):
     Covers: the dug water of every `dikeponds[]` parcel - the pond inset inside its mulberry dike
     Label: accurate
     Sources: isis-dykepond, ruddle-zhong-1988, gmrb-2024-sangji, guangdong-xinyu-22, pwsannong-zhusanjiao-nongyeshi, nongzheng-quanshu-41, minle-dou-people
-    Entry: research/archetypes.html - 'Cash crops on rice land: dike-ponds, lotus fields and tea rows', 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'A dike-pond is fed and drained through sluice gates', "Did a dike-pond village rear its own fish fry, or buy them? Most bought them - the nursery ponds were one township's trade", 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'; research/rendering/archetypes.html - "How our maps lay cash crops over a village's rice land"
+    Entry: research/archetypes.html - 'Cash crops on rice land: dike-ponds, lotus fields and tea rows', 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', "Did a dike-pond village rear its own fish fry, or buy them? Most bought them - the nursery ponds were one township's trade", 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'; research/rendering/archetypes.html - "How our maps lay cash crops over a village's rice land", 'How our maps draw a dike-pond block'
     """
 
     key = 'fish pond'
@@ -79,7 +79,7 @@ class MulberryDike(Kind):
     Covers: the bank ring of every `dikeponds[]` parcel and the coppiced crowns planted along it
     Label: accurate
     Sources: gd-gazetteer-sangji, fao-ac241e, isis-dykepond, ruddle-zhong-1988, pwsannong-gudai-zaisang, pwsannong-sangji-yutang, kotobank-souen, kotobank-negari
-    Entry: research/archetypes.html - 'The 6:4 water-to-dike ratio, and coppiced mulberry', 'Polder dikes: what they were made of, how big, and what grew on them', 'How thickly was dike mulberry planted, and how wide did a bush grow?'
+    Entry: research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Polder dikes: what they were made of, how big, and what grew on them', 'How thickly was dike mulberry planted, and how wide did a bush grow?'; research/rendering/archetypes.html - 'How our maps draw a dike-pond block'
     """
 
     key = 'mulberry dike'
@@ -107,7 +107,7 @@ class PondCanal(Kind):
     Covers: `field_ditches` whose role is not `drain` on a dike-pond field - the main from the reservoir and the laterals between the ponds
     Label: accurate
     Sources: minle-dou-people, cssn-sangyuanwei, cssn-jiangnan-weitian
-    Entry: research/archetypes.html - 'A dike-pond is fed and drained through sluice gates'
+    Entry: research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)'; research/rendering/archetypes.html - 'How our maps draw a dike-pond block'
     """
 
     key = 'pond canal'
@@ -292,7 +292,7 @@ class SluiceGate(Kind):
     Covers: the board bar of every `sluice_gates[]` record - the gate in each cut of the perimeter dike
     Label: accurate
     Sources: fao-x6708e, cssn-sangyuanwei, shen-kuo, ishizue-waju, wajyu-nogyo
-    Entry: research/archetypes.html - 'A dike-pond is fed and drained through sluice gates', 'Polders: fields diked against the fluctuating water (weitian, waju)'; research/rendering/archetypes.html - 'How our maps draw polders (weitian, waju)'
+    Entry: research/archetypes.html - 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Polders: fields diked against the fluctuating water (weitian, waju)'; research/rendering/archetypes.html - 'How our maps draw polders (weitian, waju)', 'How our maps draw a dike-pond block'
     """
 
     key = 'sluice gate'

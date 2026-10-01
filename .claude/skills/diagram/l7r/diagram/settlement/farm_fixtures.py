@@ -145,7 +145,7 @@ STY_FT = (8.0, 6.0)  # a simple pig shed on the dike, over the water's edge (FAO
 # NO DUCK PEN (269 B32, the GM 2026-09-28): the fenced dry and wet run is a modern fish-cum-duck form, read only
 # in the FAO/NACA manual, and a form attested only in modern sources is not drawn; premodern delta ducks were
 # herded in the rice fields, not penned at the fish ponds (research/archetypes/210).
-# NO PER-POND SLUICE (feature 280 M57, research/archetypes/150): a sluice through EACH pond's dike is defined only by the
+# NO PER-POND SLUICE (feature 280 M57, research/archetypes/140): a sluice through EACH pond's dike is defined only by the
 # FAO training manual, so it is not drawn - and the sty's keep-clear of it (feature 233) went with it. The polder's own
 # gates (the dou) stay.
 

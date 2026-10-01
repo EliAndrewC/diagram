@@ -141,7 +141,7 @@ class DikeMixin:
         # the two planted rows follow each band RUN (so they skip the sluice notches with the earthwork).
         # In-row spacings are drawn at the loose end (willow 8.5 px vs the attested ~5.5 ft; mulberry 4.4 px
         # at the loose end of 3-5 ft) so crowns read as touching runs, not a fused hedge - the same
-        # legibility precedent as the pond banks (research/archetypes.html 'The 6:4 water-to-dike ratio and coppiced mulberry', quantified departure).
+        # legibility precedent as the pond banks (research/rendering/archetypes.html 'How our maps draw a dike-pond block', quantified departure).
         veg_runs = runs if gap_pts else [list(range(n))]
 
         def _row_walk(frac: float, step: float) -> list[Pt]:

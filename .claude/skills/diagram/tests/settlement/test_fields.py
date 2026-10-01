@@ -456,7 +456,7 @@ def test_comb_base_fill_noops_on_an_empty_net():
 
 
 def test_a_fry_village_takes_the_smallest_ponds_up_to_its_share_and_no_pond_is_sluiced():
-    """Feature 280 M57/M60 (research/archetypes/150, 200): a fry village's fry ponds are its smallest, their area within
+    """Feature 280 M57/M60 (research/archetypes/140, 200): a fry village's fry ponds are its smallest, their area within
     seven tenths of the block's ponds; an ordinary hamlet has none; and no pond is cut by a sluice of its own."""
     from l7r.diagram.settlement.fields.landuse import FRY_VILLAGE_SHARE, fry_pond_ids
 
