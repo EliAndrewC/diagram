@@ -111,7 +111,6 @@ def test_sector_of_brackets_names_the_outer_side_and_needs_two_threads() -> None
 def test_the_partition_tiles_the_region_and_shares_every_bund() -> None:
     """The sector between the threads, both outer strips (the outer lattice) and the toe past the threads' ends: every cell
     inside the region, together exactly the region, and every interior edge one cell's AND its neighbor's."""
-    from shapely.ops import unary_union
 
     region = _box(0, 0, 420, 500)
     cells = pt.cut(_sectors(region, [_thread(100.0, 0.0, 300.0), _thread(300.0, 0.0, 300.0)]))
@@ -119,18 +118,22 @@ def test_the_partition_tiles_the_region_and_shares_every_bund() -> None:
     assert len(cells) > 20, "the lattice cuts the sector and both strips at the fan's grain"
     # EVERY BUND SHARED, counted rather than searched: the cells' perimeters sum to the region's edge once and every interior
     # bund TWICE - a bund only one cell had would be counted once, and the sum would fall short
-    network = unary_union([c.boundary for c in cells]).length
+    import shapely
+
+    # on a 0.01 px grid: a vertex `recut` sets where it splits an edge lies a float's width off the neighbor's line, and an
+    # exact union would count that stretch twice
+    network = shapely.union_all([c.boundary for c in cells], grid_size=0.01).length
     assert network > region.length, "there are interior bunds"
-    assert abs(sum(c.length for c in cells) - (2 * network - region.length)) < 1e-6 * network, "a bund only one cell has"
+    assert abs(sum(c.length for c in cells) - (2 * network - region.length)) < 1e-4 * network, "a bund only one cell has"
 
 
 def test_a_narrow_sector_spaces_its_rows_and_keeps_them() -> None:
-    """A sector narrower than a plot: its rows are spaced out (`stretch`) and exempt from the hug test, so the strip is cut
+    """A sector narrower than a plot: its rows are spaced out (`_rows_kept`) and exempt from the hug test, so the strip is cut
     into cells about a design cell in size rather than left one long ring."""
     region = _box(100, 0, 120, 400)
     sec = _sectors(region, [_thread(100.0, 0.0, 400.0), _thread(120.0, 0.0, 400.0)])
     cells = pt.cut(sec)
-    assert sec.stretch == 48.0 / 20.0, "a 20 px sector at a 48 px plot: rows spaced 2.4 row steps apart"
+    assert sec.narrow, "a 20 px sector at a 48 px plot is narrow: fewer rows, exempt from the hug test"
     _tiles(region, cells)
     assert len(cells) >= 3, "the strip is cut across, not left whole"
 
@@ -164,3 +167,36 @@ def _poly_tri() -> Any:
     from shapely.geometry import Polygon
 
     return Polygon([(100.0, 0.0), (400.0, 0.0), (130.0, 400.0), (100.0, 400.0)])
+
+
+def test_keep_rows_keeps_a_strips_crossing_and_drops_a_slivers() -> None:
+    """A short row piece crosses a strip of its ground: kept where the strip is at least `MIN_ROW` plot widths across (a
+    ditch-side strip), dropped where it is narrower (a hair-wide strip); a longer piece takes the hug test."""
+    from shapely.geometry import LineString
+
+    ground = _box(0, 0, 300, 100)
+    strip, sliver, long_hug, long_cross = LineString([(0, 50), (30, 50)]), LineString([(0, 50), (8, 50)]), LineString([(5, 3), (295, 3)]), LineString([(0, 60), (300, 60)])
+    kept = pt.keep_rows([strip, sliver, long_hug, long_cross], ground, 13.0, 48.0)
+    assert strip in kept and sliver not in kept and long_cross in kept and long_hug not in kept
+
+
+def test_rows_kept_spaces_rows_by_the_cell_they_close() -> None:
+    rows = [float(30 * k) for k in range(12)]
+    assert pt._rows_kept(rows, [240.0] * 12, 5, 48.0, (26.0, 36.0), 10.0) == set(range(12)), "full width: every row"
+    thin = pt._rows_kept(rows, [20.0] * 12, 1, 48.0, (26.0, 36.0), 5.0)
+    assert 0 in thin and len(thin) < 12, "a strip under half a plot: fewer rows, each closing about a basin"
+    assert pt._rows_kept(rows, [4.0] * 12, 1, 48.0, (26.0, 36.0), 10.0) == {0}, "under the tip's width: no row past the first"
+
+
+def test_recut_cuts_an_oversized_cell_at_the_fans_grain() -> None:
+    big = _box(0, 0, 150, 100)
+    parts = pt.recut(big, _Frame(90.0), 48.0, 31.0)
+    _tiles(big, parts)
+    assert len(parts) == 3 * 3, "three columns of 50 and three rows of 33"
+    one = _box(0, 0, 40, 30)
+    assert pt.recut(one, _Frame(90.0), 48.0, 31.0) == [one], "already a basin: nothing to cut"
+
+
+def test_f_top_reads_the_least_fall_over_an_outline() -> None:
+    assert abs(pt._f_top(_Frame(90.0), _box(10, 25, 40, 90)) - 25.0) < 1e-9
+    assert abs(pt._f_top(_Frame(90.0), _box(10, 25, 40, 90).union(_box(100, 5, 120, 30))) - 5.0) < 1e-9

@@ -30,8 +30,9 @@ sector with the contour wobble (`phase`), a sector's own row steps - and adds wh
   (ending in a T on a row bund as the width halves), a row only while it is wider than `MIN_ROW` plot widths.
 - A bund piece lying wholly beside its ground's edge - within `HUG_ROW` of a row step (a row) or `HUG_COL` of a plot width (a
   column) - is not cut: it would cut a strip no basin can be (Sawada: rows across a hair-wide strip along the drain).
-- A narrow sector's rows are spaced for it (`stretch`, capped at `MAX_STRETCH`) and exempt from the hug test; its width is its
-  MEDIAN over its span (one sample can read a thread riding its parent's path, near zero).
+- A row is kept where the cell it closes reaches `ROW_CELL_SHARE` of a design cell at the sector's LOCAL width (`_rows_kept`), and
+  the columns are counted at the sector's widest and thinned where it narrows - never one spacing or one count for a whole sector,
+  whose width can halve where a thread rides its parent's path. A sector narrower than a plot is exempt from the row hug test.
 """
 
 from __future__ import annotations
@@ -56,8 +57,19 @@ HUG_COL = 0.3
 """A column piece lying wholly within this many plot widths of its ground's edge is not cut (a column beside a thread or a ditch
 bank would cut a strip under a third of a basin wide)."""
 
-MAX_STRETCH = 3.0
-"""A narrow sector's rows are spaced by at most this many row steps, so its cells reach about a design cell without running long."""
+ROW_CELL_SHARE = 0.6
+"""A row is cut where the cell it closes reaches this share of a design cell at the sector's local width (`_rows_kept`): every row
+on ground a plot wide or wider, fewer where it narrows - a map drawing convention, so a strip's cells are basins, not slivers."""
+
+CROSS = 0.5
+"""A sector's bunds are clipped to its ground GROWN by this many px, so each piece crosses the ground's edge rather than ending on
+it: clipped exactly, a row's end lay on the edge only to within floating error, and a row a hair short of the edge is a dangle
+`polygonize` ignores - the edge column's cells came out three to five basins tall (measured, Inashiro's brief at 10 households: 12
+cells over three design cells). The overshoot is a dangle outside the cell, which `polygonize` ignores in turn."""
+
+RECUT_OVER = 2.5
+"""A cell over this many design cells is cut again on a plain lattice (`recut`): the backstop under every lattice rule above, so
+no gap in a sector's lattice ships a basin several plots big (the old carve's largest: about 3.7 design cells, specs/302 R2)."""
 
 OUTER_REACH = 14
 """The outer strip's lattice reaches this many plot widths past its thread - more than any strip a pool or cohort fan carries."""
@@ -101,7 +113,7 @@ class Sectors:
         self.f_bottom = max(F.to_uf(x, y)[1] for x, y in ((minx, miny), (maxx, miny), (maxx, maxy), (minx, maxy))) + 20
         self.rows: list[float] = []
         self.n_rows = 0
-        self.stretch = 1.0
+        self.narrow = False
 
     def bound(self, T: _Thread, fv: float) -> Pt:
         """A thread's boundary at fall `fv`: `carve._bnd` down to its own end, then straight down the fall from where it stopped."""
@@ -128,22 +140,27 @@ class Sectors:
             out.append(LineString([end, ext.interpolate(min(stops))]) if stops else ext)
         return out
 
-    def grid_lines(self, A: _Thread, B: _Thread) -> list[list[Pt]]:
-        """One sector's rows (the first `n_rows`) and columns, drawn past its ground - the caller clips them to it."""
+    def grid_lines(self, A: _Thread, B: _Thread, f_top: float | None = None) -> list[list[Pt]]:
+        """One sector's rows (the first `n_rows`) and columns, drawn past its ground - the caller clips them to it. `f_top`: the
+        fall of the sector's ground's top, where its rows begin when that lies above its threads' takeoff (the head wedge along
+        the canal - the ground the carve's canal closers cut - which rows begun at the takeoff never crossed: measured, a 34 x 526
+        px wedge on Inashiro's brief at 20 households came out one cell)."""
         F, g, R, row_step, across = self.F, self.g, self.R, self.row_step, self.plot_across
         f_lo = max(_root_f(A, F), _root_f(B, F)) + 6 * g
         f_hi0 = max(F.to_uf(*A.pts[-1])[1], F.to_uf(*B.pts[-1])[1])
         span_fs = [f_lo + (f_hi0 - f_lo) * i / 12 for i in range(13)] if f_hi0 > f_lo else [f_lo]
         ws = sorted(math.dist(self.bound(A, fv), self.bound(B, fv)) for fv in span_fs)
         width_mid = ws[len(ws) // 2]
-        nsub = max(1, round(width_mid / across))
+        # THE COLUMNS ARE COUNTED AT THE SECTOR'S WIDEST, and thinned where it narrows (`_column_kept`): counted at its median, a
+        # sector whose thread rides its parent's path for half its span was given one column where it was four plots wide
+        nsub = max(1, round(ws[-1] / across))
         phase = [R.uniform(0, 6.28) for _ in range(nsub + 2)]
         rphase = [self.RW.uniform(0, 6.28) for _ in range(nsub + 2)]
         rowamp = 0.13 * sum(row_step) / 2
-        self.stretch = min(MAX_STRETCH, max(1.0, across / max(width_mid, 1.0)))
-        rows = [f_lo - 6 * g]
+        self.narrow = width_mid < across
+        rows = [(f_lo if f_top is None else min(f_lo, f_top)) - 6 * g]
         while rows[-1] < self.f_bottom:
-            rows.append(rows[-1] + R.uniform(*row_step) * self.stretch)
+            rows.append(rows[-1] + R.uniform(*row_step))
         lo, hi = f_lo, rows[-1]
 
         def edge(fv: float, j: int) -> Pt:
@@ -161,7 +178,7 @@ class Sectors:
         # the tip is judged against the sector's OWN width where that is under a plot's: a sector narrow along its whole length
         # is not a tip, and a plot-width threshold cut none of its rows
         tip = MIN_ROW * min(across, width_mid)
-        lines = [_extend(row, 2.0) for i, row in enumerate(grid) if i == 0 or widths[i] >= tip]
+        lines = [_extend(row, 2.0) for i, row in enumerate(grid) if i in _rows_kept(rows, widths, nsub, across, row_step, tip)]
         self.n_rows, self.rows = len(lines), rows
         for j in range(1, nsub):
             run: list[Pt] = []
@@ -207,6 +224,22 @@ class Sectors:
         return k, ("lo" if e == k else "hi")
 
 
+def _rows_kept(rows: list[float], widths: list[float], nsub: int, across: float, row_step: tuple[float, float], tip: float) -> set[int]:
+    """The rows a sector cuts: the first, then each where the cell it closes - its column's width THERE (the sector's width over
+    the columns kept there) times the fall since the last row kept - reaches `ROW_CELL_SHARE` of a design cell, and the sector is
+    still wider than `tip`. Wide ground keeps every row; a strip half a plot wide keeps every other one. (A spacing set once per
+    sector, from its median width, spaced the rows three steps apart down a sector that was narrow for only half its span.)"""
+    design = across * sum(row_step) / 2
+    kept = {0}
+    last = rows[0]
+    for i in range(1, len(rows)):
+        n_here = min(nsub, max(1, round(widths[i] / across)))
+        if widths[i] >= tip and widths[i] / n_here * (rows[i] - last) >= ROW_CELL_SHARE * design:
+            kept.add(i)
+            last = rows[i]
+    return kept
+
+
 def _column_kept(width: float, nsub: int, j: int, across: float) -> bool:
     """Does column `j` of `nsub` run where its sector is `width` wide? Halved (every other column, then every fourth) while the
     sector holds fewer than two thirds of the columns it divides - nested, so a dropped column ends in a T on a row bund."""
@@ -215,6 +248,17 @@ def _column_kept(width: float, nsub: int, j: int, across: float) -> bool:
     while nsub / step > n_here * 1.5 and step < nsub:
         step *= 2
     return j % step == 0
+
+
+def keep_rows(parts: list[Any], ground: Any, lim: float, across: float) -> list[Any]:
+    """The row pieces a sector cuts: a SHORT piece (under a plot's width) crosses a strip of its ground, and is kept where the strip
+    is at least `MIN_ROW` plot widths across - a ditch-side strip, whose rows are basins - and dropped where it is narrower (a
+    hair-wide strip along the drain, whose rows would be slivers); a longer piece takes the whole-piece hug test (`keep_far`).
+    (Measured on Inashiro's brief at 10 households: the strips beside its ditches lost every row to the hug test and came out
+    3-4 basins long - the sector's width is measured between thread centerlines, inside the ditches, so it reads wider than the
+    strip of land and the narrow-sector exemption never applied.)"""
+    short = [q for q in parts if q.length < across]
+    return [q for q in short if q.length >= MIN_ROW * across] + keep_far([q for q in parts if q.length >= across], ground, lim)
 
 
 def keep_far(parts: list[Any], ground: Any, lim: float) -> list[Any]:
@@ -237,6 +281,30 @@ def inside(region: Any, cells: list[Any]) -> list[Any]:
         return []
     pts = shapely.point_on_surface(cells)
     return [c for c, k in zip(cells, shapely.contains_xy(region, shapely.get_x(pts), shapely.get_y(pts)), strict=True) if k]
+
+
+def recut(cell: Any, F: _Frame, across: float, step: float) -> list[Any]:
+    """A cell the lattice left over `RECUT_OVER` design cells, cut again on a plain lattice at the fan's grain - rows along the
+    contour every `step`, columns every `across`, spaced evenly over the cell's own extent in the frame - as the old seam pass
+    planted a large pocket (`_plant`). The pieces tile the cell; what is too small is the settle's to merge."""
+    import shapely
+    from shapely.geometry import LineString
+
+    uf = [F.to_uf(x, y) for x, y in cell.exterior.coords]
+    u0, u1 = min(u for u, _ in uf), max(u for u, _ in uf)
+    f0, f1 = min(f for _, f in uf), max(f for _, f in uf)
+    n_c, n_r = max(1, round((u1 - u0) / across)), max(1, round((f1 - f0) / step))
+    lines = [LineString([F.to_xy(u0 + (u1 - u0) * k / n_c, f0 - 1), F.to_xy(u0 + (u1 - u0) * k / n_c, f1 + 1)]) for k in range(1, n_c)]
+    lines += [LineString([F.to_xy(u0 - 1, f0 + (f1 - f0) * k / n_r), F.to_xy(u1 + 1, f0 + (f1 - f0) * k / n_r)]) for k in range(1, n_r)]
+    if not lines:
+        return [cell]
+    noded = shapely.union_all([cell.boundary, *(ln.intersection(cell.buffer(CROSS)) for ln in lines)])
+    return inside(cell, list(shapely.get_parts(shapely.polygonize(list(shapely.get_parts(noded)))))) or [cell]
+
+
+def _f_top(F: _Frame, ground: Any) -> float:
+    """The least fall over `ground`'s outline - where its top lies down the slope."""
+    return min(F.to_uf(x, y)[1] for p in getattr(ground, "geoms", [ground]) for x, y in p.exterior.coords)
 
 
 def _lines_in(ground: Any, lines: list[list[Pt]]) -> list[Any]:
@@ -266,15 +334,18 @@ def cut(sec: Sectors) -> list[Any]:
         (outer.setdefault(got, []) if got[1] else by_sector.setdefault(got[0], [])).append(pc)
     bunds: list[Any] = []
     for k, pcs in sorted(by_sector.items()):
-        lines = sec.grid_lines(sec.threads[k], sec.threads[k + 1])
         ground = shapely.union_all(pcs)
-        # a narrow sector's rows are spaced for it (`stretch`): they cross ground near both its sides by nature
-        bunds += keep_far(_lines_in(ground, lines[: sec.n_rows]), ground, 0.0 if sec.stretch > 1.0 else HUG_ROW * sec.row_step[0])
-        bunds += keep_far(_lines_in(ground, lines[sec.n_rows :]), ground, HUG_COL * sec.plot_across)
+        lines = sec.grid_lines(sec.threads[k], sec.threads[k + 1], _f_top(sec.F, ground))
+        reach = ground.buffer(CROSS)
+        # a narrow sector's rows are spaced for it (`_rows_kept`): they cross ground near both its sides by nature
+        bunds += keep_rows(_lines_in(reach, lines[: sec.n_rows]), ground, 0.0 if sec.narrow else HUG_ROW * sec.row_step[0], sec.plot_across)
+        bunds += keep_far(_lines_in(reach, lines[sec.n_rows :]), ground, HUG_COL * sec.plot_across)
     for (k, side), pcs in sorted(outer.items()):
         sec.grid_lines(sec.threads[k], sec.threads[k + 1])  # the sector's own row falls, for the strip's rows to meet
         T, other = (sec.threads[k], sec.threads[k + 1]) if side == "lo" else (sec.threads[k + 1], sec.threads[k])
         ground = shapely.union_all(pcs)
-        bunds += keep_far(_lines_in(ground, sec.outer_lines(T, other)), ground, HUG_COL * sec.plot_across)
+        bunds += keep_far(_lines_in(ground.buffer(CROSS), sec.outer_lines(T, other)), ground, HUG_COL * sec.plot_across)
     noded = shapely.union_all([noded, *bunds])
-    return inside(region, list(shapely.get_parts(shapely.polygonize(list(shapely.get_parts(noded))))))
+    cells = inside(region, list(shapely.get_parts(shapely.polygonize(list(shapely.get_parts(noded))))))
+    design = sec.plot_across * sum(sec.row_step) / 2
+    return [q for c in cells for q in (recut(c, sec.F, sec.plot_across, sum(sec.row_step) / 2) if c.area > RECUT_OVER * design else [c])]
