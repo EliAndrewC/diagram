@@ -13716,5 +13716,37 @@
    "great halls",
    "datang"
   ]
+ },
+ "yaba": {
+  "def": "A Japanese archery range: in a samurai house, a lane about 33 bow-lengths long (about 250 ft) and one wide (about 8 ft), with an earth butt (azuchi) at its end to hold the target.",
+  "variants": [
+   "yaba"
+  ]
+ },
+ "kasagake": {
+  "def": "A Japanese mounted-archery contest in which the rider gallops a straight course and shoots at a target, originally a hat hung up for the purpose, set farther off than in yabusame.",
+  "variants": [
+   "kasagake"
+  ]
+ },
+ "review hall": {
+  "def": "The hall at one end of a Chinese drill ground where officers sat to watch and inspect the troops drilling before them.",
+  "variants": [
+   "review hall",
+   "review halls"
+  ]
+ },
+ "Tsume": {
+  "def": "In the setting, a vassal house of the Crane Clan's Doji Family, which seized the city of Toshi Ranbo and quartered its garrison's overflow in the homes of the city's merchants.",
+  "variants": [
+   "Tsume"
+  ]
+ },
+ "butt": {
+  "def": "In archery, the bank of earth at the far end of a range that the target hangs on and that stops the arrows; the Japanese azuchi.",
+  "variants": [
+   "butt",
+   "butts"
+  ]
  }
 }

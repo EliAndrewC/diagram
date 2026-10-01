@@ -275,6 +275,8 @@ bursary	rent bursary
 bushi	bushi
 butsudan	butsuma
 butsuma	butsuma
+butt	butt
+butts	butt
 buyi	Buyi
 byre	byre
 byres	byre
@@ -1659,6 +1661,7 @@ karamon	Chinese-style gate
 karishiki	karishiki
 karo	karo
 karō	karo
+kasagake	kasagake
 kasasuge	kasasuge
 kashi	kashi
 kaso-dera	kaso-dera
@@ -2606,6 +2609,8 @@ reverse-kesa	kesa
 revetment	revetment
 revetments	revetment
 revetted	revetment
+review hall	review hall
+review halls	review hall
 rhizome	rhizome
 rhizomes	rhizome
 ri	ri
@@ -3374,6 +3379,7 @@ tsukubō	tsukubo
 tsumago	Tsumago
 tsumairi	tsumairi
 tsumairi-type	tsumairi
+tsume	Tsume
 tsunaba	tsunaba
 tsunoya	tsunoya
 tsurube	tsurube
@@ -3622,6 +3628,7 @@ xuanhu	Xuanhu
 xuanhua arch	memorial arch
 xun	xun
 xunjiansi	xunjiansi
+yaba	yaba
 yabusame	yabusame
 yacheng	yacheng
 yachida	yato
