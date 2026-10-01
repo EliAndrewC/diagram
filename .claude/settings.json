@@ -26,7 +26,7 @@
           },
           {
             "type": "command",
-            "command": "/diagram/scripts/stall-watchdog-hooks.sh prompt  # GUARD_EDIT_OK: feature 295 item 4 - registering a NEW guard: starts the outside stall watchdog when it is not running; no existing guard changes",
+            "command": "h=/diagram/scripts/stall-watchdog-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/stall-watchdog-hooks.sh\"; exec \"$h\" prompt  # GUARD_EDIT_OK: feature 295 item 4 - registering a NEW guard: starts the outside stall watchdog when it is not running; no existing guard changes",
             "timeout": 10
           }
         ]
