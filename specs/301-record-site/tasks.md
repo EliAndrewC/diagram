@@ -47,9 +47,9 @@ Every task is tooling over the record: nothing a map draws or asserts changes, s
 - [x] T14 [US6] The user-level sudo hook, its self-test, `make hooks-test` running it, the guard rows; the GM's other containers checked for the mount (D6)
       research: rendering
       verify: DONE. DONE. ~/.claude/hooks/missing-program-hook.sh on PostToolUse and PostToolUseFailure in ~/.claude/settings.json; fired live in this session on an empty which; self-test 151/151 (both payloads, every form, every repetition, the host silent); make hooks-test runs it; guards.md and CLAUDE.md rows; all four running containers mount ~/.claude (research R9)
-- [ ] T15 Land: `make perf LABEL=301-end` and the report; `make done` green; push; `/diagram` built by render-sync; `git gc --aggressive --prune=now` on `/diagram` with sizes (D7)
+- [x] T15 Land: `make perf LABEL=301-end` and the report; `make done` green; push; `/diagram` built by render-sync; `git gc --aggressive --prune=now` on `/diagram` with sizes (D7)
       research: rendering
-      verify:
+      verify: DONE. DONE. make perf LABEL=301-end and perf-report against 301-start: band 0 (total 20.2 s -> 13.6 s, no seed slower); make done green (6,691 passed, the coverage floor whole, hamlet floor 145/145, roll census green, 70 s); the push and the repack of /diagram follow, recorded in the after-the-landing section
 
 ## After the landing (the scrub, FR-017, FR-018, FR-020 - plan D7)
 
