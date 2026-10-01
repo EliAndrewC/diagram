@@ -438,7 +438,7 @@
   "homestead bamboo": {
     "caveat": "",
     "covers": "`bamboo_stands[role=homestead]`",
-    "entry": "research/vegetation.html - 'Bamboo: how common, and where it stood', 'Did every farmstead keep its own bamboo', \"Did a farmstead's grove carry bamboo\", 'How is bamboo drawn, when one culm is too small to see?'",
+    "entry": "research/vegetation.html - 'Bamboo groves (chikurin)'; research/rendering/vegetation.html - 'How our maps draw bamboo, when one culm is too small to see'",
     "key": "homestead bamboo",
     "label": "convention",
     "label_note": "we have rendered the bamboo stand as paired culm strokes with a leafy fork on a 7 ft grid, in order to show a stand that cannot be drawn at true scale: a culm is a few inches across, a fraction of a pixel at one foot per pixel. The stand's extent is to scale; the marks inside it are symbolic - the convention Japan's own topographic legend uses. Presence and place are read.",
@@ -790,7 +790,7 @@
   "shared bamboo grove": {
     "caveat": "",
     "covers": "`bamboo_stands` with any role other than homestead - the take-yabu at the settlement's edge",
-    "entry": "research/vegetation.html - 'Bamboo: how common, and where it stood', 'How is bamboo drawn, when one culm is too small to see?'",
+    "entry": "research/vegetation.html - 'Bamboo groves (chikurin)'; research/rendering/vegetation.html - 'How our maps draw bamboo, when one culm is too small to see'",
     "key": "shared bamboo grove",
     "label": "convention",
     "label_note": "we have rendered the shared grove with the same stand-level glyph as a homestead stand - paired culm strokes on a 7 ft grid - in order to show it at all: a culm is a few inches across and cannot be drawn at one foot per pixel. The grove's extent is to scale; the marks are symbolic. Presence is read.",
@@ -1014,7 +1014,7 @@
   "windbreak": {
     "caveat": "",
     "covers": "`village_groves[role=windbreak]`",
-    "entry": "research/vegetation.html - \"Groves around a southern Chinese village: the fengshui woods (fengshuilin) and the dooryard copse\"; research/rendering/vegetation.html - \"How our maps draw a village's groves: the back grove, the water-mouth grove and the dooryard copse\"; research/vegetation.html - \"Shelter belts on a village's windward side (bofurin)\"; research/rendering/vegetation.html - \"How our maps draw the shelter belt: its sides, its trees, and why it runs off the edge of the map\"; research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'; research/vegetation.html - \"Did a farmstead's grove carry bamboo\"",
+    "entry": "research/vegetation.html - \"Groves around a southern Chinese village: the fengshui woods (fengshuilin) and the dooryard copse\"; research/rendering/vegetation.html - \"How our maps draw a village's groves: the back grove, the water-mouth grove and the dooryard copse\"; research/vegetation.html - \"Shelter belts on a village's windward side (bofurin)\"; research/rendering/vegetation.html - \"How our maps draw the shelter belt: its sides, its trees, and why it runs off the edge of the map\"; research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'; research/vegetation.html - 'Bamboo groves (chikurin)'; research/rendering/vegetation.html - 'How our maps draw bamboo, when one culm is too small to see'",
     "key": "windbreak",
     "label": "accurate",
     "label_note": "Scale, density and placement follow the surveyed figures (forests-2020); the belt's shape follows the terrain and the cluster.",

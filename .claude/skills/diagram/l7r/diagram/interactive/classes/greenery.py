@@ -38,7 +38,7 @@ class HomesteadBamboo(Kind):
     Covers: `bamboo_stands[role=homestead]`
     Label: convention
     Sources: yashikirin-jawiki, tonami-yashikirin-haichi, sendai-igune-modelplan, tsuijimatsu, visit-toyama-sankyoson, chikurin-jawiki, phyllostachys-enwiki
-    Entry: research/vegetation.html - 'Bamboo: how common, and where it stood', 'Did every farmstead keep its own bamboo', "Did a farmstead's grove carry bamboo", 'How is bamboo drawn, when one culm is too small to see?'
+    Entry: research/vegetation.html - 'Bamboo groves (chikurin)'; research/rendering/vegetation.html - 'How our maps draw bamboo, when one culm is too small to see'
     """
 
     key = 'homestead bamboo'
@@ -67,7 +67,7 @@ class SharedBambooGrove(Kind):
     Covers: `bamboo_stands` with any role other than homestead - the take-yabu at the settlement's edge
     Label: convention
     Sources: chikurin-jawiki, take-jawiki, nagaokakyo-take-nishiyama, nagaokakyo-take-takenoko, qimin-yaoshu-zhongzhu, phyllostachys-enwiki
-    Entry: research/vegetation.html - 'Bamboo: how common, and where it stood', 'How is bamboo drawn, when one culm is too small to see?'
+    Entry: research/vegetation.html - 'Bamboo groves (chikurin)'; research/rendering/vegetation.html - 'How our maps draw bamboo, when one culm is too small to see'
     """
 
     key = 'shared bamboo grove'
@@ -123,7 +123,7 @@ class Windbreak(Kind):
     Covers: `village_groves[role=windbreak]`
     Label: accurate
     Sources: forests-2020, hu-2011-fengshui-patches, coggins-minor-2018, takehara-2004-yashikirin, tonami-yashikirin-haichi, sendai-igune-modelplan
-    Entry: research/vegetation.html - "Groves around a southern Chinese village: the fengshui woods (fengshuilin) and the dooryard copse"; research/rendering/vegetation.html - "How our maps draw a village's groves: the back grove, the water-mouth grove and the dooryard copse"; research/vegetation.html - "Shelter belts on a village's windward side (bofurin)"; research/rendering/vegetation.html - "How our maps draw the shelter belt: its sides, its trees, and why it runs off the edge of the map"; research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'; research/vegetation.html - "Did a farmstead's grove carry bamboo"
+    Entry: research/vegetation.html - "Groves around a southern Chinese village: the fengshui woods (fengshuilin) and the dooryard copse"; research/rendering/vegetation.html - "How our maps draw a village's groves: the back grove, the water-mouth grove and the dooryard copse"; research/vegetation.html - "Shelter belts on a village's windward side (bofurin)"; research/rendering/vegetation.html - "How our maps draw the shelter belt: its sides, its trees, and why it runs off the edge of the map"; research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'; research/vegetation.html - 'Bamboo groves (chikurin)'; research/rendering/vegetation.html - 'How our maps draw bamboo, when one culm is too small to see'
     """
 
     key = 'windbreak'

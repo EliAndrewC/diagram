@@ -214,8 +214,8 @@ def record_box(g: dict[str, Any], box: Box) -> None:
 class StandsMixin:
     def bamboo_stand(self: Settlement, poly: Any, role: str = "homestead") -> int:  # type: ignore[misc]
         """A BAMBOO STAND - a take-yabu: a clonal thicket with a hard edge, drawn as a STAND-LEVEL glyph
-        (feature 133 T47, GM 2026-08-27; research/vegetation.html "Bamboo: how common, where it stood, and
-        how to show it").
+        (feature 133 T47, GM 2026-08-27; research/vegetation.html "Bamboo groves (chikurin)";
+        research/rendering/vegetation.html "How our maps draw bamboo, when one culm is too small to see").
 
         THE GLYPH IS A MAP DRAWING CONVENTION (feature 183's word; it read DEVIATION until the GM split the two), recorded like the oversized wellhead: a culm is
         inches across and cannot be drawn at 1 px = 1 ft, so the stand's POSITION and EXTENT (`poly`) are to
@@ -465,7 +465,7 @@ class StandsMixin:
             # thinning band) left to it: a belt clump based in the margin is drawn as alder, one deeper is not seated
             dikes=[dk["outline"] for dk in self.M.get("dikes", [])]
             + (marsh_ground(self.M) if role == "copse" else deep_marsh(marsh_ground(self.M), MARSH_FEATHER_BS * bs))
-            # ...AND OFF THE BAMBOO, grown by a crown: a take-yabu is a clonal near single-species stand (research/vegetation 150),
+            # ...AND OFF THE BAMBOO, grown by a crown: a take-yabu is a clonal near single-species stand (research/vegetation.html "Bamboo groves (chikurin)"),
             # and once feature 280 seated the thicket behind the back row the copse's crowns stood inside it (settlement-reviews
             # of Kashikawa and Mizuguchi: four crowns centered inside, culms drawn over them)
             # The rings come from the CALLER (`bamboo_rings`, the plan's seated stands): the stands are drawn by a later stage, so

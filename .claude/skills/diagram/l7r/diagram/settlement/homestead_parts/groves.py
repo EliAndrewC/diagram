@@ -45,10 +45,10 @@ def band_clumps(cx: float, cy: float, w: float, h: float, cap_area: float) -> li
     return [(cx, cy - h / 2 + h * (i + 0.5) / k, w, h / k) for i in range(k)]
 
 
-GROVE_BAMBOO_SHARE = 0.08  # of a windbreak clump's items, the bamboo under its crowns: a GUESS (269 B29, vegetation/260)
+GROVE_BAMBOO_SHARE = 0.08  # of a windbreak clump's items, the bamboo under its crowns: a GUESS (269 B29, research/vegetation.html "Bamboo groves (chikurin)")
 
 GROVE_BAMBOO_PATCH_FT = (22.0, 16.0)
-"""A farm's household bamboo, where it rolled a stand and keeps it in its own grove (feature 291, vegetation/154): a patch
+"""A farm's household bamboo, where it rolled a stand and keeps it in its own grove (feature 291, research/vegetation.html "Bamboo groves (chikurin)"): a patch
 this size - along the band, then across it - on the house side of each windward (deep) band, every item in it bamboo,
 so it is inked as culms rather than a crown. The size is the household strip's (`hamletgen/homesteads/bamboo.py`
 `HOUSEHOLD_BAMBOO_FT`, a GUESS); each windward band, because the Tonami grove held its bamboo "from the west round to the
@@ -572,8 +572,8 @@ class GrovesMixin:
             # thicket with a hard edge, not a seasoning through a cedar belt. Bamboo is now its own
             # feature (`bamboo_stand`, the `bamboo` knob). The windbreak is cedar-backed with broadleaf;
             # the dooryard copse is fruit broadleaf.
-            # ...AND CAME BACK LOW, UNDER THE TREES (269 B29; research/vegetation/260, "Did a farmstead's grove carry
-            # bamboo?"). The Tonami grove held many bamboo stands mixed with its cedar from the west round to the north,
+            # ...AND CAME BACK LOW, UNDER THE TREES (269 B29; research/vegetation.html "Bamboo groves
+            # (chikurin)"). The Tonami grove held many bamboo stands mixed with its cedar from the west round to the north,
             # and the Sendai igune's bamboo filled the bare lower part of the trees against the wind: bamboo was one of
             # the windbreak's own plants, low under its crowns. So the windbreak mix carries a small share of bamboo
             # items, and each is drawn only where a plan view would see it - in a gap between the crowns or past the
@@ -661,7 +661,7 @@ class GrovesMixin:
                 g.append(f'<circle cx="{px:.1f}" cy="{py - lift:.1f}" r="{rr:.1f}" fill="{col}" stroke="#3C5526" stroke-width="0.8"/>')
                 if tally is not None:
                     tally[kind] = tally.get(kind, 0) + 1
-            # THE BAMBOO SHOWS IN THE GAPS AND ALONG THE EDGE (269 B29, vegetation/260): a bamboo item under a drawn
+            # THE BAMBOO SHOWS IN THE GAPS AND ALONG THE EDGE (269 B29, research/vegetation.html "Bamboo groves (chikurin)"): a bamboo item under a drawn
             # crown, this clump's or an earlier one's, is hidden from above and not inked; one in the open, clear of
             # every building and wellhead, is the culm mark, painted UNDER the crowns (first in the group) because it
             # is the low layer.
