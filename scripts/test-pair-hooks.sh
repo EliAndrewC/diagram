@@ -65,21 +65,21 @@ check "the gate alone is REWRITTEN into the paired command" 'run_pretool "$GATE"
 import json,sys
 try: sys.exit(0 if json.load(sys.stdin)[\"hookSpecificOutput\"][\"updatedInput\"][\"command\"] == \"make verify\" else 1)
 except Exception: sys.exit(1)"'
-check "...and the correction says to dispatch the review in the same turn" 'run_pretool "$GATE" | grep -q "SAME TURN"'
+check "...and the correction says to dispatch the review in the same turn" 'run_pretool "$GATE" | grep -q "WHEN THE GATE IS GREEN"'
 check "...and still names the override for a one-sided case" 'run_pretool "$GATE" | grep -q "PAIR_OK"'
 # GUARD_EDIT_OK: feature 212 - a shape `verify` cannot take is RECORDED AND PERMITTED with the
 # DISPATCH NOW context, not refused (GM 2026-09-07): the census found the rewrite above fired once
 # while every real refusal - eight `make maps`, three detached `make done` - was such a shape.
 permitted_with() { # label, payload, text the context must carry
   local out; out=$(run_pretool "$2"); local rc=$?
-  if [ "$rc" -eq 0 ] && printf '%s' "$out" | grep -q "DISPATCH NOW" && printf '%s' "$out" | grep -q -- "$3" \
+  if [ "$rc" -eq 0 ] && printf '%s' "$out" | grep -q "REVIEW CHECKS OWED" && printf '%s' "$out" | grep -q -- "$3" \
      && ! printf '%s' "$out" | grep -q "updatedInput"; then ok; else bad "$1 (rc=$rc: $out)"; fi
 }
 rm -f "$CLONE/.git/pairing-state.json"
 permitted_with "make done FULL=1 is permitted, told the review is owed, and told it serializes" "$GATE_FULL" "FOREGROUND"
 check "...and records the gate key for the pairing" 'grep -q "gate_key" "$CLONE/.git/pairing-state.json"'
 MAPS=$(stdin_for Bash '{"command":"make maps SCOPE=all 2>&1 | tail -60"}')
-permitted_with "make maps ... | tail is permitted (foreground: the review follows the gate)" "$MAPS" "make verify"
+permitted_with "make maps ... | tail is permitted (foreground: the review follows the gate)" "$MAPS" "FOREGROUND"
 DETACHED=$(stdin_for Bash '{"command":"setsid nohup make done > /tmp/done.log 2>&1 &"}')
 permitted_with "a detached make done is permitted and told the review overlaps" "$DETACHED" "detached"
 BGGATE=$(stdin_for Bash '{"command":"make maps","run_in_background":true}')
@@ -120,11 +120,11 @@ check "...and the gate records its key" 'grep -q "gate_key" "$CLONE/.git/pairing
 
 # --- 4. with a gate recorded, the review dispatch is allowed --------------------------------------
 rm -f "$DIR/agent-rev.jsonl"
-printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
+printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"; touch "$CLONE/.git/stub-gate-green"
 check "with a green record the review runs" '[ "$(rc_pretool "$REVIEW")" -eq 0 ]'
 
 # --- 5. the override runs the command and leaves its reason ---------------------------------------
-rm -f "$CLONE/.git/pairing-state.json" "$CLONE/.git/verification-state.json"
+rm -f "$CLONE/.git/pairing-state.json" "$CLONE/.git/verification-state.json" "$CLONE/.git/stub-gate-green"
 OVER=$(stdin_for Bash '{"command":"PAIR_OK=\"docs only, no map ink\" make done"}')
 check "the override runs the gate alone" '[ "$(rc_pretool "$OVER")" -eq 0 ]'
 check "...and logs its reason for the audit" 'grep -rql "docs only, no map ink" "$SKILL/dev/bypass-log"'
@@ -167,14 +167,14 @@ unmoved
 rm -f "$CLONE/.git/pairing-state.json" "$CLONE/.git/verification-state.json"
 check "with no manifest moved the gate runs as typed" '[ "$(rc_pretool "$GATE")" -eq 0 ]'
 check "...and is NOT rewritten into make verify" '! run_pretool "$GATE" | grep -q "updatedInput"'
-check "...and the context says no review is owed" 'run_pretool "$GATE" | grep -q "NO SETTLEMENT-REVIEW OWED"'
-check "...and says why, in the words of the script" 'run_pretool "$GATE" | grep -q "no pool manifest moved"'
+check "...and the context says no review is owed" 'run_pretool "$GATE" | grep -q "NO REVIEW CHECK OWED"'
+check "...and says why, in the words of the script" 'run_pretool "$GATE" | grep -q "no occasion in the delta"'
 check "...and the context is valid JSON - a quoting slip here is silent" 'run_pretool "$GATE" | python3 -c "import json,sys; json.load(sys.stdin)"'
 printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
 ( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); QUIET=$?
 check "...and the stop branch does not fire half-open" '[ "$QUIET" -eq 0 ]'
 check "...having recorded the automatic waiver" 'grep -q "waived_key" "$CLONE/.git/pairing-state.json"'
-check "...with the reason it was waived for" 'grep -q "no pool manifest moved" "$CLONE/.git/pairing-state.json"'
+check "...with the reason it was waived for" 'grep -q "no occasion in the delta" "$CLONE/.git/pairing-state.json"'
 moved
 rm -f "$CLONE/.git/pairing-state.json"
 check "...while a MOVED manifest owes the review again" 'run_pretool "$GATE" | grep -q "updatedInput"'
@@ -207,7 +207,7 @@ check "...and records the content it reviews" 'grep -q "review_dispatch_key" "$C
 check "...and no longer counts itself done at dispatch" '! grep -q "\"review_key\"" "$CLONE/.git/pairing-state.json"'
 printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
 mkdir -p "$CLONE/.git/review-verdicts"
-printf '{"map":"testmap","engine_key":"%s","verdict":"PASS","findings":[]}' "$KEY" > "$CLONE/.git/review-verdicts/testmap.json"
+printf '{"map":"testmap","engine_key":"%s","verdict":"PASS","findings":[]}' "$KEY" > "$CLONE/.git/review-verdicts/settlement-review--testmap.json"
 ( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); AFTER_ESC=$?
 check "...so once its verdict is written the stop branch does not fire half-open on it" '[ "$AFTER_ESC" -eq 0 ]'
 rm -rf "$CLONE/.git/review-verdicts"
@@ -218,14 +218,15 @@ rm -rf "$CLONE/.git/review-verdicts"
 # are flawed". The fixture carries the decision module, spec-lint (whose figure pattern it imports), a stub
 # gate stamp and a stub generation cache, so each world below is decided by a file the case writes.
 VERDICTS="$CLONE/.git/review-verdicts"
-verdict() { mkdir -p "$VERDICTS"; printf '{"map":"testmap","engine_key":"%s","verdict":"%s","findings":%s}' "${3:-$KEY}" "$1" "$2" > "$VERDICTS/testmap.json"; }
+verdict() { mkdir -p "$VERDICTS"; printf '{"map":"testmap","engine_key":"%s","verdict":"%s","findings":%s}' "${3:-$KEY}" "$1" "$2" > "$VERDICTS/settlement-review--testmap.json"; }
 reset_prereq() { rm -rf "$VERDICTS" "$CLONE/.git/review-dispositions" "$CLONE/specs" "$MAPDIR_F/testmap.gen.py.stale" "$CLONE/.git/stub-gate-green" "$CLONE/.git/pairing-state.json"; }
 refused_for() { # label, payload, text the refusal must carry
   local out; out=$(run_pretool "$2"); local rc=$?
   if [ "$rc" -eq 2 ] && printf '%s' "$out" | grep -q -- "$3"; then ok; else bad "$1 (rc=$rc: $out)"; fi
 }
 moved; reset_prereq
-printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
+green() { touch "$CLONE/.git/stub-gate-green"; }
+printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"; green
 check "a first review of a current, complete map runs" '[ "$(rc_pretool "$REVIEW")" -eq 0 ]'
 
 # FR-003: the motivating failure - the pass-13 dispatch, its figures removed, still owes pass 12's finding
@@ -235,10 +236,10 @@ refused_for "a review after findings that nothing verifies is refused, naming th
 # GUARD_EDIT_OK: feature 240 - every acting branch records under its own rule (feature 168)
 check "...and the refusal is recorded under its own rule" 'grep -rq "review-prerequisites-unmet" "$GUARD_LOG_ROOT"'
 mkdir -p "$CLONE/specs/240-x"
-printf '{"m:canopy-clear":{"value":0,"unit":"px","command":"make x","taken":"2026-09-13","verifies":"F1","subject":"testmap","quantity":"board to crown edge","source":"tree_crowns"}}' > "$CLONE/specs/240-x/measurements.json"
+printf '{"m:canopy-clear":{"value":0,"unit":"px","command":"make x","taken":"2026-09-13","verifies":"F1","subject":"settlement-review--testmap","quantity":"board to crown edge","source":"tree_crowns"}}' > "$CLONE/specs/240-x/measurements.json"
 check "...and runs once a record verifies that finding" '[ "$(rc_pretool "$REVIEW")" -eq 0 ]'
 rm -rf "$CLONE/specs"
-( cd "$CLONE" && python3 scripts/_review_prereq.py accept --clone "$CLONE" --map testmap --finding F1 --reason "left on purpose for the fixture" >/dev/null )
+( cd "$CLONE" && python3 scripts/_review_prereq.py accept --clone "$CLONE" --map settlement-review--testmap --finding F1 --reason "left on purpose for the fixture" >/dev/null )
 check "...or once the finding is ACCEPTED with a reason" '[ "$(rc_pretool "$REVIEW")" -eq 0 ]'
 
 # FR-004: a review of fixes needs the gate green, not merely running
@@ -246,7 +247,7 @@ rm -f "$CLONE/.git/stub-gate-green"
 refused_for "a review of fixes with the gate not green is refused" "$REVIEW" "FR-004"
 
 # FR-005: the map on disk must be what the engine draws now, and whole
-reset_prereq; touch "$MAPDIR_F/testmap.gen.py.stale"
+reset_prereq; green; touch "$MAPDIR_F/testmap.gen.py.stale"
 refused_for "a review of a map whose generation key moved is refused" "$REVIEW" "FR-005"
 rm -f "$MAPDIR_F/testmap.gen.py.stale" "$MAPDIR_F/testmap.png"
 # GUARD_EDIT_OK: feature 240 FR-005 - the earlier gate cases took a whole snapshot, and a whole snapshot is a
@@ -254,17 +255,17 @@ rm -f "$MAPDIR_F/testmap.gen.py.stale" "$MAPDIR_F/testmap.png"
 # again from the snapshot alone.
 # GUARD_EDIT_OK: feature 240 FR-005 amendment round 1 - the check reads where the reviewer will: a whole STALE
 # snapshot beside a render-less pool refuses a dispatch that names no snapshot, and a named whole one permits.
-mkdir -p "$CLONE/.git/review-snapshot/testmap/clone"
-for ext in json svg png html; do : > "$CLONE/.git/review-snapshot/testmap/clone/testmap.$ext"; done
-cp "$MAPDIR_F/testmap.json" "$MAPDIR_F/testmap.svg" "$CLONE/.git/review-snapshot/testmap/clone/"   # a snapshot OF the current map
+mkdir -p "$CLONE/.git/review-snapshot/settlement-review--testmap/clone"
+for ext in json svg png html; do : > "$CLONE/.git/review-snapshot/settlement-review--testmap/clone/testmap.$ext"; done
+cp "$MAPDIR_F/testmap.json" "$MAPDIR_F/testmap.svg" "$CLONE/.git/review-snapshot/settlement-review--testmap/clone/"   # a snapshot OF the current map
 refused_for "a render-less pool is refused though a whole snapshot sits on disk, when the dispatch names none" "$REVIEW" "pool folder lacks .png"
-SNAPREV=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"review testmap from .git/review-snapshot/testmap/clone/"}')
+SNAPREV=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"UNIT: settlement-review--testmap\nreview testmap from .git/review-snapshot/settlement-review--testmap/clone/"}')
 check "...and permitted when the dispatch names that whole snapshot" '[ "$(rc_pretool "$SNAPREV")" -eq 0 ]'
 # GUARD_EDIT_OK: feature 240 amendment round 2 - a named snapshot of an OLDER map (taken before a fix) is refused
-printf 'before the fix' > "$CLONE/.git/review-snapshot/testmap/clone/testmap.svg"
+printf 'before the fix' > "$CLONE/.git/review-snapshot/settlement-review--testmap/clone/testmap.svg"
 refused_for "...and refused when the snapshot it names is of an older map than the pool's" "$SNAPREV" "older map"
-: > "$CLONE/.git/review-snapshot/testmap/clone/testmap.svg"
-rm -f "$CLONE/.git/review-snapshot/testmap/clone/testmap.html"
+: > "$CLONE/.git/review-snapshot/settlement-review--testmap/clone/testmap.svg"
+rm -f "$CLONE/.git/review-snapshot/settlement-review--testmap/clone/testmap.html"
 refused_for "...and refused when the snapshot it names is not whole" "$SNAPREV" "make verify"
 : > "$MAPDIR_F/testmap.png"
 
@@ -283,7 +284,7 @@ check "...and logs its reason for the audit" 'grep -rql "a negative fixture left
 check "...and the escape is recorded under its own rule" 'grep -rq "review-prereq-ok" "$GUARD_LOG_ROOT"'
 
 # FR-002: a NOT-REVIEWABLE verdict closes nothing; a PASS for this content closes the pair
-reset_prereq
+reset_prereq; green
 check "the review dispatch runs" '[ "$(rc_pretool "$REVIEW")" -eq 0 ]'
 # GUARD_EDIT_OK: feature 240 SC-001 - a review stopped before it returns writes no verdict, and closes nothing
 ( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); NONE=$?
@@ -316,26 +317,26 @@ mkdir -p "$CLONE/.git/review-snapshot/testmap" "$CLONE/.git/review-snapshot/othe
 printf 'review testmap only\n' > "$CLONE/.git/review-snapshot/testmap/dispatch.md"
 printf 'review othermap only\n' > "$CLONE/.git/review-snapshot/othermap/dispatch.md"
 TWO=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"review the maps testmap and othermap, the delta only"}')
-refused_for "a dispatch naming two maps is refused before the agent starts" "$TWO" "one map per agent"
+refused_for "a dispatch naming two maps is refused before the agent starts" "$TWO" "one unit per agent"
 check "...and hands back each map's prompt file" 'run_pretool "$TWO" | grep -q "review-snapshot/testmap/dispatch.md" && run_pretool "$TWO" | grep -q "review-snapshot/othermap/dispatch.md"'
 check "...recorded under its own rule" 'grep -rl "review-multi-map" "$GUARD_LOG_ROOT" >/dev/null'
-TWO_SNAP=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"read /x/.git/review-snapshot/testmap/clone and /x/.git/review-snapshot/othermap/clone"}')
-refused_for "...two snapshot directories count as two maps" "$TWO_SNAP" "one map per agent"
+TWO_SNAP=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"read /x/.git/review-snapshot/settlement-review--testmap/clone and /x/.git/review-snapshot/settlement-review--othermap/clone"}')
+refused_for "...two snapshot directories count as two maps" "$TWO_SNAP" "one unit per agent"
 TWO_ESC=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"review testmap and othermap PAIR_OK: the gate is beside this"}')
 refused_for "...and there is no escape for the shape" "$TWO_ESC" "no escape"
 unmoved; mkdir -p "$SKILL/pool/hamlets/legacya" "$SKILL/pool/hamlets/legacyb"; printf '{}' > "$SKILL/pool/hamlets/legacya/legacya.json"; printf '{}' > "$SKILL/pool/hamlets/legacyb/legacyb.json"
 ( cd "$CLONE" && git add -A >/dev/null 2>&1 && git -c user.email=t@t -c user.name=t commit -qm maps >/dev/null 2>&1 && git update-ref refs/remotes/origin/main HEAD )
 TWO_UNOWED=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"spot-check legacya and legacyb"}')
-refused_for "...and two maps NOBODY owes are refused the same way (a spot check serializes too)" "$TWO_UNOWED" "one map per agent"
+refused_for "...and two maps NOBODY owes are refused the same way (a spot check serializes too)" "$TWO_UNOWED" "one unit per agent"
 rm -rf "$SKILL/pool/hamlets/legacya" "$SKILL/pool/hamlets/legacyb"; ( cd "$CLONE" && git rm -rq --cached .claude >/dev/null 2>&1; git -c user.email=t@t -c user.name=t commit -qm unmaps >/dev/null 2>&1; git update-ref refs/remotes/origin/main HEAD )
-ONE=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"review /x/.git/review-snapshot/testmap/clone against main - unlike othermap, which its own agent has"}')
+ONE=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"UNIT: settlement-review--testmap\nreview /x/.git/review-snapshot/settlement-review--testmap/clone against main - unlike othermap, which its own agent has"}')
 moved_two; reset_prereq
 # a NAMED snapshot must be whole and current (feature 240), so the fixture's snapshots carry the map's files
-snap_of() { mkdir -p "$CLONE/.git/review-snapshot/$1/clone"; cp "$SKILL/pool/hamlets/$1/$1".* "$CLONE/.git/review-snapshot/$1/clone/"; }
+snap_of() { mkdir -p "$CLONE/.git/review-snapshot/settlement-review--$1/clone"; cp "$SKILL/pool/hamlets/$1/$1".* "$CLONE/.git/review-snapshot/settlement-review--$1/clone/"; }
 snap_of testmap; snap_of othermap
-printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
+printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"; green
 check "a ONE-map dispatch that mentions the other map for context is permitted (the snapshot form wins)" '[ "$(rc_pretool "$ONE")" -eq 0 ]'
-check "...and records the dispatch: the map, at this key" 'python3 -c "import json,sys; d=json.load(open(sys.argv[1])); sys.exit(0 if d.get(\"dispatched\",{}).get(\"testmap\",{}).get(\"key\")==sys.argv[2] else 1)" "$CLONE/.git/pairing-state.json" "$KEY"'
+check "...and records the dispatch: the map, at this key" 'python3 -c "import json,sys; d=json.load(open(sys.argv[1])); sys.exit(0 if d.get(\"dispatched\",{}).get(\"settlement-review--testmap\",{}).get(\"key\")==sys.argv[2] else 1)" "$CLONE/.git/pairing-state.json" "$KEY"'
 
 # --- 11. EVERY OWED MAP IS DISPATCHED BEFORE THE TURN ENDS (feature 248 FR-003), and the span recorded (FR-004) ----
 # testmap is dispatched (section 10), othermap is not: the stop branch names othermap, once; a later dispatch of
@@ -343,13 +344,13 @@ check "...and records the dispatch: the map, at this key" 'python3 -c "import js
 STOP=$(printf '{"transcript_path":"%s","session_id":"sid-1","cwd":"%s"}' "$TMP/proj/sid-1.jsonl" "$CLONE")
 ( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >"$TMP/stop-missing.txt" 2>&1 ); MISSING=$?
 check "stop refuses while an owed map has no dispatch" '[ "$MISSING" -eq 2 ]'
-check "...naming the missing map and its prompt file" 'grep -q "othermap" "$TMP/stop-missing.txt" && grep -q "review-snapshot/othermap/dispatch.md" "$TMP/stop-missing.txt"'
-check "...not the dispatched one" '! grep -q "FOR: testmap" "$TMP/stop-missing.txt"'
+check "...naming the missing map and its prompt file" 'grep -q "othermap" "$TMP/stop-missing.txt" && grep -q "review-snapshot/settlement-review--othermap/dispatch.md" "$TMP/stop-missing.txt"'
+check "...not the dispatched one" '! grep -q "FOR: settlement-review--testmap" "$TMP/stop-missing.txt"'
 check "...recorded under its own rule" 'grep -rl "review-map-undispatched" "$GUARD_LOG_ROOT" >/dev/null'
 ( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); AGAIN=$?
 check "...and refuses once per missing set, never twice" '[ "$AGAIN" -eq 0 ]'
-OTHER=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"review /x/.git/review-snapshot/othermap/clone against main"}')
-FIRST_AT=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["dispatched"]["testmap"]["at"])' "$CLONE/.git/pairing-state.json")
+OTHER=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"UNIT: settlement-review--othermap\nreview /x/.git/review-snapshot/settlement-review--othermap/clone against main"}')
+FIRST_AT=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["dispatched"]["settlement-review--testmap"]["at"])' "$CLONE/.git/pairing-state.json")
 check "the second map's dispatch, a fixture-clock half-minute later, is permitted" '[ "$(cd "$CLONE" && printf "%s" "$OTHER" | PAIR_NOW=$((FIRST_AT + 30)) "$HOOK" pretool >/dev/null 2>&1; echo $?)" -eq 0 ]'
 check "...and every owed map now dispatched within the span records reviews-parallel" 'grep -rl "reviews-parallel" "$GUARD_LOG_ROOT" >/dev/null'
 ( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); COVERED=$?
@@ -359,7 +360,7 @@ rm -f "$CLONE/.git/pairing-state.json"; ( cd "$CLONE" && printf '%s' "$ONE" | PA
 check "two dispatches a fixture-clock two minutes apart record reviews-serialized" 'grep -rl "reviews-serialized" "$GUARD_LOG_ROOT" >/dev/null'
 # a running review naming a map covers it: a pending agent transcript whose prompt names othermap
 rm -f "$CLONE/.git/pairing-state.json"; ( cd "$CLONE" && printf '%s' "$ONE" | "$HOOK" pretool >/dev/null 2>&1 )
-printf '{"type":"user","message":{"role":"user","content":"settlement-review of /x/.git/review-snapshot/othermap/clone"}}\n{"type":"assistant","message":{"content":[{"type":"tool_use","id":"t1"}]}}\n{"type":"user","message":{"content":[{"type":"tool_result","tool_use_id":"t1"}]}}\n' > "$DIR/agent-pending1.jsonl"
+printf '{"type":"user","message":{"role":"user","content":"UNIT: settlement-review--othermap\nsettlement-review of /x/.git/review-snapshot/settlement-review--othermap/clone"}}\n{"type":"assistant","message":{"content":[{"type":"tool_use","id":"t1"}]}}\n{"type":"user","message":{"content":[{"type":"tool_result","tool_use_id":"t1"}]}}\n' > "$DIR/agent-pending1.jsonl"
 ( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); PENDING=$?
 check "a review still running that names the other map covers it" '[ "$PENDING" -eq 0 ]'
 rm -f "$DIR/agent-pending1.jsonl"
@@ -368,6 +369,30 @@ rm -f "$CLONE/.git/pairing-state.json"; printf '{"waived_key":"%s"}' "$KEY" > "$
 ( cd "$CLONE" && printf '%s' "$STOP" | "$HOOK" stop >/dev/null 2>&1 ); WAIVED2=$?
 check "a waived gate is not refused for missing maps" '[ "$WAIVED2" -eq 0 ]'
 rm -f "$CLONE/.git/pairing-state.json"; rm -rf "$MAPDIR_G"; moved; reset_prereq
+
+# --- 12. EVERY CHECK, A GREEN GATE, TWO ROUNDS (feature 294) ------------------------------------------------
+# GUARD_EDIT_OK: feature 294 - the five checks are one family (GM 2026-10-01: the glyph check is "a category of thing");
+# a review waits for a GREEN gate, never a running one (US6); and a unit gets two rounds per feature (FR-009).
+moved; reset_prereq; rm -f "$CLONE/.git/review-rounds.json"
+printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"
+GLYPH=$(stdin_for Agent '{"subagent_type":"glyph-check","prompt":"UNIT: settlement-review--testmap\njudge it"}')
+check "a glyph-check with no green gate is refused like any review" '[ "$(rc_pretool "$GLYPH")" -eq 2 ]'
+printf '{"gate_key":"%s"}' "$KEY" > "$CLONE/.git/pairing-state.json"
+refused_for "...and so is one beside a gate that is RUNNING but not yet green" "$GLYPH" "no green gate"
+green
+check "...and runs on a green gate" '[ "$(rc_pretool "$GLYPH")" -eq 0 ]'
+check "...counting its round for the active feature" 'grep -q "settlement-review--testmap" "$CLONE/.git/review-rounds.json"'
+printf '{"none":{"settlement-review--testmap":["k1","k2"]}}' > "$CLONE/.git/review-rounds.json"
+refused_for "a THIRD round of the same unit is refused" "$GLYPH" "the cap is two"
+check "...recorded under its own rule" 'grep -rl "review-round-cap" "$GUARD_LOG_ROOT" >/dev/null'
+GLYPH_BARE=$(stdin_for Agent '{"subagent_type":"glyph-check","prompt":"UNIT: settlement-review--testmap\nREVIEW_ROUNDS_OK=\"x\""}')
+refused_for "...and its waiver needs a reason" "$GLYPH_BARE" "needs a REASON"
+GLYPH_WAIVED=$(stdin_for Agent '{"subagent_type":"glyph-check","prompt":"UNIT: settlement-review--testmap\nREVIEW_ROUNDS_OK=\"the GM said: one more round is fine\""}')
+check "...and the GM's waiver runs it" '[ "$(rc_pretool "$GLYPH_WAIVED")" -eq 0 ]'
+check "...and logs the waiver" 'grep -rql "one more round is fine" "$SKILL/dev/bypass-log"'
+printf '{"none":{"settlement-review--testmap":["k1","%s"]}}' "$KEY" > "$CLONE/.git/review-rounds.json"
+check "a re-dispatch at a key already counted is the same round" '[ "$(rc_pretool "$GLYPH")" -eq 0 ]'
+rm -f "$CLONE/.git/review-rounds.json" "$CLONE/.git/pairing-state.json"; reset_prereq
 
 # --- 9. A FALLBACK ONTO MAIN'S TREE IS DISCLOSED, NEVER SILENT (feature 231's amendment, GM 2026-09-12) --
 # GUARD_EDIT_OK: feature 231's amendment - the residual the resolver leaves. An unnamed session, or a clone

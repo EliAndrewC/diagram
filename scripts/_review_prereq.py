@@ -154,7 +154,7 @@ def gen_of(skill: pathlib.Path, name: str) -> pathlib.Path | None:
     return hits[0] if hits else None
 
 
-def stale_maps(skill: pathlib.Path, names: Iterable[str], current: Callable[[str], bool], prompt: str = "") -> list[str]:
+def stale_maps(skill: pathlib.Path, names: Iterable[str], current: Callable[[str], bool], prompt: str = "", snapshot_of: dict[str, str] | None = None) -> list[str]:
     """Each map whose generator's cache key has moved, or whose pool artifacts are not all there, with the reason.
 
     `current` is the generation cache's key comparison, injected so a test can decide it; the CLI passes
@@ -171,9 +171,11 @@ def stale_maps(skill: pathlib.Path, names: Iterable[str], current: Callable[[str
         if gen is None:
             out.append(f"{name}: no pool generator by that name")
             continue
-        named = f"review-snapshot/{name}" in prompt
-        where = snapshots / name / "clone" if named else gen.parent
-        missing = [ext for ext in ARTIFACTS if not (where / f"{name}{ext}").is_file()]
+        snap = (snapshot_of or {}).get(name, name)  # feature 294: a unit's snapshot folder is its slug, of its map's files
+        named = f"review-snapshot/{snap}" in prompt
+        where = snapshots / snap / "clone" if named else gen.parent
+        sheet = not (gen.parent / f"{name}.json").exists() and (gen.parent / f"{name}.svg").is_file()  # feature 294: a Mode A sheet has no manifest
+        missing = [ext for ext in ARTIFACTS if not (where / f"{name}{ext}").is_file() and not (sheet and ext == ".json")]
         rel = gen.relative_to(skill)
         # GUARD_EDIT_OK: feature 240 FR-005 amendment round 2 - A NAMED SNAPSHOT MUST BE OF THE CURRENT MAP. Currency
         # was asked only of the pool generator's key, so a snapshot taken before a fix passed once `make map` brought
@@ -223,6 +225,7 @@ def _owed_module() -> object:
     spec = importlib.util.spec_from_file_location("review_owed_for_prereq", here / "_review_owed.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = mod  # feature 294: the module defines a dataclass, which looks its module up by name
     prior, sys.dont_write_bytecode = sys.dont_write_bytecode, True
     try:
         spec.loader.exec_module(mod)
@@ -259,6 +262,19 @@ def unresolved_figures(prompt: str, records: Iterable[dict]) -> list[str]:
 # ---- the check the hook runs -------------------------------------------------------------------------------
 
 
+# unanchored, because a running agent's transcript holds its prompt as escaped JSON (the newline is the two characters `\n`)
+_UNIT = re.compile(r"\bUNIT:\s*([a-z][a-z0-9-]*)")
+#: a unit's snapshot folder named in a prompt (`.git/review-snapshot/<check>--<subject>/`) names that unit too
+_UNIT_SNAPSHOT = re.compile(r"review-snapshot/((?:settlement-review|building-review|glyph-check|size-audit|fix-check)--[a-z0-9-]+)")
+
+
+def units_named(prompt: str, pool_names: Iterable[str]) -> list[str]:
+    """The owed units a dispatch asks a review of (feature 294): the `UNIT: <slug>` lines the tooling writes into every
+    prompt it generates; a prompt with none is counted by the maps it names, as before (`maps_named`)."""
+    units = sorted(set(_UNIT.findall(prompt)) | set(_UNIT_SNAPSHOT.findall(prompt)))
+    return units or maps_named(prompt, pool_names)
+
+
 def maps_named(prompt: str, pool_names: Iterable[str]) -> list[str]:
     """The maps a dispatch asks a review of (feature 248 FR-001, research R5): the pool maps whose snapshot
     directory `review-snapshot/<map>` the prompt names; when it names none, the pool maps whose name appears
@@ -286,11 +302,22 @@ def check(clone: pathlib.Path, names: list[str], prompt: str, gate_green: bool, 
             )
     if any(has_findings(clone, n) for n in names) and not gate_green:
         problems.append("FR-004 this is a review of FIXES, and the gate is not green for this engine key - run `make done` first")
-    problems += [f"FR-005 {p}" for p in stale_maps(skill, names, current, prompt)]
+    on = unit_maps(clone)
+    snapshot_of = {on[n]: n for n in names if on.get(n)}
+    problems += [f"FR-005 {p}" for p in stale_maps(skill, sorted({on.get(n, n) for n in names if on.get(n, n)}), current, prompt, snapshot_of)]
     figures = unresolved_figures(prompt, records)
     if figures:
         problems.append(f"FR-006 figure(s) quoted with no record behind them: {'; '.join(figures)} - cite the `m:` key or record it")
     return problems
+
+
+def unit_maps(clone: pathlib.Path) -> dict[str, str]:
+    """Each owed unit's slug -> the map or sheet it is reviewed on (feature 294); a plain map name maps to itself."""
+    try:
+        _, units, _ = _owed_module().owed(clone)  # type: ignore[attr-defined]
+    except Exception:  # noqa: BLE001 - a hook must not fail on a repository the owed script cannot read
+        return {}
+    return {u.slug: u.on for u in units}
 
 
 def _gencache_current() -> Callable[[str], bool]:
@@ -383,7 +410,7 @@ def write_verdict(clone: pathlib.Path, name: str, verdict: str, findings: list[d
         raise ValueError(f"verdict must be one of {', '.join(VERDICTS)}")
     pairing = _read_json(clone / ".git" / "pairing-state.json")
     key = str(pairing.get("review_dispatch_key", "")) if isinstance(pairing, dict) else ""
-    rec: dict = {"map": name, "engine_key": key, "verdict": verdict, "gate": state, "findings": findings, "strict": True}
+    rec: dict = {"map": name, "unit": name, "engine_key": key, "verdict": verdict, "gate": state, "findings": findings, "strict": True}
     if verdict != "NOT-REVIEWABLE" and state == "red":
         rec.update(verdict="NOT-REVIEWABLE", concluded=verdict, why="the paired gate was red when the verdict was written")
     for i, f in enumerate(findings, 1):
@@ -411,7 +438,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--maps", default="")
     ap.add_argument("--prompt-file", default="")
     ap.add_argument("--gate-green", choices=["yes", "no"], default="no")
-    ap.add_argument("--map", default="")
+    ap.add_argument("--map", "--unit", dest="map", default="")
     ap.add_argument("--finding", default="")
     ap.add_argument("--reason", default="")
     args = ap.parse_args(argv)
@@ -434,7 +461,7 @@ def main(argv: list[str] | None = None) -> int:
         # GUARD_EDIT_OK: feature 248 FR-001 - the maps a dispatch asks a review of, one per line, counted against
         # every pool map (`--maps` when given, else the clone's own pool trees); the guard refuses two or more
         pool = args.maps.split() if args.maps else _owed_module().pool_map_names(pathlib.Path(args.clone))
-        for name in maps_named(pathlib.Path(args.prompt_file).read_text(), pool):
+        for name in units_named(pathlib.Path(args.prompt_file).read_text(), pool):
             print(name)
         return 0
     if args.command == "accept":

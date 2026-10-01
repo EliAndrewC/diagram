@@ -29,7 +29,8 @@ mkrepo() {
   # GUARD_EDIT_OK: feature 248 - the gate reads the pushed tree's ENGINE KEY (a stub target, never the engine) and
   # asks _review_owed.py, which needs an origin/main to diff against; both are fixture state, like the map itself
   printf 'engine-key:\n\t@printf k\n' > .claude/skills/diagram/Makefile
-  [ "${2:-}" = withmap ] && { echo '{"v":1}' > "$POOL/m.json"; echo "notes" > "$POOL/m.notes.md"; }
+  # GUARD_EDIT_OK: feature 294 - the map carries its ink census, the record the occasions are read from
+  [ "${2:-}" = withmap ] && { echo '{"v":1,"ink_classes":{"farmhouse":1}}' > "$POOL/m.json"; echo "notes" > "$POOL/m.notes.md"; }
   git add -A; git commit -qm base; git branch -q -M main; git checkout -q -b work
   git update-ref refs/remotes/origin/main main
 }
@@ -50,8 +51,10 @@ echo "1. IT FIRES on work that skipped a mandated review"
 mkrepo a; echo "# spec" > specs/900-x/spec.md; echo work >> seed.txt; git add -A; git commit -qm s
 check "a spec with no fidelity verdict" a blocked
 
-mkrepo b withmap; echo '{"v":2}' > "$POOL/m.json"; git add -A; git commit -qm reroll
-check "a re-rolled map with no review logged" b blocked
+# GUARD_EDIT_OK: feature 294 - the occasion is an element new to the map, not a moved manifest
+NEW='{"v":2,"ink_classes":{"farmhouse":1,"well":1}}'
+mkrepo b withmap; echo "$NEW" > "$POOL/m.json"; git add -A; git commit -qm reroll
+check "a map gaining an element with no review recorded" b blocked
 
 # The two shapes the bare `grep FAITHFUL` used to let through (feature 156, 2026-08-29). The first is
 # the dangerous one: a spec a reviewer REJECTED shipped as if it had passed.
@@ -127,9 +130,9 @@ mkrepo c4; printf '# spec\n\n- **Round 1: NOT FAITHFUL.** FR-010 was an enumerat
 git add -A; git commit -qm s
 check "a rejection followed by a pass" c4 ok
 
-mkrepo d withmap; echo '{"v":2}' > "$POOL/m.json"; echo "reviewed 2026-08-24" >> "$POOL/m.notes.md"
+mkrepo d withmap; echo '{"v":2,"ink_classes":{"farmhouse":1}}' > "$POOL/m.json"; echo "reviewed 2026-08-24" >> "$POOL/m.notes.md"
 git add -A; git commit -qm reroll
-check "a re-rolled map WITH its notes updated" d ok
+check "a re-rolled map with nothing new drawn owes no review (feature 294, SC-001 at push)" d ok
 
 mkrepo e; echo hi > seed2.txt; git add -A; git commit -qm doc
 check "a change touching neither" e ok
@@ -138,16 +141,16 @@ mkrepo f withmap
 # a map with no notes file at all predates the convention and must not be held to it
 rm "$POOL/m.notes.md"; git add -A; git commit -qm drop-notes
 git checkout -q main; git checkout -q work
-echo '{"v":3}' > "$POOL/m.json"; git add -A; git commit -qm reroll
+echo '{"v":3,"ink_classes":{"farmhouse":1}}' > "$POOL/m.json"; git add -A; git commit -qm reroll
 check "a map that has no notes file" f ok
 
 # GUARD_EDIT_OK: feature 240 FR-002 - a notes file touched is not a review that happened: a map whose latest
 # verdict record is NOT-REVIEWABLE is refused even with its notes updated, and a PASS lets it through.
-mkrepo nr withmap; echo '{"v":2}' > "$POOL/m.json"; echo "reviewed 2026-09-13" >> "$POOL/m.notes.md"
+mkrepo nr withmap; echo "$NEW" > "$POOL/m.json"; echo "reviewed 2026-09-13" >> "$POOL/m.notes.md"
 git add -A; git commit -qm reroll-with-notes; mkdir -p .git/review-verdicts
-echo '{"map":"m","engine_key":"k","verdict":"NOT-REVIEWABLE","findings":[]}' > .git/review-verdicts/m.json
-check "a re-rolled map whose last verdict is NOT-REVIEWABLE, notes updated or not" nr blocked
-echo '{"map":"m","engine_key":"k","verdict":"PASS","findings":[]}' > "$T/nr/.git/review-verdicts/m.json"
+echo '{"map":"glyph-check--well","engine_key":"k","verdict":"NOT-REVIEWABLE","findings":[]}' > .git/review-verdicts/glyph-check--well.json
+check "an owed unit whose last verdict is NOT-REVIEWABLE, notes updated or not" nr blocked
+echo '{"map":"glyph-check--well","engine_key":"k","verdict":"PASS","findings":[]}' > "$T/nr/.git/review-verdicts/glyph-check--well.json"
 check "...and the same map once a review returned PASS" nr ok
 
 # GUARD_EDIT_OK: feature 248 FR-006 (GM 2026-09-14) - THE REVIEWER'S RECORD IS THE ONE RECORD. Three passes and three
@@ -157,23 +160,29 @@ check "...and the same map once a review returned PASS" nr ok
 # no notes touch refuses (case b above).
 echo
 echo "3. A MAP SHIPS ON ITS REVIEWER'S RECORD (feature 248)"
-mkrepo r1 withmap; echo '{"v":2}' > "$POOL/m.json"; git add -A; git commit -qm reroll; mkdir -p .git/review-verdicts
-echo '{"map":"m","engine_key":"k","verdict":"PASS","findings":[]}' > .git/review-verdicts/m.json
+V=.git/review-verdicts/glyph-check--well.json
+mkrepo r1 withmap; echo "$NEW" > "$POOL/m.json"; git add -A; git commit -qm reroll; mkdir -p .git/review-verdicts
+echo '{"map":"glyph-check--well","engine_key":"k","verdict":"PASS","findings":[]}' > "$V"
 check "a PASS record at this engine key, no notes touch" r1 ok
-echo '{"map":"m","engine_key":"k","verdict":"NEEDS-WORK","findings":[{"id":"F1"}]}' > "$T/r1/.git/review-verdicts/m.json"
+echo '{"map":"glyph-check--well","engine_key":"k","verdict":"NEEDS-WORK","findings":[{"id":"F1"}]}' > "$T/r1/$V"
 check "...a NEEDS-WORK record at this key too (the findings are fixed under the same key)" r1 ok
-echo '{"map":"m","engine_key":"stale","verdict":"PASS","findings":[]}' > "$T/r1/.git/review-verdicts/m.json"
+echo '{"map":"glyph-check--well","engine_key":"stale","verdict":"PASS","findings":[]}' > "$T/r1/$V"
 check "a PASS record at ANOTHER key, no notes touch: refused" r1 blocked
-mkrepo r2 withmap; echo '{"v":2}' > "$POOL/m.json"; echo "reviewed 2026-09-14" >> "$POOL/m.notes.md"; git add -A; git commit -qm reroll
-mkdir -p .git/review-verdicts; echo '{"map":"m","engine_key":"stale","verdict":"PASS","findings":[]}' > .git/review-verdicts/m.json
+mkrepo r2 withmap; echo "$NEW" > "$POOL/m.json"; echo "reviewed 2026-09-14" >> "$POOL/m.notes.md"; git add -A; git commit -qm reroll
+mkdir -p .git/review-verdicts; echo '{"map":"glyph-check--well","engine_key":"stale","verdict":"PASS","findings":[]}' > "$V"
 check "...and a stale-key record with the notes touched is refused too (D5: no substitute on a map with a record)" r2 blocked
-mkrepo r3 withmap; echo '{"v":2}' > "$POOL/m.json"; mkdir -p .specify specs/901-r
-printf -- '- [x] T01 the glyph\n      research: rendering\n- [x] T02 the note\n      research: rendering\n' > specs/901-r/tasks.md
-echo '{"feature_directory":"specs/901-r"}' > .specify/feature.json; git add -A; git commit -qm reroll-rendering
-check "the rendering-only waiver: no record, no notes touch, every active task research: rendering" r3 ok
-printf -- '- [x] T01 the glyph\n      research: rendering\n- [x] T02 the placer\n      research: procedure\n' > "$T/r3/specs/901-r/tasks.md"
-( cd "$T/r3" && git add -A && git commit -qm procedure )
-check "...but one procedure task beside the rendering ones owes the review" r3 blocked
+# GUARD_EDIT_OK: feature 294 D2 - the rendering waiver is gone; drawing or placement code that moved must DECLARE its occasions
+mkrepo r3 withmap; mkdir -p .specify specs/901-r .claude/skills/diagram/l7r
+echo 'X = 1' > .claude/skills/diagram/l7r/placer.py
+printf -- '- [x] T01 the placer\n      research: rendering\n' > specs/901-r/tasks.md
+echo '{"feature_directory":"specs/901-r"}' > .specify/feature.json; git add -A; git commit -qm placer
+check "placement code moved with no Occasions section in the active feature: refused" r3 blocked
+printf -- '## Occasions\n\n- none: a refactor, every element placed under rules already judged\n\n- [x] T01 the placer\n      research: rendering\n' > "$T/r3/specs/901-r/tasks.md"
+( cd "$T/r3" && git add -A && git commit -qm declared )
+check "...and shipped once the feature declares its occasions" r3 ok
+printf -- '## Occasions\n\n- placement-changed: farmhouse\n\n- [x] T01 the placer\n      research: rendering\n' > "$T/r3/specs/901-r/tasks.md"
+( cd "$T/r3" && git add -A && git commit -qm re-placed )
+check "...but a declared re-placement owes its glyph check (the GM's tannery)" r3 blocked
 
 mkrepo g; echo "# spec" > specs/900-x/spec.md; git add -A; git commit -qm s
 if ( cd "$T/g" && REVIEW_GATE_OK="superseded before implementation" "$GATE" main..HEAD >/dev/null 2>&1 ); then

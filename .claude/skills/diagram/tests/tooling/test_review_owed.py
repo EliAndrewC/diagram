@@ -1,9 +1,11 @@
-"""`scripts/_review_owed.py` and `scripts/_review_snapshot.py` - the scripted trigger and the reviewer's
-snapshot (feature 231).
+"""`scripts/_review_owed.py` and `scripts/_review_snapshot.py` - the scripted answer to "which review checks are owed",
+keyed on OCCASIONS (feature 294), and the reviewer's per-unit snapshot (features 231, 248).
 
-Every case runs on a real git fixture in `tmp_path`: a repository with both pool trees, an `origin/main`
-ref, and manifests moved in each of the ways a session moves one (committed, staged, unstaged, untracked).
-No `tooling` marker: these call functions and a subprocess on files, like `test_tick_task.py`.
+Every case runs on a real git fixture in `tmp_path`: a repository with both pool trees, an `origin/main` ref, Mode B maps
+carrying an `ink_classes` census and a Mode A sheet carrying `data-kind`s, changed in the ways a session changes them. The
+cases include the spec's replays: an engine change moving every manifest owes nothing (SC-001); one element new to a map, a
+declared redraw, a declared re-placement (the GM's tannery) and a new element drawn with an existing mark each owe exactly
+one glyph check (SC-002).
 """
 
 from __future__ import annotations
@@ -38,10 +40,10 @@ def git(root: Path, *args: str) -> str:
     return subprocess.run(["git", "-C", str(root), *args], capture_output=True, text=True, check=True).stdout.strip()
 
 
-def _map(root: Path, tree: str, name: str, *, poly: int = 1, renders: bool = False) -> Path:
-    d = root / SKILL / tree / f"{name}s" / name
+def _map(root: Path, tree: str, name: str, classes: dict[str, int], *, poly: int = 1, renders: bool = False) -> Path:
+    d = root / SKILL / tree / "hamlets" / name
     d.mkdir(parents=True, exist_ok=True)
-    (d / f"{name}.json").write_text(json.dumps({"meta": {"name": name}, "houses": [[poly, poly]]}))
+    (d / f"{name}.json").write_text(json.dumps({"meta": {"name": name}, "houses": [[poly, poly]], "ink_classes": classes}))
     (d / f"{name}.notes.md").write_text(f"# {name}\n")
     if renders:
         (d / f"{name}.svg").write_text("<svg/>")
@@ -50,99 +52,244 @@ def _map(root: Path, tree: str, name: str, *, poly: int = 1, renders: bool = Fal
     return d
 
 
+def _sheet(root: Path, name: str, kinds: list[str]) -> Path:
+    d = root / SKILL / "pool" / "magistracies" / name
+    d.mkdir(parents=True, exist_ok=True)
+    (d / f"{name}.gen.py").write_text("# sheet\n")
+    (d / f"{name}.svg").write_text("<svg>" + "".join(f'<rect data-kind="{k}"/>' for k in kinds) + "</svg>")
+    (d / f"{name}.notes.md").write_text(f"# {name}\n")
+    return d
+
+
+def _tasks(root: Path, occasions: list[str] | None) -> None:
+    d = root / "specs" / "999-test"
+    d.mkdir(parents=True, exist_ok=True)
+    body = "# Tasks\n\n" + ("## Occasions\n\n" + "".join(f"- {o}\n" for o in occasions) + "\n" if occasions is not None else "")
+    (d / "tasks.md").write_text(body + "## Setup\n\n- [ ] T01 a task\n      research: rendering\n")
+    (root / ".specify").mkdir(exist_ok=True)
+    (root / ".specify" / "feature.json").write_text(json.dumps({"feature_directory": "specs/999-test"}))
+
+
 @pytest.fixture
 def clone(tmp_path: Path) -> Path:
-    """A repository with two shipped maps, one per pool tree, and an `origin/main` at that commit."""
+    """Two shipped hamlets and a legacy map, one Mode A sheet, and an `origin/main` at that commit."""
     root = tmp_path / "clone"
     root.mkdir()
     git(root.parent, "init", "-q", str(root))
     git(root, "config", "user.email", "t@t")
     git(root, "config", "user.name", "t")
-    _map(root, "pool", "inashiro", renders=True)
-    _map(root, "legacy-hand-authored-pool", "furu")
+    _map(root, "pool", "inashiro", {"farmhouse": 9, "privy": 4, "-": 2}, renders=True)
+    _map(root, "pool", "sawada", {"farmhouse": 7, "wood shed": 3})
+    _map(root, "legacy-hand-authored-pool", "furu", {})
+    _sheet(root, "hayakawa", ["residence", "kitchen"])
+    (root / SKILL / "l7r").mkdir(parents=True)
+    (root / SKILL / "l7r" / "engine.py").write_text("X = 1\n")
     git(root, "add", "-A")
     git(root, "commit", "-qm", "the pool")
     git(root, "update-ref", "refs/remotes/origin/main", git(root, "rev-parse", "HEAD"))
     return root
 
 
-def test_nothing_moved_owes_no_review(clone: Path) -> None:
-    desc, names = owed.changed_maps(clone)
-    assert names == []
-    assert "no pool manifest moved" in owed.ruling(desc, names)
+def units(root: Path) -> list[tuple[str, str, str]]:
+    _, got, problems = owed.owed(root)
+    assert not problems, problems
+    return [(u.check, u.subject, u.on) for u in got]
 
 
-def test_a_committed_manifest_beyond_the_merge_base_counts(clone: Path) -> None:
-    """The case the HEAD~1 diff missed: the manifest moved two commits ago and main has neither."""
-    _map(clone, "pool", "inashiro", poly=2, renders=True)
-    git(clone, "commit", "-qam", "re-rolled")
-    (clone / "a.txt").write_text("something else")
+def test_nothing_changed_owes_nothing(clone: Path) -> None:
+    desc, got, _ = owed.owed(clone)
+    assert got == []
+    assert "no review owed" in owed.ruling(desc, got)
+
+
+def test_an_engine_change_moving_every_manifest_owes_nothing(clone: Path) -> None:
+    """SC-001: the shared engine change - every manifest moved, nothing new drawn - owes zero review runs."""
+    _map(clone, "pool", "inashiro", {"farmhouse": 9, "privy": 4}, poly=2, renders=True)
+    _map(clone, "pool", "sawada", {"farmhouse": 7, "wood shed": 3}, poly=2)
+    (clone / SKILL / "l7r" / "engine.py").write_text("X = 2\n")
+    _tasks(clone, ["none: a speed lever, every element placed under rules already judged"])
+    assert units(clone) == []
+    assert owed.check_declared(clone) is None
+
+
+def test_an_element_new_to_a_map_owes_one_glyph_check_on_that_map(clone: Path) -> None:
+    """SC-002: the occasion is an element new to the MAP - here the wood shed, which Sawada already draws."""
+    _map(clone, "pool", "inashiro", {"farmhouse": 9, "privy": 4, "wood shed": 2}, renders=True)
+    assert units(clone) == [("glyph-check", "wood shed", "inashiro")]
+
+
+def test_a_new_element_with_an_existing_mark_still_owes_the_glyph_check(clone: Path) -> None:
+    """A new class key drawn with an existing glyph is an element new to the map whatever its mark (round 1's ruling)."""
+    _map(clone, "pool", "sawada", {"farmhouse": 7, "wood shed": 3, "storage shed": 1})
+    assert units(clone) == [("glyph-check", "storage shed", "sawada")]
+
+
+def test_one_element_new_to_two_maps_is_one_unit(clone: Path) -> None:
+    _map(clone, "pool", "inashiro", {"farmhouse": 9, "privy": 4, "byre": 1}, renders=True)
+    _map(clone, "pool", "sawada", {"farmhouse": 7, "wood shed": 3, "byre": 2})
+    assert units(clone) == [("glyph-check", "byre", "inashiro")]
+
+
+def test_a_declared_redraw_owes_the_glyph_check_where_the_element_is_drawn(clone: Path) -> None:
+    _tasks(clone, ["glyph-redrawn: privy"])
+    assert units(clone) == [("glyph-check", "privy", "inashiro")]
+
+
+def test_a_declared_re_placement_owes_the_glyph_check(clone: Path) -> None:
+    """The GM's tannery: the same mark, placed by substantially different rules."""
+    _tasks(clone, ["placement-changed: wood shed - now seated off the gable"])
+    assert units(clone) == [("glyph-check", "wood shed", "sawada")]
+
+
+def test_a_declared_element_no_map_draws_is_a_problem(clone: Path) -> None:
+    _tasks(clone, ["glyph-redrawn: tannery"])
+    _, got, problems = owed.owed(clone)
+    assert [u.subject for u in got] == ["tannery"]
+    assert "drawn on no pool map" in problems[0]
+    assert "PROBLEMS" in owed.ruling("x", got, problems)
+
+
+def test_an_unknown_occasion_is_a_problem(clone: Path) -> None:
+    _tasks(clone, ["repainted: privy"])
+    _, got, problems = owed.owed(clone)
+    assert got == [] and "unknown occasion" in problems[0]
+
+
+@pytest.mark.parametrize(
+    ("line", "expected"),
+    [
+        ("new-form: sawada", [("settlement-review", "sawada", "sawada")]),
+        ("new-tier: sawada", [("settlement-review", "sawada", "sawada")]),
+        ("layout-revised: hayakawa", [("building-review", "hayakawa", "hayakawa")]),
+        ("new-program: ochaya hayakawa", [("building-review", "hayakawa", "hayakawa"), ("size-audit", "ochaya", "hayakawa")]),
+        ("gm-fix: inashiro - the board under the canopy", [("fix-check", "inashiro", "inashiro")]),
+    ],
+)
+def test_each_declared_occasion_owes_its_check(clone: Path, line: str, expected: list[tuple[str, str, str]]) -> None:
+    _tasks(clone, [line])
+    assert units(clone) == expected
+
+
+def test_a_map_new_to_the_pool_owes_the_whole_map_review_and_only_elements_new_to_the_legend(clone: Path) -> None:
+    _map(clone, "pool", "kuwabata", {"farmhouse": 5, "privy": 2, "fish pond": 3})
+    assert units(clone) == [("settlement-review", "kuwabata", "kuwabata"), ("glyph-check", "fish pond", "kuwabata")]
+
+
+def test_a_sheet_new_to_the_pool_owes_the_building_review(clone: Path) -> None:
+    _sheet(clone, "ochiba", ["residence", "stable"])
+    assert units(clone) == [("building-review", "ochiba", "ochiba"), ("glyph-check", "stable", "ochiba"), ("size-audit", "stable", "ochiba")]
+
+
+def test_a_kind_new_to_a_sheet_owes_the_glyph_check_and_the_size_audit(clone: Path) -> None:
+    _sheet(clone, "hayakawa", ["residence", "kitchen", "kura"])
+    assert units(clone) == [("glyph-check", "kura", "hayakawa"), ("size-audit", "kura", "hayakawa")]
+
+
+def test_the_legacy_tree_and_unclassed_ink_owe_nothing(clone: Path) -> None:
+    _map(clone, "legacy-hand-authored-pool", "furu", {}, poly=3)
+    _map(clone, "pool", "inashiro", {"farmhouse": 9, "privy": 4, "-": 5, "place": 1}, renders=True)
+    assert units(clone) == []
+
+
+def test_a_committed_change_beyond_the_merge_base_counts(clone: Path) -> None:
+    _map(clone, "pool", "inashiro", {"farmhouse": 9, "privy": 4, "well": 1}, renders=True)
+    git(clone, "commit", "-qam", "a well")
+    (clone / "a.txt").write_text("later")
     git(clone, "add", "-A")
-    git(clone, "commit", "-qm", "and then other work")
-    _desc, names = owed.changed_maps(clone)
-    assert names == ["inashiro"]
+    git(clone, "commit", "-qm", "later")
+    assert units(clone) == [("glyph-check", "well", "inashiro")]
 
 
-@pytest.mark.parametrize("stage", [True, False])
-def test_an_uncommitted_manifest_counts_staged_or_not(clone: Path, stage: bool) -> None:
-    _map(clone, "pool", "inashiro", poly=3, renders=True)
-    if stage:
-        git(clone, "add", "-A")
-    _desc, names = owed.changed_maps(clone)
-    assert names == ["inashiro"]
+def test_detected_and_declared_units_are_one_unit(clone: Path) -> None:
+    _map(clone, "pool", "inashiro", {"farmhouse": 9, "privy": 4, "well": 1}, renders=True)
+    _tasks(clone, ["glyph-redrawn: well"])
+    assert units(clone) == [("glyph-check", "well", "inashiro")]
 
 
-def test_a_new_untracked_map_counts(clone: Path) -> None:
-    _map(clone, "pool", "aoi")
-    _desc, names = owed.changed_maps(clone)
-    assert names == ["aoi"]
+def test_code_moved_with_no_occasions_section_is_refused(clone: Path) -> None:
+    (clone / SKILL / "l7r" / "engine.py").write_text("X = 3\n")
+    refusal = owed.check_declared(clone)
+    assert refusal and "l7r/engine.py" in refusal and "## Occasions" in refusal
+    _tasks(clone, None)  # a tasks.md with no section still refuses
+    assert owed.check_declared(clone)
+    _tasks(clone, ["none: a refactor"])
+    assert owed.check_declared(clone) is None
 
 
-def test_the_legacy_tree_counts_too(clone: Path) -> None:
-    """A pattern anchored on `pool/` alone would stop matching the frozen tree with nothing turning red."""
-    _map(clone, "legacy-hand-authored-pool", "furu", poly=9)
-    _desc, names = owed.changed_maps(clone)
-    assert names == ["furu"]
+def test_a_tracked_sheet_svg_is_code_and_a_test_or_a_note_is_not(clone: Path) -> None:
+    (clone / SKILL / "tests").mkdir()
+    (clone / SKILL / "tests" / "test_x.py").write_text("")
+    (clone / SKILL / "pool" / "hamlets" / "inashiro" / "inashiro.notes.md").write_text("# more\n")
+    assert owed.check_declared(clone) is None
+    _sheet(clone, "hayakawa", ["residence", "kitchen"]).joinpath("hayakawa.svg").write_text("<svg><rect/></svg>")
+    assert owed.check_declared(clone)
 
 
-def test_a_render_or_a_notes_file_alone_owes_nothing(clone: Path) -> None:
-    """The manifest is the layout: a re-rendered SVG or an edited notes file is not a moved settlement."""
-    (clone / SKILL / "pool" / "inashiros" / "inashiro" / "inashiro.svg").write_text("<svg>different</svg>")
-    (clone / SKILL / "pool" / "inashiros" / "inashiro" / "inashiro.notes.md").write_text("# more notes\n")
-    _desc, names = owed.changed_maps(clone)
-    assert names == []
-
-
-def test_engine_code_alone_owes_nothing(clone: Path) -> None:
-    """Feature 228's own shape: the drawing code changed, the manifest did not."""
-    py = clone / SKILL / "l7r" / "diagram" / "settlement"
-    py.mkdir(parents=True)
-    (py / "landuse.py").write_text("# the ring\n")
-    _desc, names = owed.changed_maps(clone)
-    assert names == []
+def test_many_touched_files_are_summarized(clone: Path) -> None:
+    for i in range(7):
+        (clone / SKILL / "l7r" / f"m{i}.py").write_text("")
+    assert "and 2 more" in (owed.check_declared(clone) or "")
 
 
 def test_without_origin_main_the_base_is_head(clone: Path) -> None:
     git(clone, "update-ref", "-d", "refs/remotes/origin/main")
-    desc, names = owed.changed_maps(clone)
-    assert "no origin/main" in desc and names == []
+    assert owed.base_of(clone)[1].startswith("HEAD")
 
 
-def test_a_repository_with_no_commits_reports_its_maps_as_new(tmp_path: Path) -> None:
+def test_a_repository_with_no_commits_reports_everything_new(tmp_path: Path) -> None:
     root = tmp_path / "fresh"
     root.mkdir()
-    git(tmp_path, "init", "-q", str(root))
-    _map(root, "pool", "aoi")
-    desc, names = owed.changed_maps(root)
-    assert desc == "no commits yet" and names == ["aoi"]
+    git(root.parent, "init", "-q", str(root))
+    _map(root, "pool", "inashiro", {"farmhouse": 1})
+    assert owed.base_of(root) == ("", "no commits yet")
+    _, got, _ = owed.owed(root)
+    assert [(u.check, u.subject) for u in got] == [("settlement-review", "inashiro"), ("glyph-check", "farmhouse")]
 
 
-def test_main_returns_names_or_the_ruling(clone: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    _map(clone, "pool", "inashiro", poly=4, renders=True)
+def test_a_mirror_supplies_a_generated_sheets_base(clone: Path, tmp_path: Path) -> None:
+    """A generated sheet's SVG is gitignored: its base is main's mirror copy beside `.clones/`."""
+    mirror = tmp_path / "mirror"
+    inner = mirror / ".clones" / "s"
+    subprocess.run(["git", "clone", "-q", str(clone), str(inner)], check=True)
+    git(inner, "update-ref", "refs/remotes/origin/main", git(inner, "rev-parse", "HEAD"))
+    gen = inner / SKILL / "pool" / "magistracies" / "example"
+    gen.mkdir(parents=True)
+    (gen / "example.gen.py").write_text("")
+    git(inner, "add", "-A")
+    git(inner, "commit", "-qm", "a generated sheet")
+    git(inner, "update-ref", "refs/remotes/origin/main", git(inner, "rev-parse", "HEAD"))
+    (gen / "example.svg").write_text('<svg><g data-kind="residence"/><g data-kind="well"/></svg>')
+    (mirror / SKILL / "pool" / "magistracies" / "example").mkdir(parents=True)
+    (mirror / SKILL / "pool" / "magistracies" / "example" / "example.svg").write_text('<svg><g data-kind="residence"/></svg>')
+    _, got, _ = owed.owed(inner)
+    assert [(u.check, u.subject, u.on) for u in got] == [("glyph-check", "well", "example"), ("size-audit", "well", "example")]
+
+
+def test_a_malformed_census_is_no_elements() -> None:
+    assert owed.ink_classes("not json") == set()
+    assert owed.ink_classes(json.dumps({"ink_classes": [1, 2]})) == set()
+
+
+def test_the_slug_is_file_safe() -> None:
+    assert owed.Unit("glyph-check", "manure heap", "inashiro", "x").slug == "glyph-check--manure-heap"
+
+
+def test_pool_map_names_lists_maps_and_sheets_of_both_trees(clone: Path) -> None:
+    assert owed.pool_map_names(clone) == ["furu", "hayakawa", "inashiro", "sawada"]
+
+
+def test_main_prints_slugs_units_the_ruling_and_the_declaration(clone: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    _map(clone, "pool", "inashiro", {"farmhouse": 9, "privy": 4, "well": 1}, renders=True)
     assert owed.main(["--root", str(clone)]) == 0
-    assert capsys.readouterr().out.split() == ["inashiro"]
-    assert owed.main(["--root", str(clone), "--why"]) == 0
-    assert "layout moved against" in capsys.readouterr().out
+    assert capsys.readouterr().out.strip() == "glyph-check--well"
+    owed.main(["--root", str(clone), "--units"])
+    assert capsys.readouterr().out.strip().split("\t")[:4] == ["glyph-check--well", "glyph-check", "well", "inashiro"]
+    owed.main(["--root", str(clone), "--why"])
+    assert "glyph-check:well on inashiro" in capsys.readouterr().out
+    (clone / SKILL / "l7r" / "engine.py").write_text("X = 9\n")
+    assert owed.main(["--root", str(clone), "--check-declared"]) == 1
+    _tasks(clone, ["none: test"])
+    assert owed.main(["--root", str(clone), "--check-declared"]) == 0
 
 
 def test_main_refuses_a_directory_that_is_not_a_repository(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
@@ -150,151 +297,71 @@ def test_main_refuses_a_directory_that_is_not_a_repository(tmp_path: Path, capsy
     assert "not a git repository" in capsys.readouterr().err
 
 
-# --- the snapshot ---------------------------------------------------------------------------------
+# ---- the snapshot, per unit ---------------------------------------------------------------------------------
 
 
 @pytest.fixture
-def pair(clone: Path, tmp_path: Path) -> tuple[Path, Path]:
-    """(a clone under `<mirror>/.clones/`, the mirror) - the real layout, so the mirror is derived."""
+def pair(tmp_path: Path) -> tuple[Path, Path]:
+    """A mirror with a clone under its `.clones/`, the clone drawing a well Inashiro did not have."""
     mirror = tmp_path / "mirror"
-    (mirror / ".clones").mkdir(parents=True)
-    work = mirror / ".clones" / "session"
-    clone.rename(work)
-    _map(mirror, "pool", "inashiro", poly=99, renders=True)
-    return work, mirror
+    mirror.mkdir()
+    git(mirror.parent, "init", "-q", str(mirror))
+    git(mirror, "config", "user.email", "t@t")
+    git(mirror, "config", "user.name", "t")
+    _map(mirror, "pool", "inashiro", {"farmhouse": 9}, renders=True)
+    git(mirror, "add", "-A")
+    git(mirror, "commit", "-qm", "main")
+    inner = mirror / ".clones" / "s"
+    subprocess.run(["git", "clone", "-q", str(mirror), str(inner)], check=True)
+    git(inner, "update-ref", "refs/remotes/origin/main", git(inner, "rev-parse", "HEAD"))
+    _map(inner, "pool", "inashiro", {"farmhouse": 9, "well": 1}, renders=True)
+    return mirror, inner
 
 
-def test_the_snapshot_takes_both_sides(pair: tuple[Path, Path]) -> None:
-    work, mirror = pair
-    (rec,) = snap.snapshot(work, mirror, ["inashiro"])
-    assert rec["missing"] == [] and rec["main_missing"] == []
-    clone_files = sorted(p.name for p in Path(rec["clone"]).iterdir())
-    assert clone_files == ["inashiro.html", "inashiro.json", "inashiro.notes.md", "inashiro.png", "inashiro.svg"]
-    assert json.loads((Path(rec["main"]) / "inashiro.json").read_text())["houses"] == [[99, 99]]
-    assert json.loads((Path(rec["clone"]) / "inashiro.json").read_text())["houses"] == [[1, 1]]
+def test_the_snapshot_takes_both_sides_and_writes_the_checks_prompt(pair: tuple[Path, Path], capsys: pytest.CaptureFixture[str]) -> None:
+    _, inner = pair
+    assert snap.main(["--root", str(inner), "--key", "abc", "glyph-check--well"]) == 0
+    out = capsys.readouterr().out
+    base = inner / ".git" / "review-snapshot" / "glyph-check--well"
+    assert (base / "clone" / "inashiro.json").is_file() and (base / "main" / "inashiro.json").is_file()
+    prompt = (base / "dispatch.md").read_text()
+    assert prompt.startswith("UNIT: glyph-check--well\n") and "'well'" in prompt and "UNIT=glyph-check--well" in prompt
+    assert "prompt" in out and "on inashiro" in out
 
 
-def test_a_missing_render_is_named_never_skipped(pair: tuple[Path, Path]) -> None:
-    """The gate's roll cache evicts a map's .png and .html; the reviewer must be told, not left to find out."""
-    work, mirror = pair
-    d = work / SKILL / "pool" / "inashiros" / "inashiro"
-    (d / "inashiro.png").unlink()
-    (d / "inashiro.html").unlink()
-    (rec,) = snap.snapshot(work, mirror, ["inashiro"])
-    assert rec["missing"] == [".png", ".html"]
-    assert "missing in the clone: .png .html" in snap.describe(rec)
-    assert "make map" in snap.describe(rec)
+def test_a_unit_not_owed_is_refused(pair: tuple[Path, Path], capsys: pytest.CaptureFixture[str]) -> None:
+    assert snap.main(["--root", str(pair[1]), "glyph-check--privy"]) == 2
+    assert "not owed" in capsys.readouterr().err
 
 
-def test_a_map_in_neither_tree_says_so(pair: tuple[Path, Path]) -> None:
-    work, mirror = pair
-    (rec,) = snap.snapshot(work, mirror, ["nowhere"])
-    assert rec["clone"] is None and "not in the clone's pool" in snap.describe(rec)
+def test_a_missing_render_is_named_and_a_sheet_owes_no_manifest(tmp_path: Path) -> None:
+    root = tmp_path / "r"
+    _map(root, "pool", "inashiro", {"farmhouse": 1})
+    sheet = _sheet(root, "hayakawa", ["residence"])
+    recs = snap.snapshot(root, None, [owed.Unit("glyph-check", "farmhouse", "inashiro", "x"), owed.Unit("size-audit", "residence", "hayakawa", "y")])
+    assert recs[0]["missing"] == [".svg", ".png", ".html"]
+    assert ".json" not in recs[1]["missing"] and sheet.is_dir()
+    assert recs[0]["main"] is None and "unavailable" in snap.describe(recs[0])
+    assert "regenerate it" in snap.describe(recs[0])
 
 
-def test_a_previous_snapshot_of_the_same_map_is_cleared(pair: tuple[Path, Path]) -> None:
-    work, mirror = pair
-    snap.snapshot(work, mirror, ["inashiro"])
-    stale = work / ".git" / "review-snapshot" / "inashiro" / "clone" / "stale.png"
-    stale.write_bytes(b"old")
-    snap.snapshot(work, mirror, ["inashiro"])
+def test_a_unit_with_no_map_says_so(tmp_path: Path) -> None:
+    rec = snap.snapshot(tmp_path, None, [owed.Unit("glyph-check", "tannery", "", "declared")])[0]
+    assert rec["clone"] is None and "no map draws it" in Path(rec["dispatch"]).read_text()
+
+
+def test_a_previous_snapshot_of_the_same_unit_is_cleared(tmp_path: Path) -> None:
+    root = tmp_path / "r"
+    _map(root, "pool", "inashiro", {"farmhouse": 1}, renders=True)
+    unit = owed.Unit("fix-check", "inashiro", "inashiro", "declared gm-fix")
+    stale = root / ".git" / "review-snapshot" / unit.slug / "stale.txt"
+    stale.parent.mkdir(parents=True)
+    stale.write_text("old")
+    snap.snapshot(root, None, [unit])
     assert not stale.exists()
 
 
-def test_main_derives_the_mirror_from_the_clone_path(pair: tuple[Path, Path], capsys: pytest.CaptureFixture[str]) -> None:
-    work, _mirror = pair
-    assert snap.main(["--root", str(work), "inashiro"]) == 0
-    out = capsys.readouterr().out
-    assert "snapshot inashiro:" in out and "/main" in out
-    assert json.loads((work / ".git" / "review-snapshot" / "inashiro" / "main" / "inashiro.json").read_text())["houses"] == [[99, 99]]
-
-
-def test_a_clone_outside_a_mirror_snapshots_its_own_side_only(clone: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    assert snap.main(["--root", str(clone), "inashiro"]) == 0
-    assert "main unavailable" in capsys.readouterr().out
-
-
-# ---- feature 248: the rendering-only waiver, on the DERIVED feature set -----------------------------------------
-
-
-def _feature(root: Path, name: str, classes: list[str], ticked: bool = True) -> Path:
-    d = root / "specs" / name
-    d.mkdir(parents=True, exist_ok=True)
-    box = "x" if ticked else " "
-    (d / "tasks.md").write_text("".join(f"- [{box}] T{i:02d} a task\n      research: {c}\n" for i, c in enumerate(classes, 1)))
-    return d
-
-
-def _point(root: Path, name: str) -> None:
-    (root / ".specify").mkdir(exist_ok=True)
-    (root / ".specify" / "feature.json").write_text(json.dumps({"feature_directory": f"specs/{name}"}))
-
-
-def test_rendering_only_reads_the_classification() -> None:
-    assert owed.rendering_only("- [x] T01 a\n      research: rendering\n- [ ] T02 b\n      research: rendering\n") == 2
-    assert owed.rendering_only("- [x] T01 a\n      research: rendering\n- [x] T02 b\n      research: physical\n") is None
-    assert owed.rendering_only("- [x] T01 a\n      research: rendering\n- [x] T02 b\n      research: procedure\n") is None
-    assert owed.rendering_only("- [x] T01 a\n") is None  # a task with no class is not rendering
-    assert owed.rendering_only("# no tasks\n") is None
-
-
-def test_a_rendering_only_feature_owes_no_review(clone: Path) -> None:
-    """The GM's own example: feature 247's tasks were all rendering; four manifests moved; no review owed."""
-    _feature(clone, "247-two-beads", ["rendering", "rendering", "rendering"])
-    _point(clone, "247-two-beads")
-    _map(clone, "pool", "inashiro", poly=2, renders=True)
-    git(clone, "add", "-A")
-    git(clone, "commit", "-qm", "beads")
-    desc, names, why = owed.owed(clone)
-    assert names == [] and why and "rendering-only" in why and "247-two-beads" in why and "3 tasks" in why
-    assert owed.ruling(desc, names, why) == why
-
-
-@pytest.mark.parametrize("classes", [["rendering", "physical"], ["rendering", "procedure"], []])
-def test_any_other_class_or_no_task_owes(clone: Path, classes: list[str]) -> None:
-    _feature(clone, "230-brook", classes)
-    _point(clone, "230-brook")
-    _map(clone, "pool", "inashiro", poly=2, renders=True)
-    git(clone, "add", "-A")
-    git(clone, "commit", "-qm", "moved")
-    _desc, names, why = owed.owed(clone)
-    assert names == ["inashiro"] and why is None
-
-
-def test_a_pointer_with_no_tasks_file_and_the_empty_set_both_owe(clone: Path) -> None:
-    _map(clone, "pool", "inashiro", poly=2, renders=True)
-    git(clone, "add", "-A")
-    git(clone, "commit", "-qm", "moved")
-    assert owed.owed(clone)[1] == ["inashiro"]  # the empty set: no pointer, no touched feature
-    (clone / "specs" / "249-x").mkdir(parents=True)
-    _point(clone, "249-x")
-    assert owed.owed(clone)[1] == ["inashiro"]  # a pointer naming a directory with no tasks.md
-
-
-def test_the_derived_pair_takes_the_conjunction(clone: Path) -> None:
-    """The pointer names a rendering-only feature; the delta ALSO touches a layout feature whose boxes are all
-    ticked, as at a push. The set is both, so the review is owed (spec D7); with both rendering-only, waived."""
-    _feature(clone, "247-two-beads", ["rendering"])
-    _point(clone, "247-two-beads")
-    _feature(clone, "230-brook", ["physical"], ticked=True)
-    _map(clone, "pool", "inashiro", poly=2, renders=True)
-    git(clone, "add", "-A")
-    git(clone, "commit", "-qm", "both")
-    assert sorted(owed.active_features(clone, owed.base_of(clone)[0])) == ["specs/230-brook", "specs/247-two-beads"]
-    assert owed.owed(clone)[1] == ["inashiro"]
-    _feature(clone, "230-brook", ["rendering"], ticked=True)
-    git(clone, "commit", "-qam", "reclassified")
-    _desc, names, why = owed.owed(clone)
-    assert names == [] and why and "230-brook" in why and "247-two-beads" in why
-
-
-def test_pool_map_names_lists_both_trees(clone: Path) -> None:
-    assert owed.pool_map_names(clone) == ["furu", "inashiro"]
-
-
-def test_a_dispatch_prompt_is_written_per_map(clone: Path) -> None:
-    _map(clone, "pool", "inashiro", poly=2, renders=True)
-    recs = snap.snapshot(clone, None, ["inashiro"], key="abc123")
-    text = Path(recs[0]["dispatch"]).read_text()
-    assert "ONE map: inashiro" in text and "abc123" in text and "review-snapshot/inashiro/clone" in text and "MAP=inashiro" in text
-    assert "prompt " in snap.describe(recs[0])
+@pytest.mark.parametrize("check", ["settlement-review", "building-review", "glyph-check", "size-audit", "fix-check"])
+def test_every_check_has_its_ask(check: str, tmp_path: Path) -> None:
+    rec = snap.snapshot(tmp_path, None, [owed.Unit(check, "s", "", "o")])[0]
+    assert Path(rec["dispatch"]).read_text().startswith(f"UNIT: {check}--s\n{check} - ")

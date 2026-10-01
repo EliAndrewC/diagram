@@ -114,61 +114,46 @@ for spec in $([ -z "$claim_only" ] && printf '%s\n' "$touched_specs" || true); d
   fi
 done
 
-# --- 2. a re-rolled pool map ships on its reviewer's VERDICT RECORD ---------------------------------
-# BOTH TREES (feature 161). This is a PATTERN, not a walk: when the hand-authored maps moved to
-# legacy-hand-authored-pool/ a pattern anchored on `pool/` simply stopped matching them, with
-# nothing turning red - the guard would have quietly stopped covering the frozen tree.
-#
-# GUARD_EDIT_OK: feature 248 FR-006 (GM 2026-09-14) - THE REVIEWER'S RECORD IS THE ONE RECORD. Since feature
-# 240 the settlement-review writes `<clone>/.git/review-verdicts/<map>.json` as its last act, keyed on the
-# engine key it reviewed, and this gate still demanded the 2026-07-27 form beside it - the map's `.notes.md`
-# touched in the same push - so feature 247's landing was refused for a hand-written second record of a pass
-# the reviewer had already recorded. Three ways a changed map now ships, in order: a PASS or NEEDS-WORK record
-# at the engine key of the pushed tree; the rendering-only waiver (feature 248 FR-005, asked of the one
-# script that decides it); and - ONLY for a map with no record at all (the legacy tree, a map never reviewed
-# since the records existed) - the notes touch, as before. A NOT-REVIEWABLE record still refuses; a record at
-# a STALE key refuses whether or not the notes are touched (spec D5: a notes touch never substitutes on a map
-# that has a record). The refusal names which of the three the map lacks, and records under its own rule.
-map_changes=$(printf '%s\n' "$changed" | grep -E '^\.claude/skills/diagram/(pool|legacy-hand-authored-pool)/.*\.json$' || true)
-if [ -n "$map_changes" ]; then
-  tree_key="$( cd "$ROOT/.claude/skills/diagram" 2>/dev/null && make -s engine-key REF=worktree 2>/dev/null | tr -d '[:space:]' )"
-  waiver="$(python3 "$RG_HERE/_review_owed.py" --root "$ROOT" --why 2>/dev/null || true)"
-  case "$waiver" in *"no settlement-review owed (feature 248)"*) ;; *) waiver="" ;; esac
-  [ -n "$waiver" ] && guard_log review-gate escaped "$waiver" review-waived-rendering
+# --- 2. every OWED review unit ships on its reviewer's VERDICT RECORD (feature 294) -------------------------
+# GUARD_EDIT_OK: feature 294 - THE OCCASIONS REPLACE THE MOVED MANIFEST (GM 2026-10-01: the review checks run only when
+# what they judge is new or changed; research R1 sorts every check). A push ships when every unit `_review_owed.py` owes
+# - `<check>:<subject>`, detected from the delta or declared in the feature's `## Occasions` - has a PASS or NEEDS-WORK
+# record at the engine key being pushed (feature 240's record, per unit since this feature). A map that moved and owes
+# nothing ships. The notes-file touch that stood in for a review on a never-reviewed map (2026-07-27) and the
+# rendering-only waiver (feature 248) went with the manifest trigger. And a delta that touches drawing or placement code
+# with no `## Occasions` section in any active feature is refused: whether a change is substantial is the feature's call
+# to DECLARE, never to leave silent (the GM's tannery example).
+undeclared="$(python3 "$RG_HERE/_review_owed.py" --root "$ROOT" --check-declared 2>/dev/null)"
+if [ -n "$undeclared" ]; then
+  printf '\n\033[1mREVIEW GATE: the delta does not declare its occasions.\033[0m\n'
+  printf '%s\n' "$undeclared"
+  fail="$fail occasions"; rules="$rules occasions-undeclared"
 fi
-for man in $map_changes; do
-  name="$(basename "${man%.json}")"
-  notes="${man%.json}.notes.md"
-  verdict_rec="$(git rev-parse --git-dir 2>/dev/null)/review-verdicts/$name.json"
-  if [ -f "$verdict_rec" ]; then
-    read -r verdict rec_key < <(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(d.get("verdict","") or "-", d.get("engine_key","") or "-")' "$verdict_rec" 2>/dev/null || echo "- -")
-    if [ "$verdict" = "NOT-REVIEWABLE" ]; then
-      printf '\n\033[1mREVIEW GATE: %s was last returned NOT-REVIEWABLE.\033[0m\n' "$name"
-      printf 'Its reviewer stopped at the first stage - a prerequisite was missing, so no judgment of the map\n'
-      printf 'was made. Fix what that verdict names (%s) and dispatch the review again.\n' "$verdict_rec"
-      fail="$fail $name"; rules="$rules map-not-reviewable"
-    elif [ -n "$tree_key" ] && [ "$rec_key" = "$tree_key" ] && { [ "$verdict" = "PASS" ] || [ "$verdict" = "NEEDS-WORK" ]; }; then
-      :   # the reviewer's record, at this content - the one record (feature 248)
-    elif [ -n "$waiver" ]; then
-      :   # a rendering-only feature: no review owed (feature 248 FR-005)
-    else
-      printf '\n\033[1mREVIEW GATE: %s has a %s verdict at engine key %s, but the tree being pushed is %s.\033[0m\n' "$name" "$verdict" "${rec_key:0:12}" "${tree_key:0:12}"
-      printf 'The map moved again after that review. A notes-file entry does not substitute for a review on a map\n'
-      printf 'that has a record (feature 248 D5): dispatch the settlement-review again (`make verify`), and it writes\n'
-      printf 'the record at this key as its last act.\n'
-      fail="$fail $name"; rules="$rules map-stale-verdict"
-    fi
+owed_units="$(python3 "$RG_HERE/_review_owed.py" --root "$ROOT" 2>/dev/null || true)"
+if [ -n "$owed_units" ]; then
+  tree_key="$( cd "$ROOT/.claude/skills/diagram" 2>/dev/null && make -s engine-key REF=worktree 2>/dev/null | tr -d '[:space:]' )"
+fi
+for unit in $owed_units; do
+  verdict_rec="$(git rev-parse --git-dir 2>/dev/null)/review-verdicts/$unit.json"
+  if [ ! -f "$verdict_rec" ]; then
+    printf '\n\033[1mREVIEW GATE: %s is owed and has no verdict record.\033[0m\n' "$unit"
+    printf 'Its occasion: %s\n' "$(python3 "$RG_HERE/_review_owed.py" --root "$ROOT" --units 2>/dev/null | awk -F'\t' -v u="$unit" '$1 == u {print $5}')"
+    printf 'Dispatch it (`make verify` writes its prompt) once the gate is green; it records the verdict as its last act.\n'
+    fail="$fail $unit"; rules="$rules unit-no-review"
     continue
   fi
-  [ -n "$waiver" ] && continue
-  [ -f "$notes" ] || continue          # a map with no notes file predates the convention
-  if ! printf '%s\n' "$changed" | grep -qxF "$notes"; then
-    printf '\n\033[1mREVIEW GATE: %s changed, but %s did not, and no reviewer has recorded a verdict on it.\033[0m\n' "$(basename "$man")" "$(basename "$notes")"
-    printf 'A Mode B map gets an independent `settlement-review` before it ships - the author is not\n'
-    printf 'a reliable reviewer of their own visual output. Dispatch it (`make verify` writes one prompt per\n'
-    printf 'map) and it records the verdict; a map with no record at all may still log the pass in the notes\n'
-    printf 'file'"'"'s Review section. On 2026-07-27 three city maps shipped unreviewed and nothing warned.\n'
-    fail="$fail $name"; rules="$rules map-no-review"
+  read -r verdict rec_key < <(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(d.get("verdict","") or "-", d.get("engine_key","") or "-")' "$verdict_rec" 2>/dev/null || echo "- -")
+  if [ "$verdict" = "NOT-REVIEWABLE" ]; then
+    printf '\n\033[1mREVIEW GATE: %s was last returned NOT-REVIEWABLE.\033[0m\n' "$unit"
+    printf 'Its reviewer stopped at the first stage - a prerequisite was missing, so no judgment was made.\n'
+    printf 'Fix what that verdict names (%s) and dispatch the review again.\n' "$verdict_rec"
+    fail="$fail $unit"; rules="$rules map-not-reviewable"
+  elif [ -n "${tree_key:-}" ] && [ "$rec_key" = "$tree_key" ] && { [ "$verdict" = "PASS" ] || [ "$verdict" = "NEEDS-WORK" ]; }; then
+    :   # the reviewer's record, at this content
+  else
+    printf '\n\033[1mREVIEW GATE: %s has a %s verdict at engine key %s, but the tree being pushed is %s.\033[0m\n' "$unit" "$verdict" "${rec_key:0:12}" "${tree_key:0:12}"
+    printf 'The content moved again after that review: dispatch it again (`make verify`), within the two-round cap.\n'
+    fail="$fail $unit"; rules="$rules map-stale-verdict"
   fi
 done
 
@@ -181,7 +166,7 @@ if [ -n "$fail" ]; then
   case "$fail" in
     *spec.md*)
       case "$rules" in
-        *map-*) guard_log review-gate blocked "$fail" spec-and-map ;;
+        *map-*|*unit-*|*occasions-*) guard_log review-gate blocked "$fail" spec-and-map ;;  # GUARD_EDIT_OK: feature 294 - the unit and occasions refusals are the map half
         *)      guard_log review-gate blocked "$fail" spec-no-verdict ;;
       esac ;;
     *)
