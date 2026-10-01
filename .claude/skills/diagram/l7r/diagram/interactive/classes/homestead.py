@@ -275,11 +275,13 @@ class WoodShed(Kind):
     of 1824 many houses had a firewood shed or a storage shed standing apart from the main house, and in another
     village's count, which its historian reads back to the last years of the shogunate, six households of sixteen had
     one, seven sheds in all, three of them 4 by 2 ken. So a wood shed stands on about four farmsteads in ten, the larger houses first, 24 by 12 ft. An open stack
-    against the house wall is found only on a present-day page, and the stack along the windbreak only in descriptions
+    under the eaves is found only on a present-day page, and the stack along the windbreak only in descriptions
     of today and of farms of the past with no date, so neither is drawn.
 
-    Note: The shed, its share and its size are read (Hasuda 1824, the Kakimochi count); the share is one village's, a
-    calibration, and where on the plot the shed stands - a step off the back wall or a flank - is a guess.
+    Note: The shed, its share and its size are read (Hasuda 1824, the Kakimochi count), and giving it to the larger
+    houses first is this project's reading of the same history's finding that the houses with the most outbuildings
+    had the largest main houses; the share is one village's, a calibration, and where on the plot the shed stands - a
+    step off the back wall or a flank - is a guess.
 
     Caveat: the share is one village's, a calibration, and where on the plot the shed stands - a step off the back wall
     or a flank - is a guess.

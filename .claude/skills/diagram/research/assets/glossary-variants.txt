@@ -1898,6 +1898,7 @@ kichin-yado	kichin-yado
 kido	kido
 kidoban	kidoban
 kidobans	kidoban
+kigoya	kigoya
 kikaijima	Kikaijima
 kikaijima's	Kikaijima
 kiku	kiku
@@ -3140,6 +3141,7 @@ shannon-wiener index	SWI
 shantung	Shantung
 shanxi merchant houses	Shanxi merchants
 shanxi merchants	Shanxi merchants
+shaoxing	Shaoxing
 shaso	shasō
 shasō	shasō
 shatian	shatian
