@@ -507,7 +507,7 @@ class StandsMixin:
         # `seat_near`: the reserved seats' own reach - the dooryard copse's, a house within reach on the seat's bank (W25)
         _seat_near = BankNear(seat_near[0], seat_near[1], seat_near[2]) if seat_near is not None else None
 
-        def _reseat(qx: float, qy: float, require_interior: bool, reach_of: Seats | BankNear | None = _near) -> tuple[float, float] | None:
+        def _reseat(qx: float, qy: float, require_interior: bool, reach_of: Seats | BankNear | None = _near, exact: bool = False) -> tuple[float, float] | None:
             """A DENSE belt flows around a local obstacle instead of losing the column.
 
             Which obstacles, and why this is not "re-seat around everything": a clump refused by the
@@ -591,7 +591,7 @@ class StandsMixin:
                         continue
                     if within is not None and (ax + clump * 0.9 < within[0] or ax - clump * 0.9 > within[2] or ay + clump * 0.9 < within[1] or ay - clump * 0.9 > within[3]):
                         continue
-                    if not blocks.static_clear(ax, ay):  # the fill's one region (feature 297, plan B3)
+                    if not (blocks.exact_clear if exact else blocks.static_clear)(ax, ay):  # the fill's regions; a reserved seat's exactly (R16)
                         continue
                     if near_clumps.too_near(ax, ay):
                         continue
@@ -631,15 +631,17 @@ class StandsMixin:
                 if reserved
                 else (lambda x, y: (_near is not None and not _near.too_near(x, y)) or (held is not None and held.too_near(x, y)))
             )
-            _open = blocks.static_clear(jx, jy)  # THE FILL'S ONE REGION FIRST (feature 297, plan B3): open ground asks no family
-            if (not _open and blocks.hard(jx, jy)) or _far(jx, jy):
+            # THE FILL'S REGIONS DECIDE (feature 297, plan B3): which family holds the ground, if any - and a household's reserved seat,
+            # which the seating proved clear, is asked of the exact families (the regions' margin refused one, woods W25 - R16)
+            _by = blocks.exact_taken_by(jx, jy) if reserved else blocks.taken_by(jx, jy)
+            if _by == "hard" or _far(jx, jy):
                 return
-            if not _open and (blocks.local(jx, jy) or blocks.lane(jx, jy)):
-                _alt = _reseat(jx, jy, require_interior=not blocks.local(jx, jy), reach_of=_reach)
+            if _by is not None:
+                _alt = _reseat(jx, jy, require_interior=_by != "local", reach_of=_reach, exact=reserved)
                 if _alt is None:
                     return
                 jx, jy = round(_alt[0], 1), round(_alt[1], 1)
-                if not blocks.static_clear(jx, jy) or _far(jx, jy):
+                if not (blocks.exact_clear if reserved else blocks.static_clear)(jx, jy) or _far(jx, jy):
                     return  # the re-seat's point, at the record's grain, is asked again - a rounding can carry it over an edge
             seated.append((jx, jy))
             clumps.append([round(jx, 1), round(jy, 1)])
