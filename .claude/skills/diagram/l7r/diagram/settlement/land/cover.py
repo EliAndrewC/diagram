@@ -343,7 +343,7 @@ class GroundCoverMixin:
         poorer ground so it is VISUALLY DISTINCT from the dense, dark, closed-canopy village grove - this is a
         COMMONS (not anyone's field), non-arable. WHY (south China's hills were stripped for fuel/timber over a
         millennium - open pine + grass + erosion; the protected grove is the green EXCEPTION; the back slope
-        also carried the graves + dry hill-crops): research/vegetation.html 'A village's groves' / 'Why is the hillside past the grove open scrub rather than more forest?'. Recorded
+        also carried the graves + dry hill-crops): research/vegetation.html 'Groves around a southern Chinese village' / 'Why is the hillside past the grove open scrub rather than more forest?'. Recorded
         in M['commons']. `role` picks the glyph (woodland / pasture / commons); `avoid` is a list of KEEP-OUT
         polygons (e.g. the hamlet cluster) the scatter stays out of, so ground-cover never creeps onto them."""
         # EVERY RECORDED MARSH IS A KEEP-OUT FOR SCRUB (GM 2026-08-26, feature 133 T12: *"do we mean to

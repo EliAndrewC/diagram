@@ -81,12 +81,14 @@ class Windbreak(Kind):
     conifer-led, darker conifers set in rows along the belt with lesser broadleaf among them; or mixed broadleaf,
     an irregular wood of rounded crowns. In either, a little bamboo shows between the crowns.
 
-    Why: A nucleated village shelters behind one village-scale grove against the winter monsoon. Fujian villages
-    keep about two fengshui forests each, at closed-canopy density in the well-kept Pearl River Delta patches;
-    the one large measured sample of grove size, Hong Kong's survey of 115 village woods, puts the grove behind
-    the village at a median of about one hectare - half under a hectare, four in ten between one and two. A
-    village's belt is drawn at one to two hectares, in the upper half of that band; a hamlet's follows the cluster it
-    stands behind - half a hectare to under two across these maps, inside the measured range. It is kept off the west side of the gardens so the beds keep their afternoon sun.
+    Why: A nucleated village is taken to shelter behind one village-scale grove against the winter monsoon - this
+    project's guess at the southern pattern. Villages in Fujian, or in one county of it - the source does not say
+    which - keep about two fengshui forests each, at closed-canopy density in the well-kept Pearl River Delta patches;
+    the one large sample measured grove by grove, Hong Kong's survey of 115 village woods (Zhongshan's 66 groves
+    average about four hectares, no grove's own size given), puts the grove behind the village at a median of about
+    one hectare - half under a hectare, four in ten between one and two. A village's belt is drawn at one to two
+    hectares, in the upper half of that band; a hamlet's is drawn smaller, in step with the cluster it stands behind.
+    It is kept off the west side of the gardens so the beds keep their afternoon sun.
     What it was made of was done two ways. The Japanese farmstead grove was led by one tall tree - in three of the four
     regions of a 2004 survey cedar grew at every homestead and was the dominant tree, in two of them planted in rows -
     with about nine to eighteen kinds of tree beside it; the Chinese village grove of the Pearl River Delta is a mixed
@@ -97,7 +99,9 @@ class Windbreak(Kind):
     Note: The grove count follows the Fujian figure (forests-2020), the density the Pearl-delta patches
     (hu-2011-fengshui-patches), and the size the Hong Kong survey (afcd-ncsc-9-06), measured in modern times on groves centuries old, no older measurement being known; the water-mouth cluster's
     size and the tree counts are guesses bracketed by Korean village-grove analogues; the belt's shape follows
-    the terrain and the cluster. The side it stands on, never ringing the cluster, follows the Chinese village's separate grove patches (coggins-minor-2018) and the Sendai farmstead grove - the full ring being the Izumo plain's farmstead form alone, which the maps give only to a farmstead's own grove - kept on the north
+    the terrain and the cluster, its ragged outline, its 80 to 120 ft depth and its place in the upper half of the
+    measured band being map conventions and its wrapping the cluster's flanks this project's choice; one shared grove
+    as a clustered village's pattern is a guess. The side it stands on, never ringing the cluster, follows the Chinese village's separate grove patches (coggins-minor-2018) and the Sendai farmstead grove - the full ring being the Izumo plain's farmstead form alone, which the maps give only to a farmstead's own grove - kept on the north
     and west against the northwesterly winter wind (irie-2020-igune, yashikirin-jawiki), and the GM's rulings
     that the maps show that regional wind unless a place declares its own. The two forms are read (the four-region
     survey, takehara-2004-yashikirin; the delta patches), and so is the bamboo, in the Japanese farmstead grove only
@@ -116,7 +120,7 @@ class Windbreak(Kind):
     Covers: `village_groves[role=windbreak]`
     Label: accurate
     Sources: forests-2020, hu-2011-fengshui-patches, coggins-minor-2018, takehara-2004-yashikirin, tonami-yashikirin-haichi, sendai-igune-modelplan
-    Entry: research/vegetation.html - "A village's groves: the back grove, the water-mouth grove and the dooryard copse (fengshui lin)"; research/rendering/vegetation.html - "How our maps draw a village's groves, and why their size is honest"; research/vegetation.html - 'Does a shelter belt wrap the settlement? No - it stands on one or two windward sides'; research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'; research/vegetation.html - 'Was a windbreak one kind of tree in a row', "Did a farmstead's grove carry bamboo"
+    Entry: research/vegetation.html - "Groves around a southern Chinese village: the fengshui woods (fengshuilin) and the dooryard copse"; research/rendering/vegetation.html - "How our maps draw a village's groves: the back grove, the water-mouth grove and the dooryard copse"; research/vegetation.html - 'Does a shelter belt wrap the settlement? No - it stands on one or two windward sides'; research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'; research/vegetation.html - 'Was a windbreak one kind of tree in a row', "Did a farmstead's grove carry bamboo"
     """
 
     key = 'windbreak'
@@ -220,7 +224,7 @@ class Copse(Kind):
     Covers: `village_groves[role=copse]`
     Label: accurate
     Sources: forests-2020, yashikirin-jawiki, miura-2019-yashikiyama, kotobank-yashikirin-heibonsha, takehara-2004-yashikirin
-    Entry: research/vegetation.html - "A village's groves: the back grove, the water-mouth grove and the dooryard copse (fengshui lin)"; research/rendering/vegetation.html - "How our maps draw a village's groves, and why their size is honest"; research/vegetation.html - "How big was the village's dooryard copse"
+    Entry: research/vegetation.html - "Groves around a southern Chinese village: the fengshui woods (fengshuilin) and the dooryard copse"; research/rendering/vegetation.html - "How our maps draw a village's groves: the back grove, the water-mouth grove and the dooryard copse"; research/vegetation.html - "How big was the village's dooryard copse"
     """
 
     key = 'copse'
