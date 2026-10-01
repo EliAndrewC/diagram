@@ -49,8 +49,11 @@ def shares(svg_text: str) -> dict[str, tuple[float, str | None, int]] | None:
     keys = raster.class_keys(svg_text)
     if not keys:
         return None
-    hit_png, palette = raster.id_map(svg_text, keys)
-    ink_png, _ = raster.id_map(without_hits(svg_text), keys)
+    # TEXT CRISP IN BOTH RENDERS: a hamlet page's id map blends a caption's glyph edges (feature 264 keeps it so), and a blend
+    # over a hit box reads as no class at all - Sawada's notice-board caption, laid on the connector, lost 27% of its own ink to
+    # its own antialiasing. The pointer over a glyph answers by its outline, which the crisp render is.
+    hit_png, palette = raster.id_map(svg_text, keys, crisp_text=True)
+    ink_png, _ = raster.id_map(without_hits(svg_text), keys, crisp_text=True)
     if hit_png is None or ink_png is None:
         return None
     hit, ink = _red(hit_png), _red(ink_png)
