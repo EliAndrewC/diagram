@@ -7,13 +7,15 @@ gated as it lands; the lane law in four steps; then the measurement and the reco
 
 ## Setup
 
-- [ ] T01 The base: `measure.py before` and `regen-before` in `/tmp/base297` (done at spec time), and the `297-start` bookend there
+- [x] T01 The base: `measure.py before` and `regen-before` in `/tmp/base297` (done at spec time), and the `297-start` bookend there
       research: rendering
+      verify: DONE. measure.py before + regen-before in /tmp/base297 (c5a631f9b); 297-start bookend 16.1 s after REFERENCE took Inashiro's pins (research R8); base cohort 30/30
 
 ## The region (A)
 
-- [ ] T02 [US2] [US3] `settlement/_geom/region.py`: the conservative `Region` (painters, `taken_many`, the lazy summed-area `box_clear`), with its tests against shapely and brute force (A)
+- [x] T02 [US2] [US3] `settlement/_geom/region.py`: the conservative `Region` (painters, `taken_many`, the lazy summed-area `box_clear`), with its tests against shapely and brute force (A)
       research: rendering
+      verify: DONE. settlement/_geom/region.py; tests/settlement/test_region.py 3 passed (no painted point read clear at cells 2/3/8, box query = brute sum, off-window taken)
 
 ## The small levers (C, E1-E3)
 
@@ -21,10 +23,12 @@ gated as it lands; the lane law in four steps; then the measurement and the reco
       research: rendering
 - [ ] T04 [P] [US2] The threshing-yard mats as a computed, centered lattice in `settlement/homestead_parts/yards.py` (E1)
       research: rendering
-- [ ] T05 [P] [US5] The page's hit regions, explanations and blob computed while the picture and id map render, in `interactive/page.py` (E2)
+- [x] T05 [P] [US5] The page's hit regions, explanations and blob computed while the picture and id map render, in `interactive/page.py` (E2)
       research: rendering
-- [ ] T06 [P] [US5] The drain-bank hem's box prefilter in `waterfields/banks.py` (E3)
+      verify: DONE. page.py: the picture submitted from the wrapped strings before the hit regions/hit layer, the id map after them, the explanations/card computed while both render; Inashiro regenerates with its 12 MB page and picture; tests/interactive 1202 passed
+- [x] T06 [P] [US5] The drain-bank hem's box prefilter in `waterfields/banks.py` (E3)
       research: rendering
+      verify: DONE. banks.py: hem_to_bank asks drain_bank_clearance_many (one numpy pass over vertices x drain segments); test_banks_297.py: per-vertex verdict equals the scalar predicate over 40 random rings/drains incl. zero-length segments
 
 ## The region's uses (B1-B4)
 

@@ -22,7 +22,6 @@ from typing import Any
 
 from .base import Pt
 
-
 GROW = 1.5
 """How far every painted shape is grown, in cells. A cell is painted when PIL's fill covers its center; any point of the cell
 lies within 0.71 cells of that center, and PIL places a vertex to within half a cell - so 1.5 cells keeps every point of the

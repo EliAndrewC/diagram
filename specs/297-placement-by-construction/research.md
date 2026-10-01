@@ -91,3 +91,13 @@ skeleton lane) through the perf tool, and at the wells (`OverlapRefused`: a well
 spec differs by the CLI's defaults). The cohort's own seeds pass (30/30, `cohort-base.log`). Both refusals are in code this feature
 rebuilds (the lane law, D; the seating, B1/C); each is re-rolled after its lever lands, and fixed here if it still refuses
 (constitution XIV).
+
+## R9. The layout template keyed per household - withdrawn (observed 2026-10-01, method: `make quick` with the key changed)
+
+Plan C's second half keyed `_bundle_geom`'s template on the household (the k-th seated) instead of the seat each round offers it,
+so a household's layout would be built once rather than per offer (2,261 builds for 734 offers on Inashiro). It broke the seating:
+`test_a_seating_draws_a_well_at_every_pocket_it_laid` (seed 3) seated 9 of 10 households and refused its site, and a row of
+seats at one pitch lost its fourth. The yard's area is a lognormal roll seeded by the seat's position (`_yard_area_ft2`), so
+the per-seat rolls offered a household a different yard size at every seat - the seating's only way to fit a large-yard
+household into a tight spot. Keyed once per household, a large-yard household had no seat. Withdrawn by measurement; the seat's
+own questions (the first half of C) stand and do not depend on it.

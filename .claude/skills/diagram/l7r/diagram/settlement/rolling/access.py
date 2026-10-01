@@ -420,6 +420,29 @@ def access_corridor(s: Settlement, geom: Any) -> tuple[Pt, ...] | None:
         k += 1
 
 
+def seat_reaches_tree(s: Settlement, core: Any) -> bool:
+    """Has this house and yard ANY corridor candidate to the access tree - a door whose strip clears the house and the standing
+    ground (`_house_candidates`)? The seat's own question (feature 297, FR-002), asked of the house-and-yard core before any
+    layout is built: the memo entry `access_corridor` keys on the same house and yard is the one created and peeked here, so a
+    layout's corridor search continues from it rather than starting again. True where no tree is installed."""
+    tree = getattr(s, "_access", None)
+    if tree is None:
+        return True
+    boxes = core.get("boxes") or {}
+    key = ("corridor", tuple(boxes.get("house") or core["house"]), tuple(boxes.get("yard") or core.get("yard") or ()))
+    memo = _standing_memo(s)[1]
+    found = memo.get(key)
+    if found is None:
+        found = memo[key] = ([], _house_candidates(s, tree, core))
+    if found[0]:
+        return True
+    nxt = next(found[1], None)
+    if nxt is None:
+        return False
+    found[0].append(nxt)
+    return True
+
+
 def yard_quad(geom: Any) -> list[Pt] | None:
     """A homestead's threshing yard as the overlap matrix will read it: its rect turned with its house (`_attach_yard` draws
     it at the house's rake about its own center, `registry.element_extents` reads the record's turned rect), or None for a
