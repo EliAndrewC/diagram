@@ -18,7 +18,9 @@ def _record(tmp: pathlib.Path, pairs: list[dict[str, str]] | None = None) -> pat
     (tmp / "homesteads").mkdir()
     (tmp / "homesteads" / "010-groves.html").write_text(
         '<h2 id="groves">Groves of trees (<em>yashikirin</em>)</h2>\n<!-- a session note. With a full stop. -->\n'
-        '<p>A farm\'s own wood.<sup class="fn" data-note="k"></sup> It stood on the windward sides.</p>\n', encoding="utf-8")
+        '<p>A farm\'s own wood.<sup class="fn" data-note="k"></sup> It stood on the windward sides.</p>\n',
+        encoding="utf-8",
+    )
     (tmp / "cities" / "fabric").mkdir(parents=True)
     (tmp / "cities" / "fabric" / "010-belts.html").write_text('<h2 id="belts">Shelter belts</h2>\n<p>A belt shared by a village</p>\n', encoding="utf-8")
     (tmp / "cities" / "fabric" / "020-bare.html").write_text('<h2 id="bare">No opening</h2>\n<ul><li>only bullets</li></ul>\n', encoding="utf-8")
@@ -52,13 +54,22 @@ def test_a_section_with_no_opening_paragraph_is_listed_by_title_alone(tmp_path: 
 
 
 def test_a_pair_naming_no_section_or_itself_is_named_and_refuses_the_build(tmp_path: pathlib.Path) -> None:
-    rec = str(_record(tmp_path, [{"a": "homesteads.html#groves", "b": "homesteads.html#nowhere", "why": "w"},
-                                 {"a": "homesteads.html#groves", "b": "homesteads.html#groves", "why": "w"},
-                                 {"a": "homesteads.html#groves", "b": "nopage.html#x", "why": "w"}]))
+    rec = str(
+        _record(
+            tmp_path,
+            [
+                {"a": "homesteads.html#groves", "b": "homesteads.html#nowhere", "why": "w"},
+                {"a": "homesteads.html#groves", "b": "homesteads.html#groves", "why": "w"},
+                {"a": "homesteads.html#groves", "b": "nopage.html#x", "why": "w"},
+            ],
+        )
+    )
     bad = confusables.unresolved(confusables.load(rec), rec)
-    assert bad == ["`homesteads.html#nowhere` (paired with `homesteads.html#groves`) - no such section",
-                   "`homesteads.html#groves` is paired with itself",
-                   "`nopage.html#x` (paired with `homesteads.html#groves`) - no such section"]
+    assert bad == [
+        "`homesteads.html#nowhere` (paired with `homesteads.html#groves`) - no such section",
+        "`homesteads.html#groves` is paired with itself",
+        "`nopage.html#x` (paired with `homesteads.html#groves`) - no such section",
+    ]
     with pytest.raises(store.RecordError, match="nowhere"):
         store._confusables("<p>page</p>", "homesteads.html", rec)
 
@@ -69,6 +80,7 @@ def test_no_data_file_means_no_lists(tmp_path: pathlib.Path) -> None:
 
 
 # ---- the record itself ----
+
 
 def _data() -> list[dict[str, str]]:
     with open(pathlib.Path(RESEARCH_DIR) / confusables.DATA, encoding="utf-8") as fh:

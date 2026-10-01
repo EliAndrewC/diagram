@@ -13,7 +13,7 @@ import os
 
 from l7r.diagram.interactive.classes import CLASSES
 from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES
-from l7r.diagram.interactive.sources import RESEARCH_DIR, _ENTRY_FILE, _entry_headings, _names, _parsed
+from l7r.diagram.interactive.sources import _ENTRY_FILE, RESEARCH_DIR, _entry_headings, _names, _parsed
 
 
 def stale_titles(entry: str, research_dir: str = RESEARCH_DIR) -> list[str]:

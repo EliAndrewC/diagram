@@ -142,6 +142,33 @@ the pilot; the GM reads the pages in this feature's clone.
 - **SC-010** (FR-013): a unit test proves the prepass lists an unconverted metric figure in the prose and never one in a
   quotation, a comment or with its conversion beside it.
 - **SC-008** (FR-011, spec-wide): the tasks file ends the pilot in an unticked GM sign-off task.
+- **SC-011** (FR-014): the style prepass lists "GM" in a section's visible text, with its test; the restyled record
+  shows no GM ruling (the prepass's GM list empty on every section).
+- **SC-012** (FR-015): `record-style` rule 9a judges number against the map; every restyled section passed it in its
+  check session.
+- **SC-013** (FR-016): `research/confusables.json` holds the pairs once; `tests/interactive/test_confusables.py` fails on a
+  pair naming no section, a pair listed twice, or an assembled page missing either entry of a pair.
+- **SC-014** (FR-017): every rendering section declares the research section it is about; `tests/interactive/test_xref.py`
+  proves the links are written both ways and that a declaration naming no section refuses the build.
+- **SC-015** (FR-018): the style prepass lists a paragraph over 150 words, with its test; its list is empty on every
+  restyled section.
+- **SC-016** (FR-019): `scripts/check-question-size.py` counts prose only, and `make check-bundle ... FOR=quote-check`
+  splits notes into bundles of at most 12,000 bytes, each with its test.
+- **SC-017** (FR-020): `tests/interactive/test_originals.py` proves an original is moved apart by `make record`, put back by
+  the assembly, and collapsed behind a toggle on the page.
+- **SC-018** (FR-021): the browser test places the heading's link on the heading's own row, floated right.
+- **SC-019** (FR-022): `tests/interactive/test_footnotes.py` fails on "(the source's own English)" or "translated from the
+  ... by this project" anywhere in the record.
+- **SC-020** (FR-023): the style prepass lists the years in lead lines and `record-style` rule 5c judges them, with its test.
+- **SC-021** (FR-024): `tests/interactive/test_passages.py` proves a multi-passage note renders as a list, nested where a
+  passage introduces others, and the page's text unchanged.
+- **SC-022** (FR-025): `tests/interactive/test_absence.py` proves the one opening sentence is written in place of the
+  marker from one place, and the prepass lists an absence note in the old form.
+- **SC-023** (FR-026): `record-style` rule 9c and the prepass's list of sentences resting on an absence note judge a claim
+  about an unread page; no such claim is left (the closing pass and the sweep's checks).
+- **SC-024** (FR-027): the style prepass lists kanji in our own words without its `(romaji, "meaning")` gloss, with its
+  test, and `make translation-owed` lists a changed gloss.
+- **SC-025** (FR-028): `tests/interactive/test_record_format.py` fails on a glossary variant that is a common English word.
 
 ## Decisions Recorded
 
