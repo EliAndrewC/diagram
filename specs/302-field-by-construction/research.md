@@ -113,12 +113,12 @@ without the corners found nothing - the rule's measurement, not the meeting, was
 
 ## R5. The glyph check's findings and what fixed them (observed 2026-10-01, method: the paddy glyph check on Inashiro, then a debug harness over the six harness fields - the settle's scraps and cells, each scrap's verdict; the shipped maps through `tests/gate/test_field_302.py`)
 
-The paddy glyph check (NEEDS-WORK) found a 6,377 sq ft bundless wedge at the head of Inashiro's east sector - 0.79% of the planted
+The paddy glyph check (NEEDS-WORK; observed 2026-10-01, method: the check's own count off the manifest) found a 6,377 sq ft bundless wedge at the head of Inashiro's east sector - 0.79% of the planted
 area, against SC-003's 0.5% - and a plot of 4.2 design cells below it, the only one over `RECUT_OVER`. The partition covered the
 wedge (no gap after `cut`); the settle left it bare. Its verdict was `needle` + `toe`, and the core of a trim still failed `toe`. The
 cause was in its bottom edge: the row folded back on itself, (3628.5, 2599.7) -> (3633.4, 2596.0) -> (3631.3, 2598.8).
 
-Measured over the six fields, every scrap over 700 sq ft carried the same hair-fine sawtooth on one row edge. A row passed through
+Measured over the six fields (observed 2026-10-01, method: the debug harness's scrap list, each scrap's ring and verdict), every scrap over 700 sq ft carried the same hair-fine sawtooth on one row edge. A row passed through
 every column's point, the thinned ones too. Each point carried its own wobble (5 px along the contour) and wander (along the fall),
 so where the sector narrowed the points packed into a few px and the row zigzagged. Fixes, in the order tried:
 
@@ -129,7 +129,7 @@ so where the sector narrowed the points packed into a few px and the row zigzagg
 | the wobble held under 0.3 of the local column spacing | withdrawn | the fold went, the teeth stayed - superseded by the next row |
 | a row's vertices only where a kept column runs (`grid_lines`) | yes | every field: see below |
 
-Before -> after, bare % / cells over 2.5: Inashiro 0.82 / 1 -> 0.00 / 0; Kashikawa 0.37 / 3 -> 0.00 / 0; Mizuguchi 0.83 / 0 -> 0.00 / 0;
+Before -> after (observed 2026-10-01, method: the debug harness on the committed code and on the clone, one run each; the gate test's figures from the shipped manifests), bare % / cells over 2.5: Inashiro 0.82 / 1 -> 0.00 / 0; Kashikawa 0.37 / 3 -> 0.00 / 0; Mizuguchi 0.83 / 0 -> 0.00 / 0;
 Sawada 0.62 / 0 -> 0.06 / 0; Inashiro at 10 households 0.05 -> 0.00; at 20, 0.48 / 1 -> 0.00 / 0. The largest cell is now 2.08 design
 cells. The baseline already broke SC-003 on three fields; the check that now holds it is `tests/gate/test_field_302.py`. It measures
 the comb floor less the plots and the engine's water, opened by 3 ft so that the few-px misfit between drawn and engine channel
