@@ -722,8 +722,8 @@ FORD_SPACING = 160.0
 FORD_BEND_DEG = 20.0
 
 # THE COPSE STANDS AMONG WHAT IT IS NAMED FOR (feature 261). The record gives the dooryard copse as "a loose copse of
-# bamboo and fruit trees in the gaps between the houses" and no distance (research/vegetation, 'What are the village's
-# three groves'); 90 ft is the bar the feature-230 settlement-review itself used to call a copse a wood (86% of clumps
+# bamboo and fruit trees in the gaps between the houses" and no distance (research/rendering/vegetation, 'How our maps draw a
+# village's groves'); 90 ft is the bar the feature-230 settlement-review itself used to call a copse a wood (86% of clumps
 # more than 90 ft from any house), and the pool's copses before the reseats sat at a median 77-81 ft. A map drawing
 # convention on the record's words, not a finding. The against-the-belt copse reads as one wood with the belt when its
 # crowns stand within a crown or two of the belt's: 60 ft, the same kind of convention.

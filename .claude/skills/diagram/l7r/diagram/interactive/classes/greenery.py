@@ -116,7 +116,7 @@ class Windbreak(Kind):
     Covers: `village_groves[role=windbreak]`
     Label: accurate
     Sources: forests-2020, hu-2011-fengshui-patches, coggins-minor-2018, takehara-2004-yashikirin, tonami-yashikirin-haichi, sendai-igune-modelplan
-    Entry: research/vegetation.html - 'The fengshui forest - real scale, and why ours is honest'; research/vegetation.html - 'Does a shelter belt wrap the settlement? No - it stands on one or two windward sides'; research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'; research/vegetation.html - 'Was a windbreak one kind of tree in a row', "Did a farmstead's grove carry bamboo"
+    Entry: research/vegetation.html - "A village's groves: the back grove, the water-mouth grove and the dooryard copse (fengshui lin)"; research/rendering/vegetation.html - "How our maps draw a village's groves, and why their size is honest"; research/vegetation.html - 'Does a shelter belt wrap the settlement? No - it stands on one or two windward sides'; research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'; research/vegetation.html - 'Was a windbreak one kind of tree in a row', "Did a farmstead's grove carry bamboo"
     """
 
     key = 'windbreak'
@@ -220,7 +220,7 @@ class Copse(Kind):
     Covers: `village_groves[role=copse]`
     Label: accurate
     Sources: forests-2020, yashikirin-jawiki, miura-2019-yashikiyama, kotobank-yashikirin-heibonsha, takehara-2004-yashikirin
-    Entry: research/vegetation.html - 'The fengshui forest'; research/vegetation.html - 'What are the village's three groves'; research/vegetation.html - "How big was the village's dooryard copse"
+    Entry: research/vegetation.html - "A village's groves: the back grove, the water-mouth grove and the dooryard copse (fengshui lin)"; research/rendering/vegetation.html - "How our maps draw a village's groves, and why their size is honest"; research/vegetation.html - "How big was the village's dooryard copse"
     """
 
     key = 'copse'

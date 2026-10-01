@@ -283,7 +283,7 @@ class StandsMixin:
         bamboo_rings: Sequence[Any] = (),
     ) -> int:
         """A COMMUNAL village grove - the Chinese *fengshui* forest (风水林). Unlike the per-house *yashikirin*,
-        a NUCLEATED village shelters behind ONE village-scale grove, in three roles (see research/vegetation.html 'What are the village's three groves' 'Village
+        a NUCLEATED village shelters behind ONE village-scale grove, in three roles (see research/rendering/vegetation.html 'How our maps draw a village's groves' 'Village
         windbreak'):
           - `windbreak` - the dense belt on the WINDWARD/high BACK edge (后龙林 back-village grove); the winter-
             monsoon wall and the LARGEST vegetation feature. Nestles against and EMBRACES the cluster.
@@ -376,8 +376,8 @@ class StandsMixin:
         # 9, 8, 6, 4, 6, 4, 11, 9, 26, 30 and 83 ft against a belt clump radius of 14 - **10 of 11
         # copse clumps inside the belt's own canopy**, spanning x 1096-1188 while the houses span
         # 1108-1331. So the dooryards east of the front rank got no greenery at all and a whole
-        # feature was invisible, while `research/vegetation.html` ("What are the village's three groves")
-        # says outright that "the copse, not the belt, fills the inner gaps".
+        # feature was invisible, while `research/rendering/vegetation.html` ("How our maps draw a village's groves")
+        # says outright that "the copse, not the back grove, fills the gaps between the houses".
         #
         # Sum of the two canopy reaches, so neither stand's ink laps the other. This also protects the
         # reverse order (a belt seated after a copse) without needing to know which ran first, and it

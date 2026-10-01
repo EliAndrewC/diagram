@@ -559,7 +559,6 @@ cribs	cribbing
 crop margin	crop margin
 crop margins	crop margin
 crop-margin	crop margin
-crossref	Crossref
 crown	crown
 crown fire	crown fire
 crown fires	crown fire
@@ -849,7 +848,6 @@ eta	eta
 etchu	Etchu
 etchu's	Etchu
 eunis	EUNIS
-europe pmc	Europe PMC
 eutrophic	eutrophication
 eutrophication	eutrophication
 evapotranspiration	evapotranspiration
@@ -3219,7 +3217,6 @@ shosai	shosai
 shotoku	Shotoku era
 shotoku era	Shotoku era
 shoucheng lu	Shoucheng Lu
-shoulder month	shoulder month
 showa	Showa
 shoya	shoya
 shubiki	shubiki

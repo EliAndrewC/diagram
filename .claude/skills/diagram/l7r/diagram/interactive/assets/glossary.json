@@ -5001,12 +5001,6 @@
    "NRCS-designed"
   ]
  },
- "shoulder month": {
-  "def": "The harvest month at the end of the growing season, when the sun stands low - about 28 degrees at 9am and 3pm at 38N - while the grain is being threshed and the autumn greens are still in the ground; its long shadows set how much clear ground a yard or bed needs.",
-  "variants": [
-   "shoulder month"
-  ]
- },
  "threshing yard": {
   "def": "The flat, open, sunlit yard beside a farmhouse where the harvested grain was threshed; the record keeps 39 ft of clear ground south of it.",
   "variants": [
@@ -7689,18 +7683,6 @@
   "def": "A historical prefecture of southern Anhui, China, known for its old villages and for the water-mouth groves and gardens at their entrances.",
   "variants": [
    "Huizhou"
-  ]
- },
- "Europe PMC": {
-  "def": "A free online database of life-science and biomedical literature that can be searched across the full text of its papers.",
-  "variants": [
-   "Europe PMC"
-  ]
- },
- "Crossref": {
-  "def": "The registry that issues DOIs for scholarly papers; its index of their titles and details can be searched.",
-  "variants": [
-   "Crossref"
   ]
  },
  "ha": {
