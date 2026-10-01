@@ -257,3 +257,13 @@ the accepted spec, each with its evidence:
   one figure. Addressed.
 - Round 3 (spec-fidelity-verify, 2026-09-30): FAITHFUL. The GM's second statement's guideline edits were made as their own commit
   (5594b7c54: constitution v2.27.0, `dev/performance.md`, `docs/efficiency-tooling.md`, the engine `CLAUDE.md`).
+- Amendment 1, round 1 (spec-fidelity, 2026-10-01): CHANGES REQUIRED - lever 3's narrowing unjustified (D2-D4 never built), three
+  narrowings unstated, landing the GM's call, stale rows and figures. Addressed: D2-D4 built (R14), the narrowings stated.
+- Amendment 1, round 2 (spec-fidelity-verify): CHANGES REQUIRED - D3 built at the pass boundary, not the write. Addressed: built at
+  the write (R14).
+- Amendment 1, round 3 (spec-fidelity-verify): CHANGES REQUIRED - the network-wide repairs ran per write, an IndexError unfixed.
+  Addressed: built as D1-D4 state, the harness bug fixed (R14); tasks closed; a label.
+- Amendment 1, round 4 (spec-fidelity-verify): CHANGES REQUIRED - FR-001 on a refuted premise. Addressed: R15. (In parallel the plan
+  review required B3 as planned with exact families for reserved seats only - built, R16; plan CLEAR at its round 5.)
+- Amendment 1, round 5 (spec-fidelity-verify): CHANGES REQUIRED - the outcomes block stale after the grove rebuild (one mechanical
+  item). Re-measured and restated on the final engine; the cap reached, so it goes to the GM with the decision to land.
