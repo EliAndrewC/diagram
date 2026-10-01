@@ -6,7 +6,7 @@ pig shed "constructed on the pond dyke or over the water surface" so the excreta
 premodern SHARE of households keeping a sty is not in anything read - the band below is a GUESS and the
 class entry says so - so it is rolled from the hamlet's seed like every other share, and each sty takes
 a pond of its own nearest the houses, on the bank between the parcel's edge and its water. Research:
-research/archetypes.html "The dike-pond hamlet: what stands there that a rice hamlet lacks" and research/rendering/archetypes.html "How our maps furnish a dike-pond hamlet".
+research/archetypes.html "The dike-pond hamlet: its houses, boats and manure jars" and research/rendering/archetypes.html "How our maps furnish a dike-pond hamlet".
 
 NO DUCK PEN (269 B32, the GM 2026-09-28: "We should eliminate anything which is only modern, and this
 includes the duck pen"). The fenced dry-and-wet-run pen is read only in a modern fish-cum-duck manual

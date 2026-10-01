@@ -179,6 +179,7 @@ beam span	ridge span
 bed load	bedload
 bed shear stress	bed shear stress
 bedload	bedload
+before modern times	modern times
 beishan mianshui	beishan mianshui
 beitang	beitang
 bell-and-drum tower	gulou
@@ -2115,6 +2116,7 @@ mizuya	mizuya
 mlit	MLIT
 mochinoki	mochinoki
 modern consolidation	kochi seiri
+modern times	modern times
 module	module
 mogao	Mogao caves
 mogao caves	Mogao caves
@@ -2340,6 +2342,7 @@ oku-muki	oku
 oku-no-ma	oku-no-ma
 oku-zashiki	zashiki
 okura	kura
+older than modern times	modern times
 omamori	omamori
 omi	Omi
 omote	omote
@@ -2605,6 +2608,7 @@ red pine woods	red pine
 reducing atmosphere	reducing firing
 reducing firing	reducing firing
 reel	reeling
+reeled	reeling
 reeling	reeling
 reeling machine	reeling
 reeling shed	reeling

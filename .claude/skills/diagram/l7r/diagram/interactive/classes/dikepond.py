@@ -145,7 +145,7 @@ class FruitDike(Kind):
     Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is fruit, and its trees
     Label: accurate
     Sources: guangdong-xinyu-22, guangdong-xinyu-25, pwsannong-zhusanjiao-nongyeshi, gd-gazetteer-sangji
-    Entry: research/archetypes.html - 'Were fruit, cane or banana dikes older than the mulberry dike? Fruit was - lychee above all', 'What else was planted on a pond dike besides mulberry?', 'The dike-pond hamlet: what stands there that a rice hamlet lacks'; research/rendering/archetypes.html - 'How our maps furnish a dike-pond hamlet'
+    Entry: research/archetypes.html - 'Were fruit, cane or banana dikes older than the mulberry dike? Fruit was - lychee above all', 'What else was planted on a pond dike besides mulberry?', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps furnish a dike-pond hamlet'
     """
 
     key = 'fruit dike'
@@ -207,7 +207,7 @@ class PigSty(Kind):
     Covers: every `pig_sties[]` record - a shed with its railed pen on a pond bank
     Label: accurate
     Sources: qimin-yaoshu-yangzhu, isis-dykepond, pwsannong-zhusanjiao-nongyeshi, nongzheng-quanshu-41, fao-ac264e
-    Entry: research/archetypes.html - "Does a pig sty have to stand back from the water, or from the pond's sluice?", 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields', 'Does a dike-pond hamlet keep pigs and ducks on its pond dikes?', 'The dike-pond hamlet: what stands there that a rice hamlet lacks'; research/rendering/archetypes.html - 'How our maps furnish a dike-pond hamlet'
+    Entry: research/archetypes.html - "Does a pig sty have to stand back from the water, or from the pond's sluice?", 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields', 'Does a dike-pond hamlet keep pigs and ducks on its pond dikes?', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps furnish a dike-pond hamlet'
     """
 
     key = 'pig sty'
@@ -237,7 +237,7 @@ class FryPond(Kind):
     Covers: the dug water of a `dikeponds[]` parcel recorded `kind: fry` - a fry village's smallest ponds
     Label: accurate
     Sources: cssn-sangyuanwei, guangdong-xinyu-22, pwsannong-zhusanjiao-nongyeshi
-    Entry: research/archetypes.html - "Did a dike-pond village rear its own fish fry, or buy them? Most bought them - the nursery ponds were one township's trade", 'Were fish fry a trade, and which ponds were the nursery ponds?', 'The dike-pond hamlet: what stands there that a rice hamlet lacks'; research/rendering/archetypes.html - 'How our maps furnish a dike-pond hamlet'
+    Entry: research/archetypes.html - "Did a dike-pond village rear its own fish fry, or buy them? Most bought them - the nursery ponds were one township's trade", 'Were fish fry a trade, and which ponds were the nursery ponds?', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps furnish a dike-pond hamlet'
     """
 
     key = 'fry pond'
@@ -259,17 +259,20 @@ class ManurePit(Kind):
     hamlet rolls its share of field pits somewhere between almost none and most households.
 
     Note: The form and its place behind the house are read (Fei 1939, with earthen jars sunk by farm paths and roads already in an account of China printed in 1797), and so are the field pit and how widely
-    its share varied (the highest, 15 of 18, in a village whose field pits also took night soil carted in from Sendai); carrying the field pit, found in Japan, to the silk village's jar is this project's own
-    step, and the drawn 3.5 ft mouth is a size the record does not give.
+    its share varied (the highest, 15 of 18, in a village whose field pits also took night soil carted in from Sendai), and so are field-head pits in south China in 1313, though those were lined with brick, not jars. The even heap-or-pit roll is a guess, for no
+    source says how many villages used each; carrying the field pit, found in Japan, to the silk village's jar is this
+    project's own step, as is the 160 ft reach to a field or road; and the drawn 3.5 ft mouth is a size the record does not
+    give. The jar buried to its rim and the jar half buried are drawn as one mouth, a map drawing convention.
 
-    Caveat: carrying the field pit, found in Japan, to the silk village's jar is this project's own
-    step, and the drawn 3.5 ft mouth is a size the record does not give.
+    Caveat: The even heap-or-pit roll is a guess, for no source says how many villages used each; carrying the field
+    pit, found in Japan, to the silk village's jar is this project's own step, as is the 160 ft reach to a field or
+    road; and the drawn 3.5 ft mouth is a size the record does not give.
 
     Name: manure pit
     Covers: a `farm_fixtures[]` record of kind `manure` with `form: pit` - the alternative to the heap
     Label: accurate
     Sources: fei-1939, sugiura-1973-fuzoku, suzuki-1959-noson-benjo
-    Entry: research/archetypes.html - 'The dike-pond hamlet: what stands there that a rice hamlet lacks'; research/rendering/archetypes.html - 'How our maps furnish a dike-pond hamlet'; research/homesteads.html - 'Where did the privy stand, and where was its night soil kept?'
+    Entry: research/archetypes.html - 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps furnish a dike-pond hamlet'; research/homesteads.html - 'Where did the privy stand, and where was its night soil kept?'
     """
 
     key = 'manure pit'

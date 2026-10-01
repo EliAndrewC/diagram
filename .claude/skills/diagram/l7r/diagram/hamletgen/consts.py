@@ -373,7 +373,7 @@ FRY_FORMS = ("none", "none", "none", "fry_village")
 # 2026-08-28 choosing audit A2). Sugiura 1973 counts the manure shed/heap on Tohoku farmsteads; Fei 1939 has
 # the Lake Tai silk village keeping its manure "in the pits made of earthenware, half buried in the ground at
 # the back of the building", lined along the road. Neither source gives a share of villages using each, so
-# the roll is even. research/archetypes.html "The dike-pond hamlet: what stands there that a rice hamlet lacks".
+# the roll is even. research/archetypes.html "The dike-pond hamlet: its houses, boats and manure jars".
 MANURE_FORMS = ("heap", "pit")
 
 # THE HARVEST WEATHER - an ENVIRONMENT FACT the spec declares, never a roll (feature 282, FR-005). Racks gathered by
