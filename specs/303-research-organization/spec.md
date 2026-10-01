@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-organization`)
 **Created**: 2026-10-01
-**Status**: Draft
+**Status**: Accepted - FAITHFUL at round 3 (2026-10-01)
 **Request**: [`request.md`](request.md) - the GM's words verbatim. The organization of the record today is *"haphazard"*:
 a top-level "Research" beside a "Cities" that is also research, "How our maps draw it" beside "How our maps draw cities",
 drawing conventions (Presentation) filed as research, and an order that opens on field archetypes for no reason. The GM
@@ -296,3 +296,12 @@ This feature draws nothing on a map and states nothing new about one; it reorgan
   them over (Edge Cases).
 - The GM's memory files outside the repository are updated where they name an old path, as housekeeping, not as a
   requirement of this feature.
+
+## Review history
+
+- Round 1 (spec-fidelity, 2026-10-01): CHANGES REQUIRED - sections could take questions only by primary subject (the
+  GM's "instead of only treating the first tag as the primary one"); only Presentation was audited as a convention;
+  the unpaired list was unmeasured. Fixed: FR-009/FR-010 rules over any tag, FR-008a, the measured Edge Case.
+- Round 2: CHANGES REQUIRED - three passages still said primary-subject homing or one-to-one pairing; FR-010 refused
+  what FR-013 omitted. Fixed.
+- Round 3: FAITHFUL.
