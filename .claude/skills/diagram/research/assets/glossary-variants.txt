@@ -2665,6 +2665,8 @@ rowhouse gate	nagayamon
 rowhouse gates	nagayamon
 roya	roya
 runners	yayi
+rural town	zaigomachi
+rural towns	zaigomachi
 ryo	ryo
 ryobosei	ryobosei
 ryobu	ryobu
@@ -3039,8 +3041,11 @@ straw rick	rick
 straw ricks	rick
 stream order	stream order
 stream orders	stream order
+street town	gaison
+street towns	gaison
 street village	gaison
 street villages	gaison
+street-town	gaison
 street-village	gaison
 stringer	stringer
 stringers	stringer
@@ -3311,6 +3316,8 @@ toritsugi	yoritsuki
 toro	Toro
 toro site	Toro
 torreya	torreya
+tortoise-shell	tortoise-shell
+tortoise-shell net	tortoise-shell
 toshiyori	toshiyori
 toshuko	toshuko
 total length and fall	fall

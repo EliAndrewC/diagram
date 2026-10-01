@@ -8262,9 +8262,12 @@
   ]
  },
  "gaison": {
-  "def": "Street village: a village packed tight along both sides of a road and living from it, with shops and lodging - the denser, trading form of the row village.",
+  "def": "Street village or street town: a settlement packed tight along both sides of a road and living from it, with shops and lodging - the denser, trading form of the row village.",
   "variants": [
    "gaison",
+   "street town",
+   "street-town",
+   "street towns",
    "street village",
    "street-village",
    "street villages"
@@ -12327,10 +12330,12 @@
   ]
  },
  "zaigomachi": {
-  "def": "A country market town of the Edo period that grew up among the villages as a center of the rural economy, rather than as a castle or post town; in the Kinai around Osaka they formed from the late 17th century, every few kilometers.",
+  "def": "Rural town: a country market town of the Edo period that belonged in law to the countryside but was in substance a town, grown up among the villages as a center of the rural economy rather than as a castle or post town; in the Kinai around Osaka they formed from the late 17th century, every few kilometers.",
   "variants": [
    "zaigomachi",
-   "zaigo-machi"
+   "zaigo-machi",
+   "rural town",
+   "rural towns"
   ]
  },
  "gannin": {
@@ -13735,6 +13740,13 @@
   "variants": [
    "eaves wall",
    "eaves walls"
+  ]
+ },
+ "tortoise-shell": {
+  "def": "A Chinese planners' name for a mesh of streets and lanes crossing one another into blocks, like the plates of a tortoise's shell; Leping's old town has one of 14 lanes across and 9 along on either side of its main avenue.",
+  "variants": [
+   "tortoise-shell",
+   "tortoise-shell net"
   ]
  }
 }

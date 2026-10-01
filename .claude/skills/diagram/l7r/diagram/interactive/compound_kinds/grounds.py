@@ -471,7 +471,7 @@ class ApproachRoad(Kind):
     Covers: the approach road or town street, the lanes to the lesser doors, and a road across a border
     Label: deviation
     Sources: ctie-michi-nazenaze, hiroshima-saigoku-kaido, mlit-kinsei-michi, kotobank-daihachiguruma, l7r-wagons, neixiang-xianya-zhwiki, song-architecture-enwiki, jokamachi-jawiki, lowtech-chinese-wheelbarrow, toyama-1988-road-undevelopment, jinya-jawiki, tamba-kashiwara-jinya, sina-neixiang-xianya, bjd-qing-yamen
-    Entry: research/ways.html - 'How wide is the road at a compound's gate?', 'Could a cart use the roads here, and where would it go?', 'What vehicle used a village lane, and where could the lane run?'; research/towns.html - 'Where does a magistrate's manor stand, and which way does its gate face?', 'The town plan: a street town or a grid, and the gate-to-yamen axis (gaison)'; research/rendering/towns.html - 'How our maps lay out a town's streets'
+    Entry: research/ways.html - 'How wide is the road at a compound's gate?', 'Could a cart use the roads here, and where would it go?', 'What vehicle used a village lane, and where could the lane run?'; research/towns.html - 'Where does a magistrate's manor stand, and which way does its gate face?', 'Town plans: the street town (gaison), the planned grid and the castle town'; research/rendering/towns.html - 'How our maps lay out a town's streets'
     """
 
     key = "road"
