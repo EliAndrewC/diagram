@@ -210,7 +210,7 @@ doctrine for writing a guard: `docs/guards.md`.
 | `conflict-marker-hooks.sh` | a `git add` or commit that would stage conflict markers | `CONFLICT_MARKERS_OK` |
 | `shell-check-hooks.sh` | a command that does not parse, an executing backtick, a `-m` with a quote or newline, a foreign co-author | `SHELL_CHECK_OK` |
 | `no-branch-hooks.sh` | no branches | `NO_BRANCH_OK` |
-| `no-poll-hooks.sh` | no busy-wait; corrects a self-matching `pgrep`, and scopes a wait on a make run to this tree (`_own-make.sh`); refuses a pattern that matches its own command (launch-and-wait); a file-watching loop is backgrounded and given a proof of life; every wait loop gets a 90-minute ceiling (WAIT TIMED OUT, exit 4) | `POLL_OK` |
+| `no-poll-hooks.sh` | no busy-wait; corrects a self-matching `pgrep`, and scopes a wait on a make run to this tree (`_own-make.sh`); refuses a pattern that matches its own command (launch-and-wait); a file-watching loop is backgrounded and given a proof of life; every wait loop gets a 90-minute ceiling (WAIT TIMED OUT, exit 4); a backgrounded periodic report is refused with its exact `CronCreate` call | `POLL_OK`, `CRON_OK` |
 | `batching-hooks.sh` | blocks a run of single-call recon turns, warning on every loaded turn before it | - |
 | `measure-hooks.sh` | a second expensive run with nothing changed between | `MEASURE_OK` |
 | `gate-hooks.sh` | no `-k` subset as the only run before the gate | `GATE_OK` |
@@ -225,6 +225,7 @@ doctrine for writing a guard: `docs/guards.md`.
 | `record-edit-hooks.sh` | an Edit aimed at an assembled record page is re-aimed at the one fragment holding its text; refused where none or several hold it, and a Write always | none - the guard hands you the edit |
 | `finished-run-hooks.sh` | a finished run is reported; a live `make` is not abandoned; a waiter on a dead producer is reported - each only for the session's own working tree | - |
 | `agent-stall-hooks.sh` | a stalled background agent is reported | - |
+| `stall-watchdog-hooks.sh` | one loop outside every session: a session silent an hour with unfinished work, not waiting on the GM, gets its tab marked and the bell, and a nudge typed when its own input line is empty (once per stall); a paneless one is marked on its host's tab, never nudged | - |
 | `idle-tests-hooks.sh` | an idle session runs `make idle-tests` | - |
 | at push, in `sync-with-main.sh` | `gate-stamp.py` (a green gate saw it), `review-gate.sh`, `plan-gate.sh`, `entry-gate.sh`, `check-file-scale.py`, `spec-lint.py`, `_hm_conflict.py --tracked`, `perf_review.py --check`, the open-task refusal | per script, each with a reason |
 | the gate | the 100% floor, the 1,000-line bar, `_ratchet.py` (a target that gets slower fails), the perf bands, `test_agent_models.py` (the pinned tiers, and `omitClaudeMd` on every agent file but the one the test names) | `FILE_SIZE_OK` in the file |

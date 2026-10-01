@@ -24,8 +24,10 @@ help:
 # GUARD_EDIT_OK: feature 197 - `claim` forwards too; it is the specify step's first command and runs from the clone root.
 # GUARD_EDIT_OK: feature 274 D5 - `lines` and `append` forward too: a page session reads and writes its coordination files from wherever it stands.
 # GUARD_EDIT_OK: feature 285 - `open-questions` forwards too: the GM ran it from the repository root and got "No rule to make target".
+# GUARD_EDIT_OK: feature 295 - `plan-verdict` forwards too: spec-fidelity's MODE 4 contract runs it from the clone root, and
+# on 2026-09-30 it found no such target there and recorded through `scripts/_plan_gate.py` by hand.
 FORWARD := done quick maps reference hooks-test tooling durations page-check tick claim \
-           switches ci-status ci-off ci-on perf-report perf-review audit lines append open-questions
+           switches ci-status ci-off ci-on perf-report perf-review audit lines append open-questions plan-verdict
 # GUARD_EDIT_OK: feature 197 - FIXING A FORWARD THAT BROKE ON CORRECT WORK (Principle XIV, found while ticking
 # this feature's own tasks). `$(MAKEOVERRIDES)` expanded to the raw `NOTE=<text>` and was pasted UNQUOTED into
 # the recipe, so `make tick NOTE="green; every case"` from the repository root ran `tick NOTE=green` and then

@@ -23,6 +23,11 @@
             "command": "/diagram/scripts/agent-stall-hooks.sh prompt",
             "timeout": 15,
             "statusMessage": "Checking for stalled background agents..."
+          },
+          {
+            "type": "command",
+            "command": "/diagram/scripts/stall-watchdog-hooks.sh prompt  # GUARD_EDIT_OK: feature 295 item 4 - registering a NEW guard: starts the outside stall watchdog when it is not running; no existing guard changes",
+            "timeout": 10
           }
         ]
       },
