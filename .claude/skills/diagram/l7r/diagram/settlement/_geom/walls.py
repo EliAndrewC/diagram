@@ -61,7 +61,7 @@ def torii_halfbox(ftpx: float, span_ft: float = 16.0) -> tuple[float, float, flo
 # them on purpose. So is monk_house: a temple may legitimately stand inside the ward (Tango's
 # Bishamon precinct - the warrior fortune beside the garrison quarter) and its clergy row belongs
 # with its temple, held to it by the temple-neighborhood checks. The zoning rule this encodes:
-# research/cities/government.html "Samurai and commoner ground were zoned apart by law".
+# research/rendering/cities/government.html "How our maps place and count a city's samurai households".
 WARD_BARRED_KINDS = frozenset({"laborer", "laborer_large", "merchant", "merchant_house", "merchant_large", "burakumin", "shop", "inn"})
 
 
