@@ -243,20 +243,23 @@ class Privy(Kind):
     ft to 27 by 15 ft, most 18 by 12 ft or smaller.
 
     Note: Presence, the detached form, the four seats and the sizes are read (Hasuda 1824, the Kakimochi count, Suzuki
-    1959, Sugiura). How often each seat is drawn is a guess, each hamlet re-weighting them from its seed, and so is where
-    in the yard the separate outhouse stands; a privy inside the barn is a tub under its floor, which cannot be seen from
-    above, so it is drawn as the privy against the barn's outer wall - a map drawing convention; the size is one
-    village's table, a calibration.
+    1959, Sugiura), and so is the sunny side (Wang and Ochiai found 72.7% of one Shiga village's privies south or
+    southeast of the house). How often each seat is drawn is a guess, each hamlet re-weighting them from its seed, and so
+    is where in the yard the separate outhouse stands; a privy inside the barn is a tub under its floor, which cannot be
+    seen from above, so it is drawn as the privy against the barn's outer wall - a map drawing convention; the size is
+    one village's table, a calibration; the sunny side is searched only to 48 ft, this project's choice, so only about
+    46 privies in 100 end up there against the 72.7% each house rolls.
 
-    Caveat: How often each seat is drawn is a guess, each hamlet re-weighting them from its seed, and so is where
-    in the yard the separate outhouse stands; a privy inside the barn is a tub under its floor, which cannot be
-    seen from above, so it is drawn as the privy against the barn's outer wall - a map drawing convention; the
-    size is one village's table, a calibration.
+    Caveat: How often each seat is drawn is a guess, each hamlet re-weighting them from its seed, and so
+    is where in the yard the separate outhouse stands; a privy inside the barn is a tub under its floor, which cannot be
+    seen from above, so it is drawn as the privy against the barn's outer wall - a map drawing convention; the size is
+    one village's table, a calibration; the sunny side is searched only to 48 ft, this project's choice, so only about
+    46 privies in 100 end up there against the 72.7% each house rolls.
 
     Name: privy
     Covers: `farm_fixtures[kind=privy]`
     Label: accurate
-    Sources: koshigaya-shishi-noumin-jukyo, oamishirasato-choshi-kaoku, suzuki-1959-noson-benjo, sugiura-1977-tohoku, sinyoken-madori
+    Sources: koshigaya-shishi-noumin-jukyo, oamishirasato-choshi-kaoku, suzuki-1959-noson-benjo, sugiura-1977-tohoku, sinyoken-madori, wang-ochiai-2022
     Entry: research/homesteads.html - 'Farm privies and their night soil (benjo)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps place privies (benjo)'; 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
@@ -305,7 +308,8 @@ class ManureHeap(Kind):
     over the pigsty and drained to the cesspool, and the two were one cluster.
 
     Note: The practice and the pit's two places are read (jawiki, Suzuki 1959); the share at the fields is rolled
-    across the survey's span, calibrated liberty. The heap's place beyond the privy, its 8 x 6 ft size and the 40 to
+    across the survey's span, calibrated liberty, and how far out a field pit may stand, within 160 ft of the house,
+    is a guess. The heap's place beyond the privy, its 8 x 6 ft size and the 40 to
     70 of every 100 homesteads that keep one are guesses - no readable page says where the stable-manure heap stood
     in the yard.
 

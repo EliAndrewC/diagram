@@ -250,7 +250,7 @@ class FryPond(Kind):
 class ManurePit(Kind):
     """
     What: An earthenware jar half buried in the ground, in which the household's night soil is kept until it
-    goes to the fields - the manure store in its Lake Tai form. Each hamlet has its own mix: some stand behind the house beside its privy,
+    goes to the fields - the manure store in its Lake Tai form. Each hamlet has its own mix: some stand beside the household's privy, wherever on the farmstead it stands,
     others out at the edge of the household's nearest field, or beside a road.
 
     Why: The most important fertilizer on a rice-and-silk farm was human manure, and Fei's village kept it in
