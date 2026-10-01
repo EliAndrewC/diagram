@@ -80,3 +80,12 @@ def test_ground_off_the_window_is_taken_and_cells_paint_whole():
     r.line([], 3.0)  # no points: nothing to draw
     r.line([(300.0, 300.0)], 2.0)  # one point: a dot
     assert r.taken(300.0, 300.0)
+
+
+def test_many_geometries_paint_each_by_its_kind_and_an_empty_one_paints_nothing() -> None:
+    from shapely.geometry import GeometryCollection, LineString, MultiPolygon, Point, Polygon, box
+
+    r = Region(WINDOW, 4.0)
+    r.fill_many([Point(200.0, 200.0), LineString([(300.0, 100.0), (400.0, 100.0)]), MultiPolygon([box(600, 400, 650, 450)]), GeometryCollection(), Polygon()], [10.0, 3.0, 0.0, 5.0, 5.0])
+    assert r.taken(208.0, 200.0) and r.taken(350.0, 102.0) and r.taken(625.0, 425.0)
+    assert not r.taken(500.0, 300.0)
