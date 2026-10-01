@@ -1,0 +1,119 @@
+{
+ "feature": "301-record-site",
+ "plan_sha256": "5a4b37b745c0a5f2f35d4fdb828145ca3f2f8f2154dce0d7803b61904d8ef35d",
+ "reviewed": "2026-10-01",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Every reader (modal machinery, citations derivation, scripts, tests) reads fragments through the in-memory assembly; pages enumerated from fragment directories",
+   "class": "within",
+   "why": "Required for FR-009/US3 AS3: once built pages leave git, nothing but the GM may depend on a build having run. Adds no behavior the GM did not ask for."
+  },
+  {
+   "id": "D2-layout",
+   "summary": "research/site/: home index, one parent page per current page (its opening plus a linked list of its questions), one small page per question and per registry entry, all.html single page",
+   "class": "within",
+   "why": "The GM's 'separate parent section ... each of our subsections ... individual pages ... linked on the left' and FR-001/FR-003. A parent page listing its questions is the literal reading of 'parent section' with subsections as their own pages."
+  },
+  {
+   "id": "D2-nav",
+   "summary": "Left navigation drawn from nav.js data by assets/site.js (every parent listed, current expanded and marked, single page linked); no-script fallback is a Contents link",
+   "class": "within",
+   "why": "Implements FR-002 and the second message ('the one giant page should be accessible ... in the navigation section to the left'); data-plus-script is an implementation of the requested navigation, priced in R3."
+  },
+  {
+   "id": "D2-retire",
+   "summary": "The old per-page files, citations pages and SOURCES.html are no longer written",
+   "class": "within",
+   "why": "The GM asked that what is today separate files become items of one manual; citations move to each small page's foot (fifth message) and into the single page. Not a narrowing: everything they held is in both forms."
+  },
+  {
+   "id": "D2-links-notes",
+   "summary": "One id index resolves every href per form, unresolved = build failure; small pages allocate notes from 1 with notes and works cited at the foot; single page allocates once with one Citations part; any id collision on the single page refused",
+   "class": "within",
+   "why": "FR-004 to FR-007 and the GM's accepted footnote recommendation; the extra collision refusal only enforces that the single page's anchors work."
+  },
+  {
+   "id": "D2-check",
+   "summary": "make record CHECK=1 builds to a temp dir and exits 1 on any refusal; make citations kept as an alias of make record",
+   "class": "within",
+   "why": "FR-011; the alias keeps existing callers working and adds no behavior."
+  },
+  {
+   "id": "D3",
+   "summary": "Modal research links go to research/site/<page>/<id>.html; Entry: lines name fragment paths, read by sources.py and the Entry tooling; 162 lines converted",
+   "class": "within",
+   "why": "Second message ('link to the smaller pages') and fifth message (link to the source); FR-008, FR-012."
+  },
+  {
+   "id": "D4-untrack",
+   "summary": ".gitignore and git rm --cached of every assembled output incl. glossary.js; push block's record check means 'builds cleanly'",
+   "class": "within",
+   "why": "Fourth message; FR-009, FR-011."
+  },
+  {
+   "id": "D4-render-sync",
+   "summary": "render-sync builds the record in main behind a stamp hashed over tracked research/ files and the build code",
+   "class": "within",
+   "why": "Fourth message ('regenerate ... if they would change ... not otherwise'); FR-010. See note on the stamp's input list."
+  },
+  {
+   "id": "D4-guards",
+   "summary": "record-edit-hooks re-aims an Edit on a site page too; sync-with-main refuses an unrelated-history clone, landed before the scrub",
+   "class": "within",
+   "why": "The first keeps an existing guard doing its existing job on the new output paths; the second is FR-019."
+  },
+  {
+   "id": "D5-form-check-move",
+   "summary": "Pointer form is the fragment path; sweep script with a review list for inexact matches; resolve check at gate and push with an allowlist for build code that names outputs; make fragment-move moves a fragment and rewrites its pointers; docs updated",
+   "class": "within",
+   "why": "Fifth message and the accepted 'pointers name the fragment; a gate check; renames rewrite them'; FR-012 to FR-016. No existing tool renames fragments (fragments.py numbering never renumbers), so the new command is the tooling FR-015 needs."
+  },
+  {
+   "id": "D5-scope-gm-text",
+   "summary": "Sweep skips specs/*/request.md, READMEs and SOURCE blocks",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Implied by the accepted spec's own edge case (the GM's request files left alone as quoted text) and by Principles IV/V: these are the GM's writing, which the session may not edit (source-block and README guards refuse it)."
+  },
+  {
+   "id": "D5-scope-records",
+   "summary": "Sweep skips dev/bypass-log/ and scripts/fixtures/ (recorded command corpora)",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Checked separately from the GM-text exclusion. The four matching files are scripts/fixtures/*.json recorded command transcripts used as guard test inputs; a path inside a transcript of a past command is not a link to research, so it is outside the class the GM's rule ('everything linked to research') governs, and rewriting it would falsify a record and change test inputs. The purpose - that a reader following a research link reaches the canonical source - is untouched."
+  },
+  {
+   "id": "D6-hook",
+   "summary": "User-level hook on PostToolUse and PostToolUseFailure (Bash), container-detected, fires on every not-found output and every empty existence check incl. dpkg-query and python -m pip show; message tells the session to install rather than work around; self-test with an env override; hooks-test runs it when present",
+   "class": "within",
+   "why": "Seventh, ninth and eleventh messages; FR-022 to FR-026. The added forms are inside 'all of the different ways that you would check'."
+  },
+  {
+   "id": "D6-mount",
+   "summary": "GM's other running containers listed through the host-diagnostics client and their ~/.claude mounts read; any without reported to the GM",
+   "class": "within",
+   "why": "FR-024 as accepted."
+  },
+  {
+   "id": "D7-land-repack",
+   "summary": "make done, push, render-sync build on /diagram, git gc --aggressive --prune=now under the sync lock with sizes",
+   "class": "within",
+   "why": "Seventh message ('I will have you do the Git GC command yourself'); FR-021."
+  },
+  {
+   "id": "D7-scrub",
+   "summary": "After landing: filter-repo in a scratch mirror dropping assembled paths from 0fef1e6f3 on only, tree-for-tree verification, docs/history-rewrite-301.md commit map, live sessions told, GM force-pushes, /diagram reset and repacked, clones replaced with unpushed commits replayed",
+   "class": "within",
+   "why": "Sixth and tenth messages and the accepted history recommendation; FR-017 to FR-020. See note on ordering."
+  },
+  {
+   "id": "verification",
+   "summary": "Perf bookends, Inashiro then make maps over the pool, browser look at the site",
+   "class": "within",
+   "why": "Verification that the requested thing happened (SC-004 covers the pool's maps); no new behavior."
+  }
+ ],
+ "verdict": "CLEAR"
+}
