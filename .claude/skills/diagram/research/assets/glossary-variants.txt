@@ -245,6 +245,8 @@ boundary posts	bojikui
 braced frame	braced frame
 braced frames	braced frame
 braced-frame	braced frame
+branch hall	branch hall
+branch halls	branch hall
 branch hamlet	branch hamlet
 branch hamlets	branch hamlet
 branch house	branch house
@@ -832,6 +834,8 @@ emergent plant	emergent
 emergent plants	emergent
 emergents	emergent
 enceinte	enceinte
+enclosed house	weilongwu
+enclosed houses	weilongwu
 endorheic	endorheic
 endorheic basin	endorheic
 endorheic lakes	endorheic
@@ -1289,6 +1293,8 @@ haikai	haikai
 hakata	Hakata
 hakehi	hakehi
 hakka	Hakka
+hakka enclosed house	weilongwu
+hakka enclosed houses	weilongwu
 hakone barrier	Hakone barrier
 hakusan	hakusan
 half-fold	half-fold
@@ -2459,6 +2465,7 @@ night watches	night watch
 night-soil	night soil
 nightsoil	night soil
 nihon dai-hyakka zensho	Nihon Dai-hyakka Zensho
+nihon daihyakka zensho	Nihon Dai-hyakka Zensho
 nihon kokugo daijiten	Nihon Kokugo Daijiten
 nihon kyoikushi shiryo	Nihon kyoikushi shiryo
 nihon rekishi chimei taikei	Nihon Rekishi Chimei Taikei
@@ -3403,6 +3410,8 @@ stroke	stroke
 strokes	stroke
 stupa	stupa
 stupas	stupa
+sub-branch hall	branch hall
+sub-branch halls	branch hall
 sub-prefect	sub-prefect
 sub-prefects	sub-prefect
 sub-temple	sub-temple
@@ -3687,6 +3696,8 @@ toro site	Toro
 torreya	torreya
 tortoise-shell	tortoise-shell
 tortoise-shell net	tortoise-shell
+tosa	Tosa
+tosa province	Tosa
 toshiyori	toshiyori
 toshuko	toshuko
 total length and fall	fall
@@ -3922,6 +3933,7 @@ watch house	jishinban
 watch-house	jishinban
 water caltrop	water caltrop
 water caltrops	water caltrop
+water country	water country
 water duty	water duty
 water gate	water gate
 water gates	water gate
@@ -3939,6 +3951,7 @@ water teahouses	water teahouse
 water's bearing	drainage bearing
 water-and-land hall	water-and-land hall
 water-and-land halls	water-and-land hall
+water-country	water country
 water-guard station	mizubansho
 water-guard stations	mizubansho
 water-head	water-head

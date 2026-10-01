@@ -8282,7 +8282,11 @@
   "variants": [
    "weilongwu",
    "hall-and-wing house",
-   "hall-and-wing houses"
+   "hall-and-wing houses",
+   "enclosed house",
+   "enclosed houses",
+   "Hakka enclosed house",
+   "Hakka enclosed houses"
   ]
  },
  "hsien": {
@@ -11995,7 +11999,8 @@
  "Nihon Dai-hyakka Zensho": {
   "def": "A Japanese general encyclopedia, one of the reference works whose entries Kotobank carries.",
   "variants": [
-   "Nihon Dai-hyakka Zensho"
+   "Nihon Dai-hyakka Zensho",
+   "Nihon Daihyakka Zensho"
   ]
  },
  "Zhengde": {
@@ -15058,6 +15063,29 @@
   "variants": [
    "head house",
    "head houses"
+  ]
+ },
+ "water country": {
+  "def": "A low-lying country laced with rivers, channels and ponds, like the Pearl River delta, where a village was built on open ground within the network of water and faced a river channel or a pond.",
+  "variants": [
+   "water country",
+   "water-country"
+  ]
+ },
+ "branch hall": {
+  "def": "An ancestral hall a branch of a lineage built for its own line of ancestors, below the hall of the lineage's founding ancestor; a sub-branch hall is the same one level further down.",
+  "variants": [
+   "branch hall",
+   "branch halls",
+   "sub-branch hall",
+   "sub-branch halls"
+  ]
+ },
+ "Tosa": {
+  "def": "An old province on the Pacific side of Shikoku, today Kochi Prefecture; Sukumo, whose town history counted the house plots of Yamana village, is in its southwest.",
+  "variants": [
+   "Tosa",
+   "Tosa province"
   ]
  }
 }
