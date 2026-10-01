@@ -19,7 +19,7 @@ Three ground covers are drawn today as thousands of individual glyphs that stand
 rough-grazing grass (tufts of blades and brush dots, `settlement/land/cover.py`), the marsh (reed tufts, glints and a pale tint,
 `settlement/land/wet.py`) and the bamboo stand (paired culm marks, `settlement/homestead_parts/stands.py`). Grass and reeds are
 55-68% of four pool hamlets' SVGs (27% of Kuwabata's) and 4.8 MB of Kashikawa's 20.5 MB page (observed 2026-10-01, method: a
-census of the pool SVGs and page by stroke color). Each becomes ONE shape per zone filled with a repeating tile of the same
+census of the pool SVGs and page by stroke color; research R1). Each becomes ONE shape per zone filled with a repeating tile of the same
 glyphs, at the same density and colors, drawn where the GM asked: the scrub and the marsh at the bottom of the stack, just above
 the land, so everything standing in them draws over them. Trees stay individual - the GM: drawing individual trees "serves a
 useful purpose". The scatters that threw, tested and culled the glyphs one at a time go, and the feature measures what that buys
@@ -113,13 +113,13 @@ size that likely slows us down algorithmically").
 
 ### Measurable Outcomes
 
-- **SC-001** (FR-001, FR-002, FR-003): on the five pool hamlets, zero blade, brush-dot, reed, glint, tint or stand-mark elements;
-  one cover shape per drawn zone.
+- **SC-001** (FR-001, FR-002, FR-003, FR-006): on the five pool hamlets, zero blade, brush-dot, reed, glint, tint or stand-mark
+  elements; one cover shape per drawn zone; the scrub's pines, every crown and the windbreak's culms still drawn one by one.
 - **SC-002** (FR-004, FR-005): on the five pool hamlets, every scrub and marsh cover shape lies below every non-cover feature in the stack, and no
-  cover shape overlaps a recorded clearing, the avoided ground or a no-build block (a test on the manifests).
+  scrub or marsh cover shape overlaps a recorded clearing, the avoided ground or a no-build block (a test on the manifests).
 - **SC-003** (FR-010): each pool hamlet's SVG and page are smaller than the base's; the regeneration, the hinterland stage and the
   stage total before and after are recorded for each (back to back, fastest of three), whichever way they move.
-- **SC-004** (FR-007, FR-009): `make done` green; the page's census lists no new unclassed ink; scrub, marsh and bamboo still
+- **SC-004** (FR-007, FR-008, FR-009): no consumer of the retired glyphs is left (a grep for the blade and reed buckets); `make done` green; the page's census lists no new unclassed ink; scrub, marsh and bamboo still
   highlight.
 - **SC-005** (FR-001-FR-005): the GM's look - Kashikawa and Inashiro read with tiled scrub and marsh, everything in them on top;
   a settlement-review of each moved pool map is run (or waived per the GM's 2026-08-29 ruling, recorded).
@@ -141,4 +141,6 @@ size that likely slows us down algorithmically").
 ## Review history
 
 - Round 1 (spec-fidelity, 2026-10-01): CHANGES REQUIRED - SC-002 named every cover shape while FR-004 keeps bamboo in place;
-  FR-004's reason rested on an unmeasured claim. Addressed: SC-002 names scrub and marsh; FR-004's reason restated.
+  FR-004's reason rested on an unmeasured claim. Addressed: SC-002 names scrub and marsh (its first clause); FR-004's reason restated.
+- Round 2 (spec-fidelity-verify): CHANGES REQUIRED - SC-002's second clause still named every cover shape. Addressed: it names
+  scrub and marsh, so SC-002 does in both clauses.
