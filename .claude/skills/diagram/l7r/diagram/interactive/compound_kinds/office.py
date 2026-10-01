@@ -186,7 +186,7 @@ class Granary(Kind):
     Covers: the granary, on posts or earth-walled, and its label
     Label: accurate
     Sources: takayukashiki-jawiki, takayama-onkura-heritage, dozo-jawiki, takayama-jinya-city, takayama-jinya-jawiki, nishimawari-koro-jawiki, gokura-jawiki, hatakata-men-jawiki, kuramai-jawiki, kakoimai-jawiki
-    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/towns.html - 'Why is the magistrate's manor drawn as a plain walled box?'
+    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/towns.html - 'The magistrate's manor in a town: where it stands and which way it faces (jin'ya and yamen)'; research/rendering/towns.html - 'How our maps draw the magistrate's manor on a town map'
     """
 
     key = "granary"

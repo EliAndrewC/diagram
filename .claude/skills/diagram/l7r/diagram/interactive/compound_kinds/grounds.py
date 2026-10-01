@@ -382,7 +382,7 @@ class MainGate(Kind):
     Covers: the posts flanking the main opening
     Label: accurate
     Sources: nagayamon-jawiki, tamba-kashiwara-jinya, bunka-saito-nagayamon, bunka-adachi-yakuimon, bunka-omi-yakuimon, bunka-fujioka-yakuimon, sohu-yamen-gate, bjd-qing-yamen, neixiang-xianya-zhwiki, kotobank-shikidai, kominkai-genkan
-    Entry: research/buildings.html - 'The main gate and its gatekeepers (nagaya-mon)', 'The formal entrance and a guest's arrival (genkan)'; research/towns.html - 'Where does a magistrate's manor stand, and which way does its gate face?'; research/rendering/buildings.html - 'How our maps draw the main gate and its gatekeepers (nagaya-mon)', 'How our maps draw compound walls (neribei and tsuijibei)', 'How our maps route a guest from the gate to the entrance'
+    Entry: research/buildings.html - 'The main gate and its gatekeepers (nagaya-mon)', 'The formal entrance and a guest's arrival (genkan)'; research/towns.html - 'The magistrate's manor in a town: where it stands and which way it faces (jin'ya and yamen)'; research/rendering/buildings.html - 'How our maps draw the main gate and its gatekeepers (nagaya-mon)', 'How our maps draw compound walls (neribei and tsuijibei)', 'How our maps route a guest from the gate to the entrance'; research/rendering/towns.html - 'How our maps draw the magistrate's manor on a town map'
     """
 
     key = "main gate"
@@ -471,7 +471,7 @@ class ApproachRoad(Kind):
     Covers: the approach road or town street, the lanes to the lesser doors, and a road across a border
     Label: deviation
     Sources: ctie-michi-nazenaze, hiroshima-saigoku-kaido, mlit-kinsei-michi, kotobank-daihachiguruma, l7r-wagons, neixiang-xianya-zhwiki, song-architecture-enwiki, jokamachi-jawiki, lowtech-chinese-wheelbarrow, toyama-1988-road-undevelopment, jinya-jawiki, tamba-kashiwara-jinya, sina-neixiang-xianya, bjd-qing-yamen
-    Entry: research/ways.html - 'How wide is the road at a compound's gate?', 'Could a cart use the roads here, and where would it go?', 'What vehicle used a village lane, and where could the lane run?'; research/towns.html - 'Where does a magistrate's manor stand, and which way does its gate face?', 'Town plans: the street town (gaison), the planned grid and the castle town'; research/rendering/towns.html - 'How our maps lay out a town's streets'
+    Entry: research/ways.html - 'How wide is the road at a compound's gate?', 'Could a cart use the roads here, and where would it go?', 'What vehicle used a village lane, and where could the lane run?'; research/towns.html - 'The magistrate's manor in a town: where it stands and which way it faces (jin'ya and yamen)', 'Town plans: the street town (gaison), the planned grid and the castle town'; research/rendering/towns.html - 'How our maps lay out a town's streets', 'How our maps draw the magistrate's manor on a town map'
     """
 
     key = "road"
