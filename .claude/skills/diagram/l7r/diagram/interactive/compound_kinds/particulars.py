@@ -354,7 +354,7 @@ class BoatmensAltar(Kind):
     Covers: the altar on the bank and its label
     Label: accurate
     Sources: funadama-jawiki, kotobank-funadama, kotobank-suitengu
-    Entry: research/cities/river-cities.html - 'Did the boatmen keep a shrine at the landing?'
+    Entry: research/cities/river-cities.html - "The boatmen's shrine at the landing (funadama, suijin)"; research/rendering/cities/river-cities.html - "How our maps draw the boatmen's shrine at the landing (funadama)"
     """
 
     key = "boatmen's altar"
@@ -383,7 +383,7 @@ class RiverWatch(Kind):
     Covers: the guard post at the landing and its label
     Label: accurate
     Sources: funabansho-jawiki, koto-nakagawa-funabansho, l7r-tariffs
-    Entry: research/cities/river-cities.html - 'Who kept watch on the river at an official's landing, and what did the watch post look like?'
+    Entry: research/cities/river-cities.html - 'The river watch post at a landing (funabansho)'; research/rendering/cities/river-cities.html - 'How our maps draw the river watch post (funabansho)'
     """
 
     key = "river watch"
