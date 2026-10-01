@@ -2,7 +2,7 @@
 
 **Feature Branch**: none (main, in the clone `diagram-reorg`)
 **Created**: 2026-10-01
-**Status**: Accepted - FAITHFUL at round 2 (2026-10-01)
+**Status**: Accepted - FAITHFUL at round 2 (2026-10-01); amendment 1 (landed specs swept, FR-027) FAITHFUL at its round 2
 **Request**: [`request.md`](request.md) - the GM's words verbatim: the research assembled into *"a single page version ...
 with a linkable table of contents at the very top"* and *"a page structure where anything that would be a top-level table
 of contents entry ... will be its own separate parent section and then maybe each of our subsections are themselves
@@ -302,3 +302,13 @@ rendering decision is made.
   SC-006 ("zero pointers ... outside the record and quoted GM text") and US4 AS1 ("specs ... name a fragment path"),
   and asserts the research CLAUDE.md states the `*-<anchor>` glob, which it does not (line 19 states a glob on a
   registry key only) - resolved by (1). The plan was not reviewed in this round (plan review is spec-fidelity's).
+- Amendment 1, Round 2 (spec-fidelity-verify, 2026-10-01): FAITHFUL. (1) RESOLVED - the landed-specs exception is gone
+  from the Edge Cases bullet, FR-012 and the plan's sweep and check allowlist; landed specs are swept, request files left
+  alone, as the accepted bullet had it. (2) RESOLVED - SC-006 and US4 AS1 no longer contradicted; the `*-<anchor>` glob
+  claim is removed. FR-027 matches the GM's twelfth message ("Sweep, narrow lint"): the lint judges what a push adds to
+  a pre-existing spec directory, a new one is judged whole. Its use of the review and plan gates' existing escapes
+  (review-gate.sh names "a manifest changed by a mechanical sweep" as an intended case), reason logged, loosens no
+  guard and only lets the requested sweep happen - not unrequested scope. SC-006's added clause and T17 check FR-027.
+  `spec-lint` on this directory passes. Read in full: spec.md Edge Cases 119-128, FR-012 to FR-027, SC-006, this
+  history; request.md twelfth message; research.md R7; plan.md pointer section; tasks.md T17; review-gate.sh and
+  plan-gate.sh escape headers.
