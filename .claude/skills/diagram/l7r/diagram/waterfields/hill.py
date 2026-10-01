@@ -10,8 +10,8 @@ from .palette import FLOODED, PADDY_CELL_ACRES, RICE_GREENS
 
 
 # The two hill archetypes below are unscripted at the settlement tier; the specification a future generator
-# owes them is research/archetypes.html "What does rice land look like where there is no valley floor to
-# spread across?".
+# owes them is research/rendering/archetypes.html "How our maps draw rice land on a slope" (the history at
+# research/archetypes.html "Terraced and valley paddies (tanada, yachida)").
 def build_terraces(
     W: float,
     H: float,
