@@ -1,9 +1,9 @@
-"""Where a hamlet's coarse grain grows (feature 287, water W36; research/fields.html 'Where did a hamlet at a fan's toe
-grow its coarse grain while the fan's middle was still wild?', fields/165).
+"""Where a hamlet's coarse grain grows (feature 287, water W36; research/fields.html 'Where a farming
+hamlet grew its coarse grain', fields/165; its map rules at research/rendering/fields.html fields/160).
 
 The paddy is sized for the rice two-thirds of the diet (fields/110, the sizing rule), so the coarse third has to grow
-somewhere. The record attests two places, and which one a hamlet used is the WINTER CROP knob of fields/300 ("Did a
-paddy grow a second crop over the winter?"): a double-cropped hamlet grew its barley on its own drained paddy between
+somewhere. The record attests two places, and which one a hamlet used is the WINTER CROP knob of fields/030 ("The
+paddy through the rice year"): a double-cropped hamlet grew its barley on its own drained paddy between
 the rice harvests; a single-cropped one grew it in dry fields. On a fan whose middle is still wild (`fan_middle`,
 fields/160) the dry band holds only the toe's stretch, so a single-cropped hamlet's band is TOPPED UP into the middle,
 nearest the toe first, until it holds the need - the middle cleared as far as the hamlet's grain needed and no further.
@@ -13,8 +13,8 @@ of 8.5-17, so both forms are offered on every wild fan; a CLEARED fan's strip ho
 barley only - which its drained paddy (1.21-1.37 acres a household against a 0.85 need) always covers.
 
 Classes (the four labels, research/CLAUDE.md):
-- the two forms, winter barley on the drained paddy and dry fields: historically ACCURATE (fields/300, fields/165);
-- the weights between them: GUESS (fields/300: the drainage and the manure decide, and no share was read);
+- the two forms, winter barley on the drained paddy and dry fields: historically ACCURATE (fields/030, fields/165);
+- the weights between them: GUESS (fields/030: the drainage and the manure decide, and no share was read);
 - the need per household (`COARSE_GRAIN_ACRES_PER_HOUSEHOLD`): a GUESS resting on the attested assessed rates; the winter
   crop counted acre for acre against it: GUESS (no yield for a winter barley crop was read; fields/165 records the search);
 - the order of the top-up, nearest the toe first: GUESS (no page read says from which end a fan's middle was cleared).
@@ -28,7 +28,7 @@ from typing import Any
 from .._knobs import Knob, register_knob
 
 
-# THE WINTER CROP (research/fields.html fields/300): "Two forms are attested, so this is a knob, rolled per settlement: one
+# THE WINTER CROP (research/rendering/fields.html fields/030): "Two forms are attested, so this is a knob, rolled per settlement: one
 # whose paddies carry a winter crop, and one whose paddies lie bare over the winter." An even weight is a GUESS.
 #
 # NARROWED TO WHAT THE SITE ALLOWS (feature 287, W36; as plan D4 narrowed the cluster shape): a form is offered only where
@@ -59,7 +59,7 @@ SQ_FT_PER_ACRE = 43560.0
 def dry_need_acres(households: int, drained_acres: float, winter_crop: str) -> float:
     """The acres of dry field a hamlet's coarse grain needs: the whole need where the paddy lies bare over the winter, and
     what the drained paddy's winter barley leaves where it does not - counted acre for acre (a GUESS, module docstring).
-    A wet paddy carries no barley (fields/300), so only the drained acres count."""
+    A wet paddy carries no barley (fields/030), so only the drained acres count."""
     need = households * COARSE_GRAIN_ACRES_PER_HOUSEHOLD
     if winter_crop == "barley":
         need -= drained_acres
