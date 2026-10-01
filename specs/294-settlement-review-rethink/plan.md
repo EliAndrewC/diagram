@@ -76,21 +76,27 @@ Mode B (gate tests in `tests/gate/`, template `test_covers_298.py`; a placer gua
   (`interactive/raster.id_map`, no browser).
 - **B3** wood shed seating (class 3): nearer its own house than any other building and turned with it (research homesteads
   212/720; "own house nearest" GUESS) - placer assert in `homesteads/fixtures.py` plus a gate test.
-- **B4** parallel twin watercourses (class 4): no two courses not of one comb run parallel (within 15 deg) 12-32 ft apart for
-  more than 60 ft (GUESS). The pool fails on 4 of 5 maps with comb branch ditches side by side: the comb's researched branch
-  spacing is read first (research/water); siblings of one comb are governed by that spacing, any other pair is fixed in the
-  placer.
+- **B4** parallel twin watercourses (class 4): no two courses - comb branches INCLUDED - run parallel (within 15 deg) 12-32 ft
+  apart for more than 60 ft (GUESS). The recorded case (ledger 2026-08-28, "twin branch canals ~25 ft apart") is two comb
+  branches, and so are the four maps that fail today. A research pass on the spacing of a comb's branch canals runs first
+  (constitution XII; the scout found no norm in `research/water`): if it FINDS an attested spacing that allows the pair, the
+  class goes back through the audit as decided by research, with the citation; otherwise the placer is fixed so branches are
+  not laid side by side.
 - **B5** see-through marks (class 5): every mark drawn below 0.95 opacity belongs to a class on a declared list, each with its
-  reason (drawing convention); seeded red with the mound at 0.9. The sheen half is CUT (`test_finish_287`); broadleaf over
-  conifer is not decidable (no species on a crown) and goes to the glyph check (R2.4).
+  reason (drawing convention); seeded red with the mound at 0.9. The sheen half is CUT (`test_finish_287`). **B5b** broadleaf
+  over conifer (the recorded case: feature 269 B30, broadleaf inked over earlier clumps' conifers): the crown records carry
+  their species (the renderer knows it when it inks a crown), and a gate test refuses a broadleaf crown drawn after a conifer
+  crown it overlaps (drawing convention: the conifer, the taller and darker mark, reads on top); proved red on the recorded
+  case, the renderer's crown order fixed.
 - **B6** page hit regions (class 7): each class wins at least 0.8 (GUESS) of its own ink in the id map, apart from overlaps
   `page.py` declares. Fails today (Kuwabata's mulberry dike takes 78% of the bund; the storage shed loses 18-20% to the
   farmhouse) - fixed in the page's hit order.
 - **B7** lane tread to wall (class 8): at least 4 ft (GUESS; the recorded case is 3.85 ft; the research's ~3 ft eaves strip is a
   town figure) - the tread rule in `houses.py` and a gate test.
 - **B8** side-by-side footbridges (class 11): no two decks within 60 ft (GUESS) - gate test.
-- **B9** drawn against rolled (class 12): every rolled/drawn pair in `meta` drawn within its roll's own range - gate test,
-  seeded red.
+- **B9** drawn against rolled (class 12): every rolled/drawn pair in `meta` drawn within 15% (GUESS) of the ROLLED VALUE - gate
+  test. Fails today on Sawada's homestead wood (drawn at 60% of its roll): the placer is fixed, unless the research record
+  shows the roll is a ceiling, in which case that finding is recorded and the test is drawn <= rolled and >= the floor.
 - **B10** declared forms drawn (audit MOVED 1): every rolled fixture target drawn and every rolled minimum met. Fails today
   (Kuwabata privy 11/14, bath 2/5, household shrine 0 against a minimum of 1) - fixed in the fixture placer.
 - **B11** house bearings (class 13): all houses within research homesteads/240 and 780's band (+-33.75 deg of the common
@@ -104,6 +110,10 @@ Mode B (gate tests in `tests/gate/`, template `test_covers_298.py`; a placer gua
   manifest kind is refused unless it agrees with the manifest. The 55 disagreements the scout found are triaged in the same
   task: stale -> corrected, history -> moved under a dated entry.
 - **B15** every pool and legacy map folder has a non-empty `.notes.md` (audit MOVED 2) - gate test.
+- **B15b** a Mode A sheet's notes counts (audit B11, ~15 findings): the typed counts of a `data-kind` in a sheet's notes agree
+  with the sheet's `data-kind` census, by B14's rule (outside dated history entries) - test over the sheets.
+- **B15c** sized marks the size table misses (audit Z5): `make size-table` (`tools/pack_audit`) enumerates paths, circles and
+  glyph marks as well as rects, and a test refuses a sheet with a tagged kind the table does not list.
 
 Mode A (registry checks in `tools/pack_audit/registry.py`, each with its red fixture `tests/fixtures/<sheet>-<defect>-red.svg`
 and its tier entry in `buildings/types.json`):
@@ -204,11 +214,12 @@ trigger's phrases ("layout moved", "manifest moved", "every map whose") finds no
 
 ### I. The cheaper tier (FR-012, US8)
 
-After C: per check with a recorded judgment case (glyph-check: the manure heap read as a bush and the rack as a woodpile, from
-their commits; building-review: a recorded circulation finding; settlement-review: none recorded - the twin detector never
-fired, so it stays on Opus with that reason; size-audit: a recorded anchor finding; fix-check: the canopy record of feature
-240), Sonnet at the check's effort, three runs a leg against the Opus leg, through `specs/251-*/measure/seeded.py`. A check
-moves tier only where every Sonnet run finds the recorded finding. Small slices (memory: conserve tokens in validation runs).
+After C: per check, against SEEDED cases with known findings (glyph-check: the manure heap read as a bush and the rack as a
+woodpile, from their commits; building-review: a recorded circulation finding; settlement-review: a seeded twin - a pool map's
+layout submitted as a new map - and a map whose notes declare a trade it does not draw; size-audit: a recorded anchor finding;
+fix-check: the canopy record of feature 240), Sonnet at the check's effort, three runs a leg against an Opus leg, through
+`specs/251-*/measure/seeded.py`. A check moves tier only where every Sonnet run finds the seeded finding; if Opus itself
+misses it, that is recorded and the check stays on Opus. Small slices (memory: conserve tokens in validation runs).
 
 ## Order of work
 
@@ -219,6 +230,11 @@ checks this feature's own delta declares, `294-end`, land.
 
 ## Decisions (for the plan review)
 
+The plan review of 2026-10-01 (round 1) ruled five of these NOT LEGITIMATE as first written (B4's comb exemption, class 12
+against the roll's range, broadleaf over conifer sent to the glyph check, the tier experiment skipping settlement-review, and
+the audit's B11/Z5 rows left with no home); each is rewritten above. Its LEGITIMATE narrowings (D5, D6a, D6b, D7 class 14,
+D15) go to the GM once the implementation works.
+
 | id | decision | class |
 |---|---|---|
 | D1 | Owed units are `<check>:<subject>`; elements new to a map are detected from `ink_classes` / `data-kind`, the rest declared in `tasks.md` | within (FR-005, FR-007) |
@@ -226,12 +242,15 @@ checks this feature's own delta declares, `294-end`, land.
 | D3 | The rendering-only waiver of feature 248 is retired with the manifest trigger | within (US4: rendering features are not exempt) |
 | D4 | A dispatch needs a GREEN gate, not a running one - the overlap of gate and review (feature 151) is given up | within (US6: NOT-REVIEWABLE never costs a run) |
 | D5 | FR-003 class 9 (privy and wind) CUT: research homesteads/220 found no wind rule; the seat is a researched roll | narrowing (FR-003 class 9 not ruled) - the spec's escape "a class the research shows to be ..." names judgment, not research |
-| D6 | FR-003 class 6 (reed gaps) CUT by feature 298's tile; class 5's sheen half CUT (`test_finish_287`), its broadleaf-over-conifer half to the glyph check (undecidable: no species on a crown) | narrowing (parts of classes 5 and 6 not ruled) |
-| D7 | Class 12 and class 14 ruled in the form the evidence supports: drawn within the roll's own range; the brook crossing the view as one piece (the "share off the frame" form is meaningless on a padded canvas) | narrowing (the class's recorded wording changed) |
+| D6 | FR-003 class 6 (reed gaps) CUT by feature 298's tile; class 5's sheen half CUT (`test_finish_287`); broadleaf over conifer RULED (B5b) | narrowing (parts of classes 5 and 6 not ruled) |
+| D7 | Class 12 ruled against the rolled value (B9); class 14 ruled as the brook crossing the view as one piece (the "share off the frame" form is meaningless on a padded canvas) | class 14: narrowing (the class's recorded wording changed) |
 | D8 | A new Mode A rule failing a HAND-DRAWN sheet waits on the GM's approval of the hand edit, asked once, in one message | within (standing GM rule; the rule itself is not loosened) |
 | D9 | Page prose (place card, modals) belongs to `entry-drift`, not a map review | within (the audit's X3/BX: out of every map-review contract) |
 | D10 | This feature's own delta is reviewed under the occasions it builds: it declares its occasions in `tasks.md` | within |
 | D11 | Thresholds labeled GUESS: B1 3 ft / 2 ft, B4 60 ft and 15 deg, B6 0.8, B7 4 ft, B8 60 ft, B17's count of 3, B22's table | within (each recorded at its point of change) |
-| D12 | The tier experiment runs only on checks with a recorded judgment case; settlement-review's whole-map residue stays on Opus for want of one | narrowing (US8 "per check") |
+| D12 | The tier experiment runs on every check against seeded cases (settlement-review's: a seeded twin, a declared trade not drawn) | within (US8) |
 | D13 | Old ledger rows are classified once into `docs/review-ledger-r0.json` by an Opus agent; new rows carry their class | within (FR-013) |
+| D15 | Counts in dated history entries (the Review log, the journal) are not checked by B14: they are history, and only a current claim moved under a date would abuse it | narrowing (FR-004 "every count") |
+| D16 | B4 covers comb branches; research on a comb's branch spacing first | within (FR-003 class 4) |
+| D17 | B15b and B15c rule the audit's B11 and Z5 rows (MOVED) | within |
 | D14 | `building-review` keeps Mode A layout, program and coherence in one agent with per-occasion sections; `size-audit` keeps anchors; their duplicate dead-space sweeps merge into `building-review` | within (US4 allows a shared agent with a per-check contract) |

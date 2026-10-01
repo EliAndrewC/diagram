@@ -1,0 +1,157 @@
+{
+ "feature": "294-settlement-review-rethink",
+ "plan_sha256": "19075278f303319d03eb6b326d044a313ba4c8fdff0e028730d5fbcfbe679458",
+ "reviewed": "2026-10-01",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Owed units are <check>:<subject>; new elements detected from ink_classes/data-kind, the rest declared in tasks.md",
+   "class": "within",
+   "why": "FR-005, FR-007, US4 scripted owed-answer from delta and declarations; new-map glyph checks only for classes new to the legend is the spec's own edge case"
+  },
+  {
+   "id": "D2",
+   "summary": "Delta touching drawing/placement code with no Occasions section refused at push",
+   "class": "within",
+   "why": "US4: the script refuses a delta with no declaration"
+  },
+  {
+   "id": "D3",
+   "summary": "Rendering-only waiver of feature 248 retired with the manifest trigger",
+   "class": "within",
+   "why": "US4: a research: rendering feature is not exempt"
+  },
+  {
+   "id": "D4",
+   "summary": "Dispatch needs a green gate, not a running one",
+   "class": "within",
+   "why": "US6: prerequisites checked before launch; a running gate is not known green"
+  },
+  {
+   "id": "D5",
+   "summary": "FR-003 class 9 (privy/heap and wind) CUT: research homesteads/220 found no wind rule; the seat is a researched roll and the heap goes with the privy",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "A wind rule would contradict the research record (XII); the class was a reviewer finding with no norm, so the literal rule would enforce something the record says is false. The check also leaves the review, which is the request's purpose. Verified: 220 carries the absence note. Raise with the GM once the implementation works."
+  },
+  {
+   "id": "D6a",
+   "summary": "FR-003 class 6 (reed-fringe gaps) CUT by feature 298's tile",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Impossible by construction in a uniform tile, the exact case the GM named (placement makes it impossible, stop checking); test_covers_298 already goes red on reeds drawn one by one; the residue (holes, edges) is B1/B2"
+  },
+  {
+   "id": "D6b",
+   "summary": "Class 5 sheen half CUT by test_finish_287",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "An existing named test covers it; US1 question 1 allows CUT with the covering test named"
+  },
+  {
+   "id": "D6c",
+   "summary": "Class 5 broadleaf-over-conifer sent to the glyph check as undecidable (no species on a crown)",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Not undecidable: the recorded case (ledger 2026-09-28, 269 B30: broadleaf inked over earlier clumps' conifers) is draw order the renderer controls; rules-recon item 5 says it is decidable from the crowns' z-order and fills in the SVG, or the record can carry the species. 'The record lacks the field' is implementation cost. Sending a geometric draw-order defect to a check that fires only on an occasion leaves it unchecked on every engine change - the opposite of the request (fix the placer, then stop checking). Required: a rule (record species on tree_crowns, or read fills/z-order from the SVG, or draw conifers by construction in one order) proved red on the recorded case."
+  },
+  {
+   "id": "D7a",
+   "summary": "Class 12 (drawn vs rolled area) ruled as 'drawn within its roll's own range'",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The class compares drawn with ROLLED. Checking against the range the roll is drawn from passes Sawada's wood at 60% of its roll (10,672 of 17,692 sq ft), the one pool failure rules-recon item 12 measured - the rule loosened where the pool fails, which the plan's own B preamble forbids. Recon said decide target vs ceiling first; the plan decided it implicitly. Required: compare drawn with the rolled value (band GUESS) and fix the placer, or, if research shows the roll is a ceiling, record that finding and test drawn <= rolled and >= the floor, labeled as research-decided like D5."
+  },
+  {
+   "id": "D7b",
+   "summary": "Class 14 (brook share off the frame) ruled as the brook crossing the view as one piece",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The literal share is 0.37-0.67 on every correct map (canvas padding, brooks end off-canvas by construction), so it would fail correct maps; the recorded defect was the brook leaving and re-entering the view in three pieces (230 pass 3), which the one-piece predicate catches. The purpose survives."
+  },
+  {
+   "id": "D8",
+   "summary": "A new Mode A rule failing a hand-drawn sheet waits on the GM's approval of the hand edit",
+   "class": "within",
+   "why": "Standing GM rule on hand-map edits; the rule is not loosened"
+  },
+  {
+   "id": "D9",
+   "summary": "Page prose belongs to entry-drift and generated card counts, not a map review",
+   "class": "within",
+   "why": "US1 CUT with the covering check named; the GM kept the record checks as they are"
+  },
+  {
+   "id": "D10",
+   "summary": "This feature's own delta reviewed under the occasions it builds",
+   "class": "within",
+   "why": "Applies the requested rule to itself"
+  },
+  {
+   "id": "D11",
+   "summary": "Thresholds labeled GUESS at their point of change",
+   "class": "within",
+   "why": "XII labeling; no scope change"
+  },
+  {
+   "id": "D12",
+   "summary": "Tier experiment only on checks with a recorded judgment case; settlement-review stays on Opus untested",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "US8 says per check, against SEEDED cases with known findings; a seeded case is constructed, so 'none recorded' is not an impossibility. A twin (a pool map's form resubmitted as new) or a declared trade not drawn (C6d) can be seeded for the whole-map residue. Required: seed at least one known finding for settlement-review's residue and run it three a leg like the others; if Opus itself misses the seed, record that and keep the tier."
+  },
+  {
+   "id": "D13",
+   "summary": "Old ledger rows classified once into review-ledger-r0.json by an Opus agent; the script tallies; new rows carry their class",
+   "class": "within",
+   "why": "FR-013/US7: a script prints R0 from the ledger; old rows carry no class, so a one-time recorded classification is the data the script reads"
+  },
+  {
+   "id": "D14",
+   "summary": "building-review keeps layout/program/coherence with per-occasion sections; size-audit keeps anchors; dead-space sweeps merge",
+   "class": "within",
+   "why": "US4 allows a shared agent with a per-check contract"
+  },
+  {
+   "id": "X1",
+   "summary": "B4 (unlabeled): parallel-twin rule exempts siblings of one comb, governed instead by 'the comb's researched branch spacing'",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The recorded case (ledger 2026-08-28, 'twin branch canals ~25 ft apart') and all four pool failures are comb siblings, so the carve-out excludes exactly the recorded case and the failing pool - the rule loosened where the pool fails. Rules-recon item 4: 'Norm: none found'; no branch spacing found in research/water. Required: the rule covers siblings and goes red on the recorded case, and the placer is fixed; only if a research pass FINDS a branch spacing that permits the pair is the class sent back through the audit as research-decided (FR-003's escape), recorded with the citation, and the sibling spacing then enforced by test."
+  },
+  {
+   "id": "X2",
+   "summary": "B14 (unlabeled): typed counts in the census block and dated history entries exempt from the agrees-with-manifest refusal",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The census block is checked by the existing test; a dated entry states a past manifest's count and cannot truthfully agree with the current one, so the literal rule would force falsifying or deleting history the GM never asked to remove. Condition: an entry moved under a date must be genuinely historical, not a current claim relabeled."
+  },
+  {
+   "id": "X3",
+   "summary": "Audit MOVED rows B11 (Mode A notes counts vs data-kind census, ~15 fires) and Z5 residual (sized ink outside the size table) get no rule in plan B and no review in plan C",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Silently dropped: R1 marks both MOVED (a new rule, US2), the MOVED list carries B11 as item 4, yet no B-item builds them and no contract keeps them. A check removed with no rule and no review is the opposite of 'fix the placement algorithm and THEN stop checking'. Required: a B-item for each (sheet notes counts against the data-kind census; size-table coverage of paths/circles/glyphs), or keep them in building-review/size-audit with the reason."
+  },
+  {
+   "id": "X4",
+   "summary": "B3 rules the surviving form of class 3 (wood shed nearest its own house, turned with it); end-on/off-the-wall dropped",
+   "class": "within",
+   "why": "The eaves woodpile is no longer drawn (280 M21), so those forms cannot occur"
+  },
+  {
+   "id": "X5",
+   "summary": "Section I tries Sonnet only, not Opus at lower effort",
+   "class": "within",
+   "why": "US8 offers either as the cheaper tier"
+  },
+  {
+   "id": "X6",
+   "summary": "B5 opacity allowlist seeded from today's census with a reason per class; B6 exempts overlaps page.py declares",
+   "class": "within",
+   "why": "Drawing-convention lists with reasons; both go red on their recorded/seeded cases and B6's failures are fixed in hit order, not listed"
+  }
+ ],
+ "verdict": "BLOCKED"
+}
