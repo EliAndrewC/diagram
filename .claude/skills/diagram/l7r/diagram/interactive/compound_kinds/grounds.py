@@ -463,7 +463,7 @@ class ApproachRoad(Kind):
     towns. The road at the gate is drawn at the width of the road the compound stands on, 15 to 24 ft where it is
     a highway, as read; no page read gives the width of the road before an official's gate, so any wider ground
     before the gate is a guess, and so is a lane to a side or cart gate, drawn at about 6 ft where carts use it.
-    The record read sets a Japanese seat beside the settlement it administers and a Chinese county yamen inside its town on the main street, and gives a south-facing gate for a Chinese county office; that the manor's gate faces what it fronts
+    The record read sets a Japanese seat beside the settlement it administers, which this project reads as the town's edge, and a Chinese county yamen inside its town on the main street, and gives a south-facing gate for a Chinese county office; that the manor's gate faces what it fronts
     and opens onto the road it stands on is this project's own calibration, set against the drawn
     maps rather than read from a source.
 
