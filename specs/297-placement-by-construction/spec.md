@@ -186,21 +186,24 @@ the accepted spec, each with its evidence:
   ran the whole last resort, which no longer runs there). A later round asking the law and running only its broken rules' steps
   was built and measured slower on two of three maps (R12), and withdrawn: the rounds are as before.
   `WebRefused` is unchanged. **This is narrower than the GM's lever ("kept true as the lanes are laid, rather than checked
-  afterward")**: the law is still asked, and the web still repaired, after it is laid. Plan D2-D4 were built as specified and
-  measured (R14): over the five pool maps and cohort seeds 1-24, 10 of 23 webs were refused (Inashiro and Sawada among them) and the
-  web stage summed 19.73 s against the shipping settle's 14.30 s - withdrawn under the plan's rule. **The GM is to be told.**
+  afterward")**: the law is still asked, and the web still repaired, after it is laid. Plan D2-D4 were built and
+  measured over the five pool maps and cohort seeds 1-24 (R14): with D3 at each WRITE as the plan states it (all thirteen repairs to
+  a fixpoint after every lane write, the tree's lanes first, dangling ends judged at the end), 21 of 29 specs ended broken or with a
+  house unreached and one raised (repairs asked of a web still being built take away lanes a later pass would have joined to); at
+  the pass boundary, 10 of 23 webs were refused and the web stage was 1.38x slower - withdrawn under the plan's rule (it fails the
+  gate). **The GM is to be told.**
 - **FR-002, the seat's own questions, reordered (R10).** The field's reach and the water are asked before any layout; the corridor
   - the costliest question - once per seat, after the four layouts are built and the envelope tested: asked first, it ran on every
   offered seat (325 searches against 166). So "a seat that fails them builds no layout" now holds for the field's reach and the
   water only; a seat that fails the corridor has built its four layouts first. The GM's lever ("the lane test once per seat rather
-  than once per orientation") is met.
+  than once per orientation") is met. Plan C's second half, the layout keyed per household, was withdrawn: the per-seat yard-size rolls were the seating's only
+  way to fit a large-yard household into a tight seat, and seed 3 lost a household (R9).
 - **FR-001, the seat region, as built (plan Amendment 1 B1).** The static ground and the access tree's corridors are painted and
   kept current; the seated homesteads are NOT painted (the placer's one computed move rescues a seat lapping one neighbor - painted,
   Inashiro seated no one), so the region is not recomputed for each seated house's box, only for each new corridor.
 - **FR-004, the grove, as built (B3).** The fill's region answers "clear"; where it reads taken, the exact families are asked in turn
   to say which (a hard edge drops the clump, a local obstacle re-seats it) - so User Story 3's "not tested against each keep-out in
-  turn" holds for the open ground only. Plan C's second half, the layout keyed per household, was withdrawn: the per-seat yard-size rolls were the seating's only
-  way to fit a large-yard household into a tight seat, and seed 3 lost a household (R9).
+  turn" holds for the open ground only.
 - **FR-004, the regions painted in C (R10).** Every region paints with PIL's own primitives and a two-cell margin; buffering each
   shape with shapely first was most of a region's cost and made the hinterland slower than the base. The marsh and the grass read
   their keep-out grid as one painted region (`KeepoutGrid.taken_many`).

@@ -175,7 +175,8 @@ whole gate, as the base's (`cohort-base.log`).
 
 ## R14. Plan D2-D4 built as specified, and measured (observed 2026-10-01, method: scratch harnesses run as test nodes over the five pool maps and cohort seeds 1-24, `build` through `stage_web`, the same session and load 1.4-2.1)
 
-Built as an experiment on the shipping engine: **D2**, the access tree's lanes drawn before the skeleton; **D3**, every lane-and-joint
+First built at the PASS boundary (the review of Amendment 1 round 2 rightly said this is not D3 as written; the per-write build
+follows): **D2**, the access tree's lanes drawn before the skeleton; **D3**, every lane-and-joint
 repair (`settle_husks`, `square_every_crossing`, `settle_shapes`, `settle_ends` with the dangling trim, `settle_joins`,
 `settle_needles`, `settle_defer`, `settle_widths`) applied at each pass boundary of `stage_web` - the write unit at which the passes
 hand the web on - and once more after the last pass; **D4**, no settle rounds and no last resort: the tree's owed lanes drawn
@@ -191,3 +192,15 @@ Without any repair (D4 alone, the tree's lanes drawn last) 20 of the 23 webs end
 needle loops, oblique crossings, fragments: per-lane and joint rules, not only the network-wide ones. With the repairs at each
 pass, the repairs themselves lay new breaks the next pass does not see (a needle cut opens a tail; a tree lane drawn first is met by
 the next pass's lanes as a needle). Withdrawn under the plan's own rule - both slower and failing the gate - and the settle stays.
+
+**D3 AT THE WRITE, as plan D3 states it** (observed 2026-10-01, method: the same harnesses, the hook on every lane write -
+`lane`, `reshape_lane`, `reink_lane` (which the in-place `pts` edits call) and `drop_lanes` - running ALL THIRTEEN repairs of the
+settle (`square_every_crossing`, `settle_shapes`, `settle_way_outs`, `settle_ends`, `settle_street_ends`, `settle_shadows`,
+`settle_joins`, `settle_needles`, `settle_defer`, `settle_network`, `settle_fragments`, `prune_the_tree`, `settle_widths`, with the
+husks) to a fixpoint after each write, a repair's own writes folded into that fixpoint; the tree's lanes first (D2); dangling ends
+left to the end; no settle - the law asked once): **21 of the 29 specs end broken or unreached and one raises** (Sawada: an
+`IndexError` - a repair at the write took a lane out from under the pass that was iterating the lanes); 1 web clean (the six
+dispersed draw none). Unreached houses return on eleven maps: the network and fragment repairs and `prune_the_tree`, asked of a web
+still being built, take away lanes - the tree's among them - that a later pass would have joined to. The web stage summed 15.29 s
+against the shipping settle's 14.30 s (120 to 136 writes and 266 to 784 repair-step runs a web). Withdrawn under the plan's rule:
+it fails the gate.
