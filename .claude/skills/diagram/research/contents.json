@@ -1,0 +1,283 @@
+{
+ "sections": [
+  {
+   "id": "tiers",
+   "title": "The settlement tiers",
+   "description": "<p><em>The findings behind the settlement tiers on these maps, the decisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>",
+   "drawing_description": "<p><em>How the maps draw what the research on the settlement tiers describes - what each size draws, its scale, what the card beside it states, and when a map may be excused a rule - each section linked to the history behind it.</em></p>",
+   "takes": [
+    {
+     "primary": "tiers"
+    }
+   ],
+   "sections": []
+  },
+  {
+   "id": "countryside",
+   "title": "The countryside",
+   "description": "<p><em>The land a hamlet or a village works and lives on: its fields and their forms, its farmhouses, its water, its woods and its ways.</em></p>",
+   "drawing_description": "<p><em>How the maps draw the countryside - the fields, the farmhouses, the water, the woods and the ways - each question linked to the history behind it.</em></p>",
+   "takes": [],
+   "sections": [
+    {
+     "id": "fields",
+     "title": "Fields",
+     "description": "<p><em>The findings behind the paddies, plots and crops on these maps, the decisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>",
+     "drawing_description": "<p><em>How the maps draw what the research on fields describes - the paddies and their plots, the bunds, the dry fields and their crops - each section linked to the history behind it.</em></p>",
+     "takes": [
+      {
+       "primary": "fields"
+      }
+     ],
+     "sections": []
+    },
+    {
+     "id": "field-archetypes",
+     "title": "Field archetypes",
+     "description": "<p><em>The findings behind the field archetypes on these maps - the crop overlays, the polder and the dike-pond - the decisions they drove, and, where no generator draws the feature yet, the rules a map follows.</em></p>",
+     "drawing_description": "<p><em>How the maps draw what the research on the field archetypes describes - the cash crops laid over a village's rice land, the polder and the dike-pond - each section linked to the history behind it.</em></p>",
+     "takes": [
+      {
+       "primary": "field-archetypes"
+      }
+     ],
+     "sections": []
+    },
+    {
+     "id": "homesteads",
+     "title": "Homesteads",
+     "description": "<p><em>The findings behind the farmhouses, work yards, gardens, groves and village forms on these maps, the\ndecisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>",
+     "drawing_description": "<p><em>How the maps draw what the research on homesteads describes - the sizes, the choices between forms the record shows existed, and the conventions that let a map be read - each section linked to the history behind it.</em></p>",
+     "takes": [
+      {
+       "primary": "homesteads"
+      }
+     ],
+     "sections": []
+    },
+    {
+     "id": "water",
+     "title": "Water",
+     "description": "<p><em>The findings behind the water on these maps - the flow, the channels, the moats and the wetlands - the decisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>",
+     "drawing_description": "<p><em>How the maps draw what the research on water describes - the canals and ditches that water the fields, the drains and the ponds - each section linked to the history behind it.</em></p>",
+     "takes": [
+      {
+       "primary": "water"
+      }
+     ],
+     "sections": []
+    },
+    {
+     "id": "vegetation",
+     "title": "Vegetation and terrain",
+     "description": "<p><em>The findings behind the windbreaks, groves, commons and woods on these maps, the decisions they drove, and, where the map is drawn by hand, the rule it follows.</em></p>",
+     "drawing_description": "<p><em>How the maps draw what the research on vegetation describes - the groves, the woods and the ground cover - each section linked to the history behind it.</em></p>",
+     "takes": [
+      {
+       "primary": "vegetation"
+      }
+     ],
+     "sections": []
+    },
+    {
+     "id": "ways",
+     "title": "Ways",
+     "description": "<p><em>The findings behind the roads, lanes, bridges and planks on these maps, the decisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>",
+     "drawing_description": "<p><em>How the maps draw what the research on ways describes - the lanes, roads, streets and bridges - each section linked to the history behind it.</em></p>",
+     "takes": [
+      {
+       "primary": "ways"
+      }
+     ],
+     "sections": []
+    }
+   ]
+  },
+  {
+   "id": "compounds",
+   "title": "Estates and other compounds",
+   "description": "<p><em>The research behind the compound plans - the magistrate's manor and its kind: what was found, the decision it drove, and any deliberate departure from literal reality.</em></p>",
+   "drawing_description": "<p><em>How the maps draw what the research on estates and other compounds describes - the sizes, the choices between forms the record shows existed, and the conventions that let a map be read - each section linked to the history behind it.</em></p>",
+   "takes": [
+    {
+     "primary": "compounds"
+    }
+   ],
+   "sections": []
+  },
+  {
+   "id": "towns",
+   "title": "Towns",
+   "description": "<p><em>The findings behind the layout, wall and market of a town on these maps, the decisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>",
+   "drawing_description": "<p><em>How the maps draw what the research on towns describes - the sizes, the choices between forms the record shows existed, and the conventions that let a map be read - each section linked to the history behind it.</em></p>",
+   "takes": [
+    {
+     "primary": "towns"
+    }
+   ],
+   "sections": []
+  },
+  {
+   "id": "cities",
+   "title": "Cities",
+   "description": "<p><em>The provincial city and the domain capital: the castle town as a whole, its defenses, its streets and houses, its government quarter, the ground outside its walls, its river, and how big it is.</em></p>",
+   "drawing_description": "<p><em>How the maps draw a city - its form, its walls, its streets, its government quarter, its river and its size - each question linked to the history behind it.</em></p>",
+   "takes": [],
+   "sections": [
+    {
+     "id": "capitals",
+     "title": "Domain capitals",
+     "description": "<p><em>The findings behind the castle, the government avenue, the wards, the water and the wharf of a domain capital on these maps, the decisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>",
+     "drawing_description": "<p><em>How the maps draw what the research on domain capitals describes - the tier's form, the sizes, the choices between forms the record shows existed, and the conventions that let a map be read - each section linked to the history behind it.</em></p>",
+     "takes": [
+      {
+       "primary": "capitals"
+      }
+     ],
+     "sections": []
+    },
+    {
+     "id": "city-defenses",
+     "title": "City defenses",
+     "description": "<p><em>The findings behind the wall, moat, gates and towers on these maps, the decisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>",
+     "drawing_description": "<p><em>How the maps draw what the research on city defenses describes - the wall, its gates and its shape, the choices between forms the record shows existed, and the conventions that let a map be read - each section linked to the history behind it.</em></p>",
+     "takes": [
+      {
+       "primary": "city-defenses"
+      }
+     ],
+     "sections": []
+    },
+    {
+     "id": "urban-fabric",
+     "title": "Urban fabric",
+     "description": "<p><em>The findings behind the streets, the frontage, the housing and the fire defense of these cities, the decisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>",
+     "drawing_description": "<p><em>How the maps draw what the research on urban fabric describes - the streets, the blocks and what lines them, the choices between forms the record shows existed, and the conventions that let a map be read - each section linked to the history behind it.</em></p>",
+     "takes": [
+      {
+       "primary": "urban-fabric"
+      }
+     ],
+     "sections": []
+    },
+    {
+     "id": "government",
+     "title": "The government quarter",
+     "description": "<p><em>The findings behind the government quarter, the samurai ward and martial training on these maps, the decisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>",
+     "drawing_description": "<p><em>How the maps draw what the research on the government quarter describes - the governor's compound, the ministry offices and the samurai who staff them, the choices between forms the record shows existed, and the conventions that let a map be read - each section linked to the history behind it.</em></p>",
+     "takes": [
+      {
+       "primary": "government"
+      }
+     ],
+     "sections": []
+    },
+    {
+     "id": "outside-the-walls",
+     "title": "Outside the walls",
+     "description": "<p><em>The findings behind a city's farmland, its gate suburbs and its country estates, the decisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>",
+     "drawing_description": "<p><em>How the maps draw what the research on the ground outside a city's walls describes - its gate suburbs, its kilns, its farmland and its country estates, the choices between forms the record shows existed, and the conventions that let a map be read - each section linked to the history behind it.</em></p>",
+     "takes": [
+      {
+       "primary": "outside-the-walls"
+      }
+     ],
+     "sections": []
+    },
+    {
+     "id": "river-cities",
+     "title": "River cities",
+     "description": "<p><em>The findings behind the river, the moat's junctions with it and the wharf on these maps, the decisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>",
+     "drawing_description": "<p><em>How the maps draw what the research on river cities describes - the river and the moat, the canal, its water gate and its landing, the choices between forms the record shows existed, and the conventions that let a map be read - each section linked to the history behind it.</em></p>",
+     "takes": [
+      {
+       "primary": "river-cities"
+      }
+     ],
+     "sections": []
+    },
+    {
+     "id": "city-sizing",
+     "title": "Sizing a city",
+     "description": "<p><em>The findings behind the size of a walled city's ring and the density of its quarters on these maps, the decisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>",
+     "drawing_description": "<p><em>How the maps size a walled city's ring to its population and fill its quarters - the ground each household takes, the open ground a city may keep, and the calibrations, deviations and guesses behind them - each section linked to the history behind it.</em></p>",
+     "takes": [
+      {
+       "primary": "city-sizing"
+      }
+     ],
+     "sections": []
+    }
+   ]
+  },
+  {
+   "id": "trades-and-services",
+   "title": "Trades and services",
+   "description": "<p><em>The findings behind the state markers, trades, wells, gate furniture and caste geography on these maps, the decisions they drove, and the rules a map follows.</em></p>",
+   "drawing_description": "<p><em>How the maps draw what the research on trades and services describes - the sizes, the choices between forms the record shows existed, and the conventions that let a map be read - each section linked to the history behind it.</em></p>",
+   "takes": [
+    {
+     "primary": "trades-and-services"
+    }
+   ],
+   "sections": []
+  },
+  {
+   "id": "religion-and-the-dead",
+   "title": "Religion and the dead",
+   "description": "<p><em>The findings behind the shrines, torii, monasteries and burial grounds on these maps, the decisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>",
+   "drawing_description": "<p><em>How the maps draw what the research on religion and the dead describes - the features each size of settlement carries, the sizes, the choices between forms the record shows existed, and the conventions that let a map be read - each section linked to the history behind it.</em></p>",
+   "takes": [],
+   "sections": [
+    {
+     "id": "shrines",
+     "title": "Shrines",
+     "description": "<p><em>Shrines wherever they stand - the village shrine and its grounds, torii, sacred woods, wayside figures, and the shrines of towns and cities.</em></p>",
+     "drawing_description": "<p><em>How the maps draw shrines, each question linked to the history behind it.</em></p>",
+     "takes": [
+      {
+       "primary": "shrines"
+      }
+     ],
+     "sections": []
+    },
+    {
+     "id": "temples",
+     "title": "Temples",
+     "description": "<p><em>Temples wherever they stand - the village temple, the town monastery, a city's temple quarter and its precincts, and the clergy who kept them.</em></p>",
+     "drawing_description": "<p><em>How the maps draw temples, each question linked to the history behind it.</em></p>",
+     "takes": [
+      {
+       "primary": "temples"
+      }
+     ],
+     "sections": []
+    },
+    {
+     "id": "the-dead",
+     "title": "The dead",
+     "description": "<p><em>Where the dead were laid and the customs around them - burial grounds, cremation grounds, and what was kept at a doorway.</em></p>",
+     "drawing_description": "<p><em>How the maps draw burial and cremation grounds, each question linked to the history behind it.</em></p>",
+     "takes": [
+      {
+       "primary": "the-dead"
+      }
+     ],
+     "sections": []
+    }
+   ]
+  },
+  {
+   "id": "map-conventions",
+   "title": "Map conventions",
+   "description": "",
+   "drawing_description": "<p><em>The findings behind the labels, captions, titles and frames on these maps, the decisions they drove, and - where no generator draws the feature yet - the rules a map follows.</em></p>\n<p>Almost everything in this section is a <strong>map drawing convention</strong>: a choice about how the sheet is drawn so a human eye can read it, with no historical finding behind it. A settlement had no title lettered across its fields and no bar showing a hundred feet; those are ours, and so is every rule about where a caption may sit. Where a decision does rest on something about the world - a pond that feeds a field by gravity has to stand above the field's water entry - the entry says so. Everywhere else the honest label on the decision is \"convention\", and the entries use that word rather than dressing a drawing choice as a finding.</p>",
+   "takes": [
+    {
+     "primary": "map-conventions"
+    }
+   ],
+   "sections": []
+  }
+ ]
+}

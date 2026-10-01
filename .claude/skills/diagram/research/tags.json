@@ -1,0 +1,160 @@
+{
+ "subject": {
+  "tiers": {
+   "name": "The settlement tiers",
+   "description": "What a hamlet, a village, a town, a provincial city and a capital are; households and how many live in a house."
+  },
+  "fields": {
+   "name": "Fields",
+   "description": "Paddies, dry plots and crops, the bunds between them and the ring of fields around a settlement."
+  },
+  "field-archetypes": {
+   "name": "Field archetypes",
+   "description": "Polders, dike-ponds, terraces, ribbon valleys and the land-use overlays."
+  },
+  "homesteads": {
+   "name": "Homesteads",
+   "description": "The farmhouse with its yard, garden, grove and outbuildings, and how farms cluster or scatter."
+  },
+  "water": {
+   "name": "Water",
+   "description": "Brooks, rivers, canals, ditches, ponds, wetlands and how water flows through them."
+  },
+  "vegetation": {
+   "name": "Vegetation and terrain",
+   "description": "Windbreaks, commons, woods, scrub, bamboo and ground cover."
+  },
+  "ways": {
+   "name": "Ways",
+   "description": "Roads, lanes, paths, bridges and planks."
+  },
+  "compounds": {
+   "name": "Estates and other compounds",
+   "description": "The plan of a walled or fenced compound and its buildings: magistrates' compounds, samurai estates, holding cells, staff rowhouses, rooms."
+  },
+  "towns": {
+   "name": "Towns",
+   "description": "The town tier: its layout, wall, market and what a town has."
+  },
+  "capitals": {
+   "name": "Domain capitals",
+   "description": "The castle town that is a domain's capital, as a whole."
+  },
+  "city-defenses": {
+   "name": "City defenses",
+   "description": "City walls, gates, towers and moats."
+  },
+  "urban-fabric": {
+   "name": "Urban fabric",
+   "description": "Street frontage, row-packing, blocks, wards and a city's houses."
+  },
+  "government": {
+   "name": "The government quarter",
+   "description": "A city's ministries and offices, and its martial training grounds."
+  },
+  "outside-the-walls": {
+   "name": "Outside the walls",
+   "description": "Estates and farmland just outside, and inside, a city's walls."
+  },
+  "river-cities": {
+   "name": "River cities",
+   "description": "A city on a river: the river, moat junctions, wharves and city canals."
+  },
+  "city-sizing": {
+   "name": "Sizing a city",
+   "description": "A city's space budget and its population rule."
+  },
+  "trades-and-services": {
+   "name": "Trades and services",
+   "description": "What towns and cities share: state markers and boards, justice works, trades and shops, wells, stables, inns."
+  },
+  "shrines": {
+   "name": "Shrines",
+   "description": "Shrines wherever they stand: village shrines, torii, sacred groves, wayside shrines, shrines in towns and cities."
+  },
+  "temples": {
+   "name": "Temples",
+   "description": "Temples wherever they stand: village temples, monasteries, temple quarters, the clergy, the state cult."
+  },
+  "the-dead": {
+   "name": "The dead",
+   "description": "Burial grounds, graves, cremation and the customs around the dead."
+  },
+  "map-conventions": {
+   "name": "Map conventions",
+   "description": "How a map sheet is laid out, labeled, captioned and framed."
+  },
+  "buildings": {
+   "name": "Buildings",
+   "description": "Questions about a building of any kind."
+  },
+  "samurai": {
+   "name": "Samurai",
+   "description": "Questions about where and how samurai lived and served."
+  },
+  "magistracies": {
+   "name": "Magistracies",
+   "description": "Questions about the magistrate's office, its compound and its work."
+  },
+  "markets": {
+   "name": "Markets",
+   "description": "Questions about markets, shops and trade."
+  },
+  "law-and-justice": {
+   "name": "Law and justice",
+   "description": "Questions about courts, jails, punishment and public notice."
+  },
+  "households": {
+   "name": "Households",
+   "description": "Questions about who lived together under one roof."
+  },
+  "farming": {
+   "name": "Farming",
+   "description": "Questions about how the land was worked."
+  },
+  "defense": {
+   "name": "Defense",
+   "description": "Questions about walls, gates, watch and defense of any settlement."
+  },
+  "religion": {
+   "name": "Religion",
+   "description": "Questions about religious practice beyond a shrine's or temple's grounds."
+  }
+ },
+ "setting": {
+  "countryside": {
+   "name": "The countryside",
+   "description": "Hamlets, villages and the land around them."
+  },
+  "town": {
+   "name": "Towns",
+   "description": "The town tier."
+  },
+  "city": {
+   "name": "Cities",
+   "description": "Provincial cities and domain capitals."
+  }
+ },
+ "level": [
+  {
+   "id": "foundational",
+   "name": "Foundational",
+   "description": "What the thing is and why it exists - the account to read first."
+  },
+  {
+   "id": "subtype",
+   "name": "Subtypes",
+   "description": "The kinds, forms and variants of a thing."
+  },
+  {
+   "id": "detail",
+   "name": "Details",
+   "description": "Particular parts, placement, arrangement and customs."
+  },
+  {
+   "id": "counts-and-measurements",
+   "name": "Counts and measurements",
+   "description": "Sizes, distances, numbers and densities."
+  }
+ ]
+}

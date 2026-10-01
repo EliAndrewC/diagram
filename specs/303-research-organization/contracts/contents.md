@@ -6,7 +6,7 @@ tags.json:
    "level": [{"id": "foundational", "name": "..."}, {"id": "subtype"}, {"id": "detail"}, {"id": "counts-and-measurements"}]}
 
 contents.json:
-  {"sections": [{"id": "tiers", "title": "The settlement tiers", "description": "<html>",
+  {"sections": [{"id": "tiers", "title": "The settlement tiers", "description": "<html>", "drawing_description": "<html>",
                   "takes": [{"primary": "tiers"}], "sections": []}, ...]}
 
 A clause matches when every key matches: `primary` (the first subject), `subject` (any subject), `setting` (any
