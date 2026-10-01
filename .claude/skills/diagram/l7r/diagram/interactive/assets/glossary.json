@@ -14984,5 +14984,82 @@
   "variants": [
    "sumigama"
   ]
+ },
+ "yoshihara": {
+  "def": "A reed bed: ground at a lake's or marsh's edge where reed (yoshi) grows thick. On Lake Biwa it was cut each winter for thatch and reed goods and its stubble burned in spring.",
+  "variants": [
+   "yoshihara"
+  ]
+ },
+ "makomo": {
+  "def": "Manchurian wild rice, a tall grass of shallow water. Japan's river classification lists it in one community with the club-rush ukiyagara, the two growing singly or mixed.",
+  "variants": [
+   "makomo",
+   "Zizania"
+  ]
+ },
+ "kariyasu": {
+  "def": "A perennial grass related to susuki, cut for thatch in Japan.",
+  "variants": [
+   "kariyasu"
+  ]
+ },
+ "chigaya": {
+  "def": "Cogon grass, a perennial grass of open ground, cut for thatch in Japan.",
+  "variants": [
+   "chigaya"
+  ]
+ },
+ "seral": {
+  "def": "Belonging to one stage of a succession, the series of plant communities that replace one another on the same ground, as reed gives way to wet woodland in a hydrosere.",
+  "variants": [
+   "seral",
+   "seral stage",
+   "seral stages"
+  ]
+ },
+ "Betula": {
+  "def": "The genus of the birches, which grow with alder and willow in the wet woodland at the end of a hydrosere.",
+  "variants": [
+   "Betula"
+  ]
+ },
+ "Salix": {
+  "def": "The genus of the willows, which in Japan grow on the sand and mud of the lower reaches of rivers.",
+  "variants": [
+   "Salix"
+  ]
+ },
+ "sedge": {
+  "def": "A grass-like plant of wet ground, the genus Carex among them; at a marsh's margin, sedge forms the band between the reed and the wet meadow.",
+  "variants": [
+   "sedge",
+   "sedges"
+  ]
+ },
+ "Alnus": {
+  "def": "The genus of the alders, trees of wet ground; in Japan an alder community grows on excessively wet ground and takes over a mire as it dries.",
+  "variants": [
+   "Alnus"
+  ]
+ },
+ "momiage": {
+  "def": "One of the two tendings a Japanese garden pine needs each year, beside midori-tsumi; a pine left without them loses its worth as a garden tree.",
+  "variants": [
+   "momiage"
+  ]
+ },
+ "midori-tsumi": {
+  "def": "Pinching off a pine's new shoots (midori), which stick up in early spring; one of the two tendings a Japanese garden pine needs each year.",
+  "variants": [
+   "midori-tsumi"
+  ]
+ },
+ "Lake Biwa": {
+  "def": "Japan's largest lake, in Shiga Prefecture beside Kyoto, whose shores hold the country's best-known reed beds.",
+  "variants": [
+   "Lake Biwa",
+   "Biwa"
+  ]
  }
 }

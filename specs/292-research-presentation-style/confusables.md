@@ -254,4 +254,4 @@ one, since its `What:` is the nearest thing to the record's definition today.
 - Scrub and rough grass at the edges of fields and channels / Where a field meets its ditch: the first is the grass cut along a channel's bank and the scrub kept off it; the second is how the bank, the bund and the inlet meet where a ditch feeds a field
 - Reed beds and the marsh's edge (yoshihara) / Marshes and wetlands (shitchi): the first is the plants of a marsh's margin and the cutting of its reeds; the second is the marsh itself, where a village kept one and why
 - Reed beds and the marsh's edge (yoshihara) / Reservoir ponds (tameike): a village marsh's reed is recorded as cut each winter; a reservoir pond's fringe of reed is not recorded as cut
-- Pines in residence gardens (kuromatsu) / Ornamental gardens, ponds and stone lanterns (teien): the first is the garden's pines and their size; the second is the garden as a whole
+- Black pines in Japanese gardens (kuromatsu) / Ornamental gardens, ponds and stone lanterns (teien): the first is the garden's pines and their size; the second is the garden as a whole
