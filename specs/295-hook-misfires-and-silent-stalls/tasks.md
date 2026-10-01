@@ -25,5 +25,6 @@ Spec: [`spec.md`](spec.md). Plan: [`plan.md`](plan.md) (D1-D10). Research: [`res
 - [x] T07 Each new rule shown red with it removed; wiring and tables (D10)
       research: rendering
       verify: DONE. each rule shown red (see T01-T06); settings.json registers stall-watchdog-hooks.sh prompt; CLAUDE.md and docs/guards.md rows; make hooks-test 32 suites green
-- [ ] T08 `make hooks-test` and `make done` green, then land
+- [x] T08 `make hooks-test` and `make done` green, then land
       research: rendering
+      verify: DONE. make hooks-test 32 suites green; make done green (87 s) after the census, registration and stale-artifact fixes
