@@ -148,7 +148,7 @@ def test_the_dike_pond_is_a_declared_archetype_laid_to_a_cardinal_fall() -> None
 
 
 def test_a_dike_pond_is_the_mosaic_and_a_rice_polder_is_the_grid() -> None:
-    """Feature 280 M56 (research/archetypes/130): the pond grid is a modern aerial view, so a dike-pond rolls the mosaic only
+    """Feature 280 M56 (research/archetypes/160): the pond grid is a modern aerial view, so a dike-pond rolls the mosaic only
     (`POND_LAYOUTS`); the rice polder never rolls. A spec may still name the grid - the engine's dial is kept. And the fry
     form (feature 280 M60, `FRY_FORMS`) rolls both attested forms on a dike-pond and is none elsewhere."""
     rolled = {hg.plan_site(hg.HamletSpec(name="X", seed=s, households=16, field_archetype="mulberry_dike_fishpond")).pond_layout for s in range(1, 40)}

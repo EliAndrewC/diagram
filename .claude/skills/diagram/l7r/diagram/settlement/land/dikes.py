@@ -255,7 +255,7 @@ class DikeMixin:
     def dike_top_houses(self: Settlement, count: int, seed: int = 0, dike: int = 0, span: tuple[float, float] = (0.0, 1.0), size: tuple[float, float] = (46.0, 28.0), gap_clear: float = 34.0) -> int:  # type: ignore[misc]
         """A DIKE-TOP VILLAGE: farmhouses in SINGLE FILE ON the perimeter dike crest (settlement_form
         'dike_top') - the settlement form for an ISLET polder with water on every flank and no landward
-        shore to build on. Historical grounding (researched 2026-07-24, research/archetypes.html 'Polder siting - full enclosure, fluctuating water and where the village sits'):
+        shore to build on. Historical grounding (researched 2026-07-24, research/archetypes.html 'Polders: fields diked against the fluctuating water (weitian, waju)' + research/rendering/archetypes.html 'How our maps draw a polder and its water'):
         where a polder abuts the natural shore the village sits on the landward dry ground (the Enokida/
         Kuwabata configuration), but in the DEEP-water landscape the only dry ground is the polder's own
         raised earth, and settlement went up onto it - linear dike/canal-bank villages "taking advantage of

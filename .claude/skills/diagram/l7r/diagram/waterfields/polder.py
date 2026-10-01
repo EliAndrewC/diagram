@@ -64,7 +64,7 @@ def build_polder(
       `gap` default (1.5, 4.0): between-row gaps 3 px (~1 m walking bund, attested 20-50 cm + stroke) and
       8 px column corridors carrying the 3.2 px lateral (a bang 浜 field ditch + spoil banks, ~2.4 m).
       A GAP IS ONLY AS WIDE AS WHAT RUNS IN IT (`split_gap`, GM 2026-07-24; research/archetypes.html "What lies
-      between two parcels, and how wide is it?"; `mosaic` is grounded there too, under "Grid vs mosaic", and
+      between two parcels, and how wide is it?"; `mosaic` at research/rendering/archetypes.html "How our maps draw a polder and its water", and
       `line_wander` at research/rendering/fields.html "How our maps draw bunds between the paddies (aze)"):
       `gap[1]` is the width of a
       DITCH corridor, so it belongs only on the module column lines, where a lateral actually runs. The
@@ -200,7 +200,7 @@ def _polder_lattice(
     # surrounds the field"): the trunk distribution+collection channel runs a ring on the INSIDE toe of the
     # perimeter dike, on the field side - outside the dike is the wild lake/creek the dike holds back, so no
     # channel runs out there, and water crosses the dike ONLY at gated sluices (斗门) at the inlet + outfall
-    # (research 2026-07-22, research/archetypes.html 'Polder ring canal'). So the parcel lattice is inset to
+    # (research 2026-07-22, research/archetypes.html 'Polders: fields diked against the fluctuating water (weitian, waju)'). So the parcel lattice is inset to
     # [ring, span-ring] on BOTH axes and the ring canal runs in the margins just inside the dike; the
     # envelope keeps the full span (the dike's inner face sits on it).
     J = 6.0

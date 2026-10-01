@@ -292,7 +292,7 @@ class SluiceGate(Kind):
     Covers: the board bar of every `sluice_gates[]` record - the gate in each cut of the perimeter dike
     Label: accurate
     Sources: fao-x6708e, cssn-sangyuanwei, shen-kuo
-    Entry: research/archetypes.html - 'A dike-pond is fed and drained through sluice gates', 'Polder siting - full enclosure, fluctuating water, and where the village sits'
+    Entry: research/archetypes.html - 'A dike-pond is fed and drained through sluice gates', 'Polders: fields diked against the fluctuating water (weitian, waju)'; research/rendering/archetypes.html - 'How our maps draw a polder and its water'
     """
 
     key = 'sluice gate'
@@ -318,7 +318,7 @@ class PerimeterDike(Kind):
     Covers: the earthwork band of `dikes[]` - the polder's enclosing dike, gapped at its sluices
     Label: accurate
     Sources: shen-kuo, isis-dykepond, ruddle-zhong-1988
-    Entry: research/archetypes.html - 'Polder siting - full enclosure, fluctuating water, and where the village sits', 'Why dikes were planted'
+    Entry: research/archetypes.html - 'Polders: fields diked against the fluctuating water (weitian, waju)', 'Why dikes were planted'; research/rendering/archetypes.html - 'How our maps draw a polder and its water'
     """
 
     key = 'perimeter dike'

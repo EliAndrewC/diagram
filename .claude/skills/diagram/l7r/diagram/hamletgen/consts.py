@@ -345,12 +345,12 @@ POLDER_FABRIC: dict[str, dict[str, Any]] = {
     "mulberry_dike_fishpond": {"cell": 160.0, "parcel_mix": (0.10, 0.0, 0.60), "gap": (11.0, 11.0)},
 }
 
-# THE POND LAYOUT - ONE ATTESTED FORM AT POND SCALE (feature 280 M56, research/archetypes/130): the grid is attested for
+# THE POND LAYOUT - ONE ATTESTED FORM AT POND SCALE (feature 280 M56, research/archetypes/160): the grid is attested for
 # the Song tangpu CANALS, the mosaic for the PONDS, while a uniform chessboard of ponds is found only as today's aerial view
 # of Digang - so a dike-pond block is drawn as the mosaic and the pond grid is no longer rolled. The GM ruled the knob in on
 # 2026-08-18 on the reading that both were attested ponds; that reading is withdrawn at pond scale and the reversal
 # reported. What follows is the knob's original note (constitution XII,
-# GM 2026-08-18). research/archetypes.html "Grid vs mosaic": the lower-Yangtze wei-tian was a SURVEYED
+# GM 2026-08-18). research/archetypes.html "Polders: fields diked against the fluctuating water (weitian, waju)": the lower-Yangtze wei-tian was a SURVEYED
 # rectilinear grid (the Song tangpu lattice) while the Pearl-delta dike-pond accreted household by
 # household into a MOSAIC - rectangles of varied size at varied local orientation around winding
 # creeks. Both systems carried dike-ponds (Lake Tai mulberry sat on the tang banks inside the
