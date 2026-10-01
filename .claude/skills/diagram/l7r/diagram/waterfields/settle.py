@@ -12,16 +12,20 @@ or left bare"), on a tiling that is still a tiling:
 - any other failing cell is merged into the neighbor across their longest shared bund whose union holds the rules - the union
   OPENED by `OPEN` px, so a sliver's hair spike does not ride into its neighbor's outline - and two failing cells may merge
   when the union's only fault is its size (`SIZE_ONLY`), so the cluster of scraps a ditch junction leaves grows into a basin;
+- a merge never grows a cell past the partition's own recut bound (`partition.RECUT_OVER` design cells): the settle may not
+  undo the lattice's backstop (glyph check, Inashiro: three ragged cells merged into one of 4.2 design cells);
 - what neither makes lawful is LEFT BARE, as the repair left it ("the odd corner left unpaddied").
 """
 
 from __future__ import annotations
 
+import math
 from collections.abc import Callable
 from typing import Any
 
 from .banks import _TOE_MIN_APEX, _TOE_MIN_AREA, _TOE_MIN_THICKNESS, dedup_ring, is_chevron, pointed_ring
 from .frame import Poly, _poly_area, _poly_perim
+from .partition import RECUT_OVER
 from .ring_rules import RingContext, ring_violations
 
 GRID = 0.1
@@ -98,10 +102,11 @@ def shared_length(a: Any, b: Any) -> float:
         return 0.0
 
 
-def takes(union: Any, judged: Callable[[Any], set[str]], me: Any, neighbor: Any, neighbor_fails: bool) -> set[str] | None:
+def takes(union: Any, judged: Callable[[Any], set[str]], me: Any, neighbor: Any, neighbor_fails: bool, most: float = math.inf) -> set[str] | None:
     """The verdict on `union` if the merge of `me` into `neighbor` may be kept - lawful but for a staircase (split after it), or,
-    where the neighbor fails too, growing with only its size short - else None."""
-    if union is None or union.geom_type != "Polygon" or len(union.interiors):
+    where the neighbor fails too, growing with only its size short - else None. A union over `most` (the recut bound) is never
+    kept."""
+    if union is None or union.geom_type != "Polygon" or len(union.interiors) or union.area > most:
         return None
     v = judged(union)
     if not (v - {"steps"}):
@@ -175,7 +180,7 @@ class Fabric:
         me = self.alive[i]
         for j in self.neighbors(i):
             u = opened_union(me, self.alive[j])
-            v = takes(u, self.judge, me, self.alive[j], bool(self.fails[j]))
+            v = takes(u, self.judge, me, self.alive[j], bool(self.fails[j]), RECUT_OVER * self.cell)
             if v is None:
                 continue
             self.alive[j], self.fails[j] = u, v

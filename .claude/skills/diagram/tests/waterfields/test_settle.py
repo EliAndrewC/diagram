@@ -142,6 +142,19 @@ def test_no_split_without_a_grain() -> None:
     assert len(fab.alive) == 1, "with no grain the steps rule is not asked, and nothing is split"
 
 
+def test_no_merge_grows_a_cell_past_the_recut_bound() -> None:
+    """Glyph check, Inashiro (feature 302): three ragged cells merged into one of 4.2 design cells, undoing the partition's recut
+    backstop. A union over `RECUT_OVER` design cells is never kept: the sliver beside a basin of 2.4 cells is left bare."""
+    from l7r.diagram.waterfields.partition import RECUT_OVER
+
+    ctx = RingContext(cell=CELL, g=1.0)
+    big, sliver = _box(0, 0, 48, 31 * 2.4), _box(48, 0, 51, 31 * 2.4)
+    assert (big.area + sliver.area) > RECUT_OVER * CELL > big.area, "the fixture straddles the bound"
+    kept, scraps = st.settle_cells([big, sliver], ctx, ACROSS, CELL)
+    assert len(kept) == 1 and round(kept[0].area) == round(big.area) and len(scraps) == 1
+    assert st.takes(_box(0, 0, 48, 31), lambda _p: set(), big, sliver, False, most=CELL / 2) is None, "over the bound: refused"
+
+
 def test_a_needle_whose_every_merge_would_stay_a_needle_is_left_bare() -> None:
     """A long thin wedge against a lawful basin: merged, the basin would carry the wedge's needle, so the basin refuses it (a
     lawful neighbor is only handed a lawful union) and the wedge is left bare."""

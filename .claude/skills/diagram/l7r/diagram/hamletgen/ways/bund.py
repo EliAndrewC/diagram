@@ -126,7 +126,9 @@ class RunOnBlocks:
 
     def clear(self, a: Pt, b: Pt, width: float, over_water: int = 0) -> bool:
         """Is the stretch a -> b clear - crossing no more than `over_water` water courses (a crossing the crossings stage
-        squares and planks), no marsh, crop or steading?"""
+        squares and planks), no marsh, crop, steading or farmstead fixture (`off_the_fixtures`)?"""
+        if not off_the_fixtures(self.s, [a, b], width):
+            return False
         if sum(1 for c, d in self.water if segments_cross(a, b, c, d)) > over_water:
             return False
         for w in self.wet:
@@ -137,6 +139,16 @@ class RunOnBlocks:
         if self.crops and any(poly_gap(stroke_quad(start, b, width / 2.0), c) <= 0.0 for c in self.crops):
             return False  # the drawn tread, as the matrix reads it, on a dry plot
         return not _crosses_fabric([start, b], self.fabric, FOOTPATH_FABRIC_GAP) and not _hits_a_steading(self.s, [start, b], int(width))
+
+
+def off_the_fixtures(s: Settlement, pts: Sequence[Pt], width: float) -> bool:
+    """Does a run on along `pts`, `width` wide, keep off every farmstead fixture - the lane law's own predicate
+    (`law.over_a_fixture`, the privies, heaps, baths, coops, hokora and persimmon trunks)? Feature 302 (Kashikawa): a door
+    path, a tree lane no settle repair may cut, was carried on to the bund past its own farm's persimmon trunk, and the web was
+    refused for a fault the run on had written."""
+    from .law import fixture_quads, over_a_fixture  # local: the law sits above the run on
+
+    return over_a_fixture(list(pts), width, fixture_quads(s.M)) is None
 
 
 def _segs_of(lanes: Sequence[Mapping[str, Any]], skip: int) -> list[tuple[Pt, Pt]]:
@@ -278,6 +290,8 @@ def carry_on(s: Settlement, i: int, e: int, q: Pt, to: Pt) -> bool:
     nothing is drawn, where it refuses."""
     lanes = s.M.get("lanes") or []
     step = squared_step(q, to, drawn_water_segs(s))
+    if not off_the_fixtures(s, [q, *step], float(lanes[i].get("w") or 3)):
+        return False
     if any(seg_dist(q[0], q[1], a, b) <= _TOUCH_GAP for a, b in _segs_of(lanes, i)):
         if not s.admits_lane([q, *step], BRANCH_WIDTH):
             return False

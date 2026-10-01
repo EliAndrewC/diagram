@@ -178,7 +178,13 @@ class Sectors:
         # the tip is judged against the sector's OWN width where that is under a plot's: a sector narrow along its whole length
         # is not a tip, and a plot-width threshold cut none of its rows
         tip = MIN_ROW * min(across, width_mid)
-        lines = [_extend(row, 2.0) for i, row in enumerate(grid) if i in _rows_kept(rows, widths, nsub, across, row_step, tip)]
+        # A ROW'S VERTICES ARE WHERE IT MEETS A COLUMN THAT RUNS THERE (and its two ends): through every column's point, the thinned
+        # ones too, a row narrowing to a few px between its columns carried each point's own wobble and wander - a sawtooth of
+        # 1-2 px teeth, and where the wobble passed a neighbor a fold, whose cells failed the toe rule and were left bare or merged
+        # past the recut bound (the glyph check on Inashiro's east sector head; every scrap over 700 sq ft in the pool and the
+        # 10/20-household briefs carried the teeth)
+        kept = _rows_kept(rows, widths, nsub, across, row_step, tip)
+        lines = [_extend([q for j, q in enumerate(row) if j in (0, nsub) or _column_kept(widths[i], nsub, j, across)], 2.0) for i, row in enumerate(grid) if i in kept]
         self.n_rows, self.rows = len(lines), rows
         for j in range(1, nsub):
             run: list[Pt] = []

@@ -233,6 +233,21 @@ def test_a_run_on_crosses_no_dry_plot() -> None:
     assert B.RunOnBlocks(_stub(**clear)).clear((300.0, 100.0), (396.0, 100.0), 3.0), "on the baulk beside it"
 
 
+def test_a_run_on_keeps_off_every_farmstead_fixture() -> None:
+    """Feature 302, Kashikawa: a door path - a tree lane no settle repair may cut - was carried on to the bund past its own
+    farm's persimmon trunk, and the web was refused for it. A run on is asked the lane law's own fixture predicate, both where
+    it is judged (`RunOnBlocks.clear`) and where it is written (`carry_on`)."""
+    privy = {"farm_fixtures": [{"kind": "privy", "x": 350.0, "y": 102.0, "w": 6.0, "h": 4.0}]}
+    assert not B.RunOnBlocks(_stub(**privy)).clear((300.0, 100.0), (396.0, 100.0), 3.0), "past the privy"
+    trunk = {"persimmons": [{"x": 350.0, "y": 103.0, "r": 11.0}]}
+    assert not B.RunOnBlocks(_stub(**trunk)).clear((300.0, 100.0), (396.0, 100.0), 3.0), "past the persimmon's trunk"
+    assert B.RunOnBlocks(_stub(**{"persimmons": [{"x": 350.0, "y": 130.0, "r": 11.0}]})).clear((300.0, 100.0), (396.0, 100.0), 3.0), "under the crown"
+    free = _StubSettlement(lanes=[[(100.0, 100.0), (250.0, 100.0)]])
+    free.M.update(trunk)
+    assert B.carry_on(free, 0, -1, (250.0, 100.0), (396.0, 100.0)) is False
+    assert free.M["lanes"][0]["pts"][-1] == [250.0, 100.0], "nothing written"
+
+
 def test_a_junction_end_is_carried_on_as_a_path_of_its_own() -> None:
     """`carry_on` (feature 291): an end on another lane's tread stays a junction - the step to the bund is a field path of
     its own from it; a free end is lengthened as before."""

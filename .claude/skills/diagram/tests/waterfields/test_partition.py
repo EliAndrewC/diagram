@@ -163,6 +163,27 @@ def test_a_converging_sector_ends_its_columns_in_a_T_and_still_tiles() -> None:
     assert cols and any(len(c) < len(sec.rows) for c in cols), "a column ends before the sector's foot, in a T on a row"
 
 
+def test_a_row_is_noded_only_where_a_column_runs() -> None:
+    """Glyph check, Inashiro (feature 302): a row passed through every column's point, the thinned ones too, and where the sector
+    narrowed those points stood a few px apart, each with its own wobble and wander - a sawtooth of hair teeth, and folds, whose
+    cells failed the toe rule. A row's interior vertices are its meetings with the columns that run there, never closer together
+    than a column spacing allows."""
+    import math
+
+    a = _thread(100.0, 0.0, 400.0)
+    b = _Thread(400.0, 0.0, 0.0, 0.0)
+    b.pts = [(400.0 - 27.0 * k, 40.0 * k) for k in range(11)]
+    sec = _sectors(_box(100, 0, 400, 400).intersection(_poly_tri()), [a, b])
+    rows = sec.grid_lines(a, b)[: sec.n_rows]
+    full = max(len(r) for r in rows)
+    assert any(len(r) < full for r in rows), "non-vacuity: where the sector narrows a row carries fewer vertices"
+    for r in rows:
+        cols = r[2:-2]  # past the extension and the two bounds: the columns' meetings
+        assert all(math.dist(p, q) > 0.25 * 48.0 for p, q in zip(cols, cols[1:], strict=False)), r
+        xs = [p[0] for p in r[1:-1]]
+        assert xs == sorted(xs), f"the row runs one way across its sector, never folding back: {r}"
+
+
 def _poly_tri() -> Any:
     from shapely.geometry import Polygon
 

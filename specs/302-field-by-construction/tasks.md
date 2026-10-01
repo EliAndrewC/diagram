@@ -33,8 +33,9 @@ Order: Phase 0 measures and decides; Phase 1 (T10 onward) runs only on GO, its t
 - [x] T11 [US2] `carve_comb` / `finish_comb` / `fit_field` on the region and the partition; the seam repair and `planted_area` retired for comb fields, their tests moved or retired with each rule carried (FR-006, FR-007, FR-011)
       research: rendering
       verify: DONE. DONE. carve_comb lays the skeleton + region, finish_comb partitions/settles/tints; fit scores region.area; carve plot cutting, sector_rows.py, close_seams and seams/plots.py deleted, PlotGeoms and planted_area gone; tests moved (tint) or retired, the rules held by test_settle/test_partition (tiling, shared bunds) and ring_rules' own
-- [ ] T12 [US2] Inashiro regenerated and gated; then the pool (`make maps`); every map green (SC-006)
+- [x] T12 [US2] Inashiro regenerated and gated; then the pool (`make maps`); every map green (SC-006)
       research: rendering
+      verify: DONE. DONE. make done green on 1249742be+ (6676 passed, FULL, every pool map rolled under test-full; coverage 100%); Inashiro's two gate failures (toe-marsh straight run, B7 corridor tread) fixed in c774680b4
 - [ ] T13 [US2] Research pointers that name the retired machinery re-aimed; the glyph-check the Occasions owe
       research: rendering
 - [x] T13b [US2] [US3] The 10- and 20-household fields compared cell by cell with the carve's (plot count, cell-size distribution, the longest cells) in the harness before the push - the plan review's round-3 note: the glyph check on Inashiro cannot see the narrow-sector and edge-strip cases R2 found there; a finding is fixed in the lattice
