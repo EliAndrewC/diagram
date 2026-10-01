@@ -42,7 +42,7 @@ class FishPond(Kind):
     Covers: the dug water of every `dikeponds[]` parcel - the pond inset inside its mulberry dike
     Label: accurate
     Sources: isis-dykepond, ruddle-zhong-1988, gmrb-2024-sangji, guangdong-xinyu-22, pwsannong-zhusanjiao-nongyeshi, nongzheng-quanshu-41, minle-dou-people
-    Entry: research/archetypes.html - 'Cash crops on rice land: dike-ponds, lotus fields and tea rows', 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Fish fry and nursery ponds (yumiao)', 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'; research/rendering/archetypes.html - "How our maps lay cash crops over a village's rice land", 'How our maps draw dike-ponds (sangji yutang)'
+    Entry: research/archetypes.html - 'Cash crops on rice land: dike-ponds, lotus fields and tea rows', 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Fish fry and nursery ponds (yumiao)', 'Pigs and ducks at a dike-pond: the sty on the pond dike'; research/rendering/archetypes.html - "How our maps lay cash crops over a village's rice land", 'How our maps draw dike-ponds (sangji yutang)'
     """
 
     key = 'fish pond'
@@ -208,7 +208,7 @@ class PigSty(Kind):
     Covers: every `pig_sties[]` record - a shed with its railed pen on a pond bank
     Label: accurate
     Sources: qimin-yaoshu-yangzhu, isis-dykepond, pwsannong-zhusanjiao-nongyeshi, nongzheng-quanshu-41, fao-ac264e
-    Entry: research/archetypes.html - "Does a pig sty have to stand back from the water, or from the pond's sluice?", 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields', 'Does a dike-pond hamlet keep pigs and ducks on its pond dikes?', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps furnish a dike-pond hamlet'
+    Entry: research/archetypes.html - 'Pigs and ducks at a dike-pond: the sty on the pond dike', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps place the pig sty at the pond', 'How our maps furnish a dike-pond hamlet'
     """
 
     key = 'pig sty'

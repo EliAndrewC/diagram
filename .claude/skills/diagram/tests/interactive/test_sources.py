@@ -56,8 +56,8 @@ def test_a_double_quoted_research_heading_is_read_like_a_single_quoted_one() -> 
     BETWEEN the two double quotes matched as one giant heading that no section is named, so the entry
     contributed nothing and swallowed the one after it. That section was folded into 'Reservoir ponds
     (tameike)' by feature 292, so the pin now reads another heading with an apostrophe."""
-    entry = "research/archetypes.html - \"Does a pig sty have to stand back from the water, or from the pond's sluice?\""
-    assert "fao-y1187e" in research_sources(entry)
+    entry = "research/water.html - \"Washing places at the water's edge\""
+    assert "gujo-jsce-2017" in research_sources(entry)
 
 
 def test_a_sources_roster_is_read_whole_and_deduplicated() -> None:

@@ -178,7 +178,7 @@
   "duck pen": {
     "caveat": "",
     "covers": "every `duck_pens[]` record - a fenced dry run on the dike and a fenced wet run in the pond's corner",
-    "entry": "research/archetypes.html - \"Does a pig sty have to stand back from the water, or from the pond's sluice?\", 'Does a dike-pond hamlet keep pigs and ducks on its pond dikes?', 'The dike-pond hamlet: its houses, boats and manure jars'",
+    "entry": "research/archetypes.html - 'Pigs and ducks at a dike-pond: the sty on the pond dike', 'The dike-pond hamlet: its houses, boats and manure jars'",
     "key": "duck pen",
     "label": "guess",
     "label_note": "GUESS: the form is read from the modern manual; its premodern prevalence is not, and the share band is the generator's - the weakest-evidenced item of the audit, drawn because the GM chose it.",
@@ -297,7 +297,7 @@
   "fish pond": {
     "caveat": "the pond SIZES are from 20th-century surveys of the traditional landscape, not Ming or Qing documents, and the whole-block conversion drawn here is the rare end state of a normally scattered system.",
     "covers": "the dug water of every `dikeponds[]` parcel - the pond inset inside its mulberry dike",
-    "entry": "research/archetypes.html - 'Cash crops on rice land: dike-ponds, lotus fields and tea rows', 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Fish fry and nursery ponds (yumiao)', 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'; research/rendering/archetypes.html - \"How our maps lay cash crops over a village's rice land\", 'How our maps draw dike-ponds (sangji yutang)'",
+    "entry": "research/archetypes.html - 'Cash crops on rice land: dike-ponds, lotus fields and tea rows', 'Dike-ponds: fish ponds ringed by mulberry dikes (sangji yutang)', 'Fish fry and nursery ponds (yumiao)', 'Pigs and ducks at a dike-pond: the sty on the pond dike'; research/rendering/archetypes.html - \"How our maps lay cash crops over a village's rice land\", 'How our maps draw dike-ponds (sangji yutang)'",
     "key": "fish pond",
     "label": "accurate",
     "label_note": "The form and the loop are read; the pond SIZES are from 20th-century surveys of the traditional landscape, not Ming or Qing documents, and the whole-block conversion drawn here is the rare end state of a normally scattered system.",
@@ -612,7 +612,7 @@
   "paddy": {
     "caveat": "the field is shown flooded, which is one moment of a cycle that runs from flooded to cracked and back; the depths behind that choice are modern extension figures, and no pre-modern record of either the depths or the drying stages was found.",
     "covers": "the wet plots of every `fields[kind=paddy]` - the flooded basins",
-    "entry": "research/fields.html - 'Rice paddies and their plots (suiden)', 'Plot sizes', 'The paddy through the rice year: flooding, draining, transplanting and after the harvest'; research/rendering/fields.html - 'How our maps draw rice paddies and their plots (suiden)', 'How our maps show the paddy through the rice year'; research/archetypes.html - 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields'",
+    "entry": "research/fields.html - 'Rice paddies and their plots (suiden)', 'Plot sizes', 'The paddy through the rice year: flooding, draining, transplanting and after the harvest'; research/rendering/fields.html - 'How our maps draw rice paddies and their plots (suiden)', 'How our maps show the paddy through the rice year'; research/archetypes.html - 'Pigs and ducks at a dike-pond: the sty on the pond dike'",
     "key": "paddy",
     "label": "accurate",
     "label_note": "Plot form and the irregular patchwork are read; plot sizes are calibrated from the record. the field is shown flooded, which is one moment of a cycle that runs from flooded to cracked and back; the depths behind that choice are modern extension figures, and no pre-modern record of either the depths or the drying stages was found.",
@@ -689,7 +689,7 @@
   "pig sty": {
     "caveat": "",
     "covers": "every `pig_sties[]` record - a shed with its railed pen on a pond bank",
-    "entry": "research/archetypes.html - \"Does a pig sty have to stand back from the water, or from the pond's sluice?\", 'Which animals did a dike-pond village keep at its ponds? Pigs - the ducks were herded in the rice fields', 'Does a dike-pond hamlet keep pigs and ducks on its pond dikes?', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps furnish a dike-pond hamlet'",
+    "entry": "research/archetypes.html - 'Pigs and ducks at a dike-pond: the sty on the pond dike', 'The dike-pond hamlet: its houses, boats and manure jars'; research/rendering/archetypes.html - 'How our maps place the pig sty at the pond', 'How our maps furnish a dike-pond hamlet'",
     "key": "pig sty",
     "label": "accurate",
     "label_note": "GUESS: the practice is read (the 1980s survey and the FAO/NACA manual), but nothing read gives how many households kept a sty in Ming or Qing; the per-hamlet share band is the generator's.",
