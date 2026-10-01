@@ -432,7 +432,7 @@ class Persimmon(Kind):
     Covers: `persimmons` - the dooryard persimmon tree
     Label: accurate
     Sources: toyoko-kaki, uekipedia-kaki, jataff-fuyu-kaki, sato-1962-haichi, pfaf-kaki
-    Entry: research/homesteads.html - 'Why does a persimmon stand beside so many farmhouses?'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads.html - 'Fruit trees in the farmyard: persimmon, chestnut and plum (kaki)'; 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw farmyard fruit trees (kaki)'; 'How our maps draw the farmstead and what stands on it (yashiki)'
     """
 
     key = 'persimmon'
