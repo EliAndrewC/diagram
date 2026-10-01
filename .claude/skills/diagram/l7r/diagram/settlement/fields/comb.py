@@ -95,6 +95,16 @@ def runs_downhill(course: Sequence[Sequence[float]], fall: Sequence[float], frac
     return L == 0 or vx * float(fall[0]) + vy * float(fall[1]) >= frac * L
 
 
+def feed_stub(race: Sequence[Sequence[float]], envelope: Sequence[Pt]) -> list[Sequence[float]]:
+    """The drawn inlet stub of a pond-fed race (feature 294 B1): its points from the last one inside the crop's `envelope` - the
+    ring's corner, where the feed meets the field - to its end on the reservoir's rim (`inlet_to_rim`). With no envelope to ask, or
+    no point of the race inside it, the race's last leg."""
+    for i in range(len(race) - 1, -1, -1):
+        if len(envelope) >= 3 and point_in_poly(float(race[i][0]), float(race[i][1]), list(envelope)):
+            return list(race[i:])
+    return list(race[-2:])
+
+
 def outfall_run(b0: Sequence[float], b1: Sequence[float], fall: Sequence[float], lead: float = 70.0, reach: float = 520.0) -> list[Pt]:
     """The village and city comb's drain-outfall run (water:W10): `lead` px on along the drain's own exit (`b0` toward
     `b1`) for a smooth junction, then `reach` px straight down the unit `fall` off the map - taken only where it
@@ -853,6 +863,13 @@ class CombMixin:
                 # ...and it ENDS AT THE FORK, where the drawn race ends. An extra step into the field was kept to anchor the topology,
                 # and it was a record of water that is not there - a 70 ft tail past the ink on the reference hamlet and Sawada
                 # (pass 11); nothing reads the channel's field end as more than the field it names.
+            else:
+                # THE POND'S FEED TRACES ITS DRAWN STUB TOO (feature 294 B1, record against ink). The bowed line above was the
+                # polder's record while the drawn inlet is the feeder's stub, run onto the reservoir's rim (`inlet_to_rim`): on
+                # Kuwabata the record jogged 20 ft west of the stub for 101 ft (the record-against-ink class the reviews caught
+                # five times). The pond's center, then the stub from the rim back down to the first point inside the crop - the
+                # ring's corner - where the drawn feed meets the field.
+                _ch_poly = [[round(start[0], 1), round(start[1], 1)], *[[round(float(q[0]), 1), round(float(q[1]), 1)] for q in reversed(feed_stub(hr, _env_in))]]
             _fk = (float(fork[0]), float(fork[1]))
             _fk_d = min(seg_dist(_fk[0], _fk[1], (_ch_poly[_i][0], _ch_poly[_i][1]), (_ch_poly[_i + 1][0], _ch_poly[_i + 1][1])) for _i in range(len(_ch_poly) - 1))
             # `join_head` is passed by the POLDER path and by nothing else. Conditioning this on

@@ -21,7 +21,9 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 import pytest
-from shapely.geometry import LineString, Point, box
+from shapely import affinity
+from shapely.geometry import LineString, Point, Polygon, box
+from shapely.ops import unary_union
 from shapely.strtree import STRtree
 
 _SKILL = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -32,6 +34,8 @@ BEARING_BAND_DEG = 33.75  # research homesteads/240: the commonest compass point
 PILE_AT_LIMIT = 2  # no more than two houses within a degree of the widest turn (the 9-of-16 pile, 269 E round 1)
 PILE_FLOOR_DEG = 5.0  # a turn this small is the common bearing itself, not a clamp
 SHED_TURN_TOL_DEG = 2.0
+RECORD_OFF_INK_FT = 3.0  # GUESS (plan D11): about one drawn ditch's width - a record is its drawing (map drawing convention)
+POINT_ON_WATER_FT = 2.0  # GUESS: a sluice gate or weir stands on its water (the recorded case: a gate snapped 7 ft off)
 
 
 def _manifest(gen: str) -> dict[str, Any]:
@@ -143,6 +147,52 @@ def test_a_shed_on_a_neighbors_gable_or_turned_off_its_house_fires() -> None:
     assert shed_faults(turned) == ["the shed at (0, 20) is turned off its house"]
 
 
+# ---- B1: a record lies on its own ink ---------------------------------------------------------------------
+
+
+def water_ink(M: Mapping[str, Any]) -> Any:
+    """The drawn water: every drawn channel and stream at its half-width plus a foot, and the reservoir's ellipse."""
+    ink = [LineString(d["pts"]).buffer(max(float(d.get("w0") or 2), float(d.get("w1") or 2)) / 2 + 1) for d in M.get("drawn_channels") or [] if len(d.get("pts") or []) >= 2]
+    ink += [LineString(s["poly"]).buffer(float(s.get("w") or 5) / 2 + 1) for s in M.get("streams") or [] if len(s.get("poly") or []) >= 2]
+    pond = M.get("pond")
+    if pond:
+        ink.append(affinity.scale(Point(pond[0], pond[1]).buffer(1), pond[2] + 1, pond[3] + 1))
+    return unary_union(ink)
+
+
+def record_off_ink(M: Mapping[str, Any]) -> list[str]:
+    """Where a record disagrees with its ink: a channel record's length off the drawn water beyond `RECORD_OFF_INK_FT`, a
+    sluice gate or weir beyond `POINT_ON_WATER_FT` of it, a house standing on a marsh."""
+    ftpx, water, out = _ftpx(M), water_ink(M), []
+    for i, ch in enumerate(M.get("channels") or []):
+        off = LineString(ch["poly"]).difference(water).length * ftpx
+        if off > RECORD_OFF_INK_FT:
+            out.append(f"channel {i} ({ch.get('frm', {}).get('kind')} -> {ch.get('to', {}).get('kind')}) runs {off:.1f} ft off its ink")
+    for key in ("sluice_gates", "weirs"):
+        for g in M.get(key) or []:
+            gap = Point(g["x"], g["y"]).distance(water) * ftpx
+            if gap > POINT_ON_WATER_FT:
+                out.append(f"a {key[:-1]} at ({g['x']}, {g['y']}) stands {gap:.1f} ft off the water")
+    marsh = unary_union([Polygon(m["poly"]).buffer(0) for m in M.get("marshes") or [] if len(m.get("poly") or []) >= 3])
+    for h in M.get("houses") or []:
+        if not marsh.is_empty and Point(h["x"], h["y"]).buffer(min(h["w"], h["h"]) / 2).intersects(marsh):
+            out.append(f"a house at ({h['x']:.0f}, {h['y']:.0f}) stands on a marsh")
+    return out
+
+
+def test_a_record_off_its_ink_fires() -> None:
+    """Seeded: the recorded cases - Kuwabata's feed record jogging off its stub (fixed here), a gate snapped 7 ft off."""
+    M = {"drawn_channels": [{"pts": [[0, 0], [100, 0]], "w0": 2, "w1": 2}], "channels": [{"poly": [[0, 0], [100, 0]]}]}
+    assert record_off_ink(M) == []
+    M["channels"][0]["poly"] = [[0, 0], [50, 20], [100, 0]]
+    assert record_off_ink(M) and "runs" in record_off_ink(M)[0]
+    M["channels"] = []
+    M["sluice_gates"] = [{"x": 50, "y": 9}]
+    assert record_off_ink(M) == ["a sluice_gate at (50, 9) stands 7.0 ft off the water"]
+    M2 = {"marshes": [{"poly": [[0, 0], [50, 0], [50, 50], [0, 50]]}], "houses": [{"x": 45, "y": 25, "w": 20, "h": 14}]}
+    assert record_off_ink(M2) == ["a house at (45, 25) stands on a marsh"]
+
+
 # ---- the shipped hamlets ----------------------------------------------------------------------------------
 
 
@@ -158,6 +208,7 @@ def test_the_shipped_hamlets_keep_the_rules_the_review_used_to_judge(gen: str) -
     for stream in M.get("streams") or []:
         assert brook_pieces_in_view(stream, meta["view"]) <= 1, "B12: the brook leaves and re-enters the view"
     assert shed_faults(M) == [], "B3: wood shed seating"
+    assert record_off_ink(M) == [], "B1: a record off its ink"
     # B13: the lane law the placer guarantees, proved on what shipped
     assert law.needle_ends(M.get("lanes") or []) == [], "B13: a needle join"
     assert law.needle_loops(M) == [], "B13: a needle loop"

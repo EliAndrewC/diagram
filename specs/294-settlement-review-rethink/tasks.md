@@ -10,6 +10,8 @@ and the tier experiment; then the landing.
 
 This feature's own delta, declared under the rules it builds (plan D10). Lines are added as the rules land.
 
+- none: B1 - the polder feed's channel record traces its drawn stub (settlement/fields/comb.py); nothing drawn moves, every element placed under rules already judged
+
 ## Setup
 
 - [x] T01 The baseline: `/tmp/base294` (detached worktree at the spec's HEAD) and the `294-start` bookend on unmodified code
@@ -18,33 +20,45 @@ This feature's own delta, declared under the rules it builds (plan D10). Lines a
 
 ## The trigger and the guards (D, E, F)
 
-- [ ] T02 [US3] [US4] `scripts/_review_owed.py` answers occasions (detected: maps/sheets new to the pool, elements new to a map or sheet; declared: the `## Occasions` section), `--units`, `--check-declared`; `tests/tooling/test_review_owed.py` rewritten over git fixtures (D1-D3)
+- [x] T02 [US3] [US4] `scripts/_review_owed.py` answers occasions (detected: maps/sheets new to the pool, elements new to a map or sheet; declared: the `## Occasions` section), `--units`, `--check-declared`; `tests/tooling/test_review_owed.py` rewritten over git fixtures (D1-D3)
       research: rendering
-- [ ] T03 [US3] `scripts/_review_snapshot.py` per unit: the unit's map or sheet, the check's prompt with its `UNIT:` line; its tests (D4)
+      verify: DONE. DONE. _review_owed.py: Unit(check, subject, on, occasion), detected (maps/sheets new to the pool; ink_classes / data-kind new to a map or sheet, new-map elements only when new to the pool legend; a generated sheet's base from the mirror) and declared (## Occasions: glyph-redrawn, placement-changed, new-form, new-tier, layout-revised, new-program, gm-fix, none); --units, --check-declared; tests/tooling/test_review_owed.py 41 passed
+- [x] T03 [US3] `scripts/_review_snapshot.py` per unit: the unit's map or sheet, the check's prompt with its `UNIT:` line; its tests (D4)
       research: rendering
-- [ ] T04 [US6] `scripts/_review_prereq.py` per unit (`units_named`, sheets without a manifest, `--unit`); its tests
+      verify: DONE. DONE. _review_snapshot.py per unit: the unit's map or sheet both sides, a sheet owes no .json, the check's ASK with a UNIT: line, a unit not owed refused; 9 snapshot cases in test_review_owed.py
+- [x] T04 [US6] `scripts/_review_prereq.py` per unit (`units_named`, sheets without a manifest, `--unit`); its tests
       research: rendering
-- [ ] T05 [US4] [US6] `pair-hooks.sh`: the five checks, one unit per dispatch, a GREEN gate, two rounds per unit per feature; `test-pair-hooks.sh` cases rewritten, each new branch proved by deleting it and watching a case go red (E1, E2, E4)
+      verify: DONE. DONE. _review_prereq.py: units_named (UNIT: lines, unanchored for a transcript's escaped JSON, and unit snapshot folders), unit_maps, stale_maps by the unit's map and snapshot, a sheet complete without .json, --unit; test_review_prereq.py 19 passed
+- [x] T05 [US4] [US6] `pair-hooks.sh`: the five checks, one unit per dispatch, a GREEN gate, two rounds per unit per feature; `test-pair-hooks.sh` cases rewritten, each new branch proved by deleting it and watching a case go red (E1, E2, E4)
       research: rendering
-- [ ] T06 [US3] `review-gate.sh`: owed units ship on their verdicts, an undeclared delta is refused, the notes-touch fallback and the rendering waiver gone; `test-review-gate.sh` cases (E3, E4)
+      verify: DONE. DONE. pair-hooks.sh: five review agents, one unit per dispatch, gate_green (the stamp alone), round_number/record_round with REVIEW_ROUNDS_OK; test-pair-hooks 103 passed; mutation proof on a scratch copy: no round cap -> 4 red, a running gate accepted -> 2 red, settlement-review only -> 7 red
+- [x] T06 [US3] `review-gate.sh`: owed units ship on their verdicts, an undeclared delta is refused, the notes-touch fallback and the rendering waiver gone; `test-review-gate.sh` cases (E3, E4)
       research: rendering
-- [ ] T07 `make verify` names the owed units and the undeclared delta; `make review-verdict UNIT=` (D4)
+      verify: DONE. DONE. review-gate.sh: owed units ship on PASS/NEEDS-WORK at the pushed key, --check-declared refusal, notes-touch fallback and rendering waiver gone; test-review-gate 27 passed; mutation: declaration check removed -> 1 red, unit loop removed -> 5 red; make hooks-test 32 suites green
+- [x] T07 `make verify` names the owed units and the undeclared delta; `make review-verdict UNIT=` (D4)
       research: rendering
-- [ ] T08 [US3] [US4] [US6] The replays (F): an engine change moving five manifests with `none:` owes zero units (SC-001); one new ink class, a declared redraw, a declared re-placement (the tannery, seeded) and a new element reusing an existing mark each owe exactly one glyph check (SC-002); a red gate and a missing record refuse a dispatch (SC-005)
+      verify: DONE. DONE. make verify prints OCCASIONS NOT DECLARED and the owed units, writes per-unit prompts, says dispatch when green; make review-verdict UNIT= (MAP= kept as the same field)
+- [x] T08 [US3] [US4] [US6] The replays (F): an engine change moving five manifests with `none:` owes zero units (SC-001); one new ink class, a declared redraw, a declared re-placement (the tannery, seeded) and a new element reusing an existing mark each owe exactly one glyph check (SC-002); a red gate and a missing record refuse a dispatch (SC-005)
       research: rendering
+      verify: DONE. DONE. SC-001 test_an_engine_change_moving_every_manifest_owes_nothing; SC-002 test_an_element_new_to_a_map..., test_a_new_element_with_an_existing_mark..., test_a_declared_redraw..., test_a_declared_re_placement... (tannery); SC-005 test-pair-hooks section 12 (running-not-green refused) and 8b (unverified finding refused) and test-review-gate (NOT-REVIEWABLE refused)
 
 ## The contracts (C)
 
-- [ ] T09 [US1] [US4] `.claude/agents/glyph-check.md` (new; Opus high; `omitClaudeMd`): the element-in-place check, carrying the audit's C1, B29, C2a residual, C2c, C2e, C5, C6a, C6b funerary, C7, C9c rows and the shared process rows
+- [x] T09 [US1] [US4] `.claude/agents/glyph-check.md` (new; Opus high; `omitClaudeMd`): the element-in-place check, carrying the audit's C1, B29, C2a residual, C2c, C2e, C5, C6a, C6b funerary, C7, C9c rows and the shared process rows
       research: rendering
-- [ ] T10 [US1] `.claude/agents/fix-check.md` (new): the GM-complaint fix verification (S17, S7 adequacy, X1)
+      verify: DONE. DONE. .claude/agents/glyph-check.md (7,666 chars; Opus high; omitClaudeMd): occasion, first stage, the element's reads/confusability/form/setting (cover, nuisance axis, funerary, traffic objective, pixel count), convention vs defect, output and verdict by UNIT; carries R1 C1, B29, C2a residual, C2c, C2e, C5, C6a, C6b funerary, C7, C9c
+- [x] T10 [US1] `.claude/agents/fix-check.md` (new): the GM-complaint fix verification (S17, S7 adequacy, X1)
       research: rendering
-- [ ] T11 [US1] [US5] `settlement-review.md` cut to the whole-map residue (C8, C6d, place, C2b/C2d on a new tier); every struck and cut row removed, the "gate can see / you must see" table rewritten; size before and after recorded (SC-004)
+      verify: DONE. DONE. .claude/agents/fix-check.md (3,609 chars): the GM's question at fit zoom first, the pixel count, did the fix fire (before/after), can the record bear it (the canopy case), verdict by UNIT; R1 S17, S7, X1
+- [x] T11 [US1] [US5] `settlement-review.md` cut to the whole-map residue (C8, C6d, place, C2b/C2d on a new tier); every struck and cut row removed, the "gate can see / you must see" table rewritten; size before and after recorded (SC-004)
       research: rendering
-- [ ] T12 [US1] [US5] `building-review.md` cut to layout, program and coherence by occasion (with the merged dead-space sweeps); `size-audit.md` cut to anchors and voids
+      verify: DONE. DONE. settlement-review.md 49,960 -> 5,596 chars (wc -c, SC-004 at most half): twin detector, declared economy, first impression, fabric and the tier obligations on a new tier; every struck/cut row gone, its home named in the When section
+- [x] T12 [US1] [US5] `building-review.md` cut to layout, program and coherence by occasion (with the merged dead-space sweeps); `size-audit.md` cut to anchors and voids
       research: rendering
-- [ ] T13 The tier table rows and `omitClaudeMd` for the two new agents (`test_agent_models.py`), their pre-authorization (`container-scripts/append-system-prompt.md`), and the struck tier-only obligations (outcast and status zoning, the border rule, the Imperial-road caption) in `migration-plan.md`'s town and city rows
+      verify: DONE. DONE. building-review.md 31,033 -> 9,733 (circulation, privy/cesspit siting, realistic, dead space merged with pack-audit vacancies and backing voids, interior, plausibility; program on new-program; coherence on a new sheet); size-audit.md 23,471 -> 5,811 (anchors and the band to record, on a new kind or program)
+- [x] T13 The tier table rows and `omitClaudeMd` for the two new agents (`test_agent_models.py`), their pre-authorization (`container-scripts/append-system-prompt.md`), and the struck tier-only obligations (outcast and status zoning, the border rule, the Imperial-road caption) in `migration-plan.md`'s town and city rows
       research: rendering
+      verify: DONE. DONE. test_agent_models.py TIERS + glyph-check, fix-check (opus, high), 8 passed; append-system-prompt.md names both; migration-plan.md: outcast geography, status zoning, the border rule, the Imperial-road caption as tier placement rules, checked by the new-tier whole-map review
 
 ## The rules: Mode B (B1-B15)
 
