@@ -15,6 +15,7 @@ from ..cluster import _arm_crossing_accidental
 from ..consts import (
     BUNDLE_PITCH,
     CLUSTER_SPAN_FACTOR,
+    FOOTPATH_FABRIC_GAP,
     LANE_CLEARANCE,
     MIN_WEB_GAP,
     STEADING_ARRIVAL_FT,
@@ -33,7 +34,7 @@ from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _homestead_polys, _margin_frame,
 from .geom import _TOUCH_GAP, _components, _trim_to_service, polyline_len, steading_footprints
 from .joints import center_lane_ends, fold_the_connector_hairpin, meet_end_to_end, split_at_crossings, straighten_joints
 from .route import _route
-from .serve import DOOR_REACH_FT, _lay_web_lane, lay_door_paths
+from .serve import DOOR_REACH_FT, _lay_web_lane, front_door, lay_door_paths
 from .settle import settle_the_web
 from .smooth import _STUB_REACH_FT, _smooth_web
 from .street import lay_row_streets, trim_streets
@@ -566,8 +567,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     belts = [[(float(a), float(b)) for a, b in g["poly"]] for g in s.M.get("village_groves", []) if g.get("poly")]
     drawn_water = drawn_water_segs(s)  # channels AND streams - see the helper for why the streams were missing
     if _rows:
-        _frame_w = max((max(float(b[2]), float(b[3])) for b in (((h.get("geom") or {}).get("bbox")) for h in houses) if b), default=BUNDLE_PITCH)
-        lay_row_streets(s, houses, hard_built, walls, list(plan.watercourses) + drawn_water, reach=1.5 * _frame_w, pad=_frame_w / 2)
+        lay_row_streets(s, houses, hard_built, walls, list(plan.watercourses) + drawn_water)
     cands: list[Poly] = []
     for line in lines:
         # FINER SAMPLING AND A WIDER FABRIC MARGIN THAN THE DEFAULTS. A web lane runs among the
@@ -729,7 +729,10 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         # before any door path existed
         _sweep_doubled_tails(s)
         tidy_lane_ends(s, list(plan.envelope), streets=True)
-        trim_streets(s, _TOUCH_GAP)  # ...and each street ends at its outermost joint, not past its last farm's path
+        # ...and each street ends at its outermost joint, not past its last farm's path - or its last farm's door, where that
+        # stood within the arrival reach and so took no path
+        _doors = [d for h in s.M.get("houses") or [] if (d := front_door(h, FOOTPATH_FABRIC_GAP + 4.0)) is not None]
+        trim_streets(s, _TOUCH_GAP, _doors, STEADING_ARRIVAL_FT)
     s.M["meta"]["field_path"] = a_way_onto_the_bund(s)
     s.M["meta"]["lane_web"] = plan.lane_web
     # ...AND THE WEB SETTLES ITSELF, LAST (feature 287, M4): every rule of the lane law is asked of the web as it stands and

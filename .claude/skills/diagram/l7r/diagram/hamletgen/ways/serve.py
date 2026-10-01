@@ -26,8 +26,8 @@ from ..consts import (
 )
 from .clearance import _clear_link, clear_runs
 from .fabric import _LANE_JOIN_FT, _crosses_fabric, _draw_web, _net_segs
-from .geom import _TOUCH_GAP, _net_reach, _reach, _trim_to_service, door_unhooked, polyline_len, steading_footprints
-from .route import _route
+from .geom import _TOUCH_GAP, _net_reach, _reach, _trim_to_service, door_unhooked, end_serves, polyline_len, steading_footprints
+from .route import ROUTE_CELL, _route
 
 
 def shadow_measure(run: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]]) -> tuple[int, float]:
@@ -343,6 +343,7 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
         rot_rect(float(g["x"]), float(g["y"]), float(g["w"]) + grow, float(g["h"]) + grow, float(g.get("rot") or 0.0)) for g in s.M.get("groves") or () if all(k in g for k in ("x", "y", "w", "h"))
     ]
     walls = [*walls, *quads, *bands]
+    steadings = steading_footprints(s.M)
     n = 0
     for h in list(s.M.get("houses", [])):
         door = front_door(h, FOOTPATH_FABRIC_GAP + 4.0)
@@ -355,7 +356,7 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
         ]  # a row's own street, not a join
         k = own_street(h, streets)  # type: ignore[arg-type]
         segs = streets[k] if k is not None else served_network(s.M.get("lanes") or [])
-        if door is None or not segs or min(seg_dist(door[0], door[1], a, b) for a, b in segs) <= reach:  # type: ignore[arg-type]
+        if door is None or not segs or (min(seg_dist(door[0], door[1], a, b) for a, b in segs) <= reach and street_arrives(h, door, segs, k, steadings)):  # type: ignore[arg-type]
             continue
         # ...FROM THE FRONT DOOR, ELSE A FLANK OF THE DOORYARD (`access.doors_of`, the corridors' own doors): a far-row farm
         # fronts its holding, away from its street, and with its grove on the street's side the front had no way round it
@@ -376,6 +377,19 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
                 n += 1
                 break
     return n
+
+
+def street_arrives(h: Mapping[str, Any], door: Pt, segs: Sequence[tuple[Pt, Pt]], street: int | None, steadings: Sequence[Poly]) -> bool:
+    """Does a farm's way already arrive at it without a door path? Off the network, yes (the reach alone was asked, as
+    ever). On a row's OWN street (`street` an index) only where the street's point nearest the door is an end the lane law
+    counts as serving the farm (`end_serves`: within `WAY_END_REACH_FT` of the house, or `STEADING_ARRIVAL_FT` of its built
+    ground) - the predicate the settle trims a street's end by. At the door's reach alone, Mizuguchi's east-end farm, its door
+    11 ft off the street but its yard 19, took no path; the street's end past the last path then served nothing the law
+    counts, the settle cut it back a frame, and the farm stood off every way (2026-10-01)."""
+    if street is None:
+        return True
+    q = min((seg_closest(door[0], door[1], a, b) for a, b in segs), key=lambda p: math.dist(p, door))
+    return end_serves(q, (), [(float(h["x"]), float(h["y"]))], None, steadings)
 
 
 def flank_doors(h: Mapping[str, Any]) -> list[Pt]:
@@ -407,6 +421,27 @@ def front_to_flank_open(front: Pt, flank: Pt, h: Mapping[str, Any]) -> bool:
     return not _crosses_fabric([front, flank], rings, 0.0)
 
 
+def route_from_door(door: Pt, q: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], ok: Any) -> list[Pt]:
+    """The router's way from a door to `q` (`_route`, a footpath's gap) - or, where the door's own lattice cell has no free
+    neighbor to leave by, from a step one or two cells out of it, toward `q` first, taken only where the step itself is
+    clear (`ok`), the door put back at its head. The router plans its cells at the gap and most of a cell more, so a door
+    close against its house wall and its own fixture was boxed in: Kashikawa's farm at (2473, 2937) under feature 302 found
+    no route to any of its six targets, where a step of 6-11 px found one (the Diagram performance session, 2026-10-01).
+    The law still judges the whole path (`door_path`)."""
+    path = _route(door, q, hard, walls, water, gap=FOOTPATH_FABRIC_GAP)
+    if len(path) >= 2:
+        return path
+    for r in (ROUTE_CELL, 2.0 * ROUTE_CELL):
+        steps = [(door[0] + r * math.cos(k * math.pi / 4), door[1] + r * math.sin(k * math.pi / 4)) for k in range(8)]
+        for st in sorted(steps, key=lambda p: math.dist(p, q)):
+            if not ok(door, st):
+                continue
+            path = _route(st, q, hard, walls, water, gap=FOOTPATH_FABRIC_GAP)
+            if len(path) >= 2:
+                return [door, *path]
+    return []
+
+
 def door_path(s: Settlement, door: Pt, segs: Sequence[tuple[Pt, Pt]], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], quads: Sequence[Poly], lawful: Any) -> list[Pt] | None:
     """The door path from `door` to its way (`segs`) the law keeps, trying the way's six nearest points, nearest first: the
     straight step where it is clear (the router plans on a lattice and refused doors whose every neighboring cell stood in
@@ -431,7 +466,7 @@ def door_path(s: Settlement, door: Pt, segs: Sequence[tuple[Pt, Pt]], hard: list
         )
 
     for q in sorted((seg_closest(door[0], door[1], a, b) for a, b in segs), key=lambda q: math.dist(q, door))[:6]:
-        path = [door, q] if ok(door, q) else pulled(door_unhooked(_route(door, q, hard, walls, water, gap=FOOTPATH_FABRIC_GAP), ok), ok)
+        path = [door, q] if ok(door, q) else pulled(door_unhooked(route_from_door(door, q, hard, walls, water, ok), ok), ok)
         path = to_first_arrival(path, segs, _TOUCH_GAP, ok)
         path = square_run(s.M, path) if len(path) >= 2 else path
         if len(path) >= 2 and not _crosses_fabric(path, walls, 0.0) and over_a_fixture(path, 3.0, quads) is None and lawful(path, 3.0):

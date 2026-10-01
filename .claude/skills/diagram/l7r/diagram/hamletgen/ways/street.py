@@ -13,7 +13,7 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
 
-from ..consts import FOOTPATH_FABRIC_GAP, Poly, Pt
+from ..consts import BUNDLE_PITCH, FOOTPATH_FABRIC_GAP, Poly, Pt
 from .fabric import _crosses_fabric, _draw_web
 from .route import _route
 from .serve import door_path
@@ -25,6 +25,25 @@ STREET_WIDTH = 6
 _VERTEX_FT = 40.0
 """The street's vertex spacing once laid: the planned line is sampled every 8 ft; a worn way keeps a vertex every two
 treads' lengths or so - a map drawing convention."""
+
+
+def row_reach(houses: Sequence[Mapping[str, Any]]) -> tuple[float, float]:
+    """How far off a planned street a farm may stand and still be its own (1.5 frames), and how far the street runs past its
+    end farms (half a frame) - the widest farm's frame (`geom.bbox`), or the nucleated pitch where none is recorded."""
+    fw = max((max(float(b[2]), float(b[3])) for b in (((h.get("geom") or {}).get("bbox")) for h in houses) if b), default=BUNDLE_PITCH)
+    return 1.5 * fw, fw / 2
+
+
+def drawn_span(s: Settlement, k: int, houses: Sequence[Mapping[str, Any]]) -> list[Pt]:
+    """The stretch of planned street `k` the web will lay (`lay_row_streets`): its own farms' span (`street_span`) at the
+    farms' own reach (`row_reach`). The road reads it too (`track.stage_track`), so it runs out from the street as drawn."""
+    lines = getattr(s, "_row_streets", None) or []
+    if k >= len(lines):
+        return []
+    own = getattr(s, "_row_street_farms", None) or []
+    centers = [(float(h["x"]), float(h["y"])) for h in houses]
+    reach, pad = row_reach(houses)
+    return street_span(lines[k], own[k] if k < len(own) else centers, reach, pad)
 
 
 def street_span(line: Sequence[Pt], houses: Sequence[Pt], reach: float, pad: float) -> list[Pt]:
@@ -97,7 +116,7 @@ def join_to(path: list[Pt], network: Sequence[tuple[Pt, Pt]], hard: list[Poly], 
     return (path + leg[1:]) if len(leg) >= 2 else path
 
 
-def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], reach: float, pad: float) -> int:
+def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
     """Lay each planned street of `s._row_streets` as one way: its farms' stretch (`street_span`), threaded round any
     steading in its way (`thread`), joined to the connector or a street already laid (`join_to`), drawn at the street's
     tread and recorded `street` with its index. Returns the streets drawn."""
@@ -105,10 +124,9 @@ def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: li
     # EACH STREET SPANS ITS OWN FARMS, as `seat_rows` seated them: spanned over every farm within reach, Mizuguchi's second
     # street, set out 238 ft behind the first row, took all twelve and ran 1,642 ft for the one farm of its own
     # (settlement-review, 2026-09-30)
-    own = getattr(s, "_row_street_farms", None) or []
     n = 0
-    for k, line in enumerate(getattr(s, "_row_streets", None) or []):
-        path = thread(street_span(line, own[k] if k < len(own) else centers, reach, pad), walls, hard, water)
+    for k, _line in enumerate(getattr(s, "_row_streets", None) or []):
+        path = thread(drawn_span(s, k, houses), walls, hard, water)
         # A FURTHER STREET JOINS THE ROW'S STREETS, NOT THE ROAD: joined to the nearest of either, Mizuguchi's second street
         # met the connector at its head, 96 ft past the entrance board, and two of its farms left without passing the board
         # (settlement-review, 2026-09-30); only the first street takes the road
@@ -188,6 +206,13 @@ def to_its_joints(street: Sequence[Pt], ends: Sequence[Pt], touch: float) -> lis
     return cut_between(street, arc, lo, hi)
 
 
+def nearest_on(line: Sequence[Pt], p: Pt) -> Pt | None:
+    """The point of the polyline `line` nearest `p`; None for a line of fewer than two points."""
+    if len(line) < 2:
+        return None
+    return min((seg_closest(p[0], p[1], a, b) for a, b in zip(line, line[1:], strict=False)), key=lambda q: math.dist(q, p))
+
+
 def joints_along(street: Sequence[Pt], ends: Sequence[Pt], touch: float) -> tuple[list[float], list[float]]:
     """The street's cumulative lengths, and the arc length along it of each lane end in `ends` within `touch` of it."""
     arc = [0.0]
@@ -226,8 +251,11 @@ def cut_between(pts: Sequence[Pt], arc: Sequence[float], lo: float, hi: float) -
     return [at(lo), *inner, at(hi)]
 
 
-def trim_streets(s: Settlement, touch: float) -> int:
-    """Every planned street of a row (`street_index` set) cut to its joints (`to_its_joints`); returns the streets cut."""
+def trim_streets(s: Settlement, touch: float, doors: Sequence[Pt] = (), reach: float = 0.0) -> int:
+    """Every planned street of a row (`street_index` set) cut to its joints (`to_its_joints`) - and to the nearest point of
+    each front door in `doors` within `reach` of it, a farm the street serves without a path of its own (`lay_door_paths`
+    lays none within that reach): cut to its paths' joints alone, Mizuguchi's street stopped a frame short of its end farm,
+    whose door stood 12 ft off it, and the farm was left off every way (2026-10-01). Returns the streets cut."""
     lanes = s.M.get("lanes") or []
     n = 0
     for i, ln in enumerate(lanes):
@@ -235,6 +263,7 @@ def trim_streets(s: Settlement, touch: float) -> int:
             continue
         pts = [(float(x), float(y)) for x, y in ln["pts"]]
         ends = [(float(o["pts"][e][0]), float(o["pts"][e][1])) for j, o in enumerate(lanes) if j != i and len(o.get("pts") or []) >= 2 for e in (0, -1)]
+        ends += [q for d in doors if (q := nearest_on(pts, d)) is not None and math.dist(q, d) <= reach]
         cut = to_its_joints(pts, ends, touch)
         if len(cut) >= 2 and cut != pts and s.reshape_lane(ln, cut):
             s.reink_lane(i)

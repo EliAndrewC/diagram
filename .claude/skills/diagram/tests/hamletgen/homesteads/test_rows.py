@@ -7,6 +7,7 @@ from shapely.geometry import Point
 
 from l7r.diagram.hamletgen.homesteads.row_rules import bamboo_mismatch, continuous, row_rules, water_rules
 from l7r.diagram.hamletgen.homesteads.rows import (
+    ROW_FRONTAGE_MAX_FT,
     door_clear,
     frame_extent,
     frame_on_holdings,
@@ -52,6 +53,16 @@ def test_row_seats_step_one_frame_along_on_one_side_or_both() -> None:
     both = row_seats(line, frame, "both", 20.0)
     assert len(both) == 2 * len(one) and {side for _c, side, *_r in both} == {1, -1}
     assert row_seats(line[:1], frame, "one", 20.0) == []
+
+
+def test_a_row_steps_no_wider_than_a_lots_frontage() -> None:
+    """The GM, 2026-10-01: the spacing capped at 240 ft, the widest frontage measured on a planned row (research/homesteads/
+    155-row-villages-resson.html). A 261 ft frame steps at 240; a frame narrower than the lot keeps its own width."""
+    line = [((float(x), 0.0), (0.0, -1.0)) for x in range(0, 2001, 8)]
+    wide = sorted(c[0] for c, *_r in row_seats(line, (0.0, 0.0, 261.0, 167.0), "one", 20.0, ROW_FRONTAGE_MAX_FT))
+    assert ROW_FRONTAGE_MAX_FT == 240.0 and all(b - a == pytest.approx(240.0, abs=9.0) for a, b in zip(wide, wide[1:], strict=False))
+    narrow = sorted(c[0] for c, *_r in row_seats(line, (0.0, 0.0, 221.0, 167.0), "one", 20.0, ROW_FRONTAGE_MAX_FT))
+    assert all(b - a == pytest.approx(221.0, abs=9.0) for a, b in zip(narrow, narrow[1:], strict=False))
 
 
 def test_frame_extent_offsets_and_door_room() -> None:

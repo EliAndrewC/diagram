@@ -313,3 +313,18 @@ def test_the_gap_between_a_ring_and_a_segment() -> None:
     assert poly_seg_gap(sq, (5.0, 5.0), (50.0, 5.0)) == 0.0, "an end inside"
     assert poly_seg_gap(sq, (-5.0, 5.0), (15.0, 5.0)) == 0.0, "through it"
     assert poly_seg_gap(sq, (0.0, 20.0), (10.0, 20.0)) == pytest.approx(10.0)
+
+
+def test_corridors_reserved_since_a_mark_are_released_back_to_it() -> None:
+    """A row's streets are reserved only while its farms are seated (`rows.seat_rows`): released back to the mark, the
+    corridors reserved before it stand and answer, and those after it are gone from every bin."""
+    from l7r.diagram.overlap.reserved import Reservations
+
+    res = Reservations()
+    res.reserve_corridor((0.0, 0.0), (100.0, 0.0), 5.0)
+    mark = res.corridors_mark()
+    res.reserve_corridor((0.0, 300.0), (500.0, 300.0), 5.0)
+    assert mark == 1 and res.corridors_mark() == 2
+    res.release_corridors_to(mark)
+    assert res.corridors_mark() == 1 and list(res._corridors_near(0.0, 290.0, 500.0, 310.0)) == []
+    assert [c[0] for c in res._corridors_near(0.0, -5.0, 100.0, 5.0)] == [(0.0, 0.0)]

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from l7r.diagram.hamletgen.ways.street import join_to, lay_row_streets, street_span, thread
+from l7r.diagram.hamletgen.ways.street import drawn_span, join_to, lay_row_streets, row_reach, street_span, thread
 from l7r.diagram.hamletgen.ways.track import street_run_out
 from l7r.diagram.settlement import Settlement
 
@@ -43,7 +43,7 @@ def test_lay_row_streets_draws_each_planned_street_as_one_street_lane() -> None:
     s._row_streets = [LINE]
     s.M["lanes"] = [{"pts": [[1300.0, 300.0], [1300.0, 700.0]], "w": 6, "connector": True}]
     houses = [{"x": 300.0, "y": 560.0}, {"x": 700.0, "y": 440.0}, {"x": 1000.0, "y": 560.0}]
-    assert lay_row_streets(s, houses, [], [], [], reach=150.0, pad=50.0) == 1
+    assert lay_row_streets(s, houses, [], [], []) == 1
     street = [ln for ln in s.M["lanes"] if ln.get("street") and ln.get("street_index") is not None]
     joins = [ln for ln in s.M["lanes"] if ln.get("street") and ln.get("street_index") is None]
     assert len(street) == 1 and street[0]["street_index"] == 0 and street[0]["w"] == 6
@@ -90,7 +90,7 @@ def test_a_further_street_joins_the_row_s_streets_not_the_road() -> None:
     s._row_streets = [LINE, second]
     s.M["lanes"] = [{"pts": [[1300.0, 300.0], [1300.0, 900.0]], "w": 6, "connector": True}]
     houses = [{"x": 300.0, "y": 560.0}, {"x": 700.0, "y": 440.0}, {"x": 1000.0, "y": 560.0}, {"x": 400.0, "y": 860.0}, {"x": 800.0, "y": 860.0}]
-    assert lay_row_streets(s, houses, [], [], [], reach=150.0, pad=50.0) == 2
+    assert lay_row_streets(s, houses, [], [], []) == 2
     first = next(ln for ln in s.M["lanes"] if ln.get("street_index") == 0)
     joins = [ln for ln in s.M["lanes"] if ln.get("street") and ln.get("street_index") is None]
     end = joins[-1]["pts"][-1] if joins[-1]["pts"][0] in [ln["pts"][-1] for ln in s.M["lanes"] if ln.get("street_index") == 1] else joins[-1]["pts"][0]
@@ -101,12 +101,13 @@ def test_a_further_street_joins_the_row_s_streets_not_the_road() -> None:
 def test_a_street_is_cut_to_its_outermost_joints() -> None:
     """`to_its_joints` / `cut_between` (feature 291 on 287): the stretch between the outermost lane ends standing on it;
     unchanged with no joint on it; `trim_streets` re-lays a row's street so and leaves every other lane."""
-    from l7r.diagram.hamletgen.ways.street import cut_between, to_its_joints, trim_streets
+    from l7r.diagram.hamletgen.ways.street import cut_between, nearest_on, to_its_joints, trim_streets
 
     street = [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0), (300.0, 0.0)]
     assert to_its_joints(street, [(50.0, 2.0), (250.0, -3.0), (150.0, 90.0)], 4.0) == [(50.0, 0.0), (100.0, 0.0), (200.0, 0.0), (250.0, 0.0)]
     assert to_its_joints(street, [(150.0, 90.0)], 4.0) == street, "no joint on it: as it is"
     assert cut_between(street, [0.0, 100.0, 200.0, 300.0], 0.0, 300.0) == street
+    assert nearest_on(street, (120.0, 30.0)) == (120.0, 0.0) and nearest_on(street[:1], (0.0, 0.0)) is None
     s = Settlement(400, 200, seed=1)
     s.meta(name="V", scale="hamlet", ftpx=1)
     for pts, w, extra in (
@@ -120,6 +121,9 @@ def test_a_street_is_cut_to_its_outermost_joints() -> None:
     assert trim_streets(s, 4.0) == 1
     assert s.M["lanes"][0]["pts"][0][0] == 50.0 and s.M["lanes"][0]["pts"][-1][0] == 250.0
     assert trim_streets(s, 4.0) == 0, "cut already"
+    s.M["lanes"][0]["pts"] = [list(p) for p in street]
+    assert trim_streets(s, 4.0, [(280.0, 10.0), (150.0, 60.0)], 12.0) == 1, "a door 10 ft off the street, taking no path"
+    assert s.M["lanes"][0]["pts"][0][0] == 50.0 and s.M["lanes"][0]["pts"][-1][0] == 280.0, "kept to that door; the far one is no joint"
 
 
 def test_a_street_s_one_end_is_cut_back_to_its_last_joint() -> None:
@@ -176,5 +180,20 @@ def test_a_join_the_law_refuses_is_searched_from_either_end(monkeypatch) -> None
     s._row_streets = [LINE]
     s.M["lanes"] = [{"pts": [[1300.0, 300.0], [1300.0, 900.0]], "w": 6, "connector": True}]
     houses = [{"x": 300.0, "y": 560.0}, {"x": 700.0, "y": 440.0}, {"x": 1000.0, "y": 560.0}]
-    lay_row_streets(s, houses, [], [], [], reach=150.0, pad=50.0)
+    lay_row_streets(s, houses, [], [], [])
     assert len(searched) == 2, "both ends searched when neither yields a lawful join"
+
+
+def test_the_drawn_span_is_the_streets_own_farms_at_their_reach() -> None:
+    """What the road runs out from (`track.stage_track`) and the web lays (`lay_row_streets`): the stretch over the street's
+    own farms, at 1.5 frames' reach and half a frame past its end farms - not the whole planned line (cohort seed 22)."""
+    s = Settlement(1400, 1400, seed=3)
+    assert drawn_span(s, 0, []) == []
+    s._row_streets = [LINE]
+    farms = [{"x": 300.0, "y": 560.0, "geom": {"bbox": (0.0, 0.0, 200.0, 120.0)}}, {"x": 700.0, "y": 440.0}]
+    assert row_reach(farms) == (300.0, 100.0) and row_reach([]) == (150.0, 50.0)
+    span = drawn_span(s, 0, farms)
+    assert 200.0 <= span[0][0] < 208.0 and 792.0 < span[-1][0] <= 800.0
+    s._row_street_farms = [[(700.0, 440.0)]]
+    assert 600.0 <= drawn_span(s, 0, farms)[0][0] < 608.0, "its own farms, as seated"
+    assert drawn_span(s, 1, farms) == []

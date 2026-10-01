@@ -90,7 +90,13 @@ def canonical_farmstead(
     # the pocket a wellhead needs, laid in the dooryard beside the yard - where on the plot the well stood no page read says
     # (a GUESS, as it was for the ring search this replaces) - so the placer admits the farm only with room for its water
     # (`lot.watered`). Drawn as its own well, or released where a channel or a row's shared well serves the farm instead.
-    well_r = (-(yw / 2 + gap + well / 2), yard_r[1], well, well) if well > 0 else None
+    # ...at the yard's middle, or as far down as its WELLHEAD needs to clear the house's front wall, by a foot (a third of
+    # `gap`): at the middle of a shallow yard narrower than the house, the wellhead (the pocket less its 3 ft margin, `gap`)
+    # stood on its own house, which the matrix refuses (Kashikawa, once its row's lots were capped at 240 ft). Only a
+    # wellhead that would stand on the house moves, and no further: moving every pocket a gap clear of the wall shifted
+    # five cohort seeds' farms onto failures, and a wellhead a gap clear two (2026-10-01)
+    under = yw / 2 + gap < cw / 2
+    well_r = (-(yw / 2 + gap + well / 2), max(yard_r[1], ch / 2 + well / 2 - gap + gap / 3) if under else yard_r[1], well, well) if well > 0 else None
     if well_r is not None:
         works.append(_edges(well_r))
     # `back`: the service strip (`SERVICE_STRIP_FT`) on BOTH windward sides - behind the house, and off its west end wall,
