@@ -174,10 +174,8 @@ def split_originals(record_dir: str = RESEARCH_DIR, *, write: bool = True) -> li
     """Move every original still written inline in a question's notes into its `.originals.html` (feature 292,
     `originals.py`); returns the notes files that had one. With `write=False` it only reports - the check."""
     moved = []
-    for page_rel in record_pages(record_dir):
+    for page_rel in record_pages(record_dir):  # every page is a fragment directory (feature 301 finds them that way)
         where = os.path.join(record_dir, frag.page_dir(page_rel))
-        if not os.path.isdir(where):
-            continue
         for name in frag.ordered(os.listdir(where)):
             notes_path = os.path.join(where, frag.notes_file(name))
             if not os.path.isfile(notes_path):
@@ -189,8 +187,8 @@ def split_originals(record_dir: str = RESEARCH_DIR, *, write: bool = True) -> li
                 continue
             moved.append(os.path.relpath(notes_path, record_dir))
             if write:
-                _write_if_changed(notes_path, new_text)
-                _write_if_changed(orig_path, new_stored)
+                _overwrite(notes_path, new_text)
+                _overwrite(orig_path, new_stored)
     return moved
 
 
@@ -271,12 +269,9 @@ def _confusables(page_html: str, page_rel: str, record_dir: str) -> str:
     return confusables.write(page_html, page_rel, mine, record_dir)
 
 
-def _write_if_changed(path: str, text: str) -> int:
-    if _read(path) == text:
-        return 0
+def _overwrite(path: str, text: str) -> None:
     with open(path, "w", encoding="utf-8") as fh:
         fh.write(text)
-    return 1
 
 
 def _read(path: str) -> str | None:
