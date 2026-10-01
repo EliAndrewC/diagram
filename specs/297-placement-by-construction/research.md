@@ -242,4 +242,8 @@ asked in turn - `taken_by` says which family holds a clump's ground, and that de
 
 Faster by about 0.06 s a map (observed 2026-10-01, method: the table's runs), and the belts and copses lose a sixth of their crowns: the two-cell margin of every keep-out refuses
 the clumps that stood at its edge. Kept if the gate holds every grove rule on the moved pool (the belt deep and whole, the copse's
-stocking, a household's reserved wood share); withdrawn by its own measurement if not.
+stocking, a household's reserved wood share); withdrawn by its own measurement if not. **Withdrawn**: the gate failed woods W25
+(`test_the_belt_leaves_a_reserved_seat_free_and_the_copse_plants_it`, `test_a_reserved_seat_moved_round_another_groves_crown_is_asked_its_reach_again`)
+- the margin round the belt's crowns covered a household's reserved seat the seating had proved clear, and the copse dropped it.
+The one fix - asking the exact families of a reserved seat - is the prefilter form again, which stands: the region answers "clear",
+the families say which where it reads taken.
