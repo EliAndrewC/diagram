@@ -419,7 +419,7 @@ class Kennel(Kind):
     service yard, its well and the service gate, away from the ceremonial ground of the forecourt.
 
     Note: Hunting dogs kept by a samurai household are recorded, and dogs were once housed inside an official's
-    compound, at Kitami in 1693, though as dogs in care rather than a hunting pack. The kennel's form, its size of
+    compound, the chamberlain Kitami's, though as the shogunate's dogs in care rather than a hunting pack; by 1693 the site had passed to the shogunate itself. The kennel's form, its size of
     about 11 ft square and its seat beside the stables are a guess: no page read describes a household's hunting
     kennel, gives one a size or puts one with the stables.
 
@@ -539,12 +539,12 @@ class WritingPavilion(Kind):
 
     Why: A study could be a room or a building of its own. Rai San'yō, a scholar and poet of the late Edo period,
     built a detached study-cum-tea room on his Kyoto estate in 1828, its garden on its west side, and in China
-    the study drew apart from the living rooms into the quiet part of the compound, beside the rear garden. The
+    the study drew apart from the living rooms into a quiet part of the compound, beside the rear garden where there was one. The
     office hall is where the county's business is done and the residence is the family's; a pavilion set apart
     in the garden gives its owner a room that belongs to neither.
 
     Note: A study standing apart in the garden as a building of its own is a recorded form, at a scholar's
-    estate in Kyoto and in the Chinese compound. Giving one to a magistrate, in the inner garden of the posting,
+    estate in Kyoto; in the Chinese compound the study drew apart from the living rooms, beside the rear garden where there was one. Giving one to a magistrate, in the inner garden of the posting,
     is a guess by extension from those, and so is its size of about 18 by 14 ft: no page read describes a
     detached study at an official's compound or gives a detached study's size.
 
@@ -749,7 +749,7 @@ class InnerRooms(Kind):
     memorial alcove is not among them: the butsuma was set at the formal end, by or behind the zashiki, and none
     was found among the family's private rooms.
 
-    Note: A residence grouping its private rooms at the far end from its formal ones follows the record. The bay's
+    Note: A lord's palace grouping its private rooms at the far end from its formal ones follows the record; the one smaller house whose order we read, the Kuchiba house at Hagi, runs the other way on this project's reading, its zashiki deepest in, so drawing a provincial residence in the palace's order is a choice. The bay's
     contents are the drawing's own.
 
     Caveat: The bay's contents are the drawing's own.

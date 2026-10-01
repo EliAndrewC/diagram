@@ -421,13 +421,13 @@ class Persimmon(Kind):
     What: The household's persimmon tree, in the dooryard in front of the house or behind it, drawn a yellower green
     than the groves with four fruit dots - the map's convention for naming the tree, not a season.
 
-    Why: A persimmon stood in every dooryard: the Edo agronomist Miyazaki Yasusada is said to have urged planting
+    Why: Accounts of the old farm villages give a persimmon to every dooryard: the Edo agronomist Miyazaki Yasusada is said to have urged planting
     them around the homestead, and the tree shades the house in summer. The farm villages of the past had an old
     giant persimmon in the dooryard of every house, and one is remembered in the bamboo grove behind a house, so the
     tree stands in front of the house, most often, or behind it, each hamlet rolling how often each. Its crown is
     drawn about 23 ft across.
 
-    Note: Presence and the two sides are read (toyoko, a newspaper history of the Fuyu persimmon, Sato on fruit trees
+    Note: Presence and the two sides are read, though the one account from before 1868 is at second hand and the rest are undated or later (toyoko, a newspaper history of the Fuyu persimmon, Sato on fruit trees
     in the front yard). The crown is a modern horticultural reference's full-grown size, a guess: no record from before
     1868 gives an ordinary dooryard persimmon's crown. How much likelier the front is, the seat at the edge of the work
     yard, and the share drawn - 80 to 95 of every 100 homesteads, against the sources' every dooryard - are guesses.
