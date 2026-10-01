@@ -91,11 +91,11 @@ T15 = e6 (I, xhigh), both from the one start commit with task I's re-frozen prom
       verify: DONE. e2's buildings/910 landed with its 4 sources and 3 glossary terms (its write and check sessions' research pass, source-reader, quote-check, record-format, source-applicability); the graders' two flaws fixed and re-checked clean; make record clean, 258 record tests green; ledger lines appended; the future-work item closed into closed.md, a narrower sheet check left open
 - [x] T20 [US4] Land `xhigh`'s implementation (e7, the GM's choice), ported onto current main: `make done` and the moved maps' `settlement-review`s there, the merge work recorded apart, defects found added to the report's later-defects section; the future-work item closed
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
+      - [x] research pass - e7's search (the Kakimochi record read; research/homesteads 120 and 430)
+      - [x] source-reader confirmed - no new source was added; the new notes' passages were read verbatim on their pages by quote-check
+      - [x] recorded and cited - homesteads 120 and 430, the four classes
+      - [x] quote-check confirmed - clean on 120 and 430 (e7 and again in the port)
+      - [x] source-applicability confirmed - no new or changed write-up - the cited keys were judged when first cited
       verify: DONE. e7's implementation ported onto current main by headless sessions at medium (features 287 and 291 merged in): its core change and the collateral fixes that still applied; make done green with 100% coverage in the landing clone; five maps PASS after review round 4 (docs/review-ledger.md); cohort 51/54 = main's baseline; merged into this clone; later defects in report.md
 - [x] T21 Delete the losing (and void) run clones unmerged; retire D2a's agent file if it landed; the report's final lines updated
       research: rendering

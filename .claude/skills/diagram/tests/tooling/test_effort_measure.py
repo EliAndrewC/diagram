@@ -219,8 +219,7 @@ def test_the_session_can_void_a_run_for_an_environment_reason(tmp_path: pathlib.
     (log / "result.json").write_text('{"type": "result"}')
     repo = _repo(tmp_path, w, "I", [log])
     monkeypatch.chdir(repo)
-    assert em.main(["--run", "e1", "--projects", str(w["projects"]), "--guard-log", str(w["guard"]),
-                    "--claims", str(tmp_path / "c.md"), "--void", "the launcher leaked the arm"]) == 0
+    assert em.main(["--run", "e1", "--projects", str(w["projects"]), "--guard-log", str(w["guard"]), "--claims", str(tmp_path / "c.md"), "--void", "the launcher leaked the arm"]) == 0
     run = json.loads((repo / FEATURE / "runs" / "e1.json").read_text())
     assert run["status"] == "void" and "leaked the arm" in run["void_reason"]
 
@@ -250,6 +249,5 @@ def test_a_run_that_never_started_can_be_voided(tmp_path: pathlib.Path, monkeypa
     (log / "stderr.txt").write_text("Error: No messages returned from query\n")
     repo = _repo(tmp_path, w, "I", [log])
     monkeypatch.chdir(repo)
-    assert em.main(["--run", "e1", "--projects", str(w["projects"]), "--guard-log", str(w["guard"]),
-                    "--claims", str(tmp_path / "c.md"), "--void", "it failed at launch"]) == 0
+    assert em.main(["--run", "e1", "--projects", str(w["projects"]), "--guard-log", str(w["guard"]), "--claims", str(tmp_path / "c.md"), "--void", "it failed at launch"]) == 0
     assert json.loads((repo / FEATURE / "runs" / "e1.json").read_text())["status"] == "void"

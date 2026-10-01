@@ -100,7 +100,17 @@ def _init(w: dict, seed: int = 7) -> dict:
 def _run_args(w: dict, task: str, run: str = "e1", arm: str = "xhigh", ws_gb: float = 2.0) -> argparse.Namespace:
     cg = _cgroup(w["tmp"] / f"cg-{run}-{ws_gb}", int((ws_gb + 1) * er.GB), er.GB)
     return argparse.Namespace(
-        task=task, run=run, arm=arm, order=1, origin=str(w["origin"]), clones=str(w["tmp"] / "clones"), claims=str(w["claims"]), cgroup=str(cg), events=str(w["events"]), host_diag="", mirror=str(w["mirror"])
+        task=task,
+        run=run,
+        arm=arm,
+        order=1,
+        origin=str(w["origin"]),
+        clones=str(w["tmp"] / "clones"),
+        claims=str(w["claims"]),
+        cgroup=str(cg),
+        events=str(w["events"]),
+        host_diag="",
+        mirror=str(w["mirror"]),
     )
 
 
@@ -327,8 +337,7 @@ def test_with_the_shared_figure_the_gate_reads_it_and_a_raw_warning_does_not_blo
     assert "memwatch warning" in why and reading["source"] == "container+offset", "without the host: the old rule"
 
 
-def test_a_replaced_task_is_refrozen_and_still_starts_from_the_one_start_commit(world: dict, monkeypatch: pytest.MonkeyPatch,
-                                                                             capsys: pytest.CaptureFixture[str]) -> None:
+def test_a_replaced_task_is_refrozen_and_still_starts_from_the_one_start_commit(world: dict, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     exp = _init(world)
     (world["fdir"] / "runs").mkdir()
     (world["fdir"] / "runs" / "e4.json").write_text(json.dumps({"task": "I", "status": "valid", "ended": "x"}))
@@ -353,8 +362,7 @@ def test_a_replaced_task_is_refrozen_and_still_starts_from_the_one_start_commit(
     assert "# a replaced task" in (world["out"] / "claude.argv").read_text(), "the frozen prompt, from the session's repository"
 
 
-def test_a_stalled_task_i_session_is_resumed_with_the_one_neutral_message(world: dict, monkeypatch: pytest.MonkeyPatch,
-                                                                         capsys: pytest.CaptureFixture[str]) -> None:
+def test_a_stalled_task_i_session_is_resumed_with_the_one_neutral_message(world: dict, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     _init(world)
     rec = er.launch(_run_args(world, "I", run="e9", arm="medium"), world["origin"], time.time())
     transcript = pathlib.Path(rec["sessions"][0]["transcript"])
