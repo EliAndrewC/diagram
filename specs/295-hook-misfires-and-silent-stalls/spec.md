@@ -103,7 +103,14 @@ through a variable or naming the last file the chain writes. The turn ends quiet
    gone quiet again.
 3. **Given** a session whose clone has no unfinished work, or a page-session queue in its usage-limit retry wait
    (`failed ... waiting ... then resuming it` as its run log's last line), **Then** it is not called stalled.
-4. **Given** the watchdog is not running, **When** any session submits a prompt, **Then** one instance is started,
+4. **Given** a headless (`claude -p`) session whose runner is gone, or that no runner started, silent over an hour with
+   unfinished work, **When** the watchdog runs, **Then** the stall mark and bell land on the tab of the session that
+   dispatched it (its `L7R_DISPATCHER`), else on the tab of a live interactive session in the same clone, and the nudge
+   typed there (input line empty, once per stall) names the stalled session and the command that resumes it; with no
+   such tab the stall is only logged.
+5. **Given** a background (`kind: bg`) session, **Then** its tab is the interactive session that parked it, as
+   `tab-title.sh` finds it, and the same rules apply.
+6. **Given** the watchdog is not running, **When** any session submits a prompt, **Then** one instance is started,
    detached; a second never runs beside it.
 
 ### User Story 5 - A periodic report is steered to a cron (Priority: P2)
@@ -139,14 +146,21 @@ through a variable or naming the last file the chain writes. The turn ends quiet
   rules apply unchanged.
 - **FR-004** (item 3): the runner watches each running session; silence past the stall threshold across the session's
   transcript and its subagent transcripts, with the process alive, ends the process and resumes the session at once;
-  stall resumes are capped per session and logged. The threshold is recorded with its reason.
+  stall resumes are capped per session (eight: two hours of quiet at the outside) and logged. The threshold and the cap
+  are recorded with their reasons beside them.
 - **FR-005** (item 4): a watchdog runs outside every session, one instance, started by the prompt hook when absent; on
-  each pass it judges every live interactive session by FR-005a and acts by FR-005b.
+  each pass it judges EVERY live session - interactive, headless and background - by FR-005a and acts by FR-005b on the
+  tab FR-005c names. (A runner-managed headless session is resumed by FR-004 at 15 minutes, so it reaches the hour only
+  when its runner has failed or never existed - which is item 4's case.)
   - **FR-005a**: stalled = silent over an hour (its transcripts), not waiting on the GM, and with unfinished work in its
     clone (uncommitted changes, commits not on `origin/main`, or a live make); a page-session queue's retry wait is not
     a stall.
   - **FR-005b**: the stalled session's tab is retitled with a stall mark and the idle time and the bell rung; when the
     pane's input line is empty the nudge is typed once per stall.
+  - **FR-005c**: the tab is the session's own tmux pane; for a session with none, the pane of the session that
+    dispatched it (`L7R_DISPATCHER` in its environment), else of the interactive session that parked it (a `bg` job), else
+    of a live interactive session in the same clone; with none, the stall is logged only. A nudge typed into another
+    session's tab names the stalled session and how to resume it.
 - **FR-006** (item 5): a backgrounded Bash command that is a periodic report by the definition in Story 5 is refused
   with the exact `CronCreate` call; `CRON_OK="<reason>"` escapes it; an event-driven wait is never caught.
 - **FR-007** (item 6): every clause the no-poll hook inserts is escaped for the quoting it lands in.
@@ -161,8 +175,8 @@ through a variable or naming the last file the chain writes. The turn ends quiet
 - **SC-002**: the 2026-09-30 exception dispatch's prompt, replayed through the judge, passes untouched.
 - **SC-003**: a fake headless session that goes silent is ended and resumed by the runner within the threshold plus
   one check interval.
-- **SC-004**: the watchdog, run once against fixtures, retitles, rings and nudges exactly the stalled fixture, and nudges
-  it once.
+- **SC-004**: the watchdog, run once against fixtures, retitles, rings and nudges exactly the stalled fixtures (an
+  interactive one in its own pane, a headless one in its dispatcher's), and nudges each once.
 - **SC-005**: the 292 watcher command, replayed, is refused with a `CronCreate` call; the 291 waiters pass.
 - **SC-006**: the reproduced item-6 command parses after the rewrite; the item-7 command passes.
 - **SC-007**: `make hooks-test` and `make done` green.
