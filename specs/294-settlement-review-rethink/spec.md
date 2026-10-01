@@ -164,7 +164,7 @@ the same.
 - **FR-003**: The still-unchecked geometric classes become rules, each proved red on its recorded case first: (1) record
   against ink (a snapped gate, a hit polygon over the banks, a head-race record past its ink, houses inside the toe polygon);
   (2) ruled or plumb edges on non-brook shapes (marsh limit, shrine grove, clearings); (3) woodpile seating (end-on, off the
-  wall, on a neighbor's gable); (4) parallel twin watercourses 12-32 ft apart; (5) draw order and translucency ghosting;
+  wall, on a neighbor's gable); (4) parallel twin watercourses (12-32 ft apart in the ledger rows of 08-26 T11, 145 and 230, observed by the reviewer); (5) draw order and translucency ghosting;
   (6) reed-fringe gaps; (7) page hit regions taking a neighbor's area; (8) lane tread to house-wall clearance; (9) a privy or
   heap seated without the wind; (10) acute lane merges; (11) side-by-side footbridges; (12) drawn area against rolled area;
   (13) house bearings bunching; (14) brook share off the frame. A class the research shows to be a judgment after all moves to
