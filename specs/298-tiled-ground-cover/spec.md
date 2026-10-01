@@ -84,8 +84,8 @@ size that likely slows us down algorithmically").
 - **FR-003**: Each bamboo stand (`bamboo_stand`) MUST be drawn as one shape filled with a repeating tile of the culm mark at the
   stand's present spacing, in place of the individual marks.
 - **FR-004**: The scrub and marsh fills MUST be drawn at the bottom of the stack, immediately above the land, so every feature
-  standing in them draws over them. The bamboo stand's fill stays at the stand's present place in the stack (it is drawn after
-  the houses and lanes beside it today, and nothing stands inside a stand).
+  standing in them draws over them. The bamboo stand's fill stays at the stand's present place in the stack: it draws exactly where
+  today's marks draw, at the same place, so nothing that draws over or under a stand changes.
 - **FR-005**: A zone's filled shape MUST leave out the ground its scatter keeps bare today and that nothing draws over: for scrub the
   hard keep-outs (`_commons_keep`: clearings, the avoided ground, the no-build blocks, the urban halo, the lane verges, the crop
   margin, the watercourse margin) and every marsh; for a marsh, the ground its reeds keep off (dike crests, pond banks,
@@ -115,7 +115,7 @@ size that likely slows us down algorithmically").
 
 - **SC-001** (FR-001, FR-002, FR-003): on the five pool hamlets, zero blade, brush-dot, reed, glint, tint or stand-mark elements;
   one cover shape per drawn zone.
-- **SC-002** (FR-004, FR-005): on the five pool hamlets, every cover shape lies below every non-cover feature in the stack, and no
+- **SC-002** (FR-004, FR-005): on the five pool hamlets, every scrub and marsh cover shape lies below every non-cover feature in the stack, and no
   cover shape overlaps a recorded clearing, the avoided ground or a no-build block (a test on the manifests).
 - **SC-003** (FR-010): each pool hamlet's SVG and page are smaller than the base's; the regeneration, the hinterland stage and the
   stage total before and after are recorded for each (back to back, fastest of three), whichever way they move.
@@ -139,3 +139,6 @@ size that likely slows us down algorithmically").
 - resvg, the page's rasterizer and browsers render `<pattern>` fills; the dry-crop and fallow fills are the precedent.
 
 ## Review history
+
+- Round 1 (spec-fidelity, 2026-10-01): CHANGES REQUIRED - SC-002 named every cover shape while FR-004 keeps bamboo in place;
+  FR-004's reason rested on an unmeasured claim. Addressed: SC-002 names scrub and marsh; FR-004's reason restated.
