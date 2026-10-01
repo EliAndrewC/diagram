@@ -211,6 +211,8 @@ the pilot; the GM reads the pages in this feature's clone.
 - **Amendment, round 2** (spec-fidelity, 2026-10-01): items 1-4 RESOLVED; item 5 partly - the GM's work-yard review of
   2026-09-30 had been recorded only to its first point, so FR-027's kanji-gloss words were missing (now recorded in
   full); FR-014's "the modals (stream, footbridge) that show a ruling today" understated the 19 fixed (reworded).
+- **Amendment, round 3** (spec-fidelity, 2026-10-01): FAITHFUL - both of round 2's items resolved; FR-027 and SC-024
+  checked against the GM's recorded words.
 
 - **Round 1** (spec-fidelity, 2026-09-29): REVISE. Kept: the third grove section folded in, the cap raised with the
   GM, the two phases. Fixed: an aside with real content is promoted, not cut; only map-visible statements with no

@@ -70,6 +70,8 @@ def test_make_record_moves_an_inline_original_and_the_check_names_it(tmp_path: p
     assert store.split_originals(str(rec)) == ["p/010-q.notes.html"]
     assert (rec / "p" / "010-q.originals.html").read_text(encoding="utf-8") == '<li data-orig="k#1">original: 「甲」</li>\n'
     assert store.split_originals(str(rec)) == [], "moved once"
+    (rec / "nofragments.html").write_text("", encoding="utf-8")
+    assert store.split_originals(str(rec)) == [], "a page with no fragment directory is passed over"
     assert '<span class="orig">original: 「甲」</span>' in store.read_notes("p.html", str(rec))["k"]
 
 
