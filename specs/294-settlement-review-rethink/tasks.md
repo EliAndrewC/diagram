@@ -112,8 +112,9 @@ This feature's own delta, declared under the rules it builds (plan D10). Lines a
 
 ## The rules: Mode A (B15b-B24)
 
-- [ ] T26 [US2] Registry checks B16 lodging entrances, B17 privies by zone (`compound.py` fixed for `ochiba-roundtrip-test`), B18 fire water, B19 size hierarchy, B20 sheet furniture - each with its red fixture and its tier entry
+- [x] T26 [US2] Registry checks B16 lodging entrances, B17 privies by zone (`compound.py` fixed for `ochiba-roundtrip-test`), B18 fire water, B19 size hierarchy, B20 sheet furniture - each with its red fixture and its tier entry
       research: rendering
+      verify: DONE. DONE. B16 lodging_entrances, B17 privies_by_zone (compound_parts._family_privy fixed the round-trip: residence (W)/(E) had no family privy), B18 fire_water_distribution (TUB_KINDS recorded), B19 size_hierarchy (each pair labeled READ/GUESS), B20 sheet_furniture; each red on its fixture (tests/tools/test_sheet_rules_294.py), 6/6 pool sheets pass
 - [ ] T27 [US2] B21 roads leave the frame, B22 palette roles, B23 gate feeds its road; the hand-drawn sheets they fail put to the GM in one message through `escalation-check` (D8)
       research: rendering
 - [ ] T28 [US2] [US5] B24 `mapmatch`: gate side and width, roads under every key, the `**On map**` line required where a map records the sheet's subject
