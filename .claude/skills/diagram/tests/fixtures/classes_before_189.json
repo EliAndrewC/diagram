@@ -376,7 +376,7 @@
   "garden": {
     "caveat": "the record fixes the bed's AREA and that it is hand-worked and irregular, but gives no proportion or row count, so those are drawn to read as a worked kitchen bed at this scale.",
     "covers": "`gardens`",
-    "entry": "research/homesteads.html - 'Sunlight and shade on the farm', 'Kitchen gardens beside farmhouses (yashikibatake)'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun', 'How our maps size kitchen gardens'",
+    "entry": "research/homesteads.html - 'Sunlight and shade on the farm', 'Kitchen gardens beside farmhouses (yashikibatake)'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun', 'How our maps size kitchen gardens (yashikibatake)'",
     "key": "garden",
     "label": "accurate",
     "label_note": "Presence and the sun rule are read; the record fixes the bed's AREA and that it is hand-worked and irregular, but gives no proportion or row count, so those are drawn to read as a worked kitchen bed at this scale.",
@@ -860,7 +860,7 @@
   "storage shed": {
     "caveat": "the drawn count per household is deliberately set below the source's Tohoku figure, which is a colder and better-stocked district than this one.",
     "covers": "`houses[].shed` (the storehouse against a farmhouse) and `farm_sheds` (its record)",
-    "entry": "research/homesteads.html - 'The farmstead and what stood on it (yashiki)', 'Farm storehouses (kura)', 'Farm sheds and barns (naya)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)', 'How our maps give some farms a storehouse'",
+    "entry": "research/homesteads.html - 'The farmstead and what stood on it (yashiki)', 'Farm storehouses (kura)', 'Farm sheds and barns (naya)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)', 'How our maps draw farm storehouses (kura)'",
     "key": "storage shed",
     "label": "accurate",
     "label_note": "Presence and prevalence read (Sugiura 1973); the drawn count per household is deliberately set below the source's Tohoku figure, which is a colder and better-stocked district than this one.",

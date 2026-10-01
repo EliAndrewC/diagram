@@ -54,26 +54,33 @@ class Farmhouse(Kind):
 
 class StorageShed(Kind):
     """
-    What: A roofed storage shed built onto the back of the farmhouse - a storehouse - for grain, straw and tools, on the larger farms.
+    What: A storehouse (kura): a farm's fireproof store, walled in thick earth under a tile roof, which a farm built
+    once money had accumulated - drawn as an annex against the farmhouse wall on the largest farms.
 
     Why: Before modern times a farmstead carried far fewer outbuildings than the twentieth century's counts: a village
     count of 1885, which its historian reads back to the last years of the shogunate, gives about one and a half
     besides the privy and the retirement house, with a storehouse on only two farms in sixteen, both powerful households. So a storehouse
-    stands against about one farmhouse in eight, and a village headman's always. Its size follows the two storage sheds dated to
-    the end of the Edo period, about 18 to 27 ft long and one and a half to nearly twice as long as deep.
+    stands against about one farmhouse in eight, the largest of them, and a village headman's always. It is drawn in the
+    size band of the two farm sheds measured from the end of the Edo period or just after, 18 to 27 ft long and 1.5 to
+    1.8 times as long as deep, though the storehouses recorded were smaller, about 12 to 15 by 18 ft.
 
-    Note: The count and the sheds' sizes are read (the Kakimochi count; the Hannan and Nerima sheds); the count is one
-    village's, so the share is a calibration, and drawing the storehouse joined to the house's back wall is a guess.
-    The larger barns of 1883-1926, and the 4.4 outbuildings a household of a 1972 survey, are not drawn.
+    Note: The count and the Nerima shed's size are read; the Hannan shed's 18 ft is our arithmetic from its 3 by 2 ken,
+    and its registered area suggests it may have been somewhat larger; the count is one village's, so the share is a
+    calibration; giving the storehouses strictly to the largest houses is a deviation (Kakimochi's largest house had
+    none), and so is drawing them at the sheds' size; the storehouses recorded stood free of the house, so drawing one
+    as an annex on the house's west or north wall is a convention the record contradicts; the tile is read from two
+    examples. The larger barns of 1883-1926, and the 4.4 outbuildings a household of a 1972 survey, are not drawn.
 
-    Caveat: the count is one village's, so the share is a calibration, and drawing the storehouse joined to the house's
-    back wall is a guess.
+    Caveat: the count is one village's, so the share is a calibration; giving the storehouses strictly to the largest
+    houses is a deviation (Kakimochi's largest house had none), and so is drawing them at the sheds' size; the
+    storehouses recorded stood free of the house, so drawing one as an annex on the house's west or north wall is a
+    convention the record contradicts; the tile is read from two examples.
 
     Name: storage shed
     Covers: `houses[].shed` (the storehouse against a farmhouse) and `farm_sheds` (its record)
     Label: accurate
     Sources: oamishirasato-choshi-kaoku, koshigaya-shishi-noumin-jukyo, bunka-minami-naya, nerima-mitome-naya
-    Entry: research/homesteads.html - 'The farmstead and what stood on it (yashiki)', 'Farm storehouses (kura)', 'Farm sheds and barns (naya)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)', 'How our maps give some farms a storehouse'
+    Entry: research/homesteads.html - 'The farmstead and what stood on it (yashiki)', 'Farm storehouses (kura)', 'Farm sheds and barns (naya)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)', 'How our maps draw farm storehouses (kura)'
     """
 
     key = 'storage shed'
@@ -200,20 +207,21 @@ class Garden(Kind):
     shadow to the south, clear of the windbreak's afternoon shade to the west, and, where open ground allows, nudged south out of a neighbor's grove that would take their morning sun from the east.
 
     Note: Presence is read; the sun rule is DERIVED from the geometry, and its east half is the GM's call, since the record finds no readable source for a bed's need of morning light - its season rests on daikon standing in
-    the bed through autumn (the other autumn greens are this record's reading), and its west lane is sized to
+    the bed through autumn (what the bed grew - daikon, onions, beans and herbs - is this record's guess, since no page
+    read lists its crops), and its west lane is sized to
     a working belt of about 10 m, a guess at the height of a belt kept in use, set at the low end of a band read from surveys
     of the 1980s on, whose measured trees reach 28 m, since no source says which surveyed groves were tended - no grove height from before 1868 was found, so the 10 m is a modern figure kept for want of an older one; the record
-    fixes the bed's AREA and that it is hand-worked and irregular, but gives no proportion or row count, so
-    those are drawn to read as a worked kitchen bed at this scale.
+    gives the bed no area, proportion or row count - its area is held to a guessed range of 10 to 140 sq m (about
+    108 to 1,507 sq ft) - so those are drawn to read as a worked kitchen bed at this scale.
 
-    Caveat: the record fixes the bed's AREA and that it is hand-worked and irregular, but gives no proportion or row
-    count, so those are drawn to read as a worked kitchen bed at this scale.
+    Caveat: the record gives the bed no area, proportion or row count - its area is held to a guessed range of 10 to
+    140 sq m (about 108 to 1,507 sq ft) - so those are drawn to read as a worked kitchen bed at this scale.
 
     Name: garden
     Covers: `gardens`
     Label: accurate
     Sources: not recorded
-    Entry: research/homesteads.html - 'Sunlight and shade on the farm', 'Kitchen gardens beside farmhouses (yashikibatake)'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun', 'How our maps size kitchen gardens'
+    Entry: research/homesteads.html - 'Sunlight and shade on the farm', 'Kitchen gardens beside farmhouses (yashikibatake)'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun', 'How our maps size kitchen gardens (yashikibatake)'
     """
 
     key = 'garden'
