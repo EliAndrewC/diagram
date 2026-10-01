@@ -15,12 +15,8 @@ reviewer's recorded observation, the run one sixth of the shortest comb branch."
 
 from __future__ import annotations
 
-import math
 from collections.abc import Sequence
-from typing import TYPE_CHECKING, Any
-
-if TYPE_CHECKING:  # shapely loads on first use, not at import (feature 237: 16 MiB per collecting worker)
-    from shapely.geometry import LineString
+from typing import Any
 
 TWIN_LO_FT = 12.0  # nearer than this the two are one course or a junction, not twins (the recorded band's floor)
 TWIN_HI_FT = 32.0  # the recorded band's ceiling
@@ -30,44 +26,80 @@ TWIN_JOIN_FT = 60.0  # the reach from where one course leaves the other, where r
 _STEP_FT = 5.0
 
 
-def _bearing(line: LineString, s: float) -> float:
-    a = line.interpolate(max(0.0, s - 1.0))
-    b = line.interpolate(min(line.length, s + 1.0))
-    return math.atan2(b.y - a.y, b.x - a.x)
+def _samples(a: Any, step: float) -> tuple[Any, Any, float]:
+    """(points every `step` along polyline `a`, the unit direction of the leg each lies on, `a`'s length) - numpy arrays."""
+    import numpy as np
+
+    legs = np.diff(a, axis=0)
+    lens = np.hypot(legs[:, 0], legs[:, 1])
+    cum = np.concatenate([[0.0], np.cumsum(lens)])
+    total = float(cum[-1])
+    s = np.minimum(np.arange(int(total // step) + 1) * step, total)
+    k = np.clip(np.searchsorted(cum, s, side="right") - 1, 0, len(legs) - 1)
+    k = np.where(lens[k] == 0, np.argmax(lens > 0), k)
+    f = (s - cum[k]) / np.where(lens[k] == 0, 1.0, lens[k])
+    pts = a[k] + legs[k] * f[:, None]
+    return pts, legs[k] / lens[k][:, None], total
+
+
+def _nearest(pts: Any, b: Any) -> tuple[Any, Any]:
+    """(each point's distance to polyline `b`, the unit direction of the leg of `b` nearest it) - numpy arrays."""
+    import numpy as np
+
+    a0, legs = b[:-1], np.diff(b, axis=0)
+    l2 = (legs**2).sum(axis=1)
+    keep = l2 > 0
+    a0, legs, l2 = a0[keep], legs[keep], l2[keep]
+    rel = pts[:, None, :] - a0[None, :, :]
+    t = np.clip((rel * legs[None, :, :]).sum(axis=2) / l2[None, :], 0.0, 1.0)
+    d = np.hypot(*(rel - t[:, :, None] * legs[None, :, :]).transpose(2, 0, 1))
+    k = d.argmin(axis=1)
+    return d[np.arange(len(pts)), k], legs[k] / np.sqrt(l2[k])[:, None]
 
 
 def twin_run_ft(a: Sequence[Sequence[float]], b: Sequence[Sequence[float]], ftpx: float) -> float:
     """The longest stretch, in feet, along which course `a` runs beside course `b`: within `TWIN_LO_FT`-`TWIN_HI_FT` of it,
     within `TWIN_DEG` of its bearing, and more than `TWIN_JOIN_FT` from an end of `a` that stands on `b` (where `a` leaves or
-    joins it). Sampled every five feet along `a`."""
-    from shapely.geometry import LineString, Point
+    joins it). Sampled every five feet along `a`; the bearing at a sample is the leg's it lies on.
 
-    la, lb = LineString(a), LineString(b)
-    if la.length == 0 or lb.length == 0:
+    IN NUMPY, NOT SHAPELY (feature 294's own perf bookend): a shapely `interpolate`/`project`/`distance` per five-foot sample
+    made this 7.6 s of seed 25's 10.9 s field stage (cProfile, 2026-10-01) - every pair of a comb's courses, both ways round."""
+    import numpy as np
+
+    pa, pb = np.asarray(a, dtype=float), np.asarray(b, dtype=float)
+    if len(pa) < 2 or len(pb) < 2 or not np.hypot(*np.diff(pa, axis=0).T).sum() or not np.hypot(*np.diff(pb, axis=0).T).sum():
         return 0.0
-    on_b = [lb.distance(Point(p)) * ftpx < TWIN_LO_FT for p in (a[0], a[-1])]
-    step = _STEP_FT / ftpx
+    ends, _ = _nearest(pa[[0, -1]], pb)
+    on_b = ends * ftpx < TWIN_LO_FT
+    pts, dir_a, total = _samples(pa, _STEP_FT / ftpx)
+    s = np.minimum(np.arange(len(pts)) * (_STEP_FT / ftpx), total)
+    d, dir_b = _nearest(pts, pb)
+    d = d * ftpx
+    near_join = (on_b[0] & (s * ftpx < TWIN_JOIN_FT)) | (on_b[1] & ((total - s) * ftpx < TWIN_JOIN_FT))
+    turn = np.degrees(np.arccos(np.clip(np.abs((dir_a * dir_b).sum(axis=1)), 0.0, 1.0)))
+    ok = (d >= TWIN_LO_FT) & (d <= TWIN_HI_FT) & (turn <= TWIN_DEG) & ~near_join
     best = run = 0
-    n = int(la.length // step) + 1
-    for k in range(n):
-        s = min(k * step, la.length)
-        p = la.interpolate(s)
-        d = lb.distance(p) * ftpx
-        near_join = (on_b[0] and s * ftpx < TWIN_JOIN_FT) or (on_b[1] and (la.length - s) * ftpx < TWIN_JOIN_FT)
-        turn = abs((_bearing(la, s) - _bearing(lb, lb.project(p)) + math.pi / 2) % math.pi - math.pi / 2)
-        if TWIN_LO_FT <= d <= TWIN_HI_FT and math.degrees(turn) <= TWIN_DEG and not near_join:
-            run += 1
-            best = max(best, run)
-        else:
-            run = 0
+    for flag in ok.tolist():
+        run = run + 1 if flag else 0
+        best = max(best, run)
     return best * _STEP_FT
 
 
+def _apart(a: Sequence[Sequence[float]], b: Sequence[Sequence[float]], gap: float) -> bool:
+    """Do the two courses' boxes stand more than `gap` apart - too far for either to run beside the other?"""
+    xa, ya = [p[0] for p in a], [p[1] for p in a]
+    xb, yb = [p[0] for p in b], [p[1] for p in b]
+    return min(xa) - max(xb) > gap or min(xb) - max(xa) > gap or min(ya) - max(yb) > gap or min(yb) - max(ya) > gap
+
+
 def twins(courses: Sequence[Sequence[Sequence[float]]], ftpx: float) -> list[tuple[int, int, float]]:
-    """(i, j, ft) for every pair of courses that run side by side longer than `TWIN_RUN_FT`, either way round."""
+    """(i, j, ft) for every pair of courses that run side by side longer than `TWIN_RUN_FT`, either way round. A pair whose
+    boxes stand further apart than `TWIN_HI_FT` is not measured."""
     out = []
     for i in range(len(courses)):
         for j in range(i + 1, len(courses)):
+            if len(courses[i]) < 2 or len(courses[j]) < 2 or _apart(courses[i], courses[j], TWIN_HI_FT / ftpx):
+                continue
             run = max(twin_run_ft(courses[i], courses[j], ftpx), twin_run_ft(courses[j], courses[i], ftpx))
             if run > TWIN_RUN_FT:
                 out.append((i, j, run))

@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-01T17:34:33Z",
+  "target": "perf-explain",
+  "commit": "a3ea47286",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: no control run: the bookend start predates the main merges (297-300) the end includes, so the per-stage growth is not split between this feature and main"
+}
