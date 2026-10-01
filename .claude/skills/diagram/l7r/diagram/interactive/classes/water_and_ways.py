@@ -313,8 +313,8 @@ class VillageLane(Kind):
     What: A trodden earth track - packed dirt with soft worn shoulders, a single narrow way, no paving and no
     center line.
 
-    Why: Every house in a nucleated village is reached by the interconnected lanes and alleys - that is what
-    compactness is for - and the narrow lateral lanes are taken over as semi-private space by the houses
+    Why: Every house in the clustered villages this record has read about is reached by a lane, though no page
+    states it as a rule, and the narrow lateral lanes are taken over as semi-private space by the houses
     beside them, which in this record's reading is why they are narrow and irregular (the one readable case
     is Shanghai's lane housing, a city form standing in for a village's). A lane bends like a line feet wear: as few
     turns as the plots allow, none sharp, never back on itself. The connector to the off-map road predates
@@ -329,9 +329,13 @@ class VillageLane(Kind):
     instead - a street laid out first, or the line the ground gives, a natural levee or a dike.
 
     Note: That every house is reached by a way is read from a surveyed village's own lane hierarchy; of the two
-    forms, the planned back lane is read and the alleys off the spine are on no publicly readable page, as is
-    the access passage this record paraphrases; the drawn WIDTHS (3, 5 and 6 ft; a row village's street takes the 6 ft, a rank wider than the lanes off it) are a GUESS, laddered from a footpath to a
-    wheelbarrow's width, with the connector kept under the 9 ft of the one cart road the record does measure.
+    forms, the planned back lane is read, and alleys off the streets are read only in that surveyed village, no
+    general article describing side lanes to a back row; the drawn WIDTHS (3, 5 and 6 ft; a row village's street
+    takes the 6 ft, a rank wider than the lanes off it, where Santome's planned roads were 6 ken, about 36 ft) are a
+    map drawing CONVENTION: the footpath takes the 3
+    shaku given for a field road (a traditional figure of uncertain date, not a measured one), and the spine and
+    spur are a rank wider because the whole hamlet walks them, with all three kept under the 9 ft of the one cart
+    road the record does measure.
     The record now carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to
     13 ft, reaching the house lots of a surveyed village - and the map deliberately draws below that band,
     because the village measured is a twentieth-century dry-plain one in the north rather than a wet-rice
@@ -340,14 +344,18 @@ class VillageLane(Kind):
     and a lane end that reaches nothing is pulled back to the last house it serves - is its own, and how close
     counts as serving a house (within 12 ft of its house, yard or beds, or beside it within 60 ft) is a guess
     too, as is the point where the field path joins its bund, the one nearest the hamlet. A row village's street drawn along
-    the field's dry edge, standing for a natural levee, a dike or a fan's foot, is this record's reading (a row along
-    a fan's foot most of all: the record reads a row of villages there, not how the houses lay); its running on as the
-    road the row stands on, and a path from each farm's door to it, are map drawing conventions. The
+    the field's dry edge, standing for a natural levee, a dike or a fan's foot, is this project's reading, since the
+    map knows a field's margin and not a levee's line (a row along a fan's foot most of all: the record reads a row of
+    villages there, not how the houses lay); its running on as the road the row stands on, and a path from each
+    farm's door to it, are map drawing conventions, though where a farm with its street to the north had its gate was
+    not found, so its path round the grove is a guess. The
     one width read for a way out to the fields is the one-ken (about 6 ft) farm road of a paddy replanned in
     1869 - a planned layout, not an old way measured.
 
-    Caveat: the drawn WIDTHS (3, 5 and 6 ft; a row village's street takes the 6 ft, a rank wider than the lanes off it) are a GUESS, laddered from a footpath to a wheelbarrow's width,
-    with the connector kept under the 9 ft of the one cart road the record does measure. The record now
+    Caveat: the drawn WIDTHS (3, 5 and 6 ft; a row village's street takes the 6 ft, a rank wider than the lanes
+    off it, where Santome's planned roads were 6 ken, about 36 ft) are a map drawing CONVENTION: the footpath takes the 3 shaku given for a field road (a traditional
+    figure of uncertain date, not a measured one), and the spine and spur are a rank wider because the whole
+    hamlet walks them, with all three kept under the 9 ft of the one cart road the record does measure. The record now
     carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to 13 ft,
     reaching the house lots of a surveyed village - and the map deliberately draws below that band, because
     the village measured is a twentieth-century dry-plain one in the north rather than a wet-rice hamlet. How
@@ -361,7 +369,7 @@ class VillageLane(Kind):
     Covers: `lanes` - every lane on the map: the web, the internal skeleton, a row village's streets, the connector to the off-map road and the field spur
     Label: accurate
     Sources: kotobank-nodo, kotobank-aze-sekai-daihyakka, aze-jawiki, kotobank-keihan, kotobank-nawate, sonraku-jawiki
-    Entry: research/homesteads.html - 'Is every farmhouse reached by a lane, and in what FORM?', 'How does a village lane bend?', 'How far does a village lane run past its last farmhouse?', 'How was a row village laid out?'; research/fields.html - 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; research/SOURCES.html re-sourcing queue (lane width)
+    Entry: research/homesteads.html - 'Row villages (resson)'; research/rendering/homesteads.html - 'How our maps draw a row village (resson)'; research/ways.html - 'Village lanes'; research/rendering/ways.html - 'How our maps draw village lanes'; research/fields.html - 'Bunds between the paddies (aze)'; research/rendering/fields.html - 'How our maps draw bunds between the paddies (aze)'; research/SOURCES.html re-sourcing queue (lane width)
     """
 
     key = 'village lane'
@@ -376,7 +384,7 @@ class Footbridge(Kind):
     Why: Farmers reach the plots by walking the bunds, and the long laterals cut across that walking; a
     crossing every so often is taken to keep the field passable, laid square across its ditch where both banks land on
     ground worth crossing to. All three forms are attested over small water: the one-log bridge laid across a
-    brook, the earthen bridge that was the common bridge of old Japan, and the plank deck that was the rarer
+    brook, the earthen bridge that was the common river bridge of old Japan, and the plank deck that was the rarer
     one; the record cannot say which crossed a paddy ditch, so each settlement rolls its own. Where a way
     crosses water, one deck - never two at the same point, and a lane's deck is always planked.
 
@@ -393,7 +401,7 @@ class Footbridge(Kind):
     Covers: `bridges[foot]` - every plank and deck over water
     Label: accurate
     Sources: kotobank-marukibashi, kotobank-ipponbashi, zhwiki-dumuqiao, dobashi-jawiki, xinhua-jiahou-muqiao, itabashi-kotobank, aze-jawiki
-    Entry: research/water.html - 'What crosses a farm ditch - a plank, a log, or earth over logs', 'When is a farm ditch worth a plank' (channel_footbridges); research/ways.html - 'What is a plank bridge, and what is it for?'
+    Entry: research/ways.html - 'Plank bridges over farm ditches (itabashi)'; research/rendering/ways.html - 'How our maps draw plank bridges over farm ditches (itabashi)' (channel_footbridges)
     """
 
     key = 'footbridge'

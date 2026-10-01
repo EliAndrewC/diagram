@@ -402,18 +402,21 @@ class Holding(Kind):
     the dry edge - while the near farms stand between the street and the ground the row keeps off - the rice field, or the marsh or water beside it - their lots backing on that ground while their houses face it across their yards. The map draws the lot and the field; the woodland beyond is not drawn.
 
     Note: The order back from the road and the compact holding on a dike are read; the strip's depth here, three lots,
-    is a GUESS (Santome's strip was a dry-field colony's and ran far deeper), and so are its crop, dry field, and the
-    compact holding carried from a dike row to a levee or fan-foot row. The plots' size is a map drawing convention.
+    is a GUESS (Santome's strip was a dry-field colony's and ran far deeper), and so are its crop, dry field, the
+    compact holding's one-lot depth, a dry-field strip behind a paddy row's houses at all, and the far farms holding it
+    all while the near farms hold none; carrying the compact holding from a dike row to a levee or fan-foot row is this
+    project's decision. The plots' size is a map drawing convention.
 
     Caveat: the strip's depth here, three lots, is a GUESS (Santome's strip was a dry-field colony's and ran far
-    deeper), and so are its crop, dry field, and the compact holding carried from a dike row to a levee or fan-foot row.
-    The plots' size is a map drawing convention.
+    deeper), and so are its crop, dry field, the compact holding's one-lot depth, a dry-field strip behind a paddy row's
+    houses at all, and the far farms holding it all while the near farms hold none; carrying the compact holding from a
+    dike row to a levee or fan-foot row is this project's decision. The plots' size is a map drawing convention.
 
     Name: farm holding
     Covers: `dry_plots[holding]` and their furrows
     Label: accurate
     Sources: kotobank-santome-shinden, kawashima-1986-santome, saitama-santome-history
-    Entry: research/homesteads.html - 'How wide was a farm in a row, how long was the row, and where did its field and grove lie?', 'How was a row village laid out?'
+    Entry: research/homesteads.html - 'Row villages (resson)'; research/rendering/homesteads.html - 'How our maps draw a row village (resson)'
     """
 
     key = 'farm holding'

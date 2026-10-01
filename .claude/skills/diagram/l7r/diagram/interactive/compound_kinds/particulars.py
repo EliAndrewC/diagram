@@ -79,12 +79,12 @@ class River(Kind):
 
     Why: Where navigable natural water exists, it is the main freight route, and a county on it is a staging
     node: its tax grain moves on by boat - hired hulls flying an official pennant, inspected at each port of call, for the office owns none - toward the central stores rather than sitting in rows of granaries
-    at the office. In this setting only the Lion dig transport canals, so for any other county the river is
-    the way.
+    at the office. In this setting a canal is a domain's work, dug only where an inland river is worth
+    canalizing, as the Lion's is, so for most counties the river is the way.
 
     Note: Freight by water is a recorded finding, and the village granary is recorded as a temporary store for
     shipment, but that a well-watered county's office granary is a staging node its tax rice passes through is
-    the research's own reading, and so is the contrast with an isolated county's rows of granaries, whose one example (Takayama holding rice for all of Hida) has no readable source; the hired hulls under an official pennant are recorded for the shogunate's rice going by sea, and carrying them onto a county's river is this project's own; the rule that only the Lion build canals is the setting's canon. Edo-period river landings were set up
+    the research's own reading, and so is the contrast with an isolated county's rows of granaries, whose one example (Takayama holding rice for all of Hida) has no readable source; the hired hulls under an official pennant are recorded for the shogunate's rice going by sea, and carrying them onto a county's river is this project's own; that a domain digs canals only where an inland river is worth canalizing is the setting's canon, and drawing one only in Lion lands is this project's own rule. Edo-period river landings were set up
     to carry the tax rice to Edo and Osaka. That Japan's tax rice went by water is recorded, but that its heavy
     freight in general did rests on general reading rather than a page a reader can open.
 
@@ -95,7 +95,7 @@ class River(Kind):
     Covers: the river band and its labels
     Label: accurate
     Sources: gokura-jawiki, nishimawari-koro-jawiki, takayama-jinya-city, takayama-jinya-jawiki, chinaknowledge-caoyun, daba-jawiki, chuma-jawiki, kashi-jawiki
-    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/ways.html - "Where does a village's freight go?"
+    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/ways.html - 'Moving goods: carts, packhorses and river landings (kashi)'; research/rendering/ways.html - 'How our maps draw moving goods: cart lanes and boat landings (kashi)'
     """
 
     key = "river"
@@ -120,7 +120,7 @@ class RiverLanding(Kind):
     Covers: the landing label - its dock, revetment, barge, watch post and altar are each their own kind
     Label: accurate
     Sources: nishimawari-koro-jawiki, kashi-jawiki, gangi-kowan-jawiki, takasebune-jawiki, kotobank-takasebune, matou-zhwiki, kuramae-jawiki, chinaknowledge-caoyun
-    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'; research/ways.html - "Where does a village's freight go?"; research/rendering/cities/river-cities.html - 'How our maps draw wharves and landings (kashi, gangi)'
+    Entry: research/buildings.html - 'The granary and the tax rice (gokura)'; research/rendering/buildings.html - 'How our maps draw the granary and the tax rice (gokura)'; research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'; research/ways.html - 'Moving goods: carts, packhorses and river landings (kashi)'; research/rendering/ways.html - 'How our maps draw moving goods: cart lanes and boat landings (kashi)'; research/rendering/cities/river-cities.html - 'How our maps draw wharves and landings (kashi, gangi)'
     """
 
     key = "river landing"

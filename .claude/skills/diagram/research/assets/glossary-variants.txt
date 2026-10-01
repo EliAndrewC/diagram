@@ -87,7 +87,6 @@ assignation house	assignation house
 assignation houses	assignation house
 assize	assize
 association	plant association
-asuka	Asuka period
 asuka period	Asuka period
 asunaro	asunaro
 at grade	at grade
@@ -200,6 +199,7 @@ berms	berm
 betto	bettō
 bettō	bettō
 bettō-ji	bettō
+betweenness centrality	betweenness centrality
 bidens	Bidens tripartita
 bidens tripartita	Bidens tripartita
 big door	ōdo
@@ -244,6 +244,8 @@ boundary posts	bojikui
 braced frame	braced frame
 braced frames	braced frame
 braced-frame	braced frame
+branch hall	branch hall
+branch halls	branch hall
 branch hamlet	branch hamlet
 branch hamlets	branch hamlet
 branch house	branch house
@@ -394,6 +396,7 @@ chicken-feather inn	chicken-feather inn
 chicken-feather inns	chicken-feather inn
 chigaidana	staggered shelves
 chikaraishi	chikaraishi
+chimei	chimei
 chinese toon	toon
 chinese-style gate	Chinese-style gate
 chinese-style gates	Chinese-style gate
@@ -468,6 +471,8 @@ clustered villages	kaison
 coaching inn	coaching inn
 coaching inns	coaching inn
 coaching-inn	coaching inn
+coarse grain	coarse grain
+coarse grains	coarse grain
 coefficient of variation	coefficient of variation
 coke	coke
 collateral kin	collateral kin
@@ -547,6 +552,8 @@ courtesy names	courtesy name
 covering house	ōiya
 cpc	CPC
 crab clan	Crab Clan
+crane	Crane Clan
+crane clan	Crane Clan
 crenel	crenel
 crenelated	crenellated
 crenellated	crenellated
@@ -828,6 +835,8 @@ emergent plant	emergent
 emergent plants	emergent
 emergents	emergent
 enceinte	enceinte
+enclosed house	weilongwu
+enclosed houses	weilongwu
 endorheic	endorheic
 endorheic basin	endorheic
 endorheic lakes	endorheic
@@ -1073,6 +1082,7 @@ fudō	Fudo
 fudō myōō	Fudo
 fuel-and-fodder commons	commons
 fujiwara	Fujiwara-kyo
+fujiwara no tameie	Fujiwara no Tameie
 fujiwara-kyo	Fujiwara-kyo
 fujiwara-kyo's	Fujiwara-kyo
 fukada	fukada
@@ -1287,6 +1297,8 @@ haikai	haikai
 hakata	Hakata
 hakehi	hakehi
 hakka	Hakka
+hakka enclosed house	weilongwu
+hakka enclosed houses	weilongwu
 hakone barrier	Hakone barrier
 hakusan	hakusan
 half-fold	half-fold
@@ -1328,6 +1340,7 @@ harakata-shu	harakata-shu
 hardiness zone	hardiness zone
 hari-ma	hari-ma
 hasa	hazakake
+hashi	hashi
 hata	hatake
 hata-ei	hata-ei
 hatago	hatago
@@ -1341,6 +1354,8 @@ hayakawa	Hayakawa
 hayakawa's	Hayakawa
 hayaoke	barrel coffin
 hazakake	hazakake
+head house	head house
+head houses	head house
 head race	head race
 head works	head works
 head-race	head race
@@ -1383,6 +1398,7 @@ hereditary temples	hereditary temple
 hexi	Hexi Corridor
 hexi corridor	Hexi Corridor
 hidenin	hidenin
+hideyoshi	Hideyoshi
 high loom	high loom
 high looms	high loom
 high-loom	high loom
@@ -1411,6 +1427,8 @@ hipposandal	hipposandal
 hipposandals	hipposandal
 hirairi	hirairi
 hirakata	hirakata
+hiratabune	hiratabune
+hiratabune's	hiratabune
 hiratsuka	Hiratsuka
 hirayamajiro	hill-and-plain castle
 hirazamurai	heishi
@@ -1450,6 +1468,8 @@ hokora	hokora
 hokuriku	Hokuriku
 holding jail	holding jail
 home ministry	Home Ministry
+homestead god	yashikigami
+homestead gods	yashikigami
 homestead grove	yashikirin
 homestead groves	yashikirin
 hon-byakusho	honbyakusho
@@ -1645,6 +1665,8 @@ ishigaki	ishigaki
 ishiibi	Ishi-ibi
 ishikawa method	Ishikawa method
 ishikawa-method	Ishikawa method
+island field	island field
+island fields	island field
 isohyet	isohyet
 isohyets	isohyet
 isotherm	isohyet
@@ -1885,6 +1907,7 @@ kenchi-cho	kenchicho
 kenchicho	kenchicho
 kengyo	kengyō
 kengyō	kengyō
+kenmonshu	Kenmonshu
 kera	kera
 kesa	kesa
 kesa cut	kesa
@@ -2028,6 +2051,7 @@ kyuden	kyuden
 kyuhi	kyuhi
 kyunin	kyunin
 kyunins	kyunin
+kyushu	Kyushu
 kyuyo	Kyuyo
 kyō-ma	Kyoto measure
 kyōgen	kyogen
@@ -2097,6 +2121,8 @@ lingnan	Lingnan
 lingqu	Lingqu
 lingxing gate	lingxing gate
 lingxing gates	lingxing gate
+lion	Lion Clan
+lion clan	Lion Clan
 lion-dog	lion-dog
 lion-dogs	lion-dog
 lishe	gongxiefang
@@ -2451,6 +2477,7 @@ night watches	night watch
 night-soil	night soil
 nightsoil	night soil
 nihon dai-hyakka zensho	Nihon Dai-hyakka Zensho
+nihon daihyakka zensho	Nihon Dai-hyakka Zensho
 nihon kokugo daijiten	Nihon Kokugo Daijiten
 nihon kyoikushi shiryo	Nihon kyoikushi shiryo
 nihon rekishi chimei taikei	Nihon Rekishi Chimei Taikei
@@ -2862,6 +2889,7 @@ relay towns	relay town
 remand	remand
 remanded	remand
 ren	ren
+rendai	rendai
 renge	renge
 renkaku	renkaku
 rennyo	Rennyo
@@ -3180,6 +3208,7 @@ shiki-dai	shikidai
 shikidai	shikidai
 shikoku	Shikoku
 shima	Shima
+shimabatake	island field
 shimazu	Shimazu
 shimenawa	shimenawa
 shimo-yashiki	lower mansion
@@ -3396,6 +3425,8 @@ stroke	stroke
 strokes	stroke
 stupa	stupa
 stupas	stupa
+sub-branch hall	branch hall
+sub-branch halls	branch hall
 sub-prefect	sub-prefect
 sub-prefects	sub-prefect
 sub-temple	sub-temple
@@ -3503,6 +3534,7 @@ tamagawa	Tamagawa aqueduct
 tamagawa aqueduct	Tamagawa aqueduct
 tamahagane	tamahagane
 tamajari	tamajari
+tameie	Fujiwara no Tameie
 tameike	tameike
 tamonten	Bishamon
 tan	tan
@@ -3649,6 +3681,7 @@ toiya	ton'ya
 toiyaba	toiyaba
 tokai	Tokai
 tokaido	Tokaido
+tokaido shukuson taigaicho	Tokaido Shukuson Taigaicho
 toki	toki
 toki no kane	toki no kane
 tokonoma	tokonoma
@@ -3678,6 +3711,8 @@ toro site	Toro
 torreya	torreya
 tortoise-shell	tortoise-shell
 tortoise-shell net	tortoise-shell
+tosa	Tosa
+tosa province	Tosa
 toshiyori	toshiyori
 tosho-gu	Toshogu
 toshogu	Toshogu
@@ -3694,6 +3729,7 @@ townhouse	machiya
 townhouses	machiya
 towpath	towpath
 towpaths	towpath
+toyotomi hideyoshi	Hideyoshi
 tozama	tozama
 tozama daimyo	tozama
 tozamurai	tozamurai
@@ -3908,11 +3944,13 @@ washing weir	araizeki
 washing weirs	araizeki
 wasi	wazi
 watari-roka	watari-roka
+watashi	watashi
 watashiba	watashiba
 watch house	jishinban
 watch-house	jishinban
 water caltrop	water caltrop
 water caltrops	water caltrop
+water country	water country
 water duty	water duty
 water gate	water gate
 water gates	water gate
@@ -3930,6 +3968,7 @@ water teahouses	water teahouse
 water's bearing	drainage bearing
 water-and-land hall	water-and-land hall
 water-and-land halls	water-and-land hall
+water-country	water country
 water-guard station	mizubansho
 water-guard stations	mizubansho
 water-head	water-head
@@ -4025,6 +4064,7 @@ yamakawa entry	Yamakawa Nihonshi Shojiten
 yamakawa nihonshi shojiten	Yamakawa Nihonshi Shojiten
 yamanote	Yamanote
 yamanote loop	Yamanote
+yamashiro	Yamashiro
 yamen	yamen
 yamen god	yamen-god
 yamen-god	yamen-god

@@ -1810,7 +1810,7 @@
   ]
  },
  "headman": {
-  "def": "The peasant head of a village and its district, answerable for its taxes and its order; his house is the largest on a village map.",
+  "def": "The peasant head of a village and its district, answerable for its taxes and its order; their house is the largest on a village map.",
   "variants": [
    "headman",
    "headmen"
@@ -4198,7 +4198,9 @@
   "def": "The homestead deity: the household's own god, enshrined in a small hokora in a corner of the house plot.",
   "variants": [
    "yashikigami",
-   "yashikigami-sama"
+   "yashikigami-sama",
+   "homestead god",
+   "homestead gods"
   ]
  },
  "yashikirin": {
@@ -8276,7 +8278,11 @@
   "variants": [
    "weilongwu",
    "hall-and-wing house",
-   "hall-and-wing houses"
+   "hall-and-wing houses",
+   "enclosed house",
+   "enclosed houses",
+   "Hakka enclosed house",
+   "Hakka enclosed houses"
   ]
  },
  "hsien": {
@@ -11991,7 +11997,8 @@
  "Nihon Dai-hyakka Zensho": {
   "def": "A Japanese general encyclopedia, one of the reference works whose entries Kotobank carries.",
   "variants": [
-   "Nihon Dai-hyakka Zensho"
+   "Nihon Dai-hyakka Zensho",
+   "Nihon Daihyakka Zensho"
   ]
  },
  "Zhengde": {
@@ -13424,8 +13431,7 @@
  "Asuka period": {
   "def": "An early period of Japanese history, from which clans first built temples of their own (ujidera) - nine centuries before the castle towns.",
   "variants": [
-   "Asuka period",
-   "Asuka"
+   "Asuka period"
   ]
  },
  "Benten": {
@@ -14952,11 +14958,59 @@
    "föhn"
   ]
  },
+ "betweenness centrality": {
+  "def": "A measure from the study of street networks, also called \"choice\": how often a street segment lies on the routes between other points in the network. In the London study, walkers' movement followed it closely when routes were weighted by their turns.",
+  "variants": [
+   "betweenness centrality"
+  ]
+ },
+ "Fujiwara no Tameie": {
+  "def": "A Japanese court poet of the thirteenth century, one of whose poems, in an anthology of about 1310, is the earliest recorded use of the word itabashi, \"plank bridge\".",
+  "variants": [
+   "Fujiwara no Tameie",
+   "Tameie"
+  ]
+ },
  "onbashira": {
   "def": "Great tree-trunk pillars cut and raised at the corners of a shrine in a festival held every six years, best known at Suwa in Nagano; many villages of the region keep the festival at their own shrines.",
   "variants": [
    "onbashira"
   ]
+ },
+ "Yamashiro": {
+  "def": "The old province around Kyoto, in the Kinki region; its southern part lies between Kyoto and Nara.",
+  "variants": [
+   "Yamashiro"
+  ]
+ },
+ "Hideyoshi": {
+  "def": "Toyotomi Hideyoshi, the warlord who unified Japan in the late 1500s and ordered the land surveys that fixed each village's fields; he died in 1598, and Tokugawa rule followed.",
+  "variants": [
+   "Hideyoshi",
+   "Toyotomi Hideyoshi"
+  ]
+ },
+ "Tokaido Shukuson Taigaicho": {
+  "def": "A survey of the Tokaido's post towns and the villages between them, made for the shogunate late in the Edo period, recording what each town held.",
+  "variants": [
+   "Tokaido Shukuson Taigaicho"
+  ]
+ },
+ "Lion Clan": {
+  "def": "A Great Clan of the setting. Its canal from Toshi Ranbo to the Drowned Merchant River is the setting's typical canal: a domain's own work, dug where an inland river is worth canalizing.",
+  "variants": [
+   "Lion Clan",
+   "Lion"
+  ],
+  "cased": true
+ },
+ "Crane Clan": {
+  "def": "A Great Clan of the setting, a coastal one: it moves its goods by sea and carts them only the last few miles, so it has little need of canals.",
+  "variants": [
+   "Crane Clan",
+   "Crane"
+  ],
+  "cased": true
  },
  "Han Chinese": {
   "def": "China's majority people, named for the Han dynasty; a Han Chinese house is the house of that majority rather than of one of China's minority peoples.",
@@ -14992,6 +15046,58 @@
    "yashikibatake"
   ]
  },
+ "hashi": {
+  "def": "Japanese for a bridge; in this record, the bridge that carries a road, street or lane over a river, canal or ditch.",
+  "variants": [
+   "hashi"
+  ]
+ },
+ "watashi": {
+  "def": "A river crossing where no bridge was built: a ferry, where travelers crossed by boat between landings, or a ford, where they were taken through the shallows. On the Tokaido the great rivers were crossed this way, while the lesser ones were bridged.",
+  "variants": [
+   "watashi"
+  ]
+ },
+ "rendai": {
+  "def": "A platform carried on poles by porters, on which a traveler was carried across a river at a ford.",
+  "variants": [
+   "rendai"
+  ]
+ },
+ "hiratabune": {
+  "def": "A flat-bottomed river boat; at the Banyu ferry on the Tokaido the large ones were about 13 m (~43 ft) long and 2.7 m (~9 ft) wide.",
+  "variants": [
+   "hiratabune",
+   "hiratabune's"
+  ]
+ },
+ "Kyushu": {
+  "def": "The southernmost of Japan's four main islands.",
+  "variants": [
+   "Kyushu"
+  ]
+ },
+ "Kenmonshu": {
+  "def": "A book by Miura Joshin on the events and manners of early Edo, written in the 1630s or early 1640s.",
+  "variants": [
+   "Kenmonshu"
+  ]
+ },
+ "coarse grain": {
+  "def": "The grains other than rice, such as barley, wheat and the millets, grown on dry fields rather than in the paddy.",
+  "variants": [
+   "coarse grain",
+   "coarse grains"
+  ]
+ },
+ "island field": {
+  "def": "A small raised plot of dry field standing inside the paddy, above its water, on which dry crops such as cotton, mulberry and figs were grown; what was planted on them changed greatly from era to era.",
+  "variants": [
+   "island field",
+   "island fields",
+   "shimabatake"
+  ]
+ },
  "kigoya": {
   "def": "A wood shed: a farm building of its own, standing apart from the house, for keeping firewood, charcoal and other fuel.",
   "variants": [
@@ -15002,6 +15108,42 @@
   "def": "A reign era of China's Song dynasty, which named its years by count; Shaoxing 19 is 1149, the year Chen Fu finished his farm manual.",
   "variants": [
    "shaoxing"
+  ]
+ },
+ "chimei": {
+  "def": "Japanese for a place name. Many were made from the lie of the land, such as a valley or a hill, though the origins of many are disputed or unknown.",
+  "variants": [
+   "chimei"
+  ]
+ },
+ "head house": {
+  "def": "The main line of a family, from which its branch houses split off; in a village the head house kept a voice over its branches and the first place among them.",
+  "variants": [
+   "head house",
+   "head houses"
+  ]
+ },
+ "water country": {
+  "def": "A low-lying country laced with rivers, channels and ponds, like the Pearl River delta, where a village was built on open ground within the network of water and faced a river channel or a pond.",
+  "variants": [
+   "water country",
+   "water-country"
+  ]
+ },
+ "branch hall": {
+  "def": "An ancestral hall a branch of a lineage built for its own line of ancestors, below the hall of the lineage's founding ancestor; a sub-branch hall is the same one level further down.",
+  "variants": [
+   "branch hall",
+   "branch halls",
+   "sub-branch hall",
+   "sub-branch halls"
+  ]
+ },
+ "Tosa": {
+  "def": "An old province on the Pacific side of Shikoku, today Kochi Prefecture; Sukumo, whose town history counted the house plots of Yamana village, is in its southwest.",
+  "variants": [
+   "Tosa",
+   "Tosa province"
   ]
  },
  "Youyang Zazu": {

@@ -49,7 +49,7 @@ def behind_house(house: Any, q: Pt) -> bool:
 
 
 def reaches_dooryard(house: Any, q: Pt, reach: float = DOORYARD_REACH_FT) -> bool:
-    """THE RULE (feature 287, water W57; 269 B17, research/homesteads/310): a lane end reaches a farmhouse at its DOORYARD -
+    """THE RULE (feature 287, water W57; 269 B17, research/rendering/ways/020): a lane end reaches a farmhouse at its DOORYARD -
     within `reach` of its threshing yard or its dooryard beds, or in the band `reach` deep in front of its front face.
 
     Never by distance to the house itself: 12 ft of the drawn house counted a lane ending behind the BACK wall as
@@ -75,7 +75,7 @@ class LanesMixin:
         lane (the dispersed pool maps until they are rebuilt). `clearance` is the no-build corridor
         half-width (keep houses off the tread). `connector=True` marks the trodden path that LEAVES the
         village for the wider world - it MUST run off the map edge (checked), never stop mid-landscape.
-        See research/ways.html 'What vehicle used a village lane, and where could the lane run?'."""
+        See research/ways.html 'Village lanes'."""
         # a lane KEEPS ITSELF RECORDED (feature 287 M8): the web reshapes lanes in place, and each reshape is asked of the
         # registry of what stands at the write (`Kept`) - so a repair cannot lay a lane on what the overlap matrix forbids
         # ...AND IT IS ASKED BEFORE IT IS RECORDED OR INKED (feature 287, water W53): every placer that lays a lane chose it among
@@ -220,7 +220,7 @@ class LanesMixin:
         the trim happens here instead, after the flush, by rewriting the ink in the stream slots the
         lane already owns - the lane keeps its exact draw position and nothing re-layers.
 
-        A FARMHOUSE IS REACHED AT ITS DOORYARD (269 B17, research/homesteads/310: "a lane that serves a farmhouse ends at
+        A FARMHOUSE IS REACHED AT ITS DOORYARD (269 B17, research/rendering/ways/020: "a lane that serves a farmhouse ends at
         that house's dooryard ... a lane end that reaches nothing is pulled back to the last house it serves"). An end serves
         a house when it stands within `dooryard_reach` of the house's drawn footprint, yard or beds, or within `house_reach`
         of its center while the house still lies ahead of it - never past it. It was 90 ft from the CENTER, in any

@@ -32,7 +32,7 @@ def _angle_between(run: Any, other: Any) -> float:
 
 _LANE_MIN_FT = 71.0  # one homestead's frontage: below this a lane can front nobody (see trim_lane_stubs)
 
-# A LANE THAT SERVES A FARMHOUSE ENDS AT ITS DOORYARD (269 B17, research/homesteads/310 - "a lane that serves a farmhouse
+# A LANE THAT SERVES A FARMHOUSE ENDS AT ITS DOORYARD (269 B17, research/rendering/ways/020 - "a lane that serves a farmhouse
 # ends at that house's dooryard, or runs on to reach something a reader can see"; how close counts as serving is the
 # record's GUESS). It was 90 ft to the house's CENTER here, which let an end run 60 ft past the last steading into the
 # grass. The figure is hamletgen's `STEADING_ARRIVAL_FT`, derived there from the clip (a tread that reaches a plot records

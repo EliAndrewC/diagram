@@ -1,4 +1,4 @@
-"""THE ROW VILLAGE'S STREETS (feature 291 amendment 3, plan D17; research/homesteads/155 and 156) - each street the row
+"""THE ROW VILLAGE'S STREETS (feature 291 amendment 3, plan D17; research/homesteads/155) - each street the row
 seating planned (`homesteads/rows.py`, `s._row_streets`) laid as ONE continuous way along its row, a rank wider than
 the lanes off it, joined to the connector or to the street before it; and each row farm's way ending on its OWN street.
 

@@ -71,14 +71,14 @@ def test_a_directory_that_is_not_a_bundle_is_never_cleared(tmp_path: pathlib.Pat
 
 def test_a_question_bundle_on_the_real_record(tmp_path: pathlib.Path) -> None:
     out = tmp_path / "bundle"
-    assert cb.main(["ways", "--section", "010", "--out", str(out), "--no-quotes", "--root", str(REPO)]) == 0
+    assert cb.main(["ways", "--section", "200", "--out", str(out), "--no-quotes", "--root", str(REPO)]) == 0
     names = {p.relative_to(out).as_posix() for p in out.rglob("*") if p.is_file()}
-    assert {"010-how-far-past-the-bank-does-a-bridge-land.html", "010-how-far-past-the-bank-does-a-bridge-land.notes.html"} <= names
+    assert {"200-road-bridges-over-rivers-and-canals-hashi.html", "200-road-bridges-over-rivers-and-canals-hashi.notes.html"} <= names
     assert {"prepass.txt", "glossary-variants.txt", "MANIFEST.md"} <= names
     assert "sources/ritter-timber-bridges.html" in names, "non-vacuity: the entry cites a registered work"
     assert "WORDS TO RULE ON" in (out / "prepass.txt").read_text(encoding="utf-8")
     manifest = (out / "MANIFEST.md").read_text(encoding="utf-8")
-    assert ".claude/skills/diagram/research/ways/010-how-far-past-the-bank-does-a-bridge-land.html" in manifest, "the origin is named"
+    assert ".claude/skills/diagram/research/ways/200-road-bridges-over-rivers-and-canals-hashi.html" in manifest, "the origin is named"
     assert "counts on the first line" in manifest
 
 
@@ -110,9 +110,9 @@ def test_a_source_bundle_holds_the_entry(tmp_path: pathlib.Path, monkeypatch: py
 
 def test_the_manifest_holds_every_copy_so_a_check_reads_one_file(tmp_path: pathlib.Path) -> None:
     out = tmp_path / "bundle"
-    assert cb.main(["ways", "--section", "010", "--out", str(out), "--no-quotes", "--root", str(REPO)]) == 0
+    assert cb.main(["ways", "--section", "200", "--out", str(out), "--no-quotes", "--root", str(REPO)]) == 0
     manifest = (out / "MANIFEST.md").read_text(encoding="utf-8")
-    fragment = (out / "010-how-far-past-the-bank-does-a-bridge-land.html").read_text(encoding="utf-8").rstrip()
+    fragment = (out / "200-road-bridges-over-rivers-and-canals-hashi.html").read_text(encoding="utf-8").rstrip()
     assert fragment in manifest and "WORDS TO RULE ON" in manifest, "the fragment and the prepass are inline"
     assert "sources/ritter-timber-bridges.html` - origin" in manifest
     assert "glossary-variants.txt` - origin" not in manifest, "the grep target stays a file of its own"
@@ -149,35 +149,35 @@ def test_a_recheck_verbatim_report_keeps_the_notes_the_excerpt_quotes(tmp_path: 
 
 
 def test_make_notes_prints_the_named_notes_and_refuses_without_keys(capsys: pytest.CaptureFixture[str]) -> None:
-    assert cb.main(["ways", "--section", "010", "--notes", "ritter-timber-bridges", "--print-notes", "--root", str(REPO)]) == 0
+    assert cb.main(["ways", "--section", "200", "--notes", "ritter-timber-bridges", "--print-notes", "--root", str(REPO)]) == 0
     out = capsys.readouterr().out
     assert 'data-note="ritter-timber-bridges"' in out and out.count("<li data-note=") == 1
-    assert cb.main(["ways", "--section", "010", "--print-notes", "--root", str(REPO)]) == 2
+    assert cb.main(["ways", "--section", "200", "--print-notes", "--root", str(REPO)]) == 2
 
 
 def test_each_check_gets_only_its_own_parts(tmp_path: pathlib.Path) -> None:
     """D14: a quote-check bundle holds no word list, variant index or registry entries; a record-format bundle holds no
     quote report or registry entries - the question and its notes are in both."""
     rf = tmp_path / "rf"
-    assert cb.main(["ways", "--section", "010", "--out", str(rf), "--no-quotes", "--for", "record-format", "--root", str(REPO)]) == 0
+    assert cb.main(["ways", "--section", "200", "--out", str(rf), "--no-quotes", "--for", "record-format", "--root", str(REPO)]) == 0
     names = {p.relative_to(rf).as_posix() for p in rf.rglob("*") if p.is_file()}
     assert {"prepass.txt", "glossary-variants.txt"} <= names and not any(n.startswith("sources/") for n in names)
     qc = tmp_path / "qc"
-    assert cb.main(["ways", "--section", "010", "--out", str(qc), "--no-quotes", "--for", "quote-check", "--root", str(REPO)]) == 0
+    assert cb.main(["ways", "--section", "140", "--out", str(qc), "--no-quotes", "--for", "quote-check", "--root", str(REPO)]) == 0
     names = {p.relative_to(qc).as_posix() for p in qc.rglob("*") if p.is_file()}
     assert "prepass.txt" not in names and "glossary-variants.txt" not in names and not any(n.startswith("sources/") for n in names)
-    assert "010-how-far-past-the-bank-does-a-bridge-land.notes.html" in names
+    assert "140-ferries-and-fords-watashi.notes.html" in names
     rs = tmp_path / "rs"
-    assert cb.main(["ways", "--section", "010", "--out", str(rs), "--no-quotes", "--for", "record-style", "--root", str(REPO)]) == 0
+    assert cb.main(["ways", "--section", "200", "--out", str(rs), "--no-quotes", "--for", "record-style", "--root", str(REPO)]) == 0
     names = {p.relative_to(rs).as_posix() for p in rs.rglob("*") if p.is_file()}
     assert {"STYLE.md", "style-prepass.txt", "glossary-variants.txt"} <= names and "prepass.txt" not in names, "feature 292: record-style reads the guide itself, and its own prepass"
     assert not any(n.endswith(".notes.html") for n in names), "feature 292: record-style judges prose - no notes unless it audits a merge"
     rsx = tmp_path / "rsx"
     old = REPO / ".claude/skills/diagram/research/ways" / next(n for n in names if n.endswith(".html") and n[:3].isdigit())
-    assert cb.main(["ways", "--section", "010", "--out", str(rsx), "--no-quotes", "--for", "record-style", "--extra", str(old), "--root", str(REPO)]) == 0
+    assert cb.main(["ways", "--section", "200", "--out", str(rsx), "--no-quotes", "--for", "record-style", "--extra", str(old), "--root", str(REPO)]) == 0
     assert any(p.name.endswith(".notes.html") for p in rsx.iterdir()), "a merge audit accounts for the notes, so it is handed them"
     ed = tmp_path / "ed"
-    assert cb.main(["ways", "--section", "010", "--out", str(ed), "--no-quotes", "--for", "entry-drift", "--root", str(REPO)]) == 0
+    assert cb.main(["ways", "--section", "200", "--out", str(ed), "--no-quotes", "--for", "entry-drift", "--root", str(REPO)]) == 0
     assert not any(p.name.endswith(".notes.html") for p in ed.iterdir()), "entry-drift compares a modal with the prose"
     tc = tmp_path / "tc"
     assert cb.main(["homesteads", "--section", "010", "--out", str(tc), "--no-quotes", "--for", "translation-check", "--root", str(REPO)]) == 0
@@ -287,6 +287,6 @@ def test_an_entry_bundle_lists_its_residue_pages(tmp_path: pathlib.Path, monkeyp
 
     monkeypatch.setattr(cb, "run_script", run)
     out = tmp_path / "q"
-    assert cb.main(["ways", "--section", "010", "--for", "quote-check", "--out", str(out), "--root", str(REPO)]) == 0
+    assert cb.main(["ways", "--section", "140", "--for", "quote-check", "--out", str(out), "--root", str(REPO)]) == 0
     assert "| `pages/` | `the host's page cache (feature 288)` |" in (out / "MANIFEST.md").read_text(encoding="utf-8")
     assert (out / "pages" / "01-example.org.txt").is_file()

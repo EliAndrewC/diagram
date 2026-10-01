@@ -53,7 +53,7 @@ def prefix(position: int, digits: int = SECTION_DIGITS) -> str:
 
 
 def section_file(position: int, heading_id: str) -> str:
-    """`010-how-far-past-the-bank-does-a-bridge-land.html`."""
+    """`010-road-bridges-over-rivers-and-canals-hashi.html`."""
     return f"{prefix(position)}-{heading_id}.html"
 
 

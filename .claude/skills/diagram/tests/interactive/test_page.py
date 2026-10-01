@@ -191,10 +191,11 @@ def test_the_questions_come_in_the_entry_s_order_and_every_class_that_names_a_se
     that resolved to nothing was `fallow`, whose link was hidden already - until feature 269 (K1) wrote it from
     fields/250, so now every class names a findable section."""
     qs = research_questions(CLASSES["farmhouse"].entry)
-    assert [q["text"][:30] for q in qs] == ["Farmhouses (minka)", "The farmstead and what stood o", "Is every farmhouse reached by ", "How our maps draw farmhouses (", "How our maps draw the farmstea"], qs
-    assert all(q["url"].startswith(RESEARCH_PAGES + "homesteads.html#") for q in qs[:3])
+    assert [q["text"][:30] for q in qs] == ["Farmhouses (minka)", "The farmstead and what stood o", "Village lanes", "How our maps draw farmhouses (", "How our maps draw the farmstea"], qs
+    assert all(q["url"].startswith(RESEARCH_PAGES + "homesteads.html#") for q in qs[:2])
+    assert qs[2]["url"] == RESEARCH_PAGES + "ways.html#village-lanes"
     assert qs[0]["url"].endswith("#farmhouses-minka")
-    # file order would put the farmstead entry (homesteads/140) and the lane entry (080) before the farmhouse entry (400); the entry's order wins
+    # file order would put the farmstead topic before the farmhouse topic; the entry's order wins (the lane entry moved to the ways page in the feature 292 sweep)
     assert [q["url"] for q in research_questions(CLASSES["farmhouse"].entry)] == [q["url"] for q in qs], "deterministic"
     unresolved = sorted(k for k, fc in CLASSES.items() if not research_questions(fc.entry))
     assert unresolved == [], "every class's entry names at least one findable section"
