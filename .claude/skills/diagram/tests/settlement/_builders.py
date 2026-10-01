@@ -52,7 +52,7 @@ def _covered(s):
     for k, z in s._cover_slots.items():
         if k == "defs":
             continue
-        for d in re.findall(r'<path d="([^"]+)"', s.out[z][len(was[k]) :]):
+        for d in re.findall(r'<path d="([^"]+)" fill="url\(#cover-(?!\w+-clumps)', s.out[z][len(was[k]) :]):
             for ring in re.findall(r"M([^Z]+)Z", d):
                 shape = shape.symmetric_difference(Polygon([tuple(map(float, q.split(","))) for q in ring.split("L")]))
     return shape

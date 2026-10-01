@@ -177,3 +177,10 @@ def test_a_band_the_inner_tolerance_misses_at_an_acute_corner_is_contained_all_t
     monkeypatch.setattr(primitives, "KEEPOUT_GROWTHS", 1)
     with pytest.raises(ValueError, match="contains its band"):
         keepout_ring(crest, band, 1.0)
+
+
+def test_ring_offset_takes_a_hairpin_on_its_first_edge() -> None:
+    """A vertex where the ring doubles straight back has no miter: its push falls back to the first edge's normal."""
+    hairpin = [(0.0, 0.0), (100.0, 0.0), (0.0, 0.0), (0.0, 100.0)]
+    ring = ring_offset(hairpin, 10.0, 5.0)
+    assert len(ring) >= 8 and all(math.isfinite(c) for q in ring for c in q)

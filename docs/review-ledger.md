@@ -287,3 +287,6 @@ or a later pass found what this one should have).
 | 2026-10-01 | spec-fidelity-verify | feature 299, round 2 | CHANGES REQUIRED (2) | reed base tile past its overlay; Assumptions |
 | 2026-10-01 | spec-fidelity-verify | feature 299, round 3 | CHANGES REQUIRED (1) | plan named one overlay repeat |
 | 2026-10-01 | spec-fidelity-verify | feature 299, round 4 | FAITHFUL | - |
+| 2026-10-01 | spec-fidelity | feature 299 plan decisions, round 1 | BLOCKED | the pond box cut out of the marsh square |
+| 2026-10-01 | spec-fidelity | feature 299 plan decisions, round 2 | CLEAR | 12 decisions within |
+| 2026-10-01 | record-format | vegetation 125 (feature 299) | 0/0/0, 3 wording fixes | applied |

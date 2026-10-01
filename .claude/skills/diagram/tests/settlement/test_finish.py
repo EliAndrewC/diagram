@@ -315,7 +315,9 @@ def test_flush_covers_draws_each_zone_less_its_bare_ground_in_its_slot_above_the
     s._covers.append(Cover("reed", "marsh", [(0.0, 0.0), (1.0, 0.0)], []))  # not a ring: nothing
     s.flush_covers()
     scrub = s.out[s._cover_slots[("grass", "scrub and rough grazing")]]
-    assert scrub.count("<path") == 1 and f'url(#{pattern_id("grass", 1.0)})' in scrub and 'fill-rule="evenodd"' in scrub
+    assert (
+        scrub.count("<path") == 2 and f'url(#{pattern_id("grass", 1.0)})' in scrub and f'url(#{pattern_id("grass-clumps", 1.0)})' in scrub and 'fill-rule="evenodd"' in scrub
+    )  # the base and its overlay (feature 299)
     assert s.out[s._cover_slots[("reed", "marsh")]] == ""
     assert len(rec["cover"]) == 2, "the clipped frame and the bare square's hole"
     assert pattern_id("grass", 1.0) in s.out[s._cover_slots["defs"]] and pattern_id("reed", 1.0) not in s.out[s._cover_slots["defs"]]

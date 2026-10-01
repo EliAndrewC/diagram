@@ -57,3 +57,44 @@ def test_the_covers_are_tiles_at_the_bottom_and_leave_the_clearings_bare(gen: st
             assert shape.intersection(c).area < 2.0, "a scrub tile on a swept clearing"
     # FR-006: the trees are still drawn one by one
     assert M.get("tree_crowns"), "the crowns are recorded and drawn individually"
+
+
+def test_inashiros_toe_marsh_has_no_laid_corner_or_straight_run() -> None:
+    """Feature 299 SC-001 - the two places the GM named on Inashiro: the toe marsh's top-left corner (laid as a right angle) and
+    its right-hand edge (laid as a straight east-west line). On the recorded (drawn) outline, no corner on open ground is
+    sharper than 120 degrees and no edge runs straight for long: no segment reaches two thirds of the wave's shortest length (the
+    simplified wave's chords run to about 90 ft; the laid line ran 592), except where a field, a dike or the pond cut it (their own straight banks)."""
+    import math
+
+    from l7r.diagram.settlement.land.outline import WAVE_LENGTH_FT
+    from tests.gate import _pool
+
+    with open(_pool.obtain(os.path.join(_POOL, "hamlets", "inashiro", "inashiro.gen.py")), encoding="utf-8") as fh:
+        M = json.load(fh)
+    toe = next(m for m in M["marshes"] if m["role"] == "toe")
+    ring = [(float(x), float(y)) for x, y in toe["poly"]]
+    fields = [Polygon(f["outline"]).buffer(25.0) for f in M.get("fields") or [] if len(f.get("outline") or []) >= 3]
+    pond = M.get("pond")
+    from shapely.geometry import LineString, Point, box
+
+    # the pond cuts the marsh as its own ellipse (`wet.pond_cut`): only the water and its reed ring are a cut-out here, so a box
+    # round the pond - the building keep-out - would show as sharp corners and fail
+    near_cut = [*fields] + ([Polygon([(pond[0] + (pond[2] + 10.0) * math.cos(a / 32 * math.pi), pond[1] + (pond[3] + 10.0) * math.sin(a / 32 * math.pi)) for a in range(64)])] if pond else [])
+    view = M["meta"]["view"]
+
+    frame = box(view[0], view[1], view[0] + view[2], view[1] + view[3])
+    sharp, long_runs = [], []
+    n = len(ring)
+    for i in range(n):
+        a, b, c = ring[i - 1], ring[i], ring[(i + 1) % n]
+        if not frame.contains(Point(b)) or any(z.contains(Point(b)) for z in near_cut):
+            continue
+        v1, v2 = (a[0] - b[0], a[1] - b[1]), (c[0] - b[0], c[1] - b[1])
+        n1, n2 = math.hypot(*v1), math.hypot(*v2)
+        if n1 and n2 and math.degrees(math.acos(max(-1.0, min(1.0, (v1[0] * v2[0] + v1[1] * v2[1]) / (n1 * n2))))) < 120.0:
+            sharp.append(b)
+        seg = LineString([b, c])
+        if seg.length > WAVE_LENGTH_FT[0] * 2 / 3 and frame.contains(seg) and not any(z.intersects(seg) for z in near_cut):
+            long_runs.append((b, c))
+    assert not sharp, f"a sharp corner on open ground: {sharp[:5]}"
+    assert not long_runs, f"a straight run on open ground: {long_runs[:5]}"
