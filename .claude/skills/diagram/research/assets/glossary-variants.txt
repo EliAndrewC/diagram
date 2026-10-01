@@ -498,6 +498,7 @@ courtesy name	courtesy name
 courtesy names	courtesy name
 covering house	ōiya
 cpc	CPC
+crab clan	Crab Clan
 crenel	crenel
 crenelated	crenellated
 crenellated	crenellated
@@ -1588,6 +1589,7 @@ joruri	joruri
 josui	josui
 josui ido	josui-ido
 josui-ido	josui-ido
+jowa	Jowa
 jozabangai-seki	jozabangai-seki
 jsidre	JSIDRE
 ju-jutsu	jujutsu
