@@ -113,6 +113,8 @@ at the foot, and can open the whole record as one page to read straight through 
    `test -x`/`[ -x ]` on a program path, `ls` of a binary path, `<program> --version` - **When** it finishes, **Then** the same
    note is added.
 3. **Given** a check that FINDS the program, or an unrelated failure, **When** it finishes, **Then** no note is added.
+4. **Given** a Claude Code session on the GM's host (not in a container), in any project, **When** a program is missing,
+   **Then** no note is added; **Given** a session in any container, in any project, **Then** the note is added.
 
 ### Edge Cases
 
@@ -193,8 +195,16 @@ at the foot, and can open the whole record as one page to read straight through 
   (the forms in User Story 6) comes up empty.
 - **FR-023**: The hook MUST stay silent when the program is found or the failure is unrelated, and note a program at most
   once per session.
-- **FR-024**: The hook MUST have its test companion in `make hooks-test` (every listed form fires; a found program and an
-  unrelated failure do not) and a row in `docs/guards.md` and the `CLAUDE.md` guard table.
+- **FR-024**: The hook MUST be USER-LEVEL, in every project the GM runs (GM, 2026-10-01: *"I do want this hook to apply to
+  all of my projects. In many different directories, in many different containers"*): its script under `~/.claude/hooks/`
+  and its registration in `~/.claude/settings.json` - the host's own `~/.claude`, which every container mounts - not in
+  this repository's settings.
+- **FR-025**: The hook MUST fire only inside a container (GM: *"all containers have sudo access"*, and host sessions do
+  not): it detects a container (podman's `/run/.containerenv`, docker's `/.dockerenv`, a container cgroup or `container`
+  environment variable) and is silent on the host.
+- **FR-026**: The hook MUST have a self-test beside it under `~/.claude/hooks/` (every listed form fires in a container;
+  a found program, an unrelated failure, and any miss on the host stay silent), run by this repository's `make hooks-test`
+  when present, and a row in `docs/guards.md` and the `CLAUDE.md` guard table marking it user-level.
 
 ### Key Entities
 
@@ -221,7 +231,9 @@ at the foot, and can open the whole record as one page to read straight through 
   resolved.
 - **SC-007** (FR-017-FR-021): the rewritten history verifies tree-for-tree; `.git` on the main checkout measured before and
   after (expected about 236 MB -> about 85-90 MB); every clone's root commit matches main's; a seeded unrelated-history clone is refused.
-- **SC-008** (FR-022-FR-024): the hook test fires on every listed form and stays silent on found programs and unrelated failures.
+- **SC-008** (FR-022-FR-026): the hook's self-test fires on every listed form in a container and stays silent on found
+  programs, unrelated failures and every miss with the container markers absent; the hook is registered in
+  `~/.claude/settings.json`, not in this repository's.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 

@@ -70,3 +70,7 @@ And for what it's worth, I think I do want to do the git history scrub to free u
   whose history is unrelated to main's; an old-to-new hash map is recorded. `git gc --aggressive --prune=now` on
   /diagram by the session. Measured on a scratch mirror: 236 MB now, 102 MB after gc alone, 85 MB after gc plus a
   scrub of every version (an upper bound).
+
+## 2026-10-01, eleventh message
+
+One thing to keep in mind about this hook is that I want it to inform you that you have sudo rs access if you are running in a container, but I do occasionally run Claude code sessions from my host. And so I guess ideally the hook would check and see whether or not we are in a container or not. Because I do want this hook to apply to all of my projects. In many different directories, in many different containers. But all containers have sudo access.
