@@ -36,10 +36,12 @@ Order: Phase 0 measures and decides; Phase 1 (T10 onward) runs only on GO, its t
 - [x] T12 [US2] Inashiro regenerated and gated; then the pool (`make maps`); every map green (SC-006)
       research: rendering
       verify: DONE. DONE. make done green on 1249742be+ (6676 passed, FULL, every pool map rolled under test-full; coverage 100%); Inashiro's two gate failures (toe-marsh straight run, B7 corridor tread) fixed in c774680b4
-- [ ] T13 [US2] Research pointers that name the retired machinery re-aimed; the glyph-check the Occasions owe
+- [x] T13 [US2] Research pointers that name the retired machinery re-aimed; the glyph-check the Occasions owe
       research: rendering
+      verify: DONE. DONE. research fragments' code pointers re-aimed at partition/settle/tint (c774680b4); glyph checks: paddy on inashiro PASS round 2 (round 1's F1-F4 fixed, R5), alder PASS, woodland commons PASS x2, grave island PASS x2, homestead bamboo PASS round 2 (its round-1 errors fixed)
 - [x] T13b [US2] [US3] The 10- and 20-household fields compared cell by cell with the carve's (plot count, cell-size distribution, the longest cells) in the harness before the push - the plan review's round-3 note: the glyph check on Inashiro cannot see the narrow-sector and edge-strip cases R2 found there; a finding is fixed in the lattice
       research: rendering
       verify: DONE. DONE. research R4: first cut 19/26 cells over 3 design cells at 10/20 hh (carve 3/5); four lattice causes measured and fixed (CROSS, _rows_kept, keep_rows, recut); after: 10 hh 0 over 2 cells (carve 13), 20 hh 2 (19), largest and longest below the carve's at both
-- [ ] T14 [US2] [US3] The `302-end` bookend, the harness against the base (SC-005), `make done` green (SC-008)
+- [x] T14 [US2] [US3] The `302-end` bookend, the harness against the base (SC-005), `make done` green (SC-008)
       research: rendering
+      verify: DONE. DONE. 302-end vs 302-start 15.3 -> 12.7 s (-17.0%, band 0, owes nothing); fit_field 5.72 -> 3.05 s vs main (R4); make done green on the final engine
