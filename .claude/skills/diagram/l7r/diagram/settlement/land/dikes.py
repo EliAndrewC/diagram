@@ -170,9 +170,12 @@ class DikeMixin:
         is a POST-1949 industrial shape. So `inner_env` (the rectilinear grid boundary) is the dike's INNER
         face, and this draws the OUTER face as an organic curve bulging outward by a VARYING amount (the dike
         width varies - thicker on the exposed water side / at pressure points, pinched where repaired), with
-        rounded non-square corners, filled as a mottled vegetated earthwork. TRUE SCALE: a perimeter dike ran
-        ~6-10 m+ wide (wider than the ~6.7 m inter-pond mulberry dikes it rings, not the old under-scale
-        4.4 px line), so the band is drawn to true width, not floored. Records M['dikes']; labeled (a polder
+        rounded non-square corners, filled as a mottled vegetated earthwork. WIDTH: no village polder's own
+        dike width was read; the one bound is the Echizen river dikes' ~18 ft foot, which a village dike stood
+        below. The (14, 40) ft band runs past it by a map drawing CONVENTION, so the ring reads as the greater
+        bank beside the 23 ft crop dikes round the fish ponds (the old "~6-10 m+" figure was the pond dikes'
+        modern width, not a polder ring's): research/rendering/archetypes.html "How our maps draw a polder's
+        dike and its trees". Records M['dikes']; labeled (a polder
         dike is NOT an "obvious" feature - the GM asked for it named)."""
         from l7r.diagram.waterfields import BUND
 
