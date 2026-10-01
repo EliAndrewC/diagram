@@ -502,7 +502,7 @@ class GranaryStilts(Kind):
     Covers: the posts at the granary's foot
     Label: accurate
     Sources: takayukashiki-jawiki, takayama-onkura-heritage, kuramae-jawiki, wheatbaku-asakusa-okura
-    Entry: research/buildings.html - 'Did a granary stand on posts, and why raise its floor away from a river?'; research/cities/capitals.html - "The sluice's lifting frame"
+    Entry: research/buildings.html - 'Did a granary stand on posts, and why raise its floor away from a river?'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'
     """
 
     key = "granary stilts"

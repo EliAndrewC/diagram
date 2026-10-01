@@ -708,8 +708,6 @@ dry-field conversion	kanden
 ds/m	dS/m
 dujiangyan	Dujiangyan
 dunhuang	Dunhuang
-duty cycle	duty cycle
-duty cycles	duty cycle
 duty of water	water duty
 dwarf bamboo	sasa
 dōba	dōba
