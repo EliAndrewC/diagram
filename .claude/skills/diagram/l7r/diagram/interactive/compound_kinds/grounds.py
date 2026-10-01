@@ -321,6 +321,7 @@ class ShrineGrove(Kind):
     key = "shrine grove"
 
 
+# The GM's ruling: the compound wall is drawn 3 ft thick, the heavier of the two real forms.
 class CompoundWall(Kind):
     """
     What: The heavy wall around the whole compound: earth rammed or laid up thick, under its own
@@ -333,7 +334,7 @@ class CompoundWall(Kind):
     for patching.
 
     Note: we have drawn the compound wall 3 ft thick, the heavier of the two real forms, in order to make its
-    stroke read on the plan (the GM's ruling). Two forms of earth wall are attested: the lighter wall of earth or
+    stroke read on the plan (by this project's choice). Two forms of earth wall are attested: the lighter wall of earth or
     clay laid up without a frame, or plastered over posts, about 1 to 2 ft thick - a surviving late-Edo neribei
     measures 0.6 m, about 2 ft, across its base - and the rammed-earth tsuijibei, built up to about 1 m (3.3 ft)
     thick. In Kanazawa, samurai of middle rank and above walled their land with earth while foot soldiers kept
@@ -404,12 +405,12 @@ class SideGate(Kind):
     Note: The service doors follow the record, though the dictionary names only the kitchen door and that it
     opens into work space is this record's reading, and a guests' door opening into a garden rather than a court is a guess, since no page read puts a garden before an entrance. That a night-soil collector never has to cross the inner
     court is this record's own rule rather than a finding. A cart gate or landing gate that carts pass is the
-    setting's own: carts were kept to the towns and off the highways in Edo Japan, and the GM's notes put
+    setting's own: carts were kept to the towns and off the highways in Edo Japan, and the setting's notes put
     wagons and carts on the roads.
 
     Caveat: That a night-soil collector never has to cross the inner court is this record's own rule rather
     than a finding. A cart gate or landing gate that carts pass is the setting's own: carts were kept to the
-    towns and off the highways in Edo Japan, and the GM's notes put wagons and carts on the roads.
+    towns and off the highways in Edo Japan, and the setting's notes put wagons and carts on the roads.
 
     Name: side gate
     Covers: the posts of the posterns, service gates, landing gate, cart gate and guests' door
@@ -491,7 +492,7 @@ class CartYard(Kind):
 
     Note: carts at a county compound are the setting's own departure from Edo Japan, where carts were kept to the
     towns and barred from the highways to the end of the shogunate, though the hand cart, its bed about 8 by 2.5
-    ft, spread through the castle towns and beyond them by late Edo; the GM's notes put wagons and carts on the
+    ft, spread through the castle towns and beyond them by late Edo; the setting's notes put wagons and carts on the
     roads between towns. The apron's 15 to 20 ft width is this record's own calibration, which no source read
     states; how far a store stands from other buildings is a guess, the 30 ft once derived here resting on modern
     fire guidance.
@@ -616,7 +617,7 @@ class StrikingPosts(Kind):
     gear that stands on it.
 
     Note: we have drawn the striking posts as small markers of where each stands rather than at their own size,
-    in order to mark the open ground as a practice ground by its gear, the GM's convention for these plans; a
+    in order to mark the open ground as a practice ground by its gear, this project's convention for these plans; a
     real upright post stood a little over 4 ft above the ground. The upright post is Satsuma practice, its school's founder of 1561-1643;
     carrying it to a practice ground outside that line is a guess, and so is the count.
 

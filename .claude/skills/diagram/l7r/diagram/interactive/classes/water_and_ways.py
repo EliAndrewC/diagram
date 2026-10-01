@@ -9,6 +9,8 @@ from __future__ import annotations
 from ._base import Kind
 
 
+# The GM's rulings: stream width by rank in the water hierarchy, junctions not conserving width (2026-08-16);
+# the earlier width ladder, a stream feeding a moat drawn as wide as the moat (2026-07-21).
 class Stream(Kind):
     """
     What: A natural brook off the high ground, feeding the head of the field at an intake on its bank.
@@ -19,9 +21,9 @@ class Stream(Kind):
 
     Note: we have drawn the stream's width by its RANK in the water hierarchy rather than by the water it carries, in
     order to keep brook, head race and ditch readable at every zoom - so junctions do not conserve width
-    (the GM's ruling of 2026-08-16). The two rulings behind this modal do not quite agree, and the record
-    has not reconciled them: the width ladder (the GM's ruling of 2026-07-21) draws a stream feeding a moat
-    as wide as the moat, because the water that enters has to be carried, while the later ruling sizes
+    by this project's choice. The two choices behind this modal do not quite agree, and the record
+    has not reconciled them: the width ladder (this project's earlier choice) draws a stream feeding a moat
+    as wide as the moat, because the water that enters has to be carried, while the later choice sizes
     every stroke by its own rank with no coordination across a junction. The stream's type and place are read. The 2 m is not: no page read gives a village
     creek a width, and the 0.3 m it is measured against is the Rites of Zhou's finest channel, one chi - an
     ideal, not a survey - matched by a 1657 village intake of about 21 cm and by a modern design MINIMUM, the
@@ -378,6 +380,7 @@ class VillageLane(Kind):
     key = 'village lane'
 
 
+# The GM's ruling: a farm-ditch crossing is laid over water 2 ft wide or more.
 class Footbridge(Kind):
     """
     What: A small single-file crossing laid over a ditch too wide to step across, or a small timber deck where
@@ -395,10 +398,10 @@ class Footbridge(Kind):
     the crossing is for is a guess; which one a settlement lays is rolled with an even chance, and that
     evenness is a guess - the one proportion read, for river bridges and from an article that cites no
     sources, would make the planked deck far rarer than logs under earth. No page read says at what width a
-    farm ditch was bridged: a crossing is laid over water 2 ft wide or more by the GM's ruling, about 4 ft wide
+    farm ditch was bridged: a crossing is laid over water 2 ft wide or more by this project's choice, about 4 ft wide
     by another, and where along a ditch it stands and how often is a guess.
 
-    Caveat: no page read shows one laid where a bund path meets a paddy ditch, so what the crossing is for is a guess; which one a settlement lays is rolled with an even chance, and that evenness is a guess - the one proportion read, for river bridges and from an article that cites no sources, would make the planked deck far rarer than logs under earth. No page read says at what width a farm ditch was bridged: a crossing is laid over water 2 ft wide or more by the GM's ruling, about 4 ft wide by another, and where along a ditch it stands and how often is a guess.
+    Caveat: no page read shows one laid where a bund path meets a paddy ditch, so what the crossing is for is a guess; which one a settlement lays is rolled with an even chance, and that evenness is a guess - the one proportion read, for river bridges and from an article that cites no sources, would make the planked deck far rarer than logs under earth. No page read says at what width a farm ditch was bridged: a crossing is laid over water 2 ft wide or more by this project's choice, about 4 ft wide by another, and where along a ditch it stands and how often is a guess.
 
     Name: footbridge
     Covers: `bridges[foot]` - every plank and deck over water

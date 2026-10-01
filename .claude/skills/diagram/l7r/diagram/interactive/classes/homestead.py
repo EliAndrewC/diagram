@@ -9,6 +9,7 @@ from __future__ import annotations
 from ._base import Kind
 
 
+# The GM's ruling: a farmhouse's work yard and garden beds always line up with their house.
 class Farmhouse(Kind):
     """
     What: The dwelling of one farming household: a thatched minka, its ridge on the long axis, standing on the
@@ -25,7 +26,7 @@ class Farmhouse(Kind):
     streets curve - and curving streets, which its surveyors suppose follow the contours, are seen on the land-survey maps of a village moved to its site in 1736, though which of them were laid before 1868 the paper does not say. So
     each settlement rolls a common bearing near south, and each house turns a little with the lane and the field edge it
     stands on, never more than about 30 degrees; no house is turned a quarter away. Its work yard and garden beds turn
-    with it: the GM ruled that they always line up with their house. About one farm in eight carries a storehouse
+    with it: this project draws them always lined up with their house. About one farm in eight carries a storehouse
     against its back wall, a village headman's always.
 
     Note: Placement follows the read record; that every house in a nucleated cluster is reached by a lane holds in the villages read, though no page states it as a rule; the alleys-off-the-spine form is read only in one surveyed twentieth-century Manchu village on the dry northern plain, the back lane only for planned English villages, and that alleys mean a village grew while a back lane means it was planned is this record's reading, not a source's. The setback from the paddy is stated in feet by no source:
@@ -388,12 +389,14 @@ class HenCoop(Kind):
     key = 'hen coop'
 
 
+# The GM's ruling: the old-families pattern for household shrines (rare, notable when it appears; three to
+# eight households in a hundred), over the every-house pattern of other regions.
 class HouseholdShrine(Kind):
     """
     What: A household's own small shrine - a stone or wooden hokora in a corner of the plot, drawn vermilion with
     a torii before its door.
 
-    Why: In some regions every house had one, in others only certain old families; the GM ruled for the
+    Why: In some regions every house had one, in others only certain old families; this project draws the
     old-families pattern here - rare, and notable when it appears - so the count is capped at three to eight
     households in a hundred. It stands in the plot's northwest, northeast or southwest corner, all three
     attested.

@@ -120,6 +120,9 @@ the pilot; the GM reads the pages in this feature's clone.
   prepass fails any other; a gloss whose characters or meaning changed is owed a `translation-check`.
 - **FR-028** (GM 2026-09-30): no glossary variant is a common English word ("are" wrapped as the land unit); a gate test
   holds it - the term keeps its unambiguous forms ("ares") or is matched only as written.
+- **FR-029** (GM 2026-10-01): every map modal's references point at the sections as they now stand - each title a modal's
+  `Entry:` quotes names a section that exists, held by a test over every title, not only every entry - and the
+  references box opens with "Topics we researched for this map feature:".
 - **FR-011**: The GM's sign-off on the guide and the check MUST be an open task, and the sweep's tasks MUST NOT be
   written or started before it is ticked.
 
@@ -142,8 +145,9 @@ the pilot; the GM reads the pages in this feature's clone.
 - **SC-010** (FR-013): a unit test proves the prepass lists an unconverted metric figure in the prose and never one in a
   quotation, a comment or with its conversion beside it.
 - **SC-008** (FR-011, spec-wide): the tasks file ends the pilot in an unticked GM sign-off task.
-- **SC-011** (FR-014): the style prepass lists "GM" in a section's visible text, with its test; the restyled record
-  shows no GM ruling (the prepass's GM list empty on every section).
+- **SC-011** (FR-014): the style prepass lists "GM" in a section's visible text, with its test, and its list is empty on
+  every restyled section; `tests/interactive/test_modal_no_gm.py` fails on any map modal whose visible text (its What,
+  Why, Note, Caveat or Name) names the GM; `record-style` and `record-format` report a visible "GM".
 - **SC-012** (FR-015): `record-style` rule 9a judges number against the map; every restyled section passed it in its
   check session.
 - **SC-013** (FR-016): `research/confusables.json` holds the pairs once; `tests/interactive/test_confusables.py` fails on a
@@ -153,9 +157,11 @@ the pilot; the GM reads the pages in this feature's clone.
 - **SC-015** (FR-018): the style prepass lists a paragraph over 150 words, with its test; its list is empty on every
   restyled section.
 - **SC-016** (FR-019): `scripts/check-question-size.py` counts prose only, and `make check-bundle ... FOR=quote-check`
-  splits notes into bundles of at most 12,000 bytes, each with its test.
-- **SC-017** (FR-020): `tests/interactive/test_originals.py` proves an original is moved apart by `make record`, put back by
-  the assembly, and collapsed behind a toggle on the page.
+  splits notes into bundles of at most 12,000 bytes, each with its test; `record-style` (but for a merge audit) and
+  `entry-drift` are handed no notes (`tests/tooling/test_check_bundle.py`).
+- **SC-017** (FR-020): `tests/interactive/test_originals.py` proves an original is moved apart by `make record` and put
+  back by the assembly; the browser test (`tests/full/interactive/page_browser/test_synthetic.py`) proves it is hidden
+  on the page and in the hover and shown by its toggle.
 - **SC-018** (FR-021): the browser test places the heading's link on the heading's own row, floated right.
 - **SC-019** (FR-022): `tests/interactive/test_footnotes.py` fails on "(the source's own English)" or "translated from the
   ... by this project" anywhere in the record.
@@ -169,6 +175,8 @@ the pilot; the GM reads the pages in this feature's clone.
 - **SC-024** (FR-027): the style prepass lists kanji in our own words without its `(romaji, "meaning")` gloss, with its
   test, and `make translation-owed` lists a changed gloss.
 - **SC-025** (FR-028): `tests/interactive/test_record_format.py` fails on a glossary variant that is a common English word.
+- **SC-026** (FR-029): `tests/interactive/test_entry_titles.py` fails on any quoted title that names no section, and
+  `tests/interactive/test_page.py` holds the references lead-in.
 
 ## Decisions Recorded
 
@@ -190,9 +198,16 @@ the pilot; the GM reads the pages in this feature's clone.
 ## Out of scope
 
 - Rewriting any section other than the pilot's topics before the GM's sign-off.
-- The map modals' own prose, except where a merge re-aims an `Entry:` tag.
+- The map modals' own prose, except where a merge re-aims an `Entry:` tag, a modal's text drifts from its remade section
+  (the sweep's `entry-drift` checks), a ruling of the GM's shows (FR-014), or its references and their lead-in (FR-029).
 
 ## Review history
+
+- **Amendment, round 1** (spec-fidelity, 2026-10-01): the success criteria SC-011 to SC-025 added for FR-014 to FR-028
+  (spec-lint). CHANGES REQUIRED: SC-011 to cover the modals (19 still named the GM - rewritten, and a test added);
+  SC-017 to name the browser test for the collapse; SC-016 to carry the no-notes clause; the GM's request on the
+  modals' references made FR-029 and SC-026, and the out-of-scope line narrowed; the GM's messages of 2026-09-29 and
+  10-01 that the criteria rest on added to request.md verbatim. All applied.
 
 - **Round 1** (spec-fidelity, 2026-09-29): REVISE. Kept: the third grove section folded in, the cap raised with the
   GM, the two phases. Fixed: an aside with real content is promoted, not cut; only map-visible statements with no

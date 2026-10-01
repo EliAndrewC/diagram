@@ -11,6 +11,7 @@ from __future__ import annotations
 from ..classes import Kind
 
 
+# The GM's ruling: one roof over the hall and the dwelling is the setting's form for its country shrines.
 class HallAndDwelling(Kind):
     """
     What: The shrine's one building under one roof: the villagers' hall at its center, the country monk's kitchen at
@@ -18,12 +19,12 @@ class HallAndDwelling(Kind):
 
     Why: A village shrine with a monk living at it was a common form before 1868, if an uncounted one - the
     shrine-temple kept by a resident monk - and the monk's dwelling was a farmhouse in form, earth-floored kitchen and
-    matted rooms. One roof over the hall and the dwelling is attested at one temple and is the GM's chosen form for the
+    matted rooms. One roof over the hall and the dwelling is attested at one temple and is this project's chosen form for the
     setting's country shrines; so the building is a farmhouse with a hall at its heart, larger than a farmhouse
     because it contains one.
 
     Note: The resident monk and their farmhouse-form dwelling are read, though no source counts how many village
-    shrines had one; one roof over hall and dwelling is attested once, and called unusual there, and is the GM's form
+    shrines had one; one roof over hall and dwelling is attested once, and called unusual there, and is this project's form
     for the setting. The building's size is set from the record's bands - a village hall about 20
     to 35 ft on a side, the one-roof building 2,100 to 3,600 sq ft, no deeper than the one attested example - and where
     in those bands it falls is a guess.
@@ -119,6 +120,7 @@ class WritingRoom(Kind):
     key = "writing room"
 
 
+# The GM's rulings: the number of arches along the approach and their pitch.
 class ShrineApproach(Kind):
     """
     What: The approach - the path that runs from where the way enters the precinct under its arch to the hall's
@@ -129,9 +131,9 @@ class ShrineApproach(Kind):
     stand over it.
 
     Note: The approach and the arch at its entry are read; its line is drawn to fit the ground, and its innermost arch standing 12 ft off the hall is a map convention; a row of arches at an ordinary shrine is attested only in modern times, and drawn here as a deliberate deviation; its width is a guess, and the arches' number and pitch are
-    the GM's rulings, not the record's.
+    this project's choice, not the record's.
 
-    Caveat: its line is drawn to fit the ground, and its innermost arch standing 12 ft off the hall is a map convention; a row of arches at an ordinary shrine is attested only in modern times, and drawn here as a deliberate deviation; its width is a guess, and the arches' number and pitch are the GM's rulings, not the record's.
+    Caveat: its line is drawn to fit the ground, and its innermost arch standing 12 ft off the hall is a map convention; a row of arches at an ordinary shrine is attested only in modern times, and drawn here as a deliberate deviation; its width is a guess, and the arches' number and pitch are this project's choice, not the record's.
 
     Name: approach
     Covers: the path from the precinct's edge to the hall

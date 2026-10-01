@@ -76,6 +76,7 @@ class SharedBambooGrove(Kind):
     key = 'shared bamboo grove'
 
 
+# The GM's rulings: the maps show the regional northwesterly winter wind unless a place declares its own.
 class Windbreak(Kind):
     """
     What: The village shelter belt - the fengshui back grove: a dense stand of real crowns on the windward one or
@@ -108,7 +109,7 @@ class Windbreak(Kind):
     as a clustered village's pattern is a guess; the 30 ft bare run at which the maps count a hole and fill it is a
     convention, no source giving an opening's width, and the planting resuming on both sides of a lane that crosses
     the belt is a guess, no old record saying how a lane passed through one. The side it stands on, never ringing the cluster, follows the Chinese village's separate grove patches (coggins-minor-2018) and the Sendai farmstead grove - the full ring being reported only of the Izumo plain's farmstead grove and of one island settlement's belt, Tarama's of 1742 in the Ryukyus, and given by the maps only to a farmstead's own grove - kept on the north
-    and west against the northwesterly winter wind (irie-2020-igune, yashikirin-jawiki), and the GM's rulings
+    and west against the northwesterly winter wind (irie-2020-igune, yashikirin-jawiki), and this project's choice
     that the maps show that regional wind unless a place declares its own. The two forms are read (the four-region
     survey, takehara-2004-yashikirin; the delta patches), and so is the bamboo, in the Japanese farmstead grove only
     (tonami-yashikirin-haichi, sendai-igune-modelplan); drawing the Japanese form at village scale is an interpolation,
@@ -198,6 +199,7 @@ class Alder(Kind):
     key = 'alder'
 
 
+# The GM's correction: the copse's fruit trees and bamboo fill the gaps throughout the cluster.
 class Copse(Kind):
     """
     What: The homesteads' own trees in the open ground among the houses - bamboo and fruit trees, useful trees, not
@@ -216,7 +218,7 @@ class Copse(Kind):
 
     Note: That fruit trees and bamboo were the useful species planted in a fengshui wood, and that a homestead's wood
     was its own and ran from about 6,000 to 28,000 sq ft, are read; that they fill the gaps throughout the cluster is
-    the GM's correction, on no page read. The range is a calibration against one register of three households, not a
+    this project's reading, on no page read. The range is a calibration against one register of three households, not a
     survey, and its low end rests on an entry whose sides (9 by 9 ken) do not match its stated area; counting the grove
     and the copse as one wood is this project's decision, because the record knows the wood that stands with a house
     as that homestead's own, on its lot. How the rolls spread across that range is a guess, and a clump stands only
@@ -277,6 +279,7 @@ class WoodlandCommons(Kind):
     key = 'woodland commons'
 
 
+# The GM's ruling: an irrigation channel's bank keeps scrub off by the same 6 ft as a bund.
 class ScrubAndRoughGrazing(Kind):
     """
     What: The cut-over fuel and fodder land around the settlement: grass with a few scraggly pines, grazed and
@@ -292,7 +295,7 @@ class ScrubAndRoughGrazing(Kind):
     that it was cut before modern times, for green manure, is read, and that it was cut as often then is a guess, no page giving the old rate;
     the 6 ft is this record's choice, wider than the one old figure found, and it is a flat-ground figure: on terraced ground the
     kept-cut slope face below a field is wider, at times wider than the field itself, and the map does not set that
-    width. The channel bank takes the same 6 ft by the GM's ruling, and that a bank was kept like a bund at all is this
+    width. The channel bank takes the same 6 ft by this project's choice, and that a bank was kept like a bund at all is this
     record's analogy, no page read speaking of a channel bank; nothing describes how
     the clumps sit within them, so the grass is drawn as one small block repeated, to read as rough grazing rather than as any surveyed pattern.
 

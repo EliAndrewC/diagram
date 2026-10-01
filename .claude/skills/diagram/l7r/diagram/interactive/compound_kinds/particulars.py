@@ -18,6 +18,8 @@ from __future__ import annotations
 from ..classes import Kind
 
 
+# The GM's rulings: a flanking pair of stones, one each side of the road, where canon sets one; and Ochiba's pair
+# drawn larger than canon's two-fist stones (about 3.3 by 4.7 ft), because Ochiba makes and paints them.
 class ThresholdStones(Kind):
     """
     What: A pair of river-stones painted with cinnabar fox-tracks, set one on each side of the road just outside
@@ -34,10 +36,10 @@ class ThresholdStones(Kind):
 
     Note: the threshold stones and the Pact-Bowl are the Fox Clan's road wardings, from the campaign's own
     canon, a departure made by the setting with no historical counterpart. Canon sets one stone at each
-    checkpoint; the flanking pair is the GM's ruling for this drawing, a stone on each side of the road so
+    checkpoint; the flanking pair is this project's choice for this drawing, a stone on each side of the road so
     that neither stands in it. And the pair is drawn larger than canon's stones on purpose - canon makes each
     stone a river-stone the size of two fists, and Ochiba's pair stands about 3.3 by 4.7 ft, because Ochiba is
-    where the threshold stones are made and painted (the GM's ruling).
+    where the threshold stones are made and painted (by this project's choice).
 
     Name: threshold stones
     Covers: the vermilion pair outside the main gate and their label with the "buried Pact-Bowl" sublabel
@@ -153,6 +155,7 @@ class FoxBorder(Kind):
     key = "fox border"
 
 
+# The GM's ruling: the door which receives the Kitsune is the border, so the parley room is built across it.
 class ParleyRoom(Kind):
     """
     What: A room built into the compound's border wall, the border running across its floor; its doors and its
@@ -162,7 +165,7 @@ class ParleyRoom(Kind):
     stepping onto the other's ground. Its inner door opens into a receiving court, never into the court where
     the accused kneel, because the room receives guests.
 
-    Note: a room built across a clan border is part of its map's story, made by the GM's ruling that the door
+    Note: a room built across a clan border is part of its map's story, made by this project's choice that the door
     which receives the Kitsune is the border - a departure with no historical room behind it, since no page
     read describes a room built across a border or two parties meeting on the line itself. Where two powers
     dealt regularly across a border, the forms recorded are a post on each side of the line, facing each

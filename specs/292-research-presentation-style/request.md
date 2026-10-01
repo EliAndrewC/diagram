@@ -213,3 +213,99 @@ On the capital's magistrate's office size:
 > seems like it is no longer valid and should be rewritten to say something like
 >
 > > Topics we researched for this map feature:
+
+## The GM, 2026-09-29, on no visible GM ruling (verbatim, recorded at the sweep's close)
+
+> We should not have anything like this in our research writeup:
+>
+> > The GM ruled on 2026-09-29: because it does sound as if groves completely surrounding farmhouses was a thing, then that should indeed be a tunable knob. It seems like two sides is the minimum. Three sides would sometimes be the case, and all four sides would also sometimes be the case. Offered the split and the flood-ground rise below, the GM accepted both: Your suggestions sound great, so yes, please go with all of that. Both the percentage split and the flood ground adjustment.
+>
+> Now, to be clear, it is okay to capture my rulings in our checked-in repository for your own understanding when implementing later features. For example, this is the kind of thing that could go in code, or if it is useful for you to have this located in the same place as the research write-ups that are intended for humans to read, then you could keep it by having it be hidden. Like, this is in an HTML comment where you will see it when you read the write-up, but it will not be visible to a human or something. But in general, this is not how we want to present this information.
+>
+> Now with that being said, the fact that we have made this ruling probably does mean that there is something worth conveying here. And I think that the thing that is worth conveying is that we know of at least some settlements that had windbreak forests on all four sides. And we know of some settlements that had them on three sides. And we know of some settlements that had them on only two sides. And we know that people chopped down a lot of trees And so we have some good reason to believe, based on our research, that two-sided wind break forests were the most common. followed by three-sided ones, followed by four-sided ones. And so we have somewhat arbitrarily picked fifty percent and thirty percent and twenty percent respectively for those three possibilities. As a tunable knob. Now explaining that is a useful thing. And I think that that is what this bullet point from which I extracted the quotation that I said was unacceptable should be conveying. Now, when explaining this to a human reading this later, you should not refer to this as a GM ruling. Rather, you should describe it the way this project has chosen to render the variety of settlements that we know existed historically.
+>
+> I don't have a specific suggestion for how to incorporate this into your style guide and subagent checks, but I trust that as I give you feedback of this sort, as we work through this feature, that you will take the appropriate action in figuring out how to represent this in the style guide and the subagent checks and what have you.
+
+## The GM, 2026-09-29, on the size cap (verbatim, recorded at the sweep's close)
+
+> Oh, so can we make the size cap not count the nodes? I ask because the whole point of the size cap is to conserve tokens, but the nodes are themselves also split up, right? So I think that means that we can disregard them when it comes to calculating the size because the subagents and the editing sessions which are touching them just won't actually care because they will not be reading those notes when doing the editing, I don't think, or maybe they will? How does that affect things?
+
+## The GM, 2026-09-29, on storing originals apart and checking translations (verbatim, recorded at the sweep's close)
+
+> Okay. Yes, those suggestions sound good so please do that. And then when we include translated text, and then also include the original text in whatever language, like Japanese, or whatever, then can we store the original text separately as well? Because I think that it makes sense for there to be a subagent that checks that our translation is good when either the text being quoted has changed or the translation has changed. And then otherwise that check doesn't need to run. But other than that, I don't think that there is any reason for other subagent checks to read both the translation and the original text. I think they should only read the translation. In fact, I also think that when we see the original text and the translation in a footnote, I think that the translation should be visible, but the original text should be collapsed by default. And then you should have to click on it to see. The original text. Like, click on and expand link within the footnote. that pops up when you mouse over the footnote number. That kind of thing. So please implement that as well as part of your suggestions that you are implementing before we move on to the next section. And then I will look at what you have done and then offer more feedback before we decide whether to move forward with other stuff. Thanks.
+
+## The GM, 2026-09-29, on the heading link and the footnotes (verbatim, recorded at the sweep's close)
+
+> Okay, so just from a stylistic perspective, the "How our maps draw it" is on its own separate row from the "Groves of trees around farmhouses (yashikirin)" but should be floated to the right-hand side of the same row.  I think we can also replace "How our maps draw it" with "How it's drawn" for brevity.
+>
+> Second, we should presume the source is in English unless not stated otherwise, meaning that we should strike "(the source's own English)" from the end of the relevant footnotes.
+>
+> Third: we have improved the "1868" references such that by the time we get to "Were the groves as large before 1868?" then an earlier question's answer already included the phrase "before Japan began to modernize in 1868". However, it would be good if someone skimming this section were able to read an arbitrary answer that caught their eye without requiring all of the context that came before it. Therefore, when there is an easy way to explain a year or a concept then we should take it. In this case, I can see two different ways that that might happen, and each one would be acceptable, and depending on the circumstances, we might pick one or the other for different bullet point lead-ins. The first option is to reword the question to include the explanation. For example, instead of saying, ""Were the groves as large before 1868?" we could say "Were groves as large before Japan began to modernize in 1868?" This removes the need for any explanation of why the year 1868 is significant. The second option is to make the year 1868 a tooltip. And then if someone moves their mouse over it, then they will see an explanation that this was the year that Japan began to modernize, and therefore much of the landscape of Japan became drastically different after this occurred. And therefore, there is a great deal of before and after the year 1868 that will come up in research of what features the landscape had and what a farming settlement looked like, etc. Either one of these would be fine here, but I can imagine other situations in which one or the other would be good. And I think that our subagent checks, which evaluate bullet point lead-in sentences need to consider whether or not one of these approaches is called for in order for a bolded lead-in sentence to be self-explanatory.
+>
+> Fourth: instead of saying "translated from the Japanese by this project" every single time, we should presume that all translations are donme by this project unless explicitly stated otherwise, which allows us to simply say "translated", which improves legibility and makes the footnotes scan better.
+>
+> Fifth: as a "making the footnotes more legible matter, anytime we are citing multiple things from a source instead of one thing, we should display this as a bulleted list within the footnote.  For example, where we currently have this:
+>
+> > miura-2014-kainyo - 「after all, where it grows thick it also becomes 村立見隠 [a phrase the paper says it cannot interpret], and moreover it is kept thick for a firebreak and windbreak」 (translated from the Japanese by this project; original), from a 1750 document of the Kawai papers, which the paper glosses: 「the grove's windbreak and firebreak functions are stated plainly」 (translated from the Japanese by this project; original); 「the meaning of 村立見隠ニも罷成 is not known」 (translated from the Japanese by this project; original)
+>
+> we should instead have this:
+>
+> ```
+> miura-2014-kainyo
+> * 「after all, where it grows thick it also becomes 村立見隠 [a phrase the paper says it cannot interpret], and moreover it is kept thick for a firebreak and windbreak」 (translated; original), from a 1750 document of the Kawai papers, which the paper glosses:
+>     * 「the grove's windbreak and firebreak functions are stated plainly」 (translated; original)
+>     * 「the meaning of 村立見隠ニも罷成 is not known」 (translated; original)
+> ```
+>
+> Note that in this case, it would be a nested bulleted list. However, in some other cases, it would just be a normal bulleted list. For example:
+>
+> > 
+>
+> <pasted_content id="2215">
+> miura-2014-kainyo - 「...the term 垣根 for the homestead grove in early-modern documents of the Kanazawa and Toyama domains」 (translated from the Japanese by this project; original); 「a 1658 (Manji 1) document of Tonami district carries a notice restricting (by application and permit) the cutting of the domain-reserved trees and bamboo around homesteads and on field ridges」 (translated from the Japanese by this project; original) ; 「in the domain period, the timber trees and bamboo of the homestead groves, which were privately owned, were brought into the domain's forest administration, and the species of high resource value in particular were strictly controlled」 (translated from the Japanese by this project; original) ; 「the two examples that use kaine - a settlement deed from talks among villagers including a tomura [a headman over a group of villages], and a bill of sale a villager of the group gave the headman - are, so to speak, memoranda exchanged within the village: private documents」 (translated from the Japanese by this project; original) (the paper says the reading of 垣根 in the Kanazawa domain's official documents is unknown; the spelling kaine is from private village papers of 1701 and 1782)
+> </pasted_content id="2215">
+>
+>
+> would not be a nested bulleted list. It would be a bulleted list where everything is on the same level.
+
+## The GM, 2026-09-29, on absence notes (verbatim, recorded at the sweep's close)
+
+> Also, when we have no publicly available source that we have been able to find, we currently say something like this:
+>
+> > no publicly readable source (searched 2026-09-28: web searches in Japanese for 屋敷林 江戸時代 屋敷廻り 杉 本数 砺波 加賀藩, 立木改帳 屋敷, 竹木改帳 屋敷, 屋敷林 近世 村絵図 木数改帳, カイニョ 七木の制 加賀藩, 居久根 近世 文書 仙台藩 and 屋敷林 江戸時代 樹高; read Miura's 2014 paper quoting the Edo documents on the Tonami grove, the Tonami Kainyo Club page quoting the 1789 manual, a 2003 Toyama prefecture article on the dispersed villages, ja.wikipedia 屋敷林, the Izumo tsuijimatsu society's pages, and Saitama prefecture's and ja.wikipedia's pages on the Santome new fields of 1694-96; none counts the trees of a grove before 1868. A study of one Tonami village's late-Edo grove records, Shindo and Yasukawa 2011, is in the Tonami institute's bulletin no. 28 and on no page found)
+>
+> First: "and on no page found" looks like a typo or an error that we passed through into our prose or something.
+>
+> Second: Instead of "no publicly available source" our standard wording should be "Our research of publicly-available sources couldn't find anything conclusive:"
+>
+> Third: I don't want he human-readable bits to include "searched 2026-09-28: web searches in Japanese for 屋敷林 江戸時代 屋敷廻り 杉 本数 砺波 加賀藩, 立木改帳 屋敷, 竹木改帳 屋敷, 屋敷林 近世 村絵図 木数改帳, カイニョ 七木の制 加賀藩, 居久根 近世 文書 仙台藩 and 屋敷林 江戸時代 樹高" - if this is useful information for you then it can be present but hidden and not human readable like kept in an HTML comment or something.  But the date we searched and what the web searches were is not information the human reader needs to see; it is enough to let readers know that we searched for this and couldn't fiond anything.
+>
+> Fourth: This is another case where a bulleted list would be clearer and easier to read than a long paragraph, e.g. this one would read
+>
+> ```
+> Our research of publicly-available sources couldn't find anything conclusive:
+> * None of our sources count the trees of a grove prior of 1868, including:
+>     * Miura's 2014 paper quoting the Edo documents on the Tonami grove
+>     * the Tonami Kainyo Club page quoting the 1789 manual
+>     * a 2003 Toyama prefecture article on the dispersed villages
+>     * ja.wikipedia 屋敷林
+>     * the Izumo tsuijimatsu society's pages
+>     * Saitama prefecture's and ja.wikipedia's pages on the Santome new fields of 1694-96
+> * A study of one Tonami village's late-Edo grove records, Shindo and Yasukawa 2011, is in the Tonami institute's bulletin no. 28
+> ```
+>
+> Fifth: this still has some untranslated foreign words, i.e. "屋敷林" should get translated.
+>
+> Please make all of these fixes/adjustments with the appriate enforced style guide conventions when you're done with your current round of changes.  Also, in case it isn't clear: the replacement text for "no pubicly available source" should be stored in a single place so that if we update it later we are updating a single line of text rather than finding a replacing everywhere that it is located.
+
+## The GM, 2026-09-29, asking for the second pilot topic (verbatim, recorded at the sweep's close)
+
+> Okay, I'm pretty happy with the "Groves of trees around farmhouses (yashikirin)" section.  While I review the style guide, why don't you try to give the same treatment to another section, i.e. take the next section which is currently "How big was the work yard, and how did the sizes spread?" and figure out whether there are one or more other sections should should fold into this one and then reorganize the resulting content in the manner we've done for the first section, etc.
+
+## The GM, 2026-10-01, on the open questions file (verbatim, recorded at the sweep's close)
+
+> Good to know, thanks. As for the 26 open questions, then instead of bringing those to me here in the session when the time comes, please run the escalation check on them and then put them into an open questions file within the clone so that I can review them in line and then provide my answer to each of them in a space which has been allotted within the file. And then I can work on that while you continue with the rest of the feature. My response will be required before the feature can be completely closed out, but me responding to however many open questions remain after the escalation check filters out the ones that you are able to resolve for yourself, then you can continue working on the not to be confused with lists and such.
+
+## The GM, 2026-10-01, on removing the open questions file (verbatim, recorded at the sweep's close)
+
+> Does the open questions file even need to remain in the repository? I mean, once all of the questions have been answered, then I would have expected that to just be a temporary file that doesn't need to stick around.

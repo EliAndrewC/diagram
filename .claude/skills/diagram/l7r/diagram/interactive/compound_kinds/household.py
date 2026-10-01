@@ -696,10 +696,10 @@ class LordsQuarters(Kind):
     the record, as does the private study on the far side of the line between office and home. Two room orders
     are attested: this palace order, and a small house's (one house, as this project reads its plan), with the formal zashiki deepest in and the living rooms
     between it and the entrance; in both the reception sits at one end, and these plans follow the palace order.
-    The suite's naming by its occupant is the GM's convention for these plans, and the name the lord's rooms go
+    The suite's naming by its occupant is this project's convention for these plans, and the name the lord's rooms go
     by today, the naka-oku, is a modern one.
 
-    Caveat: The suite's naming by its occupant is the GM's convention for these plans, and the name the lord's
+    Caveat: The suite's naming by its occupant is this project's convention for these plans, and the name the lord's
     rooms go by today, the naka-oku, is a modern one.
 
     Name: lord's quarters
@@ -725,9 +725,9 @@ class FamilyQuarters(Kind):
 
     Note: The household living inside the working compound (behind the office by Chinese regulation; at Takayama
     the residence stood beside it, and no Japanese rule was found), and the family's rooms beyond the lord's in
-    the palace order, follow the record. Naming the bay by its occupants is the GM's convention for these plans.
+    the palace order, follow the record. Naming the bay by its occupants is this project's convention for these plans.
 
-    Caveat: Naming the bay by its occupants is the GM's convention for these plans.
+    Caveat: Naming the bay by its occupants is this project's convention for these plans.
 
     Name: family quarters
     Covers: the family's bay of the residence, its floor and its labels
@@ -852,6 +852,7 @@ class ShrineAltar(Kind):
     key = "shrine altar"
 
 
+# The GM's ruling of 2026-09-27: a village shrine's innermost arch stands 12 ft from its hall where there is room.
 class Torii(Kind):
     """
     What: A torii, the gateway arch over a shrine's approach - a compound's small shrine, or a village's - standing a
@@ -867,13 +868,13 @@ class Torii(Kind):
     Note: The arch at the boundary of the shrine's ground, and both a shared arch and one to each shrine, are
     recorded findings; each sheet takes one. How far the arch stands from its hall is a guess, kept short because
     a compound shrine's ground is small - about 5 ft where the plan is tight, up to the 12 ft at which a village shrine's
-    innermost arch stands where there is room (the GM's ruling of 2026-09-27): no page read gives a distance from any torii to its hall.
+    innermost arch stands where there is room (by this project's choice): no page read gives a distance from any torii to its hall.
     Before a country shrine, a row of one, three or seven arches is a deliberate deviation: before 1868 an ordinary
     shrine's arch was a single gate.
 
     Caveat: How far the arch stands from its hall is a guess, kept short because a compound shrine's ground is
     small - about 5 ft where the plan is tight, up to the 12 ft at which a village shrine's innermost arch stands where there is
-    room (the GM's ruling of 2026-09-27): no page read gives a distance from any torii to its hall. Before a country
+    room (by this project's choice): no page read gives a distance from any torii to its hall. Before a country
     shrine, a row of one, three or seven arches is a deliberate deviation: before 1868 an ordinary shrine's arch was
     a single gate.
 

@@ -48,6 +48,7 @@ class FishPond(Kind):
     key = 'fish pond'
 
 
+# The GM's ruling: the mulberry crowns keep the premodern (late-Qing) spacing, about one bush per 24 sq ft.
 class MulberryDike(Kind):
     """
     What: The raised earthen dike around a fish pond, piled from the pond's own dredged mud and planted with
@@ -70,7 +71,7 @@ class MulberryDike(Kind):
     square foot in the Pearl River delta's root-cut planting, a figure given as current practice with no date,
     to about 300 trees a mu - one to about 24 square feet - in the late-Qing Yangtze delta, the only figure
     dated before the modern period; only the delta's figure is given for pond dikes, said to be planted much as any flat-land mulberry field. The crowns are drawn at about one bush
-    per twenty-four square feet, the late-Qing figure, by the GM's ruling that the map keeps the premodern
+    per twenty-four square feet, the late-Qing figure, by this project's choice that the map keeps the premodern
     spacing. No page read gives how wide a bush grew, so the 4.4 to 7 feet drawn is this
     project's own figure. And the dike is drawn as a RING, the band between the parcel's outer edge and the
     water's own outline, so hovering a dike lights its bank and not the pond inside it. So: the width of a bush's crown is this project's own, and so is the six-in-ten split drawn from Qu Dajun's two shares.
