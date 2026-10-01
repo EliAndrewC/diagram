@@ -16,7 +16,7 @@ from ..homesteads import farmstead_fixtures, household_bamboo
 from ..plan import SitePlan
 from .bamboo import bamboo_seats
 from .belt import belt_polygon
-from .frame import belt_page, frame_bounds, frame_for, scatter_frame, throw_to_the_view, title_pocket
+from .frame import belt_page, frame_bounds, frame_for, scatter_frame, title_pocket
 from .parcels import CROP_MARGIN, open_ground_patches
 
 # ---- STAGE 7: the ground between everything ------------------------------------------------------
@@ -142,7 +142,6 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     # THE SCATTER THROWS ONLY INSIDE A PREDICTED FRAME (feature 224): set before each scatter from what is known then -
     # the marsh before the coppice and the pocket exist, the commons after them - and kept for finish()'s breach record.
     s._scatter_frame = scatter_frame(s, plan)
-    vars(s)["_scatter_catchup"] = {}  # the marsh offers its re-throw here; `throw_to_the_view` takes it once the view is decided (M6)
     s.hinterland(commons=False)
     plan.woodland_polys = woodland_on_the_sheet(s, plan, open_ground_patches(s, plan, plan.woodland_patches))
     # ...and the bamboo stands (T47), seated now for the same reason: a stand is a wood, and the
@@ -160,7 +159,6 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
     plant_the_belt(s, plan)
     plan.view = frame_for(s, plan)
     s._scatter_frame = scatter_frame(s, plan)
-    throw_to_the_view(s, s._scatter_frame)  # ...and the marsh, thrown within a PREDICTION of the view, fills what the decided one shows past it
 
     s.hinterland(marsh=False, soft_extra=[*([plan.belt] if plan.belt else []), *plan.woodland_polys, *plan.bamboo_polys])
     # ...AND NO HOLES IN THE COUNTRYSIDE (feature 287, woods W11): over the decided view, the ground nothing covers - the

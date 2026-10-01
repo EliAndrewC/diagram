@@ -63,6 +63,7 @@ from .corridors import (
 from .fabric import _crosses_fabric, _homestead_polys, house_hit
 from .geom import _TOUCH_GAP, _components, _trim_to_service, memo_ground, polyline_len, steading_footprints, worked_ground
 from .joints import joints
+from .keeper import NOT_THE_SETTLES, unsettled  # noqa: F401 - re-exported: `settle.unsettled` is the exit question callers name
 from .serve import shadowed_by
 from .sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
 from .tree import prune_the_tree, settle_defer, settle_tree, tree_faults
@@ -521,8 +522,9 @@ def settle_dangling(s: Any) -> int:
     for i in _ordinary(M):
         others = [sg for k, o in enumerate(ways) if k != i and len(o) >= 2 for sg in zip(o, o[1:], strict=False)]
         trimmed = _trim_to_service(ways[i], others, centers, ground, (), steadings)
-        if len(trimmed) < 2:
-            edits[i] = []
+        if len(trimmed) < 2 or (i in bad and trimmed == ways[i]):
+            edits[i] = []  # ...and one its trim cannot mend goes whole, as this docstring always said (feature 297: Inashiro's
+            # two-point skeleton lane dangled through every round and the last resort dropped it - research R11)
         elif trimmed != ways[i] and (i in bad or polyline_len(ways[i]) - polyline_len(trimmed) > TRIM_GRAIN_FT):
             edits[i] = [trimmed]
     return apply_pieces(s, edits) if edits else 0
@@ -942,22 +944,6 @@ STEPS = (
 )
 
 
-NOT_THE_SETTLES = ("unbridged", "short_decks", "planks", "unreached_houses", "field_unreached", "unreached_targets")
-"""The rules of `law.LAW` the settle's exit does not ask (`unsettled`): the decks and planks, drawn after the web
-(`stage_crossings`), so every crossing is undecked when the settle ends - the finished map is asked them; a farmhouse or the
-reserved field left unreached, refused on its own (`last_resort.refuse_unreached`); and a way target no lawful spur reaches,
-which the settle reports rather than draws to least-bad (`settle_targets`, FR-005)."""
-
-
-def unsettled(M: Mapping[str, Any], ground: Any = None) -> dict[str, Any]:
-    """Every rule of the lane law (`law.LAW`, the predicates the acceptance sweep asks) the web as it stands breaks, but for
-    those `NOT_THE_SETTLES` - the settle's exit question, asked however the rounds ended. `ground`, the worked ground the
-    settle already holds (`memo_ground`), is handed to the two rules that read it: built afresh by each it was two thirds
-    of the question's cost (~120 of ~186 ms a map over the pool and cohort 1-20, 2026-09-30)."""
-    rules = {**law.LAW, "dangling_ends": lambda M: law.dangling_lane_ends(M, ground), "ends_behind": lambda M: law.ends_behind(M, ground)} if ground is not None else law.LAW
-    return {name: v for name, rule in rules.items() if name not in NOT_THE_SETTLES and (v := rule(M))}
-
-
 def settle_the_web(s: Any, rounds: int = SETTLE_ROUNDS) -> dict[str, Any]:
     """Repair the web until every rule of the lane law holds (see the module docstring) and report what it took: `rounds`,
     `seconds`, `changed` (lane edits), `dropped` (ORDINARY lanes the last resort dropped whole - never a tree lane,
@@ -975,13 +961,9 @@ def settle_the_web(s: Any, rounds: int = SETTLE_ROUNDS) -> dict[str, Any]:
         n = sum(step(s) for step in STEPS)
         changed += n
         settled = not n
+    # (feature 297, research R12: later rounds asking the law and running only the steps for what it named broken were measured
+    # SLOWER on two of three pool maps - the law asked each round cost more than the steps it skipped - and were withdrawn)
     if not settled or unsettled(s.M, memo_ground(s, "worked", worked_ground)):
-        # THE LAST RESORT (FR-005): the rounds ran out with a lane still breaking a rule - OR A ROUND CHANGED NOTHING WITH ONE
-        # STILL BROKEN, since a still round proves only that no repair applied, not that the law holds (cohort seed 14 with
-        # the straggler footpaths off went still in 5 rounds with the exit strip doubled along the connector: two tree lanes,
-        # which no repair cuts) - so every ORDINARY lane still breaking one goes whole - never kept as the least bad, and
-        # never a tree lane, which the seating admitted lawful (`tree.admits`); what only the tree could mend is refused by
-        # name (`last_resort.py`)
         dropped = last_resort(s)
     # ...AND NO HOUSE OR RESERVED FIELD IS SHIPPED UNREACHED, whichever way the settle ended (ways W01, W03): refused here,
     # so the driver has no unreached house to record (`meta.roll_failures`, deleted with its writer)

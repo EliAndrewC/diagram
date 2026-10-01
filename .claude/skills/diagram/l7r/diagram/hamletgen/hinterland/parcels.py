@@ -7,7 +7,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross
-from l7r.diagram.settlement._geom import PointGrid, RingIndex, boxed_grid, seg_reach_index
+from l7r.diagram.settlement._geom import PointGrid, RingIndex, seg_reach_index
 from l7r.diagram.settlement.land.cover import WOODLAND_MIN_CROWNS, ring_center
 from l7r.diagram.settlement.land.wet import marsh_ground
 
@@ -282,13 +282,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
 
     # ...each marsh's y-span taken once (feature 287 perf): a ray test counts an edge only where `(yi > py) != (yj > py)`, so a
     # sample outside a ring's [lowest, highest) y is outside it without the walk - the same verdict
-    _marsh_spans = [(min(q[1] for q in mp), max(q[1] for q in mp), mp) for mp in marshes if mp]
-
-    def _wet(x: float, y: float, half_: float) -> bool:
-        return any(y0 <= y + ddy * half_ < y1 and point_in_poly(x + ddx * half_, y + ddy * half_, mp) for y0, y1, mp in _marsh_spans for ddx in (-1.0, 0.0, 1.0) for ddy in (-1.0, 0.0, 1.0))
-
     crops: list[Poly] = [list(plan.envelope)] + [[(float(v[0]), float(v[1])) for v in d["poly"]] for d in s.M.get("dry_plots", [])]
-    crop_idx = [RingIndex(c) for c in crops]  # each crop's edges indexed once (feature 218); the rung below boxes them by its own set-back
     crop_pts = crop_edge_points(crops)  # the field ground's edge, sampled and indexed once, for `field_height_near` (269 B27)
     _hx = [h["x"] for h in s.M.get("houses", [])] or [plan.W / 2]
     _hy = [h["y"] for h in s.M.get("houses", [])] or [plan.H / 2]
@@ -402,14 +396,6 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # the margin absorbs the features that may still grow it.
             sx0, sy0 = max(cbx0 + 16.0, _fx0 - 0.6 * half), max(cby0 + 16.0, _fy0 - 0.6 * half)
             sx1, sy1 = min(cbx1 - 16.0, _fx1 + 0.6 * half), min(cby1 - 16.0, _fy1 + 0.6 * half)
-            # THE CROPS ARE BOXED ONCE PER RUNG (feature 218): `_clear_gap` measured every candidate
-            # square against every edge of every crop polygon - 1,907 calls, 220k segment distances
-            # on the reference roll. A crop can only refuse a seat it stands in or lies within
-            # `sunny + half` of (the widest set-back the gap test applies), so the boxes carry that
-            # pad and a seat asks only the crops its cell holds; `_clear_gap` decides on those exactly
-            # as before. A seat no crop's box reaches is clear of all of them - the answer the full
-            # list would have given - unless there are no crops at all, when it was never offered.
-            crop_g = boxed_grid([(idx, idx.x0 - _sb_s - half, idx.y0 - _sb_s - half, idx.x1 + _sb_s + half, idx.y1 + _sb_s + half) for idx in crop_idx])
             # the lines a lot's outline may follow (woods W26): the lanes and brooks at their keep-outs, the fields at this rung's set-back
             _lot_bounds = lot_bounds([ln for ln, _ in lanes], [st for st, _ in streams], crops, _sb_n)
 
@@ -417,9 +403,9 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # used to be an inline `if` that only the lattice scan could evaluate, which is why the
             # jitter below could not exist: there was no way to check that a moved seat was still
             # legal. Same shape as every other "placement and its check read one source" fix here.
-            # EVERY LANE AND STREAM SEGMENT BY ITS REACH, one index per size asked (feature 278): `_ok` is re-asked with a
-            # different `half` when the size roll re-tests a seat, and the reach is `pad + half`, so each size gets its own.
-            _line_g: dict[float, PointGrid] = {}
+            # ONE REGION PER SIZE ASKED (feature 297; the trap feature 284 recorded): `_ok` is re-asked with a different `half`
+            # when the size roll re-tests a seat, and every keep-out is grown by `half`, so each size paints its own.
+            regions: dict[tuple[float, float, float], Any] = {}
 
             def _ok(
                 x: float,
@@ -431,8 +417,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 sy0: float = sy0,
                 sx1: float = sx1,
                 sy1: float = sy1,
-                crop_g: PointGrid = crop_g,
-                line_g: dict[float, PointGrid] = _line_g,
+                regions: dict[tuple[float, float, float], Any] = regions,
             ) -> bool:
                 # ONE guard clause, deliberately: the window bounds and the kept-window AREA are the
                 # same question asked of a seat that may have been MOVED since the scan offered it
@@ -445,16 +430,11 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                     or (max(0.0, min(x + half, _fx1) - max(x - half, _fx0)) * max(0.0, min(y + half, _fy1) - max(y - half, _fy0))) < 0.8 * (2.0 * half) ** 2
                 ):
                     return False  # off the window, or under the check's own 70%-of-bbox rule (0.8 here, for prediction slack)
-                return (
-                    bool(crops)
-                    and not any(_crop_refuses((x, y), half, idx, n, sn) for idx, _bx0, _by0, _bx1, _by1 in crop_g.near(x, y))
-                    and not any(math.hypot(x - kx, y - ky) < kr + half for kx, ky, kr in keep)
-                    and not any(rx0 - half < x < rx1 + half and ry0 - half < y < ry1 + half for rx0, ry0, rx1, ry1 in keep_rects)
-                    and not any(
-                        bx0 <= x <= bx1 and by0 <= y <= by1 and seg_dist(x, y, a, b) < reach for a, b, reach, bx0, by0, bx1, by1 in _lines_at(line_g, lanes + streams, half).near(x, y)
-                    )  # `_near_line`, from the index
-                    and not _wet(x, y, half)
-                )
+                # EVERY KEEP-OUT A SQUARE'S CENTER IS ASKED OF, PAINTED ONCE PER SIZE (feature 297, FR-004, plan B4 - the GM:
+                # "drawing a box and then filling it in"): the crops grown by their set-back (the sunny side's deeper south of each),
+                # the keep circles and rectangles, the lanes and streams at their reach and the marsh, each grown by the square's
+                # half, so a center is one raster read (`open_ground_region`)
+                return bool(crops) and not open_ground_region(regions, half, n, sn, crops, keep, keep_rects, lanes + streams, marshes, (sx0, sy0, sx1, sy1)).taken(x, y)
 
             scored: list[tuple[float, float, float]] = []
             y = max(half + 40.0, sy0)
@@ -852,6 +832,61 @@ def follow_the_bounds(ring: Sequence[Pt], center: Pt, bounds: Sequence[Bound], r
             lo, hi = (mid, hi) if _clear(mid) else (lo, mid)
         out.append(_at(lo))
     return out
+
+
+def open_ground_region(
+    cache: dict[tuple[float, float, float], Any],
+    half: float,
+    normal: float,
+    sunny: float,
+    crops: Sequence[Poly],
+    keep: Sequence[tuple[float, float, float]],
+    keep_rects: Sequence[tuple[float, float, float, float]],
+    lines: Sequence[tuple[Poly, float]],
+    marshes: Sequence[Poly],
+    window: tuple[float, float, float, float],
+) -> Any:
+    """The ground a woodland square of half-side `half` may not CENTER on (feature 297, plan B4), as one `Region` built once per
+    (half, set-backs) into `cache`: each crop grown by its set-back plus `half` (`_crop_refuses`'s `normal`), and by the sunny
+    set-back over the band south of it (its `south_of` - the square's top below the crop's last 40 px, its center within the crop's
+    x-span grown by `half`); the keep circles grown by `half`; the keep rectangles grown by `half`; the lanes and streams at their
+    reach plus `half`; the marsh grown by `half` (a square with any of its nine points in a marsh is refused, `_wet`)."""
+    key = (half, normal, sunny)
+    got = cache.get(key)
+    if got is None:
+        import shapely
+        from shapely.geometry import Polygon
+
+        from l7r.diagram.settlement._geom.region import Region
+
+        x0, y0, x1, y1 = window
+        pad = max([normal, sunny]) + half + 40.0
+        got = Region((x0 - pad, y0 - pad, x1 + pad, y1 + pad), 3.0)  # 3 px: the margin is two cells, 6 px; at 8 px its 16 px moved a parcel off the brook line its lot follows (test_hinterland_287)
+        polys = [g if g.is_valid else g.buffer(0) for g in (Polygon(c) for c in crops if len(c) >= 3)]
+        geoms: list[Any] = list(polys)
+        pads: list[float] = [normal + half] * len(polys)
+        if polys:  # ...the sunny set-back over the band south of each crop (`_crop_refuses`' `south_of`)
+            b = shapely.bounds(polys)
+            bands = shapely.box(b[:, 0] - half, b[:, 3] - 40.0 + half, b[:, 2] + half, b[:, 3] + sunny + half + 1.0)
+            south = shapely.intersection(shapely.buffer(polys, sunny + half, quad_segs=4), bands)
+            geoms += [g for g in south if not g.is_empty]
+            pads += [0.0] * sum(1 for g in south if not g.is_empty)
+        geoms += [shapely.Point(float(kx), float(ky)) for kx, ky, _kr in keep]
+        pads += [float(kr) + half for _kx, _ky, kr in keep]
+        geoms += [shapely.box(rx0, ry0, rx1, ry1) for rx0, ry0, rx1, ry1 in keep_rects]
+        pads += [half] * len(keep_rects)
+        for pl, reach in lines:
+            if len(pl) >= 2:
+                geoms.append(shapely.LineString([(float(q[0]), float(q[1])) for q in pl]))
+                pads.append(float(reach) + half)
+        for mp in marshes:
+            if len(mp) >= 3:
+                g = Polygon(mp)
+                geoms.append(g if g.is_valid else g.buffer(0))
+                pads.append(half)
+        got.fill_many(geoms, pads)
+        cache[key] = got
+    return got
 
 
 def _crop_refuses(center: Pt, half: float, crop: RingIndex, normal: float = 80.0, sunny: float = 180.0) -> bool:

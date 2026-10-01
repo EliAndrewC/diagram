@@ -188,26 +188,3 @@ def test_the_comb_bead_test_through_the_segment_index_is_the_whole_scan() -> Non
     idx = seg_reach_index(line, 0.0)
     at = (50.0, 2.0)  # exactly `half` off the line: dry
     assert not any(x0 <= at[0] <= x1 and y0 <= at[1] <= y1 and seg_dist(at[0], at[1], a, b) < half for a, b, half, x0, y0, x1, y1 in idx.near(*at))
-
-
-def test_the_page_reads_a_blade_slot_as_it_would_have_parsed_it() -> None:
-    """A2: a blade slot the finish wrote - culled, merged by `merge_lines`, its roots handed over - gives the page it gave
-    when the page culled, merged and read the roots out of the text itself: the whole page byte-identical through both
-    routes, over a slot that tiles, a slot too small to tile, and a lone blade."""
-    from l7r.diagram.interactive import page
-    from l7r.diagram.interactive.page import HIT_FROM_MARKS, NOT_HIGHLIGHTED, merge_lines, render_page
-
-    key = next(iter(HIT_FROM_MARKS))
-    rng = random.Random(2851)
-    for n in (1, 5, page.TILE_MIN + 40):
-        blades = []
-        for _ in range(n):
-            x, y = rng.uniform(10, 590), rng.uniform(10, 390)
-            blades.append((f"{x:.1f}", f"{y:.1f}", f"{x + rng.uniform(-3, 3):.1f}", f"{y - rng.uniform(2, 5):.1f}"))
-        slot = f'<g stroke="#7a8a4a" stroke-width="0.8">{merge_lines(blades)}</g>'
-        strings = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400"><rect x="0" y="0" width="600" height="400" fill="#eee"/>', slot, "</svg>"]
-        tags = [NOT_HIGHLIGHTED, key, None]
-        parsed = render_page(strings, tags, "T", with_raster=False)
-        handed = render_page(strings, tags, "T", with_raster=False, blade_starts={1: [(b[0], b[1]) for b in blades]})
-        assert handed == parsed, f"{n} blades"
-        assert page.marks_region([slot]) == page.marks_region([], points=[(b[0], b[1]) for b in blades])

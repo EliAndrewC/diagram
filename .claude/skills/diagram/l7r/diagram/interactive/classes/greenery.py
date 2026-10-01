@@ -25,7 +25,8 @@ class HomesteadBamboo(Kind):
     when the wind comes on a diagonal) or on the other flank. A cold upland hamlet may have none; whether a hamlet's
     bamboo stands in its farmsteads, in a thicket of its own, or both is rolled per settlement.
 
-    Note: we have rendered the bamboo stand as paired culm strokes with a leafy fork on a 7 ft grid, in order to
+    Note: we have rendered the bamboo stand as paired culm strokes with a leafy fork on a 7 ft grid, one small block of them
+    repeated across the stand, in order to
     show a stand that cannot be drawn at true scale: a culm is only inches across, madake at most about four inches,
     a fraction of a pixel at one foot per pixel. The stand's extent is to scale; the marks inside it are symbolic - the convention
     Japan's modern topographic legend uses, a symbol of the national survey's maps of about 1910 that no page read traces to a map before 1868; older maps drew the growth itself. Presence below the frost line, the stand's two places (the
@@ -59,7 +60,7 @@ class SharedBambooGrove(Kind):
     picking one.
 
     Note: we have rendered the shared grove with the same stand-level glyph as a homestead stand - paired culm
-    strokes on a 7 ft grid - in order to show it at all: a culm is only inches across, madake at most about four
+    strokes on a 7 ft grid, one small block of them repeated - in order to show it at all: a culm is only inches across, madake at most about four
     inches, and cannot be drawn at one foot per pixel. The grove's extent is to scale; the marks are symbolic.
     Bamboo below the frost line and its two places are read; which side of the settlement the thicket takes, and
     that it was held in common, and its size, 84 by 58 ft, are guesses; that it was cut like a coppice is this record's likeness, no page making
@@ -293,9 +294,9 @@ class ScrubAndRoughGrazing(Kind):
     kept-cut slope face below a field is wider, at times wider than the field itself, and the map does not set that
     width. The channel bank takes the same 6 ft by the GM's ruling, and that a bank was kept like a bund at all is this
     record's analogy, no page read speaking of a channel bank; nothing describes how
-    the clumps sit within them, so the scatter is drawn to read as rough grazing rather than as any surveyed pattern.
+    the clumps sit within them, so the grass is drawn as one small block repeated, to read as rough grazing rather than as any surveyed pattern.
 
-    Caveat: nothing describes how the clumps sit within them, so the scatter is drawn to read as rough grazing
+    Caveat: nothing describes how the clumps sit within them, so the grass is drawn as one small block repeated, to read as rough grazing
     rather than as any surveyed pattern.
 
     Name: scrub and rough grazing

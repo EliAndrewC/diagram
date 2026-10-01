@@ -1,6 +1,7 @@
 """Layer-1 bank clearance: how plots hem to supply canals and delivery ditches (clearance, toe, overhang), plus channel-joint rounding."""
 
 import math
+from collections.abc import Sequence
 from typing import Any
 
 from .frame import BANK_MARGIN, Poly, Pt, _f_at_u, _Frame, _pip, _seg_d, _seg_x, taper_w
@@ -290,7 +291,8 @@ def hem_to_bank(ring: Poly, dpts: Poly, down_deg: float, w0: float, w1: float) -
     dv = (math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg)))
     cum = polyline_cum(dpts)
     out: Poly = []
-    for q in ring:
+    for q in ring:  # one ring: the scalar walk (a plot's few corners cost less than an array's fixed cost); many rings at once:
+        # `hem_rings_to_bank` (feature 297)
         gap, need, lean, past = drain_bank_clearance(q, dpts, dv, w0, w1, cum)
         if past or gap >= need or lean < 0.2:  # clear, off the collector's span, or a drain running WITH the fall
             out.append(q)
@@ -298,6 +300,61 @@ def hem_to_bank(ring: Poly, dpts: Poly, down_deg: float, w0: float, w1: float) -
         shift = (need - gap) / lean
         out.append((round(q[0] - dv[0] * shift, 1), round(q[1] - dv[1] * shift, 1)))
     return out
+
+
+def hem_rings_to_bank(rings: Sequence[Poly], dpts: Poly, down_deg: float, w0: float, w1: float) -> list[Poly]:
+    """`hem_to_bank` for every ring at once (feature 297, FR-007): every vertex of every ring asked of the collector in ONE array
+    computation - a comb's plots are a few corners each, and asked a ring at a time the array's fixed cost outweighed the
+    loop it replaced (Sawada's field, 1.2 s -> 2.1 s). Each ring comes back as `hem_to_bank` would return it."""
+    flat = [q for ring in rings for q in ring]
+    if not flat or len(dpts) < 2:
+        return [list(r) for r in rings]
+    dv = (math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg)))
+    gap, need, lean, past = drain_bank_clearance_many(flat, dpts, dv, w0, w1, polyline_cum(dpts))
+    out: list[Poly] = []
+    k = 0
+    for ring in rings:
+        moved: Poly = []
+        for q in ring:
+            if past[k] or gap[k] >= need[k] or lean[k] < 0.2:
+                moved.append(q)
+            else:
+                shift = (need[k] - gap[k]) / lean[k]
+                moved.append((round(q[0] - dv[0] * shift, 1), round(q[1] - dv[1] * shift, 1)))
+            k += 1
+        out.append(moved)
+    return out
+
+
+def drain_bank_clearance_many(qs: Poly, dpts: Poly, dv: Pt, w0: float, w1: float, cum: list[float]) -> tuple[list[float], list[float], list[float], list[bool]]:
+    """`drain_bank_clearance` for many points against one collector, as numpy arrays (feature 297): the same nearest segment
+    (the first of equals, as the loop's strict `<` kept), the same signed gap, need, lean and past, per point, as lists."""
+    import numpy as np
+
+    q = np.asarray([(float(p[0]), float(p[1])) for p in qs])
+    a = np.asarray([(float(p[0]), float(p[1])) for p in dpts[:-1]])
+    v = np.asarray([(float(dpts[i + 1][0]) - float(dpts[i][0]), float(dpts[i + 1][1]) - float(dpts[i][1])) for i in range(len(dpts) - 1)])
+    vv = (v * v).sum(1)
+    vv = np.where(vv == 0.0, 1.0, vv)
+    t = ((q[:, None, 0] - a[None, :, 0]) * v[None, :, 0] + (q[:, None, 1] - a[None, :, 1]) * v[None, :, 1]) / vv[None, :]
+    tc = np.clip(t, 0.0, 1.0)
+    sx, sy = a[None, :, 0] + tc * v[None, :, 0], a[None, :, 1] + tc * v[None, :, 1]
+    d = np.hypot(q[:, None, 0] - sx, q[:, None, 1] - sy)
+    i = d.argmin(1)  # the first minimum, as the loop's strict `<` kept the first
+    rows = np.arange(len(q))
+    seg_len = np.hypot(v[:, 0], v[:, 1])
+    arc = np.asarray(cum[:-1])[i] + tc[rows, i] * seg_len[i]
+    n = len(dpts) - 2
+    past = ((i == 0) & (t[rows, i] < 0.0)) | ((i == n) & (t[rows, i] > 1.0))
+    nl = np.where(seg_len == 0.0, 1.0, seg_len)
+    nx, ny = -v[:, 1] / nl, v[:, 0] / nl
+    flip = nx * dv[0] + ny * dv[1] < 0  # points UP-fall, off the ditch
+    nrx, nry = np.where(flip, nx, -nx)[i], np.where(flip, ny, -ny)[i]
+    gap = (q[:, 0] - sx[rows, i]) * nrx + (q[:, 1] - sy[rows, i]) * nry
+    total = cum[-1] or 1.0
+    need = [taper_w(w0, w1, float(s) / total) / 2 + BANK_MARGIN for s in arc]
+    lean = -(dv[0] * nrx + dv[1] * nry)
+    return gap.tolist(), need, lean.tolist(), past.tolist()
 
 
 # A paddy plot's minimum THICKNESS (inradius proxy 2A/P) as a fraction of `plot_across`.

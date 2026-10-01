@@ -5,7 +5,7 @@ import math
 from l7r.diagram import overlap
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._geom import turn_about
-from tests.settlement._builders import _crop_settlement, _nuc_village, _scatter_base_points, _town
+from tests.settlement._builders import _crop_settlement, _ground_points, _nuc_village, _town
 
 
 def test_village_grove_fills_an_irregular_polygon_and_records_it():
@@ -207,8 +207,7 @@ def test_commons_keeps_scrub_off_dry_plots_and_the_crop_margin():
     for role in ("grazing", "woodland"):
         before = len(s.out)
         s.commons([(100, 150), (700, 150), (700, 650), (100, 650)], role=role)  # over the dry plot AND the paddy's W edge
-        s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225; this reads the ink before one
-        pts = _scatter_base_points(s.out[before:])
+        pts = _ground_points(s, before)
         assert pts
         for gx, gy in pts:
             assert not (200 - clr <= gx <= 400 + clr and 300 - clr <= gy <= 500 + clr), (role, gx, gy)  # dry plot + margin
@@ -238,8 +237,7 @@ def test_commons_keeps_scrub_off_drawn_channels():
     # is offset from the base point _sparse tests) so every element is base-tested - the same idiom
     # as the urban-halo tests.
     s.commons([(60, 60), (560, 60), (560, 760), (60, 760)], role="pasture")  # laid over both laterals
-    s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
-    pts = _scatter_base_points(s.out[before:])
+    pts = _ground_points(s, before)
     assert pts
     _clear_of(pts, uniform, 14.0 / 2)
     _clear_of(pts, taper, 5.0 / 2)  # conservative: every piece of the taper is at least w1 wide
@@ -253,8 +251,7 @@ def test_commons_keeps_scrub_off_a_crescent_pond():
     s.M["crescent_ponds"] = [{"cx": 300.0, "cy": 420.0, "r": 40.0}]
     before = len(s.out)
     s.commons([(60, 60), (560, 60), (560, 760), (60, 760)], role="pasture")
-    s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
-    pts = _scatter_base_points(s.out[before:])
+    pts = _ground_points(s, before)
     assert pts and any(abs(gx - 300.0) < 80 and abs(gy - 420.0) < 80 for gx, gy in pts), "scrub stands near the pond"
     assert all(math.hypot(gx - 300.0, gy - 420.0) >= 40.0 + 2 - 0.15 for gx, gy in pts), "... but never on its water"
 
@@ -284,8 +281,7 @@ def test_commons_keeps_scrub_a_cut_bank_off_the_channels_but_not_the_streams():
     m = s.px(s._BANK_MARGIN_FT)
     before = len(s.out)
     s.commons([(60, 60), (560, 60), (560, 760), (60, 760)], role="pasture")  # laid over both laterals
-    s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
-    pts = _scatter_base_points(s.out[before:])
+    pts = _ground_points(s, before)
     assert pts
     for gx, gy in pts:  # every base clears drawn half-width + the cut-bank margin (w1 conservative on the taper)
         assert _min_dist(gx, gy, uniform) >= 14.0 / 2 + m - 0.15, (gx, gy)
@@ -296,8 +292,7 @@ def test_commons_keeps_scrub_a_cut_bank_off_the_channels_but_not_the_streams():
     s2.M["streams"] = [{"poly": stream, "w": 8}]
     before = len(s2.out)
     s2.commons([(60, 60), (560, 60), (560, 760), (60, 760)], role="pasture")
-    s2.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
-    pts2 = _scatter_base_points(s2.out[before:])
+    pts2 = _ground_points(s2, before)
     assert pts2
     assert all(_min_dist(gx, gy, [tuple(p) for p in stream]) >= 8 / 2 + 2 - 0.15 for gx, gy in pts2)  # still off the water itself
     assert any(_min_dist(gx, gy, [tuple(p) for p in stream]) < 8 / 2 + 2 + m for gx, gy in pts2), "no tuft near the stream bank - the no-margin-on-streams half of the rule has lost its witness"
@@ -655,11 +650,11 @@ def test_commons_grass_reaches_only_a_few_paces_under_a_wood():
     s = _nuc_village()
     before = len(s.out)
     s.commons([(60, 60), (560, 60), (560, 640), (60, 640)], role="pasture", woods=[wood])
-    s.flush_blade_groups()
-    pts = _scatter_base_points(s.out[before:])
+    pts = _ground_points(s, before)
     assert any(gx < 300 for gx, _ in pts), "the scrub still stands outside the wood"
     assert any(250 <= gx < 300 and 100 <= gy <= 600 for gx, gy in pts), "and runs right up to its edge"
-    deep = [(gx, gy) for gx, gy in pts if gx > 300 + s.px(WOOD_FRINGE_FT) + 0.5 and 100 <= gy <= 600]
+    reach = s.px(WOOD_FRINGE_FT) + 0.5  # under any edge of the wood: the grass reaches the fringe in from each side
+    deep = [(gx, gy) for gx, gy in pts if 300 + reach < gx < 700 - reach and 100 + reach < gy < 600 - reach]
     assert not deep, deep[:5]
 
 

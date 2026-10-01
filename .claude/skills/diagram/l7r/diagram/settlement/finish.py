@@ -11,7 +11,7 @@ from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.interactive.classes import PLACE
-from l7r.diagram.interactive.page import ink_census, merge_lines, unregistered_classes, write_html
+from l7r.diagram.interactive.page import ink_census, unregistered_classes, write_html
 from l7r.diagram.interactive.raster import OFFMAP_MARGIN, RESVG_FONT_ARGS
 from l7r.diagram.interactive.tags import ClsTag
 
@@ -85,23 +85,6 @@ def band_keeps_the_strips(M: Any, view: Sequence[float], grown: Sequence[float])
     faces = (M.get("meta") or {}).get("waterward") or []
     strips = [m["poly"] for m in M.get("marshes") or [] if m.get("role") == "waterside" and len(m.get("poly") or ()) >= 3]
     return all(strip_reaches_view(p, grown, faces) or not strip_reaches_view(p, view, faces) for p in strips)
-
-
-def scatter_strips(frame: Box, parcel: Box, view: Sequence[float]) -> list[Box]:
-    """The strips of a scatter's parcel the view shows past its frame, as boxes - where a re-throw goes (water W52)."""
-    s = _shown(parcel, view)
-    if s is None:
-        return []
-    out: list[Box] = []
-    if frame[0] > s[0]:
-        out.append((s[0], s[1], min(frame[0], s[2]), s[3]))
-    if frame[1] > s[1]:
-        out.append((s[0], s[1], s[2], min(frame[1], s[3])))
-    if frame[2] < s[2]:
-        out.append((max(frame[2], s[0]), s[1], s[2], s[3]))
-    if frame[3] < s[3]:
-        out.append((s[0], max(frame[3], s[1]), s[2], s[3]))
-    return out
 
 
 def neatline_clip(ink: list[str], ink_cls: list[ClsTag], neat: Sequence[float] | None) -> tuple[list[str], list[ClsTag]]:
@@ -659,44 +642,70 @@ class FinishMixin:
             y += step
         return None
 
-    def flush_blade_groups(self: Settlement) -> None:  # type: ignore[misc]
-        """Write every deferred grass and reed bucket at its draw position, WITHOUT the blades the frame clips
-        (feature 223, GM 2026-09-11: "dropping the off-map scatter in the writer"). The scatter covers the whole
-        parcel and ~90% of its blades lie outside the viewBox the map is cropped to (specs/200 R2); the page
-        dropped them (`raster.drop_offmap`, 0.6-1.1 s per map) and the file and the PNG's resvg carried them. The
-        crop is not known when the scatter runs (`stage_frame` follows the hinterland), so the buckets wait here,
-        the way the tree canopies do, and are culled by drop_offmap's own rule - a blade kept unless it lies wholly
-        outside the viewBox plus `OFFMAP_MARGIN`, judged on the same formatted coordinates - then merged by
-        `merge_lines`. The page then finds nothing more to drop from a classed bucket, so its ink is unchanged (its
-        element count can shrink by one: a bucket that falls under `TILE_MIN` blades once culled is one path where
-        the page used to tile it - Kuwabata's marsh, 24 subpaths, settlement-review 2026-09-11); an
-        unclassed bucket (a pasture's), which the page never judged, loses its off-map blades too - invisible by
-        construction, the viewBox clipped them. A map with no view is judged against its whole canvas, which is
-        what the page's `viewbox_of` reads then. Idempotent; runs first in `finish()`."""
-        pending = self._blade_groups
-        self._blade_groups = []
+    def flush_mark_groups(self: Settlement) -> None:  # type: ignore[misc]
+        """Write every deferred scatter mark - the scrub's pines - into the slot its scatter took, WITHOUT the marks the frame
+        clips (feature 225: culled by extent against the viewBox plus `OFFMAP_MARGIN`). Idempotent; runs first in `finish()`,
+        and at crop time. (The grass and reed buckets it also flushed until feature 298 are tiles now - `flush_covers`.)"""
         pending_marks = self._mark_groups
         self._mark_groups = []
         vx, vy, vw, vh = self.view if self.view else (0.0, 0.0, float(self.W), float(self.H))
         x0, y0, x1, y1 = vx - OFFMAP_MARGIN, vy - OFFMAP_MARGIN, vx + vw + OFFMAP_MARGIN, vy + vh + OFFMAP_MARGIN
-        for z, color, blades in pending:
-            kept = []
-            for ln in blades:
-                ax, ay, bx, by = float(ln[0]), float(ln[1]), float(ln[2]), float(ln[3])
-                if max(ax, bx) < x0 or min(ax, bx) > x1 or max(ay, by) < y0 or min(ay, by) > y1:
-                    continue
-                kept.append(ln)
-            self.out[z] = f'<g stroke="{color}" stroke-width="0.8">{merge_lines(kept)}</g>'
-            # THE PAGE READS THE BLADES, NOT THEIR TEXT (feature 284, FR-006): the slot is culled here by the page's own rule and
-            # is already its merged form, so the page need not cull or merge it again, and the scrub's hit region reads each
-            # blade's root - the `M` point `marks_region` found by regex in the path text - from here.
-            # KEYED BY THE SLOT'S STRING, NOT ITS INDEX: the water block is spliced into the stream after this flush, which
-            # shifts every later slot's index; the string itself (held here, so its id cannot be reused) is found again below.
-            self._blade_starts[id(self.out[z])] = (self.out[z], [(ln[0], ln[1]) for ln in kept])
-        # ...AND THE OTHER MARKS (feature 225): the brush dots, pines, wet tint and glints, each with its extent, appended to the
-        # slot their scatter took (after the crowns that slot may already hold) - the pad's ring never reaches the file.
         for z, marks in pending_marks:
             self.out[z] = self.out[z] + "".join(mk for mx0, my0, mx1, my1, mk in marks if not (mx1 < x0 or mx0 > x1 or my1 < y0 or my0 > y1))
+
+    def flush_covers(self: Settlement) -> None:  # type: ignore[misc]
+        """Draw every cover zone (feature 298): its ring less its bare ground, clipped to the viewBox plus `OFFMAP_MARGIN`, as one
+        even-odd path filled with its kind's tile, written into its class's slot right above the land (`_header`) - so every
+        feature drawn after the header draws over it (the GM 2026-10-01: "as long as we are using Z indexing ... to make sure
+        that that thing appears on top"). The tiles used, the bamboo stands' among them, go into the reserved `<defs>` slot. A
+        zone with nothing left draws nothing. A scrub zone's drawn shape is recorded on its commons record (`cover`) for the
+        page's hit region, which takes the pointer at the bottom of the stack (the fill itself takes none). Idempotent."""
+        import shapely
+        from shapely.geometry import Polygon, box
+
+        from .land.tiles import FRINGE_FT, OVERLAYS, cover_defs, cover_path, cover_rings
+
+        pending = self._covers
+        self._covers = []
+        vx, vy, vw, vh = self.view if self.view else (0.0, 0.0, float(self.W), float(self.H))
+        frame = box(vx - OFFMAP_MARGIN, vy - OFFMAP_MARGIN, vx + vw + OFFMAP_MARGIN, vy + vh + OFFMAP_MARGIN)
+        bs = self.bscale
+        shapes = []
+        for cover in pending:
+            if len(cover.ring) < 3:
+                continue
+            shape = Polygon(cover.ring).buffer(0).intersection(frame)
+            bare = [g for g in cover.bare if g is not None and not g.is_empty]
+            if bare and not shape.is_empty:
+                shape = shape.difference(shapely.union_all(bare))
+            if shape.is_empty or shape.area < 1.0:
+                continue
+            if cover.rec is not None:
+                cover.rec["cover"] = cover_rings(shape)
+            shapes.append((cover, shape))
+        # THE FRINGE (feature 299): where the scrub's shape and a marsh's meet, a band FRINGE_FT wide - half in each - is drawn
+        # with the fringe tile, in each side's own class and slot, in place of the two base tiles there
+        half = FRINGE_FT * bs / 2.0
+        reach = {kind: shapely.union_all([s for c, s in shapes if c.kind == kind]).buffer(half) for kind in ("grass", "reed")}
+        for cover, shape in shapes:
+            z = self._cover_slots.get((cover.kind, cover.cls))
+            if z is None:  # pragma: no cover - every kind and class a cover is recorded under has its slot (`_header`)
+                raise KeyError((cover.kind, cover.cls))
+            other = {"grass": "reed", "reed": "grass"}.get(cover.kind)
+            band = shape.intersection(reach[other]) if other else None
+            if band is not None and band.area >= 1.0:
+                shape = shape.difference(band)
+                self.out[z] += cover_path(band, "fringe", bs)
+                self._cover_kinds.add(("fringe", bs))
+            if shape.is_empty or shape.area < 1.0:
+                continue
+            self.out[z] += cover_path(shape, cover.kind, bs)
+            self._cover_kinds.add((cover.kind, bs))
+            if cover.kind in OVERLAYS:  # ...and the overlay over the base (feature 299: the varied look)
+                self.out[z] += cover_path(shape, OVERLAYS[cover.kind], bs)
+                self._cover_kinds.add((OVERLAYS[cover.kind], bs))
+        if "defs" in self._cover_slots:
+            self.out[self._cover_slots["defs"]] = cover_defs(self._cover_kinds)
 
     def finish(self: Settlement, basepath: str, render: bool = True, png_width: int = 2600) -> int:  # type: ignore[misc]
         # THE BEADS ARE SETTLED AFTER THE LAST WATER (feature 287, water W33): a field drops its drowned azemame over the
@@ -709,12 +718,13 @@ class FinishMixin:
         # that frames to the bare canvas never calls either (Hoshizora), and a queued stand that is
         # never flushed is a wood with no trees. Idempotent, so the usual crop-time flush still wins.
         self.flush_tree_stands()
-        self.flush_blade_groups()
+        self.flush_mark_groups()
+        self.flush_covers()
         # THE PREDICTION IS VERIFIED, NEVER TRUSTED (feature 224 FR-002): the view against the tightest frame any scatter
         # threw within; a view reaching past it means a strip inside the frame may hold no scatter - a visible defect.
         # GUARANTEED WHERE THE FRAME IS SET, not repaired here (feature 287, M6 and water W52): a hamlet's every scatter is
-        # thrown within the DECIDED view's frame (`hinterland.frame.scatter_frame_for` - the marsh thrown before the
-        # decision is thrown again into it, `throw_to_the_view`), and that frame carries the title band's allowance above
+        # thrown within the DECIDED view's frame (`hinterland.frame.scatter_frame_for`; the marsh throws nothing since feature
+        # 298, its reeds a tile), and that frame carries the title band's allowance above
         # and below the view, so the one thing that grows the view after the crop stays inside it. A re-throw here was
         # offered for a scatter whose thrower registered one and none ever did, so it is gone. What this records is the
         # overhang per side (`scatter_frame_overhang`), and a positive one as `scatter_frame_breach` for a caller whose
@@ -917,12 +927,6 @@ class FinishMixin:
             meta=self.M["meta"],
             manifest=self.M,
             with_raster=rendering,
-            # (an index into `body`: the neatline's wrapper, where there is one, stands after the header)
-            blade_starts={
-                i + (1 if i and len(ink) > len(self.out) + len(self.walls) + len(self.top) else 0): got[1]
-                for i, b in enumerate(self.out)
-                if (got := self._blade_starts.get(id(b))) is not None and got[0] is b
-            },
         )
         # WRITTEN WHOLE, THEN MOVED INTO PLACE (feature 261): the gate reads a pool map's manifest in one worker
         # while another re-rolls it, and an in-place write let a reader see it half-written - measured as a

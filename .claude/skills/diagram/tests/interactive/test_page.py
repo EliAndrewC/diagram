@@ -25,7 +25,6 @@ from l7r.diagram.interactive.page import (
     glossary_for,
     hit_layer,
     ink_census,
-    marks_region,
     merge_primitives,
     present_classes,
     render_page,
@@ -338,28 +337,6 @@ def test_same_styled_lines_merge_into_one_path_and_keep_their_group_style() -> N
     assert merge_primitives(g) == '<g stroke="#A7A860" stroke-width="0.8"><path d="M1,2L3,4M5,6L7,8M9,9L9,10" fill="none"/></g>'
 
 
-def test_merge_lines_is_merge_primitives_on_the_same_lines() -> None:
-    """Feature 222: the writer merges its blade buckets from the coordinates (`merge_lines`) and must produce the
-    bytes `merge_primitives` produces from the same lines written out - one line, a few, TILE_MIN - 1 (one path),
-    TILE_MIN and more (one path per tile, cells in order of first appearance), across tile edges and negatives."""
-    from l7r.diagram.interactive.page import TILE_MIN, merge_lines
-
-    rng = random.Random(222)
-
-    def coords(n: int) -> list[tuple[str, str, str, str]]:
-        out = []
-        for _ in range(n):
-            x, y = rng.uniform(-50, 1300), rng.uniform(-50, 1300)
-            out.append((f"{x:.1f}", f"{y:.1f}", f"{x + rng.uniform(-3, 3):.1f}", f"{y - rng.uniform(2, 5):.1f}"))
-        return out
-
-    for n in (0, 1, 2, 7, TILE_MIN - 1, TILE_MIN, 1500):
-        lines = coords(n)
-        written = "".join(f'<line x1="{a}" y1="{b}" x2="{c}" y2="{d}"/>' for a, b, c, d in lines)
-        assert merge_lines(lines) == merge_primitives(written), n
-    assert merge_lines(coords(1500)).count("<path") > 1, "the large bucket is tiled"
-
-
 def test_same_styled_circles_merge_into_one_path_of_arcs() -> None:
     out = merge_primitives('<circle cx="10" cy="20" r="1.4" fill="#2F6B35"/><circle cx="30" cy="40" r="1.4" fill="#2F6B35"/>')
     assert out.startswith('<path d="M8.6,20a1.4,1.4 0 1 0 2.8,0a1.4,1.4 0 1 0 -2.8,0M28.6,40a') and out.endswith('fill="#2F6B35"/>')
@@ -378,24 +355,28 @@ def test_the_merge_applies_to_classed_strings_only() -> None:
     assert wrap(lines, None) == lines and wrap(lines, "-") == lines
 
 
-def test_the_region_grows_a_cell_around_each_mark_but_stays_inside_the_footprint() -> None:
-    one = ['<line x1="36" y1="36" x2="37" y2="37"/>']  # the cell (1, 1)
-    grown = marks_region(one, cell=24.0, grow=1)
-    assert grown.count("<rect") == 3 and 'x="0" y="0" width="72"' in grown, "the eight neighbors are in: three rows of three"
-    clipped = marks_region(one, cell=24.0, grow=1, within=[[[0, 0], [48, 0], [48, 48], [0, 48]]])
-    assert clipped.count("<rect") == 2 and 'width="48"' in clipped and 'y="48"' not in clipped, "the growth stops at the footprint; the marked cell itself always counts"
-
-
-def test_the_scrub_region_comes_from_its_marks_not_its_polygon() -> None:
+def test_the_scrub_region_is_the_shape_its_tile_fills_not_its_polygon() -> None:
+    """Feature 298: the scrub's hit region is its recorded cover - the ground its grass tile fills, holes bare - not the
+    whole commons polygon (the GM: "if my mouse is just in the middle of the village, over blank space where there is
+    deliberately no scrubland, then I don't think that the scrubland should be highlighted"); a scrub zone whose tile filled
+    nothing has no region; a marsh keeps its polygon."""
     strings = [
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">',
         '<rect width="300" height="300" fill="#EFE3C2"/>',
-        '<g stroke="#A7A860" stroke-width="0.8"><line x1="5" y1="5" x2="6" y2="9"/></g>',
+        '<path d="M0,0L300,0L300,300Z" fill="url(#cover-grass-1)" style="pointer-events: none"/>',
+        '<path d="M0,0L10,0L10,10Z" fill="url(#cover-reed-1)" style="pointer-events: none"/>',
         "</svg>",
     ]
-    tags = [None, "-", "scrub and rough grazing", None]
-    page = render_page(strings, tags, "T", {"ftpx": 1.0}, {"commons": [{"role": "grazing", "poly": [[0, 0], [300, 0], [300, 300], [0, 300]]}]})
-    assert "<rect x=\"0\" y=\"0\" width=\"48\" height=\"24\" fill=\"none\"/>" in page and 'polygon class="hit"' not in page
+    tags = [None, "-", "scrub and rough grazing", "marsh", None]
+    cover = [[[0, 0], [300, 0], [300, 300]], [[100, 50], [150, 50], [150, 100]]]
+    manifest = {
+        "commons": [{"role": "grazing", "poly": [[0, 0], [300, 0], [300, 300], [0, 300]], "cover": cover}, {"role": "grazing", "poly": [[0, 0], [9, 0], [9, 9]]}],
+        "marshes": [{"role": "toe", "poly": [[0, 0], [10, 0], [10, 10]]}],
+    }
+    page = render_page(strings, tags, "T", {"ftpx": 1.0}, manifest)
+    assert page.count('class="hit" d="M0.0,0.0L300.0,0.0L300.0,300.0ZM100.0,50.0') == 1, "the scrub's region is its cover, hole and all"
+    assert page.count('class="hit" d="M0.0,0.0L9.0') == 0, "a scrub zone with no cover has no region"
+    assert page.count('class="hit" d="M0.0,0.0L10.0,0.0L10.0,10.0Z"') == 1, "the marsh keeps its polygon"
 
 
 def test_the_citations_come_from_the_research_entries() -> None:
@@ -947,7 +928,6 @@ def test_the_merges_bucket_grids_change_no_byte(monkeypatch):
     interleaved scatter - lines and circles in several styles, some translucent, some outlined, some wider than the
     grid's big-box bound - the merged page is byte-identical to the one the whole-list walk wrote (the grid forced to
     return everything it holds)."""
-    import random
 
     from l7r.diagram.interactive import page as pg
 

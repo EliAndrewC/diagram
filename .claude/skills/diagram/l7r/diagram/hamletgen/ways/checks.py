@@ -8,6 +8,7 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, seg_intersect, segments_cross
 from l7r.diagram.settlement._geom.indexes import PointGrid
+from l7r.diagram.settlement._geom.primitives import seg_dists
 from l7r.diagram.sitegen.geom import crosses_disc, crosses_poly, unit
 
 from ..clearance import pairs_within
@@ -369,7 +370,9 @@ def square_crossings(pts: Sequence[Pt], brook: Sequence[Pt], half: float) -> lis
     can be). The leg reaches `SQUARE_LEG_PAD` past `half` each side, so its own points stand clear of the elbow pass and
     squaring a squared lane changes nothing: the web's last pass (`settle_the_web`) runs this until a round is still."""
     if len(pts) > 2 and len(brook) > 1:
-        pts = [pts[0], *(p for p in pts[1:-1] if min(seg_dist(p[0], p[1], c, d) for c, d in zip(brook, brook[1:], strict=False)) > half), pts[-1]]
+        inner = pts[1:-1]
+        far = seg_dists(inner, list(zip(brook, brook[1:], strict=False))).min(axis=1) > half if inner else []
+        pts = [pts[0], *(p for p, f in zip(inner, far, strict=True) if f), pts[-1]]
     leg = half + SQUARE_LEG_PAD
     out: list[Pt] = [pts[0]] if pts else []
     for k, (a, b) in enumerate(zip(pts, pts[1:], strict=False)):

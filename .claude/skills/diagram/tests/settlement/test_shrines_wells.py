@@ -6,7 +6,7 @@ import pytest
 
 from l7r.diagram.settlement import TORII_PITCH_FT, Settlement, torii_halfbox
 from l7r.diagram.settlement._geom import torii_glyph_dims
-from tests.settlement._builders import _byre_village, _crop_settlement, _nuc_village, _scatter_base_points, _town, _village, _walled_city
+from tests.settlement._builders import _byre_village, _crop_settlement, _ground_points, _nuc_village, _town, _village, _walled_city
 
 
 def test_a_wellhead_is_refused_in_the_paddy_water_and_allowed_on_the_rim():
@@ -84,8 +84,7 @@ def test_commons_clears_the_wellhead_apron():
     before = len(s.out)
     s.commons([(150, 150), (500, 150), (500, 450), (150, 450)], role="pasture")
     lim = s.M["wells"][0]["vr"] + 20 * s.bscale - 0.06  # 0.1-rounding slack, as in the halo test
-    s.flush_blade_groups()  # the scatter's marks are written at finish since feature 225
-    pts = _scatter_base_points(s.out[before:])
+    pts = _ground_points(s, before)
     assert pts and all((px - 300) ** 2 + (py - 300) ** 2 > lim * lim for px, py in pts)
 
 

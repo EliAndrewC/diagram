@@ -15,6 +15,7 @@ from l7r.diagram.settlement.homestead_parts.wood_share import COPSE_CLUMP_BS, in
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT, exit_bearing, start_tree
 from l7r.diagram.settlement.rolling.bearing import COMMON_BEARING_DEG, MarginBearing, turned_reach, wrap_line_deg
+from l7r.diagram.settlement.rolling.fit import FIELD_REACH_FT
 from l7r.diagram.settlement.rolling.lot import HouseholdLots
 from l7r.diagram.settlement.shrines_wells.byres import COMMONS_BYRE_FRACTION, COMMONS_BYRE_GAP, commons_byre_target, household_byre_form
 
@@ -25,6 +26,7 @@ from .boundary import install_site_boundary
 from .capacity import SiteRefused, margin_ladder, seat_the_rest, seating_mark, unseat_to
 from .fixtures import farmstead_fixtures, fixture_forms, fixture_quota
 from .holds import hold_laid_parts
+from .region import SeatRegion, seat_window
 from .retirement import retirement_houses, retirement_quota
 from .seats import cluster_aspect, front_row
 from .wells import place_wells
@@ -240,6 +242,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     s._site_chains = None  # the boundary is the homestead stage's; every later placer runs the fit test's own path
     s._site_corridors = None
     s._free_ground = None
+    s._seat_region = None
     s._unreachable = None
     s._access = None  # the access tree is the seating's; the manifest keeps it (`access_exit`, `access_corridors`)
     s._pockets = None  # the pockets are drawn by `place_wells` from the house records (`well_pocket`)
@@ -452,6 +455,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # computed once; the fit test reads it instead of its five ground scans, and the seats below are proposed from it.
     install_site_boundary(s, plan)
     face_the_houses(s, plan)
+    s._seat_region = None  # built below once the access tree stands (feature 297, plan B1); none for a form without one
     # EACH HOUSEHOLD'S LOT, keyed on seat order (feature 287, plan M5): the k-th house seated takes rung k of the size
     # ladder and the k-th place in the kura quota, so the counts close whatever seat each household lands on
     s._byre_form, _share = household_byre_form(s)
@@ -488,7 +492,8 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         research/water/270: Hongcun beside its stream, Xidi and Likeng on both banks), so neither bank is refused;
         each farmstead stays whole on one bank, which the same entry records as a guess."""
         s._seat_search["candidates"] += 1
-        return True
+        region = getattr(s, "_seat_region", None)
+        return region is None or region.offer([(x, y)])[0]
 
     ax, ay = seat["along"]
     ox, oy = seat["out"]
@@ -568,6 +573,9 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         start_tree(s, (float(seat["cx"]), float(seat["cy"])), _out, _length)
         if not reserve_field_corridor(s):
             return 0, 0  # ...AND ITS FIELD'S CORRIDOR (ways W03): a margin with no lawful way on to its field seats no one here
+    # THE SEAT REGION (feature 297, FR-001, plan B1): built once the exit strip and the field's corridor stand, kept current as
+    # houses are seated; every round below offers only the seats it holds (`region.SeatRegion`)
+    s._seat_region = SeatRegion(s, seat_window(s, s.px(FIELD_REACH_FT))) if getattr(s, "_nucleated", False) else None
     # THE SHARED SHEDS' POCKETS BEFORE ANY HOUSE (feature 287, homes H06): on the `detached_commons` form the sheds are no
     # household's part, so their ground is reserved in the band first and the houses pack round it - AFTER the exit strip
     # and the field's corridor, whose strips a pocket keeps off (`_commons_pocket_clear`; M8: the registry refuses a shed on
@@ -874,15 +882,19 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         # meant a second copy of the dedupe and the jitter, which is how two rules drift apart.
         _offered, _along_the_field = _cands, False
         while True:
-            for _sx4, _sy4 in _offered:
+            # THE ROUND'S SEATS JITTERED, THEN OFFERED AT ONCE (feature 297, FR-001, plan B1): one region read for the list
+            _jittered = [(_q[0] + ax * (s._hjit(_q[0], _q[1], 13.0) - 0.5) * BUNDLE_PITCH * 0.2, _q[1] + ay * (s._hjit(_q[0], _q[1], 13.0) - 0.5) * BUNDLE_PITCH * 0.2) for _q in _offered]
+            _region = getattr(s, "_seat_region", None)
+            _in = _region.offer(_jittered) if _region is not None else [True] * len(_jittered)
+            for (_sx4, _sy4), _held in zip(_jittered, _in, strict=True):
                 if placed >= plan.spec.households:
                     break
+                if not _held:
+                    continue
                 # A PITCH IS A SPACING, NOT A RULING (settlement-review, feature 227: 11 of Mizuguchi's 12 houses fell in
                 # one 10 px bucket of nearest-neighbor distance, where the hand-packed maps spread over three). The seat is
                 # nudged along the band by up to a tenth of a pitch, from the map's own position hash - enough to break the
                 # modal spike, far too little to move a rank or to reopen a gap the round above just filled.
-                _jit = (s._hjit(_sx4, _sy4, 13.0) - 0.5) * BUNDLE_PITCH * 0.2
-                _sx4, _sy4 = _sx4 + ax * _jit, _sy4 + ay * _jit
                 if not in_band((_sx4, _sy4)) and attempt >= 4:
                     continue
                 if any(math.hypot(_sx4 - kx, _sy4 - ky) < BUNDLE_PITCH * (0.5 if attempt < 4 else 0.3) for kx, ky in _kept) or any(

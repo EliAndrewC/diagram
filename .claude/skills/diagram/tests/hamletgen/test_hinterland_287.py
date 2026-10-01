@@ -13,30 +13,11 @@ import pytest
 from l7r.diagram.hamletgen import hinterland
 from l7r.diagram.hamletgen.hinterland import parcels
 from l7r.diagram.hamletgen.hinterland.bamboo import BAMBOO_SAMPLE_FT, bamboo_seats, stand_samples
-from l7r.diagram.hamletgen.hinterland.frame import TITLE_POCKET_CLEAR_FT, clear_pocket_spot, pocket_clear_of_features, throw_to_the_view
+from l7r.diagram.hamletgen.hinterland.frame import TITLE_POCKET_CLEAR_FT, clear_pocket_spot, pocket_clear_of_features
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist
 from l7r.diagram.settlement.land.cover import ring_center
 
 from ._builders import a_plan
-
-# ---- M6 / water W52: the scatter thrown to the decided view ---------------------------------------------------------
-
-
-def test_a_scatter_thrown_before_the_decision_is_thrown_again_into_the_decided_view() -> None:
-    """Cohort seed 8's case: the marsh threw within a predicted frame whose foot stood 87 px above the decided view's. Each
-    scatter that offered a re-throw is thrown into exactly the strips of its parcel the new frame shows past the old, its
-    frame becomes the new one, and the registry is closed; a scatter that offered none keeps its frame."""
-    s = Settlement(1000, 1000, seed=1)
-    s._scatter_frames = [((0.0, 0.0, 500.0, 400.0), (0.0, 0.0, 800.0, 900.0)), ((0.0, 0.0, 500.0, 400.0), (0.0, 0.0, 800.0, 900.0))]
-    thrown: list[tuple[float, float, float, float]] = []
-    vars(s)["_scatter_catchup"] = {0: thrown.append}
-    throw_to_the_view(s, (0.0, 0.0, 600.0, 500.0))
-    assert thrown == [(500.0, 0.0, 600.0, 500.0), (0.0, 400.0, 600.0, 500.0)], "the strips past the old frame, inside the new"
-    assert s._scatter_frames[0][0] == (0.0, 0.0, 600.0, 500.0) and s._scatter_frames[1][0] == (0.0, 0.0, 500.0, 400.0)
-    assert "_scatter_catchup" not in vars(s), "the registry is closed with the stage"
-    throw_to_the_view(s, (0.0, 0.0, 600.0, 500.0))  # nothing offered: nothing thrown
-    assert len(thrown) == 2
-
 
 # ---- woods W04: no three woodland parcels in a ruled row, on the point the record carries --------------------------
 

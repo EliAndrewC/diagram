@@ -80,11 +80,13 @@ class Settlement(
             tuple[float, float, float, float, float, Any]
         ] = []  # stable-yard scatters queued at stables()/animal_ground() time, DRAWN at crop time when every way/footprint exists (GM 2026-07-24: a yard drawn at stables-time could not see later-drawn streets, so its furniture landed on them)
         # DEFERRED: drawn at crop time, not where it is called. See "DRAW ORDER" in CLAUDE.md.
-        # the grass and reed buckets, kept as coordinates until `finish()` knows the frame and culls the off-map ones (feature 223)
-        self._blade_groups: list[tuple[int, str, list[tuple[str, str, str, str]]]] = []
-        # the scatter's other marks - brush dots, pines, wet tint, glints - kept as (extent, string) until finish culls the off-frame ones (feature 225)
+        # the zones a cover tile fills - the scrub's grass, the marsh's reeds - drawn at finish in the slots `_header` reserves
+        # right above the land (feature 298, `flush_covers`), and the tiles every cover and bamboo stand uses, for the <defs>
+        self._covers: list[Any] = []
+        self._cover_kinds: set[tuple[str, float]] = set()
+        self._cover_slots: dict[Any, int] = {}
+        # the scatter's other marks - pines - kept as (extent, string) until finish culls the off-frame ones (feature 225)
         self._mark_groups: list[tuple[int, list[tuple[float, float, float, float, str]]]] = []
-        self._blade_starts: dict[int, tuple[str, list[tuple[str, str]]]] = {}  # id(slot string) -> (the string, its blades' roots) - for the page (feature 284)
         # the frame the scatter may predict (feature 224): a throw outside it is skipped before the keep-out test; each frame
         # used is kept so `finish()` can record whether the view stayed inside the tightest of them
         self._scatter_frame: tuple[float, float, float, float] | None = None
@@ -442,6 +444,12 @@ class Settlement(
         )
         self.add('</defs>')
         self.add(f'<rect width="{self.W}" height="{self.H}" fill="{LAND}"/>', cls="-")  # the sheet: ruled NOT highlighted (feature 134 FR-002)
+        # THE COVERS' SLOTS, RIGHT ABOVE THE LAND (feature 298, the GM 2026-10-01: "as long as we are using Z indexing ... to
+        # make sure that that thing appears on top"): the tiles' <defs>, then the scrub, a pasture's (unclassed, as its blades
+        # were) and the marsh - filled by `flush_covers` at finish, so every feature drawn after the header draws over them
+        self._cover_slots = {"defs": self.add("", cls="-")}
+        for key, cls in ((("grass", "scrub and rough grazing"), "scrub and rough grazing"), (("grass", None), None), (("reed", "marsh"), "marsh")):
+            self._cover_slots[key] = self.add("", cls=cls)
 
     def meta(self: Settlement, **kw: Any) -> None:
         if "ftpx" in kw:

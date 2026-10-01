@@ -43,7 +43,7 @@ class GroveBlocks:
     re-seats. `displaced` is the other grove's canopy alone, the one blocker a SPARSE grove re-seats
     for. `inside` and `rim_within` are the grove's own outline."""
 
-    __slots__ = ("_clear", "_fams", "_inside", "_last", "crop_pad", "dike_pad", "displacers", "dry_pad", "ring", "static")
+    __slots__ = ("_clear", "_fams", "_inside", "_last", "_raw", "_region", "crop_pad", "dike_pad", "displacers", "dry_pad", "ring", "static")
 
     def __init__(
         self,
@@ -89,6 +89,8 @@ class GroveBlocks:
         self._fams: tuple[list[Any], ...] = ()
         self._inside: dict[tuple[float, float], bool] = {}
         self._clear: dict[tuple[float, float], bool] = {}
+        self._raw = (outline, crops, crop_pad, dry, dry_pad, dikes, dike_pad, water, corridors, circles, rects)
+        self._region: Any = None
 
     def _at(self, x: float, y: float) -> tuple[list[Any], ...]:
         """The static items in (x, y)'s cell, split by family: crops, dry, dikes, water, corridors, circles, rects."""
@@ -124,12 +126,67 @@ class GroveBlocks:
             hit = self._inside[(x, y)] = self.ring.inside(x, y)
         return hit
 
+    def regions(self) -> tuple[Any, Any, Any]:
+        """EVERY STATIC KEEP-OUT OF THE FILL PAINTED ONCE, BY FAMILY (feature 297, FR-004, plan B3 - the GM: "drawing a box and then
+        filling it in"): three `Region`s over the outline's box grown by the widest reach, at two pixels - the HARD edges a belt
+        stops at (the crops and dry plots grown by their pads, the dikes and the marsh, the watercourses at their reach), the LANES
+        (the corridors at their buffers) and the LOCAL obstacles a belt is planted around (the occupancy circles, the sun
+        rectangles). A clump's ground is read off them and nothing else: which family refuses it decides whether it is dropped or
+        re-seated. Conservative (every shape grown by `region.GROW` cells): a clump at a family's very margin may be refused,
+        never one seated on a keep-out."""
+        if self._region is None:
+            from .._geom.region import Region
+
+            outline, crops, crop_pad, dry, dry_pad, dikes, dike_pad, water, corridors, circles, rects = self._raw
+            reach = max([crop_pad, dry_pad, dike_pad] + [float(r) for _pl, r in list(water) + list(corridors)] + [float(c[2]) for c in circles] + [0.0])
+            xs, ys = [float(q[0]) for q in outline], [float(q[1]) for q in outline]
+            window = (min(xs) - reach - 40.0, min(ys) - reach - 40.0, max(xs) + reach + 40.0, max(ys) + reach + 40.0)
+            hard, lane, local = Region(window, 2.0), Region(window, 2.0), Region(window, 2.0)
+            for ring_ in crops:
+                hard.poly(ring_, crop_pad)
+            for ring_ in dry:
+                hard.poly(ring_, dry_pad)
+            for ring_ in dikes:
+                hard.poly(ring_, dike_pad)
+            for pl, r in water:
+                hard.line(pl, float(r))
+            for pl, r in corridors:
+                lane.line(pl, float(r))
+            for cx, cy, r in circles:
+                local.circle(float(cx), float(cy), float(r))
+            for x0, y0, x1, y1 in rects:
+                local.rect(float(x0), float(y0), float(x1), float(y1))
+            self._region = (hard, lane, local)
+        return self._region
+
+    def taken_by(self, x: float, y: float) -> str | None:
+        """Which family's region holds the point: "hard", "local", "lane", or None where the ground is clear (feature 297)."""
+        hard, lane, local = self.regions()
+        if hard.taken(x, y):
+            return "hard"
+        if local.taken(x, y):
+            return "local"
+        return "lane" if lane.taken(x, y) else None
+
+    def exact_taken_by(self, x: float, y: float) -> str | None:
+        """`taken_by` asked of the exact families (`hard`, `local`, `lane`), for a HOUSEHOLD'S RESERVED SEAT (feature 297, research
+        R16): the seating proved such a seat clear, and the regions' margin round a keep-out refused it (woods W25 at the gate), so
+        a reserved seat and its re-seat are asked exactly; every other clump reads the regions alone."""
+        if self.hard(x, y):
+            return "hard"
+        if self.local(x, y):
+            return "local"
+        return "lane" if self.lane(x, y) else None
+
+    def exact_clear(self, x: float, y: float) -> bool:
+        """Clear of every static family, asked exactly (`exact_taken_by`) - a reserved seat's test."""
+        return self.exact_taken_by(x, y) is None
+
     def static_clear(self, x: float, y: float) -> bool:
-        """`not (hard or local or lane)`, remembered per point (feature 281, FR-008): the windbreak's gap fill offers a gap
-        the same points on every round, and none of the three changes during the fill."""
+        """Clear of every static family, read off the fill's regions (feature 297, plan B3), remembered per point (feature 281)."""
         hit = self._clear.get((x, y))
         if hit is None:
-            hit = self._clear[(x, y)] = not (self.hard(x, y) or self.local(x, y) or self.lane(x, y))
+            hit = self._clear[(x, y)] = self.taken_by(x, y) is None
         return hit
 
     def rim_within(self, x: float, y: float, limit: float) -> bool:

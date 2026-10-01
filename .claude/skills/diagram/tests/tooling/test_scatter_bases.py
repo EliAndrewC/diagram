@@ -23,7 +23,7 @@ def _load():  # noqa: ANN202
 
 
 sb = _load()
-BASES = {"blade": [(10.0, 10.0), (50.0, 50.0), (55.0, 52.0)], "pine": [], "reed": [(51.0, 51.0)]}
+BASES = {"pine": [(10.0, 10.0), (50.0, 50.0), (55.0, 52.0)], "crown": [(51.0, 51.0)]}
 
 
 def _fake(_svg: str) -> dict:
@@ -45,9 +45,9 @@ def test_locate(tmp_path: pathlib.Path) -> None:
 
 def test_render_counts_and_a_box() -> None:
     text = sb.render("sawada", BASES, None, 40)
-    assert "blade        3" in text and "pine         0" in text and "inside the box" not in text
+    assert "pine         3" in text and "crown        1" in text and "inside the box" not in text
     boxed = sb.render("sawada", BASES, (40.0, 40.0, 60.0, 60.0), 1)
-    assert "blade        2  (50.0,50.0) ..." in boxed and "reed         1  (51.0,51.0)" in boxed
+    assert "pine         2  (50.0,50.0) ..." in boxed and "crown        1  (51.0,51.0)" in boxed
     assert "verdict" in boxed.splitlines()[0] and "VIOLATION" not in boxed
 
 
@@ -63,6 +63,6 @@ def test_main(tmp_path: pathlib.Path, capsys) -> None:  # noqa: ANN001
 
 def test_the_engines_own_parse_is_what_runs(tmp_path: pathlib.Path, capsys) -> None:  # noqa: ANN001
     folder = _map(tmp_path)
-    (folder / "sawada.svg").write_text('<svg><g stroke="#A7A860"><line x1="12.0" y1="34.0" x2="13" y2="30"/></g></svg>', encoding="utf-8")
+    (folder / "sawada.svg").write_text('<svg><line x1="12.0" y1="34.0" x2="12.0" y2="22.0" stroke="#7A6A48" stroke-width="1.1"/></svg>', encoding="utf-8")
     assert sb.main([str(folder)]) == 0
-    assert "blade        1" in capsys.readouterr().out, "non-vacuity: the real parse found the one blade"
+    assert "pine         1" in capsys.readouterr().out, "non-vacuity: the real parse found the one pine"

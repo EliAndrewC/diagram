@@ -23,18 +23,13 @@ import math
 import random
 from typing import TYPE_CHECKING, Any
 
-# THE BLADES ARE WRITTEN AS MERGED PATHS (feature 222, GM 2026-09-11: "merging each blade group into one path"):
-# one <line> per blade made a hamlet's SVG 13-16 MB, 89% of it these two buckets, and resvg parsed every one of
-# them three times per gen (the PNG, the page's picture, its id map). The page's own `merge_primitives` turns the
-# bucket into `M x,y L x,y` paths - one per 400 px tile past 200 blades (feature 199's paint tiling, kept), one
-# path below that - and `merge_lines` is that merge on the coordinates themselves (parsing 260,000 written elements
-# back cost 1.9 s), so the file carries exactly what the page carried, the ink is unchanged, and every reader of
-# the file is smaller: measured on Inashiro, resvg at 2600 px 2.13 s -> 1.18 s (specs/222 research R1, R2).
-# AND SINCE FEATURE 223 THE BUCKET IS KEPT AS COORDINATES UNTIL `finish()`, which knows the frame: ~90% of the blades
-# lie outside the viewBox (specs/200 R2) and are culled there by the page's own `drop_offmap` rule before the merge,
-# so the file never carries them (`Settlement.flush_blade_groups`).
+# THE GRASS IS A TILE (feature 298): the blades and brush dots this scatter threw one by one - 55-68% of four pool hamlets'
+# SVGs once merged (features 222-225 merged and culled them) - are the grass tile (`land.tiles`), filling each zone less the
+# ground its throws were kept off (`Cover`, `Settlement.flush_covers`). The scraggly pines and the woodland's crowns stay
+# individual: the GM, 2026-10-01, drawing individual trees "serves a useful purpose".
 from .._geom import CrownIndex, KeepoutGrid, Poly, RingIndex, convex_hull
 from ..land.wet import MARSH_FEATHER_BS, marsh_ground
+from .tiles import Cover
 
 WOOD_FRINGE_FT = 8.0
 """How far grass reaches in under a wood's edge before the kept-clear floor (GM 2026-09-27, Inashiro: highlighting the
@@ -450,15 +445,11 @@ class GroundCoverMixin:
             #   role="pasture"   -> OPEN GRAZING GRASS: grass tufts + the odd brush dot, NO trees at all - reads as
             #                       open pasture, unmistakably NOT woodland.
             #   role="commons"/"grazing" (default) -> the cut-over fuel/fodder scrub: grass + a FEW scraggly pines.
-            # SVG-size: the grass BLADES are ~98% of a to-scale map's <line> elements and all share ONE constant
-            # style, so they go in a bucket emitted ONCE inside a styled <g> (bare coords per line), not one full
-            # stroke=...stroke-width=... string each - ~30% off the file, content-lossless (same lines, grouped),
-            # render is visually identical (only the z-order of overlapping scrub texture shifts, in the margins;
-            # the fields/buildings are pixel-identical). The sparse dots/pines keep their inline styles.
+            # The grass and brush are the grass tile (feature 298; the note at the imports); the pines keep their inline styles.
             g: list[str] = []
-            blades: list[tuple[str, str, str, str]] = []  # (x1, y1, x2, y2), merged by `merge_lines` at the group
-            marks: list[tuple[float, float, float, float, str]] = []  # (extent, string): the brush dots and pines, culled to the frame at finish (feature 225); the woodland crowns stay in `g`
+            marks: list[tuple[float, float, float, float, str]] = []  # (extent, string): the pines, culled to the frame at finish (feature 225); the woodland crowns stay in `g`
             _wd_crowns = 0
+            _cover_bare: list[Any] = []  # the ground the grass tile leaves bare (feature 298): set where the grass would have been thrown
             if role == "woodland":
                 # A TARGET, NOT AN ATTEMPT COUNT (settlement-review x3, 2026-08-18 round 2 - Inashiro,
                 # Sawada and Mizuguchi found it independently). `int(area / 540)` looks like a density
@@ -528,23 +519,21 @@ class GroundCoverMixin:
                 _fr = self._scatter_frame
                 if _fr is not None:
                     self._scatter_frames.append((_fr, (x0, y0, x1, y1)))  # for finish()'s breach record: the frame, and the ground this throw covered
-                # coarse grass tufts + the odd low brush dot, thrown and tested AS ARRAYS (`grass_scatter`, feature 278 FR-008)
-                _gb, _gm = grass_scatter(
-                    int(area / (74 * bs * bs)),
-                    (x0, y0, x1, y1),
-                    _fr,
-                    ring,
-                    keep,
-                    self._on_crescent_pond if crescents else None,
-                    pond,
-                    soft_idx,
-                    soft_feathers,
-                    feather,
-                    bs,
-                    random.getrandbits(64),
-                )
-                blades += _gb
-                marks += _gm
+                # THE GRASS AND BRUSH ARE A TILE NOW (feature 298, the GM 2026-10-01: "instead of then drawing individual glyphs
+                # within that ... some tiled pattern"): the zone is recorded with the ground its scatter kept bare - every keep-out
+                # the throw was tested against, every marsh, the crescent ponds and the pond - and `flush_covers` fills the rest
+                # with the grass tile at the bottom of the stack, so whatever stands in it draws over it
+                import shapely.affinity  # bound here, not at import (feature 237)
+                from shapely.geometry import Point, Polygon
+
+                _cover_bare += [g for g in (keep.shape((0.0, 0.0), (x0, y0, x1, y1)),) if g is not None]
+                _cover_bare += [Polygon(m).buffer(0) for m in soft]  # every marsh (and what the caller hands as soft): no grass in the reeds
+                # ...and every wood but its fringe: grass runs a few paces in under a wood's edge (`WOOD_FRINGE_FT`, the GM
+                # 2026-09-27: not "broad swaths of it under the windbreak")
+                _cover_bare += [Polygon(w).buffer(0).buffer(-WOOD_FRINGE_FT * bs) for w in woods]
+                _cover_bare += [Point(cp["cx"], cp["cy"]).buffer(cp["r"] + 2.0) for cp in crescents]
+                if pond:
+                    _cover_bare.append(shapely.affinity.scale(Point(pond[0], pond[1]).buffer(1.0), pond[2], pond[3]))
                 if role != "pasture":  # the SCRAGGLY pines belong to cut-over scrub, NOT to open pasture
                     for _ in range(max(2, int(area / (6000 * bs * bs)))):  # a few SCRAGGLY hill pines (sparse, individual, open)
                         px, py = random.uniform(x0 + 6, x1 - 6), random.uniform(y0 + 6, y1 - 6)
@@ -579,7 +568,6 @@ class GroundCoverMixin:
             # feature 134: the commons' highlight class follows its ROLE; a role the vocabulary does not
             # name yet (pasture) stays unclassed so the census reports it rather than misfiling it
             _ccls = {"woodland": "woodland commons", "grazing": "scrub and rough grazing", "commons": "scrub and rough grazing"}.get(role)
-            self._blade_groups.append((self.add("", cls=_ccls), "#A7A860", blades))  # flushed at finish, the off-map blades culled (feature 223); an empty bucket is harmless
             self._mark_groups.append((self.add(''.join(g), cls=_ccls), marks))  # the crowns now, the dots and pines at finish, into one slot
             random.setstate(st)
             self._cover_n += 1
@@ -604,6 +592,8 @@ class GroundCoverMixin:
                     "poly": [[round(px, 1), round(py, 1)] for px, py in poly],
                 }
             )
+            if role != "woodland":
+                self._covers.append(Cover("grass", _ccls, [(float(a), float(b)) for a, b in poly], _cover_bare, self.M["commons"][-1]))
 
     def hinterland(  # type: ignore[misc]
         self: Settlement,
@@ -743,7 +733,10 @@ class GroundCoverMixin:
         # stand under the crowns and grass thins out inside the first few paces. The belt is drawn
         # two stages later, so without this the scrub could not see it: Inashiro carried 2,688
         # blades, 158 brush dots and 11 pines inside the belt polygon.
-        soft = [toe_poly] if toe_poly else []
+        # ...BUT ONCE A MARSH IS DRAWN, ITS OWN GROUND IS THE KEEP-OUT, NOT THE BAND IT WAS LAID IN (feature 299): the marsh's
+        # outline is shaped inside the band (`land.outline`), and the ground it gives up is dry ground the scrub fills -
+        # handed the laid band, the scrub left a bare strip between the two. `commons` reads every recorded marsh itself.
+        soft = [toe_poly] if toe_poly and not marsh_ground(self.M) else []
         woods = [[tuple(q) for q in sp] for sp in soft_extra]  # every wood: grass reaches only WOOD_FRINGE_FT under its edge
         if commons:
             for p in ring(0, max(W, H)):  # the cut-over SCRUB commons: the DOMINANT denuded-hill cover
@@ -829,9 +822,9 @@ class GroundCoverMixin:
         record(verge)
 
     def _cull_cover_in(self: Settlement, ring: Poly) -> None:  # type: ignore[misc]
-        """Take out of every scatter still waiting for the finish (`_blade_groups`, `_mark_groups`) each grass blade ROOTED
-        inside the swept clearing `ring`, and each brush dot or pine stroke whose extent's middle lies inside it (feature
-        287, woods W10). The scatter skips the clearings that exist when it runs; a clearing swept after it - a household
+        """Take out of every cover still waiting for the finish (`_covers`) the swept clearing `ring` - its tile leaves the
+        ground bare (feature 298) - and out of every scatter (`_mark_groups`) each pine stroke whose extent's middle lies
+        inside it (feature 287, woods W10). The scatter skips the clearings that exist when it runs; a clearing swept after it - a household
         shrine seated after the scrub - was dotted over. Its marks are deferred to the finish, so the ground is cleared
         here, where the clearing is made, and the order the two were placed in cannot matter. The clearing is bare, which
         is what it is; no feature moves."""
@@ -842,10 +835,12 @@ class GroundCoverMixin:
         def swept(px: float, py: float) -> bool:
             return x0 <= px <= x1 and y0 <= py <= y1 and idx.inside(px, py)
 
-        for k, (z, color, blades) in enumerate(self._blade_groups):
-            kept = [ln for ln in blades if not swept(float(ln[0]), float(ln[1]))]
-            if len(kept) != len(blades):
-                self._blade_groups[k] = (z, color, kept)
+        if len(ring) >= 3:
+            from shapely.geometry import Polygon  # bound here, not at import (feature 237)
+
+            swept_ground = Polygon(ring).buffer(0)
+            for cover in self._covers:
+                cover.bare.append(swept_ground)
         for k, (z, marks) in enumerate(self._mark_groups):
             left = [mk for mk in marks if not swept((mk[0] + mk[2]) / 2.0, (mk[1] + mk[3]) / 2.0)]
             if len(left) != len(marks):
@@ -860,83 +855,3 @@ class GroundCoverMixin:
         the overlap is harmless. Pass roughly the footprint you will draw (a slightly generous `extra` is
         fine - over-clearing by a few px reads the same)."""
         self._clear_ground(x, y, w, h, extra)
-
-
-def grass_scatter(
-    n: int,
-    box: tuple[float, float, float, float],
-    frame: tuple[float, float, float, float] | None,
-    ring: Any,
-    keep: Any,
-    on_crescent: Any,
-    pond: Any,
-    soft_idx: list[Any],
-    soft_feathers: list[float],
-    feather: float,
-    bs: float,
-    seed: int,
-) -> tuple[list[tuple[str, str, str, str]], list[tuple[float, float, float, float, str]]]:
-    """The commons' grass tufts and brush dots - `n` throws over `box` - THROWN AND TESTED AS ARRAYS (feature 278, FR-008).
-
-    The loop this replaces drew two coordinates per throw and asked `_sparse` of each, one point at a time: 79,181 tests
-    and 551,875 draws on Kashikawa, most of the hinterland stage. The same throws are made here as numpy arrays from a
-    generator seeded off the parcel's own seeded stream, and every test is the one `_sparse` ran, point for point: the
-    predicted frame, the parcel's ring (`RingIndex.inside_many`), the keep-outs (`KeepoutGrid.hit_many`, the crop margin
-    at the grass's lean of 0), the crescent ponds, the pond's ellipse, then the soft ramp - a point inside a marsh or a
-    wood is dropped with the probability `sd / sf` (1 past the feather) - or, outside every soft ground, the parcel's
-    feathered edge, dropped where `u > (ed / feather) ** 0.7`. The density is the parcel's own, as before: the same throw
-    count and the same odds; the marks land at different random places (the spec's Decisions Recorded). 14% of the
-    kept points are brush dots (never in a soft ground - woody), the rest three-bladed tufts."""
-    import numpy as np
-    import shapely
-    from shapely.geometry import LinearRing
-
-    blades: list[tuple[str, str, str, str]] = []
-    marks: list[tuple[float, float, float, float, str]] = []
-    if n <= 0:
-        return blades, marks
-    x0, y0, x1, y1 = box
-    rng = np.random.default_rng(seed)
-    gx, gy = rng.uniform(x0, x1, n), rng.uniform(y0, y1, n)
-    u_thin, u_kind = rng.random(n), rng.random(n)
-    r_dot = rng.uniform(1.5, 2.4, n) * bs
-    ang, blen = rng.uniform(-0.45, 0.45, (n, 3)), rng.uniform(2.4, 4.2, (n, 3)) * bs
-    idx = np.arange(n)
-    if frame is not None:
-        idx = idx[(gx >= frame[0]) & (gx <= frame[2]) & (gy >= frame[1]) & (gy <= frame[3])]
-    idx = idx[ring.inside_many(gx[idx], gy[idx])]
-    idx = idx[~keep.hit_many(gx[idx], gy[idx], (0.0, 0.0))]
-    if on_crescent is not None and len(idx):
-        idx = idx[~np.array([bool(on_crescent(float(gx[i]), float(gy[i]))) for i in idx], dtype=bool)]
-    if pond:
-        idx = idx[((gx[idx] - pond[0]) / pond[2]) ** 2 + ((gy[idx] - pond[1]) / pond[3]) ** 2 > 1.0]
-    soft_of = np.full(len(idx), -1)
-    for k, si in enumerate(soft_idx):  # the FIRST soft ground holding a point decides it, as the loop's order did
-        free = np.flatnonzero(soft_of < 0)
-        if not len(free):
-            break
-        soft_of[free[si.inside_many(gx[idx[free]], gy[idx[free]])]] = k
-    kept = np.ones(len(idx), dtype=bool)
-    for k, (si, sf) in enumerate(zip(soft_idx, soft_feathers, strict=True)):
-        sel = np.flatnonzero(soft_of == k)
-        if len(sel):
-            d = shapely.distance(LinearRing(si.ring), shapely.points(gx[idx[sel]], gy[idx[sel]]))
-            kept[sel] = ~(u_thin[idx[sel]] < np.where(d < sf, d / sf, 1.0))
-    rest = np.flatnonzero(soft_of < 0)
-    if len(rest):
-        ed = shapely.distance(LinearRing(ring.ring), shapely.points(gx[idx[rest]], gy[idx[rest]]))
-        kept[rest] = ~((ed < feather) & (u_thin[idx[rest]] > (np.minimum(ed, feather) / feather) ** 0.7))
-    idx, in_soft = idx[kept], soft_of[kept] >= 0
-    dot = u_kind[idx] < 0.14
-    for i in idx[dot & ~in_soft].tolist():  # a low brush dot - WOODY: never in the bog (see _in_soft)
-        px, py, r = float(gx[i]), float(gy[i]), float(r_dot[i])
-        marks.append((px - r, py - r, px + r, py + r, f'<circle cx="{px:.1f}" cy="{py:.1f}" r="{r:.1f}" fill="#94A063" fill-opacity="0.85"/>'))
-    tufts = idx[~dot]  # grass tufts: three short diverging blades each (bucketed - see the note at `blades` in `commons`)
-    if len(tufts):
-        tx, ty = gx[tufts][:, None], gy[tufts][:, None]
-        ex, ey = tx + np.sin(ang[tufts]) * blen[tufts], ty - np.cos(ang[tufts]) * blen[tufts]
-        blades = [
-            (f"{a:.1f}", f"{b:.1f}", f"{c:.1f}", f"{d:.1f}")
-            for a, b, c, d in zip(np.repeat(tx, 3, axis=1).ravel().tolist(), np.repeat(ty, 3, axis=1).ravel().tolist(), ex.ravel().tolist(), ey.ravel().tolist(), strict=True)
-        ]
-    return blades, marks

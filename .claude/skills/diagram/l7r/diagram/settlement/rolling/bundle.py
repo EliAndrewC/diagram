@@ -4,7 +4,7 @@ Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.
 """
 
 import math
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 from ..homestead_parts.fixture_seats import FixtureForms, FixtureUnlaid, lay_fixtures
 from ..homestead_parts.grove_sides import bundle_turn
@@ -144,23 +144,7 @@ class BundleGeomMixin:
         the fixtures read a part in its house's frame - and `boxes` holds each part's axis-aligned box AS DRAWN, turned
         (`turned_box`); every fit rule reads the boxes, and the bundle's `bbox` is theirs. Under the old +/-5 degree
         rake the difference was two pixels and was let stand; a house turned 30 degrees, or a quarter turn, is not."""
-        seat = getattr(self, "_household_seat", None) or (hx, hy)
-        key = (
-            hw,
-            hh,
-            garden_side,
-            shed,
-            bool(getattr(self, "_nucleated", False)),
-            seat,
-            getattr(self, "_household_byre", None),
-            bool(getattr(self, "_household_well", False)),
-            tuple(getattr(self, "_household_fixtures", None) or ()),
-        )
-        cache = self.__dict__.setdefault("_bundle_templates", {})
-        tpl = cache.get(key)
-        if tpl is None:
-            tpl = self._bundle_layout(0.0, 0.0, hw, hh, garden_side, shed, seat)
-            cache[key] = tpl
+        tpl = self._bundle_template(hw, hh, garden_side, shed, getattr(self, "_household_seat", None) or (hx, hy))
 
         def moved(r: Any) -> Any:
             return None if r is None else (r[0] + hx, r[1] + hy, r[2], r[3])
@@ -191,6 +175,48 @@ class BundleGeomMixin:
         else:  # dispersed: the grove's unraked frame with the turned yard and garden
             base["bbox"] = self._bbox_of([frame, boxes["yard"], boxes["gardens"][0], *([boxes["well"]] if boxes.get("well") else []), *boxes["fixtures"].values()])
         return base
+
+    def _core_geom(self: Settlement, hx: float, hy: float, hw: float, hh: float, shed: bool = False) -> dict[str, Any]:  # type: ignore[misc]
+        """The house and its yard at (hx, hy), as `_bundle_geom` lays and boxes them, without the rest of the layout (feature 297,
+        FR-002): `house`, `yard`, `boxes` (the two turned boxes) and `turn` - what `doors_of` and the corridor search read. The
+        house and the yard are the same for every garden side (research R6), so the first side's template serves."""
+        tpl = self._bundle_template(hw, hh, self._NUC_SIDES[0], shed, getattr(self, "_household_seat", None) or (hx, hy))
+        turn = self._turn_at(hx, hy)
+        th = math.radians(turn or 0.0)
+        c, sn = math.cos(th), math.sin(th)
+        house = (tpl["house"][0] + hx, tpl["house"][1] + hy, tpl["house"][2], tpl["house"][3])
+        yard = None
+        if tpl.get("yard") is not None:
+            px, py = tpl["yard"][0] + hx, tpl["yard"][1] + hy
+            yard = (hx + (px - hx) * c - (py - hy) * sn, hy + (px - hx) * sn + (py - hy) * c, tpl["yard"][2], tpl["yard"][3])
+        _c, _s = abs(c), abs(sn)
+
+        def tbox(r: Any) -> tuple[float, float, float, float]:
+            x, y, w, h = float(r[0]), float(r[1]), float(r[2]), float(r[3])
+            return (x, y, w * _c + h * _s, w * _s + h * _c)
+
+        return {"house": house, "yard": yard, "turn": turn, "boxes": {"house": tbox(house), "yard": tbox(yard) if yard is not None else None}}
+
+    def _bundle_template(self: Settlement, hw: float, hh: float, garden_side: str, shed: bool, seat: Any) -> dict[str, Any]:  # type: ignore[misc]
+        """The household's unraked layout at the origin for one garden side, its rolls drawn at `seat` (the household's point
+        during a seat search, else the house's own position), built once per key (see `_bundle_geom`)."""
+        key = (
+            hw,
+            hh,
+            garden_side,
+            shed,
+            bool(getattr(self, "_nucleated", False)),
+            seat,
+            getattr(self, "_household_byre", None),
+            bool(getattr(self, "_household_well", False)),
+            tuple(getattr(self, "_household_fixtures", None) or ()),
+        )
+        cache = self.__dict__.setdefault("_bundle_templates", {})
+        tpl = cache.get(key)
+        if tpl is None:
+            tpl = self._bundle_layout(0.0, 0.0, hw, hh, garden_side, shed, seat)
+            cache[key] = tpl
+        return cast("dict[str, Any]", tpl)
 
     def _turn_at(self: Settlement, hx: float, hy: float) -> float:  # type: ignore[misc]
         """`_house_rot(hx, hy)`, remembered for the last seat asked while the bearing it reads stands: the four garden sides

@@ -154,8 +154,9 @@ When the change under review touches ground-cover scatter (commons scrub, the cu
 margin, crop margins), do not hand-build the SVG parse - the 2026-08-16 cut-bank DELTA spent ~21
 tool uses and most of its 350 s rebuilding exactly this. `make scatter-bases MAP=<pool map> [BOX=x0,y0,x1,y1]`, run from the clone's `.claude/skills/diagram/`, does it (it wraps the
 engine's own `l7r.diagram.tools.scatter_audit.parse_bases`, which a bare interpreter may not reach - the make-only
-guard refuses that): it prints the count of bases per family and, with `BOX`, the bases inside a window. The parse extracts every scatter BASE point (grass blades, brush dots, pine
-trunks, woodland crowns, marsh reeds) from the rendered SVG and resolves a grove clump's
+guard refuses that): it prints the count of bases per family and, with `BOX`, the bases inside a window. The parse extracts every scatter BASE point (pine
+trunks, woodland crowns; since feature 298 the scrub's grass and dots and the marsh's reeds are a repeating tile filling
+the zone's shape, which leaves the keep-outs out by construction, so they have no bases) from the rendered SVG and resolves a grove clump's
 `<g transform="translate(...)">`, which is the part that is easy to get wrong - reading `cx`/`cy` raw
 once put a crown at world (710.9, 1815.8) on the map at (4.9, -14.2).
 

@@ -148,7 +148,7 @@ def _synthetic() -> tuple[list[str], list[Any]]:
     # ground between the notice board and the placard (feature 245: the lit beads take no raster-mode wash)
     strings.append('<g opacity="0.85"><circle cx="120" cy="70" r="1.4" fill="#2F6B35"/></g>')
     tags.append("bund beans")
-    strings.append('<g stroke="#A7A860" stroke-width="0.8"><line x1="20" y1="180" x2="21" y2="184"/><line x1="30" y1="182" x2="31" y2="186"/></g>')  # two scrub blades in one corner
+    strings.append('<path d="M0,170L60,170L60,200L0,200Z" fill="url(#cover-grass-1)" fill-rule="evenodd" style="pointer-events: none"/>')  # the scrub's tile in one corner (feature 298)
     tags.append("scrub and rough grazing")
     # the title placard the way finish.py emits it: the card, then the name over it, both `place`.
     # ON EMPTY GROUND (feature 174, 2026-09-02): it was first placed at x=150 y=10, which is exactly

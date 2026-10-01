@@ -192,11 +192,11 @@ def test_the_wheel_scrolls_the_map_when_the_pointer_is_not_over_the_open_modal(s
 def test_bare_ground_inside_a_footprint_lights_its_class_and_drawn_ink_above_it_still_wins(synthetic: Page) -> None:
     """The GM (2026-08-28): hovering the scrub only worked over a blade; now the footprint takes the pointer."""
     synthetic.js("() => window.l7rMap.fit()")
-    x, y = synthetic.js("() => { const r = document.querySelector('polygon.hit').getBoundingClientRect(); return [r.x + r.width * 0.5, r.y + r.height * 0.9]; }")
+    x, y = synthetic.js("() => { const r = document.querySelector('g.f[data-k=\"marsh\"] path.hit').getBoundingClientRect(); return [r.x + r.width * 0.5, r.y + r.height * 0.9]; }")
     synthetic.page.mouse.move(x, y)
     synthetic.page.wait_for_timeout(30)
     assert synthetic.on() == {"marsh": 3}, "bare ground inside the marsh footprint lights the marsh - both patches and the region's own group"
-    assert synthetic.js("() => getComputedStyle(document.querySelector('g.f.on polygon.hit')).fill") == "none", "the region itself paints nothing when highlighted"
+    assert synthetic.js("() => getComputedStyle(document.querySelector('g.f.on path.hit')).fill") == "none", "the region itself paints nothing when highlighted"
     synthetic.page.mouse.move(1, 199)
     synthetic.page.wait_for_timeout(30)
     assert synthetic.on() == {}
@@ -234,13 +234,14 @@ def test_a_thin_mark_is_hit_from_a_few_pixels_away(synthetic: Page) -> None:
 
 
 def test_cleared_ground_inside_the_scrub_polygon_lights_nothing(synthetic: Page) -> None:
+    """Feature 298: the scrub's region is the shape its tile fills (`cover`), not its whole polygon."""
     synthetic.js("() => window.l7rMap.fit()")
-    x, y = synthetic.js("() => { const r = document.querySelector('g.f[data-k=\"scrub and rough grazing\"] rect').getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; }")
+    x, y = synthetic.js("() => { const r = document.querySelector('g.f[data-k=\"scrub and rough grazing\"] path.hit').getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; }")
     synthetic.page.mouse.move(x, y)
     synthetic.page.wait_for_timeout(30)
-    assert synthetic.on() == {"scrub and rough grazing": 2}, "a cell with a blade in it lights the scrub"
-    assert synthetic.js("() => getComputedStyle(document.querySelector('g.f.on rect')).fill") == "none", "the region never paints, highlighted or not"
-    synthetic.page.mouse.move(x + 200, y)  # inside the recorded polygon, no blade within two cells
+    assert synthetic.on() == {"scrub and rough grazing": 2}, "the ground the tile fills lights the scrub"
+    assert synthetic.js("() => getComputedStyle(document.querySelector('g.f.on path.hit')).fill") == "none", "the region never paints, highlighted or not"
+    synthetic.page.mouse.move(x + 200, y)  # inside the recorded polygon, outside the tile's shape
     synthetic.page.wait_for_timeout(30)
     assert synthetic.on() == {}, "cleared ground inside the scrub's polygon lights nothing"
 

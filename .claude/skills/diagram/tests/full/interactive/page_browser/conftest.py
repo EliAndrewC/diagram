@@ -76,7 +76,10 @@ def synthetic(browser: Any) -> Iterator[Page]:
                     tags,
                     "Synthetic",
                     {"ftpx": 1.0},
-                    {"marshes": [{"role": "toe", "poly": [[220, 100], [290, 100], [290, 190], [220, 190]]}], "commons": [{"role": "grazing", "poly": [[0, 120], [300, 120], [300, 200], [0, 200]]}]},
+                    {
+                        "marshes": [{"role": "toe", "poly": [[220, 100], [290, 100], [290, 190], [220, 190]]}],
+                        "commons": [{"role": "grazing", "poly": [[0, 120], [300, 120], [300, 200], [0, 200]], "cover": [[[0, 170], [60, 170], [60, 200], [0, 200]]]}],
+                    },
                 )
             )
         page = Page(browser, path)

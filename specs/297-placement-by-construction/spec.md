@@ -136,10 +136,11 @@ lawful when it is laid. The page's own Python work runs while its picture render
 Every figure is the fastest of three with the load recorded, taken by `measure.py` from the base worktree and the clone back to
 back; every ratio is a floor with no projection behind it. Keys `m:...` are in `measurements.json`.
 
-- The harness's "before" seconds were taken at load 6.4 -> 2.0 and the `make map` figure at 2.5 -> 6.1 (recorded per key); the
+- The harness's "before" seconds were taken at load 6.4 -> 2.0 and the `make map` figure re-taken on the final engine at 0.8 -> 1.7 (recorded per key); the
   after-run re-takes the base back to back, and the floors are judged on that pair.
 - **SC-001** (spec-wide) (the session's expectation, "well under half", held as a floor - the GM gave no number): Inashiro's stages sum to at most half the base's (5.640 s, the sum of the per-stage keys `before-inashiro-stage-<stage>-s`), and its `make map`
-  regeneration (the child with its svg, png and page) is faster than the base's (8.0 s uncached, `m:before-inashiro-regen-s`, load 2.5 -> 6.1 - re-taken back to back with the clone at the end).
+  regeneration (the child with its svg, png and page) is faster than the base's (6.5 s uncached, `m:before-inashiro-regen-s`, re-taken on the final engine at load 0.8 -> 1.7 back to back with the clone; first read 8.0 s at
+  load 2.5 -> 6.1, observed 2026-09-30, `measure.py regen-before`; research R1).
 - **SC-002** (FR-001, FR-002): on Inashiro the seats bucket asks at least `3x` fewer calls (2,640,745, `m:before-inashiro-b-seats-total`), the homestead layouts built
   (`_bundle_geom`) are at least `3x` fewer (2,716, `m:before-inashiro-bundle-geom`), and the homesteads stage is at least `2x` faster (1.114 s, `m:before-inashiro-stage-homesteads-s`).
 - **SC-003** (FR-003): the mats bucket asks at least `3x` fewer calls on Inashiro (477,299, `m:before-inashiro-b-mats-total`), every
@@ -169,8 +170,72 @@ back; every ratio is a floor with no projection behind it. Keys `m:...` are in `
 |---|---|---|---|
 | Seats offered only from the computed seat region; a house may stand at a different seat of the same rules | map drawing convention (the same rules decide; the order of offering changes) | FR-001; the GM allows map changes for speed within the rules | point of change in `hamletgen/homesteads/` |
 | Marsh glyphs, grove crowns and woodland patches placed by region-then-fill may sit differently, at the same densities and keep-outs | map drawing convention | FR-004 | points of change in `settlement/land/wet.py`, `settlement/homestead_parts/stands.py`, `hamletgen/hinterland/parcels.py` |
-| Lanes admitted lawful as laid; a lane may take a different lawful shape than the repair loop gave it | map drawing convention (the same lane law) | FR-005 | point of change in `hamletgen/ways/` |
+| ~~Lanes admitted lawful as laid~~ - withdrawn (R14); the settle repairs after the web as before, its verdicts kept per lane and a dangling lane its trim cannot mend dropped at the step | map drawing convention (the same lane law) | FR-005, Amendment 1 | `hamletgen/ways/keeper.py`, `settle.settle_dangling` |
 | Any other output the levers touch (a seat judged once, the yard's mats as a fill, the hem's prefilter, the page's order of work) may differ where the rules allow | map drawing convention (the same rules; GM 2026-09-30: maps "do NOT need to remain identical in output") | FR-002, FR-003, FR-006, FR-007 | the points of change |
+
+## Amendment 1 (2026-10-01): what the measurements decided
+
+Each lever was built and measured by the wall clock (research R10: cProfile charges calls, and misled twice); what changed from
+the accepted spec, each with its evidence:
+
+- **FR-005, the lane law, built as measured (research R11).** The web cannot be lawful at each write: its construction passes lay
+  it in pieces and join it later, and ends dangle and are joined from pass to pass, so a lane judged at its write would be refused
+  before the pass that completes it; asking the law at every pass costs more than the settle. What was built: the law's pure
+  verdicts KEPT per lane (`ways/keeper.py` - a lane unchanged since its last ask is answered from the keeper) and a defect fixed
+  (`settle_dangling` never dropped a lane its trim could not shorten, though its docstring said it did; on Inashiro that one lane
+  ran the whole last resort, which no longer runs there). A later round asking the law and running only its broken rules' steps
+  was built and measured slower on two of three maps (R12), and withdrawn: the rounds are as before.
+  `WebRefused` is unchanged. **This is narrower than the GM's lever ("kept true as the lanes are laid, rather than checked
+  afterward")**: the law is still asked, and the web still repaired, after it is laid. Plan D2-D4 were built and
+  measured over the five pool maps and cohort seeds 1-24 (R14), three ways: at the pass boundary (10 of 23 webs refused, 1.38x
+  slower); at each write with every repair (21 of 29 broken or unreached, one raising - a harness bug, fixed); and at each OUTERMOST
+  write with the network-wide repairs held to the end as plan D1 and D4 state (16 of 22 webs broken or unreached, two raising
+  because the construction passes walk the lane list by index while a repair drops lanes from under them, and the web 1.72x slower).
+  Withdrawn under the plan's rule - slower and failing the gate after the fixable failure was fixed; making the web lawful at each
+  write means re-writing its construction passes, an overhaul. **The GM is to be told.**
+- **FR-002, the seat's own questions, reordered (R10).** The field's reach and the water are asked before any layout; the corridor
+  - the costliest question - once per seat, after the four layouts are built and the envelope tested: asked first, it ran on every
+  offered seat (325 searches against 166). So "a seat that fails them builds no layout" now holds for the field's reach and the
+  water only; a seat that fails the corridor has built its four layouts first. The GM's lever ("the lane test once per seat rather
+  than once per orientation") is met. Plan C's second half, the layout keyed per household, was withdrawn: the per-seat yard-size rolls were the seating's only
+  way to fit a large-yard household into a tight seat, and seed 3 lost a household (R9).
+- **FR-001, the seat region, as built (plan Amendment 1 B1, R15).** The static ground and the access tree's corridors are painted and
+  kept current; the seated homesteads are NOT painted, by measurement: painted, every household is still seated (442 of 442 over the
+  pool and cohort seeds 1-24), but repainting and re-tabling the raster after each house made the homesteads stage 9% slower. So the
+  region is not recomputed for each seated house's box, only for each new corridor.
+- **FR-004, the grove, as built (B3, R16).** Three regions by family decide every ordinary clump alone - which family holds its ground
+  says drop (a hard edge) or re-seat (a lane, a local obstacle); no keep-out is asked in turn. A household's RESERVED wood seat and
+  its re-seat are asked of the exact families: the regions' margin refused one the seating had proved clear (woods W25 at the gate).
+  Measured on Inashiro no faster and no slower than the prefilter form, with about a sixteenth fewer crowns on the pool's groves
+  (117 of 1,986).
+- **FR-004, the regions painted in C (R10).** Every region paints with PIL's own primitives and a two-cell margin; buffering each
+  shape with shapely first was most of a region's cost and made the hinterland slower than the base. The marsh and the grass read
+  their keep-out grid as one painted region (`KeepoutGrid.taken_many`).
+- **FR-007 (R10)**: the comb's hem asks every plot's corners at once (`hem_rings_to_bank`); asked a ring at a time the array's fixed
+  cost made Sawada's field slower; the single-ring hem is the scalar walk again.
+- **What the measurements say of each success criterion** (`measure.py after` on the final engine, base `c5a631f9b` and the clone
+  back to back; `m:` keys in `measurements.json`):
+  - SC-001: Inashiro's stages 4.323 -> 3.806 s, 1.14x - MISSED (the floor was half); `make map` 6.5 -> 5.9 s on the final engine (`m:before-inashiro-regen-s`,
+    `m:after-inashiro-regen-s`, back to back) - met. The pool 24.5 -> 22.3 s, 1.10x.
+  - SC-002: the seats bucket's calls ROSE, 2,640,745 -> 3,525,463 (the region's own painting and labeling are calls); the layouts
+    built 2,716 -> 1,479 (1.84x); the homesteads stage 0.946 -> 0.882 s (1.07x) - MISSED (3x, 3x, 2x).
+  - SC-003: the mats' calls 477,299 -> 215,696 (2.2x) - MISSED (3x); every mat rule holds (`test_every_pool_yard_lays_lawful_mats`).
+  - SC-004: the marsh on Sawada 2,039,897 -> 257,151 (7.9x) - met; the grove on Inashiro 2,212,731 -> 2,067,948 (1.07x) and the open
+    ground 1,712,847 -> 1,200,562 (1.43x) - MISSED; the hinterland stage 0.909 -> 0.816 s (1.11x) - MISSED (2x).
+  - SC-005: the law's calls on Inashiro 3,989,351 -> 281,486 (14.2x) - met; on Sawada 456,889 -> 271,242 (1.68x) - MISSED (5x); repair
+    rounds still run (the settle is kept, R11-R12) - MISSED; Inashiro's web stage 0.773 -> 0.394 s (1.96x) - just MISSED (2x).
+  - SC-006: the page write 1.648 -> 1.462 s, 0.19 s (observed 2026-10-01, method: a scratch timer round `write_html`, best of
+    three, both trees) - MISSED (0.25 s).
+  - SC-007: the drain-bank clearances asked one at a time on Inashiro 12,195 -> 0 (`m:after-inashiro-drain-bank-clearance`; every
+    plot's corners asked at once) - met; every bund held off the drain (the gate).
+  - SC-008: `dev/performance.md`, "Placement by construction, and what it bought" - met.
+  - SC-009: the gate green at 100%; every pool map regenerates with the same houses, acreage, lanes and wells (R13), its groves
+    about 6% thinner (1,986 -> 1,869 crowns over the three maps that draw them, R16); `make cohort N=24` 30/30 on the final engine (`cohort-after.log`), as the base's - met.
+  - SC-010: the hinterland's `PointGrid.near` 102,164 -> 43,856 (2.3x) - MISSED (3x).
+  The floors were set with no projection behind them (the spec says so); what each lever reaches is measured above, and what
+  is left of each stage is in `dev/performance.md`. SC-002's seats bucket went the WRONG way (2,640,745 -> 3,525,463 calls: the
+  region's painting and labeling are calls of their own) even as its stage got faster. **Whether to land at these figures is the
+  GM's call**; the session lands them because every lever is faster than the base and no map broke a rule, and reports the misses.
 
 ## Assumptions
 
@@ -192,3 +257,20 @@ back; every ratio is a floor with no projection behind it. Keys `m:...` are in `
   one figure. Addressed.
 - Round 3 (spec-fidelity-verify, 2026-09-30): FAITHFUL. The GM's second statement's guideline edits were made as their own commit
   (5594b7c54: constitution v2.27.0, `dev/performance.md`, `docs/efficiency-tooling.md`, the engine `CLAUDE.md`).
+- Amendment 1, round 1 (spec-fidelity, 2026-10-01): CHANGES REQUIRED - lever 3's narrowing unjustified (D2-D4 never built), three
+  narrowings unstated, landing the GM's call, stale rows and figures. Addressed: D2-D4 built (R14), the narrowings stated.
+- Amendment 1, round 2 (spec-fidelity-verify): CHANGES REQUIRED - D3 built at the pass boundary, not the write. Addressed: built at
+  the write (R14).
+- Amendment 1, round 3 (spec-fidelity-verify): CHANGES REQUIRED - the network-wide repairs ran per write, an IndexError unfixed.
+  Addressed: built as D1-D4 state, the harness bug fixed (R14); tasks closed; a label.
+- Amendment 1, round 4 (spec-fidelity-verify): CHANGES REQUIRED - FR-001 on a refuted premise. Addressed: R15. (In parallel the plan
+  review required B3 as planned with exact families for reserved seats only - built, R16; plan CLEAR at its round 5.)
+- Amendment 1, round 5 (spec-fidelity-verify): CHANGES REQUIRED - the outcomes block stale after the grove rebuild (one mechanical
+  item). Re-measured and restated on the final engine; the cap reached, so it goes to the GM with the decision to land.
+- The GM, 2026-10-01: "I do indeed waive the 5-round cap so you can keep going on the spec amendment review with more iterations as
+  needed for this feature." The amendment's review continues past round 5.
+- Amendment 1, round 6 (spec-fidelity-verify): CHANGES REQUIRED - the cohort and the make-map figure predated the grove rebuild; a
+  stale bookend in dev/performance.md. Addressed: both re-taken on the final engine (cohort 30/30; `make map` per `m:before-inashiro-regen-s` and `m:after-inashiro-regen-s`).
+- Amendment 1, round 7 (spec-fidelity-verify): CHANGES REQUIRED - two lines still cited the key at 6.1 s. Addressed.
+- Amendment 1, round 8 (spec-fidelity-verify): CHANGES REQUIRED - the success criteria's preamble still gave the old load. Addressed.
+- Amendment 1, round 9 (spec-fidelity-verify): FAITHFUL.

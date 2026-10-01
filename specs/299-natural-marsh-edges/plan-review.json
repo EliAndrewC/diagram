@@ -1,0 +1,81 @@
+{
+ "feature": "299-natural-marsh-edges",
+ "plan_sha256": "bdd0629c73c689e8b69f65dacecd2141fc5c54c33ee88d38e6702b3bc2fe35fe",
+ "reviewed": "2026-10-01",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Rounding radius 60 ft (halved until 85% of the area stays), wave 0-40 ft inward over 180-480 ft, against the proposal's 40 ft across and 10-25 ft",
+   "class": "within",
+   "why": "FR-001: targets are the approved proposal's, calibration by eye may move them, a material departure recorded with its reason (research R1). The departure goes toward what the GM asked (a visible curve, no ruled line)."
+  },
+  {
+   "id": "D2",
+   "summary": "The wave is inward-only and cut to the laid outline",
+   "class": "within",
+   "why": "FR-002 as written; edge case 'the shaping only ever takes ground away'."
+  },
+  {
+   "id": "D3",
+   "summary": "Once a marsh is recorded the scrub keeps off the recorded marsh, not the laid toe band",
+   "class": "within",
+   "why": "Mechanism for FR-003's meeting and the edge case 'the scrub fills what the marsh gives up'."
+  },
+  {
+   "id": "D4",
+   "summary": "The reed base tile grows to 128 ft with an even haze",
+   "class": "within",
+   "why": "FR-004 states this base change as a recorded departure (research R1); the reed overlay (197 ft) stays larger."
+  },
+  {
+   "id": "D5",
+   "summary": "Overlays in the base tiles' colors, 3 clumps per 97 ft grass tile, same density per area on the 197 ft reed overlay",
+   "class": "within",
+   "why": "Calibration inside FR-004; recorded in research R1."
+  },
+  {
+   "id": "D6",
+   "summary": "The pond cuts the marsh and its reeds' bare ground as its ellipse (wet.pond_cut), not its building box; the box stays a no-build block; the SC-001 gate test's pond allowance is the ellipse plus a 10 ft ring",
+   "class": "within",
+   "why": "Resolves round 1's NOT LEGITIMATE ruling: FR-001 and User Story 1 scenario 2 have a marsh stop at the pond's edge, and the pond's edge is its water. Verified: on the regenerated inashiro.json the toe ring near the pond has no corner sharper than 150 degrees except a zero-width keyhole slit at the ellipse's top (3947,3208)-(3947,3256), invisible; a resvg crop of inashiro.svg (viewBox 3700 3150 500 320) shows the reeds and the fringe haze running to the oval with no rectangle. The box's corners stand outside the test's ellipse-plus-10 allowance (normalized radius sqrt 2), so the test now fails on a box. Buildings are still kept off the box (pond_cut swaps it only in the marsh's cut and keep-out), so FR-005's no-build ground is not narrowed."
+  },
+  {
+   "id": "A-simplify",
+   "summary": "The shaped ring simplified to 1 ft (SIMPLIFY_FT) for speed",
+   "class": "within",
+   "why": "Speed lever with no change to what was asked. FR-002 measured: natural_outline over 4 laid shapes (rectangle, L, thin band, irregular pentagon) x 200 seeds - no outline left the laid one by more than rounding (no excess area over 0.5 sq ft, worst outward distance 0.0 ft); the unit test asserts containment within 0.2 ft."
+  },
+  {
+   "id": "A-ringindex",
+   "summary": "BoxObstacles' polygon test asks each ring by row (RingIndex.inside) in place of point_in_poly",
+   "class": "within",
+   "why": "Same verdict by construction (RingIndex files each edge in the rows its y-span covers, the crossing test's own condition); performance only, no behavior reaches the request."
+  },
+  {
+   "id": "A-small-marsh",
+   "summary": "Rounding radius halved until 85% of area survives; the wave dropped where it would lose half the area",
+   "class": "within",
+   "why": "The spec's edge case: a marsh too small to shape keeps the largest rounding it can take, or its own outline."
+  },
+  {
+   "id": "A-roles",
+   "summary": "Every role but pond_fringe shaped, before _clipped_to_open_ground and drawn_ground, seeded per marsh",
+   "class": "within",
+   "why": "FR-001 and User Story 1 scenarios 2-3 as written."
+  },
+  {
+   "id": "C-fringe-overlays",
+   "summary": "Fringe band within FRINGE_FT/2 of the other cover, cut from each cover and drawn in that cover's slot and class; the rest drawn as base plus overlay",
+   "class": "within",
+   "why": "FR-003, FR-004 and the edge case on hover classes as written."
+  },
+  {
+   "id": "D-record-tests",
+   "summary": "Research 125/050 and the marsh's drawing entries rewritten; record-format, entry-drift; unit tests, Inashiro manifest test, feature 298 gate test extended; pool regenerated and timed",
+   "class": "within",
+   "why": "FR-006, FR-007, SC-001 to SC-004; tests enforcing the requested shaping serve the request."
+  }
+ ],
+ "verdict": "CLEAR"
+}

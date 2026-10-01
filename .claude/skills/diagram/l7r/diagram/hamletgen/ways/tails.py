@@ -12,6 +12,7 @@ from l7r.diagram.settlement import Settlement, seg_closest, seg_dist, seg_inters
 
 from ..consts import Pt
 from .geom import _TOUCH_GAP, _components, polyline_len
+from .keeper import kept
 
 _ALONG_FT = 14.0  # ft: two centerlines this close read as one tread doubled - a 6 ft way's width plus its soft shoulders
 _ALONG_MIN_FT = 30.0  # ft: shorter than this, running beside a way is just the approach to the junction
@@ -28,6 +29,7 @@ def _parallel(u: Pt, v: Pt, deg: float) -> bool:
     return not (nu and nv) or math.degrees(math.acos(min(1.0, abs(u[0] * v[0] + u[1] * v[1]) / (nu * nv)))) <= deg
 
 
+@kept
 def along_tail(pts: Sequence[Pt], other: Sequence[Pt], step: float = 4.0, deg: float = _ALONG_DEG) -> int | None:
     """The index in `pts`' samples where its END starts running alongside `other` - within `_ALONG_FT` of it, nearly
     parallel (within `deg`), for at least `_ALONG_MIN_FT` - or None. Samples every `step` along `pts` from its end inward."""

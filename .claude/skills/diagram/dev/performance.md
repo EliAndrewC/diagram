@@ -901,3 +901,62 @@ engine is 11 MiB and the tests 26, against 55 for third-party code and the stdli
 RAM actually goes is in COPIES and PROCESSES - ten workers each importing everything (feature 237's finding,
 still true), browsers launched per worker (fixed here), and the tooling tests' real sub-gates (a cost of
 testing the gate machinery with the gate machinery, 0.7 GiB at the peak; left as is, stated).
+
+## Placement by construction, and what it bought (feature 297, 2026-10-01)
+
+The GM, on the reference hamlet's 7.5 s: *">1s is a lot to place 15 farmhouses ... hard to believe that's actually necessary"*,
+and on the hinterland's lookups, *"instead of drawing a box and then filling it in with a much simpler algorithm"*. Feature 297
+built the three levers it was asked for - the seats offered from a precomputed reachable-and-buildable region, the ground cover
+as region-then-fill, the lane law kept per lane - and measured each by the WALL CLOCK (specs/297 research R10-R13).
+
+**What it bought, base and clone back to back** (`specs/297-placement-by-construction/measure.py after`, loads 2.1 -> 2.7 and
+2.7 -> 3.7): Inashiro's stages 4.32 -> 3.81 s (1.14x); the pool's five rolls 24.5 -> 22.3 s (1.10x); every pool map's stages
+1.05-1.35x; `make map` of Inashiro 6.5 -> 5.9 s; its page write 1.65 -> 1.46 s; the reference bookend 16.1 -> 13.9 s (band 0).
+Per stage on Inashiro: the web 0.77 -> 0.39 (the keeper and the `settle_dangling` fix), the homesteads 0.95 -> 0.88, the
+hinterland 0.91 -> 0.82, the field 1.10 -> 1.08. Every pool map keeps its houses, acreage, lanes and wells; its groves are about 6%
+thinner (the regions' margins, R16); the cohort is 30/30, as the base's. The session had expected "well under half"; it was a
+guess, and the measurement says these levers' ceiling is about a seventh.
+
+**Why so little, and the lessons worth carrying:**
+
+- **Measure by the wall clock, sampled fairly.** cProfile charges calls, so it over-weights Python and under-weights the C work a
+  region is made of; a lever that cut the seating's calls 30% left its wall time unchanged. The sampler that told the truth: a
+  thread reading the main thread's stack every millisecond, with `sys.setswitchinterval(1e-4)` - at the default 5 ms it
+  over-weights whatever releases the GIL (numpy, shapely), and the first sample blamed numpy for a Python cost.
+- **A region's cost is its painting, not its reads.** Buffering each keep-out with shapely before painting made the hinterland
+  SLOWER than the indexed scans it replaced (0.89 -> 1.16 s); painting with PIL's own primitives and a two-cell margin made it
+  faster (0.75 s). PIL's `floodfill` is pure Python (1.1 s over nine fills); a run-length union-find labels the same components in
+  0.09 s. And a fill on an image that shares numpy's buffer (`Image.fromarray`) silently paints nothing.
+- **Pruning that the rules would have refused anyway moves no map - and saves only what the refused candidates cost.** The seat
+  region took Inashiro's placer calls from 734 to 328, but most of what the seating spends is on the seats it keeps trying: the
+  corridor search behind each seat (`_house_candidates` -> `FreeGround.lines_edge_points`), the four layouts, the part rules.
+- **Order questions cheapest-first, not "position first".** Asking the corridor - the costliest question - before the envelope ran
+  it on every offered seat (166 searches became 325).
+- **The web cannot be lawful at each write** as it is built (R11): its passes lay it in pieces and join it later. What the settle
+  actually mends on Inashiro is the access tree's lanes and one dangling lane; the dangling lane is what ran the last resort.
+
+**What is left, stage by stage on Inashiro (over half a second, R10's sampler):**
+
+- **The field, 1.09 s**: `fit_field` is 90% of it - the seam closing (`close_seams`) 38%, the three trial carves 23%, the carve's
+  planted-area prediction (`CombCarve.planted_area`, shapely buffers and unions) 19%. Not one of this feature's levers; the next
+  lever is the prediction (an area sum of the plots, not a union) and fewer trial carves (284 measured the probe; it moved maps
+  that broke rules).
+- **The homesteads, 0.90 s**: the placer 53% (the part rules 21%, the corridor search 16%, the household's layout and fixtures
+  11%), the field's corridor at seating 8.5% (`reserve_field_corridor`, a routed run judged as lanes), the site boundary 8%. The
+  lever not taken: a line-of-sight reach region (cells with a clear straight strip to a tree point), which would refuse the 149
+  seats that pass the flood-fill reach and find no corridor - costly to rasterize, priced and not built.
+- **The hinterland, 0.84 s**: the commons' grass scatter 29% (its 100,000-odd throws and their string building), the village grove
+  26% (its crowns' own spacing and drawing), the woodland search 24% before its region (now a raster read per size).
+- **The page, 1.46 s**: the picture is its critical path - resvg at zoom 2 in four tiles (0.69 s) and the JPEG child (0.49 s); the
+  rest of the page's work now runs while it renders.
+
+## Ground cover as tiles, and what it bought (feature 298, 2026-10-01)
+
+The scrub's grass and brush, the marsh's tint, glints and reeds, and a bamboo stand's culms were thrown glyph by glyph -
+55-68% of four pool hamlets' SVGs (specs/298 research R1). The GM (2026-10-01): drawing them one by one serves no purpose that
+individual trees do, so each zone is now ONE shape filled with a repeating `<pattern>` of the same glyphs at the same density
+(`settlement/land/tiles.py`), its bare ground left out by geometry (`KeepoutGrid.shape`), drawn in slots `_header` reserves
+right above the land so everything in it draws over it. Measured base against tiles, back to back (specs/298 research R2):
+a regeneration 0.2-0.7 s faster, the ground-cover stage 0.83 -> 0.66 s on Inashiro and 0.62 -> 0.38 s on Kashikawa, the
+SVG a quarter of its size or less, the page 13-30% smaller (the rest of it is the embedded picture), the PNG a little larger.
+The blade buckets, their merge (`merge_lines`), the page's mark-cell scrub region and the marsh's re-throw went with the throws.

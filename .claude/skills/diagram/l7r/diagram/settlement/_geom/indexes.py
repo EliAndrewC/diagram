@@ -2,9 +2,10 @@
 whole runtime of a gen.
 
 PREFILTER FAMILY, all of it - the box or the grid PRUNES, the caller's exact test still DECIDES,
-so a verdict is identical to a linear scan's and the pool regenerates byte-identical when a
-caller switches over. That property is what separates indexing from coarsening, which this engine
-does not do (skill CLAUDE.md, 'When a check is slow, INDEX it - do not coarsen it').
+so a verdict is identical to a linear scan's. That is what a CHECK that verifies a rule needs (skill
+CLAUDE.md, 'When a check is slow, INDEX it - do not coarsen it'). A PLACER is not held to it: it may
+decide by a coarser, faster form and move maps, held to the rules (constitution X clause 15, v2.27.0;
+the GM, 2026-09-30: maps "do NOT need to remain identical in output") - `region.py` is that form.
 
 Split from settlement/_geom.py by feature 117 - see settlement/_geom/CLAUDE.md for the index.
 """
@@ -469,7 +470,7 @@ class KeepoutGrid:
 
     def __init__(self) -> None:
         self.grid = PointGrid()
-        self._trees: dict[tuple[float | None, ...], Any] = {}  # `hit_many`'s shapes, per (extra, the queried points' box)
+        self._trees: dict[tuple[Any, ...], Any] = {}  # `hit_many`'s and `shape`'s unions, per (extra, the queried points' box)
 
     def rings(self, polys: Any, pad: float = 0.0, slot: int = 0, reach: float = 0.0) -> None:
         """Rings refused inside or within `pad` (+ the query's extra for `slot`) of an edge."""
@@ -554,6 +555,12 @@ class KeepoutGrid:
         for i in np.flatnonzero(maybe & ~out):
             out[i] = self.hit(float(xs[i]), float(ys[i]), extra)
         return out
+
+    def shape(self, extra: tuple[float | None, ...], within: tuple[float, float, float, float]) -> Any:
+        """Every keep-out meeting `within` as ONE geometry (feature 298): the ground a cover's tile leaves bare, built once from the
+        very items `hit_many` asks - each grown by its pad plus the query's `extra` for its slot (and the hair of margin
+        `_trees_for` grows by, so the shape never falls short of a refused point). None where nothing meets `within`."""
+        return self._trees_for(extra, within)[1]
 
     def _trees_for(self, extra: tuple[float | None, ...], within: tuple[float, float, float, float]) -> tuple[Any, Any]:
         """The shrunk and grown shapes of every item whose box meets `within` (the queried points' box), as two prepared unions -
@@ -711,7 +718,7 @@ class BoxObstacles:
 
     def __init__(self, rects: Any, polys: Any, lines: Any, cell: float = 128.0) -> None:
         self.rects = [(float(r[0]), float(r[1]), float(r[2]), float(r[3])) for r in rects]
-        self.polys: list[tuple[Poly, float, float, float, float]] = []
+        self.polys: list[tuple[RingIndex, float, float, float, float]] = []
         edges: list[tuple[Pt, Pt, float, float, float, float]] = []
         for poly in polys:
             ring = [(float(p[0]), float(p[1])) for p in poly]
@@ -719,7 +726,7 @@ class BoxObstacles:
                 continue
             xs = [p[0] for p in ring]
             ys = [p[1] for p in ring]
-            self.polys.append((ring, min(xs), min(ys), max(xs), max(ys)))
+            self.polys.append((RingIndex(ring), min(xs), min(ys), max(xs), max(ys)))  # asked per corner by row (feature 299: a marsh's waved ring)
             n = len(ring)
             for k in range(n):
                 a, b = ring[k], ring[(k + 1) % n]
@@ -741,7 +748,7 @@ class BoxObstacles:
         for ring, px0, py0, px1, py1 in self.polys:
             if px1 < bx0 or px0 > bx1 or py1 < by0 or py0 > by1:
                 continue  # a corner inside the polygon would be inside its box
-            if any(point_in_poly(cx, cy, ring) for cx, cy in corners):
+            if any(ring.inside(cx, cy) for cx, cy in corners):  # `point_in_poly`'s verdict, from the edges in the corner's row
                 return False
         pad = max(bx1 - bx0, by1 - by0) / 2.0
         for a, b, ex0, ey0, ex1, ey1 in self.grid.near((bx0 + bx1) / 2.0, (by0 + by1) / 2.0, pad):

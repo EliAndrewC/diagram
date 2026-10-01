@@ -58,31 +58,41 @@ and the off-window rule.
 ### B1. The seat region (FR-001; `hamletgen/homesteads/region.py`, new; `capacity.py`, `stages.py`)
 
 Built when the seating starts (`_seat_households`, after the exit strip and the field corridor are reserved), over the seat
-band's window (the free-seat bounds `free_seats` computes, grown by one bundle pitch), at FreeGround's own 8 px cell: painted
-with FreeGround's surely-taken cells, the access tree's segments at the corridor's half-width, the reserved wood-floor seats
-and the shared sheds' pockets. On each seated house the house's bundle box and its new corridor are painted (the table is
-rebuilt over the window, a few milliseconds at 8 px). A seat is OFFERED - by every round, the front row, the lattice ranks,
-the rescue cloud and the exhaustive pass - only where its CORE box (house plus yard, at the smallest house the size ladder
-rolls, unturned) is clear in the region. The placer still decides each seat it is offered with all of its rules. Moves maps
-(a seat whose core box laps a painted cell's grown margin is no longer offered); held to the gate.
+band's window (the free-seat bounds `free_seats` computes, grown by one bundle pitch), at FreeGround's own 8 px cell. It is
+TWO rasters, both kept current as what stands changes:
+
+- **Buildable**: painted with FreeGround's surely-taken cells, the access tree's segments at the corridor's half-width, the
+  reserved wood-floor seats and the shared sheds' pockets, and each seated homestead's bundle box as it is seated.
+- **Reachable**: the buildable raster's free cells CONNECTED to the access tree - a flood fill (PIL `ImageDraw.floodfill` on a
+  copy) seeded from the free cells the tree's segments touch, redone when the tree gains a corridor or a homestead is seated.
+  It is the cautious reach: a door outside it has no way to the tree through free ground at all, so no corridor can be found
+  for it; a door inside it may still find none, which the placer's exact test (C) decides.
+
+A seat is OFFERED - by every round: the front row, the lattice ranks, the rescue cloud and the exhaustive pass - only where
+(a) at least one garden side's ENVELOPE (the side's own bundle box at the SMALLEST house the size ladder rolls, from the
+household-independent layout template at turn 0) is clear in the buildable raster, and (b) the door ground (the yard's box at
+that size) touches the reachable raster. The offering is computed for a round's whole candidate list at once
+(`box_clear_many`, `taken_many`), not per candidate. The placer still decides each seat it is offered with all of its rules.
+Moves maps (a seat whose envelope laps a grown margin is no longer offered; a seat at a larger house may still be refused by
+the placer, as now); held to the gate.
 
 ### B2. The marsh as array throws (FR-004; `settlement/land/wet.py`)
 
-`_throw`'s two loops become array throws, as `commons` became `grass_scatter` (feature 278), through the region the marsh
-already builds once - its `KeepoutGrid` of every keep-out family and its `RingIndex` of the drawn ground - read for all points
-at once (`RingIndex.inside_many`, `KeepoutGrid.hit_many` with the mark's slot extras), the crescent ponds and the pond's ellipse
-(grown by the lateral pad, and moved by the blade tip for `blade_up`) as array tests, and the feathered edge's probability
-computed for the survivors by `shapely.distance` to the outline, as `grass_scatter` does. The points are drawn as numpy arrays
-from a generator seeded off the marsh's own stream. Marks at the same densities; they land at different random places. (The
-same region the grass reads - one mechanism for every scatter - rather than a raster: the marsh's keep-outs are already filed
-once; what costs is asking them one point at a time in Python, research R3.)
+`_throw`'s two loops become array throws, as `commons` became `grass_scatter` (feature 278), against ONE region: the marsh's
+`KeepoutGrid`, which already files every keep-out family once, gains the two it lacked - the crescent ponds and the pond's
+ellipse, filed as rings (the ellipse as its 32-gon) with the lateral pad and the blade tip as slot extras - and the drawn ground's
+`RingIndex`. All points are read at once (`RingIndex.inside_many`, `KeepoutGrid.hit_many`), and the feathered edge's probability
+is computed for the survivors by `shapely.distance` to the outline, as `grass_scatter` does. No keep-out is asked per point or
+in turn. The points are drawn as numpy arrays from a generator seeded off the marsh's own stream. Marks at the same densities;
+they land at different random places.
 
 ### B3. The village grove's crowns (FR-004; `settlement/homestead_parts/stands.py`, `grove_blocks.py`)
 
 `village_grove` builds a `Region` over the footprint's box from its static keep-outs - the `occ` circles (houses, yards,
 gardens, byres, sheds, wells, shrines, torii, ponds, earlier groves, reserved seats), the corridor buffers, the sun boxes and
 the east-garden strips, and `GroveBlocks`' hard ground - and the jittered grid's candidates are tested against it as arrays
-(`taken_many`), replacing `static_clear` per candidate. What depends on the crowns already placed - the spacing (`Seats.too_near`)
+(`taken_many`), replacing `static_clear` per candidate - and `static_clear` itself is backed by the same region, so every path
+that asks it (the jittered grid, the windbreak's gap fill, the re-seat) reads the region. What depends on the crowns already placed - the spacing (`Seats.too_near`)
 and the clumps' own canopy area - stays per candidate over the survivors only.
 
 ### B4. The woodland search's squares (FR-004; `hamletgen/hinterland/parcels.py`)
@@ -94,35 +104,43 @@ set-back and again offset by the extra southern set-back) - and a candidate squa
 square, plus the window and frame-area rule `_ok` already applies arithmetically. One region per `half` asked (the size roll
 re-asks with another half - the trap 284 recorded). Scoring, spacing and the size roll unchanged.
 
-### C. A seat judged once (FR-002; `settlement/rolling/place.py`, `fit.py`, `access.py`)
+### C. A seat judged once (FR-002; `settlement/rolling/place.py`, `fit.py`, `access.py`, `bundle.py`)
 
-In `_place_bundle_nucleated`, before the four garden-side layouts are tested: the field's reach (`within_field_reach`, already
-memoized), the house box, and `seat_reaches_tree(s, geom0)` - does `_house_candidates` yield any corridor for this house and
-yard (the memo entry `access_corridor` would create, peeked once and kept, so the corridor search continues from it). A seat
-failing them builds no layout. A side moved by the one computed move is a different seat and is judged at its own position.
-Also: `_bundle_geom`'s template cache keys on the household's seat, so 2,261 of 2,716 layouts were rebuilt (research R2's
-profile): the layout is keyed per household, not per offered seat, and the rolls it draws are the household's.
+In `_place_bundle_nucleated`, before any garden-side layout is built (`_bundle_geom` is not called), the seat's own questions
+are asked once: the field's reach (`within_field_reach`), the water (`lot.watered`: the house's position and whether the household
+keeps a well), the house box, and `seat_reaches_tree(s, core)` - does `_house_candidates` yield any corridor for this house and
+yard, where `core` is the house-and-yard geometry (`_core_geom`: the two rects of the household's layout template, moved and turned
+by the seat's rake, and the turn - the fields `doors_of` and the corridor search read) computed without the full layout. The memo
+entry `access_corridor` would create is the one peeked, so the corridor search continues from it. A seat failing them builds no
+layout; the four layouts of a seat that passes share the answers. A side moved by the one computed move is a different seat and
+is judged at its own position. Also (WITHDRAWN, R9): `_bundle_geom`'s template cache keys on the household's seat, so 2,261 of 2,716 layouts were
+rebuilt (research R2's profile); keyed per household instead, a large-yard household lost the per-seat yard rolls that let it fit a
+tight seat, and seed 3 seated 9 of 10. The template stays keyed on the seat offered.
 
 ### D. The lane law kept as lanes are laid (FR-005; `hamletgen/ways/keeper.py`, new; `settle.py`, `last_resort.py`, `web.py`; `settlement/water_ways/lanes.py`)
 
 1. **The keeper.** `LaneLaw` holds, per lane, the verdict of each per-lane rule (hooked, kinked, the crossing fault, fouled
    fabric, over fixtures, ends behind, dangling, doorstep) and the joint rules that read a lane with the lanes it meets
-   (folded joints, needles, doubled tails, connector hairpins, near misses, width steps). It is told of every write - the
-   lane writer (`lane`), `reshape_lane`, `drop_lanes`, and every in-place `pts` assignment in `hamletgen/ways` (the 18 sites,
-   routed through one `set_lane_pts`) - and re-judges that lane and the lanes whose ends lie within the joint rules' reach of
-   it, at that moment. The network-wide rules (the networks count, fragments, reach, needle loops, way outs) are kept on a
-   web version stamp and asked once per version.
+   (folded joints, needles, doubled tails, connector hairpins, near misses, width steps). It is told of every write - the lane
+   writer (`lane`), `reshape_lane`, `drop_lanes`, and every in-place `pts` assignment in `hamletgen/ways` (the 18 sites, routed
+   through one `set_lane_pts`) - and judges that lane and the lanes whose ends lie within the joint rules' reach of it, at that
+   moment. The network-wide rules (the networks count, fragments, reach, needle loops, way outs) cannot be asked of a web still
+   being built - every web is in pieces while it is laid - so they are kept on a web version stamp and asked once, at the end.
 2. **The access tree's lanes are laid with the web.** `settle_reach`'s tree lanes (15-19 per map, research R7) are drawn at the
    start of `stage_web`, before the skeleton - they were admitted lawful at seating (`tree.admits`) - so the web's own lanes are
-   laid around them rather than repaired against them afterward.
-3. **The settle asks the keeper.** Each repair step runs only on the lanes the keeper names under its rule (a step whose rule
-   names none does nothing and asks nothing), the round loop ends when the keeper names nothing, `unsettled` reads the keeper,
-   and the last resort's `lanes_breaking` reads the keeper. `WebRefused` is unchanged in meaning: raised when the keeper still
-   names a rule only the tree could mend.
-4. **The writers lay lawfully.** Where a step of `stage_web` writes a lane the keeper then names (measured per rule over the
-   pool and cohort), the repair that step's rule needs is applied by that writer at the write - so the settle has nothing left to
-   do on a well-formed web. Target: no repair round on any pool map (SC-005); a rule that still needs a round on some map is
-   recorded with its measurement in `dev/performance.md` (FR-008).
+   laid around them.
+3. **Every repair moves to the write.** Each rule's repair - the step of today's settle that mends it (`square_every_crossing`,
+   `settle_shapes`, `settle_ends`, `settle_joins`, `settle_needles`, `settle_widths`, `settle_defer`, `settle_fragments`,
+   `prune_the_tree`, `settle_way_outs`, `settle_dangling`, `settle_shadows`, `settle_street_ends`) - is applied by the write hook
+   to the lane the keeper names under it, at the moment that lane is written; what that repair writes is itself judged at its
+   write, so a repair's own consequence is mended where it lands, never in a later round. A lane no repair can make lawful is not
+   laid (or is taken back at its write) - the last resort's drop, made where the lane is laid, never a tree lane.
+4. **No settle after the web.** The round loop (`settle_the_web`'s rounds), `unsettled`'s whole-law re-ask and the last resort's
+   passes are retired. When `stage_web` ends it reads the keeper - the per-lane and joint verdicts it holds and the network-wide
+   rules asked once - and raises `WebRefused` (or `refuse_unreached`) naming any break; nothing is repaired and no lane is dropped
+   there. `meta.web_settle` records what the writes repaired (counts per rule) and that no round ran. A map the engine cannot lay
+   lawfully this way is a finding to fix in the writer, and a mechanism that cannot be made to work is withdrawn by a spec
+   amendment through review, never kept as an exception.
 
 ### E1. The mats as a fill (FR-003; `settlement/homestead_parts/yards.py`)
 
@@ -153,7 +171,7 @@ marks re-applied as a scratch patch for SC-006's page timing and reverted; `dev/
 
 A first (with its tests); then C and E1-E3 (small, independent); then B1, B2, B3, B4, each measured on Inashiro as it lands
 (`make map ... PROFILE=1`, fastest of three) and the gate's map tests run on the moved pool; then D in its four steps,
-measured after each; then F. A lever that makes its stage slower, or cannot pass the gate on the moved pool after its
+measured after each (D3 and D4 land together - with the rounds retired, every repair must already be at its write); then F. A lever that makes its stage slower, or cannot pass the gate on the moved pool after its
 failures are fixed, is recorded with the measurement and withdrawn (spec amendment), as 284's were.
 
 ## Decisions (for the plan review)
@@ -162,6 +180,29 @@ failures are fixed, is recorded with the measurement and withdrawn (spec amendme
 |---|---|---|
 | Painters grow every shape by one cell (conservative region) | map drawing convention | a region may lose a seat or a glyph at a margin, never admit a forbidden one - the rules hold by construction |
 | Regions are built per consumer window, never the canvas | map drawing convention (a cost decision) | the summed-area table over the canvas costs 0.40 s (measured above) |
-| The seat region offers by the CORE box at the smallest house | map drawing convention | the core (house and yard) is common to all four layouts (R6); the smallest house keeps every seat any household could take |
+| The seat region offers where a garden side's envelope at the smallest house is clear and the door ground is reachable | map drawing convention | the smallest house keeps every seat any household could take; reach is the cautious one (free ground connected to the tree) and the placer's corridor search still decides |
+| ~~Every repair is applied at the write; a lane no repair makes lawful is not laid~~ - built at the write and at the pass boundary and withdrawn (R14: fails the gate both ways) | map drawing convention (the same lane law) | FR-005, Amendment 1 |
 | The marsh's marks land at different random places at the same densities | map drawing convention | array throws draw a different stream, as the grass did in 278 |
-| The access tree's lanes are drawn first in the web | map drawing convention | they were admitted lawful at seating; drawing them last made the settle draw 15-19 lanes and repair around them (R7) |
+| ~~The access tree's lanes are drawn first in the web~~ - withdrawn (R10, R14: slower, alone and with D3-D4) | map drawing convention | R7, Amendment 1 |
+
+## Amendment 1 (2026-10-01): the designs as built, by measurement (spec Amendment 1; research R9-R11)
+
+- **A.** The region paints with PIL's own primitives and a two-cell margin (`GROW = 2.0`); shapely buffers were most of a region's
+  cost. `fill_many` paints many shapely geometries by kind. The property test (no painted point read clear) holds at cells 2-8.
+- **B1.** Built as planned with two measured changes: the static ground on FreeGround's own grid, its surely-taken cells painted
+  exactly (grown on an offset grid they over-refused - Inashiro seated no one); the seated homesteads NOT painted (R15: painted, every household still seated but the stage 9% slower); the reach is the free cells' 4-connected components meeting the tree's strip
+  (a run-length union-find - PIL's flood fill is Python), its summed-area table kept with it. A side's envelope is tested shrunk by
+  a cell (the placer samples nine points).
+- **B2.** Through the marsh's `KeepoutGrid` read as one painted region (`KeepoutGrid.taken_many`), the crescents and the pond's
+  ellipse filed into it; the grass reads the same.
+- **B3.** `GroveBlocks.regions()` paints the fill's static families into three rasters by family; `taken_by` decides every ordinary
+  clump alone, and a household's reserved seat and its re-seat are asked of the exact families (`exact_taken_by`; R16: the regions'
+  margin refused one at the gate, woods W25). Measured no faster and no slower on Inashiro.
+- **B4.** `open_ground_region`, one per size, at 3 px (at 8 px the margin moved a parcel off its brook line).
+- **C.** The field's reach and the water before any layout; the corridor once per seat after the envelope (R10); the per-household
+  template withdrawn (R9).
+- **D.** D1 as `keeper.kept` (pure verdicts per lane geometry); D2-D4 built three ways and withdrawn under this plan's rule (R14: as
+  D1-D4 state it, the network-wide repairs at the end and the hook at the outermost write - 16 of 22 webs broken or unreached, two
+  raising from the passes' own index walks, 1.72x slower); targeted rounds built and withdrawn (R12); the measured fix kept (R11):
+  `settle_dangling` drops what its trim cannot mend, so the last resort no longer runs on Inashiro.
+- **E3.** `hem_rings_to_bank` (every plot at once) for the comb; the single-ring hem scalar.

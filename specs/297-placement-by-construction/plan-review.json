@@ -1,0 +1,104 @@
+{
+ "feature": "297-placement-by-construction",
+ "plan_sha256": "42eb90abfacfed64d651cbd8119a90063d674212d56713b0adf48ea0c38c1415",
+ "reviewed": "2026-10-01",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "A-grow2",
+   "summary": "Region paints with PIL primitives and a two-cell margin (GROW = 2.0); regions per consumer window",
+   "class": "within",
+   "why": "Calibration of the conservative region; FR-001/FR-004 unaffected."
+  },
+  {
+   "id": "B1-grid",
+   "summary": "Seat region's static ground on FreeGround's own grid, taken cells painted exactly; reach as 4-connected components; envelope tested shrunk by a cell",
+   "class": "within",
+   "why": "Implementation of FR-001's buildable-and-reachable region; the placer still decides every seat."
+  },
+  {
+   "id": "B1-homesteads-unpainted",
+   "summary": "Seated homesteads not painted into the seat region; region recomputed per new corridor only",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Built and measured (R15): both seat 442 of 442; painted is 9% slower on the stage. Withdrawn under the plan's rule; the GM's lever asks for a 'precomputed' region. Caveat unchanged: R15 is not fastest-of-three with loads as the plan's method asks."
+  },
+  {
+   "id": "B2-marsh-grass",
+   "summary": "Marsh and grass read the KeepoutGrid as one painted region",
+   "class": "within",
+   "why": "FR-004 as written."
+  },
+  {
+   "id": "B3-regions-ordinary",
+   "summary": "Three family regions (hard/lane/local); taken_by alone decides every ordinary clump (jittered grid, gap fill, re-seat): drop on hard, re-seat on lane/local",
+   "class": "within",
+   "why": "FR-004/US3 as written: each candidate read against the region, no keep-out asked in turn. Built as the previous round required (grove_blocks.py taken_by/static_clear; stands.py)."
+  },
+  {
+   "id": "B3-reserved-seat-exact",
+   "summary": "A household's reserved wood-floor seat and its re-seat asked of the exact families (exact_taken_by / exact_clear)",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Now confined to the one case R16 showed fails: regions alone refused reserved seats the seating proved clear (woods W25 at the gate), and the gate requires planting them. Code gates it on `reserved` only; measured no slower (R16 last paragraph) and the gate green on the moved pool, per the caller."
+  },
+  {
+   "id": "B4-3px",
+   "summary": "Woodland region one per size at 3 px",
+   "class": "within",
+   "why": "Calibration measured (8 px moved a parcel off its brook line)."
+  },
+  {
+   "id": "C-reorder",
+   "summary": "Field reach and water before any layout; corridor once per seat after the envelope",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Unchanged: asked first it doubled the costliest search (R10); 'lane test done once per seat rather than once per orientation' still holds."
+  },
+  {
+   "id": "C-template-withdrawn",
+   "summary": "Per-household layout template withdrawn",
+   "class": "within",
+   "why": "A plan addition no FR requires; withdrawn by measurement (R9)."
+  },
+  {
+   "id": "D1-keeper-kept",
+   "summary": "Keeper as pure verdicts per lane geometry, read by the kept settle",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Follows from D2-D4's withdrawal."
+  },
+  {
+   "id": "D2-D4-withdrawn",
+   "summary": "Tree lanes first, repairs at the write, no settle - built three ways and withdrawn; settle rounds stay",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Built as stated and failed the gate (16 of 22 webs broken or unreached) and 1.72x slower (R14). Withdrawn under the plan's rule with measurement and mechanism; narrower than lever 3 and the GM must be told."
+  },
+  {
+   "id": "D-targeted-rounds-withdrawn",
+   "summary": "Targeted settle rounds built and withdrawn",
+   "class": "within",
+   "why": "Slower (R12)."
+  },
+  {
+   "id": "D-settle-dangling-fix",
+   "summary": "settle_dangling drops a lane its trim cannot mend",
+   "class": "within",
+   "why": "A defect fix inside FR-005's area."
+  },
+  {
+   "id": "E3-rings",
+   "summary": "Comb hem asks every plot's corners at once",
+   "class": "within",
+   "why": "FR-007 as written."
+  },
+  {
+   "id": "E1-E2",
+   "summary": "Mats as a centered fill; page work overlapped with the picture",
+   "class": "within",
+   "why": "FR-003, FR-006 as written."
+  }
+ ],
+ "verdict": "CLEAR"
+}

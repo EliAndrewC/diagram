@@ -67,7 +67,9 @@ LOG_DIR = os.path.join(SKILL, "dev", "perf-log")
 # THE REFERENCE HAMLET. Inashiro's own spec, held fixed so snapshots stay comparable across months.
 # Changing any of this invalidates the trend, so do not tune it to make a number look better - add a
 # second reference instead, and say in its docstring what it is for.
-REFERENCE: dict[str, Any] = {"name": "Inashiro", "households": 15, "down_deg": 90, "water_sink": "pond"}
+# ...AS ITS GENERATOR ROLLS IT (feature 297): the GM pinned Inashiro nucleated with its shrine (feature 291), and this literal kept the
+# unpinned spec - on whose rolled form main's engine refused seed 4 (`WebRefused`, specs/297 research R8), so `make perf` failed.
+REFERENCE: dict[str, Any] = {"name": "Inashiro", "households": 15, "down_deg": 90, "water_sink": "pond", "settlement_form": "nucleated", "fixtures_min": {"shrine": 1}}
 
 # FOUR SEEDS, CHOSEN TO SPREAD ACROSS THE ROLLED KNOBS rather than to be fast. Seed 4 is Inashiro's
 # own; 25 and 47 were the two slowest seeds found when this tool was written (160s and 86s), and 39

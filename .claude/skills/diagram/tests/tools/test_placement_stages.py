@@ -410,7 +410,7 @@ def test_a_step_plate_this_run_did_not_write_is_pruned_too(tmp_path: Path, monke
 def test_a_watermark_rewinds_a_copy_to_where_a_step_left_it() -> None:
     """Drawing here is append-only, which is what makes the rewind exact - and the DEFERRED stores are wound back
     with the ink, because each of their entries holds the index of the slot it reserved in `out` and `finish` writes
-    through it (the first real run crashed in `flush_blade_groups` with an IndexError on exactly that)."""
+    through it (the first real run crashed in the blade flush feature 298 retired, with an IndexError on exactly that)."""
     import copy
 
     from l7r.diagram.settlement import Settlement
@@ -420,11 +420,11 @@ def test_a_watermark_rewinds_a_copy_to_where_a_step_left_it() -> None:
     mark = ps._watermark(s)
     assert ps._ink_total(mark) == ps._ink(s), "the watermark stands where the ink count does"
     s.add("<circle/>")
-    s._blade_groups.append((len(s.out) - 1, "#333", []))
+    s._mark_groups.append((len(s.out) - 1, []))
     snap = copy.deepcopy(s)
     ps._rewind(snap, mark)
     assert len(snap.out) == len(s.out) - 1 and len(snap.out_cls) == len(snap.out), "the layer and its class side-list move together"
-    assert snap._blade_groups == [], "the deferred group whose slot no longer exists is gone"
+    assert snap._mark_groups == [], "the deferred group whose slot no longer exists is gone"
 
 
 def test_a_step_is_watched_wherever_its_name_is_bound_and_the_wrap_is_undone() -> None:
