@@ -129,18 +129,18 @@ class DrainageDitch(Kind):
     lower on the ground than the end it starts from. It lets its water go at its lowest point - its low end, or partway along where its run meets a sink - off the map, into
     the passing brook, or into the pond at the field's foot, whichever lies below it.
 
-    Note: The collector's form and its separation from the supply net are read, as an Edo layout (Minuma, 1728), and so is a drain letting its water go into a river or a natural watercourse, in a modern
+    Note: The collector's form and its separation from the supply net are read, as an Edo layout at the scale of a district's trunk canals and its drain (Minuma, 1728), its ditch to every plot being modern consolidation's, and so is a drain letting its water go into a river or a natural watercourse, in a modern
     design standard and in a Saitama drain, which its article does not date, that carried the spent water of a district its canals watered in the
     Edo period; whether it widens along its run follows the field it drains, and the full width it is drawn
     at where it leaves the field is wider than the one old drain read (0.5-1 m, at the Hattori site), resting
-    on a reading of what a drain must carry, not a period figure; it is drawn for every hamlet,
+    on a reading of what a drain must carry, not a period figure, and the thread it starts as, about 1.5 ft, matches the channel at the head of the field in the Rites of Zhou, an ideal scheme whose feet are this record's reading of its unit; it is drawn for every hamlet,
     a deliberate trade over the older field-to-field and combined forms the record also holds, so a reader
     has a ditch between the plots to hover, and the sink its run reaches is the map's declared water sink. A
     drain that ends in a pond of its own is a guess, no page read describing one; and the angle at which the
-    collector meets the brook is this record's own inference, the right angle a modern drainage manual gives
+    collector meets the brook is given by no page read and set by no rule of the map, left to the ground, the right angle a modern drainage manual gives
     being the one between the field drains and the collector.
 
-    Caveat: it is drawn for every hamlet, a deliberate trade over the older field-to-field and combined forms the record also holds, so a reader has a ditch between the plots to hover, and the sink its run reaches is the map's declared water sink. A drain that ends in a pond of its own is a guess, no page read describing one; and the angle at which the collector meets the brook is this record's own inference, the right angle a modern drainage manual gives being the one between the field drains and the collector.
+    Caveat: it is drawn for every hamlet, a deliberate trade over the older field-to-field and combined forms the record also holds, so a reader has a ditch between the plots to hover, and the sink its run reaches is the map's declared water sink. A drain that ends in a pond of its own is a guess, no page read describing one; and the angle at which the collector meets the brook is given by no page read and set by no rule of the map, left to the ground, the right angle a modern drainage manual gives being the one between the field drains and the collector.
 
     Name: drainage ditch
     Covers: `field_ditches` whose role is `drain`, and `channels` leaving a drain - the collector and its run to the pond, the brook or the frame

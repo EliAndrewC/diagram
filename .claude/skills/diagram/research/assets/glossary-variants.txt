@@ -1904,6 +1904,8 @@ lineage villages	lineage village
 lineages	lineage
 linear village	ressen
 linear villages	ressen
+lined canal	lined canal
+lined canals	lined canal
 ling canal	Lingqu
 lingnan	Lingnan
 lingqu	Lingqu
@@ -2413,6 +2415,7 @@ penthouses	penthouse
 perched	perched river
 perched river	perched river
 perched, silt-choked river	perched river
+percolation	percolation
 periodic market	periodic market
 periodic markets	periodic market
 periodic-market	periodic market

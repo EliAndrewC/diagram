@@ -13713,5 +13713,18 @@
    "Hattori site",
    "Hattori"
   ]
+ },
+ "percolation": {
+  "def": "Water soaking down through the floor of a paddy into the ground below. It is lost to the field, and more is lost when the groundwater level falls.",
+  "variants": [
+   "percolation"
+  ]
+ },
+ "lined canal": {
+  "def": "A canal whose bed and banks are faced with concrete, stone or another hard surface, unlike a ditch dug in the bare earth.",
+  "variants": [
+   "lined canal",
+   "lined canals"
+  ]
  }
 }
