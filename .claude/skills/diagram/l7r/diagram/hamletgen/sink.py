@@ -14,11 +14,11 @@ from l7r.diagram.settlement import Settlement, point_in_poly, seg_closest
 from l7r.diagram.settlement.fields.comb import DOWNHILL_FRACTION as DOWNHILL_FRACTION
 from l7r.diagram.settlement.fields.comb import runs_downhill  # the channel rule, one predicate for every channel writer (water:W10)
 from l7r.diagram.settlement.land.dikes import breaches_any_dike
-from l7r.diagram.waterfields.twins import TWIN_HI_FT, TWIN_RUN_FT, twin_run_ft
 from l7r.diagram.settlement.land.wet import pond_fringe_ring
 from l7r.diagram.settlement.water_ways.water import DRAIN_HUE, DRAINAGE_DITCH
 from l7r.diagram.sitegen.geom import crosses_poly, unit
 from l7r.diagram.waterfields import DRAIN_FT, chan_px
+from l7r.diagram.waterfields.twins import TWIN_HI_FT, TWIN_RUN_FT, twin_run_ft
 
 from .consts import GRAIN, POND_SETBACK_LIMIT, REF_HOUSEHOLDS, Poly, Pt
 from .plan import SitePlan

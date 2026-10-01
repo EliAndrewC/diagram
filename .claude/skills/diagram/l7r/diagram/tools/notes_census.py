@@ -104,7 +104,34 @@ if __name__ == "__main__":
 _HISTORY = re.compile(r"\b(?:\d{4}-\d{2}-\d{2}|[Ff]eature \d{3}|pass \d+|round \d+)\b")
 _HEADING = re.compile(r"^#{1,6} .*$", re.M)
 _DATED = re.compile(r"\b\d{4}-\d{2}-\d{2}\b")
-_WORDS = {w: i for i, w in enumerate(("zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"))}
+_WORDS = {
+    w: i
+    for i, w in enumerate(
+        (
+            "zero",
+            "one",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+            "ten",
+            "eleven",
+            "twelve",
+            "thirteen",
+            "fourteen",
+            "fifteen",
+            "sixteen",
+            "seventeen",
+            "eighteen",
+            "nineteen",
+            "twenty",
+        )
+    )
+}
 #: the kinds a typed count names, and how the manifest counts them
 COUNTED: dict[str, Any] = {
     "farmhouses": lambda M: len(M.get("houses") or []),

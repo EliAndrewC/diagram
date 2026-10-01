@@ -629,7 +629,11 @@ class GrovesMixin:
             # THE CONIFERS ARE PAINTED LAST (feature 294 B5b): the clump's lesser crowns first, its conifers over them, and a
             # lesser crown that would lie over an earlier clump's conifer is not drawn (`over_a_conifer`) - so no broadleaf is
             # ever inked over a cedar (Kashikawa's and Mizuguchi's farm groves drew 199 and 108 when this was written)
-            _cones = [c for c in (getattr(self, "_conifer_crowns", None) or []) if cx - w / 2 - _cpad - c[2] <= c[0] <= cx + w / 2 + _cpad + c[2] and cy - h / 2 - _cpad - c[2] <= c[1] <= cy + h / 2 + _cpad + c[2]]  # a conifer whose DISC reaches the box
+            _cones = [
+                c
+                for c in (getattr(self, "_conifer_crowns", None) or [])
+                if cx - w / 2 - _cpad - c[2] <= c[0] <= cx + w / 2 + _cpad + c[2] and cy - h / 2 - _cpad - c[2] <= c[1] <= cy + h / 2 + _cpad + c[2]
+            ]  # a conifer whose DISC reaches the box
             high: list[str] = []
             g = [f'<g transform="translate({cx:.0f},{cy:.0f})">']
             # Draw back-to-front so the stand layers with depth. Each CROWN is one tree at real size (~5-6 m; a few

@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import math
 from collections.abc import Sequence
+from typing import Any
 
 from shapely.geometry import LineString, Point
 
@@ -75,7 +76,7 @@ def leaves_from(child: Sequence[Sequence[float]], parent: Sequence[Sequence[floa
     return LineString(parent).distance(Point(child[0])) * ftpx < TWIN_LO_FT
 
 
-def drop_twin_deliveries(channels: list[dict], first: int, ftpx: float) -> list[dict]:
+def drop_twin_deliveries(channels: list[dict[str, Any]], first: int, ftpx: float) -> list[dict[str, Any]]:
     """Take out of `channels[first:]` every delivery (`role` branch) that would run beside another course as a twin: the one
     that leaves the other, else the shorter of two deliveries. A supply canal (`role` main) is never taken out. Returns the
     deliveries taken out."""

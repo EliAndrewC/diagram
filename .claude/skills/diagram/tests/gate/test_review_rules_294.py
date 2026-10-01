@@ -17,6 +17,7 @@ from __future__ import annotations
 import glob
 import json
 import os
+import pathlib
 from collections.abc import Mapping, Sequence
 from typing import Any
 
@@ -412,7 +413,6 @@ def test_no_marsh_meets_open_ground_on_a_ruled_line(gen: str) -> None:
     from l7r.diagram.hamletgen.water.brook_rules import AXIS_EPS_DEG, RULED_MIN_LEN_FT, RULED_SHARE, RULED_TOL_FT
     from l7r.diagram.pipeline import gencache
     from l7r.diagram.tools import hit_share, marsh_edges
-    from tests.gate import _pool
 
     M = _manifest(gen)
     rings = [m["poly"] for m in M.get("marshes") or [] if len(m.get("poly") or []) >= 3]
@@ -438,7 +438,7 @@ def folders_without_notes(root: str) -> list[str]:
             if not os.path.isdir(d) or not any(os.path.isfile(os.path.join(d, f"{name}{ext}")) for ext in (".gen.py", ".json", ".svg")):
                 continue
             notes = os.path.join(d, f"{name}.notes.md")
-            if not os.path.isfile(notes) or not open(notes, encoding="utf-8").read().strip():
+            if not os.path.isfile(notes) or not pathlib.Path(notes).read_text(encoding="utf-8").strip():
                 out.append(name)
     return out
 
