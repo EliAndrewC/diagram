@@ -13799,5 +13799,30 @@
   "variants": [
    "hanamichi"
   ]
+ },
+ "Mishima": {
+  "def": "A post station on the Tokaido, the highway from Edo to Kyoto.",
+  "variants": [
+   "mishima"
+  ]
+ },
+ "Hiratsuka": {
+  "def": "A post station on the Tokaido highway, now a city whose museum has published the measured size of one of its old inns.",
+  "variants": [
+   "hiratsuka"
+  ]
+ },
+ "Park Ji-won": {
+  "def": "A Korean scholar whose Jehol Diary records his journey through north China in 1780, including its section on the inns of the road.",
+  "variants": [
+   "park ji-won"
+  ]
+ },
+ "chicken-feather inn": {
+  "def": "The cheapest kind of lodging house in old Beijing, a shared room where the poorest lodgers slept for a coin or so a night.",
+  "variants": [
+   "chicken-feather inn",
+   "chicken-feather inns"
+  ]
  }
 }

@@ -366,6 +366,8 @@ cheng-zhu neo-confucianism	Cheng-Zhu Neo-Confucianism
 chenghua	Chenghua
 chenghuangmiao	chenghuangmiao
 chi	chi
+chicken-feather inn	chicken-feather inn
+chicken-feather inns	chicken-feather inn
 chigaidana	staggered shelves
 chikaraishi	chikaraishi
 chinese toon	toon
@@ -1272,6 +1274,7 @@ hipposandal	hipposandal
 hipposandals	hipposandal
 hirairi	hirairi
 hirakata	hirakata
+hiratsuka	Hiratsuka
 hirayamajiro	hill-and-plain castle
 hirazamurai	heishi
 hiro	hiro
@@ -2074,6 +2077,7 @@ mio-suji	thalweg
 mire	mire
 mirin	mirin
 mise	mise
+mishima	Mishima
 mitochigai	mitochigai
 mitsuba	mitsuba
 mitsuke	mitsuke
@@ -2408,6 +2412,7 @@ parish	parish
 parish temple	parish
 parish's	parish
 parishioners	parish
+park ji-won	Park Ji-won
 party wall	row house
 party walls	row house
 patrol strip	patrol strip
