@@ -119,7 +119,7 @@ class RiverLanding(Kind):
     Covers: the landing label - its dock, revetment, barge, watch post and altar are each their own kind
     Label: accurate
     Sources: nishimawari-koro-jawiki, kashi-jawiki, gangi-kowan-jawiki, takasebune-jawiki, kotobank-takasebune, matou-zhwiki, kuramae-jawiki, chinaknowledge-caoyun
-    Entry: research/buildings.html - 'The granary is a staging node, not the terminal store'; research/cities/river-cities.html - "The wharf's working face"; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'; research/ways.html - "Where does a village's freight go?"
+    Entry: research/buildings.html - 'The granary is a staging node, not the terminal store'; research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/rendering/cities/river-cities.html - 'How our maps draw a city's wharf and landings'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'; research/ways.html - "Where does a village's freight go?"
     """
 
     key = "river landing"
@@ -271,7 +271,7 @@ class Revetment(Kind):
     Covers: the stone facing along the landing's bank
     Label: accurate
     Sources: gangi-hiroshima-jawiki, kashi-jawiki, gangi-kowan-jawiki, kuramae-jawiki
-    Entry: research/cities/river-cities.html - "Does an official's compound have its own stepped landing, or a pier?", "The wharf's working face"; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'
+    Entry: research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/rendering/cities/river-cities.html - 'How our maps draw a city's wharf and landings'; research/cities/capitals.html - 'Rice storehouses and the rice brokers in a capital (kura, fudasashi)'
     """
 
     key = "revetment"
@@ -302,7 +302,7 @@ class Dock(Kind):
     Covers: the landing steps in the faced bank
     Label: accurate
     Sources: gangi-hiroshima-jawiki, gangi-kowan-jawiki, pier-enwiki, matou-zhwiki
-    Entry: research/cities/river-cities.html - "Does an official's compound have its own stepped landing, or a pier?", "The wharf's working face"
+    Entry: research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/rendering/cities/river-cities.html - 'How our maps draw a city's wharf and landings'
     """
 
     key = "dock"
@@ -326,7 +326,7 @@ class TaxBarge(Kind):
     Covers: the moored barge, its lines, its bales and its label
     Label: accurate
     Sources: takasebune-jawiki, kotobank-takasebune, gokura-jawiki, takayama-jinya-city, tawara-unit-jawiki, nisira-komedawara
-    Entry: research/urban-features.html - 'How big is a bale of rice or charcoal?'; research/buildings.html - 'The granary is a staging node, not the terminal store'; research/cities/river-cities.html - "The wharf's working face"
+    Entry: research/urban-features.html - 'How big is a bale of rice or charcoal?'; research/buildings.html - 'The granary is a staging node, not the terminal store'; research/cities/river-cities.html - 'Wharves and landings: piers, quays and stepped landings (kashi, gangi)'; research/rendering/cities/river-cities.html - 'How our maps draw a city's wharf and landings'
     """
 
     key = "tax barge"
