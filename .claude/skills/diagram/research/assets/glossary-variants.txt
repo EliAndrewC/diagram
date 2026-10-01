@@ -4036,6 +4036,7 @@ yarai	yarai
 yashiki	yashiki
 yashiki-baka	yashiki-baka
 yashikibaka	yashiki-baka
+yashikibatake	yashikibatake
 yashikichi	yashikichi
 yashikigami	yashikigami
 yashikigami-sama	yashikigami

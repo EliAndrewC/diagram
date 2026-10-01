@@ -73,7 +73,7 @@ class StorageShed(Kind):
     Covers: `houses[].shed` (the storehouse against a farmhouse) and `farm_sheds` (its record)
     Label: accurate
     Sources: oamishirasato-choshi-kaoku, koshigaya-shishi-noumin-jukyo, bunka-minami-naya, nerima-mitome-naya
-    Entry: research/homesteads.html - 'The farmstead and what stood on it (yashiki)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)'
+    Entry: research/homesteads.html - 'The farmstead and what stood on it (yashiki)', 'Farm storehouses (kura)', 'Farm sheds and barns (naya)'; research/rendering/homesteads.html - 'How our maps draw the farmstead and what stands on it (yashiki)', 'How our maps give some farms a storehouse'
     """
 
     key = 'storage shed'
@@ -213,7 +213,7 @@ class Garden(Kind):
     Covers: `gardens`
     Label: accurate
     Sources: not recorded
-    Entry: research/homesteads.html - 'Sunlight and shade on the farm'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun'
+    Entry: research/homesteads.html - 'Sunlight and shade on the farm', 'Kitchen gardens beside farmhouses (yashikibatake)'; research/rendering/homesteads.html - 'How our maps keep yards and gardens in the sun', 'How our maps size kitchen gardens'
     """
 
     key = 'garden'
