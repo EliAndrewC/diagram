@@ -3826,13 +3826,6 @@
    "tanada"
   ]
  },
- "tanglao": {
-  "def": "The belt of ponds and marsh the Northern Song dug across the Hebei frontier from 989, as ground cavalry could not cross.",
-  "variants": [
-   "tanglao",
-   "塘泺"
-  ]
- },
  "tangpu": {
   "def": "The dike-and-canal grid of a Chinese polder district, its canals five to ten li apart.",
   "variants": [
@@ -13777,6 +13770,28 @@
   "def": "Japanese for marsh or wetland: low ground where water stands or the soil stays wet, the reed ground that wet rice was reclaimed from and that stayed reed wherever draining stopped.",
   "variants": [
    "shitchi"
+  ]
+ },
+ "mere": {
+  "def": "A shallow lake or pond of standing water; a Northern Song official proposed joining meres, marshes and dikes into a belt across the northern frontier to hold back an enemy's cavalry.",
+  "variants": [
+   "mere",
+   "meres"
+  ]
+ },
+ "military farm colony": {
+  "def": "A frontier settlement where soldiers farmed the land they guarded, so the garrison fed itself; a Song proposal would have watered such colonies from a belt of meres and dikes against cavalry.",
+  "variants": [
+   "military farm colony",
+   "military farm colonies",
+   "military farm-colony",
+   "military farm-colonies"
+  ]
+ },
+ "secondary succession": {
+  "def": "Wild plants returning to ground that was cleared and then let go, one plant community giving way to the next with no one planting them; on an abandoned paddy, annual weeds come first, then knotweed, then sedge.",
+  "variants": [
+   "secondary succession"
   ]
  }
 }

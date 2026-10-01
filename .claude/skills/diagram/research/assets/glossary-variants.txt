@@ -2036,6 +2036,8 @@ memorials	memorial
 men-hai	taiping-gang
 menbansho	menbansho
 mengxi bitan	Mengxi Bitan
+mere	mere
+meres	mere
 meshimori	meshimori
 meshimori onna	meshimori
 meshimori women	meshimori
@@ -2060,6 +2062,10 @@ military commissioner	military commissioner
 military commissioners	military commissioner
 military examination	military examination
 military examinations	military examination
+military farm colonies	military farm colony
+military farm colony	military farm colony
+military farm-colonies	military farm colony
+military farm-colony	military farm colony
 mimasaka	Mimasaka
 mimasaka province	Mimasaka
 mimizuka	ear mound
@@ -2781,6 +2787,7 @@ seams	seam
 season word	season word
 season words	season word
 secondary forest	secondary forest
+secondary succession	secondary succession
 secondary woodland	secondary forest
 secondary woodlands	secondary forest
 sedan	sedan
@@ -3187,7 +3194,6 @@ tang-dynasty	Tang dynasty
 tang-song	Tang dynasty
 tangible cultural properties	Tangible Cultural Property
 tangible cultural property	Tangible Cultural Property
-tanglao	tanglao
 tangpu	tangpu
 tani-ike	valley pond
 taper law	taper law
@@ -3786,7 +3792,6 @@ zushi-nikai	half-story
 四間取り	four-room type
 圃場整備	hojo seibi
 土地庙	tudi miao
-塘泺	tanglao
 屋敷林	yashikirin
 御蔵	kura
 悲田院	hidenin
