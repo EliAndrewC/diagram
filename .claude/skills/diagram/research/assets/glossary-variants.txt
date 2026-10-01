@@ -1335,6 +1335,7 @@ hoonoki	hoonoki
 horeki	Horeki
 hori	hori
 horiage-den	horita
+horikawa	horikawa
 horinouchi	horinouchi
 horinouchi's	horinouchi
 horita	horita

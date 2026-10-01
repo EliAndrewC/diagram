@@ -158,7 +158,7 @@ class WaterBodiesMixin:
     def river(self: Settlement, pts: Any, width: float | None = None, flow: str = "forward") -> float:  # type: ignore[misc]
         """A RIVER - the trunk waterway a river-bank city sits on (most provincial cities do;
         the moat taps it upstream and returns downstream, and the river itself serves as the
-        water defense on its flank - Xiangyang/Pingyao/Okayama pattern, see research/cities/river-cities.html 'Most provincial cities sit on a river').
+        water defense on its flank - Xiangyang/Pingyao/Okayama pattern, see research/cities/river-cities.html 'Cities on rivers').
         Drawn as a wide stream (off-map to off-map) and recorded in M['river'] so the checks
         that compare watercourse weights know this one legitimately outweighs the dug moat."""
         if width is None:
