@@ -210,6 +210,17 @@ def test_a_skip_render_page_is_not_filed_and_a_stale_one_is_evicted(tmp_path, mo
     assert (entry / "toy.json").exists(), "the manifest is filed regardless"
     assert gencache.load(str(gen)) is True
     assert not page.exists() and not png.exists(), "a hit deletes the standing page the entry lacks, as it does the PNG"
+    # FEATURE 294 B6: the vector page is filed apart, under a name no output carries, and only `page_of` reads it
+    assert (entry / "toy.vector.html").read_text() == "<vector-only page>"
+    assert gencache.page_of(str(gen)) == str(entry / "toy.vector.html")
+    page.write_text("<full page>")
+    assert gencache.page_of(str(gen)) == str(page), "the pool's own page first, where it stands"
+    monkeypatch.delenv("DIAGRAM_SKIP_RENDER", raising=False)
+    gencache.store(str(gen), deps)
+    assert not (entry / "toy.vector.html").exists(), "a filed full page takes the vector copy's place"
+    page.unlink()
+    (entry / "toy.html").unlink()
+    assert gencache.page_of(str(gen)) is None
     eng, gen, _ = _fixture(tmp_path)
     _with_engine(monkeypatch, tmp_path, eng)
     before = gencache.compute_key(str(gen), None)

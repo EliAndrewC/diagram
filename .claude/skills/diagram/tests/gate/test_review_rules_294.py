@@ -34,6 +34,8 @@ BEARING_BAND_DEG = 33.75  # research homesteads/240: the commonest compass point
 PILE_AT_LIMIT = 2  # no more than two houses within a degree of the widest turn (the 9-of-16 pile, 269 E round 1)
 PILE_FLOOR_DEG = 5.0  # a turn this small is the common bearing itself, not a clamp
 SHED_TURN_TOL_DEG = 2.0
+HIT_SHARE_FLOOR = 0.8  # GUESS (plan D11): a class answers the pointer over at least 80% of its own visible ink
+HIT_MIN_PIXELS = 50  # a class with less visible ink than this is a few pixels of edge, not a region to hover
 DRAWN_TO_ROLLED = 0.15  # GUESS (plan D11): a drawn size within 15% of its roll - a clump's canopy is the grain of a copse
 RECORD_OFF_INK_FT = 3.0  # GUESS (plan D11): about one drawn ditch's width - a record is its drawing (map drawing convention)
 POINT_ON_WATER_FT = 2.0  # GUESS: a sluice gate or weir stands on its water (the recorded case: a gate snapped 7 ft off)
@@ -307,6 +309,45 @@ def test_the_shipped_hamlets_keep_the_rules_the_review_used_to_judge(gen: str) -
     assert law.needle_ends(M.get("lanes") or []) == [], "B13: a needle join"
     assert law.needle_loops(M) == [], "B13: a needle loop"
     assert law.lanes_that_kink(M) == [], "B13: a lane that doubles back or kinks"
+
+
+# ---- B6: a class answers the pointer over its own ink ----------------------------------------------------
+
+
+def hit_thefts(found: Mapping[str, tuple[float, str | None, int]], declared: frozenset[str]) -> list[str]:
+    """Each class answering the pointer over less than `HIT_SHARE_FLOOR` of its own visible ink, where what answers instead is
+    not one of the `declared` widened boxes (`interactive/page.HIT_WIDEN`: a thin mark's fat hit copy is meant to win the area
+    fill beneath it, the GM's 2026-08-28 ruling)."""
+    return [f"{k}: {share:.0%} of its {n} px, {thief} answers" for k, (share, thief, n) in found.items() if n >= HIT_MIN_PIXELS and share < HIT_SHARE_FLOOR and thief not in declared]
+
+
+def test_a_region_taking_another_class_s_ink_fires() -> None:
+    """Seeded: the recorded cases' shape - a lifted region over a pig sty (88%), a sluice box winning 42% of its own."""
+    from l7r.diagram.interactive.page import HIT_WIDEN
+
+    declared = frozenset(HIT_WIDEN)
+    assert hit_thefts({"pig sty": (0.12, "pond sluice", 400), "paddy": (0.4, "bund", 9000), "edge": (0.1, "x", 3)}, declared) == ["pig sty: 12% of its 400 px, pond sluice answers"]
+
+
+@pytest.mark.renders
+@pytest.mark.parametrize("gen", _HAMLETS, ids=os.path.basename)
+def test_every_class_answers_the_pointer_over_its_own_ink(gen: str) -> None:
+    from l7r.diagram.interactive.page import HIT_WIDEN
+    from l7r.diagram.pipeline import gencache
+    from l7r.diagram.tools import hit_share
+    from tests.gate import _pool
+
+    _pool.obtain(gen)
+    page = gencache.page_of(gen)  # the pool's page, or the vector page a skip-render roll filed (feature 294)
+    assert page, "non-vacuity: the map's page is on disk or filed with its entry"
+    with open(page, encoding="utf-8") as fh:
+        svg = hit_share.page_svg(fh.read())
+    assert svg, "non-vacuity: the page carries its map"
+    found = hit_share.shares(svg)
+    if found is None:
+        pytest.skip("no resvg on this host")
+    assert len(found) > 10, "non-vacuity: the classes on the map were measured"
+    assert hit_thefts(found, frozenset(HIT_WIDEN)) == [], "B6: a class's ink answers as another"
 
 
 # ---- B15: every map folder carries its notes --------------------------------------------------------------

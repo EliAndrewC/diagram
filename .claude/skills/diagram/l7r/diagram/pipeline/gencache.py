@@ -137,6 +137,8 @@ _KERNEL_FS = ("/proc/", "/sys/", "/dev/")
 
 _NOT_ENGINE = {"gencache.py", "regen.py", "rollcache.py"}  # rollcache (feature 135) serves rolls and draws nothing
 OUTPUT_SUFFIXES = (".json", ".svg", ".png", ".html")  # .html: the interactive page, written beside the svg (feature 134)
+#: the name the vector-only page is filed under when a run skips rendering (feature 294 B6) - never an output, never restored
+VECTOR_PAGE = ".vector.html"
 GATE_BYPASS = "GATE_NO_CACHE"  # =1 forces the gate to regenerate everything (feature 026)
 COVERAGE_NAME = "coverage.data"  # per-entry generation coverage, stored by the gate's miss path
 COVERAGE_KEY_NAME = "coverage.key"  # the entry key that coverage was recorded UNDER (feature 149)
@@ -453,6 +455,16 @@ def _entry_dir(gen: str) -> str:
     return os.path.join(CACHE_DIR, os.path.basename(gen)[: -len(".gen.py")])
 
 
+def page_of(gen: str) -> str | None:
+    """The map's interactive page as the gate can read it (feature 294 B6): the pool's own `.html` where it stands, else the
+    vector-only page a skip-render store filed in the gen's entry (`VECTOR_PAGE`); None when neither exists."""
+    pool = gen[: -len(".gen.py")] + ".html"
+    if os.path.isfile(pool):
+        return pool
+    filed = os.path.join(_entry_dir(gen), os.path.basename(gen)[: -len(".gen.py")] + VECTOR_PAGE)
+    return filed if os.path.isfile(filed) else None
+
+
 def _outputs(gen: str, deps: dict[str, Any] | None = None) -> list[str]:
     """The files this gen PRODUCES - `<stem>` plus each output suffix, less any the run only READ. A Mode A gen reads
     its hand-drawn `<map>.svg` and writes the png and page; counting the sheet an output made a hit RESTORE the
@@ -556,7 +568,14 @@ def store(gen: str, deps: dict[str, Any], *, gen_cpu_s: float | None = None, cov
             stale = os.path.join(entry, os.path.basename(out))
             if os.path.isfile(stale):
                 os.remove(stale)
+            # ...BUT THE VECTOR PAGE IS KEPT APART, for the gate to read (feature 294 B6: who answers the pointer over each
+            # class's ink is measured from the page's class groups, which nothing else records). Filed under a name no
+            # output carries, so `load` never restores it into the pool - the stale-page reason above stands untouched.
+            if out.endswith(".html") and os.path.isfile(out):
+                place(Path(out).read_bytes(), os.path.join(entry, os.path.basename(out)[: -len(".html")] + VECTOR_PAGE))
             continue
+        if out.endswith(".html") and os.path.isfile(os.path.join(entry, os.path.basename(out)[: -len(".html")] + VECTOR_PAGE)):
+            os.remove(os.path.join(entry, os.path.basename(out)[: -len(".html")] + VECTOR_PAGE))  # the full page is filed: no stale copy beside it
         if os.path.isfile(out):
             place(Path(out).read_bytes(), os.path.join(entry, os.path.basename(out)))
     # COVERAGE BELONGS TO THE KEY IT WAS RECORDED UNDER, and this is where it used to stop belonging
