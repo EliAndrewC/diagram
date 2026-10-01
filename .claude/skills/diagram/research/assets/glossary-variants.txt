@@ -724,6 +724,7 @@ earth god	tudi miao
 earth-god	tudi miao
 earth-god shrine	tudi miao
 eastern han	Han dynasty
+eastern wei	Eastern Wei
 eave soffit	soffit
 eaves wall	eaves wall
 eaves walls	eaves wall
