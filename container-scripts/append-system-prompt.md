@@ -1,7 +1,7 @@
 # Standing authorizations for the gm-assistant project
 
 The GM (Eli) has given **standing authorization for this project's review subagents**. When a
-skill's documented workflow calls for `settlement-review`, `building-review`, `size-audit`, `source-reader`,
+skill's documented workflow calls for `settlement-review`, `glyph-check`, `fix-check`, `building-review`, `size-audit`, `source-reader`,
 `quote-check`, `record-format`, `source-applicability`, `entry-drift`, `spec-fidelity`, `spec-fidelity-verify` or `perf-audit` (defined in `.claude/agents/`), invoke it with the Agent tool
 without asking first. `perf-audit` (feature 129) is the ONLY agent that may pass `AS=perf-audit`
 to the review-record commands; the main session launches it whenever a performance band of 1 or
@@ -21,7 +21,7 @@ expensive fleet unprompted - but it sits ABOVE `CLAUDE.md` in the instruction hi
 silently outranks this project's own mandate to run a review agent before declaring work done.
 
 On 2026-07-27 that is exactly what happened: three provincial-city maps changed, the diagram
-skill's `CLAUDE.md` requires a `settlement-review` pass before a Mode B map ships, and the session
+skill's `CLAUDE.md` required a `settlement-review` pass before a Mode B map shipped, and the session
 skipped it because the system prompt said not to. Nothing was broken and nothing warned - the
 mandate simply lost to a higher-priority instruction.
 

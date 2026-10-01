@@ -52,6 +52,8 @@ TIERS: dict[str, tuple[str, str]] = {
     "size-audit": ("opus", "high"),
     "building-review": ("opus", "high"),
     "settlement-review": ("opus", "high"),
+    "glyph-check": ("opus", "high"),  # feature 294: the element-in-place check, owed on its occasion
+    "fix-check": ("opus", "high"),  # feature 294: the GM-complaint fix verification, owed on a declared gm-fix
     "perf-audit": ("opus", "high"),
     "effort-grader": ("opus", "high"),  # feature 293: one fixed grader for both tasks of the effort experiment (FR-010)
 }
