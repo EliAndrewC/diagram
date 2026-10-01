@@ -95,20 +95,24 @@ contents: FR-013, every leaf taking `{"primary": <its subject>}`. Map convention
 **D7 - Part openings.** Each `_front.html`'s reader-facing intro moves into the description of the section it
 introduced (by the part -> section mapping of D8); session comments in it are dropped (they describe the part's
 history); `_tail.html` and `_citations-*.html` are deleted. Per-part citations pages are retired: the site never served
-them, and the three tools that read them (R7) read the per-question notes instead. `migration.md` lists each opening
-and where its text went.
+them, and the three tools that read them (R7) read the per-question notes instead. `research.md` (R9, spec FR-016)
+lists each opening and where its text went, or that it was retired and why.
 
 **D8 - Pointers.** The sweep rewrites, repository-wide: a fragment path `research/<page>/NNN-<id>.html` (and its
 `.notes`/`.originals`) to `research/questions/NNNN-<slug>[.drawing][.notes|.originals].html`; an assembled-page pointer
 `research/<page>.html#<anchor>` to the stem holding the anchor (with `#anchor` kept when it is not the heading); a
 whole-page pointer `research/<page>/` or `research/<page>.html` to the section the part became,
 `research/contents.json#<section id>`; a prose pointer `research <page> '<heading>'` to the stem; and an old number
-`<page> NNN` naming an existing question (e.g. `homesteads 440`) to `NNNN`. The pointer check
-(`check-research-pointers.py`) validates the new forms (a stem file exists; a section id exists in `contents.json`) and
-refuses every old form, naming the new pointer from `moved-303.json`. Exempt: `specs/*/request.md`, SOURCE blocks,
-`moved-303.json` itself, and `specs/303-research-organization/` (which describes the migration in old terms). Ranges in
-landed briefs (`buildings 240-640`) are history of a finished session's scope, not pointers to a question; they are
-rewritten to the list of new numbers they covered where the range resolves, else left and reported in `migration.md`.
+`<page> NNN` or `<page>/NNN` naming an existing question (e.g. `homesteads 440`) to `NNNN` (three digits after a page
+name; every number-form rewrite is listed for review in `migration.md`, because prose can put a page name before a
+number that is not a question). The pointer check (`check-research-pointers.py`) validates the new forms (a stem file
+exists; a section id exists in `contents.json`) and refuses every old form whose old path or (page, number) is in
+`moved-303.json`, naming the new pointer from it. Exempt: `specs/*/request.md`, SOURCE blocks, `moved-303.json`, and
+`specs/303-research-organization/migration.md`, which holds only the generated old-to-new mapping. Everything else in this
+feature's own directory is swept and checked like any landed spec. A range in a landed brief (`buildings 240-640`) is
+rewritten to the new numbers of the questions it covered; a range covering no question names no research file and is
+left as written - it passes the check without an escape, because the check refuses only a (page, number) that IS in
+the mapping, and neither end of such a range is.
 
 **D9 - Tools.** Every `PAGE=<p> SECTION=<q>` becomes `Q=<NNNN>` (one or more stems, by number or stem); a whole-page
 `PAGE=<p>` becomes `IN=<section id or tag>`; `_hm_record.py` gains the one selection function every tool calls

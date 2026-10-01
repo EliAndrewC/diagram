@@ -1,0 +1,96 @@
+{
+ "feature": "303-research-organization",
+ "plan_sha256": "f65e000ed2c3a94346915290359775640c73d54afd9b164d5d54132df02d5fe9",
+ "reviewed": "2026-10-01",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Flat research/questions/ layout, stem NNNN-<slug>, four-digit numbers allocated once in initial table-of-contents order, later by make reserve KIND=question",
+   "class": "within",
+   "why": "FR-001/FR-002 and message 2's flat storage; initial allocation order is an allocation choice, the number never changes on regrouping"
+  },
+  {
+   "id": "D2",
+   "summary": "tags marker on the line after the heading; second drawing pages are own stems with about:; the 231 paired about: declarations removed; Presentation become drawing-only stems with primary subject map-conventions",
+   "class": "within",
+   "why": "FR-006, FR-007, FR-012 and the measured Edge Case; the about: marker is a pointer replaced by stem pairing, which FR-006 names"
+  },
+  {
+   "id": "D3",
+   "summary": "A page's note references resolve only in its own notes; the 19 cross-question notes are copied into the citing notes file; all.html numbers notes once by (page, key)",
+   "class": "within",
+   "why": "Mechanical consequence of one page per question (FR-001); content unchanged (FR-003, FR-015)"
+  },
+  {
+   "id": "D4",
+   "summary": "In-record links rewritten relative to questions/ by resolving each with the old index; build refuses a link that lands nowhere",
+   "class": "within",
+   "why": "FR-017 (cross-links inside the record rewritten) and FR-020; the refusal only enforces that the rewritten references land (message 3)"
+  },
+  {
+   "id": "D5",
+   "summary": "tags.json and contents.json shapes; takes clauses over primary/subject/setting/level; home = first match depth-first; initial leaves take their primary subject; Map conventions last before Sources",
+   "class": "within",
+   "why": "FR-005, FR-009, FR-010, FR-013 exactly; clauses select on any facet as the GM asked"
+  },
+  {
+   "id": "D6",
+   "summary": "Site: index, per-section pages per half, flat site/q/<heading id>.html, per-tag pages, all.html; maps link q/",
+   "class": "within",
+   "why": "FR-004 (URL from heading id), FR-012, FR-014, FR-015, FR-020"
+  },
+  {
+   "id": "D7",
+   "summary": "_front.html reader text moves into section descriptions, session comments dropped; _tail.html and per-part citations pages retired, tools read per-question notes",
+   "class": "within",
+   "why": "FR-016; _tail.html is boilerplate linking the per-part citations page, which has no reader in the new layout; the three tools keep working (FR-019)"
+  },
+  {
+   "id": "D8a",
+   "summary": "Repository-wide pointer sweep of every old form (fragment path, assembled page, whole page -> contents.json#section, prose pointer, old number) and a pointer check that refuses old forms naming the new one from moved-303.json; exempt request.md, SOURCE blocks and moved-303.json",
+   "class": "within",
+   "why": "FR-017/FR-018; request.md and SOURCE blocks are the spec's own exemptions, and the mapping file is the spec's Migration mapping entity, which must hold old paths"
+  },
+  {
+   "id": "D8b",
+   "summary": "Blanket exemption of specs/303-research-organization/ from the sweep and the pointer check, because it describes the migration in old terms",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-017 names landed specs and SC-007 allows old references only in the GM's verbatim words; message 3 asks that references by path or number use the correct new number. Only the old->new statements themselves (the mapping) physically need old names; the spec, research and tasks of 303 also name individual questions by old path (fields/170, settlements/020, homesteads 440 ...) that can carry their new stems at no loss. One argument is stretched over two unlike classes. Fix: confine the exemption to moved-303.json and the old->new mapping in migration.md; sweep the rest of the feature directory like every landed spec"
+  },
+  {
+   "id": "D8c",
+   "summary": "Number ranges in landed briefs rewritten to the list of new numbers they covered where the range resolves, else left and reported in migration.md",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Legitimate only in the reading where an unresolved range is one containing no question: such a range (a reserved number block never used) names no research file, so no correct new number exists to write. Any range holding at least one question must be rewritten to those questions' numbers, and a left range must not be one the check silently waves past for any other reason"
+  },
+  {
+   "id": "D9",
+   "summary": "PAGE=/SECTION= become Q=NNNN, PAGE= becomes IN=<section or tag>; one select() in _hm_record.py; hooks and briefs emit the new forms; fragment-move renames a stem",
+   "class": "within",
+   "why": "FR-019 verbatim: a stem, a tag or a section where a page was taken"
+  },
+  {
+   "id": "D10",
+   "summary": "Delete record/split.py, store.write_fragments, write_notes_fragments and make record SPLIT=, and COLLECTIONS, rather than port them",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "FR-019 says every target that took a page works on the new layout, but SPLIT= splits a page that is still whole and no whole page exists in either layout (R1: every question is already a fragment); porting it is impossible in substance, and the request is about organization, which loses nothing"
+  },
+  {
+   "id": "D11",
+   "summary": "tags.md generated per stem with number, title, tags, level, home section and convention ruling",
+   "class": "within",
+   "why": "FR-008, FR-008a"
+  },
+  {
+   "id": "D12",
+   "summary": "Peer clones checked for unpushed research/ commits and reported; late old paths refused at push with the new path named",
+   "class": "within",
+   "why": "FR-018 and the in-flight peer Edge Case"
+  }
+ ],
+ "verdict": "BLOCKED"
+}

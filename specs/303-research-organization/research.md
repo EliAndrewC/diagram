@@ -67,3 +67,8 @@ group. Small pages are `site/<page dir>/<heading id>.html`; maps link them throu
 240 research questions tagged by four Opus readers in batches of 60 against one vocabulary
 (`vocabulary.md` in the scratchpad, carried into `research/tags.json`), each reporting the calls it was torn on; the
 session reviewed the whole table and the torn calls (`tags.md`). Drawing pages inherit (spec FR-006).
+
+## R9 - the part openings (spec FR-016)
+
+Filled in by the migration (T05): for each retired part directory, where its `_front.html` reader-facing text went
+(the description of the section it introduced) or that it was retired and why.
