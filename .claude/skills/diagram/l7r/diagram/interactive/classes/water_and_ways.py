@@ -313,8 +313,8 @@ class VillageLane(Kind):
     What: A trodden earth track - packed dirt with soft worn shoulders, a single narrow way, no paving and no
     center line.
 
-    Why: Every house in a nucleated village is reached by the interconnected lanes and alleys - that is what
-    compactness is for - and the narrow lateral lanes are taken over as semi-private space by the houses
+    Why: Every house in the clustered villages this record has read about is reached by a lane, though no page
+    states it as a rule, and the narrow lateral lanes are taken over as semi-private space by the houses
     beside them, which in this record's reading is why they are narrow and irregular (the one readable case
     is Shanghai's lane housing, a city form standing in for a village's). A lane bends like a line feet wear: as few
     turns as the plots allow, none sharp, never back on itself. The connector to the off-map road predates
@@ -329,9 +329,12 @@ class VillageLane(Kind):
     instead - a street laid out first, or the line the ground gives, a natural levee or a dike.
 
     Note: That every house is reached by a way is read from a surveyed village's own lane hierarchy; of the two
-    forms, the planned back lane is read and the alleys off the spine are on no publicly readable page, as is
-    the access passage this record paraphrases; the drawn WIDTHS (3, 5 and 6 ft; a row village's street takes the 6 ft, a rank wider than the lanes off it) are a GUESS, laddered from a footpath to a
-    wheelbarrow's width, with the connector kept under the 9 ft of the one cart road the record does measure.
+    forms, the planned back lane is read, and alleys off the streets are read only in that surveyed village, no
+    general article describing side lanes to a back row; the drawn WIDTHS (3, 5 and 6 ft; a row village's street
+    takes the 6 ft, a rank wider than the lanes off it) are a map drawing CONVENTION: the footpath takes the 3
+    shaku given for a field road (a traditional figure of uncertain date, not a measured one), and the spine and
+    spur are a rank wider because the whole hamlet walks them, with all three kept under the 9 ft of the one cart
+    road the record does measure.
     The record now carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to
     13 ft, reaching the house lots of a surveyed village - and the map deliberately draws below that band,
     because the village measured is a twentieth-century dry-plain one in the north rather than a wet-rice
@@ -346,8 +349,10 @@ class VillageLane(Kind):
     one width read for a way out to the fields is the one-ken (about 6 ft) farm road of a paddy replanned in
     1869 - a planned layout, not an old way measured.
 
-    Caveat: the drawn WIDTHS (3, 5 and 6 ft; a row village's street takes the 6 ft, a rank wider than the lanes off it) are a GUESS, laddered from a footpath to a wheelbarrow's width,
-    with the connector kept under the 9 ft of the one cart road the record does measure. The record now
+    Caveat: the drawn WIDTHS (3, 5 and 6 ft; a row village's street takes the 6 ft, a rank wider than the lanes
+    off it) are a map drawing CONVENTION: the footpath takes the 3 shaku given for a field road (a traditional
+    figure of uncertain date, not a measured one), and the spine and spur are a rank wider because the whole
+    hamlet walks them, with all three kept under the 9 ft of the one cart road the record does measure. The record now
     carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to 13 ft,
     reaching the house lots of a surveyed village - and the map deliberately draws below that band, because
     the village measured is a twentieth-century dry-plain one in the north rather than a wet-rice hamlet. How

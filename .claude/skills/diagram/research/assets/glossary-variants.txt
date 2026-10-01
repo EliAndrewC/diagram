@@ -201,6 +201,7 @@ berms	berm
 betto	bettō
 bettō	bettō
 bettō-ji	bettō
+betweenness centrality	betweenness centrality
 bidens	Bidens tripartita
 bidens tripartita	Bidens tripartita
 big door	ōdo

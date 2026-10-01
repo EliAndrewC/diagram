@@ -17,7 +17,8 @@ class Farmhouse(Kind):
 
     Why: A house in a nucleated hamlet is reached by a lane and stands close to the paddy - up against it, but
     never on the bund. HOW that access is delivered is not settled: alleys cut off the spine, each household
-    having made its own way to the road, and a laid-out back lane serving a regular row are both attested, so
+    having made its own way to the road as this map reads it, and a laid-out back lane serving a regular row are
+    both seen in villages read, so
     this map rolls between the two forms per settlement and guarantees only that every farmhouse is served.
     No two farmhouses face exactly the same way. A survey of the houses of 27 Okinawan villages found most of them
     facing within three points of the compass about their village's commonest bearing, the smaller turns where the
@@ -27,7 +28,7 @@ class Farmhouse(Kind):
     with it: the GM ruled that they always line up with their house. About one farm in eight carries a storehouse
     against its back wall, a village headman's always.
 
-    Note: Placement follows the read record; that every house in a nucleated cluster is reached by a lane, and the alleys-off-the-spine form, are paraphrased from a morphology literature no public page carries, and the back lane is read only for planned English villages. The setback from the paddy is stated in feet by no source:
+    Note: Placement follows the read record; that every house in a nucleated cluster is reached by a lane holds in the villages read, though no page states it as a rule; the alleys-off-the-spine form is read only in one surveyed twentieth-century Manchu village on the dry northern plain, the back lane only for planned English villages, and that alleys mean a village grew while a back lane means it was planned is this record's reading, not a source's. The setback from the paddy is stated in feet by no source:
     it is built from a bund width that is sourced (one to two shaku), a levee path and an eave overhang that
     are both unsourced GUESSES, and one part that is
     read for a house facing a watercourse and extended to the paddy by this record, so the 6 ft floor beneath
