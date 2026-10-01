@@ -65,3 +65,16 @@ to the access tree 441 (166 distinct searches - the four sides of a seat share o
 so the corridor memo answers the other three), the sun rules 40, the field's reach 24, other rules 5. So 464 of the 734 offers are
 refused by ground occupancy alone (the house box and the envelope) and most of the rest by the wood seats and the corridor -
 each a question about WHERE the seat is, not about the homestead's parts.
+
+## R7. What the settle's rounds change (observed 2026-09-30, method: scratch print of each step's change count per round, reverted)
+
+- Inashiro: round 1 - `settle_reach` 15 (the access tree's lanes, judged lawful at seating, drawn only now), a squared crossing,
+  a deferral, 2 network edits; round 2 - one end; round 3 - one shape, one network edit; round 4 - nothing. The rounds went still,
+  but `unsettled` still named `dangling_ends`, so the last resort ran and dropped one ordinary lane.
+- Sawada (the web stage ran twice in one regeneration): `settle_reach` 17 and 19 in round 1, then 1-3 edits a round (ends,
+  fragments, `prune_the_tree`, widths) for 3 and 5 rounds.
+- Kashikawa: 4 edits in round 1, one in round 2, still at round 3.
+
+So almost all of the settle's edits are the access tree's lanes, which were lawful when the seating admitted them, plus a
+handful of repairs to lanes laid earlier in the stage; yet every round asks all sixteen steps of the whole web, and the exit
+asks the whole lane law again (`unsettled`), and a still round with one rule broken runs the whole last resort.
