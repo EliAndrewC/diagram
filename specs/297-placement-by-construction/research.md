@@ -1,0 +1,57 @@
+# Feature 297 - research
+
+## R1. Where Inashiro's regeneration goes (observed 2026-09-30, session "Diagram performance")
+
+Method: `make map GEN="--no-cache pool/hamlets/inashiro/inashiro.gen.py" PROFILE=1`, four runs, with scratch phase marks
+(`_phase.mark()` deltas to stderr) around `generate`, `Settlement.finish` and `render_page`, and spans inside the threaded
+renders; the marks were reverted after. Load 1.8-4.0 on 22 cores. Regeneration 7.0-8.5 s (child, as REGENERATED reports it).
+
+| part | seconds |
+|---|---|
+| stages (`build`) | 4.9-6.2 (field 1.25-1.4, homesteads 1.07-1.13, hinterland 1.0-1.6, web 0.82-0.87, windbreak 0.17-0.21, notice 0.12, track 0.11, woodland 0.07-0.09, appurtenances 0.06) |
+| finish: beads, tree stands, blade groups | 0.113 |
+| finish: labels, splices, svg write, ink census | 0.024 |
+| page: drop_offmap 0.029, wrap 0.145, hit regions 0.115, svg join 0.005 | 0.294 |
+| page: picture (resvg zoom 2 in 2x2 tiles 0.691 + JPEG child 0.488) and id map (recolor 0.051 + resvg 0.251) in two threads | 1.197 |
+| page: explanations + json blob | 0.207 |
+| PNG (resvg 2600 px, a background thread joined at the end) | 0.462, hidden |
+| json write, promote | 0.04 |
+| child start, imports, cache store | ~0.35 |
+
+The harness (`measure.py before`, base `c5a631f9b`, render off as the gate's policy requires; load recorded per key in
+`measurements.json`) gives Inashiro's stages as 4.281 s summed, the fastest of three, and the pool's five rolls 25.181 s.
+`make map` uncached, fastest of three: 8.0 s (`m:before-inashiro-regen-s`, load 2.5 -> 6.1).
+
+## R2. The homestead seating's funnel (observed 2026-09-30)
+
+Method: the manifest's own `meta.seat_search` counters, cProfile of the homesteads stage (`make perf-profile SEED=4
+STAGE=homesteads` with the gen's full spec), and scratch counters in `access_corridor` (`r2-access-counters.patch`, reverted).
+
+- 734 seats offered to `try_place` (254 by the lattice rounds, 480 by the exhaustive pass, which seated 7 of them).
+- 902 parts tests (`_parts_fit`), behind 2,716 garden-side layouts built (`_bundle_geom`, four per seat).
+- 477 corridor searches (`access_corridor`): 36 found a corridor; **348 found no candidate at all** (no door's strip to a tree
+  target clears the house and the standing ground), 93 had candidates every one of which was refused, 4 candidates refused by
+  the tree judge. The no-candidate verdict depends on the house's box and yard, the access tree and the standing ground - not on
+  the garden side or the fixtures - and is asked after all four layouts are built.
+- Cost shares (cProfile, relative only): the corridor search 42% of the stage, the layouts 34%, the threshing-yard mats 12%
+  (15 yards), `seg_dist` 215k calls.
+
+## R3. The hinterland's lookups (observed 2026-09-30, cProfile of the stage)
+
+- Grass (`commons` -> `grass_scatter`) is already thrown and tested as arrays (feature 278) - region-then-fill in all but name.
+- The marsh's `_throw` is per point in Python: 198,162 `random.uniform` draws on Inashiro, 19,408 `_sparse` tests.
+- The village grove offers 15,605 candidate crowns to `static_clear` and asks `too_near` 28,980 times (6,267 crowns drawn).
+- The open-ground search asks `_ok` 4,473 times, behind 10,819 crop-edge `edge_within` probes.
+- `RingIndex.near` 102,164 calls in the stage (273,450 over the roll).
+
+## R4. The web (observed 2026-09-30)
+
+`settle_the_web` is 73% of the stage under cProfile; on Inashiro 12 of 15 houses are unreached when the settle starts (their
+access corridors were reserved at seating and are drawn by `settle_reach`), the settle runs 4 rounds with 22 lane edits and
+the last resort drops 1 lane (`meta.web_settle`). The last resort's re-sweeps (`lanes_breaking`, 4 calls) and `unsettled` are
+39% of the stage profiled. Pool: rounds 3-6, changed 5-27, dropped 0-1.
+
+## R5. The drain-bank hem (observed 2026-09-30)
+
+12,195 `drain_bank_clearance` calls = every vertex of every plot over three carves, each against every drain segment; ~0.07 s
+real. Not the field's cost (the three carves and `close_seams` are), but asked where no corner can be near the drain.
