@@ -2456,3 +2456,16 @@ found it did not own; put to the GM in specs/293-effort-level-experiment/outputs
 count lives only in hand-typed dated entries - the kind of line that went stale on Kuwabata (round 1, F1). Sketch: one
 `storehouses: **n** of **m** farmhouses` line in the census block, read from `farm_sheds` and the plain houses, beside the
 fixture line.
+
+## OPEN 2026-09-30 (feature 293 on 291, settlement-review of Inashiro): the connector may leave through the belt's windward corner
+
+**Measured** (the manifests): after the merge with feature 291, Inashiro's connector leaves the entrance north-west, a 327 ft
+first leg from (2290, 1649) to a bend at (2012, 1477) just off the sheet, so the road enters through the windbreak's
+north-west apex, about 13 degrees off the north-west wind; main's left south-west through the belt's west arm. The
+planting resumes on both sides (35, 22 and 50 ft of open ground between canopy edges over the first 75 ft).
+**Mechanism**: the connector's dry-exit search (`ways/track.py`, `connector_through`, `dry_exit.py`) scores bearings by dry,
+clear ground and has no preference for the belt's open side. research/vegetation.html ("How did a lane get through a
+belt?") records the lane's crossing as a GUESS and the old entrances found as standing on the grove's open side (Tonami;
+the Huizhou water mouths). **Sketch**: among the dry bearings the sweep admits, prefer the one that leaves through the
+belt's lee or flank arc (`plan.windward`), and fall back to the windward arc only where no other is dry - asked of the
+whole cohort, since it moves every map whose connector currently leaves windward.
