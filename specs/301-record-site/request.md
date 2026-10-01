@@ -56,6 +56,13 @@ The uh was a voice to text artifact and I did not have anything else to say. So 
 
 And for what it's worth, I think I do want to do the git history scrub to free up the 17 megabytes for what it's worth. This is probably pointless, but it will make me feel better.
 
+## 2026-10-01, twelfth message (an answer to the session's question)
+
+The session asked how the 38 landed specs whose links point at the built pages should be handled - touching one puts
+it through the push's spec check against rules added after it landed (14 fail today, about 250 findings, none about
+the links) - offering: sweep and narrow the lint to what a push changes; leave the old specs as written; or sweep and
+update the 14 specs to today's rules. The GM chose: "Sweep, narrow lint (Recommended)".
+
 ## The session's recommendations the GM accepted (context, not the GM's words)
 
 - Footnotes: per-page numbering from 1 on each small page, with that page's notes and sources at its foot; one global

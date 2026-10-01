@@ -56,4 +56,6 @@ files, then `scripts/spec-lint.py` run on each directory found. 38 landed spec d
 62 findings each, about 250 in all), every finding a rule added after the feature landed (a figure with no
 measurement key, a requirement no success criterion names). The push lints every spec directory its delta touches,
 with no escape, and also runs the review gate (a FAITHFUL verdict in `spec.md`) and the plan gate (the recorded
-plan hash) over them - so rewriting their pointers would mean re-writing fourteen landed specs to today's rules.
+plan hash) over them - so rewriting their pointers would mean re-writing fourteen landed specs to today's rules. The
+GM chose (2026-10-01) to sweep them and narrow the lint to what a push changes in a spec directory that existed before
+it (spec FR-027).

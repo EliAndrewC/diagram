@@ -121,13 +121,11 @@ at the foot, and can open the whole record as one page to read straight through 
 - A note cites a source several times on one small page: the source is listed once at the foot.
 - A heading id must be unique across the whole record (it is the single page's anchor and the small page's name); on
   2026-10-01 the 473 questions' ids collide nowhere, and the build refuses a collision.
-- A pointer in the spec directory of a LANDED feature (every `specs/NNN-*` numbered below 301) is a record of the
-  record as it stood when that feature landed, and is left as written; the old-form check skips those directories,
-  and the request files the GM wrote are left alone everywhere (SOURCE text, quoted). AMENDED 2026-10-01 after
-  measurement (research R7): 38 landed spec directories carry old-form pointers, and touching one puts it through
-  the push's `spec-lint`, which 14 of them fail today on rules added after they landed (about 250 findings),
-  besides its review and plan gates. A reader following such a pointer finds its question with one glob on the
-  heading's anchor, `research/<page>/*-<anchor>.html`, which the research CLAUDE.md states.
+- A pointer in a spec of a LANDED feature is history: the sweep rewrites it all the same so the resolve check covers every
+  file, and the request files the GM wrote are left alone (SOURCE text, quoted). Touching a landed spec directory puts
+  it through the push's `spec-lint`, which judges it against rules added after it landed (14 of the 38 fail today,
+  about 250 findings, none about a pointer - research R7); the GM, 2026-10-01, chose that the lint judge only what a
+  push CHANGES in a landed spec (FR-027).
 - The single page is large: what it will hold - the research and rendering pages, the citations pages and the sources
   registry - sums to about 25 MB as assembled today (observed 2026-10-01; method: `du -cb` over those files under
   `research/`). It is built but never committed, and the small pages are what the maps link.
@@ -173,12 +171,15 @@ at the foot, and can open the whole record as one page to read straight through 
 **Pointers**
 
 - **FR-012**: Every pointer to the research in code, docs, specs, skill files, agent files and modal `Entry:` lines MUST
-  name a fragment path - the spec directories of landed features excepted, as the edge case above says; the modal
-  machinery MUST read the new form.
+  name a fragment path; the modal machinery MUST read the new form.
 - **FR-013**: The existing `research/<page>.html "Heading"` pointers MUST be swept to fragment paths; a pointer matching no
   fragment exactly MUST be listed for review, never guessed.
 - **FR-014**: The gate MUST fail on any fragment pointer that does not resolve, naming it.
 - **FR-015**: The record's tooling that renames or moves a fragment MUST rewrite every pointer to it in the same change.
+- **FR-027**: The push's `spec-lint` MUST judge a spec directory that existed before the push by what the push
+  introduced: a finding it also reports on the directory as it stood at the merge base is not the push's (GM,
+  2026-10-01, choosing *"Sweep, narrow lint"*); a new spec directory is judged whole, as today. The review and plan
+  gates take the sweep through their stated escapes, each with its reason logged.
 - **FR-016**: `CLAUDE.md`, the research `CLAUDE.md`, the constitution's wording if it names the page form, and the
   research doctrine MUST say a pointer names the fragment.
 
@@ -238,9 +239,10 @@ at the foot, and can open the whole record as one page to read straight through 
 - **SC-005** (FR-009, FR-010, FR-011): `git ls-files` lists no assembled output; render-sync rebuilds after a fragment change and after
   a change to the record's build code, and skips after a change to nothing the record is built from (measured); the gate
   passes.
-- **SC-006** (FR-012, FR-013, FR-014, FR-015, FR-016): zero pointers to an assembled page remain outside the record and quoted GM text; the resolve
+- **SC-006** (FR-012, FR-013, FR-014, FR-015, FR-016, FR-027): zero pointers to an assembled page remain outside the record and quoted GM text; the resolve
   check fails on a seeded bad pointer; a rename test rewrites its pointer; the review list from the sweep is empty or
-  resolved.
+  resolved; a seeded landed spec carrying a pre-existing lint finding passes the push's lint when only a pointer in it
+  changed, and fails when the push adds a finding.
 - **SC-007** (FR-017, FR-018, FR-019, FR-020, FR-021): the rewritten history verifies tree-for-tree; `.git` on the main checkout measured before and
   after (observed 2026-10-01; method: `du -sh` on the main checkout's `.git` and on a scratch mirror after
   `git gc --aggressive` with and without a full scrub, research R6: 236, 102 and 85 MB - so expected about 85-90 MB after); every clone's root commit matches main's; a seeded unrelated-history clone is refused.
@@ -289,3 +291,14 @@ rendering decision is made.
   rebuilds on a build-code change and skips on a change to nothing the record is built from; (6) FR-024's mount premise is
   now quoted from `launch-container.sh` (read: line 66 and `--no-claude`), with running containers checked in the plan and
   any without the mount reported to the GM. The change adds nothing the GM did not ask for.
+- Amendment 1, Round 1 (spec-fidelity-verify, 2026-10-01): CHANGES REQUIRED - the SC parentheticals and SC-007's R6
+  citation change no meaning and pass. (1) The landed-specs exception (the Edge Cases bullet and FR-012's "the spec
+  directories of landed features excepted") is NOT a legitimate narrowing: the GM's *"everything linked to research ...
+  link to the source"* has no carve-out, a landed spec's `research/<page>.html "Heading"` is a link to research (unlike a
+  recorded command transcript), and the reason given - the push's spec-lint, review and plan gates on 14 of the 38
+  directories (R7, re-run on this round's own run: 38 directories, the same 14 failing) - is implementation cost, not a
+  fidelity reason. Restore the accepted bullet (landed specs swept, request files left alone) and FR-012 without the
+  exception; if the cost is disproportionate, that is the GM's call. (2) As written, the exception also contradicts
+  SC-006 ("zero pointers ... outside the record and quoted GM text") and US4 AS1 ("specs ... name a fragment path"),
+  and asserts the research CLAUDE.md states the `*-<anchor>` glob, which it does not (line 19 states a glob on a
+  registry key only) - resolved by (1). The plan was not reviewed in this round (plan review is spec-fidelity's).
