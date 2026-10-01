@@ -246,6 +246,7 @@ bugyosho	machi-bugyosho
 buke	bushi
 buke-chi	buke-chi
 buke-yashiki	buke-yashiki
+bukechi	buke-chi
 bukeyashiki	buke-yashiki
 bund	bund
 bund tea	keihan-cha
@@ -576,6 +577,7 @@ daozuofang	daozuofang
 daqing gate	Daqing gate
 daqingmen	Daqing gate
 dashigeta	dashigeta
+datang	great hall
 daxiangguo	Daxiangguo
 dazaifu	Dazaifu
 db	dBA
@@ -1114,6 +1116,8 @@ grave good	grave goods
 grave goods	grave goods
 grave island	grave island
 grave islands	grave island
+great hall	great hall
+great halls	great hall
 green manure	green manure
 groin	groyne
 groins	groyne
@@ -1160,6 +1164,7 @@ hachiman	Hachiman
 hachure	hachure
 hachures	hachure
 hageyama	bald hill
+hagi	Hagi
 haibutsu kishaku	haibutsu kishaku
 haiden	haiden
 haikai	haikai
@@ -3192,6 +3197,8 @@ tenma-cho	tenma-cho
 tenmacho	Tenmacho
 tenmacho jail	Tenmacho
 tenmacho's	Tenmacho
+tenmachō	Tenmacho
+tenmachō's	Tenmacho
 tenmangu	Tenmangu
 tenmangū	Tenmangu
 tenmei	Tenmei

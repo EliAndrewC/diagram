@@ -812,6 +812,7 @@
   "def": "The samurai ground and the townsman ground of a castle town, assigned as separate districts by law.",
   "variants": [
    "buke-chi",
+   "bukechi",
    "chonin-chi",
    "samurai ground"
   ]
@@ -6487,7 +6488,9 @@
   "def": "Edo's great jail compound (the Tenmacho royashiki), where the shogunate held prisoners in a 30-mat common cell and in smaller agariya rooms.",
   "variants": [
    "Tenmacho",
+   "Tenmachō",
    "Tenmacho's",
+   "Tenmachō's",
    "Tenmacho jail"
   ]
  },
@@ -13698,6 +13701,20 @@
   "def": "The reign name of the Ming emperor who ruled 1426 to 1435, which documents use to date a year; the fifth year of Xuande is 1430.",
   "variants": [
    "Xuande"
+  ]
+ },
+ "Hagi": {
+  "def": "A castle town in western Japan, the seat of the Chōshū domain in the Edo period, where the domain built its Noyama and Iwakura jails on the sites of two confiscated residences.",
+  "variants": [
+   "Hagi"
+  ]
+ },
+ "great hall": {
+  "def": "The main hall of a Chinese yamen (datang), where the magistrate held court and heard cases.",
+  "variants": [
+   "great hall",
+   "great halls",
+   "datang"
   ]
  }
 }
