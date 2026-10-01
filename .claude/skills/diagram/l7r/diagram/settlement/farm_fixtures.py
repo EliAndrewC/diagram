@@ -145,8 +145,11 @@ class FarmFixturesMixin:
         else:  # shrine - the household hokora, in the religious red so a rare thing is seen (T58/T62)
             g.append(f'<rect x="{x0:.1f}" y="{y0:.1f}" width="{w:.1f}" height="{h:.1f}" rx="0.8" fill="{SHRINE_RED}" stroke="#5A1A10" stroke-width="1.2"/>')
             g.append(f'<line x1="{x0 + 1:.1f}" y1="{y0 + h * 0.35:.1f}" x2="{-x0 - 1:.1f}" y2="{y0 + h * 0.35:.1f}" stroke="#F2C9B0" stroke-width="1"/>')  # the ridge
-            ty = -y0 + 2.6  # a little torii standing before the door: two posts and a lintel wider than the hall
+            ty = -y0 + 2.6  # a little torii standing before the door: two posts, a lintel wider than the hall, and the tie beam
             g.append(f'<line x1="{x0 - 1.5:.1f}" y1="{ty:.1f}" x2="{-x0 + 1.5:.1f}" y2="{ty:.1f}" stroke="{SHRINE_RED}" stroke-width="1.6"/>')
+            # ...THE SECOND CROSSBAR (the nuki), below the lintel and just past the posts: with one bar the torii read as a small
+            # bench on its own (glyph-check, feature 294); two bars are the torii, and the shrine mark (GM 2026-10-01)
+            g.append(f'<line x1="{x0 - 0.2:.1f}" y1="{ty + 1.0:.1f}" x2="{-x0 + 0.2:.1f}" y2="{ty + 1.0:.1f}" stroke="{SHRINE_RED}" stroke-width="0.9"/>')
             g.append(f'<line x1="{x0 + 0.6:.1f}" y1="{ty - 0.4:.1f}" x2="{x0 + 0.6:.1f}" y2="{ty + 2.2:.1f}" stroke="{SHRINE_RED}" stroke-width="1.1"/>')
             g.append(f'<line x1="{-x0 - 0.6:.1f}" y1="{ty - 0.4:.1f}" x2="{-x0 - 0.6:.1f}" y2="{ty + 2.2:.1f}" stroke="{SHRINE_RED}" stroke-width="1.1"/>')
         g.append("</g>")
