@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-01T18:20:00Z",
+  "target": "plan-gate push",
+  "commit": "bfd60268e",
+  "why": "the only plan change since round 4 CLEAR is that review's own follow-up 3: D19 says road or footpath; this push adds a records file to 294's folder, not a plan change"
+}
