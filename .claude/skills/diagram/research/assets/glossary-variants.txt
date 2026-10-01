@@ -3093,6 +3093,7 @@ sui-dynasty	Sui dynasty
 suid	suid
 suiden	suiden
 suids	suid
+suijin	suijin
 suimon	suimon
 suiren	Suiren
 suitengu	Suitengu
@@ -3462,6 +3463,7 @@ unhairs	unhair
 unjo-gura	levy storehouse
 unthinned stand	forest stand
 uogashi	uogashi
+uoichiba	uoichiba
 upland field	hatake
 upland fields	hatake
 upland-field	hatake

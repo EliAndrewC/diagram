@@ -337,17 +337,17 @@ class TaxBarge(Kind):
 
 class BoatmensAltar(Kind):
     """
-    What: A small shrine beside the landing, kept by the boatmen who work the river.
+    What: A small shrine at the head of the landing, to the guardian spirit of the boats that work the river.
 
     Why: A boat's own guardian, the funadama, lives aboard, at the foot of the mast, and is sometimes given a shrine
     on land, and that shrine is the one drawn here. The water god's shrine that river boatmen are recorded keeping, a
-    Suitengu, is dated no earlier than the late 1920s by its one source, and nothing read places boatmen keeping one
-    before modern times, so it is not drawn.
+    Suitengu, is undated in its one source, a twentieth-century record that dates nothing before the late 1920s,
+    and nothing read places boatmen keeping one before modern times, so it is not drawn.
 
     Note: The boats' guardian and its shrine on land are read. The shrine is not recorded standing at a landing
-    itself, or with a size, so its place beside the landing and its size are a guess.
+    itself, or with a size, so its place at the head of the landing and its size are a guess.
 
-    Caveat: The shrine is not recorded standing at a landing itself, or with a size, so its place beside the
+    Caveat: The shrine is not recorded standing at a landing itself, or with a size, so its place at the head of the
     landing and its size are a guess.
 
     Name: boatmen's altar
