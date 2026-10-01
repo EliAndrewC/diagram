@@ -92,7 +92,7 @@ approval before /speckit-tasks may run.
 
 - **VI. Verify Before Reporting Done**: The plan MUST list the verification
   steps each task will run before being marked complete - `make done` for
-  Python, `settlement-review` / `building-review` + `size-audit` for a map,
+  Python, the review checks a map's delta owes (`make verify` names them - feature 294's occasions),
   spot-check of delegated work. Every generator step is TWO steps (reference
   settlement, then pool - `make maps`), both as tasks.
 

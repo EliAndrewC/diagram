@@ -120,9 +120,9 @@ claim, fixed in feature 165.
 - **Background the final gate and never poll it**; act on the completion notification. Detach a long
   run with `setsid --fork` (plain `setsid` does not fork when it is not a process-group leader, so
   the run stays a child of the tool call and dies with it).
-- **`make verify`** decides whether a settlement-review is owed (a pool manifest moved against main),
-  snapshots the changed maps for it, starts the gate in the background AND prints the review to dispatch
-  in the same turn, so the two overlap instead of queueing.
+- **`make verify`** names the review checks the delta owes (feature 294: their OCCASIONS, never a moved
+  manifest), writes one prompt per owed unit with its snapshot, and starts the gate in the background; the
+  units are dispatched once it is green (`.claude/skills/diagram/dev/reviews.md`).
 - **Idle tests**: after 60-120 minutes of idle time (staggered per session, restarted on a laptop
   resume), the clone runs the whole gate detached and the verdict opens the next prompt. Once per
   idle, never on unchanged content, aborted the moment a prompt arrives.

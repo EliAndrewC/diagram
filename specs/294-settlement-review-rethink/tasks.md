@@ -71,8 +71,9 @@ This feature's own delta, declared under the rules it builds (plan D10). Lines a
 - [x] T14 [US2] B1 record against ink (`tests/gate/`): channels on drawn water, gates and weirs on water, no house on a marsh; Kuwabata's supply run measured; red on a seeded fault first
       research: rendering
       verify: DONE. DONE. tests/gate/test_review_rules_294.py record_off_ink (channels within 3 ft of drawn water, sluice gates/weirs within 2 ft, no house on a marsh), seeded red (a 20 ft jog, a gate 7 ft off, a house on a marsh); Kuwabata's feed record ran 101 ft off its stub - fixed in comb.py (feed_stub, unit tests), 0 ft; green on the five
-- [ ] T15 [US2] B2 ruled and plumb edges on the visible marsh, grove and clearing edges, from the page's id map; red on the recorded case or a seeded fault
+- [x] T15 [US2] B2 ruled and plumb edges on the visible marsh, grove and clearing edges, from the page's id map; red on the recorded case or a seeded fault
       research: rendering
+      verify: DONE. DONE. tools/marsh_edges.py free_runs/axis_run_ft/ruled_edges (4 unit tests: a ruled axis strip fires both rules; an edge beside a dike and the frame's clip are not the marsh's); gate test with W03 (RULED_SHARE 0.4 at RULED_MIN_LEN_FT, RULED_TOL_FT) and MARSH_AXIS_RUN_FT 150 (GUESS), green on the five - the long ruled limits were broken by feature 299's natural_outline (merged from main); measured before the free-edge exclusions: a 500 ft plumb edge on Kuwabata was the dike's apron, not the marsh's limit. Grove/clearing edges: no hamlet draws a shrine grove or clearing; the Mode A sheet's are the registry's (T26-T29)
 - [x] T16 [US2] B3 wood shed seating: a placer assert and a gate test
       research: rendering
       verify: DONE. DONE. shed_faults: nearer another household's house than its own, or turned off its rake (a quarter turn the same); seeded red (a neighbor's gable, a 45 deg turn); green on the five (the end-on/off-wall forms retired with the eaves woodpile, feature 280)
@@ -87,8 +88,9 @@ This feature's own delta, declared under the rules it builds (plan D10). Lines a
 - [x] T18 [US2] B4 the twin-watercourse rule, comb branches included (T17's spacing enforced if found); red on the recorded case; the placer fixed on Inashiro, then the pool
       research: rendering
       verify: DONE. DONE. waterfields/twins.py (twin_run_ft, twins, drop_twin_deliveries) asked by comb._comb_canal_pieces and by sink.route_refusals/join_beside; unit tests red-first on a 20 ft twin; the four comb twins (190-310 ft) and Kashikawa's drain beside the brook (130 ft) gone; the gate rule green on the five
-- [ ] T19 [US2] B5 see-through marks with their declared reasons; B5b crown species on the record and the conifer drawn above a broadleaf it overlaps; red first; the renderer's order fixed
+- [x] T19 [US2] B5 see-through marks with their declared reasons; B5b crown species on the record and the conifer drawn above a broadleaf it overlaps; red first; the renderer's order fixed
       research: rendering
+      verify: DONE. DONE. B5: settlement/see_through.py SEE_THROUGH (20 classes, floor + reason each, from the census), tools/see_through.translucent_marks; seeded red (a field grave mound at 0.9, a class nobody declares); gate green on the five. B5b: groves.over_a_conifer (CROWN_OVER_SHARE 0.8, 0.2 px ink slack), conifers painted last in a clump and a lesser crown over an earlier conifer not drawn; tools/see_through.crowns_in_paint_order/broadleaf_over_conifer read the SVG's paint order (seeded red); Kashikawa 199 and Mizuguchi 108 -> 0. Plan note: the test reads the INK (fill + paint order) rather than a species on the crown record - the record-against-ink lesson; the records were not given a species
 - [x] T20 [US2] B6 page hit regions (each class wins 0.8 of its ink, declared overlaps apart); red today; the hit order fixed
       research: rendering
       verify: DONE. DONE. tools/hit_share.py (visible-ink map vs id map; 3 unit tests, seeded a region polygon over another class's ink: 40%, thief named); gencache files the skip-render vector page as <map>.vector.html (page_of; test_gencache 23 passed); hit_thefts gate rule (80%, HIT_WIDEN's boxes declared), green on the five - measured with the visible-ink form the scout's storage-shed and mulberry-dike cases do not recur (paddy/bund/wet paddy lose only to declared widened boxes)
@@ -104,8 +106,9 @@ This feature's own delta, declared under the rules it builds (plan D10). Lines a
 - [x] T24 [US2] B10 declared forms drawn (fixture targets and minimums): red on Kuwabata; the fixture placer fixed on Kuwabata, then the pool
       research: rendering
       verify: DONE. DONE. undrawn_rolls (fixture targets and floors, byres, retirement houses, settlement form); Kuwabata red (3 households seated bare) - fixed in rolling/fit.py (_parts_fit refuses an unlaid layout), every target drawn on the five; unit test
-- [ ] T25 [US2] B14 notes counts outside the census block and the dated history (the 55 found triaged), B15 every map folder has a notes file
+- [x] T25 [US2] B14 notes counts outside the census block and the dated history (the 55 found triaged), B15 every map folder has a notes file
       research: rendering
+      verify: DONE. DONE. B14: notes_census.current_prose/stale_counts (COUNTED kinds; history = a heading with a date, feature, pass or round, or a paragraph/bullet with its own date); seeded red ('15 farmhouses' on a map of 16); the pool's current prose: 10 typed counts, all the manifest's - the scout's 55 disagreements were all history (dated entries) or subsets; the 4 left under undated headings sat in dated paragraphs/bullets. B15: folders_without_notes, every pool and legacy folder carries its notes (T22's module)
 
 ## The rules: Mode A (B15b-B24)
 
@@ -120,12 +123,15 @@ This feature's own delta, declared under the rules it builds (plan D10). Lines a
 
 ## The ledger (G, A2)
 
-- [ ] T30 [US7] `scripts/_review_cost.py` and `make review-cost AGENT=<id>`: a finished agent's wall time and tokens from its transcript; tests
+- [x] T30 [US7] `scripts/_review_cost.py` and `make review-cost AGENT=<id>`: a finished agent's wall time and tokens from its transcript; tests
       research: rendering
-- [ ] T31 [US7] The ledger's new table; `scripts/_ledger_lint.py`; the `ledger-hooks.sh` guard on a commit staging the ledger, with its companion `test-ledger-hooks.sh` and its settings entry
+      verify: DONE. DONE. scripts/_review_cost.py (a run's wall + tokens off its subagent transcript, each streamed call counted once at its last line) and make review-cost AGENT=; tests/tooling/test_review_cost.py 2 passed; measured on this feature's own audit agent: 311 s | 2660k in (2528k cached) / 26.0k out
+- [x] T31 [US7] The ledger's new table; `scripts/_ledger_lint.py`; the `ledger-hooks.sh` guard on a commit staging the ledger, with its companion `test-ledger-hooks.sh` and its settings entry
       research: rendering
-- [ ] T32 [US7] `docs/review-ledger-r0.json` (the old rows classified once, by an Opus agent) and `make review-census`; within R0's error (SC-006)
+      verify: DONE. DONE. the ledger's measured table (heading, columns, prose); scripts/_ledger_lint.py (check, class, author-missed, cost cells) with tests 3 passed; scripts/ledger-hooks.sh refusing a commit staging a short row (invocation-matched, git -C and -am read, LEDGER_LINT_OK escape), test-ledger-hooks.sh 13 passed, mutation (refusal removed) -> 6 red; wired in .claude/settings.json; hooks-test green
+- [x] T32 [US7] `docs/review-ledger-r0.json` (the old rows classified once, by an Opus agent) and `make review-census`; within R0's error (SC-006)
       research: rendering
+      verify: DONE. DONE. docs/review-ledger-r0.json (181 rows, an Opus agent's one-time classification) and make review-census (tests/tooling/test_review_census.py 2 passed); research R4: settlement-review 312 runs, 40 NOT-REVIEWABLE, 270/77/174/14 findings by class - shares within R0's error (geometric 50 vs 44%, judgment 14 vs 19%, paperwork 33 vs 31%), counts finer than the hand census (stated totals counted)
 
 ## The documents (H)
 

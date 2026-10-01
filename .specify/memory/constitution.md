@@ -1,7 +1,13 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.26.0 → 2.27.0
+Version change: 2.27.0 → 2.28.0
+
+Version 2.28.0 (amended 2026-10-01, feature 294): map review runs on its OCCASION, not per changed map - the glyph check when
+an element is new to a map, its glyph redrawn or its placement rule substantially changed; the whole-map review when a map is
+new to the pool or a new form or tier; a fix check on a GM complaint's fix. What a placer or a test can make impossible is a
+gate rule, not a review finding. The GM: "anything that we can make impossible through the placement algorithm or a test
+should be done that way." MINOR.
 
 Version 2.27.0 (amended 2026-09-30, feature 297): Principle X clause 15 no longer holds a PLACER to identical output - only a
 CHECK that verifies a rule keeps "the index prunes, the exact test decides"; a placer, fill or scatter may decide by a faster
@@ -765,10 +771,13 @@ artifacts. Specifically:
   reason in the diff and points at the research section recording the audit that justified it; the next gate
   runs FULL. A shipped map's roll (the pool sweep) is printed and never failed - the pool's membership is the
   GM's exhibit decision.
-- **Maps**: a Mode B map is reviewed by `settlement-review` and a Mode A
-  plan by `building-review` + `size-audit` before it ships (the author is
-  not a reliable reviewer of their own visual output); `review-gate.sh`
-  enforces it at push time.
+- **Maps**: a map's change is reviewed by the check its OCCASION owes
+  (v2.28.0, feature 294: an element new to a map or re-drawn or re-placed
+  -> `glyph-check`; a Mode B map new to the pool -> `settlement-review`; a
+  GM complaint's fix -> `fix-check`; a Mode A plan new or revised ->
+  `building-review` + `size-audit`) before it ships (the author is not a
+  reliable reviewer of their own visual output); `review-gate.sh` enforces
+  it at push time.
 - **Delegated work**: When a subagent or skill reports completion, the
   caller MUST spot-check the artifacts (read a sample of changed files,
   run a verification query) before relaying the result to the user.
@@ -2050,9 +2059,9 @@ pushed to GitHub from outside the container between the last `sync-in` and
 the claim. Protocol: `docs/session-clones.md` "Concurrent sessions".
 
 **Map review workflow (mandatory before a map ships)**
-The verification described in Principle VI: a Mode B map goes to
-`settlement-review`, a Mode A plan to `building-review` and `size-audit`,
-and the findings are acted on before the map enters `pool/`.
+The verification described in Principle VI: each review check its
+occasion owes (`scripts/_review_owed.py`), one unit per agent, and the
+findings are acted on before the change ships.
 `scripts/review-gate.sh` refuses the push otherwise.
 
 **Python "done" checklist (mandatory per Principle X)**
@@ -2264,4 +2273,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.27.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-09-30
+**Version**: 2.28.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-10-01

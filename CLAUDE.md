@@ -129,8 +129,11 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
 - Fix defects where you find them (constitution XIV), in the same work with the same verification.
   The only deferrable fix is a complete overhaul, and deferring one delivers the measurement, the
   mechanism and a sketch. Record a fix that FAILED at the point of change.
-- Review subagents (`settlement-review`, `building-review`, `size-audit`) run at acceptance, in the
-  background, one map per agent; every pass is a row in `docs/review-ledger.md`. To improve one, add
+- Review checks (`glyph-check`, `settlement-review`, `fix-check`, `building-review`, `size-audit`) run ON
+  THEIR OCCASION (feature 294): an element new to a map, a glyph redrawn or re-placed, a map or sheet new to the
+  pool, or an occasion the feature declares in its `tasks.md` `## Occasions` - never because a manifest moved
+  (`_review_owed.py`; `.claude/skills/diagram/dev/reviews.md` has the table). One unit per agent, on a green gate,
+  two rounds at most; every pass is a row of the ledger's measured table with its cost (`make review-cost`). To improve one, add
   the general rule, prove it fires on the unfixed artifact, then fix the artifact. Findings for the
   GM go through `escalation-check` first. Every check runs on the TIER its file pins - a model and an
   effort, never inherited (`tests/test_agent_models.py` holds the table; judgment is on Opus, and a
@@ -208,13 +211,14 @@ doctrine for writing a guard: `docs/guards.md`.
 | `main-tree-hooks.sh` | a write that would land in the mirror is moved to the clone; one naming it is refused | `MAIN_TREE_OK` |
 | `discard-hooks.sh` | a checkout or restore that would discard uncommitted work | `DISCARD_OK` |
 | `conflict-marker-hooks.sh` | a `git add` or commit that would stage conflict markers | `CONFLICT_MARKERS_OK` |
+| `ledger-hooks.sh` | a commit staging the review ledger with a measured row short of its check, class or cost | `LEDGER_LINT_OK` |
 | `shell-check-hooks.sh` | a command that does not parse, an executing backtick, a `-m` with a quote or newline, a foreign co-author | `SHELL_CHECK_OK` |
 | `no-branch-hooks.sh` | no branches | `NO_BRANCH_OK` |
 | `no-poll-hooks.sh` | no busy-wait; corrects a self-matching `pgrep`, and scopes a wait on a make run to this tree (`_own-make.sh`); refuses a pattern that matches its own command (launch-and-wait); a file-watching loop is backgrounded and given a proof of life; every wait loop gets a 90-minute ceiling (WAIT TIMED OUT, exit 4); a backgrounded periodic report is refused with its exact `CronCreate` call | `POLL_OK`, `CRON_OK` |
 | `batching-hooks.sh` | blocks a run of single-call recon turns, warning on every loaded turn before it | - |
 | `measure-hooks.sh` | a second expensive run with nothing changed between | `MEASURE_OK` |
 | `gate-hooks.sh` | no `-k` subset as the only run before the gate | `GATE_OK` |
-| `pair-hooks.sh` + `_review_owed.py` | the gate and the settlement-review run together when a pool map's layout moved; one map per agent | `PAIR_OK` |
+| `pair-hooks.sh` + `_review_owed.py` | the review checks a delta owes (its occasions) dispatched on a green gate, one unit per agent, two rounds per unit | `PAIR_OK`, `REVIEW_ROUNDS_OK` |
 | `escalation-hooks.sh` | a review dispatch arms, an `escalation-check` dispatch disarms, before the turn ends | `ESCALATION_OK` |
 | `wakeup-hooks.sh` | a `ScheduleWakeup` outside a live `/loop` is refused (background work wakes a session by itself; a reminder the GM asks for is `CronCreate`); a turn cannot end with a stale wakeup pending, and the block names the `CronDelete` | none - cancel the wakeup |
 | `review-round-hooks.sh` | a later `spec-fidelity` round is handed the diff and routed to `spec-fidelity-verify`; refused first when the feature still carries the OLD value of something the change moved (`make stale-terms`) | `REVIEW_ROUND_OK`, `STALE_TERMS_OK` |
