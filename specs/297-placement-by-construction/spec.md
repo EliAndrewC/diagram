@@ -18,7 +18,7 @@ asked at its placer - this feature changes WHEN and HOW OFTEN those rules are as
 
 Inashiro regenerates in about 7.5 s: the stages about 5.0 s, the finish about 1.9 s (research R1; observed 2026-09-30, method: `make map PROFILE=1` with scratch phase marks). The time is not spent placing
 what the map shows; it is spent building candidates in full and refusing them. The seating offered 734 seats for 15 houses,
-built 2,716 garden-side layouts behind 902 part-rule tests, and asked for a lane corridor 477 times, and 348 of those asks
+built 2,716 garden-side layouts and then ran 902 part-rule tests on them, and asked for a lane corridor 477 times, and 348 of those asks
 found no corridor candidate at all - a property of where the house stands, asked only after its four layouts were built
 (research R2, R6). The
 hinterland asks each marsh tuft, grove crown and woodland candidate of every keep-out one at a time; the web lays lanes, then
@@ -136,10 +136,10 @@ lawful when it is laid. The page's own Python work runs while its picture render
 Every figure is the fastest of three with the load recorded, taken by `measure.py` from the base worktree and the clone back to
 back; every ratio is a floor with no projection behind it. Keys `m:...` are in `measurements.json`.
 
-- Every "before" second was taken at load 6.4 (recorded per key); the after-run re-takes the base back to back, and the
-  floors are judged on that pair.
-- **SC-001** (spec-wide; the session's expectation, "well under half", held as a floor - the GM gave no number): Inashiro's stages sum to at most half the base's (5.640 s, the sum of the per-stage keys `before-inashiro-stage-<stage>-s`), and its full
-  regeneration (`full_s`: svg, png and page) is faster than the base's (8.0 s uncached, `m:before-inashiro-regen-s`, load 2.5 -> 6.1 - re-taken back to back with the clone at the end).
+- The harness's "before" seconds were taken at load 6.4 -> 2.0 and the `make map` figure at 2.5 -> 6.1 (recorded per key); the
+  after-run re-takes the base back to back, and the floors are judged on that pair.
+- **SC-001** (spec-wide; the session's expectation, "well under half", held as a floor - the GM gave no number): Inashiro's stages sum to at most half the base's (5.640 s, the sum of the per-stage keys `before-inashiro-stage-<stage>-s`), and its `make map`
+  regeneration (the child with its svg, png and page) is faster than the base's (8.0 s uncached, `m:before-inashiro-regen-s`, load 2.5 -> 6.1 - re-taken back to back with the clone at the end).
 - **SC-002** (FR-001, FR-002): on Inashiro the seats bucket asks at least `3x` fewer calls (2,640,745, `m:before-inashiro-b-seats-total`), the homestead layouts built
   (`_bundle_geom`) are at least `3x` fewer (2,716, `m:before-inashiro-bundle-geom`), and the homesteads stage is at least `2x` faster (1.114 s, `m:before-inashiro-stage-homesteads-s`).
 - **SC-003** (FR-003): the mats bucket asks at least `3x` fewer calls on Inashiro (477,299, `m:before-inashiro-b-mats-total`), every
@@ -187,3 +187,6 @@ back; every ratio is a floor with no projection behind it. Keys `m:...` are in `
   baseline re-taken; the Summary restated; FR-008/SC-008 take the page write; SC-001 relabeled. Between rounds the GM ruled that maps
   need not stay identical (request.md), so every byte-identity requirement was replaced by the rules and invariants, and FR-002's
   move is in the Decisions table.
+- Round 2 (spec-fidelity-verify, 2026-09-30): CHANGES REQUIRED, 3 one-line items - the GM's second statement missing from
+  request.md, the Summary's funnel order, SC-001 naming `full_s` while citing the `make map` figure and a load bullet true of only
+  one figure. Addressed.

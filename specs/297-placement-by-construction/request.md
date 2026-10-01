@@ -35,3 +35,7 @@ Yes, please build and implement all of that as a spec-kit feature, working it fr
 The GM, during the spec's first review round (2026-09-30), verbatim:
 
 To be clear, it is perfectly acceptable for maps to change as a result of these optimizations.  They do NOT need to remain identical in output.
+
+And then, verbatim:
+
+Thanks; in general if anything in our project guidelines says that maps can't change when making optimzations then ew should strike it and say the opposite.
