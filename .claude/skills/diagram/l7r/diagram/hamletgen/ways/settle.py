@@ -1007,7 +1007,9 @@ def settle_the_web(s: Any, rounds: int = SETTLE_ROUNDS) -> dict[str, Any]:
         steps = STEPS if broken is None else steps_for(broken)
         n = sum(step(s) for step in steps)
         changed += n
-        broken = unsettled(s.M, memo_ground(s, "worked", worked_ground)) if n else (broken or {})
+        # the law is asked after any round that changed the web, and after a first round that did not (a still round proves
+        # only that no repair applied, not that the law holds - cohort seed 14); a later still round keeps the last answer
+        broken = unsettled(s.M, memo_ground(s, "worked", worked_ground)) if (n or broken is None) else broken
         settled = not n or not broken
     if broken is None or broken:
         # THE LAST RESORT (FR-005): the rounds ran out with a lane still breaking a rule - OR A ROUND CHANGED NOTHING WITH ONE

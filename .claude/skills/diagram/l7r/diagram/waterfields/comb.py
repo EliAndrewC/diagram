@@ -10,7 +10,7 @@ if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds
     from shapely.geometry import Polygon
     from shapely.ops import unary_union
 
-from .banks import _TOE_MIN_APEX, _TOE_MIN_AREA, _TOE_MIN_THICKNESS, cell_area, dedup_ring, floor_overhang, hem_rings_to_bank, hem_to_bank, is_chevron, pointed_ring, round_channel_joints
+from .banks import _TOE_MIN_APEX, _TOE_MIN_AREA, _TOE_MIN_THICKNESS, cell_area, dedup_ring, floor_overhang, hem_rings_to_bank, is_chevron, pointed_ring, round_channel_joints
 from .carve import _carve
 from .frame import (
     CANAL_A_FT,

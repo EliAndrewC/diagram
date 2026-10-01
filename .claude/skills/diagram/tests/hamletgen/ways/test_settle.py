@@ -740,3 +740,13 @@ def test_a_house_crowded_with_ends_keeps_the_trees_and_loses_an_ordinary_one() -
     assert tree == [[(-400.0, 60.0), (-360.0, 190.0)]], "the tree lane stands"
     assert len(s.M["lanes"]) < 4 or _pts(s, 1) != [(-300.0, 40.0), (-300.0, 170.0)] or _pts(s, 2) != [(-200.0, 60.0), (-240.0, 180.0)], "an ordinary end cut"
     assert len(law.fronting_ends(s.M).get(0, [])) <= law.DOORSTEP_MAX
+
+
+def test_a_dangling_lane_its_trim_cannot_mend_goes_whole(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 297 (research R11): Inashiro's two-point skeleton lane dangled through every round - its trim gave it back
+    unchanged - until the last resort dropped it. The docstring's promise, kept: it goes at the step."""
+    s = _S([CONN, [(-50.0, 0.0), (-50.0, 300.0)]], houses=[(-50.0, 120.0)])
+    monkeypatch.setattr(settle, "_trim_to_service", lambda way, *a, **k: way)
+    monkeypatch.setattr(settle.law, "dangling_lane_ends", lambda M, ground=None: [(1, -1)])
+    assert settle.settle_dangling(s) == 1
+    assert len(s.M["lanes"]) == 1 and s.M["lanes"][0].get("connector")
