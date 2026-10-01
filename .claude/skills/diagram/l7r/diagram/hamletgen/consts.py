@@ -868,7 +868,7 @@ LANE_WEBS = ("alleys", "back_lane")
 # Three forms, and the roll is DELIBERATELY flatter than real-world frequency would be. Read that
 # sentence twice before re-weighting this tuple, because the departure is the decision.
 #
-# What the research supports (research/homesteads.html, "Does a hamlet have to be NUCLEATED at all?"):
+# What the research supports (research/homesteads.html, "Clustered and scattered villages (shūson, sanson)"):
 #   - nucleated  - the default across wet-rice East Asia, because paddy is too valuable to build on,
 #                  so households cluster on whatever ground will not grow rice. The access rule
 #                  (`farmhouses_reach_a_way`) is decisive for THIS form and no other.

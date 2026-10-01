@@ -104,7 +104,7 @@ class FarmChannel(Kind):
     Covers: `farm_channels` - the channel led into a dispersed farm's grounds (feature 291), drawn with its record in `drawn_channels`
     Label: accurate
     Sources: tonami-sankyoson-museum
-    Entry: research/homesteads.html - 'Does a DISPERSED hamlet's outlying farm have its own well?'
+    Entry: research/homesteads.html - 'Clustered and scattered villages (shūson, sanson)'; research/rendering/homesteads.html - 'How our maps choose and draw a village's form'
     """
 
     key = "farm channel"
@@ -431,7 +431,7 @@ class Well(Kind):
     Covers: `wells` - the wellheads
     Label: convention
     Sources: qq-2024-beijing-wells, saijo-mizu-rekishikan, kotobank-idoyakata
-    Entry: research/urban-features.html - 'Communal wells (ido)'; research/rendering/urban-features.html - 'How our maps place and draw wells (ido)'; research/homesteads.html - 'Does a DISPERSED hamlet's outlying farm have its own well?'
+    Entry: research/urban-features.html - 'Communal wells (ido)'; research/rendering/urban-features.html - 'How our maps place and draw wells (ido)'; research/homesteads.html - 'Clustered and scattered villages (shūson, sanson)'; research/rendering/homesteads.html - 'How our maps choose and draw a village's form'
     """
 
     key = 'well'

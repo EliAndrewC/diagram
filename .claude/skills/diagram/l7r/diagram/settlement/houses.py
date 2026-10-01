@@ -788,7 +788,7 @@ class HousesMixin:
                 # The old form spread wide (x1.15 lateral) with the horns curved hard back, so the placer -
                 # which pulls every house to hug the paddy and packs ALONG it - strung them into a wide, hollow
                 # arc that stranded the horns far from the crops (Kikuta: 55 houses over a hull filled ~20%, NE
-                # horn ~400px from any field; see village_cluster_compact / research/homesteads.html 'How tightly does a nucleated village pack?').
+                # horn ~400px from any field; see village_cluster_compact / research/rendering/homesteads.html 'How our maps choose and draw a village's form').
                 # WIDTH is what the placer amplifies, so keep the lateral reach narrow (a nucleated village is a
                 # deep blob, not a wide ribbon) and let the depth carry the frontage, with a gentle concave bow.
                 t = rng.uniform(-1.0, 1.0)

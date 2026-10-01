@@ -221,6 +221,8 @@ black-charcoal	black charcoal
 black-seal	shuinchi
 black-seal land	shuinchi
 black-seal lands	shuinchi
+block village	kaison
+block villages	kaison
 blyxa	Blyxa
 bo	bo
 board feet	board foot
@@ -469,8 +471,8 @@ clothier	clothier
 clothier's	clothier
 clothiers	clothier
 cluster's spine	cluster's spine
-clustered village	kaison
-clustered villages	kaison
+clustered village	shuson
+clustered villages	shuson
 coaching inn	coaching inn
 coaching inns	coaching inn
 coaching-inn	coaching inn
@@ -2143,6 +2145,8 @@ lu guimeng	Lu Guimeng
 luban ruler	Luban ruler
 luban rulers	Luban ruler
 lulu	lulu
+lump village	kaison
+lump villages	kaison
 luocheng	luocheng
 lushi chunqiu	Lushi chunqiu
 lychee	litchi
@@ -3264,10 +3268,12 @@ shunchengjie	shunchengjie
 shunde	Shunde
 shungiku	shungiku
 shunzhi	Shunzhi
+shuson	shuson
 shōtoku	Shotoku era
 shōtoku era	Shotoku era
 shōwa	Showa
 shōya	shoya
+shūson	shuson
 si	SI
 siberian high	Siberian high
 siege mining	siege mining

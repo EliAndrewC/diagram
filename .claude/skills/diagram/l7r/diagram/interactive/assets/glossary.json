@@ -9253,11 +9253,13 @@
   ]
  },
  "kaison": {
-  "def": "A lump village: a Japanese settlement whose houses are gathered irregularly in a lump, typically at a hill's foot, on a river terrace, or at a highway crossing where water can be got.",
+  "def": "A lump village: a Japanese settlement whose houses are gathered irregularly in a lump, typically at a hill's foot, on a river terrace, or at a highway crossing where water can be got; the commonest kind of clustered village.",
   "variants": [
    "kaison",
-   "clustered village",
-   "clustered villages"
+   "block village",
+   "block villages",
+   "lump village",
+   "lump villages"
   ]
  },
  "Rinzai": {
@@ -15087,6 +15089,15 @@
   "def": "A Japanese era name, 1860 to 1861; \"Man'en 1\" is 1860.",
   "variants": [
    "Man'en"
+  ]
+ },
+ "shuson": {
+  "def": "A clustered village: a Japanese farming village whose farmhouses are gathered in one limited area with the fields around them, the general form in Japan; its houses may stand densely packed or loosely, each on a wide lot. The lump village (kaison) is the commonest kind.",
+  "variants": [
+   "shuson",
+   "shūson",
+   "clustered village",
+   "clustered villages"
   ]
  }
 }
