@@ -932,6 +932,8 @@ four carps	four domestic carps
 four domestic carps	four domestic carps
 four gods	four gods
 four major carps	four domestic carps
+four stations	four stations of Edo
+four stations of edo	four stations of Edo
 four trees	four trees
 four trees and three grasses	four trees
 four-gods formulation	four gods
